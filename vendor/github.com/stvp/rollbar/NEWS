@@ -1,0 +1,79 @@
+0.5.1 - October 11, 2017
+========================
+
+* Added BuildStackWithCallers. Thanks @seriousben!
+
+0.5.0 - May 22, 2017
+========================
+
+* Added Errorf function
+* Always close response body
+* Updated README
+* Stop using and remove custom fingerprint
+
+0.4.0 - October 13, 2015
+========================
+
+* Added PostErrors(), which returns a channel that receives errors encountered
+  while POSTing items to the Rollbar API. Thanks @tike!
+* Added MIT license. See LICENSE. Thanks @paulmach!
+* It is now acceptable to send nil items. Thanks @paulmach!
+* Fixed a bug that caused custom fields to be ignored. Thanks @nazwa!
+* Added the ability to send the code_version attribute to Rollbar. Thanks
+  @ossareh!
+
+0.3.1 - December 9th, 2014
+==========================
+
+* ErrorWriter and Platform are now configurable. Thanks @Soulou!
+
+0.3.0 - October 30th, 2014
+==========================
+
+* Added support for passing custom fields to Rollbar. Thanks @Soulou!
+
+0.2.0 - September 30th, 2014
+============================
+
+* Added support for including `http.Request` details in Rollbar items. Thanks
+  @paulmach!
+
+0.1.0 - June 27th, 2014
+=======================
+
+Important: this release changes the grouping of errors in Rollbar. Be sure to
+test if the grouping of errors in Rollbar is important to your Go projects.
+
+* Errors are now fingerprinted by the full stacktrace (filen ames, method
+  names, and line numbers). This significantly improves the grouping of errors
+  in Rollbar. Contributed by @kjk
+* File paths now omit unneeded prefixes. Contributed by @kjk
+* Add severity constants (`rollbar.CRIT`, etc.)
+* Fix `Close()` call on nil responses. Thanks @Soulou!
+* Increase default buffer size to 1,000.
+
+0.0.4 - November 25th, 2013
+===========================
+
+* When an empty API token is set, all `rollbar` methods will be
+  no-ops.
+
+0.0.3 - November 25th, 2013
+===========================
+
+* Remove incorrect "root" value that was being sent. That setting
+  is meant for the path to the root code directory, but we're running compiled
+  binaries, so it doesn't make sense to submit that value.
+
+0.0.2 - November 11th, 2013
+===========================
+
+* Add `Wait()` command to wait for all errors to be sent to
+  Rollbar.
+* Simplify reported error class for `errors.errorString` errors.
+
+0.0.1 - June 24th, 2013
+=======================
+
+* Initial release.
+
