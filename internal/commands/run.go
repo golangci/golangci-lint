@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"path/filepath"
 	"strings"
 
 	"github.com/fatih/color"
@@ -28,6 +27,8 @@ func (e *Executor) initRun() {
 	runCmd.Flags().StringVarP(&e.cfg.Run.OutFormat, "out-format", "",
 		config.OutFormatColoredLineNumber,
 		fmt.Sprintf("Format of output: %s", strings.Join(config.OutFormats, "|")))
+	runCmd.Flags().IntVarP(&e.cfg.Run.ExitCodeIfIssuesFound, "issues-exit-code", "",
+		1, "Exit code when issues were found")
 }
 
 func (e Executor) executeRun(cmd *cobra.Command, args []string) {
@@ -35,16 +36,17 @@ func (e Executor) executeRun(cmd *cobra.Command, args []string) {
 		linters := golinters.GetSupportedLinters()
 		ctx := context.Background()
 
-		ex, err := os.Executable()
+		pwd, err := os.Getwd()
 		if err != nil {
 			return err
 		}
-		exPath := filepath.Dir(ex)
-		exec := executors.NewShell(exPath)
+		exec := executors.NewShell(pwd)
+
+		e.cfg.Run.Paths = args
 
 		issues := []result.Issue{}
 		for _, linter := range linters {
-			res, err := linter.Run(ctx, exec)
+			res, err := linter.Run(ctx, exec, &e.cfg.Run)
 			if err != nil {
 				return err
 			}
@@ -53,6 +55,10 @@ func (e Executor) executeRun(cmd *cobra.Command, args []string) {
 
 		if err = outputIssues(e.cfg.Run.OutFormat, issues); err != nil {
 			return fmt.Errorf("can't output %d issues: %s", len(issues), err)
+		}
+
+		if len(issues) != 0 {
+			os.Exit(e.cfg.Run.ExitCodeIfIssuesFound)
 		}
 
 		return nil

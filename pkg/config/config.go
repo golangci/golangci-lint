@@ -15,8 +15,9 @@ type Common struct {
 }
 
 type Run struct {
-	Paths     []string
-	OutFormat string
+	Paths                 []string
+	OutFormat             string
+	ExitCodeIfIssuesFound int
 }
 
 type Config struct {

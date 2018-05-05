@@ -17,5 +17,5 @@ var golint = newLinter("golint", newLinterConfig("", pathLineColMessage, ""))
 var govet = newLinter("govet", newLinterConfig("", pathLineMessage, "", "--no-recurse"))
 
 func GetSupportedLinters() []linters.Linter {
-	return []linters.Linter{gofmt{}, gofmt{useGoimports: true}, golint, govet}
+	return []linters.Linter{errCheck}
 }

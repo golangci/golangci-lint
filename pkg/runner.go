@@ -21,7 +21,7 @@ type SimpleRunner struct {
 func (r SimpleRunner) Run(ctx context.Context, linters []Linter, exec executors.Executor) ([]result.Issue, error) {
 	results := []result.Result{}
 	for _, linter := range linters {
-		res, err := linter.Run(ctx, exec)
+		res, err := linter.Run(ctx, exec, nil)
 		if err != nil {
 			analytics.Log(ctx).Warnf("Can't run linter %+v: %s", linter, err)
 			continue

@@ -12,6 +12,7 @@ import (
 	"syscall"
 	"text/template"
 
+	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/result"
 	"github.com/golangci/golangci-shared/pkg/analytics"
 	"github.com/golangci/golangci-shared/pkg/executors"
@@ -85,25 +86,32 @@ func getOutTail(out string, linesCount int) string {
 	return strings.Join(lines[len(lines)-linesCount:], "\n")
 }
 
-func (lint linter) Run(ctx context.Context, exec executors.Executor) (*result.Result, error) {
-	paths, err := getPathsForGoProject(exec.WorkDir())
-	if err != nil {
-		return nil, fmt.Errorf("can't get files to analyze: %s", err)
+func (lint linter) Run(ctx context.Context, exec executors.Executor, cfg *config.Run) (*result.Result, error) {
+	paths := &ProjectPaths{
+		files: cfg.Paths,
+		dirs:  []string{}, // TODO
+	}
+	var err error
+	if len(cfg.Paths) == 0 {
+		paths, err = getPathsForGoProject(exec.WorkDir())
+		if err != nil {
+			return nil, fmt.Errorf("can't get files to analyze: %s", err)
+		}
 	}
 
 	retIssues := []result.Issue{}
 
-	const maxDirsPerRun = 100 // run one linter multiple times with groups of dirs: limit memory usage in the cost of higher CPU usage
+	const maxFilesPerRun = 100 // run one linter multiple times with groups of files: limit memory usage in the cost of higher CPU usage
 
-	for len(paths.dirs) != 0 {
+	for len(paths.files) != 0 {
 		args := append([]string{}, lint.args...)
 
-		dirsCount := len(paths.dirs)
-		if dirsCount > maxDirsPerRun {
-			dirsCount = maxDirsPerRun
+		filesCount := len(paths.files)
+		if filesCount > maxFilesPerRun {
+			filesCount = maxFilesPerRun
 		}
-		dirs := paths.dirs[:dirsCount]
-		args = append(args, dirs...)
+		files := paths.files[:filesCount]
+		args = append(args, files...)
 
 		out, err := exec.Run(ctx, lint.name, args...)
 		if err != nil && !lint.doesExitCodeMeansIssuesWereFound(err) {
@@ -114,7 +122,7 @@ func (lint linter) Run(ctx context.Context, exec executors.Executor) (*result.Re
 		issues := lint.parseLinterOut(out)
 		retIssues = append(retIssues, issues...)
 
-		paths.dirs = paths.dirs[dirsCount:]
+		paths.files = paths.files[filesCount:]
 	}
 
 	return &result.Result{
@@ -176,7 +184,7 @@ func (lint linter) parseLinterOut(out string) []result.Issue {
 	for scanner.Scan() {
 		vars, err := lint.parseLinterOutLine(scanner.Text())
 		if err != nil {
-			analytics.Log(context.TODO()).Warnf("Can't parse linter out line: %s", err)
+			analytics.Log(context.TODO()).Warnf("Can't parse linter %s out line: %s", lint.Name(), err)
 			continue
 		}
 

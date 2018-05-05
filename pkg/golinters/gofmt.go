@@ -5,6 +5,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/result"
 	"github.com/golangci/golangci-shared/pkg/analytics"
 	"github.com/golangci/golangci-shared/pkg/executors"
@@ -81,7 +82,8 @@ func (g gofmt) extractIssuesFromPatch(patch string) ([]result.Issue, error) {
 	return issues, nil
 }
 
-func (g gofmt) Run(ctx context.Context, exec executors.Executor) (*result.Result, error) {
+func (g gofmt) Run(ctx context.Context, exec executors.Executor, cfg *config.Run) (*result.Result, error) {
+	// TODO: cfg support
 	paths, err := getPathsForGoProject(exec.WorkDir())
 	if err != nil {
 		return nil, fmt.Errorf("can't get files to analyze: %s", err)

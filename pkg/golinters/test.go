@@ -32,7 +32,7 @@ func ExpectIssues(t *testing.T, linter linters.Linter, source string, issues []r
 	err = ioutil.WriteFile(path.Join(subDir, "f.go"), []byte(source), os.ModePerm)
 	assert.NoError(t, err)
 
-	res, err := linter.Run(context.Background(), exec)
+	res, err := linter.Run(context.Background(), exec, nil)
 	assert.NoError(t, err)
 
 	assert.Equal(t, issues, res.Issues)
