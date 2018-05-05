@@ -27,6 +27,9 @@ type Run struct {
 		CheckTypeAssertions bool
 		CheckAssignToBlank  bool
 	}
+	Govet struct {
+		CheckShadowing bool
+	}
 }
 
 type Config struct {

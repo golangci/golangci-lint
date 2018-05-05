@@ -3,6 +3,7 @@ package pkg
 import (
 	"context"
 	"fmt"
+	"os"
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/result"
@@ -21,8 +22,16 @@ type SimpleRunner struct {
 
 func (r SimpleRunner) Run(ctx context.Context, linters []Linter, exec executors.Executor, cfg *config.Run) ([]result.Issue, error) {
 	results := []result.Result{}
+	savedStdout, savedStderr := os.Stdout, os.Stderr
+	devNull, err := os.Open(os.DevNull)
+	if err != nil {
+		return nil, fmt.Errorf("can't open null device %q: %s", os.DevNull, err)
+	}
+
 	for _, linter := range linters {
+		os.Stdout, os.Stderr = devNull, devNull
 		res, err := linter.Run(ctx, exec, cfg)
+		os.Stdout, os.Stderr = savedStdout, savedStderr
 		if err != nil {
 			analytics.Log(ctx).Warnf("Can't run linter %+v: %s", linter, err)
 			continue
@@ -35,7 +44,7 @@ func (r SimpleRunner) Run(ctx context.Context, linters []Linter, exec executors.
 		results = append(results, *res)
 	}
 
-	results, err := r.processResults(results)
+	results, err = r.processResults(results)
 	if err != nil {
 		return nil, fmt.Errorf("can't process results: %s", err)
 	}

@@ -47,6 +47,17 @@
   version = "v1.0.0"
 
 [[projects]]
+  branch = "master"
+  name = "github.com/golang/go"
+  packages = [
+    ".",
+    "lib/cfg",
+    "lib/whitelist"
+  ]
+  revision = "c5b798e3c473354ef919e8fe4e0a11b4a9e36d18"
+  source = "github.com/golangci/govet"
+
+[[projects]]
   name = "github.com/golang/mock"
   packages = ["gomock"]
   revision = "c34cdb4725f4c3844d095133c6e40e448b86589b"
@@ -201,6 +212,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "51ff4a5cc3ccf4539cdef62ac5a53cf5c57180d76d7ac9179380922d45b618c1"
+  inputs-digest = "6d7156f4c2a3467b6a312e9ddb07dc6f07385f9637c29e42a386afded9bb6ef3"
   solver-name = "gps-cdcl"
   solver-version = 1

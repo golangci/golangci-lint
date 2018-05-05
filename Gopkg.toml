@@ -50,6 +50,11 @@
   branch = "master"
   source = "github.com/golangci/errcheck"
 
+[[constraint]]
+  name = "github.com/golang/go"
+  branch = "master"
+  source = "github.com/golangci/govet"
+
 [prune]
   go-tests = true
   unused-packages = true

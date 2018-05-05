@@ -1,4 +1,4 @@
-package p
+package testdata
 
 import (
 	"net/http"

@@ -37,6 +37,8 @@ func (e *Executor) initRun() {
 	runCmd.Flags().BoolVar(&rc.Errcheck.CheckClose, "errcheck.check-close", false, "Check missed error checks on .Close() calls")
 	runCmd.Flags().BoolVar(&rc.Errcheck.CheckTypeAssertions, "errcheck.check-type-assertions", false, "Check for ignored type assertion results")
 	runCmd.Flags().BoolVar(&rc.Errcheck.CheckAssignToBlank, "errcheck.check-blank", false, "Check for errors assigned to blank identifier: _ = errFunc()")
+
+	runCmd.Flags().BoolVar(&rc.Govet.CheckShadowing, "govet.check-shadowing", true, "Check for shadowed variables")
 }
 
 func (e Executor) executeRun(cmd *cobra.Command, args []string) {
@@ -76,7 +78,7 @@ func (e Executor) executeRun(cmd *cobra.Command, args []string) {
 		runner := pkg.SimpleRunner{
 			Processors: []processors.Processor{
 				processors.MaxLinterIssuesPerFile{},
-				processors.UniqByLineProcessor{},
+				//processors.UniqByLineProcessor{},
 				processors.NewPathPrettifier(),
 			},
 		}

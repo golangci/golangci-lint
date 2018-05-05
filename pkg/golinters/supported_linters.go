@@ -6,8 +6,7 @@ const pathLineColMessage = `^(?P<path>.*?\.go):(?P<line>\d+):(?P<col>\d+):\s*(?P
 const pathLineMessage = `^(?P<path>.*?\.go):(?P<line>\d+):\s*(?P<message>.*)$`
 
 var golint = newLinter("golint", newLinterConfig("", pathLineColMessage, ""))
-var govet = newLinter("govet", newLinterConfig("", pathLineMessage, "", "--no-recurse"))
 
 func GetSupportedLinters() []pkg.Linter {
-	return []pkg.Linter{errcheck{}}
+	return []pkg.Linter{govet{}, errcheck{}}
 }
