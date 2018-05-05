@@ -3,7 +3,6 @@ package golinters
 import (
 	"context"
 	"fmt"
-	"log"
 	"path"
 	"path/filepath"
 
@@ -38,7 +37,6 @@ func processPaths(root string, paths []string, maxPaths int) ([]string, error) {
 func getPathsForGoProject(root string) (*ProjectPaths, error) {
 	excludeDirs := []string{"vendor", "testdata", "examples", "Godeps"}
 	pr := fsutils.NewPathResolver(excludeDirs, []string{".go"})
-	log.Printf("root is %q, paths are %q", root, path.Join(root, "..."))
 	paths, err := pr.Resolve(path.Join(root, "..."))
 	if err != nil {
 		return nil, fmt.Errorf("can't resolve paths: %s", err)
