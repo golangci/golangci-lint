@@ -45,6 +45,11 @@
   branch = "master"
   name = "sourcegraph.com/sourcegraph/go-diff"
 
+[[constraint]]
+  name = "github.com/kisielk/errcheck"
+  branch = "master"
+  source = "github.com/golangci/errcheck"
+
 [prune]
   go-tests = true
   unused-packages = true

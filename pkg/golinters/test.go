@@ -22,7 +22,7 @@ func NewIssue(linter, message string, line int) result.Issue {
 	}
 }
 
-func ExpectIssues(t *testing.T, linter linters.Linter, source string, issues []result.Issue) {
+func ExpectIssues(t *testing.T, linter pkg.Linter, source string, issues []result.Issue) {
 	exec, err := executors.NewTempDirShell("test.expectissues")
 	assert.NoError(t, err)
 	defer exec.Clean()

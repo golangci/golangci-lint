@@ -10,7 +10,7 @@ func retErr() error {
 }
 
 func missedErrorCheck() {
-	retErr() // ERROR "Error return value is not checked"
+	retErr() // ERROR "Error return value of `retErr` is not checked"
 }
 
 func ignoreCloseMissingErrHandling() error {

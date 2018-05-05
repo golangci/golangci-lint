@@ -11,13 +11,22 @@ const (
 var OutFormats = []string{OutFormatColoredLineNumber, OutFormatLineNumber, OutFormatJSON}
 
 type Common struct {
-	IsVerbose bool
+	IsVerbose      bool
+	CPUProfilePath string
 }
 
 type Run struct {
-	Paths                 []string
+	Paths     []string
+	BuildTags []string
+
 	OutFormat             string
 	ExitCodeIfIssuesFound int
+
+	Errcheck struct {
+		CheckClose          bool
+		CheckTypeAssertions bool
+		CheckAssignToBlank  bool
+	}
 }
 
 type Config struct {

@@ -70,6 +70,16 @@
   version = "v1.0"
 
 [[projects]]
+  branch = "master"
+  name = "github.com/kisielk/errcheck"
+  packages = [
+    "golangci",
+    "internal/errcheck"
+  ]
+  revision = "5074b341ce444f80a67a09667b2e85302fb62847"
+  source = "github.com/golangci/errcheck"
+
+[[projects]]
   name = "github.com/mattn/go-colorable"
   packages = ["."]
   revision = "167de6bfdfba052fa6b2d3664c8f5272e23c9072"
@@ -168,6 +178,16 @@
 
 [[projects]]
   branch = "master"
+  name = "golang.org/x/tools"
+  packages = [
+    "go/ast/astutil",
+    "go/buildutil",
+    "go/loader"
+  ]
+  revision = "87723262609ca8fd55d449c027454c29cadefd68"
+
+[[projects]]
+  branch = "master"
   name = "sourcegraph.com/sourcegraph/go-diff"
   packages = ["diff"]
   revision = "3f415a150aec0685cb81b73cc201e762e075006d"
@@ -181,6 +201,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "e924e6f11d7b225c9680fc50df9661941727487bae2c0b819733d10d757e606b"
+  inputs-digest = "51ff4a5cc3ccf4539cdef62ac5a53cf5c57180d76d7ac9179380922d45b618c1"
   solver-name = "gps-cdcl"
   solver-version = 1

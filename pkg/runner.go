@@ -1,9 +1,10 @@
-package linters
+package pkg
 
 import (
 	"context"
 	"fmt"
 
+	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/result"
 	"github.com/golangci/golangci-lint/pkg/result/processors"
 	"github.com/golangci/golangci-shared/pkg/analytics"
@@ -11,17 +12,17 @@ import (
 )
 
 type Runner interface {
-	Run(ctx context.Context, linters []Linter, exec executors.Executor) ([]result.Issue, error)
+	Run(ctx context.Context, linters []Linter, exec executors.Executor, cfg *config.Run) ([]result.Issue, error)
 }
 
 type SimpleRunner struct {
 	Processors []processors.Processor
 }
 
-func (r SimpleRunner) Run(ctx context.Context, linters []Linter, exec executors.Executor) ([]result.Issue, error) {
+func (r SimpleRunner) Run(ctx context.Context, linters []Linter, exec executors.Executor, cfg *config.Run) ([]result.Issue, error) {
 	results := []result.Result{}
 	for _, linter := range linters {
-		res, err := linter.Run(ctx, exec, nil)
+		res, err := linter.Run(ctx, exec, cfg)
 		if err != nil {
 			analytics.Log(ctx).Warnf("Can't run linter %+v: %s", linter, err)
 			continue

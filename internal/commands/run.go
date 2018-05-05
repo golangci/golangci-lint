@@ -6,12 +6,15 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"runtime/pprof"
 	"strings"
 
 	"github.com/fatih/color"
+	"github.com/golangci/golangci-lint/pkg"
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/golinters"
 	"github.com/golangci/golangci-lint/pkg/result"
+	"github.com/golangci/golangci-lint/pkg/result/processors"
 	"github.com/golangci/golangci-shared/pkg/executors"
 	"github.com/spf13/cobra"
 )
@@ -24,49 +27,81 @@ func (e *Executor) initRun() {
 	}
 	e.rootCmd.AddCommand(runCmd)
 
-	runCmd.Flags().StringVarP(&e.cfg.Run.OutFormat, "out-format", "",
+	rc := &e.cfg.Run
+	runCmd.Flags().StringVar(&rc.OutFormat, "out-format",
 		config.OutFormatColoredLineNumber,
 		fmt.Sprintf("Format of output: %s", strings.Join(config.OutFormats, "|")))
-	runCmd.Flags().IntVarP(&e.cfg.Run.ExitCodeIfIssuesFound, "issues-exit-code", "",
+	runCmd.Flags().IntVar(&rc.ExitCodeIfIssuesFound, "issues-exit-code",
 		1, "Exit code when issues were found")
+
+	runCmd.Flags().BoolVar(&rc.Errcheck.CheckClose, "errcheck.check-close", false, "Check missed error checks on .Close() calls")
+	runCmd.Flags().BoolVar(&rc.Errcheck.CheckTypeAssertions, "errcheck.check-type-assertions", false, "Check for ignored type assertion results")
+	runCmd.Flags().BoolVar(&rc.Errcheck.CheckAssignToBlank, "errcheck.check-blank", false, "Check for errors assigned to blank identifier: _ = errFunc()")
 }
 
 func (e Executor) executeRun(cmd *cobra.Command, args []string) {
-	f := func() error {
-		linters := golinters.GetSupportedLinters()
+	f := func() (error, int) {
+		if e.cfg.Common.CPUProfilePath != "" {
+			f, err := os.Create(e.cfg.Common.CPUProfilePath)
+			if err != nil {
+				log.Fatal(err)
+			}
+			if err := pprof.StartCPUProfile(f); err != nil {
+				log.Fatal(err)
+			}
+			defer pprof.StopCPUProfile()
+		}
+
 		ctx := context.Background()
 
-		pwd, err := os.Getwd()
-		if err != nil {
-			return err
-		}
-		exec := executors.NewShell(pwd)
+		var exec executors.Executor
 
-		e.cfg.Run.Paths = args
-
-		issues := []result.Issue{}
-		for _, linter := range linters {
-			res, err := linter.Run(ctx, exec, &e.cfg.Run)
-			if err != nil {
-				return err
+		for _, path := range args {
+			if strings.HasSuffix(path, ".go") && len(args) != 1 {
+				return fmt.Errorf("Specific files for analysis are allowed only if one file is set"), 1
 			}
-			issues = append(issues, res.Issues...)
 		}
 
-		if err = outputIssues(e.cfg.Run.OutFormat, issues); err != nil {
-			return fmt.Errorf("can't output %d issues: %s", len(issues), err)
+		if len(args) == 0 {
+			args = []string{"./..."}
+		}
+
+		paths, err := golinters.GetPathsForAnalysis(args)
+		if err != nil {
+			return err, 1
+		}
+
+		e.cfg.Run.Paths = paths
+
+		runner := pkg.SimpleRunner{
+			Processors: []processors.Processor{
+				processors.MaxLinterIssuesPerFile{},
+				processors.UniqByLineProcessor{},
+				processors.NewPathPrettifier(),
+			},
+		}
+
+		issues, err := runner.Run(ctx, golinters.GetSupportedLinters(), exec, &e.cfg.Run)
+		if err != nil {
+			return err, 1
+		}
+
+		if err := outputIssues(e.cfg.Run.OutFormat, issues); err != nil {
+			return fmt.Errorf("can't output %d issues: %s", len(issues), err), 1
 		}
 
 		if len(issues) != 0 {
-			os.Exit(e.cfg.Run.ExitCodeIfIssuesFound)
+			return nil, e.cfg.Run.ExitCodeIfIssuesFound
 		}
 
-		return nil
+		return nil, 0
 	}
 
-	if err := f(); err != nil {
-		panic(err)
+	err, exitCode := f()
+	if err != nil {
+		log.Print(err)
 	}
+	os.Exit(exitCode)
 }
 
 func outputIssues(format string, issues []result.Issue) error {
@@ -80,7 +115,11 @@ func outputIssues(format string, issues []result.Issue) error {
 		}
 
 		for _, i := range issues {
-			log.Printf("%s:%d: %s", i.File, i.LineNumber, i.Text)
+			text := i.Text
+			if format == config.OutFormatColoredLineNumber {
+				text = color.RedString(text)
+			}
+			log.Printf("%s:%d: %s", i.File, i.LineNumber, text)
 		}
 		return nil
 	}

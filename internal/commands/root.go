@@ -14,5 +14,6 @@ func (e *Executor) initRoot() {
 		},
 	}
 	rootCmd.PersistentFlags().BoolVarP(&e.cfg.Common.IsVerbose, "verbose", "v", false, "verbose output")
+	rootCmd.PersistentFlags().StringVar(&e.cfg.Common.CPUProfilePath, "cpu-profile-path", "", "Path to CPU profile output file")
 	e.rootCmd = rootCmd
 }
