@@ -50,6 +50,8 @@ func (e *Executor) initRun() {
 	runCmd.Flags().BoolVar(&rc.Structcheck.CheckExportedFields, "structcheck.exported-fields", false, "Structcheck: report about unused exported struct fields")
 	runCmd.Flags().BoolVar(&rc.Varcheck.CheckExportedFields, "varcheck.exported-fields", false, "Varcheck: report about unused exported variables")
 
+	runCmd.Flags().BoolVar(&rc.Maligned.SuggestNewOrder, "maligned.suggest-new", false, "Maligned: print suggested more optimal struct fields ordering")
+
 	runCmd.Flags().StringSliceVarP(&rc.EnabledLinters, "enable", "E", []string{}, "Enable specific linter")
 	runCmd.Flags().StringSliceVarP(&rc.DisabledLinters, "disable", "D", []string{}, "Disable specific linter")
 	runCmd.Flags().BoolVar(&rc.EnableAllLinters, "enable-all", false, "Enable all linters")

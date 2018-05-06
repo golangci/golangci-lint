@@ -87,6 +87,12 @@
   revision = "31bebf17d90d40b728c41fecdd5acf5fb8654fc7"
 
 [[projects]]
+  branch = "master"
+  name = "github.com/golangci/maligned"
+  packages = ["."]
+  revision = "b1d89398deca2fd3f8578e5a9551e819bd01ca5f"
+
+[[projects]]
   name = "github.com/inconshreveable/mousetrap"
   packages = ["."]
   revision = "76626ae9c91c4f2a10f34cad8ce83ea42c93bb75"
@@ -210,6 +216,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "ccff501e3f2717b30a1883f46bda277e4438080025f03b8070c968b7ee99549a"
+  inputs-digest = "41c8a896b25eff9ad6bdcac8176d363561481e3d985dc37952af54185fa57759"
   solver-name = "gps-cdcl"
   solver-version = 1

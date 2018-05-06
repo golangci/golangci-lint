@@ -22,7 +22,7 @@ func (s Structcheck) Run(ctx context.Context, lintCtx *Context) (*result.Result,
 		res.Issues = append(res.Issues, result.Issue{
 			File:       i.Pos.Filename,
 			LineNumber: i.Pos.Line,
-			Text:       fmt.Sprintf("%s is unused", formatCode(fmt.Sprintf("%s.%s", i.Type, i.FieldName), lintCtx.RunCfg())),
+			Text:       fmt.Sprintf("%s is unused", formatCode(i.FieldName, lintCtx.RunCfg())),
 			FromLinter: s.Name(),
 		})
 	}

@@ -53,6 +53,9 @@ type Run struct {
 	Structcheck struct {
 		CheckExportedFields bool
 	}
+	Maligned struct {
+		SuggestNewOrder bool
+	}
 
 	EnabledLinters    []string
 	DisabledLinters   []string

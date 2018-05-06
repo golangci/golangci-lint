@@ -11,9 +11,9 @@ import (
 )
 
 type LinterConfig struct {
-	EnabledByDefault bool
 	Desc             string
 	Linter           Linter
+	EnabledByDefault bool
 	DoesFullImport   bool
 }
 
@@ -66,6 +66,7 @@ func GetAllSupportedLinterConfigs() []LinterConfig {
 
 		disabledByDefault(golinters.Gofmt{}, "Gofmt checks whether code was gofmt-ed. By default this tool runs with -s option to check for code simplification", false),
 		disabledByDefault(golinters.Gofmt{UseGoimports: true}, "Goimports does everything that gofmt does. Additionally it checks unused imports", false),
+		disabledByDefault(golinters.Maligned{}, "Tool to detect Go structs that would take less memory if their fields were sorted", true),
 	}
 }
 
