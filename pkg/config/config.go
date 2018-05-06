@@ -30,6 +30,9 @@ type Run struct {
 	Govet struct {
 		CheckShadowing bool
 	}
+	Golint struct {
+		MinConfidence float64
+	}
 }
 
 type Config struct {

@@ -113,3 +113,8 @@ func formatCode(code string, cfg *config.Run) string {
 
 	return fmt.Sprintf("`%s`", code)
 }
+
+func isDir(filename string) bool {
+	fi, err := os.Stat(filename)
+	return err == nil && fi.IsDir()
+}

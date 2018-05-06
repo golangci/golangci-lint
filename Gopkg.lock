@@ -58,6 +58,12 @@
   source = "github.com/golangci/govet"
 
 [[projects]]
+  branch = "master"
+  name = "github.com/golang/lint"
+  packages = ["."]
+  revision = "470b6b0bb3005eda157f0275e2e4895055396a81"
+
+[[projects]]
   name = "github.com/golang/mock"
   packages = ["gomock"]
   revision = "c34cdb4725f4c3844d095133c6e40e448b86589b"
@@ -193,7 +199,10 @@
   packages = [
     "go/ast/astutil",
     "go/buildutil",
-    "go/loader"
+    "go/gcexportdata",
+    "go/internal/gcimporter",
+    "go/loader",
+    "go/types/typeutil"
   ]
   revision = "87723262609ca8fd55d449c027454c29cadefd68"
 
@@ -212,6 +221,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "6d7156f4c2a3467b6a312e9ddb07dc6f07385f9637c29e42a386afded9bb6ef3"
+  inputs-digest = "29f17160680b1e8db1390003f80c17e24a82a83631d5c67f7a8fe7b29fd2a0f5"
   solver-name = "gps-cdcl"
   solver-version = 1
