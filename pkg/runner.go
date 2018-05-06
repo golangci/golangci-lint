@@ -27,6 +27,16 @@ type lintRes struct {
 	res    *result.Result
 }
 
+func runLinter(ctx context.Context, linter Linter, exec executors.Executor, cfg *config.Run) (res *result.Result, err error) {
+	defer func() {
+		if panicData := recover(); panicData != nil {
+			err = fmt.Errorf("panic occured: %s", panicData)
+		}
+	}()
+	res, err = linter.Run(ctx, exec, cfg)
+	return
+}
+
 func runLinters(ctx context.Context, wg *sync.WaitGroup, tasksCh chan Linter, lintResultsCh chan lintRes, exec executors.Executor, cfg *config.Config) {
 	for i := 0; i < cfg.Common.Concurrency; i++ {
 		go func() {
@@ -47,7 +57,7 @@ func runLinters(ctx context.Context, wg *sync.WaitGroup, tasksCh chan Linter, li
 					if !ok {
 						return
 					}
-					res, lerr := linter.Run(ctx, exec, &cfg.Run)
+					res, lerr := runLinter(ctx, linter, exec, &cfg.Run)
 					lintResultsCh <- lintRes{
 						linter: linter,
 						err:    lerr,

@@ -1,6 +1,6 @@
 package testdata
 
-var go_lint string // ERROR "don't use underscores in Go names; var go_lint should be goLint"
+var Go_lint string // ERROR "don't use underscores in Go names; var Go_lint should be GoLint"
 
 func ExportedFuncWithNoComment() {
 }

@@ -2,11 +2,11 @@ package testdata
 
 import "os"
 
-func govet() error {
+func Govet() error {
 	return &os.PathError{"first", "path", os.ErrNotExist} // ERROR "os.PathError composite literal uses unkeyed fields"
 }
 
-func govetShadow(f *os.File, buf []byte) (err error) {
+func GovetShadow(f *os.File, buf []byte) (err error) {
 	if f != nil {
 		_, err := f.Read(buf) // ERROR "declaration of .err. shadows declaration at testdata/govet.go:9"
 		if err != nil {

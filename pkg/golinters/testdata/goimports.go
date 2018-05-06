@@ -5,7 +5,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/config"
 )
 
-func bar() {
+func Bar() {
 	fmt.Print("x")
 	_ = config.Config{}
 }

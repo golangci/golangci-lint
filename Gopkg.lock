@@ -60,6 +60,12 @@
 
 [[projects]]
   branch = "master"
+  name = "github.com/golangci/go-misc"
+  packages = ["deadcode"]
+  revision = "a82b63c685e730fbc1efbade9ce6316ac85cceb7"
+
+[[projects]]
+  branch = "master"
   name = "github.com/golangci/gofmt"
   packages = [
     "gofmt",
@@ -231,6 +237,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "c4187e819ccca1b06537adb888a052a895c6236f90accd827314c12b2fd1ce3e"
+  inputs-digest = "fd69e23afecb188e33d824ca597d116e47e913418eb1f0842ccb4f9bb44c7c7c"
   solver-name = "gps-cdcl"
   solver-version = 1

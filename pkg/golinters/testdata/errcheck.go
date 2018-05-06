@@ -5,15 +5,15 @@ import (
 	"os"
 )
 
-func retErr() error {
+func RetErr() error {
 	return nil
 }
 
-func missedErrorCheck() {
-	retErr() // ERROR "Error return value of `retErr` is not checked"
+func MissedErrorCheck() {
+	RetErr() // ERROR "Error return value of `RetErr` is not checked"
 }
 
-func ignoreCloseMissingErrHandling() error {
+func IgnoreCloseMissingErrHandling() error {
 	f, err := os.Open("t.go")
 	if err != nil {
 		return err
@@ -23,7 +23,7 @@ func ignoreCloseMissingErrHandling() error {
 	return nil
 }
 
-func ignoreCloseInDeferMissingErrHandling() {
+func IgnoreCloseInDeferMissingErrHandling() {
 	resp, err := http.Get("http://example.com/")
 	if err != nil {
 		panic(err)
