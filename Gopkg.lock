@@ -39,6 +39,15 @@
 
 [[projects]]
   branch = "master"
+  name = "github.com/golangci/check"
+  packages = [
+    "cmd/structcheck",
+    "cmd/varcheck"
+  ]
+  revision = "cfe4005ccda277a820149d44d6ededc400cc99a2"
+
+[[projects]]
+  branch = "master"
   name = "github.com/golangci/go-misc"
   packages = ["deadcode"]
   revision = "a61b005a223b50d3656798639dd87073ca5c1981"
@@ -201,6 +210,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "1d47be3027527a2186cc0bea53742e1ebda39cb25f15860a695d7711ae576cb2"
+  inputs-digest = "ccff501e3f2717b30a1883f46bda277e4438080025f03b8070c968b7ee99549a"
   solver-name = "gps-cdcl"
   solver-version = 1

@@ -47,6 +47,12 @@ type Run struct {
 	Gocyclo struct {
 		MinComplexity int
 	}
+	Varcheck struct {
+		CheckExportedFields bool
+	}
+	Structcheck struct {
+		CheckExportedFields bool
+	}
 
 	EnabledLinters    []string
 	DisabledLinters   []string

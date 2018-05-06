@@ -61,6 +61,8 @@ func GetAllSupportedLinterConfigs() []LinterConfig {
 		enabledByDefault(golinters.Golint{}, "Golint differs from gofmt. Gofmt reformats Go source code, whereas golint prints out style mistakes", false),
 		enabledByDefault(golinters.Deadcode{}, "Finds unused code", true),
 		enabledByDefault(golinters.Gocyclo{}, "Computes and checks the cyclomatic complexity of functions", false),
+		enabledByDefault(golinters.Structcheck{}, "Finds unused struct fields", true),
+		enabledByDefault(golinters.Varcheck{}, "Finds unused global variables and constants", true),
 
 		disabledByDefault(golinters.Gofmt{}, "Gofmt checks whether code was gofmt-ed. By default this tool runs with -s option to check for code simplification", false),
 		disabledByDefault(golinters.Gofmt{UseGoimports: true}, "Goimports does everything that gofmt does. Additionally it checks unused imports", false),
