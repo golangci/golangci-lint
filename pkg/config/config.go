@@ -41,6 +41,9 @@ type Run struct {
 	Gofmt struct {
 		Simplify bool
 	}
+	Gocyclo struct {
+		MinComplexity int
+	}
 
 	EnabledLinters    []string
 	DisabledLinters   []string

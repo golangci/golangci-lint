@@ -49,6 +49,9 @@ func (e *Executor) initRun() {
 
 	runCmd.Flags().BoolVar(&rc.Gofmt.Simplify, "gofmt.simplify", true, "Gofmt: simplify code")
 
+	runCmd.Flags().IntVar(&rc.Gocyclo.MinComplexity, "gocyclo.min-complexity",
+		20, "Minimal complexity of function to report it")
+
 	runCmd.Flags().StringSliceVarP(&rc.EnabledLinters, "enable", "E", []string{}, "Enable specific linter")
 	runCmd.Flags().StringSliceVarP(&rc.DisabledLinters, "disable", "D", []string{}, "Disable specific linter")
 	runCmd.Flags().BoolVar(&rc.EnableAllLinters, "enable-all", false, "Enable all linters")
@@ -94,8 +97,8 @@ func (e Executor) executeRun(cmd *cobra.Command, args []string) {
 		runner := pkg.SimpleRunner{
 			Processors: []processors.Processor{
 				processors.MaxLinterIssuesPerFile{},
-				processors.UniqByLineProcessor{},
 				processors.NewExcludeProcessor(fmt.Sprintf("(%s)", strings.Join(e.cfg.Run.ExcludePatterns, "|"))),
+				processors.UniqByLineProcessor{},
 				processors.NewPathPrettifier(),
 			},
 		}

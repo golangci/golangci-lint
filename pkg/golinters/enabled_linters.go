@@ -38,6 +38,7 @@ func GetAllSupportedLinterConfigs() []LinterConfig {
 		enabledByDefault(errcheck{}, "Errcheck is a program for checking for unchecked errors in go programs. These unchecked errors can be critical bugs in some cases"),
 		enabledByDefault(golint{}, "Golint differs from gofmt. Gofmt reformats Go source code, whereas golint prints out style mistakes"),
 		enabledByDefault(deadcode{}, "Finds unused code"),
+		enabledByDefault(gocyclo{}, "Computes and checks the cyclomatic complexity of functions"),
 
 		disabledByDefault(gofmt{}, "Gofmt checks whether code was gofmt-ed. By default this tool runs with -s option to check for code simplification"),
 		disabledByDefault(gofmt{useGoimports: true}, "Goimports does everything that gofmt does. Additionally it checks unused imports"),
