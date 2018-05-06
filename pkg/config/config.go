@@ -39,6 +39,11 @@ type Run struct {
 	Gofmt struct {
 		Simplify bool
 	}
+
+	EnabledLinters    []string
+	DisabledLinters   []string
+	EnableAllLinters  bool
+	DisableAllLinters bool
 }
 
 type Config struct {

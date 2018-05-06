@@ -18,6 +18,7 @@ func NewExecutor() *Executor {
 
 	e.initRoot()
 	e.initRun()
+	e.initLinters()
 
 	return e
 }

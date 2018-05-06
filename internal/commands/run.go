@@ -17,7 +17,9 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters"
 	"github.com/golangci/golangci-lint/pkg/result"
 	"github.com/golangci/golangci-lint/pkg/result/processors"
+	"github.com/golangci/golangci-shared/pkg/analytics"
 	"github.com/golangci/golangci-shared/pkg/executors"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -36,7 +38,7 @@ func (e *Executor) initRun() {
 	runCmd.Flags().IntVar(&rc.ExitCodeIfIssuesFound, "issues-exit-code",
 		1, "Exit code when issues were found")
 
-	runCmd.Flags().BoolVar(&rc.Errcheck.CheckClose, "errcheck.check-close", false, " Errcheck: check missed error checks on .Close() calls")
+	runCmd.Flags().BoolVar(&rc.Errcheck.CheckClose, "errcheck.check-close", false, "Errcheck: check missed error checks on .Close() calls")
 	runCmd.Flags().BoolVar(&rc.Errcheck.CheckTypeAssertions, "errcheck.check-type-assertions", false, "Errcheck: check for ignored type assertion results")
 	runCmd.Flags().BoolVar(&rc.Errcheck.CheckAssignToBlank, "errcheck.check-blank", false, "Errcheck: check for errors assigned to blank identifier: _ = errFunc()")
 
@@ -45,11 +47,20 @@ func (e *Executor) initRun() {
 	runCmd.Flags().Float64Var(&rc.Golint.MinConfidence, "golint.min-confidence", 0.8, "Golint: minimum confidence of a problem to print it")
 
 	runCmd.Flags().BoolVar(&rc.Gofmt.Simplify, "gofmt.simplify", true, "Gofmt: simplify code")
+
+	runCmd.Flags().StringSliceVarP(&rc.EnabledLinters, "enable", "E", []string{}, "Enable specific linter")
+	runCmd.Flags().StringSliceVarP(&rc.DisabledLinters, "disable", "D", []string{}, "Disable specific linter")
+	runCmd.Flags().BoolVar(&rc.EnableAllLinters, "enable-all", false, "Enable all linters")
+	runCmd.Flags().BoolVar(&rc.DisableAllLinters, "disable-all", false, "Disable all linters")
 }
 
 func (e Executor) executeRun(cmd *cobra.Command, args []string) {
 	f := func() (error, int) {
 		runtime.GOMAXPROCS(e.cfg.Common.Concurrency)
+
+		if e.cfg.Common.IsVerbose {
+			analytics.SetLogLevel(logrus.InfoLevel)
+		}
 
 		if e.cfg.Common.CPUProfilePath != "" {
 			f, err := os.Create(e.cfg.Common.CPUProfilePath)
@@ -85,7 +96,12 @@ func (e Executor) executeRun(cmd *cobra.Command, args []string) {
 			},
 		}
 
-		issues, err := runner.Run(ctx, golinters.GetSupportedLinters(), exec, e.cfg)
+		linters, err := golinters.GetEnabledLinters(ctx, &e.cfg.Run)
+		if err != nil {
+			return err, 1
+		}
+
+		issues, err := runner.Run(ctx, linters, exec, e.cfg)
 		if err != nil {
 			return err, 1
 		}
@@ -115,7 +131,7 @@ func outputIssues(format string, issues []result.Issue) error {
 			if format == config.OutFormatColoredLineNumber {
 				outStr = color.GreenString(outStr)
 			}
-			fmt.Fprint(os.Stdout, outStr)
+			fmt.Println(outStr)
 		}
 
 		for _, i := range issues {
@@ -123,7 +139,7 @@ func outputIssues(format string, issues []result.Issue) error {
 			if format == config.OutFormatColoredLineNumber {
 				text = color.RedString(text)
 			}
-			fmt.Fprintf(os.Stdout, "%s:%d: %s\n", i.File, i.LineNumber, text)
+			fmt.Printf("%s:%d: %s\n", i.File, i.LineNumber, text)
 		}
 		return nil
 	}
@@ -133,7 +149,7 @@ func outputIssues(format string, issues []result.Issue) error {
 		if err != nil {
 			return err
 		}
-		fmt.Fprint(os.Stdout, string(outputJSON))
+		fmt.Print(string(outputJSON))
 		return nil
 	}
 
