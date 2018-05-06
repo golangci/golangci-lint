@@ -54,6 +54,28 @@
 
 [[projects]]
   branch = "master"
+  name = "github.com/golangci/go-tools"
+  packages = [
+    "callgraph",
+    "callgraph/static",
+    "cmd/megacheck",
+    "deprecated",
+    "functions",
+    "internal/sharedcheck",
+    "lint",
+    "lint/lintutil",
+    "simple",
+    "ssa",
+    "ssa/ssautil",
+    "staticcheck",
+    "staticcheck/vrp",
+    "unused",
+    "version"
+  ]
+  revision = "9a1f066598f8e2c1a58fab3249341c8d808b70ad"
+
+[[projects]]
+  branch = "master"
   name = "github.com/golangci/gocyclo"
   packages = ["."]
   revision = "687488c898ab673ee751943f7bcab53ce2371985"
@@ -216,6 +238,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "41c8a896b25eff9ad6bdcac8176d363561481e3d985dc37952af54185fa57759"
+  inputs-digest = "c267ef4b3c1b5396f8d60efc4d262a5f563d9542ea535ab6f1402141ceb4aff0"
   solver-name = "gps-cdcl"
   solver-version = 1

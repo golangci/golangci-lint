@@ -3,23 +3,19 @@ package pkg
 import (
 	"context"
 	"fmt"
-	"go/build"
 	"os"
 	"runtime/debug"
 	"sync"
 	"time"
 
-	"github.com/golangci/golangci-lint/pkg/config"
-	"github.com/golangci/golangci-lint/pkg/fsutils"
 	"github.com/golangci/golangci-lint/pkg/golinters"
 	"github.com/golangci/golangci-lint/pkg/result"
 	"github.com/golangci/golangci-lint/pkg/result/processors"
 	"github.com/golangci/golangci-shared/pkg/analytics"
-	"golang.org/x/tools/go/loader"
 )
 
 type Runner interface {
-	Run(ctx context.Context, linters []Linter, cfg *config.Config) ([]result.Issue, error)
+	Run(ctx context.Context, linters []Linter, lintCtx *golinters.Context) ([]result.Issue, error)
 }
 
 type SimpleRunner struct {
@@ -78,78 +74,7 @@ func runLinters(ctx context.Context, wg *sync.WaitGroup, tasksCh chan Linter, li
 	}
 }
 
-func isFullImportNeeded(linters []Linter) bool {
-	for _, linter := range linters {
-		lc := GetLinterConfig(linter.Name())
-		if lc.DoesFullImport {
-			return true
-		}
-	}
-
-	return false
-}
-
-func buildLoaderProgramIfNeeded(ctx context.Context, linters []Linter, cfg *config.Run, paths *fsutils.ProjectPaths) (*loader.Program, error) {
-	if !isFullImportNeeded(linters) {
-		return nil, nil
-	}
-
-	startedAt := time.Now()
-	defer func() {
-		analytics.Log(ctx).Infof("Program loading took %s", time.Since(startedAt))
-	}()
-
-	bctx := build.Default
-	bctx.BuildTags = append(bctx.BuildTags, cfg.BuildTags...)
-	loadcfg := &loader.Config{
-		Build: &bctx,
-	}
-	const needTests = true // TODO: configure and take into account in paths resolver
-	rest, err := loadcfg.FromArgs(paths.MixedPaths(), needTests)
-	if err != nil {
-		return nil, fmt.Errorf("can't parepare load config with paths: %s", err)
-	}
-	if len(rest) > 0 {
-		return nil, fmt.Errorf("unhandled loading paths: %v", rest)
-	}
-
-	prog, err := loadcfg.Load()
-	if err != nil {
-		return nil, fmt.Errorf("can't load paths: %s", err)
-	}
-
-	return prog, nil
-}
-
-func (r SimpleRunner) buildLintCtx(ctx context.Context, linters []Linter, cfg *config.Config) (*golinters.Context, error) {
-	args := cfg.Run.Args
-	if len(args) == 0 {
-		args = []string{"./..."}
-	}
-
-	paths, err := fsutils.GetPathsForAnalysis(args)
-	if err != nil {
-		return nil, err
-	}
-
-	prog, err := buildLoaderProgramIfNeeded(ctx, linters, &cfg.Run, paths)
-	if err != nil {
-		return nil, err
-	}
-
-	return &golinters.Context{
-		Paths:   paths,
-		Cfg:     cfg,
-		Program: prog,
-	}, nil
-}
-
-func (r SimpleRunner) Run(ctx context.Context, linters []Linter, cfg *config.Config) ([]result.Issue, error) {
-	lintCtx, err := r.buildLintCtx(ctx, linters, cfg)
-	if err != nil {
-		return nil, err
-	}
-
+func (r SimpleRunner) Run(ctx context.Context, linters []Linter, lintCtx *golinters.Context) ([]result.Issue, error) {
 	savedStdout, savedStderr := os.Stdout, os.Stderr
 	devNull, err := os.Open(os.DevNull)
 	if err != nil {
@@ -159,9 +84,9 @@ func (r SimpleRunner) Run(ctx context.Context, linters []Linter, cfg *config.Con
 	os.Stdout, os.Stderr = devNull, devNull
 
 	lintResultsCh := make(chan lintRes, len(linters))
-	tasksCh := make(chan Linter, cfg.Common.Concurrency)
+	tasksCh := make(chan Linter, lintCtx.Cfg.Common.Concurrency)
 	var wg sync.WaitGroup
-	wg.Add(cfg.Common.Concurrency)
+	wg.Add(lintCtx.Cfg.Common.Concurrency)
 	runLinters(ctx, &wg, tasksCh, lintResultsCh, lintCtx)
 
 	for _, linter := range linters {
@@ -187,7 +112,7 @@ func (r SimpleRunner) Run(ctx context.Context, linters []Linter, cfg *config.Con
 		results = append(results, *res.res)
 	}
 
-	results, err = r.processResults(results)
+	results, err = r.processResults(ctx, results)
 	if err != nil {
 		return nil, fmt.Errorf("can't process results: %s", err)
 	}
@@ -195,14 +120,19 @@ func (r SimpleRunner) Run(ctx context.Context, linters []Linter, cfg *config.Con
 	return r.mergeResults(results), nil
 }
 
-func (r SimpleRunner) processResults(results []result.Result) ([]result.Result, error) {
+func (r SimpleRunner) processResults(ctx context.Context, results []result.Result) ([]result.Result, error) {
 	if len(r.Processors) == 0 {
 		return results, nil
 	}
 
 	for _, p := range r.Processors {
 		var err error
+		startedAt := time.Now()
 		results, err = p.Process(results)
+		elapsed := time.Since(startedAt)
+		if elapsed > 50*time.Millisecond {
+			analytics.Log(ctx).Infof("Result processor %s took %s", p.Name(), elapsed)
+		}
 		if err != nil {
 			return nil, err
 		}

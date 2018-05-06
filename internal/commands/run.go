@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"go/build"
 	"log"
 	"strings"
 	"time"
@@ -11,9 +12,13 @@ import (
 	"github.com/fatih/color"
 	"github.com/golangci/golangci-lint/pkg"
 	"github.com/golangci/golangci-lint/pkg/config"
+	"github.com/golangci/golangci-lint/pkg/fsutils"
+	"github.com/golangci/golangci-lint/pkg/golinters"
 	"github.com/golangci/golangci-lint/pkg/result"
 	"github.com/golangci/golangci-lint/pkg/result/processors"
+	"github.com/golangci/golangci-shared/pkg/analytics"
 	"github.com/spf13/cobra"
+	"golang.org/x/tools/go/loader"
 )
 
 const exitCodeIfFailure = 3
@@ -52,6 +57,10 @@ func (e *Executor) initRun() {
 
 	runCmd.Flags().BoolVar(&rc.Maligned.SuggestNewOrder, "maligned.suggest-new", false, "Maligned: print suggested more optimal struct fields ordering")
 
+	runCmd.Flags().BoolVar(&rc.Megacheck.EnableStaticcheck, "megacheck.staticcheck", true, "Megacheck: run Staticcheck sub-linter: staticcheck is go vet on steroids, applying a ton of static analysis checks")
+	runCmd.Flags().BoolVar(&rc.Megacheck.EnableGosimple, "megacheck.gosimple", true, "Megacheck: run Gosimple sub-linter: gosimple is a linter for Go source code that specialises on simplifying code")
+	runCmd.Flags().BoolVar(&rc.Megacheck.EnableUnused, "megacheck.unused", true, "Megacheck: run Unused sub-linter: unused checks Go code for unused constants, variables, functions and types")
+
 	runCmd.Flags().StringSliceVarP(&rc.EnabledLinters, "enable", "E", []string{}, "Enable specific linter")
 	runCmd.Flags().StringSliceVarP(&rc.DisabledLinters, "disable", "D", []string{}, "Disable specific linter")
 	runCmd.Flags().BoolVar(&rc.EnableAllLinters, "enable-all", false, "Enable all linters")
@@ -62,28 +71,103 @@ func (e *Executor) initRun() {
 	runCmd.Flags().StringSliceVarP(&rc.ExcludePatterns, "exclude", "e", config.DefaultExcludePatterns, "Exclude issue by regexp")
 }
 
-func (e *Executor) runAnalysis(ctx context.Context, args []string) ([]result.Issue, error) {
-	e.cfg.Run.Args = args
-
-	runner := pkg.SimpleRunner{
-		Processors: []processors.Processor{
-			processors.MaxLinterIssuesPerFile{},
-			processors.NewExcludeProcessor(fmt.Sprintf("(%s)", strings.Join(e.cfg.Run.ExcludePatterns, "|"))),
-			processors.UniqByLineProcessor{},
-			processors.NewPathPrettifier(),
-		},
+func isFullImportNeeded(linters []pkg.Linter) bool {
+	for _, linter := range linters {
+		lc := pkg.GetLinterConfig(linter.Name())
+		if lc.DoesFullImport {
+			return true
+		}
 	}
+
+	return false
+}
+
+func loadWholeAppIfNeeded(ctx context.Context, linters []pkg.Linter, cfg *config.Run, paths *fsutils.ProjectPaths) (*loader.Program, *loader.Config, error) {
+	if !isFullImportNeeded(linters) {
+		return nil, nil, nil
+	}
+
+	startedAt := time.Now()
+	defer func() {
+		analytics.Log(ctx).Infof("Program loading took %s", time.Since(startedAt))
+	}()
+
+	bctx := build.Default
+	bctx.BuildTags = append(bctx.BuildTags, cfg.BuildTags...)
+	loadcfg := &loader.Config{
+		Build: &bctx,
+	}
+	const needTests = true // TODO: configure and take into account in paths resolver
+	rest, err := loadcfg.FromArgs(paths.MixedPaths(), needTests)
+	if err != nil {
+		return nil, nil, fmt.Errorf("can't parepare load config with paths: %s", err)
+	}
+	if len(rest) > 0 {
+		return nil, nil, fmt.Errorf("unhandled loading paths: %v", rest)
+	}
+
+	prog, err := loadcfg.Load()
+	if err != nil {
+		return nil, nil, fmt.Errorf("can't load paths: %s", err)
+	}
+
+	return prog, loadcfg, nil
+}
+
+func buildLintCtx(ctx context.Context, linters []pkg.Linter, cfg *config.Config) (*golinters.Context, error) {
+	args := cfg.Run.Args
+	if len(args) == 0 {
+		args = []string{"./..."}
+	}
+
+	paths, err := fsutils.GetPathsForAnalysis(args)
+	if err != nil {
+		return nil, err
+	}
+
+	prog, loaderConfig, err := loadWholeAppIfNeeded(ctx, linters, &cfg.Run, paths)
+	if err != nil {
+		return nil, err
+	}
+
+	return &golinters.Context{
+		Paths:        paths,
+		Cfg:          cfg,
+		Program:      prog,
+		LoaderConfig: loaderConfig,
+	}, nil
+}
+
+func (e *Executor) runAnalysis(ctx context.Context, args []string) ([]result.Issue, error) {
+	startedAt := time.Now()
+	e.cfg.Run.Args = args
 
 	linters, err := pkg.GetEnabledLinters(ctx, &e.cfg.Run)
 	if err != nil {
 		return nil, err
 	}
 
-	issues, err := runner.Run(ctx, linters, e.cfg)
+	lintCtx, err := buildLintCtx(ctx, linters, e.cfg)
 	if err != nil {
 		return nil, err
 	}
 
+	runner := pkg.SimpleRunner{
+		Processors: []processors.Processor{
+			processors.MaxLinterIssuesPerFile{},
+			processors.NewExcludeProcessor(fmt.Sprintf("(%s)", strings.Join(e.cfg.Run.ExcludePatterns, "|"))),
+			processors.NewNolintProcessor(lintCtx.Program),
+			processors.UniqByLineProcessor{},
+			processors.NewPathPrettifier(),
+		},
+	}
+
+	issues, err := runner.Run(ctx, linters, lintCtx)
+	if err != nil {
+		return nil, err
+	}
+
+	analytics.Log(ctx).Infof("Analysis took %s", time.Since(startedAt))
 	return issues, nil
 }
 

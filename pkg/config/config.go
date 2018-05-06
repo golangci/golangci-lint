@@ -56,6 +56,11 @@ type Run struct {
 	Maligned struct {
 		SuggestNewOrder bool
 	}
+	Megacheck struct {
+		EnableStaticcheck bool
+		EnableUnused      bool
+		EnableGosimple    bool
+	}
 
 	EnabledLinters    []string
 	DisabledLinters   []string
