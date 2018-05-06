@@ -1,5 +1,7 @@
 package config
 
+import "github.com/golangci/golangci-lint/pkg/fsutils"
+
 type OutFormat string
 
 const (
@@ -16,7 +18,7 @@ type Common struct {
 }
 
 type Run struct {
-	Paths     []string
+	Paths     *fsutils.ProjectPaths
 	BuildTags []string
 
 	OutFormat             string
@@ -33,6 +35,9 @@ type Run struct {
 	Golint struct {
 		MinConfidence float64
 	}
+	Gofmt struct {
+		Simplify bool
+	}
 }
 
 type Config struct {
@@ -43,7 +48,6 @@ type Config struct {
 func NewDefault() *Config {
 	return &Config{
 		Run: Run{
-			Paths:     []string{"./..."},
 			OutFormat: OutFormatColoredLineNumber,
 		},
 	}

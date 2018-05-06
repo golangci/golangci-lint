@@ -71,6 +71,15 @@
 
 [[projects]]
   branch = "master"
+  name = "github.com/golangci/gofmt"
+  packages = [
+    "gofmt",
+    "goimports"
+  ]
+  revision = "2076e05ced53480baa8ba14a05b80a415bec9377"
+
+[[projects]]
+  branch = "master"
   name = "github.com/golangci/golangci-shared"
   packages = [
     "pkg/analytics",
@@ -202,7 +211,9 @@
     "go/gcexportdata",
     "go/internal/gcimporter",
     "go/loader",
-    "go/types/typeutil"
+    "go/types/typeutil",
+    "imports",
+    "internal/fastwalk"
   ]
   revision = "87723262609ca8fd55d449c027454c29cadefd68"
 
@@ -221,6 +232,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "29f17160680b1e8db1390003f80c17e24a82a83631d5c67f7a8fe7b29fd2a0f5"
+  inputs-digest = "98e0ff9e850bf286e0e15b788f303a6baffcccb7c4d9a55155f28eee386cb43b"
   solver-name = "gps-cdcl"
   solver-version = 1

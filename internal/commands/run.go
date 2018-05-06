@@ -12,6 +12,7 @@ import (
 	"github.com/fatih/color"
 	"github.com/golangci/golangci-lint/pkg"
 	"github.com/golangci/golangci-lint/pkg/config"
+	"github.com/golangci/golangci-lint/pkg/fsutils"
 	"github.com/golangci/golangci-lint/pkg/golinters"
 	"github.com/golangci/golangci-lint/pkg/result"
 	"github.com/golangci/golangci-lint/pkg/result/processors"
@@ -41,6 +42,8 @@ func (e *Executor) initRun() {
 	runCmd.Flags().BoolVar(&rc.Govet.CheckShadowing, "govet.check-shadowing", true, "Govet: check for shadowed variables")
 
 	runCmd.Flags().Float64Var(&rc.Golint.MinConfidence, "golint.min-confidence", 0.8, "Golint: minimum confidence of a problem to print it")
+
+	runCmd.Flags().BoolVar(&rc.Gofmt.Simplify, "gofmt.simplify", true, "Gofmt: simplify code")
 }
 
 func (e Executor) executeRun(cmd *cobra.Command, args []string) {
@@ -60,17 +63,11 @@ func (e Executor) executeRun(cmd *cobra.Command, args []string) {
 
 		var exec executors.Executor
 
-		for _, path := range args {
-			if strings.HasSuffix(path, ".go") && len(args) != 1 {
-				return fmt.Errorf("Specific files for analysis are allowed only if one file is set"), 1
-			}
-		}
-
 		if len(args) == 0 {
 			args = []string{"./..."}
 		}
 
-		paths, err := golinters.GetPathsForAnalysis(args)
+		paths, err := fsutils.GetPathsForAnalysis(args)
 		if err != nil {
 			return err, 1
 		}

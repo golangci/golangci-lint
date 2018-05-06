@@ -16,7 +16,7 @@ func (govet) Name() string {
 }
 
 func (g govet) Run(ctx context.Context, exec executors.Executor, cfg *config.Run) (*result.Result, error) {
-	issues, err := govetAPI.Run(cfg.Paths, cfg.BuildTags, cfg.Govet.CheckShadowing)
+	issues, err := govetAPI.Run(cfg.Paths.MixedPaths(), cfg.BuildTags, cfg.Govet.CheckShadowing)
 	if err != nil {
 		return nil, err
 	}

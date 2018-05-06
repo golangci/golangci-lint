@@ -33,7 +33,7 @@ func (r SimpleRunner) Run(ctx context.Context, linters []Linter, exec executors.
 		res, err := linter.Run(ctx, exec, cfg)
 		os.Stdout, os.Stderr = savedStdout, savedStderr
 		if err != nil {
-			analytics.Log(ctx).Warnf("Can't run linter %+v: %s", linter, err)
+			analytics.Log(ctx).Warnf("Can't run linter %s: %s", linter.Name(), err)
 			continue
 		}
 

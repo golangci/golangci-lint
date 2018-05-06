@@ -8,7 +8,6 @@ import (
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/result"
 	"github.com/golangci/golangci-shared/pkg/executors"
-
 	errcheckAPI "github.com/kisielk/errcheck/golangci"
 )
 
@@ -20,8 +19,7 @@ func (errcheck) Name() string {
 
 func (e errcheck) Run(ctx context.Context, exec executors.Executor, cfg *config.Run) (*result.Result, error) {
 	errCfg := &cfg.Errcheck
-
-	issues, err := errcheckAPI.Run(cfg.Paths, cfg.BuildTags, errCfg.CheckAssignToBlank, errCfg.CheckTypeAssertions)
+	issues, err := errcheckAPI.Run(cfg.Paths.MixedPaths(), cfg.BuildTags, errCfg.CheckAssignToBlank, errCfg.CheckTypeAssertions)
 	if err != nil {
 		return nil, err
 	}

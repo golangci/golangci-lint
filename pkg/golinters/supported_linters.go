@@ -6,5 +6,5 @@ const pathLineColMessage = `^(?P<path>.*?\.go):(?P<line>\d+):(?P<col>\d+):\s*(?P
 const pathLineMessage = `^(?P<path>.*?\.go):(?P<line>\d+):\s*(?P<message>.*)$`
 
 func GetSupportedLinters() []pkg.Linter {
-	return []pkg.Linter{govet{}, errcheck{}, golint{}}
+	return []pkg.Linter{govet{}, errcheck{}, golint{}, gofmt{}, gofmt{useGoimports: true}}
 }

@@ -21,17 +21,20 @@ func (golint) Name() string {
 
 func (g golint) Run(ctx context.Context, exec executors.Executor, cfg *config.Run) (*result.Result, error) {
 	var issues []result.Issue
-	for _, path := range cfg.Paths {
-		var i []result.Issue
-		var err error
-		if isDir(path) {
-			i, err = lintDir(path, cfg.Golint.MinConfidence)
-		} else {
-			i, err = lintFiles(cfg.Golint.MinConfidence, path)
+	if cfg.Paths.IsDirsRun {
+		for _, path := range cfg.Paths.Dirs {
+			i, err := lintDir(path, cfg.Golint.MinConfidence)
+			if err != nil {
+				// TODO: skip and warn
+				return nil, fmt.Errorf("can't lint dir %s: %s", path, err)
+			}
+			issues = append(issues, i...)
 		}
+	} else {
+		i, err := lintFiles(cfg.Golint.MinConfidence, cfg.Paths.Files...)
 		if err != nil {
 			// TODO: skip and warn
-			return nil, fmt.Errorf("can't lint dir %s: %s", path, err)
+			return nil, fmt.Errorf("can't lint files %s: %s", cfg.Paths.Files, err)
 		}
 		issues = append(issues, i...)
 	}
