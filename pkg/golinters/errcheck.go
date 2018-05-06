@@ -5,21 +5,19 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/result"
-	"github.com/golangci/golangci-shared/pkg/executors"
 	errcheckAPI "github.com/kisielk/errcheck/golangci"
 )
 
-type errcheck struct{}
+type Errcheck struct{}
 
-func (errcheck) Name() string {
+func (Errcheck) Name() string {
 	return "errcheck"
 }
 
-func (e errcheck) Run(ctx context.Context, exec executors.Executor, cfg *config.Run) (*result.Result, error) {
-	errCfg := &cfg.Errcheck
-	issues, err := errcheckAPI.Run(cfg.Paths.MixedPaths(), cfg.BuildTags, errCfg.CheckAssignToBlank, errCfg.CheckTypeAssertions)
+func (e Errcheck) Run(ctx context.Context, lintCtx *Context) (*result.Result, error) {
+	errCfg := &lintCtx.RunCfg().Errcheck
+	issues, err := errcheckAPI.Run(lintCtx.Program, errCfg.CheckAssignToBlank, errCfg.CheckTypeAssertions)
 	if err != nil {
 		return nil, err
 	}
@@ -32,7 +30,7 @@ func (e errcheck) Run(ctx context.Context, exec executors.Executor, cfg *config.
 
 		var text string
 		if i.FuncName != "" {
-			text = fmt.Sprintf("Error return value of %s is not checked", formatCode(i.FuncName, cfg))
+			text = fmt.Sprintf("Error return value of %s is not checked", formatCode(i.FuncName, lintCtx.RunCfg()))
 		} else {
 			text = "Error return value is not checked"
 		}

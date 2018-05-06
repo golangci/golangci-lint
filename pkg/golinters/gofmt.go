@@ -7,19 +7,17 @@ import (
 
 	gofmtAPI "github.com/golangci/gofmt/gofmt"
 	goimportsAPI "github.com/golangci/gofmt/goimports"
-	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/result"
 	"github.com/golangci/golangci-shared/pkg/analytics"
-	"github.com/golangci/golangci-shared/pkg/executors"
 	"sourcegraph.com/sourcegraph/go-diff/diff"
 )
 
-type gofmt struct {
-	useGoimports bool
+type Gofmt struct {
+	UseGoimports bool
 }
 
-func (g gofmt) Name() string {
-	if g.useGoimports {
+func (g Gofmt) Name() string {
+	if g.UseGoimports {
 		return "goimports"
 	}
 
@@ -47,7 +45,7 @@ func getFirstDeletedAndAddedLineNumberInHunk(h *diff.Hunk) (int, int, error) {
 	return 0, firstAddedLineNumber, fmt.Errorf("didn't find deletion line in hunk %s", string(h.Body))
 }
 
-func (g gofmt) extractIssuesFromPatch(patch string) ([]result.Issue, error) {
+func (g Gofmt) extractIssuesFromPatch(patch string) ([]result.Issue, error) {
 	diffs, err := diff.ParseMultiFileDiff([]byte(patch))
 	if err != nil {
 		return nil, fmt.Errorf("can't parse patch: %s", err)
@@ -76,7 +74,7 @@ func (g gofmt) extractIssuesFromPatch(patch string) ([]result.Issue, error) {
 			}
 
 			text := "File is not gofmt-ed with -s"
-			if g.useGoimports {
+			if g.UseGoimports {
 				text = "File is not goimports-ed"
 			}
 			i := result.Issue{
@@ -92,16 +90,16 @@ func (g gofmt) extractIssuesFromPatch(patch string) ([]result.Issue, error) {
 	return issues, nil
 }
 
-func (g gofmt) Run(ctx context.Context, exec executors.Executor, cfg *config.Run) (*result.Result, error) {
+func (g Gofmt) Run(ctx context.Context, lintCtx *Context) (*result.Result, error) {
 	var issues []result.Issue
 
-	for _, f := range cfg.Paths.Files {
+	for _, f := range lintCtx.Paths.Files {
 		var diff []byte
 		var err error
-		if g.useGoimports {
+		if g.UseGoimports {
 			diff, err = goimportsAPI.Run(f)
 		} else {
-			diff, err = gofmtAPI.Run(f, cfg.Gofmt.Simplify)
+			diff, err = gofmtAPI.Run(f, lintCtx.RunCfg().Gofmt.Simplify)
 		}
 		if err != nil { // TODO: skip
 			return nil, err

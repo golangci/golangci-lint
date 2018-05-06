@@ -163,13 +163,7 @@ func (c *Checker) load(paths ...string) (*loader.Program, error) {
 	return loadcfg.Load()
 }
 
-// CheckPackages checks packages for errors.
-func (c *Checker) CheckPackages(paths ...string) error {
-	program, err := c.load(paths...)
-	if err != nil {
-		return fmt.Errorf("could not type check: %s", err)
-	}
-
+func (c *Checker) CheckProgram(program *loader.Program) error {
 	var wg sync.WaitGroup
 	u := &UncheckedErrors{}
 	for _, pkgInfo := range program.InitialPackages() {
@@ -207,6 +201,16 @@ func (c *Checker) CheckPackages(paths ...string) error {
 		return u
 	}
 	return nil
+}
+
+// CheckPackages checks packages for errors.
+func (c *Checker) CheckPackages(paths ...string) error {
+	program, err := c.load(paths...)
+	if err != nil {
+		return fmt.Errorf("could not type check: %s", err)
+	}
+
+	return c.CheckProgram(program)
 }
 
 // visitor implements the errcheck algorithm

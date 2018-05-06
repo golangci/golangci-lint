@@ -1,52 +1,74 @@
-package golinters
+package pkg
 
 import (
 	"context"
 	"fmt"
 	"sync"
 
-	"github.com/golangci/golangci-lint/pkg"
 	"github.com/golangci/golangci-lint/pkg/config"
+	"github.com/golangci/golangci-lint/pkg/golinters"
 	"github.com/golangci/golangci-shared/pkg/analytics"
 )
 
 type LinterConfig struct {
 	EnabledByDefault bool
 	Desc             string
-	Linter           pkg.Linter
+	Linter           Linter
+	DoesFullImport   bool
 }
 
-func enabledByDefault(linter pkg.Linter, desc string) LinterConfig {
+var nameToLC map[string]LinterConfig
+var nameToLCOnce sync.Once
+
+func GetLinterConfig(name string) *LinterConfig {
+	nameToLCOnce.Do(func() {
+		nameToLC = make(map[string]LinterConfig)
+		for _, lc := range GetAllSupportedLinterConfigs() {
+			nameToLC[lc.Linter.Name()] = lc
+		}
+	})
+
+	lc, ok := nameToLC[name]
+	if !ok {
+		return nil
+	}
+
+	return &lc
+}
+
+func enabledByDefault(linter Linter, desc string, doesFullImport bool) LinterConfig {
 	return LinterConfig{
 		EnabledByDefault: true,
 		Linter:           linter,
 		Desc:             desc,
+		DoesFullImport:   doesFullImport,
 	}
 }
 
-func disabledByDefault(linter pkg.Linter, desc string) LinterConfig {
+func disabledByDefault(linter Linter, desc string, doesFullImport bool) LinterConfig {
 	return LinterConfig{
 		EnabledByDefault: false,
 		Linter:           linter,
 		Desc:             desc,
+		DoesFullImport:   doesFullImport,
 	}
 }
 
 func GetAllSupportedLinterConfigs() []LinterConfig {
 	return []LinterConfig{
-		enabledByDefault(govet{}, "Vet examines Go source code and reports suspicious constructs, such as Printf calls whose arguments do not align with the format string"),
-		enabledByDefault(errcheck{}, "Errcheck is a program for checking for unchecked errors in go programs. These unchecked errors can be critical bugs in some cases"),
-		enabledByDefault(golint{}, "Golint differs from gofmt. Gofmt reformats Go source code, whereas golint prints out style mistakes"),
-		enabledByDefault(deadcode{}, "Finds unused code"),
-		enabledByDefault(gocyclo{}, "Computes and checks the cyclomatic complexity of functions"),
+		enabledByDefault(golinters.Govet{}, "Vet examines Go source code and reports suspicious constructs, such as Printf calls whose arguments do not align with the format string", false),
+		enabledByDefault(golinters.Errcheck{}, "Errcheck is a program for checking for unchecked errors in go programs. These unchecked errors can be critical bugs in some cases", true),
+		enabledByDefault(golinters.Golint{}, "Golint differs from gofmt. Gofmt reformats Go source code, whereas golint prints out style mistakes", false),
+		enabledByDefault(golinters.Deadcode{}, "Finds unused code", true),
+		enabledByDefault(golinters.Gocyclo{}, "Computes and checks the cyclomatic complexity of functions", false),
 
-		disabledByDefault(gofmt{}, "Gofmt checks whether code was gofmt-ed. By default this tool runs with -s option to check for code simplification"),
-		disabledByDefault(gofmt{useGoimports: true}, "Goimports does everything that gofmt does. Additionally it checks unused imports"),
+		disabledByDefault(golinters.Gofmt{}, "Gofmt checks whether code was gofmt-ed. By default this tool runs with -s option to check for code simplification", false),
+		disabledByDefault(golinters.Gofmt{UseGoimports: true}, "Goimports does everything that gofmt does. Additionally it checks unused imports", false),
 	}
 }
 
-func getAllSupportedLinters() []pkg.Linter {
-	var ret []pkg.Linter
+func getAllSupportedLinters() []Linter {
+	var ret []Linter
 	for _, lc := range GetAllSupportedLinterConfigs() {
 		ret = append(ret, lc.Linter)
 	}
@@ -54,8 +76,8 @@ func getAllSupportedLinters() []pkg.Linter {
 	return ret
 }
 
-func getAllEnabledByDefaultLinters() []pkg.Linter {
-	var ret []pkg.Linter
+func getAllEnabledByDefaultLinters() []Linter {
+	var ret []Linter
 	for _, lc := range GetAllSupportedLinterConfigs() {
 		if lc.EnabledByDefault {
 			ret = append(ret, lc.Linter)
@@ -65,12 +87,12 @@ func getAllEnabledByDefaultLinters() []pkg.Linter {
 	return ret
 }
 
-var supportedLintersByName map[string]pkg.Linter
+var supportedLintersByName map[string]Linter
 var linterByNameMapOnce sync.Once
 
-func getLinterByName(name string) pkg.Linter {
+func getLinterByName(name string) Linter {
 	linterByNameMapOnce.Do(func() {
-		supportedLintersByName = make(map[string]pkg.Linter)
+		supportedLintersByName = make(map[string]Linter)
 		for _, lc := range GetAllSupportedLinterConfigs() {
 			supportedLintersByName[lc.Linter.Name()] = lc.Linter
 		}
@@ -79,8 +101,8 @@ func getLinterByName(name string) pkg.Linter {
 	return supportedLintersByName[name]
 }
 
-func lintersToMap(linters []pkg.Linter) map[string]pkg.Linter {
-	ret := map[string]pkg.Linter{}
+func lintersToMap(linters []Linter) map[string]Linter {
+	ret := map[string]Linter{}
 	for _, linter := range linters {
 		ret[linter.Name()] = linter
 	}
@@ -129,11 +151,11 @@ func validateEnabledDisabledLintersConfig(cfg *config.Run) error {
 	return nil
 }
 
-func GetEnabledLinters(ctx context.Context, cfg *config.Run) ([]pkg.Linter, error) {
+func GetEnabledLinters(ctx context.Context, cfg *config.Run) ([]Linter, error) {
 	if err := validateEnabledDisabledLintersConfig(cfg); err != nil {
 		return nil, err
 	}
-	resultLintersSet := map[string]pkg.Linter{}
+	resultLintersSet := map[string]Linter{}
 	switch {
 	case cfg.EnableAllLinters:
 		resultLintersSet = lintersToMap(getAllSupportedLinters())
@@ -151,7 +173,7 @@ func GetEnabledLinters(ctx context.Context, cfg *config.Run) ([]pkg.Linter, erro
 		delete(resultLintersSet, name)
 	}
 
-	var resultLinters []pkg.Linter
+	var resultLinters []Linter
 	var resultLinterNames []string
 	for name, linter := range resultLintersSet {
 		resultLinters = append(resultLinters, linter)

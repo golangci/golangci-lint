@@ -5,23 +5,21 @@ import (
 	"fmt"
 
 	gocycloAPI "github.com/golangci/gocyclo"
-	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/result"
-	"github.com/golangci/golangci-shared/pkg/executors"
 )
 
-type gocyclo struct{}
+type Gocyclo struct{}
 
-func (gocyclo) Name() string {
+func (Gocyclo) Name() string {
 	return "gocyclo"
 }
 
-func (g gocyclo) Run(ctx context.Context, exec executors.Executor, cfg *config.Run) (*result.Result, error) {
-	stats := gocycloAPI.Run(cfg.Paths.MixedPaths())
+func (g Gocyclo) Run(ctx context.Context, lintCtx *Context) (*result.Result, error) {
+	stats := gocycloAPI.Run(lintCtx.Paths.MixedPaths())
 
 	res := &result.Result{}
 	for _, s := range stats {
-		if s.Complexity < cfg.Gocyclo.MinComplexity {
+		if s.Complexity < lintCtx.RunCfg().Gocyclo.MinComplexity {
 			continue
 		}
 
@@ -29,7 +27,7 @@ func (g gocyclo) Run(ctx context.Context, exec executors.Executor, cfg *config.R
 			File:       s.Pos.Filename,
 			LineNumber: s.Pos.Line,
 			Text: fmt.Sprintf("cyclomatic complexity %d of func %s is high (> %d)",
-				s.Complexity, formatCode(s.FuncName, cfg), cfg.Gocyclo.MinComplexity),
+				s.Complexity, formatCode(s.FuncName, lintCtx.RunCfg()), lintCtx.RunCfg().Gocyclo.MinComplexity),
 			FromLinter: g.Name(),
 		})
 	}

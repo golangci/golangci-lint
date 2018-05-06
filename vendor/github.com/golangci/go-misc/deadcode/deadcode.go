@@ -23,16 +23,15 @@ type Issue struct {
 	UnusedIdentName string
 }
 
-func Run(paths []string, processTestFiles bool) ([]Issue, error) {
+func Run(program *loader.Program) ([]Issue, error) {
 	ctx := &Context{
-		withTests: processTestFiles,
+		program: program,
 	}
-	ctx.Load(paths...)
 	report := ctx.Process()
 	var issues []Issue
 	for _, obj := range report {
 		issues = append(issues, Issue{
-			Pos:             ctx.Config.Fset.Position(obj.Pos()),
+			Pos:             program.Fset.Position(obj.Pos()),
 			UnusedIdentName: obj.Name(),
 		})
 	}
@@ -48,11 +47,7 @@ type Context struct {
 	cwd       string
 	withTests bool
 
-	loader.Config
-}
-
-func (ctx *Context) Load(args ...string) {
-	ctx.Config.FromArgs(args, ctx.withTests)
+	program *loader.Program
 }
 
 // error formats the error to standard error, adding program
@@ -61,7 +56,7 @@ func (ctx *Context) errorf(pos token.Pos, format string, args ...interface{}) {
 	if ctx.cwd == "" {
 		ctx.cwd, _ = os.Getwd()
 	}
-	p := ctx.Config.Fset.Position(pos)
+	p := ctx.program.Fset.Position(pos)
 	f, err := filepath.Rel(ctx.cwd, p.Filename)
 	if err == nil {
 		p.Filename = f
@@ -70,11 +65,12 @@ func (ctx *Context) errorf(pos token.Pos, format string, args ...interface{}) {
 	exitCode = 2
 }
 
+func (ctx *Context) Load(args ...string) {
+	// TODO
+}
+
 func (ctx *Context) Process() []types.Object {
-	prog, err := ctx.Config.Load()
-	if err != nil {
-		fatalf("cannot load packages: %s", err)
-	}
+	prog := ctx.program
 	var allUnused []types.Object
 	for _, pkg := range prog.Imported {
 		unused := doPackage(prog, pkg)

@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/fatih/color"
-	"github.com/golangci/golangci-lint/pkg/golinters"
+	"github.com/golangci/golangci-lint/pkg"
 	"github.com/spf13/cobra"
 )
 
@@ -18,15 +18,15 @@ func (e *Executor) initLinters() {
 	e.rootCmd.AddCommand(lintersCmd)
 }
 
-func printLinterConfigs(lcs []golinters.LinterConfig) {
+func printLinterConfigs(lcs []pkg.LinterConfig) {
 	for _, lc := range lcs {
 		fmt.Printf("%s: %s\n", color.YellowString(lc.Linter.Name()), lc.Desc)
 	}
 }
 
 func (e Executor) executeLinters(cmd *cobra.Command, args []string) {
-	var enabledLCs, disabledLCs []golinters.LinterConfig
-	for _, lc := range golinters.GetAllSupportedLinterConfigs() {
+	var enabledLCs, disabledLCs []pkg.LinterConfig
+	for _, lc := range pkg.GetAllSupportedLinterConfigs() {
 		if lc.EnabledByDefault {
 			enabledLCs = append(enabledLCs, lc)
 		} else {

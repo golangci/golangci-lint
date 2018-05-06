@@ -3,20 +3,18 @@ package golinters
 import (
 	"context"
 
-	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/result"
-	"github.com/golangci/golangci-shared/pkg/executors"
 	govetAPI "github.com/golangci/govet"
 )
 
-type govet struct{}
+type Govet struct{}
 
-func (govet) Name() string {
+func (Govet) Name() string {
 	return "govet"
 }
 
-func (g govet) Run(ctx context.Context, exec executors.Executor, cfg *config.Run) (*result.Result, error) {
-	issues, err := govetAPI.Run(cfg.Paths.MixedPaths(), cfg.BuildTags, cfg.Govet.CheckShadowing)
+func (g Govet) Run(ctx context.Context, lintCtx *Context) (*result.Result, error) {
+	issues, err := govetAPI.Run(lintCtx.Paths.MixedPaths(), lintCtx.RunCfg().BuildTags, lintCtx.RunCfg().Govet.CheckShadowing)
 	if err != nil {
 		return nil, err
 	}

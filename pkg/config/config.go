@@ -1,6 +1,8 @@
 package config
 
-import "github.com/golangci/golangci-lint/pkg/fsutils"
+import (
+	"time"
+)
 
 type OutFormat string
 
@@ -21,7 +23,8 @@ type Common struct {
 }
 
 type Run struct {
-	Paths     *fsutils.ProjectPaths
+	Args []string
+
 	BuildTags []string
 
 	OutFormat             string
@@ -51,6 +54,8 @@ type Run struct {
 	DisableAllLinters bool
 
 	ExcludePatterns []string
+
+	Deadline time.Duration
 }
 
 type Config struct {

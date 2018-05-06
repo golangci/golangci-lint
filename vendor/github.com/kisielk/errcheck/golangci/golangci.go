@@ -4,21 +4,21 @@ import (
 	"regexp"
 
 	"github.com/kisielk/errcheck/internal/errcheck"
+	"golang.org/x/tools/go/loader"
 )
 
 type Issue errcheck.UncheckedError
 
-func Run(paths []string, buildTags []string, checkBlank, checkAsserts bool) ([]Issue, error) {
+func Run(program *loader.Program, checkBlank, checkAsserts bool) ([]Issue, error) {
 	checker := errcheck.NewChecker()
 	checker.Blank = checkBlank
 	checker.Asserts = checkAsserts
 
-	checker.Tags = buildTags
 	checker.Ignore = map[string]*regexp.Regexp{
 		"fmt": regexp.MustCompile(".*"),
 	}
 
-	if err := checker.CheckPackages(paths...); err != nil {
+	if err := checker.CheckProgram(program); err != nil {
 		if e, ok := err.(*errcheck.UncheckedErrors); ok {
 			return makeIssues(e), nil
 		}

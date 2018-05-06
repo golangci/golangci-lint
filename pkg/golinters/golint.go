@@ -8,22 +8,20 @@ import (
 	"path/filepath"
 
 	"github.com/golang/lint"
-	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/result"
-	"github.com/golangci/golangci-shared/pkg/executors"
 )
 
-type golint struct{}
+type Golint struct{}
 
-func (golint) Name() string {
+func (Golint) Name() string {
 	return "golint"
 }
 
-func (g golint) Run(ctx context.Context, exec executors.Executor, cfg *config.Run) (*result.Result, error) {
+func (g Golint) Run(ctx context.Context, lintCtx *Context) (*result.Result, error) {
 	var issues []result.Issue
-	if cfg.Paths.IsDirsRun {
-		for _, path := range cfg.Paths.Dirs {
-			i, err := lintDir(path, cfg.Golint.MinConfidence)
+	if lintCtx.Paths.IsDirsRun {
+		for _, path := range lintCtx.Paths.Dirs {
+			i, err := lintDir(path, lintCtx.RunCfg().Golint.MinConfidence)
 			if err != nil {
 				// TODO: skip and warn
 				return nil, fmt.Errorf("can't lint dir %s: %s", path, err)
@@ -31,10 +29,10 @@ func (g golint) Run(ctx context.Context, exec executors.Executor, cfg *config.Ru
 			issues = append(issues, i...)
 		}
 	} else {
-		i, err := lintFiles(cfg.Golint.MinConfidence, cfg.Paths.Files...)
+		i, err := lintFiles(lintCtx.RunCfg().Golint.MinConfidence, lintCtx.Paths.Files...)
 		if err != nil {
 			// TODO: skip and warn
-			return nil, fmt.Errorf("can't lint files %s: %s", cfg.Paths.Files, err)
+			return nil, fmt.Errorf("can't lint files %s: %s", lintCtx.Paths.Files, err)
 		}
 		issues = append(issues, i...)
 	}

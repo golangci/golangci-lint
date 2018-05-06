@@ -40,7 +40,7 @@ func TestSourcesFromTestdataDir(t *testing.T) {
 
 func installBinary(t *testing.T) {
 	cmd := exec.Command("go", "install", filepath.Join("..", "..", "cmd", binName))
-	assert.NoError(t, cmd.Run())
+	assert.NoError(t, cmd.Run(), "Can't go install %s", binName)
 }
 
 func testOneSource(t *testing.T, sourcePath string) {

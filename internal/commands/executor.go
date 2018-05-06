@@ -9,6 +9,8 @@ type Executor struct {
 	rootCmd *cobra.Command
 
 	cfg *config.Config
+
+	exitCode int
 }
 
 func NewExecutor() *Executor {

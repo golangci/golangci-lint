@@ -2,12 +2,6 @@
 
 
 [[projects]]
-  name = "github.com/StackExchange/wmi"
-  packages = ["."]
-  revision = "5d049714c4a64225c3c79a7cf7d02f7fb5b96338"
-  version = "1.0.0"
-
-[[projects]]
   name = "github.com/bradleyfalzon/revgrep"
   packages = ["."]
   revision = "c04006dc3307c8768bda7a33c7c15d1c6f664e14"
@@ -32,15 +26,6 @@
   version = "v1.6.0"
 
 [[projects]]
-  name = "github.com/go-ole/go-ole"
-  packages = [
-    ".",
-    "oleutil"
-  ]
-  revision = "a41e3c4b706f6ae8dfbff342b06e40fa4d2d0506"
-  version = "v1.2.1"
-
-[[projects]]
   name = "github.com/gogo/protobuf"
   packages = ["proto"]
   revision = "1adfc126b41513cc696b209667c8656ea7aac67c"
@@ -53,16 +38,10 @@
   revision = "470b6b0bb3005eda157f0275e2e4895055396a81"
 
 [[projects]]
-  name = "github.com/golang/mock"
-  packages = ["gomock"]
-  revision = "c34cdb4725f4c3844d095133c6e40e448b86589b"
-  version = "v1.1.1"
-
-[[projects]]
   branch = "master"
   name = "github.com/golangci/go-misc"
   packages = ["deadcode"]
-  revision = "a82b63c685e730fbc1efbade9ce6316ac85cceb7"
+  revision = "a61b005a223b50d3656798639dd87073ca5c1981"
 
 [[projects]]
   branch = "master"
@@ -84,9 +63,7 @@
   name = "github.com/golangci/golangci-shared"
   packages = [
     "pkg/analytics",
-    "pkg/executors",
-    "pkg/runmode",
-    "pkg/timeutils"
+    "pkg/runmode"
   ]
   revision = "841f39765a89eddef59ce611612775291b83594b"
 
@@ -113,7 +90,7 @@
     "golangci",
     "internal/errcheck"
   ]
-  revision = "5074b341ce444f80a67a09667b2e85302fb62847"
+  revision = "7a3d63cfc6fbd9e46f2e551f9b8d1e9c69bffab1"
   source = "github.com/golangci/errcheck"
 
 [[projects]]
@@ -139,25 +116,6 @@
   name = "github.com/savaki/amplitude-go"
   packages = ["."]
   revision = "f62e3b57c0e4d24da1fad27aa5181c59b0f7868b"
-
-[[projects]]
-  name = "github.com/shirou/gopsutil"
-  packages = [
-    "cpu",
-    "host",
-    "internal/common",
-    "mem",
-    "net",
-    "process"
-  ]
-  revision = "c95755e4bcd7a62bb8bd33f3a597a7c7f35e2cf3"
-  version = "v2.18.04"
-
-[[projects]]
-  branch = "master"
-  name = "github.com/shirou/w32"
-  packages = ["."]
-  revision = "bb4de0191aa41b5507caa14b0650cdbddcd9280b"
 
 [[projects]]
   name = "github.com/sirupsen/logrus"
@@ -243,6 +201,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "27116578a35d2f40d043e02943a6f64062ec09365a37e5b10a6d8c7710461bf8"
+  inputs-digest = "1d47be3027527a2186cc0bea53742e1ebda39cb25f15860a695d7711ae576cb2"
   solver-name = "gps-cdcl"
   solver-version = 1

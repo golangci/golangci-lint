@@ -5,23 +5,18 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"os"
-	"runtime"
-	"runtime/pprof"
 	"strings"
+	"time"
 
 	"github.com/fatih/color"
 	"github.com/golangci/golangci-lint/pkg"
 	"github.com/golangci/golangci-lint/pkg/config"
-	"github.com/golangci/golangci-lint/pkg/fsutils"
-	"github.com/golangci/golangci-lint/pkg/golinters"
 	"github.com/golangci/golangci-lint/pkg/result"
 	"github.com/golangci/golangci-lint/pkg/result/processors"
-	"github.com/golangci/golangci-shared/pkg/analytics"
-	"github.com/golangci/golangci-shared/pkg/executors"
-	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
+
+const exitCodeIfFailure = 3
 
 func (e *Executor) initRun() {
 	var runCmd = &cobra.Command{
@@ -57,78 +52,64 @@ func (e *Executor) initRun() {
 	runCmd.Flags().BoolVar(&rc.EnableAllLinters, "enable-all", false, "Enable all linters")
 	runCmd.Flags().BoolVar(&rc.DisableAllLinters, "disable-all", false, "Disable all linters")
 
+	runCmd.Flags().DurationVar(&rc.Deadline, "deadline", time.Second*30, "Deadline for total work")
+
 	runCmd.Flags().StringSliceVarP(&rc.ExcludePatterns, "exclude", "e", config.DefaultExcludePatterns, "Exclude issue by regexp")
 }
 
-func (e Executor) executeRun(cmd *cobra.Command, args []string) {
-	f := func() (error, int) {
-		runtime.GOMAXPROCS(e.cfg.Common.Concurrency)
+func (e *Executor) runAnalysis(ctx context.Context, args []string) ([]result.Issue, error) {
+	e.cfg.Run.Args = args
 
-		if e.cfg.Common.IsVerbose {
-			analytics.SetLogLevel(logrus.InfoLevel)
-		}
+	runner := pkg.SimpleRunner{
+		Processors: []processors.Processor{
+			processors.MaxLinterIssuesPerFile{},
+			processors.NewExcludeProcessor(fmt.Sprintf("(%s)", strings.Join(e.cfg.Run.ExcludePatterns, "|"))),
+			processors.UniqByLineProcessor{},
+			processors.NewPathPrettifier(),
+		},
+	}
 
-		if e.cfg.Common.CPUProfilePath != "" {
-			f, err := os.Create(e.cfg.Common.CPUProfilePath)
-			if err != nil {
-				log.Fatal(err)
-			}
-			if err := pprof.StartCPUProfile(f); err != nil {
-				log.Fatal(err)
-			}
-			defer pprof.StopCPUProfile()
-		}
+	linters, err := pkg.GetEnabledLinters(ctx, &e.cfg.Run)
+	if err != nil {
+		return nil, err
+	}
 
-		ctx := context.Background()
+	issues, err := runner.Run(ctx, linters, e.cfg)
+	if err != nil {
+		return nil, err
+	}
 
-		var exec executors.Executor
+	return issues, nil
+}
 
-		if len(args) == 0 {
-			args = []string{"./..."}
-		}
+func (e *Executor) executeRun(cmd *cobra.Command, args []string) {
+	f := func() error {
+		ctx, cancel := context.WithTimeout(context.Background(), e.cfg.Run.Deadline)
+		defer cancel()
 
-		paths, err := fsutils.GetPathsForAnalysis(args)
+		issues, err := e.runAnalysis(ctx, args)
 		if err != nil {
-			return err, 1
-		}
-
-		e.cfg.Run.Paths = paths
-
-		runner := pkg.SimpleRunner{
-			Processors: []processors.Processor{
-				processors.MaxLinterIssuesPerFile{},
-				processors.NewExcludeProcessor(fmt.Sprintf("(%s)", strings.Join(e.cfg.Run.ExcludePatterns, "|"))),
-				processors.UniqByLineProcessor{},
-				processors.NewPathPrettifier(),
-			},
-		}
-
-		linters, err := golinters.GetEnabledLinters(ctx, &e.cfg.Run)
-		if err != nil {
-			return err, 1
-		}
-
-		issues, err := runner.Run(ctx, linters, exec, e.cfg)
-		if err != nil {
-			return err, 1
+			return err
 		}
 
 		if err := outputIssues(e.cfg.Run.OutFormat, issues); err != nil {
-			return fmt.Errorf("can't output %d issues: %s", len(issues), err), 1
+			return fmt.Errorf("can't output %d issues: %s", len(issues), err)
 		}
 
 		if len(issues) != 0 {
-			return nil, e.cfg.Run.ExitCodeIfIssuesFound
+			e.exitCode = e.cfg.Run.ExitCodeIfIssuesFound
+			return nil
 		}
 
-		return nil, 0
+		return nil
 	}
 
-	err, exitCode := f()
-	if err != nil {
+	if err := f(); err != nil {
 		log.Print(err)
+		if e.exitCode == 0 {
+			e.exitCode = exitCodeIfFailure
+		}
 	}
-	os.Exit(exitCode)
 }
 
 func outputIssues(format string, issues []result.Issue) error {
