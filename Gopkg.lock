@@ -48,17 +48,6 @@
 
 [[projects]]
   branch = "master"
-  name = "github.com/golang/go"
-  packages = [
-    ".",
-    "lib/cfg",
-    "lib/whitelist"
-  ]
-  revision = "c5b798e3c473354ef919e8fe4e0a11b4a9e36d18"
-  source = "github.com/golangci/govet"
-
-[[projects]]
-  branch = "master"
   name = "github.com/golang/lint"
   packages = ["."]
   revision = "470b6b0bb3005eda157f0275e2e4895055396a81"
@@ -88,6 +77,16 @@
     "pkg/timeutils"
   ]
   revision = "841f39765a89eddef59ce611612775291b83594b"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/golangci/govet"
+  packages = [
+    ".",
+    "lib/cfg",
+    "lib/whitelist"
+  ]
+  revision = "31bebf17d90d40b728c41fecdd5acf5fb8654fc7"
 
 [[projects]]
   name = "github.com/inconshreveable/mousetrap"
@@ -232,6 +231,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "98e0ff9e850bf286e0e15b788f303a6baffcccb7c4d9a55155f28eee386cb43b"
+  inputs-digest = "c4187e819ccca1b06537adb888a052a895c6236f90accd827314c12b2fd1ce3e"
   solver-name = "gps-cdcl"
   solver-version = 1

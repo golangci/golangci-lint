@@ -52,7 +52,7 @@ func Run(paths, buildTags []string, checkShadowing bool) ([]Issue, error) {
 	}
 	if dirsRun {
 		for _, name := range paths {
-			walkDir(name)
+			doPackageDir(name)
 		}
 		return foundIssues, nil
 	}

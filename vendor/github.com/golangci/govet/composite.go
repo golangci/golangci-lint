@@ -12,7 +12,7 @@ import (
 	"go/types"
 	"strings"
 
-	"github.com/golang/go/lib/whitelist"
+	"github.com/golangci/govet/lib/whitelist"
 )
 
 var compositeWhiteList = flag.Bool("compositewhitelist", true, "use composite white list; for testing only")

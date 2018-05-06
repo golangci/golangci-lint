@@ -3,10 +3,10 @@ package golinters
 import (
 	"context"
 
-	govetAPI "github.com/golang/go"
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/result"
 	"github.com/golangci/golangci-shared/pkg/executors"
+	govetAPI "github.com/golangci/govet"
 )
 
 type govet struct{}

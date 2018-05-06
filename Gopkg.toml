@@ -51,9 +51,8 @@
   source = "github.com/golangci/errcheck"
 
 [[constraint]]
-  name = "github.com/golang/go"
+  name = "github.com/golangci/govet"
   branch = "master"
-  source = "github.com/golangci/govet"
 
 [prune]
   go-tests = true

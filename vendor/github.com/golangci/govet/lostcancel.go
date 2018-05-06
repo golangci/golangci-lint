@@ -10,7 +10,7 @@ import (
 	"go/types"
 	"strconv"
 
-	"github.com/golang/go/lib/cfg"
+	"github.com/golangci/govet/lib/cfg"
 )
 
 func init() {
