@@ -37,6 +37,7 @@ func (e *Executor) initRun() {
 		fmt.Sprintf("Format of output: %s", strings.Join(config.OutFormats, "|")))
 	runCmd.Flags().IntVar(&rc.ExitCodeIfIssuesFound, "issues-exit-code",
 		1, "Exit code when issues were found")
+	runCmd.Flags().StringSliceVar(&rc.BuildTags, "build-tags", []string{}, "Build tags (not all linters support them)")
 
 	runCmd.Flags().BoolVar(&rc.Errcheck.CheckClose, "errcheck.check-close", false, "Errcheck: check missed error checks on .Close() calls")
 	runCmd.Flags().BoolVar(&rc.Errcheck.CheckTypeAssertions, "errcheck.check-type-assertions", false, "Errcheck: check for ignored type assertion results")
