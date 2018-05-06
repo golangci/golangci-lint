@@ -53,6 +53,8 @@ func (e *Executor) initRun() {
 	runCmd.Flags().StringSliceVarP(&rc.DisabledLinters, "disable", "D", []string{}, "Disable specific linter")
 	runCmd.Flags().BoolVar(&rc.EnableAllLinters, "enable-all", false, "Enable all linters")
 	runCmd.Flags().BoolVar(&rc.DisableAllLinters, "disable-all", false, "Disable all linters")
+
+	runCmd.Flags().StringSliceVarP(&rc.ExcludePatterns, "exclude", "e", config.DefaultExcludePatterns, "Exclude issue by regexp")
 }
 
 func (e Executor) executeRun(cmd *cobra.Command, args []string) {
@@ -92,7 +94,8 @@ func (e Executor) executeRun(cmd *cobra.Command, args []string) {
 		runner := pkg.SimpleRunner{
 			Processors: []processors.Processor{
 				processors.MaxLinterIssuesPerFile{},
-				//processors.UniqByLineProcessor{},
+				processors.UniqByLineProcessor{},
+				processors.NewExcludeProcessor(fmt.Sprintf("(%s)", strings.Join(e.cfg.Run.ExcludePatterns, "|"))),
 				processors.NewPathPrettifier(),
 			},
 		}

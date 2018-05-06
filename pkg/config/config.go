@@ -12,6 +12,8 @@ const (
 
 var OutFormats = []string{OutFormatColoredLineNumber, OutFormatLineNumber, OutFormatJSON}
 
+var DefaultExcludePatterns = []string{"should have comment", "comment on exported method"}
+
 type Common struct {
 	IsVerbose      bool
 	CPUProfilePath string
@@ -44,6 +46,8 @@ type Run struct {
 	DisabledLinters   []string
 	EnableAllLinters  bool
 	DisableAllLinters bool
+
+	ExcludePatterns []string
 }
 
 type Config struct {
