@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"runtime"
 	"runtime/pprof"
 	"strings"
 
@@ -48,6 +49,8 @@ func (e *Executor) initRun() {
 
 func (e Executor) executeRun(cmd *cobra.Command, args []string) {
 	f := func() (error, int) {
+		runtime.GOMAXPROCS(e.cfg.Common.Concurrency)
+
 		if e.cfg.Common.CPUProfilePath != "" {
 			f, err := os.Create(e.cfg.Common.CPUProfilePath)
 			if err != nil {
@@ -82,7 +85,7 @@ func (e Executor) executeRun(cmd *cobra.Command, args []string) {
 			},
 		}
 
-		issues, err := runner.Run(ctx, golinters.GetSupportedLinters(), exec, &e.cfg.Run)
+		issues, err := runner.Run(ctx, golinters.GetSupportedLinters(), exec, e.cfg)
 		if err != nil {
 			return err, 1
 		}
@@ -112,7 +115,7 @@ func outputIssues(format string, issues []result.Issue) error {
 			if format == config.OutFormatColoredLineNumber {
 				outStr = color.GreenString(outStr)
 			}
-			log.Print(outStr)
+			fmt.Fprint(os.Stdout, outStr)
 		}
 
 		for _, i := range issues {
@@ -120,7 +123,7 @@ func outputIssues(format string, issues []result.Issue) error {
 			if format == config.OutFormatColoredLineNumber {
 				text = color.RedString(text)
 			}
-			log.Printf("%s:%d: %s", i.File, i.LineNumber, text)
+			fmt.Fprintf(os.Stdout, "%s:%d: %s\n", i.File, i.LineNumber, text)
 		}
 		return nil
 	}
@@ -130,7 +133,7 @@ func outputIssues(format string, issues []result.Issue) error {
 		if err != nil {
 			return err
 		}
-		log.Print(string(outputJSON))
+		fmt.Fprint(os.Stdout, string(outputJSON))
 		return nil
 	}
 

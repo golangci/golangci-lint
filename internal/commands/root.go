@@ -1,6 +1,8 @@
 package commands
 
 import (
+	"runtime"
+
 	"github.com/spf13/cobra"
 )
 
@@ -15,5 +17,6 @@ func (e *Executor) initRoot() {
 	}
 	rootCmd.PersistentFlags().BoolVarP(&e.cfg.Common.IsVerbose, "verbose", "v", false, "verbose output")
 	rootCmd.PersistentFlags().StringVar(&e.cfg.Common.CPUProfilePath, "cpu-profile-path", "", "Path to CPU profile output file")
+	rootCmd.PersistentFlags().IntVarP(&e.cfg.Common.Concurrency, "concurrency", "j", runtime.NumCPU(), "Concurrency")
 	e.rootCmd = rootCmd
 }

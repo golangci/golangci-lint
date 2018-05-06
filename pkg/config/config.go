@@ -15,6 +15,7 @@ var OutFormats = []string{OutFormatColoredLineNumber, OutFormatLineNumber, OutFo
 type Common struct {
 	IsVerbose      bool
 	CPUProfilePath string
+	Concurrency    int
 }
 
 type Run struct {
