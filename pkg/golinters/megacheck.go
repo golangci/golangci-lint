@@ -15,7 +15,7 @@ func (Megacheck) Name() string {
 
 func (m Megacheck) Run(ctx context.Context, lintCtx *Context) (*result.Result, error) {
 	c := lintCtx.RunCfg().Megacheck
-	issues := megacheckAPI.Run(lintCtx.Program, lintCtx.LoaderConfig, c.EnableStaticcheck, c.EnableGosimple, c.EnableUnused)
+	issues := megacheckAPI.Run(lintCtx.Program, lintCtx.LoaderConfig, lintCtx.SSAProgram, c.EnableStaticcheck, c.EnableGosimple, c.EnableUnused)
 
 	res := &result.Result{}
 	for _, i := range issues {

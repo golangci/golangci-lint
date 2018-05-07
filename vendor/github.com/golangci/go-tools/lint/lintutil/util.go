@@ -23,6 +23,7 @@ import (
 	"github.com/golangci/go-tools/lint"
 	"github.com/golangci/go-tools/version"
 
+	"github.com/golangci/go-tools/ssa"
 	"golang.org/x/tools/go/loader"
 )
 
@@ -182,7 +183,7 @@ type CheckerConfig struct {
 	ExitNonZero bool
 }
 
-func ProcessFlagSet(confs []CheckerConfig, fs *flag.FlagSet, lprog *loader.Program, conf *loader.Config) []lint.Problem {
+func ProcessFlagSet(confs []CheckerConfig, fs *flag.FlagSet, lprog *loader.Program, conf *loader.Config, ssaProg *ssa.Program) []lint.Problem {
 	tags := fs.Lookup("tags").Value.(flag.Getter).Get().(string)
 	ignore := fs.Lookup("ignore").Value.(flag.Getter).Get().(string)
 	tests := fs.Lookup("tests").Value.(flag.Getter).Get().(bool)
@@ -199,7 +200,7 @@ func ProcessFlagSet(confs []CheckerConfig, fs *flag.FlagSet, lprog *loader.Progr
 	for _, conf := range confs {
 		cs = append(cs, conf.Checker)
 	}
-	pss, err := Lint(cs, lprog, conf, &Options{
+	pss, err := Lint(cs, lprog, conf, ssaProg, &Options{
 		Tags:          strings.Fields(tags),
 		LintTests:     tests,
 		Ignores:       ignore,
@@ -226,7 +227,7 @@ type Options struct {
 	ReturnIgnored bool
 }
 
-func Lint(cs []lint.Checker, lprog *loader.Program, conf *loader.Config, opt *Options) ([][]lint.Problem, error) {
+func Lint(cs []lint.Checker, lprog *loader.Program, conf *loader.Config, ssaProg *ssa.Program, opt *Options) ([][]lint.Problem, error) {
 	if opt == nil {
 		opt = &Options{}
 	}
@@ -244,7 +245,7 @@ func Lint(cs []lint.Checker, lprog *loader.Program, conf *loader.Config, opt *Op
 			version:       opt.GoVersion,
 			returnIgnored: opt.ReturnIgnored,
 		}
-		problems = append(problems, runner.lint(lprog, conf))
+		problems = append(problems, runner.lint(lprog, conf, ssaProg))
 	}
 	return problems, nil
 }
@@ -278,15 +279,15 @@ func ProcessArgs(name string, cs []CheckerConfig, args []string) {
 	flags := FlagSet(name)
 	flags.Parse(args)
 
-	ProcessFlagSet(cs, flags, nil, nil)
+	ProcessFlagSet(cs, flags, nil, nil, nil)
 }
 
-func (runner *runner) lint(lprog *loader.Program, conf *loader.Config) []lint.Problem {
+func (runner *runner) lint(lprog *loader.Program, conf *loader.Config, ssaProg *ssa.Program) []lint.Problem {
 	l := &lint.Linter{
 		Checker:       runner.checker,
 		Ignores:       runner.ignores,
 		GoVersion:     runner.version,
 		ReturnIgnored: runner.returnIgnored,
 	}
-	return l.Lint(lprog, conf)
+	return l.Lint(lprog, conf, ssaProg)
 }

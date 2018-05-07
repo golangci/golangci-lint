@@ -15,6 +15,7 @@ type LinterConfig struct {
 	Linter           Linter
 	EnabledByDefault bool
 	DoesFullImport   bool
+	NeedsSSARepr     bool
 }
 
 var nameToLC map[string]LinterConfig
@@ -36,40 +37,43 @@ func GetLinterConfig(name string) *LinterConfig {
 	return &lc
 }
 
-func enabledByDefault(linter Linter, desc string, doesFullImport bool) LinterConfig {
+func enabledByDefault(linter Linter, desc string, doesFullImport, needsSSARepr bool) LinterConfig {
 	return LinterConfig{
 		EnabledByDefault: true,
 		Linter:           linter,
 		Desc:             desc,
 		DoesFullImport:   doesFullImport,
+		NeedsSSARepr:     needsSSARepr,
 	}
 }
 
-func disabledByDefault(linter Linter, desc string, doesFullImport bool) LinterConfig {
+func disabledByDefault(linter Linter, desc string, doesFullImport, needsSSARepr bool) LinterConfig {
 	return LinterConfig{
 		EnabledByDefault: false,
 		Linter:           linter,
 		Desc:             desc,
 		DoesFullImport:   doesFullImport,
+		NeedsSSARepr:     needsSSARepr,
 	}
 }
 
 func GetAllSupportedLinterConfigs() []LinterConfig {
 	return []LinterConfig{
-		enabledByDefault(golinters.Govet{}, "Vet examines Go source code and reports suspicious constructs, such as Printf calls whose arguments do not align with the format string", false),
-		enabledByDefault(golinters.Errcheck{}, "Errcheck is a program for checking for unchecked errors in go programs. These unchecked errors can be critical bugs in some cases", true),
-		enabledByDefault(golinters.Golint{}, "Golint differs from gofmt. Gofmt reformats Go source code, whereas golint prints out style mistakes", false),
-		enabledByDefault(golinters.Deadcode{}, "Finds unused code", true),
-		enabledByDefault(golinters.Gocyclo{}, "Computes and checks the cyclomatic complexity of functions", false),
-		enabledByDefault(golinters.Structcheck{}, "Finds unused struct fields", true),
-		enabledByDefault(golinters.Varcheck{}, "Finds unused global variables and constants", true),
-		enabledByDefault(golinters.Megacheck{}, "Megacheck: 3 sub-linters in one: staticcheck, gosimple and unused", true),
-		enabledByDefault(golinters.Dupl{}, "Tool for code clone detection", false),
-		enabledByDefault(golinters.Ineffassign{}, "Detects when assignments to existing variables are not used", false),
+		enabledByDefault(golinters.Govet{}, "Vet examines Go source code and reports suspicious constructs, such as Printf calls whose arguments do not align with the format string", false, false),
+		enabledByDefault(golinters.Errcheck{}, "Errcheck is a program for checking for unchecked errors in go programs. These unchecked errors can be critical bugs in some cases", true, false),
+		enabledByDefault(golinters.Golint{}, "Golint differs from gofmt. Gofmt reformats Go source code, whereas golint prints out style mistakes", false, false),
+		enabledByDefault(golinters.Deadcode{}, "Finds unused code", true, false),
+		enabledByDefault(golinters.Gocyclo{}, "Computes and checks the cyclomatic complexity of functions", false, false),
+		enabledByDefault(golinters.Structcheck{}, "Finds unused struct fields", true, false),
+		enabledByDefault(golinters.Varcheck{}, "Finds unused global variables and constants", true, false),
+		enabledByDefault(golinters.Megacheck{}, "Megacheck: 3 sub-linters in one: staticcheck, gosimple and unused", true, true),
+		enabledByDefault(golinters.Dupl{}, "Tool for code clone detection", false, false),
+		enabledByDefault(golinters.Ineffassign{}, "Detects when assignments to existing variables are not used", false, false),
+		enabledByDefault(golinters.Interfacer{}, "Linter that suggests narrower interface types", true, true),
 
-		disabledByDefault(golinters.Gofmt{}, "Gofmt checks whether code was gofmt-ed. By default this tool runs with -s option to check for code simplification", false),
-		disabledByDefault(golinters.Gofmt{UseGoimports: true}, "Goimports does everything that gofmt does. Additionally it checks unused imports", false),
-		disabledByDefault(golinters.Maligned{}, "Tool to detect Go structs that would take less memory if their fields were sorted", true),
+		disabledByDefault(golinters.Gofmt{}, "Gofmt checks whether code was gofmt-ed. By default this tool runs with -s option to check for code simplification", false, false),
+		disabledByDefault(golinters.Gofmt{UseGoimports: true}, "Goimports does everything that gofmt does. Additionally it checks unused imports", false, false),
+		disabledByDefault(golinters.Maligned{}, "Tool to detect Go structs that would take less memory if their fields were sorted", true, false),
 	}
 }
 

@@ -72,7 +72,7 @@
     "unused",
     "version"
   ]
-  revision = "38c5f4a0efc6bd0efc88bdd3890e5e64e698bdc2"
+  revision = "f557f368b7f3d00a54ed44eb57b9eca59e85cee1"
 
 [[projects]]
   branch = "master"
@@ -135,6 +135,15 @@
   ]
   revision = "7a3d63cfc6fbd9e46f2e551f9b8d1e9c69bffab1"
   source = "github.com/golangci/errcheck"
+
+[[projects]]
+  name = "github.com/kisielk/gotool"
+  packages = [
+    ".",
+    "internal/load"
+  ]
+  revision = "80517062f582ea3340cd4baf70e86d539ae7d84d"
+  version = "v1.0.0"
 
 [[projects]]
   name = "github.com/mattn/go-colorable"
@@ -245,6 +254,20 @@
 
 [[projects]]
   branch = "master"
+  name = "mvdan.cc/interfacer"
+  packages = ["check"]
+  revision = "72c3fb5d5e5e0ca07e9a7c90bcd150b049920b3b"
+  source = "github.com/golangci/interfacer"
+
+[[projects]]
+  branch = "master"
+  name = "mvdan.cc/lint"
+  packages = ["."]
+  revision = "8ff1696d5934157cea033c4b97cf5ea23fdb7a32"
+  source = "github.com/golangci/lint"
+
+[[projects]]
+  branch = "master"
   name = "sourcegraph.com/sourcegraph/go-diff"
   packages = ["diff"]
   revision = "3f415a150aec0685cb81b73cc201e762e075006d"
@@ -258,6 +281,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "aa0c6cd4a6cd5957ffdeeb0f06753a92f33f5393045845e45bc63a10ead24a85"
+  inputs-digest = "6e4437a7adb255525e8d1cfda07716617c1f28acaa721ac4f910f52f49ecea2f"
   solver-name = "gps-cdcl"
   solver-version = 1

@@ -55,6 +55,16 @@
   branch = "master"
   source = "github.com/golangci/dupl"
 
+[[constraint]]
+  name = "mvdan.cc/interfacer"
+  branch = "master"
+  source = "github.com/golangci/interfacer"
+
+[[override]]
+  name = "mvdan.cc/lint"
+  branch = "master"
+  source = "github.com/golangci/lint"
+
 [prune]
   go-tests = true
   unused-packages = true

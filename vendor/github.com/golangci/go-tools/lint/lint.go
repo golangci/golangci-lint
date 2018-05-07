@@ -23,10 +23,10 @@ import (
 	"sync"
 	"unicode"
 
-	"github.com/golangci/go-tools/ssa"
-	"github.com/golangci/go-tools/ssa/ssautil"
 	"golang.org/x/tools/go/ast/astutil"
 	"golang.org/x/tools/go/loader"
+	"github.com/golangci/go-tools/ssa"
+	"github.com/golangci/go-tools/ssa/ssautil"
 )
 
 type Job struct {
@@ -235,9 +235,7 @@ func parseDirective(s string) (cmd string, args []string) {
 	return fields[0], fields[1:]
 }
 
-func (l *Linter) Lint(lprog *loader.Program, conf *loader.Config) []Problem {
-	ssaprog := ssautil.CreateProgram(lprog, ssa.GlobalDebug)
-	ssaprog.Build()
+func (l *Linter) Lint(lprog *loader.Program, conf *loader.Config, ssaprog *ssa.Program) []Problem {
 	pkgMap := map[*ssa.Package]*Pkg{}
 	var pkgs []*Pkg
 	for _, pkginfo := range lprog.InitialPackages() {
@@ -836,9 +834,6 @@ func (v *fnVisitor) Visit(node ast.Node) ast.Visitor {
 	switch node := node.(type) {
 	case *ast.FuncDecl:
 		var ssafn *ssa.Function
-		if v.pkg == nil || v.pkg.Prog == nil {
-			return nil // partially loaded
-		}
 		ssafn = v.pkg.Prog.FuncValue(v.pkg.Info.ObjectOf(node.Name).(*types.Func))
 		v.m[node] = ssafn
 		if ssafn == nil {

@@ -5,12 +5,13 @@ import (
 	"github.com/golangci/go-tools/lint"
 	"github.com/golangci/go-tools/lint/lintutil"
 	"github.com/golangci/go-tools/simple"
+	"github.com/golangci/go-tools/ssa"
 	"github.com/golangci/go-tools/staticcheck"
 	"github.com/golangci/go-tools/unused"
 	"golang.org/x/tools/go/loader"
 )
 
-func Run(program *loader.Program, conf *loader.Config, enableStaticcheck, enableGosimple, enableUnused bool) []lint.Problem {
+func Run(program *loader.Program, conf *loader.Config, ssaProg *ssa.Program, enableStaticcheck, enableGosimple, enableUnused bool) []lint.Problem {
 	var flags struct {
 		staticcheck struct {
 			enabled     bool
@@ -120,5 +121,5 @@ func Run(program *loader.Program, conf *loader.Config, enableStaticcheck, enable
 
 	}
 
-	return lintutil.ProcessFlagSet(checkers, fs, program, conf)
+	return lintutil.ProcessFlagSet(checkers, fs, program, conf, ssaProg)
 }

@@ -10,6 +10,8 @@ import (
 	"time"
 
 	"github.com/fatih/color"
+	"github.com/golangci/go-tools/ssa"
+	"github.com/golangci/go-tools/ssa/ssautil"
 	"github.com/golangci/golangci-lint/pkg"
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/fsutils"
@@ -84,6 +86,17 @@ func isFullImportNeeded(linters []pkg.Linter) bool {
 	return false
 }
 
+func isSSAReprNeeded(linters []pkg.Linter) bool {
+	for _, linter := range linters {
+		lc := pkg.GetLinterConfig(linter.Name())
+		if lc.NeedsSSARepr {
+			return true
+		}
+	}
+
+	return false
+}
+
 func loadWholeAppIfNeeded(ctx context.Context, linters []pkg.Linter, cfg *config.Run, paths *fsutils.ProjectPaths) (*loader.Program, *loader.Config, error) {
 	if !isFullImportNeeded(linters) {
 		return nil, nil, nil
@@ -117,6 +130,17 @@ func loadWholeAppIfNeeded(ctx context.Context, linters []pkg.Linter, cfg *config
 	return prog, loadcfg, nil
 }
 
+func buildSSAProgram(ctx context.Context, lprog *loader.Program) *ssa.Program {
+	startedAt := time.Now()
+	defer func() {
+		analytics.Log(ctx).Infof("SSA repr building took %s", time.Since(startedAt))
+	}()
+
+	ssaProg := ssautil.CreateProgram(lprog, ssa.GlobalDebug)
+	ssaProg.Build()
+	return ssaProg
+}
+
 func buildLintCtx(ctx context.Context, linters []pkg.Linter, cfg *config.Config) (*golinters.Context, error) {
 	args := cfg.Run.Args
 	if len(args) == 0 {
@@ -133,10 +157,16 @@ func buildLintCtx(ctx context.Context, linters []pkg.Linter, cfg *config.Config)
 		return nil, err
 	}
 
+	var ssaProg *ssa.Program
+	if prog != nil && isSSAReprNeeded(linters) {
+		ssaProg = buildSSAProgram(ctx, prog)
+	}
+
 	return &golinters.Context{
 		Paths:        paths,
 		Cfg:          cfg,
 		Program:      prog,
+		SSAProgram:   ssaProg,
 		LoaderConfig: loaderConfig,
 	}, nil
 }
