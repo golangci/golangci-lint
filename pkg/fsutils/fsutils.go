@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/golangci/golangci-shared/pkg/analytics"
+	"github.com/sirupsen/logrus"
 )
 
 func GetProjectRoot() string {
@@ -33,21 +33,21 @@ func (p ProjectPaths) MixedPaths() []string {
 
 func processPaths(root string, paths []string, maxPaths int) ([]string, error) {
 	if len(paths) > maxPaths {
-		analytics.Log(context.TODO()).Warnf("Gofmt: got too much paths (%d), analyze first %d", len(paths), maxPaths)
+		logrus.Warnf("Gofmt: got too much paths (%d), analyze first %d", len(paths), maxPaths)
 		paths = paths[:maxPaths]
 	}
 
 	ret := []string{}
-	for i := range paths {
-		if !filepath.IsAbs(paths[i]) {
-			ret = append(ret, paths[i])
+	for _, p := range paths {
+		if !filepath.IsAbs(p) {
+			ret = append(ret, p)
 			continue
 		}
 
-		relPath, err := filepath.Rel(root, paths[i])
+		relPath, err := filepath.Rel(root, p)
 		if err != nil {
 			return nil, fmt.Errorf("can't get relative path for path %s and root %s: %s",
-				paths[i], root, err)
+				p, root, err)
 		}
 		ret = append(ret, relPath)
 	}
@@ -58,7 +58,7 @@ func processPaths(root string, paths []string, maxPaths int) ([]string, error) {
 func GetPathsForAnalysis(ctx context.Context, inputPaths []string) (ret *ProjectPaths, err error) {
 	defer func(startedAt time.Time) {
 		if ret != nil {
-			analytics.Log(ctx).Infof("Found paths for analysis for %s: %s", time.Since(startedAt), ret.MixedPaths())
+			logrus.Infof("Found paths for analysis for %s: %s", time.Since(startedAt), ret.MixedPaths())
 		}
 	}(time.Now())
 
@@ -92,7 +92,7 @@ func GetPathsForAnalysis(ctx context.Context, inputPaths []string) (ret *Project
 
 	for i := range dirs {
 		dir := dirs[i]
-		if dir != "." {
+		if dir != "." && !filepath.IsAbs(dir) {
 			dirs[i] = "./" + dir
 		}
 	}

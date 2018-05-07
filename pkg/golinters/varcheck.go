@@ -14,12 +14,12 @@ func (Varcheck) Name() string {
 	return "varcheck"
 }
 
-func (v Varcheck) Run(ctx context.Context, lintCtx *Context) (*result.Result, error) {
+func (v Varcheck) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, error) {
 	issues := varcheckAPI.Run(lintCtx.Program, lintCtx.RunCfg().Varcheck.CheckExportedFields)
 
-	res := &result.Result{}
+	var res []result.Issue
 	for _, i := range issues {
-		res.Issues = append(res.Issues, result.Issue{
+		res = append(res, result.Issue{
 			File:       i.Pos.Filename,
 			LineNumber: i.Pos.Line,
 			Text:       fmt.Sprintf("%s is unused", formatCode(i.VarName, lintCtx.RunCfg())),

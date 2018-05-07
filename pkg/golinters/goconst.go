@@ -14,7 +14,7 @@ func (Goconst) Name() string {
 	return "goconst"
 }
 
-func (lint Goconst) Run(ctx context.Context, lintCtx *Context) (*result.Result, error) {
+func (lint Goconst) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, error) {
 	issues, err := goconstAPI.Run(lintCtx.Paths.Files, true,
 		lintCtx.RunCfg().Goconst.MinStringLen,
 		lintCtx.RunCfg().Goconst.MinOccurrencesCount,
@@ -23,7 +23,7 @@ func (lint Goconst) Run(ctx context.Context, lintCtx *Context) (*result.Result, 
 		return nil, err
 	}
 
-	res := &result.Result{}
+	var res []result.Issue
 	for _, i := range issues {
 		textBegin := fmt.Sprintf("string %s has %d occurrences", formatCode(i.Str, lintCtx.RunCfg()), i.OccurencesCount)
 		var textEnd string
@@ -32,7 +32,7 @@ func (lint Goconst) Run(ctx context.Context, lintCtx *Context) (*result.Result, 
 		} else {
 			textEnd = fmt.Sprintf(", but such constant %s already exists", formatCode(i.MatchingConst, lintCtx.RunCfg()))
 		}
-		res.Issues = append(res.Issues, result.Issue{
+		res = append(res, result.Issue{
 			File:       i.Pos.Filename,
 			LineNumber: i.Pos.Line,
 			Text:       textBegin + textEnd,

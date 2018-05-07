@@ -8,7 +8,7 @@ import (
 	gofmtAPI "github.com/golangci/gofmt/gofmt"
 	goimportsAPI "github.com/golangci/gofmt/goimports"
 	"github.com/golangci/golangci-lint/pkg/result"
-	"github.com/golangci/golangci-shared/pkg/analytics"
+	"github.com/sirupsen/logrus"
 	"sourcegraph.com/sourcegraph/go-diff/diff"
 )
 
@@ -58,14 +58,14 @@ func (g Gofmt) extractIssuesFromPatch(patch string) ([]result.Issue, error) {
 	issues := []result.Issue{}
 	for _, d := range diffs {
 		if len(d.Hunks) == 0 {
-			analytics.Log(context.TODO()).Warnf("Got no hunks in diff %+v", d)
+			logrus.Warnf("Got no hunks in diff %+v", d)
 			continue
 		}
 
 		for _, hunk := range d.Hunks {
 			deletedLine, addedLine, err := getFirstDeletedAndAddedLineNumberInHunk(hunk)
 			if err != nil {
-				analytics.Log(context.TODO()).Infof("Can't get first deleted line number for hunk: %s", err)
+				logrus.Infof("Can't get first deleted line number for hunk: %s", err)
 				if addedLine > 1 {
 					deletedLine = addedLine - 1 // use previous line, TODO: use both prev and next lines
 				} else {
@@ -90,7 +90,7 @@ func (g Gofmt) extractIssuesFromPatch(patch string) ([]result.Issue, error) {
 	return issues, nil
 }
 
-func (g Gofmt) Run(ctx context.Context, lintCtx *Context) (*result.Result, error) {
+func (g Gofmt) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, error) {
 	var issues []result.Issue
 
 	for _, f := range lintCtx.Paths.Files {
@@ -116,8 +116,5 @@ func (g Gofmt) Run(ctx context.Context, lintCtx *Context) (*result.Result, error
 		issues = append(issues, is...)
 	}
 
-	return &result.Result{
-		Issues:           issues,
-		MaxIssuesPerFile: 1, // don't disturb user: show just first changed not gofmt-ed line
-	}, nil
+	return issues, nil
 }

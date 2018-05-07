@@ -14,16 +14,16 @@ func (Gocyclo) Name() string {
 	return "gocyclo"
 }
 
-func (g Gocyclo) Run(ctx context.Context, lintCtx *Context) (*result.Result, error) {
+func (g Gocyclo) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, error) {
 	stats := gocycloAPI.Run(lintCtx.Paths.MixedPaths())
 
-	res := &result.Result{}
+	var res []result.Issue
 	for _, s := range stats {
 		if s.Complexity < lintCtx.RunCfg().Gocyclo.MinComplexity {
 			continue
 		}
 
-		res.Issues = append(res.Issues, result.Issue{
+		res = append(res, result.Issue{
 			File:       s.Pos.Filename,
 			LineNumber: s.Pos.Line,
 			Text: fmt.Sprintf("cyclomatic complexity %d of func %s is high (> %d)",

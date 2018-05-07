@@ -6,7 +6,6 @@ import (
 	"runtime"
 	"runtime/pprof"
 
-	"github.com/golangci/golangci-shared/pkg/analytics"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
@@ -23,7 +22,7 @@ func (e *Executor) initRoot() {
 			runtime.GOMAXPROCS(e.cfg.Common.Concurrency)
 
 			if e.cfg.Common.IsVerbose {
-				analytics.SetLogLevel(logrus.InfoLevel)
+				logrus.SetLevel(logrus.InfoLevel)
 			}
 
 			if e.cfg.Common.CPUProfilePath != "" {

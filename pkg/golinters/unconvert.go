@@ -13,11 +13,11 @@ func (Unconvert) Name() string {
 	return "unconvert"
 }
 
-func (lint Unconvert) Run(ctx context.Context, lintCtx *Context) (*result.Result, error) {
+func (lint Unconvert) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, error) {
 	positions := unconvertAPI.Run(lintCtx.Program)
-	res := &result.Result{}
+	var res []result.Issue
 	for _, pos := range positions {
-		res.Issues = append(res.Issues, result.Issue{
+		res = append(res, result.Issue{
 			File:       pos.Filename,
 			LineNumber: pos.Line,
 			Text:       "unnecessary conversion",

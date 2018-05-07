@@ -14,16 +14,16 @@ func (Maligned) Name() string {
 	return "maligned"
 }
 
-func (m Maligned) Run(ctx context.Context, lintCtx *Context) (*result.Result, error) {
+func (m Maligned) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, error) {
 	issues := malignedAPI.Run(lintCtx.Program)
 
-	res := &result.Result{}
+	var res []result.Issue
 	for _, i := range issues {
 		text := fmt.Sprintf("struct of size %d bytes could be of size %d bytes", i.OldSize, i.NewSize)
 		if lintCtx.RunCfg().Maligned.SuggestNewOrder {
 			text += fmt.Sprintf(":\n%s", formatCodeBlock(i.NewStructDef, lintCtx.RunCfg()))
 		}
-		res.Issues = append(res.Issues, result.Issue{
+		res = append(res, result.Issue{
 			File:       i.Pos.Filename,
 			LineNumber: i.Pos.Line,
 			Text:       text,

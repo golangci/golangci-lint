@@ -8,6 +8,6 @@ import (
 )
 
 type Linter interface {
-	Run(ctx context.Context, lintCtx *golinters.Context) (*result.Result, error)
+	Run(ctx context.Context, lintCtx *golinters.Context) ([]result.Issue, error)
 	Name() string
 }

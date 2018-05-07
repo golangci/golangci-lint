@@ -14,12 +14,12 @@ func (Structcheck) Name() string {
 	return "structcheck"
 }
 
-func (s Structcheck) Run(ctx context.Context, lintCtx *Context) (*result.Result, error) {
+func (s Structcheck) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, error) {
 	issues := structcheckAPI.Run(lintCtx.Program, lintCtx.RunCfg().Structcheck.CheckExportedFields)
 
-	res := &result.Result{}
+	var res []result.Issue
 	for _, i := range issues {
-		res.Issues = append(res.Issues, result.Issue{
+		res = append(res, result.Issue{
 			File:       i.Pos.Filename,
 			LineNumber: i.Pos.Line,
 			Text:       fmt.Sprintf("%s is unused", formatCode(i.FieldName, lintCtx.RunCfg())),

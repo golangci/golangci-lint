@@ -11,12 +11,8 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters"
 	"github.com/golangci/golangci-lint/pkg/result"
 	"github.com/golangci/golangci-lint/pkg/result/processors"
-	"github.com/golangci/golangci-shared/pkg/analytics"
+	"github.com/sirupsen/logrus"
 )
-
-type Runner interface {
-	Run(ctx context.Context, linters []Linter, lintCtx *golinters.Context) ([]result.Issue, error)
-}
 
 type SimpleRunner struct {
 	Processors []processors.Processor
@@ -25,25 +21,30 @@ type SimpleRunner struct {
 type lintRes struct {
 	linter Linter
 	err    error
-	res    *result.Result
+	issues []result.Issue
 }
 
-func runLinter(ctx context.Context, linter Linter, lintCtx *golinters.Context, i int) (res *result.Result, err error) {
+func (r *SimpleRunner) runLinter(ctx context.Context, linter Linter, lintCtx *golinters.Context, i int) (res []result.Issue, err error) {
 	defer func() {
 		if panicData := recover(); panicData != nil {
 			err = fmt.Errorf("panic occured: %s", panicData)
-			analytics.Log(ctx).Infof("Panic stack trace: %s", debug.Stack())
+			logrus.Infof("Panic stack trace: %s", debug.Stack())
 		}
 	}()
 	startedAt := time.Now()
 	res, err = linter.Run(ctx, lintCtx)
-	analytics.Log(ctx).Infof("worker #%d: linter %s took %s", i, linter.Name(),
-		time.Since(startedAt))
+
+	if err == nil && len(res) != 0 {
+		res = r.processIssues(ctx, res)
+	}
+
+	logrus.Infof("worker #%d: linter %s took %s and found %d issues", i, linter.Name(),
+		time.Since(startedAt), len(res))
 	return
 }
 
-func runLinters(ctx context.Context, wg *sync.WaitGroup, tasksCh chan Linter, lintResultsCh chan lintRes, lintCtx *golinters.Context) {
-	for i := 0; i < lintCtx.Cfg.Common.Concurrency; i++ {
+func (r *SimpleRunner) runLinters(ctx context.Context, wg *sync.WaitGroup, tasksCh chan Linter, lintResultsCh chan lintRes, lintCtx *golinters.Context, workersCount int) {
+	for i := 0; i < workersCount; i++ {
 		go func(i int) {
 			defer wg.Done()
 			for {
@@ -59,11 +60,11 @@ func runLinters(ctx context.Context, wg *sync.WaitGroup, tasksCh chan Linter, li
 						// it's possible to not enter to this case until tasksCh is empty.
 						return
 					}
-					res, lerr := runLinter(ctx, linter, lintCtx, i)
+					issues, lerr := r.runLinter(ctx, linter, lintCtx, i)
 					lintResultsCh <- lintRes{
 						linter: linter,
 						err:    lerr,
-						res:    res,
+						issues: issues,
 					}
 				}
 			}
@@ -71,85 +72,83 @@ func runLinters(ctx context.Context, wg *sync.WaitGroup, tasksCh chan Linter, li
 	}
 }
 
-func (r SimpleRunner) Run(ctx context.Context, linters []Linter, lintCtx *golinters.Context) ([]result.Issue, error) {
+func (r SimpleRunner) Run(ctx context.Context, linters []Linter, lintCtx *golinters.Context) chan result.Issue {
+	retIssues := make(chan result.Issue, 1024)
+	go func() {
+		defer close(retIssues)
+		if err := r.runGo(ctx, linters, lintCtx, retIssues); err != nil {
+			logrus.Warnf("error running linters: %s", err)
+		}
+	}()
+
+	return retIssues
+}
+
+func (r SimpleRunner) runGo(ctx context.Context, linters []Linter, lintCtx *golinters.Context, retIssues chan result.Issue) error {
 	savedStdout, savedStderr := os.Stdout, os.Stderr
 	devNull, err := os.Open(os.DevNull)
 	if err != nil {
-		return nil, fmt.Errorf("can't open null device %q: %s", os.DevNull, err)
+		return fmt.Errorf("can't open null device %q: %s", os.DevNull, err)
 	}
 
+	// Don't allow linters to print anything
 	os.Stdout, os.Stderr = devNull, devNull
 
 	lintResultsCh := make(chan lintRes, len(linters))
 	tasksCh := make(chan Linter, len(linters))
+	workersCount := lintCtx.Cfg.Common.Concurrency - 1
 	var wg sync.WaitGroup
-	wg.Add(lintCtx.Cfg.Common.Concurrency)
-	runLinters(ctx, &wg, tasksCh, lintResultsCh, lintCtx)
+	wg.Add(workersCount)
+	r.runLinters(ctx, &wg, tasksCh, lintResultsCh, lintCtx, workersCount)
 
 	for _, linter := range linters {
 		tasksCh <- linter
 	}
-
 	close(tasksCh)
-	wg.Wait()
-	close(lintResultsCh)
 
-	os.Stdout, os.Stderr = savedStdout, savedStderr
-	results := []result.Result{}
+	go func() {
+		wg.Wait()
+		close(lintResultsCh)
+		os.Stdout, os.Stderr = savedStdout, savedStderr
+	}()
+
 	finishedN := 0
 	for res := range lintResultsCh {
 		if res.err != nil {
-			analytics.Log(ctx).Warnf("Can't run linter %s: %s", res.linter.Name(), res.err)
+			logrus.Warnf("Can't run linter %s: %s", res.linter.Name(), res.err)
 			continue
 		}
 
 		finishedN++
-		if res.res == nil || len(res.res.Issues) == 0 {
-			continue
+		for _, i := range res.issues {
+			retIssues <- i
 		}
-
-		results = append(results, *res.res)
 	}
 
 	if ctx.Err() != nil {
-		analytics.Log(ctx).Warnf("%d/%d linters finished: deadline exceeded: try increase it by passing --deadline option",
+		return fmt.Errorf("%d/%d linters finished: deadline exceeded: try increase it by passing --deadline option",
 			finishedN, len(linters))
 	}
 
-	results, err = r.processResults(ctx, results)
-	if err != nil {
-		return nil, fmt.Errorf("can't process results: %s", err)
-	}
-
-	return r.mergeResults(results), nil
+	return nil
 }
 
-func (r SimpleRunner) processResults(ctx context.Context, results []result.Result) ([]result.Result, error) {
-	if len(r.Processors) == 0 {
-		return results, nil
-	}
-
+func (r *SimpleRunner) processIssues(ctx context.Context, issues []result.Issue) []result.Issue {
 	for _, p := range r.Processors {
 		startedAt := time.Now()
-		newResults, err := p.Process(results)
+		newIssues, err := p.Process(issues)
 		elapsed := time.Since(startedAt)
 		if elapsed > 50*time.Millisecond {
-			analytics.Log(ctx).Infof("Result processor %s took %s", p.Name(), elapsed)
+			logrus.Infof("Result processor %s took %s", p.Name(), elapsed)
 		}
 		if err != nil {
-			analytics.Log(ctx).Warnf("Can't process result by %s processor: %s", p.Name(), err)
+			logrus.Warnf("Can't process result by %s processor: %s", p.Name(), err)
 		} else {
-			results = newResults
+			issues = newIssues
 		}
-	}
-
-	return results, nil
-}
-
-func (r SimpleRunner) mergeResults(results []result.Result) []result.Issue {
-	issues := []result.Issue{}
-	for _, r := range results {
-		issues = append(issues, r.Issues...)
+		if issues == nil {
+			issues = []result.Issue{}
+		}
 	}
 
 	return issues

@@ -14,15 +14,15 @@ func (Deadcode) Name() string {
 	return "deadcode"
 }
 
-func (d Deadcode) Run(ctx context.Context, lintCtx *Context) (*result.Result, error) {
+func (d Deadcode) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, error) {
 	issues, err := deadcodeAPI.Run(lintCtx.Program)
 	if err != nil {
 		return nil, err
 	}
 
-	res := &result.Result{}
+	var res []result.Issue
 	for _, i := range issues {
-		res.Issues = append(res.Issues, result.Issue{
+		res = append(res, result.Issue{
 			File:       i.Pos.Filename,
 			LineNumber: i.Pos.Line,
 			Text:       fmt.Sprintf("%s is unused", formatCode(i.UnusedIdentName, lintCtx.RunCfg())),

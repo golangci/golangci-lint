@@ -14,12 +14,12 @@ func (Ineffassign) Name() string {
 	return "ineffassign"
 }
 
-func (lint Ineffassign) Run(ctx context.Context, lintCtx *Context) (*result.Result, error) {
+func (lint Ineffassign) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, error) {
 	issues := ineffassignAPI.Run(lintCtx.Paths.Files)
 
-	res := &result.Result{}
+	var res []result.Issue
 	for _, i := range issues {
-		res.Issues = append(res.Issues, result.Issue{
+		res = append(res, result.Issue{
 			File:       i.Pos.Filename,
 			LineNumber: i.Pos.Line,
 			Text:       fmt.Sprintf("ineffectual assignment to %s", formatCode(i.IdentName, lintCtx.RunCfg())),

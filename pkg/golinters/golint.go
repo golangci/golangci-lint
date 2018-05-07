@@ -17,7 +17,7 @@ func (Golint) Name() string {
 	return "golint"
 }
 
-func (g Golint) Run(ctx context.Context, lintCtx *Context) (*result.Result, error) {
+func (g Golint) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, error) {
 	var issues []result.Issue
 	if lintCtx.Paths.IsDirsRun {
 		for _, path := range lintCtx.Paths.Dirs {
@@ -37,9 +37,7 @@ func (g Golint) Run(ctx context.Context, lintCtx *Context) (*result.Result, erro
 		issues = append(issues, i...)
 	}
 
-	return &result.Result{
-		Issues: issues,
-	}, nil
+	return issues, nil
 }
 
 func lintDir(dirname string, minConfidence float64) ([]result.Issue, error) {

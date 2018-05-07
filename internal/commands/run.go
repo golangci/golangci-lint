@@ -6,7 +6,9 @@ import (
 	"fmt"
 	"go/build"
 	"log"
+	"os"
 	"strings"
+	"syscall"
 	"time"
 
 	"github.com/fatih/color"
@@ -18,7 +20,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters"
 	"github.com/golangci/golangci-lint/pkg/result"
 	"github.com/golangci/golangci-lint/pkg/result/processors"
-	"github.com/golangci/golangci-shared/pkg/analytics"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"golang.org/x/tools/go/loader"
 )
@@ -110,7 +112,7 @@ func loadWholeAppIfNeeded(ctx context.Context, linters []pkg.Linter, cfg *config
 
 	startedAt := time.Now()
 	defer func() {
-		analytics.Log(ctx).Infof("Program loading took %s", time.Since(startedAt))
+		logrus.Infof("Program loading took %s", time.Since(startedAt))
 	}()
 
 	bctx := build.Default
@@ -139,7 +141,7 @@ func loadWholeAppIfNeeded(ctx context.Context, linters []pkg.Linter, cfg *config
 func buildSSAProgram(ctx context.Context, lprog *loader.Program) *ssa.Program {
 	startedAt := time.Now()
 	defer func() {
-		analytics.Log(ctx).Infof("SSA repr building took %s", time.Since(startedAt))
+		logrus.Infof("SSA repr building took %s", time.Since(startedAt))
 	}()
 
 	ssaProg := ssautil.CreateProgram(lprog, ssa.GlobalDebug)
@@ -177,8 +179,7 @@ func buildLintCtx(ctx context.Context, linters []pkg.Linter, cfg *config.Config)
 	}, nil
 }
 
-func (e *Executor) runAnalysis(ctx context.Context, args []string) ([]result.Issue, error) {
-	startedAt := time.Now()
+func (e *Executor) runAnalysis(ctx context.Context, args []string) (chan result.Issue, error) {
 	e.cfg.Run.Args = args
 
 	linters, err := pkg.GetEnabledLinters(ctx, &e.cfg.Run)
@@ -193,38 +194,37 @@ func (e *Executor) runAnalysis(ctx context.Context, args []string) ([]result.Iss
 
 	runner := pkg.SimpleRunner{
 		Processors: []processors.Processor{
-			processors.MaxLinterIssuesPerFile{},
-			processors.NewExcludeProcessor(fmt.Sprintf("(%s)", strings.Join(e.cfg.Run.ExcludePatterns, "|"))),
-			processors.NewNolintProcessor(lintCtx.Program),
-			processors.UniqByLineProcessor{},
+			processors.NewMaxPerFileFromLinter(),
+			processors.NewExclude(fmt.Sprintf("(%s)", strings.Join(e.cfg.Run.ExcludePatterns, "|"))),
+			processors.NewNolint(lintCtx.Program.Fset),
+			processors.NewUniqByLine(),
 			processors.NewPathPrettifier(),
 		},
 	}
 
-	issues, err := runner.Run(ctx, linters, lintCtx)
-	if err != nil {
-		return nil, err
-	}
-
-	analytics.Log(ctx).Infof("Analysis took %s", time.Since(startedAt))
-	return issues, nil
+	return runner.Run(ctx, linters, lintCtx), nil
 }
 
 func (e *Executor) executeRun(cmd *cobra.Command, args []string) {
-	f := func() error {
-		ctx, cancel := context.WithTimeout(context.Background(), e.cfg.Run.Deadline)
-		defer cancel()
+	ctx, cancel := context.WithTimeout(context.Background(), e.cfg.Run.Deadline)
+	defer cancel()
 
+	defer func(startedAt time.Time) {
+		logrus.Infof("Run took %s", time.Since(startedAt))
+	}(time.Now())
+
+	f := func() error {
 		issues, err := e.runAnalysis(ctx, args)
 		if err != nil {
 			return err
 		}
 
-		if err := outputIssues(e.cfg.Run.OutFormat, issues); err != nil {
+		gotAnyIssues, err := outputIssues(e.cfg.Run.OutFormat, issues)
+		if err != nil {
 			return fmt.Errorf("can't output %d issues: %s", len(issues), err)
 		}
 
-		if len(issues) != 0 {
+		if gotAnyIssues {
 			e.exitCode = e.cfg.Run.ExitCodeIfIssuesFound
 			return nil
 		}
@@ -240,34 +240,42 @@ func (e *Executor) executeRun(cmd *cobra.Command, args []string) {
 	}
 }
 
-func outputIssues(format string, issues []result.Issue) error {
+func outputIssues(format string, issues chan result.Issue) (bool, error) {
+	stdout := os.NewFile(uintptr(syscall.Stdout), "/dev/stdout") // was set to /dev/null
 	if format == config.OutFormatLineNumber || format == config.OutFormatColoredLineNumber {
-		if len(issues) == 0 {
-			outStr := "Congrats! No issues were found."
-			if format == config.OutFormatColoredLineNumber {
-				outStr = color.GreenString(outStr)
-			}
-			fmt.Println(outStr)
-		}
-
-		for _, i := range issues {
+		gotAnyIssue := false
+		for i := range issues {
+			gotAnyIssue = true
 			text := i.Text
 			if format == config.OutFormatColoredLineNumber {
 				text = color.RedString(text)
 			}
-			fmt.Printf("%s:%d: %s\n", i.File, i.LineNumber, text)
+			fmt.Fprintf(stdout, "%s:%d: %s\n", i.File, i.LineNumber, text)
 		}
-		return nil
+
+		if !gotAnyIssue {
+			outStr := "Congrats! No issues were found."
+			if format == config.OutFormatColoredLineNumber {
+				outStr = color.GreenString(outStr)
+			}
+			fmt.Fprintln(stdout, outStr)
+		}
+
+		return gotAnyIssue, nil
 	}
 
 	if format == config.OutFormatJSON {
-		outputJSON, err := json.Marshal(issues)
-		if err != nil {
-			return err
+		var allIssues []result.Issue
+		for i := range issues {
+			allIssues = append(allIssues, i)
 		}
-		fmt.Print(string(outputJSON))
-		return nil
+		outputJSON, err := json.Marshal(allIssues)
+		if err != nil {
+			return false, err
+		}
+		fmt.Fprint(stdout, string(outputJSON))
+		return len(allIssues) != 0, nil
 	}
 
-	return fmt.Errorf("unknown output format %q", format)
+	return false, fmt.Errorf("unknown output format %q", format)
 }

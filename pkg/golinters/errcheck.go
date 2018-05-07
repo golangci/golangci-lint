@@ -15,14 +15,14 @@ func (Errcheck) Name() string {
 	return "errcheck"
 }
 
-func (e Errcheck) Run(ctx context.Context, lintCtx *Context) (*result.Result, error) {
+func (e Errcheck) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, error) {
 	errCfg := &lintCtx.RunCfg().Errcheck
 	issues, err := errcheckAPI.Run(lintCtx.Program, errCfg.CheckAssignToBlank, errCfg.CheckTypeAssertions)
 	if err != nil {
 		return nil, err
 	}
 
-	res := &result.Result{}
+	var res []result.Issue
 	for _, i := range issues {
 		if !errCfg.CheckClose && strings.HasSuffix(i.FuncName, ".Close") {
 			continue
@@ -34,7 +34,7 @@ func (e Errcheck) Run(ctx context.Context, lintCtx *Context) (*result.Result, er
 		} else {
 			text = "Error return value is not checked"
 		}
-		res.Issues = append(res.Issues, result.Issue{
+		res = append(res, result.Issue{
 			FromLinter: e.Name(),
 			Text:       text,
 			LineNumber: i.Pos.Line,

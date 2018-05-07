@@ -13,13 +13,13 @@ func (Megacheck) Name() string {
 	return "megacheck"
 }
 
-func (m Megacheck) Run(ctx context.Context, lintCtx *Context) (*result.Result, error) {
+func (m Megacheck) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, error) {
 	c := lintCtx.RunCfg().Megacheck
 	issues := megacheckAPI.Run(lintCtx.Program, lintCtx.LoaderConfig, lintCtx.SSAProgram, c.EnableStaticcheck, c.EnableGosimple, c.EnableUnused)
 
-	res := &result.Result{}
+	var res []result.Issue
 	for _, i := range issues {
-		res.Issues = append(res.Issues, result.Issue{
+		res = append(res, result.Issue{
 			File:       i.Position.Filename,
 			LineNumber: i.Position.Line,
 			Text:       i.Text,

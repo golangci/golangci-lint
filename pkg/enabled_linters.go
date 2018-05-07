@@ -7,7 +7,7 @@ import (
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/golinters"
-	"github.com/golangci/golangci-shared/pkg/analytics"
+	"github.com/sirupsen/logrus"
 )
 
 type LinterConfig struct {
@@ -192,7 +192,7 @@ func GetEnabledLinters(ctx context.Context, cfg *config.Run) ([]Linter, error) {
 		resultLinters = append(resultLinters, linter)
 		resultLinterNames = append(resultLinterNames, name)
 	}
-	analytics.Log(ctx).Infof("Enabled linters: %s", resultLinterNames)
+	logrus.Infof("Enabled linters: %s", resultLinterNames)
 
 	return resultLinters, nil
 }

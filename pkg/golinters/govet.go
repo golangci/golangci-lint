@@ -13,15 +13,15 @@ func (Govet) Name() string {
 	return "govet"
 }
 
-func (g Govet) Run(ctx context.Context, lintCtx *Context) (*result.Result, error) {
+func (g Govet) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, error) {
 	issues, err := govetAPI.Run(lintCtx.Paths.MixedPaths(), lintCtx.RunCfg().BuildTags, lintCtx.RunCfg().Govet.CheckShadowing)
 	if err != nil {
 		return nil, err
 	}
 
-	res := &result.Result{}
+	var res []result.Issue
 	for _, i := range issues {
-		res.Issues = append(res.Issues, result.Issue{
+		res = append(res, result.Issue{
 			File:       i.Pos.Filename,
 			LineNumber: i.Pos.Line,
 			Text:       i.Message,

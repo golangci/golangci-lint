@@ -1,44 +1,46 @@
 package processors
 
 import (
-	"regexp"
+	"fmt"
+	"os"
+	"path/filepath"
 
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-type ExcludeProcessor struct {
-	pattern *regexp.Regexp
+type PathPrettifier struct {
+	root string
 }
 
-var _ Processor = ExcludeProcessor{}
+var _ Processor = PathPrettifier{}
 
-func NewExcludeProcessor(pattern string) *ExcludeProcessor {
-	return &ExcludeProcessor{
-		pattern: regexp.MustCompile(pattern),
+func NewPathPrettifier() *PathPrettifier {
+	root, err := os.Getwd()
+	if err != nil {
+		panic(fmt.Errorf("Can't get working dir: %s", err))
+	}
+	return &PathPrettifier{
+		root: root,
 	}
 }
 
-func (p ExcludeProcessor) Name() string {
-	return "exclude"
+func (p PathPrettifier) Name() string {
+	return "path_prettifier"
 }
 
-func (p ExcludeProcessor) processResult(res result.Result) result.Result {
-	newRes := res
-	newRes.Issues = []result.Issue{}
-	for _, i := range res.Issues {
-		if !p.pattern.MatchString(i.Text) {
-			newRes.Issues = append(newRes.Issues, i)
+func (p PathPrettifier) Process(issues []result.Issue) ([]result.Issue, error) {
+	return transformIssues(issues, func(i *result.Issue) *result.Issue {
+		if !filepath.IsAbs(i.File) {
+			return i
 		}
-	}
 
-	return newRes
-}
+		rel, err := filepath.Rel(p.root, i.File)
+		if err != nil {
+			return i
+		}
 
-func (p ExcludeProcessor) Process(results []result.Result) ([]result.Result, error) {
-	retResults := []result.Result{}
-	for _, res := range results {
-		retResults = append(retResults, p.processResult(res))
-	}
-
-	return retResults, nil
+		newI := i
+		newI.File = rel
+		return newI
+	}), nil
 }
