@@ -2,6 +2,16 @@
 
 
 [[projects]]
+  branch = "master"
+  name = "github.com/GoASTScanner/gas"
+  packages = [
+    ".",
+    "rules"
+  ]
+  revision = "a9de4d6c1589158e002cc336c495bf11fbf3ea06"
+  source = "github.com/golangci/gas"
+
+[[projects]]
   name = "github.com/bradleyfalzon/revgrep"
   packages = ["."]
   revision = "c04006dc3307c8768bda7a33c7c15d1c6f664e14"
@@ -75,10 +85,10 @@
   revision = "f557f368b7f3d00a54ed44eb57b9eca59e85cee1"
 
 [[projects]]
+  branch = "master"
   name = "github.com/golangci/goconst"
   packages = ["."]
   revision = "b67b9035d29a7561902d87eb3757dd490b31c1b1"
-  branch = "master"
 
 [[projects]]
   branch = "master"
@@ -182,6 +192,22 @@
   ]
   revision = "53b9af5a45362a6f2896cfa39cc17d17ba9667ea"
   source = "github.com/golangci/dupl"
+
+[[projects]]
+  name = "github.com/nbutton23/zxcvbn-go"
+  packages = [
+    ".",
+    "adjacency",
+    "data",
+    "entropy",
+    "frequency",
+    "match",
+    "matching",
+    "scoring",
+    "utils/math"
+  ]
+  revision = "eafdab6b0663b4b528c35975c8b0e78be6e25261"
+  version = "v0.1"
 
 [[projects]]
   name = "github.com/pmezard/go-difflib"
@@ -306,6 +332,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "33466d605f73dcfcecf89a0d3a46aaa719366433cdd6080d00f8476fe77e747f"
+  inputs-digest = "c5c664dfe96bbba11f6249112ed2f5252ec99b832a4a5d70b00ed41c64ac3b6b"
   solver-name = "gps-cdcl"
   solver-version = 1

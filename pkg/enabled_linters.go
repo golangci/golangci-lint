@@ -63,6 +63,7 @@ func GetAllSupportedLinterConfigs() []LinterConfig {
 		enabledByDefault(golinters.Errcheck{}, "Errcheck is a program for checking for unchecked errors in go programs. These unchecked errors can be critical bugs in some cases", true, false),
 		enabledByDefault(golinters.Golint{}, "Golint differs from gofmt. Gofmt reformats Go source code, whereas golint prints out style mistakes", false, false),
 		enabledByDefault(golinters.Megacheck{}, "Megacheck: 3 sub-linters in one: staticcheck, gosimple and unused", true, true),
+		enabledByDefault(golinters.Gas{}, "Inspects source code for security problems", true, false),
 		enabledByDefault(golinters.Structcheck{}, "Finds unused struct fields", true, false),
 		enabledByDefault(golinters.Varcheck{}, "Finds unused global variables and constants", true, false),
 		enabledByDefault(golinters.Interfacer{}, "Linter that suggests narrower interface types", true, true),

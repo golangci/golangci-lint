@@ -60,6 +60,11 @@
   branch = "master"
   source = "github.com/golangci/interfacer"
 
+[[constraint]]
+  name = "github.com/GoASTScanner/gas"
+  branch = "master"
+  source = "github.com/golangci/gas"
+
 [[override]]
   name = "mvdan.cc/lint"
   branch = "master"
