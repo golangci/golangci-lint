@@ -1,4 +1,4 @@
-package golinters
+package pkg
 
 import (
 	"bytes"
@@ -19,11 +19,15 @@ func runGoErrchk(c *exec.Cmd, t *testing.T) {
 }
 
 const testdataDir = "testdata"
+
+var testdataWithIssuesDir = filepath.Join(testdataDir, "with_issues")
+var testdataNotCompilingDir = filepath.Join(testdataDir, "not_compiles")
+
 const binName = "golangci-lint"
 
-func TestSourcesFromTestdataDir(t *testing.T) {
-	t.Log(filepath.Join(testdataDir, "*.go"))
-	sources, err := filepath.Glob(filepath.Join(testdataDir, "*.go"))
+func TestSourcesFromTestdataWithIssuesDir(t *testing.T) {
+	t.Log(filepath.Join(testdataWithIssuesDir, "*.go"))
+	sources, err := filepath.Glob(filepath.Join(testdataWithIssuesDir, "*.go"))
 	assert.NoError(t, err)
 	assert.NotEmpty(t, sources)
 
@@ -39,7 +43,7 @@ func TestSourcesFromTestdataDir(t *testing.T) {
 }
 
 func installBinary(t *testing.T) {
-	cmd := exec.Command("go", "install", filepath.Join("..", "..", "cmd", binName))
+	cmd := exec.Command("go", "install", filepath.Join("..", "cmd", binName))
 	assert.NoError(t, cmd.Run(), "Can't go install %s", binName)
 }
 
@@ -47,4 +51,10 @@ func testOneSource(t *testing.T, sourcePath string) {
 	goErrchkBin := filepath.Join(runtime.GOROOT(), "test", "errchk")
 	cmd := exec.Command(goErrchkBin, binName, "run", "--enable-all", "--gocyclo.min-complexity", "20", sourcePath)
 	runGoErrchk(cmd, t)
+}
+
+func TestNotCompilingProgram(t *testing.T) {
+	installBinary(t)
+	err := exec.Command(binName, "run", "--enable-all", testdataNotCompilingDir).Run()
+	assert.NoError(t, err)
 }

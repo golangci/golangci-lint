@@ -153,7 +153,7 @@ func buildLintCtx(ctx context.Context, linters []pkg.Linter, cfg *config.Config)
 		args = []string{"./..."}
 	}
 
-	paths, err := fsutils.GetPathsForAnalysis(args)
+	paths, err := fsutils.GetPathsForAnalysis(ctx, args)
 	if err != nil {
 		return nil, err
 	}

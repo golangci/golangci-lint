@@ -11,7 +11,7 @@ func Govet() error {
 
 func GovetShadow(f io.Reader, buf []byte) (err error) {
 	if f != nil {
-		_, err := f.Read(buf) // ERROR "declaration of .err. shadows declaration at testdata/govet.go:\d+"
+		_, err := f.Read(buf) // ERROR "declaration of .err. shadows declaration at testdata/with_issues/govet.go:\d+"
 		if err != nil {
 			return err
 		}

@@ -37,8 +37,8 @@ func runLinter(ctx context.Context, linter Linter, lintCtx *golinters.Context, i
 	}()
 	startedAt := time.Now()
 	res, err = linter.Run(ctx, lintCtx)
-	analytics.Log(ctx).Infof("worker #%d: linter %s took %s for paths %s", i, linter.Name(),
-		time.Since(startedAt), lintCtx.Paths.MixedPaths())
+	analytics.Log(ctx).Infof("worker #%d: linter %s took %s", i, linter.Name(),
+		time.Since(startedAt))
 	return
 }
 

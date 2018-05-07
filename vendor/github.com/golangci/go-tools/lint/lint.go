@@ -23,10 +23,10 @@ import (
 	"sync"
 	"unicode"
 
-	"golang.org/x/tools/go/ast/astutil"
-	"golang.org/x/tools/go/loader"
 	"github.com/golangci/go-tools/ssa"
 	"github.com/golangci/go-tools/ssa/ssautil"
+	"golang.org/x/tools/go/ast/astutil"
+	"golang.org/x/tools/go/loader"
 )
 
 type Job struct {
@@ -482,6 +482,14 @@ type Pkg struct {
 	BuildPkg *build.Package
 }
 
+func (p Pkg) GetPackage() *types.Package {
+	if p.Package == nil {
+		return nil
+	}
+
+	return p.Pkg
+}
+
 type packager interface {
 	Package() *ssa.Package
 }
@@ -556,7 +564,7 @@ func (prog *Program) DisplayPosition(p token.Pos) token.Position {
 func (j *Job) Errorf(n Positioner, format string, args ...interface{}) *Problem {
 	tf := j.Program.SSA.Fset.File(n.Pos())
 	f := j.Program.tokenFileMap[tf]
-	pkg := j.Program.astFileMap[f].Pkg
+	pkg := j.Program.astFileMap[f].GetPackage()
 
 	pos := j.Program.DisplayPosition(n.Pos())
 	problem := Problem{
@@ -779,6 +787,9 @@ func NodeFns(pkgs []*Pkg) map[ast.Node]*ssa.Function {
 	wg := &sync.WaitGroup{}
 	chNodeFns := make(chan map[ast.Node]*ssa.Function, runtime.NumCPU()*2)
 	for _, pkg := range pkgs {
+		if pkg.Package == nil { // package wasn't loaded, probably it doesn't compile
+			continue
+		}
 		pkg := pkg
 		wg.Add(1)
 		go func() {

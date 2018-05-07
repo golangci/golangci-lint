@@ -8,6 +8,7 @@ import (
 	"path"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/golangci/golangci-shared/pkg/analytics"
 )
@@ -54,14 +55,20 @@ func processPaths(root string, paths []string, maxPaths int) ([]string, error) {
 	return ret, nil
 }
 
-func GetPathsForAnalysis(inputPaths []string) (*ProjectPaths, error) {
+func GetPathsForAnalysis(ctx context.Context, inputPaths []string) (ret *ProjectPaths, err error) {
+	defer func(startedAt time.Time) {
+		if ret != nil {
+			analytics.Log(ctx).Infof("Found paths for analysis for %s: %s", time.Since(startedAt), ret.MixedPaths())
+		}
+	}(time.Now())
+
 	for _, path := range inputPaths {
 		if strings.HasSuffix(path, ".go") && len(inputPaths) != 1 {
 			return nil, fmt.Errorf("Specific files for analysis are allowed only if one file is set")
 		}
 	}
 
-	excludeDirs := []string{"vendor", "testdata", "examples", "Godeps"}
+	excludeDirs := []string{"vendor", "testdata", "examples", "Godeps", "builtin"}
 	pr := NewPathResolver(excludeDirs, []string{".go"})
 	paths, err := pr.Resolve(inputPaths...)
 	if err != nil {
