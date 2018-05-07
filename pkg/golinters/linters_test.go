@@ -45,6 +45,6 @@ func installBinary(t *testing.T) {
 
 func testOneSource(t *testing.T, sourcePath string) {
 	goErrchkBin := filepath.Join(runtime.GOROOT(), "test", "errchk")
-	cmd := exec.Command(goErrchkBin, binName, "run", "--enable-all", sourcePath)
+	cmd := exec.Command(goErrchkBin, binName, "run", "--enable-all", "--gocyclo.min-complexity", "20", sourcePath)
 	runGoErrchk(cmd, t)
 }

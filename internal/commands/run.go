@@ -52,7 +52,7 @@ func (e *Executor) initRun() {
 	runCmd.Flags().BoolVar(&rc.Gofmt.Simplify, "gofmt.simplify", true, "Gofmt: simplify code")
 
 	runCmd.Flags().IntVar(&rc.Gocyclo.MinComplexity, "gocyclo.min-complexity",
-		20, "Minimal complexity of function to report it")
+		50, "Minimal complexity of function to report it")
 
 	runCmd.Flags().BoolVar(&rc.Structcheck.CheckExportedFields, "structcheck.exported-fields", false, "Structcheck: report about unused exported struct fields")
 	runCmd.Flags().BoolVar(&rc.Varcheck.CheckExportedFields, "varcheck.exported-fields", false, "Varcheck: report about unused exported variables")
@@ -62,8 +62,14 @@ func (e *Executor) initRun() {
 	runCmd.Flags().BoolVar(&rc.Megacheck.EnableStaticcheck, "megacheck.staticcheck", true, "Megacheck: run Staticcheck sub-linter: staticcheck is go vet on steroids, applying a ton of static analysis checks")
 	runCmd.Flags().BoolVar(&rc.Megacheck.EnableGosimple, "megacheck.gosimple", true, "Megacheck: run Gosimple sub-linter: gosimple is a linter for Go source code that specialises on simplifying code")
 	runCmd.Flags().BoolVar(&rc.Megacheck.EnableUnused, "megacheck.unused", true, "Megacheck: run Unused sub-linter: unused checks Go code for unused constants, variables, functions and types")
+
 	runCmd.Flags().IntVar(&rc.Dupl.Threshold, "dupl.threshold",
-		20, "Minimal threshold to detect copy-paste")
+		20, "Dupl: Minimal threshold to detect copy-paste")
+
+	runCmd.Flags().IntVar(&rc.Goconst.MinStringLen, "goconst.min-len",
+		3, "Goconst: minimum constant string length")
+	runCmd.Flags().IntVar(&rc.Goconst.MinOccurrencesCount, "goconst.min-occurrences",
+		3, "Goconst: minimum occurences of constant string count to trigger issue")
 
 	runCmd.Flags().StringSliceVarP(&rc.EnabledLinters, "enable", "E", []string{}, "Enable specific linter")
 	runCmd.Flags().StringSliceVarP(&rc.DisabledLinters, "disable", "D", []string{}, "Disable specific linter")

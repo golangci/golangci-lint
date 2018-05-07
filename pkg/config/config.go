@@ -64,6 +64,10 @@ type Run struct {
 	Dupl struct {
 		Threshold int
 	}
+	Goconst struct {
+		MinStringLen        int
+		MinOccurrencesCount int
+	}
 
 	EnabledLinters    []string
 	DisabledLinters   []string
