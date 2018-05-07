@@ -70,6 +70,7 @@ func GetAllSupportedLinterConfigs() []LinterConfig {
 		enabledByDefault(golinters.Dupl{}, "Tool for code clone detection", false, false),
 		enabledByDefault(golinters.Ineffassign{}, "Detects when assignments to existing variables are not used", false, false),
 		enabledByDefault(golinters.Interfacer{}, "Linter that suggests narrower interface types", true, true),
+		enabledByDefault(golinters.Unconvert{}, "Remove unnecessary type conversions", true, false),
 
 		disabledByDefault(golinters.Gofmt{}, "Gofmt checks whether code was gofmt-ed. By default this tool runs with -s option to check for code simplification", false, false),
 		disabledByDefault(golinters.Gofmt{UseGoimports: true}, "Goimports does everything that gofmt does. Additionally it checks unused imports", false, false),

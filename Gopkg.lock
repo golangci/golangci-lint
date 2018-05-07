@@ -121,6 +121,12 @@
   revision = "b1d89398deca2fd3f8578e5a9551e819bd01ca5f"
 
 [[projects]]
+  branch = "master"
+  name = "github.com/golangci/unconvert"
+  packages = ["."]
+  revision = "28b1c447d1f4a810737ee6ab40ea6c1d0ceae4ad"
+
+[[projects]]
   name = "github.com/inconshreveable/mousetrap"
   packages = ["."]
   revision = "76626ae9c91c4f2a10f34cad8ce83ea42c93bb75"
@@ -238,6 +244,19 @@
   revision = "6f686a352de66814cdd080d970febae7767857a3"
 
 [[projects]]
+  name = "golang.org/x/text"
+  packages = [
+    "internal/gen",
+    "internal/triegen",
+    "internal/ucd",
+    "transform",
+    "unicode/cldr",
+    "width"
+  ]
+  revision = "f21a4dfb5e38f5895301dc265a8def02365cc3d0"
+  version = "v0.3.0"
+
+[[projects]]
   branch = "master"
   name = "golang.org/x/tools"
   packages = [
@@ -281,6 +300,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "6e4437a7adb255525e8d1cfda07716617c1f28acaa721ac4f910f52f49ecea2f"
+  inputs-digest = "3c773b17692c1bc6ce7d565b959908aa95160e5d4f2486721deaff48608c864e"
   solver-name = "gps-cdcl"
   solver-version = 1

@@ -1,14 +1,17 @@
 package testdata
 
-import "os"
+import (
+	"io"
+	"os"
+)
 
 func Govet() error {
 	return &os.PathError{"first", "path", os.ErrNotExist} // ERROR "os.PathError composite literal uses unkeyed fields"
 }
 
-func GovetShadow(f *os.File, buf []byte) (err error) {
+func GovetShadow(f io.Reader, buf []byte) (err error) {
 	if f != nil {
-		_, err := f.Read(buf) // ERROR "declaration of .err. shadows declaration at testdata/govet.go:9"
+		_, err := f.Read(buf) // ERROR "declaration of .err. shadows declaration at testdata/govet.go:\d+"
 		if err != nil {
 			return err
 		}
