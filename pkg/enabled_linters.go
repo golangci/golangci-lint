@@ -64,6 +64,7 @@ func GetAllSupportedLinterConfigs() []LinterConfig {
 		enabledByDefault(golinters.Structcheck{}, "Finds unused struct fields", true),
 		enabledByDefault(golinters.Varcheck{}, "Finds unused global variables and constants", true),
 		enabledByDefault(golinters.Megacheck{}, "Megacheck: 3 sub-linters in one: staticcheck, gosimple and unused", true),
+		enabledByDefault(golinters.Dupl{}, "Tool for code clone detection", false),
 
 		disabledByDefault(golinters.Gofmt{}, "Gofmt checks whether code was gofmt-ed. By default this tool runs with -s option to check for code simplification", false),
 		disabledByDefault(golinters.Gofmt{UseGoimports: true}, "Goimports does everything that gofmt does. Additionally it checks unused imports", false),

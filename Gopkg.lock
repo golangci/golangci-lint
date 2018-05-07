@@ -72,7 +72,7 @@
     "unused",
     "version"
   ]
-  revision = "9a1f066598f8e2c1a58fab3249341c8d808b70ad"
+  revision = "38c5f4a0efc6bd0efc88bdd3890e5e64e698bdc2"
 
 [[projects]]
   branch = "master"
@@ -141,6 +141,20 @@
   packages = ["."]
   revision = "0360b2af4f38e8d38c7fce2a9f4e702702d73a39"
   version = "v0.0.3"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/mibk/dupl"
+  packages = [
+    ".",
+    "job",
+    "printer",
+    "suffixtree",
+    "syntax",
+    "syntax/golang"
+  ]
+  revision = "53b9af5a45362a6f2896cfa39cc17d17ba9667ea"
+  source = "github.com/golangci/dupl"
 
 [[projects]]
   name = "github.com/pmezard/go-difflib"
@@ -238,6 +252,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "c267ef4b3c1b5396f8d60efc4d262a5f563d9542ea535ab6f1402141ceb4aff0"
+  inputs-digest = "6ded01ff91bda8204ee2c22da5f6665af28fc5e9551a8b3782ff65582f08d738"
   solver-name = "gps-cdcl"
   solver-version = 1

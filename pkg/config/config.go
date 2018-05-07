@@ -61,6 +61,9 @@ type Run struct {
 		EnableUnused      bool
 		EnableGosimple    bool
 	}
+	Dupl struct {
+		Threshold int
+	}
 
 	EnabledLinters    []string
 	DisabledLinters   []string

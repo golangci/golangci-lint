@@ -60,6 +60,8 @@ func (e *Executor) initRun() {
 	runCmd.Flags().BoolVar(&rc.Megacheck.EnableStaticcheck, "megacheck.staticcheck", true, "Megacheck: run Staticcheck sub-linter: staticcheck is go vet on steroids, applying a ton of static analysis checks")
 	runCmd.Flags().BoolVar(&rc.Megacheck.EnableGosimple, "megacheck.gosimple", true, "Megacheck: run Gosimple sub-linter: gosimple is a linter for Go source code that specialises on simplifying code")
 	runCmd.Flags().BoolVar(&rc.Megacheck.EnableUnused, "megacheck.unused", true, "Megacheck: run Unused sub-linter: unused checks Go code for unused constants, variables, functions and types")
+	runCmd.Flags().IntVar(&rc.Dupl.Threshold, "dupl.threshold",
+		20, "Minimal threshold to detect copy-paste")
 
 	runCmd.Flags().StringSliceVarP(&rc.EnabledLinters, "enable", "E", []string{}, "Enable specific linter")
 	runCmd.Flags().StringSliceVarP(&rc.DisabledLinters, "disable", "D", []string{}, "Disable specific linter")
@@ -95,7 +97,8 @@ func loadWholeAppIfNeeded(ctx context.Context, linters []pkg.Linter, cfg *config
 	bctx := build.Default
 	bctx.BuildTags = append(bctx.BuildTags, cfg.BuildTags...)
 	loadcfg := &loader.Config{
-		Build: &bctx,
+		Build:       &bctx,
+		AllowErrors: true, // Try to analyze event partially
 	}
 	const needTests = true // TODO: configure and take into account in paths resolver
 	rest, err := loadcfg.FromArgs(paths.MixedPaths(), needTests)

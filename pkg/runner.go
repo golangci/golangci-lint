@@ -126,15 +126,16 @@ func (r SimpleRunner) processResults(ctx context.Context, results []result.Resul
 	}
 
 	for _, p := range r.Processors {
-		var err error
 		startedAt := time.Now()
-		results, err = p.Process(results)
+		newResults, err := p.Process(results)
 		elapsed := time.Since(startedAt)
 		if elapsed > 50*time.Millisecond {
 			analytics.Log(ctx).Infof("Result processor %s took %s", p.Name(), elapsed)
 		}
 		if err != nil {
-			return nil, err
+			analytics.Log(ctx).Warnf("Can't process result by %s processor: %s", p.Name(), err)
+		} else {
+			results = newResults
 		}
 	}
 

@@ -23,10 +23,10 @@ import (
 	"sync"
 	"unicode"
 
-	"golang.org/x/tools/go/ast/astutil"
-	"golang.org/x/tools/go/loader"
 	"github.com/golangci/go-tools/ssa"
 	"github.com/golangci/go-tools/ssa/ssautil"
+	"golang.org/x/tools/go/ast/astutil"
+	"golang.org/x/tools/go/loader"
 )
 
 type Job struct {
@@ -836,6 +836,9 @@ func (v *fnVisitor) Visit(node ast.Node) ast.Visitor {
 	switch node := node.(type) {
 	case *ast.FuncDecl:
 		var ssafn *ssa.Function
+		if v.pkg == nil || v.pkg.Prog == nil {
+			return nil // partially loaded
+		}
 		ssafn = v.pkg.Prog.FuncValue(v.pkg.Info.ObjectOf(node.Name).(*types.Func))
 		v.m[node] = ssafn
 		if ssafn == nil {
