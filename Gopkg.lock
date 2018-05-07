@@ -110,6 +110,12 @@
 
 [[projects]]
   branch = "master"
+  name = "github.com/golangci/ineffassign"
+  packages = ["."]
+  revision = "7b41b0f84881918dab3c16c5e5148d8aa55d27b4"
+
+[[projects]]
+  branch = "master"
   name = "github.com/golangci/maligned"
   packages = ["."]
   revision = "b1d89398deca2fd3f8578e5a9551e819bd01ca5f"
@@ -252,6 +258,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "6ded01ff91bda8204ee2c22da5f6665af28fc5e9551a8b3782ff65582f08d738"
+  inputs-digest = "aa0c6cd4a6cd5957ffdeeb0f06753a92f33f5393045845e45bc63a10ead24a85"
   solver-name = "gps-cdcl"
   solver-version = 1
