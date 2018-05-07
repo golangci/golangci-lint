@@ -49,17 +49,14 @@ func runLinters(ctx context.Context, wg *sync.WaitGroup, tasksCh chan Linter, li
 			for {
 				select {
 				case <-ctx.Done():
-					// XXX: if check it in a select with reading from tasksCh
-					// it's possible to not enter to this case until tasksCh is empty.
-					return
-				default:
-				}
-
-				select {
-				case <-ctx.Done():
 					return
 				case linter, ok := <-tasksCh:
 					if !ok {
+						return
+					}
+					if ctx.Err() != nil {
+						// XXX: if check it in only int a select
+						// it's possible to not enter to this case until tasksCh is empty.
 						return
 					}
 					res, lerr := runLinter(ctx, linter, lintCtx, i)
@@ -84,7 +81,7 @@ func (r SimpleRunner) Run(ctx context.Context, linters []Linter, lintCtx *golint
 	os.Stdout, os.Stderr = devNull, devNull
 
 	lintResultsCh := make(chan lintRes, len(linters))
-	tasksCh := make(chan Linter, lintCtx.Cfg.Common.Concurrency)
+	tasksCh := make(chan Linter, len(linters))
 	var wg sync.WaitGroup
 	wg.Add(lintCtx.Cfg.Common.Concurrency)
 	runLinters(ctx, &wg, tasksCh, lintResultsCh, lintCtx)
@@ -99,17 +96,24 @@ func (r SimpleRunner) Run(ctx context.Context, linters []Linter, lintCtx *golint
 
 	os.Stdout, os.Stderr = savedStdout, savedStderr
 	results := []result.Result{}
+	finishedN := 0
 	for res := range lintResultsCh {
 		if res.err != nil {
 			analytics.Log(ctx).Warnf("Can't run linter %s: %s", res.linter.Name(), res.err)
 			continue
 		}
 
+		finishedN++
 		if res.res == nil || len(res.res.Issues) == 0 {
 			continue
 		}
 
 		results = append(results, *res.res)
+	}
+
+	if ctx.Err() != nil {
+		analytics.Log(ctx).Warnf("%d/%d linters finished: deadline exceeded: try increase it by passing --deadline option",
+			finishedN, len(linters))
 	}
 
 	results, err = r.processResults(ctx, results)
