@@ -65,7 +65,7 @@ func (e *Executor) initRun() {
 	runCmd.Flags().BoolVar(&rc.Megacheck.EnableUnused, "megacheck.unused", true, "Megacheck: run Unused sub-linter: unused checks Go code for unused constants, variables, functions and types")
 
 	runCmd.Flags().IntVar(&rc.Dupl.Threshold, "dupl.threshold",
-		20, "Dupl: Minimal threshold to detect copy-paste")
+		150, "Dupl: Minimal threshold to detect copy-paste")
 
 	runCmd.Flags().IntVar(&rc.Goconst.MinStringLen, "goconst.min-len",
 		3, "Goconst: minimum constant string length")
@@ -79,7 +79,9 @@ func (e *Executor) initRun() {
 
 	runCmd.Flags().DurationVar(&rc.Deadline, "deadline", time.Second*30, "Deadline for total work")
 
-	runCmd.Flags().StringSliceVarP(&rc.ExcludePatterns, "exclude", "e", config.DefaultExcludePatterns, "Exclude issue by regexp")
+	runCmd.Flags().StringSliceVarP(&rc.ExcludePatterns, "exclude", "e", []string{}, "Exclude issue by regexp")
+	runCmd.Flags().BoolVar(&rc.UseDefaultExcludes, "exclude-use-default", true,
+		fmt.Sprintf("Use or not use default excludes: (%s)", strings.Join(config.DefaultExcludePatterns, "|")))
 
 	runCmd.Flags().IntVar(&rc.MaxIssuesPerLinter, "max-issues-per-linter", 50, "Maximum issues count per one linter. Set to 0 to disable")
 
@@ -197,9 +199,17 @@ func (e *Executor) runAnalysis(ctx context.Context, args []string) (chan result.
 		return nil, err
 	}
 
+	excludePatterns := e.cfg.Run.ExcludePatterns
+	if e.cfg.Run.UseDefaultExcludes {
+		excludePatterns = append(excludePatterns, config.DefaultExcludePatterns...)
+	}
+	var excludeTotalPattern string
+	if len(excludePatterns) != 0 {
+		excludeTotalPattern = fmt.Sprintf("(%s)", strings.Join(excludePatterns, "|"))
+	}
 	runner := pkg.SimpleRunner{
 		Processors: []processors.Processor{
-			processors.NewExclude(fmt.Sprintf("(%s)", strings.Join(e.cfg.Run.ExcludePatterns, "|"))),
+			processors.NewExclude(excludeTotalPattern),
 			processors.NewNolint(lintCtx.Program.Fset),
 			processors.NewUniqByLine(),
 			processors.NewDiff(e.cfg.Run.Diff, e.cfg.Run.DiffFromRevision, e.cfg.Run.DiffPatchFilePath),

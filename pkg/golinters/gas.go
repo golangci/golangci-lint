@@ -21,7 +21,7 @@ func (Gas) Name() string {
 
 func (lint Gas) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, error) {
 	gasConfig := gas.NewConfig()
-	enabledRules := rules.Generate(rules.NewRuleFilter(true, "G104")) // disable what errcheck does: it reports on Close etc
+	enabledRules := rules.Generate()
 	logger := log.New(ioutil.Discard, "", 0)
 	analyzer := gas.NewAnalyzer(gasConfig, logger)
 	analyzer.LoadRules(enabledRules.Builders())

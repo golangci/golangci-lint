@@ -14,7 +14,13 @@ const (
 
 var OutFormats = []string{OutFormatColoredLineNumber, OutFormatLineNumber, OutFormatJSON}
 
-var DefaultExcludePatterns = []string{"should have comment", "comment on exported method"}
+var DefaultExcludePatterns = []string{
+	"should have comment",
+	"comment on exported method",
+	"G104", // disable what errcheck does: it reports on Close etc
+	"G204", // Subprocess launching should be audited: too lot false positives
+	"G304", // Potential file inclusion via variable: `src, err := ioutil.ReadFile(filename)`
+}
 
 type Common struct {
 	IsVerbose      bool
@@ -22,7 +28,7 @@ type Common struct {
 	Concurrency    int
 }
 
-type Run struct {
+type Run struct { // nolint:maligned
 	Args []string
 
 	BuildTags []string
@@ -76,7 +82,8 @@ type Run struct {
 	EnableAllLinters  bool
 	DisableAllLinters bool
 
-	ExcludePatterns []string
+	ExcludePatterns    []string
+	UseDefaultExcludes bool
 
 	Deadline time.Duration
 
