@@ -1,6 +1,8 @@
 package processors
 
 import (
+	"sort"
+
 	"github.com/golangci/golangci-lint/pkg/result"
 	"github.com/sirupsen/logrus"
 )
@@ -37,10 +39,30 @@ func (p *MaxSameIssues) Process(issues []result.Issue) ([]result.Issue, error) {
 }
 
 func (p MaxSameIssues) Finish() {
-	for text, count := range p.tc {
+	walkStringToIntMapSortedByValue(p.tc, func(text string, count int) {
 		if count > p.limit {
 			logrus.Infof("%d/%d issues with text %q were hidden, use --max-same-issues",
 				count-p.limit, count, text)
 		}
+	})
+}
+
+type kv struct {
+	Key   string
+	Value int
+}
+
+func walkStringToIntMapSortedByValue(m map[string]int, walk func(k string, v int)) {
+	var ss []kv
+	for k, v := range m {
+		ss = append(ss, kv{k, v})
+	}
+
+	sort.Slice(ss, func(i, j int) bool {
+		return ss[i].Value > ss[j].Value
+	})
+
+	for _, kv := range ss {
+		walk(kv.Key, kv.Value)
 	}
 }

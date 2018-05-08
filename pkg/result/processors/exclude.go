@@ -15,7 +15,7 @@ var _ Processor = Exclude{}
 func NewExclude(pattern string) *Exclude {
 	var patternRe *regexp.Regexp
 	if pattern != "" {
-		patternRe = regexp.MustCompile(pattern)
+		patternRe = regexp.MustCompile("(?i)" + pattern)
 	}
 	return &Exclude{
 		pattern: patternRe,

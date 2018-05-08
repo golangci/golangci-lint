@@ -35,10 +35,10 @@ func (p *MaxFromLinter) Process(issues []result.Issue) ([]result.Issue, error) {
 }
 
 func (p MaxFromLinter) Finish() {
-	for linter, count := range p.lc {
+	walkStringToIntMapSortedByValue(p.lc, func(linter string, count int) {
 		if count > p.limit {
 			logrus.Infof("%d/%d issues from linter %s were hidden, use --max-issues-per-linter",
 				count-p.limit, count, linter)
 		}
-	}
+	})
 }

@@ -31,7 +31,7 @@ func processAssertEmpty(t *testing.T, p Processor, issues ...result.Issue) {
 
 func TestExclude(t *testing.T) {
 	p := NewExclude("^exclude$")
-	texts := []string{"exclude", "1", "", "exclud", "notexclude"}
+	texts := []string{"excLude", "1", "", "exclud", "notexclude"}
 	var issues []result.Issue
 	for _, t := range texts {
 		issues = append(issues, newTextIssue(t))

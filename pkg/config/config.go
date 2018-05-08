@@ -16,7 +16,7 @@ var OutFormats = []string{OutFormatColoredLineNumber, OutFormatLineNumber, OutFo
 
 var DefaultExcludePatterns = []string{
 	// errcheck
-	"Error return value of .(os\\.Std(out|err)\\.*|.*\\.Close|std(out|err)\\..*|os\\.Remove(All)?|.*[pP]rintf?). is not checked",
+	"Error return value of .((os\\.)?std(out|err)\\..*|.*Close|os\\.Remove(All)?|.*printf?|os\\.(Un)?Setenv). is not checked",
 
 	// golint
 	"should have comment",
@@ -26,10 +26,16 @@ var DefaultExcludePatterns = []string{
 	"G103:", // Use of unsafe calls should be audited
 	"G104:", // disable what errcheck does: it reports on Close etc
 	"G204:", // Subprocess launching should be audited: too lot false positives
+	"G301:", // Expect directory permissions to be 0750 or less
+	"G302:", // Expect file permissions to be 0600 or less
 	"G304:", // Potential file inclusion via variable: `src, err := ioutil.ReadFile(filename)`
 
 	// govet
 	"possible misuse of unsafe.Pointer",
+	"should have signature",
+
+	// megacheck
+	"ineffective break statement. Did you mean to break out of the outer loop", // developers tend to write in C-style with break in switch
 }
 
 type Common struct {

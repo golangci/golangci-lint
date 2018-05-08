@@ -43,11 +43,11 @@ func (p Text) Print(issues chan result.Issue) (bool, error) {
 		logrus.Infof("Extracting issued lines took %s", issuedLineExtractingDuration)
 	}()
 
-	gotAnyIssue := false
 	cache := filesCache{}
 	out := getOutWriter()
+	issuesN := 0
 	for i := range issues {
-		gotAnyIssue = true
+		issuesN++
 		text := p.SprintfColored(color.FgRed, "%s", i.Text)
 		if p.printLinterName {
 			text += fmt.Sprintf(" (%s)", i.FromLinter)
@@ -89,10 +89,12 @@ func (p Text) Print(issues chan result.Issue) (bool, error) {
 		}
 	}
 
-	if !gotAnyIssue {
+	if issuesN == 0 {
 		outStr := p.SprintfColored(color.FgGreen, "Congrats! No issues were found.")
 		fmt.Fprintln(out, outStr)
+	} else {
+		logrus.Infof("Found %d issues", issuesN)
 	}
 
-	return gotAnyIssue, nil
+	return issuesN != 0, nil
 }
