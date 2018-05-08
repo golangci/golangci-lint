@@ -55,7 +55,7 @@ func processPaths(root string, paths []string, maxPaths int) ([]string, error) {
 	return ret, nil
 }
 
-func GetPathsForAnalysis(ctx context.Context, inputPaths []string) (ret *ProjectPaths, err error) {
+func GetPathsForAnalysis(ctx context.Context, inputPaths []string, includeTests bool) (ret *ProjectPaths, err error) {
 	defer func(startedAt time.Time) {
 		if ret != nil {
 			logrus.Infof("Found paths for analysis for %s: %s", time.Since(startedAt), ret.MixedPaths())
@@ -69,7 +69,7 @@ func GetPathsForAnalysis(ctx context.Context, inputPaths []string) (ret *Project
 	}
 
 	excludeDirs := []string{"vendor", "testdata", "examples", "Godeps", "builtin"}
-	pr := NewPathResolver(excludeDirs, []string{".go"})
+	pr := NewPathResolver(excludeDirs, []string{".go"}, includeTests)
 	paths, err := pr.Resolve(inputPaths...)
 	if err != nil {
 		return nil, fmt.Errorf("can't resolve paths: %s", err)

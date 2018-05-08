@@ -92,6 +92,8 @@ type Run struct { // nolint:maligned
 	DiffFromRevision  string
 	DiffPatchFilePath string
 	Diff              bool
+
+	AnalyzeTests bool
 }
 
 type Config struct {

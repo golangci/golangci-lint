@@ -88,6 +88,7 @@ func (e *Executor) initRun() {
 	runCmd.Flags().BoolVarP(&rc.Diff, "new", "n", false, "Show only new issues: if there are unstaged changes or untracked files, only those changes are shown, else only changes in HEAD~ are shown")
 	runCmd.Flags().StringVar(&rc.DiffFromRevision, "new-from-rev", "", "Show only new issues created after git revision `REV`")
 	runCmd.Flags().StringVar(&rc.DiffPatchFilePath, "new-from-patch", "", "Show only new issues created in git patch with file path `PATH`")
+	runCmd.Flags().BoolVar(&rc.AnalyzeTests, "tests", false, "Analyze tests (*_test.go)")
 }
 
 func isFullImportNeeded(linters []pkg.Linter) bool {
@@ -128,8 +129,7 @@ func loadWholeAppIfNeeded(ctx context.Context, linters []pkg.Linter, cfg *config
 		Build:       &bctx,
 		AllowErrors: true, // Try to analyze event partially
 	}
-	const needTests = true // TODO: configure and take into account in paths resolver
-	rest, err := loadcfg.FromArgs(paths.MixedPaths(), needTests)
+	rest, err := loadcfg.FromArgs(paths.MixedPaths(), cfg.AnalyzeTests)
 	if err != nil {
 		return nil, nil, fmt.Errorf("can't parepare load config with paths: %s", err)
 	}
@@ -162,7 +162,7 @@ func buildLintCtx(ctx context.Context, linters []pkg.Linter, cfg *config.Config)
 		args = []string{"./..."}
 	}
 
-	paths, err := fsutils.GetPathsForAnalysis(ctx, args)
+	paths, err := fsutils.GetPathsForAnalysis(ctx, args, cfg.Run.AnalyzeTests)
 	if err != nil {
 		return nil, err
 	}

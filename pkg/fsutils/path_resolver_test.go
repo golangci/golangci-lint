@@ -54,7 +54,7 @@ func prepareFS(t *testing.T, paths ...string) *fsPreparer {
 }
 
 func newPR() *PathResolver {
-	return NewPathResolver([]string{}, []string{})
+	return NewPathResolver([]string{}, []string{}, false)
 }
 
 func TestPathResolverNoPaths(t *testing.T) {
@@ -72,11 +72,12 @@ func TestPathResolverNotExistingPath(t *testing.T) {
 
 func TestPathResolverCommonCases(t *testing.T) {
 	type testCase struct {
-		name     string
-		prepare  []string
-		resolve  []string
-		expFiles []string
-		expDirs  []string
+		name         string
+		prepare      []string
+		resolve      []string
+		expFiles     []string
+		expDirs      []string
+		includeTests bool
 	}
 
 	testCases := []testCase{
@@ -154,6 +155,28 @@ func TestPathResolverCommonCases(t *testing.T) {
 			resolve: []string{"./..."},
 			expDirs: []string{"."},
 		},
+		{
+			name:         "include tests",
+			prepare:      []string{"a/b.go", "a/b_test.go"},
+			resolve:      []string{"./..."},
+			expDirs:      []string{".", "a"},
+			expFiles:     []string{"a/b.go", "a/b_test.go"},
+			includeTests: true,
+		},
+		{
+			name:     "exclude tests",
+			prepare:  []string{"a/b.go", "a/b_test.go"},
+			resolve:  []string{"./..."},
+			expDirs:  []string{".", "a"},
+			expFiles: []string{"a/b.go"},
+		},
+		{
+			name:     "exclude tests except explicitly set",
+			prepare:  []string{"a/b.go", "a/b_test.go", "a/c_test.go"},
+			resolve:  []string{"./...", "a/c_test.go"},
+			expDirs:  []string{".", "a"},
+			expFiles: []string{"a/b.go", "a/c_test.go"},
+		},
 	}
 
 	for _, tc := range testCases {
@@ -161,7 +184,7 @@ func TestPathResolverCommonCases(t *testing.T) {
 			fp := prepareFS(t, tc.prepare...)
 			defer fp.clean()
 
-			pr := NewPathResolver([]string{"vendor"}, []string{".go"})
+			pr := NewPathResolver([]string{"vendor"}, []string{".go"}, tc.includeTests)
 			res, err := pr.Resolve(tc.resolve...)
 			assert.NoError(t, err)
 

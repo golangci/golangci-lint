@@ -11,6 +11,7 @@ import (
 type PathResolver struct {
 	excludeDirs           map[string]bool
 	allowedFileExtensions map[string]bool
+	includeTests          bool
 }
 
 type pathResolveState struct {
@@ -56,7 +57,7 @@ func (s pathResolveState) toResult() *PathResolveResult {
 	return res
 }
 
-func NewPathResolver(excludeDirs, allowedFileExtensions []string) *PathResolver {
+func NewPathResolver(excludeDirs, allowedFileExtensions []string, includeTests bool) *PathResolver {
 	excludeDirsMap := map[string]bool{}
 	for _, dir := range excludeDirs {
 		excludeDirsMap[dir] = true
@@ -70,6 +71,7 @@ func NewPathResolver(excludeDirs, allowedFileExtensions []string) *PathResolver 
 	return &PathResolver{
 		excludeDirs:           excludeDirsMap,
 		allowedFileExtensions: allowedFileExtensionsMap,
+		includeTests:          includeTests,
 	}
 }
 
@@ -89,6 +91,10 @@ func (pr PathResolver) isIgnoredDir(dir string) bool {
 }
 
 func (pr PathResolver) isAllowedFile(path string) bool {
+	if !pr.includeTests && strings.HasSuffix(path, "_test.go") {
+		return false
+	}
+
 	return pr.allowedFileExtensions[filepath.Ext(path)]
 }
 

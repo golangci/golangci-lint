@@ -20,7 +20,7 @@ func (Golint) Name() string {
 func (g Golint) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, error) {
 	var issues []result.Issue
 	if lintCtx.Paths.IsDirsRun {
-		for _, path := range lintCtx.Paths.Dirs {
+		for _, path := range lintCtx.Paths.Dirs { // TODO: support exclusion of test files
 			i, err := lintDir(path, lintCtx.RunCfg().Golint.MinConfidence)
 			if err != nil {
 				// TODO: skip and warn
