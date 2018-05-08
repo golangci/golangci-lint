@@ -86,6 +86,7 @@ func (e *Executor) initRun() {
 		fmt.Sprintf("Use or not use default excludes: (%s)", strings.Join(config.DefaultExcludePatterns, "|")))
 
 	runCmd.Flags().IntVar(&rc.MaxIssuesPerLinter, "max-issues-per-linter", 50, "Maximum issues count per one linter. Set to 0 to disable")
+	runCmd.Flags().IntVar(&rc.MaxSameIssues, "max-same-issues", 3, "Maximum count of issues with the same text. Set to 0 to disable")
 
 	runCmd.Flags().BoolVarP(&rc.Diff, "new", "n", false, "Show only new issues: if there are unstaged changes or untracked files, only those changes are shown, else only changes in HEAD~ are shown")
 	runCmd.Flags().StringVar(&rc.DiffFromRevision, "new-from-rev", "", "Show only new issues created after git revision `REV`")
@@ -225,6 +226,7 @@ func (e *Executor) runAnalysis(ctx context.Context, args []string) (chan result.
 			processors.NewDiff(e.cfg.Run.Diff, e.cfg.Run.DiffFromRevision, e.cfg.Run.DiffPatchFilePath),
 			processors.NewMaxPerFileFromLinter(),
 			processors.NewMaxFromLinter(e.cfg.Run.MaxIssuesPerLinter),
+			processors.NewMaxSameIssues(e.cfg.Run.MaxSameIssues),
 			processors.NewPathPrettifier(),
 		},
 	}

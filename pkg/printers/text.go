@@ -75,6 +75,10 @@ func (p Text) Print(issues chan result.Issue) (bool, error) {
 
 		lineRange := i.GetLineRange()
 		for line := lineRange.From; line <= lineRange.To; line++ {
+			if line == 0 { // some linters, e.g. gas can do it: it really means first line
+				line = 1
+			}
+
 			zeroIndexedLine := line - 1
 			if zeroIndexedLine >= len(fc) {
 				logrus.Warnf("No line %d in file %s", line, i.FilePath())

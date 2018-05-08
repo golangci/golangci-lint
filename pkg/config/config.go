@@ -15,12 +15,21 @@ const (
 var OutFormats = []string{OutFormatColoredLineNumber, OutFormatLineNumber, OutFormatJSON}
 
 var DefaultExcludePatterns = []string{
-	"Error return value of `(os\\.Std(out|err)\\.Write|.*\\.Close)` is not checked",
+	// errcheck
+	"Error return value of .(os\\.Std(out|err)\\.*|.*\\.Close|std(out|err)\\..*|os\\.Remove(All)?|.*[pP]rintf?). is not checked",
+
+	// golint
 	"should have comment",
 	"comment on exported method",
-	"G104", // disable what errcheck does: it reports on Close etc
-	"G204", // Subprocess launching should be audited: too lot false positives
-	"G304", // Potential file inclusion via variable: `src, err := ioutil.ReadFile(filename)`
+
+	// gas
+	"G103:", // Use of unsafe calls should be audited
+	"G104:", // disable what errcheck does: it reports on Close etc
+	"G204:", // Subprocess launching should be audited: too lot false positives
+	"G304:", // Potential file inclusion via variable: `src, err := ioutil.ReadFile(filename)`
+
+	// govet
+	"possible misuse of unsafe.Pointer",
 }
 
 type Common struct {
@@ -92,6 +101,7 @@ type Run struct { // nolint:maligned
 	Deadline time.Duration
 
 	MaxIssuesPerLinter int
+	MaxSameIssues      int
 
 	DiffFromRevision  string
 	DiffPatchFilePath string
