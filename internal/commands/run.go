@@ -37,6 +37,7 @@ func (e *Executor) initRun() {
 		config.OutFormatColoredLineNumber,
 		fmt.Sprintf("Format of output: %s", strings.Join(config.OutFormats, "|")))
 	runCmd.Flags().BoolVar(&rc.PrintIssuedLine, "print-issued-lines", true, "Print lines of code with issue")
+	runCmd.Flags().BoolVar(&rc.PrintLinterName, "print-linter-name", true, "Print linter name in issue line")
 
 	runCmd.Flags().IntVar(&rc.ExitCodeIfIssuesFound, "issues-exit-code",
 		1, "Exit code when issues were found")
@@ -53,7 +54,7 @@ func (e *Executor) initRun() {
 	runCmd.Flags().BoolVar(&rc.Gofmt.Simplify, "gofmt.simplify", true, "Gofmt: simplify code")
 
 	runCmd.Flags().IntVar(&rc.Gocyclo.MinComplexity, "gocyclo.min-complexity",
-		50, "Minimal complexity of function to report it")
+		30, "Minimal complexity of function to report it")
 
 	runCmd.Flags().BoolVar(&rc.Structcheck.CheckExportedFields, "structcheck.exported-fields", false, "Structcheck: report about unused exported struct fields")
 	runCmd.Flags().BoolVar(&rc.Varcheck.CheckExportedFields, "varcheck.exported-fields", false, "Varcheck: report about unused exported variables")
@@ -240,7 +241,8 @@ func (e *Executor) executeRun(cmd *cobra.Command, args []string) {
 		if e.cfg.Run.OutFormat == config.OutFormatJSON {
 			p = printers.NewJSON()
 		} else {
-			p = printers.NewText(e.cfg.Run.PrintIssuedLine, e.cfg.Run.OutFormat == config.OutFormatColoredLineNumber)
+			p = printers.NewText(e.cfg.Run.PrintIssuedLine,
+				e.cfg.Run.OutFormat == config.OutFormatColoredLineNumber, e.cfg.Run.PrintLinterName)
 		}
 		gotAnyIssues, err := p.Print(issues)
 		if err != nil {

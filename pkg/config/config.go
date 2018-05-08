@@ -35,6 +35,7 @@ type Run struct { // nolint:maligned
 
 	OutFormat       string
 	PrintIssuedLine bool
+	PrintLinterName bool
 
 	ExitCodeIfIssuesFound int
 

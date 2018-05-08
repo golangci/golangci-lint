@@ -34,7 +34,8 @@ func (p ProjectPaths) MixedPaths() []string {
 func (p ProjectPaths) FilesGrouppedByDirs() [][]string {
 	dirToFiles := map[string][]string{}
 	for _, f := range p.Files {
-		dirToFiles[filepath.Dir(f)] = append(dirToFiles[f], f)
+		dir := filepath.Dir(f)
+		dirToFiles[dir] = append(dirToFiles[dir], f)
 	}
 
 	ret := [][]string{}

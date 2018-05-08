@@ -13,3 +13,9 @@ type ExportedInterfaceWithNoComment interface{}
 
 // Bad comment // ERROR "comment on exported function ExportedFuncWithBadComment should be of the form .ExportedFuncWithBadComment \.\.\.."
 func ExportedFuncWithBadComment() {}
+
+type GolintTest struct{}
+
+func (receiver1 GolintTest) A() {}
+
+func (receiver2 GolintTest) B() {} // ERROR "receiver name receiver2 should be consistent with previous receiver name receiver1 for GolintTest"

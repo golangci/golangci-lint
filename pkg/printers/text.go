@@ -14,12 +14,14 @@ import (
 type Text struct {
 	printIssuedLine bool
 	useColors       bool
+	printLinterName bool
 }
 
-func NewText(printIssuedLine bool, useColors bool) *Text {
+func NewText(printIssuedLine, useColors, printLinterName bool) *Text {
 	return &Text{
 		printIssuedLine: printIssuedLine,
 		useColors:       useColors,
+		printLinterName: printLinterName,
 	}
 }
 
@@ -47,6 +49,9 @@ func (p Text) Print(issues chan result.Issue) (bool, error) {
 	for i := range issues {
 		gotAnyIssue = true
 		text := p.SprintfColored(color.FgRed, "%s", i.Text)
+		if p.printLinterName {
+			text += fmt.Sprintf(" (%s)", i.FromLinter)
+		}
 		pos := p.SprintfColored(color.Bold, "%s:%d", i.FilePath(), i.Line())
 		fmt.Fprintf(out, "%s: %s\n", pos, text)
 
