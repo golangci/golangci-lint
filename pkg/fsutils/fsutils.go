@@ -31,6 +31,19 @@ func (p ProjectPaths) MixedPaths() []string {
 	return p.Files
 }
 
+func (p ProjectPaths) FilesGrouppedByDirs() [][]string {
+	dirToFiles := map[string][]string{}
+	for _, f := range p.Files {
+		dirToFiles[filepath.Dir(f)] = append(dirToFiles[f], f)
+	}
+
+	ret := [][]string{}
+	for _, files := range dirToFiles {
+		ret = append(ret, files)
+	}
+	return ret
+}
+
 func processPaths(root string, paths []string, maxPaths int) ([]string, error) {
 	if len(paths) > maxPaths {
 		logrus.Warnf("Gofmt: got too much paths (%d), analyze first %d", len(paths), maxPaths)
