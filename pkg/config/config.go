@@ -77,6 +77,8 @@ type Run struct {
 	ExcludePatterns []string
 
 	Deadline time.Duration
+
+	MaxIssuesPerLinter int
 }
 
 type Config struct {

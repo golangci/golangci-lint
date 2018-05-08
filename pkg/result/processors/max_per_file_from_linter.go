@@ -49,3 +49,5 @@ func (p *MaxPerFileFromLinter) Process(issues []result.Issue) ([]result.Issue, e
 		return true
 	}), nil
 }
+
+func (p MaxPerFileFromLinter) Finish() {}

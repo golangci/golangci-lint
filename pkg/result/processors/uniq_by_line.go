@@ -41,3 +41,5 @@ func (p *UniqByLine) Process(issues []result.Issue) ([]result.Issue, error) {
 		return true
 	}), nil
 }
+
+func (p UniqByLine) Finish() {}

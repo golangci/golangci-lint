@@ -125,6 +125,11 @@ func (r SimpleRunner) runGo(ctx context.Context, linters []Linter, lintCtx *goli
 		}
 	}
 
+	// finalize processors: logging, clearing, no heavy work here
+	for _, p := range r.Processors {
+		p.Finish()
+	}
+
 	if ctx.Err() != nil {
 		return fmt.Errorf("%d/%d linters finished: deadline exceeded: try increase it by passing --deadline option",
 			finishedN, len(linters))

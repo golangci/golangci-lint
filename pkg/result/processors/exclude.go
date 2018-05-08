@@ -35,3 +35,5 @@ func (p Exclude) Process(issues []result.Issue) ([]result.Issue, error) {
 		return !p.pattern.MatchString(i.Text)
 	}), nil
 }
+
+func (p Exclude) Finish() {}

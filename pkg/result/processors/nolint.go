@@ -94,3 +94,5 @@ func extractFileComments(fset *token.FileSet, comments ...*ast.CommentGroup) fil
 
 	return ret
 }
+
+func (p Nolint) Finish() {}

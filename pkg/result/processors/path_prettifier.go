@@ -44,3 +44,5 @@ func (p PathPrettifier) Process(issues []result.Issue) ([]result.Issue, error) {
 		return newI
 	}), nil
 }
+
+func (p PathPrettifier) Finish() {}

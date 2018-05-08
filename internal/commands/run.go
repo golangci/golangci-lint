@@ -81,6 +81,8 @@ func (e *Executor) initRun() {
 	runCmd.Flags().DurationVar(&rc.Deadline, "deadline", time.Second*30, "Deadline for total work")
 
 	runCmd.Flags().StringSliceVarP(&rc.ExcludePatterns, "exclude", "e", config.DefaultExcludePatterns, "Exclude issue by regexp")
+
+	runCmd.Flags().IntVar(&rc.MaxIssuesPerLinter, "max-issues-per-linter", 50, "Maximum issues count per one linter. Set to 0 to disable")
 }
 
 func isFullImportNeeded(linters []pkg.Linter) bool {
@@ -198,6 +200,7 @@ func (e *Executor) runAnalysis(ctx context.Context, args []string) (chan result.
 			processors.NewExclude(fmt.Sprintf("(%s)", strings.Join(e.cfg.Run.ExcludePatterns, "|"))),
 			processors.NewNolint(lintCtx.Program.Fset),
 			processors.NewUniqByLine(),
+			processors.NewMaxFromLinter(e.cfg.Run.MaxIssuesPerLinter),
 			processors.NewPathPrettifier(),
 		},
 	}
