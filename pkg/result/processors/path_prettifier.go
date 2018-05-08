@@ -30,17 +30,17 @@ func (p PathPrettifier) Name() string {
 
 func (p PathPrettifier) Process(issues []result.Issue) ([]result.Issue, error) {
 	return transformIssues(issues, func(i *result.Issue) *result.Issue {
-		if !filepath.IsAbs(i.File) {
+		if !filepath.IsAbs(i.FilePath()) {
 			return i
 		}
 
-		rel, err := filepath.Rel(p.root, i.File)
+		rel, err := filepath.Rel(p.root, i.FilePath())
 		if err != nil {
 			return i
 		}
 
 		newI := i
-		newI.File = rel
+		newI.Pos.Filename = rel
 		return newI
 	}), nil
 }

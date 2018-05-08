@@ -27,7 +27,9 @@ type Run struct {
 
 	BuildTags []string
 
-	OutFormat             string
+	OutFormat       string
+	PrintIssuedLine bool
+
 	ExitCodeIfIssuesFound int
 
 	Errcheck struct {

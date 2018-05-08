@@ -2,22 +2,19 @@ package commands
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"go/build"
 	"log"
-	"os"
 	"strings"
-	"syscall"
 	"time"
 
-	"github.com/fatih/color"
 	"github.com/golangci/go-tools/ssa"
 	"github.com/golangci/go-tools/ssa/ssautil"
 	"github.com/golangci/golangci-lint/pkg"
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/fsutils"
 	"github.com/golangci/golangci-lint/pkg/golinters"
+	"github.com/golangci/golangci-lint/pkg/printers"
 	"github.com/golangci/golangci-lint/pkg/result"
 	"github.com/golangci/golangci-lint/pkg/result/processors"
 	"github.com/sirupsen/logrus"
@@ -39,6 +36,8 @@ func (e *Executor) initRun() {
 	runCmd.Flags().StringVar(&rc.OutFormat, "out-format",
 		config.OutFormatColoredLineNumber,
 		fmt.Sprintf("Format of output: %s", strings.Join(config.OutFormats, "|")))
+	runCmd.Flags().BoolVar(&rc.PrintIssuedLine, "print-issued-lines", true, "Print lines of code with issue")
+
 	runCmd.Flags().IntVar(&rc.ExitCodeIfIssuesFound, "issues-exit-code",
 		1, "Exit code when issues were found")
 	runCmd.Flags().StringSliceVar(&rc.BuildTags, "build-tags", []string{}, "Build tags (not all linters support them)")
@@ -227,9 +226,15 @@ func (e *Executor) executeRun(cmd *cobra.Command, args []string) {
 			return err
 		}
 
-		gotAnyIssues, err := outputIssues(e.cfg.Run.OutFormat, issues)
+		var p printers.Printer
+		if e.cfg.Run.OutFormat == config.OutFormatJSON {
+			p = printers.NewJSON()
+		} else {
+			p = printers.NewText(e.cfg.Run.PrintIssuedLine, e.cfg.Run.OutFormat == config.OutFormatColoredLineNumber)
+		}
+		gotAnyIssues, err := p.Print(issues)
 		if err != nil {
-			return fmt.Errorf("can't output %d issues: %s", len(issues), err)
+			return fmt.Errorf("can't print %d issues: %s", len(issues), err)
 		}
 
 		if gotAnyIssues {
@@ -246,44 +251,4 @@ func (e *Executor) executeRun(cmd *cobra.Command, args []string) {
 			e.exitCode = exitCodeIfFailure
 		}
 	}
-}
-
-func outputIssues(format string, issues chan result.Issue) (bool, error) {
-	stdout := os.NewFile(uintptr(syscall.Stdout), "/dev/stdout") // was set to /dev/null
-	if format == config.OutFormatLineNumber || format == config.OutFormatColoredLineNumber {
-		gotAnyIssue := false
-		for i := range issues {
-			gotAnyIssue = true
-			text := i.Text
-			if format == config.OutFormatColoredLineNumber {
-				text = color.RedString(text)
-			}
-			fmt.Fprintf(stdout, "%s:%d: %s\n", i.File, i.LineNumber, text)
-		}
-
-		if !gotAnyIssue {
-			outStr := "Congrats! No issues were found."
-			if format == config.OutFormatColoredLineNumber {
-				outStr = color.GreenString(outStr)
-			}
-			fmt.Fprintln(stdout, outStr)
-		}
-
-		return gotAnyIssue, nil
-	}
-
-	if format == config.OutFormatJSON {
-		var allIssues []result.Issue
-		for i := range issues {
-			allIssues = append(allIssues, i)
-		}
-		outputJSON, err := json.Marshal(allIssues)
-		if err != nil {
-			return false, err
-		}
-		fmt.Fprint(stdout, string(outputJSON))
-		return len(allIssues) != 0, nil
-	}
-
-	return false, fmt.Errorf("unknown output format %q", format)
 }

@@ -24,8 +24,7 @@ func (g Gocyclo) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, err
 		}
 
 		res = append(res, result.Issue{
-			File:       s.Pos.Filename,
-			LineNumber: s.Pos.Line,
+			Pos: s.Pos,
 			Text: fmt.Sprintf("cyclomatic complexity %d of func %s is high (> %d)",
 				s.Complexity, formatCode(s.FuncName, lintCtx.RunCfg()), lintCtx.RunCfg().Gocyclo.MinComplexity),
 			FromLinter: g.Name(),

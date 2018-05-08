@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"go/token"
 
 	gofmtAPI "github.com/golangci/gofmt/gofmt"
 	goimportsAPI "github.com/golangci/gofmt/goimports"
@@ -79,9 +80,11 @@ func (g Gofmt) extractIssuesFromPatch(patch string) ([]result.Issue, error) {
 			}
 			i := result.Issue{
 				FromLinter: g.Name(),
-				File:       d.NewName,
-				LineNumber: deletedLine,
-				Text:       text,
+				Pos: token.Position{
+					Filename: d.NewName,
+					Line:     deletedLine,
+				},
+				Text: text,
 			}
 			issues = append(issues, i)
 		}

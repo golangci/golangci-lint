@@ -18,8 +18,7 @@ func (lint Unconvert) Run(ctx context.Context, lintCtx *Context) ([]result.Issue
 	var res []result.Issue
 	for _, pos := range positions {
 		res = append(res, result.Issue{
-			File:       pos.Filename,
-			LineNumber: pos.Line,
+			Pos:        pos,
 			Text:       "unnecessary conversion",
 			FromLinter: lint.Name(),
 		})

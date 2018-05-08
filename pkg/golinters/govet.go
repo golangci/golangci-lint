@@ -22,8 +22,7 @@ func (g Govet) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, error
 	var res []result.Issue
 	for _, i := range issues {
 		res = append(res, result.Issue{
-			File:       i.Pos.Filename,
-			LineNumber: i.Pos.Line,
+			Pos:        i.Pos,
 			Text:       i.Message,
 			FromLinter: g.Name(),
 		})

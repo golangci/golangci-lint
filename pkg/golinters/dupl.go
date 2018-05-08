@@ -3,6 +3,7 @@ package golinters
 import (
 	"context"
 	"fmt"
+	"go/token"
 
 	"github.com/golangci/golangci-lint/pkg/result"
 	duplAPI "github.com/mibk/dupl"
@@ -27,8 +28,14 @@ func (d Dupl) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, error)
 			i.From.LineStart(), i.From.LineEnd(),
 			formatCode(dupl, lintCtx.RunCfg()))
 		res = append(res, result.Issue{
-			File:       i.From.Filename(),
-			LineNumber: i.From.LineStart(),
+			Pos: token.Position{
+				Filename: i.From.Filename(),
+				Line:     i.From.LineStart(),
+			},
+			LineRange: result.Range{
+				From: i.From.LineStart(),
+				To:   i.From.LineEnd(),
+			},
 			Text:       text,
 			FromLinter: d.Name(),
 		})

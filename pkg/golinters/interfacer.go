@@ -28,8 +28,7 @@ func (lint Interfacer) Run(ctx context.Context, lintCtx *Context) ([]result.Issu
 	for _, i := range issues {
 		pos := lintCtx.SSAProgram.Fset.Position(i.Pos())
 		res = append(res, result.Issue{
-			File:       pos.Filename,
-			LineNumber: pos.Line,
+			Pos:        pos,
 			Text:       i.Message(),
 			FromLinter: lint.Name(),
 		})

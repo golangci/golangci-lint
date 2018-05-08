@@ -39,19 +39,19 @@ func (p *Nolint) Process(issues []result.Issue) ([]result.Issue, error) {
 }
 
 func (p *Nolint) shouldPassIssue(i *result.Issue) (bool, error) {
-	comments := p.cache[i.File]
+	comments := p.cache[i.FilePath()]
 	if comments == nil {
-		file, err := parser.ParseFile(p.fset, i.File, nil, parser.ParseComments)
+		file, err := parser.ParseFile(p.fset, i.FilePath(), nil, parser.ParseComments)
 		if err != nil {
 			return true, err
 		}
 
 		comments = extractFileComments(p.fset, file.Comments...)
-		p.cache[i.File] = comments
+		p.cache[i.FilePath()] = comments
 	}
 
 	for _, comment := range comments {
-		if comment.line != i.LineNumber {
+		if comment.line != i.Line() {
 			continue
 		}
 

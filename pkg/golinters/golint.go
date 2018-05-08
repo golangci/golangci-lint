@@ -89,9 +89,8 @@ func lintFiles(minConfidence float64, filenames ...string) ([]result.Issue, erro
 	for _, p := range ps {
 		if p.Confidence >= minConfidence {
 			issues = append(issues, result.Issue{
-				File:       p.Position.Filename,
-				LineNumber: p.Position.Line,
-				Text:       p.Text,
+				Pos:  p.Position,
+				Text: p.Text,
 			})
 			// TODO: use p.Link and p.Category
 		}

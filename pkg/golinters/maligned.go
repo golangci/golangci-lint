@@ -24,8 +24,7 @@ func (m Maligned) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, er
 			text += fmt.Sprintf(":\n%s", formatCodeBlock(i.NewStructDef, lintCtx.RunCfg()))
 		}
 		res = append(res, result.Issue{
-			File:       i.Pos.Filename,
-			LineNumber: i.Pos.Line,
+			Pos:        i.Pos,
 			Text:       text,
 			FromLinter: m.Name(),
 		})

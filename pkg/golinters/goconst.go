@@ -33,8 +33,7 @@ func (lint Goconst) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, 
 			textEnd = fmt.Sprintf(", but such constant %s already exists", formatCode(i.MatchingConst, lintCtx.RunCfg()))
 		}
 		res = append(res, result.Issue{
-			File:       i.Pos.Filename,
-			LineNumber: i.Pos.Line,
+			Pos:        i.Pos,
 			Text:       textBegin + textEnd,
 			FromLinter: lint.Name(),
 		})

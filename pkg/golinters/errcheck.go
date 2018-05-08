@@ -37,8 +37,7 @@ func (e Errcheck) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, er
 		res = append(res, result.Issue{
 			FromLinter: e.Name(),
 			Text:       text,
-			LineNumber: i.Pos.Line,
-			File:       i.Pos.Filename,
+			Pos:        i.Pos,
 		})
 	}
 

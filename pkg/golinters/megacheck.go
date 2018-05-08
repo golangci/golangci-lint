@@ -20,8 +20,7 @@ func (m Megacheck) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, e
 	var res []result.Issue
 	for _, i := range issues {
 		res = append(res, result.Issue{
-			File:       i.Position.Filename,
-			LineNumber: i.Position.Line,
+			Pos:        i.Position,
 			Text:       i.Text,
 			FromLinter: m.Name(),
 		})

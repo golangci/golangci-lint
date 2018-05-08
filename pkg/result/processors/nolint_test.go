@@ -10,8 +10,10 @@ import (
 
 func newNolintFileIssue(line int, fromLinter string) result.Issue {
 	return result.Issue{
-		File:       filepath.Join("testdata", "nolint.go"),
-		LineNumber: line,
+		Pos: token.Position{
+			Filename: filepath.Join("testdata", "nolint.go"),
+			Line:     line,
+		},
 		FromLinter: fromLinter,
 	}
 }

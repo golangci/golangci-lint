@@ -25,19 +25,19 @@ func (p UniqByLine) Name() string {
 
 func (p *UniqByLine) Process(issues []result.Issue) ([]result.Issue, error) {
 	return filterIssues(issues, func(i *result.Issue) bool {
-		lc := p.flc[i.File]
+		lc := p.flc[i.FilePath()]
 		if lc == nil {
 			lc = lineToCount{}
-			p.flc[i.File] = lc
+			p.flc[i.FilePath()] = lc
 		}
 
 		const limit = 1
-		count := lc[i.LineNumber]
+		count := lc[i.Line()]
 		if count == limit {
 			return false
 		}
 
-		lc[i.LineNumber]++
+		lc[i.Line()]++
 		return true
 	}), nil
 }

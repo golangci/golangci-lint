@@ -36,16 +36,16 @@ func (p *MaxPerFileFromLinter) Process(issues []result.Issue) ([]result.Issue, e
 			return true
 		}
 
-		lm := p.flc[i.File]
+		lm := p.flc[i.FilePath()]
 		if lm == nil {
-			p.flc[i.File] = linterToCountMap{}
+			p.flc[i.FilePath()] = linterToCountMap{}
 		}
-		count := p.flc[i.File][i.FromLinter]
+		count := p.flc[i.FilePath()][i.FromLinter]
 		if count >= limit {
 			return false
 		}
 
-		p.flc[i.File][i.FromLinter]++
+		p.flc[i.FilePath()][i.FromLinter]++
 		return true
 	}), nil
 }

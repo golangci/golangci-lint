@@ -1,6 +1,7 @@
 package processors
 
 import (
+	"go/token"
 	"testing"
 
 	"github.com/golangci/golangci-lint/pkg/result"
@@ -8,8 +9,10 @@ import (
 
 func newFLIssue(file string, line int) result.Issue {
 	return result.Issue{
-		File:       file,
-		LineNumber: line,
+		Pos: token.Position{
+			Filename: file,
+			Line:     line,
+		},
 	}
 }
 

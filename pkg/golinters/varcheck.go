@@ -20,8 +20,7 @@ func (v Varcheck) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, er
 	var res []result.Issue
 	for _, i := range issues {
 		res = append(res, result.Issue{
-			File:       i.Pos.Filename,
-			LineNumber: i.Pos.Line,
+			Pos:        i.Pos,
 			Text:       fmt.Sprintf("%s is unused", formatCode(i.VarName, lintCtx.RunCfg())),
 			FromLinter: v.Name(),
 		})

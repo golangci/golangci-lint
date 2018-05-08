@@ -20,8 +20,7 @@ func (lint Ineffassign) Run(ctx context.Context, lintCtx *Context) ([]result.Iss
 	var res []result.Issue
 	for _, i := range issues {
 		res = append(res, result.Issue{
-			File:       i.Pos.Filename,
-			LineNumber: i.Pos.Line,
+			Pos:        i.Pos,
 			Text:       fmt.Sprintf("ineffectual assignment to %s", formatCode(i.IdentName, lintCtx.RunCfg())),
 			FromLinter: lint.Name(),
 		})

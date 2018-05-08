@@ -3,6 +3,7 @@ package golinters
 import (
 	"context"
 	"fmt"
+	"go/token"
 	"io/ioutil"
 	"log"
 	"strconv"
@@ -33,8 +34,10 @@ func (lint Gas) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, erro
 		text := fmt.Sprintf("%s: %s", i.RuleID, i.What) // TODO: use severity and confidence
 		line, _ := strconv.Atoi(i.Line)
 		res = append(res, result.Issue{
-			File:       i.File,
-			LineNumber: line,
+			Pos: token.Position{
+				Filename: i.File,
+				Line:     line,
+			},
 			Text:       text,
 			FromLinter: lint.Name(),
 		})
