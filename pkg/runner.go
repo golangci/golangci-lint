@@ -34,11 +34,7 @@ func (r *SimpleRunner) runLinter(ctx context.Context, linter Linter, lintCtx *go
 	startedAt := time.Now()
 	res, err = linter.Run(ctx, lintCtx)
 
-	if err == nil && len(res) != 0 {
-		res = r.processIssues(ctx, res)
-	}
-
-	logrus.Infof("worker #%d: linter %s took %s and found %d issues", i, linter.Name(),
+	logrus.Infof("worker #%d: linter %s took %s and found %d issues (before processing them)", i, linter.Name(),
 		time.Since(startedAt), len(res))
 	return
 }
@@ -120,6 +116,11 @@ func (r SimpleRunner) runGo(ctx context.Context, linters []Linter, lintCtx *goli
 		}
 
 		finishedN++
+
+		if len(res.issues) != 0 {
+			res.issues = r.processIssues(ctx, res.issues)
+		}
+
 		for _, i := range res.issues {
 			retIssues <- i
 		}

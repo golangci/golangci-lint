@@ -19,6 +19,10 @@ func (Gas) Name() string {
 	return "gas"
 }
 
+func (Gas) Desc() string {
+	return "Inspects source code for security problems"
+}
+
 func (lint Gas) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, error) {
 	gasConfig := gas.NewConfig()
 	enabledRules := rules.Generate()

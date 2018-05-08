@@ -14,6 +14,10 @@ func (Interfacer) Name() string {
 	return "interfacer"
 }
 
+func (Interfacer) Desc() string {
+	return "Linter that suggests narrower interface types"
+}
+
 func (lint Interfacer) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, error) {
 	c := new(check.Checker)
 	c.Program(lintCtx.Program)

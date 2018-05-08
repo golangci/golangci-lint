@@ -1,9 +1,7 @@
 package govet
 
 import (
-	"fmt"
 	"go/token"
-	"os"
 	"strings"
 )
 
@@ -14,7 +12,7 @@ type Issue struct {
 
 var foundIssues []Issue
 
-func Run(paths, buildTags []string, checkShadowing bool) ([]Issue, error) {
+func Run(files []string, checkShadowing bool) ([]Issue, error) {
 	foundIssues = nil
 
 	if checkShadowing {
@@ -26,37 +24,16 @@ func Run(paths, buildTags []string, checkShadowing bool) ([]Issue, error) {
 		}
 	}
 
-	tagList = buildTags
-
 	initPrintFlags()
 	initUnusedFlags()
 
-	for _, name := range paths {
-		// Is it a directory?
-		fi, err := os.Stat(name)
-		if err != nil {
-			warnf("error walking tree: %s", err)
-			continue
-		}
-		if fi.IsDir() {
-			dirsRun = true
-		} else {
-			filesRun = true
-			if !strings.HasSuffix(name, "_test.go") {
-				includesNonTest = true
-			}
+	filesRun = true
+	for _, name := range files {
+		if !strings.HasSuffix(name, "_test.go") {
+			includesNonTest = true
 		}
 	}
-	if dirsRun && filesRun {
-		return nil, fmt.Errorf("can't mix dirs and files")
-	}
-	if dirsRun {
-		for _, name := range paths {
-			doPackageDir(name)
-		}
-		return foundIssues, nil
-	}
-	if doPackage(paths, nil) == nil {
+	if doPackage(files, nil) == nil {
 		return nil, nil
 	}
 

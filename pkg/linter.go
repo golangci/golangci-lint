@@ -10,4 +10,5 @@ import (
 type Linter interface {
 	Run(ctx context.Context, lintCtx *golinters.Context) ([]result.Issue, error)
 	Name() string
+	Desc() string
 }

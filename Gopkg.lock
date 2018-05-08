@@ -101,7 +101,7 @@
     "lib/cfg",
     "lib/whitelist"
   ]
-  revision = "31bebf17d90d40b728c41fecdd5acf5fb8654fc7"
+  revision = "1a9ab8120ec96a014df3afab2d6c47f7e12d8928"
 
 [[projects]]
   branch = "master"
@@ -140,7 +140,7 @@
     "golangci",
     "internal/errcheck"
   ]
-  revision = "7a3d63cfc6fbd9e46f2e551f9b8d1e9c69bffab1"
+  revision = "d2c0791055c651c4bb6798ee1aacbd27ad377aa8"
   source = "github.com/golangci/errcheck"
 
 [[projects]]

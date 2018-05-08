@@ -15,6 +15,10 @@ func (Dupl) Name() string {
 	return "dupl"
 }
 
+func (Dupl) Desc() string {
+	return "Tool for code clone detection"
+}
+
 func (d Dupl) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, error) {
 	issues, err := duplAPI.Run(lintCtx.Paths.Files, lintCtx.RunCfg().Dupl.Threshold)
 	if err != nil {

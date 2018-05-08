@@ -14,6 +14,10 @@ func (Ineffassign) Name() string {
 	return "ineffassign"
 }
 
+func (Ineffassign) Desc() string {
+	return "Detects when assignments to existing variables are not used"
+}
+
 func (lint Ineffassign) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, error) {
 	issues := ineffassignAPI.Run(lintCtx.Paths.Files)
 

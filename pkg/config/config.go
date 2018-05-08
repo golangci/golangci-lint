@@ -15,6 +15,7 @@ const (
 var OutFormats = []string{OutFormatColoredLineNumber, OutFormatLineNumber, OutFormatJSON}
 
 var DefaultExcludePatterns = []string{
+	"Error return value of `(os\\.Std(out|err)\\.Write|.*\\.Close)` is not checked",
 	"should have comment",
 	"comment on exported method",
 	"G104", // disable what errcheck does: it reports on Close etc
@@ -33,14 +34,14 @@ type Run struct { // nolint:maligned
 
 	BuildTags []string
 
-	OutFormat       string
-	PrintIssuedLine bool
-	PrintLinterName bool
+	OutFormat           string
+	PrintIssuedLine     bool
+	PrintLinterName     bool
+	PrintWelcomeMessage bool
 
 	ExitCodeIfIssuesFound int
 
 	Errcheck struct {
-		CheckClose          bool
 		CheckTypeAssertions bool
 		CheckAssignToBlank  bool
 	}
@@ -82,6 +83,8 @@ type Run struct { // nolint:maligned
 	DisabledLinters   []string
 	EnableAllLinters  bool
 	DisableAllLinters bool
+
+	Presets []string
 
 	ExcludePatterns    []string
 	UseDefaultExcludes bool

@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"go/build"
+	"go/token"
 	"log"
 	"strings"
 	"time"
@@ -38,16 +39,16 @@ func (e *Executor) initRun() {
 		fmt.Sprintf("Format of output: %s", strings.Join(config.OutFormats, "|")))
 	runCmd.Flags().BoolVar(&rc.PrintIssuedLine, "print-issued-lines", true, "Print lines of code with issue")
 	runCmd.Flags().BoolVar(&rc.PrintLinterName, "print-linter-name", true, "Print linter name in issue line")
+	runCmd.Flags().BoolVar(&rc.PrintWelcomeMessage, "print-welcome", true, "Print welcome message")
 
 	runCmd.Flags().IntVar(&rc.ExitCodeIfIssuesFound, "issues-exit-code",
 		1, "Exit code when issues were found")
 	runCmd.Flags().StringSliceVar(&rc.BuildTags, "build-tags", []string{}, "Build tags (not all linters support them)")
 
-	runCmd.Flags().BoolVar(&rc.Errcheck.CheckClose, "errcheck.check-close", false, "Errcheck: check missed error checks on .Close() calls")
 	runCmd.Flags().BoolVar(&rc.Errcheck.CheckTypeAssertions, "errcheck.check-type-assertions", false, "Errcheck: check for ignored type assertion results")
 	runCmd.Flags().BoolVar(&rc.Errcheck.CheckAssignToBlank, "errcheck.check-blank", false, "Errcheck: check for errors assigned to blank identifier: _ = errFunc()")
 
-	runCmd.Flags().BoolVar(&rc.Govet.CheckShadowing, "govet.check-shadowing", true, "Govet: check for shadowed variables")
+	runCmd.Flags().BoolVar(&rc.Govet.CheckShadowing, "govet.check-shadowing", false, "Govet: check for shadowed variables")
 
 	runCmd.Flags().Float64Var(&rc.Golint.MinConfidence, "golint.min-confidence", 0.8, "Golint: minimum confidence of a problem to print it")
 
@@ -90,6 +91,9 @@ func (e *Executor) initRun() {
 	runCmd.Flags().StringVar(&rc.DiffFromRevision, "new-from-rev", "", "Show only new issues created after git revision `REV`")
 	runCmd.Flags().StringVar(&rc.DiffPatchFilePath, "new-from-patch", "", "Show only new issues created in git patch with file path `PATH`")
 	runCmd.Flags().BoolVar(&rc.AnalyzeTests, "tests", false, "Analyze tests (*_test.go)")
+
+	runCmd.Flags().StringSliceVarP(&rc.Presets, "presets", "p", []string{},
+		fmt.Sprintf("Enable presets (%s) of linters. Run 'golangci-lint linters' to see them. This option implies option --disable-all", strings.Join(pkg.AllPresets(), "|")))
 }
 
 func isFullImportNeeded(linters []pkg.Linter) bool {
@@ -208,10 +212,15 @@ func (e *Executor) runAnalysis(ctx context.Context, args []string) (chan result.
 	if len(excludePatterns) != 0 {
 		excludeTotalPattern = fmt.Sprintf("(%s)", strings.Join(excludePatterns, "|"))
 	}
+	fset := token.NewFileSet()
+	if lintCtx.Program != nil {
+		fset = lintCtx.Program.Fset
+	}
 	runner := pkg.SimpleRunner{
 		Processors: []processors.Processor{
 			processors.NewExclude(excludeTotalPattern),
-			processors.NewNolint(lintCtx.Program.Fset),
+			processors.NewCgo(),
+			processors.NewNolint(fset),
 			processors.NewUniqByLine(),
 			processors.NewDiff(e.cfg.Run.Diff, e.cfg.Run.DiffFromRevision, e.cfg.Run.DiffPatchFilePath),
 			processors.NewMaxPerFileFromLinter(),
@@ -230,6 +239,10 @@ func (e *Executor) executeRun(cmd *cobra.Command, args []string) {
 	defer func(startedAt time.Time) {
 		logrus.Infof("Run took %s", time.Since(startedAt))
 	}(time.Now())
+
+	if e.cfg.Run.PrintWelcomeMessage {
+		fmt.Println("Run this tool in cloud on every github pull request in https://golangci.com for free (public repos)")
+	}
 
 	f := func() error {
 		issues, err := e.runAnalysis(ctx, args)

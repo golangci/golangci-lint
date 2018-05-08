@@ -14,17 +14,27 @@ func (Goconst) Name() string {
 	return "goconst"
 }
 
+func (Goconst) Desc() string {
+	return "Finds repeated strings that could be replaced by a constant"
+}
+
 func (lint Goconst) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, error) {
-	issues, err := goconstAPI.Run(lintCtx.Paths.Files, true,
-		lintCtx.RunCfg().Goconst.MinStringLen,
-		lintCtx.RunCfg().Goconst.MinOccurrencesCount,
-	)
-	if err != nil {
-		return nil, err
+	var goconstIssues []goconstAPI.Issue
+	// TODO: make it cross-package: pass package names inside goconst
+	for _, files := range lintCtx.Paths.FilesGrouppedByDirs() {
+		issues, err := goconstAPI.Run(files, true,
+			lintCtx.RunCfg().Goconst.MinStringLen,
+			lintCtx.RunCfg().Goconst.MinOccurrencesCount,
+		)
+		if err != nil {
+			return nil, err
+		}
+
+		goconstIssues = append(goconstIssues, issues...)
 	}
 
 	var res []result.Issue
-	for _, i := range issues {
+	for _, i := range goconstIssues {
 		textBegin := fmt.Sprintf("string %s has %d occurrences", formatCode(i.Str, lintCtx.RunCfg()), i.OccurencesCount)
 		var textEnd string
 		if i.MatchingConst == "" {

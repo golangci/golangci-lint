@@ -14,6 +14,10 @@ func (Varcheck) Name() string {
 	return "varcheck"
 }
 
+func (Varcheck) Desc() string {
+	return "Finds unused global variables and constants"
+}
+
 func (v Varcheck) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, error) {
 	issues := varcheckAPI.Run(lintCtx.Program, lintCtx.RunCfg().Varcheck.CheckExportedFields)
 

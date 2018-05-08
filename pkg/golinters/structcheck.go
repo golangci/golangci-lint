@@ -14,6 +14,10 @@ func (Structcheck) Name() string {
 	return "structcheck"
 }
 
+func (Structcheck) Desc() string {
+	return "Finds unused struct fields"
+}
+
 func (s Structcheck) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, error) {
 	issues := structcheckAPI.Run(lintCtx.Program, lintCtx.RunCfg().Structcheck.CheckExportedFields)
 

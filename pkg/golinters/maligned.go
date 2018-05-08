@@ -14,6 +14,10 @@ func (Maligned) Name() string {
 	return "maligned"
 }
 
+func (Maligned) Desc() string {
+	return "Tool to detect Go structs that would take less memory if their fields were sorted"
+}
+
 func (m Maligned) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, error) {
 	issues := malignedAPI.Run(lintCtx.Program)
 

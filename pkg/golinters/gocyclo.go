@@ -14,6 +14,10 @@ func (Gocyclo) Name() string {
 	return "gocyclo"
 }
 
+func (Gocyclo) Desc() string {
+	return "Computes and checks the cyclomatic complexity of functions"
+}
+
 func (g Gocyclo) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, error) {
 	stats := gocycloAPI.Run(lintCtx.Paths.MixedPaths())
 

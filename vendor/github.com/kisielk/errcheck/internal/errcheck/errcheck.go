@@ -226,6 +226,18 @@ type visitor struct {
 	errors []UncheckedError
 }
 
+func getSelName(sel *ast.SelectorExpr) string {
+	if ident, ok := sel.X.(*ast.Ident); ok {
+		return fmt.Sprintf("%s.%s", ident.Name, sel.Sel.Name)
+	}
+
+	if s, ok := sel.X.(*ast.SelectorExpr); ok {
+		return fmt.Sprintf("%s.%s", getSelName(s), sel.Sel.Name)
+	}
+
+	return ""
+}
+
 func (v *visitor) fullName(call *ast.CallExpr) (string, bool) {
 	if ident, ok := call.Fun.(*ast.Ident); ok {
 		return ident.Name, true
@@ -235,6 +247,12 @@ func (v *visitor) fullName(call *ast.CallExpr) (string, bool) {
 	if !ok {
 		return "", false
 	}
+
+	name := getSelName(sel)
+	if name != "" {
+		return name, true
+	}
+
 	fn, ok := v.pkg.ObjectOf(sel.Sel).(*types.Func)
 	if !ok {
 		// Shouldn't happen, but be paranoid

@@ -32,3 +32,8 @@ func IgnoreCloseInDeferMissingErrHandling() {
 
 	panic(resp)
 }
+
+func IgnoreStdxWrite() {
+	os.Stdout.Write([]byte{})
+	os.Stderr.Write([]byte{})
+}

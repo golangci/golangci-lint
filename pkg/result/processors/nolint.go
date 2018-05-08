@@ -1,6 +1,7 @@
 package processors
 
 import (
+	"fmt"
 	"go/ast"
 	"go/parser"
 	"go/token"
@@ -43,7 +44,7 @@ func (p *Nolint) shouldPassIssue(i *result.Issue) (bool, error) {
 	if comments == nil {
 		file, err := parser.ParseFile(p.fset, i.FilePath(), nil, parser.ParseComments)
 		if err != nil {
-			return true, err
+			return false, fmt.Errorf("can't parse file %s", i.FilePath())
 		}
 
 		comments = extractFileComments(p.fset, file.Comments...)

@@ -56,6 +56,8 @@ func testOneSource(t *testing.T, sourcePath string) {
 		"--print-issued-lines=false",
 		"--print-linter-name=false",
 		"--out-format=line-number",
+		"--print-welcome=false",
+		"--govet.check-shadowing=true",
 		sourcePath)
 	runGoErrchk(cmd, t)
 }

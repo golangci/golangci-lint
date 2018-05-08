@@ -13,14 +13,23 @@ func (Govet) Name() string {
 	return "govet"
 }
 
+func (Govet) Desc() string {
+	return "Vet examines Go source code and reports suspicious constructs, such as Printf calls whose arguments do not align with the format string"
+}
+
 func (g Govet) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, error) {
-	issues, err := govetAPI.Run(lintCtx.Paths.MixedPaths(), lintCtx.RunCfg().BuildTags, lintCtx.RunCfg().Govet.CheckShadowing)
-	if err != nil {
-		return nil, err
+	// TODO: check .S asm files: govet can do it if pass dirs
+	var govetIssues []govetAPI.Issue
+	for _, files := range lintCtx.Paths.FilesGrouppedByDirs() {
+		issues, err := govetAPI.Run(files, lintCtx.RunCfg().Govet.CheckShadowing)
+		if err != nil {
+			return nil, err
+		}
+		govetIssues = append(govetIssues, issues...)
 	}
 
 	var res []result.Issue
-	for _, i := range issues {
+	for _, i := range govetIssues {
 		res = append(res, result.Issue{
 			Pos:        i.Pos,
 			Text:       i.Message,

@@ -25,6 +25,14 @@ func (g Gofmt) Name() string {
 	return "gofmt"
 }
 
+func (g Gofmt) Desc() string {
+	if g.UseGoimports {
+		return "Goimports does everything that gofmt does. Additionally it checks unused imports"
+	}
+
+	return "Gofmt checks whether code was gofmt-ed. By default this tool runs with -s option to check for code simplification"
+}
+
 func getFirstDeletedAndAddedLineNumberInHunk(h *diff.Hunk) (int, int, error) {
 	lines := bytes.Split(h.Body, []byte{'\n'})
 	lineNumber := int(h.OrigStartLine - 1)

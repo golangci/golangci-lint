@@ -1,6 +1,10 @@
 package processors
 
-import "github.com/golangci/golangci-lint/pkg/result"
+import (
+	"fmt"
+
+	"github.com/golangci/golangci-lint/pkg/result"
+)
 
 func filterIssues(issues []result.Issue, filter func(i *result.Issue) bool) []result.Issue {
 	retIssues := make([]result.Issue, 0, len(issues))
@@ -18,8 +22,9 @@ func filterIssuesErr(issues []result.Issue, filter func(i *result.Issue) (bool, 
 	for _, i := range issues {
 		ok, err := filter(&i)
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("can't filter issue %#v: %s", i, err)
 		}
+
 		if ok {
 			retIssues = append(retIssues, i)
 		}

@@ -3,7 +3,6 @@ package golinters
 import (
 	"context"
 	"fmt"
-	"strings"
 
 	"github.com/golangci/golangci-lint/pkg/result"
 	errcheckAPI "github.com/kisielk/errcheck/golangci"
@@ -15,6 +14,10 @@ func (Errcheck) Name() string {
 	return "errcheck"
 }
 
+func (Errcheck) Desc() string {
+	return "Errcheck is a program for checking for unchecked errors in go programs. These unchecked errors can be critical bugs in some cases"
+}
+
 func (e Errcheck) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, error) {
 	errCfg := &lintCtx.RunCfg().Errcheck
 	issues, err := errcheckAPI.Run(lintCtx.Program, errCfg.CheckAssignToBlank, errCfg.CheckTypeAssertions)
@@ -24,10 +27,6 @@ func (e Errcheck) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, er
 
 	var res []result.Issue
 	for _, i := range issues {
-		if !errCfg.CheckClose && strings.HasSuffix(i.FuncName, ".Close") {
-			continue
-		}
-
 		var text string
 		if i.FuncName != "" {
 			text = fmt.Sprintf("Error return value of %s is not checked", formatCode(i.FuncName, lintCtx.RunCfg()))

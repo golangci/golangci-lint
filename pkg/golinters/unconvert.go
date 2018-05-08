@@ -13,6 +13,10 @@ func (Unconvert) Name() string {
 	return "unconvert"
 }
 
+func (Unconvert) Desc() string {
+	return "Remove unnecessary type conversions"
+}
+
 func (lint Unconvert) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, error) {
 	positions := unconvertAPI.Run(lintCtx.Program)
 	var res []result.Issue

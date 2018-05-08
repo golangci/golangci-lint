@@ -3,6 +3,7 @@ package pkg
 import (
 	"context"
 	"fmt"
+	"strings"
 	"sync"
 
 	"github.com/golangci/golangci-lint/pkg/config"
@@ -10,12 +11,61 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+const (
+	PresetFormatting  = "format"
+	PresetComplexity  = "complexity"
+	PresetStyle       = "style"
+	PresetBugs        = "bugs"
+	PresetUnused      = "unused"
+	PresetPerformance = "performance"
+)
+
+func AllPresets() []string {
+	return []string{PresetBugs, PresetUnused, PresetFormatting, PresetStyle, PresetComplexity, PresetPerformance}
+}
+
+func allPresetsSet() map[string]bool {
+	ret := map[string]bool{}
+	for _, p := range AllPresets() {
+		ret[p] = true
+	}
+	return ret
+}
+
 type LinterConfig struct {
-	Desc             string
 	Linter           Linter
 	EnabledByDefault bool
 	DoesFullImport   bool
 	NeedsSSARepr     bool
+	InPresets        []string
+}
+
+func (lc LinterConfig) WithFullImport() LinterConfig {
+	lc.DoesFullImport = true
+	return lc
+}
+
+func (lc LinterConfig) WithSSA() LinterConfig {
+	lc.DoesFullImport = true
+	lc.NeedsSSARepr = true
+	return lc
+}
+
+func (lc LinterConfig) WithPresets(presets ...string) LinterConfig {
+	lc.InPresets = presets
+	return lc
+}
+
+func (lc LinterConfig) WithDisabledByDefault() LinterConfig {
+	lc.EnabledByDefault = false
+	return lc
+}
+
+func newLinterConfig(linter Linter) LinterConfig {
+	return LinterConfig{
+		Linter:           linter,
+		EnabledByDefault: true,
+	}
 }
 
 var nameToLC map[string]LinterConfig
@@ -37,46 +87,26 @@ func GetLinterConfig(name string) *LinterConfig {
 	return &lc
 }
 
-func enabledByDefault(linter Linter, desc string, doesFullImport, needsSSARepr bool) LinterConfig {
-	return LinterConfig{
-		EnabledByDefault: true,
-		Linter:           linter,
-		Desc:             desc,
-		DoesFullImport:   doesFullImport,
-		NeedsSSARepr:     needsSSARepr,
-	}
-}
-
-func disabledByDefault(linter Linter, desc string, doesFullImport, needsSSARepr bool) LinterConfig {
-	return LinterConfig{
-		EnabledByDefault: false,
-		Linter:           linter,
-		Desc:             desc,
-		DoesFullImport:   doesFullImport,
-		NeedsSSARepr:     needsSSARepr,
-	}
-}
-
 func GetAllSupportedLinterConfigs() []LinterConfig {
 	return []LinterConfig{
-		enabledByDefault(golinters.Govet{}, "Vet examines Go source code and reports suspicious constructs, such as Printf calls whose arguments do not align with the format string", false, false),
-		enabledByDefault(golinters.Errcheck{}, "Errcheck is a program for checking for unchecked errors in go programs. These unchecked errors can be critical bugs in some cases", true, false),
-		enabledByDefault(golinters.Golint{}, "Golint differs from gofmt. Gofmt reformats Go source code, whereas golint prints out style mistakes", false, false),
-		enabledByDefault(golinters.Megacheck{}, "Megacheck: 3 sub-linters in one: staticcheck, gosimple and unused", true, true),
-		enabledByDefault(golinters.Gas{}, "Inspects source code for security problems", true, false),
-		enabledByDefault(golinters.Structcheck{}, "Finds unused struct fields", true, false),
-		enabledByDefault(golinters.Varcheck{}, "Finds unused global variables and constants", true, false),
-		enabledByDefault(golinters.Interfacer{}, "Linter that suggests narrower interface types", true, true),
-		enabledByDefault(golinters.Unconvert{}, "Remove unnecessary type conversions", true, false),
-		enabledByDefault(golinters.Ineffassign{}, "Detects when assignments to existing variables are not used", false, false),
-		enabledByDefault(golinters.Dupl{}, "Tool for code clone detection", false, false),
-		enabledByDefault(golinters.Goconst{}, "Finds repeated strings that could be replaced by a constant", false, false),
-		enabledByDefault(golinters.Deadcode{}, "Finds unused code", true, false),
-		enabledByDefault(golinters.Gocyclo{}, "Computes and checks the cyclomatic complexity of functions", false, false),
+		newLinterConfig(golinters.Govet{}).WithPresets(PresetBugs),
+		newLinterConfig(golinters.Errcheck{}).WithFullImport().WithPresets(PresetBugs),
+		newLinterConfig(golinters.Golint{}).WithDisabledByDefault().WithPresets(PresetStyle),
+		newLinterConfig(golinters.Megacheck{}).WithSSA().WithPresets(PresetBugs, PresetUnused, PresetStyle),
+		newLinterConfig(golinters.Gas{}).WithFullImport().WithPresets(PresetBugs),
+		newLinterConfig(golinters.Structcheck{}).WithFullImport().WithPresets(PresetUnused),
+		newLinterConfig(golinters.Varcheck{}).WithFullImport().WithPresets(PresetUnused),
+		newLinterConfig(golinters.Interfacer{}).WithDisabledByDefault().WithSSA().WithPresets(PresetStyle),
+		newLinterConfig(golinters.Unconvert{}).WithDisabledByDefault().WithFullImport().WithPresets(PresetStyle),
+		newLinterConfig(golinters.Ineffassign{}).WithPresets(PresetUnused),
+		newLinterConfig(golinters.Dupl{}).WithDisabledByDefault().WithPresets(PresetStyle),
+		newLinterConfig(golinters.Goconst{}).WithDisabledByDefault().WithPresets(PresetStyle),
+		newLinterConfig(golinters.Deadcode{}).WithFullImport().WithPresets(PresetUnused),
+		newLinterConfig(golinters.Gocyclo{}).WithDisabledByDefault().WithPresets(PresetComplexity),
 
-		disabledByDefault(golinters.Gofmt{}, "Gofmt checks whether code was gofmt-ed. By default this tool runs with -s option to check for code simplification", false, false),
-		disabledByDefault(golinters.Gofmt{UseGoimports: true}, "Goimports does everything that gofmt does. Additionally it checks unused imports", false, false),
-		disabledByDefault(golinters.Maligned{}, "Tool to detect Go structs that would take less memory if their fields were sorted", true, false),
+		newLinterConfig(golinters.Gofmt{}).WithDisabledByDefault().WithPresets(PresetFormatting),
+		newLinterConfig(golinters.Gofmt{UseGoimports: true}).WithDisabledByDefault().WithPresets(PresetFormatting),
+		newLinterConfig(golinters.Maligned{}).WithFullImport().WithDisabledByDefault().WithPresets(PresetPerformance),
 	}
 }
 
@@ -132,6 +162,17 @@ func validateEnabledDisabledLintersConfig(cfg *config.Run) error {
 		}
 	}
 
+	allPresets := allPresetsSet()
+	for _, p := range cfg.Presets {
+		if !allPresets[p] {
+			return fmt.Errorf("no such preset %q: only next presets exist: (%s)", p, strings.Join(AllPresets(), "|"))
+		}
+	}
+
+	if len(cfg.Presets) != 0 && cfg.EnableAllLinters {
+		return fmt.Errorf("--presets is incompatible with --enable-all")
+	}
+
 	if cfg.EnableAllLinters && cfg.DisableAllLinters {
 		return fmt.Errorf("--enable-all and --disable-all options must not be combined")
 	}
@@ -164,12 +205,29 @@ func validateEnabledDisabledLintersConfig(cfg *config.Run) error {
 	return nil
 }
 
+func GetAllLintersForPreset(p string) []Linter {
+	ret := []Linter{}
+	for _, lc := range GetAllSupportedLinterConfigs() {
+		for _, ip := range lc.InPresets {
+			if p == ip {
+				ret = append(ret, lc.Linter)
+				break
+			}
+		}
+	}
+
+	return ret
+}
+
 func GetEnabledLinters(ctx context.Context, cfg *config.Run) ([]Linter, error) {
 	if err := validateEnabledDisabledLintersConfig(cfg); err != nil {
 		return nil, err
 	}
+
 	resultLintersSet := map[string]Linter{}
 	switch {
+	case len(cfg.Presets) != 0:
+		break // imply --disable-all
 	case cfg.EnableAllLinters:
 		resultLintersSet = lintersToMap(getAllSupportedLinters())
 	case cfg.DisableAllLinters:
@@ -182,6 +240,32 @@ func GetEnabledLinters(ctx context.Context, cfg *config.Run) ([]Linter, error) {
 		resultLintersSet[name] = getLinterByName(name)
 	}
 
+	// XXX: hacks because of sub-linters in megacheck
+	megacheckWasEnabledByUser := resultLintersSet["megacheck"] != nil
+	if !megacheckWasEnabledByUser {
+		cfg.Megacheck.EnableGosimple = false
+		cfg.Megacheck.EnableStaticcheck = false
+		cfg.Megacheck.EnableUnused = false
+	}
+
+	for _, p := range cfg.Presets {
+		for _, linter := range GetAllLintersForPreset(p) {
+			resultLintersSet[linter.Name()] = linter
+		}
+
+		if !megacheckWasEnabledByUser {
+			if p == PresetBugs {
+				cfg.Megacheck.EnableStaticcheck = true
+			}
+			if p == PresetStyle {
+				cfg.Megacheck.EnableGosimple = true
+			}
+			if p == PresetUnused {
+				cfg.Megacheck.EnableUnused = true
+			}
+		}
+	}
+
 	for _, name := range cfg.DisabledLinters {
 		delete(resultLintersSet, name)
 	}
@@ -192,7 +276,10 @@ func GetEnabledLinters(ctx context.Context, cfg *config.Run) ([]Linter, error) {
 		resultLinters = append(resultLinters, linter)
 		resultLinterNames = append(resultLinterNames, name)
 	}
-	logrus.Infof("Enabled linters: %s", resultLinterNames)
+	logrus.Infof("Active linters: %s", resultLinterNames)
+	if len(cfg.Presets) != 0 {
+		logrus.Infof("Active presets: %s", cfg.Presets)
+	}
 
 	return resultLinters, nil
 }

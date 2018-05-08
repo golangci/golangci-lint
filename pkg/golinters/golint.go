@@ -15,6 +15,10 @@ func (Golint) Name() string {
 	return "golint"
 }
 
+func (Golint) Desc() string {
+	return "Golint differs from gofmt. Gofmt reformats Go source code, whereas golint prints out style mistakes"
+}
+
 func (g Golint) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, error) {
 	var issues []result.Issue
 	for _, pkgFiles := range lintCtx.Paths.FilesGrouppedByDirs() {

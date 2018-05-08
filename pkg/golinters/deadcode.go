@@ -14,6 +14,10 @@ func (Deadcode) Name() string {
 	return "deadcode"
 }
 
+func (Deadcode) Desc() string {
+	return "Finds unused code"
+}
+
 func (d Deadcode) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, error) {
 	issues, err := deadcodeAPI.Run(lintCtx.Program)
 	if err != nil {
