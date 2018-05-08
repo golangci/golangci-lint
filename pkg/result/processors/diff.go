@@ -1,92 +1,66 @@
 package processors
 
 import (
+	"bytes"
 	"fmt"
+	"io"
 	"io/ioutil"
-	"strings"
 
-	"github.com/bradleyfalzon/revgrep"
 	"github.com/golangci/golangci-lint/pkg/result"
+	"github.com/golangci/revgrep"
 )
 
-type DiffProcessor struct {
-	patch string
+type Diff struct {
+	onlyNew       bool
+	fromRev       string
+	patchFilePath string
 }
 
-func NewDiffProcessor(patch string) *DiffProcessor {
-	return &DiffProcessor{
-		patch: patch,
+var _ Processor = Diff{}
+
+func NewDiff(onlyNew bool, fromRev, patchFilePath string) *Diff {
+	return &Diff{
+		onlyNew:       onlyNew,
+		fromRev:       fromRev,
+		patchFilePath: patchFilePath,
 	}
 }
 
-func (p DiffProcessor) Name() string {
+func (p Diff) Name() string {
 	return "diff"
 }
 
-func (p DiffProcessor) processResult(res result.Result) (*result.Result, error) {
-	// Make mapping to restore original issues metadata later
-	fli := makeFilesToLinesToIssuesMap([]result.Result{res})
-
-	rIssues, err := p.runRevgrepOnIssues(res.Issues)
-	if err != nil {
-		return nil, err
+func (p Diff) Process(issues []result.Issue) ([]result.Issue, error) {
+	if !p.onlyNew && p.fromRev == "" && p.patchFilePath == "" { // no need to work
+		return issues, nil
 	}
 
-	newIssues := []result.Issue{}
-	for _, ri := range rIssues {
-		if fli[ri.File] == nil {
-			return nil, fmt.Errorf("can't get original issue file for %v", ri)
-		}
-
-		oi := fli[ri.File][ri.LineNo]
-		if len(oi) != 1 {
-			return nil, fmt.Errorf("can't get original issue for %v: %v", ri, oi)
-		}
-
-		i := result.Issue{
-			File:       ri.File,
-			LineNumber: ri.LineNo,
-			Text:       ri.Message,
-			HunkPos:    ri.HunkPos,
-			FromLinter: oi[0].FromLinter,
-		}
-		newIssues = append(newIssues, i)
-	}
-
-	res.Issues = newIssues
-	return &res, nil
-}
-
-func (p DiffProcessor) Process(results []result.Result) ([]result.Result, error) {
-	retResults := []result.Result{}
-	for _, res := range results {
-		newRes, err := p.processResult(res)
+	var patchReader io.Reader
+	if p.patchFilePath != "" {
+		patch, err := ioutil.ReadFile(p.patchFilePath)
 		if err != nil {
-			return nil, fmt.Errorf("can't filter only new issues for result %+v: %s", res, err)
+			return nil, fmt.Errorf("can't read from pathc file %s: %s", p.patchFilePath, err)
 		}
-		retResults = append(retResults, *newRes)
+		patchReader = bytes.NewReader(patch)
+	}
+	c := revgrep.Checker{
+		Patch:        patchReader,
+		RevisionFrom: p.fromRev,
+	}
+	if err := c.Prepare(); err != nil {
+		return nil, fmt.Errorf("can't prepare diff by revgrep: %s", err)
 	}
 
-	return retResults, nil
+	return transformIssues(issues, func(i *result.Issue) *result.Issue {
+		hunkPos, isNew := c.IsNewIssue(i)
+		if !isNew {
+			return nil
+		}
+
+		newI := *i
+		newI.HunkPos = hunkPos
+		return &newI
+	}), nil
 }
 
-func (p DiffProcessor) runRevgrepOnIssues(issues []result.Issue) ([]revgrep.Issue, error) {
-	// TODO: change revgrep to accept interface with line number, file name
-	fakeIssuesLines := []string{}
-	for _, i := range issues {
-		line := fmt.Sprintf("%s:%d:%d: %s", i.File, i.LineNumber, 0, i.Text)
-		fakeIssuesLines = append(fakeIssuesLines, line)
-	}
-	fakeIssuesOut := strings.Join(fakeIssuesLines, "\n")
-
-	checker := revgrep.Checker{
-		Patch:  strings.NewReader(p.patch),
-		Regexp: `^([^:]+):(\d+):(\d+)?:?\s*(.*)$`,
-	}
-	rIssues, err := checker.Check(strings.NewReader(fakeIssuesOut), ioutil.Discard)
-	if err != nil {
-		return nil, fmt.Errorf("can't filter only new issues by revgrep: %s", err)
-	}
-
-	return rIssues, nil
-}
+func (Diff) Finish() {}

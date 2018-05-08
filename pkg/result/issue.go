@@ -8,6 +8,14 @@ type Issue struct {
 	HunkPos    int
 }
 
+func (i Issue) FilePath() string {
+	return i.File
+}
+
+func (i Issue) Line() int {
+	return i.LineNumber
+}
+
 func NewIssue(fromLinter, text, file string, lineNumber, hunkPos int) Issue {
 	return Issue{
 		FromLinter: fromLinter,

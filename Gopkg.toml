@@ -26,8 +26,8 @@
 
 
 [[constraint]]
-  name = "github.com/bradleyfalzon/revgrep"
-  version = "0.3.0"
+  name = "github.com/golangci/revgrep"
+  branch = "master"
 
 [[constraint]]
   name = "github.com/stretchr/testify"

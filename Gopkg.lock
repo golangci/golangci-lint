@@ -12,12 +12,6 @@
   source = "github.com/golangci/gas"
 
 [[projects]]
-  name = "github.com/bradleyfalzon/revgrep"
-  packages = ["."]
-  revision = "c04006dc3307c8768bda7a33c7c15d1c6f664e14"
-  version = "v0.3"
-
-[[projects]]
   name = "github.com/davecgh/go-spew"
   packages = ["spew"]
   revision = "346938d642f2ec3594ed81d874461961cd0faa76"
@@ -120,6 +114,12 @@
   name = "github.com/golangci/maligned"
   packages = ["."]
   revision = "b1d89398deca2fd3f8578e5a9551e819bd01ca5f"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/golangci/revgrep"
+  packages = ["."]
+  revision = "dfd919b445ba350862d7a6e7fe81989000b84020"
 
 [[projects]]
   branch = "master"
@@ -296,6 +296,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "f77d7467814715b13829f36bfcd792b9d8e18c1194f44e41ba9967c2c4397374"
+  inputs-digest = "76708ccce918c7352a0a1ac338ffaae892409a10ef8c7cf23724bf56e7877caf"
   solver-name = "gps-cdcl"
   solver-version = 1

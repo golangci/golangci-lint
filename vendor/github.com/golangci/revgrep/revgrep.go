@@ -40,6 +40,9 @@ type Checker struct {
 	// relative in order to match patch file. If not set, current working
 	// directory is used.
 	AbsPath string
+
+	// Calculated changes for next calls to IsNewIssue
+	changes map[string][]pos
 }
 
 // Issue contains metadata about an issue found.
@@ -61,6 +64,78 @@ type Issue struct {
 	Message string
 }
 
+func (c *Checker) preparePatch() error {
+	// Check if patch is supplied, if not, retrieve from VCS
+	if c.Patch == nil {
+		var err error
+		c.Patch, c.NewFiles, err = GitPatch(c.RevisionFrom, c.RevisionTo)
+		if err != nil {
+			return fmt.Errorf("could not read git repo: %s", err)
+		}
+		if c.Patch == nil {
+			return errors.New("no version control repository found")
+		}
+	}
+
+	return nil
+}
+
+type InputIssue interface {
+	FilePath() string
+	Line() int
+}
+
+type simpleInputIssue struct {
+	filePath   string
+	lineNumber int
+}
+
+func (i simpleInputIssue) FilePath() string {
+	return i.filePath
+}
+
+func (i simpleInputIssue) Line() int {
+	return i.lineNumber
+}
+
+func (c *Checker) Prepare() error {
+	returnErr := c.preparePatch()
+	c.changes = c.linesChanged()
+	return returnErr
+}
+
+func (c Checker) IsNewIssue(i InputIssue) (hunkPos int, isNew bool) {
+	fchanges, ok := c.changes[i.FilePath()]
+	if !ok { // file wasn't changed
+		return 0, false
+	}
+
+	var (
+		fpos    pos
+		changed bool
+	)
+	// found file, see if lines matched
+	for _, pos := range fchanges {
+		if pos.lineNo == int(i.Line()) {
+			fpos = pos
+			changed = true
+			break
+		}
+	}
+
+	if changed || fchanges == nil {
+		// either file changed or it's a new file
+		hunkPos := fpos.lineNo
+		if changed { // existing file changed
+			hunkPos = fpos.hunkPos
+		}
+
+		return hunkPos, true
+	}
+
+	return 0, false
+}
+
 // Check scans reader and writes any lines to writer that have been added in
 // Checker.Patch.
 //
@@ -72,22 +147,8 @@ type Issue struct {
 // File paths in reader must be relative to current working directory or
 // absolute.
 func (c Checker) Check(reader io.Reader, writer io.Writer) (issues []Issue, err error) {
-	// Check if patch is supplied, if not, retrieve from VCS
-	var (
-		writeAll  bool
-		returnErr error
-	)
-	if c.Patch == nil {
-		c.Patch, c.NewFiles, err = GitPatch(c.RevisionFrom, c.RevisionTo)
-		if err != nil {
-			writeAll = true
-			returnErr = fmt.Errorf("could not read git repo: %s", err)
-		}
-		if c.Patch == nil {
-			writeAll = true
-			returnErr = errors.New("no version control repository found")
-		}
-	}
+	returnErr := c.Prepare()
+	writeAll := returnErr != nil
 
 	// file.go:lineNo:colNo:message
 	// colNo is optional, strip spaces before message
@@ -101,8 +162,7 @@ func (c Checker) Check(reader io.Reader, writer io.Writer) (issues []Issue, err 
 
 	// TODO consider lazy loading this, if there's nothing in stdin, no point
 	// checking for recent changes
-	linesChanged := c.linesChanged()
-	c.debugf("lines changed: %+v", linesChanged)
+	c.debugf("lines changed: %+v", c.changes)
 
 	absPath := c.AbsPath
 	if absPath == "" {
@@ -154,38 +214,23 @@ func (c Checker) Check(reader io.Reader, writer io.Writer) (issues []Issue, err 
 		msg := string(line[4])
 
 		c.debugf("path: %q, lineNo: %v, colNo: %v, msg: %q", path, lno, cno, msg)
-
-		var (
-			fpos    pos
-			changed bool
-		)
-		if fchanges, ok := linesChanged[path]; ok {
-			// found file, see if lines matched
-			for _, pos := range fchanges {
-				if pos.lineNo == int(lno) {
-					fpos = pos
-					changed = true
-				}
-			}
-			if changed || fchanges == nil {
-				// either file changed or it's a new file
-				issue := Issue{
-					File:    path,
-					LineNo:  fpos.lineNo,
-					ColNo:   int(cno),
-					HunkPos: fpos.lineNo,
-					Issue:   scanner.Text(),
-					Message: msg,
-				}
-				if changed {
-					// existing file changed
-					issue.HunkPos = fpos.hunkPos
-				}
-				issues = append(issues, issue)
-				fmt.Fprintln(writer, scanner.Text())
-			}
+		i := simpleInputIssue{
+			filePath:   path,
+			lineNumber: int(lno),
 		}
-		if !changed {
+		hunkPos, changed := c.IsNewIssue(i)
+		if changed {
+			issue := Issue{
+				File:    path,
+				LineNo:  int(lno),
+				ColNo:   int(cno),
+				HunkPos: hunkPos,
+				Issue:   scanner.Text(),
+				Message: msg,
+			}
+			issues = append(issues, issue)
+			fmt.Fprintln(writer, scanner.Text())
+		} else {
 			c.debugf("unchanged: %s", scanner.Text())
 		}
 	}

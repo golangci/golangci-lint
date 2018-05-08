@@ -83,6 +83,10 @@ func (e *Executor) initRun() {
 	runCmd.Flags().StringSliceVarP(&rc.ExcludePatterns, "exclude", "e", config.DefaultExcludePatterns, "Exclude issue by regexp")
 
 	runCmd.Flags().IntVar(&rc.MaxIssuesPerLinter, "max-issues-per-linter", 50, "Maximum issues count per one linter. Set to 0 to disable")
+
+	runCmd.Flags().BoolVarP(&rc.Diff, "new", "n", false, "Show only new issues: if there are unstaged changes or untracked files, only those changes are shown, else only changes in HEAD~ are shown")
+	runCmd.Flags().StringVar(&rc.DiffFromRevision, "new-from-rev", "", "Show only new issues created after git revision `REV`")
+	runCmd.Flags().StringVar(&rc.DiffPatchFilePath, "new-from-patch", "", "Show only new issues created in git patch with file path `PATH`")
 }
 
 func isFullImportNeeded(linters []pkg.Linter) bool {
@@ -196,10 +200,11 @@ func (e *Executor) runAnalysis(ctx context.Context, args []string) (chan result.
 
 	runner := pkg.SimpleRunner{
 		Processors: []processors.Processor{
-			processors.NewMaxPerFileFromLinter(),
 			processors.NewExclude(fmt.Sprintf("(%s)", strings.Join(e.cfg.Run.ExcludePatterns, "|"))),
 			processors.NewNolint(lintCtx.Program.Fset),
 			processors.NewUniqByLine(),
+			processors.NewDiff(e.cfg.Run.Diff, e.cfg.Run.DiffFromRevision, e.cfg.Run.DiffPatchFilePath),
+			processors.NewMaxPerFileFromLinter(),
 			processors.NewMaxFromLinter(e.cfg.Run.MaxIssuesPerLinter),
 			processors.NewPathPrettifier(),
 		},

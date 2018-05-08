@@ -79,6 +79,10 @@ type Run struct {
 	Deadline time.Duration
 
 	MaxIssuesPerLinter int
+
+	DiffFromRevision  string
+	DiffPatchFilePath string
+	Diff              bool
 }
 
 type Config struct {
