@@ -1,0 +1,58 @@
+run:
+  args:
+    - ./...
+  verbose: true
+  concurrency: 4
+  deadline: 1m
+  issues-exit-code: 1
+  tests: true
+  build-tags:
+    - mytag
+
+output:
+  format: colored-line-number
+  print-issued-lines: true
+  print-linter-name: true
+  print-welcome: true
+
+linters-settings:
+  errcheck:
+    check-type-assertions: false
+    check-blank: false
+  govet:
+    check-shadowing: true
+  golint:
+    min-confidence: 0.8
+  gofmt:
+    simplify: true
+  gocyclo:
+    min-complexity: 10
+  maligned:
+    suggest-new: true
+  dupl:
+    threshold: 50
+  goconst:
+    min-len: 3
+    min-occurrences: 3
+
+linters:
+  enable:
+    - megacheck
+    - vet
+  enable-all: true
+  disable:
+    maligned
+  disable-all: false
+  presets:
+    - bugs
+    - unused
+
+issues:
+  exclude:
+    - abcdef
+  exclude-use-default: true
+  max-per-linter: 0
+  max-same: 0
+  new: false
+  new-from-rev: ""
+  new-from-patch: ""

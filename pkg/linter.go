@@ -1,13 +1,14 @@
-package linters
+package pkg
 
 import (
 	"context"
 
+	"github.com/golangci/golangci-lint/pkg/golinters"
 	"github.com/golangci/golangci-lint/pkg/result"
-	"github.com/golangci/golangci-shared/pkg/executors"
 )
 
 type Linter interface {
-	Run(ctx context.Context, exec executors.Executor) (*result.Result, error)
+	Run(ctx context.Context, lintCtx *golinters.Context) ([]result.Issue, error)
 	Name() string
+	Desc() string
 }

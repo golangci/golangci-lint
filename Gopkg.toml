@@ -26,16 +26,8 @@
 
 
 [[constraint]]
-  name = "github.com/bradleyfalzon/revgrep"
-  version = "0.3.0"
-
-[[constraint]]
-  name = "github.com/golang/mock"
-  version = "1.1.1"
-
-[[constraint]]
+  name = "github.com/golangci/revgrep"
   branch = "master"
-  name = "github.com/golangci/golangci-shared"
 
 [[constraint]]
   name = "github.com/stretchr/testify"
@@ -45,6 +37,39 @@
   branch = "master"
   name = "sourcegraph.com/sourcegraph/go-diff"
 
+[[constraint]]
+  name = "github.com/kisielk/errcheck"
+  branch = "master"
+  source = "github.com/golangci/errcheck"
+
+[[constraint]]
+  name = "github.com/golangci/govet"
+  branch = "master"
+
+[[constraint]]
+  name = "github.com/mibk/dupl"
+  branch = "master"
+  source = "github.com/golangci/dupl"
+
+[[constraint]]
+  name = "mvdan.cc/interfacer"
+  branch = "master"
+  source = "github.com/golangci/interfacer"
+
+[[constraint]]
+  name = "github.com/GoASTScanner/gas"
+  branch = "master"
+  source = "github.com/golangci/gas"
+
+[[override]]
+  name = "mvdan.cc/lint"
+  branch = "master"
+  source = "github.com/golangci/lint"
+
 [prune]
   go-tests = true
   unused-packages = true
+
+[[constraint]]
+  name = "github.com/spf13/viper"
+  version = "1.0.2"

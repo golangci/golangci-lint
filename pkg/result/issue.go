@@ -1,19 +1,35 @@
 package result
 
+import "go/token"
+
+type Range struct {
+	From, To int
+}
+
 type Issue struct {
 	FromLinter string
 	Text       string
-	File       string
-	LineNumber int
-	HunkPos    int
+
+	Pos       token.Position
+	LineRange Range
+	HunkPos   int
 }
 
-func NewIssue(fromLinter, text, file string, lineNumber, hunkPos int) Issue {
-	return Issue{
-		FromLinter: fromLinter,
-		Text:       text,
-		File:       file,
-		LineNumber: lineNumber,
-		HunkPos:    hunkPos,
+func (i Issue) FilePath() string {
+	return i.Pos.Filename
+}
+
+func (i Issue) Line() int {
+	return i.Pos.Line
+}
+
+func (i Issue) GetLineRange() Range {
+	if i.LineRange.From == 0 {
+		return Range{
+			From: i.Line(),
+			To:   i.Line(),
+		}
 	}
+
+	return i.LineRange
 }
