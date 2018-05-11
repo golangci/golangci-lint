@@ -1,6 +1,7 @@
 package testdata
 
 import (
+	"bytes"
 	"net/http"
 	"os"
 )
@@ -36,4 +37,8 @@ func IgnoreCloseInDeferMissingErrHandling() {
 func IgnoreStdxWrite() {
 	os.Stdout.Write([]byte{})
 	os.Stderr.Write([]byte{})
+}
+
+func IgnoreBufferWrites(buf *bytes.Buffer) {
+	buf.WriteString("x")
 }

@@ -1,7 +1,6 @@
 package pkg
 
 import (
-	"context"
 	"fmt"
 	"strings"
 	"sync"
@@ -92,7 +91,11 @@ func GetAllSupportedLinterConfigs() []LinterConfig {
 		newLinterConfig(golinters.Govet{}).WithPresets(PresetBugs),
 		newLinterConfig(golinters.Errcheck{}).WithFullImport().WithPresets(PresetBugs),
 		newLinterConfig(golinters.Golint{}).WithDisabledByDefault().WithPresets(PresetStyle),
-		newLinterConfig(golinters.Megacheck{}).WithSSA().WithPresets(PresetBugs, PresetUnused, PresetStyle),
+
+		newLinterConfig(golinters.Megacheck{StaticcheckEnabled: true}).WithSSA().WithPresets(PresetBugs),
+		newLinterConfig(golinters.Megacheck{UnusedEnabled: true}).WithSSA().WithPresets(PresetUnused),
+		newLinterConfig(golinters.Megacheck{GosimpleEnabled: true}).WithSSA().WithPresets(PresetStyle),
+
 		newLinterConfig(golinters.Gas{}).WithFullImport().WithPresets(PresetBugs),
 		newLinterConfig(golinters.Structcheck{}).WithFullImport().WithPresets(PresetUnused),
 		newLinterConfig(golinters.Varcheck{}).WithFullImport().WithPresets(PresetUnused),
@@ -107,6 +110,8 @@ func GetAllSupportedLinterConfigs() []LinterConfig {
 		newLinterConfig(golinters.Gofmt{}).WithDisabledByDefault().WithPresets(PresetFormatting),
 		newLinterConfig(golinters.Gofmt{UseGoimports: true}).WithDisabledByDefault().WithPresets(PresetFormatting),
 		newLinterConfig(golinters.Maligned{}).WithFullImport().WithDisabledByDefault().WithPresets(PresetPerformance),
+		newLinterConfig(golinters.Megacheck{GosimpleEnabled: true, UnusedEnabled: true, StaticcheckEnabled: true}).
+			WithSSA().WithPresets(PresetStyle, PresetBugs, PresetUnused).WithDisabledByDefault(),
 	}
 }
 
@@ -153,15 +158,19 @@ func lintersToMap(linters []Linter) map[string]Linter {
 	return ret
 }
 
-func validateEnabledDisabledLintersConfig(cfg *config.Run) error {
-	allNames := append([]string{}, cfg.EnabledLinters...)
-	allNames = append(allNames, cfg.DisabledLinters...)
+func validateLintersNames(cfg *config.Linters) error {
+	allNames := append([]string{}, cfg.Enable...)
+	allNames = append(allNames, cfg.Disable...)
 	for _, name := range allNames {
 		if getLinterByName(name) == nil {
 			return fmt.Errorf("no such linter %q", name)
 		}
 	}
 
+	return nil
+}
+
+func validatePresets(cfg *config.Linters) error {
 	allPresets := allPresetsSet()
 	for _, p := range cfg.Presets {
 		if !allPresets[p] {
@@ -169,36 +178,60 @@ func validateEnabledDisabledLintersConfig(cfg *config.Run) error {
 		}
 	}
 
-	if len(cfg.Presets) != 0 && cfg.EnableAllLinters {
+	if len(cfg.Presets) != 0 && cfg.EnableAll {
 		return fmt.Errorf("--presets is incompatible with --enable-all")
 	}
 
-	if cfg.EnableAllLinters && cfg.DisableAllLinters {
+	return nil
+}
+
+func validateAllDisableEnableOptions(cfg *config.Linters) error {
+	if cfg.EnableAll && cfg.DisableAll {
 		return fmt.Errorf("--enable-all and --disable-all options must not be combined")
 	}
 
-	if cfg.DisableAllLinters {
-		if len(cfg.EnabledLinters) == 0 {
+	if cfg.DisableAll {
+		if len(cfg.Enable) == 0 {
 			return fmt.Errorf("all linters were disabled, but no one linter was enabled: must enable at least one")
 		}
 
-		if len(cfg.DisabledLinters) != 0 {
-			return fmt.Errorf("can't combine options --disable-all and --disable %s", cfg.DisabledLinters[0])
+		if len(cfg.Disable) != 0 {
+			return fmt.Errorf("can't combine options --disable-all and --disable %s", cfg.Disable[0])
 		}
 	}
 
-	if cfg.EnableAllLinters && len(cfg.EnabledLinters) != 0 {
-		return fmt.Errorf("can't combine options --enable-all and --enable %s", cfg.EnabledLinters[0])
+	if cfg.EnableAll && len(cfg.Enable) != 0 {
+		return fmt.Errorf("can't combine options --enable-all and --enable %s", cfg.Enable[0])
 	}
 
+	return nil
+}
+
+func validateDisabledAndEnabledAtOneMoment(cfg *config.Linters) error {
 	enabledLintersSet := map[string]bool{}
-	for _, name := range cfg.EnabledLinters {
+	for _, name := range cfg.Enable {
 		enabledLintersSet[name] = true
 	}
 
-	for _, name := range cfg.DisabledLinters {
+	for _, name := range cfg.Disable {
 		if enabledLintersSet[name] {
 			return fmt.Errorf("linter %q can't be disabled and enabled at one moment", name)
+		}
+	}
+
+	return nil
+}
+
+func validateEnabledDisabledLintersConfig(cfg *config.Linters) error {
+	validators := []func(cfg *config.Linters) error{
+		validateLintersNames,
+		validatePresets,
+		validateAllDisableEnableOptions,
+		validateDisabledAndEnabledAtOneMoment,
+	}
+	for _, v := range validators {
+		if err := v(cfg); err != nil {
+			return err
 		}
 	}
 
@@ -219,67 +252,96 @@ func GetAllLintersForPreset(p string) []Linter {
 	return ret
 }
 
-func GetEnabledLinters(ctx context.Context, cfg *config.Run) ([]Linter, error) {
-	if err := validateEnabledDisabledLintersConfig(cfg); err != nil {
-		return nil, err
-	}
+func getEnabledLintersSet(cfg *config.Config) map[string]Linter {
+	lcfg := &cfg.Linters
 
 	resultLintersSet := map[string]Linter{}
 	switch {
-	case len(cfg.Presets) != 0:
+	case len(lcfg.Presets) != 0:
 		break // imply --disable-all
-	case cfg.EnableAllLinters:
+	case lcfg.EnableAll:
 		resultLintersSet = lintersToMap(getAllSupportedLinters())
-	case cfg.DisableAllLinters:
+	case lcfg.DisableAll:
 		break
 	default:
 		resultLintersSet = lintersToMap(getAllEnabledByDefaultLinters())
 	}
 
-	for _, name := range cfg.EnabledLinters {
+	for _, name := range lcfg.Enable {
 		resultLintersSet[name] = getLinterByName(name)
 	}
 
-	// XXX: hacks because of sub-linters in megacheck
-	megacheckWasEnabledByUser := resultLintersSet["megacheck"] != nil
-	if !megacheckWasEnabledByUser {
-		cfg.Megacheck.EnableGosimple = false
-		cfg.Megacheck.EnableStaticcheck = false
-		cfg.Megacheck.EnableUnused = false
-	}
-
-	for _, p := range cfg.Presets {
+	for _, p := range lcfg.Presets {
 		for _, linter := range GetAllLintersForPreset(p) {
 			resultLintersSet[linter.Name()] = linter
 		}
-
-		if !megacheckWasEnabledByUser {
-			if p == PresetBugs {
-				cfg.Megacheck.EnableStaticcheck = true
-			}
-			if p == PresetStyle {
-				cfg.Megacheck.EnableGosimple = true
-			}
-			if p == PresetUnused {
-				cfg.Megacheck.EnableUnused = true
-			}
-		}
 	}
 
-	for _, name := range cfg.DisabledLinters {
+	for _, name := range lcfg.Disable {
 		delete(resultLintersSet, name)
 	}
 
-	var resultLinters []Linter
-	var resultLinterNames []string
-	for name, linter := range resultLintersSet {
-		resultLinters = append(resultLinters, linter)
-		resultLinterNames = append(resultLinterNames, name)
-	}
-	logrus.Infof("Active linters: %s", resultLinterNames)
-	if len(cfg.Presets) != 0 {
-		logrus.Infof("Active presets: %s", cfg.Presets)
+	return resultLintersSet
+}
+
+func optimizeLintersSet(linters map[string]Linter) {
+	unusedName := golinters.Megacheck{UnusedEnabled: true}.Name()
+	gosimpleName := golinters.Megacheck{GosimpleEnabled: true}.Name()
+	staticcheckName := golinters.Megacheck{StaticcheckEnabled: true}.Name()
+	fullName := golinters.Megacheck{GosimpleEnabled: true, UnusedEnabled: true, StaticcheckEnabled: true}.Name()
+	allNames := []string{unusedName, gosimpleName, staticcheckName, fullName}
+
+	megacheckCount := 0
+	for _, n := range allNames {
+		if linters[n] != nil {
+			megacheckCount++
+		}
 	}
 
+	if megacheckCount <= 1 {
+		return
+	}
+
+	isFullEnabled := linters[fullName] != nil
+	m := golinters.Megacheck{
+		UnusedEnabled:      isFullEnabled || linters[unusedName] != nil,
+		GosimpleEnabled:    isFullEnabled || linters[gosimpleName] != nil,
+		StaticcheckEnabled: isFullEnabled || linters[staticcheckName] != nil,
+	}
+
+	for _, n := range allNames {
+		delete(linters, n)
+	}
+
+	linters[m.Name()] = m
+}
+
+func GetEnabledLinters(cfg *config.Config) ([]Linter, error) {
+	if err := validateEnabledDisabledLintersConfig(&cfg.Linters); err != nil {
+		return nil, err
+	}
+
+	resultLintersSet := getEnabledLintersSet(cfg)
+	optimizeLintersSet(resultLintersSet)
+
+	var resultLinters []Linter
+	for _, linter := range resultLintersSet {
+		resultLinters = append(resultLinters, linter)
+	}
+
+	verbosePrintLintersStatus(cfg, resultLinters)
+
 	return resultLinters, nil
+}
+
+func verbosePrintLintersStatus(cfg *config.Config, linters []Linter) {
+	var linterNames []string
+	for _, linter := range linters {
+		linterNames = append(linterNames, linter.Name())
+	}
+	logrus.Infof("Active linters: %s", linterNames)
+
+	if len(cfg.Linters.Presets) != 0 {
+		logrus.Infof("Active presets: %s", cfg.Linters.Presets)
+	}
 }

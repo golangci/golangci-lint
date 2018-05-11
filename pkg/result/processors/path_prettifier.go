@@ -17,7 +17,7 @@ var _ Processor = PathPrettifier{}
 func NewPathPrettifier() *PathPrettifier {
 	root, err := os.Getwd()
 	if err != nil {
-		panic(fmt.Errorf("Can't get working dir: %s", err))
+		panic(fmt.Sprintf("Can't get working dir: %s", err))
 	}
 	return &PathPrettifier{
 		root: root,

@@ -238,7 +238,7 @@ func getSelName(sel *ast.SelectorExpr) string {
 	return ""
 }
 
-func (v *visitor) fullName(call *ast.CallExpr) (string, bool) {
+func (v *visitor) fullNameForPrinting(call *ast.CallExpr) (string, bool) {
 	if ident, ok := call.Fun.(*ast.Ident); ok {
 		return ident.Name, true
 	}
@@ -251,6 +251,31 @@ func (v *visitor) fullName(call *ast.CallExpr) (string, bool) {
 	name := getSelName(sel)
 	if name != "" {
 		return name, true
+	}
+
+	fn, ok := v.pkg.ObjectOf(sel.Sel).(*types.Func)
+	if !ok {
+		// Shouldn't happen, but be paranoid
+		return "", false
+	}
+	// The name is fully qualified by the import path, possible type,
+	// function/method name and pointer receiver.
+	//
+	// TODO(dh): vendored packages will have /vendor/ in their name,
+	// thus not matching vendored standard library packages. If we
+	// want to support vendored stdlib packages, we need to implement
+	// FullName with our own logic.
+	return fn.FullName(), true
+}
+
+func (v *visitor) fullName(call *ast.CallExpr) (string, bool) {
+	if ident, ok := call.Fun.(*ast.Ident); ok {
+		return ident.Name, true
+	}
+
+	sel, ok := call.Fun.(*ast.SelectorExpr)
+	if !ok {
+		return "", false
 	}
 
 	fn, ok := v.pkg.ObjectOf(sel.Sel).(*types.Func)
@@ -402,7 +427,7 @@ func (v *visitor) addErrorAtPosition(position token.Pos, call *ast.CallExpr) {
 
 	var name string
 	if call != nil {
-		name, _ = v.fullName(call)
+		name, _ = v.fullNameForPrinting(call)
 	}
 
 	v.errors = append(v.errors, UncheckedError{pos, line, name})

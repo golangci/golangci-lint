@@ -1,0 +1,31 @@
+run:
+  verbose: true
+  deadline: 30s
+  tests: true
+
+linters-settings:
+  errcheck:
+    check-type-assertions: true
+    check-blank: true
+  govet:
+    check-shadowing: true
+  golint:
+    min-confidence: 0
+  gocyclo:
+    min-complexity: 10
+  maligned:
+    suggest-new: true
+  dupl:
+    threshold: 100
+  goconst:
+    min-len: 2
+    min-occurrences: 2
+
+linters:
+  enable-all: true
+  disable:
+    - maligned
+
+issues:
+  exclude:
+    - should have a package comment

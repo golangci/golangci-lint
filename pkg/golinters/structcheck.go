@@ -1,4 +1,4 @@
-package golinters
+package golinters // nolint:dupl
 
 import (
 	"context"
@@ -19,13 +19,13 @@ func (Structcheck) Desc() string {
 }
 
 func (s Structcheck) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, error) {
-	issues := structcheckAPI.Run(lintCtx.Program, lintCtx.RunCfg().Structcheck.CheckExportedFields)
+	issues := structcheckAPI.Run(lintCtx.Program, lintCtx.Settings().Structcheck.CheckExportedFields)
 
 	var res []result.Issue
 	for _, i := range issues {
 		res = append(res, result.Issue{
 			Pos:        i.Pos,
-			Text:       fmt.Sprintf("%s is unused", formatCode(i.FieldName, lintCtx.RunCfg())),
+			Text:       fmt.Sprintf("%s is unused", formatCode(i.FieldName, lintCtx.Cfg)),
 			FromLinter: s.Name(),
 		})
 	}

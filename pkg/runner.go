@@ -92,7 +92,7 @@ func (r SimpleRunner) runGo(ctx context.Context, linters []Linter, lintCtx *goli
 
 	lintResultsCh := make(chan lintRes, len(linters))
 	tasksCh := make(chan Linter, len(linters))
-	workersCount := lintCtx.Cfg.Common.Concurrency - 1
+	workersCount := lintCtx.Cfg.Run.Concurrency
 	var wg sync.WaitGroup
 	wg.Add(workersCount)
 	r.runLinters(ctx, &wg, tasksCh, lintResultsCh, lintCtx, workersCount)

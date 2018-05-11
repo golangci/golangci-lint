@@ -110,7 +110,7 @@ func (g Gofmt) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, error
 		if g.UseGoimports {
 			diff, err = goimportsAPI.Run(f)
 		} else {
-			diff, err = gofmtAPI.Run(f, lintCtx.RunCfg().Gofmt.Simplify)
+			diff, err = gofmtAPI.Run(f, lintCtx.Settings().Gofmt.Simplify)
 		}
 		if err != nil { // TODO: skip
 			return nil, err

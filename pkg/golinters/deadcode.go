@@ -28,7 +28,7 @@ func (d Deadcode) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, er
 	for _, i := range issues {
 		res = append(res, result.Issue{
 			Pos:        i.Pos,
-			Text:       fmt.Sprintf("%s is unused", formatCode(i.UnusedIdentName, lintCtx.RunCfg())),
+			Text:       fmt.Sprintf("%s is unused", formatCode(i.UnusedIdentName, lintCtx.Cfg)),
 			FromLinter: d.Name(),
 		})
 	}

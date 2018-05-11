@@ -7,7 +7,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/config"
 )
 
-func formatCode(code string, cfg *config.Run) string {
+func formatCode(code string, cfg *config.Config) string {
 	if strings.Contains(code, "`") {
 		return code // TODO: properly escape or remove
 	}
@@ -15,7 +15,7 @@ func formatCode(code string, cfg *config.Run) string {
 	return fmt.Sprintf("`%s`", code)
 }
 
-func formatCodeBlock(code string, cfg *config.Run) string {
+func formatCodeBlock(code string, cfg *config.Config) string {
 	if strings.Contains(code, "`") {
 		return code // TODO: properly escape or remove
 	}

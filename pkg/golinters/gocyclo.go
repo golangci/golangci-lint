@@ -23,14 +23,14 @@ func (g Gocyclo) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, err
 
 	var res []result.Issue
 	for _, s := range stats {
-		if s.Complexity < lintCtx.RunCfg().Gocyclo.MinComplexity {
+		if s.Complexity <= lintCtx.Settings().Gocyclo.MinComplexity {
 			continue
 		}
 
 		res = append(res, result.Issue{
 			Pos: s.Pos,
 			Text: fmt.Sprintf("cyclomatic complexity %d of func %s is high (> %d)",
-				s.Complexity, formatCode(s.FuncName, lintCtx.RunCfg()), lintCtx.RunCfg().Gocyclo.MinComplexity),
+				s.Complexity, formatCode(s.FuncName, lintCtx.Cfg), lintCtx.Settings().Gocyclo.MinComplexity),
 			FromLinter: g.Name(),
 		})
 	}

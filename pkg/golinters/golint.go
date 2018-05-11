@@ -22,7 +22,7 @@ func (Golint) Desc() string {
 func (g Golint) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, error) {
 	var issues []result.Issue
 	for _, pkgFiles := range lintCtx.Paths.FilesGrouppedByDirs() {
-		i, err := g.lintFiles(lintCtx.RunCfg().Golint.MinConfidence, pkgFiles...)
+		i, err := g.lintFiles(lintCtx.Settings().Golint.MinConfidence, pkgFiles...)
 		if err != nil {
 			// TODO: skip and warn
 			return nil, fmt.Errorf("can't lint files %s: %s", lintCtx.Paths.Files, err)

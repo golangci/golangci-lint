@@ -19,7 +19,7 @@ func (Errcheck) Desc() string {
 }
 
 func (e Errcheck) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, error) {
-	errCfg := &lintCtx.RunCfg().Errcheck
+	errCfg := &lintCtx.Settings().Errcheck
 	issues, err := errcheckAPI.Run(lintCtx.Program, errCfg.CheckAssignToBlank, errCfg.CheckTypeAssertions)
 	if err != nil {
 		return nil, err
@@ -29,7 +29,7 @@ func (e Errcheck) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, er
 	for _, i := range issues {
 		var text string
 		if i.FuncName != "" {
-			text = fmt.Sprintf("Error return value of %s is not checked", formatCode(i.FuncName, lintCtx.RunCfg()))
+			text = fmt.Sprintf("Error return value of %s is not checked", formatCode(i.FuncName, lintCtx.Cfg))
 		} else {
 			text = "Error return value is not checked"
 		}

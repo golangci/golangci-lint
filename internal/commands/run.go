@@ -6,6 +6,7 @@ import (
 	"go/build"
 	"go/token"
 	"log"
+	"os"
 	"strings"
 	"time"
 
@@ -20,6 +21,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result/processors"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 	"golang.org/x/tools/go/loader"
 )
 
@@ -33,68 +35,72 @@ func (e *Executor) initRun() {
 	}
 	e.rootCmd.AddCommand(runCmd)
 
-	rc := &e.cfg.Run
-	runCmd.Flags().StringVar(&rc.OutFormat, "out-format",
+	// Output config
+	oc := &e.cfg.Output
+	runCmd.Flags().StringVar(&oc.Format, "out-format",
 		config.OutFormatColoredLineNumber,
 		fmt.Sprintf("Format of output: %s", strings.Join(config.OutFormats, "|")))
-	runCmd.Flags().BoolVar(&rc.PrintIssuedLine, "print-issued-lines", true, "Print lines of code with issue")
-	runCmd.Flags().BoolVar(&rc.PrintLinterName, "print-linter-name", true, "Print linter name in issue line")
-	runCmd.Flags().BoolVar(&rc.PrintWelcomeMessage, "print-welcome", true, "Print welcome message")
+	runCmd.Flags().BoolVar(&oc.PrintIssuedLine, "print-issued-lines", true, "Print lines of code with issue")
+	runCmd.Flags().BoolVar(&oc.PrintLinterName, "print-linter-name", true, "Print linter name in issue line")
+	runCmd.Flags().BoolVar(&oc.PrintWelcomeMessage, "print-welcome", true, "Print welcome message")
 
+	// Run config
+	rc := &e.cfg.Run
 	runCmd.Flags().IntVar(&rc.ExitCodeIfIssuesFound, "issues-exit-code",
 		1, "Exit code when issues were found")
 	runCmd.Flags().StringSliceVar(&rc.BuildTags, "build-tags", []string{}, "Build tags (not all linters support them)")
-
-	runCmd.Flags().BoolVar(&rc.Errcheck.CheckTypeAssertions, "errcheck.check-type-assertions", false, "Errcheck: check for ignored type assertion results")
-	runCmd.Flags().BoolVar(&rc.Errcheck.CheckAssignToBlank, "errcheck.check-blank", false, "Errcheck: check for errors assigned to blank identifier: _ = errFunc()")
-
-	runCmd.Flags().BoolVar(&rc.Govet.CheckShadowing, "govet.check-shadowing", false, "Govet: check for shadowed variables")
-
-	runCmd.Flags().Float64Var(&rc.Golint.MinConfidence, "golint.min-confidence", 0.8, "Golint: minimum confidence of a problem to print it")
-
-	runCmd.Flags().BoolVar(&rc.Gofmt.Simplify, "gofmt.simplify", true, "Gofmt: simplify code")
-
-	runCmd.Flags().IntVar(&rc.Gocyclo.MinComplexity, "gocyclo.min-complexity",
-		30, "Minimal complexity of function to report it")
-
-	runCmd.Flags().BoolVar(&rc.Structcheck.CheckExportedFields, "structcheck.exported-fields", false, "Structcheck: report about unused exported struct fields")
-	runCmd.Flags().BoolVar(&rc.Varcheck.CheckExportedFields, "varcheck.exported-fields", false, "Varcheck: report about unused exported variables")
-
-	runCmd.Flags().BoolVar(&rc.Maligned.SuggestNewOrder, "maligned.suggest-new", false, "Maligned: print suggested more optimal struct fields ordering")
-
-	runCmd.Flags().BoolVar(&rc.Megacheck.EnableStaticcheck, "megacheck.staticcheck", true, "Megacheck: run Staticcheck sub-linter: staticcheck is go vet on steroids, applying a ton of static analysis checks")
-	runCmd.Flags().BoolVar(&rc.Megacheck.EnableGosimple, "megacheck.gosimple", true, "Megacheck: run Gosimple sub-linter: gosimple is a linter for Go source code that specialises on simplifying code")
-	runCmd.Flags().BoolVar(&rc.Megacheck.EnableUnused, "megacheck.unused", true, "Megacheck: run Unused sub-linter: unused checks Go code for unused constants, variables, functions and types")
-
-	runCmd.Flags().IntVar(&rc.Dupl.Threshold, "dupl.threshold",
-		150, "Dupl: Minimal threshold to detect copy-paste")
-
-	runCmd.Flags().IntVar(&rc.Goconst.MinStringLen, "goconst.min-len",
-		3, "Goconst: minimum constant string length")
-	runCmd.Flags().IntVar(&rc.Goconst.MinOccurrencesCount, "goconst.min-occurrences",
-		3, "Goconst: minimum occurences of constant string count to trigger issue")
-
-	runCmd.Flags().StringSliceVarP(&rc.EnabledLinters, "enable", "E", []string{}, "Enable specific linter")
-	runCmd.Flags().StringSliceVarP(&rc.DisabledLinters, "disable", "D", []string{}, "Disable specific linter")
-	runCmd.Flags().BoolVar(&rc.EnableAllLinters, "enable-all", false, "Enable all linters")
-	runCmd.Flags().BoolVar(&rc.DisableAllLinters, "disable-all", false, "Disable all linters")
-
-	runCmd.Flags().DurationVar(&rc.Deadline, "deadline", time.Second*30, "Deadline for total work")
-
-	runCmd.Flags().StringSliceVarP(&rc.ExcludePatterns, "exclude", "e", []string{}, "Exclude issue by regexp")
-	runCmd.Flags().BoolVar(&rc.UseDefaultExcludes, "exclude-use-default", true,
-		fmt.Sprintf("Use or not use default excludes: (%s)", strings.Join(config.DefaultExcludePatterns, "|")))
-
-	runCmd.Flags().IntVar(&rc.MaxIssuesPerLinter, "max-issues-per-linter", 50, "Maximum issues count per one linter. Set to 0 to disable")
-	runCmd.Flags().IntVar(&rc.MaxSameIssues, "max-same-issues", 3, "Maximum count of issues with the same text. Set to 0 to disable")
-
-	runCmd.Flags().BoolVarP(&rc.Diff, "new", "n", false, "Show only new issues: if there are unstaged changes or untracked files, only those changes are shown, else only changes in HEAD~ are shown")
-	runCmd.Flags().StringVar(&rc.DiffFromRevision, "new-from-rev", "", "Show only new issues created after git revision `REV`")
-	runCmd.Flags().StringVar(&rc.DiffPatchFilePath, "new-from-patch", "", "Show only new issues created in git patch with file path `PATH`")
+	runCmd.Flags().DurationVar(&rc.Deadline, "deadline", time.Minute, "Deadline for total work")
 	runCmd.Flags().BoolVar(&rc.AnalyzeTests, "tests", false, "Analyze tests (*_test.go)")
 
-	runCmd.Flags().StringSliceVarP(&rc.Presets, "presets", "p", []string{},
+	// Linters settings config
+	lsc := &e.cfg.LintersSettings
+	runCmd.Flags().BoolVar(&lsc.Errcheck.CheckTypeAssertions, "errcheck.check-type-assertions", false, "Errcheck: check for ignored type assertion results")
+	runCmd.Flags().BoolVar(&lsc.Errcheck.CheckAssignToBlank, "errcheck.check-blank", false, "Errcheck: check for errors assigned to blank identifier: _ = errFunc()")
+
+	runCmd.Flags().BoolVar(&lsc.Govet.CheckShadowing, "govet.check-shadowing", false, "Govet: check for shadowed variables")
+
+	runCmd.Flags().Float64Var(&lsc.Golint.MinConfidence, "golint.min-confidence", 0.8, "Golint: minimum confidence of a problem to print it")
+
+	runCmd.Flags().BoolVar(&lsc.Gofmt.Simplify, "gofmt.simplify", true, "Gofmt: simplify code")
+
+	runCmd.Flags().IntVar(&lsc.Gocyclo.MinComplexity, "gocyclo.min-complexity",
+		30, "Minimal complexity of function to report it")
+
+	runCmd.Flags().BoolVar(&lsc.Maligned.SuggestNewOrder, "maligned.suggest-new", false, "Maligned: print suggested more optimal struct fields ordering")
+
+	runCmd.Flags().IntVar(&lsc.Dupl.Threshold, "dupl.threshold",
+		150, "Dupl: Minimal threshold to detect copy-paste")
+
+	runCmd.Flags().IntVar(&lsc.Goconst.MinStringLen, "goconst.min-len",
+		3, "Goconst: minimum constant string length")
+	runCmd.Flags().IntVar(&lsc.Goconst.MinOccurrencesCount, "goconst.min-occurrences",
+		3, "Goconst: minimum occurences of constant string count to trigger issue")
+
+	// Linters config
+	lc := &e.cfg.Linters
+	runCmd.Flags().StringSliceVarP(&lc.Enable, "enable", "E", []string{}, "Enable specific linter")
+	runCmd.Flags().StringSliceVarP(&lc.Disable, "disable", "D", []string{}, "Disable specific linter")
+	runCmd.Flags().BoolVar(&lc.EnableAll, "enable-all", false, "Enable all linters")
+	runCmd.Flags().BoolVar(&lc.DisableAll, "disable-all", false, "Disable all linters")
+	runCmd.Flags().StringSliceVarP(&lc.Presets, "presets", "p", []string{},
 		fmt.Sprintf("Enable presets (%s) of linters. Run 'golangci-lint linters' to see them. This option implies option --disable-all", strings.Join(pkg.AllPresets(), "|")))
+
+	// Issues config
+	ic := &e.cfg.Issues
+	runCmd.Flags().StringSliceVarP(&ic.ExcludePatterns, "exclude", "e", []string{}, "Exclude issue by regexp")
+	runCmd.Flags().BoolVar(&ic.UseDefaultExcludes, "exclude-use-default", true,
+		fmt.Sprintf("Use or not use default excludes: (%s)", strings.Join(config.DefaultExcludePatterns, "|")))
+
+	runCmd.Flags().IntVar(&ic.MaxIssuesPerLinter, "max-issues-per-linter", 50, "Maximum issues count per one linter. Set to 0 to disable")
+	runCmd.Flags().IntVar(&ic.MaxSameIssues, "max-same-issues", 3, "Maximum count of issues with the same text. Set to 0 to disable")
+
+	runCmd.Flags().BoolVarP(&ic.Diff, "new", "n", false, "Show only new issues: if there are unstaged changes or untracked files, only those changes are shown, else only changes in HEAD~ are shown")
+	runCmd.Flags().StringVar(&ic.DiffFromRevision, "new-from-rev", "", "Show only new issues created after git revision `REV`")
+	runCmd.Flags().StringVar(&ic.DiffPatchFilePath, "new-from-patch", "", "Show only new issues created in git patch with file path `PATH`")
+
+	runCmd.Flags().StringVarP(&e.cfg.Run.Config, "config", "c", "", "Read config from file path `PATH`")
+
+	e.parseConfig(runCmd)
 }
 
 func isFullImportNeeded(linters []pkg.Linter) bool {
@@ -195,7 +201,7 @@ func buildLintCtx(ctx context.Context, linters []pkg.Linter, cfg *config.Config)
 func (e *Executor) runAnalysis(ctx context.Context, args []string) (chan result.Issue, error) {
 	e.cfg.Run.Args = args
 
-	linters, err := pkg.GetEnabledLinters(ctx, &e.cfg.Run)
+	linters, err := pkg.GetEnabledLinters(e.cfg)
 	if err != nil {
 		return nil, err
 	}
@@ -205,8 +211,8 @@ func (e *Executor) runAnalysis(ctx context.Context, args []string) (chan result.
 		return nil, err
 	}
 
-	excludePatterns := e.cfg.Run.ExcludePatterns
-	if e.cfg.Run.UseDefaultExcludes {
+	excludePatterns := e.cfg.Issues.ExcludePatterns
+	if e.cfg.Issues.UseDefaultExcludes {
 		excludePatterns = append(excludePatterns, config.DefaultExcludePatterns...)
 	}
 	var excludeTotalPattern string
@@ -223,10 +229,10 @@ func (e *Executor) runAnalysis(ctx context.Context, args []string) (chan result.
 			processors.NewCgo(),
 			processors.NewNolint(fset),
 			processors.NewUniqByLine(),
-			processors.NewDiff(e.cfg.Run.Diff, e.cfg.Run.DiffFromRevision, e.cfg.Run.DiffPatchFilePath),
+			processors.NewDiff(e.cfg.Issues.Diff, e.cfg.Issues.DiffFromRevision, e.cfg.Issues.DiffPatchFilePath),
 			processors.NewMaxPerFileFromLinter(),
-			processors.NewMaxFromLinter(e.cfg.Run.MaxIssuesPerLinter),
-			processors.NewMaxSameIssues(e.cfg.Run.MaxSameIssues),
+			processors.NewMaxSameIssues(e.cfg.Issues.MaxSameIssues),
+			processors.NewMaxFromLinter(e.cfg.Issues.MaxIssuesPerLinter),
 			processors.NewPathPrettifier(),
 		},
 	}
@@ -242,7 +248,7 @@ func (e *Executor) executeRun(cmd *cobra.Command, args []string) {
 		logrus.Infof("Run took %s", time.Since(startedAt))
 	}(time.Now())
 
-	if e.cfg.Run.PrintWelcomeMessage {
+	if e.cfg.Output.PrintWelcomeMessage {
 		fmt.Println("Run this tool in cloud on every github pull request in https://golangci.com for free (public repos)")
 	}
 
@@ -253,11 +259,11 @@ func (e *Executor) executeRun(cmd *cobra.Command, args []string) {
 		}
 
 		var p printers.Printer
-		if e.cfg.Run.OutFormat == config.OutFormatJSON {
+		if e.cfg.Output.Format == config.OutFormatJSON {
 			p = printers.NewJSON()
 		} else {
-			p = printers.NewText(e.cfg.Run.PrintIssuedLine,
-				e.cfg.Run.OutFormat == config.OutFormatColoredLineNumber, e.cfg.Run.PrintLinterName)
+			p = printers.NewText(e.cfg.Output.PrintIssuedLine,
+				e.cfg.Output.Format == config.OutFormatColoredLineNumber, e.cfg.Output.PrintLinterName)
 		}
 		gotAnyIssues, err := p.Print(issues)
 		if err != nil {
@@ -277,5 +283,39 @@ func (e *Executor) executeRun(cmd *cobra.Command, args []string) {
 		if e.exitCode == 0 {
 			e.exitCode = exitCodeIfFailure
 		}
+	}
+}
+
+func (e *Executor) parseConfig(cmd *cobra.Command) {
+	// XXX: hack with double parsing to acces "config" option here
+	if err := cmd.ParseFlags(os.Args); err != nil {
+		log.Fatalf("Can't parse agrs: %s", err)
+	}
+
+	if err := viper.BindPFlags(cmd.Flags()); err != nil {
+		log.Fatalf("Can't bind cobra's flags to viper: %s", err)
+	}
+
+	viper.SetEnvPrefix("GOLANGCI")
+	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
+	viper.AutomaticEnv()
+
+	configFile := viper.GetString("config")
+	if configFile == "" {
+		viper.SetConfigName(".golangci")
+		viper.AddConfigPath("./")
+	} else {
+		viper.SetConfigFile(configFile)
+	}
+
+	if err := viper.ReadInConfig(); err != nil {
+		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
+			return
+		}
+		log.Fatalf("Can't read viper config: %s", err)
+	}
+
+	if err := viper.Unmarshal(&e.cfg); err != nil {
+		log.Fatalf("Can't unmarshal config by viper: %s", err)
 	}
 }

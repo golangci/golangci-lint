@@ -24,8 +24,8 @@ func (m Maligned) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, er
 	var res []result.Issue
 	for _, i := range issues {
 		text := fmt.Sprintf("struct of size %d bytes could be of size %d bytes", i.OldSize, i.NewSize)
-		if lintCtx.RunCfg().Maligned.SuggestNewOrder {
-			text += fmt.Sprintf(":\n%s", formatCodeBlock(i.NewStructDef, lintCtx.RunCfg()))
+		if lintCtx.Settings().Maligned.SuggestNewOrder {
+			text += fmt.Sprintf(":\n%s", formatCodeBlock(i.NewStructDef, lintCtx.Cfg))
 		}
 		res = append(res, result.Issue{
 			Pos:        i.Pos,

@@ -1,4 +1,4 @@
-package golinters
+package golinters // nolint:dupl
 
 import (
 	"context"
@@ -19,13 +19,13 @@ func (Varcheck) Desc() string {
 }
 
 func (v Varcheck) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, error) {
-	issues := varcheckAPI.Run(lintCtx.Program, lintCtx.RunCfg().Varcheck.CheckExportedFields)
+	issues := varcheckAPI.Run(lintCtx.Program, lintCtx.Settings().Varcheck.CheckExportedFields)
 
 	var res []result.Issue
 	for _, i := range issues {
 		res = append(res, result.Issue{
 			Pos:        i.Pos,
-			Text:       fmt.Sprintf("%s is unused", formatCode(i.VarName, lintCtx.RunCfg())),
+			Text:       fmt.Sprintf("%s is unused", formatCode(i.VarName, lintCtx.Cfg)),
 			FromLinter: v.Name(),
 		})
 	}

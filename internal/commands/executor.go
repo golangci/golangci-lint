@@ -15,7 +15,7 @@ type Executor struct {
 
 func NewExecutor() *Executor {
 	e := &Executor{
-		cfg: config.NewDefault(),
+		cfg: &config.Config{},
 	}
 
 	e.initRoot()

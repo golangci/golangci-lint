@@ -15,6 +15,6 @@ type Context struct {
 	LoaderConfig *loader.Config
 }
 
-func (c *Context) RunCfg() *config.Run {
-	return &c.Cfg.Run
+func (c *Context) Settings() *config.LintersSettings {
+	return &c.Cfg.LintersSettings
 }

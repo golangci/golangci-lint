@@ -23,8 +23,8 @@ func (lint Goconst) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, 
 	// TODO: make it cross-package: pass package names inside goconst
 	for _, files := range lintCtx.Paths.FilesGrouppedByDirs() {
 		issues, err := goconstAPI.Run(files, true,
-			lintCtx.RunCfg().Goconst.MinStringLen,
-			lintCtx.RunCfg().Goconst.MinOccurrencesCount,
+			lintCtx.Settings().Goconst.MinStringLen,
+			lintCtx.Settings().Goconst.MinOccurrencesCount,
 		)
 		if err != nil {
 			return nil, err
@@ -35,12 +35,12 @@ func (lint Goconst) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, 
 
 	var res []result.Issue
 	for _, i := range goconstIssues {
-		textBegin := fmt.Sprintf("string %s has %d occurrences", formatCode(i.Str, lintCtx.RunCfg()), i.OccurencesCount)
+		textBegin := fmt.Sprintf("string %s has %d occurrences", formatCode(i.Str, lintCtx.Cfg), i.OccurencesCount)
 		var textEnd string
 		if i.MatchingConst == "" {
 			textEnd = ", make it a constant"
 		} else {
-			textEnd = fmt.Sprintf(", but such constant %s already exists", formatCode(i.MatchingConst, lintCtx.RunCfg()))
+			textEnd = fmt.Sprintf(", but such constant %s already exists", formatCode(i.MatchingConst, lintCtx.Cfg))
 		}
 		res = append(res, result.Issue{
 			Pos:        i.Pos,

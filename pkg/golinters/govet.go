@@ -21,7 +21,7 @@ func (g Govet) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, error
 	// TODO: check .S asm files: govet can do it if pass dirs
 	var govetIssues []govetAPI.Issue
 	for _, files := range lintCtx.Paths.FilesGrouppedByDirs() {
-		issues, err := govetAPI.Run(files, lintCtx.RunCfg().Govet.CheckShadowing)
+		issues, err := govetAPI.Run(files, lintCtx.Settings().Govet.CheckShadowing)
 		if err != nil {
 			return nil, err
 		}

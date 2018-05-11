@@ -13,6 +13,8 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+var stdExcludeDirs = []string{"vendor", "testdata", "examples", "Godeps", "builtin"}
+
 func GetProjectRoot() string {
 	return path.Join(build.Default.GOPATH, "src", "github.com", "golangci", "golangci-worker")
 }
@@ -69,26 +71,7 @@ func processPaths(root string, paths []string, maxPaths int) ([]string, error) {
 	return ret, nil
 }
 
-func GetPathsForAnalysis(ctx context.Context, inputPaths []string, includeTests bool) (ret *ProjectPaths, err error) {
-	defer func(startedAt time.Time) {
-		if ret != nil {
-			logrus.Infof("Found paths for analysis for %s: %s", time.Since(startedAt), ret.MixedPaths())
-		}
-	}(time.Now())
-
-	for _, path := range inputPaths {
-		if strings.HasSuffix(path, ".go") && len(inputPaths) != 1 {
-			return nil, fmt.Errorf("Specific files for analysis are allowed only if one file is set")
-		}
-	}
-
-	excludeDirs := []string{"vendor", "testdata", "examples", "Godeps", "builtin"}
-	pr := NewPathResolver(excludeDirs, []string{".go"}, includeTests)
-	paths, err := pr.Resolve(inputPaths...)
-	if err != nil {
-		return nil, fmt.Errorf("can't resolve paths: %s", err)
-	}
-
+func processResolvedPaths(paths *PathResolveResult) (*ProjectPaths, error) {
 	root, err := os.Getwd()
 	if err != nil {
 		return nil, fmt.Errorf("can't get working dir: %s", err)
@@ -116,6 +99,28 @@ func GetPathsForAnalysis(ctx context.Context, inputPaths []string, includeTests 
 		Dirs:      dirs,
 		IsDirsRun: len(dirs) != 0,
 	}, nil
+}
+
+func GetPathsForAnalysis(ctx context.Context, inputPaths []string, includeTests bool) (ret *ProjectPaths, err error) {
+	defer func(startedAt time.Time) {
+		if ret != nil {
+			logrus.Infof("Found paths for analysis for %s: %s", time.Since(startedAt), ret.MixedPaths())
+		}
+	}(time.Now())
+
+	for _, path := range inputPaths {
+		if strings.HasSuffix(path, ".go") && len(inputPaths) != 1 {
+			return nil, fmt.Errorf("specific files for analysis are allowed only if one file is set")
+		}
+	}
+
+	pr := NewPathResolver(stdExcludeDirs, []string{".go"}, includeTests)
+	paths, err := pr.Resolve(inputPaths...)
+	if err != nil {
+		return nil, fmt.Errorf("can't resolve paths: %s", err)
+	}
+
+	return processResolvedPaths(paths)
 }
 
 func IsDir(filename string) bool {
