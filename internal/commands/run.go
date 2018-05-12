@@ -2,11 +2,13 @@ package commands
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"go/build"
 	"go/token"
 	"log"
 	"os"
+	"runtime"
 	"strings"
 	"time"
 
@@ -21,6 +23,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result/processors"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 	"golang.org/x/tools/go/loader"
 )
@@ -51,6 +54,8 @@ func (e *Executor) initRun() {
 	runCmd.Flags().StringSliceVar(&rc.BuildTags, "build-tags", []string{}, "Build tags (not all linters support them)")
 	runCmd.Flags().DurationVar(&rc.Deadline, "deadline", time.Minute, "Deadline for total work")
 	runCmd.Flags().BoolVar(&rc.AnalyzeTests, "tests", false, "Analyze tests (*_test.go)")
+	runCmd.Flags().BoolVar(&rc.PrintResourcesUsage, "print-resources-usage", false, "Print avg and max memory usage of golangci-lint and total time")
+	runCmd.Flags().StringVarP(&rc.Config, "config", "c", "", "Read config from file path `PATH`")
 
 	// Linters settings config
 	lsc := &e.cfg.LintersSettings
@@ -97,8 +102,6 @@ func (e *Executor) initRun() {
 	runCmd.Flags().BoolVarP(&ic.Diff, "new", "n", false, "Show only new issues: if there are unstaged changes or untracked files, only those changes are shown, else only changes in HEAD~ are shown")
 	runCmd.Flags().StringVar(&ic.DiffFromRevision, "new-from-rev", "", "Show only new issues created after git revision `REV`")
 	runCmd.Flags().StringVar(&ic.DiffPatchFilePath, "new-from-patch", "", "Show only new issues created in git patch with file path `PATH`")
-
-	runCmd.Flags().StringVarP(&e.cfg.Run.Config, "config", "c", "", "Read config from file path `PATH`")
 
 	e.parseConfig(runCmd)
 }
@@ -240,45 +243,53 @@ func (e *Executor) runAnalysis(ctx context.Context, args []string) (chan result.
 	return runner.Run(ctx, linters, lintCtx), nil
 }
 
+func (e *Executor) runAndPrint(ctx context.Context, args []string) error {
+	issues, err := e.runAnalysis(ctx, args)
+	if err != nil {
+		return err
+	}
+
+	var p printers.Printer
+	if e.cfg.Output.Format == config.OutFormatJSON {
+		p = printers.NewJSON()
+	} else {
+		p = printers.NewText(e.cfg.Output.PrintIssuedLine,
+			e.cfg.Output.Format == config.OutFormatColoredLineNumber, e.cfg.Output.PrintLinterName)
+	}
+	gotAnyIssues, err := p.Print(issues)
+	if err != nil {
+		return fmt.Errorf("can't print %d issues: %s", len(issues), err)
+	}
+
+	if gotAnyIssues {
+		e.exitCode = e.cfg.Run.ExitCodeIfIssuesFound
+		return nil
+	}
+
+	return nil
+}
+
 func (e *Executor) executeRun(cmd *cobra.Command, args []string) {
+	needTrackResources := e.cfg.Run.IsVerbose || e.cfg.Run.PrintResourcesUsage
+	trackResourcesEndCh := make(chan struct{})
+	defer func() { // XXX: this defer must be before ctx.cancel defer
+		if needTrackResources { // wait until resource tracking finished to print properly
+			<-trackResourcesEndCh
+		}
+	}()
+
 	ctx, cancel := context.WithTimeout(context.Background(), e.cfg.Run.Deadline)
 	defer cancel()
 
-	defer func(startedAt time.Time) {
-		logrus.Infof("Run took %s", time.Since(startedAt))
-	}(time.Now())
+	if needTrackResources {
+		go watchResources(ctx, trackResourcesEndCh)
+	}
 
 	if e.cfg.Output.PrintWelcomeMessage {
 		fmt.Println("Run this tool in cloud on every github pull request in https://golangci.com for free (public repos)")
 	}
 
-	f := func() error {
-		issues, err := e.runAnalysis(ctx, args)
-		if err != nil {
-			return err
-		}
-
-		var p printers.Printer
-		if e.cfg.Output.Format == config.OutFormatJSON {
-			p = printers.NewJSON()
-		} else {
-			p = printers.NewText(e.cfg.Output.PrintIssuedLine,
-				e.cfg.Output.Format == config.OutFormatColoredLineNumber, e.cfg.Output.PrintLinterName)
-		}
-		gotAnyIssues, err := p.Print(issues)
-		if err != nil {
-			return fmt.Errorf("can't print %d issues: %s", len(issues), err)
-		}
-
-		if gotAnyIssues {
-			e.exitCode = e.cfg.Run.ExitCodeIfIssuesFound
-			return nil
-		}
-
-		return nil
-	}
-
-	if err := f(); err != nil {
+	if err := e.runAndPrint(ctx, args); err != nil {
 		log.Print(err)
 		if e.exitCode == 0 {
 			e.exitCode = exitCodeIfFailure
@@ -289,7 +300,10 @@ func (e *Executor) executeRun(cmd *cobra.Command, args []string) {
 func (e *Executor) parseConfig(cmd *cobra.Command) {
 	// XXX: hack with double parsing to acces "config" option here
 	if err := cmd.ParseFlags(os.Args); err != nil {
-		log.Fatalf("Can't parse agrs: %s", err)
+		if err == pflag.ErrHelp {
+			return
+		}
+		log.Fatalf("Can't parse args: %s", err)
 	}
 
 	if err := viper.BindPFlags(cmd.Flags()); err != nil {
@@ -318,4 +332,63 @@ func (e *Executor) parseConfig(cmd *cobra.Command) {
 	if err := viper.Unmarshal(&e.cfg); err != nil {
 		log.Fatalf("Can't unmarshal config by viper: %s", err)
 	}
+
+	if err := e.validateConfig(); err != nil {
+		log.Fatal(err)
+	}
+}
+
+func (e *Executor) validateConfig() error {
+	c := e.cfg
+	if len(c.Run.Args) != 0 {
+		return errors.New("option run.args in config aren't supported now")
+	}
+
+	if c.Run.CPUProfilePath != "" {
+		return errors.New("option run.cpuprofilepath in config isn't allowed")
+	}
+
+	return nil
+}
+
+func watchResources(ctx context.Context, done chan struct{}) {
+	startedAt := time.Now()
+
+	rssValues := []uint64{}
+	ticker := time.NewTicker(100 * time.Millisecond)
+	defer ticker.Stop()
+
+	for {
+		var m runtime.MemStats
+		runtime.ReadMemStats(&m)
+
+		rssValues = append(rssValues, m.Sys)
+
+		stop := false
+		select {
+		case <-ctx.Done():
+			stop = true
+		case <-ticker.C: // track every second
+		}
+
+		if stop {
+			break
+		}
+	}
+
+	var avg, max uint64
+	for _, v := range rssValues {
+		avg += v
+		if v > max {
+			max = v
+		}
+	}
+	avg /= uint64(len(rssValues))
+
+	const MB = 1024 * 1024
+	maxMB := float64(max) / MB
+	logrus.Infof("Memory: %d samples, avg is %.1fMB, max is %.1fMB",
+		len(rssValues), float64(avg)/MB, maxMB)
+	logrus.Infof("Execution took %s", time.Since(startedAt))
+	close(done)
 }

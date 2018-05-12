@@ -1,6 +1,4 @@
 run:
-  args:
-    - ./...
   verbose: true
   concurrency: 4
   deadline: 1m
