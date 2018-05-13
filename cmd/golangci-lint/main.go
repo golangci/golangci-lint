@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"github.com/golangci/golangci-lint/internal/commands"
+	"github.com/golangci/golangci-lint/pkg/commands"
 	"github.com/sirupsen/logrus"
 )
 
