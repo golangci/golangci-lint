@@ -1,5 +1,5 @@
 package testdata
 
-type t struct { // ERROR "`t` is unused"
-	unusedField int // ERROR "`unusedField` is unused"
+type t struct { // nolint:megacheck // ERROR "`t` is unused"
+	unusedField int // nolint:megacheck // ERROR "`unusedField` is unused"
 }
