@@ -2,6 +2,7 @@ package pkg
 
 import (
 	"fmt"
+	"os"
 	"strings"
 	"sync"
 
@@ -55,15 +56,9 @@ func (lc LinterConfig) WithPresets(presets ...string) LinterConfig {
 	return lc
 }
 
-func (lc LinterConfig) WithDisabledByDefault() LinterConfig {
-	lc.EnabledByDefault = false
-	return lc
-}
-
 func newLinterConfig(linter Linter) LinterConfig {
 	return LinterConfig{
-		Linter:           linter,
-		EnabledByDefault: true,
+		Linter: linter,
 	}
 }
 
@@ -86,11 +81,21 @@ func GetLinterConfig(name string) *LinterConfig {
 	return &lc
 }
 
+func enableLinterConfigs(lcs []LinterConfig, isEnabled func(lc *LinterConfig) bool) []LinterConfig {
+	var ret []LinterConfig
+	for _, lc := range lcs {
+		lc.EnabledByDefault = isEnabled(&lc)
+		ret = append(ret, lc)
+	}
+
+	return ret
+}
+
 func GetAllSupportedLinterConfigs() []LinterConfig {
-	return []LinterConfig{
+	lcs := []LinterConfig{
 		newLinterConfig(golinters.Govet{}).WithPresets(PresetBugs),
 		newLinterConfig(golinters.Errcheck{}).WithFullImport().WithPresets(PresetBugs),
-		newLinterConfig(golinters.Golint{}).WithDisabledByDefault().WithPresets(PresetStyle),
+		newLinterConfig(golinters.Golint{}).WithPresets(PresetStyle),
 
 		newLinterConfig(golinters.Megacheck{StaticcheckEnabled: true}).WithSSA().WithPresets(PresetBugs),
 		newLinterConfig(golinters.Megacheck{UnusedEnabled: true}).WithSSA().WithPresets(PresetUnused),
@@ -99,20 +104,47 @@ func GetAllSupportedLinterConfigs() []LinterConfig {
 		newLinterConfig(golinters.Gas{}).WithFullImport().WithPresets(PresetBugs),
 		newLinterConfig(golinters.Structcheck{}).WithFullImport().WithPresets(PresetUnused),
 		newLinterConfig(golinters.Varcheck{}).WithFullImport().WithPresets(PresetUnused),
-		newLinterConfig(golinters.Interfacer{}).WithDisabledByDefault().WithSSA().WithPresets(PresetStyle),
-		newLinterConfig(golinters.Unconvert{}).WithDisabledByDefault().WithFullImport().WithPresets(PresetStyle),
+		newLinterConfig(golinters.Interfacer{}).WithSSA().WithPresets(PresetStyle),
+		newLinterConfig(golinters.Unconvert{}).WithFullImport().WithPresets(PresetStyle),
 		newLinterConfig(golinters.Ineffassign{}).WithPresets(PresetUnused),
-		newLinterConfig(golinters.Dupl{}).WithDisabledByDefault().WithPresets(PresetStyle),
-		newLinterConfig(golinters.Goconst{}).WithDisabledByDefault().WithPresets(PresetStyle),
+		newLinterConfig(golinters.Dupl{}).WithPresets(PresetStyle),
+		newLinterConfig(golinters.Goconst{}).WithPresets(PresetStyle),
 		newLinterConfig(golinters.Deadcode{}).WithFullImport().WithPresets(PresetUnused),
-		newLinterConfig(golinters.Gocyclo{}).WithDisabledByDefault().WithPresets(PresetComplexity),
+		newLinterConfig(golinters.Gocyclo{}).WithPresets(PresetComplexity),
 
-		newLinterConfig(golinters.Gofmt{}).WithDisabledByDefault().WithPresets(PresetFormatting),
-		newLinterConfig(golinters.Gofmt{UseGoimports: true}).WithDisabledByDefault().WithPresets(PresetFormatting),
-		newLinterConfig(golinters.Maligned{}).WithFullImport().WithDisabledByDefault().WithPresets(PresetPerformance),
+		newLinterConfig(golinters.Gofmt{}).WithPresets(PresetFormatting),
+		newLinterConfig(golinters.Gofmt{UseGoimports: true}).WithPresets(PresetFormatting),
+		newLinterConfig(golinters.Maligned{}).WithFullImport().WithPresets(PresetPerformance),
 		newLinterConfig(golinters.Megacheck{GosimpleEnabled: true, UnusedEnabled: true, StaticcheckEnabled: true}).
-			WithSSA().WithPresets(PresetStyle, PresetBugs, PresetUnused).WithDisabledByDefault(),
+			WithSSA().WithPresets(PresetStyle, PresetBugs, PresetUnused),
 	}
+
+	if os.Getenv("GOLANGCI_COM_RUN") == "1" {
+		disabled := map[string]bool{
+			"gocyclo":  true,
+			"dupl":     true,
+			"maligned": true,
+		}
+		return enableLinterConfigs(lcs, func(lc *LinterConfig) bool {
+			return !disabled[lc.Linter.Name()]
+		})
+	}
+
+	enabled := map[string]bool{
+		"govet":       true,
+		"errcheck":    true,
+		"staticcheck": true,
+		"unused":      true,
+		"gosimple":    true,
+		"gas":         true,
+		"structcheck": true,
+		"varcheck":    true,
+		"ineffassign": true,
+		"deadcode":    true,
+	}
+	return enableLinterConfigs(lcs, func(lc *LinterConfig) bool {
+		return enabled[lc.Linter.Name()]
+	})
 }
 
 func getAllSupportedLinters() []Linter {

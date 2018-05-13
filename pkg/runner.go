@@ -145,7 +145,8 @@ func (r *SimpleRunner) processIssues(ctx context.Context, issues []result.Issue)
 		newIssues, err := p.Process(issues)
 		elapsed := time.Since(startedAt)
 		if elapsed > 50*time.Millisecond {
-			logrus.Infof("Result processor %s took %s", p.Name(), elapsed)
+			logrus.Infof("Result processor %s took %s and transformed %d -> %d issues",
+				p.Name(), elapsed, len(issues), len(newIssues))
 		}
 		if err != nil {
 			logrus.Warnf("Can't process result by %s processor: %s", p.Name(), err)

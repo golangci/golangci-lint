@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"os"
+	"strings"
 
 	"github.com/golangci/golangci-lint/pkg/result"
 	"github.com/golangci/revgrep"
@@ -14,6 +16,7 @@ type Diff struct {
 	onlyNew       bool
 	fromRev       string
 	patchFilePath string
+	patch         string
 }
 
 var _ Processor = Diff{}
@@ -23,6 +26,7 @@ func NewDiff(onlyNew bool, fromRev, patchFilePath string) *Diff {
 		onlyNew:       onlyNew,
 		fromRev:       fromRev,
 		patchFilePath: patchFilePath,
+		patch:         os.Getenv("GOLANGCI_DIFF_PROCESSOR_PATCH"),
 	}
 }
 
@@ -31,7 +35,7 @@ func (p Diff) Name() string {
 }
 
 func (p Diff) Process(issues []result.Issue) ([]result.Issue, error) {
-	if !p.onlyNew && p.fromRev == "" && p.patchFilePath == "" { // no need to work
+	if !p.onlyNew && p.fromRev == "" && p.patchFilePath == "" && p.patch == "" { // no need to work
 		return issues, nil
 	}
 
@@ -42,7 +46,10 @@ func (p Diff) Process(issues []result.Issue) ([]result.Issue, error) {
 			return nil, fmt.Errorf("can't read from pathc file %s: %s", p.patchFilePath, err)
 		}
 		patchReader = bytes.NewReader(patch)
+	} else if p.patch != "" {
+		patchReader = strings.NewReader(p.patch)
 	}
+
 	c := revgrep.Checker{
 		Patch:        patchReader,
 		RevisionFrom: p.fromRev,
