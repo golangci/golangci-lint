@@ -228,6 +228,7 @@ func (e *Executor) runAnalysis(ctx context.Context, args []string) (chan result.
 	}
 	runner := pkg.SimpleRunner{
 		Processors: []processors.Processor{
+			processors.NewPathPrettifier(), // must be before diff processor at least
 			processors.NewExclude(excludeTotalPattern),
 			processors.NewCgo(),
 			processors.NewNolint(fset),
@@ -236,7 +237,6 @@ func (e *Executor) runAnalysis(ctx context.Context, args []string) (chan result.
 			processors.NewMaxPerFileFromLinter(),
 			processors.NewMaxSameIssues(e.cfg.Issues.MaxSameIssues),
 			processors.NewMaxFromLinter(e.cfg.Issues.MaxIssuesPerLinter),
-			processors.NewPathPrettifier(),
 		},
 	}
 
