@@ -1,5 +1,4 @@
 run:
-  verbose: true
   concurrency: 4
   deadline: 1m
   issues-exit-code: 1
@@ -44,6 +43,7 @@ linters:
   presets:
     - bugs
     - unused
+  fast: false
 
 issues:
   exclude:

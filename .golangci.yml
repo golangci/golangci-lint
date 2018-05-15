@@ -1,12 +1,8 @@
 run:
-  verbose: true
   deadline: 30s
   tests: true
 
 linters-settings:
-  errcheck:
-    check-type-assertions: true
-    check-blank: true
   govet:
     check-shadowing: true
   golint:

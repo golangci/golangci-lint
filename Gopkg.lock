@@ -12,6 +12,12 @@
   source = "github.com/golangci/gas"
 
 [[projects]]
+  name = "github.com/StackExchange/wmi"
+  packages = ["."]
+  revision = "5d049714c4a64225c3c79a7cf7d02f7fb5b96338"
+  version = "1.0.0"
+
+[[projects]]
   name = "github.com/davecgh/go-spew"
   packages = ["spew"]
   revision = "346938d642f2ec3594ed81d874461961cd0faa76"
@@ -28,6 +34,15 @@
   packages = ["."]
   revision = "c2828203cd70a50dcccfb2761f8b1f8ceef9a8e9"
   version = "v1.4.7"
+
+[[projects]]
+  name = "github.com/go-ole/go-ole"
+  packages = [
+    ".",
+    "oleutil"
+  ]
+  revision = "a41e3c4b706f6ae8dfbff342b06e40fa4d2d0506"
+  version = "v1.2.1"
 
 [[projects]]
   name = "github.com/gogo/protobuf"
@@ -76,7 +91,7 @@
     "unused",
     "version"
   ]
-  revision = "b5abc2a37fd3a93a3716b0bc4da42d47b90ecaab"
+  revision = "d26f272c11fdcbab5d498e7fb88587ac179f3235"
 
 [[projects]]
   branch = "master"
@@ -242,6 +257,15 @@
   version = "v1.0.0"
 
 [[projects]]
+  name = "github.com/shirou/gopsutil"
+  packages = [
+    "internal/common",
+    "mem"
+  ]
+  revision = "c95755e4bcd7a62bb8bd33f3a597a7c7f35e2cf3"
+  version = "v2.18.04"
+
+[[projects]]
   name = "github.com/sirupsen/logrus"
   packages = ["."]
   revision = "c155da19408a8799da419ed3eeb0cb5db0ad5dbc"
@@ -371,6 +395,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "cef0930b43e9ca27cd15aba3d76237889dda24ad02fc56d95ae098d83d9420b9"
+  inputs-digest = "04f4609b2c6a2c0929f3ec80a6ad7877b0c0d18a4980f80250eebc5f7b8567c0"
   solver-name = "gps-cdcl"
   solver-version = 1
