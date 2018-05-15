@@ -417,18 +417,32 @@ func (l *Linter) Lint(lprog *loader.Program, conf *loader.Config, ssaprog *ssa.P
 		jobs = append(jobs, j)
 	}
 	wg := &sync.WaitGroup{}
-	for _, j := range jobs {
+	crashesMap := sync.Map{}
+	for i, j := range jobs {
 		wg.Add(1)
-		go func(j *Job) {
+		go func(i int, j *Job) {
+			defer func() {
+				if err := recover(); err != nil {
+					crashesMap.Store(i, err)
+				}
+			}()
 			defer wg.Done()
 			fn := funcs[j.check]
 			if fn == nil {
 				return
 			}
 			fn(j)
-		}(j)
+		}(i, j)
 	}
 	wg.Wait()
+
+	for i := range jobs {
+		err, ok := crashesMap.Load(i)
+		if !ok {
+			continue
+		}
+		panic(err) // restore panic but to main goroutine to be properly catched
+	}
 
 	for _, j := range jobs {
 		for _, p := range j.problems {

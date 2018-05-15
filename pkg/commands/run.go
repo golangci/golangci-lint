@@ -89,6 +89,7 @@ func (e *Executor) initRun() {
 	runCmd.Flags().BoolVar(&lc.DisableAll, "disable-all", false, "Disable all linters")
 	runCmd.Flags().StringSliceVarP(&lc.Presets, "presets", "p", []string{},
 		fmt.Sprintf("Enable presets (%s) of linters. Run 'golangci-lint linters' to see them. This option implies option --disable-all", strings.Join(pkg.AllPresets(), "|")))
+	runCmd.Flags().BoolVar(&lc.Fast, "fast", false, "Run only fast linters from enabled linters set")
 
 	// Issues config
 	ic := &e.cfg.Issues
@@ -99,7 +100,7 @@ func (e *Executor) initRun() {
 	runCmd.Flags().IntVar(&ic.MaxIssuesPerLinter, "max-issues-per-linter", 50, "Maximum issues count per one linter. Set to 0 to disable")
 	runCmd.Flags().IntVar(&ic.MaxSameIssues, "max-same-issues", 3, "Maximum count of issues with the same text. Set to 0 to disable")
 
-	runCmd.Flags().BoolVarP(&ic.Diff, "new", "n", false, "Show only new issues: if there are unstaged changes or untracked files, only those changes are shown, else only changes in HEAD~ are shown")
+	runCmd.Flags().BoolVarP(&ic.Diff, "new", "n", false, "Show only new issues: if there are unstaged changes or untracked files, only those changes are analyzed, else only changes in HEAD~ are analyzed")
 	runCmd.Flags().StringVar(&ic.DiffFromRevision, "new-from-rev", "", "Show only new issues created after git revision `REV`")
 	runCmd.Flags().StringVar(&ic.DiffPatchFilePath, "new-from-patch", "", "Show only new issues created in git patch with file path `PATH`")
 
@@ -346,6 +347,10 @@ func (e *Executor) validateConfig() error {
 
 	if c.Run.CPUProfilePath != "" {
 		return errors.New("option run.cpuprofilepath in config isn't allowed")
+	}
+
+	if c.Run.IsVerbose {
+		return errors.New("can't set run.verbose option with config: only on command-line")
 	}
 
 	return nil

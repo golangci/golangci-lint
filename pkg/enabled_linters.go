@@ -223,7 +223,7 @@ func validateAllDisableEnableOptions(cfg *config.Linters) error {
 	}
 
 	if cfg.DisableAll {
-		if len(cfg.Enable) == 0 {
+		if len(cfg.Enable) == 0 && len(cfg.Presets) == 0 {
 			return fmt.Errorf("all linters were disabled, but no one linter was enabled: must enable at least one")
 		}
 
@@ -284,7 +284,7 @@ func GetAllLintersForPreset(p string) []Linter {
 	return ret
 }
 
-func getEnabledLintersSet(cfg *config.Config) map[string]Linter {
+func getEnabledLintersSet(cfg *config.Config) map[string]Linter { // nolint:gocyclo
 	lcfg := &cfg.Linters
 
 	resultLintersSet := map[string]Linter{}
@@ -311,6 +311,14 @@ func getEnabledLintersSet(cfg *config.Config) map[string]Linter {
 
 	for _, name := range lcfg.Disable {
 		delete(resultLintersSet, name)
+	}
+
+	if lcfg.Fast {
+		for name := range resultLintersSet {
+			if GetLinterConfig(name).DoesFullImport {
+				delete(resultLintersSet, name)
+			}
+		}
 	}
 
 	return resultLintersSet

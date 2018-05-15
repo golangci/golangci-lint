@@ -22,6 +22,6 @@ func (JSON) Print(issues chan result.Issue) (bool, error) {
 	if err != nil {
 		return false, err
 	}
-	fmt.Fprint(getOutWriter(), string(outputJSON))
+	fmt.Fprint(stdOut, string(outputJSON))
 	return len(allIssues) != 0, nil
 }

@@ -21,7 +21,8 @@ func (e *Executor) initLinters() {
 
 func printLinterConfigs(lcs []pkg.LinterConfig) {
 	for _, lc := range lcs {
-		fmt.Printf("%s: %s\n", color.YellowString(lc.Linter.Name()), lc.Linter.Desc())
+		fmt.Printf("%s: %s [fast: %t]\n", color.YellowString(lc.Linter.Name()),
+			lc.Linter.Desc(), !lc.DoesFullImport)
 	}
 }
 
