@@ -41,11 +41,23 @@ func (e *Executor) initRoot() {
 			if e.cfg.Run.CPUProfilePath != "" {
 				pprof.StopCPUProfile()
 			}
+			if e.cfg.Run.MemProfilePath != "" {
+				f, err := os.Create(e.cfg.Run.MemProfilePath)
+				if err != nil {
+					log.Fatal(err)
+				}
+				runtime.GC() // get up-to-date statistics
+				if err := pprof.WriteHeapProfile(f); err != nil {
+					log.Fatal("could not write memory profile: ", err)
+				}
+			}
+
 			os.Exit(e.exitCode)
 		},
 	}
 	rootCmd.PersistentFlags().BoolVarP(&e.cfg.Run.IsVerbose, "verbose", "v", false, "verbose output")
 	rootCmd.PersistentFlags().StringVar(&e.cfg.Run.CPUProfilePath, "cpu-profile-path", "", "Path to CPU profile output file")
+	rootCmd.PersistentFlags().StringVar(&e.cfg.Run.MemProfilePath, "mem-profile-path", "", "Path to memory profile output file")
 	rootCmd.PersistentFlags().IntVarP(&e.cfg.Run.Concurrency, "concurrency", "j", runtime.NumCPU(), "Concurrency")
 
 	e.rootCmd = rootCmd

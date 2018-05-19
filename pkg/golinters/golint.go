@@ -7,6 +7,7 @@ import (
 
 	"github.com/golang/lint"
 	"github.com/golangci/golangci-lint/pkg/result"
+	"github.com/sirupsen/logrus"
 )
 
 type Golint struct{}
@@ -21,13 +22,17 @@ func (Golint) Desc() string {
 
 func (g Golint) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, error) {
 	var issues []result.Issue
+	var lintErr error
 	for _, pkgFiles := range lintCtx.Paths.FilesGrouppedByDirs() {
 		i, err := g.lintFiles(lintCtx.Settings().Golint.MinConfidence, pkgFiles...)
 		if err != nil {
-			// TODO: skip and warn
-			return nil, fmt.Errorf("can't lint files %s: %s", lintCtx.Paths.Files, err)
+			lintErr = err
+			continue
 		}
 		issues = append(issues, i...)
+	}
+	if lintErr != nil {
+		logrus.Warnf("golint: %s", lintErr)
 	}
 
 	return issues, nil

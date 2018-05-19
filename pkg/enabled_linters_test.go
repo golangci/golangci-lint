@@ -15,6 +15,7 @@ import (
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/shirou/gopsutil/mem"
+	"github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -136,55 +137,44 @@ func getBenchFastLintersArgs() []string {
 	}
 }
 
-func runGometalinter(b *testing.B) {
-	args := []string{"--disable-all", "--deadline=30m"}
-	args = append(args, getBenchLintersArgs()...)
-	args = append(args,
-		"--enable=vet",
-		"--enable=vetshadow",
+func getGometalinterCommonArgs() []string {
+	return []string{
+		"--deadline=30m",
+		"--skip=testdata",
+		"--skip=builtin",
 		"--vendor",
 		"--cyclo-over=30",
 		"--dupl-threshold=150",
 		"--exclude", fmt.Sprintf("(%s)", strings.Join(config.DefaultExcludePatterns, "|")),
-		"./...",
-	)
+		"--disable-all",
+		"--enable=vet",
+		"--enable=vetshadow",
+	}
+}
+
+func runGometalinter(b *testing.B) {
+	args := []string{}
+	args = append(args, getGometalinterCommonArgs()...)
+	args = append(args, getBenchLintersArgs()...)
+	args = append(args, "./...")
 	_ = exec.Command("gometalinter", args...).Run()
 }
 
 func runGometalinterFast(b *testing.B) {
-	args := []string{"--disable-all", "--deadline=30m"}
+	args := []string{}
+	args = append(args, getGometalinterCommonArgs()...)
 	args = append(args, getBenchFastLintersArgs()...)
-	args = append(args,
-		"--enable=vet",
-		"--enable=vetshadow",
-		"--vendor",
-		"--cyclo-over=30",
-		"--dupl-threshold=150",
-		"--exclude", fmt.Sprintf("(%s)", strings.Join(config.DefaultExcludePatterns, "|")),
-		"./...",
-	)
+	args = append(args, "./...")
 	_ = exec.Command("gometalinter", args...).Run()
 }
 
-func runGometalinterNoMegacheck(b *testing.B) {
-	args := []string{"--disable-all", "--deadline=30m"}
-	args = append(args, getBenchLintersArgsNoMegacheck()...)
-	args = append(args,
-		"--enable=vet",
-		"--enable=vetshadow",
-		"--vendor",
-		"--cyclo-over=30",
-		"--dupl-threshold=150",
-		"--exclude", fmt.Sprintf("(%s)", strings.Join(config.DefaultExcludePatterns, "|")),
-		"./...",
-	)
-	_ = exec.Command("gometalinter", args...).Run()
+func getGolangciLintCommonArgs() []string {
+	return []string{"run", "--no-config", "--issues-exit-code=0", "--deadline=30m", "--disable-all", "--enable=govet"}
 }
 
 func runGolangciLint(b *testing.B) {
-	args := []string{"run", "--issues-exit-code=0", "--disable-all", "--deadline=30m", "--enable=govet"}
+	args := getGolangciLintCommonArgs()
 	args = append(args, getBenchLintersArgs()...)
-	b.Logf("golangci-lint %s", strings.Join(args, " "))
 	out, err := exec.Command("golangci-lint", args...).CombinedOutput()
 	if err != nil {
 		b.Fatalf("can't run golangci-lint: %s, %s", err, out)
@@ -192,18 +182,8 @@ func runGolangciLint(b *testing.B) {
 }
 
 func runGolangciLintFast(b *testing.B) {
-	args := []string{"run", "--issues-exit-code=0", "--disable-all", "--deadline=30m", "--enable=govet"}
+	args := getGolangciLintCommonArgs()
 	args = append(args, getBenchFastLintersArgs()...)
-	out, err := exec.Command("golangci-lint", args...).CombinedOutput()
-	if err != nil {
-		b.Fatalf("can't run golangci-lint: %s, %s", err, out)
-	}
-}
-
-func runGolangciLintNoMegacheck(b *testing.B) {
-	args := []string{"run", "--issues-exit-code=0", "--disable-all", "--deadline=30m", "--enable=govet"}
-	args = append(args, getBenchLintersArgsNoMegacheck()...)
-	b.Logf("golangci-lint %s", strings.Join(args, " "))
 	out, err := exec.Command("golangci-lint", args...).CombinedOutput()
 	if err != nil {
 		b.Fatalf("can't run golangci-lint: %s, %s", err, out)
@@ -276,7 +256,7 @@ func runBench(b *testing.B, run func(*testing.B), format string, args ...interfa
 	if peakUsedMemMB > startUsedMemMB {
 		linterPeakMemUsage = peakUsedMemMB - startUsedMemMB
 	}
-	b.Logf("%s: start used mem is %dMB, peak used mem is %dMB, linter peak mem usage is %dMB",
+	logrus.Warnf("%s: start used mem is %dMB, peak used mem is %dMB, linter peak mem usage is %dMB",
 		name, startUsedMemMB, peakUsedMemMB, linterPeakMemUsage)
 }
 
@@ -314,8 +294,5 @@ func BenchmarkWithGometalinter(b *testing.B) {
 
 		runBench(b, runGometalinter, "%s/gometalinter (%d lines of code)", bc.name, lc)
 		runBench(b, runGolangciLint, "%s/golangci-lint (%d lines of code)", bc.name, lc)
-
-		runBench(b, runGometalinterNoMegacheck, "%s/gometalinter wo megacheck (%d lines of code)", bc.name, lc)
-		runBench(b, runGolangciLintNoMegacheck, "%s/golangci-lint wo megacheck (%d lines of code)", bc.name, lc)
 	}
 }

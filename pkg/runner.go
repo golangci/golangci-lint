@@ -203,8 +203,6 @@ func setOutputToDevNull() (savedStdout, savedStderr *os.File) {
 }
 
 func (r SimpleRunner) Run(ctx context.Context, linters []Linter, lintCtx *golinters.Context) <-chan result.Issue {
-	defer timeutils.NewStopwatch("runner").Print()
-
 	lintResultsCh := r.runWorkers(ctx, lintCtx, linters)
 	processedLintResultsCh := r.processLintResults(ctx, lintResultsCh)
 	if ctx.Err() != nil {
