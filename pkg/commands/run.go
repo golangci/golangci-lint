@@ -56,6 +56,7 @@ func (e *Executor) initRun() {
 	runCmd.Flags().BoolVar(&rc.AnalyzeTests, "tests", false, "Analyze tests (*_test.go)")
 	runCmd.Flags().BoolVar(&rc.PrintResourcesUsage, "print-resources-usage", false, "Print avg and max memory usage of golangci-lint and total time")
 	runCmd.Flags().StringVarP(&rc.Config, "config", "c", "", "Read config from file path `PATH`")
+	runCmd.Flags().BoolVar(&rc.NoConfig, "no-config", false, "Don't read config")
 
 	// Linters settings config
 	lsc := &e.cfg.LintersSettings
@@ -315,7 +316,15 @@ func (e *Executor) parseConfig(cmd *cobra.Command) {
 	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 	viper.AutomaticEnv()
 
-	configFile := viper.GetString("config")
+	configFile := e.cfg.Run.Config
+	if e.cfg.Run.NoConfig && configFile != "" {
+		log.Fatal("can't combine option --config and --no-config")
+	}
+
+	if e.cfg.Run.NoConfig {
+		return
+	}
+
 	if configFile == "" {
 		viper.SetConfigName(".golangci")
 		viper.AddConfigPath("./")
@@ -323,6 +332,10 @@ func (e *Executor) parseConfig(cmd *cobra.Command) {
 		viper.SetConfigFile(configFile)
 	}
 
+	e.parseConfigImpl()
+}
+
+func (e *Executor) parseConfigImpl() {
 	commandLineConfig := *e.cfg // make copy
 
 	if err := viper.ReadInConfig(); err != nil {
@@ -349,6 +362,10 @@ func (e *Executor) validateConfig(commandLineConfig *config.Config) error {
 
 	if commandLineConfig.Run.CPUProfilePath == "" && c.Run.CPUProfilePath != "" {
 		return errors.New("option run.cpuprofilepath in config isn't allowed")
+	}
+
+	if commandLineConfig.Run.MemProfilePath == "" && c.Run.MemProfilePath != "" {
+		return errors.New("option run.memprofilepath in config isn't allowed")
 	}
 
 	if !commandLineConfig.Run.IsVerbose && c.Run.IsVerbose {

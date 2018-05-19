@@ -61,7 +61,11 @@ func (s *Stopwatch) Print() {
 }
 
 func (s *Stopwatch) PrintStages() {
-	logrus.Infof("%s %s", s.name, s.sprintStages())
+	var stagesDuration time.Duration
+	for _, s := range s.stages {
+		stagesDuration += s
+	}
+	logrus.Infof("%s took %s with %s", s.name, stagesDuration, s.sprintStages())
 }
 
 func (s *Stopwatch) TrackStage(name string, f func()) {

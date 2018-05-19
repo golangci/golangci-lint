@@ -41,10 +41,12 @@ var DefaultExcludePatterns = []string{
 type Run struct {
 	IsVerbose           bool `mapstructure:"verbose"`
 	CPUProfilePath      string
+	MemProfilePath      string
 	Concurrency         int
 	PrintResourcesUsage bool `mapstructure:"print-resources-usage"`
 
-	Config string
+	Config   string
+	NoConfig bool
 
 	Args []string
 
