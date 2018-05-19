@@ -58,7 +58,7 @@ func (p *Text) getFileLinesForIssue(i *result.Issue) (linesCache, error) {
 	return fc, nil
 }
 
-func (p *Text) Print(issues chan result.Issue) (bool, error) {
+func (p *Text) Print(issues <-chan result.Issue) (bool, error) {
 	var issuedLineExtractingDuration time.Duration
 	defer func() {
 		logrus.Infof("Extracting issued lines took %s", issuedLineExtractingDuration)
