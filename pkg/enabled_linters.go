@@ -38,6 +38,7 @@ type LinterConfig struct {
 	DoesFullImport   bool
 	NeedsSSARepr     bool
 	InPresets        []string
+	Speed            int // more value means faster execution of linter
 }
 
 func (lc LinterConfig) WithFullImport() LinterConfig {
@@ -53,6 +54,11 @@ func (lc LinterConfig) WithSSA() LinterConfig {
 
 func (lc LinterConfig) WithPresets(presets ...string) LinterConfig {
 	lc.InPresets = presets
+	return lc
+}
+
+func (lc LinterConfig) WithSpeed(speed int) LinterConfig {
+	lc.Speed = speed
 	return lc
 }
 
@@ -93,30 +99,31 @@ func enableLinterConfigs(lcs []LinterConfig, isEnabled func(lc *LinterConfig) bo
 
 func GetAllSupportedLinterConfigs() []LinterConfig {
 	lcs := []LinterConfig{
-		newLinterConfig(golinters.Govet{}).WithPresets(PresetBugs),
-		newLinterConfig(golinters.Errcheck{}).WithFullImport().WithPresets(PresetBugs),
-		newLinterConfig(golinters.Golint{}).WithPresets(PresetStyle),
+		newLinterConfig(golinters.Govet{}).WithPresets(PresetBugs).WithSpeed(4),
+		newLinterConfig(golinters.Errcheck{}).WithFullImport().WithPresets(PresetBugs).WithSpeed(10),
+		newLinterConfig(golinters.Golint{}).WithPresets(PresetStyle).WithSpeed(3),
 
-		newLinterConfig(golinters.Megacheck{StaticcheckEnabled: true}).WithSSA().WithPresets(PresetBugs),
-		newLinterConfig(golinters.Megacheck{UnusedEnabled: true}).WithSSA().WithPresets(PresetUnused),
-		newLinterConfig(golinters.Megacheck{GosimpleEnabled: true}).WithSSA().WithPresets(PresetStyle),
+		newLinterConfig(golinters.Megacheck{StaticcheckEnabled: true}).WithSSA().
+			WithPresets(PresetBugs).WithSpeed(2),
+		newLinterConfig(golinters.Megacheck{UnusedEnabled: true}).WithSSA().WithPresets(PresetUnused).WithSpeed(5),
+		newLinterConfig(golinters.Megacheck{GosimpleEnabled: true}).WithSSA().WithPresets(PresetStyle).WithSpeed(5),
 
-		newLinterConfig(golinters.Gas{}).WithFullImport().WithPresets(PresetBugs),
-		newLinterConfig(golinters.Structcheck{}).WithFullImport().WithPresets(PresetUnused),
-		newLinterConfig(golinters.Varcheck{}).WithFullImport().WithPresets(PresetUnused),
-		newLinterConfig(golinters.Interfacer{}).WithSSA().WithPresets(PresetStyle),
-		newLinterConfig(golinters.Unconvert{}).WithFullImport().WithPresets(PresetStyle),
-		newLinterConfig(golinters.Ineffassign{}).WithPresets(PresetUnused),
-		newLinterConfig(golinters.Dupl{}).WithPresets(PresetStyle),
-		newLinterConfig(golinters.Goconst{}).WithPresets(PresetStyle),
-		newLinterConfig(golinters.Deadcode{}).WithFullImport().WithPresets(PresetUnused),
-		newLinterConfig(golinters.Gocyclo{}).WithPresets(PresetComplexity),
+		newLinterConfig(golinters.Gas{}).WithFullImport().WithPresets(PresetBugs).WithSpeed(8),
+		newLinterConfig(golinters.Structcheck{}).WithFullImport().WithPresets(PresetUnused).WithSpeed(10),
+		newLinterConfig(golinters.Varcheck{}).WithFullImport().WithPresets(PresetUnused).WithSpeed(10),
+		newLinterConfig(golinters.Interfacer{}).WithSSA().WithPresets(PresetStyle).WithSpeed(6),
+		newLinterConfig(golinters.Unconvert{}).WithFullImport().WithPresets(PresetStyle).WithSpeed(10),
+		newLinterConfig(golinters.Ineffassign{}).WithPresets(PresetUnused).WithSpeed(9),
+		newLinterConfig(golinters.Dupl{}).WithPresets(PresetStyle).WithSpeed(7),
+		newLinterConfig(golinters.Goconst{}).WithPresets(PresetStyle).WithSpeed(9),
+		newLinterConfig(golinters.Deadcode{}).WithFullImport().WithPresets(PresetUnused).WithSpeed(10),
+		newLinterConfig(golinters.Gocyclo{}).WithPresets(PresetComplexity).WithSpeed(8),
 
-		newLinterConfig(golinters.Gofmt{}).WithPresets(PresetFormatting),
-		newLinterConfig(golinters.Gofmt{UseGoimports: true}).WithPresets(PresetFormatting),
-		newLinterConfig(golinters.Maligned{}).WithFullImport().WithPresets(PresetPerformance),
+		newLinterConfig(golinters.Gofmt{}).WithPresets(PresetFormatting).WithSpeed(7),
+		newLinterConfig(golinters.Gofmt{UseGoimports: true}).WithPresets(PresetFormatting).WithSpeed(5),
+		newLinterConfig(golinters.Maligned{}).WithFullImport().WithPresets(PresetPerformance).WithSpeed(10),
 		newLinterConfig(golinters.Megacheck{GosimpleEnabled: true, UnusedEnabled: true, StaticcheckEnabled: true}).
-			WithSSA().WithPresets(PresetStyle, PresetBugs, PresetUnused),
+			WithSSA().WithPresets(PresetStyle, PresetBugs, PresetUnused).WithSpeed(1),
 	}
 
 	if os.Getenv("GOLANGCI_COM_RUN") == "1" {

@@ -202,7 +202,7 @@ func buildLintCtx(ctx context.Context, linters []pkg.Linter, cfg *config.Config)
 	}, nil
 }
 
-func (e *Executor) runAnalysis(ctx context.Context, args []string) (chan result.Issue, error) {
+func (e *Executor) runAnalysis(ctx context.Context, args []string) (<-chan result.Issue, error) {
 	e.cfg.Run.Args = args
 
 	linters, err := pkg.GetEnabledLinters(e.cfg)
