@@ -18,6 +18,7 @@ import (
 	"go/types"
 	"path/filepath"
 	"runtime"
+	"runtime/debug"
 	"sort"
 	"strings"
 	"sync"
@@ -423,7 +424,8 @@ func (l *Linter) Lint(lprog *loader.Program, conf *loader.Config, ssaprog *ssa.P
 		go func(i int, j *Job) {
 			defer func() {
 				if err := recover(); err != nil {
-					crashesMap.Store(i, err)
+					perr := fmt.Errorf("panic: %s, stack: %s", err, debug.Stack())
+					crashesMap.Store(i, perr)
 				}
 			}()
 			defer wg.Done()

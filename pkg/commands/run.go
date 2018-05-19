@@ -323,6 +323,8 @@ func (e *Executor) parseConfig(cmd *cobra.Command) {
 		viper.SetConfigFile(configFile)
 	}
 
+	commandLineConfig := *e.cfg // make copy
+
 	if err := viper.ReadInConfig(); err != nil {
 		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
 			return
@@ -334,22 +336,22 @@ func (e *Executor) parseConfig(cmd *cobra.Command) {
 		log.Fatalf("Can't unmarshal config by viper: %s", err)
 	}
 
-	if err := e.validateConfig(); err != nil {
+	if err := e.validateConfig(&commandLineConfig); err != nil {
 		log.Fatal(err)
 	}
 }
 
-func (e *Executor) validateConfig() error {
+func (e *Executor) validateConfig(commandLineConfig *config.Config) error {
 	c := e.cfg
 	if len(c.Run.Args) != 0 {
-		return errors.New("option run.args in config aren't supported now")
+		return errors.New("option run.args in config isn't supported now")
 	}
 
-	if c.Run.CPUProfilePath != "" {
+	if commandLineConfig.Run.CPUProfilePath == "" && c.Run.CPUProfilePath != "" {
 		return errors.New("option run.cpuprofilepath in config isn't allowed")
 	}
 
-	if c.Run.IsVerbose {
+	if !commandLineConfig.Run.IsVerbose && c.Run.IsVerbose {
 		return errors.New("can't set run.verbose option with config: only on command-line")
 	}
 

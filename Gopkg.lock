@@ -91,7 +91,7 @@
     "unused",
     "version"
   ]
-  revision = "d26f272c11fdcbab5d498e7fb88587ac179f3235"
+  revision = "e37cd5dbe6dac91e427e242d7fb61cc92201c8bf"
 
 [[projects]]
   branch = "master"

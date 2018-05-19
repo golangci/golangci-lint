@@ -111,7 +111,7 @@ func (r SimpleRunner) runGo(ctx context.Context, linters []Linter, lintCtx *goli
 	finishedN := 0
 	for res := range lintResultsCh {
 		if res.err != nil {
-			logrus.Warnf("Can't run linter %s: %s", res.linter.Name(), res.err)
+			logrus.Infof("Can't run linter %s: %s", res.linter.Name(), res.err)
 			continue
 		}
 
