@@ -1,18 +1,17 @@
 # GolangCI-Lint
 [![Build Status](https://travis-ci.com/golangci/golangci-lint.svg?branch=master)](https://travis-ci.com/golangci/golangci-lint)
 
-GolangCI-Lint is a linters aggregator. It is fast, easy to integrate and use, has nice output and has minimum count of false positives.
+GolangCI-Lint is a linters aggregator. It is [fast](#performance) (2-6 times faster than gometalinter), [easy to integrate and use](#issues-options), has [nice output](quick-start) and has minimum count of false positives.
 
 Sponsored by [GolangCI.com](https://golangci.com): SaaS service for running linters on Github pull requests. Free for Open Source.
 
 <a href="https://golangci.com/"><img src="docs/go.png" width="250px"></a>
 
-* [GolangCI-Lint](#golangci-lint)
 * [Install](#install)
 * [Quick Start](#quick-start)
 * [Comparison](#comparison)
-	 * [gometalinter](#gometalinter)
-	 * [Run Needed Linters Manually](#run-needed-linters-manually)
+	 * [golangci-lint vs gometalinter](#golangci-lint-vs-gometalinter)
+	 * [golangci-lint vs Run Needed Linters Manually](#golangci-lint-vs-run-needed-linters-manually)
 * [Performance](#performance)
 	 * [Default Mode](#default-mode)
 	 * [Fast Mode](#fast-mode)
@@ -93,9 +92,9 @@ $ golangci-lint run --disable-all -E errcheck
 ```
 
 # Comparison
-## `gometalinter`
+## `golangci-lint` vs `gometalinter`
 GolangCI-Lint was created to fix next issues with `gometalinter`:
-1. Slow work: `gometalinter` usually works for minutes in average projects. GolangCI-Lint works [2-6x times faster](#benchmarks) by [reusing work](#internals).
+1. Slow work: `gometalinter` usually works for minutes in average projects. GolangCI-Lint works [2-6x times faster](#performance) by [reusing work](#internals).
 2. Huge memory consumption: parallel linters don't share the same program representation and can eat `n` times more memory (`n` - concurrency). GolangCI-Lint fixes it by sharing representation.
 3. Can't set honest concurrency: if you set it to `n` it can take `n+x` threads because of forced threads in specific linters. `gometalinter` can't do anything about it, because it runs linters as black-boxes in forked processes. In GolangCI-Lint we run all linters in one process and fully control them. Configured concurrency will be honest.
 This issue is important because often you'd like to set concurrency to CPUs count minus one to save one CPU for example for IDE. It concurrency isn't correct you will have troubles using IDE while analyzing code.
@@ -105,12 +104,14 @@ This issue is important because often you'd like to set concurrency to CPUs coun
 7. Integration to large codebases. You can use `revgrep`, but it's yet another utility to install. With `golangci-lint` it's much easier: `revgrep` is already built into `golangci-lint` and you use it with one option (`-n, --new` or `--new-from-rev`).
 8. Yaml or toml config. JSON isn't convenient for configuration files.
 
-## Run Needed Linters Manually
-1. It will be slower because `golangci-lint` shares 50-90% of linters work.
+## `golangci-lint` vs Run Needed Linters Manually
+1. It will be slower because `golangci-lint` shares 50-80% of linters work.
 2. It will have fewer control and more false-positives: some linters can't be properly configured without hacks.
 3. It will take more time because of different usages and need of tracking of version of `n` linters.
 
 # Performance
+Benchmarks were executed on MacBook Pro (Retina, 13-inch, Late 2013), 2,4 GHz Intel Core i5, 8 GB 1600 MHz DDR3. It has 4 cores and concurrency for linters was default: number of cores. Benchmark runs and measures timings automatically, it's code is [here](https://github.com/golangci/golangci-lint/blob/master/pkg/enabled_linters_test.go) (`BenchmarkWithGometalinter`).
+
 ## Default Mode
 We compare golangci-lint and gometalinter in default mode, but explicitly specify all linters to enable because of small differences in default configuration.
 ```bash
@@ -128,13 +129,13 @@ $ gometalinter --deadline=30m --vendor --cyclo-over=30 --dupl-threshold=150 \
 
 | Repository | GolangCI Lint Time | GolangCI Is Faster In |
 | ---------- | ------------------ | --------------------- |
-| self repo, 4.4 kLoC | 9.1s | 6.6x |
-| gometalinter repo, 3.8 kLoC | 5.1s | 4.9x |
-| hugo, 69 kLoC | 12.4s | 5.8x |
-| go source, 1300 kLoC | 3m15s | 1.8x |
+| self repo, 4.4 kLoC         | 9.1s  | **6.6x** |
+| gometalinter repo, 3.8 kLoC | 5.1s  | **4.9x** |
+| hugo, 69 kLoC               | 12.4s | **5.8x** |
+| go source, 1300 kLoC        | 3m15s | **1.8x** |
 
 On average golangci-lint is 4.8 times faster than gometalinter. Maximum difference is in
-self repo: 6.6 times faster, minimum difference is in go source code repo: 1.8 faster.
+self repo: 6.6 times faster, minimum difference is in go source code repo: 1.8 times faster.
 
 ## Fast Mode
 We compare golangci-lint and gometalinter in fast mode (`--fast`), but don't use option `--fast` because it differs a little.
@@ -150,13 +151,13 @@ $ gometalinter --deadline=30m --vendor --cyclo-over=30 --dupl-threshold=150 \
 
 | Repository | GolangCI Lint Time | GolangCI Is Faster In |
 | ---------- | ------------------ | --------------------- |
-| self repo, 4.4 kLoC | 0.4s | 3.1x |
-| gometalinter repo, 3.8 kLoC | 0.2s | 1.9x |
-| hugo, 69 kLoC | 1.6s | 4x |
-| go source, 1300 kLoC | 35.4s | 1.17x |
+| self repo, 4.4 kLoC         | 0.4s  | **3.1x**  |
+| gometalinter repo, 3.8 kLoC | 0.2s  | **1.9x**  |
+| hugo, 69 kLoC               | 1.6s  | **4x**    |
+| go source, 1300 kLoC        | 35.4s | **1.2x**  |
 
 On average golangci-lint is 2.5 times faster than gometalinter. Maximum difference is in
-self repo: 3.1 times faster, minimum difference is in go source code repo: 17% faster.
+self repo: 3.1 times faster, minimum difference is in go source code repo: 20% faster.
 
 
 # Supported Linters
@@ -295,7 +296,7 @@ Configuration options inside file are identical to command-line options:
 - [.golangci.yml](https://github.com/golangci/golangci-lint/blob/master/.golangci.yml) of this repo: we enable more linters than by default and make their settings more strict.
 
 # False Positives
-False positives are inevitable, but we did our best to reduce their count. If false postive occured you have next choices:
+False positives are inevitable, but we did our best to reduce their count. For example, we have a enabled by default set of [exclude patterns](#issues-options). If false postive occured you have next choices:
 1. Exclude issue text using command-line option `-e` or config option `issues.exclude`. It's helpful when you decided to ignore all issues of this type.
 2. Exclude this one issue by using special comment `// nolint[:linter1,linter2,...]` on issued line.
 Comment `// nolint` disables all issues reporting on this line. Comment e.g. `// nolint:govet` disables only govet issues for this line.
