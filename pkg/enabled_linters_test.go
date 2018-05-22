@@ -14,7 +14,8 @@ import (
 	"time"
 
 	"github.com/golangci/golangci-lint/pkg/config"
-	"github.com/shirou/gopsutil/mem"
+	gops "github.com/mitchellh/go-ps"
+	"github.com/shirou/gopsutil/process"
 	"github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
 )
@@ -125,18 +126,6 @@ func getBenchLintersArgs() []string {
 	}, getBenchLintersArgsNoMegacheck()...)
 }
 
-func getBenchFastLintersArgs() []string {
-	return []string{
-		"--enable=dupl",
-		"--enable=goconst",
-		"--enable=gocyclo",
-		"--enable=golint",
-		"--enable=ineffassign",
-		// don't add gas because gometalinter uses old, fast and not working for me version of it.
-		// golangci-lint uses new and slower version of it.
-	}
-}
-
 func getGometalinterCommonArgs() []string {
 	return []string{
 		"--deadline=30m",
@@ -152,19 +141,25 @@ func getGometalinterCommonArgs() []string {
 	}
 }
 
+func printCommand(cmd string, args ...string) {
+	if os.Getenv("PRINT_CMD") != "1" {
+		return
+	}
+	quotedArgs := []string{}
+	for _, a := range args {
+		quotedArgs = append(quotedArgs, strconv.Quote(a))
+	}
+
+	logrus.Warnf("%s %s", cmd, strings.Join(quotedArgs, " "))
+}
+
 func runGometalinter(b *testing.B) {
 	args := []string{}
 	args = append(args, getGometalinterCommonArgs()...)
 	args = append(args, getBenchLintersArgs()...)
 	args = append(args, "./...")
-	_ = exec.Command("gometalinter", args...).Run()
-}
 
-func runGometalinterFast(b *testing.B) {
-	args := []string{}
-	args = append(args, getGometalinterCommonArgs()...)
-	args = append(args, getBenchFastLintersArgs()...)
-	args = append(args, "./...")
+	printCommand("gometalinter", args...)
 	_ = exec.Command("gometalinter", args...).Run()
 }
 
@@ -175,15 +170,7 @@ func getGolangciLintCommonArgs() []string {
 func runGolangciLint(b *testing.B) {
 	args := getGolangciLintCommonArgs()
 	args = append(args, getBenchLintersArgs()...)
-	out, err := exec.Command("golangci-lint", args...).CombinedOutput()
-	if err != nil {
-		b.Fatalf("can't run golangci-lint: %s, %s", err, out)
-	}
-}
-
-func runGolangciLintFast(b *testing.B) {
-	args := getGolangciLintCommonArgs()
-	args = append(args, getBenchFastLintersArgs()...)
+	printCommand("golangci-lint", args...)
 	out, err := exec.Command("golangci-lint", args...).CombinedOutput()
 	if err != nil {
 		b.Fatalf("can't run golangci-lint: %s, %s", err, out)
@@ -206,20 +193,53 @@ func getGoLinesTotalCount(b *testing.B) int {
 	return n
 }
 
-func getUsedMemoryMb(b *testing.B) int {
-	v, err := mem.VirtualMemory()
+func getLinterMemoryMB(b *testing.B, progName string) (int, error) {
+	processes, err := gops.Processes()
 	if err != nil {
-		b.Fatalf("can't get usedmemory: %s", err)
+		b.Fatalf("Can't get processes: %s", err)
 	}
 
-	return int(v.Used / 1024 / 1024)
+	var progPID int
+	for _, p := range processes {
+		if p.Executable() == progName {
+			progPID = p.Pid()
+			break
+		}
+	}
+	if progPID == 0 {
+		return 0, fmt.Errorf("no process")
+	}
+
+	allProgPIDs := []int{progPID}
+	for _, p := range processes {
+		if p.PPid() == progPID {
+			allProgPIDs = append(allProgPIDs, p.Pid())
+		}
+	}
+
+	var totalProgMemBytes uint64
+	for _, pid := range allProgPIDs {
+		p, err := process.NewProcess(int32(pid))
+		if err != nil {
+			continue // subprocess could die
+		}
+
+		mi, err := p.MemoryInfo()
+		if err != nil {
+			continue
+		}
+
+		totalProgMemBytes += mi.RSS
+	}
+
+	return int(totalProgMemBytes / 1024 / 1024), nil
 }
 
-func trackPeakMemoryUsage(b *testing.B, doneCh chan struct{}) chan int {
+func trackPeakMemoryUsage(b *testing.B, doneCh <-chan struct{}, progName string) chan int {
 	resCh := make(chan int)
 	go func() {
 		var peakUsedMemMB int
-		t := time.NewTicker(time.Millisecond * 50)
+		t := time.NewTicker(time.Millisecond * 5)
 		defer t.Stop()
 
 		for {
@@ -231,7 +251,10 @@ func trackPeakMemoryUsage(b *testing.B, doneCh chan struct{}) chan int {
 			case <-t.C:
 			}
 
-			m := getUsedMemoryMb(b)
+			m, err := getLinterMemoryMB(b, progName)
+			if err != nil {
+				continue
+			}
 			if m > peakUsedMemMB {
 				peakUsedMemMB = m
 			}
@@ -240,24 +263,38 @@ func trackPeakMemoryUsage(b *testing.B, doneCh chan struct{}) chan int {
 	return resCh
 }
 
-func runBench(b *testing.B, run func(*testing.B), format string, args ...interface{}) {
-	startUsedMemMB := getUsedMemoryMb(b)
-	doneCh := make(chan struct{})
-	peakMemCh := trackPeakMemoryUsage(b, doneCh)
-	name := fmt.Sprintf(format, args...)
-	b.Run(name, func(b *testing.B) {
-		for i := 0; i < b.N; i++ {
-			run(b)
-		}
-	})
-	close(doneCh)
-	peakUsedMemMB := <-peakMemCh
-	var linterPeakMemUsage int
-	if peakUsedMemMB > startUsedMemMB {
-		linterPeakMemUsage = peakUsedMemMB - startUsedMemMB
+type runResult struct {
+	peakMemMB int
+	duration  time.Duration
+}
+
+func compare(b *testing.B, gometalinterRun, golangciLintRun func(*testing.B), repoName, mode string, kLOC int) { // nolint
+	gometalinterRes := runOne(b, gometalinterRun, "gometalinter")
+	golangciLintRes := runOne(b, golangciLintRun, "golangci-lint")
+
+	if mode != "" {
+		mode = " " + mode
 	}
-	logrus.Warnf("%s: start used mem is %dMB, peak used mem is %dMB, linter peak mem usage is %dMB",
-		name, startUsedMemMB, peakUsedMemMB, linterPeakMemUsage)
+	logrus.Warnf("%s (%d kLoC): golangci-lint%s: time: %s, %.1f times faster; memory: %dMB, %.1f times less",
+		repoName, kLOC, mode,
+		golangciLintRes.duration, gometalinterRes.duration.Seconds()/golangciLintRes.duration.Seconds(),
+		golangciLintRes.peakMemMB, float64(gometalinterRes.peakMemMB)/float64(golangciLintRes.peakMemMB),
+	)
+}
+
+func runOne(b *testing.B, run func(*testing.B), progName string) *runResult {
+	doneCh := make(chan struct{})
+	peakMemCh := trackPeakMemoryUsage(b, doneCh, progName)
+	startedAt := time.Now()
+	run(b)
+	duration := time.Since(startedAt)
+	close(doneCh)
+
+	peakUsedMemMB := <-peakMemCh
+	return &runResult{
+		peakMemMB: peakUsedMemMB,
+		duration:  duration,
+	}
 }
 
 func BenchmarkWithGometalinter(b *testing.B) {
@@ -281,6 +318,22 @@ func BenchmarkWithGometalinter(b *testing.B) {
 			prepare: prepareGithubProject("gohugoio", "hugo"),
 		},
 		{
+			name:    "go-ethereum",
+			prepare: prepareGithubProject("ethereum", "go-ethereum"),
+		},
+		{
+			name:    "beego",
+			prepare: prepareGithubProject("astaxie", "beego"),
+		},
+		{
+			name:    "terraform",
+			prepare: prepareGithubProject("hashicorp", "terraform"),
+		},
+		{
+			name:    "consul",
+			prepare: prepareGithubProject("hashicorp", "consul"),
+		},
+		{
 			name:    "go source code",
 			prepare: prepareGoSource,
 		},
@@ -289,10 +342,6 @@ func BenchmarkWithGometalinter(b *testing.B) {
 		bc.prepare(b)
 		lc := getGoLinesTotalCount(b)
 
-		runBench(b, runGometalinterFast, "%s/gometalinter --fast (%d lines of code)", bc.name, lc)
-		runBench(b, runGolangciLintFast, "%s/golangci-lint fast (%d lines of code)", bc.name, lc)
-
-		runBench(b, runGometalinter, "%s/gometalinter (%d lines of code)", bc.name, lc)
-		runBench(b, runGolangciLint, "%s/golangci-lint (%d lines of code)", bc.name, lc)
+		compare(b, runGometalinter, runGolangciLint, bc.name, "", lc/1000)
 	}
 }

@@ -73,3 +73,7 @@
 [[constraint]]
   name = "github.com/spf13/viper"
   version = "1.0.2"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/mitchellh/go-ps"

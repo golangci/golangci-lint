@@ -1,7 +1,7 @@
 # GolangCI-Lint
 [![Build Status](https://travis-ci.com/golangci/golangci-lint.svg?branch=master)](https://travis-ci.com/golangci/golangci-lint)
 
-GolangCI-Lint is a linters aggregator. It is [fast](#performance) (2-6 times faster than gometalinter), [easy to integrate and use](#issues-options), has [nice output](quick-start) and has minimum count of false positives.
+GolangCI-Lint is a linters aggregator. It is [fast](#performance) (2-7 times faster than gometalinter), [easy to integrate and use](#issues-options), has [nice output](quick-start) and has minimum count of false positives.
 
 Sponsored by [GolangCI.com](https://golangci.com): SaaS service for running linters on Github pull requests. Free for Open Source.
 
@@ -94,7 +94,7 @@ $ golangci-lint run --disable-all -E errcheck
 # Comparison
 ## `golangci-lint` vs `gometalinter`
 GolangCI-Lint was created to fix next issues with `gometalinter`:
-1. Slow work: `gometalinter` usually works for minutes in average projects. GolangCI-Lint works [2-6x times faster](#performance) by [reusing work](#internals).
+1. Slow work: `gometalinter` usually works for minutes in average projects. GolangCI-Lint works [2-7x times faster](#performance) by [reusing work](#internals).
 2. Huge memory consumption: parallel linters don't share the same program representation and can eat `n` times more memory (`n` - concurrency). GolangCI-Lint fixes it by sharing representation.
 3. Can't set honest concurrency: if you set it to `n` it can take `n+x` threads because of forced threads in specific linters. `gometalinter` can't do anything about it, because it runs linters as black-boxes in forked processes. In GolangCI-Lint we run all linters in one process and fully control them. Configured concurrency will be honest.
 This issue is important because often you'd like to set concurrency to CPUs count minus one to save one CPU for example for IDE. It concurrency isn't correct you will have troubles using IDE while analyzing code.
@@ -112,7 +112,9 @@ This issue is important because often you'd like to set concurrency to CPUs coun
 # Performance
 Benchmarks were executed on MacBook Pro (Retina, 13-inch, Late 2013), 2,4 GHz Intel Core i5, 8 GB 1600 MHz DDR3. It has 4 cores and concurrency for linters was default: number of cores. Benchmark runs and measures timings automatically, it's code is [here](https://github.com/golangci/golangci-lint/blob/master/pkg/enabled_linters_test.go) (`BenchmarkWithGometalinter`).
 
-## Default Mode
+We measure peak memory usage (RSS) by measurement of processes RSS every 5 ms.
+
+## Comparison with gometalinter
 We compare golangci-lint and gometalinter in default mode, but explicitly specify all linters to enable because of small differences in default configuration.
 ```bash
 $ golangci-lint run --no-config --issues-exit-code=0 --deadline=30m \
@@ -127,38 +129,20 @@ $ gometalinter --deadline=30m --vendor --cyclo-over=30 --dupl-threshold=150 \
 	./...
 ```
 
-| Repository | GolangCI Lint Time | GolangCI Is Faster In |
-| ---------- | ------------------ | --------------------- |
-| self repo, 4.4 kLoC         | 9.1s  | **6.6x** |
-| gometalinter repo, 3.8 kLoC | 5.1s  | **4.9x** |
-| hugo, 69 kLoC               | 12.4s | **5.8x** |
-| go source, 1300 kLoC        | 3m15s | **1.8x** |
+| Repository | GolangCI Time | GolangCI Is Faster than Gometalinter | GolangCI Memory | GolangCI eats less memory than Gometalinter |
+| ---------- | ------------- | ------------------------------------ | --------------- | ------------------------------------------- |
+| gometalinter repo, 4 kLoC   | 6s    | **6.4x** | 0.7GB | 1.5x |
+| self repo, 4 kLoC           | 12s   | **7.5x** | 1.2GB | 1.7x |
+| beego, 50 kLoC              | 10s   | **4.2x** | 1.4GB | 1.1x |
+| hugo, 70 kLoC               | 15s   | **6.1x** | 1.6GB | 1.8x |
+| consul, 127 kLoC            | 58s   | **4x**   | 2.7GB | 1.7x |
+| terraform, 190 kLoC         | 2m13s | **1.6x** | 4.8GB | 1x   |
+| go-ethereum, 250 kLoC       | 33s   | **5x**   | 3.6GB | 1x   |
+| go source, 1300 kLoC        | 2m45s | **2x**   | 4.7GB | 1x   |
 
-On average golangci-lint is 4.8 times faster than gometalinter. Maximum difference is in
-self repo: 6.6 times faster, minimum difference is in go source code repo: 1.8 times faster.
 
-## Fast Mode
-We compare golangci-lint and gometalinter in fast mode (`--fast`), but don't use option `--fast` because it differs a little.
-Instead we configure common linters from this option.
-```bash
-$ golangci-lint run --no-config --issues-exit-code=0 --deadline=30m \
-	--disable-all --enable=govet --enable=dupl --enable=goconst --enable=gocyclo --enable=golint --enable=ineffassign
-$ gometalinter --deadline=30m --vendor --cyclo-over=30 --dupl-threshold=150 \
-	--exclude=<defaul golangci-lint excludes> --skip=testdata --skip=builtin \
-	--disable-all --enable=vet --enable=vetshadow -enable=dupl --enable=goconst --enable=gocyclo --enable=golint --enable=ineffassign \
-	./...
-```
-
-| Repository | GolangCI Lint Time | GolangCI Is Faster In |
-| ---------- | ------------------ | --------------------- |
-| self repo, 4.4 kLoC         | 0.4s  | **3.1x**  |
-| gometalinter repo, 3.8 kLoC | 0.2s  | **1.9x**  |
-| hugo, 69 kLoC               | 1.6s  | **4x**    |
-| go source, 1300 kLoC        | 35.4s | **1.2x**  |
-
-On average golangci-lint is 2.5 times faster than gometalinter. Maximum difference is in
-self repo: 3.1 times faster, minimum difference is in go source code repo: 20% faster.
-
+**On average golangci-lint is 4.6 times faster** than gometalinter. Maximum difference is in
+self repo: **7.5 times faster**, minimum difference is in terraform source code repo: 1.8 times faster.
 
 # Supported Linters
 To see a list of supported linters and which linters are enabled/disabled by default execute command
