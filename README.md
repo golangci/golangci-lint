@@ -366,5 +366,35 @@ nolint comment, diff, regexps; prettify paths etc.
 We use `cobra` for command-line action.
 
 # Thanks
+Thanks to [alecthomas/gometalinter](https://github.com/alecthomas/gometalinter) for inspiration and amazing work.
+Thanks to developers and authors of used linters:
+- [golang/vet](https://golang.org/cmd/vet/)
+- [kisielk/errcheck](https://github.com/kisielk/errcheck)
+- [staticcheck](https://staticcheck.io/)
+- [dominikh/go-tools/unused](https://github.com/dominikh/go-tools/tree/master/cmd/unused)
+- [dominikh/go-tools/gosimple](https://github.com/dominikh/go-tools/tree/master/cmd/gosimple)
+- [GoASTScanner/gas](https://github.com/GoASTScanner/gas)
+- [opennota/check](https://github.com/opennota/check)
+- [gordonklaus/ineffassign](https://github.com/gordonklaus/ineffassign)
+- [remyoudompheng/go-misc/deadcode](https://github.com/remyoudompheng/go-misc/tree/master/deadcode)
+- [golang/lint](https://github.com/golang/lint)
+- [mvdan/interfacer](https://github.com/mvdan/interfacer)
+- [mdempsky/unconvert](https://github.com/mdempsky/unconvert)
+- [mibk/dupl](https://github.com/mibk/dupl)
+- [jgautheron/goconst](https://github.com/jgautheron/goconst)
+- [alecthomas/gocyclo](https://github.com/alecthomas/gocyclo)
+- [golang/gofmt](https://golang.org/cmd/gofmt/)
+- [golang/x/tools/goimports](https://godoc.org/golang.org/x/tools/cmd/goimports)
+- [mdempsky/maligned](https://github.com/mdempsky/maligned)
+- [dominikh/go-tools/megacheck](https://github.com/dominikh/go-tools/tree/master/cmd/megacheck)
 
 # Future Plans
+1. Fully integrate all used linters: make common interface and reuse 100% of what can be reused: AST traversal, packages preparation etc
+2. Make it easy to write own linter/checker: it should take minimum code, have perfect documentation, debugging and testing tooling.
+3. Speedup packages loading (dig into [loader](golang.org/x/tools/go/loader)): on-disk cache and existing code profiling-optimizing.
+4. Analyze (don't only filter) only new code: analyze only changed files and dependencies, make incremental analysis, caches.
+5. Smart new issues detector: don't print existing issues on changed lines.
+6. Integration with Text Editors. On-the-fly code analysis for text editors: it should be super-fast.
+7. Minimize false-positives by fixing linters and improving testing tooling.
+8. Automatic issues fixing (code rewrite, refactoring) where it's possible.
+9. Documentation for every issue type.
