@@ -1,7 +1,7 @@
 # GolangCI-Lint
 [![Build Status](https://travis-ci.com/golangci/golangci-lint.svg?branch=master)](https://travis-ci.com/golangci/golangci-lint)
 
-GolangCI-Lint is a linters aggregator. It is [fast](#performance) (2-7 times faster than gometalinter), [easy to integrate and use](#issues-options), has [nice output](#quick-start) and has minimum count of false positives.
+GolangCI-Lint is a linters aggregator. It's fast (on average [5 times faster]((#performance) than gometalinter), [easy to integrate and use](#issues-options), has [nice output](#quick-start) and has minimum number of false positives.
 
 Sponsored by [GolangCI.com](https://golangci.com): SaaS service for running linters on Github pull requests. Free for Open Source.
 
@@ -36,7 +36,7 @@ go get -u gopkg.in/golangci/golangci-lint.v1/cmd/golangci-lint
 Example of output:
 ![Screenshot of sample output](docs/run_screenshot.png)
 
-Short 2 min video demo.
+Short 2 min video demo of analyzing [beego](https://github.com/astaxie/beego).
 [![asciicast](https://asciinema.org/a/183318.png)](https://asciinema.org/a/183318)
 
 # Quick Start
@@ -99,13 +99,13 @@ $ golangci-lint run --disable-all -E errcheck
 GolangCI-Lint was created to fix next issues with `gometalinter`:
 1. Slow work: `gometalinter` usually works for minutes in average projects. GolangCI-Lint works [2-7x times faster](#performance) by [reusing work](#internals).
 2. Huge memory consumption: parallel linters don't share the same program representation and can eat `n` times more memory (`n` - concurrency). GolangCI-Lint fixes it by sharing representation.
-3. Can't set honest concurrency: if you set it to `n` it can take `n+x` threads because of forced threads in specific linters. `gometalinter` can't do anything about it, because it runs linters as black-boxes in forked processes. In GolangCI-Lint we run all linters in one process and fully control them. Configured concurrency will be honest.
-This issue is important because often you'd like to set concurrency to CPUs count minus one to save one CPU for example for IDE. If concurrency isn't correct you will have troubles using IDE while analyzing code.
+3. Can't set honest concurrency: if you set it to `n` it can take up to `n*n` threads because of forced threads in specific linters. `gometalinter` can't do anything about it, because it runs linters as black-boxes in forked processes. In GolangCI-Lint we run all linters in one process and fully control them. Configured concurrency will be honest.
+This issue is important because often you'd like to set concurrency to CPUs count minus one to not freeze your PC and be able to work on it while analyzing code.
 4. Lack of nice output. We like how compilers `gcc` and `clang` format their warnings: using colors, printing of warned line and showing position in line.
 5. Too many issues. GolangCI-Lint cuts a lot of issues by using default exclude list of common false-positives. Also it has enabled by default smart issues processing: merge multiple issues for one line, merge issues with the same text or from the same linter. All of these smart processors can be configured by user.
-6. Installation. With `gometalinter` you need to run linters installation step. It's easy to forget this step and have stale linters.
-7. Integration to large codebases. You can use `revgrep`, but it's yet another utility to install. With `golangci-lint` it's much easier: `revgrep` is already built into `golangci-lint` and you use it with one option (`-n, --new` or `--new-from-rev`).
-8. Yaml or toml config. JSON isn't convenient for configuration files.
+6. Integration to large codebases. Good way to start using linters in large project is not to fix all hundreds on existing issues, but setup CI and fix only issues in new commits. You can use `revgrep` for it, but it's yet another utility to install and configure. With `golangci-lint` it's much easier: `revgrep` is already built into `golangci-lint` and you can use it with one option (`-n, --new` or `--new-from-rev`).
+7. Installation. With `gometalinter` you need to run linters installation step. It's easy to forget this step and have stale linters. It also complicates CI setup.
+8. Yaml or toml config. Gometalinter's JSON isn't convenient for configuration files.
 
 ## `golangci-lint` vs Run Needed Linters Manually
 1. It will be much slower because `golangci-lint` runs all linters in parallel and shares 50-80% of linters work.
@@ -316,12 +316,12 @@ issues:
 ```
 
 # False Positives
-False positives are inevitable, but we did our best to reduce their count. For example, we have a enabled by default set of [exclude patterns](#issues-options). If false postive occured you have next choices:
-1. Exclude issue text using command-line option `-e` or config option `issues.exclude`. It's helpful when you decided to ignore all issues of this type.
+False positives are inevitable, but we did our best to reduce their count. For example, we have an enabled by default set of [exclude patterns](#issues-options). If false postive occured you have next choices:
+1. Exclude issue by text using command-line option `-e` or config option `issues.exclude`. It's helpful when you decided to ignore all issues of this type.
 2. Exclude this one issue by using special comment `// nolint[:linter1,linter2,...]` on issued line.
 Comment `// nolint` disables all issues reporting on this line. Comment e.g. `// nolint:govet` disables only govet issues for this line.
 
-Please create [GitHub Issues here](https://github.com/golangci/golangci-lint/issues/new) about found false positives. We will add it to default exclude list if it's common or we will even fix underlying linter.
+Please create [GitHub Issues here](https://github.com/golangci/golangci-lint/issues/new) about found false positives. We will add it to default exclude list if it's common or we will fix underlying linter.
 
 # Internals
 Key difference with gometalinter is that golangci-lint shares work between specific linters (golint, govet, ...).
@@ -360,7 +360,7 @@ A: You have 2 choices:
 **Q: `golangci-lint` doesn't work**
 1. Update it: `go get -u gopkg.in/golangci/golangci-lint.v1/cmd/golangci-lint`
 2. Run it with `-v` option and check output.
-3. If it doesn't help create [GitHub issue](https://github.com/golangci/golangci-lint/issues/new).
+3. If it doesn't help create [GitHub issue](https://github.com/golangci/golangci-lint/issues/new) with output.
 
 # Thanks
 Thanks to [alecthomas/gometalinter](https://github.com/alecthomas/gometalinter) for inspiration and amazing work.
@@ -386,7 +386,7 @@ Thanks to developers and authors of used linters:
 - [dominikh/go-tools/megacheck](https://github.com/dominikh/go-tools/tree/master/cmd/megacheck)
 
 # Future Plans
-1. Fully integrate all used linters: make common interface and reuse 100% of what can be reused: AST traversal, packages preparation etc
+1. Fully integrate all used linters: make common interface and reuse 100% of what can be reused: AST traversal, packages preparation etc.
 2. Make it easy to write own linter/checker: it should take minimum code, have perfect documentation, debugging and testing tooling.
 3. Speedup packages loading (dig into [loader](golang.org/x/tools/go/loader)): on-disk cache and existing code profiling-optimizing.
 4. Analyze (don't only filter) only new code: analyze only changed files and dependencies, make incremental analysis, caches.
