@@ -7,28 +7,25 @@ Sponsored by [GolangCI.com](https://golangci.com): SaaS service for running lint
 
 <a href="https://golangci.com/"><img src="docs/go.png" width="250px"></a>
 
-* [Install](#install)
-* [Quick Start](#quick-start)
-* [Comparison](#comparison)
-	 * [golangci-lint vs gometalinter](#golangci-lint-vs-gometalinter)
-	 * [golangci-lint vs Run Needed Linters Manually](#golangci-lint-vs-run-needed-linters-manually)
-* [Performance](#performance)
-	 * [Default Mode](#default-mode)
-	 * [Fast Mode](#fast-mode)
-* [Supported Linters](#supported-linters)
-	 * [Enabled By Default Linters](#enabled-by-default-linters)
-	 * [Disabled By Default Linters (-E/--enable)](#disabled-by-default-linters--e--enable)
-* [Configuration](#configuration)
-	 * [Command-Line Options](#command-line-options)
-			* [Run Options](#run-options)
-			* [Linters](#linters)
-			* [Linters Options](#linters-options)
-			* [Issues Options](#issues-options)
-			* [Output Options](#output-options)
-	 * [Configuration File](#configuration-file)
-* [False Positives](#false-positives)
-* [FAQ](#faq)
-* [Internals](#internals)
+   * [Install](#install)
+   * [Demo](#demo)
+   * [Quick Start](#quick-start)
+   * [Comparison](#comparison)
+      * [<code>golangci-lint</code> vs <code>gometalinter</code>](#golangci-lint-vs-gometalinter)
+      * [<code>golangci-lint</code> vs Run Needed Linters Manually](#golangci-lint-vs-run-needed-linters-manually)
+   * [Performance](#performance)
+      * [Comparison with gometalinter](#comparison-with-gometalinter)
+   * [Supported Linters](#supported-linters)
+      * [Enabled By Default Linters](#enabled-by-default-linters)
+      * [Disabled By Default Linters (-E/--enable)](#disabled-by-default-linters--e--enable)
+   * [Configuration](#configuration)
+      * [Command-Line Options](#command-line-options)
+      * [Configuration File](#configuration-file)
+   * [False Positives](#false-positives)
+   * [Internals](#internals)
+   * [FAQ](#faq)
+   * [Thanks](#thanks)
+   * [Future Plans](#future-plans)
 
 # Install
 ```bash
@@ -326,6 +323,24 @@ Comment `// nolint` disables all issues reporting on this line. Comment e.g. `//
 
 Please create [GitHub Issues here](https://github.com/golangci/golangci-lint/issues/new) about found false positives. We will add it to default exclude list if it's common or we will even fix underlying linter.
 
+# Internals
+Key difference with gometalinter is that golangci-lint shares work between specific linters (golint, govet, ...).
+For small and medium projects 50-80% of work between linters can be reused.
+Now we share `loader.Program` and `SSA` representation building. `SSA` representation is used from
+a [fork of go-tools](https://github.com/dominikh/go-tools), not the official one. Also we are going to
+reuse `AST` parsing and traversal.
+
+We don't fork to call specific linter but use it's API. We forked github repos of almost all linters
+to make API. It also allows us to be more performant and control actual count of used threads.
+
+All linters are vendored in `/vendor` folder: their version is fixed, they are builtin
+and you don't need to install them separately.
+
+We use chains for issues and independent processors to post-process them: exclude issues by limits,
+nolint comment, diff, regexps; prettify paths etc.
+
+We use `cobra` for command-line action.
+
 # FAQ
 **Q: How to add custom linter?**
 
@@ -346,24 +361,6 @@ A: You have 2 choices:
 1. Update it: `go get -u gopkg.in/golangci/golangci-lint.v1/cmd/golangci-lint`
 2. Run it with `-v` option and check output.
 3. If it doesn't help create [GitHub issue](https://github.com/golangci/golangci-lint/issues/new).
-
-# Internals
-Key difference with gometalinter is that golangci-lint shares work between specific linters (golint, govet, ...).
-For small and medium projects 50-80% of work between linters can be reused.
-Now we share `loader.Program` and `SSA` representation building. `SSA` representation is used from
-a [fork of go-tools](https://github.com/dominikh/go-tools), not the official one. Also we are going to
-reuse `AST` parsing and traversal.
-
-We don't fork to call specific linter but use it's API. We forked github repos of almost all linters
-to make API. It also allows us to be more performant and control actual count of used threads.
-
-All linters are vendored in `/vendor` folder: their version is fixed, they are builtin
-and you don't need to install them separately.
-
-We use chains for issues and independent processors to post-process them: exclude issues by limits,
-nolint comment, diff, regexps; prettify paths etc.
-
-We use `cobra` for command-line action.
 
 # Thanks
 Thanks to [alecthomas/gometalinter](https://github.com/alecthomas/gometalinter) for inspiration and amazing work.
