@@ -1,7 +1,7 @@
 # GolangCI-Lint
 [![Build Status](https://travis-ci.com/golangci/golangci-lint.svg?branch=master)](https://travis-ci.com/golangci/golangci-lint)
 
-GolangCI-Lint is a linters aggregator. It's fast (on average [5 times faster]((#performance) than gometalinter), [easy to integrate and use](#issues-options), has [nice output](#quick-start) and has minimum number of false positives.
+GolangCI-Lint is a linters aggregator. It's fast: on average [5 times faster](#performance) than gometalinter. It's [easy to integrate and use](#issues-options), has [nice output](#quick-start) and has minimum number of false positives.
 
 Sponsored by [GolangCI.com](https://golangci.com): SaaS service for running linters on Github pull requests. Free for Open Source.
 
