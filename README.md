@@ -29,7 +29,7 @@ Sponsored by [GolangCI.com](https://golangci.com): SaaS service for running lint
 
 # Install
 ```bash
-go get -u gopkg.in/golangci/golangci-lint.v1/cmd/golangci-lint
+go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
 ```
 
 # Demo
@@ -358,7 +358,7 @@ A: You have 2 choices:
 2. Use custom CI: just run `golangci-lint` in CI and check exit code. If it's non-zero - fail build. The main disadvantage is that you can't see found issues in pull request code and should view build log, then open needed source file to see a context.
 
 **Q: `golangci-lint` doesn't work**
-1. Update it: `go get -u gopkg.in/golangci/golangci-lint.v1/cmd/golangci-lint`
+1. Update it: `go get -u github.com/golangci/golangci-lint/cmd/golangci-lint`
 2. Run it with `-v` option and check output.
 3. If it doesn't help create [GitHub issue](https://github.com/golangci/golangci-lint/issues/new) with output.
 
