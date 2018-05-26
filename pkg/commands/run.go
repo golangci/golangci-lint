@@ -320,7 +320,7 @@ func (e *Executor) executeRun(cmd *cobra.Command, args []string) {
 }
 
 func (e *Executor) parseConfig(cmd *cobra.Command) {
-	// XXX: hack with double parsing to acces "config" option here
+	// XXX: hack with double parsing to access "config" option here
 	if err := cmd.ParseFlags(os.Args); err != nil {
 		if err == pflag.ErrHelp {
 			return

@@ -309,26 +309,30 @@ func getEnabledLintersSet(cfg *config.Config) map[string]Linter { // nolint:gocy
 		resultLintersSet = lintersToMap(getAllEnabledByDefaultLinters())
 	}
 
-	for _, name := range lcfg.Enable {
-		resultLintersSet[name] = getLinterByName(name)
-	}
-
+	// --presets can only add linters to default set
 	for _, p := range lcfg.Presets {
 		for _, linter := range GetAllLintersForPreset(p) {
 			resultLintersSet[linter.Name()] = linter
 		}
 	}
 
-	for _, name := range lcfg.Disable {
-		delete(resultLintersSet, name)
-	}
-
+	// --fast removes slow linters from current set.
+	// It should be after --presets to be able to run only fast linters in preset.
+	// It should be before --enable and --disable to be able to enable or disable specific linter.
 	if lcfg.Fast {
 		for name := range resultLintersSet {
 			if GetLinterConfig(name).DoesFullImport {
 				delete(resultLintersSet, name)
 			}
 		}
+	}
+
+	for _, name := range lcfg.Enable {
+		resultLintersSet[name] = getLinterByName(name)
+	}
+
+	for _, name := range lcfg.Disable {
+		delete(resultLintersSet, name)
 	}
 
 	return resultLintersSet
@@ -384,6 +388,20 @@ func GetEnabledLinters(cfg *config.Config) ([]Linter, error) {
 	return resultLinters, nil
 }
 
+func uniqStrings(ss []string) []string {
+	us := map[string]bool{}
+	for _, s := range ss {
+		us[s] = true
+	}
+
+	var ret []string
+	for k := range us {
+		ret = append(ret, k)
+	}
+
+	return ret
+}
+
 func verbosePrintLintersStatus(cfg *config.Config, linters []Linter) {
 	var linterNames []string
 	for _, linter := range linters {
@@ -392,6 +410,6 @@ func verbosePrintLintersStatus(cfg *config.Config, linters []Linter) {
 	logrus.Infof("Active linters: %s", linterNames)
 
 	if len(cfg.Linters.Presets) != 0 {
-		logrus.Infof("Active presets: %s", cfg.Linters.Presets)
+		logrus.Infof("Active presets: %s", uniqStrings(cfg.Linters.Presets))
 	}
 }
