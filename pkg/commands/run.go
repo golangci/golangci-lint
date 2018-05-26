@@ -80,7 +80,7 @@ func (e *Executor) initRun() {
 	runCmd.Flags().IntVar(&lsc.Goconst.MinStringLen, "goconst.min-len",
 		3, "Goconst: minimum constant string length")
 	runCmd.Flags().IntVar(&lsc.Goconst.MinOccurrencesCount, "goconst.min-occurrences",
-		3, "Goconst: minimum occurences of constant string count to trigger issue")
+		3, "Goconst: minimum occurrences of constant string count to trigger issue")
 
 	// Linters config
 	lc := &e.cfg.Linters
