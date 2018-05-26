@@ -102,6 +102,9 @@ func (p Text) printIssue(i *result.Issue) {
 		text += fmt.Sprintf(" (%s)", i.FromLinter)
 	}
 	pos := p.SprintfColored(color.Bold, "%s:%d", i.FilePath(), i.Line())
+	if i.Pos.Column != 0 {
+		pos += fmt.Sprintf(":%d", i.Pos.Column)
+	}
 	fmt.Fprintf(stdOut, "%s: %s\n", pos, text)
 }
 

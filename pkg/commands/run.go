@@ -45,7 +45,7 @@ func (e *Executor) initRun() {
 		fmt.Sprintf("Format of output: %s", strings.Join(config.OutFormats, "|")))
 	runCmd.Flags().BoolVar(&oc.PrintIssuedLine, "print-issued-lines", true, "Print lines of code with issue")
 	runCmd.Flags().BoolVar(&oc.PrintLinterName, "print-linter-name", true, "Print linter name in issue line")
-	runCmd.Flags().BoolVar(&oc.PrintWelcomeMessage, "print-welcome", true, "Print welcome message")
+	runCmd.Flags().BoolVar(&oc.PrintWelcomeMessage, "print-welcome", false, "Print welcome message")
 
 	// Run config
 	rc := &e.cfg.Run
