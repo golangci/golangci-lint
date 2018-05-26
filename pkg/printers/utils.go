@@ -5,4 +5,4 @@ import (
 	"syscall"
 )
 
-var stdOut = os.NewFile(uintptr(syscall.Stdout), "/dev/stdout") // was set to /dev/null
+var StdOut = os.NewFile(uintptr(syscall.Stdout), "/dev/stdout") // was set to /dev/null

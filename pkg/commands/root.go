@@ -17,7 +17,7 @@ func (e *Executor) initRoot() {
 		Long:  `Smart, fast linters runner. Run it in cloud for every GitHub pull request on https://golangci.com`,
 		Run: func(cmd *cobra.Command, args []string) {
 			if err := cmd.Help(); err != nil {
-				log.Fatal(err)
+				logrus.Fatal(err)
 			}
 		},
 		PersistentPreRun: func(cmd *cobra.Command, args []string) {
@@ -33,10 +33,10 @@ func (e *Executor) initRoot() {
 			if e.cfg.Run.CPUProfilePath != "" {
 				f, err := os.Create(e.cfg.Run.CPUProfilePath)
 				if err != nil {
-					log.Fatal(err)
+					logrus.Fatal(err)
 				}
 				if err := pprof.StartCPUProfile(f); err != nil {
-					log.Fatal(err)
+					logrus.Fatal(err)
 				}
 			}
 		},
@@ -47,11 +47,11 @@ func (e *Executor) initRoot() {
 			if e.cfg.Run.MemProfilePath != "" {
 				f, err := os.Create(e.cfg.Run.MemProfilePath)
 				if err != nil {
-					log.Fatal(err)
+					logrus.Fatal(err)
 				}
 				runtime.GC() // get up-to-date statistics
 				if err := pprof.WriteHeapProfile(f); err != nil {
-					log.Fatal("could not write memory profile: ", err)
+					logrus.Fatal("could not write memory profile: ", err)
 				}
 			}
 

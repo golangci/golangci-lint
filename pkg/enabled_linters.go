@@ -118,6 +118,7 @@ func GetAllSupportedLinterConfigs() []LinterConfig {
 		newLinterConfig(golinters.Goconst{}).WithPresets(PresetStyle).WithSpeed(9),
 		newLinterConfig(golinters.Deadcode{}).WithFullImport().WithPresets(PresetUnused).WithSpeed(10),
 		newLinterConfig(golinters.Gocyclo{}).WithPresets(PresetComplexity).WithSpeed(8),
+		newLinterConfig(golinters.TypeCheck{}).WithFullImport().WithPresets(PresetBugs).WithSpeed(10),
 
 		newLinterConfig(golinters.Gofmt{}).WithPresets(PresetFormatting).WithSpeed(7),
 		newLinterConfig(golinters.Gofmt{UseGoimports: true}).WithPresets(PresetFormatting).WithSpeed(5),
@@ -128,9 +129,10 @@ func GetAllSupportedLinterConfigs() []LinterConfig {
 
 	if os.Getenv("GOLANGCI_COM_RUN") == "1" {
 		disabled := map[string]bool{
-			"gocyclo":  true,
-			"dupl":     true,
-			"maligned": true,
+			golinters.Gocyclo{}.Name():   true, // annoying
+			golinters.Dupl{}.Name():      true, // annoying
+			golinters.Maligned{}.Name():  true, // rarely usable
+			golinters.TypeCheck{}.Name(): true, // annoying because of different building envs
 		}
 		return enableLinterConfigs(lcs, func(lc *LinterConfig) bool {
 			return !disabled[lc.Linter.Name()]
@@ -138,16 +140,17 @@ func GetAllSupportedLinterConfigs() []LinterConfig {
 	}
 
 	enabled := map[string]bool{
-		"govet":       true,
-		"errcheck":    true,
-		"staticcheck": true,
-		"unused":      true,
-		"gosimple":    true,
-		"gas":         true,
-		"structcheck": true,
-		"varcheck":    true,
-		"ineffassign": true,
-		"deadcode":    true,
+		golinters.Govet{}.Name():                             true,
+		golinters.Errcheck{}.Name():                          true,
+		golinters.Megacheck{StaticcheckEnabled: true}.Name(): true,
+		golinters.Megacheck{UnusedEnabled: true}.Name():      true,
+		golinters.Megacheck{GosimpleEnabled: true}.Name():    true,
+		golinters.Gas{}.Name():                               true,
+		golinters.Structcheck{}.Name():                       true,
+		golinters.Varcheck{}.Name():                          true,
+		golinters.Ineffassign{}.Name():                       true,
+		golinters.Deadcode{}.Name():                          true,
+		golinters.TypeCheck{}.Name():                         true,
 	}
 	return enableLinterConfigs(lcs, func(lc *LinterConfig) bool {
 		return enabled[lc.Linter.Name()]

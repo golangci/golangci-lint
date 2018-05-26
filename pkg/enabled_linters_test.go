@@ -31,7 +31,6 @@ func runGoErrchk(c *exec.Cmd, t *testing.T) {
 const testdataDir = "testdata"
 
 var testdataWithIssuesDir = filepath.Join(testdataDir, "with_issues")
-var testdataNotCompilingDir = filepath.Join(testdataDir, "not_compiles")
 
 const binName = "golangci-lint"
 
@@ -70,12 +69,6 @@ func testOneSource(t *testing.T, sourcePath string) {
 		"--govet.check-shadowing=true",
 		sourcePath)
 	runGoErrchk(cmd, t)
-}
-
-func TestNotCompilingProgram(t *testing.T) {
-	installBinary(t)
-	err := exec.Command(binName, "run", "--enable-all", testdataNotCompilingDir).Run()
-	assert.NoError(t, err)
 }
 
 func chdir(b *testing.B, dir string) {

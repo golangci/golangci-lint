@@ -88,7 +88,7 @@ func (p *Text) Print(issues <-chan result.Issue) (bool, error) {
 
 	if issuesN == 0 {
 		outStr := p.SprintfColored(color.FgGreen, "Congrats! No issues were found.")
-		fmt.Fprintln(stdOut, outStr)
+		fmt.Fprintln(StdOut, outStr)
 	} else {
 		logrus.Infof("Found %d issues", issuesN)
 	}
@@ -105,7 +105,7 @@ func (p Text) printIssue(i *result.Issue) {
 	if i.Pos.Column != 0 {
 		pos += fmt.Sprintf(":%d", i.Pos.Column)
 	}
-	fmt.Fprintf(stdOut, "%s: %s\n", pos, text)
+	fmt.Fprintf(StdOut, "%s: %s\n", pos, text)
 }
 
 func (p Text) printIssuedLines(i *result.Issue, lines linesCache) {
@@ -123,7 +123,7 @@ func (p Text) printIssuedLines(i *result.Issue, lines linesCache) {
 		}
 
 		lineStr = string(bytes.Trim(lines[zeroIndexedLine], "\r"))
-		fmt.Fprintln(stdOut, lineStr)
+		fmt.Fprintln(StdOut, lineStr)
 	}
 }
 
@@ -146,5 +146,5 @@ func (p Text) printUnderLinePointer(i *result.Issue, line string) {
 		prefix += strings.Repeat(" ", spacesCount)
 	}
 
-	fmt.Fprintf(stdOut, "%s%s\n", prefix, p.SprintfColored(color.FgYellow, "^"))
+	fmt.Fprintf(StdOut, "%s%s\n", prefix, p.SprintfColored(color.FgYellow, "^"))
 }

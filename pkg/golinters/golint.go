@@ -32,7 +32,7 @@ func (g Golint) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, erro
 		issues = append(issues, i...)
 	}
 	if lintErr != nil {
-		logrus.Warnf("golint: %s", lintErr)
+		logrus.Infof("golint: %s", lintErr)
 	}
 
 	return issues, nil

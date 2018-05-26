@@ -3,7 +3,6 @@ package pkg
 import (
 	"context"
 	"fmt"
-	"os"
 	"runtime/debug"
 	"sort"
 	"strings"
@@ -107,7 +106,6 @@ func (r *SimpleRunner) runWorkers(ctx context.Context, lintCtx *golinters.Contex
 	lintResultsCh := make(chan lintRes, len(linters))
 	var wg sync.WaitGroup
 
-	savedStdout, savedStderr := setOutputToDevNull() // Don't allow linters to print anything
 	workersFinishTimes := make([]time.Time, lintCtx.Cfg.Run.Concurrency)
 
 	for i := 0; i < lintCtx.Cfg.Run.Concurrency; i++ {
@@ -129,7 +127,6 @@ func (r *SimpleRunner) runWorkers(ctx context.Context, lintCtx *golinters.Contex
 	go func() {
 		wg.Wait()
 		close(lintResultsCh)
-		os.Stdout, os.Stderr = savedStdout, savedStderr
 
 		logWorkersStat(workersFinishTimes)
 	}()
@@ -190,18 +187,6 @@ func collectIssues(ctx context.Context, resCh <-chan lintRes) <-chan result.Issu
 	return retIssues
 }
 
-func setOutputToDevNull() (savedStdout, savedStderr *os.File) {
-	savedStdout, savedStderr = os.Stdout, os.Stderr
-	devNull, err := os.Open(os.DevNull)
-	if err != nil {
-		logrus.Warnf("can't open null device %q: %s", os.DevNull, err)
-		return
-	}
-
-	os.Stdout, os.Stderr = devNull, devNull
-	return
-}
-
 func (r SimpleRunner) Run(ctx context.Context, linters []Linter, lintCtx *golinters.Context) <-chan result.Issue {
 	lintResultsCh := r.runWorkers(ctx, lintCtx, linters)
 	processedLintResultsCh := r.processLintResults(ctx, lintResultsCh)
@@ -228,7 +213,7 @@ func (r *SimpleRunner) processIssues(ctx context.Context, issues []result.Issue,
 		})
 
 		if err != nil {
-			logrus.Warnf("Can't process result by %s processor: %s", p.Name(), err)
+			logrus.Infof("Can't process result by %s processor: %s", p.Name(), err)
 		} else {
 			issues = newIssues
 		}
