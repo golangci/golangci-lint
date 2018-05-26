@@ -140,7 +140,7 @@
   branch = "master"
   name = "github.com/golangci/revgrep"
   packages = ["."]
-  revision = "dfd919b445ba350862d7a6e7fe81989000b84020"
+  revision = "d9c87f5ffaf08801898f780cf66e7026e2174097"
 
 [[projects]]
   branch = "master"
