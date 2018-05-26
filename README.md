@@ -166,6 +166,7 @@ golangci-lint linters
 - [varcheck](https://github.com/opennota/check): Finds unused global variables and constants
 - [ineffassign](https://github.com/gordonklaus/ineffassign): Detects when assignments to existing variables are not used
 - [deadcode](https://github.com/remyoudompheng/go-misc/tree/master/deadcode): Finds unused code
+- typecheck: Like the front-end of a Go compiler, parses and type-checks Go code. Similar to [gotype](https://godoc.org/golang.org/x/tools/cmd/gotype).
 
 ## Disabled By Default Linters (`-E/--enable`)
 - [golint](https://github.com/golang/lint): Golint differs from gofmt. Gofmt reformats Go source code, whereas golint prints out style mistakes

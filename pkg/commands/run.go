@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"go/build"
 	"go/token"
+	"io/ioutil"
 	"log"
 	"os"
 	"runtime"
@@ -245,7 +246,26 @@ func (e *Executor) runAnalysis(ctx context.Context, args []string) (<-chan resul
 	return runner.Run(ctx, linters, lintCtx), nil
 }
 
+func setOutputToDevNull() (savedStdout, savedStderr *os.File) {
+	savedStdout, savedStderr = os.Stdout, os.Stderr
+	devNull, err := os.Open(os.DevNull)
+	if err != nil {
+		logrus.Warnf("can't open null device %q: %s", os.DevNull, err)
+		return
+	}
+
+	os.Stdout, os.Stderr = devNull, devNull
+	return
+}
+
 func (e *Executor) runAndPrint(ctx context.Context, args []string) error {
+	// Don't allow linters and loader to print anything
+	log.SetOutput(ioutil.Discard)
+	savedStdout, savedStderr := setOutputToDevNull()
+	defer func() {
+		os.Stdout, os.Stderr = savedStdout, savedStderr
+	}()
+
 	issues, err := e.runAnalysis(ctx, args)
 	if err != nil {
 		return err
@@ -288,11 +308,11 @@ func (e *Executor) executeRun(cmd *cobra.Command, args []string) {
 	}
 
 	if e.cfg.Output.PrintWelcomeMessage {
-		fmt.Println("Run this tool in cloud on every github pull request in https://golangci.com for free (public repos)")
+		fmt.Fprintln(printers.StdOut, "Run this tool in cloud on every github pull request in https://golangci.com for free (public repos)")
 	}
 
 	if err := e.runAndPrint(ctx, args); err != nil {
-		log.Print(err)
+		logrus.Warnf("running error: %s", err)
 		if e.exitCode == 0 {
 			e.exitCode = exitCodeIfFailure
 		}
@@ -305,11 +325,11 @@ func (e *Executor) parseConfig(cmd *cobra.Command) {
 		if err == pflag.ErrHelp {
 			return
 		}
-		log.Fatalf("Can't parse args: %s", err)
+		logrus.Fatalf("Can't parse args: %s", err)
 	}
 
 	if err := viper.BindPFlags(cmd.Flags()); err != nil {
-		log.Fatalf("Can't bind cobra's flags to viper: %s", err)
+		logrus.Fatalf("Can't bind cobra's flags to viper: %s", err)
 	}
 
 	viper.SetEnvPrefix("GOLANGCI")
@@ -318,7 +338,7 @@ func (e *Executor) parseConfig(cmd *cobra.Command) {
 
 	configFile := e.cfg.Run.Config
 	if e.cfg.Run.NoConfig && configFile != "" {
-		log.Fatal("can't combine option --config and --no-config")
+		logrus.Fatal("can't combine option --config and --no-config")
 	}
 
 	if e.cfg.Run.NoConfig {
@@ -342,15 +362,15 @@ func (e *Executor) parseConfigImpl() {
 		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
 			return
 		}
-		log.Fatalf("Can't read viper config: %s", err)
+		logrus.Fatalf("Can't read viper config: %s", err)
 	}
 
 	if err := viper.Unmarshal(&e.cfg); err != nil {
-		log.Fatalf("Can't unmarshal config by viper: %s", err)
+		logrus.Fatalf("Can't unmarshal config by viper: %s", err)
 	}
 
 	if err := e.validateConfig(&commandLineConfig); err != nil {
-		log.Fatal(err)
+		logrus.Fatal(err)
 	}
 }
 
