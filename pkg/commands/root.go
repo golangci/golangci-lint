@@ -23,8 +23,11 @@ func (e *Executor) initRoot() {
 		PersistentPreRun: func(cmd *cobra.Command, args []string) {
 			runtime.GOMAXPROCS(e.cfg.Run.Concurrency)
 
+			log.SetFlags(0) // don't print time
 			if e.cfg.Run.IsVerbose {
 				logrus.SetLevel(logrus.InfoLevel)
+			} else {
+				logrus.SetLevel(logrus.WarnLevel)
 			}
 
 			if e.cfg.Run.CPUProfilePath != "" {
