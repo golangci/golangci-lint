@@ -386,12 +386,13 @@ Thanks to developers and authors of used linters:
 - [dominikh/go-tools/megacheck](https://github.com/dominikh/go-tools/tree/master/cmd/megacheck)
 
 # Future Plans
-1. Fully integrate all used linters: make common interface and reuse 100% of what can be reused: AST traversal, packages preparation etc.
-2. Make it easy to write own linter/checker: it should take minimum code, have perfect documentation, debugging and testing tooling.
-3. Speedup packages loading (dig into [loader](golang.org/x/tools/go/loader)): on-disk cache and existing code profiling-optimizing.
-4. Analyze (don't only filter) only new code: analyze only changed files and dependencies, make incremental analysis, caches.
-5. Smart new issues detector: don't print existing issues on changed lines.
-6. Integration with Text Editors. On-the-fly code analysis for text editors: it should be super-fast.
-7. Minimize false-positives by fixing linters and improving testing tooling.
-8. Automatic issues fixing (code rewrite, refactoring) where it's possible.
-9. Documentation for every issue type.
+1. Upstream all changes of forked linters.
+2. Fully integrate all used linters: make common interface and reuse 100% of what can be reused: AST traversal, packages preparation etc.
+3. Make it easy to write own linter/checker: it should take minimum code, have perfect documentation, debugging and testing tooling.
+4. Speedup packages loading (dig into [loader](golang.org/x/tools/go/loader)): on-disk cache and existing code profiling-optimizing.
+5. Analyze (don't only filter) only new code: analyze only changed files and dependencies, make incremental analysis, caches.
+6. Smart new issues detector: don't print existing issues on changed lines.
+7. Integration with Text Editors. On-the-fly code analysis for text editors: it should be super-fast.
+8. Minimize false-positives by fixing linters and improving testing tooling.
+9. Automatic issues fixing (code rewrite, refactoring) where it's possible.
+10. Documentation for every issue type.
