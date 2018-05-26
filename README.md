@@ -36,8 +36,8 @@ go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
 Example of output:
 ![Screenshot of sample output](docs/run_screenshot.png)
 
-Short 2 min video demo of analyzing [beego](https://github.com/astaxie/beego).
-[![asciicast](https://asciinema.org/a/183318.png)](https://asciinema.org/a/183318)
+Short 1.5 min video demo of analyzing [beego](https://github.com/astaxie/beego).
+[![asciicast](https://asciinema.org/a/1a1qaEXMlOSeRyvASbnuFomah.png)](https://asciinema.org/a/1a1qaEXMlOSeRyvASbnuFomah)
 
 # Quick Start
 To run golangci-lint execute:
