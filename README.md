@@ -410,3 +410,6 @@ Thanks to developers and authors of used linters:
 8. Minimize false-positives by fixing linters and improving testing tooling.
 9. Automatic issues fixing (code rewrite, refactoring) where it's possible.
 10. Documentation for every issue type.
+
+# Community Plugins
+* Emacs: [flycheck-golangci-lint](https://github.com/weijiangan/flycheck-golangci-lint)
