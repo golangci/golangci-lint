@@ -22,6 +22,7 @@ Sponsored by [GolangCI.com](https://golangci.com): SaaS service for running lint
       * [Command-Line Options](#command-line-options)
       * [Configuration File](#configuration-file)
    * [False Positives](#false-positives)
+   * [IDE integrations](#ide-integrations)
    * [Internals](#internals)
    * [FAQ](#faq)
    * [Thanks](#thanks)
@@ -323,6 +324,9 @@ False positives are inevitable, but we did our best to reduce their count. For e
 Comment `// nolint` disables all issues reporting on this line. Comment e.g. `// nolint:govet` disables only govet issues for this line.
 
 Please create [GitHub Issues here](https://github.com/golangci/golangci-lint/issues/new) about found false positives. We will add it to default exclude list if it's common or we will fix underlying linter.
+
+# IDE integrations
+1. VS Code - [pull request](https://github.com/Microsoft/vscode-go/pull/1693) (thanks to [pdf](https://github.com/pdf))
 
 # Internals
 The key difference with gometalinter is that golangci-lint shares work between specific linters (golint, govet, ...).
