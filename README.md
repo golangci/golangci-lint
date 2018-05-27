@@ -97,15 +97,15 @@ $ golangci-lint run --disable-all -E errcheck
 # Comparison
 ## `golangci-lint` vs `gometalinter`
 GolangCI-Lint was created to fix next issues with `gometalinter`:
-1. Slow work: `gometalinter` usually works for minutes in average projects. GolangCI-Lint works [2-7x times faster](#performance) by [reusing work](#internals).
-2. Huge memory consumption: parallel linters don't share the same program representation and can eat `n` times more memory (`n` - concurrency). GolangCI-Lint fixes it by sharing representation.
+1. Slow work: `gometalinter` usually works for minutes in average projects. **GolangCI-Lint works [2-7x times faster](#performance)** by [reusing work](#internals).
+2. Huge memory consumption: parallel linters don't share the same program representation and can eat `n` times more memory (`n` - concurrency). GolangCI-Lint fixes it by sharing representation and **eats 1.35x less memory**.
 3. Can't set honest concurrency: if you set it to `n` it can take up to `n*n` threads because of forced threads in specific linters. `gometalinter` can't do anything about it, because it runs linters as black-boxes in forked processes. In GolangCI-Lint we run all linters in one process and fully control them. Configured concurrency will be honest.
-This issue is important because often you'd like to set concurrency to CPUs count minus one to not freeze your PC and be able to work on it while analyzing code.
-4. Lack of nice output. We like how compilers `gcc` and `clang` format their warnings: using colors, printing of warned line and showing position in line.
-5. Too many issues. GolangCI-Lint cuts a lot of issues by using default exclude list of common false-positives. Also, it has enabled by default smart issues processing: merge multiple issues for one line, merge issues with the same text or from the same linter. All of these smart processors can be configured by the user.
-6. Integration to large codebases. A good way to start using linters in a large project is not to fix all hundreds on existing issues, but setup CI and fix only issues in new commits. You can use `revgrep` for it, but it's yet another utility to install and configure. With `golangci-lint` it's much easier: `revgrep` is already built into `golangci-lint` and you can use it with one option (`-n, --new` or `--new-from-rev`).
-7. Installation. With `gometalinter`, you need to run linters installation step. It's easy to forget this step and have stale linters. It also complicates CI setup.
-8. Yaml or toml config. Gometalinter's JSON isn't convenient for configuration files.
+This issue is important because often you'd like to set concurrency to CPUs count minus one to **not freeze your PC** and be able to work on it while analyzing code.
+4. Lack of nice output. We like how compilers `gcc` and `clang` format their warnings: **using colors, printing of warned line and showing position in line**.
+5. Too many issues. GolangCI-Lint cuts a lot of issues by using default exclude list of common false-positives. Also, it has enabled by default **smart issues processing**: merge multiple issues for one line, merge issues with the same text or from the same linter. All of these smart processors can be configured by the user.
+6. Integration to large codebases. A good way to start using linters in a large project is not to fix all hundreds on existing issues, but setup CI and **fix only issues in new commits**. You can use `revgrep` for it, but it's yet another utility to install and configure. With `golangci-lint` it's much easier: `revgrep` is already built into `golangci-lint` and you can use it with one option (`-n, --new` or `--new-from-rev`).
+7. Installation. With `gometalinter`, you need to run linters installation step. It's easy to forget this step and have stale linters. It also complicates CI setup. GolangCI-Lint requires **no installation of linters**.
+8. **Yaml or toml config**. Gometalinter's JSON isn't convenient for configuration files.
 
 ## `golangci-lint` vs Run Needed Linters Manually
 1. It will be much slower because `golangci-lint` runs all linters in parallel and shares 50-80% of linters work.
