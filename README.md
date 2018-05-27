@@ -328,6 +328,7 @@ Please create [GitHub Issues here](https://github.com/golangci/golangci-lint/iss
 # IDE integrations
 1. VS Code - [pull request](https://github.com/Microsoft/vscode-go/pull/1693) (thanks to [pdf](https://github.com/pdf))
 2. vim-go - [issue](https://github.com/fatih/vim-go/issues/1841)
+3. GNU Emacs - [flycheck checker](https://github.com/weijiangan/flycheck-golangci-lint)
 
 # Internals
 The key difference with gometalinter is that golangci-lint shares work between specific linters (golint, govet, ...).
