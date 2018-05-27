@@ -61,11 +61,6 @@
   branch = "master"
   source = "github.com/golangci/gas"
 
-[[override]]
-  name = "mvdan.cc/lint"
-  branch = "master"
-  source = "github.com/golangci/lint"
-
 [prune]
   go-tests = true
   unused-packages = true
@@ -77,3 +72,43 @@
 [[constraint]]
   branch = "master"
   name = "github.com/mitchellh/go-ps"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/golangci/go-tools"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/golangci/unconvert"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/golangci/go-misc"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/golangci/goconst"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/golangci/check"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/golangci/gocyclo"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/golangci/gofmt"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/golangci/maligned"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/golangci/ineffassign"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/golangci/lint"

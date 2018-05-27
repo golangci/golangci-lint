@@ -132,6 +132,12 @@
 
 [[projects]]
   branch = "master"
+  name = "github.com/golangci/lint"
+  packages = ["."]
+  revision = "e1cc50c0cfa0e058f40ced1b3d54b86014440c91"
+
+[[projects]]
+  branch = "master"
   name = "github.com/golangci/maligned"
   packages = ["."]
   revision = "b1d89398deca2fd3f8578e5a9551e819bd01ca5f"
@@ -386,15 +392,8 @@
   branch = "master"
   name = "mvdan.cc/interfacer"
   packages = ["check"]
-  revision = "72c3fb5d5e5e0ca07e9a7c90bcd150b049920b3b"
+  revision = "87cc93d81c1c4e460392bd89c6eb500f2c4cf629"
   source = "github.com/golangci/interfacer"
-
-[[projects]]
-  branch = "master"
-  name = "mvdan.cc/lint"
-  packages = ["."]
-  revision = "8ff1696d5934157cea033c4b97cf5ea23fdb7a32"
-  source = "github.com/golangci/lint"
 
 [[projects]]
   branch = "master"
@@ -411,6 +410,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "f75bddb805db581bbdc751784b540bc476179ed3d918cac98b870bb8c48a26aa"
+  inputs-digest = "86deafc3c3aea3a6a1437dbf35545c9d4e1f9b510f5fe21b9ef434a465d377dc"
   solver-name = "gps-cdcl"
   solver-version = 1

@@ -2,7 +2,7 @@
 // See LICENSE for licensing information
 
 // Package lint defines common interfaces for Go code checkers.
-package lint // import "mvdan.cc/lint"
+package lint
 
 import (
 	"go/token"
