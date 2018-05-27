@@ -7,6 +7,7 @@ import (
 
 	"github.com/fatih/color"
 	"github.com/golangci/golangci-lint/pkg"
+	"github.com/golangci/golangci-lint/pkg/printers"
 	"github.com/spf13/cobra"
 )
 
@@ -21,7 +22,7 @@ func (e *Executor) initLinters() {
 
 func printLinterConfigs(lcs []pkg.LinterConfig) {
 	for _, lc := range lcs {
-		fmt.Printf("%s: %s [fast: %t]\n", color.YellowString(lc.Linter.Name()),
+		fmt.Fprintf(printers.StdOut, "%s: %s [fast: %t]\n", color.YellowString(lc.Linter.Name()),
 			lc.Linter.Desc(), !lc.DoesFullImport)
 	}
 }
@@ -48,7 +49,7 @@ func (e Executor) executeLinters(cmd *cobra.Command, args []string) {
 		for _, linter := range linters {
 			linterNames = append(linterNames, linter.Name())
 		}
-		fmt.Printf("%s: %s\n", color.YellowString(p), strings.Join(linterNames, ", "))
+		fmt.Fprintf(printers.StdOut, "%s: %s\n", color.YellowString(p), strings.Join(linterNames, ", "))
 	}
 
 	os.Exit(0)

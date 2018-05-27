@@ -1,8 +1,5 @@
 package printers
 
-import (
-	"os"
-	"syscall"
-)
+import "github.com/fatih/color"
 
-var StdOut = os.NewFile(uintptr(syscall.Stdout), "/dev/stdout") // was set to /dev/null
+var StdOut = color.Output // https://github.com/golangci/golangci-lint/issues/14
