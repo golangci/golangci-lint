@@ -292,6 +292,9 @@ func (e *Executor) runAndPrint(ctx context.Context, args []string) error {
 }
 
 func (e *Executor) executeRun(cmd *cobra.Command, args []string) {
+	logrus.Infof("Concurrency: %d, machine cpus count: %d",
+		e.cfg.Run.Concurrency, runtime.NumCPU())
+
 	needTrackResources := e.cfg.Run.IsVerbose || e.cfg.Run.PrintResourcesUsage
 	trackResourcesEndCh := make(chan struct{})
 	defer func() { // XXX: this defer must be before ctx.cancel defer
