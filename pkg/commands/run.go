@@ -16,6 +16,7 @@ import (
 	"github.com/golangci/go-tools/ssa"
 	"github.com/golangci/go-tools/ssa/ssautil"
 	"github.com/golangci/golangci-lint/pkg"
+	"github.com/golangci/golangci-lint/pkg/astcache"
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/fsutils"
 	"github.com/golangci/golangci-lint/pkg/golinters"
@@ -195,12 +196,20 @@ func buildLintCtx(ctx context.Context, linters []pkg.Linter, cfg *config.Config)
 		ssaProg = buildSSAProgram(ctx, prog)
 	}
 
+	var astCache *astcache.Cache
+	if prog != nil {
+		astCache = astcache.LoadFromProgram(prog)
+	} else {
+		astCache = astcache.LoadFromFiles(paths.Files)
+	}
+
 	return &golinters.Context{
 		Paths:        paths,
 		Cfg:          cfg,
 		Program:      prog,
 		SSAProgram:   ssaProg,
 		LoaderConfig: loaderConfig,
+		ASTCache:     astCache,
 	}, nil
 }
 

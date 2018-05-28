@@ -102,8 +102,8 @@
 [[projects]]
   branch = "master"
   name = "github.com/golangci/gocyclo"
-  packages = ["."]
-  revision = "687488c898ab673ee751943f7bcab53ce2371985"
+  packages = ["pkg/gocyclo"]
+  revision = "2becd97e67eef01fc0bf8d7b9ddfce97da10a423"
 
 [[projects]]
   branch = "master"
@@ -410,6 +410,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "86deafc3c3aea3a6a1437dbf35545c9d4e1f9b510f5fe21b9ef434a465d377dc"
+  inputs-digest = "8cfc9eb6d890be05e9a019a4537c3fba5bcaf25a396437d0a8b402f6cc244d2e"
   solver-name = "gps-cdcl"
   solver-version = 1

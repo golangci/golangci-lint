@@ -109,6 +109,6 @@
   branch = "master"
   name = "github.com/golangci/ineffassign"
 
-[[constraint]]
+[[override]]
   branch = "master"
   name = "github.com/golangci/lint"
