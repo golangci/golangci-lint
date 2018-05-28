@@ -2,6 +2,7 @@ package golinters
 
 import (
 	"github.com/golangci/go-tools/ssa"
+	"github.com/golangci/golangci-lint/pkg/astcache"
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/fsutils"
 	"golang.org/x/tools/go/loader"
@@ -13,6 +14,7 @@ type Context struct {
 	Program      *loader.Program
 	SSAProgram   *ssa.Program
 	LoaderConfig *loader.Config
+	ASTCache     *astcache.Cache
 }
 
 func (c *Context) Settings() *config.LintersSettings {

@@ -3,8 +3,9 @@ package golinters
 import (
 	"context"
 	"fmt"
+	"sort"
 
-	gocycloAPI "github.com/golangci/gocyclo"
+	gocycloAPI "github.com/golangci/gocyclo/pkg/gocyclo"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
@@ -19,7 +20,14 @@ func (Gocyclo) Desc() string {
 }
 
 func (g Gocyclo) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, error) {
-	stats := gocycloAPI.Run(lintCtx.Paths.MixedPaths())
+	var stats []gocycloAPI.Stat
+	for _, f := range lintCtx.ASTCache.GetAllValidFiles() {
+		stats = gocycloAPI.BuildStats(f.F, f.Fset, stats)
+	}
+
+	sort.Slice(stats, func(i, j int) bool {
+		return stats[i].Complexity > stats[j].Complexity
+	})
 
 	var res []result.Issue
 	for _, s := range stats {
