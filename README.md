@@ -29,6 +29,7 @@ Sponsored by [GolangCI.com](https://golangci.com): SaaS service for running lint
    * [FAQ](#faq)
    * [Thanks](#thanks)
    * [Future Plans](#future-plans)
+   * [Contact Information](#contact-information)
 
 # Install
 ```bash
