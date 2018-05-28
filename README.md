@@ -392,6 +392,8 @@ Vendoring `golangci-lint` saves a network request, potentially making your CI sy
 
 # Thanks
 Thanks to [alecthomas/gometalinter](https://github.com/alecthomas/gometalinter) for inspiration and amazing work.
+Thanks to [bradleyfalzon/revgrep](https://github.com/bradleyfalzon/revgrep) for cool diff tool.
+
 Thanks to developers and authors of used linters:
 - [golang/vet](https://golang.org/cmd/vet/)
 - [kisielk/errcheck](https://github.com/kisielk/errcheck)
