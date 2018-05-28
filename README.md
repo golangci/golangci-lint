@@ -3,6 +3,8 @@
 
 GolangCI-Lint is a linters aggregator. It's fast: on average [5 times faster](#performance) than gometalinter. It's [easy to integrate and use](#issues-options), has [nice output](#quick-start) and has a minimum number of false positives.
 
+GolangCI-Lint has [integrations](#ide-integrations) with VS Code, GNU Emacs, Sublime Text.
+
 Sponsored by [GolangCI.com](https://golangci.com): SaaS service for running linters on Github pull requests. Free for Open Source.
 
 <a href="https://golangci.com/"><img src="docs/go.png" width="250px"></a>
@@ -326,9 +328,10 @@ Comment `// nolint` disables all issues reporting on this line. Comment e.g. `//
 Please create [GitHub Issues here](https://github.com/golangci/golangci-lint/issues/new) about found false positives. We will add it to default exclude list if it's common or we will fix underlying linter.
 
 # IDE integrations
-1. VS Code - [pull request](https://github.com/Microsoft/vscode-go/pull/1693) (thanks to [pdf](https://github.com/pdf))
-2. vim-go - [issue](https://github.com/fatih/vim-go/issues/1841)
-3. GNU Emacs - [flycheck checker](https://github.com/weijiangan/flycheck-golangci-lint)
+1. VS Code - [pull request](https://github.com/Microsoft/vscode-go/pull/1693) to vscode-go (thanks to [pdf](https://github.com/pdf)).
+2. Vim - [issue](https://github.com/fatih/vim-go/issues/1841) for vim-go.
+3. GNU Emacs - [flycheck checker](https://github.com/weijiangan/flycheck-golangci-lint) (thanks to [weijiangan](https://github.com/weijiangan)).
+4. Sublime Text - [plugin](https://github.com/alecthomas/SublimeLinter-contrib-golang-cilint) for SublimeLinter (thanks to [alecthomas](https://github.com/alecthomas)).
 
 # Internals
 The key difference with gometalinter is that golangci-lint shares work between specific linters (golint, govet, ...).
@@ -410,3 +413,6 @@ Thanks to developers and authors of used linters:
 8. Minimize false-positives by fixing linters and improving testing tooling.
 9. Automatic issues fixing (code rewrite, refactoring) where it's possible.
 10. Documentation for every issue type.
+
+# Contact Information
+You can contact the author of GolangCI-Lint by [denis@golangci.com](mailto:denis@golangci.com).
