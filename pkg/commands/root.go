@@ -61,7 +61,7 @@ func (e *Executor) initRoot() {
 	rootCmd.PersistentFlags().BoolVarP(&e.cfg.Run.IsVerbose, "verbose", "v", false, "verbose output")
 	rootCmd.PersistentFlags().StringVar(&e.cfg.Run.CPUProfilePath, "cpu-profile-path", "", "Path to CPU profile output file")
 	rootCmd.PersistentFlags().StringVar(&e.cfg.Run.MemProfilePath, "mem-profile-path", "", "Path to memory profile output file")
-	rootCmd.PersistentFlags().IntVarP(&e.cfg.Run.Concurrency, "concurrency", "j", runtime.NumCPU(), "Concurrency")
+	rootCmd.PersistentFlags().IntVarP(&e.cfg.Run.Concurrency, "concurrency", "j", runtime.NumCPU(), "Concurrency (default NumCPU)")
 
 	e.rootCmd = rootCmd
 }
