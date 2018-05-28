@@ -115,7 +115,6 @@ func (p *Nolint) shouldPassIssue(i *result.Issue) (bool, error) {
 			if i.FromLinter == linter {
 				return false, nil
 			}
-			// TODO: check linter name
 		}
 	}
 
@@ -127,20 +126,30 @@ func extractFileComments(fset *token.FileSet, comments ...*ast.CommentGroup) fil
 	for _, g := range comments {
 		for _, c := range g.List {
 			text := strings.TrimLeft(c.Text, "/ ")
-			if strings.HasPrefix(text, "nolint") {
-				var linters []string
-				if strings.HasPrefix(text, "nolint:") {
-					text = strings.Split(text, " ")[0] // allow arbitrary text after this comment
-					for _, linter := range strings.Split(strings.TrimPrefix(text, "nolint:"), ",") {
-						linters = append(linters, strings.TrimSpace(linter))
-					}
-				}
-				pos := fset.Position(g.Pos())
-				ret = append(ret, comment{
-					linters: linters,
-					line:    pos.Line,
-				})
+			if !strings.HasPrefix(text, "nolint") {
+				continue
 			}
+
+			pos := fset.Position(g.Pos())
+			if !strings.HasPrefix(text, "nolint:") { // ignore all linters
+				ret = append(ret, comment{
+					line: pos.Line,
+				})
+				continue
+			}
+
+			// ignore specific linters
+			var linters []string
+			text = strings.Split(text, "//")[0] // allow another comment after this comment
+			linterItems := strings.Split(strings.TrimPrefix(text, "nolint:"), ",")
+			for _, linter := range linterItems {
+				linterName := strings.TrimSpace(linter) // TODO: validate it here
+				linters = append(linters, linterName)
+			}
+			ret = append(ret, comment{
+				linters: linters,
+				line:    pos.Line,
+			})
 		}
 	}
 
