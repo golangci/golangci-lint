@@ -32,9 +32,17 @@ Sponsored by [GolangCI.com](https://golangci.com): SaaS service for running lint
    * [Contact Information](#contact-information)
 
 # Install
+Recommended way to install is:
 ```bash
 go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
 ```
+
+You can also install it by brew:
+```bash
+brew install golangci/tap/golangci-lint
+```
+
+Check the [releases page](https://github.com/golangci/golangci-lint/releases) to fix the version.
 
 # Demo
 Example of output:
