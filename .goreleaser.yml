@@ -8,13 +8,13 @@ release:
 
 builds:
   - binary: golangci-lint
-    goos: &goos
+    goos:
       - darwin
       - windows
       - linux
-    goarch: &goarch
+    goarch:
       - amd64
-      - i386
+      - 386
     env:
       - CGO_ENABLED=0
     main: ./cmd/golangci-lint/
