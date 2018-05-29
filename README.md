@@ -42,6 +42,11 @@ You can also install it by brew:
 brew install golangci/tap/golangci-lint
 ```
 
+For CI you can use fast local installation:
+```bash
+curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh
+```
+
 Check the [releases page](https://github.com/golangci/golangci-lint/releases) to fix the version.
 
 # Demo
