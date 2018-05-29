@@ -33,8 +33,11 @@ func (lint Gas) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, erro
 
 	analyzer.ProcessProgram(lintCtx.Program)
 	issues, _ := analyzer.Report()
+	if len(issues) == 0 {
+		return nil, nil
+	}
 
-	var res []result.Issue
+	res := make([]result.Issue, 0, len(issues))
 	for _, i := range issues {
 		text := fmt.Sprintf("%s: %s", i.RuleID, i.What) // TODO: use severity and confidence
 		var r result.Range

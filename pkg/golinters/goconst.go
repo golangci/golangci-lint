@@ -32,8 +32,11 @@ func (lint Goconst) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, 
 
 		goconstIssues = append(goconstIssues, issues...)
 	}
+	if len(goconstIssues) == 0 {
+		return nil, nil
+	}
 
-	var res []result.Issue
+	res := make([]result.Issue, 0, len(goconstIssues))
 	for _, i := range goconstIssues {
 		textBegin := fmt.Sprintf("string %s has %d occurrences", formatCode(i.Str, lintCtx.Cfg), i.OccurencesCount)
 		var textEnd string

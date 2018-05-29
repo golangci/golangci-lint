@@ -20,8 +20,11 @@ func (Varcheck) Desc() string {
 
 func (v Varcheck) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, error) {
 	issues := varcheckAPI.Run(lintCtx.Program, lintCtx.Settings().Varcheck.CheckExportedFields)
+	if len(issues) == 0 {
+		return nil, nil
+	}
 
-	var res []result.Issue
+	res := make([]result.Issue, 0, len(issues))
 	for _, i := range issues {
 		res = append(res, result.Issue{
 			Pos:        i.Pos,

@@ -27,8 +27,11 @@ func (g Govet) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, error
 		}
 		govetIssues = append(govetIssues, issues...)
 	}
+	if len(govetIssues) == 0 {
+		return nil, nil
+	}
 
-	var res []result.Issue
+	res := make([]result.Issue, 0, len(govetIssues))
 	for _, i := range govetIssues {
 		res = append(res, result.Issue{
 			Pos:        i.Pos,

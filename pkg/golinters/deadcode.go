@@ -24,7 +24,11 @@ func (d Deadcode) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, er
 		return nil, err
 	}
 
-	var res []result.Issue
+	if len(issues) == 0 {
+		return nil, nil
+	}
+
+	res := make([]result.Issue, 0, len(issues))
 	for _, i := range issues {
 		res = append(res, result.Issue{
 			Pos:        i.Pos,

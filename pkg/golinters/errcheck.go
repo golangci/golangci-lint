@@ -25,7 +25,11 @@ func (e Errcheck) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, er
 		return nil, err
 	}
 
-	var res []result.Issue
+	if len(issues) == 0 {
+		return nil, nil
+	}
+
+	res := make([]result.Issue, 0, len(issues))
 	for _, i := range issues {
 		var text string
 		if i.FuncName != "" {
