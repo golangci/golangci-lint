@@ -57,7 +57,7 @@ dockers:
 brew:
   github:
     owner: golangci
-    name: golangci-lint-formula
+    name: homebrew-tap
   folder: Formula
   homepage:  https://golangci.com
   description: Fast linters runner for Go.
