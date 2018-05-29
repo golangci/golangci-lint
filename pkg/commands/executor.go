@@ -11,9 +11,11 @@ type Executor struct {
 	cfg *config.Config
 
 	exitCode int
+
+	version, commit, date string
 }
 
-func NewExecutor() *Executor {
+func NewExecutor(version, commit, date string) *Executor {
 	e := &Executor{
 		cfg: &config.Config{},
 	}
@@ -21,6 +23,10 @@ func NewExecutor() *Executor {
 	e.initRoot()
 	e.initRun()
 	e.initLinters()
+
+	e.version = version
+	e.commit = commit
+	e.date = date
 
 	return e
 }

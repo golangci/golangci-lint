@@ -55,6 +55,7 @@ type Run struct {
 	ExitCodeIfIssuesFound int  `mapstructure:"issues-exit-code"`
 	AnalyzeTests          bool `mapstructure:"tests"`
 	Deadline              time.Duration
+	PrintVersion          bool
 }
 
 type LintersSettings struct {

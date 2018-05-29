@@ -1,11 +1,13 @@
 package commands
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"runtime"
 	"runtime/pprof"
 
+	"github.com/golangci/golangci-lint/pkg/printers"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
@@ -21,6 +23,11 @@ func (e *Executor) initRoot() {
 			}
 		},
 		PersistentPreRun: func(cmd *cobra.Command, args []string) {
+			if e.cfg.Run.PrintVersion {
+				fmt.Fprintf(printers.StdOut, "golangci-lint has version %s built from %s on %s\n", e.version, e.commit, e.date)
+				os.Exit(0)
+			}
+
 			runtime.GOMAXPROCS(e.cfg.Run.Concurrency)
 
 			log.SetFlags(0) // don't print time
@@ -62,6 +69,7 @@ func (e *Executor) initRoot() {
 	rootCmd.PersistentFlags().StringVar(&e.cfg.Run.CPUProfilePath, "cpu-profile-path", "", "Path to CPU profile output file")
 	rootCmd.PersistentFlags().StringVar(&e.cfg.Run.MemProfilePath, "mem-profile-path", "", "Path to memory profile output file")
 	rootCmd.PersistentFlags().IntVarP(&e.cfg.Run.Concurrency, "concurrency", "j", runtime.NumCPU(), "Concurrency (default NumCPU)")
+	rootCmd.PersistentFlags().BoolVar(&e.cfg.Run.PrintVersion, "version", false, "Print version")
 
 	e.rootCmd = rootCmd
 }
