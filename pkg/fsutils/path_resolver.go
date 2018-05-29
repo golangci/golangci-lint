@@ -184,5 +184,21 @@ func (pr PathResolver) Resolve(paths ...string) (*PathResolveResult, error) {
 		state.addFile(path)
 	}
 
+	state.excludeDirsWithoutGoFiles()
+
 	return state.toResult(), nil
+}
+
+func (s *pathResolveState) excludeDirsWithoutGoFiles() {
+	dirToFiles := map[string]bool{}
+	for f := range s.files {
+		dir := filepath.Dir(f)
+		dirToFiles[dir] = true
+	}
+
+	for dir := range s.dirs {
+		if !dirToFiles[dir] { // no go files in this dir
+			delete(s.dirs, dir)
+		}
+	}
 }
