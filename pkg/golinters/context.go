@@ -9,12 +9,13 @@ import (
 )
 
 type Context struct {
-	Paths        *fsutils.ProjectPaths
-	Cfg          *config.Config
-	Program      *loader.Program
-	SSAProgram   *ssa.Program
-	LoaderConfig *loader.Config
-	ASTCache     *astcache.Cache
+	Paths                *fsutils.ProjectPaths
+	Cfg                  *config.Config
+	Program              *loader.Program
+	SSAProgram           *ssa.Program
+	LoaderConfig         *loader.Config
+	ASTCache             *astcache.Cache
+	NotCompilingPackages []*loader.PackageInfo
 }
 
 func (c *Context) Settings() *config.LintersSettings {
