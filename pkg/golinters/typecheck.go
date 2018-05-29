@@ -63,7 +63,7 @@ func (lint TypeCheck) parseError(err error) *result.Issue {
 
 func (lint TypeCheck) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, error) {
 	var res []result.Issue
-	for _, pkg := range lintCtx.Program.InitialPackages() {
+	for _, pkg := range lintCtx.NotCompilingPackages {
 		for _, err := range pkg.Errors {
 			i := lint.parseError(err)
 			if i != nil {

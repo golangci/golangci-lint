@@ -190,6 +190,30 @@ func discoverGoRoot() (string, error) {
 	return strings.TrimSpace(string(output)), nil
 }
 
+// separateNotCompilingPackages moves not compiling packages into separate slices:
+// a lot of linters crash on such packages. Leave them only for those linters
+// which can work with them.
+func separateNotCompilingPackages(lintCtx *golinters.Context) {
+	prog := lintCtx.Program
+
+	compilingCreated := make([]*loader.PackageInfo, 0, len(prog.Created))
+	for _, info := range prog.Created {
+		if len(info.Errors) != 0 {
+			lintCtx.NotCompilingPackages = append(lintCtx.NotCompilingPackages, info)
+		} else {
+			compilingCreated = append(compilingCreated, info)
+		}
+	}
+	prog.Created = compilingCreated
+
+	for k, info := range prog.Imported {
+		if len(info.Errors) != 0 {
+			lintCtx.NotCompilingPackages = append(lintCtx.NotCompilingPackages, info)
+			delete(prog.Imported, k)
+		}
+	}
+}
+
 func buildLintCtx(ctx context.Context, linters []pkg.Linter, cfg *config.Config) (*golinters.Context, error) {
 	// Set GOROOT to have working cross-compilation: cross-compiled binaries
 	// have invalid GOROOT. XXX: can't use runtime.GOROOT().
@@ -228,14 +252,18 @@ func buildLintCtx(ctx context.Context, linters []pkg.Linter, cfg *config.Config)
 		astCache = astcache.LoadFromFiles(paths.Files)
 	}
 
-	return &golinters.Context{
+	ret := &golinters.Context{
 		Paths:        paths,
 		Cfg:          cfg,
 		Program:      prog,
 		SSAProgram:   ssaProg,
 		LoaderConfig: loaderConfig,
 		ASTCache:     astCache,
-	}, nil
+	}
+
+	separateNotCompilingPackages(ret)
+
+	return ret, nil
 }
 
 func (e *Executor) runAnalysis(ctx context.Context, args []string) (<-chan result.Issue, error) {
