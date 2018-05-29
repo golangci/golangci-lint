@@ -9,6 +9,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"os/exec"
 	"runtime"
 	"strings"
 	"time"
@@ -175,7 +176,31 @@ func buildSSAProgram(ctx context.Context, lprog *loader.Program) *ssa.Program {
 	return ssaProg
 }
 
+func discoverGoRoot() (string, error) {
+	goroot := os.Getenv("GOROOT")
+	if goroot != "" {
+		return goroot, nil
+	}
+
+	output, err := exec.Command("go", "env", "GOROOT").Output()
+	if err != nil {
+		return "", fmt.Errorf("can't execute go env GOROOT: %s", err)
+	}
+
+	return strings.TrimSpace(string(output)), nil
+}
+
 func buildLintCtx(ctx context.Context, linters []pkg.Linter, cfg *config.Config) (*golinters.Context, error) {
+	// Set GOROOT to have working cross-compilation: cross-compiled binaries
+	// have invalid GOROOT. XXX: can't use runtime.GOROOT().
+	goroot, err := discoverGoRoot()
+	if err != nil {
+		return nil, fmt.Errorf("can't discover GOROOT: %s", err)
+	}
+	os.Setenv("GOROOT", goroot)
+	build.Default.GOROOT = goroot
+	logrus.Infof("set GOROOT=%q", goroot)
+
 	args := cfg.Run.Args
 	if len(args) == 0 {
 		args = []string{"./..."}
