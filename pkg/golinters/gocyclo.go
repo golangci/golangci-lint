@@ -22,7 +22,7 @@ func (Gocyclo) Desc() string {
 func (g Gocyclo) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, error) {
 	var stats []gocycloAPI.Stat
 	for _, f := range lintCtx.ASTCache.GetAllValidFiles() {
-		stats = append(stats, gocycloAPI.BuildStats(f.F, f.Fset, stats)...)
+		stats = gocycloAPI.BuildStats(f.F, f.Fset, stats)
 	}
 	if len(stats) == 0 {
 		return nil, nil
