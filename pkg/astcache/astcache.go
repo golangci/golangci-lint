@@ -1,16 +1,21 @@
 package astcache
 
 import (
+	"fmt"
 	"go/ast"
 	"go/parser"
 	"go/token"
+	"os"
+	"path/filepath"
 
+	"github.com/sirupsen/logrus"
 	"golang.org/x/tools/go/loader"
 )
 
 type File struct {
 	F    *ast.File
 	Fset *token.FileSet
+	Name string
 	err  error
 }
 
@@ -34,22 +39,40 @@ func (c *Cache) prepareValidFiles() {
 	c.s = files
 }
 
-func LoadFromProgram(prog *loader.Program) *Cache {
+func LoadFromProgram(prog *loader.Program) (*Cache, error) {
 	c := &Cache{
 		m: map[string]*File{},
 	}
+
+	root, err := os.Getwd()
+	if err != nil {
+		return nil, fmt.Errorf("can't get working dir: %s", err)
+	}
+
 	for _, pkg := range prog.InitialPackages() {
 		for _, f := range pkg.Files {
-			pos := prog.Fset.Position(0)
-			c.m[pos.Filename] = &File{
+			pos := prog.Fset.Position(f.Pos())
+			if pos.Filename == "" {
+				continue
+			}
+
+			relPath, err := filepath.Rel(root, pos.Filename)
+			if err != nil {
+				logrus.Warnf("Can't get relative path for %s and %s: %s",
+					root, pos.Filename, err)
+				continue
+			}
+
+			c.m[relPath] = &File{
 				F:    f,
 				Fset: prog.Fset,
+				Name: relPath,
 			}
 		}
 	}
 
 	c.prepareValidFiles()
-	return c
+	return c, nil
 }
 
 func LoadFromFiles(files []string) *Cache {
@@ -63,6 +86,7 @@ func LoadFromFiles(files []string) *Cache {
 			F:    f,
 			Fset: fset,
 			err:  err,
+			Name: filePath,
 		}
 	}
 

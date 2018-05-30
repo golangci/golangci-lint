@@ -294,9 +294,7 @@ func GetAllLintersForPreset(p string) []Linter {
 	return ret
 }
 
-func getEnabledLintersSet(cfg *config.Config) map[string]Linter { // nolint:gocyclo
-	lcfg := &cfg.Linters
-
+func getEnabledLintersSet(lcfg *config.Linters, enabledByDefaultLinters []Linter) map[string]Linter { // nolint:gocyclo
 	resultLintersSet := map[string]Linter{}
 	switch {
 	case len(lcfg.Presets) != 0:
@@ -306,7 +304,7 @@ func getEnabledLintersSet(cfg *config.Config) map[string]Linter { // nolint:gocy
 	case lcfg.DisableAll:
 		break
 	default:
-		resultLintersSet = lintersToMap(getAllEnabledByDefaultLinters())
+		resultLintersSet = lintersToMap(enabledByDefaultLinters)
 	}
 
 	// --presets can only add linters to default set
@@ -332,10 +330,22 @@ func getEnabledLintersSet(cfg *config.Config) map[string]Linter { // nolint:gocy
 	}
 
 	for _, name := range lcfg.Disable {
+		if name == "megacheck" {
+			for _, ln := range getAllMegacheckSubLinterNames() {
+				delete(resultLintersSet, ln)
+			}
+		}
 		delete(resultLintersSet, name)
 	}
 
 	return resultLintersSet
+}
+
+func getAllMegacheckSubLinterNames() []string {
+	unusedName := golinters.Megacheck{UnusedEnabled: true}.Name()
+	gosimpleName := golinters.Megacheck{GosimpleEnabled: true}.Name()
+	staticcheckName := golinters.Megacheck{StaticcheckEnabled: true}.Name()
+	return []string{unusedName, gosimpleName, staticcheckName}
 }
 
 func optimizeLintersSet(linters map[string]Linter) {
@@ -375,7 +385,7 @@ func GetEnabledLinters(cfg *config.Config) ([]Linter, error) {
 		return nil, err
 	}
 
-	resultLintersSet := getEnabledLintersSet(cfg)
+	resultLintersSet := getEnabledLintersSet(&cfg.Linters, getAllEnabledByDefaultLinters())
 	optimizeLintersSet(resultLintersSet)
 
 	var resultLinters []Linter

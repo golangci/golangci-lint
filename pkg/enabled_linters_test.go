@@ -8,6 +8,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"runtime"
+	"sort"
 	"strconv"
 	"strings"
 	"sync"
@@ -368,5 +369,50 @@ func BenchmarkWithGometalinter(b *testing.B) {
 		lc := getGoLinesTotalCount(b)
 
 		compare(b, runGometalinter, runGolangciLint, bc.name, "", lc/1000)
+	}
+}
+
+func TestGetEnabledLintersSet(t *testing.T) {
+	type cs struct {
+		cfg  config.Linters
+		name string   // test case name
+		def  []string // enabled by default linters
+		exp  []string // alphabetically ordered enabled linter names
+	}
+	cases := []cs{
+		{
+			cfg: config.Linters{
+				Disable: []string{"megacheck"},
+			},
+			name: "disable all linters from megacheck",
+			def:  getAllMegacheckSubLinterNames(),
+		},
+		{
+			cfg: config.Linters{
+				Disable: []string{"staticcheck"},
+			},
+			name: "disable only staticcheck",
+			def:  getAllMegacheckSubLinterNames(),
+			exp:  []string{"gosimple", "unused"},
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(t *testing.T) {
+			defaultLinters := []Linter{}
+			for _, ln := range c.def {
+				defaultLinters = append(defaultLinters, getLinterByName(ln))
+			}
+			els := getEnabledLintersSet(&c.cfg, defaultLinters)
+			var enabledLinters []string
+			for ln := range els {
+				enabledLinters = append(enabledLinters, ln)
+			}
+
+			sort.Strings(enabledLinters)
+			sort.Strings(c.exp)
+
+			assert.Equal(t, c.exp, enabledLinters)
+		})
 	}
 }
