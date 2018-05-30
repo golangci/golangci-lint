@@ -31,7 +31,10 @@ import (
 	"golang.org/x/tools/go/loader"
 )
 
-const exitCodeIfFailure = 3
+const (
+	exitCodeIfFailure = 3
+	exitCodeIfTimeout = 4
+)
 
 func (e *Executor) initRun() {
 	var runCmd = &cobra.Command{
@@ -387,6 +390,10 @@ func (e *Executor) executeRun(cmd *cobra.Command, args []string) {
 		if e.exitCode == 0 {
 			e.exitCode = exitCodeIfFailure
 		}
+	}
+
+	if e.exitCode == 0 && ctx.Err() != nil {
+		e.exitCode = exitCodeIfTimeout
 	}
 }
 

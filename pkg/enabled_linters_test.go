@@ -10,6 +10,8 @@ import (
 	"runtime"
 	"strconv"
 	"strings"
+	"sync"
+	"syscall"
 	"testing"
 	"time"
 
@@ -19,6 +21,15 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
 )
+
+var installOnce sync.Once
+
+func installBinary(t assert.TestingT) {
+	installOnce.Do(func() {
+		cmd := exec.Command("go", "install", filepath.Join("..", "cmd", binName))
+		assert.NoError(t, cmd.Run(), "Can't go install %s", binName)
+	})
+}
 
 func runGoErrchk(c *exec.Cmd, t *testing.T) {
 	output, err := c.CombinedOutput()
@@ -51,9 +62,30 @@ func TestSourcesFromTestdataWithIssuesDir(t *testing.T) {
 	}
 }
 
-func installBinary(t assert.TestingT) {
-	cmd := exec.Command("go", "install", filepath.Join("..", "cmd", binName))
-	assert.NoError(t, cmd.Run(), "Can't go install %s", binName)
+func TestDeadlineExitCode(t *testing.T) {
+	installBinary(t)
+
+	exitCode := runGolangciLintGetExitCode(t, "--no-config", "--deadline=1ms")
+	assert.Equal(t, 4, exitCode)
+}
+
+func runGolangciLintGetExitCode(t *testing.T, args ...string) int {
+	runArgs := append([]string{"run"}, args...)
+	cmd := exec.Command("golangci-lint", runArgs...)
+	err := cmd.Run()
+	if err != nil {
+		if exitError, ok := err.(*exec.ExitError); ok {
+			ws := exitError.Sys().(syscall.WaitStatus)
+			return ws.ExitStatus()
+		}
+
+		t.Fatalf("can't get error code from %s", err)
+		return -1
+	}
+
+	// success, exitCode should be 0 if go is ok
+	ws := cmd.ProcessState.Sys().(syscall.WaitStatus)
+	return ws.ExitStatus()
 }
 
 func testOneSource(t *testing.T, sourcePath string) {
