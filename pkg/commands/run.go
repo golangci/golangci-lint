@@ -196,20 +196,24 @@ func discoverGoRoot() (string, error) {
 func separateNotCompilingPackages(lintCtx *golinters.Context) {
 	prog := lintCtx.Program
 
-	compilingCreated := make([]*loader.PackageInfo, 0, len(prog.Created))
-	for _, info := range prog.Created {
-		if len(info.Errors) != 0 {
-			lintCtx.NotCompilingPackages = append(lintCtx.NotCompilingPackages, info)
-		} else {
-			compilingCreated = append(compilingCreated, info)
+	if prog.Created != nil {
+		compilingCreated := make([]*loader.PackageInfo, 0, len(prog.Created))
+		for _, info := range prog.Created {
+			if len(info.Errors) != 0 {
+				lintCtx.NotCompilingPackages = append(lintCtx.NotCompilingPackages, info)
+			} else {
+				compilingCreated = append(compilingCreated, info)
+			}
 		}
+		prog.Created = compilingCreated
 	}
-	prog.Created = compilingCreated
 
-	for k, info := range prog.Imported {
-		if len(info.Errors) != 0 {
-			lintCtx.NotCompilingPackages = append(lintCtx.NotCompilingPackages, info)
-			delete(prog.Imported, k)
+	if prog.Imported != nil {
+		for k, info := range prog.Imported {
+			if len(info.Errors) != 0 {
+				lintCtx.NotCompilingPackages = append(lintCtx.NotCompilingPackages, info)
+				delete(prog.Imported, k)
+			}
 		}
 	}
 }
@@ -261,7 +265,9 @@ func buildLintCtx(ctx context.Context, linters []pkg.Linter, cfg *config.Config)
 		ASTCache:     astCache,
 	}
 
-	separateNotCompilingPackages(ret)
+	if prog != nil {
+		separateNotCompilingPackages(ret)
+	}
 
 	return ret, nil
 }
