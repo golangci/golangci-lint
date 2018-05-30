@@ -20,8 +20,11 @@ func (Ineffassign) Desc() string {
 
 func (lint Ineffassign) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, error) {
 	issues := ineffassignAPI.Run(lintCtx.Paths.Files)
+	if len(issues) == 0 {
+		return nil, nil
+	}
 
-	var res []result.Issue
+	res := make([]result.Issue, 0, len(issues))
 	for _, i := range issues {
 		res = append(res, result.Issue{
 			Pos:        i.Pos,

@@ -19,7 +19,11 @@ func (Unconvert) Desc() string {
 
 func (lint Unconvert) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, error) {
 	positions := unconvertAPI.Run(lintCtx.Program)
-	var res []result.Issue
+	if len(positions) == 0 {
+		return nil, nil
+	}
+
+	res := make([]result.Issue, 0, len(positions))
 	for _, pos := range positions {
 		res = append(res, result.Issue{
 			Pos:        pos,

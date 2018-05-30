@@ -27,8 +27,11 @@ func (lint Interfacer) Run(ctx context.Context, lintCtx *Context) ([]result.Issu
 	if err != nil {
 		return nil, err
 	}
+	if len(issues) == 0 {
+		return nil, nil
+	}
 
-	var res []result.Issue
+	res := make([]result.Issue, 0, len(issues))
 	for _, i := range issues {
 		pos := lintCtx.SSAProgram.Fset.Position(i.Pos())
 		res = append(res, result.Issue{

@@ -24,15 +24,18 @@ func (g Gocyclo) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, err
 	for _, f := range lintCtx.ASTCache.GetAllValidFiles() {
 		stats = gocycloAPI.BuildStats(f.F, f.Fset, stats)
 	}
+	if len(stats) == 0 {
+		return nil, nil
+	}
 
 	sort.Slice(stats, func(i, j int) bool {
 		return stats[i].Complexity > stats[j].Complexity
 	})
 
-	var res []result.Issue
+	res := make([]result.Issue, 0, len(stats))
 	for _, s := range stats {
 		if s.Complexity <= lintCtx.Settings().Gocyclo.MinComplexity {
-			continue
+			break //Break as the stats is already sorted from greatest to least
 		}
 
 		res = append(res, result.Issue{

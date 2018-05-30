@@ -53,8 +53,11 @@ func (g Golint) lintFiles(minConfidence float64, filenames ...string) ([]result.
 	if err != nil {
 		return nil, fmt.Errorf("can't lint files %s: %s", filenames, err)
 	}
+	if len(ps) == 0 {
+		return nil, nil
+	}
 
-	var issues []result.Issue
+	issues := make([]result.Issue, 0, len(ps)) //This is worst case
 	for _, p := range ps {
 		if p.Confidence >= minConfidence {
 			issues = append(issues, result.Issue{

@@ -20,8 +20,11 @@ func (Maligned) Desc() string {
 
 func (m Maligned) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, error) {
 	issues := malignedAPI.Run(lintCtx.Program)
+	if len(issues) == 0 {
+		return nil, nil
+	}
 
-	var res []result.Issue
+	res := make([]result.Issue, 0, len(issues))
 	for _, i := range issues {
 		text := fmt.Sprintf("struct of size %d bytes could be of size %d bytes", i.OldSize, i.NewSize)
 		if lintCtx.Settings().Maligned.SuggestNewOrder {

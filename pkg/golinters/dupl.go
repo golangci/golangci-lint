@@ -25,7 +25,11 @@ func (d Dupl) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, error)
 		return nil, err
 	}
 
-	var res []result.Issue
+	if len(issues) == 0 {
+		return nil, nil
+	}
+
+	res := make([]result.Issue, 0, len(issues))
 	for _, i := range issues {
 		dupl := fmt.Sprintf("%s:%d-%d", i.To.Filename(), i.To.LineStart(), i.To.LineEnd())
 		text := fmt.Sprintf("%d-%d lines are duplicate of %s",
