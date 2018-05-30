@@ -254,7 +254,10 @@ func buildLintCtx(ctx context.Context, linters []pkg.Linter, cfg *config.Config)
 
 	var astCache *astcache.Cache
 	if prog != nil {
-		astCache = astcache.LoadFromProgram(prog)
+		astCache, err = astcache.LoadFromProgram(prog)
+		if err != nil {
+			return nil, err
+		}
 	} else {
 		astCache = astcache.LoadFromFiles(paths.Files)
 	}
