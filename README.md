@@ -368,7 +368,7 @@ We use `cobra` for command-line action.
 # FAQ
 **Q: How to add custom linter?**
 
-A: You can integrate it yourself, take a look at [existing linters integrations](https://github.com/golangci/golangci-lint/tree/master/pkg/golinters). Or you can create [GitHub Issue](https://github.com/golangci/golangci-lint/issues/new) and we will integrate it soon.
+A: You can integrate it yourself, see this [wiki page](https://github.com/golangci/golangci-lint/wiki/How-to-add-a-custom-linter) with documentation. Or you can create [GitHub Issue](https://github.com/golangci/golangci-lint/issues/new) and we will integrate it soon.
 
 **Q: It's cool to use `golangci-lint` when starting a project, but what about existing projects with large codebase? It will take days to fix all found issues**
 
