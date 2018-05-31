@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/golangci/golangci-lint/pkg/lint"
 	"github.com/golangci/golangci-lint/pkg/result"
 	ineffassignAPI "github.com/golangci/ineffassign"
 )
@@ -18,7 +19,7 @@ func (Ineffassign) Desc() string {
 	return "Detects when assignments to existing variables are not used"
 }
 
-func (lint Ineffassign) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, error) {
+func (lint Ineffassign) Run(ctx context.Context, lintCtx *lint.Context) ([]result.Issue, error) {
 	issues := ineffassignAPI.Run(lintCtx.Paths.Files)
 	if len(issues) == 0 {
 		return nil, nil

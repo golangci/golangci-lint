@@ -10,6 +10,7 @@ import (
 
 	"github.com/GoASTScanner/gas"
 	"github.com/GoASTScanner/gas/rules"
+	"github.com/golangci/golangci-lint/pkg/lint"
 	"github.com/golangci/golangci-lint/pkg/result"
 	"github.com/sirupsen/logrus"
 )
@@ -24,7 +25,7 @@ func (Gas) Desc() string {
 	return "Inspects source code for security problems"
 }
 
-func (lint Gas) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, error) {
+func (lint Gas) Run(ctx context.Context, lintCtx *lint.Context) ([]result.Issue, error) {
 	gasConfig := gas.NewConfig()
 	enabledRules := rules.Generate()
 	logger := log.New(ioutil.Discard, "", 0)

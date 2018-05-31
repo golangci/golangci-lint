@@ -21,6 +21,7 @@ var DefaultExcludePatterns = []string{
 	// golint
 	"should have comment",
 	"comment on exported method",
+	"func name will be used as test\\.Test.* by other packages, and that stutters; consider calling this",
 
 	// gas
 	"G103:", // Use of unsafe calls should be audited

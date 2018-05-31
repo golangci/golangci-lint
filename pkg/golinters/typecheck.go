@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/golangci/golangci-lint/pkg/lint"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
@@ -61,7 +62,7 @@ func (lint TypeCheck) parseError(err error) *result.Issue {
 	}
 }
 
-func (lint TypeCheck) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, error) {
+func (lint TypeCheck) Run(ctx context.Context, lintCtx *lint.Context) ([]result.Issue, error) {
 	if lintCtx.NotCompilingPackages == nil {
 		return nil, nil
 	}

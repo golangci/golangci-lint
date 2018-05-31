@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	goconstAPI "github.com/golangci/goconst"
+	"github.com/golangci/golangci-lint/pkg/lint"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
@@ -18,7 +19,7 @@ func (Goconst) Desc() string {
 	return "Finds repeated strings that could be replaced by a constant"
 }
 
-func (lint Goconst) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, error) {
+func (lint Goconst) Run(ctx context.Context, lintCtx *lint.Context) ([]result.Issue, error) {
 	var goconstIssues []goconstAPI.Issue
 	// TODO: make it cross-package: pass package names inside goconst
 	for _, files := range lintCtx.Paths.FilesGrouppedByDirs() {

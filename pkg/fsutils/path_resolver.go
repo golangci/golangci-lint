@@ -80,7 +80,7 @@ func (pr PathResolver) isIgnoredDir(dir string) bool {
 
 	// https://github.com/golang/dep/issues/298
 	// https://github.com/tools/godep/issues/140
-	if strings.HasPrefix(dirName, ".") && dirName != "." {
+	if strings.HasPrefix(dirName, ".") && dirName != "." && dirName != ".." {
 		return true
 	}
 	if strings.HasPrefix(dirName, "_") {

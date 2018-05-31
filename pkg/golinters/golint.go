@@ -5,7 +5,8 @@ import (
 	"fmt"
 	"io/ioutil"
 
-	"github.com/golang/lint"
+	lintAPI "github.com/golang/lint"
+	"github.com/golangci/golangci-lint/pkg/lint"
 	"github.com/golangci/golangci-lint/pkg/result"
 	"github.com/sirupsen/logrus"
 )
@@ -20,7 +21,7 @@ func (Golint) Desc() string {
 	return "Golint differs from gofmt. Gofmt reformats Go source code, whereas golint prints out style mistakes"
 }
 
-func (g Golint) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, error) {
+func (g Golint) Run(ctx context.Context, lintCtx *lint.Context) ([]result.Issue, error) {
 	var issues []result.Issue
 	var lintErr error
 	for _, pkgFiles := range lintCtx.Paths.FilesGrouppedByDirs() {
@@ -48,7 +49,7 @@ func (g Golint) lintFiles(minConfidence float64, filenames ...string) ([]result.
 		files[filename] = src
 	}
 
-	l := new(lint.Linter)
+	l := new(lintAPI.Linter)
 	ps, err := l.LintFiles(files)
 	if err != nil {
 		return nil, fmt.Errorf("can't lint files %s: %s", filenames, err)

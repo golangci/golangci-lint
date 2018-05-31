@@ -1,7 +1,6 @@
 package processors
 
 import (
-	"github.com/golangci/golangci-lint/pkg/golinters"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
@@ -25,9 +24,9 @@ func (p MaxPerFileFromLinter) Name() string {
 }
 
 var maxPerFileFromLinterConfig = map[string]int{
-	golinters.Gofmt{}.Name():                   1,
-	golinters.Gofmt{UseGoimports: true}.Name(): 1,
-	golinters.TypeCheck{}.Name():               3,
+	"gofmt":     1,
+	"goimports": 1,
+	"typecheck": 3,
 }
 
 func (p *MaxPerFileFromLinter) Process(issues []result.Issue) ([]result.Issue, error) {

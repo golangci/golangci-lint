@@ -44,10 +44,10 @@ func (e Executor) executeLinters(cmd *cobra.Command, args []string) {
 
 	color.Green("\nLinters presets:")
 	for _, p := range pkg.AllPresets() {
-		linters := pkg.GetAllLintersForPreset(p)
+		linters := pkg.GetAllLinterConfigsForPreset(p)
 		linterNames := []string{}
-		for _, linter := range linters {
-			linterNames = append(linterNames, linter.Name())
+		for _, lc := range linters {
+			linterNames = append(linterNames, lc.Linter.Name())
 		}
 		fmt.Fprintf(printers.StdOut, "%s: %s\n", color.YellowString(p), strings.Join(linterNames, ", "))
 	}

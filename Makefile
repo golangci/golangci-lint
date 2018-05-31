@@ -4,5 +4,7 @@ test:
 	golangci-lint run --fast --no-config -v
 	golangci-lint run --fast --no-config -v
 	golangci-lint run --no-config -v
-	golangci-lint run --fast --no-config -v ./pkg/testdata/with_issues/typecheck.go
+	golangci-lint run --fast --no-config -v ./test/testdata/typecheck.go
 	go test -v -race ./...
+
+.PHONY: test
