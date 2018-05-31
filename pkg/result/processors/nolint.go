@@ -47,21 +47,26 @@ func (p *Nolint) Process(issues []result.Issue) ([]result.Issue, error) {
 }
 
 var (
-	genHdr = []byte("// Code generated ")
-	genFtr = []byte(" DO NOT EDIT.")
+	genHdr = []byte("// Code generated")
+	genFtr = []byte("DO NOT EDIT")
 )
 
-// isGenerated reports whether the source file is generated code
-// according the rules from https://golang.org/s/generatedcode.
+// isGenerated reports whether the source file is generated code.
+// Using a bit laxer rules than https://golang.org/s/generatedcode to
+// match more generated code.
 func isGenerated(src []byte) bool {
 	sc := bufio.NewScanner(bytes.NewReader(src))
+	var hdr, ftr bool
 	for sc.Scan() {
 		b := sc.Bytes()
-		if bytes.HasPrefix(b, genHdr) && bytes.HasSuffix(b, genFtr) && len(b) >= len(genHdr)+len(genFtr) {
-			return true
+		if bytes.HasPrefix(b, genHdr) {
+			hdr = true
+		}
+		if bytes.Contains(b, genFtr) {
+			ftr = true
 		}
 	}
-	return false
+	return hdr && ftr
 }
 
 func (p *Nolint) getOrCreateFileData(i *result.Issue) (*fileData, error) {
