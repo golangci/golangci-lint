@@ -88,6 +88,18 @@ func (e *Executor) initRun() {
 	runCmd.Flags().IntVar(&lsc.Goconst.MinOccurrencesCount, "goconst.min-occurrences",
 		3, "Goconst: minimum occurrences of constant string count to trigger issue")
 
+	// (@dixonwille) These flag is only used for testing purposes.
+	runCmd.Flags().StringSliceVar(&lsc.Depguard.Packages, "depguard.packages", nil,
+		"Depguard: packages to add to the list")
+	if err := runCmd.Flags().MarkHidden("depguard.packages"); err != nil {
+		panic(err) //Considering The only time this is called is if name does not exist
+	}
+	runCmd.Flags().BoolVar(&lsc.Depguard.IncludeGoRoot, "depguard.include-go-root", false,
+		"Depguard: check list against standard lib")
+	if err := runCmd.Flags().MarkHidden("depguard.include-go-root"); err != nil {
+		panic(err) //Considering The only time this is called is if name does not exist
+	}
+
 	// Linters config
 	lc := &e.cfg.Linters
 	runCmd.Flags().StringSliceVarP(&lc.Enable, "enable", "E", []string{}, "Enable specific linter")

@@ -12,6 +12,12 @@
   source = "github.com/golangci/gas"
 
 [[projects]]
+  branch = "master"
+  name = "github.com/OpenPeeDeeP/depguard"
+  packages = ["."]
+  revision = "f2dff4f73566d1b9bd73f9bfd765030fbae5263a"
+
+[[projects]]
   name = "github.com/StackExchange/wmi"
   packages = ["."]
   revision = "5d049714c4a64225c3c79a7cf7d02f7fb5b96338"
@@ -410,6 +416,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "8cfc9eb6d890be05e9a019a4537c3fba5bcaf25a396437d0a8b402f6cc244d2e"
+  inputs-digest = "832e18c919daf77730cda91687bfd2d0b0b70fe6283c38b33e48ed89c2fd2def"
   solver-name = "gps-cdcl"
   solver-version = 1

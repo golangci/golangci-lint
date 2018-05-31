@@ -104,6 +104,7 @@ gofmt: Gofmt checks whether code was gofmt-ed. By default this tool runs with -s
 goimports: Goimports does everything that gofmt does. Additionally it checks unused imports
 maligned: Tool to detect Go structs that would take less memory if their fields were sorted
 megacheck: 3 sub-linters in one: unused, gosimple and staticcheck
+depguard: Go linter that checks if package imports are in a list of acceptable packages
 ```
 
 Pass `-E/--enable` to enable linter and `-D/--disable` to disable:
@@ -196,6 +197,7 @@ golangci-lint linters
 - [goimports](https://godoc.org/golang.org/x/tools/cmd/goimports): Goimports does everything that gofmt does. Additionally it checks unused imports
 - [maligned](https://github.com/mdempsky/maligned): Tool to detect Go structs that would take less memory if their fields were sorted
 - [megacheck](https://github.com/dominikh/go-tools/tree/master/cmd/megacheck): 3 sub-linters in one: unused, gosimple and staticcheck
+- [depguard](https://github.com/OpenPeeDeeP/depguard): Go linter that checks if package imports are in a list of acceptable packages
 
 # Configuration
 ## Command-Line Options
@@ -231,7 +233,7 @@ Linters presets:
 bugs: govet, errcheck, staticcheck, gas, megacheck
 unused: unused, structcheck, varcheck, ineffassign, deadcode, megacheck
 format: gofmt, goimports
-style: golint, gosimple, interfacer, unconvert, dupl, goconst, megacheck
+style: golint, gosimple, interfacer, unconvert, dupl, goconst, megacheck, depguard
 complexity: gocyclo
 performance: maligned
 ```
@@ -427,6 +429,7 @@ Thanks to developers and authors of used linters:
 - [golang/x/tools/goimports](https://godoc.org/golang.org/x/tools/cmd/goimports)
 - [mdempsky/maligned](https://github.com/mdempsky/maligned)
 - [dominikh/go-tools/megacheck](https://github.com/dominikh/go-tools/tree/master/cmd/megacheck)
+- [OpenPeeDeeP/depguard](https://github.com/OpenPeeDeeP/depguard)
 
 # Future Plans
 1. Upstream all changes of forked linters.

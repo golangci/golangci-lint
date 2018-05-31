@@ -91,6 +91,11 @@ type LintersSettings struct {
 		MinStringLen        int `mapstructure:"min-len"`
 		MinOccurrencesCount int `mapstructure:"min-occurrences"`
 	}
+	Depguard struct {
+		ListType      string `mapstructure:"list-type"`
+		Packages      []string
+		IncludeGoRoot bool `mapstructure:"inlude-go-root"`
+	}
 }
 
 type Linters struct {

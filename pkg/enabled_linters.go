@@ -125,6 +125,7 @@ func GetAllSupportedLinterConfigs() []LinterConfig {
 		newLinterConfig(golinters.Maligned{}).WithFullImport().WithPresets(PresetPerformance).WithSpeed(10),
 		newLinterConfig(golinters.Megacheck{GosimpleEnabled: true, UnusedEnabled: true, StaticcheckEnabled: true}).
 			WithSSA().WithPresets(PresetStyle, PresetBugs, PresetUnused).WithSpeed(1),
+		newLinterConfig(golinters.Depguard{}).WithFullImport().WithPresets(PresetStyle).WithSpeed(6),
 	}
 
 	if os.Getenv("GOLANGCI_COM_RUN") == "1" {
