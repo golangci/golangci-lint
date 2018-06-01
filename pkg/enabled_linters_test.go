@@ -100,6 +100,8 @@ func testOneSource(t *testing.T, sourcePath string) {
 		"--out-format=line-number",
 		"--print-welcome=false",
 		"--govet.check-shadowing=true",
+		"--depguard.include-go-root",
+		"--depguard.packages='log'",
 		sourcePath)
 	runGoErrchk(cmd, t)
 }

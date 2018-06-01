@@ -1,6 +1,6 @@
 package testdata
 
-import "log"
+import "log" // nolint:depguard
 
 func Unconvert() {
 	a := 1

@@ -112,3 +112,7 @@
 [[override]]
   branch = "master"
   name = "github.com/golangci/lint"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/OpenPeeDeeP/depguard"

@@ -31,6 +31,11 @@ linters-settings:
   goconst:
     min-len: 3
     min-occurrences: 3
+  depguard:
+    list-type: blacklist
+    include-go-root: false
+    packages:
+      - github.com/davecgh/go-spew/spew
 
 linters:
   enable:
