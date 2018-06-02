@@ -422,4 +422,5 @@ Thanks to developers and authors of used linters:
 10. Documentation for every issue type.
 
 # Contact Information
-You can contact the author of GolangCI-Lint by [denis@golangci.com](mailto:denis@golangci.com).
+You can contact the [author](https://github.com/jirfag) of GolangCI-Lint
+by [denis@golangci.com](mailto:denis@golangci.com).
