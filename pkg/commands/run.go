@@ -8,12 +8,14 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"path/filepath"
 	"runtime"
 	"strings"
 	"time"
 
 	"github.com/fatih/color"
 	"github.com/golangci/golangci-lint/pkg/config"
+	"github.com/golangci/golangci-lint/pkg/fsutils"
 	"github.com/golangci/golangci-lint/pkg/lint"
 	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
 	"github.com/golangci/golangci-lint/pkg/printers"
@@ -301,6 +303,8 @@ func (e *Executor) parseConfig() {
 		logrus.Fatalf("Can't parse args: %s", err)
 	}
 
+	e.setupLog() // for `-v` to work until running of preRun function
+
 	if err := viper.BindPFlags(fs); err != nil {
 		logrus.Fatalf("Can't bind cobra's flags to viper: %s", err)
 	}
@@ -318,14 +322,78 @@ func (e *Executor) parseConfig() {
 		return
 	}
 
-	if configFile == "" {
-		viper.SetConfigName(".golangci")
-		viper.AddConfigPath("./")
-	} else {
+	if configFile != "" {
 		viper.SetConfigFile(configFile)
+	} else {
+		setupConfigFileSearch(fs.Args())
 	}
 
 	e.parseConfigImpl()
+}
+
+func setupConfigFileSearch(args []string) {
+	// skip all args ([golangci-lint, run/linters]) before files/dirs list
+	for len(args) != 0 {
+		if args[0] == "run" {
+			args = args[1:]
+			break
+		}
+
+		args = args[1:]
+	}
+
+	// find first file/dir arg
+	firstArg := "./..."
+	if len(args) != 0 {
+		firstArg = args[0]
+	}
+
+	absStartPath, err := filepath.Abs(firstArg)
+	if err != nil {
+		logrus.Infof("Can't make abs path for %q: %s", firstArg, err)
+		absStartPath = filepath.Clean(firstArg)
+	}
+
+	// start from it
+	var curDir string
+	if fsutils.IsDir(absStartPath) {
+		curDir = absStartPath
+	} else {
+		curDir = filepath.Dir(absStartPath)
+	}
+
+	// find all dirs from it up to the root
+	configSearchPaths := []string{"./"}
+	for {
+		configSearchPaths = append(configSearchPaths, curDir)
+		newCurDir := filepath.Dir(curDir)
+		if curDir == newCurDir || newCurDir == "" {
+			break
+		}
+		curDir = newCurDir
+	}
+
+	logrus.Infof("Config search paths: %s", configSearchPaths)
+	viper.SetConfigName(".golangci")
+	for _, p := range configSearchPaths {
+		viper.AddConfigPath(p)
+	}
+}
+
+func getRelPath(p string) string {
+	wd, err := os.Getwd()
+	if err != nil {
+		logrus.Infof("Can't get wd: %s", err)
+		return p
+	}
+
+	r, err := filepath.Rel(wd, p)
+	if err != nil {
+		logrus.Infof("Can't make path %s relative to %s: %s", p, wd, err)
+		return p
+	}
+
+	return r
 }
 
 func (e *Executor) parseConfigImpl() {
@@ -338,12 +406,23 @@ func (e *Executor) parseConfigImpl() {
 		logrus.Fatalf("Can't read viper config: %s", err)
 	}
 
+	usedConfigFile := viper.ConfigFileUsed()
+	if usedConfigFile == "" {
+		return
+	}
+	logrus.Infof("Used config file %s", getRelPath(usedConfigFile))
+
 	if err := viper.Unmarshal(&e.cfg); err != nil {
 		logrus.Fatalf("Can't unmarshal config by viper: %s", err)
 	}
 
 	if err := e.validateConfig(&commandLineConfig); err != nil {
 		logrus.Fatal(err)
+	}
+
+	if e.cfg.InternalTest { // just for testing purposes: to detect config file usage
+		fmt.Fprintln(printers.StdOut, "test")
+		os.Exit(0)
 	}
 }
 

@@ -164,7 +164,7 @@ type Issues struct {
 	Diff              bool   `mapstructure:"new"`
 }
 
-type Config struct { // nolint:maligned
+type Config struct { //nolint:maligned
 	Run Run
 
 	Output struct {
@@ -177,4 +177,6 @@ type Config struct { // nolint:maligned
 	LintersSettings LintersSettings `mapstructure:"linters-settings"`
 	Linters         Linters
 	Issues          Issues
+
+	InternalTest bool // Option is used only for testing golangci-lint code, don't use it
 }

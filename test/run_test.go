@@ -19,14 +19,18 @@ func installBinary(t assert.TestingT) {
 	})
 }
 
-func TestCongratsMessageIfNoIssues(t *testing.T) {
-	out, exitCode := runGolangciLint(t, "../...")
+func checkNoIssuesRun(t *testing.T, out string, exitCode int) {
 	assert.Equal(t, 0, exitCode)
 	assert.Equal(t, "Congrats! No issues were found.\n", out)
 }
 
+func TestCongratsMessageIfNoIssues(t *testing.T) {
+	out, exitCode := runGolangciLint(t, "../...")
+	checkNoIssuesRun(t, out, exitCode)
+}
+
 func TestDeadline(t *testing.T) {
-	out, exitCode := runGolangciLint(t, "--no-config", "--deadline=1ms", "../...")
+	out, exitCode := runGolangciLint(t, "--deadline=1ms", "../...")
 	assert.Equal(t, 4, exitCode)
 	assert.Equal(t, "", out) // no 'Congrats! No issues were found.'
 }
@@ -54,6 +58,19 @@ func runGolangciLint(t *testing.T, args ...string) (string, int) {
 }
 
 func TestTestsAreLintedByDefault(t *testing.T) {
-	out, exitCode := runGolangciLint(t, "--no-config", "./testdata/withtests")
+	out, exitCode := runGolangciLint(t, "./testdata/withtests")
 	assert.Equal(t, 0, exitCode, out)
+}
+
+func TestConfigFileIsDetected(t *testing.T) {
+	checkGotConfig := func(out string, exitCode int) {
+		assert.Equal(t, 0, exitCode, out)
+		assert.Equal(t, "test\n", out) // test config contains InternalTest: true, it triggers such output
+	}
+
+	checkGotConfig(runGolangciLint(t, "testdata/withconfig/pkg"))
+	checkGotConfig(runGolangciLint(t, "testdata/withconfig/..."))
+
+	out, exitCode := runGolangciLint(t) // doesn't detect when no args
+	checkNoIssuesRun(t, out, exitCode)
 }

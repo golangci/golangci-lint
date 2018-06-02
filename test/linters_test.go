@@ -41,6 +41,7 @@ func TestSourcesFromTestdataWithIssuesDir(t *testing.T) {
 func testOneSource(t *testing.T, sourcePath string) {
 	goErrchkBin := filepath.Join(runtime.GOROOT(), "test", "errchk")
 	cmd := exec.Command(goErrchkBin, binName, "run",
+		"--no-config",
 		"--enable-all",
 		"--dupl.threshold=20",
 		"--gocyclo.min-complexity=20",
