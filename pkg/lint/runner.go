@@ -1,4 +1,4 @@
-package pkg
+package lint
 
 import (
 	"context"
@@ -9,7 +9,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/golangci/golangci-lint/pkg/golinters"
 	"github.com/golangci/golangci-lint/pkg/result"
 	"github.com/golangci/golangci-lint/pkg/result/processors"
 	"github.com/golangci/golangci-lint/pkg/timeutils"
@@ -26,7 +25,7 @@ type lintRes struct {
 	issues []result.Issue
 }
 
-func runLinterSafe(ctx context.Context, lintCtx *golinters.Context, linter Linter) (ret []result.Issue, err error) {
+func runLinterSafe(ctx context.Context, lintCtx *Context, linter Linter) (ret []result.Issue, err error) {
 	defer func() {
 		if panicData := recover(); panicData != nil {
 			err = fmt.Errorf("panic occured: %s", panicData)
@@ -37,7 +36,7 @@ func runLinterSafe(ctx context.Context, lintCtx *golinters.Context, linter Linte
 	return linter.Run(ctx, lintCtx)
 }
 
-func runWorker(ctx context.Context, lintCtx *golinters.Context, tasksCh <-chan Linter, lintResultsCh chan<- lintRes, name string) {
+func runWorker(ctx context.Context, lintCtx *Context, tasksCh <-chan Linter, lintResultsCh chan<- lintRes, name string) {
 	sw := timeutils.NewStopwatch(name)
 	defer sw.Print()
 
@@ -88,20 +87,23 @@ func logWorkersStat(workersFinishTimes []time.Time) {
 	logrus.Infof("Workers idle times: %s", strings.Join(logStrings, ", "))
 }
 
-func getSortedLintersConfigs(linters []Linter) []LinterConfig {
-	ret := make([]LinterConfig, 0, len(linters))
-	for _, linter := range linters {
-		ret = append(ret, *GetLinterConfig(linter.Name()))
-	}
+type RunnerLinterConfig interface {
+	GetSpeed() int
+	GetLinter() Linter
+}
+
+func getSortedLintersConfigs(linters []RunnerLinterConfig) []RunnerLinterConfig {
+	ret := make([]RunnerLinterConfig, len(linters))
+	copy(ret, linters)
 
 	sort.Slice(ret, func(i, j int) bool {
-		return ret[i].Speed < ret[j].Speed
+		return ret[i].GetSpeed() < ret[j].GetSpeed()
 	})
 
 	return ret
 }
 
-func (r *SimpleRunner) runWorkers(ctx context.Context, lintCtx *golinters.Context, linters []Linter) <-chan lintRes {
+func (r *SimpleRunner) runWorkers(ctx context.Context, lintCtx *Context, linters []RunnerLinterConfig) <-chan lintRes {
 	tasksCh := make(chan Linter, len(linters))
 	lintResultsCh := make(chan lintRes, len(linters))
 	var wg sync.WaitGroup
@@ -120,7 +122,7 @@ func (r *SimpleRunner) runWorkers(ctx context.Context, lintCtx *golinters.Contex
 
 	lcs := getSortedLintersConfigs(linters)
 	for _, lc := range lcs {
-		tasksCh <- lc.Linter
+		tasksCh <- lc.GetLinter()
 	}
 	close(tasksCh)
 
@@ -187,7 +189,7 @@ func collectIssues(ctx context.Context, resCh <-chan lintRes) <-chan result.Issu
 	return retIssues
 }
 
-func (r SimpleRunner) Run(ctx context.Context, linters []Linter, lintCtx *golinters.Context) <-chan result.Issue {
+func (r SimpleRunner) Run(ctx context.Context, linters []RunnerLinterConfig, lintCtx *Context) <-chan result.Issue {
 	lintResultsCh := r.runWorkers(ctx, lintCtx, linters)
 	processedLintResultsCh := r.processLintResults(ctx, lintResultsCh)
 	if ctx.Err() != nil {

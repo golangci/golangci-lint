@@ -6,6 +6,7 @@ import (
 	"sort"
 
 	gocycloAPI "github.com/golangci/gocyclo/pkg/gocyclo"
+	"github.com/golangci/golangci-lint/pkg/lint"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
@@ -19,7 +20,7 @@ func (Gocyclo) Desc() string {
 	return "Computes and checks the cyclomatic complexity of functions"
 }
 
-func (g Gocyclo) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, error) {
+func (g Gocyclo) Run(ctx context.Context, lintCtx *lint.Context) ([]result.Issue, error) {
 	var stats []gocycloAPI.Stat
 	for _, f := range lintCtx.ASTCache.GetAllValidFiles() {
 		stats = gocycloAPI.BuildStats(f.F, f.Fset, stats)

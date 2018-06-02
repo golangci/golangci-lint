@@ -1,22 +1,30 @@
-package commands
+package lint
 
 import (
 	"context"
 	"testing"
 
-	"github.com/golangci/golangci-lint/pkg"
-	"github.com/golangci/golangci-lint/pkg/astcache"
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/fsutils"
-	"github.com/golangci/golangci-lint/pkg/golinters"
+	"github.com/golangci/golangci-lint/pkg/lint/astcache"
 	"github.com/stretchr/testify/assert"
 )
 
+type testLinterConfig struct{}
+
+func (t testLinterConfig) NeedsProgramLoading() bool {
+	return true
+}
+
+func (t testLinterConfig) NeedsSSARepresentation() bool {
+	return true
+}
+
 func TestASTCacheLoading(t *testing.T) {
 	ctx := context.Background()
-	linters := []pkg.Linter{golinters.Errcheck{}}
+	linters := []LinterConfig{testLinterConfig{}}
 
-	inputPaths := []string{"./...", "./", "./run.go", "run.go"}
+	inputPaths := []string{"./...", "./", "./context.go", "context.go"}
 	for _, inputPath := range inputPaths {
 		paths, err := fsutils.GetPathsForAnalysis(ctx, []string{inputPath}, true)
 		assert.NoError(t, err)

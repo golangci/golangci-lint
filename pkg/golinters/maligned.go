@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/golangci/golangci-lint/pkg/lint"
 	"github.com/golangci/golangci-lint/pkg/result"
 	malignedAPI "github.com/golangci/maligned"
 )
@@ -18,7 +19,7 @@ func (Maligned) Desc() string {
 	return "Tool to detect Go structs that would take less memory if their fields were sorted"
 }
 
-func (m Maligned) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, error) {
+func (m Maligned) Run(ctx context.Context, lintCtx *lint.Context) ([]result.Issue, error) {
 	issues := malignedAPI.Run(lintCtx.Program)
 	if len(issues) == 0 {
 		return nil, nil

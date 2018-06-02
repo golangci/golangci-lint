@@ -1,6 +1,7 @@
 package printers
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 
@@ -13,7 +14,7 @@ func NewJSON() *JSON {
 	return &JSON{}
 }
 
-func (JSON) Print(issues <-chan result.Issue) (bool, error) {
+func (JSON) Print(ctx context.Context, issues <-chan result.Issue) (bool, error) {
 	var allIssues []result.Issue
 	for i := range issues {
 		allIssues = append(allIssues, i)

@@ -8,6 +8,7 @@ import (
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/golinters"
+	"github.com/golangci/golangci-lint/pkg/lint"
 	"github.com/sirupsen/logrus"
 )
 
@@ -33,7 +34,7 @@ func allPresetsSet() map[string]bool {
 }
 
 type LinterConfig struct {
-	Linter           Linter
+	Linter           lint.Linter
 	EnabledByDefault bool
 	DoesFullImport   bool
 	NeedsSSARepr     bool
@@ -62,7 +63,23 @@ func (lc LinterConfig) WithSpeed(speed int) LinterConfig {
 	return lc
 }
 
-func newLinterConfig(linter Linter) LinterConfig {
+func (lc LinterConfig) NeedsProgramLoading() bool {
+	return lc.DoesFullImport
+}
+
+func (lc LinterConfig) NeedsSSARepresentation() bool {
+	return lc.NeedsSSARepr
+}
+
+func (lc LinterConfig) GetSpeed() int {
+	return lc.Speed
+}
+
+func (lc LinterConfig) GetLinter() lint.Linter {
+	return lc.Linter
+}
+
+func newLinterConfig(linter lint.Linter) LinterConfig {
 	return LinterConfig{
 		Linter: linter,
 	}
@@ -71,7 +88,7 @@ func newLinterConfig(linter Linter) LinterConfig {
 var nameToLC map[string]LinterConfig
 var nameToLCOnce sync.Once
 
-func GetLinterConfig(name string) *LinterConfig {
+func getLinterConfig(name string) *LinterConfig {
 	nameToLCOnce.Do(func() {
 		nameToLC = make(map[string]LinterConfig)
 		for _, lc := range GetAllSupportedLinterConfigs() {
@@ -158,44 +175,22 @@ func GetAllSupportedLinterConfigs() []LinterConfig {
 	})
 }
 
-func getAllSupportedLinters() []Linter {
-	var ret []Linter
-	for _, lc := range GetAllSupportedLinterConfigs() {
-		ret = append(ret, lc.Linter)
-	}
-
-	return ret
-}
-
-func getAllEnabledByDefaultLinters() []Linter {
-	var ret []Linter
+func getAllEnabledByDefaultLinters() []LinterConfig {
+	var ret []LinterConfig
 	for _, lc := range GetAllSupportedLinterConfigs() {
 		if lc.EnabledByDefault {
-			ret = append(ret, lc.Linter)
+			ret = append(ret, lc)
 		}
 	}
 
 	return ret
 }
 
-var supportedLintersByName map[string]Linter
-var linterByNameMapOnce sync.Once
-
-func getLinterByName(name string) Linter {
-	linterByNameMapOnce.Do(func() {
-		supportedLintersByName = make(map[string]Linter)
-		for _, lc := range GetAllSupportedLinterConfigs() {
-			supportedLintersByName[lc.Linter.Name()] = lc.Linter
-		}
-	})
-
-	return supportedLintersByName[name]
-}
-
-func lintersToMap(linters []Linter) map[string]Linter {
-	ret := map[string]Linter{}
-	for _, linter := range linters {
-		ret[linter.Name()] = linter
+func linterConfigsToMap(lcs []LinterConfig) map[string]*LinterConfig {
+	ret := map[string]*LinterConfig{}
+	for _, lc := range lcs {
+		lc := lc // local copy
+		ret[lc.Linter.Name()] = &lc
 	}
 
 	return ret
@@ -205,7 +200,7 @@ func validateLintersNames(cfg *config.Linters) error {
 	allNames := append([]string{}, cfg.Enable...)
 	allNames = append(allNames, cfg.Disable...)
 	for _, name := range allNames {
-		if getLinterByName(name) == nil {
+		if getLinterConfig(name) == nil {
 			return fmt.Errorf("no such linter %q", name)
 		}
 	}
@@ -281,12 +276,12 @@ func validateEnabledDisabledLintersConfig(cfg *config.Linters) error {
 	return nil
 }
 
-func GetAllLintersForPreset(p string) []Linter {
-	ret := []Linter{}
+func GetAllLinterConfigsForPreset(p string) []LinterConfig {
+	ret := []LinterConfig{}
 	for _, lc := range GetAllSupportedLinterConfigs() {
 		for _, ip := range lc.InPresets {
 			if p == ip {
-				ret = append(ret, lc.Linter)
+				ret = append(ret, lc)
 				break
 			}
 		}
@@ -295,23 +290,23 @@ func GetAllLintersForPreset(p string) []Linter {
 	return ret
 }
 
-func getEnabledLintersSet(lcfg *config.Linters, enabledByDefaultLinters []Linter) map[string]Linter { // nolint:gocyclo
-	resultLintersSet := map[string]Linter{}
+func getEnabledLintersSet(lcfg *config.Linters, enabledByDefaultLinters []LinterConfig) map[string]*LinterConfig { // nolint:gocyclo
+	resultLintersSet := map[string]*LinterConfig{}
 	switch {
 	case len(lcfg.Presets) != 0:
 		break // imply --disable-all
 	case lcfg.EnableAll:
-		resultLintersSet = lintersToMap(getAllSupportedLinters())
+		resultLintersSet = linterConfigsToMap(GetAllSupportedLinterConfigs())
 	case lcfg.DisableAll:
 		break
 	default:
-		resultLintersSet = lintersToMap(enabledByDefaultLinters)
+		resultLintersSet = linterConfigsToMap(enabledByDefaultLinters)
 	}
 
 	// --presets can only add linters to default set
 	for _, p := range lcfg.Presets {
-		for _, linter := range GetAllLintersForPreset(p) {
-			resultLintersSet[linter.Name()] = linter
+		for _, lc := range GetAllLinterConfigsForPreset(p) {
+			resultLintersSet[lc.Linter.Name()] = &lc
 		}
 	}
 
@@ -320,14 +315,14 @@ func getEnabledLintersSet(lcfg *config.Linters, enabledByDefaultLinters []Linter
 	// It should be before --enable and --disable to be able to enable or disable specific linter.
 	if lcfg.Fast {
 		for name := range resultLintersSet {
-			if GetLinterConfig(name).DoesFullImport {
+			if getLinterConfig(name).DoesFullImport {
 				delete(resultLintersSet, name)
 			}
 		}
 	}
 
 	for _, name := range lcfg.Enable {
-		resultLintersSet[name] = getLinterByName(name)
+		resultLintersSet[name] = getLinterConfig(name)
 	}
 
 	for _, name := range lcfg.Disable {
@@ -339,6 +334,7 @@ func getEnabledLintersSet(lcfg *config.Linters, enabledByDefaultLinters []Linter
 		delete(resultLintersSet, name)
 	}
 
+	optimizeLintersSet(resultLintersSet)
 	return resultLintersSet
 }
 
@@ -349,7 +345,7 @@ func getAllMegacheckSubLinterNames() []string {
 	return []string{unusedName, gosimpleName, staticcheckName}
 }
 
-func optimizeLintersSet(linters map[string]Linter) {
+func optimizeLintersSet(linters map[string]*LinterConfig) {
 	unusedName := golinters.Megacheck{UnusedEnabled: true}.Name()
 	gosimpleName := golinters.Megacheck{GosimpleEnabled: true}.Name()
 	staticcheckName := golinters.Megacheck{StaticcheckEnabled: true}.Name()
@@ -378,20 +374,21 @@ func optimizeLintersSet(linters map[string]Linter) {
 		delete(linters, n)
 	}
 
-	linters[m.Name()] = m
+	lc := *getLinterConfig("megacheck")
+	lc.Linter = m
+	linters[m.Name()] = &lc
 }
 
-func GetEnabledLinters(cfg *config.Config) ([]Linter, error) {
+func GetEnabledLinters(cfg *config.Config) ([]LinterConfig, error) {
 	if err := validateEnabledDisabledLintersConfig(&cfg.Linters); err != nil {
 		return nil, err
 	}
 
 	resultLintersSet := getEnabledLintersSet(&cfg.Linters, getAllEnabledByDefaultLinters())
-	optimizeLintersSet(resultLintersSet)
 
-	var resultLinters []Linter
-	for _, linter := range resultLintersSet {
-		resultLinters = append(resultLinters, linter)
+	var resultLinters []LinterConfig
+	for _, lc := range resultLintersSet {
+		resultLinters = append(resultLinters, *lc)
 	}
 
 	verbosePrintLintersStatus(cfg, resultLinters)
@@ -413,10 +410,10 @@ func uniqStrings(ss []string) []string {
 	return ret
 }
 
-func verbosePrintLintersStatus(cfg *config.Config, linters []Linter) {
+func verbosePrintLintersStatus(cfg *config.Config, lcs []LinterConfig) {
 	var linterNames []string
-	for _, linter := range linters {
-		linterNames = append(linterNames, linter.Name())
+	for _, lc := range lcs {
+		linterNames = append(linterNames, lc.Linter.Name())
 	}
 	logrus.Infof("Active linters: %s", linterNames)
 

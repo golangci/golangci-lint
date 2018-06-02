@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	structcheckAPI "github.com/golangci/check/cmd/structcheck"
+	"github.com/golangci/golangci-lint/pkg/lint"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
@@ -18,7 +19,7 @@ func (Structcheck) Desc() string {
 	return "Finds unused struct fields"
 }
 
-func (s Structcheck) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, error) {
+func (s Structcheck) Run(ctx context.Context, lintCtx *lint.Context) ([]result.Issue, error) {
 	issues := structcheckAPI.Run(lintCtx.Program, lintCtx.Settings().Structcheck.CheckExportedFields)
 	if len(issues) == 0 {
 		return nil, nil

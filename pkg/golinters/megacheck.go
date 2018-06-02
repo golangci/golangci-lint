@@ -2,8 +2,11 @@ package golinters
 
 import (
 	"context"
+	"fmt"
+	"strings"
 
 	megacheckAPI "github.com/golangci/go-tools/cmd/megacheck"
+	"github.com/golangci/golangci-lint/pkg/lint"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
@@ -14,17 +17,26 @@ type Megacheck struct {
 }
 
 func (m Megacheck) Name() string {
-	if m.UnusedEnabled && !m.GosimpleEnabled && !m.StaticcheckEnabled {
-		return "unused"
+	names := []string{}
+	if m.UnusedEnabled {
+		names = append(names, "unused")
 	}
-	if m.GosimpleEnabled && !m.UnusedEnabled && !m.StaticcheckEnabled {
-		return "gosimple"
+	if m.GosimpleEnabled {
+		names = append(names, "gosimple")
 	}
-	if m.StaticcheckEnabled && !m.UnusedEnabled && !m.GosimpleEnabled {
-		return "staticcheck"
+	if m.StaticcheckEnabled {
+		names = append(names, "staticcheck")
 	}
 
-	return "megacheck" // all enabled
+	if len(names) == 1 {
+		return names[0] // only one sublinter is enabled
+	}
+
+	if len(names) == 3 {
+		return "megacheck" // all enabled
+	}
+
+	return fmt.Sprintf("megacheck.{%s}", strings.Join(names, ","))
 }
 
 func (m Megacheck) Desc() string {
@@ -38,7 +50,7 @@ func (m Megacheck) Desc() string {
 	return descs[m.Name()]
 }
 
-func (m Megacheck) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, error) {
+func (m Megacheck) Run(ctx context.Context, lintCtx *lint.Context) ([]result.Issue, error) {
 	issues := megacheckAPI.Run(lintCtx.Program, lintCtx.LoaderConfig, lintCtx.SSAProgram,
 		m.StaticcheckEnabled, m.GosimpleEnabled, m.UnusedEnabled)
 	if len(issues) == 0 {

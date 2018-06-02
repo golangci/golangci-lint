@@ -5,6 +5,7 @@ import (
 
 	"mvdan.cc/interfacer/check"
 
+	"github.com/golangci/golangci-lint/pkg/lint"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
@@ -18,7 +19,7 @@ func (Interfacer) Desc() string {
 	return "Linter that suggests narrower interface types"
 }
 
-func (lint Interfacer) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, error) {
+func (lint Interfacer) Run(ctx context.Context, lintCtx *lint.Context) ([]result.Issue, error) {
 	c := new(check.Checker)
 	c.Program(lintCtx.Program)
 	c.ProgramSSA(lintCtx.SSAProgram)

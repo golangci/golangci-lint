@@ -8,6 +8,7 @@ import (
 
 	gofmtAPI "github.com/golangci/gofmt/gofmt"
 	goimportsAPI "github.com/golangci/gofmt/goimports"
+	"github.com/golangci/golangci-lint/pkg/lint"
 	"github.com/golangci/golangci-lint/pkg/result"
 	"github.com/sirupsen/logrus"
 	"sourcegraph.com/sourcegraph/go-diff/diff"
@@ -101,7 +102,7 @@ func (g Gofmt) extractIssuesFromPatch(patch string) ([]result.Issue, error) {
 	return issues, nil
 }
 
-func (g Gofmt) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, error) {
+func (g Gofmt) Run(ctx context.Context, lintCtx *lint.Context) ([]result.Issue, error) {
 	var issues []result.Issue
 
 	for _, f := range lintCtx.Paths.Files {

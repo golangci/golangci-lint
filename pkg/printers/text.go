@@ -2,6 +2,7 @@ package printers
 
 import (
 	"bytes"
+	"context"
 	"fmt"
 	"io/ioutil"
 	"strings"
@@ -58,7 +59,7 @@ func (p *Text) getFileLinesForIssue(i *result.Issue) (linesCache, error) {
 	return fc, nil
 }
 
-func (p *Text) Print(issues <-chan result.Issue) (bool, error) {
+func (p *Text) Print(ctx context.Context, issues <-chan result.Issue) (bool, error) {
 	var issuedLineExtractingDuration time.Duration
 	defer func() {
 		logrus.Infof("Extracting issued lines took %s", issuedLineExtractingDuration)
@@ -86,11 +87,11 @@ func (p *Text) Print(issues <-chan result.Issue) (bool, error) {
 		}
 	}
 
-	if issuesN == 0 {
+	if issuesN != 0 {
+		logrus.Infof("Found %d issues", issuesN)
+	} else if ctx.Err() == nil { // don't print "congrats" if timeouted
 		outStr := p.SprintfColored(color.FgGreen, "Congrats! No issues were found.")
 		fmt.Fprintln(StdOut, outStr)
-	} else {
-		logrus.Infof("Found %d issues", issuesN)
 	}
 
 	return issuesN != 0, nil

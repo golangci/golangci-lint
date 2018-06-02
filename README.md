@@ -131,7 +131,7 @@ This issue is important because often you'd like to set concurrency to CPUs coun
 3. It will take more time because of different usages and need of tracking of versions of `n` linters.
 
 # Performance
-Benchmarks were executed on MacBook Pro (Retina, 13-inch, Late 2013), 2,4 GHz Intel Core i5, 8 GB 1600 MHz DDR3. It has 4 cores and concurrency for linters was default: number of cores. Benchmark runs and measures timings automatically, it's code is [here](https://github.com/golangci/golangci-lint/blob/master/pkg/enabled_linters_test.go) (`BenchmarkWithGometalinter`).
+Benchmarks were executed on MacBook Pro (Retina, 13-inch, Late 2013), 2,4 GHz Intel Core i5, 8 GB 1600 MHz DDR3. It has 4 cores and concurrency for linters was default: number of cores. Benchmark runs and measures timings automatically, it's code is [here](https://github.com/golangci/golangci-lint/blob/master/test/bench.go) (`BenchmarkWithGometalinter`).
 
 We measure peak memory usage (RSS) by tracking of processes RSS every 5 ms.
 

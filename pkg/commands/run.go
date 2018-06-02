@@ -4,23 +4,17 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"go/build"
 	"go/token"
 	"io/ioutil"
 	"log"
 	"os"
-	"os/exec"
 	"runtime"
 	"strings"
 	"time"
 
-	"github.com/golangci/go-tools/ssa"
-	"github.com/golangci/go-tools/ssa/ssautil"
 	"github.com/golangci/golangci-lint/pkg"
-	"github.com/golangci/golangci-lint/pkg/astcache"
 	"github.com/golangci/golangci-lint/pkg/config"
-	"github.com/golangci/golangci-lint/pkg/fsutils"
-	"github.com/golangci/golangci-lint/pkg/golinters"
+	"github.com/golangci/golangci-lint/pkg/lint"
 	"github.com/golangci/golangci-lint/pkg/printers"
 	"github.com/golangci/golangci-lint/pkg/result"
 	"github.com/golangci/golangci-lint/pkg/result/processors"
@@ -28,7 +22,6 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
-	"golang.org/x/tools/go/loader"
 )
 
 const (
@@ -126,170 +119,6 @@ func (e *Executor) initRun() {
 	e.parseConfig(runCmd)
 }
 
-func isFullImportNeeded(linters []pkg.Linter) bool {
-	for _, linter := range linters {
-		lc := pkg.GetLinterConfig(linter.Name())
-		if lc.DoesFullImport {
-			return true
-		}
-	}
-
-	return false
-}
-
-func isSSAReprNeeded(linters []pkg.Linter) bool {
-	for _, linter := range linters {
-		lc := pkg.GetLinterConfig(linter.Name())
-		if lc.NeedsSSARepr {
-			return true
-		}
-	}
-
-	return false
-}
-
-func loadWholeAppIfNeeded(ctx context.Context, linters []pkg.Linter, cfg *config.Run, paths *fsutils.ProjectPaths) (*loader.Program, *loader.Config, error) {
-	if !isFullImportNeeded(linters) {
-		return nil, nil, nil
-	}
-
-	startedAt := time.Now()
-	defer func() {
-		logrus.Infof("Program loading took %s", time.Since(startedAt))
-	}()
-
-	bctx := build.Default
-	bctx.BuildTags = append(bctx.BuildTags, cfg.BuildTags...)
-	loadcfg := &loader.Config{
-		Build:       &bctx,
-		AllowErrors: true, // Try to analyze event partially
-	}
-	rest, err := loadcfg.FromArgs(paths.MixedPaths(), cfg.AnalyzeTests)
-	if err != nil {
-		return nil, nil, fmt.Errorf("can't parepare load config with paths: %s", err)
-	}
-	if len(rest) > 0 {
-		return nil, nil, fmt.Errorf("unhandled loading paths: %v", rest)
-	}
-
-	prog, err := loadcfg.Load()
-	if err != nil {
-		return nil, nil, fmt.Errorf("can't load paths: %s", err)
-	}
-
-	return prog, loadcfg, nil
-}
-
-func buildSSAProgram(ctx context.Context, lprog *loader.Program) *ssa.Program {
-	startedAt := time.Now()
-	defer func() {
-		logrus.Infof("SSA repr building took %s", time.Since(startedAt))
-	}()
-
-	ssaProg := ssautil.CreateProgram(lprog, ssa.GlobalDebug)
-	ssaProg.Build()
-	return ssaProg
-}
-
-func discoverGoRoot() (string, error) {
-	goroot := os.Getenv("GOROOT")
-	if goroot != "" {
-		return goroot, nil
-	}
-
-	output, err := exec.Command("go", "env", "GOROOT").Output()
-	if err != nil {
-		return "", fmt.Errorf("can't execute go env GOROOT: %s", err)
-	}
-
-	return strings.TrimSpace(string(output)), nil
-}
-
-// separateNotCompilingPackages moves not compiling packages into separate slices:
-// a lot of linters crash on such packages. Leave them only for those linters
-// which can work with them.
-func separateNotCompilingPackages(lintCtx *golinters.Context) {
-	prog := lintCtx.Program
-
-	if prog.Created != nil {
-		compilingCreated := make([]*loader.PackageInfo, 0, len(prog.Created))
-		for _, info := range prog.Created {
-			if len(info.Errors) != 0 {
-				lintCtx.NotCompilingPackages = append(lintCtx.NotCompilingPackages, info)
-			} else {
-				compilingCreated = append(compilingCreated, info)
-			}
-		}
-		prog.Created = compilingCreated
-	}
-
-	if prog.Imported != nil {
-		for k, info := range prog.Imported {
-			if len(info.Errors) != 0 {
-				lintCtx.NotCompilingPackages = append(lintCtx.NotCompilingPackages, info)
-				delete(prog.Imported, k)
-			}
-		}
-	}
-}
-
-func buildLintCtx(ctx context.Context, linters []pkg.Linter, cfg *config.Config) (*golinters.Context, error) {
-	// Set GOROOT to have working cross-compilation: cross-compiled binaries
-	// have invalid GOROOT. XXX: can't use runtime.GOROOT().
-	goroot, err := discoverGoRoot()
-	if err != nil {
-		return nil, fmt.Errorf("can't discover GOROOT: %s", err)
-	}
-	os.Setenv("GOROOT", goroot)
-	build.Default.GOROOT = goroot
-	logrus.Infof("set GOROOT=%q", goroot)
-
-	args := cfg.Run.Args
-	if len(args) == 0 {
-		args = []string{"./..."}
-	}
-
-	paths, err := fsutils.GetPathsForAnalysis(ctx, args, cfg.Run.AnalyzeTests)
-	if err != nil {
-		return nil, err
-	}
-
-	prog, loaderConfig, err := loadWholeAppIfNeeded(ctx, linters, &cfg.Run, paths)
-	if err != nil {
-		return nil, err
-	}
-
-	var ssaProg *ssa.Program
-	if prog != nil && isSSAReprNeeded(linters) {
-		ssaProg = buildSSAProgram(ctx, prog)
-	}
-
-	var astCache *astcache.Cache
-	if prog != nil {
-		astCache, err = astcache.LoadFromProgram(prog)
-		if err != nil {
-			return nil, err
-		}
-	} else {
-		astCache = astcache.LoadFromFiles(paths.Files)
-	}
-
-	ret := &golinters.Context{
-		Paths:        paths,
-		Cfg:          cfg,
-		Program:      prog,
-		SSAProgram:   ssaProg,
-		LoaderConfig: loaderConfig,
-		ASTCache:     astCache,
-	}
-
-	if prog != nil {
-		separateNotCompilingPackages(ret)
-	}
-
-	return ret, nil
-}
-
 func (e *Executor) runAnalysis(ctx context.Context, args []string) (<-chan result.Issue, error) {
 	e.cfg.Run.Args = args
 
@@ -298,7 +127,11 @@ func (e *Executor) runAnalysis(ctx context.Context, args []string) (<-chan resul
 		return nil, err
 	}
 
-	lintCtx, err := buildLintCtx(ctx, linters, e.cfg)
+	ctxLinters := make([]lint.LinterConfig, 0, len(linters))
+	for _, lc := range linters {
+		ctxLinters = append(ctxLinters, lint.LinterConfig(lc))
+	}
+	lintCtx, err := lint.BuildContext(ctx, ctxLinters, e.cfg)
 	if err != nil {
 		return nil, err
 	}
@@ -315,7 +148,7 @@ func (e *Executor) runAnalysis(ctx context.Context, args []string) (<-chan resul
 	if lintCtx.Program != nil {
 		fset = lintCtx.Program.Fset
 	}
-	runner := pkg.SimpleRunner{
+	runner := lint.SimpleRunner{
 		Processors: []processors.Processor{
 			processors.NewPathPrettifier(), // must be before diff processor at least
 			processors.NewExclude(excludeTotalPattern),
@@ -329,7 +162,11 @@ func (e *Executor) runAnalysis(ctx context.Context, args []string) (<-chan resul
 		},
 	}
 
-	return runner.Run(ctx, linters, lintCtx), nil
+	runLinters := make([]lint.RunnerLinterConfig, 0, len(linters))
+	for _, lc := range linters {
+		runLinters = append(runLinters, lint.RunnerLinterConfig(lc))
+	}
+	return runner.Run(ctx, runLinters, lintCtx), nil
 }
 
 func setOutputToDevNull() (savedStdout, savedStderr *os.File) {
@@ -364,7 +201,7 @@ func (e *Executor) runAndPrint(ctx context.Context, args []string) error {
 		p = printers.NewText(e.cfg.Output.PrintIssuedLine,
 			e.cfg.Output.Format == config.OutFormatColoredLineNumber, e.cfg.Output.PrintLinterName)
 	}
-	gotAnyIssues, err := p.Print(issues)
+	gotAnyIssues, err := p.Print(ctx, issues)
 	if err != nil {
 		return fmt.Errorf("can't print %d issues: %s", len(issues), err)
 	}

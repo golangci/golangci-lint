@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	deadcodeAPI "github.com/golangci/go-misc/deadcode"
+	"github.com/golangci/golangci-lint/pkg/lint"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
@@ -18,7 +19,7 @@ func (Deadcode) Desc() string {
 	return "Finds unused code"
 }
 
-func (d Deadcode) Run(ctx context.Context, lintCtx *Context) ([]result.Issue, error) {
+func (d Deadcode) Run(ctx context.Context, lintCtx *lint.Context) ([]result.Issue, error) {
 	issues, err := deadcodeAPI.Run(lintCtx.Program)
 	if err != nil {
 		return nil, err
