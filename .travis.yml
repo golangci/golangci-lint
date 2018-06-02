@@ -3,7 +3,7 @@ language: go
 go:
   - 1.9.x
   - 1.10.x
-script: make test
+script: make check_generated test
 
 after_success:
   - test -n "$TRAVIS_TAG" && docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
