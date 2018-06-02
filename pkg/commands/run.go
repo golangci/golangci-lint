@@ -20,7 +20,6 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result/processors"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
-	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 )
 
@@ -115,8 +114,6 @@ func (e *Executor) initRun() {
 	runCmd.Flags().BoolVarP(&ic.Diff, "new", "n", false, "Show only new issues: if there are unstaged changes or untracked files, only those changes are analyzed, else only changes in HEAD~ are analyzed")
 	runCmd.Flags().StringVar(&ic.DiffFromRevision, "new-from-rev", "", "Show only new issues created after git revision `REV`")
 	runCmd.Flags().StringVar(&ic.DiffPatchFilePath, "new-from-patch", "", "Show only new issues created in git patch with file path `PATH`")
-
-	e.parseConfig(runCmd)
 }
 
 func (e *Executor) runAnalysis(ctx context.Context, args []string) (<-chan result.Issue, error) {
@@ -207,6 +204,7 @@ func (e *Executor) runAndPrint(ctx context.Context, args []string) error {
 }
 
 func (e *Executor) executeRun(cmd *cobra.Command, args []string) {
+	e.parseConfig(cmd)
 	logrus.Infof("Concurrency: %d, machine cpus count: %d",
 		e.cfg.Run.Concurrency, runtime.NumCPU())
 
@@ -242,14 +240,6 @@ func (e *Executor) executeRun(cmd *cobra.Command, args []string) {
 }
 
 func (e *Executor) parseConfig(cmd *cobra.Command) {
-	// XXX: hack with double parsing to access "config" option here
-	if err := cmd.ParseFlags(os.Args); err != nil {
-		if err == pflag.ErrHelp {
-			return
-		}
-		logrus.Fatalf("Can't parse args: %s", err)
-	}
-
 	if err := viper.BindPFlags(cmd.Flags()); err != nil {
 		logrus.Fatalf("Can't bind cobra's flags to viper: %s", err)
 	}
