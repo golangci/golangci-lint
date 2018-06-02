@@ -235,12 +235,19 @@ func (e *Executor) runAndPrint(ctx context.Context, args []string) error {
 	}
 
 	var p printers.Printer
-	if e.cfg.Output.Format == config.OutFormatJSON {
+	format := e.cfg.Output.Format
+	switch format {
+	case config.OutFormatJSON:
 		p = printers.NewJSON()
-	} else {
+	case config.OutFormatColoredLineNumber, config.OutFormatLineNumber:
 		p = printers.NewText(e.cfg.Output.PrintIssuedLine,
-			e.cfg.Output.Format == config.OutFormatColoredLineNumber, e.cfg.Output.PrintLinterName)
+			format == config.OutFormatColoredLineNumber, e.cfg.Output.PrintLinterName)
+	case config.OutFormatTab:
+		p = printers.NewTab(e.cfg.Output.PrintLinterName)
+	default:
+		return fmt.Errorf("unknown output format %s", format)
 	}
+
 	gotAnyIssues, err := p.Print(ctx, issues)
 	if err != nil {
 		return fmt.Errorf("can't print %d issues: %s", len(issues), err)
@@ -296,6 +303,7 @@ func (e *Executor) parseConfig() {
 	e.initFlagSet(fs)
 	e.initRootFlagSet(fs)
 
+	fs.Usage = func() {} // otherwise help text will be printed twice
 	if err := fs.Parse(os.Args); err != nil {
 		if err == pflag.ErrHelp {
 			return

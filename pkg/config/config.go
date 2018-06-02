@@ -10,9 +10,10 @@ const (
 	OutFormatJSON              = "json"
 	OutFormatLineNumber        = "line-number"
 	OutFormatColoredLineNumber = "colored-line-number"
+	OutFormatTab               = "tab"
 )
 
-var OutFormats = []string{OutFormatColoredLineNumber, OutFormatLineNumber, OutFormatJSON}
+var OutFormats = []string{OutFormatColoredLineNumber, OutFormatLineNumber, OutFormatJSON, OutFormatTab}
 
 type ExcludePattern struct {
 	Pattern string
@@ -22,7 +23,7 @@ type ExcludePattern struct {
 
 var DefaultExcludePatterns = []ExcludePattern{
 	{
-		Pattern: "Error return value of .((os\\.)?std(out|err)\\..*|.*Close|os\\.Remove(All)?|.*printf?|os\\.(Un)?Setenv). is not checked",
+		Pattern: "Error return value of .((os\\.)?std(out|err)\\..*|.*Close|.*Flush|os\\.Remove(All)?|.*printf?|os\\.(Un)?Setenv). is not checked",
 		Linter:  "errcheck",
 		Why:     "Almost all programs ignore errors on these functions and in most cases it's ok",
 	},
