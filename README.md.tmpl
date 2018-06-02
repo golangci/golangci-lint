@@ -9,8 +9,8 @@ Sponsored by [GolangCI.com](https://golangci.com): SaaS service for running lint
 
 <a href="https://golangci.com/"><img src="docs/go.png" width="250px"></a>
 
-   * [Install](#install)
    * [Demo](#demo)
+   * [Install](#install)
    * [Quick Start](#quick-start)
    * [Comparison](#comparison)
       * [<code>golangci-lint</code> vs <code>gometalinter</code>](#golangci-lint-vs-gometalinter)
@@ -31,6 +31,14 @@ Sponsored by [GolangCI.com](https://golangci.com): SaaS service for running lint
    * [Future Plans](#future-plans)
    * [Contact Information](#contact-information)
 
+# Demo
+<p align="center">
+  <img src="./docs/demo.svg" width="100%">
+</p>
+
+Short 1.5 min video demo of analyzing [beego](https://github.com/astaxie/beego).
+[![asciicast](https://asciinema.org/a/183662.png)](https://asciinema.org/a/183662)
+
 # Install
 Recommended way to install is:
 ```bash
@@ -49,12 +57,6 @@ curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | 
 
 Check the [releases page](https://github.com/golangci/golangci-lint/releases) to fix the version.
 
-# Demo
-Example of output:
-![Screenshot of sample output](docs/run_screenshot.png)
-
-Short 1.5 min video demo of analyzing [beego](https://github.com/astaxie/beego).
-[![asciicast](https://asciinema.org/a/1a1qaEXMlOSeRyvASbnuFomah.png)](https://asciinema.org/a/1a1qaEXMlOSeRyvASbnuFomah)
 
 # Quick Start
 To run golangci-lint execute:
