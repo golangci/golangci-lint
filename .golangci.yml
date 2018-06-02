@@ -1,6 +1,3 @@
-run:
-  tests: true
-
 linters-settings:
   govet:
     check-shadowing: true
