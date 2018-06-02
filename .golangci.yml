@@ -20,7 +20,3 @@ linters:
   enable-all: true
   disable:
     - maligned
-
-issues:
-  exclude:
-    - should have a package comment

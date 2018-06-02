@@ -134,7 +134,10 @@ This issue is important because often you'd like to set concurrency to CPUs coun
 3. It will take more time because of different usages and need of tracking of versions of `n` linters.
 
 # Performance
-Benchmarks were executed on MacBook Pro (Retina, 13-inch, Late 2013), 2,4 GHz Intel Core i5, 8 GB 1600 MHz DDR3. It has 4 cores and concurrency for linters was default: number of cores. Benchmark runs and measures timings automatically, it's code is [here](https://github.com/golangci/golangci-lint/blob/master/test/bench.go) (`BenchmarkWithGometalinter`).
+Benchmarks were executed on MacBook Pro (Retina, 13-inch, Late 2013), 2,4 GHz Intel Core i5, 8 GB 1600 MHz DDR3.
+It has 4 cores and concurrency for linters was default: number of cores.
+Benchmark runs and measures timings automatically, it's code is
+[here](https://github.com/golangci/golangci-lint/blob/master/test/bench_test.go) (`BenchmarkWithGometalinter`).
 
 We measure peak memory usage (RSS) by tracking of processes RSS every 5 ms.
 
@@ -172,7 +175,7 @@ On average golangci-lint consumes 1.35 times less memory.
 
 # Supported Linters
 To see a list of supported linters and which linters are enabled/disabled by default execute a command
-```bash
+```
 golangci-lint linters
 ```
 
@@ -204,98 +207,76 @@ golangci-lint linters
 
 # Configuration
 ## Command-Line Options
-Run next command to see their description and defaults.
-```bash
+```
 golangci-lint run -h
+Usage:
+  golangci-lint run [flags]
+
+Flags:
+      --out-format string           Format of output: colored-line-number|line-number|json (default "colored-line-number")
+      --print-issued-lines          Print lines of code with issue (default true)
+      --print-linter-name           Print linter name in issue line (default true)
+      --issues-exit-code int        Exit code when issues were found (default 1)
+      --build-tags strings          Build tags (not all linters support them)
+      --deadline duration           Deadline for total work (default 1m0s)
+      --tests                       Analyze tests (*_test.go)
+      --print-resources-usage       Print avg and max memory usage of golangci-lint and total time
+  -c, --config PATH                 Read config from file path PATH
+      --no-config                   Don't read config
+  -E, --enable strings              Enable specific linter
+  -D, --disable strings             Disable specific linter
+      --enable-all                  Enable all linters
+      --disable-all                 Disable all linters
+  -p, --presets strings             Enable presets (bugs|unused|format|style|complexity|performance) of linters. Run 'golangci-lint linters' to see them. This option implies option --disable-all
+      --fast                        Run only fast linters from enabled linters set
+  -e, --exclude strings             Exclude issue by regexp
+      --exclude-use-default         Use or not use default excludes:
+                                      # errcheck: Almost all programs ignore errors on these functions and in most cases it's ok
+                                      - Error return value of .((os\.)?std(out|err)\..*|.*Close|os\.Remove(All)?|.*printf?|os\.(Un)?Setenv). is not checked
+                                    
+                                      # golint: Annoying issue about not having a comment. The rare codebase has such comments
+                                      - (should have comment|comment on exported method|should have a package comment)
+                                    
+                                      # golint: False positive when tests are defined in package 'test'
+                                      - func name will be used as test\.Test.* by other packages, and that stutters; consider calling this
+                                    
+                                      # gas: Too many false-positives on 'unsafe' usage
+                                      - Use of unsafe calls should be audited
+                                    
+                                      # gas: Too many false-positives for parametrized shell calls
+                                      - Subprocess launch(ed with variable|ing should be audited)
+                                    
+                                      # gas: Duplicated errcheck checks
+                                      - G104
+                                    
+                                      # gas: Too many issues in popular repos
+                                      - (Expect directory permissions to be 0750 or less|Expect file permissions to be 0600 or less)
+                                    
+                                      # gas: False positive is triggered by 'src, err := ioutil.ReadFile(filename)'
+                                      - Potential file inclusion via variable
+                                    
+                                      # govet: Common false positives
+                                      - (possible misuse of unsafe.Pointer|should have signature)
+                                    
+                                      # megacheck: Developers tend to write in C-style with an explicit 'break' in a 'switch', so it's ok to ignore
+                                      - ineffective break statement. Did you mean to break out of the outer loop
+                                     (default true)
+      --max-issues-per-linter int   Maximum issues count per one linter. Set to 0 to disable (default 50)
+      --max-same-issues int         Maximum count of issues with the same text. Set to 0 to disable (default 3)
+  -n, --new                         Show only new issues: if there are unstaged changes or untracked files, only those changes are analyzed, else only changes in HEAD~ are analyzed.
+                                    It's a super-useful option for integration of golangci-lint into existing large codebase.
+                                    It's not practical to fix all existing issues at the moment of integration: much better don't allow issues in new code
+      --new-from-rev REV            Show only new issues created after git revision REV
+      --new-from-patch PATH         Show only new issues created in git patch with file path PATH
+  -h, --help                        help for run
+
+Global Flags:
+  -j, --concurrency int           Concurrency (default NumCPU) (default 8)
+      --cpu-profile-path string   Path to CPU profile output file
+      --mem-profile-path string   Path to memory profile output file
+  -v, --verbose                   verbose output
+
 ```
-
-### Run Options
-- `-c, --config` - path to [config file](#configuration-file) if you don't like using default config path `.golangci.(yml|toml|json)`.
-- `-j, --concurrency` - the number of threads used. By default, it's a number of CPUs. Unlike `gometalinter`, it's an honest value, since we do not fork linter processes.
-- `--build-tags` - build tags to take into account.
-- `--issues-exit-code` - exit code if issues were found. The default is `1`.
-- `--deadline` - timeout for running golangci-lint, `1m` by default.
-- `--tests` - analyze `*_test.go` files. It's `false` by default.
-- `-v, --verbose` - enable verbose output. Use this options to see which linters were enabled, to see timings of steps and another helpful information.
-- `--print-resources-usage` - print memory usage and total time elapsed.
-
-### Linters
-- `-E, --enable` - enable specific linter. You can pass option multiple times or use a comma:
-```bash
-golangci-lint run --disable-all -E golint -E govet -E errcheck
-golangci-lint run --disable-all --enable golint,govet,errcheck
-```
-- `-D, --disable` - disable specific linter. Similar to enabling option.
-- `--enable-all` - enable all supported linters.
-- `--disable-all` - disable all supported linters.
-- `-p, --presets` - enable specific presets. To list all presets run
-```bash
-$ golangci-lint linters
-...
-Linters presets:
-bugs: govet, errcheck, staticcheck, gas, megacheck
-unused: unused, structcheck, varcheck, ineffassign, deadcode, megacheck
-format: gofmt, goimports
-style: golint, gosimple, interfacer, unconvert, dupl, goconst, megacheck, depguard
-complexity: gocyclo
-performance: maligned
-```
-Usage example:
-```bash
-$ golangci-lint run -v --disable-all -p bugs,style,complexity,format
-INFO[0000] Active linters: [govet goconst gocyclo gofmt gas dupl goimports megacheck interfacer unconvert errcheck golint]
-```
-- `--fast` - run only fast linters from the enabled set of linters. To find out which linters are fast run `golangci-lint linters`.
-
-### Linters Options
-- `--errcheck.check-type-assertions` - errcheck: check for ignored type assertion results. Disabled by default.
-- `--errcheck.check-blank` - errcheck: check for errors assigned to blank identifier: `_ = errFunc()`. Disabled by default
-- `--govet.check-shadowing` - govet: check for shadowed variables. Disabled by default.
-- `--golint.min-confidence` - golint: minimum confidence of a problem to print it. The default is `0.8`.
-- `--gofmt.simplify` - gofmt: simplify code (`gofmt -s`), enabled by default.
-- `--gocyclo.min-complexity` - gocyclo: a minimal complexity of function to report it. The default is `30` (it's very high limit).
-- `--maligned.suggest-new` - Maligned: print suggested more optimal struct fields ordering. Disabled by default. Example:
-```
-crypto/tls/ticket.go:20: struct of size 64 bytes could be of size 56 bytes:
-struct{
-	masterSecret	[]byte,
-	certificates	[][]byte,
-	vers        	uint16,
-	cipherSuite 	uint16,
-	usedOldKey  	bool,
-}
-```
-- `--dupl.threshold` - dupl: Minimal threshold to detect copy-paste, `150` by default.
-- `--goconst.min-len` - goconst: minimum constant string length, `3` by default.
-- `--goconst.min-occurrences` - goconst: minimum occurences of constant string count to trigger issue. Default is `3`.
-
-### Issues Options
-- `-n, --new` - show only new issues: if there are unstaged changes or untracked files, only those changes are analyzed, else only changes in HEAD~ are analyzed. It's a super-useful option for integration `golangci-lint` into existing large codebase. It's not practical to fix all existing issues at the moment of integration: much better don't allow issues in new code. Disabled by default.
-- `--new-from-rev` - show only new issues created after specified git revision.
-- `--new-from-patch` - show only new issues created in git patch with the specified file path.
-- `-e, --exclude` - exclude issue by regexp on issue text.
-- `--exclude-use-default` - use or not use default excludes. We tested our linter on large codebases and marked common false positives. By default we ignore common false positives by next regexps:
-  - `Error return value of .((os\.)?std(out|err)\..*|.*Close|os\.Remove(All)?|.*printf?|os\.(Un)?Setenv). is not checked` - ercheck: almost all programs ignore errors on these functions and in most cases it's ok.
-  - `(should have comment|comment on exported method)` - golint: annoying issues about not having a comment. The rare codebase has such comments.
-  - `G103:` - gas: `Use of unsafe calls should be audited`
-  - `G104:` - gas: `disable what errcheck does: it reports on Close etc`
-  - `G204:` - gas: `Subprocess launching should be audited: too lot false - positives`
-  - `G301:` - gas: `Expect directory permissions to be 0750 or less`
-  - `G302:` - gas: `Expect file permissions to be 0600 or less`
-  - `G304:` - gas: ``Potential file inclusion via variable: `src, err := ioutil.ReadFile(filename)`.``
-
-  - `(possible misuse of unsafe.Pointer|should have signature)` - common false positives by govet.
-  - `ineffective break statement. Did you mean to break out of the outer loop` - megacheck: developers tend to write in C-style with an explicit `break` in a switch, so it's ok to ignore.
-
-  Use option `--exclude-use-default=false` to disable these default exclude regexps.
-- `--max-issues-per-linter` - maximum issues count per one linter. Set to `0` to disable. The default value is `50` to not being annoying.
-- `--max-same-issues` - maximum count of issues with the same text. Set to 0 to disable. The default value is `3` to not being annoying.
-
-### Output Options
-- `--out-format` - format of output: `colored-line-number|line-number|json`, default is `colored-line-number`.
-- `--print-issued-lines` - print line of source code where the issue occurred. Enabled by default.
-- `--print-linter-name` - print linter name in issue line. Enabled by default.
-- `--print-welcome` - print welcome message. Enabled by default.
 
 ## Configuration File
 GolangCI-Lint looks for next config paths in the current directory:
@@ -330,11 +311,6 @@ linters:
   enable-all: true
   disable:
     - maligned
-
-issues:
-  exclude:
-    - should have a package comment
-
 ```
 
 # False Positives

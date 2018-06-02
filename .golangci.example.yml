@@ -10,7 +10,6 @@ output:
   format: colored-line-number
   print-issued-lines: true
   print-linter-name: true
-  print-welcome: true
 
 linters-settings:
   errcheck:

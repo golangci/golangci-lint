@@ -14,29 +14,72 @@ const (
 
 var OutFormats = []string{OutFormatColoredLineNumber, OutFormatLineNumber, OutFormatJSON}
 
-var DefaultExcludePatterns = []string{
-	// errcheck
-	"Error return value of .((os\\.)?std(out|err)\\..*|.*Close|os\\.Remove(All)?|.*printf?|os\\.(Un)?Setenv). is not checked",
+type ExcludePattern struct {
+	Pattern string
+	Linter  string
+	Why     string
+}
 
-	// golint
-	"should have comment",
-	"comment on exported method",
-	"func name will be used as test\\.Test.* by other packages, and that stutters; consider calling this",
+var DefaultExcludePatterns = []ExcludePattern{
+	{
+		Pattern: "Error return value of .((os\\.)?std(out|err)\\..*|.*Close|os\\.Remove(All)?|.*printf?|os\\.(Un)?Setenv). is not checked",
+		Linter:  "errcheck",
+		Why:     "Almost all programs ignore errors on these functions and in most cases it's ok",
+	},
+	{
+		Pattern: "(should have comment|comment on exported method|should have a package comment)",
+		Linter:  "golint",
+		Why:     "Annoying issue about not having a comment. The rare codebase has such comments",
+	},
+	{
+		Pattern: "func name will be used as test\\.Test.* by other packages, and that stutters; consider calling this",
+		Linter:  "golint",
+		Why:     "False positive when tests are defined in package 'test'",
+	},
+	{
+		Pattern: "Use of unsafe calls should be audited",
+		Linter:  "gas",
+		Why:     "Too many false-positives on 'unsafe' usage",
+	},
+	{
+		Pattern: "Subprocess launch(ed with variable|ing should be audited)",
+		Linter:  "gas",
+		Why:     "Too many false-positives for parametrized shell calls",
+	},
+	{
+		Pattern: "G104",
+		Linter:  "gas",
+		Why:     "Duplicated errcheck checks",
+	},
+	{
+		Pattern: "(Expect directory permissions to be 0750 or less|Expect file permissions to be 0600 or less)",
+		Linter:  "gas",
+		Why:     "Too many issues in popular repos",
+	},
+	{
+		Pattern: "Potential file inclusion via variable",
+		Linter:  "gas",
+		Why:     "False positive is triggered by 'src, err := ioutil.ReadFile(filename)'",
+	},
+	{
+		Pattern: "(possible misuse of unsafe.Pointer|should have signature)",
+		Linter:  "govet",
+		Why:     "Common false positives",
+	},
+	{
+		Pattern: "ineffective break statement. Did you mean to break out of the outer loop",
+		Linter:  "megacheck",
+		Why:     "Developers tend to write in C-style with an explicit 'break' in a 'switch', so it's ok to ignore",
+	},
+}
 
-	// gas
-	"G103:", // Use of unsafe calls should be audited
-	"G104:", // disable what errcheck does: it reports on Close etc
-	"G204:", // Subprocess launching should be audited: too lot false positives
-	"G301:", // Expect directory permissions to be 0750 or less
-	"G302:", // Expect file permissions to be 0600 or less
-	"G304:", // Potential file inclusion via variable: `src, err := ioutil.ReadFile(filename)`
+func GetDefaultExcludePatternsStrings() []string {
+	var ret []string
+	for _, p := range DefaultExcludePatterns {
+		ret = append(ret, p.Pattern)
+	}
 
-	// govet
-	"possible misuse of unsafe.Pointer",
-	"should have signature",
-
-	// megacheck
-	"ineffective break statement. Did you mean to break out of the outer loop", // developers tend to write in C-style with break in switch
+	return ret
 }
 
 type Run struct {
