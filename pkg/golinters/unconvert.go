@@ -3,7 +3,7 @@ package golinters
 import (
 	"context"
 
-	"github.com/golangci/golangci-lint/pkg/lint"
+	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
 	unconvertAPI "github.com/golangci/unconvert"
 )
@@ -18,7 +18,7 @@ func (Unconvert) Desc() string {
 	return "Remove unnecessary type conversions"
 }
 
-func (lint Unconvert) Run(ctx context.Context, lintCtx *lint.Context) ([]result.Issue, error) {
+func (lint Unconvert) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issue, error) {
 	positions := unconvertAPI.Run(lintCtx.Program)
 	if len(positions) == 0 {
 		return nil, nil

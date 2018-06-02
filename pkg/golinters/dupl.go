@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"go/token"
 
-	"github.com/golangci/golangci-lint/pkg/lint"
+	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
 	duplAPI "github.com/mibk/dupl"
 )
@@ -20,7 +20,7 @@ func (Dupl) Desc() string {
 	return "Tool for code clone detection"
 }
 
-func (d Dupl) Run(ctx context.Context, lintCtx *lint.Context) ([]result.Issue, error) {
+func (d Dupl) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issue, error) {
 	issues, err := duplAPI.Run(lintCtx.Paths.Files, lintCtx.Settings().Dupl.Threshold)
 	if err != nil {
 		return nil, err

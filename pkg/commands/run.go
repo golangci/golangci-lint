@@ -12,9 +12,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/golangci/golangci-lint/pkg"
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/lint"
+	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
 	"github.com/golangci/golangci-lint/pkg/printers"
 	"github.com/golangci/golangci-lint/pkg/result"
 	"github.com/golangci/golangci-lint/pkg/result/processors"
@@ -100,7 +100,7 @@ func (e *Executor) initRun() {
 	runCmd.Flags().BoolVar(&lc.EnableAll, "enable-all", false, "Enable all linters")
 	runCmd.Flags().BoolVar(&lc.DisableAll, "disable-all", false, "Disable all linters")
 	runCmd.Flags().StringSliceVarP(&lc.Presets, "presets", "p", []string{},
-		fmt.Sprintf("Enable presets (%s) of linters. Run 'golangci-lint linters' to see them. This option implies option --disable-all", strings.Join(pkg.AllPresets(), "|")))
+		fmt.Sprintf("Enable presets (%s) of linters. Run 'golangci-lint linters' to see them. This option implies option --disable-all", strings.Join(lintersdb.AllPresets(), "|")))
 	runCmd.Flags().BoolVar(&lc.Fast, "fast", false, "Run only fast linters from enabled linters set")
 
 	// Issues config
@@ -122,16 +122,12 @@ func (e *Executor) initRun() {
 func (e *Executor) runAnalysis(ctx context.Context, args []string) (<-chan result.Issue, error) {
 	e.cfg.Run.Args = args
 
-	linters, err := pkg.GetEnabledLinters(e.cfg)
+	linters, err := lintersdb.GetEnabledLinters(e.cfg)
 	if err != nil {
 		return nil, err
 	}
 
-	ctxLinters := make([]lint.LinterConfig, 0, len(linters))
-	for _, lc := range linters {
-		ctxLinters = append(ctxLinters, lint.LinterConfig(lc))
-	}
-	lintCtx, err := lint.BuildContext(ctx, ctxLinters, e.cfg)
+	lintCtx, err := lint.LoadContext(ctx, linters, e.cfg)
 	if err != nil {
 		return nil, err
 	}
@@ -162,11 +158,7 @@ func (e *Executor) runAnalysis(ctx context.Context, args []string) (<-chan resul
 		},
 	}
 
-	runLinters := make([]lint.RunnerLinterConfig, 0, len(linters))
-	for _, lc := range linters {
-		runLinters = append(runLinters, lint.RunnerLinterConfig(lc))
-	}
-	return runner.Run(ctx, runLinters, lintCtx), nil
+	return runner.Run(ctx, linters, lintCtx), nil
 }
 
 func setOutputToDevNull() (savedStdout, savedStderr *os.File) {

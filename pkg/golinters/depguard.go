@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	depguardAPI "github.com/OpenPeeDeeP/depguard"
-	"github.com/golangci/golangci-lint/pkg/lint"
+	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
@@ -20,7 +20,7 @@ func (Depguard) Desc() string {
 	return "Go linter that checks if package imports are in a list of acceptable packages"
 }
 
-func (d Depguard) Run(ctx context.Context, lintCtx *lint.Context) ([]result.Issue, error) {
+func (d Depguard) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issue, error) {
 	dg := &depguardAPI.Depguard{
 		Packages:      lintCtx.Settings().Depguard.Packages,
 		IncludeGoRoot: lintCtx.Settings().Depguard.IncludeGoRoot,
