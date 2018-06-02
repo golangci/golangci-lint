@@ -46,6 +46,108 @@ func wh(text string) string {
 	return color.GreenString(text)
 }
 
+func (e *Executor) initFlagSet(fs *pflag.FlagSet) {
+	hideFlag := func(name string) {
+		if err := fs.MarkHidden(name); err != nil {
+			panic(err)
+		}
+	}
+
+	// Output config
+	oc := &e.cfg.Output
+	fs.StringVar(&oc.Format, "out-format",
+		config.OutFormatColoredLineNumber,
+		wh(fmt.Sprintf("Format of output: %s", strings.Join(config.OutFormats, "|"))))
+	fs.BoolVar(&oc.PrintIssuedLine, "print-issued-lines", true, wh("Print lines of code with issue"))
+	fs.BoolVar(&oc.PrintLinterName, "print-linter-name", true, wh("Print linter name in issue line"))
+	fs.BoolVar(&oc.PrintWelcomeMessage, "print-welcome", false, wh("Print welcome message"))
+	hideFlag("print-welcome") // no longer used
+
+	// Run config
+	rc := &e.cfg.Run
+	fs.IntVar(&rc.ExitCodeIfIssuesFound, "issues-exit-code",
+		1, wh("Exit code when issues were found"))
+	fs.StringSliceVar(&rc.BuildTags, "build-tags", []string{}, wh("Build tags (not all linters support them)"))
+	fs.DurationVar(&rc.Deadline, "deadline", time.Minute, wh("Deadline for total work"))
+	fs.BoolVar(&rc.AnalyzeTests, "tests", false, wh("Analyze tests (*_test.go)"))
+	fs.BoolVar(&rc.PrintResourcesUsage, "print-resources-usage", false, wh("Print avg and max memory usage of golangci-lint and total time"))
+	fs.StringVarP(&rc.Config, "config", "c", "", wh("Read config from file path `PATH`"))
+	fs.BoolVar(&rc.NoConfig, "no-config", false, wh("Don't read config"))
+
+	// Linters settings config
+	lsc := &e.cfg.LintersSettings
+
+	// Hide all linters settings flags: they were initially visible,
+	// but when number of linters started to grow it became ovious that
+	// we can't fill 90% of flags by linters settings: common flags became hard to find.
+	// New linters settings should be done only through config file.
+	fs.BoolVar(&lsc.Errcheck.CheckTypeAssertions, "errcheck.check-type-assertions", false, "Errcheck: check for ignored type assertion results")
+	hideFlag("errcheck.check-type-assertions")
+
+	fs.BoolVar(&lsc.Errcheck.CheckAssignToBlank, "errcheck.check-blank", false, "Errcheck: check for errors assigned to blank identifier: _ = errFunc()")
+	hideFlag("errcheck.check-blank")
+
+	fs.BoolVar(&lsc.Govet.CheckShadowing, "govet.check-shadowing", false, "Govet: check for shadowed variables")
+	hideFlag("govet.check-shadowing")
+
+	fs.Float64Var(&lsc.Golint.MinConfidence, "golint.min-confidence", 0.8, "Golint: minimum confidence of a problem to print it")
+	hideFlag("golint.min-confidence")
+
+	fs.BoolVar(&lsc.Gofmt.Simplify, "gofmt.simplify", true, "Gofmt: simplify code")
+	hideFlag("gofmt.simplify")
+
+	fs.IntVar(&lsc.Gocyclo.MinComplexity, "gocyclo.min-complexity",
+		30, "Minimal complexity of function to report it")
+	hideFlag("gocyclo.min-complexity")
+
+	fs.BoolVar(&lsc.Maligned.SuggestNewOrder, "maligned.suggest-new", false, "Maligned: print suggested more optimal struct fields ordering")
+	hideFlag("maligned.suggest-new")
+
+	fs.IntVar(&lsc.Dupl.Threshold, "dupl.threshold",
+		150, "Dupl: Minimal threshold to detect copy-paste")
+	hideFlag("dupl.threshold")
+
+	fs.IntVar(&lsc.Goconst.MinStringLen, "goconst.min-len",
+		3, "Goconst: minimum constant string length")
+	hideFlag("goconst.min-len")
+	fs.IntVar(&lsc.Goconst.MinOccurrencesCount, "goconst.min-occurrences",
+		3, "Goconst: minimum occurrences of constant string count to trigger issue")
+	hideFlag("goconst.min-occurrences")
+
+	// (@dixonwille) These flag is only used for testing purposes.
+	fs.StringSliceVar(&lsc.Depguard.Packages, "depguard.packages", nil,
+		"Depguard: packages to add to the list")
+	hideFlag("depguard.packages")
+
+	fs.BoolVar(&lsc.Depguard.IncludeGoRoot, "depguard.include-go-root", false,
+		"Depguard: check list against standard lib")
+	hideFlag("depguard.include-go-root")
+
+	// Linters config
+	lc := &e.cfg.Linters
+	fs.StringSliceVarP(&lc.Enable, "enable", "E", []string{}, wh("Enable specific linter"))
+	fs.StringSliceVarP(&lc.Disable, "disable", "D", []string{}, wh("Disable specific linter"))
+	fs.BoolVar(&lc.EnableAll, "enable-all", false, wh("Enable all linters"))
+	fs.BoolVar(&lc.DisableAll, "disable-all", false, wh("Disable all linters"))
+	fs.StringSliceVarP(&lc.Presets, "presets", "p", []string{},
+		wh(fmt.Sprintf("Enable presets (%s) of linters. Run 'golangci-lint linters' to see them. This option implies option --disable-all", strings.Join(lintersdb.AllPresets(), "|"))))
+	fs.BoolVar(&lc.Fast, "fast", false, wh("Run only fast linters from enabled linters set"))
+
+	// Issues config
+	ic := &e.cfg.Issues
+	fs.StringSliceVarP(&ic.ExcludePatterns, "exclude", "e", []string{}, wh("Exclude issue by regexp"))
+	fs.BoolVar(&ic.UseDefaultExcludes, "exclude-use-default", true, getDefaultExcludeHelp())
+
+	fs.IntVar(&ic.MaxIssuesPerLinter, "max-issues-per-linter", 50, wh("Maximum issues count per one linter. Set to 0 to disable"))
+	fs.IntVar(&ic.MaxSameIssues, "max-same-issues", 3, wh("Maximum count of issues with the same text. Set to 0 to disable"))
+
+	fs.BoolVarP(&ic.Diff, "new", "n", false,
+		wh("Show only new issues: if there are unstaged changes or untracked files, only those changes are analyzed, else only changes in HEAD~ are analyzed.\nIt's a super-useful option for integration of golangci-lint into existing large codebase.\nIt's not practical to fix all existing issues at the moment of integration: much better don't allow issues in new code"))
+	fs.StringVar(&ic.DiffFromRevision, "new-from-rev", "", wh("Show only new issues created after git revision `REV`"))
+	fs.StringVar(&ic.DiffPatchFilePath, "new-from-patch", "", wh("Show only new issues created in git patch with file path `PATH`"))
+
+}
+
 func (e *Executor) initRun() {
 	var runCmd = &cobra.Command{
 		Use:   "run",
@@ -55,108 +157,12 @@ func (e *Executor) initRun() {
 	e.rootCmd.AddCommand(runCmd)
 
 	runCmd.SetOutput(printers.StdOut) // use custom output to properly color it in Windows terminals
-	runCmd.Flags().SortFlags = false  // sort them as they are defined here
 
-	hideFlag := func(name string) {
-		if err := runCmd.Flags().MarkHidden(name); err != nil {
-			panic(err)
-		}
-	}
+	fs := runCmd.Flags()
+	fs.SortFlags = false // sort them as they are defined here
+	e.initFlagSet(fs)
 
-	// Output config
-	oc := &e.cfg.Output
-	runCmd.Flags().StringVar(&oc.Format, "out-format",
-		config.OutFormatColoredLineNumber,
-		wh(fmt.Sprintf("Format of output: %s", strings.Join(config.OutFormats, "|"))))
-	runCmd.Flags().BoolVar(&oc.PrintIssuedLine, "print-issued-lines", true, wh("Print lines of code with issue"))
-	runCmd.Flags().BoolVar(&oc.PrintLinterName, "print-linter-name", true, wh("Print linter name in issue line"))
-	runCmd.Flags().BoolVar(&oc.PrintWelcomeMessage, "print-welcome", false, wh("Print welcome message"))
-	hideFlag("print-welcome") // no longer used
-
-	// Run config
-	rc := &e.cfg.Run
-	runCmd.Flags().IntVar(&rc.ExitCodeIfIssuesFound, "issues-exit-code",
-		1, wh("Exit code when issues were found"))
-	runCmd.Flags().StringSliceVar(&rc.BuildTags, "build-tags", []string{}, wh("Build tags (not all linters support them)"))
-	runCmd.Flags().DurationVar(&rc.Deadline, "deadline", time.Minute, wh("Deadline for total work"))
-	runCmd.Flags().BoolVar(&rc.AnalyzeTests, "tests", false, wh("Analyze tests (*_test.go)"))
-	runCmd.Flags().BoolVar(&rc.PrintResourcesUsage, "print-resources-usage", false, wh("Print avg and max memory usage of golangci-lint and total time"))
-	runCmd.Flags().StringVarP(&rc.Config, "config", "c", "", wh("Read config from file path `PATH`"))
-	runCmd.Flags().BoolVar(&rc.NoConfig, "no-config", false, wh("Don't read config"))
-
-	// Linters settings config
-	lsc := &e.cfg.LintersSettings
-
-	// Hide all linters settings flags: they were initially visible,
-	// but when number of linters started to grow it became ovious that
-	// we can't fill 90% of flags by linters settings: common flags became hard to find.
-	// New linters settings should be done only through config file.
-	runCmd.Flags().BoolVar(&lsc.Errcheck.CheckTypeAssertions, "errcheck.check-type-assertions", false, "Errcheck: check for ignored type assertion results")
-	hideFlag("errcheck.check-type-assertions")
-
-	runCmd.Flags().BoolVar(&lsc.Errcheck.CheckAssignToBlank, "errcheck.check-blank", false, "Errcheck: check for errors assigned to blank identifier: _ = errFunc()")
-	hideFlag("errcheck.check-blank")
-
-	runCmd.Flags().BoolVar(&lsc.Govet.CheckShadowing, "govet.check-shadowing", false, "Govet: check for shadowed variables")
-	hideFlag("govet.check-shadowing")
-
-	runCmd.Flags().Float64Var(&lsc.Golint.MinConfidence, "golint.min-confidence", 0.8, "Golint: minimum confidence of a problem to print it")
-	hideFlag("golint.min-confidence")
-
-	runCmd.Flags().BoolVar(&lsc.Gofmt.Simplify, "gofmt.simplify", true, "Gofmt: simplify code")
-	hideFlag("gofmt.simplify")
-
-	runCmd.Flags().IntVar(&lsc.Gocyclo.MinComplexity, "gocyclo.min-complexity",
-		30, "Minimal complexity of function to report it")
-	hideFlag("gocyclo.min-complexity")
-
-	runCmd.Flags().BoolVar(&lsc.Maligned.SuggestNewOrder, "maligned.suggest-new", false, "Maligned: print suggested more optimal struct fields ordering")
-	hideFlag("maligned.suggest-new")
-
-	runCmd.Flags().IntVar(&lsc.Dupl.Threshold, "dupl.threshold",
-		150, "Dupl: Minimal threshold to detect copy-paste")
-	hideFlag("dupl.threshold")
-
-	runCmd.Flags().IntVar(&lsc.Goconst.MinStringLen, "goconst.min-len",
-		3, "Goconst: minimum constant string length")
-	hideFlag("goconst.min-len")
-	runCmd.Flags().IntVar(&lsc.Goconst.MinOccurrencesCount, "goconst.min-occurrences",
-		3, "Goconst: minimum occurrences of constant string count to trigger issue")
-	hideFlag("goconst.min-occurrences")
-
-	// (@dixonwille) These flag is only used for testing purposes.
-	runCmd.Flags().StringSliceVar(&lsc.Depguard.Packages, "depguard.packages", nil,
-		"Depguard: packages to add to the list")
-	hideFlag("depguard.packages")
-
-	runCmd.Flags().BoolVar(&lsc.Depguard.IncludeGoRoot, "depguard.include-go-root", false,
-		"Depguard: check list against standard lib")
-	hideFlag("depguard.include-go-root")
-
-	// Linters config
-	lc := &e.cfg.Linters
-	runCmd.Flags().StringSliceVarP(&lc.Enable, "enable", "E", []string{}, wh("Enable specific linter"))
-	runCmd.Flags().StringSliceVarP(&lc.Disable, "disable", "D", []string{}, wh("Disable specific linter"))
-	runCmd.Flags().BoolVar(&lc.EnableAll, "enable-all", false, wh("Enable all linters"))
-	runCmd.Flags().BoolVar(&lc.DisableAll, "disable-all", false, wh("Disable all linters"))
-	runCmd.Flags().StringSliceVarP(&lc.Presets, "presets", "p", []string{},
-		wh(fmt.Sprintf("Enable presets (%s) of linters. Run 'golangci-lint linters' to see them. This option implies option --disable-all", strings.Join(lintersdb.AllPresets(), "|"))))
-	runCmd.Flags().BoolVar(&lc.Fast, "fast", false, wh("Run only fast linters from enabled linters set"))
-
-	// Issues config
-	ic := &e.cfg.Issues
-	runCmd.Flags().StringSliceVarP(&ic.ExcludePatterns, "exclude", "e", []string{}, wh("Exclude issue by regexp"))
-	runCmd.Flags().BoolVar(&ic.UseDefaultExcludes, "exclude-use-default", true, getDefaultExcludeHelp())
-
-	runCmd.Flags().IntVar(&ic.MaxIssuesPerLinter, "max-issues-per-linter", 50, wh("Maximum issues count per one linter. Set to 0 to disable"))
-	runCmd.Flags().IntVar(&ic.MaxSameIssues, "max-same-issues", 3, wh("Maximum count of issues with the same text. Set to 0 to disable"))
-
-	runCmd.Flags().BoolVarP(&ic.Diff, "new", "n", false,
-		wh("Show only new issues: if there are unstaged changes or untracked files, only those changes are analyzed, else only changes in HEAD~ are analyzed.\nIt's a super-useful option for integration of golangci-lint into existing large codebase.\nIt's not practical to fix all existing issues at the moment of integration: much better don't allow issues in new code"))
-	runCmd.Flags().StringVar(&ic.DiffFromRevision, "new-from-rev", "", wh("Show only new issues created after git revision `REV`"))
-	runCmd.Flags().StringVar(&ic.DiffPatchFilePath, "new-from-patch", "", wh("Show only new issues created in git patch with file path `PATH`"))
-
-	e.parseConfig(runCmd)
+	e.parseConfig()
 }
 
 func (e *Executor) runAnalysis(ctx context.Context, args []string) (<-chan result.Issue, error) {
@@ -274,16 +280,28 @@ func (e *Executor) executeRun(cmd *cobra.Command, args []string) {
 	}
 }
 
-func (e *Executor) parseConfig(cmd *cobra.Command) {
-	// XXX: hack with double parsing to access "config" option here
-	if err := cmd.ParseFlags(os.Args); err != nil {
+func (e *Executor) parseConfig() {
+	// XXX: hack with double parsing for 2 purposes:
+	// 1. to access "config" option here.
+	// 2. to give config less priority than command line.
+
+	// We use another pflag.FlagSet here to not set `changed` flag
+	// on cmd.Flags() options. Otherwise string slice options will be duplicated.
+	fs := pflag.NewFlagSet("config flag set", pflag.ContinueOnError)
+
+	// Don't do `fs.AddFlagSet(cmd.Flags())` because it shared flags representations:
+	// `changed` variable inside string slice vars will be shared.
+	e.initFlagSet(fs)
+	e.initRootFlagSet(fs)
+
+	if err := fs.Parse(os.Args); err != nil {
 		if err == pflag.ErrHelp {
 			return
 		}
 		logrus.Fatalf("Can't parse args: %s", err)
 	}
 
-	if err := viper.BindPFlags(cmd.Flags()); err != nil {
+	if err := viper.BindPFlags(fs); err != nil {
 		logrus.Fatalf("Can't bind cobra's flags to viper: %s", err)
 	}
 

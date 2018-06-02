@@ -323,6 +323,7 @@ func getEnabledLintersSet(lcfg *config.Linters, enabledByDefaultLinters []linter
 	// --presets can only add linters to default set
 	for _, p := range lcfg.Presets {
 		for _, lc := range GetAllLinterConfigsForPreset(p) {
+			lc := lc
 			resultLintersSet[lc.Linter.Name()] = &lc
 		}
 	}
@@ -413,20 +414,6 @@ func GetEnabledLinters(cfg *config.Config) ([]linter.Config, error) {
 	return resultLinters, nil
 }
 
-func uniqStrings(ss []string) []string {
-	us := map[string]bool{}
-	for _, s := range ss {
-		us[s] = true
-	}
-
-	var ret []string
-	for k := range us {
-		ret = append(ret, k)
-	}
-
-	return ret
-}
-
 func verbosePrintLintersStatus(cfg *config.Config, lcs []linter.Config) {
 	var linterNames []string
 	for _, lc := range lcs {
@@ -435,6 +422,6 @@ func verbosePrintLintersStatus(cfg *config.Config, lcs []linter.Config) {
 	logrus.Infof("Active linters: %s", linterNames)
 
 	if len(cfg.Linters.Presets) != 0 {
-		logrus.Infof("Active presets: %s", uniqStrings(cfg.Linters.Presets))
+		logrus.Infof("Active presets: %s", cfg.Linters.Presets)
 	}
 }
