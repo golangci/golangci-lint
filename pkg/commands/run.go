@@ -69,7 +69,7 @@ func (e *Executor) initFlagSet(fs *pflag.FlagSet) {
 		1, wh("Exit code when issues were found"))
 	fs.StringSliceVar(&rc.BuildTags, "build-tags", []string{}, wh("Build tags (not all linters support them)"))
 	fs.DurationVar(&rc.Deadline, "deadline", time.Minute, wh("Deadline for total work"))
-	fs.BoolVar(&rc.AnalyzeTests, "tests", false, wh("Analyze tests (*_test.go)"))
+	fs.BoolVar(&rc.AnalyzeTests, "tests", true, wh("Analyze tests (*_test.go)"))
 	fs.BoolVar(&rc.PrintResourcesUsage, "print-resources-usage", false, wh("Print avg and max memory usage of golangci-lint and total time"))
 	fs.StringVarP(&rc.Config, "config", "c", "", wh("Read config from file path `PATH`"))
 	fs.BoolVar(&rc.NoConfig, "no-config", false, wh("Don't read config"))

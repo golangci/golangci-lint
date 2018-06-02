@@ -20,22 +20,20 @@ func installBinary(t assert.TestingT) {
 }
 
 func TestCongratsMessageIfNoIssues(t *testing.T) {
-	installBinary(t)
-
 	out, exitCode := runGolangciLint(t, "../...")
 	assert.Equal(t, 0, exitCode)
 	assert.Equal(t, "Congrats! No issues were found.\n", out)
 }
 
 func TestDeadline(t *testing.T) {
-	installBinary(t)
-
 	out, exitCode := runGolangciLint(t, "--no-config", "--deadline=1ms", "../...")
 	assert.Equal(t, 4, exitCode)
 	assert.Equal(t, "", out) // no 'Congrats! No issues were found.'
 }
 
 func runGolangciLint(t *testing.T, args ...string) (string, int) {
+	installBinary(t)
+
 	runArgs := append([]string{"run"}, args...)
 	cmd := exec.Command("golangci-lint", runArgs...)
 	out, err := cmd.Output()
@@ -53,4 +51,9 @@ func runGolangciLint(t *testing.T, args ...string) (string, int) {
 	// success, exitCode should be 0 if go is ok
 	ws := cmd.ProcessState.Sys().(syscall.WaitStatus)
 	return string(out), ws.ExitStatus()
+}
+
+func TestTestsAreLintedByDefault(t *testing.T) {
+	out, exitCode := runGolangciLint(t, "--no-config", "./testdata/withtests")
+	assert.Equal(t, 0, exitCode, out)
 }

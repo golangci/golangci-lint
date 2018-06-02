@@ -223,7 +223,7 @@ Flags:
       --issues-exit-code int        Exit code when issues were found (default 1)
       --build-tags strings          Build tags (not all linters support them)
       --deadline duration           Deadline for total work (default 1m0s)
-      --tests                       Analyze tests (*_test.go)
+      --tests                       Analyze tests (*_test.go) (default true)
       --print-resources-usage       Print avg and max memory usage of golangci-lint and total time
   -c, --config PATH                 Read config from file path PATH
       --no-config                   Don't read config
@@ -293,9 +293,6 @@ There is a [`.golangci.yml`](https://github.com/golangci/golangci-lint/blob/mast
 
 It's a [.golangci.yml](https://github.com/golangci/golangci-lint/blob/master/.golangci.yml) of this repo: we enable more linters than by default and make their settings more strict:
 ```yaml
-run:
-  tests: true
-
 linters-settings:
   govet:
     check-shadowing: true
