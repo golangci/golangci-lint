@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 
 	lintAPI "github.com/golang/lint"
-	"github.com/golangci/golangci-lint/pkg/lint"
+	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
 	"github.com/sirupsen/logrus"
 )
@@ -21,7 +21,7 @@ func (Golint) Desc() string {
 	return "Golint differs from gofmt. Gofmt reformats Go source code, whereas golint prints out style mistakes"
 }
 
-func (g Golint) Run(ctx context.Context, lintCtx *lint.Context) ([]result.Issue, error) {
+func (g Golint) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issue, error) {
 	var issues []result.Issue
 	var lintErr error
 	for _, pkgFiles := range lintCtx.Paths.FilesGrouppedByDirs() {

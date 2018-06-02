@@ -14,6 +14,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/fsutils"
 	"github.com/golangci/golangci-lint/pkg/lint/astcache"
+	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/tools/go/loader"
 )
@@ -32,12 +33,7 @@ func (c *Context) Settings() *config.LintersSettings {
 	return &c.Cfg.LintersSettings
 }
 
-type LinterConfig interface {
-	NeedsProgramLoading() bool
-	NeedsSSARepresentation() bool
-}
-
-func isFullImportNeeded(linters []LinterConfig) bool {
+func isFullImportNeeded(linters []linter.Config) bool {
 	for _, linter := range linters {
 		if linter.NeedsProgramLoading() {
 			return true
@@ -47,7 +43,7 @@ func isFullImportNeeded(linters []LinterConfig) bool {
 	return false
 }
 
-func isSSAReprNeeded(linters []LinterConfig) bool {
+func isSSAReprNeeded(linters []linter.Config) bool {
 	for _, linter := range linters {
 		if linter.NeedsSSARepresentation() {
 			return true
@@ -57,7 +53,7 @@ func isSSAReprNeeded(linters []LinterConfig) bool {
 	return false
 }
 
-func loadWholeAppIfNeeded(ctx context.Context, linters []LinterConfig, cfg *config.Run, paths *fsutils.ProjectPaths) (*loader.Program, *loader.Config, error) {
+func loadWholeAppIfNeeded(ctx context.Context, linters []linter.Config, cfg *config.Run, paths *fsutils.ProjectPaths) (*loader.Program, *loader.Config, error) {
 	if !isFullImportNeeded(linters) {
 		return nil, nil, nil
 	}
@@ -117,7 +113,7 @@ func discoverGoRoot() (string, error) {
 // separateNotCompilingPackages moves not compiling packages into separate slices:
 // a lot of linters crash on such packages. Leave them only for those linters
 // which can work with them.
-func separateNotCompilingPackages(lintCtx *Context) {
+func separateNotCompilingPackages(lintCtx *linter.Context) {
 	prog := lintCtx.Program
 
 	if prog.Created != nil {
@@ -142,7 +138,7 @@ func separateNotCompilingPackages(lintCtx *Context) {
 	}
 }
 
-func BuildContext(ctx context.Context, linters []LinterConfig, cfg *config.Config) (*Context, error) {
+func LoadContext(ctx context.Context, linters []linter.Config, cfg *config.Config) (*linter.Context, error) {
 	// Set GOROOT to have working cross-compilation: cross-compiled binaries
 	// have invalid GOROOT. XXX: can't use runtime.GOROOT().
 	goroot, err := discoverGoRoot()
@@ -183,7 +179,7 @@ func BuildContext(ctx context.Context, linters []LinterConfig, cfg *config.Confi
 		astCache = astcache.LoadFromFiles(paths.Files)
 	}
 
-	ret := &Context{
+	ret := &linter.Context{
 		Paths:        paths,
 		Cfg:          cfg,
 		Program:      prog,

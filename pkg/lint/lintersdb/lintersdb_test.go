@@ -1,10 +1,11 @@
-package pkg
+package lintersdb
 
 import (
 	"sort"
 	"testing"
 
 	"github.com/golangci/golangci-lint/pkg/config"
+	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -45,7 +46,7 @@ func TestGetEnabledLintersSet(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
-			defaultLinters := []LinterConfig{}
+			defaultLinters := []linter.Config{}
 			for _, ln := range c.def {
 				defaultLinters = append(defaultLinters, *getLinterConfig(ln))
 			}

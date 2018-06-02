@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	varcheckAPI "github.com/golangci/check/cmd/varcheck"
-	"github.com/golangci/golangci-lint/pkg/lint"
+	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
@@ -19,7 +19,7 @@ func (Varcheck) Desc() string {
 	return "Finds unused global variables and constants"
 }
 
-func (v Varcheck) Run(ctx context.Context, lintCtx *lint.Context) ([]result.Issue, error) {
+func (v Varcheck) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issue, error) {
 	issues := varcheckAPI.Run(lintCtx.Program, lintCtx.Settings().Varcheck.CheckExportedFields)
 	if len(issues) == 0 {
 		return nil, nil
