@@ -217,7 +217,7 @@ Usage:
   golangci-lint run [flags]
 
 Flags:
-      --out-format string           Format of output: colored-line-number|line-number|json (default "colored-line-number")
+      --out-format string           Format of output: colored-line-number|line-number|json|tab (default "colored-line-number")
       --print-issued-lines          Print lines of code with issue (default true)
       --print-linter-name           Print linter name in issue line (default true)
       --issues-exit-code int        Exit code when issues were found (default 1)
@@ -236,7 +236,7 @@ Flags:
   -e, --exclude strings             Exclude issue by regexp
       --exclude-use-default         Use or not use default excludes:
                                       # errcheck: Almost all programs ignore errors on these functions and in most cases it's ok
-                                      - Error return value of .((os\.)?std(out|err)\..*|.*Close|os\.Remove(All)?|.*printf?|os\.(Un)?Setenv). is not checked
+                                      - Error return value of .((os\.)?std(out|err)\..*|.*Close|.*Flush|os\.Remove(All)?|.*printf?|os\.(Un)?Setenv). is not checked
                                     
                                       # golint: Annoying issue about not having a comment. The rare codebase has such comments
                                       - (should have comment|comment on exported method|should have a package comment)
