@@ -10,6 +10,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/printers"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+	"github.com/spf13/pflag"
 )
 
 func (e *Executor) persistentPostRun(cmd *cobra.Command, args []string) {
@@ -77,13 +78,17 @@ func (e *Executor) initRoot() {
 		PersistentPreRun:  e.persistentPostRun,
 		PersistentPostRun: e.persistentPreRun,
 	}
-	rootCmd.PersistentFlags().BoolVarP(&e.cfg.Run.IsVerbose, "verbose", "v", false, wh("verbose output"))
-	rootCmd.PersistentFlags().StringVar(&e.cfg.Run.CPUProfilePath, "cpu-profile-path", "", wh("Path to CPU profile output file"))
-	rootCmd.PersistentFlags().StringVar(&e.cfg.Run.MemProfilePath, "mem-profile-path", "", wh("Path to memory profile output file"))
-	rootCmd.PersistentFlags().IntVarP(&e.cfg.Run.Concurrency, "concurrency", "j", getDefaultConcurrency(), wh("Concurrency (default NumCPU)"))
-	if e.commit != "" {
-		rootCmd.PersistentFlags().BoolVar(&e.cfg.Run.PrintVersion, "version", false, wh("Print version"))
-	}
 
+	e.initRootFlagSet(rootCmd.PersistentFlags())
 	e.rootCmd = rootCmd
+}
+
+func (e *Executor) initRootFlagSet(fs *pflag.FlagSet) {
+	fs.BoolVarP(&e.cfg.Run.IsVerbose, "verbose", "v", false, wh("verbose output"))
+	fs.StringVar(&e.cfg.Run.CPUProfilePath, "cpu-profile-path", "", wh("Path to CPU profile output file"))
+	fs.StringVar(&e.cfg.Run.MemProfilePath, "mem-profile-path", "", wh("Path to memory profile output file"))
+	fs.IntVarP(&e.cfg.Run.Concurrency, "concurrency", "j", getDefaultConcurrency(), wh("Concurrency (default NumCPU)"))
+	if e.commit != "" {
+		fs.BoolVar(&e.cfg.Run.PrintVersion, "version", false, wh("Print version"))
+	}
 }

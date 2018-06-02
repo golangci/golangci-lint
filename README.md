@@ -206,6 +206,10 @@ golangci-lint linters
 - [depguard](https://github.com/OpenPeeDeeP/depguard) - Go linter that checks if package imports are in a list of acceptable packages
 
 # Configuration
+Configuration file has lower priority than command-line: if the same bool/string/int option defined in the command-line
+and in the configuration file, option from command-line will be used.
+Slice options (e.g. list of enabled/disabled linters) are combined from the command-line and configuration file.
+
 ## Command-Line Options
 ```
 golangci-lint run -h
