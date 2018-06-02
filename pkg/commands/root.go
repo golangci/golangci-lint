@@ -56,6 +56,14 @@ func (e *Executor) persistentPreRun(cmd *cobra.Command, args []string) {
 	os.Exit(e.exitCode)
 }
 
+func getDefaultConcurrency() int {
+	if os.Getenv("HELP_RUN") == "1" {
+		return 8 // to make stable concurrency for README help generating builds
+	}
+
+	return runtime.NumCPU()
+}
+
 func (e *Executor) initRoot() {
 	rootCmd := &cobra.Command{
 		Use:   "golangci-lint",
@@ -69,11 +77,13 @@ func (e *Executor) initRoot() {
 		PersistentPreRun:  e.persistentPostRun,
 		PersistentPostRun: e.persistentPreRun,
 	}
-	rootCmd.PersistentFlags().BoolVarP(&e.cfg.Run.IsVerbose, "verbose", "v", false, "verbose output")
-	rootCmd.PersistentFlags().StringVar(&e.cfg.Run.CPUProfilePath, "cpu-profile-path", "", "Path to CPU profile output file")
-	rootCmd.PersistentFlags().StringVar(&e.cfg.Run.MemProfilePath, "mem-profile-path", "", "Path to memory profile output file")
-	rootCmd.PersistentFlags().IntVarP(&e.cfg.Run.Concurrency, "concurrency", "j", runtime.NumCPU(), "Concurrency (default NumCPU)")
-	rootCmd.PersistentFlags().BoolVar(&e.cfg.Run.PrintVersion, "version", false, "Print version")
+	rootCmd.PersistentFlags().BoolVarP(&e.cfg.Run.IsVerbose, "verbose", "v", false, wh("verbose output"))
+	rootCmd.PersistentFlags().StringVar(&e.cfg.Run.CPUProfilePath, "cpu-profile-path", "", wh("Path to CPU profile output file"))
+	rootCmd.PersistentFlags().StringVar(&e.cfg.Run.MemProfilePath, "mem-profile-path", "", wh("Path to memory profile output file"))
+	rootCmd.PersistentFlags().IntVarP(&e.cfg.Run.Concurrency, "concurrency", "j", getDefaultConcurrency(), wh("Concurrency (default NumCPU)"))
+	if e.commit != "" {
+		rootCmd.PersistentFlags().BoolVar(&e.cfg.Run.PrintVersion, "version", false, wh("Print version"))
+	}
 
 	e.rootCmd = rootCmd
 }

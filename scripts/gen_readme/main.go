@@ -59,6 +59,17 @@ func buildTemplateContext() (map[string]interface{}, error) {
 
 	lintersOutParts := bytes.Split(lintersOut, []byte("\n\n"))
 
+	helpCmd := exec.Command("golangci-lint", "run", "-h")
+	helpCmd.Env = append(helpCmd.Env, os.Environ()...)
+	helpCmd.Env = append(helpCmd.Env, "HELP_RUN=1") // make default concurrency stable: don't depend on machine CPU number
+	help, err := helpCmd.Output()
+	if err != nil {
+		return nil, fmt.Errorf("can't run help cmd: %s", err)
+	}
+
+	helpLines := bytes.Split(help, []byte("\n"))
+	shortHelp := bytes.Join(helpLines[2:], []byte("\n"))
+
 	return map[string]interface{}{
 		"GolangciYaml":                     string(golangciYaml),
 		"LintersCommandOutputEnabledOnly":  string(lintersOutParts[0]),
@@ -66,6 +77,7 @@ func buildTemplateContext() (map[string]interface{}, error) {
 		"EnabledByDefaultLinters":          getLintersListMarkdown(true),
 		"DisabledByDefaultLinters":         getLintersListMarkdown(false),
 		"ThanksList":                       getThanksList(),
+		"RunHelpText":                      string(shortHelp),
 	}, nil
 }
 
