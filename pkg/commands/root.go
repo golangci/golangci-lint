@@ -13,7 +13,14 @@ import (
 	"github.com/spf13/pflag"
 )
 
-func (e *Executor) persistentPostRun(cmd *cobra.Command, args []string) {
+func (e *Executor) setupLog() {
+	log.SetFlags(0) // don't print time
+	if e.cfg.Run.IsVerbose {
+		logrus.SetLevel(logrus.InfoLevel)
+	}
+}
+
+func (e *Executor) persistentPreRun(cmd *cobra.Command, args []string) {
 	if e.cfg.Run.PrintVersion {
 		fmt.Fprintf(printers.StdOut, "golangci-lint has version %s built from %s on %s\n", e.version, e.commit, e.date)
 		os.Exit(0)
@@ -21,12 +28,7 @@ func (e *Executor) persistentPostRun(cmd *cobra.Command, args []string) {
 
 	runtime.GOMAXPROCS(e.cfg.Run.Concurrency)
 
-	log.SetFlags(0) // don't print time
-	if e.cfg.Run.IsVerbose {
-		logrus.SetLevel(logrus.InfoLevel)
-	} else {
-		logrus.SetLevel(logrus.WarnLevel)
-	}
+	e.setupLog()
 
 	if e.cfg.Run.CPUProfilePath != "" {
 		f, err := os.Create(e.cfg.Run.CPUProfilePath)
@@ -39,7 +41,7 @@ func (e *Executor) persistentPostRun(cmd *cobra.Command, args []string) {
 	}
 }
 
-func (e *Executor) persistentPreRun(cmd *cobra.Command, args []string) {
+func (e *Executor) persistentPostRun(cmd *cobra.Command, args []string) {
 	if e.cfg.Run.CPUProfilePath != "" {
 		pprof.StopCPUProfile()
 	}
@@ -75,8 +77,8 @@ func (e *Executor) initRoot() {
 				logrus.Fatal(err)
 			}
 		},
-		PersistentPreRun:  e.persistentPostRun,
-		PersistentPostRun: e.persistentPreRun,
+		PersistentPreRun:  e.persistentPreRun,
+		PersistentPostRun: e.persistentPostRun,
 	}
 
 	e.initRootFlagSet(rootCmd.PersistentFlags())

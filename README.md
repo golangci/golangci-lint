@@ -288,10 +288,16 @@ GolangCI-Lint looks for next config paths in the current directory:
 - `.golangci.toml`
 - `.golangci.json`
 
+GolangCI-Lint also searches config file in all directories from directory of the first analyzed path up to the root.
+To see which config file is used and where it was searched run golangci-lint with `-v` option.
+
 Configuration options inside the file are identical to command-line options.
+You can configure specific linters options only within configuration file, it can't be done with command-line.
+
 There is a [`.golangci.yml`](https://github.com/golangci/golangci-lint/blob/master/.golangci.example.yml) with all supported options.
 
-It's a [.golangci.yml](https://github.com/golangci/golangci-lint/blob/master/.golangci.yml) of this repo: we enable more linters than by default and make their settings more strict:
+It's a [.golangci.yml](https://github.com/golangci/golangci-lint/blob/master/.golangci.yml) of this repo: we enable more linters
+than by default and make their settings more strict:
 ```yaml
 linters-settings:
   govet:
