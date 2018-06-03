@@ -67,6 +67,9 @@ func (p *Text) Print(ctx context.Context, issues <-chan result.Issue) (bool, err
 
 	issuesN := 0
 	for i := range issues {
+		if i.FilePath() == "C" {
+			continue
+		}
 		issuesN++
 		p.printIssue(&i)
 
