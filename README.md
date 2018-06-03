@@ -13,16 +13,9 @@ Sponsored by [GolangCI.com](https://golangci.com): SaaS service for running lint
    * [Install](#install)
    * [Quick Start](#quick-start)
    * [Comparison](#comparison)
-      * [<code>golangci-lint</code> vs <code>gometalinter</code>](#golangci-lint-vs-gometalinter)
-      * [<code>golangci-lint</code> vs Run Needed Linters Manually](#golangci-lint-vs-run-needed-linters-manually)
    * [Performance](#performance)
-      * [Comparison with gometalinter](#comparison-with-gometalinter)
    * [Supported Linters](#supported-linters)
-      * [Enabled By Default Linters](#enabled-by-default-linters)
-      * [Disabled By Default Linters (-E/--enable)](#disabled-by-default-linters--e--enable)
    * [Configuration](#configuration)
-      * [Command-Line Options](#command-line-options)
-      * [Configuration File](#configuration-file)
    * [False Positives](#false-positives)
    * [IDE integrations](#ide-integrations)
    * [Internals](#internals)
@@ -40,7 +33,26 @@ Short 1.5 min video demo of analyzing [beego](https://github.com/astaxie/beego).
 [![asciicast](https://asciinema.org/a/183662.png)](https://asciinema.org/a/183662)
 
 # Install
-Recommended way to install is:
+## CI Installation
+The most installations are done for CI (travis, circleci etc). It's important to have reproducable CI:
+don't start to fail all builds at one moment. With golangci-lint this can cappen if you
+use `--enable-all` and new linter is added or even without `--enable-all`: when one linter
+was upgraded from the upstream.
+
+Therefore it's highly recommended to install a fixed version of golangci-lint.
+Find needed version on the [releases page](https://github.com/golangci/golangci-lint/releases).
+
+The recommended way to install golangci-lint is the next:
+```bash
+curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | bash -s VERSION
+```
+
+Periodically update version of golangci-lint: we do active development
+and deliver a lot of improvements. But do it explicitly with checking of
+newly found issues.
+
+## Local Installation
+It's a not recommended for CI method. Do it only for the local development.
 ```bash
 go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
 ```
@@ -48,15 +60,8 @@ go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
 You can also install it by brew:
 ```bash
 brew install golangci/tap/golangci-lint
+brew upgrade golangci/tap/golangci-lint
 ```
-
-For CI you can use fast local installation:
-```bash
-curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh
-```
-
-Check the [releases page](https://github.com/golangci/golangci-lint/releases) to fix the version.
-
 
 # Quick Start
 To run golangci-lint execute:

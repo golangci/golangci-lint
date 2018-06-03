@@ -18,7 +18,10 @@ type Executor struct {
 
 func NewExecutor(version, commit, date string) *Executor {
 	e := &Executor{
-		cfg: &config.Config{},
+		cfg:     &config.Config{},
+		version: version,
+		commit:  commit,
+		date:    date,
 	}
 
 	logrus.SetLevel(logrus.WarnLevel)
@@ -26,10 +29,6 @@ func NewExecutor(version, commit, date string) *Executor {
 	e.initRoot()
 	e.initRun()
 	e.initLinters()
-
-	e.version = version
-	e.commit = commit
-	e.date = date
 
 	return e
 }

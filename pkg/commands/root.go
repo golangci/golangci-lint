@@ -90,7 +90,7 @@ func (e *Executor) initRootFlagSet(fs *pflag.FlagSet) {
 	fs.StringVar(&e.cfg.Run.CPUProfilePath, "cpu-profile-path", "", wh("Path to CPU profile output file"))
 	fs.StringVar(&e.cfg.Run.MemProfilePath, "mem-profile-path", "", wh("Path to memory profile output file"))
 	fs.IntVarP(&e.cfg.Run.Concurrency, "concurrency", "j", getDefaultConcurrency(), wh("Concurrency (default NumCPU)"))
-	if e.commit != "" {
+	if e.date != "" {
 		fs.BoolVar(&e.cfg.Run.PrintVersion, "version", false, wh("Print version"))
 	}
 }
