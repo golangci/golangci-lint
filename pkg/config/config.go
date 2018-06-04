@@ -139,7 +139,7 @@ type LintersSettings struct {
 	Depguard struct {
 		ListType      string `mapstructure:"list-type"`
 		Packages      []string
-		IncludeGoRoot bool `mapstructure:"inlude-go-root"`
+		IncludeGoRoot bool `mapstructure:"include-go-root"`
 	}
 }
 
