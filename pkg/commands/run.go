@@ -2,20 +2,17 @@ package commands
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"go/token"
 	"io/ioutil"
 	"log"
 	"os"
-	"path/filepath"
 	"runtime"
 	"strings"
 	"time"
 
 	"github.com/fatih/color"
 	"github.com/golangci/golangci-lint/pkg/config"
-	"github.com/golangci/golangci-lint/pkg/fsutils"
 	"github.com/golangci/golangci-lint/pkg/lint"
 	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
 	"github.com/golangci/golangci-lint/pkg/printers"
@@ -24,7 +21,6 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
-	"github.com/spf13/viper"
 )
 
 const (
@@ -48,7 +44,7 @@ func wh(text string) string {
 	return color.GreenString(text)
 }
 
-func (e *Executor) initFlagSet(fs *pflag.FlagSet) {
+func initFlagSet(fs *pflag.FlagSet, cfg *config.Config) {
 	hideFlag := func(name string) {
 		if err := fs.MarkHidden(name); err != nil {
 			panic(err)
@@ -56,7 +52,7 @@ func (e *Executor) initFlagSet(fs *pflag.FlagSet) {
 	}
 
 	// Output config
-	oc := &e.cfg.Output
+	oc := &cfg.Output
 	fs.StringVar(&oc.Format, "out-format",
 		config.OutFormatColoredLineNumber,
 		wh(fmt.Sprintf("Format of output: %s", strings.Join(config.OutFormats, "|"))))
@@ -66,10 +62,10 @@ func (e *Executor) initFlagSet(fs *pflag.FlagSet) {
 	hideFlag("print-welcome") // no longer used
 
 	// Run config
-	rc := &e.cfg.Run
+	rc := &cfg.Run
 	fs.IntVar(&rc.ExitCodeIfIssuesFound, "issues-exit-code",
 		1, wh("Exit code when issues were found"))
-	fs.StringSliceVar(&rc.BuildTags, "build-tags", []string{}, wh("Build tags (not all linters support them)"))
+	fs.StringSliceVar(&rc.BuildTags, "build-tags", nil, wh("Build tags (not all linters support them)"))
 	fs.DurationVar(&rc.Deadline, "deadline", time.Minute, wh("Deadline for total work"))
 	fs.BoolVar(&rc.AnalyzeTests, "tests", true, wh("Analyze tests (*_test.go)"))
 	fs.BoolVar(&rc.PrintResourcesUsage, "print-resources-usage", false, wh("Print avg and max memory usage of golangci-lint and total time"))
@@ -77,7 +73,7 @@ func (e *Executor) initFlagSet(fs *pflag.FlagSet) {
 	fs.BoolVar(&rc.NoConfig, "no-config", false, wh("Don't read config"))
 
 	// Linters settings config
-	lsc := &e.cfg.LintersSettings
+	lsc := &cfg.LintersSettings
 
 	// Hide all linters settings flags: they were initially visible,
 	// but when number of linters started to grow it became ovious that
@@ -126,18 +122,18 @@ func (e *Executor) initFlagSet(fs *pflag.FlagSet) {
 	hideFlag("depguard.include-go-root")
 
 	// Linters config
-	lc := &e.cfg.Linters
-	fs.StringSliceVarP(&lc.Enable, "enable", "E", []string{}, wh("Enable specific linter"))
-	fs.StringSliceVarP(&lc.Disable, "disable", "D", []string{}, wh("Disable specific linter"))
+	lc := &cfg.Linters
+	fs.StringSliceVarP(&lc.Enable, "enable", "E", nil, wh("Enable specific linter"))
+	fs.StringSliceVarP(&lc.Disable, "disable", "D", nil, wh("Disable specific linter"))
 	fs.BoolVar(&lc.EnableAll, "enable-all", false, wh("Enable all linters"))
 	fs.BoolVar(&lc.DisableAll, "disable-all", false, wh("Disable all linters"))
-	fs.StringSliceVarP(&lc.Presets, "presets", "p", []string{},
+	fs.StringSliceVarP(&lc.Presets, "presets", "p", nil,
 		wh(fmt.Sprintf("Enable presets (%s) of linters. Run 'golangci-lint linters' to see them. This option implies option --disable-all", strings.Join(lintersdb.AllPresets(), "|"))))
 	fs.BoolVar(&lc.Fast, "fast", false, wh("Run only fast linters from enabled linters set"))
 
 	// Issues config
-	ic := &e.cfg.Issues
-	fs.StringSliceVarP(&ic.ExcludePatterns, "exclude", "e", []string{}, wh("Exclude issue by regexp"))
+	ic := &cfg.Issues
+	fs.StringSliceVarP(&ic.ExcludePatterns, "exclude", "e", nil, wh("Exclude issue by regexp"))
 	fs.BoolVar(&ic.UseDefaultExcludes, "exclude-use-default", true, getDefaultExcludeHelp())
 
 	fs.IntVar(&ic.MaxIssuesPerLinter, "max-issues-per-linter", 50, wh("Maximum issues count per one linter. Set to 0 to disable"))
@@ -162,9 +158,15 @@ func (e *Executor) initRun() {
 
 	fs := runCmd.Flags()
 	fs.SortFlags = false // sort them as they are defined here
-	e.initFlagSet(fs)
+	initFlagSet(fs, e.cfg)
 
+	// init e.cfg by values from config: flags parse will see these values
+	// like the default ones. It will overwrite them only if the same option
+	// is found in command-line: it's ok, command-line has higher priority.
 	e.parseConfig()
+
+	// Slice options must be explicitly set for properly merging.
+	fixSlicesFlags(fs)
 }
 
 func (e *Executor) runAnalysis(ctx context.Context, args []string) (<-chan result.Issue, error) {
@@ -287,172 +289,6 @@ func (e *Executor) executeRun(cmd *cobra.Command, args []string) {
 	if e.exitCode == 0 && ctx.Err() != nil {
 		e.exitCode = exitCodeIfTimeout
 	}
-}
-
-func (e *Executor) parseConfig() {
-	// XXX: hack with double parsing for 2 purposes:
-	// 1. to access "config" option here.
-	// 2. to give config less priority than command line.
-
-	// We use another pflag.FlagSet here to not set `changed` flag
-	// on cmd.Flags() options. Otherwise string slice options will be duplicated.
-	fs := pflag.NewFlagSet("config flag set", pflag.ContinueOnError)
-
-	// Don't do `fs.AddFlagSet(cmd.Flags())` because it shared flags representations:
-	// `changed` variable inside string slice vars will be shared.
-	e.initFlagSet(fs)
-	e.initRootFlagSet(fs)
-
-	fs.Usage = func() {} // otherwise help text will be printed twice
-	if err := fs.Parse(os.Args); err != nil {
-		if err == pflag.ErrHelp {
-			return
-		}
-		logrus.Fatalf("Can't parse args: %s", err)
-	}
-
-	e.setupLog() // for `-v` to work until running of preRun function
-
-	if err := viper.BindPFlags(fs); err != nil {
-		logrus.Fatalf("Can't bind cobra's flags to viper: %s", err)
-	}
-
-	viper.SetEnvPrefix("GOLANGCI")
-	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
-	viper.AutomaticEnv()
-
-	configFile := e.cfg.Run.Config
-	if e.cfg.Run.NoConfig && configFile != "" {
-		logrus.Fatal("can't combine option --config and --no-config")
-	}
-
-	if e.cfg.Run.NoConfig {
-		return
-	}
-
-	if configFile != "" {
-		viper.SetConfigFile(configFile)
-	} else {
-		setupConfigFileSearch(fs.Args())
-	}
-
-	e.parseConfigImpl()
-}
-
-func setupConfigFileSearch(args []string) {
-	// skip all args ([golangci-lint, run/linters]) before files/dirs list
-	for len(args) != 0 {
-		if args[0] == "run" {
-			args = args[1:]
-			break
-		}
-
-		args = args[1:]
-	}
-
-	// find first file/dir arg
-	firstArg := "./..."
-	if len(args) != 0 {
-		firstArg = args[0]
-	}
-
-	absStartPath, err := filepath.Abs(firstArg)
-	if err != nil {
-		logrus.Infof("Can't make abs path for %q: %s", firstArg, err)
-		absStartPath = filepath.Clean(firstArg)
-	}
-
-	// start from it
-	var curDir string
-	if fsutils.IsDir(absStartPath) {
-		curDir = absStartPath
-	} else {
-		curDir = filepath.Dir(absStartPath)
-	}
-
-	// find all dirs from it up to the root
-	configSearchPaths := []string{"./"}
-	for {
-		configSearchPaths = append(configSearchPaths, curDir)
-		newCurDir := filepath.Dir(curDir)
-		if curDir == newCurDir || newCurDir == "" {
-			break
-		}
-		curDir = newCurDir
-	}
-
-	logrus.Infof("Config search paths: %s", configSearchPaths)
-	viper.SetConfigName(".golangci")
-	for _, p := range configSearchPaths {
-		viper.AddConfigPath(p)
-	}
-}
-
-func getRelPath(p string) string {
-	wd, err := os.Getwd()
-	if err != nil {
-		logrus.Infof("Can't get wd: %s", err)
-		return p
-	}
-
-	r, err := filepath.Rel(wd, p)
-	if err != nil {
-		logrus.Infof("Can't make path %s relative to %s: %s", p, wd, err)
-		return p
-	}
-
-	return r
-}
-
-func (e *Executor) parseConfigImpl() {
-	commandLineConfig := *e.cfg // make copy
-
-	if err := viper.ReadInConfig(); err != nil {
-		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
-			return
-		}
-		logrus.Fatalf("Can't read viper config: %s", err)
-	}
-
-	usedConfigFile := viper.ConfigFileUsed()
-	if usedConfigFile == "" {
-		return
-	}
-	logrus.Infof("Used config file %s", getRelPath(usedConfigFile))
-
-	if err := viper.Unmarshal(&e.cfg); err != nil {
-		logrus.Fatalf("Can't unmarshal config by viper: %s", err)
-	}
-
-	if err := e.validateConfig(&commandLineConfig); err != nil {
-		logrus.Fatal(err)
-	}
-
-	if e.cfg.InternalTest { // just for testing purposes: to detect config file usage
-		fmt.Fprintln(printers.StdOut, "test")
-		os.Exit(0)
-	}
-}
-
-func (e *Executor) validateConfig(commandLineConfig *config.Config) error {
-	c := e.cfg
-	if len(c.Run.Args) != 0 {
-		return errors.New("option run.args in config isn't supported now")
-	}
-
-	if commandLineConfig.Run.CPUProfilePath == "" && c.Run.CPUProfilePath != "" {
-		return errors.New("option run.cpuprofilepath in config isn't allowed")
-	}
-
-	if commandLineConfig.Run.MemProfilePath == "" && c.Run.MemProfilePath != "" {
-		return errors.New("option run.memprofilepath in config isn't allowed")
-	}
-
-	if !commandLineConfig.Run.IsVerbose && c.Run.IsVerbose {
-		return errors.New("can't set run.verbose option with config: only on command-line")
-	}
-
-	return nil
 }
 
 func watchResources(ctx context.Context, done chan struct{}) {

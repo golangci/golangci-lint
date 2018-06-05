@@ -117,7 +117,7 @@ func GetPathsForAnalysis(ctx context.Context, inputPaths []string, includeTests 
 	pr := NewPathResolver(stdExcludeDirs, []string{".go"}, includeTests)
 	paths, err := pr.Resolve(inputPaths...)
 	if err != nil {
-		return nil, fmt.Errorf("can't resolve paths: %s", err)
+		return nil, fmt.Errorf("can't resolve paths %v: %s", inputPaths, err)
 	}
 
 	return processResolvedPaths(paths)
