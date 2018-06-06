@@ -98,6 +98,10 @@ func (p *Nolint) getOrCreateFileData(i *result.Issue) (*fileData, error) {
 }
 
 func (p *Nolint) shouldPassIssue(i *result.Issue) (bool, error) {
+	if i.FilePath() == "C" {
+		return false, nil
+	}
+
 	fd, err := p.getOrCreateFileData(i)
 	if err != nil {
 		return false, err
