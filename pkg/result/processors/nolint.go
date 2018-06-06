@@ -8,20 +8,45 @@ import (
 	"go/parser"
 	"go/token"
 	"io/ioutil"
+	"sort"
 	"strings"
 
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-type comment struct {
+type ignoredRange struct {
 	linters []string
-	line    int
+	result.Range
+	col int
 }
-type fileComments []comment
+
+func (i *ignoredRange) isAdjacent(col, start int) bool {
+	return col == i.col && i.To == start-1
+}
+
+func (i *ignoredRange) doesMatch(issue *result.Issue) bool {
+	if issue.Line() < i.From || issue.Line() > i.To {
+		return false
+	}
+
+	if len(i.linters) == 0 {
+		return true
+	}
+
+	for _, l := range i.linters {
+		if l == issue.FromLinter {
+			return true
+		}
+	}
+
+	return false
+}
+
 type fileData struct {
-	comments    fileComments
-	isGenerated bool
+	ignoredRanges []ignoredRange
+	isGenerated   bool
 }
+
 type filesCache map[string]*fileData
 
 type Nolint struct {
@@ -93,15 +118,28 @@ func (p *Nolint) getOrCreateFileData(i *result.Issue) (*fileData, error) {
 		return nil, fmt.Errorf("can't parse file %s", i.FilePath())
 	}
 
-	fd.comments = extractFileComments(p.fset, file.Comments...)
+	fd.ignoredRanges = buildIgnoredRangesForFile(file, p.fset)
 	return fd, nil
 }
 
-func (p *Nolint) shouldPassIssue(i *result.Issue) (bool, error) {
-	if i.FilePath() == "C" {
-		return false, nil
+func buildIgnoredRangesForFile(f *ast.File, fset *token.FileSet) []ignoredRange {
+	inlineRanges := extractFileCommentsInlineRanges(fset, f.Comments...)
+
+	if len(inlineRanges) == 0 {
+		return nil
 	}
 
+	e := rangeExpander{
+		fset:   fset,
+		ranges: ignoredRanges(inlineRanges),
+	}
+
+	ast.Walk(&e, f)
+
+	return e.ranges
+}
+
+func (p *Nolint) shouldPassIssue(i *result.Issue) (bool, error) {
 	fd, err := p.getOrCreateFileData(i)
 	if err != nil {
 		return false, err
@@ -111,27 +149,53 @@ func (p *Nolint) shouldPassIssue(i *result.Issue) (bool, error) {
 		return false, nil
 	}
 
-	for _, comment := range fd.comments {
-		if comment.line != i.Line() {
-			continue
-		}
-
-		if len(comment.linters) == 0 {
-			return false, nil // skip all linters
-		}
-
-		for _, linter := range comment.linters {
-			if i.FromLinter == linter {
-				return false, nil
-			}
+	for _, ir := range fd.ignoredRanges {
+		if ir.doesMatch(i) {
+			return false, nil
 		}
 	}
 
 	return true, nil
 }
 
-func extractFileComments(fset *token.FileSet, comments ...*ast.CommentGroup) fileComments {
-	ret := fileComments{}
+type ignoredRanges []ignoredRange
+
+func (ir ignoredRanges) Len() int           { return len(ir) }
+func (ir ignoredRanges) Swap(i, j int)      { ir[i], ir[j] = ir[j], ir[i] }
+func (ir ignoredRanges) Less(i, j int) bool { return ir[i].To < ir[j].To }
+
+type rangeExpander struct {
+	fset   *token.FileSet
+	ranges ignoredRanges
+}
+
+func (e *rangeExpander) Visit(node ast.Node) ast.Visitor {
+	if node == nil {
+		return e
+	}
+
+	startPos := e.fset.Position(node.Pos())
+	start := startPos.Line
+	end := e.fset.Position(node.End()).Line
+	found := sort.Search(len(e.ranges), func(i int) bool {
+		return e.ranges[i].To+1 >= start
+	})
+
+	if found < len(e.ranges) && e.ranges[found].isAdjacent(startPos.Column, start) {
+		r := &e.ranges[found]
+		if r.From > start {
+			r.From = start
+		}
+		if r.To < end {
+			r.To = end
+		}
+	}
+
+	return e
+}
+
+func extractFileCommentsInlineRanges(fset *token.FileSet, comments ...*ast.CommentGroup) []ignoredRange {
+	var ret []ignoredRange
 	for _, g := range comments {
 		for _, c := range g.List {
 			text := strings.TrimLeft(c.Text, "/ ")
@@ -139,25 +203,25 @@ func extractFileComments(fset *token.FileSet, comments ...*ast.CommentGroup) fil
 				continue
 			}
 
-			pos := fset.Position(g.Pos())
-			if !strings.HasPrefix(text, "nolint:") { // ignore all linters
-				ret = append(ret, comment{
-					line: pos.Line,
-				})
-				continue
-			}
-
-			// ignore specific linters
 			var linters []string
-			text = strings.Split(text, "//")[0] // allow another comment after this comment
-			linterItems := strings.Split(strings.TrimPrefix(text, "nolint:"), ",")
-			for _, linter := range linterItems {
-				linterName := strings.TrimSpace(linter) // TODO: validate it here
-				linters = append(linters, linterName)
-			}
-			ret = append(ret, comment{
+			if strings.HasPrefix(text, "nolint:") {
+				// ignore specific linters
+				text = strings.Split(text, "//")[0] // allow another comment after this comment
+				linterItems := strings.Split(strings.TrimPrefix(text, "nolint:"), ",")
+				for _, linter := range linterItems {
+					linterName := strings.TrimSpace(linter) // TODO: validate it here
+					linters = append(linters, linterName)
+				}
+			} // else ignore all linters
+
+			pos := fset.Position(g.Pos())
+			ret = append(ret, ignoredRange{
+				Range: result.Range{
+					From: pos.Line,
+					To:   fset.Position(g.End()).Line,
+				},
+				col:     pos.Column,
 				linters: linters,
-				line:    pos.Line,
 			})
 		}
 	}

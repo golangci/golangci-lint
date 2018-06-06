@@ -5,4 +5,4 @@
 // DO NOT EDIT!
 package testdata
 
-var v int
+var vv int
