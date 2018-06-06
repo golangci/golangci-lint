@@ -23,7 +23,7 @@ func (p Cgo) Process(issues []result.Issue) ([]result.Issue, error) {
 	return filterIssues(issues, func(i *result.Issue) bool {
 		// some linters (.e.g gas, deadcode) return incorrect filepaths for cgo issues,
 		// it breaks next processing, so skip them
-		return !strings.HasSuffix(i.FilePath(), "/C")
+		return i.FilePath() != "C" && !strings.HasSuffix(i.FilePath(), "/C")
 	}), nil
 }
 
