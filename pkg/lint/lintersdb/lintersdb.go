@@ -3,6 +3,7 @@ package lintersdb
 import (
 	"fmt"
 	"os"
+	"sort"
 	"strings"
 	"sync"
 
@@ -192,7 +193,7 @@ func GetAllSupportedLinterConfigs() []linter.Config {
 	})
 }
 
-func getAllEnabledByDefaultLinters() []linter.Config {
+func GetAllEnabledByDefaultLinters() []linter.Config {
 	var ret []linter.Config
 	for _, lc := range GetAllSupportedLinterConfigs() {
 		if lc.EnabledByDefault {
@@ -402,7 +403,7 @@ func GetEnabledLinters(cfg *config.Config) ([]linter.Config, error) {
 		return nil, err
 	}
 
-	resultLintersSet := getEnabledLintersSet(&cfg.Linters, getAllEnabledByDefaultLinters())
+	resultLintersSet := getEnabledLintersSet(&cfg.Linters, GetAllEnabledByDefaultLinters())
 
 	var resultLinters []linter.Config
 	for _, lc := range resultLintersSet {
@@ -419,9 +420,11 @@ func verbosePrintLintersStatus(cfg *config.Config, lcs []linter.Config) {
 	for _, lc := range lcs {
 		linterNames = append(linterNames, lc.Linter.Name())
 	}
-	logrus.Infof("Active linters: %s", linterNames)
+	sort.StringSlice(linterNames).Sort()
+	logrus.Infof("Active %d linters: %s", len(linterNames), linterNames)
 
 	if len(cfg.Linters.Presets) != 0 {
+		sort.StringSlice(cfg.Linters.Presets).Sort()
 		logrus.Infof("Active presets: %s", cfg.Linters.Presets)
 	}
 }
