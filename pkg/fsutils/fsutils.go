@@ -13,7 +13,12 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-var stdExcludeDirs = []string{"vendor", "testdata", "examples", "Godeps", "builtin"}
+var stdExcludeDirRegexps = []string{
+	"^vendor$", "^third_party$",
+	"^testdata$", "^examples$",
+	"^Godeps$",
+	"^builtin$",
+}
 
 func GetProjectRoot() string {
 	return path.Join(build.Default.GOPATH, "src", "github.com", "golangci", "golangci-worker")
@@ -101,7 +106,7 @@ func processResolvedPaths(paths *PathResolveResult) (*ProjectPaths, error) {
 	}, nil
 }
 
-func GetPathsForAnalysis(ctx context.Context, inputPaths []string, includeTests bool) (ret *ProjectPaths, err error) {
+func GetPathsForAnalysis(ctx context.Context, inputPaths []string, includeTests bool, skipDirRegexps []string) (ret *ProjectPaths, err error) {
 	defer func(startedAt time.Time) {
 		if ret != nil {
 			logrus.Infof("Found paths for analysis for %s: %s", time.Since(startedAt), ret.MixedPaths())
@@ -114,7 +119,13 @@ func GetPathsForAnalysis(ctx context.Context, inputPaths []string, includeTests 
 		}
 	}
 
-	pr := NewPathResolver(stdExcludeDirs, []string{".go"}, includeTests)
+	// TODO: don't analyze skipped files also, when be able to do it
+	excludeDirs := append([]string{}, stdExcludeDirRegexps...)
+	excludeDirs = append(excludeDirs, skipDirRegexps...)
+	pr, err := NewPathResolver(excludeDirs, []string{".go"}, includeTests)
+	if err != nil {
+		return nil, fmt.Errorf("can't make path resolver: %s", err)
+	}
 	paths, err := pr.Resolve(inputPaths...)
 	if err != nil {
 		return nil, fmt.Errorf("can't resolve paths %v: %s", inputPaths, err)

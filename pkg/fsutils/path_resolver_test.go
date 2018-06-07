@@ -53,12 +53,15 @@ func prepareFS(t *testing.T, paths ...string) *fsPreparer {
 	}
 }
 
-func newPR() *PathResolver {
-	return NewPathResolver([]string{}, []string{}, false)
+func newPR(t *testing.T) *PathResolver {
+	pr, err := NewPathResolver([]string{}, []string{}, false)
+	assert.NoError(t, err)
+
+	return pr
 }
 
 func TestPathResolverNoPaths(t *testing.T) {
-	_, err := newPR().Resolve()
+	_, err := newPR(t).Resolve()
 	assert.EqualError(t, err, "no paths are set")
 }
 
@@ -66,7 +69,7 @@ func TestPathResolverNotExistingPath(t *testing.T) {
 	fp := prepareFS(t)
 	defer fp.clean()
 
-	_, err := newPR().Resolve("a")
+	_, err := newPR(t).Resolve("a")
 	assert.EqualError(t, err, "can't find path a: stat a: no such file or directory")
 }
 
@@ -187,6 +190,11 @@ func TestPathResolverCommonCases(t *testing.T) {
 			expDirs:  []string{".", "a/c"},
 			expFiles: []string{"a/c/d.go", "e.go"},
 		},
+		{
+			name:    "vendor dir is excluded by regexp, not the exact match",
+			prepare: []string{"vendors/a.go", "novendor/b.go"},
+			resolve: []string{"./..."},
+		},
 	}
 
 	for _, tc := range testCases {
@@ -194,7 +202,9 @@ func TestPathResolverCommonCases(t *testing.T) {
 			fp := prepareFS(t, tc.prepare...)
 			defer fp.clean()
 
-			pr := NewPathResolver([]string{"vendor"}, []string{".go"}, tc.includeTests)
+			pr, err := NewPathResolver([]string{"vendor"}, []string{".go"}, tc.includeTests)
+			assert.NoError(t, err)
+
 			res, err := pr.Resolve(tc.resolve...)
 			assert.NoError(t, err)
 
