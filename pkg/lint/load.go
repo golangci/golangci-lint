@@ -154,7 +154,7 @@ func LoadContext(ctx context.Context, linters []linter.Config, cfg *config.Confi
 		args = []string{"./..."}
 	}
 
-	paths, err := fsutils.GetPathsForAnalysis(ctx, args, cfg.Run.AnalyzeTests)
+	paths, err := fsutils.GetPathsForAnalysis(ctx, args, cfg.Run.AnalyzeTests, cfg.Run.SkipDirs)
 	if err != nil {
 		return nil, err
 	}

@@ -232,6 +232,8 @@ Flags:
       --print-resources-usage       Print avg and max memory usage of golangci-lint and total time
   -c, --config PATH                 Read config from file path PATH
       --no-config                   Don't read config
+      --skip-dirs strings           Regexps of directory names to skip
+      --skip-files strings          Regexps of file names to skip
   -E, --enable strings              Enable specific linter
   -D, --disable strings             Disable specific linter
       --enable-all                  Enable all linters

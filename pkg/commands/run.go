@@ -71,6 +71,8 @@ func initFlagSet(fs *pflag.FlagSet, cfg *config.Config) {
 	fs.BoolVar(&rc.PrintResourcesUsage, "print-resources-usage", false, wh("Print avg and max memory usage of golangci-lint and total time"))
 	fs.StringVarP(&rc.Config, "config", "c", "", wh("Read config from file path `PATH`"))
 	fs.BoolVar(&rc.NoConfig, "no-config", false, wh("Don't read config"))
+	fs.StringSliceVar(&rc.SkipDirs, "skip-dirs", nil, wh("Regexps of directory names to skip"))
+	fs.StringSliceVar(&rc.SkipFiles, "skip-files", nil, wh("Regexps of file names to skip"))
 
 	// Linters settings config
 	lsc := &cfg.LintersSettings
@@ -194,12 +196,21 @@ func (e *Executor) runAnalysis(ctx context.Context, args []string) (<-chan resul
 	if lintCtx.Program != nil {
 		fset = lintCtx.Program.Fset
 	}
+
+	skipFilesProcessor, err := processors.NewSkipFiles(e.cfg.Run.SkipFiles)
+	if err != nil {
+		return nil, err
+	}
+
 	runner := lint.SimpleRunner{
 		Processors: []processors.Processor{
 			processors.NewPathPrettifier(), // must be before diff processor at least
-			processors.NewExclude(excludeTotalPattern),
 			processors.NewCgo(),
+			skipFilesProcessor,
+
+			processors.NewExclude(excludeTotalPattern),
 			processors.NewNolint(fset),
+
 			processors.NewUniqByLine(),
 			processors.NewDiff(e.cfg.Issues.Diff, e.cfg.Issues.DiffFromRevision, e.cfg.Issues.DiffPatchFilePath),
 			processors.NewMaxPerFileFromLinter(),

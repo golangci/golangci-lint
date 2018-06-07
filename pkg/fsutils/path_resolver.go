@@ -4,12 +4,13 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"regexp"
 	"sort"
 	"strings"
 )
 
 type PathResolver struct {
-	excludeDirs           map[string]bool
+	excludeDirs           map[string]*regexp.Regexp
 	allowedFileExtensions map[string]bool
 	includeTests          bool
 }
@@ -57,10 +58,15 @@ func (s pathResolveState) toResult() *PathResolveResult {
 	return res
 }
 
-func NewPathResolver(excludeDirs, allowedFileExtensions []string, includeTests bool) *PathResolver {
-	excludeDirsMap := map[string]bool{}
+func NewPathResolver(excludeDirs, allowedFileExtensions []string, includeTests bool) (*PathResolver, error) {
+	excludeDirsMap := map[string]*regexp.Regexp{}
 	for _, dir := range excludeDirs {
-		excludeDirsMap[dir] = true
+		re, err := regexp.Compile(dir)
+		if err != nil {
+			return nil, fmt.Errorf("can't compile regexp %q: %s", dir, err)
+		}
+
+		excludeDirsMap[dir] = re
 	}
 
 	allowedFileExtensionsMap := map[string]bool{}
@@ -72,7 +78,7 @@ func NewPathResolver(excludeDirs, allowedFileExtensions []string, includeTests b
 		excludeDirs:           excludeDirsMap,
 		allowedFileExtensions: allowedFileExtensionsMap,
 		includeTests:          includeTests,
-	}
+	}, nil
 }
 
 func (pr PathResolver) isIgnoredDir(dir string) bool {
@@ -87,7 +93,13 @@ func (pr PathResolver) isIgnoredDir(dir string) bool {
 		return true
 	}
 
-	return pr.excludeDirs[dirName]
+	for _, dirExludeRe := range pr.excludeDirs {
+		if dirExludeRe.MatchString(dirName) {
+			return true
+		}
+	}
+
+	return false
 }
 
 func (pr PathResolver) isAllowedFile(path string) bool {

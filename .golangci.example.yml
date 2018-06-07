@@ -5,6 +5,10 @@ run:
   tests: true
   build-tags:
     - mytag
+  skip-dirs:
+    - external_libs
+  skip-files:
+    - ".*\\.pb\\.go$"
 
 output:
   format: colored-line-number

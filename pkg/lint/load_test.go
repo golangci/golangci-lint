@@ -19,7 +19,7 @@ func TestASTCacheLoading(t *testing.T) {
 
 	inputPaths := []string{"./...", "./", "./load.go", "load.go"}
 	for _, inputPath := range inputPaths {
-		paths, err := fsutils.GetPathsForAnalysis(ctx, []string{inputPath}, true)
+		paths, err := fsutils.GetPathsForAnalysis(ctx, []string{inputPath}, true, nil)
 		assert.NoError(t, err)
 		assert.NotEmpty(t, paths.Files)
 

@@ -101,6 +101,9 @@ type Run struct {
 	AnalyzeTests          bool `mapstructure:"tests"`
 	Deadline              time.Duration
 	PrintVersion          bool
+
+	SkipFiles []string `mapstructure:"skip-files"`
+	SkipDirs  []string `mapstructure:"skip-dirs"`
 }
 
 type LintersSettings struct {
