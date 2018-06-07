@@ -123,8 +123,11 @@ $ golangci-lint run --disable-all -E errcheck
 # Editor Integration
 1. [Go for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=ms-vscode.Go).
 2. Sublime Text - [plugin](https://github.com/alecthomas/SublimeLinter-contrib-golang-cilint) for SublimeLinter.
-3. GNU Emacs - [flycheck checker](https://github.com/weijiangan/flycheck-golangci-lint).
-4. Vim - [issue](https://github.com/fatih/vim-go/issues/1841) for vim-go.
+3. GoLand
+  - Configure [File Watcher](https://www.jetbrains.com/help/go/settings-tools-file-watchers.html) with arguments `run --print-issued-lines=false $FileDir$`.
+  - Predefined File Watcher will be added in [issue](https://youtrack.jetbrains.com/issue/GO-4574).
+4. GNU Emacs - [flycheck checker](https://github.com/weijiangan/flycheck-golangci-lint).
+5. Vim - [issue](https://github.com/fatih/vim-go/issues/1841) for vim-go.
 
 # Comparison
 ## `golangci-lint` vs `gometalinter`
