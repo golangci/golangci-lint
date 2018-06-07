@@ -3,7 +3,7 @@
 
 GolangCI-Lint is a linters aggregator. It's fast: on average [5 times faster](#performance) than gometalinter. It's [easy to integrate and use](#issues-options), has [nice output](#quick-start) and has a minimum number of false positives.
 
-GolangCI-Lint has [integrations](#ide-integrations) with VS Code, GNU Emacs, Sublime Text.
+GolangCI-Lint has [integrations](#editor-integration) with VS Code, GNU Emacs, Sublime Text.
 
 Sponsored by [GolangCI.com](https://golangci.com): SaaS service for running linters on Github pull requests. Free for Open Source.
 
@@ -12,12 +12,12 @@ Sponsored by [GolangCI.com](https://golangci.com): SaaS service for running lint
    * [Demo](#demo)
    * [Install](#install)
    * [Quick Start](#quick-start)
+   * [Editor Integration](#editor-integration)
    * [Comparison](#comparison)
    * [Performance](#performance)
    * [Supported Linters](#supported-linters)
    * [Configuration](#configuration)
    * [False Positives](#false-positives)
-   * [IDE integrations](#ide-integrations)
    * [Internals](#internals)
    * [FAQ](#faq)
    * [Thanks](#thanks)
@@ -119,6 +119,12 @@ Pass `-E/--enable` to enable linter and `-D/--disable` to disable:
 ```bash
 $ golangci-lint run --disable-all -E errcheck
 ```
+
+# Editor Integration
+1. [Go for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=ms-vscode.Go).
+2. Sublime Text - [plugin](https://github.com/alecthomas/SublimeLinter-contrib-golang-cilint) for SublimeLinter.
+3. GNU Emacs - [flycheck checker](https://github.com/weijiangan/flycheck-golangci-lint).
+4. Vim - [issue](https://github.com/fatih/vim-go/issues/1841) for vim-go.
 
 # Comparison
 ## `golangci-lint` vs `gometalinter`
@@ -332,14 +338,16 @@ False positives are inevitable, but we did our best to reduce their count. For e
 1. Exclude issue by text using command-line option `-e` or config option `issues.exclude`. It's helpful when you decided to ignore all issues of this type.
 2. Exclude this one issue by using special comment `// nolint[:linter1,linter2,...]` on issued line.
 Comment `// nolint` disables all issues reporting on this line. Comment e.g. `// nolint:govet` disables only govet issues for this line.
+If you would like to completely exclude all issues for some function prepend this comment
+above function:
+```go
+//nolint
+func f() {
+  ...
+}
+```
 
 Please create [GitHub Issues here](https://github.com/golangci/golangci-lint/issues/new) about found false positives. We will add it to default exclude list if it's common or we will fix underlying linter.
-
-# IDE integrations
-1. VS Code - [pull request](https://github.com/Microsoft/vscode-go/pull/1693) to vscode-go (thanks to [pdf](https://github.com/pdf)).
-2. Vim - [issue](https://github.com/fatih/vim-go/issues/1841) for vim-go.
-3. GNU Emacs - [flycheck checker](https://github.com/weijiangan/flycheck-golangci-lint) (thanks to [weijiangan](https://github.com/weijiangan)).
-4. Sublime Text - [plugin](https://github.com/alecthomas/SublimeLinter-contrib-golang-cilint) for SublimeLinter (thanks to [alecthomas](https://github.com/alecthomas)).
 
 # Internals
 The key difference with gometalinter is that golangci-lint shares work between specific linters (golint, govet, ...).
