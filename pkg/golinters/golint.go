@@ -7,8 +7,8 @@ import (
 
 	lintAPI "github.com/golang/lint"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
+	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
-	"github.com/sirupsen/logrus"
 )
 
 type Golint struct{}
@@ -33,7 +33,7 @@ func (g Golint) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issu
 		issues = append(issues, i...)
 	}
 	if lintErr != nil {
-		logrus.Infof("golint: %s", lintErr)
+		logutils.HiddenWarnf("golint: %s", lintErr)
 	}
 
 	return issues, nil
