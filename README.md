@@ -47,7 +47,7 @@ The recommended way to install golangci-lint:
 curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | bash -s VERSION
 ```
 
-Periodically update version of golangci-lint: the project is under active development 
+Periodically update version of golangci-lint: the project is under active development
 and is constantly being improved. But please always check for newly found issues and
 update if needed.
 
@@ -137,7 +137,7 @@ GolangCI-Lint was created to fix the following issues with `gometalinter`:
 3. Doesn't use real bounded concurrency: if you set it to `n` it can take up to `n*n` threads because of forced threads in specific linters. `gometalinter` can't do anything about it because it runs linters as black boxes in forked processes. In GolangCI-Lint we run all linters in one process and completely control them. Configured concurrency will be correctly bounded.
 This issue is important because you often want to set concurrency to the CPUs count minus one to ensure you **do not freeze your PC** and be able to work on it while analyzing code.
 4. Lack of nice output. We like how the `gcc` and `clang` compilers format their warnings: **using colors, printing warning lines and showing the position in line**.
-5. Too many issues. GolangCI-Lint cuts a lot of issues by using default exclude list of common false-positives. By default, it has enables **smart issues processing**: merge multiple issues for one line, merge issues with the same text or from the same linter. All of these smart processors can be configured by the user.
+5. Too many issues. GolangCI-Lint cuts a lot of issues by using default exclude list of common false-positives. By default, it has enabled **smart issues processing**: merge multiple issues for one line, merge issues with the same text or from the same linter. All of these smart processors can be configured by the user.
 6. Integration into large codebases. A good way to start using linters in a large project is not to fix a plethora of existing issues, but to set up CI and **fix only issues in new commits**. You can use `revgrep` for it, but it's yet another utility to install and configure. With `golangci-lint` it's much easier: `revgrep` is already built into `golangci-lint` and you can use it with one option (`-n, --new` or `--new-from-rev`).
 7. Installation. With `gometalinter`, you need to run a linters installation step. It's easy to forget this step and end up with stale linters. It also complicates CI setup. GolangCI-Lint requires **no installation of linters**.
 8. **Yaml or toml config**. Gometalinter's JSON isn't convenient for config files.
@@ -150,13 +150,13 @@ This issue is important because you often want to set concurrency to the CPUs co
 # Performance
 Benchmarks were executed on MacBook Pro (Retina, 13-inch, Late 2013), 2,4 GHz Intel Core i5, 8 GB 1600 MHz DDR3.
 It has 4 cores and concurrent linting as a default consuming all cores.
-Benchmark were run (and measured) automatically, see the code 
+Benchmark was run (and measured) automatically, see the code
 [here](https://github.com/golangci/golangci-lint/blob/master/test/bench_test.go) (`BenchmarkWithGometalinter`).
 
 We measure peak memory usage (RSS) by tracking of processes RSS every 5 ms.
 
 ## Comparison with gometalinter
-We compare golangci-lint and gometalinter in default mode, but explicitly enabl all linters because of small differences in the default configuration.
+We compare golangci-lint and gometalinter in default mode, but explicitly enable all linters because of small differences in the default configuration.
 ```bash
 $ golangci-lint run --no-config --issues-exit-code=0 --deadline=30m \
 	--disable-all --enable=deadcode  --enable=gocyclo --enable=golint --enable=varcheck \
@@ -431,7 +431,7 @@ Thanks to developers and authors of used linters:
 1. Upstream all changes of forked linters.
 2. Fully integrate all used linters: make a common interface and reuse 100% of what can be reused: AST traversal, packages preparation etc.
 3. Make it easy to write own linter/checker: it should take a minimum code, have perfect documentation, debugging and testing tooling.
-4. Speed up package loading (dig into [loader](golang.org/x/tools/go/loader)): on-disk cache and existing code profiling-optimizing.
+4. Speed up package loading (dig into [loader](golang.org/x/tools/go/loader)): on-disk cache and existing code profiling-optimizing.
 5. Analyze (don't only filter) only new code: analyze only changed files and dependencies, make incremental analysis, caches.
 6. Smart new issues detector: don't print existing issues on changed lines.
 7. Integration with Text Editors. On-the-fly code analysis for text editors: it should be super-fast.
