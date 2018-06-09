@@ -139,6 +139,19 @@ func getEnabledByDefaultFastLintersExcept(except ...string) []string {
 	return ret
 }
 
+func getAllFastLintersWith(with ...string) []string {
+	linters := lintersdb.GetAllSupportedLinterConfigs()
+	ret := append([]string{}, with...)
+	for _, linter := range linters {
+		if linter.DoesFullImport {
+			continue
+		}
+		ret = append(ret, linter.Linter.Name())
+	}
+
+	return ret
+}
+
 func getEnabledByDefaultLinters() []string {
 	ebdl := lintersdb.GetAllEnabledByDefaultLinters()
 	ret := []string{}
@@ -178,6 +191,15 @@ func mergeMegacheck(linters []string) []string {
 	}
 
 	return linters
+}
+
+func TestEnableAllFastAndEnableCanCoexist(t *testing.T) {
+	out, exitCode := runGolangciLint(t, "--fast", "--enable-all", "--enable=typecheck")
+	checkNoIssuesRun(t, out, exitCode)
+
+	_, exitCode = runGolangciLint(t, "--enable-all", "--enable=typecheck")
+	assert.Equal(t, 3, exitCode)
+
 }
 
 func TestEnabledLinters(t *testing.T) {
@@ -265,6 +287,12 @@ func TestEnabledLinters(t *testing.T) {
 			`,
 			args:           "--fast=false",
 			el:             getEnabledByDefaultLinters(),
+			noImplicitFast: true,
+		},
+		{
+			name:           "fast option combined with enable and enable-all",
+			args:           "--enable-all --fast --enable=typecheck",
+			el:             getAllFastLintersWith("typecheck"),
 			noImplicitFast: true,
 		},
 	}

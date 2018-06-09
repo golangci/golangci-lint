@@ -256,7 +256,7 @@ func validateAllDisableEnableOptions(cfg *config.Linters) error {
 		}
 	}
 
-	if cfg.EnableAll && len(cfg.Enable) != 0 {
+	if cfg.EnableAll && len(cfg.Enable) != 0 && !cfg.Fast {
 		return fmt.Errorf("can't combine options --enable-all and --enable %s", cfg.Enable[0])
 	}
 
