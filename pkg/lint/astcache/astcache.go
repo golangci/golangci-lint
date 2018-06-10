@@ -24,8 +24,25 @@ type Cache struct {
 	s []*File
 }
 
+func NewCache() *Cache {
+	return &Cache{
+		m: map[string]*File{},
+	}
+}
+
 func (c Cache) Get(filename string) *File {
 	return c.m[filepath.Clean(filename)]
+}
+
+func (c Cache) GetOrParse(filename string) *File {
+	f := c.m[filename]
+	if f != nil {
+		return f
+	}
+
+	logrus.Infof("Parse AST for file %s on demand", filename)
+	c.parseFile(filename, nil)
+	return c.m[filename]
 }
 
 func (c Cache) GetAllValidFiles() []*File {
@@ -79,6 +96,20 @@ func LoadFromProgram(prog *loader.Program) (*Cache, error) {
 	return c, nil
 }
 
+func (c *Cache) parseFile(filePath string, fset *token.FileSet) {
+	if fset == nil {
+		fset = token.NewFileSet()
+	}
+
+	f, err := parser.ParseFile(fset, filePath, nil, parser.ParseComments) // comments needed by e.g. golint
+	c.m[filePath] = &File{
+		F:    f,
+		Fset: fset,
+		Err:  err,
+		Name: filePath,
+	}
+}
+
 func LoadFromFiles(files []string) (*Cache, error) {
 	c := &Cache{
 		m: map[string]*File{},
@@ -87,14 +118,7 @@ func LoadFromFiles(files []string) (*Cache, error) {
 	fset := token.NewFileSet()
 	for _, filePath := range files {
 		filePath = filepath.Clean(filePath)
-
-		f, err := parser.ParseFile(fset, filePath, nil, parser.ParseComments) // comments needed by e.g. golint
-		c.m[filePath] = &File{
-			F:    f,
-			Fset: fset,
-			Err:  err,
-			Name: filePath,
-		}
+		c.parseFile(filePath, fset)
 	}
 
 	c.prepareValidFiles()
