@@ -16,6 +16,7 @@ import (
 	"go/printer"
 	"go/token"
 	"go/types"
+	"io/ioutil"
 	"regexp"
 	"sort"
 	"strconv"
@@ -101,6 +102,46 @@ func (l *Linter) LintFiles(files map[string][]byte) ([]Problem, error) {
 		} else if f.Name.Name != pkgName {
 			return nil, fmt.Errorf("%s is in package %s, not %s", filename, f.Name.Name, pkgName)
 		}
+		pkg.files[filename] = &file{
+			pkg:      pkg,
+			f:        f,
+			fset:     pkg.fset,
+			src:      src,
+			filename: filename,
+		}
+	}
+	if len(pkg.files) == 0 {
+		return nil, nil
+	}
+	return pkg.lint(), nil
+}
+
+// LintFiles lints a set of files of a single package.
+// The argument is a map of filename to source.
+func (l *Linter) LintASTFiles(files []*ast.File, fset *token.FileSet) ([]Problem, error) {
+	pkg := &pkg{
+		fset:  fset,
+		files: make(map[string]*file),
+	}
+	var pkgName string
+	for _, f := range files {
+		filename := fset.Position(f.Pos()).Filename
+		if filename == "" {
+			return nil, fmt.Errorf("no file name for file %+v", f)
+		}
+
+		if pkgName == "" {
+			pkgName = f.Name.Name
+		} else if f.Name.Name != pkgName {
+			return nil, fmt.Errorf("%s is in package %s, not %s", filename, f.Name.Name, pkgName)
+		}
+
+		// TODO: reuse golangci-lint lines cache
+		src, err := ioutil.ReadFile(filename)
+		if err != nil {
+			return nil, fmt.Errorf("can't read file %s: %s", filename, err)
+		}
+
 		pkg.files[filename] = &file{
 			pkg:      pkg,
 			f:        f,

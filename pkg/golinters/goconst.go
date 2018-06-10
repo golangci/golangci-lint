@@ -21,12 +21,18 @@ func (Goconst) Desc() string {
 
 func (lint Goconst) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issue, error) {
 	var goconstIssues []goconstAPI.Issue
-	// TODO: make it cross-package: pass package names inside goconst
-	for _, files := range lintCtx.Paths.FilesGrouppedByDirs() {
-		issues, err := goconstAPI.Run(files, true,
-			lintCtx.Settings().Goconst.MinStringLen,
-			lintCtx.Settings().Goconst.MinOccurrencesCount,
-		)
+	cfg := goconstAPI.Config{
+		MatchWithConstants: true,
+		MinStringLength:    lintCtx.Settings().Goconst.MinStringLen,
+		MinOccurrences:     lintCtx.Settings().Goconst.MinOccurrencesCount,
+	}
+	for _, pkg := range lintCtx.PkgProgram.Packages() {
+		files, fset, err := getASTFilesForPkg(lintCtx, &pkg)
+		if err != nil {
+			return nil, err
+		}
+
+		issues, err := goconstAPI.Run(files, fset, &cfg)
 		if err != nil {
 			return nil, err
 		}

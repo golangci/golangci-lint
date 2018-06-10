@@ -2,7 +2,6 @@ package processors
 
 import (
 	"fmt"
-	"path/filepath"
 	"regexp"
 
 	"github.com/golangci/golangci-lint/pkg/result"
@@ -39,9 +38,8 @@ func (p SkipFiles) Process(issues []result.Issue) ([]result.Issue, error) {
 	}
 
 	return filterIssues(issues, func(i *result.Issue) bool {
-		fileName := filepath.Base(i.FilePath())
 		for _, p := range p.patterns {
-			if p.MatchString(fileName) {
+			if p.MatchString(i.FilePath()) {
 				return false
 			}
 		}

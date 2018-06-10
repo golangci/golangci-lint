@@ -1,3 +1,4 @@
+// args: -Eerrcheck
 package testdata
 
 import (

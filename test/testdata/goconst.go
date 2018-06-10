@@ -1,8 +1,9 @@
+// args: -Egoconst
 package testdata
 
 import "fmt"
 
-func GoconstA() { // nolint:dupl
+func GoconstA() {
 	a := "needconst" // ERROR "string `needconst` has 5 occurrences, make it a constant"
 	fmt.Print(a)
 	b := "needconst"
@@ -20,7 +21,7 @@ func GoconstB() {
 
 const AlreadyHasConst = "alreadyhasconst"
 
-func GoconstC() { // nolint:dupl
+func GoconstC() {
 	a := "alreadyhasconst" // ERROR "string `alreadyhasconst` has 3 occurrences, but such constant `AlreadyHasConst` already exists"
 	fmt.Print(a)
 	b := "alreadyhasconst"

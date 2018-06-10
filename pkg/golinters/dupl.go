@@ -21,7 +21,7 @@ func (Dupl) Desc() string {
 }
 
 func (d Dupl) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issue, error) {
-	issues, err := duplAPI.Run(lintCtx.Paths.Files, lintCtx.Settings().Dupl.Threshold)
+	issues, err := duplAPI.Run(lintCtx.PkgProgram.Files(lintCtx.Cfg.Run.AnalyzeTests), lintCtx.Settings().Dupl.Threshold)
 	if err != nil {
 		return nil, err
 	}

@@ -65,14 +65,14 @@ func initFlagSet(fs *pflag.FlagSet, cfg *config.Config) {
 	rc := &cfg.Run
 	fs.IntVar(&rc.ExitCodeIfIssuesFound, "issues-exit-code",
 		1, wh("Exit code when issues were found"))
-	fs.StringSliceVar(&rc.BuildTags, "build-tags", nil, wh("Build tags (not all linters support them)"))
+	fs.StringSliceVar(&rc.BuildTags, "build-tags", nil, wh("Build tags"))
 	fs.DurationVar(&rc.Deadline, "deadline", time.Minute, wh("Deadline for total work"))
 	fs.BoolVar(&rc.AnalyzeTests, "tests", true, wh("Analyze tests (*_test.go)"))
 	fs.BoolVar(&rc.PrintResourcesUsage, "print-resources-usage", false, wh("Print avg and max memory usage of golangci-lint and total time"))
 	fs.StringVarP(&rc.Config, "config", "c", "", wh("Read config from file path `PATH`"))
 	fs.BoolVar(&rc.NoConfig, "no-config", false, wh("Don't read config"))
-	fs.StringSliceVar(&rc.SkipDirs, "skip-dirs", nil, wh("Regexps of directory names to skip"))
-	fs.StringSliceVar(&rc.SkipFiles, "skip-files", nil, wh("Regexps of file names to skip"))
+	fs.StringSliceVar(&rc.SkipDirs, "skip-dirs", nil, wh("Regexps of directories to skip"))
+	fs.StringSliceVar(&rc.SkipFiles, "skip-files", nil, wh("Regexps of files to skip"))
 
 	// Linters settings config
 	lsc := &cfg.LintersSettings

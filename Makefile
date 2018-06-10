@@ -3,8 +3,7 @@ test:
 	golangci-lint run -v
 	golangci-lint run --fast --no-config -v
 	golangci-lint run --no-config -v
-	golangci-lint run --fast --no-config -v ./test/testdata/typecheck.go
-	go test -v -race ./...
+	go test -v ./...
 
 assets:
 	svg-term --cast=183662 --out docs/demo.svg --window --width 110 --height 30 --from 2000 --to 20000 --profile Dracula --term iterm2

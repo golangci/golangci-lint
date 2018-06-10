@@ -23,17 +23,23 @@ func newTestSkipFiles(t *testing.T, patterns ...string) *SkipFiles {
 }
 
 func TestSkipFiles(t *testing.T) {
-	p := newTestSkipFiles(t)
-	processAssertSame(t, p, newFileIssue("any.go"))
+	processAssertSame(t, newTestSkipFiles(t), newFileIssue("any.go"))
 
-	p = newTestSkipFiles(t, "file")
-	processAssertEmpty(t, p,
+	processAssertEmpty(t, newTestSkipFiles(t, "file"),
 		newFileIssue("file.go"),
 		newFileIssue("file"),
 		newFileIssue("nofile.go"))
 
-	p = newTestSkipFiles(t, ".*")
-	processAssertEmpty(t, p, newFileIssue("any.go"))
+	processAssertEmpty(t, newTestSkipFiles(t, ".*"), newFileIssue("any.go"))
+
+	processAssertEmpty(t, newTestSkipFiles(t, "a/b/c.go"), newFileIssue("a/b/c.go"))
+	processAssertSame(t, newTestSkipFiles(t, "a/b/c.go"), newFileIssue("a/b/d.go"))
+
+	processAssertEmpty(t, newTestSkipFiles(t, ".*\\.pb\\.go"), newFileIssue("a/b.pb.go"))
+	processAssertSame(t, newTestSkipFiles(t, ".*\\.pb\\.go"), newFileIssue("a/b.go"))
+
+	processAssertEmpty(t, newTestSkipFiles(t, ".*\\.pb\\.go$"), newFileIssue("a/b.pb.go"))
+	processAssertSame(t, newTestSkipFiles(t, ".*\\.pb\\.go$"), newFileIssue("a/b.go"))
 }
 
 func TestSkipFilesInvalidPattern(t *testing.T) {

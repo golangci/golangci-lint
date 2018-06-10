@@ -1,3 +1,4 @@
+// args: -Eineffassign
 package testdata
 
 func _() {

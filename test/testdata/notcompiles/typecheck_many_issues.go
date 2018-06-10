@@ -1,3 +1,4 @@
+// args: -Etypecheck
 package testdata
 
 func TypeCheckBadCalls() {
