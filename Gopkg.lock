@@ -58,12 +58,6 @@
 
 [[projects]]
   branch = "master"
-  name = "github.com/golang/lint"
-  packages = ["."]
-  revision = "470b6b0bb3005eda157f0275e2e4895055396a81"
-
-[[projects]]
-  branch = "master"
   name = "github.com/golangci/check"
   packages = [
     "cmd/structcheck",
@@ -103,7 +97,7 @@
   branch = "master"
   name = "github.com/golangci/goconst"
   packages = ["."]
-  revision = "b67b9035d29a7561902d87eb3757dd490b31c1b1"
+  revision = "041c5f2b40f3dd334a4a6ee6a3f84ca3fc70680a"
 
 [[projects]]
   branch = "master"
@@ -141,6 +135,12 @@
   name = "github.com/golangci/lint"
   packages = ["."]
   revision = "e1cc50c0cfa0e058f40ced1b3d54b86014440c91"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/golangci/lint-1"
+  packages = ["."]
+  revision = "4bf9709227d15e5f14c84a381e315a4695c4a372"
 
 [[projects]]
   branch = "master"
@@ -416,6 +416,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "832e18c919daf77730cda91687bfd2d0b0b70fe6283c38b33e48ed89c2fd2def"
+  inputs-digest = "4558f81cfd21ec5b1f937b518089a231eb05212cf9545af1fc3df3dd00a7fa22"
   solver-name = "gps-cdcl"
   solver-version = 1

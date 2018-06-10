@@ -1,3 +1,4 @@
+// args: -Edepguard --depguard.include-go-root --depguard.packages='log'
 package testdata
 
 import (

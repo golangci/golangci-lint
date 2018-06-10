@@ -16,12 +16,16 @@ type File struct {
 	F    *ast.File
 	Fset *token.FileSet
 	Name string
-	err  error
+	Err  error
 }
 
 type Cache struct {
 	m map[string]*File
 	s []*File
+}
+
+func (c Cache) Get(filename string) *File {
+	return c.m[filepath.Clean(filename)]
 }
 
 func (c Cache) GetAllValidFiles() []*File {
@@ -31,7 +35,7 @@ func (c Cache) GetAllValidFiles() []*File {
 func (c *Cache) prepareValidFiles() {
 	files := make([]*File, 0, len(c.m))
 	for _, f := range c.m {
-		if f.err != nil || f.F == nil {
+		if f.Err != nil || f.F == nil {
 			continue
 		}
 		files = append(files, f)
@@ -75,21 +79,24 @@ func LoadFromProgram(prog *loader.Program) (*Cache, error) {
 	return c, nil
 }
 
-func LoadFromFiles(files []string) *Cache {
+func LoadFromFiles(files []string) (*Cache, error) {
 	c := &Cache{
 		m: map[string]*File{},
 	}
+
 	fset := token.NewFileSet()
 	for _, filePath := range files {
+		filePath = filepath.Clean(filePath)
+
 		f, err := parser.ParseFile(fset, filePath, nil, parser.ParseComments) // comments needed by e.g. golint
 		c.m[filePath] = &File{
 			F:    f,
 			Fset: fset,
-			err:  err,
+			Err:  err,
 			Name: filePath,
 		}
 	}
 
 	c.prepareValidFiles()
-	return c
+	return c, nil
 }

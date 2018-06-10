@@ -1,3 +1,4 @@
+// args: -Egoimports
 package testdata
 
 import (

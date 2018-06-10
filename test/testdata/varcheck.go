@@ -1,3 +1,4 @@
+// args: -Evarcheck
 package testdata
 
-var v string // nolint:megacheck // ERROR "`v` is unused"
+var v string // ERROR "`v` is unused"

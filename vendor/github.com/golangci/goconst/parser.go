@@ -142,26 +142,27 @@ type Issue struct {
 	MatchingConst   string
 }
 
-func Run(files []string, matchWithConstants bool, minStringLength, minOccurrences int) ([]Issue, error) {
-	p := New("", "", false, matchWithConstants, false, minStringLength)
+type Config struct {
+	MatchWithConstants bool
+	MinStringLength    int
+	MinOccurrences     int
+}
+
+func Run(files []*ast.File, fset *token.FileSet, cfg *Config) ([]Issue, error) {
+	p := New("", "", false, cfg.MatchWithConstants, false, cfg.MinStringLength)
 	var issues []Issue
-	fset := token.NewFileSet()
-	for _, path := range files {
-		f, err := parser.ParseFile(fset, path, nil, 0)
-		if err != nil {
-			return nil, err
-		}
+	for _, f := range files {
 		ast.Walk(&treeVisitor{
 			fileSet:     fset,
 			packageName: "",
-			fileName:    path,
+			fileName:    "",
 			p:           p,
 		}, f)
 	}
 
 	for str, item := range p.strs {
 		// Filter out items whose occurrences don't match the min value
-		if len(item) < minOccurrences {
+		if len(item) < cfg.MinOccurrences {
 			delete(p.strs, str)
 		}
 	}

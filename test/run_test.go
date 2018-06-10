@@ -37,6 +37,11 @@ func TestCongratsMessageIfNoIssues(t *testing.T) {
 	checkNoIssuesRun(t, out, exitCode)
 }
 
+func TestSymlinkLoop(t *testing.T) {
+	out, exitCode := runGolangciLint(t, filepath.Join(testdataDir, "symlink_loop", "..."))
+	checkNoIssuesRun(t, out, exitCode)
+}
+
 func TestDeadline(t *testing.T) {
 	out, exitCode := runGolangciLint(t, "--deadline=1ms", "../...")
 	assert.Equal(t, 4, exitCode)

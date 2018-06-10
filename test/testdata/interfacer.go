@@ -1,3 +1,4 @@
+// args: -Einterfacer
 package testdata
 
 import "io"

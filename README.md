@@ -235,14 +235,14 @@ Flags:
       --print-issued-lines          Print lines of code with issue (default true)
       --print-linter-name           Print linter name in issue line (default true)
       --issues-exit-code int        Exit code when issues were found (default 1)
-      --build-tags strings          Build tags (not all linters support them)
+      --build-tags strings          Build tags
       --deadline duration           Deadline for total work (default 1m0s)
       --tests                       Analyze tests (*_test.go) (default true)
       --print-resources-usage       Print avg and max memory usage of golangci-lint and total time
   -c, --config PATH                 Read config from file path PATH
       --no-config                   Don't read config
-      --skip-dirs strings           Regexps of directory names to skip
-      --skip-files strings          Regexps of file names to skip
+      --skip-dirs strings           Regexps of directories to skip
+      --skip-files strings          Regexps of files to skip
   -E, --enable strings              Enable specific linter
   -D, --disable strings             Disable specific linter
       --enable-all                  Enable all linters
@@ -255,7 +255,7 @@ Flags:
                                       - Error return value of .((os\.)?std(out|err)\..*|.*Close|.*Flush|os\.Remove(All)?|.*printf?|os\.(Un)?Setenv). is not checked
                                     
                                       # golint: Annoying issue about not having a comment. The rare codebase has such comments
-                                      - (should have comment|comment on exported method|should have a package comment)
+                                      - (comment on exported (method|function)|should have( a package)? comment|comment should be of the form)
                                     
                                       # golint: False positive when tests are defined in package 'test'
                                       - func name will be used as test\.Test.* by other packages, and that stutters; consider calling this

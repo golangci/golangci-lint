@@ -20,7 +20,7 @@ func (Ineffassign) Desc() string {
 }
 
 func (lint Ineffassign) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issue, error) {
-	issues := ineffassignAPI.Run(lintCtx.Paths.Files)
+	issues := ineffassignAPI.Run(lintCtx.PkgProgram.Files(lintCtx.Cfg.Run.AnalyzeTests))
 	if len(issues) == 0 {
 		return nil, nil
 	}

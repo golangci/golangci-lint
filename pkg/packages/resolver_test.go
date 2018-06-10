@@ -1,12 +1,14 @@
-package fsutils
+package packages_test
 
 import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 	"testing"
 
+	"github.com/golangci/golangci-lint/pkg/packages"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -42,7 +44,8 @@ func prepareFS(t *testing.T, paths ...string) *fsPreparer {
 			continue
 		}
 
-		err = ioutil.WriteFile(p, []byte("test"), os.ModePerm)
+		goFile := "package p\n"
+		err = ioutil.WriteFile(p, []byte(goFile), os.ModePerm)
 		assert.NoError(t, err)
 	}
 
@@ -53,24 +56,19 @@ func prepareFS(t *testing.T, paths ...string) *fsPreparer {
 	}
 }
 
-func newPR(t *testing.T) *PathResolver {
-	pr, err := NewPathResolver([]string{}, []string{}, false)
+func newTestResolver(t *testing.T, excludeDirs []string) *packages.Resolver {
+	r, err := packages.NewResolver(nil, excludeDirs)
 	assert.NoError(t, err)
 
-	return pr
-}
-
-func TestPathResolverNoPaths(t *testing.T) {
-	_, err := newPR(t).Resolve()
-	assert.EqualError(t, err, "no paths are set")
+	return r
 }
 
 func TestPathResolverNotExistingPath(t *testing.T) {
 	fp := prepareFS(t)
 	defer fp.clean()
 
-	_, err := newPR(t).Resolve("a")
-	assert.EqualError(t, err, "can't find path a: stat a: no such file or directory")
+	_, err := newTestResolver(t, nil).Resolve("a")
+	assert.EqualError(t, err, "can't eval symlinks for path a: lstat a: no such file or directory")
 }
 
 func TestPathResolverCommonCases(t *testing.T) {
@@ -103,11 +101,30 @@ func TestPathResolverCommonCases(t *testing.T) {
 			resolve: []string{"./..."},
 		},
 		{
-			name:     "vendor implicitely resolved",
+			name:    "nested vendor is excluded",
+			prepare: []string{"d/vendor/a.go"},
+			resolve: []string{"./..."},
+		},
+		{
+			name:     "vendor dir is excluded by regexp, not the exact match",
+			prepare:  []string{"vendors/a.go", "novendor/b.go"},
+			resolve:  []string{"./..."},
+			expDirs:  []string{"vendors"},
+			expFiles: []string{"vendors/a.go"},
+		},
+		{
+			name:     "vendor explicitly resolved",
 			prepare:  []string{"vendor/a.go"},
 			resolve:  []string{"./vendor"},
 			expDirs:  []string{"vendor"},
 			expFiles: []string{"vendor/a.go"},
+		},
+		{
+			name:     "nested vendor explicitly resolved",
+			prepare:  []string{"d/vendor/a.go"},
+			resolve:  []string{"d/vendor"},
+			expDirs:  []string{"d/vendor"},
+			expFiles: []string{"d/vendor/a.go"},
 		},
 		{
 			name:     "extensions filter recursively",
@@ -131,10 +148,10 @@ func TestPathResolverCommonCases(t *testing.T) {
 			expFiles: []string{"a/c.go"},
 		},
 		{
-			name:     "implicitely resolved files",
+			name:     "explicitly resolved files",
 			prepare:  []string{"a/b/c.go", "a/d.txt"},
 			resolve:  []string{"./a/...", "a/d.txt"},
-			expDirs:  []string{"a", "a/b"},
+			expDirs:  []string{"a/b"},
 			expFiles: []string{"a/b/c.go", "a/d.txt"},
 		},
 		{
@@ -148,6 +165,32 @@ func TestPathResolverCommonCases(t *testing.T) {
 			resolve:  []string{"./..."},
 			expDirs:  []string{"ok"},
 			expFiles: []string{"ok/b.go"},
+		},
+		{
+			name:     "exclude path, not name",
+			prepare:  []string{"ex/clude/me/a.go", "c/d.go"},
+			resolve:  []string{"./..."},
+			expDirs:  []string{"c"},
+			expFiles: []string{"c/d.go"},
+		},
+		{
+			name:     "exclude partial path",
+			prepare:  []string{"prefix/ex/clude/me/a.go", "prefix/ex/clude/me/subdir/c.go", "prefix/b.go"},
+			resolve:  []string{"./..."},
+			expDirs:  []string{"prefix"},
+			expFiles: []string{"prefix/b.go"},
+		},
+		{
+			name:     "don't exclude file instead of dir",
+			prepare:  []string{"a/exclude.go"},
+			resolve:  []string{"a"},
+			expDirs:  []string{"a"},
+			expFiles: []string{"a/exclude.go"},
+		},
+		{
+			name:    "don't exclude file instead of dir: check dir is excluded",
+			prepare: []string{"a/exclude.go/b.go"},
+			resolve: []string{"a/..."},
 		},
 		{
 			name:    "ignore _*",
@@ -191,9 +234,11 @@ func TestPathResolverCommonCases(t *testing.T) {
 			expFiles: []string{"a/c/d.go", "e.go"},
 		},
 		{
-			name:    "vendor dir is excluded by regexp, not the exact match",
-			prepare: []string{"vendors/a.go", "novendor/b.go"},
-			resolve: []string{"./..."},
+			name:     "resolve absolute paths",
+			prepare:  []string{"a/b.go", "a/c.txt", "d.go", "e.csv"},
+			resolve:  []string{"${CWD}/..."},
+			expDirs:  []string{".", "a"},
+			expFiles: []string{"a/b.go", "d.go"},
 		},
 	}
 
@@ -202,22 +247,34 @@ func TestPathResolverCommonCases(t *testing.T) {
 			fp := prepareFS(t, tc.prepare...)
 			defer fp.clean()
 
-			pr, err := NewPathResolver([]string{"vendor"}, []string{".go"}, tc.includeTests)
-			assert.NoError(t, err)
+			for i, rp := range tc.resolve {
+				tc.resolve[i] = strings.Replace(rp, "${CWD}", fp.root, -1)
+			}
 
-			res, err := pr.Resolve(tc.resolve...)
+			r := newTestResolver(t, []string{"vendor$", "ex/clude/me", "exclude"})
+
+			prog, err := r.Resolve(tc.resolve...)
 			assert.NoError(t, err)
+			assert.NotNil(t, prog)
+
+			progFiles := prog.Files(tc.includeTests)
+			sort.StringSlice(progFiles).Sort()
+			sort.StringSlice(tc.expFiles).Sort()
+
+			progDirs := prog.Dirs()
+			sort.StringSlice(progDirs).Sort()
+			sort.StringSlice(tc.expDirs).Sort()
 
 			if tc.expFiles == nil {
-				assert.Empty(t, res.files)
+				assert.Empty(t, progFiles)
 			} else {
-				assert.Equal(t, tc.expFiles, res.files)
+				assert.Equal(t, tc.expFiles, progFiles, "files")
 			}
 
 			if tc.expDirs == nil {
-				assert.Empty(t, res.dirs)
+				assert.Empty(t, progDirs)
 			} else {
-				assert.Equal(t, tc.expDirs, res.dirs)
+				assert.Equal(t, tc.expDirs, progDirs, "dirs")
 			}
 		})
 	}

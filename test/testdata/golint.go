@@ -1,3 +1,4 @@
+// args: -Egolint
 package testdata
 
 var Go_lint string // ERROR "don't use underscores in Go names; var Go_lint should be GoLint"
@@ -11,7 +12,7 @@ type ExportedStructWithNoComment struct{}
 
 type ExportedInterfaceWithNoComment interface{}
 
-// Bad comment // ERROR "comment on exported function ExportedFuncWithBadComment should be of the form .ExportedFuncWithBadComment \.\.\.."
+// Bad comment
 func ExportedFuncWithBadComment() {}
 
 type GolintTest struct{}

@@ -4,34 +4,22 @@ import (
 	"context"
 	"fmt"
 	"go/build"
+	"go/parser"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strings"
 	"time"
 
 	"github.com/golangci/go-tools/ssa"
 	"github.com/golangci/go-tools/ssa/ssautil"
 	"github.com/golangci/golangci-lint/pkg/config"
-	"github.com/golangci/golangci-lint/pkg/fsutils"
 	"github.com/golangci/golangci-lint/pkg/lint/astcache"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
+	"github.com/golangci/golangci-lint/pkg/packages"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/tools/go/loader"
 )
-
-type Context struct {
-	Paths                *fsutils.ProjectPaths
-	Cfg                  *config.Config
-	Program              *loader.Program
-	SSAProgram           *ssa.Program
-	LoaderConfig         *loader.Config
-	ASTCache             *astcache.Cache
-	NotCompilingPackages []*loader.PackageInfo
-}
-
-func (c *Context) Settings() *config.LintersSettings {
-	return &c.Cfg.LintersSettings
-}
 
 func isFullImportNeeded(linters []linter.Config) bool {
 	for _, linter := range linters {
@@ -53,7 +41,30 @@ func isSSAReprNeeded(linters []linter.Config) bool {
 	return false
 }
 
-func loadWholeAppIfNeeded(ctx context.Context, linters []linter.Config, cfg *config.Run, paths *fsutils.ProjectPaths) (*loader.Program, *loader.Config, error) {
+func normalizePaths(paths []string) ([]string, error) {
+	root, err := os.Getwd()
+	if err != nil {
+		return nil, fmt.Errorf("can't get working dir: %s", err)
+	}
+
+	ret := make([]string, 0, len(paths))
+	for _, p := range paths {
+		if filepath.IsAbs(p) {
+			relPath, err := filepath.Rel(root, p)
+			if err != nil {
+				return nil, fmt.Errorf("can't get relative path for path %s and root %s: %s",
+					p, root, err)
+			}
+			p = relPath
+		}
+
+		ret = append(ret, "./"+p)
+	}
+
+	return ret, nil
+}
+
+func loadWholeAppIfNeeded(ctx context.Context, linters []linter.Config, cfg *config.Run, pkgProg *packages.Program) (*loader.Program, *loader.Config, error) {
 	if !isFullImportNeeded(linters) {
 		return nil, nil, nil
 	}
@@ -63,13 +74,27 @@ func loadWholeAppIfNeeded(ctx context.Context, linters []linter.Config, cfg *con
 		logrus.Infof("Program loading took %s", time.Since(startedAt))
 	}()
 
-	bctx := build.Default
-	bctx.BuildTags = append(bctx.BuildTags, cfg.BuildTags...)
+	bctx := pkgProg.BuildContext()
 	loadcfg := &loader.Config{
-		Build:       &bctx,
-		AllowErrors: true, // Try to analyze event partially
+		Build:       bctx,
+		AllowErrors: true,                 // Try to analyze partially
+		ParserMode:  parser.ParseComments, // AST will be reused by linters
 	}
-	rest, err := loadcfg.FromArgs(paths.MixedPaths(), cfg.AnalyzeTests)
+
+	var loaderArgs []string
+	dirs := pkgProg.Dirs()
+	if len(dirs) != 0 {
+		loaderArgs = dirs // dirs run
+	} else {
+		loaderArgs = pkgProg.Files(cfg.AnalyzeTests) // files run
+	}
+
+	nLoaderArgs, err := normalizePaths(loaderArgs)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	rest, err := loadcfg.FromArgs(nLoaderArgs, cfg.AnalyzeTests)
 	if err != nil {
 		return nil, nil, fmt.Errorf("can't parepare load config with paths: %s", err)
 	}
@@ -79,7 +104,7 @@ func loadWholeAppIfNeeded(ctx context.Context, linters []linter.Config, cfg *con
 
 	prog, err := loadcfg.Load()
 	if err != nil {
-		return nil, nil, fmt.Errorf("can't load program from paths %v: %s", paths.MixedPaths(), err)
+		return nil, nil, fmt.Errorf("can't load program from paths %v: %s", loaderArgs, err)
 	}
 
 	return prog, loadcfg, nil
@@ -138,6 +163,7 @@ func separateNotCompilingPackages(lintCtx *linter.Context) {
 	}
 }
 
+//nolint:gocyclo
 func LoadContext(ctx context.Context, linters []linter.Config, cfg *config.Config) (*linter.Context, error) {
 	// Set GOROOT to have working cross-compilation: cross-compiled binaries
 	// have invalid GOROOT. XXX: can't use runtime.GOROOT().
@@ -147,19 +173,25 @@ func LoadContext(ctx context.Context, linters []linter.Config, cfg *config.Confi
 	}
 	os.Setenv("GOROOT", goroot)
 	build.Default.GOROOT = goroot
-	logrus.Infof("set GOROOT=%q", goroot)
 
 	args := cfg.Run.Args
 	if len(args) == 0 {
 		args = []string{"./..."}
 	}
 
-	paths, err := fsutils.GetPathsForAnalysis(ctx, args, cfg.Run.AnalyzeTests, cfg.Run.SkipDirs)
+	skipDirs := append([]string{}, packages.StdExcludeDirRegexps...)
+	skipDirs = append(skipDirs, cfg.Run.SkipDirs...)
+	r, err := packages.NewResolver(cfg.Run.BuildTags, skipDirs)
 	if err != nil {
 		return nil, err
 	}
 
-	prog, loaderConfig, err := loadWholeAppIfNeeded(ctx, linters, &cfg.Run, paths)
+	pkgProg, err := r.Resolve(args...)
+	if err != nil {
+		return nil, err
+	}
+
+	prog, loaderConfig, err := loadWholeAppIfNeeded(ctx, linters, &cfg.Run, pkgProg)
 	if err != nil {
 		return nil, err
 	}
@@ -172,15 +204,15 @@ func LoadContext(ctx context.Context, linters []linter.Config, cfg *config.Confi
 	var astCache *astcache.Cache
 	if prog != nil {
 		astCache, err = astcache.LoadFromProgram(prog)
-		if err != nil {
-			return nil, err
-		}
 	} else {
-		astCache = astcache.LoadFromFiles(paths.Files)
+		astCache, err = astcache.LoadFromFiles(pkgProg.Files(cfg.Run.AnalyzeTests))
+	}
+	if err != nil {
+		return nil, err
 	}
 
 	ret := &linter.Context{
-		Paths:        paths,
+		PkgProgram:   pkgProg,
 		Cfg:          cfg,
 		Program:      prog,
 		SSAProgram:   ssaProg,

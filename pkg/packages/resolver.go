@@ -1,0 +1,206 @@
+package packages
+
+import (
+	"fmt"
+	"go/build"
+	"io/ioutil"
+	"os"
+	"path/filepath"
+	"regexp"
+	"strings"
+	"time"
+
+	"github.com/sirupsen/logrus"
+)
+
+type Resolver struct {
+	excludeDirs map[string]*regexp.Regexp
+	buildTags   []string
+
+	skippedDirs []string
+}
+
+func NewResolver(buildTags, excludeDirs []string) (*Resolver, error) {
+	excludeDirsMap := map[string]*regexp.Regexp{}
+	for _, dir := range excludeDirs {
+		re, err := regexp.Compile(dir)
+		if err != nil {
+			return nil, fmt.Errorf("can't compile regexp %q: %s", dir, err)
+		}
+
+		excludeDirsMap[dir] = re
+	}
+
+	return &Resolver{
+		excludeDirs: excludeDirsMap,
+		buildTags:   buildTags,
+	}, nil
+}
+
+func (r Resolver) isIgnoredDir(dir string) bool {
+	cleanName := filepath.Clean(dir)
+
+	dirName := filepath.Base(cleanName)
+
+	// https://github.com/golang/dep/issues/298
+	// https://github.com/tools/godep/issues/140
+	if strings.HasPrefix(dirName, ".") && dirName != "." && dirName != ".." {
+		return true
+	}
+	if strings.HasPrefix(dirName, "_") {
+		return true
+	}
+
+	for _, dirExludeRe := range r.excludeDirs {
+		if dirExludeRe.MatchString(cleanName) {
+			return true
+		}
+	}
+
+	return false
+}
+
+func (r *Resolver) resolveRecursively(root string, prog *Program) error {
+	// import root
+	if err := r.resolveDir(root, prog); err != nil {
+		return err
+	}
+
+	fis, err := ioutil.ReadDir(root)
+	if err != nil {
+		return fmt.Errorf("can't resolve dir %s: %s", root, err)
+	}
+	// TODO: pass cached fis to build.Context
+
+	for _, fi := range fis {
+		if !fi.IsDir() {
+			// ignore files: they were already imported by resolveDir(root)
+			continue
+		}
+
+		subdir := filepath.Join(root, fi.Name())
+
+		if r.isIgnoredDir(subdir) {
+			r.skippedDirs = append(r.skippedDirs, subdir)
+			continue
+		}
+
+		if err := r.resolveRecursively(subdir, prog); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (r Resolver) resolveDir(dir string, prog *Program) error {
+	// TODO: fork build.Import to reuse AST parsing
+	bp, err := prog.bctx.ImportDir(dir, build.ImportComment|build.IgnoreVendor)
+	if err != nil {
+		if _, nogo := err.(*build.NoGoError); nogo {
+			// Don't complain if the failure is due to no Go source files.
+			return nil
+		}
+
+		return fmt.Errorf("can't resolve dir %s: %s", dir, err)
+	}
+
+	pkg := Package{
+		bp: bp,
+	}
+	prog.addPackage(&pkg)
+	return nil
+}
+
+func (r Resolver) addFakePackage(filePath string, prog *Program) {
+	// Don't take build tags, is it test file or not, etc
+	// into account. If user explicitly wants to analyze this file
+	// do it.
+	p := Package{
+		bp: &build.Package{
+			GoFiles: []string{filePath},
+		},
+		isFake: true,
+	}
+	prog.addPackage(&p)
+}
+
+func (r Resolver) Resolve(paths ...string) (prog *Program, err error) {
+	startedAt := time.Now()
+	defer func() {
+		logrus.Infof("Paths resolving took %s: %s", time.Since(startedAt), prog)
+	}()
+
+	if len(paths) == 0 {
+		return nil, fmt.Errorf("no paths are set")
+	}
+
+	bctx := build.Default
+	bctx.BuildTags = append(bctx.BuildTags, r.buildTags...)
+	prog = &Program{
+		bctx: bctx,
+	}
+
+	root, err := os.Getwd()
+	if err != nil {
+		return nil, fmt.Errorf("can't get working dir: %s", err)
+	}
+
+	for _, path := range paths {
+		if err := r.resolvePath(path, prog, root); err != nil {
+			return nil, err
+		}
+	}
+
+	if len(r.skippedDirs) != 0 {
+		logrus.Infof("Skipped dirs: %s", r.skippedDirs)
+	}
+
+	return prog, nil
+}
+
+func (r *Resolver) resolvePath(path string, prog *Program, root string) error {
+	needRecursive := strings.HasSuffix(path, "/...")
+	if needRecursive {
+		path = filepath.Dir(path)
+	}
+
+	evalPath, err := filepath.EvalSymlinks(path)
+	if err != nil {
+		return fmt.Errorf("can't eval symlinks for path %s: %s", path, err)
+	}
+	path = evalPath
+
+	if filepath.IsAbs(path) {
+		var relPath string
+		relPath, err = filepath.Rel(root, path)
+		if err != nil {
+			return fmt.Errorf("can't get relative path for path %s and root %s: %s",
+				path, root, err)
+		}
+		path = relPath
+	}
+
+	if needRecursive {
+		if err = r.resolveRecursively(path, prog); err != nil {
+			return fmt.Errorf("can't recursively resolve %s: %s", path, err)
+		}
+
+		return nil
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		return fmt.Errorf("can't find path %s: %s", path, err)
+	}
+
+	if fi.IsDir() {
+		if err := r.resolveDir(path, prog); err != nil {
+			return fmt.Errorf("can't resolve dir %s: %s", path, err)
+		}
+		return nil
+	}
+
+	r.addFakePackage(path, prog)
+	return nil
+}

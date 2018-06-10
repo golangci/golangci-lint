@@ -105,7 +105,7 @@ func (g Gofmt) extractIssuesFromPatch(patch string) ([]result.Issue, error) {
 func (g Gofmt) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issue, error) {
 	var issues []result.Issue
 
-	for _, f := range lintCtx.Paths.Files {
+	for _, f := range lintCtx.PkgProgram.Files(lintCtx.Cfg.Run.AnalyzeTests) {
 		var diff []byte
 		var err error
 		if g.UseGoimports {
