@@ -41,7 +41,7 @@ func (d Dupl) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issue,
 				Filename: i.From.Filename(),
 				Line:     i.From.LineStart(),
 			},
-			LineRange: result.Range{
+			LineRange: &result.Range{
 				From: i.From.LineStart(),
 				To:   i.From.LineEnd(),
 			},

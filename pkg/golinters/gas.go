@@ -41,9 +41,10 @@ func (lint Gas) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issu
 	res := make([]result.Issue, 0, len(issues))
 	for _, i := range issues {
 		text := fmt.Sprintf("%s: %s", i.RuleID, i.What) // TODO: use severity and confidence
-		var r result.Range
+		var r *result.Range
 		line, err := strconv.Atoi(i.Line)
 		if err != nil {
+			r = &result.Range{}
 			if n, rerr := fmt.Sscanf(i.Line, "%d-%d", &r.From, &r.To); rerr != nil || n != 2 {
 				logutils.HiddenWarnf("Can't convert gas line number %q of %v to int: %s", i.Line, i, err)
 				continue
