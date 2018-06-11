@@ -14,4 +14,8 @@ readme:
 check_generated:
 	make readme && git diff --exit-code # check no changes
 
+release:
+	rm -rf dist
+	curl -sL https://git.io/goreleaser | bash
+
 .PHONY: test

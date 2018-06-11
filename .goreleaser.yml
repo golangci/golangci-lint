@@ -43,6 +43,7 @@ changelog:
     exclude:
     - '^docs:'
     - '^test:'
+    - '^dev:'
     - 'README'
     - Merge pull request
     - Merge branch
