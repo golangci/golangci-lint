@@ -28,7 +28,7 @@ var DefaultExcludePatterns = []ExcludePattern{
 		Why:     "Almost all programs ignore errors on these functions and in most cases it's ok",
 	},
 	{
-		Pattern: "(comment on exported (method|function)|should have( a package)? comment|comment should be of the form)",
+		Pattern: "(comment on exported (method|function|type)|should have( a package)? comment|comment should be of the form)",
 		Linter:  "golint",
 		Why:     "Annoying issue about not having a comment. The rare codebase has such comments",
 	},
