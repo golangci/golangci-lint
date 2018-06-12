@@ -371,18 +371,18 @@ nolint comment, diff, regexps; prettify paths, etc.
 We use `cobra` for command-line options.
 
 # FAQ
-**Q: How do you add a custom linter?**
+**How do you add a custom linter?**
 
-A: You can integrate it yourself, see this [wiki page](https://github.com/golangci/golangci-lint/wiki/How-to-add-a-custom-linter) with documentation. Or you can create a [GitHub Issue](https://github.com/golangci/golangci-lint/issues/new) and we will integrate when time permits.
+You can integrate it yourself, see this [wiki page](https://github.com/golangci/golangci-lint/wiki/How-to-add-a-custom-linter) with documentation. Or you can create a [GitHub Issue](https://github.com/golangci/golangci-lint/issues/new) and we will integrate when time permits.
 
-**Q: It's cool to use `golangci-lint` when starting a project, but what about existing projects with large codebase? It will take days to fix all found issues**
+**It's cool to use `golangci-lint` when starting a project, but what about existing projects with large codebase? It will take days to fix all found issues**
 
-A: We are sure that every project can easily integrate `golangci-lint`, even the large one. The idea is to not fix all existing issues. Fix only newly added issue: issues in new code. To do this setup CI (or better use [GolangCI](https://golangci.com) to run `golangci-lint` with option `--new-from-rev=origin/master`. Also, take a look at option `-n`.
+We are sure that every project can easily integrate `golangci-lint`, even the large one. The idea is to not fix all existing issues. Fix only newly added issue: issues in new code. To do this setup CI (or better use [GolangCI](https://golangci.com) to run `golangci-lint` with option `--new-from-rev=origin/master`. Also, take a look at option `-n`.
 By doing this you won't create new issues in your code and can choose fix existing issues (or not).
 
-**Q: How to use `golangci-lint` in CI (Continuous Integration)?**
+**How to use `golangci-lint` in CI (Continuous Integration)?**
 
-A: You have 2 choices:
+You have 2 choices:
 1. Use [GolangCI](https://golangci.com): this service is highly integrated with GitHub (issues are commented in the pull request) and uses a `golangci-lint` tool. For configuration use `.golangci.yml` (or toml/json).
 2. Use custom CI: just run `golangci-lint` in CI and check the exit code. If it's non-zero - fail the build. The main disadvantage is that you can't see issues in pull request code and would need to view the build log, then open the referenced source file to see the context.
 If you'd like to vendor `golangci-lint` in your repo, run:
@@ -403,12 +403,14 @@ go install ./vendor/github.com/golangci/golangci-lint/cmd/golangci-lint/`
 ```
 Vendoring `golangci-lint` saves a network request, potentially making your CI system a little more reliable.
 
-**Q: `govet` or `golint` reports false-positives or false-negatives**
+**`govet` or `golint` reports false-positives or false-negatives**
+
 These linters obtain type information from installed package files.
 The same issue you will encounter if will run `govet` or `golint` without `golangci-lint`.
-Try `go install -i ./...` (or `go install -i ./cmd/...`: depends on the project) first.
+Try `go install ./...` (or `go install ./cmd/...`: depends on the project) first.
 
-**Q: `golangci-lint` doesn't work**
+**`golangci-lint` doesn't work**
+
 1. Update it: `go get -u github.com/golangci/golangci-lint/cmd/golangci-lint`
 2. Run it with `-v` option and check the output.
 3. If it doesn't help create a [GitHub issue](https://github.com/golangci/golangci-lint/issues/new) with the output from the error and #2 above.
