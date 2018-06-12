@@ -8,6 +8,7 @@ import (
 	"runtime/pprof"
 
 	"github.com/golangci/golangci-lint/pkg/config"
+	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/printers"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -16,7 +17,9 @@ import (
 
 func setupLog(isVerbose bool) {
 	log.SetFlags(0) // don't print time
-	if isVerbose {
+	if logutils.IsDebugEnabled() {
+		logrus.SetLevel(logrus.DebugLevel)
+	} else if isVerbose {
 		logrus.SetLevel(logrus.InfoLevel)
 	}
 }

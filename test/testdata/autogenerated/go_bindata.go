@@ -3,6 +3,6 @@
 // bar.baz
 // x/y.z
 // DO NOT EDIT!
-package testdata
+package p
 
 var vv int
