@@ -3,4 +3,4 @@
 
 package p
 
-func unusedFunc2() {}
+func UnusedFunc2() {}
