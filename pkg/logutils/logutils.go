@@ -51,3 +51,7 @@ func Debug(tag string) DebugFunc {
 func IsDebugEnabled() bool {
 	return len(enabledDebugs) != 0
 }
+
+func HaveDebugTag(tag string) bool {
+	return enabledDebugs[tag]
+}
