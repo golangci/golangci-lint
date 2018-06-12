@@ -255,7 +255,7 @@ Flags:
                                       - Error return value of .((os\.)?std(out|err)\..*|.*Close|.*Flush|os\.Remove(All)?|.*printf?|os\.(Un)?Setenv). is not checked
                                     
                                       # golint: Annoying issue about not having a comment. The rare codebase has such comments
-                                      - (comment on exported (method|function)|should have( a package)? comment|comment should be of the form)
+                                      - (comment on exported (method|function|type)|should have( a package)? comment|comment should be of the form)
                                     
                                       # golint: False positive when tests are defined in package 'test'
                                       - func name will be used as test\.Test.* by other packages, and that stutters; consider calling this
@@ -402,6 +402,11 @@ In your CI scripts, install the vendored `golangci-lint` like this:
 go install ./vendor/github.com/golangci/golangci-lint/cmd/golangci-lint/`
 ```
 Vendoring `golangci-lint` saves a network request, potentially making your CI system a little more reliable.
+
+**Q: `govet` or `golint` reports false-positives or false-negatives**
+These linters obtain type information from installed package files.
+The same issue you will encounter if will run `govet` or `golint` without `golangci-lint`.
+Try `go install -i ./...` (or `go install -i ./cmd/...`: depends on the project) first.
 
 **Q: `golangci-lint` doesn't work**
 1. Update it: `go get -u github.com/golangci/golangci-lint/cmd/golangci-lint`

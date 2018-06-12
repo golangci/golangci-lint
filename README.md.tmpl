@@ -275,6 +275,11 @@ go install ./vendor/github.com/golangci/golangci-lint/cmd/golangci-lint/`
 ```
 Vendoring `golangci-lint` saves a network request, potentially making your CI system a little more reliable.
 
+**Q: `govet` or `golint` reports false-positives or false-negatives**
+These linters obtain type information from installed package files.
+The same issue you will encounter if will run `govet` or `golint` without `golangci-lint`.
+Try `go install -i ./...` (or `go install -i ./cmd/...`: depends on the project) first.
+
 **Q: `golangci-lint` doesn't work**
 1. Update it: `go get -u github.com/golangci/golangci-lint/cmd/golangci-lint`
 2. Run it with `-v` option and check the output.

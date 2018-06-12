@@ -1,5 +1,5 @@
 test:
-	go install ./cmd/...
+	go install -i ./cmd/... # needed for govet and golint
 	golangci-lint run -v
 	golangci-lint run --fast --no-config -v
 	golangci-lint run --no-config -v
