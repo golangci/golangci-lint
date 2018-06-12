@@ -11,6 +11,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/golangci/golangci-lint/pkg/logutils"
+
 	"github.com/golangci/go-tools/ssa"
 	"github.com/golangci/go-tools/ssa/ssautil"
 	"github.com/golangci/golangci-lint/pkg/config"
@@ -20,6 +22,8 @@ import (
 	"github.com/sirupsen/logrus"
 	"golang.org/x/tools/go/loader"
 )
+
+var loadDebugf = logutils.Debug("load")
 
 func isFullImportNeeded(linters []linter.Config) bool {
 	for _, linter := range linters {
@@ -64,6 +68,89 @@ func normalizePaths(paths []string) ([]string, error) {
 	return ret, nil
 }
 
+func getCurrentProjectImportPath() (string, error) {
+	gopath := os.Getenv("GOPATH")
+	if gopath == "" {
+		return "", fmt.Errorf("no GOPATH env variable")
+	}
+
+	wd, err := os.Getwd()
+	if err != nil {
+		return "", fmt.Errorf("can't get workind directory: %s", err)
+	}
+
+	if !strings.HasPrefix(wd, gopath) {
+		return "", fmt.Errorf("currently no in gopath: %q isn't a prefix of %q", gopath, wd)
+	}
+
+	path := strings.TrimPrefix(wd, gopath)
+	path = strings.TrimPrefix(path, string(os.PathSeparator)) // if GOPATH contains separator at the end
+	src := "src" + string(os.PathSeparator)
+	if !strings.HasPrefix(path, src) {
+		return "", fmt.Errorf("currently no in gopath/src: %q isn't a prefix of %q", src, path)
+	}
+
+	path = strings.TrimPrefix(path, src)
+	path = strings.Replace(path, string(os.PathSeparator), "/", -1)
+	return path, nil
+}
+
+func isLocalProjectAnalysis(args []string) bool {
+	for _, arg := range args {
+		if strings.HasPrefix(arg, "..") || filepath.IsAbs(arg) {
+			return false
+		}
+	}
+
+	return true
+}
+
+func getTypeCheckFuncBodies(cfg *config.Run, linters []linter.Config, pkgProg *packages.Program) func(string) bool {
+	if !isLocalProjectAnalysis(cfg.Args) {
+		loadDebugf("analysis in nonlocal, don't optimize loading by not typechecking func bodies")
+		return nil
+	}
+
+	if isSSAReprNeeded(linters) {
+		loadDebugf("ssa repr is needed, don't optimize loading by not typechecking func bodies")
+		return nil
+	}
+
+	if len(pkgProg.Dirs()) == 0 {
+		// files run, in this mode packages are fake: can't check their path properly
+		return nil
+	}
+
+	projPath, err := getCurrentProjectImportPath()
+	if err != nil {
+		logrus.Infof("can't get cur project path: %s", err)
+		return nil
+	}
+
+	return func(path string) bool {
+		if strings.HasPrefix(path, ".") {
+			loadDebugf("%s: dot import: typecheck func bodies", path)
+			return true
+		}
+
+		isLocalPath := strings.HasPrefix(path, projPath)
+		if isLocalPath {
+			localPath := strings.TrimPrefix(path, projPath)
+			localPath = strings.TrimPrefix(localPath, "/")
+			if strings.HasPrefix(localPath, "vendor/") {
+				loadDebugf("%s: local vendor import: DO NOT typecheck func bodies", path)
+				return false
+			}
+
+			loadDebugf("%s: local import: typecheck func bodies", path)
+			return true
+		}
+
+		loadDebugf("%s: not local import: DO NOT typecheck func bodies", path)
+		return false
+	}
+}
+
 func loadWholeAppIfNeeded(ctx context.Context, linters []linter.Config, cfg *config.Run, pkgProg *packages.Program) (*loader.Program, *loader.Config, error) {
 	if !isFullImportNeeded(linters) {
 		return nil, nil, nil
@@ -76,9 +163,10 @@ func loadWholeAppIfNeeded(ctx context.Context, linters []linter.Config, cfg *con
 
 	bctx := pkgProg.BuildContext()
 	loadcfg := &loader.Config{
-		Build:       bctx,
-		AllowErrors: true,                 // Try to analyze partially
-		ParserMode:  parser.ParseComments, // AST will be reused by linters
+		Build:               bctx,
+		AllowErrors:         true,                 // Try to analyze partially
+		ParserMode:          parser.ParseComments, // AST will be reused by linters
+		TypeCheckFuncBodies: getTypeCheckFuncBodies(cfg, linters, pkgProg),
 	}
 
 	var loaderArgs []string

@@ -75,7 +75,6 @@ func (g Gofmt) extractIssuesFromPatch(patch string) ([]result.Issue, error) {
 		for _, hunk := range d.Hunks {
 			deletedLine, addedLine, err := getFirstDeletedAndAddedLineNumberInHunk(hunk)
 			if err != nil {
-				logrus.Infof("Can't get first deleted line number for hunk: %s", err)
 				if addedLine > 1 {
 					deletedLine = addedLine - 1 // use previous line, TODO: use both prev and next lines
 				} else {

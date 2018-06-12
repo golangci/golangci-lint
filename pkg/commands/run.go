@@ -14,6 +14,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/lint"
 	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
+	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/printers"
 	"github.com/golangci/golangci-lint/pkg/result"
 	"github.com/golangci/golangci-lint/pkg/result/processors"
@@ -231,12 +232,14 @@ func setOutputToDevNull() (savedStdout, savedStderr *os.File) {
 }
 
 func (e *Executor) runAndPrint(ctx context.Context, args []string) error {
-	// Don't allow linters and loader to print anything
-	log.SetOutput(ioutil.Discard)
-	savedStdout, savedStderr := setOutputToDevNull()
-	defer func() {
-		os.Stdout, os.Stderr = savedStdout, savedStderr
-	}()
+	if !logutils.HaveDebugTag("linters_output") {
+		// Don't allow linters and loader to print anything
+		log.SetOutput(ioutil.Discard)
+		savedStdout, savedStderr := setOutputToDevNull()
+		defer func() {
+			os.Stdout, os.Stderr = savedStdout, savedStderr
+		}()
+	}
 
 	issues, err := e.runAnalysis(ctx, args)
 	if err != nil {
