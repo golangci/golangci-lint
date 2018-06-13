@@ -4,6 +4,7 @@ import (
 	"github.com/golangci/go-tools/ssa"
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/lint/astcache"
+	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/packages"
 	"golang.org/x/tools/go/loader"
 )
@@ -16,6 +17,7 @@ type Context struct {
 	LoaderConfig         *loader.Config
 	ASTCache             *astcache.Cache
 	NotCompilingPackages []*loader.PackageInfo
+	Log                  logutils.Log
 }
 
 func (c *Context) Settings() *config.LintersSettings {

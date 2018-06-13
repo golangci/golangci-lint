@@ -7,17 +7,19 @@ import (
 	"text/tabwriter"
 
 	"github.com/fatih/color"
+	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
-	"github.com/sirupsen/logrus"
 )
 
 type Tab struct {
 	printLinterName bool
+	log             logutils.Log
 }
 
-func NewTab(printLinterName bool) *Tab {
+func NewTab(printLinterName bool, log logutils.Log) *Tab {
 	return &Tab{
 		printLinterName: printLinterName,
+		log:             log,
 	}
 }
 
@@ -36,14 +38,14 @@ func (p *Tab) Print(ctx context.Context, issues <-chan result.Issue) (bool, erro
 	}
 
 	if issuesN != 0 {
-		logrus.Infof("Found %d issues", issuesN)
+		p.log.Infof("Found %d issues", issuesN)
 	} else if ctx.Err() == nil { // don't print "congrats" if timeouted
 		outStr := p.SprintfColored(color.FgGreen, "Congrats! No issues were found.")
 		fmt.Fprintln(StdOut, outStr)
 	}
 
 	if err := w.Flush(); err != nil {
-		logrus.Warnf("Can't flush tab writer: %s", err)
+		p.log.Warnf("Can't flush tab writer: %s", err)
 	}
 
 	return issuesN != 0, nil

@@ -1,9 +1,9 @@
 test:
-	go install ./cmd/... # needed for govet and golint
-	golangci-lint run -v
-	golangci-lint run --fast --no-config -v
-	golangci-lint run --no-config -v
-	go test -v ./...
+	go install ./cmd/... # needed for govet and golint if go < 1.10
+	GL_TEST_RUN=1 golangci-lint run -v
+	GL_TEST_RUN=1 golangci-lint run --fast --no-config -v
+	GL_TEST_RUN=1 golangci-lint run --no-config -v
+	GL_TEST_RUN=1 go test -v ./...
 
 assets:
 	svg-term --cast=183662 --out docs/demo.svg --window --width 110 --height 30 --from 2000 --to 20000 --profile Dracula --term iterm2

@@ -10,7 +10,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/sirupsen/logrus"
+	"github.com/golangci/golangci-lint/pkg/fsutils"
+	"github.com/golangci/golangci-lint/pkg/logutils"
 )
 
 type Resolver struct {
@@ -18,9 +19,12 @@ type Resolver struct {
 	buildTags   []string
 
 	skippedDirs []string
+	log         logutils.Log
+
+	wd string // working directory
 }
 
-func NewResolver(buildTags, excludeDirs []string) (*Resolver, error) {
+func NewResolver(buildTags, excludeDirs []string, log logutils.Log) (*Resolver, error) {
 	excludeDirsMap := map[string]*regexp.Regexp{}
 	for _, dir := range excludeDirs {
 		re, err := regexp.Compile(dir)
@@ -31,9 +35,16 @@ func NewResolver(buildTags, excludeDirs []string) (*Resolver, error) {
 		excludeDirsMap[dir] = re
 	}
 
+	wd, err := os.Getwd()
+	if err != nil {
+		return nil, fmt.Errorf("can't get working dir: %s", err)
+	}
+
 	return &Resolver{
 		excludeDirs: excludeDirsMap,
 		buildTags:   buildTags,
+		log:         log,
+		wd:          wd,
 	}, nil
 }
 
@@ -79,6 +90,15 @@ func (r *Resolver) resolveRecursively(root string, prog *Program) error {
 		}
 
 		subdir := filepath.Join(root, fi.Name())
+
+		// Normalize each subdir because working directory can be one of these subdirs:
+		// working dir = /app/subdir, resolve root is ../, without this normalization
+		// path of subdir will be "../subdir" but it must be ".".
+		// Normalize path before checking is ignored dir.
+		subdir, err := r.normalizePath(subdir)
+		if err != nil {
+			return err
+		}
 
 		if r.isIgnoredDir(subdir) {
 			r.skippedDirs = append(r.skippedDirs, subdir)
@@ -128,7 +148,7 @@ func (r Resolver) addFakePackage(filePath string, prog *Program) {
 func (r Resolver) Resolve(paths ...string) (prog *Program, err error) {
 	startedAt := time.Now()
 	defer func() {
-		logrus.Infof("Paths resolving took %s: %s", time.Since(startedAt), prog)
+		r.log.Infof("Paths resolving took %s: %s", time.Since(startedAt), prog)
 	}()
 
 	if len(paths) == 0 {
@@ -141,25 +161,24 @@ func (r Resolver) Resolve(paths ...string) (prog *Program, err error) {
 		bctx: bctx,
 	}
 
-	root, err := os.Getwd()
-	if err != nil {
-		return nil, fmt.Errorf("can't get working dir: %s", err)
-	}
-
 	for _, path := range paths {
-		if err := r.resolvePath(path, prog, root); err != nil {
+		if err := r.resolvePath(path, prog); err != nil {
 			return nil, err
 		}
 	}
 
 	if len(r.skippedDirs) != 0 {
-		logrus.Infof("Skipped dirs: %s", r.skippedDirs)
+		r.log.Infof("Skipped dirs: %s", r.skippedDirs)
 	}
 
 	return prog, nil
 }
 
-func (r *Resolver) resolvePath(path string, prog *Program, root string) error {
+func (r *Resolver) normalizePath(path string) (string, error) {
+	return fsutils.ShortestRelPath(path, r.wd)
+}
+
+func (r *Resolver) resolvePath(path string, prog *Program) error {
 	needRecursive := strings.HasSuffix(path, "/...")
 	if needRecursive {
 		path = filepath.Dir(path)
@@ -171,14 +190,9 @@ func (r *Resolver) resolvePath(path string, prog *Program, root string) error {
 	}
 	path = evalPath
 
-	if filepath.IsAbs(path) {
-		var relPath string
-		relPath, err = filepath.Rel(root, path)
-		if err != nil {
-			return fmt.Errorf("can't get relative path for path %s and root %s: %s",
-				path, root, err)
-		}
-		path = relPath
+	path, err = r.normalizePath(path)
+	if err != nil {
+		return err
 	}
 
 	if needRecursive {

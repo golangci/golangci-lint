@@ -35,7 +35,7 @@ func getASTFilesForPkg(ctx *linter.Context, pkg *packages.Package) ([]*ast.File,
 	for _, filename := range filenames {
 		f := ctx.ASTCache.Get(filename)
 		if f == nil {
-			return nil, nil, fmt.Errorf("no AST for file %s in cache", filename)
+			return nil, nil, fmt.Errorf("no AST for file %s in cache: %+v", filename, *ctx.ASTCache)
 		}
 
 		if f.Err != nil {

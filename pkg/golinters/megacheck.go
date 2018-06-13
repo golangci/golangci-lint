@@ -8,7 +8,6 @@ import (
 	megacheckAPI "github.com/golangci/go-tools/cmd/megacheck"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
-	"github.com/sirupsen/logrus"
 )
 
 type Megacheck struct {
@@ -57,7 +56,7 @@ func (m Megacheck) Run(ctx context.Context, lintCtx *linter.Context) ([]result.I
 		for _, p := range lintCtx.NotCompilingPackages {
 			packages = append(packages, p.String())
 		}
-		logrus.Warnf("Can't run megacheck because of compilation errors in packages "+
+		lintCtx.Log.Warnf("Can't run megacheck because of compilation errors in packages "+
 			"%s: run `typecheck` linter to see errors", packages)
 		// megacheck crashes if there are not compiling packages
 		return nil, nil
