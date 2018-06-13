@@ -231,7 +231,7 @@ Usage:
   golangci-lint run [flags]
 
 Flags:
-      --out-format string           Format of output: colored-line-number|line-number|json|tab (default "colored-line-number")
+      --out-format string           Format of output: colored-line-number|line-number|json|tab|checkstyle (default "colored-line-number")
       --print-issued-lines          Print lines of code with issue (default true)
       --print-linter-name           Print linter name in issue line (default true)
       --issues-exit-code int        Exit code when issues were found (default 1)

@@ -11,9 +11,16 @@ const (
 	OutFormatLineNumber        = "line-number"
 	OutFormatColoredLineNumber = "colored-line-number"
 	OutFormatTab               = "tab"
+	OutFormatCheckstyle        = "checkstyle"
 )
 
-var OutFormats = []string{OutFormatColoredLineNumber, OutFormatLineNumber, OutFormatJSON, OutFormatTab}
+var OutFormats = []string{
+	OutFormatColoredLineNumber,
+	OutFormatLineNumber,
+	OutFormatJSON,
+	OutFormatTab,
+	OutFormatCheckstyle,
+}
 
 type ExcludePattern struct {
 	Pattern string

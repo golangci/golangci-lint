@@ -256,6 +256,8 @@ func (e *Executor) runAndPrint(ctx context.Context, args []string) error {
 			format == config.OutFormatColoredLineNumber, e.cfg.Output.PrintLinterName)
 	case config.OutFormatTab:
 		p = printers.NewTab(e.cfg.Output.PrintLinterName)
+	case config.OutFormatCheckstyle:
+		p = printers.NewCheckstyle()
 	default:
 		return fmt.Errorf("unknown output format %s", format)
 	}

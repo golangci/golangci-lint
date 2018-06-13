@@ -23,6 +23,10 @@ func (i Issue) Line() int {
 	return i.Pos.Line
 }
 
+func (i Issue) Column() int {
+	return i.Pos.Column
+}
+
 func (i Issue) GetLineRange() Range {
 	if i.LineRange == nil {
 		return Range{
