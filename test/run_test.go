@@ -13,6 +13,7 @@ import (
 	"syscall"
 	"testing"
 
+	"github.com/golangci/golangci-lint/pkg/exitcodes"
 	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
 
 	"github.com/stretchr/testify/assert"
@@ -28,7 +29,7 @@ func installBinary(t assert.TestingT) {
 }
 
 func checkNoIssuesRun(t *testing.T, out string, exitCode int) {
-	assert.Equal(t, 0, exitCode)
+	assert.Equal(t, exitcodes.Success, exitCode)
 	assert.Equal(t, "Congrats! No issues were found.\n", out)
 }
 
@@ -47,9 +48,20 @@ func TestSymlinkLoop(t *testing.T) {
 	checkNoIssuesRun(t, out, exitCode)
 }
 
+func TestRunOnAbsPath(t *testing.T) {
+	absPath, err := filepath.Abs(filepath.Join(testdataDir, ".."))
+	assert.NoError(t, err)
+
+	out, exitCode := runGolangciLint(t, "--no-config", "--fast", absPath)
+	checkNoIssuesRun(t, out, exitCode)
+
+	out, exitCode = runGolangciLint(t, "--no-config", absPath)
+	checkNoIssuesRun(t, out, exitCode)
+}
+
 func TestDeadline(t *testing.T) {
-	out, exitCode := runGolangciLint(t, "--deadline=1ms", "../...")
-	assert.Equal(t, 4, exitCode)
+	out, exitCode := runGolangciLint(t, "--deadline=1ms", filepath.Join("..", "..."))
+	assert.Equal(t, exitcodes.Timeout, exitCode)
 	assert.Contains(t, out, "deadline exceeded: try increase it by passing --deadline option")
 	assert.NotContains(t, out, "Congrats! No issues were found.")
 }
@@ -79,7 +91,7 @@ func runGolangciLint(t *testing.T, args ...string) (string, int) {
 
 func runGolangciLintWithYamlConfig(t *testing.T, cfg string, args ...string) string {
 	out, ec := runGolangciLintWithYamlConfigWithCode(t, cfg, args...)
-	assert.Equal(t, 0, ec)
+	assert.Equal(t, exitcodes.Success, ec)
 
 	return out
 }
@@ -107,12 +119,12 @@ func runGolangciLintWithYamlConfigWithCode(t *testing.T, cfg string, args ...str
 
 func TestTestsAreLintedByDefault(t *testing.T) {
 	out, exitCode := runGolangciLint(t, "./testdata/withtests")
-	assert.Equal(t, 0, exitCode, out)
+	assert.Equal(t, exitcodes.Success, exitCode, out)
 }
 
 func TestConfigFileIsDetected(t *testing.T) {
 	checkGotConfig := func(out string, exitCode int) {
-		assert.Equal(t, 0, exitCode, out)
+		assert.Equal(t, exitcodes.Success, exitCode, out)
 		assert.Equal(t, "test\n", out) // test config contains InternalTest: true, it triggers such output
 	}
 
@@ -208,7 +220,7 @@ func TestEnableAllFastAndEnableCanCoexist(t *testing.T) {
 	checkNoIssuesRun(t, out, exitCode)
 
 	_, exitCode = runGolangciLint(t, "--enable-all", "--enable=typecheck")
-	assert.Equal(t, 3, exitCode)
+	assert.Equal(t, exitcodes.Failure, exitCode)
 
 }
 
@@ -327,7 +339,7 @@ func TestEnabledLinters(t *testing.T) {
 
 func TestEnabledPresetsAreNotDuplicated(t *testing.T) {
 	out, ec := runGolangciLint(t, "--no-config", "-v", "-p", "style,bugs")
-	assert.Equal(t, 0, ec)
+	assert.Equal(t, exitcodes.Success, ec)
 	assert.Contains(t, out, "Active presets: [bugs style]")
 }
 
@@ -371,7 +383,7 @@ func TestDisallowedOptionsInConfig(t *testing.T) {
 	for _, c := range cases {
 		// Run with disallowed option set only in config
 		_, ec := runGolangciLintWithYamlConfigWithCode(t, c.cfg)
-		assert.Equal(t, 1, ec)
+		assert.Equal(t, exitcodes.Failure, ec)
 
 		if c.option == "" {
 			continue
@@ -381,10 +393,10 @@ func TestDisallowedOptionsInConfig(t *testing.T) {
 
 		// Run with disallowed option set only in command-line
 		_, ec = runGolangciLint(t, args...)
-		assert.Equal(t, 0, ec)
+		assert.Equal(t, exitcodes.Success, ec)
 
 		// Run with disallowed option set both in command-line and in config
 		_, ec = runGolangciLintWithYamlConfigWithCode(t, c.cfg, args...)
-		assert.Equal(t, 1, ec)
+		assert.Equal(t, exitcodes.Failure, ec)
 	}
 }

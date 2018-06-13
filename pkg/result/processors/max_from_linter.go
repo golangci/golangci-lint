@@ -1,21 +1,23 @@
 package processors
 
 import (
+	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
-	"github.com/sirupsen/logrus"
 )
 
 type MaxFromLinter struct {
 	lc    linterToCountMap
 	limit int
+	log   logutils.Log
 }
 
 var _ Processor = &MaxFromLinter{}
 
-func NewMaxFromLinter(limit int) *MaxFromLinter {
+func NewMaxFromLinter(limit int, log logutils.Log) *MaxFromLinter {
 	return &MaxFromLinter{
 		lc:    linterToCountMap{},
 		limit: limit,
+		log:   log,
 	}
 }
 
@@ -37,7 +39,7 @@ func (p *MaxFromLinter) Process(issues []result.Issue) ([]result.Issue, error) {
 func (p MaxFromLinter) Finish() {
 	walkStringToIntMapSortedByValue(p.lc, func(linter string, count int) {
 		if count > p.limit {
-			logrus.Infof("%d/%d issues from linter %s were hidden, use --max-issues-per-linter",
+			p.log.Infof("%d/%d issues from linter %s were hidden, use --max-issues-per-linter",
 				count-p.limit, count, linter)
 		}
 	})

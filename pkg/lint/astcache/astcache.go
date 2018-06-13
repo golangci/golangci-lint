@@ -8,7 +8,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/sirupsen/logrus"
+	"github.com/golangci/golangci-lint/pkg/logutils"
 	"golang.org/x/tools/go/loader"
 )
 
@@ -20,13 +20,15 @@ type File struct {
 }
 
 type Cache struct {
-	m map[string]*File
-	s []*File
+	m   map[string]*File
+	s   []*File
+	log logutils.Log
 }
 
-func NewCache() *Cache {
+func NewCache(log logutils.Log) *Cache {
 	return &Cache{
-		m: map[string]*File{},
+		m:   map[string]*File{},
+		log: log,
 	}
 }
 
@@ -40,7 +42,7 @@ func (c Cache) GetOrParse(filename string) *File {
 		return f
 	}
 
-	logrus.Infof("Parse AST for file %s on demand", filename)
+	c.log.Infof("Parse AST for file %s on demand", filename)
 	c.parseFile(filename, nil)
 	return c.m[filename]
 }
@@ -79,7 +81,7 @@ func LoadFromProgram(prog *loader.Program) (*Cache, error) {
 
 			relPath, err := filepath.Rel(root, pos.Filename)
 			if err != nil {
-				logrus.Warnf("Can't get relative path for %s and %s: %s",
+				c.log.Warnf("Can't get relative path for %s and %s: %s",
 					root, pos.Filename, err)
 				continue
 			}
@@ -107,6 +109,9 @@ func (c *Cache) parseFile(filePath string, fset *token.FileSet) {
 		Fset: fset,
 		Err:  err,
 		Name: filePath,
+	}
+	if err != nil {
+		c.log.Warnf("Can't parse AST of %s: %s", filePath, err)
 	}
 }
 

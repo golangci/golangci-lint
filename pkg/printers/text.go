@@ -9,8 +9,8 @@ import (
 	"time"
 
 	"github.com/fatih/color"
+	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
-	"github.com/sirupsen/logrus"
 )
 
 type linesCache [][]byte
@@ -22,14 +22,16 @@ type Text struct {
 	printLinterName bool
 
 	cache filesCache
+	log   logutils.Log
 }
 
-func NewText(printIssuedLine, useColors, printLinterName bool) *Text {
+func NewText(printIssuedLine, useColors, printLinterName bool, log logutils.Log) *Text {
 	return &Text{
 		printIssuedLine: printIssuedLine,
 		useColors:       useColors,
 		printLinterName: printLinterName,
 		cache:           filesCache{},
+		log:             log,
 	}
 }
 
@@ -62,7 +64,7 @@ func (p *Text) getFileLinesForIssue(i *result.Issue) (linesCache, error) {
 func (p *Text) Print(ctx context.Context, issues <-chan result.Issue) (bool, error) {
 	var issuedLineExtractingDuration time.Duration
 	defer func() {
-		logrus.Infof("Extracting issued lines took %s", issuedLineExtractingDuration)
+		p.log.Infof("Extracting issued lines took %s", issuedLineExtractingDuration)
 	}()
 
 	issuesN := 0
@@ -88,7 +90,7 @@ func (p *Text) Print(ctx context.Context, issues <-chan result.Issue) (bool, err
 	}
 
 	if issuesN != 0 {
-		logrus.Infof("Found %d issues", issuesN)
+		p.log.Infof("Found %d issues", issuesN)
 	} else if ctx.Err() == nil { // don't print "congrats" if timeouted
 		outStr := p.SprintfColored(color.FgGreen, "Congrats! No issues were found.")
 		fmt.Fprintln(StdOut, outStr)
@@ -119,7 +121,7 @@ func (p Text) printIssuedLines(i *result.Issue, lines linesCache) {
 
 		zeroIndexedLine := line - 1
 		if zeroIndexedLine >= len(lines) {
-			logrus.Warnf("No line %d in file %s", line, i.FilePath())
+			p.log.Warnf("No line %d in file %s", line, i.FilePath())
 			break
 		}
 

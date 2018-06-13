@@ -3,8 +3,8 @@ package processors
 import (
 	"sort"
 
+	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
-	"github.com/sirupsen/logrus"
 )
 
 type textToCountMap map[string]int
@@ -12,14 +12,16 @@ type textToCountMap map[string]int
 type MaxSameIssues struct {
 	tc    textToCountMap
 	limit int
+	log   logutils.Log
 }
 
 var _ Processor = &MaxSameIssues{}
 
-func NewMaxSameIssues(limit int) *MaxSameIssues {
+func NewMaxSameIssues(limit int, log logutils.Log) *MaxSameIssues {
 	return &MaxSameIssues{
 		tc:    textToCountMap{},
 		limit: limit,
+		log:   log,
 	}
 }
 
@@ -41,7 +43,7 @@ func (p *MaxSameIssues) Process(issues []result.Issue) ([]result.Issue, error) {
 func (p MaxSameIssues) Finish() {
 	walkStringToIntMapSortedByValue(p.tc, func(text string, count int) {
 		if count > p.limit {
-			logrus.Infof("%d/%d issues with text %q were hidden, use --max-same-issues",
+			p.log.Infof("%d/%d issues with text %q were hidden, use --max-same-issues",
 				count-p.limit, count, text)
 		}
 	})

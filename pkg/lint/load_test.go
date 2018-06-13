@@ -4,6 +4,8 @@ import (
 	"context"
 	"testing"
 
+	"github.com/golangci/golangci-lint/pkg/logutils"
+
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/lint/astcache"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
@@ -19,7 +21,7 @@ func TestASTCacheLoading(t *testing.T) {
 
 	inputPaths := []string{"./...", "./", "./load.go", "load.go"}
 	for _, inputPath := range inputPaths {
-		r, err := packages.NewResolver(nil, nil)
+		r, err := packages.NewResolver(nil, nil, logutils.NewStderrLog(""))
 		assert.NoError(t, err)
 
 		pkgProg, err := r.Resolve(inputPath)
@@ -30,7 +32,7 @@ func TestASTCacheLoading(t *testing.T) {
 
 		prog, _, err := loadWholeAppIfNeeded(ctx, linters, &config.Run{
 			AnalyzeTests: true,
-		}, pkgProg)
+		}, pkgProg, logutils.NewStderrLog(""))
 		assert.NoError(t, err)
 
 		astCacheFromProg, err := astcache.LoadFromProgram(prog)

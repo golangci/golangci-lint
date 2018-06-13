@@ -255,7 +255,7 @@ Flags:
                                       - Error return value of .((os\.)?std(out|err)\..*|.*Close|.*Flush|os\.Remove(All)?|.*printf?|os\.(Un)?Setenv). is not checked
                                     
                                       # golint: Annoying issue about not having a comment. The rare codebase has such comments
-                                      - (comment on exported (method|function|type)|should have( a package)? comment|comment should be of the form)
+                                      - (comment on exported (method|function|type|const)|should have( a package)? comment|comment should be of the form)
                                     
                                       # golint: False positive when tests are defined in package 'test'
                                       - func name will be used as test\.Test.* by other packages, and that stutters; consider calling this
@@ -329,6 +329,12 @@ linters-settings:
   goconst:
     min-len: 2
     min-occurrences: 2
+  depguard:
+    list-type: blacklist
+    packages:
+      # logging is allowed only by logutils.Log, logrus
+      # is allowed to use only in logutils package
+      - github.com/sirupsen/logrus
 
 linters:
   enable-all: true

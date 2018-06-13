@@ -7,22 +7,24 @@ import (
 	"sync"
 	"time"
 
-	"github.com/sirupsen/logrus"
+	"github.com/golangci/golangci-lint/pkg/logutils"
 )
 
 type Stopwatch struct {
 	name      string
 	startedAt time.Time
 	stages    map[string]time.Duration
+	log       logutils.Log
 
 	sync.Mutex
 }
 
-func NewStopwatch(name string) *Stopwatch {
+func NewStopwatch(name string, log logutils.Log) *Stopwatch {
 	return &Stopwatch{
 		name:      name,
 		startedAt: time.Now(),
 		stages:    map[string]time.Duration{},
+		log:       log,
 	}
 }
 
@@ -53,11 +55,11 @@ func (s *Stopwatch) sprintStages() string {
 func (s *Stopwatch) Print() {
 	p := fmt.Sprintf("%s took %s", s.name, time.Since(s.startedAt))
 	if len(s.stages) == 0 {
-		logrus.Info(p)
+		s.log.Infof("%s", p)
 		return
 	}
 
-	logrus.Infof("%s with %s", p, s.sprintStages())
+	s.log.Infof("%s with %s", p, s.sprintStages())
 }
 
 func (s *Stopwatch) PrintStages() {
@@ -65,7 +67,7 @@ func (s *Stopwatch) PrintStages() {
 	for _, s := range s.stages {
 		stagesDuration += s
 	}
-	logrus.Infof("%s took %s with %s", s.name, stagesDuration, s.sprintStages())
+	s.log.Infof("%s took %s with %s", s.name, stagesDuration, s.sprintStages())
 }
 
 func (s *Stopwatch) TrackStage(name string, f func()) {

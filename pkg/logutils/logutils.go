@@ -3,19 +3,7 @@ package logutils
 import (
 	"os"
 	"strings"
-
-	"github.com/sirupsen/logrus"
 )
-
-var isGolangCIRun = os.Getenv("GOLANGCI_COM_RUN") == "1"
-
-func HiddenWarnf(format string, args ...interface{}) {
-	if isGolangCIRun {
-		logrus.Warnf(format, args...)
-	} else {
-		logrus.Infof(format, args...)
-	}
-}
 
 func getEnabledDebugs() map[string]bool {
 	ret := map[string]bool{}
@@ -43,8 +31,9 @@ func Debug(tag string) DebugFunc {
 	}
 
 	return func(format string, args ...interface{}) {
-		newArgs := append([]interface{}{tag}, args...)
-		logrus.Debugf("%s: "+format, newArgs...)
+		logger := NewStderrLog(tag)
+		logger.SetLevel(LogLevelDebug)
+		logger.Debugf(format, args...)
 	}
 }
 
@@ -54,4 +43,10 @@ func IsDebugEnabled() bool {
 
 func HaveDebugTag(tag string) bool {
 	return enabledDebugs[tag]
+}
+
+func SetupVerboseLog(log Log, isVerbose bool) {
+	if isVerbose {
+		log.SetLevel(LogLevelInfo)
+	}
 }

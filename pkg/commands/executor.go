@@ -2,7 +2,7 @@ package commands
 
 import (
 	"github.com/golangci/golangci-lint/pkg/config"
-	"github.com/sirupsen/logrus"
+	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/spf13/cobra"
 )
 
@@ -14,6 +14,8 @@ type Executor struct {
 	exitCode int
 
 	version, commit, date string
+
+	log logutils.Log
 }
 
 func NewExecutor(version, commit, date string) *Executor {
@@ -22,9 +24,8 @@ func NewExecutor(version, commit, date string) *Executor {
 		version: version,
 		commit:  commit,
 		date:    date,
+		log:     logutils.NewStderrLog(""),
 	}
-
-	logrus.SetLevel(logrus.WarnLevel)
 
 	e.initRoot()
 	e.initRun()

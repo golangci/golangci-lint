@@ -7,7 +7,6 @@ import (
 	"go/token"
 
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
-	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
 	lintAPI "github.com/golangci/lint-1"
 )
@@ -39,7 +38,7 @@ func (g Golint) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issu
 		issues = append(issues, i...)
 	}
 	if lintErr != nil {
-		logutils.HiddenWarnf("golint: %s", lintErr)
+		lintCtx.Log.Warnf("Golint: %s", lintErr)
 	}
 
 	return issues, nil

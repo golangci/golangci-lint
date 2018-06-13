@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/golangci/golangci-lint/pkg/lint/astcache"
+	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
 	"github.com/stretchr/testify/assert"
 )
@@ -21,7 +22,7 @@ func newNolintFileIssue(line int, fromLinter string) result.Issue {
 }
 
 func TestNolint(t *testing.T) {
-	p := NewNolint(astcache.NewCache())
+	p := NewNolint(astcache.NewCache(logutils.NewStderrLog("")))
 
 	// test inline comments
 	processAssertEmpty(t, p, newNolintFileIssue(3, "gofmt"))

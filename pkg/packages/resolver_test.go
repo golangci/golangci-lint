@@ -8,6 +8,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/packages"
 	"github.com/stretchr/testify/assert"
 )
@@ -57,7 +58,7 @@ func prepareFS(t *testing.T, paths ...string) *fsPreparer {
 }
 
 func newTestResolver(t *testing.T, excludeDirs []string) *packages.Resolver {
-	r, err := packages.NewResolver(nil, excludeDirs)
+	r, err := packages.NewResolver(nil, excludeDirs, logutils.NewStderrLog(""))
 	assert.NoError(t, err)
 
 	return r

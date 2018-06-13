@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"go/build"
+	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -15,7 +16,6 @@ import (
 	"github.com/golangci/golangci-lint/pkg/config"
 	gops "github.com/mitchellh/go-ps"
 	"github.com/shirou/gopsutil/process"
-	"github.com/sirupsen/logrus"
 )
 
 func chdir(b *testing.B, dir string) {
@@ -90,7 +90,7 @@ func printCommand(cmd string, args ...string) {
 		quotedArgs = append(quotedArgs, strconv.Quote(a))
 	}
 
-	logrus.Warnf("%s %s", cmd, strings.Join(quotedArgs, " "))
+	log.Printf("%s %s", cmd, strings.Join(quotedArgs, " "))
 }
 
 func runGometalinter(b *testing.B) {
@@ -215,7 +215,7 @@ func compare(b *testing.B, gometalinterRun, golangciLintRun func(*testing.B), re
 	if mode != "" {
 		mode = " " + mode
 	}
-	logrus.Warnf("%s (%d kLoC): golangci-lint%s: time: %s, %.1f times faster; memory: %dMB, %.1f times less",
+	log.Printf("%s (%d kLoC): golangci-lint%s: time: %s, %.1f times faster; memory: %dMB, %.1f times less",
 		repoName, kLOC, mode,
 		golangciLintRes.duration, gometalinterRes.duration.Seconds()/golangciLintRes.duration.Seconds(),
 		golangciLintRes.peakMemMB, float64(gometalinterRes.peakMemMB)/float64(golangciLintRes.peakMemMB),

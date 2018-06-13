@@ -10,7 +10,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/golinters"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
-	"github.com/sirupsen/logrus"
+	"github.com/golangci/golangci-lint/pkg/logutils"
 )
 
 func AllPresets() []string {
@@ -398,7 +398,7 @@ func optimizeLintersSet(linters map[string]*linter.Config) {
 	linters[m.Name()] = &lc
 }
 
-func GetEnabledLinters(cfg *config.Config) ([]linter.Config, error) {
+func GetEnabledLinters(cfg *config.Config, log logutils.Log) ([]linter.Config, error) {
 	if err := validateEnabledDisabledLintersConfig(&cfg.Linters); err != nil {
 		return nil, err
 	}
@@ -410,21 +410,21 @@ func GetEnabledLinters(cfg *config.Config) ([]linter.Config, error) {
 		resultLinters = append(resultLinters, *lc)
 	}
 
-	verbosePrintLintersStatus(cfg, resultLinters)
+	verbosePrintLintersStatus(cfg, resultLinters, log)
 
 	return resultLinters, nil
 }
 
-func verbosePrintLintersStatus(cfg *config.Config, lcs []linter.Config) {
+func verbosePrintLintersStatus(cfg *config.Config, lcs []linter.Config, log logutils.Log) {
 	var linterNames []string
 	for _, lc := range lcs {
 		linterNames = append(linterNames, lc.Linter.Name())
 	}
 	sort.StringSlice(linterNames).Sort()
-	logrus.Infof("Active %d linters: %s", len(linterNames), linterNames)
+	log.Infof("Active %d linters: %s", len(linterNames), linterNames)
 
 	if len(cfg.Linters.Presets) != 0 {
 		sort.StringSlice(cfg.Linters.Presets).Sort()
-		logrus.Infof("Active presets: %s", cfg.Linters.Presets)
+		log.Infof("Active presets: %s", cfg.Linters.Presets)
 	}
 }

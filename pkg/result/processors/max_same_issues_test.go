@@ -3,11 +3,12 @@ package processors
 import (
 	"testing"
 
+	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
 func TestMaxSameIssues(t *testing.T) {
-	p := NewMaxSameIssues(1)
+	p := NewMaxSameIssues(1, logutils.NewStderrLog(""))
 	i1 := result.Issue{
 		Text: "1",
 	}
