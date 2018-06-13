@@ -63,7 +63,7 @@ func (Checkstyle) Print(ctx context.Context, issues <-chan result.Issue) (bool, 
 		file.Errors = append(file.Errors, newError)
 	}
 
-	out.Files = make([]*checkstyleFile, len(files))
+	out.Files = make([]*checkstyleFile, 0, len(files))
 	for _, file := range files {
 		out.Files = append(out.Files, file)
 	}
