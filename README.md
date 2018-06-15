@@ -294,6 +294,7 @@ Global Flags:
   -j, --concurrency int           Concurrency (default NumCPU) (default 8)
       --cpu-profile-path string   Path to CPU profile output file
       --mem-profile-path string   Path to memory profile output file
+  -s, --silent                    disables congrats outputs
   -v, --verbose                   verbose output
 
 ```

@@ -258,10 +258,10 @@ func (e *Executor) runAndPrint(ctx context.Context, args []string) error {
 		p = printers.NewJSON()
 	case config.OutFormatColoredLineNumber, config.OutFormatLineNumber:
 		p = printers.NewText(e.cfg.Output.PrintIssuedLine,
-			format == config.OutFormatColoredLineNumber, e.cfg.Output.PrintLinterName,
+			format == config.OutFormatColoredLineNumber, e.cfg.Output.PrintLinterName, e.cfg.Run.Silent,
 			e.log.Child("text_printer"))
 	case config.OutFormatTab:
-		p = printers.NewTab(e.cfg.Output.PrintLinterName,
+		p = printers.NewTab(e.cfg.Output.PrintLinterName, e.cfg.Run.Silent,
 			e.log.Child("tab_printer"))
 	case config.OutFormatCheckstyle:
 		p = printers.NewCheckstyle()

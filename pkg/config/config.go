@@ -92,6 +92,7 @@ func GetDefaultExcludePatternsStrings() []string {
 
 type Run struct {
 	IsVerbose           bool `mapstructure:"verbose"`
+	Silent              bool
 	CPUProfilePath      string
 	MemProfilePath      string
 	Concurrency         int

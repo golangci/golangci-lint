@@ -33,6 +33,12 @@ func checkNoIssuesRun(t *testing.T, out string, exitCode int) {
 	assert.Equal(t, "Congrats! No issues were found.\n", out)
 }
 
+func TestCongratsMessageGoneIfSilent(t *testing.T) {
+	out, exitCode := runGolangciLint(t, "../...", "-s")
+	assert.Equal(t, exitcodes.Success, exitCode)
+	assert.Equal(t, "", out)
+}
+
 func TestCongratsMessageIfNoIssues(t *testing.T) {
 	out, exitCode := runGolangciLint(t, "../...")
 	checkNoIssuesRun(t, out, exitCode)
