@@ -150,7 +150,7 @@ func (e *Executor) initRun() {
 	}
 	e.rootCmd.AddCommand(runCmd)
 
-	runCmd.SetOutput(printers.StdOut) // use custom output to properly color it in Windows terminals
+	runCmd.SetOutput(logutils.StdOut) // use custom output to properly color it in Windows terminals
 
 	fs := runCmd.Flags()
 	fs.SortFlags = false // sort them as they are defined here

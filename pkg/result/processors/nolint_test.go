@@ -21,6 +21,12 @@ func newNolintFileIssue(line int, fromLinter string) result.Issue {
 	}
 }
 
+func newNolint2FileIssue(line int, fromLinter string) result.Issue {
+	i := newNolintFileIssue(line, fromLinter)
+	i.Pos.Filename = filepath.Join("testdata", "nolint2.go")
+	return i
+}
+
 func TestNolint(t *testing.T) {
 	p := NewNolint(astcache.NewCache(logutils.NewStderrLog("")))
 
@@ -76,6 +82,24 @@ func TestNolint(t *testing.T) {
 	for i := 39; i <= 45; i++ {
 		processAssertEmpty(t, p, newNolintFileIssue(i, "any"))
 	}
+
+	// check bug with transitive expanding for next and next line
+	for i := 1; i <= 8; i++ {
+		processAssertSame(t, p, newNolint2FileIssue(i, "errcheck"))
+	}
+	for i := 9; i <= 10; i++ {
+		processAssertEmpty(t, p, newNolint2FileIssue(i, "errcheck"))
+	}
+
+	// check inline comment for function
+	for i := 11; i <= 13; i++ {
+		processAssertSame(t, p, newNolint2FileIssue(i, "errcheck"))
+	}
+	processAssertEmpty(t, p, newNolint2FileIssue(14, "errcheck"))
+	for i := 15; i <= 18; i++ {
+		processAssertSame(t, p, newNolint2FileIssue(i, "errcheck"))
+	}
+
 }
 
 func TestIgnoredRangeMatches(t *testing.T) {

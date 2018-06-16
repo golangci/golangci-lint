@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
@@ -33,6 +34,6 @@ func (JSON) Print(ctx context.Context, issues <-chan result.Issue) (bool, error)
 		return false, err
 	}
 
-	fmt.Fprint(StdOut, string(outputJSON))
+	fmt.Fprint(logutils.StdOut, string(outputJSON))
 	return len(allIssues) != 0, nil
 }

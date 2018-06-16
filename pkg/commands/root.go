@@ -8,14 +8,13 @@ import (
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/logutils"
-	"github.com/golangci/golangci-lint/pkg/printers"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 )
 
 func (e *Executor) persistentPreRun(cmd *cobra.Command, args []string) {
 	if e.cfg.Run.PrintVersion {
-		fmt.Fprintf(printers.StdOut, "golangci-lint has version %s built from %s on %s\n", e.version, e.commit, e.date)
+		fmt.Fprintf(logutils.StdOut, "golangci-lint has version %s built from %s on %s\n", e.version, e.commit, e.date)
 		os.Exit(0)
 	}
 
