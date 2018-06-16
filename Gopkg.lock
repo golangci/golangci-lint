@@ -190,7 +190,7 @@
     "golangci",
     "internal/errcheck"
   ]
-  revision = "78f2b28b23265c54a520979eceadf679f93fc92b"
+  revision = "46cecd339393da3e3742fc0045eb5e5ec0dd6563"
   source = "github.com/golangci/errcheck"
 
 [[projects]]
@@ -416,6 +416,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "4558f81cfd21ec5b1f937b518089a231eb05212cf9545af1fc3df3dd00a7fa22"
+  inputs-digest = "a1b90014c75a2985fb67d7062d95d3dbafabb0db788b2cc5772fa1c34d6c419a"
   solver-name = "gps-cdcl"
   solver-version = 1
