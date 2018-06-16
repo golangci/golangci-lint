@@ -93,7 +93,7 @@ func (p *Text) Print(ctx context.Context, issues <-chan result.Issue) (bool, err
 		p.log.Infof("Found %d issues", issuesN)
 	} else if ctx.Err() == nil { // don't print "congrats" if timeouted
 		outStr := p.SprintfColored(color.FgGreen, "Congrats! No issues were found.")
-		fmt.Fprintln(StdOut, outStr)
+		fmt.Fprintln(logutils.StdOut, outStr)
 	}
 
 	return issuesN != 0, nil
@@ -108,7 +108,7 @@ func (p Text) printIssue(i *result.Issue) {
 	if i.Pos.Column != 0 {
 		pos += fmt.Sprintf(":%d", i.Pos.Column)
 	}
-	fmt.Fprintf(StdOut, "%s: %s\n", pos, text)
+	fmt.Fprintf(logutils.StdOut, "%s: %s\n", pos, text)
 }
 
 func (p Text) printIssuedLines(i *result.Issue, lines linesCache) {
@@ -126,7 +126,7 @@ func (p Text) printIssuedLines(i *result.Issue, lines linesCache) {
 		}
 
 		lineStr = string(bytes.Trim(lines[zeroIndexedLine], "\r"))
-		fmt.Fprintln(StdOut, lineStr)
+		fmt.Fprintln(logutils.StdOut, lineStr)
 	}
 }
 
@@ -149,5 +149,5 @@ func (p Text) printUnderLinePointer(i *result.Issue, line string) {
 		prefix += strings.Repeat(" ", spacesCount)
 	}
 
-	fmt.Fprintf(StdOut, "%s%s\n", prefix, p.SprintfColored(color.FgYellow, "^"))
+	fmt.Fprintf(logutils.StdOut, "%s%s\n", prefix, p.SprintfColored(color.FgYellow, "^"))
 }

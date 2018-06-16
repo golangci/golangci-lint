@@ -27,6 +27,7 @@ func NewStderrLog(name string) *StderrLog {
 
 	// control log level in logutils, not in logrus
 	sl.logger.SetLevel(logrus.DebugLevel)
+	sl.logger.Out = StdErr
 	sl.logger.Formatter = &logrus.TextFormatter{
 		DisableTimestamp: true, // `INFO[0007] msg` -> `INFO msg`
 	}

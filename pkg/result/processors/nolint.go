@@ -4,21 +4,19 @@ import (
 	"fmt"
 	"go/ast"
 	"go/token"
-	"sort"
 	"strings"
 
 	"github.com/golangci/golangci-lint/pkg/lint/astcache"
+	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
+
+var nolintDebugf = logutils.Debug("nolint")
 
 type ignoredRange struct {
 	linters []string
 	result.Range
 	col int
-}
-
-func (i *ignoredRange) isAdjacent(col, start int) bool {
-	return col == i.col && i.To == start-1
 }
 
 func (i *ignoredRange) doesMatch(issue *result.Issue) bool {
@@ -81,25 +79,31 @@ func (p *Nolint) getOrCreateFileData(i *result.Issue) (*fileData, error) {
 		return nil, fmt.Errorf("can't parse file %s: %s", i.FilePath(), file.Err)
 	}
 
-	fd.ignoredRanges = buildIgnoredRangesForFile(file.F, file.Fset)
+	fd.ignoredRanges = buildIgnoredRangesForFile(file.F, file.Fset, i.FilePath())
+	nolintDebugf("file %s: built nolint ranges are %+v", i.FilePath(), fd.ignoredRanges)
 	return fd, nil
 }
 
-func buildIgnoredRangesForFile(f *ast.File, fset *token.FileSet) []ignoredRange {
+func buildIgnoredRangesForFile(f *ast.File, fset *token.FileSet, filePath string) []ignoredRange {
 	inlineRanges := extractFileCommentsInlineRanges(fset, f.Comments...)
+	nolintDebugf("file %s: inline nolint ranges are %+v", filePath, inlineRanges)
 
 	if len(inlineRanges) == 0 {
 		return nil
 	}
 
 	e := rangeExpander{
-		fset:   fset,
-		ranges: ignoredRanges(inlineRanges),
+		fset:         fset,
+		inlineRanges: inlineRanges,
 	}
 
 	ast.Walk(&e, f)
 
-	return e.ranges
+	// TODO: merge all ranges: there are repeated ranges
+	allRanges := append([]ignoredRange{}, inlineRanges...)
+	allRanges = append(allRanges, e.expandedRanges...)
+
+	return allRanges
 }
 
 func (p *Nolint) shouldPassIssue(i *result.Issue) (bool, error) {
@@ -117,15 +121,10 @@ func (p *Nolint) shouldPassIssue(i *result.Issue) (bool, error) {
 	return true, nil
 }
 
-type ignoredRanges []ignoredRange
-
-func (ir ignoredRanges) Len() int           { return len(ir) }
-func (ir ignoredRanges) Swap(i, j int)      { ir[i], ir[j] = ir[j], ir[i] }
-func (ir ignoredRanges) Less(i, j int) bool { return ir[i].To < ir[j].To }
-
 type rangeExpander struct {
-	fset   *token.FileSet
-	ranges ignoredRanges
+	fset           *token.FileSet
+	inlineRanges   []ignoredRange
+	expandedRanges []ignoredRange
 }
 
 func (e *rangeExpander) Visit(node ast.Node) ast.Visitor {
@@ -133,22 +132,28 @@ func (e *rangeExpander) Visit(node ast.Node) ast.Visitor {
 		return e
 	}
 
-	startPos := e.fset.Position(node.Pos())
-	start := startPos.Line
-	end := e.fset.Position(node.End()).Line
-	found := sort.Search(len(e.ranges), func(i int) bool {
-		return e.ranges[i].To+1 >= start
-	})
+	nodeStartPos := e.fset.Position(node.Pos())
+	nodeStartLine := nodeStartPos.Line
+	nodeEndLine := e.fset.Position(node.End()).Line
 
-	if found < len(e.ranges) && e.ranges[found].isAdjacent(startPos.Column, start) {
-		r := &e.ranges[found]
-		if r.From > start {
-			r.From = start
-		}
-		if r.To < end {
-			r.To = end
+	var foundRange *ignoredRange
+	for _, r := range e.inlineRanges {
+		if r.To == nodeStartLine-1 && nodeStartPos.Column == r.col {
+			foundRange = &r
+			break
 		}
 	}
+	if foundRange == nil {
+		return e
+	}
+
+	expandedRange := *foundRange
+	if expandedRange.To < nodeEndLine {
+		expandedRange.To = nodeEndLine
+	}
+	nolintDebugf("found range is %v for node %#v [%d;%d], expanded range is %v",
+		*foundRange, node, nodeStartLine, nodeEndLine, expandedRange)
+	e.expandedRanges = append(e.expandedRanges, expandedRange)
 
 	return e
 }

@@ -5,6 +5,7 @@ import (
 	"encoding/xml"
 	"fmt"
 
+	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
@@ -73,6 +74,6 @@ func (Checkstyle) Print(ctx context.Context, issues <-chan result.Issue) (bool, 
 		return false, err
 	}
 
-	fmt.Fprintf(StdOut, "%s%s\n", xml.Header, data)
+	fmt.Fprintf(logutils.StdOut, "%s%s\n", xml.Header, data)
 	return len(files) > 0, nil
 }

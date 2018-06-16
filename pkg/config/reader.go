@@ -8,7 +8,6 @@ import (
 
 	"github.com/golangci/golangci-lint/pkg/fsutils"
 	"github.com/golangci/golangci-lint/pkg/logutils"
-	"github.com/golangci/golangci-lint/pkg/printers"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 )
@@ -81,7 +80,7 @@ func (r *FileReader) parseConfig() error {
 	}
 
 	if r.cfg.InternalTest { // just for testing purposes: to detect config file usage
-		fmt.Fprintln(printers.StdOut, "test")
+		fmt.Fprintln(logutils.StdOut, "test")
 		os.Exit(0)
 	}
 

@@ -29,7 +29,7 @@ func (p Tab) SprintfColored(ca color.Attribute, format string, args ...interface
 }
 
 func (p *Tab) Print(ctx context.Context, issues <-chan result.Issue) (bool, error) {
-	w := tabwriter.NewWriter(StdOut, 0, 0, 2, ' ', 0)
+	w := tabwriter.NewWriter(logutils.StdOut, 0, 0, 2, ' ', 0)
 
 	issuesN := 0
 	for i := range issues {
@@ -41,7 +41,7 @@ func (p *Tab) Print(ctx context.Context, issues <-chan result.Issue) (bool, erro
 		p.log.Infof("Found %d issues", issuesN)
 	} else if ctx.Err() == nil { // don't print "congrats" if timeouted
 		outStr := p.SprintfColored(color.FgGreen, "Congrats! No issues were found.")
-		fmt.Fprintln(StdOut, outStr)
+		fmt.Fprintln(logutils.StdOut, outStr)
 	}
 
 	if err := w.Flush(); err != nil {
