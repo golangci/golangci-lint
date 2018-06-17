@@ -75,7 +75,7 @@ func (r Runner) runLinterSafe(ctx context.Context, lintCtx *linter.Context, lc l
 	}()
 
 	specificLintCtx := *lintCtx
-	specificLintCtx.Log = lintCtx.Log.Child(lc.Linter.Name())
+	specificLintCtx.Log = r.Log.Child(lc.Linter.Name())
 	issues, err := lc.Linter.Run(ctx, &specificLintCtx)
 	if err != nil {
 		return nil, err

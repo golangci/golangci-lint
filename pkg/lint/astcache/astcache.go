@@ -62,10 +62,8 @@ func (c *Cache) prepareValidFiles() {
 	c.s = files
 }
 
-func LoadFromProgram(prog *loader.Program) (*Cache, error) {
-	c := &Cache{
-		m: map[string]*File{},
-	}
+func LoadFromProgram(prog *loader.Program, log logutils.Log) (*Cache, error) {
+	c := NewCache(log)
 
 	root, err := os.Getwd()
 	if err != nil {
@@ -115,10 +113,8 @@ func (c *Cache) parseFile(filePath string, fset *token.FileSet) {
 	}
 }
 
-func LoadFromFiles(files []string) (*Cache, error) {
-	c := &Cache{
-		m: map[string]*File{},
-	}
+func LoadFromFiles(files []string, log logutils.Log) (*Cache, error) {
+	c := NewCache(log)
 
 	fset := token.NewFileSet()
 	for _, filePath := range files {

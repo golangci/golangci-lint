@@ -57,6 +57,7 @@ func enableLinterConfigs(lcs []linter.Config, isEnabled func(lc *linter.Config) 
 func GetAllSupportedLinterConfigs() []linter.Config {
 	lcs := []linter.Config{
 		linter.NewConfig(golinters.Govet{}).
+			WithFullImport(). // TODO: depend on it's configuration here
 			WithPresets(linter.PresetBugs).
 			WithSpeed(4).
 			WithURL("https://golang.org/cmd/vet/"),

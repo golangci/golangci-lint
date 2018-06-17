@@ -6,11 +6,11 @@ import (
 	"go/build"
 	"go/parser"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"strings"
 	"time"
 
+	"github.com/golangci/golangci-lint/pkg/goutils"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 
 	"github.com/golangci/go-tools/ssa"
@@ -24,9 +24,14 @@ import (
 
 var loadDebugf = logutils.Debug("load")
 
-func isFullImportNeeded(linters []linter.Config) bool {
+func isFullImportNeeded(linters []linter.Config, cfg *config.Config) bool {
 	for _, linter := range linters {
 		if linter.NeedsProgramLoading() {
+			if linter.Linter.Name() == "govet" && cfg.LintersSettings.Govet.UseInstalledPackages {
+				// TODO: remove this hack
+				continue
+			}
+
 			return true
 		}
 	}
@@ -150,8 +155,8 @@ func getTypeCheckFuncBodies(cfg *config.Run, linters []linter.Config, pkgProg *p
 	}
 }
 
-func loadWholeAppIfNeeded(ctx context.Context, linters []linter.Config, cfg *config.Run, pkgProg *packages.Program, log logutils.Log) (*loader.Program, *loader.Config, error) {
-	if !isFullImportNeeded(linters) {
+func loadWholeAppIfNeeded(ctx context.Context, linters []linter.Config, cfg *config.Config, pkgProg *packages.Program, log logutils.Log) (*loader.Program, *loader.Config, error) {
+	if !isFullImportNeeded(linters, cfg) {
 		return nil, nil, nil
 	}
 
@@ -165,7 +170,7 @@ func loadWholeAppIfNeeded(ctx context.Context, linters []linter.Config, cfg *con
 		Build:               bctx,
 		AllowErrors:         true,                 // Try to analyze partially
 		ParserMode:          parser.ParseComments, // AST will be reused by linters
-		TypeCheckFuncBodies: getTypeCheckFuncBodies(cfg, linters, pkgProg, log),
+		TypeCheckFuncBodies: getTypeCheckFuncBodies(&cfg.Run, linters, pkgProg, log),
 	}
 
 	var loaderArgs []string
@@ -173,7 +178,7 @@ func loadWholeAppIfNeeded(ctx context.Context, linters []linter.Config, cfg *con
 	if len(dirs) != 0 {
 		loaderArgs = dirs // dirs run
 	} else {
-		loaderArgs = pkgProg.Files(cfg.AnalyzeTests) // files run
+		loaderArgs = pkgProg.Files(cfg.Run.AnalyzeTests) // files run
 	}
 
 	nLoaderArgs, err := normalizePaths(loaderArgs)
@@ -181,7 +186,7 @@ func loadWholeAppIfNeeded(ctx context.Context, linters []linter.Config, cfg *con
 		return nil, nil, err
 	}
 
-	rest, err := loadcfg.FromArgs(nLoaderArgs, cfg.AnalyzeTests)
+	rest, err := loadcfg.FromArgs(nLoaderArgs, cfg.Run.AnalyzeTests)
 	if err != nil {
 		return nil, nil, fmt.Errorf("can't parepare load config with paths: %s", err)
 	}
@@ -215,20 +220,6 @@ func buildSSAProgram(ctx context.Context, lprog *loader.Program, log logutils.Lo
 	ssaProg := ssautil.CreateProgram(lprog, ssa.GlobalDebug)
 	ssaProg.Build()
 	return ssaProg
-}
-
-func discoverGoRoot() (string, error) {
-	goroot := os.Getenv("GOROOT")
-	if goroot != "" {
-		return goroot, nil
-	}
-
-	output, err := exec.Command("go", "env", "GOROOT").Output()
-	if err != nil {
-		return "", fmt.Errorf("can't execute go env GOROOT: %s", err)
-	}
-
-	return strings.TrimSpace(string(output)), nil
 }
 
 // separateNotCompilingPackages moves not compiling packages into separate slices:
@@ -267,7 +258,7 @@ func separateNotCompilingPackages(lintCtx *linter.Context) {
 func LoadContext(ctx context.Context, linters []linter.Config, cfg *config.Config, log logutils.Log) (*linter.Context, error) {
 	// Set GOROOT to have working cross-compilation: cross-compiled binaries
 	// have invalid GOROOT. XXX: can't use runtime.GOROOT().
-	goroot, err := discoverGoRoot()
+	goroot, err := goutils.DiscoverGoRoot()
 	if err != nil {
 		return nil, fmt.Errorf("can't discover GOROOT: %s", err)
 	}
@@ -291,7 +282,7 @@ func LoadContext(ctx context.Context, linters []linter.Config, cfg *config.Confi
 		return nil, err
 	}
 
-	prog, loaderConfig, err := loadWholeAppIfNeeded(ctx, linters, &cfg.Run, pkgProg, log)
+	prog, loaderConfig, err := loadWholeAppIfNeeded(ctx, linters, cfg, pkgProg, log)
 	if err != nil {
 		return nil, err
 	}
@@ -301,11 +292,12 @@ func LoadContext(ctx context.Context, linters []linter.Config, cfg *config.Confi
 		ssaProg = buildSSAProgram(ctx, prog, log)
 	}
 
+	astLog := log.Child("astcache")
 	var astCache *astcache.Cache
 	if prog != nil {
-		astCache, err = astcache.LoadFromProgram(prog)
+		astCache, err = astcache.LoadFromProgram(prog, astLog)
 	} else {
-		astCache, err = astcache.LoadFromFiles(pkgProg.Files(cfg.Run.AnalyzeTests))
+		astCache, err = astcache.LoadFromFiles(pkgProg.Files(cfg.Run.AnalyzeTests), astLog)
 	}
 	if err != nil {
 		return nil, err

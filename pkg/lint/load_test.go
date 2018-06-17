@@ -4,6 +4,7 @@ import (
 	"context"
 	"testing"
 
+	"github.com/golangci/golangci-lint/pkg/golinters"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 
 	"github.com/golangci/golangci-lint/pkg/config"
@@ -16,12 +17,13 @@ import (
 func TestASTCacheLoading(t *testing.T) {
 	ctx := context.Background()
 	linters := []linter.Config{
-		linter.NewConfig(nil).WithFullImport(),
+		linter.NewConfig(golinters.Errcheck{}).WithFullImport(),
 	}
 
 	inputPaths := []string{"./...", "./", "./load.go", "load.go"}
+	log := logutils.NewStderrLog("")
 	for _, inputPath := range inputPaths {
-		r, err := packages.NewResolver(nil, nil, logutils.NewStderrLog(""))
+		r, err := packages.NewResolver(nil, nil, log)
 		assert.NoError(t, err)
 
 		pkgProg, err := r.Resolve(inputPath)
@@ -30,15 +32,18 @@ func TestASTCacheLoading(t *testing.T) {
 		assert.NoError(t, err)
 		assert.NotEmpty(t, pkgProg.Files(true))
 
-		prog, _, err := loadWholeAppIfNeeded(ctx, linters, &config.Run{
-			AnalyzeTests: true,
-		}, pkgProg, logutils.NewStderrLog(""))
+		cfg := &config.Config{
+			Run: config.Run{
+				AnalyzeTests: true,
+			},
+		}
+		prog, _, err := loadWholeAppIfNeeded(ctx, linters, cfg, pkgProg, logutils.NewStderrLog(""))
 		assert.NoError(t, err)
 
-		astCacheFromProg, err := astcache.LoadFromProgram(prog)
+		astCacheFromProg, err := astcache.LoadFromProgram(prog, log)
 		assert.NoError(t, err)
 
-		astCacheFromFiles, err := astcache.LoadFromFiles(pkgProg.Files(true))
+		astCacheFromFiles, err := astcache.LoadFromFiles(pkgProg.Files(true), log)
 		assert.NoError(t, err)
 
 		filesFromProg := astCacheFromProg.GetAllValidFiles()

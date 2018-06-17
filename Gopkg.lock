@@ -122,7 +122,7 @@
     "lib/cfg",
     "lib/whitelist"
   ]
-  revision = "1a9ab8120ec96a014df3afab2d6c47f7e12d8928"
+  revision = "18c83969a303d67eaa9d67747a930f007e3e9c89"
 
 [[projects]]
   branch = "master"

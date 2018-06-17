@@ -63,7 +63,7 @@ func (p *Program) Dirs() []string {
 	var ret []string
 	for _, pkg := range p.packages {
 		if !pkg.isFake {
-			ret = append(ret, pkg.bp.Dir)
+			ret = append(ret, pkg.Dir())
 		}
 	}
 
