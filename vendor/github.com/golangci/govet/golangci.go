@@ -1,8 +1,11 @@
 package govet
 
 import (
+	"go/ast"
 	"go/token"
 	"strings"
+
+	"golang.org/x/tools/go/loader"
 )
 
 type Issue struct {
@@ -12,8 +15,9 @@ type Issue struct {
 
 var foundIssues []Issue
 
-func Run(files []string, checkShadowing bool) ([]Issue, error) {
+func Analyze(files []*ast.File, fset *token.FileSet, pkgInfo *loader.PackageInfo, checkShadowing bool) ([]Issue, error) {
 	foundIssues = nil
+	*source = false // import type data for "fmt" from installed packages
 
 	if checkShadowing {
 		experimental["shadow"] = false
@@ -28,12 +32,18 @@ func Run(files []string, checkShadowing bool) ([]Issue, error) {
 	initUnusedFlags()
 
 	filesRun = true
-	for _, name := range files {
+	for _, f := range files {
+		name := fset.Position(f.Pos()).Filename
 		if !strings.HasSuffix(name, "_test.go") {
 			includesNonTest = true
 		}
 	}
-	if doPackage(files, nil) == nil {
+	pkg, err := doPackage(nil, pkgInfo, fset, files)
+	if err != nil {
+		return nil, err
+	}
+
+	if pkg == nil {
 		return nil, nil
 	}
 

@@ -57,7 +57,10 @@ type kv struct {
 func walkStringToIntMapSortedByValue(m map[string]int, walk func(k string, v int)) {
 	var ss []kv
 	for k, v := range m {
-		ss = append(ss, kv{k, v})
+		ss = append(ss, kv{
+			Key:   k,
+			Value: v,
+		})
 	}
 
 	sort.Slice(ss, func(i, j int) bool {

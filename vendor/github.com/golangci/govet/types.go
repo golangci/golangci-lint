@@ -7,11 +7,16 @@
 package govet
 
 import (
+	"fmt"
 	"go/ast"
 	"go/build"
 	"go/importer"
 	"go/token"
 	"go/types"
+	"os"
+	"time"
+
+	"golang.org/x/tools/go/loader"
 )
 
 // stdImporter is the importer we use to import packages.
@@ -24,15 +29,22 @@ var (
 	formatterType *types.Interface // possibly nil
 )
 
-func inittypes() {
+func inittypes() error {
 	errorType = types.Universe.Lookup("error").Type().Underlying().(*types.Interface)
 
-	if typ := importType("fmt", "Stringer"); typ != nil {
-		stringerType = typ.Underlying().(*types.Interface)
+	typ, err := importType("fmt", "Stringer")
+	if err != nil {
+		return err
 	}
-	if typ := importType("fmt", "Formatter"); typ != nil {
-		formatterType = typ.Underlying().(*types.Interface)
+	stringerType = typ.Underlying().(*types.Interface)
+
+	typ, err = importType("fmt", "Formatter")
+	if err != nil {
+		return err
 	}
+	formatterType = typ.Underlying().(*types.Interface)
+
+	return nil
 }
 
 // isNamedType reports whether t is the named type path.name.
@@ -48,59 +60,76 @@ func isNamedType(t types.Type, path, name string) bool {
 // importType returns the type denoted by the qualified identifier
 // path.name, and adds the respective package to the imports map
 // as a side effect. In case of an error, importType returns nil.
-func importType(path, name string) types.Type {
+func importType(path, name string) (types.Type, error) {
+	startedAt := time.Now()
+	defer func() {
+		fmt.Fprintf(os.Stderr, "vet: import of type %s.%s took %s\n", path, name, time.Since(startedAt))
+	}()
+
 	pkg, err := stdImporter.Import(path)
 	if err != nil {
 		// This can happen if the package at path hasn't been compiled yet.
-		warnf("import failed: %v", err)
-		return nil
+		return nil, fmt.Errorf("import of type %s.%s failed: %v", path, name, err)
 	}
 	if obj, ok := pkg.Scope().Lookup(name).(*types.TypeName); ok {
-		return obj.Type()
+		return obj.Type(), nil
 	}
-	warnf("invalid type name %q", name)
-	return nil
+
+	return nil, fmt.Errorf("can't import type %s.%s: invalid type name %q", path, name, name)
 }
 
-func (pkg *Package) check(fs *token.FileSet, astFiles []*ast.File) []error {
+func (pkg *Package) check(fs *token.FileSet, astFiles []*ast.File, pkgInfo *loader.PackageInfo) []error {
 	if stdImporter == nil {
 		if *source {
 			stdImporter = importer.For("source", nil)
 		} else {
 			stdImporter = importer.Default()
 		}
-		inittypes()
+		if err := inittypes(); err != nil {
+			return []error{fmt.Errorf("can't init std types: %s", err)}
+		}
 	}
-	pkg.defs = make(map[*ast.Ident]types.Object)
-	pkg.uses = make(map[*ast.Ident]types.Object)
-	pkg.selectors = make(map[*ast.SelectorExpr]*types.Selection)
-	pkg.spans = make(map[types.Object]Span)
-	pkg.types = make(map[ast.Expr]types.TypeAndValue)
 
 	var allErrors []error
-	config := types.Config{
-		// We use the same importer for all imports to ensure that
-		// everybody sees identical packages for the given paths.
-		Importer: stdImporter,
-		// By providing a Config with our own error function, it will continue
-		// past the first error. We collect them all for printing later.
-		Error: func(e error) {
-			allErrors = append(allErrors, e)
-		},
+	pkg.spans = make(map[types.Object]Span)
+	if pkgInfo != nil {
+		pkg.defs = pkgInfo.Defs
+		pkg.uses = pkgInfo.Uses
+		pkg.selectors = pkgInfo.Selections
+		pkg.types = pkgInfo.Types
+		pkg.typesPkg = pkgInfo.Pkg
+	} else {
+		pkg.defs = make(map[*ast.Ident]types.Object)
+		pkg.uses = make(map[*ast.Ident]types.Object)
+		pkg.selectors = make(map[*ast.SelectorExpr]*types.Selection)
+		pkg.types = make(map[ast.Expr]types.TypeAndValue)
 
-		Sizes: archSizes,
+		config := types.Config{
+			// We use the same importer for all imports to ensure that
+			// everybody sees identical packages for the given paths.
+			Importer: stdImporter,
+			// By providing a Config with our own error function, it will continue
+			// past the first error. We collect them all for printing later.
+			Error: func(e error) {
+				allErrors = append(allErrors, e)
+			},
+
+			Sizes: archSizes,
+		}
+		info := &types.Info{
+			Selections: pkg.selectors,
+			Types:      pkg.types,
+			Defs:       pkg.defs,
+			Uses:       pkg.uses,
+		}
+		typesPkg, err := config.Check(pkg.path, fs, astFiles, info)
+		if len(allErrors) == 0 && err != nil {
+			allErrors = append(allErrors, fmt.Errorf("type checker failed: %s", err))
+		}
+
+		pkg.typesPkg = typesPkg
 	}
-	info := &types.Info{
-		Selections: pkg.selectors,
-		Types:      pkg.types,
-		Defs:       pkg.defs,
-		Uses:       pkg.uses,
-	}
-	typesPkg, err := config.Check(pkg.path, fs, astFiles, info)
-	if len(allErrors) == 0 && err != nil {
-		allErrors = append(allErrors, err)
-	}
-	pkg.typesPkg = typesPkg
+
 	// update spans
 	for id, obj := range pkg.defs {
 		pkg.growSpan(id, obj)

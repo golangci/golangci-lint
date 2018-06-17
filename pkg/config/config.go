@@ -120,7 +120,8 @@ type LintersSettings struct {
 		CheckAssignToBlank  bool `mapstructure:"check-blank"`
 	}
 	Govet struct {
-		CheckShadowing bool `mapstructure:"check-shadowing"`
+		CheckShadowing       bool `mapstructure:"check-shadowing"`
+		UseInstalledPackages bool `mapstructure:"use-installed-packages"`
 	}
 	Golint struct {
 		MinConfidence float64 `mapstructure:"min-confidence"`

@@ -48,6 +48,11 @@ func buildTemplateContext() (map[string]interface{}, error) {
 		return nil, fmt.Errorf("can't read .golangci.yml: %s", err)
 	}
 
+	golangciYamlExample, err := ioutil.ReadFile(".golangci.example.yml")
+	if err != nil {
+		return nil, fmt.Errorf("can't read .golangci.example.yml: %s", err)
+	}
+
 	if err = exec.Command("go", "install", "./cmd/...").Run(); err != nil {
 		return nil, fmt.Errorf("can't run go install: %s", err)
 	}
@@ -72,6 +77,7 @@ func buildTemplateContext() (map[string]interface{}, error) {
 
 	return map[string]interface{}{
 		"GolangciYaml":                     string(golangciYaml),
+		"GolangciYamlExample":              string(golangciYamlExample),
 		"LintersCommandOutputEnabledOnly":  string(lintersOutParts[0]),
 		"LintersCommandOutputDisabledOnly": string(lintersOutParts[1]),
 		"EnabledByDefaultLinters":          getLintersListMarkdown(true),

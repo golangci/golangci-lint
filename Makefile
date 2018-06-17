@@ -1,5 +1,4 @@
 test:
-	go install ./cmd/... # needed for govet and golint if go < 1.10
 	GL_TEST_RUN=1 golangci-lint run -v
 	GL_TEST_RUN=1 golangci-lint run --fast --no-config -v
 	GL_TEST_RUN=1 golangci-lint run --no-config -v

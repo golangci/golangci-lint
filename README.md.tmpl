@@ -200,10 +200,14 @@ To see which config file is being used and where it was sourced from run golangc
 Config options inside the file are identical to command-line options.
 You can configure specific linters' options only within the config file (not the command-line).
 
-There is a [`.golangci.yml`](https://github.com/golangci/golangci-lint/blob/master/.golangci.example.yml) example config file with all supported options.
+There is a [`.golangci.yml`](https://github.com/golangci/golangci-lint/blob/master/.golangci.example.yml) example
+config file with all supported options, their description and default value:
+```yaml
+{{.GolangciYamlExample}}
+```
 
 It's a [.golangci.yml](https://github.com/golangci/golangci-lint/blob/master/.golangci.yml) config file of this repo: we enable more linters
-than the default and more strict settings:
+than the default and have more strict settings:
 ```yaml
 {{.GolangciYaml}}
 ```
@@ -275,11 +279,11 @@ go install ./vendor/github.com/golangci/golangci-lint/cmd/golangci-lint/
 ```
 Vendoring `golangci-lint` saves a network request, potentially making your CI system a little more reliable.
 
-**`govet` or `golint` reports false-positives or false-negatives**
+**Does I need to run `go install`?**
 
-These linters obtain type information from installed package files.
-The same issue you will encounter if will run `govet` or `golint` without `golangci-lint`.
-Try `go install ./...` (or `go install ./cmd/...`: depends on the project) first.
+No, you don't need to do it anymore. We will run `go install -i` and `go test -i`
+for analyzed packages ourselves. We will run them only
+if option `govet.use-installed-packages` is `true`.
 
 **`golangci-lint` doesn't work**
 

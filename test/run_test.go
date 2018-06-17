@@ -19,7 +19,10 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+var root = filepath.Join("..", "...")
 var installOnce sync.Once
+
+const noIssuesOut = "Congrats! No issues were found.\n"
 
 func installBinary(t assert.TestingT) {
 	installOnce.Do(func() {
@@ -30,7 +33,7 @@ func installBinary(t assert.TestingT) {
 
 func checkNoIssuesRun(t *testing.T, out string, exitCode int) {
 	assert.Equal(t, exitcodes.Success, exitCode)
-	assert.Equal(t, "Congrats! No issues were found.\n", out)
+	assert.Equal(t, noIssuesOut, out)
 }
 
 func TestCongratsMessageGoneIfSilent(t *testing.T) {
@@ -40,7 +43,7 @@ func TestCongratsMessageGoneIfSilent(t *testing.T) {
 }
 
 func TestCongratsMessageIfNoIssues(t *testing.T) {
-	out, exitCode := runGolangciLint(t, "../...")
+	out, exitCode := runGolangciLint(t, root)
 	checkNoIssuesRun(t, out, exitCode)
 }
 
@@ -66,7 +69,7 @@ func TestRunOnAbsPath(t *testing.T) {
 }
 
 func TestDeadline(t *testing.T) {
-	out, exitCode := runGolangciLint(t, "--deadline=1ms", filepath.Join("..", "..."))
+	out, exitCode := runGolangciLint(t, "--deadline=1ms", root)
 	assert.Equal(t, exitcodes.Timeout, exitCode)
 	assert.Contains(t, out, "deadline exceeded: try increase it by passing --deadline option")
 	assert.NotContains(t, out, "Congrats! No issues were found.")
@@ -341,6 +344,15 @@ func TestEnabledLinters(t *testing.T) {
 			assert.Contains(t, out, expectedLine)
 		})
 	}
+}
+
+func TestGovetInFastMode(t *testing.T) {
+	cfg := `
+	linters-settings:
+		use-installed-packages: true
+	`
+	out := runGolangciLintWithYamlConfig(t, cfg, "--fast", "-Egovet", root)
+	assert.Equal(t, noIssuesOut, out)
 }
 
 func TestEnabledPresetsAreNotDuplicated(t *testing.T) {

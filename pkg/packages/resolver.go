@@ -138,9 +138,11 @@ func (r Resolver) addFakePackage(filePath string, prog *Program) {
 	// do it.
 	p := Package{
 		bp: &build.Package{
+			// TODO: detect is it test file or not: without that we can't analyze only one test file
 			GoFiles: []string{filePath},
 		},
 		isFake: true,
+		dir:    filepath.Dir(filePath),
 	}
 	prog.addPackage(&p)
 }
