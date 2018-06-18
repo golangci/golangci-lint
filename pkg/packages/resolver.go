@@ -21,7 +21,8 @@ type Resolver struct {
 	skippedDirs []string
 	log         logutils.Log
 
-	wd string // working directory
+	wd                  string // working directory
+	importErrorsOccured int    // count of errors because too bad files in packages
 }
 
 func NewResolver(buildTags, excludeDirs []string, log logutils.Log) (*Resolver, error) {
@@ -79,7 +80,7 @@ func (r *Resolver) resolveRecursively(root string, prog *Program) error {
 
 	fis, err := ioutil.ReadDir(root)
 	if err != nil {
-		return fmt.Errorf("can't resolve dir %s: %s", root, err)
+		return fmt.Errorf("can't read dir %s: %s", root, err)
 	}
 	// TODO: pass cached fis to build.Context
 
@@ -113,7 +114,7 @@ func (r *Resolver) resolveRecursively(root string, prog *Program) error {
 	return nil
 }
 
-func (r Resolver) resolveDir(dir string, prog *Program) error {
+func (r *Resolver) resolveDir(dir string, prog *Program) error {
 	// TODO: fork build.Import to reuse AST parsing
 	bp, err := prog.bctx.ImportDir(dir, build.ImportComment|build.IgnoreVendor)
 	if err != nil {
@@ -122,7 +123,14 @@ func (r Resolver) resolveDir(dir string, prog *Program) error {
 			return nil
 		}
 
-		return fmt.Errorf("can't resolve dir %s: %s", dir, err)
+		err = fmt.Errorf("can't import dir %q: %s", dir, err)
+		r.importErrorsOccured++
+		if r.importErrorsOccured >= 10 {
+			return err
+		}
+
+		r.log.Warnf("Can't analyze dir %q: %s", dir, err)
+		return nil
 	}
 
 	pkg := Package{
