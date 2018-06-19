@@ -7,6 +7,7 @@ script: make check_generated test
 
 after_success:
   - test -n "$TRAVIS_TAG" && docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+  - echo "travis go version='$TRAVIS_GO_VERSION'"
 
 # needed for the docker pipe
 services:
@@ -18,4 +19,4 @@ deploy:
   script: curl -sL https://git.io/goreleaser | bash
   on:
     tags: true
-    condition: $TRAVIS_GO_VERSION =~ ^1\.10\.[0-9]+$
+    condition: $TRAVIS_GO_VERSION =~ ^1\.10\.
