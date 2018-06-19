@@ -16,6 +16,7 @@ import (
 	"os"
 	"time"
 
+	"golang.org/x/tools/go/gcexportdata"
 	"golang.org/x/tools/go/loader"
 )
 
@@ -28,6 +29,10 @@ var (
 	stringerType  *types.Interface // possibly nil
 	formatterType *types.Interface // possibly nil
 )
+
+func newGCExportDataImporter(fset *token.FileSet) types.ImporterFrom {
+	return gcexportdata.NewImporter(fset, make(map[string]*types.Package))
+}
 
 func inittypes() error {
 	errorType = types.Universe.Lookup("error").Type().Underlying().(*types.Interface)
@@ -83,7 +88,7 @@ func (pkg *Package) check(fs *token.FileSet, astFiles []*ast.File, pkgInfo *load
 		if *source {
 			stdImporter = importer.For("source", nil)
 		} else {
-			stdImporter = importer.Default()
+			stdImporter = newGCExportDataImporter(fs)
 		}
 		if err := inittypes(); err != nil {
 			return []error{fmt.Errorf("can't init std types: %s", err)}
