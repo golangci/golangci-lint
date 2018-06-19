@@ -76,6 +76,9 @@ func (g Govet) runOnInstalledPackages(ctx context.Context, lintCtx *linter.Conte
 			astFiles = append(astFiles, af.F)
 			fset = af.Fset
 		}
+		if len(astFiles) == 0 {
+			continue
+		}
 		issues, err := govetAPI.Analyze(astFiles, fset, nil,
 			lintCtx.Settings().Govet.CheckShadowing)
 		if err != nil {
@@ -216,6 +219,9 @@ func (g Govet) runOnSourcePackages(ctx context.Context, lintCtx *linter.Context)
 	// TODO: check .S asm files: govet can do it if pass dirs
 	var govetIssues []govetAPI.Issue
 	for _, pkg := range lintCtx.Program.InitialPackages() {
+		if len(pkg.Files) == 0 {
+			continue
+		}
 		issues, err := govetAPI.Analyze(pkg.Files, lintCtx.Program.Fset, pkg,
 			lintCtx.Settings().Govet.CheckShadowing)
 		if err != nil {
