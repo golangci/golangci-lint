@@ -6,20 +6,26 @@ import (
 	"fmt"
 
 	"github.com/golangci/golangci-lint/pkg/logutils"
+	"github.com/golangci/golangci-lint/pkg/report"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-type JSON struct{}
+type JSON struct {
+	rd *report.Data
+}
 
-func NewJSON() *JSON {
-	return &JSON{}
+func NewJSON(rd *report.Data) *JSON {
+	return &JSON{
+		rd: rd,
+	}
 }
 
 type JSONResult struct {
 	Issues []result.Issue
+	Report *report.Data
 }
 
-func (JSON) Print(ctx context.Context, issues <-chan result.Issue) (bool, error) {
+func (p JSON) Print(ctx context.Context, issues <-chan result.Issue) (bool, error) {
 	allIssues := []result.Issue{}
 	for i := range issues {
 		allIssues = append(allIssues, i)
@@ -27,6 +33,7 @@ func (JSON) Print(ctx context.Context, issues <-chan result.Issue) (bool, error)
 
 	res := JSONResult{
 		Issues: allIssues,
+		Report: p.rd,
 	}
 
 	outputJSON, err := json.Marshal(res)

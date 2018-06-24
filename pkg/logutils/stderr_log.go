@@ -93,7 +93,7 @@ func (sl StderrLog) Debugf(format string, args ...interface{}) {
 func (sl StderrLog) Child(name string) Log {
 	prefix := ""
 	if sl.name != "" {
-		prefix = sl.name + ":"
+		prefix = sl.name + "/"
 	}
 
 	child := sl
