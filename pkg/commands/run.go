@@ -211,6 +211,17 @@ func (e *Executor) runAnalysis(ctx context.Context, args []string) (<-chan resul
 		return nil, err
 	}
 
+	for _, lc := range lintersdb.GetAllSupportedLinterConfigs() {
+		isEnabled := false
+		for _, linter := range linters {
+			if linter.Linter.Name() == lc.Linter.Name() {
+				isEnabled = true
+				break
+			}
+		}
+		e.reportData.AddLinter(lc.Linter.Name(), isEnabled, lc.EnabledByDefault)
+	}
+
 	lintCtx, err := lint.LoadContext(ctx, linters, e.cfg, e.log.Child("load"))
 	if err != nil {
 		return nil, err
@@ -251,22 +262,9 @@ func (e *Executor) runAndPrint(ctx context.Context, args []string) error {
 		return err
 	}
 
-	var p printers.Printer
-	format := e.cfg.Output.Format
-	switch format {
-	case config.OutFormatJSON:
-		p = printers.NewJSON()
-	case config.OutFormatColoredLineNumber, config.OutFormatLineNumber:
-		p = printers.NewText(e.cfg.Output.PrintIssuedLine,
-			format == config.OutFormatColoredLineNumber, e.cfg.Output.PrintLinterName, e.cfg.Run.Silent,
-			e.log.Child("text_printer"))
-	case config.OutFormatTab:
-		p = printers.NewTab(e.cfg.Output.PrintLinterName, e.cfg.Run.Silent,
-			e.log.Child("tab_printer"))
-	case config.OutFormatCheckstyle:
-		p = printers.NewCheckstyle()
-	default:
-		return fmt.Errorf("unknown output format %s", format)
+	p, err := e.createPrinter()
+	if err != nil {
+		return err
 	}
 
 	gotAnyIssues, err := p.Print(ctx, issues)
@@ -280,6 +278,28 @@ func (e *Executor) runAndPrint(ctx context.Context, args []string) error {
 	}
 
 	return nil
+}
+
+func (e *Executor) createPrinter() (printers.Printer, error) {
+	var p printers.Printer
+	format := e.cfg.Output.Format
+	switch format {
+	case config.OutFormatJSON:
+		p = printers.NewJSON(&e.reportData)
+	case config.OutFormatColoredLineNumber, config.OutFormatLineNumber:
+		p = printers.NewText(e.cfg.Output.PrintIssuedLine,
+			format == config.OutFormatColoredLineNumber, e.cfg.Output.PrintLinterName, e.cfg.Run.Silent,
+			e.log.Child("text_printer"))
+	case config.OutFormatTab:
+		p = printers.NewTab(e.cfg.Output.PrintLinterName, e.cfg.Run.Silent,
+			e.log.Child("tab_printer"))
+	case config.OutFormatCheckstyle:
+		p = printers.NewCheckstyle()
+	default:
+		return nil, fmt.Errorf("unknown output format %s", format)
+	}
+
+	return p, nil
 }
 
 func (e *Executor) executeRun(cmd *cobra.Command, args []string) {
