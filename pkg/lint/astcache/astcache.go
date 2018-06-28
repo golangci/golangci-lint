@@ -113,7 +113,7 @@ func (c *Cache) parseFile(filePath string, fset *token.FileSet) {
 	}
 }
 
-func LoadFromFiles(files []string, log logutils.Log) (*Cache, error) {
+func LoadFromFiles(files []string, log logutils.Log) (*Cache, error) { //nolint:unparam
 	c := NewCache(log)
 
 	fset := token.NewFileSet()

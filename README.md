@@ -122,6 +122,7 @@ megacheck: 3 sub-linters in one: unused, gosimple and staticcheck [fast: false]
 depguard: Go linter that checks if package imports are in a list of acceptable packages [fast: false]
 misspell: Finds commonly misspelled English words in comments [fast: true]
 lll: Reports long lines [fast: true]
+unparam: Reports unused function parameters [fast: false]
 ```
 
 Pass `-E/--enable` to enable linter and `-D/--disable` to disable:
@@ -229,6 +230,7 @@ golangci-lint linters
 - [depguard](https://github.com/OpenPeeDeeP/depguard) - Go linter that checks if package imports are in a list of acceptable packages
 - [misspell](https://github.com/client9/misspell) - Finds commonly misspelled English words in comments
 - [lll](https://github.com/walle/lll) - Reports long lines
+- [unparam](https://github.com/mvdan/unparam) - Reports unused function parameters
 
 # Configuration
 The config file has lower priority than command-line options. If the same bool/string/int option is provided on the command-line
@@ -363,6 +365,7 @@ run:
     - ".*\\.my\\.go$"
     - lib/bad.go
 
+
 # output configuration options
 output:
   # colored-line-number|line-number|json|tab|checkstyle, default is "colored-line-number"
@@ -373,6 +376,7 @@ output:
 
   # print linter name in the end of issue text, default is true
   print-linter-name: true
+
 
 # all available settings of specific linters
 linters-settings:
@@ -434,6 +438,23 @@ linters-settings:
   lll:
     # max line length, lines longer will be reported. Default is 120. '\t' is counted as 1 character.
     line-length: 120
+  unused:
+    # treat code as a program (not a library) and report unused exported identifiers; default is false.
+    # XXX: if you enable this setting, unused will report a lot of false-positives in text editors:
+    # if it's called for subdir of a project it can't find funcs usages. All text editor integrations
+    # with golangci-lint call it on a directory with the changed file.
+    check-exported: false
+  unparam:
+    # call graph construction algorithm (cha, rta). In general, use cha for libraries,
+    # and rta for programs with main packages. Default is cha.
+    algo: cha
+
+    # Inspect exported functions, default is false. Set to true if no external program/library imports your code.
+    # XXX: if you enable this setting, unparam will report a lot of false-positives in text editors:
+    # if it's called for subdir of a project it can't find external interfaces. All text editor integrations
+    # with golangci-lint call it on a directory with the changed file.
+    check-exported: false
+
 
 linters:
   enable:
@@ -447,6 +468,7 @@ linters:
     - bugs
     - unused
   fast: false
+
 
 issues:
   # List of regexps of issue texts to exclude, empty list by default.

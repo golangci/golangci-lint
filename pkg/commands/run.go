@@ -237,7 +237,7 @@ func (e *Executor) runAnalysis(ctx context.Context, args []string) (<-chan resul
 		e.reportData.AddLinter(lc.Linter.Name(), isEnabled, lc.EnabledByDefault)
 	}
 
-	lintCtx, err := lint.LoadContext(ctx, linters, e.cfg, e.log.Child("load"))
+	lintCtx, err := lint.LoadContext(linters, e.cfg, e.log.Child("load"))
 	if err != nil {
 		return nil, err
 	}

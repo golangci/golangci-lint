@@ -79,28 +79,6 @@
 
 [[projects]]
   branch = "master"
-  name = "github.com/golangci/go-tools"
-  packages = [
-    "callgraph",
-    "callgraph/static",
-    "cmd/megacheck",
-    "deprecated",
-    "functions",
-    "internal/sharedcheck",
-    "lint",
-    "lint/lintutil",
-    "simple",
-    "ssa",
-    "ssa/ssautil",
-    "staticcheck",
-    "staticcheck/vrp",
-    "unused",
-    "version"
-  ]
-  revision = "e37cd5dbe6dac91e427e242d7fb61cc92201c8bf"
-
-[[projects]]
-  branch = "master"
   name = "github.com/golangci/goconst"
   packages = ["."]
   revision = "041c5f2b40f3dd334a4a6ee6a3f84ca3fc70680a"
@@ -135,12 +113,6 @@
   name = "github.com/golangci/ineffassign"
   packages = ["."]
   revision = "7b41b0f84881918dab3c16c5e5148d8aa55d27b4"
-
-[[projects]]
-  branch = "master"
-  name = "github.com/golangci/lint"
-  packages = ["."]
-  revision = "e1cc50c0cfa0e058f40ced1b3d54b86014440c91"
 
 [[projects]]
   branch = "master"
@@ -385,14 +357,21 @@
   packages = [
     "go/ast/astutil",
     "go/buildutil",
+    "go/callgraph",
+    "go/callgraph/cha",
+    "go/callgraph/rta",
+    "go/callgraph/static",
     "go/gcexportdata",
     "go/internal/gcimporter",
     "go/loader",
+    "go/ssa",
+    "go/ssa/ssautil",
     "go/types/typeutil",
     "imports",
     "internal/fastwalk"
   ]
-  revision = "87723262609ca8fd55d449c027454c29cadefd68"
+  revision = "10e39b9b093209d1d6c03acc2252a399ece6b112"
+  source = "github.com/golangci/tools"
 
 [[projects]]
   name = "gopkg.in/yaml.v2"
@@ -402,10 +381,40 @@
 
 [[projects]]
   branch = "master"
+  name = "honnef.co/go/tools"
+  packages = [
+    "deprecated",
+    "functions",
+    "internal/sharedcheck",
+    "lint",
+    "lint/lintutil",
+    "simple",
+    "staticcheck",
+    "staticcheck/vrp",
+    "unused",
+    "version"
+  ]
+  revision = "986cd2acf8dbf500b75aef5636a8107de6044e63"
+  source = "github.com/golangci/go-tools"
+
+[[projects]]
+  branch = "master"
   name = "mvdan.cc/interfacer"
   packages = ["check"]
-  revision = "87cc93d81c1c4e460392bd89c6eb500f2c4cf629"
-  source = "github.com/golangci/interfacer"
+  revision = "822e100dd73a2677e406ccc437efdb4a82e67033"
+
+[[projects]]
+  branch = "master"
+  name = "mvdan.cc/lint"
+  packages = ["."]
+  revision = "adc824a0674b99099789b6188a058d485eaf61c0"
+
+[[projects]]
+  branch = "master"
+  name = "mvdan.cc/unparam"
+  packages = ["check"]
+  revision = "31deaf77ea9671c648eee0054071487bce1b4b41"
+  source = "github.com/golangci/unparam"
 
 [[projects]]
   branch = "master"
@@ -422,6 +431,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "ad5aac1c81e8c0dd37bd45ccda7aa38e35dd3f1b1432110bd33d1614018e4767"
+  inputs-digest = "c81f352144bce99702ee1976f4fc0679c133b22861d72f152df4ca7c614adf81"
   solver-name = "gps-cdcl"
   solver-version = 1

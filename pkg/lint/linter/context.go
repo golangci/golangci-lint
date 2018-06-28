@@ -1,12 +1,12 @@
 package linter
 
 import (
-	"github.com/golangci/go-tools/ssa"
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/lint/astcache"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/packages"
 	"golang.org/x/tools/go/loader"
+	"golang.org/x/tools/go/ssa"
 )
 
 type Context struct {

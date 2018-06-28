@@ -171,6 +171,12 @@ func GetAllSupportedLinterConfigs() []linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithSpeed(10).
 			WithURL("https://github.com/walle/lll"),
+		linter.NewConfig(golinters.Unparam{}).
+			WithPresets(linter.PresetUnused).
+			WithSpeed(3).
+			WithFullImport().
+			WithSSA().
+			WithURL("https://github.com/mvdan/unparam"),
 	}
 
 	if os.Getenv("GOLANGCI_COM_RUN") == "1" {
@@ -181,6 +187,7 @@ func GetAllSupportedLinterConfigs() []linter.Config {
 			golinters.TypeCheck{}.Name(): true, // annoying because of different building envs
 			golinters.Misspell{}.Name():  true, // unsure about false-positives number
 			golinters.Lll{}.Name():       true, // annoying
+			golinters.Unparam{}.Name():   true, // need to check it first
 		}
 		return enableLinterConfigs(lcs, func(lc *linter.Config) bool {
 			return !disabled[lc.Linter.Name()]

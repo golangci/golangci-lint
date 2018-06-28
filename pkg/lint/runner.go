@@ -187,7 +187,7 @@ func (r *Runner) runWorkers(ctx context.Context, lintCtx *linter.Context, linter
 	return lintResultsCh
 }
 
-func (r Runner) processLintResults(ctx context.Context, inCh <-chan lintRes) <-chan lintRes {
+func (r Runner) processLintResults(inCh <-chan lintRes) <-chan lintRes {
 	outCh := make(chan lintRes, 64)
 
 	go func() {
@@ -202,7 +202,7 @@ func (r Runner) processLintResults(ctx context.Context, inCh <-chan lintRes) <-c
 			}
 
 			if len(res.issues) != 0 {
-				res.issues = r.processIssues(ctx, res.issues, sw)
+				res.issues = r.processIssues(res.issues, sw)
 				outCh <- res
 			}
 		}
@@ -221,7 +221,7 @@ func (r Runner) processLintResults(ctx context.Context, inCh <-chan lintRes) <-c
 	return outCh
 }
 
-func collectIssues(ctx context.Context, resCh <-chan lintRes) <-chan result.Issue {
+func collectIssues(resCh <-chan lintRes) <-chan result.Issue {
 	retIssues := make(chan result.Issue, 1024)
 	go func() {
 		defer close(retIssues)
@@ -242,7 +242,7 @@ func collectIssues(ctx context.Context, resCh <-chan lintRes) <-chan result.Issu
 
 func (r Runner) Run(ctx context.Context, linters []linter.Config, lintCtx *linter.Context) <-chan result.Issue {
 	lintResultsCh := r.runWorkers(ctx, lintCtx, linters)
-	processedLintResultsCh := r.processLintResults(ctx, lintResultsCh)
+	processedLintResultsCh := r.processLintResults(lintResultsCh)
 	if ctx.Err() != nil {
 		// XXX: always process issues, even if timeout occurred
 		finishedLintersN := 0
@@ -254,10 +254,10 @@ func (r Runner) Run(ctx context.Context, linters []linter.Config, lintCtx *linte
 			finishedLintersN, len(linters))
 	}
 
-	return collectIssues(ctx, processedLintResultsCh)
+	return collectIssues(processedLintResultsCh)
 }
 
-func (r *Runner) processIssues(ctx context.Context, issues []result.Issue, sw *timeutils.Stopwatch) []result.Issue {
+func (r *Runner) processIssues(issues []result.Issue, sw *timeutils.Stopwatch) []result.Issue {
 	for _, p := range r.Processors {
 		var newIssues []result.Issue
 		var err error

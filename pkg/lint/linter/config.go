@@ -58,10 +58,6 @@ func (lc Config) GetSpeed() int {
 	return lc.Speed
 }
 
-func (lc Config) GetLinter() Linter {
-	return lc.Linter
-}
-
 func NewConfig(linter Linter) *Config {
 	return &Config{
 		Linter: linter,
