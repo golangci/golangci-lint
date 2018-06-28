@@ -43,7 +43,7 @@ func (p Diff) Process(issues []result.Issue) ([]result.Issue, error) {
 	if p.patchFilePath != "" {
 		patch, err := ioutil.ReadFile(p.patchFilePath)
 		if err != nil {
-			return nil, fmt.Errorf("can't read from pathc file %s: %s", p.patchFilePath, err)
+			return nil, fmt.Errorf("can't read from patch file %s: %s", p.patchFilePath, err)
 		}
 		patchReader = bytes.NewReader(patch)
 	} else if p.patch != "" {
