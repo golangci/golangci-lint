@@ -5,7 +5,6 @@ import (
 	"context"
 	"fmt"
 	"io/ioutil"
-	"strings"
 	"time"
 
 	"github.com/fatih/color"
@@ -140,18 +139,15 @@ func (p Text) printUnderLinePointer(i *result.Issue, line string) {
 		return
 	}
 
-	var j int
-	for ; j < len(line) && line[j] == '\t'; j++ {
-	}
-	tabsCount := j
-	spacesCount := i.Pos.Column - 1 - tabsCount
-	prefix := ""
-	if tabsCount != 0 {
-		prefix += strings.Repeat("\t", tabsCount)
-	}
-	if spacesCount != 0 {
-		prefix += strings.Repeat(" ", spacesCount)
+	col0 := i.Pos.Column - 1
+	prefixRunes := make([]rune, 0, len(line))
+	for j := 0; j < len(line) && j < col0; j++ {
+		if line[j] == '\t' {
+			prefixRunes = append(prefixRunes, '\t')
+		} else {
+			prefixRunes = append(prefixRunes, ' ')
+		}
 	}
 
-	fmt.Fprintf(logutils.StdOut, "%s%s\n", prefix, p.SprintfColored(color.FgYellow, "^"))
+	fmt.Fprintf(logutils.StdOut, "%s%s\n", string(prefixRunes), p.SprintfColored(color.FgYellow, "^"))
 }

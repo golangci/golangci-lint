@@ -103,10 +103,12 @@ func getDoc(f *ast.File, fset *token.FileSet, filePath string) string {
 	var importPos token.Pos
 	if len(f.Imports) != 0 {
 		importPos = f.Imports[0].Pos()
-		autogenDebugf("file %q: search comments until first import pos %d (%s)", filePath, importPos, fset.Position(importPos))
+		autogenDebugf("file %q: search comments until first import pos %d (%s)",
+			filePath, importPos, fset.Position(importPos))
 	} else {
 		importPos = f.End()
-		autogenDebugf("file %q: search comments until EOF pos %d (%s)", filePath, importPos, fset.Position(importPos))
+		autogenDebugf("file %q: search comments until EOF pos %d (%s)",
+			filePath, importPos, fset.Position(importPos))
 	}
 
 	var neededComments []string

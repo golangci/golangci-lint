@@ -14,7 +14,8 @@ import (
 )
 
 func AllPresets() []string {
-	return []string{linter.PresetBugs, linter.PresetUnused, linter.PresetFormatting, linter.PresetStyle, linter.PresetComplexity, linter.PresetPerformance}
+	return []string{linter.PresetBugs, linter.PresetUnused, linter.PresetFormatting,
+		linter.PresetStyle, linter.PresetComplexity, linter.PresetPerformance}
 }
 
 func allPresetsSet() map[string]bool {
@@ -166,6 +167,10 @@ func GetAllSupportedLinterConfigs() []linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithSpeed(7).
 			WithURL("https://github.com/client9/misspell"),
+		linter.NewConfig(golinters.Lll{}).
+			WithPresets(linter.PresetStyle).
+			WithSpeed(10).
+			WithURL("https://github.com/walle/lll"),
 	}
 
 	if os.Getenv("GOLANGCI_COM_RUN") == "1" {
@@ -175,6 +180,7 @@ func GetAllSupportedLinterConfigs() []linter.Config {
 			golinters.Maligned{}.Name():  true, // rarely usable
 			golinters.TypeCheck{}.Name(): true, // annoying because of different building envs
 			golinters.Misspell{}.Name():  true, // unsure about false-positives number
+			golinters.Lll{}.Name():       true, // annoying
 		}
 		return enableLinterConfigs(lcs, func(lc *linter.Config) bool {
 			return !disabled[lc.Linter.Name()]
@@ -314,7 +320,10 @@ func GetAllLinterConfigsForPreset(p string) []linter.Config {
 	return ret
 }
 
-func getEnabledLintersSet(lcfg *config.Linters, enabledByDefaultLinters []linter.Config) map[string]*linter.Config { // nolint:gocyclo
+// nolint:gocyclo
+func getEnabledLintersSet(lcfg *config.Linters,
+	enabledByDefaultLinters []linter.Config) map[string]*linter.Config {
+
 	resultLintersSet := map[string]*linter.Config{}
 	switch {
 	case len(lcfg.Presets) != 0:

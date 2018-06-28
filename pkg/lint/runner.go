@@ -66,7 +66,9 @@ type lintRes struct {
 	issues []result.Issue
 }
 
-func (r Runner) runLinterSafe(ctx context.Context, lintCtx *linter.Context, lc linter.Config) (ret []result.Issue, err error) {
+func (r Runner) runLinterSafe(ctx context.Context, lintCtx *linter.Context,
+	lc linter.Config) (ret []result.Issue, err error) {
+
 	defer func() {
 		if panicData := recover(); panicData != nil {
 			err = fmt.Errorf("panic occurred: %s", panicData)
@@ -88,7 +90,9 @@ func (r Runner) runLinterSafe(ctx context.Context, lintCtx *linter.Context, lc l
 	return issues, nil
 }
 
-func (r Runner) runWorker(ctx context.Context, lintCtx *linter.Context, tasksCh <-chan linter.Config, lintResultsCh chan<- lintRes, name string) {
+func (r Runner) runWorker(ctx context.Context, lintCtx *linter.Context,
+	tasksCh <-chan linter.Config, lintResultsCh chan<- lintRes, name string) {
+
 	sw := timeutils.NewStopwatch(name, r.Log)
 	defer sw.Print()
 

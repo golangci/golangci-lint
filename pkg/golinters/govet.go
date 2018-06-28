@@ -25,7 +25,8 @@ func (Govet) Name() string {
 }
 
 func (Govet) Desc() string {
-	return "Vet examines Go source code and reports suspicious constructs, such as Printf calls whose arguments do not align with the format string"
+	return "Vet examines Go source code and reports suspicious constructs, " +
+		"such as Printf calls whose arguments do not align with the format string"
 }
 
 func (g Govet) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issue, error) {

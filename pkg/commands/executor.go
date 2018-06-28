@@ -23,7 +23,7 @@ type Executor struct {
 
 func NewExecutor(version, commit, date string) *Executor {
 	e := &Executor{
-		cfg:     &config.Config{},
+		cfg:     config.NewDefault(),
 		version: version,
 		commit:  commit,
 		date:    date,
