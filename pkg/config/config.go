@@ -153,6 +153,9 @@ type LintersSettings struct {
 		Packages      []string
 		IncludeGoRoot bool `mapstructure:"include-go-root"`
 	}
+	Misspell struct {
+		Locale string
+	}
 }
 
 type Linters struct {

@@ -162,6 +162,10 @@ func GetAllSupportedLinterConfigs() []linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithSpeed(6).
 			WithURL("https://github.com/OpenPeeDeeP/depguard"),
+		linter.NewConfig(golinters.Misspell{}).
+			WithPresets(linter.PresetStyle).
+			WithSpeed(7).
+			WithURL("https://github.com/client9/misspell"),
 	}
 
 	if os.Getenv("GOLANGCI_COM_RUN") == "1" {
@@ -170,6 +174,7 @@ func GetAllSupportedLinterConfigs() []linter.Config {
 			golinters.Dupl{}.Name():      true, // annoying
 			golinters.Maligned{}.Name():  true, // rarely usable
 			golinters.TypeCheck{}.Name(): true, // annoying because of different building envs
+			golinters.Misspell{}.Name():  true, // unsure about false-positives number
 		}
 		return enableLinterConfigs(lcs, func(lc *linter.Config) bool {
 			return !disabled[lc.Linter.Name()]

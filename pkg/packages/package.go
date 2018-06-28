@@ -3,6 +3,8 @@ package packages
 import (
 	"go/build"
 	"path/filepath"
+
+	"github.com/golangci/golangci-lint/pkg/result/processors"
 )
 
 type Package struct {
@@ -13,7 +15,13 @@ type Package struct {
 }
 
 func (pkg *Package) Files(includeTest bool) []string {
-	pkgFiles := append([]string{}, pkg.bp.GoFiles...)
+	var pkgFiles []string
+	for _, f := range pkg.bp.GoFiles {
+		if !processors.IsCgoFilename(f) {
+			// skip cgo at all levels to prevent failures on file reading
+			pkgFiles = append(pkgFiles, f)
+		}
+	}
 
 	// TODO: add cgo files
 	if includeTest {

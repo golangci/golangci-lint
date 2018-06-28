@@ -34,7 +34,7 @@ func testSourcesFromDir(t *testing.T, dir string) {
 
 	for _, s := range sources {
 		s := s
-		t.Run(s, func(t *testing.T) {
+		t.Run(filepath.Base(s), func(t *testing.T) {
 			t.Parallel()
 			testOneSource(t, s)
 		})
