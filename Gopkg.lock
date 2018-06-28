@@ -69,7 +69,7 @@
   branch = "master"
   name = "github.com/golangci/go-misc"
   packages = ["deadcode"]
-  revision = "a61b005a223b50d3656798639dd87073ca5c1981"
+  revision = "927a3d87b613e9f6f0fb7ef8bb8de8b83c30a5a2"
 
 [[projects]]
   branch = "master"
