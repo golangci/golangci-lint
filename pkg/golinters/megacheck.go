@@ -6,7 +6,14 @@ import (
 	"fmt"
 	"strings"
 
-	megacheckAPI "github.com/golangci/go-tools/cmd/megacheck"
+	"golang.org/x/tools/go/loader"
+	"golang.org/x/tools/go/ssa"
+	"honnef.co/go/tools/lint"
+	"honnef.co/go/tools/lint/lintutil"
+	"honnef.co/go/tools/simple"
+	"honnef.co/go/tools/staticcheck"
+	"honnef.co/go/tools/unused"
+
 	"github.com/golangci/golangci-lint/pkg/fsutils"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
@@ -95,8 +102,8 @@ func (m Megacheck) Run(ctx context.Context, lintCtx *linter.Context) ([]result.I
 		return nil, nil
 	}
 
-	issues := megacheckAPI.Run(lintCtx.Program, lintCtx.LoaderConfig, lintCtx.SSAProgram,
-		m.StaticcheckEnabled, m.GosimpleEnabled, m.UnusedEnabled)
+	issues := runMegacheck(lintCtx.Program, lintCtx.SSAProgram, lintCtx.LoaderConfig,
+		m.StaticcheckEnabled, m.GosimpleEnabled, m.UnusedEnabled, lintCtx.Settings().Unused.CheckExported)
 	if len(issues) == 0 {
 		return nil, nil
 	}
@@ -110,4 +117,36 @@ func (m Megacheck) Run(ctx context.Context, lintCtx *linter.Context) ([]result.I
 		})
 	}
 	return res, nil
+}
+
+func runMegacheck(program *loader.Program, ssaProg *ssa.Program, conf *loader.Config,
+	enableStaticcheck, enableGosimple, enableUnused, checkExportedUnused bool) []lint.Problem {
+
+	var checkers []lintutil.CheckerConfig
+
+	if enableStaticcheck {
+		sac := staticcheck.NewChecker()
+		checkers = append(checkers, lintutil.CheckerConfig{
+			Checker: sac,
+		})
+	}
+
+	if enableGosimple {
+		sc := simple.NewChecker()
+		checkers = append(checkers, lintutil.CheckerConfig{
+			Checker: sc,
+		})
+	}
+
+	if enableUnused {
+		uc := unused.NewChecker(unused.CheckAll)
+		uc.WholeProgram = checkExportedUnused
+		uc.ConsiderReflection = true
+		checkers = append(checkers, lintutil.CheckerConfig{
+			Checker: unused.NewLintChecker(uc),
+		})
+	}
+
+	fs := lintutil.FlagSet("megacheck")
+	return lintutil.ProcessFlagSet(checkers, fs, program, ssaProg, conf)
 }

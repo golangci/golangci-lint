@@ -4,8 +4,6 @@ import (
 	"time"
 )
 
-type OutFormat string
-
 const (
 	OutFormatJSON              = "json"
 	OutFormatLineNumber        = "line-number"
@@ -158,7 +156,12 @@ type LintersSettings struct {
 	Misspell struct {
 		Locale string
 	}
-	Lll LllSettings
+	Unused struct {
+		CheckExported bool `mapstructure:"check-exported"`
+	}
+
+	Lll     LllSettings
+	Unparam UnparamSettings
 }
 
 type LllSettings struct {
@@ -169,6 +172,14 @@ var defaultLintersSettings = LintersSettings{
 	Lll: LllSettings{
 		LineLength: 120,
 	},
+	Unparam: UnparamSettings{
+		Algo: "cha",
+	},
+}
+
+type UnparamSettings struct {
+	CheckExported bool `mapstructure:"check-exported"`
+	Algo          string
 }
 
 type Linters struct {

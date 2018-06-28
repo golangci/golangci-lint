@@ -1,7 +1,6 @@
 package lint
 
 import (
-	"context"
 	"testing"
 
 	"github.com/golangci/golangci-lint/pkg/golinters"
@@ -15,7 +14,6 @@ import (
 )
 
 func TestASTCacheLoading(t *testing.T) {
-	ctx := context.Background()
 	linters := []linter.Config{
 		linter.NewConfig(golinters.Errcheck{}).WithFullImport(),
 	}
@@ -37,7 +35,7 @@ func TestASTCacheLoading(t *testing.T) {
 				AnalyzeTests: true,
 			},
 		}
-		prog, _, err := loadWholeAppIfNeeded(ctx, linters, cfg, pkgProg, logutils.NewStderrLog(""))
+		prog, _, err := loadWholeAppIfNeeded(linters, cfg, pkgProg, logutils.NewStderrLog(""))
 		assert.NoError(t, err)
 
 		astCacheFromProg, err := astcache.LoadFromProgram(prog, log)

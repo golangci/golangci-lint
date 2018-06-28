@@ -11,12 +11,12 @@ import (
 	"os"
 	"strings"
 
-	"github.com/golangci/go-tools/ssa"
-	"github.com/golangci/go-tools/ssa/ssautil"
 	"golang.org/x/tools/go/loader"
+	"golang.org/x/tools/go/ssa"
+	"golang.org/x/tools/go/ssa/ssautil"
 
-	"github.com/golangci/lint"
 	"github.com/kisielk/gotool"
+	"mvdan.cc/lint"
 )
 
 func toDiscard(usage *varUsage) bool {

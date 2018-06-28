@@ -1,7 +1,6 @@
 package lint
 
 import (
-	"context"
 	"fmt"
 	"go/ast"
 	"go/build"
@@ -16,13 +15,13 @@ import (
 	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result/processors"
 
-	"github.com/golangci/go-tools/ssa"
-	"github.com/golangci/go-tools/ssa/ssautil"
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/lint/astcache"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/packages"
 	"golang.org/x/tools/go/loader"
+	"golang.org/x/tools/go/ssa"
+	"golang.org/x/tools/go/ssa/ssautil"
 )
 
 var loadDebugf = logutils.Debug("load")
@@ -160,7 +159,7 @@ func getTypeCheckFuncBodies(cfg *config.Run, linters []linter.Config,
 	}
 }
 
-func loadWholeAppIfNeeded(ctx context.Context, linters []linter.Config, cfg *config.Config,
+func loadWholeAppIfNeeded(linters []linter.Config, cfg *config.Config,
 	pkgProg *packages.Program, log logutils.Log) (*loader.Program, *loader.Config, error) {
 
 	if !isFullImportNeeded(linters, cfg) {
@@ -218,7 +217,7 @@ func loadWholeAppIfNeeded(ctx context.Context, linters []linter.Config, cfg *con
 	return prog, loadcfg, nil
 }
 
-func buildSSAProgram(ctx context.Context, lprog *loader.Program, log logutils.Log) *ssa.Program {
+func buildSSAProgram(lprog *loader.Program, log logutils.Log) *ssa.Program {
 	startedAt := time.Now()
 	defer func() {
 		log.Infof("SSA repr building took %s", time.Since(startedAt))
@@ -286,9 +285,7 @@ func removeFakePackages(prog *loader.Program) {
 }
 
 //nolint:gocyclo
-func LoadContext(ctx context.Context, linters []linter.Config, cfg *config.Config,
-	log logutils.Log) (*linter.Context, error) {
-
+func LoadContext(linters []linter.Config, cfg *config.Config, log logutils.Log) (*linter.Context, error) {
 	// Set GOROOT to have working cross-compilation: cross-compiled binaries
 	// have invalid GOROOT. XXX: can't use runtime.GOROOT().
 	goroot, err := goutils.DiscoverGoRoot()
@@ -315,17 +312,18 @@ func LoadContext(ctx context.Context, linters []linter.Config, cfg *config.Confi
 		return nil, err
 	}
 
-	prog, loaderConfig, err := loadWholeAppIfNeeded(ctx, linters, cfg, pkgProg, log)
+	prog, loaderConfig, err := loadWholeAppIfNeeded(linters, cfg, pkgProg, log)
 	if err != nil {
 		return nil, err
 	}
 
 	var ssaProg *ssa.Program
 	if prog != nil && isSSAReprNeeded(linters) {
-		ssaProg = buildSSAProgram(ctx, prog, log)
+		ssaProg = buildSSAProgram(prog, log)
 	}
 
 	if prog != nil {
+		// It's important to do it after SSA building
 		removeFakePackages(prog)
 	}
 

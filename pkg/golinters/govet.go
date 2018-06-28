@@ -216,7 +216,7 @@ func runGoCommand(ctx context.Context, log logutils.Log, args ...string) error {
 	return nil
 }
 
-func (g Govet) runOnSourcePackages(ctx context.Context, lintCtx *linter.Context) ([]govetAPI.Issue, error) {
+func (g Govet) runOnSourcePackages(_ context.Context, lintCtx *linter.Context) ([]govetAPI.Issue, error) {
 	// TODO: check .S asm files: govet can do it if pass dirs
 	var govetIssues []govetAPI.Issue
 	for _, pkg := range lintCtx.Program.InitialPackages() {
