@@ -99,6 +99,11 @@ linters-settings:
     include-go-root: false
     packages:
       - github.com/davecgh/go-spew/spew
+  misspell:
+    # Correct spellings using locale preferences for US or UK.
+    # Default is to use a neutral variety of English.
+    # Setting locale to US will correct the British spelling of 'colour' to 'color'.
+    locale: US
 
 linters:
   enable:

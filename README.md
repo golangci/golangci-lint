@@ -113,6 +113,7 @@ goimports: Goimports does everything that gofmt does. Additionally it checks unu
 maligned: Tool to detect Go structs that would take less memory if their fields were sorted [fast: false]
 megacheck: 3 sub-linters in one: unused, gosimple and staticcheck [fast: false]
 depguard: Go linter that checks if package imports are in a list of acceptable packages [fast: false]
+misspell: Finds commonly misspelled English words in comments [fast: true]
 ```
 
 Pass `-E/--enable` to enable linter and `-D/--disable` to disable:
@@ -218,6 +219,7 @@ golangci-lint linters
 - [maligned](https://github.com/mdempsky/maligned) - Tool to detect Go structs that would take less memory if their fields were sorted
 - [megacheck](https://github.com/dominikh/go-tools/tree/master/cmd/megacheck) - 3 sub-linters in one: unused, gosimple and staticcheck
 - [depguard](https://github.com/OpenPeeDeeP/depguard) - Go linter that checks if package imports are in a list of acceptable packages
+- [misspell](https://github.com/client9/misspell) - Finds commonly misspelled English words in comments
 
 # Configuration
 The config file has lower priority than command-line options. If the same bool/string/int option is provided on the command-line
@@ -415,6 +417,11 @@ linters-settings:
     include-go-root: false
     packages:
       - github.com/davecgh/go-spew/spew
+  misspell:
+    # Correct spellings using locale preferences for US or UK.
+    # Default is to use a neutral variety of English.
+    # Setting locale to US will correct the British spelling of 'colour' to 'color'.
+    locale: US
 
 linters:
   enable:
@@ -487,6 +494,8 @@ linters-settings:
       # logging is allowed only by logutils.Log, logrus
       # is allowed to use only in logutils package
       - github.com/sirupsen/logrus
+  misspell:
+    locale: US
 
 linters:
   enable-all: true
@@ -591,6 +600,7 @@ Thanks to developers and authors of used linters:
 - [remyoudompheng](https://github.com/remyoudompheng)
 - [alecthomas](https://github.com/alecthomas)
 - [OpenPeeDeeP](https://github.com/OpenPeeDeeP)
+- [client9](https://github.com/client9)
 
 # Future Plans
 1. Upstream all changes of forked linters.

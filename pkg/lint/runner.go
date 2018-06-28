@@ -69,7 +69,7 @@ type lintRes struct {
 func (r Runner) runLinterSafe(ctx context.Context, lintCtx *linter.Context, lc linter.Config) (ret []result.Issue, err error) {
 	defer func() {
 		if panicData := recover(); panicData != nil {
-			err = fmt.Errorf("panic occured: %s", panicData)
+			err = fmt.Errorf("panic occurred: %s", panicData)
 			r.Log.Warnf("Panic stack trace: %s", debug.Stack())
 		}
 	}()
@@ -240,7 +240,7 @@ func (r Runner) Run(ctx context.Context, linters []linter.Config, lintCtx *linte
 	lintResultsCh := r.runWorkers(ctx, lintCtx, linters)
 	processedLintResultsCh := r.processLintResults(ctx, lintResultsCh)
 	if ctx.Err() != nil {
-		// XXX: always process issues, even if timeout occured
+		// XXX: always process issues, even if timeout occurred
 		finishedLintersN := 0
 		for range processedLintResultsCh {
 			finishedLintersN++

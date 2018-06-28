@@ -18,6 +18,8 @@ linters-settings:
       # logging is allowed only by logutils.Log, logrus
       # is allowed to use only in logutils package
       - github.com/sirupsen/logrus
+  misspell:
+    locale: US
 
 linters:
   enable-all: true

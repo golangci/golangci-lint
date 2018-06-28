@@ -21,7 +21,7 @@ const (
 	LogLevelInfo LogLevel = 1
 
 	// hidden errors: non critical errors: work can be continued, no need to fail whole program;
-	// tests will crash if any warning occured.
+	// tests will crash if any warning occurred.
 	LogLevelWarn LogLevel = 2
 
 	// only not hidden from user errors: whole program failing, usually
