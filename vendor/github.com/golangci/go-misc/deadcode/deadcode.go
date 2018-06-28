@@ -8,6 +8,7 @@ import (
 	"os"
 	"path/filepath"
 	"sort"
+	"strings"
 
 	"golang.org/x/tools/go/loader"
 )
@@ -50,9 +51,8 @@ type Context struct {
 	program *loader.Program
 }
 
-// error formats the error to standard error, adding program
-// identification and a newline
-func (ctx *Context) errorf(pos token.Pos, format string, args ...interface{}) {
+// pos resolves a compact position encoding into a verbose one
+func (ctx *Context) pos(pos token.Pos) token.Position {
 	if ctx.cwd == "" {
 		ctx.cwd, _ = os.Getwd()
 	}
@@ -61,6 +61,13 @@ func (ctx *Context) errorf(pos token.Pos, format string, args ...interface{}) {
 	if err == nil {
 		p.Filename = f
 	}
+	return p
+}
+
+// error formats the error to standard error, adding program
+// identification and a newline
+func (ctx *Context) errorf(pos token.Pos, format string, args ...interface{}) {
+	p := ctx.pos(pos)
 	fmt.Fprintf(os.Stderr, p.String()+": "+format+"\n", args...)
 	exitCode = 2
 }
@@ -73,18 +80,22 @@ func (ctx *Context) Process() []types.Object {
 	prog := ctx.program
 	var allUnused []types.Object
 	for _, pkg := range prog.Imported {
-		unused := doPackage(prog, pkg)
+		unused := ctx.doPackage(prog, pkg)
 		allUnused = append(allUnused, unused...)
 	}
 	for _, pkg := range prog.Created {
-		unused := doPackage(prog, pkg)
+		unused := ctx.doPackage(prog, pkg)
 		allUnused = append(allUnused, unused...)
 	}
 	sort.Sort(objects(allUnused))
 	return allUnused
 }
 
-func doPackage(prog *loader.Program, pkg *loader.PackageInfo) []types.Object {
+func isTestFuncByName(name string) bool {
+	return strings.HasPrefix(name, "Test") || strings.HasPrefix(name, "Benchmark") || strings.HasPrefix(name, "Example")
+}
+
+func (ctx *Context) doPackage(prog *loader.Program, pkg *loader.PackageInfo) []types.Object {
 	used := make(map[types.Object]bool)
 	for _, file := range pkg.Files {
 		ast.Inspect(file, func(n ast.Node) bool {
@@ -107,7 +118,10 @@ func doPackage(prog *loader.Program, pkg *loader.PackageInfo) []types.Object {
 			continue
 		}
 		obj := global.Lookup(name)
-		if !used[obj] && (pkg.Pkg.Name() == "main" || !ast.IsExported(name)) {
+		_, isSig := obj.Type().(*types.Signature)
+		pos := ctx.pos(obj.Pos())
+		isTestMethod := isSig && isTestFuncByName(obj.Name()) && strings.HasSuffix(pos.Filename, "_test.go")
+		if !used[obj] && ((pkg.Pkg.Name() == "main" && !isTestMethod) || !ast.IsExported(name)) {
 			unused = append(unused, obj)
 		}
 	}
