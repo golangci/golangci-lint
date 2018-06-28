@@ -30,14 +30,16 @@ type ExcludePattern struct {
 
 var DefaultExcludePatterns = []ExcludePattern{
 	{
-		Pattern: "Error return value of .((os\\.)?std(out|err)\\..*|.*Close|.*Flush|os\\.Remove(All)?|.*printf?|os\\.(Un)?Setenv). is not checked",
-		Linter:  "errcheck",
-		Why:     "Almost all programs ignore errors on these functions and in most cases it's ok",
+		Pattern: "Error return value of .((os\\.)?std(out|err)\\..*|.*Close" +
+			"|.*Flush|os\\.Remove(All)?|.*printf?|os\\.(Un)?Setenv). is not checked",
+		Linter: "errcheck",
+		Why:    "Almost all programs ignore errors on these functions and in most cases it's ok",
 	},
 	{
-		Pattern: "(comment on exported (method|function|type|const)|should have( a package)? comment|comment should be of the form)",
-		Linter:  "golint",
-		Why:     "Annoying issue about not having a comment. The rare codebase has such comments",
+		Pattern: "(comment on exported (method|function|type|const)|" +
+			"should have( a package)? comment|comment should be of the form)",
+		Linter: "golint",
+		Why:    "Annoying issue about not having a comment. The rare codebase has such comments",
 	},
 	{
 		Pattern: "func name will be used as test\\.Test.* by other packages, and that stutters; consider calling this",
@@ -156,6 +158,17 @@ type LintersSettings struct {
 	Misspell struct {
 		Locale string
 	}
+	Lll LllSettings
+}
+
+type LllSettings struct {
+	LineLength int `mapstructure:"line-length"`
+}
+
+var defaultLintersSettings = LintersSettings{
+	Lll: LllSettings{
+		LineLength: 120,
+	},
 }
 
 type Linters struct {
@@ -195,4 +208,10 @@ type Config struct { //nolint:maligned
 	Issues          Issues
 
 	InternalTest bool // Option is used only for testing golangci-lint code, don't use it
+}
+
+func NewDefault() *Config {
+	return &Config{
+		LintersSettings: defaultLintersSettings,
+	}
 }

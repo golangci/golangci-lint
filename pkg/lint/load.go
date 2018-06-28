@@ -109,7 +109,9 @@ func isLocalProjectAnalysis(args []string) bool {
 	return true
 }
 
-func getTypeCheckFuncBodies(cfg *config.Run, linters []linter.Config, pkgProg *packages.Program, log logutils.Log) func(string) bool {
+func getTypeCheckFuncBodies(cfg *config.Run, linters []linter.Config,
+	pkgProg *packages.Program, log logutils.Log) func(string) bool {
+
 	if !isLocalProjectAnalysis(cfg.Args) {
 		loadDebugf("analysis in nonlocal, don't optimize loading by not typechecking func bodies")
 		return nil
@@ -155,7 +157,9 @@ func getTypeCheckFuncBodies(cfg *config.Run, linters []linter.Config, pkgProg *p
 	}
 }
 
-func loadWholeAppIfNeeded(ctx context.Context, linters []linter.Config, cfg *config.Config, pkgProg *packages.Program, log logutils.Log) (*loader.Program, *loader.Config, error) {
+func loadWholeAppIfNeeded(ctx context.Context, linters []linter.Config, cfg *config.Config,
+	pkgProg *packages.Program, log logutils.Log) (*loader.Program, *loader.Config, error) {
+
 	if !isFullImportNeeded(linters, cfg) {
 		return nil, nil, nil
 	}
@@ -255,7 +259,9 @@ func separateNotCompilingPackages(lintCtx *linter.Context) {
 }
 
 //nolint:gocyclo
-func LoadContext(ctx context.Context, linters []linter.Config, cfg *config.Config, log logutils.Log) (*linter.Context, error) {
+func LoadContext(ctx context.Context, linters []linter.Config, cfg *config.Config,
+	log logutils.Log) (*linter.Context, error) {
+
 	// Set GOROOT to have working cross-compilation: cross-compiled binaries
 	// have invalid GOROOT. XXX: can't use runtime.GOROOT().
 	goroot, err := goutils.DiscoverGoRoot()

@@ -32,7 +32,8 @@ func getDefaultExcludeHelp() string {
 	return strings.Join(parts, "\n")
 }
 
-const welcomeMessage = "Run this tool in cloud on every github pull request in https://golangci.com for free (public repos)"
+const welcomeMessage = "Run this tool in cloud on every github pull " +
+	"request in https://golangci.com for free (public repos)"
 
 func wh(text string) string {
 	return color.GreenString(text)
@@ -62,7 +63,8 @@ func initFlagSet(fs *pflag.FlagSet, cfg *config.Config) {
 	fs.StringSliceVar(&rc.BuildTags, "build-tags", nil, wh("Build tags"))
 	fs.DurationVar(&rc.Deadline, "deadline", time.Minute, wh("Deadline for total work"))
 	fs.BoolVar(&rc.AnalyzeTests, "tests", true, wh("Analyze tests (*_test.go)"))
-	fs.BoolVar(&rc.PrintResourcesUsage, "print-resources-usage", false, wh("Print avg and max memory usage of golangci-lint and total time"))
+	fs.BoolVar(&rc.PrintResourcesUsage, "print-resources-usage", false,
+		wh("Print avg and max memory usage of golangci-lint and total time"))
 	fs.StringVarP(&rc.Config, "config", "c", "", wh("Read config from file path `PATH`"))
 	fs.BoolVar(&rc.NoConfig, "no-config", false, wh("Don't read config"))
 	fs.StringSliceVar(&rc.SkipDirs, "skip-dirs", nil, wh("Regexps of directories to skip"))
@@ -75,16 +77,20 @@ func initFlagSet(fs *pflag.FlagSet, cfg *config.Config) {
 	// but when number of linters started to grow it became ovious that
 	// we can't fill 90% of flags by linters settings: common flags became hard to find.
 	// New linters settings should be done only through config file.
-	fs.BoolVar(&lsc.Errcheck.CheckTypeAssertions, "errcheck.check-type-assertions", false, "Errcheck: check for ignored type assertion results")
+	fs.BoolVar(&lsc.Errcheck.CheckTypeAssertions, "errcheck.check-type-assertions",
+		false, "Errcheck: check for ignored type assertion results")
 	hideFlag("errcheck.check-type-assertions")
 
-	fs.BoolVar(&lsc.Errcheck.CheckAssignToBlank, "errcheck.check-blank", false, "Errcheck: check for errors assigned to blank identifier: _ = errFunc()")
+	fs.BoolVar(&lsc.Errcheck.CheckAssignToBlank, "errcheck.check-blank", false,
+		"Errcheck: check for errors assigned to blank identifier: _ = errFunc()")
 	hideFlag("errcheck.check-blank")
 
-	fs.BoolVar(&lsc.Govet.CheckShadowing, "govet.check-shadowing", false, "Govet: check for shadowed variables")
+	fs.BoolVar(&lsc.Govet.CheckShadowing, "govet.check-shadowing", false,
+		"Govet: check for shadowed variables")
 	hideFlag("govet.check-shadowing")
 
-	fs.Float64Var(&lsc.Golint.MinConfidence, "golint.min-confidence", 0.8, "Golint: minimum confidence of a problem to print it")
+	fs.Float64Var(&lsc.Golint.MinConfidence, "golint.min-confidence", 0.8,
+		"Golint: minimum confidence of a problem to print it")
 	hideFlag("golint.min-confidence")
 
 	fs.BoolVar(&lsc.Gofmt.Simplify, "gofmt.simplify", true, "Gofmt: simplify code")
@@ -94,7 +100,8 @@ func initFlagSet(fs *pflag.FlagSet, cfg *config.Config) {
 		30, "Minimal complexity of function to report it")
 	hideFlag("gocyclo.min-complexity")
 
-	fs.BoolVar(&lsc.Maligned.SuggestNewOrder, "maligned.suggest-new", false, "Maligned: print suggested more optimal struct fields ordering")
+	fs.BoolVar(&lsc.Maligned.SuggestNewOrder, "maligned.suggest-new", false,
+		"Maligned: print suggested more optimal struct fields ordering")
 	hideFlag("maligned.suggest-new")
 
 	fs.IntVar(&lsc.Dupl.Threshold, "dupl.threshold",
@@ -124,7 +131,8 @@ func initFlagSet(fs *pflag.FlagSet, cfg *config.Config) {
 	fs.BoolVar(&lc.EnableAll, "enable-all", false, wh("Enable all linters"))
 	fs.BoolVar(&lc.DisableAll, "disable-all", false, wh("Disable all linters"))
 	fs.StringSliceVarP(&lc.Presets, "presets", "p", nil,
-		wh(fmt.Sprintf("Enable presets (%s) of linters. Run 'golangci-lint linters' to see them. This option implies option --disable-all", strings.Join(lintersdb.AllPresets(), "|"))))
+		wh(fmt.Sprintf("Enable presets (%s) of linters. Run 'golangci-lint linters' to see "+
+			"them. This option implies option --disable-all", strings.Join(lintersdb.AllPresets(), "|"))))
 	fs.BoolVar(&lc.Fast, "fast", false, wh("Run only fast linters from enabled linters set"))
 
 	// Issues config
@@ -132,13 +140,20 @@ func initFlagSet(fs *pflag.FlagSet, cfg *config.Config) {
 	fs.StringSliceVarP(&ic.ExcludePatterns, "exclude", "e", nil, wh("Exclude issue by regexp"))
 	fs.BoolVar(&ic.UseDefaultExcludes, "exclude-use-default", true, getDefaultExcludeHelp())
 
-	fs.IntVar(&ic.MaxIssuesPerLinter, "max-issues-per-linter", 50, wh("Maximum issues count per one linter. Set to 0 to disable"))
-	fs.IntVar(&ic.MaxSameIssues, "max-same-issues", 3, wh("Maximum count of issues with the same text. Set to 0 to disable"))
+	fs.IntVar(&ic.MaxIssuesPerLinter, "max-issues-per-linter", 50,
+		wh("Maximum issues count per one linter. Set to 0 to disable"))
+	fs.IntVar(&ic.MaxSameIssues, "max-same-issues", 3,
+		wh("Maximum count of issues with the same text. Set to 0 to disable"))
 
 	fs.BoolVarP(&ic.Diff, "new", "n", false,
-		wh("Show only new issues: if there are unstaged changes or untracked files, only those changes are analyzed, else only changes in HEAD~ are analyzed.\nIt's a super-useful option for integration of golangci-lint into existing large codebase.\nIt's not practical to fix all existing issues at the moment of integration: much better don't allow issues in new code"))
-	fs.StringVar(&ic.DiffFromRevision, "new-from-rev", "", wh("Show only new issues created after git revision `REV`"))
-	fs.StringVar(&ic.DiffPatchFilePath, "new-from-patch", "", wh("Show only new issues created in git patch with file path `PATH`"))
+		wh("Show only new issues: if there are unstaged changes or untracked files, only those changes "+
+			"are analyzed, else only changes in HEAD~ are analyzed.\nIt's a super-useful option for integration "+
+			"of golangci-lint into existing large codebase.\nIt's not practical to fix all existing issues at "+
+			"the moment of integration: much better don't allow issues in new code"))
+	fs.StringVar(&ic.DiffFromRevision, "new-from-rev", "",
+		wh("Show only new issues created after git revision `REV`"))
+	fs.StringVar(&ic.DiffPatchFilePath, "new-from-patch", "",
+		wh("Show only new issues created in git patch with file path `PATH`"))
 
 }
 

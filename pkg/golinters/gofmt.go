@@ -31,7 +31,8 @@ func (g Gofmt) Desc() string {
 		return "Goimports does everything that gofmt does. Additionally it checks unused imports"
 	}
 
-	return "Gofmt checks whether code was gofmt-ed. By default this tool runs with -s option to check for code simplification"
+	return "Gofmt checks whether code was gofmt-ed. By default " +
+		"this tool runs with -s option to check for code simplification"
 }
 
 func getFirstDeletedAndAddedLineNumberInHunk(h *diff.Hunk) (int, int, error) {
