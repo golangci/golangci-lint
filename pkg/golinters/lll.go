@@ -30,6 +30,7 @@ func (lint Lll) getIssuesForFile(filename string, maxLineLen int) ([]result.Issu
 	if err != nil {
 		return nil, fmt.Errorf("can't open file %s: %s", filename, err)
 	}
+	defer f.Close()
 
 	lineNumber := 1
 	scanner := bufio.NewScanner(f)

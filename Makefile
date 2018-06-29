@@ -1,4 +1,5 @@
 test:
+	go install ./cmd/...
 	GL_TEST_RUN=1 golangci-lint run -v
 	GL_TEST_RUN=1 golangci-lint run --fast --no-config -v
 	GL_TEST_RUN=1 golangci-lint run --no-config -v
