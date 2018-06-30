@@ -181,6 +181,10 @@ func GetAllSupportedLinterConfigs() []linter.Config {
 			WithPresets(linter.PresetComplexity).
 			WithSpeed(10).
 			WithURL("https://github.com/alexkohler/nakedret"),
+		linter.NewConfig(golinters.Prealloc{}).
+			WithPresets(linter.PresetPerformance).
+			WithSpeed(8).
+			WithURL("https://github.com/alexkohler/prealloc"),
 	}
 
 	if os.Getenv("GOLANGCI_COM_RUN") == "1" {
@@ -193,6 +197,7 @@ func GetAllSupportedLinterConfigs() []linter.Config {
 			golinters.Lll{}.Name():       true, // annoying
 			golinters.Unparam{}.Name():   true, // need to check it first
 			golinters.Nakedret{}.Name():  true, // annoying
+			golinters.Prealloc{}.Name():  true, // annoying
 		}
 		return enableLinterConfigs(lcs, func(lc *linter.Config) bool {
 			return !disabled[lc.Linter.Name()]

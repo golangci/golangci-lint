@@ -128,6 +128,12 @@
 
 [[projects]]
   branch = "master"
+  name = "github.com/golangci/prealloc"
+  packages = ["."]
+  revision = "215b22d4de21190b80ce05e7d8466677c1aa3223"
+
+[[projects]]
+  branch = "master"
   name = "github.com/golangci/revgrep"
   packages = ["."]
   revision = "d9c87f5ffaf08801898f780cf66e7026e2174097"
@@ -431,6 +437,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "9844330f4bbfb7620dd00fce3bf03f3aae60f82de82764e817881e76a20888f6"
+  inputs-digest = "41fa8e7a45473f77e2e6b40c275982a7a58dad227b21501ed145f41a1aa20bc9"
   solver-name = "gps-cdcl"
   solver-version = 1

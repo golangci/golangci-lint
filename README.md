@@ -127,6 +127,7 @@ misspell: Finds commonly misspelled English words in comments [fast: true]
 lll: Reports long lines [fast: true]
 unparam: Reports unused function parameters [fast: false]
 nakedret: Finds naked returns in functions greater than a specified function length [fast: true]
+prealloc: Finds slice declarations that could potentially be preallocated [fast: true]
 ```
 
 Pass `-E/--enable` to enable linter and `-D/--disable` to disable:
@@ -313,6 +314,7 @@ golangci-lint linters
 - [lll](https://github.com/walle/lll) - Reports long lines
 - [unparam](https://github.com/mvdan/unparam) - Reports unused function parameters
 - [nakedret](https://github.com/alexkohler/nakedret) - Finds naked returns in functions greater than a specified function length
+- [prealloc](https://github.com/alexkohler/prealloc) - Finds slice declarations that could potentially be preallocated
 
 # Configuration
 The config file has lower priority than command-line options. If the same bool/string/int option is provided on the command-line
@@ -539,6 +541,15 @@ linters-settings:
   nakedret:
     # make an issue if func has more lines of code than this setting and it has naked returns; default is 30
     max-func-lines: 30
+  prealloc:
+    # XXX: we don't recommend using this linter before doing performance profiling.
+    # For most programs usage of prealloc will be a premature optimization.
+
+    # Report preallocation suggestions only on simple loops that have no returns/breaks/continues/gotos in them.
+    # True by default.
+    simple: true
+    range-loops: true # Report preallocation suggestions on range loops, true by default
+    for-loops: false # Report preallocation suggestions on for loops, false by default
 
 
 linters:
@@ -547,7 +558,8 @@ linters:
     - govet
   enable-all: false
   disable:
-    maligned
+    - maligned
+    - prealloc
   disable-all: false
   presets:
     - bugs
@@ -620,6 +632,7 @@ linters:
   enable-all: true
   disable:
     - maligned
+    - prealloc
 ```
 
 # False Positives
@@ -726,6 +739,7 @@ There is the most valuable changes log:
 1. Add support of the next linters:
    * unparam
    * misspell
+   * prealloc
    * nakedret
    * lll
    * depguard
