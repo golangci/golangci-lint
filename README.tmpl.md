@@ -388,6 +388,7 @@ There is the most valuable changes log:
 1. Add support of the next linters:
    * unparam
    * misspell
+   * prealloc
    * nakedret
    * lll
    * depguard

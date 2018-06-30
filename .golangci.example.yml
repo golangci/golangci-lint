@@ -128,6 +128,15 @@ linters-settings:
   nakedret:
     # make an issue if func has more lines of code than this setting and it has naked returns; default is 30
     max-func-lines: 30
+  prealloc:
+    # XXX: we don't recommend using this linter before doing performance profiling.
+    # For most programs usage of prealloc will be a premature optimization.
+
+    # Report preallocation suggestions only on simple loops that have no returns/breaks/continues/gotos in them.
+    # True by default.
+    simple: true
+    range-loops: true # Report preallocation suggestions on range loops, true by default
+    for-loops: false # Report preallocation suggestions on for loops, false by default
 
 
 linters:
@@ -136,7 +145,8 @@ linters:
     - govet
   enable-all: false
   disable:
-    maligned
+    - maligned
+    - prealloc
   disable-all: false
   presets:
     - bugs
