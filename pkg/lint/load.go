@@ -3,8 +3,10 @@ package lint
 import (
 	"context"
 	"fmt"
+	"go/ast"
 	"go/build"
 	"go/parser"
+	"go/token"
 	"os"
 	"path/filepath"
 	"strings"
@@ -12,6 +14,7 @@ import (
 
 	"github.com/golangci/golangci-lint/pkg/goutils"
 	"github.com/golangci/golangci-lint/pkg/logutils"
+	"github.com/golangci/golangci-lint/pkg/result/processors"
 
 	"github.com/golangci/go-tools/ssa"
 	"github.com/golangci/go-tools/ssa/ssautil"
@@ -258,6 +261,30 @@ func separateNotCompilingPackages(lintCtx *linter.Context) {
 	}
 }
 
+func removeFakePkgFiles(info *loader.PackageInfo, fset *token.FileSet) {
+	newFiles := make([]*ast.File, 0, len(info.Files))
+	for _, f := range info.Files {
+		if !processors.IsCgoFilename(fset.Position(f.Pos()).Filename) {
+			newFiles = append(newFiles, f)
+		}
+	}
+	info.Files = newFiles
+}
+
+func removeFakePackages(prog *loader.Program) {
+	if prog.Created != nil {
+		for _, info := range prog.Created {
+			removeFakePkgFiles(info, prog.Fset)
+		}
+	}
+
+	if prog.Imported != nil {
+		for _, info := range prog.Imported {
+			removeFakePkgFiles(info, prog.Fset)
+		}
+	}
+}
+
 //nolint:gocyclo
 func LoadContext(ctx context.Context, linters []linter.Config, cfg *config.Config,
 	log logutils.Log) (*linter.Context, error) {
@@ -296,6 +323,10 @@ func LoadContext(ctx context.Context, linters []linter.Config, cfg *config.Confi
 	var ssaProg *ssa.Program
 	if prog != nil && isSSAReprNeeded(linters) {
 		ssaProg = buildSSAProgram(ctx, prog, log)
+	}
+
+	if prog != nil {
+		removeFakePackages(prog)
 	}
 
 	astLog := log.Child("astcache")

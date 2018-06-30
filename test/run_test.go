@@ -131,6 +131,22 @@ func TestTestsAreLintedByDefault(t *testing.T) {
 	assert.Equal(t, exitcodes.Success, exitCode, out)
 }
 
+func TestCgoOk(t *testing.T) {
+	out, exitCode := runGolangciLint(t, "--enable-all", filepath.Join(testdataDir, "cgo"))
+	checkNoIssuesRun(t, out, exitCode)
+}
+
+func TestUnsafeOk(t *testing.T) {
+	out, exitCode := runGolangciLint(t, "--enable-all", filepath.Join(testdataDir, "unsafe"))
+	checkNoIssuesRun(t, out, exitCode)
+}
+
+func TestDeadcodeNoFalsePositivesInMainPkg(t *testing.T) {
+	out, exitCode := runGolangciLint(t, "--no-config", "--disable-all", "-Edeadcode",
+		filepath.Join(testdataDir, "deadcode_main_pkg"))
+	checkNoIssuesRun(t, out, exitCode)
+}
+
 func TestConfigFileIsDetected(t *testing.T) {
 	checkGotConfig := func(out string, exitCode int) {
 		assert.Equal(t, exitcodes.Success, exitCode, out)

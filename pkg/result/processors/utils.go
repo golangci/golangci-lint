@@ -2,7 +2,7 @@ package processors
 
 import (
 	"fmt"
-	"strings"
+	"path/filepath"
 
 	"github.com/golangci/golangci-lint/pkg/result"
 )
@@ -47,5 +47,5 @@ func transformIssues(issues []result.Issue, transform func(i *result.Issue) *res
 }
 
 func IsCgoFilename(f string) bool {
-	return f == "C" || strings.HasSuffix(f, "/C")
+	return filepath.Base(f) == "C"
 }
