@@ -22,8 +22,8 @@ func (lint Unparam) Run(ctx context.Context, lintCtx *linter.Context) ([]result.
 	us := &lintCtx.Settings().Unparam
 
 	c := &check.Checker{}
-	c.Algo(us.Algo)
-	c.Exported(us.CheckExported)
+	c.CallgraphAlgorithm(us.Algo)
+	c.CheckExportedFuncs(us.CheckExported)
 	c.Program(lintCtx.Program)
 	c.ProgramSSA(lintCtx.SSAProgram)
 

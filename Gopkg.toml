@@ -26,7 +26,7 @@
 
 [[constraint]]
   name = "mvdan.cc/unparam"
-  branch = "master"
+  branch = "fix-crash-on-nil-constant"
   source = "github.com/golangci/unparam"
 
 [[constraint]]
