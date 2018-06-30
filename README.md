@@ -42,9 +42,16 @@ is upgraded.
 It's highly recommended to install a fixed version of golangci-lint.
 Releases are available on the [releases page](https://github.com/golangci/golangci-lint/releases).
 
-The recommended way to install golangci-lint:
+The recommended way to install golangci-lint (replace `vX.Y.Z` with the latest
+version from the [releases page](https://github.com/golangci/golangci-lint/releases)):
 ```bash
-curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | bash -s VERSION
+# binary will be $GOPATH/bin/golangci-lint
+curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | bash -s -- -b $GOPATH/bin vX.Y.Z
+
+# or install it into ./bin/
+# curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | bash -s vX.Y.Z
+
+# golangci-lint --version
 ```
 
 Periodically update version of golangci-lint: the project is under active development
