@@ -16,7 +16,7 @@ import (
 
 func main() {
 	const (
-		tmplPath = "README.md.tmpl"
+		tmplPath = "README.tmpl.md"
 		outPath  = "README.md"
 	)
 

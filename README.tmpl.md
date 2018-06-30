@@ -1,7 +1,8 @@
 # GolangCI-Lint
 [![Build Status](https://travis-ci.com/golangci/golangci-lint.svg?branch=master)](https://travis-ci.com/golangci/golangci-lint)
 
-GolangCI-Lint is a linters aggregator. It's fast: on average [5 times faster](#performance) than gometalinter. It's [easy to integrate and use](#command-line-options), has [nice output](#quick-start) and has a minimum number of false positives.
+GolangCI-Lint is a linters aggregator. It's fast: on average [5 times faster](#performance) than gometalinter.
+It's [easy to integrate and use](#command-line-options), has [nice output](#quick-start) and has a minimum number of false positives.
 
 GolangCI-Lint has [integrations](#editor-integration) with VS Code, GNU Emacs, Sublime Text.
 
@@ -15,13 +16,15 @@ Sponsored by [GolangCI.com](https://golangci.com): SaaS service for running lint
    * [Editor Integration](#editor-integration)
    * [Comparison](#comparison)
    * [Performance](#performance)
+   * [Internals](#internals)
+   * [Trusted By](#trusted-by)
    * [Supported Linters](#supported-linters)
    * [Configuration](#configuration)
    * [False Positives](#false-positives)
-   * [Internals](#internals)
    * [FAQ](#faq)
    * [Thanks](#thanks)
    * [Future Plans](#future-plans)
+   * [Changelog](#changelog)
    * [Contact Information](#contact-information)
 
 # Demo
@@ -112,19 +115,34 @@ $ golangci-lint run --disable-all -E errcheck
   - Configure [File Watcher](https://www.jetbrains.com/help/go/settings-tools-file-watchers.html) with arguments `run --print-issued-lines=false $FileDir$`.
   - Predefined File Watcher will be added in [issue](https://youtrack.jetbrains.com/issue/GO-4574).
 4. GNU Emacs - [flycheck checker](https://github.com/weijiangan/flycheck-golangci-lint).
-5. Vim - [issue](https://github.com/fatih/vim-go/issues/1841) for vim-go.
+5. Vim
+  - vim-go open [issue](https://github.com/fatih/vim-go/issues/1841)
+  - syntastic [merged pull request](https://github.com/vim-syntastic/syntastic/pull/2190) with golangci-lint support
 
 # Comparison
 ## `golangci-lint` vs `gometalinter`
 GolangCI-Lint was created to fix the following issues with `gometalinter`:
-1. Slow work: `gometalinter` usually works for minutes in average projects. **GolangCI-Lint works [2-7x times faster](#performance)** by [reusing work](#internals).
-2. Huge memory consumption: parallel linters don't share the same program representation and can consume `n` times more memory (`n` - concurrency). GolangCI-Lint fixes it by sharing representation and **consumes 1.35x less memory**.
-3. Doesn't use real bounded concurrency: if you set it to `n` it can take up to `n*n` threads because of forced threads in specific linters. `gometalinter` can't do anything about it because it runs linters as black boxes in forked processes. In GolangCI-Lint we run all linters in one process and completely control them. Configured concurrency will be correctly bounded.
-This issue is important because you often want to set concurrency to the CPUs count minus one to ensure you **do not freeze your PC** and be able to work on it while analyzing code.
-4. Lack of nice output. We like how the `gcc` and `clang` compilers format their warnings: **using colors, printing warning lines and showing the position in line**.
-5. Too many issues. GolangCI-Lint cuts a lot of issues by using default exclude list of common false-positives. By default, it has enabled **smart issues processing**: merge multiple issues for one line, merge issues with the same text or from the same linter. All of these smart processors can be configured by the user.
-6. Integration into large codebases. A good way to start using linters in a large project is not to fix a plethora of existing issues, but to set up CI and **fix only issues in new commits**. You can use `revgrep` for it, but it's yet another utility to install and configure. With `golangci-lint` it's much easier: `revgrep` is already built into `golangci-lint` and you can use it with one option (`-n, --new` or `--new-from-rev`).
-7. Installation. With `gometalinter`, you need to run a linters installation step. It's easy to forget this step and end up with stale linters. It also complicates CI setup. GolangCI-Lint requires **no installation of linters**.
+1. Slow work: `gometalinter` usually works for minutes in average projects.
+**GolangCI-Lint works [2-7x times faster](#performance)** by [reusing work](#internals).
+2. Huge memory consumption: parallel linters don't share the same program representation and can consume
+`n` times more memory (`n` - concurrency). GolangCI-Lint fixes it by sharing representation and **consumes 1.35x less memory**.
+3. Doesn't use real bounded concurrency: if you set it to `n` it can take up to `n*n` threads because of
+forced threads in specific linters. `gometalinter` can't do anything about it because it runs linters as
+black boxes in forked processes. In GolangCI-Lint we run all linters in one process and completely control
+them. Configured concurrency will be correctly bounded.
+This issue is important because you often want to set concurrency to the CPUs count minus one to
+ensure you **do not freeze your PC** and be able to work on it while analyzing code.
+4. Lack of nice output. We like how the `gcc` and `clang` compilers format their warnings: **using colors,
+printing warning lines and showing the position in line**.
+5. Too many issues. GolangCI-Lint cuts a lot of issues by using default exclude list of common false-positives.
+By default, it has enabled **smart issues processing**: merge multiple issues for one line, merge issues with the
+same text or from the same linter. All of these smart processors can be configured by the user.
+6. Integration into large codebases. A good way to start using linters in a large project is not to fix a plethora
+of existing issues, but to set up CI and **fix only issues in new commits**. You can use `revgrep` for it, but it's
+yet another utility to install and configure. With `golangci-lint` it's much easier: `revgrep` is already built into
+`golangci-lint` and you can use it with one option (`-n, --new` or `--new-from-rev`).
+7. Installation. With `gometalinter`, you need to run a linters installation step. It's easy to forget this step and
+end up with stale linters. It also complicates CI setup. GolangCI-Lint requires **no installation of linters**.
 8. **Yaml or toml config**. Gometalinter's JSON isn't convenient for config files.
 
 ## `golangci-lint` vs Running Linters Manually
@@ -164,13 +182,75 @@ $ gometalinter --deadline=30m --vendor --cyclo-over=30 --dupl-threshold=150 \
 | consul, 127 kLoC            | 58s   | **4x**   | 2.7GB | 1.7x |
 | terraform, 190 kLoC         | 2m13s | **1.6x** | 4.8GB | 1x   |
 | go-ethereum, 250 kLoC       | 33s   | **5x**   | 3.6GB | 1x   |
-| go source, 1300 kLoC        | 2m45s | **2x**   | 4.7GB | 1x   |
+| go source (`$GOROOT/src`), 1300 kLoC | 2m45s | **2x** | 4.7GB | 1x |
 
 
 **On average golangci-lint is 4.6 times faster** than gometalinter. Maximum difference is in the
 self-repo: **7.5 times faster**, minimum difference is in terraform source code repo: 1.8 times faster.
 
 On average golangci-lint consumes 1.35 times less memory.
+
+## Why golangci-lint is faster
+
+Golangci-lint directly calls linters (no forking) and reuses 80% of work by parsing program only once.
+Read [this section](#internals) for details.
+
+# Internals
+
+1. Work sharing
+  The key difference with gometalinter is that golangci-lint shares work between specific linters (golint, govet, ...).
+  We don't fork to call specific linter but use its API.
+  For small and medium projects 50-90% of work between linters can be reused.
+   * load `loader.Program` once
+
+      We load program (parsing all files and type-checking) only once for all linters. For the most of linters
+      it's the most heavy operation: it takes 5 seconds on 8 kLoC repo and 11 seconds on `$GOROOT/src`.
+   * build `ssa.Program` once
+
+      Some linters (megacheck, interfacer, unparam) work on SSA representation.
+      Building of this representation takes 1.5 seconds on 8 kLoC repo and 6 seconds on `$GOROOT/src`.
+      `SSA` representation is used from a [fork of go-tools](https://github.com/dominikh/go-tools), not the official one.
+
+   * parse source code and build AST once
+
+      Parsing one source file takes 200 us on average. Parsing of all files in `$GOROOT/src` takes 2 seconds.
+      Currently we parse each file more than once because it's not the bottleneck. But we already save a lot of
+      extra parsing. We're planning to parse each file only once.
+
+   * walk files and directories once
+
+     It takes 300-1000 ms for `$GOROOT/src`.
+2. Smart linters scheduling
+  
+   We schedule linters by a special algorithm which takes estimated execution time into account. It allows
+   to save 10-30% of time when one of heavy linters (megacheck etc) is enabled.
+
+3. Improved program loading
+
+   We smartly use setting `TypeCheckFuncBodies` in `loader.Config` to build `loader.Program`.
+   If there are no linters requiring SSA enabled we can load dependencies of analyzed code much faster
+   by not analyzing their functions: we analyze only file-level declarations. It makes program loading
+   10-30% faster in such cases.
+4. Don't fork to run shell commands
+
+All linters are vendored in the `/vendor` folder: their version is fixed, they are builtin
+and you don't need to install them separately.
+
+# Trusted By
+
+The following great projects use golangci-lint:
+
+* [GoogleContainerTools/skaffold](https://github.com/GoogleContainerTools/skaffold/blob/master/hack/linter.sh#L24) - Easy and Repeatable Kubernetes Development
+* [goreleaser/goreleaser](https://github.com/goreleaser/goreleaser/blob/master/Makefile#L47) - Deliver Go binaries as fast and easily as possible
+* [goreleaser/nfpm](https://github.com/goreleaser/nfpm/blob/master/Makefile#L43) - NFPM is Not FPM - a simple deb and rpm packager written in Go
+* [goreleaser/godownloader](https://github.com/goreleaser/godownloader/blob/master/Makefile#L37) - Download Go binaries as fast and easily as possible
+* [asobti/kube-monkey](https://github.com/asobti/kube-monkey/blob/master/Makefile#L12) - An implementation of Netflix's Chaos Monkey for Kubernetes clusters
+* [nutanix/terraform-provider-nutanix](https://github.com/nutanix/terraform-provider-nutanix/blob/develop/.golangci.yml) - Terraform Nutanix Provider
+* [getantibody/antibody](https://github.com/getantibody/antibody/blob/master/Makefile#L32) - The fastest shell plugin manager
+* [Aptomi/aptomi](https://github.com/Aptomi/aptomi/blob/master/.golangci.yml) - Application delivery engine for k8s
+* [status-im/status-go](https://github.com/status-im/status-go/blob/develop/.golangci.yml) - The Status module that consumes go-ethereum
+* [ovrclk/akash](https://github.com/ovrclk/akash/blob/master/.golangci.yaml) - Blockchain-powered decentralized compute platform
+
 
 # Supported Linters
 To see a list of supported linters and which linters are enabled/disabled:
@@ -235,24 +315,6 @@ func f() {
 
 Please create [GitHub Issues here](https://github.com/golangci/golangci-lint/issues/new) if you find any false positives. We will add it to the default exclude list if it's common or we will fix underlying linter.
 
-# Internals
-The key difference with gometalinter is that golangci-lint shares work between specific linters (golint, govet, ...).
-For small and medium projects 50-80% of work between linters can be reused.
-Now we share `loader.Program` and `SSA` representation building. `SSA` representation is used from
-a [fork of go-tools](https://github.com/dominikh/go-tools), not the official one. Also, we are going to
-reuse `AST` parsing and traversal.
-
-We don't fork to call specific linter but use its API. We forked GitHub repos of almost all linters
-to make API. It also allows us to be more performant and control actual count of used threads.
-
-All linters are vendored in the `/vendor` folder: their version is fixed, they are builtin
-and you don't need to install them separately.
-
-We use chains for issues and independent processors to post-process them: exclude issues by limits,
-nolint comment, diff, regexps; prettify paths, etc.
-
-We use `cobra` for command-line options.
-
 # FAQ
 **How do you add a custom linter?**
 
@@ -316,6 +378,28 @@ Thanks to developers and authors of used linters:
 8. Minimize false-positives by fixing linters and improving testing tooling.
 9. Automatic issues fixing (code rewrite, refactoring) where it's possible.
 10. Documentation for every issue type.
+
+# Changelog
+
+There is the most valuable changes log:
+
+## June 2018
+
+1. Add support of the next linters:
+   * unparam
+   * misspell
+   * nakedret
+   * lll
+   * depguard
+2. Smart generated files detector
+3. Full `//nolint` support
+4. Implement `--skip-files` and `--skip-dirs` options
+5. Checkstyle output format support
+
+## May 2018
+
+1. Support GitHub Releases
+2. Installation via Homebrew and Docker
 
 # Contact Information
 You can contact the [author](https://github.com/jirfag) of GolangCI-Lint
