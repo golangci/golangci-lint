@@ -410,10 +410,10 @@
   revision = "adc824a0674b99099789b6188a058d485eaf61c0"
 
 [[projects]]
-  branch = "master"
+  branch = "fix-crash-on-nil-constant"
   name = "mvdan.cc/unparam"
   packages = ["check"]
-  revision = "31deaf77ea9671c648eee0054071487bce1b4b41"
+  revision = "f30d69ad8b55690d0e814cdd96e955834e0d0ee1"
   source = "github.com/golangci/unparam"
 
 [[projects]]
@@ -431,6 +431,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "c81f352144bce99702ee1976f4fc0679c133b22861d72f152df4ca7c614adf81"
+  inputs-digest = "9844330f4bbfb7620dd00fce3bf03f3aae60f82de82764e817881e76a20888f6"
   solver-name = "gps-cdcl"
   solver-version = 1
