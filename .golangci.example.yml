@@ -125,6 +125,9 @@ linters-settings:
     # if it's called for subdir of a project it can't find external interfaces. All text editor integrations
     # with golangci-lint call it on a directory with the changed file.
     check-exported: false
+  nakedret:
+    # make an issue if func has more lines of code than this setting and it has naked returns; default is 30
+    max-func-lines: 30
 
 
 linters:

@@ -123,6 +123,7 @@ depguard: Go linter that checks if package imports are in a list of acceptable p
 misspell: Finds commonly misspelled English words in comments [fast: true]
 lll: Reports long lines [fast: true]
 unparam: Reports unused function parameters [fast: false]
+nakedret: Finds naked returns in functions greater than a specified function length [fast: true]
 ```
 
 Pass `-E/--enable` to enable linter and `-D/--disable` to disable:
@@ -231,6 +232,7 @@ golangci-lint linters
 - [misspell](https://github.com/client9/misspell) - Finds commonly misspelled English words in comments
 - [lll](https://github.com/walle/lll) - Reports long lines
 - [unparam](https://github.com/mvdan/unparam) - Reports unused function parameters
+- [nakedret](https://github.com/alexkohler/nakedret) - Finds naked returns in functions greater than a specified function length
 
 # Configuration
 The config file has lower priority than command-line options. If the same bool/string/int option is provided on the command-line
@@ -454,6 +456,9 @@ linters-settings:
     # if it's called for subdir of a project it can't find external interfaces. All text editor integrations
     # with golangci-lint call it on a directory with the changed file.
     check-exported: false
+  nakedret:
+    # make an issue if func has more lines of code than this setting and it has naked returns; default is 30
+    max-func-lines: 30
 
 
 linters:
@@ -636,6 +641,7 @@ Thanks to developers and authors of used linters:
 - [OpenPeeDeeP](https://github.com/OpenPeeDeeP)
 - [client9](https://github.com/client9)
 - [walle](https://github.com/walle)
+- [alexkohler](https://github.com/alexkohler)
 
 # Future Plans
 1. Upstream all changes of forked linters.
