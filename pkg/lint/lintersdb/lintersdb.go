@@ -177,6 +177,10 @@ func GetAllSupportedLinterConfigs() []linter.Config {
 			WithFullImport().
 			WithSSA().
 			WithURL("https://github.com/mvdan/unparam"),
+		linter.NewConfig(golinters.Nakedret{}).
+			WithPresets(linter.PresetComplexity).
+			WithSpeed(10).
+			WithURL("https://github.com/alexkohler/nakedret"),
 	}
 
 	if os.Getenv("GOLANGCI_COM_RUN") == "1" {
@@ -188,6 +192,7 @@ func GetAllSupportedLinterConfigs() []linter.Config {
 			golinters.Misspell{}.Name():  true, // unsure about false-positives number
 			golinters.Lll{}.Name():       true, // annoying
 			golinters.Unparam{}.Name():   true, // need to check it first
+			golinters.Nakedret{}.Name():  true, // annoying
 		}
 		return enableLinterConfigs(lcs, func(lc *linter.Config) bool {
 			return !disabled[lc.Linter.Name()]

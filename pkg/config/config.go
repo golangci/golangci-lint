@@ -160,12 +160,22 @@ type LintersSettings struct {
 		CheckExported bool `mapstructure:"check-exported"`
 	}
 
-	Lll     LllSettings
-	Unparam UnparamSettings
+	Lll      LllSettings
+	Unparam  UnparamSettings
+	Nakedret NakedretSettings
 }
 
 type LllSettings struct {
 	LineLength int `mapstructure:"line-length"`
+}
+
+type NakedretSettings struct {
+	MaxFuncLines int `mapstructure:"max-func-lines"`
+}
+
+type UnparamSettings struct {
+	CheckExported bool `mapstructure:"check-exported"`
+	Algo          string
 }
 
 var defaultLintersSettings = LintersSettings{
@@ -175,11 +185,9 @@ var defaultLintersSettings = LintersSettings{
 	Unparam: UnparamSettings{
 		Algo: "cha",
 	},
-}
-
-type UnparamSettings struct {
-	CheckExported bool `mapstructure:"check-exported"`
-	Algo          string
+	Nakedret: NakedretSettings{
+		MaxFuncLines: 30,
+	},
 }
 
 type Linters struct {
