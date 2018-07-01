@@ -116,7 +116,9 @@ func getDoc(f *ast.File, fset *token.FileSet, filePath string) string {
 		pos := g.Pos()
 		filePos := fset.Position(pos)
 		text := g.Text()
-		isAllowed := pos < importPos && filePos.Column == 1
+
+		// files using cgo have implicitly added comment "Created by cgo - DO NOT EDIT"
+		isAllowed := pos < importPos && filePos.Column == 1 && !strings.Contains(text, "Created by cgo")
 		if isAllowed {
 			autogenDebugf("file %q: pos=%d, filePos=%s: comment %q: it's allowed", filePath, pos, filePos, text)
 			neededComments = append(neededComments, text)
