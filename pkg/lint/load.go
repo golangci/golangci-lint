@@ -2,10 +2,8 @@ package lint
 
 import (
 	"fmt"
-	"go/ast"
 	"go/build"
 	"go/parser"
-	"go/token"
 	"os"
 	"path/filepath"
 	"strings"
@@ -13,7 +11,6 @@ import (
 
 	"github.com/golangci/golangci-lint/pkg/goutils"
 	"github.com/golangci/golangci-lint/pkg/logutils"
-	"github.com/golangci/golangci-lint/pkg/result/processors"
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/lint/astcache"
@@ -260,30 +257,6 @@ func separateNotCompilingPackages(lintCtx *linter.Context) {
 	}
 }
 
-func removeFakePkgFiles(info *loader.PackageInfo, fset *token.FileSet) {
-	newFiles := make([]*ast.File, 0, len(info.Files))
-	for _, f := range info.Files {
-		if !processors.IsCgoFilename(fset.Position(f.Pos()).Filename) {
-			newFiles = append(newFiles, f)
-		}
-	}
-	info.Files = newFiles
-}
-
-func removeFakePackages(prog *loader.Program) {
-	if prog.Created != nil {
-		for _, info := range prog.Created {
-			removeFakePkgFiles(info, prog.Fset)
-		}
-	}
-
-	if prog.Imported != nil {
-		for _, info := range prog.Imported {
-			removeFakePkgFiles(info, prog.Fset)
-		}
-	}
-}
-
 //nolint:gocyclo
 func LoadContext(linters []linter.Config, cfg *config.Config, log logutils.Log) (*linter.Context, error) {
 	// Set GOROOT to have working cross-compilation: cross-compiled binaries
@@ -320,11 +293,6 @@ func LoadContext(linters []linter.Config, cfg *config.Config, log logutils.Log) 
 	var ssaProg *ssa.Program
 	if prog != nil && isSSAReprNeeded(linters) {
 		ssaProg = buildSSAProgram(prog, log)
-	}
-
-	if prog != nil {
-		// It's important to do it after SSA building
-		removeFakePackages(prog)
 	}
 
 	astLog := log.Child("astcache")

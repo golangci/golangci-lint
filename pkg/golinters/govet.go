@@ -14,6 +14,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
+	"github.com/golangci/golangci-lint/pkg/result/processors"
 	"github.com/golangci/golangci-lint/pkg/timeutils"
 	govetAPI "github.com/golangci/govet"
 )
@@ -216,6 +217,17 @@ func runGoCommand(ctx context.Context, log logutils.Log, args ...string) error {
 	return nil
 }
 
+func filterFiles(files []*ast.File, fset *token.FileSet) []*ast.File {
+	newFiles := make([]*ast.File, 0, len(files))
+	for _, f := range files {
+		if !processors.IsCgoFilename(fset.Position(f.Pos()).Filename) {
+			newFiles = append(newFiles, f)
+		}
+	}
+
+	return newFiles
+}
+
 func (g Govet) runOnSourcePackages(_ context.Context, lintCtx *linter.Context) ([]govetAPI.Issue, error) {
 	// TODO: check .S asm files: govet can do it if pass dirs
 	var govetIssues []govetAPI.Issue
@@ -223,7 +235,9 @@ func (g Govet) runOnSourcePackages(_ context.Context, lintCtx *linter.Context) (
 		if len(pkg.Files) == 0 {
 			continue
 		}
-		issues, err := govetAPI.Analyze(pkg.Files, lintCtx.Program.Fset, pkg,
+
+		filteredFiles := filterFiles(pkg.Files, lintCtx.Program.Fset)
+		issues, err := govetAPI.Analyze(filteredFiles, lintCtx.Program.Fset, pkg,
 			lintCtx.Settings().Govet.CheckShadowing)
 		if err != nil {
 			return nil, err
