@@ -666,23 +666,7 @@ By doing this you won't create new issues in your code and can choose fix existi
 You have 2 choices:
 1. Use [GolangCI](https://golangci.com): this service is highly integrated with GitHub (issues are commented in the pull request) and uses a `golangci-lint` tool. For configuration use `.golangci.yml` (or toml/json).
 2. Use custom CI: just run `golangci-lint` in CI and check the exit code. If it's non-zero - fail the build. The main disadvantage is that you can't see issues in pull request code and would need to view the build log, then open the referenced source file to see the context.
-If you'd like to vendor `golangci-lint` in your repo, run:
-```bash
-go get -u github.com/golang/dep/cmd/dep
-dep init
-dep ensure -v -add github.com/golangci/golangci-lint/cmd/golangci-lint
-```
-Then add these lines to your `Gopkg.toml` file, so `dep ensure -update` won't delete the vendored `golangci-lint` code.
-```toml
-required = [
-  "github.com/golangci/golangci-lint/cmd/golangci-lint",
-]
-```
-In your CI scripts, install the vendored `golangci-lint` like this:
-```bash
-go install ./vendor/github.com/golangci/golangci-lint/cmd/golangci-lint/
-```
-Vendoring `golangci-lint` saves a network request, potentially making your CI system a little more reliable.
+We don't recommend vendoring `golangci-lint` in your repo: you will get troubles updating `golangci-lint`. Please, use recommended way to install with the shell script: it's very fast.
 
 **Does I need to run `go install`?**
 
