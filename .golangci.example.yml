@@ -165,8 +165,8 @@ issues:
   # Independently from option `exclude` we use default exclude patterns,
   # it can be disabled by this option. To list all
   # excluded by default patterns execute `golangci-lint run --help`.
-  # Default value for this option is false.
-  exclude-use-default: true
+  # Default value for this option is true.
+  exclude-use-default: false
 
   # Maximum issues count per one linter. Set to 0 to disable. Default is 50.
   max-per-linter: 0
