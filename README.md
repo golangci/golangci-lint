@@ -520,8 +520,11 @@ linters-settings:
     # Setting locale to US will correct the British spelling of 'colour' to 'color'.
     locale: US
   lll:
-    # max line length, lines longer will be reported. Default is 120. '\t' is counted as 1 character.
+    # max line length, lines longer will be reported. Default is 120.
+    # '\t' is counted as 1 character by default, and can be changed with the tab-width option
     line-length: 120
+    # tab width in spaces. Default to 1.
+    tab-width: 1
   unused:
     # treat code as a program (not a library) and report unused exported identifiers; default is false.
     # XXX: if you enable this setting, unused will report a lot of false-positives in text editors:
