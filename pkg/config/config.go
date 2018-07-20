@@ -168,6 +168,7 @@ type LintersSettings struct {
 
 type LllSettings struct {
 	LineLength int `mapstructure:"line-length"`
+	TabWidth   int `mapstructure:"tab-width"`
 }
 
 type UnparamSettings struct {
@@ -188,6 +189,7 @@ type PreallocSettings struct {
 var defaultLintersSettings = LintersSettings{
 	Lll: LllSettings{
 		LineLength: 120,
+		TabWidth:   1,
 	},
 	Unparam: UnparamSettings{
 		Algo: "cha",

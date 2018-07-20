@@ -124,6 +124,10 @@ func initFlagSet(fs *pflag.FlagSet, cfg *config.Config) {
 		"Depguard: check list against standard lib")
 	hideFlag("depguard.include-go-root")
 
+	fs.IntVar(&lsc.Lll.TabWidth, "lll.tab-width", 1,
+		"Lll: tab width in spaces")
+	hideFlag("lll.tab-width")
+
 	// Linters config
 	lc := &cfg.Linters
 	fs.StringSliceVarP(&lc.Enable, "enable", "E", nil, wh("Enable specific linter"))
