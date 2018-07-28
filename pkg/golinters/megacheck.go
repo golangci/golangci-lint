@@ -60,7 +60,7 @@ func (m Megacheck) Desc() string {
 }
 
 func prettifyCompilationError(err error) error {
-	i := TypeCheck{}.parseError(err)
+	i, _ := TypeCheck{}.parseError(err)
 	if i == nil {
 		return err
 	}

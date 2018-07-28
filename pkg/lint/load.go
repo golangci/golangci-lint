@@ -231,11 +231,14 @@ func buildSSAProgram(lprog *loader.Program, log logutils.Log) *ssa.Program {
 func separateNotCompilingPackages(lintCtx *linter.Context) {
 	prog := lintCtx.Program
 
+	notCompilingPackagesSet := map[*loader.PackageInfo]bool{}
+
 	if prog.Created != nil {
 		compilingCreated := make([]*loader.PackageInfo, 0, len(prog.Created))
 		for _, info := range prog.Created {
 			if len(info.Errors) != 0 {
 				lintCtx.NotCompilingPackages = append(lintCtx.NotCompilingPackages, info)
+				notCompilingPackagesSet[info] = true
 			} else {
 				compilingCreated = append(compilingCreated, info)
 			}
@@ -245,10 +248,27 @@ func separateNotCompilingPackages(lintCtx *linter.Context) {
 
 	if prog.Imported != nil {
 		for k, info := range prog.Imported {
-			if len(info.Errors) != 0 {
-				lintCtx.NotCompilingPackages = append(lintCtx.NotCompilingPackages, info)
-				delete(prog.Imported, k)
+			if len(info.Errors) == 0 {
+				continue
 			}
+
+			lintCtx.NotCompilingPackages = append(lintCtx.NotCompilingPackages, info)
+			notCompilingPackagesSet[info] = true
+			delete(prog.Imported, k)
+		}
+	}
+
+	if prog.AllPackages != nil {
+		for k, info := range prog.AllPackages {
+			if len(info.Errors) == 0 {
+				continue
+			}
+
+			if !notCompilingPackagesSet[info] {
+				lintCtx.NotCompilingPackages = append(lintCtx.NotCompilingPackages, info)
+				notCompilingPackagesSet[info] = true
+			}
+			delete(prog.AllPackages, k)
 		}
 	}
 

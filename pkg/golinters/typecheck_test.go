@@ -35,7 +35,7 @@ func TestParseError(t *testing.T) {
 
 	lint := TypeCheck{}
 	for _, c := range cases {
-		i := lint.parseError(errors.New(c.in))
+		i, _ := lint.parseError(errors.New(c.in))
 		if !c.good {
 			assert.Nil(t, i)
 			continue
