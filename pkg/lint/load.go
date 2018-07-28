@@ -228,6 +228,7 @@ func buildSSAProgram(lprog *loader.Program, log logutils.Log) *ssa.Program {
 // separateNotCompilingPackages moves not compiling packages into separate slices:
 // a lot of linters crash on such packages. Leave them only for those linters
 // which can work with them.
+//nolint:gocyclo
 func separateNotCompilingPackages(lintCtx *linter.Context) {
 	prog := lintCtx.Program
 
