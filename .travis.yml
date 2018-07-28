@@ -3,6 +3,7 @@ language: go
 go:
   - 1.9.x
   - 1.10.x
+  - 1.11beta2
 script: make check_generated test
 
 after_success:
@@ -19,4 +20,6 @@ deploy:
   script: curl -sL https://git.io/goreleaser | bash
   on:
     tags: true
-    condition: $TRAVIS_GO_VERSION =~ ^1\.10\.
+    # it's important to build on the newest version of go:
+    #  - go1.11 type checking properly supports _wasm.go file, without that golangci-lint won't compile program with go 1.11 env
+    condition: $TRAVIS_GO_VERSION =~ ^1\.11
