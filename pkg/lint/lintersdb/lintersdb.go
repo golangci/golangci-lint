@@ -2,7 +2,6 @@ package lintersdb
 
 import (
 	"fmt"
-	"os"
 	"sort"
 	"strings"
 	"sync"
@@ -185,23 +184,6 @@ func GetAllSupportedLinterConfigs() []linter.Config {
 			WithPresets(linter.PresetPerformance).
 			WithSpeed(8).
 			WithURL("https://github.com/alexkohler/prealloc"),
-	}
-
-	if os.Getenv("GOLANGCI_COM_RUN") == "1" {
-		disabled := map[string]bool{
-			golinters.Gocyclo{}.Name():   true, // annoying
-			golinters.Dupl{}.Name():      true, // annoying
-			golinters.Maligned{}.Name():  true, // rarely usable
-			golinters.TypeCheck{}.Name(): true, // annoying because of different building envs
-			golinters.Misspell{}.Name():  true, // unsure about false-positives number
-			golinters.Lll{}.Name():       true, // annoying
-			golinters.Unparam{}.Name():   true, // need to check it first
-			golinters.Nakedret{}.Name():  true, // annoying
-			golinters.Prealloc{}.Name():  true, // annoying
-		}
-		return enableLinterConfigs(lcs, func(lc *linter.Config) bool {
-			return !disabled[lc.Linter.Name()]
-		})
 	}
 
 	enabled := map[string]bool{
