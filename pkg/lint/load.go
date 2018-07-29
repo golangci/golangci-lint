@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"go/build"
 	"go/parser"
+	"go/types"
 	"os"
 	"path/filepath"
 	"strings"
@@ -174,6 +175,9 @@ func loadWholeAppIfNeeded(linters []linter.Config, cfg *config.Config,
 		AllowErrors:         true,                 // Try to analyze partially
 		ParserMode:          parser.ParseComments, // AST will be reused by linters
 		TypeCheckFuncBodies: getTypeCheckFuncBodies(&cfg.Run, linters, pkgProg, log),
+		TypeChecker: types.Config{
+			Sizes: types.SizesFor(build.Default.Compiler, build.Default.GOARCH),
+		},
 	}
 
 	var loaderArgs []string
