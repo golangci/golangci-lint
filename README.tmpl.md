@@ -92,13 +92,13 @@ Directories are NOT analyzed recursively. To analyze them recursively append `/.
 
 GolangCI-Lint can be used with zero configuration. By default the following linters are enabled:
 ```
-$ golangci-lint linters
+$ golangci-lint help linters
 {{.LintersCommandOutputEnabledOnly}}
 ```
 
 and the following linters are disabled by default:
 ```
-$ golangci-lint linters
+$ golangci-lint help linters
 ...
 {{.LintersCommandOutputDisabledOnly}}
 ```
@@ -255,7 +255,7 @@ The following great projects use golangci-lint:
 # Supported Linters
 To see a list of supported linters and which linters are enabled/disabled:
 ```
-golangci-lint linters
+golangci-lint help linters
 ```
 
 ## Enabled By Default Linters
@@ -268,6 +268,11 @@ golangci-lint linters
 The config file has lower priority than command-line options. If the same bool/string/int option is provided on the command-line
 and in the config file, the option from command-line will be used.
 Slice options (e.g. list of enabled/disabled linters) are combined from the command-line and config file.
+
+To see a list of enabled by your configuration linters:
+```
+golangci-lint linters
+```
 
 ## Command-Line Options
 ```

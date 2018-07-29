@@ -92,7 +92,7 @@ Directories are NOT analyzed recursively. To analyze them recursively append `/.
 
 GolangCI-Lint can be used with zero configuration. By default the following linters are enabled:
 ```
-$ golangci-lint linters
+$ golangci-lint help linters
 Enabled by default linters:
 govet: Vet examines Go source code and reports suspicious constructs, such as Printf calls whose arguments do not align with the format string [fast: false]
 errcheck: Errcheck is a program for checking for unchecked errors in go programs. These unchecked errors can be critical bugs in some cases [fast: false]
@@ -109,7 +109,7 @@ typecheck: Like the front-end of a Go compiler, parses and type-checks Go code [
 
 and the following linters are disabled by default:
 ```
-$ golangci-lint linters
+$ golangci-lint help linters
 ...
 Disabled by default linters:
 golint: Golint differs from gofmt. Gofmt reformats Go source code, whereas golint prints out style mistakes [fast: true]
@@ -282,7 +282,7 @@ The following great projects use golangci-lint:
 # Supported Linters
 To see a list of supported linters and which linters are enabled/disabled:
 ```
-golangci-lint linters
+golangci-lint help linters
 ```
 
 ## Enabled By Default Linters
@@ -320,6 +320,11 @@ golangci-lint linters
 The config file has lower priority than command-line options. If the same bool/string/int option is provided on the command-line
 and in the config file, the option from command-line will be used.
 Slice options (e.g. list of enabled/disabled linters) are combined from the command-line and config file.
+
+To see a list of enabled by your configuration linters:
+```
+golangci-lint linters
+```
 
 ## Command-Line Options
 ```

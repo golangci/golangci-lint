@@ -33,6 +33,7 @@ func NewExecutor(version, commit, date string) *Executor {
 
 	e.initRoot()
 	e.initRun()
+	e.initHelp()
 	e.initLinters()
 
 	return e
