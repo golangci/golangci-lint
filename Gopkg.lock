@@ -136,7 +136,7 @@
     "lib/whitelist",
   ]
   pruneopts = "UT"
-  revision = "54e733a64097854cf4d8fa80ccf48012a487ae1a"
+  revision = "e3b43b6cb1916e0000f244f26ee752733e544429"
 
 [[projects]]
   branch = "master"

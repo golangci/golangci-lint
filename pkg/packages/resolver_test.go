@@ -8,6 +8,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/golangci/golangci-lint/pkg/fsutils"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/packages"
 	"github.com/stretchr/testify/assert"
@@ -31,7 +32,7 @@ func prepareFS(t *testing.T, paths ...string) *fsPreparer {
 	root, err := ioutil.TempDir("/tmp", "golangci.test.path_resolver")
 	assert.NoError(t, err)
 
-	prevWD, err := os.Getwd()
+	prevWD, err := fsutils.Getwd()
 	assert.NoError(t, err)
 
 	err = os.Chdir(root)
@@ -243,6 +244,7 @@ func TestPathResolverCommonCases(t *testing.T) {
 		},
 	}
 
+	fsutils.UseWdCache(false)
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			fp := prepareFS(t, tc.prepare...)

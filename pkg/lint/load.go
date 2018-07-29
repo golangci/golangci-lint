@@ -10,6 +10,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/golangci/golangci-lint/pkg/fsutils"
 	"github.com/golangci/golangci-lint/pkg/goutils"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 
@@ -50,21 +51,13 @@ func isSSAReprNeeded(linters []linter.Config) bool {
 }
 
 func normalizePaths(paths []string) ([]string, error) {
-	root, err := os.Getwd()
-	if err != nil {
-		return nil, fmt.Errorf("can't get working dir: %s", err)
-	}
-
 	ret := make([]string, 0, len(paths))
 	for _, p := range paths {
-		if filepath.IsAbs(p) {
-			relPath, err := filepath.Rel(root, p)
-			if err != nil {
-				return nil, fmt.Errorf("can't get relative path for path %s and root %s: %s",
-					p, root, err)
-			}
-			p = relPath
+		relPath, err := fsutils.ShortestRelPath(p, "")
+		if err != nil {
+			return nil, fmt.Errorf("can't get relative path for path %s: %s", p, err)
 		}
+		p = relPath
 
 		ret = append(ret, "./"+p)
 	}
@@ -78,7 +71,7 @@ func getCurrentProjectImportPath() (string, error) {
 		return "", fmt.Errorf("no GOPATH env variable")
 	}
 
-	wd, err := os.Getwd()
+	wd, err := fsutils.Getwd()
 	if err != nil {
 		return "", fmt.Errorf("can't get workind directory: %s", err)
 	}
