@@ -272,7 +272,7 @@ func main() {
 		}
 		os.Exit(exitCode)
 	}
-	if pkg, _ := doPackage(nil, nil, nil, nil); pkg == nil {
+	if pkg, _ := doPackage(nil, nil, nil, nil, nil); pkg == nil {
 		warnf("no files checked")
 	}
 	os.Exit(exitCode)
@@ -345,7 +345,7 @@ func doPackageCfg(cfgFile string) {
 	stdImporter = &vcfg
 	inittypes()
 	mustTypecheck = true
-	doPackage(nil, nil, nil, nil)
+	doPackage(nil, nil, nil, nil, nil)
 }
 
 // doPackageDir analyzes the single package found in the directory, if there is one,
@@ -373,12 +373,12 @@ func doPackageDir(directory string) {
 	names = append(names, pkg.TestGoFiles...) // These are also in the "foo" package.
 	names = append(names, pkg.SFiles...)
 	prefixDirectory(directory, names)
-	basePkg, _ := doPackage(nil, nil, nil, nil)
+	basePkg, _ := doPackage(nil, nil, nil, nil, nil)
 	// Is there also a "foo_test" package? If so, do that one as well.
 	if len(pkg.XTestGoFiles) > 0 {
 		names = pkg.XTestGoFiles
 		prefixDirectory(directory, names)
-		doPackage(basePkg, nil, nil, nil)
+		doPackage(basePkg, nil, nil, nil, nil)
 	}
 }
 
@@ -393,56 +393,29 @@ type Package struct {
 	typesPkg  *types.Package
 }
 
-func shortestRelPath(path string, wd string) (string, error) {
-	if wd == "" { // get it if user don't have cached working dir
-		var err error
-		wd, err = os.Getwd()
-		if err != nil {
-			return "", fmt.Errorf("can't get working directory: %s", err)
-		}
-	}
-
-	// make path absolute and then relative to be able to fix this case:
-	// we'are in /test dir, we want to normalize ../test, and have file file.go in this dir;
-	// it must have normalized path file.go, not ../test/file.go,
-	var absPath string
-	if filepath.IsAbs(path) {
-		absPath = path
-	} else {
-		absPath = filepath.Join(wd, path)
-	}
-
-	relPath, err := filepath.Rel(wd, absPath)
-	if err != nil {
-		return "", fmt.Errorf("can't get relative path for path %s and root %s: %s",
-			absPath, wd, err)
-	}
-
-	return relPath, nil
-}
+type astFilePathGetter func(f *ast.File, fset *token.FileSet) (string, error)
 
 // doPackage analyzes the single package constructed from the named files.
 // It returns the parsed Package or nil if none of the files have been checked.
-func doPackage(basePkg *Package, pkgInfo *loader.PackageInfo, fs *token.FileSet, astFiles []*ast.File) (*Package, error) {
+func doPackage(basePkg *Package, pkgInfo *loader.PackageInfo, fs *token.FileSet, astFiles []*ast.File, pg astFilePathGetter) (*Package, error) {
 	var files []*File
 	for _, parsedFile := range astFiles {
-		name := fs.Position(parsedFile.Pos()).Filename
-		shortName, err := shortestRelPath(name, "")
+		name, err := pg(parsedFile, fs)
 		if err != nil {
 			return nil, err
 		}
 
-		data, err := ioutil.ReadFile(shortName)
+		data, err := ioutil.ReadFile(name)
 		if err != nil {
-			return nil, fmt.Errorf("can't read %q: %s", shortName, err)
+			return nil, fmt.Errorf("can't read %q: %s", name, err)
 		}
 
-		checkBuildTag(shortName, data)
+		checkBuildTag(name, data)
 
 		files = append(files, &File{
 			fset:    fs,
 			content: data,
-			name:    shortName,
+			name:    name,
 			file:    parsedFile,
 			dead:    make(map[ast.Node]bool),
 		})

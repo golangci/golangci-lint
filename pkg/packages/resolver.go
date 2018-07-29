@@ -36,7 +36,7 @@ func NewResolver(buildTags, excludeDirs []string, log logutils.Log) (*Resolver, 
 		excludeDirsMap[dir] = re
 	}
 
-	wd, err := os.Getwd()
+	wd, err := fsutils.Getwd()
 	if err != nil {
 		return nil, fmt.Errorf("can't get working dir: %s", err)
 	}

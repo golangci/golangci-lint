@@ -4,8 +4,11 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strings"
 	"sync"
+
+	"github.com/golangci/golangci-lint/pkg/fsutils"
 )
 
 var discoverGoRootOnce sync.Once
@@ -40,11 +43,15 @@ func InGoRoot() (bool, error) {
 		return false, err
 	}
 
-	wd, err := os.Getwd()
+	wd, err := fsutils.Getwd()
 	if err != nil {
 		return false, err
 	}
 
 	// TODO: strip, then add slashes
 	return strings.HasPrefix(wd, goroot), nil
+}
+
+func IsCgoFilename(f string) bool {
+	return filepath.Base(f) == "C"
 }

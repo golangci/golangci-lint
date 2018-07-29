@@ -15,7 +15,7 @@ type Issue struct {
 
 var foundIssues []Issue
 
-func Analyze(files []*ast.File, fset *token.FileSet, pkgInfo *loader.PackageInfo, checkShadowing bool) ([]Issue, error) {
+func Analyze(files []*ast.File, fset *token.FileSet, pkgInfo *loader.PackageInfo, checkShadowing bool, pg astFilePathGetter) ([]Issue, error) {
 	foundIssues = nil
 	*source = false // import type data for "fmt" from installed packages
 
@@ -38,7 +38,7 @@ func Analyze(files []*ast.File, fset *token.FileSet, pkgInfo *loader.PackageInfo
 			includesNonTest = true
 		}
 	}
-	pkg, err := doPackage(nil, pkgInfo, fset, files)
+	pkg, err := doPackage(nil, pkgInfo, fset, files, pg)
 	if err != nil {
 		return nil, err
 	}
