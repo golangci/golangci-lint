@@ -36,6 +36,11 @@ run:
     - ".*\\.my\\.go$"
     - lib/bad.go
 
+  # whether to hide "congrats" message if no issues were found,
+  # default is false (show "congrats" message by default).
+  # set this option to true to print nothing if no issues were found.
+  silent: true
+
 
 # output configuration options
 output:
