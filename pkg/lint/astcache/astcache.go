@@ -77,17 +77,21 @@ func LoadFromProgram(prog *loader.Program, log logutils.Log) (*Cache, error) {
 				continue
 			}
 
-			relPath, err := filepath.Rel(root, pos.Filename)
-			if err != nil {
-				c.log.Warnf("Can't get relative path for %s and %s: %s",
-					root, pos.Filename, err)
-				continue
+			path := pos.Filename
+			if filepath.IsAbs(path) {
+				relPath, err := filepath.Rel(root, pos.Filename)
+				if err != nil {
+					c.log.Warnf("Can't get relative path for %s and %s: %s",
+						root, pos.Filename, err)
+					continue
+				}
+				path = relPath
 			}
 
-			c.m[relPath] = &File{
+			c.m[path] = &File{
 				F:    f,
 				Fset: prog.Fset,
-				Name: relPath,
+				Name: path,
 			}
 		}
 	}
