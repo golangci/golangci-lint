@@ -57,7 +57,7 @@ func buildTemplateContext() (map[string]interface{}, error) {
 		return nil, fmt.Errorf("can't run go install: %s", err)
 	}
 
-	lintersOut, err := exec.Command("golangci-lint", "linters").Output()
+	lintersOut, err := exec.Command("golangci-lint", "help", "linters").Output()
 	if err != nil {
 		return nil, fmt.Errorf("can't run linters cmd: %s", err)
 	}

@@ -161,17 +161,8 @@ func initFlagSet(fs *pflag.FlagSet, cfg *config.Config) {
 
 }
 
-func (e *Executor) initRun() {
-	var runCmd = &cobra.Command{
-		Use:   "run",
-		Short: welcomeMessage,
-		Run:   e.executeRun,
-	}
-	e.rootCmd.AddCommand(runCmd)
-
-	runCmd.SetOutput(logutils.StdOut) // use custom output to properly color it in Windows terminals
-
-	fs := runCmd.Flags()
+func (e *Executor) initRunConfiguration(cmd *cobra.Command) {
+	fs := cmd.Flags()
 	fs.SortFlags = false // sort them as they are defined here
 	initFlagSet(fs, e.cfg)
 
@@ -197,6 +188,19 @@ func (e *Executor) initRun() {
 
 	// Slice options must be explicitly set for proper merging of config and command-line options.
 	fixSlicesFlags(fs)
+}
+
+func (e *Executor) initRun() {
+	var runCmd = &cobra.Command{
+		Use:   "run",
+		Short: welcomeMessage,
+		Run:   e.executeRun,
+	}
+	e.rootCmd.AddCommand(runCmd)
+
+	runCmd.SetOutput(logutils.StdOut) // use custom output to properly color it in Windows terminals
+
+	e.initRunConfiguration(runCmd)
 }
 
 func fixSlicesFlags(fs *pflag.FlagSet) {

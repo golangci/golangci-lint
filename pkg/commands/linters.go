@@ -1,57 +1,53 @@
 package commands
 
 import (
-	"fmt"
+	"log"
 	"os"
-	"strings"
 
 	"github.com/fatih/color"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
-	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/spf13/cobra"
 )
 
 func (e *Executor) initLinters() {
-	var lintersCmd = &cobra.Command{
+	lintersCmd := &cobra.Command{
 		Use:   "linters",
-		Short: "List linters",
+		Short: "List current linters configuration",
 		Run:   e.executeLinters,
 	}
 	e.rootCmd.AddCommand(lintersCmd)
+	e.initRunConfiguration(lintersCmd)
 }
 
-func printLinterConfigs(lcs []linter.Config) {
-	for _, lc := range lcs {
-		fmt.Fprintf(logutils.StdOut, "%s: %s [fast: %t]\n", color.YellowString(lc.Linter.Name()),
-			lc.Linter.Desc(), !lc.DoesFullImport)
+func IsLinterInConfigsList(name string, linters []linter.Config) bool {
+	for _, linter := range linters {
+		if linter.Linter.Name() == name {
+			return true
+		}
 	}
+
+	return false
 }
 
 func (e Executor) executeLinters(cmd *cobra.Command, args []string) {
-	var enabledLCs, disabledLCs []linter.Config
+	enabledLCs, err := lintersdb.GetEnabledLinters(e.cfg, e.log.Child("lintersdb"))
+	if err != nil {
+		log.Fatalf("Can't get enabled linters: %s", err)
+	}
+
+	color.Green("Enabled by your configuration linters:\n")
+	printLinterConfigs(enabledLCs)
+
+	var disabledLCs []linter.Config
 	for _, lc := range lintersdb.GetAllSupportedLinterConfigs() {
-		if lc.EnabledByDefault {
-			enabledLCs = append(enabledLCs, lc)
-		} else {
+		if !IsLinterInConfigsList(lc.Linter.Name(), enabledLCs) {
 			disabledLCs = append(disabledLCs, lc)
 		}
 	}
 
-	color.Green("Enabled by default linters:\n")
-	printLinterConfigs(enabledLCs)
-	color.Red("\nDisabled by default linters:\n")
+	color.Red("\nDisabled by your configuration linters:\n")
 	printLinterConfigs(disabledLCs)
-
-	color.Green("\nLinters presets:")
-	for _, p := range lintersdb.AllPresets() {
-		linters := lintersdb.GetAllLinterConfigsForPreset(p)
-		linterNames := []string{}
-		for _, lc := range linters {
-			linterNames = append(linterNames, lc.Linter.Name())
-		}
-		fmt.Fprintf(logutils.StdOut, "%s: %s\n", color.YellowString(p), strings.Join(linterNames, ", "))
-	}
 
 	os.Exit(0)
 }
