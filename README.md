@@ -152,7 +152,7 @@ GolangCI-Lint was created to fix the following issues with `gometalinter`:
 1. Slow work: `gometalinter` usually works for minutes in average projects.
 **GolangCI-Lint works [2-7x times faster](#performance)** by [reusing work](#internals).
 2. Huge memory consumption: parallel linters don't share the same program representation and can consume
-`n` times more memory (`n` - concurrency). GolangCI-Lint fixes it by sharing representation and **consumes 1.35x less memory**.
+`n` times more memory (`n` - concurrency). GolangCI-Lint fixes it by sharing representation and **consumes 26% less memory**.
 3. Doesn't use real bounded concurrency: if you set it to `n` it can take up to `n*n` threads because of
 forced threads in specific linters. `gometalinter` can't do anything about it because it runs linters as
 black boxes in forked processes. In GolangCI-Lint we run all linters in one process and completely control
@@ -202,20 +202,20 @@ $ gometalinter --deadline=30m --vendor --cyclo-over=30 --dupl-threshold=150 \
 
 | Repository | GolangCI Time | GolangCI Is Faster than Gometalinter | GolangCI Memory | GolangCI eats less memory than Gometalinter |
 | ---------- | ------------- | ------------------------------------ | --------------- | ------------------------------------------- |
-| gometalinter repo, 4 kLoC   | 6s    | **6.4x** | 0.7GB | 1.5x |
-| self-repo, 4 kLoC           | 12s   | **7.5x** | 1.2GB | 1.7x |
-| beego, 50 kLoC              | 10s   | **4.2x** | 1.4GB | 1.1x |
-| hugo, 70 kLoC               | 15s   | **6.1x** | 1.6GB | 1.8x |
-| consul, 127 kLoC            | 58s   | **4x**   | 2.7GB | 1.7x |
-| terraform, 190 kLoC         | 2m13s | **1.6x** | 4.8GB | 1x   |
-| go-ethereum, 250 kLoC       | 33s   | **5x**   | 3.6GB | 1x   |
-| go source (`$GOROOT/src`), 1300 kLoC | 2m45s | **2x** | 4.7GB | 1x |
+| gometalinter repo, 4 kLoC   | 6s    | **6.4x** | 0.7GB | 33%  |
+| self-repo, 4 kLoC           | 12s   | **7.5x** | 1.2GB | 41%  |
+| beego, 50 kLoC              | 10s   | **4.2x** | 1.4GB | 9%   |
+| hugo, 70 kLoC               | 15s   | **6.1x** | 1.6GB | 44%  |
+| consul, 127 kLoC            | 58s   | **4x**   | 2.7GB | 41%  |
+| terraform, 190 kLoC         | 2m13s | **1.6x** | 4.8GB | 0%   |
+| go-ethereum, 250 kLoC       | 33s   | **5x**   | 3.6GB | 0%   |
+| go source (`$GOROOT/src`), 1300 kLoC | 2m45s | **2x** | 4.7GB | 0% |
 
 
 **On average golangci-lint is 4.6 times faster** than gometalinter. Maximum difference is in the
 self-repo: **7.5 times faster**, minimum difference is in terraform source code repo: 1.8 times faster.
 
-On average golangci-lint consumes 1.35 times less memory.
+On average golangci-lint consumes 26% less memory.
 
 ## Why golangci-lint is faster
 
