@@ -7,6 +7,7 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/gobwas/glob"
 	"golang.org/x/tools/go/loader"
 )
 
@@ -35,11 +36,13 @@ type Issue struct {
 
 //Depguard checks imports to make sure they follow the given list and constraints.
 type Depguard struct {
-	ListType      ListType
-	Packages      []string
-	IncludeGoRoot bool
-	buildCtx      *build.Context
-	cwd           string
+	ListType       ListType
+	Packages       []string
+	IncludeGoRoot  bool
+	prefixPackages []string
+	globPackages   []glob.Glob
+	buildCtx       *build.Context
+	cwd            string
 }
 
 //Run checks for dependencies given the program and validates them against
@@ -89,8 +92,20 @@ func (dg *Depguard) initialize(config *loader.Config, prog *loader.Program) erro
 		dg.buildCtx = &build.Default
 	}
 
+	for _, pkg := range dg.Packages {
+		if strings.ContainsAny(pkg, "!?*[]{}") {
+			g, err := glob.Compile(pkg, '/')
+			if err != nil {
+				return err
+			}
+			dg.globPackages = append(dg.globPackages, g)
+		} else {
+			dg.prefixPackages = append(dg.prefixPackages, pkg)
+		}
+	}
+
 	//Sort the packages so we can have a faster search in the array
-	sort.Strings(dg.Packages)
+	sort.Strings(dg.prefixPackages)
 	return nil
 }
 
@@ -129,6 +144,13 @@ func (dg *Depguard) createImportMap(prog *loader.Program) (map[string][]token.Po
 }
 
 func (dg *Depguard) pkgInList(pkg string) bool {
+	if dg.pkgInPrefixList(pkg) {
+		return true
+	}
+	return dg.pkgInGlobList(pkg)
+}
+
+func (dg *Depguard) pkgInPrefixList(pkg string) bool {
 	//Idx represents where in the package slice the passed in package would go
 	//when sorted. -1 Just means that it would be at the very front of the slice.
 	idx := sort.Search(len(dg.Packages), func(i int) bool {
@@ -140,6 +162,15 @@ func (dg *Depguard) pkgInList(pkg string) bool {
 		return false
 	}
 	return strings.HasPrefix(pkg, dg.Packages[idx])
+}
+
+func (dg *Depguard) pkgInGlobList(pkg string) bool {
+	for _, g := range dg.globPackages {
+		if g.Match(pkg) {
+			return true
+		}
+	}
+	return false
 }
 
 //InList | WhiteList | BlackList

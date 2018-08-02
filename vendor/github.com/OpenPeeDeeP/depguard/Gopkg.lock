@@ -2,6 +2,21 @@
 
 
 [[projects]]
+  name = "github.com/gobwas/glob"
+  packages = [
+    ".",
+    "compiler",
+    "match",
+    "syntax",
+    "syntax/ast",
+    "syntax/lexer",
+    "util/runes",
+    "util/strings"
+  ]
+  revision = "5ccd90ef52e1e632236f7326478d4faa74f99438"
+  version = "v0.2.3"
+
+[[projects]]
   name = "github.com/kisielk/gotool"
   packages = [
     ".",
@@ -23,6 +38,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "d82a46da1f8e74876d14c0aa629966b2d180652e4cb74607a74cfd2bd9574905"
+  inputs-digest = "7dd6ca0cba46360ae2d416534019ea1431850a15a69336f47a1098633d08e7b4"
   solver-name = "gps-cdcl"
   solver-version = 1
