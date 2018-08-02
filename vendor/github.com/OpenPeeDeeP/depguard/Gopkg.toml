@@ -37,3 +37,7 @@ ignored = ["github.com/davecgh/go-spew/spew"]
 [[constraint]]
   branch = "master"
   name = "golang.org/x/tools"
+
+[[constraint]]
+  name = "github.com/gobwas/glob"
+  version = "0.2.3"

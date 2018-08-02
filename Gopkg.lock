@@ -15,11 +15,11 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:b0054ea8a29626fb4fb9b68b9e1798e459982553b0d9d3242937b9e0c452796a"
+  digest = "1:9b379466c4eeb7e3beaabcad5d4d4899ac59953dd810fdfb4d938d011a2a7884"
   name = "github.com/OpenPeeDeeP/depguard"
   packages = ["."]
   pruneopts = "UT"
-  revision = "f2dff4f73566d1b9bd73f9bfd765030fbae5263a"
+  revision = "cd4e93412667442f1cfc61397f938427a12f65c1"
 
 [[projects]]
   digest = "1:e92f5581902c345eb4ceffdcd4a854fb8f73cf436d47d837d1ec98ef1fe0a214"
@@ -71,6 +71,23 @@
   pruneopts = "UT"
   revision = "a41e3c4b706f6ae8dfbff342b06e40fa4d2d0506"
   version = "v1.2.1"
+
+[[projects]]
+  digest = "1:9ae31ce33b4bab257668963e844d98765b44160be4ee98cafc44637a213e530d"
+  name = "github.com/gobwas/glob"
+  packages = [
+    ".",
+    "compiler",
+    "match",
+    "syntax",
+    "syntax/ast",
+    "syntax/lexer",
+    "util/runes",
+    "util/strings",
+  ]
+  pruneopts = "UT"
+  revision = "5ccd90ef52e1e632236f7326478d4faa74f99438"
+  version = "v0.2.3"
 
 [[projects]]
   digest = "1:9a688317f3231e0175b3429033f44411906c0ce119361b7b5019d01375f8cff7"
@@ -128,7 +145,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:3ae0968217a8cdfc704c6dc20606c21a56d15dce25402cbe0c155830985480cf"
+  digest = "1:7d1f12e47120a4e50790f423446888ef01fcc1a3c17fcf9d5f1be7774cfd963c"
   name = "github.com/golangci/govet"
   packages = [
     ".",

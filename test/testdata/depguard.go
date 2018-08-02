@@ -1,10 +1,11 @@
-// args: -Edepguard --depguard.include-go-root --depguard.packages='log'
+// args: -Edepguard --depguard.include-go-root --depguard.packages='compress/*,log'
 package testdata
 
 import (
-	"log" // ERROR "`log` is in the blacklist"
+	"compress/gzip" // ERROR "`compress/gzip` is in the blacklist"
+	"log"           // ERROR "`log` is in the blacklist"
 )
 
 func SpewDebugInfo() {
-	log.Println("Debug info")
+	log.Println(gzip.BestCompression)
 }

@@ -1,9 +1,12 @@
 # Depguard
 
 Go linter that checks package imports are in a list of acceptable packages. It
-supports a white list and black list option and only checks the prefixes of the
-import path. This allows you to allow imports from a whole organization or only
-allow specific packages within a repository.
+supports a white list and black list option and can do prefix or glob matching.
+This allows you to allow imports from a whole organization or only
+allow specific packages within a repository. It is recommended to use prefix
+matching as it is faster than glob matching. The fewer glob matches the better.
+
+> If a pattern is matched by prefix it does not try to match via glob.
 
 ## Install
 
@@ -66,6 +69,5 @@ gometalinter --linter='depguard:depguard -c path/to/config.json:PATH:LINE:COL:ME
 ## Golangci-lint
 
 This linter was built with
-[Golangci-lint](https://github.com/golangci/golangci-lint) in mind. I have opened
-up a [Pull Request](github.com/golangci/golangci-lint/pull/47) into GolangCI-Lint
-and will hopefully get that merged in soon.
+[Golangci-lint](https://github.com/golangci/golangci-lint) in mind. It is compatable
+and read their docs to see how to implement all their linters, including this one.
