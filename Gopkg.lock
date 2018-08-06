@@ -15,11 +15,11 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:9b379466c4eeb7e3beaabcad5d4d4899ac59953dd810fdfb4d938d011a2a7884"
+  digest = "1:da6b9c16fb5e97523f153981486c7541cf36543be2f246e258973d8e58a801dc"
   name = "github.com/OpenPeeDeeP/depguard"
   packages = ["."]
   pruneopts = "UT"
-  revision = "cd4e93412667442f1cfc61397f938427a12f65c1"
+  revision = "a69c782687b207067fa0e371408bb18f38e1355f"
 
 [[projects]]
   digest = "1:e92f5581902c345eb4ceffdcd4a854fb8f73cf436d47d837d1ec98ef1fe0a214"
