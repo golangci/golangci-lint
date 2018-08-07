@@ -153,7 +153,9 @@ func initFlagSet(fs *pflag.FlagSet, cfg *config.Config) {
 		wh("Show only new issues: if there are unstaged changes or untracked files, only those changes "+
 			"are analyzed, else only changes in HEAD~ are analyzed.\nIt's a super-useful option for integration "+
 			"of golangci-lint into existing large codebase.\nIt's not practical to fix all existing issues at "+
-			"the moment of integration: much better don't allow issues in new code"))
+			"the moment of integration: much better to not allow issues in new code.\nFor CI setups, prefer "+
+			"--new-from-rev=HEAD~, as --new can skip linting the current patch if any scripts generate "+
+			"unstaged files before golangci-lint runs."))
 	fs.StringVar(&ic.DiffFromRevision, "new-from-rev", "",
 		wh("Show only new issues created after git revision `REV`"))
 	fs.StringVar(&ic.DiffPatchFilePath, "new-from-patch", "",

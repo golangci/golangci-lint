@@ -387,7 +387,8 @@ Flags:
       --max-same-issues int         Maximum count of issues with the same text. Set to 0 to disable (default 3)
   -n, --new                         Show only new issues: if there are unstaged changes or untracked files, only those changes are analyzed, else only changes in HEAD~ are analyzed.
                                     It's a super-useful option for integration of golangci-lint into existing large codebase.
-                                    It's not practical to fix all existing issues at the moment of integration: much better don't allow issues in new code
+                                    It's not practical to fix all existing issues at the moment of integration: much better to not allow issues in new code.
+                                    For CI setups, prefer --new-from-rev=HEAD~, as --new can skip linting the current patch if any scripts generate unstaged files before golangci-lint runs.
       --new-from-rev REV            Show only new issues created after git revision REV
       --new-from-patch PATH         Show only new issues created in git patch with file path PATH
   -h, --help                        help for run
@@ -671,7 +672,7 @@ You can integrate it yourself, see this [wiki page](https://github.com/golangci/
 
 **It's cool to use `golangci-lint` when starting a project, but what about existing projects with large codebase? It will take days to fix all found issues**
 
-We are sure that every project can easily integrate `golangci-lint`, even the large one. The idea is to not fix all existing issues. Fix only newly added issue: issues in new code. To do this setup CI (or better use [GolangCI](https://golangci.com) to run `golangci-lint` with option `--new-from-rev=origin/master`. Also, take a look at option `-n`.
+We are sure that every project can easily integrate `golangci-lint`, even the large one. The idea is to not fix all existing issues. Fix only newly added issue: issues in new code. To do this setup CI (or better use [GolangCI](https://golangci.com)) to run `golangci-lint` with option `--new-from-rev=HEAD~1`. Also, take a look at option `--new`, but consider that CI scripts that generate unstaged files will make `--new` only point out issues in those files and not in the last commit. In that regard `--new-from-rev=HEAD~1` is safer.
 By doing this you won't create new issues in your code and can choose fix existing issues (or not).
 
 **How to use `golangci-lint` in CI (Continuous Integration)?**
