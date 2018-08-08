@@ -397,7 +397,6 @@ Global Flags:
   -j, --concurrency int           Concurrency (default NumCPU) (default 8)
       --cpu-profile-path string   Path to CPU profile output file
       --mem-profile-path string   Path to memory profile output file
-  -s, --silent                    disables congrats outputs
   -v, --verbose                   verbose output
 
 ```
@@ -454,11 +453,6 @@ run:
   skip-files:
     - ".*\\.my\\.go$"
     - lib/bad.go
-
-  # whether to hide "congrats" message if no issues were found,
-  # default is false (show "congrats" message by default).
-  # set this option to true to print nothing if no issues were found.
-  silent: true
 
 
 # output configuration options

@@ -19,18 +19,16 @@ type Text struct {
 	printIssuedLine bool
 	useColors       bool
 	printLinterName bool
-	silent          bool
 
 	cache filesCache
 	log   logutils.Log
 }
 
-func NewText(printIssuedLine, useColors, printLinterName bool, silent bool, log logutils.Log) *Text {
+func NewText(printIssuedLine, useColors, printLinterName bool, log logutils.Log) *Text {
 	return &Text{
 		printIssuedLine: printIssuedLine,
 		useColors:       useColors,
 		printLinterName: printLinterName,
-		silent:          silent,
 		cache:           filesCache{},
 		log:             log,
 	}
@@ -92,11 +90,6 @@ func (p *Text) Print(ctx context.Context, issues <-chan result.Issue) (bool, err
 
 	if issuesN != 0 {
 		p.log.Infof("Found %d issues", issuesN)
-	} else if ctx.Err() == nil { // don't print "congrats" if timeouted
-		if !p.silent {
-			outStr := p.SprintfColored(color.FgGreen, "Congrats! No issues were found.")
-			fmt.Fprintln(logutils.StdOut, outStr)
-		}
 	}
 
 	return issuesN != 0, nil
