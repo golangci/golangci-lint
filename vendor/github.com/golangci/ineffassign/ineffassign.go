@@ -505,6 +505,12 @@ func (s *branchStack) get(lbl *ast.Ident) *branch {
 			return br
 		}
 	}
+
+	// Guard against invalid code (break/continue outside of loop).
+	if lbl == nil {
+		return &branch{}
+	}
+
 	return s.push(lbl.Obj)
 }
 

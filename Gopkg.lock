@@ -157,11 +157,11 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:55b1295e893690bce0d5952101bf21b3ce28a32bd3625007104068b76646e842"
+  digest = "1:3a5ea92f78579dfd319260ce995575c07890c8aff429035637287a00da664647"
   name = "github.com/golangci/ineffassign"
   packages = ["."]
   pruneopts = "UT"
-  revision = "7b41b0f84881918dab3c16c5e5148d8aa55d27b4"
+  revision = "2ee8f2867dde308c46d401d6d30f6c644094b167"
 
 [[projects]]
   branch = "master"
