@@ -2,6 +2,7 @@ package lintersdb
 
 import (
 	"fmt"
+	"os"
 	"sort"
 	"strings"
 	"sync"
@@ -197,7 +198,9 @@ func GetAllSupportedLinterConfigs() []linter.Config {
 		golinters.Varcheck{}.Name():                          true,
 		golinters.Ineffassign{}.Name():                       true,
 		golinters.Deadcode{}.Name():                          true,
-		golinters.TypeCheck{}.Name():                         true,
+
+		// don't typecheck for golangci.com: too many troubles
+		golinters.TypeCheck{}.Name(): os.Getenv("GOLANGCI_COM_RUN") == "",
 	}
 	return enableLinterConfigs(lcs, func(lc *linter.Config) bool {
 		return enabled[lc.Linter.Name()]
