@@ -22,7 +22,7 @@ import (
 var root = filepath.Join("..", "...")
 var installOnce sync.Once
 
-const noIssuesOut = "Congrats! No issues were found.\n"
+const noIssuesOut = ""
 
 func installBinary(t assert.TestingT) {
 	installOnce.Do(func() {
@@ -36,8 +36,8 @@ func checkNoIssuesRun(t *testing.T, out string, exitCode int) {
 	assert.Equal(t, noIssuesOut, out)
 }
 
-func TestCongratsMessageGoneIfSilent(t *testing.T) {
-	out, exitCode := runGolangciLint(t, "../...", "-s")
+func TestNoCongratsMessage(t *testing.T) {
+	out, exitCode := runGolangciLint(t, "../...")
 	assert.Equal(t, exitcodes.Success, exitCode)
 	assert.Equal(t, "", out)
 }
@@ -72,7 +72,6 @@ func TestDeadline(t *testing.T) {
 	out, exitCode := runGolangciLint(t, "--deadline=1ms", root)
 	assert.Equal(t, exitcodes.Timeout, exitCode)
 	assert.Contains(t, out, "deadline exceeded: try increase it by passing --deadline option")
-	assert.NotContains(t, out, "Congrats! No issues were found.")
 }
 
 func runGolangciLint(t *testing.T, args ...string) (string, int) {

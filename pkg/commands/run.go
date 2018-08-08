@@ -313,11 +313,10 @@ func (e *Executor) createPrinter() (printers.Printer, error) {
 		p = printers.NewJSON(&e.reportData)
 	case config.OutFormatColoredLineNumber, config.OutFormatLineNumber:
 		p = printers.NewText(e.cfg.Output.PrintIssuedLine,
-			format == config.OutFormatColoredLineNumber, e.cfg.Output.PrintLinterName, e.cfg.Run.Silent,
+			format == config.OutFormatColoredLineNumber, e.cfg.Output.PrintLinterName,
 			e.log.Child("text_printer"))
 	case config.OutFormatTab:
-		p = printers.NewTab(e.cfg.Output.PrintLinterName, e.cfg.Run.Silent,
-			e.log.Child("tab_printer"))
+		p = printers.NewTab(e.cfg.Output.PrintLinterName, e.log.Child("tab_printer"))
 	case config.OutFormatCheckstyle:
 		p = printers.NewCheckstyle()
 	default:
