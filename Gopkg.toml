@@ -91,3 +91,8 @@
   branch = "master"
   name = "honnef.co/go/tools"
   source = "github.com/golangci/go-tools"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/client9/misspell"
+  source = "github.com/golangci/misspell"

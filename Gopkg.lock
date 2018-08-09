@@ -30,12 +30,13 @@
   version = "1.0.0"
 
 [[projects]]
-  digest = "1:73dfedbcb6b348638ef0066766a9e7d8f6cfc5cfcb3a8e00ceb631a4bca73cf1"
+  branch = "master"
+  digest = "1:07d5a5772acf81583937919b21bee82377499b26d68d361b48bf8afcca1b41e5"
   name = "github.com/client9/misspell"
   packages = ["."]
   pruneopts = "UT"
-  revision = "b90dc15cfd220ecf8bbc9043ecb928cef381f011"
-  version = "v0.3.4"
+  revision = "950f5d19e77066a2353d9a22e89f8f889d1d7012"
+  source = "github.com/golangci/misspell"
 
 [[projects]]
   digest = "1:a2c1d0e43bd3baaa071d1b9ed72c27d78169b2b269f71c105ac4ba34b1be4a39"
