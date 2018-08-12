@@ -187,20 +187,20 @@ func GetAllSupportedLinterConfigs() []linter.Config {
 			WithURL("https://github.com/alexkohler/prealloc"),
 	}
 
+	isLocalRun := os.Getenv("GOLANGCI_COM_RUN") == ""
 	enabled := map[string]bool{
 		golinters.Govet{}.Name():                             true,
 		golinters.Errcheck{}.Name():                          true,
 		golinters.Megacheck{StaticcheckEnabled: true}.Name(): true,
 		golinters.Megacheck{UnusedEnabled: true}.Name():      true,
 		golinters.Megacheck{GosimpleEnabled: true}.Name():    true,
-		golinters.Gas{}.Name():                               true,
 		golinters.Structcheck{}.Name():                       true,
 		golinters.Varcheck{}.Name():                          true,
 		golinters.Ineffassign{}.Name():                       true,
 		golinters.Deadcode{}.Name():                          true,
 
 		// don't typecheck for golangci.com: too many troubles
-		golinters.TypeCheck{}.Name(): os.Getenv("GOLANGCI_COM_RUN") == "",
+		golinters.TypeCheck{}.Name(): isLocalRun,
 	}
 	return enableLinterConfigs(lcs, func(lc *linter.Config) bool {
 		return enabled[lc.Linter.Name()]
