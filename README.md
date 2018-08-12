@@ -99,7 +99,6 @@ errcheck: Errcheck is a program for checking for unchecked errors in go programs
 staticcheck: Staticcheck is a go vet on steroids, applying a ton of static analysis checks [fast: false]
 unused: Checks Go code for unused constants, variables, functions and types [fast: false]
 gosimple: Linter for Go source code that specializes in simplifying a code [fast: false]
-gas: Inspects source code for security problems [fast: false]
 structcheck: Finds an unused struct fields [fast: false]
 varcheck: Finds unused global variables and constants [fast: false]
 ineffassign: Detects when assignments to existing variables are not used [fast: true]
@@ -113,6 +112,7 @@ $ golangci-lint help linters
 ...
 Disabled by default linters:
 golint: Golint differs from gofmt. Gofmt reformats Go source code, whereas golint prints out style mistakes [fast: true]
+gas: Inspects source code for security problems [fast: false]
 interfacer: Linter that suggests narrower interface types [fast: false]
 unconvert: Remove unnecessary type conversions [fast: false]
 dupl: Tool for code clone detection [fast: true]
@@ -291,7 +291,6 @@ golangci-lint help linters
 - [staticcheck](https://staticcheck.io/) - Staticcheck is a go vet on steroids, applying a ton of static analysis checks
 - [unused](https://github.com/dominikh/go-tools/tree/master/cmd/unused) - Checks Go code for unused constants, variables, functions and types
 - [gosimple](https://github.com/dominikh/go-tools/tree/master/cmd/gosimple) - Linter for Go source code that specializes in simplifying a code
-- [gas](https://github.com/GoASTScanner/gas) - Inspects source code for security problems
 - [structcheck](https://github.com/opennota/check) - Finds an unused struct fields
 - [varcheck](https://github.com/opennota/check) - Finds unused global variables and constants
 - [ineffassign](https://github.com/gordonklaus/ineffassign) - Detects when assignments to existing variables are not used
@@ -300,6 +299,7 @@ golangci-lint help linters
 
 ## Disabled By Default Linters (`-E/--enable`)
 - [golint](https://github.com/golang/lint) - Golint differs from gofmt. Gofmt reformats Go source code, whereas golint prints out style mistakes
+- [gas](https://github.com/GoASTScanner/gas) - Inspects source code for security problems
 - [interfacer](https://github.com/mvdan/interfacer) - Linter that suggests narrower interface types
 - [unconvert](https://github.com/mdempsky/unconvert) - Remove unnecessary type conversions
 - [dupl](https://github.com/mibk/dupl) - Tool for code clone detection
