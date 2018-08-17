@@ -18,6 +18,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/printers"
 	"github.com/golangci/golangci-lint/pkg/result"
+	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 )
@@ -249,7 +250,7 @@ func (e *Executor) runAnalysis(ctx context.Context, args []string) (<-chan resul
 
 	lintCtx, err := lint.LoadContext(linters, e.cfg, e.log.Child("load"))
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "context loading failed")
 	}
 
 	runner, err := lint.NewRunner(lintCtx.ASTCache, e.cfg, e.log.Child("runner"))
@@ -284,7 +285,7 @@ func (e *Executor) runAndPrint(ctx context.Context, args []string) error {
 
 	issues, err := e.runAnalysis(ctx, args)
 	if err != nil {
-		return err
+		return err // XXX: don't loose type
 	}
 
 	p, err := e.createPrinter()
@@ -345,7 +346,11 @@ func (e *Executor) executeRun(cmd *cobra.Command, args []string) {
 	if err := e.runAndPrint(ctx, args); err != nil {
 		e.log.Errorf("Running error: %s", err)
 		if e.exitCode == exitcodes.Success {
-			e.exitCode = exitcodes.Failure
+			if exitErr, ok := errors.Cause(err).(*exitcodes.ExitError); ok {
+				e.exitCode = exitErr.Code
+			} else {
+				e.exitCode = exitcodes.Failure
+			}
 		}
 	}
 
