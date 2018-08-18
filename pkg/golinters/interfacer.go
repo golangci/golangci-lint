@@ -37,7 +37,7 @@ func (lint Interfacer) Run(ctx context.Context, lintCtx *linter.Context) ([]resu
 		pos := lintCtx.SSAProgram.Fset.Position(i.Pos())
 		res = append(res, result.Issue{
 			Pos:        pos,
-			Text:       i.Message(),
+			Text:       markIdentifiers(i.Message()),
 			FromLinter: lint.Name(),
 		})
 	}

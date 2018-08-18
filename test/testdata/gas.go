@@ -2,7 +2,7 @@
 package testdata
 
 import (
-	"crypto/md5" // ERROR "G501: Blacklisted import crypto/md5: weak cryptographic primitive"
+	"crypto/md5" // ERROR "G501: Blacklisted import `crypto/md5`: weak cryptographic primitive"
 	"log"
 )
 

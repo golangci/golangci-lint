@@ -36,7 +36,7 @@ func (lint Unparam) Run(ctx context.Context, lintCtx *linter.Context) ([]result.
 	for _, i := range unparamIssues {
 		res = append(res, result.Issue{
 			Pos:        lintCtx.Program.Fset.Position(i.Pos()),
-			Text:       i.Message(),
+			Text:       markIdentifiers(i.Message()),
 			FromLinter: lint.Name(),
 		})
 	}

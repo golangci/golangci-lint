@@ -61,7 +61,7 @@ func (lint TypeCheck) parseError(srcErr error) (*result.Issue, error) {
 			Line:     line,
 			Column:   column,
 		},
-		Text:       message,
+		Text:       markIdentifiers(message),
 		FromLinter: lint.Name(),
 	}, nil
 }

@@ -43,7 +43,6 @@ func (lint Lll) getIssuesForFile(filename string, maxLineLen int, tabSpaces stri
 				Pos: token.Position{
 					Filename: filename,
 					Line:     lineNumber,
-					Column:   1,
 				},
 				Text:       fmt.Sprintf("line is %d characters", lineLen),
 				FromLinter: lint.Name(),

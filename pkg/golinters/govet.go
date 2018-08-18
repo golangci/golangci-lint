@@ -53,7 +53,7 @@ func (g Govet) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issue
 	for _, i := range govetIssues {
 		res = append(res, result.Issue{
 			Pos:        i.Pos,
-			Text:       i.Message,
+			Text:       markIdentifiers(i.Message),
 			FromLinter: g.Name(),
 		})
 	}
