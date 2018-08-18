@@ -273,6 +273,26 @@ func (e *Executor) setOutputToDevNull() (savedStdout, savedStderr *os.File) {
 	return
 }
 
+func (e *Executor) setExitCodeIfIssuesFound(issues <-chan result.Issue) <-chan result.Issue {
+	resCh := make(chan result.Issue, 1024)
+
+	go func() {
+		issuesFound := false
+		for i := range issues {
+			issuesFound = true
+			resCh <- i
+		}
+
+		if issuesFound {
+			e.exitCode = e.cfg.Run.ExitCodeIfIssuesFound
+		}
+
+		close(resCh)
+	}()
+
+	return resCh
+}
+
 func (e *Executor) runAndPrint(ctx context.Context, args []string) error {
 	if !logutils.HaveDebugTag("linters_output") {
 		// Don't allow linters and loader to print anything
@@ -293,14 +313,10 @@ func (e *Executor) runAndPrint(ctx context.Context, args []string) error {
 		return err
 	}
 
-	gotAnyIssues, err := p.Print(ctx, issues)
-	if err != nil {
-		return fmt.Errorf("can't print %d issues: %s", len(issues), err)
-	}
+	issues = e.setExitCodeIfIssuesFound(issues)
 
-	if gotAnyIssues {
-		e.exitCode = e.cfg.Run.ExitCodeIfIssuesFound
-		return nil
+	if err = p.Print(ctx, issues); err != nil {
+		return fmt.Errorf("can't print %d issues: %s", len(issues), err)
 	}
 
 	return nil

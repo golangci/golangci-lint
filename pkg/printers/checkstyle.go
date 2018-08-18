@@ -36,7 +36,7 @@ func NewCheckstyle() *Checkstyle {
 	return &Checkstyle{}
 }
 
-func (Checkstyle) Print(ctx context.Context, issues <-chan result.Issue) (bool, error) {
+func (Checkstyle) Print(ctx context.Context, issues <-chan result.Issue) error {
 	out := checkstyleOutput{
 		Version: "5.0",
 	}
@@ -71,9 +71,9 @@ func (Checkstyle) Print(ctx context.Context, issues <-chan result.Issue) (bool, 
 
 	data, err := xml.Marshal(&out)
 	if err != nil {
-		return false, err
+		return err
 	}
 
 	fmt.Fprintf(logutils.StdOut, "%s%s\n", xml.Header, data)
-	return len(files) > 0, nil
+	return nil
 }

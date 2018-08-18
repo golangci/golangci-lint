@@ -1,27 +1,20 @@
 package printers
 
 import (
-	"bytes"
 	"context"
 	"fmt"
-	"io/ioutil"
-	"time"
 
 	"github.com/fatih/color"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-type linesCache [][]byte
-type filesCache map[string]linesCache
-
 type Text struct {
 	printIssuedLine bool
 	useColors       bool
 	printLinterName bool
 
-	cache filesCache
-	log   logutils.Log
+	log logutils.Log
 }
 
 func NewText(printIssuedLine, useColors, printLinterName bool, log logutils.Log) *Text {
@@ -29,7 +22,6 @@ func NewText(printIssuedLine, useColors, printLinterName bool, log logutils.Log)
 		printIssuedLine: printIssuedLine,
 		useColors:       useColors,
 		printLinterName: printLinterName,
-		cache:           filesCache{},
 		log:             log,
 	}
 }
@@ -43,56 +35,19 @@ func (p Text) SprintfColored(ca color.Attribute, format string, args ...interfac
 	return c.Sprintf(format, args...)
 }
 
-func (p *Text) getFileLinesForIssue(i *result.Issue) (linesCache, error) {
-	fc := p.cache[i.FilePath()]
-	if fc != nil {
-		return fc, nil
-	}
-
-	// TODO: make more optimal algorithm: don't load all files into memory
-	fileBytes, err := ioutil.ReadFile(i.FilePath())
-	if err != nil {
-		return nil, fmt.Errorf("can't read file %s for printing issued line: %s", i.FilePath(), err)
-	}
-	lines := bytes.Split(fileBytes, []byte("\n")) // TODO: what about \r\n?
-	fc = lines
-	p.cache[i.FilePath()] = fc
-	return fc, nil
-}
-
-func (p *Text) Print(ctx context.Context, issues <-chan result.Issue) (bool, error) {
-	var issuedLineExtractingDuration time.Duration
-	defer func() {
-		p.log.Infof("Extracting issued lines took %s", issuedLineExtractingDuration)
-	}()
-
-	issuesN := 0
+func (p *Text) Print(ctx context.Context, issues <-chan result.Issue) error {
 	for i := range issues {
-		issuesN++
 		p.printIssue(&i)
 
 		if !p.printIssuedLine {
 			continue
 		}
 
-		startedAt := time.Now()
-		lines, err := p.getFileLinesForIssue(&i)
-		if err != nil {
-			return false, err
-		}
-		issuedLineExtractingDuration += time.Since(startedAt)
-
-		p.printIssuedLines(&i, lines)
-		if i.Line()-1 < len(lines) {
-			p.printUnderLinePointer(&i, string(lines[i.Line()-1]))
-		}
+		p.printSourceCode(&i)
+		p.printUnderLinePointer(&i)
 	}
 
-	if issuesN != 0 {
-		p.log.Infof("Found %d issues", issuesN)
-	}
-
-	return issuesN != 0, nil
+	return nil
 }
 
 func (p Text) printIssue(i *result.Issue) {
@@ -107,32 +62,19 @@ func (p Text) printIssue(i *result.Issue) {
 	fmt.Fprintf(logutils.StdOut, "%s: %s\n", pos, text)
 }
 
-func (p Text) printIssuedLines(i *result.Issue, lines linesCache) {
-	lineRange := i.GetLineRange()
-	var lineStr string
-	for line := lineRange.From; line <= lineRange.To; line++ {
-		if line == 0 { // some linters, e.g. gas can do it: it really means first line
-			line = 1
-		}
-
-		zeroIndexedLine := line - 1
-		if zeroIndexedLine >= len(lines) {
-			p.log.Warnf("No line %d in file %s", line, i.FilePath())
-			break
-		}
-
-		lineStr = string(bytes.Trim(lines[zeroIndexedLine], "\r"))
-		fmt.Fprintln(logutils.StdOut, lineStr)
+func (p Text) printSourceCode(i *result.Issue) {
+	for _, line := range i.SourceLines {
+		fmt.Fprintln(logutils.StdOut, line)
 	}
 }
 
-func (p Text) printUnderLinePointer(i *result.Issue, line string) {
-	lineRange := i.GetLineRange()
-	if lineRange.From != lineRange.To || i.Pos.Column == 0 {
+func (p Text) printUnderLinePointer(i *result.Issue) {
+	if len(i.SourceLines) != 1 || i.Pos.Column == 0 {
 		return
 	}
 
 	col0 := i.Pos.Column - 1
+	line := i.SourceLines[0]
 	prefixRunes := make([]rune, 0, len(line))
 	for j := 0; j < len(line) && j < col0; j++ {
 		if line[j] == '\t' {
