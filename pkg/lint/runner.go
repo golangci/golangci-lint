@@ -55,6 +55,7 @@ func NewRunner(astCache *astcache.Cache, cfg *config.Config, log logutils.Log) (
 			processors.NewMaxPerFileFromLinter(),
 			processors.NewMaxSameIssues(icfg.MaxSameIssues, log.Child("max_same_issues")),
 			processors.NewMaxFromLinter(icfg.MaxIssuesPerLinter, log.Child("max_from_linter")),
+			processors.NewSourceCode(log.Child("source_code")),
 		},
 		Log: log,
 	}, nil

@@ -28,24 +28,18 @@ func (p Tab) SprintfColored(ca color.Attribute, format string, args ...interface
 	return c.Sprintf(format, args...)
 }
 
-func (p *Tab) Print(ctx context.Context, issues <-chan result.Issue) (bool, error) {
+func (p *Tab) Print(ctx context.Context, issues <-chan result.Issue) error {
 	w := tabwriter.NewWriter(logutils.StdOut, 0, 0, 2, ' ', 0)
 
-	issuesN := 0
 	for i := range issues {
-		issuesN++
 		p.printIssue(&i, w)
-	}
-
-	if issuesN != 0 {
-		p.log.Infof("Found %d issues", issuesN)
 	}
 
 	if err := w.Flush(); err != nil {
 		p.log.Warnf("Can't flush tab writer: %s", err)
 	}
 
-	return issuesN != 0, nil
+	return nil
 }
 
 func (p Tab) printIssue(i *result.Issue, w io.Writer) {

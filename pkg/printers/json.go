@@ -25,7 +25,7 @@ type JSONResult struct {
 	Report *report.Data
 }
 
-func (p JSON) Print(ctx context.Context, issues <-chan result.Issue) (bool, error) {
+func (p JSON) Print(ctx context.Context, issues <-chan result.Issue) error {
 	allIssues := []result.Issue{}
 	for i := range issues {
 		allIssues = append(allIssues, i)
@@ -38,9 +38,9 @@ func (p JSON) Print(ctx context.Context, issues <-chan result.Issue) (bool, erro
 
 	outputJSON, err := json.Marshal(res)
 	if err != nil {
-		return false, err
+		return err
 	}
 
 	fmt.Fprint(logutils.StdOut, string(outputJSON))
-	return len(allIssues) != 0, nil
+	return nil
 }

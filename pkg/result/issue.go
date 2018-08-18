@@ -13,6 +13,8 @@ type Issue struct {
 	Pos       token.Position
 	LineRange *Range `json:",omitempty"`
 	HunkPos   int    `json:",omitempty"`
+
+	SourceLines []string
 }
 
 func (i Issue) FilePath() string {
