@@ -146,7 +146,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:7d1f12e47120a4e50790f423446888ef01fcc1a3c17fcf9d5f1be7774cfd963c"
+  digest = "1:bfaf14a1dd31e57f9b433739af5f0411558d9ba90566c7342c02da9a48ea8e75"
   name = "github.com/golangci/govet"
   packages = [
     ".",
@@ -154,7 +154,7 @@
     "lib/whitelist",
   ]
   pruneopts = "UT"
-  revision = "e3b43b6cb1916e0000f244f26ee752733e544429"
+  revision = "44ddbe260190d79165f4150b828650780405d801"
 
 [[projects]]
   branch = "master"

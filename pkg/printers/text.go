@@ -69,6 +69,7 @@ func (p Text) printSourceCode(i *result.Issue) {
 }
 
 func (p Text) printUnderLinePointer(i *result.Issue) {
+	// if column == 0 it means column is unknown (e.g. for gas)
 	if len(i.SourceLines) != 1 || i.Pos.Column == 0 {
 		return
 	}

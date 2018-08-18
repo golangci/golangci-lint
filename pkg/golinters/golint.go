@@ -60,7 +60,7 @@ func (g Golint) lintPkg(minConfidence float64, files []*ast.File, fset *token.Fi
 		if p.Confidence >= minConfidence {
 			issues = append(issues, result.Issue{
 				Pos:        p.Position,
-				Text:       p.Text,
+				Text:       markIdentifiers(p.Text),
 				FromLinter: g.Name(),
 			})
 			// TODO: use p.Link and p.Category

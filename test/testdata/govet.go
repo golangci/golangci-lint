@@ -7,7 +7,7 @@ import (
 )
 
 func Govet() error {
-	return &os.PathError{"first", "path", os.ErrNotExist} // ERROR "os.PathError composite literal uses unkeyed fields"
+	return &os.PathError{"first", "path", os.ErrNotExist} // ERROR "`os.PathError` composite literal uses unkeyed fields"
 }
 
 func GovetShadow(f io.Reader, buf []byte) (err error) {

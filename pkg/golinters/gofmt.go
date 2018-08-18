@@ -83,9 +83,9 @@ func (g Gofmt) extractIssuesFromPatch(patch string, log logutils.Log) ([]result.
 				}
 			}
 
-			text := "File is not gofmt-ed with -s"
+			text := "File is not `gofmt`-ed with `-s`"
 			if g.UseGoimports {
-				text = "File is not goimports-ed"
+				text = "File is not `goimports`-ed"
 			}
 			i := result.Issue{
 				FromLinter: g.Name(),

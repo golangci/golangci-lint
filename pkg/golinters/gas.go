@@ -39,7 +39,7 @@ func (lint Gas) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issu
 
 	res := make([]result.Issue, 0, len(issues))
 	for _, i := range issues {
-		text := fmt.Sprintf("%s: %s", i.RuleID, i.What) // TODO: use severity and confidence
+		text := fmt.Sprintf("%s: %s", i.RuleID, markIdentifiers(i.What)) // TODO: use severity and confidence
 		var r *result.Range
 		line, err := strconv.Atoi(i.Line)
 		if err != nil {
