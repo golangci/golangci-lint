@@ -53,3 +53,7 @@ func (pkg *Package) TestFiles() []string {
 	pkgFiles = append(pkgFiles, pkg.bp.XTestGoFiles...)
 	return pkgFiles
 }
+
+func (pkg *Package) BuildPackage() *build.Package {
+	return pkg.bp
+}
