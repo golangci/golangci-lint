@@ -141,7 +141,9 @@ $ golangci-lint run --disable-all -E errcheck
 3. GoLand
   - Configure [File Watcher](https://www.jetbrains.com/help/go/settings-tools-file-watchers.html) with arguments `run --print-issued-lines=false $FileDir$`.
   - Predefined File Watcher will be added in [issue](https://youtrack.jetbrains.com/issue/GO-4574).
-4. GNU Emacs - [flycheck checker](https://github.com/weijiangan/flycheck-golangci-lint).
+4. GNU Emacs
+  - [Spacemacs](https://github.com/syl20bnr/spacemacs/blob/develop/layers/+lang/go/README.org#pre-requisites)
+  - [flycheck checker](https://github.com/weijiangan/flycheck-golangci-lint).
 5. Vim
   - vim-go open [issue](https://github.com/fatih/vim-go/issues/1841)
   - syntastic [merged pull request](https://github.com/vim-syntastic/syntastic/pull/2190) with golangci-lint support
