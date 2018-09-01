@@ -44,13 +44,15 @@ func TestGetEnabledLintersSet(t *testing.T) {
 		},
 	}
 
+	m := NewManager()
+	es := NewEnabledSet(m, &Validator{}, nil, nil)
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
 			defaultLinters := []linter.Config{}
 			for _, ln := range c.def {
-				defaultLinters = append(defaultLinters, *getLinterConfig(ln))
+				defaultLinters = append(defaultLinters, *m.getLinterConfig(ln))
 			}
-			els := getEnabledLintersSet(&c.cfg, defaultLinters)
+			els := es.build(&c.cfg, defaultLinters)
 			var enabledLinters []string
 			for ln, lc := range els {
 				assert.Equal(t, ln, lc.Linter.Name())
