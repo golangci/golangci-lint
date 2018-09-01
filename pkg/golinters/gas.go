@@ -14,17 +14,17 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-type Gas struct{}
+type Gosec struct{}
 
-func (Gas) Name() string {
-	return "gas"
+func (Gosec) Name() string {
+	return "gosec"
 }
 
-func (Gas) Desc() string {
+func (Gosec) Desc() string {
 	return "Inspects source code for security problems"
 }
 
-func (lint Gas) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issue, error) {
+func (lint Gosec) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issue, error) {
 	gasConfig := gas.NewConfig()
 	enabledRules := rules.Generate()
 	logger := log.New(ioutil.Discard, "", 0)
@@ -45,7 +45,7 @@ func (lint Gas) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issu
 		if err != nil {
 			r = &result.Range{}
 			if n, rerr := fmt.Sscanf(i.Line, "%d-%d", &r.From, &r.To); rerr != nil || n != 2 {
-				lintCtx.Log.Warnf("Can't convert gas line number %q of %v to int: %s", i.Line, i, err)
+				lintCtx.Log.Warnf("Can't convert gosec line number %q of %v to int: %s", i.Line, i, err)
 				continue
 			}
 			line = r.From

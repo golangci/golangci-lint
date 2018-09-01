@@ -56,7 +56,7 @@ var replacePatterns = []replacePattern{
 	{`^(\S+) arg list ends with redundant newline$`, "`${1}` arg list ends with redundant newline"},
 	{`^(\S+) composite literal uses unkeyed fields$`, "`${1}` composite literal uses unkeyed fields"},
 
-	// gas
+	// gosec
 	{`^Blacklisted import (\S+): weak cryptographic primitive$`,
 		"Blacklisted import `${1}`: weak cryptographic primitive"},
 	{`^TLS InsecureSkipVerify set true.$`, "TLS `InsecureSkipVerify` set true."},

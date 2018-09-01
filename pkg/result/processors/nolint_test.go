@@ -1,10 +1,12 @@
 package processors
 
 import (
+	"fmt"
 	"go/token"
 	"path/filepath"
 	"testing"
 
+	"github.com/golang/mock/gomock"
 	"github.com/golangci/golangci-lint/pkg/lint/astcache"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
@@ -27,8 +29,22 @@ func newNolint2FileIssue(line int) result.Issue {
 	return i
 }
 
+func newTestNolintProcessor(log logutils.Log) *Nolint {
+	return NewNolint(astcache.NewCache(log), log)
+}
+
+func getOkLogger(ctrl *gomock.Controller) *logutils.MockLog {
+	log := logutils.NewMockLog(ctrl)
+	log.EXPECT().Infof(gomock.Any(), gomock.Any()).AnyTimes()
+	return log
+}
+
 func TestNolint(t *testing.T) {
-	p := NewNolint(astcache.NewCache(logutils.NewStderrLog("")))
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	p := newTestNolintProcessor(getOkLogger(ctrl))
+	defer p.Finish()
 
 	// test inline comments
 	processAssertEmpty(t, p, newNolintFileIssue(3, "gofmt"))
@@ -99,7 +115,48 @@ func TestNolint(t *testing.T) {
 	for i := 15; i <= 18; i++ {
 		processAssertSame(t, p, newNolint2FileIssue(i))
 	}
+}
 
+func TestNolintInvalidLinterName(t *testing.T) {
+	fileName := filepath.Join("testdata", "nolint_bad_names.go")
+	issues := []result.Issue{
+		{
+			Pos: token.Position{
+				Filename: fileName,
+				Line:     3,
+			},
+			FromLinter: "varcheck",
+		},
+		{
+			Pos: token.Position{
+				Filename: fileName,
+				Line:     6,
+			},
+			FromLinter: "deadcode",
+		},
+	}
+
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	log := getOkLogger(ctrl)
+	log.EXPECT().Warnf("Found unknown linters in //nolint directives: %s", "bad1, bad2")
+
+	p := newTestNolintProcessor(log)
+	processAssertEmpty(t, p, issues...)
+	p.Finish()
+}
+
+func TestNolintAliases(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	p := newTestNolintProcessor(getOkLogger(ctrl))
+	for _, line := range []int{47, 49, 51} {
+		t.Run(fmt.Sprintf("line-%d", line), func(t *testing.T) {
+			processAssertEmpty(t, p, newNolintFileIssue(line, "gosec"))
+		})
+	}
+	p.Finish()
 }
 
 func TestIgnoredRangeMatches(t *testing.T) {

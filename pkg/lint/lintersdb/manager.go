@@ -15,7 +15,9 @@ func NewManager() *Manager {
 	m := &Manager{}
 	nameToLC := make(map[string]linter.Config)
 	for _, lc := range m.GetAllSupportedLinterConfigs() {
-		nameToLC[lc.Linter.Name()] = lc
+		for _, name := range lc.AllNames() {
+			nameToLC[name] = lc
+		}
 	}
 
 	m.nameToLC = nameToLC
@@ -35,7 +37,7 @@ func (m Manager) allPresetsSet() map[string]bool {
 	return ret
 }
 
-func (m Manager) getLinterConfig(name string) *linter.Config {
+func (m Manager) GetLinterConfig(name string) *linter.Config {
 	lc, ok := m.nameToLC[name]
 	if !ok {
 		return nil
@@ -87,11 +89,12 @@ func (Manager) GetAllSupportedLinterConfigs() []linter.Config {
 			WithSpeed(5).
 			WithURL("https://github.com/dominikh/go-tools/tree/master/cmd/gosimple"),
 
-		linter.NewConfig(golinters.Gas{}).
+		linter.NewConfig(golinters.Gosec{}).
 			WithFullImport().
 			WithPresets(linter.PresetBugs).
 			WithSpeed(8).
-			WithURL("https://github.com/GoASTScanner/gas"),
+			WithURL("https://github.com/securego/gosec").
+			WithAlternativeNames("gas"),
 		linter.NewConfig(golinters.Structcheck{}).
 			WithFullImport().
 			WithPresets(linter.PresetUnused).
@@ -202,7 +205,7 @@ func (Manager) GetAllSupportedLinterConfigs() []linter.Config {
 		golinters.TypeCheck{}.Name(): isLocalRun,
 	}
 	return enableLinterConfigs(lcs, func(lc *linter.Config) bool {
-		return enabled[lc.Linter.Name()]
+		return enabled[lc.Name()]
 	})
 }
 
@@ -221,7 +224,7 @@ func linterConfigsToMap(lcs []linter.Config) map[string]*linter.Config {
 	ret := map[string]*linter.Config{}
 	for _, lc := range lcs {
 		lc := lc // local copy
-		ret[lc.Linter.Name()] = &lc
+		ret[lc.Name()] = &lc
 	}
 
 	return ret

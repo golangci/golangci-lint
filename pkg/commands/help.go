@@ -33,8 +33,12 @@ func (e *Executor) initHelp() {
 
 func printLinterConfigs(lcs []linter.Config) {
 	for _, lc := range lcs {
-		fmt.Fprintf(logutils.StdOut, "%s: %s [fast: %t]\n", color.YellowString(lc.Linter.Name()),
-			lc.Linter.Desc(), !lc.DoesFullImport)
+		altNamesStr := ""
+		if len(lc.AlternativeNames) != 0 {
+			altNamesStr = fmt.Sprintf(" (%s)", strings.Join(lc.AlternativeNames, ", "))
+		}
+		fmt.Fprintf(logutils.StdOut, "%s%s: %s [fast: %t]\n", color.YellowString(lc.Name()),
+			altNamesStr, lc.Linter.Desc(), !lc.DoesFullImport)
 	}
 }
 
@@ -58,7 +62,7 @@ func (e Executor) executeLintersHelp(cmd *cobra.Command, args []string) {
 		linters := e.DBManager.GetAllLinterConfigsForPreset(p)
 		linterNames := []string{}
 		for _, lc := range linters {
-			linterNames = append(linterNames, lc.Linter.Name())
+			linterNames = append(linterNames, lc.Name())
 		}
 		fmt.Fprintf(logutils.StdOut, "%s: %s\n", color.YellowString(p), strings.Join(linterNames, ", "))
 	}

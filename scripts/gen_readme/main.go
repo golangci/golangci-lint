@@ -100,9 +100,9 @@ func getLintersListMarkdown(enabled bool) string {
 	for _, lc := range neededLcs {
 		var link string
 		if lc.OriginalURL != "" {
-			link = fmt.Sprintf("[%s](%s)", lc.Linter.Name(), lc.OriginalURL)
+			link = fmt.Sprintf("[%s](%s)", lc.Name(), lc.OriginalURL)
 		} else {
-			link = lc.Linter.Name()
+			link = lc.Name()
 		}
 		line := fmt.Sprintf("- %s - %s", link, lc.Linter.Desc())
 		lines = append(lines, line)

@@ -20,7 +20,7 @@ func (p Cgo) Name() string {
 
 func (p Cgo) Process(issues []result.Issue) ([]result.Issue, error) {
 	return filterIssues(issues, func(i *result.Issue) bool {
-		// some linters (.e.g gas, deadcode) return incorrect filepaths for cgo issues,
+		// some linters (.e.g gosec, deadcode) return incorrect filepaths for cgo issues,
 		// it breaks next processing, so skip them
 		return !goutils.IsCgoFilename(i.FilePath())
 	}), nil

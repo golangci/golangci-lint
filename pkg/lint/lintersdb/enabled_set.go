@@ -43,7 +43,7 @@ func (es EnabledSet) build(lcfg *config.Linters, enabledByDefaultLinters []linte
 	for _, p := range lcfg.Presets {
 		for _, lc := range es.m.GetAllLinterConfigsForPreset(p) {
 			lc := lc
-			resultLintersSet[lc.Linter.Name()] = &lc
+			resultLintersSet[lc.Name()] = &lc
 		}
 	}
 
@@ -52,14 +52,16 @@ func (es EnabledSet) build(lcfg *config.Linters, enabledByDefaultLinters []linte
 	// It should be before --enable and --disable to be able to enable or disable specific linter.
 	if lcfg.Fast {
 		for name := range resultLintersSet {
-			if es.m.getLinterConfig(name).DoesFullImport {
+			if es.m.GetLinterConfig(name).DoesFullImport {
 				delete(resultLintersSet, name)
 			}
 		}
 	}
 
 	for _, name := range lcfg.Enable {
-		resultLintersSet[name] = es.m.getLinterConfig(name)
+		lc := es.m.GetLinterConfig(name)
+		// it's important to use lc.Name() nor name because name can be alias
+		resultLintersSet[lc.Name()] = lc
 	}
 
 	for _, name := range lcfg.Disable {
@@ -68,7 +70,10 @@ func (es EnabledSet) build(lcfg *config.Linters, enabledByDefaultLinters []linte
 				delete(resultLintersSet, ln)
 			}
 		}
-		delete(resultLintersSet, name)
+
+		lc := es.m.GetLinterConfig(name)
+		// it's important to use lc.Name() nor name because name can be alias
+		delete(resultLintersSet, lc.Name())
 	}
 
 	es.optimizeLintersSet(resultLintersSet)
@@ -111,7 +116,7 @@ func (es EnabledSet) optimizeLintersSet(linters map[string]*linter.Config) {
 		delete(linters, n)
 	}
 
-	lc := *es.m.getLinterConfig("megacheck")
+	lc := *es.m.GetLinterConfig("megacheck")
 	lc.Linter = mega
 	linters[mega.Name()] = &lc
 }
@@ -135,7 +140,7 @@ func (es EnabledSet) Get() ([]linter.Config, error) {
 func (es EnabledSet) verbosePrintLintersStatus(lcs []linter.Config) {
 	var linterNames []string
 	for _, lc := range lcs {
-		linterNames = append(linterNames, lc.Linter.Name())
+		linterNames = append(linterNames, lc.Name())
 	}
 	sort.StringSlice(linterNames).Sort()
 	es.log.Infof("Active %d linters: %s", len(linterNames), linterNames)

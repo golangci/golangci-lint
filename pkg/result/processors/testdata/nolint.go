@@ -43,3 +43,9 @@ func nolintFuncByPrecedingMultilineComment3() *string {
 	xv := "v"
 	return &xv
 }
+
+var nolintAliasGAS bool //nolint:gas
+
+var nolintAliasGosec bool //nolint:gosec
+
+var nolintAliasUpperCase int // nolint: GAS

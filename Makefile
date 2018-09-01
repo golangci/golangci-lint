@@ -14,6 +14,9 @@ assets:
 readme:
 	go run ./scripts/gen_readme/main.go
 
+gen:
+	go generate ./...
+
 check_generated:
 	make readme && git diff --exit-code # check no changes
 

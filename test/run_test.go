@@ -173,13 +173,13 @@ func getEnabledByDefaultFastLintersExcept(except ...string) []string {
 	m := lintersdb.NewManager()
 	ebdl := m.GetAllEnabledByDefaultLinters()
 	ret := []string{}
-	for _, linter := range ebdl {
-		if linter.DoesFullImport {
+	for _, lc := range ebdl {
+		if lc.DoesFullImport {
 			continue
 		}
 
-		if !inSlice(except, linter.Linter.Name()) {
-			ret = append(ret, linter.Linter.Name())
+		if !inSlice(except, lc.Name()) {
+			ret = append(ret, lc.Name())
 		}
 	}
 
@@ -189,11 +189,11 @@ func getEnabledByDefaultFastLintersExcept(except ...string) []string {
 func getAllFastLintersWith(with ...string) []string {
 	linters := lintersdb.NewManager().GetAllSupportedLinterConfigs()
 	ret := append([]string{}, with...)
-	for _, linter := range linters {
-		if linter.DoesFullImport {
+	for _, lc := range linters {
+		if lc.DoesFullImport {
 			continue
 		}
-		ret = append(ret, linter.Linter.Name())
+		ret = append(ret, lc.Name())
 	}
 
 	return ret
@@ -202,8 +202,8 @@ func getAllFastLintersWith(with ...string) []string {
 func getEnabledByDefaultLinters() []string {
 	ebdl := lintersdb.NewManager().GetAllEnabledByDefaultLinters()
 	ret := []string{}
-	for _, linter := range ebdl {
-		ret = append(ret, linter.Linter.Name())
+	for _, lc := range ebdl {
+		ret = append(ret, lc.Name())
 	}
 
 	return ret
@@ -212,12 +212,12 @@ func getEnabledByDefaultLinters() []string {
 func getEnabledByDefaultFastLintersWith(with ...string) []string {
 	ebdl := lintersdb.NewManager().GetAllEnabledByDefaultLinters()
 	ret := append([]string{}, with...)
-	for _, linter := range ebdl {
-		if linter.DoesFullImport {
+	for _, lc := range ebdl {
+		if lc.DoesFullImport {
 			continue
 		}
 
-		ret = append(ret, linter.Linter.Name())
+		ret = append(ret, lc.Name())
 	}
 
 	return ret
@@ -372,8 +372,7 @@ func TestGovetInFastMode(t *testing.T) {
 }
 
 func TestEnabledPresetsAreNotDuplicated(t *testing.T) {
-	out, ec := runGolangciLint(t, "--no-config", "-v", "-p", "style,bugs")
-	assert.Equal(t, exitcodes.Success, ec)
+	out, _ := runGolangciLint(t, "--no-config", "-v", "-p", "style,bugs")
 	assert.Contains(t, out, "Active presets: [bugs style]")
 }
 

@@ -42,6 +42,41 @@ func TestGetEnabledLintersSet(t *testing.T) {
 			def:  []string{"gofmt", "govet"},
 			exp:  []string{"gofmt", "govet"},
 		},
+		{
+			name: "enable gosec by gas alias",
+			cfg: config.Linters{
+				Enable: []string{"gas"},
+			},
+			exp: []string{"gosec"},
+		},
+		{
+			name: "enable gosec by primary name",
+			cfg: config.Linters{
+				Enable: []string{"gosec"},
+			},
+			exp: []string{"gosec"},
+		},
+		{
+			name: "enable gosec by both names",
+			cfg: config.Linters{
+				Enable: []string{"gosec", "gas"},
+			},
+			exp: []string{"gosec"},
+		},
+		{
+			name: "disable gosec by gas alias",
+			cfg: config.Linters{
+				Disable: []string{"gas"},
+			},
+			def: []string{"gosec"},
+		},
+		{
+			name: "disable gosec by primary name",
+			cfg: config.Linters{
+				Disable: []string{"gosec"},
+			},
+			def: []string{"gosec"},
+		},
 	}
 
 	m := NewManager()
@@ -50,12 +85,12 @@ func TestGetEnabledLintersSet(t *testing.T) {
 		t.Run(c.name, func(t *testing.T) {
 			defaultLinters := []linter.Config{}
 			for _, ln := range c.def {
-				defaultLinters = append(defaultLinters, *m.getLinterConfig(ln))
+				defaultLinters = append(defaultLinters, *m.GetLinterConfig(ln))
 			}
 			els := es.build(&c.cfg, defaultLinters)
 			var enabledLinters []string
 			for ln, lc := range els {
-				assert.Equal(t, ln, lc.Linter.Name())
+				assert.Equal(t, ln, lc.Name())
 				enabledLinters = append(enabledLinters, ln)
 			}
 
