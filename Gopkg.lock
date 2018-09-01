@@ -3,18 +3,6 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:b03d8c3ef961bcfbdc5ec25b2d667e10d91d5325d38707ca6655d81b8bb96a30"
-  name = "github.com/GoASTScanner/gas"
-  packages = [
-    ".",
-    "rules",
-  ]
-  pruneopts = "UT"
-  revision = "a9de4d6c1589158e002cc336c495bf11fbf3ea06"
-  source = "github.com/golangci/gas"
-
-[[projects]]
-  branch = "master"
   digest = "1:da6b9c16fb5e97523f153981486c7541cf36543be2f246e258973d8e58a801dc"
   name = "github.com/OpenPeeDeeP/depguard"
   packages = ["."]
@@ -99,6 +87,14 @@
   version = "v1.0.0"
 
 [[projects]]
+  digest = "1:bc38c7c481812e178d85160472e231c5e1c9a7f5845d67e23ee4e706933c10d8"
+  name = "github.com/golang/mock"
+  packages = ["gomock"]
+  pruneopts = "UT"
+  revision = "c34cdb4725f4c3844d095133c6e40e448b86589b"
+  version = "v1.1.1"
+
+[[projects]]
   branch = "master"
   digest = "1:c173565780edcf5d43c5f983be0e9085266764465422d4ad230355abd2e0d252"
   name = "github.com/golangci/check"
@@ -143,6 +139,17 @@
   ]
   pruneopts = "UT"
   revision = "2076e05ced53480baa8ba14a05b80a415bec9377"
+
+[[projects]]
+  branch = "master"
+  digest = "1:bf573d0637989470dee90e11a6ea87b5de1ddb7a435334b80656b0df05b0630b"
+  name = "github.com/golangci/gosec"
+  packages = [
+    ".",
+    "rules",
+  ]
+  pruneopts = "UT"
+  revision = "8afd9cbb6cfb34a3b4d4d5711bafdc6640ae892f"
 
 [[projects]]
   branch = "master"
@@ -452,6 +459,14 @@
 
 [[projects]]
   branch = "master"
+  digest = "1:76ee51c3f468493aff39dbacc401e8831fbb765104cbf613b89bef01cf4bad70"
+  name = "golang.org/x/net"
+  packages = ["context"]
+  pruneopts = "UT"
+  revision = "8a410e7b638dca158bf9e766925842f6651ff828"
+
+[[projects]]
+  branch = "master"
   digest = "1:f188849a07aed244639654388dc775da034b17dab0890485e1e75c28e7a053ff"
   name = "golang.org/x/sys"
   packages = [
@@ -574,11 +589,10 @@
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
-    "github.com/GoASTScanner/gas",
-    "github.com/GoASTScanner/gas/rules",
     "github.com/OpenPeeDeeP/depguard",
     "github.com/client9/misspell",
     "github.com/fatih/color",
+    "github.com/golang/mock/gomock",
     "github.com/golangci/check/cmd/structcheck",
     "github.com/golangci/check/cmd/varcheck",
     "github.com/golangci/go-misc/deadcode",
@@ -586,6 +600,8 @@
     "github.com/golangci/gocyclo/pkg/gocyclo",
     "github.com/golangci/gofmt/gofmt",
     "github.com/golangci/gofmt/goimports",
+    "github.com/golangci/gosec",
+    "github.com/golangci/gosec/rules",
     "github.com/golangci/govet",
     "github.com/golangci/ineffassign",
     "github.com/golangci/lint-1",
