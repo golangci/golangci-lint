@@ -1,0 +1,19 @@
+language: go
+
+go:
+  - 1.9
+  - "1.10"
+  - tip
+
+install:
+  - go get -u github.com/golang/dep/cmd/dep
+  - go get -u github.com/golang/lint/golint
+  - go get -u github.com/onsi/ginkgo/ginkgo
+  - go get -u github.com/onsi/gomega
+  - go get -u golang.org/x/crypto/ssh
+  - go get -u github.com/golangci/gosec/cmd/gosec/...
+  - go get -v -t ./...
+  - export PATH=$PATH:$HOME/gopath/bin
+
+script: make test
+

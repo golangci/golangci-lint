@@ -8,10 +8,10 @@ import (
 	"log"
 	"strconv"
 
-	"github.com/GoASTScanner/gas"
-	"github.com/GoASTScanner/gas/rules"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
+	"github.com/golangci/gosec"
+	"github.com/golangci/gosec/rules"
 )
 
 type Gosec struct{}
@@ -25,10 +25,10 @@ func (Gosec) Desc() string {
 }
 
 func (lint Gosec) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issue, error) {
-	gasConfig := gas.NewConfig()
+	gasConfig := gosec.NewConfig()
 	enabledRules := rules.Generate()
 	logger := log.New(ioutil.Discard, "", 0)
-	analyzer := gas.NewAnalyzer(gasConfig, logger)
+	analyzer := gosec.NewAnalyzer(gasConfig, logger)
 	analyzer.LoadRules(enabledRules.Builders())
 
 	analyzer.ProcessProgram(lintCtx.Program)

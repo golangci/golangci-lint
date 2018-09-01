@@ -29,11 +29,6 @@
   branch = "fix-crash-on-nil-constant"
   source = "github.com/golangci/unparam"
 
-[[constraint]]
-  name = "github.com/GoASTScanner/gas"
-  branch = "master"
-  source = "github.com/golangci/gas"
-
 [prune]
   go-tests = true
   unused-packages = true
