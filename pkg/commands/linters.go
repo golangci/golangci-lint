@@ -20,8 +20,8 @@ func (e *Executor) initLinters() {
 }
 
 func IsLinterInConfigsList(name string, linters []linter.Config) bool {
-	for _, linter := range linters {
-		if linter.Linter.Name() == name {
+	for _, lc := range linters {
+		if lc.Name() == name {
 			return true
 		}
 	}
@@ -40,7 +40,7 @@ func (e *Executor) executeLinters(cmd *cobra.Command, args []string) {
 
 	var disabledLCs []linter.Config
 	for _, lc := range e.DBManager.GetAllSupportedLinterConfigs() {
-		if !IsLinterInConfigsList(lc.Linter.Name(), enabledLCs) {
+		if !IsLinterInConfigsList(lc.Name(), enabledLCs) {
 			disabledLCs = append(disabledLCs, lc)
 		}
 	}

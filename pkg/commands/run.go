@@ -238,23 +238,23 @@ func fixSlicesFlags(fs *pflag.FlagSet) {
 func (e *Executor) runAnalysis(ctx context.Context, args []string) (<-chan result.Issue, error) {
 	e.cfg.Run.Args = args
 
-	linters, err := e.EnabledLintersSet.Get()
+	enabledLinters, err := e.EnabledLintersSet.Get()
 	if err != nil {
 		return nil, err
 	}
 
 	for _, lc := range e.DBManager.GetAllSupportedLinterConfigs() {
 		isEnabled := false
-		for _, linter := range linters {
-			if linter.Linter.Name() == lc.Linter.Name() {
+		for _, enabledLC := range enabledLinters {
+			if enabledLC.Name() == lc.Name() {
 				isEnabled = true
 				break
 			}
 		}
-		e.reportData.AddLinter(lc.Linter.Name(), isEnabled, lc.EnabledByDefault)
+		e.reportData.AddLinter(lc.Name(), isEnabled, lc.EnabledByDefault)
 	}
 
-	lintCtx, err := lint.LoadContext(linters, e.cfg, e.log.Child("load"))
+	lintCtx, err := lint.LoadContext(enabledLinters, e.cfg, e.log.Child("load"))
 	if err != nil {
 		return nil, errors.Wrap(err, "context loading failed")
 	}
@@ -264,7 +264,7 @@ func (e *Executor) runAnalysis(ctx context.Context, args []string) (<-chan resul
 		return nil, err
 	}
 
-	return runner.Run(ctx, linters, lintCtx), nil
+	return runner.Run(ctx, enabledLinters, lintCtx), nil
 }
 
 func (e *Executor) setOutputToDevNull() (savedStdout, savedStderr *os.File) {

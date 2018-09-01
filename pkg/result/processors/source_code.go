@@ -43,7 +43,7 @@ func (p SourceCode) Process(issues []result.Issue) ([]result.Issue, error) {
 		lineRange := i.GetLineRange()
 		var lineStr string
 		for line := lineRange.From; line <= lineRange.To; line++ {
-			if line == 0 { // some linters, e.g. gas can do it: it really means first line
+			if line == 0 { // some linters, e.g. gosec can do it: it really means first line
 				line = 1
 			}
 

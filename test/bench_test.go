@@ -56,7 +56,7 @@ func getBenchLintersArgsNoMegacheck() []string {
 		"--enable=interfacer",
 		"--enable=unconvert",
 		"--enable=goconst",
-		"--enable=gas",
+		"--enable=gosec",
 	}
 }
 

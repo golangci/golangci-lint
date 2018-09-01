@@ -45,31 +45,6 @@ var DefaultExcludePatterns = []ExcludePattern{
 		Why:     "False positive when tests are defined in package 'test'",
 	},
 	{
-		Pattern: "Use of unsafe calls should be audited",
-		Linter:  "gas",
-		Why:     "Too many false-positives on 'unsafe' usage",
-	},
-	{
-		Pattern: "Subprocess launch(ed with variable|ing should be audited)",
-		Linter:  "gas",
-		Why:     "Too many false-positives for parametrized shell calls",
-	},
-	{
-		Pattern: "G104",
-		Linter:  "gas",
-		Why:     "Duplicated errcheck checks",
-	},
-	{
-		Pattern: "(Expect directory permissions to be 0750 or less|Expect file permissions to be 0600 or less)",
-		Linter:  "gas",
-		Why:     "Too many issues in popular repos",
-	},
-	{
-		Pattern: "Potential file inclusion via variable",
-		Linter:  "gas",
-		Why:     "False positive is triggered by 'src, err := ioutil.ReadFile(filename)'",
-	},
-	{
 		Pattern: "(possible misuse of unsafe.Pointer|should have signature)",
 		Linter:  "govet",
 		Why:     "Common false positives",

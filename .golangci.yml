@@ -26,3 +26,4 @@ linters:
   disable:
     - maligned
     - prealloc
+    - gosec

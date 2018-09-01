@@ -27,9 +27,9 @@ import (
 var loadDebugf = logutils.Debug("load")
 
 func isFullImportNeeded(linters []linter.Config, cfg *config.Config) bool {
-	for _, linter := range linters {
-		if linter.NeedsProgramLoading() {
-			if linter.Linter.Name() == "govet" && cfg.LintersSettings.Govet.UseInstalledPackages {
+	for _, lc := range linters {
+		if lc.NeedsProgramLoading() {
+			if lc.Name() == "govet" && cfg.LintersSettings.Govet.UseInstalledPackages {
 				// TODO: remove this hack
 				continue
 			}

@@ -4,7 +4,10 @@ import (
 	"fmt"
 	"go/ast"
 	"go/token"
+	"sort"
 	"strings"
+
+	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
 
 	"github.com/golangci/golangci-lint/pkg/lint/astcache"
 	"github.com/golangci/golangci-lint/pkg/logutils"
@@ -28,8 +31,8 @@ func (i *ignoredRange) doesMatch(issue *result.Issue) bool {
 		return true
 	}
 
-	for _, l := range i.linters {
-		if l == issue.FromLinter {
+	for _, linterName := range i.linters {
+		if linterName == issue.FromLinter {
 			return true
 		}
 	}
@@ -44,14 +47,21 @@ type fileData struct {
 type filesCache map[string]*fileData
 
 type Nolint struct {
-	cache    filesCache
-	astCache *astcache.Cache
+	cache     filesCache
+	astCache  *astcache.Cache
+	dbManager *lintersdb.Manager
+	log       logutils.Log
+
+	unknownLintersSet map[string]bool
 }
 
-func NewNolint(astCache *astcache.Cache) *Nolint {
+func NewNolint(astCache *astcache.Cache, log logutils.Log) *Nolint {
 	return &Nolint{
-		cache:    filesCache{},
-		astCache: astCache,
+		cache:             filesCache{},
+		astCache:          astCache,
+		dbManager:         lintersdb.NewManager(), // TODO: get it in constructor
+		log:               log,
+		unknownLintersSet: map[string]bool{},
 	}
 }
 
@@ -79,13 +89,13 @@ func (p *Nolint) getOrCreateFileData(i *result.Issue) (*fileData, error) {
 		return nil, fmt.Errorf("can't parse file %s: %s", i.FilePath(), file.Err)
 	}
 
-	fd.ignoredRanges = buildIgnoredRangesForFile(file.F, file.Fset, i.FilePath())
+	fd.ignoredRanges = p.buildIgnoredRangesForFile(file.F, file.Fset, i.FilePath())
 	nolintDebugf("file %s: built nolint ranges are %+v", i.FilePath(), fd.ignoredRanges)
 	return fd, nil
 }
 
-func buildIgnoredRangesForFile(f *ast.File, fset *token.FileSet, filePath string) []ignoredRange {
-	inlineRanges := extractFileCommentsInlineRanges(fset, f.Comments...)
+func (p *Nolint) buildIgnoredRangesForFile(f *ast.File, fset *token.FileSet, filePath string) []ignoredRange {
+	inlineRanges := p.extractFileCommentsInlineRanges(fset, f.Comments...)
 	nolintDebugf("file %s: inline nolint ranges are %+v", filePath, inlineRanges)
 
 	if len(inlineRanges) == 0 {
@@ -158,7 +168,7 @@ func (e *rangeExpander) Visit(node ast.Node) ast.Visitor {
 	return e
 }
 
-func extractFileCommentsInlineRanges(fset *token.FileSet, comments ...*ast.CommentGroup) []ignoredRange {
+func (p *Nolint) extractFileCommentsInlineRanges(fset *token.FileSet, comments ...*ast.CommentGroup) []ignoredRange {
 	var ret []ignoredRange
 	for _, g := range comments {
 		for _, c := range g.List {
@@ -173,10 +183,16 @@ func extractFileCommentsInlineRanges(fset *token.FileSet, comments ...*ast.Comme
 				text = strings.Split(text, "//")[0] // allow another comment after this comment
 				linterItems := strings.Split(strings.TrimPrefix(text, "nolint:"), ",")
 				for _, linter := range linterItems {
-					linterName := strings.TrimSpace(linter) // TODO: validate it here
-					linters = append(linters, linterName)
+					linterName := strings.ToLower(strings.TrimSpace(linter))
+					lc := p.dbManager.GetLinterConfig(linterName)
+					if lc == nil {
+						p.unknownLintersSet[linterName] = true
+						continue
+					}
+					linters = append(linters, lc.Name()) // normalize name to work with aliases
 				}
 			} // else ignore all linters
+			nolintDebugf("%d: linters are %s", fset.Position(g.Pos()).Line, linters)
 
 			pos := fset.Position(g.Pos())
 			ret = append(ret, ignoredRange{
@@ -193,4 +209,16 @@ func extractFileCommentsInlineRanges(fset *token.FileSet, comments ...*ast.Comme
 	return ret
 }
 
-func (p Nolint) Finish() {}
+func (p Nolint) Finish() {
+	if len(p.unknownLintersSet) == 0 {
+		return
+	}
+
+	unknownLinters := []string{}
+	for name := range p.unknownLintersSet {
+		unknownLinters = append(unknownLinters, name)
+	}
+	sort.Strings(unknownLinters)
+
+	p.log.Warnf("Found unknown linters in //nolint directives: %s", strings.Join(unknownLinters, ", "))
+}

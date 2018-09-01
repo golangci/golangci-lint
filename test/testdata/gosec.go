@@ -1,4 +1,4 @@
-// args: -Egas
+// args: -Egosec
 package testdata
 
 import (
@@ -6,7 +6,7 @@ import (
 	"log"
 )
 
-func Gas() {
+func Gosec() {
 	h := md5.New() // ERROR "G401: Use of weak cryptographic primitive"
 	log.Print(h)
 }
