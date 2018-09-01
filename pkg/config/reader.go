@@ -5,26 +5,24 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/golangci/golangci-lint/pkg/fsutils"
 	"github.com/golangci/golangci-lint/pkg/logutils"
-	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 )
 
-type FlagSetInit func(fs *pflag.FlagSet, cfg *Config)
-
 type FileReader struct {
-	log         logutils.Log
-	cfg         *Config
-	flagSetInit FlagSetInit
+	log            logutils.Log
+	cfg            *Config
+	commandLineCfg *Config
 }
 
-func NewFileReader(toCfg *Config, log logutils.Log, flagSetInit FlagSetInit) *FileReader {
+func NewFileReader(toCfg, commandLineCfg *Config, log logutils.Log) *FileReader {
 	return &FileReader{
-		log:         log,
-		cfg:         toCfg,
-		flagSetInit: flagSetInit,
+		log:            log,
+		cfg:            toCfg,
+		commandLineCfg: commandLineCfg,
 	}
 }
 
@@ -33,9 +31,9 @@ func (r *FileReader) Read() error {
 	// 1. to access "config" option here.
 	// 2. to give config less priority than command line.
 
-	configFile, restArgs, err := r.parseConfigOption()
+	configFile, err := r.parseConfigOption()
 	if err != nil {
-		if err == errConfigDisabled || err == pflag.ErrHelp {
+		if err == errConfigDisabled {
 			return nil
 		}
 
@@ -45,7 +43,7 @@ func (r *FileReader) Read() error {
 	if configFile != "" {
 		viper.SetConfigFile(configFile)
 	} else {
-		r.setupConfigFileSearch(restArgs)
+		r.setupConfigFileSearch()
 	}
 
 	return r.parseConfig()
@@ -108,7 +106,9 @@ func (r *FileReader) validateConfig() error {
 	return nil
 }
 
-func (r *FileReader) setupConfigFileSearch(args []string) {
+func getFirstPathArg() string {
+	args := os.Args
+
 	// skip all args ([golangci-lint, run/linters]) before files/dirs list
 	for len(args) != 0 {
 		if args[0] == "run" {
@@ -121,10 +121,18 @@ func (r *FileReader) setupConfigFileSearch(args []string) {
 
 	// find first file/dir arg
 	firstArg := "./..."
-	if len(args) != 0 {
-		firstArg = args[0]
+	for _, arg := range args {
+		if !strings.HasPrefix(arg, "-") {
+			firstArg = arg
+			break
+		}
 	}
 
+	return firstArg
+}
+
+func (r *FileReader) setupConfigFileSearch() {
+	firstArg := getFirstPathArg()
 	absStartPath, err := filepath.Abs(firstArg)
 	if err != nil {
 		r.log.Warnf("Can't make abs path for %q: %s", firstArg, err)
@@ -159,34 +167,20 @@ func (r *FileReader) setupConfigFileSearch(args []string) {
 
 var errConfigDisabled = errors.New("config is disabled by --no-config")
 
-func (r *FileReader) parseConfigOption() (string, []string, error) {
-	// We use another pflag.FlagSet here to not set `changed` flag
-	// on cmd.Flags() options. Otherwise string slice options will be duplicated.
-	fs := pflag.NewFlagSet("config flag set", pflag.ContinueOnError)
-
-	var cfg Config
-	r.flagSetInit(fs, &cfg)
-
-	fs.Usage = func() {} // otherwise help text will be printed twice
-	if err := fs.Parse(os.Args); err != nil {
-		if err == pflag.ErrHelp {
-			return "", nil, err
-		}
-
-		return "", nil, fmt.Errorf("can't parse args: %s", err)
+func (r *FileReader) parseConfigOption() (string, error) {
+	cfg := r.commandLineCfg
+	if cfg == nil {
+		return "", nil
 	}
-
-	// for `-v` to work until running of preRun function
-	logutils.SetupVerboseLog(r.log, cfg.Run.IsVerbose)
 
 	configFile := cfg.Run.Config
 	if cfg.Run.NoConfig && configFile != "" {
-		return "", nil, fmt.Errorf("can't combine option --config and --no-config")
+		return "", fmt.Errorf("can't combine option --config and --no-config")
 	}
 
 	if cfg.Run.NoConfig {
-		return "", nil, errConfigDisabled
+		return "", errConfigDisabled
 	}
 
-	return configFile, fs.Args(), nil
+	return configFile, nil
 }

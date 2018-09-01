@@ -129,7 +129,6 @@ func (es EnabledSet) Get() ([]linter.Config, error) {
 	}
 
 	es.verbosePrintLintersStatus(resultLinters)
-
 	return resultLinters, nil
 }
 

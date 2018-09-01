@@ -89,7 +89,7 @@ func buildTemplateContext() (map[string]interface{}, error) {
 
 func getLintersListMarkdown(enabled bool) string {
 	var neededLcs []linter.Config
-	lcs := lintersdb.GetAllSupportedLinterConfigs()
+	lcs := lintersdb.NewManager().GetAllSupportedLinterConfigs()
 	for _, lc := range lcs {
 		if lc.EnabledByDefault == enabled {
 			neededLcs = append(neededLcs, lc)
@@ -114,7 +114,7 @@ func getLintersListMarkdown(enabled bool) string {
 func getThanksList() string {
 	var lines []string
 	addedAuthors := map[string]bool{}
-	for _, lc := range lintersdb.GetAllSupportedLinterConfigs() {
+	for _, lc := range lintersdb.NewManager().GetAllSupportedLinterConfigs() {
 		if lc.OriginalURL == "" {
 			continue
 		}

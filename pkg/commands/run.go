@@ -168,42 +168,48 @@ func (e *Executor) initRunConfiguration(cmd *cobra.Command) {
 	fs := cmd.Flags()
 	fs.SortFlags = false // sort them as they are defined here
 	initFlagSet(fs, e.cfg, e.DBManager)
+}
 
-	// init e.cfg by values from config: flags parse will see these values
-	// like the default ones. It will overwrite them only if the same option
-	// is found in command-line: it's ok, command-line has higher priority.
+func (e Executor) getConfigForCommandLine() (*config.Config, error) {
+	// We use another pflag.FlagSet here to not set `changed` flag
+	// on cmd.Flags() options. Otherwise string slice options will be duplicated.
+	fs := pflag.NewFlagSet("config flag set", pflag.ContinueOnError)
 
-	r := config.NewFileReader(e.cfg, e.log.Child("config_reader"), func(fs *pflag.FlagSet, cfg *config.Config) {
-		// Don't do `fs.AddFlagSet(cmd.Flags())` because it shares flags representations:
-		// `changed` variable inside string slice vars will be shared.
-		// Use another config variable here, not e.cfg, to not
-		// affect main parsing by this parsing of only config option.
-		initFlagSet(fs, cfg, e.DBManager)
+	var cfg config.Config
+	// Don't do `fs.AddFlagSet(cmd.Flags())` because it shares flags representations:
+	// `changed` variable inside string slice vars will be shared.
+	// Use another config variable here, not e.cfg, to not
+	// affect main parsing by this parsing of only config option.
+	initFlagSet(fs, &cfg, e.DBManager)
 
-		// Parse max options, even force version option: don't want
-		// to get access to Executor here: it's error-prone to use
-		// cfg vs e.cfg.
-		initRootFlagSet(fs, cfg, true)
-	})
-	if err := r.Read(); err != nil {
-		e.log.Fatalf("Can't read config: %s", err)
+	// Parse max options, even force version option: don't want
+	// to get access to Executor here: it's error-prone to use
+	// cfg vs e.cfg.
+	initRootFlagSet(fs, &cfg, true)
+
+	fs.Usage = func() {} // otherwise help text will be printed twice
+	if err := fs.Parse(os.Args); err != nil {
+		if err == pflag.ErrHelp {
+			return nil, err
+		}
+
+		return nil, fmt.Errorf("can't parse args: %s", err)
 	}
 
-	// Slice options must be explicitly set for proper merging of config and command-line options.
-	fixSlicesFlags(fs)
+	return &cfg, nil
 }
 
 func (e *Executor) initRun() {
-	var runCmd = &cobra.Command{
+	e.runCmd = &cobra.Command{
 		Use:   "run",
 		Short: welcomeMessage,
 		Run:   e.executeRun,
 	}
-	e.rootCmd.AddCommand(runCmd)
+	e.rootCmd.AddCommand(e.runCmd)
 
-	runCmd.SetOutput(logutils.StdOut) // use custom output to properly color it in Windows terminals
+	e.runCmd.SetOutput(logutils.StdOut) // use custom output to properly color it in Windows terminals
 
-	e.initRunConfiguration(runCmd)
+	e.initRunConfiguration(e.runCmd)
 }
 
 func fixSlicesFlags(fs *pflag.FlagSet) {
