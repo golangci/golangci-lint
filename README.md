@@ -112,7 +112,7 @@ $ golangci-lint help linters
 ...
 Disabled by default linters:
 golint: Golint differs from gofmt. Gofmt reformats Go source code, whereas golint prints out style mistakes [fast: true]
-gas: Inspects source code for security problems [fast: false]
+gosec (gas): Inspects source code for security problems [fast: false]
 interfacer: Linter that suggests narrower interface types [fast: false]
 unconvert: Remove unnecessary type conversions [fast: false]
 dupl: Tool for code clone detection [fast: true]
@@ -193,12 +193,12 @@ We compare golangci-lint and gometalinter in default mode, but explicitly enable
 $ golangci-lint run --no-config --issues-exit-code=0 --deadline=30m \
 	--disable-all --enable=deadcode  --enable=gocyclo --enable=golint --enable=varcheck \
 	--enable=structcheck --enable=maligned --enable=errcheck --enable=dupl --enable=ineffassign \
-	--enable=interfacer --enable=unconvert --enable=goconst --enable=gas --enable=megacheck
+	--enable=interfacer --enable=unconvert --enable=goconst --enable=gosec --enable=megacheck
 $ gometalinter --deadline=30m --vendor --cyclo-over=30 --dupl-threshold=150 \
 	--exclude=<defaul golangci-lint excludes> --skip=testdata --skip=builtin \
 	--disable-all --enable=deadcode  --enable=gocyclo --enable=golint --enable=varcheck \
 	--enable=structcheck --enable=maligned --enable=errcheck --enable=dupl --enable=ineffassign \
-	--enable=interfacer --enable=unconvert --enable=goconst --enable=gas --enable=megacheck
+	--enable=interfacer --enable=unconvert --enable=goconst --enable=gosec --enable=megacheck
 	./...
 ```
 
@@ -301,7 +301,7 @@ golangci-lint help linters
 
 ## Disabled By Default Linters (`-E/--enable`)
 - [golint](https://github.com/golang/lint) - Golint differs from gofmt. Gofmt reformats Go source code, whereas golint prints out style mistakes
-- [gas](https://github.com/GoASTScanner/gas) - Inspects source code for security problems
+- [gosec](https://github.com/securego/gosec) - Inspects source code for security problems
 - [interfacer](https://github.com/mvdan/interfacer) - Linter that suggests narrower interface types
 - [unconvert](https://github.com/mdempsky/unconvert) - Remove unnecessary type conversions
 - [dupl](https://github.com/mibk/dupl) - Tool for code clone detection
@@ -363,21 +363,6 @@ Flags:
                                     
                                       # golint: False positive when tests are defined in package 'test'
                                       - func name will be used as test\.Test.* by other packages, and that stutters; consider calling this
-                                    
-                                      # gas: Too many false-positives on 'unsafe' usage
-                                      - Use of unsafe calls should be audited
-                                    
-                                      # gas: Too many false-positives for parametrized shell calls
-                                      - Subprocess launch(ed with variable|ing should be audited)
-                                    
-                                      # gas: Duplicated errcheck checks
-                                      - G104
-                                    
-                                      # gas: Too many issues in popular repos
-                                      - (Expect directory permissions to be 0750 or less|Expect file permissions to be 0600 or less)
-                                    
-                                      # gas: False positive is triggered by 'src, err := ioutil.ReadFile(filename)'
-                                      - Potential file inclusion via variable
                                     
                                       # govet: Common false positives
                                       - (possible misuse of unsafe.Pointer|should have signature)
@@ -643,6 +628,7 @@ linters:
   disable:
     - maligned
     - prealloc
+    - gosec
 ```
 
 # False Positives
@@ -698,7 +684,7 @@ Thanks to developers and authors of used linters:
 - [kisielk](https://github.com/kisielk)
 - [golang](https://github.com/golang)
 - [dominikh](https://github.com/dominikh)
-- [GoASTScanner](https://github.com/GoASTScanner)
+- [securego](https://github.com/securego)
 - [opennota](https://github.com/opennota)
 - [mvdan](https://github.com/mvdan)
 - [mdempsky](https://github.com/mdempsky)
