@@ -2,6 +2,7 @@ package commands
 
 import (
 	"github.com/golangci/golangci-lint/pkg/config"
+	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/report"
 	"github.com/spf13/cobra"
@@ -10,15 +11,14 @@ import (
 type Executor struct {
 	rootCmd *cobra.Command
 
-	cfg *config.Config
-
-	exitCode int
-
+	exitCode              int
 	version, commit, date string
 
-	log logutils.Log
-
-	reportData report.Data
+	cfg               *config.Config
+	log               logutils.Log
+	reportData        report.Data
+	DBManager         *lintersdb.Manager
+	EnabledLintersSet *lintersdb.EnabledSet
 }
 
 func NewExecutor(version, commit, date string) *Executor {
@@ -30,6 +30,9 @@ func NewExecutor(version, commit, date string) *Executor {
 	}
 
 	e.log = report.NewLogWrapper(logutils.NewStderrLog(""), &e.reportData)
+	e.DBManager = lintersdb.NewManager()
+	e.EnabledLintersSet = lintersdb.NewEnabledSet(e.DBManager, &lintersdb.Validator{},
+		e.log.Child("lintersdb"), e.cfg)
 
 	e.initRoot()
 	e.initRun()

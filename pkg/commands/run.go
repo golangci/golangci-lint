@@ -40,7 +40,7 @@ func wh(text string) string {
 	return color.GreenString(text)
 }
 
-func initFlagSet(fs *pflag.FlagSet, cfg *config.Config) {
+func initFlagSet(fs *pflag.FlagSet, cfg *config.Config, m *lintersdb.Manager) {
 	hideFlag := func(name string) {
 		if err := fs.MarkHidden(name); err != nil {
 			panic(err)
@@ -137,7 +137,7 @@ func initFlagSet(fs *pflag.FlagSet, cfg *config.Config) {
 	fs.BoolVar(&lc.DisableAll, "disable-all", false, wh("Disable all linters"))
 	fs.StringSliceVarP(&lc.Presets, "presets", "p", nil,
 		wh(fmt.Sprintf("Enable presets (%s) of linters. Run 'golangci-lint linters' to see "+
-			"them. This option implies option --disable-all", strings.Join(lintersdb.AllPresets(), "|"))))
+			"them. This option implies option --disable-all", strings.Join(m.AllPresets(), "|"))))
 	fs.BoolVar(&lc.Fast, "fast", false, wh("Run only fast linters from enabled linters set"))
 
 	// Issues config
@@ -167,7 +167,7 @@ func initFlagSet(fs *pflag.FlagSet, cfg *config.Config) {
 func (e *Executor) initRunConfiguration(cmd *cobra.Command) {
 	fs := cmd.Flags()
 	fs.SortFlags = false // sort them as they are defined here
-	initFlagSet(fs, e.cfg)
+	initFlagSet(fs, e.cfg, e.DBManager)
 
 	// init e.cfg by values from config: flags parse will see these values
 	// like the default ones. It will overwrite them only if the same option
@@ -178,7 +178,7 @@ func (e *Executor) initRunConfiguration(cmd *cobra.Command) {
 		// `changed` variable inside string slice vars will be shared.
 		// Use another config variable here, not e.cfg, to not
 		// affect main parsing by this parsing of only config option.
-		initFlagSet(fs, cfg)
+		initFlagSet(fs, cfg, e.DBManager)
 
 		// Parse max options, even force version option: don't want
 		// to get access to Executor here: it's error-prone to use
@@ -232,12 +232,12 @@ func fixSlicesFlags(fs *pflag.FlagSet) {
 func (e *Executor) runAnalysis(ctx context.Context, args []string) (<-chan result.Issue, error) {
 	e.cfg.Run.Args = args
 
-	linters, err := lintersdb.GetEnabledLinters(e.cfg, e.log.Child("lintersdb"))
+	linters, err := e.EnabledLintersSet.Get()
 	if err != nil {
 		return nil, err
 	}
 
-	for _, lc := range lintersdb.GetAllSupportedLinterConfigs() {
+	for _, lc := range e.DBManager.GetAllSupportedLinterConfigs() {
 		isEnabled := false
 		for _, linter := range linters {
 			if linter.Linter.Name() == lc.Linter.Name() {
