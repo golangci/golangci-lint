@@ -29,7 +29,7 @@ func IsLinterInConfigsList(name string, linters []linter.Config) bool {
 	return false
 }
 
-func (e Executor) executeLinters(cmd *cobra.Command, args []string) {
+func (e *Executor) executeLinters(cmd *cobra.Command, args []string) {
 	enabledLCs, err := e.EnabledLintersSet.Get()
 	if err != nil {
 		log.Fatalf("Can't get enabled linters: %s", err)

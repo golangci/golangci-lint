@@ -11,6 +11,12 @@ type Validator struct {
 	m *Manager
 }
 
+func NewValidator(m *Manager) *Validator {
+	return &Validator{
+		m: m,
+	}
+}
+
 func (v Validator) validateLintersNames(cfg *config.Linters) error {
 	allNames := append([]string{}, cfg.Enable...)
 	allNames = append(allNames, cfg.Disable...)

@@ -20,8 +20,6 @@ func (e *Executor) persistentPreRun(cmd *cobra.Command, args []string) {
 
 	runtime.GOMAXPROCS(e.cfg.Run.Concurrency)
 
-	logutils.SetupVerboseLog(e.log, e.cfg.Run.IsVerbose)
-
 	if e.cfg.Run.CPUProfilePath != "" {
 		f, err := os.Create(e.cfg.Run.CPUProfilePath)
 		if err != nil {

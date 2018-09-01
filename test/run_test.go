@@ -170,7 +170,8 @@ func inSlice(s []string, v string) bool {
 }
 
 func getEnabledByDefaultFastLintersExcept(except ...string) []string {
-	ebdl := lintersdb.GetAllEnabledByDefaultLinters()
+	m := lintersdb.NewManager()
+	ebdl := m.GetAllEnabledByDefaultLinters()
 	ret := []string{}
 	for _, linter := range ebdl {
 		if linter.DoesFullImport {
@@ -186,7 +187,7 @@ func getEnabledByDefaultFastLintersExcept(except ...string) []string {
 }
 
 func getAllFastLintersWith(with ...string) []string {
-	linters := lintersdb.GetAllSupportedLinterConfigs()
+	linters := lintersdb.NewManager().GetAllSupportedLinterConfigs()
 	ret := append([]string{}, with...)
 	for _, linter := range linters {
 		if linter.DoesFullImport {
@@ -199,7 +200,7 @@ func getAllFastLintersWith(with ...string) []string {
 }
 
 func getEnabledByDefaultLinters() []string {
-	ebdl := lintersdb.GetAllEnabledByDefaultLinters()
+	ebdl := lintersdb.NewManager().GetAllEnabledByDefaultLinters()
 	ret := []string{}
 	for _, linter := range ebdl {
 		ret = append(ret, linter.Linter.Name())
@@ -209,7 +210,7 @@ func getEnabledByDefaultLinters() []string {
 }
 
 func getEnabledByDefaultFastLintersWith(with ...string) []string {
-	ebdl := lintersdb.GetAllEnabledByDefaultLinters()
+	ebdl := lintersdb.NewManager().GetAllEnabledByDefaultLinters()
 	ret := append([]string{}, with...)
 	for _, linter := range ebdl {
 		if linter.DoesFullImport {
