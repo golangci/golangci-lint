@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"go/token"
 
+	duplAPI "github.com/golangci/dupl"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
-	duplAPI "github.com/mibk/dupl"
 )
 
 type Dupl struct{}
