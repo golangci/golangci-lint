@@ -292,7 +292,7 @@
   name = "github.com/golangci/unparam"
   packages = ["check"]
   pruneopts = "UT"
-  revision = "ff2498c2efa8282b1d7511cad18904a47a460782"
+  revision = "7ad9dbcccc1667190475751c43137253b310dc10"
 
 [[projects]]
   branch = "master"
