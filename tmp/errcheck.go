@@ -42,3 +42,14 @@ func IgnoreStdxWrite() {
 func IgnoreBufferWrites(buf *bytes.Buffer) {
 	buf.WriteString("x")
 }
+
+func IgnoreCloseMissingErrHandling2() error {
+	f, err := os.Open("t.go")
+	if err != nil {
+		return err
+	}
+
+	f.Close()
+	return nil
+}
+
