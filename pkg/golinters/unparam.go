@@ -5,7 +5,7 @@ import (
 
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
-	"mvdan.cc/unparam/check"
+	"github.com/golangci/unparam/check"
 )
 
 type Unparam struct{}

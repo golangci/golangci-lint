@@ -11,23 +11,8 @@
   name = "sourcegraph.com/sourcegraph/go-diff"
 
 [[constraint]]
-  name = "github.com/kisielk/errcheck"
-  branch = "master"
-  source = "github.com/golangci/errcheck"
-
-[[constraint]]
   name = "github.com/golangci/govet"
   branch = "master"
-
-[[constraint]]
-  name = "github.com/mibk/dupl"
-  branch = "master"
-  source = "github.com/golangci/dupl"
-
-[[constraint]]
-  name = "mvdan.cc/unparam"
-  branch = "fix-crash-on-nil-constant"
-  source = "github.com/golangci/unparam"
 
 [prune]
   go-tests = true
@@ -79,15 +64,4 @@
 
 [[constraint]]
   branch = "master"
-  name = "golang.org/x/tools"
-  source = "github.com/golangci/tools"
-
-[[constraint]]
-  branch = "master"
-  name = "honnef.co/go/tools"
-  source = "github.com/golangci/go-tools"
-
-[[constraint]]
-  branch = "master"
-  name = "github.com/client9/misspell"
-  source = "github.com/golangci/misspell"
+  name = "github.com/golangci/unparam"

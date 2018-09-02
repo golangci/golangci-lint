@@ -3,7 +3,7 @@ package golinters
 import (
 	"context"
 
-	"mvdan.cc/interfacer/check"
+	"github.com/golangci/interfacer/check"
 
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"

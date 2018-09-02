@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 
+	errcheckAPI "github.com/golangci/errcheck/golangci"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
-	errcheckAPI "github.com/kisielk/errcheck/golangci"
 )
 
 type Errcheck struct{}
