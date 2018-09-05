@@ -369,6 +369,21 @@ Flags:
                                     
                                       # megacheck: Developers tend to write in C-style with an explicit 'break' in a 'switch', so it's ok to ignore
                                       - ineffective break statement. Did you mean to break out of the outer loop
+                                    
+                                      # gas: Too many false-positives on 'unsafe' usage
+                                      - Use of unsafe calls should be audited
+                                    
+                                      # gas: Too many false-positives for parametrized shell calls
+                                      - Subprocess launch(ed with variable|ing should be audited)
+                                    
+                                      # gas: Duplicated errcheck checks
+                                      - G104
+                                    
+                                      # gas: Too many issues in popular repos
+                                      - (Expect directory permissions to be 0750 or less|Expect file permissions to be 0600 or less)
+                                    
+                                      # gas: False positive is triggered by 'src, err := ioutil.ReadFile(filename)'
+                                      - Potential file inclusion via variable
                                      (default true)
       --max-issues-per-linter int   Maximum issues count per one linter. Set to 0 to disable (default 50)
       --max-same-issues int         Maximum count of issues with the same text. Set to 0 to disable (default 3)
