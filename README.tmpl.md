@@ -120,6 +120,7 @@ $ golangci-lint run --disable-all -E errcheck
 5. Vim
   - vim-go open [issue](https://github.com/fatih/vim-go/issues/1841)
   - syntastic [merged pull request](https://github.com/vim-syntastic/syntastic/pull/2190) with golangci-lint support
+  - ale [merged pull request](https://github.com/w0rp/ale/pull/1890) with golangci-lint support
 
 # Comparison
 ## `golangci-lint` vs `gometalinter`
