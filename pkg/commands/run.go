@@ -75,16 +75,20 @@ func initFlagSet(fs *pflag.FlagSet, cfg *config.Config, m *lintersdb.Manager) {
 	lsc := &cfg.LintersSettings
 
 	// Hide all linters settings flags: they were initially visible,
-	// but when number of linters started to grow it became ovious that
+	// but when number of linters started to grow it became obvious that
 	// we can't fill 90% of flags by linters settings: common flags became hard to find.
 	// New linters settings should be done only through config file.
 	fs.BoolVar(&lsc.Errcheck.CheckTypeAssertions, "errcheck.check-type-assertions",
 		false, "Errcheck: check for ignored type assertion results")
 	hideFlag("errcheck.check-type-assertions")
-
 	fs.BoolVar(&lsc.Errcheck.CheckAssignToBlank, "errcheck.check-blank", false,
 		"Errcheck: check for errors assigned to blank identifier: _ = errFunc()")
 	hideFlag("errcheck.check-blank")
+	fs.StringVar(&lsc.Errcheck.Exclude, "errcheck.exclude", "", "errcheck.exclude")
+	hideFlag("errcheck.exclude")
+	lsc.Errcheck.Ignore = config.IgnoreFlag{}
+	fs.Var(&lsc.Errcheck.Ignore, "errcheck.ignore", "errcheck.ignore")
+	hideFlag("errcheck.ignore")
 
 	fs.BoolVar(&lsc.Govet.CheckShadowing, "govet.check-shadowing", false,
 		"Govet: check for shadowed variables")
