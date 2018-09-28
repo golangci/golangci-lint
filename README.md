@@ -49,12 +49,28 @@ The recommended way to install golangci-lint (replace `vX.Y.Z` with the latest
 version from the [releases page](https://github.com/golangci/golangci-lint/releases)):
 ```bash
 # binary will be $GOPATH/bin/golangci-lint
-curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | bash -s -- -b $GOPATH/bin vX.Y.Z
+curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s -- -b $GOPATH/bin vX.Y.Z
 
 # or install it into ./bin/
-# curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | bash -s vX.Y.Z
+curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s vX.Y.Z
 
-# golangci-lint --version
+# In alpine linux (as it does not come with curl by default)
+wget -O - -q https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s vX.Y.Z
+
+golangci-lint --version
+```
+As a fallback you can also use `raw.githubusercontent.com` 
+```bash
+# binary will be $GOPATH/bin/golangci-lint
+curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sh -s -- -b $GOPATH/bin vX.Y.Z
+
+# or install it into ./bin/
+curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sh -s vX.Y.Z
+
+# In alpine linux (as it does not come with curl by default)
+wget -O - -q https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sh -s vX.Y.Z
+
+golangci-lint --version
 ```
 
 Periodically update version of golangci-lint: the project is under active development
