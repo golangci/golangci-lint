@@ -209,6 +209,9 @@ var defaultLintersSettings = LintersSettings{
 		RangeLoops: true,
 		ForLoops:   false,
 	},
+	Errcheck: ErrcheckSettings{
+		Ignore: IgnoreFlag{},
+	},
 }
 
 type Linters struct {

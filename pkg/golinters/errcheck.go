@@ -80,8 +80,7 @@ func readExcludeFile(name string) (map[string]bool, error) {
 	}
 	scanner := bufio.NewScanner(fh)
 	for scanner.Scan() {
-		name := scanner.Text()
-		exclude[name] = true
+		exclude[scanner.Text()] = true
 	}
 	if err := scanner.Err(); err != nil {
 		return nil, errors.Wrapf(err, "failed scanning file: %s", name)

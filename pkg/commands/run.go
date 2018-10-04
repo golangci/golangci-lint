@@ -86,7 +86,6 @@ func initFlagSet(fs *pflag.FlagSet, cfg *config.Config, m *lintersdb.Manager) {
 	hideFlag("errcheck.check-blank")
 	fs.StringVar(&lsc.Errcheck.Exclude, "errcheck.exclude", "", "errcheck.exclude")
 	hideFlag("errcheck.exclude")
-	lsc.Errcheck.Ignore = config.IgnoreFlag{}
 	fs.Var(&lsc.Errcheck.Ignore, "errcheck.ignore", "errcheck.ignore")
 	hideFlag("errcheck.ignore")
 
