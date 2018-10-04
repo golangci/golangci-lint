@@ -113,14 +113,14 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:2146ed9836ab6af9cbe527299544566ee7506ca6dcd4ab71d761141c015ba174"
+  digest = "1:974bb21c8811f4353bd499c71c9b47da05710f80629201448a328a6b6344ed5e"
   name = "github.com/golangci/errcheck"
   packages = [
     "golangci",
     "internal/errcheck",
   ]
   pruneopts = "UT"
-  revision = "f726ab79eeeb2d770a997ee4d9bce4ca674956a0"
+  revision = "1765131d5be500f6904592495b9a6eb456c74800"
 
 [[projects]]
   branch = "master"
