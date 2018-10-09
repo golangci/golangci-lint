@@ -326,8 +326,8 @@ than the default and have more strict settings:
 # False Positives
 False positives are inevitable, but we did our best to reduce their count. For example, we have a default enabled set of [exclude patterns](#command-line-options). If a false positive occurred you have the following choices:
 1. Exclude issue by text using command-line option `-e` or config option `issues.exclude`. It's helpful when you decided to ignore all issues of this type.
-2. Exclude this one issue by using special comment `// nolint[:linter1,linter2,...]` on issued line.
-Comment `// nolint` disables all issues reporting on this line. Comment e.g. `// nolint:govet` disables only govet issues for this line.
+2. Exclude this one issue by using special comment `//nolint[:linter1,linter2,...]` on issued line.
+Comment `//nolint` disables all issues reporting on this line. Comment e.g. `//nolint:govet` disables only govet issues for this line.
 If you would like to completely exclude all issues for some function prepend this comment
 above function:
 ```go
