@@ -549,7 +549,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:1c24352e1722a8954fe7c95bcb12d878ef9883b01fe3e0e801f62e8cbf9621a0"
+  digest = "1:1f0808c71cfd0b33831391bc26c7ba2862138bfaa10b7f8ed695b2a0c67f896c"
   name = "golang.org/x/tools"
   packages = [
     "go/ast/astutil",
@@ -561,9 +561,10 @@
     "go/types/typeutil",
     "imports",
     "internal/fastwalk",
+    "internal/gopathwalk",
   ]
   pruneopts = "UT"
-  revision = "7ca132754999accbaa5c1735eda29e7ce0f3bf03"
+  revision = "5d4988d199e2aeefda3528f599e06410c43caa29"
 
 [[projects]]
   digest = "1:342378ac4dcb378a5448dd723f0784ae519383532f5e70ade24132c4c8693202"
