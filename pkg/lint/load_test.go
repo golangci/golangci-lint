@@ -3,12 +3,11 @@ package lint
 import (
 	"testing"
 
-	"github.com/golangci/golangci-lint/pkg/golinters"
-	"github.com/golangci/golangci-lint/pkg/logutils"
-
 	"github.com/golangci/golangci-lint/pkg/config"
+	"github.com/golangci/golangci-lint/pkg/golinters"
 	"github.com/golangci/golangci-lint/pkg/lint/astcache"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
+	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/packages"
 	"github.com/stretchr/testify/assert"
 )
