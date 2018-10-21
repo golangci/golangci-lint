@@ -362,6 +362,10 @@ No, you don't need to do it anymore. We will run `go install -i` and `go test -i
 for analyzed packages ourselves. We will run them only
 if option `govet.use-installed-packages` is `true`.
 
+**Which go versions are supported**
+Golangci-lint versions > 1.10.2 supports Go 1.10 and 1.11.
+Golangci-lint versions <= v1.10.2 supported Go 1.9, 1.10, 1.11.
+
 **`golangci-lint` doesn't work**
 
 1. Update it: `go get -u github.com/golangci/golangci-lint/cmd/golangci-lint`
