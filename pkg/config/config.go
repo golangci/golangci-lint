@@ -119,8 +119,7 @@ type Run struct {
 
 type LintersSettings struct {
 	Govet struct {
-		CheckShadowing       bool `mapstructure:"check-shadowing"`
-		UseInstalledPackages bool `mapstructure:"use-installed-packages"`
+		CheckShadowing bool `mapstructure:"check-shadowing"`
 	}
 	Golint struct {
 		MinConfidence float64 `mapstructure:"min-confidence"`

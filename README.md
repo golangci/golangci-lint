@@ -113,16 +113,16 @@ GolangCI-Lint can be used with zero configuration. By default the following lint
 ```
 $ golangci-lint help linters
 Enabled by default linters:
-govet: Vet examines Go source code and reports suspicious constructs, such as Printf calls whose arguments do not align with the format string [fast: false]
-errcheck: Errcheck is a program for checking for unchecked errors in go programs. These unchecked errors can be critical bugs in some cases [fast: false]
+govet: Vet examines Go source code and reports suspicious constructs, such as Printf calls whose arguments do not align with the format string [fast: true]
+errcheck: Errcheck is a program for checking for unchecked errors in go programs. These unchecked errors can be critical bugs in some cases [fast: true]
 staticcheck: Staticcheck is a go vet on steroids, applying a ton of static analysis checks [fast: false]
 unused: Checks Go code for unused constants, variables, functions and types [fast: false]
 gosimple: Linter for Go source code that specializes in simplifying a code [fast: false]
-structcheck: Finds an unused struct fields [fast: false]
-varcheck: Finds unused global variables and constants [fast: false]
+structcheck: Finds an unused struct fields [fast: true]
+varcheck: Finds unused global variables and constants [fast: true]
 ineffassign: Detects when assignments to existing variables are not used [fast: true]
-deadcode: Finds unused code [fast: false]
-typecheck: Like the front-end of a Go compiler, parses and type-checks Go code [fast: false]
+deadcode: Finds unused code [fast: true]
+typecheck: Like the front-end of a Go compiler, parses and type-checks Go code [fast: true]
 ```
 
 and the following linters are disabled by default:
@@ -131,17 +131,17 @@ $ golangci-lint help linters
 ...
 Disabled by default linters:
 golint: Golint differs from gofmt. Gofmt reformats Go source code, whereas golint prints out style mistakes [fast: true]
-gosec (gas): Inspects source code for security problems [fast: false]
+gosec (gas): Inspects source code for security problems [fast: true]
 interfacer: Linter that suggests narrower interface types [fast: false]
-unconvert: Remove unnecessary type conversions [fast: false]
+unconvert: Remove unnecessary type conversions [fast: true]
 dupl: Tool for code clone detection [fast: true]
 goconst: Finds repeated strings that could be replaced by a constant [fast: true]
 gocyclo: Computes and checks the cyclomatic complexity of functions [fast: true]
 gofmt: Gofmt checks whether code was gofmt-ed. By default this tool runs with -s option to check for code simplification [fast: true]
 goimports: Goimports does everything that gofmt does. Additionally it checks unused imports [fast: true]
-maligned: Tool to detect Go structs that would take less memory if their fields were sorted [fast: false]
+maligned: Tool to detect Go structs that would take less memory if their fields were sorted [fast: true]
 megacheck: 3 sub-linters in one: unused, gosimple and staticcheck [fast: false]
-depguard: Go linter that checks if package imports are in a list of acceptable packages [fast: false]
+depguard: Go linter that checks if package imports are in a list of acceptable packages [fast: true]
 misspell: Finds commonly misspelled English words in comments [fast: true]
 lll: Reports long lines [fast: true]
 unparam: Reports unused function parameters [fast: false]
@@ -372,7 +372,7 @@ Flags:
       --enable-all                  Enable all linters
       --disable-all                 Disable all linters
   -p, --presets strings             Enable presets (bugs|unused|format|style|complexity|performance) of linters. Run 'golangci-lint linters' to see them. This option implies option --disable-all
-      --fast                        Run only fast linters from enabled linters set
+      --fast                        Run only fast linters from enabled linters set (first run won't be fast)
   -e, --exclude strings             Exclude issue by regexp
       --exclude-use-default         Use or not use default excludes:
                                       # errcheck: Almost all programs ignore errors on these functions and in most cases it's ok
@@ -502,20 +502,6 @@ linters-settings:
   govet:
     # report about shadowed variables
     check-shadowing: true
-
-    # Obtain type information from installed (to $GOPATH/pkg) package files:
-    # golangci-lint will execute `go install -i` and `go test -i` for analyzed packages
-    # before analyzing them.
-    # By default this option is disabled and govet gets type information by loader from source code.
-    # Loading from source code is slow, but it's done only once for all linters.
-    # Go-installing of packages first time is much slower than loading them from source code,
-    # therefore this option is disabled by default.
-    # But repeated installation is fast in go >= 1.10 because of build caching.
-    # Enable this option only if all conditions are met:
-    #  1. you use only "fast" linters (--fast e.g.): no program loading occurs
-    #  2. you use go >= 1.10
-    #  3. you do repeated runs (false for CI) or cache $GOPATH/pkg or `go env GOCACHE` dir in CI.
-    use-installed-packages: false
   golint:
     # minimal confidence for issues, default is 0.8
     min-confidence: 0.8
@@ -657,6 +643,8 @@ linters-settings:
       - github.com/sirupsen/logrus
   misspell:
     locale: US
+  lll:
+    line-length: 140
 
 linters:
   enable-all: true
@@ -701,9 +689,7 @@ We don't recommend vendoring `golangci-lint` in your repo: you will get troubles
 
 **Does I need to run `go install`?**
 
-No, you don't need to do it anymore. We will run `go install -i` and `go test -i`
-for analyzed packages ourselves. We will run them only
-if option `govet.use-installed-packages` is `true`.
+No, you don't need to do it anymore.
 
 **Which go versions are supported**
 Golangci-lint versions > 1.10.2 supports Go 1.10 and 1.11.
@@ -715,7 +701,12 @@ Golangci-lint versions <= v1.10.2 supported Go 1.9, 1.10, 1.11.
 2. Run it with `-v` option and check the output.
 3. If it doesn't help create a [GitHub issue](https://github.com/golangci/golangci-lint/issues/new) with the output from the error and #2 above.
 
+**Why running with `--fast` is slow on the first run?**
+Because the first run caches type information. All subsequent runs will be fast.
+Usually this options is used during development on local machine and compilation was already performed.
+
 # Thanks
+
 Thanks to [alecthomas/gometalinter](https://github.com/alecthomas/gometalinter) for inspiration and amazing work.
 Thanks to [bradleyfalzon/revgrep](https://github.com/bradleyfalzon/revgrep) for cool diff tool.
 

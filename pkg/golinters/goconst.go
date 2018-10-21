@@ -26,8 +26,8 @@ func (lint Goconst) Run(ctx context.Context, lintCtx *linter.Context) ([]result.
 		MinStringLength:    lintCtx.Settings().Goconst.MinStringLen,
 		MinOccurrences:     lintCtx.Settings().Goconst.MinOccurrencesCount,
 	}
-	for _, pkg := range lintCtx.PkgProgram.Packages() {
-		files, fset, err := getASTFilesForPkg(lintCtx, &pkg)
+	for _, pkg := range lintCtx.Packages {
+		files, fset, err := getASTFilesForGoPkg(lintCtx, pkg)
 		if err != nil {
 			return nil, err
 		}

@@ -8,8 +8,6 @@ import (
 	"github.com/sirupsen/logrus" //nolint:depguard
 )
 
-var isTestRun = os.Getenv("GL_TEST_RUN") == "1"
-
 type StderrLog struct {
 	name   string
 	logger *logrus.Logger
@@ -32,12 +30,6 @@ func NewStderrLog(name string) *StderrLog {
 		DisableTimestamp: true, // `INFO[0007] msg` -> `INFO msg`
 	}
 	return sl
-}
-
-func exitIfTest() {
-	if isTestRun {
-		os.Exit(exitcodes.WarningInTest)
-	}
 }
 
 func (sl StderrLog) prefix() string {
@@ -71,7 +63,6 @@ func (sl StderrLog) Warnf(format string, args ...interface{}) {
 	}
 
 	sl.logger.Warnf("%s%s", sl.prefix(), fmt.Sprintf(format, args...))
-	exitIfTest()
 }
 
 func (sl StderrLog) Infof(format string, args ...interface{}) {

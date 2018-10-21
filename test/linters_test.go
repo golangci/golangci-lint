@@ -10,7 +10,7 @@ import (
 	"testing"
 
 	"github.com/golangci/golangci-lint/pkg/exitcodes"
-	"github.com/stretchr/testify/assert"
+	assert "github.com/stretchr/testify/require"
 )
 
 func runGoErrchk(c *exec.Cmd, t *testing.T) {

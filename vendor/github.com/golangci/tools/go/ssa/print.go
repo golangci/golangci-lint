@@ -2,8 +2,6 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// +build go1.5
-
 package ssa
 
 // This file implements the String() methods for all Value and
@@ -85,14 +83,18 @@ func (v *Alloc) String() string {
 
 func (v *Phi) String() string {
 	var b bytes.Buffer
-	b.WriteString("φ [")
+	b.WriteString("phi [")
 	for i, edge := range v.Edges {
 		if i > 0 {
 			b.WriteString(", ")
 		}
 		// Be robust against malformed CFG.
+		if v.block == nil {
+			b.WriteString("??")
+			continue
+		}
 		block := -1
-		if v.block != nil && i < len(v.block.Preds) {
+		if i < len(v.block.Preds) {
 			block = v.block.Preds[i].Index
 		}
 		fmt.Fprintf(&b, "%d: ", block)

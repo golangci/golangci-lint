@@ -265,7 +265,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:ba7223001c6b9de88a3e5beb6e441b3d559e09e3e9bc8ff866b2c0e72a6f7f8f"
+  digest = "1:0d459e50f313bce282754dfccb74a03b6caf7864eefd9660ffc2866c640b9ca1"
   name = "github.com/golangci/tools"
   packages = [
     "go/callgraph",
@@ -276,7 +276,7 @@
     "go/ssa/ssautil",
   ]
   pruneopts = "UT"
-  revision = "98e75f53b4b9b9243ddc6f08b76f7682294b53b5"
+  revision = "01dd7756e01d993519ad7a8415ad8f2de8797be8"
 
 [[projects]]
   branch = "master"
@@ -497,9 +497,12 @@
   version = "v1.0.2"
 
 [[projects]]
-  digest = "1:f85e109eda8f6080877185d1c39e98dd8795e1780c08beca28304b87fd855a1c"
+  digest = "1:7e8d267900c7fa7f35129a2a37596e38ed0f11ca746d6d9ba727980ee138f9f6"
   name = "github.com/stretchr/testify"
-  packages = ["assert"]
+  packages = [
+    "assert",
+    "require",
+  ]
   pruneopts = "UT"
   revision = "12b6f73e6084dad08a7c6e575284b177ecafbc71"
   version = "v1.2.1"
@@ -549,7 +552,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:1f0808c71cfd0b33831391bc26c7ba2862138bfaa10b7f8ed695b2a0c67f896c"
+  digest = "1:e5f00913432ec90163061b29e00176fd12b71fe400adeb0cb4071273ada6542d"
   name = "golang.org/x/tools"
   packages = [
     "go/ast/astutil",
@@ -558,13 +561,15 @@
     "go/internal/cgo",
     "go/internal/gcimporter",
     "go/loader",
+    "go/packages",
     "go/types/typeutil",
     "imports",
     "internal/fastwalk",
     "internal/gopathwalk",
+    "internal/semver",
   ]
   pruneopts = "UT"
-  revision = "5d4988d199e2aeefda3528f599e06410c43caa29"
+  revision = "3e7aa9e59977626dc60433e9aeadf1bb63d28295"
 
 [[projects]]
   digest = "1:342378ac4dcb378a5448dd723f0784ae519383532f5e70ade24132c4c8693202"
@@ -634,7 +639,9 @@
     "github.com/spf13/pflag",
     "github.com/spf13/viper",
     "github.com/stretchr/testify/assert",
+    "github.com/stretchr/testify/require",
     "golang.org/x/tools/go/loader",
+    "golang.org/x/tools/go/packages",
     "sourcegraph.com/sourcegraph/go-diff/diff",
   ]
   solver-name = "gps-cdcl"

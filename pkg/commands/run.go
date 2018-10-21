@@ -141,7 +141,7 @@ func initFlagSet(fs *pflag.FlagSet, cfg *config.Config, m *lintersdb.Manager) {
 	fs.StringSliceVarP(&lc.Presets, "presets", "p", nil,
 		wh(fmt.Sprintf("Enable presets (%s) of linters. Run 'golangci-lint linters' to see "+
 			"them. This option implies option --disable-all", strings.Join(m.AllPresets(), "|"))))
-	fs.BoolVar(&lc.Fast, "fast", false, wh("Run only fast linters from enabled linters set"))
+	fs.BoolVar(&lc.Fast, "fast", false, wh("Run only fast linters from enabled linters set (first run won't be fast)"))
 
 	// Issues config
 	ic := &cfg.Issues
@@ -257,12 +257,13 @@ func (e *Executor) runAnalysis(ctx context.Context, args []string) (<-chan resul
 		e.reportData.AddLinter(lc.Name(), isEnabled, lc.EnabledByDefault)
 	}
 
-	lintCtx, err := lint.LoadContext(enabledLinters, e.cfg, e.log.Child("load"))
+	lintCtx, err := e.contextLoader.Load(ctx, enabledLinters)
 	if err != nil {
 		return nil, errors.Wrap(err, "context loading failed")
 	}
+	lintCtx.Log = e.log.Child("linters context")
 
-	runner, err := lint.NewRunner(lintCtx.ASTCache, e.cfg, e.log.Child("runner"))
+	runner, err := lint.NewRunner(lintCtx.ASTCache, e.cfg, e.log.Child("runner"), e.goenv)
 	if err != nil {
 		return nil, err
 	}
@@ -303,6 +304,10 @@ func (e *Executor) setExitCodeIfIssuesFound(issues <-chan result.Issue) <-chan r
 }
 
 func (e *Executor) runAndPrint(ctx context.Context, args []string) error {
+	if err := e.goenv.Discover(ctx); err != nil {
+		e.log.Warnf("Failed to discover go env: %s", err)
+	}
+
 	if !logutils.HaveDebugTag("linters_output") {
 		// Don't allow linters and loader to print anything
 		log.SetOutput(ioutil.Discard)
@@ -379,8 +384,20 @@ func (e *Executor) executeRun(cmd *cobra.Command, args []string) {
 		}
 	}
 
-	if e.exitCode == exitcodes.Success && ctx.Err() != nil {
+	e.setupExitCode(ctx)
+}
+
+func (e *Executor) setupExitCode(ctx context.Context) {
+	if ctx.Err() != nil {
 		e.exitCode = exitcodes.Timeout
+		e.log.Errorf("Deadline exceeded: try increase it by passing --deadline option")
+	}
+
+	if e.exitCode == exitcodes.Success &&
+		os.Getenv("GL_TEST_RUN") == "1" &&
+		len(e.reportData.Warnings) != 0 {
+
+		e.exitCode = exitcodes.WarningInTest
 	}
 }
 

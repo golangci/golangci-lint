@@ -2,8 +2,6 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// +build go1.5
-
 package ssautil
 
 // This file defines utility functions for constructing programs in SSA form.
@@ -13,9 +11,57 @@ import (
 	"go/token"
 	"go/types"
 
-	"golang.org/x/tools/go/loader"
 	"github.com/golangci/tools/go/ssa"
+	"golang.org/x/tools/go/loader"
+	"golang.org/x/tools/go/packages"
 )
+
+// Packages creates an SSA program for a set of packages loaded from
+// source syntax using the golang.org/x/tools/go/packages.Load function.
+// It creates and returns an SSA package for each well-typed package in
+// the initial list. The resulting list of packages has the same length
+// as initial, and contains a nil if SSA could not be constructed for
+// the corresponding initial package.
+//
+// Code for bodies of functions is not built until Build is called
+// on the resulting Program.
+//
+// The mode parameter controls diagnostics and checking during SSA construction.
+//
+func Packages(initial []*packages.Package, mode ssa.BuilderMode) (*ssa.Program, []*ssa.Package) {
+	var fset *token.FileSet
+	if len(initial) > 0 {
+		fset = initial[0].Fset
+	}
+
+	prog := ssa.NewProgram(fset, mode)
+	seen := make(map[*packages.Package]*ssa.Package)
+	var create func(p *packages.Package) *ssa.Package
+	create = func(p *packages.Package) *ssa.Package {
+		ssapkg, ok := seen[p]
+		if !ok {
+			if p.Types == nil || p.IllTyped {
+				// not well typed
+				seen[p] = nil
+				return nil
+			}
+
+			ssapkg = prog.CreatePackage(p.Types, p.Syntax, p.TypesInfo, true)
+			seen[p] = ssapkg
+
+			for _, imp := range p.Imports {
+				create(imp)
+			}
+		}
+		return ssapkg
+	}
+
+	var ssapkgs []*ssa.Package
+	for _, p := range initial {
+		ssapkgs = append(ssapkgs, create(p))
+	}
+	return prog, ssapkgs
+}
 
 // CreateProgram returns a new program in SSA form, given a program
 // loaded from source.  An SSA package is created for each transitively

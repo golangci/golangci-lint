@@ -20,6 +20,8 @@ linters-settings:
       - github.com/sirupsen/logrus
   misspell:
     locale: US
+  lll:
+    line-length: 140
 
 linters:
   enable-all: true

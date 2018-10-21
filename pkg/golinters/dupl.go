@@ -6,8 +6,10 @@ import (
 	"go/token"
 
 	duplAPI "github.com/golangci/dupl"
+	"github.com/golangci/golangci-lint/pkg/fsutils"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
+	"github.com/pkg/errors"
 )
 
 type Dupl struct{}
@@ -21,7 +23,7 @@ func (Dupl) Desc() string {
 }
 
 func (d Dupl) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issue, error) {
-	issues, err := duplAPI.Run(lintCtx.PkgProgram.Files(lintCtx.Cfg.Run.AnalyzeTests), lintCtx.Settings().Dupl.Threshold)
+	issues, err := duplAPI.Run(getAllFileNames(lintCtx), lintCtx.Settings().Dupl.Threshold)
 	if err != nil {
 		return nil, err
 	}
@@ -32,7 +34,11 @@ func (d Dupl) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issue,
 
 	res := make([]result.Issue, 0, len(issues))
 	for _, i := range issues {
-		dupl := fmt.Sprintf("%s:%d-%d", i.To.Filename(), i.To.LineStart(), i.To.LineEnd())
+		toFilename, err := fsutils.ShortestRelPath(i.To.Filename(), "")
+		if err != nil {
+			return nil, errors.Wrapf(err, "failed to get shortest rel path for %q", i.To.Filename())
+		}
+		dupl := fmt.Sprintf("%s:%d-%d", toFilename, i.To.LineStart(), i.To.LineEnd())
 		text := fmt.Sprintf("%d-%d lines are duplicate of %s",
 			i.From.LineStart(), i.From.LineEnd(),
 			formatCode(dupl, lintCtx.Cfg))

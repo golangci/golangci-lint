@@ -10,7 +10,9 @@ void myprint(char* s) {
 */
 import "C"
 
-import "unsafe"
+import (
+	"unsafe"
+)
 
 func Example() {
 	cs := C.CString("Hello from stdio\n")

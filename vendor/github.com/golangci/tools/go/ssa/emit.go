@@ -2,8 +2,6 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// +build go1.5
-
 package ssa
 
 // Helpers for emitting SSA instructions.
@@ -265,11 +263,6 @@ func emitJump(f *Function, target *BasicBlock) {
 	b.emit(new(Jump))
 	addEdge(b, target)
 	f.currentBlock = nil
-}
-
-func (b *BasicBlock) emitJump(target *BasicBlock) {
-	b.emit(new(Jump))
-	addEdge(b, target)
 }
 
 // emitIf emits to f a conditional jump to tblock or fblock based on

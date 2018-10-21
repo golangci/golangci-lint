@@ -24,8 +24,8 @@ func (Golint) Desc() string {
 func (g Golint) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issue, error) {
 	var issues []result.Issue
 	var lintErr error
-	for _, pkg := range lintCtx.PkgProgram.Packages() {
-		files, fset, err := getASTFilesForPkg(lintCtx, &pkg)
+	for _, pkg := range lintCtx.Packages {
+		files, fset, err := getASTFilesForGoPkg(lintCtx, pkg)
 		if err != nil {
 			return nil, err
 		}
