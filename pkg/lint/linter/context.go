@@ -4,20 +4,23 @@ import (
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/lint/astcache"
 	"github.com/golangci/golangci-lint/pkg/logutils"
-	"github.com/golangci/golangci-lint/pkg/packages"
 	"github.com/golangci/tools/go/ssa"
 	"golang.org/x/tools/go/loader"
+	"golang.org/x/tools/go/packages"
 )
 
 type Context struct {
-	PkgProgram           *packages.Program
-	Cfg                  *config.Config
-	Program              *loader.Program
-	SSAProgram           *ssa.Program
-	LoaderConfig         *loader.Config
-	ASTCache             *astcache.Cache
-	NotCompilingPackages []*loader.PackageInfo
-	Log                  logutils.Log
+	Packages             []*packages.Package
+	NotCompilingPackages []*packages.Package
+
+	LoaderConfig *loader.Config  // deprecated, don't use for new linters
+	Program      *loader.Program // deprecated, use Packages for new linters
+
+	SSAProgram *ssa.Program
+
+	Cfg      *config.Config
+	ASTCache *astcache.Cache
+	Log      logutils.Log
 }
 
 func (c *Context) Settings() *config.LintersSettings {

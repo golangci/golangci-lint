@@ -6,9 +6,9 @@ import (
 )
 
 func TestSomething(t *testing.T) {
-	v := someType{
-		fieldUsedOnlyInTests: true,
+	if true {
+		return
+	} else {
+		fmt.Printf("test")
 	}
-	fmt.Println(v, varUsedOnlyInTests)
-	usedOnlyInTests()
 }

@@ -2,8 +2,6 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// +build go1.5
-
 package ssa
 
 // This package defines a high-level intermediate representation for
@@ -77,9 +75,6 @@ type Member interface {
 }
 
 // A Type is a Member of a Package representing a package-level named type.
-//
-// Type() returns a *types.Named.
-//
 type Type struct {
 	object *types.TypeName
 	pkg    *Package
@@ -97,7 +92,6 @@ type Type struct {
 type NamedConst struct {
 	object *types.Const
 	Value  *Const
-	pos    token.Pos
 	pkg    *Package
 }
 
@@ -578,8 +572,8 @@ type BinOp struct {
 	register
 	// One of:
 	// ADD SUB MUL QUO REM          + - * / %
-	// AND OR XOR SHL SHR AND_NOT   & | ^ << >> &^
-	// EQL NEQ LSS LEQ GTR GEQ      == != < <= < >=
+	// AND OR XOR SHL SHR AND_NOT   & | ^ << >> &~
+	// EQL LSS GTR NEQ LEQ GEQ      == != < <= < >=
 	Op   token.Token
 	X, Y Value
 }
@@ -819,7 +813,7 @@ type Slice struct {
 type FieldAddr struct {
 	register
 	X     Value // *struct
-	Field int   // field is X.Type().Underlying().(*types.Pointer).Elem().Underlying().(*types.Struct).Field(Field)
+	Field int   // index into X.Type().Deref().(*types.Struct).Fields
 }
 
 // The Field instruction yields the Field of struct X.

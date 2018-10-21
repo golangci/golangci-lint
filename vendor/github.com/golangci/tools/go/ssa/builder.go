@@ -58,7 +58,7 @@ var (
 	tString     = types.Typ[types.String]
 	tUntypedNil = types.Typ[types.UntypedNil]
 	tRangeIter  = &opaqueType{nil, "iter"} // the type of all "range" iterators
-	tEface      = new(types.Interface)
+	tEface      = types.NewInterface(nil, nil).Complete()
 
 	// SSA Value constants.
 	vZero = intConst(0)
@@ -154,7 +154,7 @@ func (b *builder) logicalBinop(fn *Function, e *ast.BinaryExpr) Value {
 
 	// All edges from e.X to done carry the short-circuit value.
 	var edges []Value
-	for _ = range done.Preds {
+	for range done.Preds {
 		edges = append(edges, short)
 	}
 
@@ -2262,10 +2262,6 @@ func (p *Package) Build() { p.buildOnce.Do(p.build) }
 func (p *Package) build() {
 	if p.info == nil {
 		return // synthetic package, e.g. "testmain"
-	}
-	if p.files == nil {
-		p.info = nil
-		return // package loaded from export data
 	}
 
 	// Ensure we have runtime type info for all exported members.

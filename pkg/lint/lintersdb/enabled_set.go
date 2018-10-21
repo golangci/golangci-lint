@@ -52,7 +52,7 @@ func (es EnabledSet) build(lcfg *config.Linters, enabledByDefaultLinters []linte
 	// It should be before --enable and --disable to be able to enable or disable specific linter.
 	if lcfg.Fast {
 		for name := range resultLintersSet {
-			if es.m.GetLinterConfig(name).DoesFullImport {
+			if es.m.GetLinterConfig(name).NeedsSSARepr {
 				delete(resultLintersSet, name)
 			}
 		}

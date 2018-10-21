@@ -83,7 +83,7 @@ func (lint Lll) getIssuesForFile(filename string, maxLineLen int, tabSpaces stri
 func (lint Lll) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issue, error) {
 	var res []result.Issue
 	spaces := strings.Repeat(" ", lintCtx.Settings().Lll.TabWidth)
-	for _, f := range lintCtx.PkgProgram.Files(lintCtx.Cfg.Run.AnalyzeTests) {
+	for _, f := range getAllFileNames(lintCtx) {
 		issues, err := lint.getIssuesForFile(f, lintCtx.Settings().Lll.LineLength, spaces)
 		if err != nil {
 			return nil, err

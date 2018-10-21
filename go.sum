@@ -59,6 +59,7 @@ github.com/golangci/prealloc v0.0.0-20180630174525-215b22d4de21 h1:leSNB7iYzLYSS
 github.com/golangci/prealloc v0.0.0-20180630174525-215b22d4de21/go.mod h1:tf5+bzsHdTM0bsB7+8mt0GUMvjCgwLpTapNZHU8AajI=
 github.com/golangci/revgrep v0.0.0-20180526074752-d9c87f5ffaf0 h1:HVfrLniijszjS1aiNg8JbBMO2+E1WIQ+j/gL4SQqGPg=
 github.com/golangci/revgrep v0.0.0-20180526074752-d9c87f5ffaf0/go.mod h1:qOQCunEYvmd/TLamH+7LlVccLvUH5kZNhbCgTHoBbp4=
+github.com/golangci/tools v0.0.0-20180902102414-01dd7756e01d/go.mod h1:zgj6NOYXOC1cexsdtDceI4/mj3aXK4JOVg9AV3C5LWI=
 github.com/golangci/tools v0.0.0-20180902102414-98e75f53b4b9 h1:JGHGJqnbD9OMyjgQqyja7DZd0/to1LKFpN31Fq8byxc=
 github.com/golangci/tools v0.0.0-20180902102414-98e75f53b4b9/go.mod h1:zgj6NOYXOC1cexsdtDceI4/mj3aXK4JOVg9AV3C5LWI=
 github.com/golangci/unconvert v0.0.0-20180507085042-28b1c447d1f4 h1:zwtduBRr5SSWhqsYNgcuWO2kFlpdOZbP0+yRjmvPGys=
@@ -131,6 +132,7 @@ golang.org/x/text v0.3.0 h1:g61tztE5qeGQ89tm6NTjjM9VPIm088od1l6aSorWRWg=
 golang.org/x/text v0.3.0/go.mod h1:NqM8EUOU14njkJ3fqMW+pc6Ldnwhi/IjpwHt7yyuwOQ=
 golang.org/x/tools v0.0.0-20180221164845-07fd8470d635/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=
 golang.org/x/tools v0.0.0-20180826000951-f6ba57429505/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=
+golang.org/x/tools v0.0.0-20180831211245-3e7aa9e59977/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=
 golang.org/x/tools v0.0.0-20180831211245-5d4988d199e2 h1:DpCOQ3KV1qfJ60hZlyxHUgKvOehh5A/F9Fznu08v5Yw=
 golang.org/x/tools v0.0.0-20180831211245-5d4988d199e2/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=
 golang.org/x/tools v0.0.0-20180831211245-7ca132754999 h1:mf2VYfMpSMTlp0I/UXrX13w5LejDx34QeUUHH4TrUA8=

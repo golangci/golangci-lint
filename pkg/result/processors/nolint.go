@@ -83,7 +83,7 @@ func (p *Nolint) getOrCreateFileData(i *result.Issue) (*fileData, error) {
 	fd = &fileData{}
 	p.cache[i.FilePath()] = fd
 
-	file := p.astCache.GetOrParse(i.FilePath())
+	file := p.astCache.GetOrParse(i.FilePath(), nil)
 	if file.Err != nil {
 		return nil, fmt.Errorf("can't parse file %s: %s", i.FilePath(), file.Err)
 	}

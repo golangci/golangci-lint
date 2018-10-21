@@ -1,9 +1,9 @@
 package lint
 
 import (
+	"context"
 	"fmt"
 	"go/build"
-	"go/parser"
 	"go/types"
 	"os"
 	"path/filepath"
@@ -12,335 +12,294 @@ import (
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/exitcodes"
-	"github.com/golangci/golangci-lint/pkg/fsutils"
-	"github.com/golangci/golangci-lint/pkg/goutils"
+	"github.com/golangci/golangci-lint/pkg/goutil"
 	"github.com/golangci/golangci-lint/pkg/lint/astcache"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/logutils"
-	"github.com/golangci/golangci-lint/pkg/packages"
 	"github.com/golangci/tools/go/ssa"
 	"github.com/golangci/tools/go/ssa/ssautil"
+	"github.com/pkg/errors"
 	"golang.org/x/tools/go/loader"
+	"golang.org/x/tools/go/packages"
 )
 
-var loadDebugf = logutils.Debug("load")
+type ContextLoader struct {
+	cfg    *config.Config
+	log    logutils.Log
+	debugf logutils.DebugFunc
+	goenv  *goutil.Env
+}
 
-func isFullImportNeeded(linters []linter.Config, cfg *config.Config) bool {
+func NewContextLoader(cfg *config.Config, log logutils.Log, goenv *goutil.Env) *ContextLoader {
+	return &ContextLoader{
+		cfg:    cfg,
+		log:    log,
+		debugf: logutils.Debug("loader"),
+		goenv:  goenv,
+	}
+}
+
+func (cl ContextLoader) prepareBuildContext() {
+	// Set GOROOT to have working cross-compilation: cross-compiled binaries
+	// have invalid GOROOT. XXX: can't use runtime.GOROOT().
+	goroot := cl.goenv.Get("GOROOT")
+	if goroot == "" {
+		return
+	}
+
+	os.Setenv("GOROOT", goroot)
+	build.Default.GOROOT = goroot
+	build.Default.BuildTags = cl.cfg.Run.BuildTags
+}
+
+func (cl ContextLoader) makeFakeLoaderPackageInfo(pkg *packages.Package) *loader.PackageInfo {
+	var errs []error
+	for _, err := range pkg.Errors {
+		errs = append(errs, err)
+	}
+
+	typeInfo := &types.Info{}
+	if pkg.TypesInfo != nil {
+		typeInfo = pkg.TypesInfo
+	}
+
+	return &loader.PackageInfo{
+		Pkg:                   pkg.Types,
+		Importable:            true, // not used
+		TransitivelyErrorFree: !pkg.IllTyped,
+
+		// use compiled (preprocessed) go files AST;
+		// AST linters use not preprocessed go files AST
+		Files:  pkg.Syntax,
+		Errors: errs,
+		Info:   *typeInfo,
+	}
+}
+
+func shouldSkipPkg(pkg *packages.Package) bool {
+	// it's an implicit testmain package
+	return pkg.Name == "main" && strings.HasSuffix(pkg.PkgPath, ".test")
+}
+
+func (cl ContextLoader) makeFakeLoaderProgram(pkgs []*packages.Package) *loader.Program {
+	var createdPkgs []*loader.PackageInfo
+	for _, pkg := range pkgs {
+		if len(pkg.Errors) != 0 {
+			// some linters crash on packages with errors,
+			// skip them and warn about them in another place
+			continue
+		}
+
+		pkgInfo := cl.makeFakeLoaderPackageInfo(pkg)
+		createdPkgs = append(createdPkgs, pkgInfo)
+	}
+
+	allPkgs := map[*types.Package]*loader.PackageInfo{}
+	for _, pkg := range createdPkgs {
+		pkg := pkg
+		allPkgs[pkg.Pkg] = pkg
+	}
+	for _, pkg := range pkgs {
+		if len(pkg.Errors) != 0 {
+			// some linters crash on packages with errors,
+			// skip them and warn about them in another place
+			continue
+		}
+
+		for _, impPkg := range pkg.Imports {
+			// don't use astcache for imported packages: we don't find issues in cgo imported deps
+			pkgInfo := cl.makeFakeLoaderPackageInfo(impPkg)
+			allPkgs[pkgInfo.Pkg] = pkgInfo
+		}
+	}
+
+	return &loader.Program{
+		Fset:        pkgs[0].Fset,
+		Imported:    nil,         // not used without .Created in any linter
+		Created:     createdPkgs, // all initial packages
+		AllPackages: allPkgs,     // all initial packages and their depndencies
+	}
+}
+
+func (cl ContextLoader) buildSSAProgram(pkgs []*packages.Package) *ssa.Program {
+	startedAt := time.Now()
+	defer func() {
+		cl.log.Infof("SSA repr building took %s", time.Since(startedAt))
+	}()
+
+	ssaProg, _ := ssautil.Packages(pkgs, ssa.GlobalDebug)
+	ssaProg.Build()
+	return ssaProg
+}
+
+func (cl ContextLoader) findLoadMode(linters []linter.Config) packages.LoadMode {
+	maxLoadMode := packages.LoadFiles
 	for _, lc := range linters {
-		if lc.NeedsProgramLoading() {
-			if lc.Name() == "govet" && cfg.LintersSettings.Govet.UseInstalledPackages {
-				// TODO: remove this hack
-				continue
+		curLoadMode := packages.LoadFiles
+		if lc.NeedsTypeInfo {
+			curLoadMode = packages.LoadSyntax
+		}
+		if lc.NeedsSSARepr {
+			curLoadMode = packages.LoadAllSyntax
+		}
+		if curLoadMode > maxLoadMode {
+			maxLoadMode = curLoadMode
+		}
+	}
+
+	return maxLoadMode
+}
+
+func stringifyLoadMode(mode packages.LoadMode) string {
+	switch mode {
+	case packages.LoadFiles:
+		return "load files"
+	case packages.LoadImports:
+		return "load imports"
+	case packages.LoadTypes:
+		return "load types"
+	case packages.LoadSyntax:
+		return "load types and syntax"
+	case packages.LoadAllSyntax:
+		return "load deps types and syntax"
+	}
+	return "unknown"
+}
+
+func (cl ContextLoader) buildArgs() []string {
+	args := cl.cfg.Run.Args
+	if len(args) == 0 {
+		return []string{"./..."}
+	}
+
+	var retArgs []string
+	for _, arg := range args {
+		if strings.HasPrefix(arg, ".") {
+			retArgs = append(retArgs, arg)
+		} else {
+			// go/packages doesn't work well if we don't have prefix ./ for local packages
+			retArgs = append(retArgs, fmt.Sprintf(".%c%s", filepath.Separator, arg))
+		}
+	}
+
+	return retArgs
+}
+
+func (cl ContextLoader) loadPackages(ctx context.Context, loadMode packages.LoadMode) ([]*packages.Package, error) {
+	defer func(startedAt time.Time) {
+		cl.log.Infof("Go packages loading at mode %s took %s", stringifyLoadMode(loadMode), time.Since(startedAt))
+	}(time.Now())
+
+	cl.prepareBuildContext()
+
+	var buildFlags []string
+	if len(cl.cfg.Run.BuildTags) != 0 {
+		// go help build
+		buildFlags = []string{fmt.Sprintf("-tags '%s'", strings.Join(cl.cfg.Run.BuildTags, " "))}
+	}
+	conf := &packages.Config{
+		Mode:       loadMode,
+		Tests:      cl.cfg.Run.AnalyzeTests,
+		Context:    ctx,
+		BuildFlags: buildFlags,
+		//TODO: use fset, parsefile, overlay
+	}
+
+	args := cl.buildArgs()
+	cl.debugf("Built loader args are %s", args)
+	pkgs, err := packages.Load(conf, args...)
+	if err != nil {
+		return nil, errors.Wrap(err, "failed to load program with go/packages")
+	}
+	cl.debugf("loaded %d pkgs", len(pkgs))
+	for i, pkg := range pkgs {
+		var syntaxFiles []string
+		for _, sf := range pkg.Syntax {
+			syntaxFiles = append(syntaxFiles, pkg.Fset.Position(sf.Pos()).Filename)
+		}
+		cl.debugf("Loaded pkg #%d: ID=%s GoFiles=%s CompiledGoFiles=%s Syntax=%s",
+			i, pkg.ID, pkg.GoFiles, pkg.CompiledGoFiles, syntaxFiles)
+	}
+
+	var retPkgs []*packages.Package
+	for _, pkg := range pkgs {
+		for _, err := range pkg.Errors {
+			if strings.Contains(err.Msg, "no Go files") {
+				return nil, errors.Wrapf(exitcodes.ErrNoGoFiles, "package %s", pkg.PkgPath)
 			}
-
-			return true
+		}
+		if !shouldSkipPkg(pkg) {
+			retPkgs = append(retPkgs, pkg)
 		}
 	}
 
-	return false
+	return retPkgs, nil
 }
 
-func isSSAReprNeeded(linters []linter.Config) bool {
-	for _, linter := range linters {
-		if linter.NeedsSSARepresentation() {
-			return true
-		}
+func (cl ContextLoader) Load(ctx context.Context, linters []linter.Config) (*linter.Context, error) {
+	loadMode := cl.findLoadMode(linters)
+	pkgs, err := cl.loadPackages(ctx, loadMode)
+	if err != nil {
+		return nil, err
 	}
 
-	return false
-}
+	if len(pkgs) == 0 {
+		return nil, exitcodes.ErrNoGoFiles
+	}
 
-func normalizePaths(paths []string) ([]string, error) {
-	ret := make([]string, 0, len(paths))
-	for _, p := range paths {
-		relPath, err := fsutils.ShortestRelPath(p, "")
-		if err != nil {
-			return nil, fmt.Errorf("can't get relative path for path %s: %s", p, err)
+	var prog *loader.Program
+	if loadMode >= packages.LoadSyntax {
+		prog = cl.makeFakeLoaderProgram(pkgs)
+	}
+
+	var ssaProg *ssa.Program
+	if loadMode == packages.LoadAllSyntax {
+		ssaProg = cl.buildSSAProgram(pkgs)
+	}
+
+	astLog := cl.log.Child("astcache")
+	astCache, err := astcache.LoadFromPackages(pkgs, astLog)
+	if err != nil {
+		return nil, err
+	}
+
+	ret := &linter.Context{
+		Packages:   pkgs,
+		Program:    prog,
+		SSAProgram: ssaProg,
+		LoaderConfig: &loader.Config{
+			Cwd:   "",  // used by depguard and fallbacked to os.Getcwd
+			Build: nil, // used by depguard and megacheck and fallbacked to build.Default
+		},
+		Cfg:      cl.cfg,
+		ASTCache: astCache,
+		Log:      cl.log,
+	}
+
+	if prog != nil {
+		saveNotCompilingPackages(ret)
+	} else {
+		for _, pkg := range pkgs {
+			if len(pkg.Errors) != 0 {
+				cl.log.Infof("Pkg %s errors: %v", pkg.ID, pkg.Errors)
+			}
 		}
-		p = relPath
-
-		ret = append(ret, "./"+p)
 	}
 
 	return ret, nil
 }
 
-func getCurrentProjectImportPath() (string, error) {
-	gopath := os.Getenv("GOPATH")
-	if gopath == "" {
-		return "", fmt.Errorf("no GOPATH env variable")
-	}
-
-	wd, err := fsutils.Getwd()
-	if err != nil {
-		return "", fmt.Errorf("can't get workind directory: %s", err)
-	}
-
-	if !strings.HasPrefix(wd, gopath) {
-		return "", fmt.Errorf("currently no in gopath: %q isn't a prefix of %q", gopath, wd)
-	}
-
-	path := strings.TrimPrefix(wd, gopath)
-	path = strings.TrimPrefix(path, string(os.PathSeparator)) // if GOPATH contains separator at the end
-	src := "src" + string(os.PathSeparator)
-	if !strings.HasPrefix(path, src) {
-		return "", fmt.Errorf("currently no in gopath/src: %q isn't a prefix of %q", src, path)
-	}
-
-	path = strings.TrimPrefix(path, src)
-	path = strings.Replace(path, string(os.PathSeparator), "/", -1)
-	return path, nil
-}
-
-func isLocalProjectAnalysis(args []string) bool {
-	for _, arg := range args {
-		if strings.HasPrefix(arg, "..") || filepath.IsAbs(arg) {
-			return false
-		}
-	}
-
-	return true
-}
-
-func getTypeCheckFuncBodies(cfg *config.Run, linters []linter.Config,
-	pkgProg *packages.Program, log logutils.Log) func(string) bool {
-
-	if !isLocalProjectAnalysis(cfg.Args) {
-		loadDebugf("analysis in nonlocal, don't optimize loading by not typechecking func bodies")
-		return nil
-	}
-
-	if isSSAReprNeeded(linters) {
-		loadDebugf("ssa repr is needed, don't optimize loading by not typechecking func bodies")
-		return nil
-	}
-
-	if len(pkgProg.Dirs()) == 0 {
-		// files run, in this mode packages are fake: can't check their path properly
-		return nil
-	}
-
-	projPath, err := getCurrentProjectImportPath()
-	if err != nil {
-		log.Infof("Can't get cur project path: %s", err)
-		return nil
-	}
-
-	return func(path string) bool {
-		if strings.HasPrefix(path, ".") {
-			loadDebugf("%s: dot import: typecheck func bodies", path)
-			return true
-		}
-
-		isLocalPath := strings.HasPrefix(path, projPath)
-		if isLocalPath {
-			localPath := strings.TrimPrefix(path, projPath)
-			localPath = strings.TrimPrefix(localPath, "/")
-			if strings.HasPrefix(localPath, "vendor/") {
-				loadDebugf("%s: local vendor import: DO NOT typecheck func bodies", path)
-				return false
-			}
-
-			loadDebugf("%s: local import: typecheck func bodies", path)
-			return true
-		}
-
-		loadDebugf("%s: not local import: DO NOT typecheck func bodies", path)
-		return false
-	}
-}
-
-func loadWholeAppIfNeeded(linters []linter.Config, cfg *config.Config,
-	pkgProg *packages.Program, log logutils.Log) (*loader.Program, *loader.Config, error) {
-
-	if !isFullImportNeeded(linters, cfg) {
-		return nil, nil, nil
-	}
-
-	startedAt := time.Now()
-	defer func() {
-		log.Infof("Program loading took %s", time.Since(startedAt))
-	}()
-
-	bctx := pkgProg.BuildContext()
-	loadcfg := &loader.Config{
-		Build:               bctx,
-		AllowErrors:         true,                 // Try to analyze partially
-		ParserMode:          parser.ParseComments, // AST will be reused by linters
-		TypeCheckFuncBodies: getTypeCheckFuncBodies(&cfg.Run, linters, pkgProg, log),
-		TypeChecker: types.Config{
-			Sizes: types.SizesFor(build.Default.Compiler, build.Default.GOARCH),
-		},
-	}
-
-	var loaderArgs []string
-	dirs := pkgProg.Dirs()
-	if len(dirs) != 0 {
-		loaderArgs = dirs // dirs run
-	} else {
-		loaderArgs = pkgProg.Files(cfg.Run.AnalyzeTests) // files run
-	}
-
-	nLoaderArgs, err := normalizePaths(loaderArgs)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	rest, err := loadcfg.FromArgs(nLoaderArgs, cfg.Run.AnalyzeTests)
-	if err != nil {
-		return nil, nil, fmt.Errorf("can't parepare load config with paths: %s", err)
-	}
-	if len(rest) > 0 {
-		return nil, nil, fmt.Errorf("unhandled loading paths: %v", rest)
-	}
-
-	prog, err := loadcfg.Load()
-	if err != nil {
-		return nil, nil, fmt.Errorf("can't load program from paths %v: %s", loaderArgs, err)
-	}
-
-	if len(prog.InitialPackages()) == 1 {
-		pkg := prog.InitialPackages()[0]
-		var files []string
-		for _, f := range pkg.Files {
-			files = append(files, prog.Fset.Position(f.Pos()).Filename)
-		}
-		log.Infof("pkg %s files: %s", pkg, files)
-	}
-
-	return prog, loadcfg, nil
-}
-
-func buildSSAProgram(lprog *loader.Program, log logutils.Log) *ssa.Program {
-	startedAt := time.Now()
-	defer func() {
-		log.Infof("SSA repr building took %s", time.Since(startedAt))
-	}()
-
-	ssaProg := ssautil.CreateProgram(lprog, ssa.GlobalDebug)
-	ssaProg.Build()
-	return ssaProg
-}
-
-// separateNotCompilingPackages moves not compiling packages into separate slices:
+// saveNotCompilingPackages saves not compiling packages into separate slice:
 // a lot of linters crash on such packages. Leave them only for those linters
 // which can work with them.
-//nolint:gocyclo
-func separateNotCompilingPackages(lintCtx *linter.Context) {
-	prog := lintCtx.Program
-
-	notCompilingPackagesSet := map[*loader.PackageInfo]bool{}
-
-	if prog.Created != nil {
-		compilingCreated := make([]*loader.PackageInfo, 0, len(prog.Created))
-		for _, info := range prog.Created {
-			if len(info.Errors) != 0 {
-				lintCtx.NotCompilingPackages = append(lintCtx.NotCompilingPackages, info)
-				notCompilingPackagesSet[info] = true
-			} else {
-				compilingCreated = append(compilingCreated, info)
-			}
-		}
-		prog.Created = compilingCreated
-	}
-
-	if prog.Imported != nil {
-		for k, info := range prog.Imported {
-			if len(info.Errors) == 0 {
-				continue
-			}
-
-			lintCtx.NotCompilingPackages = append(lintCtx.NotCompilingPackages, info)
-			notCompilingPackagesSet[info] = true
-			delete(prog.Imported, k)
-		}
-	}
-
-	if prog.AllPackages != nil {
-		for k, info := range prog.AllPackages {
-			if len(info.Errors) == 0 {
-				continue
-			}
-
-			if !notCompilingPackagesSet[info] {
-				lintCtx.NotCompilingPackages = append(lintCtx.NotCompilingPackages, info)
-				notCompilingPackagesSet[info] = true
-			}
-			delete(prog.AllPackages, k)
+func saveNotCompilingPackages(lintCtx *linter.Context) {
+	for _, pkg := range lintCtx.Packages {
+		if len(pkg.Errors) != 0 {
+			lintCtx.NotCompilingPackages = append(lintCtx.NotCompilingPackages, pkg)
 		}
 	}
 
 	if len(lintCtx.NotCompilingPackages) != 0 {
 		lintCtx.Log.Infof("Packages that do not compile: %+v", lintCtx.NotCompilingPackages)
 	}
-}
-
-//nolint:gocyclo
-func LoadContext(linters []linter.Config, cfg *config.Config, log logutils.Log) (*linter.Context, error) {
-	// Set GOROOT to have working cross-compilation: cross-compiled binaries
-	// have invalid GOROOT. XXX: can't use runtime.GOROOT().
-	goroot, err := goutils.DiscoverGoRoot()
-	if err != nil {
-		return nil, fmt.Errorf("can't discover GOROOT: %s", err)
-	}
-	os.Setenv("GOROOT", goroot)
-	build.Default.GOROOT = goroot
-
-	args := cfg.Run.Args
-	if len(args) == 0 {
-		args = []string{"./..."}
-	}
-
-	skipDirs := append([]string{}, packages.StdExcludeDirRegexps...)
-	skipDirs = append(skipDirs, cfg.Run.SkipDirs...)
-	r, err := packages.NewResolver(cfg.Run.BuildTags, skipDirs, log.Child("path_resolver"))
-	if err != nil {
-		return nil, err
-	}
-
-	pkgProg, err := r.Resolve(args...)
-	if err != nil {
-		return nil, err
-	}
-
-	if len(pkgProg.Packages()) == 0 {
-		return nil, exitcodes.ErrNoGoFiles
-	}
-
-	prog, loaderConfig, err := loadWholeAppIfNeeded(linters, cfg, pkgProg, log)
-	if err != nil {
-		return nil, err
-	}
-
-	var ssaProg *ssa.Program
-	if prog != nil && isSSAReprNeeded(linters) {
-		ssaProg = buildSSAProgram(prog, log)
-	}
-
-	astLog := log.Child("astcache")
-	var astCache *astcache.Cache
-	if prog != nil {
-		astCache, err = astcache.LoadFromProgram(prog, astLog)
-	} else {
-		astCache, err = astcache.LoadFromFiles(pkgProg.Files(cfg.Run.AnalyzeTests), astLog)
-	}
-	if err != nil {
-		return nil, err
-	}
-
-	ret := &linter.Context{
-		PkgProgram:   pkgProg,
-		Cfg:          cfg,
-		Program:      prog,
-		SSAProgram:   ssaProg,
-		LoaderConfig: loaderConfig,
-		ASTCache:     astCache,
-		Log:          log,
-	}
-
-	if prog != nil {
-		separateNotCompilingPackages(ret)
-	}
-
-	return ret, nil
 }
