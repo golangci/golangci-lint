@@ -76,8 +76,8 @@ func buildTemplateContext() (map[string]interface{}, error) {
 	shortHelp := bytes.Join(helpLines[2:], []byte("\n"))
 
 	return map[string]interface{}{
-		"GolangciYaml":                     string(golangciYaml),
-		"GolangciYamlExample":              string(golangciYamlExample),
+		"GolangciYaml":                     strings.TrimSpace(string(golangciYaml)),
+		"GolangciYamlExample":              strings.TrimSpace(string(golangciYamlExample)),
 		"LintersCommandOutputEnabledOnly":  string(lintersOutParts[0]),
 		"LintersCommandOutputDisabledOnly": string(lintersOutParts[1]),
 		"EnabledByDefaultLinters":          getLintersListMarkdown(true),

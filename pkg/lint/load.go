@@ -10,14 +10,13 @@ import (
 	"strings"
 	"time"
 
+	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/exitcodes"
 	"github.com/golangci/golangci-lint/pkg/fsutils"
 	"github.com/golangci/golangci-lint/pkg/goutils"
-	"github.com/golangci/golangci-lint/pkg/logutils"
-
-	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/lint/astcache"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
+	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/packages"
 	"github.com/golangci/tools/go/ssa"
 	"github.com/golangci/tools/go/ssa/ssautil"

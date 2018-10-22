@@ -49,12 +49,28 @@ The recommended way to install golangci-lint (replace `vX.Y.Z` with the latest
 version from the [releases page](https://github.com/golangci/golangci-lint/releases)):
 ```bash
 # binary will be $GOPATH/bin/golangci-lint
-curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | bash -s -- -b $GOPATH/bin vX.Y.Z
+curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s -- -b $GOPATH/bin vX.Y.Z
 
 # or install it into ./bin/
-# curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | bash -s vX.Y.Z
+curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s vX.Y.Z
 
-# golangci-lint --version
+# In alpine linux (as it does not come with curl by default)
+wget -O - -q https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s vX.Y.Z
+
+golangci-lint --version
+```
+As a fallback you can also use `raw.githubusercontent.com`
+```bash
+# binary will be $GOPATH/bin/golangci-lint
+curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sh -s -- -b $GOPATH/bin vX.Y.Z
+
+# or install it into ./bin/
+curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sh -s vX.Y.Z
+
+# In alpine linux (as it does not come with curl by default)
+wget -O - -q https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sh -s vX.Y.Z
+
+golangci-lint --version
 ```
 
 Periodically update version of golangci-lint: the project is under active development
@@ -147,6 +163,7 @@ $ golangci-lint run --disable-all -E errcheck
 5. Vim
   - vim-go open [issue](https://github.com/fatih/vim-go/issues/1841)
   - syntastic [merged pull request](https://github.com/vim-syntastic/syntastic/pull/2190) with golangci-lint support
+  - ale [merged pull request](https://github.com/w0rp/ale/pull/1890) with golangci-lint support
 
 # Comparison
 ## `golangci-lint` vs `gometalinter`
@@ -370,19 +387,19 @@ Flags:
                                       # megacheck: Developers tend to write in C-style with an explicit 'break' in a 'switch', so it's ok to ignore
                                       - ineffective break statement. Did you mean to break out of the outer loop
                                     
-                                      # gas: Too many false-positives on 'unsafe' usage
+                                      # gosec: Too many false-positives on 'unsafe' usage
                                       - Use of unsafe calls should be audited
                                     
-                                      # gas: Too many false-positives for parametrized shell calls
+                                      # gosec: Too many false-positives for parametrized shell calls
                                       - Subprocess launch(ed with variable|ing should be audited)
                                     
-                                      # gas: Duplicated errcheck checks
+                                      # gosec: Duplicated errcheck checks
                                       - G104
                                     
-                                      # gas: Too many issues in popular repos
+                                      # gosec: Too many issues in popular repos
                                       - (Expect directory permissions to be 0750 or less|Expect file permissions to be 0600 or less)
                                     
-                                      # gas: False positive is triggered by 'src, err := ioutil.ReadFile(filename)'
+                                      # gosec: False positive is triggered by 'src, err := ioutil.ReadFile(filename)'
                                       - Potential file inclusion via variable
                                      (default true)
       --max-issues-per-linter int   Maximum issues count per one linter. Set to 0 to disable (default 50)
@@ -595,7 +612,7 @@ issues:
   max-per-linter: 0
 
   # Maximum count of issues with the same text. Set to 0 to disable. Default is 3.
-  max-same: 0
+  max-same-issues: 0
 
   # Show only new issues: if there are unstaged changes or untracked files,
   # only those changes are analyzed, else only changes in HEAD~ are analyzed.
@@ -649,8 +666,8 @@ linters:
 # False Positives
 False positives are inevitable, but we did our best to reduce their count. For example, we have a default enabled set of [exclude patterns](#command-line-options). If a false positive occurred you have the following choices:
 1. Exclude issue by text using command-line option `-e` or config option `issues.exclude`. It's helpful when you decided to ignore all issues of this type.
-2. Exclude this one issue by using special comment `// nolint[:linter1,linter2,...]` on issued line.
-Comment `// nolint` disables all issues reporting on this line. Comment e.g. `// nolint:govet` disables only govet issues for this line.
+2. Exclude this one issue by using special comment `//nolint[:linter1,linter2,...]` on issued line.
+Comment `//nolint` disables all issues reporting on this line. Comment e.g. `//nolint:govet` disables only govet issues for this line.
 If you would like to completely exclude all issues for some function prepend this comment
 above function:
 ```go
@@ -684,6 +701,10 @@ We don't recommend vendoring `golangci-lint` in your repo: you will get troubles
 No, you don't need to do it anymore. We will run `go install -i` and `go test -i`
 for analyzed packages ourselves. We will run them only
 if option `govet.use-installed-packages` is `true`.
+
+**Which go versions are supported**
+Golangci-lint versions > 1.10.2 supports Go 1.10 and 1.11.
+Golangci-lint versions <= v1.10.2 supported Go 1.9, 1.10, 1.11.
 
 **`golangci-lint` doesn't work**
 

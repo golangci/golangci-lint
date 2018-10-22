@@ -3,10 +3,9 @@ package golinters
 import (
 	"context"
 
-	"github.com/golangci/interfacer/check"
-
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
+	"github.com/golangci/interfacer/check"
 )
 
 type Interfacer struct{}

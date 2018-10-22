@@ -15,7 +15,6 @@ import (
 
 	"github.com/golangci/golangci-lint/pkg/exitcodes"
 	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
-
 	"github.com/stretchr/testify/assert"
 )
 

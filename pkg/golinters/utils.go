@@ -8,10 +8,9 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/packages"
-
-	"github.com/golangci/golangci-lint/pkg/config"
 )
 
 func formatCode(code string, _ *config.Config) string {

@@ -113,14 +113,14 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:2146ed9836ab6af9cbe527299544566ee7506ca6dcd4ab71d761141c015ba174"
+  digest = "1:974bb21c8811f4353bd499c71c9b47da05710f80629201448a328a6b6344ed5e"
   name = "github.com/golangci/errcheck"
   packages = [
     "golangci",
     "internal/errcheck",
   ]
   pruneopts = "UT"
-  revision = "f726ab79eeeb2d770a997ee4d9bce4ca674956a0"
+  revision = "1765131d5be500f6904592495b9a6eb456c74800"
 
 [[projects]]
   branch = "master"
@@ -481,12 +481,12 @@
   revision = "7c0cea34c8ece3fbeb2b27ab9b59511d360fb394"
 
 [[projects]]
-  digest = "1:9424f440bba8f7508b69414634aef3b2b3a877e522d8a4624692412805407bb7"
+  branch = "master"
+  digest = "1:c1b1102241e7f645bc8e0c22ae352e8f0dc6484b6cb4d132fa9f24174e0119e2"
   name = "github.com/spf13/pflag"
   packages = ["."]
   pruneopts = "UT"
-  revision = "583c0c0531f06d5278b7d917446061adc344b5cd"
-  version = "v1.0.1"
+  revision = "298182f68c66c05229eb03ac171abe6e309ee79a"
 
 [[projects]]
   digest = "1:59e7dceb53b4a1e57eb1eb0bf9951ff0c25912df7660004a789b62b4e8cdca3b"
@@ -549,7 +549,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:1c24352e1722a8954fe7c95bcb12d878ef9883b01fe3e0e801f62e8cbf9621a0"
+  digest = "1:1f0808c71cfd0b33831391bc26c7ba2862138bfaa10b7f8ed695b2a0c67f896c"
   name = "golang.org/x/tools"
   packages = [
     "go/ast/astutil",
@@ -561,9 +561,10 @@
     "go/types/typeutil",
     "imports",
     "internal/fastwalk",
+    "internal/gopathwalk",
   ]
   pruneopts = "UT"
-  revision = "7ca132754999accbaa5c1735eda29e7ce0f3bf03"
+  revision = "5d4988d199e2aeefda3528f599e06410c43caa29"
 
 [[projects]]
   digest = "1:342378ac4dcb378a5448dd723f0784ae519383532f5e70ade24132c4c8693202"

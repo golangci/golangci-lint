@@ -24,6 +24,10 @@
 
 [[constraint]]
   branch = "master"
+  name = "github.com/spf13/pflag"
+
+[[constraint]]
+  branch = "master"
   name = "github.com/mitchellh/go-ps"
 
 [[constraint]]
