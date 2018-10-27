@@ -169,6 +169,7 @@ type LintersSettings struct {
 type ErrcheckSettings struct {
 	CheckTypeAssertions bool       `mapstructure:"check-type-assertions"`
 	CheckAssignToBlank  bool       `mapstructure:"check-blank"`
+	CheckWithoutTests   bool       `mapstructure:"check-without-tests"`
 	Ignore              IgnoreFlag `mapstructure:"ignore"`
 	Exclude             string     `mapstructure:"exclude"`
 }

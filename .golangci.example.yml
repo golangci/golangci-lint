@@ -59,6 +59,10 @@ linters-settings:
     # report about assignment of errors to blank identifier: `num, _ := strconv.Atoi(numStr)`;
     # default is false: such cases aren't reported by default.
     check-blank: false
+
+    # report about checking of _test.go files is disabled.
+    # default is false: such cases aren't reported by default.
+    check-without-tests: false
   govet:
     # report about shadowed variables
     check-shadowing: true

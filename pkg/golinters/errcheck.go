@@ -58,9 +58,10 @@ func (e Errcheck) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Is
 
 func genConfig(errCfg *config.ErrcheckSettings) (*errcheckAPI.Config, error) {
 	c := &errcheckAPI.Config{
-		Ignore:  errCfg.Ignore,
-		Blank:   errCfg.CheckAssignToBlank,
-		Asserts: errCfg.CheckTypeAssertions,
+		Ignore:       errCfg.Ignore,
+		Blank:        errCfg.CheckAssignToBlank,
+		Asserts:      errCfg.CheckTypeAssertions,
+		WithoutTests: errCfg.CheckWithoutTests,
 	}
 	if errCfg.Exclude != "" {
 		exclude, err := readExcludeFile(errCfg.Exclude)
