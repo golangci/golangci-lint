@@ -271,7 +271,7 @@ func separateNotCompilingPackages(lintCtx *linter.Context) {
 	}
 
 	if len(lintCtx.NotCompilingPackages) != 0 {
-		lintCtx.Log.Infof("Not compiling packages: %+v", lintCtx.NotCompilingPackages)
+		lintCtx.Log.Infof("Packages that do not compile: %+v", lintCtx.NotCompilingPackages)
 	}
 }
 
