@@ -7,9 +7,10 @@ import (
 	"io/ioutil"
 	"strings"
 
+	"github.com/golangci/misspell"
+
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
-	"github.com/golangci/misspell"
 )
 
 type Misspell struct{}

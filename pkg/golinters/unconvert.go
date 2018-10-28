@@ -3,9 +3,10 @@ package golinters
 import (
 	"context"
 
+	unconvertAPI "github.com/golangci/unconvert"
+
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
-	unconvertAPI "github.com/golangci/unconvert"
 )
 
 type Unconvert struct{}

@@ -4,9 +4,10 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/pkg/errors"
+
 	"github.com/golangci/golangci-lint/pkg/goutil"
 	"github.com/golangci/golangci-lint/pkg/result"
-	"github.com/pkg/errors"
 )
 
 type Cgo struct {

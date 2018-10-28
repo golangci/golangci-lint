@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	structcheckAPI "github.com/golangci/check/cmd/structcheck"
+
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
 )

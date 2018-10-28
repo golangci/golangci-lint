@@ -11,12 +11,13 @@ import (
 	"github.com/golangci/go-tools/simple"
 	"github.com/golangci/go-tools/staticcheck"
 	"github.com/golangci/go-tools/unused"
-	"github.com/golangci/golangci-lint/pkg/fsutils"
-	"github.com/golangci/golangci-lint/pkg/lint/linter"
-	"github.com/golangci/golangci-lint/pkg/result"
 	"github.com/golangci/tools/go/ssa"
 	"golang.org/x/tools/go/loader"
 	"golang.org/x/tools/go/packages"
+
+	"github.com/golangci/golangci-lint/pkg/fsutils"
+	"github.com/golangci/golangci-lint/pkg/lint/linter"
+	"github.com/golangci/golangci-lint/pkg/result"
 )
 
 const megacheckName = "megacheck"

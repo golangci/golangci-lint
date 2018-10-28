@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	goconstAPI "github.com/golangci/goconst"
+
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
 )

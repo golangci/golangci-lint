@@ -5,10 +5,11 @@ import (
 	"go/ast"
 	"go/token"
 
+	govetAPI "github.com/golangci/govet"
+
 	"github.com/golangci/golangci-lint/pkg/fsutils"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
-	govetAPI "github.com/golangci/govet"
 )
 
 type Govet struct{}

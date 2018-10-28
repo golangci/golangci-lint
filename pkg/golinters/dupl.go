@@ -6,10 +6,11 @@ import (
 	"go/token"
 
 	duplAPI "github.com/golangci/dupl"
+	"github.com/pkg/errors"
+
 	"github.com/golangci/golangci-lint/pkg/fsutils"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
-	"github.com/pkg/errors"
 )
 
 type Dupl struct{}

@@ -7,10 +7,11 @@ import (
 	"os"
 
 	errcheckAPI "github.com/golangci/errcheck/golangci"
+	"github.com/pkg/errors"
+
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
-	"github.com/pkg/errors"
 )
 
 type Errcheck struct{}

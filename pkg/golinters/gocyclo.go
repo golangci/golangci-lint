@@ -6,6 +6,7 @@ import (
 	"sort"
 
 	gocycloAPI "github.com/golangci/gocyclo/pkg/gocyclo"
+
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
 )

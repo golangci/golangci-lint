@@ -4,9 +4,10 @@ import (
 	"sort"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
+
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestGetEnabledLintersSet(t *testing.T) {

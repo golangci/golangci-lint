@@ -1,14 +1,15 @@
 package commands
 
 import (
+	"github.com/spf13/cobra"
+	"github.com/spf13/pflag"
+
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/goutil"
 	"github.com/golangci/golangci-lint/pkg/lint"
 	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/report"
-	"github.com/spf13/cobra"
-	"github.com/spf13/pflag"
 )
 
 type Executor struct {

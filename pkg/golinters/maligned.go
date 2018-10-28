@@ -4,9 +4,10 @@ import (
 	"context"
 	"fmt"
 
+	malignedAPI "github.com/golangci/maligned"
+
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
-	malignedAPI "github.com/golangci/maligned"
 )
 
 type Maligned struct{}

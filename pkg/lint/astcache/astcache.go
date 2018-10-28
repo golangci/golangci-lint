@@ -8,8 +8,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/golangci/golangci-lint/pkg/logutils"
 	"golang.org/x/tools/go/packages"
+
+	"github.com/golangci/golangci-lint/pkg/logutils"
 )
 
 type File struct {

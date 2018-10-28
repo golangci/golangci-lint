@@ -4,9 +4,10 @@ import (
 	"context"
 	"fmt"
 
+	ineffassignAPI "github.com/golangci/ineffassign"
+
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
-	ineffassignAPI "github.com/golangci/ineffassign"
 )
 
 type Ineffassign struct{}

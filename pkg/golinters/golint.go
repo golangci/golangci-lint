@@ -6,9 +6,10 @@ import (
 	"go/ast"
 	"go/token"
 
+	lintAPI "github.com/golangci/lint-1"
+
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
-	lintAPI "github.com/golangci/lint-1"
 )
 
 type Golint struct{}

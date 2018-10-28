@@ -518,6 +518,10 @@ linters-settings:
   gofmt:
     # simplify code: gofmt with `-s` option, true by default
     simplify: true
+  goimports:
+    # put imports beginning with prefix after 3rd-party packages;
+    # it's a comma-separated list of prefixes
+    local-prefixes: github.com/org/project
   gocyclo:
     # minimal code complexity to report, 30 by default (but we recommend 10-20)
     min-complexity: 10
@@ -655,6 +659,8 @@ linters-settings:
     locale: US
   lll:
     line-length: 140
+  goimports:
+    local-prefixes: github.com/golangci/golangci-lint
 
 linters:
   enable-all: true

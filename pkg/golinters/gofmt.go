@@ -6,12 +6,15 @@ import (
 	"fmt"
 	"go/token"
 
+	"golang.org/x/tools/imports"
+
 	gofmtAPI "github.com/golangci/gofmt/gofmt"
 	goimportsAPI "github.com/golangci/gofmt/goimports"
+	"sourcegraph.com/sourcegraph/go-diff/diff"
+
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
-	"sourcegraph.com/sourcegraph/go-diff/diff"
 )
 
 type Gofmt struct {
@@ -109,6 +112,7 @@ func (g Gofmt) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issue
 		var diff []byte
 		var err error
 		if g.UseGoimports {
+			imports.LocalPrefix = lintCtx.Settings().Goimports.LocalPrefixes
 			diff, err = goimportsAPI.Run(f)
 		} else {
 			diff, err = gofmtAPI.Run(f, lintCtx.Settings().Gofmt.Simplify)

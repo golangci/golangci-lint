@@ -10,17 +10,18 @@ import (
 	"strings"
 	"time"
 
+	"github.com/golangci/tools/go/ssa"
+	"github.com/golangci/tools/go/ssa/ssautil"
+	"github.com/pkg/errors"
+	"golang.org/x/tools/go/loader"
+	"golang.org/x/tools/go/packages"
+
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/exitcodes"
 	"github.com/golangci/golangci-lint/pkg/goutil"
 	"github.com/golangci/golangci-lint/pkg/lint/astcache"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/logutils"
-	"github.com/golangci/tools/go/ssa"
-	"github.com/golangci/tools/go/ssa/ssautil"
-	"github.com/pkg/errors"
-	"golang.org/x/tools/go/loader"
-	"golang.org/x/tools/go/packages"
 )
 
 type ContextLoader struct {

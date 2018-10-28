@@ -127,6 +127,9 @@ type LintersSettings struct {
 	Gofmt struct {
 		Simplify bool
 	}
+	Goimports struct {
+		LocalPrefixes string `mapstructure:"local-prefixes"`
+	}
 	Gocyclo struct {
 		MinComplexity int `mapstructure:"min-complexity"`
 	}

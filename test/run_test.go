@@ -13,9 +13,10 @@ import (
 	"syscall"
 	"testing"
 
+	assert "github.com/stretchr/testify/require"
+
 	"github.com/golangci/golangci-lint/pkg/exitcodes"
 	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
-	assert "github.com/stretchr/testify/require"
 )
 
 var root = filepath.Join("..", "...")

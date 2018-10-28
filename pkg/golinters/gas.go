@@ -8,10 +8,11 @@ import (
 	"log"
 	"strconv"
 
-	"github.com/golangci/golangci-lint/pkg/lint/linter"
-	"github.com/golangci/golangci-lint/pkg/result"
 	"github.com/golangci/gosec"
 	"github.com/golangci/gosec/rules"
+
+	"github.com/golangci/golangci-lint/pkg/lint/linter"
+	"github.com/golangci/golangci-lint/pkg/result"
 )
 
 type Gosec struct{}

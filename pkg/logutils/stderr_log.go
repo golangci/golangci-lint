@@ -4,8 +4,9 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/golangci/golangci-lint/pkg/exitcodes"
 	"github.com/sirupsen/logrus" //nolint:depguard
+
+	"github.com/golangci/golangci-lint/pkg/exitcodes"
 )
 
 type StderrLog struct {
