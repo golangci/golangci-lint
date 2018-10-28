@@ -13,12 +13,12 @@ Sponsored by [GolangCI.com](https://golangci.com): SaaS service for running lint
 
    * [Demo](#demo)
    * [Install](#install)
+   * [Trusted By](#trusted-by)
    * [Quick Start](#quick-start)
    * [Editor Integration](#editor-integration)
    * [Comparison](#comparison)
    * [Performance](#performance)
    * [Internals](#internals)
-   * [Trusted By](#trusted-by)
    * [Supported Linters](#supported-linters)
    * [Configuration](#configuration)
    * [False Positives](#false-positives)
@@ -91,6 +91,42 @@ You can also install it on OSX using brew:
 brew install golangci/tap/golangci-lint
 brew upgrade golangci/tap/golangci-lint
 ```
+
+# Trusted By
+
+The following companies/products use golangci-lint:
+
+* [Google](https://github.com/GoogleContainerTools/skaffold)
+* [Facebook](https://github.com/facebookincubator/fbender)
+* [Red Hat OpenShift](https://github.com/openshift/telemeter)
+* [Yahoo](https://github.com/yahoo/yfuzz)
+* [IBM](https://github.com/ibm-developer/ibm-cloud-env-golang)
+* [Xiaomi](https://github.com/XiaoMi/soar)
+* [Samsung](https://github.com/samsung-cnct/cluster-api-provider-ssh)
+* [Arduino](https://github.com/arduino/arduino-cli)
+* [Eclipse Foundation](https://github.com/eclipse/che-go-jsonrpc)
+* [WooCart](https://github.com/woocart/gsutil)
+* [Percona](https://github.com/percona/pmm-managed)
+* [Serverless](https://github.com/serverless/event-gateway)
+* [ScyllaDB](https://github.com/scylladb/gocqlx)
+* [NixOS](https://github.com/NixOS/nixpkgs-channels)
+* [The New York Times](https://github.com/NYTimes/encoding-wrapper)
+
+The following great projects use golangci-lint:
+
+* [goreleaser/goreleaser](https://github.com/goreleaser/goreleaser)
+* [tsuru/tsuru](https://github.com/tsuru/tsuru)
+* [xenolf/lego](https://github.com/xenolf/lego)
+* [go-swagger/go-swagger](https://github.com/go-swagger/go-swagger)
+* [kubernetes-sigs/kustomize](https://github.com/kubernetes-sigs/kustomize)
+* [virtual-kubelet/virtual-kubelet](https://github.com/virtual-kubelet/virtual-kubelet)
+* [alecthomas/participle](https://github.com/alecthomas/participle)
+* [asobti/kube-monkey](https://github.com/asobti/kube-monkey)
+* [getantibody/antibody](https://github.com/getantibody/antibody)
+* [banzaicloud/pipeline](https://github.com/banzaicloud/pipeline)
+* [posener/complete](https://github.com/posener/complete)
+* [y0ssar1an/q](https://github.com/y0ssar1an/q)
+
 
 # Quick Start
 To run golangci-lint execute:
@@ -295,21 +331,6 @@ Read [this section](#internals) for details.
 
 All linters are vendored in the `/vendor` folder: their version is fixed, they are builtin
 and you don't need to install them separately.
-
-# Trusted By
-
-The following great projects use golangci-lint:
-
-* [GoogleContainerTools/skaffold](https://github.com/GoogleContainerTools/skaffold/blob/master/hack/linter.sh#L24) - Easy and Repeatable Kubernetes Development
-* [goreleaser/goreleaser](https://github.com/goreleaser/goreleaser/blob/master/Makefile#L47) - Deliver Go binaries as fast and easily as possible
-* [goreleaser/nfpm](https://github.com/goreleaser/nfpm/blob/master/Makefile#L43) - NFPM is Not FPM - a simple deb and rpm packager written in Go
-* [goreleaser/godownloader](https://github.com/goreleaser/godownloader/blob/master/Makefile#L37) - Download Go binaries as fast and easily as possible
-* [asobti/kube-monkey](https://github.com/asobti/kube-monkey/blob/master/Makefile#L12) - An implementation of Netflix's Chaos Monkey for Kubernetes clusters
-* [nutanix/terraform-provider-nutanix](https://github.com/nutanix/terraform-provider-nutanix/blob/develop/.golangci.yml) - Terraform Nutanix Provider
-* [getantibody/antibody](https://github.com/getantibody/antibody/blob/master/Makefile#L32) - The fastest shell plugin manager
-* [Aptomi/aptomi](https://github.com/Aptomi/aptomi/blob/master/.golangci.yml) - Application delivery engine for k8s
-* [status-im/status-go](https://github.com/status-im/status-go/blob/develop/.golangci.yml) - The Status module that consumes go-ethereum
-* [ovrclk/akash](https://github.com/ovrclk/akash/blob/master/.golangci.yaml) - Blockchain-powered decentralized compute platform
 
 
 # Supported Linters
