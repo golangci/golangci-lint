@@ -8,7 +8,6 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/golangci/golangci-lint/pkg/fsutils"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
@@ -75,11 +74,11 @@ func (p *SkipDirs) Process(issues []result.Issue) ([]result.Issue, error) {
 	return filterIssues(issues, p.shouldPassIssue), nil
 }
 
-func (p *SkipDirs) getLongestArgRelativeIssuePath(i *result.Issue) (string, string) {
+func (p *SkipDirs) getLongestArgRelativeIssuePath(i *result.Issue) string {
 	issueAbsPath, err := filepath.Abs(i.FilePath())
 	if err != nil {
 		p.log.Warnf("Can't abs-ify path %q: %s", i.FilePath(), err)
-		return "", ""
+		return ""
 	}
 
 	for _, arg := range p.sortedAbsArgs {
@@ -89,15 +88,15 @@ func (p *SkipDirs) getLongestArgRelativeIssuePath(i *result.Issue) (string, stri
 
 		relPath := strings.TrimPrefix(issueAbsPath, arg)
 		relPath = strings.TrimPrefix(relPath, string(filepath.Separator))
-		return relPath, arg
+		return relPath
 	}
 
 	p.log.Infof("Issue path %q isn't relative to any of run args", i.FilePath())
-	return "", ""
+	return ""
 }
 
 func (p *SkipDirs) shouldPassIssue(i *result.Issue) bool {
-	relIssuePath, issueArg := p.getLongestArgRelativeIssuePath(i)
+	relIssuePath := p.getLongestArgRelativeIssuePath(i)
 	if relIssuePath == "" {
 		return true
 	}
@@ -106,21 +105,10 @@ func (p *SkipDirs) shouldPassIssue(i *result.Issue) bool {
 		relIssuePath = filepath.Dir(relIssuePath)
 	}
 
-	relIssueDirParts := strings.Split(relIssuePath, string(filepath.Separator))
-
 	for _, pattern := range p.patterns {
-		skippedDir := issueArg
-		for _, part := range relIssueDirParts {
-			skippedDir = filepath.Join(skippedDir, part)
-			if pattern.MatchString(part) {
-				relSkippedDir, err := fsutils.ShortestRelPath(skippedDir, "")
-				if err != nil {
-					p.log.Warnf("Can't construct short relative path for %q: %s", skippedDir, err)
-					return true
-				}
-				p.skippedDirs[relSkippedDir] = true
-				return false
-			}
+		if pattern.MatchString(relIssuePath) {
+			p.skippedDirs[relIssuePath] = true
+			return false
 		}
 	}
 
