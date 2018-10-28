@@ -156,6 +156,16 @@ $ golangci-lint run --disable-all -E errcheck
 
 # Editor Integration
 1. [Go for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=ms-vscode.Go).
+Recommended settings for VS Code are:
+```json
+"go.lintTool":"golangci-lint",
+"go.lintFlags": [
+  "--fast"
+]
+```
+Using it in an editor without `--fast` can freeze your editor.
+Golangci-lint automatically discovers `.golangci.yml` config for edited file: you don't need to configure it in VS Code settings.
+
 2. Sublime Text - [plugin](https://github.com/alecthomas/SublimeLinter-contrib-golang-cilint) for SublimeLinter.
 3. GoLand
   - Configure [File Watcher](https://www.jetbrains.com/help/go/settings-tools-file-watchers.html) with arguments `run --print-issued-lines=false $FileDir$`.
