@@ -1,6 +1,7 @@
 # GolangCI-Lint
 [![Build Status](https://travis-ci.com/golangci/golangci-lint.svg?branch=master)](https://travis-ci.com/golangci/golangci-lint)
 [![GolangCI](https://golangci.com/badges/github.com/golangci/golangci-lint.svg)](https://golangci.com)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fgolangci%2Fgolangci-lint.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fgolangci%2Fgolangci-lint?ref=badge_shield)
 
 GolangCI-Lint is a linters aggregator. It's fast: on average [5 times faster](#performance) than gometalinter.
 It's [easy to integrate and use](#command-line-options), has [nice output](#quick-start) and has a minimum number of false positives.
@@ -783,3 +784,7 @@ There is the most valuable changes log:
 # Contact Information
 You can contact the [author](https://github.com/jirfag) of GolangCI-Lint
 by [denis@golangci.com](mailto:denis@golangci.com).
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fgolangci%2Fgolangci-lint.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fgolangci%2Fgolangci-lint?ref=badge_large)
