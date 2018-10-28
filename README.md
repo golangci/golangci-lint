@@ -177,6 +177,7 @@ Golangci-lint automatically discovers `.golangci.yml` config for edited file: yo
   - vim-go open [issue](https://github.com/fatih/vim-go/issues/1841)
   - syntastic [merged pull request](https://github.com/vim-syntastic/syntastic/pull/2190) with golangci-lint support
   - ale [merged pull request](https://github.com/w0rp/ale/pull/1890) with golangci-lint support
+6. Atom - the [issue](https://github.com/joefitzgerald/go-plus/issues/819) for a go-plus.
 
 # Comparison
 ## `golangci-lint` vs `gometalinter`
