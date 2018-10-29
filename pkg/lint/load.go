@@ -196,7 +196,7 @@ func (cl ContextLoader) loadPackages(ctx context.Context, loadMode packages.Load
 	var buildFlags []string
 	if len(cl.cfg.Run.BuildTags) != 0 {
 		// go help build
-		buildFlags = []string{fmt.Sprintf("-tags '%s'", strings.Join(cl.cfg.Run.BuildTags, " "))}
+		buildFlags = []string{"-tags", strings.Join(cl.cfg.Run.BuildTags, " ")}
 	}
 	conf := &packages.Config{
 		Mode:       loadMode,
