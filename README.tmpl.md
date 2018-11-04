@@ -25,8 +25,8 @@ Sponsored by [GolangCI.com](https://golangci.com): SaaS service for running lint
 * [False Positives](#false-positives)
 * [FAQ](#faq)
 * [Thanks](#thanks)
-* [Future Plans](#future-plans)
 * [Changelog](#changelog)
+* [Future Plans](#future-plans)
 * [Contact Information](#contact-information)
 
 ## Demo
@@ -459,22 +459,45 @@ Thanks to [bradleyfalzon/revgrep](https://github.com/bradleyfalzon/revgrep) for 
 Thanks to developers and authors of used linters:
 {{.ThanksList}}
 
-## Future Plans
-
-1. Upstream all changes of forked linters.
-2. Fully integrate all used linters: make a common interface and reuse 100% of what can be reused: AST traversal, packages preparation etc.
-3. Make it easy to write own linter/checker: it should take a minimum code, have perfect documentation, debugging and testing tooling.
-4. Speed up package loading (dig into [loader](golang.org/x/tools/go/loader)): on-disk cache and existing code profiling-optimizing.
-5. Analyze (don't only filter) only new code: analyze only changed files and dependencies, make incremental analysis, caches.
-6. Smart new issues detector: don't print existing issues on changed lines.
-7. Integration with Text Editors. On-the-fly code analysis for text editors: it should be super-fast.
-8. Minimize false-positives by fixing linters and improving testing tooling.
-9. Automatic issues fixing (code rewrite, refactoring) where it's possible.
-10. Documentation for every issue type.
-
 ## Changelog
 
 There is the most valuable changes log:
+
+### October 2018
+
+1. Update goimports formatting
+2. Use go/packages
+   * A lot of linters became "fast": they are enabled by --fast now and
+     work in 1-2 seconds. Only unparam, interfacer and megacheck
+     are "slow" linters now.
+
+   * Average project is analyzed 20-40% faster than before if all linters are
+     enabled! If we enable all linters except unparam, interfacer and
+     megacheck analysis is 10-20x faster!
+3. Support goimports.local-prefix option for goimports
+4. Change license from AGPL to GPL
+5. Update CLA
+
+### September 2018
+
+1. Rename GAS to gosec
+2. Drop go1.9 support
+3. Support installation of golangci-lint via go modules
+4. Update dockerfile to use golang 1.11
+5. Add support for ignore/exclude flags in errcheck
+
+### August 2018
+
+1. Improve lll parsing for very long lines
+2. Update Depguard with a Glob support
+3. Silent output by default
+4. Disable GAS (gosec) by default
+5. Build golangci-lint on go1.11
+
+### July 2018
+
+1. Add `golangci-lint linters` command
+2. Fix work with symlinks
 
 ### June 2018
 
@@ -495,7 +518,22 @@ There is the most valuable changes log:
 1. Support GitHub Releases
 2. Installation via Homebrew and Docker
 
+## Future Plans
+
+1. Upstream all changes of forked linters.
+2. Make it easy to write own linter/checker: it should take a minimum code, have perfect documentation, debugging and testing tooling.
+3. Speed up SSA loading: on-disk cache and existing code profiling-optimizing.
+4. Analyze (don't only filter) only new code: analyze only changed files and dependencies, make incremental analysis, caches.
+5. Smart new issues detector: don't print existing issues on changed lines.
+6. Minimize false-positives by fixing linters and improving testing tooling.
+7. Automatic issues fixing (code rewrite, refactoring) where it's possible.
+8. Documentation for every issue type.
+
 ## Contact Information
 
 You can contact the [author](https://github.com/jirfag) of GolangCI-Lint
 by [denis@golangci.com](mailto:denis@golangci.com).
+
+## License Scan
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fgolangci%2Fgolangci-lint.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fgolangci%2Fgolangci-lint?ref=badge_large)
