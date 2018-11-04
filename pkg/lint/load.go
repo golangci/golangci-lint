@@ -237,6 +237,7 @@ func (cl ContextLoader) loadPackages(ctx context.Context, loadMode packages.Load
 	return retPkgs, nil
 }
 
+//nolint:gocyclo
 func (cl ContextLoader) Load(ctx context.Context, linters []linter.Config) (*linter.Context, error) {
 	loadMode := cl.findLoadMode(linters)
 	pkgs, err := cl.loadPackages(ctx, loadMode)
@@ -256,6 +257,21 @@ func (cl ContextLoader) Load(ctx context.Context, linters []linter.Config) (*lin
 	var ssaProg *ssa.Program
 	if loadMode == packages.LoadAllSyntax {
 		ssaProg = cl.buildSSAProgram(pkgs)
+		for _, pkginfo := range prog.InitialPackages() {
+			if pkginfo == nil {
+				cl.log.Infof("Pkginfo is nil")
+				continue
+			}
+			if pkginfo.Pkg == nil {
+				cl.log.Infof("Pkg %#v: types package is nil", *pkginfo)
+				continue
+			}
+			ssaPkg := ssaProg.Package(pkginfo.Pkg)
+			if ssaPkg == nil {
+				cl.log.Infof("Pkg %#v: ssaPkg is nil: %#v", *pkginfo, *pkginfo.Pkg)
+				continue
+			}
+		}
 	}
 
 	astLog := cl.log.Child("astcache")
