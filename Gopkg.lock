@@ -555,7 +555,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:aac721c5ec779073b35cf7a51b7764d13f6db2243d650965d2c71469e8994e5b"
+  digest = "1:c09b8b20f35b802fa418b0715e3147d6366b706c6003bbdef9df78272ffe80a5"
   name = "golang.org/x/tools"
   packages = [
     "go/ast/astutil",

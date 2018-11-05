@@ -222,6 +222,7 @@ func (r Runner) processLintResults(inCh <-chan lintRes) <-chan lintRes {
 		// finalize processors: logging, clearing, no heavy work here
 
 		for _, p := range r.Processors {
+			p := p
 			sw.TrackStage(p.Name(), func() {
 				p.Finish()
 			})
@@ -273,6 +274,7 @@ func (r *Runner) processIssues(issues []result.Issue, sw *timeutils.Stopwatch) [
 	for _, p := range r.Processors {
 		var newIssues []result.Issue
 		var err error
+		p := p
 		sw.TrackStage(p.Name(), func() {
 			newIssues, err = p.Process(issues)
 		})

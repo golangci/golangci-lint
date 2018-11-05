@@ -153,6 +153,7 @@ func TestNolintAliases(t *testing.T) {
 
 	p := newTestNolintProcessor(getOkLogger(ctrl))
 	for _, line := range []int{47, 49, 51} {
+		line := line
 		t.Run(fmt.Sprintf("line-%d", line), func(t *testing.T) {
 			processAssertEmpty(t, p, newNolintFileIssue(line, "gosec"))
 		})

@@ -199,6 +199,7 @@ lll: Reports long lines [fast: true]
 unparam: Reports unused function parameters [fast: false]
 nakedret: Finds naked returns in functions greater than a specified function length [fast: true]
 prealloc: Finds slice declarations that could potentially be preallocated [fast: true]
+scopelint: Scopelint checks for unpinned variables in go programs [fast: true]
 ```
 
 Pass `-E/--enable` to enable linter and `-D/--disable` to disable:
@@ -398,6 +399,7 @@ golangci-lint help linters
 - [unparam](https://github.com/mvdan/unparam) - Reports unused function parameters
 - [nakedret](https://github.com/alexkohler/nakedret) - Finds naked returns in functions greater than a specified function length
 - [prealloc](https://github.com/alexkohler/prealloc) - Finds slice declarations that could potentially be preallocated
+- [scopelint](https://github.com/kyoh86/scopelint) - Scopelint checks for unpinned variables in go programs
 
 ## Configuration
 
@@ -807,6 +809,7 @@ Thanks to developers and authors of used linters:
 - [client9](https://github.com/client9)
 - [walle](https://github.com/walle)
 - [alexkohler](https://github.com/alexkohler)
+- [kyoh86](https://github.com/kyoh86)
 
 ## Changelog
 
