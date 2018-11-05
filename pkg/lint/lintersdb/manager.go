@@ -49,6 +49,7 @@ func (m Manager) GetLinterConfig(name string) *linter.Config {
 func enableLinterConfigs(lcs []linter.Config, isEnabled func(lc *linter.Config) bool) []linter.Config {
 	var ret []linter.Config
 	for _, lc := range lcs {
+		lc := lc
 		lc.EnabledByDefault = isEnabled(&lc)
 		ret = append(ret, lc)
 	}
@@ -186,6 +187,10 @@ func (Manager) GetAllSupportedLinterConfigs() []linter.Config {
 			WithPresets(linter.PresetPerformance).
 			WithSpeed(8).
 			WithURL("https://github.com/alexkohler/prealloc"),
+		linter.NewConfig(golinters.Scopelint{}).
+			WithPresets(linter.PresetBugs).
+			WithSpeed(8).
+			WithURL("https://github.com/kyoh86/scopelint"),
 	}
 
 	isLocalRun := os.Getenv("GOLANGCI_COM_RUN") == ""

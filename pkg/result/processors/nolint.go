@@ -148,6 +148,7 @@ func (e *rangeExpander) Visit(node ast.Node) ast.Visitor {
 	var foundRange *ignoredRange
 	for _, r := range e.inlineRanges {
 		if r.To == nodeStartLine-1 && nodeStartPos.Column == r.col {
+			r := r
 			foundRange = &r
 			break
 		}

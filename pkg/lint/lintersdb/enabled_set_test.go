@@ -83,6 +83,7 @@ func TestGetEnabledLintersSet(t *testing.T) {
 	m := NewManager()
 	es := NewEnabledSet(m, NewValidator(m), nil, nil)
 	for _, c := range cases {
+		c := c
 		t.Run(c.name, func(t *testing.T) {
 			defaultLinters := []linter.Config{}
 			for _, ln := range c.def {
