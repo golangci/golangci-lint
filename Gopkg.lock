@@ -167,14 +167,14 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:66fcab6100e2be1bb31ae5494a0eb928690e2a4bf739d44eb2923ac7dd687e03"
+  digest = "1:7fa19fb714538cab3783505a0aca7b8e970d30f5149a13a8adcb37290a2e570a"
   name = "github.com/golangci/gofmt"
   packages = [
     "gofmt",
     "goimports",
   ]
   pruneopts = "UT"
-  revision = "2076e05ced53480baa8ba14a05b80a415bec9377"
+  revision = "f021c4179c8204f48aa93990e6badea1b3f9446d"
 
 [[projects]]
   branch = "master"
@@ -265,7 +265,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:0d459e50f313bce282754dfccb74a03b6caf7864eefd9660ffc2866c640b9ca1"
+  digest = "1:f821e22281a3dea9186b73b19a70dcbddad87dba3a3becdb3b03c8d20816dac3"
   name = "github.com/golangci/tools"
   packages = [
     "go/callgraph",
@@ -274,9 +274,12 @@
     "go/callgraph/static",
     "go/ssa",
     "go/ssa/ssautil",
+    "imports",
+    "internal/fastwalk",
+    "internal/gopathwalk",
   ]
   pruneopts = "UT"
-  revision = "01dd7756e01d993519ad7a8415ad8f2de8797be8"
+  revision = "ed64e33c8c8bc9a919e2b85a1a08225b5ae59d70"
 
 [[projects]]
   branch = "master"
@@ -552,7 +555,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:6aa9381fe53ab53763996ddd72a57dc1b69ed1cd90fa8aeb4f6b4e567204f8cf"
+  digest = "1:aac721c5ec779073b35cf7a51b7764d13f6db2243d650965d2c71469e8994e5b"
   name = "golang.org/x/tools"
   packages = [
     "go/ast/astutil",
@@ -569,7 +572,7 @@
     "internal/semver",
   ]
   pruneopts = "UT"
-  revision = "f60e5f99f0816fc2d9ecb338008ea420248d2943"
+  revision = "6c7e314b6563ee0a4dc169c7ee9960e0b709c035"
 
 [[projects]]
   digest = "1:342378ac4dcb378a5448dd723f0784ae519383532f5e70ade24132c4c8693202"
@@ -642,6 +645,7 @@
     "github.com/stretchr/testify/require",
     "golang.org/x/tools/go/loader",
     "golang.org/x/tools/go/packages",
+    "golang.org/x/tools/imports",
     "sourcegraph.com/sourcegraph/go-diff/diff",
   ]
   solver-name = "gps-cdcl"

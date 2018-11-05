@@ -96,10 +96,10 @@ func TestGolintConsumesXTestFiles(t *testing.T) {
 	const expIssue = "if block ends with a return statement, so drop this else and outdent its block"
 
 	out, ec := runGolangciLint(t, "--no-config", "--disable-all", "-Egolint", dir)
-	assert.Equal(t, exitcodes.IssuesFound, ec)
+	assert.Equal(t, exitcodes.IssuesFound, ec, out)
 	assert.Contains(t, out, expIssue)
 
 	out, ec = runGolangciLint(t, "--no-config", "--disable-all", "-Egolint", filepath.Join(dir, "p_test.go"))
-	assert.Equal(t, exitcodes.IssuesFound, ec)
+	assert.Equal(t, exitcodes.IssuesFound, ec, out)
 	assert.Contains(t, out, expIssue)
 }

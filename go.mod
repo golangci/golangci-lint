@@ -17,7 +17,7 @@ require (
 	github.com/golangci/go-tools v0.0.0-20180902103155-93eecd106a0b
 	github.com/golangci/goconst v0.0.0-20180610141641-041c5f2b40f3
 	github.com/golangci/gocyclo v0.0.0-20180528134321-2becd97e67ee
-	github.com/golangci/gofmt v0.0.0-20180506063654-2076e05ced53
+	github.com/golangci/gofmt v0.0.0-20180506063654-f021c4179c82
 	github.com/golangci/gosec v0.0.0-20180901114220-8afd9cbb6cfb
 	github.com/golangci/govet v0.0.0-20180818181408-44ddbe260190
 	github.com/golangci/ineffassign v0.0.0-20180808204949-2ee8f2867dde
@@ -28,7 +28,7 @@ require (
 	github.com/golangci/misspell v0.0.0-20180809174111-950f5d19e770
 	github.com/golangci/prealloc v0.0.0-20180630174525-215b22d4de21
 	github.com/golangci/revgrep v0.0.0-20180526074752-d9c87f5ffaf0
-	github.com/golangci/tools v0.0.0-20180902102414-01dd7756e01d
+	github.com/golangci/tools v0.0.0-20180902102414-ed64e33c8c8b
 	github.com/golangci/unconvert v0.0.0-20180507085042-28b1c447d1f4
 	github.com/golangci/unparam v0.0.0-20180902112548-7ad9dbcccc16
 	github.com/hashicorp/hcl v0.0.0-20180404174102-ef8a98b0bbce // indirect
@@ -56,7 +56,7 @@ require (
 	github.com/spf13/viper v1.0.2
 	github.com/stretchr/testify v1.2.1
 	golang.org/x/crypto v0.0.0-20180505025534-4ec37c66abab // indirect
-	golang.org/x/tools v0.0.0-20180831211245-f60e5f99f081
+	golang.org/x/tools v0.0.0-20180831211245-6c7e314b6563
 	gopkg.in/airbrake/gobrake.v2 v2.0.9 // indirect
 	gopkg.in/gemnasium/logrus-airbrake-hook.v2 v2.1.2 // indirect
 	sourcegraph.com/sourcegraph/go-diff v0.0.0-20171119081133-3f415a150aec
