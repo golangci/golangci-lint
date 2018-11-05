@@ -1,13 +1,10 @@
 package goutil
 
 import (
-	"bufio"
-	"bytes"
 	"context"
+	"encoding/json"
 	"os"
 	"os/exec"
-	"strconv"
-	"strings"
 
 	"github.com/pkg/errors"
 
@@ -29,27 +26,13 @@ func NewEnv(log logutils.Log) *Env {
 }
 
 func (e *Env) Discover(ctx context.Context) error {
-	out, err := exec.CommandContext(ctx, "go", "env").Output()
+	out, err := exec.CommandContext(ctx, "go", "env", "-json").Output()
 	if err != nil {
 		return errors.Wrap(err, "failed to run 'go env'")
 	}
 
-	scanner := bufio.NewScanner(bytes.NewReader(out))
-	scanner.Split(bufio.ScanLines)
-	for scanner.Scan() {
-		parts := strings.SplitN(scanner.Text(), "=", 2)
-		if len(parts) != 2 {
-			e.log.Warnf("Can't parse go env line %q: got %d parts", scanner.Text(), len(parts))
-			continue
-		}
-
-		v, err := strconv.Unquote(parts[1])
-		if err != nil {
-			e.log.Warnf("Invalid key %q with value %q: %s", parts[0], parts[1], err)
-			continue
-		}
-
-		e.vars[parts[0]] = v
+	if err = json.Unmarshal(out, &e.vars); err != nil {
+		return errors.Wrap(err, "failed to parse go env json")
 	}
 
 	e.debugf("Read go env: %#v", e.vars)
