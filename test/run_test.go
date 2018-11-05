@@ -163,6 +163,12 @@ func TestDeadcodeNoFalsePositivesInMainPkg(t *testing.T) {
 	checkNoIssuesRun(t, out, exitCode)
 }
 
+func TestIdentifierUsedOnlyInTests(t *testing.T) {
+	out, exitCode := runGolangciLint(t, "--no-config", "--disable-all", "-Eunused",
+		filepath.Join(testdataDir, "used_only_in_tests"))
+	checkNoIssuesRun(t, out, exitCode)
+}
+
 func TestConfigFileIsDetected(t *testing.T) {
 	checkGotConfig := func(out string, exitCode int) {
 		assert.Equal(t, exitcodes.Success, exitCode, out)
