@@ -65,6 +65,11 @@ func NewExecutor(version, commit, date string) *Executor {
 		e.log.Fatalf("Can't read config: %s", err)
 	}
 
+	e.cfg.LintersSettings.Gocritic.InferEnabledChecks(e.log)
+	if err := e.cfg.LintersSettings.Gocritic.Validate(e.log); err != nil {
+		e.log.Fatalf("Invalid gocritic settings: %s", err)
+	}
+
 	// Slice options must be explicitly set for proper merging of config and command-line options.
 	fixSlicesFlags(e.runCmd.Flags())
 

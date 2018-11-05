@@ -200,6 +200,7 @@ unparam: Reports unused function parameters [fast: false]
 nakedret: Finds naked returns in functions greater than a specified function length [fast: true]
 prealloc: Finds slice declarations that could potentially be preallocated [fast: true]
 scopelint: Scopelint checks for unpinned variables in go programs [fast: true]
+gocritic: The most opinionated Go source code linter [fast: true]
 ```
 
 Pass `-E/--enable` to enable linter and `-D/--disable` to disable:
@@ -400,6 +401,7 @@ golangci-lint help linters
 - [nakedret](https://github.com/alexkohler/nakedret) - Finds naked returns in functions greater than a specified function length
 - [prealloc](https://github.com/alexkohler/prealloc) - Finds slice declarations that could potentially be preallocated
 - [scopelint](https://github.com/kyoh86/scopelint) - Scopelint checks for unpinned variables in go programs
+- [gocritic](https://github.com/go-critic/go-critic) - The most opinionated Go source code linter
 
 ## Configuration
 
@@ -639,7 +641,22 @@ linters-settings:
     simple: true
     range-loops: true # Report preallocation suggestions on range loops, true by default
     for-loops: false # Report preallocation suggestions on for loops, false by default
-
+  gocritic:
+    # which checks should be enabled; can't be combined with 'disabled-checks';
+    # default are: [appendAssign assignOp caseOrder dupArg dupBranchBody dupCase flagDeref
+    # ifElseChain regexpMust singleCaseSwitch sloppyLen switchTrue typeSwitchVar underef
+    # unlambda unslice rangeValCopy defaultCaseOrder];
+    # all checks list: https://github.com/go-critic/checkers
+    enabled-checks:
+      - rangeValCopy
+    # which checks should be disabled; can't be combined with 'enabled-checks'; default is empty
+    disabled-checks:
+      - regexpMust
+    settings: # settings passed to gocritic
+      captLocal: # must be valid enabled check name
+        checkLocals: true
+      rangeValCopy:
+        sizeThreshold: 32
 
 linters:
   enable:
@@ -810,6 +827,7 @@ Thanks to developers and authors of used linters:
 - [walle](https://github.com/walle)
 - [alexkohler](https://github.com/alexkohler)
 - [kyoh86](https://github.com/kyoh86)
+- [go-critic](https://github.com/go-critic)
 
 ## Changelog
 
