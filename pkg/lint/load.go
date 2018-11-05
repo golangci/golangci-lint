@@ -7,6 +7,7 @@ import (
 	"go/types"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 	"time"
 
@@ -25,18 +26,20 @@ import (
 )
 
 type ContextLoader struct {
-	cfg    *config.Config
-	log    logutils.Log
-	debugf logutils.DebugFunc
-	goenv  *goutil.Env
+	cfg         *config.Config
+	log         logutils.Log
+	debugf      logutils.DebugFunc
+	goenv       *goutil.Env
+	pkgTestIDRe *regexp.Regexp
 }
 
 func NewContextLoader(cfg *config.Config, log logutils.Log, goenv *goutil.Env) *ContextLoader {
 	return &ContextLoader{
-		cfg:    cfg,
-		log:    log,
-		debugf: logutils.Debug("loader"),
-		goenv:  goenv,
+		cfg:         cfg,
+		log:         log,
+		debugf:      logutils.Debug("loader"),
+		goenv:       goenv,
+		pkgTestIDRe: regexp.MustCompile(`^(.*) \[(.*)\.test\]`),
 	}
 }
 
@@ -222,19 +225,65 @@ func (cl ContextLoader) loadPackages(ctx context.Context, loadMode packages.Load
 			i, pkg.ID, pkg.GoFiles, pkg.CompiledGoFiles, syntaxFiles)
 	}
 
-	var retPkgs []*packages.Package
 	for _, pkg := range pkgs {
 		for _, err := range pkg.Errors {
 			if strings.Contains(err.Msg, "no Go files") {
 				return nil, errors.Wrapf(exitcodes.ErrNoGoFiles, "package %s", pkg.PkgPath)
 			}
 		}
-		if !shouldSkipPkg(pkg) {
-			retPkgs = append(retPkgs, pkg)
+	}
+
+	return cl.filterPackages(pkgs), nil
+}
+
+func (cl ContextLoader) tryParseTestPackage(pkg *packages.Package) (name, testName string, isTest bool) {
+	matches := cl.pkgTestIDRe.FindStringSubmatch(pkg.ID)
+	if matches == nil {
+		return "", "", false
+	}
+
+	return matches[1], matches[2], true
+}
+
+func (cl ContextLoader) filterPackages(pkgs []*packages.Package) []*packages.Package {
+	packagesWithTests := map[string]bool{}
+	for _, pkg := range pkgs {
+		name, testName, isTest := cl.tryParseTestPackage(pkg)
+		if !isTest {
+			continue
+		}
+		packagesWithTests[name] = true
+
+		if name != testName {
+			cl.log.Infof("pkg ID=%s: %s != %s: %#v", pkg.ID, name, testName, pkg)
 		}
 	}
 
-	return retPkgs, nil
+	cl.debugf("package with tests: %#v", packagesWithTests)
+
+	var retPkgs []*packages.Package
+	for _, pkg := range pkgs {
+		if shouldSkipPkg(pkg) {
+			cl.debugf("skip pkg ID=%s", pkg.ID)
+			continue
+		}
+
+		_, _, isTest := cl.tryParseTestPackage(pkg)
+		if !isTest && packagesWithTests[pkg.PkgPath] {
+			// If tests loading is enabled,
+			// for package with files a.go and a_test.go go/packages loads two packages:
+			// 1. ID=".../a" GoFiles=[a.go]
+			// 2. ID=".../a [.../a.test]" GoFiles=[a.go a_test.go]
+			// We need only the second package, otherwise we can get warnings about unused variables/fields/functions
+			// in a.go if they are used only in a_test.go.
+			cl.debugf("skip pkg ID=%s because we load it with test package", pkg.ID)
+			continue
+		}
+
+		retPkgs = append(retPkgs, pkg)
+	}
+
+	return retPkgs
 }
 
 //nolint:gocyclo
