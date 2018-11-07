@@ -1,4 +1,4 @@
-// args: -Egofmt
+//args: -Egofmt
 package testdata
 
 import "fmt"

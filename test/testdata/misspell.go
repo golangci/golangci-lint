@@ -1,4 +1,4 @@
-// args: -Emisspell
+//args: -Emisspell
 package testdata
 
 func Misspell() {

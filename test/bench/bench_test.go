@@ -1,4 +1,4 @@
-package test
+package bench
 
 import (
 	"bytes"
@@ -12,6 +12,8 @@ import (
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/golangci/golangci-lint/test/testshared"
 
 	gops "github.com/mitchellh/go-ps"
 	"github.com/shirou/gopsutil/process"
@@ -239,7 +241,7 @@ func runOne(b *testing.B, run func(*testing.B), progName string) *runResult {
 }
 
 func BenchmarkWithGometalinter(b *testing.B) {
-	installBinary(b)
+	testshared.NewLintRunner(b).Install()
 
 	type bcase struct {
 		name    string

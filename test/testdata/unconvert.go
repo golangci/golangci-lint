@@ -1,4 +1,4 @@
-// args: -Eunconvert
+//args: -Eunconvert
 package testdata
 
 import "log"

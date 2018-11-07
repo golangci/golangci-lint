@@ -1,4 +1,4 @@
-// args: -Emegacheck
+//args: -Emegacheck
 package testdata
 
 func Megacheck() {

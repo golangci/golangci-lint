@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"go/token"
 
-	"golang.org/x/tools/imports"
+	"github.com/golangci/tools/imports" // TODO: replace with x/tools when use it in golangci/gofmt/gofmt
 
 	gofmtAPI "github.com/golangci/gofmt/gofmt"
 	goimportsAPI "github.com/golangci/gofmt/goimports"

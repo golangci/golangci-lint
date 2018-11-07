@@ -1,4 +1,4 @@
-// args: -Egolint
+//args: -Egolint
 package testdata
 
 var Go_lint string // ERROR "don't use underscores in Go names; var Go_lint should be GoLint"

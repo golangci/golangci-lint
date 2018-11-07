@@ -1,4 +1,4 @@
-// args: -Egocritic
+//args: -Egocritic
 package testdata
 
 import "flag"

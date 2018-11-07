@@ -14,9 +14,10 @@ import (
 	_ "github.com/go-critic/checkers" // this import register checkers
 
 	"github.com/go-lintpack/lintpack"
+	"golang.org/x/tools/go/loader"
+
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
-	"golang.org/x/tools/go/loader"
 )
 
 type Gocritic struct{}

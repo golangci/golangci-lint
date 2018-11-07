@@ -1,4 +1,4 @@
-// args: -Edupl --dupl.threshold=20
+//args: -Edupl --dupl.threshold=20
 package testdata
 
 type DuplLogger struct{}

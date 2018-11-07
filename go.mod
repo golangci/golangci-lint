@@ -37,7 +37,7 @@ require (
 	github.com/golangci/misspell v0.0.0-20180809174111-950f5d19e770
 	github.com/golangci/prealloc v0.0.0-20180630174525-215b22d4de21
 	github.com/golangci/revgrep v0.0.0-20180526074752-d9c87f5ffaf0
-	github.com/golangci/tools v0.0.0-20180902102414-ed64e33c8c8b
+	github.com/golangci/tools v0.0.0-20180902102414-2cefd77fef9b
 	github.com/golangci/unconvert v0.0.0-20180507085042-28b1c447d1f4
 	github.com/golangci/unparam v0.0.0-20180902112548-7ad9dbcccc16
 	github.com/hashicorp/hcl v0.0.0-20180404174102-ef8a98b0bbce // indirect
@@ -68,6 +68,7 @@ require (
 	golang.org/x/tools v0.0.0-20180831211245-6c7e314b6563
 	gopkg.in/airbrake/gobrake.v2 v2.0.9 // indirect
 	gopkg.in/gemnasium/logrus-airbrake-hook.v2 v2.1.2 // indirect
+	gopkg.in/yaml.v2 v2.2.1
 	sourcegraph.com/sourcegraph/go-diff v0.0.0-20171119081133-3f415a150aec
 	sourcegraph.com/sqs/pbtypes v0.0.0-20160107090929-4d1b9dc7ffc3 // indirect
 )

@@ -1,4 +1,4 @@
-// args: -Edeadcode
+//args: -Edeadcode
 package testdata
 
 var y int

@@ -1,4 +1,4 @@
-// args: -Egosec
+//args: -Egosec
 package testdata
 
 import (

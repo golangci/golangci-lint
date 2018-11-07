@@ -1,4 +1,4 @@
-// args: -Eerrcheck
+//args: -Eerrcheck
 package testdata
 
 import (

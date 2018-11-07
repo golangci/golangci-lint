@@ -1,4 +1,4 @@
-// args: -Egochecknoinits
+//args: -Egochecknoinits
 package testdata
 
 import "fmt"
