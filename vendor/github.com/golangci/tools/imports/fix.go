@@ -364,46 +364,7 @@ func fixImports(fset *token.FileSet, f *ast.File, filename string) (added []stri
 }
 
 // importPathToName returns the package name for the given import path.
-var importPathToName func(importPath, srcDir string) (packageName string) = importPathToNameModules
-
-// importPathToNameModules is intended to be a backwards compatible
-// importPathtoName func that in the presence of modules, falls back
-// to importPathToNameBasic. This solves a speed issues as
-// importPathToNameGoPath calls build.Imports, which in the presence
-// of modules runs the 'go list' command.
-func importPathToNameModules(importPath, srcDir string) (packageName string) {
-	// modules are disabled, so preserve previous behavior
-	if os.Getenv("GO111MODULE") == "off" {
-		return importPathToNameGoPath(importPath, srcDir)
-	}
-
-	// modules may or may not be in use, so check for a go.mod
-	abs, err := filepath.Abs(srcDir)
-	if err != nil {
-		return importPathToNameGoPath(importPath, srcDir)
-	}
-
-	hasGoMod := false
-	for {
-		info, err := os.Stat(filepath.Join(abs, "go.mod"))
-		if err == nil && !info.IsDir() {
-			hasGoMod = true
-			break
-		}
-		d := filepath.Dir(abs)
-		if len(d) >= len(abs) {
-			break
-		}
-		abs = d
-	}
-
-	// found a go.mod so resort to the faster fallback importPathToNameBasic
-	if hasGoMod {
-		return importPathToNameBasic(importPath, srcDir)
-	}
-
-	return importPathToNameGoPath(importPath, srcDir)
-}
+var importPathToName func(importPath, srcDir string) (packageName string) = importPathToNameGoPath
 
 // importPathToNameBasic assumes the package name is the base of import path,
 // except that if the path ends in foo/vN, it assumes the package name is foo.

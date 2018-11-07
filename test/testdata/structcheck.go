@@ -1,4 +1,4 @@
-// args: -Estructcheck
+//args: -Estructcheck
 package testdata
 
 type t struct {

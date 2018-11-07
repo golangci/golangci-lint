@@ -1,4 +1,4 @@
-// args: -Egovet --govet.check-shadowing=true
+//args: -Egovet --govet.check-shadowing=true
 package testdata
 
 import (

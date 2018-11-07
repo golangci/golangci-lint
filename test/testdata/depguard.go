@@ -1,4 +1,4 @@
-// args: -Edepguard --depguard.include-go-root --depguard.packages='compress/*,log'
+//args: -Edepguard --depguard.include-go-root --depguard.packages='compress/*,log'
 package testdata
 
 import (

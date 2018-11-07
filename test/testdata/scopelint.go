@@ -1,4 +1,4 @@
-// args: -Escopelint
+//args: -Escopelint
 package testdata
 
 import "fmt"

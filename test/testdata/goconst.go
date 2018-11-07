@@ -1,4 +1,4 @@
-// args: -Egoconst
+//args: -Egoconst
 package testdata
 
 import "fmt"

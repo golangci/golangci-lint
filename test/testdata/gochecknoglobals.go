@@ -1,4 +1,4 @@
-// args: -Egochecknoglobals
+//args: -Egochecknoglobals
 package testdata
 
 import (

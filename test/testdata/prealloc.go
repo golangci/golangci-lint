@@ -1,4 +1,4 @@
-// args: -Eprealloc
+//args: -Eprealloc
 package testdata
 
 func Prealloc(source []int) []int {
