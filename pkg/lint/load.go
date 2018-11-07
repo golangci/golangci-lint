@@ -23,6 +23,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/lint/astcache"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/logutils"
+	libpackages "github.com/golangci/golangci-lint/pkg/packages"
 )
 
 type ContextLoader struct {
@@ -88,7 +89,7 @@ func shouldSkipPkg(pkg *packages.Package) bool {
 func (cl ContextLoader) makeFakeLoaderProgram(pkgs []*packages.Package) *loader.Program {
 	var createdPkgs []*loader.PackageInfo
 	for _, pkg := range pkgs {
-		if len(pkg.Errors) != 0 {
+		if pkg.IllTyped {
 			// some linters crash on packages with errors,
 			// skip them and warn about them in another place
 			continue
@@ -104,7 +105,7 @@ func (cl ContextLoader) makeFakeLoaderProgram(pkgs []*packages.Package) *loader.
 		allPkgs[pkg.Pkg] = pkg
 	}
 	for _, pkg := range pkgs {
-		if len(pkg.Errors) != 0 {
+		if pkg.IllTyped {
 			// some linters crash on packages with errors,
 			// skip them and warn about them in another place
 			continue
@@ -346,8 +347,8 @@ func (cl ContextLoader) Load(ctx context.Context, linters []linter.Config) (*lin
 		saveNotCompilingPackages(ret)
 	} else {
 		for _, pkg := range pkgs {
-			if len(pkg.Errors) != 0 {
-				cl.log.Infof("Pkg %s errors: %v", pkg.ID, pkg.Errors)
+			if pkg.IllTyped {
+				cl.log.Infof("Pkg %s errors: %v", pkg.ID, libpackages.ExtractErrors(pkg))
 			}
 		}
 	}
@@ -360,7 +361,7 @@ func (cl ContextLoader) Load(ctx context.Context, linters []linter.Config) (*lin
 // which can work with them.
 func saveNotCompilingPackages(lintCtx *linter.Context) {
 	for _, pkg := range lintCtx.Packages {
-		if len(pkg.Errors) != 0 {
+		if pkg.IllTyped {
 			lintCtx.NotCompilingPackages = append(lintCtx.NotCompilingPackages, pkg)
 		}
 	}

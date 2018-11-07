@@ -52,7 +52,6 @@ func NewSkipDirs(patterns []string, log logutils.Log, runArgs []string) (*SkipDi
 		sortedAbsArgs = append(sortedAbsArgs, absArg)
 	}
 	sort.Sort(sortedByLenStrings(sortedAbsArgs))
-	log.Infof("sorted abs args: %s", sortedAbsArgs)
 
 	return &SkipDirs{
 		patterns:      patternsRe,

@@ -17,6 +17,7 @@ import (
 
 	"github.com/golangci/golangci-lint/pkg/fsutils"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
+	libpackages "github.com/golangci/golangci-lint/pkg/packages"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
@@ -87,7 +88,7 @@ func (m Megacheck) Run(ctx context.Context, lintCtx *linter.Context) ([]result.I
 		var errors []packages.Error
 		for _, p := range lintCtx.NotCompilingPackages {
 			errPkgs = append(errPkgs, p.String())
-			errors = append(errors, p.Errors...)
+			errors = append(errors, libpackages.ExtractErrors(p)...)
 		}
 
 		warnText := fmt.Sprintf("Can't run megacheck because of compilation errors in packages %s",
