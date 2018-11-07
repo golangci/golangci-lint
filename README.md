@@ -201,6 +201,8 @@ nakedret: Finds naked returns in functions greater than a specified function len
 prealloc: Finds slice declarations that could potentially be preallocated [fast: true]
 scopelint: Scopelint checks for unpinned variables in go programs [fast: true]
 gocritic: The most opinionated Go source code linter [fast: true]
+gochecknoinits: Checks that no init functions are present in Go code [fast: true]
+gochecknoglobals: Checks that no globals are present in Go code [fast: true]
 ```
 
 Pass `-E/--enable` to enable linter and `-D/--disable` to disable:
@@ -402,6 +404,8 @@ golangci-lint help linters
 - [prealloc](https://github.com/alexkohler/prealloc) - Finds slice declarations that could potentially be preallocated
 - [scopelint](https://github.com/kyoh86/scopelint) - Scopelint checks for unpinned variables in go programs
 - [gocritic](https://github.com/go-critic/go-critic) - The most opinionated Go source code linter
+- [gochecknoinits](https://github.com/leighmcculloch/gochecknoinits) - Checks that no init functions are present in Go code
+- [gochecknoglobals](https://github.com/leighmcculloch/gochecknoglobals) - Checks that no globals are present in Go code
 
 ## Configuration
 
@@ -745,6 +749,7 @@ linters:
     - maligned
     - prealloc
     - gosec
+    - gochecknoglobals
 ```
 
 ## False Positives
@@ -828,6 +833,7 @@ Thanks to developers and authors of used linters:
 - [alexkohler](https://github.com/alexkohler)
 - [kyoh86](https://github.com/kyoh86)
 - [go-critic](https://github.com/go-critic)
+- [leighmcculloch](https://github.com/leighmcculloch)
 
 ## Changelog
 
