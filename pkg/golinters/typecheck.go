@@ -11,6 +11,7 @@ import (
 	"golang.org/x/tools/go/packages"
 
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
+	libpackages "github.com/golangci/golangci-lint/pkg/packages"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
@@ -59,7 +60,8 @@ func (lint TypeCheck) parseError(srcErr packages.Error) (*result.Issue, error) {
 func (lint TypeCheck) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issue, error) {
 	var res []result.Issue
 	for _, pkg := range lintCtx.NotCompilingPackages {
-		for _, err := range pkg.Errors {
+		errors := libpackages.ExtractErrors(pkg)
+		for _, err := range errors {
 			i, perr := lint.parseError(err)
 			if perr != nil {
 				res = append(res, result.Issue{
