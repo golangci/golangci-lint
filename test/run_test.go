@@ -19,8 +19,8 @@ import (
 	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
 )
 
-var root = filepath.Join("..", "...")
-var installOnce sync.Once
+var root = filepath.Join("..", "...") //nolint:gochecknoglobals
+var installOnce sync.Once             //nolint:gochecknoglobals
 
 const noIssuesOut = ""
 
@@ -100,7 +100,7 @@ func runGolangciLint(t *testing.T, args ...string) (string, int) {
 
 func runGolangciLintWithYamlConfig(t *testing.T, cfg string, args ...string) string {
 	out, ec := runGolangciLintWithYamlConfigWithCode(t, cfg, args...)
-	assert.Equal(t, exitcodes.Success, ec)
+	assert.Equal(t, exitcodes.Success, ec, out)
 
 	return out
 }
