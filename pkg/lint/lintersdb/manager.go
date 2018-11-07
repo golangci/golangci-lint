@@ -196,6 +196,14 @@ func (Manager) GetAllSupportedLinterConfigs() []linter.Config {
 			WithSpeed(5).
 			WithTypeInfo().
 			WithURL("https://github.com/go-critic/go-critic"),
+		linter.NewConfig(golinters.Gochecknoinits{}).
+			WithPresets(linter.PresetStyle).
+			WithSpeed(10).
+			WithURL("https://github.com/leighmcculloch/gochecknoinits"),
+		linter.NewConfig(golinters.Gochecknoglobals{}).
+			WithPresets(linter.PresetStyle).
+			WithSpeed(10).
+			WithURL("https://github.com/leighmcculloch/gochecknoglobals"),
 	}
 
 	isLocalRun := os.Getenv("GOLANGCI_COM_RUN") == ""

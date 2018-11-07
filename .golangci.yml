@@ -31,3 +31,4 @@ linters:
     - maligned
     - prealloc
     - gosec
+    - gochecknoglobals
