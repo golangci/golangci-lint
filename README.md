@@ -839,6 +839,15 @@ Thanks to developers and authors of used linters:
 
 There is the most valuable changes log:
 
+### November 2018
+
+1. Support new linters:
+   * gocritic
+   * scopelint
+   * gochecknointis
+   * gochecknoglobals
+2. Update CLA
+
 ### October 2018
 
 1. Update goimports formatting
@@ -852,7 +861,6 @@ There is the most valuable changes log:
      megacheck analysis is 10-20x faster!
 3. Support goimports.local-prefix option for goimports
 4. Change license from AGPL to GPL
-5. Update CLA
 
 ### September 2018
 
