@@ -106,7 +106,7 @@ func (m Megacheck) Run(ctx context.Context, lintCtx *linter.Context) ([]result.I
 		return nil, nil
 	}
 
-	issues := runMegacheck(lintCtx.Program, lintCtx.SSAProgram, lintCtx.LoaderConfig,
+	issues := runMegacheck(lintCtx.Program, lintCtx.MegacheckSSAProgram, lintCtx.LoaderConfig,
 		m.StaticcheckEnabled, m.GosimpleEnabled, m.UnusedEnabled, lintCtx.Settings().Unused.CheckExported)
 	if len(issues) == 0 {
 		return nil, nil

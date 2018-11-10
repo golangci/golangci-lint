@@ -1,9 +1,13 @@
 test:
-	go install ./cmd/...
-	GL_TEST_RUN=1 golangci-lint run -v
-	GL_TEST_RUN=1 golangci-lint run --fast --no-config -v
-	GL_TEST_RUN=1 golangci-lint run --no-config -v
+	go build -o golangci-lint ./cmd/golangci-lint
+	GL_TEST_RUN=1 ./golangci-lint run -v
+	GL_TEST_RUN=1 ./golangci-lint run --fast --no-config -v
+	GL_TEST_RUN=1 ./golangci-lint run --no-config -v
 	GL_TEST_RUN=1 go test -v ./...
+
+test_race:
+	go build -race -o golangci-lint ./cmd/golangci-lint
+	GL_TEST_RUN=1 ./golangci-lint run -v --deadline=5m
 
 test_linters:
 	GL_TEST_RUN=1 go test -v ./test -count 1 -run TestSourcesFromTestdataWithIssuesDir/$T

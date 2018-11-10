@@ -3,3 +3,4 @@
 /dist/
 /.idea/
 /test/path
+/golangci-lint
