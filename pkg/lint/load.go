@@ -126,13 +126,16 @@ func (cl ContextLoader) makeFakeLoaderProgram(pkgs []*packages.Package) *loader.
 	}
 }
 
-func (cl ContextLoader) buildSSAProgram(pkgs []*packages.Package) *ssa.Program {
+func (cl ContextLoader) buildSSAProgram(pkgs []*packages.Package, name string) *ssa.Program {
 	startedAt := time.Now()
+	var pkgsBuiltDuration time.Duration
 	defer func() {
-		cl.log.Infof("SSA repr building took %s", time.Since(startedAt))
+		cl.log.Infof("SSA %srepr building timing: packages building %s, total %s",
+			name, pkgsBuiltDuration, time.Since(startedAt))
 	}()
 
 	ssaProg, _ := ssautil.Packages(pkgs, ssa.GlobalDebug)
+	pkgsBuiltDuration = time.Since(startedAt)
 	ssaProg.Build()
 	return ssaProg
 }
@@ -300,24 +303,10 @@ func (cl ContextLoader) Load(ctx context.Context, linters []linter.Config) (*lin
 		prog = cl.makeFakeLoaderProgram(pkgs)
 	}
 
-	var ssaProg *ssa.Program
+	var ssaProg, megacheckSSAProg *ssa.Program
 	if loadMode == packages.LoadAllSyntax {
-		ssaProg = cl.buildSSAProgram(pkgs)
-		for _, pkginfo := range prog.InitialPackages() {
-			if pkginfo == nil {
-				cl.log.Infof("Pkginfo is nil")
-				continue
-			}
-			if pkginfo.Pkg == nil {
-				cl.log.Infof("Pkg %#v: types package is nil", *pkginfo)
-				continue
-			}
-			ssaPkg := ssaProg.Package(pkginfo.Pkg)
-			if ssaPkg == nil {
-				cl.log.Infof("Pkg %#v: ssaPkg is nil: %#v", *pkginfo, *pkginfo.Pkg)
-				continue
-			}
-		}
+		ssaProg = cl.buildSSAProgram(pkgs, "")
+		megacheckSSAProg = cl.buildSSAProgram(pkgs, "for megacheck ")
 	}
 
 	astLog := cl.log.Child("astcache")
@@ -327,9 +316,10 @@ func (cl ContextLoader) Load(ctx context.Context, linters []linter.Config) (*lin
 	}
 
 	ret := &linter.Context{
-		Packages:   pkgs,
-		Program:    prog,
-		SSAProgram: ssaProg,
+		Packages:            pkgs,
+		Program:             prog,
+		SSAProgram:          ssaProg,
+		MegacheckSSAProgram: megacheckSSAProg,
 		LoaderConfig: &loader.Config{
 			Cwd:   "",  // used by depguard and fallbacked to os.Getcwd
 			Build: nil, // used by depguard and megacheck and fallbacked to build.Default

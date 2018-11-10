@@ -17,7 +17,8 @@ type Context struct {
 	LoaderConfig *loader.Config  // deprecated, don't use for new linters
 	Program      *loader.Program // deprecated, use Packages for new linters
 
-	SSAProgram *ssa.Program
+	SSAProgram          *ssa.Program // for unparam and interfacer: they don't change it
+	MegacheckSSAProgram *ssa.Program // for megacheck: it modifies ssa program
 
 	Cfg      *config.Config
 	ASTCache *astcache.Cache
