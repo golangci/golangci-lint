@@ -35,6 +35,10 @@ func ExtractErrors(pkg *packages.Package) []packages.Error {
 }
 
 func extractErrorsImpl(pkg *packages.Package) []packages.Error {
+	if !pkg.IllTyped { // otherwise it may take hours to traverse all deps many times
+		return nil
+	}
+
 	if len(pkg.Errors) != 0 {
 		return pkg.Errors
 	}

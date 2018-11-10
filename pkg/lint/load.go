@@ -249,15 +249,11 @@ func (cl ContextLoader) tryParseTestPackage(pkg *packages.Package) (name, testNa
 func (cl ContextLoader) filterPackages(pkgs []*packages.Package) []*packages.Package {
 	packagesWithTests := map[string]bool{}
 	for _, pkg := range pkgs {
-		name, testName, isTest := cl.tryParseTestPackage(pkg)
+		name, _, isTest := cl.tryParseTestPackage(pkg)
 		if !isTest {
 			continue
 		}
 		packagesWithTests[name] = true
-
-		if name != testName {
-			cl.log.Infof("pkg ID=%s: %s != %s: %#v", pkg.ID, name, testName, pkg)
-		}
 	}
 
 	cl.debugf("package with tests: %#v", packagesWithTests)
