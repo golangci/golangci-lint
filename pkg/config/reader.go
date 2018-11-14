@@ -11,6 +11,8 @@ import (
 
 	"github.com/golangci/golangci-lint/pkg/fsutils"
 	"github.com/golangci/golangci-lint/pkg/logutils"
+
+	"github.com/mitchellh/go-homedir"
 )
 
 type FileReader struct {
@@ -181,6 +183,11 @@ func (r *FileReader) parseConfigOption() (string, error) {
 
 	if cfg.Run.NoConfig {
 		return "", errConfigDisabled
+	}
+
+	configFile, err := homedir.Expand(configFile)
+	if err != nil {
+		return "", fmt.Errorf("failed to expand configuration path")
 	}
 
 	return configFile, nil
