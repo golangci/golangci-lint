@@ -31,6 +31,16 @@ func ExtractErrors(pkg *packages.Package) []packages.Error {
 		}
 	}
 
+	// some errors like "code in directory  expects import" don't have Pos, set it here
+	if len(pkg.GoFiles) != 0 {
+		for i := range uniqErrors {
+			err := &uniqErrors[i]
+			if err.Pos == "" {
+				err.Pos = fmt.Sprintf("%s:1", pkg.GoFiles[0])
+			}
+		}
+	}
+
 	return uniqErrors
 }
 
