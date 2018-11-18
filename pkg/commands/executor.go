@@ -55,6 +55,7 @@ func NewExecutor(version, commit, date string) *Executor {
 	e.initRun()
 	e.initHelp()
 	e.initLinters()
+	e.initConfig()
 
 	// init e.cfg by values from config: flags parse will see these values
 	// like the default ones. It will overwrite them only if the same option
