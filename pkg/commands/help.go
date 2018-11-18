@@ -22,7 +22,7 @@ func (e *Executor) initHelp() {
 			}
 		},
 	}
-	e.rootCmd.AddCommand(helpCmd)
+	e.rootCmd.SetHelpCommand(helpCmd)
 
 	lintersHelpCmd := &cobra.Command{
 		Use:   "linters",
