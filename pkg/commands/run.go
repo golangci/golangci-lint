@@ -395,7 +395,7 @@ func (e *Executor) setupExitCode(ctx context.Context) {
 	}
 
 	if e.exitCode == exitcodes.Success &&
-		os.Getenv("GL_TEST_RUN") == "1" &&
+		(os.Getenv("GL_TEST_RUN") == "1" || os.Getenv("FAIL_ON_WARNINGS") == "1") &&
 		len(e.reportData.Warnings) != 0 {
 
 		e.exitCode = exitcodes.WarningInTest

@@ -63,11 +63,8 @@ func (lint TypeCheck) Run(ctx context.Context, lintCtx *linter.Context) ([]resul
 		errors := libpackages.ExtractErrors(pkg)
 		for _, err := range errors {
 			i, perr := lint.parseError(err)
-			if perr != nil {
-				res = append(res, result.Issue{
-					Text:       err.Msg,
-					FromLinter: lint.Name(),
-				})
+			if perr != nil { // failed to parse
+				lintCtx.Log.Errorf("typechecking error: %s", err.Msg)
 			} else {
 				res = append(res, *i)
 			}
