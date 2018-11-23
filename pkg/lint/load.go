@@ -334,7 +334,7 @@ func (cl ContextLoader) Load(ctx context.Context, linters []linter.Config) (*lin
 	} else {
 		for _, pkg := range pkgs {
 			if pkg.IllTyped {
-				cl.log.Infof("Pkg %s errors: %v", pkg.ID, libpackages.ExtractErrors(pkg))
+				cl.log.Infof("Pkg %s errors: %v", pkg.ID, libpackages.ExtractErrors(pkg, astCache))
 			}
 		}
 	}

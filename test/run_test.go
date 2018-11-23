@@ -24,7 +24,8 @@ func TestEmptyDirRun(t *testing.T) {
 
 func TestNotExistingDirRun(t *testing.T) {
 	testshared.NewLintRunner(t).Run(getTestDataDir("no_such_dir")).
-		ExpectHasIssue(`cannot find package \"./testdata/no_such_dir\"`)
+		ExpectExitCode(exitcodes.WarningInTest).
+		ExpectOutputContains(`cannot find package \"./testdata/no_such_dir\"`)
 }
 
 func TestSymlinkLoop(t *testing.T) {

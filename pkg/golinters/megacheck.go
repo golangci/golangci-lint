@@ -88,7 +88,7 @@ func (m Megacheck) Run(ctx context.Context, lintCtx *linter.Context) ([]result.I
 		var errors []packages.Error
 		for _, p := range lintCtx.NotCompilingPackages {
 			errPkgs = append(errPkgs, p.String())
-			errors = append(errors, libpackages.ExtractErrors(p)...)
+			errors = append(errors, libpackages.ExtractErrors(p, lintCtx.ASTCache)...)
 		}
 
 		warnText := fmt.Sprintf("Can't run megacheck because of compilation errors in packages %s",

@@ -3,10 +3,13 @@ package packages
 import (
 	"fmt"
 
+	"github.com/golangci/golangci-lint/pkg/lint/astcache"
+
 	"golang.org/x/tools/go/packages"
 )
 
-func ExtractErrors(pkg *packages.Package) []packages.Error {
+//nolint:gocyclo
+func ExtractErrors(pkg *packages.Package, astCache *astcache.Cache) []packages.Error {
 	errors := extractErrorsImpl(pkg)
 	if len(errors) == 0 {
 		return errors
@@ -22,17 +25,18 @@ func ExtractErrors(pkg *packages.Package) []packages.Error {
 		uniqErrors = append(uniqErrors, err)
 	}
 
-	if len(pkg.Errors) == 0 && len(pkg.GoFiles) != 0 {
-		// erorrs were extracted from deps and have at leat one file in package
-		for i := range uniqErrors {
-			// change pos to local file to properly process it by processors (properly read line etc)
-			uniqErrors[i].Msg = fmt.Sprintf("%s: %s", uniqErrors[i].Pos, uniqErrors[i].Msg)
-			uniqErrors[i].Pos = fmt.Sprintf("%s:1", pkg.GoFiles[0])
-		}
-	}
-
-	// some errors like "code in directory  expects import" don't have Pos, set it here
 	if len(pkg.GoFiles) != 0 {
+		// errors were extracted from deps and have at leat one file in package
+		for i := range uniqErrors {
+			errPos, parseErr := ParseErrorPosition(uniqErrors[i].Pos)
+			if parseErr != nil || astCache.Get(errPos.Filename) == nil {
+				// change pos to local file to properly process it by processors (properly read line etc)
+				uniqErrors[i].Msg = fmt.Sprintf("%s: %s", uniqErrors[i].Pos, uniqErrors[i].Msg)
+				uniqErrors[i].Pos = fmt.Sprintf("%s:1", pkg.GoFiles[0])
+			}
+		}
+
+		// some errors like "code in directory  expects import" don't have Pos, set it here
 		for i := range uniqErrors {
 			err := &uniqErrors[i]
 			if err.Pos == "" {

@@ -2,12 +2,7 @@ package golinters
 
 import (
 	"context"
-	"fmt"
-	"go/token"
-	"strconv"
-	"strings"
 
-	"github.com/pkg/errors"
 	"golang.org/x/tools/go/packages"
 
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
@@ -26,44 +21,31 @@ func (TypeCheck) Desc() string {
 }
 
 func (lint TypeCheck) parseError(srcErr packages.Error) (*result.Issue, error) {
-	// file:line(<optional>:colon)
-	parts := strings.Split(srcErr.Pos, ":")
-	if len(parts) == 1 {
-		return nil, errors.New("no colons")
-	}
-
-	file := parts[0]
-	line, err := strconv.Atoi(parts[1])
+	pos, err := libpackages.ParseErrorPosition(srcErr.Pos)
 	if err != nil {
-		return nil, fmt.Errorf("can't parse line number %q: %s", parts[1], err)
-	}
-
-	var column int
-	if len(parts) == 3 { // no column
-		column, err = strconv.Atoi(parts[2])
-		if err != nil {
-			return nil, errors.Wrapf(err, "failed to parse column from %q", parts[2])
-		}
+		return nil, err
 	}
 
 	return &result.Issue{
-		Pos: token.Position{
-			Filename: file,
-			Line:     line,
-			Column:   column,
-		},
+		Pos:        *pos,
 		Text:       srcErr.Msg,
 		FromLinter: lint.Name(),
 	}, nil
 }
 
 func (lint TypeCheck) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issue, error) {
+	uniqReportedIssues := map[string]bool{}
+
 	var res []result.Issue
 	for _, pkg := range lintCtx.NotCompilingPackages {
-		errors := libpackages.ExtractErrors(pkg)
+		errors := libpackages.ExtractErrors(pkg, lintCtx.ASTCache)
 		for _, err := range errors {
 			i, perr := lint.parseError(err)
 			if perr != nil { // failed to parse
+				if uniqReportedIssues[err.Msg] {
+					continue
+				}
+				uniqReportedIssues[err.Msg] = true
 				lintCtx.Log.Errorf("typechecking error: %s", err.Msg)
 			} else {
 				res = append(res, *i)
