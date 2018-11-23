@@ -31,7 +31,12 @@ func newNolint2FileIssue(line int) result.Issue {
 }
 
 func newTestNolintProcessor(log logutils.Log) *Nolint {
-	return NewNolint(astcache.NewCache(log), log)
+	cache := astcache.LoadFromFilenames(log,
+		filepath.Join("testdata", "nolint.go"),
+		filepath.Join("testdata", "nolint2.go"),
+		filepath.Join("testdata", "nolint_bad_names.go"),
+	)
+	return NewNolint(cache, log)
 }
 
 func getOkLogger(ctrl *gomock.Controller) *logutils.MockLog {
