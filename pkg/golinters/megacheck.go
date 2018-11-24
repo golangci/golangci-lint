@@ -82,27 +82,44 @@ func prettifyCompilationError(err packages.Error) error {
 	return errors.New(errText)
 }
 
+func (m Megacheck) canAnalyze(lintCtx *linter.Context) bool {
+	if len(lintCtx.NotCompilingPackages) == 0 {
+		return true
+	}
+
+	var errPkgs []string
+	var errors []packages.Error
+	for _, p := range lintCtx.NotCompilingPackages {
+		if p.Name == "main" {
+			// megacheck crashes on not compiling packages but main packages
+			// aren't reachable by megacheck: other packages can't depend on them.
+			continue
+		}
+
+		errPkgs = append(errPkgs, p.String())
+		errors = append(errors, libpackages.ExtractErrors(p, lintCtx.ASTCache)...)
+	}
+
+	if len(errPkgs) == 0 { // only main packages do not compile
+		return true
+	}
+
+	warnText := fmt.Sprintf("Can't run megacheck because of compilation errors in packages %s", errPkgs)
+	if len(errors) != 0 {
+		warnText += fmt.Sprintf(": %s", prettifyCompilationError(errors[0]))
+		if len(errors) > 1 {
+			const runCmd = "golangci-lint run --no-config --disable-all -E typecheck"
+			warnText += fmt.Sprintf(" and %d more errors: run `%s` to see all errors", len(errors)-1, runCmd)
+		}
+	}
+	lintCtx.Log.Warnf("%s", warnText)
+
+	// megacheck crashes if there are not compiling packages
+	return false
+}
+
 func (m Megacheck) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issue, error) {
-	if len(lintCtx.NotCompilingPackages) != 0 {
-		var errPkgs []string
-		var errors []packages.Error
-		for _, p := range lintCtx.NotCompilingPackages {
-			errPkgs = append(errPkgs, p.String())
-			errors = append(errors, libpackages.ExtractErrors(p, lintCtx.ASTCache)...)
-		}
-
-		warnText := fmt.Sprintf("Can't run megacheck because of compilation errors in packages %s",
-			errPkgs)
-		if len(errors) != 0 {
-			warnText += fmt.Sprintf(": %s", prettifyCompilationError(errors[0]))
-			if len(errors) > 1 {
-				const runCmd = "golangci-lint run --no-config --disable-all -E typecheck"
-				warnText += fmt.Sprintf(" and %d more errors: run `%s` to see all errors", len(errors)-1, runCmd)
-			}
-		}
-		lintCtx.Log.Warnf("%s", warnText)
-
-		// megacheck crashes if there are not compiling packages
+	if !m.canAnalyze(lintCtx) {
 		return nil, nil
 	}
 
