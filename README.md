@@ -292,7 +292,7 @@ $ golangci-lint run --no-config --issues-exit-code=0 --deadline=30m \
   --enable=structcheck --enable=maligned --enable=errcheck --enable=dupl --enable=ineffassign \
   --enable=interfacer --enable=unconvert --enable=goconst --enable=gosec --enable=megacheck
 $ gometalinter --deadline=30m --vendor --cyclo-over=30 --dupl-threshold=150 \
-  --exclude=<defaul golangci-lint excludes> --skip=testdata --skip=builtin \
+  --exclude=<default golangci-lint excludes> --skip=testdata --skip=builtin \
   --disable-all --enable=deadcode  --enable=gocyclo --enable=golint --enable=varcheck \
   --enable=structcheck --enable=maligned --enable=errcheck --enable=dupl --enable=ineffassign \
   --enable=interfacer --enable=unconvert --enable=goconst --enable=gosec --enable=megacheck
