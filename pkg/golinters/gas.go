@@ -8,8 +8,8 @@ import (
 	"log"
 	"strconv"
 
-	"github.com/golangci/gosec"
-	"github.com/golangci/gosec/rules"
+	"github.com/securego/gosec"
+	"github.com/securego/gosec/rules"
 
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"

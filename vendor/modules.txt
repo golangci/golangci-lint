@@ -2,7 +2,7 @@
 github.com/OpenPeeDeeP/depguard
 # github.com/StackExchange/wmi v0.0.0-20180116203802-5d049714c4a6
 github.com/StackExchange/wmi
-# github.com/davecgh/go-spew v1.1.0
+# github.com/davecgh/go-spew v1.1.1
 github.com/davecgh/go-spew/spew
 # github.com/fatih/color v1.6.0
 github.com/fatih/color
@@ -76,9 +76,6 @@ github.com/golangci/gocyclo/pkg/gocyclo
 # github.com/golangci/gofmt v0.0.0-20181105071733-f021c4179c82
 github.com/golangci/gofmt/gofmt
 github.com/golangci/gofmt/goimports
-# github.com/golangci/gosec v0.0.0-20180901114220-8afd9cbb6cfb
-github.com/golangci/gosec
-github.com/golangci/gosec/rules
 # github.com/golangci/govet v0.0.0-20180818181408-44ddbe260190
 github.com/golangci/govet
 github.com/golangci/govet/lib/cfg
@@ -157,6 +154,9 @@ github.com/pelletier/go-toml
 github.com/pkg/errors
 # github.com/pmezard/go-difflib v1.0.0
 github.com/pmezard/go-difflib/difflib
+# github.com/securego/gosec v0.0.0-20181111085728-2695567487c0
+github.com/securego/gosec
+github.com/securego/gosec/rules
 # github.com/shirou/gopsutil v0.0.0-20180427012116-c95755e4bcd7
 github.com/shirou/gopsutil/process
 github.com/shirou/gopsutil/cpu
@@ -181,7 +181,7 @@ github.com/spf13/jwalterweatherman
 github.com/spf13/pflag
 # github.com/spf13/viper v1.0.2
 github.com/spf13/viper
-# github.com/stretchr/testify v1.2.1
+# github.com/stretchr/testify v1.2.2
 github.com/stretchr/testify/assert
 github.com/stretchr/testify/require
 # golang.org/x/crypto v0.0.0-20180505025534-4ec37c66abab
