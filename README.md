@@ -432,6 +432,7 @@ Flags:
       --print-linter-name           Print linter name in issue line (default true)
       --issues-exit-code int        Exit code when issues were found (default 1)
       --build-tags strings          Build tags
+      --mod string                  module download mode to use: readonly or vendor (passed to go list)
       --deadline duration           Deadline for total work (default 1m0s)
       --tests                       Analyze tests (*_test.go) (default true)
       --print-resources-usage       Print avg and max memory usage of golangci-lint and total time
