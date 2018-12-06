@@ -110,6 +110,7 @@ type Run struct {
 	Args []string
 
 	BuildTags []string `mapstructure:"build-tags"`
+	Mod       string   `mapstructure:"mod"`
 
 	ExitCodeIfIssuesFound int  `mapstructure:"issues-exit-code"`
 	AnalyzeTests          bool `mapstructure:"tests"`

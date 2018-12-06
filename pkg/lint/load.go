@@ -201,10 +201,17 @@ func (cl ContextLoader) loadPackages(ctx context.Context, loadMode packages.Load
 	cl.prepareBuildContext()
 
 	var buildFlags []string
+
 	if len(cl.cfg.Run.BuildTags) != 0 {
 		// go help build
 		buildFlags = []string{"-tags", strings.Join(cl.cfg.Run.BuildTags, " ")}
 	}
+
+	if cl.cfg.Run.Mod != "" {
+		// go help module
+		buildFlags = append(buildFlags, fmt.Sprintf("-mod=%s", cl.cfg.Run.Mod))
+	}
+
 	conf := &packages.Config{
 		Mode:       loadMode,
 		Tests:      cl.cfg.Run.AnalyzeTests,
