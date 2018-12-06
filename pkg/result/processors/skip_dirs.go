@@ -85,9 +85,7 @@ func (p *SkipDirs) getLongestArgRelativeIssuePath(i *result.Issue) string {
 			continue
 		}
 
-		relPath := strings.TrimPrefix(issueAbsPath, arg)
-		relPath = strings.TrimPrefix(relPath, string(filepath.Separator))
-		return relPath
+		return i.FilePath()
 	}
 
 	p.log.Infof("Issue path %q isn't relative to any of run args", i.FilePath())
