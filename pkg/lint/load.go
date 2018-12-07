@@ -182,7 +182,7 @@ func (cl ContextLoader) buildArgs() []string {
 
 	var retArgs []string
 	for _, arg := range args {
-		if strings.HasPrefix(arg, ".") {
+		if strings.HasPrefix(arg, ".") || filepath.IsAbs(arg) {
 			retArgs = append(retArgs, arg)
 		} else {
 			// go/packages doesn't work well if we don't have prefix ./ for local packages
