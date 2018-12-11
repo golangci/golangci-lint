@@ -162,14 +162,14 @@ Directories are NOT analyzed recursively. To analyze them recursively append `/.
 GolangCI-Lint can be used with zero configuration. By default the following linters are enabled:
 
 ```bash
-$ golangci-lint help linters
+$ golangci-lint linters help
 {{.LintersCommandOutputEnabledOnly}}
 ```
 
 and the following linters are disabled by default:
 
 ```bash
-$ golangci-lint help linters
+$ golangci-lint linters help
 ...
 {{.LintersCommandOutputDisabledOnly}}
 ```
@@ -336,7 +336,7 @@ and you don't need to install them separately.
 To see a list of supported linters and which linters are enabled/disabled:
 
 ```bash
-golangci-lint help linters
+golangci-lint linters help
 ```
 
 ### Enabled By Default Linters
