@@ -162,7 +162,7 @@ Directories are NOT analyzed recursively. To analyze them recursively append `/.
 GolangCI-Lint can be used with zero configuration. By default the following linters are enabled:
 
 ```bash
-$ golangci-lint help linters
+$ golangci-lint linters help
 Enabled by default linters:
 govet: Vet examines Go source code and reports suspicious constructs, such as Printf calls whose arguments do not align with the format string [fast: true]
 errcheck: Errcheck is a program for checking for unchecked errors in go programs. These unchecked errors can be critical bugs in some cases [fast: true]
@@ -179,7 +179,7 @@ typecheck: Like the front-end of a Go compiler, parses and type-checks Go code [
 and the following linters are disabled by default:
 
 ```bash
-$ golangci-lint help linters
+$ golangci-lint linters help
 ...
 Disabled by default linters:
 golint: Golint differs from gofmt. Gofmt reformats Go source code, whereas golint prints out style mistakes [fast: true]
@@ -367,7 +367,7 @@ and you don't need to install them separately.
 To see a list of supported linters and which linters are enabled/disabled:
 
 ```bash
-golangci-lint help linters
+golangci-lint linters help
 ```
 
 ### Enabled By Default Linters
@@ -492,6 +492,7 @@ Global Flags:
       --cpu-profile-path string   Path to CPU profile output file
       --mem-profile-path string   Path to memory profile output file
   -v, --verbose                   verbose output
+      --version                   Print version
 
 ```
 
