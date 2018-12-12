@@ -54,8 +54,8 @@ The recommended way to install golangci-lint (replace `vX.Y.Z` with the latest
 version from the [releases page](https://github.com/golangci/golangci-lint/releases)):
 
 ```bash
-# binary will be $GOPATH/bin/golangci-lint
-curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s -- -b $GOPATH/bin vX.Y.Z
+# binary will be $(go env GOPATH)/bin/golangci-lint
+curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s -- -b $(go env GOPATH)/bin vX.Y.Z
 
 # or install it into ./bin/
 curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s vX.Y.Z
@@ -69,8 +69,8 @@ golangci-lint --version
 As a fallback you can also use `raw.githubusercontent.com`
 
 ```bash
-# binary will be $GOPATH/bin/golangci-lint
-curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sh -s -- -b $GOPATH/bin vX.Y.Z
+# binary will be $(go env GOPATH)/bin/golangci-lint
+curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sh -s -- -b $(go env GOPATH)/bin vX.Y.Z
 
 # or install it into ./bin/
 curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sh -s vX.Y.Z
@@ -91,7 +91,7 @@ It's a not recommended for your CI pipeline. Only install like this for your loc
 
 ```bash
 go get -u github.com/golangci/golangci-lint
-cd $GOPATH/src/github.com/golangci/golangci-lint/cmd/golangci-lint
+cd $(go env GOPATH)/src/github.com/golangci/golangci-lint/cmd/golangci-lint
 go install -ldflags "-X 'main.version=$(git describe --tags)' -X 'main.commit=$(git rev-parse --short HEAD)' -X 'main.date=$(date)'"
 ```
 
