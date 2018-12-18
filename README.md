@@ -121,6 +121,7 @@ The following companies/products use golangci-lint:
 * [ScyllaDB](https://github.com/scylladb/gocqlx)
 * [NixOS](https://github.com/NixOS/nixpkgs-channels)
 * [The New York Times](https://github.com/NYTimes/encoding-wrapper)
+* [Istio](https://github.com/istio/istio)
 
 The following great projects use golangci-lint:
 
