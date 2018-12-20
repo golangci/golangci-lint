@@ -24,7 +24,7 @@ p.negatives = append(p.negatives, y)`
 p.positives = append(p.positives, x)
 p.negatives = append(p.negatives, y)`
 
-	lintpack.AddChecker(&info, func(ctx *lintpack.CheckerContext) lintpack.FileWalker {
+	collection.AddChecker(&info, func(ctx *lintpack.CheckerContext) lintpack.FileWalker {
 		return astwalk.WalkerForStmt(&appendAssignChecker{ctx: ctx})
 	})
 }

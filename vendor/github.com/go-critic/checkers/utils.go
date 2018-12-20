@@ -2,11 +2,9 @@ package checkers
 
 import (
 	"go/ast"
-	"go/token"
 	"go/types"
 	"strings"
 
-	"github.com/go-critic/checkers/internal/lintutil"
 	"github.com/go-lintpack/lintpack"
 	"golang.org/x/tools/go/ast/astutil"
 )
@@ -91,56 +89,4 @@ func findNode(root ast.Node, pred func(ast.Node) bool) ast.Node {
 // containsNode reports whether `findNode(root, pred)!=nil`.
 func containsNode(root ast.Node, pred func(ast.Node) bool) bool {
 	return findNode(root, pred) != nil
-}
-
-// isSafeExpr reports whether expr is softly safe expression and contains
-// no significant side-effects. As opposed to strictly safe expressions,
-// soft safe expressions permit some forms of side-effects, like
-// panic possibility during indexing or nil pointer dereference.
-//
-// Uses types info to determine type conversion expressions that
-// are the only permitted kinds of call expressions.
-func isSafeExpr(info *types.Info, expr ast.Expr) bool {
-	// This list switch is not comprehensive and uses
-	// whitelist to be on the conservative side.
-	// Can be extended as needed.
-	//
-	// Note that it is not very strict "safe" as
-	// index expressions are permitted even though they
-	// may cause panics.
-	switch expr := expr.(type) {
-	case *ast.StarExpr:
-		return isSafeExpr(info, expr.X)
-	case *ast.BinaryExpr:
-		return isSafeExpr(info, expr.X) && isSafeExpr(info, expr.Y)
-	case *ast.UnaryExpr:
-		return expr.Op != token.ARROW && isSafeExpr(info, expr.X)
-	case *ast.BasicLit, *ast.Ident:
-		return true
-	case *ast.IndexExpr:
-		return isSafeExpr(info, expr.X) && isSafeExpr(info, expr.Index)
-	case *ast.SelectorExpr:
-		return isSafeExpr(info, expr.X)
-	case *ast.ParenExpr:
-		return isSafeExpr(info, expr.X)
-	case *ast.CompositeLit:
-		return isSafeExprList(info, expr.Elts)
-	case *ast.CallExpr:
-		return lintutil.IsTypeExpr(info, expr.Fun) &&
-			isSafeExprList(info, expr.Args)
-
-	default:
-		return false
-	}
-}
-
-// isSafeExprList reports whether every expr in list is safe.
-// See isSafeExpr.
-func isSafeExprList(info *types.Info, list []ast.Expr) bool {
-	for _, expr := range list {
-		if !isSafeExpr(info, expr) {
-			return false
-		}
-	}
-	return true
 }

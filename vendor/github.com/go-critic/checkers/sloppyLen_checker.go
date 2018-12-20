@@ -23,7 +23,7 @@ len(arr) < 0  // Doesn't make sense at all`
 len(arr) > 0
 len(arr) == 0`
 
-	lintpack.AddChecker(&info, func(ctx *lintpack.CheckerContext) lintpack.FileWalker {
+	collection.AddChecker(&info, func(ctx *lintpack.CheckerContext) lintpack.FileWalker {
 		return astwalk.WalkerForExpr(&sloppyLenChecker{ctx: ctx})
 	})
 }

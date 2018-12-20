@@ -31,7 +31,7 @@ default: // <- last case (could also be the first one)
 	// ...
 }`
 
-	lintpack.AddChecker(&info, func(ctx *lintpack.CheckerContext) lintpack.FileWalker {
+	collection.AddChecker(&info, func(ctx *lintpack.CheckerContext) lintpack.FileWalker {
 		return astwalk.WalkerForStmt(&defaultCaseOrderChecker{ctx: ctx})
 	})
 }

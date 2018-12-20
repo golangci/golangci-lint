@@ -18,7 +18,7 @@ func init() {
 	info.Before = `func(x int) int { return fn(x) }`
 	info.After = `fn`
 
-	lintpack.AddChecker(&info, func(ctx *lintpack.CheckerContext) lintpack.FileWalker {
+	collection.AddChecker(&info, func(ctx *lintpack.CheckerContext) lintpack.FileWalker {
 		return astwalk.WalkerForExpr(&unlambdaChecker{ctx: ctx})
 	})
 }

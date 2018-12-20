@@ -22,7 +22,7 @@ if x, ok := x.(int); ok {
 	body()
 }`
 
-	lintpack.AddChecker(&info, func(ctx *lintpack.CheckerContext) lintpack.FileWalker {
+	collection.AddChecker(&info, func(ctx *lintpack.CheckerContext) lintpack.FileWalker {
 		return astwalk.WalkerForStmt(&singleCaseSwitchChecker{ctx: ctx})
 	})
 }
