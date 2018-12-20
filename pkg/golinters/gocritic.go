@@ -8,7 +8,6 @@ import (
 	"path/filepath"
 	"runtime"
 	"runtime/debug"
-	"strings"
 	"sync"
 
 	_ "github.com/go-critic/checkers" // this import register checkers
@@ -41,8 +40,7 @@ func (lint Gocritic) Run(ctx context.Context, lintCtx *linter.Context) ([]result
 			continue
 		}
 
-		params := s.SettingsPerCheck[strings.ToLower(info.Name)]
-		c := lintpack.NewChecker(lintpackCtx, info, params)
+		c := lintpack.NewChecker(lintpackCtx, info)
 		enabledCheckers = append(enabledCheckers, c)
 	}
 

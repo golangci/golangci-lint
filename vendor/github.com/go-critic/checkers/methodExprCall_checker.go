@@ -20,7 +20,7 @@ foo.bar(f)`
 	info.After = `f := foo{}
 f.bar()`
 
-	lintpack.AddChecker(&info, func(ctx *lintpack.CheckerContext) lintpack.FileWalker {
+	collection.AddChecker(&info, func(ctx *lintpack.CheckerContext) lintpack.FileWalker {
 		return astwalk.WalkerForExpr(&methodExprCallChecker{ctx: ctx})
 	})
 }

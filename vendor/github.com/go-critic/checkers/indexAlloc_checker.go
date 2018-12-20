@@ -18,7 +18,7 @@ func init() {
 	info.After = `bytes.Index(x, []byte(y))`
 	info.Note = `See Go issue for details: https://github.com/golang/go/issues/25864`
 
-	lintpack.AddChecker(&info, func(ctx *lintpack.CheckerContext) lintpack.FileWalker {
+	collection.AddChecker(&info, func(ctx *lintpack.CheckerContext) lintpack.FileWalker {
 		return astwalk.WalkerForExpr(&indexAllocChecker{ctx: ctx})
 	})
 }

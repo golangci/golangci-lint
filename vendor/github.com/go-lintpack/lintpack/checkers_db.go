@@ -2,23 +2,24 @@ package lintpack
 
 import (
 	"fmt"
-	"go/ast"
+	"regexp"
 	"sort"
 	"strings"
 
 	"github.com/go-toolsmith/astfmt"
 )
 
+type checkerProto struct {
+	info        *CheckerInfo
+	constructor func(*Context) *Checker
+}
+
 // prototypes is a set of registered checkers that are not yet instantiated.
 // Registration should be done with AddChecker function.
 // Initialized checkers can be obtained with NewChecker function.
 var prototypes = make(map[string]checkerProto)
 
-// GetCheckersInfo returns a checkers info list for all registered checkers.
-// The slice is sorted by a checker name.
-//
-// Info objects can be used to instantiate checkers with NewChecker function.
-func GetCheckersInfo() []*CheckerInfo {
+func getCheckersInfo() []*CheckerInfo {
 	infoList := make([]*CheckerInfo, 0, len(prototypes))
 	for _, proto := range prototypes {
 		infoCopy := *proto.info
@@ -30,65 +31,48 @@ func GetCheckersInfo() []*CheckerInfo {
 	return infoList
 }
 
-// NewChecker returns initialized checker identified by an info.
-// info must be non-nil.
-// Panics if info describes a checker that was not properly registered.
-//
-// params argument specifies per-checker options.NewChecker. Can be nil.
-func NewChecker(ctx *Context, info *CheckerInfo, params map[string]interface{}) *Checker {
-	proto, ok := prototypes[info.Name]
-	if !ok {
-		panic(fmt.Sprintf("checker with name %q not registered", info.Name))
-	}
-	return proto.constructor(ctx, params)
-}
-
-// FileWalker is an interface every checker should implement.
-//
-// The WalkFile method is executed for every Go file inside the
-// package that is being checked.
-type FileWalker interface {
-	WalkFile(*ast.File)
-}
-
-// AddChecker registers a new checker into a checkers pool.
-// Constructor is used to create a new checker instance.
-// Checker name (defined in CheckerInfo.Name) must be unique.
-//
-// If checker is never needed, for example if it is disabled,
-// constructor will not be called.
-func AddChecker(info *CheckerInfo, constructor func(*CheckerContext) FileWalker) {
+func addChecker(info *CheckerInfo, constructor func(*CheckerContext) FileWalker) {
 	if _, ok := prototypes[info.Name]; ok {
 		panic(fmt.Sprintf("checker with name %q already registered", info.Name))
 	}
 
-	trimDocumentation := func(d *CheckerInfo) {
+	// Validate param value type.
+	for pname, param := range info.Params {
+		switch param.Value.(type) {
+		case string, int, bool:
+			// OK.
+		default:
+			panic(fmt.Sprintf("unsupported %q param type value: %T",
+				pname, param.Value))
+		}
+	}
+
+	trimDocumentation := func(info *CheckerInfo) {
 		fields := []*string{
-			&d.Summary,
-			&d.Details,
-			&d.Before,
-			&d.After,
-			&d.Note,
+			&info.Summary,
+			&info.Details,
+			&info.Before,
+			&info.After,
+			&info.Note,
 		}
 		for _, f := range fields {
 			*f = strings.TrimSpace(*f)
 		}
 	}
-	validateDocumentation := func(d *CheckerInfo) {
-		// TODO(Quasilyte): validate documentation.
-	}
 
 	trimDocumentation(info)
-	validateDocumentation(info)
+
+	if err := validateCheckerInfo(info); err != nil {
+		panic(err)
+	}
 
 	proto := checkerProto{
 		info: info,
-		constructor: func(ctx *Context, params parameters) *Checker {
+		constructor: func(ctx *Context) *Checker {
 			var c Checker
 			c.Info = info
 			c.ctx = CheckerContext{
 				Context: ctx,
-				Params:  params,
 				printer: astfmt.NewPrinter(ctx.FileSet),
 			}
 			c.fileWalker = constructor(&c.ctx)
@@ -97,4 +81,55 @@ func AddChecker(info *CheckerInfo, constructor func(*CheckerContext) FileWalker)
 	}
 
 	prototypes[info.Name] = proto
+}
+
+func newChecker(ctx *Context, info *CheckerInfo) *Checker {
+	proto, ok := prototypes[info.Name]
+	if !ok {
+		panic(fmt.Sprintf("checker with name %q not registered", info.Name))
+	}
+	return proto.constructor(ctx)
+}
+
+func validateCheckerInfo(info *CheckerInfo) error {
+	steps := []func(*CheckerInfo) error{
+		validateCheckerName,
+		validateCheckerDocumentation,
+		validateCheckerTags,
+	}
+
+	for _, step := range steps {
+		if err := step(info); err != nil {
+			return fmt.Errorf("%q validation error: %v", info.Name, err)
+		}
+	}
+	return nil
+}
+
+var validIdentRE = regexp.MustCompile(`^\w+$`)
+
+func validateCheckerName(info *CheckerInfo) error {
+	if !validIdentRE.MatchString(info.Name) {
+		return fmt.Errorf("checker name contains illegal chars")
+	}
+	return nil
+}
+
+func validateCheckerDocumentation(info *CheckerInfo) error {
+	// TODO(Quasilyte): validate documentation.
+	return nil
+}
+
+func validateCheckerTags(info *CheckerInfo) error {
+	tagSet := make(map[string]bool)
+	for _, tag := range info.Tags {
+		if tagSet[tag] {
+			return fmt.Errorf("duplicated tag %q", tag)
+		}
+		if !validIdentRE.MatchString(tag) {
+			return fmt.Errorf("checker tag %q contains illegal chars", tag)
+		}
+		tagSet[tag] = true
+	}
+	return nil
 }

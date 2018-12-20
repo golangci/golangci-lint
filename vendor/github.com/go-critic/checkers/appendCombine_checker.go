@@ -20,7 +20,7 @@ xs = append(xs, 1)
 xs = append(xs, 2)`
 	info.After = `xs = append(xs, 1, 2)`
 
-	lintpack.AddChecker(&info, func(ctx *lintpack.CheckerContext) lintpack.FileWalker {
+	collection.AddChecker(&info, func(ctx *lintpack.CheckerContext) lintpack.FileWalker {
 		return astwalk.WalkerForStmtList(&appendCombineChecker{ctx: ctx})
 	})
 }

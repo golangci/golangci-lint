@@ -21,7 +21,7 @@ func FuncOld() int`
 // Deprecated: use FuncNew instead
 func FuncOld() int`
 
-	lintpack.AddChecker(&info, func(ctx *lintpack.CheckerContext) lintpack.FileWalker {
+	collection.AddChecker(&info, func(ctx *lintpack.CheckerContext) lintpack.FileWalker {
 		c := &deprecatedCommentChecker{ctx: ctx}
 
 		c.commonPatterns = []*regexp.Regexp{
@@ -84,28 +84,34 @@ func (c *deprecatedCommentChecker) VisitDocComment(doc *ast.CommentGroup) {
 	//
 	// TODO(quasilyte): there are also multi-line deprecation comments.
 
-	for _, l := range strings.Split(doc.Text(), "\n") {
+	for _, comment := range doc.List {
+		if strings.HasPrefix(comment.Text, "/*") {
+			// TODO(quasilyte): handle multi-line doc comments.
+			continue
+		}
+		l := comment.Text[len("//"):]
 		if len(l) < len("Deprecated: ") {
 			continue
 		}
+		l = strings.TrimSpace(l)
 
 		// Check whether someone messed up with a prefix casing.
 		upcase := strings.ToUpper(l)
 		if strings.HasPrefix(upcase, "DEPRECATED: ") && !strings.HasPrefix(l, "Deprecated: ") {
-			c.warnCasing(doc, l)
+			c.warnCasing(comment, l)
 			return
 		}
 
 		// Check is someone used comma instead of a colon.
 		if strings.HasPrefix(l, "Deprecated, ") {
-			c.warnComma(doc)
+			c.warnComma(comment)
 			return
 		}
 
 		// Check for other commonly used patterns.
 		for _, pat := range c.commonPatterns {
 			if pat.MatchString(l) {
-				c.warnPattern(doc)
+				c.warnPattern(comment)
 				return
 			}
 		}
@@ -113,7 +119,7 @@ func (c *deprecatedCommentChecker) VisitDocComment(doc *ast.CommentGroup) {
 		// Detect some simple typos.
 		for _, prefixWithTypo := range c.commonTypos {
 			if strings.HasPrefix(upcase, prefixWithTypo) {
-				c.warnTypo(doc, l)
+				c.warnTypo(comment, l)
 				return
 			}
 		}

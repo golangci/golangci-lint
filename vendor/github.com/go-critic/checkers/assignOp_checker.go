@@ -8,6 +8,7 @@ import (
 	"github.com/go-lintpack/lintpack/astwalk"
 	"github.com/go-toolsmith/astcopy"
 	"github.com/go-toolsmith/astequal"
+	"github.com/go-toolsmith/typep"
 )
 
 func init() {
@@ -18,7 +19,7 @@ func init() {
 	info.Before = `x = x * 2`
 	info.After = `x *= 2`
 
-	lintpack.AddChecker(&info, func(ctx *lintpack.CheckerContext) lintpack.FileWalker {
+	collection.AddChecker(&info, func(ctx *lintpack.CheckerContext) lintpack.FileWalker {
 		return astwalk.WalkerForStmt(&assignOpChecker{ctx: ctx})
 	})
 }
@@ -34,7 +35,7 @@ func (c *assignOpChecker) VisitStmt(stmt ast.Stmt) {
 		assign.Tok == token.ASSIGN &&
 		len(assign.Lhs) == 1 &&
 		len(assign.Rhs) == 1 &&
-		isSafeExpr(c.ctx.TypesInfo, assign.Lhs[0])
+		typep.SideEffectFree(c.ctx.TypesInfo, assign.Lhs[0])
 	if !cond {
 		return
 	}
