@@ -16,7 +16,7 @@ func init() {
 	info.Before = `copy(dst, dst)`
 	info.After = `copy(dst, src)`
 
-	lintpack.AddChecker(&info, func(ctx *lintpack.CheckerContext) lintpack.FileWalker {
+	collection.AddChecker(&info, func(ctx *lintpack.CheckerContext) lintpack.FileWalker {
 		c := &dupArgChecker{ctx: ctx}
 		// newMatcherFunc returns a function that matches a call if
 		// args[xIndex] and args[yIndex] are equal.
@@ -33,6 +33,7 @@ func init() {
 		m := map[string]func(*ast.CallExpr) bool{
 			"(x, x, ...)":    newMatcherFunc(0, 1),
 			"(x, _, x, ...)": newMatcherFunc(0, 2),
+			"(_, x, x, ...)": newMatcherFunc(1, 2),
 		}
 
 		// TODO(quasilyte): handle x.Equal(x) cases.
@@ -61,6 +62,8 @@ func init() {
 			"strings.SplitAfter":  m["(x, x, ...)"],
 			"strings.SplitAfterN": m["(x, x, ...)"],
 			"strings.SplitN":      m["(x, x, ...)"],
+			"strings.Replace":     m["(_, x, x, ...)"],
+			"strings.ReplaceAll":  m["(_, x, x, ...)"],
 
 			"bytes.Contains":    m["(x, x, ...)"],
 			"bytes.Compare":     m["(x, x, ...)"],
@@ -74,6 +77,8 @@ func init() {
 			"bytes.SplitAfter":  m["(x, x, ...)"],
 			"bytes.SplitAfterN": m["(x, x, ...)"],
 			"bytes.SplitN":      m["(x, x, ...)"],
+			"bytes.Replace":     m["(_, x, x, ...)"],
+			"bytes.ReplaceAll":  m["(_, x, x, ...)"],
 
 			"types.Identical":           m["(x, x, ...)"],
 			"types.IdenticalIgnoreTags": m["(x, x, ...)"],

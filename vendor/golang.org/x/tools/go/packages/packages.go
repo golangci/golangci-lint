@@ -19,9 +19,6 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	"runtime"
-	"sort"
-	"strings"
 	"sync"
 
 	"golang.org/x/tools/go/gcexportdata"
@@ -60,7 +57,7 @@ const (
 	LoadAllSyntax
 )
 
-// An Config specifies details about how packages should be loaded.
+// A Config specifies details about how packages should be loaded.
 // The zero value is a valid configuration.
 // Calls to Load do not modify this struct.
 type Config struct {
@@ -128,9 +125,8 @@ type Config struct {
 	// If the file  with the given path already exists, the parser will use the
 	// alternative file contents provided by the map.
 	//
-	// The Package.Imports map may not include packages that are imported only
-	// by the alternative file contents provided by Overlay. This may cause
-	// type-checking to fail.
+	// Overlays provide incomplete support for when a given file doesn't
+	// already exist on disk. See the package doc above for more details.
 	Overlay map[string][]byte
 }
 
@@ -140,6 +136,9 @@ type driver func(cfg *Config, patterns ...string) (*driverResponse, error)
 
 // driverResponse contains the results for a driver query.
 type driverResponse struct {
+	// Sizes, if not nil, is the types.Sizes to use when type checking.
+	Sizes *types.StdSizes
+
 	// Roots is the set of package IDs that make up the root packages.
 	// We have to encode this separately because when we encode a single package
 	// we cannot know if it is one of the roots as that requires knowledge of the
@@ -174,7 +173,7 @@ func Load(cfg *Config, patterns ...string) ([]*Package, error) {
 	if err != nil {
 		return nil, err
 	}
-	sort.Strings(response.Roots) // make all driver responses deterministic
+	l.sizes = response.Sizes
 	return l.refine(response.Roots, response.Packages...)
 }
 
@@ -369,6 +368,7 @@ type loaderPackage struct {
 type loader struct {
 	pkgs map[string]*loaderPackage
 	Config
+	sizes    types.Sizes
 	exportMu sync.Mutex // enforces mutual exclusion of exportdata operations
 }
 
@@ -413,26 +413,36 @@ func newLoader(cfg *Config) *loader {
 // refine connects the supplied packages into a graph and then adds type and
 // and syntax information as requested by the LoadMode.
 func (ld *loader) refine(roots []string, list ...*Package) ([]*Package, error) {
-	isRoot := make(map[string]bool, len(roots))
-	for _, root := range roots {
-		isRoot[root] = true
+	rootMap := make(map[string]int, len(roots))
+	for i, root := range roots {
+		rootMap[root] = i
 	}
 	ld.pkgs = make(map[string]*loaderPackage)
 	// first pass, fixup and build the map and roots
-	var initial []*loaderPackage
+	var initial = make([]*loaderPackage, len(roots))
 	for _, pkg := range list {
+		rootIndex := -1
+		if i, found := rootMap[pkg.ID]; found {
+			rootIndex = i
+		}
 		lpkg := &loaderPackage{
 			Package: pkg,
 			needtypes: ld.Mode >= LoadAllSyntax ||
-				ld.Mode >= LoadTypes && isRoot[pkg.ID],
+				ld.Mode >= LoadTypes && rootIndex >= 0,
 			needsrc: ld.Mode >= LoadAllSyntax ||
-				ld.Mode >= LoadSyntax && isRoot[pkg.ID] ||
+				ld.Mode >= LoadSyntax && rootIndex >= 0 ||
+				len(ld.Overlay) > 0 || // Overlays can invalidate export data. TODO(matloob): make this check fine-grained based on dependencies on overlaid files
 				pkg.ExportFile == "" && pkg.PkgPath != "unsafe",
 		}
 		ld.pkgs[lpkg.ID] = lpkg
-		if isRoot[lpkg.ID] {
-			initial = append(initial, lpkg)
+		if rootIndex >= 0 {
+			initial[rootIndex] = lpkg
 			lpkg.initial = true
+		}
+	}
+	for i, root := range roots {
+		if initial[i] == nil {
+			return nil, fmt.Errorf("root package %v is missing", root)
 		}
 	}
 
@@ -685,17 +695,6 @@ func (ld *loader) loadPackage(lpkg *loaderPackage) {
 		panic("unreachable")
 	})
 
-	// This is only an approximation.
-	// TODO(adonovan): derive Sizes from the underlying build system.
-	goarch := runtime.GOARCH
-	const goarchPrefix = "GOARCH="
-	for _, e := range ld.Config.Env {
-		if strings.HasPrefix(e, goarchPrefix) {
-			goarch = e[len(goarchPrefix):]
-		}
-	}
-	sizes := types.SizesFor("gc", goarch)
-
 	// type-check
 	tc := &types.Config{
 		Importer: importer,
@@ -706,7 +705,7 @@ func (ld *loader) loadPackage(lpkg *loaderPackage) {
 		IgnoreFuncBodies: ld.Mode < LoadAllSyntax && !lpkg.initial,
 
 		Error: appendError,
-		Sizes: sizes,
+		Sizes: ld.sizes,
 	}
 	types.NewChecker(tc, ld.Fset, lpkg.Types, lpkg.TypesInfo).Files(lpkg.Syntax)
 
@@ -820,6 +819,15 @@ func (ld *loader) parseFiles(filenames []string) ([]*ast.File, []error) {
 // the same file.
 //
 func sameFile(x, y string) bool {
+	if x == y {
+		// It could be the case that y doesn't exist.
+		// For instance, it may be an overlay file that
+		// hasn't been written to disk. To handle that case
+		// let x == y through. (We added the exact absolute path
+		// string to the CompiledGoFiles list, so the unwritten
+		// overlay case implies x==y.)
+		return true
+	}
 	if filepath.Base(x) == filepath.Base(y) { // (optimisation)
 		if xi, err := os.Stat(x); err == nil {
 			if yi, err := os.Stat(y); err == nil {

@@ -11,6 +11,16 @@ func init() {
 	var info lintpack.CheckerInfo
 	info.Name = "rangeValCopy"
 	info.Tags = []string{"performance"}
+	info.Params = lintpack.CheckerParams{
+		"sizeThreshold": {
+			Value: 128,
+			Usage: "size in bytes that makes the warning trigger",
+		},
+		"skipTestFuncs": {
+			Value: true,
+			Usage: "whether to check test functions",
+		},
+	}
 	info.Summary = "Detects loops that copy big objects during each iteration"
 	info.Details = "Suggests to use index access or take address and make use pointer instead."
 	info.Before = `
@@ -25,10 +35,10 @@ for i := range xs {
 	// Loop body.
 }`
 
-	lintpack.AddChecker(&info, func(ctx *lintpack.CheckerContext) lintpack.FileWalker {
+	collection.AddChecker(&info, func(ctx *lintpack.CheckerContext) lintpack.FileWalker {
 		c := &rangeValCopyChecker{ctx: ctx}
-		c.sizeThreshold = int64(c.ctx.Params.Int("sizeThreshold", 128))
-		c.skipTestFuncs = c.ctx.Params.Bool("skipTestFuncs", true)
+		c.sizeThreshold = int64(info.Params.Int("sizeThreshold"))
+		c.skipTestFuncs = info.Params.Bool("skipTestFuncs")
 		return astwalk.WalkerForStmt(c)
 	})
 }

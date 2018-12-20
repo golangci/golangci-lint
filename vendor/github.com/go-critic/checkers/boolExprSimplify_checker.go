@@ -9,6 +9,7 @@ import (
 	"github.com/go-lintpack/lintpack/astwalk"
 	"github.com/go-toolsmith/astcopy"
 	"github.com/go-toolsmith/astequal"
+	"github.com/go-toolsmith/typep"
 	"golang.org/x/tools/go/ast/astutil"
 )
 
@@ -24,7 +25,7 @@ b := !(x) == !(y)`
 a := elapsed < expectElapsedMin
 b := (x) == (y)`
 
-	lintpack.AddChecker(&info, func(ctx *lintpack.CheckerContext) lintpack.FileWalker {
+	collection.AddChecker(&info, func(ctx *lintpack.CheckerContext) lintpack.FileWalker {
 		return astwalk.WalkerForExpr(&boolExprSimplifyChecker{ctx: ctx})
 	})
 }
@@ -115,7 +116,9 @@ func (c *boolExprSimplifyChecker) combineChecks(cur *astutil.Cursor) bool {
 	if !astequal.Expr(lhs.X, rhs.X) || !astequal.Expr(lhs.Y, rhs.Y) {
 		return false
 	}
-	if !isSafeExpr(c.ctx.TypesInfo, lhs.X) || !isSafeExpr(c.ctx.TypesInfo, lhs.Y) {
+	safe := typep.SideEffectFree(c.ctx.TypesInfo, lhs.X) &&
+		typep.SideEffectFree(c.ctx.TypesInfo, lhs.Y)
+	if !safe {
 		return false
 	}
 

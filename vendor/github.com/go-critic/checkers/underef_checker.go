@@ -14,6 +14,12 @@ func init() {
 	var info lintpack.CheckerInfo
 	info.Name = "underef"
 	info.Tags = []string{"style"}
+	info.Params = lintpack.CheckerParams{
+		"skipRecvDeref": {
+			Value: true,
+			Usage: "whether to skip (*x).method() calls where x is a pointer receiver",
+		},
+	}
 	info.Summary = "Detects dereference expressions that can be omitted"
 	info.Before = `
 (*k).field = 5
@@ -22,9 +28,9 @@ v := (*a)[5] // only if a is array`
 k.field = 5
 v := a[5]`
 
-	lintpack.AddChecker(&info, func(ctx *lintpack.CheckerContext) lintpack.FileWalker {
+	collection.AddChecker(&info, func(ctx *lintpack.CheckerContext) lintpack.FileWalker {
 		c := &underefChecker{ctx: ctx}
-		c.skipRecvCopy = ctx.Params.Bool("skipRecvCopy", true)
+		c.skipRecvDeref = info.Params.Bool("skipRecvDeref")
 		return astwalk.WalkerForExpr(c)
 	})
 }
@@ -33,14 +39,14 @@ type underefChecker struct {
 	astwalk.WalkHandler
 	ctx *lintpack.CheckerContext
 
-	skipRecvCopy bool
+	skipRecvDeref bool
 }
 
 func (c *underefChecker) VisitExpr(expr ast.Expr) {
 	switch n := expr.(type) {
 	case *ast.SelectorExpr:
 		expr := lintutil.AsParenExpr(n.X)
-		if c.skipRecvCopy && c.isPtrRecvMethodCall(n.Sel) {
+		if c.skipRecvDeref && c.isPtrRecvMethodCall(n.Sel) {
 			return
 		}
 
@@ -66,7 +72,7 @@ func (c *underefChecker) isPtrRecvMethodCall(fn *ast.Ident) bool {
 	typ, ok := c.ctx.TypesInfo.TypeOf(fn).(*types.Signature)
 	if ok && typ != nil && typ.Recv() != nil {
 		_, ok := typ.Recv().Type().(*types.Pointer)
-		return ok && c.skipRecvCopy
+		return ok
 	}
 	return false
 }

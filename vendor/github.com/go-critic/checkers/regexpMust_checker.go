@@ -18,7 +18,7 @@ func init() {
 	info.Before = `re, _ := regexp.Compile("const pattern")`
 	info.After = `re := regexp.MustCompile("const pattern")`
 
-	lintpack.AddChecker(&info, func(ctx *lintpack.CheckerContext) lintpack.FileWalker {
+	collection.AddChecker(&info, func(ctx *lintpack.CheckerContext) lintpack.FileWalker {
 		return astwalk.WalkerForExpr(&regexpMustChecker{ctx: ctx})
 	})
 }
