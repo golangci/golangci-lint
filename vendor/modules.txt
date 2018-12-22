@@ -75,7 +75,7 @@ github.com/golangci/go-tools/staticcheck/vrp
 github.com/golangci/goconst
 # github.com/golangci/gocyclo v0.0.0-20180528134321-2becd97e67ee
 github.com/golangci/gocyclo/pkg/gocyclo
-# github.com/golangci/gofmt v0.0.0-20181105071733-f021c4179c82
+# github.com/golangci/gofmt v0.0.0-20181105071733-0b8337e80d98
 github.com/golangci/gofmt/gofmt
 github.com/golangci/gofmt/goimports
 # github.com/golangci/gosec v0.0.0-20180901114220-8afd9cbb6cfb
@@ -202,6 +202,7 @@ golang.org/x/tools/go/loader
 golang.org/x/tools/go/packages
 golang.org/x/tools/go/ast/astutil
 golang.org/x/tools/go/types/typeutil
+golang.org/x/tools/imports
 golang.org/x/tools/go/gcexportdata
 golang.org/x/tools/go/buildutil
 golang.org/x/tools/go/internal/cgo

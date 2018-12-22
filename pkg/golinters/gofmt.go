@@ -6,10 +6,9 @@ import (
 	"fmt"
 	"go/token"
 
-	"github.com/golangci/tools/imports" // TODO: replace with x/tools when use it in golangci/gofmt/gofmt
-
 	gofmtAPI "github.com/golangci/gofmt/gofmt"
 	goimportsAPI "github.com/golangci/gofmt/goimports"
+	"golang.org/x/tools/imports"
 	"sourcegraph.com/sourcegraph/go-diff/diff"
 
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
