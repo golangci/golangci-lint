@@ -15,7 +15,7 @@ import (
 
 	assert "github.com/stretchr/testify/require"
 
-	"gopkg.in/yaml.v2"
+	yaml "gopkg.in/yaml.v2"
 )
 
 func runGoErrchk(c *exec.Cmd, t *testing.T) {

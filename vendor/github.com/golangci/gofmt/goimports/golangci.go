@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 
-	"github.com/golangci/tools/imports"
+	"golang.org/x/tools/imports"
 )
 
 func Run(filename string) ([]byte, error) {

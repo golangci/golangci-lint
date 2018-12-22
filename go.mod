@@ -24,7 +24,7 @@ require (
 	github.com/golangci/go-tools v0.0.0-20180902103155-93eecd106a0b
 	github.com/golangci/goconst v0.0.0-20180610141641-041c5f2b40f3
 	github.com/golangci/gocyclo v0.0.0-20180528134321-2becd97e67ee
-	github.com/golangci/gofmt v0.0.0-20181105071733-f021c4179c82
+	github.com/golangci/gofmt v0.0.0-20181105071733-0b8337e80d98
 	github.com/golangci/gosec v0.0.0-20180901114220-8afd9cbb6cfb
 	github.com/golangci/govet v0.0.0-20180818181408-44ddbe260190
 	github.com/golangci/ineffassign v0.0.0-20180808204949-2ee8f2867dde
