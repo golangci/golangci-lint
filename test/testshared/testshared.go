@@ -46,8 +46,8 @@ type RunResult struct {
 }
 
 func (r *RunResult) ExpectNoIssues() {
-	assert.Equal(r.t, "", r.output, r.exitCode)
-	assert.Equal(r.t, exitcodes.Success, r.exitCode, r.output)
+	assert.Equal(r.t, "", r.output, "exit code is %d", r.exitCode)
+	assert.Equal(r.t, exitcodes.Success, r.exitCode, "output is %s", r.output)
 }
 
 func (r *RunResult) ExpectExitCode(possibleCodes ...int) *RunResult {
