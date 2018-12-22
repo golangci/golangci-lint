@@ -84,7 +84,6 @@ func (p *SkipDirs) shouldPassIssue(i *result.Issue) bool {
 
 	for _, absArgDir := range p.absArgsDirs {
 		if absArgDir == issueAbsDir {
-			p.log.Infof("Pass issue in file %s because it's dir was explicitly set in arg %s", i.FilePath(), absArgDir)
 			// we must not skip issues if they are from explicitly set dirs
 			// even if they match skip patterns
 			return true
