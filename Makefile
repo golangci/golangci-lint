@@ -1,8 +1,8 @@
 test:
 	go build -o golangci-lint ./cmd/golangci-lint
 	GL_TEST_RUN=1 ./golangci-lint run -v
-	GL_TEST_RUN=1 ./golangci-lint run --fast --no-config -v
-	GL_TEST_RUN=1 ./golangci-lint run --no-config -v
+	GL_TEST_RUN=1 ./golangci-lint run --fast --no-config -v --skip-dirs test/testdata_etc
+	GL_TEST_RUN=1 ./golangci-lint run --no-config -v --skip-dirs test/testdata_etc
 	GL_TEST_RUN=1 go test -v ./...
 
 test_race:
