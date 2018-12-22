@@ -57,8 +57,6 @@ func TestTypecheck(t *testing.T) {
 }
 
 func TestGoimportsLocal(t *testing.T) {
-	t.Skipf("strange travis and go bug, enable it when it will be fixed: https://travis-ci.com/golangci/golangci-lint/jobs/157695743")
-
 	sourcePath := filepath.Join(testdataDir, "goimports", "goimports.go")
 	args := []string{
 		"--disable-all", "--print-issued-lines=false", "--print-linter-name=false", "--out-format=line-number",
