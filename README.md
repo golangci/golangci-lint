@@ -432,7 +432,6 @@ Flags:
       --print-linter-name           Print linter name in issue line (default true)
       --issues-exit-code int        Exit code when issues were found (default 1)
       --build-tags strings          Build tags
-      --mod string                  module download mode to use: readonly or vendor (passed to go list)
       --deadline duration           Deadline for total work (default 1m0s)
       --tests                       Analyze tests (*_test.go) (default true)
       --print-resources-usage       Print avg and max memory usage of golangci-lint and total time
@@ -551,6 +550,16 @@ run:
   skip-files:
     - ".*\\.my\\.go$"
     - lib/bad.go
+
+  # by default isn't set. If set we pass it to "go list -mod={option}". From "go help modules":
+  # If invoked with -mod=readonly, the go command is disallowed from the implicit
+  # automatic updating of go.mod described above. Instead, it fails when any changes
+  # to go.mod are needed. This setting is most useful to check that go.mod does
+  # not need updates, such as in a continuous integration and testing system.
+  # If invoked with -mod=vendor, the go command assumes that the vendor
+  # directory holds the correct copies of dependencies and ignores
+  # the dependency descriptions in go.mod.
+  modules-download-mode: readonly|release|vendor
 
 
 # output configuration options

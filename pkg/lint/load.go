@@ -193,6 +193,35 @@ func (cl ContextLoader) buildArgs() []string {
 	return retArgs
 }
 
+func (cl ContextLoader) makeBuildFlags() ([]string, error) {
+	var buildFlags []string
+
+	if len(cl.cfg.Run.BuildTags) != 0 {
+		// go help build
+		buildFlags = append(buildFlags, "-tags", strings.Join(cl.cfg.Run.BuildTags, " "))
+	}
+
+	mod := cl.cfg.Run.ModulesDownloadMode
+	if mod != "" {
+		// go help modules
+		allowedMods := []string{"release", "readonly", "vendor"}
+		var ok bool
+		for _, am := range allowedMods {
+			if am == mod {
+				ok = true
+				break
+			}
+		}
+		if !ok {
+			return nil, fmt.Errorf("invalid modules download path %s, only (%s) allowed", mod, strings.Join(allowedMods, "|"))
+		}
+
+		buildFlags = append(buildFlags, fmt.Sprintf("-mod=%s", cl.cfg.Run.ModulesDownloadMode))
+	}
+
+	return buildFlags, nil
+}
+
 func (cl ContextLoader) loadPackages(ctx context.Context, loadMode packages.LoadMode) ([]*packages.Package, error) {
 	defer func(startedAt time.Time) {
 		cl.log.Infof("Go packages loading at mode %s took %s", stringifyLoadMode(loadMode), time.Since(startedAt))
@@ -200,16 +229,9 @@ func (cl ContextLoader) loadPackages(ctx context.Context, loadMode packages.Load
 
 	cl.prepareBuildContext()
 
-	var buildFlags []string
-
-	if len(cl.cfg.Run.BuildTags) != 0 {
-		// go help build
-		buildFlags = []string{"-tags", strings.Join(cl.cfg.Run.BuildTags, " ")}
-	}
-
-	if cl.cfg.Run.Mod != "" {
-		// go help module
-		buildFlags = append(buildFlags, fmt.Sprintf("-mod=%s", cl.cfg.Run.Mod))
+	buildFlags, err := cl.makeBuildFlags()
+	if err != nil {
+		return nil, errors.Wrap(err, "failed to make build flags for go list")
 	}
 
 	conf := &packages.Config{
