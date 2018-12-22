@@ -761,6 +761,10 @@ linters:
     - prealloc
     - gosec
     - gochecknoglobals
+
+run:
+  skip-dirs:
+    - test/testdata_etc
 ```
 
 ## False Positives
