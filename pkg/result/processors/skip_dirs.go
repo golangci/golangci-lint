@@ -3,7 +3,6 @@ package processors
 import (
 	"path/filepath"
 	"regexp"
-	"sort"
 	"strings"
 
 	"github.com/pkg/errors"
@@ -13,19 +12,15 @@ import (
 )
 
 type SkipDirs struct {
-	patterns      []*regexp.Regexp
-	log           logutils.Log
-	skippedDirs   map[string]bool
-	sortedAbsArgs []string
+	patterns    []*regexp.Regexp
+	log         logutils.Log
+	skippedDirs map[string][]string // regexp to dir mapping
+	absArgsDirs []string
 }
 
 var _ Processor = SkipFiles{}
 
-type sortedByLenStrings []string
-
-func (s sortedByLenStrings) Len() int           { return len(s) }
-func (s sortedByLenStrings) Less(i, j int) bool { return len(s[i]) > len(s[j]) }
-func (s sortedByLenStrings) Swap(i, j int)      { s[i], s[j] = s[j], s[i] }
+const goFileSuffix = ".go"
 
 func NewSkipDirs(patterns []string, log logutils.Log, runArgs []string) (*SkipDirs, error) {
 	var patternsRe []*regexp.Regexp
@@ -40,24 +35,25 @@ func NewSkipDirs(patterns []string, log logutils.Log, runArgs []string) (*SkipDi
 	if len(runArgs) == 0 {
 		runArgs = append(runArgs, "./...")
 	}
-	var sortedAbsArgs []string
+	var absArgsDirs []string
 	for _, arg := range runArgs {
-		if filepath.Base(arg) == "..." {
+		base := filepath.Base(arg)
+		if base == "..." || strings.HasSuffix(base, goFileSuffix) {
 			arg = filepath.Dir(arg)
 		}
+
 		absArg, err := filepath.Abs(arg)
 		if err != nil {
 			return nil, errors.Wrapf(err, "failed to abs-ify arg %q", arg)
 		}
-		sortedAbsArgs = append(sortedAbsArgs, absArg)
+		absArgsDirs = append(absArgsDirs, absArg)
 	}
-	sort.Sort(sortedByLenStrings(sortedAbsArgs))
 
 	return &SkipDirs{
-		patterns:      patternsRe,
-		log:           log,
-		skippedDirs:   map[string]bool{},
-		sortedAbsArgs: sortedAbsArgs,
+		patterns:    patternsRe,
+		log:         log,
+		skippedDirs: map[string][]string{},
+		absArgsDirs: absArgsDirs,
 	}, nil
 }
 
@@ -73,38 +69,38 @@ func (p *SkipDirs) Process(issues []result.Issue) ([]result.Issue, error) {
 	return filterIssues(issues, p.shouldPassIssue), nil
 }
 
-func (p *SkipDirs) getLongestArgRelativeIssuePath(i *result.Issue) string {
-	issueAbsPath, err := filepath.Abs(i.FilePath())
-	if err != nil {
-		p.log.Warnf("Can't abs-ify path %q: %s", i.FilePath(), err)
-		return ""
-	}
-
-	for _, arg := range p.sortedAbsArgs {
-		if !strings.HasPrefix(issueAbsPath, arg) {
-			continue
-		}
-
-		return i.FilePath()
-	}
-
-	p.log.Infof("Issue path %q isn't relative to any of run args", i.FilePath())
-	return ""
-}
-
 func (p *SkipDirs) shouldPassIssue(i *result.Issue) bool {
-	relIssuePath := p.getLongestArgRelativeIssuePath(i)
-	if relIssuePath == "" {
+	if filepath.IsAbs(i.FilePath()) {
+		p.log.Warnf("Got abs path in skip dirs processor, it should be relative")
 		return true
 	}
 
-	if strings.HasSuffix(filepath.Base(relIssuePath), ".go") {
-		relIssuePath = filepath.Dir(relIssuePath)
+	issueRelDir := filepath.Dir(i.FilePath())
+	issueAbsDir, err := filepath.Abs(issueRelDir)
+	if err != nil {
+		p.log.Warnf("Can't abs-ify path %q: %s", issueRelDir, err)
+		return true
 	}
 
+	for _, absArgDir := range p.absArgsDirs {
+		if absArgDir == issueAbsDir {
+			p.log.Infof("Pass issue in file %s because it's dir was explicitly set in arg %s", i.FilePath(), absArgDir)
+			// we must not skip issues if they are from explicitly set dirs
+			// even if they match skip patterns
+			return true
+		}
+	}
+
+	// We use issueRelDir for matching: it's the relative to the current
+	// work dir path of directory of source file with the issue. It can lead
+	// to unexpected behavior if we're analyzing files out of current work dir.
+	// The alternative solution is to find relative to args path, but it has
+	// disadvantages (https://github.com/golangci/golangci-lint/pull/313).
+
 	for _, pattern := range p.patterns {
-		if pattern.MatchString(relIssuePath) {
-			p.skippedDirs[relIssuePath] = true
+		if pattern.MatchString(issueRelDir) {
+			ps := pattern.String()
+			p.skippedDirs[ps] = append(p.skippedDirs[ps], issueRelDir)
 			return false
 		}
 	}
@@ -113,11 +109,7 @@ func (p *SkipDirs) shouldPassIssue(i *result.Issue) bool {
 }
 
 func (p SkipDirs) Finish() {
-	if len(p.skippedDirs) != 0 {
-		var skippedDirs []string
-		for dir := range p.skippedDirs {
-			skippedDirs = append(skippedDirs, dir)
-		}
-		p.log.Infof("Skipped dirs: %s", skippedDirs)
+	for pattern, dirs := range p.skippedDirs {
+		p.log.Infof("Skipped by pattern %s dirs: %s", pattern, dirs)
 	}
 }

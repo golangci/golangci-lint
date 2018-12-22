@@ -56,13 +56,19 @@ func TestUnsafeOk(t *testing.T) {
 	testshared.NewLintRunner(t).Run("--enable-all", getTestDataDir("unsafe")).ExpectNoIssues()
 }
 
-func TestSkippedDirs(t *testing.T) {
-	r := testshared.NewLintRunner(t).Run("--print-issued-lines=false", "--no-config", "--skip-dirs", "skip_me", "-Egolint",
-		getTestDataDir("skipdirs", "..."))
+func TestSkippedDirsNoMatchArg(t *testing.T) {
+	dir := getTestDataDir("skipdirs", "skip_me", "nested")
+	r := testshared.NewLintRunner(t).Run("--print-issued-lines=false", "--no-config", "--skip-dirs", dir, "-Egolint", dir)
 
 	r.ExpectExitCode(exitcodes.IssuesFound).
-		ExpectOutputEq("testdata/skipdirs/examples_no_skip/with_issue.go:8:9: if block ends with " +
+		ExpectOutputEq("testdata/skipdirs/skip_me/nested/with_issue.go:8:9: if block ends with " +
 			"a return statement, so drop this else and outdent its block (golint)\n")
+}
+
+func TestSkippedDirsTestdata(t *testing.T) {
+	r := testshared.NewLintRunner(t).Run("--print-issued-lines=false", "--no-config", "-Egolint", getTestDataDir("skipdirs", "..."))
+
+	r.ExpectNoIssues() // all was skipped because in testdata
 }
 
 func TestDeadcodeNoFalsePositivesInMainPkg(t *testing.T) {
