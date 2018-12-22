@@ -109,8 +109,8 @@ type Run struct {
 
 	Args []string
 
-	BuildTags []string `mapstructure:"build-tags"`
-	Mod       string   `mapstructure:"mod"`
+	BuildTags           []string `mapstructure:"build-tags"`
+	ModulesDownloadMode string   `mapstructure:"modules-download-mode"`
 
 	ExitCodeIfIssuesFound int  `mapstructure:"issues-exit-code"`
 	AnalyzeTests          bool `mapstructure:"tests"`
