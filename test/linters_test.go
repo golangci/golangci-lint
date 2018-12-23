@@ -85,7 +85,9 @@ func saveConfig(t *testing.T, cfg map[string]interface{}) (cfgPath string, finis
 
 	return cfgPath, func() {
 		assert.NoError(t, f.Close())
-		assert.NoError(t, os.Remove(cfgPath))
+		if os.Getenv("GL_KEEP_TEMP_FILES") != "1" {
+			assert.NoError(t, os.Remove(cfgPath))
+		}
 	}
 }
 
@@ -106,6 +108,8 @@ func testOneSource(t *testing.T, sourcePath string) {
 		p, finish := saveConfig(t, rc.config)
 		defer finish()
 		cfgPath = p
+	} else if rc.configPath != "" {
+		cfgPath = rc.configPath
 	}
 
 	for _, addArg := range []string{"", "-Etypecheck"} {
@@ -129,8 +133,9 @@ func testOneSource(t *testing.T, sourcePath string) {
 }
 
 type runContext struct {
-	args   []string
-	config map[string]interface{}
+	args       []string
+	config     map[string]interface{}
+	configPath string
 }
 
 func buildConfigFromShortRepr(t *testing.T, repr string, config map[string]interface{}) {
@@ -188,6 +193,15 @@ func extractRunContextFromComments(t *testing.T, sourcePath string) *runContext 
 			buildConfigFromShortRepr(t, repr, rc.config)
 			continue
 		}
+
+		if strings.HasPrefix(line, "config_path: ") {
+			configPath := strings.TrimPrefix(line, "config_path: ")
+			assert.NotEmpty(t, configPath)
+			rc.configPath = configPath
+			continue
+		}
+
+		assert.Fail(t, "invalid prefix of comment line %s", line)
 	}
 
 	return rc

@@ -1,4 +1,5 @@
-//args: -Egovet --govet.check-shadowing=true
+//args: -Egovet
+//config: linters-settings.govet.check-shadowing=true
 package testdata
 
 import (

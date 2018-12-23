@@ -115,7 +115,9 @@ func (r *LintRunner) RunWithYamlConfig(cfg string, args ...string) *RunResult {
 	err = os.Rename(f.Name(), cfgPath)
 	assert.NoError(r.t, err)
 
-	defer os.Remove(cfgPath)
+	if os.Getenv("GL_KEEP_TEMP_FILES") != "1" {
+		defer os.Remove(cfgPath)
+	}
 
 	cfg = strings.TrimSpace(cfg)
 	cfg = strings.Replace(cfg, "\t", " ", -1)

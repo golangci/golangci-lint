@@ -1,4 +1,5 @@
-//args: -Elll --lll.tab-width 4
+//args: -Elll
+//config: linters-settings.lll.tab-width=4
 package testdata
 
 func Lll() {

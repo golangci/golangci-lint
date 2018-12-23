@@ -2,8 +2,6 @@ package config
 
 import (
 	"errors"
-	"fmt"
-	"regexp"
 	"strings"
 	"time"
 
@@ -174,10 +172,10 @@ type LintersSettings struct {
 }
 
 type ErrcheckSettings struct {
-	CheckTypeAssertions bool       `mapstructure:"check-type-assertions"`
-	CheckAssignToBlank  bool       `mapstructure:"check-blank"`
-	Ignore              IgnoreFlag `mapstructure:"ignore"`
-	Exclude             string     `mapstructure:"exclude"`
+	CheckTypeAssertions bool   `mapstructure:"check-type-assertions"`
+	CheckAssignToBlank  bool   `mapstructure:"check-blank"`
+	Ignore              string `mapstructure:"ignore"`
+	Exclude             string `mapstructure:"exclude"`
 }
 
 type LllSettings struct {
@@ -295,9 +293,6 @@ var defaultLintersSettings = LintersSettings{
 		RangeLoops: true,
 		ForLoops:   false,
 	},
-	Errcheck: ErrcheckSettings{
-		Ignore: IgnoreFlag{},
-	},
 	Gocritic: GocriticSettings{
 		SettingsPerCheck: map[string]GocriticCheckSettings{},
 	},
@@ -346,48 +341,4 @@ func NewDefault() *Config {
 	return &Config{
 		LintersSettings: defaultLintersSettings,
 	}
-}
-
-// IgnoreFlags was taken from errcheck in order to keep the API identical.
-// https://github.com/kisielk/errcheck/blob/1787c4bee836470bf45018cfbc783650db3c6501/main.go#L25-L60
-type IgnoreFlag map[string]*regexp.Regexp
-
-func (f IgnoreFlag) String() string {
-	pairs := make([]string, 0, len(f))
-	for pkg, re := range f {
-		prefix := ""
-		if pkg != "" {
-			prefix = pkg + ":"
-		}
-		pairs = append(pairs, prefix+re.String())
-	}
-	return fmt.Sprintf("%q", strings.Join(pairs, ","))
-}
-
-func (f IgnoreFlag) Set(s string) error {
-	if s == "" {
-		return nil
-	}
-	for _, pair := range strings.Split(s, ",") {
-		colonIndex := strings.Index(pair, ":")
-		var pkg, re string
-		if colonIndex == -1 {
-			pkg = ""
-			re = pair
-		} else {
-			pkg = pair[:colonIndex]
-			re = pair[colonIndex+1:]
-		}
-		regex, err := regexp.Compile(re)
-		if err != nil {
-			return err
-		}
-		f[pkg] = regex
-	}
-	return nil
-}
-
-// Type returns the type of the flag follow the pflag format.
-func (IgnoreFlag) Type() string {
-	return "stringToRegexp"
 }

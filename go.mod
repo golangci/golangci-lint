@@ -19,7 +19,7 @@ require (
 	github.com/golang/mock v1.1.1
 	github.com/golangci/check v0.0.0-20180506172741-cfe4005ccda2
 	github.com/golangci/dupl v0.0.0-20180902072040-3e9179ac440a
-	github.com/golangci/errcheck v0.0.0-20181003203344-1765131d5be5
+	github.com/golangci/errcheck v0.0.0-20181003203344-ef45e06d44b6
 	github.com/golangci/go-misc v0.0.0-20180628070357-927a3d87b613
 	github.com/golangci/go-tools v0.0.0-20180902103155-93eecd106a0b
 	github.com/golangci/goconst v0.0.0-20180610141641-041c5f2b40f3

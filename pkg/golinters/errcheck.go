@@ -5,6 +5,8 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"regexp"
+	"strings"
 
 	errcheckAPI "github.com/golangci/errcheck/golangci"
 	"github.com/pkg/errors"
@@ -57,12 +59,47 @@ func (e Errcheck) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Is
 	return res, nil
 }
 
+// parseIgnoreConfig was taken from errcheck in order to keep the API identical.
+// https://github.com/kisielk/errcheck/blob/1787c4bee836470bf45018cfbc783650db3c6501/main.go#L25-L60
+func parseIgnoreConfig(s string) (map[string]*regexp.Regexp, error) {
+	if s == "" {
+		return nil, nil
+	}
+
+	cfg := map[string]*regexp.Regexp{}
+
+	for _, pair := range strings.Split(s, ",") {
+		colonIndex := strings.Index(pair, ":")
+		var pkg, re string
+		if colonIndex == -1 {
+			pkg = ""
+			re = pair
+		} else {
+			pkg = pair[:colonIndex]
+			re = pair[colonIndex+1:]
+		}
+		regex, err := regexp.Compile(re)
+		if err != nil {
+			return nil, err
+		}
+		cfg[pkg] = regex
+	}
+
+	return cfg, nil
+}
+
 func genConfig(errCfg *config.ErrcheckSettings) (*errcheckAPI.Config, error) {
+	ignoreConfig, err := parseIgnoreConfig(errCfg.Ignore)
+	if err != nil {
+		return nil, errors.Wrap(err, "failed to parse 'ignore' directive")
+	}
+
 	c := &errcheckAPI.Config{
-		Ignore:  errCfg.Ignore,
+		Ignore:  ignoreConfig,
 		Blank:   errCfg.CheckAssignToBlank,
 		Asserts: errCfg.CheckTypeAssertions,
 	}
+
 	if errCfg.Exclude != "" {
 		exclude, err := readExcludeFile(errCfg.Exclude)
 		if err != nil {
@@ -70,6 +107,7 @@ func genConfig(errCfg *config.ErrcheckSettings) (*errcheckAPI.Config, error) {
 		}
 		c.Exclude = exclude
 	}
+
 	return c, nil
 }
 

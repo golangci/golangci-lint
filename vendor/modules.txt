@@ -55,7 +55,7 @@ github.com/golangci/dupl/printer
 github.com/golangci/dupl/syntax
 github.com/golangci/dupl/suffixtree
 github.com/golangci/dupl/syntax/golang
-# github.com/golangci/errcheck v0.0.0-20181003203344-1765131d5be5
+# github.com/golangci/errcheck v0.0.0-20181003203344-ef45e06d44b6
 github.com/golangci/errcheck/golangci
 github.com/golangci/errcheck/internal/errcheck
 # github.com/golangci/go-misc v0.0.0-20180628070357-927a3d87b613
@@ -103,14 +103,11 @@ github.com/golangci/prealloc
 github.com/golangci/revgrep
 # github.com/golangci/tools v0.0.0-20180902102414-2cefd77fef9b
 github.com/golangci/tools/go/ssa
-github.com/golangci/tools/imports
 github.com/golangci/tools/go/ssa/ssautil
-github.com/golangci/tools/internal/gopathwalk
 github.com/golangci/tools/go/callgraph
 github.com/golangci/tools/go/callgraph/cha
 github.com/golangci/tools/go/callgraph/rta
 github.com/golangci/tools/go/callgraph/static
-github.com/golangci/tools/internal/fastwalk
 # github.com/golangci/unconvert v0.0.0-20180507085042-28b1c447d1f4
 github.com/golangci/unconvert
 # github.com/golangci/unparam v0.0.0-20180902112548-7ad9dbcccc16
@@ -200,9 +197,9 @@ golang.org/x/text/unicode/norm
 # golang.org/x/tools v0.0.0-20181220024903-92cdcd90bf52
 golang.org/x/tools/go/loader
 golang.org/x/tools/go/packages
+golang.org/x/tools/imports
 golang.org/x/tools/go/ast/astutil
 golang.org/x/tools/go/types/typeutil
-golang.org/x/tools/imports
 golang.org/x/tools/go/gcexportdata
 golang.org/x/tools/go/buildutil
 golang.org/x/tools/go/internal/cgo
