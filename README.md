@@ -585,6 +585,15 @@ linters-settings:
     # report about assignment of errors to blank identifier: `num, _ := strconv.Atoi(numStr)`;
     # default is false: such cases aren't reported by default.
     check-blank: false
+
+    # [deprecated] comma-separated list of pairs of the form pkg:regex
+    # the regex is used to ignore names within pkg. (default "fmt:.*").
+    # see https://github.com/kisielk/errcheck#the-deprecated-method for details
+    ignore: fmt,io/ioutil:^ReadF.*
+
+    # path to a file containing a list of functions to exclude from checking
+    # see https://github.com/kisielk/errcheck#excluding-functions for details
+    exclude: /path/to/file.txt
   govet:
     # report about shadowed variables
     check-shadowing: true

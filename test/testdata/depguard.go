@@ -1,4 +1,6 @@
-//args: -Edepguard --depguard.include-go-root --depguard.packages='compress/*,log'
+//args: -Edepguard
+//config: linters-settings.depguard.include-go-root=true
+//config: linters-settings.depguard.packages=compress/*,log
 package testdata
 
 import (

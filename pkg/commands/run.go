@@ -41,10 +41,18 @@ func wh(text string) string {
 	return color.GreenString(text)
 }
 
-func initFlagSet(fs *pflag.FlagSet, cfg *config.Config, m *lintersdb.Manager) {
+func initFlagSet(fs *pflag.FlagSet, cfg *config.Config, m *lintersdb.Manager, isFinalInit bool) {
 	hideFlag := func(name string) {
 		if err := fs.MarkHidden(name); err != nil {
 			panic(err)
+		}
+
+		// we run initFlagSet multiple times, but we wouldn't like to see deprecation message multiple times
+		if isFinalInit {
+			const deprecateMessage = "flag will be removed soon, please, use .golangci.yml config"
+			if err := fs.MarkDeprecated(name, deprecateMessage); err != nil {
+				panic(err)
+			}
 		}
 	}
 
@@ -85,9 +93,11 @@ func initFlagSet(fs *pflag.FlagSet, cfg *config.Config, m *lintersdb.Manager) {
 	fs.BoolVar(&lsc.Errcheck.CheckAssignToBlank, "errcheck.check-blank", false,
 		"Errcheck: check for errors assigned to blank identifier: _ = errFunc()")
 	hideFlag("errcheck.check-blank")
-	fs.StringVar(&lsc.Errcheck.Exclude, "errcheck.exclude", "", "errcheck.exclude")
+	fs.StringVar(&lsc.Errcheck.Exclude, "errcheck.exclude", "",
+		"Path to a file containing a list of functions to exclude from checking")
 	hideFlag("errcheck.exclude")
-	fs.Var(&lsc.Errcheck.Ignore, "errcheck.ignore", "errcheck.ignore")
+	fs.StringVar(&lsc.Errcheck.Ignore, "errcheck.ignore", "fmt:.*",
+		`Comma-separated list of pairs of the form pkg:regex. The regex is used to ignore names within pkg`)
 	hideFlag("errcheck.ignore")
 
 	fs.BoolVar(&lsc.Govet.CheckShadowing, "govet.check-shadowing", false,
@@ -171,7 +181,7 @@ func initFlagSet(fs *pflag.FlagSet, cfg *config.Config, m *lintersdb.Manager) {
 func (e *Executor) initRunConfiguration(cmd *cobra.Command) {
 	fs := cmd.Flags()
 	fs.SortFlags = false // sort them as they are defined here
-	initFlagSet(fs, e.cfg, e.DBManager)
+	initFlagSet(fs, e.cfg, e.DBManager, true)
 }
 
 func (e Executor) getConfigForCommandLine() (*config.Config, error) {
@@ -184,7 +194,7 @@ func (e Executor) getConfigForCommandLine() (*config.Config, error) {
 	// `changed` variable inside string slice vars will be shared.
 	// Use another config variable here, not e.cfg, to not
 	// affect main parsing by this parsing of only config option.
-	initFlagSet(fs, &cfg, e.DBManager)
+	initFlagSet(fs, &cfg, e.DBManager, false)
 
 	// Parse max options, even force version option: don't want
 	// to get access to Executor here: it's error-prone to use

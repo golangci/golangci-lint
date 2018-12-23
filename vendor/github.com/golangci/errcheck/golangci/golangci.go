@@ -55,9 +55,7 @@ func RunWithConfig(program *loader.Program, c *Config) ([]Issue, error) {
 
 	checker.SetExclude(c.Exclude)
 
-	checker.Ignore = map[string]*regexp.Regexp{
-		"fmt": dotStar,
-	}
+	checker.Ignore = map[string]*regexp.Regexp{}
 	for pkg, re := range c.Ignore {
 		checker.Ignore[pkg] = re
 	}

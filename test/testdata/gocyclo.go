@@ -1,4 +1,5 @@
-//args: -Egocyclo --gocyclo.min-complexity=20
+//args: -Egocyclo
+//config: linters-settings.gocyclo.min-complexity=20
 package testdata
 
 func GocycloBigComplexity(s string) { // ERROR "cyclomatic complexity .* of func .* is high .*"

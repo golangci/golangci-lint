@@ -1,0 +1,4 @@
+linters-settings:
+  errcheck:
+    check-blank: true
+    ignore: os:.*,io/ioutil:^ReadF.*
