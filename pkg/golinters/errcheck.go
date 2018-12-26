@@ -5,6 +5,8 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"os/user"
+	"path/filepath"
 	"regexp"
 	"strings"
 
@@ -12,6 +14,7 @@ import (
 	"github.com/pkg/errors"
 
 	"github.com/golangci/golangci-lint/pkg/config"
+	"github.com/golangci/golangci-lint/pkg/fsutils"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
@@ -111,13 +114,86 @@ func genConfig(errCfg *config.ErrcheckSettings) (*errcheckAPI.Config, error) {
 	return c, nil
 }
 
-func readExcludeFile(name string) (map[string]bool, error) {
-	exclude := make(map[string]bool)
-	fh, err := os.Open(name)
+func getFirstPathArg() string {
+	args := os.Args
+
+	// skip all args ([golangci-lint, run/linters]) before files/dirs list
+	for len(args) != 0 {
+		if args[0] == "run" {
+			args = args[1:]
+			break
+		}
+
+		args = args[1:]
+	}
+
+	// find first file/dir arg
+	firstArg := "./..."
+	for _, arg := range args {
+		if !strings.HasPrefix(arg, "-") {
+			firstArg = arg
+			break
+		}
+	}
+
+	return firstArg
+}
+
+func setupConfigFileSearch(name string) []string {
+	if strings.HasPrefix(name, "~") {
+		if u, err := user.Current(); err == nil {
+			name = strings.Replace(name, "~", u.HomeDir, 1)
+		}
+	}
+
+	if filepath.IsAbs(name) {
+		return []string{name}
+	}
+
+	firstArg := getFirstPathArg()
+
+	absStartPath, err := filepath.Abs(firstArg)
 	if err != nil {
+		absStartPath = filepath.Clean(firstArg)
+	}
+
+	// start from it
+	var curDir string
+	if fsutils.IsDir(absStartPath) {
+		curDir = absStartPath
+	} else {
+		curDir = filepath.Dir(absStartPath)
+	}
+
+	// find all dirs from it up to the root
+	configSearchPaths := []string{filepath.Join(".", name)}
+	for {
+		configSearchPaths = append(configSearchPaths, filepath.Join(curDir, name))
+		newCurDir := filepath.Dir(curDir)
+		if curDir == newCurDir || newCurDir == "" {
+			break
+		}
+		curDir = newCurDir
+	}
+
+	return configSearchPaths
+}
+
+func readExcludeFile(name string) (map[string]bool, error) {
+	var err error
+	var fh *os.File
+
+	for _, path := range setupConfigFileSearch(name) {
+		if fh, err = os.Open(path); err == nil {
+			break
+		}
+	}
+
+	if fh == nil {
 		return nil, errors.Wrapf(err, "failed reading exclude file: %s", name)
 	}
 	scanner := bufio.NewScanner(fh)
+	exclude := make(map[string]bool)
 	for scanner.Scan() {
 		exclude[scanner.Text()] = true
 	}
