@@ -493,6 +493,7 @@ Global Flags:
       --cpu-profile-path string   Path to CPU profile output file
       --mem-profile-path string   Path to memory profile output file
   -v, --verbose                   verbose output
+      --version                   Print version
 
 ```
 
@@ -667,9 +668,10 @@ linters-settings:
     for-loops: false # Report preallocation suggestions on for loops, false by default
   gocritic:
     # which checks should be enabled; can't be combined with 'disabled-checks';
-    # default are: [appendAssign assignOp caseOrder dupArg dupBranchBody dupCase flagDeref
-    # ifElseChain regexpMust singleCaseSwitch sloppyLen switchTrue typeSwitchVar underef
-    # unlambda unslice rangeValCopy defaultCaseOrder];
+    # default are: [appendAssign appendCombine assignOp builtinShadow captLocal caseOrder defaultCaseOrder
+    # dupArg dupBranchBody dupCase elseif flagDeref ifElseChain importShadow indexAlloc paramTypeCombine
+    # rangeExprCopy rangeValCopy regexpMust singleCaseSwitch sloppyLen switchTrue typeSwitchVar typeUnparen
+    # underef unlambda unslice dupSubExpr hugeParam];
     # all checks list: https://github.com/go-critic/checkers
     enabled-checks:
       - rangeValCopy

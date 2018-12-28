@@ -257,24 +257,38 @@ func (s GocriticSettings) IsCheckEnabled(name string) bool {
 	return s.inferredEnabledChecks[strings.ToLower(name)]
 }
 
+// Its a good idea to keep this list in sync with the gocritic stable checks list in:
+// https://github.com/go-critic/go-critic/blob/master/checkers/checkers_test.go#L63
 var defaultGocriticEnabledChecks = []string{
 	"appendAssign",
+	"appendCombine",
 	"assignOp",
+	"builtinShadow",
+	"captLocal",
 	"caseOrder",
+	"defaultCaseOrder",
 	"dupArg",
 	"dupBranchBody",
 	"dupCase",
+	"elseif",
 	"flagDeref",
 	"ifElseChain",
+	"importShadow",
+	"indexAlloc",
+	"paramTypeCombine",
+	"rangeExprCopy",
+	"rangeValCopy",
 	"regexpMust",
 	"singleCaseSwitch",
 	"sloppyLen",
 	"switchTrue",
 	"typeSwitchVar",
+	"typeUnparen",
 	"underef",
 	"unlambda",
 	"unslice",
-	"defaultCaseOrder",
+	"dupSubExpr",
+	"hugeParam",
 }
 
 var defaultLintersSettings = LintersSettings{
