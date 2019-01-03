@@ -140,7 +140,7 @@ func (cl ContextLoader) buildSSAProgram(pkgs []*packages.Package, name string) *
 	return ssaProg
 }
 
-func (cl ContextLoader) findLoadMode(linters []linter.Config) packages.LoadMode {
+func (cl ContextLoader) findLoadMode(linters []*linter.Config) packages.LoadMode {
 	maxLoadMode := packages.LoadFiles
 	for _, lc := range linters {
 		curLoadMode := packages.LoadFiles
@@ -316,7 +316,7 @@ func (cl ContextLoader) filterPackages(pkgs []*packages.Package) []*packages.Pac
 }
 
 //nolint:gocyclo
-func (cl ContextLoader) Load(ctx context.Context, linters []linter.Config) (*linter.Context, error) {
+func (cl ContextLoader) Load(ctx context.Context, linters []*linter.Config) (*linter.Context, error) {
 	loadMode := cl.findLoadMode(linters)
 	pkgs, err := cl.loadPackages(ctx, loadMode)
 	if err != nil {

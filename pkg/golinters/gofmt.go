@@ -9,7 +9,7 @@ import (
 	gofmtAPI "github.com/golangci/gofmt/gofmt"
 	goimportsAPI "github.com/golangci/gofmt/goimports"
 	"golang.org/x/tools/imports"
-	"sourcegraph.com/sourcegraph/go-diff/diff"
+	diffpkg "sourcegraph.com/sourcegraph/go-diff/diff"
 
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/logutils"
@@ -37,7 +37,7 @@ func (g Gofmt) Desc() string {
 		"this tool runs with -s option to check for code simplification"
 }
 
-func getFirstDeletedAndAddedLineNumberInHunk(h *diff.Hunk) (int, int, error) {
+func getFirstDeletedAndAddedLineNumberInHunk(h *diffpkg.Hunk) (int, int, error) {
 	lines := bytes.Split(h.Body, []byte{'\n'})
 	lineNumber := int(h.OrigStartLine - 1)
 	firstAddedLineNumber := -1
@@ -59,7 +59,7 @@ func getFirstDeletedAndAddedLineNumberInHunk(h *diff.Hunk) (int, int, error) {
 }
 
 func (g Gofmt) extractIssuesFromPatch(patch string, log logutils.Log) ([]result.Issue, error) {
-	diffs, err := diff.ParseMultiFileDiff([]byte(patch))
+	diffs, err := diffpkg.ParseMultiFileDiff([]byte(patch))
 	if err != nil {
 		return nil, fmt.Errorf("can't parse patch: %s", err)
 	}

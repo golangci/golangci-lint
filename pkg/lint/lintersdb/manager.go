@@ -8,12 +8,12 @@ import (
 )
 
 type Manager struct {
-	nameToLC map[string]linter.Config
+	nameToLC map[string]*linter.Config
 }
 
 func NewManager() *Manager {
 	m := &Manager{}
-	nameToLC := make(map[string]linter.Config)
+	nameToLC := make(map[string]*linter.Config)
 	for _, lc := range m.GetAllSupportedLinterConfigs() {
 		for _, name := range lc.AllNames() {
 			nameToLC[name] = lc
@@ -43,22 +43,22 @@ func (m Manager) GetLinterConfig(name string) *linter.Config {
 		return nil
 	}
 
-	return &lc
+	return lc
 }
 
-func enableLinterConfigs(lcs []linter.Config, isEnabled func(lc *linter.Config) bool) []linter.Config {
-	var ret []linter.Config
+func enableLinterConfigs(lcs []*linter.Config, isEnabled func(lc *linter.Config) bool) []*linter.Config {
+	var ret []*linter.Config
 	for _, lc := range lcs {
 		lc := lc
-		lc.EnabledByDefault = isEnabled(&lc)
+		lc.EnabledByDefault = isEnabled(lc)
 		ret = append(ret, lc)
 	}
 
 	return ret
 }
 
-func (Manager) GetAllSupportedLinterConfigs() []linter.Config {
-	lcs := []linter.Config{
+func (Manager) GetAllSupportedLinterConfigs() []*linter.Config {
+	lcs := []*linter.Config{
 		linter.NewConfig(golinters.Govet{}).
 			WithTypeInfo().
 			WithPresets(linter.PresetBugs).
@@ -226,8 +226,8 @@ func (Manager) GetAllSupportedLinterConfigs() []linter.Config {
 	})
 }
 
-func (m Manager) GetAllEnabledByDefaultLinters() []linter.Config {
-	var ret []linter.Config
+func (m Manager) GetAllEnabledByDefaultLinters() []*linter.Config {
+	var ret []*linter.Config
 	for _, lc := range m.GetAllSupportedLinterConfigs() {
 		if lc.EnabledByDefault {
 			ret = append(ret, lc)
@@ -237,18 +237,18 @@ func (m Manager) GetAllEnabledByDefaultLinters() []linter.Config {
 	return ret
 }
 
-func linterConfigsToMap(lcs []linter.Config) map[string]*linter.Config {
+func linterConfigsToMap(lcs []*linter.Config) map[string]*linter.Config {
 	ret := map[string]*linter.Config{}
 	for _, lc := range lcs {
 		lc := lc // local copy
-		ret[lc.Name()] = &lc
+		ret[lc.Name()] = lc
 	}
 
 	return ret
 }
 
-func (m Manager) GetAllLinterConfigsForPreset(p string) []linter.Config {
-	ret := []linter.Config{}
+func (m Manager) GetAllLinterConfigsForPreset(p string) []*linter.Config {
+	var ret []*linter.Config
 	for _, lc := range m.GetAllSupportedLinterConfigs() {
 		for _, ip := range lc.InPresets {
 			if p == ip {

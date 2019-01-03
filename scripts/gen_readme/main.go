@@ -88,7 +88,7 @@ func buildTemplateContext() (map[string]interface{}, error) {
 }
 
 func getLintersListMarkdown(enabled bool) string {
-	var neededLcs []linter.Config
+	var neededLcs []*linter.Config
 	lcs := lintersdb.NewManager().GetAllSupportedLinterConfigs()
 	for _, lc := range lcs {
 		if lc.EnabledByDefault == enabled {

@@ -82,6 +82,6 @@ func NewExecutor(version, commit, date string) *Executor {
 	return e
 }
 
-func (e Executor) Execute() error {
+func (e *Executor) Execute() error {
 	return e.rootCmd.Execute()
 }

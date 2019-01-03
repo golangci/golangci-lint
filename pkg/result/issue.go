@@ -17,19 +17,19 @@ type Issue struct {
 	SourceLines []string
 }
 
-func (i Issue) FilePath() string {
+func (i *Issue) FilePath() string {
 	return i.Pos.Filename
 }
 
-func (i Issue) Line() int {
+func (i *Issue) Line() int {
 	return i.Pos.Line
 }
 
-func (i Issue) Column() int {
+func (i *Issue) Column() int {
 	return i.Pos.Column
 }
 
-func (i Issue) GetLineRange() Range {
+func (i *Issue) GetLineRange() Range {
 	if i.LineRange == nil {
 		return Range{
 			From: i.Line(),

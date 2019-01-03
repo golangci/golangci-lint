@@ -20,7 +20,7 @@ func (e *Executor) initLinters() {
 	e.initRunConfiguration(lintersCmd)
 }
 
-func IsLinterInConfigsList(name string, linters []linter.Config) bool {
+func IsLinterInConfigsList(name string, linters []*linter.Config) bool {
 	for _, lc := range linters {
 		if lc.Name() == name {
 			return true
@@ -43,7 +43,7 @@ func (e *Executor) executeLinters(cmd *cobra.Command, args []string) {
 	color.Green("Enabled by your configuration linters:\n")
 	printLinterConfigs(enabledLCs)
 
-	var disabledLCs []linter.Config
+	var disabledLCs []*linter.Config
 	for _, lc := range e.DBManager.GetAllSupportedLinterConfigs() {
 		if !IsLinterInConfigsList(lc.Name(), enabledLCs) {
 			disabledLCs = append(disabledLCs, lc)

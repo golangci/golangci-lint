@@ -88,7 +88,7 @@ func (m Megacheck) canAnalyze(lintCtx *linter.Context) bool {
 	}
 
 	var errPkgs []string
-	var errors []packages.Error
+	var errs []packages.Error
 	for _, p := range lintCtx.NotCompilingPackages {
 		if p.Name == "main" {
 			// megacheck crashes on not compiling packages but main packages
@@ -97,7 +97,7 @@ func (m Megacheck) canAnalyze(lintCtx *linter.Context) bool {
 		}
 
 		errPkgs = append(errPkgs, p.String())
-		errors = append(errors, libpackages.ExtractErrors(p, lintCtx.ASTCache)...)
+		errs = append(errs, libpackages.ExtractErrors(p, lintCtx.ASTCache)...)
 	}
 
 	if len(errPkgs) == 0 { // only main packages do not compile
@@ -105,11 +105,11 @@ func (m Megacheck) canAnalyze(lintCtx *linter.Context) bool {
 	}
 
 	warnText := fmt.Sprintf("Can't run megacheck because of compilation errors in packages %s", errPkgs)
-	if len(errors) != 0 {
-		warnText += fmt.Sprintf(": %s", prettifyCompilationError(errors[0]))
-		if len(errors) > 1 {
+	if len(errs) != 0 {
+		warnText += fmt.Sprintf(": %s", prettifyCompilationError(errs[0]))
+		if len(errs) > 1 {
 			const runCmd = "golangci-lint run --no-config --disable-all -E typecheck"
-			warnText += fmt.Sprintf(" and %d more errors: run `%s` to see all errors", len(errors)-1, runCmd)
+			warnText += fmt.Sprintf(" and %d more errors: run `%s` to see all errors", len(errs)-1, runCmd)
 		}
 	}
 	lintCtx.Log.Warnf("%s", warnText)
