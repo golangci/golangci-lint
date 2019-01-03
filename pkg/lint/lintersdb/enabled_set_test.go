@@ -85,9 +85,9 @@ func TestGetEnabledLintersSet(t *testing.T) {
 	for _, c := range cases {
 		c := c
 		t.Run(c.name, func(t *testing.T) {
-			defaultLinters := []linter.Config{}
+			var defaultLinters []*linter.Config
 			for _, ln := range c.def {
-				defaultLinters = append(defaultLinters, *m.GetLinterConfig(ln))
+				defaultLinters = append(defaultLinters, m.GetLinterConfig(ln))
 			}
 			els := es.build(&c.cfg, defaultLinters)
 			var enabledLinters []string

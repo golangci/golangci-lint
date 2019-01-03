@@ -34,7 +34,7 @@ func (e *Executor) initConfig() {
 
 }
 
-func (e Executor) executePathCmd(cmd *cobra.Command, args []string) {
+func (e *Executor) executePathCmd(cmd *cobra.Command, args []string) {
 	usedConfigFile := viper.ConfigFileUsed()
 	if usedConfigFile == "" {
 		e.log.Warnf("No config file detected")

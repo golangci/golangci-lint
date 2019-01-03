@@ -57,11 +57,11 @@ func (g Golint) lintPkg(minConfidence float64, files []*ast.File, fset *token.Fi
 	}
 
 	issues := make([]result.Issue, 0, len(ps)) // This is worst case
-	for _, p := range ps {
-		if p.Confidence >= minConfidence {
+	for idx := range ps {
+		if ps[idx].Confidence >= minConfidence {
 			issues = append(issues, result.Issue{
-				Pos:        p.Position,
-				Text:       markIdentifiers(p.Text),
+				Pos:        ps[idx].Position,
+				Text:       markIdentifiers(ps[idx].Text),
 				FromLinter: g.Name(),
 			})
 			// TODO: use p.Link and p.Category

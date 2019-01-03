@@ -26,7 +26,7 @@ func NewEnabledSet(m *Manager, v *Validator, log logutils.Log, cfg *config.Confi
 }
 
 // nolint:gocyclo
-func (es EnabledSet) build(lcfg *config.Linters, enabledByDefaultLinters []linter.Config) map[string]*linter.Config {
+func (es EnabledSet) build(lcfg *config.Linters, enabledByDefaultLinters []*linter.Config) map[string]*linter.Config {
 	resultLintersSet := map[string]*linter.Config{}
 	switch {
 	case len(lcfg.Presets) != 0:
@@ -43,7 +43,7 @@ func (es EnabledSet) build(lcfg *config.Linters, enabledByDefaultLinters []linte
 	for _, p := range lcfg.Presets {
 		for _, lc := range es.m.GetAllLinterConfigsForPreset(p) {
 			lc := lc
-			resultLintersSet[lc.Name()] = &lc
+			resultLintersSet[lc.Name()] = lc
 		}
 	}
 
@@ -121,23 +121,23 @@ func (es EnabledSet) optimizeLintersSet(linters map[string]*linter.Config) {
 	linters[mega.Name()] = &lc
 }
 
-func (es EnabledSet) Get() ([]linter.Config, error) {
+func (es EnabledSet) Get() ([]*linter.Config, error) {
 	if err := es.v.validateEnabledDisabledLintersConfig(&es.cfg.Linters); err != nil {
 		return nil, err
 	}
 
 	resultLintersSet := es.build(&es.cfg.Linters, es.m.GetAllEnabledByDefaultLinters())
 
-	var resultLinters []linter.Config
+	var resultLinters []*linter.Config
 	for _, lc := range resultLintersSet {
-		resultLinters = append(resultLinters, *lc)
+		resultLinters = append(resultLinters, lc)
 	}
 
 	es.verbosePrintLintersStatus(resultLinters)
 	return resultLinters, nil
 }
 
-func (es EnabledSet) verbosePrintLintersStatus(lcs []linter.Config) {
+func (es EnabledSet) verbosePrintLintersStatus(lcs []*linter.Config) {
 	var linterNames []string
 	for _, lc := range lcs {
 		linterNames = append(linterNames, lc.Name())

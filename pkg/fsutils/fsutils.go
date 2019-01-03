@@ -65,7 +65,7 @@ func EvalSymlinks(path string) (string, error) {
 	return er.path, er.err
 }
 
-func ShortestRelPath(path string, wd string) (string, error) {
+func ShortestRelPath(path, wd string) (string, error) {
 	if wd == "" { // get it if user don't have cached working dir
 		var err error
 		wd, err = Getwd()

@@ -73,13 +73,13 @@ func NewRunner(astCache *astcache.Cache, cfg *config.Config, log logutils.Log, g
 }
 
 type lintRes struct {
-	linter linter.Config
+	linter *linter.Config
 	err    error
 	issues []result.Issue
 }
 
-func (r Runner) runLinterSafe(ctx context.Context, lintCtx *linter.Context,
-	lc linter.Config) (ret []result.Issue, err error) {
+func (r *Runner) runLinterSafe(ctx context.Context, lintCtx *linter.Context,
+	lc *linter.Config) (ret []result.Issue, err error) {
 
 	defer func() {
 		if panicData := recover(); panicData != nil {
@@ -103,7 +103,7 @@ func (r Runner) runLinterSafe(ctx context.Context, lintCtx *linter.Context,
 }
 
 func (r Runner) runWorker(ctx context.Context, lintCtx *linter.Context,
-	tasksCh <-chan linter.Config, lintResultsCh chan<- lintRes, name string) {
+	tasksCh <-chan *linter.Config, lintResultsCh chan<- lintRes, name string) {
 
 	sw := timeutils.NewStopwatch(name, r.Log)
 	defer sw.Print()
@@ -155,8 +155,8 @@ func (r Runner) logWorkersStat(workersFinishTimes []time.Time) {
 	r.Log.Infof("Workers idle times: %s", strings.Join(logStrings, ", "))
 }
 
-func getSortedLintersConfigs(linters []linter.Config) []linter.Config {
-	ret := make([]linter.Config, len(linters))
+func getSortedLintersConfigs(linters []*linter.Config) []*linter.Config {
+	ret := make([]*linter.Config, len(linters))
 	copy(ret, linters)
 
 	sort.Slice(ret, func(i, j int) bool {
@@ -166,8 +166,8 @@ func getSortedLintersConfigs(linters []linter.Config) []linter.Config {
 	return ret
 }
 
-func (r *Runner) runWorkers(ctx context.Context, lintCtx *linter.Context, linters []linter.Config) <-chan lintRes {
-	tasksCh := make(chan linter.Config, len(linters))
+func (r *Runner) runWorkers(ctx context.Context, lintCtx *linter.Context, linters []*linter.Config) <-chan lintRes {
+	tasksCh := make(chan *linter.Config, len(linters))
 	lintResultsCh := make(chan lintRes, len(linters))
 	var wg sync.WaitGroup
 
@@ -259,7 +259,7 @@ func collectIssues(resCh <-chan lintRes) <-chan result.Issue {
 	return retIssues
 }
 
-func (r Runner) Run(ctx context.Context, linters []linter.Config, lintCtx *linter.Context) <-chan result.Issue {
+func (r Runner) Run(ctx context.Context, linters []*linter.Config, lintCtx *linter.Context) <-chan result.Issue {
 	lintResultsCh := r.runWorkers(ctx, lintCtx, linters)
 	processedLintResultsCh := r.processLintResults(lintResultsCh)
 	if ctx.Err() != nil {
