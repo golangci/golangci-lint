@@ -87,15 +87,16 @@ update if needed.
 
 ### Local Installation
 
-It's a not recommended for your CI pipeline. Only install like this for your local development environment.
+Local installation is not recommended for your CI pipeline. Only install the linter this way in a local development environment.
 
 ```bash
-go get -u github.com/golangci/golangci-lint
+go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
 cd $(go env GOPATH)/src/github.com/golangci/golangci-lint/cmd/golangci-lint
 go install -ldflags "-X 'main.version=$(git describe --tags)' -X 'main.commit=$(git rev-parse --short HEAD)' -X 'main.date=$(date)'"
 ```
+(On Windows, you can run the above commands with Git Bash, which comes with [Git for Windows](https://git-scm.com/download/win).)
 
-You can also install it on OSX using brew:
+You can also install it on MacOS using [brew](https://brew.sh/):
 
 ```bash
 brew install golangci/tap/golangci-lint
