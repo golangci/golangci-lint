@@ -10,13 +10,12 @@ github.com/davecgh/go-spew/spew
 github.com/fatih/color
 # github.com/fsnotify/fsnotify v1.4.7
 github.com/fsnotify/fsnotify
-# github.com/go-critic/checkers v0.0.0-20181204210945-97246d3b3c67
-github.com/go-critic/checkers
-github.com/go-critic/checkers/internal/lintutil
-# github.com/go-lintpack/lintpack v0.5.1
+# github.com/go-critic/go-critic v0.0.0-20181204210945-0af0999fabfb
+github.com/go-critic/go-critic/checkers
+github.com/go-critic/go-critic/checkers/internal/lintutil
+# github.com/go-lintpack/lintpack v0.5.2
 github.com/go-lintpack/lintpack
 github.com/go-lintpack/lintpack/astwalk
-github.com/go-lintpack/lintpack/internal/lintutil
 # github.com/go-ole/go-ole v1.2.1
 github.com/go-ole/go-ole
 github.com/go-ole/go-ole/oleutil

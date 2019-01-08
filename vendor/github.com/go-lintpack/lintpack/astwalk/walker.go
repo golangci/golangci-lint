@@ -41,6 +41,11 @@ func WalkerForLocalComment(v LocalCommentVisitor) lintpack.FileWalker {
 	return &localCommentWalker{visitor: v}
 }
 
+// WalkerForComment returns file walker implementation for CommentVisitor.
+func WalkerForComment(v CommentVisitor) lintpack.FileWalker {
+	return &commentWalker{visitor: v}
+}
+
 // WalkerForDocComment returns file walker implementation for DocCommentVisitor.
 func WalkerForDocComment(v DocCommentVisitor) lintpack.FileWalker {
 	return &docCommentWalker{visitor: v}

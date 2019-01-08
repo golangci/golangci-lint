@@ -37,7 +37,7 @@ func (g Gocyclo) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Iss
 	res := make([]result.Issue, 0, len(stats))
 	for _, s := range stats {
 		if s.Complexity <= lintCtx.Settings().Gocyclo.MinComplexity {
-			break //Break as the stats is already sorted from greatest to least
+			break // Break as the stats is already sorted from greatest to least
 		}
 
 		res = append(res, result.Issue{

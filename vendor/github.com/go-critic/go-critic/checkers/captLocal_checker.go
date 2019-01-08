@@ -32,8 +32,7 @@ type captLocalChecker struct {
 	astwalk.WalkHandler
 	ctx *lintpack.CheckerContext
 
-	upcaseNames map[string]bool
-	paramsOnly  bool
+	paramsOnly bool
 }
 
 func (c *captLocalChecker) VisitLocalDef(def astwalk.Name, _ ast.Expr) {

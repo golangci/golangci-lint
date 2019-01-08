@@ -5,8 +5,8 @@ import (
 	"go/token"
 	"go/types"
 
-	"github.com/go-lintpack/lintpack/internal/lintutil"
 	"github.com/go-toolsmith/astp"
+	"github.com/go-toolsmith/typep"
 )
 
 type typeExprWalker struct {
@@ -49,7 +49,7 @@ func (w *typeExprWalker) visit(x ast.Expr) bool {
 func (w *typeExprWalker) walk(x ast.Node) bool {
 	switch x := x.(type) {
 	case *ast.ParenExpr:
-		if lintutil.IsTypeExpr(w.info, x.X) {
+		if typep.IsTypeExpr(w.info, x.X) {
 			return w.visit(x)
 		}
 		return true
@@ -63,7 +63,7 @@ func (w *typeExprWalker) walk(x ast.Node) bool {
 		// Like with conversions, method expressions are another special.
 		return w.inspectInner(x.X)
 	case *ast.StarExpr:
-		if lintutil.IsTypeExpr(w.info, x.X) {
+		if typep.IsTypeExpr(w.info, x.X) {
 			return w.visit(x)
 		}
 		return true
@@ -95,7 +95,7 @@ func (w *typeExprWalker) walk(x ast.Node) bool {
 
 func (w *typeExprWalker) inspectInner(x ast.Expr) bool {
 	parens, ok := x.(*ast.ParenExpr)
-	if ok && lintutil.IsTypeExpr(w.info, parens.X) && astp.IsStarExpr(parens.X) {
+	if ok && typep.IsTypeExpr(w.info, parens.X) && astp.IsStarExpr(parens.X) {
 		ast.Inspect(parens.X, w.walk)
 		return false
 	}

@@ -4,7 +4,7 @@ import (
 	"go/ast"
 	"go/types"
 
-	"github.com/go-critic/checkers/internal/lintutil"
+	"github.com/go-critic/go-critic/checkers/internal/lintutil"
 	"github.com/go-lintpack/lintpack"
 	"github.com/go-lintpack/lintpack/astwalk"
 	"github.com/go-toolsmith/astequal"
@@ -60,8 +60,9 @@ func (c *unlambdaChecker) VisitExpr(x ast.Expr) {
 		}
 	}
 
-	c.warn(fn, callable)
-
+	if len(result.Args) == n {
+		c.warn(fn, callable)
+	}
 }
 
 func (c *unlambdaChecker) warn(cause ast.Node, suggestion string) {

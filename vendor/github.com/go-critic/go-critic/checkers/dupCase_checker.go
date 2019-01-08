@@ -3,7 +3,7 @@ package checkers
 import (
 	"go/ast"
 
-	"github.com/go-critic/checkers/internal/lintutil"
+	"github.com/go-critic/go-critic/checkers/internal/lintutil"
 	"github.com/go-lintpack/lintpack"
 	"github.com/go-lintpack/lintpack/astwalk"
 )

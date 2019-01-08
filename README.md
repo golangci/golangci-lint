@@ -667,17 +667,22 @@ linters-settings:
     range-loops: true # Report preallocation suggestions on range loops, true by default
     for-loops: false # Report preallocation suggestions on for loops, false by default
   gocritic:
-    # which checks should be enabled; can't be combined with 'disabled-checks';
-    # default are: [appendAssign appendCombine assignOp builtinShadow captLocal caseOrder defaultCaseOrder
-    # dupArg dupBranchBody dupCase elseif flagDeref ifElseChain importShadow indexAlloc paramTypeCombine
-    # rangeExprCopy rangeValCopy regexpMust singleCaseSwitch sloppyLen switchTrue typeSwitchVar typeUnparen
-    # underef unlambda unslice dupSubExpr hugeParam];
-    # all checks list: https://github.com/go-critic/checkers
+    # Which checks should be enabled; can't be combined with 'disabled-checks';
+    # See https://go-critic.github.io/overview#checks-overview
+    # To check which checks are enabled run `GL_DEBUG=gocritic golangci-lint run`
+    # By default list of stable checks is used.
     enabled-checks:
       - rangeValCopy
-    # which checks should be disabled; can't be combined with 'enabled-checks'; default is empty
+
+    # Which checks should be disabled; can't be combined with 'enabled-checks'; default is empty
     disabled-checks:
       - regexpMust
+
+    # Enable multiple checks by tags, run `GL_DEBUG=gocritic golangci-lint` run to see all tags and checks.
+    # Empty list by default. See https://github.com/go-critic/go-critic#usage -> section "Tags".
+    enabled-tags:
+      - performance
+
     settings: # settings passed to gocritic
       captLocal: # must be valid enabled check name
         checkLocals: true
@@ -764,6 +769,14 @@ linters-settings:
     line-length: 140
   goimports:
     local-prefixes: github.com/golangci/golangci-lint
+  gocritic:
+    enabled-tags:
+      - performance
+      - style
+      - experimental
+    disabled-checks:
+      - wrapperFunc
+      - commentFormatting # https://github.com/go-critic/go-critic/issues/755
 
 linters:
   enable-all: true
