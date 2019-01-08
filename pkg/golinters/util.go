@@ -61,6 +61,9 @@ var replacePatterns = []replacePattern{
 		"Blacklisted import `${1}`: weak cryptographic primitive"},
 	{`^TLS InsecureSkipVerify set true.$`, "TLS `InsecureSkipVerify` set true."},
 
+	// gosimple
+	{`^should replace loop with (.*)$`, "should replace loop with `${1}`"},
+
 	// megacheck
 	{`^this value of (\S+) is never used$`, "this value of `${1}` is never used"},
 	{`^should use time.Since instead of time.Now().Sub$`,

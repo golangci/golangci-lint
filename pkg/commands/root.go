@@ -13,7 +13,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/logutils"
 )
 
-func (e *Executor) persistentPreRun(cmd *cobra.Command, args []string) {
+func (e *Executor) persistentPreRun(_ *cobra.Command, _ []string) {
 	if e.cfg.Run.PrintVersion {
 		fmt.Fprintf(logutils.StdOut, "golangci-lint has version %s built from %s on %s\n", e.version, e.commit, e.date)
 		os.Exit(0)
@@ -32,7 +32,7 @@ func (e *Executor) persistentPreRun(cmd *cobra.Command, args []string) {
 	}
 }
 
-func (e *Executor) persistentPostRun(cmd *cobra.Command, args []string) {
+func (e *Executor) persistentPostRun(_ *cobra.Command, _ []string) {
 	if e.cfg.Run.CPUProfilePath != "" {
 		pprof.StopCPUProfile()
 	}
@@ -64,6 +64,9 @@ func (e *Executor) initRoot() {
 		Short: "golangci-lint is a smart linters runner.",
 		Long:  `Smart, fast linters runner. Run it in cloud for every GitHub pull request on https://golangci.com`,
 		Run: func(cmd *cobra.Command, args []string) {
+			if len(args) != 0 {
+				e.log.Fatalf("Usage: golangci-lint")
+			}
 			if err := cmd.Help(); err != nil {
 				e.log.Fatalf("Can't run help: %s", err)
 			}

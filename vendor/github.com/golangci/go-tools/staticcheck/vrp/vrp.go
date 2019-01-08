@@ -12,7 +12,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/golangci/tools/go/ssa"
+	"github.com/golangci/go-tools/ssa"
 )
 
 type Future interface {

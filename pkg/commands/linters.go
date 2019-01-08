@@ -30,7 +30,7 @@ func IsLinterInConfigsList(name string, linters []*linter.Config) bool {
 	return false
 }
 
-func (e *Executor) executeLinters(cmd *cobra.Command, args []string) {
+func (e *Executor) executeLinters(_ *cobra.Command, args []string) {
 	if len(args) != 0 {
 		e.log.Fatalf("Usage: golangci-lint linters")
 	}

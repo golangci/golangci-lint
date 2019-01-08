@@ -21,7 +21,7 @@ func (v Validator) validateLintersNames(cfg *config.Linters) error {
 	allNames := append([]string{}, cfg.Enable...)
 	allNames = append(allNames, cfg.Disable...)
 	for _, name := range allNames {
-		if v.m.GetLinterConfig(name) == nil {
+		if v.m.GetLinterConfig(name) == nil && v.m.GetMetaLinter(name) == nil {
 			return fmt.Errorf("no such linter %q", name)
 		}
 	}

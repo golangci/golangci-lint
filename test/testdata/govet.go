@@ -22,3 +22,11 @@ func GovetShadow(f io.Reader, buf []byte) (err error) {
 	_ = err
 	return
 }
+
+func GovetNolintVet() error {
+	return &os.PathError{"first", "path", os.ErrNotExist} //nolint:vet
+}
+
+func GovetNolintVetShadow() error {
+	return &os.PathError{"first", "path", os.ErrNotExist} //nolint:vetshadow
+}

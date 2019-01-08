@@ -10,3 +10,13 @@ func Gosec() {
 	h := md5.New() // ERROR "G401: Use of weak cryptographic primitive"
 	log.Print(h)
 }
+
+func GosecNolintGas() {
+	h := md5.New() //nolint:gas
+	log.Print(h)
+}
+
+func GosecNolintGosec() {
+	h := md5.New() //nolint:gosec
+	log.Print(h)
+}

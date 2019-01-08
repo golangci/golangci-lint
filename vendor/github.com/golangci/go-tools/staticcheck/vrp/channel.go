@@ -3,7 +3,7 @@ package vrp
 import (
 	"fmt"
 
-	"github.com/golangci/tools/go/ssa"
+	"github.com/golangci/go-tools/ssa"
 )
 
 type ChannelInterval struct {
@@ -54,10 +54,10 @@ func (c *MakeChannelConstraint) Operands() []ssa.Value       { return []ssa.Valu
 func (c *ChannelChangeTypeConstraint) Operands() []ssa.Value { return []ssa.Value{c.X} }
 
 func (c *MakeChannelConstraint) String() string {
-	return fmt.Sprintf("%s = make(chan, %s)", c.Y().Name, c.Buffer.Name())
+	return fmt.Sprintf("%s = make(chan, %s)", c.Y().Name(), c.Buffer.Name())
 }
 func (c *ChannelChangeTypeConstraint) String() string {
-	return fmt.Sprintf("%s = changetype(%s)", c.Y().Name, c.X.Name())
+	return fmt.Sprintf("%s = changetype(%s)", c.Y().Name(), c.X.Name())
 }
 
 func (c *MakeChannelConstraint) Eval(g *Graph) Range {

@@ -17,6 +17,9 @@ func (e *Executor) initHelp() {
 		Use:   "help",
 		Short: "Help",
 		Run: func(cmd *cobra.Command, args []string) {
+			if len(args) != 0 {
+				e.log.Fatalf("Usage: golangci-lint help")
+			}
 			if err := cmd.Help(); err != nil {
 				e.log.Fatalf("Can't run help: %s", err)
 			}
@@ -43,7 +46,7 @@ func printLinterConfigs(lcs []*linter.Config) {
 	}
 }
 
-func (e *Executor) executeLintersHelp(cmd *cobra.Command, args []string) {
+func (e *Executor) executeLintersHelp(_ *cobra.Command, args []string) {
 	if len(args) != 0 {
 		e.log.Fatalf("Usage: golangci-lint help linters")
 	}

@@ -17,6 +17,9 @@ func (e *Executor) initConfig() {
 		Use:   "config",
 		Short: "Config",
 		Run: func(cmd *cobra.Command, args []string) {
+			if len(args) != 0 {
+				e.log.Fatalf("Usage: golangci-lint config")
+			}
 			if err := cmd.Help(); err != nil {
 				e.log.Fatalf("Can't run help: %s", err)
 			}
@@ -34,7 +37,11 @@ func (e *Executor) initConfig() {
 
 }
 
-func (e *Executor) executePathCmd(cmd *cobra.Command, args []string) {
+func (e *Executor) executePathCmd(_ *cobra.Command, args []string) {
+	if len(args) != 0 {
+		e.log.Fatalf("Usage: golangci-lint config path")
+	}
+
 	usedConfigFile := viper.ConfigFileUsed()
 	if usedConfigFile == "" {
 		e.log.Warnf("No config file detected")

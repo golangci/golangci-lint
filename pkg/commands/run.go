@@ -370,7 +370,7 @@ func (e *Executor) createPrinter() (printers.Printer, error) {
 	return p, nil
 }
 
-func (e *Executor) executeRun(cmd *cobra.Command, args []string) {
+func (e *Executor) executeRun(_ *cobra.Command, args []string) {
 	needTrackResources := e.cfg.Run.IsVerbose || e.cfg.Run.PrintResourcesUsage
 	trackResourcesEndCh := make(chan struct{})
 	defer func() { // XXX: this defer must be before ctx.cancel defer

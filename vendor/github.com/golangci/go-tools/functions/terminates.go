@@ -1,6 +1,6 @@
 package functions
 
-import "github.com/golangci/tools/go/ssa"
+import "github.com/golangci/go-tools/ssa"
 
 // terminates reports whether fn is supposed to return, that is if it
 // has at least one theoretic path that returns from the function.

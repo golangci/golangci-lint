@@ -4,6 +4,8 @@ import (
 	"sort"
 	"testing"
 
+	"github.com/golangci/golangci-lint/pkg/golinters"
+
 	"github.com/stretchr/testify/assert"
 
 	"github.com/golangci/golangci-lint/pkg/config"
@@ -20,23 +22,32 @@ func TestGetEnabledLintersSet(t *testing.T) {
 	cases := []cs{
 		{
 			cfg: config.Linters{
-				Disable: []string{"megacheck"},
+				Disable: []string{golinters.MegacheckMetalinter{}.Name()},
 			},
 			name: "disable all linters from megacheck",
-			def:  getAllMegacheckSubLinterNames(),
+			def:  golinters.MegacheckMetalinter{}.DefaultChildLinterNames(),
+			exp:  nil, // all disabled
 		},
 		{
 			cfg: config.Linters{
-				Disable: []string{"staticcheck"},
+				Disable: []string{golinters.MegacheckStaticcheckName},
 			},
 			name: "disable only staticcheck",
-			def:  getAllMegacheckSubLinterNames(),
-			exp:  []string{"megacheck.{unused,gosimple}"},
+			def:  golinters.MegacheckMetalinter{}.DefaultChildLinterNames(),
+			exp:  []string{golinters.MegacheckGosimpleName, golinters.MegacheckUnusedName},
 		},
 		{
-			name: "merge into megacheck",
-			def:  getAllMegacheckSubLinterNames(),
-			exp:  []string{"megacheck"},
+			name: "don't merge into megacheck",
+			def:  golinters.MegacheckMetalinter{}.DefaultChildLinterNames(),
+			exp:  golinters.MegacheckMetalinter{}.DefaultChildLinterNames(),
+		},
+		{
+			name: "expand megacheck",
+			cfg: config.Linters{
+				Enable: []string{golinters.MegacheckMetalinter{}.Name()},
+			},
+			def: nil,
+			exp: golinters.MegacheckMetalinter{}.DefaultChildLinterNames(),
 		},
 		{
 			name: "don't disable anything",
@@ -87,8 +98,11 @@ func TestGetEnabledLintersSet(t *testing.T) {
 		t.Run(c.name, func(t *testing.T) {
 			var defaultLinters []*linter.Config
 			for _, ln := range c.def {
-				defaultLinters = append(defaultLinters, m.GetLinterConfig(ln))
+				lc := m.GetLinterConfig(ln)
+				assert.NotNil(t, lc, ln)
+				defaultLinters = append(defaultLinters, lc)
 			}
+
 			els := es.build(&c.cfg, defaultLinters)
 			var enabledLinters []string
 			for ln, lc := range els {
