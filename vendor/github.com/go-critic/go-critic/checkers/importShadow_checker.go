@@ -39,8 +39,7 @@ func (c *importShadowChecker) VisitLocalDef(def astwalk.Name, _ ast.Expr) {
 }
 
 func (c *importShadowChecker) warn(id ast.Node, importedName string, pkg *types.Package) {
-	if pkg.Path() == pkg.Name() {
-		// Сheck for standart library packages.
+	if isStdlibPkg(pkg) {
 		c.ctx.Warn(id, "shadow of imported package '%s'", importedName)
 	} else {
 		c.ctx.Warn(id, "shadow of imported from '%s' package '%s'", pkg.Path(), importedName)

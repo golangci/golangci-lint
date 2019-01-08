@@ -3,6 +3,7 @@ package checkers
 import (
 	"go/ast"
 
+	"github.com/go-critic/go-critic/checkers/internal/lintutil"
 	"github.com/go-lintpack/lintpack"
 	"github.com/go-lintpack/lintpack/astwalk"
 	"github.com/go-toolsmith/astcopy"
@@ -66,7 +67,7 @@ func (c *typeUnparenChecker) checkTypeExpr(x ast.Expr) {
 }
 
 func (c *typeUnparenChecker) hasParens(x ast.Expr) bool {
-	return containsNode(x, astp.IsParenExpr)
+	return lintutil.ContainsNode(x, astp.IsParenExpr)
 }
 
 func (c *typeUnparenChecker) unparenExpr(x ast.Expr) ast.Expr {

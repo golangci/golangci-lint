@@ -58,6 +58,12 @@ type (
 		walkerEvents
 		VisitLocalComment(*ast.CommentGroup)
 	}
+
+	// CommentVisitor visits every comment.
+	CommentVisitor interface {
+		walkerEvents
+		VisitComment(*ast.CommentGroup)
+	}
 )
 
 // walkerEvents describes common hooks available for most visitor types.

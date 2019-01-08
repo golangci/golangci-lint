@@ -6,8 +6,12 @@ import (
 	"strings"
 
 	"github.com/go-lintpack/lintpack"
-	"golang.org/x/tools/go/ast/astutil"
 )
+
+// isStdlibPkg reports whether pkg is a package from the Go standard library.
+func isStdlibPkg(pkg *types.Package) bool {
+	return pkg != nil && pkg.Path() == pkg.Name()
+}
 
 // isUnitTestFunc reports whether FuncDecl declares testing function.
 func isUnitTestFunc(ctx *lintpack.CheckerContext, fn *ast.FuncDecl) bool {
@@ -69,24 +73,4 @@ func identOf(x ast.Node) *ast.Ident {
 		// Note that this function is not comprehensive.
 		return nil
 	}
-}
-
-// findNode applies pred for root and all it's childs until it returns true.
-// Matched node is returned.
-// If none of the nodes matched predicate, nil is returned.
-func findNode(root ast.Node, pred func(ast.Node) bool) ast.Node {
-	var found ast.Node
-	astutil.Apply(root, nil, func(cur *astutil.Cursor) bool {
-		if pred(cur.Node()) {
-			found = cur.Node()
-			return false
-		}
-		return true
-	})
-	return found
-}
-
-// containsNode reports whether `findNode(root, pred)!=nil`.
-func containsNode(root ast.Node, pred func(ast.Node) bool) bool {
-	return findNode(root, pred) != nil
 }

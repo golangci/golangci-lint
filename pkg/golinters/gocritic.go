@@ -10,8 +10,6 @@ import (
 	"runtime/debug"
 	"sync"
 
-	_ "github.com/go-critic/checkers" // this import register checkers
-
 	"github.com/go-lintpack/lintpack"
 	"golang.org/x/tools/go/loader"
 
@@ -34,6 +32,7 @@ func (lint Gocritic) Run(ctx context.Context, lintCtx *linter.Context) ([]result
 	lintpackCtx := lintpack.NewContext(lintCtx.Program.Fset, sizes)
 
 	s := lintCtx.Settings().Gocritic
+
 	var enabledCheckers []*lintpack.Checker
 	for _, info := range lintpack.GetCheckersInfo() {
 		if !s.IsCheckEnabled(info.Name) {

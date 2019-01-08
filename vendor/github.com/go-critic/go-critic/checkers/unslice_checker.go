@@ -54,6 +54,6 @@ func (c *unsliceChecker) unslice(expr ast.Expr) ast.Expr {
 	return expr
 }
 
-func (c *unsliceChecker) warn(cause ast.Expr, unsliced ast.Expr) {
+func (c *unsliceChecker) warn(cause, unsliced ast.Expr) {
 	c.ctx.Warn(cause, "could simplify %s to %s", cause, unsliced)
 }

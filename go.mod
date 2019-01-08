@@ -6,14 +6,10 @@ require (
 	github.com/StackExchange/wmi v0.0.0-20180116203802-5d049714c4a6 // indirect
 	github.com/davecgh/go-spew v1.1.0 // indirect
 	github.com/fatih/color v1.6.0
-	github.com/go-critic/checkers v0.0.0-20181204210945-97246d3b3c67
-	github.com/go-lintpack/lintpack v0.5.1
+	github.com/go-critic/go-critic v0.0.0-20181204210945-0af0999fabfb
+	github.com/go-lintpack/lintpack v0.5.2
 	github.com/go-ole/go-ole v1.2.1 // indirect
-	github.com/go-toolsmith/astcast v0.0.0-20181028201508-b7a89ed70af1 // indirect
-	github.com/go-toolsmith/astcopy v0.0.0-20180903214859-79b422d080c4 // indirect
 	github.com/go-toolsmith/pkgload v0.0.0-20181120203407-5122569a890b // indirect
-	github.com/go-toolsmith/strparse v0.0.0-20180903215201-830b6daa1241 // indirect
-	github.com/go-toolsmith/typep v0.0.0-20181030061450-d63dc7650676 // indirect
 	github.com/gobwas/glob v0.2.3 // indirect
 	github.com/gogo/protobuf v1.0.0 // indirect
 	github.com/golang/mock v1.1.1

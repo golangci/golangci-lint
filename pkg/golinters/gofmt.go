@@ -37,7 +37,7 @@ func (g Gofmt) Desc() string {
 		"this tool runs with -s option to check for code simplification"
 }
 
-func getFirstDeletedAndAddedLineNumberInHunk(h *diffpkg.Hunk) (int, int, error) {
+func getFirstDeletedAndAddedLineNumberInHunk(h *diffpkg.Hunk) (firstDeleted, firstAdded int, err error) {
 	lines := bytes.Split(h.Body, []byte{'\n'})
 	lineNumber := int(h.OrigStartLine - 1)
 	firstAddedLineNumber := -1

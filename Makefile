@@ -28,4 +28,10 @@ release:
 	rm -rf dist
 	curl -sL https://git.io/goreleaser | bash
 
+update_deps:
+	GO111MODULE=on go mod verify
+	GO111MODULE=on go mod tidy
+	rm -rf vendor
+	GO111MODULE=on go mod vendor
+
 .PHONY: test

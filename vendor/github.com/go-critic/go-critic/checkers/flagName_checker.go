@@ -30,12 +30,22 @@ type flagNameChecker struct {
 
 func (c *flagNameChecker) VisitExpr(expr ast.Expr) {
 	call := astcast.ToCallExpr(expr)
-	switch qualifiedName(call.Fun) {
-	case "flag.Bool", "flag.Duration", "flag.Float64", "flag.String",
-		"flag.Int", "flag.Int64", "flag.Uint", "flag.Uint64":
+	sym := astcast.ToIdent(astcast.ToSelectorExpr(call.Fun).Sel)
+	obj := c.ctx.TypesInfo.ObjectOf(sym)
+	if obj == nil {
+		return
+	}
+	pkg := obj.Pkg()
+	if !isStdlibPkg(pkg) || pkg.Name() != "flag" {
+		return
+	}
+
+	switch sym.Name {
+	case "Bool", "Duration", "Float64", "String",
+		"Int", "Int64", "Uint", "Uint64":
 		c.checkFlagName(call, call.Args[0])
-	case "flag.BoolVar", "flag.DurationVar", "flag.Float64Var", "flag.StringVar",
-		"flag.IntVar", "flag.Int64Var", "flag.UintVar", "flag.Uint64Var":
+	case "BoolVar", "DurationVar", "Float64Var", "StringVar",
+		"IntVar", "Int64Var", "UintVar", "Uint64Var":
 		c.checkFlagName(call, call.Args[1])
 	}
 }

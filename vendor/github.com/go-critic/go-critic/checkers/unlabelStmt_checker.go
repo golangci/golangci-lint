@@ -4,6 +4,7 @@ import (
 	"go/ast"
 	"go/token"
 
+	"github.com/go-critic/go-critic/checkers/internal/lintutil"
 	"github.com/go-lintpack/lintpack"
 	"github.com/go-lintpack/lintpack/astwalk"
 )
@@ -43,7 +44,7 @@ func (c *unlabelStmtChecker) EnterFunc(fn *ast.FuncDecl) bool {
 	}
 	// TODO(Quasilyte): should not do additional traversal here.
 	// For now, skip all functions that contain goto statement.
-	return !containsNode(fn.Body, func(n ast.Node) bool {
+	return !lintutil.ContainsNode(fn.Body, func(n ast.Node) bool {
 		br, ok := n.(*ast.BranchStmt)
 		return ok && br.Tok == token.GOTO
 	})
@@ -78,7 +79,7 @@ func (c *unlabelStmtChecker) VisitStmt(stmt ast.Stmt) {
 	matchUsage := func(n ast.Node) bool {
 		return c.canBreakFrom(n) && c.usesLabel(c.blockStmtOf(n), name)
 	}
-	if !containsNode(c.blockStmtOf(labeled.Stmt), matchUsage) {
+	if !lintutil.ContainsNode(c.blockStmtOf(labeled.Stmt), matchUsage) {
 		c.warnRedundant(labeled)
 		return
 	}
@@ -95,7 +96,7 @@ func (c *unlabelStmtChecker) VisitStmt(stmt ast.Stmt) {
 		if !c.isLoop(last) {
 			return
 		}
-		br := findNode(c.blockStmtOf(last), func(n ast.Node) bool {
+		br := lintutil.FindNode(c.blockStmtOf(last), func(n ast.Node) bool {
 			br, ok := n.(*ast.BranchStmt)
 			return ok && br.Label != nil &&
 				br.Label.Name == name && br.Tok == token.CONTINUE
@@ -152,7 +153,7 @@ func (c *unlabelStmtChecker) blockStmtOf(n ast.Node) *ast.BlockStmt {
 
 // usesLabel reports whether n contains a usage of label.
 func (c *unlabelStmtChecker) usesLabel(n *ast.BlockStmt, label string) bool {
-	return containsNode(n, func(n ast.Node) bool {
+	return lintutil.ContainsNode(n, func(n ast.Node) bool {
 		branch, ok := n.(*ast.BranchStmt)
 		return ok && branch.Label != nil &&
 			branch.Label.Name == label &&

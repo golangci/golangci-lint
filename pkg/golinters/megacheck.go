@@ -305,7 +305,7 @@ func (m megacheck) runMegacheck(workingPkgs []*packages.Package, checkExportedUn
 // parseIgnore is a copy from megacheck code just to not fork megacheck
 func parseIgnore(s string) ([]lint.Ignore, error) {
 	var out []lint.Ignore
-	if len(s) == 0 {
+	if s == "" {
 		return nil, nil
 	}
 	for _, part := range strings.Fields(s) {

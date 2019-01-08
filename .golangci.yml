@@ -24,6 +24,14 @@ linters-settings:
     line-length: 140
   goimports:
     local-prefixes: github.com/golangci/golangci-lint
+  gocritic:
+    enabled-tags:
+      - performance
+      - style
+      - experimental
+    disabled-checks:
+      - wrapperFunc
+      - commentFormatting # https://github.com/go-critic/go-critic/issues/755
 
 linters:
   enable-all: true
