@@ -49,21 +49,11 @@ func ExtractErrors(pkg *packages.Package, astCache *astcache.Cache) []packages.E
 }
 
 func extractErrorsImpl(pkg *packages.Package) []packages.Error {
-	if !pkg.IllTyped { // otherwise it may take hours to traverse all deps many times
-		return nil
-	}
-
-	if len(pkg.Errors) != 0 {
-		return pkg.Errors
-	}
-
 	var errors []packages.Error
-	for _, iPkg := range pkg.Imports {
-		iPkgErrors := extractErrorsImpl(iPkg)
-		if iPkgErrors != nil {
-			errors = append(errors, iPkgErrors...)
-		}
-	}
-
+	packages.Visit([]*packages.Package{pkg},
+		// only keep if pkg or its parents have errors,
+		// otherwise save the effort, there are no errors to be found.
+		func(pkg *packages.Package) bool { return pkg.IllTyped },
+		func(pkg *packages.Package) { errors = append(errors, pkg.Errors...) })
 	return errors
 }
