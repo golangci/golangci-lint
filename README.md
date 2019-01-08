@@ -185,7 +185,6 @@ $ golangci-lint help linters
 ...
 Disabled by default linters:
 golint: Golint differs from gofmt. Gofmt reformats Go source code, whereas golint prints out style mistakes [fast: true]
-stylecheck: Stylecheck is a replacement for golint [fast: false]
 gosec (gas): Inspects source code for security problems [fast: true]
 interfacer: Linter that suggests narrower interface types [fast: false]
 unconvert: Remove unnecessary type conversions [fast: true]
