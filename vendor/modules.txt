@@ -1,3 +1,5 @@
+# github.com/BurntSushi/toml v0.3.1
+github.com/BurntSushi/toml
 # github.com/OpenPeeDeeP/depguard v0.0.0-20180806142446-a69c782687b2
 github.com/OpenPeeDeeP/depguard
 # github.com/StackExchange/wmi v0.0.0-20180116203802-5d049714c4a6
@@ -60,17 +62,27 @@ github.com/golangci/errcheck/golangci
 github.com/golangci/errcheck/internal/errcheck
 # github.com/golangci/go-misc v0.0.0-20180628070357-927a3d87b613
 github.com/golangci/go-misc/deadcode
-# github.com/golangci/go-tools v0.0.0-20180902103155-93eecd106a0b
+# github.com/golangci/go-tools v0.0.0-20180109140146-be4842e24b95
+github.com/golangci/go-tools/config
 github.com/golangci/go-tools/lint
 github.com/golangci/go-tools/lint/lintutil
 github.com/golangci/go-tools/simple
 github.com/golangci/go-tools/staticcheck
+github.com/golangci/go-tools/stylecheck
 github.com/golangci/go-tools/unused
+github.com/golangci/go-tools/ssa
+github.com/golangci/go-tools/ssa/ssautil
+github.com/golangci/go-tools/lint/lintutil/format
 github.com/golangci/go-tools/version
+github.com/golangci/go-tools/arg
 github.com/golangci/go-tools/internal/sharedcheck
+github.com/golangci/go-tools/lint/lintdsl
 github.com/golangci/go-tools/deprecated
 github.com/golangci/go-tools/functions
+github.com/golangci/go-tools/ssautil
 github.com/golangci/go-tools/staticcheck/vrp
+github.com/golangci/go-tools/callgraph
+github.com/golangci/go-tools/callgraph/static
 # github.com/golangci/goconst v0.0.0-20180610141641-041c5f2b40f3
 github.com/golangci/goconst
 # github.com/golangci/gocyclo v0.0.0-20180528134321-2becd97e67ee
@@ -87,10 +99,6 @@ github.com/golangci/govet/lib/cfg
 github.com/golangci/govet/lib/whitelist
 # github.com/golangci/ineffassign v0.0.0-20180808204949-2ee8f2867dde
 github.com/golangci/ineffassign
-# github.com/golangci/interfacer v0.0.0-20180902080945-01958817a6ec
-github.com/golangci/interfacer/check
-# github.com/golangci/lint v0.0.0-20180902080404-c2187e7932b5
-github.com/golangci/lint
 # github.com/golangci/lint-1 v0.0.0-20180610141402-4bf9709227d1
 github.com/golangci/lint-1
 # github.com/golangci/maligned v0.0.0-20180506175553-b1d89398deca
@@ -101,17 +109,8 @@ github.com/golangci/misspell
 github.com/golangci/prealloc
 # github.com/golangci/revgrep v0.0.0-20180526074752-d9c87f5ffaf0
 github.com/golangci/revgrep
-# github.com/golangci/tools v0.0.0-20180902102414-2cefd77fef9b
-github.com/golangci/tools/go/ssa
-github.com/golangci/tools/go/ssa/ssautil
-github.com/golangci/tools/go/callgraph
-github.com/golangci/tools/go/callgraph/cha
-github.com/golangci/tools/go/callgraph/rta
-github.com/golangci/tools/go/callgraph/static
 # github.com/golangci/unconvert v0.0.0-20180507085042-28b1c447d1f4
 github.com/golangci/unconvert
-# github.com/golangci/unparam v0.0.0-20180902112548-7ad9dbcccc16
-github.com/golangci/unparam/check
 # github.com/hashicorp/hcl v0.0.0-20180404174102-ef8a98b0bbce
 github.com/hashicorp/hcl
 github.com/hashicorp/hcl/hcl/printer
@@ -198,6 +197,8 @@ golang.org/x/text/unicode/norm
 golang.org/x/tools/go/loader
 golang.org/x/tools/go/packages
 golang.org/x/tools/imports
+golang.org/x/tools/go/ssa
+golang.org/x/tools/go/ssa/ssautil
 golang.org/x/tools/go/ast/astutil
 golang.org/x/tools/go/types/typeutil
 golang.org/x/tools/go/gcexportdata
@@ -206,10 +207,19 @@ golang.org/x/tools/go/internal/cgo
 golang.org/x/tools/go/internal/packagesdriver
 golang.org/x/tools/internal/gopathwalk
 golang.org/x/tools/internal/semver
+golang.org/x/tools/go/callgraph
+golang.org/x/tools/go/callgraph/cha
+golang.org/x/tools/go/callgraph/rta
 golang.org/x/tools/go/internal/gcimporter
 golang.org/x/tools/internal/fastwalk
 # gopkg.in/yaml.v2 v2.2.1
 gopkg.in/yaml.v2
+# mvdan.cc/interfacer v0.0.0-20180901003855-c20040233aed
+mvdan.cc/interfacer/check
+# mvdan.cc/lint v0.0.0-20170908181259-adc824a0674b
+mvdan.cc/lint
+# mvdan.cc/unparam v0.0.0-20181201214637-68701730a1d7
+mvdan.cc/unparam/check
 # sourcegraph.com/sourcegraph/go-diff v0.0.0-20171119081133-3f415a150aec
 sourcegraph.com/sourcegraph/go-diff/diff
 # sourcegraph.com/sqs/pbtypes v0.0.0-20160107090929-4d1b9dc7ffc3

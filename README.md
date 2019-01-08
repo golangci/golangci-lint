@@ -166,7 +166,7 @@ GolangCI-Lint can be used with zero configuration. By default the following lint
 ```bash
 $ golangci-lint help linters
 Enabled by default linters:
-govet: Vet examines Go source code and reports suspicious constructs, such as Printf calls whose arguments do not align with the format string [fast: true]
+govet (vet, vetshadow): Vet examines Go source code and reports suspicious constructs, such as Printf calls whose arguments do not align with the format string [fast: true]
 errcheck: Errcheck is a program for checking for unchecked errors in go programs. These unchecked errors can be critical bugs in some cases [fast: true]
 staticcheck: Staticcheck is a go vet on steroids, applying a ton of static analysis checks [fast: false]
 unused: Checks Go code for unused constants, variables, functions and types [fast: false]
@@ -185,6 +185,7 @@ $ golangci-lint help linters
 ...
 Disabled by default linters:
 golint: Golint differs from gofmt. Gofmt reformats Go source code, whereas golint prints out style mistakes [fast: true]
+stylecheck: Stylecheck is a replacement for golint [fast: false]
 gosec (gas): Inspects source code for security problems [fast: true]
 interfacer: Linter that suggests narrower interface types [fast: false]
 unconvert: Remove unnecessary type conversions [fast: true]
@@ -194,7 +195,6 @@ gocyclo: Computes and checks the cyclomatic complexity of functions [fast: true]
 gofmt: Gofmt checks whether code was gofmt-ed. By default this tool runs with -s option to check for code simplification [fast: true]
 goimports: Goimports does everything that gofmt does. Additionally it checks unused imports [fast: true]
 maligned: Tool to detect Go structs that would take less memory if their fields were sorted [fast: true]
-megacheck: 3 sub-linters in one: unused, gosimple and staticcheck [fast: false]
 depguard: Go linter that checks if package imports are in a list of acceptable packages [fast: true]
 misspell: Finds commonly misspelled English words in comments [fast: true]
 lll: Reports long lines [fast: true]
@@ -388,6 +388,7 @@ golangci-lint help linters
 ### Disabled By Default Linters (`-E/--enable`)
 
 - [golint](https://github.com/golang/lint) - Golint differs from gofmt. Gofmt reformats Go source code, whereas golint prints out style mistakes
+- [stylecheck](https://github.com/dominikh/go-tools/tree/master/stylecheck) - Stylecheck is a replacement for golint
 - [gosec](https://github.com/securego/gosec) - Inspects source code for security problems
 - [interfacer](https://github.com/mvdan/interfacer) - Linter that suggests narrower interface types
 - [unconvert](https://github.com/mdempsky/unconvert) - Remove unnecessary type conversions
@@ -397,7 +398,6 @@ golangci-lint help linters
 - [gofmt](https://golang.org/cmd/gofmt/) - Gofmt checks whether code was gofmt-ed. By default this tool runs with -s option to check for code simplification
 - [goimports](https://godoc.org/golang.org/x/tools/cmd/goimports) - Goimports does everything that gofmt does. Additionally it checks unused imports
 - [maligned](https://github.com/mdempsky/maligned) - Tool to detect Go structs that would take less memory if their fields were sorted
-- [megacheck](https://github.com/dominikh/go-tools/tree/master/cmd/megacheck) - 3 sub-linters in one: unused, gosimple and staticcheck
 - [depguard](https://github.com/OpenPeeDeeP/depguard) - Go linter that checks if package imports are in a list of acceptable packages
 - [misspell](https://github.com/client9/misspell) - Finds commonly misspelled English words in comments
 - [lll](https://github.com/walle/lll) - Reports long lines
@@ -461,7 +461,7 @@ Flags:
                                       # govet: Common false positives
                                       - (possible misuse of unsafe.Pointer|should have signature)
                                     
-                                      # megacheck: Developers tend to write in C-style with an explicit 'break' in a 'switch', so it's ok to ignore
+                                      # staticcheck: Developers tend to write in C-style with an explicit 'break' in a 'switch', so it's ok to ignore
                                       - ineffective break statement. Did you mean to break out of the outer loop
                                     
                                       # gosec: Too many false-positives on 'unsafe' usage

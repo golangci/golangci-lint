@@ -14,7 +14,8 @@ import (
 	"unicode/utf8"
 
 	"github.com/golangci/go-tools/lint"
-	"github.com/golangci/tools/go/ssa"
+	. "github.com/golangci/go-tools/lint/lintdsl"
+	"github.com/golangci/go-tools/ssa"
 	"github.com/golangci/go-tools/staticcheck/vrp"
 )
 
@@ -193,7 +194,7 @@ func validEncodingBinaryType(j *lint.Job, typ types.Type) bool {
 			types.Float32, types.Float64, types.Complex64, types.Complex128, types.Invalid:
 			return true
 		case types.Bool:
-			return j.IsGoVersion(8)
+			return IsGoVersion(j, 8)
 		}
 		return false
 	case *types.Struct:
@@ -294,7 +295,7 @@ func ValidHostPort(v Value) bool {
 // ConvertedFrom reports whether value v was converted from type typ.
 func ConvertedFrom(v Value, typ string) bool {
 	change, ok := v.Value.(*ssa.ChangeType)
-	return ok && types.TypeString(change.X.Type(), nil) == typ
+	return ok && IsType(change.X.Type(), typ)
 }
 
 func UniqueStringCutset(v Value) bool {

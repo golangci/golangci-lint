@@ -55,7 +55,7 @@ var DefaultExcludePatterns = []ExcludePattern{
 	},
 	{
 		Pattern: "ineffective break statement. Did you mean to break out of the outer loop",
-		Linter:  "megacheck",
+		Linter:  "staticcheck",
 		Why:     "Developers tend to write in C-style with an explicit 'break' in a 'switch', so it's ok to ignore",
 	},
 	{

@@ -1,9 +1,9 @@
 package linter
 
 import (
-	"github.com/golangci/tools/go/ssa"
 	"golang.org/x/tools/go/loader"
 	"golang.org/x/tools/go/packages"
+	"golang.org/x/tools/go/ssa"
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/lint/astcache"
@@ -17,8 +17,7 @@ type Context struct {
 	LoaderConfig *loader.Config  // deprecated, don't use for new linters
 	Program      *loader.Program // deprecated, use Packages for new linters
 
-	SSAProgram          *ssa.Program // for unparam and interfacer: they don't change it
-	MegacheckSSAProgram *ssa.Program // for megacheck: it modifies ssa program
+	SSAProgram *ssa.Program // for unparam and interfacer but not for megacheck (it change it)
 
 	Cfg      *config.Config
 	ASTCache *astcache.Cache

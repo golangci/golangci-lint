@@ -21,23 +21,19 @@ require (
 	github.com/golangci/dupl v0.0.0-20180902072040-3e9179ac440a
 	github.com/golangci/errcheck v0.0.0-20181003203344-ef45e06d44b6
 	github.com/golangci/go-misc v0.0.0-20180628070357-927a3d87b613
-	github.com/golangci/go-tools v0.0.0-20180902103155-93eecd106a0b
+	github.com/golangci/go-tools v0.0.0-20180109140146-be4842e24b95
 	github.com/golangci/goconst v0.0.0-20180610141641-041c5f2b40f3
 	github.com/golangci/gocyclo v0.0.0-20180528134321-2becd97e67ee
 	github.com/golangci/gofmt v0.0.0-20181105071733-0b8337e80d98
 	github.com/golangci/gosec v0.0.0-20180901114220-8afd9cbb6cfb
 	github.com/golangci/govet v0.0.0-20180818181408-44ddbe260190
 	github.com/golangci/ineffassign v0.0.0-20180808204949-2ee8f2867dde
-	github.com/golangci/interfacer v0.0.0-20180902080945-01958817a6ec
-	github.com/golangci/lint v0.0.0-20180902080404-c2187e7932b5 // indirect
 	github.com/golangci/lint-1 v0.0.0-20180610141402-4bf9709227d1
 	github.com/golangci/maligned v0.0.0-20180506175553-b1d89398deca
 	github.com/golangci/misspell v0.0.0-20180809174111-950f5d19e770
 	github.com/golangci/prealloc v0.0.0-20180630174525-215b22d4de21
 	github.com/golangci/revgrep v0.0.0-20180526074752-d9c87f5ffaf0
-	github.com/golangci/tools v0.0.0-20180902102414-2cefd77fef9b
 	github.com/golangci/unconvert v0.0.0-20180507085042-28b1c447d1f4
-	github.com/golangci/unparam v0.0.0-20180902112548-7ad9dbcccc16
 	github.com/hashicorp/hcl v0.0.0-20180404174102-ef8a98b0bbce // indirect
 	github.com/inconshreveable/mousetrap v1.0.0 // indirect
 	github.com/magiconair/properties v1.7.6 // indirect
@@ -68,6 +64,9 @@ require (
 	gopkg.in/airbrake/gobrake.v2 v2.0.9 // indirect
 	gopkg.in/gemnasium/logrus-airbrake-hook.v2 v2.1.2 // indirect
 	gopkg.in/yaml.v2 v2.2.1
+	mvdan.cc/interfacer v0.0.0-20180901003855-c20040233aed
+	mvdan.cc/lint v0.0.0-20170908181259-adc824a0674b // indirect
+	mvdan.cc/unparam v0.0.0-20181201214637-68701730a1d7
 	sourcegraph.com/sourcegraph/go-diff v0.0.0-20171119081133-3f415a150aec
 	sourcegraph.com/sqs/pbtypes v0.0.0-20160107090929-4d1b9dc7ffc3 // indirect
 )
