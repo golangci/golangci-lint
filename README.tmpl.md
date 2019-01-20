@@ -207,7 +207,7 @@ golangci-lint run --disable-all -E errcheck
    * vim-go open [issue](https://github.com/fatih/vim-go/issues/1841)
    * syntastic [merged pull request](https://github.com/vim-syntastic/syntastic/pull/2190) with golangci-lint support
    * ale [merged pull request](https://github.com/w0rp/ale/pull/1890) with golangci-lint support
-6. Atom - the [issue](https://github.com/joefitzgerald/go-plus/issues/819) for a go-plus.
+6. Atom - [go-plus](https://atom.io/packages/go-plus) supports golangci-lint.
 
 ## Comparison
 
