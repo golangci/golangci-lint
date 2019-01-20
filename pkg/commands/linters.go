@@ -35,7 +35,7 @@ func (e *Executor) executeLinters(_ *cobra.Command, args []string) {
 		e.log.Fatalf("Usage: golangci-lint linters")
 	}
 
-	enabledLCs, err := e.EnabledLintersSet.Get()
+	enabledLCs, err := e.EnabledLintersSet.Get(false)
 	if err != nil {
 		log.Fatalf("Can't get enabled linters: %s", err)
 	}

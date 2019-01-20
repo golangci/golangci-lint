@@ -254,7 +254,7 @@ func fixSlicesFlags(fs *pflag.FlagSet) {
 func (e *Executor) runAnalysis(ctx context.Context, args []string) (<-chan result.Issue, error) {
 	e.cfg.Run.Args = args
 
-	enabledLinters, err := e.EnabledLintersSet.Get()
+	enabledLinters, err := e.EnabledLintersSet.Get(true)
 	if err != nil {
 		return nil, err
 	}
