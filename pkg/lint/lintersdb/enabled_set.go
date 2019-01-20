@@ -115,14 +115,16 @@ func (es EnabledSet) optimizeLintersSet(linters map[string]*linter.Config) {
 	}
 }
 
-func (es EnabledSet) Get() ([]*linter.Config, error) {
+func (es EnabledSet) Get(optimize bool) ([]*linter.Config, error) {
 	if err := es.v.validateEnabledDisabledLintersConfig(&es.cfg.Linters); err != nil {
 		return nil, err
 	}
 
 	resultLintersSet := es.build(&es.cfg.Linters, es.m.GetAllEnabledByDefaultLinters())
 	es.verbosePrintLintersStatus(resultLintersSet)
-	es.optimizeLintersSet(resultLintersSet)
+	if optimize {
+		es.optimizeLintersSet(resultLintersSet)
+	}
 
 	var resultLinters []*linter.Config
 	for _, lc := range resultLintersSet {
