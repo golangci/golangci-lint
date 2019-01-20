@@ -10,7 +10,7 @@ import (
 
 //nolint:gocyclo
 func ExtractErrors(pkg *packages.Package, astCache *astcache.Cache) []packages.Error {
-	errors := extractErrorsImpl(pkg)
+	errors := extractErrorsImpl(pkg, map[*packages.Package]bool{})
 	if len(errors) == 0 {
 		return errors
 	}
@@ -48,7 +48,12 @@ func ExtractErrors(pkg *packages.Package, astCache *astcache.Cache) []packages.E
 	return uniqErrors
 }
 
-func extractErrorsImpl(pkg *packages.Package) []packages.Error {
+func extractErrorsImpl(pkg *packages.Package, seenPackages map[*packages.Package]bool) []packages.Error {
+	if seenPackages[pkg] {
+		return nil
+	}
+	seenPackages[pkg] = true
+
 	if !pkg.IllTyped { // otherwise it may take hours to traverse all deps many times
 		return nil
 	}
@@ -59,7 +64,7 @@ func extractErrorsImpl(pkg *packages.Package) []packages.Error {
 
 	var errors []packages.Error
 	for _, iPkg := range pkg.Imports {
-		iPkgErrors := extractErrorsImpl(iPkg)
+		iPkgErrors := extractErrorsImpl(iPkg, seenPackages)
 		if iPkgErrors != nil {
 			errors = append(errors, iPkgErrors...)
 		}
