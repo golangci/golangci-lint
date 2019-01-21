@@ -4,9 +4,11 @@
 [![GolangCI](https://golangci.com/badges/github.com/golangci/golangci-lint.svg)](https://golangci.com)
 
 GolangCI-Lint is a linters aggregator. It's fast: on average [5 times faster](#performance) than gometalinter.
-It's [easy to integrate and use](#command-line-options), has [nice output](#quick-start) and has a minimum number of false positives.
+It's [easy to integrate and use](#command-line-options), has [nice output](#quick-start) and has a minimum number of false positives. It supports go modules.
 
 GolangCI-Lint has [integrations](#editor-integration) with VS Code, GNU Emacs, Sublime Text.
+
+Follow the news and releases on our [twitter](https://twitter.com/golangci) and our [blog](https://medium.com/golangci).
 
 Sponsored by [GolangCI.com](https://golangci.com): SaaS service for running linters on Github pull requests. Free for Open Source.
 
@@ -44,8 +46,7 @@ Short 1.5 min video demo of analyzing [beego](https://github.com/astaxie/beego).
 
 Most installations are done for CI (travis, circleci etc). It's important to have reproducible CI:
 don't start to fail all builds at the same time. With golangci-lint this can happen if you
-use `--enable-all` and a new linter is added or even without `--enable-all`: when one upstream linter
-is upgraded.
+use `--enable-all` and a new linter is added or even without `--enable-all`: when one upstream linter is upgraded.
 
 It's highly recommended to install a fixed version of golangci-lint.
 Releases are available on the [releases page](https://github.com/golangci/golangci-lint/releases).
@@ -94,7 +95,8 @@ go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
 cd $(go env GOPATH)/src/github.com/golangci/golangci-lint/cmd/golangci-lint
 go install -ldflags "-X 'main.version=$(git describe --tags)' -X 'main.commit=$(git rev-parse --short HEAD)' -X 'main.date=$(date)'"
 ```
-(On Windows, you can run the above commands with Git Bash, which comes with [Git for Windows](https://git-scm.com/download/win).)
+
+(On Windows, you can run the above commands with Git Bash, which comes with [Git for Windows](https://git-scm.com/download/win). Or you can run just `go get -u github.com/golangci/golangci-lint/cmd/golangci-lint`.)
 
 You can also install it on MacOS using [brew](https://brew.sh/):
 
@@ -298,7 +300,7 @@ Read [this section](#internals) for details.
   We don't fork to call specific linter but use its API.
   For small and medium projects 50-90% of work between linters can be reused.
 
-   * load `loader.Program` once
+   * load `[]*packages.Package` by `go/packages` once
 
       We load program (parsing all files and type-checking) only once for all linters. For the most of linters
       it's the most heavy operation: it takes 5 seconds on 8 kLoC repo and 11 seconds on `$GOROOT/src`.
@@ -306,7 +308,6 @@ Read [this section](#internals) for details.
 
       Some linters (megacheck, interfacer, unparam) work on SSA representation.
       Building of this representation takes 1.5 seconds on 8 kLoC repo and 6 seconds on `$GOROOT/src`.
-      `SSA` representation is used from a [fork of go-tools](https://github.com/dominikh/go-tools), not the official one.
 
    * parse source code and build AST once
 
@@ -318,17 +319,11 @@ Read [this section](#internals) for details.
 
      It takes 300-1000 ms for `$GOROOT/src`.
 2. Smart linters scheduling
-  
+
    We schedule linters by a special algorithm which takes estimated execution time into account. It allows
    to save 10-30% of time when one of heavy linters (megacheck etc) is enabled.
 
-3. Improved program loading
-
-   We smartly use setting `TypeCheckFuncBodies` in `loader.Config` to build `loader.Program`.
-   If there are no linters requiring SSA enabled we can load dependencies of analyzed code much faster
-   by not analyzing their functions: we analyze only file-level declarations. It makes program loading
-   10-30% faster in such cases.
-4. Don't fork to run shell commands
+3. Don't fork to run shell commands
 
 All linters are vendored in the `/vendor` folder: their version is fixed, they are builtin
 and you don't need to install them separately.
@@ -435,13 +430,14 @@ You have 2 choices:
 
 We don't recommend vendoring `golangci-lint` in your repo: you will get troubles updating `golangci-lint`. Please, use recommended way to install with the shell script: it's very fast.
 
-**Does I need to run `go install`?**
+**Do I need to run `go install`?**
 
 No, you don't need to do it anymore.
 
 **Which go versions are supported**
-Golangci-lint versions > 1.10.2 supports Go 1.10 and 1.11.
-Golangci-lint versions <= v1.10.2 supported Go 1.9, 1.10, 1.11.
+Short answer: go 1.10 and newer are supported.
+
+Long answer: golangci-lint > 1.10.2 supports Go 1.10 and 1.11; golangci-lint <= v1.10.2 supports Go 1.9, 1.10, 1.11.
 
 **`golangci-lint` doesn't work**
 
@@ -455,6 +451,7 @@ Usually this options is used during development on local machine and compilation
 
 ## Thanks
 
+Thanks to all [contributors](https://github.com/golangci/golangci-lint/graphs/contributors)!
 Thanks to [alecthomas/gometalinter](https://github.com/alecthomas/gometalinter) for inspiration and amazing work.
 Thanks to [bradleyfalzon/revgrep](https://github.com/bradleyfalzon/revgrep) for cool diff tool.
 
@@ -463,7 +460,33 @@ Thanks to developers and authors of used linters:
 
 ## Changelog
 
+Follow the news and releases on our [twitter](https://twitter.com/golangci) and our [blog](https://medium.com/golangci).
 There is the most valuable changes log:
+
+### January 2019
+
+1. Update `megacheck` (`staticcheck`) to the latest version: it consumes much less memory.
+2. Support the new `stylecheck` linter.
+3. Update `go-critic` to the latest version.
+4. Support of `enabled-tags` options for `go-critic`.
+5. Make rich debugging for `go-critic` and meticulously validate `go-critic` checks config.
+6. Update and use upstream versions of `unparam` and `interfacer` instead of forked ones.
+7. Improve handling of unknown linter names in `//nolint` directives.
+8. Speedup `typecheck` on large project with compilation errors.
+9. Add support for searching for `errcheck` exclude file.
+10. Fix `go-misc` checksum.
+
+### December 2018
+
+1. Update `goimports`: the new version creates named imports for name/path mismatches.
+2. Update `go-critic` to the latest version.
+3. Sync default `go-critic` checks list with the `go-critic`.
+4. Support `pre-commit.com` hooks.
+5. Rework and simplify `--skip-dirs` for some edge cases.
+6. Add `modules-download-mode` option: it's useful in CI.
+7. Better validate commands.
+8. Fix working with absolute paths.
+9. Fix `errcheck.ignore` option.
 
 ### November 2018
 
@@ -542,7 +565,7 @@ There is the most valuable changes log:
 ## Contact Information
 
 You can contact the [author](https://github.com/jirfag) of GolangCI-Lint
-by [denis@golangci.com](mailto:denis@golangci.com).
+by [denis@golangci.com](mailto:denis@golangci.com). Follow the news and releases on our [twitter](https://twitter.com/golangci) and our [blog](https://medium.com/golangci).
 
 ## License Scan
 
