@@ -18,7 +18,11 @@ builds:
     env:
       - CGO_ENABLED=0
     main: ./cmd/golangci-lint/
-    ldflags: -s -w -X main.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{.Date}}
+    ldflags:
+      - -s -w
+      - -X main.version={{.Version}}
+      - -X main.commit={{.Commit}}
+      - -X main.date={{.Date}}
 
 archive:
   format: tar.gz
@@ -49,11 +53,10 @@ changelog:
     - Merge branch
 
 dockers:
-- image: golangci/golangci-lint
-  tag_templates:
-  - '{{ .Tag }}'
-  - 'v{{ .Major }}.{{ .Minor }}'
-  - 'latest'
+  image_templates:
+    - "golangci/golangci-lint:latest"
+    - "golangci/golangci-lint:{{ .Tag }}"
+    - "golangci/golangci-lint:v{{ .Major }}.{{ .Minor }}"
 
 brew:
   github:
@@ -64,6 +67,3 @@ brew:
   description: Fast linters runner for Go.
   test: |
     system "#{bin}/golangci-lint --version"
-
-git:
-  short_hash: true
