@@ -44,3 +44,10 @@ linters:
 run:
   skip-dirs:
     - test/testdata_etc
+
+# golangci.com configuration
+# https://github.com/golangci/golangci/wiki/Configuration
+service:
+  golangci-lint-version: 1.13.x # use fixed version to not introduce new linters unexpectedly
+  prepare:
+    - echo "here I can run custom commands, but no preparation needed"
