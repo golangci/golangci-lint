@@ -151,6 +151,7 @@ The following great projects use golangci-lint:
 * [banzaicloud/pipeline](https://github.com/banzaicloud/pipeline)
 * [posener/complete](https://github.com/posener/complete)
 * [y0ssar1an/q](https://github.com/y0ssar1an/q)
+* [segmentio/terraform-docs](https://github.com/segmentio/terraform-docs)
 
 ## Quick Start
 

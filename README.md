@@ -151,6 +151,7 @@ The following great projects use golangci-lint:
 * [banzaicloud/pipeline](https://github.com/banzaicloud/pipeline)
 * [posener/complete](https://github.com/posener/complete)
 * [y0ssar1an/q](https://github.com/y0ssar1an/q)
+* [segmentio/terraform-docs](https://github.com/segmentio/terraform-docs)
 
 ## Quick Start
 
@@ -500,6 +501,7 @@ Global Flags:
       --cpu-profile-path string   Path to CPU profile output file
       --mem-profile-path string   Path to memory profile output file
   -v, --verbose                   verbose output
+      --version                   Print version
 
 ```
 
