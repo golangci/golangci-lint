@@ -9,16 +9,17 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"runtime/debug"
 	"sort"
 	"strings"
 	"sync"
 	"time"
 	"unicode"
 
-	"golang.org/x/tools/go/packages"
 	"github.com/golangci/go-tools/config"
 	"github.com/golangci/go-tools/ssa"
 	"github.com/golangci/go-tools/ssa/ssautil"
+	"golang.org/x/tools/go/packages"
 )
 
 type Job struct {
@@ -29,6 +30,7 @@ type Job struct {
 	problems []Problem
 
 	duration time.Duration
+	panicErr error
 }
 
 type Ignore interface {
@@ -451,6 +453,11 @@ func (l *Linter) Lint(initial []*packages.Package, stats *PerfStats) []Problem {
 	for _, j := range jobs {
 		wg.Add(1)
 		go func(j *Job) {
+			defer func() {
+				if panicErr := recover(); panicErr != nil {
+					j.panicErr = fmt.Errorf("panic: %s: %s", panicErr, string(debug.Stack()))
+				}
+			}()
 			defer wg.Done()
 			sem <- struct{}{}
 			defer func() { <-sem }()
@@ -466,6 +473,10 @@ func (l *Linter) Lint(initial []*packages.Package, stats *PerfStats) []Problem {
 	wg.Wait()
 
 	for _, j := range jobs {
+		if j.panicErr != nil {
+			panic(j.panicErr)
+		}
+
 		if stats != nil {
 			stats.Jobs = append(stats.Jobs, JobStat{j.check.ID, j.duration})
 		}
