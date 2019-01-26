@@ -295,3 +295,11 @@ func (s *GocriticSettings) validateCheckerNames() error {
 
 	return nil
 }
+
+func (s *GocriticSettings) GetLowercasedParams() map[string]GocriticCheckSettings {
+	ret := map[string]GocriticCheckSettings{}
+	for checker, params := range s.SettingsPerCheck {
+		ret[strings.ToLower(checker)] = params
+	}
+	return ret
+}

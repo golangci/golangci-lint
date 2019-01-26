@@ -8,7 +8,11 @@ import (
 	"path/filepath"
 	"runtime"
 	"runtime/debug"
+	"sort"
+	"strings"
 	"sync"
+
+	"github.com/golangci/golangci-lint/pkg/config"
 
 	"github.com/go-lintpack/lintpack"
 	"golang.org/x/tools/go/loader"
@@ -27,11 +31,52 @@ func (Gocritic) Desc() string {
 	return "The most opinionated Go source code linter"
 }
 
-func (lint Gocritic) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issue, error) {
-	sizes := types.SizesFor("gc", runtime.GOARCH)
-	lintpackCtx := lintpack.NewContext(lintCtx.Program.Fset, sizes)
+func (Gocritic) normalizeCheckerInfoParams(info *lintpack.CheckerInfo) lintpack.CheckerParams {
+	// lowercase info param keys here because golangci-lint's config parser lowercases all strings
+	ret := lintpack.CheckerParams{}
+	for k, v := range info.Params {
+		ret[strings.ToLower(k)] = v
+	}
 
+	return ret
+}
+
+func (lint Gocritic) configureCheckerInfo(info *lintpack.CheckerInfo, allParams map[string]config.GocriticCheckSettings) error {
+	params := allParams[strings.ToLower(info.Name)]
+	if params == nil { // no config for this checker
+		return nil
+	}
+
+	infoParams := lint.normalizeCheckerInfoParams(info)
+	for k, p := range params {
+		v, ok := infoParams[k]
+		if ok {
+			v.Value = p
+			continue
+		}
+
+		// param `k` isn't supported
+		if len(info.Params) == 0 {
+			return fmt.Errorf("checker %s config param %s doesn't exist: checker doesn't have params",
+				info.Name, k)
+		}
+
+		var supportedKeys []string
+		for sk := range info.Params {
+			supportedKeys = append(supportedKeys, sk)
+		}
+		sort.Strings(supportedKeys)
+
+		return fmt.Errorf("checker %s config param %s doesn't exist, all existing: %s",
+			info.Name, k, supportedKeys)
+	}
+
+	return nil
+}
+
+func (lint Gocritic) buildEnabledCheckers(lintCtx *linter.Context, lintpackCtx *lintpack.Context) ([]*lintpack.Checker, error) {
 	s := lintCtx.Settings().Gocritic
+	allParams := s.GetLowercasedParams()
 
 	var enabledCheckers []*lintpack.Checker
 	for _, info := range lintpack.GetCheckersInfo() {
@@ -39,8 +84,24 @@ func (lint Gocritic) Run(ctx context.Context, lintCtx *linter.Context) ([]result
 			continue
 		}
 
+		if err := lint.configureCheckerInfo(info, allParams); err != nil {
+			return nil, err
+		}
+
 		c := lintpack.NewChecker(lintpackCtx, info)
 		enabledCheckers = append(enabledCheckers, c)
+	}
+
+	return enabledCheckers, nil
+}
+
+func (lint Gocritic) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issue, error) {
+	sizes := types.SizesFor("gc", runtime.GOARCH)
+	lintpackCtx := lintpack.NewContext(lintCtx.Program.Fset, sizes)
+
+	enabledCheckers, err := lint.buildEnabledCheckers(lintCtx, lintpackCtx)
+	if err != nil {
+		return nil, err
 	}
 
 	issuesCh := make(chan result.Issue, 1024)
