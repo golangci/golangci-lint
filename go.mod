@@ -9,7 +9,6 @@ require (
 	github.com/go-critic/go-critic v0.0.0-20181204210945-0af0999fabfb
 	github.com/go-lintpack/lintpack v0.5.2
 	github.com/go-ole/go-ole v1.2.1 // indirect
-	github.com/go-toolsmith/pkgload v0.0.0-20181120203407-5122569a890b // indirect
 	github.com/gobwas/glob v0.2.3 // indirect
 	github.com/gogo/protobuf v1.0.0 // indirect
 	github.com/golang/mock v1.1.1
@@ -56,13 +55,13 @@ require (
 	github.com/spf13/viper v1.0.2
 	github.com/stretchr/testify v1.2.1
 	golang.org/x/crypto v0.0.0-20180505025534-4ec37c66abab // indirect
-	golang.org/x/tools v0.0.0-20181220024903-92cdcd90bf52
+	golang.org/x/tools v0.0.0-20190125232054-d66bd3c5d5a6
 	gopkg.in/airbrake/gobrake.v2 v2.0.9 // indirect
 	gopkg.in/gemnasium/logrus-airbrake-hook.v2 v2.1.2 // indirect
 	gopkg.in/yaml.v2 v2.2.1
 	mvdan.cc/interfacer v0.0.0-20180901003855-c20040233aed
 	mvdan.cc/lint v0.0.0-20170908181259-adc824a0674b // indirect
-	mvdan.cc/unparam v0.0.0-20181201214637-68701730a1d7
+	mvdan.cc/unparam v0.0.0-20190124213536-cc9d2fb52971
 	sourcegraph.com/sourcegraph/go-diff v0.0.0-20171119081133-3f415a150aec
 	sourcegraph.com/sqs/pbtypes v0.0.0-20160107090929-4d1b9dc7ffc3 // indirect
 )

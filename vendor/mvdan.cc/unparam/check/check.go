@@ -23,7 +23,6 @@ import (
 
 	"golang.org/x/tools/go/callgraph"
 	"golang.org/x/tools/go/callgraph/cha"
-	"golang.org/x/tools/go/callgraph/rta"
 	"golang.org/x/tools/go/packages"
 	"golang.org/x/tools/go/ssa"
 	"golang.org/x/tools/go/ssa/ssautil"
@@ -31,7 +30,7 @@ import (
 
 // UnusedParams returns a list of human-readable issues that point out unused
 // function parameters.
-func UnusedParams(tests bool, algo string, exported, debug bool, args ...string) ([]string, error) {
+func UnusedParams(tests bool, exported, debug bool, args ...string) ([]string, error) {
 	wd, err := os.Getwd()
 	if err != nil {
 		return nil, err
@@ -39,7 +38,6 @@ func UnusedParams(tests bool, algo string, exported, debug bool, args ...string)
 	c := &Checker{
 		wd:       wd,
 		tests:    tests,
-		algo:     algo,
 		exported: exported,
 	}
 	if debug {
@@ -59,7 +57,6 @@ type Checker struct {
 	wd string
 
 	tests    bool
-	algo     string
 	exported bool
 	debugLog io.Writer
 
@@ -73,6 +70,12 @@ type Checker struct {
 	// funcBodyByPos maps from a function position to its body. We can't map
 	// to the declaration, as that could be either a FuncDecl or FuncLit.
 	funcBodyByPos map[token.Pos]*ast.BlockStmt
+
+	typesImplementing map[*types.Named]bool
+
+	// Funcs used as a struct field or a func call argument. These are very
+	// often signatures which cannot be changed.
+	funcUsedAs map[*ssa.Function]string
 }
 
 var errorType = types.Universe.Lookup("error").Type()
@@ -139,11 +142,6 @@ func (c *Checker) ProgramSSA(prog *ssa.Program) {
 	c.prog = prog
 }
 
-// CallgraphAlgorithm supplies Checker with the call graph construction algorithm.
-func (c *Checker) CallgraphAlgorithm(algo string) {
-	c.algo = algo
-}
-
 // CheckExportedFuncs sets whether to inspect exported functions
 func (c *Checker) CheckExportedFuncs(exported bool) {
 	c.exported = exported
@@ -184,6 +182,8 @@ func (c *Checker) Check() ([]Issue, error) {
 	c.cachedDeclCounts = make(map[string]map[string]int)
 	c.callByPos = make(map[token.Pos]*ast.CallExpr)
 	c.funcBodyByPos = make(map[token.Pos]*ast.BlockStmt)
+	c.typesImplementing = make(map[*types.Named]bool)
+
 	wantPkg := make(map[*types.Package]*packages.Package)
 	genFiles := make(map[string]bool)
 	for _, pkg := range c.pkgs {
@@ -195,6 +195,21 @@ func (c *Checker) Check() ([]Issue, error) {
 			}
 			ast.Inspect(f, func(node ast.Node) bool {
 				switch node := node.(type) {
+				case *ast.ValueSpec:
+					if len(node.Values) == 0 || node.Type == nil ||
+						len(node.Names) != 1 || node.Names[0].Name != "_" {
+						break
+					}
+					_, ok := pkg.TypesInfo.TypeOf(node.Type).Underlying().(*types.Interface)
+					if !ok {
+						break
+					}
+					valTyp := pkg.TypesInfo.Types[node.Values[0]].Type
+					named := findNamed(valTyp)
+					if named == nil {
+						break
+					}
+					c.typesImplementing[named] = true
 				case *ast.CallExpr:
 					c.callByPos[node.Lparen] = node
 				// ssa.Function.Pos returns the declaring
@@ -209,26 +224,47 @@ func (c *Checker) Check() ([]Issue, error) {
 			})
 		}
 	}
-	switch c.algo {
-	case "cha":
-		c.graph = cha.CallGraph(c.prog)
-	case "rta":
-		mains, err := mainPackages(c.prog, wantPkg)
-		if err != nil {
-			return nil, err
-		}
-		var roots []*ssa.Function
-		for _, main := range mains {
-			roots = append(roots, main.Func("init"), main.Func("main"))
-		}
-		result := rta.Analyze(roots, true)
-		c.graph = result.CallGraph
-	default:
-		return nil, fmt.Errorf("unknown call graph construction algorithm: %q", c.algo)
-	}
+	c.graph = cha.CallGraph(c.prog)
 	c.graph.DeleteSyntheticNodes()
 
-	for fn := range ssautil.AllFunctions(c.prog) {
+	allFuncs := ssautil.AllFunctions(c.prog)
+
+	c.funcUsedAs = make(map[*ssa.Function]string)
+	for fn := range allFuncs {
+		for _, b := range fn.Blocks {
+			for _, instr := range b.Instrs {
+				switch instr := instr.(type) {
+				case *ssa.Call:
+					for _, arg := range instr.Call.Args {
+						if fn := findFunction(arg); fn != nil {
+							// someFunc(fn)
+							c.funcUsedAs[fn] = "param"
+						}
+					}
+				case *ssa.Store:
+					if _, ok := instr.Addr.(*ssa.FieldAddr); !ok {
+						break
+					}
+					if fn := findFunction(instr.Val); fn != nil {
+						// x.someField = fn
+						c.funcUsedAs[fn] = "field"
+					}
+				case *ssa.MakeInterface:
+					if fn := findFunction(instr.X); fn != nil {
+						// emptyIface = fn
+						c.funcUsedAs[fn] = "interface"
+					}
+				case *ssa.ChangeType:
+					if fn := findFunction(instr.X); fn != nil {
+						// someType(fn)
+						c.funcUsedAs[fn] = "type conversion"
+					}
+				}
+			}
+		}
+	}
+
+	for fn := range allFuncs {
 		switch {
 		case fn.Pkg == nil: // builtin?
 			continue
@@ -267,6 +303,28 @@ func (c *Checker) Check() ([]Issue, error) {
 	return c.issues, nil
 }
 
+func findNamed(typ types.Type) *types.Named {
+	switch typ := typ.(type) {
+	case *types.Pointer:
+		return findNamed(typ.Elem())
+	case *types.Named:
+		return typ
+	}
+	return nil
+}
+
+// findFunction returns the function that is behind a value, if any.
+func findFunction(value ssa.Value) *ssa.Function {
+	switch value := value.(type) {
+	case *ssa.Function:
+		return value
+	case *ssa.MakeClosure:
+		// closure of a func
+		return value.Fn.(*ssa.Function)
+	}
+	return nil
+}
+
 // addIssue records a newly found unused parameter.
 func (c *Checker) addIssue(fn *ssa.Function, pos token.Pos, format string, args ...interface{}) {
 	c.issues = append(c.issues, Issue{
@@ -298,6 +356,17 @@ func (c *Checker) checkFunc(fn *ssa.Function, pkg *packages.Package) {
 	if requiredViaCall(fn, inboundCalls) {
 		c.debug("  skip - type is required via call\n")
 		return
+	}
+	if usedAs := c.funcUsedAs[fn]; usedAs != "" {
+		c.debug("  skip - func is used as a %s\n", usedAs)
+		return
+	}
+	if recv := fn.Signature.Recv(); recv != nil {
+		named := findNamed(recv.Type())
+		if c.typesImplementing[named] {
+			c.debug("  skip - receiver must implement an interface\n")
+			return
+		}
 	}
 	if c.multipleImpls(pkg, fn) {
 		c.debug("  skip - multiple implementations via build tags\n")
@@ -410,21 +479,6 @@ resLoop:
 	}
 }
 
-// mainPackages returns the subset of main packages within pkgSet.
-func mainPackages(prog *ssa.Program, pkgSet map[*types.Package]*packages.Package) ([]*ssa.Package, error) {
-	mains := make([]*ssa.Package, 0, len(pkgSet))
-	for tpkg := range pkgSet {
-		pkg := prog.Package(tpkg)
-		if tpkg.Name() == "main" && pkg.Func("main") != nil {
-			mains = append(mains, pkg)
-		}
-	}
-	if len(mains) == 0 {
-		return nil, fmt.Errorf("no main packages")
-	}
-	return mains, nil
-}
-
 // calledInReturn reports whether any of a function's inbound calls happened
 // directly as a return statement. That is, if function "foo" was used via
 // "return foo()". This means that the result parameters of the function cannot
@@ -500,6 +554,12 @@ func (c *Checker) alwaysReceivedConst(in []*callgraph.Edge, par *ssa.Parameter, 
 	seenOrig := ""
 	for _, edge := range in {
 		call := edge.Site.Common()
+		if pos >= len(call.Args) {
+			// TODO: investigate? Weird crash in
+			// internal/x/net/http2/hpack/hpack_test.go, where we
+			// roughly do: "at := d.mustAt; at(3)".
+			return ""
+		}
 		cnst := constValue(call.Args[pos])
 		if cnst == nil {
 			return "" // not a constant
@@ -731,16 +791,8 @@ func (c *Checker) multipleImpls(pkg *packages.Package, fn *ssa.Function) bool {
 	path := c.prog.Fset.Position(fn.Pos()).Filename
 	count := c.declCounts(filepath.Dir(path), pkg.Types.Name())
 	name := fn.Name()
-	if fn.Signature.Recv() != nil {
-		tp := fn.Params[0].Type()
-		for {
-			ptr, ok := tp.(*types.Pointer)
-			if !ok {
-				break
-			}
-			tp = ptr.Elem()
-		}
-		named := tp.(*types.Named)
+	if recv := fn.Signature.Recv(); recv != nil {
+		named := findNamed(recv.Type())
 		name = named.Obj().Name() + "." + name
 	}
 	return count[name] > 1
