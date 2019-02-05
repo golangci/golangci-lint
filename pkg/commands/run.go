@@ -363,6 +363,8 @@ func (e *Executor) createPrinter() (printers.Printer, error) {
 		p = printers.NewTab(e.cfg.Output.PrintLinterName, e.log.Child("tab_printer"))
 	case config.OutFormatCheckstyle:
 		p = printers.NewCheckstyle()
+	case config.OutFormatCodeClimate:
+		p = printers.NewCodeClimate()
 	default:
 		return nil, fmt.Errorf("unknown output format %s", format)
 	}

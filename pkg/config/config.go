@@ -10,6 +10,7 @@ const (
 	OutFormatColoredLineNumber = "colored-line-number"
 	OutFormatTab               = "tab"
 	OutFormatCheckstyle        = "checkstyle"
+	OutFormatCodeClimate       = "code-climate"
 )
 
 var OutFormats = []string{
@@ -18,6 +19,7 @@ var OutFormats = []string{
 	OutFormatJSON,
 	OutFormatTab,
 	OutFormatCheckstyle,
+	OutFormatCodeClimate,
 }
 
 type ExcludePattern struct {
