@@ -150,6 +150,8 @@ golang.org/x/tools v0.0.0-20181201035826-d0ca3933b724/go.mod h1:n7NCudcB/nEzxVGm
 golang.org/x/tools v0.0.0-20181205014116-22934f0fdb62/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=
 golang.org/x/tools v0.0.0-20181220024903-92cdcd90bf52 h1:oOIe9Zzq27JsS/3ACpGF1HwWnWNflZWT/3EvM7mtcEk=
 golang.org/x/tools v0.0.0-20181220024903-92cdcd90bf52/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=
+golang.org/x/tools v0.0.0-20190205201329-379209517ffe h1:wgpl8ZFbbyCTwUEyUPYafSzqRqUUGAuN9JSXU9iBjts=
+golang.org/x/tools v0.0.0-20190205201329-379209517ffe/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=
 gopkg.in/airbrake/gobrake.v2 v2.0.9 h1:7z2uVWwn7oVeeugY1DtlPAy5H+KYgB1KeKTnqjNatLo=
 gopkg.in/airbrake/gobrake.v2 v2.0.9/go.mod h1:/h5ZAUhDkGaJfjzjKLSjv6zCL6O0LLBxU4K+aSYdM/U=
 gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405 h1:yhCVgyC4o1eVCa2tZl7eS0r+SDo693bJlVdllGtEeKM=
