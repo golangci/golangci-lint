@@ -1,6 +1,9 @@
 package config
 
 import (
+	"errors"
+	"fmt"
+	"regexp"
 	"time"
 )
 
@@ -231,6 +234,37 @@ type ExcludeRule struct {
 	Linters []string
 	Path    string
 	Text    string
+}
+
+func validateOptionalRegex(value string) error {
+	if value == "" {
+		return nil
+	}
+	_, err := regexp.Compile(value)
+	return err
+}
+
+func (e ExcludeRule) Validate() error {
+	if err := validateOptionalRegex(e.Path); err != nil {
+		return fmt.Errorf("invalid path regex: %v", err)
+	}
+	if err := validateOptionalRegex(e.Text); err != nil {
+		return fmt.Errorf("invalid text regex: %v", err)
+	}
+	nonBlank := 0
+	if len(e.Linters) > 0 {
+		nonBlank++
+	}
+	if e.Path != "" {
+		nonBlank++
+	}
+	if e.Text != "" {
+		nonBlank++
+	}
+	if nonBlank < 2 {
+		return errors.New("at least 2 of (text, path, linters) should be set")
+	}
+	return nil
 }
 
 type Issues struct {
