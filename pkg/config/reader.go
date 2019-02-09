@@ -105,6 +105,11 @@ func (r *FileReader) validateConfig() error {
 	if c.Run.IsVerbose {
 		return errors.New("can't set run.verbose option with config: only on command-line")
 	}
+	for i, rule := range c.Issues.ExcludeRules {
+		if err := rule.Validate(); err != nil {
+			return fmt.Errorf("error in exclude rule #%d: %v", i, err)
+		}
+	}
 
 	return nil
 }

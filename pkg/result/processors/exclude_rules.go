@@ -55,7 +55,6 @@ func NewExcludeRules(rules []ExcludeRule) *ExcludeRules {
 		if rule.Path != "" {
 			parsedRule.path = regexp.MustCompile(rule.Path)
 		}
-		// TODO: Forbid text-only, linter-only or path-only exclude rule.
 		r.rules = append(r.rules, parsedRule)
 	}
 	return r
