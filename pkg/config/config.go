@@ -227,9 +227,16 @@ type Linters struct {
 	Presets []string
 }
 
+type ExcludeRule struct {
+	Linters []string
+	Path    string
+	Text    string
+}
+
 type Issues struct {
-	ExcludePatterns    []string `mapstructure:"exclude"`
-	UseDefaultExcludes bool     `mapstructure:"exclude-use-default"`
+	ExcludePatterns    []string      `mapstructure:"exclude"`
+	ExcludeRules       []ExcludeRule `mapstructure:"exclude-rules"`
+	UseDefaultExcludes bool          `mapstructure:"exclude-use-default"`
 
 	MaxIssuesPerLinter int `mapstructure:"max-issues-per-linter"`
 	MaxSameIssues      int `mapstructure:"max-same-issues"`
