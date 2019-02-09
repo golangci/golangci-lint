@@ -68,7 +68,6 @@ func (r ExcludeRules) Process(issues []result.Issue) ([]result.Issue, error) {
 	if len(r.rules) == 0 {
 		return issues, nil
 	}
-	// TODO: Concurrency?
 	return filterIssues(issues, func(i *result.Issue) bool {
 		for _, rule := range r.rules {
 			if rule.Match(i) {
