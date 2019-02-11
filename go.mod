@@ -61,7 +61,7 @@ require (
 	gopkg.in/yaml.v2 v2.2.1
 	mvdan.cc/interfacer v0.0.0-20180901003855-c20040233aed
 	mvdan.cc/lint v0.0.0-20170908181259-adc824a0674b // indirect
-	mvdan.cc/unparam v0.0.0-20190124213536-cc9d2fb52971
+	mvdan.cc/unparam v0.0.0-20190124213536-fbb59629db34
 	sourcegraph.com/sourcegraph/go-diff v0.0.0-20171119081133-3f415a150aec
 	sourcegraph.com/sqs/pbtypes v0.0.0-20160107090929-4d1b9dc7ffc3 // indirect
 )

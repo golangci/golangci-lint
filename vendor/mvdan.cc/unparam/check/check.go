@@ -21,8 +21,6 @@ import (
 	"sort"
 	"strings"
 
-	"golang.org/x/tools/go/callgraph"
-	"golang.org/x/tools/go/callgraph/cha"
 	"golang.org/x/tools/go/packages"
 	"golang.org/x/tools/go/ssa"
 	"golang.org/x/tools/go/ssa/ssautil"
@@ -50,9 +48,8 @@ func UnusedParams(tests bool, exported, debug bool, args ...string) ([]string, e
 // UnusedParams instead, unless you want to use a *loader.Program and
 // *ssa.Program directly.
 type Checker struct {
-	pkgs  []*packages.Package
-	prog  *ssa.Program
-	graph *callgraph.Graph
+	pkgs []*packages.Package
+	prog *ssa.Program
 
 	wd string
 
@@ -71,11 +68,20 @@ type Checker struct {
 	// to the declaration, as that could be either a FuncDecl or FuncLit.
 	funcBodyByPos map[token.Pos]*ast.BlockStmt
 
-	typesImplementing map[*types.Named]bool
+	// typesImplementing records the method names that each named type needs
+	// to typecheck properly, as they're required to implement interfaces.
+	typesImplementing map[*types.Named][]string
 
-	// Funcs used as a struct field or a func call argument. These are very
-	// often signatures which cannot be changed.
-	funcUsedAs map[*ssa.Function]string
+	// localCallSites is a very simple form of a callgraph, only recording
+	// direct function calls within a single package.
+	localCallSites map[*ssa.Function][]ssa.CallInstruction
+
+	// These three maps record whether an entire func's signature cannot be
+	// changed, or only its list of parameters or results.
+
+	signRequiredBy    map[*ssa.Function]string
+	paramsRequiredBy  map[*ssa.Function]string
+	resultsRequiredBy map[*ssa.Function]string
 }
 
 var errorType = types.Universe.Lookup("error").Type()
@@ -182,7 +188,7 @@ func (c *Checker) Check() ([]Issue, error) {
 	c.cachedDeclCounts = make(map[string]map[string]int)
 	c.callByPos = make(map[token.Pos]*ast.CallExpr)
 	c.funcBodyByPos = make(map[token.Pos]*ast.BlockStmt)
-	c.typesImplementing = make(map[*types.Named]bool)
+	c.typesImplementing = make(map[*types.Named][]string)
 
 	wantPkg := make(map[*types.Package]*packages.Package)
 	genFiles := make(map[string]bool)
@@ -200,16 +206,13 @@ func (c *Checker) Check() ([]Issue, error) {
 						len(node.Names) != 1 || node.Names[0].Name != "_" {
 						break
 					}
-					_, ok := pkg.TypesInfo.TypeOf(node.Type).Underlying().(*types.Interface)
+					iface, ok := pkg.TypesInfo.TypeOf(node.Type).Underlying().(*types.Interface)
 					if !ok {
 						break
 					}
+					// var _ someIface = named
 					valTyp := pkg.TypesInfo.Types[node.Values[0]].Type
-					named := findNamed(valTyp)
-					if named == nil {
-						break
-					}
-					c.typesImplementing[named] = true
+					c.addImplementing(findNamed(valTyp), iface)
 				case *ast.CallExpr:
 					c.callByPos[node.Lparen] = node
 				// ssa.Function.Pos returns the declaring
@@ -224,40 +227,121 @@ func (c *Checker) Check() ([]Issue, error) {
 			})
 		}
 	}
-	c.graph = cha.CallGraph(c.prog)
-	c.graph.DeleteSyntheticNodes()
-
 	allFuncs := ssautil.AllFunctions(c.prog)
 
-	c.funcUsedAs = make(map[*ssa.Function]string)
-	for fn := range allFuncs {
-		for _, b := range fn.Blocks {
+	// map from *ssa.FreeVar to *ssa.Function, to find function literals
+	// behind closure vars in the simpler scenarios.
+	freeVars := map[*ssa.FreeVar]*ssa.Function{}
+	for curFunc := range allFuncs {
+		for _, b := range curFunc.Blocks {
 			for _, instr := range b.Instrs {
+				instr, ok := instr.(*ssa.MakeClosure)
+				if !ok {
+					continue
+				}
+				fn := instr.Fn.(*ssa.Function)
+				for i, fv := range fn.FreeVars {
+					binding := instr.Bindings[i]
+					alloc, ok := binding.(*ssa.Alloc)
+					if !ok {
+						continue
+					}
+					for _, ref := range *alloc.Referrers() {
+						store, ok := ref.(*ssa.Store)
+						if !ok {
+							continue
+						}
+						if fn, ok := store.Val.(*ssa.Function); ok {
+							freeVars[fv] = fn
+							break
+						}
+					}
+				}
+			}
+		}
+	}
+
+	c.signRequiredBy = make(map[*ssa.Function]string)
+	c.paramsRequiredBy = make(map[*ssa.Function]string)
+	c.resultsRequiredBy = make(map[*ssa.Function]string)
+	c.localCallSites = make(map[*ssa.Function][]ssa.CallInstruction)
+	for curFunc := range allFuncs {
+		if strings.HasPrefix(curFunc.Synthetic, "wrapper for func") {
+			// Synthetic func wrappers are uninteresting, and can
+			// lead to false negatives.
+			continue
+		}
+		for _, b := range curFunc.Blocks {
+			for _, instr := range b.Instrs {
+				if instr, ok := instr.(ssa.CallInstruction); ok {
+					if fn := findFunction(freeVars, instr.Common().Value); fn != nil {
+						c.localCallSites[fn] = append(c.localCallSites[fn], instr)
+					}
+					fn := receivesExtractedArgs(freeVars, instr)
+					if fn != nil {
+						// fn(someFunc()) fixes params
+						c.paramsRequiredBy[fn] = "forwarded call"
+					}
+				}
 				switch instr := instr.(type) {
 				case *ssa.Call:
 					for _, arg := range instr.Call.Args {
-						if fn := findFunction(arg); fn != nil {
+						if fn := findFunction(freeVars, arg); fn != nil {
 							// someFunc(fn)
-							c.funcUsedAs[fn] = "param"
+							c.signRequiredBy[fn] = "call"
+						}
+					}
+				case *ssa.Phi:
+					for _, val := range instr.Edges {
+						if fn := findFunction(freeVars, val); fn != nil {
+							// nonConstVar = fn
+							c.signRequiredBy[fn] = "phi"
+						}
+					}
+				case *ssa.Return:
+					for _, val := range instr.Results {
+						if fn := findFunction(freeVars, val); fn != nil {
+							// return fn
+							c.signRequiredBy[fn] = "result"
+						}
+					}
+					if call := callExtract(instr, instr.Results); call != nil {
+						if fn := findFunction(freeVars, call.Call.Value); fn != nil {
+							// return fn()
+							c.resultsRequiredBy[fn] = "return"
 						}
 					}
 				case *ssa.Store:
-					if _, ok := instr.Addr.(*ssa.FieldAddr); !ok {
-						break
-					}
-					if fn := findFunction(instr.Val); fn != nil {
+					as := ""
+					switch instr.Addr.(type) {
+					case *ssa.FieldAddr:
 						// x.someField = fn
-						c.funcUsedAs[fn] = "field"
+						as = "field"
+					case *ssa.IndexAddr:
+						// x[someIndex] = fn
+						as = "element"
+					case *ssa.Global:
+						// someGlobal = fn
+						as = "global"
+					default:
+						continue
+					}
+					if fn := findFunction(freeVars, instr.Val); fn != nil {
+						c.signRequiredBy[fn] = as
 					}
 				case *ssa.MakeInterface:
-					if fn := findFunction(instr.X); fn != nil {
+					// someIface(named)
+					iface := instr.Type().Underlying().(*types.Interface)
+					c.addImplementing(findNamed(instr.X.Type()), iface)
+
+					if fn := findFunction(freeVars, instr.X); fn != nil {
 						// emptyIface = fn
-						c.funcUsedAs[fn] = "interface"
+						c.signRequiredBy[fn] = "interface"
 					}
 				case *ssa.ChangeType:
-					if fn := findFunction(instr.X); fn != nil {
+					if fn := findFunction(freeVars, instr.X); fn != nil {
 						// someType(fn)
-						c.funcUsedAs[fn] = "type conversion"
+						c.signRequiredBy[fn] = "type conversion"
 					}
 				}
 			}
@@ -303,6 +387,29 @@ func (c *Checker) Check() ([]Issue, error) {
 	return c.issues, nil
 }
 
+func stringsContains(list []string, elem string) bool {
+	for _, e := range list {
+		if e == elem {
+			return true
+		}
+	}
+	return false
+}
+
+func (c *Checker) addImplementing(named *types.Named, iface *types.Interface) {
+	if named == nil || iface == nil {
+		return
+	}
+	list := c.typesImplementing[named]
+	for i := 0; i < iface.NumMethods(); i++ {
+		name := iface.Method(i).Name()
+		if !stringsContains(list, name) {
+			list = append(list, name)
+		}
+	}
+	c.typesImplementing[named] = list
+}
+
 func findNamed(typ types.Type) *types.Named {
 	switch typ := typ.(type) {
 	case *types.Pointer:
@@ -314,13 +421,36 @@ func findNamed(typ types.Type) *types.Named {
 }
 
 // findFunction returns the function that is behind a value, if any.
-func findFunction(value ssa.Value) *ssa.Function {
+func findFunction(freeVars map[*ssa.FreeVar]*ssa.Function, value ssa.Value) *ssa.Function {
 	switch value := value.(type) {
 	case *ssa.Function:
+		name := value.Name()
+		if strings.HasSuffix(name, "$thunk") || strings.HasSuffix(name, "$bound") {
+			// Method wrapper funcs contain a single block, which
+			// calls the function being wrapped, and returns. We
+			// want the function being wrapped.
+			for _, instr := range value.Blocks[0].Instrs {
+				call, ok := instr.(*ssa.Call)
+				if !ok {
+					continue
+				}
+				if callee := call.Call.StaticCallee(); callee != nil {
+					return callee
+				}
+			}
+			return nil // no static callee?
+		}
 		return value
 	case *ssa.MakeClosure:
 		// closure of a func
-		return value.Fn.(*ssa.Function)
+		return findFunction(freeVars, value.Fn)
+	case *ssa.UnOp:
+		if value.Op != token.MUL {
+			break
+		}
+		if fv, ok := value.X.(*ssa.FreeVar); ok {
+			return freeVars[fv]
+		}
 	}
 	return nil
 }
@@ -349,22 +479,14 @@ func (c *Checker) checkFunc(fn *ssa.Function, pkg *packages.Package) {
 		c.debug("  skip - dummy implementation\n")
 		return
 	}
-	var inboundCalls []*callgraph.Edge
-	if node := c.graph.Nodes[fn]; node != nil {
-		inboundCalls = node.In
-	}
-	if requiredViaCall(fn, inboundCalls) {
-		c.debug("  skip - type is required via call\n")
-		return
-	}
-	if usedAs := c.funcUsedAs[fn]; usedAs != "" {
-		c.debug("  skip - func is used as a %s\n", usedAs)
+	if by := c.signRequiredBy[fn]; by != "" {
+		c.debug("  skip - func signature required by %s\n", by)
 		return
 	}
 	if recv := fn.Signature.Recv(); recv != nil {
 		named := findNamed(recv.Type())
-		if c.typesImplementing[named] {
-			c.debug("  skip - receiver must implement an interface\n")
+		if stringsContains(c.typesImplementing[named], fn.Name()) {
+			c.debug("  skip - method required to implement an interface\n")
 			return
 		}
 	}
@@ -372,12 +494,18 @@ func (c *Checker) checkFunc(fn *ssa.Function, pkg *packages.Package) {
 		c.debug("  skip - multiple implementations via build tags\n")
 		return
 	}
+	paramsBy := c.paramsRequiredBy[fn]
+	resultsBy := c.resultsRequiredBy[fn]
+	callSites := c.localCallSites[fn]
 
 	results := fn.Signature.Results()
 	sameConsts := make([]*ssa.Const, results.Len())
 	numRets := 0
 	allRetsExtracting := true
 	for _, block := range fn.Blocks {
+		if resultsBy != "" {
+			continue // we can't change the returns
+		}
 		last := block.Instrs[len(block.Instrs)-1]
 		ret, ok := last.(*ssa.Return)
 		if !ok {
@@ -406,9 +534,6 @@ func (c *Checker) checkFunc(fn *ssa.Function, pkg *packages.Package) {
 			// false positives)
 			continue
 		}
-		if calledInReturn(inboundCalls) {
-			continue
-		}
 		res := results.At(i)
 		name := paramDesc(i, res)
 		c.addIssue(fn, res.Pos(), "result %s is always %s", name, constValueString(cnst))
@@ -416,6 +541,9 @@ func (c *Checker) checkFunc(fn *ssa.Function, pkg *packages.Package) {
 
 resLoop:
 	for i := 0; i < results.Len(); i++ {
+		if resultsBy != "" {
+			continue // we can't change the returns
+		}
 		if allRetsExtracting {
 			continue
 		}
@@ -426,8 +554,8 @@ resLoop:
 			continue
 		}
 		count := 0
-		for _, edge := range inboundCalls {
-			val := edge.Site.Value()
+		for _, site := range callSites {
+			val := site.Value()
 			if val == nil { // e.g. go statement
 				count++
 				continue
@@ -454,6 +582,9 @@ resLoop:
 	}
 
 	for i, par := range fn.Params {
+		if paramsBy != "" {
+			continue // we can't change the params
+		}
 		if i == 0 && fn.Signature.Recv() != nil { // receiver
 			continue
 		}
@@ -468,7 +599,7 @@ resLoop:
 			continue
 		}
 		reason := "is unused"
-		constStr := c.alwaysReceivedConst(inboundCalls, par, i)
+		constStr := c.alwaysReceivedConst(callSites, par, i)
 		if constStr != "" {
 			reason = fmt.Sprintf("always receives %s", constStr)
 		} else if c.anyRealUse(par, i, pkg) {
@@ -477,43 +608,6 @@ resLoop:
 		}
 		c.addIssue(fn, par.Pos(), "%s %s", par.Name(), reason)
 	}
-}
-
-// calledInReturn reports whether any of a function's inbound calls happened
-// directly as a return statement. That is, if function "foo" was used via
-// "return foo()". This means that the result parameters of the function cannot
-// be changed without breaking other code.
-func calledInReturn(in []*callgraph.Edge) bool {
-	for _, edge := range in {
-		val := edge.Site.Value()
-		if val == nil { // e.g. go statement
-			continue
-		}
-		refs := *val.Referrers()
-		if len(refs) == 0 { // no use of return values
-			continue
-		}
-		allReturnExtracts := true
-		for _, instr := range refs {
-			switch x := instr.(type) {
-			case *ssa.Return:
-				return true
-			case *ssa.Extract:
-				refs := *x.Referrers()
-				if len(refs) != 1 {
-					allReturnExtracts = false
-					break
-				}
-				if _, ok := refs[0].(*ssa.Return); !ok {
-					allReturnExtracts = false
-				}
-			}
-		}
-		if allReturnExtracts {
-			return true
-		}
-	}
-	return false
 }
 
 // nodeStr stringifies a syntax tree node. It is only meant for simple nodes,
@@ -534,8 +628,8 @@ func nodeStr(node ast.Node) string {
 // This function is used to recommend that the parameter be replaced by a direct
 // use of the constant. To avoid false positives, the function will return false
 // if the number of inbound calls is too low.
-func (c *Checker) alwaysReceivedConst(in []*callgraph.Edge, par *ssa.Parameter, pos int) string {
-	if len(in) < 4 {
+func (c *Checker) alwaysReceivedConst(callSites []ssa.CallInstruction, par *ssa.Parameter, pos int) string {
+	if len(callSites) < 4 {
 		// We can't possibly receive the same constant value enough
 		// times, hence a potential false positive.
 		return ""
@@ -552,8 +646,8 @@ func (c *Checker) alwaysReceivedConst(in []*callgraph.Edge, par *ssa.Parameter, 
 		origPos--
 	}
 	seenOrig := ""
-	for _, edge := range in {
-		call := edge.Site.Common()
+	for _, site := range callSites {
+		call := site.Common()
 		if pos >= len(call.Args) {
 			// TODO: investigate? Weird crash in
 			// internal/x/net/http2/hpack/hpack_test.go, where we
@@ -612,8 +706,15 @@ func (c *Checker) anyRealUse(par *ssa.Parameter, pos int, pkg *packages.Package)
 			if any {
 				return false
 			}
-			if id, ok := node.(*ast.Ident); ok {
-				obj := pkg.TypesInfo.Uses[id]
+			asgn, ok := node.(*ast.AssignStmt)
+			if !ok || asgn.Tok != token.ASSIGN || len(asgn.Lhs) != 1 || len(asgn.Rhs) != 1 {
+				return true
+			}
+			if left, ok := asgn.Lhs[0].(*ast.Ident); !ok || left.Name != "_" {
+				return true
+			}
+			if right, ok := asgn.Rhs[0].(*ast.Ident); ok {
+				obj := pkg.TypesInfo.Uses[right]
 				if obj != nil && obj.Pos() == par.Pos() {
 					any = true
 				}
@@ -798,29 +899,72 @@ func (c *Checker) multipleImpls(pkg *packages.Package, fn *ssa.Function) bool {
 	return count[name] > 1
 }
 
-// receivesExtractedArgs reports whether a function call got all of its
-// arguments via another function call. That is, if a call to function "foo" was
-// of the form "foo(bar())".
-func receivesExtractedArgs(sign *types.Signature, call *ssa.Call) bool {
-	if call == nil {
-		return false
+// receivesExtractedArgs returns the statically called function, if its multiple
+// arguments were all received via another function call. That is, if a call to
+// function "foo" was of the form "foo(bar())". This often means that the
+// parameters in "foo" are difficult to remove, even if unused.
+func receivesExtractedArgs(freeVars map[*ssa.FreeVar]*ssa.Function, call ssa.CallInstruction) *ssa.Function {
+	comm := call.Common()
+	callee := findFunction(freeVars, comm.Value)
+	if callee == nil {
+		return nil
 	}
-	if sign.Params().Len() < 2 {
-		return false // extracting into one param is ok
+	if callee.Signature.Params().Len() < 2 {
+		// there aren't multiple parameters
+		return nil
 	}
-	args := call.Operands(nil)
-	for i, arg := range args {
-		if i == 0 {
-			continue // *ssa.Function, func itself
-		}
-		if i == 1 && sign.Recv() != nil {
-			continue // method receiver
-		}
-		if _, ok := (*arg).(*ssa.Extract); !ok {
-			return false
+	args := comm.Args
+	if callee.Signature.Recv() != nil {
+		// skip the receiver argument
+		args = args[1:]
+	}
+	if c := callExtract(call, args); c != nil {
+		return callee
+	}
+	return nil
+}
+
+// callExtract returns the call instruction fn(...) if it is used directly as
+// arguments to the parent instruction, such as fn2(fn(...)) or return fn(...).
+func callExtract(parent ssa.Instruction, values []ssa.Value) *ssa.Call {
+	if len(values) == 1 {
+		if call, ok := values[0].(*ssa.Call); ok {
+			return call
 		}
 	}
-	return true
+	var prev *ssa.Call
+	for i, val := range values {
+		ext, ok := val.(*ssa.Extract)
+		if !ok {
+			return nil
+		}
+		if ext.Index != i {
+			return nil // not extracted in the same order
+		}
+		call, ok := ext.Tuple.(*ssa.Call)
+		if !ok {
+			return nil // not a call
+		}
+		if prev == nil {
+			prev = call
+		} else if prev != call {
+			return nil // not the same calls
+		}
+	}
+	if prev == nil {
+		return nil
+	}
+	if prev.Call.Signature().Results().Len() != len(values) {
+		return nil // not extracting all the results
+	}
+	if prev.Pos() < parent.Pos() {
+		// Of the form:
+		//
+		//   a, b := fn()
+		//   fn2(a, b)
+		return nil
+	}
+	return prev
 }
 
 // paramDesc returns a string describing a parameter variable. If the parameter
@@ -832,43 +976,4 @@ func paramDesc(i int, v *types.Var) string {
 		return name
 	}
 	return fmt.Sprintf("%d (%s)", i, v.Type().String())
-}
-
-// requiredViaCall reports whether a function has any inbound call that strongly
-// depends on the function's signature. For example, if the function is accessed
-// via a field, or if it gets its arguments from another function call. In these
-// cases, changing the function signature would mean a larger refactor.
-func requiredViaCall(fn *ssa.Function, calls []*callgraph.Edge) bool {
-	for _, edge := range calls {
-		call := edge.Site.Value()
-		if receivesExtractedArgs(fn.Signature, call) {
-			// called via fn(x())
-			return true
-		}
-		switch edge.Site.Common().Value.(type) {
-		case *ssa.Parameter:
-			// Func used as parameter; not safe.
-			return true
-		case *ssa.Call:
-			// Called through an interface; not safe.
-			return true
-		case *ssa.TypeAssert:
-			// Called through a type assertion; not safe.
-			return true
-		case *ssa.Const:
-			// Conservative "may implement" edge; not safe.
-			return true
-		case *ssa.UnOp:
-			// TODO: why is this not safe?
-			return true
-		case *ssa.Phi:
-			// We may run this function or another; not safe.
-			return true
-		case *ssa.Function:
-			// Called directly; the call site can easily be adapted.
-		default:
-			// Other instructions are safe or non-interesting.
-		}
-	}
-	return false
 }

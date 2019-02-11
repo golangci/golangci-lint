@@ -207,8 +207,6 @@ golang.org/x/tools/go/internal/packagesdriver
 golang.org/x/tools/internal/gopathwalk
 golang.org/x/tools/internal/semver
 golang.org/x/tools/internal/module
-golang.org/x/tools/go/callgraph
-golang.org/x/tools/go/callgraph/cha
 golang.org/x/tools/go/internal/gcimporter
 golang.org/x/tools/internal/fastwalk
 # gopkg.in/yaml.v2 v2.2.1
@@ -217,7 +215,7 @@ gopkg.in/yaml.v2
 mvdan.cc/interfacer/check
 # mvdan.cc/lint v0.0.0-20170908181259-adc824a0674b
 mvdan.cc/lint
-# mvdan.cc/unparam v0.0.0-20190124213536-cc9d2fb52971
+# mvdan.cc/unparam v0.0.0-20190124213536-fbb59629db34
 mvdan.cc/unparam/check
 # sourcegraph.com/sourcegraph/go-diff v0.0.0-20171119081133-3f415a150aec
 sourcegraph.com/sourcegraph/go-diff/diff
