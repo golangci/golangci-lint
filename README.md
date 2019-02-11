@@ -501,7 +501,6 @@ Global Flags:
       --cpu-profile-path string   Path to CPU profile output file
       --mem-profile-path string   Path to memory profile output file
   -v, --verbose                   verbose output
-      --version                   Print version
 
 ```
 
