@@ -48,6 +48,9 @@ func init() {
 		c.matchers = map[string]func(*ast.CallExpr) bool{
 			"copy": m["(x, x, ...)"],
 
+			"math.Max": m["(x, x, ...)"],
+			"math.Min": m["(x, x, ...)"],
+
 			"reflect.Copy":      m["(x, x, ...)"],
 			"reflect.DeepEqual": m["(x, x, ...)"],
 

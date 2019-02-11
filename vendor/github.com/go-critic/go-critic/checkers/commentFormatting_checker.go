@@ -20,7 +20,13 @@ func init() {
 	info.After = `// This is a comment`
 
 	collection.AddChecker(&info, func(ctx *lintpack.CheckerContext) lintpack.FileWalker {
-		pragmaRE := regexp.MustCompile(`(?m)^//\w+:.*$`)
+		parts := []string{
+			`^//\w+:.*$`,      //key: value
+			`^//nolint$`,      //nolint
+			`^//line /.*:\d+`, //line /path/to/file:123
+		}
+		pat := "(?m)" + strings.Join(parts, "|")
+		pragmaRE := regexp.MustCompile(pat)
 		return astwalk.WalkerForComment(&commentFormattingChecker{
 			ctx:      ctx,
 			pragmaRE: pragmaRE,

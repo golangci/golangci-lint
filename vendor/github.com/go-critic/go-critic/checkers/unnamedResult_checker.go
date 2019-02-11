@@ -44,7 +44,7 @@ func (c *unnamedResultChecker) VisitFuncDecl(decl *ast.FuncDecl) {
 	switch {
 	case results == nil:
 		return // Function has no results
-	case len(results.List) > 0 && results.List[0].Names != nil:
+	case len(results.List) != 0 && results.List[0].Names != nil:
 		return // Skip named results
 	}
 

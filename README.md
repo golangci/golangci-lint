@@ -779,7 +779,6 @@ linters-settings:
       - experimental
     disabled-checks:
       - wrapperFunc
-      - commentFormatting # https://github.com/go-critic/go-critic/issues/755
 
 linters:
   enable-all: true
