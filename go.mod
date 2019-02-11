@@ -55,7 +55,7 @@ require (
 	github.com/spf13/viper v1.0.2
 	github.com/stretchr/testify v1.2.1
 	golang.org/x/crypto v0.0.0-20180505025534-4ec37c66abab // indirect
-	golang.org/x/tools v0.0.0-20190125232054-d66bd3c5d5a6
+	golang.org/x/tools v0.0.0-20190125232054-379209517ffe
 	gopkg.in/airbrake/gobrake.v2 v2.0.9 // indirect
 	gopkg.in/gemnasium/logrus-airbrake-hook.v2 v2.1.2 // indirect
 	gopkg.in/yaml.v2 v2.2.1
