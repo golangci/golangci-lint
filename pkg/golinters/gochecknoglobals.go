@@ -49,7 +49,7 @@ func (lint Gochecknoglobals) checkFile(f *ast.File, fset *token.FileSet) []resul
 				}
 
 				res = append(res, result.Issue{
-					Pos:        fset.Position(genDecl.TokPos),
+					Pos:        fset.Position(vn.Pos()),
 					Text:       fmt.Sprintf("%s is a global variable", formatCode(vn.Name, nil)),
 					FromLinter: lint.Name(),
 				})
