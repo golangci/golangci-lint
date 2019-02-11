@@ -688,7 +688,7 @@ linters-settings:
 
     settings: # settings passed to gocritic
       captLocal: # must be valid enabled check name
-        checkLocals: true
+        paramsOnly: true
       rangeValCopy:
         sizeThreshold: 32
 
