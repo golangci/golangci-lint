@@ -22,6 +22,10 @@ func (Unparam) Desc() string {
 func (lint Unparam) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issue, error) {
 	us := &lintCtx.Settings().Unparam
 
+	if us.Algo != "cha" {
+		lintCtx.Log.Warnf("`linters-settings.unparam.algo` isn't supported by the newest `unparam`")
+	}
+
 	c := &check.Checker{}
 	c.CheckExportedFuncs(us.CheckExported)
 	c.Packages(lintCtx.Packages)
