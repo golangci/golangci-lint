@@ -14,6 +14,16 @@ const (
 	Globals = "global"
 )
 
+// GlobalOption defines the name of the global options
+type GlobalOption string
+
+const (
+	// Nosec global option for #nosec directive
+	Nosec GlobalOption = "nosec"
+	// Audit global option which indicates that gosec runs in audit mode
+	Audit GlobalOption = "audit"
+)
+
 // Config is used to provide configuration and customization to each of the rules.
 type Config map[string]interface{}
 
@@ -22,7 +32,7 @@ type Config map[string]interface{}
 // or from a *os.File.
 func NewConfig() Config {
 	cfg := make(Config)
-	cfg[Globals] = make(map[string]string)
+	cfg[Globals] = make(map[GlobalOption]string)
 	return cfg
 }
 
@@ -65,9 +75,9 @@ func (c Config) Set(section string, value interface{}) {
 }
 
 // GetGlobal returns value associated with global configuration option
-func (c Config) GetGlobal(option string) (string, error) {
+func (c Config) GetGlobal(option GlobalOption) (string, error) {
 	if globals, ok := c[Globals]; ok {
-		if settings, ok := globals.(map[string]string); ok {
+		if settings, ok := globals.(map[GlobalOption]string); ok {
 			if value, ok := settings[option]; ok {
 				return value, nil
 			}
@@ -78,11 +88,20 @@ func (c Config) GetGlobal(option string) (string, error) {
 
 }
 
-// SetGlobal associates a value with a global configuration ooption
-func (c Config) SetGlobal(option, value string) {
+// SetGlobal associates a value with a global configuration option
+func (c Config) SetGlobal(option GlobalOption, value string) {
 	if globals, ok := c[Globals]; ok {
-		if settings, ok := globals.(map[string]string); ok {
+		if settings, ok := globals.(map[GlobalOption]string); ok {
 			settings[option] = value
 		}
 	}
+}
+
+// IsGlobalEnabled checks if a global option is enabled
+func (c Config) IsGlobalEnabled(option GlobalOption) (bool, error) {
+	value, err := c.GetGlobal(option)
+	if err != nil {
+		return false, err
+	}
+	return (value == "true" || value == "enabled"), nil
 }

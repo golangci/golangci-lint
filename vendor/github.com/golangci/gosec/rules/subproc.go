@@ -40,7 +40,7 @@ func (r *subprocess) ID() string {
 //
 // syscall.Exec("echo", "foobar" + tainted)
 func (r *subprocess) Match(n ast.Node, c *gosec.Context) (*gosec.Issue, error) {
-	if node := r.ContainsCallExpr(n, c); node != nil {
+	if node := r.ContainsCallExpr(n, c, false); node != nil {
 		for _, arg := range node.Args {
 			if ident, ok := arg.(*ast.Ident); ok {
 				obj := c.Info.ObjectOf(ident)

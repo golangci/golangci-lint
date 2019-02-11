@@ -1,8 +1,12 @@
+# transient files
+/image
+
 # Compiled Object files, Static and Dynamic libs (Shared Objects)
 *.o
 *.a
 *.so
 *.swp
+/gosec
 
 # Folders
 _obj

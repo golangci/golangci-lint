@@ -19,6 +19,9 @@ test: bootstrap
 	gosec ./...
 	ginkgo -r -v
 
+test-coverage:
+	go test -race -coverprofile=coverage.txt -covermode=atomic
+
 build:
 	go build -o $(BIN) ./cmd/gosec/
 
@@ -33,7 +36,7 @@ release: bootstrap
 build-linux:
 	CGO_ENABLED=$(CGO_ENABLED) GOOS=linux GOARCH=amd64 go build -ldflags $(BUILDFLAGS) -o $(BIN) ./cmd/gosec/
 
-image: build-linux
+image:
 	@echo "Building the Docker image..."
 	docker build -t $(IMAGE_REPO)/$(BIN):$(GIT_TAG) .
 	docker tag $(IMAGE_REPO)/$(BIN):$(GIT_TAG) $(IMAGE_REPO)/$(BIN):latest

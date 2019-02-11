@@ -34,7 +34,7 @@ const (
 	High
 )
 
-// Issue is returnd by a gosec rule if it discovers an issue with the scanned code.
+// Issue is returned by a gosec rule if it discovers an issue with the scanned code.
 type Issue struct {
 	Severity   Score  `json:"severity"`   // issue severity (how problematic it is)
 	Confidence Score  `json:"confidence"` // issue confidence (how sure we are we found it)
@@ -46,7 +46,7 @@ type Issue struct {
 }
 
 // MetaData is embedded in all gosec rules. The Severity, Confidence and What message
-// will be passed tbhrough to reported issues.
+// will be passed through to reported issues.
 type MetaData struct {
 	ID         string
 	Severity   Score

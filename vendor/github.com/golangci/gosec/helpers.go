@@ -165,8 +165,54 @@ func GetCallInfo(n ast.Node, ctx *Context) (string, string, error) {
 	return "", "", fmt.Errorf("unable to determine call info")
 }
 
+// GetCallStringArgsValues returns the values of strings arguments if they can be resolved
+func GetCallStringArgsValues(n ast.Node, ctx *Context) []string {
+	values := []string{}
+	switch node := n.(type) {
+	case *ast.CallExpr:
+		for _, arg := range node.Args {
+			switch param := arg.(type) {
+			case *ast.BasicLit:
+				value, err := GetString(param)
+				if err == nil {
+					values = append(values, value)
+				}
+			case *ast.Ident:
+				values = append(values, GetIdentStringValues(param)...)
+			}
+		}
+	}
+	return values
+}
+
+// GetIdentStringValues return the string values of an Ident if they can be resolved
+func GetIdentStringValues(ident *ast.Ident) []string {
+	values := []string{}
+	obj := ident.Obj
+	if obj != nil {
+		switch decl := obj.Decl.(type) {
+		case *ast.ValueSpec:
+			for _, v := range decl.Values {
+				value, err := GetString(v)
+				if err == nil {
+					values = append(values, value)
+				}
+			}
+		case *ast.AssignStmt:
+			for _, v := range decl.Rhs {
+				value, err := GetString(v)
+				if err == nil {
+					values = append(values, value)
+				}
+			}
+		}
+
+	}
+	return values
+}
+
 // GetImportedName returns the name used for the package within the
-// code. It will resolve aliases and ignores initalization only imports.
+// code. It will resolve aliases and ignores initialization only imports.
 func GetImportedName(path string, ctx *Context) (string, bool) {
 	importName, imported := ctx.Imports.Imported[path]
 	if !imported {
@@ -183,7 +229,7 @@ func GetImportedName(path string, ctx *Context) (string, bool) {
 	return importName, true
 }
 
-// GetImportPath resolves the full import path of an identifer based on
+// GetImportPath resolves the full import path of an identifier based on
 // the imports in the current context.
 func GetImportPath(name string, ctx *Context) (string, bool) {
 	for path := range ctx.Imports.Imported {
@@ -257,7 +303,7 @@ func GetPkgAbsPath(pkgPath string) (string, error) {
 	return absPath, nil
 }
 
-// ConcatString recusively concatenates strings from a binary expression
+// ConcatString recursively concatenates strings from a binary expression
 func ConcatString(n *ast.BinaryExpr) (string, bool) {
 	var s string
 	// sub expressions are found in X object, Y object is always last BasicLit

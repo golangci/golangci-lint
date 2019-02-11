@@ -35,14 +35,15 @@ import (
 
 // The Context is populated with data parsed from the source code as it is scanned.
 // It is passed through to all rule functions as they are called. Rules may use
-// this data in conjunction withe the encoutered AST node.
+// this data in conjunction withe the encountered AST node.
 type Context struct {
 	FileSet  *token.FileSet
 	Comments ast.CommentMap
 	Info     *types.Info
 	Pkg      *types.Package
+	PkgFiles []*ast.File
 	Root     *ast.File
-	Config   map[string]interface{}
+	Config   Config
 	Imports  *ImportTracker
 	Ignores  []map[string]bool
 }
@@ -67,11 +68,11 @@ type Analyzer struct {
 	stats       *Metrics
 }
 
-// NewAnalyzer builds a new anaylzer.
+// NewAnalyzer builds a new analyzer.
 func NewAnalyzer(conf Config, logger *log.Logger) *Analyzer {
 	ignoreNoSec := false
-	if setting, err := conf.GetGlobal("nosec"); err == nil {
-		ignoreNoSec = setting == "true" || setting == "enabled"
+	if enabled, err := conf.IsGlobalEnabled(Nosec); err == nil {
+		ignoreNoSec = enabled
 	}
 	if logger == nil {
 		logger = log.New(os.Stderr, "[gosec]", log.LstdFlags)
@@ -147,6 +148,7 @@ func (gosec *Analyzer) ProcessProgram(builtPackage *loader.Program) {
 			gosec.context.Root = file
 			gosec.context.Info = &pkg.Info
 			gosec.context.Pkg = pkg.Pkg
+			gosec.context.PkgFiles = pkg.Files
 			gosec.context.Imports = NewImportTracker()
 			gosec.context.Imports.TrackPackages(gosec.context.Pkg.Imports()...)
 			ast.Walk(gosec, file)

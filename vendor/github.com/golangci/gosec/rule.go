@@ -27,7 +27,7 @@ type Rule interface {
 type RuleBuilder func(id string, c Config) (Rule, []ast.Node)
 
 // A RuleSet maps lists of rules to the type of AST node they should be run on.
-// The anaylzer will only invoke rules contained in the list associated with the
+// The analyzer will only invoke rules contained in the list associated with the
 // type of AST node it is currently visiting.
 type RuleSet map[reflect.Type][]Rule
 

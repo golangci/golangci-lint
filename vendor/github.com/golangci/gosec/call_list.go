@@ -15,7 +15,10 @@ package gosec
 
 import (
 	"go/ast"
+	"strings"
 )
+
+const vendorPath = "vendor/"
 
 type set map[string]bool
 
@@ -55,17 +58,27 @@ func (c CallList) Contains(selector, ident string) bool {
 
 // ContainsCallExpr resolves the call expression name and type
 /// or package and determines if it exists within the CallList
-func (c CallList) ContainsCallExpr(n ast.Node, ctx *Context) *ast.CallExpr {
+func (c CallList) ContainsCallExpr(n ast.Node, ctx *Context, stripVendor bool) *ast.CallExpr {
 	selector, ident, err := GetCallInfo(n, ctx)
 	if err != nil {
 		return nil
 	}
 
-	// Use only explicit path to reduce conflicts
-	if path, ok := GetImportPath(selector, ctx); ok && c.Contains(path, ident) {
-		return n.(*ast.CallExpr)
+	// Use only explicit path (optionally strip vendor path prefix) to reduce conflicts
+	path, ok := GetImportPath(selector, ctx)
+	if !ok {
+		return nil
+	}
+	if stripVendor {
+		if vendorIdx := strings.Index(path, vendorPath); vendorIdx >= 0 {
+			path = path[vendorIdx+len(vendorPath):]
+		}
+	}
+	if !c.Contains(path, ident) {
+		return nil
 	}
 
+	return n.(*ast.CallExpr)
 	/*
 		// Try direct resolution
 		if c.Contains(selector, ident) {
@@ -74,5 +87,4 @@ func (c CallList) ContainsCallExpr(n ast.Node, ctx *Context) *ast.CallExpr {
 		}
 	*/
 
-	return nil
 }

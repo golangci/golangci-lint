@@ -65,6 +65,7 @@ func Generate(filters ...RuleFilter) RuleList {
 		{"G104", "Audit errors not checked", NewNoErrorCheck},
 		{"G105", "Audit the use of big.Exp function", NewUsingBigExp},
 		{"G106", "Audit the use of ssh.InsecureIgnoreHostKey function", NewSSHHostKey},
+		{"G107", "Url provided to HTTP request as taint input", NewSSRFCheck},
 
 		// injection
 		{"G201", "SQL query construction using format string", NewSQLStrFormat},
@@ -74,7 +75,7 @@ func Generate(filters ...RuleFilter) RuleList {
 
 		// filesystem
 		{"G301", "Poor file permissions used when creating a directory", NewMkdirPerms},
-		{"G302", "Poor file permisions used when creation file or using chmod", NewFilePerms},
+		{"G302", "Poor file permissions used when creation file or using chmod", NewFilePerms},
 		{"G303", "Creating tempfile using a predictable path", NewBadTempFile},
 		{"G304", "File path provided as taint input", NewReadFile},
 		{"G305", "File path traversal when extracting zip archive", NewArchive},
