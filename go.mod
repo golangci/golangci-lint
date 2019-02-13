@@ -9,7 +9,6 @@ require (
 	github.com/go-lintpack/lintpack v0.5.2
 	github.com/go-ole/go-ole v1.2.1 // indirect
 	github.com/gobwas/glob v0.2.3 // indirect
-	github.com/gogo/protobuf v1.0.0 // indirect
 	github.com/golang/mock v1.1.1
 	github.com/golangci/check v0.0.0-20180506172741-cfe4005ccda2
 	github.com/golangci/dupl v0.0.0-20180902072040-3e9179ac440a
@@ -42,8 +41,6 @@ require (
 	github.com/pkg/errors v0.8.0
 	github.com/shirou/gopsutil v0.0.0-20180427012116-c95755e4bcd7
 	github.com/shirou/w32 v0.0.0-20160930032740-bb4de0191aa4 // indirect
-	github.com/shurcooL/go v0.0.0-20180423040247-9e1955d9fb6e // indirect
-	github.com/shurcooL/go-goon v0.0.0-20170922171312-37c2f522c041 // indirect
 	github.com/sirupsen/logrus v1.0.5
 	github.com/spf13/afero v1.1.0 // indirect
 	github.com/spf13/cast v1.2.0 // indirect
@@ -60,6 +57,5 @@ require (
 	mvdan.cc/interfacer v0.0.0-20180901003855-c20040233aed
 	mvdan.cc/lint v0.0.0-20170908181259-adc824a0674b // indirect
 	mvdan.cc/unparam v0.0.0-20190124213536-fbb59629db34
-	sourcegraph.com/sourcegraph/go-diff v0.0.0-20171119081133-3f415a150aec
-	sourcegraph.com/sqs/pbtypes v0.0.0-20160107090929-4d1b9dc7ffc3 // indirect
+	sourcegraph.com/sourcegraph/go-diff v0.5.1-0.20190210232911-dee78e514455
 )
