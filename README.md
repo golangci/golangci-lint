@@ -96,6 +96,11 @@ Local installation is not recommended for your CI pipeline. Only install the lin
 go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
 ```
 
+With `go1.11` or later you can get a particular version
+```bash
+GO111MODULE=on go get github.com/golangci/golangci-lint/cmd/golangci-lint@v1.14.1
+```
+
 #### MacOS
 
 You can also install it on MacOS using [brew](https://brew.sh/):
