@@ -1,6 +1,7 @@
 package processors
 
 import (
+	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
@@ -9,15 +10,17 @@ type MaxFromLinter struct {
 	lc    linterToCountMap
 	limit int
 	log   logutils.Log
+	cfg   *config.Config
 }
 
 var _ Processor = &MaxFromLinter{}
 
-func NewMaxFromLinter(limit int, log logutils.Log) *MaxFromLinter {
+func NewMaxFromLinter(limit int, log logutils.Log, cfg *config.Config) *MaxFromLinter {
 	return &MaxFromLinter{
 		lc:    linterToCountMap{},
 		limit: limit,
 		log:   log,
+		cfg:   cfg,
 	}
 }
 
@@ -27,6 +30,11 @@ func (p MaxFromLinter) Name() string {
 
 func (p *MaxFromLinter) Process(issues []result.Issue) ([]result.Issue, error) {
 	if p.limit <= 0 { // no limit
+		return issues, nil
+	}
+
+	if p.cfg.Issues.NeedFix {
+		// we need to fix all issues at once => we need to return all of them
 		return issues, nil
 	}
 

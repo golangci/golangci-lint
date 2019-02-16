@@ -22,9 +22,11 @@ type LintRunner struct {
 }
 
 func NewLintRunner(t assert.TestingT) *LintRunner {
+	log := logutils.NewStderrLog("test")
+	log.SetLevel(logutils.LogLevelInfo)
 	return &LintRunner{
 		t:   t,
-		log: logutils.NewStderrLog("test"),
+		log: log,
 	}
 }
 
@@ -67,7 +69,7 @@ func (r *RunResult) ExpectOutputContains(s string) *RunResult {
 }
 
 func (r *RunResult) ExpectOutputEq(s string) *RunResult {
-	assert.Equal(r.t, r.output, s, "exit code is %d", r.exitCode)
+	assert.Equal(r.t, s, r.output, "exit code is %d", r.exitCode)
 	return r
 }
 

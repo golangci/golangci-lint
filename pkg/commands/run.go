@@ -10,6 +10,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/golangci/golangci-lint/pkg/result/processors"
+
 	"github.com/fatih/color"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
@@ -177,7 +179,7 @@ func initFlagSet(fs *pflag.FlagSet, cfg *config.Config, m *lintersdb.Manager, is
 		wh("Show only new issues created after git revision `REV`"))
 	fs.StringVar(&ic.DiffPatchFilePath, "new-from-patch", "",
 		wh("Show only new issues created in git patch with file path `PATH`"))
-
+	fs.BoolVar(&ic.NeedFix, "fix", false, "Fix found issues (if it's supported by the linter)")
 }
 
 func (e *Executor) initRunConfiguration(cmd *cobra.Command) {
@@ -281,7 +283,9 @@ func (e *Executor) runAnalysis(ctx context.Context, args []string) (<-chan resul
 		return nil, err
 	}
 
-	return runner.Run(ctx, enabledLinters, lintCtx), nil
+	issuesCh := runner.Run(ctx, enabledLinters, lintCtx)
+	fixer := processors.NewFixer(e.cfg, e.log)
+	return fixer.Process(issuesCh), nil
 }
 
 func (e *Executor) setOutputToDevNull() (savedStdout, savedStderr *os.File) {

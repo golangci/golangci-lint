@@ -41,8 +41,8 @@ func printLinterConfigs(lcs []*linter.Config) {
 		if len(lc.AlternativeNames) != 0 {
 			altNamesStr = fmt.Sprintf(" (%s)", strings.Join(lc.AlternativeNames, ", "))
 		}
-		fmt.Fprintf(logutils.StdOut, "%s%s: %s [fast: %t]\n", color.YellowString(lc.Name()),
-			altNamesStr, lc.Linter.Desc(), !lc.NeedsSSARepr)
+		fmt.Fprintf(logutils.StdOut, "%s%s: %s [fast: %t, auto-fix: %t]\n", color.YellowString(lc.Name()),
+			altNamesStr, lc.Linter.Desc(), !lc.NeedsSSARepr, lc.CanAutoFix)
 	}
 }
 

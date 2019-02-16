@@ -47,7 +47,7 @@ func TestDeadline(t *testing.T) {
 
 func TestTestsAreLintedByDefault(t *testing.T) {
 	testshared.NewLintRunner(t).Run(getTestDataDir("withtests")).
-		ExpectHasIssue("if block ends with a return")
+		ExpectHasIssue("`if` block ends with a `return`")
 }
 
 func TestCgoOk(t *testing.T) {
@@ -68,8 +68,8 @@ func TestSkippedDirsNoMatchArg(t *testing.T) {
 	r := testshared.NewLintRunner(t).Run("--print-issued-lines=false", "--no-config", "--skip-dirs", dir, "-Egolint", dir)
 
 	r.ExpectExitCode(exitcodes.IssuesFound).
-		ExpectOutputEq("testdata/skipdirs/skip_me/nested/with_issue.go:8:9: if block ends with " +
-			"a return statement, so drop this else and outdent its block (golint)\n")
+		ExpectOutputEq("testdata/skipdirs/skip_me/nested/with_issue.go:8:9: `if` block ends with " +
+			"a `return` statement, so drop this `else` and outdent its block (golint)\n")
 }
 
 func TestSkippedDirsTestdata(t *testing.T) {
@@ -114,7 +114,7 @@ func TestAbsPathDirAnalysis(t *testing.T) {
 	assert.NoError(t, err)
 
 	r := testshared.NewLintRunner(t).Run("--print-issued-lines=false", "--no-config", "-Egolint", absDir)
-	r.ExpectHasIssue("if block ends with a return statement")
+	r.ExpectHasIssue("`if` block ends with a `return` statement")
 }
 
 func TestAbsPathFileAnalysis(t *testing.T) {
@@ -123,7 +123,7 @@ func TestAbsPathFileAnalysis(t *testing.T) {
 	assert.NoError(t, err)
 
 	r := testshared.NewLintRunner(t).Run("--print-issued-lines=false", "--no-config", "-Egolint", absDir)
-	r.ExpectHasIssue("if block ends with a return statement")
+	r.ExpectHasIssue("`if` block ends with a `return` statement")
 }
 
 func TestDisallowedOptionsInConfig(t *testing.T) {

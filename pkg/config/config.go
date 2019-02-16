@@ -278,6 +278,8 @@ type Issues struct {
 	DiffFromRevision  string `mapstructure:"new-from-rev"`
 	DiffPatchFilePath string `mapstructure:"new-from-patch"`
 	Diff              bool   `mapstructure:"new"`
+
+	NeedFix bool `mapstructure:"fix"`
 }
 
 type Config struct { //nolint:maligned
