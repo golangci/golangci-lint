@@ -214,7 +214,7 @@ func TestExtractRunContextFromComments(t *testing.T) {
 
 func TestGolintConsumesXTestFiles(t *testing.T) {
 	dir := getTestDataDir("withxtest")
-	const expIssue = "if block ends with a return statement, so drop this else and outdent its block"
+	const expIssue = "`if` block ends with a `return` statement, so drop this `else` and outdent its block"
 
 	r := testshared.NewLintRunner(t)
 	r.Run("--no-config", "--disable-all", "-Egolint", dir).ExpectHasIssue(expIssue)

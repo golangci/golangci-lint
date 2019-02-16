@@ -3,11 +3,13 @@ package processors
 import (
 	"testing"
 
+	"github.com/golangci/golangci-lint/pkg/config"
+
 	"github.com/golangci/golangci-lint/pkg/logutils"
 )
 
 func TestMaxFromLinter(t *testing.T) {
-	p := NewMaxFromLinter(1, logutils.NewStderrLog(""))
+	p := NewMaxFromLinter(1, logutils.NewStderrLog(""), &config.Config{})
 	gosimple := newFromLinterIssue("gosimple")
 	gofmt := newFromLinterIssue("gofmt")
 	processAssertSame(t, p, gosimple)  // ok

@@ -169,10 +169,12 @@ func (Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		linter.NewConfig(golinters.Gofmt{}).
 			WithPresets(linter.PresetFormatting).
 			WithSpeed(7).
+			WithAutoFix().
 			WithURL("https://golang.org/cmd/gofmt/"),
 		linter.NewConfig(golinters.Gofmt{UseGoimports: true}).
 			WithPresets(linter.PresetFormatting).
 			WithSpeed(5).
+			WithAutoFix().
 			WithURL("https://godoc.org/golang.org/x/tools/cmd/goimports"),
 		linter.NewConfig(golinters.Maligned{}).
 			WithTypeInfo().
@@ -187,6 +189,7 @@ func (Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		linter.NewConfig(golinters.Misspell{}).
 			WithPresets(linter.PresetStyle).
 			WithSpeed(7).
+			WithAutoFix().
 			WithURL("https://github.com/client9/misspell"),
 		linter.NewConfig(golinters.Lll{}).
 			WithPresets(linter.PresetStyle).

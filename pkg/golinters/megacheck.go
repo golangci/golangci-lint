@@ -259,7 +259,7 @@ func (m megacheck) Run(ctx context.Context, lintCtx *linter.Context) ([]result.I
 
 		res = append(res, result.Issue{
 			Pos:        i.Position,
-			Text:       markIdentifiers(i.Text),
+			Text:       i.Text,
 			FromLinter: i.Checker,
 		})
 	}

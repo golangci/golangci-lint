@@ -6,15 +6,26 @@ type Range struct {
 	From, To int
 }
 
+type Replacement struct {
+	NeedOnlyDelete bool     // need to delete all lines of the issue without replacement with new lines
+	NewLines       []string // is NeedDelete is false it's the replacement lines
+}
+
 type Issue struct {
 	FromLinter string
 	Text       string
 
 	Pos       token.Position
 	LineRange *Range `json:",omitempty"`
-	HunkPos   int    `json:",omitempty"`
 
+	// HunkPos is used only when golangci-lint is run over a diff
+	HunkPos int `json:",omitempty"`
+
+	// Source lines of a code with the issue to show
 	SourceLines []string
+
+	// If we know how to fix the issue we can provide replacement lines
+	Replacement *Replacement
 }
 
 func (i *Issue) FilePath() string {
