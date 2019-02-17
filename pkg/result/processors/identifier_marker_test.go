@@ -43,6 +43,8 @@ func TestIdentifierMarker(t *testing.T) {
 			"don't use underscores in Go names; var `Go_lint` should be `GoLint`"},
 		{"G501: Blacklisted import crypto/md5: weak cryptographic primitive",
 			"G501: Blacklisted import `crypto/md5`: weak cryptographic primitive"},
+		{"S1017: should replace this if statement with an unconditional strings.TrimPrefix",
+			"S1017: should replace this `if` statement with an unconditional `strings.TrimPrefix`"},
 	}
 	p := NewIdentifierMarker()
 

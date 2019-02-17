@@ -258,8 +258,9 @@ func (m megacheck) Run(ctx context.Context, lintCtx *linter.Context) ([]result.I
 		}
 
 		res = append(res, result.Issue{
-			Pos:        i.Position,
-			Text:       i.Text,
+			Pos: i.Position,
+			// TODO: use severity
+			Text:       fmt.Sprintf("%s: %s", i.Check, i.Text),
 			FromLinter: i.Checker,
 		})
 	}

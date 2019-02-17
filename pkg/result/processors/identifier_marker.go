@@ -36,24 +36,26 @@ var replacePatterns = []replacePattern{
 	{`^TLS InsecureSkipVerify set true.$`, "TLS `InsecureSkipVerify` set true."},
 
 	// gosimple
-	{`^should replace loop with (.*)$`, "should replace loop with `${1}`"},
-	{`^should use a simple channel send/receive instead of select with a single case`,
+	{`should replace loop with (.*)$`, "should replace loop with `${1}`"},
+	{`should use a simple channel send/receive instead of select with a single case`,
 		"should use a simple channel send/receive instead of `select` with a single case"},
-	{`^should omit comparison to bool constant, can be simplified to (.+)$`,
+	{`should omit comparison to bool constant, can be simplified to (.+)$`,
 		"should omit comparison to bool constant, can be simplified to `${1}`"},
-	{`^should write (.+) instead of (.+)$`, "should write `${1}` instead of `${2}`"},
-	{`^redundant return statement$`, "redundant `return` statement"},
+	{`should write (.+) instead of (.+)$`, "should write `${1}` instead of `${2}`"},
+	{`redundant return statement$`, "redundant `return` statement"},
+	{`should replace this if statement with an unconditional strings.TrimPrefix`,
+		"should replace this `if` statement with an unconditional `strings.TrimPrefix`"},
 
 	// staticcheck
-	{`^this value of (\S+) is never used$`, "this value of `${1}` is never used"},
-	{`^should use time.Since instead of time.Now\(\).Sub$`,
+	{`this value of (\S+) is never used$`, "this value of `${1}` is never used"},
+	{`should use time.Since instead of time.Now\(\).Sub$`,
 		"should use `time.Since` instead of `time.Now().Sub`"},
-	{`^should check returned error before deferring response.Close\(\)$`,
+	{`should check returned error before deferring response.Close\(\)$`,
 		"should check returned error before deferring `response.Close()`"},
-	{`^no value of type uint is less than 0$`, "no value of type `uint` is less than `0`"},
+	{`no value of type uint is less than 0$`, "no value of type `uint` is less than `0`"},
 
 	// unused
-	{`^(func|const|field|type|var) (\S+) is unused$`, "${1} `${2}` is unused"},
+	{`(func|const|field|type|var) (\S+) is unused$`, "${1} `${2}` is unused"},
 
 	// typecheck
 	{`^unknown field (\S+) in struct literal$`, "unknown field `${1}` in struct literal"},
