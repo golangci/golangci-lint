@@ -6,6 +6,9 @@ package p
 // language
 // language langauge
 
+// check Language
+// and check langAuge
+
 func langaugeMisspell() { // the function detects language of the text
 
 }
