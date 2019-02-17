@@ -158,7 +158,8 @@ type LintersSettings struct {
 		IncludeGoRoot bool `mapstructure:"include-go-root"`
 	}
 	Misspell struct {
-		Locale string
+		Locale      string
+		IgnoreWords []string `mapstructure:"ignore-words"`
 	}
 	Unused struct {
 		CheckExported bool `mapstructure:"check-exported"`
