@@ -481,18 +481,30 @@ Thanks to developers and authors of used linters:
 Follow the news and releases on our [twitter](https://twitter.com/golangci) and our [blog](https://medium.com/golangci).
 There is the most valuable changes log:
 
+### February 2019
+1. Implement auto-fixing for `gofmt`, `goimports` and `misspell`
+2. Update `unparam`, `goimports`, `gosec` and `go-critic`
+3. Support `issues.exclude-rules` config option
+4. Add more `identifier` marking patterns
+5. Add code-climate output format
+6. Fix diff parsing on windows
+7. Add version information to built artifact for go1.12
+8. Dockerfile: copy the binary to `/usr/bin/` instead of `$GOPATH/bin/`
+9. Support `ignore-words` config option for `misspell`
+10. Include `staticcheck` check name into a message
+
 ### January 2019
 
-1. Update `megacheck` (`staticcheck`) to the latest version: it consumes much less memory.
+1. Update `megacheck` (`staticcheck`), `unparam` and `go-critic` to the latest versions.
 2. Support the new `stylecheck` linter.
-3. Update `go-critic` to the latest version.
-4. Support of `enabled-tags` options for `go-critic`.
-5. Make rich debugging for `go-critic` and meticulously validate `go-critic` checks config.
-6. Update and use upstream versions of `unparam` and `interfacer` instead of forked ones.
-7. Improve handling of unknown linter names in `//nolint` directives.
-8. Speedup `typecheck` on large project with compilation errors.
-9. Add support for searching for `errcheck` exclude file.
-10. Fix `go-misc` checksum.
+3. Support of `enabled-tags` options for `go-critic`.
+4. Make rich debugging for `go-critic` and meticulously validate `go-critic` checks config.
+5. Update and use upstream versions of `unparam` and `interfacer` instead of forked ones.
+6. Improve handling of unknown linter names in `//nolint` directives.
+7. Speedup `typecheck` on large project with compilation errors.
+8. Add support for searching for `errcheck` exclude file.
+9. Fix `go-misc` checksum.
+10. Don't crash when staticcheck panics
 
 ### December 2018
 

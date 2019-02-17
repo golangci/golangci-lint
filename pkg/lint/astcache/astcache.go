@@ -9,6 +9,7 @@ import (
 
 	"golang.org/x/tools/go/packages"
 
+	"github.com/golangci/golangci-lint/pkg/fsutils"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 )
 
@@ -41,17 +42,27 @@ func (c Cache) ParsedFilenames() []string {
 }
 
 func (c Cache) normalizeFilename(filename string) string {
-	if filepath.IsAbs(filename) {
-		return filepath.Clean(filename)
-	}
+	absPath := func() string {
+		if filepath.IsAbs(filename) {
+			return filepath.Clean(filename)
+		}
 
-	absFilename, err := filepath.Abs(filename)
+		absFilename, err := filepath.Abs(filename)
+		if err != nil {
+			c.log.Warnf("Can't abs-ify filename %s: %s", filename, err)
+			return filename
+		}
+
+		return absFilename
+	}()
+
+	ret, err := fsutils.EvalSymlinks(absPath)
 	if err != nil {
-		c.log.Warnf("Can't abs-ify filename %s: %s", filename, err)
-		return filename
+		c.log.Warnf("Failed to eval symlinks for %s: %s", absPath, err)
+		return absPath
 	}
 
-	return absFilename
+	return ret
 }
 
 func (c Cache) Get(filename string) *File {
