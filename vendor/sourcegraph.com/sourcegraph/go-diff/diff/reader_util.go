@@ -2,7 +2,6 @@ package diff
 
 import (
 	"bufio"
-	"bytes"
 	"io"
 )
 
@@ -25,6 +24,14 @@ func readLine(r *bufio.Reader) ([]byte, error) {
 	} else if err != nil {
 		return nil, err
 	}
-	line := bytes.TrimSuffix(line_, []byte{'\n'})
-	return line, nil
+	line := line_[0 : len(line_)-1]
+	return dropCR(line), nil
+}
+
+// dropCR drops a terminal \r from the data.
+func dropCR(data []byte) []byte {
+	if len(data) > 0 && data[len(data)-1] == '\r' {
+		return data[0 : len(data)-1]
+	}
+	return data
 }

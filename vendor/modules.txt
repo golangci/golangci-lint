@@ -42,7 +42,7 @@ github.com/gobwas/glob/syntax/ast
 github.com/gobwas/glob/util/runes
 github.com/gobwas/glob/syntax/lexer
 github.com/gobwas/glob/util/strings
-# github.com/gogo/protobuf v1.0.0
+# github.com/gogo/protobuf v1.1.1
 github.com/gogo/protobuf/proto
 # github.com/golang/mock v1.1.1
 github.com/golang/mock/gomock
@@ -217,7 +217,7 @@ mvdan.cc/interfacer/check
 mvdan.cc/lint
 # mvdan.cc/unparam v0.0.0-20190124213536-fbb59629db34
 mvdan.cc/unparam/check
-# sourcegraph.com/sourcegraph/go-diff v0.0.0-20171119081133-3f415a150aec
+# sourcegraph.com/sourcegraph/go-diff v0.5.1-0.20190210232911-dee78e514455
 sourcegraph.com/sourcegraph/go-diff/diff
-# sourcegraph.com/sqs/pbtypes v0.0.0-20160107090929-4d1b9dc7ffc3
+# sourcegraph.com/sqs/pbtypes v0.0.0-20180604144634-d3ebe8f20ae4
 sourcegraph.com/sqs/pbtypes
