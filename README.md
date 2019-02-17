@@ -715,6 +715,39 @@ issues:
   exclude:
     - abcdef
 
+  # Excluding configuration per-path and per-linter
+  exclude-rules:
+    # Exclude some linters from running on tests files.
+    - path: _test\.go
+      linters:
+        - gocyclo
+        - errcheck
+        - dupl
+        - gosec
+
+    # Ease some gocritic warnings on test files.
+    - path: _test\.go
+      text: "(unnamedResult|exitAfterDefer)"
+      linters:
+        - gocritic
+
+    # Exclude known linters from partially hard-vendored code,
+    # which is impossible to exclude via "nolint" comments.
+    - path: internal/hmac/
+      text: "weak cryptographic primitive"
+      linters:
+        - gosec
+    - path: internal/hmac/
+      text: "Write\\` is not checked"
+      linters:
+        - errcheck
+
+    # Ease linting on benchmarking code.
+    - path: cmd/stun-bench/
+      linters:
+        - gosec
+        - errcheck
+
   # Independently from option `exclude` we use default exclude patterns,
   # it can be disabled by this option. To list all
   # excluded by default patterns execute `golangci-lint run --help`.
@@ -785,7 +818,6 @@ linters:
   disable:
     - maligned
     - prealloc
-    - gosec
     - gochecknoglobals
 
 run:
@@ -798,17 +830,24 @@ service:
   golangci-lint-version: 1.13.x # use fixed version to not introduce new linters unexpectedly
   prepare:
     - echo "here I can run custom commands, but no preparation needed"
+
+issues:
+  exclude-rules:
+    - text: "weak cryptographic primitive"
+      linters:
+        - gosec
 ```
 
 ## False Positives
 
 False positives are inevitable, but we did our best to reduce their count. For example, we have a default enabled set of [exclude patterns](#command-line-options). If a false positive occurred you have the following choices:
 
-1. Exclude issue by text using command-line option `-e` or config option `issues.exclude`. It's helpful when you decided to ignore all issues of this type.
+1. Exclude issue by text using command-line option `-e` or config option `issues.exclude`. It's helpful when you decided to ignore all issues of this type. Also, you can use `issues.exclude-rules` config option for per-path or per-linter configuration.
 2. Exclude this one issue by using special comment `//nolint[:linter1,linter2,...]` on issued line.
    Comment `//nolint` disables all issues reporting on this line. Comment e.g. `//nolint:govet` disables only govet issues for this line.
    If you would like to completely exclude all issues for some function prepend this comment
    above function:
+3. Exclude issues in path by `run.skip-dirs`, `run.skip-files` or `issues.exclude-rules` config options.
 
 ```go
 //nolint
