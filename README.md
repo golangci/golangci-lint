@@ -841,9 +841,9 @@ issues:
 # golangci.com configuration
 # https://github.com/golangci/golangci/wiki/Configuration
 service:
-  golangci-lint-version: 1.14.x # use the fixed version to not introduce new linters unexpectedly
+  golangci-lint-version: 1.15.x # use the fixed version to not introduce new linters unexpectedly
   prepare:
-    - echo "here I can run custom commands, but no preparation needed"
+    - echo "here I can run custom commands, but no preparation needed for this repo"
 ```
 
 ## False Positives
@@ -948,6 +948,7 @@ There is the most valuable changes log:
 8. Dockerfile: copy the binary to `/usr/bin/` instead of `$GOPATH/bin/`
 9. Support `ignore-words` config option for `misspell`
 10. Include `staticcheck` check name into a message
+11. Fix working with symbolic links
 
 ### January 2019
 
