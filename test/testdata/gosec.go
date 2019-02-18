@@ -3,7 +3,9 @@ package testdata
 
 import (
 	"crypto/md5" // ERROR "G501: Blacklisted import `crypto/md5`: weak cryptographic primitive"
+	"fmt"
 	"log"
+	"os"
 )
 
 func Gosec() {
@@ -19,4 +21,9 @@ func GosecNolintGas() {
 func GosecNolintGosec() {
 	h := md5.New() //nolint:gosec
 	log.Print(h)
+}
+
+func GosecNoErrorCheckingByDefault() {
+	f, _ := os.Create("foo")
+	fmt.Println(f)
 }
