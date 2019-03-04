@@ -7,6 +7,7 @@ import (
 	"runtime/debug"
 )
 
+//nolint:gochecknoinits
 func init() {
 	if info, available := debug.ReadBuildInfo(); available {
 		if date == "" && info.Main.Version != "(devel)" {
