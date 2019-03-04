@@ -129,10 +129,12 @@ func (c *Cache) loadFromPackage(pkg *packages.Package) {
 			continue
 		}
 
-		c.m[pos.Filename] = &File{
+		filePath := c.normalizeFilename(pos.Filename)
+
+		c.m[filePath] = &File{
 			F:    f,
 			Fset: pkg.Fset,
-			Name: pos.Filename,
+			Name: filePath,
 		}
 	}
 }
