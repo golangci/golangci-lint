@@ -891,9 +891,13 @@ We don't recommend vendoring `golangci-lint` in your repo: you will get troubles
 No, you don't need to do it anymore.
 
 **Which go versions are supported**
-Short answer: go 1.10 and newer are supported.
+Short answer: go 1.11 and newer are oficially supported.
 
-Long answer: golangci-lint > 1.10.2 supports Go 1.10 and 1.11; golangci-lint <= v1.10.2 supports Go 1.9, 1.10, 1.11.
+Long answer:
+1. go < 1.9 isn't supported
+2. go 1.9 is supported by golangci-lint <= v1.10.2
+3. go 1.10 is oficially supported by golangci-lint <= 1.15.0.
+4. go1.11 and go1.12 are oficially supported by the latest version of golangci-lint.
 
 **`golangci-lint` doesn't work**
 
