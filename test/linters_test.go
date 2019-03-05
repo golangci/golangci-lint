@@ -2,14 +2,14 @@ package test
 
 import (
 	"bufio"
-	"bytes"
 	"io/ioutil"
 	"os"
 	"os/exec"
 	"path/filepath"
-	"runtime"
 	"strings"
 	"testing"
+
+	"github.com/golangci/golangci-lint/pkg/exitcodes"
 
 	"github.com/golangci/golangci-lint/test/testshared"
 
@@ -18,12 +18,19 @@ import (
 	yaml "gopkg.in/yaml.v2"
 )
 
-func runGoErrchk(c *exec.Cmd, t *testing.T) {
+func runGoErrchk(c *exec.Cmd, files []string, t *testing.T) {
 	output, err := c.CombinedOutput()
-	assert.NoError(t, err, "Output:\n%s", output)
+	exitErr, ok := err.(*exec.ExitError)
+	assert.True(t, ok)
+	assert.Equal(t, exitcodes.IssuesFound, exitErr.ExitCode())
 
-	// Can't check exit code: tool only prints to output
-	assert.False(t, bytes.Contains(output, []byte("BUG")), "Output:\n%s", output)
+	fullshort := make([]string, 0, len(files)*2)
+	for _, f := range files {
+		fullshort = append(fullshort, f, filepath.Base(f))
+	}
+
+	err = errorCheck(string(output), false, fullshort...)
+	assert.NoError(t, err)
 }
 
 func testSourcesFromDir(t *testing.T, dir string) {
@@ -92,9 +99,8 @@ func saveConfig(t *testing.T, cfg map[string]interface{}) (cfgPath string, finis
 }
 
 func testOneSource(t *testing.T, sourcePath string) {
-	goErrchkBin := filepath.Join(runtime.GOROOT(), "test", "errchk")
 	args := []string{
-		binName, "run",
+		"run",
 		"--disable-all",
 		"--print-issued-lines=false",
 		"--print-linter-name=false",
@@ -126,9 +132,9 @@ func testOneSource(t *testing.T, sourcePath string) {
 
 		caseArgs = append(caseArgs, sourcePath)
 
-		cmd := exec.Command(goErrchkBin, caseArgs...)
+		cmd := exec.Command(binName, caseArgs...)
 		t.Log(caseArgs)
-		runGoErrchk(cmd, t)
+		runGoErrchk(cmd, []string{sourcePath}, t)
 	}
 }
 
