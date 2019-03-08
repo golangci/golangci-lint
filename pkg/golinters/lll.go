@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"go/token"
 	"os"
+	"regexp"
 	"strings"
 	"unicode/utf8"
 
@@ -23,7 +24,7 @@ func (Lll) Desc() string {
 	return "Reports long lines"
 }
 
-func (lint Lll) getIssuesForFile(filename string, maxLineLen int, tabSpaces string) ([]result.Issue, error) {
+func (lint Lll) getIssuesForFile(filename string, maxLineLen int, tabSpaces string, exclude *regexp.Regexp) ([]result.Issue, error) {
 	var res []result.Issue
 
 	f, err := os.Open(filename)
@@ -36,6 +37,9 @@ func (lint Lll) getIssuesForFile(filename string, maxLineLen int, tabSpaces stri
 	scanner := bufio.NewScanner(f)
 	for scanner.Scan() {
 		line := scanner.Text()
+		if exclude != nil && exclude.Match(scanner.Bytes()) {
+			continue
+		}
 		line = strings.Replace(line, "\t", tabSpaces, -1)
 		lineLen := utf8.RuneCountInString(line)
 		if lineLen > maxLineLen {
@@ -83,8 +87,18 @@ func (lint Lll) getIssuesForFile(filename string, maxLineLen int, tabSpaces stri
 func (lint Lll) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issue, error) {
 	var res []result.Issue
 	spaces := strings.Repeat(" ", lintCtx.Settings().Lll.TabWidth)
+
+	var reg *regexp.Regexp
+	exclude := lintCtx.Settings().Lll.Exclude
+	if exclude != "" {
+		r, err := regexp.Compile(lintCtx.Settings().Lll.Exclude)
+		if err != nil {
+			return nil, fmt.Errorf("provided exclude regexp string %s failed to compile: %s", exclude, err)
+		}
+		reg = r
+	}
 	for _, f := range getAllFileNames(lintCtx) {
-		issues, err := lint.getIssuesForFile(f, lintCtx.Settings().Lll.LineLength, spaces)
+		issues, err := lint.getIssuesForFile(f, lintCtx.Settings().Lll.LineLength, spaces, reg)
 		if err != nil {
 			return nil, err
 		}

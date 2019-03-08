@@ -181,8 +181,9 @@ type ErrcheckSettings struct {
 }
 
 type LllSettings struct {
-	LineLength int `mapstructure:"line-length"`
-	TabWidth   int `mapstructure:"tab-width"`
+	LineLength int    `mapstructure:"line-length"`
+	TabWidth   int    `mapstructure:"tab-width"`
+	Exclude    string `mapstructure:"exclude"`
 }
 
 type UnparamSettings struct {
