@@ -295,6 +295,7 @@ type Config struct { //nolint:maligned
 
 	Output struct {
 		Format              string
+		Color               string
 		PrintIssuedLine     bool `mapstructure:"print-issued-lines"`
 		PrintLinterName     bool `mapstructure:"print-linter-name"`
 		PrintWelcomeMessage bool `mapstructure:"print-welcome"`

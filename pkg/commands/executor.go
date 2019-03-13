@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 
@@ -51,6 +52,17 @@ func NewExecutor(version, commit, date string) *Executor {
 	}
 	if commandLineCfg != nil {
 		logutils.SetupVerboseLog(e.log, commandLineCfg.Run.IsVerbose)
+	}
+
+	switch commandLineCfg.Output.Color {
+	case "always":
+		color.NoColor = false
+	case "never":
+		color.NoColor = true
+	case "auto":
+		// nothing
+	default:
+		e.log.Fatalf("invalid value %q for --color; must be 'always', 'auto', or 'never'", commandLineCfg.Output.Color)
 	}
 
 	// init of commands must be done before config file reading because
