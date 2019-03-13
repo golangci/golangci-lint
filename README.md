@@ -942,6 +942,7 @@ There is the most valuable changes log:
 2. Build and test on go 1.12
 3. Support `--color` option
 4. Update x/tools to fix c++ issues
+5. Include support to log level
 
 ### February 2019
 
