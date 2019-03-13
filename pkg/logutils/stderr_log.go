@@ -24,12 +24,22 @@ func NewStderrLog(name string) *StderrLog {
 		level:  LogLevelWarn,
 	}
 
-	// control log level in logutils, not in logrus
-	sl.logger.SetLevel(logrus.DebugLevel)
+	switch os.Getenv("LOG_LEVEL") {
+	case "error", "err":
+		sl.logger.SetLevel(logrus.ErrorLevel)
+	case "warning", "warn":
+		sl.logger.SetLevel(logrus.WarnLevel)
+	case "info":
+		sl.logger.SetLevel(logrus.InfoLevel)
+	default:
+		sl.logger.SetLevel(logrus.DebugLevel)
+	}
+
 	sl.logger.Out = StdErr
 	sl.logger.Formatter = &logrus.TextFormatter{
 		DisableTimestamp: true, // `INFO[0007] msg` -> `INFO msg`
 	}
+
 	return sl
 }
 
