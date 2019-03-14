@@ -49,8 +49,10 @@ require (
 	github.com/spf13/pflag v1.0.1
 	github.com/spf13/viper v1.0.2
 	github.com/stretchr/testify v1.2.2
-	golang.org/x/crypto v0.0.0-20180505025534-4ec37c66abab // indirect
-	golang.org/x/tools v0.0.0-20190125232054-379209517ffe
+	golang.org/x/crypto v0.0.0-20190313024323-a1f597ede03a // indirect
+	golang.org/x/net v0.0.0-20190313220215-9f648a60d977 // indirect
+	golang.org/x/sys v0.0.0-20190312061237-fead79001313 // indirect
+	golang.org/x/tools v0.0.0-20190314010720-1286b2016bb1
 	gopkg.in/airbrake/gobrake.v2 v2.0.9 // indirect
 	gopkg.in/gemnasium/logrus-airbrake-hook.v2 v2.1.2 // indirect
 	gopkg.in/yaml.v2 v2.2.1
