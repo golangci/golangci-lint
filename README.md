@@ -940,6 +940,8 @@ There is the most valuable changes log:
 
 1. Exclude issues by source code line regexp by `issues.exclude-rules[i].source`
 2. Build and test on go 1.12
+3. Support `--color` option
+4. Update x/tools to fix c++ issues
 
 ### February 2019
 
