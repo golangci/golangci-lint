@@ -3,11 +3,12 @@ package processors
 import (
 	"bytes"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"sort"
 	"strings"
+
+	"github.com/golangci/golangci-lint/pkg/fsutils"
 
 	"github.com/golangci/golangci-lint/pkg/logutils"
 
@@ -18,12 +19,13 @@ import (
 )
 
 type Fixer struct {
-	cfg *config.Config
-	log logutils.Log
+	cfg       *config.Config
+	log       logutils.Log
+	fileCache *fsutils.FileCache
 }
 
-func NewFixer(cfg *config.Config, log logutils.Log) *Fixer {
-	return &Fixer{cfg: cfg, log: log}
+func NewFixer(cfg *config.Config, log logutils.Log, fileCache *fsutils.FileCache) *Fixer {
+	return &Fixer{cfg: cfg, log: log, fileCache: fileCache}
 }
 
 func (f Fixer) Process(issues <-chan result.Issue) <-chan result.Issue {
@@ -63,9 +65,9 @@ func (f Fixer) Process(issues <-chan result.Issue) <-chan result.Issue {
 func (f Fixer) fixIssuesInFile(filePath string, issues []result.Issue) error {
 	// TODO: don't read the whole file into memory: read line by line;
 	// can't just use bufio.scanner: it has a line length limit
-	origFileData, err := ioutil.ReadFile(filePath)
+	origFileData, err := f.fileCache.GetFileBytes(filePath)
 	if err != nil {
-		return errors.Wrapf(err, "failed to read %s", filePath)
+		return errors.Wrapf(err, "failed to get file bytes for %s", filePath)
 	}
 	origFileLines := bytes.Split(origFileData, []byte("\n"))
 

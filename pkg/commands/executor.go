@@ -4,6 +4,8 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 
+	"github.com/golangci/golangci-lint/pkg/fsutils"
+
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/goutil"
 	"github.com/golangci/golangci-lint/pkg/lint"
@@ -26,6 +28,8 @@ type Executor struct {
 	EnabledLintersSet *lintersdb.EnabledSet
 	contextLoader     *lint.ContextLoader
 	goenv             *goutil.Env
+	fileCache         *fsutils.FileCache
+	lineCache         *fsutils.LineCache
 }
 
 func NewExecutor(version, commit, date string) *Executor {
@@ -78,6 +82,8 @@ func NewExecutor(version, commit, date string) *Executor {
 		lintersdb.NewValidator(e.DBManager), e.log.Child("lintersdb"), e.cfg)
 	e.goenv = goutil.NewEnv(e.log.Child("goenv"))
 	e.contextLoader = lint.NewContextLoader(e.cfg, e.log.Child("loader"), e.goenv)
+	e.fileCache = fsutils.NewFileCache()
+	e.lineCache = fsutils.NewLineCache(e.fileCache)
 
 	return e
 }
