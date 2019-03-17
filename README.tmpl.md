@@ -485,7 +485,13 @@ Thanks to developers and authors of used linters:
 Follow the news and releases on our [twitter](https://twitter.com/golangci) and our [blog](https://medium.com/golangci).
 There is the most valuable changes log:
 
+### March 2019
+
+1. Exclude issues by source code line regexp by `issues.exclude-rules[i].source`
+2. Build and test on go 1.12
+
 ### February 2019
+
 1. Implement auto-fixing for `gofmt`, `goimports` and `misspell`
 2. Update `unparam`, `goimports`, `gosec` and `go-critic`
 3. Support `issues.exclude-rules` config option
