@@ -12,7 +12,7 @@ import (
 )
 
 func getCommonRunArgs() []string {
-	return []string{"--skip-dirs", "testdata_etc/"}
+	return []string{"--skip-dirs", "testdata_etc/,pkg/golinters/goanalysis/(checker|passes)"}
 }
 
 func withCommonRunArgs(args ...string) []string {

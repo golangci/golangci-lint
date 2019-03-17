@@ -91,7 +91,7 @@ func TestGetEnabledLintersSet(t *testing.T) {
 		},
 	}
 
-	m := NewManager()
+	m := NewManager(nil)
 	es := NewEnabledSet(m, NewValidator(m), nil, nil)
 	for _, c := range cases {
 		c := c

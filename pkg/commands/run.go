@@ -278,7 +278,8 @@ func (e *Executor) runAnalysis(ctx context.Context, args []string) (<-chan resul
 	}
 	lintCtx.Log = e.log.Child("linters context")
 
-	runner, err := lint.NewRunner(lintCtx.ASTCache, e.cfg, e.log.Child("runner"), e.goenv, e.lineCache)
+	runner, err := lint.NewRunner(lintCtx.ASTCache, e.cfg, e.log.Child("runner"),
+		e.goenv, e.lineCache, e.DBManager)
 	if err != nil {
 		return nil, err
 	}

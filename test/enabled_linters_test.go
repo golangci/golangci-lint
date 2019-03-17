@@ -21,7 +21,7 @@ func inSlice(s []string, v string) bool {
 }
 
 func getEnabledByDefaultFastLintersExcept(except ...string) []string {
-	m := lintersdb.NewManager()
+	m := lintersdb.NewManager(nil)
 	ebdl := m.GetAllEnabledByDefaultLinters()
 	ret := []string{}
 	for _, lc := range ebdl {
@@ -38,7 +38,7 @@ func getEnabledByDefaultFastLintersExcept(except ...string) []string {
 }
 
 func getAllFastLintersWith(with ...string) []string {
-	linters := lintersdb.NewManager().GetAllSupportedLinterConfigs()
+	linters := lintersdb.NewManager(nil).GetAllSupportedLinterConfigs()
 	ret := append([]string{}, with...)
 	for _, lc := range linters {
 		if lc.NeedsSSARepr {
@@ -51,7 +51,7 @@ func getAllFastLintersWith(with ...string) []string {
 }
 
 func getEnabledByDefaultLinters() []string {
-	ebdl := lintersdb.NewManager().GetAllEnabledByDefaultLinters()
+	ebdl := lintersdb.NewManager(nil).GetAllEnabledByDefaultLinters()
 	ret := []string{}
 	for _, lc := range ebdl {
 		ret = append(ret, lc.Name())
@@ -61,7 +61,7 @@ func getEnabledByDefaultLinters() []string {
 }
 
 func getEnabledByDefaultFastLintersWith(with ...string) []string {
-	ebdl := lintersdb.NewManager().GetAllEnabledByDefaultLinters()
+	ebdl := lintersdb.NewManager(nil).GetAllEnabledByDefaultLinters()
 	ret := append([]string{}, with...)
 	for _, lc := range ebdl {
 		if lc.NeedsSSARepr {

@@ -8,12 +8,12 @@ import (
 )
 
 func Govet() error {
-	return &os.PathError{"first", "path", os.ErrNotExist} // ERROR "`os.PathError` composite literal uses unkeyed fields"
+	return &os.PathError{"first", "path", os.ErrNotExist} // ERROR "composites: `os.PathError` composite literal uses unkeyed fields"
 }
 
 func GovetShadow(f io.Reader, buf []byte) (err error) {
 	if f != nil {
-		_, err := f.Read(buf) // ERROR "declaration of .err. shadows declaration at .*govet.go:\d+"
+		_, err := f.Read(buf) // ERROR "shadow: declaration of .err. shadows declaration at line \d+"
 		if err != nil {
 			return err
 		}

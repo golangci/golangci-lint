@@ -121,9 +121,7 @@ type Run struct {
 }
 
 type LintersSettings struct {
-	Govet struct {
-		CheckShadowing bool `mapstructure:"check-shadowing"`
-	}
+	Govet  GovetSettings
 	Golint struct {
 		MinConfidence float64 `mapstructure:"min-confidence"`
 	}
@@ -171,6 +169,11 @@ type LintersSettings struct {
 	Prealloc PreallocSettings
 	Errcheck ErrcheckSettings
 	Gocritic GocriticSettings
+}
+
+type GovetSettings struct {
+	CheckShadowing bool `mapstructure:"check-shadowing"`
+	Settings       map[string]map[string]interface{}
 }
 
 type ErrcheckSettings struct {

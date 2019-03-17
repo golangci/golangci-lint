@@ -185,7 +185,7 @@ GolangCI-Lint can be used with zero configuration. By default the following lint
 ```bash
 $ golangci-lint help linters
 Enabled by default linters:
-govet (vet, vetshadow): Vet examines Go source code and reports suspicious constructs, such as Printf calls whose arguments do not align with the format string [fast: true, auto-fix: false]
+govet (vet, vetshadow): Vet examines Go source code and reports suspicious constructs, such as Printf calls whose arguments do not align with the format string [fast: false, auto-fix: false]
 errcheck: Errcheck is a program for checking for unchecked errors in go programs. These unchecked errors can be critical bugs in some cases [fast: true, auto-fix: false]
 staticcheck: Staticcheck is a go vet on steroids, applying a ton of static analysis checks [fast: false, auto-fix: false]
 unused: Checks Go code for unused constants, variables, functions and types [fast: false, auto-fix: false]
@@ -612,6 +612,15 @@ linters-settings:
   govet:
     # report about shadowed variables
     check-shadowing: true
+
+    # settings per analyzer
+    settings:
+      printf: # analyzer name, run `go tool vet help` to see all analyzers
+        funcs: # run `go tool vet help printf` to see available settings for `printf` analyzer
+          - (github.com/golangci/golangci-lint/pkg/logutils.Log).Infof
+          - (github.com/golangci/golangci-lint/pkg/logutils.Log).Warnf
+          - (github.com/golangci/golangci-lint/pkg/logutils.Log).Errorf
+          - (github.com/golangci/golangci-lint/pkg/logutils.Log).Fatalf
   golint:
     # minimal confidence for issues, default is 0.8
     min-confidence: 0.8
@@ -785,6 +794,13 @@ than the default and have more strict settings:
 linters-settings:
   govet:
     check-shadowing: true
+    settings:
+      printf:
+        funcs:
+          - (github.com/golangci/golangci-lint/pkg/logutils.Log).Infof
+          - (github.com/golangci/golangci-lint/pkg/logutils.Log).Warnf
+          - (github.com/golangci/golangci-lint/pkg/logutils.Log).Errorf
+          - (github.com/golangci/golangci-lint/pkg/logutils.Log).Fatalf
   golint:
     min-confidence: 0
   gocyclo:
@@ -826,6 +842,7 @@ linters:
 run:
   skip-dirs:
     - test/testdata_etc
+    - pkg/golinters/goanalysis/(checker|passes)
 
 issues:
   exclude-rules:

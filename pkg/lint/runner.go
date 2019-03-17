@@ -9,6 +9,8 @@ import (
 	"sync"
 	"time"
 
+	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
+
 	"github.com/golangci/golangci-lint/pkg/fsutils"
 
 	"github.com/golangci/golangci-lint/pkg/config"
@@ -28,7 +30,7 @@ type Runner struct {
 }
 
 func NewRunner(astCache *astcache.Cache, cfg *config.Config, log logutils.Log, goenv *goutil.Env,
-	lineCache *fsutils.LineCache) (*Runner, error) {
+	lineCache *fsutils.LineCache, dbManager *lintersdb.Manager) (*Runner, error) {
 
 	icfg := cfg.Issues
 	excludePatterns := icfg.ExcludePatterns
@@ -74,7 +76,7 @@ func NewRunner(astCache *astcache.Cache, cfg *config.Config, log logutils.Log, g
 			processors.NewIdentifierMarker(), // must be befor exclude
 			processors.NewExclude(excludeTotalPattern),
 			processors.NewExcludeRules(excludeRules, lineCache, log.Child("exclude_rules")),
-			processors.NewNolint(astCache, log.Child("nolint")),
+			processors.NewNolint(astCache, log.Child("nolint"), dbManager),
 
 			processors.NewUniqByLine(),
 			processors.NewDiff(icfg.Diff, icfg.DiffFromRevision, icfg.DiffPatchFilePath),
