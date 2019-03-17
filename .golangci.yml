@@ -1,6 +1,13 @@
 linters-settings:
   govet:
     check-shadowing: true
+    settings:
+      printf:
+        funcs:
+          - (github.com/golangci/golangci-lint/pkg/logutils.Log).Infof
+          - (github.com/golangci/golangci-lint/pkg/logutils.Log).Warnf
+          - (github.com/golangci/golangci-lint/pkg/logutils.Log).Errorf
+          - (github.com/golangci/golangci-lint/pkg/logutils.Log).Fatalf
   golint:
     min-confidence: 0
   gocyclo:
@@ -42,6 +49,7 @@ linters:
 run:
   skip-dirs:
     - test/testdata_etc
+    - pkg/golinters/goanalysis/(checker|passes)
 
 issues:
   exclude-rules:

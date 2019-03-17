@@ -6,6 +6,8 @@ import (
 	"path/filepath"
 	"testing"
 
+	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
+
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
 
@@ -36,7 +38,7 @@ func newTestNolintProcessor(log logutils.Log) *Nolint {
 		filepath.Join("testdata", "nolint2.go"),
 		filepath.Join("testdata", "nolint_bad_names.go"),
 	)
-	return NewNolint(cache, log)
+	return NewNolint(cache, log, lintersdb.NewManager(nil))
 }
 
 func getOkLogger(ctrl *gomock.Controller) *logutils.MockLog {

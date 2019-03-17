@@ -3,16 +3,19 @@ package lintersdb
 import (
 	"os"
 
+	"github.com/golangci/golangci-lint/pkg/config"
+
 	"github.com/golangci/golangci-lint/pkg/golinters"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 )
 
 type Manager struct {
 	nameToLC map[string]*linter.Config
+	cfg      *config.Config
 }
 
-func NewManager() *Manager {
-	m := &Manager{}
+func NewManager(cfg *config.Config) *Manager {
+	m := &Manager{cfg: cfg}
 	nameToLC := make(map[string]*linter.Config)
 	for _, lc := range m.GetAllSupportedLinterConfigs() {
 		for _, name := range lc.AllNames() {
@@ -74,10 +77,14 @@ func (Manager) GetMetaLinters() map[string]linter.MetaLinter {
 	return ret
 }
 
-func (Manager) GetAllSupportedLinterConfigs() []*linter.Config {
+func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
+	var govetCfg *config.GovetSettings
+	if m.cfg != nil {
+		govetCfg = &m.cfg.LintersSettings.Govet
+	}
 	lcs := []*linter.Config{
-		linter.NewConfig(golinters.Govet{}).
-			WithTypeInfo().
+		linter.NewConfig(golinters.NewGovet(govetCfg)).
+			WithSSA(). // TODO: extract from the linter config and don't build SSA, just use LoadAllSyntax mode
 			WithPresets(linter.PresetBugs).
 			WithSpeed(4).
 			WithAlternativeNames("vet", "vetshadow").
@@ -229,7 +236,7 @@ func (Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 
 	isLocalRun := os.Getenv("GOLANGCI_COM_RUN") == ""
 	enabledByDefault := map[string]bool{
-		golinters.Govet{}.Name():       true,
+		golinters.NewGovet(nil).Name(): true,
 		golinters.Errcheck{}.Name():    true,
 		golinters.Staticcheck{}.Name(): true,
 		golinters.Unused{}.Name():      true,

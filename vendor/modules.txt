@@ -92,10 +92,6 @@ github.com/golangci/gofmt/goimports
 # github.com/golangci/gosec v0.0.0-20180901114220-66fb7fc33547
 github.com/golangci/gosec
 github.com/golangci/gosec/rules
-# github.com/golangci/govet v0.0.0-20180818181408-44ddbe260190
-github.com/golangci/govet
-github.com/golangci/govet/lib/cfg
-github.com/golangci/govet/lib/whitelist
 # github.com/golangci/ineffassign v0.0.0-20180808204949-2ee8f2867dde
 github.com/golangci/ineffassign
 # github.com/golangci/lint-1 v0.0.0-20180610141402-4bf9709227d1
@@ -192,20 +188,50 @@ golang.org/x/sys/windows
 golang.org/x/text/width
 golang.org/x/text/transform
 golang.org/x/text/unicode/norm
-# golang.org/x/tools v0.0.0-20190314010720-1286b2016bb1
-golang.org/x/tools/go/packages
+# golang.org/x/tools v0.0.0-20190314010720-f0bfdbff1f9c
+golang.org/x/tools/go/analysis
+golang.org/x/tools/go/analysis/passes/asmdecl
+golang.org/x/tools/go/analysis/passes/assign
+golang.org/x/tools/go/analysis/passes/atomic
+golang.org/x/tools/go/analysis/passes/atomicalign
+golang.org/x/tools/go/analysis/passes/bools
+golang.org/x/tools/go/analysis/passes/buildtag
+golang.org/x/tools/go/analysis/passes/cgocall
+golang.org/x/tools/go/analysis/passes/composite
+golang.org/x/tools/go/analysis/passes/copylock
+golang.org/x/tools/go/analysis/passes/httpresponse
+golang.org/x/tools/go/analysis/passes/loopclosure
+golang.org/x/tools/go/analysis/passes/lostcancel
+golang.org/x/tools/go/analysis/passes/nilfunc
+golang.org/x/tools/go/analysis/passes/printf
+golang.org/x/tools/go/analysis/passes/shadow
+golang.org/x/tools/go/analysis/passes/shift
+golang.org/x/tools/go/analysis/passes/stdmethods
+golang.org/x/tools/go/analysis/passes/structtag
+golang.org/x/tools/go/analysis/passes/tests
+golang.org/x/tools/go/analysis/passes/unmarshal
+golang.org/x/tools/go/analysis/passes/unreachable
+golang.org/x/tools/go/analysis/passes/unsafeptr
+golang.org/x/tools/go/analysis/passes/unusedresult
 golang.org/x/tools/go/loader
+golang.org/x/tools/go/packages
 golang.org/x/tools/imports
+golang.org/x/tools/go/analysis/passes/buildssa
 golang.org/x/tools/go/ssa
 golang.org/x/tools/go/ssa/ssautil
+golang.org/x/tools/go/ast/astutil
+golang.org/x/tools/go/types/typeutil
 golang.org/x/tools/go/gcexportdata
+golang.org/x/tools/go/analysis/passes/internal/analysisutil
+golang.org/x/tools/go/analysis/passes/inspect
+golang.org/x/tools/go/ast/inspector
+golang.org/x/tools/go/analysis/passes/ctrlflow
+golang.org/x/tools/go/cfg
+golang.org/x/tools/go/buildutil
 golang.org/x/tools/go/internal/cgo
 golang.org/x/tools/go/internal/packagesdriver
 golang.org/x/tools/internal/gopathwalk
 golang.org/x/tools/internal/semver
-golang.org/x/tools/go/ast/astutil
-golang.org/x/tools/go/types/typeutil
-golang.org/x/tools/go/buildutil
 golang.org/x/tools/internal/module
 golang.org/x/tools/go/internal/gcimporter
 golang.org/x/tools/internal/fastwalk

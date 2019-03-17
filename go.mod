@@ -19,7 +19,6 @@ require (
 	github.com/golangci/gocyclo v0.0.0-20180528134321-2becd97e67ee
 	github.com/golangci/gofmt v0.0.0-20181105071733-0b8337e80d98
 	github.com/golangci/gosec v0.0.0-20180901114220-66fb7fc33547
-	github.com/golangci/govet v0.0.0-20180818181408-44ddbe260190
 	github.com/golangci/ineffassign v0.0.0-20180808204949-2ee8f2867dde
 	github.com/golangci/lint-1 v0.0.0-20180610141402-4bf9709227d1
 	github.com/golangci/maligned v0.0.0-20180506175553-b1d89398deca
@@ -52,7 +51,7 @@ require (
 	golang.org/x/crypto v0.0.0-20190313024323-a1f597ede03a // indirect
 	golang.org/x/net v0.0.0-20190313220215-9f648a60d977 // indirect
 	golang.org/x/sys v0.0.0-20190312061237-fead79001313 // indirect
-	golang.org/x/tools v0.0.0-20190314010720-1286b2016bb1
+	golang.org/x/tools v0.0.0-20190314010720-f0bfdbff1f9c
 	gopkg.in/airbrake/gobrake.v2 v2.0.9 // indirect
 	gopkg.in/gemnasium/logrus-airbrake-hook.v2 v2.1.2 // indirect
 	gopkg.in/yaml.v2 v2.2.1

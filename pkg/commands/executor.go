@@ -39,7 +39,7 @@ func NewExecutor(version, commit, date string) *Executor {
 		version:   version,
 		commit:    commit,
 		date:      date,
-		DBManager: lintersdb.NewManager(),
+		DBManager: lintersdb.NewManager(nil),
 	}
 
 	e.log = report.NewLogWrapper(logutils.NewStderrLog(""), &e.reportData)
@@ -81,6 +81,9 @@ func NewExecutor(version, commit, date string) *Executor {
 	if err := r.Read(); err != nil {
 		e.log.Fatalf("Can't read config: %s", err)
 	}
+
+	// recreate after getting config
+	e.DBManager = lintersdb.NewManager(e.cfg)
 
 	e.cfg.LintersSettings.Gocritic.InferEnabledChecks(e.log)
 	if err := e.cfg.LintersSettings.Gocritic.Validate(e.log); err != nil {

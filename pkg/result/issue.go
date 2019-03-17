@@ -14,8 +14,8 @@ type Replacement struct {
 type Issue struct {
 	FromLinter string
 	Text       string
+	Pos        token.Position
 
-	Pos       token.Position
 	LineRange *Range `json:",omitempty"`
 
 	// HunkPos is used only when golangci-lint is run over a diff

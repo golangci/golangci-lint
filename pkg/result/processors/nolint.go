@@ -54,11 +54,11 @@ type Nolint struct {
 	unknownLintersSet map[string]bool
 }
 
-func NewNolint(astCache *astcache.Cache, log logutils.Log) *Nolint {
+func NewNolint(astCache *astcache.Cache, log logutils.Log, dbManager *lintersdb.Manager) *Nolint {
 	return &Nolint{
 		cache:             filesCache{},
 		astCache:          astCache,
-		dbManager:         lintersdb.NewManager(), // TODO: get it in constructor
+		dbManager:         dbManager,
 		log:               log,
 		unknownLintersSet: map[string]bool{},
 	}

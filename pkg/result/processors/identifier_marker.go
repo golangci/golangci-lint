@@ -27,8 +27,8 @@ var replacePatterns = []replacePattern{
 	{`^(\S+) can be (\S+)$`, "`${1}` can be `${2}`"},
 
 	// govet
-	{`^(\S+) arg list ends with redundant newline$`, "`${1}` arg list ends with redundant newline"},
-	{`^(\S+) composite literal uses unkeyed fields$`, "`${1}` composite literal uses unkeyed fields"},
+	{`^printf: (\S+) arg list ends with redundant newline$`, "printf: `${1}` arg list ends with redundant newline"},
+	{`^composites: (\S+) composite literal uses unkeyed fields$`, "composites: `${1}` composite literal uses unkeyed fields"},
 
 	// gosec
 	{`^(\S+): Blacklisted import (\S+): weak cryptographic primitive$`,
