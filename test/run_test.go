@@ -63,6 +63,10 @@ func TestUnsafeOk(t *testing.T) {
 	testshared.NewLintRunner(t).Run("--enable-all", getTestDataDir("unsafe")).ExpectNoIssues()
 }
 
+func TestGovetCustomFormatter(t *testing.T) {
+	testshared.NewLintRunner(t).Run(getTestDataDir("govet_custom_formatter")).ExpectNoIssues()
+}
+
 func TestSkippedDirsNoMatchArg(t *testing.T) {
 	dir := getTestDataDir("skipdirs", "skip_me", "nested")
 	r := testshared.NewLintRunner(t).Run("--print-issued-lines=false", "--no-config", "--skip-dirs", dir, "-Egolint", dir)
