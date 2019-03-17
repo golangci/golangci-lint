@@ -12,7 +12,6 @@ package checker
 import (
 	"bytes"
 	"encoding/gob"
-	"flag"
 	"fmt"
 	"go/token"
 	"go/types"
@@ -27,10 +26,10 @@ import (
 	"sync"
 	"time"
 
+	"github.com/pkg/errors"
+
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/packages"
-
-	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis/analysisflags"
 )
 
 var (
@@ -42,22 +41,16 @@ var (
 	//	t	show [t]iming info (NB: use 'p' flag to avoid GC/scheduler noise)
 	//	v	show [v]erbose logging
 	//
-	Debug = ""
+	Debug = os.Getenv("GL_DEBUG_GO_ANALYSIS")
 
 	// Log files for optional performance tracing.
 	CPUProfile, MemProfile, Trace string
 )
 
-// RegisterFlags registers command-line flags used by the analysis driver.
-func RegisterFlags() {
-	// When adding flags here, remember to update
-	// the list of suppressed flags in analysisflags.
-
-	flag.StringVar(&Debug, "debug", Debug, `debug flags, any subset of "fpstv"`)
-
-	flag.StringVar(&CPUProfile, "cpuprofile", "", "write CPU profile to this file")
-	flag.StringVar(&MemProfile, "memprofile", "", "write memory profile to this file")
-	flag.StringVar(&Trace, "trace", "", "write trace log to this file")
+type Diagnostic struct {
+	analysis.Diagnostic
+	AnalyzerName string
+	Position     token.Position
 }
 
 // Run loads the packages specified by args using go/packages,
@@ -66,7 +59,8 @@ func RegisterFlags() {
 // It provides most of the logic for the main functions of both the
 // singlechecker and the multi-analysis commands.
 // It returns the appropriate exit code.
-func Run(args []string, analyzers []*analysis.Analyzer) (exitcode int) {
+//nolint:gocyclo
+func Run(analyzers []*analysis.Analyzer, initialPackages []*packages.Package) ([]Diagnostic, []error) {
 	if CPUProfile != "" {
 		f, err := os.Create(CPUProfile)
 		if err != nil {
@@ -113,81 +107,13 @@ func Run(args []string, analyzers []*analysis.Analyzer) (exitcode int) {
 	if dbg('v') {
 		log.SetPrefix("")
 		log.SetFlags(log.Lmicroseconds) // display timing
-		log.Printf("load %s", args)
-	}
-
-	// Optimization: if the selected analyzers don't produce/consume
-	// facts, we need source only for the initial packages.
-	allSyntax := needFacts(analyzers)
-	initial, err := load(args, allSyntax)
-	if err != nil {
-		log.Print(err)
-		return 1 // load errors
+		log.Printf("load %d packages", len(initialPackages))
 	}
 
 	// Print the results.
-	roots := analyze(initial, analyzers)
+	roots := analyze(initialPackages, analyzers)
 
-	return printDiagnostics(roots)
-}
-
-// load loads the initial packages.
-func load(patterns []string, allSyntax bool) ([]*packages.Package, error) {
-	mode := packages.LoadSyntax
-	if allSyntax {
-		mode = packages.LoadAllSyntax
-	}
-	conf := packages.Config{
-		Mode:  mode,
-		Tests: true,
-	}
-	initial, err := packages.Load(&conf, patterns...)
-	if err == nil {
-		if n := packages.PrintErrors(initial); n > 1 {
-			err = fmt.Errorf("%d errors during loading", n)
-		} else if n == 1 {
-			err = fmt.Errorf("error during loading")
-		} else if len(initial) == 0 {
-			err = fmt.Errorf("%s matched no packages", strings.Join(patterns, " "))
-		}
-	}
-
-	return initial, err
-}
-
-// TestAnalyzer applies an analysis to a set of packages (and their
-// dependencies if necessary) and returns the results.
-//
-// Facts about pkg are returned in a map keyed by object; package facts
-// have a nil key.
-//
-// This entry point is used only by analysistest.
-func TestAnalyzer(a *analysis.Analyzer, pkgs []*packages.Package) []*TestAnalyzerResult {
-	var results []*TestAnalyzerResult
-	for _, act := range analyze(pkgs, []*analysis.Analyzer{a}) {
-		facts := make(map[types.Object][]analysis.Fact)
-		for key, fact := range act.objectFacts {
-			if key.obj.Pkg() == act.pass.Pkg {
-				facts[key.obj] = append(facts[key.obj], fact)
-			}
-		}
-		for key, fact := range act.packageFacts {
-			if key.pkg == act.pass.Pkg {
-				facts[nil] = append(facts[nil], fact)
-			}
-		}
-
-		results = append(results, &TestAnalyzerResult{act.pass, act.diagnostics, facts, act.result, act.err})
-	}
-	return results
-}
-
-type TestAnalyzerResult struct {
-	Pass        *analysis.Pass
-	Diagnostics []analysis.Diagnostic
-	Facts       map[types.Object][]analysis.Fact
-	Result      interface{}
-	Err         error
+	return extractDiagnostics(roots)
 }
 
 func analyze(pkgs []*packages.Package, analyzers []*analysis.Analyzer) []*action {
@@ -252,118 +178,59 @@ func analyze(pkgs []*packages.Package, analyzers []*analysis.Analyzer) []*action
 	return roots
 }
 
-// printDiagnostics prints the diagnostics for the root packages in either
-// plain text or JSON format. JSON format also includes errors for any
-// dependencies.
-//
-// It returns the exitcode: in plain mode, 0 for success, 1 for analysis
-// errors, and 3 for diagnostics. We avoid 2 since the flag package uses
-// it. JSON mode always succeeds at printing errors and diagnostics in a
-// structured form to stdout.
-func printDiagnostics(roots []*action) (exitcode int) {
-	// Print the output.
-	//
-	// Print diagnostics only for root packages,
-	// but errors for all packages.
-	printed := make(map[*action]bool)
-	var print func(*action)
+func extractDiagnostics(roots []*action) (retDiags []Diagnostic, retErrors []error) {
+	extracted := make(map[*action]bool)
+	var extract func(*action)
 	var visitAll func(actions []*action)
 	visitAll = func(actions []*action) {
 		for _, act := range actions {
-			if !printed[act] {
-				printed[act] = true
+			if !extracted[act] {
+				extracted[act] = true
 				visitAll(act.deps)
-				print(act)
+				extract(act)
 			}
 		}
 	}
 
-	if analysisflags.JSON {
-		// JSON output
-		tree := make(analysisflags.JSONTree)
-		print = func(act *action) {
-			var diags []analysis.Diagnostic
-			if act.isroot {
-				diags = act.diagnostics
-			}
-			tree.Add(act.pkg.Fset, act.pkg.ID, act.a.Name, diags, act.err)
+	// De-duplicate diagnostics by position (not token.Pos) to
+	// avoid double-reporting in source files that belong to
+	// multiple packages, such as foo and foo.test.
+	type key struct {
+		token.Position
+		*analysis.Analyzer
+		message string
+	}
+	seen := make(map[key]bool)
+
+	extract = func(act *action) {
+		if act.err != nil {
+			retErrors = append(retErrors, errors.Wrap(act.err, act.a.Name))
+			return
 		}
-		visitAll(roots)
-		tree.Print()
-	} else {
-		// plain text output
 
-		// De-duplicate diagnostics by position (not token.Pos) to
-		// avoid double-reporting in source files that belong to
-		// multiple packages, such as foo and foo.test.
-		type key struct {
-			token.Position
-			*analysis.Analyzer
-			message string
-		}
-		seen := make(map[key]bool)
+		if act.isroot {
+			for _, diag := range act.diagnostics {
+				// We don't display a.Name/f.Category
+				// as most users don't care.
 
-		print = func(act *action) {
-			if act.err != nil {
-				fmt.Fprintf(os.Stderr, "%s: %v\n", act.a.Name, act.err)
-				exitcode = 1 // analysis failed, at least partially
-				return
-			}
-			if act.isroot {
-				for _, diag := range act.diagnostics {
-					// We don't display a.Name/f.Category
-					// as most users don't care.
-
-					posn := act.pkg.Fset.Position(diag.Pos)
-					k := key{posn, act.a, diag.Message}
-					if seen[k] {
-						continue // duplicate
-					}
-					seen[k] = true
-
-					analysisflags.PrintPlain(act.pkg.Fset, diag)
+				posn := act.pkg.Fset.Position(diag.Pos)
+				k := key{posn, act.a, diag.Message}
+				if seen[k] {
+					continue // duplicate
 				}
-			}
-		}
-		visitAll(roots)
+				seen[k] = true
 
-		if exitcode == 0 && len(seen) > 0 {
-			exitcode = 3 // successfuly produced diagnostics
-		}
-	}
-
-	// Print timing info.
-	if dbg('t') {
-		if !dbg('p') {
-			log.Println("Warning: times are mostly GC/scheduler noise; use -debug=tp to disable parallelism")
-		}
-		var all []*action
-		var total time.Duration
-		for act := range printed {
-			all = append(all, act)
-			total += act.duration
-		}
-		sort.Slice(all, func(i, j int) bool {
-			return all[i].duration > all[j].duration
-		})
-
-		// Print actions accounting for 90% of the total.
-		var sum time.Duration
-		for _, act := range all {
-			fmt.Fprintf(os.Stderr, "%s\t%s\n", act.duration, act)
-			sum += act.duration
-			if sum >= total*9/10 {
-				break
+				retDiags = append(retDiags, Diagnostic{Diagnostic: diag, AnalyzerName: act.a.Name, Position: posn})
 			}
 		}
 	}
-
-	return exitcode
+	visitAll(roots)
+	return
 }
 
-// needFacts reports whether any analysis required by the specified set
+// NeedFacts reports whether any analysis required by the specified set
 // needs facts.  If so, we must load the entire program from source.
-func needFacts(analyzers []*analysis.Analyzer) bool {
+func NeedFacts(analyzers []*analysis.Analyzer) bool {
 	seen := make(map[*analysis.Analyzer]bool)
 	var q []*analysis.Analyzer // for BFS
 	q = append(q, analyzers...)
