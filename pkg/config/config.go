@@ -235,6 +235,7 @@ type ExcludeRule struct {
 	Linters []string
 	Path    string
 	Text    string
+	Source  string
 }
 
 func validateOptionalRegex(value string) error {
@@ -252,6 +253,9 @@ func (e ExcludeRule) Validate() error {
 	if err := validateOptionalRegex(e.Text); err != nil {
 		return fmt.Errorf("invalid text regex: %v", err)
 	}
+	if err := validateOptionalRegex(e.Source); err != nil {
+		return fmt.Errorf("invalid source regex: %v", err)
+	}
 	nonBlank := 0
 	if len(e.Linters) > 0 {
 		nonBlank++
@@ -262,8 +266,11 @@ func (e ExcludeRule) Validate() error {
 	if e.Text != "" {
 		nonBlank++
 	}
+	if e.Source != "" {
+		nonBlank++
+	}
 	if nonBlank < 2 {
-		return errors.New("at least 2 of (text, path, linters) should be set")
+		return errors.New("at least 2 of (text, source, path, linters) should be set")
 	}
 	return nil
 }
