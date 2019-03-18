@@ -1,25 +1,30 @@
 //args: -Egosimple
 package testdata
 
-import "strings"
+import (
+	"log"
+)
 
-func Gosimple(id1, s1 string) string {
-	if strings.HasPrefix(id1, s1) { // ERROR "should replace.*with.*strings.TrimPrefix"
-		id1 = strings.TrimPrefix(id1, s1)
+func Gosimple(ss []string) {
+	if ss != nil { // ERROR "S1031: unnecessary nil check around range"
+		for _, s := range ss {
+			log.Printf(s)
+		}
 	}
-	return id1
 }
 
-func GosimpleNolintGosimple(id1, s1 string) string {
-	if strings.HasPrefix(id1, s1) { //nolint:gosimple
-		id1 = strings.TrimPrefix(id1, s1)
+func GosimpleNolintGosimple(ss []string) {
+	if ss != nil { //nolint:gosimple
+		for _, s := range ss {
+			log.Printf(s)
+		}
 	}
-	return id1
 }
 
-func GosimpleNolintMegacheck(id1, s1 string) string {
-	if strings.HasPrefix(id1, s1) { //nolint:megacheck
-		id1 = strings.TrimPrefix(id1, s1)
+func GosimpleNolintMegacheck(ss []string) {
+	if ss != nil { //nolint:megacheck
+		for _, s := range ss {
+			log.Printf(s)
+		}
 	}
-	return id1
 }

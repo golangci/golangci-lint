@@ -309,7 +309,7 @@ func Lint(cs []lint.Checker, paths []string, opt *Options) ([]lint.Problem, erro
 	return problems, nil
 }
 
-var posRe = regexp.MustCompile(`^(.+?):(\d+):(\d+)?$`)
+var posRe = regexp.MustCompile(`^(.+?):(\d+)(?::(\d+)?)?$`)
 
 func parsePos(pos string) token.Position {
 	if pos == "-" || pos == "" {
