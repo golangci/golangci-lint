@@ -28,8 +28,8 @@ func NewManager(cfg *config.Config) *Manager {
 }
 
 func (Manager) AllPresets() []string {
-	return []string{linter.PresetBugs, linter.PresetUnused, linter.PresetFormatting,
-		linter.PresetStyle, linter.PresetComplexity, linter.PresetPerformance}
+	return []string{linter.PresetBugs, linter.PresetComplexity, linter.PresetFormatting,
+		linter.PresetPerformance, linter.PresetStyle, linter.PresetUnused}
 }
 
 func (m Manager) allPresetsSet() map[string]bool {
