@@ -12,7 +12,6 @@ var args = map[string]int{
 	"encoding/binary.Write.data":           2,
 	"errors.New.text":                      0,
 	"fmt.Printf.format":                    0,
-	"fmt.Fprintf.format":                   1,
 	"fmt.Sprintf.a[0]":                     1,
 	"fmt.Sprintf.format":                   0,
 	"len.v":                                0,

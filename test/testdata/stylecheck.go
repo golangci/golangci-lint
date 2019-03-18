@@ -2,19 +2,34 @@
 package testdata
 
 func Stylecheck(x int) {
-	if 0 == x { // ERROR "don't use Yoda conditions"
-		panic(x)
+	switch x {
+	case 1:
+		return
+	default: // ERROR "ST1015: default case should be first or last in switch statement"
+		return
+	case 2:
+		return
 	}
 }
 
 func StylecheckNolintStylecheck(x int) {
-	if 0 == x { //nolint:stylecheck
-		panic(x)
+	switch x {
+	case 1:
+		return
+	default: //nolint:stylecheck
+		return
+	case 2:
+		return
 	}
 }
 
 func StylecheckNolintMegacheck(x int) {
-	if 0 == x { //nolint:megacheck // ERROR "don't use Yoda conditions"
-		panic(x)
+	switch x {
+	case 1:
+		return
+	default: //nolint:megacheck // ERROR "ST1015: default case should be first or last in switch statement"
+		return
+	case 2:
+		return
 	}
 }

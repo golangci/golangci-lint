@@ -257,7 +257,7 @@ func (c *Checker) Checks() []lint.Check {
 		{ID: "SA4000", FilterGenerated: false, Fn: c.CheckLhsRhsIdentical},
 		{ID: "SA4001", FilterGenerated: false, Fn: c.CheckIneffectiveCopy},
 		{ID: "SA4002", FilterGenerated: false, Fn: c.CheckDiffSizeComparison},
-		{ID: "SA4003", FilterGenerated: false, Fn: c.CheckExtremeComparison},
+		{ID: "SA4003", FilterGenerated: false, Fn: c.CheckUnsignedComparison},
 		{ID: "SA4004", FilterGenerated: false, Fn: c.CheckIneffectiveLoop},
 		{ID: "SA4006", FilterGenerated: false, Fn: c.CheckUnreadVariableValues},
 		{ID: "SA4008", FilterGenerated: false, Fn: c.CheckLoopCondition},
@@ -272,7 +272,6 @@ func (c *Checker) Checks() []lint.Check {
 		{ID: "SA4017", FilterGenerated: false, Fn: c.CheckPureFunctions},
 		{ID: "SA4018", FilterGenerated: true, Fn: c.CheckSelfAssignment},
 		{ID: "SA4019", FilterGenerated: true, Fn: c.CheckDuplicateBuildConstraints},
-		{ID: "SA4020", FilterGenerated: false, Fn: c.CheckUnreachableTypeCases},
 
 		{ID: "SA5000", FilterGenerated: false, Fn: c.CheckNilMaps},
 		{ID: "SA5001", FilterGenerated: false, Fn: c.CheckEarlyDefer},
@@ -287,7 +286,6 @@ func (c *Checker) Checks() []lint.Check {
 		{ID: "SA6002", FilterGenerated: false, Fn: c.callChecker(checkSyncPoolValueRules)},
 		{ID: "SA6003", FilterGenerated: false, Fn: c.CheckRangeStringRunes},
 		// {ID: "SA6004", FilterGenerated: false, Fn: c.CheckSillyRegexp},
-		{ID: "SA6005", FilterGenerated: false, Fn: c.CheckToLowerToUpperComparison},
 
 		{ID: "SA9001", FilterGenerated: false, Fn: c.CheckDubiousDeferInChannelRangeLoop},
 		{ID: "SA9002", FilterGenerated: false, Fn: c.CheckNonOctalFileMode},
@@ -654,21 +652,14 @@ func (c *Checker) CheckInfiniteEmptyLoop(j *lint.Job) {
 		// is dynamic and the loop might terminate. Similarly for
 		// channel receives.
 
+		if loop.Cond != nil && hasSideEffects(loop.Cond) {
+			return true
+		}
+
+		j.Errorf(loop, "this loop will spin, using 100%% CPU")
 		if loop.Cond != nil {
-			if hasSideEffects(loop.Cond) {
-				return true
-			}
-			if ident, ok := loop.Cond.(*ast.Ident); ok {
-				if k, ok := ObjectOf(j, ident).(*types.Const); ok {
-					if !constant.BoolVal(k.Val()) {
-						// don't flag `for false {}` loops. They're a debug aid.
-						return true
-					}
-				}
-			}
 			j.Errorf(loop, "loop condition never changes or has a race condition")
 		}
-		j.Errorf(loop, "this loop will spin, using 100%% CPU")
 
 		return true
 	}
@@ -872,7 +863,7 @@ func (c *Checker) CheckLhsRhsIdentical(j *lint.Job) {
 		}
 		switch op.Op {
 		case token.EQL, token.NEQ:
-			if basic, ok := TypeOf(j, op.X).Underlying().(*types.Basic); ok {
+			if basic, ok := TypeOf(j, op.X).(*types.Basic); ok {
 				if kind := basic.Kind(); kind == types.Float32 || kind == types.Float64 {
 					// f == f and f != f might be used to check for NaN
 					return true
@@ -964,24 +955,19 @@ func (c *Checker) CheckUnsafePrintf(j *lint.Job) {
 		if !ok {
 			return true
 		}
-		var arg int
-		if IsCallToAnyAST(j, call, "fmt.Printf", "fmt.Sprintf", "log.Printf") {
-			arg = Arg("fmt.Printf.format")
-		} else if IsCallToAnyAST(j, call, "fmt.Fprintf") {
-			arg = Arg("fmt.Fprintf.format")
-		} else {
+		if !IsCallToAnyAST(j, call, "fmt.Printf", "fmt.Sprintf", "log.Printf") {
 			return true
 		}
-		if len(call.Args) != arg+1 {
+		if len(call.Args) != 1 {
 			return true
 		}
-		switch call.Args[arg].(type) {
+		switch call.Args[Arg("fmt.Printf.format")].(type) {
 		case *ast.CallExpr, *ast.Ident:
 		default:
 			return true
 		}
-		j.Errorf(call.Args[arg],
-			"printf-style function with dynamic format string and no further arguments should use print-style function instead")
+		j.Errorf(call.Args[Arg("fmt.Printf.format")],
+			"printf-style function with dynamic first argument and no further arguments should use print-style function instead")
 		return true
 	}
 	for _, f := range j.Program.Files {
@@ -1396,15 +1382,7 @@ func (c *Checker) CheckNilMaps(j *lint.Job) {
 	}
 }
 
-func (c *Checker) CheckExtremeComparison(j *lint.Job) {
-	isobj := func(expr ast.Expr, name string) bool {
-		sel, ok := expr.(*ast.SelectorExpr)
-		if !ok {
-			return false
-		}
-		return IsObject(ObjectOf(j, sel.Sel), name)
-	}
-
+func (c *Checker) CheckUnsignedComparison(j *lint.Job) {
 	fn := func(node ast.Node) bool {
 		expr, ok := node.(*ast.BinaryExpr)
 		if !ok {
@@ -1415,68 +1393,19 @@ func (c *Checker) CheckExtremeComparison(j *lint.Job) {
 		if !ok {
 			return true
 		}
-
-		var max string
-		var min string
-
-		switch basic.Kind() {
-		case types.Uint8:
-			max = "math.MaxUint8"
-		case types.Uint16:
-			max = "math.MaxUint16"
-		case types.Uint32:
-			max = "math.MaxUint32"
-		case types.Uint64:
-			max = "math.MaxUint64"
-		case types.Uint:
-			max = "math.MaxUint64"
-
-		case types.Int8:
-			min = "math.MinInt8"
-			max = "math.MaxInt8"
-		case types.Int16:
-			min = "math.MinInt16"
-			max = "math.MaxInt16"
-		case types.Int32:
-			min = "math.MinInt32"
-			max = "math.MaxInt32"
-		case types.Int64:
-			min = "math.MinInt64"
-			max = "math.MaxInt64"
-		case types.Int:
-			min = "math.MinInt64"
-			max = "math.MaxInt64"
+		if (basic.Info() & types.IsUnsigned) == 0 {
+			return true
 		}
-
-		if (expr.Op == token.GTR || expr.Op == token.GEQ) && isobj(expr.Y, max) ||
-			(expr.Op == token.LSS || expr.Op == token.LEQ) && isobj(expr.X, max) {
-			j.Errorf(expr, "no value of type %s is greater than %s", basic, max)
+		lit, ok := expr.Y.(*ast.BasicLit)
+		if !ok || lit.Value != "0" {
+			return true
 		}
-		if expr.Op == token.LEQ && isobj(expr.Y, max) ||
-			expr.Op == token.GEQ && isobj(expr.X, max) {
-			j.Errorf(expr, "every value of type %s is <= %s", basic, max)
+		switch expr.Op {
+		case token.GEQ:
+			j.Errorf(expr, "unsigned values are always >= 0")
+		case token.LSS:
+			j.Errorf(expr, "unsigned values are never < 0")
 		}
-
-		if (basic.Info() & types.IsUnsigned) != 0 {
-			if (expr.Op == token.LSS || expr.Op == token.LEQ) && IsIntLiteral(expr.Y, "0") ||
-				(expr.Op == token.GTR || expr.Op == token.GEQ) && IsIntLiteral(expr.X, "0") {
-				j.Errorf(expr, "no value of type %s is less than 0", basic)
-			}
-			if expr.Op == token.GEQ && IsIntLiteral(expr.Y, "0") ||
-				expr.Op == token.LEQ && IsIntLiteral(expr.X, "0") {
-				j.Errorf(expr, "every value of type %s is >= 0", basic)
-			}
-		} else {
-			if (expr.Op == token.LSS || expr.Op == token.LEQ) && isobj(expr.Y, min) ||
-				(expr.Op == token.GTR || expr.Op == token.GEQ) && isobj(expr.X, min) {
-				j.Errorf(expr, "no value of type %s is less than %s", basic, min)
-			}
-			if expr.Op == token.GEQ && isobj(expr.Y, min) ||
-				expr.Op == token.LEQ && isobj(expr.X, min) {
-				j.Errorf(expr, "every value of type %s is >= %s", basic, min)
-			}
-		}
-
 		return true
 	}
 	for _, f := range j.Program.Files {
@@ -2885,124 +2814,5 @@ func (c *Checker) CheckTimerResetReturnValue(j *lint.Job) {
 				}
 			}
 		}
-	}
-}
-
-func (c *Checker) CheckToLowerToUpperComparison(j *lint.Job) {
-	fn := func(node ast.Node) bool {
-		binExpr, ok := node.(*ast.BinaryExpr)
-		if !ok {
-			return true
-		}
-
-		var negative bool
-		switch binExpr.Op {
-		case token.EQL:
-			negative = false
-		case token.NEQ:
-			negative = true
-		default:
-			return true
-		}
-
-		const (
-			lo = "strings.ToLower"
-			up = "strings.ToUpper"
-		)
-
-		var call string
-		if IsCallToAST(j, binExpr.X, lo) && IsCallToAST(j, binExpr.Y, lo) {
-			call = lo
-		} else if IsCallToAST(j, binExpr.X, up) && IsCallToAST(j, binExpr.Y, up) {
-			call = up
-		} else {
-			return true
-		}
-
-		bang := ""
-		if negative {
-			bang = "!"
-		}
-
-		j.Errorf(binExpr, "should use %sstrings.EqualFold(a, b) instead of %s(a) %s %s(b)", bang, call, binExpr.Op, call)
-		return true
-	}
-
-	for _, f := range j.Program.Files {
-		ast.Inspect(f, fn)
-	}
-}
-
-func (c *Checker) CheckUnreachableTypeCases(j *lint.Job) {
-	// Check if T subsumes V in a type switch. T subsumes V if T is an interface and T's method set is a subset of V's method set.
-	subsumes := func(T, V types.Type) bool {
-		tIface, ok := T.Underlying().(*types.Interface)
-		if !ok {
-			return false
-		}
-
-		return types.Implements(V, tIface)
-	}
-
-	subsumesAny := func(Ts, Vs []types.Type) (types.Type, types.Type, bool) {
-		for _, T := range Ts {
-			for _, V := range Vs {
-				if subsumes(T, V) {
-					return T, V, true
-				}
-			}
-		}
-
-		return nil, nil, false
-	}
-
-	fn := func(node ast.Node) bool {
-		tsStmt, ok := node.(*ast.TypeSwitchStmt)
-		if !ok {
-			return true
-		}
-
-		type ccAndTypes struct {
-			cc    *ast.CaseClause
-			types []types.Type
-		}
-
-		// All asserted types in the order of case clauses.
-		ccs := make([]ccAndTypes, 0, len(tsStmt.Body.List))
-		for _, stmt := range tsStmt.Body.List {
-			cc, _ := stmt.(*ast.CaseClause)
-
-			// Exclude the 'default' case.
-			if len(cc.List) == 0 {
-				continue
-			}
-
-			Ts := make([]types.Type, len(cc.List))
-			for i, expr := range cc.List {
-				Ts[i] = TypeOf(j, expr)
-			}
-
-			ccs = append(ccs, ccAndTypes{cc: cc, types: Ts})
-		}
-
-		if len(ccs) <= 1 {
-			// Zero or one case clauses, nothing to check.
-			return true
-		}
-
-		// Check if case clauses following cc have types that are subsumed by cc.
-		for i, cc := range ccs[:len(ccs)-1] {
-			for _, next := range ccs[i+1:] {
-				if T, V, yes := subsumesAny(cc.types, next.types); yes {
-					j.Errorf(next.cc, "unreachable case clause: %s will always match before %s", T.String(), V.String())
-				}
-			}
-		}
-
-		return true
-	}
-
-	for _, f := range j.Program.Files {
-		ast.Inspect(f, fn)
 	}
 }

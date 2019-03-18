@@ -48,7 +48,6 @@ func (c *Checker) Checks() []lint.Check {
 		{ID: "ST1013", FilterGenerated: true, Fn: c.CheckHTTPStatusCodes},
 		{ID: "ST1015", FilterGenerated: true, Fn: c.CheckDefaultCaseOrder},
 		{ID: "ST1016", FilterGenerated: false, Fn: c.CheckReceiverNamesIdentical},
-		{ID: "ST1017", FilterGenerated: true, Fn: c.CheckYodaConditions},
 	}
 }
 
@@ -618,30 +617,6 @@ func (c *Checker) CheckDefaultCaseOrder(j *lint.Job) {
 				break
 			}
 		}
-		return true
-	}
-	for _, f := range j.Program.Files {
-		ast.Inspect(f, fn)
-	}
-}
-
-func (c *Checker) CheckYodaConditions(j *lint.Job) {
-	fn := func(node ast.Node) bool {
-		cond, ok := node.(*ast.BinaryExpr)
-		if !ok {
-			return true
-		}
-		if cond.Op != token.EQL && cond.Op != token.NEQ {
-			return true
-		}
-		if _, ok := cond.X.(*ast.BasicLit); !ok {
-			return true
-		}
-		if _, ok := cond.Y.(*ast.BasicLit); ok {
-			// Don't flag lit == lit conditions, just in case
-			return true
-		}
-		j.Errorf(cond, "don't use Yoda conditions")
 		return true
 	}
 	for _, f := range j.Program.Files {

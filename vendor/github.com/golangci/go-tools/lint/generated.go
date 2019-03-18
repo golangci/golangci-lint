@@ -7,6 +7,8 @@ import (
 )
 
 var (
+	// used by cgo before Go 1.11
+	oldCgo = []byte("// Created by cgo - DO NOT EDIT")
 	prefix = []byte("// Code generated ")
 	suffix = []byte(" DO NOT EDIT.")
 	nl     = []byte("\n")
@@ -23,6 +25,9 @@ func isGenerated(r io.Reader) bool {
 		s = bytes.TrimSuffix(s, crnl)
 		s = bytes.TrimSuffix(s, nl)
 		if bytes.HasPrefix(s, prefix) && bytes.HasSuffix(s, suffix) {
+			return true
+		}
+		if bytes.Equal(s, oldCgo) {
 			return true
 		}
 		if err == io.EOF {
