@@ -1,9 +1,11 @@
-test:
-	go build -o golangci-lint ./cmd/golangci-lint
+test: build
 	GL_TEST_RUN=1 ./golangci-lint run -v
 	GL_TEST_RUN=1 ./golangci-lint run --fast --no-config -v --skip-dirs 'test/testdata_etc,pkg/golinters/goanalysis/(checker|passes)'
 	GL_TEST_RUN=1 ./golangci-lint run --no-config -v --skip-dirs 'test/testdata_etc,pkg/golinters/goanalysis/(checker|passes)'
 	GL_TEST_RUN=1 go test -v ./...
+
+build:
+	go build -o golangci-lint ./cmd/golangci-lint
 
 test_race:
 	go build -race -o golangci-lint ./cmd/golangci-lint
