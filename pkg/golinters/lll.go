@@ -123,11 +123,12 @@ func (lint Lll) getIssuesForFile(
 func (lint Lll) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issue, error) {
 	var res []result.Issue
 	spaces := strings.Repeat(" ", lintCtx.Settings().Lll.TabWidth)
+	settings := lintCtx.Settings().Lll
 	for _, f := range getAllFileNames(lintCtx) {
 		issues, err := lint.getIssuesForFile(
 			f,
-			lintCtx.Settings().Lll.LineLength,
-			lintCtx.Settings().Lll.Excludes,
+			settings.LineLength,
+			settings.Excludes,
 			spaces,
 		)
 		if err != nil {
