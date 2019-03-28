@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/golangci/golangci-lint/pkg/result"
+
 	"github.com/stretchr/testify/assert"
 )
 
