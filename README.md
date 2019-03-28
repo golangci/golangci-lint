@@ -962,6 +962,7 @@ There is the most valuable changes log:
 5. Support `--color` option
 6. Update x/tools to fix c++ issues
 7. Include support for log level
+8. Support regexp excludes for `lll`
 
 ### February 2019
 
