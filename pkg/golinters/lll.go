@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"go/token"
 	"os"
+	"regexp"
 	"strings"
 	"unicode/utf8"
 
@@ -23,8 +24,45 @@ func (Lll) Desc() string {
 	return "Reports long lines"
 }
 
-func (lint Lll) getIssuesForFile(filename string, maxLineLen int, tabSpaces string) ([]result.Issue, error) {
+func (lint Lll) lineMatches(line string, regexps []*regexp.Regexp) bool {
+	if len(regexps) > 0 {
+		for _, r := range regexps {
+			if match := r.MatchString(line); match {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+func (lint Lll) excludeRegexps(excludes []string) ([]*regexp.Regexp, error) {
+	var excludeRegexps []*regexp.Regexp
+	if len(excludes) > 0 {
+		excludeRegexps = make([]*regexp.Regexp, len(excludes))
+		for i, exclude := range excludes {
+			if r, err := regexp.Compile(exclude); err == nil {
+				excludeRegexps[i] = r
+			} else {
+				return nil, fmt.Errorf("can't compile regexp %s: %s", exclude, err)
+			}
+		}
+	}
+	return excludeRegexps, nil
+}
+
+func (lint Lll) getIssuesForFile(
+	filename string,
+	maxLineLen int,
+	excludes []string,
+	tabSpaces string,
+) ([]result.Issue, error) {
+
 	var res []result.Issue
+
+	excludeRegexps, err := lint.excludeRegexps(excludes)
+	if err != nil {
+		return nil, err
+	}
 
 	f, err := os.Open(filename)
 	if err != nil {
@@ -39,14 +77,16 @@ func (lint Lll) getIssuesForFile(filename string, maxLineLen int, tabSpaces stri
 		line = strings.Replace(line, "\t", tabSpaces, -1)
 		lineLen := utf8.RuneCountInString(line)
 		if lineLen > maxLineLen {
-			res = append(res, result.Issue{
-				Pos: token.Position{
-					Filename: filename,
-					Line:     lineNumber,
-				},
-				Text:       fmt.Sprintf("line is %d characters", lineLen),
-				FromLinter: lint.Name(),
-			})
+			if len(excludeRegexps) == 0 || !lint.lineMatches(line, excludeRegexps) {
+				res = append(res, result.Issue{
+					Pos: token.Position{
+						Filename: filename,
+						Line:     lineNumber,
+					},
+					Text:       fmt.Sprintf("line is %d characters", lineLen),
+					FromLinter: lint.Name(),
+				})
+			}
 		}
 		lineNumber++
 	}
@@ -84,7 +124,12 @@ func (lint Lll) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issu
 	var res []result.Issue
 	spaces := strings.Repeat(" ", lintCtx.Settings().Lll.TabWidth)
 	for _, f := range getAllFileNames(lintCtx) {
-		issues, err := lint.getIssuesForFile(f, lintCtx.Settings().Lll.LineLength, spaces)
+		issues, err := lint.getIssuesForFile(
+			f,
+			lintCtx.Settings().Lll.LineLength,
+			lintCtx.Settings().Lll.Excludes,
+			spaces,
+		)
 		if err != nil {
 			return nil, err
 		}
