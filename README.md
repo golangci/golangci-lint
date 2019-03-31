@@ -973,11 +973,14 @@ There is the most valuable changes log:
 
 1. Support the newest `go vet` (with `go/analysis`)
 2. Support configuration of `go vet`: e.g. you can set print functions by `linters-settings.govet.settings.printf.funcs`
-3. Exclude issues by source code line regexp by `issues.exclude-rules[i].source`
-4. Build and test on go 1.12
-5. Support `--color` option
-6. Update x/tools to fix c++ issues
-7. Include support for log level
+3. Update megacheck (staticcheck) to 2019.1.1
+4. Add [information](https://github.com/golangci/golangci-lint#memory-usage-of-golangci-lint) about controlling space-time trade-off into README
+5. Exclude issues by source code line regexp by `issues.exclude-rules[i].source`
+6. Build and test on go 1.12
+7. Support `--color` option
+8. Update x/tools to fix c++ issues
+9. Include support for log level
+10. Sort linters list in help commands
 
 ### February 2019
 
