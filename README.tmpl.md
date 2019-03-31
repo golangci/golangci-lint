@@ -310,6 +310,22 @@ On average golangci-lint consumes 26% less memory.
 Golangci-lint directly calls linters (no forking) and reuses 80% of work by parsing program only once.
 Read [this section](#internals) for details.
 
+### Memory Usage of Golangci-lint
+
+A trade-off between memory usage and execution time can be controlled by [`GOCC`](https://golang.org/pkg/runtime/#hdr-Environment_Variables) environment variable.
+Less `GOGC` values trigger garbage collection more frequently and golangci-lint consumes less memory and more CPU. Below is the trade-off table for running on this repo:
+
+|`GOGC`|Peak Memory, GB|Executon Time, s|
+|------|---------------|----------------|
+|`5`   |1.1            |60              |
+|`10`  |1.1            |34              |
+|`20`  |1.3            |25              |
+|`30`  |1.6            |20.2            |
+|`50`  |2.0            |17.1            |
+|`80`  |2.2            |14.1            |
+|`100` (default)|2.2   |13.8            |
+|`off` |3.2            |9.3             |
+
 ## Internals
 
 1. Work sharing

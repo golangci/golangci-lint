@@ -430,11 +430,21 @@ func watchResources(ctx context.Context, done chan struct{}, logger logutils.Log
 	ticker := time.NewTicker(100 * time.Millisecond)
 	defer ticker.Stop()
 
-	for {
+	logEveryRecord := os.Getenv("GL_MEM_LOG_EVERY") == "1"
+
+	track := func() {
 		var m runtime.MemStats
 		runtime.ReadMemStats(&m)
 
+		if logEveryRecord {
+			printMemStats(&m, logger)
+		}
+
 		rssValues = append(rssValues, m.Sys)
+	}
+
+	for {
+		track()
 
 		stop := false
 		select {
@@ -447,6 +457,7 @@ func watchResources(ctx context.Context, done chan struct{}, logger logutils.Log
 			break
 		}
 	}
+	track()
 
 	var avg, max uint64
 	for _, v := range rssValues {
