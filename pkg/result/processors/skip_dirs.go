@@ -14,7 +14,7 @@ import (
 type SkipDirs struct {
 	patterns    []*regexp.Regexp
 	log         logutils.Log
-	skippedDirs map[string][]string // regexp to dir mapping
+	skippedDirs map[string]string // dir to the last regexp mapping
 	absArgsDirs []string
 }
 
@@ -52,7 +52,7 @@ func NewSkipDirs(patterns []string, log logutils.Log, runArgs []string) (*SkipDi
 	return &SkipDirs{
 		patterns:    patternsRe,
 		log:         log,
-		skippedDirs: map[string][]string{},
+		skippedDirs: map[string]string{},
 		absArgsDirs: absArgsDirs,
 	}, nil
 }
@@ -99,7 +99,7 @@ func (p *SkipDirs) shouldPassIssue(i *result.Issue) bool {
 	for _, pattern := range p.patterns {
 		if pattern.MatchString(issueRelDir) {
 			ps := pattern.String()
-			p.skippedDirs[ps] = append(p.skippedDirs[ps], issueRelDir)
+			p.skippedDirs[issueRelDir] = ps
 			return false
 		}
 	}
@@ -108,7 +108,7 @@ func (p *SkipDirs) shouldPassIssue(i *result.Issue) bool {
 }
 
 func (p SkipDirs) Finish() {
-	for pattern, dirs := range p.skippedDirs {
-		p.log.Infof("Skipped by pattern %s dirs: %s", pattern, dirs)
+	for dir, pattern := range p.skippedDirs {
+		p.log.Infof("Skipped dir %s by pattern %s", dir, pattern)
 	}
 }
