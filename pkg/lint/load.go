@@ -168,7 +168,9 @@ func stringifyLoadMode(mode packages.LoadMode) string {
 		return "load types"
 	case packages.LoadSyntax:
 		return "load types and syntax"
-	case packages.LoadAllSyntax:
+	}
+	// it may be an alias, and may be not
+	if mode == packages.LoadAllSyntax {
 		return "load deps types and syntax"
 	}
 	return "unknown"
