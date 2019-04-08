@@ -10,8 +10,8 @@ import (
 	gofmtAPI "github.com/golangci/gofmt/gofmt"
 	goimportsAPI "github.com/golangci/gofmt/goimports"
 	"github.com/pkg/errors"
+	diffpkg "github.com/sourcegraph/go-diff/diff"
 	"golang.org/x/tools/imports"
-	diffpkg "sourcegraph.com/sourcegraph/go-diff/diff"
 
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/logutils"

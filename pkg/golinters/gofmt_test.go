@@ -7,8 +7,8 @@ import (
 
 	"github.com/golangci/golangci-lint/pkg/result"
 
+	diffpkg "github.com/sourcegraph/go-diff/diff"
 	"github.com/stretchr/testify/assert"
-	diffpkg "sourcegraph.com/sourcegraph/go-diff/diff"
 
 	"github.com/golangci/golangci-lint/pkg/logutils"
 )

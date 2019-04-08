@@ -161,6 +161,8 @@ github.com/shirou/gopsutil/net
 github.com/shirou/w32
 # github.com/sirupsen/logrus v1.0.5
 github.com/sirupsen/logrus
+# github.com/sourcegraph/go-diff v0.5.1
+github.com/sourcegraph/go-diff/diff
 # github.com/spf13/afero v1.1.0
 github.com/spf13/afero
 github.com/spf13/afero/mem
@@ -243,7 +245,5 @@ mvdan.cc/interfacer/check
 mvdan.cc/lint
 # mvdan.cc/unparam v0.0.0-20190124213536-fbb59629db34
 mvdan.cc/unparam/check
-# sourcegraph.com/sourcegraph/go-diff v0.5.1-0.20190210232911-dee78e514455
-sourcegraph.com/sourcegraph/go-diff/diff
 # sourcegraph.com/sqs/pbtypes v0.0.0-20180604144634-d3ebe8f20ae4
 sourcegraph.com/sqs/pbtypes
