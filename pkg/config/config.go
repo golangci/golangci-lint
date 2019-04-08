@@ -172,8 +172,9 @@ type LintersSettings struct {
 }
 
 type GovetSettings struct {
-	CheckShadowing bool `mapstructure:"check-shadowing"`
-	Settings       map[string]map[string]interface{}
+	CheckShadowing  bool `mapstructure:"check-shadowing"`
+	CheckComposites bool `mapstructure:"check-composites"`
+	Settings        map[string]map[string]interface{}
 }
 
 type ErrcheckSettings struct {

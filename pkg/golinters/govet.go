@@ -45,7 +45,6 @@ func NewGovet(cfg *config.GovetSettings) *goanalysis.Linter {
 		bools.Analyzer,
 		buildtag.Analyzer,
 		cgocall.Analyzer,
-		composite.Analyzer,
 		copylock.Analyzer,
 		httpresponse.Analyzer,
 		loopclosure.Analyzer,
@@ -73,6 +72,9 @@ func NewGovet(cfg *config.GovetSettings) *goanalysis.Linter {
 	if cfg != nil {
 		if cfg.CheckShadowing {
 			analyzers = append(analyzers, shadow.Analyzer)
+		}
+		if cfg.CheckComposites {
+			analyzers = append(analyzers, composite.Analyzer)
 		}
 		settings = cfg.Settings
 	}

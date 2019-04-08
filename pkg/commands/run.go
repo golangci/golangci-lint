@@ -108,6 +108,10 @@ func initFlagSet(fs *pflag.FlagSet, cfg *config.Config, m *lintersdb.Manager, is
 		"Govet: check for shadowed variables")
 	hideFlag("govet.check-shadowing")
 
+	fs.BoolVar(&lsc.Govet.CheckComposites, "govet.check-composites", true,
+		"Govet: check for unkeyed composite literals")
+	hideFlag("govet.check-composites")
+
 	fs.Float64Var(&lsc.Golint.MinConfidence, "golint.min-confidence", 0.8,
 		"Golint: minimum confidence of a problem to print it")
 	hideFlag("golint.min-confidence")
