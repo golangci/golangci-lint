@@ -103,6 +103,7 @@ func initFlagSet(fs *pflag.FlagSet, cfg *config.Config, m *lintersdb.Manager, is
 	fs.StringVar(&lsc.Errcheck.Ignore, "errcheck.ignore", "fmt:.*",
 		`Comma-separated list of pairs of the form pkg:regex. The regex is used to ignore names within pkg`)
 	hideFlag("errcheck.ignore")
+	fs.BoolVar(&lsc.Errcheck.WithoutTests, "errcheck.without-tests", false, "Boolean value to include tests in errcheck or not")
 
 	fs.BoolVar(&lsc.Govet.CheckShadowing, "govet.check-shadowing", false,
 		"Govet: check for shadowed variables")
