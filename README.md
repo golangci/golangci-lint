@@ -469,6 +469,7 @@ Flags:
       --no-config                   Don't read config
       --skip-dirs strings           Regexps of directories to skip
       --skip-files strings          Regexps of files to skip
+      --errcheck.without-tests      Boolean value to include tests in errcheck or not
   -E, --enable strings              Enable specific linter
   -D, --disable strings             Disable specific linter
       --enable-all                  Enable all linters
