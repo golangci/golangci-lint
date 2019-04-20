@@ -18,11 +18,12 @@ type posMapper func(pos token.Position) token.Position
 // to get filename. And they return adjusted filename (e.g. *.qtpl) for an issue. We need
 // restore real .go filename to properly output it, parse it, etc.
 type FilenameUnadjuster struct {
-	m   map[string]posMapper // map from adjusted filename to position mapper: adjusted -> unadjusted position
-	log logutils.Log
+	m                   map[string]posMapper // map from adjusted filename to position mapper: adjusted -> unadjusted position
+	log                 logutils.Log
+	loggedUnadjustments map[string]bool
 }
 
-var _ Processor = FilenameUnadjuster{}
+var _ Processor = &FilenameUnadjuster{}
 
 func NewFilenameUnadjuster(cache *astcache.Cache, log logutils.Log) *FilenameUnadjuster {
 	m := map[string]posMapper{}
@@ -51,8 +52,9 @@ func NewFilenameUnadjuster(cache *astcache.Cache, log logutils.Log) *FilenameUna
 	}
 
 	return &FilenameUnadjuster{
-		m:   m,
-		log: log,
+		m:                   m,
+		log:                 log,
+		loggedUnadjustments: map[string]bool{},
 	}
 }
 
@@ -60,7 +62,7 @@ func (p FilenameUnadjuster) Name() string {
 	return "filename_unadjuster"
 }
 
-func (p FilenameUnadjuster) Process(issues []result.Issue) ([]result.Issue, error) {
+func (p *FilenameUnadjuster) Process(issues []result.Issue) ([]result.Issue, error) {
 	return transformIssues(issues, func(i *result.Issue) *result.Issue {
 		issueFilePath := i.FilePath()
 		if !filepath.IsAbs(i.FilePath()) {
@@ -79,7 +81,10 @@ func (p FilenameUnadjuster) Process(issues []result.Issue) ([]result.Issue, erro
 
 		newI := *i
 		newI.Pos = mapper(i.Pos)
-		p.log.Infof("Unadjusted from %v to %v", i.Pos, newI.Pos)
+		if !p.loggedUnadjustments[i.Pos.Filename] {
+			p.log.Infof("Unadjusted from %v to %v", i.Pos, newI.Pos)
+			p.loggedUnadjustments[i.Pos.Filename] = true
+		}
 		return &newI
 	}), nil
 }
