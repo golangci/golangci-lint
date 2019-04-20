@@ -2,6 +2,7 @@ package test
 
 import (
 	"path/filepath"
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -65,6 +66,30 @@ func TestUnsafeOk(t *testing.T) {
 
 func TestGovetCustomFormatter(t *testing.T) {
 	testshared.NewLintRunner(t).Run(getTestDataDir("govet_custom_formatter")).ExpectNoIssues()
+}
+
+func TestLineDirectiveProcessedFilesLiteLoading(t *testing.T) {
+	r := testshared.NewLintRunner(t).Run("--print-issued-lines=false", "--no-config",
+		"--exclude-use-default=false", "-Egolint", getTestDataDir("quicktemplate"))
+
+	output := strings.Join([]string{
+		"testdata/quicktemplate/hello.qtpl.go:26:1: exported function `StreamHello` should have comment or be unexported (golint)",
+		"testdata/quicktemplate/hello.qtpl.go:50:1: exported function `Hello` should have comment or be unexported (golint)",
+		"testdata/quicktemplate/hello.qtpl.go:39:1: exported function `WriteHello` should have comment or be unexported (golint)",
+	}, "\n")
+	r.ExpectExitCode(exitcodes.IssuesFound).ExpectOutputEq(output + "\n")
+}
+
+func TestLineDirectiveProcessedFilesFullLoading(t *testing.T) {
+	r := testshared.NewLintRunner(t).Run("--print-issued-lines=false", "--no-config",
+		"--exclude-use-default=false", "-Egolint,govet", getTestDataDir("quicktemplate"))
+
+	output := strings.Join([]string{
+		"testdata/quicktemplate/hello.qtpl.go:26:1: exported function `StreamHello` should have comment or be unexported (golint)",
+		"testdata/quicktemplate/hello.qtpl.go:50:1: exported function `Hello` should have comment or be unexported (golint)",
+		"testdata/quicktemplate/hello.qtpl.go:39:1: exported function `WriteHello` should have comment or be unexported (golint)",
+	}, "\n")
+	r.ExpectExitCode(exitcodes.IssuesFound).ExpectOutputEq(output + "\n")
 }
 
 func TestSkippedDirsNoMatchArg(t *testing.T) {

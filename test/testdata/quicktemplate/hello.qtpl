@@ -1,0 +1,7 @@
+All text outside function templates is treated as comments,
+i.e. it is just ignored by quicktemplate compiler (`qtc`). It is for humans.
+
+Hello is a simple template function.
+{% func Hello(name string) %}
+	Hello, {%s name %}!
+{% endfunc %}
