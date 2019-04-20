@@ -1,6 +1,8 @@
 package golinters
 
 import (
+	"log"
+
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/config"
@@ -73,6 +75,12 @@ func NewGovet(cfg *config.GovetSettings) *goanalysis.Linter {
 	if cfg != nil {
 		if cfg.CheckShadowing {
 			analyzers = append(analyzers, shadow.Analyzer)
+			if cfg.ShadowStrict {
+				err := shadow.Analyzer.Flags.Set("strict", "true")
+				if err != nil {
+					log.Printf("failed to set strict mode for shadow analyzer: %v", err)
+				}
+			}
 		}
 		settings = cfg.Settings
 	}

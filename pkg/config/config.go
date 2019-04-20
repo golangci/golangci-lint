@@ -173,6 +173,7 @@ type LintersSettings struct {
 
 type GovetSettings struct {
 	CheckShadowing bool `mapstructure:"check-shadowing"`
+	ShadowStrict   bool `mapstructure:"shadow-strict"`
 	Settings       map[string]map[string]interface{}
 }
 
