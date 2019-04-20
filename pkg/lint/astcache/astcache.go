@@ -5,7 +5,6 @@ import (
 	"go/parser"
 	"go/token"
 	"path/filepath"
-	"time"
 
 	"golang.org/x/tools/go/packages"
 
@@ -107,34 +106,37 @@ func LoadFromPackages(pkgs []*packages.Package, log logutils.Log) (*Cache, error
 	return c, nil
 }
 
-func (c *Cache) loadFromPackage(pkg *packages.Package) {
-	if len(pkg.Syntax) == 0 || len(pkg.GoFiles) != len(pkg.CompiledGoFiles) {
-		// len(pkg.Syntax) == 0 if only filenames are loaded
-		// lengths aren't equal if there are preprocessed files (cgo)
-		startedAt := time.Now()
+func (c *Cache) extractFilenamesForAstFile(fset *token.FileSet, f *ast.File) []string {
+	var ret []string
 
-		// can't use pkg.Fset: it will overwrite offsets by preprocessed files
-		fset := token.NewFileSet()
-		for _, f := range pkg.GoFiles {
-			c.parseFile(f, fset)
-		}
-
-		c.log.Infof("Parsed AST of all pkg.GoFiles: %s for %s", pkg.GoFiles, time.Since(startedAt))
-		return
+	// false ignores //line comments: name can be incorrect for generated files with //line directives
+	// mapping e.g. from .rl to .go files.
+	pos := fset.PositionFor(f.Pos(), false)
+	if pos.Filename != "" {
+		ret = append(ret, pos.Filename)
 	}
 
+	return ret
+}
+
+func (c *Cache) loadFromPackage(pkg *packages.Package) {
 	for _, f := range pkg.Syntax {
-		pos := pkg.Fset.Position(f.Pos())
-		if pos.Filename == "" {
-			continue
+		for _, filename := range c.extractFilenamesForAstFile(pkg.Fset, f) {
+			filePath := c.normalizeFilename(filename)
+			c.m[filePath] = &File{
+				F:    f,
+				Fset: pkg.Fset,
+				Name: filePath,
+			}
 		}
+	}
 
-		filePath := c.normalizeFilename(pos.Filename)
-
-		c.m[filePath] = &File{
-			F:    f,
-			Fset: pkg.Fset,
-			Name: filePath,
+	// some Go files sometimes aren't present in pkg.Syntax
+	fset := token.NewFileSet() // can't use pkg.Fset: it will overwrite offsets by preprocessed files
+	for _, filePath := range pkg.GoFiles {
+		filePath = c.normalizeFilename(filePath)
+		if c.m[filePath] == nil {
+			c.parseFile(filePath, fset)
 		}
 	}
 }

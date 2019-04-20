@@ -7,6 +7,8 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/pkg/errors"
+
 	"github.com/golangci/golangci-lint/pkg/lint/astcache"
 	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
 	"github.com/golangci/golangci-lint/pkg/logutils"
@@ -88,8 +90,12 @@ func (p *Nolint) getOrCreateFileData(i *result.Issue) (*fileData, error) {
 	}
 
 	file := p.astCache.Get(i.FilePath())
-	if file == nil || file.Err != nil {
-		return nil, fmt.Errorf("can't parse file %s: %v, astcache is %v", i.FilePath(), file, p.astCache.ParsedFilenames())
+	if file == nil {
+		return nil, fmt.Errorf("no file %s in ast cache %v",
+			i.FilePath(), p.astCache.ParsedFilenames())
+	}
+	if file.Err != nil {
+		return nil, errors.Wrapf(file.Err, "can't parse file %s", i.FilePath())
 	}
 
 	fd.ignoredRanges = p.buildIgnoredRangesForFile(file.F, file.Fset, i.FilePath())
