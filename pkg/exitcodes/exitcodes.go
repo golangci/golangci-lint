@@ -24,4 +24,8 @@ var (
 		Message: "no go files to analyze",
 		Code:    NoGoFiles,
 	}
+	ErrFailure = &ExitError{
+		Message: "failed to analyze",
+		Code:    Failure,
+	}
 )
