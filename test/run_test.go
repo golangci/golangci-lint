@@ -32,7 +32,7 @@ func TestEmptyDirRun(t *testing.T) {
 
 func TestNotExistingDirRun(t *testing.T) {
 	testshared.NewLintRunner(t).Run(getTestDataDir("no_such_dir")).
-		ExpectExitCode(exitcodes.WarningInTest).
+		ExpectExitCode(exitcodes.Failure).
 		ExpectOutputContains(`cannot find package \"./testdata/no_such_dir\"`)
 }
 

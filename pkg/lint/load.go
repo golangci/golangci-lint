@@ -23,7 +23,6 @@ import (
 	"github.com/golangci/golangci-lint/pkg/lint/astcache"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/logutils"
-	libpackages "github.com/golangci/golangci-lint/pkg/packages"
 )
 
 type ContextLoader struct {
@@ -265,6 +264,10 @@ func (cl ContextLoader) loadPackages(ctx context.Context, loadMode packages.Load
 			if strings.Contains(err.Msg, "no Go files") {
 				return nil, errors.Wrapf(exitcodes.ErrNoGoFiles, "package %s", pkg.PkgPath)
 			}
+			if strings.Contains(err.Msg, "cannot find package") {
+				// when analyzing not existing directory
+				return nil, errors.Wrap(exitcodes.ErrFailure, err.Msg)
+			}
 		}
 	}
 
@@ -358,29 +361,23 @@ func (cl ContextLoader) Load(ctx context.Context, linters []*linter.Config) (*li
 		Log:      cl.log,
 	}
 
-	if prog != nil {
-		saveNotCompilingPackages(ret)
-	} else {
-		for _, pkg := range pkgs {
-			if pkg.IllTyped {
-				cl.log.Infof("Pkg %s errors: %v", pkg.ID, libpackages.ExtractErrors(pkg, astCache))
-			}
-		}
-	}
-
+	separateNotCompilingPackages(ret)
 	return ret, nil
 }
 
-// saveNotCompilingPackages saves not compiling packages into separate slice:
-// a lot of linters crash on such packages. Leave them only for those linters
-// which can work with them.
-func saveNotCompilingPackages(lintCtx *linter.Context) {
+// separateNotCompilingPackages moves not compiling packages into separate slice:
+// a lot of linters crash on such packages
+func separateNotCompilingPackages(lintCtx *linter.Context) {
+	goodPkgs := make([]*packages.Package, 0, len(lintCtx.Packages))
 	for _, pkg := range lintCtx.Packages {
 		if pkg.IllTyped {
 			lintCtx.NotCompilingPackages = append(lintCtx.NotCompilingPackages, pkg)
+		} else {
+			goodPkgs = append(goodPkgs, pkg)
 		}
 	}
 
+	lintCtx.Packages = goodPkgs
 	if len(lintCtx.NotCompilingPackages) != 0 {
 		lintCtx.Log.Infof("Packages that do not compile: %+v", lintCtx.NotCompilingPackages)
 	}

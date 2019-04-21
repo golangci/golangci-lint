@@ -18,9 +18,6 @@ import (
 	"github.com/golangci/go-tools/unused"
 	"golang.org/x/tools/go/packages"
 
-	"github.com/golangci/golangci-lint/pkg/fsutils"
-	libpackages "github.com/golangci/golangci-lint/pkg/packages"
-
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
@@ -179,67 +176,7 @@ func (m MegacheckMetalinter) isValidChild(name string) bool {
 	return false
 }
 
-func prettifyCompilationError(err packages.Error) error {
-	i, _ := TypeCheck{}.parseError(err)
-	if i == nil {
-		return err
-	}
-
-	shortFilename, pathErr := fsutils.ShortestRelPath(i.Pos.Filename, "")
-	if pathErr != nil {
-		return err
-	}
-
-	errText := shortFilename
-	if i.Line() != 0 {
-		errText += fmt.Sprintf(":%d", i.Line())
-	}
-	errText += fmt.Sprintf(": %s", i.Text)
-	return errors.New(errText)
-}
-
-func (m megacheck) canAnalyze(lintCtx *linter.Context) bool {
-	if len(lintCtx.NotCompilingPackages) == 0 {
-		return true
-	}
-
-	var errPkgs []string
-	var errs []packages.Error
-	for _, p := range lintCtx.NotCompilingPackages {
-		if p.Name == "main" {
-			// megacheck crashes on not compiling packages but main packages
-			// aren't reachable by megacheck: other packages can't depend on them.
-			continue
-		}
-
-		errPkgs = append(errPkgs, p.String())
-		errs = append(errs, libpackages.ExtractErrors(p, lintCtx.ASTCache)...)
-	}
-
-	if len(errPkgs) == 0 { // only main packages do not compile
-		return true
-	}
-
-	// TODO: print real linter names in this message
-	warnText := fmt.Sprintf("Can't run megacheck because of compilation errors in packages %s", errPkgs)
-	if len(errs) != 0 {
-		warnText += fmt.Sprintf(": %s", prettifyCompilationError(errs[0]))
-		if len(errs) > 1 {
-			const runCmd = "golangci-lint run --no-config --disable-all -E typecheck"
-			warnText += fmt.Sprintf(" and %d more errors: run `%s` to see all errors", len(errs)-1, runCmd)
-		}
-	}
-	lintCtx.Log.Warnf("%s", warnText)
-
-	// megacheck crashes if there are not compiling packages
-	return false
-}
-
 func (m megacheck) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issue, error) {
-	if !m.canAnalyze(lintCtx) {
-		return nil, nil
-	}
-
 	issues, err := m.runMegacheck(lintCtx.Packages, lintCtx.Settings().Unused.CheckExported)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to run megacheck")
