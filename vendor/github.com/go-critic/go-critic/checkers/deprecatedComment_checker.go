@@ -29,6 +29,7 @@ func FuncOld() int`
 			regexp.MustCompile(`(?i)deprecated[.!]? use \S* instead`),
 			regexp.MustCompile(`(?i)\[\[deprecated\]\].*`),
 			regexp.MustCompile(`(?i)note: deprecated\b.*`),
+			regexp.MustCompile(`(?i)deprecated in.*`),
 			// TODO(quasilyte): more of these?
 		}
 

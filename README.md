@@ -848,6 +848,7 @@ linters-settings:
       - experimental
     disabled-checks:
       - wrapperFunc
+      - dupImport # https://github.com/go-critic/go-critic/issues/845
 
 linters:
   enable-all: true

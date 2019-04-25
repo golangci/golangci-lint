@@ -74,8 +74,29 @@ func (c *assignOpChecker) VisitStmt(stmt ast.Stmt) {
 }
 
 func (c *assignOpChecker) warn(cause *ast.AssignStmt, op token.Token, rhs ast.Expr) {
+	suggestion := c.simplify(cause, op, rhs)
+	c.ctx.Warn(cause, "replace `%s` with `%s`", cause, suggestion)
+}
+
+func (c *assignOpChecker) simplify(cause *ast.AssignStmt, op token.Token, rhs ast.Expr) ast.Stmt {
+	if lit, ok := rhs.(*ast.BasicLit); ok && lit.Kind == token.INT && lit.Value == "1" {
+		switch op {
+		case token.ADD_ASSIGN:
+			return &ast.IncDecStmt{
+				X:      cause.Lhs[0],
+				TokPos: cause.TokPos,
+				Tok:    token.INC,
+			}
+		case token.SUB_ASSIGN:
+			return &ast.IncDecStmt{
+				X:      cause.Lhs[0],
+				TokPos: cause.TokPos,
+				Tok:    token.DEC,
+			}
+		}
+	}
 	suggestion := astcopy.AssignStmt(cause)
 	suggestion.Tok = op
 	suggestion.Rhs[0] = rhs
-	c.ctx.Warn(cause, "replace `%s` with `%s`", cause, suggestion)
+	return suggestion
 }
