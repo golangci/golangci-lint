@@ -83,6 +83,6 @@ func (c *typeSwitchVarChecker) checkTypeSwitch(root *ast.TypeSwitchStmt) {
 	}
 }
 
-func (c *typeSwitchVarChecker) warn(node ast.Node, caseIndex int) {
-	c.ctx.Warn(node, "case %d can benefit from type switch with assignment", caseIndex)
+func (c *typeSwitchVarChecker) warn(n ast.Node, caseIndex int) {
+	c.ctx.Warn(n, "case %d can benefit from type switch with assignment", caseIndex)
 }

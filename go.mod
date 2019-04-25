@@ -5,7 +5,7 @@ require (
 	github.com/OpenPeeDeeP/depguard v0.0.0-20180806142446-a69c782687b2
 	github.com/StackExchange/wmi v0.0.0-20180116203802-5d049714c4a6 // indirect
 	github.com/fatih/color v1.6.0
-	github.com/go-critic/go-critic v0.0.0-20181204210945-ee9bf5809ead
+	github.com/go-critic/go-critic v0.0.0-20181204210945-c3db6069acc5
 	github.com/go-lintpack/lintpack v0.5.2
 	github.com/go-ole/go-ole v1.2.1 // indirect
 	github.com/gobwas/glob v0.2.3 // indirect

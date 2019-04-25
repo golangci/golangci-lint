@@ -2,9 +2,11 @@ package checkers
 
 import (
 	"go/ast"
+	"go/types"
 
 	"github.com/go-lintpack/lintpack"
 	"github.com/go-lintpack/lintpack/astwalk"
+	"github.com/go-toolsmith/astcast"
 	"github.com/go-toolsmith/astequal"
 )
 
@@ -105,6 +107,16 @@ func (c *dupArgChecker) VisitExpr(expr ast.Expr) {
 	call, ok := expr.(*ast.CallExpr)
 	if !ok {
 		return
+	}
+
+	// TODO(quasilyte): this kind of check is needed in multiple
+	// places and the code is somewhat duplicated around.
+	// We probably need to stop using qualifiedName for non-experimental checkers.
+	if calledExpr, ok := call.Fun.(*ast.SelectorExpr); ok {
+		obj, ok := c.ctx.TypesInfo.ObjectOf(astcast.ToIdent(calledExpr.X)).(*types.PkgName)
+		if !ok || !isStdlibPkg(obj.Imported()) {
+			return
+		}
 	}
 
 	m := c.matchers[qualifiedName(call.Fun)]
