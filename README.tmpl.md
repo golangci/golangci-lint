@@ -475,8 +475,8 @@ Short answer: go 1.11 and newer are oficially supported.
 Long answer:
 1. go < 1.9 isn't supported
 2. go 1.9 is supported by golangci-lint <= v1.10.2
-3. go 1.10 is oficially supported by golangci-lint <= 1.15.0.
-4. go1.11 and go1.12 are oficially supported by the latest version of golangci-lint.
+3. go 1.10 is officially supported by golangci-lint <= 1.15.0.
+4. go1.11 and go1.12 are officially supported by the latest version of golangci-lint.
 
 **`golangci-lint` doesn't work**
 
