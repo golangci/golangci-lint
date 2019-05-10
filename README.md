@@ -204,6 +204,7 @@ and the following linters are disabled by default:
 $ golangci-lint help linters
 ...
 Disabled by default linters:
+bodyclose: bodyclose checks whether HTTP response body is closed successfully [fast: false, auto-fix: false]
 depguard: Go linter that checks if package imports are in a list of acceptable packages [fast: true, auto-fix: false]
 dupl: Tool for code clone detection [fast: true, auto-fix: false]
 gochecknoglobals: Checks that no globals are present in Go code [fast: true, auto-fix: false]
@@ -416,6 +417,7 @@ golangci-lint help linters
 
 ### Disabled By Default Linters (`-E/--enable`)
 
+- [bodyclose](https://github.com/timakin/bodyclose) - bodyclose checks whether HTTP response body is closed successfully
 - [golint](https://github.com/golang/lint) - Golint differs from gofmt. Gofmt reformats Go source code, whereas golint prints out style mistakes
 - [stylecheck](https://github.com/dominikh/go-tools/tree/master/stylecheck) - Stylecheck is a replacement for golint
 - [gosec](https://github.com/securego/gosec) - Inspects source code for security problems
@@ -946,6 +948,7 @@ Thanks to [alecthomas/gometalinter](https://github.com/alecthomas/gometalinter) 
 Thanks to [bradleyfalzon/revgrep](https://github.com/bradleyfalzon/revgrep) for cool diff tool.
 
 Thanks to developers and authors of used linters:
+- [timakin](https://github.com/timakin)
 - [kisielk](https://github.com/kisielk)
 - [golang](https://github.com/golang)
 - [dominikh](https://github.com/dominikh)
