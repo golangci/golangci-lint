@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"sort"
 
-	gocycloAPI "github.com/golangci/gocyclo/pkg/gocyclo"
+	gocycloAPI "github.com/fzipp/gocyclo/pkg/gocyclo"
 
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"

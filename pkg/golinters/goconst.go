@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	goconstAPI "github.com/golangci/goconst"
+	goconstAPI "github.com/jgautheron/goconst"
 
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"

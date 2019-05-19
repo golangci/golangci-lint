@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	ineffassignAPI "github.com/golangci/ineffassign"
+	ineffassignAPI "github.com/gordonklaus/ineffassign"
 
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"

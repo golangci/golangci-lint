@@ -3,7 +3,7 @@ package golinters
 import (
 	"context"
 
-	unconvertAPI "github.com/golangci/unconvert"
+	unconvertAPI "github.com/mdempsky/unconvert"
 
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"

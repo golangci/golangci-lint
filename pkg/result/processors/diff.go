@@ -8,7 +8,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/golangci/revgrep"
+	"github.com/bradleyfalzon/revgrep"
 
 	"github.com/golangci/golangci-lint/pkg/result"
 )

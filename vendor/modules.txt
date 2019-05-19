@@ -4,12 +4,20 @@ github.com/BurntSushi/toml
 github.com/OpenPeeDeeP/depguard
 # github.com/StackExchange/wmi v0.0.0-20180116203802-5d049714c4a6
 github.com/StackExchange/wmi
+# github.com/alexkohler/prealloc v0.0.0-00010101000000-000000000000 => github.com/golangci/prealloc v0.0.0-20180630174525-215b22d4de21
+github.com/alexkohler/prealloc
+# github.com/bradleyfalzon/revgrep v0.0.0-00010101000000-000000000000 => github.com/golangci/revgrep v0.0.0-20180526074752-d9c87f5ffaf0
+github.com/bradleyfalzon/revgrep
+# github.com/client9/misspell v0.0.0-00010101000000-000000000000 => github.com/golangci/misspell v0.0.0-20180809174111-950f5d19e770
+github.com/client9/misspell
 # github.com/davecgh/go-spew v1.1.1
 github.com/davecgh/go-spew/spew
 # github.com/fatih/color v1.6.0
 github.com/fatih/color
 # github.com/fsnotify/fsnotify v1.4.7
 github.com/fsnotify/fsnotify
+# github.com/fzipp/gocyclo v0.0.0-00010101000000-000000000000 => github.com/LukeShu/gocyclo v0.0.0-20190519210859-68da8eb3e8f7
+github.com/fzipp/gocyclo/pkg/gocyclo
 # github.com/go-critic/go-critic v0.0.0-20181204210945-1df300866540
 github.com/go-critic/go-critic/checkers
 github.com/go-critic/go-critic/checkers/internal/lintutil
@@ -46,66 +54,11 @@ github.com/gobwas/glob/util/strings
 github.com/gogo/protobuf/proto
 # github.com/golang/mock v1.0.0
 github.com/golang/mock/gomock
-# github.com/golangci/check v0.0.0-20180506172741-cfe4005ccda2
-github.com/golangci/check/cmd/structcheck
-github.com/golangci/check/cmd/varcheck
-# github.com/golangci/dupl v0.0.0-20180902072040-3e9179ac440a
-github.com/golangci/dupl
-github.com/golangci/dupl/job
-github.com/golangci/dupl/printer
-github.com/golangci/dupl/syntax
-github.com/golangci/dupl/suffixtree
-github.com/golangci/dupl/syntax/golang
-# github.com/golangci/errcheck v0.0.0-20181003203344-ef45e06d44b6
-github.com/golangci/errcheck/golangci
-github.com/golangci/errcheck/internal/errcheck
-# github.com/golangci/go-misc v0.0.0-20180628070357-927a3d87b613
-github.com/golangci/go-misc/deadcode
-# github.com/golangci/go-tools v0.0.0-20180109140146-af6baa5dc196
-github.com/golangci/go-tools/config
-github.com/golangci/go-tools/lint
-github.com/golangci/go-tools/lint/lintutil
-github.com/golangci/go-tools/simple
-github.com/golangci/go-tools/staticcheck
-github.com/golangci/go-tools/stylecheck
-github.com/golangci/go-tools/unused
-github.com/golangci/go-tools/ssa
-github.com/golangci/go-tools/ssa/ssautil
-github.com/golangci/go-tools/lint/lintutil/format
-github.com/golangci/go-tools/version
-github.com/golangci/go-tools/arg
-github.com/golangci/go-tools/internal/sharedcheck
-github.com/golangci/go-tools/lint/lintdsl
-github.com/golangci/go-tools/deprecated
-github.com/golangci/go-tools/functions
-github.com/golangci/go-tools/ssautil
-github.com/golangci/go-tools/staticcheck/vrp
-github.com/golangci/go-tools/callgraph
-github.com/golangci/go-tools/callgraph/static
-# github.com/golangci/goconst v0.0.0-20180610141641-041c5f2b40f3
-github.com/golangci/goconst
-# github.com/golangci/gocyclo v0.0.0-20180528134321-2becd97e67ee
-github.com/golangci/gocyclo/pkg/gocyclo
 # github.com/golangci/gofmt v0.0.0-20181105071733-0b8337e80d98
 github.com/golangci/gofmt/gofmt
 github.com/golangci/gofmt/goimports
-# github.com/golangci/gosec v0.0.0-20180901114220-66fb7fc33547
-github.com/golangci/gosec
-github.com/golangci/gosec/rules
-# github.com/golangci/ineffassign v0.0.0-20180808204949-42439a7714cc
-github.com/golangci/ineffassign
-# github.com/golangci/lint-1 v0.0.0-20180610141402-ee948d087217
-github.com/golangci/lint-1
-# github.com/golangci/maligned v0.0.0-20180506175553-b1d89398deca
-github.com/golangci/maligned
-# github.com/golangci/misspell v0.0.0-20180809174111-950f5d19e770
-github.com/golangci/misspell
-# github.com/golangci/prealloc v0.0.0-20180630174525-215b22d4de21
-github.com/golangci/prealloc
-# github.com/golangci/revgrep v0.0.0-20180526074752-d9c87f5ffaf0
-github.com/golangci/revgrep
-# github.com/golangci/unconvert v0.0.0-20180507085042-28b1c447d1f4
-github.com/golangci/unconvert
+# github.com/gordonklaus/ineffassign v0.0.0-00010101000000-000000000000 => github.com/golangci/ineffassign v0.0.0-20180808204949-42439a7714cc
+github.com/gordonklaus/ineffassign
 # github.com/gostaticanalysis/analysisutil v0.0.0-20190318220348-4088753ea4d3
 github.com/gostaticanalysis/analysisutil
 # github.com/hashicorp/hcl v0.0.0-20180404174102-ef8a98b0bbce
@@ -121,6 +74,11 @@ github.com/hashicorp/hcl/json/scanner
 github.com/hashicorp/hcl/json/token
 # github.com/inconshreveable/mousetrap v1.0.0
 github.com/inconshreveable/mousetrap
+# github.com/jgautheron/goconst v0.0.0-00010101000000-000000000000 => github.com/golangci/goconst v0.0.0-20180610141641-041c5f2b40f3
+github.com/jgautheron/goconst
+# github.com/kisielk/errcheck v0.0.0-00010101000000-000000000000 => github.com/LukeShu/errcheck v0.0.0-20190519204902-14b08a384e90
+github.com/kisielk/errcheck/golangci
+github.com/kisielk/errcheck/internal/errcheck
 # github.com/kisielk/gotool v1.0.0
 github.com/kisielk/gotool
 github.com/kisielk/gotool/internal/load
@@ -130,6 +88,17 @@ github.com/magiconair/properties
 github.com/mattn/go-colorable
 # github.com/mattn/go-isatty v0.0.3
 github.com/mattn/go-isatty
+# github.com/mdempsky/maligned v0.0.0-00010101000000-000000000000 => github.com/golangci/maligned v0.0.0-20180506175553-b1d89398deca
+github.com/mdempsky/maligned
+# github.com/mdempsky/unconvert v0.0.0-00010101000000-000000000000 => github.com/golangci/unconvert v0.0.0-20180507085042-28b1c447d1f4
+github.com/mdempsky/unconvert
+# github.com/mibk/dupl v0.0.0-00010101000000-000000000000 => github.com/golangci/dupl v0.0.0-20180507061201-53b9af5a4536
+github.com/mibk/dupl
+github.com/mibk/dupl/job
+github.com/mibk/dupl/printer
+github.com/mibk/dupl/syntax
+github.com/mibk/dupl/suffixtree
+github.com/mibk/dupl/syntax/golang
 # github.com/mitchellh/go-homedir v1.0.0
 github.com/mitchellh/go-homedir
 # github.com/mitchellh/go-ps v0.0.0-20170309133038-4fdf99ab2936
@@ -152,6 +121,11 @@ github.com/pelletier/go-toml
 github.com/pkg/errors
 # github.com/pmezard/go-difflib v1.0.0
 github.com/pmezard/go-difflib/difflib
+# github.com/remyoudompheng/go-misc v0.0.0-00010101000000-000000000000 => github.com/golangci/go-misc v0.0.0-20180628070357-927a3d87b613
+github.com/remyoudompheng/go-misc/deadcode
+# github.com/securego/gosec v0.0.0-00010101000000-000000000000 => github.com/golangci/gosec v0.0.0-20190211063915-c04360ff3e06
+github.com/securego/gosec
+github.com/securego/gosec/rules
 # github.com/shirou/gopsutil v0.0.0-20180427012116-c95755e4bcd7
 github.com/shirou/gopsutil/process
 github.com/shirou/gopsutil/cpu
@@ -187,8 +161,13 @@ github.com/timakin/bodyclose/passes/bodyclose
 github.com/valyala/bytebufferpool
 # github.com/valyala/quicktemplate v1.1.1
 github.com/valyala/quicktemplate
+# gitlab.com/opennota/check v0.0.0-00010101000000-000000000000 => github.com/golangci/check v0.0.0-20180506172741-cfe4005ccda2
+gitlab.com/opennota/check/cmd/structcheck
+gitlab.com/opennota/check/cmd/varcheck
 # golang.org/x/crypto v0.0.0-20190313024323-a1f597ede03a
 golang.org/x/crypto/ssh/terminal
+# golang.org/x/lint v0.0.0-00010101000000-000000000000 => github.com/golangci/lint-1 v0.0.0-20180610141402-ee948d087217
+golang.org/x/lint
 # golang.org/x/sys v0.0.0-20190312061237-fead79001313
 golang.org/x/sys/unix
 golang.org/x/sys/windows
@@ -228,13 +207,13 @@ golang.org/x/tools/go/analysis/passes/buildssa
 golang.org/x/tools/go/ssa
 golang.org/x/tools/go/ssa/ssautil
 golang.org/x/tools/go/ast/astutil
-golang.org/x/tools/go/types/typeutil
 golang.org/x/tools/go/gcexportdata
 golang.org/x/tools/go/analysis/passes/internal/analysisutil
 golang.org/x/tools/go/analysis/passes/inspect
 golang.org/x/tools/go/ast/inspector
 golang.org/x/tools/go/analysis/passes/ctrlflow
 golang.org/x/tools/go/cfg
+golang.org/x/tools/go/types/typeutil
 golang.org/x/tools/go/buildutil
 golang.org/x/tools/go/internal/cgo
 golang.org/x/tools/go/internal/packagesdriver
@@ -246,6 +225,27 @@ golang.org/x/tools/internal/fastwalk
 golang.org/x/tools/internal/module
 # gopkg.in/yaml.v2 v2.2.1
 gopkg.in/yaml.v2
+# honnef.co/go/tools v0.0.0-00010101000000-000000000000 => github.com/LukeShu/go-tools v0.0.0-20190519204515-e8d8fd50977c
+honnef.co/go/tools/config
+honnef.co/go/tools/lint
+honnef.co/go/tools/lint/lintutil
+honnef.co/go/tools/simple
+honnef.co/go/tools/staticcheck
+honnef.co/go/tools/stylecheck
+honnef.co/go/tools/unused
+honnef.co/go/tools/ssa
+honnef.co/go/tools/ssa/ssautil
+honnef.co/go/tools/lint/lintutil/format
+honnef.co/go/tools/version
+honnef.co/go/tools/arg
+honnef.co/go/tools/internal/sharedcheck
+honnef.co/go/tools/lint/lintdsl
+honnef.co/go/tools/deprecated
+honnef.co/go/tools/functions
+honnef.co/go/tools/ssautil
+honnef.co/go/tools/staticcheck/vrp
+honnef.co/go/tools/callgraph
+honnef.co/go/tools/callgraph/static
 # mvdan.cc/interfacer v0.0.0-20180901003855-c20040233aed
 mvdan.cc/interfacer/check
 # mvdan.cc/lint v0.0.0-20170908181259-adc824a0674b

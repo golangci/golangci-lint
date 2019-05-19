@@ -8,15 +8,15 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/golangci/go-tools/config"
-	"github.com/golangci/go-tools/stylecheck"
+	"honnef.co/go/tools/config"
+	"honnef.co/go/tools/stylecheck"
 
-	"github.com/golangci/go-tools/lint"
-	"github.com/golangci/go-tools/lint/lintutil"
-	"github.com/golangci/go-tools/simple"
-	"github.com/golangci/go-tools/staticcheck"
-	"github.com/golangci/go-tools/unused"
 	"golang.org/x/tools/go/packages"
+	"honnef.co/go/tools/lint"
+	"honnef.co/go/tools/lint/lintutil"
+	"honnef.co/go/tools/simple"
+	"honnef.co/go/tools/staticcheck"
+	"honnef.co/go/tools/unused"
 
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"

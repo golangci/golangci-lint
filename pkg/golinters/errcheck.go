@@ -10,7 +10,7 @@ import (
 	"regexp"
 	"strings"
 
-	errcheckAPI "github.com/golangci/errcheck/golangci"
+	errcheckAPI "github.com/kisielk/errcheck/golangci"
 	"github.com/pkg/errors"
 
 	"github.com/golangci/golangci-lint/pkg/config"

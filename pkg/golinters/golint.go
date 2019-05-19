@@ -6,7 +6,7 @@ import (
 	"go/ast"
 	"go/token"
 
-	lintAPI "github.com/golangci/lint-1"
+	lintAPI "golang.org/x/lint"
 
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"

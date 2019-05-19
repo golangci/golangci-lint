@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	varcheckAPI "github.com/golangci/check/cmd/varcheck"
+	varcheckAPI "gitlab.com/opennota/check/cmd/varcheck"
 
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"

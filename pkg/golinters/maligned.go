@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	malignedAPI "github.com/golangci/maligned"
+	malignedAPI "github.com/mdempsky/maligned"
 
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"

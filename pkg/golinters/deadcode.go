@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	deadcodeAPI "github.com/golangci/go-misc/deadcode"
+	deadcodeAPI "github.com/remyoudompheng/go-misc/deadcode"
 
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"

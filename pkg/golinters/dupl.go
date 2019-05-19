@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"go/token"
 
-	duplAPI "github.com/golangci/dupl"
+	duplAPI "github.com/mibk/dupl"
 	"github.com/pkg/errors"
 
 	"github.com/golangci/golangci-lint/pkg/fsutils"
