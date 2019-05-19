@@ -9,7 +9,7 @@ require (
 	github.com/go-lintpack/lintpack v0.5.2
 	github.com/go-ole/go-ole v1.2.1 // indirect
 	github.com/gobwas/glob v0.2.3 // indirect
-	github.com/golang/mock v1.1.1
+	github.com/golang/mock v1.0.0
 	github.com/golangci/check v0.0.0-20180506172741-cfe4005ccda2
 	github.com/golangci/dupl v0.0.0-20180902072040-3e9179ac440a
 	github.com/golangci/errcheck v0.0.0-20181003203344-ef45e06d44b6
