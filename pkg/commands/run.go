@@ -372,6 +372,8 @@ func (e *Executor) createPrinter() (printers.Printer, error) {
 		p = printers.NewCheckstyle()
 	case config.OutFormatCodeClimate:
 		p = printers.NewCodeClimate()
+	case config.OutFormatJunitXML:
+		p = printers.NewJunitXML()
 	default:
 		return nil, fmt.Errorf("unknown output format %s", format)
 	}
