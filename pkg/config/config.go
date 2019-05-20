@@ -14,6 +14,7 @@ const (
 	OutFormatTab               = "tab"
 	OutFormatCheckstyle        = "checkstyle"
 	OutFormatCodeClimate       = "code-climate"
+	OutFormatJunitXML          = "junit-xml"
 )
 
 var OutFormats = []string{
@@ -23,6 +24,7 @@ var OutFormats = []string{
 	OutFormatTab,
 	OutFormatCheckstyle,
 	OutFormatCodeClimate,
+	OutFormatJunitXML,
 }
 
 type ExcludePattern struct {
