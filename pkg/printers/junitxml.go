@@ -37,7 +37,6 @@ func (JunitXML) Print(ctx context.Context, issues <-chan result.Issue) error {
 	suites := make(map[string]testSuiteXML) // use a map to group-by "FromLinter"
 
 	for i := range issues {
-		i := i
 		fromLinter := i.FromLinter
 		testSuite := suites[fromLinter]
 		testSuite.Suite = fromLinter
@@ -55,14 +54,14 @@ func (JunitXML) Print(ctx context.Context, issues <-chan result.Issue) error {
 		suites[fromLinter] = testSuite
 	}
 
-	var result testSuitesXML
+	var res testSuitesXML
 	for _, val := range suites {
-		result.TestSuites = append(result.TestSuites, val)
+		res.TestSuites = append(res.TestSuites, val)
 	}
 
 	enc := xml.NewEncoder(logutils.StdOut)
 	enc.Indent("", "  ")
-	if err := enc.Encode(result); err != nil {
+	if err := enc.Encode(res); err != nil {
 		return err
 	}
 	return nil
