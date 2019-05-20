@@ -34,14 +34,10 @@ func NewJunitXML() *JunitXML {
 }
 
 func (JunitXML) Print(ctx context.Context, issues <-chan result.Issue) error {
-	//debug := logutils.Debug("junitxml")
-	//debug("starting")
 	suites := make(map[string]testSuiteXML) // use a map to group-by "FromLinter"
 
 	for i := range issues {
 		i := i
-		//debug("%+v", i)
-
 		fromLinter := i.FromLinter
 		testSuite := suites[fromLinter]
 		testSuite.Suite = fromLinter
