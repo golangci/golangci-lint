@@ -5,3 +5,4 @@
 /.idea/
 /test/path
 /golangci-lint
+/tools/
