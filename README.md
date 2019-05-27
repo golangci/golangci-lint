@@ -345,7 +345,7 @@ Read [this section](#internals) for details.
 
 ### Memory Usage of Golangci-lint
 
-A trade-off between memory usage and execution time can be controlled by [`GOCC`](https://golang.org/pkg/runtime/#hdr-Environment_Variables) environment variable.
+A trade-off between memory usage and execution time can be controlled by [`GOGC`](https://golang.org/pkg/runtime/#hdr-Environment_Variables) environment variable.
 Less `GOGC` values trigger garbage collection more frequently and golangci-lint consumes less memory and more CPU. Below is the trade-off table for running on this repo:
 
 |`GOGC`|Peak Memory, GB|Executon Time, s|
