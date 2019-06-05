@@ -24,7 +24,8 @@ gen:
 	go generate ./...
 
 check_generated:
-	make readme && git diff --exit-code # check no changes
+	$(MAKE) readme update_deps
+	git diff --exit-code # check no changes
 
 release:
 	rm -rf dist
