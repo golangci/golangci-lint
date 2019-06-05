@@ -1,3 +1,5 @@
+export GO111MODULE = on
+
 test: build
 	GL_TEST_RUN=1 ./golangci-lint run -v
 	GL_TEST_RUN=1 ./golangci-lint run --fast --no-config -v --skip-dirs 'test/testdata_etc,pkg/golinters/goanalysis/(checker|passes)'
@@ -32,9 +34,9 @@ release:
 	curl -sL https://git.io/goreleaser | bash
 
 update_deps:
-	GO111MODULE=on go mod verify
-	GO111MODULE=on go mod tidy
+	go mod verify
+	go mod tidy
 	rm -rf vendor
-	GO111MODULE=on go mod vendor
+	go mod vendor
 
 .PHONY: test

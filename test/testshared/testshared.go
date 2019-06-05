@@ -4,7 +4,6 @@ import (
 	"io/ioutil"
 	"os"
 	"os/exec"
-	"path/filepath"
 	"strings"
 	"syscall"
 
@@ -17,27 +16,26 @@ import (
 type LintRunner struct {
 	t   assert.TestingT
 	log logutils.Log
-
-	installed bool
+	env []string
 }
 
-func NewLintRunner(t assert.TestingT) *LintRunner {
+func NewLintRunner(t assert.TestingT, environ ...string) *LintRunner {
 	log := logutils.NewStderrLog("test")
 	log.SetLevel(logutils.LogLevelInfo)
 	return &LintRunner{
 		t:   t,
 		log: log,
+		env: environ,
 	}
 }
 
 func (r *LintRunner) Install() {
-	if r.installed {
+	if _, err := os.Stat("../golangci-lint"); err == nil {
 		return
 	}
 
-	cmd := exec.Command("go", "install", filepath.Join("..", "cmd", "golangci-lint"))
+	cmd := exec.Command("make", "-C", "..", "build")
 	assert.NoError(r.t, cmd.Run(), "Can't go install golangci-lint")
-	r.installed = true
 }
 
 type RunResult struct {
@@ -82,7 +80,8 @@ func (r *LintRunner) Run(args ...string) *RunResult {
 
 	runArgs := append([]string{"run"}, args...)
 	r.log.Infof("golangci-lint %s", strings.Join(runArgs, " "))
-	cmd := exec.Command("golangci-lint", runArgs...)
+	cmd := exec.Command("../golangci-lint", runArgs...)
+	cmd.Env = append(os.Environ(), r.env...)
 	out, err := cmd.CombinedOutput()
 	if err != nil {
 		if exitError, ok := err.(*exec.ExitError); ok {

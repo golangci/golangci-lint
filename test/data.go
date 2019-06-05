@@ -3,7 +3,7 @@ package test
 import "path/filepath"
 
 const testdataDir = "testdata"
-const binName = "golangci-lint"
+const binName = "../golangci-lint"
 
 func getProjectRoot() string {
 	return filepath.Join("..", "...")

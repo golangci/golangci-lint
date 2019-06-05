@@ -179,6 +179,10 @@ github.com/spf13/viper
 # github.com/stretchr/testify v1.2.2
 github.com/stretchr/testify/assert
 github.com/stretchr/testify/require
+# github.com/valyala/bytebufferpool v1.0.0
+github.com/valyala/bytebufferpool
+# github.com/valyala/quicktemplate v1.1.1
+github.com/valyala/quicktemplate
 # golang.org/x/crypto v0.0.0-20190313024323-a1f597ede03a
 golang.org/x/crypto/ssh/terminal
 # golang.org/x/net v0.0.0-20190313220215-9f648a60d977

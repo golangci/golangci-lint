@@ -1,0 +1,19 @@
+language: go
+
+go:
+  - 1.11.x
+  - 1.12.x
+  - tip
+
+before_install:
+  - go get -u github.com/valyala/quicktemplate/qtc
+  - go generate
+
+script:
+  # build test for supported platforms
+  - GOOS=linux go build
+  - GOOS=darwin go build
+  - GOOS=freebsd go build
+
+  # run tests on a standard platform
+  - go test -v ./...
