@@ -17,7 +17,7 @@ func (Structcheck) Name() string {
 }
 
 func (Structcheck) Desc() string {
-	return "Finds an unused struct fields"
+	return "Finds unused struct fields"
 }
 
 func (s Structcheck) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issue, error) {
