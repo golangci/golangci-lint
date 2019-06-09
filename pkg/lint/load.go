@@ -148,39 +148,19 @@ func (cl ContextLoader) buildSSAProgram(pkgs []*packages.Package) *ssa.Program {
 }
 
 func (cl ContextLoader) findLoadMode(linters []*linter.Config) packages.LoadMode {
-	maxLoadMode := packages.LoadFiles
+	//TODO: specify them in linters: need more fine-grained control.
+	// e.g. NeedTypesSizes is needed only for go vet
+	loadMode := packages.NeedName | packages.NeedFiles | packages.NeedCompiledGoFiles
 	for _, lc := range linters {
-		curLoadMode := packages.LoadFiles
 		if lc.NeedsTypeInfo {
-			curLoadMode = packages.LoadSyntax
+			loadMode |= packages.NeedImports | packages.NeedTypes | packages.NeedTypesSizes | packages.NeedTypesInfo | packages.NeedSyntax
 		}
 		if lc.NeedsSSARepr {
-			curLoadMode = packages.LoadAllSyntax
-		}
-		if curLoadMode > maxLoadMode {
-			maxLoadMode = curLoadMode
+			loadMode |= packages.NeedDeps
 		}
 	}
 
-	return maxLoadMode
-}
-
-func stringifyLoadMode(mode packages.LoadMode) string {
-	switch mode {
-	case packages.LoadFiles:
-		return "load files"
-	case packages.LoadImports:
-		return "load imports"
-	case packages.LoadTypes:
-		return "load types"
-	case packages.LoadSyntax:
-		return "load types and syntax"
-	}
-	// it may be an alias, and may be not
-	if mode == packages.LoadAllSyntax {
-		return "load deps types and syntax"
-	}
-	return "unknown"
+	return loadMode
 }
 
 func (cl ContextLoader) buildArgs() []string {
@@ -231,6 +211,58 @@ func (cl ContextLoader) makeBuildFlags() ([]string, error) {
 	return buildFlags, nil
 }
 
+func stringifyLoadMode(mode packages.LoadMode) string {
+	m := map[packages.LoadMode]string{
+		packages.NeedCompiledGoFiles: "compiled_files",
+		packages.NeedDeps:            "deps",
+		packages.NeedExportsFile:     "exports_file",
+		packages.NeedFiles:           "files",
+		packages.NeedImports:         "imports",
+		packages.NeedName:            "name",
+		packages.NeedSyntax:          "syntax",
+		packages.NeedTypes:           "types",
+		packages.NeedTypesInfo:       "types_info",
+		packages.NeedTypesSizes:      "types_sizes",
+	}
+
+	var flags []string
+	for flag, flagStr := range m {
+		if mode&flag != 0 {
+			flags = append(flags, flagStr)
+		}
+	}
+
+	return fmt.Sprintf("%d (%s)", mode, strings.Join(flags, "|"))
+}
+
+func (cl ContextLoader) debugPrintLoadedPackages(pkgs []*packages.Package) {
+	cl.debugf("loaded %d pkgs", len(pkgs))
+	for i, pkg := range pkgs {
+		var syntaxFiles []string
+		for _, sf := range pkg.Syntax {
+			syntaxFiles = append(syntaxFiles, pkg.Fset.Position(sf.Pos()).Filename)
+		}
+		cl.debugf("Loaded pkg #%d: ID=%s GoFiles=%s CompiledGoFiles=%s Syntax=%s",
+			i, pkg.ID, pkg.GoFiles, pkg.CompiledGoFiles, syntaxFiles)
+	}
+}
+
+func (cl ContextLoader) parseLoadedPackagesErrors(pkgs []*packages.Package) error {
+	for _, pkg := range pkgs {
+		for _, err := range pkg.Errors {
+			if strings.Contains(err.Msg, "no Go files") {
+				return errors.Wrapf(exitcodes.ErrNoGoFiles, "package %s", pkg.PkgPath)
+			}
+			if strings.Contains(err.Msg, "cannot find package") {
+				// when analyzing not existing directory
+				return errors.Wrap(exitcodes.ErrFailure, err.Msg)
+			}
+		}
+	}
+
+	return nil
+}
+
 func (cl ContextLoader) loadPackages(ctx context.Context, loadMode packages.LoadMode) ([]*packages.Package, error) {
 	defer func(startedAt time.Time) {
 		cl.log.Infof("Go packages loading at mode %s took %s", stringifyLoadMode(loadMode), time.Since(startedAt))
@@ -248,6 +280,7 @@ func (cl ContextLoader) loadPackages(ctx context.Context, loadMode packages.Load
 		Tests:      cl.cfg.Run.AnalyzeTests,
 		Context:    ctx,
 		BuildFlags: buildFlags,
+		Logf:       cl.debugf,
 		//TODO: use fset, parsefile, overlay
 	}
 
@@ -257,26 +290,10 @@ func (cl ContextLoader) loadPackages(ctx context.Context, loadMode packages.Load
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to load program with go/packages")
 	}
-	cl.debugf("loaded %d pkgs", len(pkgs))
-	for i, pkg := range pkgs {
-		var syntaxFiles []string
-		for _, sf := range pkg.Syntax {
-			syntaxFiles = append(syntaxFiles, pkg.Fset.Position(sf.Pos()).Filename)
-		}
-		cl.debugf("Loaded pkg #%d: ID=%s GoFiles=%s CompiledGoFiles=%s Syntax=%s",
-			i, pkg.ID, pkg.GoFiles, pkg.CompiledGoFiles, syntaxFiles)
-	}
+	cl.debugPrintLoadedPackages(pkgs)
 
-	for _, pkg := range pkgs {
-		for _, err := range pkg.Errors {
-			if strings.Contains(err.Msg, "no Go files") {
-				return nil, errors.Wrapf(exitcodes.ErrNoGoFiles, "package %s", pkg.PkgPath)
-			}
-			if strings.Contains(err.Msg, "cannot find package") {
-				// when analyzing not existing directory
-				return nil, errors.Wrap(exitcodes.ErrFailure, err.Msg)
-			}
-		}
+	if err := cl.parseLoadedPackagesErrors(pkgs); err != nil {
+		return nil, err
 	}
 
 	return cl.filterPackages(pkgs), nil
@@ -341,12 +358,12 @@ func (cl ContextLoader) Load(ctx context.Context, linters []*linter.Config) (*li
 	}
 
 	var prog *loader.Program
-	if loadMode >= packages.LoadSyntax {
+	if loadMode&packages.NeedTypes != 0 {
 		prog = cl.makeFakeLoaderProgram(pkgs)
 	}
 
 	var ssaProg *ssa.Program
-	if loadMode == packages.LoadAllSyntax {
+	if loadMode&packages.NeedDeps != 0 {
 		ssaProg = cl.buildSSAProgram(pkgs)
 	}
 
