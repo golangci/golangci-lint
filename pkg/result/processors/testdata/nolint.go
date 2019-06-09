@@ -49,3 +49,9 @@ var nolintAliasGAS bool //nolint:gas
 var nolintAliasGosec bool //nolint:gosec
 
 var nolintAliasUpperCase int // nolint: GAS
+
+//nolint:errcheck
+var (
+	nolintVarBlockVar1 int
+	nolintVarBlockVar2 int
+)
