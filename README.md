@@ -204,6 +204,7 @@ and the following linters are disabled by default:
 $ golangci-lint help linters
 ...
 Disabled by default linters:
+bodyclose: checks whether HTTP response body is closed successfully [fast: false, auto-fix: false]
 depguard: Go linter that checks if package imports are in a list of acceptable packages [fast: true, auto-fix: false]
 dupl: Tool for code clone detection [fast: true, auto-fix: false]
 gochecknoglobals: Checks that no globals are present in Go code [fast: true, auto-fix: false]
@@ -344,7 +345,7 @@ Read [this section](#internals) for details.
 
 ### Memory Usage of Golangci-lint
 
-A trade-off between memory usage and execution time can be controlled by [`GOCC`](https://golang.org/pkg/runtime/#hdr-Environment_Variables) environment variable.
+A trade-off between memory usage and execution time can be controlled by [`GOGC`](https://golang.org/pkg/runtime/#hdr-Environment_Variables) environment variable.
 Less `GOGC` values trigger garbage collection more frequently and golangci-lint consumes less memory and more CPU. Below is the trade-off table for running on this repo:
 
 |`GOGC`|Peak Memory, GB|Executon Time, s|
@@ -416,6 +417,7 @@ golangci-lint help linters
 
 ### Disabled By Default Linters (`-E/--enable`)
 
+- [bodyclose](https://github.com/timakin/bodyclose) - checks whether HTTP response body is closed successfully
 - [golint](https://github.com/golang/lint) - Golint differs from gofmt. Gofmt reformats Go source code, whereas golint prints out style mistakes
 - [stylecheck](https://github.com/dominikh/go-tools/tree/master/stylecheck) - Stylecheck is a replacement for golint
 - [gosec](https://github.com/securego/gosec) - Inspects source code for security problems
@@ -871,7 +873,7 @@ issues:
 # golangci.com configuration
 # https://github.com/golangci/golangci/wiki/Configuration
 service:
-  golangci-lint-version: 1.15.x # use the fixed version to not introduce new linters unexpectedly
+  golangci-lint-version: 1.16.x # use the fixed version to not introduce new linters unexpectedly
   prepare:
     - echo "here I can run custom commands, but no preparation needed for this repo"
 ```
@@ -926,8 +928,8 @@ Short answer: go 1.11 and newer are oficially supported.
 Long answer:
 1. go < 1.9 isn't supported
 2. go 1.9 is supported by golangci-lint <= v1.10.2
-3. go 1.10 is oficially supported by golangci-lint <= 1.15.0.
-4. go1.11 and go1.12 are oficially supported by the latest version of golangci-lint.
+3. go 1.10 is officially supported by golangci-lint <= 1.15.0.
+4. go1.11 and go1.12 are officially supported by the latest version of golangci-lint.
 
 **`golangci-lint` doesn't work**
 
@@ -946,6 +948,7 @@ Thanks to [alecthomas/gometalinter](https://github.com/alecthomas/gometalinter) 
 Thanks to [bradleyfalzon/revgrep](https://github.com/bradleyfalzon/revgrep) for cool diff tool.
 
 Thanks to developers and authors of used linters:
+- [timakin](https://github.com/timakin)
 - [kisielk](https://github.com/kisielk)
 - [golang](https://github.com/golang)
 - [dominikh](https://github.com/dominikh)

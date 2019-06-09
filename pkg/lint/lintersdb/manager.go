@@ -89,6 +89,11 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithSpeed(4).
 			WithAlternativeNames("vet", "vetshadow").
 			WithURL("https://golang.org/cmd/vet/"),
+		linter.NewConfig(golinters.NewBodyclose()).
+			WithSSA().
+			WithPresets(linter.PresetPerformance, linter.PresetBugs).
+			WithSpeed(4).
+			WithURL("https://github.com/timakin/bodyclose"),
 		linter.NewConfig(golinters.Errcheck{}).
 			WithTypeInfo().
 			WithPresets(linter.PresetBugs).

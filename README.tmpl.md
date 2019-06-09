@@ -313,7 +313,7 @@ Read [this section](#internals) for details.
 
 ### Memory Usage of Golangci-lint
 
-A trade-off between memory usage and execution time can be controlled by [`GOCC`](https://golang.org/pkg/runtime/#hdr-Environment_Variables) environment variable.
+A trade-off between memory usage and execution time can be controlled by [`GOGC`](https://golang.org/pkg/runtime/#hdr-Environment_Variables) environment variable.
 Less `GOGC` values trigger garbage collection more frequently and golangci-lint consumes less memory and more CPU. Below is the trade-off table for running on this repo:
 
 |`GOGC`|Peak Memory, GB|Executon Time, s|
@@ -475,8 +475,8 @@ Short answer: go 1.11 and newer are oficially supported.
 Long answer:
 1. go < 1.9 isn't supported
 2. go 1.9 is supported by golangci-lint <= v1.10.2
-3. go 1.10 is oficially supported by golangci-lint <= 1.15.0.
-4. go1.11 and go1.12 are oficially supported by the latest version of golangci-lint.
+3. go 1.10 is officially supported by golangci-lint <= 1.15.0.
+4. go1.11 and go1.12 are officially supported by the latest version of golangci-lint.
 
 **`golangci-lint` doesn't work**
 
