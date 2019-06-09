@@ -77,6 +77,19 @@ func (f Fixer) fixIssuesInFile(filePath string, issues []result.Issue) error {
 		return errors.Wrapf(err, "failed to make file %s", tmpFileName)
 	}
 
+	// merge multiple issues per line into one issue
+	issuesPerLine := map[int][]result.Issue{}
+	for _, i := range issues {
+		issuesPerLine[i.Line()] = append(issuesPerLine[i.Line()], i)
+	}
+
+	issues = issues[:0] // reuse the same memory
+	for line, lineIssues := range issuesPerLine {
+		if mergedIssue := f.mergeLineIssues(line, lineIssues, origFileLines); mergedIssue != nil {
+			issues = append(issues, *mergedIssue)
+		}
+	}
+
 	issues = f.findNotIntersectingIssues(issues)
 
 	if err = f.writeFixedFile(origFileLines, issues, tmpOutFile); err != nil {
@@ -94,9 +107,76 @@ func (f Fixer) fixIssuesInFile(filePath string, issues []result.Issue) error {
 	return nil
 }
 
+//nolint:gocyclo
+func (f Fixer) mergeLineIssues(lineNum int, lineIssues []result.Issue, origFileLines [][]byte) *result.Issue {
+	origLine := origFileLines[lineNum-1] // lineNum is 1-based
+
+	if len(lineIssues) == 1 && lineIssues[0].Replacement.Inline == nil {
+		return &lineIssues[0]
+	}
+
+	// check issues first
+	for _, i := range lineIssues {
+		if i.LineRange != nil {
+			f.log.Infof("Line %d has multiple issues but at least one of them is ranged: %#v", lineNum, lineIssues)
+			return &lineIssues[0]
+		}
+
+		r := i.Replacement
+		if r.Inline == nil || len(r.NewLines) != 0 || r.NeedOnlyDelete {
+			f.log.Infof("Line %d has multiple issues but at least one of them isn't inline: %#v", lineNum, lineIssues)
+			return &lineIssues[0]
+		}
+
+		if r.Inline.StartCol < 0 || r.Inline.Length <= 0 || r.Inline.StartCol+r.Inline.Length > len(origLine) {
+			f.log.Warnf("Line %d (%q) has invalid inline fix: %#v, %#v", lineNum, origLine, i, r.Inline)
+			return nil
+		}
+	}
+
+	return f.applyInlineFixes(lineIssues, origLine, lineNum)
+}
+
+func (f Fixer) applyInlineFixes(lineIssues []result.Issue, origLine []byte, lineNum int) *result.Issue {
+	sort.Slice(lineIssues, func(i, j int) bool {
+		return lineIssues[i].Replacement.Inline.StartCol < lineIssues[j].Replacement.Inline.StartCol
+	})
+
+	var newLineBuf bytes.Buffer
+	newLineBuf.Grow(len(origLine))
+
+	//nolint:misspell
+	// example: origLine="it's becouse of them", StartCol=5, Length=7, NewString="because"
+
+	curOrigLinePos := 0
+	for _, i := range lineIssues {
+		fix := i.Replacement.Inline
+		if fix.StartCol < curOrigLinePos {
+			f.log.Warnf("Line %d has multiple intersecting issues: %#v", lineNum, lineIssues)
+			return nil
+		}
+
+		if curOrigLinePos != fix.StartCol {
+			newLineBuf.Write(origLine[curOrigLinePos:fix.StartCol])
+		}
+		newLineBuf.WriteString(fix.NewString)
+		curOrigLinePos = fix.StartCol + fix.Length
+	}
+	if curOrigLinePos != len(origLine) {
+		newLineBuf.Write(origLine[curOrigLinePos:])
+	}
+
+	mergedIssue := lineIssues[0] // use text from the first issue (it's not really used)
+	mergedIssue.Replacement = &result.Replacement{
+		NewLines: []string{newLineBuf.String()},
+	}
+	return &mergedIssue
+}
+
 func (f Fixer) findNotIntersectingIssues(issues []result.Issue) []result.Issue {
 	sort.SliceStable(issues, func(i, j int) bool {
-		return issues[i].Line() < issues[j].Line() //nolint:scopelint
+		a, b := issues[i], issues[j] //nolint:scopelint
+		return a.Line() < b.Line()
 	})
 
 	var ret []result.Issue

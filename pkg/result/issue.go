@@ -9,6 +9,13 @@ type Range struct {
 type Replacement struct {
 	NeedOnlyDelete bool     // need to delete all lines of the issue without replacement with new lines
 	NewLines       []string // is NeedDelete is false it's the replacement lines
+	Inline         *InlineFix
+}
+
+type InlineFix struct {
+	StartCol  int // zero-based
+	Length    int // length of chunk to be replaced
+	NewString string
 }
 
 type Issue struct {

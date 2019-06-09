@@ -1,14 +1,17 @@
 //args: -Emisspell
 package p
 
+import "log"
+
 // language lala
 // lala language
 // language
-// language langauge
+// language language
 
 // check Language
 // and check langAuge
 
-func langaugeMisspell() { // the function detects language of the text
-
+func langaugeMisspell() {
+	var language, langaugeAnd string
+	log.Printf("it's because of them: %s, %s", language, langaugeAnd)
 }

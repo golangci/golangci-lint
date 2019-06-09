@@ -4,6 +4,8 @@ import (
 	"go/token"
 	"testing"
 
+	"github.com/golangci/golangci-lint/pkg/config"
+
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
@@ -17,7 +19,7 @@ func newFLIssue(file string, line int) result.Issue {
 }
 
 func TestUniqByLine(t *testing.T) {
-	p := NewUniqByLine()
+	p := NewUniqByLine(&config.Config{})
 	i1 := newFLIssue("f1", 1)
 
 	processAssertSame(t, p, i1)

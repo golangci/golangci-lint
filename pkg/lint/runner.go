@@ -79,13 +79,12 @@ func NewRunner(astCache *astcache.Cache, cfg *config.Config, log logutils.Log, g
 			processors.NewExcludeRules(excludeRules, lineCache, log.Child("exclude_rules")),
 			processors.NewNolint(astCache, log.Child("nolint"), dbManager),
 
-			processors.NewUniqByLine(),
+			processors.NewUniqByLine(cfg),
 			processors.NewDiff(icfg.Diff, icfg.DiffFromRevision, icfg.DiffPatchFilePath),
 			processors.NewMaxPerFileFromLinter(cfg),
 			processors.NewMaxSameIssues(icfg.MaxSameIssues, log.Child("max_same_issues"), cfg),
 			processors.NewMaxFromLinter(icfg.MaxIssuesPerLinter, log.Child("max_from_linter"), cfg),
 			processors.NewSourceCode(lineCache, log.Child("source_code")),
-			processors.NewReplacementBuilder(log.Child("replacement_builder")), // must be after source code
 			processors.NewPathShortener(),
 		},
 		Log: log,

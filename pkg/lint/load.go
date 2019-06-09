@@ -11,6 +11,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/golangci/golangci-lint/pkg/fsutils"
+
 	"github.com/pkg/errors"
 	"golang.org/x/tools/go/loader"
 	"golang.org/x/tools/go/packages"
@@ -31,15 +33,21 @@ type ContextLoader struct {
 	debugf      logutils.DebugFunc
 	goenv       *goutil.Env
 	pkgTestIDRe *regexp.Regexp
+	lineCache   *fsutils.LineCache
+	fileCache   *fsutils.FileCache
 }
 
-func NewContextLoader(cfg *config.Config, log logutils.Log, goenv *goutil.Env) *ContextLoader {
+func NewContextLoader(cfg *config.Config, log logutils.Log, goenv *goutil.Env,
+	lineCache *fsutils.LineCache, fileCache *fsutils.FileCache) *ContextLoader {
+
 	return &ContextLoader{
 		cfg:         cfg,
 		log:         log,
 		debugf:      logutils.Debug("loader"),
 		goenv:       goenv,
 		pkgTestIDRe: regexp.MustCompile(`^(.*) \[(.*)\.test\]`),
+		lineCache:   lineCache,
+		fileCache:   fileCache,
 	}
 }
 
@@ -356,9 +364,11 @@ func (cl ContextLoader) Load(ctx context.Context, linters []*linter.Config) (*li
 			Cwd:   "",  // used by depguard and fallbacked to os.Getcwd
 			Build: nil, // used by depguard and megacheck and fallbacked to build.Default
 		},
-		Cfg:      cl.cfg,
-		ASTCache: astCache,
-		Log:      cl.log,
+		Cfg:       cl.cfg,
+		ASTCache:  astCache,
+		Log:       cl.log,
+		FileCache: cl.fileCache,
+		LineCache: cl.lineCache,
 	}
 
 	separateNotCompilingPackages(ret)

@@ -109,7 +109,7 @@ func (lint Gocritic) Run(ctx context.Context, lintCtx *linter.Context) ([]result
 	go func() {
 		defer func() {
 			if err := recover(); err != nil {
-				panicErr = fmt.Errorf("panic occured: %s", err)
+				panicErr = fmt.Errorf("panic occurred: %s", err)
 				lintCtx.Log.Warnf("Panic: %s", debug.Stack())
 			}
 		}()
