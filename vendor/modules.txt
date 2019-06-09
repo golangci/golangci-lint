@@ -44,7 +44,7 @@ github.com/gobwas/glob/syntax/lexer
 github.com/gobwas/glob/util/strings
 # github.com/gogo/protobuf v1.1.1
 github.com/gogo/protobuf/proto
-# github.com/golang/mock v1.1.1
+# github.com/golang/mock v1.0.0
 github.com/golang/mock/gomock
 # github.com/golangci/check v0.0.0-20180506172741-cfe4005ccda2
 github.com/golangci/check/cmd/structcheck
@@ -181,12 +181,14 @@ github.com/spf13/viper
 # github.com/stretchr/testify v1.2.2
 github.com/stretchr/testify/assert
 github.com/stretchr/testify/require
+# github.com/valyala/bytebufferpool v1.0.0
+github.com/valyala/bytebufferpool
+# github.com/valyala/quicktemplate v1.1.1
+github.com/valyala/quicktemplate
 # github.com/timakin/bodyclose v0.0.0-20190407043127-4a873e97b2bb
 github.com/timakin/bodyclose/passes/bodyclose
 # golang.org/x/crypto v0.0.0-20190313024323-a1f597ede03a
 golang.org/x/crypto/ssh/terminal
-# golang.org/x/net v0.0.0-20190313220215-9f648a60d977
-golang.org/x/net/context
 # golang.org/x/sys v0.0.0-20190312061237-fead79001313
 golang.org/x/sys/unix
 golang.org/x/sys/windows

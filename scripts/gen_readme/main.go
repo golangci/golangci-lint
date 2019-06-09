@@ -53,18 +53,18 @@ func buildTemplateContext() (map[string]interface{}, error) {
 		return nil, fmt.Errorf("can't read .golangci.example.yml: %s", err)
 	}
 
-	if err = exec.Command("go", "install", "./cmd/...").Run(); err != nil {
+	if err = exec.Command("make", "build").Run(); err != nil {
 		return nil, fmt.Errorf("can't run go install: %s", err)
 	}
 
-	lintersOut, err := exec.Command("golangci-lint", "help", "linters").Output()
+	lintersOut, err := exec.Command("./golangci-lint", "help", "linters").Output()
 	if err != nil {
 		return nil, fmt.Errorf("can't run linters cmd: %s", err)
 	}
 
 	lintersOutParts := bytes.Split(lintersOut, []byte("\n\n"))
 
-	helpCmd := exec.Command("golangci-lint", "run", "-h")
+	helpCmd := exec.Command("./golangci-lint", "run", "-h")
 	helpCmd.Env = append(helpCmd.Env, os.Environ()...)
 	helpCmd.Env = append(helpCmd.Env, "HELP_RUN=1") // make default concurrency stable: don't depend on machine CPU number
 	help, err := helpCmd.Output()
