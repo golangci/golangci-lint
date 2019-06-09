@@ -38,6 +38,7 @@ maintainer-clean: clean
 
 check_generated:
 	$(MAKE) --always-make generate
+	git checkout -- go.mod go.sum # can differ between go1.11 and go1.12
 	git diff --exit-code # check no changes
 .PHONY: check_generated
 
