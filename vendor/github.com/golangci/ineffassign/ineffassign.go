@@ -240,7 +240,7 @@ func (bld *builder) Visit(n ast.Node) ast.Visitor {
 					bld.use(id)
 				}
 				// Don't treat explicit initialization to zero as assignment; it is often used as shorthand for a bare declaration.
-				if n.Tok == token.DEFINE && i < len(n.Rhs) && isZeroLiteral(n.Rhs[i]) {
+				if n.Tok == token.DEFINE && i < len(n.Rhs) && isZeroInitializer(n.Rhs[i]) {
 					bld.use(id)
 				} else {
 					bld.assign(id)
@@ -278,18 +278,17 @@ func (bld *builder) Visit(n ast.Node) ast.Visitor {
 		for _, x := range n.Results {
 			bld.walk(x)
 		}
-		res := bld.results[len(bld.results)-1]
-		if res == nil {
-			break
-		}
-		for _, f := range res.List {
-			for _, id := range f.Names {
-				if n.Results != nil {
-					bld.assign(id)
+		if res := bld.results[len(bld.results)-1]; res != nil {
+			for _, f := range res.List {
+				for _, id := range f.Names {
+					if n.Results != nil {
+						bld.assign(id)
+					}
+					bld.use(id)
 				}
-				bld.use(id)
 			}
 		}
+		bld.newBlock()
 	case *ast.SendStmt:
 		bld.maybePanic()
 		return bld
@@ -350,15 +349,30 @@ func (bld *builder) Visit(n ast.Node) ast.Visitor {
 	return nil
 }
 
-func isZeroLiteral(x ast.Expr) bool {
-	b, ok := x.(*ast.BasicLit)
-	if !ok {
-		return false
+func isZeroInitializer(x ast.Expr) bool {
+	// Assume that a call expression of a single argument is a conversion expression.  We can't do better without type information.
+	if c, ok := x.(*ast.CallExpr); ok {
+		switch c.Fun.(type) {
+		case *ast.Ident, *ast.SelectorExpr:
+		default:
+			return false
+		}
+		if len(c.Args) != 1 {
+			return false
+		}
+		x = c.Args[0]
 	}
-	switch b.Value {
-	case "0", "0.0", "0.", ".0", `""`:
-		return true
+
+	switch x := x.(type) {
+	case *ast.BasicLit:
+		switch x.Value {
+		case "0", "0.0", "0.", ".0", `""`:
+			return true
+		}
+	case *ast.Ident:
+		return x.Name == "false" && x.Obj == nil
 	}
+
 	return false
 }
 

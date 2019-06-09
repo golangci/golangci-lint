@@ -92,7 +92,7 @@ github.com/golangci/gofmt/goimports
 # github.com/golangci/gosec v0.0.0-20180901114220-66fb7fc33547
 github.com/golangci/gosec
 github.com/golangci/gosec/rules
-# github.com/golangci/ineffassign v0.0.0-20180808204949-2ee8f2867dde
+# github.com/golangci/ineffassign v0.0.0-20180808204949-42439a7714cc
 github.com/golangci/ineffassign
 # github.com/golangci/lint-1 v0.0.0-20180610141402-ee948d087217
 github.com/golangci/lint-1

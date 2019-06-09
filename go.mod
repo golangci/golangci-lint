@@ -19,7 +19,7 @@ require (
 	github.com/golangci/gocyclo v0.0.0-20180528134321-2becd97e67ee
 	github.com/golangci/gofmt v0.0.0-20181105071733-0b8337e80d98
 	github.com/golangci/gosec v0.0.0-20180901114220-66fb7fc33547
-	github.com/golangci/ineffassign v0.0.0-20180808204949-2ee8f2867dde
+	github.com/golangci/ineffassign v0.0.0-20180808204949-42439a7714cc
 	github.com/golangci/lint-1 v0.0.0-20180610141402-ee948d087217
 	github.com/golangci/maligned v0.0.0-20180506175553-b1d89398deca
 	github.com/golangci/misspell v0.0.0-20180809174111-950f5d19e770
