@@ -1,6 +1,8 @@
 //args: -Emisspell
 package p
 
+import "log"
+
 // langauge lala
 // lala langauge
 // langauge
@@ -9,6 +11,7 @@ package p
 // check Langauge
 // and check langAuge
 
-func langaugeMisspell() { // the function detects langauge of the text
-
+func langaugeMisspell() {
+	var langauge, langaugeAnd string
+	log.Printf("it's becouse of them: %s, %s", langauge, langaugeAnd)
 }

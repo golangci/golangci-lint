@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"go/token"
-	"io/ioutil"
 	"strings"
 
 	"github.com/golangci/misspell"
@@ -14,6 +13,10 @@ import (
 )
 
 type Misspell struct{}
+
+func NewMisspell() *Misspell {
+	return &Misspell{}
+}
 
 func (Misspell) Name() string {
 	return "misspell"
@@ -50,25 +53,52 @@ func (lint Misspell) Run(ctx context.Context, lintCtx *linter.Context) ([]result
 
 	var res []result.Issue
 	for _, f := range getAllFileNames(lintCtx) {
-		fileContent, err := ioutil.ReadFile(f)
+		issues, err := lint.runOnFile(f, &r, lintCtx)
 		if err != nil {
-			return nil, fmt.Errorf("can't read file %s: %s", f, err)
+			return nil, err
+		}
+		res = append(res, issues...)
+	}
+
+	return res, nil
+}
+
+func (lint Misspell) runOnFile(fileName string, r *misspell.Replacer, lintCtx *linter.Context) ([]result.Issue, error) {
+	var res []result.Issue
+	fileContent, err := lintCtx.FileCache.GetFileBytes(fileName)
+	if err != nil {
+		return nil, fmt.Errorf("can't get file %s contents: %s", fileName, err)
+	}
+
+	// use r.Replace, not r.ReplaceGo because r.ReplaceGo doesn't find
+	// issues inside strings: it searches only inside comments. r.Replace
+	// searches all words: it treats input as a plain text. A standalone misspell
+	// tool uses r.Replace by default.
+	_, diffs := r.Replace(string(fileContent))
+	for _, diff := range diffs {
+		text := fmt.Sprintf("`%s` is a misspelling of `%s`", diff.Original, diff.Corrected)
+		pos := token.Position{
+			Filename: fileName,
+			Line:     diff.Line,
+			Column:   diff.Column + 1,
+		}
+		var replacement *result.Replacement
+		if lintCtx.Cfg.Issues.NeedFix {
+			replacement = &result.Replacement{
+				Inline: &result.InlineFix{
+					StartCol:  diff.Column,
+					Length:    len(diff.Original),
+					NewString: diff.Corrected,
+				},
+			}
 		}
 
-		_, diffs := r.ReplaceGo(string(fileContent))
-		for _, diff := range diffs {
-			text := fmt.Sprintf("`%s` is a misspelling of `%s`", diff.Original, diff.Corrected)
-			pos := token.Position{
-				Filename: f,
-				Line:     diff.Line,
-				Column:   diff.Column + 1,
-			}
-			res = append(res, result.Issue{
-				Pos:        pos,
-				Text:       text,
-				FromLinter: lint.Name(),
-			})
-		}
+		res = append(res, result.Issue{
+			Pos:         pos,
+			Text:        text,
+			FromLinter:  lint.Name(),
+			Replacement: replacement,
+		})
 	}
 
 	return res, nil

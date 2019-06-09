@@ -96,9 +96,9 @@ func NewExecutor(version, commit, date string) *Executor {
 	e.EnabledLintersSet = lintersdb.NewEnabledSet(e.DBManager,
 		lintersdb.NewValidator(e.DBManager), e.log.Child("lintersdb"), e.cfg)
 	e.goenv = goutil.NewEnv(e.log.Child("goenv"))
-	e.contextLoader = lint.NewContextLoader(e.cfg, e.log.Child("loader"), e.goenv)
 	e.fileCache = fsutils.NewFileCache()
 	e.lineCache = fsutils.NewLineCache(e.fileCache)
+	e.contextLoader = lint.NewContextLoader(e.cfg, e.log.Child("loader"), e.goenv, e.lineCache, e.fileCache)
 
 	return e
 }
