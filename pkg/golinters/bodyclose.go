@@ -1,9 +1,10 @@
 package golinters
 
 import (
-	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 	"github.com/timakin/bodyclose/passes/bodyclose"
 	"golang.org/x/tools/go/analysis"
+
+	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 )
 
 func NewBodyclose() *goanalysis.Linter {

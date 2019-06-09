@@ -90,7 +90,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithAlternativeNames("vet", "vetshadow").
 			WithURL("https://golang.org/cmd/vet/"),
 		linter.NewConfig(golinters.NewBodyclose()).
-			WithSSA(). // TODO: extract from the linter config and don't build SSA, just use LoadAllSyntax mode
+			WithSSA().
 			WithPresets(linter.PresetPerformance, linter.PresetBugs).
 			WithSpeed(4).
 			WithURL("https://github.com/timakin/bodyclose"),
