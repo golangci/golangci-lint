@@ -4,6 +4,9 @@ go:
   - 1.11.x
   - 1.12.x
 
+before_script:
+  - go get github.com/valyala/quicktemplate
+
 script: make check_generated test
 
 after_success:

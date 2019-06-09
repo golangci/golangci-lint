@@ -14,9 +14,10 @@ import (
 )
 
 type LintRunner struct {
-	t   assert.TestingT
-	log logutils.Log
-	env []string
+	t         assert.TestingT
+	log       logutils.Log
+	env       []string
+	installed bool
 }
 
 func NewLintRunner(t assert.TestingT, environ ...string) *LintRunner {
@@ -30,12 +31,13 @@ func NewLintRunner(t assert.TestingT, environ ...string) *LintRunner {
 }
 
 func (r *LintRunner) Install() {
-	if _, err := os.Stat("../golangci-lint"); err == nil {
+	if r.installed {
 		return
 	}
 
 	cmd := exec.Command("make", "-C", "..", "build")
 	assert.NoError(r.t, cmd.Run(), "Can't go install golangci-lint")
+	r.installed = true
 }
 
 type RunResult struct {
@@ -79,7 +81,7 @@ func (r *LintRunner) Run(args ...string) *RunResult {
 	r.Install()
 
 	runArgs := append([]string{"run"}, args...)
-	r.log.Infof("golangci-lint %s", strings.Join(runArgs, " "))
+	r.log.Infof("../golangci-lint %s", strings.Join(runArgs, " "))
 	cmd := exec.Command("../golangci-lint", runArgs...)
 	cmd.Env = append(os.Environ(), r.env...)
 	out, err := cmd.CombinedOutput()

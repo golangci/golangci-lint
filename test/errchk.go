@@ -52,6 +52,7 @@ func errorCheck(outStr string, wantAuto bool, fullshort ...string) (err error) {
 		}
 		matched := false
 		n := len(out)
+		var textsToMatch []string
 		for _, errmsg := range errmsgs {
 			// Assume errmsg says "file:line: foo".
 			// Cut leading "file:line: " to avoid accidental matching of file name instead of message.
@@ -63,10 +64,13 @@ func errorCheck(outStr string, wantAuto bool, fullshort ...string) (err error) {
 				matched = true
 			} else {
 				out = append(out, errmsg)
+				textsToMatch = append(textsToMatch, text)
 			}
 		}
 		if !matched {
-			errs = append(errs, fmt.Errorf("%s:%d: no match for %#q in:\n\t%s", we.file, we.lineNum, we.reStr, strings.Join(out[n:], "\n\t")))
+			err := fmt.Errorf("%s:%d: no match for %#q vs %q in:\n\t%s",
+				we.file, we.lineNum, we.reStr, textsToMatch, strings.Join(out[n:], "\n\t"))
+			errs = append(errs, err)
 			continue
 		}
 	}
