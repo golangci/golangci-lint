@@ -37,6 +37,7 @@ func newTestNolintProcessor(log logutils.Log) *Nolint {
 		filepath.Join("testdata", "nolint.go"),
 		filepath.Join("testdata", "nolint2.go"),
 		filepath.Join("testdata", "nolint_bad_names.go"),
+		filepath.Join("testdata", "nolint_whole_file.go"),
 	)
 	return NewNolint(cache, log, lintersdb.NewManager(nil))
 }
@@ -121,6 +122,11 @@ func TestNolint(t *testing.T) {
 	}
 	processAssertEmpty(t, p, newNolint2FileIssue(14))
 	for i := 15; i <= 18; i++ {
+		processAssertSame(t, p, newNolint2FileIssue(i))
+	}
+
+	// variables block exclude
+	for i := 55; i <= 56; i++ {
 		processAssertSame(t, p, newNolint2FileIssue(i))
 	}
 }
@@ -225,4 +231,26 @@ func TestIgnoredRangeMatches(t *testing.T) {
 		}
 		assert.Equal(t, testcase.expected, ir.doesMatch(&testcase.issue), testcase.doc)
 	}
+}
+
+func TestNolintWholeFile(t *testing.T) {
+	fileName := filepath.Join("testdata", "nolint_whole_file.go")
+
+	p := newTestNolintProcessor(nil)
+	defer p.Finish()
+
+	processAssertEmpty(t, p, result.Issue{
+		Pos: token.Position{
+			Filename: fileName,
+			Line:     4,
+		},
+		FromLinter: "unparam",
+	})
+	processAssertSame(t, p, result.Issue{
+		Pos: token.Position{
+			Filename: fileName,
+			Line:     4,
+		},
+		FromLinter: "deadcode",
+	})
 }

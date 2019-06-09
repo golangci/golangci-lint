@@ -430,20 +430,50 @@ than the default and have more strict settings:
 False positives are inevitable, but we did our best to reduce their count. For example, we have a default enabled set of [exclude patterns](#command-line-options). If a false positive occurred you have the following choices:
 
 1. Exclude issue by text using command-line option `-e` or config option `issues.exclude`. It's helpful when you decided to ignore all issues of this type. Also, you can use `issues.exclude-rules` config option for per-path or per-linter configuration.
-2. Exclude this one issue by using special comment `//nolint[:linter1,linter2,...]` on issued line.
-   Comment `//nolint` disables all issues reporting on this line. Comment e.g. `//nolint:govet` disables only govet issues for this line.
-   If you would like to completely exclude all issues for some function prepend this comment
-   above function:
+2. Exclude this one issue by using special comment `//nolint` (see [the section](#nolint) below).
 3. Exclude issues in path by `run.skip-dirs`, `run.skip-files` or `issues.exclude-rules` config options.
+
+Please create [GitHub Issues here](https://github.com/golangci/golangci-lint/issues/new) if you find any false positives. We will add it to the default exclude list if it's common or we will fix underlying linter.
+
+### Nolint
+
+To exclude issues from all linters use `//nolint`. For example, if it's used inline (not from the beginning of the line) it excludes issues only for this line.
+
+```go
+var bad_name int //nolint
+```
+
+To exclude issues from specific linters only:
+
+```go
+var bad_name int //nolint:golint,unused
+```
+
+To exclude issues for the block of code use this directive on the beginning of a line:
 
 ```go
 //nolint
-func f() {
-  ...
+func allIssuesInThisFunctionAreExcluded() *string {
+	// ...
 }
+
+//nolint:govet
+var (
+	a int
+	b int
+)
 ```
 
-Please create [GitHub Issues here](https://github.com/golangci/golangci-lint/issues/new) if you find any false positives. We will add it to the default exclude list if it's common or we will fix underlying linter.
+Also, you can exclude all issues in a file by:
+
+```go
+//nolint: unparam
+package pkg
+```
+
+You can see more examples of using `//nolint` in [our tests](https://github.com/golangci/golangci-lint/tree/master/pkg/result/processors/testdata) for it.
+
+Use `//nolint` instead of `// nolint` because machine-readable comments should have no space by Go convention.
 
 ## FAQ
 
