@@ -233,7 +233,7 @@ func (p *hunkChangesParser) parse(h *diffpkg.Hunk) []Change {
 	return p.ret
 }
 
-func (g Gofmt) extractIssuesFromPatch(patch string, log logutils.Log) ([]result.Issue, error) {
+func (g Gofmt) extractIssuesFromPatch(patch string, log logutils.Log, lintCtx *linter.Context) ([]result.Issue, error) {
 	diffs, err := diffpkg.ParseMultiFileDiff([]byte(patch))
 	if err != nil {
 		return nil, errors.Wrap(err, "can't parse patch")
@@ -251,9 +251,14 @@ func (g Gofmt) extractIssuesFromPatch(patch string, log logutils.Log) ([]result.
 		}
 
 		for _, hunk := range d.Hunks {
-			text := "File is not `gofmt`-ed with `-s`"
+			var text string
 			if g.UseGoimports {
 				text = "File is not `goimports`-ed"
+			} else {
+				text = "File is not `gofmt`-ed"
+				if lintCtx.Settings().Gofmt.Simplify {
+					text += " with `-s`"
+				}
 			}
 			p := hunkChangesParser{
 				log: log,
@@ -301,7 +306,7 @@ func (g Gofmt) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issue
 			continue
 		}
 
-		is, err := g.extractIssuesFromPatch(string(diff), lintCtx.Log)
+		is, err := g.extractIssuesFromPatch(string(diff), lintCtx.Log, lintCtx)
 		if err != nil {
 			return nil, fmt.Errorf("can't extract issues from gofmt diff output %q: %s", string(diff), err)
 		}

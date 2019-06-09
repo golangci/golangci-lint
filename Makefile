@@ -1,6 +1,5 @@
 .DEFAULT_GOAL = test
 .PHONY: FORCE
-export GO111MODULE = on
 
 # Build
 
@@ -18,8 +17,6 @@ test: build
 	GL_TEST_RUN=1 ./golangci-lint run --no-config -v --skip-dirs 'test/testdata_etc,pkg/golinters/goanalysis/(checker|passes)'
 	GL_TEST_RUN=1 go test -v ./...
 
-build:
-	go build -o golangci-lint ./cmd/golangci-lint
 .PHONY: test
 
 test_race:
@@ -55,18 +52,18 @@ golangci-lint: FORCE pkg/logutils/log_mock.go
 	go build -o $@ ./cmd/golangci-lint
 
 tools/mockgen: go.mod go.sum
-	GOBIN=$(CURDIR)/tools go install github.com/golang/mock/mockgen
+	GOBIN=$(CURDIR)/tools GO111MODULE=on go install github.com/golang/mock/mockgen
 
 tools/goimports: go.mod go.sum
-	GOBIN=$(CURDIR)/tools go install golang.org/x/tools/cmd/goimports
+	GOBIN=$(CURDIR)/tools GO111MODULE=on go install golang.org/x/tools/cmd/goimports
 
 tools/go.mod:
 	@mkdir -p tools
 	@rm -f $@
-	cd tools && go mod init local-tools
+	cd tools && GO111MODULE=on go mod init local-tools
 
 tools/godownloader: Makefile tools/go.mod
-	cd tools && GOBIN=$(CURDIR)/tools go get github.com/goreleaser/godownloader@3b90d248ba30307915288f08ab3f2fc2d9f6710c
+	cd tools && GOBIN=$(CURDIR)/tools GO111MODULE=on go get github.com/goreleaser/godownloader@3b90d248ba30307915288f08ab3f2fc2d9f6710c
 
 tools/svg-term:
 	@mkdir -p tools
@@ -81,7 +78,8 @@ docs/demo.svg: tools/svg-term tools/Dracula.itermcolors
 	PATH=$(CURDIR)/tools:$${PATH} svg-term --cast=183662 --out docs/demo.svg --window --width 110 --height 30 --from 2000 --to 20000 --profile ./tools/Dracula.itermcolors --term iterm2
 
 install.sh: tools/godownloader .goreleaser.yml
-	PATH=$(CURDIR)/tools:$${PATH} tools/godownloader .goreleaser.yml | sed '/DO NOT EDIT/s/ on [0-9TZ:-]*//' > $@
+	# TODO: use when Windows installation will be fixed in the upstream
+	#PATH=$(CURDIR)/tools:$${PATH} tools/godownloader .goreleaser.yml | sed '/DO NOT EDIT/s/ on [0-9TZ:-]*//' > $@
 
 README.md: FORCE golangci-lint
 	go run ./scripts/gen_readme/main.go
@@ -91,10 +89,11 @@ pkg/logutils/log_mock.go: tools/mockgen tools/goimports pkg/logutils/log.go
 	PATH=$(CURDIR)/tools:$${PATH} go generate ./...
 
 go.mod: FORCE
-	go mod verify
-	go mod tidy
+	GO111MODULE=on go mod verify
+	GO111MODULE=on go mod tidy
 go.sum: go.mod
 
+.PHONY: vendor
 vendor: go.mod go.sum
 	rm -rf vendor
-	go mod vendor
+	GO111MODULE=on go mod vendor
