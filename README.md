@@ -192,7 +192,7 @@ gosimple: Linter for Go source code that specializes in simplifying a code [fast
 govet (vet, vetshadow): Vet examines Go source code and reports suspicious constructs, such as Printf calls whose arguments do not align with the format string [fast: false, auto-fix: false]
 ineffassign: Detects when assignments to existing variables are not used [fast: true, auto-fix: false]
 staticcheck: Staticcheck is a go vet on steroids, applying a ton of static analysis checks [fast: false, auto-fix: false]
-structcheck: Finds an unused struct fields [fast: true, auto-fix: false]
+structcheck: Finds unused struct fields [fast: true, auto-fix: false]
 typecheck: Like the front-end of a Go compiler, parses and type-checks Go code [fast: true, auto-fix: false]
 unused: Checks Go code for unused constants, variables, functions and types [fast: false, auto-fix: false]
 varcheck: Finds unused global variables and constants [fast: true, auto-fix: false]
@@ -409,7 +409,7 @@ golangci-lint help linters
 - [staticcheck](https://staticcheck.io/) - Staticcheck is a go vet on steroids, applying a ton of static analysis checks
 - [unused](https://github.com/dominikh/go-tools/tree/master/cmd/unused) - Checks Go code for unused constants, variables, functions and types
 - [gosimple](https://github.com/dominikh/go-tools/tree/master/cmd/gosimple) - Linter for Go source code that specializes in simplifying a code
-- [structcheck](https://github.com/opennota/check) - Finds an unused struct fields
+- [structcheck](https://github.com/opennota/check) - Finds unused struct fields
 - [varcheck](https://github.com/opennota/check) - Finds unused global variables and constants
 - [ineffassign](https://github.com/gordonklaus/ineffassign) - Detects when assignments to existing variables are not used
 - [deadcode](https://github.com/remyoudompheng/go-misc/tree/master/deadcode) - Finds unused code
