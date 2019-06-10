@@ -6,5 +6,5 @@ import (
 )
 
 var collection = &lintpack.CheckerCollection{
-	URL: "https://github.com/go-critic/checkers",
+	URL: "https://github.com/go-critic/go-critic/checkers",
 }

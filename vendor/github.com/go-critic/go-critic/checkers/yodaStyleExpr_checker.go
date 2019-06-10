@@ -33,7 +33,8 @@ func (c *yodaStyleExprChecker) VisitLocalExpr(expr ast.Expr) {
 	if !ok {
 		return
 	}
-	if binexpr.Op == token.EQL || binexpr.Op == token.NEQ {
+	switch binexpr.Op {
+	case token.EQL, token.NEQ, token.LSS, token.LEQ, token.GEQ, token.GTR:
 		if c.isConstExpr(binexpr.X) && !c.isConstExpr(binexpr.Y) {
 			c.warn(binexpr)
 		}
@@ -44,8 +45,22 @@ func (c *yodaStyleExprChecker) isConstExpr(expr ast.Expr) bool {
 	return qualifiedName(expr) == "nil" || astp.IsBasicLit(expr)
 }
 
+func (c *yodaStyleExprChecker) invert(expr *ast.BinaryExpr) {
+	expr.X, expr.Y = expr.Y, expr.X
+	switch expr.Op {
+	case token.LSS:
+		expr.Op = token.GEQ
+	case token.LEQ:
+		expr.Op = token.GTR
+	case token.GEQ:
+		expr.Op = token.LSS
+	case token.GTR:
+		expr.Op = token.LEQ
+	}
+}
+
 func (c *yodaStyleExprChecker) warn(expr *ast.BinaryExpr) {
 	e := astcopy.BinaryExpr(expr)
-	e.X, e.Y = e.Y, e.X
+	c.invert(e)
 	c.ctx.Warn(expr, "consider to change order in expression to %s", e)
 }

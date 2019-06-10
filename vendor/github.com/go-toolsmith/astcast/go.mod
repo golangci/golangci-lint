@@ -1,4 +1,4 @@
-module github.com/go-toolsmith/astp
+module github.com/go-toolsmith/astcast
 
 require (
 	github.com/go-toolsmith/astequal v1.0.0 // indirect

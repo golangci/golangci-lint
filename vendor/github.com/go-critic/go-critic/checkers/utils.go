@@ -241,6 +241,11 @@ func isStdlibPkg(pkg *types.Package) bool {
 	return pkg != nil && goStdlib[pkg.Path()]
 }
 
+// isExampleTestFunc reports whether FuncDecl looks like a testable example function.
+func isExampleTestFunc(fn *ast.FuncDecl) bool {
+	return len(fn.Type.Params.List) == 0 && strings.HasPrefix(fn.Name.String(), "Example")
+}
+
 // isUnitTestFunc reports whether FuncDecl declares testing function.
 func isUnitTestFunc(ctx *lintpack.CheckerContext, fn *ast.FuncDecl) bool {
 	if !strings.HasPrefix(fn.Name.Name, "Test") {

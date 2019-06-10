@@ -235,6 +235,10 @@ func (c *boolExprSimplifyChecker) removeIncDec(cur *astutil.Cursor) bool {
 }
 
 func (c *boolExprSimplifyChecker) foldRanges(cur *astutil.Cursor) bool {
+	if c.hasFloats { // See #848
+		return false
+	}
+
 	e, ok := cur.Node().(*ast.BinaryExpr)
 	if !ok {
 		return false
