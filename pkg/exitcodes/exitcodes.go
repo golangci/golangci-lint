@@ -8,6 +8,7 @@ const (
 	Timeout              = 4
 	NoGoFiles            = 5
 	NoConfigFileDetected = 6
+	ErrorWasLogged       = 7
 )
 
 type ExitError struct {

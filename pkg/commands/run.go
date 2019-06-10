@@ -415,13 +415,23 @@ func (e *Executor) setupExitCode(ctx context.Context) {
 	if ctx.Err() != nil {
 		e.exitCode = exitcodes.Timeout
 		e.log.Errorf("Deadline exceeded: try increase it by passing --deadline option")
+		return
 	}
 
-	if e.exitCode == exitcodes.Success &&
-		(os.Getenv("GL_TEST_RUN") == "1" || os.Getenv("FAIL_ON_WARNINGS") == "1") &&
-		len(e.reportData.Warnings) != 0 {
+	if e.exitCode != exitcodes.Success {
+		return
+	}
 
+	needFailOnWarnings := (os.Getenv("GL_TEST_RUN") == "1" || os.Getenv("FAIL_ON_WARNINGS") == "1")
+	if needFailOnWarnings && len(e.reportData.Warnings) != 0 {
 		e.exitCode = exitcodes.WarningInTest
+		return
+	}
+
+	if e.reportData.Error != "" {
+		// it's a case e.g. when typecheck linter couldn't parse and error and just logged it
+		e.exitCode = exitcodes.ErrorWasLogged
+		return
 	}
 }
 
