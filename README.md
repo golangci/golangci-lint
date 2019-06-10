@@ -99,7 +99,7 @@ go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
 With `go1.11` or later you can get a particular version
 
 ```bash
-GO111MODULE=on go get github.com/golangci/golangci-lint/cmd/golangci-lint@v1.16.0
+GO111MODULE=on go get github.com/golangci/golangci-lint/cmd/golangci-lint@v1.17.0
 ```
 
 #### MacOS
@@ -873,7 +873,7 @@ issues:
 # golangci.com configuration
 # https://github.com/golangci/golangci/wiki/Configuration
 service:
-  golangci-lint-version: 1.16.x # use the fixed version to not introduce new linters unexpectedly
+  golangci-lint-version: 1.17.x # use the fixed version to not introduce new linters unexpectedly
   prepare:
     - echo "here I can run custom commands, but no preparation needed for this repo"
 ```
