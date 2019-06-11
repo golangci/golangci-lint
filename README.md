@@ -99,7 +99,7 @@ go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
 With `go1.11` or later you can get a particular version
 
 ```bash
-GO111MODULE=on go get github.com/golangci/golangci-lint/cmd/golangci-lint@v1.17.0
+GO111MODULE=on go get github.com/golangci/golangci-lint/cmd/golangci-lint@v1.17.1
 ```
 
 #### MacOS
