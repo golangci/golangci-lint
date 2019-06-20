@@ -27,9 +27,6 @@ func FuncOld() int`
 		c.commonPatterns = []*regexp.Regexp{
 			regexp.MustCompile(`(?i)this (?:function|type) is deprecated`),
 			regexp.MustCompile(`(?i)deprecated[.!]? use \S* instead`),
-			regexp.MustCompile(`(?i)\[\[deprecated\]\].*`),
-			regexp.MustCompile(`(?i)note: deprecated\b.*`),
-			regexp.MustCompile(`(?i)deprecated in.*`),
 			// TODO(quasilyte): more of these?
 		}
 
@@ -49,7 +46,6 @@ func FuncOld() int`
 			"Deprecate: ",
 			"Derpecate: ",
 			"Derpecated: ",
-			"Depreacted: ",
 		}
 		for i := range c.commonTypos {
 			c.commonTypos[i] = strings.ToUpper(c.commonTypos[i])

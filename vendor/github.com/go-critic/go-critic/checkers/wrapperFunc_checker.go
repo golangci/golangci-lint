@@ -39,10 +39,6 @@ func init() {
 			"sync.WaitGroup.Add => WaitGroup.Done": {
 				{0, "-1"},
 			},
-
-			"bytes.Buffer.Truncate => Buffer.Reset": {
-				{0, "0"},
-			},
 		}
 
 		pkgPatterns := map[string][]arg{
@@ -50,9 +46,6 @@ func init() {
 				{0, "http.NotFound"},
 			},
 
-			"strings.SplitN => strings.Split": {
-				{2, "-1"},
-			},
 			"strings.Replace => strings.ReplaceAll": {
 				{3, "-1"},
 			},
@@ -63,9 +56,6 @@ func init() {
 				{0, "unicode.ToTitle"},
 			},
 
-			"bytes.SplitN => bytes.Split": {
-				{2, "-1"},
-			},
 			"bytes.Replace => bytes.ReplaceAll": {
 				{3, "-1"},
 			},

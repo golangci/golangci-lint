@@ -5,9 +5,10 @@ require (
 	github.com/OpenPeeDeeP/depguard v0.0.0-20180806142446-a69c782687b2
 	github.com/StackExchange/wmi v0.0.0-20180116203802-5d049714c4a6 // indirect
 	github.com/fatih/color v1.6.0
-	github.com/go-critic/go-critic v0.0.0-20181204210945-1df300866540
+	github.com/go-critic/go-critic v0.3.4
 	github.com/go-lintpack/lintpack v0.5.2
 	github.com/go-ole/go-ole v1.2.1 // indirect
+	github.com/go-toolsmith/astfmt v1.0.0 // indirect
 	github.com/gobwas/glob v0.2.3 // indirect
 	github.com/golang/mock v1.0.0
 	github.com/golangci/check v0.0.0-20180506172741-cfe4005ccda2
@@ -19,7 +20,7 @@ require (
 	github.com/golangci/gocyclo v0.0.0-20180528134321-2becd97e67ee
 	github.com/golangci/gofmt v0.0.0-20181105071733-0b8337e80d98
 	github.com/golangci/gosec v0.0.0-20180901114220-66fb7fc33547
-	github.com/golangci/ineffassign v0.0.0-20180808204949-42439a7714cc
+	github.com/golangci/ineffassign v0.0.0-20180808204949-2ee8f2867dde
 	github.com/golangci/lint-1 v0.0.0-20180610141402-ee948d087217
 	github.com/golangci/maligned v0.0.0-20180506175553-b1d89398deca
 	github.com/golangci/misspell v0.0.0-20180809174111-950f5d19e770

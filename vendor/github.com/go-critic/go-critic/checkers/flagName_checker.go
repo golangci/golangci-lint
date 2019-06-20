@@ -3,7 +3,6 @@ package checkers
 import (
 	"go/ast"
 	"go/constant"
-	"go/types"
 	"strings"
 
 	"github.com/go-lintpack/lintpack"
@@ -31,14 +30,13 @@ type flagNameChecker struct {
 
 func (c *flagNameChecker) VisitExpr(expr ast.Expr) {
 	call := astcast.ToCallExpr(expr)
-	calledExpr := astcast.ToSelectorExpr(call.Fun)
-	obj, ok := c.ctx.TypesInfo.ObjectOf(astcast.ToIdent(calledExpr.X)).(*types.PkgName)
-	if !ok {
+	sym := astcast.ToIdent(astcast.ToSelectorExpr(call.Fun).Sel)
+	obj := c.ctx.TypesInfo.ObjectOf(sym)
+	if obj == nil {
 		return
 	}
-	sym := calledExpr.Sel
-	pkg := obj.Imported()
-	if pkg.Path() != "flag" {
+	pkg := obj.Pkg()
+	if !isStdlibPkg(pkg) || pkg.Name() != "flag" {
 		return
 	}
 

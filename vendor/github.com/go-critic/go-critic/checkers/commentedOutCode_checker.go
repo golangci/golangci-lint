@@ -1,7 +1,6 @@
 package checkers
 
 import (
-	"fmt"
 	"go/ast"
 	"go/token"
 	"regexp"
@@ -33,14 +32,8 @@ foo(1, 2)`
 type commentedOutCodeChecker struct {
 	astwalk.WalkHandler
 	ctx *lintpack.CheckerContext
-	fn  *ast.FuncDecl
 
 	notQuiteFuncCall *regexp.Regexp
-}
-
-func (c *commentedOutCodeChecker) EnterFunc(fn *ast.FuncDecl) bool {
-	c.fn = fn // Need to store current function inside checker context
-	return fn.Body != nil
 }
 
 func (c *commentedOutCodeChecker) VisitLocalComment(cg *ast.CommentGroup) {
@@ -84,44 +77,13 @@ func (c *commentedOutCodeChecker) VisitLocalComment(cg *ast.CommentGroup) {
 	}
 
 	stmt := strparse.Stmt(s)
-
-	if c.isPermittedStmt(stmt) {
-		return
+	if stmt == strparse.BadStmt {
+		return // Most likely not a code
 	}
 
-	if stmt != strparse.BadStmt {
-		c.warn(cg)
-		return
-	}
-
-	// Don't try to parse one-liner as block statement
-	if len(cg.List) == 1 && !strings.Contains(s, "\n") {
-		return
-	}
-
-	// Some attempts to avoid false positives.
-	if c.skipBlock(s) {
-		return
-	}
-
-	// Add braces to make block statement from
-	// multiple statements.
-	stmt = strparse.Stmt(fmt.Sprintf("{ %s }", s))
-
-	if stmt, ok := stmt.(*ast.BlockStmt); ok && len(stmt.List) != 0 {
+	if !c.isPermittedStmt(stmt) {
 		c.warn(cg)
 	}
-}
-
-func (c *commentedOutCodeChecker) skipBlock(s string) bool {
-	lines := strings.Split(s, "\n") // There is at least 1 line, that's invariant
-
-	// Special example test block.
-	if isExampleTestFunc(c.fn) && strings.Contains(lines[0], "Output:") {
-		return true
-	}
-
-	return false
 }
 
 func (c *commentedOutCodeChecker) isPermittedStmt(stmt ast.Stmt) bool {

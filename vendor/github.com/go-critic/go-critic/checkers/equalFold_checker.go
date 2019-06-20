@@ -7,7 +7,6 @@ import (
 	"github.com/go-lintpack/lintpack"
 	"github.com/go-lintpack/lintpack/astwalk"
 	"github.com/go-toolsmith/astcast"
-	"github.com/go-toolsmith/astequal"
 )
 
 func init() {
@@ -58,9 +57,7 @@ func (c *equalFoldChecker) checkBytes(expr *ast.CallExpr) {
 	if !ok1 && !ok2 {
 		return
 	}
-	if !astequal.Expr(x, y) {
-		c.warnBytes(expr, x, y)
-	}
+	c.warnBytes(expr, x, y)
 }
 
 func (c *equalFoldChecker) checkStrings(expr *ast.BinaryExpr) {
@@ -73,9 +70,7 @@ func (c *equalFoldChecker) checkStrings(expr *ast.BinaryExpr) {
 	if !ok1 && !ok2 {
 		return
 	}
-	if !astequal.Expr(x, y) {
-		c.warnStrings(expr, x, y)
-	}
+	c.warnStrings(expr, x, y)
 }
 
 func (c *equalFoldChecker) warnStrings(cause ast.Node, x, y ast.Expr) {

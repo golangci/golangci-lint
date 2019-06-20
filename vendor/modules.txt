@@ -10,7 +10,7 @@ github.com/davecgh/go-spew/spew
 github.com/fatih/color
 # github.com/fsnotify/fsnotify v1.4.7
 github.com/fsnotify/fsnotify
-# github.com/go-critic/go-critic v0.0.0-20181204210945-1df300866540
+# github.com/go-critic/go-critic v0.3.4
 github.com/go-critic/go-critic/checkers
 github.com/go-critic/go-critic/checkers/internal/lintutil
 # github.com/go-lintpack/lintpack v0.5.2
@@ -19,19 +19,19 @@ github.com/go-lintpack/lintpack/astwalk
 # github.com/go-ole/go-ole v1.2.1
 github.com/go-ole/go-ole
 github.com/go-ole/go-ole/oleutil
-# github.com/go-toolsmith/astcast v1.0.0
+# github.com/go-toolsmith/astcast v0.0.0-20181028201508-b7a89ed70af1
 github.com/go-toolsmith/astcast
-# github.com/go-toolsmith/astcopy v1.0.0
+# github.com/go-toolsmith/astcopy v0.0.0-20180903214859-79b422d080c4
 github.com/go-toolsmith/astcopy
 # github.com/go-toolsmith/astequal v1.0.0
 github.com/go-toolsmith/astequal
 # github.com/go-toolsmith/astfmt v1.0.0
 github.com/go-toolsmith/astfmt
-# github.com/go-toolsmith/astp v1.0.0
+# github.com/go-toolsmith/astp v0.0.0-20180903215135-0af7e3c24f30
 github.com/go-toolsmith/astp
 # github.com/go-toolsmith/strparse v1.0.0
 github.com/go-toolsmith/strparse
-# github.com/go-toolsmith/typep v1.0.0
+# github.com/go-toolsmith/typep v0.0.0-20181030061450-d63dc7650676
 github.com/go-toolsmith/typep
 # github.com/gobwas/glob v0.2.3
 github.com/gobwas/glob
@@ -92,7 +92,7 @@ github.com/golangci/gofmt/goimports
 # github.com/golangci/gosec v0.0.0-20180901114220-66fb7fc33547
 github.com/golangci/gosec
 github.com/golangci/gosec/rules
-# github.com/golangci/ineffassign v0.0.0-20180808204949-42439a7714cc
+# github.com/golangci/ineffassign v0.0.0-20180808204949-2ee8f2867dde
 github.com/golangci/ineffassign
 # github.com/golangci/lint-1 v0.0.0-20180610141402-ee948d087217
 github.com/golangci/lint-1
