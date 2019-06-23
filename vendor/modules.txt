@@ -61,7 +61,7 @@ github.com/golangci/errcheck/golangci
 github.com/golangci/errcheck/internal/errcheck
 # github.com/golangci/go-misc v0.0.0-20180628070357-927a3d87b613
 github.com/golangci/go-misc/deadcode
-# github.com/golangci/go-tools v0.0.0-20180109140146-af6baa5dc196
+# github.com/golangci/go-tools v0.0.0-20190318055746-e32c54105b7c
 github.com/golangci/go-tools/config
 github.com/golangci/go-tools/lint
 github.com/golangci/go-tools/lint/lintutil
