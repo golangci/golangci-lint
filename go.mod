@@ -2,7 +2,7 @@ module github.com/golangci/golangci-lint
 
 require (
 	github.com/BurntSushi/toml v0.3.1 // indirect
-	github.com/OpenPeeDeeP/depguard v0.0.0-20180806142446-a69c782687b2
+	github.com/OpenPeeDeeP/depguard v1.0.0
 	github.com/StackExchange/wmi v0.0.0-20180116203802-5d049714c4a6 // indirect
 	github.com/fatih/color v1.6.0
 	github.com/go-critic/go-critic v0.0.0-20181204210945-1df300866540
