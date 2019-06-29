@@ -82,15 +82,12 @@ func (lint Misspell) runOnFile(fileName string, r *misspell.Replacer, lintCtx *l
 			Line:     diff.Line,
 			Column:   diff.Column + 1,
 		}
-		var replacement *result.Replacement
-		if lintCtx.Cfg.Issues.NeedFix {
-			replacement = &result.Replacement{
-				Inline: &result.InlineFix{
-					StartCol:  diff.Column,
-					Length:    len(diff.Original),
-					NewString: diff.Corrected,
-				},
-			}
+		replacement := &result.Replacement{
+			Inline: &result.InlineFix{
+				StartCol:  diff.Column,
+				Length:    len(diff.Original),
+				NewString: diff.Corrected,
+			},
 		}
 
 		res = append(res, result.Issue{
