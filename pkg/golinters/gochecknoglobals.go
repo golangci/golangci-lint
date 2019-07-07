@@ -61,7 +61,7 @@ func (lint Gochecknoglobals) checkFile(f *ast.File, fset *token.FileSet) []resul
 }
 
 func isWhitelisted(i *ast.Ident) bool {
-	return i.Name == "_" || looksLikeError(i)
+	return i.Name == "_" || i.Name == "version" || looksLikeError(i)
 }
 
 // looksLikeError returns true if the AST identifier starts
