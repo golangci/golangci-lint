@@ -183,6 +183,8 @@ github.com/stretchr/testify/assert
 github.com/stretchr/testify/require
 # github.com/timakin/bodyclose v0.0.0-20190407043127-4a873e97b2bb
 github.com/timakin/bodyclose/passes/bodyclose
+# github.com/ultraware/funlen v0.0.1
+github.com/ultraware/funlen
 # github.com/valyala/bytebufferpool v1.0.0
 github.com/valyala/bytebufferpool
 # github.com/valyala/quicktemplate v1.1.1
