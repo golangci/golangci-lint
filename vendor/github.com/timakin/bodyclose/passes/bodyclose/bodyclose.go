@@ -227,7 +227,7 @@ func (r *runner) isCloseCall(ccall ssa.Instruction) bool {
 			return true
 		}
 	case *ssa.Call:
-		if ccall.Call.Method.Name() == r.closeMthd.Name() {
+		if ccall.Call.Method != nil && ccall.Call.Method.Name() == r.closeMthd.Name() {
 			return true
 		}
 	case *ssa.ChangeInterface:
