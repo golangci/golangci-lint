@@ -181,7 +181,7 @@ github.com/spf13/viper
 # github.com/stretchr/testify v1.2.2
 github.com/stretchr/testify/assert
 github.com/stretchr/testify/require
-# github.com/timakin/bodyclose v0.0.0-20190713050349-d96ec0dee822
+# github.com/timakin/bodyclose v0.0.0-00010101000000-000000000000 => github.com/golangci/bodyclose v0.0.0-20190713050349-65da19158fa2
 github.com/timakin/bodyclose/passes/bodyclose
 # github.com/valyala/bytebufferpool v1.0.0
 github.com/valyala/bytebufferpool
