@@ -1,8 +1,6 @@
-# github.com/BurntSushi/toml v0.3.1
-github.com/BurntSushi/toml
 # github.com/OpenPeeDeeP/depguard v1.0.0
 github.com/OpenPeeDeeP/depguard
-# github.com/StackExchange/wmi v0.0.0-20180116203802-5d049714c4a6
+# github.com/StackExchange/wmi v0.0.0-20190523213315-cbe66965904d
 github.com/StackExchange/wmi
 # github.com/davecgh/go-spew v1.1.1
 github.com/davecgh/go-spew/spew
@@ -10,13 +8,13 @@ github.com/davecgh/go-spew/spew
 github.com/fatih/color
 # github.com/fsnotify/fsnotify v1.4.7
 github.com/fsnotify/fsnotify
-# github.com/go-critic/go-critic v0.0.0-20181204210945-1df300866540
+# github.com/go-critic/go-critic v0.3.4
 github.com/go-critic/go-critic/checkers
 github.com/go-critic/go-critic/checkers/internal/lintutil
 # github.com/go-lintpack/lintpack v0.5.2
 github.com/go-lintpack/lintpack
 github.com/go-lintpack/lintpack/astwalk
-# github.com/go-ole/go-ole v1.2.1
+# github.com/go-ole/go-ole v1.2.4
 github.com/go-ole/go-ole
 github.com/go-ole/go-ole/oleutil
 # github.com/go-toolsmith/astcast v1.0.0
@@ -56,12 +54,12 @@ github.com/golangci/dupl/printer
 github.com/golangci/dupl/syntax
 github.com/golangci/dupl/suffixtree
 github.com/golangci/dupl/syntax/golang
-# github.com/golangci/errcheck v0.0.0-20181003203344-ef45e06d44b6
+# github.com/golangci/errcheck v0.0.0-20181223084120-ef45e06d44b6
 github.com/golangci/errcheck/golangci
 github.com/golangci/errcheck/internal/errcheck
 # github.com/golangci/go-misc v0.0.0-20180628070357-927a3d87b613
 github.com/golangci/go-misc/deadcode
-# github.com/golangci/go-tools v0.0.0-20180109140146-af6baa5dc196
+# github.com/golangci/go-tools v0.0.0-20190124090046-35a9f45a5db0
 github.com/golangci/go-tools/config
 github.com/golangci/go-tools/lint
 github.com/golangci/go-tools/lint/lintutil
@@ -86,15 +84,15 @@ github.com/golangci/go-tools/callgraph/static
 github.com/golangci/goconst
 # github.com/golangci/gocyclo v0.0.0-20180528134321-2becd97e67ee
 github.com/golangci/gocyclo/pkg/gocyclo
-# github.com/golangci/gofmt v0.0.0-20181105071733-0b8337e80d98
+# github.com/golangci/gofmt v0.0.0-20181222123516-0b8337e80d98
 github.com/golangci/gofmt/gofmt
 github.com/golangci/gofmt/goimports
-# github.com/golangci/gosec v0.0.0-20180901114220-66fb7fc33547
+# github.com/golangci/gosec v0.0.0-20180901114220-8afd9cbb6cfb
 github.com/golangci/gosec
 github.com/golangci/gosec/rules
-# github.com/golangci/ineffassign v0.0.0-20180808204949-42439a7714cc
+# github.com/golangci/ineffassign v0.0.0-20180808204949-2ee8f2867dde
 github.com/golangci/ineffassign
-# github.com/golangci/lint-1 v0.0.0-20180610141402-ee948d087217
+# github.com/golangci/lint-1 v0.0.0-20181222135242-d2cdd8c08219
 github.com/golangci/lint-1
 # github.com/golangci/maligned v0.0.0-20180506175553-b1d89398deca
 github.com/golangci/maligned
@@ -108,7 +106,7 @@ github.com/golangci/revgrep
 github.com/golangci/unconvert
 # github.com/gostaticanalysis/analysisutil v0.0.0-20190318220348-4088753ea4d3
 github.com/gostaticanalysis/analysisutil
-# github.com/hashicorp/hcl v0.0.0-20180404174102-ef8a98b0bbce
+# github.com/hashicorp/hcl v1.0.0
 github.com/hashicorp/hcl
 github.com/hashicorp/hcl/hcl/printer
 github.com/hashicorp/hcl/hcl/ast
@@ -124,7 +122,7 @@ github.com/inconshreveable/mousetrap
 # github.com/kisielk/gotool v1.0.0
 github.com/kisielk/gotool
 github.com/kisielk/gotool/internal/load
-# github.com/magiconair/properties v1.7.6
+# github.com/magiconair/properties v1.8.1
 github.com/magiconair/properties
 # github.com/mattn/go-colorable v0.0.9
 github.com/mattn/go-colorable
@@ -134,9 +132,9 @@ github.com/mattn/go-isatty
 github.com/mitchellh/go-homedir
 # github.com/mitchellh/go-ps v0.0.0-20170309133038-4fdf99ab2936
 github.com/mitchellh/go-ps
-# github.com/mitchellh/mapstructure v0.0.0-20180220230111-00c29f56e238
+# github.com/mitchellh/mapstructure v1.1.2
 github.com/mitchellh/mapstructure
-# github.com/nbutton23/zxcvbn-go v0.0.0-20171102151520-eafdab6b0663
+# github.com/nbutton23/zxcvbn-go v0.0.0-20180912185939-ae427f1e4c1d
 github.com/nbutton23/zxcvbn-go
 github.com/nbutton23/zxcvbn-go/match
 github.com/nbutton23/zxcvbn-go/matching
@@ -146,7 +144,7 @@ github.com/nbutton23/zxcvbn-go/adjacency
 github.com/nbutton23/zxcvbn-go/entropy
 github.com/nbutton23/zxcvbn-go/frequency
 github.com/nbutton23/zxcvbn-go/data
-# github.com/pelletier/go-toml v1.1.0
+# github.com/pelletier/go-toml v1.4.0
 github.com/pelletier/go-toml
 # github.com/pkg/errors v0.8.1
 github.com/pkg/errors
@@ -165,14 +163,14 @@ github.com/shirou/w32
 github.com/sirupsen/logrus
 # github.com/sourcegraph/go-diff v0.5.1
 github.com/sourcegraph/go-diff/diff
-# github.com/spf13/afero v1.1.0
+# github.com/spf13/afero v1.2.2
 github.com/spf13/afero
 github.com/spf13/afero/mem
-# github.com/spf13/cast v1.2.0
+# github.com/spf13/cast v1.3.0
 github.com/spf13/cast
 # github.com/spf13/cobra v0.0.2
 github.com/spf13/cobra
-# github.com/spf13/jwalterweatherman v0.0.0-20180109140146-7c0cea34c8ec
+# github.com/spf13/jwalterweatherman v1.1.0
 github.com/spf13/jwalterweatherman
 # github.com/spf13/pflag v1.0.1
 github.com/spf13/pflag
@@ -181,17 +179,12 @@ github.com/spf13/viper
 # github.com/stretchr/testify v1.2.2
 github.com/stretchr/testify/assert
 github.com/stretchr/testify/require
-# github.com/timakin/bodyclose v0.0.0-00010101000000-000000000000 => github.com/golangci/bodyclose v0.0.0-20190713050349-65da19158fa2
+# github.com/timakin/bodyclose v0.0.0-20190713050349-d96ec0dee822
 github.com/timakin/bodyclose/passes/bodyclose
 # github.com/valyala/bytebufferpool v1.0.0
 github.com/valyala/bytebufferpool
 # github.com/valyala/quicktemplate v1.1.1
 github.com/valyala/quicktemplate
-# golang.org/x/crypto v0.0.0-20190313024323-a1f597ede03a
-golang.org/x/crypto/ssh/terminal
-# golang.org/x/sys v0.0.0-20190312061237-fead79001313
-golang.org/x/sys/unix
-golang.org/x/sys/windows
 # golang.org/x/text v0.3.0
 golang.org/x/text/width
 golang.org/x/text/transform
@@ -244,13 +237,13 @@ golang.org/x/tools/internal/imports
 golang.org/x/tools/go/internal/gcimporter
 golang.org/x/tools/internal/fastwalk
 golang.org/x/tools/internal/module
-# gopkg.in/yaml.v2 v2.2.1
+# gopkg.in/yaml.v2 v2.2.2
 gopkg.in/yaml.v2
 # mvdan.cc/interfacer v0.0.0-20180901003855-c20040233aed
 mvdan.cc/interfacer/check
 # mvdan.cc/lint v0.0.0-20170908181259-adc824a0674b
 mvdan.cc/lint
-# mvdan.cc/unparam v0.0.0-20190124213536-fbb59629db34
+# mvdan.cc/unparam v0.0.0-20190310220240-1b9ccfa71afe
 mvdan.cc/unparam/check
 # sourcegraph.com/sqs/pbtypes v0.0.0-20180604144634-d3ebe8f20ae4
 sourcegraph.com/sqs/pbtypes
