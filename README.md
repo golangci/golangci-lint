@@ -948,6 +948,8 @@ You have 2 choices:
 
 We don't recommend vendoring `golangci-lint` in your repo: you will get troubles updating `golangci-lint`. Please, use recommended way to install with the shell script: it's very fast.
 
+If you are seeing errors on Travis CI, try running `go mod download` before running `golangci-lint run`.
+
 **Do I need to run `go install`?**
 
 No, you don't need to do it anymore.
