@@ -97,8 +97,8 @@ tag_to_version() {
   VERSION=${TAG#v}
 }
 adjust_format() {
-  # change format (tar.gz or zip) based on ARCH
-  case ${ARCH} in
+  # change format (tar.gz or zip) based on OS
+  case ${OS} in
     windows) FORMAT=zip ;;
   esac
   true
