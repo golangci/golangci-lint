@@ -458,6 +458,7 @@ golangci-lint help linters
 - [gocritic](https://github.com/go-critic/go-critic) - The most opinionated Go source code linter
 - [gochecknoinits](https://github.com/leighmcculloch/gochecknoinits) - Checks that no init functions are present in Go code
 - [gochecknoglobals](https://github.com/leighmcculloch/gochecknoglobals) - Checks that no globals are present in Go code
+- [godox](https://github.com/matoous/godox) - Reports unresolved TODOS and FIXMES
 - [funlen](https://github.com/ultraware/funlen) - Tool for detection of long functions
 
 ## Configuration
@@ -764,6 +765,10 @@ linters-settings:
         paramsOnly: true
       rangeValCopy:
         sizeThreshold: 32
+  godox:
+    keywords:
+      - FIXME
+      - TODO
 
 linters:
   enable:
@@ -889,6 +894,10 @@ linters-settings:
     disabled-checks:
       - wrapperFunc
       - dupImport # https://github.com/go-critic/go-critic/issues/845
+  godox:
+    keywords:
+      - TODO
+      - FIXME
 
 linters:
   # inverted configuration with `enable-all` and `disable` is not scalable during updates of golangci-lint
@@ -1079,6 +1088,7 @@ Thanks to developers and authors of used linters:
 - [kyoh86](https://github.com/kyoh86)
 - [go-critic](https://github.com/go-critic)
 - [leighmcculloch](https://github.com/leighmcculloch)
+- [matoous](https://github.com/matoous)
 - [ultraware](https://github.com/ultraware)
 
 ## Changelog

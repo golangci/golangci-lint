@@ -186,6 +186,10 @@ linters-settings:
         paramsOnly: true
       rangeValCopy:
         sizeThreshold: 32
+  godox:
+    keywords:
+      - FIXME
+      - TODO
 
 linters:
   enable:
