@@ -21,9 +21,14 @@ type testSuiteXML struct {
 }
 
 type testCaseXML struct {
-	Name      string `xml:"name,attr"`
-	ClassName string `xml:"classname,attr"`
-	Status    string `xml:"status,attr"`
+	Name      string     `xml:"name,attr"`
+	ClassName string     `xml:"classname,attr"`
+	Failure   failureXML `xml:"failure"`
+}
+
+type failureXML struct {
+	Message string `xml:"message,attr"`
+	Content string `xml:",cdata"`
 }
 
 type JunitXML struct {
@@ -34,24 +39,24 @@ func NewJunitXML() *JunitXML {
 }
 
 func (JunitXML) Print(ctx context.Context, issues <-chan result.Issue) error {
-	suites := make(map[string]testSuiteXML) // use a map to group-by "FromLinter"
+	suites := make(map[string]testSuiteXML) // use a map to group by file
 
 	for i := range issues {
-		fromLinter := i.FromLinter
-		testSuite := suites[fromLinter]
-		testSuite.Suite = fromLinter
+		suiteName := i.FilePath()
+		testSuite := suites[suiteName]
+		testSuite.Suite = i.FilePath()
 
-		var source string
-		for _, line := range i.SourceLines {
-			source += strings.TrimSpace(line) + "; "
-		}
-		tc := testCaseXML{Name: i.Text,
+		tc := testCaseXML{
+			Name:      i.FromLinter,
 			ClassName: i.Pos.String(),
-			Status:    strings.TrimSuffix(source, "; "),
+			Failure: failureXML{
+				Message: i.Text,
+				Content: strings.Join(i.SourceLines, "\n"),
+			},
 		}
 
 		testSuite.TestCases = append(testSuite.TestCases, tc)
-		suites[fromLinter] = testSuite
+		suites[suiteName] = testSuite
 	}
 
 	var res testSuitesXML
