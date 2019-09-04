@@ -1,5 +1,7 @@
 module github.com/golangci/golangci-lint
 
+go 1.12
+
 require (
 	github.com/BurntSushi/toml v0.3.1 // indirect
 	github.com/OpenPeeDeeP/depguard v1.0.0
@@ -64,4 +66,4 @@ require (
 )
 
 // https://github.com/timakin/bodyclose/pull/17
-replace github.com/timakin/bodyclose => github.com/golangci/bodyclose v0.0.0-20190713050349-65da19158fa2
+replace github.com/timakin/bodyclose => github.com/golangci/bodyclose v0.0.0-20190714144026-65da19158fa2
