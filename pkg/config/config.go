@@ -153,9 +153,10 @@ type LintersSettings struct {
 		MinOccurrencesCount int `mapstructure:"min-occurrences"`
 	}
 	Depguard struct {
-		ListType      string `mapstructure:"list-type"`
-		Packages      []string
-		IncludeGoRoot bool `mapstructure:"include-go-root"`
+		ListType                 string `mapstructure:"list-type"`
+		Packages                 []string
+		IncludeGoRoot            bool              `mapstructure:"include-go-root"`
+		PackagesWithErrorMessage map[string]string `mapstructure:"packages-with-error-message"`
 	}
 	Misspell struct {
 		Locale      string

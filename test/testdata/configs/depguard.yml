@@ -1,0 +1,7 @@
+linters-settings:
+  depguard:
+    include-go-root: true
+    packages: 
+      - compress/*
+    packages-with-error-message:
+      log: "don't use log"

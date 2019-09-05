@@ -36,6 +36,22 @@ func (d Depguard) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Is
 		dg.ListType = depguardAPI.LTBlacklist
 	}
 
+	if dg.ListType == depguardAPI.LTBlacklist {
+		// if the list type was a blacklist the packages with error messages should
+		// be included in the blacklist package list
+
+		noMessagePackages := make(map[string]bool)
+		for _, pkg := range dg.Packages {
+			noMessagePackages[pkg] = true
+		}
+
+		for pkg := range lintCtx.Settings().Depguard.PackagesWithErrorMessage {
+			if _, ok := noMessagePackages[pkg]; !ok {
+				dg.Packages = append(dg.Packages, pkg)
+			}
+		}
+	}
+
 	issues, err := dg.Run(lintCtx.LoaderConfig, lintCtx.Program)
 	if err != nil {
 		return nil, err
@@ -49,9 +65,13 @@ func (d Depguard) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Is
 	}
 	res := make([]result.Issue, 0, len(issues))
 	for _, i := range issues {
+		userSuppliedMsgSuffix := lintCtx.Settings().Depguard.PackagesWithErrorMessage[i.PackageName]
+		if userSuppliedMsgSuffix != "" {
+			userSuppliedMsgSuffix = ": " + userSuppliedMsgSuffix
+		}
 		res = append(res, result.Issue{
 			Pos:        i.Position,
-			Text:       fmt.Sprintf("%s %s", formatCode(i.PackageName, lintCtx.Cfg), msgSuffix),
+			Text:       fmt.Sprintf("%s %s%s", formatCode(i.PackageName, lintCtx.Cfg), msgSuffix, userSuppliedMsgSuffix),
 			FromLinter: d.Name(),
 		})
 	}
