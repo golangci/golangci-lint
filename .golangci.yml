@@ -46,6 +46,7 @@ linters:
     - maligned
     - prealloc
     - gochecknoglobals
+    - funlen
 
 run:
   skip-dirs:

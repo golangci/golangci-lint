@@ -61,7 +61,7 @@ github.com/golangci/errcheck/golangci
 github.com/golangci/errcheck/internal/errcheck
 # github.com/golangci/go-misc v0.0.0-20180628070357-927a3d87b613
 github.com/golangci/go-misc/deadcode
-# github.com/golangci/go-tools v0.0.0-20180109140146-af6baa5dc196
+# github.com/golangci/go-tools v0.0.0-20190318055746-e32c54105b7c
 github.com/golangci/go-tools/config
 github.com/golangci/go-tools/lint
 github.com/golangci/go-tools/lint/lintutil
@@ -181,8 +181,10 @@ github.com/spf13/viper
 # github.com/stretchr/testify v1.2.2
 github.com/stretchr/testify/assert
 github.com/stretchr/testify/require
-# github.com/timakin/bodyclose v0.0.0-00010101000000-000000000000 => github.com/golangci/bodyclose v0.0.0-20190714144026-65da19158fa2
+# github.com/timakin/bodyclose v0.0.0-00010101000000-87058b9bfcec
 github.com/timakin/bodyclose/passes/bodyclose
+# github.com/ultraware/funlen v0.0.1
+github.com/ultraware/funlen
 # github.com/valyala/bytebufferpool v1.0.0
 github.com/valyala/bytebufferpool
 # github.com/valyala/quicktemplate v1.1.1
@@ -196,7 +198,7 @@ golang.org/x/sys/windows
 golang.org/x/text/width
 golang.org/x/text/transform
 golang.org/x/text/unicode/norm
-# golang.org/x/tools v0.0.0-20190521203540-521d6ed310dd
+# golang.org/x/tools v0.0.0-20190521203540-521d6ed310dd => github.com/golangci/tools v0.0.0-20190713050349-979bdb7f8cc8
 golang.org/x/tools/go/analysis
 golang.org/x/tools/go/analysis/passes/asmdecl
 golang.org/x/tools/go/analysis/passes/assign

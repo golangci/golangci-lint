@@ -177,7 +177,9 @@ func (m MegacheckMetalinter) isValidChild(name string) bool {
 }
 
 func (m megacheck) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issue, error) {
-	issues, err := m.runMegacheck(lintCtx.Packages, lintCtx.Settings().Unused.CheckExported)
+	// Use OriginalPackages not Packages because `unused` doesn't work properly
+	// when we deduplicate normal and test packages.
+	issues, err := m.runMegacheck(lintCtx.OriginalPackages, lintCtx.Settings().Unused.CheckExported)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to run megacheck")
 	}
@@ -231,16 +233,17 @@ func (m megacheck) runMegacheck(workingPkgs []*packages.Package, checkExportedUn
 	opts := &lintutil.Options{
 		// TODO: get current go version, but now it doesn't matter,
 		// may be needed after next updates of megacheck
-		GoVersion: 11,
+		GoVersion: 12,
 
 		Config: cfg,
 		// TODO: support Ignores option
 	}
 
-	return runMegacheckCheckers(checkers, opts, workingPkgs)
+	return runMegacheckCheckers(checkers, workingPkgs, opts)
 }
 
-// parseIgnore is a copy from megacheck code just to not fork megacheck
+// parseIgnore is a copy from megacheck honnef.co/go/tools/lint/lintutil.parseIgnore
+// just to not fork megacheck.
 func parseIgnore(s string) ([]lint.Ignore, error) {
 	var out []lint.Ignore
 	if s == "" {
@@ -258,17 +261,28 @@ func parseIgnore(s string) ([]lint.Ignore, error) {
 	return out, nil
 }
 
-func runMegacheckCheckers(cs []lint.Checker, opt *lintutil.Options, workingPkgs []*packages.Package) ([]lint.Problem, error) {
+// runMegacheckCheckers is like megacheck honnef.co/go/tools/lint/lintutil.Lint,
+// but takes a list of already-parsed packages instead of a list of
+// package-paths to parse.
+func runMegacheckCheckers(cs []lint.Checker, workingPkgs []*packages.Package, opt *lintutil.Options) ([]lint.Problem, error) {
 	stats := lint.PerfStats{
 		CheckerInits: map[string]time.Duration{},
 	}
 
+	if opt == nil {
+		opt = &lintutil.Options{}
+	}
 	ignores, err := parseIgnore(opt.Ignores)
 	if err != nil {
 		return nil, err
 	}
 
+	// package-parsing elided here
+	stats.PackageLoading = 0
+
 	var problems []lint.Problem
+	// populating 'problems' with parser-problems elided here
+
 	if len(workingPkgs) == 0 {
 		return problems, nil
 	}

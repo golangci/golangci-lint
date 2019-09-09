@@ -5,9 +5,14 @@ go:
   - 1.12.x
 
 before_script:
-  - go get github.com/valyala/quicktemplate
+  - go get github.com/valyala/quicktemplate # for tests
+  - go get github.com/pkg/errors # for tests
 
 script: make check_generated test
+
+branches:
+  only: # speed up CI: don't build pull requests twice
+    - "master"
 
 after_success:
   - test -n "$TRAVIS_TAG" && docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
