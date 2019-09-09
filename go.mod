@@ -2,7 +2,7 @@ module github.com/golangci/golangci-lint
 
 require (
 	github.com/BurntSushi/toml v0.3.1 // indirect
-	github.com/OpenPeeDeeP/depguard v0.0.0-20180806142446-a69c782687b2
+	github.com/OpenPeeDeeP/depguard v1.0.0
 	github.com/StackExchange/wmi v0.0.0-20180116203802-5d049714c4a6 // indirect
 	github.com/fatih/color v1.6.0
 	github.com/go-critic/go-critic v0.0.0-20181204210945-1df300866540
@@ -49,10 +49,9 @@ require (
 	github.com/spf13/pflag v1.0.1
 	github.com/spf13/viper v1.0.2
 	github.com/stretchr/testify v1.2.2
-	github.com/timakin/bodyclose v0.0.0-20190407043127-4a873e97b2bb
+	github.com/timakin/bodyclose v0.0.0-00010101000000-000000000000
 	github.com/valyala/quicktemplate v1.1.1
 	golang.org/x/crypto v0.0.0-20190313024323-a1f597ede03a // indirect
-	golang.org/x/net v0.0.0-20190313220215-9f648a60d977 // indirect
 	golang.org/x/sys v0.0.0-20190312061237-fead79001313 // indirect
 	golang.org/x/tools v0.0.0-20190521203540-521d6ed310dd
 	gopkg.in/airbrake/gobrake.v2 v2.0.9 // indirect
@@ -61,4 +60,12 @@ require (
 	mvdan.cc/interfacer v0.0.0-20180901003855-c20040233aed
 	mvdan.cc/lint v0.0.0-20170908181259-adc824a0674b // indirect
 	mvdan.cc/unparam v0.0.0-20190124213536-fbb59629db34
+)
+
+replace (
+	// https://github.com/timakin/bodyclose/pull/17
+	github.com/timakin/bodyclose => github.com/golangci/bodyclose v0.0.0-20190713050349-65da19158fa2
+
+	// https://github.com/golang/tools/pull/139
+	golang.org/x/tools => github.com/golangci/tools v0.0.0-20190713050349-979bdb7f8cc8
 )
