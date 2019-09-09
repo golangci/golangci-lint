@@ -11,11 +11,15 @@ clean:
 
 # Test
 
+# until https://github.com/OpenPeeDeeP/depguard/issues/7 fixed
+test: export GO111MODULE = off
+test: export GOLANGCI_LINT_INSTALLED = true
+
 test: build
-	GL_TEST_RUN=1 ./golangci-lint run -v
-	GL_TEST_RUN=1 ./golangci-lint run --fast --no-config -v --skip-dirs 'test/testdata_etc,pkg/golinters/goanalysis/(checker|passes)'
-	GL_TEST_RUN=1 ./golangci-lint run --no-config -v --skip-dirs 'test/testdata_etc,pkg/golinters/goanalysis/(checker|passes)'
-	GL_TEST_RUN=1 go test -v ./...
+	GL_TEST_RUN=1 time ./golangci-lint run -v
+	GL_TEST_RUN=1 time ./golangci-lint run --fast --no-config -v --skip-dirs 'test/testdata_etc,pkg/golinters/goanalysis/(checker|passes)'
+	GL_TEST_RUN=1 time ./golangci-lint run --no-config -v --skip-dirs 'test/testdata_etc,pkg/golinters/goanalysis/(checker|passes)'
+	GL_TEST_RUN=1 time go test -v ./...
 
 .PHONY: test
 
@@ -30,8 +34,9 @@ test_linters:
 
 # Maintenance
 
-generate: README.md install.sh pkg/logutils/log_mock.go vendor
-generate_svg: docs/demo.svg
+generate: README.md docs/demo.svg install.sh pkg/logutils/log_mock.go vendor
+fast_generate: README.md vendor
+
 maintainer-clean: clean
 	rm -f docs/demo.svg README.md install.sh pkg/logutils/log_mock.go
 	rm -rf vendor
@@ -40,8 +45,16 @@ maintainer-clean: clean
 check_generated:
 	$(MAKE) --always-make generate
 	git checkout -- go.mod go.sum # can differ between go1.11 and go1.12
+	git checkout -- vendor/modules.txt # can differ between go1.12 and go1.13
 	git diff --exit-code # check no changes
 .PHONY: check_generated
+
+fast_check_generated:
+	$(MAKE) --always-make fast_generate
+	git checkout -- go.mod go.sum # can differ between go1.11 and go1.12
+	git checkout -- vendor/modules.txt # can differ between go1.12 and go1.13
+	git diff --exit-code # check no changes
+.PHONY: fast_check_generated
 
 release:
 	rm -rf dist
@@ -65,7 +78,8 @@ tools/go.mod:
 	cd tools && GO111MODULE=on go mod init local-tools
 
 tools/godownloader: Makefile tools/go.mod
-	cd tools && GOBIN=$(CURDIR)/tools GO111MODULE=on go get github.com/goreleaser/godownloader@3b90d248ba30307915288f08ab3f2fc2d9f6710c
+	# https://github.com/goreleaser/godownloader/issues/133
+	cd tools && GOBIN=$(CURDIR)/tools GO111MODULE=off go get github.com/goreleaser/godownloader
 
 tools/svg-term:
 	@mkdir -p tools
@@ -79,7 +93,8 @@ tools/Dracula.itermcolors:
 docs/demo.svg: tools/svg-term tools/Dracula.itermcolors
 	PATH=$(CURDIR)/tools:$${PATH} svg-term --cast=183662 --out docs/demo.svg --window --width 110 --height 30 --from 2000 --to 20000 --profile ./tools/Dracula.itermcolors --term iterm2
 
-install.sh: tools/godownloader .goreleaser.yml
+install.sh:
+	# dependencies: tools/godownloader .goreleaser.yml
 	# TODO: use when Windows installation will be fixed in the upstream
 	#PATH=$(CURDIR)/tools:$${PATH} tools/godownloader .goreleaser.yml | sed '/DO NOT EDIT/s/ on [0-9TZ:-]*//' > $@
 

@@ -160,7 +160,7 @@ var (
 )
 
 // wantedErrors parses expected errors from comments in a file.
-//nolint:nakedret,gocyclo
+//nolint:nakedret,gocyclo,funlen
 func wantedErrors(file, short string) (errs []wantedError) {
 	cache := make(map[string]*regexp.Regexp)
 

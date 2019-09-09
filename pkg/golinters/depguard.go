@@ -17,25 +17,21 @@ func (Depguard) Name() string {
 	return "depguard"
 }
 
-func (Depguard) Desc() string {
-	return "Go linter that checks if package imports are in a list of acceptable packages"
-}
-
-func (d Depguard) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issue, error) {
-	dg := &depguardAPI.Depguard{
-		Packages:      lintCtx.Settings().Depguard.Packages,
-		IncludeGoRoot: lintCtx.Settings().Depguard.IncludeGoRoot,
-	}
+func setDepguardListType(dg *depguardAPI.Depguard, lintCtx *linter.Context) error {
 	listType := lintCtx.Settings().Depguard.ListType
 	var found bool
 	dg.ListType, found = depguardAPI.StringToListType[strings.ToLower(listType)]
 	if !found {
 		if listType != "" {
-			return nil, fmt.Errorf("unsure what list type %s is", listType)
+			return fmt.Errorf("unsure what list type %s is", listType)
 		}
 		dg.ListType = depguardAPI.LTBlacklist
 	}
 
+	return nil
+}
+
+func setupDepguardPackages(dg *depguardAPI.Depguard, lintCtx *linter.Context) {
 	if dg.ListType == depguardAPI.LTBlacklist {
 		// if the list type was a blacklist the packages with error messages should
 		// be included in the blacklist package list
@@ -51,6 +47,21 @@ func (d Depguard) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Is
 			}
 		}
 	}
+}
+
+func (Depguard) Desc() string {
+	return "Go linter that checks if package imports are in a list of acceptable packages"
+}
+
+func (d Depguard) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issue, error) {
+	dg := &depguardAPI.Depguard{
+		Packages:      lintCtx.Settings().Depguard.Packages,
+		IncludeGoRoot: lintCtx.Settings().Depguard.IncludeGoRoot,
+	}
+	if err := setDepguardListType(dg, lintCtx); err != nil {
+		return nil, err
+	}
+	setupDepguardPackages(dg, lintCtx)
 
 	issues, err := dg.Run(lintCtx.LoaderConfig, lintCtx.Program)
 	if err != nil {

@@ -1,0 +1,3 @@
+package minimalpkg
+
+func SomeTestFunc() {}

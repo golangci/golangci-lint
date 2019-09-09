@@ -14,15 +14,15 @@ require (
 	github.com/golang/mock v1.0.0
 	github.com/golangci/check v0.0.0-20180506172741-cfe4005ccda2
 	github.com/golangci/dupl v0.0.0-20180902072040-3e9179ac440a
-	github.com/golangci/errcheck v0.0.0-20181003203344-ef45e06d44b6
+	github.com/golangci/errcheck v0.0.0-20181223084120-ef45e06d44b6
 	github.com/golangci/go-misc v0.0.0-20180628070357-927a3d87b613
 	github.com/golangci/go-tools v0.0.0-20190318055746-e32c54105b7c
 	github.com/golangci/goconst v0.0.0-20180610141641-041c5f2b40f3
 	github.com/golangci/gocyclo v0.0.0-20180528134321-2becd97e67ee
 	github.com/golangci/gofmt v0.0.0-20181222123516-0b8337e80d98
-	github.com/golangci/gosec v0.0.0-20180901114220-66fb7fc33547
+	github.com/golangci/gosec v0.0.0-20190211064107-66fb7fc33547
 	github.com/golangci/ineffassign v0.0.0-20190609212857-42439a7714cc
-	github.com/golangci/lint-1 v0.0.0-20180610141402-ee948d087217
+	github.com/golangci/lint-1 v0.0.0-20190420132249-ee948d087217
 	github.com/golangci/maligned v0.0.0-20180506175553-b1d89398deca
 	github.com/golangci/misspell v0.0.0-20180809174111-950f5d19e770
 	github.com/golangci/prealloc v0.0.0-20180630174525-215b22d4de21
@@ -51,7 +51,7 @@ require (
 	github.com/spf13/pflag v1.0.1
 	github.com/spf13/viper v1.0.2
 	github.com/stretchr/testify v1.2.2
-	github.com/timakin/bodyclose v0.0.0-00010101000000-87058b9bfcec
+	github.com/timakin/bodyclose v0.0.0-20190721030226-87058b9bfcec
 	github.com/ultraware/funlen v0.0.1
 	github.com/valyala/quicktemplate v1.1.1
 	golang.org/x/crypto v0.0.0-20190313024323-a1f597ede03a // indirect
@@ -62,8 +62,12 @@ require (
 	gopkg.in/yaml.v2 v2.2.1
 	mvdan.cc/interfacer v0.0.0-20180901003855-c20040233aed
 	mvdan.cc/lint v0.0.0-20170908181259-adc824a0674b // indirect
-	mvdan.cc/unparam v0.0.0-20190124213536-fbb59629db34
+	mvdan.cc/unparam v0.0.0-20190209190245-fbb59629db34
 )
 
-// https://github.com/golang/tools/pull/139
-replace golang.org/x/tools => github.com/golangci/tools v0.0.0-20190713050349-979bdb7f8cc8
+replace (
+	// https://github.com/ultraware/funlen/pull/1
+	github.com/ultraware/funlen => github.com/golangci/funlen v0.0.0-20190909161642-5e59b9546114
+	// https://github.com/golang/tools/pull/139
+	golang.org/x/tools => github.com/golangci/tools v0.0.0-20190909104219-979bdb7f8cc8
+)
