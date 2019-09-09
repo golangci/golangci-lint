@@ -48,6 +48,7 @@ func getOkLogger(ctrl *gomock.Controller) *logutils.MockLog {
 	return log
 }
 
+//nolint:funlen
 func TestNolint(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
