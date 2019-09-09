@@ -65,5 +65,7 @@ require (
 replace (
 	// https://github.com/timakin/bodyclose/pull/17
 	github.com/timakin/bodyclose => github.com/golangci/bodyclose v0.0.0-20190713050349-65da19158fa2
+
+	// https://github.com/golang/tools/pull/139
 	golang.org/x/tools => github.com/golangci/tools v0.0.0-20190713050349-979bdb7f8cc8
 )
