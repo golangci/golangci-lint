@@ -1,11 +1,13 @@
 module github.com/golangci/golangci-lint
 
+go 1.11
+
 require (
 	github.com/BurntSushi/toml v0.3.1 // indirect
 	github.com/OpenPeeDeeP/depguard v1.0.0
 	github.com/StackExchange/wmi v0.0.0-20180116203802-5d049714c4a6 // indirect
 	github.com/fatih/color v1.6.0
-	github.com/go-critic/go-critic v0.0.0-20181204210945-1df300866540
+	github.com/go-critic/go-critic v0.3.5-0.20190526074819-1df300866540
 	github.com/go-lintpack/lintpack v0.5.2
 	github.com/go-ole/go-ole v1.2.1 // indirect
 	github.com/gobwas/glob v0.2.3 // indirect
@@ -17,9 +19,9 @@ require (
 	github.com/golangci/go-tools v0.0.0-20190318055746-e32c54105b7c
 	github.com/golangci/goconst v0.0.0-20180610141641-041c5f2b40f3
 	github.com/golangci/gocyclo v0.0.0-20180528134321-2becd97e67ee
-	github.com/golangci/gofmt v0.0.0-20181105071733-0b8337e80d98
+	github.com/golangci/gofmt v0.0.0-20181222123516-0b8337e80d98
 	github.com/golangci/gosec v0.0.0-20180901114220-66fb7fc33547
-	github.com/golangci/ineffassign v0.0.0-20180808204949-42439a7714cc
+	github.com/golangci/ineffassign v0.0.0-20190609212857-42439a7714cc
 	github.com/golangci/lint-1 v0.0.0-20180610141402-ee948d087217
 	github.com/golangci/maligned v0.0.0-20180506175553-b1d89398deca
 	github.com/golangci/misspell v0.0.0-20180809174111-950f5d19e770
