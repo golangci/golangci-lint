@@ -472,6 +472,15 @@ Also, you can exclude all issues in a file by:
 package pkg
 ```
 
+You may add a comment explaining or justifying why `//nolint` is being used on the same line as the flag itself:
+
+```go
+//nolint:gocyclo // This legacy function is complex but the team too busy to simplify it
+func someLegacyFunction() *string {
+	// ...
+}
+```
+
 You can see more examples of using `//nolint` in [our tests](https://github.com/golangci/golangci-lint/tree/master/pkg/result/processors/testdata) for it.
 
 Use `//nolint` instead of `// nolint` because machine-readable comments should have no space by Go convention.
