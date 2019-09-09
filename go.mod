@@ -14,7 +14,7 @@ require (
 	github.com/golangci/dupl v0.0.0-20180902072040-3e9179ac440a
 	github.com/golangci/errcheck v0.0.0-20181003203344-ef45e06d44b6
 	github.com/golangci/go-misc v0.0.0-20180628070357-927a3d87b613
-	github.com/golangci/go-tools v0.0.0-20180109140146-af6baa5dc196
+	github.com/golangci/go-tools v0.0.0-20190318055746-e32c54105b7c
 	github.com/golangci/goconst v0.0.0-20180610141641-041c5f2b40f3
 	github.com/golangci/gocyclo v0.0.0-20180528134321-2becd97e67ee
 	github.com/golangci/gofmt v0.0.0-20181105071733-0b8337e80d98
@@ -49,11 +49,10 @@ require (
 	github.com/spf13/pflag v1.0.1
 	github.com/spf13/viper v1.0.2
 	github.com/stretchr/testify v1.2.2
-	github.com/timakin/bodyclose v0.0.0-20190407043127-4a873e97b2bb
 	github.com/ultraware/funlen v0.0.1
+	github.com/timakin/bodyclose v0.0.0-00010101000000-87058b9bfcec
 	github.com/valyala/quicktemplate v1.1.1
 	golang.org/x/crypto v0.0.0-20190313024323-a1f597ede03a // indirect
-	golang.org/x/net v0.0.0-20190313220215-9f648a60d977 // indirect
 	golang.org/x/sys v0.0.0-20190312061237-fead79001313 // indirect
 	golang.org/x/tools v0.0.0-20190521203540-521d6ed310dd
 	gopkg.in/airbrake/gobrake.v2 v2.0.9 // indirect
@@ -63,3 +62,6 @@ require (
 	mvdan.cc/lint v0.0.0-20170908181259-adc824a0674b // indirect
 	mvdan.cc/unparam v0.0.0-20190124213536-fbb59629db34
 )
+
+// https://github.com/golang/tools/pull/139
+replace golang.org/x/tools => github.com/golangci/tools v0.0.0-20190713050349-979bdb7f8cc8

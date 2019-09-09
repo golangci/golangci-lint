@@ -38,7 +38,9 @@ type runner struct {
 	skipFile  map[*ast.File]bool
 }
 
-func (r *runner) run(pass *analysis.Pass) (interface{}, error) {
+// run executes an analysis for the pass. The receiver is passed
+// by value because this func is called in parallel for different passes.
+func (r runner) run(pass *analysis.Pass) (interface{}, error) {
 	r.pass = pass
 	funcs := pass.ResultOf[buildssa.Analyzer].(*buildssa.SSA).SrcFuncs
 
@@ -227,7 +229,7 @@ func (r *runner) isCloseCall(ccall ssa.Instruction) bool {
 			return true
 		}
 	case *ssa.Call:
-		if ccall.Call.Method.Name() == r.closeMthd.Name() {
+		if ccall.Call.Method != nil && ccall.Call.Method.Name() == r.closeMthd.Name() {
 			return true
 		}
 	case *ssa.ChangeInterface:
