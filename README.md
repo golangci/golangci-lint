@@ -208,6 +208,7 @@ Disabled by default linters:
 bodyclose: checks whether HTTP response body is closed successfully [fast: false, auto-fix: false]
 depguard: Go linter that checks if package imports are in a list of acceptable packages [fast: true, auto-fix: false]
 dupl: Tool for code clone detection [fast: true, auto-fix: false]
+funlen: Tool for detection of long functions [fast: true, auto-fix: false]
 gochecknoglobals: Checks that no globals are present in Go code [fast: true, auto-fix: false]
 gochecknoinits: Checks that no init functions are present in Go code [fast: true, auto-fix: false]
 goconst: Finds repeated strings that could be replaced by a constant [fast: true, auto-fix: false]
@@ -440,6 +441,7 @@ golangci-lint help linters
 - [gocritic](https://github.com/go-critic/go-critic) - The most opinionated Go source code linter
 - [gochecknoinits](https://github.com/leighmcculloch/gochecknoinits) - Checks that no init functions are present in Go code
 - [gochecknoglobals](https://github.com/leighmcculloch/gochecknoglobals) - Checks that no globals are present in Go code
+- [funlen](https://github.com/ultraware/funlen) - Tool for detection of long functions
 
 ## Configuration
 
@@ -629,6 +631,11 @@ linters-settings:
     # path to a file containing a list of functions to exclude from checking
     # see https://github.com/kisielk/errcheck#excluding-functions for details
     exclude: /path/to/file.txt
+
+  funlen:
+    lines: 60
+    statements: 40
+
   govet:
     # report about shadowed variables
     check-shadowing: true
@@ -859,6 +866,7 @@ linters:
     - maligned
     - prealloc
     - gochecknoglobals
+    - funlen
 
 run:
   skip-dirs:
@@ -999,6 +1007,7 @@ Thanks to developers and authors of used linters:
 - [kyoh86](https://github.com/kyoh86)
 - [go-critic](https://github.com/go-critic)
 - [leighmcculloch](https://github.com/leighmcculloch)
+- [ultraware](https://github.com/ultraware)
 
 ## Changelog
 

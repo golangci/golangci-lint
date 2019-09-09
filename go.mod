@@ -49,6 +49,7 @@ require (
 	github.com/spf13/pflag v1.0.1
 	github.com/spf13/viper v1.0.2
 	github.com/stretchr/testify v1.2.2
+	github.com/ultraware/funlen v0.0.1
 	github.com/timakin/bodyclose v0.0.0-00010101000000-87058b9bfcec
 	github.com/valyala/quicktemplate v1.1.1
 	golang.org/x/crypto v0.0.0-20190313024323-a1f597ede03a // indirect
