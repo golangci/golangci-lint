@@ -49,7 +49,7 @@ require (
 	github.com/spf13/pflag v1.0.1
 	github.com/spf13/viper v1.0.2
 	github.com/stretchr/testify v1.2.2
-	github.com/timakin/bodyclose v0.0.0-00010101000000-000000000000
+	github.com/timakin/bodyclose v0.0.0-00010101000000-87058b9bfcec
 	github.com/valyala/quicktemplate v1.1.1
 	golang.org/x/crypto v0.0.0-20190313024323-a1f597ede03a // indirect
 	golang.org/x/sys v0.0.0-20190312061237-fead79001313 // indirect
@@ -62,10 +62,5 @@ require (
 	mvdan.cc/unparam v0.0.0-20190124213536-fbb59629db34
 )
 
-replace (
-	// https://github.com/timakin/bodyclose/pull/17
-	github.com/timakin/bodyclose => github.com/golangci/bodyclose v0.0.0-20190713050349-65da19158fa2
-
-	// https://github.com/golang/tools/pull/139
-	golang.org/x/tools => github.com/golangci/tools v0.0.0-20190713050349-979bdb7f8cc8
-)
+// https://github.com/golang/tools/pull/139
+replace golang.org/x/tools => github.com/golangci/tools v0.0.0-20190713050349-979bdb7f8cc8
