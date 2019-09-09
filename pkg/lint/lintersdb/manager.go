@@ -77,6 +77,7 @@ func (Manager) GetMetaLinters() map[string]linter.MetaLinter {
 	return ret
 }
 
+//nolint:funlen
 func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 	var govetCfg *config.GovetSettings
 	if m.cfg != nil {

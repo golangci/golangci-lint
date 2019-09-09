@@ -74,6 +74,7 @@ func getEnabledByDefaultFastLintersWith(with ...string) []string {
 	return ret
 }
 
+//nolint:funlen
 func TestEnabledLinters(t *testing.T) {
 	type tc struct {
 		name           string
