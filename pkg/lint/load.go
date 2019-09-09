@@ -381,7 +381,12 @@ func (cl ContextLoader) Load(ctx context.Context, linters []*linter.Config) (*li
 	}
 
 	ret := &linter.Context{
-		Packages:   pkgs,
+		Packages: deduplicatedPkgs,
+
+		// At least `unused` linters works properly only on original (not deduplicated) packages,
+		// see https://github.com/golangci/golangci-lint/pull/585.
+		OriginalPackages: pkgs,
+
 		Program:    prog,
 		SSAProgram: ssaProg,
 		LoaderConfig: &loader.Config{
@@ -402,6 +407,7 @@ func (cl ContextLoader) Load(ctx context.Context, linters []*linter.Config) (*li
 // separateNotCompilingPackages moves not compiling packages into separate slice:
 // a lot of linters crash on such packages
 func separateNotCompilingPackages(lintCtx *linter.Context) {
+	// Separate deduplicated packages
 	goodPkgs := make([]*packages.Package, 0, len(lintCtx.Packages))
 	for _, pkg := range lintCtx.Packages {
 		if pkg.IllTyped {
@@ -415,4 +421,13 @@ func separateNotCompilingPackages(lintCtx *linter.Context) {
 	if len(lintCtx.NotCompilingPackages) != 0 {
 		lintCtx.Log.Infof("Packages that do not compile: %+v", lintCtx.NotCompilingPackages)
 	}
+
+	// Separate original (not deduplicated) packages
+	goodOriginalPkgs := make([]*packages.Package, 0, len(lintCtx.OriginalPackages))
+	for _, pkg := range lintCtx.OriginalPackages {
+		if !pkg.IllTyped {
+			goodOriginalPkgs = append(goodOriginalPkgs, pkg)
+		}
+	}
+	lintCtx.OriginalPackages = goodOriginalPkgs
 }
