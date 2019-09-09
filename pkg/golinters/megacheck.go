@@ -177,7 +177,9 @@ func (m MegacheckMetalinter) isValidChild(name string) bool {
 }
 
 func (m megacheck) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issue, error) {
-	issues, err := m.runMegacheck(lintCtx.Packages, lintCtx.Settings().Unused.CheckExported)
+	// Use OriginalPackages not Packages because `unused` doesn't work properly
+	// when we deduplicate normal and test packages.
+	issues, err := m.runMegacheck(lintCtx.OriginalPackages, lintCtx.Settings().Unused.CheckExported)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to run megacheck")
 	}
@@ -231,7 +233,7 @@ func (m megacheck) runMegacheck(workingPkgs []*packages.Package, checkExportedUn
 	opts := &lintutil.Options{
 		// TODO: get current go version, but now it doesn't matter,
 		// may be needed after next updates of megacheck
-		GoVersion: 11,
+		GoVersion: 12,
 
 		Config: cfg,
 		// TODO: support Ignores option
