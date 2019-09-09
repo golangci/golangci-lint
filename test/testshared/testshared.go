@@ -35,6 +35,10 @@ func (r *LintRunner) Install() {
 		return
 	}
 
+	if os.Getenv("GOLANGCI_LINT_INSTALLED") == "true" {
+		return
+	}
+
 	cmd := exec.Command("make", "-C", "..", "build")
 	assert.NoError(r.t, cmd.Run(), "Can't go install golangci-lint")
 	r.installed = true

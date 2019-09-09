@@ -52,8 +52,9 @@ use `--enable-all` and a new linter is added or even without `--enable-all`: whe
 It's highly recommended to install a fixed version of golangci-lint.
 Releases are available on the [releases page](https://github.com/golangci/golangci-lint/releases).
 
-The recommended way to install golangci-lint (replace `vX.Y.Z` with the latest
-version from the [releases page](https://github.com/golangci/golangci-lint/releases)):
+Latest version: ![GitHub release](https://img.shields.io/github/release/golangci/golangci-lint.svg)
+
+Here is the recommended way to install golangci-lint (replace `vX.Y.Z` with the latest version):
 
 ```bash
 # binary will be $(go env GOPATH)/bin/golangci-lint
@@ -455,13 +456,13 @@ To exclude issues for the block of code use this directive on the beginning of a
 ```go
 //nolint
 func allIssuesInThisFunctionAreExcluded() *string {
-	// ...
+  // ...
 }
 
 //nolint:govet
 var (
-	a int
-	b int
+  a int
+  b int
 )
 ```
 
@@ -477,7 +478,7 @@ You may add a comment explaining or justifying why `//nolint` is being used on t
 ```go
 //nolint:gocyclo // This legacy function is complex but the team too busy to simplify it
 func someLegacyFunction() *string {
-	// ...
+  // ...
 }
 ```
 
@@ -510,13 +511,15 @@ We don't recommend vendoring `golangci-lint` in your repo: you will get troubles
 No, you don't need to do it anymore.
 
 **Which go versions are supported**
-Short answer: go 1.11 and newer are oficially supported.
+Short answer: go 1.12 and newer are oficially supported.
 
 Long answer:
+
 1. go < 1.9 isn't supported
-2. go 1.9 is supported by golangci-lint <= v1.10.2
-3. go 1.10 is officially supported by golangci-lint <= 1.15.0.
-4. go1.11 and go1.12 are officially supported by the latest version of golangci-lint.
+2. go1.9 is officially supported by golangci-lint <= v1.10.2
+3. go1.10 is officially supported by golangci-lint <= 1.15.0.
+4. go1.11 is officially supported by golangci-lint <= 1.17.1.
+5. go1.12 and go1.13 are officially supported by the latest version of golangci-lint (>= 1.18.0).
 
 **`golangci-lint` doesn't work**
 

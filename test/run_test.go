@@ -35,7 +35,8 @@ func TestEmptyDirRun(t *testing.T) {
 func TestNotExistingDirRun(t *testing.T) {
 	testshared.NewLintRunner(t, "GO111MODULE=off").Run(getTestDataDir("no_such_dir")).
 		ExpectExitCode(exitcodes.Failure).
-		ExpectOutputContains(`cannot find package \"./testdata/no_such_dir\"`)
+		ExpectOutputContains("cannot find package").
+		ExpectOutputContains("/testdata/no_such_dir")
 }
 
 func TestSymlinkLoop(t *testing.T) {
@@ -54,16 +55,16 @@ func TestTestsAreLintedByDefault(t *testing.T) {
 }
 
 func TestCgoOk(t *testing.T) {
-	testshared.NewLintRunner(t).Run("--enable-all", getTestDataDir("cgo")).ExpectNoIssues()
+	testshared.NewLintRunner(t).Run("--no-config", "--enable-all", getTestDataDir("cgo")).ExpectNoIssues()
 }
 
 func TestCgoWithIssues(t *testing.T) {
-	testshared.NewLintRunner(t).Run("--enable-all", getTestDataDir("cgo_with_issues")).
+	testshared.NewLintRunner(t).Run("--no-config", "--enable-all", getTestDataDir("cgo_with_issues")).
 		ExpectHasIssue("Printf format %t has arg cs of wrong type")
 }
 
 func TestUnsafeOk(t *testing.T) {
-	testshared.NewLintRunner(t).Run("--enable-all", getTestDataDir("unsafe")).ExpectNoIssues()
+	testshared.NewLintRunner(t).Run("--no-config", "--enable-all", getTestDataDir("unsafe")).ExpectNoIssues()
 }
 
 func TestGovetCustomFormatter(t *testing.T) {
@@ -134,12 +135,14 @@ func TestConfigFileIsDetected(t *testing.T) {
 
 func TestEnableAllFastAndEnableCanCoexist(t *testing.T) {
 	r := testshared.NewLintRunner(t)
-	r.Run(withCommonRunArgs("--fast", "--enable-all", "--enable=typecheck")...).ExpectNoIssues()
-	r.Run(withCommonRunArgs("--enable-all", "--enable=typecheck")...).ExpectExitCode(exitcodes.Failure)
+	r.Run(withCommonRunArgs("--no-config", "--fast", "--enable-all", "--enable=typecheck", minimalPkg)...).
+		ExpectExitCode(exitcodes.Success, exitcodes.IssuesFound)
+	r.Run(withCommonRunArgs("--no-config", "--enable-all", "--enable=typecheck", minimalPkg)...).
+		ExpectExitCode(exitcodes.Failure)
 }
 
 func TestEnabledPresetsAreNotDuplicated(t *testing.T) {
-	testshared.NewLintRunner(t).Run("--no-config", "-v", "-p", "style,bugs").
+	testshared.NewLintRunner(t).Run("--no-config", "-v", "-p", "style,bugs", minimalPkg).
 		ExpectOutputContains("Active presets: [bugs style]")
 }
 
@@ -201,13 +204,13 @@ func TestDisallowedOptionsInConfig(t *testing.T) {
 	r := testshared.NewLintRunner(t)
 	for _, c := range cases {
 		// Run with disallowed option set only in config
-		r.RunWithYamlConfig(c.cfg, getCommonRunArgs()...).ExpectExitCode(exitcodes.Failure)
+		r.RunWithYamlConfig(c.cfg, withCommonRunArgs(minimalPkg)...).ExpectExitCode(exitcodes.Failure)
 
 		if c.option == "" {
 			continue
 		}
 
-		args := []string{c.option, "--fast"}
+		args := []string{c.option, "--fast", minimalPkg}
 
 		// Run with disallowed option set only in command-line
 		r.Run(withCommonRunArgs(args...)...).ExpectExitCode(exitcodes.Success)

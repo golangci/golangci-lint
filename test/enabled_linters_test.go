@@ -180,6 +180,7 @@ func TestEnabledLinters(t *testing.T) {
 			if c.args != "" {
 				runArgs = append(runArgs, strings.Split(c.args, " ")...)
 			}
+			runArgs = append(runArgs, minimalPkg)
 			r := testshared.NewLintRunner(t).RunWithYamlConfig(c.cfg, runArgs...)
 			sort.StringSlice(c.el).Sort()
 

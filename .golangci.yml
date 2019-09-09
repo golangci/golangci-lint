@@ -41,8 +41,6 @@ linters-settings:
     disabled-checks:
       - wrapperFunc
       - dupImport # https://github.com/go-critic/go-critic/issues/845
-  funlen:
-    lines: 70
 
 linters:
   # inverted configuration with `enable-all` and `disable` is not scalable during updates of golangci-lint
@@ -50,10 +48,9 @@ linters:
   enable:
     - bodyclose
     - deadcode
-    - depguard
     - dupl
     - errcheck
-    - funlen
+    # - funlen - TODO: enable it when golangci.com will support it.
     - gochecknoinits
     - goconst
     - gocritic
@@ -78,6 +75,11 @@ linters:
     - unparam
     - unused
     - varcheck
+
+  # don't enable:
+  # - depguard - until https://github.com/OpenPeeDeeP/depguard/issues/7 gets fixed
+  # - maligned,prealloc
+  # - gochecknoglobals
 
 run:
   skip-dirs:
