@@ -237,10 +237,11 @@ func (m megacheck) runMegacheck(workingPkgs []*packages.Package, checkExportedUn
 		// TODO: support Ignores option
 	}
 
-	return runMegacheckCheckers(checkers, opts, workingPkgs)
+	return runMegacheckCheckers(checkers, workingPkgs, opts)
 }
 
-// parseIgnore is a copy from megacheck code just to not fork megacheck
+// parseIgnore is a copy from megacheck honnef.co/go/tools/lint/lintutil.parseIgnore
+// just to not fork megacheck.
 func parseIgnore(s string) ([]lint.Ignore, error) {
 	var out []lint.Ignore
 	if s == "" {
@@ -258,17 +259,28 @@ func parseIgnore(s string) ([]lint.Ignore, error) {
 	return out, nil
 }
 
-func runMegacheckCheckers(cs []lint.Checker, opt *lintutil.Options, workingPkgs []*packages.Package) ([]lint.Problem, error) {
+// runMegacheckCheckers is like megacheck honnef.co/go/tools/lint/lintutil.Lint,
+// but takes a list of already-parsed packages instead of a list of
+// package-paths to parse.
+func runMegacheckCheckers(cs []lint.Checker, workingPkgs []*packages.Package, opt *lintutil.Options) ([]lint.Problem, error) {
 	stats := lint.PerfStats{
 		CheckerInits: map[string]time.Duration{},
 	}
 
+	if opt == nil {
+		opt = &lintutil.Options{}
+	}
 	ignores, err := parseIgnore(opt.Ignores)
 	if err != nil {
 		return nil, err
 	}
 
+	// package-parsing elided here
+	stats.PackageLoading = 0
+
 	var problems []lint.Problem
+	// populating 'problems' with parser-problems elided here
+
 	if len(workingPkgs) == 0 {
 		return problems, nil
 	}

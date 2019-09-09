@@ -88,11 +88,6 @@ func (cl ContextLoader) makeFakeLoaderPackageInfo(pkg *packages.Package) *loader
 	}
 }
 
-func shouldSkipPkg(pkg *packages.Package) bool {
-	// it's an implicit testmain package
-	return pkg.Name == "main" && strings.HasSuffix(pkg.PkgPath, ".test")
-}
-
 func (cl ContextLoader) makeFakeLoaderProgram(pkgs []*packages.Package) *loader.Program {
 	var createdPkgs []*loader.PackageInfo
 	for _, pkg := range pkgs {
@@ -296,7 +291,7 @@ func (cl ContextLoader) loadPackages(ctx context.Context, loadMode packages.Load
 		return nil, err
 	}
 
-	return cl.filterPackages(pkgs), nil
+	return cl.filterTestMainPackages(pkgs), nil
 }
 
 func (cl ContextLoader) tryParseTestPackage(pkg *packages.Package) (name, testName string, isTest bool) {
@@ -308,7 +303,22 @@ func (cl ContextLoader) tryParseTestPackage(pkg *packages.Package) (name, testNa
 	return matches[1], matches[2], true
 }
 
-func (cl ContextLoader) filterPackages(pkgs []*packages.Package) []*packages.Package {
+func (cl ContextLoader) filterTestMainPackages(pkgs []*packages.Package) []*packages.Package {
+	var retPkgs []*packages.Package
+	for _, pkg := range pkgs {
+		if pkg.Name == "main" && strings.HasSuffix(pkg.PkgPath, ".test") {
+			// it's an implicit testmain package
+			cl.debugf("skip pkg ID=%s", pkg.ID)
+			continue
+		}
+
+		retPkgs = append(retPkgs, pkg)
+	}
+
+	return retPkgs
+}
+
+func (cl ContextLoader) filterDuplicatePackages(pkgs []*packages.Package) []*packages.Package {
 	packagesWithTests := map[string]bool{}
 	for _, pkg := range pkgs {
 		name, _, isTest := cl.tryParseTestPackage(pkg)
@@ -322,11 +332,6 @@ func (cl ContextLoader) filterPackages(pkgs []*packages.Package) []*packages.Pac
 
 	var retPkgs []*packages.Package
 	for _, pkg := range pkgs {
-		if shouldSkipPkg(pkg) {
-			cl.debugf("skip pkg ID=%s", pkg.ID)
-			continue
-		}
-
 		_, _, isTest := cl.tryParseTestPackage(pkg)
 		if !isTest && packagesWithTests[pkg.PkgPath] {
 			// If tests loading is enabled,
@@ -353,22 +358,24 @@ func (cl ContextLoader) Load(ctx context.Context, linters []*linter.Config) (*li
 		return nil, err
 	}
 
-	if len(pkgs) == 0 {
+	deduplicatedPkgs := cl.filterDuplicatePackages(pkgs)
+
+	if len(deduplicatedPkgs) == 0 {
 		return nil, exitcodes.ErrNoGoFiles
 	}
 
 	var prog *loader.Program
 	if loadMode&packages.NeedTypes != 0 {
-		prog = cl.makeFakeLoaderProgram(pkgs)
+		prog = cl.makeFakeLoaderProgram(deduplicatedPkgs)
 	}
 
 	var ssaProg *ssa.Program
 	if loadMode&packages.NeedDeps != 0 {
-		ssaProg = cl.buildSSAProgram(pkgs)
+		ssaProg = cl.buildSSAProgram(deduplicatedPkgs)
 	}
 
 	astLog := cl.log.Child("astcache")
-	astCache, err := astcache.LoadFromPackages(pkgs, astLog)
+	astCache, err := astcache.LoadFromPackages(deduplicatedPkgs, astLog)
 	if err != nil {
 		return nil, err
 	}

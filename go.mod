@@ -14,7 +14,7 @@ require (
 	github.com/golangci/dupl v0.0.0-20180902072040-3e9179ac440a
 	github.com/golangci/errcheck v0.0.0-20181003203344-ef45e06d44b6
 	github.com/golangci/go-misc v0.0.0-20180628070357-927a3d87b613
-	github.com/golangci/go-tools v0.0.0-20180109140146-af6baa5dc196
+	github.com/golangci/go-tools v0.0.0-20190318055746-e32c54105b7c
 	github.com/golangci/goconst v0.0.0-20180610141641-041c5f2b40f3
 	github.com/golangci/gocyclo v0.0.0-20180528134321-2becd97e67ee
 	github.com/golangci/gofmt v0.0.0-20181105071733-0b8337e80d98
