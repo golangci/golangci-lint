@@ -3,6 +3,7 @@ package golinters
 import (
 	"context"
 	"go/token"
+	"strings"
 
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
@@ -37,7 +38,7 @@ func (f Funlen) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issu
 				Filename: i.Pos.Filename,
 				Line:     i.Pos.Line,
 			},
-			Text:       i.Message,
+			Text:       strings.TrimRight(i.Message, "\n"),
 			FromLinter: f.Name(),
 		}
 	}

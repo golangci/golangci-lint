@@ -45,6 +45,7 @@ func wh(text string) string {
 	return color.GreenString(text)
 }
 
+//nolint:funlen
 func initFlagSet(fs *pflag.FlagSet, cfg *config.Config, m *lintersdb.Manager, isFinalInit bool) {
 	hideFlag := func(name string) {
 		if err := fs.MarkHidden(name); err != nil {
