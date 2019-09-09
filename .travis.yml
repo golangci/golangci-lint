@@ -10,6 +10,10 @@ before_script:
 
 script: make check_generated test
 
+branches:
+  only: # speed up CI: don't build pull requests twice
+    - "master"
+
 after_success:
   - test -n "$TRAVIS_TAG" && docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
   - echo "travis go version='$TRAVIS_GO_VERSION'"
