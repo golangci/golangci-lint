@@ -1,12 +1,16 @@
-sudo: false
 language: go
 go:
   - 1.11.x
   - 1.12.x
 
+env:
+  global:
+    - NODE_VERSION=10.15.0
+
 before_script:
   - go get github.com/valyala/quicktemplate # for tests
   - go get github.com/pkg/errors # for tests
+  - nvm install "${NODE_VERSION}"
 
 script: make check_generated test
 

@@ -69,7 +69,7 @@ tools/godownloader: Makefile tools/go.mod
 
 tools/svg-term:
 	@mkdir -p tools
-	cd tools && npm install svg-term-cli
+	cd tools && npm ci
 	ln -sf node_modules/.bin/svg-term $@
 
 tools/Dracula.itermcolors:
