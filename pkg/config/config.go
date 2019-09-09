@@ -164,6 +164,10 @@ type LintersSettings struct {
 	Unused struct {
 		CheckExported bool `mapstructure:"check-exported"`
 	}
+	Funlen struct {
+		Lines      int
+		Statements int
+	}
 
 	Lll      LllSettings
 	Unparam  UnparamSettings

@@ -124,13 +124,13 @@ func (lnt Linter) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Is
 	}
 
 	var issues []result.Issue
-	for _, diag := range diags {
-		i := result.Issue{
+	for i := range diags {
+		diag := &diags[i]
+		issues = append(issues, result.Issue{
 			FromLinter: lnt.Name(),
 			Text:       fmt.Sprintf("%s: %s", diag.AnalyzerName, diag.Message),
 			Pos:        diag.Position,
-		}
-		issues = append(issues, i)
+		})
 	}
 
 	return issues, nil

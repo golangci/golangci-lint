@@ -117,6 +117,10 @@ func TestIdentifierUsedOnlyInTests(t *testing.T) {
 	testshared.NewLintRunner(t).Run("--no-config", "--disable-all", "-Eunused", getTestDataDir("used_only_in_tests")).ExpectNoIssues()
 }
 
+func TestUnusedCheckExported(t *testing.T) {
+	testshared.NewLintRunner(t).Run("-c", "testdata_etc/unused_exported/golangci.yml", "testdata_etc/unused_exported/...").ExpectNoIssues()
+}
+
 func TestConfigFileIsDetected(t *testing.T) {
 	checkGotConfig := func(r *testshared.RunResult) {
 		r.ExpectExitCode(exitcodes.Success).

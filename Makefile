@@ -30,7 +30,8 @@ test_linters:
 
 # Maintenance
 
-generate: docs/demo.svg README.md install.sh pkg/logutils/log_mock.go vendor
+generate: README.md install.sh pkg/logutils/log_mock.go vendor
+generate_svg: docs/demo.svg
 maintainer-clean: clean
 	rm -f docs/demo.svg README.md install.sh pkg/logutils/log_mock.go
 	rm -rf vendor

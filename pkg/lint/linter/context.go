@@ -13,7 +13,13 @@ import (
 )
 
 type Context struct {
-	Packages             []*packages.Package
+	// Packages are deduplicated (test and normal packages) packages
+	Packages []*packages.Package
+
+	// OriginalPackages aren't deduplicated: they contain both normal and test
+	// version for each of packages
+	OriginalPackages []*packages.Package
+
 	NotCompilingPackages []*packages.Package
 
 	LoaderConfig *loader.Config  // deprecated, don't use for new linters
