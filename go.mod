@@ -56,7 +56,7 @@ require (
 	github.com/valyala/quicktemplate v1.1.1
 	golang.org/x/crypto v0.0.0-20190313024323-a1f597ede03a // indirect
 	golang.org/x/sys v0.0.0-20190312061237-fead79001313 // indirect
-	golang.org/x/tools v0.0.0-20190521203540-521d6ed310dd
+	golang.org/x/tools v0.0.0-20190908161001-5b82db07426d
 	gopkg.in/airbrake/gobrake.v2 v2.0.9 // indirect
 	gopkg.in/gemnasium/logrus-airbrake-hook.v2 v2.1.2 // indirect
 	gopkg.in/yaml.v2 v2.2.1
