@@ -460,6 +460,14 @@ Flags:
   -c, --config PATH                 Read config from file path PATH
       --no-config                   Don't read config
       --skip-dirs strings           Regexps of directories to skip
+      --skip-dirs-use-default       Use or not use default excluded directories:
+                                      - (^|/)vendor($|/)
+                                      - (^|/)third_party($|/)
+                                      - (^|/)testdata($|/)
+                                      - (^|/)examples($|/)
+                                      - (^|/)Godeps($|/)
+                                      - (^|/)builtin($|/)
+                                     (default true)
       --skip-files strings          Regexps of files to skip
   -E, --enable strings              Enable specific linter
   -D, --disable strings             Disable specific linter

@@ -42,11 +42,9 @@ func getDefaultIssueExcludeHelp() string {
 func getDefaultDirectoryExcludeHelp() string {
 	parts := []string{"Use or not use default excluded directories:"}
 	for _, dir := range packages.StdExcludeDirRegexps {
-		parts = append(parts,
-			fmt.Sprintf("  - %s", color.YellowString(dir)),
-			"",
-		)
+		parts = append(parts, fmt.Sprintf("  - %s", color.YellowString(dir)))
 	}
+	parts = append(parts, "")
 	return strings.Join(parts, "\n")
 }
 
