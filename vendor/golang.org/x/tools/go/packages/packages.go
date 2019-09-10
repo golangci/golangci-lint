@@ -49,7 +49,6 @@ const (
 	NeedImports
 
 	// NeedDeps adds the fields requested by the LoadMode in the packages in Imports.
-	// If NeedImports is not set, it will be added automatically.
 	NeedDeps
 
 	// NeedExportsFile adds ExportsFile.
@@ -61,7 +60,7 @@ const (
 	// NeedSyntax adds Syntax.
 	NeedSyntax
 
-	// NeedTypesInfo adds TypesInfo. If NeedImports is not set, it will be added automatically.
+	// NeedTypesInfo adds TypesInfo.
 	NeedTypesInfo
 
 	// NeedTypesSizes adds TypesSizes.
@@ -416,11 +415,13 @@ type loader struct {
 	parseCacheMu sync.Mutex
 	exportMu     sync.Mutex // enforces mutual exclusion of exportdata operations
 
-	// TODO(matloob): Add an implied mode here and use that instead of mode.
-	// Implied mode would contain all the fields we need the data for so we can
-	// get the actually requested fields. We'll zero them out before returning
-	// packages to the user. This will make it easier for us to get the conditions
-	// where we need certain modes right.
+	// Config.Mode contains the implied mode (see implyLoadMode).
+	// Implied mode contains all the fields we need the data for.
+	// In requestedMode there are the actually requested fields.
+	// We'll zero them out before returning packages to the user.
+	// This makes it easier for us to get the conditions where
+	// we need certain modes right.
+	requestedMode LoadMode
 }
 
 type parseValue struct {
@@ -477,7 +478,9 @@ func newLoader(cfg *Config) *loader {
 		}
 	}
 
-	ld.addDependingLoadModes()
+	// Save the actually requested fields. We'll zero them out before returning packages to the user.
+	ld.requestedMode = ld.Mode
+	ld.implyLoadMode()
 	return ld
 }
 
@@ -625,35 +628,35 @@ func (ld *loader) refine(roots []string, list ...*Package) ([]*Package, error) {
 	}
 	for i := range ld.pkgs {
 		// Clear all unrequested fields, for extra de-Hyrum-ization.
-		if ld.Mode&NeedName == 0 {
+		if ld.requestedMode&NeedName == 0 {
 			ld.pkgs[i].Name = ""
 			ld.pkgs[i].PkgPath = ""
 		}
-		if ld.Mode&NeedFiles == 0 {
+		if ld.requestedMode&NeedFiles == 0 {
 			ld.pkgs[i].GoFiles = nil
 			ld.pkgs[i].OtherFiles = nil
 		}
-		if ld.Mode&NeedCompiledGoFiles == 0 {
+		if ld.requestedMode&NeedCompiledGoFiles == 0 {
 			ld.pkgs[i].CompiledGoFiles = nil
 		}
-		if ld.Mode&NeedImports == 0 {
+		if ld.requestedMode&NeedImports == 0 {
 			ld.pkgs[i].Imports = nil
 		}
-		if ld.Mode&NeedExportsFile == 0 {
+		if ld.requestedMode&NeedExportsFile == 0 {
 			ld.pkgs[i].ExportFile = ""
 		}
-		if ld.Mode&NeedTypes == 0 {
+		if ld.requestedMode&NeedTypes == 0 {
 			ld.pkgs[i].Types = nil
 			ld.pkgs[i].Fset = nil
 			ld.pkgs[i].IllTyped = false
 		}
-		if ld.Mode&NeedSyntax == 0 {
+		if ld.requestedMode&NeedSyntax == 0 {
 			ld.pkgs[i].Syntax = nil
 		}
-		if ld.Mode&NeedTypesInfo == 0 {
+		if ld.requestedMode&NeedTypesInfo == 0 {
 			ld.pkgs[i].TypesInfo = nil
 		}
-		if ld.Mode&NeedTypesSizes == 0 {
+		if ld.requestedMode&NeedTypesSizes == 0 {
 			ld.pkgs[i].TypesSizes = nil
 		}
 	}
@@ -1077,8 +1080,8 @@ func (ld *loader) loadFromExportData(lpkg *loaderPackage) (*types.Package, error
 	return tpkg, nil
 }
 
-// addDependingLoadModes adds dependencies for choosed LoadMode in ld.Mode
-func (ld *loader) addDependingLoadModes() {
+// implyLoadMode adds dependencies for choosed LoadMode in ld.Mode
+func (ld *loader) implyLoadMode() {
 	if ld.Mode&NeedTypesInfo != 0 && ld.Mode&NeedImports == 0 {
 		// If NeedTypesInfo, go/packages needs to do typechecking itself so it can
 		// associate type info with the AST. To do so, we need the export data

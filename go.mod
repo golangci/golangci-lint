@@ -69,5 +69,5 @@ replace (
 	// https://github.com/ultraware/funlen/pull/1
 	github.com/ultraware/funlen => github.com/golangci/funlen v0.0.0-20190909161642-5e59b9546114
 	// https://github.com/golang/tools/pull/139
-	golang.org/x/tools => github.com/golangci/tools v0.0.0-20190909104219-979bdb7f8cc8
+	golang.org/x/tools => github.com/golangci/tools v0.0.0-20190910062050-3540c026601b
 )
