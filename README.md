@@ -216,6 +216,7 @@ scopelint: Scopelint checks for unpinned variables in go programs [fast: true, a
 stylecheck: Stylecheck is a replacement for golint [fast: false, auto-fix: false]
 unconvert: Remove unnecessary type conversions [fast: true, auto-fix: false]
 unparam: Reports unused function parameters [fast: false, auto-fix: false]
+whitespace: Tool for detection of leading and trailing whitespace [fast: true, auto-fix: false]
 ```
 
 Pass `-E/--enable` to enable linter and `-D/--disable` to disable:
@@ -459,6 +460,7 @@ golangci-lint help linters
 - [gochecknoinits](https://github.com/leighmcculloch/gochecknoinits) - Checks that no init functions are present in Go code
 - [gochecknoglobals](https://github.com/leighmcculloch/gochecknoglobals) - Checks that no globals are present in Go code
 - [funlen](https://github.com/ultraware/funlen) - Tool for detection of long functions
+- [whitespace](https://github.com/ultraware/whitespace) - Tool for detection of leading and trailing whitespace
 
 ## Configuration
 
