@@ -58,21 +58,6 @@ Here is the recommended way to install golangci-lint (replace `vX.Y.Z` with the 
 
 ```bash
 # binary will be $(go env GOPATH)/bin/golangci-lint
-curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s -- -b $(go env GOPATH)/bin vX.Y.Z
-
-# or install it into ./bin/
-curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s vX.Y.Z
-
-# In alpine linux (as it does not come with curl by default)
-wget -O - -q https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s vX.Y.Z
-
-golangci-lint --version
-```
-
-As a fallback you can also use `raw.githubusercontent.com`
-
-```bash
-# binary will be $(go env GOPATH)/bin/golangci-lint
 curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sh -s -- -b $(go env GOPATH)/bin vX.Y.Z
 
 # or install it into ./bin/

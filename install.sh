@@ -27,11 +27,12 @@ parse_args() {
   # over-ridden by flag below
 
   BINDIR=${BINDIR:-./bin}
-  while getopts "b:dh?" arg; do
+  while getopts "b:dh?x" arg; do
     case "$arg" in
       b) BINDIR="$OPTARG" ;;
       d) log_set_priority 10 ;;
       h | \?) usage "$0" ;;
+      x) set -x ;;
     esac
   done
   shift $((OPTIND - 1))
@@ -42,7 +43,7 @@ parse_args() {
 # network, either nothing will happen or will syntax error
 # out preventing half-done work
 execute() {
-  tmpdir=$(mktmpdir)
+  tmpdir=$(mktemp -d)
   log_debug "downloading files into ${tmpdir}"
   http_download "${tmpdir}/${TARBALL}" "${TARBALL_URL}"
   http_download "${tmpdir}/${CHECKSUM}" "${CHECKSUM_URL}"
@@ -50,36 +51,43 @@ execute() {
   srcdir="${tmpdir}/${NAME}"
   rm -rf "${srcdir}"
   (cd "${tmpdir}" && untar "${TARBALL}")
-  install -d "${BINDIR}"
-  for binexe in "golangci-lint" ; do
+  test ! -d "${BINDIR}" && install -d "${BINDIR}"
+  for binexe in $BINARIES; do
     if [ "$OS" = "windows" ]; then
       binexe="${binexe}.exe"
     fi
     install "${srcdir}/${binexe}" "${BINDIR}/"
     log_info "installed ${BINDIR}/${binexe}"
   done
+  rm -rf "${tmpdir}"
 }
-is_supported_platform() {
-  platform=$1
-  found=1
-  case "$platform" in
-    darwin/amd64) found=0 ;;
-    darwin/386) found=0 ;;
-    windows/amd64) found=0 ;;
-    windows/386) found=0 ;;
-    linux/amd64) found=0 ;;
-    linux/386) found=0 ;;
+get_binaries() {
+  case "$PLATFORM" in
+    darwin/386) BINARIES="golangci-lint" ;;
+    darwin/amd64) BINARIES="golangci-lint" ;;
+    darwin/arm64) BINARIES="golangci-lint" ;;
+    darwin/armv6) BINARIES="golangci-lint" ;;
+    darwin/armv7) BINARIES="golangci-lint" ;;
+    freebsd/386) BINARIES="golangci-lint" ;;
+    freebsd/amd64) BINARIES="golangci-lint" ;;
+    freebsd/arm64) BINARIES="golangci-lint" ;;
+    freebsd/armv6) BINARIES="golangci-lint" ;;
+    freebsd/armv7) BINARIES="golangci-lint" ;;
+    linux/386) BINARIES="golangci-lint" ;;
+    linux/amd64) BINARIES="golangci-lint" ;;
+    linux/arm64) BINARIES="golangci-lint" ;;
+    linux/armv6) BINARIES="golangci-lint" ;;
+    linux/armv7) BINARIES="golangci-lint" ;;
+    windows/386) BINARIES="golangci-lint" ;;
+    windows/amd64) BINARIES="golangci-lint" ;;
+    windows/arm64) BINARIES="golangci-lint" ;;
+    windows/armv6) BINARIES="golangci-lint" ;;
+    windows/armv7) BINARIES="golangci-lint" ;;
+    *)
+      log_crit "platform $PLATFORM is not supported.  Make sure this script is up-to-date and file request at https://github.com/${PREFIX}/issues/new"
+      exit 1
+      ;;
   esac
-  return $found
-}
-check_platform() {
-  if is_supported_platform "$PLATFORM"; then
-    # optional logging goes here
-    true
-  else
-    log_crit "platform $PLATFORM is not supported.  Make sure this script is up-to-date and file request at https://github.com/${PREFIX}/issues/new"
-    exit 1
-  fi
 }
 tag_to_version() {
   if [ -z "${TAG}" ]; then
@@ -172,8 +180,9 @@ log_crit() {
 uname_os() {
   os=$(uname -s | tr '[:upper:]' '[:lower:]')
   case "$os" in
-    msys_nt*) os="windows" ;;
+    cygwin_nt*) os="windows" ;;
     mingw*) os="windows" ;;
+    msys_nt*) os="windows" ;;
   esac
   echo "$os"
 }
@@ -241,11 +250,6 @@ untar() {
       return 1
       ;;
   esac
-}
-mktmpdir() {
-  test -z "$TMPDIR" && TMPDIR="$(mktemp -d)"
-  mkdir -p "${TMPDIR}"
-  echo "${TMPDIR}"
 }
 http_download_curl() {
   local_file=$1
@@ -367,7 +371,7 @@ uname_arch_check "$ARCH"
 
 parse_args "$@"
 
-check_platform
+get_binaries
 
 tag_to_version
 
