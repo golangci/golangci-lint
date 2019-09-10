@@ -202,6 +202,7 @@ gochecknoinits: Checks that no init functions are present in Go code [fast: true
 goconst: Finds repeated strings that could be replaced by a constant [fast: true, auto-fix: false]
 gocritic: The most opinionated Go source code linter [fast: true, auto-fix: false]
 gocyclo: Computes and checks the cyclomatic complexity of functions [fast: true, auto-fix: false]
+godox: Tool for detection of FIXME, TODO and other comment keywords [fast: true, auto-fix: false]
 gofmt: Gofmt checks whether code was gofmt-ed. By default this tool runs with -s option to check for code simplification [fast: true, auto-fix: true]
 goimports: Goimports does everything that gofmt does. Additionally it checks unused imports [fast: true, auto-fix: true]
 golint: Golint differs from gofmt. Gofmt reformats Go source code, whereas golint prints out style mistakes [fast: true, auto-fix: false]
@@ -458,7 +459,7 @@ golangci-lint help linters
 - [gocritic](https://github.com/go-critic/go-critic) - The most opinionated Go source code linter
 - [gochecknoinits](https://github.com/leighmcculloch/gochecknoinits) - Checks that no init functions are present in Go code
 - [gochecknoglobals](https://github.com/leighmcculloch/gochecknoglobals) - Checks that no globals are present in Go code
-- [godox](https://github.com/matoous/godox) - Reports unresolved TODOS and FIXMES
+- [godox](https://github.com/matoous/godox) - Tool for detection of FIXME, TODO and other comment keywords
 - [funlen](https://github.com/ultraware/funlen) - Tool for detection of long functions
 
 ## Configuration
@@ -908,6 +909,7 @@ linters:
     - dupl
     - errcheck
     # - funlen - TODO: enable it when golangci.com will support it.
+    # - godox - TODO: enable it when golangci.com will support it.
     - gochecknoinits
     - goconst
     - gocritic

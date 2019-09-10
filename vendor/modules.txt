@@ -126,6 +126,8 @@ github.com/kisielk/gotool
 github.com/kisielk/gotool/internal/load
 # github.com/magiconair/properties v1.7.6
 github.com/magiconair/properties
+# github.com/matoous/godox v0.0.0-20190910121045-032ad8106c86
+github.com/matoous/godox
 # github.com/mattn/go-colorable v0.0.9
 github.com/mattn/go-colorable
 # github.com/mattn/go-isatty v0.0.3
@@ -198,7 +200,7 @@ golang.org/x/sys/windows
 golang.org/x/text/transform
 golang.org/x/text/unicode/norm
 golang.org/x/text/width
-# golang.org/x/tools v0.0.0-20190909030654-5b82db07426d => github.com/golangci/tools v0.0.0-20190910062050-3540c026601b
+# golang.org/x/tools v0.0.0-20190910044552-dd2b5c81c578 => github.com/golangci/tools v0.0.0-20190910062050-3540c026601b
 golang.org/x/tools/go/analysis
 golang.org/x/tools/go/analysis/passes/asmdecl
 golang.org/x/tools/go/analysis/passes/assign

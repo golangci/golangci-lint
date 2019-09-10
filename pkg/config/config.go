@@ -213,8 +213,7 @@ type PreallocSettings struct {
 }
 
 type GodoxSettings struct {
-	IncludeTests bool `mapstructure:"include-tests"`
-	Keywords     []string
+	Keywords []string
 }
 
 var defaultLintersSettings = LintersSettings{
@@ -237,8 +236,7 @@ var defaultLintersSettings = LintersSettings{
 		SettingsPerCheck: map[string]GocriticCheckSettings{},
 	},
 	Godox: GodoxSettings{
-		Keywords:     []string{"FIXME", "TODO"},
-		IncludeTests: true,
+		Keywords: []string{"FIXME", "TODO"},
 	},
 }
 

@@ -41,10 +41,6 @@ linters-settings:
     disabled-checks:
       - wrapperFunc
       - dupImport # https://github.com/go-critic/go-critic/issues/845
-  godox:
-    keywords:
-      - TODO
-      - FIXME
 
 linters:
   # inverted configuration with `enable-all` and `disable` is not scalable during updates of golangci-lint
@@ -55,6 +51,7 @@ linters:
     - dupl
     - errcheck
     # - funlen - TODO: enable it when golangci.com will support it.
+    # - godox - TODO: enable it when golangci.com will support it.
     - gochecknoinits
     - goconst
     - gocritic
