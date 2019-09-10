@@ -31,7 +31,6 @@ type Runner struct {
 
 func NewRunner(astCache *astcache.Cache, cfg *config.Config, log logutils.Log, goenv *goutil.Env,
 	lineCache *fsutils.LineCache, dbManager *lintersdb.Manager) (*Runner, error) {
-
 	icfg := cfg.Issues
 	excludePatterns := icfg.ExcludePatterns
 	if icfg.UseDefaultExcludes {
@@ -101,7 +100,6 @@ type lintRes struct {
 
 func (r *Runner) runLinterSafe(ctx context.Context, lintCtx *linter.Context,
 	lc *linter.Config) (ret []result.Issue, err error) {
-
 	defer func() {
 		if panicData := recover(); panicData != nil {
 			err = fmt.Errorf("panic occurred: %s", panicData)
@@ -125,7 +123,6 @@ func (r *Runner) runLinterSafe(ctx context.Context, lintCtx *linter.Context,
 
 func (r Runner) runWorker(ctx context.Context, lintCtx *linter.Context,
 	tasksCh <-chan *linter.Config, lintResultsCh chan<- lintRes, name string) {
-
 	sw := timeutils.NewStopwatch(name, r.Log)
 	defer sw.Print()
 

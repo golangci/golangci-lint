@@ -348,7 +348,6 @@ func (act *action) execOnce() {
 			// in-memory outputs of prerequisite analyzers
 			// become inputs to this analysis pass.
 			inputs[dep.a] = dep.result
-
 		} else if dep.a == act.a { // (always true)
 			// Same analysis, different package (vertical edge):
 			// serialized facts produced by prerequisite analysis

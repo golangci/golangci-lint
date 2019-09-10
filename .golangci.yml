@@ -75,6 +75,7 @@ linters:
     - unparam
     - unused
     - varcheck
+    # - whitespace - TODO: enable it when golangci.com will support it.
 
   # don't enable:
   # - depguard - until https://github.com/OpenPeeDeeP/depguard/issues/7 gets fixed
