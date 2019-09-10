@@ -38,4 +38,4 @@ deploy:
   on:
     tags: true
     # it's important to build on the newest version of go:
-    condition: $TRAVIS_GO_VERSION =~ ^1\.12
+    condition: $TRAVIS_GO_VERSION =~ ^1\.13
