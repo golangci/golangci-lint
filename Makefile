@@ -5,11 +5,13 @@
 
 fast_build: FORCE
 	go build -o golangci-lint ./cmd/golangci-lint
+build_race: FORCE
+	go build -race -o golangci-lint ./cmd/golangci-lint
 build: golangci-lint
 clean:
 	rm -f golangci-lint test/path
 	rm -rf tools
-.PHONY: fast_build build clean
+.PHONY: fast_build build build_race clean
 
 # Test
 

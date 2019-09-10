@@ -19,6 +19,7 @@ import (
 	"os"
 	"reflect"
 	"runtime"
+	"runtime/debug"
 	"runtime/pprof"
 	"runtime/trace"
 	"sort"
@@ -285,11 +286,17 @@ func (act *action) String() string {
 func execAll(actions []*action) {
 	sequential := dbg('p')
 	var wg sync.WaitGroup
-	for _, act := range actions {
+	panics := make([]interface{}, len(actions))
+	for i, act := range actions {
 		wg.Add(1)
 		work := func(act *action) {
+			defer func() {
+				wg.Done()
+				if p := recover(); p != nil {
+					panics[i] = fmt.Errorf("%s: %s", p, debug.Stack())
+				}
+			}()
 			act.exec()
-			wg.Done()
 		}
 		if sequential {
 			work(act)
@@ -298,6 +305,11 @@ func execAll(actions []*action) {
 		}
 	}
 	wg.Wait()
+	for _, p := range panics {
+		if p != nil {
+			panic(p)
+		}
+	}
 }
 
 func (act *action) exec() { act.once.Do(act.execOnce) }
