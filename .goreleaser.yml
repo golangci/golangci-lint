@@ -67,5 +67,10 @@ brew:
   folder: Formula
   homepage:  https://golangci.com
   description: Fast linters runner for Go.
+  install: |
+    bin.install "golangci-lint"
+    output = Utils.popen_read("#{bin}/golangci-lint completion bash")
+    (bash_completion/"golangci-lint").write output
+    prefix.install_metafiles
   test: |
     system "#{bin}/golangci-lint --version"
