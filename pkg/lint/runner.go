@@ -123,7 +123,6 @@ func (r *Runner) runLinterSafe(ctx context.Context, lintCtx *linter.Context,
 
 func (r Runner) runWorker(ctx context.Context, lintCtx *linter.Context,
 	tasksCh <-chan *linter.Config, lintResultsCh chan<- lintRes, name string) {
-
 	sw := timeutils.NewStopwatch(name, r.Log)
 	defer sw.Print()
 

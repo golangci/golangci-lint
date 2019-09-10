@@ -245,6 +245,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		linter.NewConfig(golinters.Whitespace{}).
 			WithPresets(linter.PresetStyle).
 			WithSpeed(10).
+			WithAutoFix().
 			WithURL("https://github.com/ultraware/whitespace"),
 	}
 

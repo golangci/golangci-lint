@@ -216,7 +216,7 @@ scopelint: Scopelint checks for unpinned variables in go programs [fast: true, a
 stylecheck: Stylecheck is a replacement for golint [fast: false, auto-fix: false]
 unconvert: Remove unnecessary type conversions [fast: true, auto-fix: false]
 unparam: Reports unused function parameters [fast: false, auto-fix: false]
-whitespace: Tool for detection of leading and trailing whitespace [fast: true, auto-fix: false]
+whitespace: Tool for detection of leading and trailing whitespace [fast: true, auto-fix: true]
 ```
 
 Pass `-E/--enable` to enable linter and `-D/--disable` to disable:
@@ -925,6 +925,7 @@ linters:
     - unparam
     - unused
     - varcheck
+    # - whitespace - TODO: enable it when golangci.com will support it.
 
   # don't enable:
   # - depguard - until https://github.com/OpenPeeDeeP/depguard/issues/7 gets fixed
