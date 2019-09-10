@@ -10,6 +10,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/golangci/golangci-lint/pkg/packages"
 	"github.com/golangci/golangci-lint/pkg/result/processors"
 
 	"github.com/fatih/color"
@@ -26,12 +27,23 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-func getDefaultExcludeHelp() string {
+func getDefaultIssueExcludeHelp() string {
 	parts := []string{"Use or not use default excludes:"}
 	for _, ep := range config.DefaultExcludePatterns {
 		parts = append(parts,
 			fmt.Sprintf("  # %s: %s", ep.Linter, ep.Why),
 			fmt.Sprintf("  - %s", color.YellowString(ep.Pattern)),
+			"",
+		)
+	}
+	return strings.Join(parts, "\n")
+}
+
+func getDefaultDirectoryExcludeHelp() string {
+	parts := []string{"Use or not use default excluded directories:"}
+	for _, dir := range packages.StdExcludeDirRegexps {
+		parts = append(parts,
+			fmt.Sprintf("  - %s", color.YellowString(dir)),
 			"",
 		)
 	}
@@ -83,6 +95,7 @@ func initFlagSet(fs *pflag.FlagSet, cfg *config.Config, m *lintersdb.Manager, is
 	fs.StringVarP(&rc.Config, "config", "c", "", wh("Read config from file path `PATH`"))
 	fs.BoolVar(&rc.NoConfig, "no-config", false, wh("Don't read config"))
 	fs.StringSliceVar(&rc.SkipDirs, "skip-dirs", nil, wh("Regexps of directories to skip"))
+	fs.BoolVar(&rc.UseDefaultSkipDirs, "skip-dirs-use-default", true, getDefaultDirectoryExcludeHelp())
 	fs.StringSliceVar(&rc.SkipFiles, "skip-files", nil, wh("Regexps of files to skip"))
 
 	// Linters settings config
@@ -162,7 +175,7 @@ func initFlagSet(fs *pflag.FlagSet, cfg *config.Config, m *lintersdb.Manager, is
 	// Issues config
 	ic := &cfg.Issues
 	fs.StringSliceVarP(&ic.ExcludePatterns, "exclude", "e", nil, wh("Exclude issue by regexp"))
-	fs.BoolVar(&ic.UseDefaultExcludes, "exclude-use-default", true, getDefaultExcludeHelp())
+	fs.BoolVar(&ic.UseDefaultExcludes, "exclude-use-default", true, getDefaultIssueExcludeHelp())
 
 	fs.IntVar(&ic.MaxIssuesPerLinter, "max-issues-per-linter", 50,
 		wh("Maximum issues count per one linter. Set to 0 to disable"))

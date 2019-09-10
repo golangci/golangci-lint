@@ -118,8 +118,9 @@ type Run struct {
 	Deadline              time.Duration
 	PrintVersion          bool
 
-	SkipFiles []string `mapstructure:"skip-files"`
-	SkipDirs  []string `mapstructure:"skip-dirs"`
+	SkipFiles          []string `mapstructure:"skip-files"`
+	SkipDirs           []string `mapstructure:"skip-dirs"`
+	UseDefaultSkipDirs bool     `mapstructure:"skip-dirs-use-default"`
 }
 
 type LintersSettings struct {

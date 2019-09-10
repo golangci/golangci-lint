@@ -48,8 +48,10 @@ func NewRunner(astCache *astcache.Cache, cfg *config.Config, log logutils.Log, g
 		return nil, err
 	}
 
-	skipDirs := append([]string{}, packages.StdExcludeDirRegexps...)
-	skipDirs = append(skipDirs, cfg.Run.SkipDirs...)
+	skipDirs := cfg.Run.SkipDirs
+	if cfg.Run.UseDefaultSkipDirs {
+		skipDirs = append(skipDirs, packages.StdExcludeDirRegexps...)
+	}
 	skipDirsProcessor, err := processors.NewSkipDirs(skipDirs, log.Child("skip dirs"), cfg.Run.Args)
 	if err != nil {
 		return nil, err
