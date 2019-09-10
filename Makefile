@@ -79,7 +79,7 @@ tools/go.mod:
 
 tools/godownloader: Makefile tools/go.mod
 	# https://github.com/goreleaser/godownloader/issues/133
-	cd tools && GOBIN=$(CURDIR)/tools GO111MODULE=off go get github.com/goreleaser/godownloader
+	cd tools && GOBIN=$(CURDIR)/tools GO111MODULE=off go get -u github.com/goreleaser/godownloader
 
 tools/svg-term:
 	@mkdir -p tools
@@ -93,10 +93,8 @@ tools/Dracula.itermcolors:
 docs/demo.svg: tools/svg-term tools/Dracula.itermcolors
 	PATH=$(CURDIR)/tools:$${PATH} svg-term --cast=183662 --out docs/demo.svg --window --width 110 --height 30 --from 2000 --to 20000 --profile ./tools/Dracula.itermcolors --term iterm2
 
-install.sh:
-	# dependencies: tools/godownloader .goreleaser.yml
-	# TODO: use when Windows installation will be fixed in the upstream
-	#PATH=$(CURDIR)/tools:$${PATH} tools/godownloader .goreleaser.yml | sed '/DO NOT EDIT/s/ on [0-9TZ:-]*//' > $@
+install.sh: tools/godownloader .goreleaser.yml
+	PATH=$(CURDIR)/tools:$${PATH} tools/godownloader .goreleaser.yml | sed '/DO NOT EDIT/s/ on [0-9TZ:-]*//' > $@
 
 README.md: FORCE golangci-lint
 	go run ./scripts/gen_readme/main.go
