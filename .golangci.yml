@@ -75,6 +75,7 @@ linters:
     - unparam
     - unused
     - varcheck
+    - whitespace
 
   # don't enable:
   # - depguard - until https://github.com/OpenPeeDeeP/depguard/issues/7 gets fixed
