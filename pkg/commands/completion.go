@@ -1,25 +1,31 @@
 package commands
 
 import (
-	"fmt"
 	"os"
 
+	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 )
 
 func (e *Executor) initCompletion() {
 	completionCmd := &cobra.Command{
 		Use:   "completion",
-		Short: "Generates bash completion scripts",
-		RunE:  e.executeCompletion,
+		Short: "Output completion script",
 	}
 	e.rootCmd.AddCommand(completionCmd)
+
+	bashCmd := &cobra.Command{
+		Use:   "bash",
+		Short: "Output bash completion script",
+		RunE:  e.executeCompletion,
+	}
+	completionCmd.AddCommand(bashCmd)
 }
 
 func (e *Executor) executeCompletion(cmd *cobra.Command, args []string) error {
 	err := cmd.Root().GenBashCompletion(os.Stdout)
 	if err != nil {
-		return fmt.Errorf("unable to generate bash completions: %v", err)
+		return errors.Wrap(err, "unable to generate bash completions: %v")
 	}
 
 	return nil

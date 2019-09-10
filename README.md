@@ -19,6 +19,7 @@ Sponsored by [GolangCI.com](https://golangci.com): SaaS service for running lint
 * [Trusted By](#trusted-by)
 * [Quick Start](#quick-start)
 * [Editor Integration](#editor-integration)
+* [Shell Completion](#shell-completion)
 * [Comparison](#comparison)
 * [Performance](#performance)
 * [Internals](#internals)
@@ -249,6 +250,35 @@ golangci-lint run --disable-all -E errcheck
    * syntastic [merged pull request](https://github.com/vim-syntastic/syntastic/pull/2190) with golangci-lint support
    * ale [merged pull request](https://github.com/w0rp/ale/pull/1890) with golangci-lint support
 6. Atom - [go-plus](https://atom.io/packages/go-plus) supports golangci-lint.
+
+## Shell Completion
+
+`golangci-lint` can generate bash completion file.
+
+### Mac OS X
+
+Yhere are two versions of `bash-completion`, v1 and v2. V1 is for Bash 3.2 (which is the default on macOS), and v2 is for Bash 4.1+. The `golangci-lint` completion script doesn’t work correctly with bash-completion v1 and Bash 3.2. It requires bash-completion v2 and Bash 4.1+. Thus, to be able to correctly use `golangci-lint` completion on macOS, you have to install and use Bash 4.1+ ([instructions](https://itnext.io/upgrading-bash-on-macos-7138bd1066ba)). The following instructions assume that you use Bash 4.1+ (that is, any Bash version of 4.1 or newer).
+
+Install `bash-completion v2`:
+
+```bash
+brew install bash-completion@2
+echo 'export BASH_COMPLETION_COMPAT_DIR="/usr/local/etc/bash_completion.d"' >>~/.bashrc
+echo '[[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]] && . "/usr/local/etc/profile.d/bash_completion.sh"' >>~/.bashrc
+exec bash # reload and replace (if it was updated) shell
+type _init_completion && echo "completion is OK" # verify that bash-completion v2 is correctly installed
+```
+
+Add `golangci-lint` bash completion:
+
+```bash
+echo 'source <(golangci-lint completion bash)' >>~/.bashrc
+source ~/.bashrc
+```
+
+### Linux
+
+See [kubectl instructions](https://kubernetes.io/docs/tasks/tools/install-kubectl/#enabling-shell-autocompletion) and don't forget to replace `kubectl` with `golangci-lint`.
 
 ## Comparison
 
