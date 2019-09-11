@@ -26,9 +26,9 @@ func (lint Scopelint) Run(ctx context.Context, lintCtx *linter.Context) ([]resul
 	for _, f := range lintCtx.ASTCache.GetAllValidFiles() {
 		n := Node{
 			fset:          f.Fset,
-			dangerObjects: map[*ast.Object]struct{}{},
-			unsafeObjects: map[*ast.Object]struct{}{},
-			skipFuncs:     map[*ast.FuncLit]struct{}{},
+			DangerObjects: map[*ast.Object]int{},
+			UnsafeObjects: map[*ast.Object]int{},
+			SkipFuncs:     map[*ast.FuncLit]int{},
 			issues:        &res,
 		}
 		ast.Walk(&n, f.F)
@@ -37,14 +37,14 @@ func (lint Scopelint) Run(ctx context.Context, lintCtx *linter.Context) ([]resul
 	return res, nil
 }
 
-// The code below is copy-pasted from https://github.com/kyoh86/scopelint
+// The code below is copy-pasted from https://github.com/kyoh86/scopelint 92cbe2cc9276abda0e309f52cc9e309d407f174e
 
 // Node represents a Node being linted.
 type Node struct {
 	fset          *token.FileSet
-	dangerObjects map[*ast.Object]struct{}
-	unsafeObjects map[*ast.Object]struct{}
-	skipFuncs     map[*ast.FuncLit]struct{}
+	DangerObjects map[*ast.Object]int
+	UnsafeObjects map[*ast.Object]int
+	SkipFuncs     map[*ast.FuncLit]int
 	issues        *[]result.Issue
 }
 
@@ -60,7 +60,7 @@ func (f *Node) Visit(node ast.Node) ast.Visitor {
 			for _, lh := range init.Lhs {
 				switch tlh := lh.(type) {
 				case *ast.Ident:
-					f.unsafeObjects[tlh.Obj] = struct{}{}
+					f.UnsafeObjects[tlh.Obj] = 0
 				}
 			}
 		}
@@ -69,25 +69,25 @@ func (f *Node) Visit(node ast.Node) ast.Visitor {
 		// Memory variables declarated in range statement
 		switch k := typedNode.Key.(type) {
 		case *ast.Ident:
-			f.unsafeObjects[k.Obj] = struct{}{}
+			f.UnsafeObjects[k.Obj] = 0
 		}
 		switch v := typedNode.Value.(type) {
 		case *ast.Ident:
-			f.unsafeObjects[v.Obj] = struct{}{}
+			f.UnsafeObjects[v.Obj] = 0
 		}
 
 	case *ast.UnaryExpr:
 		if typedNode.Op == token.AND {
 			switch ident := typedNode.X.(type) {
 			case *ast.Ident:
-				if _, unsafe := f.unsafeObjects[ident.Obj]; unsafe {
+				if _, unsafe := f.UnsafeObjects[ident.Obj]; unsafe {
 					f.errorf(ident, "Using a reference for the variable on range scope %s", formatCode(ident.Name, nil))
 				}
 			}
 		}
 
 	case *ast.Ident:
-		if _, obj := f.dangerObjects[typedNode.Obj]; obj {
+		if _, obj := f.DangerObjects[typedNode.Obj]; obj {
 			// It is the naked variable in scope of range statement.
 			f.errorf(node, "Using the variable on range scope %s in function literal", formatCode(typedNode.Name, nil))
 			break
@@ -97,25 +97,42 @@ func (f *Node) Visit(node ast.Node) ast.Visitor {
 		// Ignore func literals that'll be called immediately.
 		switch funcLit := typedNode.Fun.(type) {
 		case *ast.FuncLit:
-			f.skipFuncs[funcLit] = struct{}{}
+			f.SkipFuncs[funcLit] = 0
 		}
 
 	case *ast.FuncLit:
-		if _, skip := f.skipFuncs[typedNode]; !skip {
-			dangers := map[*ast.Object]struct{}{}
-			for d := range f.dangerObjects {
-				dangers[d] = struct{}{}
+		if _, skip := f.SkipFuncs[typedNode]; !skip {
+			dangers := map[*ast.Object]int{}
+			for d := range f.DangerObjects {
+				dangers[d] = 0
 			}
-			for u := range f.unsafeObjects {
-				dangers[u] = struct{}{}
+			for u := range f.UnsafeObjects {
+				dangers[u] = 0
+				f.UnsafeObjects[u]++
 			}
 			return &Node{
 				fset:          f.fset,
-				dangerObjects: dangers,
-				unsafeObjects: f.unsafeObjects,
-				skipFuncs:     f.skipFuncs,
+				DangerObjects: dangers,
+				UnsafeObjects: f.UnsafeObjects,
+				SkipFuncs:     f.SkipFuncs,
 				issues:        f.issues,
 			}
+		}
+
+	case *ast.ReturnStmt:
+		unsafe := map[*ast.Object]int{}
+		for u := range f.UnsafeObjects {
+			if f.UnsafeObjects[u] == 0 {
+				continue
+			}
+			unsafe[u] = f.UnsafeObjects[u]
+		}
+		return &Node{
+			fset:          f.fset,
+			DangerObjects: f.DangerObjects,
+			UnsafeObjects: unsafe,
+			SkipFuncs:     f.SkipFuncs,
+			issues:        f.issues,
 		}
 	}
 	return f
