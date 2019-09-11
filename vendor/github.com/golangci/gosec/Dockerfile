@@ -1,11 +1,14 @@
-FROM golang:1.11.1-alpine3.8 as build
-WORKDIR /go/src/github.com/golangci/gosec
-COPY . .
-RUN apk add -U git make
-RUN go get -u github.com/golang/dep/cmd/dep
-RUN make
+ARG GO_VERSION=1.12
+FROM golang:${GO_VERSION}-alpine AS builder
+RUN apk add --update --no-cache ca-certificates make git curl
+RUN mkdir -p /build
+WORKDIR /build
+COPY . /build/
+RUN go mod download
+RUN make build-linux
 
-FROM golang:1.11.1-alpine3.8
-RUN apk add -U gcc musl-dev
-COPY --from=build /go/src/github.com/golangci/gosec/gosec /usr/local/bin/gosec
-ENTRYPOINT ["gosec"]
+FROM golang:${GO_VERSION}-alpine 
+RUN apk add --update --no-cache ca-certificates git 
+ENV GO111MODULE on
+COPY --from=builder /build/gosec /bin/gosec
+ENTRYPOINT ["/bin/gosec"]

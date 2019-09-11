@@ -1,21 +1,16 @@
 language: go
 
 go:
-  - "1.9.x"
-  - "1.10.x"
   - "1.11.x"
+  - "1.12.x"
+  - "1.13.x"
   - tip
 
 install:
-  - go get -u github.com/golang/dep/cmd/dep
-  - go get -u golang.org/x/lint/golint
-  - go get -u github.com/onsi/ginkgo/ginkgo
-  - go get -u github.com/onsi/gomega
   - go get -u golang.org/x/crypto/ssh
   - go get -u github.com/lib/pq
-  - go get -u github.com/golangci/gosec/cmd/gosec/...
-  - go get -v -t ./...
   - export PATH=$PATH:$HOME/gopath/bin
+  - export GO111MODULE=on
 
 script: make test
 

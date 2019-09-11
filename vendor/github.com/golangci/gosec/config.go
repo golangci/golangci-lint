@@ -22,6 +22,8 @@ const (
 	Nosec GlobalOption = "nosec"
 	// Audit global option which indicates that gosec runs in audit mode
 	Audit GlobalOption = "audit"
+	// NoSecAlternative global option alternative for #nosec directive
+	NoSecAlternative GlobalOption = "#nosec"
 )
 
 // Config is used to provide configuration and customization to each of the rules.

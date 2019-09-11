@@ -2,22 +2,33 @@ GIT_TAG?= $(shell git describe --always --tags)
 BIN = gosec
 FMT_CMD = $(gofmt -s -l -w $(find . -type f -name '*.go' -not -path './vendor/*') | tee /dev/stderr)
 IMAGE_REPO = securego
-BUILDFLAGS := ''
+BUILDFLAGS := '-w -s'
 CGO_ENABLED = 0
+GO := GO111MODULE=on go
+GO_NOMOD :=GO111MODULE=off go
 
 default:
-	$(MAKE) bootstrap
 	$(MAKE) build
 
-bootstrap:
-	dep ensure
-
-test: bootstrap
-	test -z '$(FMT_CMD)'
-	go vet $(go list ./... | grep -v /vendor/)
-	golint -set_exit_status $(shell go list ./... | grep -v vendor)
-	gosec ./...
+test: build fmt lint sec
+	$(GO_NOMOD) get -u github.com/onsi/ginkgo/ginkgo
 	ginkgo -r -v
+
+fmt:
+	@echo "FORMATTING"
+	@FORMATTED=`$(GO) fmt ./...`
+	@([[ ! -z "$(FORMATTED)" ]] && printf "Fixed unformatted files:\n$(FORMATTED)") || true
+
+lint: 
+	@echo "LINTING"
+	$(GO_NOMOD) get -u golang.org/x/lint/golint
+	golint -set_exit_status ./... 
+	@echo "VETTING"
+	$(GO) vet ./... 
+
+sec: 
+	@echo "SECURITY SCANNING"
+	./$(BIN) ./...
 
 test-coverage:
 	go test -race -coverprofile=coverage.txt -covermode=atomic
@@ -27,9 +38,9 @@ build:
 
 clean:
 	rm -rf build vendor dist
-	rm -f release image bootstrap $(BIN)
+	rm -f release image $(BIN)
 
-release: bootstrap
+release: 
 	@echo "Releasing the gosec binary..."
 	goreleaser release
  

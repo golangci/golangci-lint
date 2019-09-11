@@ -8,14 +8,15 @@ import (
 	"github.com/nbutton23/zxcvbn-go/match"
 )
 
-const SPATIAL_MATCHER_NAME = "SPATIAL"
+const spatialMatcherName = "SPATIAL"
 
+//FilterSpatialMatcher can be pass to zxcvbn-go.PasswordStrength to skip that matcher
 func FilterSpatialMatcher(m match.Matcher) bool {
-	return m.ID == SPATIAL_MATCHER_NAME
+	return m.ID == spatialMatcherName
 }
 
 func spatialMatch(password string) (matches []match.Match) {
-	for _, graph := range ADJACENCY_GRAPHS {
+	for _, graph := range adjacencyGraphs {
 		if graph.Graph != nil {
 			matches = append(matches, spatialMatchHelper(password, graph)...)
 		}
@@ -23,7 +24,7 @@ func spatialMatch(password string) (matches []match.Match) {
 	return matches
 }
 
-func spatialMatchHelper(password string, graph adjacency.AdjacencyGraph) (matches []match.Match) {
+func spatialMatchHelper(password string, graph adjacency.Graph) (matches []match.Match) {
 
 	for i := 0; i < len(password)-1; {
 		j := i + 1
@@ -42,7 +43,7 @@ func spatialMatchHelper(password string, graph adjacency.AdjacencyGraph) (matche
 			if j < len(password) {
 				curChar := password[j]
 				for _, adj := range adjacents {
-					curDirection += 1
+					curDirection++
 
 					if strings.Index(adj, string(curChar)) != -1 {
 						found = true
@@ -51,13 +52,13 @@ func spatialMatchHelper(password string, graph adjacency.AdjacencyGraph) (matche
 						if strings.Index(adj, string(curChar)) == 1 {
 							//index 1 in the adjacency means the key is shifted, 0 means unshifted: A vs a, % vs 5, etc.
 							//for example, 'q' is adjacent to the entry '2@'. @ is shifted w/ index 1, 2 is unshifted.
-							shiftedCount += 1
+							shiftedCount++
 						}
 
 						if lastDirection != foundDirection {
 							//adding a turn is correct even in the initial case when last_direction is null:
 							//every spatial pattern starts with a turn.
-							turns += 1
+							turns++
 							lastDirection = foundDirection
 						}
 						break
@@ -67,7 +68,7 @@ func spatialMatchHelper(password string, graph adjacency.AdjacencyGraph) (matche
 
 			//if the current pattern continued, extend j and try to grow again
 			if found {
-				j += 1
+				j++
 			} else {
 				//otherwise push the pattern discovered so far, if any...
 				//don't consider length 1 or 2 chains.

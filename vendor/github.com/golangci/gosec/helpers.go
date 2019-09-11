@@ -23,6 +23,7 @@ import (
 	"os"
 	"os/user"
 	"path/filepath"
+	"regexp"
 	"runtime"
 	"strconv"
 	"strings"
@@ -50,29 +51,6 @@ func MatchCallByPackage(n ast.Node, c *Context, pkg string, names ...string) (*a
 		if packageName == importedName {
 			for _, name := range names {
 				if callName == name {
-					return callExpr, true
-				}
-			}
-		}
-	}
-	return nil, false
-}
-
-// MatchCallByType ensures that the node is a call expression to a
-// specific object type.
-//
-// Usage:
-// 	node, matched := MatchCallByType(n, ctx, "bytes.Buffer", "WriteTo", "Write")
-//
-func MatchCallByType(n ast.Node, ctx *Context, requiredType string, calls ...string) (*ast.CallExpr, bool) {
-	if callExpr, ok := n.(*ast.CallExpr); ok {
-		typeName, callName, err := GetCallInfo(callExpr, ctx)
-		if err != nil {
-			return nil, false
-		}
-		if typeName == requiredType {
-			for _, call := range calls {
-				if call == callName {
 					return callExpr, true
 				}
 			}
@@ -356,4 +334,65 @@ func FindVarIdentities(n *ast.BinaryExpr, c *Context) ([]*ast.Ident, bool) {
 	}
 	// if nil or error, return false
 	return nil, false
+}
+
+// PackagePaths returns a slice with all packages path at given root directory
+func PackagePaths(root string, excludes []*regexp.Regexp) ([]string, error) {
+	if strings.HasSuffix(root, "...") {
+		root = root[0 : len(root)-3]
+	} else {
+		return []string{root}, nil
+	}
+	paths := map[string]bool{}
+	err := filepath.Walk(root, func(path string, f os.FileInfo, err error) error {
+		if filepath.Ext(path) == ".go" {
+			path = filepath.Dir(path)
+			if isExcluded(path, excludes) {
+				return nil
+			}
+			paths[path] = true
+		}
+		return nil
+	})
+	if err != nil {
+		return []string{}, err
+	}
+
+	result := []string{}
+	for path := range paths {
+		result = append(result, path)
+	}
+	return result, nil
+}
+
+// isExcluded checks if a string matches any of the exclusion regexps
+func isExcluded(str string, excludes []*regexp.Regexp) bool {
+	if excludes == nil {
+		return false
+	}
+	for _, exclude := range excludes {
+		if exclude != nil && exclude.MatchString(str) {
+			return true
+		}
+	}
+	return false
+}
+
+// ExcludedDirsRegExp builds the regexps for a list of excluded dirs provided as strings
+func ExcludedDirsRegExp(excludedDirs []string) []*regexp.Regexp {
+	var exps []*regexp.Regexp
+	for _, excludedDir := range excludedDirs {
+		str := fmt.Sprintf(`([\\/])?%s([\\/])?`, excludedDir)
+		r := regexp.MustCompile(str)
+		exps = append(exps, r)
+	}
+	return exps
+}
+
+// RootPath returns the absolute root path of a scan
+func RootPath(root string) (string, error) {
+	if strings.HasSuffix(root, "...") {
+		root = root[0 : len(root)-3]
+	}
+	return filepath.Abs(root)
 }

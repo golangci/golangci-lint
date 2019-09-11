@@ -18,9 +18,9 @@
 package gosec
 
 import (
+	"fmt"
 	"go/ast"
 	"go/build"
-	"go/parser"
 	"go/token"
 	"go/types"
 	"log"
@@ -28,9 +28,11 @@ import (
 	"path"
 	"reflect"
 	"regexp"
+	"strconv"
+
 	"strings"
 
-	"golang.org/x/tools/go/loader"
+	"golang.org/x/tools/go/packages"
 )
 
 // The Context is populated with data parsed from the source code as it is scanned.
@@ -66,10 +68,12 @@ type Analyzer struct {
 	logger      *log.Logger
 	issues      []*Issue
 	stats       *Metrics
+	errors      map[string][]Error // keys are file paths; values are the golang errors in those files
+	tests       bool
 }
 
 // NewAnalyzer builds a new analyzer.
-func NewAnalyzer(conf Config, logger *log.Logger) *Analyzer {
+func NewAnalyzer(conf Config, tests bool, logger *log.Logger) *Analyzer {
 	ignoreNoSec := false
 	if enabled, err := conf.IsGlobalEnabled(Nosec); err == nil {
 		ignoreNoSec = enabled
@@ -85,7 +89,19 @@ func NewAnalyzer(conf Config, logger *log.Logger) *Analyzer {
 		logger:      logger,
 		issues:      make([]*Issue, 0, 16),
 		stats:       &Metrics{},
+		errors:      make(map[string][]Error),
+		tests:       tests,
 	}
+}
+
+// SetConfig upates the analyzer configuration
+func (gosec *Analyzer) SetConfig(conf Config) {
+	gosec.config = conf
+}
+
+// Config returns the current configuration
+func (gosec *Analyzer) Config() Config {
+	return gosec.config
 }
 
 // LoadRules instantiates all the rules to be used when analyzing source
@@ -99,78 +115,161 @@ func (gosec *Analyzer) LoadRules(ruleDefinitions map[string]RuleBuilder) {
 
 // Process kicks off the analysis process for a given package
 func (gosec *Analyzer) Process(buildTags []string, packagePaths ...string) error {
-	ctx := build.Default
-	ctx.BuildTags = append(ctx.BuildTags, buildTags...)
-	packageConfig := loader.Config{
-		Build:       &ctx,
-		ParserMode:  parser.ParseComments,
-		AllowErrors: true,
-	}
-	for _, packagePath := range packagePaths {
-		abspath, err := GetPkgAbsPath(packagePath)
+	config := gosec.pkgConfig(buildTags)
+	for _, pkgPath := range packagePaths {
+		pkgs, err := gosec.load(pkgPath, config)
 		if err != nil {
-			gosec.logger.Printf("Skipping: %s. Path doesn't exist.", abspath)
-			continue
+			gosec.AppendError(pkgPath, err)
 		}
-		gosec.logger.Println("Searching directory:", abspath)
-
-		basePackage, err := build.Default.ImportDir(packagePath, build.ImportComment)
-		if err != nil {
-			return err
+		for _, pkg := range pkgs {
+			if pkg.Name != "" {
+				err := gosec.ParseErrors(pkg)
+				if err != nil {
+					return fmt.Errorf("parsing errors in pkg %q: %v", pkg.Name, err)
+				}
+				gosec.Check(pkg)
+			}
 		}
-
-		var packageFiles []string
-		for _, filename := range basePackage.GoFiles {
-			packageFiles = append(packageFiles, path.Join(packagePath, filename))
-		}
-
-		packageConfig.CreateFromFilenames(basePackage.Name, packageFiles...)
 	}
-
-	builtPackage, err := packageConfig.Load()
-	if err != nil {
-		return err
-	}
-
-	gosec.ProcessProgram(builtPackage)
+	sortErrors(gosec.errors)
 	return nil
 }
 
-// ProcessProgram kicks off the analysis process for a given program
-func (gosec *Analyzer) ProcessProgram(builtPackage *loader.Program) {
-	for _, pkg := range builtPackage.InitialPackages() {
-		gosec.logger.Println("Checking package:", pkg.String())
-		for _, file := range pkg.Files {
-			gosec.logger.Println("Checking file:", builtPackage.Fset.File(file.Pos()).Name())
-			gosec.context.FileSet = builtPackage.Fset
-			gosec.context.Config = gosec.config
-			gosec.context.Comments = ast.NewCommentMap(gosec.context.FileSet, file, file.Comments)
-			gosec.context.Root = file
-			gosec.context.Info = &pkg.Info
-			gosec.context.Pkg = pkg.Pkg
-			gosec.context.PkgFiles = pkg.Files
-			gosec.context.Imports = NewImportTracker()
-			gosec.context.Imports.TrackPackages(gosec.context.Pkg.Imports()...)
-			ast.Walk(gosec, file)
-			gosec.stats.NumFiles++
-			gosec.stats.NumLines += builtPackage.Fset.File(file.Pos()).LineCount()
+func (gosec *Analyzer) pkgConfig(buildTags []string) *packages.Config {
+	flags := []string{}
+	if len(buildTags) > 0 {
+		tagsFlag := "-tags=" + strings.Join(buildTags, " ")
+		flags = append(flags, tagsFlag)
+	}
+	return &packages.Config{
+		Mode:       packages.LoadSyntax,
+		BuildFlags: flags,
+		Tests:      gosec.tests,
+	}
+}
+
+func (gosec *Analyzer) load(pkgPath string, conf *packages.Config) ([]*packages.Package, error) {
+	abspath, err := GetPkgAbsPath(pkgPath)
+	if err != nil {
+		gosec.logger.Printf("Skipping: %s. Path doesn't exist.", abspath)
+		return []*packages.Package{}, nil
+	}
+
+	gosec.logger.Println("Import directory:", abspath)
+	basePackage, err := build.Default.ImportDir(pkgPath, build.ImportComment)
+	if err != nil {
+		return []*packages.Package{}, fmt.Errorf("importing dir %q: %v", pkgPath, err)
+	}
+
+	var packageFiles []string
+	for _, filename := range basePackage.GoFiles {
+		packageFiles = append(packageFiles, path.Join(pkgPath, filename))
+	}
+
+	if gosec.tests {
+		testsFiles := []string{}
+		testsFiles = append(testsFiles, basePackage.TestGoFiles...)
+		testsFiles = append(testsFiles, basePackage.XTestGoFiles...)
+		for _, filename := range testsFiles {
+			packageFiles = append(packageFiles, path.Join(pkgPath, filename))
 		}
 	}
+
+	pkgs, err := packages.Load(conf, packageFiles...)
+	if err != nil {
+		return []*packages.Package{}, fmt.Errorf("loading files from package %q: %v", pkgPath, err)
+	}
+	return pkgs, nil
+}
+
+func (gosec *Analyzer) Check(pkg *packages.Package) {
+	gosec.logger.Println("Checking package:", pkg.Name)
+	for _, file := range pkg.Syntax {
+		gosec.logger.Println("Checking file:", pkg.Fset.File(file.Pos()).Name())
+		gosec.context.FileSet = pkg.Fset
+		gosec.context.Config = gosec.config
+		gosec.context.Comments = ast.NewCommentMap(gosec.context.FileSet, file, file.Comments)
+		gosec.context.Root = file
+		gosec.context.Info = pkg.TypesInfo
+		gosec.context.Pkg = pkg.Types
+		gosec.context.PkgFiles = pkg.Syntax
+		gosec.context.Imports = NewImportTracker()
+		gosec.context.Imports.TrackFile(file)
+		ast.Walk(gosec, file)
+		gosec.stats.NumFiles++
+		gosec.stats.NumLines += pkg.Fset.File(file.Pos()).LineCount()
+	}
+}
+
+// ParseErrors parses the errors from given package
+func (gosec *Analyzer) ParseErrors(pkg *packages.Package) error {
+	if len(pkg.Errors) == 0 {
+		return nil
+	}
+	for _, pkgErr := range pkg.Errors {
+		parts := strings.Split(pkgErr.Pos, ":")
+		file := parts[0]
+		var err error
+		var line int
+		if len(parts) > 1 {
+			if line, err = strconv.Atoi(parts[1]); err != nil {
+				return fmt.Errorf("parsing line: %v", err)
+			}
+		}
+		var column int
+		if len(parts) > 2 {
+			if column, err = strconv.Atoi(parts[2]); err != nil {
+				return fmt.Errorf("parsing column: %v", err)
+			}
+		}
+		msg := strings.TrimSpace(pkgErr.Msg)
+		newErr := NewError(line, column, msg)
+		if errSlice, ok := gosec.errors[file]; ok {
+			gosec.errors[file] = append(errSlice, *newErr)
+		} else {
+			errSlice = []Error{}
+			gosec.errors[file] = append(errSlice, *newErr)
+		}
+	}
+	return nil
+}
+
+// AppendError appends an error to the file errors
+func (gosec *Analyzer) AppendError(file string, err error) {
+	// Do not report the error for empty packages (e.g. files excluded from build with a tag)
+	r := regexp.MustCompile(`no buildable Go source files in`)
+	if r.MatchString(err.Error()) {
+		return
+	}
+	errors := []Error{}
+	if ferrs, ok := gosec.errors[file]; ok {
+		errors = ferrs
+	}
+	ferr := NewError(0, 0, err.Error())
+	errors = append(errors, *ferr)
+	gosec.errors[file] = errors
 }
 
 // ignore a node (and sub-tree) if it is tagged with a "#nosec" comment
 func (gosec *Analyzer) ignore(n ast.Node) ([]string, bool) {
 	if groups, ok := gosec.context.Comments[n]; ok && !gosec.ignoreNosec {
+
+		// Checks if an alternative for #nosec is set and, if not, uses the default.
+		noSecAlternative, err := gosec.config.GetGlobal(NoSecAlternative)
+		if err != nil {
+			noSecAlternative = "#nosec"
+		}
+
 		for _, group := range groups {
-			if strings.Contains(group.Text(), "#nosec") {
+			if strings.Contains(group.Text(), noSecAlternative) {
 				gosec.stats.NumNosec++
 
 				// Pull out the specific rules that are listed to be ignored.
-				re := regexp.MustCompile("(G\\d{3})")
+				re := regexp.MustCompile(`(G\d{3})`)
 				matches := re.FindAllStringSubmatch(group.Text(), -1)
 
 				// If no specific rules were given, ignore everything.
-				if matches == nil || len(matches) == 0 {
+				if len(matches) == 0 {
 					return nil, true
 				}
 
@@ -204,7 +303,7 @@ func (gosec *Analyzer) Visit(n ast.Node) ast.Visitor {
 	}
 
 	// Now create the union of exclusions.
-	ignores := make(map[string]bool, 0)
+	ignores := map[string]bool{}
 	if len(gosec.context.Ignores) > 0 {
 		for k, v := range gosec.context.Ignores[0] {
 			ignores[k] = v
@@ -240,8 +339,8 @@ func (gosec *Analyzer) Visit(n ast.Node) ast.Visitor {
 }
 
 // Report returns the current issues discovered and the metrics about the scan
-func (gosec *Analyzer) Report() ([]*Issue, *Metrics) {
-	return gosec.issues, gosec.stats
+func (gosec *Analyzer) Report() ([]*Issue, *Metrics, map[string][]Error) {
+	return gosec.issues, gosec.stats, gosec.errors
 }
 
 // Reset clears state such as context, issues and metrics from the configured analyzer
@@ -249,4 +348,5 @@ func (gosec *Analyzer) Reset() {
 	gosec.context = &Context{}
 	gosec.issues = make([]*Issue, 0, 16)
 	gosec.stats = &Metrics{}
+	gosec.ruleset = NewRuleSet()
 }

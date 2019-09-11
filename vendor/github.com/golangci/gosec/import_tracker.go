@@ -36,14 +36,22 @@ func NewImportTracker() *ImportTracker {
 	}
 }
 
+// TrackFile track all the imports used by the supplied file
+func (t *ImportTracker) TrackFile(file *ast.File) {
+	for _, imp := range file.Imports {
+		path := strings.Trim(imp.Path.Value, `"`)
+		parts := strings.Split(path, "/")
+		if len(parts) > 0 {
+			name := parts[len(parts)-1]
+			t.Imported[path] = name
+		}
+	}
+}
+
 // TrackPackages tracks all the imports used by the supplied packages
 func (t *ImportTracker) TrackPackages(pkgs ...*types.Package) {
 	for _, pkg := range pkgs {
 		t.Imported[pkg.Path()] = pkg.Name()
-		// Transient imports
-		//for _, imp := range pkg.Imports() {
-		//	t.Imported[imp.Path()] = imp.Name()
-		//}
 	}
 }
 
