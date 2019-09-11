@@ -11,6 +11,7 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"github.com/golangci/golangci-lint/pkg/logutils"
+	"github.com/golangci/golangci-lint/pkg/logutils/mock_logutils"
 )
 
 func testDiffProducesChanges(t *testing.T, log logutils.Log, diff string, expectedChanges ...Change) {
@@ -131,7 +132,7 @@ index 0000000..6399915
 
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	log := logutils.NewMockLog(ctrl)
+	log := mock_logutils.NewMockLog(ctrl)
 	log.EXPECT().Infof("The diff contains only additions: no original or deleted lines: %#v", gomock.Any())
 	var noChanges []Change
 	testDiffProducesChanges(t, log, diff, noChanges...)

@@ -13,6 +13,7 @@ import (
 
 	"github.com/golangci/golangci-lint/pkg/lint/astcache"
 	"github.com/golangci/golangci-lint/pkg/logutils"
+	"github.com/golangci/golangci-lint/pkg/logutils/mock_logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
@@ -42,8 +43,8 @@ func newTestNolintProcessor(log logutils.Log) *Nolint {
 	return NewNolint(cache, log, lintersdb.NewManager(nil))
 }
 
-func getOkLogger(ctrl *gomock.Controller) *logutils.MockLog {
-	log := logutils.NewMockLog(ctrl)
+func getOkLogger(ctrl *gomock.Controller) *mock_logutils.MockLog {
+	log := mock_logutils.NewMockLog(ctrl)
 	log.EXPECT().Infof(gomock.Any(), gomock.Any()).AnyTimes()
 	return log
 }
