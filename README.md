@@ -767,9 +767,12 @@ linters-settings:
       rangeValCopy:
         sizeThreshold: 32
   godox:
-    keywords:
-      - FIXME
-      - TODO
+    # report any comments starting with keywords, this is useful for TODO or FIXME comments that
+    # might be left in the code accidentally and should be resolved before merging
+    keywords: # default keywords are TODO, BUG, and FIXME, these can be overwritten by this setting
+      - NOTE
+      - OPTIMIZE # marks code that should be optimized before merging
+      - HACK # marks hack-arounds that should be removed before merging
 
 linters:
   enable:
@@ -895,10 +898,6 @@ linters-settings:
     disabled-checks:
       - wrapperFunc
       - dupImport # https://github.com/go-critic/go-critic/issues/845
-  godox:
-    keywords:
-      - TODO
-      - FIXME
 
 linters:
   # inverted configuration with `enable-all` and `disable` is not scalable during updates of golangci-lint

@@ -236,7 +236,7 @@ var defaultLintersSettings = LintersSettings{
 		SettingsPerCheck: map[string]GocriticCheckSettings{},
 	},
 	Godox: GodoxSettings{
-		Keywords: []string{"FIXME", "TODO"},
+		Keywords: []string{},
 	},
 }
 
