@@ -24,6 +24,9 @@ func init() {
 		// args[xIndex] and args[yIndex] are equal.
 		newMatcherFunc := func(xIndex, yIndex int) func(*ast.CallExpr) bool {
 			return func(call *ast.CallExpr) bool {
+				if len(call.Args) <= xIndex || len(call.Args) <= yIndex {
+					return false
+				}
 				x := call.Args[xIndex]
 				y := call.Args[yIndex]
 				return astequal.Expr(x, y)
