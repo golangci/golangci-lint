@@ -10,7 +10,7 @@ github.com/davecgh/go-spew/spew
 github.com/fatih/color
 # github.com/fsnotify/fsnotify v1.4.7
 github.com/fsnotify/fsnotify
-# github.com/go-critic/go-critic v0.3.5-0.20190526074819-1df300866540
+# github.com/go-critic/go-critic v0.3.5-0.20190904082202-d79a9f0c64db
 github.com/go-critic/go-critic/checkers
 github.com/go-critic/go-critic/checkers/internal/lintutil
 # github.com/go-lintpack/lintpack v0.5.2
@@ -187,6 +187,8 @@ github.com/stretchr/testify/require
 github.com/timakin/bodyclose/passes/bodyclose
 # github.com/ultraware/funlen v0.0.1 => github.com/golangci/funlen v0.0.0-20190909161642-5e59b9546114
 github.com/ultraware/funlen
+# github.com/ultraware/whitespace v0.0.2
+github.com/ultraware/whitespace
 # github.com/valyala/bytebufferpool v1.0.0
 github.com/valyala/bytebufferpool
 # github.com/valyala/quicktemplate v1.1.1
