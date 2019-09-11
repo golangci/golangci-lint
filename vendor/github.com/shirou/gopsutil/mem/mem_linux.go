@@ -61,6 +61,8 @@ func VirtualMemoryWithContext(ctx context.Context) (*VirtualMemoryStat, error) {
 			ret.Shared = t * 1024
 		case "Slab":
 			ret.Slab = t * 1024
+		case "SReclaimable":
+			ret.SReclaimable = t * 1024
 		case "PageTables":
 			ret.PageTables = t * 1024
 		case "SwapCached":
@@ -69,8 +71,37 @@ func VirtualMemoryWithContext(ctx context.Context) (*VirtualMemoryStat, error) {
 			ret.CommitLimit = t * 1024
 		case "Committed_AS":
 			ret.CommittedAS = t * 1024
+		case "HighTotal":
+			ret.HighTotal = t * 1024
+		case "HighFree":
+			ret.HighFree = t * 1024
+		case "LowTotal":
+			ret.LowTotal = t * 1024
+		case "LowFree":
+			ret.LowFree = t * 1024
+		case "SwapTotal":
+			ret.SwapTotal = t * 1024
+		case "SwapFree":
+			ret.SwapFree = t * 1024
+		case "Mapped":
+			ret.Mapped = t * 1024
+		case "VmallocTotal":
+			ret.VMallocTotal = t * 1024
+		case "VmallocUsed":
+			ret.VMallocUsed = t * 1024
+		case "VmallocChunk":
+			ret.VMallocChunk = t * 1024
+		case "HugePages_Total":
+			ret.HugePagesTotal = t
+		case "HugePages_Free":
+			ret.HugePagesFree = t
+		case "Hugepagesize":
+			ret.HugePageSize = t * 1024
 		}
 	}
+
+	ret.Cached += ret.SReclaimable
+
 	if !memavail {
 		ret.Available = ret.Free + ret.Buffers + ret.Cached
 	}

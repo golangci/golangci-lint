@@ -199,6 +199,28 @@ func (p *Process) StatusWithContext(ctx context.Context) (string, error) {
 	return p.status, nil
 }
 
+// Foreground returns true if the process is in foreground, false otherwise.
+func (p *Process) Foreground() (bool, error) {
+	return p.ForegroundWithContext(context.Background())
+}
+
+func (p *Process) ForegroundWithContext(ctx context.Context) (bool, error) {
+	// see https://github.com/shirou/gopsutil/issues/596#issuecomment-432707831 for implementation details
+	pid := p.Pid
+	statPath := common.HostProc(strconv.Itoa(int(pid)), "stat")
+	contents, err := ioutil.ReadFile(statPath)
+	if err != nil {
+		return false, err
+	}
+	fields := strings.Fields(string(contents))
+	if len(fields) < 8 {
+		return false, fmt.Errorf("insufficient data in %s", statPath)
+	}
+	pgid := fields[4]
+	tpgid := fields[7]
+	return pgid == tpgid, nil
+}
+
 // Uids returns user ids of the process as a slice of the int
 func (p *Process) Uids() ([]int32, error) {
 	return p.UidsWithContext(context.Background())
@@ -985,6 +1007,8 @@ func (p *Process) fillFromStatusWithContext(ctx context.Context) error {
 					extendedName := filepath.Base(cmdlineSlice[0])
 					if strings.HasPrefix(extendedName, p.name) {
 						p.name = extendedName
+					} else {
+						p.name = cmdlineSlice[0]
 					}
 				}
 			}
@@ -1175,6 +1199,9 @@ func (p *Process) fillFromTIDStatWithContext(ctx context.Context, tid int32) (ui
 	createTime := int64(ctime * 1000)
 
 	rtpriority, err := strconv.ParseInt(fields[i+16], 10, 32)
+	if err != nil {
+		return 0, 0, nil, 0, 0, 0, err
+	}
 	if rtpriority < 0 {
 		rtpriority = rtpriority*-1 - 1
 	} else {
@@ -1215,7 +1242,7 @@ func Processes() ([]*Process, error) {
 func ProcessesWithContext(ctx context.Context) ([]*Process, error) {
 	out := []*Process{}
 
-	pids, err := Pids()
+	pids, err := PidsWithContext(ctx)
 	if err != nil {
 		return out, err
 	}

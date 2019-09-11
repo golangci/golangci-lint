@@ -146,6 +146,19 @@ func PidExistsWithContext(ctx context.Context, pid int32) (bool, error) {
 	return false, err
 }
 
+// Background returns true if the process is in background, false otherwise.
+func (p *Process) Background() (bool, error) {
+	return p.BackgroundWithContext(context.Background())
+}
+
+func (p *Process) BackgroundWithContext(ctx context.Context) (bool, error) {
+	fg, err := p.ForegroundWithContext(ctx)
+	if err != nil {
+		return false, err
+	}
+	return !fg, err
+}
+
 // If interval is 0, return difference from last call(non-blocking).
 // If interval > 0, wait interval sec and return diffrence between start and end.
 func (p *Process) Percent(interval time.Duration) (float64, error) {

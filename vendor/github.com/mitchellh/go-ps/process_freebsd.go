@@ -1,4 +1,4 @@
-// +build freebsd,amd64
+// +build freebsd
 
 package ps
 

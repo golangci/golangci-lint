@@ -6,6 +6,8 @@ import (
 	"bytes"
 	"context"
 	"encoding/binary"
+	"os/exec"
+	"strconv"
 	"strings"
 
 	cpu "github.com/shirou/gopsutil/cpu"
@@ -168,6 +170,25 @@ func (p *Process) StatusWithContext(ctx context.Context) (string, error) {
 
 	return s, nil
 }
+
+func (p *Process) Foreground() (bool, error) {
+	return p.ForegroundWithContext(context.Background())
+}
+
+func (p *Process) ForegroundWithContext(ctx context.Context) (bool, error) {
+	// see https://github.com/shirou/gopsutil/issues/596#issuecomment-432707831 for implementation details
+	pid := p.Pid
+	ps, err := exec.LookPath("ps")
+	if err != nil {
+		return false, err
+	}
+	out, err := invoke.CommandWithContext(ctx, ps, "-o", "stat=", "-p", strconv.Itoa(int(pid)))
+	if err != nil {
+		return false, err
+	}
+	return strings.IndexByte(string(out), '+') != -1, nil
+}
+
 func (p *Process) Uids() ([]int32, error) {
 	return p.UidsWithContext(context.Background())
 }

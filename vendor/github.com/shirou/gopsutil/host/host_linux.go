@@ -73,7 +73,10 @@ func InfoWithContext(ctx context.Context) (*InfoStat, error) {
 	}
 
 	sysProductUUID := common.HostSys("class/dmi/id/product_uuid")
+	machineID := common.HostEtc("machine-id")
 	switch {
+	// In order to read this file, needs to be supported by kernel/arch and run as root
+	// so having fallback is important
 	case common.PathExists(sysProductUUID):
 		lines, err := common.ReadLines(sysProductUUID)
 		if err == nil && len(lines) > 0 && lines[0] != "" {
@@ -81,6 +84,16 @@ func InfoWithContext(ctx context.Context) (*InfoStat, error) {
 			break
 		}
 		fallthrough
+	// Fallback on GNU Linux systems with systemd, readable by everyone
+	case common.PathExists(machineID):
+		lines, err := common.ReadLines(machineID)
+		if err == nil && len(lines) > 0 && len(lines[0]) == 32 {
+			st := lines[0]
+			ret.HostID = fmt.Sprintf("%s-%s-%s-%s-%s", st[0:8], st[8:12], st[12:16], st[16:20], st[20:32])
+			break
+		}
+		fallthrough
+	// Not stable between reboot, but better than nothing
 	default:
 		values, err := common.DoSysctrl("kernel.random.boot_id")
 		if err == nil && len(values) == 1 && values[0] != "" {
@@ -319,6 +332,12 @@ func PlatformInformationWithContext(ctx context.Context) (platform string, famil
 		if err == nil {
 			version = getRedhatishVersion(contents)
 		}
+	} else if common.PathExists(common.HostEtc("slackware-version")) {
+		platform = "slackware"
+		contents, err := common.ReadLines(common.HostEtc("slackware-version"))
+		if err == nil {
+			version = getSlackwareVersion(contents)
+		}
 	} else if common.PathExists(common.HostEtc("debian_version")) {
 		if lsb.ID == "Ubuntu" {
 			platform = "ubuntu"
@@ -439,6 +458,12 @@ func KernelVersionWithContext(ctx context.Context) (version string, err error) {
 	}
 
 	return version, nil
+}
+
+func getSlackwareVersion(contents []string) string {
+	c := strings.ToLower(strings.Join(contents, ""))
+	c = strings.Replace(c, "slackware ", "", 1)
+	return c
 }
 
 func getRedhatishVersion(contents []string) string {
