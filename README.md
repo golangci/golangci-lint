@@ -110,6 +110,12 @@ go install -ldflags "-X 'main.version=$(git describe --tags)' -X 'main.commit=$(
 
 On Windows, you can run the above commands with Git Bash, which comes with [Git for Windows](https://git-scm.com/download/win).
 
+### GitHub Actions installation
+
+To use GolangCI Lint as GitHub action in your repo please visit [GolangCI Lint Action](https://github.com/matoous/golangci-lint-action).
+and click on `View on Marketplace`. You can also take a look how to add badge from this action into the README.md in the
+GolangCI Lint Action repository README.
+
 ## Trusted By
 
 The following companies/products use golangci-lint:
