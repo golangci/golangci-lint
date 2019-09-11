@@ -238,6 +238,10 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithSpeed(10).
 			WithURL("https://github.com/leighmcculloch/gochecknoglobals"),
+		linter.NewConfig(golinters.Godox{}).
+			WithPresets(linter.PresetStyle).
+			WithSpeed(10).
+			WithURL("https://github.com/matoous/godox"),
 		linter.NewConfig(golinters.Funlen{}).
 			WithPresets(linter.PresetStyle).
 			WithSpeed(10).

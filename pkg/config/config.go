@@ -177,6 +177,7 @@ type LintersSettings struct {
 	Prealloc PreallocSettings
 	Errcheck ErrcheckSettings
 	Gocritic GocriticSettings
+	Godox    GodoxSettings
 }
 
 type GovetSettings struct {
@@ -211,6 +212,10 @@ type PreallocSettings struct {
 	ForLoops   bool `mapstructure:"for-loops"`
 }
 
+type GodoxSettings struct {
+	Keywords []string
+}
+
 var defaultLintersSettings = LintersSettings{
 	Lll: LllSettings{
 		LineLength: 120,
@@ -229,6 +234,9 @@ var defaultLintersSettings = LintersSettings{
 	},
 	Gocritic: GocriticSettings{
 		SettingsPerCheck: map[string]GocriticCheckSettings{},
+	},
+	Godox: GodoxSettings{
+		Keywords: []string{},
 	},
 }
 

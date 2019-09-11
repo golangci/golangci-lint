@@ -126,6 +126,8 @@ github.com/kisielk/gotool
 github.com/kisielk/gotool/internal/load
 # github.com/magiconair/properties v1.7.6
 github.com/magiconair/properties
+# github.com/matoous/godox v0.0.0-20190910121045-032ad8106c86
+github.com/matoous/godox
 # github.com/mattn/go-colorable v0.0.9
 github.com/mattn/go-colorable
 # github.com/mattn/go-isatty v0.0.3
