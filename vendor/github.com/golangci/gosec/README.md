@@ -15,7 +15,11 @@ You may obtain a copy of the License [here](http://www.apache.org/licenses/LICEN
 
 [![Build Status](https://travis-ci.org/securego/gosec.svg?branch=master)](https://travis-ci.org/securego/gosec)
 [![Coverage Status](https://codecov.io/gh/securego/gosec/branch/master/graph/badge.svg)](https://codecov.io/gh/securego/gosec)
+[![GoReport](https://goreportcard.com/badge/github.com/golangci/gosec)](https://goreportcard.com/badge/github.com/golangci/gosec)
 [![GoDoc](https://godoc.org/github.com/golangci/gosec?status.svg)](https://godoc.org/github.com/golangci/gosec)
+[![Docs](https://readthedocs.org/projects/docs/badge/?version=latest)](https://securego.io/)
+[![Downloads](https://img.shields.io/github/downloads/securego/gosec/total.svg)](https://github.com/golangci/gosec/releases)
+[![Docker Pulls](https://img.shields.io/docker/pulls/securego/gosec.svg)](https://hub.docker.com/r/securego/gosec/tags)
 [![Slack](http://securego.herokuapp.com/badge.svg)](http://securego.herokuapp.com)
 
 ## Install
@@ -32,12 +36,22 @@ curl -sfL https://raw.githubusercontent.com/securego/gosec/master/install.sh | s
 # In alpine linux (as it does not come with curl by default)
 wget -O - -q https://raw.githubusercontent.com/securego/gosec/master/install.sh | sh -s vX.Y.Z
 
+# If you want to use the checksums provided on the "Releases" page
+# then you will have to download a tar.gz file for your operating system instead of a binary file
+wget https://github.com/golangci/gosec/releases/download/vX.Y.Z/gosec_vX.Y.Z_OS.tar.gz
+
+# The file will be in the current folder where you run the command 
+# and you can check the checksum like this
+echo "<check sum from the check sum file>  gosec_vX.Y.Z_OS.tar.gz" | sha256sum -c -
+
 gosec --help
 ```
 
 ### Local Installation
 
-`$ go get github.com/golangci/gosec/cmd/gosec/...`
+```bash
+go get github.com/golangci/gosec/cmd/gosec
+```
 
 ## Usage
 
@@ -46,10 +60,6 @@ paths, and produce reports in different formats. By default all rules will be
 run against the supplied input files. To recursively scan from the current
 directory you can supply './...' as the input argument.
 
-### Selecting rules
-
-By default gosec will run all rules against the supplied file paths. It is however possible to select a subset of rules to run via the '-include=' flag,
-or to specify a set of rules to explicitly exclude using the '-exclude=' flag.
 
 ### Available rules
 
@@ -57,7 +67,6 @@ or to specify a set of rules to explicitly exclude using the '-exclude=' flag.
 - G102: Bind to all interfaces
 - G103: Audit the use of unsafe block
 - G104: Audit errors not checked
-- G105: Audit the use of math/big.Int.Exp
 - G106: Audit the use of ssh.InsecureIgnoreHostKey
 - G107: Url provided to HTTP request as taint input
 - G201: SQL query construction using format string
@@ -78,6 +87,15 @@ or to specify a set of rules to explicitly exclude using the '-exclude=' flag.
 - G503: Import blacklist: crypto/rc4
 - G504: Import blacklist: net/http/cgi
 - G505: Import blacklist: crypto/sha1
+
+### Retired rules
+
+- G105: Audit the use of math/big.Int.Exp - [CVE is fixed](https://github.com/golang/go/issues/15184)
+
+### Selecting rules
+
+By default gosec will run all rules against the supplied file paths. It is however possible to select a subset of rules to run via the '-include=' flag,
+or to specify a set of rules to explicitly exclude using the '-exclude=' flag.
 
 ```bash
 # Run a specific set of rules
@@ -105,13 +123,40 @@ A number of global settings can be provided in a configuration file as follows:
 
 ```bash
 # Run with a global configuration file
-$ goesc -conf config.json .
+$ gosec -conf config.json .
+```
+Also some rules accept configuration. For instance on rule `G104`, it is possible to define packages along with a list 
+of functions which will be skipped when auditing the not checked errors:
+
+```JSON
+{
+    "G104": {
+        "io/ioutil": ["WriteFile"]
+    }
+}
 ```
 
-### Excluding files
+### Dependencies 
 
-gosec will ignore dependencies in your vendor directory any files
-that are not considered build artifacts by the compiler (so test files).
+gosec will fetch automatically the dependencies of the code which is being analyzed when go modules are turned on (e.g.` GO111MODULE=on`). If this is not the case,
+the dependencies need to be explicitly downloaded by running the `go get -d` command before the scan.
+
+### Excluding test files and folders
+
+gosec will ignore test files across all packages and any dependencies in your vendor directory. 
+
+The scanning of test files can be enabled with the following flag:
+
+```bash
+
+gosec -tests ./...
+```
+
+Also additional folders can be excluded as follows:
+
+```bash
+ gosec -exclude-dir=rules -exclude-dir=cmd ./...
+```
 
 ### Annotating code
 
@@ -157,7 +202,7 @@ gosec -tag debug,ignore ./...
 
 ### Output formats
 
-gosec currently supports text, json, yaml, csv and JUnit XML output formats. By default
+gosec currently supports text, json, yaml, csv, sonarqube and JUnit XML output formats. By default
 results will be reported to stdout, but can also be written to an output
 file. The output format is controlled by the '-fmt' flag, and the output file is controlled by the '-out' flag as follows:
 
@@ -167,15 +212,6 @@ $ gosec -fmt=json -out=results.json *.go
 ```
 
 ## Development
-
-### Prerequisites
-
-Install dep according to the instructions here: https://github.com/golang/dep
-Install the latest version of golint:
-
-```bash
-go get -u golang.org/x/lint/golint
-```
 
 ### Build
 
@@ -194,7 +230,7 @@ make test
 Make sure you have installed the [goreleaser](https://github.com/goreleaser/goreleaser) tool and then you can release gosec as follows:
 
 ```bash
-git tag 1.0.0
+git tag v1.0.0
 export GITHUB_TOKEN=<YOUR GITHUB TOKEN>
 make release
 ```
@@ -209,7 +245,7 @@ gosec analyzes Go source code to look for common programming mistakes that
 can lead to security problems.
 
 VERSION: 1.0.0
-GIT TAG: 1.0.0
+GIT TAG: v1.0.0
 BUILD DATE: 2018-04-27T12:41:38Z
 ```
 
@@ -223,11 +259,11 @@ You can build the docker image as follows:
 make image
 ```
 
-You can run the `gosec` tool in a container against your local Go project. You just have to mount the project in the
-`GOPATH` of the container:
+You can run the `gosec` tool in a container against your local Go project. You just have to mount the project 
+into a volume as follow:
 
 ```bash
-docker run -it -v $GOPATH/src/<YOUR PROJECT PATH>:/go/src/<YOUR PROJECT PATH> securego/gosec ./...
+docker run -it -v <YOUR PROJECT PATH>/<PROJECT>:/<PROJECT> securego/gosec /<PROJECT>/...
 ```
 
 ### Generate TLS rule

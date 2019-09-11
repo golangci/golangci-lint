@@ -3,65 +3,76 @@ package adjacency
 import (
 	"encoding/json"
 	"log"
-	//	"fmt"
+
 	"github.com/nbutton23/zxcvbn-go/data"
 )
 
-type AdjacencyGraph struct {
+// Graph holds information about different graphs
+type Graph struct {
 	Graph         map[string][]string
 	averageDegree float64
 	Name          string
 }
 
-var AdjacencyGph = make(map[string]AdjacencyGraph)
+// GraphMap is a map of all graphs
+var GraphMap = make(map[string]Graph)
 
 func init() {
-	AdjacencyGph["qwerty"] = BuildQwerty()
-	AdjacencyGph["dvorak"] = BuildDvorak()
-	AdjacencyGph["keypad"] = BuildKeypad()
-	AdjacencyGph["macKeypad"] = BuildMacKeypad()
-	AdjacencyGph["l33t"] = BuildLeet()
+	GraphMap["qwerty"] = BuildQwerty()
+	GraphMap["dvorak"] = BuildDvorak()
+	GraphMap["keypad"] = BuildKeypad()
+	GraphMap["macKeypad"] = BuildMacKeypad()
+	GraphMap["l33t"] = BuildLeet()
 }
 
-func BuildQwerty() AdjacencyGraph {
-	data, err := zxcvbn_data.Asset("data/Qwerty.json")
+//BuildQwerty builds the Qwerty Graph
+func BuildQwerty() Graph {
+	data, err := data.Asset("data/Qwerty.json")
 	if err != nil {
 		panic("Can't find asset")
 	}
-	return GetAdjancencyGraphFromFile(data, "qwerty")
-}
-func BuildDvorak() AdjacencyGraph {
-	data, err := zxcvbn_data.Asset("data/Dvorak.json")
-	if err != nil {
-		panic("Can't find asset")
-	}
-	return GetAdjancencyGraphFromFile(data, "dvorak")
-}
-func BuildKeypad() AdjacencyGraph {
-	data, err := zxcvbn_data.Asset("data/Keypad.json")
-	if err != nil {
-		panic("Can't find asset")
-	}
-	return GetAdjancencyGraphFromFile(data, "keypad")
-}
-func BuildMacKeypad() AdjacencyGraph {
-	data, err := zxcvbn_data.Asset("data/MacKeypad.json")
-	if err != nil {
-		panic("Can't find asset")
-	}
-	return GetAdjancencyGraphFromFile(data, "mac_keypad")
-}
-func BuildLeet() AdjacencyGraph {
-	data, err := zxcvbn_data.Asset("data/L33t.json")
-	if err != nil {
-		panic("Can't find asset")
-	}
-	return GetAdjancencyGraphFromFile(data, "keypad")
+	return getAdjancencyGraphFromFile(data, "qwerty")
 }
 
-func GetAdjancencyGraphFromFile(data []byte, name string) AdjacencyGraph {
+//BuildDvorak builds the Dvorak Graph
+func BuildDvorak() Graph {
+	data, err := data.Asset("data/Dvorak.json")
+	if err != nil {
+		panic("Can't find asset")
+	}
+	return getAdjancencyGraphFromFile(data, "dvorak")
+}
 
-	var graph AdjacencyGraph
+//BuildKeypad builds the Keypad Graph
+func BuildKeypad() Graph {
+	data, err := data.Asset("data/Keypad.json")
+	if err != nil {
+		panic("Can't find asset")
+	}
+	return getAdjancencyGraphFromFile(data, "keypad")
+}
+
+//BuildMacKeypad builds the Mac Keypad Graph
+func BuildMacKeypad() Graph {
+	data, err := data.Asset("data/MacKeypad.json")
+	if err != nil {
+		panic("Can't find asset")
+	}
+	return getAdjancencyGraphFromFile(data, "mac_keypad")
+}
+
+//BuildLeet builds the L33T Graph
+func BuildLeet() Graph {
+	data, err := data.Asset("data/L33t.json")
+	if err != nil {
+		panic("Can't find asset")
+	}
+	return getAdjancencyGraphFromFile(data, "keypad")
+}
+
+func getAdjancencyGraphFromFile(data []byte, name string) Graph {
+
+	var graph Graph
 	err := json.Unmarshal(data, &graph)
 	if err != nil {
 		log.Fatal(err)
@@ -70,10 +81,11 @@ func GetAdjancencyGraphFromFile(data []byte, name string) AdjacencyGraph {
 	return graph
 }
 
+// CalculateAvgDegree calclates the average degree between nodes in the graph
 //on qwerty, 'g' has degree 6, being adjacent to 'ftyhbv'. '\' has degree 1.
 //this calculates the average over all keys.
 //TODO double check that i ported this correctly scoring.coffee ln 5
-func (adjGrp AdjacencyGraph) CalculateAvgDegree() float64 {
+func (adjGrp Graph) CalculateAvgDegree() float64 {
 	if adjGrp.averageDegree != float64(0) {
 		return adjGrp.averageDegree
 	}
@@ -82,7 +94,7 @@ func (adjGrp AdjacencyGraph) CalculateAvgDegree() float64 {
 	for _, value := range adjGrp.Graph {
 
 		for _, char := range value {
-			if char != "" || char != " " {
+			if len(char) != 0 || char != " " {
 				avg += float64(len(char))
 				count++
 			}

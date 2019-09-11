@@ -20,7 +20,7 @@ require (
 	github.com/golangci/goconst v0.0.0-20180610141641-041c5f2b40f3
 	github.com/golangci/gocyclo v0.0.0-20180528134321-2becd97e67ee
 	github.com/golangci/gofmt v0.0.0-20181222123516-0b8337e80d98
-	github.com/golangci/gosec v0.0.0-20190211064107-66fb7fc33547
+	github.com/golangci/gosec v0.0.0-20190911143311-c62ea1e208f0
 	github.com/golangci/ineffassign v0.0.0-20190609212857-42439a7714cc
 	github.com/golangci/lint-1 v0.0.0-20190420132249-ee948d087217
 	github.com/golangci/maligned v0.0.0-20180506175553-b1d89398deca
@@ -37,8 +37,6 @@ require (
 	github.com/mitchellh/go-homedir v1.0.0
 	github.com/mitchellh/go-ps v0.0.0-20170309133038-4fdf99ab2936
 	github.com/mitchellh/mapstructure v0.0.0-20180220230111-00c29f56e238 // indirect
-	github.com/nbutton23/zxcvbn-go v0.0.0-20171102151520-eafdab6b0663 // indirect
-	github.com/onsi/gomega v1.4.2 // indirect
 	github.com/pelletier/go-toml v1.1.0 // indirect
 	github.com/pkg/errors v0.8.1
 	github.com/shirou/gopsutil v0.0.0-20180427012116-c95755e4bcd7
@@ -51,17 +49,15 @@ require (
 	github.com/spf13/jwalterweatherman v0.0.0-20180109140146-7c0cea34c8ec // indirect
 	github.com/spf13/pflag v1.0.1
 	github.com/spf13/viper v1.0.2
-	github.com/stretchr/testify v1.2.2
+	github.com/stretchr/testify v1.4.0
 	github.com/timakin/bodyclose v0.0.0-20190721030226-87058b9bfcec
 	github.com/ultraware/funlen v0.0.1
 	github.com/ultraware/whitespace v0.0.2
 	github.com/valyala/quicktemplate v1.1.1
-	golang.org/x/crypto v0.0.0-20190313024323-a1f597ede03a // indirect
-	golang.org/x/sys v0.0.0-20190312061237-fead79001313 // indirect
-	golang.org/x/tools v0.0.0-20190909030654-5b82db07426d
+	golang.org/x/tools v0.0.0-20190911022129-16c5e0f7d110
 	gopkg.in/airbrake/gobrake.v2 v2.0.9 // indirect
 	gopkg.in/gemnasium/logrus-airbrake-hook.v2 v2.1.2 // indirect
-	gopkg.in/yaml.v2 v2.2.1
+	gopkg.in/yaml.v2 v2.2.2
 	mvdan.cc/interfacer v0.0.0-20180901003855-c20040233aed
 	mvdan.cc/lint v0.0.0-20170908181259-adc824a0674b // indirect
 	mvdan.cc/unparam v0.0.0-20190209190245-fbb59629db34

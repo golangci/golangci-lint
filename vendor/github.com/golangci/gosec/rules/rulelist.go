@@ -63,7 +63,6 @@ func Generate(filters ...RuleFilter) RuleList {
 		{"G102", "Bind to all interfaces", NewBindsToAllNetworkInterfaces},
 		{"G103", "Audit the use of unsafe block", NewUsingUnsafe},
 		{"G104", "Audit errors not checked", NewNoErrorCheck},
-		{"G105", "Audit the use of big.Exp function", NewUsingBigExp},
 		{"G106", "Audit the use of ssh.InsecureIgnoreHostKey function", NewSSHHostKey},
 		{"G107", "Url provided to HTTP request as taint input", NewSSRFCheck},
 

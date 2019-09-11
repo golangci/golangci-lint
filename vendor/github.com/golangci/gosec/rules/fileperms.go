@@ -36,11 +36,11 @@ func (r *filePermissions) ID() string {
 func getConfiguredMode(conf map[string]interface{}, configKey string, defaultMode int64) int64 {
 	var mode = defaultMode
 	if value, ok := conf[configKey]; ok {
-		switch value.(type) {
+		switch value := value.(type) {
 		case int64:
-			mode = value.(int64)
+			mode = value
 		case string:
-			if m, e := strconv.ParseInt(value.(string), 0, 64); e != nil {
+			if m, e := strconv.ParseInt(value, 0, 64); e != nil {
 				mode = defaultMode
 			} else {
 				mode = m
