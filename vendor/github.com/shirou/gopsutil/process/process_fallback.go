@@ -36,6 +36,14 @@ func PidsWithContext(ctx context.Context) ([]int32, error) {
 	return []int32{}, common.ErrNotImplementedError
 }
 
+func Processes() ([]*Process, error) {
+	return nil, common.ErrNotImplementedError
+}
+
+func ProcessesWithContext(ctx context.Context) ([]*Process, error) {
+	return nil, common.ErrNotImplementedError
+}
+
 func NewProcess(pid int32) (*Process, error) {
 	return nil, common.ErrNotImplementedError
 }
@@ -105,6 +113,13 @@ func (p *Process) Status() (string, error) {
 
 func (p *Process) StatusWithContext(ctx context.Context) (string, error) {
 	return "", common.ErrNotImplementedError
+}
+func (p *Process) Foreground() (bool, error) {
+	return p.ForegroundWithContext(context.Background())
+}
+
+func (p *Process) ForegroundWithContext(ctx context.Context) (bool, error) {
+	return false, common.ErrNotImplementedError
 }
 func (p *Process) Uids() ([]int32, error) {
 	return p.UidsWithContext(context.Background())

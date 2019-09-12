@@ -239,6 +239,25 @@ func (p *Process) StatusWithContext(ctx context.Context) (string, error) {
 
 	return r[0][0], err
 }
+
+func (p *Process) Foreground() (bool, error) {
+	return p.ForegroundWithContext(context.Background())
+}
+
+func (p *Process) ForegroundWithContext(ctx context.Context) (bool, error) {
+	// see https://github.com/shirou/gopsutil/issues/596#issuecomment-432707831 for implementation details
+	pid := p.Pid
+	ps, err := exec.LookPath("ps")
+	if err != nil {
+		return false, err
+	}
+	out, err := invoke.CommandWithContext(ctx, ps, "-o", "stat=", "-p", strconv.Itoa(int(pid)))
+	if err != nil {
+		return false, err
+	}
+	return strings.IndexByte(string(out), '+') != -1, nil
+}
+
 func (p *Process) Uids() ([]int32, error) {
 	return p.UidsWithContext(context.Background())
 }
@@ -527,34 +546,22 @@ func Processes() ([]*Process, error) {
 }
 
 func ProcessesWithContext(ctx context.Context) ([]*Process, error) {
-	results := []*Process{}
+	out := []*Process{}
 
-	mib := []int32{CTLKern, KernProc, KernProcAll, 0}
-	buf, length, err := common.CallSyscall(mib)
+	pids, err := PidsWithContext(ctx)
 	if err != nil {
-		return results, err
+		return out, err
 	}
 
-	// get kinfo_proc size
-	k := KinfoProc{}
-	procinfoLen := int(unsafe.Sizeof(k))
-	count := int(length / uint64(procinfoLen))
-
-	// parse buf to procs
-	for i := 0; i < count; i++ {
-		b := buf[i*procinfoLen : i*procinfoLen+procinfoLen]
-		k, err := parseKinfoProc(b)
+	for _, pid := range pids {
+		p, err := NewProcess(pid)
 		if err != nil {
 			continue
 		}
-		p, err := NewProcess(int32(k.Proc.P_pid))
-		if err != nil {
-			continue
-		}
-		results = append(results, p)
+		out = append(out, p)
 	}
 
-	return results, nil
+	return out, nil
 }
 
 func parseKinfoProc(buf []byte) (KinfoProc, error) {

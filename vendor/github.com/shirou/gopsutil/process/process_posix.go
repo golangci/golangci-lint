@@ -26,6 +26,9 @@ func getTerminalMap() (map[uint64]string, error) {
 	defer d.Close()
 
 	devnames, err := d.Readdirnames(-1)
+	if err != nil {
+		return nil, err
+	}
 	for _, devname := range devnames {
 		if strings.HasPrefix(devname, "/dev/tty") {
 			termfiles = append(termfiles, "/dev/tty/"+devname)
@@ -45,6 +48,9 @@ func getTerminalMap() (map[uint64]string, error) {
 	if ptsnames == nil {
 		defer ptsd.Close()
 		ptsnames, err = ptsd.Readdirnames(-1)
+		if err != nil {
+			return nil, err
+		}
 		for _, ptsname := range ptsnames {
 			termfiles = append(termfiles, "/dev/pts/"+ptsname)
 		}

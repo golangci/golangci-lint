@@ -38,11 +38,11 @@ test_linters:
 
 # Maintenance
 
-generate: README.md docs/demo.svg install.sh pkg/logutils/log_mock.go vendor
+generate: README.md docs/demo.svg install.sh pkg/logutils/mock_logutils/mock_log.go vendor
 fast_generate: README.md vendor
 
 maintainer-clean: clean
-	rm -f docs/demo.svg README.md install.sh pkg/logutils/log_mock.go
+	rm -f docs/demo.svg README.md install.sh pkg/logutils/mock_logutils/mock_log.go
 	rm -rf vendor
 .PHONY: generate maintainer-clean
 
@@ -67,7 +67,7 @@ release:
 
 # Non-PHONY targets (real files)
 
-golangci-lint: FORCE pkg/logutils/log_mock.go
+golangci-lint: FORCE pkg/logutils/mock_logutils/mock_log.go
 	go build -o $@ ./cmd/golangci-lint
 
 tools/mockgen: go.mod go.sum
@@ -103,7 +103,7 @@ install.sh: tools/godownloader .goreleaser.yml
 README.md: FORCE golangci-lint
 	go run ./scripts/gen_readme/main.go
 
-pkg/logutils/log_mock.go: tools/mockgen tools/goimports pkg/logutils/log.go
+pkg/logutils/mock_logutils/mock_log.go: tools/mockgen tools/goimports pkg/logutils/log.go
 	@rm -f $@
 	PATH=$(CURDIR)/tools:$${PATH} go generate ./...
 
