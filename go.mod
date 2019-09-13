@@ -41,7 +41,7 @@ require (
 	github.com/spf13/viper v1.4.0
 	github.com/stretchr/testify v1.4.0
 	github.com/timakin/bodyclose v0.0.0-20190721030226-87058b9bfcec
-	github.com/ultraware/funlen v0.0.1
+	github.com/ultraware/funlen v0.0.2
 	github.com/ultraware/whitespace v0.0.2
 	github.com/valyala/quicktemplate v1.1.1
 	golang.org/x/tools v0.0.0-20190911022129-16c5e0f7d110
@@ -51,9 +51,5 @@ require (
 	mvdan.cc/unparam v0.0.0-20190209190245-fbb59629db34
 )
 
-replace (
-	// https://github.com/ultraware/funlen/pull/1
-	github.com/ultraware/funlen => github.com/golangci/funlen v0.0.0-20190909161642-5e59b9546114
-	// https://github.com/golang/tools/pull/139
-	golang.org/x/tools => github.com/golangci/tools v0.0.0-20190910062050-3540c026601b
-)
+// https://github.com/golang/tools/pull/139
+replace golang.org/x/tools => github.com/golangci/tools v0.0.0-20190910062050-3540c026601b
