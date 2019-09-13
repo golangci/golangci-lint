@@ -187,7 +187,7 @@ github.com/stretchr/testify/assert
 github.com/stretchr/testify/require
 # github.com/timakin/bodyclose v0.0.0-20190721030226-87058b9bfcec
 github.com/timakin/bodyclose/passes/bodyclose
-# github.com/ultraware/funlen v0.0.1 => github.com/golangci/funlen v0.0.0-20190909161642-5e59b9546114
+# github.com/ultraware/funlen v0.0.2
 github.com/ultraware/funlen
 # github.com/ultraware/whitespace v0.0.2
 github.com/ultraware/whitespace
