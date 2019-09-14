@@ -17,7 +17,7 @@ package rules
 import (
 	"go/ast"
 
-	"github.com/golangci/gosec"
+	"github.com/securego/gosec"
 )
 
 type usingUnsafe struct {

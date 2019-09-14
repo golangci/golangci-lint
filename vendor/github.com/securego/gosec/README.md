@@ -15,10 +15,10 @@ You may obtain a copy of the License [here](http://www.apache.org/licenses/LICEN
 
 [![Build Status](https://travis-ci.org/securego/gosec.svg?branch=master)](https://travis-ci.org/securego/gosec)
 [![Coverage Status](https://codecov.io/gh/securego/gosec/branch/master/graph/badge.svg)](https://codecov.io/gh/securego/gosec)
-[![GoReport](https://goreportcard.com/badge/github.com/golangci/gosec)](https://goreportcard.com/badge/github.com/golangci/gosec)
-[![GoDoc](https://godoc.org/github.com/golangci/gosec?status.svg)](https://godoc.org/github.com/golangci/gosec)
+[![GoReport](https://goreportcard.com/badge/github.com/securego/gosec)](https://goreportcard.com/badge/github.com/securego/gosec)
+[![GoDoc](https://godoc.org/github.com/securego/gosec?status.svg)](https://godoc.org/github.com/securego/gosec)
 [![Docs](https://readthedocs.org/projects/docs/badge/?version=latest)](https://securego.io/)
-[![Downloads](https://img.shields.io/github/downloads/securego/gosec/total.svg)](https://github.com/golangci/gosec/releases)
+[![Downloads](https://img.shields.io/github/downloads/securego/gosec/total.svg)](https://github.com/securego/gosec/releases)
 [![Docker Pulls](https://img.shields.io/docker/pulls/securego/gosec.svg)](https://hub.docker.com/r/securego/gosec/tags)
 [![Slack](http://securego.herokuapp.com/badge.svg)](http://securego.herokuapp.com)
 
@@ -38,7 +38,7 @@ wget -O - -q https://raw.githubusercontent.com/securego/gosec/master/install.sh 
 
 # If you want to use the checksums provided on the "Releases" page
 # then you will have to download a tar.gz file for your operating system instead of a binary file
-wget https://github.com/golangci/gosec/releases/download/vX.Y.Z/gosec_vX.Y.Z_OS.tar.gz
+wget https://github.com/securego/gosec/releases/download/vX.Y.Z/gosec_vX.Y.Z_OS.tar.gz
 
 # The file will be in the current folder where you run the command 
 # and you can check the checksum like this
@@ -50,7 +50,7 @@ gosec --help
 ### Local Installation
 
 ```bash
-go get github.com/golangci/gosec/cmd/gosec
+go get github.com/securego/gosec/cmd/gosec
 ```
 
 ## Usage
@@ -273,7 +273,7 @@ The configuration of TLS rule can be generated from [Mozilla's TLS ciphers recom
 First you need to install the generator tool:
 
 ```bash
-go get github.com/golangci/gosec/cmd/tlsconfig/...
+go get github.com/securego/gosec/cmd/tlsconfig/...
 ```
 
 You can invoke now the `go generate` in the root of the project:

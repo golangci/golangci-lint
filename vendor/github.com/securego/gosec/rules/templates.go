@@ -16,43 +16,46 @@ package rules
 
 import (
 	"go/ast"
-	"regexp"
 
-	"github.com/golangci/gosec"
+	"github.com/securego/gosec"
 )
 
-type badTempFile struct {
+type templateCheck struct {
 	gosec.MetaData
 	calls gosec.CallList
-	args  *regexp.Regexp
 }
 
-func (t *badTempFile) ID() string {
+func (t *templateCheck) ID() string {
 	return t.MetaData.ID
 }
 
-func (t *badTempFile) Match(n ast.Node, c *gosec.Context) (gi *gosec.Issue, err error) {
+func (t *templateCheck) Match(n ast.Node, c *gosec.Context) (*gosec.Issue, error) {
 	if node := t.calls.ContainsCallExpr(n, c, false); node != nil {
-		if arg, e := gosec.GetString(node.Args[0]); t.args.MatchString(arg) && e == nil {
-			return gosec.NewIssue(c, n, t.ID(), t.What, t.Severity, t.Confidence), nil
+		for _, arg := range node.Args {
+			if _, ok := arg.(*ast.BasicLit); !ok { // basic lits are safe
+				return gosec.NewIssue(c, n, t.ID(), t.What, t.Severity, t.Confidence), nil
+			}
 		}
 	}
 	return nil, nil
 }
 
-// NewBadTempFile detects direct writes to predictable path in temporary directory
-func NewBadTempFile(id string, conf gosec.Config) (gosec.Rule, []ast.Node) {
+// NewTemplateCheck constructs the template check rule. This rule is used to
+// find use of templates where HTML/JS escaping is not being used
+func NewTemplateCheck(id string, conf gosec.Config) (gosec.Rule, []ast.Node) {
+
 	calls := gosec.NewCallList()
-	calls.Add("io/ioutil", "WriteFile")
-	calls.Add("os", "Create")
-	return &badTempFile{
+	calls.Add("html/template", "HTML")
+	calls.Add("html/template", "HTMLAttr")
+	calls.Add("html/template", "JS")
+	calls.Add("html/template", "URL")
+	return &templateCheck{
 		calls: calls,
-		args:  regexp.MustCompile(`^/tmp/.*$|^/var/tmp/.*$`),
 		MetaData: gosec.MetaData{
 			ID:         id,
 			Severity:   gosec.Medium,
-			Confidence: gosec.High,
-			What:       "File creation in shared tmp directory without using ioutil.Tempfile",
+			Confidence: gosec.Low,
+			What:       "this method will not auto-escape HTML. Verify data is well formed.",
 		},
 	}, []ast.Node{(*ast.CallExpr)(nil)}
 }

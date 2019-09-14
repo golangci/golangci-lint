@@ -89,9 +89,6 @@ github.com/golangci/gocyclo/pkg/gocyclo
 # github.com/golangci/gofmt v0.0.0-20181222123516-0b8337e80d98
 github.com/golangci/gofmt/gofmt
 github.com/golangci/gofmt/goimports
-# github.com/golangci/gosec v0.0.0-20190911143311-c62ea1e208f0
-github.com/golangci/gosec
-github.com/golangci/gosec/rules
 # github.com/golangci/ineffassign v0.0.0-20190609212857-42439a7714cc
 github.com/golangci/ineffassign
 # github.com/golangci/lint-1 v0.0.0-20190420132249-ee948d087217
@@ -156,6 +153,9 @@ github.com/pelletier/go-toml
 github.com/pkg/errors
 # github.com/pmezard/go-difflib v1.0.0
 github.com/pmezard/go-difflib/difflib
+# github.com/securego/gosec v0.0.0-20190912120752-140048b2a218
+github.com/securego/gosec
+github.com/securego/gosec/rules
 # github.com/shirou/gopsutil v2.18.12+incompatible
 github.com/shirou/gopsutil/cpu
 github.com/shirou/gopsutil/host
@@ -195,7 +195,7 @@ github.com/ultraware/whitespace
 github.com/valyala/bytebufferpool
 # github.com/valyala/quicktemplate v1.1.1
 github.com/valyala/quicktemplate
-# golang.org/x/sys v0.0.0-20190910064555-bbd175535a8b
+# golang.org/x/sys v0.0.0-20190911201528-7ad0cfa0b7b5
 golang.org/x/sys/unix
 golang.org/x/sys/windows
 # golang.org/x/text v0.3.2

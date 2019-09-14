@@ -15,44 +15,41 @@
 package rules
 
 import (
-	"fmt"
 	"go/ast"
 
-	"github.com/golangci/gosec"
+	"github.com/securego/gosec"
 )
 
-type weakKeyStrength struct {
+type weakRand struct {
 	gosec.MetaData
-	calls gosec.CallList
-	bits  int
+	funcNames   []string
+	packagePath string
 }
 
-func (w *weakKeyStrength) ID() string {
+func (w *weakRand) ID() string {
 	return w.MetaData.ID
 }
 
-func (w *weakKeyStrength) Match(n ast.Node, c *gosec.Context) (*gosec.Issue, error) {
-	if callExpr := w.calls.ContainsCallExpr(n, c, false); callExpr != nil {
-		if bits, err := gosec.GetInt(callExpr.Args[1]); err == nil && bits < (int64)(w.bits) {
+func (w *weakRand) Match(n ast.Node, c *gosec.Context) (*gosec.Issue, error) {
+	for _, funcName := range w.funcNames {
+		if _, matched := gosec.MatchCallByPackage(n, c, w.packagePath, funcName); matched {
 			return gosec.NewIssue(c, n, w.ID(), w.What, w.Severity, w.Confidence), nil
 		}
 	}
+
 	return nil, nil
 }
 
-// NewWeakKeyStrength builds a rule that detects RSA keys < 2048 bits
-func NewWeakKeyStrength(id string, conf gosec.Config) (gosec.Rule, []ast.Node) {
-	calls := gosec.NewCallList()
-	calls.Add("crypto/rsa", "GenerateKey")
-	bits := 2048
-	return &weakKeyStrength{
-		calls: calls,
-		bits:  bits,
+// NewWeakRandCheck detects the use of random number generator that isn't cryptographically secure
+func NewWeakRandCheck(id string, conf gosec.Config) (gosec.Rule, []ast.Node) {
+	return &weakRand{
+		funcNames:   []string{"Read", "Int"},
+		packagePath: "math/rand",
 		MetaData: gosec.MetaData{
 			ID:         id,
-			Severity:   gosec.Medium,
-			Confidence: gosec.High,
-			What:       fmt.Sprintf("RSA keys should be at least %d bits", bits),
+			Severity:   gosec.High,
+			Confidence: gosec.Medium,
+			What:       "Use of weak random number generator (math/rand instead of crypto/rand)",
 		},
 	}, []ast.Node{(*ast.CallExpr)(nil)}
 }
