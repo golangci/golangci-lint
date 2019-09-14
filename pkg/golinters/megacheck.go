@@ -144,15 +144,16 @@ func (MegacheckMetalinter) BuildLinterConfig(enabledChildren []string) (*linter.
 
 	// TODO: merge linter.Config and linter.Linter or refactor it in another way
 	return &linter.Config{
-		Linter:           m,
-		EnabledByDefault: false,
-		NeedsTypeInfo:    true,
-		NeedsSSARepr:     true,
-		InPresets:        []string{linter.PresetStyle, linter.PresetBugs, linter.PresetUnused},
-		Speed:            1,
-		AlternativeNames: nil,
-		OriginalURL:      "",
-		ParentLinterName: "",
+		Linter:            m,
+		EnabledByDefault:  false,
+		NeedsTypeInfo:     true,
+		NeedsDepsTypeInfo: true,
+		NeedsSSARepr:      true,
+		InPresets:         []string{linter.PresetStyle, linter.PresetBugs, linter.PresetUnused},
+		Speed:             1,
+		AlternativeNames:  nil,
+		OriginalURL:       "",
+		ParentLinterName:  "",
 	}, nil
 }
 

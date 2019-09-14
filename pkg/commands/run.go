@@ -406,7 +406,7 @@ func (e *Executor) executeRun(_ *cobra.Command, args []string) {
 	defer cancel()
 
 	if needTrackResources {
-		go watchResources(ctx, trackResourcesEndCh, e.log)
+		go watchResources(ctx, trackResourcesEndCh, e.log, e.debugf)
 	}
 
 	if err := e.runAndPrint(ctx, args); err != nil {
@@ -447,11 +447,12 @@ func (e *Executor) setupExitCode(ctx context.Context) {
 	}
 }
 
-func watchResources(ctx context.Context, done chan struct{}, logger logutils.Log) {
+func watchResources(ctx context.Context, done chan struct{}, logger logutils.Log, debugf logutils.DebugFunc) {
 	startedAt := time.Now()
+	debugf("Started tracking time")
 
 	var rssValues []uint64
-	ticker := time.NewTicker(100 * time.Millisecond)
+	ticker := time.NewTicker(10 * time.Millisecond)
 	defer ticker.Stop()
 
 	logEveryRecord := os.Getenv("GL_MEM_LOG_EVERY") == "1"
@@ -474,6 +475,7 @@ func watchResources(ctx context.Context, done chan struct{}, logger logutils.Log
 		select {
 		case <-ctx.Done():
 			stop = true
+			debugf("Stopped resources tracking")
 		case <-ticker.C: // track every second
 		}
 

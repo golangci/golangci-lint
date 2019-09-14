@@ -31,6 +31,7 @@ type Executor struct {
 	goenv             *goutil.Env
 	fileCache         *fsutils.FileCache
 	lineCache         *fsutils.LineCache
+	debugf            logutils.DebugFunc
 }
 
 func NewExecutor(version, commit, date string) *Executor {
@@ -40,8 +41,10 @@ func NewExecutor(version, commit, date string) *Executor {
 		commit:    commit,
 		date:      date,
 		DBManager: lintersdb.NewManager(nil),
+		debugf:    logutils.Debug("exec"),
 	}
 
+	e.debugf("Starting execution...")
 	e.log = report.NewLogWrapper(logutils.NewStderrLog(""), &e.reportData)
 
 	// to setup log level early we need to parse config from command line extra time to
@@ -100,10 +103,12 @@ func NewExecutor(version, commit, date string) *Executor {
 	e.fileCache = fsutils.NewFileCache()
 	e.lineCache = fsutils.NewLineCache(e.fileCache)
 	e.contextLoader = lint.NewContextLoader(e.cfg, e.log.Child("loader"), e.goenv, e.lineCache, e.fileCache)
-
+	e.debugf("Initialized executor")
 	return e
 }
 
 func (e *Executor) Execute() error {
-	return e.rootCmd.Execute()
+	err := e.rootCmd.Execute()
+	e.debugf("Finished execution")
+	return err
 }

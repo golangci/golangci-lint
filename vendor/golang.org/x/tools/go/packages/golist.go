@@ -112,19 +112,33 @@ func goListDriver(cfg *Config, patterns ...string) (*driverResponse, error) {
 
 	// start fetching rootDirs
 	var info goInfo
-	var rootDirsReady, envReady = make(chan struct{}), make(chan struct{})
-	go func() {
-		info.rootDirs = determineRootDirs(cfg)
-		close(rootDirsReady)
-	}()
-	go func() {
-		info.env = determineEnv(cfg)
-		close(envReady)
-	}()
-	getGoInfo := func() *goInfo {
-		<-rootDirsReady
-		<-envReady
-		return &info
+	var getGoInfo func() *goInfo
+	if len(cfg.Overlay) != 0 {
+		// Both of determineEnv and determineRootDirs calls take 100-200ms on MacBook Pro.
+		// Optimize: right now they are needed in most cases only for overlay processing.
+
+		var rootDirsReady, envReady = make(chan struct{}), make(chan struct{})
+		go func() {
+			info.rootDirs = determineRootDirs(cfg)
+			close(rootDirsReady)
+		}()
+		go func() {
+			info.env = determineEnv(cfg)
+			close(envReady)
+		}()
+		getGoInfo = func() *goInfo {
+			<-rootDirsReady
+			<-envReady
+			return &info
+		}
+	} else {
+		var determineRootDirsOnce sync.Once
+		getGoInfo = func() *goInfo {
+			determineRootDirsOnce.Do(func() {
+				info.rootDirs = determineRootDirs(cfg)
+			})
+			return &info
+		}
 	}
 
 	// always pass getGoInfo to golistDriver
