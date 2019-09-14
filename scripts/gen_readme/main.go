@@ -74,6 +74,10 @@ func buildTemplateContext() (map[string]interface{}, error) {
 
 	helpLines := bytes.Split(help, []byte("\n"))
 	shortHelp := bytes.Join(helpLines[2:], []byte("\n"))
+	changeLog, err := ioutil.ReadFile("CHANGELOG.md")
+	if err != nil {
+		return nil, err
+	}
 
 	return map[string]interface{}{
 		"GolangciYaml":                     strings.TrimSpace(string(golangciYaml)),
@@ -84,6 +88,7 @@ func buildTemplateContext() (map[string]interface{}, error) {
 		"DisabledByDefaultLinters":         getLintersListMarkdown(false),
 		"ThanksList":                       getThanksList(),
 		"RunHelpText":                      string(shortHelp),
+		"ChangeLog":                        string(changeLog),
 	}, nil
 }
 
