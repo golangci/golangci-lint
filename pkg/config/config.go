@@ -183,6 +183,11 @@ type LintersSettings struct {
 type GovetSettings struct {
 	CheckShadowing bool `mapstructure:"check-shadowing"`
 	Settings       map[string]map[string]interface{}
+
+	Enable     []string
+	Disable    []string
+	EnableAll  bool `mapstructure:"enable-all"`
+	DisableAll bool `mapstructure:"disable-all"`
 }
 
 type ErrcheckSettings struct {
