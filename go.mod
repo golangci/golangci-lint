@@ -50,3 +50,6 @@ require (
 	mvdan.cc/lint v0.0.0-20170908181259-adc824a0674b // indirect
 	mvdan.cc/unparam v0.0.0-20190209190245-fbb59629db34
 )
+
+// https://github.com/golang/tools/pull/160
+replace golang.org/x/tools => github.com/golangci/tools v0.0.0-20190914130248-e9260b99c8f1

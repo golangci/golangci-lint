@@ -25,7 +25,7 @@ func getEnabledByDefaultFastLintersExcept(except ...string) []string {
 	ebdl := m.GetAllEnabledByDefaultLinters()
 	ret := []string{}
 	for _, lc := range ebdl {
-		if lc.NeedsSSARepr {
+		if lc.NeedsDepsTypeInfo {
 			continue
 		}
 
@@ -41,7 +41,7 @@ func getAllFastLintersWith(with ...string) []string {
 	linters := lintersdb.NewManager(nil).GetAllSupportedLinterConfigs()
 	ret := append([]string{}, with...)
 	for _, lc := range linters {
-		if lc.NeedsSSARepr {
+		if lc.NeedsDepsTypeInfo {
 			continue
 		}
 		ret = append(ret, lc.Name())
@@ -64,7 +64,7 @@ func getEnabledByDefaultFastLintersWith(with ...string) []string {
 	ebdl := lintersdb.NewManager(nil).GetAllEnabledByDefaultLinters()
 	ret := append([]string{}, with...)
 	for _, lc := range ebdl {
-		if lc.NeedsSSARepr {
+		if lc.NeedsDepsTypeInfo {
 			continue
 		}
 

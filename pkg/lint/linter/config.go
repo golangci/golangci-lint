@@ -13,8 +13,9 @@ type Config struct {
 	Linter           Linter
 	EnabledByDefault bool
 
-	NeedsTypeInfo bool
-	NeedsSSARepr  bool
+	NeedsTypeInfo     bool
+	NeedsDepsTypeInfo bool
+	NeedsSSARepr      bool
 
 	InPresets        []string
 	Speed            int // more value means faster execution of linter
@@ -27,6 +28,12 @@ type Config struct {
 
 func (lc *Config) WithTypeInfo() *Config {
 	lc.NeedsTypeInfo = true
+	return lc
+}
+
+func (lc *Config) WithDepsTypeInfo() *Config {
+	lc.NeedsTypeInfo = true
+	lc.NeedsDepsTypeInfo = true
 	return lc
 }
 

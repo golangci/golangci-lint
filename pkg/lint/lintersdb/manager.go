@@ -85,12 +85,13 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 	}
 	lcs := []*linter.Config{
 		linter.NewConfig(golinters.NewGovet(govetCfg)).
-			WithSSA(). // TODO: extract from the linter config and don't build SSA, just use LoadAllSyntax mode
+			WithDepsTypeInfo().
 			WithPresets(linter.PresetBugs).
 			WithSpeed(4).
 			WithAlternativeNames("vet", "vetshadow").
 			WithURL("https://golang.org/cmd/vet/"),
 		linter.NewConfig(golinters.NewBodyclose()).
+			WithDepsTypeInfo().
 			WithSSA().
 			WithPresets(linter.PresetPerformance, linter.PresetBugs).
 			WithSpeed(4).
@@ -106,21 +107,25 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithURL("https://github.com/golang/lint"),
 
 		linter.NewConfig(golinters.NewStaticcheck()).
+			WithDepsTypeInfo().
 			WithSSA().
 			WithPresets(linter.PresetBugs).
 			WithSpeed(2).
 			WithURL("https://staticcheck.io/"),
 		linter.NewConfig(golinters.NewUnused()).
+			WithDepsTypeInfo().
 			WithSSA().
 			WithPresets(linter.PresetUnused).
 			WithSpeed(5).
 			WithURL("https://github.com/dominikh/go-tools/tree/master/cmd/unused"),
 		linter.NewConfig(golinters.NewGosimple()).
+			WithDepsTypeInfo().
 			WithSSA().
 			WithPresets(linter.PresetStyle).
 			WithSpeed(5).
 			WithURL("https://github.com/dominikh/go-tools/tree/master/cmd/gosimple"),
 		linter.NewConfig(golinters.NewStylecheck()).
+			WithDepsTypeInfo().
 			WithSSA().
 			WithPresets(linter.PresetStyle).
 			WithSpeed(5).
@@ -143,6 +148,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithSpeed(10).
 			WithURL("https://github.com/opennota/check"),
 		linter.NewConfig(golinters.Interfacer{}).
+			WithDepsTypeInfo().
 			WithSSA().
 			WithPresets(linter.PresetStyle).
 			WithSpeed(6).
@@ -211,6 +217,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		linter.NewConfig(golinters.Unparam{}).
 			WithPresets(linter.PresetUnused).
 			WithSpeed(3).
+			WithDepsTypeInfo().
 			WithSSA().
 			WithURL("https://github.com/mvdan/unparam"),
 		linter.NewConfig(golinters.Nakedret{}).
