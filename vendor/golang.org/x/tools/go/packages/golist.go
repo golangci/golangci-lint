@@ -21,6 +21,7 @@ import (
 	"strings"
 	"sync"
 	"time"
+	"unicode"
 
 	"golang.org/x/tools/go/internal/packagesdriver"
 	"golang.org/x/tools/internal/gopathwalk"
@@ -677,7 +678,7 @@ func golistDriver(cfg *Config, rootsDirs func() *goInfo, words ...string) (*driv
 		// go list -e, when given an absolute path, will find the package contained at
 		// that directory. But when no package exists there, it will return a fake package
 		// with an error and the ImportPath set to the absolute path provided to go list.
-		// Try toto convert that absolute path to what its package path would be if it's
+		// Try to convert that absolute path to what its package path would be if it's
 		// contained in a known module or GOPATH entry. This will allow the package to be
 		// properly "reclaimed" when overlays are processed.
 		if filepath.IsAbs(p.ImportPath) && p.Error != nil {
@@ -888,8 +889,19 @@ func invokeGo(cfg *Config, args ...string) (*bytes.Buffer, error) {
 		// and should be suppressed by go list -e.
 		//
 		// This condition is not perfect yet because the error message can include other error messages than runtime/cgo.
-		if len(stderr.String()) > 0 && strings.HasPrefix(stderr.String(), "# runtime/cgo\n") {
-			return stdout, nil
+		isPkgPathRune := func(r rune) bool {
+			// From https://golang.org/ref/spec#Import_declarations:
+			//    Implementation restriction: A compiler may restrict ImportPaths to non-empty strings
+			//    using only characters belonging to Unicode's L, M, N, P, and S general categories
+			//    (the Graphic characters without spaces) and may also exclude the
+			//    characters !"#$%&'()*,:;<=>?[\]^`{|} and the Unicode replacement character U+FFFD.
+			return unicode.IsOneOf([]*unicode.RangeTable{unicode.L, unicode.M, unicode.N, unicode.P, unicode.S}, r) &&
+				strings.IndexRune("!\"#$%&'()*,:;<=>?[\\]^`{|}\uFFFD", r) == -1
+		}
+		if len(stderr.String()) > 0 && strings.HasPrefix(stderr.String(), "# ") {
+			if strings.HasPrefix(strings.TrimLeftFunc(stderr.String()[len("# "):], isPkgPathRune), "\n") {
+				return stdout, nil
+			}
 		}
 
 		// This error only appears in stderr. See golang.org/cl/166398 for a fix in go list to show
@@ -926,6 +938,16 @@ func invokeGo(cfg *Config, args ...string) (*bytes.Buffer, error) {
 			output := fmt.Sprintf(`{"ImportPath": "command-line-arguments","Incomplete": true,"Error": {"Pos": "","Err": %q}}`,
 				strings.Trim(stderr.String(), "\n"))
 			return bytes.NewBufferString(output), nil
+		}
+
+		// Workaround for #34273. go list -e with GO111MODULE=on has incorrect behavior when listing a
+		// directory outside any module.
+		if len(stderr.String()) > 0 && strings.Contains(stderr.String(), "outside available modules") {
+			output := fmt.Sprintf(`{"ImportPath": %q,"Incomplete": true,"Error": {"Pos": "","Err": %q}}`,
+				// TODO(matloob): command-line-arguments isn't correct here.
+				"command-line-arguments", strings.Trim(stderr.String(), "\n"))
+			return bytes.NewBufferString(output), nil
+
 		}
 
 		// Workaround for an instance of golang.org/issue/26755: go list -e  will return a non-zero exit
