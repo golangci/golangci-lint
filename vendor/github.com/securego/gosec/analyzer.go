@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Modifications copyright (C) 2018 GolangCI
-
 // Package gosec holds the central scanning logic used by gosec security scanner
 package gosec
 
@@ -182,6 +180,7 @@ func (gosec *Analyzer) load(pkgPath string, conf *packages.Config) ([]*packages.
 	return pkgs, nil
 }
 
+// Check runs analysis on the given package
 func (gosec *Analyzer) Check(pkg *packages.Package) {
 	gosec.logger.Println("Checking package:", pkg.Name)
 	for _, file := range pkg.Syntax {

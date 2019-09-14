@@ -19,7 +19,6 @@ require (
 	github.com/golangci/goconst v0.0.0-20180610141641-041c5f2b40f3
 	github.com/golangci/gocyclo v0.0.0-20180528134321-2becd97e67ee
 	github.com/golangci/gofmt v0.0.0-20181222123516-0b8337e80d98
-	github.com/golangci/gosec v0.0.0-20190911143311-c62ea1e208f0
 	github.com/golangci/ineffassign v0.0.0-20190609212857-42439a7714cc
 	github.com/golangci/lint-1 v0.0.0-20190420132249-ee948d087217
 	github.com/golangci/maligned v0.0.0-20180506175553-b1d89398deca
@@ -32,6 +31,7 @@ require (
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/mitchellh/go-ps v0.0.0-20190716172923-621e5597135b
 	github.com/pkg/errors v0.8.1
+	github.com/securego/gosec v0.0.0-20190912120752-140048b2a218
 	github.com/shirou/gopsutil v2.18.12+incompatible
 	github.com/shirou/w32 v0.0.0-20160930032740-bb4de0191aa4 // indirect
 	github.com/sirupsen/logrus v1.4.2
