@@ -11,12 +11,12 @@ import (
 	"golang.org/x/tools/go/analysis/passes/asmdecl"
 	"golang.org/x/tools/go/analysis/passes/assign"
 	"golang.org/x/tools/go/analysis/passes/atomic"
-	"golang.org/x/tools/go/analysis/passes/atomicalign"
 	"golang.org/x/tools/go/analysis/passes/bools"
 	"golang.org/x/tools/go/analysis/passes/buildtag"
 	"golang.org/x/tools/go/analysis/passes/cgocall"
 	"golang.org/x/tools/go/analysis/passes/composite"
 	"golang.org/x/tools/go/analysis/passes/copylock"
+	"golang.org/x/tools/go/analysis/passes/errorsas"
 	"golang.org/x/tools/go/analysis/passes/httpresponse"
 	"golang.org/x/tools/go/analysis/passes/loopclosure"
 	"golang.org/x/tools/go/analysis/passes/lostcancel"
@@ -31,8 +31,6 @@ import (
 	"golang.org/x/tools/go/analysis/passes/unreachable"
 	"golang.org/x/tools/go/analysis/passes/unsafeptr"
 	"golang.org/x/tools/go/analysis/passes/unusedresult"
-
-	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis/passes/nilness"
 )
 
 func NewGovet(cfg *config.GovetSettings) *goanalysis.Linter {
@@ -41,12 +39,12 @@ func NewGovet(cfg *config.GovetSettings) *goanalysis.Linter {
 		asmdecl.Analyzer,
 		assign.Analyzer,
 		atomic.Analyzer,
-		atomicalign.Analyzer,
 		bools.Analyzer,
 		buildtag.Analyzer,
 		cgocall.Analyzer,
 		composite.Analyzer,
 		copylock.Analyzer,
+		errorsas.Analyzer,
 		httpresponse.Analyzer,
 		loopclosure.Analyzer,
 		lostcancel.Analyzer,
@@ -60,13 +58,6 @@ func NewGovet(cfg *config.GovetSettings) *goanalysis.Linter {
 		unreachable.Analyzer,
 		unsafeptr.Analyzer,
 		unusedresult.Analyzer,
-
-		// for debugging:
-		// findcall.Analyzer,
-		// pkgfact.Analyzer,
-
-		// uses SSA:
-		nilness.Analyzer,
 	}
 
 	var settings map[string]map[string]interface{}

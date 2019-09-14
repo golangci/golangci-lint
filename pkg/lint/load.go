@@ -53,7 +53,7 @@ func NewContextLoader(cfg *config.Config, log logutils.Log, goenv *goutil.Env,
 func (cl ContextLoader) prepareBuildContext() {
 	// Set GOROOT to have working cross-compilation: cross-compiled binaries
 	// have invalid GOROOT. XXX: can't use runtime.GOROOT().
-	goroot := cl.goenv.Get("GOROOT")
+	goroot := cl.goenv.Get(goutil.EnvGoRoot)
 	if goroot == "" {
 		return
 	}
@@ -149,7 +149,7 @@ func (cl ContextLoader) findLoadMode(linters []*linter.Config) packages.LoadMode
 		if lc.NeedsTypeInfo {
 			loadMode |= packages.NeedImports | packages.NeedTypes | packages.NeedTypesSizes | packages.NeedTypesInfo | packages.NeedSyntax
 		}
-		if lc.NeedsSSARepr {
+		if lc.NeedsDepsTypeInfo {
 			loadMode |= packages.NeedDeps
 		}
 	}
@@ -349,6 +349,15 @@ func (cl ContextLoader) filterDuplicatePackages(pkgs []*packages.Package) []*pac
 	return retPkgs
 }
 
+func needSSA(linters []*linter.Config) bool {
+	for _, lc := range linters {
+		if lc.NeedsSSARepr {
+			return true
+		}
+	}
+	return false
+}
+
 //nolint:gocyclo
 func (cl ContextLoader) Load(ctx context.Context, linters []*linter.Config) (*linter.Context, error) {
 	loadMode := cl.findLoadMode(linters)
@@ -369,7 +378,7 @@ func (cl ContextLoader) Load(ctx context.Context, linters []*linter.Config) (*li
 	}
 
 	var ssaProg *ssa.Program
-	if loadMode&packages.NeedDeps != 0 {
+	if needSSA(linters) {
 		ssaProg = cl.buildSSAProgram(deduplicatedPkgs)
 	}
 
