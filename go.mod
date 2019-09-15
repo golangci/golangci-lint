@@ -14,7 +14,6 @@ require (
 	github.com/golangci/dupl v0.0.0-20180902072040-3e9179ac440a
 	github.com/golangci/errcheck v0.0.0-20181223084120-ef45e06d44b6
 	github.com/golangci/go-misc v0.0.0-20180628070357-927a3d87b613
-	github.com/golangci/go-tools v0.0.0-20190318055746-e32c54105b7c
 	github.com/golangci/goconst v0.0.0-20180610141641-041c5f2b40f3
 	github.com/golangci/gocyclo v0.0.0-20180528134321-2becd97e67ee
 	github.com/golangci/gofmt v0.0.0-20181222123516-0b8337e80d98
@@ -45,10 +44,13 @@ require (
 	github.com/valyala/quicktemplate v1.2.0
 	golang.org/x/tools v0.0.0-20190912215617-3720d1ec3678
 	gopkg.in/yaml.v2 v2.2.2
+	honnef.co/go/tools v0.0.1-2019.2.3
 	mvdan.cc/interfacer v0.0.0-20180901003855-c20040233aed
 	mvdan.cc/lint v0.0.0-20170908181259-adc824a0674b // indirect
 	mvdan.cc/unparam v0.0.0-20190720180237-d51796306d8f
 )
 
+// https://github.com/golang/tools/pull/162
 // https://github.com/golang/tools/pull/160
-replace golang.org/x/tools => github.com/golangci/tools v0.0.0-20190914130248-e9260b99c8f1
+// https://github.com/golang/tools/pull/156
+replace golang.org/x/tools => github.com/golangci/tools v0.0.0-20190915081525-6aa350649b1c

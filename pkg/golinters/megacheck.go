@@ -3,21 +3,17 @@ package golinters
 import (
 	"context"
 	"fmt"
-	"strings"
-	"time"
 
-	"github.com/pkg/errors"
+	"honnef.co/go/tools/unused"
 
-	"github.com/golangci/go-tools/config"
-	"github.com/golangci/go-tools/stylecheck"
+	"honnef.co/go/tools/lint"
 
-	"github.com/golangci/go-tools/lint"
-	"github.com/golangci/go-tools/lint/lintutil"
-	"github.com/golangci/go-tools/simple"
-	"github.com/golangci/go-tools/staticcheck"
-	"github.com/golangci/go-tools/unused"
-	"golang.org/x/tools/go/packages"
+	"golang.org/x/tools/go/analysis"
+	"honnef.co/go/tools/simple"
+	"honnef.co/go/tools/staticcheck"
+	"honnef.co/go/tools/stylecheck"
 
+	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
@@ -148,7 +144,7 @@ func (MegacheckMetalinter) BuildLinterConfig(enabledChildren []string) (*linter.
 		EnabledByDefault:  false,
 		NeedsTypeInfo:     true,
 		NeedsDepsTypeInfo: true,
-		NeedsSSARepr:      true,
+		NeedsSSARepr:      false,
 		InPresets:         []string{linter.PresetStyle, linter.PresetBugs, linter.PresetUnused},
 		Speed:             1,
 		AlternativeNames:  nil,
@@ -180,125 +176,61 @@ func (m MegacheckMetalinter) isValidChild(name string) bool {
 func (m megacheck) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issue, error) {
 	// Use OriginalPackages not Packages because `unused` doesn't work properly
 	// when we deduplicate normal and test packages.
-	issues, err := m.runMegacheck(lintCtx.OriginalPackages, lintCtx.Settings().Unused.CheckExported)
-	if err != nil {
-		return nil, errors.Wrap(err, "failed to run megacheck")
-	}
-
-	if len(issues) == 0 {
-		return nil, nil
-	}
-
-	res := make([]result.Issue, 0, len(issues))
-	meta := MegacheckMetalinter{}
-	for _, i := range issues {
-		if !meta.isValidChild(i.Checker) {
-			lintCtx.Log.Warnf("Bad megacheck checker name %q", i.Checker)
-			continue
-		}
-
-		res = append(res, result.Issue{
-			Pos: i.Position,
-			// TODO: use severity
-			Text:       fmt.Sprintf("%s: %s", i.Check, i.Text),
-			FromLinter: i.Checker,
-		})
-	}
-	return res, nil
+	return m.runMegacheck(ctx, lintCtx)
 }
 
-func (m megacheck) runMegacheck(workingPkgs []*packages.Package, checkExportedUnused bool) ([]lint.Problem, error) {
-	var checkers []lint.Checker
+func getAnalyzers(m map[string]*analysis.Analyzer) []*analysis.Analyzer {
+	var ret []*analysis.Analyzer
+	for _, v := range m {
+		ret = append(ret, v)
+	}
+	return ret
+}
+
+func (m megacheck) runMegacheck(ctx context.Context, lintCtx *linter.Context) ([]result.Issue, error) {
+	var linters []linter.Linter
 
 	if m.gosimpleEnabled {
-		checkers = append(checkers, simple.NewChecker())
+		lnt := goanalysis.NewLinter(MegacheckGosimpleName, "", getAnalyzers(simple.Analyzers), nil)
+		linters = append(linters, lnt)
 	}
 	if m.staticcheckEnabled {
-		checkers = append(checkers, staticcheck.NewChecker())
+		lnt := goanalysis.NewLinter(MegacheckStaticcheckName, "", getAnalyzers(staticcheck.Analyzers), nil)
+		linters = append(linters, lnt)
 	}
 	if m.stylecheckEnabled {
-		checkers = append(checkers, stylecheck.NewChecker())
+		lnt := goanalysis.NewLinter(MegacheckStylecheckName, "", getAnalyzers(stylecheck.Analyzers), nil)
+		linters = append(linters, lnt)
 	}
+
+	var u lint.CumulativeChecker
 	if m.unusedEnabled {
-		uc := unused.NewChecker(unused.CheckAll)
-		uc.ConsiderReflection = true
-		uc.WholeProgram = checkExportedUnused
-		checkers = append(checkers, unused.NewLintChecker(uc))
+		u = unused.NewChecker(lintCtx.Settings().Unused.CheckExported)
+		lnt := goanalysis.NewLinter(MegacheckStylecheckName, "", []*analysis.Analyzer{u.Analyzer()}, nil)
+		linters = append(linters, lnt)
 	}
 
-	if len(checkers) == 0 {
+	if len(linters) == 0 {
 		return nil, nil
 	}
 
-	cfg := config.Config{}
-	opts := &lintutil.Options{
-		// TODO: get current go version, but now it doesn't matter,
-		// may be needed after next updates of megacheck
-		GoVersion: 12,
-
-		Config: cfg,
-		// TODO: support Ignores option
-	}
-
-	return runMegacheckCheckers(checkers, workingPkgs, opts)
-}
-
-// parseIgnore is a copy from megacheck honnef.co/go/tools/lint/lintutil.parseIgnore
-// just to not fork megacheck.
-func parseIgnore(s string) ([]lint.Ignore, error) {
-	var out []lint.Ignore
-	if s == "" {
-		return nil, nil
-	}
-	for _, part := range strings.Fields(s) {
-		p := strings.Split(part, ":")
-		if len(p) != 2 {
-			return nil, errors.New("malformed ignore string")
+	var issues []result.Issue
+	for _, lnt := range linters {
+		i, err := lnt.Run(ctx, lintCtx)
+		if err != nil {
+			return nil, err
 		}
-		path := p[0]
-		checks := strings.Split(p[1], ",")
-		out = append(out, &lint.GlobIgnore{Pattern: path, Checks: checks})
-	}
-	return out, nil
-}
-
-// runMegacheckCheckers is like megacheck honnef.co/go/tools/lint/lintutil.Lint,
-// but takes a list of already-parsed packages instead of a list of
-// package-paths to parse.
-func runMegacheckCheckers(cs []lint.Checker, workingPkgs []*packages.Package, opt *lintutil.Options) ([]lint.Problem, error) {
-	stats := lint.PerfStats{
-		CheckerInits: map[string]time.Duration{},
+		issues = append(issues, i...)
 	}
 
-	if opt == nil {
-		opt = &lintutil.Options{}
-	}
-	ignores, err := parseIgnore(opt.Ignores)
-	if err != nil {
-		return nil, err
-	}
-
-	// package-parsing elided here
-	stats.PackageLoading = 0
-
-	var problems []lint.Problem
-	// populating 'problems' with parser-problems elided here
-
-	if len(workingPkgs) == 0 {
-		return problems, nil
+	for _, ur := range u.Result() {
+		p := u.ProblemObject(lintCtx.Packages[0].Fset, ur)
+		issues = append(issues, result.Issue{
+			FromLinter: MegacheckUnusedName,
+			Text:       p.Message,
+			Pos:        p.Pos,
+		})
 	}
 
-	l := &lint.Linter{
-		Checkers:      cs,
-		Ignores:       ignores,
-		GoVersion:     opt.GoVersion,
-		ReturnIgnored: opt.ReturnIgnored,
-		Config:        opt.Config,
-
-		MaxConcurrentJobs: opt.MaxConcurrentJobs,
-		PrintStats:        opt.PrintStats,
-	}
-	problems = append(problems, l.Lint(workingPkgs, &stats)...)
-
-	return problems, nil
+	return issues, nil
 }

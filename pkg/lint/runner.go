@@ -272,7 +272,9 @@ func (r Runner) printPerProcessorStat(stat map[string]processorStat) {
 			parts = append(parts, fmt.Sprintf("%s: %d/%d", name, ps.outCount, ps.inCount))
 		}
 	}
-	r.Log.Infof("Processors filtering stat (out/in): %s", strings.Join(parts, ", "))
+	if len(parts) != 0 {
+		r.Log.Infof("Processors filtering stat (out/in): %s", strings.Join(parts, ", "))
+	}
 }
 
 func collectIssues(resCh <-chan lintRes) <-chan result.Issue {

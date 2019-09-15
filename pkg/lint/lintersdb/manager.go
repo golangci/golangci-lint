@@ -92,7 +92,6 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithURL("https://golang.org/cmd/vet/"),
 		linter.NewConfig(golinters.NewBodyclose()).
 			WithDepsTypeInfo().
-			WithSSA().
 			WithPresets(linter.PresetPerformance, linter.PresetBugs).
 			WithSpeed(4).
 			WithURL("https://github.com/timakin/bodyclose"),
@@ -108,25 +107,21 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 
 		linter.NewConfig(golinters.NewStaticcheck()).
 			WithDepsTypeInfo().
-			WithSSA().
 			WithPresets(linter.PresetBugs).
 			WithSpeed(2).
 			WithURL("https://staticcheck.io/"),
 		linter.NewConfig(golinters.NewUnused()).
 			WithDepsTypeInfo().
-			WithSSA().
 			WithPresets(linter.PresetUnused).
 			WithSpeed(5).
 			WithURL("https://github.com/dominikh/go-tools/tree/master/cmd/unused"),
 		linter.NewConfig(golinters.NewGosimple()).
 			WithDepsTypeInfo().
-			WithSSA().
 			WithPresets(linter.PresetStyle).
 			WithSpeed(5).
 			WithURL("https://github.com/dominikh/go-tools/tree/master/cmd/gosimple"),
 		linter.NewConfig(golinters.NewStylecheck()).
 			WithDepsTypeInfo().
-			WithSSA().
 			WithPresets(linter.PresetStyle).
 			WithSpeed(5).
 			WithURL("https://github.com/dominikh/go-tools/tree/master/stylecheck"),

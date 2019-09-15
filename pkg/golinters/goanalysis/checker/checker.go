@@ -383,6 +383,8 @@ func (act *action) execOnce() {
 		ExportObjectFact:  act.exportObjectFact,
 		ImportPackageFact: act.importPackageFact,
 		ExportPackageFact: act.exportPackageFact,
+		AllObjectFacts:    func() []analysis.ObjectFact { return nil },
+		AllPackageFacts:   func() []analysis.PackageFact { return nil },
 	}
 	act.pass = pass
 
