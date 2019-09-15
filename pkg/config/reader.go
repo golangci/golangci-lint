@@ -110,7 +110,9 @@ func (r *FileReader) validateConfig() error {
 			return fmt.Errorf("error in exclude rule #%d: %v", i, err)
 		}
 	}
-
+	if err := c.LintersSettings.Govet.Validate(); err != nil {
+		return fmt.Errorf("error in govet config: %v", err)
+	}
 	return nil
 }
 
