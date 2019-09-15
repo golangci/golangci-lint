@@ -102,7 +102,7 @@ func isAnalyzerEnabled(name string, cfg *config.GovetSettings, defaultAnalyzers 
 	}
 	for _, n := range cfg.Disable {
 		if n == name {
-			return true
+			return false
 		}
 	}
 	if cfg.DisableAll {

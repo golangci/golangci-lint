@@ -4,7 +4,15 @@ import (
 	"sort"
 	"testing"
 
+	"github.com/golangci/golangci-lint/pkg/config"
+
 	"golang.org/x/tools/go/analysis"
+	"golang.org/x/tools/go/analysis/passes/asmdecl"
+	"golang.org/x/tools/go/analysis/passes/assign"
+	"golang.org/x/tools/go/analysis/passes/atomic"
+	"golang.org/x/tools/go/analysis/passes/bools"
+	"golang.org/x/tools/go/analysis/passes/buildtag"
+	"golang.org/x/tools/go/analysis/passes/cgocall"
 	"golang.org/x/tools/go/analysis/passes/shadow"
 )
 
@@ -46,4 +54,41 @@ func TestGovetSorted(t *testing.T) {
 			t.Error("please keep default analyzers list sorted by name")
 		}
 	})
+}
+
+func TestGovetAnalyzerIsEnabled(t *testing.T) {
+	defaultAnalyzers := []*analysis.Analyzer{
+		asmdecl.Analyzer,
+		assign.Analyzer,
+		atomic.Analyzer,
+		bools.Analyzer,
+		buildtag.Analyzer,
+		cgocall.Analyzer,
+	}
+	for _, tc := range []struct {
+		Enable     []string
+		Disable    []string
+		EnableAll  bool
+		DisableAll bool
+
+		Name    string
+		Enabled bool
+	}{
+		{Name: "assign", Enabled: true},
+		{Name: "cgocall", Enabled: false, DisableAll: true},
+		{Name: "errorsas", Enabled: false},
+		{Name: "bools", Enabled: false, Disable: []string{"bools"}},
+		{Name: "unsafeptr", Enabled: true, Enable: []string{"unsafeptr"}},
+		{Name: "shift", Enabled: true, EnableAll: true},
+	} {
+		cfg := &config.GovetSettings{
+			Enable:     tc.Enable,
+			Disable:    tc.Disable,
+			EnableAll:  tc.EnableAll,
+			DisableAll: tc.DisableAll,
+		}
+		if enabled := isAnalyzerEnabled(tc.Name, cfg, defaultAnalyzers); enabled != tc.Enabled {
+			t.Errorf("%+v", tc)
+		}
+	}
 }
