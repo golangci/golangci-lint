@@ -9,6 +9,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/golangci/golangci-lint/internal/errorutil"
 	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
 
 	"github.com/golangci/golangci-lint/pkg/fsutils"
@@ -102,8 +103,13 @@ func (r *Runner) runLinterSafe(ctx context.Context, lintCtx *linter.Context,
 	lc *linter.Config) (ret []result.Issue, err error) {
 	defer func() {
 		if panicData := recover(); panicData != nil {
-			err = fmt.Errorf("panic occurred: %s", panicData)
-			r.Log.Warnf("Panic stack trace: %s", debug.Stack())
+			if pe, ok := panicData.(*errorutil.PanicError); ok {
+				// Don't print stacktrace from goroutines twice
+				lintCtx.Log.Warnf("Panic: %s: %s", pe, pe.Stack())
+			} else {
+				err = fmt.Errorf("panic occurred: %s", panicData)
+				r.Log.Warnf("Panic stack trace: %s", debug.Stack())
+			}
 		}
 	}()
 

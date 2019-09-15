@@ -9,7 +9,6 @@ import (
 	"github.com/pkg/errors"
 	"golang.org/x/tools/go/analysis"
 
-	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis/checker"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
@@ -115,7 +114,9 @@ func (lnt Linter) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Is
 		return nil, errors.Wrap(err, "failed to configure analyzers")
 	}
 
-	diags, errs := checker.Run(lnt.analyzers, lintCtx.Packages)
+	runner := newRunner(lnt.name, lintCtx.Log.Child("goanalysis"), lintCtx.PkgCache, lintCtx.LoadGuard)
+
+	diags, errs := runner.run(lnt.analyzers, lintCtx.Packages)
 	for i := 1; i < len(errs); i++ {
 		lintCtx.Log.Warnf("%s error: %s", lnt.Name(), errs[i])
 	}
@@ -128,10 +129,26 @@ func (lnt Linter) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Is
 		diag := &diags[i]
 		issues = append(issues, result.Issue{
 			FromLinter: lnt.Name(),
-			Text:       fmt.Sprintf("%s: %s", diag.AnalyzerName, diag.Message),
+			Text:       fmt.Sprintf("%s: %s", diag.Analyzer.Name, diag.Message),
 			Pos:        diag.Position,
 		})
 	}
 
 	return issues, nil
+}
+
+func (lnt Linter) Analyzers() []*analysis.Analyzer {
+	return lnt.analyzers
+}
+
+func (lnt Linter) Cfg() map[string]map[string]interface{} {
+	return lnt.cfg
+}
+
+func (lnt Linter) AnalyzerToLinterNameMapping() map[*analysis.Analyzer]string {
+	ret := map[*analysis.Analyzer]string{}
+	for _, a := range lnt.analyzers {
+		ret[a] = lnt.Name()
+	}
+	return ret
 }

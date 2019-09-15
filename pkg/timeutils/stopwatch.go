@@ -34,6 +34,10 @@ type stageDuration struct {
 }
 
 func (s *Stopwatch) sprintStages() string {
+	if len(s.stages) == 0 {
+		return "no stages"
+	}
+
 	stageDurations := []stageDuration{}
 	for n, d := range s.stages {
 		stageDurations = append(stageDurations, stageDuration{
