@@ -25,22 +25,22 @@ The following is an example configuration file.
 ```json
 {
   "type": "whitelist",
-  "packages": [
-    "github.com/OpenPeeDeeP/depguard"
-  ],
-  "inTests": [
-    "github.com/stretchr/testify"
-  ],
-  "includeGoRoot": true
+  "packages": ["github.com/OpenPeeDeeP/depguard"],
+  "packageErrorMessages": {
+    "github.com/OpenPeeDeeP/depguards": "Please use \"github.com/OpenPeeDeeP/depguard\","
+  },
+  "inTests": ["github.com/stretchr/testify"],
+  "includeGoStdLib": true
 }
 ```
 
 - `type` can be either `whitelist` or `blacklist`. This check is case insensitive.
-If not specified the default is `blacklist`.
+  If not specified the default is `blacklist`.
 - `packages` is a list of packages for the list type specified.
+- `packageErrorMessages` is a mapping from packages to the error message to display
 - `inTests` is a list of packages allowed/disallowed only in test files.
-- Set `includeGoRoot` to true if you want to check the list against standard lib.
-If not specified the default is false.
+- Set `includeGoStdLib` (`includeGoRoot` for backwards compatability) to true if you want to check the list against standard lib.
+  If not specified the default is false.
 
 ## Gometalinter
 

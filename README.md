@@ -907,6 +907,7 @@ linters:
   enable:
     - bodyclose
     - deadcode
+    - depguard
     - dupl
     - errcheck
     # - funlen - TODO: enable it when golangci.com will support it.
@@ -938,7 +939,6 @@ linters:
     # - whitespace - TODO: enable it when golangci.com will support it.
 
   # don't enable:
-  # - depguard - until https://github.com/OpenPeeDeeP/depguard/issues/7 gets fixed
   # - maligned,prealloc
   # - gochecknoglobals
 

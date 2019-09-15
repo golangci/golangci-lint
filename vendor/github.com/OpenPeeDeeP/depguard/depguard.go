@@ -1,8 +1,10 @@
 package depguard
 
 import (
+	"go/build"
 	"go/token"
-	"os"
+	"io/ioutil"
+	"path"
 	"sort"
 	"strings"
 
@@ -46,8 +48,7 @@ type Depguard struct {
 	prefixTestPackages []string
 	globTestPackages   []glob.Glob
 
-	rootChecker *RootChecker
-	cwd         string
+	prefixRoot []string
 }
 
 // Run checks for dependencies given the program and validates them against
@@ -86,18 +87,6 @@ func (dg *Depguard) Run(config *loader.Config, prog *loader.Program) ([]*Issue, 
 }
 
 func (dg *Depguard) initialize(config *loader.Config, prog *loader.Program) error {
-	// Try and get the current working directory
-	dg.cwd = config.Cwd
-	if dg.cwd == "" {
-		var err error
-		dg.cwd, err = os.Getwd()
-		if err != nil {
-			return err
-		}
-	}
-
-	dg.rootChecker = NewRootChecker(config.Build)
-
 	// parse ordinary guarded packages
 	for _, pkg := range dg.Packages {
 		if strings.ContainsAny(pkg, "!?*[]{}") {
@@ -130,6 +119,14 @@ func (dg *Depguard) initialize(config *loader.Config, prog *loader.Program) erro
 	// Sort the test packages so we can have a faster search in the array
 	sort.Strings(dg.prefixTestPackages)
 
+	if !dg.IncludeGoRoot {
+		var err error
+		dg.prefixRoot, err = listRootPrefixs(config.Build)
+		if err != nil {
+			return err
+		}
+	}
+
 	return nil
 }
 
@@ -143,14 +140,8 @@ func (dg *Depguard) createImportMap(prog *loader.Program) (map[string][]token.Po
 			// This will filter out GoRoot depending on the Depguard.IncludeGoRoot
 			for _, fileImport := range file.Imports {
 				fileImportPath := cleanBasicLitString(fileImport.Path.Value)
-				if !dg.IncludeGoRoot {
-					isRoot, err := dg.rootChecker.IsRoot(fileImportPath, dg.cwd)
-					if err != nil {
-						return nil, err
-					}
-					if isRoot {
-						continue
-					}
+				if !dg.IncludeGoRoot && dg.isRoot(fileImportPath) {
+					continue
 				}
 				position := prog.Fset.Position(fileImport.Pos())
 				positions, found := importMap[fileImportPath]
@@ -167,14 +158,14 @@ func (dg *Depguard) createImportMap(prog *loader.Program) (map[string][]token.Po
 	return importMap, nil
 }
 
-func (dg *Depguard) pkgInList(pkg string, prefixList []string, globList []glob.Glob) bool {
-	if dg.pkgInPrefixList(pkg, prefixList) {
+func pkgInList(pkg string, prefixList []string, globList []glob.Glob) bool {
+	if pkgInPrefixList(pkg, prefixList) {
 		return true
 	}
-	return dg.pkgInGlobList(pkg, globList)
+	return pkgInGlobList(pkg, globList)
 }
 
-func (dg *Depguard) pkgInPrefixList(pkg string, prefixList []string) bool {
+func pkgInPrefixList(pkg string, prefixList []string) bool {
 	// Idx represents where in the package slice the passed in package would go
 	// when sorted. -1 Just means that it would be at the very front of the slice.
 	idx := sort.Search(len(prefixList), func(i int) bool {
@@ -188,7 +179,7 @@ func (dg *Depguard) pkgInPrefixList(pkg string, prefixList []string) bool {
 	return strings.HasPrefix(pkg, prefixList[idx])
 }
 
-func (dg *Depguard) pkgInGlobList(pkg string, globList []glob.Glob) bool {
+func pkgInGlobList(pkg string, globList []glob.Glob) bool {
 	for _, g := range globList {
 		if g.Match(pkg) {
 			return true
@@ -201,9 +192,50 @@ func (dg *Depguard) pkgInGlobList(pkg string, globList []glob.Glob) bool {
 //   y   |           |     x
 //   n   |     x     |
 func (dg *Depguard) flagIt(pkg string, prefixList []string, globList []glob.Glob) bool {
-	return dg.pkgInList(pkg, prefixList, globList) == (dg.ListType == LTBlacklist)
+	return pkgInList(pkg, prefixList, globList) == (dg.ListType == LTBlacklist)
 }
 
 func cleanBasicLitString(value string) string {
 	return strings.Trim(value, "\"\\")
+}
+
+// We can do this as all imports that are not root are either prefixed with a domain
+// or prefixed with `./` or `/` to dictate it is a local file reference
+func listRootPrefixs(buildCtx *build.Context) ([]string, error) {
+	if buildCtx == nil {
+		buildCtx = &build.Default
+	}
+	root := path.Join(buildCtx.GOROOT, "src")
+	fs, err := ioutil.ReadDir(root)
+	if err != nil {
+		return nil, err
+	}
+	var pkgPrefix []string
+	for _, f := range fs {
+		if !f.IsDir() {
+			continue
+		}
+		pkgPrefix = append(pkgPrefix, f.Name())
+	}
+	return pkgPrefix, nil
+}
+
+func (dg *Depguard) isRoot(importPath string) bool {
+	// Idx represents where in the package slice the passed in package would go
+	// when sorted. -1 Just means that it would be at the very front of the slice.
+	idx := sort.Search(len(dg.prefixRoot), func(i int) bool {
+		return dg.prefixRoot[i] > importPath
+	}) - 1
+	// This means that the package passed in has no way to be prefixed by anything
+	// in the package list as it is already smaller then everything
+	if idx == -1 {
+		return false
+	}
+	// if it is prefixed by a root prefix we need to check if it is an exact match
+	// or prefix with `/` as this could return false posative if the domain was
+	// `archive.com` for example as `archive` is a go root package.
+	if strings.HasPrefix(importPath, dg.prefixRoot[idx]) {
+		return strings.HasPrefix(importPath, dg.prefixRoot[idx]+"/") || importPath == dg.prefixRoot[idx]
+	}
+	return false
 }
