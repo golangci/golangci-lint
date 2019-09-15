@@ -183,6 +183,24 @@ type LintersSettings struct {
 type GovetSettings struct {
 	CheckShadowing bool `mapstructure:"check-shadowing"`
 	Settings       map[string]map[string]interface{}
+
+	Enable     []string
+	Disable    []string
+	EnableAll  bool `mapstructure:"enable-all"`
+	DisableAll bool `mapstructure:"disable-all"`
+}
+
+func (cfg GovetSettings) Validate() error {
+	if cfg.EnableAll && cfg.DisableAll {
+		return errors.New("enable-all and disable-all can't be combined")
+	}
+	if cfg.EnableAll && len(cfg.Enable) != 0 {
+		return errors.New("enable-all and enable can't be combined")
+	}
+	if cfg.DisableAll && len(cfg.Disable) != 0 {
+		return errors.New("disable-all and disable can't be combined")
+	}
+	return nil
 }
 
 type ErrcheckSettings struct {
