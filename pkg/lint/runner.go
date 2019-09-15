@@ -92,8 +92,6 @@ func NewRunner(astCache *astcache.Cache, cfg *config.Config, log logutils.Log, g
 	}, nil
 }
 
-func someUnusedFunc() {}
-
 type lintRes struct {
 	linter *linter.Config
 	err    error
