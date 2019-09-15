@@ -14,9 +14,7 @@ clean:
 .PHONY: fast_build build build_race clean
 
 # Test
-
-# until https://github.com/OpenPeeDeeP/depguard/issues/7 fixed
-test: export GO111MODULE = off
+test: export GO111MODULE = on
 test: export GOLANGCI_LINT_INSTALLED = true
 
 test: build

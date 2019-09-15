@@ -3,13 +3,12 @@ module github.com/golangci/golangci-lint
 go 1.11
 
 require (
-	github.com/OpenPeeDeeP/depguard v1.0.0
+	github.com/OpenPeeDeeP/depguard v1.0.1
 	github.com/StackExchange/wmi v0.0.0-20190523213315-cbe66965904d // indirect
 	github.com/fatih/color v1.7.0
 	github.com/go-critic/go-critic v0.3.5-0.20190904082202-d79a9f0c64db
 	github.com/go-lintpack/lintpack v0.5.2
 	github.com/go-ole/go-ole v1.2.4 // indirect
-	github.com/gobwas/glob v0.2.3 // indirect
 	github.com/golang/mock v1.3.1
 	github.com/golangci/check v0.0.0-20180506172741-cfe4005ccda2
 	github.com/golangci/dupl v0.0.0-20180902072040-3e9179ac440a
