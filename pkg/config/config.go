@@ -178,6 +178,7 @@ type LintersSettings struct {
 	Errcheck ErrcheckSettings
 	Gocritic GocriticSettings
 	Godox    GodoxSettings
+	Dogsled  DogsledSettings
 }
 
 type GovetSettings struct {
@@ -234,6 +235,10 @@ type GodoxSettings struct {
 	Keywords []string
 }
 
+type DogsledSettings struct {
+	MaxBlankIdentifiers int `mapstructure:"max-blank-identifiers"`
+}
+
 var defaultLintersSettings = LintersSettings{
 	Lll: LllSettings{
 		LineLength: 120,
@@ -255,6 +260,9 @@ var defaultLintersSettings = LintersSettings{
 	},
 	Godox: GodoxSettings{
 		Keywords: []string{},
+	},
+	Dogsled: DogsledSettings{
+		MaxBlankIdentifiers: 2,
 	},
 }
 

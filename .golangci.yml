@@ -49,6 +49,7 @@ linters:
     - bodyclose
     - deadcode
     - depguard
+    # - dogsled - TODO: enable it when golangci.com will support it.
     - dupl
     - errcheck
     # - funlen - TODO: enable it when golangci.com will support it.
