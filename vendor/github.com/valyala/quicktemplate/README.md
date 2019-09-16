@@ -605,7 +605,6 @@ BenchmarkMarshalXMLQuickTemplate1000-4    	   30000	     53000 ns/op	      32 B/
       * Clear syntax insead of hard-to-understand magic stuff related
         to template arguments, template inheritance and embedding function
         templates into other templates.
-      * Performance optimizations.
 
 * *Is there a syntax highlighting for qtpl files?*
 

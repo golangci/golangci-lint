@@ -8,9 +8,6 @@ env:
     - NODE_VERSION=10.16.3
 
 before_script:
-  # use GO111MODULE=off otherwise libs can't be updates inside vendor/
-  - GO111MODULE=off go get github.com/valyala/quicktemplate # for tests
-  - GO111MODULE=off go get github.com/pkg/errors # for tests
   - nvm install "${NODE_VERSION}"
 
 script:
