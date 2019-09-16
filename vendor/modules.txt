@@ -193,7 +193,7 @@ github.com/ultraware/funlen
 github.com/ultraware/whitespace
 # github.com/valyala/bytebufferpool v1.0.0
 github.com/valyala/bytebufferpool
-# github.com/valyala/quicktemplate v1.1.1
+# github.com/valyala/quicktemplate v1.2.0
 github.com/valyala/quicktemplate
 # golang.org/x/sys v0.0.0-20190911201528-7ad0cfa0b7b5
 golang.org/x/sys/unix
