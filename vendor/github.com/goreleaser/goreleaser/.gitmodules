@@ -1,0 +1,3 @@
+[submodule "www/themes/hugo-apex-theme"]
+	path = www/themes/hugo-apex-theme
+	url = https://github.com/caarlos0/hugo-apex-theme

@@ -1,7 +1,7 @@
 package logutils
 
-//go:generate mockgen -source log.go -destination mock_logutils/mock_log.go
-//go:generate goimports -w mock_logutils/mock_log.go
+//go:generate go run ../../vendor/github.com/golang/mock/mockgen -source log.go -destination mock_logutils/mock_log.go
+//go:generate go run ../../vendor/golang.org/x/tools/cmd/goimports -w mock_logutils/mock_log.go
 
 type Log interface {
 	Fatalf(format string, args ...interface{})

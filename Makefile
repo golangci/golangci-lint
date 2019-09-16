@@ -1,8 +1,10 @@
 .DEFAULT_GOAL = test
 .PHONY: FORCE
 
-# Enable Go module support across all commands.
+# enable module support across all go commands.
 export GO111MODULE = on
+# opt-in to vendor deps across all go commands.
+export GOFLAGS = -mod=vendor
 
 # Build
 
@@ -59,8 +61,7 @@ fast_check_generated:
 .PHONY: fast_check_generated
 
 release:
-	rm -rf dist
-	curl -sL https://git.io/goreleaser | bash
+	go run ./vendor/github.com/goreleaser/goreleaser
 .PHONY: release
 
 # Non-PHONY targets (real files)
@@ -68,42 +69,27 @@ release:
 golangci-lint: FORCE pkg/logutils/mock_logutils/mock_log.go
 	go build -o $@ ./cmd/golangci-lint
 
-tools/mockgen: go.mod go.sum
-	GOBIN=$(CURDIR)/tools go install github.com/golang/mock/mockgen
-
-tools/goimports: go.mod go.sum
-	GOBIN=$(CURDIR)/tools go install golang.org/x/tools/cmd/goimports
-
-tools/go.mod:
+tools:
 	@mkdir -p tools
-	@rm -f $@
-	cd tools && go mod init local-tools
 
-tools/godownloader: Makefile tools/go.mod
-	# https://github.com/goreleaser/godownloader/issues/133
-	cd tools && GOBIN=$(CURDIR)/tools go get -u github.com/goreleaser/godownloader
-
-tools/svg-term:
-	@mkdir -p tools
+tools/svg-term: tools
 	cd tools && npm ci
 	ln -sf node_modules/.bin/svg-term $@
 
-tools/Dracula.itermcolors:
-	@mkdir -p tools
+tools/Dracula.itermcolors: tools
 	curl -fL -o $@ https://raw.githubusercontent.com/dracula/iterm/master/Dracula.itermcolors
 
 docs/demo.svg: tools/svg-term tools/Dracula.itermcolors
-	PATH=$(CURDIR)/tools:$${PATH} svg-term --cast=183662 --out docs/demo.svg --window --width 110 --height 30 --from 2000 --to 20000 --profile ./tools/Dracula.itermcolors --term iterm2
+	./tools/svg-term --cast=183662 --out docs/demo.svg --window --width 110 --height 30 --from 2000 --to 20000 --profile ./tools/Dracula.itermcolors --term iterm2
 
-install.sh: tools/godownloader .goreleaser.yml
-	PATH=$(CURDIR)/tools:$${PATH} tools/godownloader .goreleaser.yml | sed '/DO NOT EDIT/s/ on [0-9TZ:-]*//' > $@
+install.sh: .goreleaser.yml
+	go run ./vendor/github.com/goreleaser/godownloader .goreleaser.yml | sed '/DO NOT EDIT/s/ on [0-9TZ:-]*//' > $@
 
 README.md: FORCE golangci-lint
 	go run ./scripts/gen_readme/main.go
 
-pkg/logutils/mock_logutils/mock_log.go: tools/mockgen tools/goimports pkg/logutils/log.go
-	@rm -f $@
-	PATH=$(CURDIR)/tools:$${PATH} go generate ./...
+pkg/logutils/mock_logutils/mock_log.go: pkg/logutils/log.go
+	go generate ./...
 
 go.mod: FORCE
 	go mod tidy
@@ -112,5 +98,4 @@ go.sum: go.mod
 
 .PHONY: vendor
 vendor: go.mod go.sum
-	rm -rf vendor
 	go mod vendor
