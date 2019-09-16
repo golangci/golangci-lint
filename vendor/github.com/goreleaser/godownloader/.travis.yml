@@ -1,0 +1,30 @@
+dist: trusty
+language: go
+go: '1.12.x'
+
+env:
+- GO111MODULE=on
+
+install: make setup
+
+addons:
+  apt:
+    sources:
+    - debian-sid
+
+script: make ci
+
+notifications:
+  email: false
+
+deploy:
+  provider: pages
+  skip_cleanup: true
+  github_token: $GITHUB_TOKEN
+  local_dir: www/public
+  target_branch: master
+  repo: goreleaser/goinstall
+  verbose: true
+  fqdn: install.goreleaser.com
+  on:
+    branch: master

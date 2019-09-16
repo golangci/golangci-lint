@@ -31,7 +31,7 @@ deploy:
   skip_cleanup: true
   script:
     - make test_race
-    - curl -sL https://git.io/goreleaser | bash
+    - make release
   on:
     tags: true
     # it's important to build on the newest version of go:

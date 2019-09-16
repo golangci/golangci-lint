@@ -1,0 +1,114 @@
+env:
+  - GO111MODULE=on
+  - GOPROXY=https://gocenter.io
+before:
+  hooks:
+    - go mod tidy
+builds:
+- env:
+    - CGO_ENABLED=0
+  goos:
+    - linux
+    - darwin
+    - windows
+  goarch:
+    - 386
+    - amd64
+    - arm
+    - arm64
+checksum:
+  name_template: '{{ .ProjectName }}_checksums.txt'
+changelog:
+  sort: asc
+  filters:
+    exclude:
+    - '^docs:'
+    - '^test:'
+    - Merge pull request
+    - Merge branch
+dockers:
+- image_templates:
+  - 'goreleaser/goreleaser:{{ .Tag }}-cgo'
+  - 'goreleaser/goreleaser:v{{ .Major }}.{{ .Minor }}-cgo'
+  - 'goreleaser/goreleaser:latest-cgo'
+  dockerfile: Dockerfile.cgo
+  binaries:
+  - goreleaser
+  build_flag_templates:
+  - "--label=org.label-schema.schema-version=1.0"
+  - "--label=org.label-schema.version={{.Version}}"
+  - "--label=org.label-schema.name={{.ProjectName}}"
+  extra_files:
+  - scripts/entrypoint.sh
+- image_templates:
+  - 'goreleaser/goreleaser:{{ .Tag }}'
+  - 'goreleaser/goreleaser:v{{ .Major }}.{{ .Minor }}'
+  - 'goreleaser/goreleaser:latest'
+  dockerfile: Dockerfile
+  binaries:
+  - goreleaser
+  build_flag_templates:
+  - "--label=org.label-schema.schema-version=1.0"
+  - "--label=org.label-schema.version={{.Version}}"
+  - "--label=org.label-schema.name={{.ProjectName}}"
+  - "--label=com.github.actions.name={{.ProjectName}}"
+  - "--label=com.github.actions.description=Deliver Go binaries as fast and easily as possible"
+  - "--label=com.github.actions.icon=terminal"
+  - "--label=com.github.actions.color=blue"
+  - "--label=repository=http://github.com/goreleaser/goreleaser"
+  - "--label=homepage=http://goreleaser.com"
+  - "--label=maintainer=Carlos Becker <goreleaser@carlosbecker.com>"
+
+  extra_files:
+  - scripts/entrypoint.sh
+archives:
+  - name_template: '{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'
+    replacements:
+      darwin: Darwin
+      linux: Linux
+      windows: Windows
+      386: i386
+      amd64: x86_64
+    format_overrides:
+    - goos: windows
+      format: zip
+brews:
+  - github:
+      owner: goreleaser
+      name: homebrew-tap
+    folder: Formula
+    homepage:  https://goreleaser.com
+    description: Deliver Go binaries as fast and easily as possible
+    test: |
+      system "#{bin}/goreleaser -v"
+scoop:
+  bucket:
+    owner: goreleaser
+    name: scoop-bucket
+  homepage:  https://goreleaser.com
+  description: Deliver Go binaries as fast and easily as possible
+  license: MIT
+nfpms:
+  - name_template: '{{ .ProjectName }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'
+    homepage:  https://goreleaser.com
+    description: Deliver Go binaries as fast and easily as possible
+    maintainer: Carlos Alexandro Becker <root@carlosbecker.com>
+    license: MIT
+    vendor: GoReleaser
+    formats:
+    - deb
+    - rpm
+    dependencies:
+    - git
+    recommends:
+    - rpm
+snapcrafts:
+  - name_template: '{{ .ProjectName }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'
+    summary: Deliver Go binaries as fast and easily as possible
+    description: |
+      GoReleaser builds Go binaries for several platforms, creates a GitHub
+      release and then pushes a Homebrew formula to a repository. All that
+      wrapped in your favorite CI.
+    grade: stable
+    confinement: classic
+    publish: true

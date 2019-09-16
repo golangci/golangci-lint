@@ -22,6 +22,8 @@ require (
 	github.com/golangci/prealloc v0.0.0-20180630174525-215b22d4de21
 	github.com/golangci/revgrep v0.0.0-20180526074752-d9c87f5ffaf0
 	github.com/golangci/unconvert v0.0.0-20180507085042-28b1c447d1f4
+	github.com/goreleaser/godownloader v0.0.0-20190907185828-93b2b793cd90
+	github.com/goreleaser/goreleaser v0.118.0
 	github.com/matoous/godox v0.0.0-20190910121045-032ad8106c86
 	github.com/mattn/go-colorable v0.1.2
 	github.com/mitchellh/go-homedir v1.1.0
@@ -47,7 +49,16 @@ require (
 	mvdan.cc/unparam v0.0.0-20190720180237-d51796306d8f
 )
 
-// https://github.com/golang/tools/pull/162
-// https://github.com/golang/tools/pull/160
-// https://github.com/golang/tools/pull/156
-replace golang.org/x/tools => github.com/golangci/tools v0.0.0-20190915081525-6aa350649b1c
+replace (
+	// Fix godownloader/goreleaser deps (ambiguous imports/invalid pseudo-version)
+	// https://github.com/goreleaser/godownloader/issues/133
+	// https://github.com/goreleaser/goreleaser/issues/1145
+	github.com/Azure/go-autorest => github.com/Azure/go-autorest v13.0.1+incompatible
+	github.com/census-instrumentation/opencensus-proto => github.com/census-instrumentation/opencensus-proto v0.2.1
+	github.com/go-macaron/cors => github.com/go-macaron/cors v0.0.0-20190418220122-6fd6a9bfe14e
+
+	// https://github.com/golang/tools/pull/156
+	// https://github.com/golang/tools/pull/160
+	// https://github.com/golang/tools/pull/162
+	golang.org/x/tools => github.com/golangci/tools v0.0.0-20190915081525-6aa350649b1c
+)

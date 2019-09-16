@@ -1,0 +1,8 @@
+bin/
+godownloader
+vendor/
+shlib/
+tmp/
+dist/
+treeout
+coverage.txt
