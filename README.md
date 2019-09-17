@@ -195,6 +195,7 @@ $ golangci-lint help linters
 Disabled by default linters:
 bodyclose: checks whether HTTP response body is closed successfully [fast: false, auto-fix: false]
 depguard: Go linter that checks if package imports are in a list of acceptable packages [fast: true, auto-fix: false]
+dogsled: Checks assignments with too many blank identifiers (e.g. x, _, _, _, := f()) [fast: true, auto-fix: false]
 dupl: Tool for code clone detection [fast: true, auto-fix: false]
 funlen: Tool for detection of long functions [fast: true, auto-fix: false]
 gochecknoglobals: Checks that no globals are present in Go code [fast: true, auto-fix: false]
@@ -454,6 +455,7 @@ golangci-lint help linters
 - [misspell](https://github.com/client9/misspell) - Finds commonly misspelled English words in comments
 - [lll](https://github.com/walle/lll) - Reports long lines
 - [unparam](https://github.com/mvdan/unparam) - Reports unused function parameters
+- [dogsled](https://github.com/alexkohler/dogsled) - Checks assignments with too many blank identifiers (e.g. x, _, _, _, := f())
 - [nakedret](https://github.com/alexkohler/nakedret) - Finds naked returns in functions greater than a specified function length
 - [prealloc](https://github.com/alexkohler/prealloc) - Finds slice declarations that could potentially be preallocated
 - [scopelint](https://github.com/kyoh86/scopelint) - Scopelint checks for unpinned variables in go programs
@@ -783,6 +785,9 @@ linters-settings:
       - NOTE
       - OPTIMIZE # marks code that should be optimized before merging
       - HACK # marks hack-arounds that should be removed before merging
+  dogsled:
+    # checks assignments with too many blank identifiers; default is 2
+    max-blank-identifiers: 2
 
 linters:
   enable:
@@ -916,6 +921,7 @@ linters:
     - bodyclose
     - deadcode
     - depguard
+    # - dogsled - TODO: enable it when golangci.com will support it.
     - dupl
     - errcheck
     # - funlen - TODO: enable it when golangci.com will support it.

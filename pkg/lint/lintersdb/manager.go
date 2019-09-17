@@ -215,6 +215,10 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadDepsTypeInfo().
 			WithSSA().
 			WithURL("https://github.com/mvdan/unparam"),
+		linter.NewConfig(golinters.Dogsled{}).
+			WithPresets(linter.PresetStyle).
+			WithSpeed(10).
+			WithURL("https://github.com/alexkohler/dogsled"),
 		linter.NewConfig(golinters.Nakedret{}).
 			WithPresets(linter.PresetComplexity).
 			WithSpeed(10).
