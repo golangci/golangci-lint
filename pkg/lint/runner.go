@@ -9,6 +9,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/golangci/golangci-lint/internal/errorutil"
 	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
 
 	"github.com/golangci/golangci-lint/pkg/fsutils"
@@ -102,8 +103,13 @@ func (r *Runner) runLinterSafe(ctx context.Context, lintCtx *linter.Context,
 	lc *linter.Config) (ret []result.Issue, err error) {
 	defer func() {
 		if panicData := recover(); panicData != nil {
-			err = fmt.Errorf("panic occurred: %s", panicData)
-			r.Log.Warnf("Panic stack trace: %s", debug.Stack())
+			if pe, ok := panicData.(*errorutil.PanicError); ok {
+				// Don't print stacktrace from goroutines twice
+				lintCtx.Log.Warnf("Panic: %s: %s", pe, pe.Stack())
+			} else {
+				err = fmt.Errorf("panic occurred: %s", panicData)
+				r.Log.Warnf("Panic stack trace: %s", debug.Stack())
+			}
 		}
 	}()
 
@@ -272,7 +278,9 @@ func (r Runner) printPerProcessorStat(stat map[string]processorStat) {
 			parts = append(parts, fmt.Sprintf("%s: %d/%d", name, ps.outCount, ps.inCount))
 		}
 	}
-	r.Log.Infof("Processors filtering stat (out/in): %s", strings.Join(parts, ", "))
+	if len(parts) != 0 {
+		r.Log.Infof("Processors filtering stat (out/in): %s", strings.Join(parts, ", "))
+	}
 }
 
 func collectIssues(resCh <-chan lintRes) <-chan result.Issue {

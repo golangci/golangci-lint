@@ -3,21 +3,19 @@ package golinters
 import (
 	"context"
 	"fmt"
-	"strings"
-	"time"
 
-	"github.com/pkg/errors"
+	"github.com/golangci/golangci-lint/pkg/logutils"
 
-	"github.com/golangci/go-tools/config"
-	"github.com/golangci/go-tools/stylecheck"
+	"honnef.co/go/tools/unused"
 
-	"github.com/golangci/go-tools/lint"
-	"github.com/golangci/go-tools/lint/lintutil"
-	"github.com/golangci/go-tools/simple"
-	"github.com/golangci/go-tools/staticcheck"
-	"github.com/golangci/go-tools/unused"
-	"golang.org/x/tools/go/packages"
+	"honnef.co/go/tools/lint"
 
+	"golang.org/x/tools/go/analysis"
+	"honnef.co/go/tools/simple"
+	"honnef.co/go/tools/staticcheck"
+	"honnef.co/go/tools/stylecheck"
+
+	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
@@ -29,6 +27,8 @@ const (
 	MegacheckGosimpleName    = "gosimple"
 	MegacheckStylecheckName  = "stylecheck"
 )
+
+var debugf = logutils.Debug("megacheck")
 
 type Staticcheck struct {
 	megacheck
@@ -143,18 +143,22 @@ func (MegacheckMetalinter) BuildLinterConfig(enabledChildren []string) (*linter.
 	}
 
 	// TODO: merge linter.Config and linter.Linter or refactor it in another way
-	return &linter.Config{
-		Linter:            m,
-		EnabledByDefault:  false,
-		NeedsTypeInfo:     true,
-		NeedsDepsTypeInfo: true,
-		NeedsSSARepr:      true,
-		InPresets:         []string{linter.PresetStyle, linter.PresetBugs, linter.PresetUnused},
-		Speed:             1,
-		AlternativeNames:  nil,
-		OriginalURL:       "",
-		ParentLinterName:  "",
-	}, nil
+	lc := &linter.Config{
+		Linter:           m,
+		EnabledByDefault: false,
+		NeedsSSARepr:     false,
+		InPresets:        []string{linter.PresetStyle, linter.PresetBugs, linter.PresetUnused},
+		Speed:            1,
+		AlternativeNames: nil,
+		OriginalURL:      "",
+		ParentLinterName: "",
+	}
+	if m.unusedEnabled {
+		lc = lc.WithLoadDepsTypeInfo()
+	} else {
+		lc = lc.WithLoadForGoAnalysis()
+	}
+	return lc, nil
 }
 
 func (MegacheckMetalinter) DefaultChildLinterNames() []string {
@@ -167,138 +171,130 @@ func (m MegacheckMetalinter) AllChildLinterNames() []string {
 	return append(m.DefaultChildLinterNames(), MegacheckStylecheckName)
 }
 
-func (m MegacheckMetalinter) isValidChild(name string) bool {
-	for _, child := range m.AllChildLinterNames() {
-		if child == name {
-			return true
-		}
-	}
-
-	return false
-}
-
 func (m megacheck) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issue, error) {
 	// Use OriginalPackages not Packages because `unused` doesn't work properly
 	// when we deduplicate normal and test packages.
-	issues, err := m.runMegacheck(lintCtx.OriginalPackages, lintCtx.Settings().Unused.CheckExported)
-	if err != nil {
-		return nil, errors.Wrap(err, "failed to run megacheck")
-	}
-
-	if len(issues) == 0 {
-		return nil, nil
-	}
-
-	res := make([]result.Issue, 0, len(issues))
-	meta := MegacheckMetalinter{}
-	for _, i := range issues {
-		if !meta.isValidChild(i.Checker) {
-			lintCtx.Log.Warnf("Bad megacheck checker name %q", i.Checker)
-			continue
-		}
-
-		res = append(res, result.Issue{
-			Pos: i.Position,
-			// TODO: use severity
-			Text:       fmt.Sprintf("%s: %s", i.Check, i.Text),
-			FromLinter: i.Checker,
-		})
-	}
-	return res, nil
+	return m.runMegacheck(ctx, lintCtx)
 }
 
-func (m megacheck) runMegacheck(workingPkgs []*packages.Package, checkExportedUnused bool) ([]lint.Problem, error) {
-	var checkers []lint.Checker
+func getAnalyzers(m map[string]*analysis.Analyzer) []*analysis.Analyzer {
+	var ret []*analysis.Analyzer
+	for _, v := range m {
+		ret = append(ret, v)
+	}
+	return ret
+}
+
+func setGoVersion(analyzers []*analysis.Analyzer) {
+	const goVersion = 13 // TODO
+	for _, a := range analyzers {
+		if v := a.Flags.Lookup("go"); v != nil {
+			if err := v.Value.Set(fmt.Sprintf("1.%d", goVersion)); err != nil {
+				debugf("Failed to set go version: %s", err)
+			}
+		}
+	}
+}
+
+func (m megacheck) runMegacheck(ctx context.Context, lintCtx *linter.Context) ([]result.Issue, error) {
+	var linters []linter.Linter
 
 	if m.gosimpleEnabled {
-		checkers = append(checkers, simple.NewChecker())
+		analyzers := getAnalyzers(simple.Analyzers)
+		setGoVersion(analyzers)
+		lnt := goanalysis.NewLinter(MegacheckGosimpleName, "", analyzers, nil)
+		linters = append(linters, lnt)
 	}
 	if m.staticcheckEnabled {
-		checkers = append(checkers, staticcheck.NewChecker())
+		analyzers := getAnalyzers(staticcheck.Analyzers)
+		setGoVersion(analyzers)
+		lnt := goanalysis.NewLinter(MegacheckStaticcheckName, "", analyzers, nil)
+		linters = append(linters, lnt)
 	}
 	if m.stylecheckEnabled {
-		checkers = append(checkers, stylecheck.NewChecker())
+		analyzers := getAnalyzers(stylecheck.Analyzers)
+		setGoVersion(analyzers)
+		lnt := goanalysis.NewLinter(MegacheckStylecheckName, "", analyzers, nil)
+		linters = append(linters, lnt)
 	}
+
+	var u lint.CumulativeChecker
 	if m.unusedEnabled {
-		uc := unused.NewChecker(unused.CheckAll)
-		uc.ConsiderReflection = true
-		uc.WholeProgram = checkExportedUnused
-		checkers = append(checkers, unused.NewLintChecker(uc))
+		u = unused.NewChecker(lintCtx.Settings().Unused.CheckExported)
+		analyzers := []*analysis.Analyzer{u.Analyzer()}
+		setGoVersion(analyzers)
+		lnt := goanalysis.NewLinter(MegacheckUnusedName, "", analyzers, nil)
+		linters = append(linters, lnt)
 	}
 
-	if len(checkers) == 0 {
+	if len(linters) == 0 {
 		return nil, nil
 	}
 
-	cfg := config.Config{}
-	opts := &lintutil.Options{
-		// TODO: get current go version, but now it doesn't matter,
-		// may be needed after next updates of megacheck
-		GoVersion: 12,
-
-		Config: cfg,
-		// TODO: support Ignores option
-	}
-
-	return runMegacheckCheckers(checkers, workingPkgs, opts)
-}
-
-// parseIgnore is a copy from megacheck honnef.co/go/tools/lint/lintutil.parseIgnore
-// just to not fork megacheck.
-func parseIgnore(s string) ([]lint.Ignore, error) {
-	var out []lint.Ignore
-	if s == "" {
-		return nil, nil
-	}
-	for _, part := range strings.Fields(s) {
-		p := strings.Split(part, ":")
-		if len(p) != 2 {
-			return nil, errors.New("malformed ignore string")
+	var issues []result.Issue
+	for _, lnt := range linters {
+		i, err := lnt.Run(ctx, lintCtx)
+		if err != nil {
+			return nil, err
 		}
-		path := p[0]
-		checks := strings.Split(p[1], ",")
-		out = append(out, &lint.GlobIgnore{Pattern: path, Checks: checks})
+		issues = append(issues, i...)
 	}
-	return out, nil
+
+	if u != nil {
+		for _, ur := range u.Result() {
+			p := u.ProblemObject(lintCtx.Packages[0].Fset, ur)
+			issues = append(issues, result.Issue{
+				FromLinter: MegacheckUnusedName,
+				Text:       p.Message,
+				Pos:        p.Pos,
+			})
+		}
+	}
+
+	return issues, nil
 }
 
-// runMegacheckCheckers is like megacheck honnef.co/go/tools/lint/lintutil.Lint,
-// but takes a list of already-parsed packages instead of a list of
-// package-paths to parse.
-func runMegacheckCheckers(cs []lint.Checker, workingPkgs []*packages.Package, opt *lintutil.Options) ([]lint.Problem, error) {
-	stats := lint.PerfStats{
-		CheckerInits: map[string]time.Duration{},
+func (m megacheck) Analyzers() []*analysis.Analyzer {
+	if m.unusedEnabled {
+		// Don't treat this linter as go/analysis linter if unused is used
+		// because it has non-standard API.
+		return nil
 	}
 
-	if opt == nil {
-		opt = &lintutil.Options{}
+	var allAnalyzers []*analysis.Analyzer
+	if m.gosimpleEnabled {
+		allAnalyzers = append(allAnalyzers, getAnalyzers(simple.Analyzers)...)
 	}
-	ignores, err := parseIgnore(opt.Ignores)
-	if err != nil {
-		return nil, err
+	if m.staticcheckEnabled {
+		allAnalyzers = append(allAnalyzers, getAnalyzers(staticcheck.Analyzers)...)
 	}
-
-	// package-parsing elided here
-	stats.PackageLoading = 0
-
-	var problems []lint.Problem
-	// populating 'problems' with parser-problems elided here
-
-	if len(workingPkgs) == 0 {
-		return problems, nil
+	if m.stylecheckEnabled {
+		allAnalyzers = append(allAnalyzers, getAnalyzers(stylecheck.Analyzers)...)
 	}
+	setGoVersion(allAnalyzers)
+	return allAnalyzers
+}
 
-	l := &lint.Linter{
-		Checkers:      cs,
-		Ignores:       ignores,
-		GoVersion:     opt.GoVersion,
-		ReturnIgnored: opt.ReturnIgnored,
-		Config:        opt.Config,
+func (megacheck) Cfg() map[string]map[string]interface{} {
+	return nil
+}
 
-		MaxConcurrentJobs: opt.MaxConcurrentJobs,
-		PrintStats:        opt.PrintStats,
+func (m megacheck) AnalyzerToLinterNameMapping() map[*analysis.Analyzer]string {
+	ret := map[*analysis.Analyzer]string{}
+	if m.gosimpleEnabled {
+		for _, a := range simple.Analyzers {
+			ret[a] = MegacheckGosimpleName
+		}
 	}
-	problems = append(problems, l.Lint(workingPkgs, &stats)...)
-
-	return problems, nil
+	if m.staticcheckEnabled {
+		for _, a := range staticcheck.Analyzers {
+			ret[a] = MegacheckStaticcheckName
+		}
+	}
+	if m.stylecheckEnabled {
+		for _, a := range stylecheck.Analyzers {
+			ret[a] = MegacheckStylecheckName
+		}
+	}
+	return ret
 }

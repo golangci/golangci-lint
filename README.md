@@ -878,7 +878,7 @@ linters-settings:
   golint:
     min-confidence: 0
   gocyclo:
-    min-complexity: 10
+    min-complexity: 15
   maligned:
     suggest-new: true
   dupl:
@@ -953,7 +953,7 @@ linters:
 run:
   skip-dirs:
     - test/testdata_etc
-    - pkg/golinters/goanalysis/(checker|passes)
+    - internal/(cache|renameio|robustio)
 
 issues:
   exclude-rules:
