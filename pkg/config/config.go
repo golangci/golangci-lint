@@ -175,14 +175,15 @@ type LintersSettings struct {
 		MultiIf bool `mapstructure:"multi-if"`
 	}
 
-	Lll      LllSettings
-	Unparam  UnparamSettings
-	Nakedret NakedretSettings
-	Prealloc PreallocSettings
-	Errcheck ErrcheckSettings
-	Gocritic GocriticSettings
-	Godox    GodoxSettings
-	Dogsled  DogsledSettings
+	Lll        LllSettings
+	Unparam    UnparamSettings
+	Nakedret   NakedretSettings
+	Prealloc   PreallocSettings
+	Errcheck   ErrcheckSettings
+	Gocritic   GocriticSettings
+	Godox      GodoxSettings
+	Dogsled    DogsledSettings
+	NoLintLint NoLintLintSettings
 }
 
 type GovetSettings struct {
@@ -243,6 +244,13 @@ type DogsledSettings struct {
 	MaxBlankIdentifiers int `mapstructure:"max-blank-identifiers"`
 }
 
+type NoLintLintSettings struct {
+	Explain  bool
+	Machine  bool
+	Specific bool
+	Exclude  []string
+}
+
 var defaultLintersSettings = LintersSettings{
 	Lll: LllSettings{
 		LineLength: 120,
@@ -267,6 +275,11 @@ var defaultLintersSettings = LintersSettings{
 	},
 	Dogsled: DogsledSettings{
 		MaxBlankIdentifiers: 2,
+	},
+	NoLintLint: NoLintLintSettings{
+		Explain:  false,
+		Machine:  false,
+		Specific: true,
 	},
 }
 

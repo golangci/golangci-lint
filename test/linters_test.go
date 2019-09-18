@@ -49,6 +49,9 @@ func testSourcesFromDir(t *testing.T, dir string) {
 
 	for _, s := range sources {
 		s := s
+		if s != "testdata/nolintlint.go" {
+			continue
+		}
 		t.Run(filepath.Base(s), func(t *testing.T) {
 			t.Parallel()
 			testOneSource(t, s)

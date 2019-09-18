@@ -126,6 +126,10 @@ func (p *Nolint) buildIgnoredRangesForFile(f *ast.File, fset *token.FileSet, fil
 }
 
 func (p *Nolint) shouldPassIssue(i *result.Issue) (bool, error) {
+	if i.FromLinter == "nolintlint" {
+		return true, nil
+	}
+
 	fd, err := p.getOrCreateFileData(i)
 	if err != nil {
 		return false, err

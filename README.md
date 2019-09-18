@@ -213,6 +213,7 @@ lll: Reports long lines [fast: true, auto-fix: false]
 maligned: Tool to detect Go structs that would take less memory if their fields were sorted [fast: true, auto-fix: false]
 misspell: Finds commonly misspelled English words in comments [fast: true, auto-fix: true]
 nakedret: Finds naked returns in functions greater than a specified function length [fast: true, auto-fix: false]
+nolintlint: Reports ill-formed or insufficient nolint directives [fast: true, auto-fix: false]
 prealloc: Finds slice declarations that could potentially be preallocated [fast: true, auto-fix: false]
 scopelint: Scopelint checks for unpinned variables in go programs [fast: true, auto-fix: false]
 stylecheck: Stylecheck is a replacement for golint [fast: false, auto-fix: false]
@@ -465,6 +466,7 @@ golangci-lint help linters
 - [godox](https://github.com/matoous/godox) - Tool for detection of FIXME, TODO and other comment keywords
 - [funlen](https://github.com/ultraware/funlen) - Tool for detection of long functions
 - [whitespace](https://github.com/ultraware/whitespace) - Tool for detection of leading and trailing whitespace
+- [nolintlint](https://github.com/ashanbrown/nolintlint) - Reports ill-formed or insufficient nolint directives
 
 ## Configuration
 
@@ -789,6 +791,10 @@ linters-settings:
   dogsled:
     # checks assignments with too many blank identifiers; default is 2
     max-blank-identifiers: 2
+  nolintlint:
+    explain: true
+    machine: false
+    specific: true
 
   whitespace:
     multi-if: false
@@ -917,6 +923,10 @@ linters-settings:
     disabled-checks:
       - wrapperFunc
       - dupImport # https://github.com/go-critic/go-critic/issues/845
+  nolintlint:
+    explain: true
+    machine: false
+    specific: true
 
 linters:
   # inverted configuration with `enable-all` and `disable` is not scalable during updates of golangci-lint
@@ -1112,6 +1122,7 @@ Thanks to developers and authors of used linters:
 - [leighmcculloch](https://github.com/leighmcculloch)
 - [matoous](https://github.com/matoous)
 - [ultraware](https://github.com/ultraware)
+- [ashanbrown](https://github.com/ashanbrown)
 
 ## Changelog
 

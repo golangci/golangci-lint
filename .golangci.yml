@@ -41,6 +41,10 @@ linters-settings:
     disabled-checks:
       - wrapperFunc
       - dupImport # https://github.com/go-critic/go-critic/issues/845
+  nolintlint:
+    explain: true
+    machine: false
+    specific: true
 
 linters:
   # inverted configuration with `enable-all` and `disable` is not scalable during updates of golangci-lint

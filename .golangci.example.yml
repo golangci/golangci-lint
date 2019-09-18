@@ -204,6 +204,10 @@ linters-settings:
   dogsled:
     # checks assignments with too many blank identifiers; default is 2
     max-blank-identifiers: 2
+  nolintlint:
+    explain: true
+    machine: false
+    specific: true
 
   whitespace:
     multi-if: false
