@@ -2,7 +2,7 @@
 github.com/BurntSushi/toml
 # github.com/OpenPeeDeeP/depguard v1.0.1
 github.com/OpenPeeDeeP/depguard
-# github.com/StackExchange/wmi v0.0.0-20190523213315-cbe66965904d
+# github.com/StackExchange/wmi v0.0.0-20180116203802-5d049714c4a6
 github.com/StackExchange/wmi
 # github.com/davecgh/go-spew v1.1.1
 github.com/davecgh/go-spew/spew
@@ -16,7 +16,7 @@ github.com/go-critic/go-critic/checkers/internal/lintutil
 # github.com/go-lintpack/lintpack v0.5.2
 github.com/go-lintpack/lintpack
 github.com/go-lintpack/lintpack/astwalk
-# github.com/go-ole/go-ole v1.2.4
+# github.com/go-ole/go-ole v1.2.1
 github.com/go-ole/go-ole
 github.com/go-ole/go-ole/oleutil
 # github.com/go-toolsmith/astcast v1.0.0
@@ -135,9 +135,8 @@ github.com/pmezard/go-difflib/difflib
 # github.com/securego/gosec v0.0.0-20190912120752-140048b2a218
 github.com/securego/gosec
 github.com/securego/gosec/rules
-# github.com/shirou/gopsutil v2.18.12+incompatible
+# github.com/shirou/gopsutil v0.0.0-20190901111213-e4ec7b275ada
 github.com/shirou/gopsutil/cpu
-github.com/shirou/gopsutil/host
 github.com/shirou/gopsutil/internal/common
 github.com/shirou/gopsutil/mem
 github.com/shirou/gopsutil/net

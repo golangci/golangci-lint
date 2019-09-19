@@ -4,11 +4,9 @@ go 1.11
 
 require (
 	github.com/OpenPeeDeeP/depguard v1.0.1
-	github.com/StackExchange/wmi v0.0.0-20190523213315-cbe66965904d // indirect
 	github.com/fatih/color v1.7.0
 	github.com/go-critic/go-critic v0.3.5-0.20190904082202-d79a9f0c64db
 	github.com/go-lintpack/lintpack v0.5.2
-	github.com/go-ole/go-ole v1.2.4 // indirect
 	github.com/golang/mock v1.3.1
 	github.com/golangci/check v0.0.0-20180506172741-cfe4005ccda2
 	github.com/golangci/dupl v0.0.0-20180902072040-3e9179ac440a
@@ -30,8 +28,7 @@ require (
 	github.com/mitchellh/go-ps v0.0.0-20190716172923-621e5597135b
 	github.com/pkg/errors v0.8.1
 	github.com/securego/gosec v0.0.0-20190912120752-140048b2a218
-	github.com/shirou/gopsutil v2.18.12+incompatible
-	github.com/shirou/w32 v0.0.0-20160930032740-bb4de0191aa4 // indirect
+	github.com/shirou/gopsutil v0.0.0-20190901111213-e4ec7b275ada // v2.19.8
 	github.com/sirupsen/logrus v1.4.2
 	github.com/sourcegraph/go-diff v0.5.1
 	github.com/spf13/cobra v0.0.5
