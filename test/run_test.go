@@ -59,8 +59,10 @@ func TestCgoOk(t *testing.T) {
 }
 
 func TestCgoWithIssues(t *testing.T) {
-	testshared.NewLintRunner(t).Run("--no-config", "--enable-all", getTestDataDir("cgo_with_issues")).
+	testshared.NewLintRunner(t).Run("--no-config", "--disable-all", "-Egovet", getTestDataDir("cgo_with_issues")).
 		ExpectHasIssue("Printf format %t has arg cs of wrong type")
+	testshared.NewLintRunner(t).Run("--no-config", "--disable-all", "-Estaticcheck", getTestDataDir("cgo_with_issues")).
+		ExpectHasIssue("SA5009: Printf format %t has arg #1 of wrong type")
 }
 
 func TestUnsafeOk(t *testing.T) {

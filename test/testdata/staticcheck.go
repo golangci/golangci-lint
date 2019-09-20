@@ -2,6 +2,7 @@
 package testdata
 
 import (
+	"fmt"
 	"runtime"
 )
 
@@ -22,4 +23,9 @@ func StaticcheckNolintMegacheck() {
 
 func StaticcheckDeprecated() {
 	_ = runtime.CPUProfile() // ERROR "SA1019: runtime.CPUProfile is deprecated"
+}
+
+func StaticcheckPrintf() {
+	x := "dummy"
+	fmt.Printf("%d", x) // ERROR "SA5009: Printf format %d has arg #1 of wrong type"
 }
