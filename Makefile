@@ -1,6 +1,9 @@
 .DEFAULT_GOAL = test
 .PHONY: FORCE
 
+# Enable Go module support across all commands.
+export GO111MODULE = on
+
 # Build
 
 fast_build: FORCE
@@ -14,15 +17,12 @@ clean:
 .PHONY: fast_build build build_race clean
 
 # Test
-test: export GO111MODULE = on
 test: export GOLANGCI_LINT_INSTALLED = true
-
 test: build
 	GL_TEST_RUN=1 time ./golangci-lint run -v
 	GL_TEST_RUN=1 time ./golangci-lint run --fast --no-config -v --skip-dirs 'test/testdata_etc,internal/(cache|renameio|robustio)'
 	GL_TEST_RUN=1 time ./golangci-lint run --no-config -v --skip-dirs 'test/testdata_etc,internal/(cache|renameio|robustio)'
 	GL_TEST_RUN=1 time go test -v ./...
-
 .PHONY: test
 
 test_race:
@@ -69,19 +69,19 @@ golangci-lint: FORCE pkg/logutils/mock_logutils/mock_log.go
 	go build -o $@ ./cmd/golangci-lint
 
 tools/mockgen: go.mod go.sum
-	GOBIN=$(CURDIR)/tools GO111MODULE=on go install github.com/golang/mock/mockgen
+	GOBIN=$(CURDIR)/tools go install github.com/golang/mock/mockgen
 
 tools/goimports: go.mod go.sum
-	GOBIN=$(CURDIR)/tools GO111MODULE=on go install golang.org/x/tools/cmd/goimports
+	GOBIN=$(CURDIR)/tools go install golang.org/x/tools/cmd/goimports
 
 tools/go.mod:
 	@mkdir -p tools
 	@rm -f $@
-	cd tools && GO111MODULE=on go mod init local-tools
+	cd tools && go mod init local-tools
 
 tools/godownloader: Makefile tools/go.mod
 	# https://github.com/goreleaser/godownloader/issues/133
-	cd tools && GOBIN=$(CURDIR)/tools GO111MODULE=off go get -u github.com/goreleaser/godownloader
+	cd tools && GOBIN=$(CURDIR)/tools go get -u github.com/goreleaser/godownloader
 
 tools/svg-term:
 	@mkdir -p tools
@@ -106,11 +106,11 @@ pkg/logutils/mock_logutils/mock_log.go: tools/mockgen tools/goimports pkg/loguti
 	PATH=$(CURDIR)/tools:$${PATH} go generate ./...
 
 go.mod: FORCE
-	GO111MODULE=on go mod verify
-	GO111MODULE=on go mod tidy
+	go mod tidy
+	go mod verify
 go.sum: go.mod
 
 .PHONY: vendor
 vendor: go.mod go.sum
 	rm -rf vendor
-	GO111MODULE=on go mod vendor
+	go mod vendor
