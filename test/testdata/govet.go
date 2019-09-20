@@ -3,6 +3,7 @@
 package testdata
 
 import (
+	"fmt"
 	"io"
 	"os"
 )
@@ -29,4 +30,9 @@ func GovetNolintVet() error {
 
 func GovetNolintVetShadow() error {
 	return &os.PathError{"first", "path", os.ErrNotExist} //nolint:vetshadow
+}
+
+func GovetPrintf() {
+	x := "dummy"
+	fmt.Printf("%d", x) // ERROR "printf: Printf format %d has arg x of wrong type string"
 }
