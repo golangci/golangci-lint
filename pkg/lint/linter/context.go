@@ -37,8 +37,9 @@ type Context struct {
 	LineCache *fsutils.LineCache
 	Log       logutils.Log
 
-	PkgCache  *pkgcache.Cache
-	LoadGuard *load.Guard
+	PkgCache         *pkgcache.Cache
+	LoadGuard        *load.Guard
+	NeedWholeProgram bool
 }
 
 func (c *Context) Settings() *config.LintersSettings {

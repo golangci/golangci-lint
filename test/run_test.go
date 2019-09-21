@@ -197,6 +197,13 @@ func TestDisallowedOptionsInConfig(t *testing.T) {
 		{
 			cfg: `
 				run:
+					TracePath: path
+			`,
+			option: "--trace-path=path",
+		},
+		{
+			cfg: `
+				run:
 					Verbose: true
 			`,
 			option: "-v",

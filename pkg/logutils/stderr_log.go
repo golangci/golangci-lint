@@ -64,6 +64,10 @@ func (sl StderrLog) Fatalf(format string, args ...interface{}) {
 	os.Exit(exitcodes.Failure)
 }
 
+func (sl StderrLog) Panicf(format string, args ...interface{}) {
+	sl.logger.Panicf("%s%s", sl.prefix(), fmt.Sprintf(format, args...))
+}
+
 func (sl StderrLog) Errorf(format string, args ...interface{}) {
 	if sl.level > LogLevelError {
 		return

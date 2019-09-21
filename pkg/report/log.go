@@ -24,6 +24,10 @@ func (lw LogWrapper) Fatalf(format string, args ...interface{}) {
 	lw.origLog.Fatalf(format, args...)
 }
 
+func (lw LogWrapper) Panicf(format string, args ...interface{}) {
+	lw.origLog.Panicf(format, args...)
+}
+
 func (lw LogWrapper) Errorf(format string, args ...interface{}) {
 	lw.origLog.Errorf(format, args...)
 	lw.rd.Error = fmt.Sprintf(format, args...)

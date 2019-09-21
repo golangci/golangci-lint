@@ -114,12 +114,10 @@ func (lnt Linter) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Is
 		return nil, errors.Wrap(err, "failed to configure analyzers")
 	}
 
-	runner := newRunner(lnt.name, lintCtx.Log.Child("goanalysis"), lintCtx.PkgCache, lintCtx.LoadGuard)
+	runner := newRunner(lnt.name, lintCtx.Log.Child("goanalysis"), lintCtx.PkgCache, lintCtx.LoadGuard, lintCtx.NeedWholeProgram)
 
 	diags, errs := runner.run(lnt.analyzers, lintCtx.Packages)
-	for i := 1; i < len(errs); i++ {
-		lintCtx.Log.Warnf("%s error: %s", lnt.Name(), errs[i])
-	}
+	// Don't print all errs: they can duplicate.
 	if len(errs) != 0 {
 		return nil, errs[0]
 	}

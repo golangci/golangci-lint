@@ -46,12 +46,10 @@ func (ml MetaLinter) Run(ctx context.Context, lintCtx *linter.Context) ([]result
 		allAnalyzers = append(allAnalyzers, linter.analyzers...)
 	}
 
-	runner := newRunner("metalinter", lintCtx.Log.Child("goanalysis"), lintCtx.PkgCache, lintCtx.LoadGuard)
+	runner := newRunner("metalinter", lintCtx.Log.Child("goanalysis"), lintCtx.PkgCache, lintCtx.LoadGuard, lintCtx.NeedWholeProgram)
 
 	diags, errs := runner.run(allAnalyzers, lintCtx.Packages)
-	for i := 1; i < len(errs); i++ {
-		lintCtx.Log.Warnf("go/analysis metalinter error: %s", errs[i])
-	}
+	// Don't print all errs: they can duplicate.
 	if len(errs) != 0 {
 		return nil, errs[0]
 	}

@@ -5,6 +5,7 @@ import (
 	"os"
 	"runtime"
 	"runtime/pprof"
+	"runtime/trace"
 	"strconv"
 
 	"github.com/spf13/cobra"
@@ -37,6 +38,16 @@ func (e *Executor) persistentPreRun(_ *cobra.Command, _ []string) {
 			runtime.MemProfileRate, _ = strconv.Atoi(rate)
 		}
 	}
+
+	if e.cfg.Run.TracePath != "" {
+		f, err := os.Create(e.cfg.Run.TracePath)
+		if err != nil {
+			e.log.Fatalf("Can't create file %s: %s", e.cfg.Run.TracePath, err)
+		}
+		if err = trace.Start(f); err != nil {
+			e.log.Fatalf("Can't start tracing: %s", err)
+		}
+	}
 }
 
 func (e *Executor) persistentPostRun(_ *cobra.Command, _ []string) {
@@ -57,6 +68,9 @@ func (e *Executor) persistentPostRun(_ *cobra.Command, _ []string) {
 			e.log.Fatalf("Can't write heap profile: %s", err)
 		}
 		f.Close()
+	}
+	if e.cfg.Run.TracePath != "" {
+		trace.Stop()
 	}
 
 	os.Exit(e.exitCode)
@@ -136,6 +150,7 @@ func initRootFlagSet(fs *pflag.FlagSet, cfg *config.Config, needVersionOption bo
 
 	fs.StringVar(&cfg.Run.CPUProfilePath, "cpu-profile-path", "", wh("Path to CPU profile output file"))
 	fs.StringVar(&cfg.Run.MemProfilePath, "mem-profile-path", "", wh("Path to memory profile output file"))
+	fs.StringVar(&cfg.Run.TracePath, "trace-path", "", wh("Path to trace output file"))
 	fs.IntVarP(&cfg.Run.Concurrency, "concurrency", "j", getDefaultConcurrency(), wh("Concurrency (default NumCPU)"))
 	if needVersionOption {
 		fs.BoolVar(&cfg.Run.PrintVersion, "version", false, wh("Print version"))

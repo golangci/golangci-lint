@@ -18,7 +18,6 @@ import (
 	"go/scanner"
 	"go/token"
 	"go/types"
-	"log"
 	"os"
 	"reflect"
 	"runtime"
@@ -26,6 +25,7 @@ import (
 	"sort"
 	"strings"
 	"sync"
+	"sync/atomic"
 	"time"
 
 	"golang.org/x/tools/go/types/objectpath"
@@ -57,8 +57,11 @@ var (
 	debugf  = logutils.Debug("goanalysis")
 	isDebug = logutils.HaveDebugTag("goanalysis")
 
-	factsDebugf  = logutils.Debug("goanalysis/facts")
-	isFactsDebug = logutils.HaveDebugTag("goanalysis/facts")
+	factsDebugf        = logutils.Debug("goanalysis/facts")
+	factsInheritDebugf = logutils.Debug("goanalysis/facts/inherit")
+	factsExportDebugf  = logutils.Debug("goanalysis/facts")
+	isFactsExportDebug = logutils.HaveDebugTag("goanalysis/facts/export")
+	isMemoryDebug      = logutils.HaveDebugTag("goanalysis/memory")
 
 	factsCacheDebugf = logutils.Debug("goanalysis/facts/cache")
 	analyzeDebugf    = logutils.Debug("goanalysis/analyze")
@@ -75,18 +78,20 @@ type Diagnostic struct {
 }
 
 type runner struct {
-	log       logutils.Log
-	prefix    string // ensure unique analyzer names
-	pkgCache  *pkgcache.Cache
-	loadGuard *load.Guard
+	log              logutils.Log
+	prefix           string // ensure unique analyzer names
+	pkgCache         *pkgcache.Cache
+	loadGuard        *load.Guard
+	needWholeProgram bool
 }
 
-func newRunner(prefix string, logger logutils.Log, pkgCache *pkgcache.Cache, loadGuard *load.Guard) *runner {
+func newRunner(prefix string, logger logutils.Log, pkgCache *pkgcache.Cache, loadGuard *load.Guard, needWholeProgram bool) *runner {
 	return &runner{
-		prefix:    prefix,
-		log:       logger,
-		pkgCache:  pkgCache,
-		loadGuard: loadGuard,
+		prefix:           prefix,
+		log:              logger,
+		pkgCache:         pkgCache,
+		loadGuard:        loadGuard,
+		needWholeProgram: needWholeProgram,
 	}
 }
 
@@ -100,15 +105,13 @@ func newRunner(prefix string, logger logutils.Log, pkgCache *pkgcache.Cache, loa
 func (r *runner) run(analyzers []*analysis.Analyzer, initialPackages []*packages.Package) ([]Diagnostic, []error) {
 	defer r.pkgCache.Trim()
 
-	roots, err := r.analyze(initialPackages, analyzers)
-	if err != nil {
-		return nil, []error{err}
-	}
-
+	roots := r.analyze(initialPackages, analyzers)
 	return extractDiagnostics(roots)
 }
 
-func (r *runner) analyze(pkgs []*packages.Package, analyzers []*analysis.Analyzer) ([]*action, error) {
+//nolint:gocritic
+func (r *runner) prepareAnalysis(pkgs []*packages.Package,
+	analyzers []*analysis.Analyzer) (map[*packages.Package]bool, []*action, []*action) {
 	// Construct the action graph.
 
 	// Each graph node (action) is one unit of analysis.
@@ -141,6 +144,7 @@ func (r *runner) analyze(pkgs []*packages.Package, analyzers []*analysis.Analyze
 				analysisDoneCh:    make(chan struct{}),
 				objectFacts:       make(map[objectFactKey]analysis.Fact),
 				packageFacts:      make(map[packageFactKey]analysis.Fact),
+				needWholeProgram:  r.needWholeProgram,
 			}
 
 			// Add a dependency on each required analyzers.
@@ -187,19 +191,11 @@ func (r *runner) analyze(pkgs []*packages.Package, analyzers []*analysis.Analyze
 		allActions = append(allActions, act)
 	}
 
-	if err := r.loadPackagesAndFacts(allActions, initialPkgs); err != nil {
-		return nil, errors.Wrap(err, "failed to load packages")
-	}
-
-	r.runActionsAnalysis(allActions)
-
-	return roots, nil
+	return initialPkgs, allActions, roots
 }
 
-func (r *runner) loadPackagesAndFacts(actions []*action, initialPkgs map[*packages.Package]bool) error {
-	defer func(from time.Time) {
-		debugf("Loading packages and facts took %s", time.Since(from))
-	}(time.Now())
+func (r *runner) analyze(pkgs []*packages.Package, analyzers []*analysis.Analyzer) []*action {
+	initialPkgs, actions, rootActions := r.prepareAnalysis(pkgs, analyzers)
 
 	actionPerPkg := map[*packages.Package][]*action{}
 	for _, act := range actions {
@@ -217,76 +213,44 @@ func (r *runner) loadPackagesAndFacts(actions []*action, initialPkgs map[*packag
 		imports := map[string]*loadingPackage{}
 		for impPath, imp := range pkg.Imports {
 			dfs(imp)
-			imports[impPath] = loadingPackages[imp]
+			impLp := loadingPackages[imp]
+			impLp.dependents++
+			imports[impPath] = impLp
 		}
 
 		loadingPackages[pkg] = &loadingPackage{
-			pkg:       pkg,
-			imports:   imports,
-			isInitial: initialPkgs[pkg],
-			doneCh:    make(chan struct{}),
-			log:       r.log,
-			actions:   actionPerPkg[pkg],
-			loadGuard: r.loadGuard,
+			pkg:        pkg,
+			imports:    imports,
+			isInitial:  initialPkgs[pkg],
+			log:        r.log,
+			actions:    actionPerPkg[pkg],
+			loadGuard:  r.loadGuard,
+			dependents: 1, // self dependent
 		}
 	}
 	for _, act := range actions {
 		dfs(act.pkg)
 	}
 
-	// Limit IO.
-	loadSem := make(chan struct{}, runtime.GOMAXPROCS(-1))
+	// Limit memory and IO usage.
+	gomaxprocs := runtime.GOMAXPROCS(-1)
+	debugf("Analyzing at most %d packages in parallel", gomaxprocs)
+	loadSem := make(chan struct{}, gomaxprocs)
 
 	var wg sync.WaitGroup
-	wg.Add(len(loadingPackages))
-	errCh := make(chan error, len(loadingPackages))
+	debugf("There are %d initial and %d total packages", len(initialPkgs), len(loadingPackages))
 	for _, lp := range loadingPackages {
-		go func(lp *loadingPackage) {
-			defer wg.Done()
-
-			lp.waitUntilImportsLoaded()
-			loadSem <- struct{}{}
-
-			if err := lp.loadWithFacts(); err != nil {
-				errCh <- errors.Wrapf(err, "failed to load package %s", lp.pkg.Name)
-			}
-			<-loadSem
-		}(lp)
-	}
-	wg.Wait()
-
-	close(errCh)
-	for err := range errCh {
-		return err
-	}
-
-	return nil
-}
-
-func (r *runner) runActionsAnalysis(actions []*action) {
-	// Execute the graph in parallel.
-	debugf("Running %d actions in parallel", len(actions))
-	var wg sync.WaitGroup
-	wg.Add(len(actions))
-	panicsCh := make(chan error, len(actions))
-	for _, act := range actions {
-		go func(act *action) {
-			defer func() {
-				if p := recover(); p != nil {
-					panicsCh <- errorutil.NewPanicError(fmt.Sprintf("%s: package %q (isInitialPkg: %t, needAnalyzeSource: %t): %s",
-						act.a.Name, act.pkg.Name, act.isInitialPkg, act.needAnalyzeSource, p), debug.Stack())
-				}
+		if lp.isInitial {
+			wg.Add(1)
+			go func(lp *loadingPackage) {
+				lp.analyzeRecursive(r.needWholeProgram, loadSem)
 				wg.Done()
-			}()
-			act.analyze()
-		}(act)
+			}(lp)
+		}
 	}
 	wg.Wait()
-	close(panicsCh)
 
-	for p := range panicsCh {
-		panic(p)
-	}
+	return rootActions
 }
 
 //nolint:nakedret
@@ -316,6 +280,9 @@ func extractDiagnostics(roots []*action) (retDiags []Diagnostic, retErrors []err
 
 	extract = func(act *action) {
 		if act.err != nil {
+			if pe, ok := act.err.(*errorutil.PanicError); ok {
+				panic(pe)
+			}
 			retErrors = append(retErrors, errors.Wrap(act.err, act.a.Name))
 			return
 		}
@@ -384,6 +351,7 @@ type action struct {
 	analysisDoneCh      chan struct{}
 	loadCachedFactsDone bool
 	loadCachedFactsOk   bool
+	needWholeProgram    bool
 }
 
 type objectFactKey struct {
@@ -421,16 +389,29 @@ func (act *action) loadCachedFacts() bool {
 	return res
 }
 
+func (act *action) waitUntilDependingAnalyzersWorked() {
+	for _, dep := range act.deps {
+		if dep.pkg == act.pkg {
+			<-dep.analysisDoneCh
+		}
+	}
+}
+
+func (act *action) analyzeSafe() {
+	defer func() {
+		if p := recover(); p != nil {
+			act.err = errorutil.NewPanicError(fmt.Sprintf("%s: package %q (isInitialPkg: %t, needAnalyzeSource: %t): %s",
+				act.a.Name, act.pkg.Name, act.isInitialPkg, act.needAnalyzeSource, p), debug.Stack())
+		}
+	}()
+	act.analyze()
+}
+
 func (act *action) analyze() {
-	defer close(act.analysisDoneCh) // unblock actions depending from this action
+	defer close(act.analysisDoneCh) // unblock actions depending on this action
 
 	if !act.needAnalyzeSource {
 		return
-	}
-
-	// Analyze dependencies.
-	for _, dep := range act.deps {
-		<-dep.analysisDoneCh
 	}
 
 	// TODO(adonovan): uncomment this during profiling.
@@ -470,6 +451,7 @@ func (act *action) analyze() {
 	// Plumb the output values of the dependencies
 	// into the inputs of this action.  Also facts.
 	inputs := make(map[*analysis.Analyzer]interface{})
+	startedAt := time.Now()
 	for _, dep := range act.deps {
 		if dep.pkg == act.pkg {
 			// Same package, different analysis (horizontal edge):
@@ -483,6 +465,7 @@ func (act *action) analyze() {
 			inheritFacts(act, dep)
 		}
 	}
+	factsDebugf("%s: Inherited facts in %s", act, time.Since(startedAt))
 
 	// Run the analysis.
 	pass := &analysis.Pass{
@@ -508,13 +491,11 @@ func (act *action) analyze() {
 	if act.pkg.IllTyped && !pass.Analyzer.RunDespiteErrors {
 		err = fmt.Errorf("analysis skipped due to errors in package")
 	} else {
+		startedAt = time.Now()
 		act.result, err = pass.Analyzer.Run(pass)
-		if err == nil {
-			if got, want := reflect.TypeOf(act.result), pass.Analyzer.ResultType; got != want {
-				err = fmt.Errorf(
-					"internal error: on package %s, analyzer %s returned a result of type %v, but declared ResultType %v",
-					pass.Pkg.Path(), pass.Analyzer, got, want)
-			}
+		analyzedIn := time.Since(startedAt)
+		if analyzedIn > time.Millisecond*10 {
+			debugf("%s: run analyzer in %s", act, analyzedIn)
 		}
 	}
 	act.err = err
@@ -538,7 +519,7 @@ func inheritFacts(act, dep *action) {
 		// that are irrelevant downstream
 		// (equivalently: not in the compiler export data).
 		if !exportedFrom(key.obj, dep.pkg.Types) {
-			factsDebugf("%v: discarding %T fact from %s for %s: %s", act, fact, dep, key.obj, fact)
+			factsInheritDebugf("%v: discarding %T fact from %s for %s: %s", act, fact, dep, key.obj, fact)
 			continue
 		}
 
@@ -548,11 +529,11 @@ func inheritFacts(act, dep *action) {
 			var err error
 			fact, err = codeFact(fact)
 			if err != nil {
-				log.Panicf("internal error: encoding of %T fact failed in %v", fact, act)
+				act.log.Panicf("internal error: encoding of %T fact failed in %v", fact, act)
 			}
 		}
 
-		factsDebugf("%v: inherited %T fact for %s: %s", act, fact, key.obj, fact)
+		factsInheritDebugf("%v: inherited %T fact for %s: %s", act, fact, key.obj, fact)
 		act.objectFacts[key] = fact
 	}
 
@@ -568,11 +549,11 @@ func inheritFacts(act, dep *action) {
 			var err error
 			fact, err = codeFact(fact)
 			if err != nil {
-				log.Panicf("internal error: encoding of %T fact failed in %v", fact, act)
+				act.log.Panicf("internal error: encoding of %T fact failed in %v", fact, act)
 			}
 		}
 
-		factsDebugf("%v: inherited %T fact for %s: %s", act, fact, key.pkg.Path(), fact)
+		factsInheritDebugf("%v: inherited %T fact for %s: %s", act, fact, key.pkg.Path(), fact)
 		act.packageFacts[key] = fact
 	}
 }
@@ -634,7 +615,7 @@ func (act *action) importObjectFact(obj types.Object, ptr analysis.Fact) bool {
 	if obj == nil {
 		panic("nil object")
 	}
-	key := objectFactKey{obj, factType(ptr)}
+	key := objectFactKey{obj, act.factType(ptr)}
 	if v, ok := act.objectFacts[key]; ok {
 		reflect.ValueOf(ptr).Elem().Set(reflect.ValueOf(v).Elem())
 		return true
@@ -644,20 +625,16 @@ func (act *action) importObjectFact(obj types.Object, ptr analysis.Fact) bool {
 
 // exportObjectFact implements Pass.ExportObjectFact.
 func (act *action) exportObjectFact(obj types.Object, fact analysis.Fact) {
-	if act.pass.ExportObjectFact == nil {
-		log.Panicf("%s: Pass.ExportObjectFact(%s, %T) called after Run", act, obj, fact)
-	}
-
 	if obj.Pkg() != act.pkg.Types {
-		log.Panicf("internal error: in analysis %s of package %s: Fact.Set(%s, %T): can't set facts on objects belonging another package",
+		act.log.Panicf("internal error: in analysis %s of package %s: Fact.Set(%s, %T): can't set facts on objects belonging another package",
 			act.a, act.pkg, obj, fact)
 	}
 
-	key := objectFactKey{obj, factType(fact)}
+	key := objectFactKey{obj, act.factType(fact)}
 	act.objectFacts[key] = fact // clobber any existing entry
-	if isFactsDebug {
+	if isFactsExportDebug {
 		objstr := types.ObjectString(obj, (*types.Package).Name)
-		factsDebugf("%s: object %s has fact %s\n",
+		factsExportDebugf("%s: object %s has fact %s\n",
 			act.pkg.Fset.Position(obj.Pos()), objstr, fact)
 	}
 }
@@ -680,7 +657,7 @@ func (act *action) importPackageFact(pkg *types.Package, ptr analysis.Fact) bool
 	if pkg == nil {
 		panic("nil package")
 	}
-	key := packageFactKey{pkg, factType(ptr)}
+	key := packageFactKey{pkg, act.factType(ptr)}
 	if v, ok := act.packageFacts[key]; ok {
 		reflect.ValueOf(ptr).Elem().Set(reflect.ValueOf(v).Elem())
 		return true
@@ -690,11 +667,7 @@ func (act *action) importPackageFact(pkg *types.Package, ptr analysis.Fact) bool
 
 // exportPackageFact implements Pass.ExportPackageFact.
 func (act *action) exportPackageFact(fact analysis.Fact) {
-	if act.pass.ExportPackageFact == nil {
-		log.Panicf("%s: Pass.ExportPackageFact(%T) called after Run", act, fact)
-	}
-
-	key := packageFactKey{act.pass.Pkg, factType(fact)}
+	key := packageFactKey{act.pass.Pkg, act.factType(fact)}
 	act.packageFacts[key] = fact // clobber any existing entry
 	factsDebugf("%s: package %s has fact %s\n",
 		act.pkg.Fset.Position(act.pass.Files[0].Pos()), act.pass.Pkg.Path(), fact)
@@ -711,10 +684,10 @@ func (act *action) allPackageFacts() []analysis.PackageFact {
 	return out
 }
 
-func factType(fact analysis.Fact) reflect.Type {
+func (act *action) factType(fact analysis.Fact) reflect.Type {
 	t := reflect.TypeOf(fact)
 	if t.Kind() != reflect.Ptr {
-		log.Fatalf("invalid Fact type: got %T, want pointer", t)
+		act.log.Fatalf("invalid Fact type: got %T, want pointer", t)
 	}
 	return t
 }
@@ -783,7 +756,7 @@ func (act *action) loadPersistedFacts() bool {
 
 	for _, f := range facts {
 		if f.Path == "" { // this is a package fact
-			key := packageFactKey{act.pkg.Types, factType(f.Fact)}
+			key := packageFactKey{act.pkg.Types, act.factType(f.Fact)}
 			act.packageFacts[key] = f.Fact
 			continue
 		}
@@ -802,7 +775,7 @@ func (act *action) loadPersistedFacts() bool {
 			// again.
 			continue
 		}
-		factKey := objectFactKey{obj, factType(f.Fact)}
+		factKey := objectFactKey{obj, act.factType(f.Fact)}
 		act.objectFacts[factKey] = f.Fact
 	}
 
@@ -810,14 +783,185 @@ func (act *action) loadPersistedFacts() bool {
 }
 
 type loadingPackage struct {
-	pkg       *packages.Package
-	imports   map[string]*loadingPackage
-	isInitial bool
-	doneCh    chan struct{}
-	log       logutils.Log
-	actions   []*action // all actions with this package
-	wasLoaded bool
-	loadGuard *load.Guard
+	pkg         *packages.Package
+	imports     map[string]*loadingPackage
+	isInitial   bool
+	log         logutils.Log
+	actions     []*action // all actions with this package
+	loadGuard   *load.Guard
+	dependents  int32 // number of depending on it packages
+	analyzeOnce sync.Once
+	decUseMutex sync.Mutex
+}
+
+func (lp *loadingPackage) String() string {
+	return fmt.Sprintf("%s@%s", lp.pkg.PkgPath, lp.pkg.Name)
+}
+
+func sizeOfValueTreeBytes(v interface{}) int {
+	return sizeOfReflectValueTreeBytes(reflect.ValueOf(v), map[uintptr]struct{}{})
+}
+
+func sizeOfReflectValueTreeBytes(rv reflect.Value, visitedPtrs map[uintptr]struct{}) int {
+	switch rv.Kind() {
+	case reflect.Ptr:
+		ptrSize := int(rv.Type().Size())
+		if rv.IsNil() {
+			return ptrSize
+		}
+		ptr := rv.Pointer()
+		if _, ok := visitedPtrs[ptr]; ok {
+			return 0
+		}
+		visitedPtrs[ptr] = struct{}{}
+		return ptrSize + sizeOfReflectValueTreeBytes(rv.Elem(), visitedPtrs)
+	case reflect.Interface:
+		if rv.IsNil() {
+			return 0
+		}
+		return sizeOfReflectValueTreeBytes(rv.Elem(), visitedPtrs)
+	case reflect.Struct:
+		ret := 0
+		for i := 0; i < rv.NumField(); i++ {
+			ret += sizeOfReflectValueTreeBytes(rv.Field(i), visitedPtrs)
+		}
+		return ret
+	case reflect.Slice, reflect.Array, reflect.Chan:
+		return int(rv.Type().Size()) + rv.Cap()*int(rv.Type().Elem().Size())
+	case reflect.Map:
+		ret := 0
+		for _, key := range rv.MapKeys() {
+			mv := rv.MapIndex(key)
+			ret += sizeOfReflectValueTreeBytes(key, visitedPtrs)
+			ret += sizeOfReflectValueTreeBytes(mv, visitedPtrs)
+		}
+		return ret
+	case reflect.String:
+		return rv.Len()
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64,
+		reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64,
+		reflect.Uintptr, reflect.Bool, reflect.Float32, reflect.Float64, reflect.UnsafePointer:
+		return int(rv.Type().Size())
+	case reflect.Invalid:
+		return 0
+	default:
+		panic("unknown rv of type " + fmt.Sprint(rv))
+	}
+}
+
+func (lp *loadingPackage) decUse() {
+	lp.decUseMutex.Lock()
+	defer lp.decUseMutex.Unlock()
+
+	for _, act := range lp.actions {
+		pass := act.pass
+		if pass == nil {
+			continue
+		}
+
+		pass.Files = nil
+		pass.TypesInfo = nil
+		pass.TypesSizes = nil
+		pass.ResultOf = nil
+		pass.Pkg = nil
+		pass.OtherFiles = nil
+		pass.AllObjectFacts = nil
+		pass.AllPackageFacts = nil
+		pass.ImportObjectFact = nil
+		pass.ExportObjectFact = nil
+		pass.ImportPackageFact = nil
+		pass.ExportPackageFact = nil
+		act.pass = nil
+	}
+
+	lp.pkg.Syntax = nil
+	lp.pkg.TypesInfo = nil
+	lp.pkg.TypesSizes = nil
+
+	// Can't set lp.pkg.Imports to nil because of loadFromExportData.visit.
+
+	dependents := atomic.AddInt32(&lp.dependents, -1)
+	if dependents != 0 {
+		return
+	}
+
+	lp.pkg.Types = nil
+	lp.pkg = nil
+
+	for _, imp := range lp.imports {
+		imp.decUse()
+	}
+	lp.imports = nil
+
+	for _, act := range lp.actions {
+		if !lp.isInitial {
+			act.pkg = nil
+		}
+		act.packageFacts = nil
+		act.objectFacts = nil
+		act.deps = nil
+		if act.result != nil {
+			if isMemoryDebug {
+				debugf("%s: decUse: nilling act result of size %d bytes", act, sizeOfValueTreeBytes(act.result))
+			}
+			act.result = nil
+		}
+	}
+	lp.actions = nil
+}
+
+func (lp *loadingPackage) analyzeRecursive(needWholeProgram bool, loadSem chan struct{}) {
+	lp.analyzeOnce.Do(func() {
+		// Load the direct dependencies, in parallel.
+		var wg sync.WaitGroup
+		wg.Add(len(lp.imports))
+		for _, imp := range lp.imports {
+			go func(imp *loadingPackage) {
+				imp.analyzeRecursive(needWholeProgram, loadSem)
+				wg.Done()
+			}(imp)
+		}
+		wg.Wait()
+		lp.analyze(needWholeProgram, loadSem)
+	})
+}
+
+func (lp *loadingPackage) analyze(needWholeProgram bool, loadSem chan struct{}) {
+	loadSem <- struct{}{}
+	defer func() {
+		<-loadSem
+	}()
+
+	defer func() {
+		if !needWholeProgram {
+			// Save memory on unused more fields.
+			lp.decUse()
+		}
+	}()
+
+	if err := lp.loadWithFacts(needWholeProgram); err != nil {
+		werr := errors.Wrapf(err, "failed to load package %s", lp.pkg.Name)
+		// Don't need to write error to errCh, it will be extracted and reported on another layer.
+		// Unblock depending actions and propagate error.
+		for _, act := range lp.actions {
+			close(act.analysisDoneCh)
+			act.err = werr
+		}
+		return
+	}
+
+	var actsWg sync.WaitGroup
+	actsWg.Add(len(lp.actions))
+	for _, act := range lp.actions {
+		go func(act *action) {
+			defer actsWg.Done()
+
+			act.waitUntilDependingAnalyzersWorked()
+
+			act.analyzeSafe()
+		}(act)
+	}
+	actsWg.Wait()
 }
 
 func (lp *loadingPackage) loadFromSource() error {
@@ -962,26 +1106,16 @@ func (lp *loadingPackage) loadFromExportData() error {
 	return nil
 }
 
-func (lp *loadingPackage) waitUntilImportsLoaded() {
-	// Imports must be loaded before loading the package.
-	for _, imp := range lp.imports {
-		<-imp.doneCh
-	}
-}
-
-func (lp *loadingPackage) loadWithFacts() error {
-	defer close(lp.doneCh)
-	defer func() {
-		lp.wasLoaded = true
-	}()
-
+func (lp *loadingPackage) loadWithFacts(needWholeProgram bool) error {
 	pkg := lp.pkg
 
 	if pkg.PkgPath == unsafePkgName {
-		// Fill in the blanks to avoid surprises.
-		pkg.Types = types.Unsafe
-		pkg.Syntax = []*ast.File{}
-		pkg.TypesInfo = new(types.Info)
+		if !needWholeProgram { // the package wasn't loaded yet
+			// Fill in the blanks to avoid surprises.
+			pkg.Types = types.Unsafe
+			pkg.Syntax = []*ast.File{}
+			pkg.TypesInfo = new(types.Info)
+		}
 		return nil
 	}
 
@@ -1000,13 +1134,12 @@ func (lp *loadingPackage) loadWithFacts() error {
 		// Already loaded package, e.g. because another not go/analysis linter required types for deps.
 		// Try load cached facts for it.
 
-		if !lp.wasLoaded { // wasLoaded can't be set in parallel
-			for _, act := range lp.actions {
-				if !act.loadCachedFacts() {
-					// Cached facts loading failed: analyze later the action from source.
-					act.needAnalyzeSource = true
-					markDepsForAnalyzingSource(act)
-				}
+		for _, act := range lp.actions {
+			if !act.loadCachedFacts() {
+				// Cached facts loading failed: analyze later the action from source.
+				act.needAnalyzeSource = true
+				factsCacheDebugf("Loading of facts for already loaded %s failed, analyze it from source later", act)
+				markDepsForAnalyzingSource(act)
 			}
 		}
 		return nil
@@ -1050,7 +1183,7 @@ func (lp *loadingPackage) loadWithFacts() error {
 		}
 
 		// Cached facts loading failed: analyze later the action from source.
-		factsCacheDebugf("Loading of facts for %s:%s failed, analyze it from source later", act.a.Name, pkg.Name)
+		factsCacheDebugf("Loading of facts for %s failed, analyze it from source later", act)
 		act.needAnalyzeSource = true // can't be set in parallel
 		needLoadFromSource = true
 
