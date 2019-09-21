@@ -102,6 +102,7 @@ type Run struct {
 	Silent              bool
 	CPUProfilePath      string
 	MemProfilePath      string
+	TracePath           string
 	Concurrency         int
 	PrintResourcesUsage bool `mapstructure:"print-resources-usage"`
 

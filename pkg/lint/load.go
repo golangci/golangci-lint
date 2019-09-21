@@ -413,13 +413,14 @@ func (cl *ContextLoader) Load(ctx context.Context, linters []*linter.Config) (*l
 			Cwd:   "",  // used by depguard and fallbacked to os.Getcwd
 			Build: nil, // used by depguard and megacheck and fallbacked to build.Default
 		},
-		Cfg:       cl.cfg,
-		ASTCache:  astCache,
-		Log:       cl.log,
-		FileCache: cl.fileCache,
-		LineCache: cl.lineCache,
-		PkgCache:  cl.pkgCache,
-		LoadGuard: cl.loadGuard,
+		Cfg:              cl.cfg,
+		ASTCache:         astCache,
+		Log:              cl.log,
+		FileCache:        cl.fileCache,
+		LineCache:        cl.lineCache,
+		PkgCache:         cl.pkgCache,
+		LoadGuard:        cl.loadGuard,
+		NeedWholeProgram: loadMode&packages.NeedDeps != 0 && loadMode&packages.NeedTypesInfo != 0,
 	}
 
 	separateNotCompilingPackages(ret)

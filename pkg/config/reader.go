@@ -102,6 +102,10 @@ func (r *FileReader) validateConfig() error {
 		return errors.New("option run.memprofilepath in config isn't allowed")
 	}
 
+	if c.Run.TracePath != "" {
+		return errors.New("option run.tracepath in config isn't allowed")
+	}
+
 	if c.Run.IsVerbose {
 		return errors.New("can't set run.verbose option with config: only on command-line")
 	}

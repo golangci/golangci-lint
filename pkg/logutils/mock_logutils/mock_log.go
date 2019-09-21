@@ -51,6 +51,23 @@ func (mr *MockLogMockRecorder) Fatalf(format interface{}, args ...interface{}) *
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Fatalf", reflect.TypeOf((*MockLog)(nil).Fatalf), varargs...)
 }
 
+// Panicf mocks base method
+func (m *MockLog) Panicf(format string, args ...interface{}) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{format}
+	for _, a := range args {
+		varargs = append(varargs, a)
+	}
+	m.ctrl.Call(m, "Panicf", varargs...)
+}
+
+// Panicf indicates an expected call of Panicf
+func (mr *MockLogMockRecorder) Panicf(format interface{}, args ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{format}, args...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Panicf", reflect.TypeOf((*MockLog)(nil).Panicf), varargs...)
+}
+
 // Errorf mocks base method
 func (m *MockLog) Errorf(format string, args ...interface{}) {
 	m.ctrl.T.Helper()
