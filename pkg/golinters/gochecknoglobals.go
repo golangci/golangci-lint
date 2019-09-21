@@ -60,8 +60,56 @@ func (lint Gochecknoglobals) checkFile(f *ast.File, fset *token.FileSet) []resul
 	return res
 }
 
-func isWhitelisted(i *ast.Ident) bool {
-	return i.Name == "_" || i.Name == "version" || looksLikeError(i)
+type whitelistedExpression struct {
+	Name    string
+	SelName string
+}
+
+func isWhitelisted(v ast.Node) bool {
+	switch i := v.(type) {
+	case *ast.Ident:
+		return i.Name == "_" || i.Name == "version" || looksLikeError(i)
+	case *ast.CallExpr:
+		if expr, ok := i.Fun.(*ast.SelectorExpr); ok {
+			return isWhitelistedSelectorExpression(expr)
+		}
+	case *ast.CompositeLit:
+		if expr, ok := i.Type.(*ast.SelectorExpr); ok {
+			return isWhitelistedSelectorExpression(expr)
+		}
+	}
+
+	return false
+}
+
+func isWhitelistedSelectorExpression(v *ast.SelectorExpr) bool {
+	x, ok := v.X.(*ast.Ident)
+	if !ok {
+		return false
+	}
+
+	whitelist := []whitelistedExpression{
+		{
+			Name:    "errors",
+			SelName: "New",
+		},
+		{
+			Name:    "fmt",
+			SelName: "Errorf",
+		},
+		{
+			Name:    "regexp",
+			SelName: "MustCompile",
+		},
+	}
+
+	for _, i := range whitelist {
+		if x.Name == i.Name && v.Sel.Name == i.SelName {
+			return true
+		}
+	}
+
+	return false
 }
 
 // looksLikeError returns true if the AST identifier starts
