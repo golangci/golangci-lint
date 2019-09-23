@@ -8,11 +8,27 @@ import (
 // Message contains a message
 type Message struct {
 	Pos     token.Position
+	Type    MessageType
 	Message string
 }
 
+// MessageType describes what should happen to fix the warning
+type MessageType uint8
+
+// List of MessageTypes
+const (
+	MessageTypeLeading MessageType = iota + 1
+	MessageTypeTrailing
+	MessageTypeAddAfter
+)
+
+// Settings contains settings for edge-cases
+type Settings struct {
+	MultiIf bool
+}
+
 // Run runs this linter on the provided code
-func Run(file *ast.File, fset *token.FileSet) []Message {
+func Run(file *ast.File, fset *token.FileSet, settings Settings) []Message {
 	var messages []Message
 
 	for _, f := range file.Decls {
@@ -21,7 +37,7 @@ func Run(file *ast.File, fset *token.FileSet) []Message {
 			continue
 		}
 
-		vis := visitor{file.Comments, fset, nil}
+		vis := visitor{file.Comments, fset, nil, make(map[*ast.BlockStmt]bool), settings}
 		ast.Walk(&vis, decl)
 
 		messages = append(messages, vis.messages...)
@@ -34,6 +50,8 @@ type visitor struct {
 	comments []*ast.CommentGroup
 	fset     *token.FileSet
 	messages []Message
+	multiIf  map[*ast.BlockStmt]bool
+	settings Settings
 }
 
 func (v *visitor) Visit(node ast.Node) ast.Visitor {
@@ -41,12 +59,33 @@ func (v *visitor) Visit(node ast.Node) ast.Visitor {
 		return v
 	}
 
-	if stmt, ok := node.(*ast.BlockStmt); ok {
-		first, last := firstAndLast(v.comments, v.fset, stmt.Pos(), stmt.End(), stmt.List)
+	if v.settings.MultiIf {
+		if stmt, ok := node.(*ast.IfStmt); ok {
+			start, end := posLine(v.fset, stmt.Cond.Pos()), posLine(v.fset, stmt.Cond.End())
 
-		if msg := checkStart(v.fset, stmt.Lbrace, first); msg != nil {
-			v.messages = append(v.messages, *msg)
+			if end > start { // Check only multi line conditions
+				v.multiIf[stmt.Body] = true
+			}
 		}
+	}
+
+	if stmt, ok := node.(*ast.BlockStmt); ok {
+		multiIf := v.multiIf[stmt]
+
+		comments := v.comments
+		if multiIf {
+			comments = nil
+		}
+		first, last := firstAndLast(comments, v.fset, stmt.Pos(), stmt.End(), stmt.List)
+
+		startMsg := checkStart(v.fset, stmt.Lbrace, first)
+
+		if multiIf && startMsg == nil {
+			v.messages = append(v.messages, Message{v.fset.Position(stmt.Pos()), MessageTypeAddAfter, `multi-line if should be followed by a newline`})
+		} else if !multiIf && startMsg != nil {
+			v.messages = append(v.messages, *startMsg)
+		}
+
 		if msg := checkEnd(v.fset, stmt.Rbrace, last); msg != nil {
 			v.messages = append(v.messages, *msg)
 		}
@@ -92,7 +131,7 @@ func checkStart(fset *token.FileSet, start token.Pos, first ast.Node) *Message {
 
 	if posLine(fset, start)+1 < posLine(fset, first.Pos()) {
 		pos := fset.Position(start)
-		return &Message{pos, `unnecessary leading newline`}
+		return &Message{pos, MessageTypeLeading, `unnecessary leading newline`}
 	}
 
 	return nil
@@ -105,7 +144,7 @@ func checkEnd(fset *token.FileSet, end token.Pos, last ast.Node) *Message {
 
 	if posLine(fset, end)-1 > posLine(fset, last.End()) {
 		pos := fset.Position(end)
-		return &Message{pos, `unnecessary trailing newline`}
+		return &Message{pos, MessageTypeTrailing, `unnecessary trailing newline`}
 	}
 
 	return nil

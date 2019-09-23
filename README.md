@@ -790,6 +790,9 @@ linters-settings:
     # checks assignments with too many blank identifiers; default is 2
     max-blank-identifiers: 2
 
+  whitespace:
+    multi-if: false
+
 linters:
   enable:
     - megacheck
