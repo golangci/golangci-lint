@@ -17,6 +17,7 @@ script:
 branches:
   only: # speed up CI: don't build pull requests twice
     - "master"
+    - /^v\d+\.\d+\.\d+$/
 
 after_success:
   - test -n "$TRAVIS_TAG" && docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
