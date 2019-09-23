@@ -57,6 +57,9 @@ replace (
 	github.com/census-instrumentation/opencensus-proto => github.com/census-instrumentation/opencensus-proto v0.2.1
 	github.com/go-macaron/cors => github.com/go-macaron/cors v0.0.0-20190418220122-6fd6a9bfe14e
 
+	// https://github.com/timakin/bodyclose/pull/20
+	github.com/timakin/bodyclose => github.com/golangci/bodyclose v0.0.0-20190910154619-42cacc375707
+
 	// https://github.com/golang/tools/pull/156
 	// https://github.com/golang/tools/pull/160
 	// https://github.com/golang/tools/pull/162
