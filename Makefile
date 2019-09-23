@@ -5,6 +5,8 @@
 export GO111MODULE = on
 # opt-in to vendor deps across all go commands.
 export GOFLAGS = -mod=vendor
+# enable consistent Go 1.12/1.13 GOPROXY behavior.
+export GOPROXY = https://proxy.golang.org
 
 # Build
 
