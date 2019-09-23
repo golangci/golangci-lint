@@ -26,16 +26,16 @@ builds:
     main: ./cmd/golangci-lint/
     ldflags: -s -w -X main.version={{.Version}} -X main.commit={{.ShortCommit}} -X main.date={{.Date}}
 
-archive:
-  format: tar.gz
-  wrap_in_directory: true
-  format_overrides:
-    - goos: windows
-      format: zip
-  name_template: '{{ .Binary }}-{{ .Version }}-{{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'
-  files:
-    - LICENSE
-    - README.md
+archives:
+  - format: tar.gz
+    wrap_in_directory: true
+    format_overrides:
+      - goos: windows
+        format: zip
+    name_template: '{{ .Binary }}-{{ .Version }}-{{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'
+    files:
+      - LICENSE
+      - README.md
 
 snapshot:
   name_template: SNAPSHOT-{{ .Commit }}
@@ -60,17 +60,17 @@ dockers:
       - "golangci/golangci-lint:{{ .Tag }}"
       - "golangci/golangci-lint:v{{ .Major }}.{{ .Minor }}"
 
-brew:
-  github:
-    owner: golangci
-    name: homebrew-tap
-  folder: Formula
-  homepage:  https://golangci.com
-  description: Fast linters runner for Go.
-  install: |
-    bin.install "golangci-lint"
-    output = Utils.popen_read("#{bin}/golangci-lint completion bash")
-    (bash_completion/"golangci-lint").write output
-    prefix.install_metafiles
-  test: |
-    system "#{bin}/golangci-lint --version"
+brews:
+  - github:
+      owner: golangci
+      name: homebrew-tap
+    folder: Formula
+    homepage:  https://golangci.com
+    description: Fast linters runner for Go.
+    install: |
+      bin.install "golangci-lint"
+      output = Utils.popen_read("#{bin}/golangci-lint completion bash")
+      (bash_completion/"golangci-lint").write output
+      prefix.install_metafiles
+    test: |
+      system "#{bin}/golangci-lint --version"
