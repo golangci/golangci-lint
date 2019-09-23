@@ -225,7 +225,7 @@ func (r *runner) getBodyOp(instr ssa.Instruction) (*ssa.UnOp, bool) {
 func (r *runner) isCloseCall(ccall ssa.Instruction) bool {
 	switch ccall := ccall.(type) {
 	case *ssa.Defer:
-		if ccall.Call.Method.Name() == r.closeMthd.Name() {
+		if ccall.Call.Method != nil && ccall.Call.Method.Name() == r.closeMthd.Name() {
 			return true
 		}
 	case *ssa.Call:

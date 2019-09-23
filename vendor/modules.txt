@@ -359,7 +359,7 @@ github.com/spf13/viper
 # github.com/stretchr/testify v1.4.0
 github.com/stretchr/testify/assert
 github.com/stretchr/testify/require
-# github.com/timakin/bodyclose v0.0.0-20190721030226-87058b9bfcec
+# github.com/timakin/bodyclose v0.0.0-20190721030226-87058b9bfcec => github.com/golangci/bodyclose v0.0.0-20190910154619-42cacc375707
 github.com/timakin/bodyclose/passes/bodyclose
 # github.com/ultraware/funlen v0.0.2
 github.com/ultraware/funlen
