@@ -872,6 +872,13 @@ func (lp *loadingPackage) decUse() {
 		pass.ImportPackageFact = nil
 		pass.ExportPackageFact = nil
 		act.pass = nil
+		act.deps = nil
+		if act.result != nil {
+			if isMemoryDebug {
+				debugf("%s: decUse: nilling act result of size %d bytes", act, sizeOfValueTreeBytes(act.result))
+			}
+			act.result = nil
+		}
 	}
 
 	lp.pkg.Syntax = nil
@@ -899,13 +906,6 @@ func (lp *loadingPackage) decUse() {
 		}
 		act.packageFacts = nil
 		act.objectFacts = nil
-		act.deps = nil
-		if act.result != nil {
-			if isMemoryDebug {
-				debugf("%s: decUse: nilling act result of size %d bytes", act, sizeOfValueTreeBytes(act.result))
-			}
-			act.result = nil
-		}
 	}
 	lp.actions = nil
 }
