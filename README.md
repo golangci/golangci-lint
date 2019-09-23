@@ -84,10 +84,10 @@ Local installation is not recommended for your CI pipeline. Only install the lin
 go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
 ```
 
-With `go1.11` or later you can get a particular version
+With `go1.12` or later you can get a particular version
 
 ```bash
-GO111MODULE=on go get github.com/golangci/golangci-lint/cmd/golangci-lint@v1.17.1
+GO111MODULE=on go get github.com/golangci/golangci-lint/cmd/golangci-lint@v1.18.0
 ```
 
 #### MacOS
@@ -1071,7 +1071,7 @@ Long answer:
 2. go1.9 is officially supported by golangci-lint <= v1.10.2
 3. go1.10 is officially supported by golangci-lint <= 1.15.0.
 4. go1.11 is officially supported by golangci-lint <= 1.17.1.
-5. go1.12 and go1.13 are officially supported by the latest version of golangci-lint (>= 1.18.0).
+5. go1.12+ are officially supported by the latest version of golangci-lint (>= 1.18.0).
 
 **`golangci-lint` doesn't work**
 
