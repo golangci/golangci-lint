@@ -171,6 +171,9 @@ type LintersSettings struct {
 		Lines      int
 		Statements int
 	}
+	Whitespace struct {
+		MultiIf bool `mapstructure:"multi-if"`
+	}
 
 	Lll      LllSettings
 	Unparam  UnparamSettings

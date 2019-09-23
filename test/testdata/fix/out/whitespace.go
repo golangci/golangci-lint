@@ -1,4 +1,5 @@
 //args: -Ewhitespace
+//config: linters-settings.whitespace.multi-if=true
 package p
 
 import "fmt"
@@ -40,4 +41,12 @@ func oneLeadingNewlineWithCommentFunc() {
 func twoLeadingNewlines() {
 
 	fmt.Println("Hello world")
+}
+
+func multiIfFunc() {
+	if 1 == 1 &&
+		2 == 2 {
+
+		fmt.Println(`Hello multi-line world`)
+	}
 }
