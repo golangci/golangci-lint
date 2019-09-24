@@ -6,14 +6,12 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
-
-	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 
 	"github.com/golangci/golangci-lint/pkg/lint/astcache"
+	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
 	"github.com/golangci/golangci-lint/pkg/logutils"
-	"github.com/golangci/golangci-lint/pkg/logutils/mock_logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
@@ -43,18 +41,15 @@ func newTestNolintProcessor(log logutils.Log) *Nolint {
 	return NewNolint(cache, log, lintersdb.NewManager(nil))
 }
 
-func getOkLogger(ctrl *gomock.Controller) *mock_logutils.MockLog {
-	log := mock_logutils.NewMockLog(ctrl)
-	log.EXPECT().Infof(gomock.Any(), gomock.Any()).AnyTimes()
+func getMockLog() *logutils.MockLog {
+	log := logutils.NewMockLog()
+	log.On("Infof", mock.Anything, mock.Anything).Maybe()
 	return log
 }
 
 //nolint:funlen
 func TestNolint(t *testing.T) {
-	ctrl := gomock.NewController(t)
-	defer ctrl.Finish()
-
-	p := newTestNolintProcessor(getOkLogger(ctrl))
+	p := newTestNolintProcessor(getMockLog())
 	defer p.Finish()
 
 	// test inline comments
@@ -152,10 +147,8 @@ func TestNolintInvalidLinterName(t *testing.T) {
 		},
 	}
 
-	ctrl := gomock.NewController(t)
-	defer ctrl.Finish()
-	log := getOkLogger(ctrl)
-	log.EXPECT().Warnf("Found unknown linters in //nolint directives: %s", "bad1, bad2")
+	log := getMockLog()
+	log.On("Warnf", "Found unknown linters in //nolint directives: %s", "bad1, bad2")
 
 	p := newTestNolintProcessor(log)
 	processAssertEmpty(t, p, issues...)
@@ -163,10 +156,7 @@ func TestNolintInvalidLinterName(t *testing.T) {
 }
 
 func TestNolintAliases(t *testing.T) {
-	ctrl := gomock.NewController(t)
-	defer ctrl.Finish()
-
-	p := newTestNolintProcessor(getOkLogger(ctrl))
+	p := newTestNolintProcessor(getMockLog())
 	for _, line := range []int{47, 49, 51} {
 		line := line
 		t.Run(fmt.Sprintf("line-%d", line), func(t *testing.T) {

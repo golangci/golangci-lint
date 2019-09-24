@@ -3,15 +3,12 @@ package golinters
 import (
 	"testing"
 
-	"github.com/golang/mock/gomock"
-
-	"github.com/golangci/golangci-lint/pkg/result"
-
 	diffpkg "github.com/sourcegraph/go-diff/diff"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 
 	"github.com/golangci/golangci-lint/pkg/logutils"
-	"github.com/golangci/golangci-lint/pkg/logutils/mock_logutils"
+	"github.com/golangci/golangci-lint/pkg/result"
 )
 
 func testDiffProducesChanges(t *testing.T, log logutils.Log, diff string, expectedChanges ...Change) {
@@ -130,10 +127,9 @@ index 0000000..6399915
 +// line
 `
 
-	ctrl := gomock.NewController(t)
-	defer ctrl.Finish()
-	log := mock_logutils.NewMockLog(ctrl)
-	log.EXPECT().Infof("The diff contains only additions: no original or deleted lines: %#v", gomock.Any())
+	log := logutils.NewMockLog()
+	log.On("Infof", "The diff contains only additions: no original or deleted lines: %#v", mock.Anything)
+
 	var noChanges []Change
 	testDiffProducesChanges(t, log, diff, noChanges...)
 }
