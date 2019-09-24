@@ -5,5 +5,7 @@
 /.idea/
 /test/path
 /golangci-lint
-/tools/
+/tools/Dracula.itermcolors
+/tools/node_modules
+/tools/svg-term
 /.vscode/
