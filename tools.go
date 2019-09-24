@@ -9,8 +9,6 @@ package tools
 //
 // nolint
 import (
-	_ "github.com/golang/mock/mockgen"
 	_ "github.com/goreleaser/godownloader"
 	_ "github.com/goreleaser/goreleaser"
-	_ "golang.org/x/tools/cmd/goimports"
 )

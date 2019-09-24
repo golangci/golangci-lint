@@ -150,10 +150,6 @@ github.com/gobwas/glob/util/strings
 github.com/gogo/protobuf/proto
 # github.com/golang/groupcache v0.0.0-20190702054246-869f871628b6
 github.com/golang/groupcache/lru
-# github.com/golang/mock v1.3.1
-github.com/golang/mock/gomock
-github.com/golang/mock/mockgen
-github.com/golang/mock/mockgen/model
 # github.com/golang/protobuf v1.3.2
 github.com/golang/protobuf/proto
 github.com/golang/protobuf/protoc-gen-go/descriptor
@@ -356,8 +352,11 @@ github.com/spf13/jwalterweatherman
 github.com/spf13/pflag
 # github.com/spf13/viper v1.4.0
 github.com/spf13/viper
+# github.com/stretchr/objx v0.2.0
+github.com/stretchr/objx
 # github.com/stretchr/testify v1.4.0
 github.com/stretchr/testify/assert
+github.com/stretchr/testify/mock
 github.com/stretchr/testify/require
 # github.com/timakin/bodyclose v0.0.0-20190721030226-87058b9bfcec => github.com/golangci/bodyclose v0.0.0-20190924091105-43b3ff1b0de0
 github.com/timakin/bodyclose/passes/bodyclose
@@ -441,7 +440,6 @@ golang.org/x/text/unicode/bidi
 golang.org/x/text/unicode/norm
 golang.org/x/text/width
 # golang.org/x/tools v0.0.0-20190912215617-3720d1ec3678 => github.com/golangci/tools v0.0.0-20190915081525-6aa350649b1c
-golang.org/x/tools/cmd/goimports
 golang.org/x/tools/go/analysis
 golang.org/x/tools/go/analysis/passes/asmdecl
 golang.org/x/tools/go/analysis/passes/assign
