@@ -325,7 +325,7 @@ func (r *runner) calledInFunc(f *ssa.Function, called bool) bool {
 								}
 								for _, vref := range vrefs {
 									if c, ok := vref.(*ssa.Call); ok {
-										if c.Call.Method.Name() == closeMethod {
+										if c.Call.Method != nil && c.Call.Method.Name() == closeMethod {
 											return !called
 										}
 									}
