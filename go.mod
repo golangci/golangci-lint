@@ -21,8 +21,6 @@ require (
 	github.com/golangci/prealloc v0.0.0-20180630174525-215b22d4de21
 	github.com/golangci/revgrep v0.0.0-20180526074752-d9c87f5ffaf0
 	github.com/golangci/unconvert v0.0.0-20180507085042-28b1c447d1f4
-	github.com/goreleaser/godownloader v0.0.0-20190907185828-93b2b793cd90
-	github.com/goreleaser/goreleaser v0.118.0
 	github.com/matoous/godox v0.0.0-20190910121045-032ad8106c86
 	github.com/mattn/go-colorable v0.1.2
 	github.com/mitchellh/go-homedir v1.1.0
@@ -49,13 +47,6 @@ require (
 )
 
 replace (
-	// Fix godownloader/goreleaser deps (ambiguous imports/invalid pseudo-version)
-	// https://github.com/goreleaser/godownloader/issues/133
-	// https://github.com/goreleaser/goreleaser/issues/1145
-	github.com/Azure/go-autorest => github.com/Azure/go-autorest v13.0.1+incompatible
-	github.com/census-instrumentation/opencensus-proto => github.com/census-instrumentation/opencensus-proto v0.2.1
-	github.com/go-macaron/cors => github.com/go-macaron/cors v0.0.0-20190418220122-6fd6a9bfe14e
-
 	// https://github.com/timakin/bodyclose/pull/20
 	github.com/timakin/bodyclose => github.com/golangci/bodyclose v0.0.0-20190924091105-43b3ff1b0de0
 

@@ -16,8 +16,11 @@ build_race: FORCE
 	go build -race -o golangci-lint ./cmd/golangci-lint
 build: golangci-lint
 clean:
-	rm -f golangci-lint test/path
-	rm -rf tools
+	rm -f golangci-lint
+	rm -f test/path
+	rm -f tools/svg-term
+	rm -f tools/Dracula.itermcolors
+	rm -rf tools/node_modules
 .PHONY: fast_build build build_race clean
 
 # Test
@@ -60,8 +63,9 @@ fast_check_generated:
 	git diff --exit-code # check no changes
 .PHONY: fast_check_generated
 
-release:
-	go run ./vendor/github.com/goreleaser/goreleaser
+release: export GOFLAGS = -mod=readonly
+release: .goreleaser.yml
+	cd tools && go run github.com/goreleaser/goreleaser --config ../.goreleaser.yml
 .PHONY: release
 
 # Non-PHONY targets (real files)
@@ -69,21 +73,19 @@ release:
 golangci-lint: FORCE
 	go build -o $@ ./cmd/golangci-lint
 
-tools:
-	@mkdir -p tools
-
-tools/svg-term: tools
+tools/svg-term: tools/package.json tools/package-lock.json
 	cd tools && npm ci
 	ln -sf node_modules/.bin/svg-term $@
 
-tools/Dracula.itermcolors: tools
+tools/Dracula.itermcolors:
 	curl -fL -o $@ https://raw.githubusercontent.com/dracula/iterm/master/Dracula.itermcolors
 
 docs/demo.svg: tools/svg-term tools/Dracula.itermcolors
 	./tools/svg-term --cast=183662 --out docs/demo.svg --window --width 110 --height 30 --from 2000 --to 20000 --profile ./tools/Dracula.itermcolors --term iterm2
 
+install.sh: export GOFLAGS = -mod=readonly
 install.sh: .goreleaser.yml
-	go run ./vendor/github.com/goreleaser/godownloader .goreleaser.yml | sed '/DO NOT EDIT/s/ on [0-9TZ:-]*//' > $@
+	cd tools && go run github.com/goreleaser/godownloader ../.goreleaser.yml | sed '/DO NOT EDIT/s/ on [0-9TZ:-]*//' > ../$@
 
 README.md: FORCE golangci-lint
 	go run ./scripts/gen_readme/main.go
