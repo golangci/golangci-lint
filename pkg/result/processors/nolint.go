@@ -126,7 +126,7 @@ func (p *Nolint) buildIgnoredRangesForFile(f *ast.File, fset *token.FileSet, fil
 }
 
 func (p *Nolint) shouldPassIssue(i *result.Issue) (bool, error) {
-	if i.FromLinter == "nolintlint" {
+	if i.FromLinter == "nolintlint" { // a nolint directive would otherwise prevent nolintlint from checking the line
 		return true, nil
 	}
 
