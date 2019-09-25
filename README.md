@@ -429,8 +429,8 @@ golangci-lint help linters
 - [govet](https://golang.org/cmd/vet/) - Vet examines Go source code and reports suspicious constructs, such as Printf calls whose arguments do not align with the format string
 - [errcheck](https://github.com/kisielk/errcheck) - Errcheck is a program for checking for unchecked errors in go programs. These unchecked errors can be critical bugs in some cases
 - [staticcheck](https://staticcheck.io/) - Staticcheck is a go vet on steroids, applying a ton of static analysis checks
-- [unused](https://github.com/dominikh/go-tools/tree/master/cmd/unused) - Checks Go code for unused constants, variables, functions and types
-- [gosimple](https://github.com/dominikh/go-tools/tree/master/cmd/gosimple) - Linter for Go source code that specializes in simplifying a code
+- [unused](https://github.com/dominikh/go-tools/tree/master/unused) - Checks Go code for unused constants, variables, functions and types
+- [gosimple](https://github.com/dominikh/go-tools/tree/master/simple) - Linter for Go source code that specializes in simplifying a code
 - [structcheck](https://github.com/opennota/check) - Finds unused struct fields
 - [varcheck](https://github.com/opennota/check) - Finds unused global variables and constants
 - [ineffassign](https://github.com/gordonklaus/ineffassign) - Detects when assignments to existing variables are not used

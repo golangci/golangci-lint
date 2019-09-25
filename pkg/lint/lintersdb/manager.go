@@ -114,12 +114,12 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadDepsTypeInfo().
 			WithPresets(linter.PresetUnused).
 			WithSpeed(5).
-			WithURL("https://github.com/dominikh/go-tools/tree/master/cmd/unused"),
+			WithURL("https://github.com/dominikh/go-tools/tree/master/unused"),
 		linter.NewConfig(golinters.NewGosimple()).
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetStyle).
 			WithSpeed(5).
-			WithURL("https://github.com/dominikh/go-tools/tree/master/cmd/gosimple"),
+			WithURL("https://github.com/dominikh/go-tools/tree/master/simple"),
 		linter.NewConfig(golinters.NewStylecheck()).
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetStyle).
