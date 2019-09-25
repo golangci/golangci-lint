@@ -21,7 +21,6 @@ func (Dogsled) Desc() string {
 }
 
 func (d Dogsled) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issue, error) {
-
 	var res []result.Issue
 	for _, f := range lintCtx.ASTCache.GetAllValidFiles() {
 		v := returnsVisitor{
