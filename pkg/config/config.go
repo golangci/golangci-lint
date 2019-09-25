@@ -279,7 +279,7 @@ var defaultLintersSettings = LintersSettings{
 	NoLintLint: NoLintLintSettings{
 		Explain:  false,
 		Machine:  false,
-		Specific: true,
+		Specific: false,
 	},
 }
 

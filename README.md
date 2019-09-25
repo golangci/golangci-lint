@@ -792,9 +792,9 @@ linters-settings:
     # checks assignments with too many blank identifiers; default is 2
     max-blank-identifiers: 2
   nolintlint:
-    explain: true
-    machine: false
-    specific: true
+    explain: true # require an explanation for nolint directives
+    machine: false # don't require machine-readable nolint directives (i.e. with no leading space)
+    specific: true # require nolint directives to be specific about which linter is being skipped
 
   whitespace:
     multi-if: false
@@ -924,9 +924,9 @@ linters-settings:
       - wrapperFunc
       - dupImport # https://github.com/go-critic/go-critic/issues/845
   nolintlint:
-    explain: true
-    machine: false
-    specific: true
+    explain: false # don't require an explanation for nolint directives
+    machine: false # don't require machine-readable nolint directives (i.e. with no leading space)
+    specific: false # don't require nolint directives to be specific about which linter is being skipped
 
 linters:
   # inverted configuration with `enable-all` and `disable` is not scalable during updates of golangci-lint
