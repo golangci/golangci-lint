@@ -923,6 +923,9 @@ linters-settings:
     disabled-checks:
       - wrapperFunc
       - dupImport # https://github.com/go-critic/go-critic/issues/845
+  funlen:
+    lines: 100
+    statements: 50
   nolintlint:
     explain: false # don't require an explanation for nolint directives
     machine: false # don't require machine-readable nolint directives (i.e. with no leading space)
@@ -935,11 +938,10 @@ linters:
     - bodyclose
     - deadcode
     - depguard
-    # - dogsled - TODO: enable it when golangci.com will support it.
+    - dogsled
     - dupl
     - errcheck
-    # - funlen - TODO: enable it when golangci.com will support it.
-    # - godox - TODO: enable it when golangci.com will support it.
+    - funlen
     - gochecknoinits
     - goconst
     - gocritic
@@ -964,9 +966,10 @@ linters:
     - unparam
     - unused
     - varcheck
-    # - whitespace - TODO: enable it when golangci.com will support it.
+    - whitespace
 
   # don't enable:
+  # - godox
   # - maligned,prealloc
   # - gochecknoglobals
 
@@ -984,7 +987,7 @@ issues:
 # golangci.com configuration
 # https://github.com/golangci/golangci/wiki/Configuration
 service:
-  golangci-lint-version: 1.17.x # use the fixed version to not introduce new linters unexpectedly
+  golangci-lint-version: 1.19.x # use the fixed version to not introduce new linters unexpectedly
   prepare:
     - echo "here I can run custom commands, but no preparation needed for this repo"
 ```
