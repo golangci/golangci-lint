@@ -39,8 +39,6 @@ require (
 	github.com/ultraware/funlen v0.0.2
 	github.com/ultraware/whitespace v0.0.3
 	github.com/valyala/quicktemplate v1.2.0
-	golang.org/x/net v0.0.0-20190918130420-a8b05e9114ab // indirect
-	golang.org/x/sys v0.0.0-20190916202348-b4ddaad3f8a3 // indirect
 	golang.org/x/tools v0.0.0-20190917215024-905c8ffbfa41
 	gopkg.in/yaml.v2 v2.2.2
 	honnef.co/go/tools v0.0.1-2019.2.3
