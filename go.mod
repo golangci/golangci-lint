@@ -34,7 +34,7 @@ require (
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.4.0
 	github.com/stretchr/testify v1.4.0
-	github.com/timakin/bodyclose v0.0.0-20190721030226-87058b9bfcec
+	github.com/timakin/bodyclose v0.0.0-20190926151346-866fdb772e33
 	github.com/ultraware/funlen v0.0.2
 	github.com/ultraware/whitespace v0.0.3
 	github.com/valyala/quicktemplate v1.2.0
@@ -46,12 +46,7 @@ require (
 	mvdan.cc/unparam v0.0.0-20190720180237-d51796306d8f
 )
 
-replace (
-	// https://github.com/timakin/bodyclose/pull/20
-	github.com/timakin/bodyclose => github.com/golangci/bodyclose v0.0.0-20190924091105-43b3ff1b0de0
-
-	// https://github.com/golang/tools/pull/156
-	// https://github.com/golang/tools/pull/160
-	// https://github.com/golang/tools/pull/162
-	golang.org/x/tools => github.com/golangci/tools v0.0.0-20190915081525-6aa350649b1c
-)
+// https://github.com/golang/tools/pull/156
+// https://github.com/golang/tools/pull/160
+// https://github.com/golang/tools/pull/162
+replace golang.org/x/tools => github.com/golangci/tools v0.0.0-20190915081525-6aa350649b1c
