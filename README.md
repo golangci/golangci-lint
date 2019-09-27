@@ -893,8 +893,6 @@ linters-settings:
     min-confidence: 0
   gocyclo:
     min-complexity: 15
-  gocognit:
-    min-complexity: 20
   maligned:
     suggest-new: true
   dupl:
@@ -943,7 +941,6 @@ linters:
     - goconst
     - gocritic
     - gocyclo
-    - gocognit
     - gofmt
     - goimports
     - golint
