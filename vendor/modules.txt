@@ -164,7 +164,7 @@ github.com/stretchr/objx
 github.com/stretchr/testify/assert
 github.com/stretchr/testify/mock
 github.com/stretchr/testify/require
-# github.com/timakin/bodyclose v0.0.0-20190721030226-87058b9bfcec => github.com/golangci/bodyclose v0.0.0-20190924091105-43b3ff1b0de0
+# github.com/timakin/bodyclose v0.0.0-20190926151346-866fdb772e33
 github.com/timakin/bodyclose/passes/bodyclose
 # github.com/ultraware/funlen v0.0.2
 github.com/ultraware/funlen
