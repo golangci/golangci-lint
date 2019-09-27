@@ -49,6 +49,7 @@ func getBenchLintersArgsNoMegacheck() []string {
 	return []string{
 		"--enable=deadcode",
 		"--enable=gocyclo",
+		"--enable=gocognit",
 		"--enable=golint",
 		"--enable=varcheck",
 		"--enable=structcheck",

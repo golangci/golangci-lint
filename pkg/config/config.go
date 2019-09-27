@@ -138,6 +138,9 @@ type LintersSettings struct {
 	Gocyclo struct {
 		MinComplexity int `mapstructure:"min-complexity"`
 	}
+	Gocognit struct {
+		MinComplexity int `mapstructure:"min-complexity"`
+	}
 	Varcheck struct {
 		CheckExportedFields bool `mapstructure:"exported-fields"`
 	}
