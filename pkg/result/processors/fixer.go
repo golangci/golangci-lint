@@ -8,16 +8,13 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/golangci/golangci-lint/pkg/timeutils"
-
-	"github.com/golangci/golangci-lint/pkg/fsutils"
-
-	"github.com/golangci/golangci-lint/pkg/logutils"
-
 	"github.com/pkg/errors"
 
 	"github.com/golangci/golangci-lint/pkg/config"
+	"github.com/golangci/golangci-lint/pkg/fsutils"
+	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
+	"github.com/golangci/golangci-lint/pkg/timeutils"
 )
 
 type Fixer struct {

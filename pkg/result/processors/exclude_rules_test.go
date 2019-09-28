@@ -5,10 +5,9 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/golangci/golangci-lint/pkg/fsutils"
-
 	"github.com/stretchr/testify/assert"
 
+	"github.com/golangci/golangci-lint/pkg/fsutils"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 

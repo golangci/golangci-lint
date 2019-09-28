@@ -4,12 +4,10 @@ import (
 	"fmt"
 	"sync"
 
+	"github.com/golangci/ineffassign"
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
-
-	ineffassignAPI "github.com/golangci/ineffassign"
-
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
@@ -37,7 +35,7 @@ func NewIneffassign() *goanalysis.Linter {
 				fileNames = append(fileNames, pos.Filename)
 			}
 
-			issues := ineffassignAPI.Run(fileNames)
+			issues := ineffassign.Run(fileNames)
 			if len(issues) == 0 {
 				return nil, nil
 			}

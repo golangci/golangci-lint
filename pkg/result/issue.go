@@ -1,6 +1,8 @@
 package result
 
-import "go/token"
+import (
+	"go/token"
+)
 
 type Range struct {
 	From, To int

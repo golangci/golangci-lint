@@ -28,20 +28,16 @@ import (
 	"sync/atomic"
 	"time"
 
-	"golang.org/x/tools/go/types/objectpath"
-
+	"github.com/pkg/errors"
+	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/gcexportdata"
+	"golang.org/x/tools/go/packages"
+	"golang.org/x/tools/go/types/objectpath"
 
 	"github.com/golangci/golangci-lint/internal/errorutil"
 	"github.com/golangci/golangci-lint/internal/pkgcache"
-
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis/load"
 	"github.com/golangci/golangci-lint/pkg/logutils"
-
-	"github.com/pkg/errors"
-
-	"golang.org/x/tools/go/analysis"
-	"golang.org/x/tools/go/packages"
 )
 
 var (

@@ -4,10 +4,9 @@ import (
 	"golang.org/x/tools/go/analysis"
 	"honnef.co/go/tools/unused"
 
+	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
-
-	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 )
 
 func NewUnused() *goanalysis.Linter {

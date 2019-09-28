@@ -3,9 +3,9 @@ package golinters
 import (
 	"fmt"
 
-	"github.com/golangci/golangci-lint/pkg/logutils"
-
 	"golang.org/x/tools/go/analysis"
+
+	"github.com/golangci/golangci-lint/pkg/logutils"
 )
 
 var debugf = logutils.Debug("megacheck")
