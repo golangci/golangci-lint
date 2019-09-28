@@ -147,6 +147,7 @@ The following great projects use golangci-lint:
 * [y0ssar1an/q](https://github.com/y0ssar1an/q)
 * [segmentio/terraform-docs](https://github.com/segmentio/terraform-docs)
 * [kubeedge/kubeedge](https://github.com/kubeedge/kubeedge)
+* [caicloud/cyclone](https://github.com/caicloud/cyclone)
 
 ## Quick Start
 
