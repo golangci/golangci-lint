@@ -147,5 +147,5 @@ func NewGovet(cfg *config.GovetSettings) *goanalysis.Linter {
 			"such as Printf calls whose arguments do not align with the format string",
 		analyzersFromConfig(cfg),
 		settings,
-	)
+	).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }

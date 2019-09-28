@@ -1,38 +1,55 @@
 package golinters // nolint:dupl
 
 import (
-	"context"
 	"fmt"
+	"sync"
 
 	varcheckAPI "github.com/golangci/check/cmd/varcheck"
+	"golang.org/x/tools/go/analysis"
 
+	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-type Varcheck struct{}
-
-func (Varcheck) Name() string {
-	return "varcheck"
-}
-
-func (Varcheck) Desc() string {
-	return "Finds unused global variables and constants"
-}
-
-func (v Varcheck) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issue, error) {
-	issues := varcheckAPI.Run(lintCtx.Program, lintCtx.Settings().Varcheck.CheckExportedFields)
-	if len(issues) == 0 {
-		return nil, nil
+func NewVarcheck() *goanalysis.Linter {
+	const linterName = "varcheck"
+	var mu sync.Mutex
+	var res []result.Issue
+	analyzer := &analysis.Analyzer{
+		Name: goanalysis.TheOnlyAnalyzerName,
+		Doc:  goanalysis.TheOnlyanalyzerDoc,
 	}
+	return goanalysis.NewLinter(
+		linterName,
+		"Finds unused global variables and constants",
+		[]*analysis.Analyzer{analyzer},
+		nil,
+	).WithContextSetter(func(lintCtx *linter.Context) {
+		checkExported := lintCtx.Settings().Varcheck.CheckExportedFields
+		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
+			prog := goanalysis.MakeFakeLoaderProgram(pass)
 
-	res := make([]result.Issue, 0, len(issues))
-	for _, i := range issues {
-		res = append(res, result.Issue{
-			Pos:        i.Pos,
-			Text:       fmt.Sprintf("%s is unused", formatCode(i.VarName, lintCtx.Cfg)),
-			FromLinter: v.Name(),
-		})
-	}
-	return res, nil
+			varcheckIssues := varcheckAPI.Run(prog, checkExported)
+			if len(varcheckIssues) == 0 {
+				return nil, nil
+			}
+
+			issues := make([]result.Issue, 0, len(varcheckIssues))
+			for _, i := range varcheckIssues {
+				issues = append(issues, result.Issue{
+					Pos:        i.Pos,
+					Text:       fmt.Sprintf("%s is unused", formatCode(i.VarName, lintCtx.Cfg)),
+					FromLinter: linterName,
+				})
+			}
+
+			mu.Lock()
+			res = append(res, issues...)
+			mu.Unlock()
+			return nil, nil
+		}
+	}).WithIssuesReporter(func(*linter.Context) []result.Issue {
+		return res
+	}).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }

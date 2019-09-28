@@ -29,6 +29,7 @@ clean:
 test: export GOLANGCI_LINT_INSTALLED = true
 test: build
 	GL_TEST_RUN=1 time ./golangci-lint run -v
+	time go run ./cmd/golangci-lint/main.go run -v
 	GL_TEST_RUN=1 time ./golangci-lint run --fast --no-config -v --skip-dirs 'test/testdata_etc,internal/(cache|renameio|robustio)'
 	GL_TEST_RUN=1 time ./golangci-lint run --no-config -v --skip-dirs 'test/testdata_etc,internal/(cache|renameio|robustio)'
 	GL_TEST_RUN=1 time go test -v ./...

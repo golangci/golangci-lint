@@ -164,8 +164,8 @@ func TestEnabledLinters(t *testing.T) {
 		},
 		{
 			name:           "fast option combined with enable and enable-all",
-			args:           "--enable-all --fast --enable=staticcheck",
-			el:             getAllFastLintersWith("staticcheck"),
+			args:           "--enable-all --fast --enable=unused",
+			el:             getAllFastLintersWith("unused"),
 			noImplicitFast: true,
 		},
 	}

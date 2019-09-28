@@ -1,69 +1,20 @@
 package golinters
 
 import (
-	"context"
 	"fmt"
 	"go/token"
 	"strings"
+	"sync"
 
 	"github.com/golangci/misspell"
+	"golang.org/x/tools/go/analysis"
 
+	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-type Misspell struct{}
-
-func NewMisspell() *Misspell {
-	return &Misspell{}
-}
-
-func (Misspell) Name() string {
-	return "misspell"
-}
-
-func (Misspell) Desc() string {
-	return "Finds commonly misspelled English words in comments"
-}
-
-func (lint Misspell) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issue, error) {
-	r := misspell.Replacer{
-		Replacements: misspell.DictMain,
-	}
-
-	// Figure out regional variations
-	settings := lintCtx.Settings().Misspell
-	locale := settings.Locale
-	switch strings.ToUpper(locale) {
-	case "":
-		// nothing
-	case "US":
-		r.AddRuleList(misspell.DictAmerican)
-	case "UK", "GB":
-		r.AddRuleList(misspell.DictBritish)
-	case "NZ", "AU", "CA":
-		return nil, fmt.Errorf("unknown locale: %q", locale)
-	}
-
-	if len(settings.IgnoreWords) != 0 {
-		r.RemoveRule(settings.IgnoreWords)
-	}
-
-	r.Compile()
-
-	var res []result.Issue
-	for _, f := range getAllFileNames(lintCtx) {
-		issues, err := lint.runOnFile(f, &r, lintCtx)
-		if err != nil {
-			return nil, err
-		}
-		res = append(res, issues...)
-	}
-
-	return res, nil
-}
-
-func (lint Misspell) runOnFile(fileName string, r *misspell.Replacer, lintCtx *linter.Context) ([]result.Issue, error) {
+func runMisspellOnFile(fileName string, r *misspell.Replacer, lintCtx *linter.Context) ([]result.Issue, error) {
 	var res []result.Issue
 	fileContent, err := lintCtx.FileCache.GetFileBytes(fileName)
 	if err != nil {
@@ -93,10 +44,87 @@ func (lint Misspell) runOnFile(fileName string, r *misspell.Replacer, lintCtx *l
 		res = append(res, result.Issue{
 			Pos:         pos,
 			Text:        text,
-			FromLinter:  lint.Name(),
+			FromLinter:  misspellName,
 			Replacement: replacement,
 		})
 	}
 
 	return res, nil
+}
+
+const misspellName = "misspell"
+
+func NewMisspell() *goanalysis.Linter {
+	var mu sync.Mutex
+	var resIssues []result.Issue
+	var ruleErr error
+
+	analyzer := &analysis.Analyzer{
+		Name: goanalysis.TheOnlyAnalyzerName,
+		Doc:  goanalysis.TheOnlyanalyzerDoc,
+	}
+	return goanalysis.NewLinter(
+		misspellName,
+		"Finds commonly misspelled English words in comments",
+		[]*analysis.Analyzer{analyzer},
+		nil,
+	).WithContextSetter(func(lintCtx *linter.Context) {
+		r := misspell.Replacer{
+			Replacements: misspell.DictMain,
+		}
+
+		// Figure out regional variations
+		settings := lintCtx.Settings().Misspell
+		locale := settings.Locale
+		switch strings.ToUpper(locale) {
+		case "":
+			// nothing
+		case "US":
+			r.AddRuleList(misspell.DictAmerican)
+		case "UK", "GB":
+			r.AddRuleList(misspell.DictBritish)
+		case "NZ", "AU", "CA":
+			ruleErr = fmt.Errorf("unknown locale: %q", locale)
+		}
+
+		if ruleErr == nil {
+			if len(settings.IgnoreWords) != 0 {
+				r.RemoveRule(settings.IgnoreWords)
+			}
+
+			r.Compile()
+		}
+
+		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
+			if ruleErr != nil {
+				return nil, ruleErr
+			}
+
+			var fileNames []string
+			for _, f := range pass.Files {
+				pos := pass.Fset.Position(f.Pos())
+				fileNames = append(fileNames, pos.Filename)
+			}
+
+			var res []result.Issue
+			for _, f := range fileNames {
+				issues, err := runMisspellOnFile(f, &r, lintCtx)
+				if err != nil {
+					return nil, err
+				}
+				res = append(res, issues...)
+			}
+			if len(res) == 0 {
+				return nil, nil
+			}
+
+			mu.Lock()
+			resIssues = append(resIssues, res...)
+			mu.Unlock()
+
+			return nil, nil
+		}
+	}).WithIssuesReporter(func(*linter.Context) []result.Issue {
+		return resIssues
+	}).WithLoadMode(goanalysis.LoadModeSyntax)
 }

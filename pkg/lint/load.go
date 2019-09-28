@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"go/build"
 	"go/token"
-	"go/types"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -19,10 +18,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/fsutils"
 
 	"github.com/pkg/errors"
-	"golang.org/x/tools/go/loader"
 	"golang.org/x/tools/go/packages"
-	"golang.org/x/tools/go/ssa"
-	"golang.org/x/tools/go/ssa/ssautil"
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/exitcodes"
@@ -70,84 +66,6 @@ func (cl *ContextLoader) prepareBuildContext() {
 	os.Setenv("GOROOT", goroot)
 	build.Default.GOROOT = goroot
 	build.Default.BuildTags = cl.cfg.Run.BuildTags
-}
-
-func (cl *ContextLoader) makeFakeLoaderPackageInfo(pkg *packages.Package) *loader.PackageInfo {
-	var errs []error
-	for _, err := range pkg.Errors {
-		errs = append(errs, err)
-	}
-
-	typeInfo := &types.Info{}
-	if pkg.TypesInfo != nil {
-		typeInfo = pkg.TypesInfo
-	}
-
-	return &loader.PackageInfo{
-		Pkg:                   pkg.Types,
-		Importable:            true, // not used
-		TransitivelyErrorFree: !pkg.IllTyped,
-
-		// use compiled (preprocessed) go files AST;
-		// AST linters use not preprocessed go files AST
-		Files:  pkg.Syntax,
-		Errors: errs,
-		Info:   *typeInfo,
-	}
-}
-
-func (cl *ContextLoader) makeFakeLoaderProgram(pkgs []*packages.Package) *loader.Program {
-	var createdPkgs []*loader.PackageInfo
-	for _, pkg := range pkgs {
-		if pkg.IllTyped {
-			// some linters crash on packages with errors,
-			// skip them and warn about them in another place
-			continue
-		}
-
-		pkgInfo := cl.makeFakeLoaderPackageInfo(pkg)
-		createdPkgs = append(createdPkgs, pkgInfo)
-	}
-
-	allPkgs := map[*types.Package]*loader.PackageInfo{}
-	for _, pkg := range createdPkgs {
-		pkg := pkg
-		allPkgs[pkg.Pkg] = pkg
-	}
-	for _, pkg := range pkgs {
-		if pkg.IllTyped {
-			// some linters crash on packages with errors,
-			// skip them and warn about them in another place
-			continue
-		}
-
-		for _, impPkg := range pkg.Imports {
-			// don't use astcache for imported packages: we don't find issues in cgo imported deps
-			pkgInfo := cl.makeFakeLoaderPackageInfo(impPkg)
-			allPkgs[pkgInfo.Pkg] = pkgInfo
-		}
-	}
-
-	return &loader.Program{
-		Fset:        pkgs[0].Fset,
-		Imported:    nil,         // not used without .Created in any linter
-		Created:     createdPkgs, // all initial packages
-		AllPackages: allPkgs,     // all initial packages and their depndencies
-	}
-}
-
-func (cl *ContextLoader) buildSSAProgram(pkgs []*packages.Package) *ssa.Program {
-	startedAt := time.Now()
-	var pkgsBuiltDuration time.Duration
-	defer func() {
-		cl.log.Infof("SSA repr building timing: packages building %s, total %s",
-			pkgsBuiltDuration, time.Since(startedAt))
-	}()
-
-	ssaProg, _ := ssautil.Packages(pkgs, ssa.GlobalDebug)
-	pkgsBuiltDuration = time.Since(startedAt)
-	ssaProg.Build()
-	return ssaProg
 }
 
 func (cl *ContextLoader) findLoadMode(linters []*linter.Config) packages.LoadMode {
@@ -305,13 +223,13 @@ func (cl *ContextLoader) loadPackages(ctx context.Context, loadMode packages.Loa
 	return cl.filterTestMainPackages(pkgs), nil
 }
 
-func (cl *ContextLoader) tryParseTestPackage(pkg *packages.Package) (name, testName string, isTest bool) {
+func (cl *ContextLoader) tryParseTestPackage(pkg *packages.Package) (name string, isTest bool) {
 	matches := cl.pkgTestIDRe.FindStringSubmatch(pkg.ID)
 	if matches == nil {
-		return "", "", false
+		return "", false
 	}
 
-	return matches[1], matches[2], true
+	return matches[1], true
 }
 
 func (cl *ContextLoader) filterTestMainPackages(pkgs []*packages.Package) []*packages.Package {
@@ -332,7 +250,7 @@ func (cl *ContextLoader) filterTestMainPackages(pkgs []*packages.Package) []*pac
 func (cl *ContextLoader) filterDuplicatePackages(pkgs []*packages.Package) []*packages.Package {
 	packagesWithTests := map[string]bool{}
 	for _, pkg := range pkgs {
-		name, _, isTest := cl.tryParseTestPackage(pkg)
+		name, isTest := cl.tryParseTestPackage(pkg)
 		if !isTest {
 			continue
 		}
@@ -343,7 +261,7 @@ func (cl *ContextLoader) filterDuplicatePackages(pkgs []*packages.Package) []*pa
 
 	var retPkgs []*packages.Package
 	for _, pkg := range pkgs {
-		_, _, isTest := cl.tryParseTestPackage(pkg)
+		_, isTest := cl.tryParseTestPackage(pkg)
 		if !isTest && packagesWithTests[pkg.PkgPath] {
 			// If tests loading is enabled,
 			// for package with files a.go and a_test.go go/packages loads two packages:
@@ -361,15 +279,6 @@ func (cl *ContextLoader) filterDuplicatePackages(pkgs []*packages.Package) []*pa
 	return retPkgs
 }
 
-func needSSA(linters []*linter.Config) bool {
-	for _, lc := range linters {
-		if lc.NeedsSSARepr {
-			return true
-		}
-	}
-	return false
-}
-
 //nolint:gocyclo
 func (cl *ContextLoader) Load(ctx context.Context, linters []*linter.Config) (*linter.Context, error) {
 	loadMode := cl.findLoadMode(linters)
@@ -384,21 +293,13 @@ func (cl *ContextLoader) Load(ctx context.Context, linters []*linter.Config) (*l
 		return nil, exitcodes.ErrNoGoFiles
 	}
 
-	var prog *loader.Program
-	if loadMode&packages.NeedTypes != 0 {
-		prog = cl.makeFakeLoaderProgram(deduplicatedPkgs)
-	}
-
-	var ssaProg *ssa.Program
-	if needSSA(linters) {
-		ssaProg = cl.buildSSAProgram(deduplicatedPkgs)
-	}
-
 	astLog := cl.log.Child("astcache")
+	startedLoadingASTAt := time.Now()
 	astCache, err := astcache.LoadFromPackages(deduplicatedPkgs, astLog)
 	if err != nil {
 		return nil, err
 	}
+	cl.log.Infof("Loaded %d AST files in %s", len(astCache.ParsedFilenames()), time.Since(startedLoadingASTAt))
 
 	ret := &linter.Context{
 		Packages: deduplicatedPkgs,
@@ -407,50 +308,14 @@ func (cl *ContextLoader) Load(ctx context.Context, linters []*linter.Config) (*l
 		// see https://github.com/golangci/golangci-lint/pull/585.
 		OriginalPackages: pkgs,
 
-		Program:    prog,
-		SSAProgram: ssaProg,
-		LoaderConfig: &loader.Config{
-			Cwd:   "",  // used by depguard and fallbacked to os.Getcwd
-			Build: nil, // used by depguard and megacheck and fallbacked to build.Default
-		},
-		Cfg:              cl.cfg,
-		ASTCache:         astCache,
-		Log:              cl.log,
-		FileCache:        cl.fileCache,
-		LineCache:        cl.lineCache,
-		PkgCache:         cl.pkgCache,
-		LoadGuard:        cl.loadGuard,
-		NeedWholeProgram: loadMode&packages.NeedDeps != 0 && loadMode&packages.NeedTypesInfo != 0,
+		Cfg:       cl.cfg,
+		ASTCache:  astCache,
+		Log:       cl.log,
+		FileCache: cl.fileCache,
+		LineCache: cl.lineCache,
+		PkgCache:  cl.pkgCache,
+		LoadGuard: cl.loadGuard,
 	}
 
-	separateNotCompilingPackages(ret)
 	return ret, nil
-}
-
-// separateNotCompilingPackages moves not compiling packages into separate slice:
-// a lot of linters crash on such packages
-func separateNotCompilingPackages(lintCtx *linter.Context) {
-	// Separate deduplicated packages
-	goodPkgs := make([]*packages.Package, 0, len(lintCtx.Packages))
-	for _, pkg := range lintCtx.Packages {
-		if pkg.IllTyped {
-			lintCtx.NotCompilingPackages = append(lintCtx.NotCompilingPackages, pkg)
-		} else {
-			goodPkgs = append(goodPkgs, pkg)
-		}
-	}
-
-	lintCtx.Packages = goodPkgs
-	if len(lintCtx.NotCompilingPackages) != 0 {
-		lintCtx.Log.Infof("Packages that do not compile: %+v", lintCtx.NotCompilingPackages)
-	}
-
-	// Separate original (not deduplicated) packages
-	goodOriginalPkgs := make([]*packages.Package, 0, len(lintCtx.OriginalPackages))
-	for _, pkg := range lintCtx.OriginalPackages {
-		if !pkg.IllTyped {
-			goodOriginalPkgs = append(goodOriginalPkgs, pkg)
-		}
-	}
-	lintCtx.OriginalPackages = goodOriginalPkgs
 }

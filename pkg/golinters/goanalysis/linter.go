@@ -6,32 +6,95 @@ import (
 	"fmt"
 	"strings"
 
+	"golang.org/x/tools/go/packages"
+
 	"github.com/pkg/errors"
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
+	libpackages "github.com/golangci/golangci-lint/pkg/packages"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
+const (
+	TheOnlyAnalyzerName = "the_only_name"
+	TheOnlyanalyzerDoc  = "the_only_doc"
+)
+
+type LoadMode int
+
+const (
+	LoadModeNone LoadMode = iota
+	LoadModeSyntax
+	LoadModeTypesInfo
+	LoadModeWholeProgram
+)
+
+func (loadMode LoadMode) String() string {
+	switch loadMode {
+	case LoadModeNone:
+		return "none"
+	case LoadModeSyntax:
+		return "syntax"
+	case LoadModeTypesInfo:
+		return "types info"
+	case LoadModeWholeProgram:
+		return "whole program"
+	}
+	panic(fmt.Sprintf("unknown load mode %d", loadMode))
+}
+
 type Linter struct {
-	name, desc string
-	analyzers  []*analysis.Analyzer
-	cfg        map[string]map[string]interface{}
+	name, desc          string
+	analyzers           []*analysis.Analyzer
+	cfg                 map[string]map[string]interface{}
+	issuesReporter      func(*linter.Context) []result.Issue
+	contextSetter       func(*linter.Context)
+	loadMode            LoadMode
+	useOriginalPackages bool
+	isTypecheckMode     bool
 }
 
 func NewLinter(name, desc string, analyzers []*analysis.Analyzer, cfg map[string]map[string]interface{}) *Linter {
 	return &Linter{name: name, desc: desc, analyzers: analyzers, cfg: cfg}
 }
 
-func (lnt Linter) Name() string {
+func (lnt *Linter) UseOriginalPackages() {
+	lnt.useOriginalPackages = true
+}
+
+func (lnt *Linter) SetTypecheckMode() {
+	lnt.isTypecheckMode = true
+}
+
+func (lnt *Linter) LoadMode() LoadMode {
+	return lnt.loadMode
+}
+
+func (lnt *Linter) WithLoadMode(loadMode LoadMode) *Linter {
+	lnt.loadMode = loadMode
+	return lnt
+}
+
+func (lnt *Linter) WithIssuesReporter(r func(*linter.Context) []result.Issue) *Linter {
+	lnt.issuesReporter = r
+	return lnt
+}
+
+func (lnt *Linter) WithContextSetter(cs func(*linter.Context)) *Linter {
+	lnt.contextSetter = cs
+	return lnt
+}
+
+func (lnt *Linter) Name() string {
 	return lnt.name
 }
 
-func (lnt Linter) Desc() string {
+func (lnt *Linter) Desc() string {
 	return lnt.desc
 }
 
-func (lnt Linter) allAnalyzerNames() []string {
+func (lnt *Linter) allAnalyzerNames() []string {
 	var ret []string
 	for _, a := range lnt.analyzers {
 		ret = append(ret, a.Name)
@@ -63,7 +126,7 @@ func valueToString(v interface{}) string {
 	return fmt.Sprint(v)
 }
 
-func (lnt Linter) configureAnalyzer(a *analysis.Analyzer, cfg map[string]interface{}) error {
+func (lnt *Linter) configureAnalyzer(a *analysis.Analyzer, cfg map[string]interface{}) error {
 	for k, v := range cfg {
 		f := a.Flags.Lookup(k)
 		if f == nil {
@@ -84,7 +147,7 @@ func (lnt Linter) configureAnalyzer(a *analysis.Analyzer, cfg map[string]interfa
 	return nil
 }
 
-func (lnt Linter) configure() error {
+func (lnt *Linter) configure() error {
 	analyzersMap := map[string]*analysis.Analyzer{}
 	for _, a := range lnt.analyzers {
 		analyzersMap[a.Name] = a
@@ -105,7 +168,63 @@ func (lnt Linter) configure() error {
 	return nil
 }
 
-func (lnt Linter) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issue, error) {
+func parseError(srcErr packages.Error) (*result.Issue, error) {
+	pos, err := libpackages.ParseErrorPosition(srcErr.Pos)
+	if err != nil {
+		return nil, err
+	}
+
+	return &result.Issue{
+		Pos:        *pos,
+		Text:       srcErr.Msg,
+		FromLinter: "typecheck",
+	}, nil
+}
+
+func buildIssuesFromErrorsForTypecheckMode(errs []error, lintCtx *linter.Context) ([]result.Issue, error) {
+	var issues []result.Issue
+	uniqReportedIssues := map[string]bool{}
+	for _, err := range errs {
+		itErr, ok := errors.Cause(err).(*IllTypedError)
+		if !ok {
+			return nil, err
+		}
+		for _, err := range libpackages.ExtractErrors(itErr.Pkg, lintCtx.ASTCache) {
+			i, perr := parseError(err)
+			if perr != nil { // failed to parse
+				if uniqReportedIssues[err.Msg] {
+					continue
+				}
+				uniqReportedIssues[err.Msg] = true
+				lintCtx.Log.Errorf("typechecking error: %s", err.Msg)
+			} else {
+				issues = append(issues, *i)
+			}
+		}
+	}
+	return issues, nil
+}
+
+func buildIssues(diags []Diagnostic, linterNameBuilder func(diag *Diagnostic) string) []result.Issue {
+	var issues []result.Issue
+	for i := range diags {
+		diag := &diags[i]
+		var text string
+		if diag.Analyzer.Name == TheOnlyAnalyzerName {
+			text = diag.Message
+		} else {
+			text = fmt.Sprintf("%s: %s", diag.Analyzer.Name, diag.Message)
+		}
+		issues = append(issues, result.Issue{
+			FromLinter: linterNameBuilder(diag),
+			Text:       text,
+			Pos:        diag.Position,
+		})
+	}
+	return issues
+}
+
+func (lnt *Linter) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issue, error) {
 	if err := analysis.Validate(lnt.analyzers); err != nil {
 		return nil, errors.Wrap(err, "failed to validate analyzers")
 	}
@@ -114,39 +233,37 @@ func (lnt Linter) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Is
 		return nil, errors.Wrap(err, "failed to configure analyzers")
 	}
 
-	runner := newRunner(lnt.name, lintCtx.Log.Child("goanalysis"), lintCtx.PkgCache, lintCtx.LoadGuard, lintCtx.NeedWholeProgram)
+	if lnt.contextSetter != nil {
+		lnt.contextSetter(lintCtx)
+	}
 
-	diags, errs := runner.run(lnt.analyzers, lintCtx.Packages)
+	loadMode := lnt.loadMode
+	runner := newRunner(lnt.name, lintCtx.Log.Child("goanalysis"),
+		lintCtx.PkgCache, lintCtx.LoadGuard, loadMode)
+
+	pkgs := lintCtx.Packages
+	if lnt.useOriginalPackages {
+		pkgs = lintCtx.OriginalPackages
+	}
+
+	diags, errs := runner.run(lnt.analyzers, pkgs)
+
+	linterNameBuilder := func(*Diagnostic) string { return lnt.Name() }
+	if lnt.isTypecheckMode {
+		return buildIssuesFromErrorsForTypecheckMode(errs, lintCtx)
+	}
+
 	// Don't print all errs: they can duplicate.
 	if len(errs) != 0 {
 		return nil, errs[0]
 	}
 
 	var issues []result.Issue
-	for i := range diags {
-		diag := &diags[i]
-		issues = append(issues, result.Issue{
-			FromLinter: lnt.Name(),
-			Text:       fmt.Sprintf("%s: %s", diag.Analyzer.Name, diag.Message),
-			Pos:        diag.Position,
-		})
+	if lnt.issuesReporter != nil {
+		issues = append(issues, lnt.issuesReporter(lintCtx)...)
+	} else {
+		issues = buildIssues(diags, linterNameBuilder)
 	}
 
 	return issues, nil
-}
-
-func (lnt Linter) Analyzers() []*analysis.Analyzer {
-	return lnt.analyzers
-}
-
-func (lnt Linter) Cfg() map[string]map[string]interface{} {
-	return lnt.cfg
-}
-
-func (lnt Linter) AnalyzerToLinterNameMapping() map[*analysis.Analyzer]string {
-	ret := map[*analysis.Analyzer]string{}
-	for _, a := range lnt.analyzers {
-		ret[a] = lnt.Name()
-	}
-	return ret
 }

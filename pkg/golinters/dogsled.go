@@ -1,37 +1,54 @@
 package golinters
 
 import (
-	"context"
 	"fmt"
 	"go/ast"
 	"go/token"
+	"sync"
 
+	"golang.org/x/tools/go/analysis"
+
+	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-type Dogsled struct{}
+const dogsledLinterName = "dogsled"
 
-func (Dogsled) Name() string {
-	return "dogsled"
-}
+func NewDogsled() *goanalysis.Linter {
+	var mu sync.Mutex
+	var resIssues []result.Issue
 
-func (Dogsled) Desc() string {
-	return "Checks assignments with too many blank identifiers (e.g. x, _, _, _, := f())"
-}
-
-func (d Dogsled) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issue, error) {
-	var res []result.Issue
-	for _, f := range lintCtx.ASTCache.GetAllValidFiles() {
-		v := returnsVisitor{
-			maxBlanks: lintCtx.Settings().Dogsled.MaxBlankIdentifiers,
-			f:         f.Fset,
-		}
-		ast.Walk(&v, f.F)
-		res = append(res, v.issues...)
+	analyzer := &analysis.Analyzer{
+		Name: goanalysis.TheOnlyAnalyzerName,
+		Doc:  goanalysis.TheOnlyanalyzerDoc,
 	}
+	return goanalysis.NewLinter(
+		dogsledLinterName,
+		"Checks assignments with too many blank identifiers (e.g. x, _, _, _, := f())",
+		[]*analysis.Analyzer{analyzer},
+		nil,
+	).WithContextSetter(func(lintCtx *linter.Context) {
+		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
+			var pkgIssues []result.Issue
+			for _, f := range pass.Files {
+				v := returnsVisitor{
+					maxBlanks: lintCtx.Settings().Dogsled.MaxBlankIdentifiers,
+					f:         pass.Fset,
+				}
+				ast.Walk(&v, f)
+				pkgIssues = append(pkgIssues, v.issues...)
+			}
 
-	return res, nil
+			mu.Lock()
+			resIssues = append(resIssues, pkgIssues...)
+			mu.Unlock()
+
+			return nil, nil
+		}
+	}).WithIssuesReporter(func(*linter.Context) []result.Issue {
+		return resIssues
+	}).WithLoadMode(goanalysis.LoadModeSyntax)
 }
 
 type returnsVisitor struct {
@@ -68,7 +85,7 @@ func (v *returnsVisitor) Visit(node ast.Node) ast.Visitor {
 
 		if numBlank > v.maxBlanks {
 			v.issues = append(v.issues, result.Issue{
-				FromLinter: Dogsled{}.Name(),
+				FromLinter: dogsledLinterName,
 				Text:       fmt.Sprintf("declaration has %v blank identifiers", numBlank),
 				Pos:        v.f.Position(assgnStmt.Pos()),
 			})

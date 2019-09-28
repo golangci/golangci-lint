@@ -3,8 +3,6 @@ package lintersdb
 import (
 	"sort"
 
-	"golang.org/x/tools/go/analysis"
-
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 
 	"github.com/golangci/golangci-lint/pkg/config"
@@ -56,69 +54,28 @@ func (es EnabledSet) build(lcfg *config.Linters, enabledByDefaultLinters []*lint
 	// It should be after --presets to be able to run only fast linters in preset.
 	// It should be before --enable and --disable to be able to enable or disable specific linter.
 	if lcfg.Fast {
-		for name := range resultLintersSet {
-			if es.m.GetLinterConfig(name).IsSlowLinter() {
+		for name, lc := range resultLintersSet {
+			if lc.IsSlowLinter() {
 				delete(resultLintersSet, name)
 			}
 		}
 	}
 
-	metaLinters := es.m.GetMetaLinters()
-
 	for _, name := range lcfg.Enable {
-		if metaLinter := metaLinters[name]; metaLinter != nil {
-			// e.g. if we use --enable=megacheck we should add staticcheck,unused and gosimple to result set
-			for _, childLinter := range metaLinter.DefaultChildLinterNames() {
-				resultLintersSet[childLinter] = es.m.GetLinterConfig(childLinter)
-			}
-			continue
+		for _, lc := range es.m.GetLinterConfigs(name) {
+			// it's important to use lc.Name() nor name because name can be alias
+			resultLintersSet[lc.Name()] = lc
 		}
-
-		lc := es.m.GetLinterConfig(name)
-		// it's important to use lc.Name() nor name because name can be alias
-		resultLintersSet[lc.Name()] = lc
 	}
 
 	for _, name := range lcfg.Disable {
-		if metaLinter := metaLinters[name]; metaLinter != nil {
-			// e.g. if we use --disable=megacheck we should remove staticcheck,unused and gosimple from result set
-			for _, childLinter := range metaLinter.DefaultChildLinterNames() {
-				delete(resultLintersSet, childLinter)
-			}
-			continue
+		for _, lc := range es.m.GetLinterConfigs(name) {
+			// it's important to use lc.Name() nor name because name can be alias
+			delete(resultLintersSet, lc.Name())
 		}
-
-		lc := es.m.GetLinterConfig(name)
-		// it's important to use lc.Name() nor name because name can be alias
-		delete(resultLintersSet, lc.Name())
 	}
 
 	return resultLintersSet
-}
-
-func (es EnabledSet) optimizeLintersSet(linters map[string]*linter.Config) {
-	for _, metaLinter := range es.m.GetMetaLinters() {
-		var children []string
-		for _, child := range metaLinter.AllChildLinterNames() {
-			if _, ok := linters[child]; ok {
-				children = append(children, child)
-			}
-		}
-
-		if len(children) <= 1 {
-			continue
-		}
-
-		for _, child := range children {
-			delete(linters, child)
-		}
-		builtLinterConfig, err := metaLinter.BuildLinterConfig(children)
-		if err != nil {
-			panic("shouldn't fail during linter building: " + err.Error())
-		}
-		linters[metaLinter.Name()] = builtLinterConfig
-		es.log.Infof("Optimized sublinters %s into metalinter %s", children, metaLinter.Name())
-	}
 }
 
 func (es EnabledSet) Get(optimize bool) ([]*linter.Config, error) {
@@ -129,9 +86,8 @@ func (es EnabledSet) Get(optimize bool) ([]*linter.Config, error) {
 	resultLintersSet := es.build(&es.cfg.Linters, es.m.GetAllEnabledByDefaultLinters())
 	es.verbosePrintLintersStatus(resultLintersSet)
 	if optimize {
-		es.optimizeLintersSet(resultLintersSet)
+		es.combineGoAnalysisLinters(resultLintersSet)
 	}
-	es.combineGoAnalysisLinters(resultLintersSet)
 
 	var resultLinters []*linter.Config
 	for _, lc := range resultLintersSet {
@@ -144,24 +100,18 @@ func (es EnabledSet) Get(optimize bool) ([]*linter.Config, error) {
 func (es EnabledSet) combineGoAnalysisLinters(linters map[string]*linter.Config) {
 	var goanalysisLinters []*goanalysis.Linter
 	goanalysisPresets := map[string]bool{}
-	analyzerToLinterName := map[*analysis.Analyzer]string{}
 	for _, linter := range linters {
-		lnt, ok := linter.Linter.(goanalysis.SupportedLinter)
+		lnt, ok := linter.Linter.(*goanalysis.Linter)
 		if !ok {
 			continue
 		}
-
-		analyzers := lnt.Analyzers()
-		if len(analyzers) == 0 {
-			continue // e.g. if "unused" is enabled
+		if lnt.LoadMode() == goanalysis.LoadModeWholeProgram {
+			// It's ineffective by CPU and memory to run whole-program and incremental analyzers at once.
+			continue
 		}
-		gl := goanalysis.NewLinter(linter.Name(), "", analyzers, lnt.Cfg())
-		goanalysisLinters = append(goanalysisLinters, gl)
+		goanalysisLinters = append(goanalysisLinters, lnt)
 		for _, p := range linter.InPresets {
 			goanalysisPresets[p] = true
-		}
-		for a, name := range lnt.AnalyzerToLinterNameMapping() {
-			analyzerToLinterName[a] = name
 		}
 	}
 
@@ -174,7 +124,7 @@ func (es EnabledSet) combineGoAnalysisLinters(linters map[string]*linter.Config)
 		delete(linters, lnt.Name())
 	}
 
-	ml := goanalysis.NewMetaLinter(goanalysisLinters, analyzerToLinterName)
+	ml := goanalysis.NewMetaLinter(goanalysisLinters)
 
 	var presets []string
 	for p := range goanalysisPresets {
@@ -184,13 +134,11 @@ func (es EnabledSet) combineGoAnalysisLinters(linters map[string]*linter.Config)
 	mlConfig := &linter.Config{
 		Linter:           ml,
 		EnabledByDefault: false,
-		NeedsSSARepr:     false,
 		InPresets:        presets,
-		Speed:            5,
 		AlternativeNames: nil,
 		OriginalURL:      "",
-		ParentLinterName: "",
 	}
+
 	mlConfig = mlConfig.WithLoadForGoAnalysis()
 
 	linters[ml.Name()] = mlConfig

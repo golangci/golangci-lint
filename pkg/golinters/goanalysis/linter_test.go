@@ -1,4 +1,4 @@
-package golinters
+package goanalysis
 
 import (
 	"fmt"
@@ -19,9 +19,8 @@ func TestParseError(t *testing.T) {
 		{"f.go: 1", "", false},
 	}
 
-	lint := TypeCheck{}
 	for _, c := range cases {
-		i, _ := lint.parseError(packages.Error{
+		i, _ := parseError(packages.Error{
 			Pos: c.in,
 			Msg: "msg",
 		})
