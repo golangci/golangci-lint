@@ -5,13 +5,12 @@ import (
 	"sync"
 
 	"github.com/pkg/errors"
+	"github.com/ultraware/whitespace"
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
-
-	"github.com/ultraware/whitespace"
 )
 
 func NewWhitespace() *goanalysis.Linter {

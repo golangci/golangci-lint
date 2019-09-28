@@ -13,12 +13,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/golangci/golangci-lint/test/testshared"
-
 	gops "github.com/mitchellh/go-ps"
 	"github.com/shirou/gopsutil/process"
 
 	"github.com/golangci/golangci-lint/pkg/config"
+	"github.com/golangci/golangci-lint/test/testshared"
 )
 
 func chdir(b *testing.B, dir string) {

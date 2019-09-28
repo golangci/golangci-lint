@@ -6,7 +6,6 @@ import (
 	"sync"
 
 	"github.com/matoous/godox"
-
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"

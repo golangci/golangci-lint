@@ -5,9 +5,9 @@ import (
 	"io/ioutil"
 	"sync"
 
-	"github.com/golangci/golangci-lint/pkg/logutils"
-
 	"github.com/pkg/errors"
+
+	"github.com/golangci/golangci-lint/pkg/logutils"
 )
 
 type FileCache struct {

@@ -5,11 +5,9 @@ import (
 
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/analysis/passes/buildssa"
-
-	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
-
 	"mvdan.cc/interfacer/check"
 
+	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
 )

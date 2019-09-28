@@ -10,14 +10,11 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/go-lintpack/lintpack"
 	"golang.org/x/tools/go/analysis"
 
-	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
-
 	"github.com/golangci/golangci-lint/pkg/config"
-
-	"github.com/go-lintpack/lintpack"
-
+	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
 )

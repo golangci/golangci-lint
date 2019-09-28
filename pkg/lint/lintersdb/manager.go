@@ -4,7 +4,6 @@ import (
 	"os"
 
 	"github.com/golangci/golangci-lint/pkg/config"
-
 	"github.com/golangci/golangci-lint/pkg/golinters"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 )

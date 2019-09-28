@@ -10,15 +10,13 @@ import (
 	"strings"
 	"sync"
 
-	"golang.org/x/tools/go/analysis"
-
-	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
-
-	errcheckAPI "github.com/golangci/errcheck/golangci"
+	errcheck "github.com/golangci/errcheck/golangci"
 	"github.com/pkg/errors"
+	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/fsutils"
+	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
@@ -44,7 +42,7 @@ func NewErrcheck() *goanalysis.Linter {
 			if err != nil {
 				return nil, err
 			}
-			errcheckIssues, err := errcheckAPI.RunWithConfig(prog, errCfg)
+			errcheckIssues, err := errcheck.RunWithConfig(prog, errCfg)
 			if err != nil {
 				return nil, err
 			}
@@ -106,13 +104,13 @@ func parseIgnoreConfig(s string) (map[string]*regexp.Regexp, error) {
 	return cfg, nil
 }
 
-func genConfig(errCfg *config.ErrcheckSettings) (*errcheckAPI.Config, error) {
+func genConfig(errCfg *config.ErrcheckSettings) (*errcheck.Config, error) {
 	ignoreConfig, err := parseIgnoreConfig(errCfg.Ignore)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to parse 'ignore' directive")
 	}
 
-	c := &errcheckAPI.Config{
+	c := &errcheck.Config{
 		Ignore:  ignoreConfig,
 		Blank:   errCfg.CheckAssignToBlank,
 		Asserts: errCfg.CheckTypeAssertions,

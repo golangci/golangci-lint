@@ -5,33 +5,31 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/OpenPeeDeeP/depguard"
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/loader"
 
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
-
-	depguardAPI "github.com/OpenPeeDeeP/depguard"
-
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-func setDepguardListType(dg *depguardAPI.Depguard, lintCtx *linter.Context) error {
+func setDepguardListType(dg *depguard.Depguard, lintCtx *linter.Context) error {
 	listType := lintCtx.Settings().Depguard.ListType
 	var found bool
-	dg.ListType, found = depguardAPI.StringToListType[strings.ToLower(listType)]
+	dg.ListType, found = depguard.StringToListType[strings.ToLower(listType)]
 	if !found {
 		if listType != "" {
 			return fmt.Errorf("unsure what list type %s is", listType)
 		}
-		dg.ListType = depguardAPI.LTBlacklist
+		dg.ListType = depguard.LTBlacklist
 	}
 
 	return nil
 }
 
-func setupDepguardPackages(dg *depguardAPI.Depguard, lintCtx *linter.Context) {
-	if dg.ListType == depguardAPI.LTBlacklist {
+func setupDepguardPackages(dg *depguard.Depguard, lintCtx *linter.Context) {
+	if dg.ListType == depguard.LTBlacklist {
 		// if the list type was a blacklist the packages with error messages should
 		// be included in the blacklist package list
 
@@ -66,7 +64,7 @@ func NewDepguard() *goanalysis.Linter {
 		dgSettings := &lintCtx.Settings().Depguard
 		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
 			prog := goanalysis.MakeFakeLoaderProgram(pass)
-			dg := &depguardAPI.Depguard{
+			dg := &depguard.Depguard{
 				Packages:      dgSettings.Packages,
 				IncludeGoRoot: dgSettings.IncludeGoRoot,
 			}
@@ -87,7 +85,7 @@ func NewDepguard() *goanalysis.Linter {
 				return nil, nil
 			}
 			msgSuffix := "is in the blacklist"
-			if dg.ListType == depguardAPI.LTWhitelist {
+			if dg.ListType == depguard.LTWhitelist {
 				msgSuffix = "is not in the whitelist"
 			}
 			res := make([]result.Issue, 0, len(issues))

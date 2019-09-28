@@ -1,6 +1,8 @@
 package errorutil
 
-import "fmt"
+import (
+	"fmt"
+)
 
 // PanicError can be used to not print stacktrace twice
 type PanicError struct {
