@@ -47,12 +47,19 @@ func getMessages(c *ast.Comment, fset *token.FileSet, keywords []string) []Messa
 		for _, kw := range keywords {
 			if bytes.EqualFold([]byte(kw), sComment[0:len(kw)]) {
 				pos := fset.Position(c.Pos())
+				// trim the comment
 				if len(sComment) > 40 {
 					sComment = []byte(fmt.Sprintf("%s...", sComment[:40]))
 				}
 				comments = append(comments, Message{
-					Pos:     pos,
-					Message: fmt.Sprintf("%s:%d: Line contains %s: \"%s\"", filepath.Join(pos.Filename), pos.Line+lineNum, strings.Join(keywords, "/"), sComment),
+					Pos: pos,
+					Message: fmt.Sprintf(
+						"%s:%d: Line contains %s: \"%s\"",
+						filepath.Join(pos.Filename),
+						pos.Line+lineNum,
+						strings.Join(keywords, "/"),
+						sComment,
+					),
 				})
 				break
 			}
@@ -61,8 +68,10 @@ func getMessages(c *ast.Comment, fset *token.FileSet, keywords []string) []Messa
 	return comments
 }
 
+// Run runs the godox linter on given file.
+// Godox searches for comments starting with given keywords and reports them.
 func Run(file *ast.File, fset *token.FileSet, keywords ...string) []Message {
-	if keywords == nil || len(keywords) == 0 {
+	if len(keywords) == 0 {
 		keywords = defaultKeywords
 	}
 	var messages []Message

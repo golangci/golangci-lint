@@ -49,9 +49,12 @@ issues:
         - goconst
         - dupl
 
-    - path: api/v1/
+    - path: fixtures
       linters:
-        - dupl
+        - gocritic
+        - varcheck
+        - deadcode
+        - unused
 
 run:
   modules-download-mode: readonly

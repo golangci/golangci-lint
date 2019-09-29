@@ -102,7 +102,7 @@ github.com/kisielk/gotool/internal/load
 github.com/konsorten/go-windows-terminal-sequences
 # github.com/magiconair/properties v1.8.0
 github.com/magiconair/properties
-# github.com/matoous/godox v0.0.0-20190910121045-032ad8106c86
+# github.com/matoous/godox v0.0.0-20190911065817-5d6d842e92eb
 github.com/matoous/godox
 # github.com/mattn/go-colorable v0.1.2
 github.com/mattn/go-colorable
