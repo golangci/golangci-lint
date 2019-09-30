@@ -314,7 +314,7 @@ func (r *runner) calledInFunc(f *ssa.Function, called bool) bool {
 				for _, r := range refs {
 					if v, ok := r.(ssa.Value); ok {
 						if ptr, ok := v.Type().(*types.Pointer); !ok || !isNamedType(ptr.Elem(), "io", "ReadCloser") {
-							return true
+							continue
 						}
 						vrefs := *v.Referrers()
 						for _, vref := range vrefs {
