@@ -199,7 +199,7 @@ depguard: Go linter that checks if package imports are in a list of acceptable p
 dogsled: Checks assignments with too many blank identifiers (e.g. x, _, _, _, := f()) [fast: true, auto-fix: false]
 dupl: Tool for code clone detection [fast: true, auto-fix: false]
 funlen: Tool for detection of long functions [fast: true, auto-fix: false]
-gochecknoglobals: Tool for detection of long functions [fast: true, auto-fix: false]
+gochecknoglobals: Checks that no globals are present in Go code [fast: true, auto-fix: false]
 gochecknoinits: Checks that no init functions are present in Go code [fast: true, auto-fix: false]
 goconst: Finds repeated strings that could be replaced by a constant [fast: true, auto-fix: false]
 gocritic: The most opinionated Go source code linter [fast: true, auto-fix: false]
@@ -462,7 +462,7 @@ golangci-lint help linters
 - [scopelint](https://github.com/kyoh86/scopelint) - Scopelint checks for unpinned variables in go programs
 - [gocritic](https://github.com/go-critic/go-critic) - The most opinionated Go source code linter
 - [gochecknoinits](https://github.com/leighmcculloch/gochecknoinits) - Checks that no init functions are present in Go code
-- [gochecknoglobals](https://github.com/leighmcculloch/gochecknoglobals) - Tool for detection of long functions
+- [gochecknoglobals](https://github.com/leighmcculloch/gochecknoglobals) - Checks that no globals are present in Go code
 - [godox](https://github.com/matoous/godox) - Tool for detection of FIXME, TODO and other comment keywords
 - [funlen](https://github.com/ultraware/funlen) - Tool for detection of long functions
 - [whitespace](https://github.com/ultraware/whitespace) - Tool for detection of leading and trailing whitespace
