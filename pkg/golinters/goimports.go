@@ -1,22 +1,21 @@
 package golinters
 
 import (
-	"fmt"
 	"sync"
 
+	goimportsAPI "github.com/golangci/gofmt/goimports"
+	"github.com/pkg/errors"
 	"golang.org/x/tools/go/analysis"
+	"golang.org/x/tools/imports"
 
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
-
-	ineffassignAPI "github.com/golangci/ineffassign"
-
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-const ineffassignName = "ineffassign"
+const goimportsName = "goimports"
 
-func NewIneffassign() *goanalysis.Linter {
+func NewGoimports() *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []result.Issue
 
@@ -25,11 +24,12 @@ func NewIneffassign() *goanalysis.Linter {
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 	}
 	return goanalysis.NewLinter(
-		ineffassignName,
-		"Detects when assignments to existing variables are not used",
+		goimportsName,
+		"Goimports does everything that gofmt does. Additionally it checks unused imports",
 		[]*analysis.Analyzer{analyzer},
 		nil,
 	).WithContextSetter(func(lintCtx *linter.Context) {
+		imports.LocalPrefix = lintCtx.Settings().Goimports.LocalPrefixes
 		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
 			var fileNames []string
 			for _, f := range pass.Files {
@@ -37,22 +37,31 @@ func NewIneffassign() *goanalysis.Linter {
 				fileNames = append(fileNames, pos.Filename)
 			}
 
-			issues := ineffassignAPI.Run(fileNames)
+			var issues []result.Issue
+
+			for _, f := range fileNames {
+				diff, err := goimportsAPI.Run(f)
+				if err != nil { // TODO: skip
+					return nil, err
+				}
+				if diff == nil {
+					continue
+				}
+
+				is, err := extractIssuesFromPatch(string(diff), lintCtx.Log, lintCtx, true)
+				if err != nil {
+					return nil, errors.Wrapf(err, "can't extract issues from gofmt diff output %q", string(diff))
+				}
+
+				issues = append(issues, is...)
+			}
+
 			if len(issues) == 0 {
 				return nil, nil
 			}
 
-			res := make([]result.Issue, 0, len(issues))
-			for _, i := range issues {
-				res = append(res, result.Issue{
-					Pos:        i.Pos,
-					Text:       fmt.Sprintf("ineffectual assignment to %s", formatCode(i.IdentName, lintCtx.Cfg)),
-					FromLinter: ineffassignName,
-				})
-			}
-
 			mu.Lock()
-			resIssues = append(resIssues, res...)
+			resIssues = append(resIssues, issues...)
 			mu.Unlock()
 
 			return nil, nil

@@ -36,8 +36,8 @@ func (p Text) SprintfColored(ca color.Attribute, format string, args ...interfac
 	return c.Sprintf(format, args...)
 }
 
-func (p *Text) Print(ctx context.Context, issues <-chan result.Issue) error {
-	for i := range issues {
+func (p *Text) Print(ctx context.Context, issues []result.Issue) error {
+	for _, i := range issues {
 		i := i
 		p.printIssue(&i)
 

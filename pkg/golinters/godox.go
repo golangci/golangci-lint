@@ -1,46 +1,64 @@
 package golinters
 
 import (
-	"context"
 	"go/token"
 	"strings"
-
-	"github.com/golangci/golangci-lint/pkg/lint/linter"
-	"github.com/golangci/golangci-lint/pkg/result"
+	"sync"
 
 	"github.com/matoous/godox"
+
+	"golang.org/x/tools/go/analysis"
+
+	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
+	"github.com/golangci/golangci-lint/pkg/lint/linter"
+	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-type Godox struct{}
+const godoxName = "godox"
 
-func (Godox) Name() string {
-	return "godox"
-}
+func NewGodox() *goanalysis.Linter {
+	var mu sync.Mutex
+	var resIssues []result.Issue
 
-func (Godox) Desc() string {
-	return "Tool for detection of FIXME, TODO and other comment keywords"
-}
-
-func (f Godox) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issue, error) {
-	var issues []godox.Message
-	for _, file := range lintCtx.ASTCache.GetAllValidFiles() {
-		issues = append(issues, godox.Run(file.F, file.Fset, lintCtx.Settings().Godox.Keywords...)...)
+	analyzer := &analysis.Analyzer{
+		Name: goanalysis.TheOnlyAnalyzerName,
+		Doc:  goanalysis.TheOnlyanalyzerDoc,
 	}
+	return goanalysis.NewLinter(
+		godoxName,
+		"Tool for detection of FIXME, TODO and other comment keywords",
+		[]*analysis.Analyzer{analyzer},
+		nil,
+	).WithContextSetter(func(lintCtx *linter.Context) {
+		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
+			var issues []godox.Message
+			for _, file := range pass.Files {
+				issues = append(issues, godox.Run(file, pass.Fset, lintCtx.Settings().Godox.Keywords...)...)
+			}
 
-	if len(issues) == 0 {
-		return nil, nil
-	}
+			if len(issues) == 0 {
+				return nil, nil
+			}
 
-	res := make([]result.Issue, len(issues))
-	for k, i := range issues {
-		res[k] = result.Issue{
-			Pos: token.Position{
-				Filename: i.Pos.Filename,
-				Line:     i.Pos.Line,
-			},
-			Text:       strings.TrimRight(i.Message, "\n"),
-			FromLinter: f.Name(),
+			res := make([]result.Issue, len(issues))
+			for k, i := range issues {
+				res[k] = result.Issue{
+					Pos: token.Position{
+						Filename: i.Pos.Filename,
+						Line:     i.Pos.Line,
+					},
+					Text:       strings.TrimRight(i.Message, "\n"),
+					FromLinter: godoxName,
+				}
+			}
+
+			mu.Lock()
+			resIssues = append(resIssues, res...)
+			mu.Unlock()
+
+			return nil, nil
 		}
-	}
-	return res, nil
+	}).WithIssuesReporter(func(*linter.Context) []result.Issue {
+		return resIssues
+	}).WithLoadMode(goanalysis.LoadModeSyntax)
 }

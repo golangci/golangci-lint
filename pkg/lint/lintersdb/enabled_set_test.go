@@ -4,8 +4,6 @@ import (
 	"sort"
 	"testing"
 
-	"github.com/golangci/golangci-lint/pkg/golinters"
-
 	"github.com/stretchr/testify/assert"
 
 	"github.com/golangci/golangci-lint/pkg/config"
@@ -20,35 +18,36 @@ func TestGetEnabledLintersSet(t *testing.T) {
 		def  []string // enabled by default linters
 		exp  []string // alphabetically ordered enabled linter names
 	}
+	allMegacheckLinterNames := []string{"gosimple", "staticcheck", "unused"}
 	cases := []cs{
 		{
 			cfg: config.Linters{
-				Disable: []string{golinters.MegacheckMetalinter{}.Name()},
+				Disable: []string{"megacheck"},
 			},
 			name: "disable all linters from megacheck",
-			def:  golinters.MegacheckMetalinter{}.DefaultChildLinterNames(),
+			def:  allMegacheckLinterNames,
 			exp:  nil, // all disabled
 		},
 		{
 			cfg: config.Linters{
-				Disable: []string{golinters.MegacheckStaticcheckName},
+				Disable: []string{"staticcheck"},
 			},
 			name: "disable only staticcheck",
-			def:  golinters.MegacheckMetalinter{}.DefaultChildLinterNames(),
-			exp:  []string{golinters.MegacheckGosimpleName, golinters.MegacheckUnusedName},
+			def:  allMegacheckLinterNames,
+			exp:  []string{"gosimple", "unused"},
 		},
 		{
 			name: "don't merge into megacheck",
-			def:  golinters.MegacheckMetalinter{}.DefaultChildLinterNames(),
-			exp:  golinters.MegacheckMetalinter{}.DefaultChildLinterNames(),
+			def:  allMegacheckLinterNames,
+			exp:  allMegacheckLinterNames,
 		},
 		{
 			name: "expand megacheck",
 			cfg: config.Linters{
-				Enable: []string{golinters.MegacheckMetalinter{}.Name()},
+				Enable: []string{"megacheck"},
 			},
 			def: nil,
-			exp: golinters.MegacheckMetalinter{}.DefaultChildLinterNames(),
+			exp: allMegacheckLinterNames,
 		},
 		{
 			name: "don't disable anything",
@@ -99,9 +98,9 @@ func TestGetEnabledLintersSet(t *testing.T) {
 		t.Run(c.name, func(t *testing.T) {
 			var defaultLinters []*linter.Config
 			for _, ln := range c.def {
-				lc := m.GetLinterConfig(ln)
-				assert.NotNil(t, lc, ln)
-				defaultLinters = append(defaultLinters, lc)
+				lcs := m.GetLinterConfigs(ln)
+				assert.NotNil(t, lcs, ln)
+				defaultLinters = append(defaultLinters, lcs...)
 			}
 
 			els := es.build(&c.cfg, defaultLinters)

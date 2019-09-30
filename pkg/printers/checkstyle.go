@@ -36,14 +36,14 @@ func NewCheckstyle() *Checkstyle {
 	return &Checkstyle{}
 }
 
-func (Checkstyle) Print(ctx context.Context, issues <-chan result.Issue) error {
+func (Checkstyle) Print(ctx context.Context, issues []result.Issue) error {
 	out := checkstyleOutput{
 		Version: "5.0",
 	}
 
 	files := map[string]*checkstyleFile{}
 
-	for issue := range issues {
+	for _, issue := range issues {
 		file, ok := files[issue.FilePath()]
 		if !ok {
 			file = &checkstyleFile{

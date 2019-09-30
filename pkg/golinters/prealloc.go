@@ -1,40 +1,57 @@
 package golinters
 
 import (
-	"context"
 	"fmt"
-	"go/ast"
+	"sync"
 
 	"github.com/golangci/prealloc"
+	"golang.org/x/tools/go/analysis"
 
+	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-type Prealloc struct{}
+const preallocName = "prealloc"
 
-func (Prealloc) Name() string {
-	return "prealloc"
-}
+func NewPrealloc() *goanalysis.Linter {
+	var mu sync.Mutex
+	var resIssues []result.Issue
 
-func (Prealloc) Desc() string {
-	return "Finds slice declarations that could potentially be preallocated"
-}
-
-func (lint Prealloc) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issue, error) {
-	var res []result.Issue
-
-	s := &lintCtx.Settings().Prealloc
-	for _, f := range lintCtx.ASTCache.GetAllValidFiles() {
-		hints := prealloc.Check([]*ast.File{f.F}, s.Simple, s.RangeLoops, s.ForLoops)
-		for _, hint := range hints {
-			res = append(res, result.Issue{
-				Pos:        f.Fset.Position(hint.Pos),
-				Text:       fmt.Sprintf("Consider preallocating %s", formatCode(hint.DeclaredSliceName, lintCtx.Cfg)),
-				FromLinter: lint.Name(),
-			})
-		}
+	analyzer := &analysis.Analyzer{
+		Name: goanalysis.TheOnlyAnalyzerName,
+		Doc:  goanalysis.TheOnlyanalyzerDoc,
 	}
+	return goanalysis.NewLinter(
+		preallocName,
+		"Finds slice declarations that could potentially be preallocated",
+		[]*analysis.Analyzer{analyzer},
+		nil,
+	).WithContextSetter(func(lintCtx *linter.Context) {
+		s := &lintCtx.Settings().Prealloc
 
-	return res, nil
+		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
+			var res []result.Issue
+			hints := prealloc.Check(pass.Files, s.Simple, s.RangeLoops, s.ForLoops)
+			for _, hint := range hints {
+				res = append(res, result.Issue{
+					Pos:        pass.Fset.Position(hint.Pos),
+					Text:       fmt.Sprintf("Consider preallocating %s", formatCode(hint.DeclaredSliceName, lintCtx.Cfg)),
+					FromLinter: preallocName,
+				})
+			}
+
+			if len(res) == 0 {
+				return nil, nil
+			}
+
+			mu.Lock()
+			resIssues = append(resIssues, res...)
+			mu.Unlock()
+
+			return nil, nil
+		}
+	}).WithIssuesReporter(func(*linter.Context) []result.Issue {
+		return resIssues
+	}).WithLoadMode(goanalysis.LoadModeSyntax)
 }

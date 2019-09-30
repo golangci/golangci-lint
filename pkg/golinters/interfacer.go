@@ -1,7 +1,12 @@
 package golinters
 
 import (
-	"context"
+	"sync"
+
+	"golang.org/x/tools/go/analysis"
+	"golang.org/x/tools/go/analysis/passes/buildssa"
+
+	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 
 	"mvdan.cc/interfacer/check"
 
@@ -9,38 +14,56 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-type Interfacer struct{}
+const interfacerName = "interfacer"
 
-func (Interfacer) Name() string {
-	return "interfacer"
-}
+func NewInterfacer() *goanalysis.Linter {
+	var mu sync.Mutex
+	var resIssues []result.Issue
 
-func (Interfacer) Desc() string {
-	return "Linter that suggests narrower interface types"
-}
-
-func (lint Interfacer) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issue, error) {
-	c := new(check.Checker)
-	c.Program(lintCtx.Program)
-	c.ProgramSSA(lintCtx.SSAProgram)
-
-	issues, err := c.Check()
-	if err != nil {
-		return nil, err
+	analyzer := &analysis.Analyzer{
+		Name:     goanalysis.TheOnlyAnalyzerName,
+		Doc:      goanalysis.TheOnlyanalyzerDoc,
+		Requires: []*analysis.Analyzer{buildssa.Analyzer},
 	}
-	if len(issues) == 0 {
-		return nil, nil
-	}
+	return goanalysis.NewLinter(
+		interfacerName,
+		"Linter that suggests narrower interface types",
+		[]*analysis.Analyzer{analyzer},
+		nil,
+	).WithContextSetter(func(lintCtx *linter.Context) {
+		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
+			ssa := pass.ResultOf[buildssa.Analyzer].(*buildssa.SSA)
+			ssaPkg := ssa.Pkg
+			c := &check.Checker{}
+			prog := goanalysis.MakeFakeLoaderProgram(pass)
+			c.Program(prog)
+			c.ProgramSSA(ssaPkg.Prog)
 
-	res := make([]result.Issue, 0, len(issues))
-	for _, i := range issues {
-		pos := lintCtx.SSAProgram.Fset.Position(i.Pos())
-		res = append(res, result.Issue{
-			Pos:        pos,
-			Text:       i.Message(),
-			FromLinter: lint.Name(),
-		})
-	}
+			issues, err := c.Check()
+			if err != nil {
+				return nil, err
+			}
+			if len(issues) == 0 {
+				return nil, nil
+			}
 
-	return res, nil
+			res := make([]result.Issue, 0, len(issues))
+			for _, i := range issues {
+				pos := pass.Fset.Position(i.Pos())
+				res = append(res, result.Issue{
+					Pos:        pos,
+					Text:       i.Message(),
+					FromLinter: interfacerName,
+				})
+			}
+
+			mu.Lock()
+			resIssues = append(resIssues, res...)
+			mu.Unlock()
+
+			return nil, nil
+		}
+	}).WithIssuesReporter(func(*linter.Context) []result.Issue {
+		return resIssues
+	}).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }

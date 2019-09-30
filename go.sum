@@ -86,12 +86,12 @@ github.com/golangci/goconst v0.0.0-20180610141641-041c5f2b40f3 h1:pe9JHs3cHHDQgO
 github.com/golangci/goconst v0.0.0-20180610141641-041c5f2b40f3/go.mod h1:JXrF4TWy4tXYn62/9x8Wm/K/dm06p8tCKwFRDPZG/1o=
 github.com/golangci/gocyclo v0.0.0-20180528134321-2becd97e67ee h1:J2XAy40+7yz70uaOiMbNnluTg7gyQhtGqLQncQh+4J8=
 github.com/golangci/gocyclo v0.0.0-20180528134321-2becd97e67ee/go.mod h1:ozx7R9SIwqmqf5pRP90DhR2Oay2UIjGuKheCBCNwAYU=
-github.com/golangci/gofmt v0.0.0-20181222123516-0b8337e80d98 h1:0OkFarm1Zy2CjCiDKfK9XHgmc2wbDlRMD2hD8anAJHU=
-github.com/golangci/gofmt v0.0.0-20181222123516-0b8337e80d98/go.mod h1:9qCChq59u/eW8im404Q2WWTrnBUQKjpNYKMbU4M7EFU=
+github.com/golangci/gofmt v0.0.0-20190930125516-244bba706f1a h1:iR3fYXUjHCR97qWS8ch1y9zPNsgXThGwjKPrYfqMPks=
+github.com/golangci/gofmt v0.0.0-20190930125516-244bba706f1a/go.mod h1:9qCChq59u/eW8im404Q2WWTrnBUQKjpNYKMbU4M7EFU=
 github.com/golangci/ineffassign v0.0.0-20190609212857-42439a7714cc h1:gLLhTLMk2/SutryVJ6D4VZCU3CUqr8YloG7FPIBWFpI=
 github.com/golangci/ineffassign v0.0.0-20190609212857-42439a7714cc/go.mod h1:e5tpTHCfVze+7EpLEozzMB3eafxo2KT5veNg1k6byQU=
-github.com/golangci/lint-1 v0.0.0-20190420132249-ee948d087217 h1:En/tZdwhAn0JNwLuXzP3k2RVtMqMmOEK7Yu/g3tmtJE=
-github.com/golangci/lint-1 v0.0.0-20190420132249-ee948d087217/go.mod h1:66R6K6P6VWk9I95jvqGxkqJxVWGFy9XlDwLwVz1RCFg=
+github.com/golangci/lint-1 v0.0.0-20190930103755-fad67e08aa89 h1:664ewjIQUXDvinFMbAsoH2V2Yvaro/X8BoYpIMTWGXI=
+github.com/golangci/lint-1 v0.0.0-20190930103755-fad67e08aa89/go.mod h1:66R6K6P6VWk9I95jvqGxkqJxVWGFy9XlDwLwVz1RCFg=
 github.com/golangci/maligned v0.0.0-20180506175553-b1d89398deca h1:kNY3/svz5T29MYHubXix4aDDuE3RWHkPvopM/EDv/MA=
 github.com/golangci/maligned v0.0.0-20180506175553-b1d89398deca/go.mod h1:tvlJhZqDe4LMs4ZHD0oMUlt9G2LWuDGoisJTBzLMV9o=
 github.com/golangci/misspell v0.0.0-20180809174111-950f5d19e770 h1:EL/O5HGrF7Jaq0yNhBLucz9hTuRzj2LdwGBOaENgxIk=

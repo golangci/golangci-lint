@@ -157,6 +157,7 @@ func (c *Cache) parseFile(filePath string, fset *token.FileSet) {
 		Name: filePath,
 	}
 	if err != nil {
-		c.log.Warnf("Can't parse AST of %s: %s", filePath, err)
+		c.log.Infof("Can't parse AST of %s: %s", filePath, err)
+		// Info level because it will be reported by typecheck linter or go/analysis.
 	}
 }

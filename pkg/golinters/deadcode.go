@@ -1,42 +1,52 @@
 package golinters
 
 import (
-	"context"
 	"fmt"
+	"sync"
 
 	deadcodeAPI "github.com/golangci/go-misc/deadcode"
+	"golang.org/x/tools/go/analysis"
 
+	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-type Deadcode struct{}
+func NewDeadcode() *goanalysis.Linter {
+	const linterName = "deadcode"
+	var mu sync.Mutex
+	var resIssues []result.Issue
 
-func (Deadcode) Name() string {
-	return "deadcode"
-}
+	analyzer := &analysis.Analyzer{
+		Name: goanalysis.TheOnlyAnalyzerName,
+		Doc:  goanalysis.TheOnlyanalyzerDoc,
+		Run: func(pass *analysis.Pass) (interface{}, error) {
+			prog := goanalysis.MakeFakeLoaderProgram(pass)
+			issues, err := deadcodeAPI.Run(prog)
+			if err != nil {
+				return nil, err
+			}
+			res := make([]result.Issue, 0, len(issues))
+			for _, i := range issues {
+				res = append(res, result.Issue{
+					Pos:        i.Pos,
+					Text:       fmt.Sprintf("%s is unused", formatCode(i.UnusedIdentName, nil)),
+					FromLinter: linterName,
+				})
+			}
+			mu.Lock()
+			resIssues = append(resIssues, res...)
+			mu.Unlock()
 
-func (Deadcode) Desc() string {
-	return "Finds unused code"
-}
-
-func (d Deadcode) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issue, error) {
-	issues, err := deadcodeAPI.Run(lintCtx.Program)
-	if err != nil {
-		return nil, err
+			return nil, nil
+		},
 	}
-
-	if len(issues) == 0 {
-		return nil, nil
-	}
-
-	res := make([]result.Issue, 0, len(issues))
-	for _, i := range issues {
-		res = append(res, result.Issue{
-			Pos:        i.Pos,
-			Text:       fmt.Sprintf("%s is unused", formatCode(i.UnusedIdentName, lintCtx.Cfg)),
-			FromLinter: d.Name(),
-		})
-	}
-	return res, nil
+	return goanalysis.NewLinter(
+		linterName,
+		"Finds unused code",
+		[]*analysis.Analyzer{analyzer},
+		nil,
+	).WithIssuesReporter(func(*linter.Context) []result.Issue {
+		return resIssues
+	}).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }

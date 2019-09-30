@@ -30,9 +30,9 @@ func NewCodeClimate() *CodeClimate {
 	return &CodeClimate{}
 }
 
-func (p CodeClimate) Print(ctx context.Context, issues <-chan result.Issue) error {
+func (p CodeClimate) Print(ctx context.Context, issues []result.Issue) error {
 	allIssues := []CodeClimateIssue{}
-	for i := range issues {
+	for _, i := range issues {
 		var issue CodeClimateIssue
 		issue.Description = i.FromLinter + ": " + i.Text
 		issue.Location.Path = i.Pos.Filename

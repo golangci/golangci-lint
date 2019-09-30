@@ -2,13 +2,17 @@ package golinters
 
 import (
 	"bufio"
-	"context"
 	"fmt"
 	"os"
 	"os/user"
 	"path/filepath"
 	"regexp"
 	"strings"
+	"sync"
+
+	"golang.org/x/tools/go/analysis"
+
+	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 
 	errcheckAPI "github.com/golangci/errcheck/golangci"
 	"github.com/pkg/errors"
@@ -19,47 +23,58 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-type Errcheck struct{}
-
-func (Errcheck) Name() string {
-	return "errcheck"
-}
-
-func (Errcheck) Desc() string {
-	return "Errcheck is a program for checking for unchecked errors " +
-		"in go programs. These unchecked errors can be critical bugs in some cases"
-}
-
-func (e Errcheck) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issue, error) {
-	errCfg, err := genConfig(&lintCtx.Settings().Errcheck)
-	if err != nil {
-		return nil, err
+func NewErrcheck() *goanalysis.Linter {
+	const linterName = "errcheck"
+	var mu sync.Mutex
+	var res []result.Issue
+	analyzer := &analysis.Analyzer{
+		Name: goanalysis.TheOnlyAnalyzerName,
+		Doc:  goanalysis.TheOnlyanalyzerDoc,
 	}
-	issues, err := errcheckAPI.RunWithConfig(lintCtx.Program, errCfg)
-	if err != nil {
-		return nil, err
-	}
+	return goanalysis.NewLinter(
+		linterName,
+		"Errcheck is a program for checking for unchecked errors "+
+			"in go programs. These unchecked errors can be critical bugs in some cases",
+		[]*analysis.Analyzer{analyzer},
+		nil,
+	).WithContextSetter(func(lintCtx *linter.Context) {
+		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
+			prog := goanalysis.MakeFakeLoaderProgram(pass)
+			errCfg, err := genConfig(&lintCtx.Settings().Errcheck)
+			if err != nil {
+				return nil, err
+			}
+			errcheckIssues, err := errcheckAPI.RunWithConfig(prog, errCfg)
+			if err != nil {
+				return nil, err
+			}
 
-	if len(issues) == 0 {
-		return nil, nil
-	}
+			if len(errcheckIssues) == 0 {
+				return nil, nil
+			}
 
-	res := make([]result.Issue, 0, len(issues))
-	for _, i := range issues {
-		var text string
-		if i.FuncName != "" {
-			text = fmt.Sprintf("Error return value of %s is not checked", formatCode(i.FuncName, lintCtx.Cfg))
-		} else {
-			text = "Error return value is not checked"
+			issues := make([]result.Issue, 0, len(errcheckIssues))
+			for _, i := range errcheckIssues {
+				var text string
+				if i.FuncName != "" {
+					text = fmt.Sprintf("Error return value of %s is not checked", formatCode(i.FuncName, lintCtx.Cfg))
+				} else {
+					text = "Error return value is not checked"
+				}
+				issues = append(issues, result.Issue{
+					FromLinter: linterName,
+					Text:       text,
+					Pos:        i.Pos,
+				})
+			}
+			mu.Lock()
+			res = append(res, issues...)
+			mu.Unlock()
+			return nil, nil
 		}
-		res = append(res, result.Issue{
-			FromLinter: e.Name(),
-			Text:       text,
-			Pos:        i.Pos,
-		})
-	}
-
-	return res, nil
+	}).WithIssuesReporter(func(*linter.Context) []result.Issue {
+		return res
+	}).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }
 
 // parseIgnoreConfig was taken from errcheck in order to keep the API identical.

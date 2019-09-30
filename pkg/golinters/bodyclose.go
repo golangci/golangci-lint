@@ -17,5 +17,5 @@ func NewBodyclose() *goanalysis.Linter {
 		"checks whether HTTP response body is closed successfully",
 		analyzers,
 		nil,
-	)
+	).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }
