@@ -43,7 +43,7 @@ func NewGochecknoglobals() *goanalysis.Linter {
 	}
 	return goanalysis.NewLinter(
 		gochecknoglobalsName,
-		"Tool for detection of long functions",
+		"Checks that no globals are present in Go code",
 		[]*analysis.Analyzer{analyzer},
 		nil,
 	).WithIssuesReporter(func(*linter.Context) []result.Issue {
