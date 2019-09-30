@@ -43,7 +43,8 @@ import (
 )
 
 func getAllAnalyzers() []*analysis.Analyzer {
-	return []*analysis.Analyzer{
+	var analyzers []*analysis.Analyzer
+	for _, a := range []*analysis.Analyzer{
 		asmdecl.Analyzer,
 		assign.Analyzer,
 		atomic.Analyzer,
@@ -76,7 +77,14 @@ func getAllAnalyzers() []*analysis.Analyzer {
 		unreachable.Analyzer,
 		unsafeptr.Analyzer,
 		unusedresult.Analyzer,
+	} {
+		if a.ResultType != nil {
+			// Skipping internal analyzers.
+			continue
+		}
+		analyzers = append(analyzers, a)
 	}
+	return analyzers
 }
 
 func getDefaultAnalyzers() []*analysis.Analyzer {
