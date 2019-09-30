@@ -65,7 +65,8 @@ func (sl StderrLog) Fatalf(format string, args ...interface{}) {
 }
 
 func (sl StderrLog) Panicf(format string, args ...interface{}) {
-	sl.logger.Panicf("%s%s", sl.prefix(), fmt.Sprintf(format, args...))
+	v := fmt.Sprintf("%s%s", sl.prefix(), fmt.Sprintf(format, args...))
+	panic(v)
 }
 
 func (sl StderrLog) Errorf(format string, args ...interface{}) {

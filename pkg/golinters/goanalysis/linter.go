@@ -189,7 +189,7 @@ func buildIssuesFromErrorsForTypecheckMode(errs []error, lintCtx *linter.Context
 		if !ok {
 			return nil, err
 		}
-		for _, err := range libpackages.ExtractErrors(itErr.Pkg, lintCtx.ASTCache) {
+		for _, err := range libpackages.ExtractErrors(itErr.Pkg) {
 			i, perr := parseError(err)
 			if perr != nil { // failed to parse
 				if uniqReportedIssues[err.Msg] {

@@ -23,7 +23,6 @@ import (
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/exitcodes"
 	"github.com/golangci/golangci-lint/pkg/goutil"
-	"github.com/golangci/golangci-lint/pkg/lint/astcache"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 )
@@ -293,14 +292,6 @@ func (cl *ContextLoader) Load(ctx context.Context, linters []*linter.Config) (*l
 		return nil, exitcodes.ErrNoGoFiles
 	}
 
-	astLog := cl.log.Child("astcache")
-	startedLoadingASTAt := time.Now()
-	astCache, err := astcache.LoadFromPackages(deduplicatedPkgs, astLog)
-	if err != nil {
-		return nil, err
-	}
-	cl.log.Infof("Loaded %d AST files in %s", len(astCache.ParsedFilenames()), time.Since(startedLoadingASTAt))
-
 	ret := &linter.Context{
 		Packages: deduplicatedPkgs,
 
@@ -309,7 +300,6 @@ func (cl *ContextLoader) Load(ctx context.Context, linters []*linter.Config) (*l
 		OriginalPackages: pkgs,
 
 		Cfg:       cl.cfg,
-		ASTCache:  astCache,
 		Log:       cl.log,
 		FileCache: cl.fileCache,
 		LineCache: cl.lineCache,

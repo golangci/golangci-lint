@@ -108,6 +108,113 @@ func (r *runner) run(analyzers []*analysis.Analyzer, initialPackages []*packages
 	return extractDiagnostics(roots)
 }
 
+type actKey struct {
+	*analysis.Analyzer
+	*packages.Package
+}
+
+func (r *runner) markAllActions(a *analysis.Analyzer, pkg *packages.Package, markedActions map[actKey]struct{}) {
+	k := actKey{a, pkg}
+	if _, ok := markedActions[k]; ok {
+		return
+	}
+
+	for _, req := range a.Requires {
+		r.markAllActions(req, pkg, markedActions)
+	}
+
+	if len(a.FactTypes) != 0 {
+		for path := range pkg.Imports {
+			r.markAllActions(a, pkg.Imports[path], markedActions)
+		}
+	}
+
+	markedActions[k] = struct{}{}
+}
+
+func (r *runner) makeAction(a *analysis.Analyzer, pkg *packages.Package,
+	initialPkgs map[*packages.Package]bool, actions map[actKey]*action, actAlloc *actionAllocator) *action {
+	k := actKey{a, pkg}
+	act, ok := actions[k]
+	if ok {
+		return act
+	}
+
+	act = actAlloc.alloc()
+	act.a = a
+	act.pkg = pkg
+	act.log = r.log
+	act.prefix = r.prefix
+	act.pkgCache = r.pkgCache
+	act.isInitialPkg = initialPkgs[pkg]
+	act.needAnalyzeSource = initialPkgs[pkg]
+	act.analysisDoneCh = make(chan struct{})
+
+	depsCount := len(a.Requires)
+	if len(a.FactTypes) > 0 {
+		depsCount += len(pkg.Imports)
+	}
+	act.deps = make([]*action, 0, depsCount)
+
+	// Add a dependency on each required analyzers.
+	for _, req := range a.Requires {
+		act.deps = append(act.deps, r.makeAction(req, pkg, initialPkgs, actions, actAlloc))
+	}
+
+	r.buildActionFactDeps(act, a, pkg, initialPkgs, actions, actAlloc)
+
+	actions[k] = act
+	return act
+}
+
+func (r *runner) buildActionFactDeps(act *action, a *analysis.Analyzer, pkg *packages.Package,
+	initialPkgs map[*packages.Package]bool, actions map[actKey]*action, actAlloc *actionAllocator) {
+	// An analysis that consumes/produces facts
+	// must run on the package's dependencies too.
+	if len(a.FactTypes) == 0 {
+		return
+	}
+
+	act.objectFacts = make(map[objectFactKey]analysis.Fact)
+	act.packageFacts = make(map[packageFactKey]analysis.Fact)
+
+	paths := make([]string, 0, len(pkg.Imports))
+	for path := range pkg.Imports {
+		paths = append(paths, path)
+	}
+	sort.Strings(paths) // for determinism
+	for _, path := range paths {
+		dep := r.makeAction(a, pkg.Imports[path], initialPkgs, actions, actAlloc)
+		act.deps = append(act.deps, dep)
+	}
+
+	// Need to register fact types for pkgcache proper gob encoding.
+	for _, f := range a.FactTypes {
+		gob.Register(f)
+	}
+}
+
+type actionAllocator struct {
+	allocatedActions []action
+	nextFreeIndex    int
+}
+
+func newActionAllocator(maxCount int) *actionAllocator {
+	return &actionAllocator{
+		allocatedActions: make([]action, maxCount),
+		nextFreeIndex:    0,
+	}
+}
+
+func (actAlloc *actionAllocator) alloc() *action {
+	if actAlloc.nextFreeIndex == len(actAlloc.allocatedActions) {
+		panic(fmt.Sprintf("Made too many allocations of actions: %d allowed", len(actAlloc.allocatedActions)))
+	}
+	act := &actAlloc.allocatedActions[actAlloc.nextFreeIndex]
+	actAlloc.nextFreeIndex++
+	return act
+}
+
 //nolint:gocritic
 func (r *runner) prepareAnalysis(pkgs []*packages.Package,
 	analyzers []*analysis.Analyzer) (map[*packages.Package]bool, []*action, []*action) {
@@ -116,70 +223,30 @@ func (r *runner) prepareAnalysis(pkgs []*packages.Package,
 	// Each graph node (action) is one unit of analysis.
 	// Edges express package-to-package (vertical) dependencies,
 	// and analysis-to-analysis (horizontal) dependencies.
-	type key struct {
-		*analysis.Analyzer
-		*packages.Package
-	}
-	actions := make(map[key]*action)
 
-	initialPkgs := map[*packages.Package]bool{}
+	// This place is memory-intensive: e.g. Istio project has 120k total actions.
+	// Therefore optimize it carefully.
+	markedActions := make(map[actKey]struct{}, len(analyzers)*len(pkgs))
+	for _, a := range analyzers {
+		for _, pkg := range pkgs {
+			r.markAllActions(a, pkg, markedActions)
+		}
+	}
+	totalActionsCount := len(markedActions)
+
+	actions := make(map[actKey]*action, totalActionsCount)
+	actAlloc := newActionAllocator(totalActionsCount)
+
+	initialPkgs := make(map[*packages.Package]bool, len(pkgs))
 	for _, pkg := range pkgs {
 		initialPkgs[pkg] = true
 	}
 
-	var mkAction func(a *analysis.Analyzer, pkg *packages.Package) *action
-	mkAction = func(a *analysis.Analyzer, pkg *packages.Package) *action {
-		k := key{a, pkg}
-		act, ok := actions[k]
-		if !ok {
-			act = &action{
-				a:                 a,
-				pkg:               pkg,
-				log:               r.log,
-				prefix:            r.prefix,
-				pkgCache:          r.pkgCache,
-				isInitialPkg:      initialPkgs[pkg],
-				needAnalyzeSource: initialPkgs[pkg],
-				analysisDoneCh:    make(chan struct{}),
-				objectFacts:       make(map[objectFactKey]analysis.Fact),
-				packageFacts:      make(map[packageFactKey]analysis.Fact),
-				loadMode:          r.loadMode,
-			}
-
-			// Add a dependency on each required analyzers.
-			for _, req := range a.Requires {
-				act.deps = append(act.deps, mkAction(req, pkg))
-			}
-
-			// An analysis that consumes/produces facts
-			// must run on the package's dependencies too.
-			if len(a.FactTypes) > 0 {
-				paths := make([]string, 0, len(pkg.Imports))
-				for path := range pkg.Imports {
-					paths = append(paths, path)
-				}
-				sort.Strings(paths) // for determinism
-				for _, path := range paths {
-					dep := mkAction(a, pkg.Imports[path])
-					act.deps = append(act.deps, dep)
-				}
-
-				// Need to register fact types for pkgcache proper gob encoding.
-				for _, f := range a.FactTypes {
-					gob.Register(f)
-				}
-			}
-
-			actions[k] = act
-		}
-		return act
-	}
-
 	// Build nodes for initial packages.
-	var roots []*action
+	roots := make([]*action, 0, len(pkgs)*len(analyzers))
 	for _, a := range analyzers {
 		for _, pkg := range pkgs {
-			root := mkAction(a, pkg)
+			root := r.makeAction(a, pkg, initialPkgs, actions, actAlloc)
 			root.isroot = true
 			roots = append(roots, root)
 		}
@@ -189,6 +256,8 @@ func (r *runner) prepareAnalysis(pkgs []*packages.Package,
 	for _, act := range actions {
 		allActions = append(allActions, act)
 	}
+
+	debugf("Built %d actions", len(actions))
 
 	return initialPkgs, allActions, roots
 }
@@ -334,9 +403,6 @@ type action struct {
 	a                   *analysis.Analyzer
 	pkg                 *packages.Package
 	pass                *analysis.Pass
-	isroot              bool
-	isInitialPkg        bool
-	needAnalyzeSource   bool
 	deps                []*action
 	objectFacts         map[objectFactKey]analysis.Fact
 	packageFacts        map[packageFactKey]analysis.Fact
@@ -349,7 +415,9 @@ type action struct {
 	analysisDoneCh      chan struct{}
 	loadCachedFactsDone bool
 	loadCachedFactsOk   bool
-	loadMode            LoadMode
+	isroot              bool
+	isInitialPkg        bool
+	needAnalyzeSource   bool
 }
 
 type objectFactKey struct {

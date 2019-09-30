@@ -9,7 +9,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 
-	"github.com/golangci/golangci-lint/pkg/lint/astcache"
 	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
@@ -32,13 +31,7 @@ func newNolint2FileIssue(line int) result.Issue {
 }
 
 func newTestNolintProcessor(log logutils.Log) *Nolint {
-	cache := astcache.LoadFromFilenames(log,
-		filepath.Join("testdata", "nolint.go"),
-		filepath.Join("testdata", "nolint2.go"),
-		filepath.Join("testdata", "nolint_bad_names.go"),
-		filepath.Join("testdata", "nolint_whole_file.go"),
-	)
-	return NewNolint(cache, log, lintersdb.NewManager(nil))
+	return NewNolint(log, lintersdb.NewManager(nil))
 }
 
 func getMockLog() *logutils.MockLog {

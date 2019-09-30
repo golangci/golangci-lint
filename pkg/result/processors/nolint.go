@@ -3,11 +3,11 @@ package processors
 import (
 	"fmt"
 	"go/ast"
+	"go/parser"
 	"go/token"
 	"sort"
 	"strings"
 
-	"github.com/golangci/golangci-lint/pkg/lint/astcache"
 	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
@@ -47,17 +47,15 @@ type filesCache map[string]*fileData
 
 type Nolint struct {
 	cache     filesCache
-	astCache  *astcache.Cache
 	dbManager *lintersdb.Manager
 	log       logutils.Log
 
 	unknownLintersSet map[string]bool
 }
 
-func NewNolint(astCache *astcache.Cache, log logutils.Log, dbManager *lintersdb.Manager) *Nolint {
+func NewNolint(log logutils.Log, dbManager *lintersdb.Manager) *Nolint {
 	return &Nolint{
 		cache:             filesCache{},
-		astCache:          astCache,
 		dbManager:         dbManager,
 		log:               log,
 		unknownLintersSet: map[string]bool{},
@@ -87,17 +85,18 @@ func (p *Nolint) getOrCreateFileData(i *result.Issue) (*fileData, error) {
 		return nil, fmt.Errorf("no file path for issue")
 	}
 
-	file := p.astCache.Get(i.FilePath())
-	if file == nil {
-		return nil, fmt.Errorf("no file %s in ast cache %v",
-			i.FilePath(), p.astCache.ParsedFilenames())
-	}
-	if file.Err != nil {
+	// TODO: migrate this parsing to go/analysis facts
+	// or cache them somehow per file.
+
+	// Don't use cached AST because they consume a lot of memory on large projects.
+	fset := token.NewFileSet()
+	f, err := parser.ParseFile(fset, i.FilePath(), nil, parser.ParseComments)
+	if err != nil {
 		// Don't report error because it's already must be reporter by typecheck or go/analysis.
 		return fd, nil
 	}
 
-	fd.ignoredRanges = p.buildIgnoredRangesForFile(file.F, file.Fset, i.FilePath())
+	fd.ignoredRanges = p.buildIgnoredRangesForFile(f, fset, i.FilePath())
 	nolintDebugf("file %s: built nolint ranges are %+v", i.FilePath(), fd.ignoredRanges)
 	return fd, nil
 }
