@@ -133,21 +133,21 @@ The following companies/products use golangci-lint:
 
 The following great projects use golangci-lint:
 
-* [goreleaser/goreleaser](https://github.com/goreleaser/goreleaser)
-* [tsuru/tsuru](https://github.com/tsuru/tsuru)
-* [xenolf/lego](https://github.com/xenolf/lego)
-* [go-swagger/go-swagger](https://github.com/go-swagger/go-swagger)
-* [kubernetes-sigs/kustomize](https://github.com/kubernetes-sigs/kustomize)
-* [virtual-kubelet/virtual-kubelet](https://github.com/virtual-kubelet/virtual-kubelet)
 * [alecthomas/participle](https://github.com/alecthomas/participle)
 * [asobti/kube-monkey](https://github.com/asobti/kube-monkey)
-* [getantibody/antibody](https://github.com/getantibody/antibody)
 * [banzaicloud/pipeline](https://github.com/banzaicloud/pipeline)
-* [posener/complete](https://github.com/posener/complete)
-* [y0ssar1an/q](https://github.com/y0ssar1an/q)
-* [segmentio/terraform-docs](https://github.com/segmentio/terraform-docs)
-* [kubeedge/kubeedge](https://github.com/kubeedge/kubeedge)
 * [caicloud/cyclone](https://github.com/caicloud/cyclone)
+* [getantibody/antibody](https://github.com/getantibody/antibody)
+* [goreleaser/goreleaser](https://github.com/goreleaser/goreleaser)
+* [go-swagger/go-swagger](https://github.com/go-swagger/go-swagger)
+* [kubeedge/kubeedge](https://github.com/kubeedge/kubeedge)
+* [kubernetes-sigs/kustomize](https://github.com/kubernetes-sigs/kustomize)
+* [posener/complete](https://github.com/posener/complete)
+* [segmentio/terraform-docs](https://github.com/segmentio/terraform-docs)
+* [tsuru/tsuru](https://github.com/tsuru/tsuru)
+* [virtual-kubelet/virtual-kubelet](https://github.com/virtual-kubelet/virtual-kubelet)
+* [xenolf/lego](https://github.com/xenolf/lego)
+* [y0ssar1an/q](https://github.com/y0ssar1an/q)
 
 ## Quick Start
 
