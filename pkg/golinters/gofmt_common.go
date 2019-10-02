@@ -229,6 +229,9 @@ func extractIssuesFromPatch(patch string, log logutils.Log, lintCtx *linter.Cont
 			var text string
 			if isGoimports {
 				text = "File is not `goimports`-ed"
+				if lintCtx.Settings().Goimports.LocalPrefixes != "" {
+					text += " with -local " + lintCtx.Settings().Goimports.LocalPrefixes
+				}
 			} else {
 				text = "File is not `gofmt`-ed"
 				if lintCtx.Settings().Gofmt.Simplify {
