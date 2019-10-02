@@ -174,6 +174,9 @@ type LintersSettings struct {
 	Whitespace struct {
 		MultiIf bool `mapstructure:"multi-if"`
 	}
+	WSL struct {
+		NoTest bool `mapstructure:"no-test"`
+	}
 
 	Lll      LllSettings
 	Unparam  UnparamSettings
