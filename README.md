@@ -145,6 +145,7 @@ The following great projects use golangci-lint:
 * [posener/complete](https://github.com/posener/complete)
 * [segmentio/terraform-docs](https://github.com/segmentio/terraform-docs)
 * [tsuru/tsuru](https://github.com/tsuru/tsuru)
+* [twpayne/chezmoi](https://github.com/twpayne/chezmoi)
 * [virtual-kubelet/virtual-kubelet](https://github.com/virtual-kubelet/virtual-kubelet)
 * [xenolf/lego](https://github.com/xenolf/lego)
 * [y0ssar1an/q](https://github.com/y0ssar1an/q)
