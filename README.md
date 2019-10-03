@@ -201,6 +201,7 @@ dupl: Tool for code clone detection [fast: true, auto-fix: false]
 funlen: Tool for detection of long functions [fast: true, auto-fix: false]
 gochecknoglobals: Checks that no globals are present in Go code [fast: true, auto-fix: false]
 gochecknoinits: Checks that no init functions are present in Go code [fast: true, auto-fix: false]
+gocognit: Computes and checks the cognitive complexity of functions [fast: true, auto-fix: false]
 goconst: Finds repeated strings that could be replaced by a constant [fast: true, auto-fix: false]
 gocritic: The most opinionated Go source code linter [fast: true, auto-fix: false]
 gocyclo: Computes and checks the cyclomatic complexity of functions [fast: true, auto-fix: false]
@@ -449,6 +450,7 @@ golangci-lint help linters
 - [dupl](https://github.com/mibk/dupl) - Tool for code clone detection
 - [goconst](https://github.com/jgautheron/goconst) - Finds repeated strings that could be replaced by a constant
 - [gocyclo](https://github.com/alecthomas/gocyclo) - Computes and checks the cyclomatic complexity of functions
+- [gocognit](https://github.com/uudashr/gocognit) - Computes and checks the cognitive complexity of functions
 - [gofmt](https://golang.org/cmd/gofmt/) - Gofmt checks whether code was gofmt-ed. By default this tool runs with -s option to check for code simplification
 - [goimports](https://godoc.org/golang.org/x/tools/cmd/goimports) - Goimports does everything that gofmt does. Additionally it checks unused imports
 - [maligned](https://github.com/mdempsky/maligned) - Tool to detect Go structs that would take less memory if their fields were sorted
@@ -701,6 +703,9 @@ linters-settings:
     # it's a comma-separated list of prefixes
     local-prefixes: github.com/org/project
   gocyclo:
+    # minimal code complexity to report, 30 by default (but we recommend 10-20)
+    min-complexity: 10
+  gocognit:
     # minimal code complexity to report, 30 by default (but we recommend 10-20)
     min-complexity: 10
   maligned:
@@ -1108,6 +1113,7 @@ Thanks to developers and authors of used linters:
 - [jgautheron](https://github.com/jgautheron)
 - [remyoudompheng](https://github.com/remyoudompheng)
 - [alecthomas](https://github.com/alecthomas)
+- [uudashr](https://github.com/uudashr)
 - [OpenPeeDeeP](https://github.com/OpenPeeDeeP)
 - [client9](https://github.com/client9)
 - [walle](https://github.com/walle)

@@ -170,6 +170,8 @@ github.com/timakin/bodyclose/passes/bodyclose
 github.com/ultraware/funlen
 # github.com/ultraware/whitespace v0.0.3
 github.com/ultraware/whitespace
+# github.com/uudashr/gocognit v0.0.0-20190926065955-1655d0de0517
+github.com/uudashr/gocognit
 # github.com/valyala/bytebufferpool v1.0.0
 github.com/valyala/bytebufferpool
 # github.com/valyala/quicktemplate v1.2.0

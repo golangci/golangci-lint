@@ -6,7 +6,7 @@ import (
 	"sort"
 	"sync"
 
-	gocycloAPI "github.com/golangci/gocyclo/pkg/gocyclo"
+	"github.com/uudashr/gocognit"
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
@@ -14,9 +14,9 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-const gocycloName = "gocyclo"
+const gocognitName = "gocognit"
 
-func NewGocyclo() *goanalysis.Linter {
+func NewGocognit() *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []result.Issue
 
@@ -25,15 +25,15 @@ func NewGocyclo() *goanalysis.Linter {
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 	}
 	return goanalysis.NewLinter(
-		gocycloName,
-		"Computes and checks the cyclomatic complexity of functions",
+		gocognitName,
+		"Computes and checks the cognitive complexity of functions",
 		[]*analysis.Analyzer{analyzer},
 		nil,
 	).WithContextSetter(func(lintCtx *linter.Context) {
 		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
-			var stats []gocycloAPI.Stat
+			var stats []gocognit.Stat
 			for _, f := range pass.Files {
-				stats = gocycloAPI.BuildStats(f, pass.Fset, stats)
+				stats = gocognit.ComplexityStats(f, pass.Fset, stats)
 			}
 			if len(stats) == 0 {
 				return nil, nil
@@ -45,15 +45,15 @@ func NewGocyclo() *goanalysis.Linter {
 
 			res := make([]result.Issue, 0, len(stats))
 			for _, s := range stats {
-				if s.Complexity <= lintCtx.Settings().Gocyclo.MinComplexity {
+				if s.Complexity <= lintCtx.Settings().Gocognit.MinComplexity {
 					break // Break as the stats is already sorted from greatest to least
 				}
 
 				res = append(res, result.Issue{
 					Pos: s.Pos,
-					Text: fmt.Sprintf("cyclomatic complexity %d of func %s is high (> %d)",
-						s.Complexity, formatCode(s.FuncName, lintCtx.Cfg), lintCtx.Settings().Gocyclo.MinComplexity),
-					FromLinter: gocycloName,
+					Text: fmt.Sprintf("cognitive complexity %d of func %s is high (> %d)",
+						s.Complexity, formatCode(s.FuncName, lintCtx.Cfg), lintCtx.Settings().Gocognit.MinComplexity),
+					FromLinter: gocognitName,
 				})
 			}
 
