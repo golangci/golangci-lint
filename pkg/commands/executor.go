@@ -5,19 +5,16 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 
-	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis/load"
-
 	"github.com/golangci/golangci-lint/internal/pkgcache"
-	"github.com/golangci/golangci-lint/pkg/timeutils"
-
-	"github.com/golangci/golangci-lint/pkg/fsutils"
-
 	"github.com/golangci/golangci-lint/pkg/config"
+	"github.com/golangci/golangci-lint/pkg/fsutils"
+	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis/load"
 	"github.com/golangci/golangci-lint/pkg/goutil"
 	"github.com/golangci/golangci-lint/pkg/lint"
 	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/report"
+	"github.com/golangci/golangci-lint/pkg/timeutils"
 )
 
 type Executor struct {
@@ -85,6 +82,7 @@ func NewExecutor(version, commit, date string) *Executor {
 	e.initLinters()
 	e.initConfig()
 	e.initCompletion()
+	e.initVersion()
 
 	// init e.cfg by values from config: flags parse will see these values
 	// like the default ones. It will overwrite them only if the same option

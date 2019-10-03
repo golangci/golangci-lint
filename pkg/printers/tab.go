@@ -29,10 +29,10 @@ func (p Tab) SprintfColored(ca color.Attribute, format string, args ...interface
 	return c.Sprintf(format, args...)
 }
 
-func (p *Tab) Print(ctx context.Context, issues <-chan result.Issue) error {
+func (p *Tab) Print(ctx context.Context, issues []result.Issue) error {
 	w := tabwriter.NewWriter(logutils.StdOut, 0, 0, 2, ' ', 0)
 
-	for i := range issues {
+	for _, i := range issues {
 		i := i
 		p.printIssue(&i, w)
 	}

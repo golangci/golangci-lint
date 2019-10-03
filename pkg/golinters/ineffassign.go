@@ -1,38 +1,61 @@
 package golinters
 
 import (
-	"context"
 	"fmt"
+	"sync"
 
-	ineffassignAPI "github.com/golangci/ineffassign"
+	"github.com/golangci/ineffassign"
+	"golang.org/x/tools/go/analysis"
 
+	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-type Ineffassign struct{}
+const ineffassignName = "ineffassign"
 
-func (Ineffassign) Name() string {
-	return "ineffassign"
-}
+func NewIneffassign() *goanalysis.Linter {
+	var mu sync.Mutex
+	var resIssues []result.Issue
 
-func (Ineffassign) Desc() string {
-	return "Detects when assignments to existing variables are not used"
-}
-
-func (lint Ineffassign) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issue, error) {
-	issues := ineffassignAPI.Run(getAllFileNames(lintCtx))
-	if len(issues) == 0 {
-		return nil, nil
+	analyzer := &analysis.Analyzer{
+		Name: goanalysis.TheOnlyAnalyzerName,
+		Doc:  goanalysis.TheOnlyanalyzerDoc,
 	}
+	return goanalysis.NewLinter(
+		ineffassignName,
+		"Detects when assignments to existing variables are not used",
+		[]*analysis.Analyzer{analyzer},
+		nil,
+	).WithContextSetter(func(lintCtx *linter.Context) {
+		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
+			var fileNames []string
+			for _, f := range pass.Files {
+				pos := pass.Fset.Position(f.Pos())
+				fileNames = append(fileNames, pos.Filename)
+			}
 
-	res := make([]result.Issue, 0, len(issues))
-	for _, i := range issues {
-		res = append(res, result.Issue{
-			Pos:        i.Pos,
-			Text:       fmt.Sprintf("ineffectual assignment to %s", formatCode(i.IdentName, lintCtx.Cfg)),
-			FromLinter: lint.Name(),
-		})
-	}
-	return res, nil
+			issues := ineffassign.Run(fileNames)
+			if len(issues) == 0 {
+				return nil, nil
+			}
+
+			res := make([]result.Issue, 0, len(issues))
+			for _, i := range issues {
+				res = append(res, result.Issue{
+					Pos:        i.Pos,
+					Text:       fmt.Sprintf("ineffectual assignment to %s", formatCode(i.IdentName, lintCtx.Cfg)),
+					FromLinter: ineffassignName,
+				})
+			}
+
+			mu.Lock()
+			resIssues = append(resIssues, res...)
+			mu.Unlock()
+
+			return nil, nil
+		}
+	}).WithIssuesReporter(func(*linter.Context) []result.Issue {
+		return resIssues
+	}).WithLoadMode(goanalysis.LoadModeSyntax)
 }

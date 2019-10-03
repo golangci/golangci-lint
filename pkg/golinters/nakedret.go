@@ -1,24 +1,17 @@
 package golinters
 
 import (
-	"context"
 	"fmt"
 	"go/ast"
 	"go/token"
+	"sync"
 
+	"golang.org/x/tools/go/analysis"
+
+	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
-
-type Nakedret struct{}
-
-func (Nakedret) Name() string {
-	return "nakedret"
-}
-
-func (Nakedret) Desc() string {
-	return "Finds naked returns in functions greater than a specified function length"
-}
 
 type nakedretVisitor struct {
 	maxLength int
@@ -50,7 +43,7 @@ func (v *nakedretVisitor) processFuncDecl(funcDecl *ast.FuncDecl) {
 		}
 
 		v.issues = append(v.issues, result.Issue{
-			FromLinter: Nakedret{}.Name(),
+			FromLinter: nakedretName,
 			Text: fmt.Sprintf("naked return in func `%s` with %d lines of code",
 				funcDecl.Name.Name, functionLineLength),
 			Pos: v.f.Position(s.Pos()),
@@ -85,16 +78,44 @@ func (v *nakedretVisitor) Visit(node ast.Node) ast.Visitor {
 	return v
 }
 
-func (lint Nakedret) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issue, error) {
-	var res []result.Issue
-	for _, f := range lintCtx.ASTCache.GetAllValidFiles() {
-		v := nakedretVisitor{
-			maxLength: lintCtx.Settings().Nakedret.MaxFuncLines,
-			f:         f.Fset,
-		}
-		ast.Walk(&v, f.F)
-		res = append(res, v.issues...)
-	}
+const nakedretName = "nakedret"
 
-	return res, nil
+func NewNakedret() *goanalysis.Linter {
+	var mu sync.Mutex
+	var resIssues []result.Issue
+
+	analyzer := &analysis.Analyzer{
+		Name: goanalysis.TheOnlyAnalyzerName,
+		Doc:  goanalysis.TheOnlyanalyzerDoc,
+	}
+	return goanalysis.NewLinter(
+		nakedretName,
+		"Finds naked returns in functions greater than a specified function length",
+		[]*analysis.Analyzer{analyzer},
+		nil,
+	).WithContextSetter(func(lintCtx *linter.Context) {
+		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
+			var res []result.Issue
+			for _, file := range pass.Files {
+				v := nakedretVisitor{
+					maxLength: lintCtx.Settings().Nakedret.MaxFuncLines,
+					f:         pass.Fset,
+				}
+				ast.Walk(&v, file)
+				res = append(res, v.issues...)
+			}
+
+			if len(res) == 0 {
+				return nil, nil
+			}
+
+			mu.Lock()
+			resIssues = append(resIssues, res...)
+			mu.Unlock()
+
+			return nil, nil
+		}
+	}).WithIssuesReporter(func(*linter.Context) []result.Issue {
+		return resIssues
+	}).WithLoadMode(goanalysis.LoadModeSyntax)
 }

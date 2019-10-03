@@ -6,12 +6,10 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-
-	"github.com/golangci/golangci-lint/test/testshared"
+	_ "github.com/valyala/quicktemplate"
 
 	"github.com/golangci/golangci-lint/pkg/exitcodes"
-
-	_ "github.com/valyala/quicktemplate"
+	"github.com/golangci/golangci-lint/test/testshared"
 )
 
 func getCommonRunArgs() []string {

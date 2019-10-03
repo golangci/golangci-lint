@@ -4,7 +4,6 @@ import (
 	"sort"
 
 	"github.com/golangci/golangci-lint/pkg/config"
-
 	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
 )

@@ -180,10 +180,11 @@ github.com/googleapis/gax-go/v2 v2.0.4 h1:hU4mGcQI4DaAYW+IbTun+2qEZVFxK0ySjQLTbS
 github.com/googleapis/gax-go/v2 v2.0.4/go.mod h1:0Wqv26UfaUD9n4G6kQubkQ+KchISgw+vpHVxEJEs9eg=
 github.com/gopherjs/gopherjs v0.0.0-20181017120253-0766667cb4d1/go.mod h1:wJfORRmW1u3UXTncJ5qlYoELFm8eSnnEO6hX4iZ3EWY=
 github.com/gopherjs/gopherjs v0.0.0-20181103185306-d547d1d9531e/go.mod h1:wJfORRmW1u3UXTncJ5qlYoELFm8eSnnEO6hX4iZ3EWY=
-github.com/goreleaser/godownloader v0.0.0-20190924012648-96e3b3dd514b h1:7u8WsQsGXi8x3df3ChbQOtrRsuSrfOWlFLUGDf11M4E=
-github.com/goreleaser/godownloader v0.0.0-20190924012648-96e3b3dd514b/go.mod h1:cv+jJswk7UlSyNgNUI//7+Nb0lzbC+L2bADmnpW0gd8=
-github.com/goreleaser/goreleaser v0.118.1 h1:Qwlnpkoaqj/ZB121AeVUObOY4AmutS4raP3Csik0mdU=
+github.com/goreleaser/godownloader v0.0.0-20191002112816-e64d0375716b h1:8+9La80eMd7TCtzlrZff5WGbNLbh6AOavTJaHavrTjY=
+github.com/goreleaser/godownloader v0.0.0-20191002112816-e64d0375716b/go.mod h1:kn+MyzfRUvvOzgv5wOpaKdz4ZIi3O/NVdEvIh46PCNU=
 github.com/goreleaser/goreleaser v0.118.1/go.mod h1:NmNo7GPf3JzoqwR76dS/Xk3CDyWkiLjrWllNVa3s+aE=
+github.com/goreleaser/goreleaser v0.118.2 h1:kI74D3kkjleA/fjdSns35cPfdTfZAWFzl9zI+dZ0JJU=
+github.com/goreleaser/goreleaser v0.118.2/go.mod h1:/8PalJ1igLHW/xtfl952ZhkXHNp04hRoHCwblbGNidA=
 github.com/goreleaser/nfpm v0.13.0 h1:/dY1M+CNcbfHMuHDQBK5R3h5PgreKSulONKL20BffPw=
 github.com/goreleaser/nfpm v0.13.0/go.mod h1:F2yzin6cBAL9gb+mSiReuXdsfTrOQwDMsuSpULof+y4=
 github.com/gorilla/context v1.1.1/go.mod h1:kBGZzfjB9CEq2AlWe17Uuf7NDRt0dE0s8S51q0aT7Yg=

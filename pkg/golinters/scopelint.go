@@ -1,40 +1,60 @@
 package golinters
 
 import (
-	"context"
 	"fmt"
 	"go/ast"
 	"go/token"
+	"sync"
 
+	"golang.org/x/tools/go/analysis"
+
+	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-type Scopelint struct{}
+const scopelintName = "scopelint"
 
-func (Scopelint) Name() string {
-	return "scopelint"
-}
+func NewScopelint() *goanalysis.Linter {
+	var mu sync.Mutex
+	var resIssues []result.Issue
 
-func (Scopelint) Desc() string {
-	return "Scopelint checks for unpinned variables in go programs"
-}
-
-func (lint Scopelint) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issue, error) {
-	var res []result.Issue
-
-	for _, f := range lintCtx.ASTCache.GetAllValidFiles() {
-		n := Node{
-			fset:          f.Fset,
-			DangerObjects: map[*ast.Object]int{},
-			UnsafeObjects: map[*ast.Object]int{},
-			SkipFuncs:     map[*ast.FuncLit]int{},
-			issues:        &res,
-		}
-		ast.Walk(&n, f.F)
+	analyzer := &analysis.Analyzer{
+		Name: goanalysis.TheOnlyAnalyzerName,
+		Doc:  goanalysis.TheOnlyanalyzerDoc,
 	}
+	return goanalysis.NewLinter(
+		scopelintName,
+		"Scopelint checks for unpinned variables in go programs",
+		[]*analysis.Analyzer{analyzer},
+		nil,
+	).WithContextSetter(func(lintCtx *linter.Context) {
+		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
+			var res []result.Issue
+			for _, file := range pass.Files {
+				n := Node{
+					fset:          pass.Fset,
+					DangerObjects: map[*ast.Object]int{},
+					UnsafeObjects: map[*ast.Object]int{},
+					SkipFuncs:     map[*ast.FuncLit]int{},
+					issues:        &res,
+				}
+				ast.Walk(&n, file)
+			}
 
-	return res, nil
+			if len(res) == 0 {
+				return nil, nil
+			}
+
+			mu.Lock()
+			resIssues = append(resIssues, res...)
+			mu.Unlock()
+
+			return nil, nil
+		}
+	}).WithIssuesReporter(func(*linter.Context) []result.Issue {
+		return resIssues
+	}).WithLoadMode(goanalysis.LoadModeSyntax)
 }
 
 // The code below is copy-pasted from https://github.com/kyoh86/scopelint 92cbe2cc9276abda0e309f52cc9e309d407f174e
@@ -151,6 +171,6 @@ func (f *Node) errorfAt(pos token.Position, format string, args ...interface{}) 
 	*f.issues = append(*f.issues, result.Issue{
 		Pos:        pos,
 		Text:       fmt.Sprintf(format, args...),
-		FromLinter: Scopelint{}.Name(),
+		FromLinter: scopelintName,
 	})
 }

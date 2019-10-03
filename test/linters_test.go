@@ -9,11 +9,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/golangci/golangci-lint/test/testshared"
-
 	assert "github.com/stretchr/testify/require"
-
 	yaml "gopkg.in/yaml.v2"
+
+	"github.com/golangci/golangci-lint/test/testshared"
 )
 
 func runGoErrchk(c *exec.Cmd, files []string, t *testing.T) {

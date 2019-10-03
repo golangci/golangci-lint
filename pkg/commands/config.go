@@ -4,12 +4,11 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
 	"github.com/golangci/golangci-lint/pkg/exitcodes"
 	"github.com/golangci/golangci-lint/pkg/fsutils"
-
-	"github.com/spf13/cobra"
 )
 
 func (e *Executor) initConfig() {

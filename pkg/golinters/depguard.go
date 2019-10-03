@@ -1,38 +1,35 @@
 package golinters
 
 import (
-	"context"
 	"fmt"
 	"strings"
+	"sync"
 
-	depguardAPI "github.com/OpenPeeDeeP/depguard"
+	"github.com/OpenPeeDeeP/depguard"
+	"golang.org/x/tools/go/analysis"
+	"golang.org/x/tools/go/loader"
 
+	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-type Depguard struct{}
-
-func (Depguard) Name() string {
-	return "depguard"
-}
-
-func setDepguardListType(dg *depguardAPI.Depguard, lintCtx *linter.Context) error {
+func setDepguardListType(dg *depguard.Depguard, lintCtx *linter.Context) error {
 	listType := lintCtx.Settings().Depguard.ListType
 	var found bool
-	dg.ListType, found = depguardAPI.StringToListType[strings.ToLower(listType)]
+	dg.ListType, found = depguard.StringToListType[strings.ToLower(listType)]
 	if !found {
 		if listType != "" {
 			return fmt.Errorf("unsure what list type %s is", listType)
 		}
-		dg.ListType = depguardAPI.LTBlacklist
+		dg.ListType = depguard.LTBlacklist
 	}
 
 	return nil
 }
 
-func setupDepguardPackages(dg *depguardAPI.Depguard, lintCtx *linter.Context) {
-	if dg.ListType == depguardAPI.LTBlacklist {
+func setupDepguardPackages(dg *depguard.Depguard, lintCtx *linter.Context) {
+	if dg.ListType == depguard.LTBlacklist {
 		// if the list type was a blacklist the packages with error messages should
 		// be included in the blacklist package list
 
@@ -49,42 +46,67 @@ func setupDepguardPackages(dg *depguardAPI.Depguard, lintCtx *linter.Context) {
 	}
 }
 
-func (Depguard) Desc() string {
-	return "Go linter that checks if package imports are in a list of acceptable packages"
-}
+func NewDepguard() *goanalysis.Linter {
+	const linterName = "depguard"
+	var mu sync.Mutex
+	var resIssues []result.Issue
 
-func (d Depguard) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issue, error) {
-	dg := &depguardAPI.Depguard{
-		Packages:      lintCtx.Settings().Depguard.Packages,
-		IncludeGoRoot: lintCtx.Settings().Depguard.IncludeGoRoot,
+	analyzer := &analysis.Analyzer{
+		Name: goanalysis.TheOnlyAnalyzerName,
+		Doc:  goanalysis.TheOnlyanalyzerDoc,
 	}
-	if err := setDepguardListType(dg, lintCtx); err != nil {
-		return nil, err
-	}
-	setupDepguardPackages(dg, lintCtx)
+	return goanalysis.NewLinter(
+		linterName,
+		"Go linter that checks if package imports are in a list of acceptable packages",
+		[]*analysis.Analyzer{analyzer},
+		nil,
+	).WithContextSetter(func(lintCtx *linter.Context) {
+		dgSettings := &lintCtx.Settings().Depguard
+		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
+			prog := goanalysis.MakeFakeLoaderProgram(pass)
+			dg := &depguard.Depguard{
+				Packages:      dgSettings.Packages,
+				IncludeGoRoot: dgSettings.IncludeGoRoot,
+			}
+			if err := setDepguardListType(dg, lintCtx); err != nil {
+				return nil, err
+			}
+			setupDepguardPackages(dg, lintCtx)
 
-	issues, err := dg.Run(lintCtx.LoaderConfig, lintCtx.Program)
-	if err != nil {
-		return nil, err
-	}
-	if len(issues) == 0 {
-		return nil, nil
-	}
-	msgSuffix := "is in the blacklist"
-	if dg.ListType == depguardAPI.LTWhitelist {
-		msgSuffix = "is not in the whitelist"
-	}
-	res := make([]result.Issue, 0, len(issues))
-	for _, i := range issues {
-		userSuppliedMsgSuffix := lintCtx.Settings().Depguard.PackagesWithErrorMessage[i.PackageName]
-		if userSuppliedMsgSuffix != "" {
-			userSuppliedMsgSuffix = ": " + userSuppliedMsgSuffix
+			loadConfig := &loader.Config{
+				Cwd:   "",  // fallbacked to os.Getcwd
+				Build: nil, // fallbacked to build.Default
+			}
+			issues, err := dg.Run(loadConfig, prog)
+			if err != nil {
+				return nil, err
+			}
+			if len(issues) == 0 {
+				return nil, nil
+			}
+			msgSuffix := "is in the blacklist"
+			if dg.ListType == depguard.LTWhitelist {
+				msgSuffix = "is not in the whitelist"
+			}
+			res := make([]result.Issue, 0, len(issues))
+			for _, i := range issues {
+				userSuppliedMsgSuffix := dgSettings.PackagesWithErrorMessage[i.PackageName]
+				if userSuppliedMsgSuffix != "" {
+					userSuppliedMsgSuffix = ": " + userSuppliedMsgSuffix
+				}
+				res = append(res, result.Issue{
+					Pos:        i.Position,
+					Text:       fmt.Sprintf("%s %s%s", formatCode(i.PackageName, lintCtx.Cfg), msgSuffix, userSuppliedMsgSuffix),
+					FromLinter: linterName,
+				})
+			}
+			mu.Lock()
+			resIssues = append(resIssues, res...)
+			mu.Unlock()
+
+			return nil, nil
 		}
-		res = append(res, result.Issue{
-			Pos:        i.Position,
-			Text:       fmt.Sprintf("%s %s%s", formatCode(i.PackageName, lintCtx.Cfg), msgSuffix, userSuppliedMsgSuffix),
-			FromLinter: d.Name(),
-		})
-	}
-	return res, nil
+	}).WithIssuesReporter(func(*linter.Context) []result.Issue {
+		return resIssues
+	}).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }

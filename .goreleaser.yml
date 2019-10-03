@@ -55,10 +55,16 @@ changelog:
     - Merge branch
 
 dockers:
-  - image_templates:
+  - dockerfile: build/Dockerfile
+    image_templates:
       - "golangci/golangci-lint:latest"
       - "golangci/golangci-lint:{{ .Tag }}"
       - "golangci/golangci-lint:v{{ .Major }}.{{ .Minor }}"
+  - dockerfile: build/Dockerfile.alpine
+    image_templates:
+      - "golangci/golangci-lint:latest-alpine"
+      - "golangci/golangci-lint:{{ .Tag }}-alpine"
+      - "golangci/golangci-lint:v{{ .Major }}.{{ .Minor }}-alpine"
 
 brews:
   - github:

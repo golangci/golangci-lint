@@ -13,15 +13,15 @@ require (
 	github.com/golangci/go-misc v0.0.0-20180628070357-927a3d87b613
 	github.com/golangci/goconst v0.0.0-20180610141641-041c5f2b40f3
 	github.com/golangci/gocyclo v0.0.0-20180528134321-2becd97e67ee
-	github.com/golangci/gofmt v0.0.0-20181222123516-0b8337e80d98
+	github.com/golangci/gofmt v0.0.0-20190930125516-244bba706f1a
 	github.com/golangci/ineffassign v0.0.0-20190609212857-42439a7714cc
-	github.com/golangci/lint-1 v0.0.0-20190420132249-ee948d087217
+	github.com/golangci/lint-1 v0.0.0-20190930103755-fad67e08aa89
 	github.com/golangci/maligned v0.0.0-20180506175553-b1d89398deca
 	github.com/golangci/misspell v0.0.0-20180809174111-950f5d19e770
 	github.com/golangci/prealloc v0.0.0-20180630174525-215b22d4de21
 	github.com/golangci/revgrep v0.0.0-20180526074752-d9c87f5ffaf0
 	github.com/golangci/unconvert v0.0.0-20180507085042-28b1c447d1f4
-	github.com/matoous/godox v0.0.0-20190910121045-032ad8106c86
+	github.com/matoous/godox v0.0.0-20190911065817-5d6d842e92eb // v1.0
 	github.com/mattn/go-colorable v0.1.2
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/mitchellh/go-ps v0.0.0-20190716172923-621e5597135b
@@ -34,7 +34,7 @@ require (
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.4.0
 	github.com/stretchr/testify v1.4.0
-	github.com/timakin/bodyclose v0.0.0-20190926151346-866fdb772e33
+	github.com/timakin/bodyclose v0.0.0-20190930140734-f7f2e9bca95e
 	github.com/ultraware/funlen v0.0.2
 	github.com/ultraware/whitespace v0.0.3
 	github.com/uudashr/gocognit v0.0.0-20190926065955-1655d0de0517
