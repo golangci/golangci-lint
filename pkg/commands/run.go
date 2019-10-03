@@ -131,10 +131,6 @@ func initFlagSet(fs *pflag.FlagSet, cfg *config.Config, m *lintersdb.Manager, is
 		30, "Minimal complexity of function to report it")
 	hideFlag("gocyclo.min-complexity")
 
-	fs.IntVar(&lsc.Gocognit.MinComplexity, "gocognit.min-complexity",
-		30, "Minimal complexity of function to report it")
-	hideFlag("gocognit.min-complexity")
-
 	fs.BoolVar(&lsc.Maligned.SuggestNewOrder, "maligned.suggest-new", false,
 		"Maligned: print suggested more optimal struct fields ordering")
 	hideFlag("maligned.suggest-new")
