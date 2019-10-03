@@ -95,7 +95,6 @@ func newRunner(prefix string, logger logutils.Log, pkgCache *pkgcache.Cache, loa
 // It provides most of the logic for the main functions of both the
 // singlechecker and the multi-analysis commands.
 // It returns the appropriate exit code.
-//nolint:gocyclo
 func (r *runner) run(analyzers []*analysis.Analyzer, initialPackages []*packages.Package) ([]Diagnostic, []error) {
 	debugf("Analyzing %d packages on load mode %s", len(initialPackages), r.loadMode)
 	defer r.pkgCache.Trim()

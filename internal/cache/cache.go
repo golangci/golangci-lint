@@ -159,8 +159,7 @@ func (c *Cache) get(id ActionID) (Entry, error) {
 	eid, entry := entry[3:3+hexSize], entry[3+hexSize:]
 	eout, entry := entry[1:1+hexSize], entry[1+hexSize:]
 	esize, entry := entry[1:1+20], entry[1+20:]
-	//lint:ignore SA4006 See https://github.com/dominikh/go-tools/issues/465
-  etime, entry := entry[1:1+20], entry[1+20:] //nolint:staticcheck
+	etime, entry := entry[1:1+20], entry[1+20:]
 	var buf [HashSize]byte
 	if _, err := hex.Decode(buf[:], eid); err != nil || buf != id {
 		return missing()
