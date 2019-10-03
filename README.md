@@ -797,10 +797,6 @@ linters-settings:
   whitespace:
     multi-if: false
 
-  wsl:
-    # Skip test files
-    no-test: false
-
 linters:
   enable:
     - megacheck
