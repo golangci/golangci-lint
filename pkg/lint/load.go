@@ -275,7 +275,6 @@ func (cl *ContextLoader) filterDuplicatePackages(pkgs []*packages.Package) []*pa
 	return retPkgs
 }
 
-//nolint:gocyclo
 func (cl *ContextLoader) Load(ctx context.Context, linters []*linter.Config) (*linter.Context, error) {
 	loadMode := cl.findLoadMode(linters)
 	pkgs, err := cl.loadPackages(ctx, loadMode)

@@ -342,7 +342,7 @@ type Issues struct {
 	NeedFix bool `mapstructure:"fix"`
 }
 
-type Config struct { //nolint:maligned
+type Config struct {
 	Run Run
 
 	Output struct {

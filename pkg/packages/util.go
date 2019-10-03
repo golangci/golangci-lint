@@ -6,7 +6,6 @@ import (
 	"golang.org/x/tools/go/packages"
 )
 
-//nolint:gocyclo
 func ExtractErrors(pkg *packages.Package) []packages.Error {
 	errors := extractErrorsImpl(pkg, map[*packages.Package]bool{})
 	if len(errors) == 0 {

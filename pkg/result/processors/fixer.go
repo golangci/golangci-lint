@@ -115,7 +115,6 @@ func (f Fixer) fixIssuesInFile(filePath string, issues []result.Issue) error {
 	return nil
 }
 
-//nolint:gocyclo
 func (f Fixer) mergeLineIssues(lineNum int, lineIssues []result.Issue, origFileLines [][]byte) *result.Issue {
 	origLine := origFileLines[lineNum-1] // lineNum is 1-based
 

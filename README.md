@@ -969,20 +969,16 @@ linters:
     - whitespace
 
   # don't enable:
-  # - godox
-  # - maligned,prealloc
   # - gochecknoglobals
+  # - gocognit
+  # - godox
+  # - maligned
+  # - prealloc
 
 run:
   skip-dirs:
     - test/testdata_etc
     - internal/(cache|renameio|robustio)
-
-issues:
-  exclude-rules:
-    - text: "weak cryptographic primitive"
-      linters:
-        - gosec
 
 # golangci.com configuration
 # https://github.com/golangci/golangci/wiki/Configuration

@@ -27,7 +27,6 @@ func NewEnabledSet(m *Manager, v *Validator, log logutils.Log, cfg *config.Confi
 	}
 }
 
-// nolint:gocyclo
 func (es EnabledSet) build(lcfg *config.Linters, enabledByDefaultLinters []*linter.Config) map[string]*linter.Config {
 	resultLintersSet := map[string]*linter.Config{}
 	switch {
