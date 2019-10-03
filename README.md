@@ -919,9 +919,11 @@ linters-settings:
     local-prefixes: github.com/golangci/golangci-lint
   gocritic:
     enabled-tags:
+      - diagnostic
+      - experimental
+      - opinionated
       - performance
       - style
-      - experimental
     disabled-checks:
       - wrapperFunc
       - dupImport # https://github.com/go-critic/go-critic/issues/845
