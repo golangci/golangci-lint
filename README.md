@@ -222,6 +222,7 @@ stylecheck: Stylecheck is a replacement for golint [fast: true, auto-fix: false]
 unconvert: Remove unnecessary type conversions [fast: true, auto-fix: false]
 unparam: Reports unused function parameters [fast: true, auto-fix: false]
 whitespace: Tool for detection of leading and trailing whitespace [fast: true, auto-fix: true]
+wsl: Whitespace Linter - Forces you to use empty lines! [fast: true, auto-fix: false]
 ```
 
 Pass `-E/--enable` to enable linter and `-D/--disable` to disable:
@@ -469,6 +470,7 @@ golangci-lint help linters
 - [godox](https://github.com/matoous/godox) - Tool for detection of FIXME, TODO and other comment keywords
 - [funlen](https://github.com/ultraware/funlen) - Tool for detection of long functions
 - [whitespace](https://github.com/ultraware/whitespace) - Tool for detection of leading and trailing whitespace
+- [wsl](https://github.com/bombsimon/wsl) - Whitespace Linter - Forces you to use empty lines!
 
 ## Configuration
 
@@ -1123,6 +1125,7 @@ Thanks to developers and authors of used linters:
 - [leighmcculloch](https://github.com/leighmcculloch)
 - [matoous](https://github.com/matoous)
 - [ultraware](https://github.com/ultraware)
+- [bombsimon](https://github.com/bombsimon)
 
 ## Changelog
 

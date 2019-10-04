@@ -204,6 +204,9 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithAutoFix().
 			WithURL("https://github.com/ultraware/whitespace"),
+		linter.NewConfig(golinters.NewWSL()).
+			WithPresets(linter.PresetStyle).
+			WithURL("https://github.com/bombsimon/wsl"),
 	}
 
 	isLocalRun := os.Getenv("GOLANGCI_COM_RUN") == ""
