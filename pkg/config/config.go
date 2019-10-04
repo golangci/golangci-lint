@@ -138,9 +138,6 @@ type LintersSettings struct {
 	Gocyclo struct {
 		MinComplexity int `mapstructure:"min-complexity"`
 	}
-	Gocognit struct {
-		MinComplexity int `mapstructure:"min-complexity"`
-	}
 	Varcheck struct {
 		CheckExportedFields bool `mapstructure:"exported-fields"`
 	}
@@ -186,6 +183,7 @@ type LintersSettings struct {
 	Gocritic GocriticSettings
 	Godox    GodoxSettings
 	Dogsled  DogsledSettings
+	Gocognit GocognitSettings
 }
 
 type GovetSettings struct {
@@ -246,6 +244,10 @@ type DogsledSettings struct {
 	MaxBlankIdentifiers int `mapstructure:"max-blank-identifiers"`
 }
 
+type GocognitSettings struct {
+	MinComplexity int `mapstructure:"min-complexity"`
+}
+
 var defaultLintersSettings = LintersSettings{
 	Lll: LllSettings{
 		LineLength: 120,
@@ -270,6 +272,9 @@ var defaultLintersSettings = LintersSettings{
 	},
 	Dogsled: DogsledSettings{
 		MaxBlankIdentifiers: 2,
+	},
+	Gocognit: GocognitSettings{
+		MinComplexity: 30,
 	},
 }
 
