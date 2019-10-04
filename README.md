@@ -130,6 +130,7 @@ The following companies/products use golangci-lint:
 * [NixOS](https://github.com/NixOS/nixpkgs-channels)
 * [The New York Times](https://github.com/NYTimes/encoding-wrapper)
 * [Istio](https://github.com/istio/istio)
+* [SoundCloud](https://github.com/soundcloud/periskop)
 
 The following great projects use golangci-lint:
 
