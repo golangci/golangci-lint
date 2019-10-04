@@ -61,7 +61,7 @@ func Open(dir string) (*Cache, error) {
 	}
 	for i := 0; i < 256; i++ {
 		name := filepath.Join(dir, fmt.Sprintf("%02x", i))
-		if err := os.MkdirAll(name, 0777); err != nil {
+		if err := os.MkdirAll(name, 0744); err != nil {
 			return nil, err
 		}
 	}

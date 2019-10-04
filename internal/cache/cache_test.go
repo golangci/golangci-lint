@@ -31,7 +31,7 @@ func TestBasic(t *testing.T) {
 	}
 
 	cdir := filepath.Join(dir, "c1")
-	if err := os.Mkdir(cdir, 0777); err != nil {
+	if err := os.Mkdir(cdir, 0744); err != nil {
 		t.Fatal(err)
 	}
 
