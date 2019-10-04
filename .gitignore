@@ -2,6 +2,7 @@
 /*.pdf
 /*.pprof
 /dist/
+/tools/dist/
 /.idea/
 /test/path
 /golangci-lint
