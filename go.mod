@@ -36,7 +36,7 @@ require (
 	github.com/stretchr/testify v1.4.0
 	github.com/timakin/bodyclose v0.0.0-20190930140734-f7f2e9bca95e
 	github.com/ultraware/funlen v0.0.2
-	github.com/ultraware/whitespace v0.0.3
+	github.com/ultraware/whitespace v0.0.4
 	github.com/uudashr/gocognit v0.0.0-20190926065955-1655d0de0517
 	github.com/valyala/quicktemplate v1.2.0
 	golang.org/x/tools v0.0.0-20190912215617-3720d1ec3678
