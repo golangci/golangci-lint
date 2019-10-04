@@ -146,7 +146,17 @@ second := 2
 third := 3
 forever := 4
 
-if forever {
+if forever > 3 {
+    return fmt.Sprintf("group multiple assignments away from if")
+}
+
+// Or separate from your condition.
+first := 1
+second := 2
+third := 3
+
+forever := 4
+if forever > 3 {
     return fmt.Sprintf("group multiple assignments away from if")
 }
 
@@ -174,8 +184,8 @@ return false
 
 if true {
     stmt.X = true
-    stmt.Y = fals
-    return stmt
+    stmt.Y = false
+    return true
 }
 ```
 
@@ -191,13 +201,13 @@ return false
 
 if true {
     stmt.X = "only one line without return, may cuddled"
-    return stmt
+    return true
 }
 
 if thisWorksToo {
     whitespace := true
 
-    return
+    return false
 }
 ```
 
@@ -265,6 +275,13 @@ assignTwo := "two")
 callFunc(assignOne)
 callFunc(assignTwo)
 
+// Or group assignment and call by usage.
+assignOne := "one"
+callFunc(assignOne)
+
+assignTwo := "two")
+callFunc(assignTwo)
+
 if true {
     return
 }
@@ -284,7 +301,7 @@ Declarations should never be cuddled with anything, not even other declarations.
 
 ```go
 var x int
-var y int // Group declarations
+var y int
 
 z := 2
 var a
@@ -293,6 +310,7 @@ var a
 **Do**
 
 ```go
+// Group declarations, they'll align nice and tidy!
 var (
     x int
     y int
@@ -417,15 +435,16 @@ defer m2.RUnlock() // Not the expression above
 
 ```go
 first := getFirst()
-defer first.Close()
-
 second := getSecond()
+
+defer first.Close()
 defer second.Close()
 
+// Or group by usage.
 first := getFirst()
-second := getSecond()
-
 defer first.Close()
+
+second := getSecond()
 defer second.Close()
 
 m.Lock()
@@ -488,7 +507,7 @@ and that assignment is used in the expression.
 ```go
 first := func() {}
 second := func() {}
-go first()
+go second()
 
 notUsed := func() {}
 go first()

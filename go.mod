@@ -4,7 +4,7 @@ go 1.12
 
 require (
 	github.com/OpenPeeDeeP/depguard v1.0.1
-	github.com/bombsimon/wsl v1.0.0
+	github.com/bombsimon/wsl v1.0.1
 	github.com/fatih/color v1.7.0
 	github.com/go-critic/go-critic v0.3.5-0.20190904082202-d79a9f0c64db
 	github.com/go-lintpack/lintpack v0.5.2
@@ -40,7 +40,7 @@ require (
 	github.com/ultraware/whitespace v0.0.3
 	github.com/valyala/quicktemplate v1.2.0
 	golang.org/x/tools v0.0.0-20190912215617-3720d1ec3678
-	gopkg.in/yaml.v2 v2.2.3
+	gopkg.in/yaml.v2 v2.2.4
 	honnef.co/go/tools v0.0.1-2019.2.3
 	mvdan.cc/interfacer v0.0.0-20180901003855-c20040233aed
 	mvdan.cc/lint v0.0.0-20170908181259-adc824a0674b // indirect

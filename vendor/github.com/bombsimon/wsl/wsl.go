@@ -82,6 +82,11 @@ func (p *processor) process(filename string, data []byte) {
 // parseBlockBody will parse any kind of block statements such as switch cases
 // and if statements. A list of Result is returned.
 func (p *processor) parseBlockBody(block *ast.BlockStmt) {
+	// Nothing to do if there's no value.
+	if reflect.ValueOf(block).IsNil() {
+		return
+	}
+
 	// Start by finding leading and trailing whitespaces.
 	p.findLeadingAndTrailingWhitespaces(block, nil)
 
@@ -614,6 +619,7 @@ func (p *processor) findLeadingAndTrailingWhitespaces(stmt, nextStatement ast.No
 		return
 	}
 
+	// Ignore empty blocks even if they have newlines or just comments.
 	if len(blockStatements) < 1 {
 		return
 	}
@@ -626,11 +632,25 @@ func (p *processor) findLeadingAndTrailingWhitespaces(stmt, nextStatement ast.No
 	// Get the comment related to the first statement, we do allow commends in
 	// the beginning of a block before the first statement.
 	if c, ok := commentMap[firstStatement]; ok {
-		commentsBefore := c[0]
+		for _, commentGroup := range c {
+			var (
+				start = p.fileSet.Position(commentGroup.Pos()).Line
+			)
 
-		// Ensure that the comment we are parsing occurs BEFORE the statement.
-		if commentsBefore.Pos() < firstStatement.Pos() {
-			allowedLinesBeforeFirstStatement += len(commentsBefore.List)
+			// If the comment group is on the same lince as the block start
+			// (LBrace) we should not consider it.
+			if start == blockStartLine {
+				continue
+			}
+
+			// We only care about comments before our statement from the comment
+			// map. As soon as we hit comments after our statement let's break
+			// out!
+			if commentGroup.Pos() > firstStatement.Pos() {
+				break
+			}
+
+			allowedLinesBeforeFirstStatement += len(commentGroup.List)
 		}
 	}
 
