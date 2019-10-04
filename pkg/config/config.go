@@ -175,7 +175,8 @@ type LintersSettings struct {
 		Statements int
 	}
 	Whitespace struct {
-		MultiIf bool `mapstructure:"multi-if"`
+		MultiIf   bool `mapstructure:"multi-if"`
+		MultiFunc bool `mapstructure:"multi-func"`
 	}
 
 	Lll      LllSettings

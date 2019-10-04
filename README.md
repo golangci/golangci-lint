@@ -799,7 +799,8 @@ linters-settings:
     max-blank-identifiers: 2
 
   whitespace:
-    multi-if: false
+    multi-if: false   # Enforces newlines (or comments) after every multi-line if statement
+    multi-func: false # Enforces newlines (or comments) after every multi-line function signature
 
 linters:
   enable:

@@ -28,7 +28,8 @@ func NewWhitespace() *goanalysis.Linter {
 		[]*analysis.Analyzer{analyzer},
 		nil,
 	).WithContextSetter(func(lintCtx *linter.Context) {
-		settings := whitespace.Settings{MultiIf: lintCtx.Cfg.LintersSettings.Whitespace.MultiIf}
+		cfg := lintCtx.Cfg.LintersSettings.Whitespace
+		settings := whitespace.Settings{MultiIf: cfg.MultiIf, MultiFunc: cfg.MultiFunc}
 
 		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
 			var issues []whitespace.Message
