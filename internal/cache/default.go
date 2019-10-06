@@ -34,7 +34,7 @@ const cacheREADME = `This directory holds cached build artifacts from golangci-l
 // the first time Default is called.
 func initDefaultCache() {
 	dir := DefaultDir()
-	if err := os.MkdirAll(dir, 0777); err != nil {
+	if err := os.MkdirAll(dir, 0744); err != nil {
 		log.Fatalf("failed to initialize build cache at %s: %s\n", dir, err)
 	}
 	if _, err := os.Stat(filepath.Join(dir, "README")); err != nil {
