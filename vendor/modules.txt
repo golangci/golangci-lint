@@ -4,7 +4,7 @@ github.com/BurntSushi/toml
 github.com/OpenPeeDeeP/depguard
 # github.com/StackExchange/wmi v0.0.0-20180116203802-5d049714c4a6
 github.com/StackExchange/wmi
-# github.com/bombsimon/wsl v1.0.1
+# github.com/bombsimon/wsl v1.2.1
 github.com/bombsimon/wsl
 # github.com/davecgh/go-spew v1.1.1
 github.com/davecgh/go-spew/spew

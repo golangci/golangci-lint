@@ -4,7 +4,7 @@ go 1.12
 
 require (
 	github.com/OpenPeeDeeP/depguard v1.0.1
-	github.com/bombsimon/wsl v1.0.1
+	github.com/bombsimon/wsl v1.2.1
 	github.com/fatih/color v1.7.0
 	github.com/go-critic/go-critic v0.3.5-0.20190904082202-d79a9f0c64db
 	github.com/go-lintpack/lintpack v0.5.2

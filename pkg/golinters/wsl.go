@@ -33,13 +33,23 @@ func NewWSL() *goanalysis.Linter {
 		nil,
 	).WithContextSetter(func(lintCtx *linter.Context) {
 		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
-			files := []string{}
+			var (
+				files        = []string{}
+				linterCfg    = lintCtx.Cfg.LintersSettings.WSL
+				processorCfg = wsl.DefaultConfig()
+			)
+
+			processorCfg.StrictAppend = linterCfg.StrictAppend
+			processorCfg.AllowAssignAndCallCuddle = linterCfg.AllowAssignAndCallCuddle
+			processorCfg.AllowMultiLineAssignCuddle = linterCfg.AllowMultiLineAssignCuddle
 
 			for _, file := range pass.Files {
 				files = append(files, pass.Fset.Position(file.Pos()).Filename)
 			}
 
-			wslErrors, _ := wsl.ProcessFiles(files)
+			wslErrors, _ := wsl.NewProcessorWithConfig(processorCfg).
+				ProcessFiles(files)
+
 			if len(wslErrors) == 0 {
 				return nil, nil
 			}
