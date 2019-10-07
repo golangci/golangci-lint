@@ -36,12 +36,14 @@ func NewWSL() *goanalysis.Linter {
 			var (
 				files        = []string{}
 				linterCfg    = lintCtx.Cfg.LintersSettings.WSL
-				processorCfg = wsl.DefaultConfig()
+				processorCfg = wsl.Configuration{
+					StrictAppend:               linterCfg.StrictAppend,
+					AllowAssignAndCallCuddle:   linterCfg.AllowAssignAndCallCuddle,
+					AllowMultiLineAssignCuddle: linterCfg.AllowMultiLineAssignCuddle,
+					AllowCuddleWithCalls:       []string{"Lock", "RLock"},
+					AllowCuddleWithRHS:         []string{"Unlock", "RUnlock"},
+				}
 			)
-
-			processorCfg.StrictAppend = linterCfg.StrictAppend
-			processorCfg.AllowAssignAndCallCuddle = linterCfg.AllowAssignAndCallCuddle
-			processorCfg.AllowMultiLineAssignCuddle = linterCfg.AllowMultiLineAssignCuddle
 
 			for _, file := range pass.Files {
 				files = append(files, pass.Fset.Position(file.Pos()).Filename)
