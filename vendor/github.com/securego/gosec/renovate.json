@@ -1,6 +1,7 @@
 {
   "extends": [
-    "config:base"
-  ],
-  "automerge": true
+    "config:semverAllMonthly",
+    ":enableVulnerabilityAlertsWithLabel(vulnerablity)",
+    ":docker"
+  ]
 }

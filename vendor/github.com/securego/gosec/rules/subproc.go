@@ -47,9 +47,11 @@ func (r *subprocess) Match(n ast.Node, c *gosec.Context) (*gosec.Issue, error) {
 				if _, ok := obj.(*types.Var); ok && !gosec.TryResolve(ident, c) {
 					return gosec.NewIssue(c, n, r.ID(), "Subprocess launched with variable", gosec.Medium, gosec.High), nil
 				}
+			} else if !gosec.TryResolve(arg, c) {
+				// the arg is not a constant or a variable but instead a function call or os.Args[i]
+				return gosec.NewIssue(c, n, r.ID(), "Subprocess launched with function call as argument or cmd arguments", gosec.Medium, gosec.High), nil
 			}
 		}
-		return gosec.NewIssue(c, n, r.ID(), "Subprocess launching should be audited", gosec.Low, gosec.High), nil
 	}
 	return nil, nil
 }

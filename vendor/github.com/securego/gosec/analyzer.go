@@ -33,6 +33,16 @@ import (
 	"golang.org/x/tools/go/packages"
 )
 
+// LoadMode controls the amount of details to return when loading the packages
+const LoadMode = packages.NeedName |
+	packages.NeedFiles |
+	packages.NeedCompiledGoFiles |
+	packages.NeedImports |
+	packages.NeedTypes |
+	packages.NeedTypesSizes |
+	packages.NeedTypesInfo |
+	packages.NeedSyntax
+
 // The Context is populated with data parsed from the source code as it is scanned.
 // It is passed through to all rule functions as they are called. Rules may use
 // this data in conjunction withe the encountered AST node.
@@ -140,7 +150,7 @@ func (gosec *Analyzer) pkgConfig(buildTags []string) *packages.Config {
 		flags = append(flags, tagsFlag)
 	}
 	return &packages.Config{
-		Mode:       packages.LoadSyntax,
+		Mode:       LoadMode,
 		BuildFlags: flags,
 		Tests:      gosec.tests,
 	}

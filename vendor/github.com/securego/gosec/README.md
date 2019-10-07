@@ -13,6 +13,7 @@ You may obtain a copy of the License [here](http://www.apache.org/licenses/LICEN
 
 ## Project status
 
+[![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/3218/badge)](https://bestpractices.coreinfrastructure.org/projects/3218)
 [![Build Status](https://travis-ci.org/securego/gosec.svg?branch=master)](https://travis-ci.org/securego/gosec)
 [![Coverage Status](https://codecov.io/gh/securego/gosec/branch/master/graph/badge.svg)](https://codecov.io/gh/securego/gosec)
 [![GoReport](https://goreportcard.com/badge/github.com/securego/gosec)](https://goreportcard.com/badge/github.com/securego/gosec)
@@ -69,6 +70,7 @@ directory you can supply './...' as the input argument.
 - G104: Audit errors not checked
 - G106: Audit the use of ssh.InsecureIgnoreHostKey
 - G107: Url provided to HTTP request as taint input
+- G108: Profiling endpoint automatically exposed on /debug/pprof
 - G201: SQL query construction using format string
 - G202: SQL query construction using string concatenation
 - G203: Use of unescaped data in HTML templates
