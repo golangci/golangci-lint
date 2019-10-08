@@ -14,9 +14,9 @@ import (
 func NewUnconvert() *goanalysis.Linter {
 	const linterName = "unconvert"
 	var mu sync.Mutex
-	var res []result.Issue
+	var res []goanalysis.Issue
 	analyzer := &analysis.Analyzer{
-		Name: goanalysis.TheOnlyAnalyzerName,
+		Name: linterName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 	}
 	return goanalysis.NewLinter(
@@ -33,13 +33,13 @@ func NewUnconvert() *goanalysis.Linter {
 				return nil, nil
 			}
 
-			issues := make([]result.Issue, 0, len(positions))
+			issues := make([]goanalysis.Issue, 0, len(positions))
 			for _, pos := range positions {
-				issues = append(issues, result.Issue{
+				issues = append(issues, goanalysis.NewIssue(&result.Issue{ //nolint:scopelint
 					Pos:        pos,
 					Text:       "unnecessary conversion",
 					FromLinter: linterName,
-				})
+				}, pass))
 			}
 
 			mu.Lock()
@@ -47,7 +47,7 @@ func NewUnconvert() *goanalysis.Linter {
 			mu.Unlock()
 			return nil, nil
 		}
-	}).WithIssuesReporter(func(*linter.Context) []result.Issue {
+	}).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
 		return res
 	}).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }

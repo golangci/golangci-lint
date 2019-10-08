@@ -17,10 +17,10 @@ const godoxName = "godox"
 
 func NewGodox() *goanalysis.Linter {
 	var mu sync.Mutex
-	var resIssues []result.Issue
+	var resIssues []goanalysis.Issue
 
 	analyzer := &analysis.Analyzer{
-		Name: goanalysis.TheOnlyAnalyzerName,
+		Name: godoxName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 	}
 	return goanalysis.NewLinter(
@@ -39,16 +39,16 @@ func NewGodox() *goanalysis.Linter {
 				return nil, nil
 			}
 
-			res := make([]result.Issue, len(issues))
+			res := make([]goanalysis.Issue, len(issues))
 			for k, i := range issues {
-				res[k] = result.Issue{
+				res[k] = goanalysis.NewIssue(&result.Issue{ //nolint:scopelint
 					Pos: token.Position{
 						Filename: i.Pos.Filename,
 						Line:     i.Pos.Line,
 					},
 					Text:       strings.TrimRight(i.Message, "\n"),
 					FromLinter: godoxName,
-				}
+				}, pass)
 			}
 
 			mu.Lock()
@@ -57,7 +57,7 @@ func NewGodox() *goanalysis.Linter {
 
 			return nil, nil
 		}
-	}).WithIssuesReporter(func(*linter.Context) []result.Issue {
+	}).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
 		return resIssues
 	}).WithLoadMode(goanalysis.LoadModeSyntax)
 }

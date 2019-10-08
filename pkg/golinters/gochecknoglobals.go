@@ -19,15 +19,18 @@ const gochecknoglobalsName = "gochecknoglobals"
 //nolint:dupl
 func NewGochecknoglobals() *goanalysis.Linter {
 	var mu sync.Mutex
-	var resIssues []result.Issue
+	var resIssues []goanalysis.Issue
 
 	analyzer := &analysis.Analyzer{
-		Name: goanalysis.TheOnlyAnalyzerName,
+		Name: gochecknoglobalsName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 		Run: func(pass *analysis.Pass) (interface{}, error) {
-			var res []result.Issue
+			var res []goanalysis.Issue
 			for _, file := range pass.Files {
-				res = append(res, checkFileForGlobals(file, pass.Fset)...)
+				fileIssues := checkFileForGlobals(file, pass.Fset)
+				for i := range fileIssues {
+					res = append(res, goanalysis.NewIssue(&fileIssues[i], pass))
+				}
 			}
 			if len(res) == 0 {
 				return nil, nil
@@ -45,7 +48,7 @@ func NewGochecknoglobals() *goanalysis.Linter {
 		"Checks that no globals are present in Go code",
 		[]*analysis.Analyzer{analyzer},
 		nil,
-	).WithIssuesReporter(func(*linter.Context) []result.Issue {
+	).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
 		return resIssues
 	}).WithLoadMode(goanalysis.LoadModeSyntax)
 }

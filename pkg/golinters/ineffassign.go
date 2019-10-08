@@ -16,10 +16,10 @@ const ineffassignName = "ineffassign"
 
 func NewIneffassign() *goanalysis.Linter {
 	var mu sync.Mutex
-	var resIssues []result.Issue
+	var resIssues []goanalysis.Issue
 
 	analyzer := &analysis.Analyzer{
-		Name: goanalysis.TheOnlyAnalyzerName,
+		Name: ineffassignName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 	}
 	return goanalysis.NewLinter(
@@ -40,13 +40,13 @@ func NewIneffassign() *goanalysis.Linter {
 				return nil, nil
 			}
 
-			res := make([]result.Issue, 0, len(issues))
+			res := make([]goanalysis.Issue, 0, len(issues))
 			for _, i := range issues {
-				res = append(res, result.Issue{
+				res = append(res, goanalysis.NewIssue(&result.Issue{ //nolint:scopelint
 					Pos:        i.Pos,
 					Text:       fmt.Sprintf("ineffectual assignment to %s", formatCode(i.IdentName, lintCtx.Cfg)),
 					FromLinter: ineffassignName,
-				})
+				}, pass))
 			}
 
 			mu.Lock()
@@ -55,7 +55,7 @@ func NewIneffassign() *goanalysis.Linter {
 
 			return nil, nil
 		}
-	}).WithIssuesReporter(func(*linter.Context) []result.Issue {
+	}).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
 		return resIssues
 	}).WithLoadMode(goanalysis.LoadModeSyntax)
 }

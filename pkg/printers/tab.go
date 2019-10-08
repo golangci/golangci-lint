@@ -32,9 +32,8 @@ func (p Tab) SprintfColored(ca color.Attribute, format string, args ...interface
 func (p *Tab) Print(ctx context.Context, issues []result.Issue) error {
 	w := tabwriter.NewWriter(logutils.StdOut, 0, 0, 2, ' ', 0)
 
-	for _, i := range issues {
-		i := i
-		p.printIssue(&i, w)
+	for i := range issues {
+		p.printIssue(&issues[i], w)
 	}
 
 	if err := w.Flush(); err != nil {

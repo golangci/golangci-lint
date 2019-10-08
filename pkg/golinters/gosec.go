@@ -22,14 +22,14 @@ const gosecName = "gosec"
 
 func NewGosec() *goanalysis.Linter {
 	var mu sync.Mutex
-	var resIssues []result.Issue
+	var resIssues []goanalysis.Issue
 
 	gasConfig := gosec.NewConfig()
 	enabledRules := rules.Generate()
 	logger := log.New(ioutil.Discard, "", 0)
 
 	analyzer := &analysis.Analyzer{
-		Name: goanalysis.TheOnlyAnalyzerName,
+		Name: gosecName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 	}
 	return goanalysis.NewLinter(
@@ -53,7 +53,7 @@ func NewGosec() *goanalysis.Linter {
 				return nil, nil
 			}
 
-			res := make([]result.Issue, 0, len(issues))
+			res := make([]goanalysis.Issue, 0, len(issues))
 			for _, i := range issues {
 				text := fmt.Sprintf("%s: %s", i.RuleID, i.What) // TODO: use severity and confidence
 				var r *result.Range
@@ -67,7 +67,7 @@ func NewGosec() *goanalysis.Linter {
 					line = r.From
 				}
 
-				res = append(res, result.Issue{
+				res = append(res, goanalysis.NewIssue(&result.Issue{ //nolint:scopelint
 					Pos: token.Position{
 						Filename: i.File,
 						Line:     line,
@@ -75,7 +75,7 @@ func NewGosec() *goanalysis.Linter {
 					Text:       text,
 					LineRange:  r,
 					FromLinter: gosecName,
-				})
+				}, pass))
 			}
 
 			mu.Lock()
@@ -84,7 +84,7 @@ func NewGosec() *goanalysis.Linter {
 
 			return nil, nil
 		}
-	}).WithIssuesReporter(func(*linter.Context) []result.Issue {
+	}).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
 		return resIssues
 	}).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }

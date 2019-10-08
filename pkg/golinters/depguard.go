@@ -49,10 +49,10 @@ func setupDepguardPackages(dg *depguard.Depguard, lintCtx *linter.Context) {
 func NewDepguard() *goanalysis.Linter {
 	const linterName = "depguard"
 	var mu sync.Mutex
-	var resIssues []result.Issue
+	var resIssues []goanalysis.Issue
 
 	analyzer := &analysis.Analyzer{
-		Name: goanalysis.TheOnlyAnalyzerName,
+		Name: linterName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 	}
 	return goanalysis.NewLinter(
@@ -88,17 +88,17 @@ func NewDepguard() *goanalysis.Linter {
 			if dg.ListType == depguard.LTWhitelist {
 				msgSuffix = "is not in the whitelist"
 			}
-			res := make([]result.Issue, 0, len(issues))
+			res := make([]goanalysis.Issue, 0, len(issues))
 			for _, i := range issues {
 				userSuppliedMsgSuffix := dgSettings.PackagesWithErrorMessage[i.PackageName]
 				if userSuppliedMsgSuffix != "" {
 					userSuppliedMsgSuffix = ": " + userSuppliedMsgSuffix
 				}
-				res = append(res, result.Issue{
+				res = append(res, goanalysis.NewIssue(&result.Issue{ //nolint:scopelint
 					Pos:        i.Position,
 					Text:       fmt.Sprintf("%s %s%s", formatCode(i.PackageName, lintCtx.Cfg), msgSuffix, userSuppliedMsgSuffix),
 					FromLinter: linterName,
-				})
+				}, pass))
 			}
 			mu.Lock()
 			resIssues = append(resIssues, res...)
@@ -106,7 +106,7 @@ func NewDepguard() *goanalysis.Linter {
 
 			return nil, nil
 		}
-	}).WithIssuesReporter(func(*linter.Context) []result.Issue {
+	}).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
 		return resIssues
 	}).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }

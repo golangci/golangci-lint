@@ -1,7 +1,17 @@
 package commands
 
 import (
+	"bytes"
+	"crypto/sha256"
+	"encoding/json"
+	"fmt"
+	"io"
+	"os"
+
+	"github.com/golangci/golangci-lint/internal/cache"
+
 	"github.com/fatih/color"
+	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 
@@ -83,6 +93,7 @@ func NewExecutor(version, commit, date string) *Executor {
 	e.initConfig()
 	e.initCompletion()
 	e.initVersion()
+	e.initCache()
 
 	// init e.cfg by values from config: flags parse will see these values
 	// like the default ones. It will overwrite them only if the same option
@@ -118,10 +129,69 @@ func NewExecutor(version, commit, date string) *Executor {
 	e.loadGuard = load.NewGuard()
 	e.contextLoader = lint.NewContextLoader(e.cfg, e.log.Child("loader"), e.goenv,
 		e.lineCache, e.fileCache, e.pkgCache, e.loadGuard)
+	if err = e.initHashSalt(version); err != nil {
+		e.log.Fatalf("Failed to init hash salt: %s", err)
+	}
 	e.debugf("Initialized executor")
 	return e
 }
 
 func (e *Executor) Execute() error {
 	return e.rootCmd.Execute()
+}
+
+func (e *Executor) initHashSalt(version string) error {
+	binSalt, err := computeBinarySalt(version)
+	if err != nil {
+		return errors.Wrap(err, "failed to calculate binary salt")
+	}
+
+	configSalt, err := computeConfigSalt(e.cfg)
+	if err != nil {
+		return errors.Wrap(err, "failed to calculate config salt")
+	}
+
+	var b bytes.Buffer
+	b.Write(binSalt)
+	b.Write(configSalt)
+	cache.SetSalt(b.Bytes())
+	return nil
+}
+
+func computeBinarySalt(version string) ([]byte, error) {
+	if version != "" && version != "(devel)" {
+		return []byte(version), nil
+	}
+
+	if logutils.HaveDebugTag("bin_salt") {
+		return []byte("debug"), nil
+	}
+
+	p, err := os.Executable()
+	if err != nil {
+		return nil, err
+	}
+	f, err := os.Open(p)
+	if err != nil {
+		return nil, err
+	}
+	defer f.Close()
+	h := sha256.New()
+	if _, err := io.Copy(h, f); err != nil {
+		return nil, err
+	}
+	return h.Sum(nil), nil
+}
+
+func computeConfigSalt(cfg *config.Config) ([]byte, error) {
+	configBytes, err := json.Marshal(cfg)
+	if err != nil {
+		return nil, errors.Wrap(err, "failed to json marshal config")
+	}
+
+	h := sha256.New()
+	if n, err := h.Write(configBytes); n != len(configBytes) {
+		return nil, fmt.Errorf("failed to hash config bytes: wrote %d/%d bytes, error: %s", n, len(configBytes), err)
+	}
+	return h.Sum(nil), nil
 }
