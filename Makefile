@@ -37,7 +37,7 @@ test: build
 
 test_race:
 	go build -race -o golangci-lint ./cmd/golangci-lint
-	GL_TEST_RUN=1 ./golangci-lint run -v --deadline=5m
+	GL_TEST_RUN=1 ./golangci-lint run -v --timeout=5m
 .PHONY: test_race
 
 test_linters:

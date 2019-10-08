@@ -116,9 +116,13 @@ type Run struct {
 
 	ExitCodeIfIssuesFound int  `mapstructure:"issues-exit-code"`
 	AnalyzeTests          bool `mapstructure:"tests"`
-	Deadline              time.Duration
-	PrintVersion          bool
 
+	// Deprecated: Deadline exists for historical compatibility
+	// and should not be used. To set run timeout use Timeout instead.
+	Deadline time.Duration
+	Timeout  time.Duration
+
+	PrintVersion       bool
 	SkipFiles          []string `mapstructure:"skip-files"`
 	SkipDirs           []string `mapstructure:"skip-dirs"`
 	UseDefaultSkipDirs bool     `mapstructure:"skip-dirs-use-default"`

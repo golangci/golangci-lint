@@ -337,7 +337,7 @@ We measure peak memory usage (RSS) by tracking of processes RSS every 5 ms.
 We compare golangci-lint and gometalinter in default mode, but explicitly enable all linters because of small differences in the default configuration.
 
 ```bash
-$ golangci-lint run --no-config --issues-exit-code=0 --deadline=30m \
+$ golangci-lint run --no-config --issues-exit-code=0 --timeout=30m \
   --disable-all --enable=deadcode  --enable=gocyclo --enable=golint --enable=varcheck \
   --enable=structcheck --enable=maligned --enable=errcheck --enable=dupl --enable=ineffassign \
   --enable=interfacer --enable=unconvert --enable=goconst --enable=gosec --enable=megacheck
@@ -498,7 +498,7 @@ Flags:
       --print-linter-name           Print linter name in issue line (default true)
       --issues-exit-code int        Exit code when issues were found (default 1)
       --build-tags strings          Build tags
-      --deadline duration           Deadline for total work (default 1m0s)
+      --timeout duration            Timeout for total work (default 1m0s)
       --tests                       Analyze tests (*_test.go) (default true)
       --print-resources-usage       Print avg and max memory usage of golangci-lint and total time
   -c, --config PATH                 Read config from file path PATH
@@ -600,7 +600,7 @@ run:
   concurrency: 4
 
   # timeout for analysis, e.g. 30s, 5m, default is 1m
-  deadline: 1m
+  timeout: 1m
 
   # exit code when at least one issue was found, default is 1
   issues-exit-code: 1
