@@ -52,6 +52,26 @@ func main() {
 	_, cf2 := context.WithCancel(context.Background())
 	defer cf1() // ERROR "only one cuddle assignment allowed before defer statement"
 	defer cf2()
+
+	err := multiline(
+		"spanning",
+		"multiple",
+	)
+	if err != nil {
+		panic(err)
+	}
+
+	notErr := multiline(
+		"spanning",
+		"multiple",
+	)
+	if err != nil { // ERROR "if statements should only be cuddled with assignments used in the if statement itself"
+		panic(notErr)
+	}
+}
+
+func multiline(s ...string) error {
+	return nil
 }
 
 func f1() int {
@@ -78,3 +98,5 @@ func f3() int {
 
 	return sum + notSum
 }
+
+func onelineShouldNotError() error { return nil }

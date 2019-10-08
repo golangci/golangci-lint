@@ -176,6 +176,7 @@ type LintersSettings struct {
 		MultiFunc bool `mapstructure:"multi-func"`
 	}
 
+	WSL      WSLSettings
 	Lll      LllSettings
 	Unparam  UnparamSettings
 	Nakedret NakedretSettings
@@ -249,6 +250,12 @@ type GocognitSettings struct {
 	MinComplexity int `mapstructure:"min-complexity"`
 }
 
+type WSLSettings struct {
+	StrictAppend               bool `mapstructure:"strict-append"`
+	AllowAssignAndCallCuddle   bool `mapstructure:"allow-assign-and-call"`
+	AllowMultiLineAssignCuddle bool `mapstructure:"allow-multiline-assign"`
+}
+
 var defaultLintersSettings = LintersSettings{
 	Lll: LllSettings{
 		LineLength: 120,
@@ -276,6 +283,11 @@ var defaultLintersSettings = LintersSettings{
 	},
 	Gocognit: GocognitSettings{
 		MinComplexity: 30,
+	},
+	WSL: WSLSettings{
+		StrictAppend:               true,
+		AllowAssignAndCallCuddle:   true,
+		AllowMultiLineAssignCuddle: true,
 	},
 }
 

@@ -14,6 +14,13 @@ good, making it harder for other people to read and understand. The linter will
 warn about newlines in and around blocks, in the beginning of files and other
 places in the code.
 
+**I know this linter is aggressive** and a lot of projects I've tested it on
+have failed miserably. For this linter to be useful at all I want to be open to
+new ideas, configurations and discussions! Also note that some of the warnings
+might be bugs or unintentional false positives so I would love an
+[issue](https://github.com/bombsimon/wsl/issues/new) to fix, discuss, change or
+make something configurable!
+
 ## Usage
 
 Install by using `go get -u github.com/bombsimon/wsl/cmd/...`.
@@ -25,6 +32,9 @@ relative or absolute path.
 By default, the linter will run on `./...` which means all go files in the
 current path and all subsequent paths, including test files. To disable linting
 test files, use `-n` or `--no-test`.
+
+This linter can also be used as a part of
+[golangci-lint](https://github.com/golangci/golangci-lint)
 
 ## Rules
 
@@ -335,6 +345,11 @@ fmt.Println(a)
 
 foo := true
 someFunc(false)
+
+if someBool() {
+    fmt.Println("doing things")
+}
+x.Calling()
 ```
 
 **Do**
@@ -350,6 +365,12 @@ someFunc(foo)
 bar := false
 
 someFunc(true)
+
+if someBool() {
+    fmt.Println("doing things")
+}
+
+x.Calling()
 ```
 
 #### Ranges
