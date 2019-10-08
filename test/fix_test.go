@@ -30,7 +30,8 @@ func TestFix(t *testing.T) {
 		defer os.RemoveAll(tmpDir)
 	}
 
-	err := exec.Command("cp", "-R", filepath.Join(testdataDir, "fix"), tmpDir).Run()
+	fixDir := filepath.Join(testdataDir, "fix")
+	err := exec.Command("cp", "-R", fixDir, tmpDir).Run()
 	assert.NoError(t, err)
 
 	inputs := findSources(tmpDir, "in", "*.go")

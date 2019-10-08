@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"os/exec"
 )
 
 func Gosec() {
@@ -26,4 +27,12 @@ func GosecNolintGosec() {
 func GosecNoErrorCheckingByDefault() {
 	f, _ := os.Create("foo")
 	fmt.Println(f)
+}
+
+func GosecG204SubprocWithFunc() {
+	arg := func() string {
+		return "/tmp/dummy"
+	}
+
+	exec.Command("ls", arg()).Run() // ERROR "G204: Subprocess launched with function call as argument or cmd arguments"
 }
