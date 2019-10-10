@@ -166,6 +166,11 @@ func initFlagSet(fs *pflag.FlagSet, cfg *config.Config, m *lintersdb.Manager, is
 	fs.StringSliceVarP(&lc.Enable, "enable", "E", nil, wh("Enable specific linter"))
 	fs.StringSliceVarP(&lc.Disable, "disable", "D", nil, wh("Disable specific linter"))
 	fs.BoolVar(&lc.EnableAll, "enable-all", false, wh("Enable all linters"))
+	if err := fs.MarkHidden("enable-all"); err != nil {
+		panic(err)
+	}
+	// TODO: run hideFlag("enable-all") to print deprecation message.
+
 	fs.BoolVar(&lc.DisableAll, "disable-all", false, wh("Disable all linters"))
 	fs.StringSliceVarP(&lc.Presets, "presets", "p", nil,
 		wh(fmt.Sprintf("Enable presets (%s) of linters. Run 'golangci-lint linters' to see "+

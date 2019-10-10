@@ -42,6 +42,16 @@ func genReadme(tmplPath, outPath string) error {
 	return tmpl.Execute(out, ctx)
 }
 
+func getLatestVersion() (string, error) {
+	out, err := exec.Command("git", "tag", "-l", "--sort=-v:refname").Output()
+	if err != nil {
+		return "", fmt.Errorf("failed to run git tag: %w", err)
+	}
+
+	lines := bytes.Split(out, []byte("\n"))
+	return string(lines[0]), nil
+}
+
 func buildTemplateContext() (map[string]interface{}, error) {
 	golangciYaml, err := ioutil.ReadFile(".golangci.yml")
 	if err != nil {
@@ -79,6 +89,11 @@ func buildTemplateContext() (map[string]interface{}, error) {
 		return nil, err
 	}
 
+	latestVersion, err := getLatestVersion()
+	if err != nil {
+		return nil, fmt.Errorf("failed to get latest version: %w", err)
+	}
+
 	return map[string]interface{}{
 		"GolangciYaml":                     strings.TrimSpace(string(golangciYaml)),
 		"GolangciYamlExample":              strings.TrimSpace(string(golangciYamlExample)),
@@ -89,6 +104,7 @@ func buildTemplateContext() (map[string]interface{}, error) {
 		"ThanksList":                       getThanksList(),
 		"RunHelpText":                      string(shortHelp),
 		"ChangeLog":                        string(changeLog),
+		"LatestVersion":                    latestVersion,
 	}, nil
 }
 
