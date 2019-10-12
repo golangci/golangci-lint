@@ -225,7 +225,6 @@ linters:
   enable:
     - megacheck
     - govet
-  enable-all: false
   disable:
     - maligned
     - prealloc

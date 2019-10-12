@@ -14,24 +14,42 @@ Sponsored by [GolangCI.com](https://golangci.com): SaaS service for running lint
 
 <a href="https://golangci.com/"><img src="docs/go.png" width="250px"></a>
 
-* [Demo](#demo)
-* [Install](#install)
-* [Trusted By](#trusted-by)
-* [Quick Start](#quick-start)
-* [Editor Integration](#editor-integration)
-* [Shell Completion](#shell-completion)
-* [Comparison](#comparison)
-* [Performance](#performance)
-* [Internals](#internals)
-* [Supported Linters](#supported-linters)
-* [Configuration](#configuration)
-* [False Positives](#false-positives)
-* [FAQ](#faq)
-* [Thanks](#thanks)
-* [Changelog](#changelog)
-* [Debug](#debug)
-* [Future Plans](#future-plans)
-* [Contact Information](#contact-information)
+- [GolangCI-Lint](#golangci-lint)
+  - [Demo](#demo)
+  - [Install](#install)
+    - [Binary Release](#binary-release)
+    - [MacOS](#macos)
+    - [By Docker](#by-docker)
+    - [go get](#go-get)
+  - [Trusted By](#trusted-by)
+  - [Quick Start](#quick-start)
+  - [Editor Integration](#editor-integration)
+  - [Shell Completion](#shell-completion)
+    - [Mac OS X](#mac-os-x)
+    - [Linux](#linux)
+  - [Comparison](#comparison)
+    - [`golangci-lint` vs `gometalinter`](#golangci-lint-vs-gometalinter)
+    - [`golangci-lint` vs Running Linters Manually](#golangci-lint-vs-running-linters-manually)
+  - [Performance](#performance)
+    - [Comparison with gometalinter](#comparison-with-gometalinter)
+    - [Why golangci-lint is faster](#why-golangci-lint-is-faster)
+    - [Memory Usage of Golangci-lint](#memory-usage-of-golangci-lint)
+  - [Internals](#internals)
+  - [Supported Linters](#supported-linters)
+    - [Enabled By Default Linters](#enabled-by-default-linters)
+    - [Disabled By Default Linters (`-E/--enable`)](#disabled-by-default-linters--e--enable)
+  - [Configuration](#configuration)
+    - [Command-Line Options](#command-line-options)
+    - [Config File](#config-file)
+  - [False Positives](#false-positives)
+    - [Nolint](#nolint)
+  - [FAQ](#faq)
+  - [Thanks](#thanks)
+  - [Changelog](#changelog)
+  - [Debug](#debug)
+  - [Future Plans](#future-plans)
+  - [Contact Information](#contact-information)
+  - [License Scan](#license-scan)
 
 ## Demo
 
@@ -44,28 +62,28 @@ Short 1.5 min video demo of analyzing [beego](https://github.com/astaxie/beego).
 
 ## Install
 
-### CI Installation
+### Binary Release
 
 Most installations are done for CI (travis, circleci etc). It's important to have reproducible CI:
 don't start to fail all builds at the same time. With golangci-lint this can happen if you
-use `--enable-all` and a new linter is added or even without `--enable-all`: when one upstream linter is upgraded.
+use deprecated option `--enable-all` and a new linter is added or even without `--enable-all`: when one upstream linter is upgraded.
 
 It's highly recommended to install a fixed version of golangci-lint.
 Releases are available on the [releases page](https://github.com/golangci/golangci-lint/releases).
 
-Latest version: ![GitHub release](https://img.shields.io/github/release/golangci/golangci-lint.svg)
+Latest version: [{{.LatestVersion}}](https://github.com/golangci/golangci-lint/releases/tag/{{.LatestVersion}})
 
-Here is the recommended way to install golangci-lint (replace `vX.Y.Z` with the latest version):
+Here is the recommended way to install golangci-lint:
 
 ```bash
 # binary will be $(go env GOPATH)/bin/golangci-lint
-curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sh -s -- -b $(go env GOPATH)/bin vX.Y.Z
+curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sh -s -- -b $(go env GOPATH)/bin {{.LatestVersion}}
 
 # or install it into ./bin/
-curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sh -s vX.Y.Z
+curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sh -s {{.LatestVersion}}
 
 # In alpine linux (as it does not come with curl by default)
-wget -O - -q https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sh -s vX.Y.Z
+wget -O - -q https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sh -s {{.LatestVersion}}
 
 golangci-lint --version
 ```
@@ -74,41 +92,30 @@ Periodically update version of golangci-lint: the project is under active develo
 and is constantly being improved. But please always check for newly found issues and
 update if needed.
 
-### Local Installation
+### MacOS
 
-Local installation is not recommended for your CI pipeline. Only install the linter this way in a local development environment.
-
-#### Windows, MacOS and Linux
-
-```bash
-go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
-```
-
-With `go1.12` or later you can get a particular version
-
-```bash
-GO111MODULE=on go get github.com/golangci/golangci-lint/cmd/golangci-lint@v1.18.0
-```
-
-#### MacOS
-
-You can also install it on MacOS using [brew](https://brew.sh/):
+You can also install a binary release on MacOS using [brew](https://brew.sh/):
 
 ```bash
 brew install golangci/tap/golangci-lint
 brew upgrade golangci/tap/golangci-lint
 ```
 
-#### `--version`
-
-If you need your local `golangci-lint --version` to show proper version additionally run:
+### By Docker
 
 ```bash
-cd $(go env GOPATH)/src/github.com/golangci/golangci-lint/cmd/golangci-lint
-go install -ldflags "-X 'main.version=$(git describe --tags)' -X 'main.commit=$(git rev-parse --short HEAD)' -X 'main.date=$(date)'"
+docker run --rm -v $(pwd):/app -w /app golangci/golangci-lint:{{.LatestVersion}} golangci-lint run -v
 ```
 
-On Windows, you can run the above commands with Git Bash, which comes with [Git for Windows](https://git-scm.com/download/win).
+### go get
+
+Please, do not install `golangci-lint` by `go get`:
+
+1. [`go.mod`](https://github.com/golangci/golangci-lint/blob/master/go.mod) replacement directive doesn't apply. It means you will be using patched version of `golangci-lint`.
+2. it's much slower than binary installation
+3. it's stability depends on your Go version (e.g. on [this compiler Go <= 1.12 bug](https://github.com/golang/go/issues/29612)).
+4. it's not guaranteed to work: e.g. we've encountered a lot of issues with Go modules hashes.
+5. it allows installation from `master` branch which can't be considered stable.
 
 ## Trusted By
 
@@ -542,7 +549,7 @@ Long answer:
 
 **`golangci-lint` doesn't work**
 
-1. Update it: `go get -u github.com/golangci/golangci-lint/cmd/golangci-lint`
+1. Please, ensure you are using the latest binary release.
 2. Run it with `-v` option and check the output.
 3. If it doesn't help create a [GitHub issue](https://github.com/golangci/golangci-lint/issues/new) with the output from the error and #2 above.
 
