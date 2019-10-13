@@ -61,7 +61,11 @@ func (c *Cache) Put(pkg *packages.Package, key string, data interface{}) error {
 	c.sw.TrackStage("key build", func() {
 		aID, err = c.pkgActionID(pkg)
 		if err == nil {
-			aID = cache.Subkey(aID, key)
+			subkey, subkeyErr := cache.Subkey(aID, key)
+			if subkeyErr != nil {
+				err = errors.Wrap(subkeyErr, "failed to build subkey")
+			}
+			aID = subkey
 		}
 	})
 	if err != nil {
@@ -87,7 +91,11 @@ func (c *Cache) Get(pkg *packages.Package, key string, data interface{}) error {
 	c.sw.TrackStage("key build", func() {
 		aID, err = c.pkgActionID(pkg)
 		if err == nil {
-			aID = cache.Subkey(aID, key)
+			subkey, subkeyErr := cache.Subkey(aID, key)
+			if subkeyErr != nil {
+				err = errors.Wrap(subkeyErr, "failed to build subkey")
+			}
+			aID = subkey
 		}
 	})
 	if err != nil {
@@ -123,7 +131,10 @@ func (c *Cache) pkgActionID(pkg *packages.Package) (cache.ActionID, error) {
 		return cache.ActionID{}, errors.Wrap(err, "failed to get package hash")
 	}
 
-	key := cache.NewHash("action ID")
+	key, err := cache.NewHash("action ID")
+	if err != nil {
+		return cache.ActionID{}, errors.Wrap(err, "failed to make a hash")
+	}
 	fmt.Fprintf(key, "pkgpath %s\n", pkg.PkgPath)
 	fmt.Fprintf(key, "pkghash %s\n", hash)
 
@@ -139,7 +150,11 @@ func (c *Cache) packageHash(pkg *packages.Package) (string, error) {
 		return cachedHash.(string), nil
 	}
 
-	key := cache.NewHash("package hash")
+	key, err := cache.NewHash("package hash")
+	if err != nil {
+		return "", errors.Wrap(err, "failed to make a hash")
+	}
+
 	fmt.Fprintf(key, "pkgpath %s\n", pkg.PkgPath)
 	for _, f := range pkg.CompiledGoFiles {
 		c.ioSem <- struct{}{}

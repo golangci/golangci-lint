@@ -44,13 +44,14 @@ func (f Fixer) Process(issues []result.Issue) []result.Issue {
 
 	outIssues := make([]result.Issue, 0, len(issues))
 	issuesToFixPerFile := map[string][]result.Issue{}
-	for _, issue := range issues {
+	for i := range issues {
+		issue := &issues[i]
 		if issue.Replacement == nil {
-			outIssues = append(outIssues, issue)
+			outIssues = append(outIssues, *issue)
 			continue
 		}
 
-		issuesToFixPerFile[issue.FilePath()] = append(issuesToFixPerFile[issue.FilePath()], issue)
+		issuesToFixPerFile[issue.FilePath()] = append(issuesToFixPerFile[issue.FilePath()], *issue)
 	}
 
 	for file, issuesToFix := range issuesToFixPerFile {
@@ -87,8 +88,9 @@ func (f Fixer) fixIssuesInFile(filePath string, issues []result.Issue) error {
 
 	// merge multiple issues per line into one issue
 	issuesPerLine := map[int][]result.Issue{}
-	for _, i := range issues {
-		issuesPerLine[i.Line()] = append(issuesPerLine[i.Line()], i)
+	for i := range issues {
+		issue := &issues[i]
+		issuesPerLine[issue.Line()] = append(issuesPerLine[issue.Line()], *issue)
 	}
 
 	issues = issues[:0] // reuse the same memory
@@ -123,7 +125,8 @@ func (f Fixer) mergeLineIssues(lineNum int, lineIssues []result.Issue, origFileL
 	}
 
 	// check issues first
-	for _, i := range lineIssues {
+	for ind := range lineIssues {
+		i := &lineIssues[ind]
 		if i.LineRange != nil {
 			f.log.Infof("Line %d has multiple issues but at least one of them is ranged: %#v", lineNum, lineIssues)
 			return &lineIssues[0]
@@ -156,8 +159,8 @@ func (f Fixer) applyInlineFixes(lineIssues []result.Issue, origLine []byte, line
 	// example: origLine="it's becouse of them", StartCol=5, Length=7, NewString="because"
 
 	curOrigLinePos := 0
-	for _, i := range lineIssues {
-		fix := i.Replacement.Inline
+	for i := range lineIssues {
+		fix := lineIssues[i].Replacement.Inline
 		if fix.StartCol < curOrigLinePos {
 			f.log.Warnf("Line %d has multiple intersecting issues: %#v", lineNum, lineIssues)
 			return nil
@@ -188,14 +191,15 @@ func (f Fixer) findNotIntersectingIssues(issues []result.Issue) []result.Issue {
 
 	var ret []result.Issue
 	var currentEnd int
-	for _, issue := range issues {
+	for i := range issues {
+		issue := &issues[i]
 		rng := issue.GetLineRange()
 		if rng.From <= currentEnd {
 			f.log.Infof("Skip issue %#v: intersects with end %d", issue, currentEnd)
 			continue // skip intersecting issue
 		}
 		f.log.Infof("Fix issue %#v with range %v", issue, issue.GetLineRange())
-		ret = append(ret, issue)
+		ret = append(ret, *issue)
 		currentEnd = rng.To
 	}
 

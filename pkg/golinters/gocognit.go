@@ -18,7 +18,7 @@ const gocognitName = "gocognit"
 
 func NewGocognit() *goanalysis.Linter {
 	var mu sync.Mutex
-	var resIssues []result.Issue
+	var resIssues []goanalysis.Issue
 
 	analyzer := &analysis.Analyzer{
 		Name: goanalysis.TheOnlyAnalyzerName,
@@ -43,18 +43,18 @@ func NewGocognit() *goanalysis.Linter {
 				return stats[i].Complexity > stats[j].Complexity
 			})
 
-			res := make([]result.Issue, 0, len(stats))
+			res := make([]goanalysis.Issue, 0, len(stats))
 			for _, s := range stats {
 				if s.Complexity <= lintCtx.Settings().Gocognit.MinComplexity {
 					break // Break as the stats is already sorted from greatest to least
 				}
 
-				res = append(res, result.Issue{
+				res = append(res, goanalysis.NewIssue(&result.Issue{ //nolint:scopelint
 					Pos: s.Pos,
 					Text: fmt.Sprintf("cognitive complexity %d of func %s is high (> %d)",
 						s.Complexity, formatCode(s.FuncName, lintCtx.Cfg), lintCtx.Settings().Gocognit.MinComplexity),
 					FromLinter: gocognitName,
-				})
+				}, pass))
 			}
 
 			mu.Lock()
@@ -63,7 +63,7 @@ func NewGocognit() *goanalysis.Linter {
 
 			return nil, nil
 		}
-	}).WithIssuesReporter(func(*linter.Context) []result.Issue {
+	}).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
 		return resIssues
 	}).WithLoadMode(goanalysis.LoadModeSyntax)
 }

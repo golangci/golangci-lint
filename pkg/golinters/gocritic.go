@@ -23,12 +23,12 @@ const gocriticName = "gocritic"
 
 func NewGocritic() *goanalysis.Linter {
 	var mu sync.Mutex
-	var resIssues []result.Issue
+	var resIssues []goanalysis.Issue
 
 	sizes := types.SizesFor("gc", runtime.GOARCH)
 
 	analyzer := &analysis.Analyzer{
-		Name: goanalysis.TheOnlyAnalyzerName,
+		Name: gocriticName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 	}
 	return goanalysis.NewLinter(
@@ -45,7 +45,11 @@ func NewGocritic() *goanalysis.Linter {
 			}
 
 			lintpackCtx.SetPackageInfo(pass.TypesInfo, pass.Pkg)
-			res := runGocriticOnPackage(lintpackCtx, enabledCheckers, pass.Files)
+			var res []goanalysis.Issue
+			pkgIssues := runGocriticOnPackage(lintpackCtx, enabledCheckers, pass.Files)
+			for i := range pkgIssues {
+				res = append(res, goanalysis.NewIssue(&pkgIssues[i], pass))
+			}
 			if len(res) == 0 {
 				return nil, nil
 			}
@@ -56,7 +60,7 @@ func NewGocritic() *goanalysis.Linter {
 
 			return nil, nil
 		}
-	}).WithIssuesReporter(func(*linter.Context) []result.Issue {
+	}).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
 		return resIssues
 	}).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }

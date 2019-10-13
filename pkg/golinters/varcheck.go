@@ -15,9 +15,9 @@ import (
 func NewVarcheck() *goanalysis.Linter {
 	const linterName = "varcheck"
 	var mu sync.Mutex
-	var res []result.Issue
+	var res []goanalysis.Issue
 	analyzer := &analysis.Analyzer{
-		Name: goanalysis.TheOnlyAnalyzerName,
+		Name: linterName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 	}
 	return goanalysis.NewLinter(
@@ -35,13 +35,13 @@ func NewVarcheck() *goanalysis.Linter {
 				return nil, nil
 			}
 
-			issues := make([]result.Issue, 0, len(varcheckIssues))
+			issues := make([]goanalysis.Issue, 0, len(varcheckIssues))
 			for _, i := range varcheckIssues {
-				issues = append(issues, result.Issue{
+				issues = append(issues, goanalysis.NewIssue(&result.Issue{ //nolint:scopelint
 					Pos:        i.Pos,
 					Text:       fmt.Sprintf("%s is unused", formatCode(i.VarName, lintCtx.Cfg)),
 					FromLinter: linterName,
-				})
+				}, pass))
 			}
 
 			mu.Lock()
@@ -49,7 +49,7 @@ func NewVarcheck() *goanalysis.Linter {
 			mu.Unlock()
 			return nil, nil
 		}
-	}).WithIssuesReporter(func(*linter.Context) []result.Issue {
+	}).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
 		return res
 	}).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }

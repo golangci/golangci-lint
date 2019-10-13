@@ -16,10 +16,10 @@ const interfacerName = "interfacer"
 
 func NewInterfacer() *goanalysis.Linter {
 	var mu sync.Mutex
-	var resIssues []result.Issue
+	var resIssues []goanalysis.Issue
 
 	analyzer := &analysis.Analyzer{
-		Name:     goanalysis.TheOnlyAnalyzerName,
+		Name:     interfacerName,
 		Doc:      goanalysis.TheOnlyanalyzerDoc,
 		Requires: []*analysis.Analyzer{buildssa.Analyzer},
 	}
@@ -45,14 +45,14 @@ func NewInterfacer() *goanalysis.Linter {
 				return nil, nil
 			}
 
-			res := make([]result.Issue, 0, len(issues))
+			res := make([]goanalysis.Issue, 0, len(issues))
 			for _, i := range issues {
 				pos := pass.Fset.Position(i.Pos())
-				res = append(res, result.Issue{
+				res = append(res, goanalysis.NewIssue(&result.Issue{ //nolint:scopelint
 					Pos:        pos,
 					Text:       i.Message(),
 					FromLinter: interfacerName,
-				})
+				}, pass))
 			}
 
 			mu.Lock()
@@ -61,7 +61,7 @@ func NewInterfacer() *goanalysis.Linter {
 
 			return nil, nil
 		}
-	}).WithIssuesReporter(func(*linter.Context) []result.Issue {
+	}).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
 		return resIssues
 	}).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }

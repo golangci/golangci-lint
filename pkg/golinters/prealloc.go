@@ -16,10 +16,10 @@ const preallocName = "prealloc"
 
 func NewPrealloc() *goanalysis.Linter {
 	var mu sync.Mutex
-	var resIssues []result.Issue
+	var resIssues []goanalysis.Issue
 
 	analyzer := &analysis.Analyzer{
-		Name: goanalysis.TheOnlyAnalyzerName,
+		Name: preallocName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 	}
 	return goanalysis.NewLinter(
@@ -31,14 +31,14 @@ func NewPrealloc() *goanalysis.Linter {
 		s := &lintCtx.Settings().Prealloc
 
 		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
-			var res []result.Issue
+			var res []goanalysis.Issue
 			hints := prealloc.Check(pass.Files, s.Simple, s.RangeLoops, s.ForLoops)
 			for _, hint := range hints {
-				res = append(res, result.Issue{
+				res = append(res, goanalysis.NewIssue(&result.Issue{ //nolint:scopelint
 					Pos:        pass.Fset.Position(hint.Pos),
 					Text:       fmt.Sprintf("Consider preallocating %s", formatCode(hint.DeclaredSliceName, lintCtx.Cfg)),
 					FromLinter: preallocName,
-				})
+				}, pass))
 			}
 
 			if len(res) == 0 {
@@ -51,7 +51,7 @@ func NewPrealloc() *goanalysis.Linter {
 
 			return nil, nil
 		}
-	}).WithIssuesReporter(func(*linter.Context) []result.Issue {
+	}).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
 		return resIssues
 	}).WithLoadMode(goanalysis.LoadModeSyntax)
 }

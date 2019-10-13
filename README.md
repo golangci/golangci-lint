@@ -945,6 +945,8 @@ linters-settings:
     disabled-checks:
       - wrapperFunc
       - dupImport # https://github.com/go-critic/go-critic/issues/845
+      - ifElseChain
+      - octalLiteral
   funlen:
     lines: 100
     statements: 50
@@ -997,7 +999,17 @@ linters:
 run:
   skip-dirs:
     - test/testdata_etc
-    - internal/(cache|renameio|robustio)
+  skip-files:
+    - internal/cache/.*_test.go
+
+issues:
+  exclude-rules:
+    - path: internal/(cache|renameio)/
+      linters:
+        - lll
+        - gochecknoinits
+        - gocyclo
+        - funlen
 
 # golangci.com configuration
 # https://github.com/golangci/golangci/wiki/Configuration

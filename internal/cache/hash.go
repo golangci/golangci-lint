@@ -42,11 +42,19 @@ func SetSalt(b []byte) {
 
 // Subkey returns an action ID corresponding to mixing a parent
 // action ID with a string description of the subkey.
-func Subkey(parent ActionID, desc string) ActionID {
+func Subkey(parent ActionID, desc string) (ActionID, error) {
 	h := sha256.New()
-	h.Write([]byte("subkey:"))
-	h.Write(parent[:])
-	h.Write([]byte(desc))
+	const subkeyPrefix = "subkey:"
+	if n, err := h.Write([]byte(subkeyPrefix)); n != len(subkeyPrefix) {
+		return ActionID{}, fmt.Errorf("wrote %d/%d bytes of subkey prefix with error %s", n, len(subkeyPrefix), err)
+	}
+	if n, err := h.Write(parent[:]); n != len(parent) {
+		return ActionID{}, fmt.Errorf("wrote %d/%d bytes of parent with error %s", n, len(parent), err)
+	}
+	if n, err := h.Write([]byte(desc)); n != len(desc) {
+		return ActionID{}, fmt.Errorf("wrote %d/%d bytes of desc with error %s", n, len(desc), err)
+	}
+
 	var out ActionID
 	h.Sum(out[:0])
 	if debugHash {
@@ -57,21 +65,23 @@ func Subkey(parent ActionID, desc string) ActionID {
 		hashDebug.m[out] = fmt.Sprintf("subkey %x %q", parent, desc)
 		hashDebug.Unlock()
 	}
-	return out
+	return out, nil
 }
 
 // NewHash returns a new Hash.
 // The caller is expected to Write data to it and then call Sum.
-func NewHash(name string) *Hash {
+func NewHash(name string) (*Hash, error) {
 	h := &Hash{h: sha256.New(), name: name}
 	if debugHash {
 		fmt.Fprintf(os.Stderr, "HASH[%s]\n", h.name)
 	}
-	h.Write(hashSalt)
+	if n, err := h.Write(hashSalt); n != len(hashSalt) {
+		return nil, fmt.Errorf("wrote %d/%d bytes of hash salt with error %s", n, len(hashSalt), err)
+	}
 	if verify {
 		h.buf = new(bytes.Buffer)
 	}
-	return h
+	return h, nil
 }
 
 // Write writes data to the running hash.

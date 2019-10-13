@@ -82,10 +82,10 @@ const nakedretName = "nakedret"
 
 func NewNakedret() *goanalysis.Linter {
 	var mu sync.Mutex
-	var resIssues []result.Issue
+	var resIssues []goanalysis.Issue
 
 	analyzer := &analysis.Analyzer{
-		Name: goanalysis.TheOnlyAnalyzerName,
+		Name: nakedretName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 	}
 	return goanalysis.NewLinter(
@@ -95,14 +95,16 @@ func NewNakedret() *goanalysis.Linter {
 		nil,
 	).WithContextSetter(func(lintCtx *linter.Context) {
 		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
-			var res []result.Issue
+			var res []goanalysis.Issue
 			for _, file := range pass.Files {
 				v := nakedretVisitor{
 					maxLength: lintCtx.Settings().Nakedret.MaxFuncLines,
 					f:         pass.Fset,
 				}
 				ast.Walk(&v, file)
-				res = append(res, v.issues...)
+				for i := range v.issues {
+					res = append(res, goanalysis.NewIssue(&v.issues[i], pass))
+				}
 			}
 
 			if len(res) == 0 {
@@ -115,7 +117,7 @@ func NewNakedret() *goanalysis.Linter {
 
 			return nil, nil
 		}
-	}).WithIssuesReporter(func(*linter.Context) []result.Issue {
+	}).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
 		return resIssues
 	}).WithLoadMode(goanalysis.LoadModeSyntax)
 }

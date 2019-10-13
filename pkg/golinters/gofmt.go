@@ -9,17 +9,16 @@ import (
 
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
-	"github.com/golangci/golangci-lint/pkg/result"
 )
 
 const gofmtName = "gofmt"
 
 func NewGofmt() *goanalysis.Linter {
 	var mu sync.Mutex
-	var resIssues []result.Issue
+	var resIssues []goanalysis.Issue
 
 	analyzer := &analysis.Analyzer{
-		Name: goanalysis.TheOnlyAnalyzerName,
+		Name: gofmtName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 	}
 	return goanalysis.NewLinter(
@@ -36,7 +35,7 @@ func NewGofmt() *goanalysis.Linter {
 				fileNames = append(fileNames, pos.Filename)
 			}
 
-			var issues []result.Issue
+			var issues []goanalysis.Issue
 
 			for _, f := range fileNames {
 				diff, err := gofmtAPI.Run(f, lintCtx.Settings().Gofmt.Simplify)
@@ -52,7 +51,9 @@ func NewGofmt() *goanalysis.Linter {
 					return nil, errors.Wrapf(err, "can't extract issues from gofmt diff output %q", string(diff))
 				}
 
-				issues = append(issues, is...)
+				for i := range is {
+					issues = append(issues, goanalysis.NewIssue(&is[i], pass))
+				}
 			}
 
 			if len(issues) == 0 {
@@ -65,7 +66,7 @@ func NewGofmt() *goanalysis.Linter {
 
 			return nil, nil
 		}
-	}).WithIssuesReporter(func(*linter.Context) []result.Issue {
+	}).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
 		return resIssues
 	}).WithLoadMode(goanalysis.LoadModeSyntax)
 }

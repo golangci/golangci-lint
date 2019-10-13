@@ -56,11 +56,11 @@ const misspellName = "misspell"
 
 func NewMisspell() *goanalysis.Linter {
 	var mu sync.Mutex
-	var resIssues []result.Issue
+	var resIssues []goanalysis.Issue
 	var ruleErr error
 
 	analyzer := &analysis.Analyzer{
-		Name: goanalysis.TheOnlyAnalyzerName,
+		Name: misspellName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 	}
 	return goanalysis.NewLinter(
@@ -106,13 +106,15 @@ func NewMisspell() *goanalysis.Linter {
 				fileNames = append(fileNames, pos.Filename)
 			}
 
-			var res []result.Issue
+			var res []goanalysis.Issue
 			for _, f := range fileNames {
 				issues, err := runMisspellOnFile(f, &r, lintCtx)
 				if err != nil {
 					return nil, err
 				}
-				res = append(res, issues...)
+				for i := range issues {
+					res = append(res, goanalysis.NewIssue(&issues[i], pass))
+				}
 			}
 			if len(res) == 0 {
 				return nil, nil
@@ -124,7 +126,7 @@ func NewMisspell() *goanalysis.Linter {
 
 			return nil, nil
 		}
-	}).WithIssuesReporter(func(*linter.Context) []result.Issue {
+	}).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
 		return resIssues
 	}).WithLoadMode(goanalysis.LoadModeSyntax)
 }

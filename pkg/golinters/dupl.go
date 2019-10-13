@@ -19,10 +19,10 @@ const duplLinterName = "dupl"
 
 func NewDupl() *goanalysis.Linter {
 	var mu sync.Mutex
-	var resIssues []result.Issue
+	var resIssues []goanalysis.Issue
 
 	analyzer := &analysis.Analyzer{
-		Name: goanalysis.TheOnlyAnalyzerName,
+		Name: duplLinterName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 	}
 	return goanalysis.NewLinter(
@@ -47,7 +47,7 @@ func NewDupl() *goanalysis.Linter {
 				return nil, nil
 			}
 
-			res := make([]result.Issue, 0, len(issues))
+			res := make([]goanalysis.Issue, 0, len(issues))
 			for _, i := range issues {
 				toFilename, err := fsutils.ShortestRelPath(i.To.Filename(), "")
 				if err != nil {
@@ -57,7 +57,7 @@ func NewDupl() *goanalysis.Linter {
 				text := fmt.Sprintf("%d-%d lines are duplicate of %s",
 					i.From.LineStart(), i.From.LineEnd(),
 					formatCode(dupl, lintCtx.Cfg))
-				res = append(res, result.Issue{
+				res = append(res, goanalysis.NewIssue(&result.Issue{ //nolint:scopelint
 					Pos: token.Position{
 						Filename: i.From.Filename(),
 						Line:     i.From.LineStart(),
@@ -68,7 +68,7 @@ func NewDupl() *goanalysis.Linter {
 					},
 					Text:       text,
 					FromLinter: duplLinterName,
-				})
+				}, pass))
 			}
 
 			mu.Lock()
@@ -77,7 +77,7 @@ func NewDupl() *goanalysis.Linter {
 
 			return nil, nil
 		}
-	}).WithIssuesReporter(func(*linter.Context) []result.Issue {
+	}).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
 		return resIssues
 	}).WithLoadMode(goanalysis.LoadModeSyntax)
 }

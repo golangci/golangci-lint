@@ -18,10 +18,10 @@ const gocycloName = "gocyclo"
 
 func NewGocyclo() *goanalysis.Linter {
 	var mu sync.Mutex
-	var resIssues []result.Issue
+	var resIssues []goanalysis.Issue
 
 	analyzer := &analysis.Analyzer{
-		Name: goanalysis.TheOnlyAnalyzerName,
+		Name: gocycloName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 	}
 	return goanalysis.NewLinter(
@@ -43,18 +43,18 @@ func NewGocyclo() *goanalysis.Linter {
 				return stats[i].Complexity > stats[j].Complexity
 			})
 
-			res := make([]result.Issue, 0, len(stats))
+			res := make([]goanalysis.Issue, 0, len(stats))
 			for _, s := range stats {
 				if s.Complexity <= lintCtx.Settings().Gocyclo.MinComplexity {
 					break // Break as the stats is already sorted from greatest to least
 				}
 
-				res = append(res, result.Issue{
+				res = append(res, goanalysis.NewIssue(&result.Issue{ //nolint:scopelint
 					Pos: s.Pos,
 					Text: fmt.Sprintf("cyclomatic complexity %d of func %s is high (> %d)",
 						s.Complexity, formatCode(s.FuncName, lintCtx.Cfg), lintCtx.Settings().Gocyclo.MinComplexity),
 					FromLinter: gocycloName,
-				})
+				}, pass))
 			}
 
 			mu.Lock()
@@ -63,7 +63,7 @@ func NewGocyclo() *goanalysis.Linter {
 
 			return nil, nil
 		}
-	}).WithIssuesReporter(func(*linter.Context) []result.Issue {
+	}).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
 		return resIssues
 	}).WithLoadMode(goanalysis.LoadModeSyntax)
 }

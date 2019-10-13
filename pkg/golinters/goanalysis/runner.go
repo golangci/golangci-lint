@@ -69,14 +69,17 @@ type Diagnostic struct {
 	analysis.Diagnostic
 	Analyzer *analysis.Analyzer
 	Position token.Position
+	Pkg      *packages.Package
 }
 
 type runner struct {
-	log       logutils.Log
-	prefix    string // ensure unique analyzer names
-	pkgCache  *pkgcache.Cache
-	loadGuard *load.Guard
-	loadMode  LoadMode
+	log            logutils.Log
+	prefix         string // ensure unique analyzer names
+	pkgCache       *pkgcache.Cache
+	loadGuard      *load.Guard
+	loadMode       LoadMode
+	passToPkg      map[*analysis.Pass]*packages.Package
+	passToPkgGuard sync.Mutex
 }
 
 func newRunner(prefix string, logger logutils.Log, pkgCache *pkgcache.Cache, loadGuard *load.Guard, loadMode LoadMode) *runner {
@@ -86,6 +89,7 @@ func newRunner(prefix string, logger logutils.Log, pkgCache *pkgcache.Cache, loa
 		pkgCache:  pkgCache,
 		loadGuard: loadGuard,
 		loadMode:  loadMode,
+		passToPkg: map[*analysis.Pass]*packages.Package{},
 	}
 }
 
@@ -95,12 +99,14 @@ func newRunner(prefix string, logger logutils.Log, pkgCache *pkgcache.Cache, loa
 // It provides most of the logic for the main functions of both the
 // singlechecker and the multi-analysis commands.
 // It returns the appropriate exit code.
-func (r *runner) run(analyzers []*analysis.Analyzer, initialPackages []*packages.Package) ([]Diagnostic, []error) {
+func (r *runner) run(analyzers []*analysis.Analyzer, initialPackages []*packages.Package) ([]Diagnostic,
+	[]error, map[*analysis.Pass]*packages.Package) {
 	debugf("Analyzing %d packages on load mode %s", len(initialPackages), r.loadMode)
 	defer r.pkgCache.Trim()
 
 	roots := r.analyze(initialPackages, analyzers)
-	return extractDiagnostics(roots)
+	diags, errs := extractDiagnostics(roots)
+	return diags, errs, r.passToPkg
 }
 
 type actKey struct {
@@ -138,9 +144,7 @@ func (r *runner) makeAction(a *analysis.Analyzer, pkg *packages.Package,
 	act = actAlloc.alloc()
 	act.a = a
 	act.pkg = pkg
-	act.log = r.log
-	act.prefix = r.prefix
-	act.pkgCache = r.pkgCache
+	act.r = r
 	act.isInitialPkg = initialPkgs[pkg]
 	act.needAnalyzeSource = initialPkgs[pkg]
 	act.analysisDoneCh = make(chan struct{})
@@ -362,7 +366,13 @@ func extractDiagnostics(roots []*action) (retDiags []Diagnostic, retErrors []err
 				}
 				seen[k] = true
 
-				retDiags = append(retDiags, Diagnostic{Diagnostic: diag, Analyzer: act.a, Position: posn})
+				retDiag := Diagnostic{
+					Diagnostic: diag,
+					Analyzer:   act.a,
+					Position:   posn,
+					Pkg:        act.pkg,
+				}
+				retDiags = append(retDiags, retDiag)
 			}
 		}
 	}
@@ -404,9 +414,7 @@ type action struct {
 	result              interface{}
 	diagnostics         []analysis.Diagnostic
 	err                 error
-	log                 logutils.Log
-	prefix              string
-	pkgCache            *pkgcache.Cache
+	r                   *runner
 	analysisDoneCh      chan struct{}
 	loadCachedFactsDone bool
 	loadCachedFactsOk   bool
@@ -483,22 +491,8 @@ func (act *action) analyze() {
 		return
 	}
 
-	// TODO(adonovan): uncomment this during profiling.
-	// It won't build pre-go1.11 but conditional compilation
-	// using build tags isn't warranted.
-	//
-	// ctx, task := trace.NewTask(context.Background(), "exec")
-	// trace.Log(ctx, "pass", act.String())
-	// defer task.End()
-
-	// Record time spent in this node but not its dependencies.
-	// In parallel mode, due to GC/scheduler contention, the
-	// time is 5x higher than in sequential mode, even with a
-	// semaphore limiting the number of threads here.
-	// So use -debug=tp.
-
 	defer func(now time.Time) {
-		analyzeDebugf("go/analysis: %s: %s: analyzed package %q in %s", act.prefix, act.a.Name, act.pkg.Name, time.Since(now))
+		analyzeDebugf("go/analysis: %s: %s: analyzed package %q in %s", act.r.prefix, act.a.Name, act.pkg.Name, time.Since(now))
 	}(time.Now())
 
 	// Report an error if any dependency failed.
@@ -552,6 +546,9 @@ func (act *action) analyze() {
 		AllPackageFacts:   act.allPackageFacts,
 	}
 	act.pass = pass
+	act.r.passToPkgGuard.Lock()
+	act.r.passToPkg[pass] = act.pkg
+	act.r.passToPkgGuard.Unlock()
 
 	var err error
 	if act.pkg.IllTyped {
@@ -574,7 +571,7 @@ func (act *action) analyze() {
 	pass.ExportPackageFact = nil
 
 	if err := act.persistFactsToCache(); err != nil {
-		act.log.Warnf("Failed to persist facts to cache: %s", err)
+		act.r.log.Warnf("Failed to persist facts to cache: %s", err)
 	}
 }
 
@@ -598,7 +595,7 @@ func inheritFacts(act, dep *action) {
 			var err error
 			fact, err = codeFact(fact)
 			if err != nil {
-				act.log.Panicf("internal error: encoding of %T fact failed in %v", fact, act)
+				act.r.log.Panicf("internal error: encoding of %T fact failed in %v", fact, act)
 			}
 		}
 
@@ -618,7 +615,7 @@ func inheritFacts(act, dep *action) {
 			var err error
 			fact, err = codeFact(fact)
 			if err != nil {
-				act.log.Panicf("internal error: encoding of %T fact failed in %v", fact, act)
+				act.r.log.Panicf("internal error: encoding of %T fact failed in %v", fact, act)
 			}
 		}
 
@@ -695,7 +692,7 @@ func (act *action) importObjectFact(obj types.Object, ptr analysis.Fact) bool {
 // exportObjectFact implements Pass.ExportObjectFact.
 func (act *action) exportObjectFact(obj types.Object, fact analysis.Fact) {
 	if obj.Pkg() != act.pkg.Types {
-		act.log.Panicf("internal error: in analysis %s of package %s: Fact.Set(%s, %T): can't set facts on objects belonging another package",
+		act.r.log.Panicf("internal error: in analysis %s of package %s: Fact.Set(%s, %T): can't set facts on objects belonging another package",
 			act.a, act.pkg, obj, fact)
 	}
 
@@ -756,7 +753,7 @@ func (act *action) allPackageFacts() []analysis.PackageFact {
 func (act *action) factType(fact analysis.Fact) reflect.Type {
 	t := reflect.TypeOf(fact)
 	if t.Kind() != reflect.Ptr {
-		act.log.Fatalf("invalid Fact type: got %T, want pointer", t)
+		act.r.log.Fatalf("invalid Fact type: got %T, want pointer", t)
 	}
 	return t
 }
@@ -806,15 +803,15 @@ func (act *action) persistFactsToCache() error {
 	factsCacheDebugf("Caching %d facts for package %q and analyzer %s", len(facts), act.pkg.Name, act.a.Name)
 
 	key := fmt.Sprintf("%s/facts", analyzer.Name)
-	return act.pkgCache.Put(act.pkg, key, facts)
+	return act.r.pkgCache.Put(act.pkg, key, facts)
 }
 
 func (act *action) loadPersistedFacts() bool {
 	var facts []Fact
 	key := fmt.Sprintf("%s/facts", act.a.Name)
-	if err := act.pkgCache.Get(act.pkg, key, &facts); err != nil {
+	if err := act.r.pkgCache.Get(act.pkg, key, &facts); err != nil {
 		if err != pkgcache.ErrMissing {
-			act.log.Warnf("Failed to get persisted facts: %s", err)
+			act.r.log.Warnf("Failed to get persisted facts: %s", err)
 		}
 
 		factsCacheDebugf("No cached facts for package %q and analyzer %s", act.pkg.Name, act.a.Name)

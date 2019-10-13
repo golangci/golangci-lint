@@ -44,10 +44,10 @@ const golintName = "golint"
 
 func NewGolint() *goanalysis.Linter {
 	var mu sync.Mutex
-	var resIssues []result.Issue
+	var resIssues []goanalysis.Issue
 
 	analyzer := &analysis.Analyzer{
-		Name: goanalysis.TheOnlyAnalyzerName,
+		Name: golintName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 	}
 	return goanalysis.NewLinter(
@@ -63,12 +63,14 @@ func NewGolint() *goanalysis.Linter {
 			}
 
 			mu.Lock()
-			resIssues = append(resIssues, res...)
+			for i := range res {
+				resIssues = append(resIssues, goanalysis.NewIssue(&res[i], pass))
+			}
 			mu.Unlock()
 
 			return nil, nil
 		}
-	}).WithIssuesReporter(func(*linter.Context) []result.Issue {
+	}).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
 		return resIssues
 	}).WithLoadMode(goanalysis.LoadModeSyntax)
 }

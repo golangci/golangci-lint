@@ -16,10 +16,10 @@ import (
 func NewWhitespace() *goanalysis.Linter {
 	const linterName = "whitespace"
 	var mu sync.Mutex
-	var resIssues []result.Issue
+	var resIssues []goanalysis.Issue
 
 	analyzer := &analysis.Analyzer{
-		Name: goanalysis.TheOnlyAnalyzerName,
+		Name: linterName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 	}
 	return goanalysis.NewLinter(
@@ -41,7 +41,7 @@ func NewWhitespace() *goanalysis.Linter {
 				return nil, nil
 			}
 
-			res := make([]result.Issue, len(issues))
+			res := make([]goanalysis.Issue, len(issues))
 			for k, i := range issues {
 				issue := result.Issue{
 					Pos: token.Position{
@@ -70,7 +70,7 @@ func NewWhitespace() *goanalysis.Linter {
 				}
 				issue.Replacement.NewLines = []string{bracketLine}
 
-				res[k] = issue
+				res[k] = goanalysis.NewIssue(&issue, pass) //nolint:scopelint
 			}
 
 			mu.Lock()
@@ -79,7 +79,7 @@ func NewWhitespace() *goanalysis.Linter {
 
 			return nil, nil
 		}
-	}).WithIssuesReporter(func(*linter.Context) []result.Issue {
+	}).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
 		return resIssues
 	}).WithLoadMode(goanalysis.LoadModeSyntax)
 }

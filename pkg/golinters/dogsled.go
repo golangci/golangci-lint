@@ -17,10 +17,10 @@ const dogsledLinterName = "dogsled"
 
 func NewDogsled() *goanalysis.Linter {
 	var mu sync.Mutex
-	var resIssues []result.Issue
+	var resIssues []goanalysis.Issue
 
 	analyzer := &analysis.Analyzer{
-		Name: goanalysis.TheOnlyAnalyzerName,
+		Name: dogsledLinterName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 	}
 	return goanalysis.NewLinter(
@@ -30,14 +30,16 @@ func NewDogsled() *goanalysis.Linter {
 		nil,
 	).WithContextSetter(func(lintCtx *linter.Context) {
 		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
-			var pkgIssues []result.Issue
+			var pkgIssues []goanalysis.Issue
 			for _, f := range pass.Files {
 				v := returnsVisitor{
 					maxBlanks: lintCtx.Settings().Dogsled.MaxBlankIdentifiers,
 					f:         pass.Fset,
 				}
 				ast.Walk(&v, f)
-				pkgIssues = append(pkgIssues, v.issues...)
+				for i := range v.issues {
+					pkgIssues = append(pkgIssues, goanalysis.NewIssue(&v.issues[i], pass))
+				}
 			}
 
 			mu.Lock()
@@ -46,7 +48,7 @@ func NewDogsled() *goanalysis.Linter {
 
 			return nil, nil
 		}
-	}).WithIssuesReporter(func(*linter.Context) []result.Issue {
+	}).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
 		return resIssues
 	}).WithLoadMode(goanalysis.LoadModeSyntax)
 }
