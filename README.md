@@ -819,6 +819,10 @@ linters-settings:
     allow-assign-and-call: true
     # Allow multiline assignments to be cuddled. Default is true.
     allow-multiline-assign: true
+    # Allow case blocks to end with a whitespace.
+    allow-case-traling-whitespace: true
+    # Allow declarations (var) to be cuddled.
+    allow-cuddle-declarations: false
 
 linters:
   enable:
