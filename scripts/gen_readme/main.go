@@ -45,7 +45,7 @@ func genReadme(tmplPath, outPath string) error {
 func getLatestVersion() (string, error) {
 	out, err := exec.Command("git", "tag", "-l", "--sort=-v:refname").Output()
 	if err != nil {
-		return "", fmt.Errorf("failed to run git tag: %w", err)
+		return "", fmt.Errorf("failed to run git tag: %s", err)
 	}
 
 	lines := bytes.Split(out, []byte("\n"))
@@ -91,7 +91,7 @@ func buildTemplateContext() (map[string]interface{}, error) {
 
 	latestVersion, err := getLatestVersion()
 	if err != nil {
-		return nil, fmt.Errorf("failed to get latest version: %w", err)
+		return nil, fmt.Errorf("failed to get latest version: %s", err)
 	}
 
 	return map[string]interface{}{
