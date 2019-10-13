@@ -73,6 +73,7 @@ func (e *Executor) persistentPostRun(_ *cobra.Command, _ []string) {
 		trace.Stop()
 	}
 
+	e.releaseFileLock()
 	os.Exit(e.exitCode)
 }
 

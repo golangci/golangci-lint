@@ -453,7 +453,6 @@ func watchResources(ctx context.Context, done chan struct{}, logger logutils.Log
 	const MB = 1024 * 1024
 
 	track := func() {
-		debugf("Starting memory tracing iteration ...")
 		var m runtime.MemStats
 		runtime.ReadMemStats(&m)
 

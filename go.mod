@@ -8,6 +8,7 @@ require (
 	github.com/fatih/color v1.7.0
 	github.com/go-critic/go-critic v0.3.5-0.20190904082202-d79a9f0c64db
 	github.com/go-lintpack/lintpack v0.5.2
+	github.com/gofrs/flock v0.0.0-20190320160742-5135e617513b
 	github.com/golangci/check v0.0.0-20180506172741-cfe4005ccda2
 	github.com/golangci/dupl v0.0.0-20180902072040-3e9179ac440a
 	github.com/golangci/errcheck v0.0.0-20181223084120-ef45e06d44b6

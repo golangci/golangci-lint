@@ -44,6 +44,8 @@ github.com/gobwas/glob/syntax/ast
 github.com/gobwas/glob/syntax/lexer
 github.com/gobwas/glob/util/runes
 github.com/gobwas/glob/util/strings
+# github.com/gofrs/flock v0.0.0-20190320160742-5135e617513b
+github.com/gofrs/flock
 # github.com/gogo/protobuf v1.2.1
 github.com/gogo/protobuf/proto
 # github.com/golangci/check v0.0.0-20180506172741-cfe4005ccda2
