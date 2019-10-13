@@ -49,6 +49,29 @@ type Configuration struct {
 	//  }
 	AllowMultiLineAssignCuddle bool
 
+	// AllowCaseTrailingWhitespace will allow case blocks to end with a
+	// whitespace. Sometimes this might actually improve readability. This
+	// defaults to false but setting it to true will enable the following
+	// example:
+	//  switch {
+	//  case 1:
+	//      fmt.Println(1)
+	//
+	// case 2:
+	//     fmt.Println(2)
+	//
+	// case 3:
+	//     fmt:println(3)
+	// }
+	AllowCaseTrailingWhitespace bool
+
+	// AllowCuddleDeclaration will allow multiple var/declaration statements to
+	// be cuddled. This defaults to false but setting it to true will enable the
+	// following example:
+	//  var foo bool
+	//  var err error
+	AllowCuddleDeclaration bool
+
 	// AllowCuddleWithCalls is a list of call idents that everything can be
 	// cuddled with. Defaults to calls looking like locks to support a flow like
 	// this:
@@ -69,11 +92,12 @@ type Configuration struct {
 // DefaultConfig returns default configuration
 func DefaultConfig() Configuration {
 	return Configuration{
-		StrictAppend:               true,
-		AllowAssignAndCallCuddle:   true,
-		AllowMultiLineAssignCuddle: true,
-		AllowCuddleWithCalls:       []string{"Lock", "RLock"},
-		AllowCuddleWithRHS:         []string{"Unlock", "RUnlock"},
+		StrictAppend:                true,
+		AllowAssignAndCallCuddle:    true,
+		AllowMultiLineAssignCuddle:  true,
+		AllowCaseTrailingWhitespace: false,
+		AllowCuddleWithCalls:        []string{"Lock", "RLock"},
+		AllowCuddleWithRHS:          []string{"Unlock", "RUnlock"},
 	}
 }
 
@@ -113,6 +137,7 @@ func NewProcessor() *Processor {
 
 // ProcessFiles takes a string slice with file names (full paths) and lints
 // them.
+// nolint: gocritic
 func (p *Processor) ProcessFiles(filenames []string) ([]Result, []string) {
 	for _, filename := range filenames {
 		data, err := ioutil.ReadFile(filename)
@@ -244,14 +269,6 @@ func (p *Processor) parseBlockStatements(statements []ast.Stmt) {
 			calledOrAssignedOnLineAbove = append(calledOnLineAbove, assignedOnLineAbove...)
 		)
 
-		/*
-			DEBUG:
-			fmt.Println("LHS: ", leftHandSide)
-			fmt.Println("RHS: ", rightHandSide)
-			fmt.Println("Assigned above: ", assignedOnLineAbove)
-			fmt.Println("Assigned first: ", assignedFirstInBlock)
-		*/
-
 		// If we called some kind of lock on the line above we allow cuddling
 		// anything.
 		if atLeastOneInListsMatch(calledOnLineAbove, p.config.AllowCuddleWithCalls) {
@@ -282,6 +299,7 @@ func (p *Processor) parseBlockStatements(statements []ast.Stmt) {
 			//     t.X = true
 			//     return t
 			// }
+			// nolint: gocritic
 			if i == len(statements)-1 && i == 1 {
 				if p.nodeEnd(stmt)-p.nodeStart(previousStatement) <= 2 {
 					return true
@@ -351,7 +369,9 @@ func (p *Processor) parseBlockStatements(statements []ast.Stmt) {
 
 			p.addError(t.Pos(), "assignments should only be cuddled with other assignments")
 		case *ast.DeclStmt:
-			p.addError(t.Pos(), "declarations should never be cuddled")
+			if !p.config.AllowCuddleDeclaration {
+				p.addError(t.Pos(), "declarations should never be cuddled")
+			}
 		case *ast.ExprStmt:
 			switch previousStatement.(type) {
 			case *ast.DeclStmt, *ast.ReturnStmt:
@@ -392,6 +412,25 @@ func (p *Processor) parseBlockStatements(statements []ast.Stmt) {
 			if _, ok := previousStatement.(*ast.DeferStmt); ok {
 				// We may cuddle multiple defers to group logic.
 				continue
+			}
+
+			// Special treatment of deferring body closes after error checking
+			// according to best practices. See
+			// https://github.com/bombsimon/wsl/issues/31 which links to
+			// discussion about error handling after HTTP requests. This is hard
+			// coded and very specific but for now this is to be seen as a
+			// special case. What this does is that it *only* allows a defer
+			// statement with `Close` on the right hand side to be cuddled with
+			// an if-statement to support this:
+			//  resp, err := client.Do(req)
+			//  if err != nil {
+			//      return err
+			//  }
+			//  defer resp.Body.Close()
+			if _, ok := previousStatement.(*ast.IfStmt); ok {
+				if atLeastOneInListsMatch(rightHandSide, []string{"Close"}) {
+					continue
+				}
 			}
 
 			if moreThanOneStatementAbove() {
@@ -664,6 +703,13 @@ func (p *Processor) findRHS(node ast.Node) []string {
 		return p.findRHS(t.Call)
 	case *ast.SendStmt:
 		return p.findLHS(t.Value)
+	case *ast.IndexExpr:
+		rhs = append(rhs, p.findRHS(t.Index)...)
+		rhs = append(rhs, p.findRHS(t.X)...)
+	case *ast.SliceExpr:
+		rhs = append(rhs, p.findRHS(t.X)...)
+		rhs = append(rhs, p.findRHS(t.Low)...)
+		rhs = append(rhs, p.findRHS(t.High)...)
 	default:
 		if x, ok := maybeX(t); ok {
 			return p.findRHS(x)
@@ -679,7 +725,7 @@ func (p *Processor) findRHS(node ast.Node) []string {
 // if it exists. If the node doesn't have an X field nil and false is returned.
 // Known fields with X that are handled:
 // IndexExpr, ExprStmt, SelectorExpr, StarExpr, ParentExpr, TypeAssertExpr,
-// RangeStmt, UnaryExpr, ParenExpr, SLiceExpr, IncDecStmt.
+// RangeStmt, UnaryExpr, ParenExpr, SliceExpr, IncDecStmt.
 func maybeX(node interface{}) (ast.Node, bool) {
 	maybeHasX := reflect.Indirect(reflect.ValueOf(node)).FieldByName("X")
 	if !maybeHasX.IsValid() {
@@ -726,6 +772,7 @@ func atLeastOneInListsMatch(listOne, listTwo []string) bool {
 // findLeadingAndTrailingWhitespaces will find leading and trailing whitespaces
 // in a node. The method takes comments in consideration which will make the
 // parser more gentle.
+// nolint: gocognit
 func (p *Processor) findLeadingAndTrailingWhitespaces(stmt, nextStatement ast.Node) {
 	var (
 		allowedLinesBeforeFirstStatement = 1
@@ -811,11 +858,16 @@ func (p *Processor) findLeadingAndTrailingWhitespaces(stmt, nextStatement ast.No
 			return
 		}
 
+		// If we allow case to end white whitespace just return.
+		if p.config.AllowCaseTrailingWhitespace {
+			return
+		}
+
 		switch n := nextStatement.(type) {
 		case *ast.CaseClause:
-			blockEndPos = n.Colon
+			blockEndPos = n.Case
 		case *ast.CommClause:
-			blockEndPos = n.Colon
+			blockEndPos = n.Case
 		default:
 			// We're not at the end of the case?
 			return

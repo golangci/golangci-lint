@@ -105,6 +105,7 @@ func testOneSource(t *testing.T, sourcePath string) {
 		"--print-issued-lines=false",
 		"--print-linter-name=false",
 		"--out-format=line-number",
+		"--max-same-issues=10",
 	}
 
 	rc := extractRunContextFromComments(t, sourcePath)
