@@ -2,11 +2,13 @@ package commands
 
 import (
 	"bytes"
+	"context"
 	"crypto/sha256"
 	"encoding/json"
 	"fmt"
 	"io"
 	"os"
+	"time"
 
 	"github.com/golangci/golangci-lint/internal/cache"
 
@@ -14,6 +16,8 @@ import (
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
+
+	"github.com/gofrs/flock"
 
 	"github.com/golangci/golangci-lint/internal/pkgcache"
 	"github.com/golangci/golangci-lint/pkg/config"
@@ -48,6 +52,7 @@ type Executor struct {
 	sw                *timeutils.Stopwatch
 
 	loadGuard *load.Guard
+	flock     *flock.Flock
 }
 
 func NewExecutor(version, commit, date string) *Executor {
@@ -62,6 +67,9 @@ func NewExecutor(version, commit, date string) *Executor {
 
 	e.debugf("Starting execution...")
 	e.log = report.NewLogWrapper(logutils.NewStderrLog(""), &e.reportData)
+	if ok := e.acquireFileLock(); !ok {
+		e.log.Fatalf("Parallel golangci-lint is running")
+	}
 
 	// to setup log level early we need to parse config from command line extra time to
 	// find `-v` option
@@ -194,4 +202,25 @@ func computeConfigSalt(cfg *config.Config) ([]byte, error) {
 		return nil, fmt.Errorf("failed to hash config bytes: wrote %d/%d bytes, error: %s", n, len(configBytes), err)
 	}
 	return h.Sum(nil), nil
+}
+
+func (e *Executor) acquireFileLock() bool {
+	lockFile := os.TempDir() + "/golangci-lint.lock"
+	e.debugf("Locking on file %s...", lockFile)
+	f := flock.New(lockFile)
+	ctx, finish := context.WithTimeout(context.Background(), time.Minute)
+	defer finish()
+
+	if ok, _ := f.TryLockContext(ctx, time.Second*3); !ok {
+		return false
+	}
+
+	e.flock = f
+	return true
+}
+
+func (e *Executor) releaseFileLock() {
+	if err := e.flock.Unlock(); err != nil {
+		e.debugf("Failed to unlock on file: %s", err)
+	}
 }
