@@ -8,6 +8,7 @@ import (
 	"sort"
 	"strings"
 	"sync"
+	"sync/atomic"
 	"time"
 
 	"github.com/golangci/golangci-lint/pkg/logutils"
@@ -305,33 +306,51 @@ func saveIssuesToCache(allPkgs []*packages.Package, pkgsFromCache map[*packages.
 		perPkgIssues[i.Pkg] = append(perPkgIssues[i.Pkg], *i)
 	}
 
-	savedIssuesCount := 0
+	savedIssuesCount := int32(0)
 	lintResKey := getIssuesCacheKey(analyzers)
+
+	workerCount := runtime.GOMAXPROCS(-1)
+	var wg sync.WaitGroup
+	wg.Add(workerCount)
+
+	pkgCh := make(chan *packages.Package, len(allPkgs))
+	for i := 0; i < workerCount; i++ {
+		go func() {
+			defer wg.Done()
+			for pkg := range pkgCh {
+				pkgIssues := perPkgIssues[pkg]
+				encodedIssues := make([]EncodingIssue, 0, len(pkgIssues))
+				for ind := range pkgIssues {
+					i := &pkgIssues[ind]
+					encodedIssues = append(encodedIssues, EncodingIssue{
+						FromLinter:  i.FromLinter,
+						Text:        i.Text,
+						Pos:         i.Pos,
+						LineRange:   i.LineRange,
+						Replacement: i.Replacement,
+					})
+				}
+
+				atomic.AddInt32(&savedIssuesCount, int32(len(encodedIssues)))
+				if err := lintCtx.PkgCache.Put(pkg, lintResKey, encodedIssues); err != nil {
+					lintCtx.Log.Infof("Failed to save package %s issues (%d) to cache: %s", pkg, len(pkgIssues), err)
+				} else {
+					issuesCacheDebugf("Saved package %s issues (%d) to cache", pkg, len(pkgIssues))
+				}
+			}
+		}()
+	}
+
 	for _, pkg := range allPkgs {
 		if pkgsFromCache[pkg] {
 			continue
 		}
 
-		pkgIssues := perPkgIssues[pkg]
-		encodedIssues := make([]EncodingIssue, 0, len(pkgIssues))
-		for ind := range pkgIssues {
-			i := &pkgIssues[ind]
-			encodedIssues = append(encodedIssues, EncodingIssue{
-				FromLinter:  i.FromLinter,
-				Text:        i.Text,
-				Pos:         i.Pos,
-				LineRange:   i.LineRange,
-				Replacement: i.Replacement,
-			})
-		}
-
-		savedIssuesCount += len(encodedIssues)
-		if err := lintCtx.PkgCache.Put(pkg, lintResKey, encodedIssues); err != nil {
-			lintCtx.Log.Infof("Failed to save package %s issues (%d) to cache: %s", pkg, len(pkgIssues), err)
-		} else {
-			issuesCacheDebugf("Saved package %s issues (%d) to cache", pkg, len(pkgIssues))
-		}
+		pkgCh <- pkg
 	}
+	close(pkgCh)
+	wg.Wait()
+
 	issuesCacheDebugf("Saved %d issues from %d packages to cache in %s", savedIssuesCount, len(allPkgs), time.Since(startedAt))
 }
 
