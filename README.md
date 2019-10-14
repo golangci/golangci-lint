@@ -500,73 +500,74 @@ Usage:
   golangci-lint run [flags]
 
 Flags:
-      --out-format string           Format of output: colored-line-number|line-number|json|tab|checkstyle|code-climate|junit-xml (default "colored-line-number")
-      --print-issued-lines          Print lines of code with issue (default true)
-      --print-linter-name           Print linter name in issue line (default true)
-      --issues-exit-code int        Exit code when issues were found (default 1)
-      --build-tags strings          Build tags
-      --timeout duration            Timeout for total work (default 1m0s)
-      --tests                       Analyze tests (*_test.go) (default true)
-      --print-resources-usage       Print avg and max memory usage of golangci-lint and total time
-  -c, --config PATH                 Read config from file path PATH
-      --no-config                   Don't read config
-      --skip-dirs strings           Regexps of directories to skip
-      --skip-dirs-use-default       Use or not use default excluded directories:
-                                      - (^|/)vendor($|/)
-                                      - (^|/)third_party($|/)
-                                      - (^|/)testdata($|/)
-                                      - (^|/)examples($|/)
-                                      - (^|/)Godeps($|/)
-                                      - (^|/)builtin($|/)
-                                     (default true)
-      --skip-files strings          Regexps of files to skip
-  -E, --enable strings              Enable specific linter
-  -D, --disable strings             Disable specific linter
-      --disable-all                 Disable all linters
-  -p, --presets strings             Enable presets (bugs|complexity|format|performance|style|unused) of linters. Run 'golangci-lint linters' to see them. This option implies option --disable-all
-      --fast                        Run only fast linters from enabled linters set (first run won't be fast)
-  -e, --exclude strings             Exclude issue by regexp
-      --exclude-use-default         Use or not use default excludes:
-                                      # errcheck: Almost all programs ignore errors on these functions and in most cases it's ok
-                                      - Error return value of .((os\.)?std(out|err)\..*|.*Close|.*Flush|os\.Remove(All)?|.*printf?|os\.(Un)?Setenv). is not checked
-                                    
-                                      # golint: Annoying issue about not having a comment. The rare codebase has such comments
-                                      - (comment on exported (method|function|type|const)|should have( a package)? comment|comment should be of the form)
-                                    
-                                      # golint: False positive when tests are defined in package 'test'
-                                      - func name will be used as test\.Test.* by other packages, and that stutters; consider calling this
-                                    
-                                      # govet: Common false positives
-                                      - (possible misuse of unsafe.Pointer|should have signature)
-                                    
-                                      # staticcheck: Developers tend to write in C-style with an explicit 'break' in a 'switch', so it's ok to ignore
-                                      - ineffective break statement. Did you mean to break out of the outer loop
-                                    
-                                      # gosec: Too many false-positives on 'unsafe' usage
-                                      - Use of unsafe calls should be audited
-                                    
-                                      # gosec: Too many false-positives for parametrized shell calls
-                                      - Subprocess launch(ed with variable|ing should be audited)
-                                    
-                                      # gosec: Duplicated errcheck checks
-                                      - G104
-                                    
-                                      # gosec: Too many issues in popular repos
-                                      - (Expect directory permissions to be 0750 or less|Expect file permissions to be 0600 or less)
-                                    
-                                      # gosec: False positive is triggered by 'src, err := ioutil.ReadFile(filename)'
-                                      - Potential file inclusion via variable
-                                     (default true)
-      --max-issues-per-linter int   Maximum issues count per one linter. Set to 0 to disable (default 50)
-      --max-same-issues int         Maximum count of issues with the same text. Set to 0 to disable (default 3)
-  -n, --new                         Show only new issues: if there are unstaged changes or untracked files, only those changes are analyzed, else only changes in HEAD~ are analyzed.
-                                    It's a super-useful option for integration of golangci-lint into existing large codebase.
-                                    It's not practical to fix all existing issues at the moment of integration: much better to not allow issues in new code.
-                                    For CI setups, prefer --new-from-rev=HEAD~, as --new can skip linting the current patch if any scripts generate unstaged files before golangci-lint runs.
-      --new-from-rev REV            Show only new issues created after git revision REV
-      --new-from-patch PATH         Show only new issues created in git patch with file path PATH
-      --fix                         Fix found issues (if it's supported by the linter)
-  -h, --help                        help for run
+      --out-format string              Format of output: colored-line-number|line-number|json|tab|checkstyle|code-climate|junit-xml (default "colored-line-number")
+      --print-issued-lines             Print lines of code with issue (default true)
+      --print-linter-name              Print linter name in issue line (default true)
+      --modules-download-mode string   Modules download mode. If not empty, passed as -mod=<mode> to go tools
+      --issues-exit-code int           Exit code when issues were found (default 1)
+      --build-tags strings             Build tags
+      --timeout duration               Timeout for total work (default 1m0s)
+      --tests                          Analyze tests (*_test.go) (default true)
+      --print-resources-usage          Print avg and max memory usage of golangci-lint and total time
+  -c, --config PATH                    Read config from file path PATH
+      --no-config                      Don't read config
+      --skip-dirs strings              Regexps of directories to skip
+      --skip-dirs-use-default          Use or not use default excluded directories:
+                                         - (^|/)vendor($|/)
+                                         - (^|/)third_party($|/)
+                                         - (^|/)testdata($|/)
+                                         - (^|/)examples($|/)
+                                         - (^|/)Godeps($|/)
+                                         - (^|/)builtin($|/)
+                                        (default true)
+      --skip-files strings             Regexps of files to skip
+  -E, --enable strings                 Enable specific linter
+  -D, --disable strings                Disable specific linter
+      --disable-all                    Disable all linters
+  -p, --presets strings                Enable presets (bugs|complexity|format|performance|style|unused) of linters. Run 'golangci-lint linters' to see them. This option implies option --disable-all
+      --fast                           Run only fast linters from enabled linters set (first run won't be fast)
+  -e, --exclude strings                Exclude issue by regexp
+      --exclude-use-default            Use or not use default excludes:
+                                         # errcheck: Almost all programs ignore errors on these functions and in most cases it's ok
+                                         - Error return value of .((os\.)?std(out|err)\..*|.*Close|.*Flush|os\.Remove(All)?|.*printf?|os\.(Un)?Setenv). is not checked
+                                       
+                                         # golint: Annoying issue about not having a comment. The rare codebase has such comments
+                                         - (comment on exported (method|function|type|const)|should have( a package)? comment|comment should be of the form)
+                                       
+                                         # golint: False positive when tests are defined in package 'test'
+                                         - func name will be used as test\.Test.* by other packages, and that stutters; consider calling this
+                                       
+                                         # govet: Common false positives
+                                         - (possible misuse of unsafe.Pointer|should have signature)
+                                       
+                                         # staticcheck: Developers tend to write in C-style with an explicit 'break' in a 'switch', so it's ok to ignore
+                                         - ineffective break statement. Did you mean to break out of the outer loop
+                                       
+                                         # gosec: Too many false-positives on 'unsafe' usage
+                                         - Use of unsafe calls should be audited
+                                       
+                                         # gosec: Too many false-positives for parametrized shell calls
+                                         - Subprocess launch(ed with variable|ing should be audited)
+                                       
+                                         # gosec: Duplicated errcheck checks
+                                         - G104
+                                       
+                                         # gosec: Too many issues in popular repos
+                                         - (Expect directory permissions to be 0750 or less|Expect file permissions to be 0600 or less)
+                                       
+                                         # gosec: False positive is triggered by 'src, err := ioutil.ReadFile(filename)'
+                                         - Potential file inclusion via variable
+                                        (default true)
+      --max-issues-per-linter int      Maximum issues count per one linter. Set to 0 to disable (default 50)
+      --max-same-issues int            Maximum count of issues with the same text. Set to 0 to disable (default 3)
+  -n, --new                            Show only new issues: if there are unstaged changes or untracked files, only those changes are analyzed, else only changes in HEAD~ are analyzed.
+                                       It's a super-useful option for integration of golangci-lint into existing large codebase.
+                                       It's not practical to fix all existing issues at the moment of integration: much better to not allow issues in new code.
+                                       For CI setups, prefer --new-from-rev=HEAD~, as --new can skip linting the current patch if any scripts generate unstaged files before golangci-lint runs.
+      --new-from-rev REV               Show only new issues created after git revision REV
+      --new-from-patch PATH            Show only new issues created in git patch with file path PATH
+      --fix                            Fix found issues (if it's supported by the linter)
+  -h, --help                           help for run
 
 Global Flags:
       --color string              Use color when printing; can be 'always', 'auto', or 'never' (default "auto")
@@ -618,14 +619,17 @@ run:
   build-tags:
     - mytag
 
-  # which dirs to skip: they won't be analyzed;
+  # which dirs to skip: issues from them won't be reported;
   # can use regexp here: generated.*, regexp is applied on full path;
-  # default value is empty list, but next dirs are always skipped independently
-  # from this option's value:
-  #   	vendor$, third_party$, testdata$, examples$, Godeps$, builtin$
+  # default value is empty list, but default dirs are skipped independently
+  # from this option's value (see skip-dirs-use-default).
   skip-dirs:
     - src/external_libs
     - autogenerated_by_my_lib
+
+  # default is true. Enables skipping of directories:
+  #   vendor$, third_party$, testdata$, examples$, Godeps$, builtin$
+  skip-dirs-use-default: true
 
   # which files to skip: they will be analyzed, but issues from them
   # won't be reported. Default value is empty list, but there is
