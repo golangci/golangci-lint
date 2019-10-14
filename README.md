@@ -14,24 +14,42 @@ Sponsored by [GolangCI.com](https://golangci.com): SaaS service for running lint
 
 <a href="https://golangci.com/"><img src="docs/go.png" width="250px"></a>
 
-* [Demo](#demo)
-* [Install](#install)
-* [Trusted By](#trusted-by)
-* [Quick Start](#quick-start)
-* [Editor Integration](#editor-integration)
-* [Shell Completion](#shell-completion)
-* [Comparison](#comparison)
-* [Performance](#performance)
-* [Internals](#internals)
-* [Supported Linters](#supported-linters)
-* [Configuration](#configuration)
-* [False Positives](#false-positives)
-* [FAQ](#faq)
-* [Thanks](#thanks)
-* [Changelog](#changelog)
-* [Debug](#debug)
-* [Future Plans](#future-plans)
-* [Contact Information](#contact-information)
+- [GolangCI-Lint](#golangci-lint)
+  - [Demo](#demo)
+  - [Install](#install)
+    - [Binary Release](#binary-release)
+    - [MacOS](#macos)
+    - [By Docker](#by-docker)
+    - [go get](#go-get)
+  - [Trusted By](#trusted-by)
+  - [Quick Start](#quick-start)
+  - [Editor Integration](#editor-integration)
+  - [Shell Completion](#shell-completion)
+    - [Mac OS X](#mac-os-x)
+    - [Linux](#linux)
+  - [Comparison](#comparison)
+    - [`golangci-lint` vs `gometalinter`](#golangci-lint-vs-gometalinter)
+    - [`golangci-lint` vs Running Linters Manually](#golangci-lint-vs-running-linters-manually)
+  - [Performance](#performance)
+    - [Comparison with gometalinter](#comparison-with-gometalinter)
+    - [Why golangci-lint is faster](#why-golangci-lint-is-faster)
+    - [Memory Usage of Golangci-lint](#memory-usage-of-golangci-lint)
+  - [Internals](#internals)
+  - [Supported Linters](#supported-linters)
+    - [Enabled By Default Linters](#enabled-by-default-linters)
+    - [Disabled By Default Linters (`-E/--enable`)](#disabled-by-default-linters--e--enable)
+  - [Configuration](#configuration)
+    - [Command-Line Options](#command-line-options)
+    - [Config File](#config-file)
+  - [False Positives](#false-positives)
+    - [Nolint](#nolint)
+  - [FAQ](#faq)
+  - [Thanks](#thanks)
+  - [Changelog](#changelog)
+  - [Debug](#debug)
+  - [Future Plans](#future-plans)
+  - [Contact Information](#contact-information)
+  - [License Scan](#license-scan)
 
 ## Demo
 
@@ -44,28 +62,28 @@ Short 1.5 min video demo of analyzing [beego](https://github.com/astaxie/beego).
 
 ## Install
 
-### CI Installation
+### Binary Release
 
 Most installations are done for CI (travis, circleci etc). It's important to have reproducible CI:
 don't start to fail all builds at the same time. With golangci-lint this can happen if you
-use `--enable-all` and a new linter is added or even without `--enable-all`: when one upstream linter is upgraded.
+use deprecated option `--enable-all` and a new linter is added or even without `--enable-all`: when one upstream linter is upgraded.
 
 It's highly recommended to install a fixed version of golangci-lint.
 Releases are available on the [releases page](https://github.com/golangci/golangci-lint/releases).
 
-Latest version: ![GitHub release](https://img.shields.io/github/release/golangci/golangci-lint.svg)
+Latest version: [v1.20.0](https://github.com/golangci/golangci-lint/releases/tag/v1.20.0)
 
-Here is the recommended way to install golangci-lint (replace `vX.Y.Z` with the latest version):
+Here is the recommended way to install golangci-lint:
 
 ```bash
 # binary will be $(go env GOPATH)/bin/golangci-lint
-curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sh -s -- -b $(go env GOPATH)/bin vX.Y.Z
+curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sh -s -- -b $(go env GOPATH)/bin v1.20.0
 
 # or install it into ./bin/
-curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sh -s vX.Y.Z
+curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sh -s v1.20.0
 
 # In alpine linux (as it does not come with curl by default)
-wget -O - -q https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sh -s vX.Y.Z
+wget -O - -q https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sh -s v1.20.0
 
 golangci-lint --version
 ```
@@ -74,41 +92,30 @@ Periodically update version of golangci-lint: the project is under active develo
 and is constantly being improved. But please always check for newly found issues and
 update if needed.
 
-### Local Installation
+### MacOS
 
-Local installation is not recommended for your CI pipeline. Only install the linter this way in a local development environment.
-
-#### Windows, MacOS and Linux
-
-```bash
-go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
-```
-
-With `go1.12` or later you can get a particular version
-
-```bash
-GO111MODULE=on go get github.com/golangci/golangci-lint/cmd/golangci-lint@v1.18.0
-```
-
-#### MacOS
-
-You can also install it on MacOS using [brew](https://brew.sh/):
+You can also install a binary release on MacOS using [brew](https://brew.sh/):
 
 ```bash
 brew install golangci/tap/golangci-lint
 brew upgrade golangci/tap/golangci-lint
 ```
 
-#### `--version`
-
-If you need your local `golangci-lint --version` to show proper version additionally run:
+### By Docker
 
 ```bash
-cd $(go env GOPATH)/src/github.com/golangci/golangci-lint/cmd/golangci-lint
-go install -ldflags "-X 'main.version=$(git describe --tags)' -X 'main.commit=$(git rev-parse --short HEAD)' -X 'main.date=$(date)'"
+docker run --rm -v $(pwd):/app -w /app golangci/golangci-lint:v1.20.0 golangci-lint run -v
 ```
 
-On Windows, you can run the above commands with Git Bash, which comes with [Git for Windows](https://git-scm.com/download/win).
+### go get
+
+Please, do not install `golangci-lint` by `go get`:
+
+1. [`go.mod`](https://github.com/golangci/golangci-lint/blob/master/go.mod) replacement directive doesn't apply. It means you will be using patched version of `golangci-lint`.
+2. it's much slower than binary installation
+3. it's stability depends on your Go version (e.g. on [this compiler Go <= 1.12 bug](https://github.com/golang/go/issues/29612)).
+4. it's not guaranteed to work: e.g. we've encountered a lot of issues with Go modules hashes.
+5. it allows installation from `master` branch which can't be considered stable.
 
 ## Trusted By
 
@@ -130,6 +137,7 @@ The following companies/products use golangci-lint:
 * [NixOS](https://github.com/NixOS/nixpkgs-channels)
 * [The New York Times](https://github.com/NYTimes/encoding-wrapper)
 * [Istio](https://github.com/istio/istio)
+* [SoundCloud](https://github.com/soundcloud/periskop)
 
 The following great projects use golangci-lint:
 
@@ -222,6 +230,7 @@ stylecheck: Stylecheck is a replacement for golint [fast: true, auto-fix: false]
 unconvert: Remove unnecessary type conversions [fast: true, auto-fix: false]
 unparam: Reports unused function parameters [fast: true, auto-fix: false]
 whitespace: Tool for detection of leading and trailing whitespace [fast: true, auto-fix: true]
+wsl: Whitespace Linter - Forces you to use empty lines! [fast: true, auto-fix: false]
 ```
 
 Pass `-E/--enable` to enable linter and `-D/--disable` to disable:
@@ -335,7 +344,7 @@ We measure peak memory usage (RSS) by tracking of processes RSS every 5 ms.
 We compare golangci-lint and gometalinter in default mode, but explicitly enable all linters because of small differences in the default configuration.
 
 ```bash
-$ golangci-lint run --no-config --issues-exit-code=0 --deadline=30m \
+$ golangci-lint run --no-config --issues-exit-code=0 --timeout=30m \
   --disable-all --enable=deadcode  --enable=gocyclo --enable=golint --enable=varcheck \
   --enable=structcheck --enable=maligned --enable=errcheck --enable=dupl --enable=ineffassign \
   --enable=interfacer --enable=unconvert --enable=goconst --enable=gosec --enable=megacheck
@@ -469,6 +478,7 @@ golangci-lint help linters
 - [godox](https://github.com/matoous/godox) - Tool for detection of FIXME, TODO and other comment keywords
 - [funlen](https://github.com/ultraware/funlen) - Tool for detection of long functions
 - [whitespace](https://github.com/ultraware/whitespace) - Tool for detection of leading and trailing whitespace
+- [wsl](https://github.com/bombsimon/wsl) - Whitespace Linter - Forces you to use empty lines!
 
 ## Configuration
 
@@ -490,75 +500,73 @@ Usage:
   golangci-lint run [flags]
 
 Flags:
-      --out-format string              Format of output: colored-line-number|line-number|json|tab|checkstyle|code-climate|junit-xml (default "colored-line-number")
-      --print-issued-lines             Print lines of code with issue (default true)
-      --print-linter-name              Print linter name in issue line (default true)
-      --modules-download-mode string   Modules download mode. If not empty, passed as -mod=<mode> to go tools
-      --issues-exit-code int           Exit code when issues were found (default 1)
-      --build-tags strings             Build tags
-      --deadline duration              Deadline for total work (default 1m0s)
-      --tests                          Analyze tests (*_test.go) (default true)
-      --print-resources-usage          Print avg and max memory usage of golangci-lint and total time
-  -c, --config PATH                    Read config from file path PATH
-      --no-config                      Don't read config
-      --skip-dirs strings              Regexps of directories to skip
-      --skip-dirs-use-default          Use or not use default excluded directories:
-                                         - (^|/)vendor($|/)
-                                         - (^|/)third_party($|/)
-                                         - (^|/)testdata($|/)
-                                         - (^|/)examples($|/)
-                                         - (^|/)Godeps($|/)
-                                         - (^|/)builtin($|/)
-                                        (default true)
-      --skip-files strings             Regexps of files to skip
-  -E, --enable strings                 Enable specific linter
-  -D, --disable strings                Disable specific linter
-      --enable-all                     Enable all linters
-      --disable-all                    Disable all linters
-  -p, --presets strings                Enable presets (bugs|complexity|format|performance|style|unused) of linters. Run 'golangci-lint linters' to see them. This option implies option --disable-all
-      --fast                           Run only fast linters from enabled linters set (first run won't be fast)
-  -e, --exclude strings                Exclude issue by regexp
-      --exclude-use-default            Use or not use default excludes:
-                                         # errcheck: Almost all programs ignore errors on these functions and in most cases it's ok
-                                         - Error return value of .((os\.)?std(out|err)\..*|.*Close|.*Flush|os\.Remove(All)?|.*printf?|os\.(Un)?Setenv). is not checked
-                                       
-                                         # golint: Annoying issue about not having a comment. The rare codebase has such comments
-                                         - (comment on exported (method|function|type|const)|should have( a package)? comment|comment should be of the form)
-                                       
-                                         # golint: False positive when tests are defined in package 'test'
-                                         - func name will be used as test\.Test.* by other packages, and that stutters; consider calling this
-                                       
-                                         # govet: Common false positives
-                                         - (possible misuse of unsafe.Pointer|should have signature)
-                                       
-                                         # staticcheck: Developers tend to write in C-style with an explicit 'break' in a 'switch', so it's ok to ignore
-                                         - ineffective break statement. Did you mean to break out of the outer loop
-                                       
-                                         # gosec: Too many false-positives on 'unsafe' usage
-                                         - Use of unsafe calls should be audited
-                                       
-                                         # gosec: Too many false-positives for parametrized shell calls
-                                         - Subprocess launch(ed with variable|ing should be audited)
-                                       
-                                         # gosec: Duplicated errcheck checks
-                                         - G104
-                                       
-                                         # gosec: Too many issues in popular repos
-                                         - (Expect directory permissions to be 0750 or less|Expect file permissions to be 0600 or less)
-                                       
-                                         # gosec: False positive is triggered by 'src, err := ioutil.ReadFile(filename)'
-                                         - Potential file inclusion via variable
-                                        (default true)
-      --max-issues-per-linter int      Maximum issues count per one linter. Set to 0 to disable (default 50)
-      --max-same-issues int            Maximum count of issues with the same text. Set to 0 to disable (default 3)
-  -n, --new                            Show only new issues: if there are unstaged changes or untracked files, only those changes are analyzed, else only changes in HEAD~ are analyzed.
-                                       It's a super-useful option for integration of golangci-lint into existing large codebase.
-                                       It's not practical to fix all existing issues at the moment of integration: much better to not allow issues in new code.
-                                       For CI setups, prefer --new-from-rev=HEAD~, as --new can skip linting the current patch if any scripts generate unstaged files before golangci-lint runs.
-      --new-from-rev REV               Show only new issues created after git revision REV
-      --new-from-patch PATH            Show only new issues created in git patch with file path PATH
-      --fix                            Fix found issues (if it's supported by the linter)
-  -h, --help                           help for run
+      --out-format string           Format of output: colored-line-number|line-number|json|tab|checkstyle|code-climate|junit-xml (default "colored-line-number")
+      --print-issued-lines          Print lines of code with issue (default true)
+      --print-linter-name           Print linter name in issue line (default true)
+      --issues-exit-code int        Exit code when issues were found (default 1)
+      --build-tags strings          Build tags
+      --timeout duration            Timeout for total work (default 1m0s)
+      --tests                       Analyze tests (*_test.go) (default true)
+      --print-resources-usage       Print avg and max memory usage of golangci-lint and total time
+  -c, --config PATH                 Read config from file path PATH
+      --no-config                   Don't read config
+      --skip-dirs strings           Regexps of directories to skip
+      --skip-dirs-use-default       Use or not use default excluded directories:
+                                      - (^|/)vendor($|/)
+                                      - (^|/)third_party($|/)
+                                      - (^|/)testdata($|/)
+                                      - (^|/)examples($|/)
+                                      - (^|/)Godeps($|/)
+                                      - (^|/)builtin($|/)
+                                     (default true)
+      --skip-files strings          Regexps of files to skip
+  -E, --enable strings              Enable specific linter
+  -D, --disable strings             Disable specific linter
+      --disable-all                 Disable all linters
+  -p, --presets strings             Enable presets (bugs|complexity|format|performance|style|unused) of linters. Run 'golangci-lint linters' to see them. This option implies option --disable-all
+      --fast                        Run only fast linters from enabled linters set (first run won't be fast)
+  -e, --exclude strings             Exclude issue by regexp
+      --exclude-use-default         Use or not use default excludes:
+                                      # errcheck: Almost all programs ignore errors on these functions and in most cases it's ok
+                                      - Error return value of .((os\.)?std(out|err)\..*|.*Close|.*Flush|os\.Remove(All)?|.*printf?|os\.(Un)?Setenv). is not checked
+                                    
+                                      # golint: Annoying issue about not having a comment. The rare codebase has such comments
+                                      - (comment on exported (method|function|type|const)|should have( a package)? comment|comment should be of the form)
+                                    
+                                      # golint: False positive when tests are defined in package 'test'
+                                      - func name will be used as test\.Test.* by other packages, and that stutters; consider calling this
+                                    
+                                      # govet: Common false positives
+                                      - (possible misuse of unsafe.Pointer|should have signature)
+                                    
+                                      # staticcheck: Developers tend to write in C-style with an explicit 'break' in a 'switch', so it's ok to ignore
+                                      - ineffective break statement. Did you mean to break out of the outer loop
+                                    
+                                      # gosec: Too many false-positives on 'unsafe' usage
+                                      - Use of unsafe calls should be audited
+                                    
+                                      # gosec: Too many false-positives for parametrized shell calls
+                                      - Subprocess launch(ed with variable|ing should be audited)
+                                    
+                                      # gosec: Duplicated errcheck checks
+                                      - G104
+                                    
+                                      # gosec: Too many issues in popular repos
+                                      - (Expect directory permissions to be 0750 or less|Expect file permissions to be 0600 or less)
+                                    
+                                      # gosec: False positive is triggered by 'src, err := ioutil.ReadFile(filename)'
+                                      - Potential file inclusion via variable
+                                     (default true)
+      --max-issues-per-linter int   Maximum issues count per one linter. Set to 0 to disable (default 50)
+      --max-same-issues int         Maximum count of issues with the same text. Set to 0 to disable (default 3)
+  -n, --new                         Show only new issues: if there are unstaged changes or untracked files, only those changes are analyzed, else only changes in HEAD~ are analyzed.
+                                    It's a super-useful option for integration of golangci-lint into existing large codebase.
+                                    It's not practical to fix all existing issues at the moment of integration: much better to not allow issues in new code.
+                                    For CI setups, prefer --new-from-rev=HEAD~, as --new can skip linting the current patch if any scripts generate unstaged files before golangci-lint runs.
+      --new-from-rev REV            Show only new issues created after git revision REV
+      --new-from-patch PATH         Show only new issues created in git patch with file path PATH
+      --fix                         Fix found issues (if it's supported by the linter)
+  -h, --help                        help for run
 
 Global Flags:
       --color string              Use color when printing; can be 'always', 'auto', or 'never' (default "auto")
@@ -598,7 +606,7 @@ run:
   concurrency: 4
 
   # timeout for analysis, e.g. 30s, 5m, default is 1m
-  deadline: 1m
+  timeout: 1m
 
   # exit code when at least one issue was found, default is 1
   issues-exit-code: 1
@@ -800,13 +808,22 @@ linters-settings:
     max-blank-identifiers: 2
 
   whitespace:
-    multi-if: false
+    multi-if: false   # Enforces newlines (or comments) after every multi-line if statement
+    multi-func: false # Enforces newlines (or comments) after every multi-line function signature
+  wsl:
+    # If true append is only allowed to be cuddled if appending value is
+    # matching variables, fields or types on line above. Default is true.
+    strict-append: true
+    # Allow calls and assignments to be cuddled as long as the lines have any
+    # matching variables, fields or types. Default is true.
+    allow-assign-and-call: true
+    # Allow multiline assignments to be cuddled. Default is true.
+    allow-multiline-assign: true
 
 linters:
   enable:
     - megacheck
     - govet
-  enable-all: false
   disable:
     - maligned
     - prealloc
@@ -928,11 +945,14 @@ linters-settings:
     disabled-checks:
       - wrapperFunc
       - dupImport # https://github.com/go-critic/go-critic/issues/845
+      - ifElseChain
+      - octalLiteral
   funlen:
     lines: 100
     statements: 50
 
 linters:
+  # please, do not use `enable-all`: it's deprecated and will be removed soon.
   # inverted configuration with `enable-all` and `disable` is not scalable during updates of golangci-lint
   disable-all: true
   enable:
@@ -979,7 +999,17 @@ linters:
 run:
   skip-dirs:
     - test/testdata_etc
-    - internal/(cache|renameio|robustio)
+  skip-files:
+    - internal/cache/.*_test.go
+
+issues:
+  exclude-rules:
+    - path: internal/(cache|renameio)/
+      linters:
+        - lll
+        - gochecknoinits
+        - gocyclo
+        - funlen
 
 # golangci.com configuration
 # https://github.com/golangci/golangci/wiki/Configuration
@@ -1085,7 +1115,7 @@ Long answer:
 
 **`golangci-lint` doesn't work**
 
-1. Update it: `go get -u github.com/golangci/golangci-lint/cmd/golangci-lint`
+1. Please, ensure you are using the latest binary release.
 2. Run it with `-v` option and check the output.
 3. If it doesn't help create a [GitHub issue](https://github.com/golangci/golangci-lint/issues/new) with the output from the error and #2 above.
 
@@ -1123,6 +1153,7 @@ Thanks to developers and authors of used linters:
 - [leighmcculloch](https://github.com/leighmcculloch)
 - [matoous](https://github.com/matoous)
 - [ultraware](https://github.com/ultraware)
+- [bombsimon](https://github.com/bombsimon)
 
 ## Changelog
 

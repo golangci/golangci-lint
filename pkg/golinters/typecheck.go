@@ -9,7 +9,7 @@ import (
 func NewTypecheck() *goanalysis.Linter {
 	const linterName = "typecheck"
 	analyzer := &analysis.Analyzer{
-		Name: goanalysis.TheOnlyAnalyzerName,
+		Name: linterName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 		Run: func(pass *analysis.Pass) (interface{}, error) {
 			return nil, nil

@@ -24,7 +24,8 @@ const (
 
 // Settings contains settings for edge-cases
 type Settings struct {
-	MultiIf bool
+	MultiIf   bool
+	MultiFunc bool
 }
 
 // Run runs this linter on the provided code
@@ -47,11 +48,11 @@ func Run(file *ast.File, fset *token.FileSet, settings Settings) []Message {
 }
 
 type visitor struct {
-	comments []*ast.CommentGroup
-	fset     *token.FileSet
-	messages []Message
-	multiIf  map[*ast.BlockStmt]bool
-	settings Settings
+	comments    []*ast.CommentGroup
+	fset        *token.FileSet
+	messages    []Message
+	wantNewline map[*ast.BlockStmt]bool
+	settings    Settings
 }
 
 func (v *visitor) Visit(node ast.Node) ast.Visitor {
@@ -59,30 +60,28 @@ func (v *visitor) Visit(node ast.Node) ast.Visitor {
 		return v
 	}
 
-	if v.settings.MultiIf {
-		if stmt, ok := node.(*ast.IfStmt); ok {
-			start, end := posLine(v.fset, stmt.Cond.Pos()), posLine(v.fset, stmt.Cond.End())
+	if stmt, ok := node.(*ast.IfStmt); ok && v.settings.MultiIf {
+		checkMultiLine(v, stmt.Body, stmt.Cond)
+	}
 
-			if end > start { // Check only multi line conditions
-				v.multiIf[stmt.Body] = true
-			}
-		}
+	if stmt, ok := node.(*ast.FuncDecl); ok && v.settings.MultiFunc {
+		checkMultiLine(v, stmt.Body, stmt.Type)
 	}
 
 	if stmt, ok := node.(*ast.BlockStmt); ok {
-		multiIf := v.multiIf[stmt]
+		wantNewline := v.wantNewline[stmt]
 
 		comments := v.comments
-		if multiIf {
-			comments = nil
+		if wantNewline {
+			comments = nil // Comments also count as a newline if we want a newline
 		}
 		first, last := firstAndLast(comments, v.fset, stmt.Pos(), stmt.End(), stmt.List)
 
 		startMsg := checkStart(v.fset, stmt.Lbrace, first)
 
-		if multiIf && startMsg == nil {
-			v.messages = append(v.messages, Message{v.fset.Position(stmt.Pos()), MessageTypeAddAfter, `multi-line if should be followed by a newline`})
-		} else if !multiIf && startMsg != nil {
+		if wantNewline && startMsg == nil {
+			v.messages = append(v.messages, Message{v.fset.Position(stmt.Pos()), MessageTypeAddAfter, `multi-line statement should be followed by a newline`})
+		} else if !wantNewline && startMsg != nil {
 			v.messages = append(v.messages, *startMsg)
 		}
 
@@ -92,6 +91,14 @@ func (v *visitor) Visit(node ast.Node) ast.Visitor {
 	}
 
 	return v
+}
+
+func checkMultiLine(v *visitor, body *ast.BlockStmt, stmtStart ast.Node) {
+	start, end := posLine(v.fset, stmtStart.Pos()), posLine(v.fset, stmtStart.End())
+
+	if end > start { // Check only multi line conditions
+		v.wantNewline[body] = true
+	}
 }
 
 func posLine(fset *token.FileSet, pos token.Pos) int {

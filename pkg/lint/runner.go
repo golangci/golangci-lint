@@ -112,13 +112,16 @@ func (r *Runner) runLinterSafe(ctx context.Context, lintCtx *linter.Context,
 
 	specificLintCtx := *lintCtx
 	specificLintCtx.Log = r.Log.Child(lc.Name())
+
 	issues, err := lc.Linter.Run(ctx, &specificLintCtx)
 	if err != nil {
 		return nil, err
 	}
 
-	for _, i := range issues {
-		i.FromLinter = lc.Name()
+	for i := range issues {
+		if issues[i].FromLinter == "" {
+			issues[i].FromLinter = lc.Name()
+		}
 	}
 
 	return issues, nil

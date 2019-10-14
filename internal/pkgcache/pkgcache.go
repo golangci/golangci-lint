@@ -17,6 +17,14 @@ import (
 	"github.com/golangci/golangci-lint/pkg/timeutils"
 )
 
+type HashMode int
+
+const (
+	HashModeNeedOnlySelf HashMode = iota
+	HashModeNeedDirectDeps
+	HashModeNeedAllDeps
+)
+
 // Cache is a per-package data cache. A cached data is invalidated when
 // package or it's dependencies change.
 type Cache struct {
@@ -46,7 +54,7 @@ func (c *Cache) Trim() {
 	})
 }
 
-func (c *Cache) Put(pkg *packages.Package, key string, data interface{}) error {
+func (c *Cache) Put(pkg *packages.Package, mode HashMode, key string, data interface{}) error {
 	var err error
 	buf := &bytes.Buffer{}
 	c.sw.TrackStage("gob", func() {
@@ -59,9 +67,13 @@ func (c *Cache) Put(pkg *packages.Package, key string, data interface{}) error {
 	var aID cache.ActionID
 
 	c.sw.TrackStage("key build", func() {
-		aID, err = c.pkgActionID(pkg)
+		aID, err = c.pkgActionID(pkg, mode)
 		if err == nil {
-			aID = cache.Subkey(aID, key)
+			subkey, subkeyErr := cache.Subkey(aID, key)
+			if subkeyErr != nil {
+				err = errors.Wrap(subkeyErr, "failed to build subkey")
+			}
+			aID = subkey
 		}
 	})
 	if err != nil {
@@ -81,13 +93,17 @@ func (c *Cache) Put(pkg *packages.Package, key string, data interface{}) error {
 
 var ErrMissing = errors.New("missing data")
 
-func (c *Cache) Get(pkg *packages.Package, key string, data interface{}) error {
+func (c *Cache) Get(pkg *packages.Package, mode HashMode, key string, data interface{}) error {
 	var aID cache.ActionID
 	var err error
 	c.sw.TrackStage("key build", func() {
-		aID, err = c.pkgActionID(pkg)
+		aID, err = c.pkgActionID(pkg, mode)
 		if err == nil {
-			aID = cache.Subkey(aID, key)
+			subkey, subkeyErr := cache.Subkey(aID, key)
+			if subkeyErr != nil {
+				err = errors.Wrap(subkeyErr, "failed to build subkey")
+			}
+			aID = subkey
 		}
 	})
 	if err != nil {
@@ -117,13 +133,16 @@ func (c *Cache) Get(pkg *packages.Package, key string, data interface{}) error {
 	return nil
 }
 
-func (c *Cache) pkgActionID(pkg *packages.Package) (cache.ActionID, error) {
-	hash, err := c.packageHash(pkg)
+func (c *Cache) pkgActionID(pkg *packages.Package, mode HashMode) (cache.ActionID, error) {
+	hash, err := c.packageHash(pkg, mode)
 	if err != nil {
 		return cache.ActionID{}, errors.Wrap(err, "failed to get package hash")
 	}
 
-	key := cache.NewHash("action ID")
+	key, err := cache.NewHash("action ID")
+	if err != nil {
+		return cache.ActionID{}, errors.Wrap(err, "failed to make a hash")
+	}
 	fmt.Fprintf(key, "pkgpath %s\n", pkg.PkgPath)
 	fmt.Fprintf(key, "pkghash %s\n", hash)
 
@@ -133,23 +152,36 @@ func (c *Cache) pkgActionID(pkg *packages.Package) (cache.ActionID, error) {
 // packageHash computes a package's hash. The hash is based on all Go
 // files that make up the package, as well as the hashes of imported
 // packages.
-func (c *Cache) packageHash(pkg *packages.Package) (string, error) {
-	cachedHash, ok := c.pkgHashes.Load(pkg)
+func (c *Cache) packageHash(pkg *packages.Package, mode HashMode) (string, error) {
+	type hashResults map[HashMode]string
+	hashResI, ok := c.pkgHashes.Load(pkg)
 	if ok {
-		return cachedHash.(string), nil
+		hashRes := hashResI.(hashResults)
+		if _, ok := hashRes[mode]; !ok {
+			return "", fmt.Errorf("no mode %d in hash result", mode)
+		}
+		return hashRes[mode], nil
 	}
 
-	key := cache.NewHash("package hash")
+	hashRes := hashResults{}
+
+	key, err := cache.NewHash("package hash")
+	if err != nil {
+		return "", errors.Wrap(err, "failed to make a hash")
+	}
+
 	fmt.Fprintf(key, "pkgpath %s\n", pkg.PkgPath)
 	for _, f := range pkg.CompiledGoFiles {
 		c.ioSem <- struct{}{}
-		h, err := cache.FileHash(f)
+		h, fErr := cache.FileHash(f)
 		<-c.ioSem
-		if err != nil {
-			return "", errors.Wrapf(err, "failed to calculate file %s hash", f)
+		if fErr != nil {
+			return "", errors.Wrapf(fErr, "failed to calculate file %s hash", f)
 		}
 		fmt.Fprintf(key, "file %s %x\n", f, h)
 	}
+	curSum := key.Sum()
+	hashRes[HashModeNeedOnlySelf] = hex.EncodeToString(curSum[:])
 
 	imps := make([]*packages.Package, 0, len(pkg.Imports))
 	for _, imp := range pkg.Imports {
@@ -158,20 +190,40 @@ func (c *Cache) packageHash(pkg *packages.Package) (string, error) {
 	sort.Slice(imps, func(i, j int) bool {
 		return imps[i].PkgPath < imps[j].PkgPath
 	})
-	for _, dep := range imps {
-		if dep.PkgPath == "unsafe" {
-			continue
-		}
 
-		depHash, err := c.packageHash(dep)
-		if err != nil {
-			return "", errors.Wrapf(err, "failed to calculate hash for dependency %s", dep.Name)
-		}
+	calcDepsHash := func(depMode HashMode) error {
+		for _, dep := range imps {
+			if dep.PkgPath == "unsafe" {
+				continue
+			}
 
-		fmt.Fprintf(key, "import %s %s\n", dep.PkgPath, depHash)
+			depHash, depErr := c.packageHash(dep, depMode)
+			if depErr != nil {
+				return errors.Wrapf(depErr, "failed to calculate hash for dependency %s with mode %d", dep.Name, depMode)
+			}
+
+			fmt.Fprintf(key, "import %s %s\n", dep.PkgPath, depHash)
+		}
+		return nil
 	}
-	h := key.Sum()
-	ret := hex.EncodeToString(h[:])
-	c.pkgHashes.Store(pkg, ret)
-	return ret, nil
+
+	if err := calcDepsHash(HashModeNeedOnlySelf); err != nil {
+		return "", err
+	}
+
+	curSum = key.Sum()
+	hashRes[HashModeNeedDirectDeps] = hex.EncodeToString(curSum[:])
+
+	if err := calcDepsHash(HashModeNeedAllDeps); err != nil {
+		return "", err
+	}
+	curSum = key.Sum()
+	hashRes[HashModeNeedAllDeps] = hex.EncodeToString(curSum[:])
+
+	if _, ok := hashRes[mode]; !ok {
+		return "", fmt.Errorf("invalid mode %d", mode)
+	}
+
+	c.pkgHashes.Store(pkg, hashRes)
+	return hashRes[mode], nil
 }

@@ -15,9 +15,9 @@ import (
 func NewMaligned() *goanalysis.Linter {
 	const linterName = "maligned"
 	var mu sync.Mutex
-	var res []result.Issue
+	var res []goanalysis.Issue
 	analyzer := &analysis.Analyzer{
-		Name: goanalysis.TheOnlyAnalyzerName,
+		Name: linterName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 	}
 	return goanalysis.NewLinter(
@@ -34,17 +34,17 @@ func NewMaligned() *goanalysis.Linter {
 				return nil, nil
 			}
 
-			issues := make([]result.Issue, 0, len(malignedIssues))
+			issues := make([]goanalysis.Issue, 0, len(malignedIssues))
 			for _, i := range malignedIssues {
 				text := fmt.Sprintf("struct of size %d bytes could be of size %d bytes", i.OldSize, i.NewSize)
 				if lintCtx.Settings().Maligned.SuggestNewOrder {
 					text += fmt.Sprintf(":\n%s", formatCodeBlock(i.NewStructDef, lintCtx.Cfg))
 				}
-				issues = append(issues, result.Issue{
+				issues = append(issues, goanalysis.NewIssue(&result.Issue{ //nolint:scopelint
 					Pos:        i.Pos,
 					Text:       text,
 					FromLinter: linterName,
-				})
+				}, pass))
 			}
 
 			mu.Lock()
@@ -52,7 +52,7 @@ func NewMaligned() *goanalysis.Linter {
 			mu.Unlock()
 			return nil, nil
 		}
-	}).WithIssuesReporter(func(*linter.Context) []result.Issue {
+	}).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
 		return res
 	}).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }

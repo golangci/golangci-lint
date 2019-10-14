@@ -24,9 +24,9 @@ import (
 func NewErrcheck() *goanalysis.Linter {
 	const linterName = "errcheck"
 	var mu sync.Mutex
-	var res []result.Issue
+	var res []goanalysis.Issue
 	analyzer := &analysis.Analyzer{
-		Name: goanalysis.TheOnlyAnalyzerName,
+		Name: linterName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 	}
 	return goanalysis.NewLinter(
@@ -51,7 +51,7 @@ func NewErrcheck() *goanalysis.Linter {
 				return nil, nil
 			}
 
-			issues := make([]result.Issue, 0, len(errcheckIssues))
+			issues := make([]goanalysis.Issue, 0, len(errcheckIssues))
 			for _, i := range errcheckIssues {
 				var text string
 				if i.FuncName != "" {
@@ -59,18 +59,18 @@ func NewErrcheck() *goanalysis.Linter {
 				} else {
 					text = "Error return value is not checked"
 				}
-				issues = append(issues, result.Issue{
+				issues = append(issues, goanalysis.NewIssue(&result.Issue{ //nolint:scopelint
 					FromLinter: linterName,
 					Text:       text,
 					Pos:        i.Pos,
-				})
+				}, pass))
 			}
 			mu.Lock()
 			res = append(res, issues...)
 			mu.Unlock()
 			return nil, nil
 		}
-	}).WithIssuesReporter(func(*linter.Context) []result.Issue {
+	}).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
 		return res
 	}).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }

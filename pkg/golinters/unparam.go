@@ -17,10 +17,10 @@ import (
 func NewUnparam() *goanalysis.Linter {
 	const linterName = "unparam"
 	var mu sync.Mutex
-	var resIssues []result.Issue
+	var resIssues []goanalysis.Issue
 
 	analyzer := &analysis.Analyzer{
-		Name:     goanalysis.TheOnlyAnalyzerName,
+		Name:     linterName,
 		Doc:      goanalysis.TheOnlyanalyzerDoc,
 		Requires: []*analysis.Analyzer{buildssa.Analyzer},
 	}
@@ -56,13 +56,13 @@ func NewUnparam() *goanalysis.Linter {
 				return nil, err
 			}
 
-			var res []result.Issue
+			var res []goanalysis.Issue
 			for _, i := range unparamIssues {
-				res = append(res, result.Issue{
+				res = append(res, goanalysis.NewIssue(&result.Issue{ //nolint:scopelint
 					Pos:        pass.Fset.Position(i.Pos()),
 					Text:       i.Message(),
 					FromLinter: linterName,
-				})
+				}, pass))
 			}
 
 			mu.Lock()
@@ -71,7 +71,7 @@ func NewUnparam() *goanalysis.Linter {
 
 			return nil, nil
 		}
-	}).WithIssuesReporter(func(*linter.Context) []result.Issue {
+	}).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
 		return resIssues
 	}).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"go/ast"
 	"go/token"
+	"go/types"
 	"sync"
 
 	lintAPI "github.com/golangci/lint-1"
@@ -14,9 +15,10 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-func golintProcessPkg(minConfidence float64, files []*ast.File, fset *token.FileSet) ([]result.Issue, error) {
+func golintProcessPkg(minConfidence float64, files []*ast.File, fset *token.FileSet,
+	typesPkg *types.Package, typesInfo *types.Info) ([]result.Issue, error) {
 	l := new(lintAPI.Linter)
-	ps, err := l.LintASTFiles(files, fset)
+	ps, err := l.LintPkg(files, fset, typesPkg, typesInfo)
 	if err != nil {
 		return nil, fmt.Errorf("can't lint %d files: %s", len(files), err)
 	}
@@ -44,10 +46,10 @@ const golintName = "golint"
 
 func NewGolint() *goanalysis.Linter {
 	var mu sync.Mutex
-	var resIssues []result.Issue
+	var resIssues []goanalysis.Issue
 
 	analyzer := &analysis.Analyzer{
-		Name: goanalysis.TheOnlyAnalyzerName,
+		Name: golintName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 	}
 	return goanalysis.NewLinter(
@@ -57,18 +59,20 @@ func NewGolint() *goanalysis.Linter {
 		nil,
 	).WithContextSetter(func(lintCtx *linter.Context) {
 		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
-			res, err := golintProcessPkg(lintCtx.Settings().Golint.MinConfidence, pass.Files, pass.Fset)
+			res, err := golintProcessPkg(lintCtx.Settings().Golint.MinConfidence, pass.Files, pass.Fset, pass.Pkg, pass.TypesInfo)
 			if err != nil || len(res) == 0 {
 				return nil, err
 			}
 
 			mu.Lock()
-			resIssues = append(resIssues, res...)
+			for i := range res {
+				resIssues = append(resIssues, goanalysis.NewIssue(&res[i], pass))
+			}
 			mu.Unlock()
 
 			return nil, nil
 		}
-	}).WithIssuesReporter(func(*linter.Context) []result.Issue {
+	}).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
 		return resIssues
-	}).WithLoadMode(goanalysis.LoadModeSyntax)
+	}).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }

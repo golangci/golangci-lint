@@ -22,6 +22,8 @@ import (
 	"github.com/golangci/golangci-lint/internal/robustio"
 )
 
+const windowsOS = "windows"
+
 func TestConcurrentReadsAndWrites(t *testing.T) {
 	dir, err := ioutil.TempDir("", "renameio")
 	if err != nil {
@@ -115,7 +117,7 @@ func TestConcurrentReadsAndWrites(t *testing.T) {
 	}
 
 	var minWriteSuccesses int64 = attempts
-	if runtime.GOOS == "windows" {
+	if runtime.GOOS == windowsOS {
 		// Windows produces frequent "Access is denied" errors under heavy rename load.
 		// As long as those are the only errors and *some* of the writes succeed, we're happy.
 		minWriteSuccesses = attempts / 4
@@ -128,7 +130,7 @@ func TestConcurrentReadsAndWrites(t *testing.T) {
 	}
 
 	var minReadSuccesses int64 = attempts
-	if runtime.GOOS == "windows" {
+	if runtime.GOOS == windowsOS {
 		// Windows produces frequent "Access is denied" errors under heavy rename load.
 		// As long as those are the only errors and *some* of the writes succeed, we're happy.
 		minReadSuccesses = attempts / 4

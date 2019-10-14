@@ -16,10 +16,10 @@ const goconstName = "goconst"
 
 func NewGoconst() *goanalysis.Linter {
 	var mu sync.Mutex
-	var resIssues []result.Issue
+	var resIssues []goanalysis.Issue
 
 	analyzer := &analysis.Analyzer{
-		Name: goanalysis.TheOnlyAnalyzerName,
+		Name: goconstName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 	}
 	return goanalysis.NewLinter(
@@ -40,12 +40,12 @@ func NewGoconst() *goanalysis.Linter {
 
 			return nil, nil
 		}
-	}).WithIssuesReporter(func(*linter.Context) []result.Issue {
+	}).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
 		return resIssues
 	}).WithLoadMode(goanalysis.LoadModeSyntax)
 }
 
-func checkConstants(pass *analysis.Pass, lintCtx *linter.Context) ([]result.Issue, error) {
+func checkConstants(pass *analysis.Pass, lintCtx *linter.Context) ([]goanalysis.Issue, error) {
 	cfg := goconstAPI.Config{
 		MatchWithConstants: true,
 		MinStringLength:    lintCtx.Settings().Goconst.MinStringLen,
@@ -61,7 +61,7 @@ func checkConstants(pass *analysis.Pass, lintCtx *linter.Context) ([]result.Issu
 		return nil, nil
 	}
 
-	res := make([]result.Issue, 0, len(goconstIssues))
+	res := make([]goanalysis.Issue, 0, len(goconstIssues))
 	for _, i := range goconstIssues {
 		textBegin := fmt.Sprintf("string %s has %d occurrences", formatCode(i.Str, lintCtx.Cfg), i.OccurencesCount)
 		var textEnd string
@@ -70,11 +70,11 @@ func checkConstants(pass *analysis.Pass, lintCtx *linter.Context) ([]result.Issu
 		} else {
 			textEnd = fmt.Sprintf(", but such constant %s already exists", formatCode(i.MatchingConst, lintCtx.Cfg))
 		}
-		res = append(res, result.Issue{
+		res = append(res, goanalysis.NewIssue(&result.Issue{ //nolint:scopelint
 			Pos:        i.Pos,
 			Text:       textBegin + textEnd,
 			FromLinter: goconstName,
-		})
+		}, pass))
 	}
 
 	return res, nil

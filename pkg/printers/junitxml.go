@@ -41,7 +41,8 @@ func NewJunitXML() *JunitXML {
 func (JunitXML) Print(ctx context.Context, issues []result.Issue) error {
 	suites := make(map[string]testSuiteXML) // use a map to group by file
 
-	for _, i := range issues {
+	for ind := range issues {
+		i := &issues[ind]
 		suiteName := i.FilePath()
 		testSuite := suites[suiteName]
 		testSuite.Suite = i.FilePath()

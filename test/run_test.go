@@ -44,7 +44,14 @@ func TestSymlinkLoop(t *testing.T) {
 func TestDeadline(t *testing.T) {
 	testshared.NewLintRunner(t).Run("--deadline=1ms", getProjectRoot()).
 		ExpectExitCode(exitcodes.Timeout).
-		ExpectOutputContains(`Deadline exceeded: try increase it by passing --deadline option`)
+		ExpectOutputContains(`Timeout exceeded: try increase it by passing --timeout option`).
+		ExpectOutputContains(`Flag --deadline has been deprecated, flag will be removed soon, please, use .golangci.yml config`)
+}
+
+func TestTimeout(t *testing.T) {
+	testshared.NewLintRunner(t).Run("--timeout=1ms", getProjectRoot()).
+		ExpectExitCode(exitcodes.Timeout).
+		ExpectOutputContains(`Timeout exceeded: try increase it by passing --timeout option`)
 }
 
 func TestTestsAreLintedByDefault(t *testing.T) {

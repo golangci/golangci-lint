@@ -15,10 +15,10 @@ import (
 func NewDeadcode() *goanalysis.Linter {
 	const linterName = "deadcode"
 	var mu sync.Mutex
-	var resIssues []result.Issue
+	var resIssues []goanalysis.Issue
 
 	analyzer := &analysis.Analyzer{
-		Name: goanalysis.TheOnlyAnalyzerName,
+		Name: linterName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 		Run: func(pass *analysis.Pass) (interface{}, error) {
 			prog := goanalysis.MakeFakeLoaderProgram(pass)
@@ -26,13 +26,13 @@ func NewDeadcode() *goanalysis.Linter {
 			if err != nil {
 				return nil, err
 			}
-			res := make([]result.Issue, 0, len(issues))
+			res := make([]goanalysis.Issue, 0, len(issues))
 			for _, i := range issues {
-				res = append(res, result.Issue{
+				res = append(res, goanalysis.NewIssue(&result.Issue{ //nolint:scopelint
 					Pos:        i.Pos,
 					Text:       fmt.Sprintf("%s is unused", formatCode(i.UnusedIdentName, nil)),
 					FromLinter: linterName,
-				})
+				}, pass))
 			}
 			mu.Lock()
 			resIssues = append(resIssues, res...)
@@ -46,7 +46,7 @@ func NewDeadcode() *goanalysis.Linter {
 		"Finds unused code",
 		[]*analysis.Analyzer{analyzer},
 		nil,
-	).WithIssuesReporter(func(*linter.Context) []result.Issue {
+	).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
 		return resIssues
 	}).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }
