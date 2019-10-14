@@ -7,6 +7,7 @@ import (
 	"go/token"
 	"io/ioutil"
 	"reflect"
+	"strings"
 )
 
 type Configuration struct {
@@ -49,6 +50,29 @@ type Configuration struct {
 	//  }
 	AllowMultiLineAssignCuddle bool
 
+	// AllowCaseTrailingWhitespace will allow case blocks to end with a
+	// whitespace. Sometimes this might actually improve readability. This
+	// defaults to false but setting it to true will enable the following
+	// example:
+	//  switch {
+	//  case 1:
+	//      fmt.Println(1)
+	//
+	// case 2:
+	//     fmt.Println(2)
+	//
+	// case 3:
+	//     fmt:println(3)
+	// }
+	AllowCaseTrailingWhitespace bool
+
+	// AllowCuddleDeclaration will allow multiple var/declaration statements to
+	// be cuddled. This defaults to false but setting it to true will enable the
+	// following example:
+	//  var foo bool
+	//  var err error
+	AllowCuddleDeclaration bool
+
 	// AllowCuddleWithCalls is a list of call idents that everything can be
 	// cuddled with. Defaults to calls looking like locks to support a flow like
 	// this:
@@ -69,11 +93,12 @@ type Configuration struct {
 // DefaultConfig returns default configuration
 func DefaultConfig() Configuration {
 	return Configuration{
-		StrictAppend:               true,
-		AllowAssignAndCallCuddle:   true,
-		AllowMultiLineAssignCuddle: true,
-		AllowCuddleWithCalls:       []string{"Lock", "RLock"},
-		AllowCuddleWithRHS:         []string{"Unlock", "RUnlock"},
+		StrictAppend:                true,
+		AllowAssignAndCallCuddle:    true,
+		AllowMultiLineAssignCuddle:  true,
+		AllowCaseTrailingWhitespace: false,
+		AllowCuddleWithCalls:        []string{"Lock", "RLock"},
+		AllowCuddleWithRHS:          []string{"Unlock", "RUnlock"},
 	}
 }
 
@@ -113,6 +138,7 @@ func NewProcessor() *Processor {
 
 // ProcessFiles takes a string slice with file names (full paths) and lints
 // them.
+// nolint: gocritic
 func (p *Processor) ProcessFiles(filenames []string) ([]Result, []string) {
 	for _, filename := range filenames {
 		data, err := ioutil.ReadFile(filename)
@@ -147,7 +173,7 @@ func (p *Processor) process(filename string, data []byte) {
 	for _, d := range p.file.Decls {
 		switch v := d.(type) {
 		case *ast.FuncDecl:
-			p.parseBlockBody(v.Body)
+			p.parseBlockBody(v.Name, v.Body)
 		case *ast.GenDecl:
 			// `go fmt` will handle proper spacing for GenDecl such as imports,
 			// constants etc.
@@ -159,14 +185,14 @@ func (p *Processor) process(filename string, data []byte) {
 
 // parseBlockBody will parse any kind of block statements such as switch cases
 // and if statements. A list of Result is returned.
-func (p *Processor) parseBlockBody(block *ast.BlockStmt) {
+func (p *Processor) parseBlockBody(ident *ast.Ident, block *ast.BlockStmt) {
 	// Nothing to do if there's no value.
 	if reflect.ValueOf(block).IsNil() {
 		return
 	}
 
 	// Start by finding leading and trailing whitespaces.
-	p.findLeadingAndTrailingWhitespaces(block, nil)
+	p.findLeadingAndTrailingWhitespaces(ident, block, nil)
 
 	// Parse the block body contents.
 	p.parseBlockStatements(block.List)
@@ -182,7 +208,7 @@ func (p *Processor) parseBlockStatements(statements []ast.Stmt) {
 		if as, isAssignStmt := stmt.(*ast.AssignStmt); isAssignStmt {
 			for _, rhs := range as.Rhs {
 				if fl, isFuncLit := rhs.(*ast.FuncLit); isFuncLit {
-					p.parseBlockBody(fl.Body)
+					p.parseBlockBody(nil, fl.Body)
 				}
 			}
 		}
@@ -244,14 +270,6 @@ func (p *Processor) parseBlockStatements(statements []ast.Stmt) {
 			calledOrAssignedOnLineAbove = append(calledOnLineAbove, assignedOnLineAbove...)
 		)
 
-		/*
-			DEBUG:
-			fmt.Println("LHS: ", leftHandSide)
-			fmt.Println("RHS: ", rightHandSide)
-			fmt.Println("Assigned above: ", assignedOnLineAbove)
-			fmt.Println("Assigned first: ", assignedFirstInBlock)
-		*/
-
 		// If we called some kind of lock on the line above we allow cuddling
 		// anything.
 		if atLeastOneInListsMatch(calledOnLineAbove, p.config.AllowCuddleWithCalls) {
@@ -282,6 +300,7 @@ func (p *Processor) parseBlockStatements(statements []ast.Stmt) {
 			//     t.X = true
 			//     return t
 			// }
+			// nolint: gocritic
 			if i == len(statements)-1 && i == 1 {
 				if p.nodeEnd(stmt)-p.nodeStart(previousStatement) <= 2 {
 					return true
@@ -351,7 +370,9 @@ func (p *Processor) parseBlockStatements(statements []ast.Stmt) {
 
 			p.addError(t.Pos(), "assignments should only be cuddled with other assignments")
 		case *ast.DeclStmt:
-			p.addError(t.Pos(), "declarations should never be cuddled")
+			if !p.config.AllowCuddleDeclaration {
+				p.addError(t.Pos(), "declarations should never be cuddled")
+			}
 		case *ast.ExprStmt:
 			switch previousStatement.(type) {
 			case *ast.DeclStmt, *ast.ReturnStmt:
@@ -392,6 +413,25 @@ func (p *Processor) parseBlockStatements(statements []ast.Stmt) {
 			if _, ok := previousStatement.(*ast.DeferStmt); ok {
 				// We may cuddle multiple defers to group logic.
 				continue
+			}
+
+			// Special treatment of deferring body closes after error checking
+			// according to best practices. See
+			// https://github.com/bombsimon/wsl/issues/31 which links to
+			// discussion about error handling after HTTP requests. This is hard
+			// coded and very specific but for now this is to be seen as a
+			// special case. What this does is that it *only* allows a defer
+			// statement with `Close` on the right hand side to be cuddled with
+			// an if-statement to support this:
+			//  resp, err := client.Do(req)
+			//  if err != nil {
+			//      return err
+			//  }
+			//  defer resp.Body.Close()
+			if _, ok := previousStatement.(*ast.IfStmt); ok {
+				if atLeastOneInListsMatch(rightHandSide, []string{"Close"}) {
+					continue
+				}
 			}
 
 			if moreThanOneStatementAbove() {
@@ -517,7 +557,7 @@ func (p *Processor) firstBodyStatement(i int, allStmt []ast.Stmt) ast.Node {
 			}
 		}
 
-		p.parseBlockBody(statementBodyContent)
+		p.parseBlockBody(nil, statementBodyContent)
 	case []ast.Stmt:
 		// The Body field for an *ast.CaseClause or *ast.CommClause is of type
 		// []ast.Stmt. We must check leading and trailing whitespaces and then
@@ -530,7 +570,7 @@ func (p *Processor) firstBodyStatement(i int, allStmt []ast.Stmt) ast.Node {
 			nextStatement = allStmt[i+1]
 		}
 
-		p.findLeadingAndTrailingWhitespaces(stmt, nextStatement)
+		p.findLeadingAndTrailingWhitespaces(nil, stmt, nextStatement)
 		p.parseBlockStatements(statementBodyContent)
 	default:
 		p.addWarning(
@@ -664,6 +704,13 @@ func (p *Processor) findRHS(node ast.Node) []string {
 		return p.findRHS(t.Call)
 	case *ast.SendStmt:
 		return p.findLHS(t.Value)
+	case *ast.IndexExpr:
+		rhs = append(rhs, p.findRHS(t.Index)...)
+		rhs = append(rhs, p.findRHS(t.X)...)
+	case *ast.SliceExpr:
+		rhs = append(rhs, p.findRHS(t.X)...)
+		rhs = append(rhs, p.findRHS(t.Low)...)
+		rhs = append(rhs, p.findRHS(t.High)...)
 	default:
 		if x, ok := maybeX(t); ok {
 			return p.findRHS(x)
@@ -679,7 +726,7 @@ func (p *Processor) findRHS(node ast.Node) []string {
 // if it exists. If the node doesn't have an X field nil and false is returned.
 // Known fields with X that are handled:
 // IndexExpr, ExprStmt, SelectorExpr, StarExpr, ParentExpr, TypeAssertExpr,
-// RangeStmt, UnaryExpr, ParenExpr, SLiceExpr, IncDecStmt.
+// RangeStmt, UnaryExpr, ParenExpr, SliceExpr, IncDecStmt.
 func maybeX(node interface{}) (ast.Node, bool) {
 	maybeHasX := reflect.Indirect(reflect.ValueOf(node)).FieldByName("X")
 	if !maybeHasX.IsValid() {
@@ -726,7 +773,8 @@ func atLeastOneInListsMatch(listOne, listTwo []string) bool {
 // findLeadingAndTrailingWhitespaces will find leading and trailing whitespaces
 // in a node. The method takes comments in consideration which will make the
 // parser more gentle.
-func (p *Processor) findLeadingAndTrailingWhitespaces(stmt, nextStatement ast.Node) {
+// nolint: gocognit
+func (p *Processor) findLeadingAndTrailingWhitespaces(ident *ast.Ident, stmt, nextStatement ast.Node) {
 	var (
 		allowedLinesBeforeFirstStatement = 1
 		commentMap                       = ast.NewCommentMap(p.fileSet, stmt, p.file.Comments)
@@ -811,11 +859,16 @@ func (p *Processor) findLeadingAndTrailingWhitespaces(stmt, nextStatement ast.No
 			return
 		}
 
+		// If we allow case to end white whitespace just return.
+		if p.config.AllowCaseTrailingWhitespace {
+			return
+		}
+
 		switch n := nextStatement.(type) {
 		case *ast.CaseClause:
-			blockEndPos = n.Colon
+			blockEndPos = n.Case
 		case *ast.CommClause:
-			blockEndPos = n.Colon
+			blockEndPos = n.Case
 		default:
 			// We're not at the end of the case?
 			return
@@ -824,12 +877,16 @@ func (p *Processor) findLeadingAndTrailingWhitespaces(stmt, nextStatement ast.No
 		blockEndLine = p.fileSet.Position(blockEndPos).Line
 	}
 
-	if p.nodeEnd(lastStatement) != blockEndLine-1 {
+	if p.nodeEnd(lastStatement) != blockEndLine-1 && !isExampleFunc(ident) {
 		p.addError(
 			blockEndPos,
 			"block should not end with a whitespace (or comment)",
 		)
 	}
+}
+
+func isExampleFunc(ident *ast.Ident) bool {
+	return ident != nil && strings.HasPrefix(ident.Name, "Example")
 }
 
 func (p *Processor) nodeStart(node ast.Node) int {

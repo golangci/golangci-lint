@@ -255,9 +255,11 @@ type GocognitSettings struct {
 }
 
 type WSLSettings struct {
-	StrictAppend               bool `mapstructure:"strict-append"`
-	AllowAssignAndCallCuddle   bool `mapstructure:"allow-assign-and-call"`
-	AllowMultiLineAssignCuddle bool `mapstructure:"allow-multiline-assign"`
+	StrictAppend                bool `mapstructure:"strict-append"`
+	AllowAssignAndCallCuddle    bool `mapstructure:"allow-assign-and-call"`
+	AllowMultiLineAssignCuddle  bool `mapstructure:"allow-multiline-assign"`
+	AllowCaseTrailingWhitespace bool `mapstructure:"allow-case-trailing-whitespace"`
+	AllowCuddleDeclaration      bool `mapstructure:"allow-cuddle-declarations"`
 }
 
 var defaultLintersSettings = LintersSettings{
@@ -289,9 +291,11 @@ var defaultLintersSettings = LintersSettings{
 		MinComplexity: 30,
 	},
 	WSL: WSLSettings{
-		StrictAppend:               true,
-		AllowAssignAndCallCuddle:   true,
-		AllowMultiLineAssignCuddle: true,
+		StrictAppend:                true,
+		AllowAssignAndCallCuddle:    true,
+		AllowMultiLineAssignCuddle:  true,
+		AllowCaseTrailingWhitespace: true,
+		AllowCuddleDeclaration:      false,
 	},
 }
 

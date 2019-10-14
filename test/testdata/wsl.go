@@ -100,3 +100,75 @@ func f3() int {
 }
 
 func onelineShouldNotError() error { return nil }
+
+func multilineCase() {
+	// Multiline cases
+	switch {
+	case true,
+		false:
+		fmt.Println("ok")
+	case false ||
+		true:
+		fmt.Println("ok")
+	case true,
+		false:
+		fmt.Println("ok")
+	}
+}
+
+func sliceExpr() {
+	// Index- and slice expressions.
+	var aSlice = []int{1, 2, 3}
+
+	start := 2
+	if v := aSlice[start]; v == 1 {
+		fmt.Println("ok")
+	}
+
+	notOk := 1
+	if v := aSlice[start]; v == 1 { // ERROR "if statements should only be cuddled with assignments used in the if statement itself"
+		fmt.Println("notOk")
+		fmt.Println(notOk)
+	}
+
+	end := 2
+	if len(aSlice[start:end]) > 2 {
+		fmt.Println("ok")
+	}
+}
+
+func indexExpr() {
+	var aMap = map[string]struct{}{"key": {}}
+
+	key := "key"
+	if k, ok := aMap[key]; ok {
+		fmt.Println(k)
+	}
+
+	xxx := "xxx"
+	if _, ok := aMap[key]; ok { // ERROR "if statements should only be cuddled with assignments used in the if statement itself"
+		fmt.Println("not ok")
+		fmt.Println(xxx)
+	}
+}
+
+func allowTrailing(i int) {
+	switch i {
+	case 1:
+		fmt.Println("one")
+
+	case 2:
+		fmt.Println("two")
+
+	case 3:
+		fmt.Println("three")
+	}
+}
+
+// ExampleSomeOutput simulates an example function.
+func ExampleSomeOutput() {
+	fmt.Println("Hello, world")
+
+	// Output:
+	// Hello, world
+}
