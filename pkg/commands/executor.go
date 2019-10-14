@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path/filepath"
 	"time"
 
 	"github.com/golangci/golangci-lint/internal/cache"
@@ -205,7 +206,7 @@ func computeConfigSalt(cfg *config.Config) ([]byte, error) {
 }
 
 func (e *Executor) acquireFileLock() bool {
-	lockFile := os.TempDir() + "/golangci-lint.lock"
+	lockFile := filepath.Join(os.TempDir(), "golangci-lint.lock")
 	e.debugf("Locking on file %s...", lockFile)
 	f := flock.New(lockFile)
 	ctx, finish := context.WithTimeout(context.Background(), time.Minute)
