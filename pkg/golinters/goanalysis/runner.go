@@ -28,6 +28,8 @@ import (
 	"sync/atomic"
 	"time"
 
+	"github.com/golangci/golangci-lint/pkg/timeutils"
+
 	"github.com/pkg/errors"
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/gcexportdata"
@@ -80,9 +82,11 @@ type runner struct {
 	loadMode       LoadMode
 	passToPkg      map[*analysis.Pass]*packages.Package
 	passToPkgGuard sync.Mutex
+	sw             *timeutils.Stopwatch
 }
 
-func newRunner(prefix string, logger logutils.Log, pkgCache *pkgcache.Cache, loadGuard *load.Guard, loadMode LoadMode) *runner {
+func newRunner(prefix string, logger logutils.Log, pkgCache *pkgcache.Cache, loadGuard *load.Guard,
+	loadMode LoadMode, sw *timeutils.Stopwatch) *runner {
 	return &runner{
 		prefix:    prefix,
 		log:       logger,
@@ -90,6 +94,7 @@ func newRunner(prefix string, logger logutils.Log, pkgCache *pkgcache.Cache, loa
 		loadGuard: loadGuard,
 		loadMode:  loadMode,
 		passToPkg: map[*analysis.Pass]*packages.Package{},
+		sw:        sw,
 	}
 }
 
@@ -481,7 +486,9 @@ func (act *action) analyzeSafe() {
 				act.a.Name, act.pkg.Name, act.isInitialPkg, act.needAnalyzeSource, p), debug.Stack())
 		}
 	}()
-	act.analyze()
+	act.r.sw.TrackStage(act.a.Name, func() {
+		act.analyze()
+	})
 }
 
 func (act *action) analyze() {
@@ -803,13 +810,13 @@ func (act *action) persistFactsToCache() error {
 	factsCacheDebugf("Caching %d facts for package %q and analyzer %s", len(facts), act.pkg.Name, act.a.Name)
 
 	key := fmt.Sprintf("%s/facts", analyzer.Name)
-	return act.r.pkgCache.Put(act.pkg, key, facts)
+	return act.r.pkgCache.Put(act.pkg, pkgcache.HashModeNeedAllDeps, key, facts)
 }
 
 func (act *action) loadPersistedFacts() bool {
 	var facts []Fact
 	key := fmt.Sprintf("%s/facts", act.a.Name)
-	if err := act.r.pkgCache.Get(act.pkg, key, &facts); err != nil {
+	if err := act.r.pkgCache.Get(act.pkg, pkgcache.HashModeNeedAllDeps, key, &facts); err != nil {
 		if err != pkgcache.ErrMissing {
 			act.r.log.Warnf("Failed to get persisted facts: %s", err)
 		}

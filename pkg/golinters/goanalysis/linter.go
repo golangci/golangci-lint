@@ -11,6 +11,9 @@ import (
 	"sync/atomic"
 	"time"
 
+	"github.com/golangci/golangci-lint/pkg/timeutils"
+
+	"github.com/golangci/golangci-lint/internal/pkgcache"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 
 	"golang.org/x/tools/go/packages"
@@ -332,7 +335,7 @@ func saveIssuesToCache(allPkgs []*packages.Package, pkgsFromCache map[*packages.
 				}
 
 				atomic.AddInt32(&savedIssuesCount, int32(len(encodedIssues)))
-				if err := lintCtx.PkgCache.Put(pkg, lintResKey, encodedIssues); err != nil {
+				if err := lintCtx.PkgCache.Put(pkg, pkgcache.HashModeNeedAllDeps, lintResKey, encodedIssues); err != nil {
 					lintCtx.Log.Infof("Failed to save package %s issues (%d) to cache: %s", pkg, len(pkgIssues), err)
 				} else {
 					issuesCacheDebugf("Saved package %s issues (%d) to cache", pkg, len(pkgIssues))
@@ -379,7 +382,7 @@ func loadIssuesFromCache(pkgs []*packages.Package, lintCtx *linter.Context,
 			defer wg.Done()
 			for pkg := range pkgCh {
 				var pkgIssues []EncodingIssue
-				err := lintCtx.PkgCache.Get(pkg, lintResKey, &pkgIssues)
+				err := lintCtx.PkgCache.Get(pkg, pkgcache.HashModeNeedAllDeps, lintResKey, &pkgIssues)
 				cacheRes := pkgToCacheRes[pkg]
 				cacheRes.loadErr = err
 				if err != nil {
@@ -430,8 +433,11 @@ func loadIssuesFromCache(pkgs []*packages.Package, lintCtx *linter.Context,
 }
 
 func runAnalyzers(cfg runAnalyzersConfig, lintCtx *linter.Context) ([]result.Issue, error) {
-	runner := newRunner(cfg.getName(), lintCtx.Log.Child("goanalysis"),
-		lintCtx.PkgCache, lintCtx.LoadGuard, cfg.getLoadMode())
+	log := lintCtx.Log.Child("goanalysis")
+	sw := timeutils.NewStopwatch("analyzers", log)
+	defer sw.PrintTopStages(10)
+
+	runner := newRunner(cfg.getName(), log, lintCtx.PkgCache, lintCtx.LoadGuard, cfg.getLoadMode(), sw)
 
 	pkgs := lintCtx.Packages
 	if cfg.useOriginalPackages() {

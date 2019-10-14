@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"go/ast"
 	"go/token"
+	"go/types"
 	"sync"
 
 	lintAPI "github.com/golangci/lint-1"
@@ -14,9 +15,10 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-func golintProcessPkg(minConfidence float64, files []*ast.File, fset *token.FileSet) ([]result.Issue, error) {
+func golintProcessPkg(minConfidence float64, files []*ast.File, fset *token.FileSet,
+	typesPkg *types.Package, typesInfo *types.Info) ([]result.Issue, error) {
 	l := new(lintAPI.Linter)
-	ps, err := l.LintASTFiles(files, fset)
+	ps, err := l.LintPkg(files, fset, typesPkg, typesInfo)
 	if err != nil {
 		return nil, fmt.Errorf("can't lint %d files: %s", len(files), err)
 	}
@@ -57,7 +59,7 @@ func NewGolint() *goanalysis.Linter {
 		nil,
 	).WithContextSetter(func(lintCtx *linter.Context) {
 		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
-			res, err := golintProcessPkg(lintCtx.Settings().Golint.MinConfidence, pass.Files, pass.Fset)
+			res, err := golintProcessPkg(lintCtx.Settings().Golint.MinConfidence, pass.Files, pass.Fset, pass.Pkg, pass.TypesInfo)
 			if err != nil || len(res) == 0 {
 				return nil, err
 			}
@@ -72,5 +74,5 @@ func NewGolint() *goanalysis.Linter {
 		}
 	}).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
 		return resIssues
-	}).WithLoadMode(goanalysis.LoadModeSyntax)
+	}).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }
