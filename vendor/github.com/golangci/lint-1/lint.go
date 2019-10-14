@@ -118,10 +118,12 @@ func (l *Linter) LintFiles(files map[string][]byte) ([]Problem, error) {
 
 // LintFiles lints a set of files of a single package.
 // The argument is a map of filename to source.
-func (l *Linter) LintASTFiles(files []*ast.File, fset *token.FileSet) ([]Problem, error) {
+func (l *Linter) LintPkg(files []*ast.File, fset *token.FileSet, typesPkg *types.Package, typesInfo *types.Info) ([]Problem, error) {
 	pkg := &pkg{
-		fset:  fset,
-		files: make(map[string]*file),
+		fset:      fset,
+		files:     make(map[string]*file),
+		typesPkg:  typesPkg,
+		typesInfo: typesInfo,
 	}
 	var pkgName string
 	for _, f := range files {
@@ -193,25 +195,6 @@ type pkg struct {
 }
 
 func (p *pkg) lint() []Problem {
-	if err := p.typeCheck(); err != nil {
-		/* TODO(dsymonds): Consider reporting these errors when golint operates on entire packages.
-		if e, ok := err.(types.Error); ok {
-			pos := p.fset.Position(e.Pos)
-			conf := 1.0
-			if strings.Contains(e.Msg, "can't find import: ") {
-				// Golint is probably being run in a context that doesn't support
-				// typechecking (e.g. package files aren't found), so don't warn about it.
-				conf = 0
-			}
-			if conf > 0 {
-				p.errorfAt(pos, conf, category("typechecking"), e.Msg)
-			}
-
-			// TODO(dsymonds): Abort if !e.Soft?
-		}
-		*/
-	}
-
 	p.scanSortable()
 	p.main = p.isMain()
 

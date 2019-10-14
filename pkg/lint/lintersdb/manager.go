@@ -76,6 +76,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetBugs).
 			WithURL("https://github.com/kisielk/errcheck"),
 		linter.NewConfig(golinters.NewGolint()).
+			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/golang/lint"),
 
