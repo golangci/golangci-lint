@@ -259,7 +259,7 @@ type WSLSettings struct {
 	AllowAssignAndCallCuddle    bool `mapstructure:"allow-assign-and-call"`
 	AllowMultiLineAssignCuddle  bool `mapstructure:"allow-multiline-assign"`
 	AllowCaseTrailingWhitespace bool `mapstructure:"allow-case-trailing-whitespace"`
-	AllowCuddleDeclaration      bool `mapstructure:"allow-declarations"`
+	AllowCuddleDeclaration      bool `mapstructure:"allow-cuddle-declarations"`
 }
 
 var defaultLintersSettings = LintersSettings{
