@@ -62,6 +62,7 @@ linters:
     - errcheck
     - funlen
     - gochecknoinits
+    - gocognit
     - goconst
     - gocritic
     - gocyclo
@@ -89,10 +90,10 @@ linters:
 
   # don't enable:
   # - gochecknoglobals
-  # - gocognit
   # - godox
   # - maligned
   # - prealloc
+  # - wsl
 
 run:
   skip-dirs:
@@ -106,6 +107,7 @@ issues:
       linters:
         - lll
         - gochecknoinits
+        - gocognit
         - gocyclo
         - funlen
 
