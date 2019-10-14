@@ -7,6 +7,7 @@ import (
 	"go/token"
 	"io/ioutil"
 	"reflect"
+	"strings"
 )
 
 type Configuration struct {
@@ -172,7 +173,7 @@ func (p *Processor) process(filename string, data []byte) {
 	for _, d := range p.file.Decls {
 		switch v := d.(type) {
 		case *ast.FuncDecl:
-			p.parseBlockBody(v.Body)
+			p.parseBlockBody(v.Name, v.Body)
 		case *ast.GenDecl:
 			// `go fmt` will handle proper spacing for GenDecl such as imports,
 			// constants etc.
@@ -184,14 +185,14 @@ func (p *Processor) process(filename string, data []byte) {
 
 // parseBlockBody will parse any kind of block statements such as switch cases
 // and if statements. A list of Result is returned.
-func (p *Processor) parseBlockBody(block *ast.BlockStmt) {
+func (p *Processor) parseBlockBody(ident *ast.Ident, block *ast.BlockStmt) {
 	// Nothing to do if there's no value.
 	if reflect.ValueOf(block).IsNil() {
 		return
 	}
 
 	// Start by finding leading and trailing whitespaces.
-	p.findLeadingAndTrailingWhitespaces(block, nil)
+	p.findLeadingAndTrailingWhitespaces(ident, block, nil)
 
 	// Parse the block body contents.
 	p.parseBlockStatements(block.List)
@@ -207,7 +208,7 @@ func (p *Processor) parseBlockStatements(statements []ast.Stmt) {
 		if as, isAssignStmt := stmt.(*ast.AssignStmt); isAssignStmt {
 			for _, rhs := range as.Rhs {
 				if fl, isFuncLit := rhs.(*ast.FuncLit); isFuncLit {
-					p.parseBlockBody(fl.Body)
+					p.parseBlockBody(nil, fl.Body)
 				}
 			}
 		}
@@ -556,7 +557,7 @@ func (p *Processor) firstBodyStatement(i int, allStmt []ast.Stmt) ast.Node {
 			}
 		}
 
-		p.parseBlockBody(statementBodyContent)
+		p.parseBlockBody(nil, statementBodyContent)
 	case []ast.Stmt:
 		// The Body field for an *ast.CaseClause or *ast.CommClause is of type
 		// []ast.Stmt. We must check leading and trailing whitespaces and then
@@ -569,7 +570,7 @@ func (p *Processor) firstBodyStatement(i int, allStmt []ast.Stmt) ast.Node {
 			nextStatement = allStmt[i+1]
 		}
 
-		p.findLeadingAndTrailingWhitespaces(stmt, nextStatement)
+		p.findLeadingAndTrailingWhitespaces(nil, stmt, nextStatement)
 		p.parseBlockStatements(statementBodyContent)
 	default:
 		p.addWarning(
@@ -773,7 +774,7 @@ func atLeastOneInListsMatch(listOne, listTwo []string) bool {
 // in a node. The method takes comments in consideration which will make the
 // parser more gentle.
 // nolint: gocognit
-func (p *Processor) findLeadingAndTrailingWhitespaces(stmt, nextStatement ast.Node) {
+func (p *Processor) findLeadingAndTrailingWhitespaces(ident *ast.Ident, stmt, nextStatement ast.Node) {
 	var (
 		allowedLinesBeforeFirstStatement = 1
 		commentMap                       = ast.NewCommentMap(p.fileSet, stmt, p.file.Comments)
@@ -876,12 +877,16 @@ func (p *Processor) findLeadingAndTrailingWhitespaces(stmt, nextStatement ast.No
 		blockEndLine = p.fileSet.Position(blockEndPos).Line
 	}
 
-	if p.nodeEnd(lastStatement) != blockEndLine-1 {
+	if p.nodeEnd(lastStatement) != blockEndLine-1 && !isExampleFunc(ident) {
 		p.addError(
 			blockEndPos,
 			"block should not end with a whitespace (or comment)",
 		)
 	}
+}
+
+func isExampleFunc(ident *ast.Ident) bool {
+	return ident != nil && strings.HasPrefix(ident.Name, "Example")
 }
 
 func (p *Processor) nodeStart(node ast.Node) int {

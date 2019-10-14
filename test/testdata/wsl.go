@@ -164,3 +164,11 @@ func allowTrailing(i int) {
 		fmt.Println("three")
 	}
 }
+
+// ExampleSomeOutput simulates an example function.
+func ExampleSomeOutput() {
+	fmt.Println("Hello, world")
+
+	// Output:
+	// Hello, world
+}
