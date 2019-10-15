@@ -1022,7 +1022,7 @@ issues:
 # golangci.com configuration
 # https://github.com/golangci/golangci/wiki/Configuration
 service:
-  golangci-lint-version: 1.19.x # use the fixed version to not introduce new linters unexpectedly
+  golangci-lint-version: 1.20.x # use the fixed version to not introduce new linters unexpectedly
   prepare:
     - echo "here I can run custom commands, but no preparation needed for this repo"
 ```
