@@ -43,6 +43,10 @@ func genReadme(tmplPath, outPath string) error {
 }
 
 func getLatestVersion() (string, error) {
+	if gitTag := os.Getenv("GIT_TAG"); gitTag != "" {
+		return gitTag, nil
+	}
+
 	out, err := exec.Command("git", "tag", "-l", "--sort=-v:refname").Output()
 	if err != nil {
 		return "", fmt.Errorf("failed to run git tag: %s", err)
