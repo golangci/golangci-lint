@@ -54,6 +54,42 @@ func TestTimeout(t *testing.T) {
 		ExpectOutputContains(`Timeout exceeded: try increase it by passing --timeout option`)
 }
 
+func TestTimeoutInConfig(t *testing.T) {
+	type tc struct {
+		cfg string
+	}
+
+	cases := []tc{
+		{
+			cfg: `
+				run:
+					deadline: 1ms
+			`,
+		},
+		{
+			cfg: `
+				run:
+					timeout: 1ms
+			`,
+		},
+		{
+			// timeout should override deadline
+			cfg: `
+				run:
+					deadline: 100s
+					timeout: 1ms
+			`,
+		},
+	}
+
+	r := testshared.NewLintRunner(t)
+	for _, c := range cases {
+		// Run with disallowed option set only in config
+		r.RunWithYamlConfig(c.cfg, withCommonRunArgs(minimalPkg)...).ExpectExitCode(exitcodes.Timeout).
+			ExpectOutputContains(`Timeout exceeded: try increase it by passing --timeout option`)
+	}
+}
+
 func TestTestsAreLintedByDefault(t *testing.T) {
 	testshared.NewLintRunner(t).Run(getTestDataDir("withtests")).
 		ExpectHasIssue("`if` block ends with a `return`")
