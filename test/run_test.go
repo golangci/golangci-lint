@@ -63,13 +63,21 @@ func TestTimeoutInConfig(t *testing.T) {
 		{
 			cfg: `
 				run:
-				deadline: 1ms
+					deadline: 1ms
 			`,
 		},
 		{
 			cfg: `
 				run:
-				timeout: 1ms
+					timeout: 1ms
+			`,
+		},
+		{
+			// timeout should override deadline
+			cfg: `
+				run:
+					deadline: 100s
+					timeout: 1ms
 			`,
 		},
 	}

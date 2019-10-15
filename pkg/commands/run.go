@@ -54,6 +54,8 @@ func wh(text string) string {
 	return color.GreenString(text)
 }
 
+const defaultTimeout = time.Minute
+
 //nolint:funlen
 func initFlagSet(fs *pflag.FlagSet, cfg *config.Config, m *lintersdb.Manager, isFinalInit bool) {
 	hideFlag := func(name string) {
@@ -87,9 +89,10 @@ func initFlagSet(fs *pflag.FlagSet, cfg *config.Config, m *lintersdb.Manager, is
 	fs.IntVar(&rc.ExitCodeIfIssuesFound, "issues-exit-code",
 		exitcodes.IssuesFound, wh("Exit code when issues were found"))
 	fs.StringSliceVar(&rc.BuildTags, "build-tags", nil, wh("Build tags"))
-	fs.DurationVar(&rc.Timeout, "deadline", time.Minute, wh("Deadline for total work"))
+
+	fs.DurationVar(&rc.Timeout, "deadline", defaultTimeout, wh("Deadline for total work"))
 	hideFlag("deadline")
-	fs.DurationVar(&rc.Timeout, "timeout", time.Minute, wh("Timeout for total work"))
+	fs.DurationVar(&rc.Timeout, "timeout", defaultTimeout, wh("Timeout for total work"))
 
 	fs.BoolVar(&rc.AnalyzeTests, "tests", true, wh("Analyze tests (*_test.go)"))
 	fs.BoolVar(&rc.PrintResourcesUsage, "print-resources-usage", false,
@@ -397,6 +400,7 @@ func (e *Executor) executeRun(_ *cobra.Command, args []string) {
 		}
 	}()
 
+	e.setTimeoutToDeadlineIfOnlyDeadlineIsSet()
 	ctx, cancel := context.WithTimeout(context.Background(), e.cfg.Run.Timeout)
 	defer cancel()
 
@@ -416,6 +420,13 @@ func (e *Executor) executeRun(_ *cobra.Command, args []string) {
 	}
 
 	e.setupExitCode(ctx)
+}
+
+// to be removed when deadline is finally removed
+func (e *Executor) setTimeoutToDeadlineIfOnlyDeadlineIsSet() {
+	if e.cfg.Run.Deadline != defaultTimeout && e.cfg.Run.Timeout == defaultTimeout {
+		e.cfg.Run.Timeout = e.cfg.Run.Deadline
+	}
 }
 
 func (e *Executor) setupExitCode(ctx context.Context) {
