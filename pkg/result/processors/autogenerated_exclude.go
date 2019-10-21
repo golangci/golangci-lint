@@ -126,7 +126,7 @@ func getDoc(filePath string) (string, error) {
 		if strings.HasPrefix(line, "//") { //nolint:gocritic
 			text := strings.TrimSpace(strings.TrimPrefix(line, "//"))
 			docLines = append(docLines, text)
-		} else if line == "" {
+		} else if line == "" || strings.HasPrefix(line, "package") {
 			// go to next line
 		} else {
 			break
