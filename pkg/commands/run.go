@@ -287,9 +287,14 @@ func (e *Executor) runAnalysis(ctx context.Context, args []string) ([]result.Iss
 		return nil, err
 	}
 
+	enabledOriginalLinters, err := e.EnabledLintersSet.Get(false)
+	if err != nil {
+		return nil, err
+	}
+
 	for _, lc := range e.DBManager.GetAllSupportedLinterConfigs() {
 		isEnabled := false
-		for _, enabledLC := range enabledLinters {
+		for _, enabledLC := range enabledOriginalLinters {
 			if enabledLC.Name() == lc.Name() {
 				isEnabled = true
 				break
