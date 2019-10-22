@@ -4,4 +4,4 @@
 // third line
 
 package testdata // no this text
-// and no this text too
+// and this text also
