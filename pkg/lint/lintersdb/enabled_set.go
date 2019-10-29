@@ -1,6 +1,9 @@
 package lintersdb
 
 import (
+	"fmt"
+	"golang.org/x/tools/go/analysis"
+	"plugin"
 	"sort"
 
 	"github.com/golangci/golangci-lint/pkg/config"
@@ -73,7 +76,60 @@ func (es EnabledSet) build(lcfg *config.Linters, enabledByDefaultLinters []*lint
 		}
 	}
 
+	// This isn't quite the right place to do this, but proves it can be done
+	pluginLinters := es.cfg.PluginLintersSettings.PluginLinters
+	for _, pluginLinter := range pluginLinters {
+		analyzer, err := es.GetAnalyzer(pluginLinter.Path)
+		if err != nil {
+			es.log.Errorf("Unable to load custom analyzer %s:%s, %v",
+				pluginLinter.Name,
+				pluginLinter.Path,
+				err)
+		} else {
+			es.log.Infof("Loaded %s: %s", pluginLinter.Path, analyzer.Name)
+			customLinter := goanalysis.NewLinter(
+				analyzer.Name,
+				analyzer.Doc,
+				[]*analysis.Analyzer{analyzer},
+				nil)
+			resultLintersSet[analyzer.Name] = &linter.Config{
+				Linter:           customLinter,
+				EnabledByDefault: true,
+				LoadMode:         0,
+				InPresets:        nil,
+				AlternativeNames: nil,
+				OriginalURL:      "",
+				CanAutoFix:       false,
+				IsSlow:           false,
+			}
+		}
+	}
+	//
+
 	return resultLintersSet
+}
+
+type AnalyzerPlugin interface {
+	GetAnalyzer() *analysis.Analyzer
+}
+
+func (es EnabledSet) GetAnalyzer(path string) (*analysis.Analyzer, error) {
+	plug, err := plugin.Open(path)
+	if err != nil {
+		return nil, err
+	}
+
+	symbol, err := plug.Lookup("AnalyzerPlugin")
+	if err != nil {
+		return nil, err
+	}
+
+	analyzerPlugin, ok := symbol.(AnalyzerPlugin)
+	if !ok {
+		return nil, fmt.Errorf("plugin %s does not abide by 'AnalyzerPlugin' interface", path)
+	}
+
+	return analyzerPlugin.GetAnalyzer(), nil
 }
 
 func (es EnabledSet) Get(optimize bool) ([]*linter.Config, error) {

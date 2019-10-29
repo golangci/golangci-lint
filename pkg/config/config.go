@@ -299,6 +299,24 @@ var defaultLintersSettings = LintersSettings{
 	},
 }
 
+type PluginLintersSettings struct {
+	PluginLinters []PluginLinter `mapstructure:"plugin-linters"`
+}
+
+type PluginLinter struct {
+	Name string
+	Path string
+}
+
+func (cfg Config) GetPluginLinterNames() []string {
+	l := len(cfg.PluginLintersSettings.PluginLinters)
+	names := make([]string, l)
+	for i, linter := range cfg.PluginLintersSettings.PluginLinters {
+		names[i] = linter.Name
+	}
+	return names
+}
+
 type Linters struct {
 	Enable     []string
 	Disable    []string
@@ -379,9 +397,10 @@ type Config struct {
 		PrintWelcomeMessage bool `mapstructure:"print-welcome"`
 	}
 
-	LintersSettings LintersSettings `mapstructure:"linters-settings"`
-	Linters         Linters
-	Issues          Issues
+	LintersSettings       LintersSettings       `mapstructure:"linters-settings"`
+	PluginLintersSettings PluginLintersSettings `mapstructure:"plugin-linters-settings"`
+	Linters               Linters
+	Issues                Issues
 
 	InternalTest bool // Option is used only for testing golangci-lint code, don't use it
 }
