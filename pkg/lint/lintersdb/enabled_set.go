@@ -77,43 +77,51 @@ func (es EnabledSet) build(lcfg *config.Linters, enabledByDefaultLinters []*lint
 	}
 
 	// This isn't quite the right place to do this, but proves it can be done
-	pluginLinters := es.cfg.PluginLintersSettings.PluginLinters
-	for _, pluginLinter := range pluginLinters {
-		analyzer, err := es.GetAnalyzer(pluginLinter.Path)
+	for name, settings := range es.cfg.LintersSettings.Custom {
+		linterConfig, err := es.loadCustomLinterConfig(name, settings)
+
 		if err != nil {
 			es.log.Errorf("Unable to load custom analyzer %s:%s, %v",
-				pluginLinter.Name,
-				pluginLinter.Path,
+				name,
+				settings.Path,
 				err)
 		} else {
-			es.log.Infof("Loaded %s: %s", pluginLinter.Path, analyzer.Name)
-			customLinter := goanalysis.NewLinter(
-				analyzer.Name,
-				analyzer.Doc,
-				[]*analysis.Analyzer{analyzer},
-				nil)
-			resultLintersSet[analyzer.Name] = &linter.Config{
-				Linter:           customLinter,
-				EnabledByDefault: true,
-				LoadMode:         0,
-				InPresets:        nil,
-				AlternativeNames: nil,
-				OriginalURL:      "",
-				CanAutoFix:       false,
-				IsSlow:           false,
-			}
+			resultLintersSet[linterConfig.Name()] = linterConfig
 		}
 	}
-	//
 
 	return resultLintersSet
 }
 
-type AnalyzerPlugin interface {
-	GetAnalyzer() *analysis.Analyzer
+func (es EnabledSet) loadCustomLinterConfig(name string, settings config.CustomLinterSettings) (*linter.Config, error) {
+	analyzer, err := es.GetAnalyzerPlugin(settings.Path)
+	if err != nil {
+		return nil, err
+	} else {
+		es.log.Infof("Loaded %s: %s", settings.Path, analyzer.GetLinterName())
+		customLinter := goanalysis.NewLinter(
+			analyzer.GetLinterName(),
+			analyzer.GetLinterDesc(),
+			analyzer.GetAnalyzers(),
+			nil)
+		linterConfig := linter.NewConfig(customLinter)
+		linterConfig.EnabledByDefault = settings.Enabled
+		linterConfig.IsSlow = settings.Slow
+		linterConfig.WithURL(settings.OriginalUrl)
+		if name != linterConfig.Name() {
+			es.log.Warnf("Configuration linter name %s doesn't match plugin linter name %s", name, linterConfig.Name())
+		}
+		return linterConfig, nil
+	}
 }
 
-func (es EnabledSet) GetAnalyzer(path string) (*analysis.Analyzer, error) {
+type AnalyzerPlugin interface {
+	GetLinterName() string
+	GetLinterDesc() string
+	GetAnalyzers() []*analysis.Analyzer
+}
+
+func (es EnabledSet) GetAnalyzerPlugin(path string) (AnalyzerPlugin, error) {
 	plug, err := plugin.Open(path)
 	if err != nil {
 		return nil, err
@@ -129,7 +137,7 @@ func (es EnabledSet) GetAnalyzer(path string) (*analysis.Analyzer, error) {
 		return nil, fmt.Errorf("plugin %s does not abide by 'AnalyzerPlugin' interface", path)
 	}
 
-	return analyzerPlugin.GetAnalyzer(), nil
+	return analyzerPlugin, nil
 }
 
 func (es EnabledSet) Get(optimize bool) ([]*linter.Config, error) {

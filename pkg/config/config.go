@@ -190,6 +190,8 @@ type LintersSettings struct {
 	Godox    GodoxSettings
 	Dogsled  DogsledSettings
 	Gocognit GocognitSettings
+
+	Custom map[string]CustomLinterSettings
 }
 
 type GovetSettings struct {
@@ -306,6 +308,13 @@ type PluginLintersSettings struct {
 type PluginLinter struct {
 	Name string
 	Path string
+}
+
+type CustomLinterSettings struct {
+	Path        string
+	Enabled     bool
+	OriginalUrl string `mapstructure:"original-url"`
+	Slow        bool
 }
 
 func (cfg Config) GetPluginLinterNames() []string {
