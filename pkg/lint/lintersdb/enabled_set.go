@@ -1,9 +1,6 @@
 package lintersdb
 
 import (
-	"fmt"
-	"golang.org/x/tools/go/analysis"
-	"plugin"
 	"sort"
 
 	"github.com/golangci/golangci-lint/pkg/config"
@@ -76,68 +73,7 @@ func (es EnabledSet) build(lcfg *config.Linters, enabledByDefaultLinters []*lint
 		}
 	}
 
-	// This isn't quite the right place to do this, but proves it can be done
-	for name, settings := range es.cfg.LintersSettings.Custom {
-		linterConfig, err := es.loadCustomLinterConfig(name, settings)
-
-		if err != nil {
-			es.log.Errorf("Unable to load custom analyzer %s:%s, %v",
-				name,
-				settings.Path,
-				err)
-		} else {
-			resultLintersSet[linterConfig.Name()] = linterConfig
-		}
-	}
-
 	return resultLintersSet
-}
-
-func (es EnabledSet) loadCustomLinterConfig(name string, settings config.CustomLinterSettings) (*linter.Config, error) {
-	analyzer, err := es.GetAnalyzerPlugin(settings.Path)
-	if err != nil {
-		return nil, err
-	} else {
-		es.log.Infof("Loaded %s: %s", settings.Path, analyzer.GetLinterName())
-		customLinter := goanalysis.NewLinter(
-			analyzer.GetLinterName(),
-			analyzer.GetLinterDesc(),
-			analyzer.GetAnalyzers(),
-			nil)
-		linterConfig := linter.NewConfig(customLinter)
-		linterConfig.EnabledByDefault = settings.Enabled
-		linterConfig.IsSlow = settings.Slow
-		linterConfig.WithURL(settings.OriginalUrl)
-		if name != linterConfig.Name() {
-			es.log.Warnf("Configuration linter name %s doesn't match plugin linter name %s", name, linterConfig.Name())
-		}
-		return linterConfig, nil
-	}
-}
-
-type AnalyzerPlugin interface {
-	GetLinterName() string
-	GetLinterDesc() string
-	GetAnalyzers() []*analysis.Analyzer
-}
-
-func (es EnabledSet) GetAnalyzerPlugin(path string) (AnalyzerPlugin, error) {
-	plug, err := plugin.Open(path)
-	if err != nil {
-		return nil, err
-	}
-
-	symbol, err := plug.Lookup("AnalyzerPlugin")
-	if err != nil {
-		return nil, err
-	}
-
-	analyzerPlugin, ok := symbol.(AnalyzerPlugin)
-	if !ok {
-		return nil, fmt.Errorf("plugin %s does not abide by 'AnalyzerPlugin' interface", path)
-	}
-
-	return analyzerPlugin, nil
 }
 
 func (es EnabledSet) Get(optimize bool) ([]*linter.Config, error) {
