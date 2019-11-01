@@ -304,7 +304,7 @@ func (m Manager) loadCustomLinterConfig(name string, settings config.CustomLinte
 			analyzer.GetLinterName(),
 			analyzer.GetLinterDesc(),
 			analyzer.GetAnalyzers(),
-			nil)
+			nil).WithLoadMode(goanalysis.LoadModeTypesInfo)
 		linterConfig := linter.NewConfig(customLinter)
 		linterConfig.EnabledByDefault = settings.Enabled
 		linterConfig.IsSlow = settings.Slow
