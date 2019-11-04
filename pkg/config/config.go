@@ -304,7 +304,7 @@ var defaultLintersSettings = LintersSettings{
 type CustomLinterSettings struct {
 	Path        string
 	Enabled     bool
-	OriginalUrl string `mapstructure:"original-url"`
+	OriginalURL string `mapstructure:"original-url"`
 	Slow        bool
 }
 

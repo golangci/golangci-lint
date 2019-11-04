@@ -5,7 +5,6 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/report"
-	"github.com/prometheus/common/log"
 	"golang.org/x/tools/go/analysis"
 	"os"
 	"plugin"
@@ -43,7 +42,7 @@ func (m *Manager) WithCustomLinters() *Manager {
 			lc, err := m.loadCustomLinterConfig(name, settings)
 
 			if err != nil {
-				log.Errorf("Unable to load custom analyzer %s:%s, %v",
+				m.log.Errorf("Unable to load custom analyzer %s:%s, %v",
 					name,
 					settings.Path,
 					err)
@@ -298,22 +297,21 @@ func (m Manager) loadCustomLinterConfig(name string, settings config.CustomLinte
 	analyzer, err := m.getAnalyzerPlugin(settings.Path)
 	if err != nil {
 		return nil, err
-	} else {
-		m.log.Infof("Loaded %s: %s", settings.Path, analyzer.GetLinterName())
-		customLinter := goanalysis.NewLinter(
-			analyzer.GetLinterName(),
-			analyzer.GetLinterDesc(),
-			analyzer.GetAnalyzers(),
-			nil).WithLoadMode(goanalysis.LoadModeTypesInfo)
-		linterConfig := linter.NewConfig(customLinter)
-		linterConfig.EnabledByDefault = settings.Enabled
-		linterConfig.IsSlow = settings.Slow
-		linterConfig.WithURL(settings.OriginalUrl)
-		if name != linterConfig.Name() {
-			m.log.Warnf("Configuration linter name %s doesn't match plugin linter name %s", name, linterConfig.Name())
-		}
-		return linterConfig, nil
 	}
+	m.log.Infof("Loaded %s: %s", settings.Path, analyzer.GetLinterName())
+	customLinter := goanalysis.NewLinter(
+		analyzer.GetLinterName(),
+		analyzer.GetLinterDesc(),
+		analyzer.GetAnalyzers(),
+		nil).WithLoadMode(goanalysis.LoadModeTypesInfo)
+	linterConfig := linter.NewConfig(customLinter)
+	linterConfig.EnabledByDefault = settings.Enabled
+	linterConfig.IsSlow = settings.Slow
+	linterConfig.WithURL(settings.OriginalURL)
+	if name != linterConfig.Name() {
+		m.log.Warnf("Configuration linter name %s doesn't match plugin linter name %s", name, linterConfig.Name())
+	}
+	return linterConfig, nil
 }
 
 type AnalyzerPlugin interface {
