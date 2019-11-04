@@ -48,12 +48,6 @@ linters-settings:
   funlen:
     lines: 100
     statements: 50
-#  custom:
-#    example-1:
-#      path: /example-linter.so
-#      enabled: true
-#      original-url: github.com/dbraley/example-linter
-#      slow: false
 
 linters:
   # please, do not use `enable-all`: it's deprecated and will be removed soon.

@@ -228,6 +228,21 @@ linters-settings:
     # Allow declarations (var) to be cuddled.
     allow-cuddle-declarations: false
 
+  # The custom section can be used to define linter plugins to be loaded at runtime. See README doc
+  #  for more info.
+  custom:
+    # Each custom linter should have a name. This name should match with what the linter reports for itself.
+     example:
+      # The path to the plugin *.so. Required for each custom linter
+      path: /path/to/example.so
+      # If the linter should be enabled by default. Options in the `linters`
+      #  section override this, including `disable-all`. Optional, false by default.
+      enabled: true
+      # Intended to point to the repo location of the linter. Optional, just for documentation purposes.
+      original-url: github.com/dbraley/example-linter
+      # Indicates if this linter should be considered slow. Optional, false by default.
+      slow: false
+
 linters:
   enable:
     - megacheck
