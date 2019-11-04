@@ -2,6 +2,7 @@ package lintersdb
 
 import (
 	"fmt"
+	"golang.org/x/tools/go/analysis"
 	"os"
 	"plugin"
 
@@ -11,7 +12,6 @@ import (
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/report"
-	"golang.org/x/tools/go/analysis"
 )
 
 type Manager struct {
