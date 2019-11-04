@@ -308,16 +308,6 @@ type CustomLinterSettings struct {
 	Slow        bool
 }
 
-func (cfg Config) GetPluginLinterNames() []string {
-	customLinterSettings := cfg.LintersSettings.Custom
-	l := len(customLinterSettings)
-	names := make([]string, l)
-	for name := range customLinterSettings {
-		names = append(names, name)
-	}
-	return names
-}
-
 type Linters struct {
 	Enable     []string
 	Disable    []string
