@@ -3,7 +3,6 @@ package golinters
 import (
 	"golang.org/x/tools/go/analysis"
 
-	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 	magic_numbers "github.com/tommy-muehle/go-mnd"
 )
 
