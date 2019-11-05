@@ -222,6 +222,7 @@ golint: Golint differs from gofmt. Gofmt reformats Go source code, whereas golin
 gosec (gas): Inspects source code for security problems [fast: true, auto-fix: false]
 interfacer: Linter that suggests narrower interface types [fast: true, auto-fix: false]
 lll: Reports long lines [fast: true, auto-fix: false]
+magicnumber: checks whether magic number detector is used [fast: true, auto-fix: false]
 maligned: Tool to detect Go structs that would take less memory if their fields were sorted [fast: true, auto-fix: false]
 misspell: Finds commonly misspelled English words in comments [fast: true, auto-fix: true]
 nakedret: Finds naked returns in functions greater than a specified function length [fast: true, auto-fix: false]
@@ -480,6 +481,7 @@ golangci-lint help linters
 - [funlen](https://github.com/ultraware/funlen) - Tool for detection of long functions
 - [whitespace](https://github.com/ultraware/whitespace) - Tool for detection of leading and trailing whitespace
 - [wsl](https://github.com/bombsimon/wsl) - Whitespace Linter - Forces you to use empty lines!
+- [magicnumber](https://github.com/tommy-muehle/go-mnd) - checks whether magic number detector is used
 
 ## Configuration
 
@@ -945,7 +947,7 @@ linters-settings:
   lll:
     line-length: 140
   goimports:
-    local-prefixes: github.com/golangci/golangci-lint
+    local-prefixes: github.com/golangci/golangci-lint github.com/golangci/golangci-lint/pkg/golinters/goanalysis
   gocritic:
     enabled-tags:
       - diagnostic
@@ -1165,6 +1167,7 @@ Thanks to developers and authors of used linters:
 - [matoous](https://github.com/matoous)
 - [ultraware](https://github.com/ultraware)
 - [bombsimon](https://github.com/bombsimon)
+- [tommy-muehle](https://github.com/tommy-muehle)
 
 ## Changelog
 
