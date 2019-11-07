@@ -150,6 +150,7 @@ The following great projects use golangci-lint:
 * [go-swagger/go-swagger](https://github.com/go-swagger/go-swagger)
 * [kubeedge/kubeedge](https://github.com/kubeedge/kubeedge)
 * [kubernetes-sigs/kustomize](https://github.com/kubernetes-sigs/kustomize)
+* [dunglas/mercure](https://github.com/dunglas/mercure)
 * [posener/complete](https://github.com/posener/complete)
 * [segmentio/terraform-docs](https://github.com/segmentio/terraform-docs)
 * [tsuru/tsuru](https://github.com/tsuru/tsuru)
