@@ -179,6 +179,9 @@ type LintersSettings struct {
 		MultiIf   bool `mapstructure:"multi-if"`
 		MultiFunc bool `mapstructure:"multi-func"`
 	}
+	RowsErrCheck struct {
+		Packages []string
+	}
 
 	WSL      WSLSettings
 	Lll      LllSettings

@@ -79,6 +79,10 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/golang/lint"),
+		linter.NewConfig(golinters.NewRowsErrCheck()).
+			WithLoadForGoAnalysis().
+			WithPresets(linter.PresetPerformance, linter.PresetBugs).
+			WithURL("https://github.com/jingyugao/rowserr"),
 
 		linter.NewConfig(golinters.NewStaticcheck()).
 			WithLoadForGoAnalysis().
