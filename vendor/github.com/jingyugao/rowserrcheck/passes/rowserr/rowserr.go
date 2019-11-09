@@ -36,17 +36,16 @@ type runner struct {
 	rowsObj   types.Object
 	closeMthd *types.Func
 	skipFile  map[*ast.File]bool
-	sqlPkg    string
+	sqlPkgs   []string
 }
 
 func NewRun(pkgs ...string) func(pass *analysis.Pass) (interface{}, error) {
 	return func(pass *analysis.Pass) (interface{}, error) {
 		pkgs = append(pkgs, "database/sql")
 		for _, pkg := range pkgs {
-			ret, err := new(runner).run(pass, pkg)
-			if err != nil {
-				return ret, err
-			}
+			r := new(runner)
+			r.sqlPkgs = pkgs
+			r.run(pass, pkg)
 		}
 		return nil, nil
 	}
@@ -54,11 +53,21 @@ func NewRun(pkgs ...string) func(pass *analysis.Pass) (interface{}, error) {
 
 // run executes an analysis for the pass. The receiver is passed
 // by value because this func is called in parallel for different passes.
-func (r runner) run(pass *analysis.Pass, pkg string) (interface{}, error) {
-	r.sqlPkg = pkg
+func (r runner) run(pass *analysis.Pass, pkgPath string) (interface{}, error) {
 	r.pass = pass
-	funcs := pass.ResultOf[buildssa.Analyzer].(*buildssa.SSA).SrcFuncs
-	r.rowsObj = analysisutil.LookupFromImports(pass.Pkg.Imports(), r.sqlPkg, rowsName)
+	ssa := pass.ResultOf[buildssa.Analyzer].(*buildssa.SSA)
+	funcs := ssa.SrcFuncs
+	pkg := ssa.Pkg.Prog.ImportedPackage(pkgPath)
+	if pkg == nil {
+		return nil, nil
+	}
+
+	r.rowsObj = pkg.Type(rowsName).Object()
+	// r.rowsObj = analysisutil.LookupFromImports(pass.Pkg.Imports(), pkgPath, rowsName)
+	pmtPkgs := ""
+	for _, p := range pass.Pkg.Imports() {
+		pmtPkgs += "," + p.String()
+	}
 	if r.rowsObj == nil {
 		// skip checking
 		return nil, nil
@@ -66,7 +75,7 @@ func (r runner) run(pass *analysis.Pass, pkg string) (interface{}, error) {
 
 	resNamed, ok := r.rowsObj.Type().(*types.Named)
 	if !ok {
-		return nil, fmt.Errorf("cannot find sql.Rows")
+		return nil, nil
 	}
 	r.rowsTyp = types.NewPointer(resNamed)
 
@@ -80,7 +89,7 @@ func (r runner) run(pass *analysis.Pass, pkg string) (interface{}, error) {
 
 	r.skipFile = map[*ast.File]bool{}
 	for _, f := range funcs {
-		if r.noImportedNetHTTP(f) {
+		if r.noImportedDBSQL(f) {
 			// skip this
 			continue
 		}
@@ -140,7 +149,7 @@ func (r *runner) isopen(b *ssa.BasicBlock, i int) bool {
 				for _, aref := range *resRef.Addr.Referrers() {
 					if c, ok := aref.(*ssa.MakeClosure); ok {
 						f := c.Fn.(*ssa.Function)
-						if r.noImportedNetHTTP(f) {
+						if r.noImportedDBSQL(f) {
 							// skip this
 							return false
 						}
@@ -259,7 +268,8 @@ func (r *runner) isClosureCalled(c *ssa.MakeClosure) bool {
 	return false
 }
 
-func (r *runner) noImportedNetHTTP(f *ssa.Function) (ret bool) {
+func (r *runner) noImportedDBSQL(f *ssa.Function) (ret bool) {
+	return false
 	obj := f.Object()
 	if obj == nil {
 		return false
@@ -283,9 +293,12 @@ func (r *runner) noImportedNetHTTP(f *ssa.Function) (ret bool) {
 			continue
 		}
 		path = analysisutil.RemoveVendor(path)
-		if path == r.sqlPkg {
-			return false
+		for _, pkg := range r.sqlPkgs {
+			if pkg == path {
+				return false
+			}
 		}
+
 	}
 
 	return true

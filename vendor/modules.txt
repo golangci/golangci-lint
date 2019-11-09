@@ -99,7 +99,7 @@ github.com/hashicorp/hcl/json/scanner
 github.com/hashicorp/hcl/json/token
 # github.com/inconshreveable/mousetrap v1.0.0
 github.com/inconshreveable/mousetrap
-# github.com/jingyugao/rowserrcheck v0.0.0-20191109070513-80719221d9ba
+# github.com/jingyugao/rowserrcheck v0.0.0-20191109104502-9d97ac16db4e
 github.com/jingyugao/rowserrcheck/passes/rowserr
 # github.com/kisielk/gotool v1.0.0
 github.com/kisielk/gotool
