@@ -6,7 +6,7 @@ import (
 )
 
 func RowsErrNotChecked(db *sql.DB) {
-	rows, _ := db.Query("select id from tb") // rowserr: rows err must be checked
+	rows, _ := db.Query("select id from tb") // want "rows err must be checked"
 	for rows.Next() {
 
 	}
