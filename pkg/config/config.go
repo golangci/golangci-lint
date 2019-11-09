@@ -200,17 +200,18 @@ type LintersSettings struct {
 		} `mapstructure:"blocked"`
 	}
 
-	WSL      WSLSettings
-	Lll      LllSettings
-	Unparam  UnparamSettings
-	Nakedret NakedretSettings
-	Prealloc PreallocSettings
-	Errcheck ErrcheckSettings
-	Gocritic GocriticSettings
-	Godox    GodoxSettings
-	Dogsled  DogsledSettings
-	Gocognit GocognitSettings
-	Godot    GodotSettings
+	WSL         WSLSettings
+	Lll         LllSettings
+	Unparam     UnparamSettings
+	Nakedret    NakedretSettings
+	Prealloc    PreallocSettings
+	Errcheck    ErrcheckSettings
+	Gocritic    GocriticSettings
+	Godox       GodoxSettings
+	Dogsled     DogsledSettings
+	Gocognit    GocognitSettings
+	Godot       GodotSettings
+	Testpackage TestpackageSettings
 
 	Custom map[string]CustomLinterSettings
 }
@@ -292,6 +293,10 @@ type GodotSettings struct {
 	CheckAll bool `mapstructure:"check-all"`
 }
 
+type TestpackageSettings struct {
+	SkipRegexp string `mapstructure:"skip-regexp"`
+}
+
 //nolint:gomnd
 var defaultLintersSettings = LintersSettings{
 	Lll: LllSettings{
@@ -330,6 +335,9 @@ var defaultLintersSettings = LintersSettings{
 		AllowSeparatedLeadingComment:     false,
 		ForceCuddleErrCheckAndAssign:     false,
 		ForceCaseTrailingWhitespaceLimit: 0,
+	},
+	Testpackage: TestpackageSettings{
+		SkipRegexp: `(export|internal)_test\.go`,
 	},
 }
 

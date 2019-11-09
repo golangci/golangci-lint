@@ -233,6 +233,7 @@ prealloc: Finds slice declarations that could potentially be preallocated [fast:
 rowserrcheck: checks whether Err of rows is checked successfully [fast: true, auto-fix: false]
 scopelint: Scopelint checks for unpinned variables in go programs [fast: true, auto-fix: false]
 stylecheck: Stylecheck is a replacement for golint [fast: true, auto-fix: false]
+testpackage: linter that makes you use a separate _test package [fast: true, auto-fix: false]
 unconvert: Remove unnecessary type conversions [fast: true, auto-fix: false]
 unparam: Reports unused function parameters [fast: true, auto-fix: false]
 whitespace: Tool for detection of leading and trailing whitespace [fast: true, auto-fix: true]
@@ -490,6 +491,7 @@ golangci-lint help linters
 - [gomnd](https://github.com/tommy-muehle/go-mnd) - An analyzer to detect magic numbers.
 - [gomodguard](https://github.com/ryancurrah/gomodguard) - Allow and block list linter for direct Go module dependencies.
 - [godot](https://github.com/tetafro/godot) - Check if comments end in a period
+- [testpackage](https://github.com/maratori/testpackage) - linter that makes you use a separate _test package
 
 ## Configuration
 
@@ -834,6 +836,9 @@ linters-settings:
   rowserrcheck:
     packages:
       - github.com/jmoiron/sqlx
+  testpackage:
+    # regexp pattern to skip files
+    skip-regexp: (export|internal)_test\.go
   unparam:
     # Inspect exported functions, default is false. Set to true if no external program/library imports your code.
     # XXX: if you enable this setting, unparam will report a lot of false-positives in text editors:
@@ -1280,6 +1285,7 @@ Thanks to developers and authors of used linters:
 - [tommy-muehle](https://github.com/tommy-muehle)
 - [ryancurrah](https://github.com/ryancurrah)
 - [tetafro](https://github.com/tetafro)
+- [maratori](https://github.com/maratori)
 
 ## Changelog
 
