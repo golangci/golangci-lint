@@ -15,7 +15,7 @@ import (
 
 func NewAnalyzer(sqlPkgs ...string) *analysis.Analyzer {
 	return &analysis.Analyzer{
-		Name: "rowserr",
+		Name: "rowserrcheck",
 		Doc:  Doc,
 		Run:  NewRun(sqlPkgs...),
 		Requires: []*analysis.Analyzer{
