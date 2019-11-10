@@ -7,15 +7,15 @@ import (
 	magic_numbers "github.com/tommy-muehle/go-mnd"
 )
 
-func NewMnd() *goanalysis.Linter {
+func NewGomnd() *goanalysis.Linter {
 	analyzers := []*analysis.Analyzer{
 		magic_numbers.Analyzer,
 	}
 
 	return goanalysis.NewLinter(
-		"magicnumber",
+		"gomnd",
 		"checks whether magic number detector is used",
 		analyzers,
 		nil,
-	).WithLoadMode(goanalysis.LoadModeTypesInfo)
+	).WithLoadMode(goanalysis.LoadModeSyntax)
 }
