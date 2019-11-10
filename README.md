@@ -939,6 +939,9 @@ linters-settings:
       - github.com/sirupsen/logrus
     packages-with-error-messages:
       github.com/sirupsen/logrus: "logging is allowed only by logutils.Log"
+  rowserrcheck:
+    packages:
+      # - github.com/jmoiron/sqlx
   misspell:
     locale: US
   lll:
@@ -966,7 +969,7 @@ linters:
   # inverted configuration with `enable-all` and `disable` is not scalable during updates of golangci-lint
   disable-all: true
   enable:
-    - rowserrcheck
+    # - rowserrcheck
     - bodyclose
     - deadcode
     - depguard
