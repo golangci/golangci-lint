@@ -23,6 +23,7 @@ require (
 	github.com/golangci/prealloc v0.0.0-20180630174525-215b22d4de21
 	github.com/golangci/revgrep v0.0.0-20180526074752-d9c87f5ffaf0
 	github.com/golangci/unconvert v0.0.0-20180507085042-28b1c447d1f4
+	github.com/jirfag/go-printf-func-name v0.0.0-20191110105641-45db9963cdd3
 	github.com/matoous/godox v0.0.0-20190911065817-5d6d842e92eb // v1.0
 	github.com/mattn/go-colorable v0.1.4
 	github.com/mitchellh/go-homedir v1.1.0
@@ -41,7 +42,7 @@ require (
 	github.com/ultraware/whitespace v0.0.4
 	github.com/uudashr/gocognit v0.0.0-20190926065955-1655d0de0517
 	github.com/valyala/quicktemplate v1.2.0
-	golang.org/x/tools v0.0.0-20191010075000-0337d82405ff
+	golang.org/x/tools v0.0.0-20191108193012-7d206e10da11
 	gopkg.in/yaml.v2 v2.2.4
 	honnef.co/go/tools v0.0.1-2019.2.3
 	mvdan.cc/interfacer v0.0.0-20180901003855-c20040233aed

@@ -208,6 +208,9 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		linter.NewConfig(golinters.NewWSL()).
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/bombsimon/wsl"),
+		linter.NewConfig(golinters.NewGoPrintfFuncName()).
+			WithPresets(linter.PresetStyle).
+			WithURL("https://github.com/jirfag/go-printf-func-name"),
 	}
 
 	isLocalRun := os.Getenv("GOLANGCI_COM_RUN") == ""
