@@ -461,7 +461,7 @@ is supported through go's plugin library.
 In order to use plugins, you'll need a golangci-lint executable that can run them. The normal version of this project 
 is built with the vendors option, which breaks plugins that have overlapping dependencies.
 
-1. Download https://github.com/golangci/golangci-lint
+1. Download [golangci-lint](https://github.com/golangci/golangci-lint) source code
 2. From the projects root directory, run `make vendor_free_build`
 3. Copy the `golangci-lint` executable that was created to your path, project, or other location
 
@@ -482,20 +482,25 @@ linters-settings:
 ```
 
 That is all the configuration that is required to run a custom linter in your project. Custom linters are enabled by default,
-but abide by the same rules as other linters. If the `.golang.yml` file specifies `linters:disable-all: true`
+but abide by the same rules as other linters. If the disable all option is specified either on command line or in 
+`.golang.yml` files `linters:disable-all: true`, custom linters will be disabled; they can be re-enabled by adding them 
+to the `linters:enable` list, or providing the enabled option on the command line, `golangci-lint run -Eexample`.
 
-### To Create Your Own Custom `golang.org/x/tools/go/analysis` Based Linter
+### To Create Your Own Custom Linter
 
-Your linter must implement one or more `analysis.Analyzer` structs.
-Your project should also use `go.mod`. All versions of libraries that overlap `golangci-lint` (including replaced libraries) MUST be set to the same version as `golangci-lint`. You can see the versions by running `go version -m golangci-lint`.
+Your linter must implement one or more `golang.org/x/tools/go/analysis.Analyzer` structs.
+Your project should also use `go.mod`. All versions of libraries that overlap `golangci-lint` (including replaced 
+libraries) MUST be set to the same version as `golangci-lint`. You can see the versions by running `go version -m golangci-lint`.
 
-You'll also need to create a go file like `plugin/example.go`. This MUST be in the package `main`, and define a variable of Named `AnalyzerPlugin`. The `AnalyzerPlugin` MUST implement the following interface:
+You'll also need to create a go file like `plugin/example.go`. This MUST be in the package `main`, and define a 
+variable of name `AnalyzerPlugin`. The `AnalyzerPlugin` instance MUST implement the following interface:
 ```
 type AnalyzerPlugin interface {
     GetAnalyzers() []*analysis.Analyzer
 }
 ```
-The type `AnalyzerPlugin` is not important, but is by convention of `type analyzerPlugin struct {}`. See [plugin/example.go](https://github.com/golangci/example-plugin-linter/plugin/example.go) for more info.
+The type of `AnalyzerPlugin` is not important, but is by convention `type analyzerPlugin struct {}`. See 
+[plugin/example.go](https://github.com/golangci/example-plugin-linter/plugin/example.go) for more info.
 
 To build the plugin, from the root project directory, run `go build -buildmode=plugin plugin/example.go`. This will create a plugin `*.so`
 file that can be copied into your project or another well known location for usage in golangci-lint.
