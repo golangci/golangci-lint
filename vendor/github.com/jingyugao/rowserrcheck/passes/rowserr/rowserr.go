@@ -31,12 +31,11 @@ const (
 )
 
 type runner struct {
-	pass      *analysis.Pass
-	rowsTyp   *types.Pointer
-	rowsObj   types.Object
-	closeMthd *types.Func
-	skipFile  map[*ast.File]bool
-	sqlPkgs   []string
+	pass     *analysis.Pass
+	rowsTyp  *types.Pointer
+	rowsObj  types.Object
+	skipFile map[*ast.File]bool
+	sqlPkgs  []string
 }
 
 func NewRun(pkgs ...string) func(pass *analysis.Pass) (interface{}, error) {
@@ -55,19 +54,16 @@ func NewRun(pkgs ...string) func(pass *analysis.Pass) (interface{}, error) {
 // by value because this func is called in parallel for different passes.
 func (r runner) run(pass *analysis.Pass, pkgPath string) (interface{}, error) {
 	r.pass = pass
-	ssa := pass.ResultOf[buildssa.Analyzer].(*buildssa.SSA)
-	funcs := ssa.SrcFuncs
-	pkg := ssa.Pkg.Prog.ImportedPackage(pkgPath)
+	pssa := pass.ResultOf[buildssa.Analyzer].(*buildssa.SSA)
+	funcs := pssa.SrcFuncs
+
+	pkg := pssa.Pkg.Prog.ImportedPackage(pkgPath)
 	if pkg == nil {
+		// skip
 		return nil, nil
 	}
 
 	r.rowsObj = pkg.Type(rowsName).Object()
-	// r.rowsObj = analysisutil.LookupFromImports(pass.Pkg.Imports(), pkgPath, rowsName)
-	pmtPkgs := ""
-	for _, p := range pass.Pkg.Imports() {
-		pmtPkgs += "," + p.String()
-	}
 	if r.rowsObj == nil {
 		// skip checking
 		return nil, nil
@@ -77,17 +73,10 @@ func (r runner) run(pass *analysis.Pass, pkgPath string) (interface{}, error) {
 	if !ok {
 		return nil, nil
 	}
+
 	r.rowsTyp = types.NewPointer(resNamed)
-
-	rowsNamed := r.rowsObj.Type().(*types.Named)
-	for i := 0; i < rowsNamed.NumMethods(); i++ {
-		rsmd := rowsNamed.Method(i)
-		if rsmd.Id() == errMethod {
-			r.closeMthd = rsmd
-		}
-	}
-
 	r.skipFile = map[*ast.File]bool{}
+
 	for _, f := range funcs {
 		if r.noImportedDBSQL(f) {
 			// skip this
@@ -96,11 +85,13 @@ func (r runner) run(pass *analysis.Pass, pkgPath string) (interface{}, error) {
 
 		// skip if the function is just referenced
 		var isreffunc bool
+
 		for i := 0; i < f.Signature.Results().Len(); i++ {
 			if f.Signature.Results().At(i).Type().String() == r.rowsTyp.String() {
 				isreffunc = true
 			}
 		}
+
 		if isreffunc {
 			continue
 		}
@@ -108,7 +99,7 @@ func (r runner) run(pass *analysis.Pass, pkgPath string) (interface{}, error) {
 		for _, b := range f.Blocks {
 			for i := range b.Instrs {
 				pos := b.Instrs[i].Pos()
-				if r.isopen(b, i) {
+				if r.notCheck(b, i) {
 					pass.Reportf(pos, fmt.Sprintf("rows err must be checked"))
 				}
 			}
@@ -118,7 +109,7 @@ func (r runner) run(pass *analysis.Pass, pkgPath string) (interface{}, error) {
 	return nil, nil
 }
 
-func (r *runner) isopen(b *ssa.BasicBlock, i int) bool {
+func (r *runner) notCheck(b *ssa.BasicBlock, i int) bool {
 	call, ok := r.getReqCall(b.Instrs[i])
 	if !ok {
 		return false
@@ -166,7 +157,7 @@ func (r *runner) isopen(b *ssa.BasicBlock, i int) bool {
 				if f, ok := resRef.Call.Value.(*ssa.Function); ok {
 					for _, b := range f.Blocks {
 						for i := range b.Instrs {
-							return r.isopen(b, i)
+							return r.notCheck(b, i)
 						}
 					}
 				}
@@ -242,11 +233,11 @@ func (r *runner) getBodyOp(instr ssa.Instruction) (*ssa.UnOp, bool) {
 func (r *runner) isCloseCall(ccall ssa.Instruction) bool {
 	switch ccall := ccall.(type) {
 	case *ssa.Defer:
-		if ccall.Call.Value != nil && ccall.Call.Value.Name() == r.closeMthd.Name() {
+		if ccall.Call.Value != nil && ccall.Call.Value.Name() == errMethod {
 			return true
 		}
 	case *ssa.Call:
-		if ccall.Call.Value != nil && ccall.Call.Value.Name() == r.closeMthd.Name() {
+		if ccall.Call.Value != nil && ccall.Call.Value.Name() == errMethod {
 			return true
 		}
 
@@ -335,7 +326,7 @@ func (r *runner) calledInFunc(f *ssa.Function, called bool) bool {
 
 				}
 			default:
-				return r.isopen(b, i) || !called
+				return r.notCheck(b, i) || !called
 			}
 		}
 	}
