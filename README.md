@@ -947,7 +947,7 @@ linters-settings:
   lll:
     line-length: 140
   goimports:
-    local-prefixes: github.com/golangci/golangci-lint github.com/golangci/golangci-lint/pkg/golinters/goanalysis
+    local-prefixes: github.com/golangci/golangci-lint
   gocritic:
     enabled-tags:
       - diagnostic
