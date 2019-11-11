@@ -299,25 +299,20 @@ func (m Manager) loadCustomLinterConfig(name string, settings config.CustomLinte
 	if err != nil {
 		return nil, err
 	}
-	m.log.Infof("Loaded %s: %s", settings.Path, analyzer.GetLinterName())
+	m.log.Infof("Loaded %s: %s", settings.Path, name)
 	customLinter := goanalysis.NewLinter(
-		analyzer.GetLinterName(),
-		analyzer.GetLinterDesc(),
+		name,
+		settings.Description,
 		analyzer.GetAnalyzers(),
 		nil).WithLoadMode(goanalysis.LoadModeTypesInfo)
 	linterConfig := linter.NewConfig(customLinter)
-	linterConfig.EnabledByDefault = settings.Enabled
-	linterConfig.IsSlow = settings.Slow
+	linterConfig.EnabledByDefault = true
+	linterConfig.IsSlow = false
 	linterConfig.WithURL(settings.OriginalURL)
-	if name != linterConfig.Name() {
-		m.log.Warnf("Configuration linter name %s doesn't match plugin linter name %s", name, linterConfig.Name())
-	}
 	return linterConfig, nil
 }
 
 type AnalyzerPlugin interface {
-	GetLinterName() string
-	GetLinterDesc() string
 	GetAnalyzers() []*analysis.Analyzer
 }
 

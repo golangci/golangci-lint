@@ -231,17 +231,14 @@ linters-settings:
   # The custom section can be used to define linter plugins to be loaded at runtime. See README doc
   #  for more info.
   custom:
-    # Each custom linter should have a name. This name should match with what the linter reports for itself.
+    # Each custom linter should have a unique name.
      example:
-      # The path to the plugin *.so. Required for each custom linter
+      # The path to the plugin *.so. Can be absolute or local. Required for each custom linter
       path: /path/to/example.so
-      # If the linter should be enabled by default. Options in the `linters`
-      #  section override this, including `disable-all`. Optional, false by default.
-      enabled: true
+      # The description of the linter. Optional, just for documentation purposes.
+      description: This is an example usage of a plugin linter.
       # Intended to point to the repo location of the linter. Optional, just for documentation purposes.
-      original-url: github.com/dbraley/example-linter
-      # Indicates if this linter should be considered slow. Optional, false by default.
-      slow: false
+      original-url: github.com/golangci/example-linter
 
 linters:
   enable:
