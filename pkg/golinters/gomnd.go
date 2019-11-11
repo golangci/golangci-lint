@@ -1,10 +1,10 @@
 package golinters
 
 import (
-	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
+	magic_numbers "github.com/tommy-muehle/go-mnd"
 	"golang.org/x/tools/go/analysis"
 
-	magic_numbers "github.com/tommy-muehle/go-mnd"
+	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 )
 
 func NewGomnd() *goanalysis.Linter {
