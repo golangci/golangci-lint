@@ -224,9 +224,10 @@ func (r *runner) getBodyOp(instr ssa.Instruction) (*ssa.UnOp, bool) {
 	if !ok {
 		return nil, false
 	}
-	if op.Type() != r.rowsObj.Type() {
-		return nil, false
-	}
+	// fix: try to check type
+	// if op.Type() != r.rowsObj.Type() {
+	// 	return nil, false
+	// }
 	return op, true
 }
 
