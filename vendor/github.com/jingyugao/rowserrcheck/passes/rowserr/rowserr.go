@@ -115,11 +115,7 @@ func (r *runner) notCheck(b *ssa.BasicBlock, i int) bool {
 		return false
 	}
 
-	if len(*call.Referrers()) == 0 {
-		return true
-	}
-	cRefs := *call.Referrers()
-	for _, cRef := range cRefs {
+	for _, cRef := range *call.Referrers() {
 		val, ok := r.getResVal(cRef)
 		if !ok {
 			continue
@@ -161,28 +157,6 @@ func (r *runner) notCheck(b *ssa.BasicBlock, i int) bool {
 						}
 					}
 				}
-			case *ssa.FieldAddr: // Normal reference to response entity
-				if resRef.Referrers() == nil {
-					return true
-				}
-
-				bRefs := *resRef.Referrers()
-
-				for _, bRef := range bRefs {
-					bOp, ok := r.getBodyOp(bRef)
-					if !ok {
-						continue
-					}
-					if len(*bOp.Referrers()) == 0 {
-						return true
-					}
-					ccalls := *bOp.Referrers()
-					for _, ccall := range ccalls {
-						if r.isCloseCall(ccall) {
-							return false
-						}
-					}
-				}
 			}
 		}
 	}
@@ -203,10 +177,6 @@ func (r *runner) getReqCall(instr ssa.Instruction) (*ssa.Call, bool) {
 
 func (r *runner) getResVal(instr ssa.Instruction) (ssa.Value, bool) {
 	switch instr := instr.(type) {
-	case *ssa.FieldAddr:
-		if instr.X.Type().String() == r.rowsTyp.String() {
-			return instr.X.(ssa.Value), true
-		}
 	case *ssa.Call:
 		if len(instr.Call.Args) == 1 && instr.Call.Args[0].Type().String() == r.rowsTyp.String() {
 			return instr.Call.Args[0], true
@@ -301,37 +271,25 @@ func (r *runner) calledInFunc(f *ssa.Function, called bool) bool {
 		for i, instr := range b.Instrs {
 			switch instr := instr.(type) {
 			case *ssa.UnOp:
-				refs := *instr.Referrers()
-				if len(refs) == 0 {
-					return true
-				}
-				for _, r := range refs {
-					if v, ok := r.(ssa.Value); ok {
-						vrefs := *v.Referrers()
-						for _, vref := range vrefs {
-							if vref, ok := vref.(*ssa.UnOp); ok {
-								vrefs := *vref.Referrers()
-								if len(vrefs) == 0 {
-									return true
-								}
-								for _, vref := range vrefs {
-									if c, ok := vref.(*ssa.Call); ok {
-										if c.Call.Value != nil && c.Call.Value.Name() == errMethod {
-											return !called
-										}
-									}
+				for _, ref := range *instr.Referrers() {
+					if v, ok := ref.(ssa.Value); ok {
+						if vCall, ok := v.(*ssa.Call); ok {
+							if vCall.Call.Value != nil && vCall.Call.Value.Name() == errMethod {
+								if called {
+									return false
 								}
 							}
 						}
 					}
-
 				}
 			default:
-				return r.notCheck(b, i) || !called
+				if r.notCheck(b, i) || !called {
+					return true
+				}
 			}
 		}
 	}
-	return false
+	return true
 }
 
 // isNamedType reports whether t is the named type path.name.
