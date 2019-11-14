@@ -159,7 +159,7 @@ func allowTrailing(i int) {
 
 	case 2:
 		fmt.Println("two")
-		// Comments OK too!
+
 	case 3:
 		fmt.Println("three")
 	}
@@ -171,42 +171,4 @@ func ExampleSomeOutput() {
 
 	// Output:
 	// Hello, world
-}
-
-func IncDecStmt() {
-	counter := 0
-	for range make([]int, 5) {
-		counter++
-	}
-
-	type t struct {
-		counter int
-	}
-
-	x := t{5}
-
-	x.counter--
-	if x.counter > 0 {
-		fmt.Println("not yet 0")
-	}
-}
-
-func AnonymousBlock() {
-	func(a, b int) { // ERROR "block should not start with a whitespace"
-
-		fmt.Println(a + b)
-	}(1, 1)
-}
-
-func MultilineComment() {
-	if true {
-		/*
-			Ok to start block with
-			a
-			long
-			multiline
-			cmoment
-		*/
-		fmt.Println("true")
-	}
 }
