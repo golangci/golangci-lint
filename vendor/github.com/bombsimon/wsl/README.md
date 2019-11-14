@@ -21,105 +21,595 @@ might be bugs or unintentional false positives so I would love an
 [issue](https://github.com/bombsimon/wsl/issues/new) to fix, discuss, change or
 make something configurable!
 
-## Installation
-
-### By `go get` (local installation)
-
-You can do that by using:
-
-```sh
-go get -u github.com/bombsimon/wsl/cmd/...
-```
-
-### By golangci-lint (CI automation)
-
-`wsl` is already integrated with
-[golangci-lint](https://github.com/golangci/golangci-lint). Please refer to the
-instructions there.
-
 ## Usage
 
-How to use depends on how you install `wsl`.
+Install by using `go get -u github.com/bombsimon/wsl/cmd/...`.
 
-### With local binary
-
-The general command format for `wsl` is:
-
-```sh
-$ wsl [flags] <file1> [files...]
-$ wsl [flags] </path/to/package/...>
-
-# Examples
-
-$ wsl ./main.go
-$ wsl --no-test ./main.go
-$ wsl -allow-declaration ./main.go
-$ wsl --no-test --allow-cuddle-declaration ./main.go
-$ wsl --no-test --allow-trailing-comment ./myProject/...
-```
-
-The "..." wildcard is not used like other `go` commands but instead can only
-be to a relative or absolute path.
+Run with `wsl [--no-test] <file1> [files...]` or `wsl ./package/...`. The "..."
+wildcard is not used like other `go` commands but instead can only be to a
+relative or absolute path.
 
 By default, the linter will run on `./...` which means all go files in the
 current path and all subsequent paths, including test files. To disable linting
 test files, use `-n` or `--no-test`.
 
-### By `golangci-lint` (CI automation)
+This linter can also be used as a part of
+[golangci-lint](https://github.com/golangci/golangci-lint)
 
-The recommended command is:
+## Rules
 
-```sh
-golangci-lint --disable-all --enable wsl
+Note that this linter doesn't take in consideration the issues that will be
+fixed with `gofmt` so ensure that the code is properly formatted.
+
+### Never use empty lines
+
+Even though this linter was built to **promote** the usage of empty lines, there
+are a few places where they should never be used.
+
+Never use empty lines in the start or end of a block!
+
+**Don't**
+
+```go
+if someBooleanValue {
+
+    fmt.Println("i like starting newlines")
+}
+
+if someOtherBooleanValue {
+    fmt.Println("also trailing")
+
+}
+
+switch {
+
+case 1:
+    fmt.Println("switch is also a block")
+}
+
+switch {
+case 1:
+
+    fmt.Println("not in a case")
+case 2:
+    fmt.Println("or at the end")
+
+}
+
+func neverNewlineAfterReturn() {
+    return true
+
+}
+
+func notEvenWithComments() {
+    return false
+    // I just forgot to say this...
+}
 ```
 
-For more information, please refer to
-[golangci-lint](https://github.com/golangci/golangci-lint)'s documentation.
+**Do**
 
-## Issues and configuration
+```go
+if someBooleanValue {
+    fmt.Println("this is tight and nice")
+}
 
-The linter suppers a few ways to configure it to satisfy more than one kind of
-code style. These settings could be set either with flags or with YAML
-configuration if used via `golangci-lint`.
+switch {
+case 1:
+    fmt.Println("no blank lines here")
+case 2:
+    // Comments are fine here!
+    fmt.Println("or here")
+}
 
-The supported configuration can be found [in the documentation](doc/configuration.md).
+func returnCuddleded() {
+    // My comment goes above the last statement!
+    return true
+}
+```
 
-Below are the available checklist for any hit from `wsl`. If you do not see any,
-feel free to raise an [issue](https://github.com/bombsimon/wsl/issues/new).
+### Use empty lines
 
-> **Note**:  this linter doesn't take in consideration the issues that will be
-> fixed with `go fmt -s` so ensure that the code is properly formatted before
-> use.
+There's an easy way to improve logic and readability by enforcing whitespaces at
+the right places. Usually this is around blocks and after declarations.
 
-* [Anonymous switch statements should never be cuddled](doc/rules.md#anonymous-switch-statements-should-never-be-cuddled)
-* [Append only allowed to cuddle with appended value](doc/rules.md#append-only-allowed-to-cuddle-with-appended-value)
-* [Assignments should only be cuddled with other assignments](doc/rules.md#assignments-should-only-be-cuddled-with-other-assignments)
-* [Block should not end with a whitespace (or comment)](doc/rules.md#block-should-not-end-with-a-whitespace-or-comment)
-* [Block should not start with a whitespace](doc/rules.md#block-should-not-start-with-a-whitespace)
-* [Case block should end with newline at this size](doc/rules.md#case-block-should-end-with-newline-at-this-size)
-* [Branch statements should not be cuddled if block has more than two lines](doc/rules.md#branch-statements-should-not-be-cuddled-if-block-has-more-than-two-lines)
-* [Declarations should never be cuddled](doc/rules.md#declarations-should-never-be-cuddled)
-* [Defer statements should only be cuddled with expressions on same variable](doc/rules.md#defer-statements-should-only-be-cuddled-with-expressions-on-same-variable)
-* [Expressions should not be cuddled with blocks](doc/rules.md#expressions-should-not-be-cuddled-with-blocks)
-* [Expressions should not be cuddled with declarations or returns](doc/rules.md#expressions-should-not-be-cuddled-with-declarations-or-returns)
-* [For statement without condition should never be cuddled](doc/rules.md#for-statement-without-condition-should-never-be-cuddled)
-* [For statements should only be cuddled with assignments used in the iteration](doc/rules.md#for-statements-should-only-be-cuddled-with-assignments-used-in-the-iteration)
-* [Go statements can only invoke functions assigned on line above](doc/rules.md#go-statements-can-only-invoke-functions-assigned-on-line-above)
-* [If statements should only be cuddled with assignments](doc/rules.md#if-statements-should-only-be-cuddled-with-assignments)
-* [If statements should only be cuddled with assignments used in the if
-  statement
-  itself](doc/rules.md#if-statements-should-only-be-cuddled-with-assignments-used-in-the-if-statement-itself)
-* [Only cuddled expressions if assigning variable or using from line
-  above](doc/rules.md#only-cuddled-expressions-if-assigning-variable-or-using-from-line-above)
-* [Only one cuddle assignment allowed before defer statement](doc/rules.md#only-one-cuddle-assignment-allowed-before-defer-statement)
-* [Only one cuddle assginment allowed before for statement](doc/rules.md#only-one-cuddle-assignment-allowed-before-for-statement)
-* [Only one cuddle assignment allowed before go statement](doc/rules.md#only-one-cuddle-assignment-allowed-before-go-statement)
-* [Only one cuddle assignment allowed before if statement](doc/rules.md#only-one-cuddle-assignment-allowed-before-if-statement)
-* [Only one cuddle assignment allowed before range statement](doc/rules.md#only-one-cuddle-assignment-allowed-before-range-statement)
-* [Only one cuddle assignment allowed before switch statement](doc/rules.md#only-one-cuddle-assignment-allowed-before-switch-statement)
-* [Only one cuddle assignment allowed before type switch statement](doc/rules.md#only-one-cuddle-assignment-allowed-before-type-switch-statement)
-* [Ranges should only be cuddled with assignments used in the iteration](doc/rules.md#ranges-should-only-be-cuddled-with-assignments-used-in-the-iteration)
-* [Return statements should not be cuddled if block has more than two lines](doc/rules.md#return-statements-should-not-be-cuddled-if-block-has-more-than-two-lines)
-* [Stmt type not implemented](doc/rules.md#stmt-type-not-implemented)
-* [Switch statements should only be cuddled with variables switched](doc/rules.md#switch-statements-should-only-be-cuddled-with-variables-switched)
-* [Type switch statements should only be cuddled with variables switched](doc/rules.md#type-switch-statements-should-only-be-cuddled-with-variables-switched)
+#### If
+
+If statements should only be cuddled with assignments/declarations of variables
+used in the condition and only one assignment should be cuddled. Never cuddle if
+with anything but assignments.
+
+**Don't**
+
+```go
+notConditional := "x"
+if somethingElse == "y" {
+    fmt.Println("what am i checking?")
+}
+
+first := 1
+second := 2
+third := 3
+forever := 4
+if forever {
+    return true
+}
+
+if false {
+    fmt.Println("first if")
+}
+if true {
+    fmt.Println("second if is cuddled")
+}
+```
+
+**Do**
+
+```go
+val, err := SomeThing()
+if err != nil {
+    // err is assigned on line above
+}
+
+first := 1
+second := 2
+third := 3
+forever := 4
+
+if forever > 3 {
+    return fmt.Sprintf("group multiple assignments away from if")
+}
+
+// Or separate from your condition.
+first := 1
+second := 2
+third := 3
+
+forever := 4
+if forever > 3 {
+    return fmt.Sprintf("group multiple assignments away from if")
+}
+
+if false {
+    // This is one statement
+}
+
+if true {
+    // This is another one, don't cuddled them!
+}
+```
+
+#### Return
+
+Return should be placed on a separate line from other statement unless the block
+consists of only two lines (including the return).
+
+**Don't**
+
+```go
+doSomething()
+add := 1+2
+fmt.Sprintf(add)
+return false
+
+if true {
+    stmt.X = true
+    stmt.Y = false
+    return true
+}
+```
+
+**Do**
+
+```go
+doSomething()
+
+add := 1+2
+fmt.Sprintf(add))
+
+return false
+
+if true {
+    stmt.X = "only one line without return, may cuddled"
+    return true
+}
+
+if thisWorksToo {
+    whitespace := true
+
+    return false
+}
+```
+
+#### Branch statement
+
+The same rule as for return
+
+**Don't**
+
+```go
+for i := range make([]int, 5) {
+    if i > 2 {
+        sendToOne(i)
+        sendToSecond(i)
+        continue
+    }
+}
+```
+
+**Do**
+
+```go
+for i := range make([]int, 5) {
+    if i > 2 {
+        sendToOne(i)
+        sendToSecond(i)
+
+        continue
+    }
+
+    if statement == "is short" {
+        sendToOne(i)
+        break
+    }
+}
+```
+
+#### Assignment
+
+Assignments may only be cuddled with other assignments.
+
+**Don't**
+
+```go
+assignOne := "one"
+callFunc(assignOne)
+assignTwo := "two")
+callFunc(assignTwo)
+
+if true {
+    return
+}
+assigningClose := "bad"
+
+var x = 2
+y := 3
+```
+
+**Do**
+
+```go
+assignOne := "one"
+assignTwo := "two")
+
+callFunc(assignOne)
+callFunc(assignTwo)
+
+// Or group assignment and call by usage.
+assignOne := "one"
+callFunc(assignOne)
+
+assignTwo := "two")
+callFunc(assignTwo)
+
+if true {
+    return
+}
+
+notAssigningClose := "not bad"
+
+var x = 2
+
+y := 3
+```
+
+#### Declarations
+
+Declarations should never be cuddled with anything, not even other declarations.
+
+**Don't**
+
+```go
+var x int
+var y int
+
+z := 2
+var a
+```
+
+**Do**
+
+```go
+// Group declarations, they'll align nice and tidy!
+var (
+    x int
+    y int
+)
+
+z := 2
+
+var a
+```
+
+#### Expressions
+
+Expressions (function calls) may never be cuddled with declarations or return
+statements. Expressions may also not be cuddled with assignments if not passed
+to the expression func.
+
+**Don't**
+
+```go
+var a bool
+fmt.Println(a)
+
+foo := true
+someFunc(false)
+
+if someBool() {
+    fmt.Println("doing things")
+}
+x.Calling()
+```
+
+**Do**
+
+```go
+var b bool
+
+fmt.Println(b)
+
+foo := true
+someFunc(foo)
+
+bar := false
+
+someFunc(true)
+
+if someBool() {
+    fmt.Println("doing things")
+}
+
+x.Calling()
+```
+
+#### Ranges
+
+Range statements may only be cuddled with assignments that are used in the
+range. Just like if statements this only applies if it's a single assignment
+cuddled and not multiple.
+
+Ranges may also be cuddled with assignments that are used directly in the block
+as first statement.
+
+**Don't**
+
+```go
+noRangeList := []string{"a", "b", "c"}
+for _, x := range anotherList {
+    fmt.Println(x)
+}
+
+oneList := []int{1, 2, 3}
+twoList := []int{4, 5, 6}
+for i := range twoList {
+    fmt.Println("too much assignments!")
+}
+
+myCount := 0
+for _, v := range aList {
+    fmt.Sprintf("first statement doesn't use assignment")
+}
+```
+
+**Do**
+
+```go
+rangeList := []string{"a", "b", "c"}
+for _, x := range rangeList {
+    fmt.Println(x)
+}
+
+oneList := []int{1, 2, 3}
+
+twoList := []int{4, 5, 6}
+for i := range twoList {
+    fmt.Println("too much assignments!")
+}
+
+myCount := 0
+for _, v := range aList {
+    myCount += v
+
+    fmt.Sprintf("first statement uses cuddled assignment")
+}
+```
+
+#### Defer
+
+Defer is almost handled like return statements but there are cases where
+grouping defer statements with each other or expression calls may improve
+readability.
+
+Defer statements may be cuddled with other defer statements as many times as you
+like. It may also be cuddled with assignments above or expression variables on
+the line above.
+
+**Don't**
+
+```go
+first := getFirst()
+defer first.Close()
+second := getSecond() // This will fail
+defer second.Close()
+
+first := getFirst()
+second := getSecond()
+defer first.Close() // Too many assignments above
+defer second.Close()
+
+m1.Lock()
+defer m2.RUnlock() // Not the expression above
+```
+
+**Do**
+
+```go
+first := getFirst()
+second := getSecond()
+
+defer first.Close()
+defer second.Close()
+
+// Or group by usage.
+first := getFirst()
+defer first.Close()
+
+second := getSecond()
+defer second.Close()
+
+m.Lock()
+defer m.Unlock()
+```
+
+#### For loops
+
+For statements works similar like ranges except that anonymous (infinite) loops
+may never be cuddled. Just like the range statement, variables used in the for
+or in first statement in the body may be cuddled.
+
+**Don't**
+
+```go
+t := true
+for notT {
+    fmt.Println("where's t used?")
+}
+
+n := 0
+m := 1
+for x < 100 {
+    n += x // m not used in for or body
+}
+
+n := 1
+for {
+    fmt.Println("never cuddled for without condition")
+}
+```
+
+**Do**
+
+```go
+t := true
+for t {
+    fmt.Println("t used in for")
+}
+
+n := 0
+for x < 100 {
+    n += x // n used in first block statement.
+}
+
+n := 1
+
+for {
+    fmt.Println("never cuddled for without condition")
+}
+```
+
+#### Go
+
+Go routines may only be executed if there's a maximum of one assignments above
+and that assignment is used in the expression.
+
+**Don't**
+
+```go
+first := func() {}
+second := func() {}
+go second()
+
+notUsed := func() {}
+go first()
+
+x := "1"
+go func() {
+    fmt.Println("where's x used!=")
+}()
+```
+
+**Do**
+
+```go
+first := func() {}
+go first()
+
+notUsed := func() {}
+
+first := func() {}
+go first()
+```
+
+#### Switch and Type switch
+
+The same rules applies for switch and type switch statements with the exception
+of anonymous type switches. That means type switches where a new variable is not
+assigned. It's also allowed to cuddled type switches with variables used if it's
+used as the first argument in the first case.
+
+Type switches may only be cuddled with one assignment above and if that
+assignment is used in the switch.
+
+**Don't**
+
+```go
+notSome := SomeInt()
+switch some {
+case 1:
+    fmt.Println("1")
+default:
+    fmt.Println("not 1")
+}
+
+notSwitched := SomeInt()
+switch {
+case 1 > 2:
+    fmt.Println("whitespace between assignments")
+}
+
+n := 0
+switch v := some.(type):
+case typeOne:
+    x := v.X // n not used in switch or body
+case typeTwo:
+    x := v.X
+}
+```
+
+**Do**
+
+```go
+some := SomeInt()
+switch some {
+case 1:
+    fmt.Println("1")
+default:
+    fmt.Println("not 1")
+}
+
+notSwitched := SomeInt()
+
+switch {
+case 1 > 2:
+    fmt.Println("whitespace between assignments")
+}
+
+n := 0
+switch v := some.(type):
+case typeOne:
+    n = v.X // n is used first in block, OK to cuddle
+case typeTwo:
+    n = v.Y
+}
+```
