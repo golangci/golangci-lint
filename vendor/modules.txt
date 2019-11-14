@@ -4,8 +4,8 @@ github.com/BurntSushi/toml
 github.com/OpenPeeDeeP/depguard
 # github.com/StackExchange/wmi v0.0.0-20180116203802-5d049714c4a6
 github.com/StackExchange/wmi
-# github.com/bombsimon/wsl v1.2.5
-github.com/bombsimon/wsl
+# github.com/bombsimon/wsl/v2 v2.0.0
+github.com/bombsimon/wsl/v2
 # github.com/davecgh/go-spew v1.1.1
 github.com/davecgh/go-spew/spew
 # github.com/fatih/color v1.7.0
@@ -187,7 +187,7 @@ golang.org/x/sys/windows
 golang.org/x/text/transform
 golang.org/x/text/unicode/norm
 golang.org/x/text/width
-# golang.org/x/tools v0.0.0-20191010075000-0337d82405ff => github.com/golangci/tools v0.0.0-20190915081525-6aa350649b1c
+# golang.org/x/tools v0.0.0-20191113232020-e2727e816f5a => github.com/golangci/tools v0.0.0-20190915081525-6aa350649b1c
 golang.org/x/tools/go/analysis
 golang.org/x/tools/go/analysis/passes/asmdecl
 golang.org/x/tools/go/analysis/passes/assign
@@ -242,7 +242,7 @@ golang.org/x/tools/internal/gopathwalk
 golang.org/x/tools/internal/imports
 golang.org/x/tools/internal/module
 golang.org/x/tools/internal/semver
-# gopkg.in/yaml.v2 v2.2.4
+# gopkg.in/yaml.v2 v2.2.5
 gopkg.in/yaml.v2
 # honnef.co/go/tools v0.0.1-2019.2.3
 honnef.co/go/tools/arg
