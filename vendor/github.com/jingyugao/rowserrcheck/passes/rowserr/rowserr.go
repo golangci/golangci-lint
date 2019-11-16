@@ -5,7 +5,6 @@ import (
 	"go/ast"
 	"go/types"
 	"strconv"
-	"strings"
 
 	"github.com/gostaticanalysis/analysisutil"
 	"golang.org/x/tools/go/analysis"
@@ -87,7 +86,7 @@ func (r runner) run(pass *analysis.Pass, pkgPath string) (interface{}, error) {
 		var isreffunc bool
 
 		for i := 0; i < f.Signature.Results().Len(); i++ {
-			if f.Signature.Results().At(i).Type().String() == r.rowsTyp.String() {
+			if types.Identical(f.Signature.Results().At(i).Type(), r.rowsTyp) {
 				isreffunc = true
 			}
 		}
@@ -98,9 +97,8 @@ func (r runner) run(pass *analysis.Pass, pkgPath string) (interface{}, error) {
 
 		for _, b := range f.Blocks {
 			for i := range b.Instrs {
-				pos := b.Instrs[i].Pos()
 				if r.notCheck(b, i) {
-					pass.Reportf(pos, fmt.Sprintf("rows err must be checked"))
+					pass.Reportf(b.Instrs[i].Pos(), fmt.Sprintf("rows err must be checked"))
 				}
 			}
 		}
@@ -157,6 +155,19 @@ func (r *runner) notCheck(b *ssa.BasicBlock, i int) bool {
 						}
 					}
 				}
+			case *ssa.FieldAddr:
+				for _, bRef := range *resRef.Referrers() {
+					bOp, ok := r.getBodyOp(bRef)
+					if !ok {
+						continue
+					}
+
+					for _, ccall := range *bOp.Referrers() {
+						if r.isCloseCall(ccall) {
+							return false
+						}
+					}
+				}
 			}
 		}
 	}
@@ -169,23 +180,33 @@ func (r *runner) getReqCall(instr ssa.Instruction) (*ssa.Call, bool) {
 	if !ok {
 		return nil, false
 	}
-	if !strings.Contains(call.Type().String(), r.rowsTyp.String()) {
+
+	res := call.Call.Signature().Results()
+	flag := false
+
+	for i := 0; i < res.Len(); i++ {
+		flag = flag || types.Identical(res.At(i).Type(), r.rowsTyp)
+	}
+
+	if !flag {
 		return nil, false
 	}
+
 	return call, true
 }
 
 func (r *runner) getResVal(instr ssa.Instruction) (ssa.Value, bool) {
 	switch instr := instr.(type) {
 	case *ssa.Call:
-		if len(instr.Call.Args) == 1 && instr.Call.Args[0].Type().String() == r.rowsTyp.String() {
+		if len(instr.Call.Args) == 1 && types.Identical(instr.Call.Args[0].Type(), r.rowsTyp) {
 			return instr.Call.Args[0], true
 		}
 	case ssa.Value:
-		if instr.Type().String() == r.rowsTyp.String() {
+		if types.Identical(instr.Type(), r.rowsTyp) {
 			return instr, true
 		}
 	}
+
 	return nil, false
 }
 
@@ -211,27 +232,23 @@ func (r *runner) isCloseCall(ccall ssa.Instruction) bool {
 		if ccall.Call.Value != nil && ccall.Call.Value.Name() == errMethod {
 			return true
 		}
-
 	}
+
 	return false
 }
 
 func (r *runner) isClosureCalled(c *ssa.MakeClosure) bool {
-	refs := *c.Referrers()
-	if len(refs) == 0 {
-		return false
-	}
-	for _, ref := range refs {
+	for _, ref := range *c.Referrers() {
 		switch ref.(type) {
 		case *ssa.Call, *ssa.Defer:
 			return true
 		}
 	}
+
 	return false
 }
 
 func (r *runner) noImportedDBSQL(f *ssa.Function) (ret bool) {
-	return false
 	obj := f.Object()
 	if obj == nil {
 		return false
@@ -260,7 +277,6 @@ func (r *runner) noImportedDBSQL(f *ssa.Function) (ret bool) {
 				return false
 			}
 		}
-
 	}
 
 	return true

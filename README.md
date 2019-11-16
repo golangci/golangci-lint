@@ -941,7 +941,7 @@ linters-settings:
       github.com/sirupsen/logrus: "logging is allowed only by logutils.Log"
   rowserrcheck:
     packages:
-      # - github.com/jmoiron/sqlx
+      - github.com/jmoiron/sqlx
   misspell:
     locale: US
   lll:
@@ -969,39 +969,39 @@ linters:
   # inverted configuration with `enable-all` and `disable` is not scalable during updates of golangci-lint
   disable-all: true
   enable:
-    # - rowserrcheck
-    - bodyclose
-    - deadcode
-    - depguard
-    - dogsled
-    - dupl
-    - errcheck
-    - funlen
-    - gochecknoinits
-    - goconst
-    - gocritic
-    - gocyclo
-    - gofmt
-    - goimports
-    - golint
-    - gosec
-    - gosimple
-    - govet
-    - ineffassign
-    - interfacer
-    - lll
-    - misspell
-    - nakedret
-    - scopelint
-    - staticcheck
-    - structcheck
-    - stylecheck
-    - typecheck
-    - unconvert
-    - unparam
-    - unused
-    - varcheck
-    - whitespace
+    - rowserrcheck
+    # - bodyclose
+    # - deadcode
+    # - depguard
+    # - dogsled
+    # - dupl
+    # - errcheck
+    # - funlen
+    # - gochecknoinits
+    # - goconst
+    # - gocritic
+    # - gocyclo
+    # - gofmt
+    # - goimports
+    # - golint
+    # - gosec
+    # - gosimple
+    # - govet
+    # - ineffassign
+    # - interfacer
+    # - lll
+    # - misspell
+    # - nakedret
+    # - scopelint
+    # - staticcheck
+    # - structcheck
+    # - stylecheck
+    # - typecheck
+    # - unconvert
+    # - unparam
+    # - unused
+    # - varcheck
+    # - whitespace
 
   # don't enable:
   # - gochecknoglobals
