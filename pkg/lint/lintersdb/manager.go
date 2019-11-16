@@ -208,7 +208,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		linter.NewConfig(golinters.NewWSL()).
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/bombsimon/wsl"),
-		linter.NewConfig(golinters.NewGomnd()).
+		linter.NewConfig(golinters.NewGoMND()).
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/tommy-muehle/go-mnd"),
 	}
