@@ -13,12 +13,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/golangci/golangci-lint/test/testshared"
-
 	gops "github.com/mitchellh/go-ps"
 	"github.com/shirou/gopsutil/process"
 
 	"github.com/golangci/golangci-lint/pkg/config"
+	"github.com/golangci/golangci-lint/test/testshared"
 )
 
 func chdir(b *testing.B, dir string) {
@@ -36,7 +35,8 @@ func prepareGithubProject(owner, name string) func(*testing.B) {
 		dir := filepath.Join(build.Default.GOPATH, "src", "github.com", owner, name)
 		_, err := os.Stat(dir)
 		if os.IsNotExist(err) {
-			err = exec.Command("git", "clone", fmt.Sprintf("https://github.com/%s/%s.git", owner, name)).Run()
+			repo := fmt.Sprintf("https://github.com/%s/%s.git", owner, name)
+			err = exec.Command("git", "clone", repo).Run()
 			if err != nil {
 				b.Fatalf("can't git clone %s/%s: %s", owner, name, err)
 			}

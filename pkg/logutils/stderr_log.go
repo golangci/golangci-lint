@@ -3,6 +3,7 @@ package logutils
 import (
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/sirupsen/logrus" //nolint:depguard
 
@@ -36,9 +37,15 @@ func NewStderrLog(name string) *StderrLog {
 	}
 
 	sl.logger.Out = StdErr
-	sl.logger.Formatter = &logrus.TextFormatter{
+	formatter := &logrus.TextFormatter{
 		DisableTimestamp: true, // `INFO[0007] msg` -> `INFO msg`
 	}
+	if os.Getenv("LOG_TIMESTAMP") == "1" {
+		formatter.DisableTimestamp = false
+		formatter.FullTimestamp = true
+		formatter.TimestampFormat = time.StampMilli
+	}
+	sl.logger.Formatter = formatter
 
 	return sl
 }
@@ -55,6 +62,11 @@ func (sl StderrLog) prefix() string {
 func (sl StderrLog) Fatalf(format string, args ...interface{}) {
 	sl.logger.Errorf("%s%s", sl.prefix(), fmt.Sprintf(format, args...))
 	os.Exit(exitcodes.Failure)
+}
+
+func (sl StderrLog) Panicf(format string, args ...interface{}) {
+	v := fmt.Sprintf("%s%s", sl.prefix(), fmt.Sprintf(format, args...))
+	panic(v)
 }
 
 func (sl StderrLog) Errorf(format string, args ...interface{}) {

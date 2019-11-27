@@ -1,36 +1,59 @@
 package golinters
 
 import (
-	"context"
 	"fmt"
 	"go/ast"
 	"go/token"
 	"strings"
+	"sync"
 
+	"golang.org/x/tools/go/analysis"
+
+	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-type Gochecknoglobals struct{}
+const gochecknoglobalsName = "gochecknoglobals"
 
-func (Gochecknoglobals) Name() string {
-	return "gochecknoglobals"
-}
+//nolint:dupl
+func NewGochecknoglobals() *goanalysis.Linter {
+	var mu sync.Mutex
+	var resIssues []goanalysis.Issue
 
-func (Gochecknoglobals) Desc() string {
-	return "Checks that no globals are present in Go code"
-}
+	analyzer := &analysis.Analyzer{
+		Name: gochecknoglobalsName,
+		Doc:  goanalysis.TheOnlyanalyzerDoc,
+		Run: func(pass *analysis.Pass) (interface{}, error) {
+			var res []goanalysis.Issue
+			for _, file := range pass.Files {
+				fileIssues := checkFileForGlobals(file, pass.Fset)
+				for i := range fileIssues {
+					res = append(res, goanalysis.NewIssue(&fileIssues[i], pass))
+				}
+			}
+			if len(res) == 0 {
+				return nil, nil
+			}
 
-func (lint Gochecknoglobals) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issue, error) {
-	var res []result.Issue
-	for _, f := range lintCtx.ASTCache.GetAllValidFiles() {
-		res = append(res, lint.checkFile(f.F, f.Fset)...)
+			mu.Lock()
+			resIssues = append(resIssues, res...)
+			mu.Unlock()
+
+			return nil, nil
+		},
 	}
-
-	return res, nil
+	return goanalysis.NewLinter(
+		gochecknoglobalsName,
+		"Checks that no globals are present in Go code",
+		[]*analysis.Analyzer{analyzer},
+		nil,
+	).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
+		return resIssues
+	}).WithLoadMode(goanalysis.LoadModeSyntax)
 }
 
-func (lint Gochecknoglobals) checkFile(f *ast.File, fset *token.FileSet) []result.Issue {
+func checkFileForGlobals(f *ast.File, fset *token.FileSet) []result.Issue {
 	var res []result.Issue
 	for _, decl := range f.Decls {
 		genDecl, ok := decl.(*ast.GenDecl)
@@ -51,7 +74,7 @@ func (lint Gochecknoglobals) checkFile(f *ast.File, fset *token.FileSet) []resul
 				res = append(res, result.Issue{
 					Pos:        fset.Position(vn.Pos()),
 					Text:       fmt.Sprintf("%s is a global variable", formatCode(vn.Name, nil)),
-					FromLinter: lint.Name(),
+					FromLinter: gochecknoglobalsName,
 				})
 			}
 		}
@@ -61,7 +84,7 @@ func (lint Gochecknoglobals) checkFile(f *ast.File, fset *token.FileSet) []resul
 }
 
 func isWhitelisted(i *ast.Ident) bool {
-	return i.Name == "_" || looksLikeError(i)
+	return i.Name == "_" || i.Name == "version" || looksLikeError(i)
 }
 
 // looksLikeError returns true if the AST identifier starts

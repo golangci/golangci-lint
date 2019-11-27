@@ -9,11 +9,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/golangci/golangci-lint/test/testshared"
-
 	assert "github.com/stretchr/testify/require"
-
 	yaml "gopkg.in/yaml.v2"
+
+	"github.com/golangci/golangci-lint/test/testshared"
 )
 
 func runGoErrchk(c *exec.Cmd, files []string, t *testing.T) {
@@ -106,6 +105,7 @@ func testOneSource(t *testing.T, sourcePath string) {
 		"--print-issued-lines=false",
 		"--print-linter-name=false",
 		"--out-format=line-number",
+		"--max-same-issues=10",
 	}
 
 	rc := extractRunContextFromComments(t, sourcePath)

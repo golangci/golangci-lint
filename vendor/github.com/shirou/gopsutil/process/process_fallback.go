@@ -28,16 +28,31 @@ type MemoryMapsStat struct {
 type MemoryInfoExStat struct {
 }
 
-func Pids() ([]int32, error) {
-	return PidsWithContext(context.Background())
-}
-
-func PidsWithContext(ctx context.Context) ([]int32, error) {
+func pidsWithContext(ctx context.Context) ([]int32, error) {
 	return []int32{}, common.ErrNotImplementedError
 }
 
-func NewProcess(pid int32) (*Process, error) {
+func Processes() ([]*Process, error) {
 	return nil, common.ErrNotImplementedError
+}
+
+func ProcessesWithContext(ctx context.Context) ([]*Process, error) {
+	return nil, common.ErrNotImplementedError
+}
+
+func PidExistsWithContext(ctx context.Context, pid int32) (bool, error) {
+	pids, err := PidsWithContext(ctx)
+	if err != nil {
+		return false, err
+	}
+
+	for _, i := range pids {
+		if i == pid {
+			return true, err
+		}
+	}
+
+	return false, err
 }
 
 func (p *Process) Ppid() (int32, error) {
@@ -105,6 +120,13 @@ func (p *Process) Status() (string, error) {
 
 func (p *Process) StatusWithContext(ctx context.Context) (string, error) {
 	return "", common.ErrNotImplementedError
+}
+func (p *Process) Foreground() (bool, error) {
+	return p.ForegroundWithContext(context.Background())
+}
+
+func (p *Process) ForegroundWithContext(ctx context.Context) (bool, error) {
+	return false, common.ErrNotImplementedError
 }
 func (p *Process) Uids() ([]int32, error) {
 	return p.UidsWithContext(context.Background())
@@ -218,6 +240,12 @@ func (p *Process) MemoryInfoEx() (*MemoryInfoExStat, error) {
 func (p *Process) MemoryInfoExWithContext(ctx context.Context) (*MemoryInfoExStat, error) {
 	return nil, common.ErrNotImplementedError
 }
+func (p *Process) PageFaults() (*PageFaultsStat, error) {
+	return p.PageFaultsWithContext(context.Background())
+}
+func (p *Process) PageFaultsWithContext(ctx context.Context) (*PageFaultsStat, error) {
+	return nil, common.ErrNotImplementedError
+}
 func (p *Process) Children() ([]*Process, error) {
 	return p.ChildrenWithContext(context.Background())
 }
@@ -239,6 +267,15 @@ func (p *Process) Connections() ([]net.ConnectionStat, error) {
 func (p *Process) ConnectionsWithContext(ctx context.Context) ([]net.ConnectionStat, error) {
 	return []net.ConnectionStat{}, common.ErrNotImplementedError
 }
+
+func (p *Process) ConnectionsMax(max int) ([]net.ConnectionStat, error) {
+	return p.ConnectionsMaxWithContext(context.Background(), max)
+}
+
+func (p *Process) ConnectionsMaxWithContext(ctx context.Context, max int) ([]net.ConnectionStat, error) {
+	return []net.ConnectionStat{}, common.ErrNotImplementedError
+}
+
 func (p *Process) NetIOCounters(pernic bool) ([]net.IOCountersStat, error) {
 	return p.NetIOCountersWithContext(context.Background(), pernic)
 }

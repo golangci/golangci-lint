@@ -9,28 +9,23 @@ import (
 )
 
 var (
-	DICTIONARY_MATCHERS []match.Matcher
-	MATCHERS            []match.Matcher
-	ADJACENCY_GRAPHS    []adjacency.AdjacencyGraph
-	L33T_TABLE          adjacency.AdjacencyGraph
+	dictionaryMatchers []match.Matcher
+	matchers           []match.Matcher
+	adjacencyGraphs    []adjacency.Graph
+	l33tTable          adjacency.Graph
 
-	SEQUENCES map[string]string
-)
-
-const (
-	DATE_RX_YEAR_SUFFIX    string = `((\d{1,2})(\s|-|\/|\\|_|\.)(\d{1,2})(\s|-|\/|\\|_|\.)(19\d{2}|200\d|201\d|\d{2}))`
-	DATE_RX_YEAR_PREFIX    string = `((19\d{2}|200\d|201\d|\d{2})(\s|-|/|\\|_|\.)(\d{1,2})(\s|-|/|\\|_|\.)(\d{1,2}))`
-	DATE_WITHOUT_SEP_MATCH string = `\d{4,8}`
+	sequences map[string]string
 )
 
 func init() {
 	loadFrequencyList()
 }
 
+// Omnimatch runs all matchers against the password
 func Omnimatch(password string, userInputs []string, filters ...func(match.Matcher) bool) (matches []match.Match) {
 
 	//Can I run into the issue where nil is not equal to nil?
-	if DICTIONARY_MATCHERS == nil || ADJACENCY_GRAPHS == nil {
+	if dictionaryMatchers == nil || adjacencyGraphs == nil {
 		loadFrequencyList()
 	}
 
@@ -39,7 +34,7 @@ func Omnimatch(password string, userInputs []string, filters ...func(match.Match
 		matches = userInputMatcher(password)
 	}
 
-	for _, matcher := range MATCHERS {
+	for _, matcher := range matchers {
 		shouldBeFiltered := false
 		for i := range filters {
 			if filters[i](matcher) {
@@ -57,31 +52,31 @@ func Omnimatch(password string, userInputs []string, filters ...func(match.Match
 
 func loadFrequencyList() {
 
-	for n, list := range frequency.FrequencyLists {
-		DICTIONARY_MATCHERS = append(DICTIONARY_MATCHERS, match.Matcher{MatchingFunc: buildDictMatcher(n, buildRankedDict(list.List)), ID: n})
+	for n, list := range frequency.Lists {
+		dictionaryMatchers = append(dictionaryMatchers, match.Matcher{MatchingFunc: buildDictMatcher(n, buildRankedDict(list.List)), ID: n})
 	}
 
-	L33T_TABLE = adjacency.AdjacencyGph["l33t"]
+	l33tTable = adjacency.GraphMap["l33t"]
 
-	ADJACENCY_GRAPHS = append(ADJACENCY_GRAPHS, adjacency.AdjacencyGph["qwerty"])
-	ADJACENCY_GRAPHS = append(ADJACENCY_GRAPHS, adjacency.AdjacencyGph["dvorak"])
-	ADJACENCY_GRAPHS = append(ADJACENCY_GRAPHS, adjacency.AdjacencyGph["keypad"])
-	ADJACENCY_GRAPHS = append(ADJACENCY_GRAPHS, adjacency.AdjacencyGph["macKeypad"])
+	adjacencyGraphs = append(adjacencyGraphs, adjacency.GraphMap["qwerty"])
+	adjacencyGraphs = append(adjacencyGraphs, adjacency.GraphMap["dvorak"])
+	adjacencyGraphs = append(adjacencyGraphs, adjacency.GraphMap["keypad"])
+	adjacencyGraphs = append(adjacencyGraphs, adjacency.GraphMap["macKeypad"])
 
 	//l33tFilePath, _ := filepath.Abs("adjacency/L33t.json")
 	//L33T_TABLE = adjacency.GetAdjancencyGraphFromFile(l33tFilePath, "l33t")
 
-	SEQUENCES = make(map[string]string)
-	SEQUENCES["lower"] = "abcdefghijklmnopqrstuvwxyz"
-	SEQUENCES["upper"] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-	SEQUENCES["digits"] = "0123456789"
+	sequences = make(map[string]string)
+	sequences["lower"] = "abcdefghijklmnopqrstuvwxyz"
+	sequences["upper"] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	sequences["digits"] = "0123456789"
 
-	MATCHERS = append(MATCHERS, DICTIONARY_MATCHERS...)
-	MATCHERS = append(MATCHERS, match.Matcher{MatchingFunc: spatialMatch, ID: SPATIAL_MATCHER_NAME})
-	MATCHERS = append(MATCHERS, match.Matcher{MatchingFunc: repeatMatch, ID: REPEAT_MATCHER_NAME})
-	MATCHERS = append(MATCHERS, match.Matcher{MatchingFunc: sequenceMatch, ID: SEQUENCE_MATCHER_NAME})
-	MATCHERS = append(MATCHERS, match.Matcher{MatchingFunc: l33tMatch, ID: L33T_MATCHER_NAME})
-	MATCHERS = append(MATCHERS, match.Matcher{MatchingFunc: dateSepMatcher, ID: DATESEP_MATCHER_NAME})
-	MATCHERS = append(MATCHERS, match.Matcher{MatchingFunc: dateWithoutSepMatch, ID: DATEWITHOUTSEP_MATCHER_NAME})
+	matchers = append(matchers, dictionaryMatchers...)
+	matchers = append(matchers, match.Matcher{MatchingFunc: spatialMatch, ID: spatialMatcherName})
+	matchers = append(matchers, match.Matcher{MatchingFunc: repeatMatch, ID: repeatMatcherName})
+	matchers = append(matchers, match.Matcher{MatchingFunc: sequenceMatch, ID: sequenceMatcherName})
+	matchers = append(matchers, match.Matcher{MatchingFunc: l33tMatch, ID: L33TMatcherName})
+	matchers = append(matchers, match.Matcher{MatchingFunc: dateSepMatcher, ID: dateSepMatcherName})
+	matchers = append(matchers, match.Matcher{MatchingFunc: dateWithoutSepMatch, ID: dateWithOutSepMatcherName})
 
 }

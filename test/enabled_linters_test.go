@@ -25,7 +25,7 @@ func getEnabledByDefaultFastLintersExcept(except ...string) []string {
 	ebdl := m.GetAllEnabledByDefaultLinters()
 	ret := []string{}
 	for _, lc := range ebdl {
-		if lc.NeedsSSARepr {
+		if lc.IsSlowLinter() {
 			continue
 		}
 
@@ -41,7 +41,7 @@ func getAllFastLintersWith(with ...string) []string {
 	linters := lintersdb.NewManager(nil).GetAllSupportedLinterConfigs()
 	ret := append([]string{}, with...)
 	for _, lc := range linters {
-		if lc.NeedsSSARepr {
+		if lc.IsSlowLinter() {
 			continue
 		}
 		ret = append(ret, lc.Name())
@@ -64,7 +64,7 @@ func getEnabledByDefaultFastLintersWith(with ...string) []string {
 	ebdl := lintersdb.NewManager(nil).GetAllEnabledByDefaultLinters()
 	ret := append([]string{}, with...)
 	for _, lc := range ebdl {
-		if lc.NeedsSSARepr {
+		if lc.IsSlowLinter() {
 			continue
 		}
 
@@ -74,6 +74,7 @@ func getEnabledByDefaultFastLintersWith(with ...string) []string {
 	return ret
 }
 
+//nolint:funlen
 func TestEnabledLinters(t *testing.T) {
 	type tc struct {
 		name           string
@@ -163,8 +164,8 @@ func TestEnabledLinters(t *testing.T) {
 		},
 		{
 			name:           "fast option combined with enable and enable-all",
-			args:           "--enable-all --fast --enable=staticcheck",
-			el:             getAllFastLintersWith("staticcheck"),
+			args:           "--enable-all --fast --enable=unused",
+			el:             getAllFastLintersWith("unused"),
 			noImplicitFast: true,
 		},
 	}
@@ -179,6 +180,7 @@ func TestEnabledLinters(t *testing.T) {
 			if c.args != "" {
 				runArgs = append(runArgs, strings.Split(c.args, " ")...)
 			}
+			runArgs = append(runArgs, minimalPkg)
 			r := testshared.NewLintRunner(t).RunWithYamlConfig(c.cfg, runArgs...)
 			sort.StringSlice(c.el).Sort()
 

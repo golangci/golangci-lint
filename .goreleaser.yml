@@ -12,24 +12,32 @@ builds:
       - darwin
       - windows
       - linux
+      - freebsd
     goarch:
       - amd64
+      - arm64
+      - arm
       - 386
+      - ppc64le
+      - s390x
+    goarm:
+      - 6
+      - 7
     env:
       - CGO_ENABLED=0
     main: ./cmd/golangci-lint/
     ldflags: -s -w -X main.version={{.Version}} -X main.commit={{.ShortCommit}} -X main.date={{.Date}}
 
-archive:
-  format: tar.gz
-  wrap_in_directory: true
-  format_overrides:
-    - goos: windows
-      format: zip
-  name_template: '{{ .Binary }}-{{ .Version }}-{{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'
-  files:
-    - LICENSE
-    - README.md
+archives:
+  - format: tar.gz
+    wrap_in_directory: true
+    format_overrides:
+      - goos: windows
+        format: zip
+    name_template: '{{ .Binary }}-{{ .Version }}-{{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'
+    files:
+      - LICENSE
+      - README.md
 
 snapshot:
   name_template: SNAPSHOT-{{ .Commit }}
@@ -49,17 +57,32 @@ changelog:
     - Merge branch
 
 dockers:
-  - image_templates:
+  - dockerfile: build/Dockerfile
+    binaries:
+      - golangci-lint
+    image_templates:
       - "golangci/golangci-lint:latest"
       - "golangci/golangci-lint:{{ .Tag }}"
       - "golangci/golangci-lint:v{{ .Major }}.{{ .Minor }}"
+  - dockerfile: build/Dockerfile.alpine
+    binaries:
+      - golangci-lint
+    image_templates:
+      - "golangci/golangci-lint:latest-alpine"
+      - "golangci/golangci-lint:{{ .Tag }}-alpine"
+      - "golangci/golangci-lint:v{{ .Major }}.{{ .Minor }}-alpine"
 
-brew:
-  github:
-    owner: golangci
-    name: homebrew-tap
-  folder: Formula
-  homepage:  https://golangci.com
-  description: Fast linters runner for Go.
-  test: |
-    system "#{bin}/golangci-lint --version"
+brews:
+  - github:
+      owner: golangci
+      name: homebrew-tap
+    folder: Formula
+    homepage:  https://golangci.com
+    description: Fast linters runner for Go.
+    install: |
+      bin.install "golangci-lint"
+      output = Utils.popen_read("#{bin}/golangci-lint completion bash")
+      (bash_completion/"golangci-lint").write output
+      prefix.install_metafiles
+    test: |
+      system "#{bin}/golangci-lint --version"

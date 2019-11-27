@@ -1,9 +1,13 @@
 package test
 
-import "path/filepath"
+import (
+	"path/filepath"
+)
 
 const testdataDir = "testdata"
 const binName = "../golangci-lint"
+
+var minimalPkg = getTestDataDir("minimalpkg")
 
 func getProjectRoot() string {
 	return filepath.Join("..", "...")

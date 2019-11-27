@@ -42,6 +42,20 @@ func genReadme(tmplPath, outPath string) error {
 	return tmpl.Execute(out, ctx)
 }
 
+func getLatestVersion() (string, error) {
+	if gitTag := os.Getenv("GIT_TAG"); gitTag != "" {
+		return gitTag, nil
+	}
+
+	out, err := exec.Command("git", "tag", "-l", "--sort=-v:refname").Output()
+	if err != nil {
+		return "", fmt.Errorf("failed to run git tag: %s", err)
+	}
+
+	lines := bytes.Split(out, []byte("\n"))
+	return string(lines[0]), nil
+}
+
 func buildTemplateContext() (map[string]interface{}, error) {
 	golangciYaml, err := ioutil.ReadFile(".golangci.yml")
 	if err != nil {
@@ -74,6 +88,15 @@ func buildTemplateContext() (map[string]interface{}, error) {
 
 	helpLines := bytes.Split(help, []byte("\n"))
 	shortHelp := bytes.Join(helpLines[2:], []byte("\n"))
+	changeLog, err := ioutil.ReadFile("CHANGELOG.md")
+	if err != nil {
+		return nil, err
+	}
+
+	latestVersion, err := getLatestVersion()
+	if err != nil {
+		return nil, fmt.Errorf("failed to get latest version: %s", err)
+	}
 
 	return map[string]interface{}{
 		"GolangciYaml":                     strings.TrimSpace(string(golangciYaml)),
@@ -84,6 +107,8 @@ func buildTemplateContext() (map[string]interface{}, error) {
 		"DisabledByDefaultLinters":         getLintersListMarkdown(false),
 		"ThanksList":                       getThanksList(),
 		"RunHelpText":                      string(shortHelp),
+		"ChangeLog":                        string(changeLog),
+		"LatestVersion":                    latestVersion,
 	}, nil
 }
 

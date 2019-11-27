@@ -24,11 +24,14 @@ func TestFix(t *testing.T) {
 	tmpDir := filepath.Join(testdataDir, "fix.tmp")
 	os.RemoveAll(tmpDir) // cleanup after previous runs
 
-	if os.Getenv("GL_KEEP_TEMP_FILES") != "1" {
+	if os.Getenv("GL_KEEP_TEMP_FILES") == "1" {
+		t.Logf("Temp dir for fix test: %s", tmpDir)
+	} else {
 		defer os.RemoveAll(tmpDir)
 	}
 
-	err := exec.Command("cp", "-R", filepath.Join(testdataDir, "fix"), tmpDir).Run()
+	fixDir := filepath.Join(testdataDir, "fix")
+	err := exec.Command("cp", "-R", fixDir, tmpDir).Run()
 	assert.NoError(t, err)
 
 	inputs := findSources(tmpDir, "in", "*.go")

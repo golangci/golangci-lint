@@ -38,7 +38,9 @@ type runner struct {
 	skipFile  map[*ast.File]bool
 }
 
-func (r *runner) run(pass *analysis.Pass) (interface{}, error) {
+// run executes an analysis for the pass. The receiver is passed
+// by value because this func is called in parallel for different passes.
+func (r runner) run(pass *analysis.Pass) (interface{}, error) {
 	r.pass = pass
 	funcs := pass.ResultOf[buildssa.Analyzer].(*buildssa.SSA).SrcFuncs
 
@@ -223,11 +225,11 @@ func (r *runner) getBodyOp(instr ssa.Instruction) (*ssa.UnOp, bool) {
 func (r *runner) isCloseCall(ccall ssa.Instruction) bool {
 	switch ccall := ccall.(type) {
 	case *ssa.Defer:
-		if ccall.Call.Method.Name() == r.closeMthd.Name() {
+		if ccall.Call.Method != nil && ccall.Call.Method.Name() == r.closeMthd.Name() {
 			return true
 		}
 	case *ssa.Call:
-		if ccall.Call.Method.Name() == r.closeMthd.Name() {
+		if ccall.Call.Method != nil && ccall.Call.Method.Name() == r.closeMthd.Name() {
 			return true
 		}
 	case *ssa.ChangeInterface:
@@ -312,7 +314,7 @@ func (r *runner) calledInFunc(f *ssa.Function, called bool) bool {
 				for _, r := range refs {
 					if v, ok := r.(ssa.Value); ok {
 						if ptr, ok := v.Type().(*types.Pointer); !ok || !isNamedType(ptr.Elem(), "io", "ReadCloser") {
-							return true
+							continue
 						}
 						vrefs := *v.Referrers()
 						for _, vref := range vrefs {
@@ -323,7 +325,7 @@ func (r *runner) calledInFunc(f *ssa.Function, called bool) bool {
 								}
 								for _, vref := range vrefs {
 									if c, ok := vref.(*ssa.Call); ok {
-										if c.Call.Method.Name() == closeMethod {
+										if c.Call.Method != nil && c.Call.Method.Name() == closeMethod {
 											return !called
 										}
 									}

@@ -14,22 +14,42 @@ Sponsored by [GolangCI.com](https://golangci.com): SaaS service for running lint
 
 <a href="https://golangci.com/"><img src="docs/go.png" width="250px"></a>
 
-* [Demo](#demo)
-* [Install](#install)
-* [Trusted By](#trusted-by)
-* [Quick Start](#quick-start)
-* [Editor Integration](#editor-integration)
-* [Comparison](#comparison)
-* [Performance](#performance)
-* [Internals](#internals)
-* [Supported Linters](#supported-linters)
-* [Configuration](#configuration)
-* [False Positives](#false-positives)
-* [FAQ](#faq)
-* [Thanks](#thanks)
-* [Changelog](#changelog)
-* [Future Plans](#future-plans)
-* [Contact Information](#contact-information)
+- [GolangCI-Lint](#golangci-lint)
+  - [Demo](#demo)
+  - [Install](#install)
+    - [Binary Release](#binary-release)
+    - [MacOS](#macos)
+    - [By Docker](#by-docker)
+    - [go get](#go-get)
+  - [Trusted By](#trusted-by)
+  - [Quick Start](#quick-start)
+  - [Editor Integration](#editor-integration)
+  - [Shell Completion](#shell-completion)
+    - [Mac OS X](#mac-os-x)
+    - [Linux](#linux)
+  - [Comparison](#comparison)
+    - [`golangci-lint` vs `gometalinter`](#golangci-lint-vs-gometalinter)
+    - [`golangci-lint` vs Running Linters Manually](#golangci-lint-vs-running-linters-manually)
+  - [Performance](#performance)
+    - [Comparison with gometalinter](#comparison-with-gometalinter)
+    - [Why golangci-lint is faster](#why-golangci-lint-is-faster)
+    - [Memory Usage of Golangci-lint](#memory-usage-of-golangci-lint)
+  - [Internals](#internals)
+  - [Supported Linters](#supported-linters)
+    - [Enabled By Default Linters](#enabled-by-default-linters)
+    - [Disabled By Default Linters (`-E/--enable`)](#disabled-by-default-linters--e--enable)
+  - [Configuration](#configuration)
+    - [Command-Line Options](#command-line-options)
+    - [Config File](#config-file)
+  - [False Positives](#false-positives)
+    - [Nolint](#nolint)
+  - [FAQ](#faq)
+  - [Thanks](#thanks)
+  - [Changelog](#changelog)
+  - [Debug](#debug)
+  - [Future Plans](#future-plans)
+  - [Contact Information](#contact-information)
+  - [License Scan](#license-scan)
 
 ## Demo
 
@@ -42,42 +62,27 @@ Short 1.5 min video demo of analyzing [beego](https://github.com/astaxie/beego).
 
 ## Install
 
-### CI Installation
+### Binary Release
 
 Most installations are done for CI (travis, circleci etc). It's important to have reproducible CI:
 don't start to fail all builds at the same time. With golangci-lint this can happen if you
-use `--enable-all` and a new linter is added or even without `--enable-all`: when one upstream linter is upgraded.
+use deprecated option `--enable-all` and a new linter is added or even without `--enable-all`: when one upstream linter is upgraded.
 
 It's highly recommended to install a specific version of golangci-lint. Releases are available on the [releases page](https://github.com/golangci/golangci-lint/releases).
 
-Latest version: ![GitHub release](https://img.shields.io/github/release/golangci/golangci-lint.svg)
+Latest release: [![GitHub release](https://img.shields.io/github/release/golangci/golangci-lint.svg)]((https://github.com/golangci/golangci-lint/releases/latest))
 
-Here is the recommended way to install golangci-lint (replace `vX.Y.Z` with the latest version):
-
-```bash
-# binary will be $(go env GOPATH)/bin/golangci-lint
-curl -sSfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s -- -b $(go env GOPATH)/bin vX.Y.Z
-
-# or install it into ./bin/
-curl -sSfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s vX.Y.Z
-
-# In alpine linux (as it does not come with curl by default)
-wget -O- -nv https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s vX.Y.Z
-
-golangci-lint --version
-```
-
-Or you can as fallback also use `raw.githubusercontent.com` to get the install script:
+Here is the recommended way to install golangci-lint {{.LatestVersion}}:
 
 ```bash
 # binary will be $(go env GOPATH)/bin/golangci-lint
-curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin vX.Y.Z
+curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin {{.LatestVersion}}
 
 # or install it into ./bin/
-curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s vX.Y.Z
+curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s {{.LatestVersion}}
 
 # In alpine linux (as it does not come with curl by default)
-wget -O- -q https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s vX.Y.Z
+wget -O- -nv https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s {{.LatestVersion}}
 
 golangci-lint --version
 ```
@@ -86,41 +91,30 @@ Periodically update version of golangci-lint the project is under active develop
 and is constantly being improved. But please always check for recent issues and
 update if needed.
 
-### Local Installation
+### MacOS
 
-Local installation is not recommended for your CI pipeline. Only install the linter this way in a local development environment.
-
-#### Windows, MacOS and Linux
-
-```bash
-go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
-```
-
-With `go1.11` or later you can get a particular version
-
-```bash
-GO111MODULE=on go get github.com/golangci/golangci-lint/cmd/golangci-lint@v1.17.1
-```
-
-#### MacOS
-
-You can also install it on MacOS using [brew](https://brew.sh/):
+You can also install a binary release on MacOS using [brew](https://brew.sh/):
 
 ```bash
 brew install golangci/tap/golangci-lint
 brew upgrade golangci/tap/golangci-lint
 ```
 
-#### `--version`
-
-If you need your local `golangci-lint --version` to show proper version additionally run:
+### By Docker
 
 ```bash
-cd $(go env GOPATH)/src/github.com/golangci/golangci-lint/cmd/golangci-lint
-go install -ldflags "-X 'main.version=$(git describe --tags)' -X 'main.commit=$(git rev-parse --short HEAD)' -X 'main.date=$(date)'"
+docker run --rm -v $(pwd):/app -w /app golangci/golangci-lint:{{.LatestVersion}} golangci-lint run -v
 ```
 
-On Windows, you can run the above commands with Git Bash, which comes with [Git for Windows](https://git-scm.com/download/win).
+### go get
+
+Please, do not install `golangci-lint` by `go get`:
+
+1. [`go.mod`](https://github.com/golangci/golangci-lint/blob/master/go.mod) replacement directive doesn't apply. It means you will be using patched version of `golangci-lint`.
+2. it's much slower than binary installation
+3. it's stability depends on your Go version (e.g. on [this compiler Go <= 1.12 bug](https://github.com/golang/go/issues/29612)).
+4. it's not guaranteed to work: e.g. we've encountered a lot of issues with Go modules hashes.
+5. it allows installation from `master` branch which can't be considered stable.
 
 ## Trusted By
 
@@ -142,22 +136,28 @@ The following companies/products use golangci-lint:
 * [NixOS](https://github.com/NixOS/nixpkgs-channels)
 * [The New York Times](https://github.com/NYTimes/encoding-wrapper)
 * [Istio](https://github.com/istio/istio)
+* [SoundCloud](https://github.com/soundcloud/periskop)
+* [Mattermost](https://github.com/mattermost/mattermost-server)
 
 The following great projects use golangci-lint:
 
-* [goreleaser/goreleaser](https://github.com/goreleaser/goreleaser)
-* [tsuru/tsuru](https://github.com/tsuru/tsuru)
-* [xenolf/lego](https://github.com/xenolf/lego)
-* [go-swagger/go-swagger](https://github.com/go-swagger/go-swagger)
-* [kubernetes-sigs/kustomize](https://github.com/kubernetes-sigs/kustomize)
-* [virtual-kubelet/virtual-kubelet](https://github.com/virtual-kubelet/virtual-kubelet)
 * [alecthomas/participle](https://github.com/alecthomas/participle)
 * [asobti/kube-monkey](https://github.com/asobti/kube-monkey)
-* [getantibody/antibody](https://github.com/getantibody/antibody)
 * [banzaicloud/pipeline](https://github.com/banzaicloud/pipeline)
+* [caicloud/cyclone](https://github.com/caicloud/cyclone)
+* [getantibody/antibody](https://github.com/getantibody/antibody)
+* [goreleaser/goreleaser](https://github.com/goreleaser/goreleaser)
+* [go-swagger/go-swagger](https://github.com/go-swagger/go-swagger)
+* [kubeedge/kubeedge](https://github.com/kubeedge/kubeedge)
+* [kubernetes-sigs/kustomize](https://github.com/kubernetes-sigs/kustomize)
+* [dunglas/mercure](https://github.com/dunglas/mercure)
 * [posener/complete](https://github.com/posener/complete)
-* [y0ssar1an/q](https://github.com/y0ssar1an/q)
 * [segmentio/terraform-docs](https://github.com/segmentio/terraform-docs)
+* [tsuru/tsuru](https://github.com/tsuru/tsuru)
+* [twpayne/chezmoi](https://github.com/twpayne/chezmoi)
+* [virtual-kubelet/virtual-kubelet](https://github.com/virtual-kubelet/virtual-kubelet)
+* [xenolf/lego](https://github.com/xenolf/lego)
+* [y0ssar1an/q](https://github.com/y0ssar1an/q)
 
 ## Quick Start
 
@@ -229,6 +229,35 @@ golangci-lint run --disable-all -E errcheck
    * ale [merged pull request](https://github.com/w0rp/ale/pull/1890) with golangci-lint support
 6. Atom - [go-plus](https://atom.io/packages/go-plus) supports golangci-lint.
 
+## Shell Completion
+
+`golangci-lint` can generate bash completion file.
+
+### Mac OS X
+
+There are two versions of `bash-completion`, v1 and v2. V1 is for Bash 3.2 (which is the default on macOS), and v2 is for Bash 4.1+. The `golangci-lint` completion script doesn’t work correctly with bash-completion v1 and Bash 3.2. It requires bash-completion v2 and Bash 4.1+. Thus, to be able to correctly use `golangci-lint` completion on macOS, you have to install and use Bash 4.1+ ([instructions](https://itnext.io/upgrading-bash-on-macos-7138bd1066ba)). The following instructions assume that you use Bash 4.1+ (that is, any Bash version of 4.1 or newer).
+
+Install `bash-completion v2`:
+
+```bash
+brew install bash-completion@2
+echo 'export BASH_COMPLETION_COMPAT_DIR="/usr/local/etc/bash_completion.d"' >>~/.bashrc
+echo '[[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]] && . "/usr/local/etc/profile.d/bash_completion.sh"' >>~/.bashrc
+exec bash # reload and replace (if it was updated) shell
+type _init_completion && echo "completion is OK" # verify that bash-completion v2 is correctly installed
+```
+
+Add `golangci-lint` bash completion:
+
+```bash
+echo 'source <(golangci-lint completion bash)' >>~/.bashrc
+source ~/.bashrc
+```
+
+### Linux
+
+See [kubectl instructions](https://kubernetes.io/docs/tasks/tools/install-kubectl/#enabling-shell-autocompletion) and don't forget to replace `kubectl` with `golangci-lint`.
+
 ## Comparison
 
 ### `golangci-lint` vs `gometalinter`
@@ -278,7 +307,7 @@ We measure peak memory usage (RSS) by tracking of processes RSS every 5 ms.
 We compare golangci-lint and gometalinter in default mode, but explicitly enable all linters because of small differences in the default configuration.
 
 ```bash
-$ golangci-lint run --no-config --issues-exit-code=0 --deadline=30m \
+$ golangci-lint run --no-config --issues-exit-code=0 --timeout=30m \
   --disable-all --enable=deadcode  --enable=gocyclo --enable=golint --enable=varcheck \
   --enable=structcheck --enable=maligned --enable=errcheck --enable=dupl --enable=ineffassign \
   --enable=interfacer --enable=unconvert --enable=goconst --enable=gosec --enable=megacheck
@@ -454,13 +483,13 @@ To exclude issues for the block of code use this directive on the beginning of a
 ```go
 //nolint
 func allIssuesInThisFunctionAreExcluded() *string {
-	// ...
+  // ...
 }
 
 //nolint:govet
 var (
-	a int
-	b int
+  a int
+  b int
 )
 ```
 
@@ -469,6 +498,15 @@ Also, you can exclude all issues in a file by:
 ```go
 //nolint:unparam
 package pkg
+```
+
+You may add a comment explaining or justifying why `//nolint` is being used on the same line as the flag itself:
+
+```go
+//nolint:gocyclo // This legacy function is complex but the team too busy to simplify it
+func someLegacyFunction() *string {
+  // ...
+}
 ```
 
 You can see more examples of using `//nolint` in [our tests](https://github.com/golangci/golangci-lint/tree/master/pkg/result/processors/testdata) for it.
@@ -500,17 +538,19 @@ We don't recommend vendoring `golangci-lint` in your repo: you will get troubles
 No, you don't need to do it anymore.
 
 **Which go versions are supported**
-Short answer: go 1.11 and newer are oficially supported.
+Short answer: go 1.12 and newer are oficially supported.
 
 Long answer:
+
 1. go < 1.9 isn't supported
-2. go 1.9 is supported by golangci-lint <= v1.10.2
-3. go 1.10 is officially supported by golangci-lint <= 1.15.0.
-4. go1.11 and go1.12 are officially supported by the latest version of golangci-lint.
+2. go1.9 is officially supported by golangci-lint <= v1.10.2
+3. go1.10 is officially supported by golangci-lint <= 1.15.0.
+4. go1.11 is officially supported by golangci-lint <= 1.17.1.
+5. go1.12+ are officially supported by the latest version of golangci-lint (>= 1.18.0).
 
 **`golangci-lint` doesn't work**
 
-1. Update it: `go get -u github.com/golangci/golangci-lint/cmd/golangci-lint`
+1. Please, ensure you are using the latest binary release.
 2. Run it with `-v` option and check the output.
 3. If it doesn't help create a [GitHub issue](https://github.com/golangci/golangci-lint/issues/new) with the output from the error and #2 above.
 
@@ -529,144 +569,21 @@ Thanks to developers and authors of used linters:
 
 ## Changelog
 
-Follow the news and releases on our [twitter](https://twitter.com/golangci) and our [blog](https://medium.com/golangci).
-There is the most valuable changes log:
+{{.ChangeLog}}
 
-### June 2019
+## Debug
 
-1. treat Go source files as a plain text by `misspell`: it allows detecting issues in strings, variable names, etc.
-2. implement richer and more stable auto-fix of `misspell` issues.
+You can see a verbose output of linter by using `-v` option.
 
-### May 2019
+If you would like to see more detailed logs you can set environment variable `GL_DEBUG` to debug `golangci-lint`.
+It's value is a list of debug tags. For example, `GL_DEBUG=loader,gocritic golangci-lint run`.
+Existing debug tags:
 
-1. Add [bodyclose](https://github.com/timakin/bodyclose) linter.
-2. Support junit-xml output.
-
-### April 2019
-
-1. Update go-critic, new checkers were added: badCall, dupImports, evalOrder, newDeref
-2. Fix staticcheck panic on packages that do not compile
-3. Make install script work on Windows
-4. Fix compatibility with the latest x/tools version and update golang.org/x/tools
-5. Correct import path of module sourcegraph/go-diff
-6. Fix `max-issues-per-linter` name
-7. Fix linting of preprocessed files (e.g. `*.qtpl.go`, goyacc)
-8. Enable auto-fixing when running via pre-commit
-
-### March 2019
-
-1. Support the newest `go vet` (with `go/analysis`)
-2. Support configuration of `go vet`: e.g. you can set print functions by `linters-settings.govet.settings.printf.funcs`
-3. Update megacheck (staticcheck) to 2019.1.1
-4. Add [information](https://github.com/golangci/golangci-lint#memory-usage-of-golangci-lint) about controlling space-time trade-off into README
-5. Exclude issues by source code line regexp by `issues.exclude-rules[i].source`
-6. Build and test on go 1.12
-7. Support `--color` option
-8. Update x/tools to fix c++ issues
-9. Include support for log level
-10. Sort linters list in help commands
-
-### February 2019
-
-1. Implement auto-fixing for `gofmt`, `goimports` and `misspell`
-2. Update `unparam`, `goimports`, `gosec` and `go-critic`
-3. Support `issues.exclude-rules` config option
-4. Add more `identifier` marking patterns
-5. Add code-climate output format
-6. Fix diff parsing on windows
-7. Add version information to built artifact for go1.12
-8. Dockerfile: copy the binary to `/usr/bin/` instead of `$GOPATH/bin/`
-9. Support `ignore-words` config option for `misspell`
-10. Include `staticcheck` check name into a message
-11. Fix working with symbolic links
-
-### January 2019
-
-1. Update `megacheck` (`staticcheck`), `unparam` and `go-critic` to the latest versions.
-2. Support the new `stylecheck` linter.
-3. Support of `enabled-tags` options for `go-critic`.
-4. Make rich debugging for `go-critic` and meticulously validate `go-critic` checks config.
-5. Update and use upstream versions of `unparam` and `interfacer` instead of forked ones.
-6. Improve handling of unknown linter names in `//nolint` directives.
-7. Speedup `typecheck` on large project with compilation errors.
-8. Add support for searching for `errcheck` exclude file.
-9. Fix `go-misc` checksum.
-10. Don't crash when staticcheck panics
-
-### December 2018
-
-1. Update `goimports`: the new version creates named imports for name/path mismatches.
-2. Update `go-critic` to the latest version.
-3. Sync default `go-critic` checks list with the `go-critic`.
-4. Support `pre-commit.com` hooks.
-5. Rework and simplify `--skip-dirs` for some edge cases.
-6. Add `modules-download-mode` option: it's useful in CI.
-7. Better validate commands.
-8. Fix working with absolute paths.
-9. Fix `errcheck.ignore` option.
-
-### November 2018
-
-1. Support new linters:
-   * gocritic
-   * scopelint
-   * gochecknointis
-   * gochecknoglobals
-2. Update CLA
-
-### October 2018
-
-1. Update goimports formatting
-2. Use go/packages
-   * A lot of linters became "fast": they are enabled by --fast now and
-     work in 1-2 seconds. Only unparam, interfacer and megacheck
-     are "slow" linters now.
-
-   * Average project is analyzed 20-40% faster than before if all linters are
-     enabled! If we enable all linters except unparam, interfacer and
-     megacheck analysis is 10-20x faster!
-3. Support goimports.local-prefix option for goimports
-4. Change license from AGPL to GPL
-
-### September 2018
-
-1. Rename GAS to gosec
-2. Drop go1.9 support
-3. Support installation of golangci-lint via go modules
-4. Update dockerfile to use golang 1.11
-5. Add support for ignore/exclude flags in errcheck
-
-### August 2018
-
-1. Improve lll parsing for very long lines
-2. Update Depguard with a Glob support
-3. Silent output by default
-4. Disable GAS (gosec) by default
-5. Build golangci-lint on go1.11
-
-### July 2018
-
-1. Add `golangci-lint linters` command
-2. Fix work with symlinks
-
-### June 2018
-
-1. Add support of the next linters:
-   * unparam
-   * misspell
-   * prealloc
-   * nakedret
-   * lll
-   * depguard
-2. Smart generated files detector
-3. Full `//nolint` support
-4. Implement `--skip-files` and `--skip-dirs` options
-5. Checkstyle output format support
-
-### May 2018
-
-1. Support GitHub Releases
-2. Installation via Homebrew and Docker
+1. `gocritic` - debug `go-critic` linter;
+2. `env` - debug `go env` command;
+3. `loader` - debug packages loading (including `go/packages` internal debugging);
+4. `autogen_exclude` - debug a filter excluding autogenerated source code;
+5. `nolint` - debug a filter excluding issues by `//nolint` comments.
 
 ## Future Plans
 

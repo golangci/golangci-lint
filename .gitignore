@@ -2,7 +2,13 @@
 /*.pdf
 /*.pprof
 /dist/
+/tools/dist/
 /.idea/
 /test/path
 /golangci-lint
-/tools/
+/tools/Dracula.itermcolors
+/tools/godownloader
+/tools/goreleaser
+/tools/node_modules
+/tools/svg-term
+/.vscode/

@@ -1,14 +1,16 @@
 package processors
 
 import (
+	"go/parser"
 	"go/token"
 	"path/filepath"
 	"strings"
+	"sync"
+	"time"
+
+	"golang.org/x/tools/go/packages"
 
 	"github.com/golangci/golangci-lint/pkg/logutils"
-
-	"github.com/golangci/golangci-lint/pkg/lint/astcache"
-
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
@@ -25,31 +27,60 @@ type FilenameUnadjuster struct {
 
 var _ Processor = &FilenameUnadjuster{}
 
-func NewFilenameUnadjuster(cache *astcache.Cache, log logutils.Log) *FilenameUnadjuster {
-	m := map[string]posMapper{}
-	for _, f := range cache.GetAllValidFiles() {
-		adjustedFilename := f.Fset.PositionFor(f.F.Pos(), true).Filename
-		if adjustedFilename == "" {
-			continue
-		}
-		unadjustedFilename := f.Fset.PositionFor(f.F.Pos(), false).Filename
-		if unadjustedFilename == "" || unadjustedFilename == adjustedFilename {
-			continue
-		}
-		if !strings.HasSuffix(unadjustedFilename, ".go") {
-			continue // file.go -> /caches/cgo-xxx
-		}
+func processUnadjusterPkg(m map[string]posMapper, pkg *packages.Package, log logutils.Log) {
+	fset := token.NewFileSet() // it's more memory efficient to not store all in one fset
 
-		f := f
-		m[adjustedFilename] = func(adjustedPos token.Position) token.Position {
-			tokenFile := f.Fset.File(f.F.Pos())
-			if tokenFile == nil {
-				log.Warnf("Failed to get token file for %s", adjustedFilename)
-				return adjustedPos
-			}
-			return f.Fset.PositionFor(tokenFile.Pos(adjustedPos.Offset), false)
-		}
+	for _, filename := range pkg.CompiledGoFiles {
+		// It's important to call func here to run GC
+		processUnadjusterFile(filename, m, log, fset)
 	}
+}
+
+func processUnadjusterFile(filename string, m map[string]posMapper, log logutils.Log, fset *token.FileSet) {
+	syntax, err := parser.ParseFile(fset, filename, nil, parser.ParseComments)
+	if err != nil {
+		// Error will be reported by typecheck
+		return
+	}
+
+	adjustedFilename := fset.PositionFor(syntax.Pos(), true).Filename
+	if adjustedFilename == "" {
+		return
+	}
+
+	unadjustedFilename := fset.PositionFor(syntax.Pos(), false).Filename
+	if unadjustedFilename == "" || unadjustedFilename == adjustedFilename {
+		return
+	}
+
+	if !strings.HasSuffix(unadjustedFilename, ".go") {
+		return // file.go -> /caches/cgo-xxx
+	}
+
+	m[adjustedFilename] = func(adjustedPos token.Position) token.Position {
+		tokenFile := fset.File(syntax.Pos())
+		if tokenFile == nil {
+			log.Warnf("Failed to get token file for %s", adjustedFilename)
+			return adjustedPos
+		}
+		return fset.PositionFor(tokenFile.Pos(adjustedPos.Offset), false)
+	}
+}
+
+func NewFilenameUnadjuster(pkgs []*packages.Package, log logutils.Log) *FilenameUnadjuster {
+	m := map[string]posMapper{}
+	startedAt := time.Now()
+	var wg sync.WaitGroup
+	wg.Add(len(pkgs))
+	for _, pkg := range pkgs {
+		go func(pkg *packages.Package) {
+			// It's important to call func here to run GC
+			processUnadjusterPkg(m, pkg, log)
+			wg.Done()
+		}(pkg)
+	}
+	wg.Wait()
+	log.Infof("Pre-built %d adjustments in %s", len(m), time.Since(startedAt))
 
 	return &FilenameUnadjuster{
 		m:                   m,

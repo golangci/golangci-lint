@@ -102,6 +102,7 @@ type Run struct {
 	Silent              bool
 	CPUProfilePath      string
 	MemProfilePath      string
+	TracePath           string
 	Concurrency         int
 	PrintResourcesUsage bool `mapstructure:"print-resources-usage"`
 
@@ -115,11 +116,16 @@ type Run struct {
 
 	ExitCodeIfIssuesFound int  `mapstructure:"issues-exit-code"`
 	AnalyzeTests          bool `mapstructure:"tests"`
-	Deadline              time.Duration
-	PrintVersion          bool
 
-	SkipFiles []string `mapstructure:"skip-files"`
-	SkipDirs  []string `mapstructure:"skip-dirs"`
+	// Deprecated: Deadline exists for historical compatibility
+	// and should not be used. To set run timeout use Timeout instead.
+	Deadline time.Duration
+	Timeout  time.Duration
+
+	PrintVersion       bool
+	SkipFiles          []string `mapstructure:"skip-files"`
+	SkipDirs           []string `mapstructure:"skip-dirs"`
+	UseDefaultSkipDirs bool     `mapstructure:"skip-dirs-use-default"`
 }
 
 type LintersSettings struct {
@@ -153,9 +159,10 @@ type LintersSettings struct {
 		MinOccurrencesCount int `mapstructure:"min-occurrences"`
 	}
 	Depguard struct {
-		ListType      string `mapstructure:"list-type"`
-		Packages      []string
-		IncludeGoRoot bool `mapstructure:"include-go-root"`
+		ListType                 string `mapstructure:"list-type"`
+		Packages                 []string
+		IncludeGoRoot            bool              `mapstructure:"include-go-root"`
+		PackagesWithErrorMessage map[string]string `mapstructure:"packages-with-error-message"`
 	}
 	Misspell struct {
 		Locale      string
@@ -164,18 +171,48 @@ type LintersSettings struct {
 	Unused struct {
 		CheckExported bool `mapstructure:"check-exported"`
 	}
+	Funlen struct {
+		Lines      int
+		Statements int
+	}
+	Whitespace struct {
+		MultiIf   bool `mapstructure:"multi-if"`
+		MultiFunc bool `mapstructure:"multi-func"`
+	}
 
+	WSL      WSLSettings
 	Lll      LllSettings
 	Unparam  UnparamSettings
 	Nakedret NakedretSettings
 	Prealloc PreallocSettings
 	Errcheck ErrcheckSettings
 	Gocritic GocriticSettings
+	Godox    GodoxSettings
+	Dogsled  DogsledSettings
+	Gocognit GocognitSettings
 }
 
 type GovetSettings struct {
 	CheckShadowing bool `mapstructure:"check-shadowing"`
 	Settings       map[string]map[string]interface{}
+
+	Enable     []string
+	Disable    []string
+	EnableAll  bool `mapstructure:"enable-all"`
+	DisableAll bool `mapstructure:"disable-all"`
+}
+
+func (cfg GovetSettings) Validate() error {
+	if cfg.EnableAll && cfg.DisableAll {
+		return errors.New("enable-all and disable-all can't be combined")
+	}
+	if cfg.EnableAll && len(cfg.Enable) != 0 {
+		return errors.New("enable-all and enable can't be combined")
+	}
+	if cfg.DisableAll && len(cfg.Disable) != 0 {
+		return errors.New("disable-all and disable can't be combined")
+	}
+	return nil
 }
 
 type ErrcheckSettings struct {
@@ -205,6 +242,27 @@ type PreallocSettings struct {
 	ForLoops   bool `mapstructure:"for-loops"`
 }
 
+type GodoxSettings struct {
+	Keywords []string
+}
+
+type DogsledSettings struct {
+	MaxBlankIdentifiers int `mapstructure:"max-blank-identifiers"`
+}
+
+type GocognitSettings struct {
+	MinComplexity int `mapstructure:"min-complexity"`
+}
+
+type WSLSettings struct {
+	StrictAppend                     bool `mapstructure:"strict-append"`
+	AllowAssignAndCallCuddle         bool `mapstructure:"allow-assign-and-call"`
+	AllowMultiLineAssignCuddle       bool `mapstructure:"allow-multiline-assign"`
+	AllowCuddleDeclaration           bool `mapstructure:"allow-cuddle-declarations"`
+	AllowTrailingComment             bool `mapstructure:"allow-trailing-comment"`
+	CaseForceTrailingWhitespaceLimit int  `mapstructure:"force-case-trailing-whitespace:"`
+}
+
 var defaultLintersSettings = LintersSettings{
 	Lll: LllSettings{
 		LineLength: 120,
@@ -223,6 +281,23 @@ var defaultLintersSettings = LintersSettings{
 	},
 	Gocritic: GocriticSettings{
 		SettingsPerCheck: map[string]GocriticCheckSettings{},
+	},
+	Godox: GodoxSettings{
+		Keywords: []string{},
+	},
+	Dogsled: DogsledSettings{
+		MaxBlankIdentifiers: 2,
+	},
+	Gocognit: GocognitSettings{
+		MinComplexity: 30,
+	},
+	WSL: WSLSettings{
+		StrictAppend:                     true,
+		AllowAssignAndCallCuddle:         true,
+		AllowMultiLineAssignCuddle:       true,
+		AllowCuddleDeclaration:           false,
+		AllowTrailingComment:             false,
+		CaseForceTrailingWhitespaceLimit: 0,
 	},
 }
 
@@ -295,7 +370,7 @@ type Issues struct {
 	NeedFix bool `mapstructure:"fix"`
 }
 
-type Config struct { //nolint:maligned
+type Config struct {
 	Run Run
 
 	Output struct {

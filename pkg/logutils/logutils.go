@@ -30,9 +30,10 @@ func Debug(tag string) DebugFunc {
 		return nopDebugf
 	}
 
+	logger := NewStderrLog(tag)
+	logger.SetLevel(LogLevelDebug)
+
 	return func(format string, args ...interface{}) {
-		logger := NewStderrLog(tag)
-		logger.SetLevel(LogLevelDebug)
 		logger.Debugf(format, args...)
 	}
 }

@@ -22,7 +22,7 @@ import (
 //
 // Sources files are supplied as fullshort slice.
 // It consists of pairs: full path to source file and its base name.
-//nolint:gocyclo
+//nolint:gocyclo,funlen
 func errorCheck(outStr string, wantAuto bool, fullshort ...string) (err error) {
 	var errs []error
 	out := splitOutput(outStr, wantAuto)
@@ -160,7 +160,7 @@ var (
 )
 
 // wantedErrors parses expected errors from comments in a file.
-//nolint:nakedret,gocyclo
+//nolint:nakedret,gocyclo,funlen
 func wantedErrors(file, short string) (errs []wantedError) {
 	cache := make(map[string]*regexp.Regexp)
 

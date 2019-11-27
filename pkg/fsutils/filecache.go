@@ -3,26 +3,25 @@ package fsutils
 import (
 	"fmt"
 	"io/ioutil"
-
-	"github.com/golangci/golangci-lint/pkg/logutils"
+	"sync"
 
 	"github.com/pkg/errors"
+
+	"github.com/golangci/golangci-lint/pkg/logutils"
 )
 
 type FileCache struct {
-	files map[string][]byte
+	files sync.Map
 }
 
 func NewFileCache() *FileCache {
-	return &FileCache{
-		files: map[string][]byte{},
-	}
+	return &FileCache{}
 }
 
 func (fc *FileCache) GetFileBytes(filePath string) ([]byte, error) {
-	cachedBytes := fc.files[filePath]
-	if cachedBytes != nil {
-		return cachedBytes, nil
+	cachedBytes, ok := fc.files.Load(filePath)
+	if ok {
+		return cachedBytes.([]byte), nil
 	}
 
 	fileBytes, err := ioutil.ReadFile(filePath)
@@ -30,11 +29,11 @@ func (fc *FileCache) GetFileBytes(filePath string) ([]byte, error) {
 		return nil, errors.Wrapf(err, "can't read file %s", filePath)
 	}
 
-	fc.files[filePath] = fileBytes
+	fc.files.Store(filePath, fileBytes)
 	return fileBytes, nil
 }
 
-func prettifyBytesCount(n int) string {
+func PrettifyBytesCount(n int64) string {
 	const (
 		Multiplexer = 1024
 		KiB         = 1 * Multiplexer
@@ -55,10 +54,14 @@ func prettifyBytesCount(n int) string {
 }
 
 func (fc *FileCache) PrintStats(log logutils.Log) {
-	var size int
-	for _, fileBytes := range fc.files {
-		size += len(fileBytes)
-	}
+	var size int64
+	var mapLen int
+	fc.files.Range(func(_, fileBytes interface{}) bool {
+		mapLen++
+		size += int64(len(fileBytes.([]byte)))
 
-	log.Infof("File cache stats: %d entries of total size %s", len(fc.files), prettifyBytesCount(size))
+		return true
+	})
+
+	log.Infof("File cache stats: %d entries of total size %s", mapLen, PrettifyBytesCount(size))
 }

@@ -12,7 +12,7 @@
 // data/Surnames.json
 // DO NOT EDIT!
 
-package zxcvbn_data
+package data
 
 import (
 	"bytes"

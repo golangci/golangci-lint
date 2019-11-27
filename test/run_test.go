@@ -6,12 +6,10 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-
-	"github.com/golangci/golangci-lint/test/testshared"
+	_ "github.com/valyala/quicktemplate"
 
 	"github.com/golangci/golangci-lint/pkg/exitcodes"
-
-	_ "github.com/valyala/quicktemplate"
+	"github.com/golangci/golangci-lint/test/testshared"
 )
 
 func getCommonRunArgs() []string {
@@ -35,7 +33,8 @@ func TestEmptyDirRun(t *testing.T) {
 func TestNotExistingDirRun(t *testing.T) {
 	testshared.NewLintRunner(t, "GO111MODULE=off").Run(getTestDataDir("no_such_dir")).
 		ExpectExitCode(exitcodes.Failure).
-		ExpectOutputContains(`cannot find package \"./testdata/no_such_dir\"`)
+		ExpectOutputContains("cannot find package").
+		ExpectOutputContains("/testdata/no_such_dir")
 }
 
 func TestSymlinkLoop(t *testing.T) {
@@ -45,7 +44,49 @@ func TestSymlinkLoop(t *testing.T) {
 func TestDeadline(t *testing.T) {
 	testshared.NewLintRunner(t).Run("--deadline=1ms", getProjectRoot()).
 		ExpectExitCode(exitcodes.Timeout).
-		ExpectOutputContains(`Deadline exceeded: try increase it by passing --deadline option`)
+		ExpectOutputContains(`Timeout exceeded: try increase it by passing --timeout option`)
+}
+
+func TestTimeout(t *testing.T) {
+	testshared.NewLintRunner(t).Run("--timeout=1ms", getProjectRoot()).
+		ExpectExitCode(exitcodes.Timeout).
+		ExpectOutputContains(`Timeout exceeded: try increase it by passing --timeout option`)
+}
+
+func TestTimeoutInConfig(t *testing.T) {
+	type tc struct {
+		cfg string
+	}
+
+	cases := []tc{
+		{
+			cfg: `
+				run:
+					deadline: 1ms
+			`,
+		},
+		{
+			cfg: `
+				run:
+					timeout: 1ms
+			`,
+		},
+		{
+			// timeout should override deadline
+			cfg: `
+				run:
+					deadline: 100s
+					timeout: 1ms
+			`,
+		},
+	}
+
+	r := testshared.NewLintRunner(t)
+	for _, c := range cases {
+		// Run with disallowed option set only in config
+		r.RunWithYamlConfig(c.cfg, withCommonRunArgs(minimalPkg)...).ExpectExitCode(exitcodes.Timeout).
+			ExpectOutputContains(`Timeout exceeded: try increase it by passing --timeout option`)
+	}
 }
 
 func TestTestsAreLintedByDefault(t *testing.T) {
@@ -54,16 +95,18 @@ func TestTestsAreLintedByDefault(t *testing.T) {
 }
 
 func TestCgoOk(t *testing.T) {
-	testshared.NewLintRunner(t).Run("--enable-all", getTestDataDir("cgo")).ExpectNoIssues()
+	testshared.NewLintRunner(t).Run("--no-config", "--enable-all", getTestDataDir("cgo")).ExpectNoIssues()
 }
 
 func TestCgoWithIssues(t *testing.T) {
-	testshared.NewLintRunner(t).Run("--enable-all", getTestDataDir("cgo_with_issues")).
+	testshared.NewLintRunner(t).Run("--no-config", "--disable-all", "-Egovet", getTestDataDir("cgo_with_issues")).
 		ExpectHasIssue("Printf format %t has arg cs of wrong type")
+	testshared.NewLintRunner(t).Run("--no-config", "--disable-all", "-Estaticcheck", getTestDataDir("cgo_with_issues")).
+		ExpectHasIssue("SA5009: Printf format %t has arg #1 of wrong type")
 }
 
 func TestUnsafeOk(t *testing.T) {
-	testshared.NewLintRunner(t).Run("--enable-all", getTestDataDir("unsafe")).ExpectNoIssues()
+	testshared.NewLintRunner(t).Run("--no-config", "--enable-all", getTestDataDir("unsafe")).ExpectNoIssues()
 }
 
 func TestGovetCustomFormatter(t *testing.T) {
@@ -117,6 +160,10 @@ func TestIdentifierUsedOnlyInTests(t *testing.T) {
 	testshared.NewLintRunner(t).Run("--no-config", "--disable-all", "-Eunused", getTestDataDir("used_only_in_tests")).ExpectNoIssues()
 }
 
+func TestUnusedCheckExported(t *testing.T) {
+	testshared.NewLintRunner(t).Run("-c", "testdata_etc/unused_exported/golangci.yml", "testdata_etc/unused_exported/...").ExpectNoIssues()
+}
+
 func TestConfigFileIsDetected(t *testing.T) {
 	checkGotConfig := func(r *testshared.RunResult) {
 		r.ExpectExitCode(exitcodes.Success).
@@ -130,12 +177,14 @@ func TestConfigFileIsDetected(t *testing.T) {
 
 func TestEnableAllFastAndEnableCanCoexist(t *testing.T) {
 	r := testshared.NewLintRunner(t)
-	r.Run(withCommonRunArgs("--fast", "--enable-all", "--enable=typecheck")...).ExpectNoIssues()
-	r.Run(withCommonRunArgs("--enable-all", "--enable=typecheck")...).ExpectExitCode(exitcodes.Failure)
+	r.Run(withCommonRunArgs("--no-config", "--fast", "--enable-all", "--enable=typecheck", minimalPkg)...).
+		ExpectExitCode(exitcodes.Success, exitcodes.IssuesFound)
+	r.Run(withCommonRunArgs("--no-config", "--enable-all", "--enable=typecheck", minimalPkg)...).
+		ExpectExitCode(exitcodes.Failure)
 }
 
 func TestEnabledPresetsAreNotDuplicated(t *testing.T) {
-	testshared.NewLintRunner(t).Run("--no-config", "-v", "-p", "style,bugs").
+	testshared.NewLintRunner(t).Run("--no-config", "-v", "-p", "style,bugs", minimalPkg).
 		ExpectOutputContains("Active presets: [bugs style]")
 }
 
@@ -188,6 +237,13 @@ func TestDisallowedOptionsInConfig(t *testing.T) {
 		{
 			cfg: `
 				run:
+					TracePath: path
+			`,
+			option: "--trace-path=path",
+		},
+		{
+			cfg: `
+				run:
 					Verbose: true
 			`,
 			option: "-v",
@@ -197,13 +253,13 @@ func TestDisallowedOptionsInConfig(t *testing.T) {
 	r := testshared.NewLintRunner(t)
 	for _, c := range cases {
 		// Run with disallowed option set only in config
-		r.RunWithYamlConfig(c.cfg, getCommonRunArgs()...).ExpectExitCode(exitcodes.Failure)
+		r.RunWithYamlConfig(c.cfg, withCommonRunArgs(minimalPkg)...).ExpectExitCode(exitcodes.Failure)
 
 		if c.option == "" {
 			continue
 		}
 
-		args := []string{c.option, "--fast"}
+		args := []string{c.option, "--fast", minimalPkg}
 
 		// Run with disallowed option set only in command-line
 		r.Run(withCommonRunArgs(args...)...).ExpectExitCode(exitcodes.Success)

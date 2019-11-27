@@ -7,5 +7,5 @@ import (
 )
 
 type Printer interface {
-	Print(ctx context.Context, issues <-chan result.Issue) error
+	Print(ctx context.Context, issues []result.Issue) error
 }

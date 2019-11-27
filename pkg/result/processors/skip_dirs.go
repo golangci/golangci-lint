@@ -11,11 +11,17 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
+type skipStat struct {
+	pattern string
+	count   int
+}
+
 type SkipDirs struct {
-	patterns    []*regexp.Regexp
-	log         logutils.Log
-	skippedDirs map[string]string // dir to the last regexp mapping
-	absArgsDirs []string
+	patterns         []*regexp.Regexp
+	log              logutils.Log
+	skippedDirs      map[string]*skipStat
+	absArgsDirs      []string
+	skippedDirsCache map[string]bool
 }
 
 var _ Processor = SkipFiles{}
@@ -50,14 +56,15 @@ func NewSkipDirs(patterns []string, log logutils.Log, runArgs []string) (*SkipDi
 	}
 
 	return &SkipDirs{
-		patterns:    patternsRe,
-		log:         log,
-		skippedDirs: map[string]string{},
-		absArgsDirs: absArgsDirs,
+		patterns:         patternsRe,
+		log:              log,
+		skippedDirs:      map[string]*skipStat{},
+		absArgsDirs:      absArgsDirs,
+		skippedDirsCache: map[string]bool{},
 	}, nil
 }
 
-func (p SkipDirs) Name() string {
+func (p *SkipDirs) Name() string {
 	return "skip_dirs"
 }
 
@@ -78,12 +85,26 @@ func (p *SkipDirs) shouldPassIssue(i *result.Issue) bool {
 	}
 
 	issueRelDir := filepath.Dir(i.FilePath())
+
+	if toPass, ok := p.skippedDirsCache[issueRelDir]; ok {
+		if !toPass {
+			p.skippedDirs[issueRelDir].count++
+		}
+		return toPass
+	}
+
 	issueAbsDir, err := filepath.Abs(issueRelDir)
 	if err != nil {
 		p.log.Warnf("Can't abs-ify path %q: %s", issueRelDir, err)
 		return true
 	}
 
+	toPass := p.shouldPassIssueDirs(issueRelDir, issueAbsDir)
+	p.skippedDirsCache[issueRelDir] = toPass
+	return toPass
+}
+
+func (p *SkipDirs) shouldPassIssueDirs(issueRelDir, issueAbsDir string) bool {
 	for _, absArgDir := range p.absArgsDirs {
 		if absArgDir == issueAbsDir {
 			// we must not skip issues if they are from explicitly set dirs
@@ -101,7 +122,12 @@ func (p *SkipDirs) shouldPassIssue(i *result.Issue) bool {
 	for _, pattern := range p.patterns {
 		if pattern.MatchString(issueRelDir) {
 			ps := pattern.String()
-			p.skippedDirs[issueRelDir] = ps
+			if p.skippedDirs[issueRelDir] == nil {
+				p.skippedDirs[issueRelDir] = &skipStat{
+					pattern: ps,
+				}
+			}
+			p.skippedDirs[issueRelDir].count++
 			return false
 		}
 	}
@@ -109,8 +135,8 @@ func (p *SkipDirs) shouldPassIssue(i *result.Issue) bool {
 	return true
 }
 
-func (p SkipDirs) Finish() {
-	for dir, pattern := range p.skippedDirs {
-		p.log.Infof("Skipped dir %s by pattern %s", dir, pattern)
+func (p *SkipDirs) Finish() {
+	for dir, stat := range p.skippedDirs {
+		p.log.Infof("Skipped %d issues from dir %s by pattern %s", stat.count, dir, stat.pattern)
 	}
 }

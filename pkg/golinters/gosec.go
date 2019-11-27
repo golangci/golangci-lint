@@ -1,67 +1,90 @@
 package golinters
 
 import (
-	"context"
 	"fmt"
 	"go/token"
 	"io/ioutil"
 	"log"
 	"strconv"
+	"sync"
 
-	"github.com/golangci/gosec"
-	"github.com/golangci/gosec/rules"
+	"github.com/securego/gosec"
+	"github.com/securego/gosec/rules"
+	"golang.org/x/tools/go/analysis"
+	"golang.org/x/tools/go/packages"
 
+	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-type Gosec struct{}
+const gosecName = "gosec"
 
-func (Gosec) Name() string {
-	return "gosec"
-}
+func NewGosec() *goanalysis.Linter {
+	var mu sync.Mutex
+	var resIssues []goanalysis.Issue
 
-func (Gosec) Desc() string {
-	return "Inspects source code for security problems"
-}
-
-func (lint Gosec) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issue, error) {
 	gasConfig := gosec.NewConfig()
 	enabledRules := rules.Generate()
 	logger := log.New(ioutil.Discard, "", 0)
-	analyzer := gosec.NewAnalyzer(gasConfig, logger)
-	analyzer.LoadRules(enabledRules.Builders())
 
-	analyzer.ProcessProgram(lintCtx.Program)
-	issues, _ := analyzer.Report()
-	if len(issues) == 0 {
-		return nil, nil
+	analyzer := &analysis.Analyzer{
+		Name: gosecName,
+		Doc:  goanalysis.TheOnlyanalyzerDoc,
 	}
-
-	res := make([]result.Issue, 0, len(issues))
-	for _, i := range issues {
-		text := fmt.Sprintf("%s: %s", i.RuleID, i.What) // TODO: use severity and confidence
-		var r *result.Range
-		line, err := strconv.Atoi(i.Line)
-		if err != nil {
-			r = &result.Range{}
-			if n, rerr := fmt.Sscanf(i.Line, "%d-%d", &r.From, &r.To); rerr != nil || n != 2 {
-				lintCtx.Log.Warnf("Can't convert gosec line number %q of %v to int: %s", i.Line, i, err)
-				continue
+	return goanalysis.NewLinter(
+		gosecName,
+		"Inspects source code for security problems",
+		[]*analysis.Analyzer{analyzer},
+		nil,
+	).WithContextSetter(func(lintCtx *linter.Context) {
+		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
+			gosecAnalyzer := gosec.NewAnalyzer(gasConfig, true, logger)
+			gosecAnalyzer.LoadRules(enabledRules.Builders())
+			pkg := &packages.Package{
+				Fset:      pass.Fset,
+				Syntax:    pass.Files,
+				Types:     pass.Pkg,
+				TypesInfo: pass.TypesInfo,
 			}
-			line = r.From
+			gosecAnalyzer.Check(pkg)
+			issues, _, _ := gosecAnalyzer.Report()
+			if len(issues) == 0 {
+				return nil, nil
+			}
+
+			res := make([]goanalysis.Issue, 0, len(issues))
+			for _, i := range issues {
+				text := fmt.Sprintf("%s: %s", i.RuleID, i.What) // TODO: use severity and confidence
+				var r *result.Range
+				line, err := strconv.Atoi(i.Line)
+				if err != nil {
+					r = &result.Range{}
+					if n, rerr := fmt.Sscanf(i.Line, "%d-%d", &r.From, &r.To); rerr != nil || n != 2 {
+						lintCtx.Log.Warnf("Can't convert gosec line number %q of %v to int: %s", i.Line, i, err)
+						continue
+					}
+					line = r.From
+				}
+
+				res = append(res, goanalysis.NewIssue(&result.Issue{ //nolint:scopelint
+					Pos: token.Position{
+						Filename: i.File,
+						Line:     line,
+					},
+					Text:       text,
+					LineRange:  r,
+					FromLinter: gosecName,
+				}, pass))
+			}
+
+			mu.Lock()
+			resIssues = append(resIssues, res...)
+			mu.Unlock()
+
+			return nil, nil
 		}
-
-		res = append(res, result.Issue{
-			Pos: token.Position{
-				Filename: i.File,
-				Line:     line,
-			},
-			Text:       text,
-			LineRange:  r,
-			FromLinter: lint.Name(),
-		})
-	}
-
-	return res, nil
+	}).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
+		return resIssues
+	}).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }

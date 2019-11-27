@@ -1,13 +1,23 @@
-sudo: false
 language: go
 go:
-  - 1.11.x
   - 1.12.x
+  - 1.13.x
+
+env:
+  global:
+    - NODE_VERSION=10.16.3
 
 before_script:
-  - go get github.com/valyala/quicktemplate
+  - nvm install "${NODE_VERSION}"
 
-script: make check_generated test
+script:
+  - time make fast_check_generated
+  - time make test
+
+branches:
+  only: # speed up CI: don't build pull requests twice
+    - "master"
+    - /^v\d+\.\d+\.\d+$/
 
 after_success:
   - test -n "$TRAVIS_TAG" && docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
@@ -20,8 +30,10 @@ services:
 deploy:
 - provider: script
   skip_cleanup: true
-  script: curl -sL https://git.io/goreleaser | bash
+  script:
+    - make test_race
+    - make release
   on:
     tags: true
     # it's important to build on the newest version of go:
-    condition: $TRAVIS_GO_VERSION =~ ^1\.12
+    condition: $TRAVIS_GO_VERSION =~ ^1\.13

@@ -46,7 +46,7 @@ func Packages(initial []*packages.Package, mode ssa.BuilderMode) (*ssa.Program, 
 //
 // AllPackages creates an SSA package for each well-typed package in the
 // initial list, plus all their dependencies. The resulting list of
-// packages corresponds to the list of intial packages, and may contain
+// packages corresponds to the list of initial packages, and may contain
 // a nil if SSA code could not be constructed for the corresponding
 // initial package due to type errors.
 //
@@ -101,7 +101,7 @@ func doPackages(initial []*packages.Package, mode ssa.BuilderMode, deps bool) (*
 //
 // The mode parameter controls diagnostics and checking during SSA construction.
 //
-// Deprecated: use golang.org/x/tools/go/packages and the Packages
+// Deprecated: Use golang.org/x/tools/go/packages and the Packages
 // function instead; see ssa.ExampleLoadPackages.
 //
 func CreateProgram(lprog *loader.Program, mode ssa.BuilderMode) *ssa.Program {

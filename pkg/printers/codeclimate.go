@@ -2,7 +2,7 @@ package printers
 
 import (
 	"context"
-	"crypto/md5"
+	"crypto/md5" //nolint:gosec
 	"encoding/json"
 	"fmt"
 
@@ -30,16 +30,17 @@ func NewCodeClimate() *CodeClimate {
 	return &CodeClimate{}
 }
 
-func (p CodeClimate) Print(ctx context.Context, issues <-chan result.Issue) error {
+func (p CodeClimate) Print(ctx context.Context, issues []result.Issue) error {
 	allIssues := []CodeClimateIssue{}
-	for i := range issues {
+	for ind := range issues {
+		i := &issues[ind]
 		var issue CodeClimateIssue
 		issue.Description = i.FromLinter + ": " + i.Text
 		issue.Location.Path = i.Pos.Filename
 		issue.Location.Lines.Begin = i.Pos.Line
 
 		// Need a checksum of the issue, so we use MD5 of the filename, text, and first line of source
-		hash := md5.New()
+		hash := md5.New() //nolint:gosec
 		_, _ = hash.Write([]byte(i.Pos.Filename + i.Text + i.SourceLines[0]))
 		issue.Fingerprint = fmt.Sprintf("%X", hash.Sum(nil))
 
