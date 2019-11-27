@@ -87,9 +87,8 @@ wget -O- -nv https://raw.githubusercontent.com/golangci/golangci-lint/master/ins
 golangci-lint --version
 ```
 
-Periodically update version of golangci-lint the project is under active development
-and is constantly being improved. But please always check for recent issues and
-update if needed.
+It is advised that you periodically update version of golangci-lint as the project is under active development
+and is constantly being improved. For any problems with golangci-lint, check out recent [GitHub issues](https://github.com/golangci/golangci-lint/issues) and update if needed.
 
 ### MacOS
 
