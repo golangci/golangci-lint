@@ -68,29 +68,27 @@ Most installations are done for CI (travis, circleci etc). It's important to hav
 don't start to fail all builds at the same time. With golangci-lint this can happen if you
 use deprecated option `--enable-all` and a new linter is added or even without `--enable-all`: when one upstream linter is upgraded.
 
-It's highly recommended to install a fixed version of golangci-lint.
-Releases are available on the [releases page](https://github.com/golangci/golangci-lint/releases).
+It's highly recommended to install a specific version of golangci-lint. Releases are available on the [releases page](https://github.com/golangci/golangci-lint/releases).
 
-Latest version: [v1.21.0](https://github.com/golangci/golangci-lint/releases/tag/v1.21.0)
+Latest release: [![GitHub release](https://img.shields.io/github/release/golangci/golangci-lint.svg)]((https://github.com/golangci/golangci-lint/releases/latest))
 
-Here is the recommended way to install golangci-lint:
+Here is the recommended way to install golangci-lint v1.21.0:
 
 ```bash
 # binary will be $(go env GOPATH)/bin/golangci-lint
-curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sh -s -- -b $(go env GOPATH)/bin v1.21.0
+curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.21.0
 
 # or install it into ./bin/
-curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sh -s v1.21.0
+curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.21.0
 
 # In alpine linux (as it does not come with curl by default)
-wget -O - -q https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sh -s v1.21.0
+wget -O- -nv https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.21.0
 
 golangci-lint --version
 ```
 
-Periodically update version of golangci-lint: the project is under active development
-and is constantly being improved. But please always check for newly found issues and
-update if needed.
+It is advised that you periodically update version of golangci-lint as the project is under active development
+and is constantly being improved. For any problems with golangci-lint, check out recent [GitHub issues](https://github.com/golangci/golangci-lint/issues) and update if needed.
 
 ### MacOS
 
