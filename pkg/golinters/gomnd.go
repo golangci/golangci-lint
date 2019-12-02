@@ -14,7 +14,7 @@ func NewGoMND() *goanalysis.Linter {
 
 	return goanalysis.NewLinter(
 		"gomnd",
-		"checks whether magic number is used",
+		"A analyzer to detect magic numbers.",
 		analyzers,
 		nil,
 	).WithLoadMode(goanalysis.LoadModeSyntax)
