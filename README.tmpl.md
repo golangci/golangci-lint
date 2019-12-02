@@ -2,6 +2,9 @@
 
 [![Build Status](https://travis-ci.com/golangci/golangci-lint.svg?branch=master)](https://travis-ci.com/golangci/golangci-lint)
 [![GolangCI](https://golangci.com/badges/github.com/golangci/golangci-lint.svg)](https://golangci.com)
+[![License](https://img.shields.io/github/license/golangci/golangci-lint)](/LICENSE)
+[![Release](https://img.shields.io/github/release/golangci/golangci-lint.svg)](https://github.com/golangci/golangci-lint/releases/latest)
+[![Docker](https://img.shields.io/docker/pulls/golangci/golangci-lint)](https://hub.docker.com/r/golangci/golangci-lint)
 
 GolangCI-Lint is a linters aggregator. It's fast: on average [5 times faster](#performance) than gometalinter.
 It's [easy to integrate and use](#command-line-options), has [nice output](#quick-start) and has a minimum number of false positives. It supports go modules.
@@ -10,22 +13,22 @@ GolangCI-Lint has [integrations](#editor-integration) with VS Code, GNU Emacs, S
 
 Follow the news and releases on our [twitter](https://twitter.com/golangci) and our [blog](https://medium.com/golangci).
 
-Sponsored by [GolangCI.com](https://golangci.com): SaaS service for running linters on Github pull requests. Free for Open Source.
+Sponsored by [GolangCI.com](https://golangci.com): SaaS service for running linters on GitHub pull requests. Free for Open Source.
 
 <a href="https://golangci.com/"><img src="docs/go.png" width="250px"></a>
 
 - [GolangCI-Lint](#golangci-lint)
   - [Demo](#demo)
   - [Install](#install)
-    - [Binary Release](#binary-release)
-    - [MacOS](#macos)
-    - [By Docker](#by-docker)
-    - [go get](#go-get)
+    - [Binary](#binary)
+    - [macOS](#macos)
+    - [Docker](#docker)
+    - [Go](#go)
   - [Trusted By](#trusted-by)
   - [Quick Start](#quick-start)
   - [Editor Integration](#editor-integration)
   - [Shell Completion](#shell-completion)
-    - [Mac OS X](#mac-os-x)
+    - [macOS](#macos-1)
     - [Linux](#linux)
   - [Comparison](#comparison)
     - [`golangci-lint` vs `gometalinter`](#golangci-lint-vs-gometalinter)
@@ -62,15 +65,13 @@ Short 1.5 min video demo of analyzing [beego](https://github.com/astaxie/beego).
 
 ## Install
 
-### Binary Release
+### Binary
 
-Most installations are done for CI (travis, circleci etc). It's important to have reproducible CI:
+Most installations are done for CI (e.g. Travis CI, CircleCI). It's important to have reproducible CI:
 don't start to fail all builds at the same time. With golangci-lint this can happen if you
 use deprecated option `--enable-all` and a new linter is added or even without `--enable-all`: when one upstream linter is upgraded.
 
-It's highly recommended to install a specific version of golangci-lint. Releases are available on the [releases page](https://github.com/golangci/golangci-lint/releases).
-
-Latest release: [![GitHub release](https://img.shields.io/github/release/golangci/golangci-lint.svg)]((https://github.com/golangci/golangci-lint/releases/latest))
+It's highly recommended to install a specific version of golangci-lint available on the [releases page](https://github.com/golangci/golangci-lint/releases).
 
 Here is the recommended way to install golangci-lint {{.LatestVersion}}:
 
@@ -90,28 +91,28 @@ golangci-lint --version
 It is advised that you periodically update version of golangci-lint as the project is under active development
 and is constantly being improved. For any problems with golangci-lint, check out recent [GitHub issues](https://github.com/golangci/golangci-lint/issues) and update if needed.
 
-### MacOS
+### macOS
 
-You can also install a binary release on MacOS using [brew](https://brew.sh/):
+You can also install a binary release on macOS using [brew](https://brew.sh/):
 
 ```bash
 brew install golangci/tap/golangci-lint
 brew upgrade golangci/tap/golangci-lint
 ```
 
-### By Docker
+### Docker
 
 ```bash
 docker run --rm -v $(pwd):/app -w /app golangci/golangci-lint:{{.LatestVersion}} golangci-lint run -v
 ```
 
-### go get
+### Go
 
 Please, do not install `golangci-lint` by `go get`:
 
 1. [`go.mod`](https://github.com/golangci/golangci-lint/blob/master/go.mod) replacement directive doesn't apply. It means you will be using patched version of `golangci-lint`.
 2. it's much slower than binary installation
-3. it's stability depends on your Go version (e.g. on [this compiler Go <= 1.12 bug](https://github.com/golang/go/issues/29612)).
+3. its stability depends on your Go version (e.g. on [this compiler Go <= 1.12 bug](https://github.com/golang/go/issues/29612)).
 4. it's not guaranteed to work: e.g. we've encountered a lot of issues with Go modules hashes.
 5. it allows installation from `master` branch which can't be considered stable.
 
@@ -232,7 +233,7 @@ golangci-lint run --disable-all -E errcheck
 
 `golangci-lint` can generate bash completion file.
 
-### Mac OS X
+### macOS
 
 There are two versions of `bash-completion`, v1 and v2. V1 is for Bash 3.2 (which is the default on macOS), and v2 is for Bash 4.1+. The `golangci-lint` completion script doesn’t work correctly with bash-completion v1 and Bash 3.2. It requires bash-completion v2 and Bash 4.1+. Thus, to be able to correctly use `golangci-lint` completion on macOS, you have to install and use Bash 4.1+ ([instructions](https://itnext.io/upgrading-bash-on-macos-7138bd1066ba)). The following instructions assume that you use Bash 4.1+ (that is, any Bash version of 4.1 or newer).
 
@@ -537,7 +538,7 @@ We don't recommend vendoring `golangci-lint` in your repo: you will get troubles
 No, you don't need to do it anymore.
 
 **Which go versions are supported**
-Short answer: go 1.12 and newer are oficially supported.
+Short answer: go 1.12 and newer are officially supported.
 
 Long answer:
 
