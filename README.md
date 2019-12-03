@@ -210,6 +210,7 @@ bodyclose: checks whether HTTP response body is closed successfully [fast: true,
 depguard: Go linter that checks if package imports are in a list of acceptable packages [fast: true, auto-fix: false]
 dogsled: Checks assignments with too many blank identifiers (e.g. x, _, _, _, := f()) [fast: true, auto-fix: false]
 dupl: Tool for code clone detection [fast: true, auto-fix: false]
+erris: checks that errors are compared or type asserted using errors.Is and errors.As [fast: true, auto-fix: false]
 funlen: Tool for detection of long functions [fast: true, auto-fix: false]
 gochecknoglobals: Checks that no globals are present in Go code [fast: true, auto-fix: false]
 gochecknoinits: Checks that no init functions are present in Go code [fast: true, auto-fix: false]
@@ -490,6 +491,7 @@ golangci-lint help linters
 - [goprintffuncname](https://github.com/jirfag/go-printf-func-name) - Checks that printf-like functions are named with `f` at the end
 - [gomnd](https://github.com/tommy-muehle/go-mnd) - An analyzer to detect magic numbers.
 - [godot](https://github.com/tetafro/godot) - Check if comments end in a period
+- [erris](https://github.com/romanyx/erris) - checks that errors are compared or type asserted using errors.Is and errors.As
 
 ## Configuration
 
@@ -1017,6 +1019,7 @@ linters:
     - dogsled
     - dupl
     - errcheck
+    - erris
     - funlen
     - gochecknoinits
     - goconst
@@ -1267,6 +1270,7 @@ Thanks to developers and authors of used linters:
 - [jirfag](https://github.com/jirfag)
 - [tommy-muehle](https://github.com/tommy-muehle)
 - [tetafro](https://github.com/tetafro)
+- [romanyx](https://github.com/romanyx)
 
 ## Changelog
 
