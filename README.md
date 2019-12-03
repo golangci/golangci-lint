@@ -685,6 +685,9 @@ linters-settings:
     # see https://github.com/kisielk/errcheck#excluding-functions for details
     exclude: /path/to/file.txt
 
+    # if true, checking of _test.go files is disabled
+    without-tests: false
+
   funlen:
     lines: 60
     statements: 40

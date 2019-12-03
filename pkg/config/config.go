@@ -220,6 +220,7 @@ type ErrcheckSettings struct {
 	CheckAssignToBlank  bool   `mapstructure:"check-blank"`
 	Ignore              string `mapstructure:"ignore"`
 	Exclude             string `mapstructure:"exclude"`
+	WithoutTests        bool   `mapstructure:"without-tests"`
 }
 
 type LllSettings struct {

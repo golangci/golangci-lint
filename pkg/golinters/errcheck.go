@@ -111,9 +111,10 @@ func genConfig(errCfg *config.ErrcheckSettings) (*errcheck.Config, error) {
 	}
 
 	c := &errcheck.Config{
-		Ignore:  ignoreConfig,
-		Blank:   errCfg.CheckAssignToBlank,
-		Asserts: errCfg.CheckTypeAssertions,
+		Ignore:       ignoreConfig,
+		Blank:        errCfg.CheckAssignToBlank,
+		Asserts:      errCfg.CheckTypeAssertions,
+		WithoutTests: errCfg.WithoutTests,
 	}
 
 	if errCfg.Exclude != "" {
