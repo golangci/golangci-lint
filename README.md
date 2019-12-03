@@ -219,7 +219,7 @@ godox: Tool for detection of FIXME, TODO and other comment keywords [fast: true,
 gofmt: Gofmt checks whether code was gofmt-ed. By default this tool runs with -s option to check for code simplification [fast: true, auto-fix: true]
 goimports: Goimports does everything that gofmt does. Additionally it checks unused imports [fast: true, auto-fix: true]
 golint: Golint differs from gofmt. Gofmt reformats Go source code, whereas golint prints out style mistakes [fast: true, auto-fix: false]
-gomnd: checks whether magic number is used [fast: true, auto-fix: false]
+gomnd: An analyzer to detect magic numbers. [fast: true, auto-fix: false]
 gosec (gas): Inspects source code for security problems [fast: true, auto-fix: false]
 interfacer: Linter that suggests narrower interface types [fast: true, auto-fix: false]
 lll: Reports long lines [fast: true, auto-fix: false]
@@ -481,7 +481,7 @@ golangci-lint help linters
 - [funlen](https://github.com/ultraware/funlen) - Tool for detection of long functions
 - [whitespace](https://github.com/ultraware/whitespace) - Tool for detection of leading and trailing whitespace
 - [wsl](https://github.com/bombsimon/wsl) - Whitespace Linter - Forces you to use empty lines!
-- [gomnd](https://github.com/tommy-muehle/go-mnd) - checks whether magic number is used
+- [gomnd](https://github.com/tommy-muehle/go-mnd) - An analyzer to detect magic numbers.
 
 ## Configuration
 
