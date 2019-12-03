@@ -138,9 +138,9 @@ linters-settings:
     include-go-root: false
     packages:
       - github.com/sirupsen/logrus
-    packages-with-error-messages:
+    packages-with-error-message:
       # specify an error message to output when a blacklisted package is used
-      github.com/sirupsen/logrus: "logging is allowed only by logutils.Log"
+      - github.com/sirupsen/logrus: "logging is allowed only by logutils.Log"
   misspell:
     # Correct spellings using locale preferences for US or UK.
     # Default is to use a neutral variety of English.
