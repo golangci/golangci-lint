@@ -98,7 +98,7 @@ func (r runner) run(pass *analysis.Pass, pkgPath string) (interface{}, error) {
 		for _, b := range f.Blocks {
 			for i := range b.Instrs {
 				if r.notCheck(b, i) {
-					pass.Reportf(b.Instrs[i].Pos(), fmt.Sprintf("rows err must be checked"))
+					pass.Reportf(b.Instrs[i].Pos(), fmt.Sprintf("rows.Err must be checked"))
 				}
 			}
 		}
