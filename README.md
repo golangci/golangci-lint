@@ -126,6 +126,7 @@ The following companies/products use golangci-lint:
 * [Yahoo](https://github.com/yahoo/yfuzz)
 * [IBM](https://github.com/ibm-developer/ibm-cloud-env-golang)
 * [Xiaomi](https://github.com/XiaoMi/soar)
+* [Baidu](https://github.com/baidu/bfe)
 * [Samsung](https://github.com/samsung-cnct/cluster-api-provider-ssh)
 * [Arduino](https://github.com/arduino/arduino-cli)
 * [Eclipse Foundation](https://github.com/eclipse/che-go-jsonrpc)
