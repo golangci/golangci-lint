@@ -40,7 +40,7 @@ require (
 	github.com/tommy-muehle/go-mnd v1.1.1
 	github.com/ultraware/funlen v0.0.2
 	github.com/ultraware/whitespace v0.0.4
-	github.com/uudashr/gocognit v0.0.0-20190926065955-1655d0de0517
+	github.com/uudashr/gocognit v1.0.1
 	github.com/valyala/quicktemplate v1.2.0
 	golang.org/x/tools v0.0.0-20191113232020-e2727e816f5a
 	gopkg.in/yaml.v2 v2.2.5
