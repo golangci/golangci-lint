@@ -170,14 +170,14 @@ github.com/stretchr/testify/mock
 github.com/stretchr/testify/require
 # github.com/timakin/bodyclose v0.0.0-20190930140734-f7f2e9bca95e
 github.com/timakin/bodyclose/passes/bodyclose
-# github.com/tommy-muehle/go-mnd v0.0.0-20190903201840-c93e405da530
+# github.com/tommy-muehle/go-mnd v1.1.1
 github.com/tommy-muehle/go-mnd
 github.com/tommy-muehle/go-mnd/checks
 # github.com/ultraware/funlen v0.0.2
 github.com/ultraware/funlen
 # github.com/ultraware/whitespace v0.0.4
 github.com/ultraware/whitespace
-# github.com/uudashr/gocognit v0.0.0-20190926065955-1655d0de0517
+# github.com/uudashr/gocognit v1.0.1
 github.com/uudashr/gocognit
 # github.com/valyala/bytebufferpool v1.0.0
 github.com/valyala/bytebufferpool
