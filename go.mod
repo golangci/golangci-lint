@@ -6,7 +6,7 @@ require (
 	github.com/OpenPeeDeeP/depguard v1.0.1
 	github.com/bombsimon/wsl/v2 v2.0.0
 	github.com/fatih/color v1.7.0
-	github.com/go-critic/go-critic v0.3.5-0.20190904082202-d79a9f0c64db
+	github.com/go-critic/go-critic v0.4.0
 	github.com/go-lintpack/lintpack v0.5.2
 	github.com/gofrs/flock v0.0.0-20190320160742-5135e617513b
 	github.com/golangci/check v0.0.0-20180506172741-cfe4005ccda2
