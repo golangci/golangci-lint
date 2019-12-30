@@ -26,9 +26,7 @@ services:
 deploy:
 - provider: script
   skip_cleanup: true
-  script:
-    - make test_race
-    - make release
+  script: make release
   on:
     tags: true
     # it's important to build on the newest version of go:
