@@ -3,12 +3,8 @@ go:
   - 1.12.x
   - 1.13.x
 
-env:
-  global:
-    - NODE_VERSION=10.16.3
-
 before_script:
-  - nvm install "${NODE_VERSION}"
+  - nvm install 12.14.0
 
 script:
   - time make fast_check_generated
