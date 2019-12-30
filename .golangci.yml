@@ -98,17 +98,9 @@ linters:
 run:
   skip-dirs:
     - test/testdata_etc
-  skip-files:
-    - internal/cache/.*_test.go
-
-issues:
-  exclude-rules:
-    - path: internal/(cache|renameio)/
-      linters:
-        - lll
-        - gochecknoinits
-        - gocyclo
-        - funlen
+    - internal/cache
+    - internal/renameio
+    - internal/robustio
 
 # golangci.com configuration
 # https://github.com/golangci/golangci/wiki/Configuration
