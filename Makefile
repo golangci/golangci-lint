@@ -10,11 +10,13 @@ export GOPROXY = https://proxy.golang.org
 
 # Build
 
-fast_build: FORCE
-	go build -o golangci-lint ./cmd/golangci-lint
-build_race: FORCE
-	go build -race -o golangci-lint ./cmd/golangci-lint
 build: golangci-lint
+.PHONY: build
+
+build_race:
+	go build -race -o golangci-lint ./cmd/golangci-lint
+.PHONY: build_race
+
 clean:
 	rm -f golangci-lint
 	rm -f test/path
@@ -23,20 +25,18 @@ clean:
 	rm -f tools/goreleaser
 	rm -f tools/svg-term
 	rm -rf tools/node_modules
-.PHONY: fast_build build build_race clean
+.PHONY: clean
 
 # Test
 test: export GOLANGCI_LINT_INSTALLED = true
 test: build
 	GL_TEST_RUN=1 time ./golangci-lint run -v
-	time go run ./cmd/golangci-lint/main.go run -v
 	GL_TEST_RUN=1 time ./golangci-lint run --fast --no-config -v --skip-dirs 'test/testdata_etc,internal/(cache|renameio|robustio)'
 	GL_TEST_RUN=1 time ./golangci-lint run --no-config -v --skip-dirs 'test/testdata_etc,internal/(cache|renameio|robustio)'
 	GL_TEST_RUN=1 time go test -v ./...
 .PHONY: test
 
-test_race:
-	go build -race -o golangci-lint ./cmd/golangci-lint
+test_race: build_race
 	GL_TEST_RUN=1 ./golangci-lint run -v --timeout=5m
 .PHONY: test_race
 
@@ -47,12 +47,14 @@ test_linters:
 # Maintenance
 
 generate: README.md docs/demo.svg install.sh vendor
+.PHONY: generate
+
 fast_generate: README.md vendor
+.PHONY: fast_generate
 
 maintainer-clean: clean
-	rm -f docs/demo.svg README.md install.sh
-	rm -rf vendor
-.PHONY: generate maintainer-clean
+	rm -rf docs/demo.svg README.md install.sh vendor
+.PHONY: maintainer-clean
 
 check_generated:
 	$(MAKE) --always-make generate
@@ -104,6 +106,6 @@ go.mod: FORCE
 	go mod verify
 go.sum: go.mod
 
-.PHONY: vendor
 vendor: go.mod go.sum
 	go mod vendor
+.PHONY: vendor
