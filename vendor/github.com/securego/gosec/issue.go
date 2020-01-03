@@ -34,15 +34,56 @@ const (
 	High
 )
 
+// Cwe id and url
+type Cwe struct {
+	ID  string
+	URL string
+}
+
+// GetCwe creates a cwe object for a given RuleID
+func GetCwe(id string) Cwe {
+	return Cwe{ID: id, URL: fmt.Sprintf("https://cwe.mitre.org/data/definitions/%s.html", id)}
+}
+
+// IssueToCWE maps gosec rules to CWEs
+var IssueToCWE = map[string]Cwe{
+	"G101": GetCwe("798"),
+	"G102": GetCwe("200"),
+	"G103": GetCwe("242"),
+	"G104": GetCwe("703"),
+	"G106": GetCwe("322"),
+	"G107": GetCwe("88"),
+	"G201": GetCwe("89"),
+	"G202": GetCwe("89"),
+	"G203": GetCwe("79"),
+	"G204": GetCwe("78"),
+	"G301": GetCwe("276"),
+	"G302": GetCwe("276"),
+	"G303": GetCwe("377"),
+	"G304": GetCwe("22"),
+	"G305": GetCwe("22"),
+	"G401": GetCwe("326"),
+	"G402": GetCwe("295"),
+	"G403": GetCwe("310"),
+	"G404": GetCwe("338"),
+	"G501": GetCwe("327"),
+	"G502": GetCwe("327"),
+	"G503": GetCwe("327"),
+	"G504": GetCwe("327"),
+	"G505": GetCwe("327"),
+}
+
 // Issue is returned by a gosec rule if it discovers an issue with the scanned code.
 type Issue struct {
 	Severity   Score  `json:"severity"`   // issue severity (how problematic it is)
 	Confidence Score  `json:"confidence"` // issue confidence (how sure we are we found it)
+	Cwe        Cwe    `json:"cwe"`        // Cwe associated with RuleID
 	RuleID     string `json:"rule_id"`    // Human readable explanation
 	What       string `json:"details"`    // Human readable explanation
 	File       string `json:"file"`       // File name we found it in
 	Code       string `json:"code"`       // Impacted code line
 	Line       string `json:"line"`       // Line number in file
+	Col        string `json:"column"`     // Column number in line
 }
 
 // MetaData is embedded in all gosec rules. The Severity, Confidence and What message
@@ -102,6 +143,8 @@ func NewIssue(ctx *Context, node ast.Node, ruleID, desc string, severity Score, 
 		line = fmt.Sprintf("%d-%d", start, end)
 	}
 
+	col := strconv.Itoa(fobj.Position(node.Pos()).Column)
+
 	// #nosec
 	if file, err := os.Open(fobj.Name()); err == nil {
 		defer file.Close()
@@ -116,10 +159,12 @@ func NewIssue(ctx *Context, node ast.Node, ruleID, desc string, severity Score, 
 	return &Issue{
 		File:       name,
 		Line:       line,
+		Col:        col,
 		RuleID:     ruleID,
 		What:       desc,
 		Confidence: confidence,
 		Severity:   severity,
 		Code:       code,
+		Cwe:        IssueToCWE[ruleID],
 	}
 }
