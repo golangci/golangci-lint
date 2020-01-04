@@ -219,8 +219,8 @@ golangci-lint run --disable-all -E errcheck
    Golangci-lint automatically discovers `.golangci.yml` config for edited file: you don't need to configure it in VS Code settings.
 2. Sublime Text - [plugin](https://github.com/alecthomas/SublimeLinter-contrib-golang-cilint) for SublimeLinter.
 3. GoLand
-   * Configure [File Watcher](https://www.jetbrains.com/help/go/settings-tools-file-watchers.html) with arguments `run --print-issued-lines=false $FileDir$`.
-   * Predefined File Watcher will be added in [issue](https://youtrack.jetbrains.com/issue/GO-4574).
+   * Add [File Watcher](https://www.jetbrains.com/help/go/settings-tools-file-watchers.html) using existing `golangcli-lint` template.
+   * If your version of GoLand does not have the `golangcli-lint` [File Watcher](https://www.jetbrains.com/help/go/settings-tools-file-watchers.html) template you can configure your own and use arguments `run --disable=typecheck $FileDir$`.
 4. GNU Emacs
    * [Spacemacs](https://github.com/syl20bnr/spacemacs/blob/develop/layers/+lang/go/README.org#pre-requisites)
    * [flycheck checker](https://github.com/weijiangan/flycheck-golangci-lint).
