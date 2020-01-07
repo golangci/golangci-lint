@@ -51,6 +51,6 @@ func NewUnused() *goanalysis.Linter {
 		return issues
 	}).WithContextSetter(func(lintCtx *linter.Context) {
 		u.WholeProgram = lintCtx.Settings().Unused.CheckExported
-	}).WithLoadMode(goanalysis.LoadModeWholeProgram)
+	}).WithLoadMode(goanalysis.LoadModeTypesInfo)
 	return lnt
 }
