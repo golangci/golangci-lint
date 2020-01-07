@@ -25,7 +25,7 @@ func NewUnused() *goanalysis.Linter {
 		nil,
 	).WithIssuesReporter(func(lintCtx *linter.Context) []goanalysis.Issue {
 		typesToPkg := map[*types.Package]*packages.Package{}
-		for _, pkg := range lintCtx.OriginalPackages {
+		for _, pkg := range lintCtx.Packages {
 			typesToPkg[pkg.Types] = pkg
 		}
 
@@ -52,6 +52,5 @@ func NewUnused() *goanalysis.Linter {
 	}).WithContextSetter(func(lintCtx *linter.Context) {
 		u.WholeProgram = lintCtx.Settings().Unused.CheckExported
 	}).WithLoadMode(goanalysis.LoadModeWholeProgram)
-	lnt.UseOriginalPackages()
 	return lnt
 }

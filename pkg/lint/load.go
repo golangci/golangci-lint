@@ -289,12 +289,7 @@ func (cl *ContextLoader) Load(ctx context.Context, linters []*linter.Config) (*l
 	}
 
 	ret := &linter.Context{
-		Packages: deduplicatedPkgs,
-
-		// At least `unused` linters works properly only on original (not deduplicated) packages,
-		// see https://github.com/golangci/golangci-lint/pull/585.
-		OriginalPackages: pkgs,
-
+		Packages:  deduplicatedPkgs,
 		Cfg:       cl.cfg,
 		Log:       cl.log,
 		FileCache: cl.fileCache,

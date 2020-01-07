@@ -14,10 +14,6 @@ type Context struct {
 	// Packages are deduplicated (test and normal packages) packages
 	Packages []*packages.Package
 
-	// OriginalPackages aren't deduplicated: they contain both normal and test
-	// version for each of packages
-	OriginalPackages []*packages.Package
-
 	Cfg       *config.Config
 	FileCache *fsutils.FileCache
 	LineCache *fsutils.LineCache

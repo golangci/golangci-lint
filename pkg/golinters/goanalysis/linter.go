@@ -54,22 +54,17 @@ func (loadMode LoadMode) String() string {
 }
 
 type Linter struct {
-	name, desc              string
-	analyzers               []*analysis.Analyzer
-	cfg                     map[string]map[string]interface{}
-	issuesReporter          func(*linter.Context) []Issue
-	contextSetter           func(*linter.Context)
-	loadMode                LoadMode
-	needUseOriginalPackages bool
-	isTypecheckModeOn       bool
+	name, desc        string
+	analyzers         []*analysis.Analyzer
+	cfg               map[string]map[string]interface{}
+	issuesReporter    func(*linter.Context) []Issue
+	contextSetter     func(*linter.Context)
+	loadMode          LoadMode
+	isTypecheckModeOn bool
 }
 
 func NewLinter(name, desc string, analyzers []*analysis.Analyzer, cfg map[string]map[string]interface{}) *Linter {
 	return &Linter{name: name, desc: desc, analyzers: analyzers, cfg: cfg}
-}
-
-func (lnt *Linter) UseOriginalPackages() {
-	lnt.needUseOriginalPackages = true
 }
 
 func (lnt *Linter) SetTypecheckMode() {
@@ -264,10 +259,6 @@ func (lnt *Linter) getAnalyzers() []*analysis.Analyzer {
 	return lnt.analyzers
 }
 
-func (lnt *Linter) useOriginalPackages() bool {
-	return lnt.needUseOriginalPackages
-}
-
 func (lnt *Linter) isTypecheckMode() bool {
 	return lnt.isTypecheckModeOn
 }
@@ -287,7 +278,6 @@ type runAnalyzersConfig interface {
 	getName() string
 	getLinterNameForDiagnostic(*Diagnostic) string
 	getAnalyzers() []*analysis.Analyzer
-	useOriginalPackages() bool
 	isTypecheckMode() bool
 	reportIssues(*linter.Context) []Issue
 	getLoadMode() LoadMode
@@ -437,9 +427,6 @@ func runAnalyzers(cfg runAnalyzersConfig, lintCtx *linter.Context) ([]result.Iss
 	runner := newRunner(cfg.getName(), log, lintCtx.PkgCache, lintCtx.LoadGuard, cfg.getLoadMode(), sw)
 
 	pkgs := lintCtx.Packages
-	if cfg.useOriginalPackages() {
-		pkgs = lintCtx.OriginalPackages
-	}
 
 	issues, pkgsFromCache := loadIssuesFromCache(pkgs, lintCtx, cfg.getAnalyzers())
 	var pkgsToAnalyze []*packages.Package

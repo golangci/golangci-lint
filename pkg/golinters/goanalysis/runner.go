@@ -505,6 +505,7 @@ func (act *action) analyze() {
 	var failed []string
 	for _, dep := range act.deps {
 		if dep.err != nil {
+			act.r.log.Warnf("Failed dependency %s: %s", dep, dep.err)
 			failed = append(failed, dep.String())
 		}
 	}

@@ -60,10 +60,6 @@ func (ml MetaLinter) getName() string {
 	return "metalinter"
 }
 
-func (ml MetaLinter) useOriginalPackages() bool {
-	return false // `unused` can't be run by this metalinter
-}
-
 func (ml MetaLinter) reportIssues(lintCtx *linter.Context) []Issue {
 	var ret []Issue
 	for _, lnt := range ml.linters {
