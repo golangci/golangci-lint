@@ -228,6 +228,7 @@ maligned: Tool to detect Go structs that would take less memory if their fields 
 misspell: Finds commonly misspelled English words in comments [fast: true, auto-fix: true]
 nakedret: Finds naked returns in functions greater than a specified function length [fast: true, auto-fix: false]
 prealloc: Finds slice declarations that could potentially be preallocated [fast: true, auto-fix: false]
+rowserrcheck: checks whether Err of rows is checked successfully [fast: true, auto-fix: false]
 scopelint: Scopelint checks for unpinned variables in go programs [fast: true, auto-fix: false]
 stylecheck: Stylecheck is a replacement for golint [fast: true, auto-fix: false]
 unconvert: Remove unnecessary type conversions [fast: true, auto-fix: false]
@@ -456,6 +457,7 @@ golangci-lint help linters
 
 - [bodyclose](https://github.com/timakin/bodyclose) - checks whether HTTP response body is closed successfully
 - [golint](https://github.com/golang/lint) - Golint differs from gofmt. Gofmt reformats Go source code, whereas golint prints out style mistakes
+- [rowserrcheck](https://github.com/jingyugao/rowserr) - checks whether Err of rows is checked successfully
 - [stylecheck](https://github.com/dominikh/go-tools/tree/master/stylecheck) - Stylecheck is a replacement for golint
 - [gosec](https://github.com/securego/gosec) - Inspects source code for security problems
 - [interfacer](https://github.com/mvdan/interfacer) - Linter that suggests narrower interface types
@@ -983,6 +985,7 @@ linters:
   # inverted configuration with `enable-all` and `disable` is not scalable during updates of golangci-lint
   disable-all: true
   enable:
+    # - rowserrcheck
     - bodyclose
     - deadcode
     - depguard
@@ -1204,6 +1207,7 @@ Thanks to developers and authors of used linters:
 - [timakin](https://github.com/timakin)
 - [kisielk](https://github.com/kisielk)
 - [golang](https://github.com/golang)
+- [jingyugao](https://github.com/jingyugao)
 - [dominikh](https://github.com/dominikh)
 - [securego](https://github.com/securego)
 - [opennota](https://github.com/opennota)
