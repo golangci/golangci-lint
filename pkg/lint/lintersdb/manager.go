@@ -1,20 +1,28 @@
 package lintersdb
 
 import (
+	"fmt"
 	"os"
+	"plugin"
+
+	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/golinters"
+	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
+	"github.com/golangci/golangci-lint/pkg/logutils"
+	"github.com/golangci/golangci-lint/pkg/report"
 )
 
 type Manager struct {
 	nameToLCs map[string][]*linter.Config
 	cfg       *config.Config
+	log       logutils.Log
 }
 
-func NewManager(cfg *config.Config) *Manager {
-	m := &Manager{cfg: cfg}
+func NewManager(cfg *config.Config, log logutils.Log) *Manager {
+	m := &Manager{cfg: cfg, log: log}
 	nameToLCs := make(map[string][]*linter.Config)
 	for _, lc := range m.GetAllSupportedLinterConfigs() {
 		for _, name := range lc.AllNames() {
@@ -23,6 +31,27 @@ func NewManager(cfg *config.Config) *Manager {
 	}
 
 	m.nameToLCs = nameToLCs
+	return m
+}
+
+func (m *Manager) WithCustomLinters() *Manager {
+	if m.log == nil {
+		m.log = report.NewLogWrapper(logutils.NewStderrLog(""), &report.Data{})
+	}
+	if m.cfg != nil {
+		for name, settings := range m.cfg.LintersSettings.Custom {
+			lc, err := m.loadCustomLinterConfig(name, settings)
+
+			if err != nil {
+				m.log.Errorf("Unable to load custom analyzer %s:%s, %v",
+					name,
+					settings.Path,
+					err)
+			} else {
+				m.nameToLCs[name] = append(m.nameToLCs[name], lc)
+			}
+		}
+	}
 	return m
 }
 
@@ -266,4 +295,45 @@ func (m Manager) GetAllLinterConfigsForPreset(p string) []*linter.Config {
 	}
 
 	return ret
+}
+
+func (m Manager) loadCustomLinterConfig(name string, settings config.CustomLinterSettings) (*linter.Config, error) {
+	analyzer, err := m.getAnalyzerPlugin(settings.Path)
+	if err != nil {
+		return nil, err
+	}
+	m.log.Infof("Loaded %s: %s", settings.Path, name)
+	customLinter := goanalysis.NewLinter(
+		name,
+		settings.Description,
+		analyzer.GetAnalyzers(),
+		nil).WithLoadMode(goanalysis.LoadModeTypesInfo)
+	linterConfig := linter.NewConfig(customLinter)
+	linterConfig.EnabledByDefault = true
+	linterConfig.IsSlow = false
+	linterConfig.WithURL(settings.OriginalURL)
+	return linterConfig, nil
+}
+
+type AnalyzerPlugin interface {
+	GetAnalyzers() []*analysis.Analyzer
+}
+
+func (m Manager) getAnalyzerPlugin(path string) (AnalyzerPlugin, error) {
+	plug, err := plugin.Open(path)
+	if err != nil {
+		return nil, err
+	}
+
+	symbol, err := plug.Lookup("AnalyzerPlugin")
+	if err != nil {
+		return nil, err
+	}
+
+	analyzerPlugin, ok := symbol.(AnalyzerPlugin)
+	if !ok {
+		return nil, fmt.Errorf("plugin %s does not abide by 'AnalyzerPlugin' interface", path)
+	}
+
+	return analyzerPlugin, nil
 }

@@ -60,7 +60,7 @@ func NewExecutor(version, commit, date string) *Executor {
 		version:   version,
 		commit:    commit,
 		date:      date,
-		DBManager: lintersdb.NewManager(nil),
+		DBManager: lintersdb.NewManager(nil, nil),
 		debugf:    logutils.Debug("exec"),
 	}
 
@@ -112,7 +112,7 @@ func NewExecutor(version, commit, date string) *Executor {
 	}
 
 	// recreate after getting config
-	e.DBManager = lintersdb.NewManager(e.cfg)
+	e.DBManager = lintersdb.NewManager(e.cfg, e.log).WithCustomLinters()
 
 	e.cfg.LintersSettings.Gocritic.InferEnabledChecks(e.log)
 	if err = e.cfg.LintersSettings.Gocritic.Validate(e.log); err != nil {

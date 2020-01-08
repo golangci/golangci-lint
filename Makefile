@@ -108,4 +108,8 @@ go.sum: go.mod
 
 vendor: go.mod go.sum
 	go mod vendor
-.PHONY: vendor
+
+unexport GOFLAGS
+vendor_free_build: FORCE
+	go build -o golangci-lint ./cmd/golangci-lint
+.PHONY: vendor_free_build vendor

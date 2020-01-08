@@ -230,6 +230,18 @@ linters-settings:
     # Force newlines in end of case at this limit (0 = never).
     force-case-trailing-whitespace: 0
 
+  # The custom section can be used to define linter plugins to be loaded at runtime. See README doc
+  #  for more info.
+  custom:
+    # Each custom linter should have a unique name.
+     example:
+      # The path to the plugin *.so. Can be absolute or local. Required for each custom linter
+      path: /path/to/example.so
+      # The description of the linter. Optional, just for documentation purposes.
+      description: This is an example usage of a plugin linter.
+      # Intended to point to the repo location of the linter. Optional, just for documentation purposes.
+      original-url: github.com/golangci/example-linter
+
 linters:
   enable:
     - megacheck
