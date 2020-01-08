@@ -67,10 +67,17 @@ func NewGosec() *goanalysis.Linter {
 					line = r.From
 				}
 
+				column, err := strconv.Atoi(i.Col)
+				if err != nil {
+					lintCtx.Log.Warnf("Can't convert gosec column number %q of %v to int: %s", i.Col, i, err)
+					continue
+				}
+
 				res = append(res, goanalysis.NewIssue(&result.Issue{ //nolint:scopelint
 					Pos: token.Position{
 						Filename: i.File,
 						Line:     line,
+						Column:   column,
 					},
 					Text:       text,
 					LineRange:  r,

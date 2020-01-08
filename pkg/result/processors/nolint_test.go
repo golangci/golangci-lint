@@ -31,7 +31,7 @@ func newNolint2FileIssue(line int) result.Issue {
 }
 
 func newTestNolintProcessor(log logutils.Log) *Nolint {
-	return NewNolint(log, lintersdb.NewManager(nil))
+	return NewNolint(log, lintersdb.NewManager(nil, nil))
 }
 
 func getMockLog() *logutils.MockLog {
