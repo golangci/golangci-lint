@@ -24,8 +24,15 @@ func (r *ssrf) ResolveVar(n *ast.CallExpr, c *gosec.Context) bool {
 		arg := n.Args[0]
 		if ident, ok := arg.(*ast.Ident); ok {
 			obj := c.Info.ObjectOf(ident)
-			if _, ok := obj.(*types.Var); ok && !gosec.TryResolve(ident, c) {
-				return true
+			if _, ok := obj.(*types.Var); ok {
+				scope := c.Pkg.Scope()
+				if scope != nil && scope.Lookup(ident.Name) != nil {
+					// a URL defined in a variable at package scope can be changed at any time
+					return true
+				}
+				if !gosec.TryResolve(ident, c) {
+					return true
+				}
 			}
 		}
 	}

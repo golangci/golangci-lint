@@ -50,21 +50,12 @@ type Configuration struct {
 	//  }
 	AllowMultiLineAssignCuddle bool
 
-	// AllowCaseTrailingWhitespace will allow case blocks to end with a
-	// whitespace. Sometimes this might actually improve readability. This
-	// defaults to false but setting it to true will enable the following
-	// example:
-	//  switch {
-	//  case 1:
-	//      fmt.Println(1)
-	//
-	// case 2:
-	//     fmt.Println(2)
-	//
-	// case 3:
-	//     fmt:println(3)
-	// }
-	AllowCaseTrailingWhitespace bool
+	// If the number of lines in a case block is equal to or lager than this
+	// number, the case *must* end white a newline.
+	CaseForceTrailingWhitespaceLimit int
+
+	// AllowTrailingComment will allow blocks to end with comments.
+	AllowTrailingComment bool
 
 	// AllowCuddleDeclaration will allow multiple var/declaration statements to
 	// be cuddled. This defaults to false but setting it to true will enable the
@@ -93,12 +84,13 @@ type Configuration struct {
 // DefaultConfig returns default configuration
 func DefaultConfig() Configuration {
 	return Configuration{
-		StrictAppend:                true,
-		AllowAssignAndCallCuddle:    true,
-		AllowMultiLineAssignCuddle:  true,
-		AllowCaseTrailingWhitespace: false,
-		AllowCuddleWithCalls:        []string{"Lock", "RLock"},
-		AllowCuddleWithRHS:          []string{"Unlock", "RUnlock"},
+		StrictAppend:                     true,
+		AllowAssignAndCallCuddle:         true,
+		AllowMultiLineAssignCuddle:       true,
+		AllowTrailingComment:             false,
+		CaseForceTrailingWhitespaceLimit: 0,
+		AllowCuddleWithCalls:             []string{"Lock", "RLock"},
+		AllowCuddleWithRHS:               []string{"Unlock", "RUnlock"},
 	}
 }
 
@@ -203,14 +195,12 @@ func (p *Processor) parseBlockBody(ident *ast.Ident, block *ast.BlockStmt) {
 // nolint: gocognit
 func (p *Processor) parseBlockStatements(statements []ast.Stmt) {
 	for i, stmt := range statements {
-		// TODO: How to tell when and where func literals may exist to enforce
-		// linting.
-		if as, isAssignStmt := stmt.(*ast.AssignStmt); isAssignStmt {
-			for _, rhs := range as.Rhs {
-				if fl, isFuncLit := rhs.(*ast.FuncLit); isFuncLit {
-					p.parseBlockBody(nil, fl.Body)
-				}
-			}
+		// Start by checking if this statement is another block (other than if,
+		// for and range). This could be assignment to a function, defer or go
+		// call with an inline function or similar. If this is found we start by
+		// parsing this body block before moving on.
+		for _, stmtBlocks := range p.findBlockStmt(stmt) {
+			p.parseBlockBody(nil, stmtBlocks)
 		}
 
 		firstBodyStatement := p.firstBodyStatement(i, statements)
@@ -322,11 +312,15 @@ func (p *Processor) parseBlockStatements(statements []ast.Stmt) {
 				continue
 			}
 
-			if !atLeastOneInListsMatch(rightAndLeftHandSide, assignedOnLineAbove) {
-				if !atLeastOneInListsMatch(assignedOnLineAbove, assignedFirstInBlock) {
-					p.addError(t.Pos(), "if statements should only be cuddled with assignments used in the if statement itself")
-				}
+			if atLeastOneInListsMatch(rightAndLeftHandSide, assignedOnLineAbove) {
+				continue
 			}
+
+			if atLeastOneInListsMatch(assignedOnLineAbove, assignedFirstInBlock) {
+				continue
+			}
+
+			p.addError(t.Pos(), "if statements should only be cuddled with assignments used in the if statement itself")
 		case *ast.ReturnStmt:
 			if isLastStatementInBlockOfOnlyTwoLines() {
 				continue
@@ -473,6 +467,10 @@ func (p *Processor) parseBlockStatements(statements []ast.Stmt) {
 				}
 			}
 		case *ast.GoStmt:
+			if _, ok := previousStatement.(*ast.GoStmt); ok {
+				continue
+			}
+
 			if moreThanOneStatementAbove() {
 				p.addError(t.Pos(), "only one cuddle assignment allowed before go statement")
 
@@ -595,9 +593,10 @@ func (p *Processor) findLHS(node ast.Node) []string {
 		*ast.ReturnStmt, *ast.GoStmt, *ast.CaseClause,
 		*ast.CommClause, *ast.CallExpr, *ast.UnaryExpr,
 		*ast.BranchStmt, *ast.TypeSpec, *ast.ChanType,
-		*ast.DeferStmt, *ast.TypeAssertExpr, *ast.IncDecStmt,
-		*ast.RangeStmt:
-		// Nothing to add to LHS
+		*ast.DeferStmt, *ast.TypeAssertExpr, *ast.RangeStmt:
+	// Nothing to add to LHS
+	case *ast.IncDecStmt:
+		return p.findLHS(t.X)
 	case *ast.Ident:
 		return []string{t.Name}
 	case *ast.AssignStmt:
@@ -722,6 +721,33 @@ func (p *Processor) findRHS(node ast.Node) []string {
 	return rhs
 }
 
+func (p *Processor) findBlockStmt(node ast.Node) []*ast.BlockStmt {
+	var blocks []*ast.BlockStmt
+
+	switch t := node.(type) {
+	case *ast.AssignStmt:
+		for _, x := range t.Rhs {
+			blocks = append(blocks, p.findBlockStmt(x)...)
+		}
+	case *ast.CallExpr:
+		blocks = append(blocks, p.findBlockStmt(t.Fun)...)
+	case *ast.FuncLit:
+		blocks = append(blocks, t.Body)
+	case *ast.ExprStmt:
+		blocks = append(blocks, p.findBlockStmt(t.X)...)
+	case *ast.ReturnStmt:
+		for _, x := range t.Results {
+			blocks = append(blocks, p.findBlockStmt(x)...)
+		}
+	case *ast.DeferStmt:
+		blocks = append(blocks, p.findBlockStmt(t.Call)...)
+	case *ast.GoStmt:
+		blocks = append(blocks, p.findBlockStmt(t.Call)...)
+	}
+
+	return blocks
+}
+
 // maybeX extracts the X field from an AST node and returns it with a true value
 // if it exists. If the node doesn't have an X field nil and false is returned.
 // Known fields with X that are handled:
@@ -839,7 +865,10 @@ func (p *Processor) findLeadingAndTrailingWhitespaces(ident *ast.Ident, stmt, ne
 				break
 			}
 
-			allowedLinesBeforeFirstStatement += len(commentGroup.List)
+			// Support both /* multiline */ and //single line comments
+			for _, c := range commentGroup.List {
+				allowedLinesBeforeFirstStatement += len(strings.Split(c.Text, "\n"))
+			}
 		}
 	}
 
@@ -850,38 +879,92 @@ func (p *Processor) findLeadingAndTrailingWhitespaces(ident *ast.Ident, stmt, ne
 		)
 	}
 
-	// If the blockEndLine is 0 we're a case clause. If we don't have any
-	// nextStatement the trailing whitespace will be handled when parsing the
-	// switch. If we do have a next statement we can see where it starts by
-	// getting it's colon position.
-	if blockEndLine == 0 {
-		if nextStatement == nil {
-			return
+	// If the blockEndLine is not 0 we're a regular block (not case).
+	if blockEndLine != 0 {
+		if p.config.AllowTrailingComment {
+			if lastComment, ok := commentMap[lastStatement]; ok {
+				var (
+					lastCommentGroup = lastComment[len(lastComment)-1]
+					lastCommentLine  = lastCommentGroup.List[len(lastCommentGroup.List)-1]
+					countNewlines    = 0
+				)
+
+				countNewlines += len(strings.Split(lastCommentLine.Text, "\n"))
+
+				// No newlines between trailing comments and end of block.
+				if p.nodeStart(lastCommentLine)+countNewlines != blockEndLine-1 {
+					return
+				}
+			}
 		}
 
-		// If we allow case to end white whitespace just return.
-		if p.config.AllowCaseTrailingWhitespace {
-			return
+		if p.nodeEnd(lastStatement) != blockEndLine-1 && !isExampleFunc(ident) {
+			p.addError(blockEndPos, "block should not end with a whitespace (or comment)")
 		}
 
-		switch n := nextStatement.(type) {
-		case *ast.CaseClause:
-			blockEndPos = n.Case
-		case *ast.CommClause:
-			blockEndPos = n.Case
-		default:
-			// We're not at the end of the case?
-			return
-		}
-
-		blockEndLine = p.fileSet.Position(blockEndPos).Line
+		return
 	}
 
-	if p.nodeEnd(lastStatement) != blockEndLine-1 && !isExampleFunc(ident) {
-		p.addError(
-			blockEndPos,
-			"block should not end with a whitespace (or comment)",
-		)
+	// If we don't have any nextStatement the trailing whitespace will be
+	// handled when parsing the switch. If we do have a next statement we can
+	// see where it starts by getting it's colon position. We set the end of the
+	// current case to the position of the next case.
+	switch n := nextStatement.(type) {
+	case *ast.CaseClause:
+		blockEndPos = n.Case
+	case *ast.CommClause:
+		blockEndPos = n.Case
+	default:
+		// No more cases
+		return
+	}
+
+	blockEndLine = p.fileSet.Position(blockEndPos).Line - 1
+
+	var (
+		blockSize                = blockEndLine - blockStartLine
+		caseTrailingCommentLines int
+	)
+
+	// TODO: I don't know what comments are bound to in cases. For regular
+	// blocks the last comment is bound to the last statement but for cases
+	// they are bound to the case clause expression. This will however get us all
+	// comments and depending on the case expression this gets tricky.
+	//
+	// To handle this I get the comment map from the current statement (the case
+	// itself) and iterate through all groups and all comment within all groups.
+	// I then get the comments after the last statement but before the next case
+	// clause and just map each line of comment that way.
+	for _, commentGroups := range commentMap {
+		for _, commentGroup := range commentGroups {
+			for _, comment := range commentGroup.List {
+				commentLine := p.fileSet.Position(comment.Pos()).Line
+
+				// Ignore comments before the last statement.
+				if commentLine <= p.nodeStart(lastStatement) {
+					continue
+				}
+
+				// Ignore comments after the end of this case.
+				if commentLine > blockEndLine {
+					continue
+				}
+
+				// This allows /* multiline */ comments with newlines as well
+				// as regular (//) ones
+				caseTrailingCommentLines += len(strings.Split(comment.Text, "\n"))
+			}
+		}
+	}
+
+	hasTrailingWhitespace := p.nodeEnd(lastStatement)+caseTrailingCommentLines != blockEndLine
+
+	// If the force trailing limit is configured and we don't end with a newline.
+	if p.config.CaseForceTrailingWhitespaceLimit > 0 && !hasTrailingWhitespace {
+		// Check if the block size is too big to miss the newline.
+		if blockSize >= p.config.CaseForceTrailingWhitespaceLimit {
+			p.addError(lastStatement.Pos(), "case block should end with newline at this size")
+		}
 	}
 }
 
