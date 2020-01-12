@@ -61,6 +61,9 @@ output:
   # print linter name in the end of issue text, default is true
   print-linter-name: true
 
+  # make issues output unique by line, default is true
+  uniq-by-line: true
+
 
 # all available settings of specific linters
 linters-settings:
