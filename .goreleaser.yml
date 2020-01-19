@@ -83,6 +83,8 @@ brews:
       bin.install "golangci-lint"
       output = Utils.popen_read("#{bin}/golangci-lint completion bash")
       (bash_completion/"golangci-lint").write output
+      output = Utils.popen_read("#{bin}/golangci-lint completion zsh")
+      (zsh_completion/"_golangci-lint").write output
       prefix.install_metafiles
     test: |
       system "#{bin}/golangci-lint --version"

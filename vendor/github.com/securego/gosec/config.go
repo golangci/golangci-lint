@@ -38,6 +38,22 @@ func NewConfig() Config {
 	return cfg
 }
 
+func (c Config) keyToGlobalOptions(key string) GlobalOption {
+	return GlobalOption(key)
+}
+
+func (c Config) convertGlobals() {
+	if globals, ok := c[Globals]; ok {
+		if settings, ok := globals.(map[string]interface{}); ok {
+			validGlobals := map[GlobalOption]string{}
+			for k, v := range settings {
+				validGlobals[c.keyToGlobalOptions(k)] = fmt.Sprintf("%v", v)
+			}
+			c[Globals] = validGlobals
+		}
+	}
+}
+
 // ReadFrom implements the io.ReaderFrom interface. This
 // should be used with io.Reader to load configuration from
 //file or from string etc.
@@ -49,6 +65,7 @@ func (c Config) ReadFrom(r io.Reader) (int64, error) {
 	if err = json.Unmarshal(data, &c); err != nil {
 		return int64(len(data)), err
 	}
+	c.convertGlobals()
 	return int64(len(data)), nil
 }
 
@@ -87,7 +104,6 @@ func (c Config) GetGlobal(option GlobalOption) (string, error) {
 		}
 	}
 	return "", fmt.Errorf("no global config options found")
-
 }
 
 // SetGlobal associates a value with a global configuration option

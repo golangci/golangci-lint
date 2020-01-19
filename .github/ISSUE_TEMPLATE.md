@@ -8,7 +8,7 @@ Please include the following information:
 
 <details><summary>Version of golangci-lint</summary>
 
-```bash
+```console
 $ golangci-lint --version
 # paste output here
 ```
@@ -17,7 +17,7 @@ $ golangci-lint --version
 
 <details><summary>Config file</summary>
 
-```bash
+```console
 $ cat .golangci.yml
 # paste output here
 ```
@@ -26,7 +26,7 @@ $ cat .golangci.yml
 
 <details><summary>Go environment</summary>
 
-```bash
+```console
 $ go version && go env
 # paste output here
 ```
@@ -35,7 +35,7 @@ $ go version && go env
 
 <details><summary>Verbose output of running</summary>
 
-```bash
+```console
 $ golangci-lint run -v
 # paste output here
 ```

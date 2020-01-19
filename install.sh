@@ -68,21 +68,29 @@ get_binaries() {
     darwin/arm64) BINARIES="golangci-lint" ;;
     darwin/armv6) BINARIES="golangci-lint" ;;
     darwin/armv7) BINARIES="golangci-lint" ;;
+    darwin/ppc64le) BINARIES="golangci-lint" ;;
+    darwin/s390x) BINARIES="golangci-lint" ;;
     freebsd/386) BINARIES="golangci-lint" ;;
     freebsd/amd64) BINARIES="golangci-lint" ;;
     freebsd/arm64) BINARIES="golangci-lint" ;;
     freebsd/armv6) BINARIES="golangci-lint" ;;
     freebsd/armv7) BINARIES="golangci-lint" ;;
+    freebsd/ppc64le) BINARIES="golangci-lint" ;;
+    freebsd/s390x) BINARIES="golangci-lint" ;;
     linux/386) BINARIES="golangci-lint" ;;
     linux/amd64) BINARIES="golangci-lint" ;;
     linux/arm64) BINARIES="golangci-lint" ;;
     linux/armv6) BINARIES="golangci-lint" ;;
     linux/armv7) BINARIES="golangci-lint" ;;
+    linux/ppc64le) BINARIES="golangci-lint" ;;
+    linux/s390x) BINARIES="golangci-lint" ;;
     windows/386) BINARIES="golangci-lint" ;;
     windows/amd64) BINARIES="golangci-lint" ;;
     windows/arm64) BINARIES="golangci-lint" ;;
     windows/armv6) BINARIES="golangci-lint" ;;
     windows/armv7) BINARIES="golangci-lint" ;;
+    windows/ppc64le) BINARIES="golangci-lint" ;;
+    windows/s390x) BINARIES="golangci-lint" ;;
     *)
       log_crit "platform $PLATFORM is not supported.  Make sure this script is up-to-date and file request at https://github.com/${PREFIX}/issues/new"
       exit 1
@@ -242,8 +250,8 @@ uname_arch_check() {
 untar() {
   tarball=$1
   case "${tarball}" in
-    *.tar.gz | *.tgz) tar -xzf "${tarball}" ;;
-    *.tar) tar -xf "${tarball}" ;;
+    *.tar.gz | *.tgz) tar --no-same-owner -xzf "${tarball}" ;;
+    *.tar) tar --no-same-owner -xf "${tarball}" ;;
     *.zip) unzip "${tarball}" ;;
     *)
       log_err "untar unknown archive format for ${tarball}"

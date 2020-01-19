@@ -138,9 +138,9 @@ linters-settings:
     include-go-root: false
     packages:
       - github.com/sirupsen/logrus
-    packages-with-error-messages:
+    packages-with-error-message:
       # specify an error message to output when a blacklisted package is used
-      github.com/sirupsen/logrus: "logging is allowed only by logutils.Log"
+      - github.com/sirupsen/logrus: "logging is allowed only by logutils.Log"
   misspell:
     # Correct spellings using locale preferences for US or UK.
     # Default is to use a neutral variety of English.
@@ -154,6 +154,9 @@ linters-settings:
     line-length: 120
     # tab width in spaces. Default to 1.
     tab-width: 1
+  rowserrcheck:
+    packages:
+      - github.com/jmoiron/sqlx
   unused:
     # treat code as a program (not a library) and report unused exported identifiers; default is false.
     # XXX: if you enable this setting, unused will report a lot of false-positives in text editors:
@@ -223,10 +226,24 @@ linters-settings:
     allow-assign-and-call: true
     # Allow multiline assignments to be cuddled. Default is true.
     allow-multiline-assign: true
-    # Allow case blocks to end with a whitespace.
-    allow-case-traling-whitespace: true
     # Allow declarations (var) to be cuddled.
     allow-cuddle-declarations: false
+    # Allow trailing comments in ending of blocks
+    allow-trailing-comment: false
+    # Force newlines in end of case at this limit (0 = never).
+    force-case-trailing-whitespace: 0
+
+  # The custom section can be used to define linter plugins to be loaded at runtime. See README doc
+  #  for more info.
+  custom:
+    # Each custom linter should have a unique name.
+     example:
+      # The path to the plugin *.so. Can be absolute or local. Required for each custom linter
+      path: /path/to/example.so
+      # The description of the linter. Optional, just for documentation purposes.
+      description: This is an example usage of a plugin linter.
+      # Intended to point to the repo location of the linter. Optional, just for documentation purposes.
+      original-url: github.com/golangci/example-linter
 
 linters:
   enable:

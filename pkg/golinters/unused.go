@@ -38,6 +38,14 @@ func NewUnused() *goanalysis.Linter {
 				Text:       p.Message,
 				Pos:        p.Pos,
 				Pkg:        pkg,
+				LineRange: &result.Range{
+					From: p.Pos.Line,
+					To:   p.End.Line,
+				},
+				Replacement: &result.Replacement{
+					// Suggest deleting unused stuff.
+					NeedOnlyDelete: true,
+				},
 			}, nil))
 		}
 		return issues

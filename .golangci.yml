@@ -25,8 +25,8 @@ linters-settings:
       # logging is allowed only by logutils.Log, logrus
       # is allowed to use only in logutils package
       - github.com/sirupsen/logrus
-    packages-with-error-messages:
-      github.com/sirupsen/logrus: "logging is allowed only by logutils.Log"
+    packages-with-error-message:
+      - github.com/sirupsen/logrus: "logging is allowed only by logutils.Log"
   misspell:
     locale: US
   lll:
@@ -41,10 +41,11 @@ linters-settings:
       - performance
       - style
     disabled-checks:
-      - wrapperFunc
       - dupImport # https://github.com/go-critic/go-critic/issues/845
       - ifElseChain
       - octalLiteral
+      - whyNoLint
+      - wrapperFunc
   funlen:
     lines: 100
     statements: 50
@@ -54,6 +55,7 @@ linters:
   # inverted configuration with `enable-all` and `disable` is not scalable during updates of golangci-lint
   disable-all: true
   enable:
+    # - rowserrcheck
     - bodyclose
     - deadcode
     - depguard
@@ -97,17 +99,9 @@ linters:
 run:
   skip-dirs:
     - test/testdata_etc
-  skip-files:
-    - internal/cache/.*_test.go
-
-issues:
-  exclude-rules:
-    - path: internal/(cache|renameio)/
-      linters:
-        - lll
-        - gochecknoinits
-        - gocyclo
-        - funlen
+    - internal/cache
+    - internal/renameio
+    - internal/robustio
 
 # golangci.com configuration
 # https://github.com/golangci/golangci/wiki/Configuration
