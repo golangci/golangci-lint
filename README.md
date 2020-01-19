@@ -485,8 +485,8 @@ golangci-lint help linters
 - [funlen](https://github.com/ultraware/funlen) - Tool for detection of long functions
 - [whitespace](https://github.com/ultraware/whitespace) - Tool for detection of leading and trailing whitespace
 - [wsl](https://github.com/bombsimon/wsl) - Whitespace Linter - Forces you to use empty lines!
-- [gomnd](https://github.com/tommy-muehle/go-mnd) - An analyzer to detect magic numbers.
 - [goprintffuncname](https://github.com/jirfag/go-printf-func-name) - Checks that printf-like functions are named with `f` at the end
+- [gomnd](https://github.com/tommy-muehle/go-mnd) - An analyzer to detect magic numbers.
 
 ## Configuration
 
