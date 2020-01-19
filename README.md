@@ -511,6 +511,7 @@ Flags:
       --out-format string              Format of output: colored-line-number|line-number|json|tab|checkstyle|code-climate|junit-xml (default "colored-line-number")
       --print-issued-lines             Print lines of code with issue (default true)
       --print-linter-name              Print linter name in issue line (default true)
+      --uniq-by-line                   Make issues output unique by line (default true)
       --modules-download-mode string   Modules download mode. If not empty, passed as -mod=<mode> to go tools
       --issues-exit-code int           Exit code when issues were found (default 1)
       --build-tags strings             Build tags
@@ -668,6 +669,9 @@ output:
 
   # print linter name in the end of issue text, default is true
   print-linter-name: true
+
+  # make issues output unique by line, default is true
+  uniq-by-line: true
 
 
 # all available settings of specific linters

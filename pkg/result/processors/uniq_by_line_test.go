@@ -18,7 +18,10 @@ func newFLIssue(file string, line int) result.Issue {
 }
 
 func TestUniqByLine(t *testing.T) {
-	p := NewUniqByLine(&config.Config{})
+	cfg := config.Config{}
+	cfg.Output.UniqByLine = true
+
+	p := NewUniqByLine(&cfg)
 	i1 := newFLIssue("f1", 1)
 
 	processAssertSame(t, p, i1)
@@ -27,4 +30,15 @@ func TestUniqByLine(t *testing.T) {
 
 	processAssertSame(t, p, newFLIssue("f1", 2)) // another line
 	processAssertSame(t, p, newFLIssue("f2", 1)) // another file
+}
+
+func TestUniqByLineDisabled(t *testing.T) {
+	cfg := config.Config{}
+	cfg.Output.UniqByLine = false
+
+	p := NewUniqByLine(&cfg)
+	i1 := newFLIssue("f1", 1)
+
+	processAssertSame(t, p, i1)
+	processAssertSame(t, p, i1) // check the same issue passed twice
 }

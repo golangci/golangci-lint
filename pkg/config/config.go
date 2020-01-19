@@ -389,6 +389,7 @@ type Config struct {
 		Color               string
 		PrintIssuedLine     bool `mapstructure:"print-issued-lines"`
 		PrintLinterName     bool `mapstructure:"print-linter-name"`
+		UniqByLine          bool `mapstructure:"uniq-by-line"`
 		PrintWelcomeMessage bool `mapstructure:"print-welcome"`
 	}
 

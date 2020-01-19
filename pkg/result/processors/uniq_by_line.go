@@ -27,6 +27,10 @@ func (p UniqByLine) Name() string {
 }
 
 func (p *UniqByLine) Process(issues []result.Issue) ([]result.Issue, error) {
+	if !p.cfg.Output.UniqByLine {
+		return issues, nil
+	}
+
 	return filterIssues(issues, func(i *result.Issue) bool {
 		if i.Replacement != nil && p.cfg.Issues.NeedFix {
 			// if issue will be auto-fixed we shouldn't collapse issues:
