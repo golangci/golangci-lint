@@ -93,18 +93,23 @@ func printMemStats(ms *runtime.MemStats, logger logutils.Log) {
 }
 
 func formatMemory(memBytes uint64) string {
-	if memBytes < 1024 {
+	const Kb = 1024
+	const Mb = Kb * 1024
+
+	if memBytes < Kb {
 		return fmt.Sprintf("%db", memBytes)
 	}
-	if memBytes < 1024*1024 {
-		return fmt.Sprintf("%dkb", memBytes/1024)
+	if memBytes < Mb {
+		return fmt.Sprintf("%dkb", memBytes/Kb)
 	}
-	return fmt.Sprintf("%dmb", memBytes/1024/1024)
+	return fmt.Sprintf("%dmb", memBytes/Mb)
 }
 
 func getDefaultConcurrency() int {
 	if os.Getenv("HELP_RUN") == "1" {
-		return 8 // to make stable concurrency for README help generating builds
+		// Make stable concurrency for README help generating builds.
+		const prettyConcurrency = 8
+		return prettyConcurrency
 	}
 
 	return runtime.NumCPU()

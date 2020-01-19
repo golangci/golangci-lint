@@ -67,6 +67,12 @@ output:
 
 # all available settings of specific linters
 linters-settings:
+  dogsled:
+    # checks assignments with too many blank identifiers; default is 2
+    max-blank-identifiers: 2
+  dupl:
+    # tokens count to trigger issue, 150 by default
+    threshold: 100
   errcheck:
     # report about not checking of errors in type assetions: `a := b.(MyStruct)`;
     # default is false: such cases aren't reported by default.
@@ -84,106 +90,17 @@ linters-settings:
     # path to a file containing a list of functions to exclude from checking
     # see https://github.com/kisielk/errcheck#excluding-functions for details
     exclude: /path/to/file.txt
-
   funlen:
     lines: 60
     statements: 40
-
-  govet:
-    # report about shadowed variables
-    check-shadowing: true
-
-    # settings per analyzer
-    settings:
-      printf: # analyzer name, run `go tool vet help` to see all analyzers
-        funcs: # run `go tool vet help printf` to see available settings for `printf` analyzer
-          - (github.com/golangci/golangci-lint/pkg/logutils.Log).Infof
-          - (github.com/golangci/golangci-lint/pkg/logutils.Log).Warnf
-          - (github.com/golangci/golangci-lint/pkg/logutils.Log).Errorf
-          - (github.com/golangci/golangci-lint/pkg/logutils.Log).Fatalf
-
-    # enable or disable analyzers by name
-    enable:
-      - atomicalign
-    enable-all: false
-    disable:
-      - shadow
-    disable-all: false
-  golint:
-    # minimal confidence for issues, default is 0.8
-    min-confidence: 0.8
-  gofmt:
-    # simplify code: gofmt with `-s` option, true by default
-    simplify: true
-  goimports:
-    # put imports beginning with prefix after 3rd-party packages;
-    # it's a comma-separated list of prefixes
-    local-prefixes: github.com/org/project
-  gocyclo:
-    # minimal code complexity to report, 30 by default (but we recommend 10-20)
-    min-complexity: 10
   gocognit:
     # minimal code complexity to report, 30 by default (but we recommend 10-20)
     min-complexity: 10
-  maligned:
-    # print struct with more effective memory layout or not, false by default
-    suggest-new: true
-  dupl:
-    # tokens count to trigger issue, 150 by default
-    threshold: 100
   goconst:
     # minimal length of string constant, 3 by default
     min-len: 3
     # minimal occurrences count to trigger, 3 by default
     min-occurrences: 3
-  depguard:
-    list-type: blacklist
-    include-go-root: false
-    packages:
-      - github.com/sirupsen/logrus
-    packages-with-error-message:
-      # specify an error message to output when a blacklisted package is used
-      - github.com/sirupsen/logrus: "logging is allowed only by logutils.Log"
-  misspell:
-    # Correct spellings using locale preferences for US or UK.
-    # Default is to use a neutral variety of English.
-    # Setting locale to US will correct the British spelling of 'colour' to 'color'.
-    locale: US
-    ignore-words:
-      - someword
-  lll:
-    # max line length, lines longer will be reported. Default is 120.
-    # '\t' is counted as 1 character by default, and can be changed with the tab-width option
-    line-length: 120
-    # tab width in spaces. Default to 1.
-    tab-width: 1
-  rowserrcheck:
-    packages:
-      - github.com/jmoiron/sqlx
-  unused:
-    # treat code as a program (not a library) and report unused exported identifiers; default is false.
-    # XXX: if you enable this setting, unused will report a lot of false-positives in text editors:
-    # if it's called for subdir of a project it can't find funcs usages. All text editor integrations
-    # with golangci-lint call it on a directory with the changed file.
-    check-exported: false
-  unparam:
-    # Inspect exported functions, default is false. Set to true if no external program/library imports your code.
-    # XXX: if you enable this setting, unparam will report a lot of false-positives in text editors:
-    # if it's called for subdir of a project it can't find external interfaces. All text editor integrations
-    # with golangci-lint call it on a directory with the changed file.
-    check-exported: false
-  nakedret:
-    # make an issue if func has more lines of code than this setting and it has naked returns; default is 30
-    max-func-lines: 30
-  prealloc:
-    # XXX: we don't recommend using this linter before doing performance profiling.
-    # For most programs usage of prealloc will be a premature optimization.
-
-    # Report preallocation suggestions only on simple loops that have no returns/breaks/continues/gotos in them.
-    # True by default.
-    simple: true
-    range-loops: true # Report preallocation suggestions on range loops, true by default
-    for-loops: false # Report preallocation suggestions on for loops, false by default
   gocritic:
     # Which checks should be enabled; can't be combined with 'disabled-checks';
     # See https://go-critic.github.io/overview#checks-overview
@@ -206,6 +123,9 @@ linters-settings:
         paramsOnly: true
       rangeValCopy:
         sizeThreshold: 32
+  gocyclo:
+    # minimal code complexity to report, 30 by default (but we recommend 10-20)
+    min-complexity: 10
   godox:
     # report any comments starting with keywords, this is useful for TODO or FIXME comments that
     # might be left in the code accidentally and should be resolved before merging
@@ -213,10 +133,92 @@ linters-settings:
       - NOTE
       - OPTIMIZE # marks code that should be optimized before merging
       - HACK # marks hack-arounds that should be removed before merging
-  dogsled:
-    # checks assignments with too many blank identifiers; default is 2
-    max-blank-identifiers: 2
+  gofmt:
+    # simplify code: gofmt with `-s` option, true by default
+    simplify: true
+  goimports:
+    # put imports beginning with prefix after 3rd-party packages;
+    # it's a comma-separated list of prefixes
+    local-prefixes: github.com/org/project
+  golint:
+    # minimal confidence for issues, default is 0.8
+    min-confidence: 0.8
+  gomnd:
+    settings:
+      mnd:
+        # the list of enabled checks, see https://github.com/tommy-muehle/go-mnd/#checks for description.
+        checks: argument,case,condition,operation,return,assign
+  govet:
+    # report about shadowed variables
+    check-shadowing: true
 
+    # settings per analyzer
+    settings:
+      printf: # analyzer name, run `go tool vet help` to see all analyzers
+        funcs: # run `go tool vet help printf` to see available settings for `printf` analyzer
+          - (github.com/golangci/golangci-lint/pkg/logutils.Log).Infof
+          - (github.com/golangci/golangci-lint/pkg/logutils.Log).Warnf
+          - (github.com/golangci/golangci-lint/pkg/logutils.Log).Errorf
+          - (github.com/golangci/golangci-lint/pkg/logutils.Log).Fatalf
+
+    # enable or disable analyzers by name
+    enable:
+      - atomicalign
+    enable-all: false
+    disable:
+      - shadow
+    disable-all: false
+  depguard:
+    list-type: blacklist
+    include-go-root: false
+    packages:
+      - github.com/sirupsen/logrus
+    packages-with-error-message:
+      # specify an error message to output when a blacklisted package is used
+      - github.com/sirupsen/logrus: "logging is allowed only by logutils.Log"
+  lll:
+    # max line length, lines longer will be reported. Default is 120.
+    # '\t' is counted as 1 character by default, and can be changed with the tab-width option
+    line-length: 120
+    # tab width in spaces. Default to 1.
+    tab-width: 1
+  maligned:
+    # print struct with more effective memory layout or not, false by default
+    suggest-new: true
+  misspell:
+    # Correct spellings using locale preferences for US or UK.
+    # Default is to use a neutral variety of English.
+    # Setting locale to US will correct the British spelling of 'colour' to 'color'.
+    locale: US
+    ignore-words:
+      - someword
+  nakedret:
+    # make an issue if func has more lines of code than this setting and it has naked returns; default is 30
+    max-func-lines: 30
+  prealloc:
+    # XXX: we don't recommend using this linter before doing performance profiling.
+    # For most programs usage of prealloc will be a premature optimization.
+
+    # Report preallocation suggestions only on simple loops that have no returns/breaks/continues/gotos in them.
+    # True by default.
+    simple: true
+    range-loops: true # Report preallocation suggestions on range loops, true by default
+    for-loops: false # Report preallocation suggestions on for loops, false by default
+  rowserrcheck:
+    packages:
+      - github.com/jmoiron/sqlx
+  unparam:
+    # Inspect exported functions, default is false. Set to true if no external program/library imports your code.
+    # XXX: if you enable this setting, unparam will report a lot of false-positives in text editors:
+    # if it's called for subdir of a project it can't find external interfaces. All text editor integrations
+    # with golangci-lint call it on a directory with the changed file.
+    check-exported: false
+  unused:
+    # treat code as a program (not a library) and report unused exported identifiers; default is false.
+    # XXX: if you enable this setting, unused will report a lot of false-positives in text editors:
+    # if it's called for subdir of a project it can't find funcs usages. All text editor integrations
+    # with golangci-lint call it on a directory with the changed file.
+    check-exported: false
   whitespace:
     multi-if: false   # Enforces newlines (or comments) after every multi-line if statement
     multi-func: false # Enforces newlines (or comments) after every multi-line function signature

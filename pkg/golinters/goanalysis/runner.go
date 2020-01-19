@@ -312,7 +312,7 @@ func (r *runner) analyze(pkgs []*packages.Package, analyzers []*analysis.Analyze
 	debugf("There are %d initial and %d total packages", len(initialPkgs), len(loadingPackages))
 	for _, lp := range loadingPackages {
 		if lp.isInitial {
-			wg.Add(1)
+			wg.Add(1) //nolint:gomnd
 			go func(lp *loadingPackage) {
 				lp.analyzeRecursive(r.loadMode, loadSem)
 				wg.Done()

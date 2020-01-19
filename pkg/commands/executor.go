@@ -210,7 +210,8 @@ func (e *Executor) acquireFileLock() bool {
 	ctx, finish := context.WithTimeout(context.Background(), time.Minute)
 	defer finish()
 
-	if ok, _ := f.TryLockContext(ctx, time.Second*3); !ok {
+	timeout := time.Second * 3
+	if ok, _ := f.TryLockContext(ctx, timeout); !ok {
 		return false
 	}
 

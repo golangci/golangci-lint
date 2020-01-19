@@ -113,7 +113,7 @@ func (es EnabledSet) combineGoAnalysisLinters(linters map[string]*linter.Config)
 		}
 	}
 
-	if len(goanalysisLinters) <= 1 {
+	if len(goanalysisLinters) <= 1 { //nolint:gomnd
 		es.debugf("Didn't combine go/analysis linters: got only %d linters", len(goanalysisLinters))
 		return
 	}
