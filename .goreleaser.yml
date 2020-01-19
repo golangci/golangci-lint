@@ -24,6 +24,13 @@ builds:
     goarm:
       - 6
       - 7
+    ignore:
+      - goos: android
+        goarch: 386
+      - goos: android
+        goarch: ppc64le
+      - goos: android
+        goarch: s390x
     env:
       - CGO_ENABLED=0
     main: ./cmd/golangci-lint/
