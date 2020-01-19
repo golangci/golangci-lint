@@ -432,7 +432,9 @@ func loadIssuesFromCache(pkgs []*packages.Package, lintCtx *linter.Context,
 func runAnalyzers(cfg runAnalyzersConfig, lintCtx *linter.Context) ([]result.Issue, error) {
 	log := lintCtx.Log.Child("goanalysis")
 	sw := timeutils.NewStopwatch("analyzers", log)
-	defer sw.PrintTopStages(10)
+
+	const stagesToPrint = 10
+	defer sw.PrintTopStages(stagesToPrint)
 
 	runner := newRunner(cfg.getName(), log, lintCtx.PkgCache, lintCtx.LoadGuard, cfg.getLoadMode(), sw)
 

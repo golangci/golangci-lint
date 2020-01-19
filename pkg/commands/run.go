@@ -473,7 +473,9 @@ func watchResources(ctx context.Context, done chan struct{}, logger logutils.Log
 
 	var maxRSSMB, totalRSSMB float64
 	var iterationsCount int
-	ticker := time.NewTicker(100 * time.Millisecond)
+
+	const intervalMS = 100
+	ticker := time.NewTicker(intervalMS * time.Millisecond)
 	defer ticker.Stop()
 
 	logEveryRecord := os.Getenv("GL_MEM_LOG_EVERY") == "1"

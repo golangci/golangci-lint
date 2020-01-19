@@ -85,7 +85,7 @@ func errorCheck(outStr string, wantAuto bool, fullshort ...string) (err error) {
 	if len(errs) == 0 {
 		return nil
 	}
-	if len(errs) == 1 {
+	if len(errs) == 1 { //nolint:gomnd
 		return errs[0]
 	}
 	var buf bytes.Buffer

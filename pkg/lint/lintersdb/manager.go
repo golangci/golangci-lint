@@ -244,7 +244,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		linter.NewConfig(golinters.NewGoPrintfFuncName()).
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/jirfag/go-printf-func-name"),
-		linter.NewConfig(golinters.NewGoMND()).
+		linter.NewConfig(golinters.NewGoMND(m.cfg)).
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/tommy-muehle/go-mnd"),
 	}

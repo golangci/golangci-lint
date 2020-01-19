@@ -158,6 +158,9 @@ type LintersSettings struct {
 		MinStringLen        int `mapstructure:"min-len"`
 		MinOccurrencesCount int `mapstructure:"min-occurrences"`
 	}
+	Gomnd struct {
+		Settings map[string]map[string]interface{}
+	}
 	Depguard struct {
 		ListType                 string `mapstructure:"list-type"`
 		Packages                 []string
@@ -268,6 +271,7 @@ type WSLSettings struct {
 	CaseForceTrailingWhitespaceLimit int  `mapstructure:"force-case-trailing-whitespace:"`
 }
 
+//nolint:gomnd
 var defaultLintersSettings = LintersSettings{
 	Lll: LllSettings{
 		LineLength: 120,
@@ -360,7 +364,8 @@ func (e ExcludeRule) Validate() error {
 	if e.Source != "" {
 		nonBlank++
 	}
-	if nonBlank < 2 {
+	const minConditionsCount = 2
+	if nonBlank < minConditionsCount {
 		return errors.New("at least 2 of (text, source, path, linters) should be set")
 	}
 	return nil
