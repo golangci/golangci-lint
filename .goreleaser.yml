@@ -26,6 +26,8 @@ builds:
       - 7
     ignore:
       - goos: android
+        goarch: arm
+      - goos: android
         goarch: 386
       - goos: android
         goarch: ppc64le
