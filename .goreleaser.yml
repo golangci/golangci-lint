@@ -28,6 +28,8 @@ builds:
       - goos: android
         goarch: arm
       - goos: android
+        goarch: arm64
+      - goos: android
         goarch: 386
       - goos: android
         goarch: ppc64le
