@@ -1015,7 +1015,7 @@ linters:
     - gofmt
     - goimports
     - golint
-#    - gomnd TODO: enable it with release > v1.23.0
+    - gomnd
     - goprintffuncname
     - gosec
     - gosimple
