@@ -10,12 +10,15 @@ const (
 	escape = "\x1b"
 	reset  = escape + "[0m"
 	green  = escape + "[32m"
+
+	minValue = 0.0
+	maxValue = 1.0
 )
 
 // Bar is a progress bar.
 type Bar float64
 
-var _ fmt.Formatter = Bar(1.0)
+var _ fmt.Formatter = Bar(maxValue)
 
 // Format the progress bar as output
 func (h Bar) Format(state fmt.State, r rune) {
@@ -25,16 +28,16 @@ func (h Bar) Format(state fmt.State, r rune) {
 		panic(fmt.Sprintf("%v: unexpected format character", float64(h)))
 	}
 
-	if h > 1.0 {
-		h = 1.0
+	if h > maxValue {
+		h = maxValue
 	}
 
-	if h < 0.0 {
-		h = 0.0
+	if h < minValue {
+		h = minValue
 	}
 
 	if state.Flag('-') {
-		h = 1.0 - h
+		h = maxValue - h
 	}
 
 	width, ok := state.Width()
