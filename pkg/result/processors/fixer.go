@@ -218,7 +218,7 @@ func (f Fixer) writeFixedFile(origFileLines [][]byte, issues []result.Issue, tmp
 		}
 
 		origFileLineNumber := i + 1
-		if nextIssue == nil || origFileLineNumber != nextIssue.Line() {
+		if nextIssue == nil || origFileLineNumber != nextIssue.GetLineRange().From {
 			outLine = string(origFileLines[i])
 		} else {
 			nextIssueIndex++
