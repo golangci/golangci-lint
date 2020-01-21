@@ -18,8 +18,7 @@ import (
 
 func TestGovet(t *testing.T) {
 	// Checking that every default analyzer is in "all analyzers" list.
-	allAnalyzers := getAllAnalyzers()
-	checkList := append(getDefaultAnalyzers(),
+	checkList := append(defaultAnalyzers,
 		shadow.Analyzer, // special case, used in analyzersFromConfig
 	)
 	for _, defaultAnalyzer := range checkList {
@@ -45,12 +44,12 @@ func (p sortedAnalyzers) Swap(i, j int)      { p[i].Name, p[j].Name = p[j].Name,
 func TestGovetSorted(t *testing.T) {
 	// Keeping analyzers sorted so their order match the import order.
 	t.Run("All", func(t *testing.T) {
-		if !sort.IsSorted(sortedAnalyzers(getAllAnalyzers())) {
+		if !sort.IsSorted(sortedAnalyzers(allAnalyzers)) {
 			t.Error("please keep all analyzers list sorted by name")
 		}
 	})
 	t.Run("Default", func(t *testing.T) {
-		if !sort.IsSorted(sortedAnalyzers(getDefaultAnalyzers())) {
+		if !sort.IsSorted(sortedAnalyzers(defaultAnalyzers)) {
 			t.Error("please keep default analyzers list sorted by name")
 		}
 	})
