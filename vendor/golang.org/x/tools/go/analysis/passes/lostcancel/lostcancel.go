@@ -3,7 +3,7 @@
 // license that can be found in the LICENSE file.
 
 // Package lostcancel defines an Analyzer that checks for failure to
-// call a context cancelation function.
+// call a context cancellation function.
 package lostcancel
 
 import (
@@ -20,7 +20,7 @@ import (
 
 const Doc = `check cancel func returned by context.WithCancel is called
 
-The cancelation function returned by context.WithCancel, WithTimeout,
+The cancellation function returned by context.WithCancel, WithTimeout,
 and WithDeadline must be called or the new context will remain live
 until its parent context is cancelled.
 (The background context is never cancelled.)`
@@ -121,7 +121,7 @@ func runFunc(pass *analysis.Pass, node ast.Node) {
 		}
 		if id != nil {
 			if id.Name == "_" {
-				pass.Reportf(id.Pos(),
+				pass.ReportRangef(id,
 					"the cancel function returned by context.%s should be called, not discarded, to avoid a context leak",
 					n.(*ast.SelectorExpr).Sel.Name)
 			} else if v, ok := pass.TypesInfo.Uses[id].(*types.Var); ok {
@@ -174,8 +174,8 @@ func runFunc(pass *analysis.Pass, node ast.Node) {
 	for v, stmt := range cancelvars {
 		if ret := lostCancelPath(pass, g, v, stmt, sig); ret != nil {
 			lineno := pass.Fset.Position(stmt.Pos()).Line
-			pass.Reportf(stmt.Pos(), "the %s function is not used on all paths (possible context leak)", v.Name())
-			pass.Reportf(ret.Pos(), "this return statement may be reached without using the %s var defined on line %d", v.Name(), lineno)
+			pass.ReportRangef(stmt, "the %s function is not used on all paths (possible context leak)", v.Name())
+			pass.ReportRangef(ret, "this return statement may be reached without using the %s var defined on line %d", v.Name(), lineno)
 		}
 	}
 }

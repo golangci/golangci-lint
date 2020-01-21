@@ -19,9 +19,11 @@ import (
 	"golang.org/x/tools/go/ast/inspector"
 )
 
+const Doc = "check for non-64-bits-aligned arguments to sync/atomic functions"
+
 var Analyzer = &analysis.Analyzer{
 	Name:     "atomicalign",
-	Doc:      "check for non-64-bits-aligned arguments to sync/atomic functions",
+	Doc:      Doc,
 	Requires: []*analysis.Analyzer{inspect.Analyzer},
 	Run:      run,
 }
@@ -110,7 +112,7 @@ func check64BitAlignment(pass *analysis.Pass, funcName string, arg ast.Expr) {
 		return // 64-bit aligned
 	}
 
-	pass.Reportf(arg.Pos(), "address of non 64-bit aligned field .%s passed to atomic.%s", tvar.Name(), funcName)
+	pass.ReportRangef(arg, "address of non 64-bit aligned field .%s passed to atomic.%s", tvar.Name(), funcName)
 }
 
 // imports reports whether pkg has path among its direct imports.
