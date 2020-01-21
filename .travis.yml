@@ -2,6 +2,7 @@ language: go
 go:
   - 1.12.x
   - 1.13.x
+  - 1.14beta1
 
 before_script:
   - nvm install 12.14.0
