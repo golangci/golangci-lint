@@ -111,7 +111,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		linter.NewConfig(golinters.NewRowsErrCheck()).
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetPerformance, linter.PresetBugs).
-			WithURL("https://github.com/jingyugao/rowserr"),
+			WithURL("https://github.com/jingyugao/rowserrcheck"),
 
 		linter.NewConfig(golinters.NewStaticcheck()).
 			WithLoadForGoAnalysis().
