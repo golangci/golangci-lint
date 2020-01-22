@@ -458,7 +458,7 @@ golangci-lint help linters
 
 - [bodyclose](https://github.com/timakin/bodyclose) - checks whether HTTP response body is closed successfully
 - [golint](https://github.com/golang/lint) - Golint differs from gofmt. Gofmt reformats Go source code, whereas golint prints out style mistakes
-- [rowserrcheck](https://github.com/jingyugao/rowserr) - checks whether Err of rows is checked successfully
+- [rowserrcheck](https://github.com/jingyugao/rowserrcheck) - checks whether Err of rows is checked successfully
 - [stylecheck](https://github.com/dominikh/go-tools/tree/master/stylecheck) - Stylecheck is a replacement for golint
 - [gosec](https://github.com/securego/gosec) - Inspects source code for security problems
 - [interfacer](https://github.com/mvdan/interfacer) - Linter that suggests narrower interface types
