@@ -74,7 +74,7 @@ linters-settings:
     # tokens count to trigger issue, 150 by default
     threshold: 100
   errcheck:
-    # report about not checking of errors in type assetions: `a := b.(MyStruct)`;
+    # report about not checking of errors in type assertions: `a := b.(MyStruct)`;
     # default is false: such cases aren't reported by default.
     check-type-assertions: false
 
