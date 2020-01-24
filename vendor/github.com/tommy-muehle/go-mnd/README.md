@@ -42,6 +42,8 @@ mnd ./...
 
 The ```-checks``` option let's you define a comma separated list of checks.
 
+The ```-ignored-numbers``` option let's you define a comma separated list of numbers to ignore.
+
 ## Checks
 
 By default this detector analyses arguments, assigns, cases, conditions, operations and return statements.

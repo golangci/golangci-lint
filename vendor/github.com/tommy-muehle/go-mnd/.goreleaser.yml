@@ -10,9 +10,10 @@ builds:
         - amd64
       ldflags: -s -w -X main.version={{.Version}} -X main.commit={{.Commit}} -X main.buildTime={{.Date}}`.
 
-archive:
-    format: tar.gz
-    format_overrides:
+archives:
+    -
+      format: tar.gz
+      format_overrides:
         - goos: windows
           format: zip
 
