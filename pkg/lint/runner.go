@@ -111,10 +111,29 @@ func (r *Runner) runLinterSafe(ctx context.Context, lintCtx *linter.Context,
 		}
 	}()
 
+	// pkgs will get dirty while analyzing, which affects to other linters' result.
+	// To avoid this issue, we clone the loaded packages rather than directly using them.
+	oldPackages := lintCtx.Packages
+	oldOriginalPackages := lintCtx.OriginalPackages
+	clone := func(pkgs []*gopackages.Package) []*gopackages.Package {
+		clonedPkgs := make([]*gopackages.Package, len(pkgs))
+		for i, pkg := range pkgs {
+			p := *pkg
+			clonedPkgs[i] = &p
+		}
+		return clonedPkgs
+	}
+	lintCtx.Packages = clone(lintCtx.Packages)
+	lintCtx.OriginalPackages = clone(lintCtx.OriginalPackages)
+
 	specificLintCtx := *lintCtx
 	specificLintCtx.Log = r.Log.Child(lc.Name())
 
 	issues, err := lc.Linter.Run(ctx, &specificLintCtx)
+
+	lintCtx.Packages = oldPackages
+	lintCtx.OriginalPackages = oldOriginalPackages
+
 	if err != nil {
 		return nil, err
 	}
