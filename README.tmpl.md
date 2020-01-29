@@ -485,7 +485,7 @@ linters-settings:
 
 That is all the configuration that is required to run a custom linter in your project. Custom linters are enabled by default,
 but abide by the same rules as other linters. If the disable all option is specified either on command line or in 
-`.golang.yml` files `linters:disable-all: true`, custom linters will be disabled; they can be re-enabled by adding them 
+`.golangci.yml` files `linters:disable-all: true`, custom linters will be disabled; they can be re-enabled by adding them 
 to the `linters:enable` list, or providing the enabled option on the command line, `golangci-lint run -Eexample`.
 
 ### To Create Your Own Custom Linter
