@@ -125,6 +125,7 @@ The following companies/products use golangci-lint:
 * [Red Hat OpenShift](https://github.com/openshift/telemeter)
 * [Yahoo](https://github.com/yahoo/yfuzz)
 * [IBM](https://github.com/ibm-developer/ibm-cloud-env-golang)
+* [Intuit](https://github.com/intuit)
 * [Xiaomi](https://github.com/XiaoMi/soar)
 * [Baidu](https://github.com/baidu/bfe)
 * [Samsung](https://github.com/samsung-cnct/cluster-api-provider-ssh)
