@@ -223,4 +223,7 @@ func (e *Executor) releaseFileLock() {
 	if err := e.flock.Unlock(); err != nil {
 		e.debugf("Failed to unlock on file: %s", err)
 	}
+	if err := os.Remove(e.flock.Path()); err != nil {
+		e.debugf("Failed to remove lock file: %s", err)
+	}
 }
