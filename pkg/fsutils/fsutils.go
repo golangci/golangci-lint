@@ -81,7 +81,7 @@ func ShortestRelPath(path, wd string) (string, error) {
 	path = evaledPath
 
 	// make path absolute and then relative to be able to fix this case:
-	// we'are in /test dir, we want to normalize ../test, and have file file.go in this dir;
+	// we are in /test dir, we want to normalize ../test, and have file file.go in this dir;
 	// it must have normalized path file.go, not ../test/file.go,
 	var absPath string
 	if filepath.IsAbs(path) {

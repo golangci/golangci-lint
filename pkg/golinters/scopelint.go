@@ -88,7 +88,7 @@ func (f *Node) Visit(node ast.Node) ast.Visitor {
 		}
 
 	case *ast.RangeStmt:
-		// Memory variables declarated in range statement
+		// Memory variables declared in range statement
 		switch k := typedNode.Key.(type) {
 		case *ast.Ident:
 			f.UnsafeObjects[k.Obj] = 0
