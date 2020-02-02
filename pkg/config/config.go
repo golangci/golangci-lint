@@ -199,6 +199,7 @@ type LintersSettings struct {
 	Dogsled  DogsledSettings
 	Gocognit GocognitSettings
 	Godot    GodotSettings
+	Nestif   NestifSettings
 
 	Custom map[string]CustomLinterSettings
 }
@@ -280,6 +281,10 @@ type GodotSettings struct {
 	CheckAll bool `mapstructure:"check-all"`
 }
 
+type NestifSettings struct {
+	MinComplexity int `mapstructure:"min-complexity"`
+}
+
 //nolint:gomnd
 var defaultLintersSettings = LintersSettings{
 	Lll: LllSettings{
@@ -318,6 +323,9 @@ var defaultLintersSettings = LintersSettings{
 		AllowSeparatedLeadingComment:     false,
 		ForceCuddleErrCheckAndAssign:     false,
 		ForceCaseTrailingWhitespaceLimit: 0,
+	},
+	Nestif: NestifSettings{
+		MinComplexity: 5,
 	},
 }
 

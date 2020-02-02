@@ -230,6 +230,7 @@ lll: Reports long lines [fast: true, auto-fix: false]
 maligned: Tool to detect Go structs that would take less memory if their fields were sorted [fast: true, auto-fix: false]
 misspell: Finds commonly misspelled English words in comments [fast: true, auto-fix: true]
 nakedret: Finds naked returns in functions greater than a specified function length [fast: true, auto-fix: false]
+nestif: Reports deeply nested if statements [fast: true, auto-fix: false]
 prealloc: Finds slice declarations that could potentially be preallocated [fast: true, auto-fix: false]
 rowserrcheck: checks whether Err of rows is checked successfully [fast: true, auto-fix: false]
 scopelint: Scopelint checks for unpinned variables in go programs [fast: true, auto-fix: false]
@@ -490,6 +491,7 @@ golangci-lint help linters
 - [goprintffuncname](https://github.com/jirfag/go-printf-func-name) - Checks that printf-like functions are named with `f` at the end
 - [gomnd](https://github.com/tommy-muehle/go-mnd) - An analyzer to detect magic numbers.
 - [godot](https://github.com/tetafro/godot) - Check if comments end in a period
+- [nestif](https://github.com/nakabonne/nestif) - Reports deeply nested if statements
 
 ## Configuration
 
@@ -708,6 +710,9 @@ linters-settings:
   gocognit:
     # minimal code complexity to report, 30 by default (but we recommend 10-20)
     min-complexity: 10
+  nestif:
+    # minimal complexity of if statements to report, 5 by default
+    min-complexity: 4
   goconst:
     # minimal length of string constant, 3 by default
     min-len: 3
@@ -1267,6 +1272,7 @@ Thanks to developers and authors of used linters:
 - [jirfag](https://github.com/jirfag)
 - [tommy-muehle](https://github.com/tommy-muehle)
 - [tetafro](https://github.com/tetafro)
+- [nakabonne](https://github.com/nakabonne)
 
 ## Changelog
 

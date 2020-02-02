@@ -96,6 +96,9 @@ linters-settings:
   gocognit:
     # minimal code complexity to report, 30 by default (but we recommend 10-20)
     min-complexity: 10
+  nestif:
+    # minimal complexity of if statements to report, 5 by default
+    min-complexity: 4
   goconst:
     # minimal length of string constant, 3 by default
     min-len: 3
