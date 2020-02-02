@@ -1,6 +1,8 @@
 package linter
 
 import (
+	"go/ast"
+
 	"golang.org/x/tools/go/packages"
 
 	"github.com/golangci/golangci-lint/internal/pkgcache"
@@ -29,4 +31,19 @@ type Context struct {
 
 func (c *Context) Settings() *config.LintersSettings {
 	return &c.Cfg.LintersSettings
+}
+
+func (c *Context) ClearTypesInPackages() {
+	for _, p := range c.Packages {
+		clearTypes(p)
+	}
+	for _, p := range c.OriginalPackages {
+		clearTypes(p)
+	}
+}
+
+func clearTypes(p *packages.Package) {
+	p.Types = nil
+	p.TypesInfo = nil
+	p.Syntax = []*ast.File{}
 }

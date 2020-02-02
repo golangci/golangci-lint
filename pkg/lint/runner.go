@@ -114,6 +114,10 @@ func (r *Runner) runLinterSafe(ctx context.Context, lintCtx *linter.Context,
 	specificLintCtx := *lintCtx
 	specificLintCtx.Log = r.Log.Child(lc.Name())
 
+	// Packages in lintCtx might be dirty due to the last analysis,
+	// which affects to the next analysis.
+	// To avoid this issue, we clear type information from the packages.
+	specificLintCtx.ClearTypesInPackages()
 	issues, err := lc.Linter.Run(ctx, &specificLintCtx)
 	if err != nil {
 		return nil, err
