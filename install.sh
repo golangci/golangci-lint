@@ -84,6 +84,8 @@ get_binaries() {
     linux/armv7) BINARIES="golangci-lint" ;;
     linux/ppc64le) BINARIES="golangci-lint" ;;
     linux/s390x) BINARIES="golangci-lint" ;;
+    linux/mips64) BINARIES="golangci-lint" ;;
+    linux/mips64le) BINARIES="golangci-lint" ;;
     windows/386) BINARIES="golangci-lint" ;;
     windows/amd64) BINARIES="golangci-lint" ;;
     windows/arm64) BINARIES="golangci-lint" ;;

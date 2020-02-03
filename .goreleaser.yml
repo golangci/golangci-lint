@@ -20,6 +20,8 @@ builds:
       - 386
       - ppc64le
       - s390x
+      - mips64
+      - mips64le
     goarm:
       - 6
       - 7
