@@ -139,8 +139,8 @@ func (s *GocriticSettings) InferEnabledChecks(log logutils.Log) {
 		enabledChecksSet := stringsSliceToSet(enabledChecks)
 		for _, disabledCheck := range s.DisabledChecks {
 			if !enabledChecksSet[disabledCheck] {
-				log.Warnf("Gocritic check %q was disabled by config, was it's not enabled, no need to disable it",
-					disabledCheck)
+				log.Warnf("Gocritic check %q was explicitly disabled via config. However, as this check"+
+					"is disabled by default, there is no need to explicitly disable it via config.", disabledCheck)
 				continue
 			}
 			delete(enabledChecksSet, disabledCheck)
