@@ -124,10 +124,10 @@ func getDoc(filePath string) (string, error) {
 	// Issue 954: Some lines can be very long, e.g. auto-generated
 	// embedded resources. Reported on file of 86.2KB.
 	const (
-		naxSize     = 512 * 1024 // 512KB should be enough
+		maxSize     = 512 * 1024 // 512KB should be enough
 		initialSize = 4096       // same as startBufSize in bufio
 	)
-	scanner.Buffer(make([]byte, initialSize), naxSize)
+	scanner.Buffer(make([]byte, initialSize), maxSize)
 
 	var docLines []string
 	for scanner.Scan() {
