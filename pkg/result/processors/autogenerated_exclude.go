@@ -120,6 +120,12 @@ func getDoc(filePath string) (string, error) {
 	defer file.Close()
 
 	scanner := bufio.NewScanner(file)
+
+	// Issue 954: Some lines can be very long, e.g. auto-generated
+	// embedded resources. Reported on file of 86.2KB.
+	const maxTokenSize = 512 * 1024 // 512KB should be enough
+	scanner.Buffer(make([]byte, maxTokenSize), maxTokenSize)
+
 	var docLines []string
 	for scanner.Scan() {
 		line := strings.TrimSpace(scanner.Text())
