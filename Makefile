@@ -58,13 +58,13 @@ maintainer-clean: clean
 
 check_generated:
 	$(MAKE) --always-make generate
-	git checkout -- vendor/modules.txt # can differ between go1.12 and go1.13
+	git checkout -- vendor/modules.txt go.mod go.sum # can differ between go1.12 and go1.13
 	git diff --exit-code # check no changes
 .PHONY: check_generated
 
 fast_check_generated:
 	$(MAKE) --always-make fast_generate
-	git checkout -- vendor/modules.txt # can differ between go1.12 and go1.13
+	git checkout -- vendor/modules.txt go.mod go.sum # can differ between go1.12 and go1.13
 	git diff --exit-code # check no changes
 .PHONY: fast_check_generated
 
