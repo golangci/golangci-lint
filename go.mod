@@ -44,14 +44,10 @@ require (
 	github.com/ultraware/whitespace v0.0.4
 	github.com/uudashr/gocognit v1.0.1
 	github.com/valyala/quicktemplate v1.2.0
-	golang.org/x/tools v0.0.0-20200102140908-9497f49d5709
+	golang.org/x/tools v0.0.0-20200204192400-7124308813f3
 	gopkg.in/yaml.v2 v2.2.7
 	honnef.co/go/tools v0.0.1-2019.2.3
 	mvdan.cc/interfacer v0.0.0-20180901003855-c20040233aed
 	mvdan.cc/lint v0.0.0-20170908181259-adc824a0674b // indirect
 	mvdan.cc/unparam v0.0.0-20190720180237-d51796306d8f
 )
-
-// https://github.com/golang/tools/pull/156
-// https://github.com/golang/tools/pull/160
-replace golang.org/x/tools => github.com/golangci/tools v0.0.0-20190915081525-6aa350649b1c
