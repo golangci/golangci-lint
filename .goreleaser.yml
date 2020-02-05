@@ -25,6 +25,8 @@ builds:
     goarm:
       - 6
       - 7
+    gomips:
+      - hardfloat
     env:
       - CGO_ENABLED=0
     main: ./cmd/golangci-lint/
