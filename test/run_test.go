@@ -44,13 +44,13 @@ func TestSymlinkLoop(t *testing.T) {
 func TestDeadline(t *testing.T) {
 	testshared.NewLintRunner(t).Run("--deadline=1ms", getProjectRoot()).
 		ExpectExitCode(exitcodes.Timeout).
-		ExpectOutputContains(`Timeout exceeded: try increase it by passing --timeout option`)
+		ExpectOutputContains(`Timeout exceeded: try increasing it by passing --timeout option`)
 }
 
 func TestTimeout(t *testing.T) {
 	testshared.NewLintRunner(t).Run("--timeout=1ms", getProjectRoot()).
 		ExpectExitCode(exitcodes.Timeout).
-		ExpectOutputContains(`Timeout exceeded: try increase it by passing --timeout option`)
+		ExpectOutputContains(`Timeout exceeded: try increasing it by passing --timeout option`)
 }
 
 func TestTimeoutInConfig(t *testing.T) {
@@ -85,7 +85,7 @@ func TestTimeoutInConfig(t *testing.T) {
 	for _, c := range cases {
 		// Run with disallowed option set only in config
 		r.RunWithYamlConfig(c.cfg, withCommonRunArgs(minimalPkg)...).ExpectExitCode(exitcodes.Timeout).
-			ExpectOutputContains(`Timeout exceeded: try increase it by passing --timeout option`)
+			ExpectOutputContains(`Timeout exceeded: try increasing it by passing --timeout option`)
 	}
 }
 

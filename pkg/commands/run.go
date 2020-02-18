@@ -446,7 +446,7 @@ func (e *Executor) setTimeoutToDeadlineIfOnlyDeadlineIsSet() {
 func (e *Executor) setupExitCode(ctx context.Context) {
 	if ctx.Err() != nil {
 		e.exitCode = exitcodes.Timeout
-		e.log.Errorf("Timeout exceeded: try increase it by passing --timeout option")
+		e.log.Errorf("Timeout exceeded: try increasing it by passing --timeout option")
 		return
 	}
 
