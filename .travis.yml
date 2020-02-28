@@ -2,7 +2,7 @@ language: go
 go:
   - 1.12.x
   - 1.13.x
-  - 1.14rc1
+  - 1.14.x
 
 before_script:
   - nvm install 12.14.0
@@ -31,4 +31,4 @@ deploy:
   on:
     tags: true
     # it's important to build on the newest version of go:
-    condition: $TRAVIS_GO_VERSION =~ ^1\.13
+    condition: $TRAVIS_GO_VERSION =~ ^1\.14
