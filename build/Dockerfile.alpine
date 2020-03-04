@@ -1,4 +1,4 @@
-FROM golang:1.13-alpine
+FROM golang:1.14-alpine
 
 # gcc is required to support cgo;
 # git and mercurial are needed most times for go get`, etc.
