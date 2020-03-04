@@ -268,7 +268,9 @@ type WSLSettings struct {
 	AllowMultiLineAssignCuddle       bool `mapstructure:"allow-multiline-assign"`
 	AllowCuddleDeclaration           bool `mapstructure:"allow-cuddle-declarations"`
 	AllowTrailingComment             bool `mapstructure:"allow-trailing-comment"`
-	CaseForceTrailingWhitespaceLimit int  `mapstructure:"force-case-trailing-whitespace:"`
+	AllowSeparatedLeadingComment     bool `mapstructure:"allow-separated-leading-comment"`
+	ForceCuddleErrCheckAndAssign     bool `mapstructure:"force-err-cuddling"`
+	ForceCaseTrailingWhitespaceLimit int  `mapstructure:"force-case-trailing-whitespace"`
 }
 
 //nolint:gomnd
@@ -306,7 +308,9 @@ var defaultLintersSettings = LintersSettings{
 		AllowMultiLineAssignCuddle:       true,
 		AllowCuddleDeclaration:           false,
 		AllowTrailingComment:             false,
-		CaseForceTrailingWhitespaceLimit: 0,
+		AllowSeparatedLeadingComment:     false,
+		ForceCuddleErrCheckAndAssign:     false,
+		ForceCaseTrailingWhitespaceLimit: 0,
 	},
 }
 

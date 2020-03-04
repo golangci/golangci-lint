@@ -70,7 +70,7 @@ test files, use `-n` or `--no-test`.
 The recommended command is:
 
 ```sh
-golangci-lint --disable-all --enable wsl
+golangci-lint run --disable-all --enable wsl
 ```
 
 For more information, please refer to
@@ -109,6 +109,7 @@ feel free to raise an [issue](https://github.com/bombsimon/wsl/issues/new).
 * [If statements should only be cuddled with assignments used in the if
   statement
   itself](doc/rules.md#if-statements-should-only-be-cuddled-with-assignments-used-in-the-if-statement-itself)
+* [If statements that check an error must be cuddled with the statement that assigned the error](doc/rules.md#if-statements-that-check-an-error-must-be-cuddled-with-the-statement-that-assigned-the-error)
 * [Only cuddled expressions if assigning variable or using from line
   above](doc/rules.md#only-cuddled-expressions-if-assigning-variable-or-using-from-line-above)
 * [Only one cuddle assignment allowed before defer statement](doc/rules.md#only-one-cuddle-assignment-allowed-before-defer-statement)
