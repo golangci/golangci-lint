@@ -9,7 +9,7 @@ import (
 
 func UseMagicNumber() {
 	c := &http.Client{
-		Timeout: 1 * time.Second, // ERROR : "Magic number: 1, in <assign> detected"
+		Timeout: 2 * time.Second, // ERROR : "Magic number: 2, in <assign> detected"
 	}
 
 	res, err := c.Get("http://www.google.com")

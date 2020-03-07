@@ -2,19 +2,24 @@ package checks
 
 import (
 	"go/ast"
+	"go/token"
 
 	"golang.org/x/tools/go/analysis"
+
+	config "github.com/tommy-muehle/go-mnd/config"
 )
 
 const ReturnCheck = "return"
 
 type ReturnAnalyzer struct {
-	pass *analysis.Pass
+	pass   *analysis.Pass
+	config *config.Config
 }
 
-func NewReturnAnalyzer(pass *analysis.Pass) *ReturnAnalyzer {
+func NewReturnAnalyzer(pass *analysis.Pass, config *config.Config) *ReturnAnalyzer {
 	return &ReturnAnalyzer{
-		pass: pass,
+		pass:   pass,
+		config: config,
 	}
 }
 
@@ -33,9 +38,13 @@ func (a *ReturnAnalyzer) Check(n ast.Node) {
 	for _, expr := range stmt.Results {
 		switch x := expr.(type) {
 		case *ast.BasicLit:
-			if isMagicNumber(x) {
+			if a.isMagicNumber(x) {
 				a.pass.Reportf(x.Pos(), reportMsg, x.Value, ReturnCheck)
 			}
 		}
 	}
+}
+
+func (a *ReturnAnalyzer) isMagicNumber(l *ast.BasicLit) bool {
+	return (l.Kind == token.FLOAT || l.Kind == token.INT) && !a.config.IsIgnoredNumber(l.Value)
 }

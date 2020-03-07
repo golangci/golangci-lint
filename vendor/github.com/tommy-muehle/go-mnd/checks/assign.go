@@ -2,19 +2,24 @@ package checks
 
 import (
 	"go/ast"
+	"go/token"
 
 	"golang.org/x/tools/go/analysis"
+
+	config "github.com/tommy-muehle/go-mnd/config"
 )
 
 const AssignCheck = "assign"
 
 type AssignAnalyzer struct {
-	pass *analysis.Pass
+	pass   *analysis.Pass
+	config *config.Config
 }
 
-func NewAssignAnalyzer(pass *analysis.Pass) *AssignAnalyzer {
+func NewAssignAnalyzer(pass *analysis.Pass, config *config.Config) *AssignAnalyzer {
 	return &AssignAnalyzer{
-		pass: pass,
+		pass:   pass,
+		config: config,
 	}
 }
 
@@ -32,7 +37,7 @@ func (a *AssignAnalyzer) Check(n ast.Node) {
 
 	switch x := expr.Value.(type) {
 	case *ast.BasicLit:
-		if isMagicNumber(x) {
+		if a.isMagicNumber(x) {
 			a.pass.Reportf(x.Pos(), reportMsg, x.Value, AssignCheck)
 		}
 	case *ast.BinaryExpr:
@@ -43,15 +48,19 @@ func (a *AssignAnalyzer) Check(n ast.Node) {
 func (a *AssignAnalyzer) checkBinaryExpr(expr *ast.BinaryExpr) {
 	switch x := expr.X.(type) {
 	case *ast.BasicLit:
-		if isMagicNumber(x) {
+		if a.isMagicNumber(x) {
 			a.pass.Reportf(x.Pos(), reportMsg, x.Value, AssignCheck)
 		}
 	}
 
 	switch y := expr.Y.(type) {
 	case *ast.BasicLit:
-		if isMagicNumber(y) {
+		if a.isMagicNumber(y) {
 			a.pass.Reportf(y.Pos(), reportMsg, y.Value, AssignCheck)
 		}
 	}
+}
+
+func (a *AssignAnalyzer) isMagicNumber(l *ast.BasicLit) bool {
+	return (l.Kind == token.FLOAT || l.Kind == token.INT) && !a.config.IsIgnoredNumber(l.Value)
 }
