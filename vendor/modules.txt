@@ -257,28 +257,32 @@ golang.org/x/tools/internal/semver
 gopkg.in/ini.v1
 # gopkg.in/yaml.v2 v2.2.7
 gopkg.in/yaml.v2
-# honnef.co/go/tools v0.0.1-2019.2.3
+# honnef.co/go/tools v0.0.1-2020.1.3
 honnef.co/go/tools/arg
+honnef.co/go/tools/code
 honnef.co/go/tools/config
 honnef.co/go/tools/deprecated
+honnef.co/go/tools/edit
 honnef.co/go/tools/facts
 honnef.co/go/tools/functions
 honnef.co/go/tools/go/types/typeutil
 honnef.co/go/tools/internal/cache
-honnef.co/go/tools/internal/passes/buildssa
+honnef.co/go/tools/internal/passes/buildir
 honnef.co/go/tools/internal/renameio
+honnef.co/go/tools/internal/robustio
 honnef.co/go/tools/internal/sharedcheck
+honnef.co/go/tools/ir
+honnef.co/go/tools/ir/irutil
 honnef.co/go/tools/lint
 honnef.co/go/tools/lint/lintdsl
 honnef.co/go/tools/lint/lintutil
 honnef.co/go/tools/lint/lintutil/format
 honnef.co/go/tools/loader
+honnef.co/go/tools/pattern
 honnef.co/go/tools/printf
+honnef.co/go/tools/report
 honnef.co/go/tools/simple
-honnef.co/go/tools/ssa
-honnef.co/go/tools/ssautil
 honnef.co/go/tools/staticcheck
-honnef.co/go/tools/staticcheck/vrp
 honnef.co/go/tools/stylecheck
 honnef.co/go/tools/unused
 honnef.co/go/tools/version
