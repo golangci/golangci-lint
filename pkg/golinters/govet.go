@@ -101,6 +101,11 @@ var (
 
 func isAnalyzerEnabled(name string, cfg *config.GovetSettings, defaultAnalyzers []*analysis.Analyzer) bool {
 	if cfg.EnableAll {
+		for _, n := range cfg.Disable {
+			if n == name {
+				return false
+			}
+		}
 		return true
 	}
 	// Raw for loops should be OK on small slice lengths.
