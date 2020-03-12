@@ -2,19 +2,24 @@ package checks
 
 import (
 	"go/ast"
+	"go/token"
 
 	"golang.org/x/tools/go/analysis"
+
+	config "github.com/tommy-muehle/go-mnd/config"
 )
 
 const CaseCheck = "case"
 
 type CaseAnalyzer struct {
-	pass *analysis.Pass
+	pass   *analysis.Pass
+	config *config.Config
 }
 
-func NewCaseAnalyzer(pass *analysis.Pass) *CaseAnalyzer {
+func NewCaseAnalyzer(pass *analysis.Pass, config *config.Config) *CaseAnalyzer {
 	return &CaseAnalyzer{
-		pass: pass,
+		pass:   pass,
+		config: config,
 	}
 }
 
@@ -33,7 +38,7 @@ func (a *CaseAnalyzer) Check(n ast.Node) {
 	for _, c := range caseClause.List {
 		switch x := c.(type) {
 		case *ast.BasicLit:
-			if isMagicNumber(x) {
+			if a.isMagicNumber(x) {
 				a.pass.Reportf(x.Pos(), reportMsg, x.Value, CaseCheck)
 			}
 		case *ast.BinaryExpr:
@@ -45,15 +50,19 @@ func (a *CaseAnalyzer) Check(n ast.Node) {
 func (a *CaseAnalyzer) checkBinaryExpr(expr *ast.BinaryExpr) {
 	switch x := expr.X.(type) {
 	case *ast.BasicLit:
-		if isMagicNumber(x) {
+		if a.isMagicNumber(x) {
 			a.pass.Reportf(x.Pos(), reportMsg, x.Value, CaseCheck)
 		}
 	}
 
 	switch y := expr.Y.(type) {
 	case *ast.BasicLit:
-		if isMagicNumber(y) {
+		if a.isMagicNumber(y) {
 			a.pass.Reportf(y.Pos(), reportMsg, y.Value, CaseCheck)
 		}
 	}
+}
+
+func (a *CaseAnalyzer) isMagicNumber(l *ast.BasicLit) bool {
+	return (l.Kind == token.FLOAT || l.Kind == token.INT) && !a.config.IsIgnoredNumber(l.Value)
 }

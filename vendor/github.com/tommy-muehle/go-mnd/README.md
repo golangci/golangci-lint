@@ -42,6 +42,10 @@ mnd ./...
 
 The ```-checks``` option let's you define a comma separated list of checks.
 
+The ```-ignored-numbers``` option let's you define a comma separated list of numbers to ignore.
+
+The ```-excludes``` option let's you define a comma separated list of regexp patterns to exclude.
+
 ## Checks
 
 By default this detector analyses arguments, assigns, cases, conditions, operations and return statements.
@@ -88,9 +92,19 @@ y = 10 * x
 return 3
 ```
 
-## Notices
+## Excludes
 
-By default the number 0 is excluded!
+By default the numbers 0 and 1 as well as test files are excluded! 
+
+### Further known excludes
+
+The function "Date" in the "Time" package.
+
+```
+t := time.Date(2017, time.September, 26, 12, 13, 14, 0, time.UTC)
+```
+
+Additional custom excludes can be defined via option flag.
 
 ## License
 

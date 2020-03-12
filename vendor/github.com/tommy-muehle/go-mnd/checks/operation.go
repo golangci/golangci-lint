@@ -2,19 +2,24 @@ package checks
 
 import (
 	"go/ast"
+	"go/token"
 
 	"golang.org/x/tools/go/analysis"
+
+	config "github.com/tommy-muehle/go-mnd/config"
 )
 
 const OperationCheck = "operation"
 
 type OperationAnalyzer struct {
-	pass *analysis.Pass
+	pass   *analysis.Pass
+	config *config.Config
 }
 
-func NewOperationAnalyzer(pass *analysis.Pass) *OperationAnalyzer {
+func NewOperationAnalyzer(pass *analysis.Pass, config *config.Config) *OperationAnalyzer {
 	return &OperationAnalyzer{
-		pass: pass,
+		pass:   pass,
+		config: config,
 	}
 }
 
@@ -50,15 +55,19 @@ func (a *OperationAnalyzer) Check(n ast.Node) {
 func (a *OperationAnalyzer) checkBinaryExpr(expr *ast.BinaryExpr) {
 	switch x := expr.X.(type) {
 	case *ast.BasicLit:
-		if isMagicNumber(x) {
+		if a.isMagicNumber(x) {
 			a.pass.Reportf(x.Pos(), reportMsg, x.Value, OperationCheck)
 		}
 	}
 
 	switch y := expr.Y.(type) {
 	case *ast.BasicLit:
-		if isMagicNumber(y) {
+		if a.isMagicNumber(y) {
 			a.pass.Reportf(y.Pos(), reportMsg, y.Value, OperationCheck)
 		}
 	}
+}
+
+func (a *OperationAnalyzer) isMagicNumber(l *ast.BasicLit) bool {
+	return (l.Kind == token.FLOAT || l.Kind == token.INT) && !a.config.IsIgnoredNumber(l.Value)
 }

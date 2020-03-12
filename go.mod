@@ -39,7 +39,7 @@ require (
 	github.com/spf13/viper v1.6.1
 	github.com/stretchr/testify v1.4.0
 	github.com/timakin/bodyclose v0.0.0-20190930140734-f7f2e9bca95e
-	github.com/tommy-muehle/go-mnd v1.1.1
+	github.com/tommy-muehle/go-mnd v1.3.1-0.20200224220436-e6f9a994e8fa
 	github.com/ultraware/funlen v0.0.2
 	github.com/ultraware/whitespace v0.0.4
 	github.com/uudashr/gocognit v1.0.1

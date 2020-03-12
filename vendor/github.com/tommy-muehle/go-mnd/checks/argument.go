@@ -2,8 +2,11 @@ package checks
 
 import (
 	"go/ast"
+	"go/token"
 
 	"golang.org/x/tools/go/analysis"
+
+	config "github.com/tommy-muehle/go-mnd/config"
 )
 
 const ArgumentCheck = "argument"
@@ -15,12 +18,14 @@ var argumentExcludes = map[string]string{
 }
 
 type ArgumentAnalyzer struct {
-	pass *analysis.Pass
+	config *config.Config
+	pass   *analysis.Pass
 }
 
-func NewArgumentAnalyzer(pass *analysis.Pass) *ArgumentAnalyzer {
+func NewArgumentAnalyzer(pass *analysis.Pass, config *config.Config) *ArgumentAnalyzer {
 	return &ArgumentAnalyzer{
-		pass: pass,
+		pass:   pass,
+		config: config,
 	}
 }
 
@@ -44,7 +49,7 @@ func (a *ArgumentAnalyzer) Check(n ast.Node) {
 	for i, arg := range expr.Args {
 		switch x := arg.(type) {
 		case *ast.BasicLit:
-			if !isMagicNumber(x) {
+			if !a.isMagicNumber(x) {
 				continue
 			}
 			// If it's a magic number and has no previous element, report it
@@ -55,7 +60,7 @@ func (a *ArgumentAnalyzer) Check(n ast.Node) {
 				switch expr.Args[i-1].(type) {
 				case *ast.ChanType:
 					// When it's not a simple buffered channel, report it
-					if x.Value != "1" {
+					if a.isMagicNumber(x) {
 						a.pass.Reportf(x.Pos(), reportMsg, x.Value, ArgumentCheck)
 					}
 				}
@@ -84,15 +89,19 @@ func (a *ArgumentAnalyzer) isExcluded(expr *ast.SelectorExpr) bool {
 func (a *ArgumentAnalyzer) checkBinaryExpr(expr *ast.BinaryExpr) {
 	switch x := expr.X.(type) {
 	case *ast.BasicLit:
-		if isMagicNumber(x) {
+		if a.isMagicNumber(x) {
 			a.pass.Reportf(x.Pos(), reportMsg, x.Value, ArgumentCheck)
 		}
 	}
 
 	switch y := expr.Y.(type) {
 	case *ast.BasicLit:
-		if isMagicNumber(y) {
+		if a.isMagicNumber(y) {
 			a.pass.Reportf(y.Pos(), reportMsg, y.Value, ArgumentCheck)
 		}
 	}
+}
+
+func (a *ArgumentAnalyzer) isMagicNumber(l *ast.BasicLit) bool {
+	return (l.Kind == token.FLOAT || l.Kind == token.INT) && !a.config.IsIgnoredNumber(l.Value)
 }
