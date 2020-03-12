@@ -79,6 +79,7 @@ func TestGovetAnalyzerIsEnabled(t *testing.T) {
 		{Name: "bools", Enabled: false, Disable: []string{"bools"}},
 		{Name: "unsafeptr", Enabled: true, Enable: []string{"unsafeptr"}},
 		{Name: "shift", Enabled: true, EnableAll: true},
+		{Name: "shadow", EnableAll: true, Disable: []string{"shadow"}, Enabled: false},
 	} {
 		cfg := &config.GovetSettings{
 			Enable:     tc.Enable,
