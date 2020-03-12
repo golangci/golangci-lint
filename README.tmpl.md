@@ -300,7 +300,7 @@ GolangCI-Lint was created to fix the following issues with `gometalinter`:
 Benchmarks were executed on MacBook Pro (Retina, 13-inch, Late 2013), 2,4 GHz Intel Core i5, 8 GB 1600 MHz DDR3.
 It has 4 cores and concurrent linting as a default consuming all cores.
 Benchmark was run (and measured) automatically, see the code
-[here](https://github.com/golangci/golangci-lint/blob/master/test/bench_test.go) (`BenchmarkWithGometalinter`).
+[here](https://github.com/golangci/golangci-lint/blob/master/test/bench/bench_test.go) (`BenchmarkWithGometalinter`).
 
 We measure peak memory usage (RSS) by tracking of processes RSS every 5 ms.
 
