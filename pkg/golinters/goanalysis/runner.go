@@ -478,6 +478,49 @@ func (e *IllTypedError) Error() string {
 	return fmt.Sprintf("errors in package: %v", e.Pkg.Errors)
 }
 
+type FailedPrerequisitesError struct {
+	errors map[string][]string
+}
+
+func (f FailedPrerequisitesError) NotEmpty() bool {
+	return len(f.errors) > 0
+}
+
+func (f *FailedPrerequisitesError) Consume(name string, err error) {
+	if f.errors == nil {
+		f.errors = map[string][]string{}
+	}
+	k := fmt.Sprintf("%v", err)
+	f.errors[k] = append(f.errors[k], name)
+}
+
+type groupedPrerequisiteErr struct {
+	names []string
+	err   string
+}
+
+func (g groupedPrerequisiteErr) String() string {
+	if len(g.names) == 1 {
+		return fmt.Sprintf("%s: %s", g.names[0], g.err)
+	}
+	return fmt.Sprintf("(%s): %s", strings.Join(g.names, ", "), g.err)
+}
+
+func (f FailedPrerequisitesError) Error() string {
+	var errs []string
+	for err := range f.errors {
+		errs = append(errs, err)
+	}
+	var groups []groupedPrerequisiteErr
+	for _, err := range errs {
+		groups = append(groups, groupedPrerequisiteErr{
+			err:   err,
+			names: f.errors[err],
+		})
+	}
+	return fmt.Sprintf("failed prerequisites: %s", groups)
+}
+
 func (act *action) analyzeSafe() {
 	defer func() {
 		if p := recover(); p != nil {
@@ -501,16 +544,16 @@ func (act *action) analyze() {
 		analyzeDebugf("go/analysis: %s: %s: analyzed package %q in %s", act.r.prefix, act.a.Name, act.pkg.Name, time.Since(now))
 	}(time.Now())
 
-	// Report an error if any dependency failed.
-	var failed []string
+	// Report an error if any dependency failures.
+	var depErr FailedPrerequisitesError
 	for _, dep := range act.deps {
-		if dep.err != nil {
-			failed = append(failed, dep.String())
+		if dep.err == nil {
+			continue
 		}
+		depErr.Consume(dep.String(), dep.err)
 	}
-	if failed != nil {
-		sort.Strings(failed)
-		act.err = fmt.Errorf("failed prerequisites: %s", strings.Join(failed, ", "))
+	if depErr.NotEmpty() {
+		act.err = depErr
 		return
 	}
 
