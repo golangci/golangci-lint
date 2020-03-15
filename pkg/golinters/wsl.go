@@ -3,7 +3,7 @@ package golinters
 import (
 	"sync"
 
-	"github.com/bombsimon/wsl/v2"
+	"github.com/bombsimon/wsl/v3"
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
@@ -42,9 +42,12 @@ func NewWSL() *goanalysis.Linter {
 					AllowMultiLineAssignCuddle:       linterCfg.AllowMultiLineAssignCuddle,
 					AllowCuddleDeclaration:           linterCfg.AllowCuddleDeclaration,
 					AllowTrailingComment:             linterCfg.AllowTrailingComment,
-					CaseForceTrailingWhitespaceLimit: linterCfg.CaseForceTrailingWhitespaceLimit,
+					AllowSeparatedLeadingComment:     linterCfg.AllowSeparatedLeadingComment,
+					ForceCuddleErrCheckAndAssign:     linterCfg.ForceCuddleErrCheckAndAssign,
+					ForceCaseTrailingWhitespaceLimit: linterCfg.ForceCaseTrailingWhitespaceLimit,
 					AllowCuddleWithCalls:             []string{"Lock", "RLock"},
 					AllowCuddleWithRHS:               []string{"Unlock", "RUnlock"},
+					ErrorVariableNames:               []string{"err"},
 				}
 			)
 

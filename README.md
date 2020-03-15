@@ -847,6 +847,10 @@ linters-settings:
     allow-trailing-comment: false
     # Force newlines in end of case at this limit (0 = never).
     force-case-trailing-whitespace: 0
+    # Force cuddling of err checks with err var assignment
+    force-err-cuddling: false
+    # Allow leading comments to be separated with empty liens
+    allow-separated-leading-comment: false
 
   # The custom section can be used to define linter plugins to be loaded at runtime. See README doc
   #  for more info.

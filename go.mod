@@ -4,7 +4,7 @@ go 1.12
 
 require (
 	github.com/OpenPeeDeeP/depguard v1.0.1
-	github.com/bombsimon/wsl/v2 v2.0.0
+	github.com/bombsimon/wsl/v3 v3.0.0
 	github.com/fatih/color v1.7.0
 	github.com/go-critic/go-critic v0.4.1
 	github.com/go-lintpack/lintpack v0.5.2
@@ -37,7 +37,7 @@ require (
 	github.com/spf13/cobra v0.0.5
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.6.1
-	github.com/stretchr/testify v1.4.0
+	github.com/stretchr/testify v1.5.1
 	github.com/timakin/bodyclose v0.0.0-20190930140734-f7f2e9bca95e
 	github.com/tommy-muehle/go-mnd v1.3.1-0.20200224220436-e6f9a994e8fa
 	github.com/ultraware/funlen v0.0.2
@@ -45,7 +45,7 @@ require (
 	github.com/uudashr/gocognit v1.0.1
 	github.com/valyala/quicktemplate v1.2.0
 	golang.org/x/tools v0.0.0-20200204192400-7124308813f3
-	gopkg.in/yaml.v2 v2.2.7
+	gopkg.in/yaml.v2 v2.2.8
 	honnef.co/go/tools v0.0.1-2020.1.3
 	mvdan.cc/interfacer v0.0.0-20180901003855-c20040233aed
 	mvdan.cc/lint v0.0.0-20170908181259-adc824a0674b // indirect
