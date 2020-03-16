@@ -25,7 +25,6 @@ func NewGosec() *goanalysis.Linter {
 	var resIssues []goanalysis.Issue
 
 	gasConfig := gosec.NewConfig()
-	enabledRules := rules.Generate()
 	logger := log.New(ioutil.Discard, "", 0)
 
 	analyzer := &analysis.Analyzer{
@@ -38,7 +37,11 @@ func NewGosec() *goanalysis.Linter {
 		[]*analysis.Analyzer{analyzer},
 		nil,
 	).WithContextSetter(func(lintCtx *linter.Context) {
+		cfg := lintCtx.Cfg.LintersSettings.Gosec
+		exclude := cfg.Exclude
 		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
+			filter := rules.NewRuleFilter(true, exclude...)
+			enabledRules := rules.Generate(filter)
 			gosecAnalyzer := gosec.NewAnalyzer(gasConfig, true, logger)
 			gosecAnalyzer.LoadRules(enabledRules.Builders())
 			pkg := &packages.Package{

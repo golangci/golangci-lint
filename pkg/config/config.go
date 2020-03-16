@@ -196,6 +196,7 @@ type LintersSettings struct {
 	Godox    GodoxSettings
 	Dogsled  DogsledSettings
 	Gocognit GocognitSettings
+	Gosec    GosecSettings
 
 	Custom map[string]CustomLinterSettings
 }
@@ -271,6 +272,10 @@ type WSLSettings struct {
 	AllowSeparatedLeadingComment     bool `mapstructure:"allow-separated-leading-comment"`
 	ForceCuddleErrCheckAndAssign     bool `mapstructure:"force-err-cuddling"`
 	ForceCaseTrailingWhitespaceLimit int  `mapstructure:"force-case-trailing-whitespace"`
+}
+
+type GosecSettings struct {
+	Exclude []string `mapstructure:"exclude"`
 }
 
 //nolint:gomnd
