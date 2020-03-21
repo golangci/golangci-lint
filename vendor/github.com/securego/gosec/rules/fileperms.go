@@ -60,6 +60,22 @@ func (r *filePermissions) Match(n ast.Node, c *gosec.Context) (*gosec.Issue, err
 	return nil, nil
 }
 
+// NewWritePerms creates a rule to detect file Writes with bad permissions.
+func NewWritePerms(id string, conf gosec.Config) (gosec.Rule, []ast.Node) {
+	mode := getConfiguredMode(conf, "G306", 0600)
+	return &filePermissions{
+		mode:  mode,
+		pkg:   "io/ioutil",
+		calls: []string{"WriteFile"},
+		MetaData: gosec.MetaData{
+			ID:         id,
+			Severity:   gosec.Medium,
+			Confidence: gosec.High,
+			What:       fmt.Sprintf("Expect WriteFile permissions to be %#o or less", mode),
+		},
+	}, []ast.Node{(*ast.CallExpr)(nil)}
+}
+
 // NewFilePerms creates a rule to detect file creation with a more permissive than configured
 // permission mask.
 func NewFilePerms(id string, conf gosec.Config) (gosec.Rule, []ast.Node) {

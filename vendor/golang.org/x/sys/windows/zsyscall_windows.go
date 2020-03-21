@@ -44,6 +44,7 @@ var (
 	moduser32   = NewLazySystemDLL("user32.dll")
 	modole32    = NewLazySystemDLL("ole32.dll")
 	modntdll    = NewLazySystemDLL("ntdll.dll")
+	modpsapi    = NewLazySystemDLL("psapi.dll")
 	modws2_32   = NewLazySystemDLL("ws2_32.dll")
 	moddnsapi   = NewLazySystemDLL("dnsapi.dll")
 	modiphlpapi = NewLazySystemDLL("iphlpapi.dll")
@@ -77,6 +78,8 @@ var (
 	procLoadLibraryExW                                       = modkernel32.NewProc("LoadLibraryExW")
 	procFreeLibrary                                          = modkernel32.NewProc("FreeLibrary")
 	procGetProcAddress                                       = modkernel32.NewProc("GetProcAddress")
+	procGetModuleFileNameW                                   = modkernel32.NewProc("GetModuleFileNameW")
+	procGetModuleHandleExW                                   = modkernel32.NewProc("GetModuleHandleExW")
 	procGetVersion                                           = modkernel32.NewProc("GetVersion")
 	procFormatMessageW                                       = modkernel32.NewProc("FormatMessageW")
 	procExitProcess                                          = modkernel32.NewProc("ExitProcess")
@@ -101,6 +104,8 @@ var (
 	procDeleteFileW                                          = modkernel32.NewProc("DeleteFileW")
 	procMoveFileW                                            = modkernel32.NewProc("MoveFileW")
 	procMoveFileExW                                          = modkernel32.NewProc("MoveFileExW")
+	procLockFileEx                                           = modkernel32.NewProc("LockFileEx")
+	procUnlockFileEx                                         = modkernel32.NewProc("UnlockFileEx")
 	procGetComputerNameW                                     = modkernel32.NewProc("GetComputerNameW")
 	procGetComputerNameExW                                   = modkernel32.NewProc("GetComputerNameExW")
 	procSetEndOfFile                                         = modkernel32.NewProc("SetEndOfFile")
@@ -119,8 +124,6 @@ var (
 	procTerminateProcess                                     = modkernel32.NewProc("TerminateProcess")
 	procGetExitCodeProcess                                   = modkernel32.NewProc("GetExitCodeProcess")
 	procGetStartupInfoW                                      = modkernel32.NewProc("GetStartupInfoW")
-	procGetCurrentProcess                                    = modkernel32.NewProc("GetCurrentProcess")
-	procGetCurrentThread                                     = modkernel32.NewProc("GetCurrentThread")
 	procGetProcessTimes                                      = modkernel32.NewProc("GetProcessTimes")
 	procDuplicateHandle                                      = modkernel32.NewProc("DuplicateHandle")
 	procWaitForSingleObject                                  = modkernel32.NewProc("WaitForSingleObject")
@@ -222,6 +225,7 @@ var (
 	procFindNextVolumeMountPointW                            = modkernel32.NewProc("FindNextVolumeMountPointW")
 	procFindVolumeClose                                      = modkernel32.NewProc("FindVolumeClose")
 	procFindVolumeMountPointClose                            = modkernel32.NewProc("FindVolumeMountPointClose")
+	procGetDiskFreeSpaceExW                                  = modkernel32.NewProc("GetDiskFreeSpaceExW")
 	procGetDriveTypeW                                        = modkernel32.NewProc("GetDriveTypeW")
 	procGetLogicalDrives                                     = modkernel32.NewProc("GetLogicalDrives")
 	procGetLogicalDriveStringsW                              = modkernel32.NewProc("GetLogicalDriveStringsW")
@@ -244,6 +248,11 @@ var (
 	procCoTaskMemFree                                        = modole32.NewProc("CoTaskMemFree")
 	procRtlGetVersion                                        = modntdll.NewProc("RtlGetVersion")
 	procRtlGetNtVersionNumbers                               = modntdll.NewProc("RtlGetNtVersionNumbers")
+	procGetProcessPreferredUILanguages                       = modkernel32.NewProc("GetProcessPreferredUILanguages")
+	procGetThreadPreferredUILanguages                        = modkernel32.NewProc("GetThreadPreferredUILanguages")
+	procGetUserPreferredUILanguages                          = modkernel32.NewProc("GetUserPreferredUILanguages")
+	procGetSystemPreferredUILanguages                        = modkernel32.NewProc("GetSystemPreferredUILanguages")
+	procEnumProcesses                                        = modpsapi.NewProc("EnumProcesses")
 	procWSAStartup                                           = modws2_32.NewProc("WSAStartup")
 	procWSACleanup                                           = modws2_32.NewProc("WSACleanup")
 	procWSAIoctl                                             = modws2_32.NewProc("WSAIoctl")
@@ -683,6 +692,31 @@ func _GetProcAddress(module Handle, procname *byte) (proc uintptr, err error) {
 	return
 }
 
+func GetModuleFileName(module Handle, filename *uint16, size uint32) (n uint32, err error) {
+	r0, _, e1 := syscall.Syscall(procGetModuleFileNameW.Addr(), 3, uintptr(module), uintptr(unsafe.Pointer(filename)), uintptr(size))
+	n = uint32(r0)
+	if n == 0 {
+		if e1 != 0 {
+			err = errnoErr(e1)
+		} else {
+			err = syscall.EINVAL
+		}
+	}
+	return
+}
+
+func GetModuleHandleEx(flags uint32, moduleName *uint16, module *Handle) (err error) {
+	r1, _, e1 := syscall.Syscall(procGetModuleHandleExW.Addr(), 3, uintptr(flags), uintptr(unsafe.Pointer(moduleName)), uintptr(unsafe.Pointer(module)))
+	if r1 == 0 {
+		if e1 != 0 {
+			err = errnoErr(e1)
+		} else {
+			err = syscall.EINVAL
+		}
+	}
+	return
+}
+
 func GetVersion() (ver uint32, err error) {
 	r0, _, e1 := syscall.Syscall(procGetVersion.Addr(), 0, 0, 0, 0)
 	ver = uint32(r0)
@@ -996,6 +1030,30 @@ func MoveFileEx(from *uint16, to *uint16, flags uint32) (err error) {
 	return
 }
 
+func LockFileEx(file Handle, flags uint32, reserved uint32, bytesLow uint32, bytesHigh uint32, overlapped *Overlapped) (err error) {
+	r1, _, e1 := syscall.Syscall6(procLockFileEx.Addr(), 6, uintptr(file), uintptr(flags), uintptr(reserved), uintptr(bytesLow), uintptr(bytesHigh), uintptr(unsafe.Pointer(overlapped)))
+	if r1 == 0 {
+		if e1 != 0 {
+			err = errnoErr(e1)
+		} else {
+			err = syscall.EINVAL
+		}
+	}
+	return
+}
+
+func UnlockFileEx(file Handle, reserved uint32, bytesLow uint32, bytesHigh uint32, overlapped *Overlapped) (err error) {
+	r1, _, e1 := syscall.Syscall6(procUnlockFileEx.Addr(), 5, uintptr(file), uintptr(reserved), uintptr(bytesLow), uintptr(bytesHigh), uintptr(unsafe.Pointer(overlapped)), 0)
+	if r1 == 0 {
+		if e1 != 0 {
+			err = errnoErr(e1)
+		} else {
+			err = syscall.EINVAL
+		}
+	}
+	return
+}
+
 func GetComputerName(buf *uint16, n *uint32) (err error) {
 	r1, _, e1 := syscall.Syscall(procGetComputerNameW.Addr(), 2, uintptr(unsafe.Pointer(buf)), uintptr(unsafe.Pointer(n)), 0)
 	if r1 == 0 {
@@ -1155,7 +1213,7 @@ func OpenProcess(desiredAccess uint32, inheritHandle bool, processId uint32) (ha
 
 func ShellExecute(hwnd Handle, verb *uint16, file *uint16, args *uint16, cwd *uint16, showCmd int32) (err error) {
 	r1, _, e1 := syscall.Syscall6(procShellExecuteW.Addr(), 6, uintptr(hwnd), uintptr(unsafe.Pointer(verb)), uintptr(unsafe.Pointer(file)), uintptr(unsafe.Pointer(args)), uintptr(unsafe.Pointer(cwd)), uintptr(showCmd))
-	if r1 == 0 {
+	if r1 <= 32 {
 		if e1 != 0 {
 			err = errnoErr(e1)
 		} else {
@@ -1206,18 +1264,6 @@ func GetStartupInfo(startupInfo *StartupInfo) (err error) {
 			err = syscall.EINVAL
 		}
 	}
-	return
-}
-
-func GetCurrentProcess() (pseudoHandle Handle) {
-	r0, _, _ := syscall.Syscall(procGetCurrentProcess.Addr(), 0, 0, 0, 0)
-	pseudoHandle = Handle(r0)
-	return
-}
-
-func GetCurrentThread() (pseudoHandle Handle) {
-	r0, _, _ := syscall.Syscall(procGetCurrentThread.Addr(), 0, 0, 0, 0)
-	pseudoHandle = Handle(r0)
 	return
 }
 
@@ -2464,6 +2510,18 @@ func FindVolumeMountPointClose(findVolumeMountPoint Handle) (err error) {
 	return
 }
 
+func GetDiskFreeSpaceEx(directoryName *uint16, freeBytesAvailableToCaller *uint64, totalNumberOfBytes *uint64, totalNumberOfFreeBytes *uint64) (err error) {
+	r1, _, e1 := syscall.Syscall6(procGetDiskFreeSpaceExW.Addr(), 4, uintptr(unsafe.Pointer(directoryName)), uintptr(unsafe.Pointer(freeBytesAvailableToCaller)), uintptr(unsafe.Pointer(totalNumberOfBytes)), uintptr(unsafe.Pointer(totalNumberOfFreeBytes)), 0, 0)
+	if r1 == 0 {
+		if e1 != 0 {
+			err = errnoErr(e1)
+		} else {
+			err = syscall.EINVAL
+		}
+	}
+	return
+}
+
 func GetDriveType(rootPathName *uint16) (driveType uint32) {
 	r0, _, _ := syscall.Syscall(procGetDriveTypeW.Addr(), 1, uintptr(unsafe.Pointer(rootPathName)), 0, 0)
 	driveType = uint32(r0)
@@ -2703,6 +2761,70 @@ func rtlGetVersion(info *OsVersionInfoEx) (ret error) {
 
 func rtlGetNtVersionNumbers(majorVersion *uint32, minorVersion *uint32, buildNumber *uint32) {
 	syscall.Syscall(procRtlGetNtVersionNumbers.Addr(), 3, uintptr(unsafe.Pointer(majorVersion)), uintptr(unsafe.Pointer(minorVersion)), uintptr(unsafe.Pointer(buildNumber)))
+	return
+}
+
+func getProcessPreferredUILanguages(flags uint32, numLanguages *uint32, buf *uint16, bufSize *uint32) (err error) {
+	r1, _, e1 := syscall.Syscall6(procGetProcessPreferredUILanguages.Addr(), 4, uintptr(flags), uintptr(unsafe.Pointer(numLanguages)), uintptr(unsafe.Pointer(buf)), uintptr(unsafe.Pointer(bufSize)), 0, 0)
+	if r1 == 0 {
+		if e1 != 0 {
+			err = errnoErr(e1)
+		} else {
+			err = syscall.EINVAL
+		}
+	}
+	return
+}
+
+func getThreadPreferredUILanguages(flags uint32, numLanguages *uint32, buf *uint16, bufSize *uint32) (err error) {
+	r1, _, e1 := syscall.Syscall6(procGetThreadPreferredUILanguages.Addr(), 4, uintptr(flags), uintptr(unsafe.Pointer(numLanguages)), uintptr(unsafe.Pointer(buf)), uintptr(unsafe.Pointer(bufSize)), 0, 0)
+	if r1 == 0 {
+		if e1 != 0 {
+			err = errnoErr(e1)
+		} else {
+			err = syscall.EINVAL
+		}
+	}
+	return
+}
+
+func getUserPreferredUILanguages(flags uint32, numLanguages *uint32, buf *uint16, bufSize *uint32) (err error) {
+	r1, _, e1 := syscall.Syscall6(procGetUserPreferredUILanguages.Addr(), 4, uintptr(flags), uintptr(unsafe.Pointer(numLanguages)), uintptr(unsafe.Pointer(buf)), uintptr(unsafe.Pointer(bufSize)), 0, 0)
+	if r1 == 0 {
+		if e1 != 0 {
+			err = errnoErr(e1)
+		} else {
+			err = syscall.EINVAL
+		}
+	}
+	return
+}
+
+func getSystemPreferredUILanguages(flags uint32, numLanguages *uint32, buf *uint16, bufSize *uint32) (err error) {
+	r1, _, e1 := syscall.Syscall6(procGetSystemPreferredUILanguages.Addr(), 4, uintptr(flags), uintptr(unsafe.Pointer(numLanguages)), uintptr(unsafe.Pointer(buf)), uintptr(unsafe.Pointer(bufSize)), 0, 0)
+	if r1 == 0 {
+		if e1 != 0 {
+			err = errnoErr(e1)
+		} else {
+			err = syscall.EINVAL
+		}
+	}
+	return
+}
+
+func EnumProcesses(processIds []uint32, bytesReturned *uint32) (err error) {
+	var _p0 *uint32
+	if len(processIds) > 0 {
+		_p0 = &processIds[0]
+	}
+	r1, _, e1 := syscall.Syscall(procEnumProcesses.Addr(), 3, uintptr(unsafe.Pointer(_p0)), uintptr(len(processIds)), uintptr(unsafe.Pointer(bytesReturned)))
+	if r1 == 0 {
+		if e1 != 0 {
+			err = errnoErr(e1)
+		} else {
+			err = syscall.EINVAL
+		}
+	}
 	return
 }
 

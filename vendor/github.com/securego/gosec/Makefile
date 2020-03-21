@@ -6,27 +6,32 @@ BUILDFLAGS := '-w -s'
 CGO_ENABLED = 0
 GO := GO111MODULE=on go
 GO_NOMOD :=GO111MODULE=off go
+GOPATH ?= $(shell $(GO) env GOPATH)
+GOBIN ?= $(GOPATH)/bin
+GOLINT ?= $(GOBIN)/golint
+GOSEC ?= $(GOBIN)/gosec
+GINKGO ?= $(GOBIN)/ginkgo
 
 default:
 	$(MAKE) build
 
 test: build fmt lint sec
 	$(GO_NOMOD) get -u github.com/onsi/ginkgo/ginkgo
-	ginkgo -r -v
+	$(GINKGO) -r -v
 
 fmt:
 	@echo "FORMATTING"
 	@FORMATTED=`$(GO) fmt ./...`
 	@([[ ! -z "$(FORMATTED)" ]] && printf "Fixed unformatted files:\n$(FORMATTED)") || true
 
-lint: 
+lint:
 	@echo "LINTING"
 	$(GO_NOMOD) get -u golang.org/x/lint/golint
-	golint -set_exit_status ./... 
+	$(GOLINT) -set_exit_status ./...
 	@echo "VETTING"
-	$(GO) vet ./... 
+	$(GO) vet ./...
 
-sec: 
+sec:
 	@echo "SECURITY SCANNING"
 	./$(BIN) ./...
 
@@ -40,10 +45,10 @@ clean:
 	rm -rf build vendor dist
 	rm -f release image $(BIN)
 
-release: 
+release:
 	@echo "Releasing the gosec binary..."
 	goreleaser release
- 
+
 build-linux:
 	CGO_ENABLED=$(CGO_ENABLED) GOOS=linux GOARCH=amd64 go build -ldflags $(BUILDFLAGS) -o $(BIN) ./cmd/gosec/
 
@@ -59,4 +64,3 @@ image-push: image
 	docker push $(IMAGE_REPO)/$(BIN):latest
 
 .PHONY: test build clean release image image-push
-

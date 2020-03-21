@@ -72,7 +72,7 @@ var DefaultExcludePatterns = []ExcludePattern{
 		Why:     "Too many false-positives for parametrized shell calls",
 	},
 	{
-		Pattern: "G104",
+		Pattern: "(G104|G307)",
 		Linter:  "gosec",
 		Why:     "Duplicated errcheck checks",
 	},

@@ -71,6 +71,8 @@ directory you can supply `./...` as the input argument.
 - G106: Audit the use of ssh.InsecureIgnoreHostKey
 - G107: Url provided to HTTP request as taint input
 - G108: Profiling endpoint automatically exposed on /debug/pprof
+- G109: Potential Integer overflow made by strconv.Atoi result conversion to int16/32
+- G110: Potential DoS vulnerability via decompression bomb
 - G201: SQL query construction using format string
 - G202: SQL query construction using string concatenation
 - G203: Use of unescaped data in HTML templates
@@ -80,6 +82,8 @@ directory you can supply `./...` as the input argument.
 - G303: Creating tempfile using a predictable path
 - G304: File path provided as taint input
 - G305: File traversal when extracting zip archive
+- G306: Poor file permissions used when writing to a new file
+- G307: Deferring a method which returns an error
 - G401: Detect the usage of DES, RC4, MD5 or SHA1
 - G402: Look for bad TLS connection settings
 - G403: Ensure minimum RSA key length of 2048 bits

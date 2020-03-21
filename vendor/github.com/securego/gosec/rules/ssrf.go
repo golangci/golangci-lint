@@ -42,7 +42,7 @@ func (r *ssrf) ResolveVar(n *ast.CallExpr, c *gosec.Context) bool {
 // Match inspects AST nodes to determine if certain net/http methods are called with variable input
 func (r *ssrf) Match(n ast.Node, c *gosec.Context) (*gosec.Issue, error) {
 	// Call expression is using http package directly
-	if node := r.ContainsCallExpr(n, c, false); node != nil {
+	if node := r.ContainsPkgCallExpr(n, c, false); node != nil {
 		if r.ResolveVar(node, c) {
 			return gosec.NewIssue(c, n, r.ID(), r.What, r.Severity, r.Confidence), nil
 		}

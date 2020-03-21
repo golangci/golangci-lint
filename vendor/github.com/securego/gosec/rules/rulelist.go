@@ -66,6 +66,8 @@ func Generate(filters ...RuleFilter) RuleList {
 		{"G106", "Audit the use of ssh.InsecureIgnoreHostKey function", NewSSHHostKey},
 		{"G107", "Url provided to HTTP request as taint input", NewSSRFCheck},
 		{"G108", "Profiling endpoint is automatically exposed", NewPprofCheck},
+		{"G109", "Converting strconv.Atoi result to int32/int16", NewIntegerOverflowCheck},
+		{"G110", "Detect io.Copy instead of io.CopyN when decompression", NewDecompressionBombCheck},
 
 		// injection
 		{"G201", "SQL query construction using format string", NewSQLStrFormat},
@@ -79,6 +81,8 @@ func Generate(filters ...RuleFilter) RuleList {
 		{"G303", "Creating tempfile using a predictable path", NewBadTempFile},
 		{"G304", "File path provided as taint input", NewReadFile},
 		{"G305", "File path traversal when extracting zip archive", NewArchive},
+		{"G306", "Poor file permissions used when writing to a file", NewWritePerms},
+		{"G307", "Unsafe defer call of a method returning an error", NewDeferredClosing},
 
 		// crypto
 		{"G401", "Detect the usage of DES, RC4, MD5 or SHA1", NewUsesWeakCryptography},

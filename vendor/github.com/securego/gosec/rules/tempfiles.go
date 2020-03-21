@@ -32,7 +32,7 @@ func (t *badTempFile) ID() string {
 }
 
 func (t *badTempFile) Match(n ast.Node, c *gosec.Context) (gi *gosec.Issue, err error) {
-	if node := t.calls.ContainsCallExpr(n, c, false); node != nil {
+	if node := t.calls.ContainsPkgCallExpr(n, c, false); node != nil {
 		if arg, e := gosec.GetString(node.Args[0]); t.args.MatchString(arg) && e == nil {
 			return gosec.NewIssue(c, n, t.ID(), t.What, t.Severity, t.Confidence), nil
 		}

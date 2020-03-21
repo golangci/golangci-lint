@@ -34,7 +34,7 @@ func (r *readfile) ID() string {
 
 // isJoinFunc checks if there is a filepath.Join or other join function
 func (r *readfile) isJoinFunc(n ast.Node, c *gosec.Context) bool {
-	if call := r.pathJoin.ContainsCallExpr(n, c, false); call != nil {
+	if call := r.pathJoin.ContainsPkgCallExpr(n, c, false); call != nil {
 		for _, arg := range call.Args {
 			// edge case: check if one of the args is a BinaryExpr
 			if binExp, ok := arg.(*ast.BinaryExpr); ok {
@@ -58,7 +58,7 @@ func (r *readfile) isJoinFunc(n ast.Node, c *gosec.Context) bool {
 
 // Match inspects AST nodes to determine if the match the methods `os.Open` or `ioutil.ReadFile`
 func (r *readfile) Match(n ast.Node, c *gosec.Context) (*gosec.Issue, error) {
-	if node := r.ContainsCallExpr(n, c, false); node != nil {
+	if node := r.ContainsPkgCallExpr(n, c, false); node != nil {
 		for _, arg := range node.Args {
 			// handles path joining functions in Arg
 			// eg. os.Open(filepath.Join("/tmp/", file))

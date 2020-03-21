@@ -30,7 +30,7 @@ func (t *templateCheck) ID() string {
 }
 
 func (t *templateCheck) Match(n ast.Node, c *gosec.Context) (*gosec.Issue, error) {
-	if node := t.calls.ContainsCallExpr(n, c, false); node != nil {
+	if node := t.calls.ContainsPkgCallExpr(n, c, false); node != nil {
 		for _, arg := range node.Args {
 			if _, ok := arg.(*ast.BasicLit); !ok { // basic lits are safe
 				return gosec.NewIssue(c, n, t.ID(), t.What, t.Severity, t.Confidence), nil

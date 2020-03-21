@@ -32,7 +32,7 @@ func (w *weakKeyStrength) ID() string {
 }
 
 func (w *weakKeyStrength) Match(n ast.Node, c *gosec.Context) (*gosec.Issue, error) {
-	if callExpr := w.calls.ContainsCallExpr(n, c, false); callExpr != nil {
+	if callExpr := w.calls.ContainsPkgCallExpr(n, c, false); callExpr != nil {
 		if bits, err := gosec.GetInt(callExpr.Args[1]); err == nil && bits < (int64)(w.bits) {
 			return gosec.NewIssue(c, n, w.ID(), w.What, w.Severity, w.Confidence), nil
 		}

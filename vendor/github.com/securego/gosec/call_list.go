@@ -56,9 +56,22 @@ func (c CallList) Contains(selector, ident string) bool {
 	return false
 }
 
-// ContainsCallExpr resolves the call expression name and type
-/// or package and determines if it exists within the CallList
-func (c CallList) ContainsCallExpr(n ast.Node, ctx *Context, stripVendor bool) *ast.CallExpr {
+// ContainsPointer returns true if a pointer to the selector type or the type
+// itself is a members of this call list.
+func (c CallList) ContainsPointer(selector, indent string) bool {
+	if strings.HasPrefix(selector, "*") {
+		if c.Contains(selector, indent) {
+			return true
+		}
+		s := strings.TrimPrefix(selector, "*")
+		return c.Contains(s, indent)
+	}
+	return false
+}
+
+// ContainsPkgCallExpr resolves the call expression name and type, and then further looks
+//  up the package path for that type. Finally, it determines if the call exists within the call list
+func (c CallList) ContainsPkgCallExpr(n ast.Node, ctx *Context, stripVendor bool) *ast.CallExpr {
 	selector, ident, err := GetCallInfo(n, ctx)
 	if err != nil {
 		return nil
@@ -79,12 +92,18 @@ func (c CallList) ContainsCallExpr(n ast.Node, ctx *Context, stripVendor bool) *
 	}
 
 	return n.(*ast.CallExpr)
-	/*
-		// Try direct resolution
-		if c.Contains(selector, ident) {
-			log.Printf("c.Contains == true, %s, %s.", selector, ident)
-			return n.(*ast.CallExpr)
-		}
-	*/
+}
 
+// ContainsCallExpr resolves the call expression name and type, and then determines
+// if the call exists with the call list
+func (c CallList) ContainsCallExpr(n ast.Node, ctx *Context) *ast.CallExpr {
+	selector, ident, err := GetCallInfo(n, ctx)
+	if err != nil {
+		return nil
+	}
+	if !c.Contains(selector, ident) && !c.ContainsPointer(selector, ident) {
+		return nil
+	}
+
+	return n.(*ast.CallExpr)
 }

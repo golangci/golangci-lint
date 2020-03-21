@@ -135,11 +135,48 @@ func GetCallInfo(n ast.Node, ctx *Context) (string, string, error) {
 					return "undefined", fn.Sel.Name, fmt.Errorf("missing type info")
 				}
 				return expr.Name, fn.Sel.Name, nil
+			case *ast.SelectorExpr:
+				if expr.Sel != nil {
+					t := ctx.Info.TypeOf(expr.Sel)
+					if t != nil {
+						return t.String(), fn.Sel.Name, nil
+					}
+					return "undefined", fn.Sel.Name, fmt.Errorf("missing type info")
+				}
+			case *ast.CallExpr:
+				switch call := expr.Fun.(type) {
+				case *ast.Ident:
+					if call.Name == "new" {
+						t := ctx.Info.TypeOf(expr.Args[0])
+						if t != nil {
+							return t.String(), fn.Sel.Name, nil
+						}
+						return "undefined", fn.Sel.Name, fmt.Errorf("missing type info")
+					}
+					if call.Obj != nil {
+						switch decl := call.Obj.Decl.(type) {
+						case *ast.FuncDecl:
+							ret := decl.Type.Results
+							if ret != nil && len(ret.List) > 0 {
+								ret1 := ret.List[0]
+								if ret1 != nil {
+									t := ctx.Info.TypeOf(ret1.Type)
+									if t != nil {
+										return t.String(), fn.Sel.Name, nil
+									}
+									return "undefined", fn.Sel.Name, fmt.Errorf("missing type info")
+								}
+							}
+						}
+					}
+
+				}
 			}
 		case *ast.Ident:
 			return ctx.Pkg.Name(), fn.Name, nil
 		}
 	}
+
 	return "", "", fmt.Errorf("unable to determine call info")
 }
 

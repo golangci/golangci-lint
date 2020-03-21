@@ -19,7 +19,7 @@ func (a *archive) ID() string {
 
 // Match inspects AST nodes to determine if the filepath.Joins uses any argument derived from type zip.File
 func (a *archive) Match(n ast.Node, c *gosec.Context) (*gosec.Issue, error) {
-	if node := a.calls.ContainsCallExpr(n, c, false); node != nil {
+	if node := a.calls.ContainsPkgCallExpr(n, c, false); node != nil {
 		for _, arg := range node.Args {
 			var argType types.Type
 			if selector, ok := arg.(*ast.SelectorExpr); ok {

@@ -53,6 +53,8 @@ var IssueToCWE = map[string]Cwe{
 	"G104": GetCwe("703"),
 	"G106": GetCwe("322"),
 	"G107": GetCwe("88"),
+	"G109": GetCwe("190"),
+	"G110": GetCwe("409"),
 	"G201": GetCwe("89"),
 	"G202": GetCwe("89"),
 	"G203": GetCwe("79"),
