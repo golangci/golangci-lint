@@ -247,6 +247,9 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		linter.NewConfig(golinters.NewGoMND(m.cfg)).
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/tommy-muehle/go-mnd"),
+		linter.NewConfig(golinters.NewGomodguard()).
+			WithPresets(linter.PresetStyle).
+			WithURL("https://github.com/rcurrah/gomodguard"),
 	}
 
 	isLocalRun := os.Getenv("GOLANGCI_COM_RUN") == ""

@@ -222,6 +222,7 @@ gofmt: Gofmt checks whether code was gofmt-ed. By default this tool runs with -s
 goimports: Goimports does everything that gofmt does. Additionally it checks unused imports [fast: true, auto-fix: true]
 golint: Golint differs from gofmt. Gofmt reformats Go source code, whereas golint prints out style mistakes [fast: true, auto-fix: false]
 gomnd: An analyzer to detect magic numbers. [fast: true, auto-fix: false]
+gomodguard: Allow and block list linter for direct Go module dependencies. [fast: true, auto-fix: false]
 goprintffuncname: Checks that printf-like functions are named with `f` at the end [fast: true, auto-fix: false]
 gosec (gas): Inspects source code for security problems [fast: true, auto-fix: false]
 interfacer: Linter that suggests narrower interface types [fast: true, auto-fix: false]
@@ -488,6 +489,7 @@ golangci-lint help linters
 - [wsl](https://github.com/bombsimon/wsl) - Whitespace Linter - Forces you to use empty lines!
 - [goprintffuncname](https://github.com/jirfag/go-printf-func-name) - Checks that printf-like functions are named with `f` at the end
 - [gomnd](https://github.com/tommy-muehle/go-mnd) - An analyzer to detect magic numbers.
+- [gomodguard](https://github.com/rcurrah/gomodguard) - Allow and block list linter for direct Go module dependencies.
 
 ## Configuration
 
@@ -758,6 +760,18 @@ linters-settings:
       mnd:
         # the list of enabled checks, see https://github.com/tommy-muehle/go-mnd/#checks for description.
         checks: argument,case,condition,operation,return,assign
+  gomodguard:
+    allowed:
+      modules:                                                        # List of allowed modules
+        # - gopkg.in/yaml.v2
+      domains:                                                        # List of allowed module domains
+        # - golang.org
+    blocked:
+      modules:                                                        # List of blocked modules
+        # - github.com/uudashr/go-module:                             # Blocked module
+        #     recommendations:                                        # Recommended modules that should be used instead (Optional)
+        #       - golang.org/x/mod                           
+        #     reason: "`mod` is the official go.mod parser library."  # Reason why the recommended module should be used (Optional)    
   govet:
     # report about shadowed variables
     check-shadowing: true
@@ -1261,6 +1275,7 @@ Thanks to developers and authors of used linters:
 - [bombsimon](https://github.com/bombsimon)
 - [jirfag](https://github.com/jirfag)
 - [tommy-muehle](https://github.com/tommy-muehle)
+- [rcurrah](https://github.com/rcurrah)
 
 ## Changelog
 
