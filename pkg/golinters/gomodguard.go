@@ -59,7 +59,9 @@ func NewGomodguard() *goanalysis.Linter {
 
 			processor, err := gomodguard.NewProcessor(processorCfg, log.New(os.Stderr, "", 0))
 			if err != nil {
-				return nil, err
+				lintCtx.Log.Warnf("running gomodguard failed: %s: if you are not using go modules "+
+					"it is suggested to disable this linter", err)
+				return nil, nil
 			}
 
 			gomodguardErrors := processor.ProcessFiles(files)
