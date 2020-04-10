@@ -28,10 +28,9 @@ func formatIssueAsGithub(issue *result.Issue) string {
 	return ret
 }
 
-func (g *github) Print(ctx context.Context, issues []result.Issue) error {
+func (g *github) Print(_ context.Context, issues []result.Issue) error {
 	for ind := range issues {
-		issue := &issues[ind]
-		_, err := fmt.Fprintln(logutils.StdOut, formatIssueAsGithub(issue))
+		_, err := fmt.Fprintln(logutils.StdOut, formatIssueAsGithub(&issues[ind]))
 		if err != nil {
 			return err
 		}
