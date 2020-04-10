@@ -30,8 +30,9 @@ func formatIssueAsGithub(issue *result.Issue) string {
 }
 
 func (g *github) Print(ctx context.Context, issues []result.Issue) error {
-	for _, issue := range issues {
-		_, err := fmt.Fprintln(logutils.StdOut, formatIssueAsGithub(&issue))
+	for ind := range issues {
+		issue := &issues[ind]
+		_, err := fmt.Fprintln(logutils.StdOut, formatIssueAsGithub(issue))
 		if err != nil {
 			return err
 		}
