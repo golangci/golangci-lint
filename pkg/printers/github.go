@@ -3,6 +3,7 @@ package printers
 import (
 	"context"
 	"fmt"
+
 	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
@@ -17,19 +18,19 @@ func NewGithub() Printer {
 }
 
 // print each line as: ::error file=app.js,line=10,col=15::Something went wrong
-func formatIssueAsGithub(issue result.Issue) string {
-	result := fmt.Sprintf("::error file=%s,line=%d", issue.FilePath(), issue.Line())
+func formatIssueAsGithub(issue *result.Issue) string {
+	ret := fmt.Sprintf("::error file=%s,line=%d", issue.FilePath(), issue.Line())
 	if issue.Pos.Column != 0 {
-		result += fmt.Sprintf(",col=%d", issue.Pos.Column)
+		ret += fmt.Sprintf(",col=%d", issue.Pos.Column)
 	}
 
-	result += fmt.Sprintf("::%s (%s)", issue.Text, issue.FromLinter)
-	return result
+	ret += fmt.Sprintf("::%s (%s)", issue.Text, issue.FromLinter)
+	return ret
 }
 
 func (g *github) Print(ctx context.Context, issues []result.Issue) error {
 	for _, issue := range issues {
-		_, err := fmt.Fprintln(logutils.StdOut, formatIssueAsGithub(issue))
+		_, err := fmt.Fprintln(logutils.StdOut, formatIssueAsGithub(&issue))
 		if err != nil {
 			return err
 		}

@@ -1,10 +1,12 @@
 package printers
 
 import (
-	"github.com/golangci/golangci-lint/pkg/result"
-	"github.com/stretchr/testify/require"
 	"go/token"
 	"testing"
+
+	"github.com/stretchr/testify/require"
+
+	"github.com/golangci/golangci-lint/pkg/result"
 )
 
 func TestFormatGithubIssue(t *testing.T) {
@@ -18,8 +20,8 @@ func TestFormatGithubIssue(t *testing.T) {
 			Column:   4,
 		},
 	}
-	require.Equal(t, "::error file=path/to/file.go,line=10,col=4::some issue (sample-linter)", formatIssueAsGithub(sampleIssue))
+	require.Equal(t, "::error file=path/to/file.go,line=10,col=4::some issue (sample-linter)", formatIssueAsGithub(&sampleIssue))
 
 	sampleIssue.Pos.Column = 0
-	require.Equal(t, "::error file=path/to/file.go,line=10::some issue (sample-linter)", formatIssueAsGithub(sampleIssue))
+	require.Equal(t, "::error file=path/to/file.go,line=10::some issue (sample-linter)", formatIssueAsGithub(&sampleIssue))
 }
