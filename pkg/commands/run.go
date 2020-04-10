@@ -396,6 +396,8 @@ func (e *Executor) createPrinter() (printers.Printer, error) {
 		p = printers.NewCodeClimate()
 	case config.OutFormatJunitXML:
 		p = printers.NewJunitXML()
+	case config.OutFormatGithubActions:
+		p = printers.NewGithub()
 	default:
 		return nil, fmt.Errorf("unknown output format %s", format)
 	}
