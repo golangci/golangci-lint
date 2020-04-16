@@ -39,6 +39,7 @@ require (
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.6.1
 	github.com/stretchr/testify v1.5.1
+	github.com/tdakkota/asciicheck v0.0.0-20200416190851-d7f85be797a2
 	github.com/tetafro/godot v0.2.5
 	github.com/timakin/bodyclose v0.0.0-20190930140734-f7f2e9bca95e
 	github.com/tommy-muehle/go-mnd v1.3.1-0.20200224220436-e6f9a994e8fa
@@ -46,7 +47,7 @@ require (
 	github.com/ultraware/whitespace v0.0.4
 	github.com/uudashr/gocognit v1.0.1
 	github.com/valyala/quicktemplate v1.2.0
-	golang.org/x/tools v0.0.0-20200204192400-7124308813f3
+	golang.org/x/tools v0.0.0-20200414032229-332987a829c3
 	gopkg.in/yaml.v2 v2.2.8
 	honnef.co/go/tools v0.0.1-2020.1.3
 	mvdan.cc/interfacer v0.0.0-20180901003855-c20040233aed
