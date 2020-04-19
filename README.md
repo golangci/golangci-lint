@@ -15,7 +15,7 @@ Follow the news and releases on our [twitter](https://twitter.com/golangci) and 
 
 Sponsored by [GolangCI.com](https://golangci.com): SaaS service for running linters on GitHub pull requests. Free for Open Source.
 
-<a href="https://golangci.com/"><img src="docs/go.png" width="250px"></a>
+<a href="https://golangci.com/"><img src="docs/go.png" width="250px"></a> 
 
 - [GolangCI-Lint](#golangci-lint)
   - [Demo](#demo)
