@@ -511,7 +511,7 @@ Usage:
   golangci-lint run [flags]
 
 Flags:
-      --out-format string              Format of output: colored-line-number|line-number|json|tab|checkstyle|code-climate|junit-xml (default "colored-line-number")
+      --out-format string              Format of output: colored-line-number|line-number|json|tab|checkstyle|code-climate|junit-xml|github-actions (default "colored-line-number")
       --print-issued-lines             Print lines of code with issue (default true)
       --print-linter-name              Print linter name in issue line (default true)
       --uniq-by-line                   Make issues output unique by line (default true)
