@@ -40,7 +40,7 @@ func NewNestif() *goanalysis.Linter {
 				return nil, nil
 			}
 
-			sort.Slice(issues, func(i, j int) bool {
+			sort.SliceStable(issues, func(i, j int) bool {
 				return issues[i].Complexity > issues[j].Complexity
 			})
 
