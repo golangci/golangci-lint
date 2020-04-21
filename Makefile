@@ -3,8 +3,6 @@
 
 # enable module support across all go commands.
 export GO111MODULE = on
-# opt-in to vendor deps across all go commands.
-export GOFLAGS = -mod=vendor
 # enable consistent Go 1.12/1.13 GOPROXY behavior.
 export GOPROXY = https://proxy.golang.org
 
@@ -46,25 +44,25 @@ test_linters:
 
 # Maintenance
 
-generate: README.md docs/demo.svg install.sh vendor
+generate: README.md docs/demo.svg install.sh
 .PHONY: generate
 
-fast_generate: README.md vendor
+fast_generate: README.md
 .PHONY: fast_generate
 
 maintainer-clean: clean
-	rm -rf docs/demo.svg README.md install.sh vendor
+	rm -rf docs/demo.svg README.md install.sh
 .PHONY: maintainer-clean
 
 check_generated:
 	$(MAKE) --always-make generate
-	git checkout -- vendor/modules.txt go.mod go.sum # can differ between go1.12 and go1.13
+	git checkout -- go.mod go.sum # can differ between go1.12 and go1.13
 	git diff --exit-code # check no changes
 .PHONY: check_generated
 
 fast_check_generated:
 	$(MAKE) --always-make fast_generate
-	git checkout -- vendor/modules.txt go.mod go.sum # can differ between go1.12 and go1.13
+	git checkout -- go.mod go.sum # can differ between go1.12 and go1.13
 	git diff --exit-code # check no changes
 .PHONY: fast_check_generated
 
@@ -105,11 +103,3 @@ go.mod: FORCE
 	go mod tidy
 	go mod verify
 go.sum: go.mod
-
-vendor: go.mod go.sum
-	go mod vendor
-
-unexport GOFLAGS
-vendor_free_build: FORCE
-	go build -o golangci-lint ./cmd/golangci-lint
-.PHONY: vendor_free_build vendor
