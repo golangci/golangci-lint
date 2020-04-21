@@ -217,6 +217,7 @@ gocognit: Computes and checks the cognitive complexity of functions [fast: true,
 goconst: Finds repeated strings that could be replaced by a constant [fast: true, auto-fix: false]
 gocritic: The most opinionated Go source code linter [fast: true, auto-fix: false]
 gocyclo: Computes and checks the cyclomatic complexity of functions [fast: true, auto-fix: false]
+godot: Check if comments end in a period [fast: true, auto-fix: false]
 godox: Tool for detection of FIXME, TODO and other comment keywords [fast: true, auto-fix: false]
 gofmt: Gofmt checks whether code was gofmt-ed. By default this tool runs with -s option to check for code simplification [fast: true, auto-fix: true]
 goimports: Goimports does everything that gofmt does. Additionally it checks unused imports [fast: true, auto-fix: true]
@@ -488,6 +489,7 @@ golangci-lint help linters
 - [wsl](https://github.com/bombsimon/wsl) - Whitespace Linter - Forces you to use empty lines!
 - [goprintffuncname](https://github.com/jirfag/go-printf-func-name) - Checks that printf-like functions are named with `f` at the end
 - [gomnd](https://github.com/tommy-muehle/go-mnd) - An analyzer to detect magic numbers.
+- [godot](https://github.com/tetafro/godot) - Check if comments end in a period
 
 ## Configuration
 
@@ -736,6 +738,9 @@ linters-settings:
   gocyclo:
     # minimal code complexity to report, 30 by default (but we recommend 10-20)
     min-complexity: 10
+  godot:
+    # check all top-level comments, not only declarations
+    check-all: false
   godox:
     # report any comments starting with keywords, this is useful for TODO or FIXME comments that
     # might be left in the code accidentally and should be resolved before merging
@@ -1261,6 +1266,7 @@ Thanks to developers and authors of used linters:
 - [bombsimon](https://github.com/bombsimon)
 - [jirfag](https://github.com/jirfag)
 - [tommy-muehle](https://github.com/tommy-muehle)
+- [tetafro](https://github.com/tetafro)
 
 ## Changelog
 
