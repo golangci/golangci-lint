@@ -1,6 +1,7 @@
 package testshared
 
 import (
+	"errors"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -90,7 +91,8 @@ func (r *LintRunner) Run(args ...string) *RunResult {
 	cmd.Env = append(os.Environ(), r.env...)
 	out, err := cmd.CombinedOutput()
 	if err != nil {
-		if exitError, ok := err.(*exec.ExitError); ok {
+		var exitError *exec.ExitError
+		if errors.As(err, &exitError) {
 			r.log.Infof("stderr: %s", exitError.Stderr)
 			ws := exitError.Sys().(syscall.WaitStatus)
 			return &RunResult{

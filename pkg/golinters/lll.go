@@ -2,6 +2,7 @@ package golinters
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
 	"go/token"
 	"os"
@@ -45,7 +46,7 @@ func getLLLIssuesForFile(filename string, maxLineLen int, tabSpaces string) ([]r
 	}
 
 	if err := scanner.Err(); err != nil {
-		if err == bufio.ErrTooLong && maxLineLen < bufio.MaxScanTokenSize {
+		if errors.Is(err, bufio.ErrTooLong) && maxLineLen < bufio.MaxScanTokenSize {
 			// scanner.Scan() might fail if the line is longer than bufio.MaxScanTokenSize
 			// In the case where the specified maxLineLen is smaller than bufio.MaxScanTokenSize
 			// we can return this line as a long line instead of returning an error.

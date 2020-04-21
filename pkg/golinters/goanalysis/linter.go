@@ -2,6 +2,7 @@ package goanalysis
 
 import (
 	"context"
+	stderrors "errors"
 	"flag"
 	"fmt"
 	"runtime"
@@ -194,8 +195,8 @@ func buildIssuesFromErrorsForTypecheckMode(errs []error, lintCtx *linter.Context
 	var issues []result.Issue
 	uniqReportedIssues := map[string]bool{}
 	for _, err := range errs {
-		itErr, ok := errors.Cause(err).(*IllTypedError)
-		if !ok {
+		var itErr *IllTypedError
+		if !stderrors.As(errors.Cause(err), &itErr) {
 			return nil, err
 		}
 		for _, err := range libpackages.ExtractErrors(itErr.Pkg) {

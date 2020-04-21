@@ -12,6 +12,7 @@ package goanalysis
 import (
 	"bytes"
 	"encoding/gob"
+	stderrors "errors"
 	"fmt"
 	"go/ast"
 	"go/parser"
@@ -351,7 +352,8 @@ func extractDiagnostics(roots []*action) (retDiags []Diagnostic, retErrors []err
 
 	extract = func(act *action) {
 		if act.err != nil {
-			if pe, ok := act.err.(*errorutil.PanicError); ok {
+			var pe *errorutil.PanicError
+			if stderrors.As(act.err, &pe) {
 				panic(pe)
 			}
 			retErrors = append(retErrors, errors.Wrap(act.err, act.a.Name))
@@ -859,7 +861,7 @@ func (act *action) loadPersistedFacts() bool {
 	var facts []Fact
 	key := fmt.Sprintf("%s/facts", act.a.Name)
 	if err := act.r.pkgCache.Get(act.pkg, pkgcache.HashModeNeedAllDeps, key, &facts); err != nil {
-		if err != pkgcache.ErrMissing {
+		if !stderrors.Is(err, pkgcache.ErrMissing) {
 			act.r.log.Warnf("Failed to get persisted facts: %s", err)
 		}
 
@@ -1347,7 +1349,7 @@ func (lp *loadingPackage) loadImportedPackageWithFacts(loadMode LoadMode) error 
 func (lp *loadingPackage) convertError(err error) []packages.Error {
 	var errs []packages.Error
 	// taken from go/packages
-	switch err := err.(type) {
+	switch err := err.(type) { //nolint:erris
 	case packages.Error:
 		// from driver
 		errs = append(errs, err)

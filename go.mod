@@ -1,6 +1,6 @@
 module github.com/golangci/golangci-lint
 
-go 1.12
+go 1.13
 
 require (
 	github.com/OpenPeeDeeP/depguard v1.0.1

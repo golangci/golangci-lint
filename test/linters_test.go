@@ -2,6 +2,7 @@ package test
 
 import (
 	"bufio"
+	"errors"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -18,8 +19,8 @@ import (
 func runGoErrchk(c *exec.Cmd, files []string, t *testing.T) {
 	output, err := c.CombinedOutput()
 	assert.Error(t, err)
-	_, ok := err.(*exec.ExitError)
-	assert.True(t, ok)
+	var typ *exec.ExitError
+	assert.True(t, errors.As(err, &typ))
 
 	// TODO: uncomment after deprecating go1.11
 	// assert.Equal(t, exitcodes.IssuesFound, exitErr.ExitCode())

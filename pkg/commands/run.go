@@ -2,6 +2,7 @@ package commands
 
 import (
 	"context"
+	stderrors "errors"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -234,7 +235,7 @@ func (e *Executor) getConfigForCommandLine() (*config.Config, error) {
 
 	fs.Usage = func() {} // otherwise help text will be printed twice
 	if err := fs.Parse(os.Args); err != nil {
-		if err == pflag.ErrHelp {
+		if stderrors.Is(err, pflag.ErrHelp) {
 			return nil, err
 		}
 
@@ -425,7 +426,8 @@ func (e *Executor) executeRun(_ *cobra.Command, args []string) {
 	if err := e.runAndPrint(ctx, args); err != nil {
 		e.log.Errorf("Running error: %s", err)
 		if e.exitCode == exitcodes.Success {
-			if exitErr, ok := errors.Cause(err).(*exitcodes.ExitError); ok {
+			var exitErr *exitcodes.ExitError
+			if stderrors.As(errors.Cause(err), &exitErr) {
 				e.exitCode = exitErr.Code
 			} else {
 				e.exitCode = exitcodes.Failure

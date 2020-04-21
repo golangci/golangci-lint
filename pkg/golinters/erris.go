@@ -3,10 +3,10 @@ package golinters
 import (
 	"strings"
 
+	"github.com/romanyx/erris"
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
-	"github.com/romanyx/erris"
 )
 
 func NewErris() *goanalysis.Linter {
