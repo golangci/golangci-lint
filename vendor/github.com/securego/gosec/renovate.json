@@ -1,7 +1,0 @@
-{
-  "extends": [
-    "config:semverAllMonthly",
-    ":enableVulnerabilityAlertsWithLabel(vulnerablity)",
-    ":docker"
-  ]
-}
