@@ -782,8 +782,8 @@ linters-settings:
       modules:                                                        # List of blocked modules
         # - github.com/uudashr/go-module:                             # Blocked module
         #     recommendations:                                        # Recommended modules that should be used instead (Optional)
-        #       - golang.org/x/mod
-        #     reason: "`mod` is the official go.mod parser library."  # Reason why the recommended module should be used (Optional)
+        #       - golang.org/x/mod                           
+        #     reason: "`mod` is the official go.mod parser library."  # Reason why the recommended module should be used (Optional)    
   govet:
     # report about shadowed variables
     check-shadowing: true
