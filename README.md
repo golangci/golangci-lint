@@ -15,7 +15,7 @@ Follow the news and releases on our [twitter](https://twitter.com/golangci) and 
 
 Sponsored by [GolangCI.com](https://golangci.com): SaaS service for running linters on GitHub pull requests. Free for Open Source.
 
-<a href="https://golangci.com/"><img src="docs/go.png" width="250px"></a> 
+<a href="https://golangci.com/"><img src="docs/go.png" width="250px"></a>
 
 - [GolangCI-Lint](#golangci-lint)
   - [Demo](#demo)
@@ -490,6 +490,7 @@ golangci-lint help linters
 - [wsl](https://github.com/bombsimon/wsl) - Whitespace Linter - Forces you to use empty lines!
 - [goprintffuncname](https://github.com/jirfag/go-printf-func-name) - Checks that printf-like functions are named with `f` at the end
 - [gomnd](https://github.com/tommy-muehle/go-mnd) - An analyzer to detect magic numbers.
+- [gomodguard](https://github.com/ryancurrah/gomodguard) - Allow and block list linter for direct Go module dependencies.
 - [godot](https://github.com/tetafro/godot) - Check if comments end in a period
 
 ## Configuration
@@ -1279,6 +1280,7 @@ Thanks to developers and authors of used linters:
 - [bombsimon](https://github.com/bombsimon)
 - [jirfag](https://github.com/jirfag)
 - [tommy-muehle](https://github.com/tommy-muehle)
+- [ryancurrah](https://github.com/ryancurrah)
 - [tetafro](https://github.com/tetafro)
 
 ## Changelog
