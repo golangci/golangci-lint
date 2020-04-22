@@ -111,7 +111,7 @@ docker run --rm -v $(pwd):/app -w /app golangci/golangci-lint:{{.LatestVersion}}
 Go source installations are supported for the two most recent Go releases.
 
 ```bash
-GO111MODULE=on go get github.com/golangci/golangci-lint/cmd/golangci-lint
+GO111MODULE=on go get github.com/golangci/golangci-lint/cmd/golangci-lint@{{.LatestVersion}}
 ```
 
 ## Trusted By
