@@ -1,7 +1,7 @@
 Follow the news and releases on our [twitter](https://twitter.com/golangci) and our [blog](https://medium.com/golangci).
 There is the most valuable changes log:
 
-## April 2020
+### April 2020
 
 1. Add new linters: `testpackage`, `nestif`, `godot`, `gomodguard`
 2. Add  github actions output format
