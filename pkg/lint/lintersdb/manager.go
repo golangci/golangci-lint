@@ -260,6 +260,9 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/maratori/testpackage"),
+		linter.NewConfig(golinters.NewNestif()).
+			WithPresets(linter.PresetComplexity).
+			WithURL("https://github.com/nakabonne/nestif"),
 	}
 
 	isLocalRun := os.Getenv("GOLANGCI_COM_RUN") == ""

@@ -30,6 +30,7 @@ require (
 	github.com/mattn/go-colorable v0.1.4
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/mitchellh/go-ps v0.0.0-20190716172923-621e5597135b
+	github.com/nakabonne/nestif v0.3.0
 	github.com/pkg/errors v0.8.1
 	github.com/ryancurrah/gomodguard v1.0.2
 	github.com/securego/gosec v0.0.0-20200103095621-79fbf3af8d83

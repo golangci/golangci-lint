@@ -212,6 +212,7 @@ type LintersSettings struct {
 	Gocognit    GocognitSettings
 	Godot       GodotSettings
 	Testpackage TestpackageSettings
+	Nestif      NestifSettings
 
 	Custom map[string]CustomLinterSettings
 }
@@ -297,6 +298,10 @@ type TestpackageSettings struct {
 	SkipRegexp string `mapstructure:"skip-regexp"`
 }
 
+type NestifSettings struct {
+	MinComplexity int `mapstructure:"min-complexity"`
+}
+
 //nolint:gomnd
 var defaultLintersSettings = LintersSettings{
 	Lll: LllSettings{
@@ -338,6 +343,9 @@ var defaultLintersSettings = LintersSettings{
 	},
 	Testpackage: TestpackageSettings{
 		SkipRegexp: `(export|internal)_test\.go`,
+	},
+	Nestif: NestifSettings{
+		MinComplexity: 5,
 	},
 }
 
