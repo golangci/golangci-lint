@@ -161,6 +161,7 @@ func TestIdentifierUsedOnlyInTests(t *testing.T) {
 }
 
 func TestUnusedCheckExported(t *testing.T) {
+	t.Skip("Issue955")
 	testshared.NewLintRunner(t).Run("-c", "testdata_etc/unused_exported/golangci.yml", "testdata_etc/unused_exported/...").ExpectNoIssues()
 }
 
