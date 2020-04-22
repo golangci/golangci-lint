@@ -1,6 +1,15 @@
 Follow the news and releases on our [twitter](https://twitter.com/golangci) and our [blog](https://medium.com/golangci).
 There is the most valuable changes log:
 
+## April 2020
+
+1. Add new linters: `testpackage`, `nestif`, `godot`, `gomodguard`
+2. Add  github actions output format
+3. Update linters: `wsl`
+4. Support `disabled-tags` setting for `gocritic`
+5. Mitigate OOM and "failed prerequisites"
+6. Self-isolate due to unexpected pandemics
+
 ### September 2019
 
 1. Support go1.13
