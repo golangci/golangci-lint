@@ -229,6 +229,7 @@ lll: Reports long lines [fast: true, auto-fix: false]
 maligned: Tool to detect Go structs that would take less memory if their fields were sorted [fast: true, auto-fix: false]
 misspell: Finds commonly misspelled English words in comments [fast: true, auto-fix: true]
 nakedret: Finds naked returns in functions greater than a specified function length [fast: true, auto-fix: false]
+nestif: Reports deeply nested if statements [fast: true, auto-fix: false]
 prealloc: Finds slice declarations that could potentially be preallocated [fast: true, auto-fix: false]
 rowserrcheck: checks whether Err of rows is checked successfully [fast: true, auto-fix: false]
 scopelint: Scopelint checks for unpinned variables in go programs [fast: true, auto-fix: false]
@@ -492,6 +493,7 @@ golangci-lint help linters
 - [gomodguard](https://github.com/ryancurrah/gomodguard) - Allow and block list linter for direct Go module dependencies.
 - [godot](https://github.com/tetafro/godot) - Check if comments end in a period
 - [testpackage](https://github.com/maratori/testpackage) - linter that makes you use a separate _test package
+- [nestif](https://github.com/nakabonne/nestif) - Reports deeply nested if statements
 
 ## Configuration
 
@@ -710,6 +712,9 @@ linters-settings:
   gocognit:
     # minimal code complexity to report, 30 by default (but we recommend 10-20)
     min-complexity: 10
+  nestif:
+    # minimal complexity of if statements to report, 5 by default
+    min-complexity: 4
   goconst:
     # minimal length of string constant, 3 by default
     min-len: 3
@@ -777,8 +782,8 @@ linters-settings:
       modules:                                                        # List of blocked modules
         # - github.com/uudashr/go-module:                             # Blocked module
         #     recommendations:                                        # Recommended modules that should be used instead (Optional)
-        #       - golang.org/x/mod                           
-        #     reason: "`mod` is the official go.mod parser library."  # Reason why the recommended module should be used (Optional)    
+        #       - golang.org/x/mod
+        #     reason: "`mod` is the official go.mod parser library."  # Reason why the recommended module should be used (Optional)
   govet:
     # report about shadowed variables
     check-shadowing: true
@@ -1288,6 +1293,7 @@ Thanks to developers and authors of used linters:
 - [ryancurrah](https://github.com/ryancurrah)
 - [tetafro](https://github.com/tetafro)
 - [maratori](https://github.com/maratori)
+- [nakabonne](https://github.com/nakabonne)
 
 ## Changelog
 
