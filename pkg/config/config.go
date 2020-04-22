@@ -187,6 +187,18 @@ type LintersSettings struct {
 	RowsErrCheck struct {
 		Packages []string
 	}
+	Gomodguard struct {
+		Allowed struct {
+			Modules []string `mapstructure:"modules"`
+			Domains []string `mapstructure:"domains"`
+		} `mapstructure:"allowed"`
+		Blocked struct {
+			Modules []map[string]struct {
+				Recommendations []string `mapstructure:"recommendations"`
+				Reason          string   `mapstructure:"reason"`
+			} `mapstructure:"modules"`
+		} `mapstructure:"blocked"`
+	}
 
 	WSL      WSLSettings
 	Lll      LllSettings

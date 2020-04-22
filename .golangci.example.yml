@@ -151,6 +151,18 @@ linters-settings:
       mnd:
         # the list of enabled checks, see https://github.com/tommy-muehle/go-mnd/#checks for description.
         checks: argument,case,condition,operation,return,assign
+  gomodguard:
+    allowed:
+      modules:                                                        # List of allowed modules
+        # - gopkg.in/yaml.v2
+      domains:                                                        # List of allowed module domains
+        # - golang.org
+    blocked:
+      modules:                                                        # List of blocked modules
+        # - github.com/uudashr/go-module:                             # Blocked module
+        #     recommendations:                                        # Recommended modules that should be used instead (Optional)
+        #       - golang.org/x/mod                           
+        #     reason: "`mod` is the official go.mod parser library."  # Reason why the recommended module should be used (Optional)    
   govet:
     # report about shadowed variables
     check-shadowing: true
