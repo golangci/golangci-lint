@@ -29,6 +29,11 @@ builds:
       - hardfloat
     env:
       - CGO_ENABLED=0
+    ignore:
+      - goos: darwin
+        goarch: 386
+      - goos: freebsd
+        goarch: arm64
     main: ./cmd/golangci-lint/
     ldflags: -s -w -X main.version={{.Version}} -X main.commit={{.ShortCommit}} -X main.date={{.Date}}
 
