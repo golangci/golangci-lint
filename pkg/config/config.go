@@ -15,6 +15,7 @@ const (
 	OutFormatCheckstyle        = "checkstyle"
 	OutFormatCodeClimate       = "code-climate"
 	OutFormatJunitXML          = "junit-xml"
+	OutFormatGithubActions     = "github-actions"
 )
 
 var OutFormats = []string{
@@ -25,6 +26,7 @@ var OutFormats = []string{
 	OutFormatCheckstyle,
 	OutFormatCodeClimate,
 	OutFormatJunitXML,
+	OutFormatGithubActions,
 }
 
 type ExcludePattern struct {
@@ -208,6 +210,7 @@ type LintersSettings struct {
 	Godox    GodoxSettings
 	Dogsled  DogsledSettings
 	Gocognit GocognitSettings
+	Godot    GodotSettings
 
 	Custom map[string]CustomLinterSettings
 }
@@ -283,6 +286,10 @@ type WSLSettings struct {
 	AllowSeparatedLeadingComment     bool `mapstructure:"allow-separated-leading-comment"`
 	ForceCuddleErrCheckAndAssign     bool `mapstructure:"force-err-cuddling"`
 	ForceCaseTrailingWhitespaceLimit int  `mapstructure:"force-case-trailing-whitespace"`
+}
+
+type GodotSettings struct {
+	CheckAll bool `mapstructure:"check-all"`
 }
 
 //nolint:gomnd
