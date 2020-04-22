@@ -5,7 +5,6 @@ go 1.12
 require (
 	cloud.google.com/go v0.52.0 // indirect
 	cloud.google.com/go/storage v1.5.0 // indirect
-	code.gitea.io/sdk/gitea v0.11.0 // indirect
 	contrib.go.opencensus.io/exporter/ocagent v0.6.0 // indirect
 	github.com/Azure/azure-pipeline-go v0.2.2 // indirect
 	github.com/Azure/azure-sdk-for-go v39.0.0+incompatible // indirect
@@ -19,15 +18,13 @@ require (
 	github.com/golang/groupcache v0.0.0-20200121045136-8c9f03a8e57e // indirect
 	github.com/google/wire v0.4.0 // indirect
 	github.com/goreleaser/godownloader v0.1.0
-	github.com/goreleaser/goreleaser v0.126.0
+	github.com/goreleaser/goreleaser v0.132.0
 	github.com/grpc-ecosystem/grpc-gateway v1.12.2 // indirect
 	github.com/hashicorp/golang-lru v0.5.4 // indirect
 	github.com/kamilsk/retry/v4 v4.4.2 // indirect
 	github.com/mattn/go-ieproxy v0.0.0-20200203040449-2dbc853185d9 // indirect
 	github.com/mattn/go-isatty v0.0.12 // indirect
-	github.com/xanzy/go-gitlab v0.25.0 // indirect
 	go.opencensus.io v0.22.3 // indirect
-	gocloud.dev v0.19.0 // indirect
 	golang.org/x/crypto v0.0.0-20200208060501-ecb85df21340 // indirect
 	golang.org/x/exp v0.0.0-20200207192155-f17229e696bd // indirect
 	golang.org/x/lint v0.0.0-20200130185559-910be7a94367 // indirect
