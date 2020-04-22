@@ -70,6 +70,10 @@ release: .goreleaser.yml tools/goreleaser
 	./tools/goreleaser
 .PHONY: release
 
+snapshot: .goreleaser.yml tools/goreleaser
+	./tools/goreleaser --snapshot --rm-dist
+.PHONY: snapshot
+
 # Non-PHONY targets (real files)
 
 golangci-lint: FORCE
