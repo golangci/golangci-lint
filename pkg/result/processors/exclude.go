@@ -37,3 +37,21 @@ func (p Exclude) Process(issues []result.Issue) ([]result.Issue, error) {
 }
 
 func (p Exclude) Finish() {}
+
+type ExcludeCaseSensitive struct {
+	*Exclude
+}
+
+func NewExcludeCaseSensitive(pattern string) *ExcludeCaseSensitive {
+	var patternRe *regexp.Regexp
+	if pattern != "" {
+		patternRe = regexp.MustCompile(pattern)
+	}
+	return &ExcludeCaseSensitive{
+		&Exclude{pattern: patternRe},
+	}
+}
+
+func (p ExcludeCaseSensitive) Name() string {
+	return "exclude-case-sensitive"
+}

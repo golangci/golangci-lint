@@ -376,9 +376,10 @@ func (e ExcludeRule) Validate() error {
 }
 
 type Issues struct {
-	ExcludePatterns    []string      `mapstructure:"exclude"`
-	ExcludeRules       []ExcludeRule `mapstructure:"exclude-rules"`
-	UseDefaultExcludes bool          `mapstructure:"exclude-use-default"`
+	ExcludeCaseSensitive bool          `mapstructure:"exclude-case-sensitive"`
+	ExcludePatterns      []string      `mapstructure:"exclude"`
+	ExcludeRules         []ExcludeRule `mapstructure:"exclude-rules"`
+	UseDefaultExcludes   bool          `mapstructure:"exclude-use-default"`
 
 	MaxIssuesPerLinter int `mapstructure:"max-issues-per-linter"`
 	MaxSameIssues      int `mapstructure:"max-same-issues"`
