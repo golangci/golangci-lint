@@ -224,6 +224,9 @@ linters-settings:
   rowserrcheck:
     packages:
       - github.com/jmoiron/sqlx
+  testpackage:
+    # regexp pattern to skip files
+    skip-regexp: (export|internal)_test\.go
   unparam:
     # Inspect exported functions, default is false. Set to true if no external program/library imports your code.
     # XXX: if you enable this setting, unparam will report a lot of false-positives in text editors:
