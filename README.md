@@ -108,13 +108,11 @@ docker run --rm -v $(pwd):/app -w /app golangci/golangci-lint:v1.24.0 golangci-l
 
 ### Go
 
-Please, do not install `golangci-lint` by `go get`:
+Go source installations are supported for the two most recent Go releases.
 
-1. [`go.mod`](https://github.com/golangci/golangci-lint/blob/master/go.mod) replacement directive doesn't apply. It means you will be using patched version of `golangci-lint`.
-2. it's much slower than binary installation
-3. its stability depends on your Go version (e.g. on [this compiler Go <= 1.12 bug](https://github.com/golang/go/issues/29612)).
-4. it's not guaranteed to work: e.g. we've encountered a lot of issues with Go modules hashes.
-5. it allows installation from `master` branch which can't be considered stable.
+```bash
+GO111MODULE=on go get github.com/golangci/golangci-lint/cmd/golangci-lint@v1.24.0
+```
 
 ## Trusted By
 
