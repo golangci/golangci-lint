@@ -37,24 +37,29 @@ func NewExcludeRules(rules []ExcludeRule, lineCache *fsutils.LineCache, log logu
 		lineCache: lineCache,
 		log:       log,
 	}
+	r.rules = createRules(rules, "(?i)")
 
+	return r
+}
+
+func createRules(rules []ExcludeRule, prefix string) []excludeRule {
+	parsedRules := make([]excludeRule, 0, len(rules))
 	for _, rule := range rules {
 		parsedRule := excludeRule{
 			linters: rule.Linters,
 		}
 		if rule.Text != "" {
-			parsedRule.text = regexp.MustCompile("(?i)" + rule.Text)
+			parsedRule.text = regexp.MustCompile(prefix + rule.Text)
 		}
 		if rule.Source != "" {
-			parsedRule.source = regexp.MustCompile("(?i)" + rule.Source)
+			parsedRule.source = regexp.MustCompile(prefix + rule.Source)
 		}
 		if rule.Path != "" {
 			parsedRule.path = regexp.MustCompile(rule.Path)
 		}
-		r.rules = append(r.rules, parsedRule)
+		parsedRules = append(parsedRules, parsedRule)
 	}
-
-	return r
+	return parsedRules
 }
 
 func (p ExcludeRules) Process(issues []result.Issue) ([]result.Issue, error) {
@@ -128,22 +133,7 @@ func NewExcludeRulesCaseSensitive(rules []ExcludeRule, lineCache *fsutils.LineCa
 		lineCache: lineCache,
 		log:       log,
 	}
-
-	for _, rule := range rules {
-		parsedRule := excludeRule{
-			linters: rule.Linters,
-		}
-		if rule.Text != "" {
-			parsedRule.text = regexp.MustCompile(rule.Text)
-		}
-		if rule.Source != "" {
-			parsedRule.source = regexp.MustCompile(rule.Source)
-		}
-		if rule.Path != "" {
-			parsedRule.path = regexp.MustCompile(rule.Path)
-		}
-		r.rules = append(r.rules, parsedRule)
-	}
+	r.rules = createRules(rules, "")
 
 	return &ExcludeRulesCaseSensitive{r}
 }
