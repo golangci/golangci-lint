@@ -118,3 +118,36 @@ func (ExcludeRules) Name() string { return "exclude-rules" }
 func (ExcludeRules) Finish()      {}
 
 var _ Processor = ExcludeRules{}
+
+type ExcludeRulesCaseSensitive struct {
+	*ExcludeRules
+}
+
+func NewExcludeRulesCaseSensitive(rules []ExcludeRule, lineCache *fsutils.LineCache, log logutils.Log) *ExcludeRulesCaseSensitive {
+	r := &ExcludeRules{
+		lineCache: lineCache,
+		log:       log,
+	}
+
+	for _, rule := range rules {
+		parsedRule := excludeRule{
+			linters: rule.Linters,
+		}
+		if rule.Text != "" {
+			parsedRule.text = regexp.MustCompile(rule.Text)
+		}
+		if rule.Source != "" {
+			parsedRule.source = regexp.MustCompile(rule.Source)
+		}
+		if rule.Path != "" {
+			parsedRule.path = regexp.MustCompile(rule.Path)
+		}
+		r.rules = append(r.rules, parsedRule)
+	}
+
+	return &ExcludeRulesCaseSensitive{r}
+}
+
+func (ExcludeRulesCaseSensitive) Name() string { return "exclude-rules-case-sensitive" }
+
+var _ Processor = ExcludeCaseSensitive{}
