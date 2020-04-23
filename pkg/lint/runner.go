@@ -70,6 +70,12 @@ func NewRunner(cfg *config.Config, log logutils.Log, goenv *goutil.Env,
 			Linters: r.Linters,
 		})
 	}
+	var excludeRulesProcessor processors.Processor
+	if cfg.Issues.ExcludeCaseSensitive {
+		excludeRulesProcessor = processors.NewExcludeRulesCaseSensitive(excludeRules, lineCache, log.Child("exclude_rules"))
+	} else {
+		excludeRulesProcessor = processors.NewExcludeRules(excludeRules, lineCache, log.Child("exclude_rules"))
+	}
 
 	return &Runner{
 		Processors: []processors.Processor{
@@ -89,7 +95,7 @@ func NewRunner(cfg *config.Config, log logutils.Log, goenv *goutil.Env,
 			processors.NewIdentifierMarker(),
 
 			excludeProcessor,
-			processors.NewExcludeRules(excludeRules, lineCache, log.Child("exclude_rules")),
+			excludeRulesProcessor,
 			processors.NewNolint(log.Child("nolint"), dbManager),
 
 			processors.NewUniqByLine(cfg),
