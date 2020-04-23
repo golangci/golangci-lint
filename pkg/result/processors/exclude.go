@@ -42,6 +42,8 @@ type ExcludeCaseSensitive struct {
 	*Exclude
 }
 
+var _ Processor = ExcludeCaseSensitive{}
+
 func NewExcludeCaseSensitive(pattern string) *ExcludeCaseSensitive {
 	var patternRe *regexp.Regexp
 	if pattern != "" {
