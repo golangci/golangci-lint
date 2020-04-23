@@ -189,7 +189,8 @@ func initFlagSet(fs *pflag.FlagSet, cfg *config.Config, m *lintersdb.Manager, is
 	ic := &cfg.Issues
 	fs.StringSliceVarP(&ic.ExcludePatterns, "exclude", "e", nil, wh("Exclude issue by regexp"))
 	fs.BoolVar(&ic.UseDefaultExcludes, "exclude-use-default", true, getDefaultIssueExcludeHelp())
-	fs.BoolVar(&ic.ExcludeCaseSensitive, "exclude-case-sensitive", false, wh("If set to true exclude rules are case sensitive"))
+	fs.BoolVar(&ic.ExcludeCaseSensitive, "exclude-case-sensitive", false, wh("If set to true exclude "+
+		"and exclude rules regular expressions are case sensitive"))
 
 	fs.IntVar(&ic.MaxIssuesPerLinter, "max-issues-per-linter", 50,
 		wh("Maximum issues count per one linter. Set to 0 to disable"))
