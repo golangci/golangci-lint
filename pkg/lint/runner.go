@@ -40,6 +40,13 @@ func NewRunner(cfg *config.Config, log logutils.Log, goenv *goutil.Env,
 		excludeTotalPattern = fmt.Sprintf("(%s)", strings.Join(excludePatterns, "|"))
 	}
 
+	var excludeProcessor processors.Processor
+	if cfg.Issues.ExcludeCaseSensitive {
+		excludeProcessor = processors.NewExcludeCaseSensitive(excludeTotalPattern)
+	} else {
+		excludeProcessor = processors.NewExclude(excludeTotalPattern)
+	}
+
 	skipFilesProcessor, err := processors.NewSkipFiles(cfg.Run.SkipFiles)
 	if err != nil {
 		return nil, err
@@ -63,6 +70,12 @@ func NewRunner(cfg *config.Config, log logutils.Log, goenv *goutil.Env,
 			Linters: r.Linters,
 		})
 	}
+	var excludeRulesProcessor processors.Processor
+	if cfg.Issues.ExcludeCaseSensitive {
+		excludeRulesProcessor = processors.NewExcludeRulesCaseSensitive(excludeRules, lineCache, log.Child("exclude_rules"))
+	} else {
+		excludeRulesProcessor = processors.NewExcludeRules(excludeRules, lineCache, log.Child("exclude_rules"))
+	}
 
 	return &Runner{
 		Processors: []processors.Processor{
@@ -81,8 +94,8 @@ func NewRunner(cfg *config.Config, log logutils.Log, goenv *goutil.Env,
 			// Must be before exclude because users see already marked output and configure excluding by it.
 			processors.NewIdentifierMarker(),
 
-			processors.NewExclude(excludeTotalPattern),
-			processors.NewExcludeRules(excludeRules, lineCache, log.Child("exclude_rules")),
+			excludeProcessor,
+			excludeRulesProcessor,
 			processors.NewNolint(log.Child("nolint"), dbManager),
 
 			processors.NewUniqByLine(cfg),

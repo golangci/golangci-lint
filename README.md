@@ -574,6 +574,7 @@ Flags:
                                          # gosec: False positive is triggered by 'src, err := ioutil.ReadFile(filename)'
                                          - Potential file inclusion via variable
                                         (default true)
+      --exclude-case-sensitive         If set to true exclude and exclude rules regular expressions are case sensitive
       --max-issues-per-linter int      Maximum issues count per one linter. Set to 0 to disable (default 50)
       --max-same-issues int            Maximum count of issues with the same text. Set to 0 to disable (default 3)
   -n, --new                            Show only new issues: if there are unstaged changes or untracked files, only those changes are analyzed, else only changes in HEAD~ are analyzed.
