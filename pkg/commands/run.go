@@ -30,7 +30,7 @@ func getDefaultIssueExcludeHelp() string {
 	parts := []string{"Use or not use default excludes:"}
 	for _, ep := range config.DefaultExcludePatterns {
 		parts = append(parts,
-			fmt.Sprintf("  # %s: %s", ep.Linter, ep.Why),
+			fmt.Sprintf("  # %s %s: %s", ep.ID, ep.Linter, ep.Why),
 			fmt.Sprintf("  - %s", color.YellowString(ep.Pattern)),
 			"",
 		)
