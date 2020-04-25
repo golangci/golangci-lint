@@ -223,6 +223,8 @@ github.com/rogpeppe/go-internal v1.3.0/go.mod h1:M8bDsm7K2OlrFYOpmOWEs/qY81heoFR
 github.com/russross/blackfriday v1.5.2/go.mod h1:JO/DiYxRf+HjHt06OyowR9PTA263kcR/rfWxYHBV53g=
 github.com/ryancurrah/gomodguard v1.0.2 h1:vumZpZardqQ9EfFIZDNEpKaMxfqqEBMhu0uSRcDO5x4=
 github.com/ryancurrah/gomodguard v1.0.2/go.mod h1:9T/Cfuxs5StfsocWr4WzDL36HqnX0fVb9d5fSEaLhoE=
+github.com/ryancurrah/gomodguard v1.0.4 h1:oCreMAt9GuFXDe9jW4HBpc3GjdX3R/sUEcLAGh1zPx8=
+github.com/ryancurrah/gomodguard v1.0.4/go.mod h1:9T/Cfuxs5StfsocWr4WzDL36HqnX0fVb9d5fSEaLhoE=
 github.com/securego/gosec v0.0.0-20200103095621-79fbf3af8d83 h1:AtnWoOvTioyDXFvu96MWEeE8qj4COSQnJogzLy/u41A=
 github.com/securego/gosec v0.0.0-20200103095621-79fbf3af8d83/go.mod h1:vvbZ2Ae7AzSq3/kywjUDxSNq2SJ27RxCz2un0H3ePqE=
 github.com/shirou/gopsutil v0.0.0-20190901111213-e4ec7b275ada h1:WokF3GuxBeL+n4Lk4Fa8v9mbdjlrl7bHuneF4N1bk2I=
