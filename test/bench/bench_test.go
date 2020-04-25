@@ -77,7 +77,7 @@ func getGometalinterCommonArgs() []string {
 		"--vendor",
 		"--cyclo-over=30",
 		"--dupl-threshold=150",
-		"--exclude", fmt.Sprintf("(%s)", strings.Join(config.GetDefaultExcludePatternsStrings(), "|")),
+		"--exclude", fmt.Sprintf("(%s)", strings.Join(config.GetDefaultExcludePatternsStrings(nil), "|")),
 		"--disable-all",
 		"--enable=vet",
 		"--enable=vetshadow",

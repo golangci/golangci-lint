@@ -32,7 +32,7 @@ func NewRunner(cfg *config.Config, log logutils.Log, goenv *goutil.Env,
 	icfg := cfg.Issues
 	excludePatterns := icfg.ExcludePatterns
 	if icfg.UseDefaultExcludes {
-		excludePatterns = append(excludePatterns, config.GetDefaultExcludePatternsStrings()...)
+		excludePatterns = append(excludePatterns, config.GetDefaultExcludePatternsStrings(icfg.IncludeDefaultExcludes)...)
 	}
 
 	var excludeTotalPattern string
