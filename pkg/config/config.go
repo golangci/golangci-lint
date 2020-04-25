@@ -101,7 +101,11 @@ var DefaultExcludePatterns = []ExcludePattern{
 	},
 }
 
-func GetDefaultExcludePatternsStrings(include []string) []string {
+func GetDefaultExcludePatternsStrings() []string {
+	return GetExcludePatternsStrings(nil)
+}
+
+func GetExcludePatternsStrings(include []string) []string {
 	includeMap := make(map[string]bool, len(include))
 	for _, inc := range include {
 		includeMap[inc] = true
