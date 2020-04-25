@@ -546,34 +546,34 @@ Flags:
       --fast                           Run only fast linters from enabled linters set (first run won't be fast)
   -e, --exclude strings                Exclude issue by regexp
       --exclude-use-default            Use or not use default excludes:
-                                         # errcheck: Almost all programs ignore errors on these functions and in most cases it's ok
+                                         # EXC0001 errcheck: Almost all programs ignore errors on these functions and in most cases it's ok
                                          - Error return value of .((os\.)?std(out|err)\..*|.*Close|.*Flush|os\.Remove(All)?|.*printf?|os\.(Un)?Setenv). is not checked
                                        
-                                         # golint: Annoying issue about not having a comment. The rare codebase has such comments
+                                         # EXC0002 golint: Annoying issue about not having a comment. The rare codebase has such comments
                                          - (comment on exported (method|function|type|const)|should have( a package)? comment|comment should be of the form)
                                        
-                                         # golint: False positive when tests are defined in package 'test'
+                                         # EXC0003 golint: False positive when tests are defined in package 'test'
                                          - func name will be used as test\.Test.* by other packages, and that stutters; consider calling this
                                        
-                                         # govet: Common false positives
+                                         # EXC0004 govet: Common false positives
                                          - (possible misuse of unsafe.Pointer|should have signature)
                                        
-                                         # staticcheck: Developers tend to write in C-style with an explicit 'break' in a 'switch', so it's ok to ignore
+                                         # EXC0005 staticcheck: Developers tend to write in C-style with an explicit 'break' in a 'switch', so it's ok to ignore
                                          - ineffective break statement. Did you mean to break out of the outer loop
                                        
-                                         # gosec: Too many false-positives on 'unsafe' usage
+                                         # EXC0006 gosec: Too many false-positives on 'unsafe' usage
                                          - Use of unsafe calls should be audited
                                        
-                                         # gosec: Too many false-positives for parametrized shell calls
+                                         # EXC0007 gosec: Too many false-positives for parametrized shell calls
                                          - Subprocess launch(ed with variable|ing should be audited)
                                        
-                                         # gosec: Duplicated errcheck checks
+                                         # EXC0008 gosec: Duplicated errcheck checks
                                          - G104
                                        
-                                         # gosec: Too many issues in popular repos
+                                         # EXC0009 gosec: Too many issues in popular repos
                                          - (Expect directory permissions to be 0750 or less|Expect file permissions to be 0600 or less)
                                        
-                                         # gosec: False positive is triggered by 'src, err := ioutil.ReadFile(filename)'
+                                         # EXC0010 gosec: False positive is triggered by 'src, err := ioutil.ReadFile(filename)'
                                          - Potential file inclusion via variable
                                         (default true)
       --exclude-case-sensitive         If set to true exclude and exclude rules regular expressions are case sensitive
