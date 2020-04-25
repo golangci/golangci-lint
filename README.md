@@ -204,6 +204,7 @@ and the following linters are disabled by default:
 $ golangci-lint help linters
 ...
 Disabled by default linters:
+asciicheck: Simple linter to check that your code does not contain non-ASCII identifiers [fast: true, auto-fix: false]
 bodyclose: checks whether HTTP response body is closed successfully [fast: true, auto-fix: false]
 depguard: Go linter that checks if package imports are in a list of acceptable packages [fast: true, auto-fix: false]
 dogsled: Checks assignments with too many blank identifiers (e.g. x, _, _, _, := f()) [fast: true, auto-fix: false]
@@ -470,6 +471,7 @@ golangci-lint help linters
 - [goconst](https://github.com/jgautheron/goconst) - Finds repeated strings that could be replaced by a constant
 - [gocyclo](https://github.com/alecthomas/gocyclo) - Computes and checks the cyclomatic complexity of functions
 - [gocognit](https://github.com/uudashr/gocognit) - Computes and checks the cognitive complexity of functions
+- [asciicheck](https://github.com/tdakkota/asciicheck) - Simple linter to check that your code does not contain non-ASCII identifiers
 - [gofmt](https://golang.org/cmd/gofmt/) - Gofmt checks whether code was gofmt-ed. By default this tool runs with -s option to check for code simplification
 - [goimports](https://godoc.org/golang.org/x/tools/cmd/goimports) - Goimports does everything that gofmt does. Additionally it checks unused imports
 - [maligned](https://github.com/mdempsky/maligned) - Tool to detect Go structs that would take less memory if their fields were sorted
@@ -1279,6 +1281,7 @@ Thanks to developers and authors of used linters:
 - [remyoudompheng](https://github.com/remyoudompheng)
 - [alecthomas](https://github.com/alecthomas)
 - [uudashr](https://github.com/uudashr)
+- [tdakkota](https://github.com/tdakkota)
 - [OpenPeeDeeP](https://github.com/OpenPeeDeeP)
 - [client9](https://github.com/client9)
 - [walle](https://github.com/walle)
