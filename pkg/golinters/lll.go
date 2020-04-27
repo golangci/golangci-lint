@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"go/token"
 	"os"
+	"regexp"
 	"strings"
 	"sync"
 	"unicode/utf8"
@@ -15,6 +16,8 @@ import (
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
+
+var goGenerateFootprint = regexp.MustCompile(`go:generate\s+`)
 
 func getLLLIssuesForFile(filename string, maxLineLen int, tabSpaces string) ([]result.Issue, error) {
 	var res []result.Issue
@@ -31,7 +34,8 @@ func getLLLIssuesForFile(filename string, maxLineLen int, tabSpaces string) ([]r
 		line := scanner.Text()
 		line = strings.Replace(line, "\t", tabSpaces, -1)
 		lineLen := utf8.RuneCountInString(line)
-		if lineLen > maxLineLen {
+
+		if lineLen > maxLineLen && !goGenerateFootprint.MatchString(line) {
 			res = append(res, result.Issue{
 				Pos: token.Position{
 					Filename: filename,
