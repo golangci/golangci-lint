@@ -218,6 +218,7 @@ gocritic: The most opinionated Go source code linter [fast: true, auto-fix: fals
 gocyclo: Computes and checks the cyclomatic complexity of functions [fast: true, auto-fix: false]
 godot: Check if comments end in a period [fast: true, auto-fix: false]
 godox: Tool for detection of FIXME, TODO and other comment keywords [fast: true, auto-fix: false]
+goerr113: Golang linter to check the errors handling expressions [fast: true, auto-fix: false]
 gofmt: Gofmt checks whether code was gofmt-ed. By default this tool runs with -s option to check for code simplification [fast: true, auto-fix: true]
 goimports: Goimports does everything that gofmt does. Additionally it checks unused imports [fast: true, auto-fix: true]
 golint: Golint differs from gofmt. Gofmt reformats Go source code, whereas golint prints out style mistakes [fast: true, auto-fix: false]
@@ -492,6 +493,7 @@ golangci-lint help linters
 - [wsl](https://github.com/bombsimon/wsl) - Whitespace Linter - Forces you to use empty lines!
 - [goprintffuncname](https://github.com/jirfag/go-printf-func-name) - Checks that printf-like functions are named with `f` at the end
 - [gomnd](https://github.com/tommy-muehle/go-mnd) - An analyzer to detect magic numbers.
+- [goerr113](https://github.com/Djarvur/go-err113) - Golang linter to check the errors handling expressions
 - [gomodguard](https://github.com/ryancurrah/gomodguard) - Allow and block list linter for direct Go module dependencies.
 - [godot](https://github.com/tetafro/godot) - Check if comments end in a period
 - [testpackage](https://github.com/maratori/testpackage) - linter that makes you use a separate _test package
@@ -1294,6 +1296,7 @@ Thanks to developers and authors of used linters:
 - [bombsimon](https://github.com/bombsimon)
 - [jirfag](https://github.com/jirfag)
 - [tommy-muehle](https://github.com/tommy-muehle)
+- [Djarvur](https://github.com/Djarvur)
 - [ryancurrah](https://github.com/ryancurrah)
 - [tetafro](https://github.com/tetafro)
 - [maratori](https://github.com/maratori)
