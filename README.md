@@ -73,17 +73,17 @@ use deprecated option `--enable-all` and a new linter is added or even without `
 
 It's highly recommended to install a specific version of golangci-lint available on the [releases page](https://github.com/golangci/golangci-lint/releases).
 
-Here is the recommended way to install golangci-lint v1.25.0:
+Here is the recommended way to install golangci-lint v1.25.1:
 
 ```bash
 # binary will be $(go env GOPATH)/bin/golangci-lint
-curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.25.0
+curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.25.1
 
 # or install it into ./bin/
-curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.25.0
+curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.25.1
 
 # In alpine linux (as it does not come with curl by default)
-wget -O- -nv https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.25.0
+wget -O- -nv https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.25.1
 
 golangci-lint --version
 ```
@@ -103,7 +103,7 @@ brew upgrade golangci/tap/golangci-lint
 ### Docker
 
 ```bash
-docker run --rm -v $(pwd):/app -w /app golangci/golangci-lint:v1.25.0 golangci-lint run -v
+docker run --rm -v $(pwd):/app -w /app golangci/golangci-lint:v1.25.1 golangci-lint run -v
 ```
 
 ### Go
@@ -111,7 +111,7 @@ docker run --rm -v $(pwd):/app -w /app golangci/golangci-lint:v1.25.0 golangci-l
 Go source installations are supported for the two most recent Go releases.
 
 ```bash
-GO111MODULE=on go get github.com/golangci/golangci-lint/cmd/golangci-lint@v1.25.0
+GO111MODULE=on go get github.com/golangci/golangci-lint/cmd/golangci-lint@v1.25.1
 ```
 
 ## Trusted By
@@ -1306,12 +1306,14 @@ There is the most valuable changes log:
 
 ### April 2020
 
-1. Add new linters: `testpackage`, `nestif`, `godot`, `gomodguard`
+1. Add new linters: `testpackage`, `nestif`, `godot`, `gomodguard`, `asciicheck`
 2. Add  github actions output format
-3. Update linters: `wsl`
+3. Update linters: `wsl`, `gomodguard`, `gosec`
 4. Support `disabled-tags` setting for `gocritic`
 5. Mitigate OOM and "failed prerequisites"
 6. Self-isolate due to unexpected pandemics
+7. Support case-sensitive excludes
+8. Allow granular re-enabling excludes by ID, e.g. `EXC0002`
 
 ### September 2019
 
