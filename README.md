@@ -568,7 +568,7 @@ Flags:
                                          - Subprocess launch(ed with variable|ing should be audited)
                                        
                                          # EXC0008 gosec: Duplicated errcheck checks
-                                         - G104
+                                         - (G104|G307)
                                        
                                          # EXC0009 gosec: Too many issues in popular repos
                                          - (Expect directory permissions to be 0750 or less|Expect file permissions to be 0600 or less)
