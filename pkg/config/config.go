@@ -83,7 +83,7 @@ var DefaultExcludePatterns = []ExcludePattern{
 	},
 	{
 		ID:      "EXC0008",
-		Pattern: "G104",
+		Pattern: "(G104|G307)",
 		Linter:  "gosec",
 		Why:     "Duplicated errcheck checks",
 	},

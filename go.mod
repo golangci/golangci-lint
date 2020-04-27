@@ -33,7 +33,7 @@ require (
 	github.com/nakabonne/nestif v0.3.0
 	github.com/pkg/errors v0.8.1
 	github.com/ryancurrah/gomodguard v1.0.4
-	github.com/securego/gosec v0.0.0-20200103095621-79fbf3af8d83
+	github.com/securego/gosec v0.0.0-20200316084457-7da9f46445fd
 	github.com/shirou/gopsutil v0.0.0-20190901111213-e4ec7b275ada // v2.19.8
 	github.com/sirupsen/logrus v1.4.2
 	github.com/sourcegraph/go-diff v0.5.1
