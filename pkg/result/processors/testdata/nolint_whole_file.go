@@ -1,4 +1,4 @@
-//nolint: unparam
+//nolint: varcheck
 package testdata
 
-var nolintUnparam int
+var nolintVarcheck int

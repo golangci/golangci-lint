@@ -58,7 +58,7 @@ func NewUnparam() *goanalysis.Linter {
 
 			var res []goanalysis.Issue
 			for _, i := range unparamIssues {
-				res = append(res, goanalysis.NewIssue(&result.Issue{ //nolint:scopelint
+				res = append(res, goanalysis.NewIssue(&result.Issue{
 					Pos:        pass.Fset.Position(i.Pos()),
 					Text:       i.Message(),
 					FromLinter: linterName,

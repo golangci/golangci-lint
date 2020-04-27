@@ -27,7 +27,7 @@ func NewMaxPerFileFromLinter(cfg *config.Config) *MaxPerFileFromLinter {
 	}
 
 	return &MaxPerFileFromLinter{
-		flc:                        fileToLinterToCountMap{}, //nolint:goimports,gofmt
+		flc:                        fileToLinterToCountMap{},
 		maxPerFileFromLinterConfig: maxPerFileFromLinterConfig,
 	}
 }

@@ -48,7 +48,7 @@ func NewInterfacer() *goanalysis.Linter {
 			res := make([]goanalysis.Issue, 0, len(issues))
 			for _, i := range issues {
 				pos := pass.Fset.Position(i.Pos())
-				res = append(res, goanalysis.NewIssue(&result.Issue{ //nolint:scopelint
+				res = append(res, goanalysis.NewIssue(&result.Issue{
 					Pos:        pos,
 					Text:       i.Message(),
 					FromLinter: interfacerName,

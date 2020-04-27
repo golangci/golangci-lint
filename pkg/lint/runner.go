@@ -77,6 +77,13 @@ func NewRunner(cfg *config.Config, log logutils.Log, goenv *goutil.Env,
 		excludeRulesProcessor = processors.NewExcludeRules(excludeRules, lineCache, log.Child("exclude_rules"))
 	}
 
+	enabledLintersSet := lintersdb.NewEnabledSet(dbManager,
+		lintersdb.NewValidator(dbManager), log.Child("enabledLinters"), cfg)
+	lcs, err := enabledLintersSet.Get(false)
+	if err != nil {
+		return nil, err
+	}
+
 	return &Runner{
 		Processors: []processors.Processor{
 			processors.NewCgo(goenv),
@@ -96,7 +103,7 @@ func NewRunner(cfg *config.Config, log logutils.Log, goenv *goutil.Env,
 
 			excludeProcessor,
 			excludeRulesProcessor,
-			processors.NewNolint(log.Child("nolint"), dbManager),
+			processors.NewNolint(log.Child("nolint"), dbManager, lcs),
 
 			processors.NewUniqByLine(cfg),
 			processors.NewDiff(icfg.Diff, icfg.DiffFromRevision, icfg.DiffPatchFilePath),

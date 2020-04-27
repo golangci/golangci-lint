@@ -33,7 +33,7 @@ func NewUnused() *goanalysis.Linter {
 		for _, ur := range u.Result() {
 			p := u.ProblemObject(lintCtx.Packages[0].Fset, ur)
 			pkg := typesToPkg[ur.Pkg()]
-			issues = append(issues, goanalysis.NewIssue(&result.Issue{ //nolint:scopelint
+			issues = append(issues, goanalysis.NewIssue(&result.Issue{
 				FromLinter: name,
 				Text:       p.Message,
 				Pos:        p.Pos,

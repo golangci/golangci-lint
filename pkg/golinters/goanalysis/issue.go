@@ -21,9 +21,11 @@ func NewIssue(i *result.Issue, pass *analysis.Pass) Issue {
 }
 
 type EncodingIssue struct {
-	FromLinter  string
-	Text        string
-	Pos         token.Position
-	LineRange   *result.Range
-	Replacement *result.Replacement
+	FromLinter           string
+	Text                 string
+	Pos                  token.Position
+	LineRange            *result.Range
+	Replacement          *result.Replacement
+	ExpectNoLint         bool
+	ExpectedNoLintLinter string
 }

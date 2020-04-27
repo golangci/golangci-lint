@@ -46,7 +46,7 @@ func NewNestif() *goanalysis.Linter {
 
 			res := make([]goanalysis.Issue, 0, len(issues))
 			for _, i := range issues {
-				res = append(res, goanalysis.NewIssue(&result.Issue{ //nolint:scopelint
+				res = append(res, goanalysis.NewIssue(&result.Issue{
 					Pos:        i.Pos,
 					Text:       i.Message,
 					FromLinter: nestifName,

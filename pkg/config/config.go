@@ -235,6 +235,7 @@ type LintersSettings struct {
 	Godot       GodotSettings
 	Testpackage TestpackageSettings
 	Nestif      NestifSettings
+	NoLintLint  NoLintLintSettings
 
 	Custom map[string]CustomLinterSettings
 }
@@ -316,6 +317,14 @@ type GodotSettings struct {
 	CheckAll bool `mapstructure:"check-all"`
 }
 
+type NoLintLintSettings struct {
+	RequireExplanation bool     `mapstructure:"require-explanation"`
+	AllowLeadingSpace  bool     `mapstructure:"allow-leading-space"`
+	RequireSpecific    bool     `mapstructure:"require-specific"`
+	AllowNoExplanation []string `mapstructure:"allow-no-explanation"`
+	AllowUnused        bool     `mapstructure:"allow-unused"`
+}
+
 type TestpackageSettings struct {
 	SkipRegexp string `mapstructure:"skip-regexp"`
 }
@@ -324,7 +333,6 @@ type NestifSettings struct {
 	MinComplexity int `mapstructure:"min-complexity"`
 }
 
-//nolint:gomnd
 var defaultLintersSettings = LintersSettings{
 	Lll: LllSettings{
 		LineLength: 120,
@@ -362,6 +370,12 @@ var defaultLintersSettings = LintersSettings{
 		AllowSeparatedLeadingComment:     false,
 		ForceCuddleErrCheckAndAssign:     false,
 		ForceCaseTrailingWhitespaceLimit: 0,
+	},
+	NoLintLint: NoLintLintSettings{
+		RequireExplanation: false,
+		AllowLeadingSpace:  true,
+		RequireSpecific:    false,
+		AllowUnused:        false,
 	},
 	Testpackage: TestpackageSettings{
 		SkipRegexp: `(export|internal)_test\.go`,

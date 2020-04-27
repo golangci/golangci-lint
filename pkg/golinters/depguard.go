@@ -94,7 +94,7 @@ func NewDepguard() *goanalysis.Linter {
 				if userSuppliedMsgSuffix != "" {
 					userSuppliedMsgSuffix = ": " + userSuppliedMsgSuffix
 				}
-				res = append(res, goanalysis.NewIssue(&result.Issue{ //nolint:scopelint
+				res = append(res, goanalysis.NewIssue(&result.Issue{
 					Pos:        i.Position,
 					Text:       fmt.Sprintf("%s %s%s", formatCode(i.PackageName, lintCtx.Cfg), msgSuffix, userSuppliedMsgSuffix),
 					FromLinter: linterName,

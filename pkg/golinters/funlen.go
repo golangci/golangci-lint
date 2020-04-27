@@ -42,7 +42,7 @@ func NewFunlen() *goanalysis.Linter {
 
 			res := make([]goanalysis.Issue, len(issues))
 			for k, i := range issues {
-				res[k] = goanalysis.NewIssue(&result.Issue{ //nolint:scopelint
+				res[k] = goanalysis.NewIssue(&result.Issue{
 					Pos: token.Position{
 						Filename: i.Pos.Filename,
 						Line:     i.Pos.Line,
