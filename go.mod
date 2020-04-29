@@ -3,6 +3,7 @@ module github.com/golangci/golangci-lint
 go 1.12
 
 require (
+	github.com/Djarvur/go-err113 v0.0.0-20200410182137-af658d038157
 	github.com/OpenPeeDeeP/depguard v1.0.1
 	github.com/bombsimon/wsl/v3 v3.0.0
 	github.com/fatih/color v1.7.0
@@ -33,7 +34,7 @@ require (
 	github.com/nakabonne/nestif v0.3.0
 	github.com/pkg/errors v0.8.1
 	github.com/ryancurrah/gomodguard v1.0.4
-	github.com/securego/gosec v0.0.0-20200103095621-79fbf3af8d83
+	github.com/securego/gosec v0.0.0-20200316084457-7da9f46445fd
 	github.com/shirou/gopsutil v0.0.0-20190901111213-e4ec7b275ada // v2.19.8
 	github.com/sirupsen/logrus v1.4.2
 	github.com/sourcegraph/go-diff v0.5.1

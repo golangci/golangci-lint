@@ -3,12 +3,14 @@ There is the most valuable changes log:
 
 ### April 2020
 
-1. Add new linters: `testpackage`, `nestif`, `godot`, `gomodguard`
+1. Add new linters: `testpackage`, `nestif`, `godot`, `gomodguard`, `asciicheck`
 2. Add  github actions output format
-3. Update linters: `wsl`
+3. Update linters: `wsl`, `gomodguard`, `gosec`
 4. Support `disabled-tags` setting for `gocritic`
 5. Mitigate OOM and "failed prerequisites"
 6. Self-isolate due to unexpected pandemics
+7. Support case-sensitive excludes
+8. Allow granular re-enabling excludes by ID, e.g. `EXC0002`
 
 ### September 2019
 

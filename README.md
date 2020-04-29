@@ -73,17 +73,17 @@ use deprecated option `--enable-all` and a new linter is added or even without `
 
 It's highly recommended to install a specific version of golangci-lint available on the [releases page](https://github.com/golangci/golangci-lint/releases).
 
-Here is the recommended way to install golangci-lint v1.25.0:
+Here is the recommended way to install golangci-lint v1.25.1:
 
 ```bash
 # binary will be $(go env GOPATH)/bin/golangci-lint
-curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.25.0
+curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.25.1
 
 # or install it into ./bin/
-curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.25.0
+curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.25.1
 
 # In alpine linux (as it does not come with curl by default)
-wget -O- -nv https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.25.0
+wget -O- -nv https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.25.1
 
 golangci-lint --version
 ```
@@ -103,7 +103,7 @@ brew upgrade golangci/tap/golangci-lint
 ### Docker
 
 ```bash
-docker run --rm -v $(pwd):/app -w /app golangci/golangci-lint:v1.25.0 golangci-lint run -v
+docker run --rm -v $(pwd):/app -w /app golangci/golangci-lint:v1.25.1 golangci-lint run -v
 ```
 
 ### Go
@@ -111,7 +111,7 @@ docker run --rm -v $(pwd):/app -w /app golangci/golangci-lint:v1.25.0 golangci-l
 Go source installations are supported for the two most recent Go releases.
 
 ```bash
-GO111MODULE=on go get github.com/golangci/golangci-lint/cmd/golangci-lint@v1.25.0
+GO111MODULE=on go get github.com/golangci/golangci-lint/cmd/golangci-lint@v1.25.1
 ```
 
 ## Trusted By
@@ -218,6 +218,7 @@ gocritic: The most opinionated Go source code linter [fast: true, auto-fix: fals
 gocyclo: Computes and checks the cyclomatic complexity of functions [fast: true, auto-fix: false]
 godot: Check if comments end in a period [fast: true, auto-fix: false]
 godox: Tool for detection of FIXME, TODO and other comment keywords [fast: true, auto-fix: false]
+goerr113: Golang linter to check the errors handling expressions [fast: true, auto-fix: false]
 gofmt: Gofmt checks whether code was gofmt-ed. By default this tool runs with -s option to check for code simplification [fast: true, auto-fix: true]
 goimports: Goimports does everything that gofmt does. Additionally it checks unused imports [fast: true, auto-fix: true]
 golint: Golint differs from gofmt. Gofmt reformats Go source code, whereas golint prints out style mistakes [fast: true, auto-fix: false]
@@ -493,6 +494,7 @@ golangci-lint help linters
 - [wsl](https://github.com/bombsimon/wsl) - Whitespace Linter - Forces you to use empty lines!
 - [goprintffuncname](https://github.com/jirfag/go-printf-func-name) - Checks that printf-like functions are named with `f` at the end
 - [gomnd](https://github.com/tommy-muehle/go-mnd) - An analyzer to detect magic numbers.
+- [goerr113](https://github.com/Djarvur/go-err113) - Golang linter to check the errors handling expressions
 - [gomodguard](https://github.com/ryancurrah/gomodguard) - Allow and block list linter for direct Go module dependencies.
 - [godot](https://github.com/tetafro/godot) - Check if comments end in a period
 - [testpackage](https://github.com/maratori/testpackage) - linter that makes you use a separate _test package
@@ -570,7 +572,7 @@ Flags:
                                          - Subprocess launch(ed with variable|ing should be audited)
                                        
                                          # EXC0008 gosec: Duplicated errcheck checks
-                                         - G104
+                                         - (G104|G307)
                                        
                                          # EXC0009 gosec: Too many issues in popular repos
                                          - (Expect directory permissions to be 0750 or less|Expect file permissions to be 0600 or less)
@@ -1313,6 +1315,7 @@ Thanks to developers and authors of used linters:
 - [bombsimon](https://github.com/bombsimon)
 - [jirfag](https://github.com/jirfag)
 - [tommy-muehle](https://github.com/tommy-muehle)
+- [Djarvur](https://github.com/Djarvur)
 - [ryancurrah](https://github.com/ryancurrah)
 - [tetafro](https://github.com/tetafro)
 - [maratori](https://github.com/maratori)
@@ -1326,12 +1329,14 @@ There is the most valuable changes log:
 
 ### April 2020
 
-1. Add new linters: `testpackage`, `nestif`, `godot`, `gomodguard`
+1. Add new linters: `testpackage`, `nestif`, `godot`, `gomodguard`, `asciicheck`
 2. Add  github actions output format
-3. Update linters: `wsl`
+3. Update linters: `wsl`, `gomodguard`, `gosec`
 4. Support `disabled-tags` setting for `gocritic`
 5. Mitigate OOM and "failed prerequisites"
 6. Self-isolate due to unexpected pandemics
+7. Support case-sensitive excludes
+8. Allow granular re-enabling excludes by ID, e.g. `EXC0002`
 
 ### September 2019
 
