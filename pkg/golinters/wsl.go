@@ -66,7 +66,7 @@ func NewWSL() *goanalysis.Linter {
 			defer mu.Unlock()
 
 			for _, err := range wslErrors {
-				issues = append(issues, goanalysis.NewIssue(&result.Issue{ //nolint:scopelint
+				issues = append(issues, goanalysis.NewIssue(&result.Issue{
 					FromLinter: name,
 					Pos:        err.Position,
 					Text:       err.Reason,

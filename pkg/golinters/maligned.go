@@ -40,7 +40,7 @@ func NewMaligned() *goanalysis.Linter {
 				if lintCtx.Settings().Maligned.SuggestNewOrder {
 					text += fmt.Sprintf(":\n%s", formatCodeBlock(i.NewStructDef, lintCtx.Cfg))
 				}
-				issues = append(issues, goanalysis.NewIssue(&result.Issue{ //nolint:scopelint
+				issues = append(issues, goanalysis.NewIssue(&result.Issue{
 					Pos:        i.Pos,
 					Text:       text,
 					FromLinter: linterName,

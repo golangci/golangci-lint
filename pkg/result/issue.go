@@ -41,6 +41,10 @@ type Issue struct {
 
 	// HunkPos is used only when golangci-lint is run over a diff
 	HunkPos int `json:",omitempty"`
+
+	// If we are expecting a nolint (because this is from nolintlint), record the expected linter
+	ExpectNoLint         bool
+	ExpectedNoLintLinter string
 }
 
 func (i *Issue) FilePath() string {

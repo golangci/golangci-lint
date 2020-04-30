@@ -232,6 +232,7 @@ maligned: Tool to detect Go structs that would take less memory if their fields 
 misspell: Finds commonly misspelled English words in comments [fast: true, auto-fix: true]
 nakedret: Finds naked returns in functions greater than a specified function length [fast: true, auto-fix: false]
 nestif: Reports deeply nested if statements [fast: true, auto-fix: false]
+nolintlint: Reports ill-formed or insufficient nolint directives [fast: true, auto-fix: false]
 prealloc: Finds slice declarations that could potentially be preallocated [fast: true, auto-fix: false]
 rowserrcheck: checks whether Err of rows is checked successfully [fast: true, auto-fix: false]
 scopelint: Scopelint checks for unpinned variables in go programs [fast: true, auto-fix: false]
@@ -498,6 +499,7 @@ golangci-lint help linters
 - [godot](https://github.com/tetafro/godot) - Check if comments end in a period
 - [testpackage](https://github.com/maratori/testpackage) - linter that makes you use a separate _test package
 - [nestif](https://github.com/nakabonne/nestif) - Reports deeply nested if statements
+- [nolintlint](https://github.com/golangci-lint/pkg/golinters/nolintlint) - Reports ill-formed or insufficient nolint directives
 
 ## Configuration
 
@@ -845,6 +847,17 @@ linters-settings:
     simple: true
     range-loops: true # Report preallocation suggestions on range loops, true by default
     for-loops: false # Report preallocation suggestions on for loops, false by default
+  nolintlint:
+    # Enable to ensure that nolint directives are all used. Default is true.
+    allow-unused: false
+    # Disable to ensure that nolint directives don't have a leading space. Default is true.
+    allow-leading-space: true
+    # Exclude following linters from requiring an explanation.  Default is [].
+    allow-no-explanation: []
+    # Enable to require an explanation after each nolint directive. Default is false.
+    require-explanation: true
+    # Enable to require an explanation after each nolint directive. Default is false.
+    require-specific: true
   rowserrcheck:
     packages:
       - github.com/jmoiron/sqlx
@@ -1034,6 +1047,11 @@ linters-settings:
     suggest-new: true
   misspell:
     locale: US
+  nolintlint:
+    allow-leading-space: true # don't require machine-readable nolint directives (i.e. with no leading space)
+    allow-unused: false # report any unused nolint directives
+    require-explanation: false # don't require an explanation for nolint directives
+    require-specific: false # don't require nolint directives to be specific about which linter is being skipped
 
 linters:
   # please, do not use `enable-all`: it's deprecated and will be removed soon.
@@ -1064,6 +1082,7 @@ linters:
     - lll
     - misspell
     - nakedret
+    - nolintlint
     - rowserrcheck
     - scopelint
     - staticcheck
@@ -1301,6 +1320,7 @@ Thanks to developers and authors of used linters:
 - [tetafro](https://github.com/tetafro)
 - [maratori](https://github.com/maratori)
 - [nakabonne](https://github.com/nakabonne)
+- [golangci-lint](https://github.com/golangci-lint)
 
 ## Changelog
 

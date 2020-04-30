@@ -34,7 +34,7 @@ func NewPrealloc() *goanalysis.Linter {
 			var res []goanalysis.Issue
 			hints := prealloc.Check(pass.Files, s.Simple, s.RangeLoops, s.ForLoops)
 			for _, hint := range hints {
-				res = append(res, goanalysis.NewIssue(&result.Issue{ //nolint:scopelint
+				res = append(res, goanalysis.NewIssue(&result.Issue{
 					Pos:        pass.Fset.Position(hint.Pos),
 					Text:       fmt.Sprintf("Consider preallocating %s", formatCode(hint.DeclaredSliceName, lintCtx.Cfg)),
 					FromLinter: preallocName,

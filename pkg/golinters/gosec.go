@@ -73,7 +73,7 @@ func NewGosec() *goanalysis.Linter {
 					continue
 				}
 
-				res = append(res, goanalysis.NewIssue(&result.Issue{ //nolint:scopelint
+				res = append(res, goanalysis.NewIssue(&result.Issue{
 					Pos: token.Position{
 						Filename: i.File,
 						Line:     line,

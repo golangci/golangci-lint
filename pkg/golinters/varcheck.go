@@ -37,7 +37,7 @@ func NewVarcheck() *goanalysis.Linter {
 
 			issues := make([]goanalysis.Issue, 0, len(varcheckIssues))
 			for _, i := range varcheckIssues {
-				issues = append(issues, goanalysis.NewIssue(&result.Issue{ //nolint:scopelint
+				issues = append(issues, goanalysis.NewIssue(&result.Issue{
 					Pos:        i.Pos,
 					Text:       fmt.Sprintf("%s is unused", formatCode(i.VarName, lintCtx.Cfg)),
 					FromLinter: linterName,

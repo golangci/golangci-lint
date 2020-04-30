@@ -323,11 +323,13 @@ func saveIssuesToCache(allPkgs []*packages.Package, pkgsFromCache map[*packages.
 				for ind := range pkgIssues {
 					i := &pkgIssues[ind]
 					encodedIssues = append(encodedIssues, EncodingIssue{
-						FromLinter:  i.FromLinter,
-						Text:        i.Text,
-						Pos:         i.Pos,
-						LineRange:   i.LineRange,
-						Replacement: i.Replacement,
+						FromLinter:           i.FromLinter,
+						Text:                 i.Text,
+						Pos:                  i.Pos,
+						LineRange:            i.LineRange,
+						Replacement:          i.Replacement,
+						ExpectNoLint:         i.ExpectNoLint,
+						ExpectedNoLintLinter: i.ExpectedNoLintLinter,
 					})
 				}
 
@@ -392,12 +394,14 @@ func loadIssuesFromCache(pkgs []*packages.Package, lintCtx *linter.Context,
 				issues := make([]result.Issue, 0, len(pkgIssues))
 				for _, i := range pkgIssues {
 					issues = append(issues, result.Issue{
-						FromLinter:  i.FromLinter,
-						Text:        i.Text,
-						Pos:         i.Pos,
-						LineRange:   i.LineRange,
-						Replacement: i.Replacement,
-						Pkg:         pkg,
+						FromLinter:           i.FromLinter,
+						Text:                 i.Text,
+						Pos:                  i.Pos,
+						LineRange:            i.LineRange,
+						Replacement:          i.Replacement,
+						Pkg:                  pkg,
+						ExpectNoLint:         i.ExpectNoLint,
+						ExpectedNoLintLinter: i.ExpectedNoLintLinter,
 					})
 				}
 				cacheRes.issues = issues

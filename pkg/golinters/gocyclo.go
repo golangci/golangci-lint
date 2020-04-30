@@ -49,7 +49,7 @@ func NewGocyclo() *goanalysis.Linter {
 					break // Break as the stats is already sorted from greatest to least
 				}
 
-				res = append(res, goanalysis.NewIssue(&result.Issue{ //nolint:scopelint
+				res = append(res, goanalysis.NewIssue(&result.Issue{
 					Pos: s.Pos,
 					Text: fmt.Sprintf("cyclomatic complexity %d of func %s is high (> %d)",
 						s.Complexity, formatCode(s.FuncName, lintCtx.Cfg), lintCtx.Settings().Gocyclo.MinComplexity),

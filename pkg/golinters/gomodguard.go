@@ -73,7 +73,7 @@ func NewGomodguard() *goanalysis.Linter {
 			defer mu.Unlock()
 
 			for _, err := range gomodguardErrors {
-				issues = append(issues, goanalysis.NewIssue(&result.Issue{ //nolint:scopelint
+				issues = append(issues, goanalysis.NewIssue(&result.Issue{
 					FromLinter: gomodguardName,
 					Pos:        err.Position,
 					Text:       err.Reason,

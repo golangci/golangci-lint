@@ -132,7 +132,7 @@ func getDoc(filePath string) (string, error) {
 	var docLines []string
 	for scanner.Scan() {
 		line := strings.TrimSpace(scanner.Text())
-		if strings.HasPrefix(line, "//") { //nolint:gocritic
+		if strings.HasPrefix(line, "//") {
 			text := strings.TrimSpace(strings.TrimPrefix(line, "//"))
 			docLines = append(docLines, text)
 		} else if line == "" || strings.HasPrefix(line, "package") {

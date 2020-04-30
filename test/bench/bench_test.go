@@ -211,7 +211,7 @@ type runResult struct {
 	duration  time.Duration
 }
 
-func compare(b *testing.B, gometalinterRun, golangciLintRun func(*testing.B), repoName, mode string, kLOC int) { // nolint
+func compare(b *testing.B, gometalinterRun, golangciLintRun func(*testing.B), repoName, mode string, kLOC int) {
 	gometalinterRes := runOne(b, gometalinterRun, "gometalinter")
 	golangciLintRes := runOne(b, golangciLintRun, "golangci-lint")
 
