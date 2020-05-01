@@ -29,7 +29,7 @@ jobs:
         with:
           go-version: ${{ matrix.golang }}
       - name: Run tests
-        if: not contains(matrix.os, 'windows')
+        if: contains(matrix.os, 'ubuntu') || contains(matrix.os, 'macos')
         run: make test
       - name: Run tests
         if: contains(matrix.os, 'windows')
