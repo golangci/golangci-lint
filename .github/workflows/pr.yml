@@ -17,7 +17,7 @@ jobs:
           - 1.13
           - 1.14
         os:
-#          - windows-latest
+          - windows-latest
           - ubuntu-latest
           - macos-latest
     steps:
@@ -28,6 +28,10 @@ jobs:
           go-version: ${{ matrix.golang }}
       - name: Run tests
         run: make test
+        if: matrix.os != "windows-latest"
+      - name: Run tests
+        run: make.exe test
+        if: matrix.os == "windows-latest"
   check_generated:
     env:
       GIT_TAG: v1.26.0
