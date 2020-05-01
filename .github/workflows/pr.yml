@@ -31,7 +31,7 @@ jobs:
   check_generated:
     env:
       GIT_TAG: v1.26.0
-      runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Install Go
