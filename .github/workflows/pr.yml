@@ -29,5 +29,5 @@ jobs:
       - name: Check if README.md is up to date
         run: time make fast_check_generated
       - name: Run tests
-        run: make tests
+        run: make test
 
