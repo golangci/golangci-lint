@@ -30,10 +30,10 @@ jobs:
           go-version: ${{ matrix.golang }}
       - name: Run tests
         run: make test
-        if: matrix.os != 'windows-latest'
+        if: !contains(matrix.os, 'windows')
       - name: Run tests
         run: make.exe test
-        if: matrix.os == 'windows-latest'
+        if: contains(matrix.os, 'windows')
   check_generated:
     env:
       GIT_TAG: v1.26.0
