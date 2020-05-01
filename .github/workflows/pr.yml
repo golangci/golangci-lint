@@ -7,16 +7,17 @@ on:
   pull_request:
 jobs:
   build:
-    runs-on:
-      - windows-latest
-      - ubuntu-latest
-      - macos-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         golang:
           - 1.12
           - 1.13
           - 1.14
+        os:
+          - windows-latest
+          - ubuntu-latest
+          - macos-lates
     steps:
       - uses: actions/checkout@v2
       - name: Check if README.md is up to date
