@@ -6,7 +6,7 @@ on:
 #      - master
   pull_request:
 jobs:
-  build:
+  tests:
     env:
       GIT_TAG: v1.26.0
     runs-on: ${{ matrix.os }}
@@ -17,7 +17,7 @@ jobs:
           - 1.13
           - 1.14
         os:
-          - windows-latest
+#          - windows-latest
           - ubuntu-latest
           - macos-latest
     steps:
@@ -26,8 +26,15 @@ jobs:
         uses: actions/setup-go@v1
         with:
           go-version: ${{ matrix.golang }}
-      - name: Check if README.md is up to date
-        run: time make fast_check_generated
       - name: Run tests
         run: make test
-
+  check_generated:
+    env:
+      GIT_TAG: v1.26.0
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v2
+        - name: Install Go
+          uses: actions/setup-go@v1
+        - name: Check if README.md is up to date
+          run: make fast_check_generated
