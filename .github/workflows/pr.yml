@@ -29,11 +29,11 @@ jobs:
         with:
           go-version: ${{ matrix.golang }}
       - name: Run tests
-        run: make test
         if: !contains(matrix.os, 'windows')
+        run: make test
       - name: Run tests
-        run: make.exe test
         if: contains(matrix.os, 'windows')
+        run: make.exe test
   check_generated:
     env:
       GIT_TAG: v1.26.0
