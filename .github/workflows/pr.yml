@@ -19,9 +19,9 @@ jobs:
       - name: Check if README.md is up to date
         run: time make fast_check_generated
       - name: Run tests
-        run: |
-          docker run -t \
+        run: >
+          docker run -t
           -v ${{ github.workspace }}:/go
-          golang:${{ golang }}
+          golang:${{ matrix.golang }}
           time make tests
 
