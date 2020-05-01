@@ -29,5 +29,6 @@ jobs:
           docker run -t
           -v ${{ github.workspace }}:/go
           golang:${{ matrix.golang }}
-          time make tests
+          -e DEBIAN_FRONTEND=noninteractive
+          apt-get install -y time make && time make tests
 
