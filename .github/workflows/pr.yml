@@ -30,5 +30,5 @@ jobs:
           -v ${{ github.workspace }}:/go
           -e DEBIAN_FRONTEND=noninteractive
           golang:${{ matrix.golang }}
-          apt-get install -y time make && time make tests
+          apt-get update && apt-get install -y time make && time make tests
 
