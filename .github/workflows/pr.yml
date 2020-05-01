@@ -2,10 +2,11 @@
 name: PR build
 on:
   push:
+    tags:
+      - v*
     branches:
       - master
   pull_request:
-  tags:
 jobs:
   tests:
     env:
