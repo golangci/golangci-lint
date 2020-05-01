@@ -2,9 +2,11 @@
 name: PR build
 on:
   push:
-#    branches:
-#      - master
+    branches:
+      - master
   pull_request:
+  tags:
+    - v*
 jobs:
   tests:
     env:
@@ -28,10 +30,10 @@ jobs:
           go-version: ${{ matrix.golang }}
       - name: Run tests
         run: make test
-        if: matrix.os != "windows-latest"
+        if: matrix.os != 'windows-latest'
       - name: Run tests
         run: make.exe test
-        if: matrix.os == "windows-latest"
+        if: matrix.os == 'windows-latest'
   check_generated:
     env:
       GIT_TAG: v1.26.0
