@@ -63,18 +63,20 @@ execute() {
 }
 get_binaries() {
   case "$PLATFORM" in
-    darwin/386) BINARIES="golangci-lint" ;;
     darwin/amd64) BINARIES="golangci-lint" ;;
     darwin/arm64) BINARIES="golangci-lint" ;;
     darwin/armv6) BINARIES="golangci-lint" ;;
     darwin/armv7) BINARIES="golangci-lint" ;;
+    darwin/mips64) BINARIES="golangci-lint" ;;
+    darwin/mips64le) BINARIES="golangci-lint" ;;
     darwin/ppc64le) BINARIES="golangci-lint" ;;
     darwin/s390x) BINARIES="golangci-lint" ;;
     freebsd/386) BINARIES="golangci-lint" ;;
     freebsd/amd64) BINARIES="golangci-lint" ;;
-    freebsd/arm64) BINARIES="golangci-lint" ;;
     freebsd/armv6) BINARIES="golangci-lint" ;;
     freebsd/armv7) BINARIES="golangci-lint" ;;
+    freebsd/mips64) BINARIES="golangci-lint" ;;
+    freebsd/mips64le) BINARIES="golangci-lint" ;;
     freebsd/ppc64le) BINARIES="golangci-lint" ;;
     freebsd/s390x) BINARIES="golangci-lint" ;;
     linux/386) BINARIES="golangci-lint" ;;
@@ -82,15 +84,17 @@ get_binaries() {
     linux/arm64) BINARIES="golangci-lint" ;;
     linux/armv6) BINARIES="golangci-lint" ;;
     linux/armv7) BINARIES="golangci-lint" ;;
-    linux/ppc64le) BINARIES="golangci-lint" ;;
-    linux/s390x) BINARIES="golangci-lint" ;;
     linux/mips64) BINARIES="golangci-lint" ;;
     linux/mips64le) BINARIES="golangci-lint" ;;
+    linux/ppc64le) BINARIES="golangci-lint" ;;
+    linux/s390x) BINARIES="golangci-lint" ;;
     windows/386) BINARIES="golangci-lint" ;;
     windows/amd64) BINARIES="golangci-lint" ;;
     windows/arm64) BINARIES="golangci-lint" ;;
     windows/armv6) BINARIES="golangci-lint" ;;
     windows/armv7) BINARIES="golangci-lint" ;;
+    windows/mips64) BINARIES="golangci-lint" ;;
+    windows/mips64le) BINARIES="golangci-lint" ;;
     windows/ppc64le) BINARIES="golangci-lint" ;;
     windows/s390x) BINARIES="golangci-lint" ;;
     *)
