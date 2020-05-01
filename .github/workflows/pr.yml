@@ -6,7 +6,6 @@ on:
       - master
   pull_request:
   tags:
-    - v*
 jobs:
   tests:
     env:
