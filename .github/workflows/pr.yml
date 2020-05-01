@@ -17,9 +17,9 @@ jobs:
           - 1.13
           - 1.14
         os:
-#          - windows-latest
+          - windows-latest
           - ubuntu-latest
-#          - macos-latest
+          - macos-latest
     steps:
       - uses: actions/checkout@v2
       - name: Install Go
