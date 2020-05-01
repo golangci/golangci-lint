@@ -1,0 +1,25 @@
+---
+name: "Release a tag"
+on:
+  push:
+    tags:
+      - v*
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GOLANGCI_LINT_TOKEN }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Go
+        uses: actions/setup-go@v1
+        with:
+          go-version: 1.14
+      - name: Unshallow
+        run: git fetch --prune --unshallow
+      - name: Login do docker.io
+        run: docker login -u golangci -p ${{ secrets.GOLANGCI_LINT_DOCKER_TOKEN }}
+      - name: Create release
+        uses: goreleaser/goreleaser-action@v1
+        with:
+          args: release --rm-dist
