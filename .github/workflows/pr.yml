@@ -45,8 +45,6 @@ jobs:
       - name: Run tests on Unix-like operating systems
         run: make test
   check_generated:
-    env:
-      GIT_TAG: v1.26.0
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
