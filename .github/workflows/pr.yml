@@ -1,0 +1,27 @@
+---
+name: PR build
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+jobs:
+  build:
+    runs-on: [windows-latest, ubuntu-latest, macos-latest]
+    strategy:
+      matrix:
+        golang:
+          - 1.12
+          - 1.13
+          - 1.14
+    steps:
+      - uses: actions/checkout@v2
+      - name: Check if README.md is up to date
+        run: time make fast_check_generated
+      - name: Run tests
+        run: |
+          docker run -t \
+          -v ${{ github.workspace }}:/go
+          golang:${{ golang }}
+          time make tests
+
