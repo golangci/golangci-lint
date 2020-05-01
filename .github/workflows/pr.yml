@@ -32,9 +32,9 @@ jobs:
     env:
       GIT_TAG: v1.26.0
       runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v2
-        - name: Install Go
-          uses: actions/setup-go@v1
-        - name: Check if README.md is up to date
-          run: make fast_check_generated
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Go
+        uses: actions/setup-go@v1
+      - name: Check if README.md is up to date
+        run: make fast_check_generated
