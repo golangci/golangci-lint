@@ -1327,6 +1327,10 @@ Thanks to developers and authors of used linters:
 Follow the news and releases on our [twitter](https://twitter.com/golangci) and our [blog](https://medium.com/golangci).
 There is the most valuable changes log:
 
+### May 2020
+1. Add new linters: `nolintlint`, `goerr113`
+2. Updated linters: `godot`
+
 ### April 2020
 
 1. Add new linters: `testpackage`, `nestif`, `godot`, `gomodguard`, `asciicheck`
