@@ -28,7 +28,7 @@ jobs:
         run: >
           docker run -t
           -v ${{ github.workspace }}:/go
+          -e DEBIAN_FRONTEND=noninteractive
           golang:${{ matrix.golang }}
-          -e "DEBIAN_FRONTEND=noninteractive"
           apt-get install -y time make && time make tests
 
