@@ -343,6 +343,10 @@ issues:
   # Default value for this option is true.
   exclude-use-default: false
 
+  # The default value is false. If set to true exclude and exclude-rules
+  # regular expressions become case sensitive.
+  exclude-case-sensitive: false
+
   # Maximum issues count per one linter. Set to 0 to disable. Default is 50.
   max-issues-per-linter: 0
 
