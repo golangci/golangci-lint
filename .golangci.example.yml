@@ -347,6 +347,10 @@ issues:
   # regular expressions become case sensitive.
   exclude-case-sensitive: false
 
+  # The list of ids of default excludes to include or disable. By default it's empty.
+  include:
+    - EXC0002 # disable excluding of issues about comments from golint
+
   # Maximum issues count per one linter. Set to 0 to disable. Default is 50.
   max-issues-per-linter: 0
 
