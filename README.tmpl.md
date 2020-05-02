@@ -388,7 +388,7 @@ Less `GOGC` values trigger garbage collection more frequently and golangci-lint 
 
 3. Don't fork to run shell commands
 
-All linters are vendored in the `/vendor` folder: their version is fixed, they are builtin
+All linters has their version fixed with go modules, they are builtin
 and you don't need to install them separately.
 
 ## Supported Linters
