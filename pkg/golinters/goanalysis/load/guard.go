@@ -7,9 +7,8 @@ import (
 )
 
 type Guard struct {
-	loadMutexes        map[*packages.Package]*sync.Mutex
-	mutexForExportData sync.Mutex
-	mutex              sync.Mutex
+	loadMutexes map[*packages.Package]*sync.Mutex
+	mutex       sync.Mutex
 }
 
 func NewGuard() *Guard {
@@ -24,10 +23,6 @@ func (g *Guard) AddMutexForPkg(pkg *packages.Package) {
 
 func (g *Guard) MutexForPkg(pkg *packages.Package) *sync.Mutex {
 	return g.loadMutexes[pkg]
-}
-
-func (g *Guard) MutexForExportData() *sync.Mutex {
-	return &g.mutexForExportData
 }
 
 func (g *Guard) Mutex() *sync.Mutex {

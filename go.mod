@@ -60,4 +60,4 @@ require (
 // See https://github.com/golangci/golangci-lint/issues/995
 // Update only after mitigating this issue.
 // TODO: Enable back tests with skip "Issue955" after update.
-require honnef.co/go/tools v0.0.1-2019.2.3
+require honnef.co/go/tools v0.0.1-2020.1.3

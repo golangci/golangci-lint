@@ -39,7 +39,7 @@ func NewGocognit() *goanalysis.Linter {
 				return nil, nil
 			}
 
-			sort.Slice(stats, func(i, j int) bool {
+			sort.SliceStable(stats, func(i, j int) bool {
 				return stats[i].Complexity > stats[j].Complexity
 			})
 
