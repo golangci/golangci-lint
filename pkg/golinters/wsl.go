@@ -52,7 +52,7 @@ func NewWSL() *goanalysis.Linter {
 			)
 
 			for _, file := range pass.Files {
-				files = append(files, pass.Fset.Position(file.Pos()).Filename)
+				files = append(files, pass.Fset.PositionFor(file.Pos(), false).Filename)
 			}
 
 			wslErrors, _ := wsl.NewProcessorWithConfig(processorCfg).
