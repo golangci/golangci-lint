@@ -1,0 +1,3 @@
+linters-settings:
+  lll:
+    line-length: 50

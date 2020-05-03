@@ -137,6 +137,27 @@ func TestLineDirectiveProcessedFilesFullLoading(t *testing.T) {
 	r.ExpectExitCode(exitcodes.IssuesFound).ExpectOutputEq(output + "\n")
 }
 
+func TestLintFilesWithLineDirective(t *testing.T) {
+	testshared.NewLintRunner(t).Run("-Edupl", "--disable-all", "--config=testdata/linedirective/dupl.yml", getTestDataDir("linedirective")).
+		ExpectHasIssue("21-23 lines are duplicate of `testdata/linedirective/hello.go:25-27` (dupl)")
+	testshared.NewLintRunner(t).Run("-Egofmt", "--disable-all", "--no-config", getTestDataDir("linedirective")).
+		ExpectHasIssue("File is not `gofmt`-ed with `-s` (gofmt)")
+	testshared.NewLintRunner(t).Run("-Egoimports", "--disable-all", "--no-config", getTestDataDir("linedirective")).
+		ExpectHasIssue("File is not `goimports`-ed (goimports)")
+	testshared.NewLintRunner(t).
+		Run("-Egomodguard", "--disable-all", "--config=testdata/linedirective/gomodguard.yml", getTestDataDir("linedirective")).
+		ExpectHasIssue("import of package `github.com/ryancurrah/gomodguard` is blocked because the module is not " +
+			"in the allowed modules list. (gomodguard)")
+	testshared.NewLintRunner(t).Run("-Eineffassign", "--disable-all", "--no-config", getTestDataDir("linedirective")).
+		ExpectHasIssue("ineffectual assignment to `x` (ineffassign)")
+	testshared.NewLintRunner(t).Run("-Elll", "--disable-all", "--config=testdata/linedirective/lll.yml", getTestDataDir("linedirective")).
+		ExpectHasIssue("line is 57 characters (lll)")
+	testshared.NewLintRunner(t).Run("-Emisspell", "--disable-all", "--no-config", getTestDataDir("linedirective")).
+		ExpectHasIssue("is a misspelling of `language` (misspell)")
+	testshared.NewLintRunner(t).Run("-Ewsl", "--disable-all", "--no-config", getTestDataDir("linedirective")).
+		ExpectHasIssue("block should not start with a whitespace (wsl)")
+}
+
 func TestSkippedDirsNoMatchArg(t *testing.T) {
 	dir := getTestDataDir("skipdirs", "skip_me", "nested")
 	r := testshared.NewLintRunner(t).Run("--print-issued-lines=false", "--no-config", "--skip-dirs", dir, "-Egolint", dir)
