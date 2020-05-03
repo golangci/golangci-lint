@@ -12,3 +12,4 @@
 /tools/node_modules
 /tools/svg-term
 /.vscode/
+*.test

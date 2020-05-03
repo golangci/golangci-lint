@@ -34,7 +34,7 @@ require (
 	github.com/nakabonne/nestif v0.3.0
 	github.com/pkg/errors v0.8.1
 	github.com/ryancurrah/gomodguard v1.0.4
-	github.com/securego/gosec v0.0.0-20200316084457-7da9f46445fd
+	github.com/securego/gosec/v2 v2.2.1-0.20200424144625-ee3146e63716
 	github.com/shirou/gopsutil v0.0.0-20190901111213-e4ec7b275ada // v2.19.8
 	github.com/sirupsen/logrus v1.4.2
 	github.com/sourcegraph/go-diff v0.5.1
@@ -50,7 +50,7 @@ require (
 	github.com/ultraware/whitespace v0.0.4
 	github.com/uudashr/gocognit v1.0.1
 	github.com/valyala/quicktemplate v1.2.0
-	golang.org/x/tools v0.0.0-20200422022333-3d57cf2e726e
+	golang.org/x/tools v0.0.0-20200502202811-ed308ab3e770
 	gopkg.in/yaml.v2 v2.2.8
 	mvdan.cc/interfacer v0.0.0-20180901003855-c20040233aed
 	mvdan.cc/lint v0.0.0-20170908181259-adc824a0674b // indirect
