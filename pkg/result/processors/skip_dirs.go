@@ -31,6 +31,7 @@ const goFileSuffix = ".go"
 func NewSkipDirs(patterns []string, log logutils.Log, runArgs []string) (*SkipDirs, error) {
 	var patternsRe []*regexp.Regexp
 	for _, p := range patterns {
+		p = normalizePathInRegex(p)
 		patternRe, err := regexp.Compile(p)
 		if err != nil {
 			return nil, errors.Wrapf(err, "can't compile regexp %q", p)

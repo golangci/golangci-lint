@@ -103,11 +103,17 @@ linters:
     - whitespace
 
   # don't enable:
+  # - asciicheck
   # - gochecknoglobals
   # - gocognit
+  # - godot
   # - godox
+  # - goerr113
   # - maligned
+  # - nestif
   # - prealloc
+  # - testpackage
+  # - wsl
 
 issues:
   # Excluding configuration per-path, per-linter, per-text and per-source
