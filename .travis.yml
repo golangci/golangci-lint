@@ -1,10 +1,11 @@
 language: go
 go:
+  - 1.12.x
   - 1.13.x
   - 1.14.x
 
 before_script:
-  - nvm install 13.11.0
+  - nvm install 12.14.0
 
 script:
   - time make fast_check_generated
