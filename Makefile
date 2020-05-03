@@ -28,10 +28,10 @@ clean:
 # Test
 test: export GOLANGCI_LINT_INSTALLED = true
 test: build
-	GL_TEST_RUN=1 time ./golangci-lint run -v
-	GL_TEST_RUN=1 time ./golangci-lint run --fast --no-config -v --skip-dirs 'test/testdata_etc,internal/(cache|renameio|robustio)'
-	GL_TEST_RUN=1 time ./golangci-lint run --no-config -v --skip-dirs 'test/testdata_etc,internal/(cache|renameio|robustio)'
-	GL_TEST_RUN=1 time go test -v ./...
+	GL_TEST_RUN=1 ./golangci-lint run -v
+	GL_TEST_RUN=1 ./golangci-lint run --fast --no-config -v --skip-dirs 'test/testdata_etc,internal/(cache|renameio|robustio)'
+	GL_TEST_RUN=1 ./golangci-lint run --no-config -v --skip-dirs 'test/testdata_etc,internal/(cache|renameio|robustio)'
+	GL_TEST_RUN=1 go test -v ./...
 .PHONY: test
 
 test_race: build_race

@@ -1,0 +1,56 @@
+---
+name: PR build
+on:
+  push:
+    tags:
+      - v*
+    branches:
+      - master
+  pull_request:
+jobs:
+  tests-on-windows:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        golang:
+          - 1.12
+          - 1.13
+          - 1.14
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Go
+        uses: actions/setup-go@v1
+        with:
+          go-version: ${{ matrix.golang }}
+      - name: Run tests on Windows
+        run: make.exe test
+        continue-on-error: true
+  tests-on-unix:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        golang:
+          - 1.12
+          - 1.13
+          - 1.14
+        os:
+          - ubuntu-latest
+          - macos-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Go
+        uses: actions/setup-go@v1
+        with:
+          go-version: ${{ matrix.golang }}
+      - name: Run tests on Unix-like operating systems
+        run: make test
+  check_generated:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Go
+        uses: actions/setup-go@v1
+        with:
+          go-version: 1.14
+      - name: Check if README.md is up to date
+        run: make check_generated
