@@ -60,18 +60,13 @@ type filesCache map[string]*fileData
 type Nolint struct {
 	cache          filesCache
 	dbManager      *lintersdb.Manager
-	enabledLinters map[string]bool
+	enabledLinters map[string]*linter.Config
 	log            logutils.Log
 
 	unknownLintersSet map[string]bool
 }
 
-func NewNolint(log logutils.Log, dbManager *lintersdb.Manager, enabledLCs []*linter.Config) *Nolint {
-	enabledLinters := make(map[string]bool, len(enabledLCs))
-	for _, lc := range enabledLCs {
-		enabledLinters[lc.Name()] = true
-	}
-
+func NewNolint(log logutils.Log, dbManager *lintersdb.Manager, enabledLinters map[string]*linter.Config) *Nolint {
 	return &Nolint{
 		cache:             filesCache{},
 		dbManager:         dbManager,
@@ -154,7 +149,7 @@ func (p *Nolint) shouldPassIssue(i *result.Issue) (bool, error) {
 		if i.ExpectedNoLintLinter != "" {
 			// don't expect disabled linters to cover their nolint statements
 			nolintDebugf("enabled linters: %v", p.enabledLinters)
-			if !p.enabledLinters[i.ExpectedNoLintLinter] {
+			if p.enabledLinters[i.ExpectedNoLintLinter] == nil {
 				return false, nil
 			}
 			nolintDebugf("checking that lint issue was used for %s: %v", i.ExpectedNoLintLinter, i)

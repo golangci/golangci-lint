@@ -20,32 +20,26 @@ func (e *Executor) initLinters() {
 	e.initRunConfiguration(lintersCmd)
 }
 
-func IsLinterInConfigsList(name string, linters []*linter.Config) bool {
-	for _, lc := range linters {
-		if lc.Name() == name {
-			return true
-		}
-	}
-
-	return false
-}
-
 func (e *Executor) executeLinters(_ *cobra.Command, args []string) {
 	if len(args) != 0 {
 		e.log.Fatalf("Usage: golangci-lint linters")
 	}
 
-	enabledLCs, err := e.EnabledLintersSet.Get(false)
+	enabledLintersMap, err := e.EnabledLintersSet.GetEnabledLintersMap()
 	if err != nil {
 		log.Fatalf("Can't get enabled linters: %s", err)
 	}
 
 	color.Green("Enabled by your configuration linters:\n")
-	printLinterConfigs(enabledLCs)
+	enabledLinters := make([]*linter.Config, 0, len(enabledLintersMap))
+	for _, linter := range enabledLintersMap {
+		enabledLinters = append(enabledLinters, linter)
+	}
+	printLinterConfigs(enabledLinters)
 
 	var disabledLCs []*linter.Config
 	for _, lc := range e.DBManager.GetAllSupportedLinterConfigs() {
-		if !IsLinterInConfigsList(lc.Name(), enabledLCs) {
+		if enabledLintersMap[lc.Name()] == nil {
 			disabledLCs = append(disabledLCs, lc)
 		}
 	}

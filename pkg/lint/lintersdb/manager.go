@@ -125,6 +125,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetUnused).
 			WithAlternativeNames(megacheckName).
 			ConsiderSlow().
+			WithChangeTypes().
 			WithURL("https://github.com/dominikh/go-tools/tree/master/unused"),
 		linter.NewConfig(golinters.NewGosimple()).
 			WithLoadForGoAnalysis().

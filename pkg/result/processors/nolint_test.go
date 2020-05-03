@@ -253,9 +253,9 @@ func TestNolintUnused(t *testing.T) {
 		cfg := &config.Config{Linters: config.Linters{DisableAll: true, Enable: enabledLinters}}
 		dbManager := lintersdb.NewManager(cfg, nil)
 		enabledLintersSet := lintersdb.NewEnabledSet(dbManager, lintersdb.NewValidator(dbManager), enabledSetLog, cfg)
-		lcs, err := enabledLintersSet.Get(false)
+		enabledLintersMap, err := enabledLintersSet.GetEnabledLintersMap()
 		assert.NoError(t, err)
-		return NewNolint(log, dbManager, lcs)
+		return NewNolint(log, dbManager, enabledLintersMap)
 	}
 
 	// the issues below the nolintlint issues that would be generated for the test file
@@ -297,9 +297,9 @@ func TestNolintUnused(t *testing.T) {
 		dbManager := lintersdb.NewManager(cfg, nil)
 		enabledLintersSet := lintersdb.NewEnabledSet(dbManager, lintersdb.NewValidator(dbManager), enabledSetLog, cfg)
 
-		lcs, err := enabledLintersSet.Get(false)
+		enabledLintersMap, err := enabledLintersSet.GetEnabledLintersMap()
 		assert.NoError(t, err)
-		p := NewNolint(log, dbManager, lcs)
+		p := NewNolint(log, dbManager, enabledLintersMap)
 		defer p.Finish()
 
 		processAssertEmpty(t, p, nolintlintIssueVarcheck)
