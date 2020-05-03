@@ -55,7 +55,10 @@ func NewUnused() *goanalysis.Linter {
 		}
 		return issues
 	}).WithContextSetter(func(lintCtx *linter.Context) {
-		u.WholeProgram = lintCtx.Settings().Unused.CheckExported
+		if lintCtx.Settings().Unused.CheckExported {
+			lintCtx.Log.Infof("Using whole program analysis for unused, it can be memory-heavy")
+			u.WholeProgram = true
+		}
 	}).WithLoadMode(goanalysis.LoadModeWholeProgram)
 	lnt.UseOriginalPackages()
 	return lnt

@@ -14,7 +14,6 @@ import (
 	"encoding/hex"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -24,6 +23,7 @@ import (
 	"github.com/pkg/errors"
 
 	"github.com/golangci/golangci-lint/internal/renameio"
+	"github.com/golangci/golangci-lint/internal/robustio"
 )
 
 // An ActionID is a cache action key, the hash of a complete description of a
@@ -232,7 +232,7 @@ func (c *Cache) GetBytes(id ActionID) ([]byte, Entry, error) {
 		return nil, entry, err
 	}
 
-	data, err := ioutil.ReadFile(outputFile)
+	data, err := robustio.ReadFile(outputFile)
 	if err != nil {
 		return nil, entry, err
 	}

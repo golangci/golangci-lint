@@ -98,6 +98,7 @@ func (cl *ContextLoader) makeBuildFlags() ([]string, error) {
 	if len(cl.cfg.Run.BuildTags) != 0 {
 		// go help build
 		buildFlags = append(buildFlags, "-tags", strings.Join(cl.cfg.Run.BuildTags, " "))
+		cl.log.Infof("Using build tags: %v", cl.cfg.Run.BuildTags)
 	}
 
 	mod := cl.cfg.Run.ModulesDownloadMode

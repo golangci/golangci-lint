@@ -2,6 +2,7 @@ package lintersdb
 
 import (
 	"sort"
+	"strings"
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
@@ -92,6 +93,11 @@ func (es EnabledSet) Get(optimize bool) ([]*linter.Config, error) {
 		resultLinters = append(resultLinters, lc)
 	}
 
+	// Make order of execution of linters (go/analysis metalinter and unused) stable.
+	sort.Slice(resultLinters, func(i, j int) bool {
+		return strings.Compare(resultLinters[i].Name(), resultLinters[j].Name()) <= 0
+	})
+
 	return resultLinters, nil
 }
 
@@ -122,6 +128,10 @@ func (es EnabledSet) combineGoAnalysisLinters(linters map[string]*linter.Config)
 		delete(linters, lnt.Name())
 	}
 
+	// Make order of execution of go/analysis analyzers stable.
+	sort.Slice(goanalysisLinters, func(i, j int) bool {
+		return strings.Compare(goanalysisLinters[i].Name(), goanalysisLinters[j].Name()) <= 0
+	})
 	ml := goanalysis.NewMetaLinter(goanalysisLinters)
 
 	var presets []string

@@ -384,26 +384,6 @@ func extractDiagnostics(roots []*action) (retDiags []Diagnostic, retErrors []err
 	return
 }
 
-// NeedFacts reports whether any analysis required by the specified set
-// needs facts.  If so, we must load the entire program from source.
-func NeedFacts(analyzers []*analysis.Analyzer) bool {
-	seen := make(map[*analysis.Analyzer]bool)
-	var q []*analysis.Analyzer // for BFS
-	q = append(q, analyzers...)
-	for len(q) > 0 {
-		a := q[0]
-		q = q[1:]
-		if !seen[a] {
-			seen[a] = true
-			if len(a.FactTypes) > 0 {
-				return true
-			}
-			q = append(q, a.Requires...)
-		}
-	}
-	return false
-}
-
 // An action represents one unit of analysis work: the application of
 // one analysis to one package. Actions form a DAG, both within a
 // package (as different analyzers are applied, either in sequence or
@@ -964,7 +944,7 @@ func sizeOfReflectValueTreeBytes(rv reflect.Value, visitedPtrs map[uintptr]struc
 	}
 }
 
-func (lp *loadingPackage) decUse() {
+func (lp *loadingPackage) decUse(canClearTypes bool) {
 	lp.decUseMutex.Lock()
 	defer lp.decUseMutex.Unlock()
 
@@ -1007,11 +987,17 @@ func (lp *loadingPackage) decUse() {
 		return
 	}
 
-	lp.pkg.Types = nil
+	if canClearTypes {
+		// canClearTypes is set to true if we can discard type
+		// information after the package and its dependents have been
+		// processed. This is the case when no whole program checkers (unused) are
+		// being run.
+		lp.pkg.Types = nil
+	}
 	lp.pkg = nil
 
 	for _, imp := range lp.imports {
-		imp.decUse()
+		imp.decUse(canClearTypes)
 	}
 	lp.imports = nil
 
@@ -1047,12 +1033,8 @@ func (lp *loadingPackage) analyze(loadMode LoadMode, loadSem chan struct{}) {
 		<-loadSem
 	}()
 
-	defer func() {
-		if loadMode < LoadModeWholeProgram {
-			// Save memory on unused more fields.
-			lp.decUse()
-		}
-	}()
+	// Save memory on unused more fields.
+	defer lp.decUse(loadMode < LoadModeWholeProgram)
 
 	if err := lp.loadWithFacts(loadMode); err != nil {
 		werr := errors.Wrapf(err, "failed to load package %s", lp.pkg.Name)
@@ -1168,22 +1150,6 @@ func (lp *loadingPackage) loadFromSource(loadMode LoadMode) error {
 }
 
 func (lp *loadingPackage) loadFromExportData() error {
-	// Because gcexportdata.Read has the potential to create or
-	// modify the types.Package for each node in the transitive
-	// closure of dependencies of lpkg, all exportdata operations
-	// must be sequential. (Finer-grained locking would require
-	// changes to the gcexportdata API.)
-	//
-	// The exportMu lock guards the Package.Pkg field and the
-	// types.Package it points to, for each Package in the graph.
-	//
-	// Not all accesses to Package.Pkg need to be protected by this mutex:
-	// graph ordering ensures that direct dependencies of source
-	// packages are fully loaded before the importer reads their Pkg field.
-	mu := lp.loadGuard.MutexForExportData()
-	mu.Lock()
-	defer mu.Unlock()
-
 	pkg := lp.pkg
 
 	// Call NewPackage directly with explicit name.

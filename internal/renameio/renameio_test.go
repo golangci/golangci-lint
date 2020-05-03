@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-//+build !plan9
+// +build !plan9
 
 package renameio
 
@@ -21,8 +21,6 @@ import (
 
 	"github.com/golangci/golangci-lint/internal/robustio"
 )
-
-const windowsOS = "windows"
 
 func TestConcurrentReadsAndWrites(t *testing.T) {
 	dir, err := ioutil.TempDir("", "renameio")
@@ -117,7 +115,7 @@ func TestConcurrentReadsAndWrites(t *testing.T) {
 	}
 
 	var minWriteSuccesses int64 = attempts
-	if runtime.GOOS == windowsOS {
+	if runtime.GOOS == "windows" {
 		// Windows produces frequent "Access is denied" errors under heavy rename load.
 		// As long as those are the only errors and *some* of the writes succeed, we're happy.
 		minWriteSuccesses = attempts / 4
@@ -130,10 +128,18 @@ func TestConcurrentReadsAndWrites(t *testing.T) {
 	}
 
 	var minReadSuccesses int64 = attempts
-	if runtime.GOOS == windowsOS {
+
+	switch runtime.GOOS {
+	case "windows":
 		// Windows produces frequent "Access is denied" errors under heavy rename load.
-		// As long as those are the only errors and *some* of the writes succeed, we're happy.
+		// As long as those are the only errors and *some* of the reads succeed, we're happy.
 		minReadSuccesses = attempts / 4
+
+	case "darwin":
+		// The filesystem on macOS 10.14 occasionally fails with "no such file or
+		// directory" errors. See https://golang.org/issue/33041. The flake rate is
+		// fairly low, so ensure that at least 75% of attempts succeed.
+		minReadSuccesses = attempts - (attempts / 4)
 	}
 
 	if readSuccesses < minReadSuccesses {
