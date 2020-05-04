@@ -13,7 +13,6 @@ jobs:
     strategy:
       matrix:
         golang:
-          - 1.12
           - 1.13
           - 1.14
     steps:
@@ -30,7 +29,6 @@ jobs:
     strategy:
       matrix:
         golang:
-          - 1.12
           - 1.13
           - 1.14
         os:
