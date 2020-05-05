@@ -77,16 +77,25 @@ func (es EnabledSet) build(lcfg *config.Linters, enabledByDefaultLinters []*lint
 	return resultLintersSet
 }
 
-func (es EnabledSet) Get(optimize bool) ([]*linter.Config, error) {
+func (es EnabledSet) GetEnabledLintersMap() (map[string]*linter.Config, error) {
+	if err := es.v.validateEnabledDisabledLintersConfig(&es.cfg.Linters); err != nil {
+		return nil, err
+	}
+
+	return es.build(&es.cfg.Linters, es.m.GetAllEnabledByDefaultLinters()), nil
+}
+
+// GetOptimizedLinters returns enabled linters after optimization (merging) of multiple linters
+// into a fewer number of linters. E.g. some go/analysis linters can be optimized into
+// one metalinter for data reuse and speed up.
+func (es EnabledSet) GetOptimizedLinters() ([]*linter.Config, error) {
 	if err := es.v.validateEnabledDisabledLintersConfig(&es.cfg.Linters); err != nil {
 		return nil, err
 	}
 
 	resultLintersSet := es.build(&es.cfg.Linters, es.m.GetAllEnabledByDefaultLinters())
 	es.verbosePrintLintersStatus(resultLintersSet)
-	if optimize {
-		es.combineGoAnalysisLinters(resultLintersSet)
-	}
+	es.combineGoAnalysisLinters(resultLintersSet)
 
 	var resultLinters []*linter.Config
 	for _, lc := range resultLintersSet {
@@ -95,7 +104,11 @@ func (es EnabledSet) Get(optimize bool) ([]*linter.Config, error) {
 
 	// Make order of execution of linters (go/analysis metalinter and unused) stable.
 	sort.Slice(resultLinters, func(i, j int) bool {
-		return strings.Compare(resultLinters[i].Name(), resultLinters[j].Name()) <= 0
+		a, b := resultLinters[i], resultLinters[j]
+		if a.DoesChangeTypes != b.DoesChangeTypes {
+			return b.DoesChangeTypes // move type-changing linters to the end to optimize speed
+		}
+		return strings.Compare(a.Name(), b.Name()) < 0
 	})
 
 	return resultLinters, nil

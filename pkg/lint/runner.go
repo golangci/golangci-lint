@@ -7,6 +7,8 @@ import (
 	"runtime/debug"
 	"strings"
 
+	"github.com/pkg/errors"
+
 	"github.com/golangci/golangci-lint/internal/errorutil"
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/fsutils"
@@ -27,7 +29,7 @@ type Runner struct {
 	Log        logutils.Log
 }
 
-func NewRunner(cfg *config.Config, log logutils.Log, goenv *goutil.Env,
+func NewRunner(cfg *config.Config, log logutils.Log, goenv *goutil.Env, es *lintersdb.EnabledSet,
 	lineCache *fsutils.LineCache, dbManager *lintersdb.Manager, pkgs []*gopackages.Package) (*Runner, error) {
 	icfg := cfg.Issues
 	excludePatterns := icfg.ExcludePatterns
@@ -77,11 +79,9 @@ func NewRunner(cfg *config.Config, log logutils.Log, goenv *goutil.Env,
 		excludeRulesProcessor = processors.NewExcludeRules(excludeRules, lineCache, log.Child("exclude_rules"))
 	}
 
-	enabledLintersSet := lintersdb.NewEnabledSet(dbManager,
-		lintersdb.NewValidator(dbManager), log.Child("enabledLinters"), cfg)
-	lcs, err := enabledLintersSet.Get(false)
+	enabledLinters, err := es.GetEnabledLintersMap()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "failed to get enabled linters")
 	}
 
 	return &Runner{
@@ -103,7 +103,7 @@ func NewRunner(cfg *config.Config, log logutils.Log, goenv *goutil.Env,
 
 			excludeProcessor,
 			excludeRulesProcessor,
-			processors.NewNolint(log.Child("nolint"), dbManager, lcs),
+			processors.NewNolint(log.Child("nolint"), dbManager, enabledLinters),
 
 			processors.NewUniqByLine(cfg),
 			processors.NewDiff(icfg.Diff, icfg.DiffFromRevision, icfg.DiffPatchFilePath),
@@ -131,14 +131,17 @@ func (r *Runner) runLinterSafe(ctx context.Context, lintCtx *linter.Context,
 		}
 	}()
 
-	specificLintCtx := *lintCtx
-	specificLintCtx.Log = r.Log.Child(lc.Name())
+	issues, err := lc.Linter.Run(ctx, lintCtx)
 
-	// Packages in lintCtx might be dirty due to the last analysis,
-	// which affects to the next analysis.
-	// To avoid this issue, we clear type information from the packages.
-	specificLintCtx.ClearTypesInPackages()
-	issues, err := lc.Linter.Run(ctx, &specificLintCtx)
+	if lc.DoesChangeTypes {
+		// Packages in lintCtx might be dirty due to the last analysis,
+		// which affects to the next analysis.
+		// To avoid this issue, we clear type information from the packages.
+		// See https://github.com/golangci/golangci-lint/pull/944.
+		// Currently DoesChangeTypes is true only for `unused`.
+		lintCtx.ClearTypesInPackages()
+	}
+
 	if err != nil {
 		return nil, err
 	}
