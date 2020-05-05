@@ -1,6 +1,7 @@
 package lintersdb
 
 import (
+	"os"
 	"sort"
 	"strings"
 
@@ -29,6 +30,7 @@ func NewEnabledSet(m *Manager, v *Validator, log logutils.Log, cfg *config.Confi
 }
 
 func (es EnabledSet) build(lcfg *config.Linters, enabledByDefaultLinters []*linter.Config) map[string]*linter.Config {
+	es.debugf("Linters config: %#v", lcfg)
 	resultLintersSet := map[string]*linter.Config{}
 	switch {
 	case len(lcfg.Presets) != 0:
@@ -82,7 +84,11 @@ func (es EnabledSet) GetEnabledLintersMap() (map[string]*linter.Config, error) {
 		return nil, err
 	}
 
-	return es.build(&es.cfg.Linters, es.m.GetAllEnabledByDefaultLinters()), nil
+	enabledLinters := es.build(&es.cfg.Linters, es.m.GetAllEnabledByDefaultLinters())
+	if os.Getenv("GL_TEST_RUN") == "1" {
+		es.verbosePrintLintersStatus(enabledLinters)
+	}
+	return enabledLinters, nil
 }
 
 // GetOptimizedLinters returns enabled linters after optimization (merging) of multiple linters

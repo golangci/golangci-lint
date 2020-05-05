@@ -99,9 +99,10 @@ func TestCgoOk(t *testing.T) {
 }
 
 func TestCgoWithIssues(t *testing.T) {
-	testshared.NewLintRunner(t).Run("--no-config", "--disable-all", "-Egovet", getTestDataDir("cgo_with_issues")).
+	r := testshared.NewLintRunner(t)
+	r.Run("--no-config", "--disable-all", "-Egovet", getTestDataDir("cgo_with_issues")).
 		ExpectHasIssue("Printf format %t has arg cs of wrong type")
-	testshared.NewLintRunner(t).Run("--no-config", "--disable-all", "-Estaticcheck", getTestDataDir("cgo_with_issues")).
+	r.Run("--no-config", "--disable-all", "-Estaticcheck", getTestDataDir("cgo_with_issues")).
 		ExpectHasIssue("SA5009: Printf format %t has arg #1 of wrong type")
 }
 
@@ -138,31 +139,32 @@ func TestLineDirectiveProcessedFilesFullLoading(t *testing.T) {
 }
 
 func TestLintFilesWithLineDirective(t *testing.T) {
-	testshared.NewLintRunner(t).Run("-Edupl", "--disable-all", "--config=testdata/linedirective/dupl.yml", getTestDataDir("linedirective")).
+	r := testshared.NewLintRunner(t)
+	r.Run("-Edupl", "--disable-all", "--config=testdata/linedirective/dupl.yml", getTestDataDir("linedirective")).
 		ExpectHasIssue("21-23 lines are duplicate of `testdata/linedirective/hello.go:25-27` (dupl)")
-	testshared.NewLintRunner(t).Run("-Egofmt", "--disable-all", "--no-config", getTestDataDir("linedirective")).
+	r.Run("-Egofmt", "--disable-all", "--no-config", getTestDataDir("linedirective")).
 		ExpectHasIssue("File is not `gofmt`-ed with `-s` (gofmt)")
-	testshared.NewLintRunner(t).Run("-Egoimports", "--disable-all", "--no-config", getTestDataDir("linedirective")).
+	r.Run("-Egoimports", "--disable-all", "--no-config", getTestDataDir("linedirective")).
 		ExpectHasIssue("File is not `goimports`-ed (goimports)")
-	testshared.NewLintRunner(t).
+	r.
 		Run("-Egomodguard", "--disable-all", "--config=testdata/linedirective/gomodguard.yml", getTestDataDir("linedirective")).
 		ExpectHasIssue("import of package `github.com/ryancurrah/gomodguard` is blocked because the module is not " +
 			"in the allowed modules list. (gomodguard)")
-	testshared.NewLintRunner(t).Run("-Eineffassign", "--disable-all", "--no-config", getTestDataDir("linedirective")).
+	r.Run("-Eineffassign", "--disable-all", "--no-config", getTestDataDir("linedirective")).
 		ExpectHasIssue("ineffectual assignment to `x` (ineffassign)")
-	testshared.NewLintRunner(t).Run("-Elll", "--disable-all", "--config=testdata/linedirective/lll.yml", getTestDataDir("linedirective")).
+	r.Run("-Elll", "--disable-all", "--config=testdata/linedirective/lll.yml", getTestDataDir("linedirective")).
 		ExpectHasIssue("line is 57 characters (lll)")
-	testshared.NewLintRunner(t).Run("-Emisspell", "--disable-all", "--no-config", getTestDataDir("linedirective")).
+	r.Run("-Emisspell", "--disable-all", "--no-config", getTestDataDir("linedirective")).
 		ExpectHasIssue("is a misspelling of `language` (misspell)")
-	testshared.NewLintRunner(t).Run("-Ewsl", "--disable-all", "--no-config", getTestDataDir("linedirective")).
+	r.Run("-Ewsl", "--disable-all", "--no-config", getTestDataDir("linedirective")).
 		ExpectHasIssue("block should not start with a whitespace (wsl)")
 }
 
 func TestSkippedDirsNoMatchArg(t *testing.T) {
 	dir := getTestDataDir("skipdirs", "skip_me", "nested")
-	r := testshared.NewLintRunner(t).Run("--print-issued-lines=false", "--no-config", "--skip-dirs", dir, "-Egolint", dir)
+	res := testshared.NewLintRunner(t).Run("--print-issued-lines=false", "--no-config", "--skip-dirs", dir, "-Egolint", dir)
 
-	r.ExpectExitCode(exitcodes.IssuesFound).
+	res.ExpectExitCode(exitcodes.IssuesFound).
 		ExpectOutputEq("testdata/skipdirs/skip_me/nested/with_issue.go:8:9: `if` block ends with " +
 			"a `return` statement, so drop this `else` and outdent its block (golint)\n")
 }

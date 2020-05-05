@@ -11,13 +11,13 @@ import (
 )
 
 func (e *Executor) initLinters() {
-	lintersCmd := &cobra.Command{
+	e.lintersCmd = &cobra.Command{
 		Use:   "linters",
 		Short: "List current linters configuration",
 		Run:   e.executeLinters,
 	}
-	e.rootCmd.AddCommand(lintersCmd)
-	e.initRunConfiguration(lintersCmd)
+	e.rootCmd.AddCommand(e.lintersCmd)
+	e.initRunConfiguration(e.lintersCmd)
 }
 
 func (e *Executor) executeLinters(_ *cobra.Command, args []string) {
