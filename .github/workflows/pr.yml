@@ -1,5 +1,5 @@
 ---
-name: PR build
+name: CI
 on:
   push:
     tags:
@@ -8,7 +8,20 @@ on:
       - master
   pull_request:
 jobs:
+  # We already run the current golangci-lint in tests, but here we test
+  # our GitHub action with the latest stable golangci-lint.
+  golangci-lint:
+    name: golangci-lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: lint
+        uses: golangci/golangci-lint-action@v0.1.3
+        with:
+          version: v1.26
+          github-token: ${{ secrets.GOLANGCI_LINT_TOKEN }}
   tests-on-windows:
+    needs: golangci-lint # run after golangci-lint action to not produce duplicated errors
     runs-on: windows-latest
     strategy:
       matrix:
@@ -25,6 +38,7 @@ jobs:
         run: make.exe test
         continue-on-error: true
   tests-on-unix:
+    needs: golangci-lint # run after golangci-lint action to not produce duplicated errors
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -49,6 +63,7 @@ jobs:
       - name: Run tests on Unix-like operating systems
         run: make test
   check_generated:
+    needs: golangci-lint # run after golangci-lint action to not produce duplicated errors
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

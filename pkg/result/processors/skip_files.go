@@ -16,6 +16,7 @@ var _ Processor = SkipFiles{}
 func NewSkipFiles(patterns []string) (*SkipFiles, error) {
 	var patternsRe []*regexp.Regexp
 	for _, p := range patterns {
+		p = normalizePathInRegex(p)
 		patternRe, err := regexp.Compile(p)
 		if err != nil {
 			return nil, fmt.Errorf("can't compile regexp %q: %s", p, err)

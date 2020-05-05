@@ -1,7 +1,6 @@
 # GolangCI-Lint
 
-[![Build Status](https://travis-ci.com/golangci/golangci-lint.svg?branch=master)](https://travis-ci.com/golangci/golangci-lint)
-[![GolangCI](https://golangci.com/badges/github.com/golangci/golangci-lint.svg)](https://golangci.com)
+![Build Status](https://github.com/golangci/golangci-lint/workflows/CI/badge.svg)
 [![License](https://img.shields.io/github/license/golangci/golangci-lint)](/LICENSE)
 [![Release](https://img.shields.io/github/release/golangci/golangci-lint.svg)](https://github.com/golangci/golangci-lint/releases/latest)
 [![Docker](https://img.shields.io/docker/pulls/golangci/golangci-lint)](https://hub.docker.com/r/golangci/golangci-lint)
@@ -44,6 +43,10 @@ Sponsored by [GolangCI.com](https://golangci.com): SaaS service for running lint
   - [Configuration](#configuration)
     - [Command-Line Options](#command-line-options)
     - [Config File](#config-file)
+  - [Custom Linters](#custom-linters)
+    - [Create a Copy of `golangci-lint` that Can Run with Plugins](#create-a-copy-of-golangci-lint-that-can-run-with-plugins)
+    - [Configure Your Project for Linting](#configure-your-project-for-linting)
+    - [To Create Your Own Custom Linter](#to-create-your-own-custom-linter)
   - [False Positives](#false-positives)
     - [Nolint](#nolint)
   - [FAQ](#faq)
