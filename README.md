@@ -1269,10 +1269,7 @@ By doing this you won't create new issues in your code and can choose fix existi
 
 **How to use `golangci-lint` in CI (Continuous Integration)?**
 
-You have 2 choices:
-
-1. Use [GolangCI](https://golangci.com): this service is highly integrated with GitHub (issues are commented in the pull request) and uses a `golangci-lint` tool. For configuration use `.golangci.yml` (or toml/json).
-2. Use custom CI: just run `golangci-lint` in CI and check the exit code. If it's non-zero - fail the build. The main disadvantage is that you can't see issues in pull request code and would need to view the build log, then open the referenced source file to see the context.
+Run `golangci-lint` in CI and check the exit code. If it's non-zero - fail the build.
 
 We don't recommend vendoring `golangci-lint` in your repo: you will get troubles updating `golangci-lint`. Please, use recommended way to install with the shell script: it's very fast.
 
