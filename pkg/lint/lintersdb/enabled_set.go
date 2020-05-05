@@ -85,6 +85,9 @@ func (es EnabledSet) GetEnabledLintersMap() (map[string]*linter.Config, error) {
 	return es.build(&es.cfg.Linters, es.m.GetAllEnabledByDefaultLinters()), nil
 }
 
+// GetOptimizedLinters returns enabled linters after optimization (merging) of multiple linters
+// into a fewer number of linters. E.g. some go/analysis linters can be optimized into
+// one metalinter for data reuse and speed up.
 func (es EnabledSet) GetOptimizedLinters() ([]*linter.Config, error) {
 	if err := es.v.validateEnabledDisabledLintersConfig(&es.cfg.Linters); err != nil {
 		return nil, err
