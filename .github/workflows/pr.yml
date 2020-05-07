@@ -16,10 +16,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: lint
-        uses: golangci/golangci-lint-action@v0.1.3
+        uses: golangci/golangci-lint-action@v0
         with:
           version: v1.26
-          github-token: ${{ secrets.GOLANGCI_LINT_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
   tests-on-windows:
     needs: golangci-lint # run after golangci-lint action to not produce duplicated errors
     runs-on: windows-latest
