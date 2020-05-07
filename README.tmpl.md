@@ -14,7 +14,7 @@ Follow the news and releases on our [twitter](https://twitter.com/golangci) and 
 
 Sponsored by [GolangCI.com](https://golangci.com): SaaS service for running linters on GitHub pull requests. Free for Open Source.
 
-<a href="https://golangci.com/"><img src="docs/go.png" width="250px"></a>
+<a href="https://golangci.com/"><img src="assets/go.png" width="250px"></a>
 
 - [GolangCI-Lint](#golangci-lint)
   - [Demo](#demo)
@@ -60,7 +60,7 @@ Sponsored by [GolangCI.com](https://golangci.com): SaaS service for running lint
 ## Demo
 
 <p align="center">
-  <img src="./docs/demo.svg" width="100%">
+  <img src="./assets/demo.svg" width="100%">
 </p>
 
 Short 1.5 min video demo of analyzing [beego](https://github.com/astaxie/beego).
