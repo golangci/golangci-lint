@@ -99,6 +99,7 @@ and is constantly being improved. For any problems with golangci-lint, check out
 You can also install a binary release on macOS using [brew](https://brew.sh/):
 
 ```bash
+brew tap golangci/tap
 brew install golangci/tap/golangci-lint
 brew upgrade golangci/tap/golangci-lint
 ```
