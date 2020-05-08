@@ -43,6 +43,14 @@ func NewUnused() *goanalysis.Linter {
 					To:   p.End.Line,
 				},
 			}
+
+			// Set LineRange.To to the same value as LineRange.From if
+			// the Problem End line does not represent a valid Position
+			// See https://github.com/golangci/golangci-lint/issues/979
+			if !p.End.IsValid() {
+				i.LineRange.To = p.Pos.Line
+			}
+
 			// See https://github.com/golangci/golangci-lint/issues/1048
 			// If range is invalid, this will break `--fix` mode.
 			if i.LineRange.To >= i.LineRange.From {
