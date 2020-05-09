@@ -555,7 +555,7 @@ Flags:
   -e, --exclude strings                Exclude issue by regexp
       --exclude-use-default            Use or not use default excludes:
                                          # EXC0001 errcheck: Almost all programs ignore errors on these functions and in most cases it's ok
-                                         - Error return value of .((os\.)?std(out|err)\..*|.*Close|.*Flush|os\.Remove(All)?|.*printf?|os\.(Un)?Setenv). is not checked
+                                         - Error return value of .((os\.)?std(out|err)\..*|.*Close|.*Flush|os\.Remove(All)?|.*print(f|ln)?|os\.(Un)?Setenv). is not checked
                                        
                                          # EXC0002 golint: Annoying issue about not having a comment. The rare codebase has such comments
                                          - (comment on exported (method|function|type|const)|should have( a package)? comment|comment should be of the form)
