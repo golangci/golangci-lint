@@ -50,7 +50,7 @@ func generate(ctx context.Context) error {
 
 type logInfo struct {
 	Warning string `json:",omitempty"`
-	Info    string `json:"omitempty"`
+	Info    string `json:",omitempty"`
 }
 
 type versionConfig struct {
