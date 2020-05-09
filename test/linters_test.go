@@ -19,7 +19,7 @@ func runGoErrchk(c *exec.Cmd, files []string, t *testing.T) {
 	output, err := c.CombinedOutput()
 	assert.Error(t, err)
 	_, ok := err.(*exec.ExitError)
-	assert.True(t, ok)
+	assert.True(t, ok, err)
 
 	// TODO: uncomment after deprecating go1.11
 	// assert.Equal(t, exitcodes.IssuesFound, exitErr.ExitCode())
@@ -48,9 +48,9 @@ func testSourcesFromDir(t *testing.T, dir string) {
 
 	for _, s := range sources {
 		s := s
-		t.Run(filepath.Base(s), func(t *testing.T) {
-			t.Parallel()
-			testOneSource(t, s)
+		t.Run(filepath.Base(s), func(subTest *testing.T) {
+			subTest.Parallel()
+			testOneSource(subTest, s)
 		})
 	}
 }
@@ -101,6 +101,7 @@ func saveConfig(t *testing.T, cfg map[string]interface{}) (cfgPath string, finis
 func testOneSource(t *testing.T, sourcePath string) {
 	args := []string{
 		"run",
+		"--allow-parallel-runners",
 		"--disable-all",
 		"--print-issued-lines=false",
 		"--print-linter-name=false",

@@ -150,6 +150,8 @@ type Run struct {
 	SkipFiles          []string `mapstructure:"skip-files"`
 	SkipDirs           []string `mapstructure:"skip-dirs"`
 	UseDefaultSkipDirs bool     `mapstructure:"skip-dirs-use-default"`
+
+	AllowParallelRunners bool `mapstructure:"allow-parallel-runners"`
 }
 
 type LintersSettings struct {

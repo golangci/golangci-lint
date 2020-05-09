@@ -106,6 +106,10 @@ func initFlagSet(fs *pflag.FlagSet, cfg *config.Config, m *lintersdb.Manager, is
 	fs.BoolVar(&rc.UseDefaultSkipDirs, "skip-dirs-use-default", true, getDefaultDirectoryExcludeHelp())
 	fs.StringSliceVar(&rc.SkipFiles, "skip-files", nil, wh("Regexps of files to skip"))
 
+	const allowParallelDesc = "Allow multiple parallel golangci-lint instances running. " +
+		"If false (default) - golangci-lint acquires file lock on start."
+	fs.BoolVar(&rc.AllowParallelRunners, "allow-parallel-runners", false, wh(allowParallelDesc))
+
 	// Linters settings config
 	lsc := &cfg.LintersSettings
 
@@ -251,6 +255,14 @@ func (e *Executor) initRun() {
 		Use:   "run",
 		Short: welcomeMessage,
 		Run:   e.executeRun,
+		PreRun: func(_ *cobra.Command, _ []string) {
+			if ok := e.acquireFileLock(); !ok {
+				e.log.Fatalf("Parallel golangci-lint is running")
+			}
+		},
+		PostRun: func(_ *cobra.Command, _ []string) {
+			e.releaseFileLock()
+		},
 	}
 	e.rootCmd.AddCommand(e.runCmd)
 

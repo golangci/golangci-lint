@@ -23,17 +23,12 @@ jobs:
   tests-on-windows:
     needs: golangci-lint # run after golangci-lint action to not produce duplicated errors
     runs-on: windows-latest
-    strategy:
-      matrix:
-        golang:
-          - 1.13
-          - 1.14
     steps:
       - uses: actions/checkout@v2
       - name: Install Go
         uses: actions/setup-go@v2
         with:
-          go-version: ${{ matrix.golang }}
+          go-version: 1.14 # test only the latest go version to speed up CI
       - name: Run tests on Windows
         run: make.exe test
         continue-on-error: true
@@ -47,7 +42,11 @@ jobs:
           - 1.14
         os:
           - ubuntu-latest
-          - macos-latest
+        include:
+          - os: macos-latest
+            # test only the one go version on Mac OS to speed up CI
+            # TODO: use the latet go version after https://github.com/golang/go/issues/38824
+            golang: 1.13
     steps:
       - uses: actions/checkout@v2
       - name: Install Go

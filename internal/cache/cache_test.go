@@ -20,6 +20,8 @@ func init() {
 }
 
 func TestBasic(t *testing.T) {
+	t.Parallel()
+
 	dir, err := ioutil.TempDir("", "cachetest-")
 	if err != nil {
 		t.Fatal(err)
@@ -65,6 +67,8 @@ func TestBasic(t *testing.T) {
 }
 
 func TestGrowth(t *testing.T) {
+	t.Parallel()
+
 	dir, err := ioutil.TempDir("", "cachetest-")
 	if err != nil {
 		t.Fatal(err)
@@ -151,6 +155,8 @@ func dummyID(x int) [HashSize]byte {
 }
 
 func TestCacheTrim(t *testing.T) {
+	t.Parallel()
+
 	dir, err := ioutil.TempDir("", "cachetest-")
 	if err != nil {
 		t.Fatal(err)

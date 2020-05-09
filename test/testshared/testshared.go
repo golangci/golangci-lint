@@ -5,7 +5,9 @@ import (
 	"os"
 	"os/exec"
 	"strings"
+	"sync"
 	"syscall"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 
@@ -14,10 +16,10 @@ import (
 )
 
 type LintRunner struct {
-	t         assert.TestingT
-	log       logutils.Log
-	env       []string
-	installed bool
+	t           assert.TestingT
+	log         logutils.Log
+	env         []string
+	installOnce sync.Once
 }
 
 func NewLintRunner(t assert.TestingT, environ ...string) *LintRunner {
@@ -31,17 +33,14 @@ func NewLintRunner(t assert.TestingT, environ ...string) *LintRunner {
 }
 
 func (r *LintRunner) Install() {
-	if r.installed {
-		return
-	}
+	r.installOnce.Do(func() {
+		if os.Getenv("GOLANGCI_LINT_INSTALLED") == "true" {
+			return
+		}
 
-	if os.Getenv("GOLANGCI_LINT_INSTALLED") == "true" {
-		return
-	}
-
-	cmd := exec.Command("make", "-C", "..", "build")
-	assert.NoError(r.t, cmd.Run(), "Can't go install golangci-lint")
-	r.installed = true
+		cmd := exec.Command("make", "-C", "..", "build")
+		assert.NoError(r.t, cmd.Run(), "Can't go install golangci-lint")
+	})
 }
 
 type RunResult struct {
@@ -82,10 +81,18 @@ func (r *RunResult) ExpectHasIssue(issueText string) *RunResult {
 }
 
 func (r *LintRunner) Run(args ...string) *RunResult {
+	newArgs := append([]string{"--allow-parallel-runners"}, args...)
+	return r.RunCommand("run", newArgs...)
+}
+
+func (r *LintRunner) RunCommand(command string, args ...string) *RunResult {
 	r.Install()
 
-	runArgs := append([]string{"run"}, args...)
-	r.log.Infof("../golangci-lint %s", strings.Join(runArgs, " "))
+	runArgs := append([]string{command}, args...)
+	defer func(startedAt time.Time) {
+		r.log.Infof("ran [../golangci-lint %s] in %s", strings.Join(runArgs, " "), time.Since(startedAt))
+	}(time.Now())
+
 	cmd := exec.Command("../golangci-lint", runArgs...)
 	cmd.Env = append(os.Environ(), r.env...)
 	out, err := cmd.CombinedOutput()
@@ -114,6 +121,11 @@ func (r *LintRunner) Run(args ...string) *RunResult {
 }
 
 func (r *LintRunner) RunWithYamlConfig(cfg string, args ...string) *RunResult {
+	newArgs := append([]string{"--allow-parallel-runners"}, args...)
+	return r.RunCommandWithYamlConfig(cfg, "run", newArgs...)
+}
+
+func (r *LintRunner) RunCommandWithYamlConfig(cfg, command string, args ...string) *RunResult {
 	f, err := ioutil.TempFile("", "golangci_lint_test")
 	assert.NoError(r.t, err)
 	f.Close()
@@ -133,5 +145,5 @@ func (r *LintRunner) RunWithYamlConfig(cfg string, args ...string) *RunResult {
 	assert.NoError(r.t, err)
 
 	pargs := append([]string{"-c", cfgPath}, args...)
-	return r.Run(pargs...)
+	return r.RunCommand(command, pargs...)
 }

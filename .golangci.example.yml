@@ -53,6 +53,10 @@ run:
   # the dependency descriptions in go.mod.
   modules-download-mode: readonly|release|vendor
 
+  # Allow multiple parallel golangci-lint instances running.
+  # If false (default) - golangci-lint acquires file lock on start.
+  allow-parallel-runners: false
+
 
 # output configuration options
 output:

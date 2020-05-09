@@ -546,6 +546,7 @@ Flags:
                                          - (^|/)builtin($|/)
                                         (default true)
       --skip-files strings             Regexps of files to skip
+      --allow-parallel-runners         Allow multiple parallel golangci-lint instances running. If false (default) - golangci-lint acquires file lock on start.
   -E, --enable strings                 Enable specific linter
   -D, --disable strings                Disable specific linter
       --disable-all                    Disable all linters
@@ -678,6 +679,10 @@ run:
   # directory holds the correct copies of dependencies and ignores
   # the dependency descriptions in go.mod.
   modules-download-mode: readonly|release|vendor
+
+  # Allow multiple parallel golangci-lint instances running.
+  # If false (default) - golangci-lint acquires file lock on start.
+  allow-parallel-runners: false
 
 
 # output configuration options
