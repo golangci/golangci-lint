@@ -1,0 +1,44 @@
+---
+title: Quick Start
+---
+
+To run golangci-lint execute:
+
+```bash
+golangci-lint run
+```
+
+It's an equivalent of executing:
+
+```bash
+golangci-lint run ./...
+```
+
+You can choose which directories and files to analyze:
+
+```bash
+golangci-lint run dir1 dir2/... dir3/file1.go
+```
+
+Directories are NOT analyzed recursively. To analyze them recursively append `/...` to their path.
+
+GolangCI-Lint can be used with zero configuration. By default the following linters are enabled:
+
+```bash
+$ golangci-lint help linters
+{.LintersCommandOutputEnabledOnly}
+```
+
+and the following linters are disabled by default:
+
+```bash
+$ golangci-lint help linters
+...
+{.LintersCommandOutputDisabledOnly}
+```
+
+Pass `-E/--enable` to enable linter and `-D/--disable` to disable:
+
+```bash
+golangci-lint run --disable-all -E errcheck
+```

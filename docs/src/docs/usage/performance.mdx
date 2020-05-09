@@ -1,0 +1,56 @@
+---
+title: Performance
+---
+
+## Memory Usage
+
+A trade-off between memory usage and execution time can be controlled by [`GOGC`](https://golang.org/pkg/runtime/#hdr-Environment_Variables) environment variable.
+Less `GOGC` values trigger garbage collection more frequently and golangci-lint consumes less memory and more CPU. Below is the trade-off table for running on this repo:
+
+| `GOGC`          | Peak Memory, GB | Executon Time, s |
+| --------------- | --------------- | ---------------- |
+| `5`             | 1.1             | 60               |
+| `10`            | 1.1             | 34               |
+| `20`            | 1.3             | 25               |
+| `30`            | 1.6             | 20.2             |
+| `50`            | 2.0             | 17.1             |
+| `80`            | 2.2             | 14.1             |
+| `100` (default) | 2.2             | 13.8             |
+| `off`           | 3.2             | 9.3              |
+
+## Why `golangci-lint` is so fast
+
+1. Work sharing
+   The key difference with gometalinter is that golangci-lint shares work between specific linters (golint, govet, ...).
+   We don't fork to call specific linter but use its API.
+   For small and medium projects 50-90% of work between linters can be reused.
+
+   - load `[]*packages.Package` by `go/packages` once
+
+     We load program (parsing all files and type-checking) only once for all linters. For the most of linters
+     it's the most heavy operation: it takes 5 seconds on 8 kLoC repo and 11 seconds on `$GOROOT/src`.
+
+   - build `ssa.Program` once
+
+     Some linters (megacheck, interfacer, unparam) work on SSA representation.
+     Building of this representation takes 1.5 seconds on 8 kLoC repo and 6 seconds on `$GOROOT/src`.
+
+   - parse source code and build AST once
+
+     Parsing one source file takes 200 us on average. Parsing of all files in `$GOROOT/src` takes 2 seconds.
+     Currently we parse each file more than once because it's not the bottleneck. But we already save a lot of
+     extra parsing. We're planning to parse each file only once.
+
+   - walk files and directories once
+
+     It takes 300-1000 ms for `$GOROOT/src`.
+
+2. Smart linters scheduling
+
+   We schedule linters by a special algorithm which takes estimated execution time into account. It allows
+   to save 10-30% of time when one of heavy linters (megacheck etc) is enabled.
+
+3. Don't fork to run shell commands
+
+All linters has their version fixed with go modules, they are builtin
+and you don't need to install them separately.

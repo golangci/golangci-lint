@@ -1,0 +1,56 @@
+---
+title: "Install"
+---
+
+## Binary
+
+Most installations are done for CI (e.g. Travis CI, CircleCI). It's important to have reproducible CI:
+don't start to fail all builds at the same time. With golangci-lint this can happen if you
+use deprecated option `--enable-all` and a new linter is added or even without `--enable-all`: when one upstream linter is upgraded.
+
+It's highly recommended to install a specific version of golangci-lint available on the [releases page](https://github.com/golangci/golangci-lint/releases).
+
+Here is the recommended way to install golangci-lint {.LatestVersion}:
+
+```bash
+# binary will be $(go env GOPATH)/bin/golangci-lint
+curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin {.LatestVersion}
+
+# or install it into ./bin/
+curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s {.LatestVersion}
+
+# In alpine linux (as it does not come with curl by default)
+wget -O- -nv https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s {.LatestVersion}
+
+golangci-lint --version
+```
+
+It is advised that you periodically update version of golangci-lint as the project is under active development
+and is constantly being improved. For any problems with golangci-lint, check out recent [GitHub issues](https://github.com/golangci/golangci-lint/issues) and update if needed.
+
+## macOS
+
+You can also install a binary release on macOS using [brew](https://brew.sh/):
+
+```bash
+brew install golangci/tap/golangci-lint
+brew upgrade golangci/tap/golangci-lint
+```
+
+## Docker
+
+```bash
+docker run --rm -v $(pwd):/app -w /app golangci/golangci-lint:{.LatestVersion} golangci-lint run -v
+```
+
+## Go
+
+Go source installations are supported for the two most recent Go releases.
+
+```bash
+go get github.com/golangci/golangci-lint/cmd/golangci-lint@{.LatestVersion}
+```
+
+## Next
+
+[Quick Start: how to use `golangci-lint`](/usage/quick-start).

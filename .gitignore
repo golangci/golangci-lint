@@ -13,3 +13,4 @@
 /tools/svg-term
 /.vscode/
 *.test
+.DS_Store

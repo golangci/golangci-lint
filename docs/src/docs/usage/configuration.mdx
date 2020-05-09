@@ -1,0 +1,48 @@
+---
+title: Configuration
+---
+
+The config file has lower priority than command-line options. If the same bool/string/int option is provided on the command-line
+and in the config file, the option from command-line will be used.
+Slice options (e.g. list of enabled/disabled linters) are combined from the command-line and config file.
+
+To see a list of enabled by your configuration linters:
+
+```bash
+golangci-lint linters
+```
+
+## Command-Line Options
+
+```bash
+golangci-lint run -h
+{.RunHelpText}
+```
+
+## Config File
+
+GolangCI-Lint looks for config files in the following paths from the current working directory:
+
+- `.golangci.yml`
+- `.golangci.toml`
+- `.golangci.json`
+
+GolangCI-Lint also searches for config files in all directories from the directory of the first analyzed path up to the root.
+To see which config file is being used and where it was sourced from run golangci-lint with `-v` option.
+
+Config options inside the file are identical to command-line options.
+You can configure specific linters' options only within the config file (not the command-line).
+
+There is a [`.golangci.example.yml`](https://github.com/golangci/golangci-lint/blob/master/.golangci.example.yml) example
+config file with all supported options, their description and default value:
+
+```yaml
+{ .GolangciYamlExample }
+```
+
+It's a [.golangci.yml](https://github.com/golangci/golangci-lint/blob/master/.golangci.yml) config file of this repo: we enable more linters
+than the default and have more strict settings:
+
+```yaml
+{ .GolangciYaml }
+```

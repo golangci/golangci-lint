@@ -2,13 +2,14 @@ Follow the news and releases on our [twitter](https://twitter.com/golangci) and 
 There is the most valuable changes log:
 
 ### May 2020
+
 1. Add new linters: `nolintlint`, `goerr113`
-2. Updated linters: `godot`
+2. Updated linters: `godot`, `staticcheck`
 
 ### April 2020
 
 1. Add new linters: `testpackage`, `nestif`, `godot`, `gomodguard`, `asciicheck`
-2. Add  github actions output format
+2. Add github actions output format
 3. Update linters: `wsl`, `gomodguard`, `gosec`
 4. Support `disabled-tags` setting for `gocritic`
 5. Mitigate OOM and "failed prerequisites"

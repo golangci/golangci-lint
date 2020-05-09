@@ -1,0 +1,62 @@
+
+<svg width="100px" height="100px" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 48.2 (47327) - http://www.bohemiancoding.com/sketch -->
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <circle id="path-1" cx="50" cy="50" r="50"></circle>
+        <linearGradient x1="48.6208546%" y1="50%" x2="51.1360013%" y2="50%" id="linearGradient-3">
+            <stop stop-color="#97EBF6" offset="0%"></stop>
+            <stop stop-color="#59C1CE" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="go">
+            <g id="logo__go__circle" fill="#17AFC2" fill-rule="nonzero">
+                <circle id="a" cx="50" cy="50" r="50"></circle>
+            </g>
+            <g id="logo__go__body">
+                <mask id="mask-2" fill="white">
+                    <use xlink:href="#path-1"></use>
+                </mask>
+                <g id="a"></g>
+                <g id="Group" mask="url(#mask-2)">
+                    <g transform="translate(16.000000, 20.000000)">
+                        <path d="M0.818,50.893 C0.953,53.683 3.728,52.391 4.988,51.52 C6.181,50.692 6.53,51.38 6.635,49.747 C6.703,48.673 6.827,47.6 6.765,46.522 C4.961,46.358 2.997,46.789 1.517,47.868 C0.755,48.424 -0.675,50.198 0.817,50.893" id="Shape" stroke="#178391" stroke-width="1.5" fill="#97EBF5" fill-rule="nonzero"></path>
+                        <path d="M0.818,50.893 C1.056,50.759 2.086,50.217 2.248,49.893" id="Shape" stroke="#178391" stroke-width="1" fill="#C6B198" fill-rule="nonzero"></path>
+                        <path d="M7.235,17.676 C-3.405,14.676 4.505,1.096 13.051,6.681 L7.236,17.677 L7.235,17.676 Z M54.51,5.662 C62.933,-0.272 70.544,13.117 60.756,16.485 L54.51,5.662 Z" id="Shape" stroke="#178391" stroke-width="1.5" fill="#97EBF5" fill-rule="nonzero"></path>
+                        <path d="M7.68,13.926 C6.275,13.181 5.245,12.169 6.104,10.541 C6.899,9.034 8.376,9.197 9.78,9.941 L7.68,13.927 L7.68,13.926 Z M59.538,12.51 C60.942,11.765 61.972,10.753 61.113,9.124 C60.318,7.616 58.841,7.78 57.437,8.524 L59.537,12.51 L59.538,12.51 Z" id="Shape" stroke="none" fill="#178391" fill-rule="nonzero"></path>
+                        <path d="M68.2,50.54 C68.067,53.328 65.29,52.037 64.032,51.166 C62.838,50.338 62.489,51.026 62.384,49.393 C62.316,48.319 62.192,47.246 62.254,46.168 C64.058,46.004 66.022,46.435 67.502,47.514 C68.264,48.07 69.694,49.844 68.202,50.539" id="Shape" stroke="#178391" stroke-width="1.5" fill="#97EBF5" fill-rule="nonzero"></path>
+                        <path d="M68.2,50.54 C67.797,50.388 66.524,49.904 66.25,49.538" id="Shape" stroke="#178391" stroke-width="1" fill="#C6B198" fill-rule="nonzero"></path>
+                        <path d="M63.011,47.897 C63.624,58.339 64.981,70.403 60.151,80.081 C55.071,90.263 42.376,92.824 31.916,92.449 C23.701,92.154 13.776,89.466 9.14,81.936 C3.7,73.102 6.274,59.968 6.67,50.138 C7.137,38.495 3.525,26.818 7.338,15.424 C11.294,3.604 21.962,0.934 33.443,0.024 C44.096,0.024 54.083,1.551 59.288,11.818 C63.96,23.325 62.298,35.734 63.011,47.897 Z" id="Shape" stroke="#178391" stroke-width="1.5" fill="#97EBF6" fill-rule="nonzero"></path>
+                        <path d="M35.324,16.367 C37.237,27.52 55.41,24.572 52.8,13.323 C50.46,3.236 34.688,6.028 35.324,16.367 Z M13.606,18.17 C16.086,27.88 31.582,25.395 30.998,15.655 C30.298,3.99 11.236,6.241 13.606,18.171 L13.606,18.17 Z M37.517,30.75 C37.525,32.2 37.845,33.83 37.572,35.37 C37.202,36.07 36.479,36.145 35.855,36.428 C34.992,36.292 34.265,35.723 33.92,34.914 C33.7,33.154 34.003,31.448 34.06,29.687 L37.517,30.751 L37.517,30.75 Z" id="Shape" stroke="#178391" stroke-width="1" fill="#FFFFFF" fill-rule="nonzero"></path>
+                        <g id="Group" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" transform="translate(15.580000, 13.684000)">
+                            <ellipse id="Oval" fill="#178391" fill-rule="nonzero" cx="2.704" cy="2.904" rx="2.617" ry="2.843"></ellipse>
+                            <ellipse id="Oval" fill="#FFFFFF" fill-rule="nonzero" cx="3.895" cy="3.546" rx="1" ry="1"></ellipse>
+                        </g>
+                        <g id="Group" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" transform="translate(37.560000, 12.976000)">
+                            <ellipse id="Oval" fill="#178391" fill-rule="nonzero" cx="2.748" cy="2.904" rx="2.573" ry="2.843"></ellipse>
+                            <ellipse id="Oval" fill="#FFFFFF" fill-rule="nonzero" cx="3.918" cy="3.546" rx="1" ry="1"></ellipse>
+                        </g>
+                        <path d="M30.038,30.593 C28.898,33.369 30.675,38.919 33.773,34.825 C33.551,33.065 33.856,31.36 33.911,29.598 L30.039,30.593 L30.038,30.593 Z" id="Shape" stroke="#178391" stroke-width="1" fill="#FFFFFF" fill-rule="nonzero"></path>
+                        <path d="M30.43,25.247 C28.3,25.429 26.56,27.967 27.668,29.975 C29.133,32.635 32.404,29.74 34.441,30.011 C36.786,30.061 38.707,32.499 40.591,30.453 C42.684,28.178 39.688,25.961 37.347,24.971 L30.43,25.248 L30.43,25.247 Z" id="Shape" stroke="#178391" stroke-width="1.2" fill="#97EBF5" fill-rule="nonzero"></path>
+                        <path d="M30.16,25.136 C30.004,21.438 37.033,20.976 37.863,24.071 C38.691,27.161 30.507,27.878 30.161,25.137 C29.886,22.947 30.161,25.137 30.161,25.137 L30.16,25.136 Z" id="Shape" stroke="none" fill="#168391" fill-rule="nonzero"></path>
+                    </g>
+                </g>
+            </g>
+            <g id="logo__go__shield" transform="translate(12.000000, 46.000000)" stroke="#036D7A">
+                <path d="M29,3.7420034 L29,32.8111955 L14.4442385,45 L0,32.8111955 L0,3.73968608 C0.452286685,3.75887778 0.910586619,3.76869038 1.37394334,3.76869038 C7.17954221,3.76869038 12.1912918,2.22824223 14.5278808,1.18988708e-11 C16.8644697,2.22824223 21.8762193,3.76869038 27.6818182,3.76869038 C28.1261432,3.76869038 28.5658182,3.75966731 29,3.7420034 Z" id="Combined-Shape" fill="url(#linearGradient-3)" stroke-linecap="square"></path>
+                <g id="bug" transform="translate(6.000000, 13.000000)">
+                    <polyline id="Line-4" stroke-linecap="square" transform="translate(2.769231, 14.153846) scale(-1, 1) translate(-2.769231, -14.153846) " points="1.38461538 12.3076923 3.34243128 13.483874 4.15384615 16"></polyline>
+                    <polyline id="Line-4" stroke-linecap="square" points="12.4615385 12.3076923 14.4193544 13.483874 15.2307692 16"></polyline>
+                    <polyline id="Line-2" stroke-linecap="square" points="13.8461538 8.61538462 16.3555308 8.61538462 18 11.0769231"></polyline>
+                    <ellipse id="Oval-2" cx="8.30769231" cy="8" rx="4.15384615" ry="8"></ellipse>
+                    <polyline id="Line-2" stroke-linecap="square" transform="translate(2.076923, 9.846154) scale(-1, 1) translate(-2.076923, -9.846154) " points="3.55271368e-15 8.61538462 2.50937698 8.61538462 4.15384615 11.0769231"></polyline>
+                    <polyline id="Line-3" stroke-linecap="square" points="12.4615385 3.69230769 15.4320542 2.9391728 16.6153846 1.23076923"></polyline>
+                    <polyline id="Line-3" stroke-linecap="square" transform="translate(2.076923, 2.461538) scale(-1, 1) translate(-2.076923, -2.461538) " points="0 3.69230769 2.97051577 2.9391728 4.15384615 1.23076923"></polyline>
+                    <path d="M6.04771997,1.23076923 C6.63033385,1.67380534 7.42794975,1.94692839 8.30769231,1.94692839 C9.18743487,1.94692839 9.98505076,1.67380534 10.5676646,1.23076923 C11.7076091,2.66247502 12.4615385,5.1458636 12.4615385,7.96967337 C12.4615385,12.4047003 10.6017982,16 8.30769231,16 C6.01358642,16 4.15384615,12.4047003 4.15384615,7.96967337 C4.15384615,5.1458636 4.90777549,2.66247502 6.04771997,1.23076923 Z" id="Combined-Shape"></path>
+                    <path d="M8.30769231,2.94505495 L8.30769231,15.5164835" id="Line-6" stroke-linecap="square"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,39 @@
+---
+title: Roadmap
+---
+
+## 💡 Feature Requests
+
+Please file an issue to suggest new features. Vote on feature requests by adding a 👍. This helps maintainers prioritize what to work on.
+
+[See Feature Requests](https://github.com/golangci/golangci-lint/issues?utf8=✓&q=is%3Aissue+is%3Aopen+sort%3Areactions-%2B1-desc+label%3Aenhancement)
+
+## 🐛 Bugs
+
+Please file an issue for bugs, missing documentation, or unexpected behavior.
+
+[See Bugs](https://github.com/golangci/golangci-lint/issues?utf8=✓&q=is%3Aissue+is%3Aopen+label%3A%22bug%22+sort%3Acreated-desc)
+
+## Thanks
+
+Thanks to all [contributors](https://github.com/golangci/golangci-lint/graphs/contributors)!
+Thanks to [alecthomas/gometalinter](https://github.com/alecthomas/gometalinter) for inspiration and amazing work.
+Thanks to [bradleyfalzon/revgrep](https://github.com/bradleyfalzon/revgrep) for cool diff tool.
+
+Thanks to developers and authors of used linters:
+{.ThanksList}
+
+## Changelog
+
+{.ChangeLog}
+
+## Future Plans
+
+1. Upstream all changes of forked linters.
+2. Make it easy to write own linter/checker: it should take a minimum code, have perfect documentation, debugging and testing tooling.
+3. Speed up SSA loading: on-disk cache and existing code profiling-optimizing.
+4. Analyze (don't only filter) only new code: analyze only changed files and dependencies, make incremental analysis, caches.
+5. Smart new issues detector: don't print existing issues on changed lines.
+6. Minimize false-positives by fixing linters and improving testing tooling.
+7. Automatic issues fixing (code rewrite, refactoring) where it's possible.
+8. Documentation for every issue type.
