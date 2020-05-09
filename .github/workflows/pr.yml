@@ -64,6 +64,9 @@ jobs:
   check_generated:
     needs: golangci-lint # run after golangci-lint action to not produce duplicated errors
     runs-on: ubuntu-latest
+    env:
+      # needed for github-action-config.json generation
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v2
       - name: Unshallow

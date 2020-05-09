@@ -42,14 +42,14 @@ test_linters:
 
 # Maintenance
 
-generate: README.md docs/demo.svg install.sh
+generate: README.md assets/demo.svg install.sh assets/github-action-config.json
 .PHONY: generate
 
 fast_generate: README.md
 .PHONY: fast_generate
 
 maintainer-clean: clean
-	rm -rf docs/demo.svg README.md install.sh
+	rm -rf assets/demo.svg README.md install.sh
 .PHONY: maintainer-clean
 
 check_generated:
@@ -92,14 +92,17 @@ tools/svg-term: tools/package.json tools/package-lock.json
 tools/Dracula.itermcolors:
 	curl -fL -o $@ https://raw.githubusercontent.com/dracula/iterm/master/Dracula.itermcolors
 
-docs/demo.svg: tools/svg-term tools/Dracula.itermcolors
-	./tools/svg-term --cast=183662 --out docs/demo.svg --window --width 110 --height 30 --from 2000 --to 20000 --profile ./tools/Dracula.itermcolors --term iterm2
+assets/demo.svg: tools/svg-term tools/Dracula.itermcolors
+	./tools/svg-term --cast=183662 --out assets/demo.svg --window --width 110 --height 30 --from 2000 --to 20000 --profile ./tools/Dracula.itermcolors --term iterm2
 
 install.sh: .goreleaser.yml tools/godownloader
 	./tools/godownloader .goreleaser.yml | sed '/DO NOT EDIT/s/ on [0-9TZ:-]*//' > $@
 
 README.md: FORCE golangci-lint
 	go run ./scripts/gen_readme/main.go
+
+assets/github-action-config.json: FORCE golangci-lint
+	go run ./scripts/gen_github_action_config/main.go $@
 
 go.mod: FORCE
 	go mod tidy
