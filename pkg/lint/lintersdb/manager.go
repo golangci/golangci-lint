@@ -255,6 +255,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithURL("https://github.com/tommy-muehle/go-mnd"),
 		linter.NewConfig(golinters.NewGoerr113()).
 			WithPresets(linter.PresetStyle).
+			WithLoadForGoAnalysis().
 			WithURL("https://github.com/Djarvur/go-err113"),
 		linter.NewConfig(golinters.NewGomodguard()).
 			WithPresets(linter.PresetStyle).
