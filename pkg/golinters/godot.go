@@ -43,10 +43,9 @@ func NewGodot() *goanalysis.Linter {
 			res := make([]goanalysis.Issue, len(issues))
 			for k, i := range issues {
 				issue := result.Issue{
-					Pos:         i.Pos,
-					Text:        i.Message,
-					FromLinter:  godotName,
-					Replacement: &result.Replacement{},
+					Pos:        i.Pos,
+					Text:       i.Message,
+					FromLinter: godotName,
 				}
 
 				res[k] = goanalysis.NewIssue(&issue, pass)
