@@ -76,17 +76,17 @@ use deprecated option `--enable-all` and a new linter is added or even without `
 
 It's highly recommended to install a specific version of golangci-lint available on the [releases page](https://github.com/golangci/golangci-lint/releases).
 
-Here is the recommended way to install golangci-lint v1.26.0:
+Here is the recommended way to install golangci-lint v1.27.0:
 
 ```bash
 # binary will be $(go env GOPATH)/bin/golangci-lint
-curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.26.0
+curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.27.0
 
 # or install it into ./bin/
-curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.26.0
+curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.27.0
 
 # In alpine linux (as it does not come with curl by default)
-wget -O- -nv https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.26.0
+wget -O- -nv https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.27.0
 
 golangci-lint --version
 ```
@@ -106,7 +106,7 @@ brew upgrade golangci/tap/golangci-lint
 ### Docker
 
 ```bash
-docker run --rm -v $(pwd):/app -w /app golangci/golangci-lint:v1.26.0 golangci-lint run -v
+docker run --rm -v $(pwd):/app -w /app golangci/golangci-lint:v1.27.0 golangci-lint run -v
 ```
 
 ### Go
@@ -114,7 +114,7 @@ docker run --rm -v $(pwd):/app -w /app golangci/golangci-lint:v1.26.0 golangci-l
 Go source installations are supported for the two most recent Go releases.
 
 ```bash
-GO111MODULE=on go get github.com/golangci/golangci-lint/cmd/golangci-lint@v1.26.0
+GO111MODULE=on go get github.com/golangci/golangci-lint/cmd/golangci-lint@v1.27.0
 ```
 
 ## Trusted By
