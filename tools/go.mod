@@ -8,4 +8,4 @@ require (
 )
 
 // Fix invalid pseudo-version: revision is longer than canonical (6fd6a9bfe14e)
-replace github.com/go-macaron/cors => github.com/go-macaron/cors v0.0.0-20190418220122-6fd6a9bfe14e
+replace github.com/go-macaron/cors => github.com/go-macaron/cors v0.0.0-20190925001837-b0274f40d4c7
