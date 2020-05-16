@@ -6,7 +6,7 @@ require (
 	github.com/Djarvur/go-err113 v0.0.0-20200511133814-5174e21577d5
 	github.com/OpenPeeDeeP/depguard v1.0.1
 	github.com/bombsimon/wsl/v3 v3.0.0
-	github.com/fatih/color v1.7.0
+	github.com/fatih/color v1.9.0
 	github.com/go-critic/go-critic v0.4.1
 	github.com/go-lintpack/lintpack v0.5.2
 	github.com/gofrs/flock v0.0.0-20190320160742-5135e617513b
