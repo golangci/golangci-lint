@@ -74,5 +74,5 @@ jobs:
         uses: actions/setup-go@v2
         with:
           go-version: 1.14
-      - name: Check if README.md is up to date
-        run: make check_generated
+      - name: Check generated files are up to date
+        run: make fast_check_generated
