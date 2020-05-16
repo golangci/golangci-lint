@@ -1,3 +1,4 @@
 {
-  "ignorePaths": ["docs/**"]
+  "ignorePaths": ["docs/**"],
+  "labels": ["dependency"]
 }
