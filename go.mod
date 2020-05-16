@@ -55,5 +55,5 @@ require (
 	honnef.co/go/tools v0.0.1-2020.1.3
 	mvdan.cc/interfacer v0.0.0-20180901003855-c20040233aed
 	mvdan.cc/lint v0.0.0-20170908181259-adc824a0674b // indirect
-	mvdan.cc/unparam v0.0.0-20190720180237-d51796306d8f
+	mvdan.cc/unparam v0.0.0-20200501210554-b37ab49443f7
 )
