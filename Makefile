@@ -41,11 +41,17 @@ test_linters:
 # Maintenance
 
 generate: install.sh assets/github-action-config.json
-.PHONY: generate
+fast_generate: assets/github-action-config.json
+.PHONY: generate fast_generate
 
 maintainer-clean: clean
 	rm -rf install.sh
 .PHONY: maintainer-clean
+
+fast_check_generated:
+	$(MAKE) --always-make fast_generate
+	git checkout -- go.mod go.sum # can differ between go1.12 and go1.13
+	git diff --exit-code # check no changes
 
 check_generated:
 	$(MAKE) --always-make generate
