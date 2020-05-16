@@ -32,7 +32,7 @@
     "gatsby-starter"
   ],
   "scripts": {
-    "build": "gatsby build",
+    "build": "make -C .. expand_website_templates && gatsby build",
     "start": "gatsby develop",
     "serve": "gatsby serve",
     "clean": "gatsby clean"
