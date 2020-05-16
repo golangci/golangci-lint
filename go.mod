@@ -3,7 +3,7 @@ module github.com/golangci/golangci-lint
 go 1.12
 
 require (
-	github.com/Djarvur/go-err113 v0.0.0-20200410182137-af658d038157
+	github.com/Djarvur/go-err113 v0.0.0-20200511133814-5174e21577d5
 	github.com/OpenPeeDeeP/depguard v1.0.1
 	github.com/bombsimon/wsl/v3 v3.0.0
 	github.com/fatih/color v1.7.0
