@@ -1,8 +1,6 @@
 .DEFAULT_GOAL = test
 .PHONY: FORCE
 
-# enable module support across all go commands.
-export GO111MODULE = on
 # enable consistent Go 1.12/1.13 GOPROXY behavior.
 export GOPROXY = https://proxy.golang.org
 
@@ -42,14 +40,11 @@ test_linters:
 
 # Maintenance
 
-generate: README.md assets/demo.svg install.sh assets/github-action-config.json
+generate: install.sh assets/github-action-config.json
 .PHONY: generate
 
-fast_generate: README.md
-.PHONY: fast_generate
-
 maintainer-clean: clean
-	rm -rf assets/demo.svg README.md install.sh
+	rm -rf install.sh
 .PHONY: maintainer-clean
 
 check_generated:
@@ -57,12 +52,6 @@ check_generated:
 	git checkout -- go.mod go.sum # can differ between go1.12 and go1.13
 	git diff --exit-code # check no changes
 .PHONY: check_generated
-
-fast_check_generated:
-	$(MAKE) --always-make fast_generate
-	git checkout -- go.mod go.sum # can differ between go1.12 and go1.13
-	git diff --exit-code # check no changes
-.PHONY: fast_check_generated
 
 release: .goreleaser.yml tools/goreleaser
 	./tools/goreleaser
@@ -85,21 +74,21 @@ tools/goreleaser: export GOFLAGS = -mod=readonly
 tools/goreleaser: tools/go.mod tools/go.sum
 	cd tools && go build github.com/goreleaser/goreleaser
 
+# TODO: migrate to docs/
 tools/svg-term: tools/package.json tools/package-lock.json
 	cd tools && npm ci
 	ln -sf node_modules/.bin/svg-term $@
 
+# TODO: migrate to docs/
 tools/Dracula.itermcolors:
 	curl -fL -o $@ https://raw.githubusercontent.com/dracula/iterm/master/Dracula.itermcolors
 
+# TODO: migrate to docs/
 assets/demo.svg: tools/svg-term tools/Dracula.itermcolors
 	./tools/svg-term --cast=183662 --out assets/demo.svg --window --width 110 --height 30 --from 2000 --to 20000 --profile ./tools/Dracula.itermcolors --term iterm2
 
 install.sh: .goreleaser.yml tools/godownloader
 	./tools/godownloader .goreleaser.yml | sed '/DO NOT EDIT/s/ on [0-9TZ:-]*//' > $@
-
-README.md: FORCE golangci-lint
-	go run ./scripts/gen_readme/main.go
 
 assets/github-action-config.json: FORCE golangci-lint
 	go run ./scripts/gen_github_action_config/main.go $@

@@ -1,0 +1,34 @@
+# Sidebar navigation
+
+- label: "Introduction"
+  link: "/"
+- label: Usage
+  items:
+    - label: "Install"
+      link: "/usage/install/"
+    - label: "Quick Start"
+      link: "/usage/quick-start/"
+    - label: "Integrations"
+      link: "/usage/integrations/"
+    - label: "Linters"
+      link: "/usage/linters/"
+    - label: "Configuration"
+      link: "/usage/configuration/"
+    - label: "False Positives"
+      link: "/usage/false-positives/"
+    - label: "FAQ"
+      link: "/usage/faq/"
+    - label: "Performance"
+      link: "/usage/performance/"
+    - label: "Debug"
+      link: "/usage/debug/"
+- label: Product
+  items:
+    - label: "Roadmap"
+      link: "/product/roadmap/"
+    - label: "GitHub"
+      link: "https://github.com/golangci/golangci-lint"
+    - label: "Trusted By"
+      link: "/product/trusted-by/"
+    - label: "Comparison"
+      link: "/product/comparison/"

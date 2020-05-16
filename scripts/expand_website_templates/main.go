@@ -2,44 +2,125 @@ package main
 
 import (
 	"bytes"
+	"crypto/sha256"
+	"encoding/hex"
+	"encoding/json"
+	"flag"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strings"
-	"text/template"
+
+	"github.com/golangci/golangci-lint/internal/renameio"
 
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
 )
 
-func main() {
-	const (
-		tmplPath = "README.tmpl.md"
-		outPath  = "README.md"
-	)
+var stateFilePath = filepath.Join("docs", "template_data.state")
 
-	if err := genReadme(tmplPath, outPath); err != nil {
-		log.Fatalf("failed: %s", err)
+func main() {
+	var onlyWriteState bool
+	flag.BoolVar(&onlyWriteState, "only-state", false, fmt.Sprintf("Only write hash of state to %s and exit", stateFilePath))
+	flag.Parse()
+
+	replacements, err := buildTemplateContext()
+	if err != nil {
+		log.Fatalf("Failed to build template context: %s", err)
 	}
-	log.Printf("Successfully generated %s", outPath)
+
+	if err = updateStateFile(replacements); err != nil {
+		log.Fatalf("Failed to update state file: %s", err)
+	}
+
+	if onlyWriteState {
+		return
+	}
+
+	if err := rewriteDocs(replacements); err != nil {
+		log.Fatalf("Failed to rewrite docs: %s", err)
+	}
+	log.Printf("Successfully expanded templates")
 }
 
-func genReadme(tmplPath, outPath string) error {
-	ctx, err := buildTemplateContext()
+func updateStateFile(replacements map[string]string) error {
+	replBytes, err := json.Marshal(replacements)
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to json marshal replacements: %w", err)
 	}
 
-	out, err := os.Create(outPath)
-	if err != nil {
-		return err
-	}
-	defer out.Close()
+	h := sha256.New()
+	h.Write(replBytes) //nolint:errcheck
 
-	tmpl := template.Must(template.ParseFiles(tmplPath))
-	return tmpl.Execute(out, ctx)
+	var contentBuf bytes.Buffer
+	contentBuf.WriteString("This file stores hash of website templates to trigger " +
+		"Netlify rebuild when something changes, e.g. new linter is added.\n")
+	contentBuf.WriteString(hex.EncodeToString(h.Sum(nil)))
+
+	return renameio.WriteFile(stateFilePath, contentBuf.Bytes(), os.ModePerm)
+}
+
+func rewriteDocs(replacements map[string]string) error {
+	madeReplacements := map[string]bool{}
+	err := filepath.Walk(filepath.Join("docs", "src", "docs"),
+		func(path string, info os.FileInfo, err error) error {
+			if err != nil {
+				return err
+			}
+			if info.IsDir() {
+				return nil
+			}
+			return processDoc(path, replacements, madeReplacements)
+		})
+	if err != nil {
+		return fmt.Errorf("failed to walk dir: %w", err)
+	}
+
+	if len(madeReplacements) != len(replacements) {
+		for key := range replacements {
+			if !madeReplacements[key] {
+				log.Printf("Replacement %q wasn't performed", key)
+			}
+		}
+		return fmt.Errorf("%d replacements weren't performed", len(replacements)-len(madeReplacements))
+	}
+	return nil
+}
+
+func processDoc(path string, replacements map[string]string, madeReplacements map[string]bool) error {
+	contentBytes, err := ioutil.ReadFile(path)
+	if err != nil {
+		return fmt.Errorf("failed to read %s: %w", path, err)
+	}
+
+	content := string(contentBytes)
+	hasReplacements := false
+	for key, replacement := range replacements {
+		nextContent := content
+		nextContent = strings.ReplaceAll(nextContent, fmt.Sprintf("{.%s}", key), replacement)
+
+		// Yaml formatter in mdx code section makes extra spaces, need to match them too.
+		nextContent = strings.ReplaceAll(nextContent, fmt.Sprintf("{ .%s }", key), replacement)
+
+		if nextContent != content {
+			hasReplacements = true
+			madeReplacements[key] = true
+			content = nextContent
+		}
+	}
+	if !hasReplacements {
+		return nil
+	}
+
+	log.Printf("Expanded template in %s, saving it", path)
+	if err = renameio.WriteFile(path, []byte(content), os.ModePerm); err != nil {
+		return fmt.Errorf("failed to write changes to file %s: %w", path, err)
+	}
+
+	return nil
 }
 
 func getLatestVersion() (string, error) {
@@ -56,7 +137,7 @@ func getLatestVersion() (string, error) {
 	return string(lines[0]), nil
 }
 
-func buildTemplateContext() (map[string]interface{}, error) {
+func buildTemplateContext() (map[string]string, error) {
 	golangciYaml, err := ioutil.ReadFile(".golangci.yml")
 	if err != nil {
 		return nil, fmt.Errorf("can't read .golangci.yml: %s", err)
@@ -98,7 +179,7 @@ func buildTemplateContext() (map[string]interface{}, error) {
 		return nil, fmt.Errorf("failed to get latest version: %s", err)
 	}
 
-	return map[string]interface{}{
+	return map[string]string{
 		"GolangciYaml":                     strings.TrimSpace(string(golangciYaml)),
 		"GolangciYamlExample":              strings.TrimSpace(string(golangciYamlExample)),
 		"LintersCommandOutputEnabledOnly":  string(lintersOutParts[0]),
