@@ -97,3 +97,7 @@ go.mod: FORCE
 	go mod tidy
 	go mod verify
 go.sum: go.mod
+
+expand_website_templates:
+	go run ./scripts/expand_website_templates/main.go
+.PHONY: expand_website_templates
