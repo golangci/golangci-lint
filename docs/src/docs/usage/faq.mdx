@@ -7,20 +7,16 @@ title: FAQ
 You can integrate it yourself, see this [manual](/usage/linters#how-to-add-a-linter-to-golangci-lint-).
 Or you can create a [GitHub Issue](https://github.com/golangci/golangci-lint/issues/new) and we will integrate when time permits.
 
-## It's cool to use `golangci-lint` when starting a project, but what about existing projects with large codebase? It will take days to fix all found issues
+## How to integrate `golangci-lint` into large project with thousands of issues
 
 We are sure that every project can easily integrate `golangci-lint`, even the large one. The idea is to not fix all existing issues. Fix only newly added issue: issues in new code. To do this setup CI (or better use [GolangCI](https://golangci.com)) to run `golangci-lint` with option `--new-from-rev=HEAD~1`. Also, take a look at option `--new`, but consider that CI scripts that generate unstaged files will make `--new` only point out issues in those files and not in the last commit. In that regard `--new-from-rev=HEAD~1` is safer.
 By doing this you won't create new issues in your code and can choose fix existing issues (or not).
 
-## How to use `golangci-lint` in CI (Continuous Integration)?
+## How to use `golangci-lint` in CI
 
 Run `golangci-lint` in CI and check the exit code. If it's non-zero - fail the build.
 
-We don't recommend vendoring `golangci-lint` in your repo: you will get troubles updating `golangci-lint`. Please, use recommended way to install with the shell script: it's very fast.
-
-## Do I need to run `go install`?
-
-No, you don't need to do it anymore.
+See [how to properly install `golangci-lint` in CI](/usage/install#ci-installation)
 
 ## Which go versions are supported
 
@@ -40,7 +36,7 @@ Long answer:
 2. Run it with `-v` option and check the output.
 3. If it doesn't help create a [GitHub issue](https://github.com/golangci/golangci-lint/issues/new) with the output from the error and #2 above.
 
-## Why running with `--fast` is slow on the first run?
+## Why running with `--fast` is slow on the first run
 
 Because the first run caches type information. All subsequent runs will be fast.
 Usually this options is used during development on local machine and compilation was already performed.

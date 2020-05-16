@@ -1,0 +1,316 @@
+---
+title: Architecture
+---
+
+import ResponsiveContainer from "components/ResponsiveContainer";
+
+There are the following `golangci-lint` execution steps:
+
+<ResponsiveContainer>
+
+```mermaid
+graph LR
+    init[Init]
+    loadPackages[Load packages]
+    runLinters[Run linters]
+    postprocess[Postprocess issues]
+    print[Print issues]
+
+    init --> loadPackages --> runLinters --> postprocess --> print
+
+```
+
+</ResponsiveContainer>
+
+## Init
+
+The execution starts here:
+
+```go title=cmd/golangci-lint/main.go
+func main() {
+	e := commands.NewExecutor(version, commit, date)
+
+	if err := e.Execute(); err != nil {
+		fmt.Fprintf(os.Stderr, "failed executing command with error %v\n", err)
+		os.Exit(exitcodes.Failure)
+	}
+}
+```
+
+The **executer** is our abstraction:
+
+```go title=pkg/commands/executor.go
+type Executor struct {
+	rootCmd    *cobra.Command
+	runCmd     *cobra.Command
+	lintersCmd *cobra.Command
+
+	exitCode              int
+
+	cfg               *config.Config
+	log               logutils.Log
+	reportData        report.Data
+	DBManager         *lintersdb.Manager
+	EnabledLintersSet *lintersdb.EnabledSet
+	contextLoader     *lint.ContextLoader
+	goenv             *goutil.Env
+	fileCache         *fsutils.FileCache
+	lineCache         *fsutils.LineCache
+	pkgCache          *pkgcache.Cache
+	debugf            logutils.DebugFunc
+	sw                *timeutils.Stopwatch
+
+	loadGuard *load.Guard
+	flock     *flock.Flock
+}
+```
+
+We use dependency injection and all root dependencies are stored in this executor.
+
+In the function `NewExecutor` we do the following:
+
+1. init dependencies
+2. init [cobra](https://github.com/spf13/cobra) commands
+3. parse config file using [viper](https://github.com/spf13/viper) and merge it with command line args.
+
+The following execution is controlled by `cobra`. If user a user executes `golangci-lint run`
+then `cobra` executes `e.runCmd`.
+
+Different `cobra` commands have different runners, e.g. a `run` command is configured in the following way:
+
+```go title=pkg/commands/run.go
+func (e *Executor) initRun() {
+	e.runCmd = &cobra.Command{
+		Use:   "run",
+		Short: welcomeMessage,
+		Run:   e.executeRun,
+		PreRun: func(_ *cobra.Command, _ []string) {
+			if ok := e.acquireFileLock(); !ok {
+				e.log.Fatalf("Parallel golangci-lint is running")
+			}
+		},
+		PostRun: func(_ *cobra.Command, _ []string) {
+			e.releaseFileLock()
+		},
+	}
+	e.rootCmd.AddCommand(e.runCmd)
+	e.runCmd.SetOutput(logutils.StdOut) // use custom output to properly color it in Windows terminals
+	e.initRunConfiguration(e.runCmd)
+}
+```
+
+The primary execution function of the `run` command is `executeRun`.
+
+## Load Packages
+
+Loading packages is listing all packages and their recursive dependencies for analysis.
+Also, depending from enabled linters set some parsing of a source code can be performed
+at this step.
+
+Packages loading stars here:
+
+```go title=pkg/lint/load.go
+func (cl *ContextLoader) Load(ctx context.Context, linters []*linter.Config) (*linter.Context, error) {
+	loadMode := cl.findLoadMode(linters)
+	pkgs, err := cl.loadPackages(ctx, loadMode)
+	if err != nil {
+		return nil, err
+	}
+
+    // ...
+    ret := &linter.Context{
+        // ...
+    }
+	return ret, nil
+}
+```
+
+First, we find a load mode as union of load modes for all enabled linters.
+We use [go/packages](https://godoc.org/golang.org/x/tools/go/packages) for packages loading and use it's enum `packages.Need*` for load modes.
+Load mode sets which data does a linter needs for execution.
+
+A linter that works only with AST need minimum of information: only filenames and AST. There is no need for
+packages dependencies or type information. AST is built during `go/analysis` execution to reduce memory usage.
+Such AST-based linters are configured with the following code:
+
+```go title=pkg/lint/linter/config.go
+func (lc *Config) WithLoadFiles() *Config {
+	lc.LoadMode |= packages.NeedName | packages.NeedFiles | packages.NeedCompiledGoFiles
+	return lc
+}
+```
+
+If a linter uses `go/analysis` and needs type information, we need to extract more data by `go/packages`:
+
+```go title=/pkg/lint/linter/config.go
+func (lc *Config) WithLoadForGoAnalysis() *Config {
+	lc = lc.WithLoadFiles()
+	lc.LoadMode |= packages.NeedImports | packages.NeedDeps | packages.NeedExportsFile | packages.NeedTypesSizes
+	return lc
+}
+```
+
+After finding a load mode we run `go/packages`: the library get list of dirs (or `./...` as the default value) as input
+and outputs list of packages and requested information about them: filenames, type information, AST, etc.
+
+## Run Linters
+
+First, we need to find all enaled linters. All linters are registered here:
+
+```go title=pkg/lint/lintersdb/manager.go
+func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
+    // ...
+	lcs := []*linter.Config{
+		linter.NewConfig(golinters.NewGovet(govetCfg)).
+			WithLoadForGoAnalysis().
+			WithPresets(linter.PresetBugs).
+			WithAlternativeNames("vet", "vetshadow").
+			WithURL("https://golang.org/cmd/vet/"),
+		linter.NewConfig(golinters.NewBodyclose()).
+			WithLoadForGoAnalysis().
+			WithPresets(linter.PresetPerformance, linter.PresetBugs).
+            WithURL("https://github.com/timakin/bodyclose"),
+        // ...
+    }
+    // ...
+}
+```
+
+We filter requested in config and command-line linters in `EnabledSet`:
+
+```go title=pkg/lint/lintersdb/enabled_set.go
+func (es EnabledSet) GetEnabledLintersMap() (map[string]*linter.Config, error)
+```
+
+We merge enabled linters into one `MetaLinter` to improve execution time if we can:
+
+```go title=pkg/lint/lintersdb/enabled_set.go
+// GetOptimizedLinters returns enabled linters after optimization (merging) of multiple linters
+// into a fewer number of linters. E.g. some go/analysis linters can be optimized into
+// one metalinter for data reuse and speed up.
+func (es EnabledSet) GetOptimizedLinters() ([]*linter.Config, error) {
+    // ...
+    es.combineGoAnalysisLinters(resultLintersSet)
+    // ...
+}
+```
+
+The `MetaLinter` just stores all merged linters inside to run them at once:
+
+```go title=pkg/golinters/goanalysis/metalinter.go
+type MetaLinter struct {
+	linters              []*Linter
+	analyzerToLinterName map[*analysis.Analyzer]string
+}
+```
+
+Currently, all linters except `unused` can be merged into this meta linter.
+The `unused` isn't merged because it has high memory usage.
+
+Linters execution starts in `runAnalyzers`. It's the most complex part of the `golangci-lint`.
+We use custom [go/analysis](https://godoc.org/golang.org/x/tools/go/analysis) runner there. It runs as much as it can in parallel. It lazy-loads as much as it can
+to reduce memory usage. Also, it set all heavyweight data to `nil` as becomes unneeded to save memory.
+
+We don't use existing [multichecker](https://godoc.org/golang.org/x/tools/go/analysis/multichecker) because
+it doesn't use caching and doesn't have some important performance optimizations.
+
+All found by linters issues are represented with `result.Issue` struct:
+
+```go title=pkg/result/issue.go
+type Issue struct {
+	FromLinter string
+	Text       string
+
+	// Source lines of a code with the issue to show
+	SourceLines []string
+
+	// If we know how to fix the issue we can provide replacement lines
+	Replacement *Replacement
+
+	// Pkg is needed for proper caching of linting results
+	Pkg *packages.Package `json:"-"`
+
+	LineRange *Range `json:",omitempty"`
+
+	Pos token.Position
+
+	// HunkPos is used only when golangci-lint is run over a diff
+	HunkPos int `json:",omitempty"`
+
+	// If we are expecting a nolint (because this is from nolintlint), record the expected linter
+	ExpectNoLint         bool
+	ExpectedNoLintLinter string
+}
+```
+
+## Postprocess Issues
+
+We have an abstraction of `result.Processor` to postprocess found issues:
+
+```bash
+$ tree -L 1 ./pkg/result/processors/
+./pkg/result/processors/
+├── autogenerated_exclude.go
+├── autogenerated_exclude_test.go
+├── cgo.go
+├── diff.go
+├── exclude.go
+├── exclude_rules.go
+├── exclude_rules_test.go
+├── exclude_test.go
+├── filename_unadjuster.go
+├── fixer.go
+├── identifier_marker.go
+├── identifier_marker_test.go
+├── max_from_linter.go
+├── max_from_linter_test.go
+├── max_per_file_from_linter.go
+├── max_per_file_from_linter_test.go
+├── max_same_issues.go
+├── max_same_issues_test.go
+├── nolint.go
+├── nolint_test.go
+├── path_prettifier.go
+├── path_shortener.go
+├── processor.go
+├── skip_dirs.go
+├── skip_files.go
+├── skip_files_test.go
+├── source_code.go
+├── testdata
+├── uniq_by_line.go
+├── uniq_by_line_test.go
+└── utils.go
+```
+
+The abstraction is simple:
+
+```go title=pkg/result/processors/processor.go
+type Processor interface {
+	Process(issues []result.Issue) ([]result.Issue, error)
+	Name() string
+	Finish()
+}
+```
+
+A processor can hide issues (`nolint`, `exclude`) or change issues (`path_shortener`).
+
+## Print Issues
+
+We have an abstraction for printint found issues.
+
+```bash
+$ tree -L 1 ./pkg/printers/
+./pkg/printers/
+├── checkstyle.go
+├── codeclimate.go
+├── github.go
+├── github_test.go
+├── json.go
+├── junitxml.go
+├── printer.go
+├── tab.go
+└── text.go
+```
+
+Needed printer is selected by command line option `--out-format`.

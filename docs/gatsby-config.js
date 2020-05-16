@@ -62,11 +62,13 @@ module.exports = {
           },
           `gatsby-remark-responsive-iframe`,
           `gatsby-remark-copy-linked-files`,
+          `gatsby-remark-mermaid`,
         ],
         plugins: [
           `gatsby-remark-autolink-headers`,
           `gatsby-remark-external-links`,
           `gatsby-remark-images`,
+          `gatsby-remark-mermaid`,
         ],
       },
     },

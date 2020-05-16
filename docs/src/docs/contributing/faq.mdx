@@ -1,0 +1,29 @@
+---
+title: Contributing FAQ
+---
+
+## How to write a custom linter
+
+See [there](/contributing/new-linters#how-to-write-a-custom-linter).
+
+## How to add a new open-source linter to `golangci-lint`
+
+See [there](/contributing/new-linters#how-to-add-a-public-linter-to-golangci-lint).
+
+## How to add a new private linter to `golangci-lint`
+
+See [there](/contributing/new-linters#how-to-add-a-private-linter-to-golangci-lint).
+
+## How to update existing linter
+
+Just update it's version in `go.mod`.
+
+## How to add configuration option to existing linter
+
+Add a new field to a [config struct](https://github.com/golangci/golangci-lint/blob/master/pkg/config/config.go).
+Document it in [.golangci.example.yml](https://github.com/golangci/golangci-lint/blob/master/.golangci.example.yml).
+Pass it to a linter.
+
+## How to see `INFO` or `DEBUG` logs
+
+See [tutorial about debugging](/contributing/debug/).

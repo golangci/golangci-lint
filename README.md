@@ -28,7 +28,7 @@ Documentation is hosted at https://golangci-lint.run.
 
 ## Contributors
 
-This project exists thanks to all the people who contribute.
+This project exists thanks to all the people who contribute. [How to contribute](https://golangci-lint.run/contributing/workflow/).
 
 <a href="https://github.com/golangci/golangci-lint/graphs/contributors">
   <img src="https://contributors-img.web.app/image?repo=golangci/golangci-lint" />

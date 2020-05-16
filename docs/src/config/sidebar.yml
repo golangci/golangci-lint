@@ -16,12 +16,10 @@
       link: "/usage/configuration/"
     - label: "False Positives"
       link: "/usage/false-positives/"
-    - label: "FAQ"
-      link: "/usage/faq/"
     - label: "Performance"
       link: "/usage/performance/"
-    - label: "Debug"
-      link: "/usage/debug/"
+    - label: "FAQ"
+      link: "/usage/faq/"
 - label: Product
   items:
     - label: "Roadmap"
@@ -32,3 +30,17 @@
       link: "/product/comparison/"
     - label: "GitHub"
       link: "https://github.com/golangci/golangci-lint"
+- label: Contributing
+  items:
+    - label: Workflow
+      link: /contributing/workflow/
+    - label: Architecture
+      link: /contributing/architecture/
+    - label: New Linters
+      link: /contributing/new-linters/
+    - label: "Debug"
+      link: "/contributing/debug/"
+    - label: FAQ
+      link: /contributing/faq/
+    - label: This Website
+      link: /contributing/website/

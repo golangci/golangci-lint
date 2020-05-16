@@ -1,0 +1,58 @@
+---
+title: Contributing Workflow
+---
+
+# Contributing
+
+By participating to this project, you agree to abide our [code of
+conduct](https://github.com/golangci/golangci-lint/blob/master/CODE_OF_CONDUCT.md).
+
+## Setup your machine
+
+`golangci-lint` is written in [Go](https://golang.org/).
+
+Prerequisites:
+
+- `make`
+- [Go 1.13+](https://golang.org/doc/install)
+
+Fork and clone [golangci-lint](https://github.com/golangci/golangci-lint) repository.
+
+A good way of making sure everything is all right is running the following:
+
+```bash
+make build
+./golangci-lint run -v
+```
+
+## Test your change
+
+When you are satisfied with the changes, we suggest you run:
+
+```bash
+$ make test
+```
+
+Which runs all the linters and tests.
+
+## Submit a pull request
+
+Push your branch to your `golangci-lint` fork and open a pull request against the
+`master` branch.
+
+## Pull request checks
+
+First, please, accept [CLA](https://gist.github.com/jirfag/26a39fd375da84b2d5ad4296fecb0668) - [cla assistant](https://cla-assistant.io/) will
+make a comment on the pull request about it.
+
+Also, we run a few checks in CI by using GitHub actions, you can see them [here](https://github.com/golangci/golangci-lint/blob/master/.github/workflows/pr.yml).
+
+## Credits
+
+### Contributors
+
+Thank you to all the people who have already contributed to `golangci-lint`!
+
+[![golangci-lint contributors](https://contributors-img.web.app/image?repo=golangci/golangci-lint)](https://github.com/golangci/golangci-lint/graphs/contributors)
+
+<!-- TODO: use `allcontributors` -->
