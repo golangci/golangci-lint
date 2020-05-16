@@ -2,9 +2,23 @@
 title: "Install"
 ---
 
-## Binary
+## CI installation
 
-Most installations are done for CI (e.g. Travis CI, CircleCI). It's important to have reproducible CI:
+Most installations of `golangci-lint` are performed for CI.
+
+### GitHub Actions
+
+We recommend using [our GitHub Action](https://github.com/golangci/golangci-lint-action) for running `golangci-lint` in CI for GitHub projects.
+It's [fast and uses smart caching](https://github.com/golangci/golangci-lint-action#performance) inside
+and it can be much faster than simple binary installation.
+
+Also, the action creates GitHub annotations for found issues: you don't need to dig into build log to see found by `golangci-lint` issues:
+
+![GitHub annotations of the action](./annotations.png)
+
+### Other CI
+
+It's important to have reproducible CI:
 don't start to fail all builds at the same time. With golangci-lint this can happen if you
 use deprecated option `--enable-all` and a new linter is added or even without `--enable-all`: when one upstream linter is upgraded.
 
@@ -28,7 +42,9 @@ golangci-lint --version
 It is advised that you periodically update version of golangci-lint as the project is under active development
 and is constantly being improved. For any problems with golangci-lint, check out recent [GitHub issues](https://github.com/golangci/golangci-lint/issues) and update if needed.
 
-## macOS
+## Local Installation
+
+### macOS
 
 You can also install a binary release on macOS using [brew](https://brew.sh/):
 
@@ -37,13 +53,13 @@ brew install golangci/tap/golangci-lint
 brew upgrade golangci/tap/golangci-lint
 ```
 
-## Docker
+### Docker
 
 ```bash
 docker run --rm -v $(pwd):/app -w /app golangci/golangci-lint:{.LatestVersion} golangci-lint run -v
 ```
 
-## Go
+### Install from Source
 
 Go source installations are supported for the two most recent Go releases.
 
