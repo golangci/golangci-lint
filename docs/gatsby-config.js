@@ -1,4 +1,9 @@
+const withDefault = require(`./src/@rocketseat/gatsby-theme-docs-core/util/with-default`);
+
 const siteUrl = `https://golangci-lint.run`;
+
+const siteConfig = require(`./src/config/site.js`);
+const { basePath, configPath, docsPath } = withDefault(siteConfig);
 
 module.exports = {
   siteMetadata: {
@@ -6,23 +11,63 @@ module.exports = {
     defaultTitle: ``,
     siteTitleShort: `golangci-lint`,
     siteDescription: `Fast Go linters runner golangci-lint.`,
-    siteUrl: siteUrl,
+    siteUrl,
     siteAuthor: `@golangci`,
     siteImage: `/logo.png`,
     siteLanguage: `en`,
     themeColor: `#7159c1`,
-    basePath: `/`,
+    basePath,
     footer: `© ${new Date().getFullYear()}`,
   },
   plugins: [
     `gatsby-alias-imports`,
+
+    `gatsby-transformer-sharp`,
+    `gatsby-plugin-sharp`,
     {
-      resolve: `@rocketseat/gatsby-theme-docs`,
+      resolve: `gatsby-source-filesystem`,
       options: {
-        configPath: `src/config`,
-        docsPath: `src/docs`,
-        githubUrl: `https://github.com/golangci/golangci-lint`,
-        baseDir: `docs`,
+        name: `docs`,
+        path: docsPath,
+      },
+    },
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: `config`,
+        path: configPath,
+      },
+    },
+    {
+      resolve: `gatsby-transformer-yaml`,
+      options: {
+        typeName: `SidebarItems`,
+      },
+    },
+    {
+      resolve: `gatsby-plugin-mdx`,
+      options: {
+        extensions: [`.mdx`, `.md`],
+        gatsbyRemarkPlugins: [
+          `gatsby-remark-autolink-headers`,
+          `gatsby-remark-external-links`,
+          `gatsby-remark-embedder`,
+          {
+            resolve: `gatsby-remark-images`,
+            options: {
+              maxWidth: 960,
+              withWebp: true,
+              linkImagesToOriginal: false,
+            },
+          },
+          `gatsby-remark-responsive-iframe`,
+          `gatsby-remark-copy-linked-files`,
+        ],
+        plugins: [
+          `gatsby-remark-autolink-headers`,
+          `gatsby-remark-external-links`,
+          `gatsby-remark-images`,
+        ],
       },
     },
     {
@@ -59,13 +104,11 @@ module.exports = {
         },
       },
     },
-    {
-      resolve: `gatsby-transformer-remark`,
-      options: {
-        plugins: [`gatsby-remark-external-links`],
-      },
-    },
     `gatsby-plugin-netlify`,
     `gatsby-plugin-netlify-cache`,
+
+    `gatsby-plugin-catch-links`,
+    `gatsby-plugin-emotion`,
+    `gatsby-plugin-react-helmet`,
   ],
 };

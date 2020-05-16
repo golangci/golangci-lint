@@ -26,9 +26,9 @@
   items:
     - label: "Roadmap"
       link: "/product/roadmap/"
-    - label: "GitHub"
-      link: "https://github.com/golangci/golangci-lint"
     - label: "Trusted By"
       link: "/product/trusted-by/"
     - label: "Comparison"
       link: "/product/comparison/"
+    - label: "GitHub"
+      link: "https://github.com/golangci/golangci-lint"
