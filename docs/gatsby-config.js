@@ -87,7 +87,7 @@ module.exports = {
     {
       resolve: `gatsby-plugin-google-analytics`,
       options: {
-        trackingId: null, // TODO
+        trackingId: `UA-48413061-13`,
         siteSpeedSampleRate: 100,
       },
     },
