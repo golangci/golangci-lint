@@ -32,8 +32,8 @@ require (
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/mitchellh/go-ps v0.0.0-20190716172923-621e5597135b
 	github.com/nakabonne/nestif v0.3.0
-	github.com/pkg/errors v0.8.1
-	github.com/ryancurrah/gomodguard v1.0.4
+	github.com/pkg/errors v0.9.1
+	github.com/ryancurrah/gomodguard v1.1.0
 	github.com/securego/gosec/v2 v2.3.0
 	github.com/shirou/gopsutil v0.0.0-20190901111213-e4ec7b275ada // v2.19.8
 	github.com/sirupsen/logrus v1.4.2
