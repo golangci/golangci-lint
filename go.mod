@@ -45,7 +45,7 @@ require (
 	github.com/tdakkota/asciicheck v0.0.0-20200416190851-d7f85be797a2
 	github.com/tetafro/godot v0.3.7
 	github.com/timakin/bodyclose v0.0.0-20190930140734-f7f2e9bca95e
-	github.com/tommy-muehle/go-mnd v1.3.1-0.20200224220436-e6f9a994e8fa
+	github.com/tommy-muehle/go-mnd/v2/v2 v2.0.0
 	github.com/ultraware/funlen v0.0.2
 	github.com/ultraware/whitespace v0.0.4
 	github.com/uudashr/gocognit v1.0.1
