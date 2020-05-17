@@ -44,11 +44,22 @@ func NewGomodguard() *goanalysis.Linter {
 			processorCfg.Allowed.Domains = linterCfg.Allowed.Domains
 			for n := range linterCfg.Blocked.Modules {
 				for k, v := range linterCfg.Blocked.Modules[n] {
-					m := gomodguard.BlockedModule{k: gomodguard.Recommendations{
+					m := map[string]gomodguard.BlockedModule{k: {
 						Recommendations: v.Recommendations,
 						Reason:          v.Reason,
 					}}
 					processorCfg.Blocked.Modules = append(processorCfg.Blocked.Modules, m)
+					break
+				}
+			}
+
+			for n := range linterCfg.Blocked.Versions {
+				for k, v := range linterCfg.Blocked.Versions[n] {
+					m := map[string]gomodguard.BlockedVersion{k: {
+						Version: v.Version,
+						Reason:  v.Reason,
+					}}
+					processorCfg.Blocked.Versions = append(processorCfg.Blocked.Versions, m)
 					break
 				}
 			}
