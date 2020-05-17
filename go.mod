@@ -37,7 +37,7 @@ require (
 	github.com/securego/gosec/v2 v2.3.0
 	github.com/shirou/gopsutil v0.0.0-20190901111213-e4ec7b275ada // v2.19.8
 	github.com/sirupsen/logrus v1.6.0
-	github.com/sourcegraph/go-diff v0.5.1
+	github.com/sourcegraph/go-diff v0.5.2
 	github.com/spf13/cobra v1.0.0
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.6.1
