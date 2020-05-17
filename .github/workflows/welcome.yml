@@ -9,4 +9,6 @@ jobs:
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           issue-message: "Hey, thank you for opening your first Issue ! 🙂"
-          pr-message: "Hey, thank you for opening your first Pull Request !"
+          pr-message: |
+            Hey, thank you for opening your first Pull Request !
+            If you would like to contribute we have a [guide for contributors](https://golangci-lint.run/contributing/quick-start/).
