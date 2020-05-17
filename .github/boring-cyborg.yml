@@ -1,9 +1,5 @@
 firstPRWelcomeComment: Hey, thank you for opening your first Pull Request !
 
-# Comment to be posted to congratulate user on their first merged PR
-firstPRMergeComment: >
-  Awesome work, congrats on your first merged pull request!
-
 # Comment to be posted to on first time issues
 firstIssueWelcomeComment: >
   Hey, thank you for opening your first Issue ! 🙂
