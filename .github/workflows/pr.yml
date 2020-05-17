@@ -41,11 +41,7 @@ jobs:
           - 1.14
         os:
           - ubuntu-latest
-        include:
-          - os: macos-latest
-            # test only the one go version on Mac OS to speed up CI
-            # TODO: use the latet go version after https://github.com/golang/go/issues/38824
-            golang: 1.13
+          # don't enable mac os because it's machines are very slow
     steps:
       - uses: actions/checkout@v2
       - name: Install Go
