@@ -35,7 +35,7 @@ require (
 	github.com/pkg/errors v0.8.1
 	github.com/ryancurrah/gomodguard v1.0.4
 	github.com/securego/gosec/v2 v2.3.0
-	github.com/shirou/gopsutil v0.0.0-20190901111213-e4ec7b275ada // v2.19.8
+	github.com/shirou/gopsutil/v2/v2 v2.20.4 // v2.19.8
 	github.com/sirupsen/logrus v1.4.2
 	github.com/sourcegraph/go-diff v0.5.1
 	github.com/spf13/cobra v0.0.5
