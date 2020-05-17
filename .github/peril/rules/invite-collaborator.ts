@@ -28,7 +28,7 @@ export const inviteCollaborator = async () => {
 
   // Check whether or not we’ve already invited this contributor.
   try {
-    const inviteCheck = (await api.orgs.getTeamMembership({
+    const inviteCheck = (await api.teams.getMembership({
       team_id: teamId,
       username,
     } as any)) as any;
@@ -41,12 +41,15 @@ export const inviteCollaborator = async () => {
       );
       return;
     }
-  } catch (_) {
+  } catch (err) {
+    console.info(
+      `Error checking membership of ${username} in team ${teamId}: ${err.stack}`
+    );
     // If the user hasn’t been invited, the invite check throws an error.
   }
 
   try {
-    const invite = await api.orgs.addTeamMembership({
+    const invite = await api.teams.addOrUpdateMembership({
       team_id: teamId,
       username,
     } as any);

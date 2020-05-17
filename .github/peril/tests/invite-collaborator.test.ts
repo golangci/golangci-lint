@@ -19,9 +19,9 @@ beforeEach(() => {
         },
       },
       api: {
-        orgs: {
-          getTeamMembership: () => Promise.resolve({ meta: { status: "404" } }),
-          addTeamMembership: jest.fn(() =>
+        teams: {
+          getMembership: () => Promise.resolve({ meta: { status: "404" } }),
+          addOrUpdateMembership: jest.fn(() =>
             Promise.resolve({ data: { state: "pending" } })
           ),
         },
