@@ -32,6 +32,8 @@
       link: "https://github.com/golangci/golangci-lint"
 - label: Contributing
   items:
+    - label: Quick Start
+      link: /contributing/quick-start/
     - label: Workflow
       link: /contributing/workflow/
     - label: Architecture

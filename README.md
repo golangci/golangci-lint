@@ -28,13 +28,11 @@ Documentation is hosted at https://golangci-lint.run.
 
 ## Contributors
 
-This project exists thanks to all the people who contribute. [How to contribute](https://golangci-lint.run/contributing/workflow/).
+This project exists thanks to all the people who contribute. [How to contribute](https://golangci-lint.run/contributing/quick-start/).
 
 <a href="https://github.com/golangci/golangci-lint/graphs/contributors">
   <img src="https://contributors-img.web.app/image?repo=golangci/golangci-lint" />
 </a>
-
-<!-- TODO: use `allcontributors` -->
 
 ## Stargazers over time
 
