@@ -30,7 +30,9 @@ func NewGomodguard() *goanalysis.Linter {
 
 	return goanalysis.NewLinter(
 		gomodguardName,
-		"Allow and block list linter for direct Go module dependencies.",
+		"Allow and block list linter for direct Go module dependencies. "+
+			"This is different from depguard where there are different block "+
+			"types for example version constraints and module recommendations.",
 		[]*analysis.Analyzer{analyzer},
 		nil,
 	).WithContextSetter(func(lintCtx *linter.Context) {
