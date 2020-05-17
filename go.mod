@@ -30,7 +30,7 @@ require (
 	github.com/matoous/godox v0.0.0-20190911065817-5d6d842e92eb // v1.0
 	github.com/mattn/go-colorable v0.1.4
 	github.com/mitchellh/go-homedir v1.1.0
-	github.com/mitchellh/go-ps v0.0.0-20190716172923-621e5597135b
+	github.com/mitchellh/go-ps v1.0.0
 	github.com/nakabonne/nestif v0.3.0
 	github.com/pkg/errors v0.8.1
 	github.com/ryancurrah/gomodguard v1.0.4
