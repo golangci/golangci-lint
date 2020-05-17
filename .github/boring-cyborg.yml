@@ -1,6 +1,4 @@
-firstPRWelcomeComment: |
-  Hey, thank you for opening your first Pull Request !
-  If you would like to contribute we have a [guide for contributors](https://golangci-lint.run/contributing/quick-start/).
+firstPRWelcomeComment: Hey, thank you for opening your first Pull Request !
 
 # Comment to be posted to congratulate user on their first merged PR
 firstPRMergeComment: >
@@ -9,3 +7,4 @@ firstPRMergeComment: >
 # Comment to be posted to on first time issues
 firstIssueWelcomeComment: >
   Hey, thank you for opening your first Issue ! 🙂
+  If you would like to contribute we have a [guide for contributors](https://golangci-lint.run/contributing/quick-start/).
