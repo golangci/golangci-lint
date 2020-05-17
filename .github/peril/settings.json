@@ -1,0 +1,14 @@
+{
+  "$schema": "https://raw.githubusercontent.com/danger/peril/master/peril-settings-json.schema",
+  "settings": {
+    "ignored_repos": [],
+    "env_vars": ["SLACK_WEBHOOK_URL", "GITHUB_ACCESS_TOKEN"]
+  },
+  "repos": {
+    "golangci/golangci-lint": {
+      "pull_request.closed (pull_request.merged == true)": [
+        ".github/peril/rules/invite-collaborator.ts"
+      ]
+    }
+  }
+}
