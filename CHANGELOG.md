@@ -5,6 +5,7 @@ There is the most valuable changes log:
 
 1. Add new linters: `nolintlint`, `goerr113`
 2. Updated linters: `godot`, `staticcheck`
+3. Launch a [website](https://golangci-lint.run)
 
 ### April 2020
 
