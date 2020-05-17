@@ -10,7 +10,7 @@ Most installations of `golangci-lint` are performed for CI.
 
 We recommend using [our GitHub Action](https://github.com/golangci/golangci-lint-action) for running `golangci-lint` in CI for GitHub projects.
 It's [fast and uses smart caching](https://github.com/golangci/golangci-lint-action#performance) inside
-and it can be much faster than simple binary installation.
+and it can be much faster than the simple binary installation.
 
 Also, the action creates GitHub annotations for found issues: you don't need to dig into build log to see found by `golangci-lint` issues:
 
@@ -39,8 +39,8 @@ wget -O- -nv https://raw.githubusercontent.com/golangci/golangci-lint/master/ins
 golangci-lint --version
 ```
 
-It is advised that you periodically update version of golangci-lint as the project is under active development
-and is constantly being improved. For any problems with golangci-lint, check out recent [GitHub issues](https://github.com/golangci/golangci-lint/issues) and update if needed.
+It is advised that you periodically update the version of `golangci-lint` as the project is under active development
+and is constantly being improved. For any problems with `golangci-lint`, check out recent [GitHub issues](https://github.com/golangci/golangci-lint/issues) and update if needed.
 
 ## Local Installation
 
@@ -66,6 +66,33 @@ Go source installations are supported for the two most recent Go releases.
 ```bash
 go get github.com/golangci/golangci-lint/cmd/golangci-lint@{.LatestVersion}
 ```
+
+## Versioning Policy
+
+`golangci-lint` follows [semantic versioning](https://semver.org). However, due to the nature of `golangci-lint` as a code quality tool,
+it's not always clear when a minor or major version bump occurs. To help clarify this for everyone, we've defined the following semantic versioning policy:
+
+- Patch release (intended to not break your lint build)
+  - A patch version update in a specific linter that results in `golangci-lint` reporting fewer errors.
+  - A bug fix to the CLI or core (packages loading, runner, postprocessors, etc).
+  - Improvements to documentation.
+  - Non-user-facing changes such as refactoring code, adding, deleting, or modifying tests, and increasing test coverage.
+  - Re-releasing after a failed release (i.e., publishing a release that doesn't work for anyone).
+- Minor release (might break your lint build because of newly found issues)
+  - A major or minor version update of a specific linter that results in `golangci-lint` reporting more errors.
+  - A new linter is added.
+  - An existing configuration option or linter is deprecated.
+  - A new CLI command is created.
+  - Backward incompatible change of configuration with extremely low impact, e.g. adding validation of a list of enabled `go-critic` checkers.
+- Major release (likely to break your lint build)
+  - Backward incompatible change of configuration with huge impact, e.g. removing excluding issues about missed comments from `golint` by default.
+  - A linter is removed.
+
+According to our policy, any minor update may report more errors than the previous release (ex: from a bug fix).
+As such, we recommend using the fixed minor version and fixed or the latest patch version to guarantee the results of your builds.
+
+For example, in our [GitHub Action](https://github.com/golangci/golangci-lint-action) we require users to explicitly set the minor version of `golangci-lint`
+and we always use the latest patch version.
 
 ## Next
 
