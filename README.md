@@ -34,8 +34,6 @@ This project exists thanks to all the people who contribute. [How to contribute]
   <img src="https://contributors-img.web.app/image?repo=golangci/golangci-lint" />
 </a>
 
-<!-- TODO: use `allcontributors` -->
-
 ## Stargazers over time
 
 [![Stargazers over time](https://starchart.cc/golangci/golangci-lint.svg)](https://starchart.cc/golangci/golangci-lint)
