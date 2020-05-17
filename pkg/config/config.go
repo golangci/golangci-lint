@@ -221,6 +221,10 @@ type LintersSettings struct {
 				Recommendations []string `mapstructure:"recommendations"`
 				Reason          string   `mapstructure:"reason"`
 			} `mapstructure:"modules"`
+			Versions []map[string]struct {
+				Version string `mapstructure:"version"`
+				Reason  string `mapstructure:"reason"`
+			} `mapstructure:"versions"`
 		} `mapstructure:"blocked"`
 	}
 
