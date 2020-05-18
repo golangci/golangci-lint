@@ -28,7 +28,7 @@ type checkstyleError struct {
 	Source   string `xml:"source,attr"`
 }
 
-const defaultSeverity = "error"
+const defaultCheckstyleSeverity = "error"
 
 type Checkstyle struct{}
 
@@ -54,12 +54,17 @@ func (Checkstyle) Print(ctx context.Context, issues []result.Issue) error {
 			files[issue.FilePath()] = file
 		}
 
+		severity := defaultCheckstyleSeverity
+		if issue.Severity != "" {
+			severity = issue.Severity
+		}
+
 		newError := &checkstyleError{
 			Column:   issue.Column(),
 			Line:     issue.Line(),
 			Message:  issue.Text,
 			Source:   issue.FromLinter,
-			Severity: defaultSeverity,
+			Severity: severity,
 		}
 
 		file.Errors = append(file.Errors, newError)

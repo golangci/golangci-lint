@@ -97,7 +97,7 @@ func (p ExcludeRules) matchSource(i *result.Issue, r *excludeRule) bool { //noli
 	return r.source.MatchString(sourceLine)
 }
 
-func (p ExcludeRules) match(i *result.Issue, r *excludeRule) bool {
+func (p ExcludeRules) match(i *result.Issue, r *excludeRule) bool { //nolint:dupl
 	if r.isEmpty() {
 		return false
 	}

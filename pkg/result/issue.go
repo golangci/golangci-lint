@@ -26,6 +26,8 @@ type Issue struct {
 	FromLinter string
 	Text       string
 
+	Severity string
+
 	// Source lines of a code with the issue to show
 	SourceLines []string
 

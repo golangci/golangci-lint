@@ -14,6 +14,7 @@ import (
 // It is just enough to support GitLab CI Code Quality - https://docs.gitlab.com/ee/user/project/merge_requests/code_quality.html
 type CodeClimateIssue struct {
 	Description string `json:"description"`
+	Severity    string `json:"severity"`
 	Fingerprint string `json:"fingerprint"`
 	Location    struct {
 		Path  string `json:"path"`
@@ -38,6 +39,10 @@ func (p CodeClimate) Print(ctx context.Context, issues []result.Issue) error {
 		issue.Description = i.FromLinter + ": " + i.Text
 		issue.Location.Path = i.Pos.Filename
 		issue.Location.Lines.Begin = i.Pos.Line
+
+		if i.Severity != "" {
+			issue.Severity = i.Severity
+		}
 
 		// Need a checksum of the issue, so we use MD5 of the filename, text, and first line of source if there is any
 		var firstLine string

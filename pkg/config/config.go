@@ -452,12 +452,53 @@ func (e ExcludeRule) Validate() error {
 	return nil
 }
 
+type SeverityRule struct {
+	Severity string
+	Linters  []string
+	Path     string
+	Text     string
+	Source   string
+}
+
+func (s *SeverityRule) Validate() error {
+	if err := validateOptionalRegex(s.Path); err != nil {
+		return fmt.Errorf("invalid path regex: %v", err)
+	}
+	if err := validateOptionalRegex(s.Text); err != nil {
+		return fmt.Errorf("invalid text regex: %v", err)
+	}
+	if err := validateOptionalRegex(s.Source); err != nil {
+		return fmt.Errorf("invalid source regex: %v", err)
+	}
+	nonBlank := 0
+	if len(s.Linters) > 0 {
+		nonBlank++
+	}
+	if s.Path != "" {
+		nonBlank++
+	}
+	if s.Text != "" {
+		nonBlank++
+	}
+	if s.Source != "" {
+		nonBlank++
+	}
+	const minConditionsCount = 1
+	if nonBlank < minConditionsCount {
+		return errors.New("at least 1 of (text, source, path, linters) should be set")
+	}
+	return nil
+}
+
 type Issues struct {
 	IncludeDefaultExcludes []string      `mapstructure:"include"`
 	ExcludeCaseSensitive   bool          `mapstructure:"exclude-case-sensitive"`
 	ExcludePatterns        []string      `mapstructure:"exclude"`
 	ExcludeRules           []ExcludeRule `mapstructure:"exclude-rules"`
 	UseDefaultExcludes     bool          `mapstructure:"exclude-use-default"`
+
+	SeverityDefault string         `mapstructure:"severity-default"`
+	SeverityRules   []SeverityRule `mapstructure:"severity-rules"`
 
 	MaxIssuesPerLinter int `mapstructure:"max-issues-per-linter"`
 	MaxSameIssues      int `mapstructure:"max-same-issues"`

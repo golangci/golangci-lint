@@ -84,6 +84,17 @@ func NewRunner(cfg *config.Config, log logutils.Log, goenv *goutil.Env, es *lint
 		return nil, errors.Wrap(err, "failed to get enabled linters")
 	}
 
+	var severityRules []processors.SeverityRule
+	for _, r := range icfg.SeverityRules {
+		severityRules = append(severityRules, processors.SeverityRule{
+			Severity: r.Severity,
+			Text:     r.Text,
+			Source:   r.Source,
+			Path:     r.Path,
+			Linters:  r.Linters,
+		})
+	}
+
 	return &Runner{
 		Processors: []processors.Processor{
 			processors.NewCgo(goenv),
@@ -112,6 +123,7 @@ func NewRunner(cfg *config.Config, log logutils.Log, goenv *goutil.Env, es *lint
 			processors.NewMaxFromLinter(icfg.MaxIssuesPerLinter, log.Child("max_from_linter"), cfg),
 			processors.NewSourceCode(lineCache, log.Child("source_code")),
 			processors.NewPathShortener(),
+			processors.NewSeverityRules(icfg.SeverityDefault, severityRules, lineCache, log.Child("exclude_rules")),
 		},
 		Log: log,
 	}, nil
