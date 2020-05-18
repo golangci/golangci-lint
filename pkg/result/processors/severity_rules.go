@@ -108,7 +108,7 @@ func (p SeverityRules) matchSource(i *result.Issue, r *severityRule) bool { //no
 	return r.source.MatchString(sourceLine)
 }
 
-func (p SeverityRules) match(i *result.Issue, r *severityRule) bool {
+func (p SeverityRules) match(i *result.Issue, r *severityRule) bool { // nolint:dupl
 	if r.isEmpty() {
 		return false
 	}

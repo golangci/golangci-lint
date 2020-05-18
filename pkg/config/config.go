@@ -422,7 +422,7 @@ func validateOptionalRegex(value string) error {
 	return err
 }
 
-func (e ExcludeRule) Validate() error {
+func (e ExcludeRule) Validate() error { // nolint:dupl
 	if err := validateOptionalRegex(e.Path); err != nil {
 		return fmt.Errorf("invalid path regex: %v", err)
 	}
@@ -460,7 +460,7 @@ type SeverityRule struct {
 	Source   string
 }
 
-func (s *SeverityRule) Validate() error {
+func (s *SeverityRule) Validate() error { // nolint:dupl
 	if err := validateOptionalRegex(s.Path); err != nil {
 		return fmt.Errorf("invalid path regex: %v", err)
 	}
