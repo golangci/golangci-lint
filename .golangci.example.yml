@@ -391,7 +391,7 @@ issues:
   # - Github: https://help.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-error-message
   severity-default: error
 
-  # When a list of severity rules are provided severity information will be added to lint issues. 
+  # When a list of severity rules are provided, severity information will be added to lint issues. 
   # Severity rules has the same filtering capability as exclude rules.
   # Only affects out formats that support setting severity information.
   severity-rules:

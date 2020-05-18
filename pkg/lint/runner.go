@@ -123,7 +123,7 @@ func NewRunner(cfg *config.Config, log logutils.Log, goenv *goutil.Env, es *lint
 			processors.NewMaxFromLinter(icfg.MaxIssuesPerLinter, log.Child("max_from_linter"), cfg),
 			processors.NewSourceCode(lineCache, log.Child("source_code")),
 			processors.NewPathShortener(),
-			processors.NewSeverityRules(icfg.SeverityDefault, severityRules, lineCache, log.Child("exclude_rules")),
+			processors.NewSeverityRules(icfg.SeverityDefault, severityRules, lineCache, log.Child("severity_rules")),
 		},
 		Log: log,
 	}, nil
