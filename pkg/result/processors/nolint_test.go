@@ -258,7 +258,7 @@ func TestNolintUnused(t *testing.T) {
 		return NewNolint(log, dbManager, enabledLintersMap)
 	}
 
-	// the issues below the nolintlint issues that would be generated for the test file
+	// the issue below is the nolintlint issue that would be generated for the test file
 	nolintlintIssueVarcheck := result.Issue{
 		Pos: token.Position{
 			Filename: fileName,
