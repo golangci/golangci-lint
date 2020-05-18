@@ -26,7 +26,7 @@ It's highly recommended to install a specific version of golangci-lint available
 
 Here is the recommended way to install golangci-lint {.LatestVersion}:
 
-```bash
+```sh
 # binary will be $(go env GOPATH)/bin/golangci-lint
 curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin {.LatestVersion}
 
@@ -48,14 +48,14 @@ and is constantly being improved. For any problems with `golangci-lint`, check o
 
 You can also install a binary release on macOS using [brew](https://brew.sh/):
 
-```bash
+```sh
 brew install golangci/tap/golangci-lint
 brew upgrade golangci/tap/golangci-lint
 ```
 
 ### Docker
 
-```bash
+```sh
 docker run --rm -v $(pwd):/app -w /app golangci/golangci-lint:{.LatestVersion} golangci-lint run -v
 ```
 
@@ -63,7 +63,7 @@ docker run --rm -v $(pwd):/app -w /app golangci/golangci-lint:{.LatestVersion} g
 
 Go source installations are supported for the two most recent Go releases.
 
-```bash
+```sh
 go get github.com/golangci/golangci-lint/cmd/golangci-lint@{.LatestVersion}
 ```
 

@@ -48,7 +48,7 @@ We measure peak memory usage (RSS) by tracking of processes RSS every 5 ms.
 
 We compare golangci-lint and gometalinter in default mode, but explicitly enable all linters because of small differences in the default configuration.
 
-```bash
+```sh
 $ golangci-lint run --no-config --issues-exit-code=0 --timeout=30m \
   --disable-all --enable=deadcode  --enable=gocyclo --enable=golint --enable=varcheck \
   --enable=structcheck --enable=maligned --enable=errcheck --enable=dupl --enable=ineffassign \
