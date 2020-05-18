@@ -14,7 +14,7 @@ import (
 // It is just enough to support GitLab CI Code Quality - https://docs.gitlab.com/ee/user/project/merge_requests/code_quality.html
 type CodeClimateIssue struct {
 	Description string `json:"description"`
-	Severity    string `json:"severity"`
+	Severity    string `json:"severity,omitempty"`
 	Fingerprint string `json:"fingerprint"`
 	Location    struct {
 		Path  string `json:"path"`
