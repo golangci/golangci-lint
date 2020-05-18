@@ -11,6 +11,7 @@
 /tools/goreleaser
 /tools/node_modules
 /tools/svg-term
+/vendor/
 /.vscode/
 *.test
 .DS_Store
