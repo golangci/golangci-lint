@@ -1,6 +1,7 @@
 const withDefault = require(`./src/@rocketseat/gatsby-theme-docs-core/util/with-default`);
 
-const siteUrl = `https://golangci-lint.run`;
+const domain = `golangci-lint.run`;
+const siteUrl = `https://${domain}`;
 
 const siteConfig = require(`./src/config/site.js`);
 const { basePath, configPath, docsPath } = withDefault(siteConfig);
@@ -112,5 +113,20 @@ module.exports = {
     `gatsby-plugin-catch-links`,
     `gatsby-plugin-emotion`,
     `gatsby-plugin-react-helmet`,
+    {
+      resolve: `gatsby-plugin-robots-txt`,
+      options: {
+        env: {
+          development: {
+            host: domain,
+            policy: [{ userAgent: "*", disallow: ["/"] }],
+          },
+          production: {
+            host: domain,
+            policy: [{ userAgent: "*", disallow: ["/page-data/"] }],
+          },
+        },
+      },
+    },
   ],
 };
