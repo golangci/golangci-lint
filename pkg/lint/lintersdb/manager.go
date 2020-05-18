@@ -263,6 +263,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithURL("https://github.com/ryancurrah/gomodguard"),
 		linter.NewConfig(golinters.NewGodot()).
 			WithPresets(linter.PresetStyle).
+			WithAutoFix().
 			WithURL("https://github.com/tetafro/godot"),
 		linter.NewConfig(golinters.NewTestpackage(testpackageCfg)).
 			WithPresets(linter.PresetStyle).
