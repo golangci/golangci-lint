@@ -28,6 +28,7 @@ linters-settings:
       - octalLiteral
       - whyNoLint
       - wrapperFunc
+      - unnecessaryDefer # https://github.com/go-critic/go-critic/issues/926
   gocyclo:
     min-complexity: 15
   goimports:
