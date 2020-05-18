@@ -20,7 +20,7 @@ Fork and clone [golangci-lint](https://github.com/golangci/golangci-lint) reposi
 
 A good way of making sure everything is all right is running the following:
 
-```bash
+```sh
 make build
 ./golangci-lint run -v
 ```
@@ -29,7 +29,7 @@ make build
 
 When you are satisfied with the changes, we suggest you run:
 
-```bash
+```sh
 $ make test
 ```
 
@@ -62,12 +62,12 @@ After making a release you need to update:
 
 1. GitHub [action config](https://github.com/golangci/golangci-lint/blob/master/assets/github-action-config.json) by running:
 
-```bash
+```sh
 make assets/github-action-config.json
 ```
 
 2. The latest version in documentation on our website:
 
-```bash
+```sh
 make expand_website_templates
 ```
