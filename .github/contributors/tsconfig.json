@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": false,
+    "target": "es2015",
+    "module": "es2015",
+    "lib": ["es2015"],
+    "strict": true,
+    "incremental": true
+  }
+}

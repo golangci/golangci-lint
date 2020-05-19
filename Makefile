@@ -107,3 +107,6 @@ go.sum: go.mod
 expand_website_templates:
 	go run ./scripts/expand_website_templates/main.go
 .PHONY: expand_website_templates
+
+update_contributors_list:
+	cd .github/contributors && npm run all
