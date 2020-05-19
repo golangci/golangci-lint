@@ -199,7 +199,14 @@ func (cl *ContextLoader) loadPackages(ctx context.Context, loadMode packages.Loa
 	cl.debugf("Built loader args are %s", args)
 	pkgs, err := packages.Load(conf, args...)
 	if err != nil {
-		return nil, errors.Wrap(err, "failed to load program with go/packages")
+		return nil, errors.Wrap(err, "failed to load with go/packages")
+	}
+
+	// Currently, go/packages doesn't guarantee that error will be returned
+	// if context was canceled. See
+	// https://github.com/golang/tools/commit/c5cec6710e927457c3c29d6c156415e8539a5111#r39261855
+	if ctx.Err() != nil {
+		return nil, errors.Wrap(ctx.Err(), "timed out to load packages")
 	}
 
 	if loadMode&packages.NeedSyntax == 0 {
@@ -280,7 +287,7 @@ func (cl *ContextLoader) Load(ctx context.Context, linters []*linter.Config) (*l
 	loadMode := cl.findLoadMode(linters)
 	pkgs, err := cl.loadPackages(ctx, loadMode)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "failed to load packages")
 	}
 
 	deduplicatedPkgs := cl.filterDuplicatePackages(pkgs)
