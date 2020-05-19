@@ -28,7 +28,7 @@ const rowsVisible = 5
 const buildContributorsTable = (contributors: ContributorInfo[]): string => {
   type Contributors = ContributorInfo[]
   const rows: Contributors[] = []
-  for (let i = 0; i < contributors.length; i++) {
+  for (let i = 0; i < contributors.length; ) {
     rows.push(contributors.slice(i, i + colPerRow))
     i += colPerRow
   }
@@ -43,7 +43,7 @@ ${rows
             `  <td align="center"><a href="${
               c.websiteUrl ? c.websiteUrl : `https://github.com/${c.login}`
             }?utm_source=golangci-lint-contributors"><img src="${c.avatarUrl}" width="100px;" alt=""/><br /><sub><b>${
-              c.name
+              c.name ? c.name : `@${c.login}`
             }</b></sub></a></td>`
         )
         .join(`\n`)}\n</tr>`

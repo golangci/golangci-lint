@@ -14,23 +14,27 @@ type Contribution = {
 }
 
 const buildWeights = (contributors: any): Map<string, number> => {
+  console.info(contributors)
   const loginToTotalWeight: Map<string, number> = new Map<string, number>()
 
-  const addContributions = (weight: number, contributions: Contribution[]) => {
+  const addContributions = (weight: number, contributions: Contribution[], onlyExisting: boolean) => {
     for (const contr of contributions) {
+      if (onlyExisting && !loginToTotalWeight.has(contr.login)) {
+        continue
+      }
       loginToTotalWeight.set(contr.login, (loginToTotalWeight.get(contr.login) || 0) + contr.count * weight)
     }
   }
 
   // totally every pull or commit should account as 10
-  addContributions(5, contributors.prCreators)
-  addContributions(5, contributors.commitAuthors) // some commits are out pull requests
+  addContributions(5, contributors.prCreators, false)
+  addContributions(5, contributors.commitAuthors, false) // some commits are out pull requests
 
-  addContributions(2, contributors.prCommentators)
-  addContributions(2, contributors.issueCreators)
-  addContributions(2, contributors.issueCommentators)
-  addContributions(2, contributors.reviewers)
-  addContributions(0.3, contributors.reactors)
+  addContributions(2, contributors.prCommentators, true)
+  addContributions(2, contributors.issueCreators, true)
+  addContributions(2, contributors.issueCommentators, true)
+  addContributions(2, contributors.reviewers, true)
+  addContributions(0.3, contributors.reactors, true)
 
   return loginToTotalWeight
 }
