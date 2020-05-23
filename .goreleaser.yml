@@ -41,7 +41,7 @@ archives:
     format_overrides:
       - goos: windows
         format: zip
-    name_template: '{{ .Binary }}-{{ .Version }}-{{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'
+    name_template: '{{ .ProjectName }}-{{ .Version }}-{{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'
     files:
       - LICENSE
       - README.md
