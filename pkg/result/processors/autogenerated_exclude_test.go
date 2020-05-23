@@ -101,3 +101,11 @@ this one line comment also`,
 		assert.Equal(t, tc.doc, doc)
 	}
 }
+
+// Issue 954: Some lines can be very long, e.g. auto-generated
+// embedded resources. Reported on file of 86.2KB.
+func TestGetDocFileWithLongLine(t *testing.T) {
+	fpath := filepath.Join("testdata", "autogen_exclude_long_line.go")
+	_, err := getDoc(fpath)
+	assert.NoError(t, err)
+}
