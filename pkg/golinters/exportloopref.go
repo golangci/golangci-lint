@@ -7,7 +7,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 )
 
-func NewExportLoopRer() *goanalysis.Linter {
+func NewExportLoopRef() *goanalysis.Linter {
 	analyzers := []*analysis.Analyzer{
 		exportloopref.Analyzer,
 	}
