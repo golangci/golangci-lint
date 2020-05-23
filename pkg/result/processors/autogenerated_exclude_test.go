@@ -84,6 +84,15 @@ and this text also`,
 			fpath: filepath.Join("testdata", "autogen_exclude_doc.go"),
 			doc:   `DO NOT EDIT`,
 		},
+		{
+			fpath: filepath.Join("testdata", "autogen_exclude_block_comment.go"),
+			doc: `first line
+second line
+third line
+and this text also
+this type of block comment also
+this one line comment also`,
+		},
 	}
 
 	for _, tc := range testCases {

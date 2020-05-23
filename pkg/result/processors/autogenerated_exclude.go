@@ -130,11 +130,32 @@ func getDoc(filePath string) (string, error) {
 	scanner.Buffer(make([]byte, initialSize), maxSize)
 
 	var docLines []string
+	inBlockComment := false
 	for scanner.Scan() {
 		line := strings.TrimSpace(scanner.Text())
-		if strings.HasPrefix(line, "//") {
+		if inBlockComment {
+			text := line
+			if strings.Contains(text, "*/") {
+				inBlockComment = false
+				text = text[:strings.Index(text, "*/")]
+			}
+			text = strings.TrimSpace(strings.TrimPrefix(text, "*"))
+			if text != "" {
+				docLines = append(docLines, text)
+			}
+		} else if strings.HasPrefix(line, "//") {
 			text := strings.TrimSpace(strings.TrimPrefix(line, "//"))
 			docLines = append(docLines, text)
+		} else if strings.HasPrefix(line, "/*") {
+			text := strings.TrimSpace(strings.TrimPrefix(line, "/*"))
+			if !strings.Contains(text, "*/") {
+				inBlockComment = true
+			} else {
+				text = strings.TrimSpace(text[:strings.Index(text, "*/")])
+			}
+			if text != "" {
+				docLines = append(docLines, text)
+			}
 		} else if line == "" || strings.HasPrefix(line, "package") {
 			// go to next line
 		} else {
