@@ -13,8 +13,7 @@ type Contribution = {
   count: number
 }
 
-const buildWeights = (contributors: any): Map<string, number> => {
-  console.info(contributors)
+const buildWeights = (contributorStats: any[]): Map<string, number> => {
   const loginToTotalWeight: Map<string, number> = new Map<string, number>()
 
   const addContributions = (weight: number, contributions: Contribution[], onlyExisting: boolean) => {
@@ -26,15 +25,19 @@ const buildWeights = (contributors: any): Map<string, number> => {
     }
   }
 
-  // totally every pull or commit should account as 10
-  addContributions(5, contributors.prCreators, false)
-  addContributions(5, contributors.commitAuthors, false) // some commits are out pull requests
+  for (const stat of contributorStats) {
+    // totally every pull or commit should account as 10
+    addContributions(5, stat.prCreators, false)
+    addContributions(5, stat.commitAuthors, false) // some commits are out pull requests
+  }
 
-  addContributions(2, contributors.prCommentators, true)
-  addContributions(2, contributors.issueCreators, true)
-  addContributions(2, contributors.issueCommentators, true)
-  addContributions(2, contributors.reviewers, true)
-  addContributions(0.3, contributors.reactors, true)
+  for (const stat of contributorStats) {
+    addContributions(2, stat.prCommentators, true)
+    addContributions(2, stat.issueCreators, true)
+    addContributions(2, stat.issueCommentators, true)
+    addContributions(2, stat.reviewers, true)
+    addContributions(0.3, stat.reactors, true)
+  }
 
   return loginToTotalWeight
 }
@@ -93,16 +96,21 @@ const buildCoreTeamInfo = async (): Promise<ContributorInfo[]> => {
 
 const main = async () => {
   try {
-    const contributors = await nyc.repoContributors({
-      token: process.env.GITHUB_TOKEN,
-      user: "golangci",
-      repo: "golangci-lint",
-      before: new Date(),
-      after: new Date(0),
-      commits: true,
-      reactions: true,
-    })
-    const loginToWeight = buildWeights(contributors)
+    const repos = [`golangci-lint`, `golangci-lint-action`]
+    const promises = repos.map((repo) =>
+      nyc.repoContributors({
+        token: process.env.GITHUB_TOKEN,
+        user: `golangci`,
+        repo,
+        before: new Date(),
+        after: new Date(0),
+        commits: true,
+        reactions: true,
+      })
+    )
+    const contributorStats = await Promise.all(promises)
+    console.info(`Got stat for repos ${repos}`)
+    const loginToWeight = buildWeights(contributorStats)
     const weightedContributors: WeightedContributor[] = []
     loginToWeight.forEach((weight, login) => weightedContributors.push({ login, weight }))
 
