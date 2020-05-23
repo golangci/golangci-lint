@@ -3,5 +3,5 @@
 
 // third line
 
-package testdata // no this text
+package testdata // this text also
 // and this text also
