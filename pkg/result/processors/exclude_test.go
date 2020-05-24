@@ -8,34 +8,12 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-func newTextIssue(text string) result.Issue {
-	return result.Issue{
-		Text: text,
-	}
-}
-
-func process(t *testing.T, p Processor, issues ...result.Issue) []result.Issue {
-	processedIssues, err := p.Process(issues)
-	assert.NoError(t, err)
-	return processedIssues
-}
-
-func processAssertSame(t *testing.T, p Processor, issues ...result.Issue) {
-	processedIssues := process(t, p, issues...)
-	assert.Equal(t, issues, processedIssues)
-}
-
-func processAssertEmpty(t *testing.T, p Processor, issues ...result.Issue) {
-	processedIssues := process(t, p, issues...)
-	assert.Empty(t, processedIssues)
-}
-
 func TestExclude(t *testing.T) {
 	p := NewExclude("^exclude$")
 	texts := []string{"excLude", "1", "", "exclud", "notexclude"}
 	var issues []result.Issue
 	for _, t := range texts {
-		issues = append(issues, newTextIssue(t))
+		issues = append(issues, newIssueFromTextTestCase(t))
 	}
 
 	processedIssues := process(t, p, issues...)
@@ -49,7 +27,7 @@ func TestExclude(t *testing.T) {
 }
 
 func TestNoExclude(t *testing.T) {
-	processAssertSame(t, NewExclude(""), newTextIssue("test"))
+	processAssertSame(t, NewExclude(""), newIssueFromTextTestCase("test"))
 }
 
 func TestExcludeCaseSensitive(t *testing.T) {
@@ -57,7 +35,7 @@ func TestExcludeCaseSensitive(t *testing.T) {
 	texts := []string{"excLude", "1", "", "exclud", "exclude"}
 	var issues []result.Issue
 	for _, t := range texts {
-		issues = append(issues, newTextIssue(t))
+		issues = append(issues, newIssueFromTextTestCase(t))
 	}
 
 	processedIssues := process(t, p, issues...)

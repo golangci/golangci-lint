@@ -17,7 +17,7 @@ type severityRule struct {
 }
 
 func (r *severityRule) isEmpty() bool {
-	return r.text == nil && r.path == nil && len(r.linters) == 0
+	return r.source == nil && r.text == nil && r.path == nil && len(r.linters) == 0
 }
 
 type SeverityRule struct {
@@ -134,3 +134,21 @@ func (SeverityRules) Name() string { return "severity-rules" }
 func (SeverityRules) Finish()      {}
 
 var _ Processor = SeverityRules{}
+
+type SeverityRulesCaseSensitive struct {
+	*SeverityRules
+}
+
+func NewSeverityRulesCaseSensitive(defaultSeverity string, rules []SeverityRule,
+	lineCache *fsutils.LineCache, log logutils.Log) *SeverityRulesCaseSensitive {
+	r := &SeverityRules{
+		lineCache:       lineCache,
+		log:             log,
+		defaultSeverity: defaultSeverity,
+	}
+	r.rules = createSeverityRules(rules, "")
+
+	return &SeverityRulesCaseSensitive{r}
+}
+
+func (SeverityRulesCaseSensitive) Name() string { return "severity-rules-case-sensitive" }

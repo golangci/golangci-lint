@@ -497,8 +497,9 @@ type Issues struct {
 	ExcludeRules           []ExcludeRule `mapstructure:"exclude-rules"`
 	UseDefaultExcludes     bool          `mapstructure:"exclude-use-default"`
 
-	SeverityDefault string         `mapstructure:"severity-default"`
-	SeverityRules   []SeverityRule `mapstructure:"severity-rules"`
+	SeverityDefault       string         `mapstructure:"severity-default"`
+	SeverityCaseSensitive bool           `mapstructure:"severity-case-sensitive"`
+	SeverityRules         []SeverityRule `mapstructure:"severity-rules"`
 
 	MaxIssuesPerLinter int `mapstructure:"max-issues-per-linter"`
 	MaxSameIssues      int `mapstructure:"max-same-issues"`

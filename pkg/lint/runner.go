@@ -29,6 +29,7 @@ type Runner struct {
 	Log        logutils.Log
 }
 
+//nolint:funlen
 func NewRunner(cfg *config.Config, log logutils.Log, goenv *goutil.Env, es *lintersdb.EnabledSet,
 	lineCache *fsutils.LineCache, dbManager *lintersdb.Manager, pkgs []*gopackages.Package) (*Runner, error) {
 	icfg := cfg.Issues
@@ -95,6 +96,23 @@ func NewRunner(cfg *config.Config, log logutils.Log, goenv *goutil.Env, es *lint
 		})
 	}
 
+	var severityRulesProcessor processors.Processor
+	if cfg.Issues.SeverityCaseSensitive {
+		severityRulesProcessor = processors.NewSeverityRulesCaseSensitive(
+			icfg.SeverityDefault,
+			severityRules,
+			lineCache,
+			log.Child("severity_rules"),
+		)
+	} else {
+		severityRulesProcessor = processors.NewSeverityRules(
+			icfg.SeverityDefault,
+			severityRules,
+			lineCache,
+			log.Child("severity_rules"),
+		)
+	}
+
 	return &Runner{
 		Processors: []processors.Processor{
 			processors.NewCgo(goenv),
@@ -123,7 +141,7 @@ func NewRunner(cfg *config.Config, log logutils.Log, goenv *goutil.Env, es *lint
 			processors.NewMaxFromLinter(icfg.MaxIssuesPerLinter, log.Child("max_from_linter"), cfg),
 			processors.NewSourceCode(lineCache, log.Child("source_code")),
 			processors.NewPathShortener(),
-			processors.NewSeverityRules(icfg.SeverityDefault, severityRules, lineCache, log.Child("severity_rules")),
+			severityRulesProcessor,
 		},
 		Log: log,
 	}, nil

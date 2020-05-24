@@ -1,7 +1,6 @@
 package processors
 
 import (
-	"go/token"
 	"path/filepath"
 	"testing"
 
@@ -32,7 +31,7 @@ func TestExcludeRulesMultiple(t *testing.T) {
 		},
 	}, lineCache, nil)
 
-	cases := []issueCase{
+	cases := []issueTestCase{
 		{Path: "e.go", Text: "exclude", Linter: "linter"},
 		{Path: "e.go", Text: "some", Linter: "linter"},
 		{Path: "e_test.go", Text: "normal", Linter: "testlinter"},
@@ -43,42 +42,24 @@ func TestExcludeRulesMultiple(t *testing.T) {
 	}
 	var issues []result.Issue
 	for _, c := range cases {
-		issues = append(issues, newIssueCase(c))
+		issues = append(issues, newIssueFromIssueTestCase(c))
 	}
 	processedIssues := process(t, p, issues...)
-	var resultingCases []issueCase
+	var resultingCases []issueTestCase
 	for _, i := range processedIssues {
-		resultingCases = append(resultingCases, issueCase{
+		resultingCases = append(resultingCases, issueTestCase{
 			Path:   i.FilePath(),
 			Linter: i.FromLinter,
 			Text:   i.Text,
 			Line:   i.Line(),
 		})
 	}
-	expectedCases := []issueCase{
+	expectedCases := []issueTestCase{
 		{Path: "e.go", Text: "some", Linter: "linter"},
 		{Path: "e_Test.go", Text: "normal", Linter: "testlinter"},
 		{Path: "e_test.go", Text: "another", Linter: "linter"},
 	}
 	assert.Equal(t, expectedCases, resultingCases)
-}
-
-type issueCase struct {
-	Path   string
-	Line   int
-	Text   string
-	Linter string
-}
-
-func newIssueCase(c issueCase) result.Issue {
-	return result.Issue{
-		Text:       c.Text,
-		FromLinter: c.Linter,
-		Pos: token.Position{
-			Filename: c.Path,
-			Line:     c.Line,
-		},
-	}
 }
 
 func TestExcludeRulesText(t *testing.T) {
@@ -110,7 +91,7 @@ func TestExcludeRulesText(t *testing.T) {
 }
 
 func TestExcludeRulesEmpty(t *testing.T) {
-	processAssertSame(t, NewExcludeRules(nil, nil, nil), newTextIssue("test"))
+	processAssertSame(t, NewExcludeRules(nil, nil, nil), newIssueFromTextTestCase("test"))
 }
 
 func TestExcludeRulesCaseSensitiveMultiple(t *testing.T) {
@@ -134,7 +115,7 @@ func TestExcludeRulesCaseSensitiveMultiple(t *testing.T) {
 		},
 	}, lineCache, nil)
 
-	cases := []issueCase{
+	cases := []issueTestCase{
 		{Path: "e.go", Text: "exclude", Linter: "linter"},
 		{Path: "e.go", Text: "excLude", Linter: "linter"},
 		{Path: "e.go", Text: "some", Linter: "linter"},
@@ -147,19 +128,19 @@ func TestExcludeRulesCaseSensitiveMultiple(t *testing.T) {
 	}
 	var issues []result.Issue
 	for _, c := range cases {
-		issues = append(issues, newIssueCase(c))
+		issues = append(issues, newIssueFromIssueTestCase(c))
 	}
 	processedIssues := process(t, p, issues...)
-	var resultingCases []issueCase
+	var resultingCases []issueTestCase
 	for _, i := range processedIssues {
-		resultingCases = append(resultingCases, issueCase{
+		resultingCases = append(resultingCases, issueTestCase{
 			Path:   i.FilePath(),
 			Linter: i.FromLinter,
 			Text:   i.Text,
 			Line:   i.Line(),
 		})
 	}
-	expectedCases := []issueCase{
+	expectedCases := []issueTestCase{
 		{Path: "e.go", Text: "excLude", Linter: "linter"},
 		{Path: "e.go", Text: "some", Linter: "linter"},
 		{Path: "e_Test.go", Text: "normal", Linter: "testlinter"},
@@ -199,5 +180,5 @@ func TestExcludeRulesCaseSensitiveText(t *testing.T) {
 }
 
 func TestExcludeRulesCaseSensitiveEmpty(t *testing.T) {
-	processAssertSame(t, NewExcludeRulesCaseSensitive(nil, nil, nil), newTextIssue("test"))
+	processAssertSame(t, NewExcludeRulesCaseSensitive(nil, nil, nil), newIssueFromTextTestCase("test"))
 }
