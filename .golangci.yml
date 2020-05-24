@@ -122,6 +122,11 @@ issues:
       linters:
         - gomnd
 
+    # https://github.com/go-critic/go-critic/issues/926
+    - linters:
+        - gocritic
+      text: "unnecessaryDefer:"
+
 run:
   skip-dirs:
     - test/testdata_etc

@@ -46,7 +46,7 @@ and is constantly being improved. For any problems with `golangci-lint`, check o
 
 ### macOS
 
-You can also install a binary release on macOS using [brew](https://brew.sh/):
+You can install a binary release on macOS using [brew](https://brew.sh/):
 
 ```sh
 brew install golangci/tap/golangci-lint
@@ -59,13 +59,41 @@ brew upgrade golangci/tap/golangci-lint
 docker run --rm -v $(pwd):/app -w /app golangci/golangci-lint:{.LatestVersion} golangci-lint run -v
 ```
 
+### Linux and Windows
+
+```sh
+# binary will be $(go env GOPATH)/bin/golangci-lint
+curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin {.LatestVersion}
+
+golangci-lint --version
+```
+
+On Windows, you can run the above commands with Git Bash, which comes with [Git for Windows](https://git-scm.com/download/win).
+
 ### Install from Source
 
-Go source installations are supported for the two most recent Go releases.
+Note: such `go get` installation aren't guaranteed to work. We recommend using binary installation.
+<details>
+<summary>Why?</summary>
+
+`go get` installation isn't recommended because of the following points:
+
+1. some users use `-u` flag for `go get`, which upgrades our dependencies. Resulting configuration wasn't tested and isn't guaranteed to work.
+2. [`go.mod`](https://github.com/golangci/golangci-lint/blob/master/go.mod) replacement directive doesn't apply. It means a user will be using patched version of `golangci-lint` if we use such replacements.
+3. it's stability depends on a user's Go version (e.g. on [this compiler Go <= 1.12 bug](https://github.com/golang/go/issues/29612)).
+4. we've encountered a lot of issues with Go modules hashes.
+5. it allows installation from `master` branch which can't be considered stable.
+6. it's slower than binary installation
+
+</details>
+
+<div style="margin-top: 2em;">
 
 ```sh
 go get github.com/golangci/golangci-lint/cmd/golangci-lint@{.LatestVersion}
 ```
+
+</div>
 
 ## Versioning Policy
 

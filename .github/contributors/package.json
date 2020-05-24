@@ -1,0 +1,21 @@
+{
+  "name": "contributors",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "gen": "tsc && node --trace-warnings ./generate.js",
+    "rewrite_readme": "tsc && node --trace-warnings ./rewrite_readme.js",
+    "all": "npm run gen && npm run rewrite_readme"
+  },
+  "author": "",
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "@octokit/graphql": "^4.4.0",
+    "@types/node": "^14.0.1",
+    "name-your-contributors": "^3.8.3",
+    "typescript": "^3.9.2"
+  }
+}

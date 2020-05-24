@@ -192,7 +192,7 @@ func fetchAllReleases(ctx context.Context) ([]release, error) {
 		return nil, errors.New("no GITHUB_TOKEN environment variable")
 	}
 	src := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: githubToken})
-	httpClient := oauth2.NewClient(context.Background(), src)
+	httpClient := oauth2.NewClient(ctx, src)
 	client := githubv4.NewClient(httpClient)
 
 	var q struct {

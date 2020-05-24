@@ -1,0 +1,6 @@
+/cache/
+/node_modules/
+*.log
+*.tsbuildinfo
+/*.js
+/contributors.json
