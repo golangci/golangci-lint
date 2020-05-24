@@ -242,6 +242,7 @@ type LintersSettings struct {
 	Testpackage TestpackageSettings
 	Nestif      NestifSettings
 	NoLintLint  NoLintLintSettings
+	Exhaustive  ExhaustiveSettings
 
 	Custom map[string]CustomLinterSettings
 }
@@ -339,6 +340,10 @@ type NestifSettings struct {
 	MinComplexity int `mapstructure:"min-complexity"`
 }
 
+type ExhaustiveSettings struct {
+	DefaultSignifiesExhaustive bool `mapstructure:"default-signifies-exhaustive"`
+}
+
 var defaultLintersSettings = LintersSettings{
 	Lll: LllSettings{
 		LineLength: 120,
@@ -388,6 +393,9 @@ var defaultLintersSettings = LintersSettings{
 	},
 	Nestif: NestifSettings{
 		MinComplexity: 5,
+	},
+	Exhaustive: ExhaustiveSettings{
+		DefaultSignifiesExhaustive: false,
 	},
 }
 
