@@ -114,7 +114,7 @@ func (r *FileReader) validateConfig() error {
 		}
 	}
 	if len(c.Severity.Rules) > 0 && c.Severity.Default == "" {
-		return errors.New("can't set severity rule option: no severity default defined")
+		return errors.New("can't set severity rule option: no default severity defined")
 	}
 	for i, rule := range c.Severity.Rules {
 		if err := rule.Validate(); err != nil {
