@@ -14,20 +14,28 @@ func TestExcludeRulesMultiple(t *testing.T) {
 	lineCache := fsutils.NewLineCache(fsutils.NewFileCache())
 	p := NewExcludeRules([]ExcludeRule{
 		{
-			Text:    "^exclude$",
-			Linters: []string{"linter"},
+			BaseRule: BaseRule{
+				Text:    "^exclude$",
+				Linters: []string{"linter"},
+			},
 		},
 		{
-			Linters: []string{"testlinter"},
-			Path:    `_test\.go`,
+			BaseRule: BaseRule{
+				Linters: []string{"testlinter"},
+				Path:    `_test\.go`,
+			},
 		},
 		{
-			Text: "^testonly$",
-			Path: `_test\.go`,
+			BaseRule: BaseRule{
+				Text: "^testonly$",
+				Path: `_test\.go`,
+			},
 		},
 		{
-			Source:  "^//go:generate ",
-			Linters: []string{"lll"},
+			BaseRule: BaseRule{
+				Source:  "^//go:generate ",
+				Linters: []string{"lll"},
+			},
 		},
 	}, lineCache, nil)
 
@@ -65,9 +73,9 @@ func TestExcludeRulesMultiple(t *testing.T) {
 func TestExcludeRulesText(t *testing.T) {
 	p := NewExcludeRules([]ExcludeRule{
 		{
-			Text: "^exclude$",
-			Linters: []string{
-				"linter",
+			BaseRule: BaseRule{
+				Text:    "^exclude$",
+				Linters: []string{"linter"},
 			},
 		},
 	}, nil, nil)
@@ -98,20 +106,28 @@ func TestExcludeRulesCaseSensitiveMultiple(t *testing.T) {
 	lineCache := fsutils.NewLineCache(fsutils.NewFileCache())
 	p := NewExcludeRulesCaseSensitive([]ExcludeRule{
 		{
-			Text:    "^exclude$",
-			Linters: []string{"linter"},
+			BaseRule: BaseRule{
+				Text:    "^exclude$",
+				Linters: []string{"linter"},
+			},
 		},
 		{
-			Linters: []string{"testlinter"},
-			Path:    `_test\.go`,
+			BaseRule: BaseRule{
+				Linters: []string{"testlinter"},
+				Path:    `_test\.go`,
+			},
 		},
 		{
-			Text: "^testonly$",
-			Path: `_test\.go`,
+			BaseRule: BaseRule{
+				Text: "^testonly$",
+				Path: `_test\.go`,
+			},
 		},
 		{
-			Source:  "^//go:generate ",
-			Linters: []string{"lll"},
+			BaseRule: BaseRule{
+				Source:  "^//go:generate ",
+				Linters: []string{"lll"},
+			},
 		},
 	}, lineCache, nil)
 
@@ -154,9 +170,9 @@ func TestExcludeRulesCaseSensitiveMultiple(t *testing.T) {
 func TestExcludeRulesCaseSensitiveText(t *testing.T) {
 	p := NewExcludeRulesCaseSensitive([]ExcludeRule{
 		{
-			Text: "^exclude$",
-			Linters: []string{
-				"linter",
+			BaseRule: BaseRule{
+				Text:    "^exclude$",
+				Linters: []string{"linter"},
 			},
 		},
 	}, nil, nil)

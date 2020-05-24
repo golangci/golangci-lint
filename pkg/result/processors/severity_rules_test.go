@@ -17,35 +17,49 @@ func TestSeverityRulesMultiple(t *testing.T) {
 	log := report.NewLogWrapper(logutils.NewStderrLog(""), &report.Data{})
 	p := NewSeverityRules("error", []SeverityRule{
 		{
-			Text:     "^ssl$",
-			Linters:  []string{"gosec"},
 			Severity: "info",
+			BaseRule: BaseRule{
+				Text:    "^ssl$",
+				Linters: []string{"gosec"},
+			},
 		},
 		{
-			Linters:  []string{"linter"},
-			Path:     "e.go",
 			Severity: "info",
+			BaseRule: BaseRule{
+				Linters: []string{"linter"},
+				Path:    "e.go",
+			},
 		},
 		{
-			Text:     "^testonly$",
-			Path:     `_test\.go`,
 			Severity: "info",
+			BaseRule: BaseRule{
+				Text: "^testonly$",
+				Path: `_test\.go`,
+			},
 		},
 		{
-			Source:  "^//go:generate ",
-			Linters: []string{"lll"},
+			BaseRule: BaseRule{
+				Source:  "^//go:generate ",
+				Linters: []string{"lll"},
+			},
 		},
 		{
-			Source:   "^//go:dosomething",
 			Severity: "info",
+			BaseRule: BaseRule{
+				Source: "^//go:dosomething",
+			},
 		},
 		{
-			Linters:  []string{"someotherlinter"},
 			Severity: "info",
+			BaseRule: BaseRule{
+				Linters: []string{"someotherlinter"},
+			},
 		},
 		{
-			Linters:  []string{"somelinter"},
 			Severity: "info",
+			BaseRule: BaseRule{
+				Linters: []string{"somelinter"},
+			},
 		},
 		{
 			Severity: "info",
@@ -93,8 +107,10 @@ func TestSeverityRulesMultiple(t *testing.T) {
 func TestSeverityRulesText(t *testing.T) {
 	p := NewSeverityRules("", []SeverityRule{
 		{
-			Text:    "^severity$",
-			Linters: []string{"linter"},
+			BaseRule: BaseRule{
+				Text:    "^severity$",
+				Linters: []string{"linter"},
+			},
 		},
 	}, nil, nil)
 	texts := []string{"seveRity", "1", "", "serverit", "notseverity"}
@@ -124,9 +140,11 @@ func TestSeverityRulesCaseSensitive(t *testing.T) {
 	lineCache := fsutils.NewLineCache(fsutils.NewFileCache())
 	p := NewSeverityRulesCaseSensitive("error", []SeverityRule{
 		{
-			Text:     "^ssl$",
-			Linters:  []string{"gosec", "someotherlinter"},
 			Severity: "info",
+			BaseRule: BaseRule{
+				Text:    "^ssl$",
+				Linters: []string{"gosec", "someotherlinter"},
+			},
 		},
 	}, lineCache, nil)
 

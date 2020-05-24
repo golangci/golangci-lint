@@ -407,11 +407,15 @@ type Linters struct {
 	Presets []string
 }
 
-type ExcludeRule struct {
+type BaseRule struct {
 	Linters []string
 	Path    string
 	Text    string
 	Source  string
+}
+
+type ExcludeRule struct {
+	BaseRule `mapstructure:",squash"`
 }
 
 func validateOptionalRegex(value string) error {
@@ -422,72 +426,17 @@ func validateOptionalRegex(value string) error {
 	return err
 }
 
-func (e ExcludeRule) Validate() error { // nolint:dupl
-	if err := validateOptionalRegex(e.Path); err != nil {
-		return fmt.Errorf("invalid path regex: %v", err)
-	}
-	if err := validateOptionalRegex(e.Text); err != nil {
-		return fmt.Errorf("invalid text regex: %v", err)
-	}
-	if err := validateOptionalRegex(e.Source); err != nil {
-		return fmt.Errorf("invalid source regex: %v", err)
-	}
-	nonBlank := 0
-	if len(e.Linters) > 0 {
-		nonBlank++
-	}
-	if e.Path != "" {
-		nonBlank++
-	}
-	if e.Text != "" {
-		nonBlank++
-	}
-	if e.Source != "" {
-		nonBlank++
-	}
-	const minConditionsCount = 2
-	if nonBlank < minConditionsCount {
-		return errors.New("at least 2 of (text, source, path, linters) should be set")
-	}
-	return nil
+func (e ExcludeRule) Validate() error {
+	return validateBaseRule(e.BaseRule, 2)
 }
 
 type SeverityRule struct {
+	BaseRule `mapstructure:",squash"`
 	Severity string
-	Linters  []string
-	Path     string
-	Text     string
-	Source   string
 }
 
-func (s *SeverityRule) Validate() error { // nolint:dupl
-	if err := validateOptionalRegex(s.Path); err != nil {
-		return fmt.Errorf("invalid path regex: %v", err)
-	}
-	if err := validateOptionalRegex(s.Text); err != nil {
-		return fmt.Errorf("invalid text regex: %v", err)
-	}
-	if err := validateOptionalRegex(s.Source); err != nil {
-		return fmt.Errorf("invalid source regex: %v", err)
-	}
-	nonBlank := 0
-	if len(s.Linters) > 0 {
-		nonBlank++
-	}
-	if s.Path != "" {
-		nonBlank++
-	}
-	if s.Text != "" {
-		nonBlank++
-	}
-	if s.Source != "" {
-		nonBlank++
-	}
-	const minConditionsCount = 1
-	if nonBlank < minConditionsCount {
-		return errors.New("at least 1 of (text, source, path, linters) should be set")
-	}
-	return nil
+func (s *SeverityRule) Validate() error {
+	return validateBaseRule(s.BaseRule, 1)
 }
 
 type Issues struct {
@@ -497,10 +446,6 @@ type Issues struct {
 	ExcludeRules           []ExcludeRule `mapstructure:"exclude-rules"`
 	UseDefaultExcludes     bool          `mapstructure:"exclude-use-default"`
 
-	SeverityDefault       string         `mapstructure:"severity-default"`
-	SeverityCaseSensitive bool           `mapstructure:"severity-case-sensitive"`
-	SeverityRules         []SeverityRule `mapstructure:"severity-rules"`
-
 	MaxIssuesPerLinter int `mapstructure:"max-issues-per-linter"`
 	MaxSameIssues      int `mapstructure:"max-same-issues"`
 
@@ -509,6 +454,12 @@ type Issues struct {
 	Diff              bool   `mapstructure:"new"`
 
 	NeedFix bool `mapstructure:"fix"`
+}
+
+type Severity struct {
+	Default       string         `mapstructure:"default-severity"`
+	CaseSensitive bool           `mapstructure:"case-sensitive"`
+	Rules         []SeverityRule `mapstructure:"rules"`
 }
 
 type Config struct {
@@ -526,6 +477,7 @@ type Config struct {
 	LintersSettings LintersSettings `mapstructure:"linters-settings"`
 	Linters         Linters
 	Issues          Issues
+	Severity        Severity
 
 	InternalTest bool // Option is used only for testing golangci-lint code, don't use it
 }
@@ -534,4 +486,33 @@ func NewDefault() *Config {
 	return &Config{
 		LintersSettings: defaultLintersSettings,
 	}
+}
+
+func validateBaseRule(rule BaseRule, minConditionsCount int) error {
+	if err := validateOptionalRegex(rule.Path); err != nil {
+		return fmt.Errorf("invalid path regex: %v", err)
+	}
+	if err := validateOptionalRegex(rule.Text); err != nil {
+		return fmt.Errorf("invalid text regex: %v", err)
+	}
+	if err := validateOptionalRegex(rule.Source); err != nil {
+		return fmt.Errorf("invalid source regex: %v", err)
+	}
+	nonBlank := 0
+	if len(rule.Linters) > 0 {
+		nonBlank++
+	}
+	if rule.Path != "" {
+		nonBlank++
+	}
+	if rule.Text != "" {
+		nonBlank++
+	}
+	if rule.Source != "" {
+		nonBlank++
+	}
+	if nonBlank < minConditionsCount {
+		return fmt.Errorf("at least %d of (text, source, path, linters) should be set", minConditionsCount)
+	}
+	return nil
 }
