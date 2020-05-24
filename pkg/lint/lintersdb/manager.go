@@ -273,8 +273,8 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetComplexity).
 			WithURL("https://github.com/nakabonne/nestif"),
 		linter.NewConfig(golinters.NewExportLoopRef()).
-			WithPresets(linter.PresetStyle).
-			WithURL("github.com/kyoh86/exportloopref"),
+			WithPresets(linter.PresetBugs).
+			WithURL("https://github.com/kyoh86/exportloopref"),
 		// nolintlint must be last because it looks at the results of all the previous linters for unused nolint directives
 		linter.NewConfig(golinters.NewNoLintLint()).
 			WithPresets(linter.PresetStyle).
