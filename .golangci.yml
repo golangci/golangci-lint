@@ -106,7 +106,7 @@ linters:
 
   # don't enable:
   # - asciicheck
-  # - exhaustive (TODO: enable after next release)
+  # - exhaustive (TODO: enable after next release; current release is v1.27)
   # - gochecknoglobals
   # - gocognit
   # - godot
