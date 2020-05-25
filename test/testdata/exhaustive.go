@@ -1,12 +1,17 @@
 //args: -Eexhaustive
 package testdata
 
-import (
-	"github.com/golangci/golangci-lint/test/testdata/exhaustive"
+type Direction int
+
+const (
+	North Direction = iota
+	East
+	South
+	West
 )
 
-func processDirection(d exhaustive.Direction) {
-	switch d { // ERROR "missing cases in switch of type exhaustive.Direction: East, West"
+func processDirection(d Direction) {
+	switch d { // ERROR "missing cases in switch of type Direction: East, West"
 	case North, South:
 	}
 }
