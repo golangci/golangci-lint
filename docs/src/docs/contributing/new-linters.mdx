@@ -17,16 +17,16 @@ After that:
    Run `T=yourlintername.go make test_linters` to ensure that test fails.
 2. Add a new file `pkg/golinters/{yourlintername}.go`. Look at other linters in this directory. Implement linter integration and check that test passes.
 3. Add the new struct for the linter (which you've implemented in `pkg/golinters/{yourlintername}.go`) to the
-   list of all supported linters in [`pkg/lint/lintersdb/lintersdb.go`](https://github.com/golangci/golangci-lint/blob/master/pkg/lint/lintersdb/lintersdb.go)
+   list of all supported linters in [`pkg/lint/lintersdb/manager.go`](https://github.com/golangci/golangci-lint/blob/master/pkg/lint/lintersdb/manager.go)
    to the function `GetAllSupportedLinterConfigs`. Enable it by default only if you are sure.
 4. Find out what options do you need to configure for the linter. For example, `govet` has
-   only 1 option: [`check-shadowing`](https://github.com/golangci/golangci-lint/blob/master/.golangci.example.yml#L20).
+   only 1 option: [`check-shadowing`](https://github.com/golangci/golangci-lint/blob/master/.golangci.example.yml).
    Choose default values to not being annoying for users of golangci-lint. Add configuration options to:
 
 - [.golangci.example.yml](https://github.com/golangci/golangci-lint/blob/master/.golangci.example.yml) - the example of a configuration file. You can also add
   them to [.golangci.yml](https://github.com/golangci/golangci-lint/blob/master/.golangci.yml) if you think
   that this project needs not default values.
-- [config struct](https://github.com/golangci/golangci-lint/blob/master/pkg/config/config.go#L61) - don't forget
+- [config struct](https://github.com/golangci/golangci-lint/blob/master/pkg/config/config.go) - don't forget
   about `mapstructure` tag for proper configuration files parsing by [pflag](https://github.com/spf13/pflag).
 
 5. Take a look at the example of [Pull Request with new linter support](https://github.com/golangci/golangci-lint/pull/850).
