@@ -2,7 +2,6 @@ package printers
 
 import (
 	"context"
-	"crypto/md5" //nolint:gosec
 	"encoding/json"
 	"fmt"
 
@@ -14,6 +13,7 @@ import (
 // It is just enough to support GitLab CI Code Quality - https://docs.gitlab.com/ee/user/project/merge_requests/code_quality.html
 type CodeClimateIssue struct {
 	Description string `json:"description"`
+	Severity    string `json:"severity,omitempty"`
 	Fingerprint string `json:"fingerprint"`
 	Location    struct {
 		Path  string `json:"path"`
@@ -31,28 +31,23 @@ func NewCodeClimate() *CodeClimate {
 }
 
 func (p CodeClimate) Print(ctx context.Context, issues []result.Issue) error {
-	allIssues := []CodeClimateIssue{}
-	for ind := range issues {
-		i := &issues[ind]
-		var issue CodeClimateIssue
-		issue.Description = i.FromLinter + ": " + i.Text
-		issue.Location.Path = i.Pos.Filename
-		issue.Location.Lines.Begin = i.Pos.Line
+	codeClimateIssues := []CodeClimateIssue{}
+	for i := range issues {
+		issue := &issues[i]
+		codeClimateIssue := CodeClimateIssue{}
+		codeClimateIssue.Description = issue.Description()
+		codeClimateIssue.Location.Path = issue.Pos.Filename
+		codeClimateIssue.Location.Lines.Begin = issue.Pos.Line
+		codeClimateIssue.Fingerprint = issue.Fingerprint()
 
-		// Need a checksum of the issue, so we use MD5 of the filename, text, and first line of source if there is any
-		var firstLine string
-		if len(i.SourceLines) > 0 {
-			firstLine = i.SourceLines[0]
+		if issue.Severity != "" {
+			codeClimateIssue.Severity = issue.Severity
 		}
 
-		hash := md5.New() //nolint:gosec
-		_, _ = hash.Write([]byte(i.Pos.Filename + i.Text + firstLine))
-		issue.Fingerprint = fmt.Sprintf("%X", hash.Sum(nil))
-
-		allIssues = append(allIssues, issue)
+		codeClimateIssues = append(codeClimateIssues, codeClimateIssue)
 	}
 
-	outputJSON, err := json.Marshal(allIssues)
+	outputJSON, err := json.Marshal(codeClimateIssues)
 	if err != nil {
 		return err
 	}

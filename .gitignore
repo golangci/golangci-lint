@@ -15,3 +15,5 @@
 /.vscode/
 *.test
 .DS_Store
+coverage.out
+coverage.xml

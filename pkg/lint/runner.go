@@ -31,24 +31,6 @@ type Runner struct {
 
 func NewRunner(cfg *config.Config, log logutils.Log, goenv *goutil.Env, es *lintersdb.EnabledSet,
 	lineCache *fsutils.LineCache, dbManager *lintersdb.Manager, pkgs []*gopackages.Package) (*Runner, error) {
-	icfg := cfg.Issues
-	excludePatterns := icfg.ExcludePatterns
-	if icfg.UseDefaultExcludes {
-		excludePatterns = append(excludePatterns, config.GetExcludePatternsStrings(icfg.IncludeDefaultExcludes)...)
-	}
-
-	var excludeTotalPattern string
-	if len(excludePatterns) != 0 {
-		excludeTotalPattern = fmt.Sprintf("(%s)", strings.Join(excludePatterns, "|"))
-	}
-
-	var excludeProcessor processors.Processor
-	if cfg.Issues.ExcludeCaseSensitive {
-		excludeProcessor = processors.NewExcludeCaseSensitive(excludeTotalPattern)
-	} else {
-		excludeProcessor = processors.NewExclude(excludeTotalPattern)
-	}
-
 	skipFilesProcessor, err := processors.NewSkipFiles(cfg.Run.SkipFiles)
 	if err != nil {
 		return nil, err
@@ -61,22 +43,6 @@ func NewRunner(cfg *config.Config, log logutils.Log, goenv *goutil.Env, es *lint
 	skipDirsProcessor, err := processors.NewSkipDirs(skipDirs, log.Child("skip dirs"), cfg.Run.Args)
 	if err != nil {
 		return nil, err
-	}
-
-	var excludeRules []processors.ExcludeRule
-	for _, r := range icfg.ExcludeRules {
-		excludeRules = append(excludeRules, processors.ExcludeRule{
-			Text:    r.Text,
-			Source:  r.Source,
-			Path:    r.Path,
-			Linters: r.Linters,
-		})
-	}
-	var excludeRulesProcessor processors.Processor
-	if cfg.Issues.ExcludeCaseSensitive {
-		excludeRulesProcessor = processors.NewExcludeRulesCaseSensitive(excludeRules, lineCache, log.Child("exclude_rules"))
-	} else {
-		excludeRulesProcessor = processors.NewExcludeRules(excludeRules, lineCache, log.Child("exclude_rules"))
 	}
 
 	enabledLinters, err := es.GetEnabledLintersMap()
@@ -101,17 +67,18 @@ func NewRunner(cfg *config.Config, log logutils.Log, goenv *goutil.Env, es *lint
 			// Must be before exclude because users see already marked output and configure excluding by it.
 			processors.NewIdentifierMarker(),
 
-			excludeProcessor,
-			excludeRulesProcessor,
+			getExcludeProcessor(&cfg.Issues),
+			getExcludeRulesProcessor(&cfg.Issues, log, lineCache),
 			processors.NewNolint(log.Child("nolint"), dbManager, enabledLinters),
 
 			processors.NewUniqByLine(cfg),
-			processors.NewDiff(icfg.Diff, icfg.DiffFromRevision, icfg.DiffPatchFilePath),
+			processors.NewDiff(cfg.Issues.Diff, cfg.Issues.DiffFromRevision, cfg.Issues.DiffPatchFilePath),
 			processors.NewMaxPerFileFromLinter(cfg),
-			processors.NewMaxSameIssues(icfg.MaxSameIssues, log.Child("max_same_issues"), cfg),
-			processors.NewMaxFromLinter(icfg.MaxIssuesPerLinter, log.Child("max_from_linter"), cfg),
+			processors.NewMaxSameIssues(cfg.Issues.MaxSameIssues, log.Child("max_same_issues"), cfg),
+			processors.NewMaxFromLinter(cfg.Issues.MaxIssuesPerLinter, log.Child("max_from_linter"), cfg),
 			processors.NewSourceCode(lineCache, log.Child("source_code")),
 			processors.NewPathShortener(),
+			getSeverityRulesProcessor(&cfg.Severity, log, lineCache),
 		},
 		Log: log,
 	}, nil
@@ -253,4 +220,90 @@ func (r *Runner) processIssues(issues []result.Issue, sw *timeutils.Stopwatch, s
 	}
 
 	return issues
+}
+
+func getExcludeProcessor(cfg *config.Issues) processors.Processor {
+	excludePatterns := cfg.ExcludePatterns
+	if cfg.UseDefaultExcludes {
+		excludePatterns = append(excludePatterns, config.GetExcludePatternsStrings(cfg.IncludeDefaultExcludes)...)
+	}
+
+	var excludeTotalPattern string
+	if len(excludePatterns) != 0 {
+		excludeTotalPattern = fmt.Sprintf("(%s)", strings.Join(excludePatterns, "|"))
+	}
+
+	var excludeProcessor processors.Processor
+	if cfg.ExcludeCaseSensitive {
+		excludeProcessor = processors.NewExcludeCaseSensitive(excludeTotalPattern)
+	} else {
+		excludeProcessor = processors.NewExclude(excludeTotalPattern)
+	}
+
+	return excludeProcessor
+}
+
+func getExcludeRulesProcessor(cfg *config.Issues, log logutils.Log, lineCache *fsutils.LineCache) processors.Processor {
+	var excludeRules []processors.ExcludeRule
+	for _, r := range cfg.ExcludeRules {
+		excludeRules = append(excludeRules, processors.ExcludeRule{
+			BaseRule: processors.BaseRule{
+				Text:    r.Text,
+				Source:  r.Source,
+				Path:    r.Path,
+				Linters: r.Linters,
+			},
+		})
+	}
+
+	var excludeRulesProcessor processors.Processor
+	if cfg.ExcludeCaseSensitive {
+		excludeRulesProcessor = processors.NewExcludeRulesCaseSensitive(
+			excludeRules,
+			lineCache,
+			log.Child("exclude_rules"),
+		)
+	} else {
+		excludeRulesProcessor = processors.NewExcludeRules(
+			excludeRules,
+			lineCache,
+			log.Child("exclude_rules"),
+		)
+	}
+
+	return excludeRulesProcessor
+}
+
+func getSeverityRulesProcessor(cfg *config.Severity, log logutils.Log, lineCache *fsutils.LineCache) processors.Processor {
+	var severityRules []processors.SeverityRule
+	for _, r := range cfg.Rules {
+		severityRules = append(severityRules, processors.SeverityRule{
+			Severity: r.Severity,
+			BaseRule: processors.BaseRule{
+				Text:    r.Text,
+				Source:  r.Source,
+				Path:    r.Path,
+				Linters: r.Linters,
+			},
+		})
+	}
+
+	var severityRulesProcessor processors.Processor
+	if cfg.CaseSensitive {
+		severityRulesProcessor = processors.NewSeverityRulesCaseSensitive(
+			cfg.Default,
+			severityRules,
+			lineCache,
+			log.Child("severity_rules"),
+		)
+	} else {
+		severityRulesProcessor = processors.NewSeverityRules(
+			cfg.Default,
+			severityRules,
+			lineCache,
+			log.Child("severity_rules"),
+		)
+	}
+
+	return severityRulesProcessor
 }

@@ -113,6 +113,14 @@ func (r *FileReader) validateConfig() error {
 			return fmt.Errorf("error in exclude rule #%d: %v", i, err)
 		}
 	}
+	if len(c.Severity.Rules) > 0 && c.Severity.Default == "" {
+		return errors.New("can't set severity rule option: no default severity defined")
+	}
+	for i, rule := range c.Severity.Rules {
+		if err := rule.Validate(); err != nil {
+			return fmt.Errorf("error in severity rule #%d: %v", i, err)
+		}
+	}
 	if err := c.LintersSettings.Govet.Validate(); err != nil {
 		return fmt.Errorf("error in govet config: %v", err)
 	}

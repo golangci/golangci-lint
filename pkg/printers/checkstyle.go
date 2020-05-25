@@ -5,6 +5,8 @@ import (
 	"encoding/xml"
 	"fmt"
 
+	"github.com/go-xmlfmt/xmlfmt"
+
 	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
@@ -28,7 +30,7 @@ type checkstyleError struct {
 	Source   string `xml:"source,attr"`
 }
 
-const defaultSeverity = "error"
+const defaultCheckstyleSeverity = "error"
 
 type Checkstyle struct{}
 
@@ -54,12 +56,17 @@ func (Checkstyle) Print(ctx context.Context, issues []result.Issue) error {
 			files[issue.FilePath()] = file
 		}
 
+		severity := defaultCheckstyleSeverity
+		if issue.Severity != "" {
+			severity = issue.Severity
+		}
+
 		newError := &checkstyleError{
 			Column:   issue.Column(),
 			Line:     issue.Line(),
 			Message:  issue.Text,
 			Source:   issue.FromLinter,
-			Severity: defaultSeverity,
+			Severity: severity,
 		}
 
 		file.Errors = append(file.Errors, newError)
@@ -75,6 +82,6 @@ func (Checkstyle) Print(ctx context.Context, issues []result.Issue) error {
 		return err
 	}
 
-	fmt.Fprintf(logutils.StdOut, "%s%s\n", xml.Header, data)
+	fmt.Fprintf(logutils.StdOut, "%s%s\n", xml.Header, xmlfmt.FormatXML(string(data), "", "  "))
 	return nil
 }

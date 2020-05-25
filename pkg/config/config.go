@@ -407,11 +407,46 @@ type Linters struct {
 	Presets []string
 }
 
-type ExcludeRule struct {
+type BaseRule struct {
 	Linters []string
 	Path    string
 	Text    string
 	Source  string
+}
+
+func (b BaseRule) Validate(minConditionsCount int) error {
+	if err := validateOptionalRegex(b.Path); err != nil {
+		return fmt.Errorf("invalid path regex: %v", err)
+	}
+	if err := validateOptionalRegex(b.Text); err != nil {
+		return fmt.Errorf("invalid text regex: %v", err)
+	}
+	if err := validateOptionalRegex(b.Source); err != nil {
+		return fmt.Errorf("invalid source regex: %v", err)
+	}
+	nonBlank := 0
+	if len(b.Linters) > 0 {
+		nonBlank++
+	}
+	if b.Path != "" {
+		nonBlank++
+	}
+	if b.Text != "" {
+		nonBlank++
+	}
+	if b.Source != "" {
+		nonBlank++
+	}
+	if nonBlank < minConditionsCount {
+		return fmt.Errorf("at least %d of (text, source, path, linters) should be set", minConditionsCount)
+	}
+	return nil
+}
+
+const excludeRuleMinConditionsCount = 2
+
+type ExcludeRule struct {
+	BaseRule `mapstructure:",squash"`
 }
 
 func validateOptionalRegex(value string) error {
@@ -423,33 +458,18 @@ func validateOptionalRegex(value string) error {
 }
 
 func (e ExcludeRule) Validate() error {
-	if err := validateOptionalRegex(e.Path); err != nil {
-		return fmt.Errorf("invalid path regex: %v", err)
-	}
-	if err := validateOptionalRegex(e.Text); err != nil {
-		return fmt.Errorf("invalid text regex: %v", err)
-	}
-	if err := validateOptionalRegex(e.Source); err != nil {
-		return fmt.Errorf("invalid source regex: %v", err)
-	}
-	nonBlank := 0
-	if len(e.Linters) > 0 {
-		nonBlank++
-	}
-	if e.Path != "" {
-		nonBlank++
-	}
-	if e.Text != "" {
-		nonBlank++
-	}
-	if e.Source != "" {
-		nonBlank++
-	}
-	const minConditionsCount = 2
-	if nonBlank < minConditionsCount {
-		return errors.New("at least 2 of (text, source, path, linters) should be set")
-	}
-	return nil
+	return e.BaseRule.Validate(excludeRuleMinConditionsCount)
+}
+
+const severityRuleMinConditionsCount = 1
+
+type SeverityRule struct {
+	BaseRule `mapstructure:",squash"`
+	Severity string
+}
+
+func (s *SeverityRule) Validate() error {
+	return s.BaseRule.Validate(severityRuleMinConditionsCount)
 }
 
 type Issues struct {
@@ -469,6 +489,12 @@ type Issues struct {
 	NeedFix bool `mapstructure:"fix"`
 }
 
+type Severity struct {
+	Default       string         `mapstructure:"default-severity"`
+	CaseSensitive bool           `mapstructure:"case-sensitive"`
+	Rules         []SeverityRule `mapstructure:"rules"`
+}
+
 type Config struct {
 	Run Run
 
@@ -484,6 +510,7 @@ type Config struct {
 	LintersSettings LintersSettings `mapstructure:"linters-settings"`
 	Linters         Linters
 	Issues          Issues
+	Severity        Severity
 
 	InternalTest bool // Option is used only for testing golangci-lint code, don't use it
 }
