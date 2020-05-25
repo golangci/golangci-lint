@@ -73,6 +73,7 @@ linters:
     - dogsled
     - dupl
     - errcheck
+    - exhaustive
     - funlen
     - gochecknoinits
     - goconst
@@ -106,7 +107,6 @@ linters:
 
   # don't enable:
   # - asciicheck
-  # - exhaustive
   # - gochecknoglobals
   # - gocognit
   # - godot
