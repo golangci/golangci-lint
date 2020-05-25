@@ -279,6 +279,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithURL("https://github.com/kyoh86/exportloopref"),
 		linter.NewConfig(golinters.NewExhaustive(exhaustiveCfg)).
 			WithPresets(linter.PresetBugs).
+			WithLoadForGoAnalysis().
 			WithURL("https://github.com/nishanths/exhaustive"),
 		// nolintlint must be last because it looks at the results of all the previous linters for unused nolint directives
 		linter.NewConfig(golinters.NewNoLintLint()).
