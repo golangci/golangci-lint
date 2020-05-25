@@ -21,7 +21,6 @@ func runGoErrchk(c *exec.Cmd, files []string, t *testing.T) {
 	// cases produce no output). Perform these assertions only if the error is
 	// present.
 	if err != nil {
-		assert.Error(t, err)
 		_, ok := err.(*exec.ExitError)
 		assert.True(t, ok, err)
 	}
