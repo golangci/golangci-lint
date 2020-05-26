@@ -17,9 +17,9 @@ import (
 
 func runGoErrchk(c *exec.Cmd, files []string, t *testing.T) {
 	output, err := c.CombinedOutput()
-	// The returned error will be nil if the test does not write to stderr (some test
-	// cases produce no output). Perform these assertions only if the error is
-	// present.
+	// The returned error will be nil if the test file does not have any issues
+	// and thus the linter exits with exit code 0. So perform the additional
+	// assertions only if the error is non-nil.
 	if err != nil {
 		_, ok := err.(*exec.ExitError)
 		assert.True(t, ok, err)
