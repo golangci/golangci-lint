@@ -17,9 +17,13 @@ import (
 
 func runGoErrchk(c *exec.Cmd, files []string, t *testing.T) {
 	output, err := c.CombinedOutput()
-	assert.Error(t, err)
-	_, ok := err.(*exec.ExitError)
-	assert.True(t, ok, err)
+	// The returned error will be nil if the test file does not have any issues
+	// and thus the linter exits with exit code 0. So perform the additional
+	// assertions only if the error is non-nil.
+	if err != nil {
+		_, ok := err.(*exec.ExitError)
+		assert.True(t, ok, err)
+	}
 
 	// TODO: uncomment after deprecating go1.11
 	// assert.Equal(t, exitcodes.IssuesFound, exitErr.ExitCode())

@@ -34,6 +34,7 @@ require (
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/mitchellh/go-ps v1.0.0
 	github.com/nakabonne/nestif v0.3.0
+	github.com/nishanths/exhaustive v0.0.0-20200525081945-8e46705b6132
 	github.com/pkg/errors v0.9.1
 	github.com/ryancurrah/gomodguard v1.1.0
 	github.com/securego/gosec/v2 v2.3.0
@@ -52,7 +53,7 @@ require (
 	github.com/ultraware/whitespace v0.0.4
 	github.com/uudashr/gocognit v1.0.1
 	github.com/valyala/quicktemplate v1.5.0
-	golang.org/x/tools v0.0.0-20200502202811-ed308ab3e770
+	golang.org/x/tools v0.0.0-20200519015757-0d0afa43d58a
 	gopkg.in/yaml.v2 v2.3.0
 	honnef.co/go/tools v0.0.1-2020.1.4
 	mvdan.cc/interfacer v0.0.0-20180901003855-c20040233aed

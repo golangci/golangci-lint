@@ -87,9 +87,11 @@ func enableLinterConfigs(lcs []*linter.Config, isEnabled func(lc *linter.Config)
 func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 	var govetCfg *config.GovetSettings
 	var testpackageCfg *config.TestpackageSettings
+	var exhaustiveCfg *config.ExhaustiveSettings
 	if m.cfg != nil {
 		govetCfg = &m.cfg.LintersSettings.Govet
 		testpackageCfg = &m.cfg.LintersSettings.Testpackage
+		exhaustiveCfg = &m.cfg.LintersSettings.Exhaustive
 	}
 	const megacheckName = "megacheck"
 	lcs := []*linter.Config{
@@ -275,6 +277,10 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		linter.NewConfig(golinters.NewExportLoopRef()).
 			WithPresets(linter.PresetBugs).
 			WithURL("https://github.com/kyoh86/exportloopref"),
+		linter.NewConfig(golinters.NewExhaustive(exhaustiveCfg)).
+			WithPresets(linter.PresetBugs).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/nishanths/exhaustive"),
 		// nolintlint must be last because it looks at the results of all the previous linters for unused nolint directives
 		linter.NewConfig(golinters.NewNoLintLint()).
 			WithPresets(linter.PresetStyle).

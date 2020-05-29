@@ -9,6 +9,8 @@ linters-settings:
       - github.com/sirupsen/logrus: "logging is allowed only by logutils.Log"
   dupl:
     threshold: 100
+  exhaustive:
+    default-signifies-exhaustive: false
   funlen:
     lines: 100
     statements: 50
@@ -104,6 +106,7 @@ linters:
 
   # don't enable:
   # - asciicheck
+  # - exhaustive (TODO: enable after next release; current release at time of writing is v1.27)
   # - gochecknoglobals
   # - gocognit
   # - godot

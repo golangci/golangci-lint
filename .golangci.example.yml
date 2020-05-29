@@ -98,6 +98,11 @@ linters-settings:
     # path to a file containing a list of functions to exclude from checking
     # see https://github.com/kisielk/errcheck#excluding-functions for details
     exclude: /path/to/file.txt
+  exhaustive:
+    # indicates that switch statements are to be considered exhaustive if a
+    # 'default' case is present, even if all enum members aren't listed in the
+    # switch
+    default-signifies-exhaustive: false
   funlen:
     lines: 60
     statements: 40
@@ -174,7 +179,7 @@ linters-settings:
       modules:                                                        # List of blocked modules
         # - github.com/uudashr/go-module:                             # Blocked module
         #     recommendations:                                        # Recommended modules that should be used instead (Optional)
-        #       - golang.org/x/mod                           
+        #       - golang.org/x/mod
         #     reason: "`mod` is the official go.mod parser library."  # Reason why the recommended module should be used (Optional)
       versions:                                                       # List of blocked module version constraints
         # - github.com/mitchellh/go-homedir:                          # Blocked module with version constraint
