@@ -76,7 +76,7 @@ type AnalyzerPlugin interface {
 ```
 
 The type of `AnalyzerPlugin` is not important, but is by convention `type analyzerPlugin struct {}`. See
-[plugin/example.go](https://github.com/golangci/example-plugin-linter/plugin/example.go) for more info.
+[plugin/example.go](https://github.com/golangci/example-plugin-linter/blob/master/plugin/example.go) for more info.
 
 To build the plugin, from the root project directory, run `go build -buildmode=plugin plugin/example.go`. This will create a plugin `*.so`
 file that can be copied into your project or another well known location for usage in golangci-lint.
