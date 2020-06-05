@@ -49,7 +49,7 @@ func NewGofumpt() *goanalysis.Linter {
 				if err != nil {
 					return nil, fmt.Errorf("error while running gofumpt: %w", err)
 				}
-				if bytes.Compare(input, output) != 0 {
+				if !bytes.Equal(input, output) {
 					issues = append(issues, goanalysis.NewIssue(&result.Issue{
 						FromLinter: gofumptName,
 						Text:       "File is not `gofumpt`-ed",
