@@ -91,6 +91,7 @@ linters:
     - lll
     - misspell
     - nakedret
+    - noctx
     - nolintlint
     - rowserrcheck
     - scopelint

@@ -8,7 +8,7 @@ import (
 
 var newRequestPkg = http.NewRequest
 
-func main() {
+func Noctx() {
 	const url = "http://example.com"
 	cli := &http.Client{}
 
