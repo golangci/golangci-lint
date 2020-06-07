@@ -183,10 +183,9 @@ func extractRunContextFromComments(t *testing.T, sourcePath string) *runContext 
 	scanner := bufio.NewScanner(f)
 	for scanner.Scan() {
 		line := scanner.Text()
-		if !strings.HasPrefix(line, "//") {
+		if strings.HasPrefix(strings.TrimSpace(line), "package") {
 			return rc
 		}
-
 		line = strings.TrimPrefix(line, "//")
 		if strings.HasPrefix(line, "args: ") {
 			assert.Nil(t, rc.args)
@@ -212,8 +211,6 @@ func extractRunContextFromComments(t *testing.T, sourcePath string) *runContext 
 			rc.configPath = configPath
 			continue
 		}
-
-		assert.Fail(t, "invalid prefix of comment line %s", line)
 	}
 
 	return rc

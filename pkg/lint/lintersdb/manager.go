@@ -202,6 +202,10 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetFormatting).
 			WithAutoFix().
 			WithURL("https://godoc.org/golang.org/x/tools/cmd/goimports"),
+		linter.NewConfig(golinters.NewGoHeader()).
+			WithPresets(linter.PresetStyle).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/denis-tingajkin/go-header"),
 		linter.NewConfig(golinters.NewMaligned()).
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetPerformance).

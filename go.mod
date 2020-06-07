@@ -1,14 +1,17 @@
 module github.com/golangci/golangci-lint
 
-go 1.12
+go 1.14
 
 require (
-	github.com/Djarvur/go-err113 v0.0.0-20200511133814-5174e21577d5
+	github.com/Djarvur/go-err113 v0.1.0
 	github.com/OpenPeeDeeP/depguard v1.0.1
+	github.com/StackExchange/wmi v0.0.0-20190523213315-cbe66965904d // indirect
 	github.com/bombsimon/wsl/v3 v3.1.0
+	github.com/denis-tingajkin/go-header v0.3.1
 	github.com/fatih/color v1.9.0
 	github.com/go-critic/go-critic v0.4.3
 	github.com/go-lintpack/lintpack v0.5.2
+	github.com/go-ole/go-ole v1.2.4 // indirect
 	github.com/go-xmlfmt/xmlfmt v0.0.0-20191208150333-d5b6f63a941b
 	github.com/gofrs/flock v0.7.1
 	github.com/golangci/check v0.0.0-20180506172741-cfe4005ccda2
@@ -18,18 +21,18 @@ require (
 	github.com/golangci/goconst v0.0.0-20180610141641-041c5f2b40f3
 	github.com/golangci/gocyclo v0.0.0-20180528144436-0a533e8fa43d
 	github.com/golangci/gofmt v0.0.0-20190930125516-244bba706f1a
-	github.com/golangci/ineffassign v0.0.0-20190609212857-42439a7714cc
-	github.com/golangci/lint-1 v0.0.0-20191013205115-297bf364a8e0
+	github.com/golangci/ineffassign v0.0.0-20180808204949-2ee8f2867dde
+	github.com/golangci/lint-1 v0.0.0-20181222135242-d2cdd8c08219
 	github.com/golangci/maligned v0.0.0-20180506175553-b1d89398deca
-	github.com/golangci/misspell v0.0.0-20180809174111-950f5d19e770
+	github.com/golangci/misspell v0.3.5
 	github.com/golangci/prealloc v0.0.0-20180630174525-215b22d4de21
-	github.com/golangci/revgrep v0.0.0-20180526074752-d9c87f5ffaf0
+	github.com/golangci/revgrep v0.0.0-20180812185044-276a5c0a1039
 	github.com/golangci/unconvert v0.0.0-20180507085042-28b1c447d1f4
 	github.com/jingyugao/rowserrcheck v0.0.0-20191204022205-72ab7603b68a
-	github.com/jirfag/go-printf-func-name v0.0.0-20191110105641-45db9963cdd3
+	github.com/jirfag/go-printf-func-name v0.0.0-20200119135958-7558a9eaa5af
 	github.com/kyoh86/exportloopref v0.1.4
 	github.com/maratori/testpackage v1.0.1
-	github.com/matoous/godox v0.0.0-20190911065817-5d6d842e92eb // v1.0
+	github.com/matoous/godox v0.0.0-20190911065817-5d6d842e92eb
 	github.com/mattn/go-colorable v0.1.6
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/mitchellh/go-ps v1.0.0
@@ -38,7 +41,7 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/ryancurrah/gomodguard v1.1.0
 	github.com/securego/gosec/v2 v2.3.0
-	github.com/shirou/gopsutil v0.0.0-20190901111213-e4ec7b275ada // v2.19.8
+	github.com/shirou/gopsutil v2.20.5+incompatible
 	github.com/sirupsen/logrus v1.6.0
 	github.com/sonatard/noctx v0.0.1
 	github.com/sourcegraph/go-diff v0.5.3
@@ -46,10 +49,10 @@ require (
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.7.0
 	github.com/stretchr/testify v1.6.1
-	github.com/tdakkota/asciicheck v0.0.0-20200416190851-d7f85be797a2
+	github.com/tdakkota/asciicheck v0.0.0-20200416200610-e657995f937b
 	github.com/tetafro/godot v0.4.2
-	github.com/timakin/bodyclose v0.0.0-20190930140734-f7f2e9bca95e
-	github.com/tommy-muehle/go-mnd v1.3.1-0.20200224220436-e6f9a994e8fa
+	github.com/timakin/bodyclose v0.0.0-20200424151742-cb6215831a94
+	github.com/tommy-muehle/go-mnd v1.3.0
 	github.com/ultraware/funlen v0.0.2
 	github.com/ultraware/whitespace v0.0.4
 	github.com/uudashr/gocognit v1.0.1
@@ -60,5 +63,5 @@ require (
 	mvdan.cc/gofumpt v0.0.0-20200513141252-abc0db2c416a
 	mvdan.cc/interfacer v0.0.0-20180901003855-c20040233aed
 	mvdan.cc/lint v0.0.0-20170908181259-adc824a0674b // indirect
-	mvdan.cc/unparam v0.0.0-20190720180237-d51796306d8f
+	mvdan.cc/unparam v0.0.0-20200501210554-b37ab49443f7
 )
