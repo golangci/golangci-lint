@@ -70,6 +70,19 @@ golangci-lint --version
 
 On Windows, you can run the above commands with Git Bash, which comes with [Git for Windows](https://git-scm.com/download/win).
 
+#### Command Not Found on Linux with Pre-Commit
+
+```sh
+- exit code: 127
+/home/user/.cache/pre-commit/som3reP0/run-golangci-lint.sh: 2: exec: golangci-lint: not found 
+```
+
+If youn thos error, make sure golangci-lint installed globally. The indicator is command `golangci-lint --version` returned nothing when you run it on the outside of directory `$(go env GOPATH)/bin`. To fix this, move the downloaded binari from `$(go env GOPATH)/bin` to `/usr/bin`.
+
+```sh
+sudo mv $(go env GOPATH)/bin/golangci-lint /usr/bin/golangci-lint
+```
+
 ### Install from Source
 
 Note: such `go get` installation aren't guaranteed to work. We recommend using binary installation.
