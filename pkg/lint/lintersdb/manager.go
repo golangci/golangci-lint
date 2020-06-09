@@ -104,6 +104,10 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetPerformance, linter.PresetBugs).
 			WithURL("https://github.com/timakin/bodyclose"),
+		linter.NewConfig(golinters.NewNoctx()).
+			WithLoadForGoAnalysis().
+			WithPresets(linter.PresetPerformance, linter.PresetBugs).
+			WithURL("https://github.com/sonatard/noctx"),
 		linter.NewConfig(golinters.NewErrcheck()).
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetBugs).
