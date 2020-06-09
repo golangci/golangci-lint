@@ -25,7 +25,6 @@ require (
 	github.com/golangci/prealloc v0.0.0-20180630174525-215b22d4de21
 	github.com/golangci/revgrep v0.0.0-20180526074752-d9c87f5ffaf0
 	github.com/golangci/unconvert v0.0.0-20180507085042-28b1c447d1f4
-	github.com/google/martian v2.1.0+incompatible
 	github.com/jingyugao/rowserrcheck v0.0.0-20191204022205-72ab7603b68a
 	github.com/jirfag/go-printf-func-name v0.0.0-20191110105641-45db9963cdd3
 	github.com/kyoh86/exportloopref v0.1.4
