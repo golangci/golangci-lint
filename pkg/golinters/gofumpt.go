@@ -87,8 +87,10 @@ func NewGofumpt() *goanalysis.Linter {
 	}).WithLoadMode(goanalysis.LoadModeSyntax)
 }
 
+const bufferSize = 32 * 1024
+
 func lineCounter(r io.Reader) (int, error) {
-	buf := make([]byte, 32*1024)
+	buf := make([]byte, bufferSize)
 	count := 0
 	lineSep := []byte{'\n'}
 
