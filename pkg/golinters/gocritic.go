@@ -116,7 +116,7 @@ func configureCheckerInfo(info *gocriticlinter.CheckerInfo, allParams map[string
 // but the file parsers (TOML, YAML, JSON) don't create the same representation for raw type.
 // then we have to convert value types into the expected value types.
 // Maybe in the future, this kind of conversion will be done in go-critic itself.
-//nolint:exhaustive // only 3 types (int, bool, and string) are supported by CheckerParam.Value
+//nolint:exhaustive,nolintlint // only 3 types (int, bool, and string) are supported by CheckerParam.Value
 func normalizeCheckerParamsValue(p interface{}) interface{} {
 	rv := reflect.ValueOf(p)
 	switch rv.Type().Kind() {

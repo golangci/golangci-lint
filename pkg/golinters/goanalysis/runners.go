@@ -2,6 +2,7 @@ package goanalysis
 
 import (
 	"fmt"
+	"go/token"
 	"runtime"
 	"sort"
 	"strings"
@@ -34,7 +35,14 @@ func runAnalyzers(cfg runAnalyzersConfig, lintCtx *linter.Context) ([]result.Iss
 	const stagesToPrint = 10
 	defer sw.PrintTopStages(stagesToPrint)
 
-	runner := newRunner(cfg.getName(), log, lintCtx.PkgCache, lintCtx.LoadGuard, cfg.getLoadMode(), sw)
+	runner := newRunner(
+		cfg.getName(),
+		log,
+		lintCtx.PkgCache,
+		lintCtx.LoadGuard,
+		cfg.getLoadMode(),
+		sw,
+	)
 
 	pkgs := lintCtx.Packages
 	if cfg.useOriginalPackages() {
@@ -84,38 +92,70 @@ func runAnalyzers(cfg runAnalyzersConfig, lintCtx *linter.Context) ([]result.Iss
 	return issues, nil
 }
 
-func buildIssues(diags []Diagnostic, linterNameBuilder func(diag *Diagnostic) string) []result.Issue {
+func buildIssues(
+	diags []Diagnostic,
+	linterNameBuilder func(diag *Diagnostic) string,
+) []result.Issue {
 	var issues []result.Issue
 	for i := range diags {
 		diag := &diags[i]
-		linterName := linterNameBuilder(diag)
+		issues = append(issues, buildSingleIssue(diag, linterNameBuilder(diag)))
+	}
+	return issues
+}
 
-		var text string
-		if diag.Analyzer.Name == linterName {
-			text = diag.Message
-		} else {
-			text = fmt.Sprintf("%s: %s", diag.Analyzer.Name, diag.Message)
-		}
+func buildSingleIssue(diag *Diagnostic, linterName string) result.Issue {
+	text := generateIssueText(diag, linterName)
+	issue := result.Issue{
+		FromLinter: linterName,
+		Text:       text,
+		Pos:        diag.Position,
+		Pkg:        diag.Pkg,
+	}
 
-		issues = append(issues, result.Issue{
-			FromLinter: linterName,
-			Text:       text,
-			Pos:        diag.Position,
-			Pkg:        diag.Pkg,
-		})
+	if len(diag.SuggestedFixes) > 0 {
+		// Don't really have a better way of picking a best fix right now
+		chosenFix := diag.SuggestedFixes[0]
 
-		if len(diag.Related) > 0 {
-			for _, info := range diag.Related {
-				issues = append(issues, result.Issue{
-					FromLinter: linterName,
-					Text:       fmt.Sprintf("%s(related information): %s", diag.Analyzer.Name, info.Message),
-					Pos:        diag.Pkg.Fset.Position(info.Pos),
-					Pkg:        diag.Pkg,
-				})
+		// It could be confusing to return more than one issue per single diagnostic,
+		// but if we return a subset it might be a partial application of a fix. Don't
+		// apply a fix unless there is only one for now
+		if len(chosenFix.TextEdits) == 1 {
+			edit := chosenFix.TextEdits[0]
+
+			pos := diag.Pkg.Fset.Position(edit.Pos)
+			end := diag.Pkg.Fset.Position(edit.End)
+
+			newLines := strings.Split(string(edit.NewText), "\n")
+
+			// This only works if we're only replacing whole lines with brand-new lines
+			if onlyReplacesWholeLines(pos, end, newLines) {
+				// both original and new content ends with newline,
+				// omit to avoid partial line replacement
+				newLines = newLines[:len(newLines)-1]
+
+				issue.Replacement = &result.Replacement{NewLines: newLines}
+				issue.LineRange = &result.Range{From: pos.Line, To: end.Line - 1}
+
+				return issue
 			}
 		}
 	}
-	return issues
+
+	return issue
+}
+
+func onlyReplacesWholeLines(oPos, oEnd token.Position, newLines []string) bool {
+	return oPos.Column == 1 && oEnd.Column == 1 &&
+		oPos.Line < oEnd.Line && // must be replacing at least one line
+		newLines[len(newLines)-1] == "" // edit.NewText ended with '\n'
+}
+
+func generateIssueText(diag *Diagnostic, linterName string) string {
+	if diag.Analyzer.Name == linterName {
+		return diag.Message
+	}
+	return fmt.Sprintf("%s: %s", diag.Analyzer.Name, diag.Message)
 }
 
 func getIssuesCacheKey(analyzers []*analysis.Analyzer) string {
@@ -160,7 +200,12 @@ func saveIssuesToCache(allPkgs []*packages.Package, pkgsFromCache map[*packages.
 
 				atomic.AddInt32(&savedIssuesCount, int32(len(encodedIssues)))
 				if err := lintCtx.PkgCache.Put(pkg, pkgcache.HashModeNeedAllDeps, lintResKey, encodedIssues); err != nil {
-					lintCtx.Log.Infof("Failed to save package %s issues (%d) to cache: %s", pkg, len(pkgIssues), err)
+					lintCtx.Log.Infof(
+						"Failed to save package %s issues (%d) to cache: %s",
+						pkg,
+						len(pkgIssues),
+						err,
+					)
 				} else {
 					issuesCacheDebugf("Saved package %s issues (%d) to cache", pkg, len(pkgIssues))
 				}
@@ -178,7 +223,12 @@ func saveIssuesToCache(allPkgs []*packages.Package, pkgsFromCache map[*packages.
 	close(pkgCh)
 	wg.Wait()
 
-	issuesCacheDebugf("Saved %d issues from %d packages to cache in %s", savedIssuesCount, len(allPkgs), time.Since(startedAt))
+	issuesCacheDebugf(
+		"Saved %d issues from %d packages to cache in %s",
+		savedIssuesCount,
+		len(allPkgs),
+		time.Since(startedAt),
+	)
 }
 
 //nolint:gocritic
@@ -206,7 +256,12 @@ func loadIssuesFromCache(pkgs []*packages.Package, lintCtx *linter.Context,
 			defer wg.Done()
 			for pkg := range pkgCh {
 				var pkgIssues []EncodingIssue
-				err := lintCtx.PkgCache.Get(pkg, pkgcache.HashModeNeedAllDeps, lintResKey, &pkgIssues)
+				err := lintCtx.PkgCache.Get(
+					pkg,
+					pkgcache.HashModeNeedAllDeps,
+					lintResKey,
+					&pkgIssues,
+				)
 				cacheRes := pkgToCacheRes[pkg]
 				cacheRes.loadErr = err
 				if err != nil {

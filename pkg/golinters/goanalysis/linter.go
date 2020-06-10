@@ -51,7 +51,11 @@ type Linter struct {
 	needUseOriginalPackages bool
 }
 
-func NewLinter(name, desc string, analyzers []*analysis.Analyzer, cfg map[string]map[string]interface{}) *Linter {
+func NewLinter(
+	name, desc string,
+	analyzers []*analysis.Analyzer,
+	cfg map[string]map[string]interface{},
+) *Linter {
 	return &Linter{name: name, desc: desc, analyzers: analyzers, cfg: cfg}
 }
 
