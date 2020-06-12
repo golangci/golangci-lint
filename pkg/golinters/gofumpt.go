@@ -76,5 +76,3 @@ func NewGofumpt() *goanalysis.Linter {
 		return resIssues
 	}).WithLoadMode(goanalysis.LoadModeSyntax)
 }
-
-const bufferSize = 32 * 1024
