@@ -4,9 +4,8 @@ import (
 	"bytes"
 	"fmt"
 	"go/token"
-	"io"
 	"io/ioutil"
-	"os"
+	"strings"
 	"sync"
 
 	"golang.org/x/tools/go/analysis"
@@ -52,21 +51,12 @@ func NewGofumpt() *goanalysis.Linter {
 					return nil, fmt.Errorf("error while running gofumpt: %w", err)
 				}
 				if !bytes.Equal(input, output) {
-					reader, err := os.Open(f)
-					if err != nil {
-						return nil, fmt.Errorf("unable to open file %s: %w", f, err)
-					}
-					numberOfLines, err := lineCounter(reader)
-					if err != nil {
-						return nil, fmt.Errorf("unable to count the number of lines: %w", err)
-					}
-
 					issues = append(issues, goanalysis.NewIssue(&result.Issue{
 						FromLinter: gofumptName,
 						Text:       "File is not `gofumpt`-ed",
 						Pos: token.Position{
 							Filename: f,
-							Line:     numberOfLines,
+							Line:     strings.Count(string(input), "\n"),
 						},
 					}, pass))
 				}
@@ -88,22 +78,3 @@ func NewGofumpt() *goanalysis.Linter {
 }
 
 const bufferSize = 32 * 1024
-
-func lineCounter(r io.Reader) (int, error) {
-	buf := make([]byte, bufferSize)
-	count := 0
-	lineSep := []byte{'\n'}
-
-	for {
-		c, err := r.Read(buf)
-		count += bytes.Count(buf[:c], lineSep)
-
-		switch {
-		case err == io.EOF:
-			return count, nil
-
-		case err != nil:
-			return count, err
-		}
-	}
-}
