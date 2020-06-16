@@ -1,6 +1,9 @@
 Follow the news and releases on our [twitter](https://twitter.com/golangci) and our [blog](https://medium.com/golangci).
 There is the most valuable changes log:
 
+### June 2020
+1. Add new linters: `gofumpt`
+
 ### May 2020
 
 1. Add new linters: `nolintlint`, `goerr113`
