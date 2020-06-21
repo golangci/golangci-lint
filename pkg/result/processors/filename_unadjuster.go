@@ -16,6 +16,11 @@ import (
 
 type posMapper func(pos token.Position) token.Position
 
+type adjustMap struct {
+	sync.Mutex
+	m map[string]posMapper
+}
+
 // FilenameUnadjuster is needed because a lot of linters use fset.Position(f.Pos())
 // to get filename. And they return adjusted filename (e.g. *.qtpl) for an issue. We need
 // restore real .go filename to properly output it, parse it, etc.
@@ -27,7 +32,7 @@ type FilenameUnadjuster struct {
 
 var _ Processor = &FilenameUnadjuster{}
 
-func processUnadjusterPkg(m map[string]posMapper, pkg *packages.Package, log logutils.Log) {
+func processUnadjusterPkg(m *adjustMap, pkg *packages.Package, log logutils.Log) {
 	fset := token.NewFileSet() // it's more memory efficient to not store all in one fset
 
 	for _, filename := range pkg.CompiledGoFiles {
@@ -36,7 +41,7 @@ func processUnadjusterPkg(m map[string]posMapper, pkg *packages.Package, log log
 	}
 }
 
-func processUnadjusterFile(filename string, m map[string]posMapper, log logutils.Log, fset *token.FileSet) {
+func processUnadjusterFile(filename string, m *adjustMap, log logutils.Log, fset *token.FileSet) {
 	syntax, err := parser.ParseFile(fset, filename, nil, parser.ParseComments)
 	if err != nil {
 		// Error will be reported by typecheck
@@ -57,7 +62,9 @@ func processUnadjusterFile(filename string, m map[string]posMapper, log logutils
 		return // file.go -> /caches/cgo-xxx
 	}
 
-	m[adjustedFilename] = func(adjustedPos token.Position) token.Position {
+	m.Lock()
+	defer m.Unlock()
+	m.m[adjustedFilename] = func(adjustedPos token.Position) token.Position {
 		tokenFile := fset.File(syntax.Pos())
 		if tokenFile == nil {
 			log.Warnf("Failed to get token file for %s", adjustedFilename)
@@ -68,22 +75,23 @@ func processUnadjusterFile(filename string, m map[string]posMapper, log logutils
 }
 
 func NewFilenameUnadjuster(pkgs []*packages.Package, log logutils.Log) *FilenameUnadjuster {
-	m := map[string]posMapper{}
+	m := adjustMap{m: map[string]posMapper{}}
+
 	startedAt := time.Now()
 	var wg sync.WaitGroup
 	wg.Add(len(pkgs))
 	for _, pkg := range pkgs {
 		go func(pkg *packages.Package) {
 			// It's important to call func here to run GC
-			processUnadjusterPkg(m, pkg, log)
+			processUnadjusterPkg(&m, pkg, log)
 			wg.Done()
 		}(pkg)
 	}
 	wg.Wait()
-	log.Infof("Pre-built %d adjustments in %s", len(m), time.Since(startedAt))
+	log.Infof("Pre-built %d adjustments in %s", len(m.m), time.Since(startedAt))
 
 	return &FilenameUnadjuster{
-		m:                   m,
+		m:                   m.m,
 		log:                 log,
 		loggedUnadjustments: map[string]bool{},
 	}
