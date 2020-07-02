@@ -95,3 +95,15 @@ brews:
       prefix.install_metafiles
     test: |
       system "#{bin}/golangci-lint --version"
+
+nfpms:
+  -
+    id: golangci-lint-nfpms
+    package_name: golangci-lint
+    file_name_template: "{{ .ProjectName }}-{{ .Version }}-{{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
+    homepage: https://golangci-lint.run/
+    description: Fast linters Runner for Go
+    license: GPLv3
+    formats:
+      - deb
+      - rpm
