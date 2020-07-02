@@ -12,13 +12,15 @@ import (
 )
 
 var (
-	ctx context.Context
-	db  *sql.DB
-	dbx *sqlx.DB
+	ctx    context.Context
+	db     *sql.DB
+	dbx    *sqlx.DB
+	age    = 27
+	userID = 43
 )
 
 func rowsCorrectDeferBlock() {
-	age := 27
+
 	rows, err := db.QueryContext(ctx, "SELECT name FROM users WHERE age=?", age)
 	if err != nil {
 		log.Fatal(err)
@@ -48,7 +50,6 @@ func rowsCorrectDeferBlock() {
 }
 
 func rowsCorrectDefer() {
-	age := 27
 	rows, err := db.QueryContext(ctx, "SELECT name FROM users WHERE age=?", age)
 	if err != nil {
 		log.Fatal(err)
@@ -72,7 +73,6 @@ func rowsCorrectDefer() {
 }
 
 func rowsMissingClose() {
-	age := 27
 	rows, err := db.QueryContext(ctx, "SELECT name FROM users WHERE age=?", age) // ERROR "Rows/Stmt was not closed"
 	if err != nil {
 		log.Fatal(err)
@@ -96,7 +96,6 @@ func rowsMissingClose() {
 }
 
 func rowsNonDeferClose() {
-	age := 27
 	rows, err := db.QueryContext(ctx, "SELECT name FROM users WHERE age=?", age)
 	if err != nil {
 		log.Fatal(err)
@@ -147,7 +146,6 @@ func rowsDontClosedPassed(*sql.Rows) {
 }
 
 func rowsReturn() (*sql.Rows, error) {
-	age := 27
 	rows, err := db.QueryContext(ctx, "SELECT name FROM users WHERE age=?", age)
 	if err != nil {
 		log.Fatal(err)
@@ -156,7 +154,6 @@ func rowsReturn() (*sql.Rows, error) {
 }
 
 func rowsReturnShort() (*sql.Rows, error) {
-	age := 27
 	return db.QueryContext(ctx, "SELECT name FROM users WHERE age=?", age)
 }
 
@@ -174,12 +171,11 @@ func stmtCorrectDeferBlock() {
 	}()
 
 	// Then reuse it each time you need to issue the query.
-	id := 43
 	var username string
-	err = stmt.QueryRowContext(ctx, id).Scan(&username)
+	err = stmt.QueryRowContext(ctx, userID).Scan(&username)
 	switch {
 	case err == sql.ErrNoRows:
-		log.Fatalf("no user with id %d", id)
+		log.Fatalf("no user with id %d", userID)
 	case err != nil:
 		log.Fatal(err)
 	default:
@@ -196,12 +192,11 @@ func stmtCorrectDefer() {
 	defer stmt.Close()
 
 	// Then reuse it each time you need to issue the query.
-	id := 43
 	var username string
-	err = stmt.QueryRowContext(ctx, id).Scan(&username)
+	err = stmt.QueryRowContext(ctx, userID).Scan(&username)
 	switch {
 	case err == sql.ErrNoRows:
-		log.Fatalf("no user with id %d", id)
+		log.Fatalf("no user with id %d", userID)
 	case err != nil:
 		log.Fatal(err)
 	default:
@@ -218,12 +213,11 @@ func stmtMissingClose() {
 	// defer stmt.Close()
 
 	// Then reuse it each time you need to issue the query.
-	id := 43
 	var username string
-	err = stmt.QueryRowContext(ctx, id).Scan(&username)
+	err = stmt.QueryRowContext(ctx, userID).Scan(&username)
 	switch {
 	case err == sql.ErrNoRows:
-		log.Fatalf("no user with id %d", id)
+		log.Fatalf("no user with id %d", userID)
 	case err != nil:
 		log.Fatal(err)
 	default:
@@ -239,12 +233,11 @@ func stmtNonDeferClose() {
 	}
 
 	// Then reuse it each time you need to issue the query.
-	id := 43
 	var username string
-	err = stmt.QueryRowContext(ctx, id).Scan(&username)
+	err = stmt.QueryRowContext(ctx, userID).Scan(&username)
 	switch {
 	case err == sql.ErrNoRows:
-		log.Fatalf("no user with id %d", id)
+		log.Fatalf("no user with id %d", userID)
 	case err != nil:
 		log.Fatal(err)
 	default:
@@ -268,7 +261,6 @@ func stmtReturnShort() (*sql.Stmt, error) {
 }
 
 func sqlxCorrectDefer() {
-	age := 27
 	rows, err := dbx.Queryx("SELECT name FROM users WHERE age=?", age)
 	if err != nil {
 		log.Fatal(err)
@@ -293,7 +285,6 @@ func sqlxCorrectDefer() {
 }
 
 func sqlxNonDeferClose() {
-	age := 27
 	rows, err := dbx.Queryx("SELECT name FROM users WHERE age=?", age)
 	if err != nil {
 		log.Fatal(err)
@@ -318,7 +309,6 @@ func sqlxNonDeferClose() {
 }
 
 func sqlxMissingClose() {
-	age := 27
 	rows, err := dbx.Queryx("SELECT name FROM users WHERE age=?", age) // ERROR "Rows/Stmt was not closed"
 	if err != nil {
 		log.Fatal(err)
@@ -343,7 +333,6 @@ func sqlxMissingClose() {
 }
 
 func sqlxReturnRows() (*sqlx.Rows, error) {
-	age := 27
 	rows, err := dbx.Queryx("SELECT name FROM users WHERE age=?", age)
 	if err != nil {
 		return nil, err

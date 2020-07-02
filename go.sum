@@ -316,8 +316,6 @@ github.com/rogpeppe/go-internal v1.5.2/go.mod h1:xXDCJY+GAPziupqXw64V24skbSoqbTE
 github.com/russross/blackfriday/v2 v2.0.1/go.mod h1:+Rmxgy9KzJVeS9/2gXHxylqXiyQDYRxCVz55jmeOWTM=
 github.com/ryancurrah/gomodguard v1.1.0 h1:DWbye9KyMgytn8uYpuHkwf0RHqAYO6Ay/D0TbCpPtVU=
 github.com/ryancurrah/gomodguard v1.1.0/go.mod h1:4O8tr7hBODaGE6VIhfJDHcwzh5GUccKSJBU0UMXJFVM=
-github.com/ryanrolds/sqlclosecheck v0.2.0 h1:lzXPc4X12yhUqHHU2PWl45YGbV4jpCmhcrvgLxlZDeg=
-github.com/ryanrolds/sqlclosecheck v0.2.0/go.mod h1:qQo/5OG8w7cvmVC4dhOki6VA8CqA7RaMP22evraZ1JE=
 github.com/ryanrolds/sqlclosecheck v0.3.0-rc h1:NF+ZEPcvAfH+LuVbwAywRPPNrpPl/m+4qsNNV1zU1us=
 github.com/ryanrolds/sqlclosecheck v0.3.0-rc/go.mod h1:1gREqxyTGR3lVtpngyFo3hZAgk0KCtEdgEkHwDbigdA=
 github.com/ryanuber/columnize v0.0.0-20160712163229-9b3edd62028f/go.mod h1:sm1tb6uqfes/u+d4ooFouqFdy9/2g9QGwK3SQygK0Ts=
