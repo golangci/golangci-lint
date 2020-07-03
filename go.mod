@@ -37,7 +37,7 @@ require (
 	github.com/nishanths/exhaustive v0.0.0-20200525081945-8e46705b6132
 	github.com/pkg/errors v0.9.1
 	github.com/ryancurrah/gomodguard v1.1.0
-	github.com/ryanrolds/sqlclosecheck v0.3.0-rc
+	github.com/ryanrolds/sqlclosecheck v0.3.0
 	github.com/securego/gosec/v2 v2.3.0
 	github.com/shirou/gopsutil v0.0.0-20190901111213-e4ec7b275ada // v2.19.8
 	github.com/sirupsen/logrus v1.6.0
@@ -56,7 +56,7 @@ require (
 	github.com/uudashr/gocognit v1.0.1
 	github.com/valyala/quicktemplate v1.5.0
 	golang.org/x/mod v0.3.0 // indirect
-	golang.org/x/tools v0.0.0-20200701151220-7cb253f4c4f8
+	golang.org/x/tools v0.0.0-20200702044944-0cc1aa72b347
 	gopkg.in/yaml.v2 v2.3.0
 	honnef.co/go/tools v0.0.1-2020.1.4
 	mvdan.cc/gofumpt v0.0.0-20200513141252-abc0db2c416a
