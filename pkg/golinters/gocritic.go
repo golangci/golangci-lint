@@ -10,7 +10,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/go-lintpack/lintpack"
+	gocriticlinter "github.com/go-critic/go-critic/framework/linter"
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/config"
@@ -38,15 +38,15 @@ func NewGocritic() *goanalysis.Linter {
 		nil,
 	).WithContextSetter(func(lintCtx *linter.Context) {
 		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
-			lintpackCtx := lintpack.NewContext(pass.Fset, sizes)
-			enabledCheckers, err := buildEnabledCheckers(lintCtx, lintpackCtx)
+			linterCtx := gocriticlinter.NewContext(pass.Fset, sizes)
+			enabledCheckers, err := buildEnabledCheckers(lintCtx, linterCtx)
 			if err != nil {
 				return nil, err
 			}
 
-			lintpackCtx.SetPackageInfo(pass.TypesInfo, pass.Pkg)
+			linterCtx.SetPackageInfo(pass.TypesInfo, pass.Pkg)
 			var res []goanalysis.Issue
-			pkgIssues := runGocriticOnPackage(lintpackCtx, enabledCheckers, pass.Files)
+			pkgIssues := runGocriticOnPackage(linterCtx, enabledCheckers, pass.Files)
 			for i := range pkgIssues {
 				res = append(res, goanalysis.NewIssue(&pkgIssues[i], pass))
 			}
@@ -65,9 +65,9 @@ func NewGocritic() *goanalysis.Linter {
 	}).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }
 
-func normalizeCheckerInfoParams(info *lintpack.CheckerInfo) lintpack.CheckerParams {
+func normalizeCheckerInfoParams(info *gocriticlinter.CheckerInfo) gocriticlinter.CheckerParams {
 	// lowercase info param keys here because golangci-lint's config parser lowercases all strings
-	ret := lintpack.CheckerParams{}
+	ret := gocriticlinter.CheckerParams{}
 	for k, v := range info.Params {
 		ret[strings.ToLower(k)] = v
 	}
@@ -75,7 +75,7 @@ func normalizeCheckerInfoParams(info *lintpack.CheckerInfo) lintpack.CheckerPara
 	return ret
 }
 
-func configureCheckerInfo(info *lintpack.CheckerInfo, allParams map[string]config.GocriticCheckSettings) error {
+func configureCheckerInfo(info *gocriticlinter.CheckerInfo, allParams map[string]config.GocriticCheckSettings) error {
 	params := allParams[strings.ToLower(info.Name)]
 	if params == nil { // no config for this checker
 		return nil
@@ -108,12 +108,12 @@ func configureCheckerInfo(info *lintpack.CheckerInfo, allParams map[string]confi
 	return nil
 }
 
-func buildEnabledCheckers(lintCtx *linter.Context, lintpackCtx *lintpack.Context) ([]*lintpack.Checker, error) {
+func buildEnabledCheckers(lintCtx *linter.Context, linterCtx *gocriticlinter.Context) ([]*gocriticlinter.Checker, error) {
 	s := lintCtx.Settings().Gocritic
 	allParams := s.GetLowercasedParams()
 
-	var enabledCheckers []*lintpack.Checker
-	for _, info := range lintpack.GetCheckersInfo() {
+	var enabledCheckers []*gocriticlinter.Checker
+	for _, info := range gocriticlinter.GetCheckersInfo() {
 		if !s.IsCheckEnabled(info.Name) {
 			continue
 		}
@@ -122,27 +122,27 @@ func buildEnabledCheckers(lintCtx *linter.Context, lintpackCtx *lintpack.Context
 			return nil, err
 		}
 
-		c := lintpack.NewChecker(lintpackCtx, info)
+		c := gocriticlinter.NewChecker(linterCtx, info)
 		enabledCheckers = append(enabledCheckers, c)
 	}
 
 	return enabledCheckers, nil
 }
 
-func runGocriticOnPackage(lintpackCtx *lintpack.Context, checkers []*lintpack.Checker,
+func runGocriticOnPackage(linterCtx *gocriticlinter.Context, checkers []*gocriticlinter.Checker,
 	files []*ast.File) []result.Issue {
 	var res []result.Issue
 	for _, f := range files {
-		filename := filepath.Base(lintpackCtx.FileSet.Position(f.Pos()).Filename)
-		lintpackCtx.SetFileInfo(filename, f)
+		filename := filepath.Base(linterCtx.FileSet.Position(f.Pos()).Filename)
+		linterCtx.SetFileInfo(filename, f)
 
-		issues := runGocriticOnFile(lintpackCtx, f, checkers)
+		issues := runGocriticOnFile(linterCtx, f, checkers)
 		res = append(res, issues...)
 	}
 	return res
 }
 
-func runGocriticOnFile(ctx *lintpack.Context, f *ast.File, checkers []*lintpack.Checker) []result.Issue {
+func runGocriticOnFile(ctx *gocriticlinter.Context, f *ast.File, checkers []*gocriticlinter.Checker) []result.Issue {
 	var res []result.Issue
 
 	for _, c := range checkers {

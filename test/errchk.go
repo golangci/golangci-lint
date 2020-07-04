@@ -156,7 +156,7 @@ var (
 	errRx       = regexp.MustCompile(`// (?:GC_)?ERROR (.*)`)
 	errAutoRx   = regexp.MustCompile(`// (?:GC_)?ERRORAUTO (.*)`)
 	errQuotesRx = regexp.MustCompile(`"([^"]*)"`)
-	lineRx      = regexp.MustCompile(`LINE(([+-])([0-9]+))?`)
+	lineRx      = regexp.MustCompile(`LINE(([+-])(\d+))?`)
 )
 
 // wantedErrors parses expected errors from comments in a file.

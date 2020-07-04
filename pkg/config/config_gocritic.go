@@ -5,7 +5,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/go-lintpack/lintpack"
+	"github.com/go-critic/go-critic/framework/linter"
 	"github.com/pkg/errors"
 
 	_ "github.com/go-critic/go-critic/checkers" // this import register checkers
@@ -18,9 +18,9 @@ const gocriticDebugKey = "gocritic"
 var (
 	gocriticDebugf        = logutils.Debug(gocriticDebugKey)
 	isGocriticDebug       = logutils.HaveDebugTag(gocriticDebugKey)
-	allGocriticCheckers   = lintpack.GetCheckersInfo()
-	allGocriticCheckerMap = func() map[string]*lintpack.CheckerInfo {
-		checkInfoMap := make(map[string]*lintpack.CheckerInfo)
+	allGocriticCheckers   = linter.GetCheckersInfo()
+	allGocriticCheckerMap = func() map[string]*linter.CheckerInfo {
+		checkInfoMap := make(map[string]*linter.CheckerInfo)
 		for _, checkInfo := range allGocriticCheckers {
 			checkInfoMap[checkInfo.Name] = checkInfo
 		}
@@ -281,7 +281,7 @@ func getAllCheckerNames() map[string]bool {
 	return allCheckerNames
 }
 
-func isEnabledByDefaultGocriticCheck(info *lintpack.CheckerInfo) bool {
+func isEnabledByDefaultGocriticCheck(info *linter.CheckerInfo) bool {
 	return !info.HasTag("experimental") &&
 		!info.HasTag("opinionated") &&
 		!info.HasTag("performance")
@@ -290,9 +290,6 @@ func isEnabledByDefaultGocriticCheck(info *lintpack.CheckerInfo) bool {
 func getDefaultEnabledGocriticCheckersNames() []string {
 	var enabled []string
 	for _, info := range allGocriticCheckers {
-		// get in sync with lintpack behavior in bindDefaultEnabledList
-		// in https://github.com/go-lintpack/lintpack/blob/master/linter/lintmain/internal/check/check.go#L317
-
 		enable := isEnabledByDefaultGocriticCheck(info)
 		if enable {
 			enabled = append(enabled, info.Name)
@@ -305,9 +302,6 @@ func getDefaultEnabledGocriticCheckersNames() []string {
 func getDefaultDisabledGocriticCheckersNames() []string {
 	var disabled []string
 	for _, info := range allGocriticCheckers {
-		// get in sync with lintpack behavior in bindDefaultEnabledList
-		// in https://github.com/go-lintpack/lintpack/blob/master/linter/lintmain/internal/check/check.go#L317
-
 		enable := isEnabledByDefaultGocriticCheck(info)
 		if !enable {
 			disabled = append(disabled, info.Name)
