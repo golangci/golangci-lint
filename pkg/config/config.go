@@ -239,12 +239,19 @@ type LintersSettings struct {
 	Dogsled     DogsledSettings
 	Gocognit    GocognitSettings
 	Godot       GodotSettings
+	Goheader    GoHeaderSettings
 	Testpackage TestpackageSettings
 	Nestif      NestifSettings
 	NoLintLint  NoLintLintSettings
 	Exhaustive  ExhaustiveSettings
 
 	Custom map[string]CustomLinterSettings
+}
+
+type GoHeaderSettings struct {
+	Values       map[string]map[string]string `mapstructure:"values"`
+	Template     string                       `mapstructure:"template"`
+	TemplatePath string                       `mapstructure:"template-path"`
 }
 
 type GovetSettings struct {

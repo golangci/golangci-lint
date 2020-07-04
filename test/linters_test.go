@@ -173,6 +173,12 @@ func buildConfigFromShortRepr(t *testing.T, repr string, config map[string]inter
 	lastObj[keyParts[len(keyParts)-1]] = kv[1]
 }
 
+func skipMultilineComment(scanner *bufio.Scanner) {
+	for line := scanner.Text(); !strings.Contains(line, "*/") && scanner.Scan(); {
+		line = scanner.Text()
+	}
+}
+
 func extractRunContextFromComments(t *testing.T, sourcePath string) *runContext {
 	f, err := os.Open(sourcePath)
 	assert.NoError(t, err)
@@ -183,10 +189,13 @@ func extractRunContextFromComments(t *testing.T, sourcePath string) *runContext 
 	scanner := bufio.NewScanner(f)
 	for scanner.Scan() {
 		line := scanner.Text()
+		if strings.HasPrefix(line, "/*") {
+			skipMultilineComment(scanner)
+			continue
+		}
 		if !strings.HasPrefix(line, "//") {
 			return rc
 		}
-
 		line = strings.TrimPrefix(line, "//")
 		if strings.HasPrefix(line, "args: ") {
 			assert.Nil(t, rc.args)
