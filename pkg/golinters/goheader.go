@@ -51,6 +51,9 @@ func NewGoHeader() *goanalysis.Linter {
 			var res []goanalysis.Issue
 			for _, file := range pass.Files {
 				i := a.Analyze(file)
+				if i == nil {
+					continue
+				}
 				issue := result.Issue{
 					Pos: token.Position{
 						Line:     i.Location().Line + 1,
