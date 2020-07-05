@@ -193,6 +193,9 @@ func extractRunContextFromComments(t *testing.T, sourcePath string) *runContext 
 			skipMultilineComment(scanner)
 			continue
 		}
+		if strings.TrimSpace(line) == "" {
+			continue
+		}
 		if !strings.HasPrefix(line, "//") {
 			return rc
 		}
