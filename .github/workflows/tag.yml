@@ -23,3 +23,5 @@ jobs:
         uses: goreleaser/goreleaser-action@v1
         with:
           args: release --rm-dist
+        env:
+          GITHUB_TOKEN: ${{ secrets.GOLANGCI_LINT_TOKEN }}
