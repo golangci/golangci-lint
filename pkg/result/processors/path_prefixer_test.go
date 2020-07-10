@@ -27,7 +27,7 @@ func TestPathPrefixer_Process(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			r := require.New(t)
 
-			p := NewPathPrefixer(tt.prefix) //nolint:scopelint
+			p := NewPathPrefixer(tt.prefix)  //nolint:scopelint
 			got, err := p.Process(tt.issues) //nolint:scopelint
 			r.NoError(err, "prefixer should never error")
 
