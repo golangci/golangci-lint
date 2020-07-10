@@ -80,11 +80,11 @@ dockers:
       - "golangci/golangci-lint:v{{ .Major }}.{{ .Minor }}-alpine"
 
 brews:
-  - github:
+  - tap:
       owner: golangci
       name: homebrew-tap
     folder: Formula
-    homepage:  https://golangci.com
+    homepage: https://golangci.com
     description: Fast linters runner for Go.
     install: |
       bin.install "golangci-lint"
