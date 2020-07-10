@@ -66,6 +66,12 @@ func (r *RunResult) ExpectExitCode(possibleCodes ...int) *RunResult {
 	return r
 }
 
+// ExpectOutputRegexp can be called with either a string or compiled regexp
+func (r *RunResult) ExpectOutputRegexp(s interface{}) *RunResult {
+	assert.Regexp(r.t, s, r.output, "exit code is %d", r.exitCode)
+	return r
+}
+
 func (r *RunResult) ExpectOutputContains(s string) *RunResult {
 	assert.Contains(r.t, r.output, s, "exit code is %d", r.exitCode)
 	return r
