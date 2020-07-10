@@ -446,8 +446,8 @@ func (e *Executor) executeRun(_ *cobra.Command, args []string) {
 
 // to be removed when deadline is finally decommissioned
 func (e *Executor) setTimeoutToDeadlineIfOnlyDeadlineIsSet() {
-	//lint:ignore SA1019 We want to promoted the deprecated config value when needed
-	deadlineValue := e.cfg.Run.Deadline // nolint:staticcheck
+	// nolint:staticcheck
+	deadlineValue := e.cfg.Run.Deadline
 	if deadlineValue != 0 && e.cfg.Run.Timeout == defaultTimeout {
 		e.cfg.Run.Timeout = deadlineValue
 	}

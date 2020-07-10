@@ -73,6 +73,7 @@ linters:
     - dogsled
     - dupl
     - errcheck
+    - exhaustive
     - funlen
     - gochecknoinits
     - goconst
@@ -91,6 +92,7 @@ linters:
     - lll
     - misspell
     - nakedret
+    - noctx
     - nolintlint
     - rowserrcheck
     - scopelint
@@ -106,7 +108,6 @@ linters:
 
   # don't enable:
   # - asciicheck
-  # - exhaustive (TODO: enable after next release; current release at time of writing is v1.27)
   # - gochecknoglobals
   # - gocognit
   # - godot
@@ -114,7 +115,6 @@ linters:
   # - goerr113
   # - maligned
   # - nestif
-  # - noctx (TODO: enable after next release; current release at time of writing is v1.27)
   # - prealloc
   # - testpackage
   # - wsl
