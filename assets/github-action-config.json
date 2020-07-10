@@ -69,8 +69,8 @@
       "AssetURL": "https://github.com/golangci/golangci-lint/releases/download/v1.27.0/golangci-lint-1.27.0-linux-amd64.tar.gz"
     },
     "v1.28": {
-      "TargetVersion": "v1.28.1",
-      "AssetURL": "https://github.com/golangci/golangci-lint/releases/download/v1.28.1/golangci-lint-1.28.1-linux-amd64.tar.gz"
+      "TargetVersion": "v1.28.2",
+      "AssetURL": "https://github.com/golangci/golangci-lint/releases/download/v1.28.2/golangci-lint-1.28.2-linux-amd64.tar.gz"
     },
     "v1.3": {
       "Error": "golangci-lint version 'v1.3' isn't supported: we support only v1.14.0 and later versions"
