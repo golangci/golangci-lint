@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"path"
 	"runtime"
 	"strings"
 	"time"
@@ -81,6 +82,7 @@ func initFlagSet(fs *pflag.FlagSet, cfg *config.Config, m *lintersdb.Manager, is
 	fs.BoolVar(&oc.PrintLinterName, "print-linter-name", true, wh("Print linter name in issue line"))
 	fs.BoolVar(&oc.UniqByLine, "uniq-by-line", true, wh("Make issues output unique by line"))
 	fs.BoolVar(&oc.PrintWelcomeMessage, "print-welcome", false, wh("Print welcome message"))
+	fs.StringVar(&oc.PathPrefix, "path-prefix", "", wh("Path prefix to add to output"))
 	hideFlag("print-welcome") // no longer used
 
 	// Run config
@@ -377,6 +379,8 @@ func (e *Executor) runAndPrint(ctx context.Context, args []string) error {
 
 	e.setExitCodeIfIssuesFound(issues)
 
+	e.postProcess(issues)
+
 	if err = p.Print(ctx, issues); err != nil {
 		return fmt.Errorf("can't print %d issues: %s", len(issues), err)
 	}
@@ -411,6 +415,14 @@ func (e *Executor) createPrinter() (printers.Printer, error) {
 	}
 
 	return p, nil
+}
+
+func (e *Executor) postProcess(issues []result.Issue) {
+	if e.cfg.Output.PathPrefix != "" {
+		for i := range issues {
+			issues[i].Pos.Filename = path.Join(e.cfg.Output.PathPrefix, issues[i].FilePath())
+		}
+	}
 }
 
 func (e *Executor) executeRun(_ *cobra.Command, args []string) {
