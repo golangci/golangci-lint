@@ -39,6 +39,19 @@ Which runs all the linters and tests.
 
 Add your new or updated parameters to `.golangci.example.yml` so they will be shown in the docs
 
+## Update golangci-lint version to lint golangci-lint codebase
+
+[.github/workflows/pr.yml](https://github.com/golangci/golangci-lint/blob/master/.github/workflows/pr.yml)
+
+## Enable new linters to lint golangci-lint codebase
+
+[.golangci.yml](https://github.com/golangci/golangci-lint/blob/master/.golangci.yml)
+
+```yaml
+  # Enable in next release
+  # - newlinter
+```
+
 ## Submit a pull request
 
 Push your branch to your `golangci-lint` fork and open a pull request against the

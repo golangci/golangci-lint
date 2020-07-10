@@ -106,6 +106,8 @@ linters:
     - varcheck
     - whitespace
 
+  # Enable in next release
+
   # don't enable:
   # - asciicheck
   # - gochecknoglobals
