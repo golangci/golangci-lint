@@ -110,3 +110,6 @@ expand_website_templates:
 
 update_contributors_list:
 	cd .github/contributors && npm run all
+
+update_netlify_state:
+	go run ./scripts/expand_website_templates/main.go -only-state
