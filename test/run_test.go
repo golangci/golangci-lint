@@ -126,6 +126,41 @@ func TestLineDirectiveProcessedFilesLiteLoading(t *testing.T) {
 	r.ExpectExitCode(exitcodes.IssuesFound).ExpectOutputEq(output + "\n")
 }
 
+func TestSortedResults(t *testing.T) {
+	var testCases = []struct {
+		opt  string
+		want string
+	}{
+		{
+			"--sort-results=false",
+			strings.Join([]string{
+				"testdata/sort_results/main.go:12:5: `db` is unused (deadcode)",
+				"testdata/sort_results/main.go:15:13: Error return value of `returnError` is not checked (errcheck)",
+				"testdata/sort_results/main.go:8:6: func `returnError` is unused (unused)",
+			}, "\n"),
+		},
+		{
+			"--sort-results=true",
+			strings.Join([]string{
+				"testdata/sort_results/main.go:8:6: func `returnError` is unused (unused)",
+				"testdata/sort_results/main.go:12:5: `db` is unused (deadcode)",
+				"testdata/sort_results/main.go:15:13: Error return value of `returnError` is not checked (errcheck)",
+			}, "\n"),
+		},
+	}
+
+	dir := getTestDataDir("sort_results")
+
+	t.Parallel()
+	for i := range testCases {
+		test := testCases[i]
+		t.Run(test.opt, func(t *testing.T) {
+			r := testshared.NewLintRunner(t).Run("--print-issued-lines=false", test.opt, dir)
+			r.ExpectExitCode(exitcodes.IssuesFound).ExpectOutputEq(test.want + "\n")
+		})
+	}
+}
+
 func TestLineDirectiveProcessedFilesFullLoading(t *testing.T) {
 	r := testshared.NewLintRunner(t).Run("--print-issued-lines=false", "--no-config",
 		"--exclude-use-default=false", "-Egolint,govet", getTestDataDir("quicktemplate"))

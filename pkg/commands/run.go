@@ -80,6 +80,7 @@ func initFlagSet(fs *pflag.FlagSet, cfg *config.Config, m *lintersdb.Manager, is
 	fs.BoolVar(&oc.PrintIssuedLine, "print-issued-lines", true, wh("Print lines of code with issue"))
 	fs.BoolVar(&oc.PrintLinterName, "print-linter-name", true, wh("Print linter name in issue line"))
 	fs.BoolVar(&oc.UniqByLine, "uniq-by-line", true, wh("Make issues output unique by line"))
+	fs.BoolVar(&oc.SortResults, "sort-results", false, wh("Sort linter results"))
 	fs.BoolVar(&oc.PrintWelcomeMessage, "print-welcome", false, wh("Print welcome message"))
 	fs.StringVar(&oc.PathPrefix, "path-prefix", "", wh("Path prefix to add to output"))
 	hideFlag("print-welcome") // no longer used

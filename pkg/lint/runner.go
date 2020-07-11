@@ -80,6 +80,7 @@ func NewRunner(cfg *config.Config, log logutils.Log, goenv *goutil.Env, es *lint
 			processors.NewPathShortener(),
 			getSeverityRulesProcessor(&cfg.Severity, log, lineCache),
 			processors.NewPathPrefixer(cfg.Output.PathPrefix),
+			processors.NewSortResults(cfg),
 		},
 		Log: log,
 	}, nil
