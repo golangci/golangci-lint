@@ -299,12 +299,12 @@ func TestPathPrefix(t *testing.T) {
 		Args    []string
 		Pattern string
 	}{
-		{"empty", nil, "^testdata/withTests/"},
-		{"prefixed", []string{"--path-prefix=cool"}, "^cool/testdata/withTests"},
+		{"empty", nil, "^testdata/withtests/"},
+		{"prefixed", []string{"--path-prefix=cool"}, "^cool/testdata/withtests"},
 	} {
 		t.Run(tt.Name, func(t *testing.T) {
 			testshared.NewLintRunner(t).Run(
-				append(tt.Args, getTestDataDir("withTests"))..., //nolint:scopelint
+				append(tt.Args, getTestDataDir("withtests"))..., //nolint:scopelint
 			).ExpectOutputRegexp(
 				tt.Pattern, //nolint:scopelint
 			)
