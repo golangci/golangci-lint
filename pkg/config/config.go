@@ -527,6 +527,7 @@ type Config struct {
 		PrintIssuedLine     bool   `mapstructure:"print-issued-lines"`
 		PrintLinterName     bool   `mapstructure:"print-linter-name"`
 		UniqByLine          bool   `mapstructure:"uniq-by-line"`
+		SortResults         bool   `mapstructure:"sort-results"`
 		PrintWelcomeMessage bool   `mapstructure:"print-welcome"`
 		PathPrefix          string `mapstructure:"path-prefix"`
 	}
