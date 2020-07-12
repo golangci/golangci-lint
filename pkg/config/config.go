@@ -244,6 +244,7 @@ type LintersSettings struct {
 	Nestif      NestifSettings
 	NoLintLint  NoLintLintSettings
 	Exhaustive  ExhaustiveSettings
+	Gofumpt     GofumptSettings
 
 	Custom map[string]CustomLinterSettings
 }
@@ -351,6 +352,10 @@ type ExhaustiveSettings struct {
 	DefaultSignifiesExhaustive bool `mapstructure:"default-signifies-exhaustive"`
 }
 
+type GofumptSettings struct {
+	ExtraRules bool `mapstructure:"extra-rules"`
+}
+
 var defaultLintersSettings = LintersSettings{
 	Lll: LllSettings{
 		LineLength: 120,
@@ -403,6 +408,9 @@ var defaultLintersSettings = LintersSettings{
 	},
 	Exhaustive: ExhaustiveSettings{
 		DefaultSignifiesExhaustive: false,
+	},
+	Gofumpt: GofumptSettings{
+		ExtraRules: false,
 	},
 }
 

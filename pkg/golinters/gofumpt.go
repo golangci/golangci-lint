@@ -46,7 +46,9 @@ func NewGofumpt() *goanalysis.Linter {
 				if err != nil {
 					return nil, fmt.Errorf("unable to open file %s: %w", f, err)
 				}
-				output, err := format.Source(input, "")
+				output, err := format.Source(input, format.Options{
+					ExtraRules: lintCtx.Settings().Gofumpt.ExtraRules,
+				})
 				if err != nil {
 					return nil, fmt.Errorf("error while running gofumpt: %w", err)
 				}

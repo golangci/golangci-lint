@@ -322,6 +322,10 @@ linters-settings:
     force-err-cuddling: false
     # Allow leading comments to be separated with empty liens
     allow-separated-leading-comment: false
+  gofumpt:
+    # Choose whether or not to use the extra rules that are disabled
+    # by default
+    extra-rules: false
 
   # The custom section can be used to define linter plugins to be loaded at runtime. See README doc
   #  for more info.
