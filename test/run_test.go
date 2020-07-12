@@ -292,3 +292,22 @@ func TestDisallowedOptionsInConfig(t *testing.T) {
 		r.RunWithYamlConfig(c.cfg, withCommonRunArgs(args...)...).ExpectExitCode(exitcodes.Failure)
 	}
 }
+
+func TestPathPrefix(t *testing.T) {
+	for _, tt := range []struct {
+		Name    string
+		Args    []string
+		Pattern string
+	}{
+		{"empty", nil, "^testdata/withtests/"},
+		{"prefixed", []string{"--path-prefix=cool"}, "^cool/testdata/withtests"},
+	} {
+		t.Run(tt.Name, func(t *testing.T) {
+			testshared.NewLintRunner(t).Run(
+				append(tt.Args, getTestDataDir("withtests"))..., //nolint:scopelint
+			).ExpectOutputRegexp(
+				tt.Pattern, //nolint:scopelint
+			)
+		})
+	}
+}

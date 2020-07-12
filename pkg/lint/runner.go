@@ -79,6 +79,7 @@ func NewRunner(cfg *config.Config, log logutils.Log, goenv *goutil.Env, es *lint
 			processors.NewSourceCode(lineCache, log.Child("source_code")),
 			processors.NewPathShortener(),
 			getSeverityRulesProcessor(&cfg.Severity, log, lineCache),
+			processors.NewPathPrefixer(cfg.Output.PathPrefix),
 		},
 		Log: log,
 	}, nil

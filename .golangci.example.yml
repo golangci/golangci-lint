@@ -72,6 +72,9 @@ output:
   # make issues output unique by line, default is true
   uniq-by-line: true
 
+  # add a prefix to the output file references; default is no prefix
+  path-prefix: ""
+
 
 # all available settings of specific linters
 linters-settings:
