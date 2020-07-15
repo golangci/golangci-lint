@@ -261,6 +261,8 @@ github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e h1:fD57ERR4JtEqsWb
 github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e/go.mod h1:zD1mROLANZcx1PVRCS0qkT7pwLkGfwJo4zjcN/Tysno=
 github.com/nishanths/exhaustive v0.0.0-20200525081945-8e46705b6132 h1:NjznefjSrral0MiR4KlB41io/d3OklvhcgQUdfZTqJE=
 github.com/nishanths/exhaustive v0.0.0-20200525081945-8e46705b6132/go.mod h1:wBEpHwM2OdmeNpdCvRPUlkEbBuaFmcK4Wv8Q7FuGW3c=
+github.com/nishanths/exhaustive v0.0.0-20200708172631-8866003e3856 h1:W3KBC2LFyfgd+wNudlfgCCsTo4q97MeNWrfz8/wSdSc=
+github.com/nishanths/exhaustive v0.0.0-20200708172631-8866003e3856/go.mod h1:wBEpHwM2OdmeNpdCvRPUlkEbBuaFmcK4Wv8Q7FuGW3c=
 github.com/oklog/ulid v1.3.1/go.mod h1:CirwcVhetQ6Lv90oh/F+FBtV6XMibvdAFo93nm5qn4U=
 github.com/onsi/ginkgo v1.6.0/go.mod h1:lLunBs/Ym6LB5Z9jYTR76FiuTmxDTDusOGeTQH+WWjE=
 github.com/onsi/ginkgo v1.12.0 h1:Iw5WCbBcaAAd0fpRb1c9r5YCylv4XDoCSigm1zLevwU=

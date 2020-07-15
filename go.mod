@@ -34,7 +34,7 @@ require (
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/mitchellh/go-ps v1.0.0
 	github.com/nakabonne/nestif v0.3.0
-	github.com/nishanths/exhaustive v0.0.0-20200525081945-8e46705b6132
+	github.com/nishanths/exhaustive v0.0.0-20200708172631-8866003e3856
 	github.com/pkg/errors v0.9.1
 	github.com/ryancurrah/gomodguard v1.1.0
 	github.com/ryanrolds/sqlclosecheck v0.3.0
