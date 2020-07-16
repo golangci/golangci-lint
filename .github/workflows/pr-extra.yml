@@ -1,0 +1,19 @@
+name: Extra
+on:
+  push:
+    tags:
+      - v*
+    branches:
+      - master
+  pull_request:
+jobs:
+  vulns:
+    name: Vulnerability scanner
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v2
+      # We cannot use nancy-github-action because it is outdated, so it's better to use the latest
+      # docker image for the validation
+      - name: nancy
+        run: go list -json -m all | docker run -i sonatypecommunity/nancy:latest
