@@ -17,7 +17,7 @@ func NewValidator(m *Manager) *Validator {
 	}
 }
 
-func (v *Validator) validateLinterConfigNames(cfg *config.Linters) error {
+func (v Validator) validateLintersNames(cfg *config.Linters) error {
 	allNames := append([]string{}, cfg.Enable...)
 	allNames = append(allNames, cfg.Disable...)
 	for _, name := range allNames {
@@ -29,7 +29,7 @@ func (v *Validator) validateLinterConfigNames(cfg *config.Linters) error {
 	return nil
 }
 
-func (v *Validator) validatePresets(cfg *config.Linters) error {
+func (v Validator) validatePresets(cfg *config.Linters) error {
 	allPresets := v.m.allPresetsSet()
 	for _, p := range cfg.Presets {
 		if !allPresets[p] {
@@ -45,7 +45,7 @@ func (v *Validator) validatePresets(cfg *config.Linters) error {
 	return nil
 }
 
-func (v *Validator) validateAllDisableEnableOptions(cfg *config.Linters) error {
+func (v Validator) validateAllDisableEnableOptions(cfg *config.Linters) error {
 	if cfg.EnableAll && cfg.DisableAll {
 		return fmt.Errorf("--enable-all and --disable-all options must not be combined")
 	}
@@ -67,7 +67,7 @@ func (v *Validator) validateAllDisableEnableOptions(cfg *config.Linters) error {
 	return nil
 }
 
-func (v *Validator) validateDisabledAndEnabledAtOneMoment(cfg *config.Linters) error {
+func (v Validator) validateDisabledAndEnabledAtOneMoment(cfg *config.Linters) error {
 	enabledLintersSet := map[string]bool{}
 	for _, name := range cfg.Enable {
 		enabledLintersSet[name] = true
@@ -82,9 +82,9 @@ func (v *Validator) validateDisabledAndEnabledAtOneMoment(cfg *config.Linters) e
 	return nil
 }
 
-func (v *Validator) validateEnabledDisabledLintersConfig(cfg *config.Linters) error {
+func (v Validator) validateEnabledDisabledLintersConfig(cfg *config.Linters) error {
 	validators := []func(cfg *config.Linters) error{
-		v.validateLinterConfigNames,
+		v.validateLintersNames,
 		v.validatePresets,
 		v.validateAllDisableEnableOptions,
 		v.validateDisabledAndEnabledAtOneMoment,
