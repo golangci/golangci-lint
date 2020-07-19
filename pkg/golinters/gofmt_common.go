@@ -207,7 +207,29 @@ func (p *hunkChangesParser) parse(h *diffpkg.Hunk) []Change {
 	return p.ret
 }
 
-func extractIssuesFromPatch(patch string, log logutils.Log, lintCtx *linter.Context, isGoimports bool) ([]result.Issue, error) {
+func getErrorTextForLinter(lintCtx *linter.Context, linterName string) string {
+	text := "File is not formatted"
+	switch linterName {
+	case gofumptName:
+		text = "File is not `gofumpt`-ed"
+		if lintCtx.Settings().Gofumpt.ExtraRules {
+			text += " with `-extra`"
+		}
+	case gofmtName:
+		text = "File is not `gofmt`-ed"
+		if lintCtx.Settings().Gofmt.Simplify {
+			text += " with `-s`"
+		}
+	case goimportsName:
+		text = "File is not `goimports`-ed"
+		if lintCtx.Settings().Goimports.LocalPrefixes != "" {
+			text += " with -local " + lintCtx.Settings().Goimports.LocalPrefixes
+		}
+	}
+	return text
+}
+
+func extractIssuesFromPatch(patch string, log logutils.Log, lintCtx *linter.Context, linterName string) ([]result.Issue, error) {
 	diffs, err := diffpkg.ParseMultiFileDiff([]byte(patch))
 	if err != nil {
 		return nil, errors.Wrap(err, "can't parse patch")
@@ -225,35 +247,19 @@ func extractIssuesFromPatch(patch string, log logutils.Log, lintCtx *linter.Cont
 		}
 
 		for _, hunk := range d.Hunks {
-			var text string
-			if isGoimports {
-				text = "File is not `goimports`-ed"
-				if lintCtx.Settings().Goimports.LocalPrefixes != "" {
-					text += " with -local " + lintCtx.Settings().Goimports.LocalPrefixes
-				}
-			} else {
-				text = "File is not `gofmt`-ed"
-				if lintCtx.Settings().Gofmt.Simplify {
-					text += " with `-s`"
-				}
-			}
 			p := hunkChangesParser{
 				log: log,
 			}
 			changes := p.parse(hunk)
 			for _, change := range changes {
 				change := change // fix scope
-				linterName := gofmtName
-				if isGoimports {
-					linterName = goimportsName
-				}
 				i := result.Issue{
 					FromLinter: linterName,
 					Pos: token.Position{
 						Filename: d.NewName,
 						Line:     change.LineRange.From,
 					},
-					Text:        text,
+					Text:        getErrorTextForLinter(lintCtx, linterName),
 					Replacement: &change.Replacement,
 				}
 				if change.LineRange.From != change.LineRange.To {
