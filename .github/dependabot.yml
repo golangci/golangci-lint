@@ -21,3 +21,9 @@ updates:
       interval: weekly
     reviewers:
       - "golangci/team"
+  - package-ecosystem: gomod
+    directory: "/scripts/gen_github_action_config"
+    schedule:
+      interval: weekly
+    reviewers:
+      - "golangci/team"
