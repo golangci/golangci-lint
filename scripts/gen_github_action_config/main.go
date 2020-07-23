@@ -153,6 +153,8 @@ func buildConfig(releases []release) (*actionConfig, error) {
 	minorVersionToConfig := map[string]versionConfig{}
 	minAllowedVersion := version{major: 1, minor: 14, patch: 0}
 
+	latestVersion := version{}
+	latestVersionConfig := versionConfig{}
 	for minorVersionedStr, maxPatchVersion := range maxPatchReleases {
 		if !maxPatchVersion.isAfterOrEq(&minAllowedVersion) {
 			minorVersionToConfig[minorVersionedStr] = versionConfig{
@@ -170,7 +172,13 @@ func buildConfig(releases []release) (*actionConfig, error) {
 			TargetVersion: maxPatchVersion.String(),
 			AssetURL:      assetURL,
 		}
+		if maxPatchVersion.isAfterOrEq(&latestVersion) {
+			latestVersion = maxPatchVersion
+			latestVersionConfig.TargetVersion = maxPatchVersion.String()
+			latestVersionConfig.AssetURL = assetURL
+		}
 	}
+	minorVersionToConfig["latest"] = latestVersionConfig
 
 	return &actionConfig{MinorVersionToConfig: minorVersionToConfig}, nil
 }
