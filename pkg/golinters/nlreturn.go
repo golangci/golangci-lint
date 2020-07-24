@@ -1,9 +1,10 @@
 package golinters
 
 import (
-	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 	"github.com/ssgreg/nlreturn/v2/pkg/nlreturn"
 	"golang.org/x/tools/go/analysis"
+
+	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 )
 
 func NewNLReturn() *goanalysis.Linter {
