@@ -206,6 +206,9 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/denis-tingajkin/go-header"),
+		linter.NewConfig(golinters.NewGci()).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/daixiang0/gci"),
 		linter.NewConfig(golinters.NewMaligned()).
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetPerformance).

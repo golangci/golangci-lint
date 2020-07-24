@@ -225,6 +225,11 @@ func getErrorTextForLinter(lintCtx *linter.Context, linterName string) string {
 		if lintCtx.Settings().Goimports.LocalPrefixes != "" {
 			text += " with -local " + lintCtx.Settings().Goimports.LocalPrefixes
 		}
+	case gciName:
+		text = "File is not `gci`-ed"
+		if lintCtx.Settings().Gci.LocalPrefixes != "" {
+			text += " with -local " + lintCtx.Settings().Gci.LocalPrefixes
+		}
 	}
 	return text
 }

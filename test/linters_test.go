@@ -83,6 +83,22 @@ func TestGoimportsLocal(t *testing.T) {
 		ExpectHasIssue("testdata/goimports/goimports.go:8: File is not `goimports`-ed")
 }
 
+func TestGciLocal(t *testing.T) {
+	sourcePath := filepath.Join(testdataDir, "gci", "gci.go")
+	args := []string{
+		"--disable-all", "--print-issued-lines=false", "--print-linter-name=false", "--out-format=line-number",
+		sourcePath,
+	}
+	rc := extractRunContextFromComments(t, sourcePath)
+	args = append(args, rc.args...)
+
+	cfg, err := yaml.Marshal(rc.config)
+	assert.NoError(t, err)
+
+	testshared.NewLintRunner(t).RunWithYamlConfig(string(cfg), args...).
+		ExpectHasIssue("testdata/gci/gci.go:8: File is not `gci`-ed")
+}
+
 func saveConfig(t *testing.T, cfg map[string]interface{}) (cfgPath string, finishFunc func()) {
 	f, err := ioutil.TempFile("", "golangci_lint_test")
 	assert.NoError(t, err)
