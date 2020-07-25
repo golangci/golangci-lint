@@ -1,6 +1,6 @@
 module github.com/golangci/golangci-lint
 
-go 1.12
+go 1.14
 
 require (
 	github.com/Djarvur/go-err113 v0.0.0-20200511133814-5174e21577d5

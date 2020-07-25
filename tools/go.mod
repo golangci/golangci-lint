@@ -1,6 +1,6 @@
 module github.com/golangci/golangci-lint/tools
 
-go 1.12
+go 1.14
 
 require (
 	github.com/goreleaser/godownloader v0.1.0
