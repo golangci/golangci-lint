@@ -7,5 +7,5 @@ require (
 	github.com/goreleaser/goreleaser v0.136.0
 )
 
-// Fix invalid pseudo-version: revision is longer than canonical (6fd6a9bfe14e)
+//  Fix invalid pseudo-version: revision is longer than canonical (6fd6a9bfe14e)
 replace github.com/go-macaron/cors => github.com/go-macaron/cors v0.0.0-20190418220122-6fd6a9bfe14e
