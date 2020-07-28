@@ -28,6 +28,11 @@ func NewGci() *goanalysis.Linter {
 		nil,
 	).WithContextSetter(func(lintCtx *linter.Context) {
 		localFlag := lintCtx.Settings().Gci.LocalPrefixes
+		goimportsFlag := lintCtx.Settings().Goimports.LocalPrefixes
+		if localFlag == "" && goimportsFlag != "" {
+			localFlag = goimportsFlag
+		}
+
 		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
 			var fileNames []string
 			for _, f := range pass.Files {
