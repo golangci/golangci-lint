@@ -6,6 +6,7 @@ require (
 	github.com/Djarvur/go-err113 v0.0.0-20200511133814-5174e21577d5
 	github.com/OpenPeeDeeP/depguard v1.0.1
 	github.com/bombsimon/wsl/v3 v3.1.0
+	github.com/daixiang0/gci v0.0.0-20200727065011-66f1df783cb2
 	github.com/denis-tingajkin/go-header v0.3.1
 	github.com/fatih/color v1.9.0
 	github.com/go-critic/go-critic v0.5.0
@@ -56,7 +57,7 @@ require (
 	github.com/ultraware/whitespace v0.0.4
 	github.com/uudashr/gocognit v1.0.1
 	github.com/valyala/quicktemplate v1.5.1
-	golang.org/x/tools v0.0.0-20200710042808-f1c4188a97a1
+	golang.org/x/tools v0.0.0-20200724022722-7017fd6b1305
 	gopkg.in/yaml.v2 v2.3.0
 	honnef.co/go/tools v0.0.1-2020.1.4
 	mvdan.cc/gofumpt v0.0.0-20200709182408-4fd085cb6d5f

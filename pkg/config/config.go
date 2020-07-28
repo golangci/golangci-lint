@@ -155,6 +155,9 @@ type Run struct {
 }
 
 type LintersSettings struct {
+	Gci struct {
+		LocalPrefixes string `mapstructure:"local-prefixes"`
+	}
 	Govet  GovetSettings
 	Golint struct {
 		MinConfidence float64 `mapstructure:"min-confidence"`

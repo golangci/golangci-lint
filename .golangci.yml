@@ -14,6 +14,8 @@ linters-settings:
   funlen:
     lines: 100
     statements: 50
+  gci:
+    local-prefixes: github.com/golangci/golangci-lint
   goconst:
     min-len: 2
     min-occurrences: 2
