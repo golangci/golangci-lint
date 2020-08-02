@@ -1,6 +1,14 @@
 Follow the news and releases on our [twitter](https://twitter.com/golangci) and our [blog](https://medium.com/golangci).
 There is the most valuable changes log:
 
+### August 2020
+
+1. new `nlreturn` linter: https://github.com/ssgreg/nlreturn
+2. new `gci` linter: https://github.com/daixiang0/gci
+3. support `latest` version of golangci-lint in golangci-lint-action
+4. update `gosec` linter from 2.3.0 to 2.4.0
+5. update `godot` linter from 0.4.2 to 0.4.8
+
 ### July 2020
 
 1. `gofumpt` linter:
