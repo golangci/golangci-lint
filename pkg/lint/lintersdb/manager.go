@@ -197,6 +197,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithURL("https://golang.org/cmd/gofmt/"),
 		linter.NewConfig(golinters.NewGofumpt()).
 			WithPresets(linter.PresetFormatting).
+			WithAutoFix().
 			WithURL("https://github.com/mvdan/gofumpt"),
 		linter.NewConfig(golinters.NewGoimports()).
 			WithPresets(linter.PresetFormatting).
