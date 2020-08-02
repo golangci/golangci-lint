@@ -6,6 +6,7 @@ require (
 	github.com/Djarvur/go-err113 v0.0.0-20200511133814-5174e21577d5
 	github.com/OpenPeeDeeP/depguard v1.0.1
 	github.com/bombsimon/wsl/v3 v3.1.0
+	github.com/daixiang0/gci v0.0.0-20200727065011-66f1df783cb2
 	github.com/denis-tingajkin/go-header v0.3.1
 	github.com/fatih/color v1.9.0
 	github.com/go-critic/go-critic v0.5.0
@@ -38,7 +39,7 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/ryancurrah/gomodguard v1.1.0
 	github.com/ryanrolds/sqlclosecheck v0.3.0
-	github.com/securego/gosec/v2 v2.3.0
+	github.com/securego/gosec/v2 v2.4.0
 	github.com/shazow/go-diff v0.0.0-20160112020656-b6b7b6733b8c
 	github.com/shirou/gopsutil v0.0.0-20190901111213-e4ec7b275ada // v2.19.8
 	github.com/sirupsen/logrus v1.6.0

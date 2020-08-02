@@ -18,7 +18,7 @@ jobs:
       - name: lint
         uses: golangci/golangci-lint-action@v2
         with:
-          version: v1.28
+          version: latest
   tests-on-windows:
     needs: golangci-lint # run after golangci-lint action to not produce duplicated errors
     runs-on: windows-latest
