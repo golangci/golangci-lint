@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"net/http"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -123,18 +124,35 @@ func processDoc(path string, replacements map[string]string, madeReplacements ma
 	return nil
 }
 
+type latestRelease struct {
+	TagName string `json:"tag_name"`
+}
+
 func getLatestVersion() (string, error) {
-	if gitTag := os.Getenv("GIT_TAG"); gitTag != "" {
-		return gitTag, nil
-	}
-
-	out, err := exec.Command("git", "tag", "-l", "--sort=-v:refname").Output()
+	req, err := http.NewRequest( // nolint:noctx
+		http.MethodGet,
+		"https://api.github.com/repos/golangci/golangci-lint/releases/latest",
+		nil,
+	)
 	if err != nil {
-		return "", fmt.Errorf("failed to run git tag: %s", err)
+		return "", fmt.Errorf("failed to prepare a http request: %s", err)
 	}
-
-	lines := bytes.Split(out, []byte("\n"))
-	return string(lines[0]), nil
+	req.Header.Add("Accept", "application/vnd.github.v3+json")
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return "", fmt.Errorf("failed to get http response for the latest tag: %s", err)
+	}
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return "", fmt.Errorf("failed to read a body for the latest tag: %s", err)
+	}
+	release := latestRelease{}
+	err = json.Unmarshal(body, &release)
+	if err != nil {
+		return "", fmt.Errorf("failed to unmarshal the body for the latest tag: %s", err)
+	}
+	return release.TagName, nil
 }
 
 func buildTemplateContext() (map[string]string, error) {

@@ -27,3 +27,9 @@ updates:
       interval: weekly
     reviewers:
       - "golangci/team"
+  - package-ecosystem: npm
+    directory: "/docs"
+    schedule:
+      interval: weekly
+    reviewers:
+      - "golangci/team"
