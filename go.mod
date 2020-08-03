@@ -60,7 +60,7 @@ require (
 	github.com/valyala/quicktemplate v1.6.0
 	golang.org/x/tools v0.0.0-20200724022722-7017fd6b1305
 	gopkg.in/yaml.v2 v2.3.0
-	honnef.co/go/tools v0.0.1-2020.1.4
+	honnef.co/go/tools v0.0.1-2020.1.5
 	mvdan.cc/gofumpt v0.0.0-20200709182408-4fd085cb6d5f
 	mvdan.cc/interfacer v0.0.0-20180901003855-c20040233aed
 	mvdan.cc/lint v0.0.0-20170908181259-adc824a0674b // indirect
