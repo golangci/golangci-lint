@@ -48,7 +48,7 @@ require (
 	github.com/spf13/cobra v1.0.0
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.7.0
-	github.com/ssgreg/nlreturn/v2 v2.0.1
+	github.com/ssgreg/nlreturn/v2 v2.0.2
 	github.com/stretchr/testify v1.6.1
 	github.com/tdakkota/asciicheck v0.0.0-20200416190851-d7f85be797a2
 	github.com/tetafro/godot v0.4.8
