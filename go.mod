@@ -14,7 +14,6 @@ require (
 	github.com/gofrs/flock v0.7.1
 	github.com/golangci/check v0.0.0-20180506172741-cfe4005ccda2
 	github.com/golangci/dupl v0.0.0-20180902072040-3e9179ac440a
-	github.com/golangci/errcheck v0.0.0-20181223084120-ef45e06d44b6
 	github.com/golangci/go-misc v0.0.0-20180628070357-927a3d87b613
 	github.com/golangci/goconst v0.0.0-20180610141641-041c5f2b40f3
 	github.com/golangci/gocyclo v0.0.0-20180528144436-0a533e8fa43d
@@ -28,6 +27,7 @@ require (
 	github.com/golangci/unconvert v0.0.0-20180507085042-28b1c447d1f4
 	github.com/jingyugao/rowserrcheck v0.0.0-20191204022205-72ab7603b68a
 	github.com/jirfag/go-printf-func-name v0.0.0-20191110105641-45db9963cdd3
+	github.com/kisielk/errcheck v1.4.1-0.20200802052755-ea6ea2fa7078
 	github.com/kyoh86/exportloopref v0.1.7
 	github.com/maratori/testpackage v1.0.1
 	github.com/matoous/godox v0.0.0-20190911065817-5d6d842e92eb // v1.0
@@ -66,3 +66,5 @@ require (
 	mvdan.cc/lint v0.0.0-20170908181259-adc824a0674b // indirect
 	mvdan.cc/unparam v0.0.0-20190720180237-d51796306d8f
 )
+
+replace github.com/kisielk/errcheck => /Users/sergey.vilgelm@ibm.com/icloud/projects/errcheck

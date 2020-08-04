@@ -18,6 +18,7 @@ jobs:
         uses: golangci/golangci-lint-action@v2
         with:
           version: latest
+          args: --verbose
   tests-on-windows:
     needs: golangci-lint # run after golangci-lint action to not produce duplicated errors
     runs-on: windows-latest

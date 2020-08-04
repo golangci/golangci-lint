@@ -13,7 +13,7 @@ func TestErrcheckIgnoreOs() {
 }
 
 func TestErrcheckNoIgnoreFmt(s string) int {
-	n, _ := fmt.Println(s) // ERROR "Error return value of `fmt.Println` is not checked"
+	n, _ := fmt.Println(s) // ERROR "Error return value is not checked"
 	return n
 }
 
@@ -23,6 +23,6 @@ func TestErrcheckIgnoreIoutil() []byte {
 }
 
 func TestErrcheckNoIgnoreIoutil() []byte {
-	ret, _ := ioutil.ReadAll(nil) // ERROR "Error return value of `ioutil.ReadAll` is not checked"
+	ret, _ := ioutil.ReadAll(nil) // ERROR "Error return value is not checked"
 	return ret
 }

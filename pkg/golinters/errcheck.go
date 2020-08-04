@@ -10,9 +10,10 @@ import (
 	"strings"
 	"sync"
 
-	errcheck "github.com/golangci/errcheck/golangci"
+	"github.com/kisielk/errcheck/errcheck"
 	"github.com/pkg/errors"
 	"golang.org/x/tools/go/analysis"
+	"golang.org/x/tools/go/packages"
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/fsutils"
@@ -36,17 +37,23 @@ func NewErrcheck() *goanalysis.Linter {
 		[]*analysis.Analyzer{analyzer},
 		nil,
 	).WithContextSetter(func(lintCtx *linter.Context) {
+		// copied from errcheck
+		checker, err := getChecker(&lintCtx.Settings().Errcheck)
+		if err != nil {
+			panic(err.Error())
+		}
+		checker.Verbose = lintCtx.Cfg.Run.IsVerbose
+		checker.Tags = lintCtx.Cfg.Run.BuildTags
+
 		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
-			prog := goanalysis.MakeFakeLoaderProgram(pass)
-			errCfg, err := genConfig(&lintCtx.Settings().Errcheck)
-			if err != nil {
-				return nil, err
-			}
-			errcheckIssues, err := errcheck.RunWithConfig(prog, errCfg)
-			if err != nil {
-				return nil, err
+			pkg := &packages.Package{
+				Fset:      pass.Fset,
+				Syntax:    pass.Files,
+				Types:     pass.Pkg,
+				TypesInfo: pass.TypesInfo,
 			}
 
+			errcheckIssues := checker.CheckPackage(pkg)
 			if len(errcheckIssues) == 0 {
 				return nil, nil
 			}
@@ -104,27 +111,32 @@ func parseIgnoreConfig(s string) (map[string]*regexp.Regexp, error) {
 	return cfg, nil
 }
 
-func genConfig(errCfg *config.ErrcheckSettings) (*errcheck.Config, error) {
+func getChecker(errCfg *config.ErrcheckSettings) (*errcheck.Checker, error) {
+	checker := errcheck.NewChecker()
+	checker.Blank = errCfg.CheckAssignToBlank
+	checker.Asserts = errCfg.CheckTypeAssertions
+
 	ignoreConfig, err := parseIgnoreConfig(errCfg.Ignore)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to parse 'ignore' directive")
 	}
 
-	c := &errcheck.Config{
-		Ignore:  ignoreConfig,
-		Blank:   errCfg.CheckAssignToBlank,
-		Asserts: errCfg.CheckTypeAssertions,
+	checker.Ignore = map[string]*regexp.Regexp{}
+	for pkg, re := range ignoreConfig {
+		checker.Ignore[pkg] = re
 	}
+	checker.UpdateNonVendoredIgnore()
 
+	checker.AddExcludes(errcheck.DefaultExcludes)
 	if errCfg.Exclude != "" {
 		exclude, err := readExcludeFile(errCfg.Exclude)
 		if err != nil {
 			return nil, err
 		}
-		c.Exclude = exclude
+		checker.AddExcludes(exclude)
 	}
 
-	return c, nil
+	return checker, nil
 }
 
 func getFirstPathArg() string {
@@ -192,7 +204,7 @@ func setupConfigFileSearch(name string) []string {
 	return configSearchPaths
 }
 
-func readExcludeFile(name string) (map[string]bool, error) {
+func readExcludeFile(name string) ([]string, error) {
 	var err error
 	var fh *os.File
 
@@ -206,12 +218,12 @@ func readExcludeFile(name string) (map[string]bool, error) {
 		return nil, errors.Wrapf(err, "failed reading exclude file: %s", name)
 	}
 	scanner := bufio.NewScanner(fh)
-	exclude := make(map[string]bool)
+	excludes := []string{}
 	for scanner.Scan() {
-		exclude[scanner.Text()] = true
+		excludes = append(excludes, scanner.Text())
 	}
 	if err := scanner.Err(); err != nil {
 		return nil, errors.Wrapf(err, "failed scanning file: %s", name)
 	}
-	return exclude, nil
+	return excludes, nil
 }
