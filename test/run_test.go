@@ -135,7 +135,7 @@ func TestSortedResults(t *testing.T) {
 			"--sort-results=false",
 			strings.Join([]string{
 				"testdata/sort_results/main.go:12:5: `db` is unused (deadcode)",
-				"testdata/sort_results/main.go:15:13: Error return value of `returnError` is not checked (errcheck)",
+				"testdata/sort_results/main.go:15:13: Error return value is not checked (errcheck)",
 				"testdata/sort_results/main.go:8:6: func `returnError` is unused (unused)",
 			}, "\n"),
 		},
@@ -144,7 +144,7 @@ func TestSortedResults(t *testing.T) {
 			strings.Join([]string{
 				"testdata/sort_results/main.go:8:6: func `returnError` is unused (unused)",
 				"testdata/sort_results/main.go:12:5: `db` is unused (deadcode)",
-				"testdata/sort_results/main.go:15:13: Error return value of `returnError` is not checked (errcheck)",
+				"testdata/sort_results/main.go:15:13: Error return value is not checked (errcheck)",
 			}, "\n"),
 		},
 	}

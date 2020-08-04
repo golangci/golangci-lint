@@ -17,7 +17,6 @@ require (
 	github.com/gofrs/flock v0.8.0
 	github.com/golangci/check v0.0.0-20180506172741-cfe4005ccda2
 	github.com/golangci/dupl v0.0.0-20180902072040-3e9179ac440a
-	github.com/golangci/errcheck v0.0.0-20181223084120-ef45e06d44b6
 	github.com/golangci/go-misc v0.0.0-20180628070357-927a3d87b613
 	github.com/golangci/gocyclo v0.0.0-20180528144436-0a533e8fa43d
 	github.com/golangci/gofmt v0.0.0-20190930125516-244bba706f1a
@@ -34,6 +33,8 @@ require (
 	github.com/kulti/thelper v0.1.0
 	github.com/kunwardeep/paralleltest v1.0.2
 	github.com/kyoh86/exportloopref v0.1.8
+	github.com/kisielk/errcheck v1.4.1-0.20200802052755-ea6ea2fa7078
+	github.com/kyoh86/exportloopref v0.1.7
 	github.com/maratori/testpackage v1.0.1
 	github.com/matoous/godox v0.0.0-20190911065817-5d6d842e92eb // v1.0
 	github.com/mattn/go-colorable v0.1.8
@@ -77,3 +78,5 @@ require (
 	mvdan.cc/lint v0.0.0-20170908181259-adc824a0674b // indirect
 	mvdan.cc/unparam v0.0.0-20200501210554-b37ab49443f7
 )
+
+replace github.com/kisielk/errcheck => /Users/sergey.vilgelm@ibm.com/icloud/projects/errcheck
