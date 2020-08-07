@@ -73,4 +73,5 @@ require (
 	mvdan.cc/unparam v0.0.0-20200501210554-b37ab49443f7
 )
 
-replace golang.org/x/text => golang.org/x/text v0.3.3 //CVE-2020-14040
+//CVE-2020-14040
+replace golang.org/x/text => golang.org/x/text v0.3.3
