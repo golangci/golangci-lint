@@ -21,7 +21,7 @@
     "gatsby-plugin-mdx": "^1.2.30",
     "gatsby-plugin-netlify": "^2.3.12",
     "gatsby-plugin-netlify-cache": "^1.2.0",
-    "gatsby-plugin-offline": "^3.2.21",
+    "gatsby-plugin-offline": "^3.2.22",
     "gatsby-plugin-react-helmet": "^3.3.10",
     "gatsby-plugin-react-svg": "^3.0.0",
     "gatsby-plugin-robots-txt": "^1.5.1",
