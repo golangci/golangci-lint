@@ -47,7 +47,7 @@ func (l *tLog) SetLevel(level logutils.LogLevel) {}
 func TestFilterByDisableTags(t *testing.T) {
 	testLog := &tLog{}
 	disabledTags := []string{"experimental", "opinionated"}
-	enabledChecks := []string{"appendAssign", "argOrder", "caseOrder", "codegenComment"}
+	enabledChecks := []string{"appendAssign", "sortSlice", "caseOrder", "dupImport"}
 	filterEnabledChecks := filterByDisableTags(enabledChecks, disabledTags, testLog)
 	sort.Strings(filterEnabledChecks)
 	assert.Equal(t, []string{"appendAssign", "caseOrder"}, filterEnabledChecks)
