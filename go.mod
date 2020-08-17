@@ -9,7 +9,7 @@ require (
 	github.com/daixiang0/gci v0.2.2
 	github.com/denis-tingajkin/go-header v0.3.1
 	github.com/fatih/color v1.9.0
-	github.com/go-critic/go-critic v0.5.0
+	github.com/go-critic/go-critic v0.5.2
 	github.com/go-xmlfmt/xmlfmt v0.0.0-20191208150333-d5b6f63a941b
 	github.com/gofrs/flock v0.7.1
 	github.com/golangci/check v0.0.0-20180506172741-cfe4005ccda2
@@ -58,7 +58,7 @@ require (
 	github.com/ultraware/whitespace v0.0.4
 	github.com/uudashr/gocognit v1.0.1
 	github.com/valyala/quicktemplate v1.6.2
-	golang.org/x/tools v0.0.0-20200724022722-7017fd6b1305
+	golang.org/x/tools v0.0.0-20200812195022-5ae4c3c160a0
 	gopkg.in/yaml.v2 v2.3.0
 	honnef.co/go/tools v0.0.1-2020.1.5
 	mvdan.cc/gofumpt v0.0.0-20200709182408-4fd085cb6d5f
