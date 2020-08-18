@@ -16,4 +16,4 @@ jobs:
       # We cannot use nancy-github-action because it is outdated, so it's better to use the latest
       # docker image for the validation
       - name: nancy
-        run: go list -json -m all | docker run -i sonatypecommunity/nancy:latest
+        run: go list -json -m all | docker run -i sonatypecommunity/nancy:v0.3
