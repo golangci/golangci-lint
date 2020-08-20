@@ -521,6 +521,10 @@ type Severity struct {
 	Rules         []SeverityRule `mapstructure:"rules"`
 }
 
+type Version struct {
+	Format string `mapstructure:"format"`
+}
+
 type Config struct {
 	Run Run
 
@@ -539,6 +543,7 @@ type Config struct {
 	Linters         Linters
 	Issues          Issues
 	Severity        Severity
+	Version         Version
 
 	InternalTest bool // Option is used only for testing golangci-lint code, don't use it
 }

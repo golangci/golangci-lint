@@ -234,6 +234,7 @@ func (e *Executor) getConfigForCommandLine() (*config.Config, error) {
 	// Use another config variable here, not e.cfg, to not
 	// affect main parsing by this parsing of only config option.
 	initFlagSet(fs, &cfg, e.DBManager, false)
+	initVersionFlagSet(fs, &cfg)
 
 	// Parse max options, even force version option: don't want
 	// to get access to Executor here: it's error-prone to use
