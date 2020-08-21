@@ -170,6 +170,7 @@ func (r *FileReader) setupConfigFileSearch() {
 
 	// find all dirs from it up to the root
 	configSearchPaths := []string{"./"}
+
 	for {
 		configSearchPaths = append(configSearchPaths, curDir)
 		newCurDir := filepath.Dir(curDir)
@@ -177,6 +178,14 @@ func (r *FileReader) setupConfigFileSearch() {
 			break
 		}
 		curDir = newCurDir
+	}
+
+	// find home directory for global config
+	home, err := homedir.Dir()
+	if err != nil {
+		r.log.Warnf("Can't get user's home directory: %s", home)
+	} else {
+		configSearchPaths = append(configSearchPaths, home)
 	}
 
 	r.log.Infof("Config search paths: %s", configSearchPaths)
