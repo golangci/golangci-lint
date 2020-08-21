@@ -184,7 +184,7 @@ func (r *FileReader) setupConfigFileSearch() {
 	home, err := homedir.Dir()
 	if err != nil {
 		r.log.Warnf("Can't get user's home directory: %s", home)
-	} else {
+	} else if !sliceContains(configSearchPaths, home) {
 		configSearchPaths = append(configSearchPaths, home)
 	}
 
@@ -193,6 +193,15 @@ func (r *FileReader) setupConfigFileSearch() {
 	for _, p := range configSearchPaths {
 		viper.AddConfigPath(p)
 	}
+}
+
+func sliceContains(slice []string, value string) bool {
+	for _, v := range slice {
+		if v == value {
+			return true
+		}
+	}
+	return false
 }
 
 var errConfigDisabled = errors.New("config is disabled by --no-config")
