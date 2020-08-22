@@ -181,9 +181,8 @@ func (r *FileReader) setupConfigFileSearch() {
 	}
 
 	// find home directory for global config
-	home, err := homedir.Dir()
-	if err != nil {
-		r.log.Warnf("Can't get user's home directory: %s", home)
+	if home, err := homedir.Dir(); err != nil {
+		r.log.Warnf("Can't get user's home directory: %s", err.Error())
 	} else if !sliceContains(configSearchPaths, home) {
 		configSearchPaths = append(configSearchPaths, home)
 	}
