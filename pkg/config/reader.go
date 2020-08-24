@@ -12,6 +12,7 @@ import (
 
 	"github.com/golangci/golangci-lint/pkg/fsutils"
 	"github.com/golangci/golangci-lint/pkg/logutils"
+	"github.com/golangci/golangci-lint/pkg/sliceutil"
 )
 
 type FileReader struct {
@@ -183,7 +184,7 @@ func (r *FileReader) setupConfigFileSearch() {
 	// find home directory for global config
 	if home, err := homedir.Dir(); err != nil {
 		r.log.Warnf("Can't get user's home directory: %s", err.Error())
-	} else if !sliceContains(configSearchPaths, home) {
+	} else if !sliceutil.Contains(configSearchPaths, home) {
 		configSearchPaths = append(configSearchPaths, home)
 	}
 
@@ -192,15 +193,6 @@ func (r *FileReader) setupConfigFileSearch() {
 	for _, p := range configSearchPaths {
 		viper.AddConfigPath(p)
 	}
-}
-
-func sliceContains(slice []string, value string) bool {
-	for _, v := range slice {
-		if v == value {
-			return true
-		}
-	}
-	return false
 }
 
 var errConfigDisabled = errors.New("config is disabled by --no-config")
