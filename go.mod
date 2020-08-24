@@ -11,7 +11,7 @@ require (
 	github.com/fatih/color v1.9.0
 	github.com/go-critic/go-critic v0.5.2
 	github.com/go-xmlfmt/xmlfmt v0.0.0-20191208150333-d5b6f63a941b
-	github.com/gofrs/flock v0.7.1
+	github.com/gofrs/flock v0.7.3
 	github.com/golangci/check v0.0.0-20180506172741-cfe4005ccda2
 	github.com/golangci/dupl v0.0.0-20180902072040-3e9179ac440a
 	github.com/golangci/errcheck v0.0.0-20181223084120-ef45e06d44b6
