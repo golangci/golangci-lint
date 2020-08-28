@@ -218,11 +218,15 @@ func (e *Executor) acquireFileLock() bool {
 	lockFile := filepath.Join(os.TempDir(), "golangci-lint.lock")
 	e.debugf("Locking on file %s...", lockFile)
 	f := flock.New(lockFile)
-	const totalTimeout = 5 * time.Second
 	const retryDelay = time.Second
-	ctx, finish := context.WithTimeout(context.Background(), totalTimeout)
-	defer finish()
 
+	ctx := context.Background()
+	if !e.cfg.Run.AllowSerialRunners {
+		const totalTimeout = 5 * time.Second
+		var cancel context.CancelFunc
+		ctx, cancel = context.WithTimeout(ctx, totalTimeout)
+		defer cancel()
+	}
 	if ok, _ := f.TryLockContext(ctx, retryDelay); !ok {
 		return false
 	}
