@@ -96,7 +96,7 @@ func TestGciLocal(t *testing.T) {
 	assert.NoError(t, err)
 
 	testshared.NewLintRunner(t).RunWithYamlConfig(string(cfg), args...).
-		ExpectHasIssue("testdata/gci/gci.go:8: File is not `gci`-ed")
+		ExpectHasIssue("testdata/gci/gci.go:7: File is not `gci`-ed")
 }
 
 func saveConfig(t *testing.T, cfg map[string]interface{}) (cfgPath string, finishFunc func()) {
