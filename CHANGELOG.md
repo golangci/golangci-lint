@@ -1,6 +1,12 @@
 Follow the news and releases on our [twitter](https://twitter.com/golangci) and our [blog](https://medium.com/golangci).
 There is the most valuable changes log:
 
+
+### Septempber 2020
+
+1. update exhaustive linter (#1339)
+
+
 ### August 2020
 
 1. new `nlreturn` linter: https://github.com/ssgreg/nlreturn
@@ -8,6 +14,15 @@ There is the most valuable changes log:
 3. support `latest` version of golangci-lint in golangci-lint-action
 4. update `gosec` linter from 2.3.0 to 2.4.0
 5. update `godot` linter from 0.4.2 to 0.4.8
+6. update `go-critic` from 0.5.0 to 0.5.2 (#1307)
+7. update `nlreturn` from 2.0.1 to 2.0.2 (#1287), 2.0.2 to 2.1.0 (#1327)
+8. update `gci` to v0.2.1 (#1292), to v0.2.2 (#1305), to v0.2.4 (#1337),
+9. update `funlen` from 0.0.2 to 0.0.3 (#1341)
+10. upgrade to golang 1.15 for smaller binary (#1303)
+11. support short and json formats for version cmd (#1315)
+12. add home directory to config file search paths (#1325)
+13. allow for serializing multiple golangci-lint invocations (#1302)
+
 
 ### July 2020
 
