@@ -58,11 +58,11 @@ require (
 	github.com/ultraware/whitespace v0.0.4
 	github.com/uudashr/gocognit v1.0.1
 	github.com/valyala/quicktemplate v1.6.2
-	golang.org/x/tools v0.0.0-20200812195022-5ae4c3c160a0
+	golang.org/x/tools v0.0.0-20200918232735-d647fc253266
 	gopkg.in/yaml.v2 v2.3.0
 	honnef.co/go/tools v0.0.1-2020.1.5
-	mvdan.cc/gofumpt v0.0.0-20200709182408-4fd085cb6d5f
+	mvdan.cc/gofumpt v0.0.0-20200802201014-ab5a8192947d
 	mvdan.cc/interfacer v0.0.0-20180901003855-c20040233aed
 	mvdan.cc/lint v0.0.0-20170908181259-adc824a0674b // indirect
-	mvdan.cc/unparam v0.0.0-20190720180237-d51796306d8f
+	mvdan.cc/unparam v0.0.0-20200501210554-b37ab49443f7
 )
