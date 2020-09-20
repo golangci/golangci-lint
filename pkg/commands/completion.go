@@ -62,7 +62,7 @@ func (e *Executor) executeZshCompletion(cmd *cobra.Command, args []string) error
 func (e *Executor) executeFishCompletion(cmd *cobra.Command, args []string) error {
 	err := cmd.Root().GenFishCompletion(os.Stdout, true)
 	if err != nil {
-		return errors.Wrap(err, "unable to generate fish completions: %v")
+		return errors.Wrap(err, "generate fish completion")
 	}
 
 	return nil
