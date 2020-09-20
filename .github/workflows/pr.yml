@@ -8,6 +8,21 @@ on:
       - master
   pull_request:
 jobs:
+  # Check if there any dirty change for go mod tidy
+  go-mod:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.15
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Check go mod
+        run: |
+          go mod tidy
+          git diff --exit-code
+
   # We already run the current golangci-lint in tests, but here we test
   # our GitHub action with the latest stable golangci-lint.
   golangci-lint:
