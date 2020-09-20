@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-go@v2
-      # We cannot use nancy-github-action because it is outdated, so it's better to use the latest
-      # docker image for the validation
-      - name: nancy
-        run: go list -json -m all | docker run -i sonatypecommunity/nancy:v0.3
+      - name: Run go list
+        run: go list -json -m all > go.list
+      - name: Nancy
+        uses: sonatype-nexus-community/nancy-github-action@master
