@@ -252,11 +252,20 @@ func TestExtractRunContextFromComments(t *testing.T) {
 	assert.Equal(t, []string{"-Egoimports"}, rc.args)
 }
 
-func TestGolintConsumesXTestFiles(t *testing.T) {
-	dir := getTestDataDir("withxtest")
-	const expIssue = "`if` block ends with a `return` statement, so drop this `else` and outdent its block"
+func TestTparallel(t *testing.T) {
+	sourcePath := filepath.Join(testdataDir, "tparallel", "tparallel_test.go")
+	args := []string{
+		"--disable-all", "--print-issued-lines=false", "--print-linter-name=false", "--out-format=line-number", "--enable", "tparallel",
+		sourcePath,
+	}
+	rc := extractRunContextFromComments(t, sourcePath)
+	args = append(args, rc.args...)
 
-	r := testshared.NewLintRunner(t)
-	r.Run("--no-config", "--disable-all", "-Egolint", dir).ExpectHasIssue(expIssue)
-	r.Run("--no-config", "--disable-all", "-Egolint", filepath.Join(dir, "p_test.go")).ExpectHasIssue(expIssue)
+	cfg, err := yaml.Marshal(rc.config)
+	assert.NoError(t, err)
+
+	testshared.NewLintRunner(t).RunWithYamlConfig(string(cfg), args...).
+		ExpectHasIssue(
+			"testdata/tparallel/tparallel_test.go:7:6: TestSomething should call t.Parallel on the top level as well as its subtests\n",
+		)
 }
