@@ -253,19 +253,54 @@ func TestExtractRunContextFromComments(t *testing.T) {
 }
 
 func TestTparallel(t *testing.T) {
-	sourcePath := filepath.Join(testdataDir, "tparallel", "tparallel_test.go")
-	args := []string{
-		"--disable-all", "--print-issued-lines=false", "--print-linter-name=false", "--out-format=line-number", "--enable", "tparallel",
-		sourcePath,
-	}
-	rc := extractRunContextFromComments(t, sourcePath)
-	args = append(args, rc.args...)
+	t.Run("should fail on missing top-level Parallel()", func(t *testing.T) {
+		sourcePath := filepath.Join(testdataDir, "tparallel", "missing_toplevel_test.go")
+		args := []string{
+			"--disable-all", "--print-issued-lines=false", "--print-linter-name=false", "--out-format=line-number", "--enable", "tparallel",
+			sourcePath,
+		}
+		rc := extractRunContextFromComments(t, sourcePath)
+		args = append(args, rc.args...)
 
-	cfg, err := yaml.Marshal(rc.config)
-	assert.NoError(t, err)
+		cfg, err := yaml.Marshal(rc.config)
+		assert.NoError(t, err)
 
-	testshared.NewLintRunner(t).RunWithYamlConfig(string(cfg), args...).
-		ExpectHasIssue(
-			"testdata/tparallel/tparallel_test.go:7:6: TestSomething should call t.Parallel on the top level as well as its subtests\n",
-		)
+		testshared.NewLintRunner(t).RunWithYamlConfig(string(cfg), args...).
+			ExpectHasIssue(
+				"testdata/tparallel/missing_toplevel_test.go:7:6: TestTopLevel should call t.Parallel on the top level as well as its subtests\n",
+			)
+	})
+
+	t.Run("should fail on missing subtest Parallel()", func(t *testing.T) {
+		sourcePath := filepath.Join(testdataDir, "tparallel", "missing_subtest_test.go")
+		args := []string{
+			"--disable-all", "--print-issued-lines=false", "--print-linter-name=false", "--out-format=line-number", "--enable", "tparallel",
+			sourcePath,
+		}
+		rc := extractRunContextFromComments(t, sourcePath)
+		args = append(args, rc.args...)
+
+		cfg, err := yaml.Marshal(rc.config)
+		assert.NoError(t, err)
+
+		testshared.NewLintRunner(t).RunWithYamlConfig(string(cfg), args...).
+			ExpectHasIssue(
+				"testdata/tparallel/missing_subtest_test.go:7:6: TestSubtests's subtests should call t.Parallel\n",
+			)
+	})
+
+	t.Run("should pass on parallel test with no subtests", func(t *testing.T) {
+		sourcePath := filepath.Join(testdataDir, "tparallel", "happy_path_test.go")
+		args := []string{
+			"--disable-all", "--print-issued-lines=false", "--print-linter-name=false", "--out-format=line-number", "--enable", "tparallel",
+			sourcePath,
+		}
+		rc := extractRunContextFromComments(t, sourcePath)
+		args = append(args, rc.args...)
+
+		cfg, err := yaml.Marshal(rc.config)
+		assert.NoError(t, err)
+
+		testshared.NewLintRunner(t).RunWithYamlConfig(string(cfg), args...).ExpectNoIssues()
+	})
 }

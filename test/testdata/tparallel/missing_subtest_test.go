@@ -4,8 +4,9 @@ import (
 	"testing"
 )
 
-func TestSomething(t *testing.T) {
+func TestSubtests(t *testing.T) {
+	t.Parallel()
+
 	t.Run("", func(t *testing.T) {
-		t.Parallel()
 	})
 }
