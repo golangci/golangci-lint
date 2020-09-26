@@ -80,7 +80,7 @@ func TestGoimportsLocal(t *testing.T) {
 	assert.NoError(t, err)
 
 	r := testshared.NewLintRunner(t).RunWithYamlConfig(string(cfg), args...)
-	assert.NotNil(t, res, "command failed to run")
+	assert.NotNil(t, r, "command failed to run")
 	r.ExpectHasIssue("testdata/goimports/goimports.go:8: File is not `goimports`-ed")
 }
 
@@ -97,7 +97,7 @@ func TestGciLocal(t *testing.T) {
 	assert.NoError(t, err)
 
 	r := testshared.NewLintRunner(t).RunWithYamlConfig(string(cfg), args...)
-	assert.NotNil(t, res, "command failed to run")
+	assert.NotNil(t, r, "command failed to run")
 	r.ExpectHasIssue("testdata/gci/gci.go:7: File is not `gci`-ed")
 }
 
