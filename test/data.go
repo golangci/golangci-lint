@@ -1,11 +1,14 @@
 package test
 
 import (
+	"os"
 	"path/filepath"
 )
 
-const testdataDir = "testdata"
-const binName = "../golangci-lint"
+const (
+	testdataDir = "testdata"
+	binName     = ".." + string(os.PathSeparator) + "golangci-lint"
+)
 
 var minimalPkg = getTestDataDir("minimalpkg")
 

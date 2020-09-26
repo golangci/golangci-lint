@@ -40,6 +40,8 @@ func (r *LintRunner) Install() {
 		}
 
 		cmd := exec.Command("make", "-C", "..", "build")
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
 		assert.NoError(r.t, cmd.Run(), "Can't go install golangci-lint")
 	})
 }
