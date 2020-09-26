@@ -4,6 +4,7 @@ import (
 	"io/ioutil"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strings"
 	"sync"
 	"syscall"
@@ -99,7 +100,7 @@ func (r *LintRunner) RunCommand(command string, args ...string) *RunResult {
 		r.log.Infof("ran [../golangci-lint %s] in %s", strings.Join(runArgs, " "), time.Since(startedAt))
 	}(time.Now())
 
-	cmd := exec.Command("../golangci-lint", runArgs...)
+	cmd := exec.Command(filepath.Join("..", "golangci-lint"), runArgs...)
 	cmd.Env = append(os.Environ(), r.env...)
 	out, err := cmd.CombinedOutput()
 	if err != nil {
