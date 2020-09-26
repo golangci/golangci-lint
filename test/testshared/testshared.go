@@ -11,19 +11,20 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"github.com/golangci/golangci-lint/pkg/exitcodes"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 )
 
 type LintRunner struct {
-	t           assert.TestingT
+	t           require.TestingT
 	log         logutils.Log
 	env         []string
 	installOnce sync.Once
 }
 
-func NewLintRunner(t assert.TestingT, environ ...string) *LintRunner {
+func NewLintRunner(t require.TestingT, environ ...string) *LintRunner {
 	log := logutils.NewStderrLog("test")
 	log.SetLevel(logutils.LogLevelInfo)
 	return &LintRunner{
@@ -40,7 +41,7 @@ func (r *LintRunner) Install() {
 		}
 
 		cmd := exec.Command("make", "-C", "..", "build")
-		assert.NoError(r.t, cmd.Run(), "Can't go install golangci-lint")
+		require.NoError(r.t, cmd.Run(), "Can't go install golangci-lint")
 	})
 }
 
@@ -95,12 +96,12 @@ func (r *LintRunner) Run(args ...string) *RunResult {
 func (r *LintRunner) RunCommand(command string, args ...string) *RunResult {
 	r.Install()
 
+	binPath := filepath.Join("..", "golangci-lint")
 	runArgs := append([]string{command}, args...)
 	defer func(startedAt time.Time) {
-		r.log.Infof("ran [../golangci-lint %s] in %s", strings.Join(runArgs, " "), time.Since(startedAt))
+		r.log.Infof("ran [%s %s] in %s", binPath, strings.Join(runArgs, " "), time.Since(startedAt))
 	}(time.Now())
 
-	binPath := filepath.Join("..", "golangci-lint")
 	cmd := exec.Command(binPath, runArgs...)
 	cmd.Env = append(os.Environ(), r.env...)
 	out, err := cmd.CombinedOutput()
