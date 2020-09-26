@@ -10,7 +10,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/stretchr/testify/assert"
+	assert "github.com/stretchr/testify/require"
 
 	"github.com/golangci/golangci-lint/pkg/exitcodes"
 	"github.com/golangci/golangci-lint/pkg/logutils"
@@ -116,7 +116,11 @@ func (r *LintRunner) RunCommand(command string, args ...string) *RunResult {
 		}
 
 		r.t.Errorf("can't get error code from %s", err)
-		return nil
+		return &RunResult{
+			t:        r.t,
+			output:   err.Error(),
+			exitCode: -1,
+		}
 	}
 
 	// success, exitCode should be 0 if go is ok
