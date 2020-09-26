@@ -184,10 +184,12 @@ func TestEnabledLinters(t *testing.T) {
 				runArgs = append(runArgs, strings.Split(c.args, " ")...)
 			}
 			r := runner.RunCommandWithYamlConfig(c.cfg, "linters", runArgs...)
-			sort.StringSlice(c.el).Sort()
+			if r != nil {
+				sort.StringSlice(c.el).Sort()
 
-			expectedLine := fmt.Sprintf("Active %d linters: [%s]", len(c.el), strings.Join(c.el, " "))
-			r.ExpectOutputContains(expectedLine)
+				expectedLine := fmt.Sprintf("Active %d linters: [%s]", len(c.el), strings.Join(c.el, " "))
+				r.ExpectOutputContains(expectedLine)
+			}
 		})
 	}
 }

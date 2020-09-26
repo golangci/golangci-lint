@@ -11,20 +11,19 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 
 	"github.com/golangci/golangci-lint/pkg/exitcodes"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 )
 
 type LintRunner struct {
-	t           require.TestingT
+	t           assert.TestingT
 	log         logutils.Log
 	env         []string
 	installOnce sync.Once
 }
 
-func NewLintRunner(t require.TestingT, environ ...string) *LintRunner {
+func NewLintRunner(t assert.TestingT, environ ...string) *LintRunner {
 	log := logutils.NewStderrLog("test")
 	log.SetLevel(logutils.LogLevelInfo)
 	return &LintRunner{
@@ -41,7 +40,7 @@ func (r *LintRunner) Install() {
 		}
 
 		cmd := exec.Command("make", "-C", "..", "build")
-		require.NoError(r.t, cmd.Run(), "Can't go install golangci-lint")
+		assert.NoError(r.t, cmd.Run(), "Can't go install golangci-lint")
 	})
 }
 
