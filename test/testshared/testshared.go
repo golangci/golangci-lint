@@ -5,6 +5,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"sync"
 	"syscall"
@@ -40,8 +41,6 @@ func (r *LintRunner) Install() {
 		}
 
 		cmd := exec.Command("make", "-C", "..", "build")
-		cmd.Stdout = os.Stdout
-		cmd.Stderr = os.Stderr
 		assert.NoError(r.t, cmd.Run(), "Can't go install golangci-lint")
 	})
 }

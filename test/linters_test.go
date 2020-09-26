@@ -79,8 +79,9 @@ func TestGoimportsLocal(t *testing.T) {
 	cfg, err := yaml.Marshal(rc.config)
 	assert.NoError(t, err)
 
-	testshared.NewLintRunner(t).RunWithYamlConfig(string(cfg), args...).
-		ExpectHasIssue("testdata/goimports/goimports.go:8: File is not `goimports`-ed")
+	r := testshared.NewLintRunner(t).RunWithYamlConfig(string(cfg), args...)
+	assert.NotNil(t, res, "command failed to run")
+	r.ExpectHasIssue("testdata/goimports/goimports.go:8: File is not `goimports`-ed")
 }
 
 func TestGciLocal(t *testing.T) {
@@ -95,8 +96,9 @@ func TestGciLocal(t *testing.T) {
 	cfg, err := yaml.Marshal(rc.config)
 	assert.NoError(t, err)
 
-	testshared.NewLintRunner(t).RunWithYamlConfig(string(cfg), args...).
-		ExpectHasIssue("testdata/gci/gci.go:7: File is not `gci`-ed")
+	r := testshared.NewLintRunner(t).RunWithYamlConfig(string(cfg), args...)
+	assert.NotNil(t, res, "command failed to run")
+	r.ExpectHasIssue("testdata/gci/gci.go:7: File is not `gci`-ed")
 }
 
 func saveConfig(t *testing.T, cfg map[string]interface{}) (cfgPath string, finishFunc func()) {
@@ -257,6 +259,11 @@ func TestGolintConsumesXTestFiles(t *testing.T) {
 	const expIssue = "`if` block ends with a `return` statement, so drop this `else` and outdent its block"
 
 	r := testshared.NewLintRunner(t)
-	r.Run("--no-config", "--disable-all", "-Egolint", dir).ExpectHasIssue(expIssue)
-	r.Run("--no-config", "--disable-all", "-Egolint", filepath.Join(dir, "p_test.go")).ExpectHasIssue(expIssue)
+	res := r.Run("--no-config", "--disable-all", "-Egolint", dir)
+	assert.NotNil(t, res, "command failed to run")
+	res.ExpectHasIssue(expIssue)
+
+	res = r.Run("--no-config", "--disable-all", "-Egolint", filepath.Join(dir, "p_test.go"))
+	assert.NotNil(t, res, "command failed to run")
+	res.ExpectHasIssue(expIssue)
 }
