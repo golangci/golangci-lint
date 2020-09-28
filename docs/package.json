@@ -8,7 +8,7 @@
   "dependencies": {
     "@emotion/core": "^10.0.35",
     "@emotion/styled": "^10.0.27",
-    "@mdx-js/mdx": "^1.6.16",
+    "@mdx-js/mdx": "^1.6.18",
     "@mdx-js/react": "^1.6.16",
     "emotion-theming": "^10.0.27",
     "gatsby": "^2.24.52",
