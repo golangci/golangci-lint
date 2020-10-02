@@ -104,6 +104,7 @@ nfpms:
     package_name: golangci-lint
     file_name_template: "{{ .ProjectName }}-{{ .Version }}-{{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
     homepage: https://golangci-lint.run/
+    maintainer: "golangci-lint Team <golangci-releaser@users.noreply.github.com>"
     description: Fast linters Runner for Go
     license: GPLv3
     formats:
