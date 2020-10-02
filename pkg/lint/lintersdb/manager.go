@@ -305,6 +305,11 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/ssgreg/nlreturn"),
+		linter.NewConfig(golinters.NewWrapcheck()).
+			WithPresets(linter.PresetStyle).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/tomarrell/wrapcheck"),
+
 		// nolintlint must be last because it looks at the results of all the previous linters for unused nolint directives
 		linter.NewConfig(golinters.NewNoLintLint()).
 			WithPresets(linter.PresetStyle).
