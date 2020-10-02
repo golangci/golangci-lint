@@ -56,8 +56,10 @@ func (m *Manager) WithCustomLinters() *Manager {
 }
 
 func (Manager) AllPresets() []string {
-	return []string{linter.PresetBugs, linter.PresetComplexity, linter.PresetFormatting,
-		linter.PresetPerformance, linter.PresetStyle, linter.PresetUnused}
+	return []string{
+		linter.PresetBugs, linter.PresetComplexity, linter.PresetFormatting,
+		linter.PresetPerformance, linter.PresetStyle, linter.PresetUnused,
+	}
 }
 
 func (m Manager) allPresetsSet() map[string]bool {
@@ -305,6 +307,10 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/ssgreg/nlreturn"),
+		linter.NewConfig(golinters.NewTparallel()).
+			WithPresets(linter.PresetStyle).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/moricho/tparallel"),
 		// nolintlint must be last because it looks at the results of all the previous linters for unused nolint directives
 		linter.NewConfig(golinters.NewNoLintLint()).
 			WithPresets(linter.PresetStyle).
