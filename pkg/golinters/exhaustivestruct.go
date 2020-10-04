@@ -13,5 +13,5 @@ func NewExhaustiveStruct() *goanalysis.Linter {
 		"Checks if all struct's fields are initialized",
 		[]*analysis.Analyzer{analyzer.Analyzer},
 		nil,
-	).WithLoadMode(goanalysis.LoadModeSyntax)
+	).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }
