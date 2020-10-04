@@ -1,10 +1,13 @@
 package golinters
 
 import (
+	"bytes"
+	"fmt"
 	"sync"
 
 	"github.com/daixiang0/gci/pkg/gci"
 	"github.com/pkg/errors"
+	"github.com/shazow/go-diff/difflib"
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
@@ -16,6 +19,7 @@ const gciName = "gci"
 func NewGci() *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
+	differ := difflib.New()
 
 	analyzer := &analysis.Analyzer{
 		Name: gciName,
@@ -43,17 +47,28 @@ func NewGci() *goanalysis.Linter {
 			var issues []goanalysis.Issue
 
 			for _, f := range fileNames {
-				diff, err := gci.Run(f, &gci.FlagSet{LocalFlag: localFlag})
+				source, result, err := gci.Run(f, &gci.FlagSet{LocalFlag: localFlag})
 				if err != nil {
 					return nil, err
 				}
-				if diff == nil {
+				if result == nil {
 					continue
 				}
 
-				is, err := extractIssuesFromPatch(string(diff), lintCtx.Log, lintCtx, gciName)
+				diff := bytes.Buffer{}
+				_, err = diff.WriteString(fmt.Sprintf("--- %[1]s\n+++ %[1]s\n", f))
 				if err != nil {
-					return nil, errors.Wrapf(err, "can't extract issues from gci diff output %q", string(diff))
+					return nil, fmt.Errorf("can't write diff header: %v", err)
+				}
+
+				err = differ.Diff(&diff, bytes.NewReader(source), bytes.NewReader(result))
+				if err != nil {
+					return nil, fmt.Errorf("can't get gci diff output: %v", err)
+				}
+
+				is, err := extractIssuesFromPatch(diff.String(), lintCtx.Log, lintCtx, gciName)
+				if err != nil {
+					return nil, errors.Wrapf(err, "can't extract issues from gci diff output %q", diff.String())
 				}
 
 				for i := range is {

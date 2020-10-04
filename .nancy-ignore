@@ -1,0 +1,11 @@
+# Skip for golang/golang.org/x/net@v0.0.0-20200904194848-62affa334b73
+CVE-2018-17848
+CVE-2018-17143
+CVE-2018-17847
+CVE-2018-17142
+CVE-2018-17846
+
+# Skip for indirect dependency github.com/coreos/etcd@3.3.13
+CVE-2020-15114
+CVE-2020-15115
+CVE-2020-15136

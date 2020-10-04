@@ -176,7 +176,7 @@ func TestEnabledLinters(t *testing.T) {
 		t.Run(c.name, func(t *testing.T) {
 			t.Parallel()
 
-			runArgs := []string{"-v"}
+			runArgs := []string{"--verbose"}
 			if !c.noImplicitFast {
 				runArgs = append(runArgs, "--fast")
 			}

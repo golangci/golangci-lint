@@ -111,6 +111,9 @@ func initFlagSet(fs *pflag.FlagSet, cfg *config.Config, m *lintersdb.Manager, is
 	const allowParallelDesc = "Allow multiple parallel golangci-lint instances running. " +
 		"If false (default) - golangci-lint acquires file lock on start."
 	fs.BoolVar(&rc.AllowParallelRunners, "allow-parallel-runners", false, wh(allowParallelDesc))
+	const allowSerialDesc = "Allow multiple golangci-lint instances running, but serialize them	around a lock. " +
+		"If false (default) - golangci-lint exits with an error if it fails to acquire file lock on start."
+	fs.BoolVar(&rc.AllowSerialRunners, "allow-serial-runners", false, wh(allowSerialDesc))
 
 	// Linters settings config
 	lsc := &cfg.LintersSettings
@@ -234,6 +237,7 @@ func (e *Executor) getConfigForCommandLine() (*config.Config, error) {
 	// Use another config variable here, not e.cfg, to not
 	// affect main parsing by this parsing of only config option.
 	initFlagSet(fs, &cfg, e.DBManager, false)
+	initVersionFlagSet(fs, &cfg)
 
 	// Parse max options, even force version option: don't want
 	// to get access to Executor here: it's error-prone to use
