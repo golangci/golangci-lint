@@ -307,6 +307,10 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/ssgreg/nlreturn"),
+		linter.NewConfig(golinters.NewWrapcheck()).
+			WithPresets(linter.PresetStyle).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/tomarrell/wrapcheck"),
 		linter.NewConfig(golinters.NewTparallel()).
 			WithPresets(linter.PresetStyle).
 			WithLoadForGoAnalysis().
