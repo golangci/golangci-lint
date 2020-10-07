@@ -31,7 +31,7 @@ require (
 	github.com/kyoh86/exportloopref v0.1.7
 	github.com/maratori/testpackage v1.0.1
 	github.com/matoous/godox v0.0.0-20190911065817-5d6d842e92eb // v1.0
-	github.com/mattn/go-colorable v0.1.7
+	github.com/mattn/go-colorable v0.1.8
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/mitchellh/go-ps v1.0.0
 	github.com/moricho/tparallel v0.2.1
