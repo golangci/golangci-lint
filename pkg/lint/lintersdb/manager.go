@@ -90,10 +90,12 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 	var govetCfg *config.GovetSettings
 	var testpackageCfg *config.TestpackageSettings
 	var exhaustiveCfg *config.ExhaustiveSettings
+	var errorlintCfg *config.ErrorLintSettings
 	if m.cfg != nil {
 		govetCfg = &m.cfg.LintersSettings.Govet
 		testpackageCfg = &m.cfg.LintersSettings.Testpackage
 		exhaustiveCfg = &m.cfg.LintersSettings.Exhaustive
+		errorlintCfg = &m.cfg.LintersSettings.ErrorLint
 	}
 	const megacheckName = "megacheck"
 	lcs := []*linter.Config{
@@ -315,6 +317,10 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/moricho/tparallel"),
+		linter.NewConfig(golinters.NewErrorLint(errorlintCfg)).
+			WithPresets(linter.PresetBugs).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/polyfloyd/go-errorlint"),
 
 		// nolintlint must be last because it looks at the results of all the previous linters for unused nolint directives
 		linter.NewConfig(golinters.NewNoLintLint()).
