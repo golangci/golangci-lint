@@ -249,6 +249,7 @@ type LintersSettings struct {
 	NoLintLint  NoLintLintSettings
 	Exhaustive  ExhaustiveSettings
 	Gofumpt     GofumptSettings
+	ErrorLint   ErrorLintSettings
 
 	Custom map[string]CustomLinterSettings
 }
@@ -360,6 +361,10 @@ type GofumptSettings struct {
 	ExtraRules bool `mapstructure:"extra-rules"`
 }
 
+type ErrorLintSettings struct {
+	Errorf bool `mapstructure:"errorf"`
+}
+
 var defaultLintersSettings = LintersSettings{
 	Lll: LllSettings{
 		LineLength: 120,
@@ -415,6 +420,9 @@ var defaultLintersSettings = LintersSettings{
 	},
 	Gofumpt: GofumptSettings{
 		ExtraRules: false,
+	},
+	ErrorLint: ErrorLintSettings{
+		Errorf: true,
 	},
 }
 
