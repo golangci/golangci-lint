@@ -3,6 +3,7 @@ module github.com/golangci/golangci-lint
 go 1.12
 
 require (
+	4d63.com/gochecknoglobals v0.0.0-20201008074935-acfc0b28355a
 	github.com/Djarvur/go-err113 v0.0.0-20200511133814-5174e21577d5
 	github.com/OpenPeeDeeP/depguard v1.0.1
 	github.com/bombsimon/wsl/v3 v3.1.0
@@ -61,7 +62,7 @@ require (
 	github.com/ultraware/whitespace v0.0.4
 	github.com/uudashr/gocognit v1.0.1
 	github.com/valyala/quicktemplate v1.6.3
-	golang.org/x/tools v0.0.0-20200918232735-d647fc253266
+	golang.org/x/tools v0.0.0-20201002184944-ecd9fd270d5d
 	gopkg.in/yaml.v2 v2.3.0
 	honnef.co/go/tools v0.0.1-2020.1.5
 	mvdan.cc/gofumpt v0.0.0-20200802201014-ab5a8192947d
