@@ -46,7 +46,7 @@ require (
 	github.com/shirou/gopsutil v0.0.0-20190901111213-e4ec7b275ada // v2.19.8
 	github.com/sirupsen/logrus v1.6.0
 	github.com/sonatard/noctx v0.0.1
-	github.com/sourcegraph/go-diff v0.6.0
+	github.com/sourcegraph/go-diff v0.6.1
 	github.com/spf13/cobra v1.0.1-0.20200916152758-7f8e83d9366a
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.7.1
