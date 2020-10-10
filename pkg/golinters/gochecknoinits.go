@@ -15,7 +15,6 @@ import (
 
 const gochecknoinitsName = "gochecknoinits"
 
-//nolint:dupl
 func NewGochecknoinits() *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue

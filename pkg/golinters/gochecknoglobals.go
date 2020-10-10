@@ -4,6 +4,7 @@ import (
 	"golang.org/x/tools/go/analysis"
 
 	"4d63.com/gochecknoglobals/checknoglobals"
+
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 )
 
