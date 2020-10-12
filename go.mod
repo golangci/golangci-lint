@@ -37,7 +37,7 @@ require (
 	github.com/mitchellh/go-ps v1.0.0
 	github.com/moricho/tparallel v0.2.1
 	github.com/nakabonne/nestif v0.3.0
-	github.com/nishanths/exhaustive v0.0.0-20201012213148-ec67bea5141e
+	github.com/nishanths/exhaustive v0.1.0
 	github.com/pkg/errors v0.9.1
 	github.com/polyfloyd/go-errorlint v0.0.0-20201006195004-351e25ade6e3
 	github.com/ryancurrah/gomodguard v1.1.0
