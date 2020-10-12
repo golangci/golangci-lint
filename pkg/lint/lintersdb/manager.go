@@ -317,6 +317,9 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/moricho/tparallel"),
+		linter.NewConfig(golinters.NewExhaustiveStruct()).
+			WithPresets(linter.PresetStyle).
+			WithURL("https://github.com/mbilski/exhaustivestruct"),
 		linter.NewConfig(golinters.NewErrorLint(errorlintCfg)).
 			WithPresets(linter.PresetBugs).
 			WithLoadForGoAnalysis().
