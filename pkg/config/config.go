@@ -354,6 +354,7 @@ type NestifSettings struct {
 }
 
 type ExhaustiveSettings struct {
+	CheckGenerated             bool `mapstructure:"check-generated"`
 	DefaultSignifiesExhaustive bool `mapstructure:"default-signifies-exhaustive"`
 }
 
@@ -416,6 +417,7 @@ var defaultLintersSettings = LintersSettings{
 		MinComplexity: 5,
 	},
 	Exhaustive: ExhaustiveSettings{
+		CheckGenerated:             false,
 		DefaultSignifiesExhaustive: false,
 	},
 	Gofumpt: GofumptSettings{

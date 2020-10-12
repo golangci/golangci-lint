@@ -10,6 +10,7 @@ linters-settings:
   dupl:
     threshold: 100
   exhaustive:
+    check-generated: false
     default-signifies-exhaustive: false
   funlen:
     lines: 100
