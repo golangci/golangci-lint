@@ -15,7 +15,7 @@ func NewExhaustive(settings *config.ExhaustiveSettings) *goanalysis.Linter {
 	if settings != nil {
 		cfg = map[string]map[string]interface{}{
 			a.Name: {
-				exhaustive.CheckGeneratedFilesFlag:        settings.CheckGenerated,
+				exhaustive.CheckGeneratedFlag:             settings.CheckGenerated,
 				exhaustive.DefaultSignifiesExhaustiveFlag: settings.DefaultSignifiesExhaustive,
 			},
 		}
