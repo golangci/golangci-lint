@@ -33,6 +33,7 @@ require (
 	github.com/maratori/testpackage v1.0.1
 	github.com/matoous/godox v0.0.0-20190911065817-5d6d842e92eb // v1.0
 	github.com/mattn/go-colorable v0.1.8
+	github.com/mbilski/exhaustivestruct v1.0.1
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/mitchellh/go-ps v1.0.0
 	github.com/moricho/tparallel v0.2.1
@@ -45,9 +46,9 @@ require (
 	github.com/securego/gosec/v2 v2.4.0
 	github.com/shazow/go-diff v0.0.0-20160112020656-b6b7b6733b8c
 	github.com/shirou/gopsutil v0.0.0-20190901111213-e4ec7b275ada // v2.19.8
-	github.com/sirupsen/logrus v1.6.0
+	github.com/sirupsen/logrus v1.7.0
 	github.com/sonatard/noctx v0.0.1
-	github.com/sourcegraph/go-diff v0.6.0
+	github.com/sourcegraph/go-diff v0.6.1
 	github.com/spf13/cobra v1.0.1-0.20200916152758-7f8e83d9366a
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.7.1
@@ -62,6 +63,7 @@ require (
 	github.com/ultraware/whitespace v0.0.4
 	github.com/uudashr/gocognit v1.0.1
 	github.com/valyala/quicktemplate v1.6.3
+	golang.org/x/sys v0.0.0-20201009025420-dfb3f7c4e634 // indirect
 	golang.org/x/tools v0.0.0-20201002184944-ecd9fd270d5d
 	gopkg.in/yaml.v2 v2.3.0
 	honnef.co/go/tools v0.0.1-2020.1.5
