@@ -7,6 +7,15 @@ package testdata
 // is a generated file as indicated by the above comment
 // (golang.org/s/generatedcode).
 
+type Direction int
+
+const (
+	North Direction = iota
+	East
+	South
+	West
+)
+
 func processDirectionGenerated(d Direction) {
 	switch d {
 	case North, South:
