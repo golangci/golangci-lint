@@ -5,7 +5,7 @@ package testdata
 
 // Should not report missing cases in the switch statement below, because this
 // is a generated file as indicated by the above comment
-// (golang.org/s/generatedcode).
+// (golang.org/s/generatedcode), and check-generated setting is false.
 
 type Direction int
 
