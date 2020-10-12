@@ -331,6 +331,9 @@ linters-settings:
     # Choose whether or not to use the extra rules that are disabled
     # by default
     extra-rules: false
+  errorlint:
+    # Report non-wrapping error creation using fmt.Errorf
+    errorf: true
 
   # The custom section can be used to define linter plugins to be loaded at runtime. See README doc
   #  for more info.

@@ -39,14 +39,15 @@ require (
 	github.com/nakabonne/nestif v0.3.0
 	github.com/nishanths/exhaustive v0.0.0-20200811152831-6cf413ae40e0
 	github.com/pkg/errors v0.9.1
+	github.com/polyfloyd/go-errorlint v0.0.0-20201006195004-351e25ade6e3
 	github.com/ryancurrah/gomodguard v1.1.0
 	github.com/ryanrolds/sqlclosecheck v0.3.0
 	github.com/securego/gosec/v2 v2.4.0
 	github.com/shazow/go-diff v0.0.0-20160112020656-b6b7b6733b8c
 	github.com/shirou/gopsutil v0.0.0-20190901111213-e4ec7b275ada // v2.19.8
-	github.com/sirupsen/logrus v1.6.0
+	github.com/sirupsen/logrus v1.7.0
 	github.com/sonatard/noctx v0.0.1
-	github.com/sourcegraph/go-diff v0.6.0
+	github.com/sourcegraph/go-diff v0.6.1
 	github.com/spf13/cobra v1.0.1-0.20200916152758-7f8e83d9366a
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.7.1
@@ -63,7 +64,7 @@ require (
 	github.com/valyala/quicktemplate v1.6.3
 	golang.org/x/tools v0.0.0-20201001104356-43ebab892c4c
 	gopkg.in/yaml.v2 v2.3.0
-	honnef.co/go/tools v0.0.1-2020.1.5
+	honnef.co/go/tools v0.0.1-2020.1.6
 	mvdan.cc/gofumpt v0.0.0-20200802201014-ab5a8192947d
 	mvdan.cc/interfacer v0.0.0-20180901003855-c20040233aed
 	mvdan.cc/lint v0.0.0-20170908181259-adc824a0674b // indirect
