@@ -1,8 +1,6 @@
 package golinters
 
 import (
-	"flag"
-
 	"golang.org/x/tools/go/analysis"
 
 	"4d63.com/gochecknoglobals/checknoglobals"
@@ -11,20 +9,22 @@ import (
 )
 
 func NewGochecknoglobals() *goanalysis.Linter {
-	// gochecknoglobals only lints test files if the `-t` flag is passed so we
-	// set up our own FlagSet and add it to the analyzer before running it. This
-	// can be turned of by using the regular golangci-lint flags such as
-	// `--tests` or `--skip-files`.
-	flags := flag.NewFlagSet("", flag.ContinueOnError)
-	flags.Bool("t", true, "Include tests")
-
 	gochecknoglobals := checknoglobals.Analyzer()
-	gochecknoglobals.Flags = *flags
+
+	// gochecknoglobals only lints test files if the `-t` flag is passed so we
+	// pass the `t` flag as true to the analyzer before running it. This can be
+	// turned of by using the regular golangci-lint flags such as `--tests` or
+	// `--skip-files`.
+	linterConfig := map[string]map[string]interface{}{
+		gochecknoglobals.Name: {
+			"t": true,
+		},
+	}
 
 	return goanalysis.NewLinter(
 		gochecknoglobals.Name,
 		gochecknoglobals.Doc,
 		[]*analysis.Analyzer{gochecknoglobals},
-		nil,
+		linterConfig,
 	).WithLoadMode(goanalysis.LoadModeSyntax)
 }
