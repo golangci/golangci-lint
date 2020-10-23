@@ -2,6 +2,10 @@ package lintersdb
 
 import (
 	"fmt"
+	"io"
+	"io/ioutil"
+	"net/http"
+	"net/url"
 	"os"
 	"plugin"
 
@@ -409,6 +413,27 @@ type AnalyzerPlugin interface {
 }
 
 func (m Manager) getAnalyzerPlugin(path string) (AnalyzerPlugin, error) {
+	pathURL, err := url.Parse(path)
+	if err != nil {
+		return nil, fmt.Errorf("plugin %s has invalid path", path)
+	}
+
+	switch pathURL.Scheme {
+	case "http", "https":
+		pluginPath, downloadErr := downloadFile(path)
+		if downloadErr != nil {
+			return nil, fmt.Errorf("download plugin %s error, err: %w", path, err)
+		}
+		defer os.Remove(pluginPath)
+
+		path = pluginPath
+
+	case "":
+
+	default:
+		return nil, fmt.Errorf("plugin %s with invalid scheme", path)
+	}
+
 	plug, err := plugin.Open(path)
 	if err != nil {
 		return nil, err
@@ -425,4 +450,27 @@ func (m Manager) getAnalyzerPlugin(path string) (AnalyzerPlugin, error) {
 	}
 
 	return analyzerPlugin, nil
+}
+
+func downloadFile(path string) (string, error) {
+	temfile, err := ioutil.TempFile("", "plugin")
+	if err != nil {
+		return "", err
+	}
+
+	resp, err := http.Get(path) //nolint:gosec,noctx
+	if err != nil {
+		return "", err
+	}
+	defer resp.Body.Close()
+
+	if _, err := io.Copy(temfile, resp.Body); err != nil {
+		return "", err
+	}
+
+	if err := temfile.Close(); err != nil {
+		return "", err
+	}
+
+	return temfile.Name(), nil
 }
