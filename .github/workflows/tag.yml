@@ -45,6 +45,10 @@ jobs:
           file: build/Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
+          build-args: |
+            VERSION=${{ steps.prepare.outputs.tag_name }}
+            SHORT_COMMIT=${GITHUB_SHA::8}
+            DATE=$(date '+%Y-%m-%dT%H:%M:%SZ')
           tags: |
             golangci/golangci-lint:${{ steps.prepare.outputs.tag_name }}
             golangci/golangci-lint:${{ steps.prepare.outputs.major_tag }}
@@ -56,6 +60,10 @@ jobs:
           context: .
           file: build/Dockerfile.alpine
           platforms: linux/amd64,linux/arm64
+          build-args: |
+            VERSION=${{ steps.prepare.outputs.tag_name }}
+            SHORT_COMMIT=${GITHUB_SHA::8}
+            DATE=$(date '+%Y-%m-%dT%H:%M:%SZ')
           push: true
           tags: |
             golangci/golangci-lint:${{ steps.prepare.outputs.tag_name }}-alpine
