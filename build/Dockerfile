@@ -1,9 +1,13 @@
 # stage 1 building the code
 FROM golang:1.15 as builder
 
+ARG VERSION
+ARG SHORT_COMMIT
+ARG DATE
+
 COPY / /golangci
 WORKDIR /golangci
-RUN go build -o golangci-lint ./cmd/golangci-lint/main.go
+RUN CGO_ENABLED=0 go build -ldflags "-s -w -X main.version=$VERSION -X main.commit=$SHORT_COMMIT -X main.date=$DATE" -o golangci-lint ./cmd/golangci-lint/main.go
 
 # stage 2
 FROM golang:1.15

@@ -17,8 +17,7 @@ jobs:
           go-version: 1.15
       - name: Unshallow
         run: git fetch --prune --unshallow
-      - name: Login do docker.io
-        run: docker login -u golangci -p ${{ secrets.GOLANGCI_LINT_DOCKER_TOKEN }}
+
       - name: Create release
         uses: goreleaser/goreleaser-action@v2
         with:
@@ -26,38 +25,59 @@ jobs:
           args: release --rm-dist
         env:
           GITHUB_TOKEN: ${{ secrets.GOLANGCI_LINT_TOKEN }}
+
+  docker-release:
+    needs: [ release ]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        target:
+          - Dockerfile: build/Dockerfile
+          - Dockerfile: build/Dockerfile.alpine
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.15
+
+      - name: Unshallow
+        run: git fetch --prune --unshallow
+
       - name: Prepare
         id: prepare
         run: |
             TAG=${GITHUB_REF#refs/tags/}
             MAJOR=${TAG%.*}
+            SHORT_COMMIT=${GITHUB_SHA::8}
+            DATE=$(date '+%Y-%m-%dT%H:%M:%SZ')
             echo ::set-output name=tag_name::${TAG}
             echo ::set-output name=major_tag::${MAJOR}
+            echo ::set-output name=short_commit::${SHORT_COMMIT}
+            echo ::set-output name=date::${DATE}
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
-      - name: build and publish main image
-        id: docker_build
+
+      - name: Login do docker.io
+        run: docker login -u golangci -p ${{ secrets.GOLANGCI_LINT_DOCKER_TOKEN }}
+
+      - name: Build and publish ${{ matrix.target.Dockerfile }}
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: build/Dockerfile
+          file: ${{ matrix.target.Dockerfile }}
           platforms: linux/amd64,linux/arm64
           push: true
+          build-args: |
+            VERSION=${{ steps.prepare.outputs.tag_name }}
+            SHORT_COMMIT=${{ steps.prepare.outputs.short_commit }}
+            DATE=${{ steps.prepare.outputs.date }}
           tags: |
             golangci/golangci-lint:${{ steps.prepare.outputs.tag_name }}
             golangci/golangci-lint:${{ steps.prepare.outputs.major_tag }}
             golangci/golangci-lint:latest
-      - name: build and publish alpine image
-        id: docker_build_alpine
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          file: build/Dockerfile.alpine
-          platforms: linux/amd64,linux/arm64
-          push: true
-          tags: |
-            golangci/golangci-lint:${{ steps.prepare.outputs.tag_name }}-alpine
-            golangci/golangci-lint:${{ steps.prepare.outputs.major_tag }}-alpine
-            golangci/golangci-lint:latest-alpine
