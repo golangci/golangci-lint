@@ -12,7 +12,7 @@
     "@mdx-js/react": "^1.6.16",
     "emotion-theming": "^10.0.27",
     "gatsby": "^2.24.65",
-    "gatsby-alias-imports": "^1.0.4",
+    "gatsby-alias-imports": "^1.0.6",
     "gatsby-plugin-canonical-urls": "^2.3.11",
     "gatsby-plugin-catch-links": "^2.3.14",
     "gatsby-plugin-emotion": "^4.3.10",
