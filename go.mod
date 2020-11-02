@@ -9,7 +9,7 @@ require (
 	github.com/bombsimon/wsl/v3 v3.1.0
 	github.com/daixiang0/gci v0.2.4
 	github.com/denis-tingajkin/go-header v0.3.1
-	github.com/fatih/color v1.9.0
+	github.com/fatih/color v1.10.0
 	github.com/go-critic/go-critic v0.5.2
 	github.com/go-xmlfmt/xmlfmt v0.0.0-20191208150333-d5b6f63a941b
 	github.com/gofrs/flock v0.8.0
