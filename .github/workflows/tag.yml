@@ -56,6 +56,15 @@ jobs:
             echo ::set-output name=major_tag::${MAJOR}
             echo ::set-output name=short_commit::${SHORT_COMMIT}
             echo ::set-output name=date::${DATE}
+            if [[ ${{ matrix.target.Dockerfile }} == *"alpine"* ]]; then
+              echo ::set-output name=full_tag_name::${TAG}-alpine
+              echo ::set-output name=full_major_tag::${MAJOR}-alpine
+              echo ::set-output name=latest_tag::latest-alpine
+            else
+              echo ::set-output name=full_tag_name::${TAG}
+              echo ::set-output name=full_major_tag::${MAJOR}
+              echo ::set-output name=latest_tag::latest
+            fi
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -78,6 +87,6 @@ jobs:
             SHORT_COMMIT=${{ steps.prepare.outputs.short_commit }}
             DATE=${{ steps.prepare.outputs.date }}
           tags: |
-            golangci/golangci-lint:${{ steps.prepare.outputs.tag_name }}
-            golangci/golangci-lint:${{ steps.prepare.outputs.major_tag }}
-            golangci/golangci-lint:latest
+            golangci/golangci-lint:${{ steps.prepare.outputs.full_tag_name }}
+            golangci/golangci-lint:${{ steps.prepare.outputs.full_major_tag }}
+            golangci/golangci-lint:${{ steps.prepare.outputs.latest_tag }}
