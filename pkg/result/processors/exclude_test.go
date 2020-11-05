@@ -9,7 +9,7 @@ import (
 )
 
 func TestExclude(t *testing.T) {
-	p := NewExclude("^exclude$")
+	p := NewExclude("^exclude$", nil)
 	texts := []string{"excLude", "1", "", "exclud", "notexclude"}
 	var issues []result.Issue
 	for _, t := range texts {
@@ -27,11 +27,11 @@ func TestExclude(t *testing.T) {
 }
 
 func TestNoExclude(t *testing.T) {
-	processAssertSame(t, NewExclude(""), newIssueFromTextTestCase("test"))
+	processAssertSame(t, NewExclude("", nil), newIssueFromTextTestCase("test"))
 }
 
 func TestExcludeCaseSensitive(t *testing.T) {
-	p := NewExcludeCaseSensitive("^exclude$")
+	p := NewExcludeCaseSensitive("^exclude$", nil)
 	texts := []string{"excLude", "1", "", "exclud", "exclude"}
 	var issues []result.Issue
 	for _, t := range texts {

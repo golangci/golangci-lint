@@ -99,6 +99,12 @@ var DefaultExcludePatterns = []ExcludePattern{
 		Linter:  "gosec",
 		Why:     "False positive is triggered by 'src, err := ioutil.ReadFile(filename)'",
 	},
+	{
+		ID:      "EXC0011",
+		Pattern: "at least one file in a package should have a package comment",
+		Linter:  "stylecheck",
+		Why:     "Annoying issue about not having a package comment.",
+	},
 }
 
 func GetDefaultExcludePatternsStrings() []string {
