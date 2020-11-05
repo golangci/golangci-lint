@@ -85,7 +85,7 @@ func enableLinterConfigs(lcs []*linter.Config, isEnabled func(lc *linter.Config)
 	return ret
 }
 
-//nolint:funlen
+//nolint:funlen,stylecheck
 func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 	var govetCfg *config.GovetSettings
 	var testpackageCfg *config.TestpackageSettings

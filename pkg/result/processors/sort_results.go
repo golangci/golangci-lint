@@ -91,10 +91,10 @@ var (
 
 type ByName struct{ next comparator }
 
-//nolint:golint
+//nolint:golint,stylecheck
 func (cmp ByName) Next() comparator { return cmp.next }
 
-//nolint:golint
+//nolint:golint,stylecheck
 func (cmp ByName) Compare(a, b *result.Issue) compareResult {
 	var res compareResult
 
@@ -111,10 +111,10 @@ func (cmp ByName) Compare(a, b *result.Issue) compareResult {
 
 type ByLine struct{ next comparator }
 
-//nolint:golint
+//nolint:golint,stylecheck
 func (cmp ByLine) Next() comparator { return cmp.next }
 
-//nolint:golint
+//nolint:golint,stylecheck,stylecheck
 func (cmp ByLine) Compare(a, b *result.Issue) compareResult {
 	var res compareResult
 
@@ -131,10 +131,10 @@ func (cmp ByLine) Compare(a, b *result.Issue) compareResult {
 
 type ByColumn struct{ next comparator }
 
-//nolint:golint
+//nolint:golint,stylecheck
 func (cmp ByColumn) Next() comparator { return cmp.next }
 
-//nolint:golint
+//nolint:golint,stylecheck
 func (cmp ByColumn) Compare(a, b *result.Issue) compareResult {
 	var res compareResult
 

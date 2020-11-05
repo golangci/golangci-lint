@@ -1,4 +1,4 @@
-// nolint:dupl
+// nolint:dupl,stylecheck
 package golinters
 
 import (
