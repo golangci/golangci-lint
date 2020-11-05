@@ -233,7 +233,7 @@ func getExcludeProcessor(cfg *config.Issues) processors.Processor {
 
 	var excludePatterns []config.ExcludePattern
 	if cfg.UseDefaultExcludes {
-		excludePatterns = config.DefaultExcludePatterns
+		excludePatterns = config.GetExcludePatterns(cfg.IncludeDefaultExcludes)
 	}
 
 	var excludeProcessor processors.Processor

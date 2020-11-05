@@ -1,5 +1,5 @@
 //args: -Estylecheck
-package testdata
+package main // don't need package comment
 
 func Stylecheck(x int) {
 	switch x {

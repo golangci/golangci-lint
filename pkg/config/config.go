@@ -127,6 +127,22 @@ func GetExcludePatternsStrings(include []string) []string {
 	return ret
 }
 
+func GetExcludePatterns(include []string) []ExcludePattern {
+	includeMap := make(map[string]bool, len(include))
+	for _, inc := range include {
+		includeMap[inc] = true
+	}
+
+	var ret []ExcludePattern
+	for _, p := range DefaultExcludePatterns {
+		if !includeMap[p.ID] {
+			ret = append(ret, p)
+		}
+	}
+
+	return ret
+}
+
 type Run struct {
 	IsVerbose           bool `mapstructure:"verbose"`
 	Silent              bool
