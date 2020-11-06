@@ -99,22 +99,33 @@ var DefaultExcludePatterns = []ExcludePattern{
 		Linter:  "gosec",
 		Why:     "False positive is triggered by 'src, err := ioutil.ReadFile(filename)'",
 	},
+	{
+		ID: "EXC0011",
+		Pattern: "(comment on exported (method|function|type|const)|" +
+			"should have( a package)? comment|comment should be of the form)",
+		Linter: "stylecheck",
+		Why:    "Annoying issue about not having a comment. The rare codebase has such comments",
+	},
 }
 
 func GetDefaultExcludePatternsStrings() []string {
-	return GetExcludePatternsStrings(nil)
+	ret := make([]string, len(DefaultExcludePatterns))
+	for i, p := range DefaultExcludePatterns {
+		ret[i] = p.Pattern
+	}
+	return ret
 }
 
-func GetExcludePatternsStrings(include []string) []string {
+func GetExcludePatterns(include []string) []ExcludePattern {
 	includeMap := make(map[string]bool, len(include))
 	for _, inc := range include {
 		includeMap[inc] = true
 	}
 
-	var ret []string
+	var ret []ExcludePattern
 	for _, p := range DefaultExcludePatterns {
 		if !includeMap[p.ID] {
-			ret = append(ret, p.Pattern)
+			ret = append(ret, p)
 		}
 	}
 
