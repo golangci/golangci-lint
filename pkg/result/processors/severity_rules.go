@@ -57,7 +57,7 @@ func createSeverityRules(rules []SeverityRule, prefix string) []severityRule {
 }
 
 func (p SeverityRules) Process(issues []result.Issue) ([]result.Issue, error) {
-	if len(p.rules) == 0 {
+	if len(p.rules) == 0 && p.defaultSeverity == "" {
 		return issues, nil
 	}
 	return transformIssues(issues, func(i *result.Issue) *result.Issue {

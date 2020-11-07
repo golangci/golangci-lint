@@ -1,5 +1,5 @@
 //args: -Eexhaustive
-//config_path: testdata/configs/exhaustive.yml
+//config_path: testdata/configs/exhaustive_default.yml
 package testdata
 
 type Direction int

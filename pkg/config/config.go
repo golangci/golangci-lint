@@ -249,6 +249,7 @@ type LintersSettings struct {
 	NoLintLint  NoLintLintSettings
 	Exhaustive  ExhaustiveSettings
 	Gofumpt     GofumptSettings
+	ErrorLint   ErrorLintSettings
 
 	Custom map[string]CustomLinterSettings
 }
@@ -353,11 +354,16 @@ type NestifSettings struct {
 }
 
 type ExhaustiveSettings struct {
+	CheckGenerated             bool `mapstructure:"check-generated"`
 	DefaultSignifiesExhaustive bool `mapstructure:"default-signifies-exhaustive"`
 }
 
 type GofumptSettings struct {
 	ExtraRules bool `mapstructure:"extra-rules"`
+}
+
+type ErrorLintSettings struct {
+	Errorf bool `mapstructure:"errorf"`
 }
 
 var defaultLintersSettings = LintersSettings{
@@ -411,10 +417,14 @@ var defaultLintersSettings = LintersSettings{
 		MinComplexity: 5,
 	},
 	Exhaustive: ExhaustiveSettings{
+		CheckGenerated:             false,
 		DefaultSignifiesExhaustive: false,
 	},
 	Gofumpt: GofumptSettings{
 		ExtraRules: false,
+	},
+	ErrorLint: ErrorLintSettings{
+		Errorf: true,
 	},
 }
 

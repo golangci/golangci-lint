@@ -13,6 +13,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"sort"
 	"strings"
 
 	"github.com/golangci/golangci-lint/internal/renameio"
@@ -220,6 +221,9 @@ func getLintersListMarkdown(enabled bool) string {
 		}
 	}
 
+	sort.Slice(neededLcs, func(i, j int) bool {
+		return neededLcs[i].Name() < neededLcs[j].Name()
+	})
 	var lines []string
 	for _, lc := range neededLcs {
 		var link string
