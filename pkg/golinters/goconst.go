@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"sync"
 
-	goconstAPI "github.com/golangci/goconst"
+	goconstAPI "github.com/jgautheron/goconst"
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
@@ -47,9 +47,12 @@ func NewGoconst() *goanalysis.Linter {
 
 func checkConstants(pass *analysis.Pass, lintCtx *linter.Context) ([]goanalysis.Issue, error) {
 	cfg := goconstAPI.Config{
-		MatchWithConstants: true,
+		MatchWithConstants: lintCtx.Settings().Goconst.MatchWithConstants,
 		MinStringLength:    lintCtx.Settings().Goconst.MinStringLen,
 		MinOccurrences:     lintCtx.Settings().Goconst.MinOccurrencesCount,
+		ParseNumbers:       lintCtx.Settings().Goconst.ParseNumbers,
+		NumberMin:          lintCtx.Settings().Goconst.NumberMin,
+		NumberMax:          lintCtx.Settings().Goconst.NumberMax,
 	}
 
 	goconstIssues, err := goconstAPI.Run(pass.Files, pass.Fset, &cfg)
@@ -63,7 +66,7 @@ func checkConstants(pass *analysis.Pass, lintCtx *linter.Context) ([]goanalysis.
 
 	res := make([]goanalysis.Issue, 0, len(goconstIssues))
 	for _, i := range goconstIssues {
-		textBegin := fmt.Sprintf("string %s has %d occurrences", formatCode(i.Str, lintCtx.Cfg), i.OccurencesCount)
+		textBegin := fmt.Sprintf("string %s has %d occurrences", formatCode(i.Str, lintCtx.Cfg), i.OccurrencesCount)
 		var textEnd string
 		if i.MatchingConst == "" {
 			textEnd = ", make it a constant"

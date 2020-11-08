@@ -196,8 +196,12 @@ type LintersSettings struct {
 		Threshold int
 	}
 	Goconst struct {
-		MinStringLen        int `mapstructure:"min-len"`
-		MinOccurrencesCount int `mapstructure:"min-occurrences"`
+		MatchWithConstants  bool `mapstructure:"match-constant"`
+		MinStringLen        int  `mapstructure:"min-len"`
+		MinOccurrencesCount int  `mapstructure:"min-occurrences"`
+		ParseNumbers        bool `mapstructure:"numbers"`
+		NumberMin           int  `mapstructure:"min"`
+		NumberMax           int  `mapstructure:"max"`
 	}
 	Gomnd struct {
 		Settings map[string]map[string]interface{}
