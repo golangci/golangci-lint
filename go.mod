@@ -55,7 +55,7 @@ require (
 	github.com/ssgreg/nlreturn/v2 v2.1.0
 	github.com/stretchr/testify v1.6.1
 	github.com/tdakkota/asciicheck v0.0.0-20200416190851-d7f85be797a2
-	github.com/tetafro/godot v0.4.9
+	github.com/tetafro/godot v1.3.0
 	github.com/timakin/bodyclose v0.0.0-20190930140734-f7f2e9bca95e
 	github.com/tomarrell/wrapcheck v0.0.0-20200807122107-df9e8bcb914d
 	github.com/tommy-muehle/go-mnd v1.3.1-0.20200224220436-e6f9a994e8fa

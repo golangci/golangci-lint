@@ -334,6 +334,10 @@ type WSLSettings struct {
 }
 
 type GodotSettings struct {
+	Scope   string `mapstructure:"scope"`
+	Capital bool   `mapstructure:"capital"`
+
+	// Deprecated: use `Scope` instead
 	CheckAll bool `mapstructure:"check-all"`
 }
 
