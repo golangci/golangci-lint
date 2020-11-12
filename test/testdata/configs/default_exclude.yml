@@ -1,0 +1,3 @@
+issues:
+  include:
+    - EXC0011 # include issues about comments from `stylecheck`

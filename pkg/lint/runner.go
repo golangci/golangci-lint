@@ -225,14 +225,10 @@ func (r *Runner) processIssues(issues []result.Issue, sw *timeutils.Stopwatch, s
 }
 
 func getExcludeProcessor(cfg *config.Issues) processors.Processor {
-	excludePatterns := cfg.ExcludePatterns
-	if cfg.UseDefaultExcludes {
-		excludePatterns = append(excludePatterns, config.GetExcludePatternsStrings(cfg.IncludeDefaultExcludes)...)
-	}
-
 	var excludeTotalPattern string
-	if len(excludePatterns) != 0 {
-		excludeTotalPattern = fmt.Sprintf("(%s)", strings.Join(excludePatterns, "|"))
+	excludeGlobalPatterns := cfg.ExcludePatterns
+	if len(excludeGlobalPatterns) != 0 {
+		excludeTotalPattern = fmt.Sprintf("(%s)", strings.Join(excludeGlobalPatterns, "|"))
 	}
 
 	var excludeProcessor processors.Processor
@@ -256,6 +252,17 @@ func getExcludeRulesProcessor(cfg *config.Issues, log logutils.Log, lineCache *f
 				Linters: r.Linters,
 			},
 		})
+	}
+
+	if cfg.UseDefaultExcludes {
+		for _, r := range config.GetExcludePatterns(cfg.IncludeDefaultExcludes) {
+			excludeRules = append(excludeRules, processors.ExcludeRule{
+				BaseRule: processors.BaseRule{
+					Text:    r.Pattern,
+					Linters: []string{r.Linter},
+				},
+			})
+		}
 	}
 
 	var excludeRulesProcessor processors.Processor
