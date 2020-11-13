@@ -202,6 +202,7 @@ type LintersSettings struct {
 		ParseNumbers        bool `mapstructure:"numbers"`
 		NumberMin           int  `mapstructure:"min"`
 		NumberMax           int  `mapstructure:"max"`
+		IgnoreCalls         bool `mapstructure:"ignore-calls"`
 	}
 	Gomnd struct {
 		Settings map[string]map[string]interface{}

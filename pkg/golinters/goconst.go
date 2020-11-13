@@ -66,7 +66,10 @@ func checkConstants(pass *analysis.Pass, lintCtx *linter.Context) ([]goanalysis.
 
 	res := make([]goanalysis.Issue, 0, len(goconstIssues))
 	for _, i := range goconstIssues {
-		textBegin := fmt.Sprintf("string %s has %d occurrences", formatCode(i.Str, lintCtx.Cfg), i.OccurrencesCount)
+		if lintCtx.Settings().Goconst.IgnoreCalls && i.Typ == goconstAPI.Call {
+			continue
+		}
+		textBegin := fmt.Sprintf("string %s has %d occurrences as %s statement", formatCode(i.Str, lintCtx.Cfg), i.OccurrencesCount, i.Typ)
 		var textEnd string
 		if i.MatchingConst == "" {
 			textEnd = ", make it a constant"

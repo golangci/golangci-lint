@@ -176,6 +176,9 @@ func initFlagSet(fs *pflag.FlagSet, cfg *config.Config, m *lintersdb.Manager, is
 	fs.IntVar(&lsc.Goconst.NumberMax, "goconst.max",
 		3, "maximum value, only works with goconst.numbers")
 	hideFlag("goconst.max")
+	fs.BoolVar(&lsc.Goconst.IgnoreCalls, "goconst.ignore-calls",
+		true, "Goconst: ignore when constant is not used as function argument")
+	hideFlag("goconst.ignore-calls")
 
 	// (@dixonwille) These flag is only used for testing purposes.
 	fs.StringSliceVar(&lsc.Depguard.Packages, "depguard.packages", nil,
