@@ -73,6 +73,4 @@ require (
 	mvdan.cc/unparam v0.0.0-20200501210554-b37ab49443f7
 )
 
-replace (
-	github.com/jgautheron/goconst => github.com/iwankgb/goconst v0.0.0-20201113193136-4c8fa7523232
-)
+replace github.com/jgautheron/goconst => github.com/iwankgb/goconst v0.0.0-20201115195935-66b9063f334d

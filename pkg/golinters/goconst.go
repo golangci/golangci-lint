@@ -53,8 +53,11 @@ func checkConstants(pass *analysis.Pass, lintCtx *linter.Context) ([]goanalysis.
 		ParseNumbers:       lintCtx.Settings().Goconst.ParseNumbers,
 		NumberMin:          lintCtx.Settings().Goconst.NumberMin,
 		NumberMax:          lintCtx.Settings().Goconst.NumberMax,
+		ExcludeTypes:       map[goconstAPI.Type]bool{},
 	}
-
+	if lintCtx.Settings().Goconst.IgnoreCalls {
+		cfg.ExcludeTypes[goconstAPI.Call] = true
+	}
 	goconstIssues, err := goconstAPI.Run(pass.Files, pass.Fset, &cfg)
 	if err != nil {
 		return nil, err
@@ -66,10 +69,7 @@ func checkConstants(pass *analysis.Pass, lintCtx *linter.Context) ([]goanalysis.
 
 	res := make([]goanalysis.Issue, 0, len(goconstIssues))
 	for _, i := range goconstIssues {
-		if lintCtx.Settings().Goconst.IgnoreCalls && i.Typ == goconstAPI.Call {
-			continue
-		}
-		textBegin := fmt.Sprintf("string %s has %d occurrences as %s statement", formatCode(i.Str, lintCtx.Cfg), i.OccurrencesCount, i.Typ)
+		textBegin := fmt.Sprintf("string %s has %d occurrences", formatCode(i.Str, lintCtx.Cfg), i.OccurrencesCount)
 		var textEnd string
 		if i.MatchingConst == "" {
 			textEnd = ", make it a constant"
