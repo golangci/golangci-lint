@@ -1,3 +1,4 @@
+// Package pkg ...
 package pkg
 
 import (
@@ -5,6 +6,7 @@ import (
 	"unsafe"
 )
 
+// F ...
 func F() {
 	x := 123 // of type int
 	p := unsafe.Pointer(&x)

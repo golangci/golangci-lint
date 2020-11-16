@@ -1,3 +1,4 @@
+// Package cgoexample ...
 package cgoexample
 
 /*
@@ -14,6 +15,7 @@ import (
 	"unsafe"
 )
 
+// Example ...
 func Example() {
 	cs := C.CString("Hello from stdio\n")
 	C.myprint(cs)
