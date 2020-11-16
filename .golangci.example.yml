@@ -388,6 +388,11 @@ linters-settings:
       - shadow
     disable-all: false
 
+  bannedfunc:
+    # 禁用函数采用键值对形式
+    # 包名需要用引号扩起
+    (time).Now: "不能使用 time.Now()，请使用 MiaoSiLa/missevan-go/util 下 TimeNow()"
+
   depguard:
     list-type: blacklist
     include-go-root: false
