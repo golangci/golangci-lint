@@ -75,6 +75,9 @@ output:
   # add a prefix to the output file references; default is no prefix
   path-prefix: ""
 
+  # sorts results by: filepath, line and column
+  sort-results: false
+
 
 # all available settings of specific linters
 linters-settings:
