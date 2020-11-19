@@ -122,4 +122,4 @@ jobs:
       with:
         base: master
         token: ${{ secrets.PAT_TOKEN }}
-        push-to-fork: neha-viswanathan/golangci-lint  
+        push-to-fork: codectl/golangci-lint  
