@@ -388,7 +388,7 @@ type ErrorLintSettings struct {
 }
 
 type MakezeroSettings struct {
-	Always     bool
+	Always bool
 }
 
 var defaultLintersSettings = LintersSettings{
