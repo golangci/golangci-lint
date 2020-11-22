@@ -90,7 +90,6 @@ linters:
     - ineffassign
     - interfacer
     - lll
-    - makezero
     - misspell
     - nakedret
     - noctx
