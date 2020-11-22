@@ -3,5 +3,12 @@
 package testdata
 
 func MakezeroAlways() []int {
-	return make([]int, 5)
+	x := make([]int, 5)
+	return x // ERROR "slice `x` does not have non-zero initial length"
+}
+
+
+func MakezeroAlwaysNolint() []int {
+	x := make([]int, 5)
+	return x //nolint:makezero // ok that this is not initialized
 }
