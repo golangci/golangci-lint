@@ -7,7 +7,6 @@ func MakezeroAlways() []int {
 	return x
 }
 
-
 func MakezeroAlwaysNolint() []int {
 	x := make([]int, 5) //nolint:makezero // ok that this is not initialized
 	return x
