@@ -6,7 +6,7 @@ require (
 	4d63.com/gochecknoglobals v0.0.0-20201008074935-acfc0b28355a
 	github.com/Djarvur/go-err113 v0.0.0-20200511133814-5174e21577d5
 	github.com/OpenPeeDeeP/depguard v1.0.1
-	github.com/ashanbrown/makezero v0.0.0-20201122223944-6aa12ecc2e71
+	github.com/ashanbrown/makezero v0.0.0-20201122223944-6aa12ecc2e71 // indirect
 	github.com/bombsimon/wsl/v3 v3.1.0
 	github.com/daixiang0/gci v0.2.4
 	github.com/denis-tingajkin/go-header v0.3.1
@@ -30,6 +30,7 @@ require (
 	github.com/jgautheron/goconst v0.0.0-20201117150253-ccae5bf973f3
 	github.com/jingyugao/rowserrcheck v0.0.0-20191204022205-72ab7603b68a
 	github.com/jirfag/go-printf-func-name v0.0.0-20191110105641-45db9963cdd3
+	github.com/kunwardeep/paralleltest v1.0.2
 	github.com/kyoh86/exportloopref v0.1.8
 	github.com/maratori/testpackage v1.0.1
 	github.com/matoous/godox v0.0.0-20190911065817-5d6d842e92eb // v1.0
@@ -65,7 +66,7 @@ require (
 	github.com/uudashr/gocognit v1.0.1
 	github.com/valyala/quicktemplate v1.6.3
 	golang.org/x/sys v0.0.0-20201009025420-dfb3f7c4e634 // indirect
-	golang.org/x/tools v0.0.0-20201121010211-780cb80bd7fb
+	golang.org/x/tools v0.0.0-20201013201025-64a9e34f3752
 	gopkg.in/yaml.v2 v2.3.0
 	honnef.co/go/tools v0.0.1-2020.1.6
 	mvdan.cc/gofumpt v0.0.0-20200802201014-ab5a8192947d

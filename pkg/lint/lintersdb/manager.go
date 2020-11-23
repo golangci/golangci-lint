@@ -324,6 +324,10 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetBugs).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/polyfloyd/go-errorlint"),
+		linter.NewConfig(golinters.NewParallelTest()).
+			WithPresets(linter.PresetStyle).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/kunwardeep/paralleltest"),
 		linter.NewConfig(golinters.NewMakezero()).
 			WithPresets(linter.PresetStyle, linter.PresetBugs).
 			WithURL("https://github.com/ashanbrown/makezero"),
