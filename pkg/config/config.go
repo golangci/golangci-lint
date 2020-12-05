@@ -266,6 +266,7 @@ type LintersSettings struct {
 	Exhaustive  ExhaustiveSettings
 	Gofumpt     GofumptSettings
 	ErrorLint   ErrorLintSettings
+	Makezero    MakezeroSettings
 
 	Custom map[string]CustomLinterSettings
 }
@@ -384,6 +385,10 @@ type GofumptSettings struct {
 
 type ErrorLintSettings struct {
 	Errorf bool `mapstructure:"errorf"`
+}
+
+type MakezeroSettings struct {
+	Always bool
 }
 
 var defaultLintersSettings = LintersSettings{

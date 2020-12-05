@@ -328,6 +328,9 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/kunwardeep/paralleltest"),
+		linter.NewConfig(golinters.NewMakezero()).
+			WithPresets(linter.PresetStyle, linter.PresetBugs).
+			WithURL("https://github.com/ashanbrown/makezero"),
 
 		// nolintlint must be last because it looks at the results of all the previous linters for unused nolint directives
 		linter.NewConfig(golinters.NewNoLintLint()).

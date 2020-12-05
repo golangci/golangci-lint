@@ -341,6 +341,9 @@ linters-settings:
   errorlint:
     # Report non-wrapping error creation using fmt.Errorf
     errorf: true
+  makezero:
+    # Allow only slices initialized with a length of zero. Default is false.
+    always: false
 
   # The custom section can be used to define linter plugins to be loaded at runtime. See README doc
   #  for more info.
