@@ -267,6 +267,7 @@ type LintersSettings struct {
 	Gofumpt     GofumptSettings
 	ErrorLint   ErrorLintSettings
 	Makezero    MakezeroSettings
+	Thelper     ThelperSettings
 
 	Custom map[string]CustomLinterSettings
 }
@@ -389,6 +390,19 @@ type ErrorLintSettings struct {
 
 type MakezeroSettings struct {
 	Always bool
+}
+
+type ThelperSettings struct {
+	Test struct {
+		First bool `mapstructure:"first"`
+		Name  bool `mapstructure:"name"`
+		Begin bool `mapstructure:"begin"`
+	} `mapstructure:"test"`
+	Benchmark struct {
+		First bool `mapstructure:"first"`
+		Name  bool `mapstructure:"name"`
+		Begin bool `mapstructure:"begin"`
+	} `mapstructure:"benchmark"`
 }
 
 var defaultLintersSettings = LintersSettings{

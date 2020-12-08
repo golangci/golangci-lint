@@ -300,6 +300,17 @@ linters-settings:
   testpackage:
     # regexp pattern to skip files
     skip-regexp: (export|internal)_test\.go
+  thelper:
+    # The following configurations enable all checks. It can be omitted because all checks are enabled by default.
+    # You can enable only required checks deleting unnecessary checks.
+    test:
+      first: true
+      name: true
+      begin: true
+    benchmark:
+      first: true
+      name: true
+      begin: true
   unparam:
     # Inspect exported functions, default is false. Set to true if no external program/library imports your code.
     # XXX: if you enable this setting, unparam will report a lot of false-positives in text editors:

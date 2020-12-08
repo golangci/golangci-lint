@@ -30,6 +30,7 @@ require (
 	github.com/jgautheron/goconst v0.0.0-20201117150253-ccae5bf973f3
 	github.com/jingyugao/rowserrcheck v0.0.0-20191204022205-72ab7603b68a
 	github.com/jirfag/go-printf-func-name v0.0.0-20191110105641-45db9963cdd3
+	github.com/kulti/thelper v0.1.0
 	github.com/kunwardeep/paralleltest v1.0.2
 	github.com/kyoh86/exportloopref v0.1.8
 	github.com/maratori/testpackage v1.0.1
