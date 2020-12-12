@@ -5,7 +5,7 @@ import (
 	"sort"
 	"testing"
 
-	"github.com/golangci/golangci-lint/pkg/logutils"
+	"github.com/anduril/golangci-lint/pkg/logutils"
 
 	"github.com/stretchr/testify/assert"
 )

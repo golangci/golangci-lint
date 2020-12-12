@@ -5,7 +5,7 @@ import (
 
 	"4d63.com/gochecknoglobals/checknoglobals"
 
-	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
+	"github.com/anduril/golangci-lint/pkg/golinters/goanalysis"
 )
 
 func NewGochecknoglobals() *goanalysis.Linter {

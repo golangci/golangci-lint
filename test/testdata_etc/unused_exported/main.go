@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/golangci/golangci-lint/test/testdata_etc/unused_exported/lib"
+	"github.com/anduril/golangci-lint/test/testdata_etc/unused_exported/lib"
 )
 
 func main() {

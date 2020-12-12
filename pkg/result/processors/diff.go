@@ -10,7 +10,7 @@ import (
 
 	"github.com/golangci/revgrep"
 
-	"github.com/golangci/golangci-lint/pkg/result"
+	"github.com/anduril/golangci-lint/pkg/result"
 )
 
 type Diff struct {

@@ -7,9 +7,9 @@ import (
 	"golang.org/x/tools/go/packages"
 	"honnef.co/go/tools/unused"
 
-	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
-	"github.com/golangci/golangci-lint/pkg/lint/linter"
-	"github.com/golangci/golangci-lint/pkg/result"
+	"github.com/anduril/golangci-lint/pkg/golinters/goanalysis"
+	"github.com/anduril/golangci-lint/pkg/lint/linter"
+	"github.com/anduril/golangci-lint/pkg/result"
 )
 
 func NewUnused() *goanalysis.Linter {
@@ -43,7 +43,7 @@ func NewUnused() *goanalysis.Linter {
 					To:   p.End.Line,
 				},
 			}
-			// See https://github.com/golangci/golangci-lint/issues/1048
+			// See https://github.com/anduril/golangci-lint/issues/1048
 			// If range is invalid, this will break `--fix` mode.
 			if i.LineRange.To >= i.LineRange.From {
 				i.Replacement = &result.Replacement{

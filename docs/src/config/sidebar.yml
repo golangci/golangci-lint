@@ -29,7 +29,7 @@
     - label: "Comparison"
       link: "/product/comparison/"
     - label: "GitHub"
-      link: "https://github.com/golangci/golangci-lint"
+      link: "https://github.com/anduril/golangci-lint"
 - label: Contributing
   items:
     - label: Quick Start

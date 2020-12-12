@@ -4,8 +4,8 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/golangci/golangci-lint/pkg/config"
-	"github.com/golangci/golangci-lint/pkg/result"
+	"github.com/anduril/golangci-lint/pkg/config"
+	"github.com/anduril/golangci-lint/pkg/result"
 )
 
 // Base propose of this functionality to sort results (issues)

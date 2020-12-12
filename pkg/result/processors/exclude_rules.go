@@ -3,9 +3,9 @@ package processors
 import (
 	"regexp"
 
-	"github.com/golangci/golangci-lint/pkg/fsutils"
-	"github.com/golangci/golangci-lint/pkg/logutils"
-	"github.com/golangci/golangci-lint/pkg/result"
+	"github.com/anduril/golangci-lint/pkg/fsutils"
+	"github.com/anduril/golangci-lint/pkg/logutils"
+	"github.com/anduril/golangci-lint/pkg/result"
 )
 
 type excludeRule struct {

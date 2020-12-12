@@ -1,4 +1,4 @@
-module github.com/golangci/golangci-lint/tools
+module github.com/anduril/golangci-lint/tools
 
 go 1.12
 

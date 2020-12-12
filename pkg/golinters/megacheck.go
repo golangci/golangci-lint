@@ -5,7 +5,7 @@ import (
 
 	"golang.org/x/tools/go/analysis"
 
-	"github.com/golangci/golangci-lint/pkg/logutils"
+	"github.com/anduril/golangci-lint/pkg/logutils"
 )
 
 var debugf = logutils.Debug("megacheck")

@@ -5,9 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/golangci/golangci-lint/pkg/logutils"
-	"github.com/golangci/golangci-lint/pkg/report"
-	"github.com/golangci/golangci-lint/pkg/result"
+	"github.com/anduril/golangci-lint/pkg/logutils"
+	"github.com/anduril/golangci-lint/pkg/report"
+	"github.com/anduril/golangci-lint/pkg/result"
 )
 
 type JSON struct {

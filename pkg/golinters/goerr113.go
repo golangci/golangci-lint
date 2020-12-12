@@ -4,7 +4,7 @@ import (
 	"github.com/Djarvur/go-err113"
 	"golang.org/x/tools/go/analysis"
 
-	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
+	"github.com/anduril/golangci-lint/pkg/golinters/goanalysis"
 )
 
 func NewGoerr113() *goanalysis.Linter {

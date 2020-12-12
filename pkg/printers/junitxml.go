@@ -5,8 +5,8 @@ import (
 	"encoding/xml"
 	"strings"
 
-	"github.com/golangci/golangci-lint/pkg/logutils"
-	"github.com/golangci/golangci-lint/pkg/result"
+	"github.com/anduril/golangci-lint/pkg/logutils"
+	"github.com/anduril/golangci-lint/pkg/result"
 )
 
 type testSuitesXML struct {

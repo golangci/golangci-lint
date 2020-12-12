@@ -10,8 +10,8 @@ import (
 
 	"golang.org/x/tools/go/packages"
 
-	"github.com/golangci/golangci-lint/pkg/logutils"
-	"github.com/golangci/golangci-lint/pkg/result"
+	"github.com/anduril/golangci-lint/pkg/logutils"
+	"github.com/anduril/golangci-lint/pkg/result"
 )
 
 type posMapper func(pos token.Position) token.Position

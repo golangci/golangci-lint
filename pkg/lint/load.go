@@ -14,14 +14,14 @@ import (
 	"github.com/pkg/errors"
 	"golang.org/x/tools/go/packages"
 
-	"github.com/golangci/golangci-lint/internal/pkgcache"
-	"github.com/golangci/golangci-lint/pkg/config"
-	"github.com/golangci/golangci-lint/pkg/exitcodes"
-	"github.com/golangci/golangci-lint/pkg/fsutils"
-	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis/load"
-	"github.com/golangci/golangci-lint/pkg/goutil"
-	"github.com/golangci/golangci-lint/pkg/lint/linter"
-	"github.com/golangci/golangci-lint/pkg/logutils"
+	"github.com/anduril/golangci-lint/internal/pkgcache"
+	"github.com/anduril/golangci-lint/pkg/config"
+	"github.com/anduril/golangci-lint/pkg/exitcodes"
+	"github.com/anduril/golangci-lint/pkg/fsutils"
+	"github.com/anduril/golangci-lint/pkg/golinters/goanalysis/load"
+	"github.com/anduril/golangci-lint/pkg/goutil"
+	"github.com/anduril/golangci-lint/pkg/lint/linter"
+	"github.com/anduril/golangci-lint/pkg/logutils"
 )
 
 type ContextLoader struct {
@@ -300,7 +300,7 @@ func (cl *ContextLoader) Load(ctx context.Context, linters []*linter.Config) (*l
 		Packages: deduplicatedPkgs,
 
 		// At least `unused` linters works properly only on original (not deduplicated) packages,
-		// see https://github.com/golangci/golangci-lint/pull/585.
+		// see https://github.com/anduril/golangci-lint/pull/585.
 		OriginalPackages: pkgs,
 
 		Cfg:       cl.cfg,

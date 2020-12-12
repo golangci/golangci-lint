@@ -9,17 +9,17 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/golangci/golangci-lint/internal/errorutil"
-	"github.com/golangci/golangci-lint/pkg/config"
-	"github.com/golangci/golangci-lint/pkg/fsutils"
-	"github.com/golangci/golangci-lint/pkg/goutil"
-	"github.com/golangci/golangci-lint/pkg/lint/linter"
-	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
-	"github.com/golangci/golangci-lint/pkg/logutils"
-	"github.com/golangci/golangci-lint/pkg/packages"
-	"github.com/golangci/golangci-lint/pkg/result"
-	"github.com/golangci/golangci-lint/pkg/result/processors"
-	"github.com/golangci/golangci-lint/pkg/timeutils"
+	"github.com/anduril/golangci-lint/internal/errorutil"
+	"github.com/anduril/golangci-lint/pkg/config"
+	"github.com/anduril/golangci-lint/pkg/fsutils"
+	"github.com/anduril/golangci-lint/pkg/goutil"
+	"github.com/anduril/golangci-lint/pkg/lint/linter"
+	"github.com/anduril/golangci-lint/pkg/lint/lintersdb"
+	"github.com/anduril/golangci-lint/pkg/logutils"
+	"github.com/anduril/golangci-lint/pkg/packages"
+	"github.com/anduril/golangci-lint/pkg/result"
+	"github.com/anduril/golangci-lint/pkg/result/processors"
+	"github.com/anduril/golangci-lint/pkg/timeutils"
 
 	gopackages "golang.org/x/tools/go/packages"
 )
@@ -106,7 +106,7 @@ func (r *Runner) runLinterSafe(ctx context.Context, lintCtx *linter.Context,
 		// Packages in lintCtx might be dirty due to the last analysis,
 		// which affects to the next analysis.
 		// To avoid this issue, we clear type information from the packages.
-		// See https://github.com/golangci/golangci-lint/pull/944.
+		// See https://github.com/anduril/golangci-lint/pull/944.
 		// Currently DoesChangeTypes is true only for `unused`.
 		lintCtx.ClearTypesInPackages()
 	}

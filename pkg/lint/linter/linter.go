@@ -3,7 +3,7 @@ package linter
 import (
 	"context"
 
-	"github.com/golangci/golangci-lint/pkg/result"
+	"github.com/anduril/golangci-lint/pkg/result"
 )
 
 type Linter interface {

@@ -15,12 +15,12 @@ import (
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/packages"
 
-	"github.com/golangci/golangci-lint/internal/pkgcache"
-	"github.com/golangci/golangci-lint/pkg/lint/linter"
-	"github.com/golangci/golangci-lint/pkg/logutils"
-	libpackages "github.com/golangci/golangci-lint/pkg/packages"
-	"github.com/golangci/golangci-lint/pkg/result"
-	"github.com/golangci/golangci-lint/pkg/timeutils"
+	"github.com/anduril/golangci-lint/internal/pkgcache"
+	"github.com/anduril/golangci-lint/pkg/lint/linter"
+	"github.com/anduril/golangci-lint/pkg/logutils"
+	libpackages "github.com/anduril/golangci-lint/pkg/packages"
+	"github.com/anduril/golangci-lint/pkg/result"
+	"github.com/anduril/golangci-lint/pkg/timeutils"
 )
 
 const (

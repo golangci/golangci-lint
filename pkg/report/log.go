@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/golangci/golangci-lint/pkg/logutils"
+	"github.com/anduril/golangci-lint/pkg/logutils"
 )
 
 type LogWrapper struct {

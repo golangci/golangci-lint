@@ -7,12 +7,12 @@ import (
 
 	"golang.org/x/tools/go/analysis"
 
-	"github.com/golangci/golangci-lint/pkg/config"
-	"github.com/golangci/golangci-lint/pkg/golinters"
-	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
-	"github.com/golangci/golangci-lint/pkg/lint/linter"
-	"github.com/golangci/golangci-lint/pkg/logutils"
-	"github.com/golangci/golangci-lint/pkg/report"
+	"github.com/anduril/golangci-lint/pkg/config"
+	"github.com/anduril/golangci-lint/pkg/golinters"
+	"github.com/anduril/golangci-lint/pkg/golinters/goanalysis"
+	"github.com/anduril/golangci-lint/pkg/lint/linter"
+	"github.com/anduril/golangci-lint/pkg/logutils"
+	"github.com/anduril/golangci-lint/pkg/report"
 )
 
 type Manager struct {
@@ -338,7 +338,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		// nolintlint must be last because it looks at the results of all the previous linters for unused nolint directives
 		linter.NewConfig(golinters.NewNoLintLint()).
 			WithPresets(linter.PresetStyle).
-			WithURL("https://github.com/golangci/golangci-lint/blob/master/pkg/golinters/nolintlint/README.md"),
+			WithURL("https://github.com/anduril/golangci-lint/blob/master/pkg/golinters/nolintlint/README.md"),
 	}
 
 	isLocalRun := os.Getenv("GOLANGCI_COM_RUN") == ""

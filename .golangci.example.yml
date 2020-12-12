@@ -235,10 +235,10 @@ linters-settings:
     settings:
       printf: # analyzer name, run `go tool vet help` to see all analyzers
         funcs: # run `go tool vet help printf` to see available settings for `printf` analyzer
-          - (github.com/golangci/golangci-lint/pkg/logutils.Log).Infof
-          - (github.com/golangci/golangci-lint/pkg/logutils.Log).Warnf
-          - (github.com/golangci/golangci-lint/pkg/logutils.Log).Errorf
-          - (github.com/golangci/golangci-lint/pkg/logutils.Log).Fatalf
+          - (github.com/anduril/golangci-lint/pkg/logutils.Log).Infof
+          - (github.com/anduril/golangci-lint/pkg/logutils.Log).Warnf
+          - (github.com/anduril/golangci-lint/pkg/logutils.Log).Errorf
+          - (github.com/anduril/golangci-lint/pkg/logutils.Log).Fatalf
 
     # enable or disable analyzers by name
     enable:

@@ -17,17 +17,17 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 
-	"github.com/golangci/golangci-lint/internal/cache"
-	"github.com/golangci/golangci-lint/internal/pkgcache"
-	"github.com/golangci/golangci-lint/pkg/config"
-	"github.com/golangci/golangci-lint/pkg/fsutils"
-	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis/load"
-	"github.com/golangci/golangci-lint/pkg/goutil"
-	"github.com/golangci/golangci-lint/pkg/lint"
-	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
-	"github.com/golangci/golangci-lint/pkg/logutils"
-	"github.com/golangci/golangci-lint/pkg/report"
-	"github.com/golangci/golangci-lint/pkg/timeutils"
+	"github.com/anduril/golangci-lint/internal/cache"
+	"github.com/anduril/golangci-lint/internal/pkgcache"
+	"github.com/anduril/golangci-lint/pkg/config"
+	"github.com/anduril/golangci-lint/pkg/fsutils"
+	"github.com/anduril/golangci-lint/pkg/golinters/goanalysis/load"
+	"github.com/anduril/golangci-lint/pkg/goutil"
+	"github.com/anduril/golangci-lint/pkg/lint"
+	"github.com/anduril/golangci-lint/pkg/lint/lintersdb"
+	"github.com/anduril/golangci-lint/pkg/logutils"
+	"github.com/anduril/golangci-lint/pkg/report"
+	"github.com/anduril/golangci-lint/pkg/timeutils"
 )
 
 type Executor struct {

@@ -9,9 +9,9 @@ import (
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/loader"
 
-	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
-	"github.com/golangci/golangci-lint/pkg/lint/linter"
-	"github.com/golangci/golangci-lint/pkg/result"
+	"github.com/anduril/golangci-lint/pkg/golinters/goanalysis"
+	"github.com/anduril/golangci-lint/pkg/lint/linter"
+	"github.com/anduril/golangci-lint/pkg/result"
 )
 
 func setDepguardListType(dg *depguard.Depguard, lintCtx *linter.Context) error {

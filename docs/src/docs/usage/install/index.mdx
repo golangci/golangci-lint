@@ -8,8 +8,8 @@ Most installations of `golangci-lint` are performed for CI.
 
 ### GitHub Actions
 
-We recommend using [our GitHub Action](https://github.com/golangci/golangci-lint-action) for running `golangci-lint` in CI for GitHub projects.
-It's [fast and uses smart caching](https://github.com/golangci/golangci-lint-action#performance) inside
+We recommend using [our GitHub Action](https://github.com/anduril/golangci-lint-action) for running `golangci-lint` in CI for GitHub projects.
+It's [fast and uses smart caching](https://github.com/anduril/golangci-lint-action#performance) inside
 and it can be much faster than the simple binary installation.
 
 Also, the action creates GitHub annotations for found issues: you don't need to dig into build log to see found by `golangci-lint` issues:
@@ -22,7 +22,7 @@ It's important to have reproducible CI:
 don't start to fail all builds at the same time. With golangci-lint this can happen if you
 use deprecated option `--enable-all` and a new linter is added or even without `--enable-all`: when one upstream linter is upgraded.
 
-It's highly recommended to install a specific version of golangci-lint available on the [releases page](https://github.com/golangci/golangci-lint/releases).
+It's highly recommended to install a specific version of golangci-lint available on the [releases page](https://github.com/anduril/golangci-lint/releases).
 
 Here is the recommended way to install golangci-lint {.LatestVersion}:
 
@@ -40,7 +40,7 @@ golangci-lint --version
 ```
 
 It is advised that you periodically update the version of `golangci-lint` as the project is under active development
-and is constantly being improved. For any problems with `golangci-lint`, check out recent [GitHub issues](https://github.com/golangci/golangci-lint/issues) and update if needed.
+and is constantly being improved. For any problems with `golangci-lint`, check out recent [GitHub issues](https://github.com/anduril/golangci-lint/issues) and update if needed.
 
 ## Local Installation
 
@@ -88,7 +88,7 @@ Note: such `go get` installation aren't guaranteed to work. We recommend using b
 `go get` installation isn't recommended because of the following points:
 
 1. some users use `-u` flag for `go get`, which upgrades our dependencies. Resulting configuration wasn't tested and isn't guaranteed to work.
-2. [`go.mod`](https://github.com/golangci/golangci-lint/blob/master/go.mod) replacement directive doesn't apply. It means a user will be using patched version of `golangci-lint` if we use such replacements.
+2. [`go.mod`](https://github.com/anduril/golangci-lint/blob/master/go.mod) replacement directive doesn't apply. It means a user will be using patched version of `golangci-lint` if we use such replacements.
 3. it's stability depends on a user's Go version (e.g. on [this compiler Go <= 1.12 bug](https://github.com/golang/go/issues/29612)).
 4. we've encountered a lot of issues with Go modules hashes.
 5. it allows installation from `master` branch which can't be considered stable.
@@ -99,7 +99,7 @@ Note: such `go get` installation aren't guaranteed to work. We recommend using b
 <div style="margin-top: 2em;">
 
 ```sh
-go get github.com/golangci/golangci-lint/cmd/golangci-lint@{.LatestVersion}
+go get github.com/anduril/golangci-lint/cmd/golangci-lint@{.LatestVersion}
 ```
 
 </div>
@@ -128,7 +128,7 @@ it's not always clear when a minor or major version bump occurs. To help clarify
 According to our policy, any minor update may report more errors than the previous release (ex: from a bug fix).
 As such, we recommend using the fixed minor version and fixed or the latest patch version to guarantee the results of your builds.
 
-For example, in our [GitHub Action](https://github.com/golangci/golangci-lint-action) we require users to explicitly set the minor version of `golangci-lint`
+For example, in our [GitHub Action](https://github.com/anduril/golangci-lint-action) we require users to explicitly set the minor version of `golangci-lint`
 and we always use the latest patch version.
 
 ## Next

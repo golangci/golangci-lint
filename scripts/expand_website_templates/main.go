@@ -16,10 +16,10 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/golangci/golangci-lint/internal/renameio"
+	"github.com/anduril/golangci-lint/internal/renameio"
 
-	"github.com/golangci/golangci-lint/pkg/lint/linter"
-	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
+	"github.com/anduril/golangci-lint/pkg/lint/linter"
+	"github.com/anduril/golangci-lint/pkg/lint/lintersdb"
 )
 
 var stateFilePath = filepath.Join("docs", "template_data.state")

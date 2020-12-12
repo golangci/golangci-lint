@@ -4,7 +4,7 @@ import (
 	"github.com/kyoh86/exportloopref"
 	"golang.org/x/tools/go/analysis"
 
-	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
+	"github.com/anduril/golangci-lint/pkg/golinters/goanalysis"
 )
 
 func NewExportLoopRef() *goanalysis.Linter {

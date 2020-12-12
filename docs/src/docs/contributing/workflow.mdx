@@ -5,7 +5,7 @@ title: Contributing Workflow
 # Contributing
 
 By participating to this project, you agree to abide our [code of
-conduct](https://github.com/golangci/golangci-lint/blob/master/CODE_OF_CONDUCT.md).
+conduct](https://github.com/anduril/golangci-lint/blob/master/CODE_OF_CONDUCT.md).
 
 ## Setup your machine
 
@@ -16,7 +16,7 @@ Prerequisites:
 - `make`
 - [Go 1.13+](https://golang.org/doc/install)
 
-Fork and clone [golangci-lint](https://github.com/golangci/golangci-lint) repository.
+Fork and clone [golangci-lint](https://github.com/anduril/golangci-lint) repository.
 
 A good way of making sure everything is all right is running the following:
 
@@ -49,18 +49,18 @@ Push your branch to your `golangci-lint` fork and open a pull request against th
 First, please, accept [CLA](https://gist.github.com/jirfag/26a39fd375da84b2d5ad4296fecb0668) - [cla assistant](https://cla-assistant.io/) will
 make a comment on the pull request about it.
 
-Also, we run a few checks in CI by using GitHub actions, you can see them [here](https://github.com/golangci/golangci-lint/blob/master/.github/workflows/pr.yml).
+Also, we run a few checks in CI by using GitHub actions, you can see them [here](https://github.com/anduril/golangci-lint/blob/master/.github/workflows/pr.yml).
 
 ## New releases
 
 First, see [our versioning policy](/usage/install/#versioning-policy).
 
 To make a new release create a tag `vx.y.z`. Don't forget to add zero patch version for a new minor release, e.g. `v1.99.0`.
-A GitHub action [workflow](https://github.com/golangci/golangci-lint/blob/master/.github/workflows/tag.yml) will start building and publishing release after that.
+A GitHub action [workflow](https://github.com/anduril/golangci-lint/blob/master/.github/workflows/tag.yml) will start building and publishing release after that.
 
 After making a release you need to update:
 
-1. GitHub [action config](https://github.com/golangci/golangci-lint/blob/master/assets/github-action-config.json) by running:
+1. GitHub [action config](https://github.com/anduril/golangci-lint/blob/master/assets/github-action-config.json) by running:
 
 ```sh
 make assets/github-action-config.json

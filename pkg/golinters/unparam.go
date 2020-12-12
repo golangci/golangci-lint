@@ -9,9 +9,9 @@ import (
 	"golang.org/x/tools/go/analysis/passes/buildssa"
 	"mvdan.cc/unparam/check"
 
-	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
-	"github.com/golangci/golangci-lint/pkg/lint/linter"
-	"github.com/golangci/golangci-lint/pkg/result"
+	"github.com/anduril/golangci-lint/pkg/golinters/goanalysis"
+	"github.com/anduril/golangci-lint/pkg/lint/linter"
+	"github.com/anduril/golangci-lint/pkg/result"
 )
 
 func NewUnparam() *goanalysis.Linter {

@@ -13,7 +13,7 @@ linters-settings:
     lines: 100
     statements: 50
   gci:
-    local-prefixes: github.com/golangci/golangci-lint
+    local-prefixes: github.com/anduril/golangci-lint
   goconst:
     min-len: 2
     min-occurrences: 2
@@ -33,7 +33,7 @@ linters-settings:
   gocyclo:
     min-complexity: 15
   goimports:
-    local-prefixes: github.com/golangci/golangci-lint
+    local-prefixes: github.com/anduril/golangci-lint
   golint:
     min-confidence: 0
   gomnd:
@@ -46,10 +46,10 @@ linters-settings:
     settings:
       printf:
         funcs:
-          - (github.com/golangci/golangci-lint/pkg/logutils.Log).Infof
-          - (github.com/golangci/golangci-lint/pkg/logutils.Log).Warnf
-          - (github.com/golangci/golangci-lint/pkg/logutils.Log).Errorf
-          - (github.com/golangci/golangci-lint/pkg/logutils.Log).Fatalf
+          - (github.com/anduril/golangci-lint/pkg/logutils.Log).Infof
+          - (github.com/anduril/golangci-lint/pkg/logutils.Log).Warnf
+          - (github.com/anduril/golangci-lint/pkg/logutils.Log).Errorf
+          - (github.com/anduril/golangci-lint/pkg/logutils.Log).Fatalf
   lll:
     line-length: 140
   maligned:
