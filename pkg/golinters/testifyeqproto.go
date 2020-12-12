@@ -69,7 +69,8 @@ func runTestifyEqProto(pass *analysis.Pass) []goanalysis.Issue {
 		visited := map[string]bool{}
 		if transitivelyReferencesProto(type2, visited) || transitivelyReferencesProto(type3, visited) {
 			issue := goanalysis.NewIssue(&result.Issue{
-				Pos: pass.Fset.Position(n.Pos()),
+				FromLinter: testifyAssertEqualProto,
+				Pos:        pass.Fset.Position(n.Pos()),
 				Text: "call to assert.Equal made with structs that contain proto.Message fields: " +
 					"Use proto.Equal instead.",
 			}, pass)

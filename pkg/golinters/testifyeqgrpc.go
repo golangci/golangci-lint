@@ -100,8 +100,9 @@ func runFunc(pass *analysis.Pass, n ast.Node) []goanalysis.Issue { // nolint:goc
 			use := pass.TypesInfo.Uses[id]
 			if use.Pkg().Path() == "github.com/stretchr/testify/assert" && use.Id() == "Equal" {
 				issue := goanalysis.NewIssue(&result.Issue{
-					Pos:  pass.Fset.Position(stmt.Pos()),
-					Text: testifyAssertEqualGrpcMsg,
+					FromLinter: testifyAssertEqualGrpc,
+					Pos:        pass.Fset.Position(stmt.Pos()),
+					Text:       testifyAssertEqualGrpcMsg,
 				}, pass)
 				issues = append(issues, issue)
 			}
@@ -142,8 +143,9 @@ func runFunc(pass *analysis.Pass, n ast.Node) []goanalysis.Issue { // nolint:goc
 			}
 			if bad {
 				issue := goanalysis.NewIssue(&result.Issue{
-					Pos:  pass.Fset.Position(call.Pos()),
-					Text: testifyAssertEqualGrpcMsg,
+					FromLinter: testifyAssertEqualGrpc,
+					Pos:        pass.Fset.Position(call.Pos()),
+					Text:       testifyAssertEqualGrpcMsg,
 				}, pass)
 				issues = append(issues, issue)
 			}

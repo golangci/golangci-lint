@@ -334,15 +334,15 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		linter.NewConfig(golinters.NewTickerInLoop()).
 			WithPresets(linter.PresetBugs).
 			WithLoadForGoAnalysis().
-			WithURL("https://ghe.anduril.dev/anduril/golangci-lint"),
+			WithURL("https://github.com/anduril/golangci-lint"),
 		linter.NewConfig(golinters.NewTestifyAssertEqualProto()).
 			WithPresets(linter.PresetBugs).
 			WithLoadForGoAnalysis().
-			WithURL("https://ghe.anduril.dev/anduril/golangci-lint"),
+			WithURL("https://github.com/anduril/golangci-lint"),
 		linter.NewConfig(golinters.NewTestifyAssertEqualGrpc()).
 			WithPresets(linter.PresetBugs).
 			WithLoadForGoAnalysis().
-			WithURL("https://ghe.anduril.dev/anduril/golangci-lint"),
+			WithURL("https://github.com/anduril/golangci-lint"),
 		// nolintlint must be last because it looks at the results of all the previous linters for unused nolint directives
 		linter.NewConfig(golinters.NewNoLintLint()).
 			WithPresets(linter.PresetStyle).
