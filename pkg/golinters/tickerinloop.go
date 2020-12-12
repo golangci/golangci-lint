@@ -28,7 +28,7 @@ func NewTickerInLoop() *goanalysis.Linter {
 		nil,
 	).WithContextSetter(func(lintCtx *linter.Context) {
 		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
-			issues := runOnFile(pass)
+			issues := runTickerInLoopOnFile(pass)
 
 			mu.Lock()
 			resIssues = append(resIssues, issues...)
@@ -41,7 +41,7 @@ func NewTickerInLoop() *goanalysis.Linter {
 	}).WithLoadMode(goanalysis.LoadModeSyntax)
 }
 
-func runOnFile(pass *analysis.Pass) []goanalysis.Issue {
+func runTickerInLoopOnFile(pass *analysis.Pass) []goanalysis.Issue {
 	var res []goanalysis.Issue
 	for _, file := range pass.Files {
 		ast.Inspect(file, func(n ast.Node) bool {
