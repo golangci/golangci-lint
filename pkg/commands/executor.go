@@ -55,7 +55,7 @@ type Executor struct {
 	flock     *flock.Flock
 }
 
-func NewExecutor(version, commit, date string) *Executor {
+func NewExecutor(version, commit, date string) *Executor { // nolint:funlen
 	startedAt := time.Now()
 	e := &Executor{
 		cfg:       config.NewDefault(),
@@ -108,6 +108,12 @@ func NewExecutor(version, commit, date string) *Executor {
 	r := config.NewFileReader(e.cfg, commandLineCfg, e.log.Child("config_reader"))
 	if err = r.Read(); err != nil {
 		e.log.Fatalf("Can't read config: %s", err)
+	}
+
+	// Anduril-specific config
+	err = modifyConfigAnduril(e.cfg)
+	if err != nil {
+		e.log.Fatalf("Error handling Anduril config: %s", err)
 	}
 
 	// recreate after getting config
