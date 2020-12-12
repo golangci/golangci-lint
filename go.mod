@@ -15,7 +15,6 @@ require (
 	github.com/go-xmlfmt/xmlfmt v0.0.0-20191208150333-d5b6f63a941b
 	github.com/gofrs/flock v0.8.0
 	github.com/golangci/check v0.0.0-20180506172741-cfe4005ccda2
-	github.com/golangci/dupl v0.0.0-20180902072040-3e9179ac440a
 	github.com/golangci/errcheck v0.0.0-20181223084120-ef45e06d44b6
 	github.com/golangci/go-misc v0.0.0-20180628070357-927a3d87b613
 	github.com/golangci/gocyclo v0.0.0-20180528144436-0a533e8fa43d
@@ -36,6 +35,7 @@ require (
 	github.com/matoous/godox v0.0.0-20190911065817-5d6d842e92eb // v1.0
 	github.com/mattn/go-colorable v0.1.8
 	github.com/mbilski/exhaustivestruct v1.1.0
+	github.com/mibk/dupl v1.0.0
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/mitchellh/go-ps v1.0.0
 	github.com/moricho/tparallel v0.2.1
@@ -75,3 +75,5 @@ require (
 	mvdan.cc/lint v0.0.0-20170908181259-adc824a0674b // indirect
 	mvdan.cc/unparam v0.0.0-20200501210554-b37ab49443f7
 )
+
+replace github.com/mibk/dupl => github.com/iwankgb/dupl v0.0.0-20201212183150-dacd1b4f3f54

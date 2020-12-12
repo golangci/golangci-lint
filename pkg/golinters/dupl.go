@@ -5,7 +5,7 @@ import (
 	"go/token"
 	"sync"
 
-	duplAPI "github.com/golangci/dupl"
+	duplAPI "github.com/mibk/dupl/api"
 	"github.com/pkg/errors"
 	"golang.org/x/tools/go/analysis"
 
@@ -49,22 +49,22 @@ func NewDupl() *goanalysis.Linter {
 
 			res := make([]goanalysis.Issue, 0, len(issues))
 			for _, i := range issues {
-				toFilename, err := fsutils.ShortestRelPath(i.To.Filename(), "")
+				toFilename, err := fsutils.ShortestRelPath(i.To.Filename, "")
 				if err != nil {
-					return nil, errors.Wrapf(err, "failed to get shortest rel path for %q", i.To.Filename())
+					return nil, errors.Wrapf(err, "failed to get shortest rel path for %q", i.To.Filename)
 				}
-				dupl := fmt.Sprintf("%s:%d-%d", toFilename, i.To.LineStart(), i.To.LineEnd())
+				dupl := fmt.Sprintf("%s:%d-%d", toFilename, i.To.LineStart, i.To.LineEnd)
 				text := fmt.Sprintf("%d-%d lines are duplicate of %s",
-					i.From.LineStart(), i.From.LineEnd(),
+					i.From.LineStart, i.From.LineEnd,
 					formatCode(dupl, lintCtx.Cfg))
 				res = append(res, goanalysis.NewIssue(&result.Issue{
 					Pos: token.Position{
-						Filename: i.From.Filename(),
-						Line:     i.From.LineStart(),
+						Filename: i.From.Filename,
+						Line:     i.From.LineStart,
 					},
 					LineRange: &result.Range{
-						From: i.From.LineStart(),
-						To:   i.From.LineEnd(),
+						From: i.From.LineStart,
+						To:   i.From.LineEnd,
 					},
 					Text:       text,
 					FromLinter: duplLinterName,
