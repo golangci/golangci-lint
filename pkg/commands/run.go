@@ -47,9 +47,6 @@ func getDefaultDirectoryExcludeHelp() string {
 	return strings.Join(parts, "\n")
 }
 
-const welcomeMessage = "Run this tool in cloud on every github pull " +
-	"request in https://golangci.com for free (public repos)"
-
 func wh(text string) string {
 	return color.GreenString(text)
 }
@@ -274,7 +271,7 @@ func (e *Executor) getConfigForCommandLine() (*config.Config, error) {
 func (e *Executor) initRun() {
 	e.runCmd = &cobra.Command{
 		Use:   "run",
-		Short: welcomeMessage,
+		Short: "Run the linters",
 		Run:   e.executeRun,
 		PreRun: func(_ *cobra.Command, _ []string) {
 			if ok := e.acquireFileLock(); !ok {
