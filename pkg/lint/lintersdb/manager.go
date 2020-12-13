@@ -91,11 +91,13 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 	var testpackageCfg *config.TestpackageSettings
 	var exhaustiveCfg *config.ExhaustiveSettings
 	var errorlintCfg *config.ErrorLintSettings
+	var thelperCfg *config.ThelperSettings
 	if m.cfg != nil {
 		govetCfg = &m.cfg.LintersSettings.Govet
 		testpackageCfg = &m.cfg.LintersSettings.Testpackage
 		exhaustiveCfg = &m.cfg.LintersSettings.Exhaustive
 		errorlintCfg = &m.cfg.LintersSettings.ErrorLint
+		thelperCfg = &m.cfg.LintersSettings.Thelper
 	}
 	const megacheckName = "megacheck"
 	lcs := []*linter.Config{
@@ -313,6 +315,10 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/tomarrell/wrapcheck"),
+		linter.NewConfig(golinters.NewThelper(thelperCfg)).
+			WithPresets(linter.PresetStyle).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/kulti/thelper"),
 		linter.NewConfig(golinters.NewTparallel()).
 			WithPresets(linter.PresetStyle).
 			WithLoadForGoAnalysis().
