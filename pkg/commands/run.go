@@ -284,7 +284,8 @@ func (e *Executor) initRun() {
 	}
 	e.rootCmd.AddCommand(e.runCmd)
 
-	e.runCmd.SetOutput(logutils.StdOut) // use custom output to properly color it in Windows terminals
+	e.runCmd.SetOut(logutils.StdOut) // use custom output to properly color it in Windows terminals
+	e.runCmd.SetErr(logutils.StdErr)
 
 	e.initRunConfiguration(e.runCmd)
 }
