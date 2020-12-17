@@ -325,7 +325,7 @@ func (s *GocriticSettings) validateCheckerNames(log logutils.Log) error {
 
 	for checkName := range s.SettingsPerCheck {
 		if _, ok := allowedNames[checkName]; !ok {
-			return fmt.Errorf("Invalid setting, checker %s doesn't exist, all existing checkers: %s",
+			return fmt.Errorf("invalid setting, checker %s doesn't exist, all existing checkers: %s",
 				checkName, sprintAllowedCheckerNames(allowedNames))
 		}
 		if !s.IsCheckEnabled(checkName) {
