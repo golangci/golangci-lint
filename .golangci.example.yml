@@ -173,7 +173,7 @@ linters-settings:
         # whether to check test functions (default true)
         skipTestFuncs: true
       ruleguard:
-        # path to a gorules file
+        # path to a gorules file for the ruleguard checker
         rules: ''
       truncateCmp:
         # whether to skip int/uint/uintptr types (default true)
