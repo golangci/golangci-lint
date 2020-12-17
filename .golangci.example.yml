@@ -149,7 +149,9 @@ linters-settings:
     disabled-tags:
       - experimental
 
-    settings: # settings passed to gocritic
+    # Settings passed to gocritic.
+    # The list of supported settings can be obtained using `gocritic check -h`
+    settings: 
       captLocal: # must be valid enabled check name
         # whether to restrict checker to params only (default true)
         paramsOnly: true 
