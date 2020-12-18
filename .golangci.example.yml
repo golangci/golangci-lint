@@ -151,8 +151,7 @@ linters-settings:
 
     # Settings passed to gocritic.
     # The settings key is the name of a supported gocritic checker.
-    # The list of supported checkers can be obtained using `gocritic doc`.
-    # The list of supported checker settings can be obtained using `gocritic check -h`
+    # The list of supported checkers can be find in https://go-critic.github.io/overview.
     settings: 
       captLocal: # must be valid enabled check name
         # whether to restrict checker to params only (default true)
