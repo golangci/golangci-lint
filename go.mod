@@ -76,4 +76,4 @@ require (
 	mvdan.cc/unparam v0.0.0-20200501210554-b37ab49443f7
 )
 
-replace github.com/mibk/dupl => github.com/iwankgb/dupl v0.0.0-20201212183150-dacd1b4f3f54
+replace github.com/mibk/dupl => github.com/iwankgb/dupl v0.0.0-20201219201750-a7c1664a1424
