@@ -68,6 +68,8 @@ func NewGomodguard() *goanalysis.Linter {
 				files = append(files, pass.Fset.PositionFor(file.Pos(), false).Filename)
 			}
 
+			processorCfg.Blocked.LocalReplaceDirectives = linterCfg.Blocked.LocalReplaceDirectives
+
 			processor, err := gomodguard.NewProcessor(processorCfg)
 			if err != nil {
 				lintCtx.Log.Warnf("running gomodguard failed: %s: if you are not using go modules "+
