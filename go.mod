@@ -44,7 +44,7 @@ require (
 	github.com/nishanths/exhaustive v0.1.0
 	github.com/pkg/errors v0.9.1
 	github.com/polyfloyd/go-errorlint v0.0.0-20201127212506-19bd8db6546f
-	github.com/ryancurrah/gomodguard v1.1.0
+	github.com/ryancurrah/gomodguard v1.2.0
 	github.com/ryanrolds/sqlclosecheck v0.3.0
 	github.com/securego/gosec/v2 v2.5.0
 	github.com/shazow/go-diff v0.0.0-20160112020656-b6b7b6733b8c
