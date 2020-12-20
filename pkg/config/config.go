@@ -245,6 +245,7 @@ type LintersSettings struct {
 				Version string `mapstructure:"version"`
 				Reason  string `mapstructure:"reason"`
 			} `mapstructure:"versions"`
+			LocalReplaceDirectives bool `mapstructure:"local_replace_directives"`
 		} `mapstructure:"blocked"`
 	}
 

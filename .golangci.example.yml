@@ -263,6 +263,7 @@ linters-settings:
         # - github.com/mitchellh/go-homedir:                          # Blocked module with version constraint
         #     version: "< 1.1.0"                                      # Version constraint, see https://github.com/Masterminds/semver#basic-comparisons
         #     reason: "testing if blocked version constraint works."  # Reason why the version constraint exists. (Optional)
+      local_replace_directives: false                                 # Set to true to raise lint issues for packages that are loaded from a local path via replace directive
   govet:
     # report about shadowed variables
     check-shadowing: true

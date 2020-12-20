@@ -1,8 +1,6 @@
 package golinters
 
 import (
-	"log"
-	"os"
 	"sync"
 
 	"github.com/ryancurrah/gomodguard"
@@ -40,7 +38,7 @@ func NewGomodguard() *goanalysis.Linter {
 			var (
 				files        = []string{}
 				linterCfg    = lintCtx.Cfg.LintersSettings.Gomodguard
-				processorCfg = gomodguard.Configuration{}
+				processorCfg = &gomodguard.Configuration{}
 			)
 			processorCfg.Allowed.Modules = linterCfg.Allowed.Modules
 			processorCfg.Allowed.Domains = linterCfg.Allowed.Domains
@@ -70,7 +68,9 @@ func NewGomodguard() *goanalysis.Linter {
 				files = append(files, pass.Fset.PositionFor(file.Pos(), false).Filename)
 			}
 
-			processor, err := gomodguard.NewProcessor(processorCfg, log.New(os.Stderr, "", 0))
+			processorCfg.Blocked.LocalReplaceDirectives = linterCfg.Blocked.LocalReplaceDirectives
+
+			processor, err := gomodguard.NewProcessor(processorCfg)
 			if err != nil {
 				lintCtx.Log.Warnf("running gomodguard failed: %s: if you are not using go modules "+
 					"it is suggested to disable this linter", err)
