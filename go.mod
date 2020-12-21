@@ -70,7 +70,7 @@ require (
 	golang.org/x/text v0.3.4 // indirect
 	golang.org/x/tools v0.0.0-20201121010211-780cb80bd7fb
 	gopkg.in/yaml.v2 v2.4.0
-	honnef.co/go/tools v0.0.1-2020.1.6
+	honnef.co/go/tools v0.2.0-0.dev
 	mvdan.cc/gofumpt v0.0.0-20201129102820-5c11c50e9475
 	mvdan.cc/interfacer v0.0.0-20180901003855-c20040233aed
 	mvdan.cc/lint v0.0.0-20170908181259-adc824a0674b // indirect
