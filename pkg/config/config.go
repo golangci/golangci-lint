@@ -366,6 +366,7 @@ type NoLintLintSettings struct {
 	RequireSpecific    bool     `mapstructure:"require-specific"`
 	AllowNoExplanation []string `mapstructure:"allow-no-explanation"`
 	AllowUnused        bool     `mapstructure:"allow-unused"`
+	IgnoreUnused       []string `mapstructure:"ignore-unused"`
 }
 
 type TestpackageSettings struct {

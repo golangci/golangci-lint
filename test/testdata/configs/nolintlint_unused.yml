@@ -1,0 +1,5 @@
+linters-settings:
+  nolintlint:
+    allow-unused: false
+    ignore-unused:
+      - deadcode

@@ -54,6 +54,12 @@ func NewNoLintLint() *goanalysis.Linter {
 			for _, n := range pass.Files {
 				nodes = append(nodes, n)
 			}
+
+			ignoredLinters := make(map[string]struct{}, len(settings.IgnoreUnused))
+			for _, l := range settings.IgnoreUnused {
+				ignoredLinters[l] = struct{}{}
+			}
+
 			issues, err := lnt.Run(pass.Fset, nodes...)
 			if err != nil {
 				return nil, fmt.Errorf("linter failed to run: %s", err)
@@ -65,6 +71,9 @@ func NewNoLintLint() *goanalysis.Linter {
 				if ii, ok := i.(nolintlint.UnusedCandidate); ok {
 					expectedNolintLinter = ii.ExpectedLinter
 					expectNoLint = true
+					if _, ignored := ignoredLinters[expectedNolintLinter]; ignored {
+						continue
+					}
 				}
 				issue := &result.Issue{
 					FromLinter:           NolintlintName,

@@ -188,6 +188,7 @@ func (l Linter) Run(fset *token.FileSet, nodes ...ast.Node) ([]Issue, error) {
 				}
 				lintersText, explanation := fullMatches[1], fullMatches[2]
 				var linters []string
+				ignoreUnused := false
 				if len(lintersText) > 0 {
 					lls := strings.Split(lintersText[1:], ",")
 					linters = make([]string, 0, len(lls))
@@ -195,6 +196,9 @@ func (l Linter) Run(fset *token.FileSet, nodes ...ast.Node) ([]Issue, error) {
 						ll = strings.TrimSpace(ll)
 						if ll != "" {
 							linters = append(linters, ll)
+						}
+						if ll == "nolintlint" {
+							ignoreUnused = true
 						}
 					}
 				}
@@ -205,7 +209,7 @@ func (l Linter) Run(fset *token.FileSet, nodes ...ast.Node) ([]Issue, error) {
 				}
 
 				// when detecting unused directives, we send all the directives through and filter them out in the nolint processor
-				if l.needs&NeedsUnused != 0 {
+				if l.needs&NeedsUnused != 0 && !ignoreUnused {
 					if len(linters) == 0 {
 						issues = append(issues, UnusedCandidate{BaseIssue: base})
 					} else {
