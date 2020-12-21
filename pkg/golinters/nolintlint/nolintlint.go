@@ -167,14 +167,12 @@ func (l Linter) Run(fset *token.FileSet, nodes ...ast.Node) ([]Issue, error) {
 					base := BaseIssue{
 						fullDirective:                     comment.Text,
 						directiveWithOptionalLeadingSpace: directiveWithOptionalLeadingSpace,
-						position:                          fset.Position(c.Pos()),
+						position:                          fset.Position(comment.Pos()),
 					}
 
 					// check for, report and eliminate leading spaces so we can check for other issues
 					if len(leadingSpace) > 1 {
-						issues = append(issues, ExtraLeadingSpace{
-							BaseIssue: base,
-						})
+						issues = append(issues, ExtraLeadingSpace{BaseIssue: base})
 					}
 
 					if (l.needs&NeedsMachineOnly) != 0 && len(leadingSpace) > 0 {
