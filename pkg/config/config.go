@@ -269,6 +269,7 @@ type LintersSettings struct {
 	ErrorLint   ErrorLintSettings
 	Makezero    MakezeroSettings
 	Thelper     ThelperSettings
+	Forbidigo   ForbidigoSettings
 
 	Custom map[string]CustomLinterSettings
 }
@@ -404,6 +405,10 @@ type ThelperSettings struct {
 		Name  bool `mapstructure:"name"`
 		Begin bool `mapstructure:"begin"`
 	} `mapstructure:"benchmark"`
+}
+
+type ForbidigoSettings struct {
+	Forbid []string `mapstructure:"forbid"`
 }
 
 var defaultLintersSettings = LintersSettings{
