@@ -41,6 +41,20 @@ func foo() {
 			},
 		},
 		{
+			desc:  "when multiple directives on multiple lines",
+			needs: NeedsExplanation,
+			contents: `
+package bar
+
+// example
+//nolint // this is ok
+//nolint:dupl
+func foo() {}`,
+			expected: []string{
+				"directive `//nolint:dupl` should provide explanation such as `//nolint:dupl // this is why` at testing.go:6:1",
+			},
+		},
+		{
 			desc:     "when no explanation is needed for a specific linter",
 			needs:    NeedsExplanation,
 			excludes: []string{"lll"},
