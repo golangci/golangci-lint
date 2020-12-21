@@ -145,12 +145,10 @@ func (l Linter) Run(fset *token.FileSet, nodes ...ast.Node) ([]Issue, error) {
 	for _, node := range nodes {
 		if file, ok := node.(*ast.File); ok {
 			for _, c := range file.Comments {
-				text := c.Text()
-				matches := directiveOnlyPattern.FindStringSubmatch(text)
-				if len(matches) == 0 {
+				directive := getText(c)
+				if directive == "" {
 					continue
 				}
-				directive := matches[1]
 
 				// check for a space between the "//" and the directive
 				leadingSpaceMatches := leadingSpacePattern.FindStringSubmatch(c.List[0].Text) // c.Text() doesn't have all leading space
@@ -236,4 +234,18 @@ func (l Linter) Run(fset *token.FileSet, nodes ...ast.Node) ([]Issue, error) {
 		}
 	}
 	return issues, nil
+}
+
+func getText(c *ast.CommentGroup) string {
+	var text string
+	for _, comment := range c.List {
+		if !directiveOnlyPattern.MatchString(comment.Text) {
+			continue
+		}
+
+		text = strings.TrimSpace(strings.TrimPrefix(comment.Text, "//"))
+		break
+	}
+
+	return text
 }
