@@ -24,6 +24,8 @@ func TestNoLintLint(t *testing.T) {
 			contents: `
 package bar
 
+// example
+//nolint
 func foo() {
   bad() //nolint
   bad() //nolint //
@@ -32,9 +34,10 @@ func foo() {
 	other() //nolintother
 }`,
 			expected: []string{
-				"directive `//nolint` should provide explanation such as `//nolint // this is why` at testing.go:5:9",
-				"directive `//nolint //` should provide explanation such as `//nolint // this is why` at testing.go:6:9",
-				"directive `//nolint // ` should provide explanation such as `//nolint // this is why` at testing.go:7:9",
+				"directive `//nolint` should provide explanation such as `//nolint // this is why` at testing.go:5:1",
+				"directive `//nolint` should provide explanation such as `//nolint // this is why` at testing.go:7:9",
+				"directive `//nolint //` should provide explanation such as `//nolint // this is why` at testing.go:8:9",
+				"directive `//nolint // ` should provide explanation such as `//nolint // this is why` at testing.go:9:9",
 			},
 		},
 		{
