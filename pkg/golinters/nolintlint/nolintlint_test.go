@@ -6,14 +6,26 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
+//nolint:funlen
 func TestNoLintLint(t *testing.T) {
-	t.Run("when no explanation is provided", func(t *testing.T) {
-		linter, _ := NewLinter(NeedsExplanation, nil)
-		expectIssues(t, linter, `
+	testCases := []struct {
+		desc     string
+		needs    Needs
+		excludes []string
+		contents string
+		expected []string
+	}{
+		{
+			desc:  "when no explanation is provided",
+			needs: NeedsExplanation,
+			contents: `
 package bar
 
+// example
+//nolint
 func foo() {
   bad() //nolint
   bad() //nolint //
@@ -21,25 +33,42 @@ func foo() {
   good() //nolint // this is ok
 	other() //nolintother
 }`,
-			"directive `//nolint` should provide explanation such as `//nolint // this is why` at testing.go:5:9",
-			"directive `//nolint //` should provide explanation such as `//nolint // this is why` at testing.go:6:9",
-			"directive `//nolint // ` should provide explanation such as `//nolint // this is why` at testing.go:7:9",
-		)
-	})
+			expected: []string{
+				"directive `//nolint` should provide explanation such as `//nolint // this is why` at testing.go:5:1",
+				"directive `//nolint` should provide explanation such as `//nolint // this is why` at testing.go:7:9",
+				"directive `//nolint //` should provide explanation such as `//nolint // this is why` at testing.go:8:9",
+				"directive `//nolint // ` should provide explanation such as `//nolint // this is why` at testing.go:9:9",
+			},
+		},
+		{
+			desc:  "when multiple directives on multiple lines",
+			needs: NeedsExplanation,
+			contents: `
+package bar
 
-	t.Run("when no explanation is needed for a specific linter", func(t *testing.T) {
-		linter, _ := NewLinter(NeedsExplanation, []string{"lll"})
-		expectIssues(t, linter, `
+// example
+//nolint // this is ok
+//nolint:dupl
+func foo() {}`,
+			expected: []string{
+				"directive `//nolint:dupl` should provide explanation such as `//nolint:dupl // this is why` at testing.go:6:1",
+			},
+		},
+		{
+			desc:     "when no explanation is needed for a specific linter",
+			needs:    NeedsExplanation,
+			excludes: []string{"lll"},
+			contents: `
 package bar
 
 func foo() {
 	thisIsAReallyLongLine() //nolint:lll
-}`)
-	})
-
-	t.Run("when no specific linter is mentioned", func(t *testing.T) {
-		linter, _ := NewLinter(NeedsSpecific, nil)
-		expectIssues(t, linter, `
+}`,
+		},
+		{
+			desc:  "when no specific linter is mentioned",
+			needs: NeedsSpecific,
+			contents: `
 package bar
 
 func foo() {
@@ -47,35 +76,41 @@ func foo() {
   bad() //nolint
   bad() // nolint // because
 }`,
-			"directive `//nolint` should mention specific linter such as `//nolint:my-linter` at testing.go:6:9",
-			"directive `// nolint // because` should mention specific linter such as `// nolint:my-linter` at testing.go:7:9")
-	})
-
-	t.Run("when machine-readable style isn't used", func(t *testing.T) {
-		linter, _ := NewLinter(NeedsMachineOnly, nil)
-		expectIssues(t, linter, `
+			expected: []string{
+				"directive `//nolint` should mention specific linter such as `//nolint:my-linter` at testing.go:6:9",
+				"directive `// nolint // because` should mention specific linter such as `// nolint:my-linter` at testing.go:7:9",
+			},
+		},
+		{
+			desc:  "when machine-readable style isn't used",
+			needs: NeedsMachineOnly,
+			contents: `
 package bar
 
 func foo() {
   bad() // nolint
   good() //nolint
-}`, "directive `// nolint` should be written without leading space as `//nolint` at testing.go:5:9")
-	})
-
-	t.Run("extra spaces in front of directive are reported", func(t *testing.T) {
-		linter, _ := NewLinter(0, nil)
-		expectIssues(t, linter, `
+}`,
+			expected: []string{
+				"directive `// nolint` should be written without leading space as `//nolint` at testing.go:5:9",
+			},
+		},
+		{
+			desc: "extra spaces in front of directive are reported",
+			contents: `
 package bar
 
 func foo() {
   bad() //  nolint
   good() // nolint
-}`, "directive `//  nolint` should not have more than one leading space at testing.go:5:9")
-	})
-
-	t.Run("spaces are allowed in comma-separated list of linters", func(t *testing.T) {
-		linter, _ := NewLinter(0, nil)
-		expectIssues(t, linter, `
+}`,
+			expected: []string{
+				"directive `//  nolint` should not have more than one leading space at testing.go:5:9",
+			},
+		},
+		{
+			desc: "spaces are allowed in comma-separated list of linters",
+			contents: `
 package bar
 
 func foo() {
@@ -84,40 +119,42 @@ func foo() {
   good() // nolint: linter1,linter2
   good() // nolint: linter1, linter2
 }`,
-			"directive `// nolint:linter1 linter2` should match `// nolint[:<comma-separated-linters>] [// <explanation>]` at testing.go:6:9", //nolint:lll // this is a string
-		)
-	})
-
-	t.Run("multi-line comments don't confuse parser", func(t *testing.T) {
-		linter, _ := NewLinter(0, nil)
-		expectIssues(t, linter, `
+			expected: []string{
+				"directive `// nolint:linter1 linter2` should match `// nolint[:<comma-separated-linters>] [// <explanation>]` at testing.go:6:9", //nolint:lll // this is a string
+			},
+		},
+		{
+			desc: "multi-line comments don't confuse parser",
+			contents: `
 package bar
 
 func foo() {
   //nolint:test
   // something else
-}`)
-	})
-}
+}`,
+		},
+	}
 
-func expectIssues(t *testing.T, linter *Linter, contents string, issues ...string) {
-	actualIssues := parseFile(t, linter, contents)
-	actualIssueStrs := make([]string, 0, len(actualIssues))
-	for _, i := range actualIssues {
-		actualIssueStrs = append(actualIssueStrs, i.String())
-	}
-	assert.ElementsMatch(t, issues, actualIssueStrs, "expected %s but got %s", issues, actualIssues)
-}
+	for _, test := range testCases {
+		test := test
+		t.Run(test.desc, func(t *testing.T) {
+			t.Parallel()
 
-func parseFile(t *testing.T, linter *Linter, contents string) []Issue {
-	fset := token.NewFileSet()
-	expr, err := parser.ParseFile(fset, "testing.go", contents, parser.ParseComments)
-	if err != nil {
-		t.Fatalf("unable to parse file contents: %s", err)
+			linter, _ := NewLinter(test.needs, test.excludes)
+
+			fset := token.NewFileSet()
+			expr, err := parser.ParseFile(fset, "testing.go", test.contents, parser.ParseComments)
+			require.NoError(t, err)
+
+			actualIssues, err := linter.Run(fset, expr)
+			require.NoError(t, err)
+
+			actualIssueStrs := make([]string, 0, len(actualIssues))
+			for _, i := range actualIssues {
+				actualIssueStrs = append(actualIssueStrs, i.String())
+			}
+
+			assert.ElementsMatch(t, test.expected, actualIssueStrs, "expected %s \nbut got %s", test.expected, actualIssues)
+		})
 	}
-	issues, err := linter.Run(fset, expr)
-	if err != nil {
-		t.Fatalf("unable to parse file: %s", err)
-	}
-	return issues
 }
