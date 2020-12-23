@@ -1,7 +1,7 @@
 //args: -Enolintlint
 //config: linters-settings.nolintlint.require-explanation=true
 //config: linters-settings.nolintlint.require-specific=true
-//config: linters-settings.nolintlint.allowing-leading-space=false
+//config: linters-settings.nolintlint.allow-leading-space=false
 package testdata
 
 import "fmt"
