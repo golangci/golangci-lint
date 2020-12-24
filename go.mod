@@ -6,6 +6,7 @@ require (
 	4d63.com/gochecknoglobals v0.0.0-20201008074935-acfc0b28355a
 	github.com/Djarvur/go-err113 v0.0.0-20200511133814-5174e21577d5
 	github.com/OpenPeeDeeP/depguard v1.0.1
+	github.com/ashanbrown/gofmts v0.1.4
 	github.com/ashanbrown/makezero v0.0.0-20201205152432-7b7cdbb3025a
 	github.com/bombsimon/wsl/v3 v3.1.0
 	github.com/daixiang0/gci v0.2.7
@@ -68,7 +69,7 @@ require (
 	github.com/valyala/quicktemplate v1.6.3
 	golang.org/x/sys v0.0.0-20201009025420-dfb3f7c4e634 // indirect
 	golang.org/x/text v0.3.4 // indirect
-	golang.org/x/tools v0.0.0-20201121010211-780cb80bd7fb
+	golang.org/x/tools v0.0.0-20201223010750-3fa0e8f87c1a
 	gopkg.in/yaml.v2 v2.4.0
 	honnef.co/go/tools v0.0.1-2020.1.6
 	mvdan.cc/gofumpt v0.0.0-20201129102820-5c11c50e9475

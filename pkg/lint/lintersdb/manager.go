@@ -337,6 +337,10 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		linter.NewConfig(golinters.NewMakezero()).
 			WithPresets(linter.PresetStyle, linter.PresetBugs).
 			WithURL("https://github.com/ashanbrown/makezero"),
+		linter.NewConfig(golinters.NewGofmts()).
+			WithPresets(linter.PresetFormatting).
+			WithAutoFix().
+			WithURL("https://github.com/ashanbrown/gofmts"),
 
 		// nolintlint must be last because it looks at the results of all the previous linters for unused nolint directives
 		linter.NewConfig(golinters.NewNoLintLint()).
