@@ -332,7 +332,7 @@ linters-settings:
     # Enable to require nolint directives to mention the specific linter being suppressed. Default is false.
     require-specific: true
     # Ignore nolints for specific linters
-    ignore: []
+    ignore-unused: []
   rowserrcheck:
     packages:
       - github.com/jmoiron/sqlx
