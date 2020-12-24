@@ -392,6 +392,12 @@ linters-settings:
   makezero:
     # Allow only slices initialized with a length of zero. Default is false.
     always: false
+  forbidigo:
+    # Forbid the following identifiers
+    forbid:
+      - fmt.Errorf # consider errors.Errorf in github.com/pkg/errors
+      - fmt.Print.* # too much log noise
+      - ginkgo\\.F.* # these are used just for local development
 
   # The custom section can be used to define linter plugins to be loaded at runtime. See README doc
   #  for more info.
