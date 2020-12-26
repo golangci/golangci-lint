@@ -3,8 +3,10 @@ package lintersdb
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"plugin"
 
+	"github.com/spf13/viper"
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/config"
@@ -425,6 +427,16 @@ type AnalyzerPlugin interface {
 }
 
 func (m Manager) getAnalyzerPlugin(path string) (AnalyzerPlugin, error) {
+	if !filepath.IsAbs(path) {
+		// resolve non-absolute paths relative to config file's directory
+		configFilePath := viper.ConfigFileUsed()
+		absConfigFilePath, err := filepath.Abs(configFilePath)
+		if err != nil {
+			return nil, fmt.Errorf("could not get absolute representation of config file path %q: %v", configFilePath, err)
+		}
+		path = filepath.Join(filepath.Dir(absConfigFilePath), path)
+	}
+
 	plug, err := plugin.Open(path)
 	if err != nil {
 		return nil, err
