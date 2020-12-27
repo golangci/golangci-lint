@@ -24,12 +24,15 @@ import (
 
 func NewErrcheck() *goanalysis.Linter {
 	const linterName = "errcheck"
+
 	var mu sync.Mutex
 	var res []goanalysis.Issue
+
 	analyzer := &analysis.Analyzer{
 		Name: linterName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 	}
+
 	return goanalysis.NewLinter(
 		linterName,
 		"Errcheck is a program for checking for unchecked errors "+
@@ -65,15 +68,18 @@ func NewErrcheck() *goanalysis.Linter {
 				} else {
 					text = "Error return value is not checked"
 				}
+
 				issues = append(issues, goanalysis.NewIssue(&result.Issue{
 					FromLinter: linterName,
 					Text:       text,
 					Pos:        i.Pos,
 				}, pass))
 			}
+
 			mu.Lock()
 			res = append(res, issues...)
 			mu.Unlock()
+
 			return nil, nil
 		}
 	}).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
@@ -111,26 +117,30 @@ func parseIgnoreConfig(s string) (map[string]*regexp.Regexp, error) {
 }
 
 func getChecker(errCfg *config.ErrcheckSettings) (*errcheck.Checker, error) {
-	var checker errcheck.Checker
-	checker.Exclusions.BlankAssignments = !errCfg.CheckAssignToBlank
-	checker.Exclusions.TypeAssertions = !errCfg.CheckTypeAssertions
-
 	ignoreConfig, err := parseIgnoreConfig(errCfg.Ignore)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to parse 'ignore' directive")
 	}
 
-	checker.Exclusions.SymbolRegexpsByPackage = map[string]*regexp.Regexp{}
+	checker := errcheck.Checker{
+		Exclusions: errcheck.Exclusions{
+			BlankAssignments:       !errCfg.CheckAssignToBlank,
+			TypeAssertions:         !errCfg.CheckTypeAssertions,
+			SymbolRegexpsByPackage: map[string]*regexp.Regexp{},
+			Symbols:                append([]string{}, errcheck.DefaultExcludedSymbols...),
+		},
+	}
+
 	for pkg, re := range ignoreConfig {
 		checker.Exclusions.SymbolRegexpsByPackage[pkg] = re
 	}
 
-	checker.Exclusions.Symbols = append([]string{}, errcheck.DefaultExcludedSymbols...)
 	if errCfg.Exclude != "" {
 		exclude, err := readExcludeFile(errCfg.Exclude)
 		if err != nil {
 			return nil, err
 		}
+
 		checker.Exclusions.Symbols = append(checker.Exclusions.Symbols, exclude...)
 	}
 
@@ -215,13 +225,17 @@ func readExcludeFile(name string) ([]string, error) {
 	if fh == nil {
 		return nil, errors.Wrapf(err, "failed reading exclude file: %s", name)
 	}
+
 	scanner := bufio.NewScanner(fh)
-	excludes := []string{}
+
+	var excludes []string
 	for scanner.Scan() {
 		excludes = append(excludes, scanner.Text())
 	}
+
 	if err := scanner.Err(); err != nil {
 		return nil, errors.Wrapf(err, "failed scanning file: %s", name)
 	}
+
 	return excludes, nil
 }
