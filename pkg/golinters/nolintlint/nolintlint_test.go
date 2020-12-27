@@ -7,16 +7,22 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+
+	"github.com/golangci/golangci-lint/pkg/result"
 )
 
 //nolint:funlen
 func TestNoLintLint(t *testing.T) {
+	type issueWithReplacement struct {
+		issue       string
+		replacement *result.Replacement
+	}
 	testCases := []struct {
 		desc     string
 		needs    Needs
 		excludes []string
 		contents string
-		expected []string
+		expected []issueWithReplacement
 	}{
 		{
 			desc:  "when no explanation is provided",
@@ -33,11 +39,11 @@ func foo() {
   good() //nolint // this is ok
 	other() //nolintother
 }`,
-			expected: []string{
-				"directive `//nolint` should provide explanation such as `//nolint // this is why` at testing.go:5:1",
-				"directive `//nolint` should provide explanation such as `//nolint // this is why` at testing.go:7:9",
-				"directive `//nolint //` should provide explanation such as `//nolint // this is why` at testing.go:8:9",
-				"directive `//nolint // ` should provide explanation such as `//nolint // this is why` at testing.go:9:9",
+			expected: []issueWithReplacement{
+				{"directive `//nolint` should provide explanation such as `//nolint // this is why` at testing.go:5:1", nil},
+				{"directive `//nolint` should provide explanation such as `//nolint // this is why` at testing.go:7:9", nil},
+				{"directive `//nolint //` should provide explanation such as `//nolint // this is why` at testing.go:8:9", nil},
+				{"directive `//nolint // ` should provide explanation such as `//nolint // this is why` at testing.go:9:9", nil},
 			},
 		},
 		{
@@ -50,8 +56,8 @@ package bar
 //nolint // this is ok
 //nolint:dupl
 func foo() {}`,
-			expected: []string{
-				"directive `//nolint:dupl` should provide explanation such as `//nolint:dupl // this is why` at testing.go:6:1",
+			expected: []issueWithReplacement{
+				{"directive `//nolint:dupl` should provide explanation such as `//nolint:dupl // this is why` at testing.go:6:1", nil},
 			},
 		},
 		{
@@ -76,9 +82,9 @@ func foo() {
   bad() //nolint
   bad() // nolint // because
 }`,
-			expected: []string{
-				"directive `//nolint` should mention specific linter such as `//nolint:my-linter` at testing.go:6:9",
-				"directive `// nolint // because` should mention specific linter such as `// nolint:my-linter` at testing.go:7:9",
+			expected: []issueWithReplacement{
+				{"directive `//nolint` should mention specific linter such as `//nolint:my-linter` at testing.go:6:9", nil},
+				{"directive `// nolint // because` should mention specific linter such as `// nolint:my-linter` at testing.go:7:9", nil},
 			},
 		},
 		{
@@ -91,8 +97,17 @@ func foo() {
   bad() // nolint
   good() //nolint
 }`,
-			expected: []string{
-				"directive `// nolint` should be written without leading space as `//nolint` at testing.go:5:9",
+			expected: []issueWithReplacement{
+				{
+					"directive `// nolint` should be written without leading space as `//nolint` at testing.go:5:9",
+					&result.Replacement{
+						Inline: &result.InlineFix{
+							StartCol:  8,
+							Length:    3,
+							NewString: "//",
+						},
+					},
+				},
 			},
 		},
 		{
@@ -104,8 +119,17 @@ func foo() {
   bad() //  nolint
   good() // nolint
 }`,
-			expected: []string{
-				"directive `//  nolint` should not have more than one leading space at testing.go:5:9",
+			expected: []issueWithReplacement{
+				{
+					"directive `//  nolint` should not have more than one leading space at testing.go:5:9",
+					&result.Replacement{
+						Inline: &result.InlineFix{
+							StartCol:  8,
+							Length:    4,
+							NewString: "//",
+						},
+					},
+				},
 			},
 		},
 		{
@@ -119,8 +143,8 @@ func foo() {
   good() // nolint: linter1,linter2
   good() // nolint: linter1, linter2
 }`,
-			expected: []string{
-				"directive `// nolint:linter1 linter2` should match `// nolint[:<comma-separated-linters>] [// <explanation>]` at testing.go:6:9", //nolint:lll // this is a string
+			expected: []issueWithReplacement{
+				{"directive `// nolint:linter1 linter2` should match `// nolint[:<comma-separated-linters>] [// <explanation>]` at testing.go:6:9", nil}, //nolint:lll // this is a string
 			},
 		},
 		{
@@ -132,6 +156,92 @@ func foo() {
   //nolint:test
   // something else
 }`,
+		},
+		{
+			desc:  "needs unused without specific linter generates replacement",
+			needs: NeedsUnused,
+			contents: `
+package bar
+
+func foo() {
+  bad() //nolint
+}`,
+			expected: []issueWithReplacement{
+				{
+					"directive `//nolint` is unused at testing.go:5:9",
+					&result.Replacement{
+						Inline: &result.InlineFix{
+							StartCol:  8,
+							Length:    8,
+							NewString: "",
+						},
+					},
+				},
+			},
+		},
+		{
+			desc:  "needs unused with one specific linter generates replacement",
+			needs: NeedsUnused,
+			contents: `
+package bar
+
+func foo() {
+  bad() //nolint:somelinter
+}`,
+			expected: []issueWithReplacement{
+				{
+					"directive `//nolint:somelinter` is unused for linter \"somelinter\" at testing.go:5:9",
+					&result.Replacement{
+						Inline: &result.InlineFix{
+							StartCol:  8,
+							Length:    19,
+							NewString: "",
+						},
+					},
+				},
+			},
+		},
+		{
+			desc:  "needs unused with multiple specific linter generates replacement for each linter",
+			needs: NeedsUnused,
+			contents: `
+package bar
+
+func foo() {
+  bad() //nolint:linter1,linter2,linter3
+}`,
+			expected: []issueWithReplacement{
+				{
+					"directive `//nolint:linter1,linter2,linter3` is unused for linter \"linter1\" at testing.go:5:9",
+					&result.Replacement{
+						Inline: &result.InlineFix{
+							StartCol:  17,
+							Length:    22,
+							NewString: "linter2,linter3",
+						},
+					},
+				},
+				{
+					"directive `//nolint:linter1,linter2,linter3` is unused for linter \"linter2\" at testing.go:5:9",
+					&result.Replacement{
+						Inline: &result.InlineFix{
+							StartCol:  17,
+							Length:    22,
+							NewString: "linter1,linter3",
+						},
+					},
+				},
+				{
+					"directive `//nolint:linter1,linter2,linter3` is unused for linter \"linter3\" at testing.go:5:9",
+					&result.Replacement{
+						Inline: &result.InlineFix{
+							StartCol:  17,
+							Length:    22,
+							NewString: "linter1,linter2",
+						},
+					},
+				},
+			},
 		},
 	}
 
@@ -149,12 +259,16 @@ func foo() {
 			actualIssues, err := linter.Run(fset, expr)
 			require.NoError(t, err)
 
-			actualIssueStrs := make([]string, 0, len(actualIssues))
+			actualIssuesWithReplacements := make([]issueWithReplacement, 0, len(actualIssues))
 			for _, i := range actualIssues {
-				actualIssueStrs = append(actualIssueStrs, i.String())
+				actualIssuesWithReplacements = append(actualIssuesWithReplacements, issueWithReplacement{
+					issue:       i.String(),
+					replacement: i.Replacement(),
+				})
 			}
 
-			assert.ElementsMatch(t, test.expected, actualIssueStrs, "expected %s \nbut got %s", test.expected, actualIssues)
+			assert.ElementsMatch(t, test.expected, actualIssuesWithReplacements,
+				"expected %s \nbut got %s", test.expected, actualIssuesWithReplacements)
 		})
 	}
 }

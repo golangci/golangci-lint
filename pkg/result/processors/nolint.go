@@ -21,7 +21,8 @@ type ignoredRange struct {
 	linters                []string
 	matchedIssueFromLinter map[string]bool
 	result.Range
-	col int
+	col           int
+	originalRange *ignoredRange // pre-expanded range (used to match nolintlint issues)
 }
 
 func (i *ignoredRange) doesMatch(issue *result.Issue) bool {
@@ -163,7 +164,11 @@ func (p *Nolint) shouldPassIssue(i *result.Issue) (bool, error) {
 
 	for _, ir := range fd.ignoredRanges {
 		if ir.doesMatch(i) {
+			nolintDebugf("found ignored range for issue %v: %v", i, ir)
 			ir.matchedIssueFromLinter[i.FromLinter] = true
+			if ir.originalRange != nil {
+				ir.originalRange.matchedIssueFromLinter[i.FromLinter] = true
+			}
 			return false, nil
 		}
 	}
@@ -199,9 +204,14 @@ func (e *rangeExpander) Visit(node ast.Node) ast.Visitor {
 	}
 
 	expandedRange := *foundRange
+	// store the original unexpanded range for matching nolintlint issues
+	if expandedRange.originalRange == nil {
+		expandedRange.originalRange = foundRange
+	}
 	if expandedRange.To < nodeEndLine {
 		expandedRange.To = nodeEndLine
 	}
+
 	nolintDebugf("found range is %v for node %#v [%d;%d], expanded range is %v",
 		*foundRange, node, nodeStartLine, nodeEndLine, expandedRange)
 	e.expandedRanges = append(e.expandedRanges, expandedRange)

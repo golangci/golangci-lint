@@ -8,16 +8,21 @@ import (
 	"regexp"
 	"strings"
 	"unicode"
+
+	"github.com/golangci/golangci-lint/pkg/result"
 )
 
 type BaseIssue struct {
 	fullDirective                     string
 	directiveWithOptionalLeadingSpace string
 	position                          token.Position
+	replacement                       *result.Replacement
 }
 
-func (b BaseIssue) Position() token.Position {
-	return b.position
+func (b BaseIssue) Position() token.Position { return b.position }
+
+func (b BaseIssue) Replacement() *result.Replacement {
+	return b.replacement
 }
 
 type ExtraLeadingSpace struct {
@@ -85,7 +90,7 @@ type UnusedCandidate struct {
 func (i UnusedCandidate) Details() string {
 	details := fmt.Sprintf("directive `%s` is unused", i.fullDirective)
 	if i.ExpectedLinter != "" {
-		details += fmt.Sprintf(" for linter %s", i.ExpectedLinter)
+		details += fmt.Sprintf(" for linter %q", i.ExpectedLinter)
 	}
 	return details
 }
@@ -100,6 +105,7 @@ type Issue interface {
 	Details() string
 	Position() token.Position
 	String() string
+	Replacement() *result.Replacement
 }
 
 type Needs uint
@@ -115,7 +121,7 @@ const (
 var commentPattern = regexp.MustCompile(`^//\s*(nolint)(:\s*[\w-]+\s*(?:,\s*[\w-]+\s*)*)?\b`)
 
 // matches a complete nolint directive
-var fullDirectivePattern = regexp.MustCompile(`^//\s*nolint(:\s*[\w-]+\s*(?:,\s*[\w-]+\s*)*)?\s*(//.*)?\s*\n?$`)
+var fullDirectivePattern = regexp.MustCompile(`^//\s*nolint(?::(\s*[\w-]+\s*(?:,\s*[\w-]+\s*)*))?\s*(//.*)?\s*\n?$`)
 
 type Linter struct {
 	excludes        []string // lists individual linters that don't require explanations
@@ -164,19 +170,34 @@ func (l Linter) Run(fset *token.FileSet, nodes ...ast.Node) ([]Issue, error) {
 						directiveWithOptionalLeadingSpace = "// " + strings.TrimSpace(split[1])
 					}
 
+					pos := fset.Position(comment.Pos())
+					end := fset.Position(comment.End())
+
 					base := BaseIssue{
 						fullDirective:                     comment.Text,
 						directiveWithOptionalLeadingSpace: directiveWithOptionalLeadingSpace,
-						position:                          fset.Position(comment.Pos()),
+						position:                          pos,
 					}
 
 					// check for, report and eliminate leading spaces so we can check for other issues
-					if len(leadingSpace) > 1 {
-						issues = append(issues, ExtraLeadingSpace{BaseIssue: base})
-					}
+					if len(leadingSpace) > 0 {
+						machineReadableReplacement := &result.Replacement{
+							Inline: &result.InlineFix{
+								StartCol:  pos.Column - 1,
+								Length:    len(leadingSpace) + 2,
+								NewString: "//",
+							},
+						}
 
-					if (l.needs&NeedsMachineOnly) != 0 && len(leadingSpace) > 0 {
-						issues = append(issues, NotMachine{BaseIssue: base})
+						if (l.needs & NeedsMachineOnly) != 0 {
+							issue := NotMachine{BaseIssue: base}
+							issue.BaseIssue.replacement = machineReadableReplacement
+							issues = append(issues, issue)
+						} else if len(leadingSpace) > 1 {
+							issue := ExtraLeadingSpace{BaseIssue: base}
+							issue.BaseIssue.replacement = machineReadableReplacement
+							issues = append(issues, issue)
+						}
 					}
 
 					fullMatches := fullDirectivePattern.FindStringSubmatch(comment.Text)
@@ -188,7 +209,7 @@ func (l Linter) Run(fset *token.FileSet, nodes ...ast.Node) ([]Issue, error) {
 					lintersText, explanation := fullMatches[1], fullMatches[2]
 					var linters []string
 					if len(lintersText) > 0 {
-						lls := strings.Split(lintersText[1:], ",")
+						lls := strings.Split(lintersText, ",")
 						linters = make([]string, 0, len(lls))
 						for _, ll := range lls {
 							ll = strings.TrimSpace(ll)
@@ -206,11 +227,34 @@ func (l Linter) Run(fset *token.FileSet, nodes ...ast.Node) ([]Issue, error) {
 
 					// when detecting unused directives, we send all the directives through and filter them out in the nolint processor
 					if (l.needs & NeedsUnused) != 0 {
+						removeNolintCompletely := &result.Replacement{
+							Inline: &result.InlineFix{
+								StartCol:  pos.Column - 1,
+								Length:    end.Column - pos.Column,
+								NewString: "",
+							},
+						}
+
 						if len(linters) == 0 {
-							issues = append(issues, UnusedCandidate{BaseIssue: base})
+							issue := UnusedCandidate{BaseIssue: base}
+							issue.replacement = removeNolintCompletely
+							issues = append(issues, issue)
 						} else {
-							for _, linter := range linters {
-								issues = append(issues, UnusedCandidate{BaseIssue: base, ExpectedLinter: linter})
+							for i, linter := range linters {
+								issue := UnusedCandidate{BaseIssue: base, ExpectedLinter: linter}
+								replacement := removeNolintCompletely
+								if len(linters) > 1 {
+									otherLinters := append(append([]string(nil), linters[0:i]...), linters[i+1:]...)
+									replacement = &result.Replacement{
+										Inline: &result.InlineFix{
+											StartCol:  (pos.Column - 1) + len("//") + len(leadingSpace) + len("nolint:"),
+											Length:    len(lintersText) - 1,
+											NewString: strings.Join(otherLinters, ","),
+										},
+									}
+								}
+								issue.replacement = replacement
+								issues = append(issues, issue)
 							}
 						}
 					}
