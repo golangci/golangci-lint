@@ -27,7 +27,7 @@ require (
 	github.com/golangci/unconvert v0.0.0-20180507085042-28b1c447d1f4
 	github.com/jingyugao/rowserrcheck v0.0.0-20191204022205-72ab7603b68a
 	github.com/jirfag/go-printf-func-name v0.0.0-20191110105641-45db9963cdd3
-	github.com/kisielk/errcheck v1.4.1-0.20200802052755-ea6ea2fa7078
+	github.com/kisielk/errcheck v1.5.0-alpha.0.20201210184435-7e1276f76cf6
 	github.com/kyoh86/exportloopref v0.1.7
 	github.com/maratori/testpackage v1.0.1
 	github.com/matoous/godox v0.0.0-20190911065817-5d6d842e92eb // v1.0
@@ -58,7 +58,8 @@ require (
 	github.com/ultraware/whitespace v0.0.4
 	github.com/uudashr/gocognit v1.0.1
 	github.com/valyala/quicktemplate v1.6.2
-	golang.org/x/tools v0.0.0-20200812195022-5ae4c3c160a0
+	golang.org/x/mod v0.4.0 // indirect
+	golang.org/x/tools v0.0.0-20201226215659-b1c90890d22a
 	gopkg.in/yaml.v2 v2.3.0
 	honnef.co/go/tools v0.0.1-2020.1.5
 	mvdan.cc/gofumpt v0.0.0-20200709182408-4fd085cb6d5f
@@ -66,5 +67,3 @@ require (
 	mvdan.cc/lint v0.0.0-20170908181259-adc824a0674b // indirect
 	mvdan.cc/unparam v0.0.0-20190720180237-d51796306d8f
 )
-
-replace github.com/kisielk/errcheck => /Users/sergey.vilgelm@ibm.com/icloud/projects/errcheck
