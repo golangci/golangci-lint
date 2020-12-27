@@ -34,6 +34,7 @@ require (
 	github.com/kunwardeep/paralleltest v1.0.2
 	github.com/kyoh86/exportloopref v0.1.8
 	github.com/kisielk/errcheck v1.4.1-0.20200802052755-ea6ea2fa7078
+	github.com/kisielk/errcheck v1.5.0-alpha.0.20201210184435-7e1276f76cf6
 	github.com/kyoh86/exportloopref v0.1.7
 	github.com/maratori/testpackage v1.0.1
 	github.com/matoous/godox v0.0.0-20190911065817-5d6d842e92eb // v1.0
@@ -78,5 +79,3 @@ require (
 	mvdan.cc/lint v0.0.0-20170908181259-adc824a0674b // indirect
 	mvdan.cc/unparam v0.0.0-20200501210554-b37ab49443f7
 )
-
-replace github.com/kisielk/errcheck => /Users/sergey.vilgelm@ibm.com/icloud/projects/errcheck

@@ -42,7 +42,6 @@ func NewErrcheck() *goanalysis.Linter {
 		if err != nil {
 			panic(err.Error())
 		}
-		checker.Verbose = lintCtx.Cfg.Run.IsVerbose
 		checker.Tags = lintCtx.Cfg.Run.BuildTags
 
 		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
@@ -54,12 +53,12 @@ func NewErrcheck() *goanalysis.Linter {
 			}
 
 			errcheckIssues := checker.CheckPackage(pkg)
-			if len(errcheckIssues) == 0 {
+			if len(errcheckIssues.UncheckedErrors) == 0 {
 				return nil, nil
 			}
 
-			issues := make([]goanalysis.Issue, 0, len(errcheckIssues))
-			for _, i := range errcheckIssues {
+			issues := make([]goanalysis.Issue, 0, len(errcheckIssues.UncheckedErrors))
+			for _, i := range errcheckIssues.UncheckedErrors {
 				var text string
 				if i.FuncName != "" {
 					text = fmt.Sprintf("Error return value of %s is not checked", formatCode(i.FuncName, lintCtx.Cfg))
@@ -112,31 +111,30 @@ func parseIgnoreConfig(s string) (map[string]*regexp.Regexp, error) {
 }
 
 func getChecker(errCfg *config.ErrcheckSettings) (*errcheck.Checker, error) {
-	checker := errcheck.NewChecker()
-	checker.Blank = errCfg.CheckAssignToBlank
-	checker.Asserts = errCfg.CheckTypeAssertions
+	var checker errcheck.Checker
+	checker.Exclusions.BlankAssignments = !errCfg.CheckAssignToBlank
+	checker.Exclusions.TypeAssertions = !errCfg.CheckTypeAssertions
 
 	ignoreConfig, err := parseIgnoreConfig(errCfg.Ignore)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to parse 'ignore' directive")
 	}
 
-	checker.Ignore = map[string]*regexp.Regexp{}
+	checker.Exclusions.SymbolRegexpsByPackage = map[string]*regexp.Regexp{}
 	for pkg, re := range ignoreConfig {
-		checker.Ignore[pkg] = re
+		checker.Exclusions.SymbolRegexpsByPackage[pkg] = re
 	}
-	checker.UpdateNonVendoredIgnore()
 
-	checker.AddExcludes(errcheck.DefaultExcludes)
+	checker.Exclusions.Symbols = append([]string{}, errcheck.DefaultExcludedSymbols...)
 	if errCfg.Exclude != "" {
 		exclude, err := readExcludeFile(errCfg.Exclude)
 		if err != nil {
 			return nil, err
 		}
-		checker.AddExcludes(exclude)
+		checker.Exclusions.Symbols = append(checker.Exclusions.Symbols, exclude...)
 	}
 
-	return checker, nil
+	return &checker, nil
 }
 
 func getFirstPathArg() string {

@@ -12,8 +12,8 @@ func TestErrcheckIgnoreOs() {
 	_, _ = os.Open("f.txt")
 }
 
-func TestErrcheckNoIgnoreFmt(s string) int {
-	n, _ := fmt.Println(s) // ERROR "Error return value is not checked"
+func TestErrcheckIgnoreFmt(s string) int {
+	n, _ := fmt.Println(s)
 	return n
 }
 
@@ -23,6 +23,6 @@ func TestErrcheckIgnoreIoutil() []byte {
 }
 
 func TestErrcheckNoIgnoreIoutil() []byte {
-	ret, _ := ioutil.ReadAll(nil) // ERROR "Error return value is not checked"
+	ret, _ := ioutil.ReadAll(nil) // ERROR "Error return value of `io/ioutil.ReadAll` is not checked"
 	return ret
 }
