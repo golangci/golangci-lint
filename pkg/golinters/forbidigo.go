@@ -12,18 +12,17 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-const forbidigoName = "forbidigo"
-
 func NewForbidigo() *goanalysis.Linter {
+	const linterName = "forbidigo"
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
 
 	analyzer := &analysis.Analyzer{
-		Name: forbidigoName,
+		Name: linterName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 	}
 	return goanalysis.NewLinter(
-		forbidigoName,
+		linterName,
 		"Forbids identifiers",
 		[]*analysis.Analyzer{analyzer},
 		nil,
@@ -34,7 +33,7 @@ func NewForbidigo() *goanalysis.Linter {
 			var res []goanalysis.Issue
 			forbid, err := forbidigo.NewLinter(s.Forbid)
 			if err != nil {
-				return nil, errors.Wrapf(err, "failed to create linter %q", forbidigoName)
+				return nil, errors.Wrapf(err, "failed to create linter %q", linterName)
 			}
 
 			for _, file := range pass.Files {
@@ -46,7 +45,7 @@ func NewForbidigo() *goanalysis.Linter {
 					res = append(res, goanalysis.NewIssue(&result.Issue{
 						Pos:        hint.Position(),
 						Text:       hint.Details(),
-						FromLinter: makezeroName,
+						FromLinter: linterName,
 					}, pass))
 				}
 			}
