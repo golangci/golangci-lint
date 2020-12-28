@@ -342,6 +342,9 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		linter.NewConfig(golinters.NewForbidigo()).
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/ashanbrown/forbidigo"),
+		linter.NewConfig(golinters.NewIfshort()).
+			WithPresets(linter.PresetStyle).
+			WithURL("https://github.com/esimonov/ifshort"),
 
 		// nolintlint must be last because it looks at the results of all the previous linters for unused nolint directives
 		linter.NewConfig(golinters.NewNoLintLint()).

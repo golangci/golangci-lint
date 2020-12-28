@@ -270,6 +270,7 @@ type LintersSettings struct {
 	Makezero    MakezeroSettings
 	Thelper     ThelperSettings
 	Forbidigo   ForbidigoSettings
+	Ifshort     IfshortSettings
 
 	Custom map[string]CustomLinterSettings
 }
@@ -405,6 +406,11 @@ type ThelperSettings struct {
 		Name  bool `mapstructure:"name"`
 		Begin bool `mapstructure:"begin"`
 	} `mapstructure:"benchmark"`
+}
+
+type IfshortSettings struct {
+	MaxDeclLines int `mapstructure:"max-decl-lines"`
+	MaxDeclChars int `mapstructure:"max-decl-chars"`
 }
 
 type ForbidigoSettings struct {
