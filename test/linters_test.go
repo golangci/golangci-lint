@@ -252,12 +252,12 @@ func extractRunContextFromComments(t *testing.T, sourcePath string) *runContext 
 		assert.Fail(t, "invalid prefix of comment line %s", line)
 	}
 
-	// guess the expected linter if none is specified 
+	// guess the expected linter if none is specified
 	if rc.expectedLinter == "" {
 		for _, arg := range rc.args {
-			if strings.HasPrefix(arg, "-E") && !strings.Contains(arg, ","){
+			if strings.HasPrefix(arg, "-E") && !strings.Contains(arg, ",") {
 				if rc.expectedLinter != "" {
-					assert.Fail(t, "could not infer expected linter for errors because multiple linters are enabled. Please use the `expected_linter: ` directive in your test to indicate the linter-under-test.")
+					assert.Fail(t, "could not infer expected linter for errors because multiple linters are enabled. Please use the `expected_linter: ` directive in your test to indicate the linter-under-test.") //nolint:lll
 					break
 				}
 				rc.expectedLinter = arg[2:]
