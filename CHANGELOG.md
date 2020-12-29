@@ -30,6 +30,8 @@ There is the most valuable changes log:
    * bump `ini` from 1.3.5 to 1.3.8 in /tools (#1560)
    * bump `react-headroom` from 3.0.0 to 3.0.1 in /docs (#1532)
    * bump `react-live` from 2.2.2 to 2.2.3 in /docs (#1534)
+   * bump `react` from 16.13.1 to 16.14.0 in /docs (#1481)
+   * Fix `forbidigo` linter name in reports (#1590)
 
 ### November 2020
 
@@ -130,7 +132,7 @@ There is the most valuable changes log:
    * bump `gatsby-transformer-yaml` from 2.4.10 to 2.4.11 in /docs (#1367)
    * bump `node-fetch` in /.github/contributors (#1363)
    * bump `polished` from 3.6.5 to 3.6.6 in /docs (#1347)
-   
+
 ### August 2020
 
 1. new `nlreturn` linter: https://github.com/ssgreg/nlreturn
