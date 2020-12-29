@@ -77,3 +77,6 @@ require (
 	mvdan.cc/lint v0.0.0-20170908181259-adc824a0674b // indirect
 	mvdan.cc/unparam v0.0.0-20200501210554-b37ab49443f7
 )
+
+// Pinned to below version as mentioned in https://github.com/golangci/golangci-lint/issues/1502
+replace golang.org/x/tools => golang.org/x/tools v0.0.0-20201022035929-9cf592e881e9
