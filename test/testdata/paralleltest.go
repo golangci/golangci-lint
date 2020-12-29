@@ -21,4 +21,5 @@ func TestFunctionSuccessfulRangeTest(t *testing.T) {
 	}
 }
 
-func TestFunctionMissingCallToParallel(t *testing.T) {} // ERROR "Function TestFunctionMissingCallToParallel missing the call to method parallel"
+// ERROR "Function TestFunctionMissingCallToParallel missing the call to method parallel"
+func TestFunctionMissingCallToParallel(t *testing.T) {}

@@ -3,7 +3,7 @@
 //config: linters-settings.funlen.statements=10
 package testdata
 
-func TooManyLines() { // ERROR "Function 'TooManyLines' is too long \(22 > 20\)"
+func TooManyLines() { // ERROR `Function 'TooManyLines' is too long \(22 > 20\)`
 	t := struct {
 		A string
 		B string
@@ -28,7 +28,7 @@ func TooManyLines() { // ERROR "Function 'TooManyLines' is too long \(22 > 20\)"
 	_ = t
 }
 
-func TooManyStatements() { // ERROR "Function 'TooManyStatements' has too many statements \(11 > 10\)"
+func TooManyStatements() { // ERROR `Function 'TooManyStatements' has too many statements \(11 > 10\)`
 	a := 1
 	b := a
 	c := b

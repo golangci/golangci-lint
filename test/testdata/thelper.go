@@ -8,11 +8,11 @@ func thelperWithHelperAfterAssignment(t *testing.T) { // ERROR "test helper func
 	t.Helper()
 }
 
-func thelperWithNotFirst(s string, t *testing.T, i int) { // ERROR "parameter \*testing.T should be the first"
+func thelperWithNotFirst(s string, t *testing.T, i int) { // ERROR `parameter \*testing.T should be the first`
 	t.Helper()
 }
 
-func thelperWithIncorrectName(o *testing.T) { // ERROR "parameter \*testing.T should have name t"
+func thelperWithIncorrectName(o *testing.T) { // ERROR `parameter \*testing.T should have name t`
 	o.Helper()
 }
 
@@ -21,11 +21,11 @@ func bhelperWithHelperAfterAssignment(b *testing.B) { // ERROR "test helper func
 	b.Helper()
 }
 
-func bhelperWithNotFirst(s string, b *testing.B, i int) { // ERROR "parameter \*testing.B should be the first"
+func bhelperWithNotFirst(s string, b *testing.B, i int) { // ERROR `parameter \*testing.B should be the first`
 	b.Helper()
 }
 
-func bhelperWithIncorrectName(o *testing.B) { // ERROR "parameter \*testing.B should have name b"
+func bhelperWithIncorrectName(o *testing.B) { // ERROR `parameter \*testing.B should have name b`
 	o.Helper()
 }
 
