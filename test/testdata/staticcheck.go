@@ -23,7 +23,7 @@ func StaticcheckNolintMegacheck() {
 }
 
 func StaticcheckDeprecated() {
-	_ = runtime.CPUProfile() // ERROR "SA1019: runtime.CPUProfile is deprecated"
+	_ = runtime.CPUProfile() // ERROR "SA1019: runtime.CPUProfile has been deprecated .*"
 }
 
 func StaticcheckPrintf() {
