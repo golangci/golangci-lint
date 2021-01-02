@@ -152,10 +152,10 @@ linters-settings:
     # Settings passed to gocritic.
     # The settings key is the name of a supported gocritic checker.
     # The list of supported checkers can be find in https://go-critic.github.io/overview.
-    settings: 
+    settings:
       captLocal: # must be valid enabled check name
         # whether to restrict checker to params only (default true)
-        paramsOnly: true 
+        paramsOnly: true
       elseif:
         # whether to skip balanced if-else pairs (default true)
         skipBalanced: true
@@ -219,13 +219,13 @@ linters-settings:
       #
       # {{ AUTHOR }} {{ COMPANY }} {{ YEAR }}
       # SPDX-License-Identifier: Apache-2.0
-  
+
       # Licensed under the Apache License, Version 2.0 (the "License");
       # you may not use this file except in compliance with the License.
       # You may obtain a copy of the License at:
-  
+
       #   http://www.apache.org/licenses/LICENSE-2.0
-  
+
       # Unless required by applicable law or agreed to in writing, software
       # distributed under the License is distributed on an "AS IS" BASIS,
       # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -321,6 +321,11 @@ linters-settings:
     simple: true
     range-loops: true # Report preallocation suggestions on range loops, true by default
     for-loops: false # Report preallocation suggestions on for loops, false by default
+  predeclared:
+    # comma-separated list of predeclared identifiers to not report on
+    ignore: ""
+    # include method names and field names (i.e., qualified names) in checks
+    q: false
   nolintlint:
     # Enable to ensure that nolint directives are all used. Default is true.
     allow-unused: false
