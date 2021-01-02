@@ -1,9 +1,8 @@
 //args: -Epredeclared
-//config_path: testdata/configs/predeclared.yml
 package testdata
 
 func hello() {
-	var real int
+	var real int // ERROR "variable real has same name as predeclared identifier"
 	a := A{}
 	copy := Clone(a) // ERROR "variable copy has same name as predeclared identifier"
 
@@ -14,7 +13,7 @@ func hello() {
 }
 
 type A struct {
-	true bool // ERROR "field true has same name as predeclared identifier"
+	true bool
 	foo  int
 }
 
@@ -25,4 +24,4 @@ func Clone(a A) A {
 	}
 }
 
-func recover() {}
+func recover() {} // ERROR "function recover has same name as predeclared identifier"

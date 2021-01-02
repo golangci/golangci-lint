@@ -43,7 +43,7 @@ require (
 	github.com/moricho/tparallel v0.2.1
 	github.com/nakabonne/nestif v0.3.0
 	github.com/nishanths/exhaustive v0.1.0
-	github.com/nishanths/predeclared v0.1.0
+	github.com/nishanths/predeclared v0.2.1
 	github.com/pkg/errors v0.9.1
 	github.com/polyfloyd/go-errorlint v0.0.0-20201127212506-19bd8db6546f
 	github.com/ryancurrah/gomodguard v1.2.0
