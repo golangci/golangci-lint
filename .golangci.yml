@@ -94,7 +94,6 @@ linters:
     - nakedret
     - noctx
     - nolintlint
-    - predeclared
     - rowserrcheck
     - scopelint
     - staticcheck
