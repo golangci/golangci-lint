@@ -1,0 +1,4 @@
+linters-settings:
+  forbidigo:
+    forbid:
+      - fmt\.Print.*

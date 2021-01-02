@@ -75,6 +75,9 @@ output:
   # add a prefix to the output file references; default is no prefix
   path-prefix: ""
 
+  # sorts results by: filepath, line and column
+  sort-results: false
+
 
 # all available settings of specific linters
 linters-settings:
@@ -102,6 +105,8 @@ linters-settings:
     # see https://github.com/kisielk/errcheck#excluding-functions for details
     exclude: /path/to/file.txt
   exhaustive:
+    # check switch statements in generated files also
+    check-generated: false
     # indicates that switch statements are to be considered exhaustive if a
     # 'default' case is present, even if all enum members aren't listed in the
     # switch
@@ -144,17 +149,52 @@ linters-settings:
     disabled-tags:
       - experimental
 
-    settings: # settings passed to gocritic
+    # Settings passed to gocritic.
+    # The settings key is the name of a supported gocritic checker.
+    # The list of supported checkers can be find in https://go-critic.github.io/overview.
+    settings: 
       captLocal: # must be valid enabled check name
-        paramsOnly: true
+        # whether to restrict checker to params only (default true)
+        paramsOnly: true 
+      elseif:
+        # whether to skip balanced if-else pairs (default true)
+        skipBalanced: true
+      hugeParam:
+        # size in bytes that makes the warning trigger (default 80)
+        sizeThreshold: 80
+      nestingReduce:
+        # min number of statements inside a branch to trigger a warning (default 5)
+        bodyWidth: 5
+      rangeExprCopy:
+        # size in bytes that makes the warning trigger (default 512)
+        sizeThreshold: 512
+        # whether to check test functions (default true)
+        skipTestFuncs: true
       rangeValCopy:
+        # size in bytes that makes the warning trigger (default 128)
         sizeThreshold: 32
+        # whether to check test functions (default true)
+        skipTestFuncs: true
+      ruleguard:
+        # path to a gorules file for the ruleguard checker
+        rules: ''
+      truncateCmp:
+        # whether to skip int/uint/uintptr types (default true)
+        skipArchDependent: true
+      underef:
+        # whether to skip (*x).method() calls where x is a pointer receiver (default true)
+        skipRecvDeref: true
+    	unnamedResult:
+        # whether to check exported functions
+        checkExported: true
   gocyclo:
     # minimal code complexity to report, 30 by default (but we recommend 10-20)
     min-complexity: 10
   godot:
-    # check all top-level comments, not only declarations
-    check-all: false
+    # comments to be checked: `declarations`, `toplevel`, or `all`
+    scope: declarations
+    # check that each sentence starts with a capital letter
+    capital: false
   godox:
     # report any comments starting with keywords, this is useful for TODO or FIXME comments that
     # might be left in the code accidentally and should be resolved before merging
@@ -169,27 +209,28 @@ linters-settings:
     values:
       const:
         # define here const type values in format k:v, for example:
-        # YEAR: 2020
         # COMPANY: MY COMPANY
       regexp:
         # define here regexp type values, for example
         # AUTHOR: .*@mycompany\.com
-    template:
+    template: # |
       # put here copyright header template for source code files, for example:
-      #    {{ AUTHOR }} {{ COMPANY }} {{ YEAR }}
-      #    SPDX-License-Identifier: Apache-2.0
+      # Note: {{ YEAR }} is a builtin value that returns the year relative to the current machine time.
       #
-      #    Licensed under the Apache License, Version 2.0 (the "License");
-      #    you may not use this file except in compliance with the License.
-      #    You may obtain a copy of the License at:
-      #
-      #      http://www.apache.org/licenses/LICENSE-2.0
-      #
-      #    Unless required by applicable law or agreed to in writing, software
-      #    distributed under the License is distributed on an "AS IS" BASIS,
-      #    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-      #    See the License for the specific language governing permissions and
-      #    limitations under the License.
+      # {{ AUTHOR }} {{ COMPANY }} {{ YEAR }}
+      # SPDX-License-Identifier: Apache-2.0
+  
+      # Licensed under the Apache License, Version 2.0 (the "License");
+      # you may not use this file except in compliance with the License.
+      # You may obtain a copy of the License at:
+  
+      #   http://www.apache.org/licenses/LICENSE-2.0
+  
+      # Unless required by applicable law or agreed to in writing, software
+      # distributed under the License is distributed on an "AS IS" BASIS,
+      # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+      # See the License for the specific language governing permissions and
+      # limitations under the License.
     template-path:
       # also as alternative of directive 'template' you may put the path to file with the template source
   goimports:
@@ -204,6 +245,9 @@ linters-settings:
       mnd:
         # the list of enabled checks, see https://github.com/tommy-muehle/go-mnd/#checks for description.
         checks: argument,case,condition,operation,return,assign
+        # ignored-numbers: 1000
+        # ignored-files: magic_.*.go
+        # ignored-functions: math.*
   gomodguard:
     allowed:
       modules:                                                        # List of allowed modules
@@ -220,6 +264,7 @@ linters-settings:
         # - github.com/mitchellh/go-homedir:                          # Blocked module with version constraint
         #     version: "< 1.1.0"                                      # Version constraint, see https://github.com/Masterminds/semver#basic-comparisons
         #     reason: "testing if blocked version constraint works."  # Reason why the version constraint exists. (Optional)
+      local_replace_directives: false                                 # Set to true to raise lint issues for packages that are loaded from a local path via replace directive
   govet:
     # report about shadowed variables
     check-shadowing: true
@@ -293,6 +338,17 @@ linters-settings:
   testpackage:
     # regexp pattern to skip files
     skip-regexp: (export|internal)_test\.go
+  thelper:
+    # The following configurations enable all checks. It can be omitted because all checks are enabled by default.
+    # You can enable only required checks deleting unnecessary checks.
+    test:
+      first: true
+      name: true
+      begin: true
+    benchmark:
+      first: true
+      name: true
+      begin: true
   unparam:
     # Inspect exported functions, default is false. Set to true if no external program/library imports your code.
     # XXX: if you enable this setting, unparam will report a lot of false-positives in text editors:
@@ -331,6 +387,18 @@ linters-settings:
     # Choose whether or not to use the extra rules that are disabled
     # by default
     extra-rules: false
+  errorlint:
+    # Report non-wrapping error creation using fmt.Errorf
+    errorf: true
+  makezero:
+    # Allow only slices initialized with a length of zero. Default is false.
+    always: false
+  forbidigo:
+    # Forbid the following identifiers
+    forbid:
+      - fmt.Errorf # consider errors.Errorf in github.com/pkg/errors
+      - fmt.Print.* # too much log noise
+      - ginkgo\\.F.* # these are used just for local development
 
   # The custom section can be used to define linter plugins to be loaded at runtime. See README doc
   #  for more info.
@@ -429,22 +497,22 @@ issues:
 
 severity:
   # Default value is empty string.
-  # Set the default severity for issues. If severity rules are defined and the issues 
-  # do not match or no severity is provided to the rule this will be the default 
-  # severity applied. Severities should match the supported severity names of the 
+  # Set the default severity for issues. If severity rules are defined and the issues
+  # do not match or no severity is provided to the rule this will be the default
+  # severity applied. Severities should match the supported severity names of the
   # selected out format.
   # - Code climate: https://docs.codeclimate.com/docs/issues#issue-severity
   # -   Checkstyle: https://checkstyle.sourceforge.io/property_types.html#severity
   # -       Github: https://help.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-error-message
   default-severity: error
 
-  # The default value is false. 
+  # The default value is false.
   # If set to true severity-rules regular expressions become case sensitive.
   case-sensitive: false
 
   # Default value is empty list.
   # When a list of severity rules are provided, severity information will be added to lint
-  # issues. Severity rules have the same filtering capability as exclude rules except you 
+  # issues. Severity rules have the same filtering capability as exclude rules except you
   # are allowed to specify one matcher per severity rule.
   # Only affects out formats that support setting severity information.
   rules:

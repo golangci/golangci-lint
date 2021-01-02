@@ -63,22 +63,6 @@ changelog:
     - Merge pull request
     - Merge branch
 
-dockers:
-  - dockerfile: build/Dockerfile
-    binaries:
-      - golangci-lint
-    image_templates:
-      - "golangci/golangci-lint:latest"
-      - "golangci/golangci-lint:{{ .Tag }}"
-      - "golangci/golangci-lint:v{{ .Major }}.{{ .Minor }}"
-  - dockerfile: build/Dockerfile.alpine
-    binaries:
-      - golangci-lint
-    image_templates:
-      - "golangci/golangci-lint:latest-alpine"
-      - "golangci/golangci-lint:{{ .Tag }}-alpine"
-      - "golangci/golangci-lint:v{{ .Major }}.{{ .Minor }}-alpine"
-
 brews:
   - tap:
       owner: golangci
@@ -104,6 +88,7 @@ nfpms:
     package_name: golangci-lint
     file_name_template: "{{ .ProjectName }}-{{ .Version }}-{{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
     homepage: https://golangci-lint.run/
+    maintainer: "golangci-lint Team <golangci-releaser@users.noreply.github.com>"
     description: Fast linters Runner for Go
     license: GPLv3
     formats:

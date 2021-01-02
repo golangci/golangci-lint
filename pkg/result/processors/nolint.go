@@ -250,24 +250,20 @@ func (p *Nolint) extractInlineRangeFromComment(text string, g ast.Node, fset *to
 	var linters []string
 	text = strings.Split(text, "//")[0] // allow another comment after this comment
 	linterItems := strings.Split(strings.TrimPrefix(text, "nolint:"), ",")
-	var gotUnknownLinters bool
 	for _, linter := range linterItems {
 		linterName := strings.ToLower(strings.TrimSpace(linter))
 
 		lcs := p.dbManager.GetLinterConfigs(linterName)
 		if lcs == nil {
 			p.unknownLintersSet[linterName] = true
-			gotUnknownLinters = true
+			linters = append(linters, linterName)
+			nolintDebugf("unknown linter %s on line %d", linterName, fset.Position(g.Pos()).Line)
 			continue
 		}
 
 		for _, lc := range lcs {
 			linters = append(linters, lc.Name()) // normalize name to work with aliases
 		}
-	}
-
-	if gotUnknownLinters {
-		return buildRange(nil) // ignore all linters to not annoy user
 	}
 
 	nolintDebugf("%d: linters are %s", fset.Position(g.Pos()).Line, linters)

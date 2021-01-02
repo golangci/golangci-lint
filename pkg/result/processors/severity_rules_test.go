@@ -132,6 +132,37 @@ func TestSeverityRulesText(t *testing.T) {
 	assert.Equal(t, texts, processedTexts)
 }
 
+func TestSeverityRulesOnlyDefault(t *testing.T) {
+	lineCache := fsutils.NewLineCache(fsutils.NewFileCache())
+	log := report.NewLogWrapper(logutils.NewStderrLog(""), &report.Data{})
+	p := NewSeverityRules("info", []SeverityRule{}, lineCache, log)
+
+	cases := []issueTestCase{
+		{Path: "ssl.go", Text: "ssl", Linter: "gosec"},
+		{Path: "empty.go", Text: "empty", Linter: "empty"},
+	}
+	var issues []result.Issue
+	for _, c := range cases {
+		issues = append(issues, newIssueFromIssueTestCase(c))
+	}
+	processedIssues := process(t, p, issues...)
+	var resultingCases []issueTestCase
+	for _, i := range processedIssues {
+		resultingCases = append(resultingCases, issueTestCase{
+			Path:     i.FilePath(),
+			Linter:   i.FromLinter,
+			Text:     i.Text,
+			Line:     i.Line(),
+			Severity: i.Severity,
+		})
+	}
+	expectedCases := []issueTestCase{
+		{Path: "ssl.go", Text: "ssl", Linter: "gosec", Severity: "info"},
+		{Path: "empty.go", Text: "empty", Linter: "empty", Severity: "info"},
+	}
+	assert.Equal(t, expectedCases, resultingCases)
+}
+
 func TestSeverityRulesEmpty(t *testing.T) {
 	processAssertSame(t, NewSeverityRules("", nil, nil, nil), newIssueFromTextTestCase("test"))
 }

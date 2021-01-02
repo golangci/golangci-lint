@@ -47,9 +47,6 @@ func getDefaultDirectoryExcludeHelp() string {
 	return strings.Join(parts, "\n")
 }
 
-const welcomeMessage = "Run this tool in cloud on every github pull " +
-	"request in https://golangci.com for free (public repos)"
-
 func wh(text string) string {
 	return color.GreenString(text)
 }
@@ -158,12 +155,27 @@ func initFlagSet(fs *pflag.FlagSet, cfg *config.Config, m *lintersdb.Manager, is
 		150, "Dupl: Minimal threshold to detect copy-paste")
 	hideFlag("dupl.threshold")
 
+	fs.BoolVar(&lsc.Goconst.MatchWithConstants, "goconst.match-constant",
+		true, "Goconst: look for existing constants matching the values")
+	hideFlag("goconst.match-constant")
 	fs.IntVar(&lsc.Goconst.MinStringLen, "goconst.min-len",
 		3, "Goconst: minimum constant string length")
 	hideFlag("goconst.min-len")
 	fs.IntVar(&lsc.Goconst.MinOccurrencesCount, "goconst.min-occurrences",
 		3, "Goconst: minimum occurrences of constant string count to trigger issue")
 	hideFlag("goconst.min-occurrences")
+	fs.BoolVar(&lsc.Goconst.ParseNumbers, "goconst.numbers",
+		false, "Goconst: search also for duplicated numbers")
+	hideFlag("goconst.numbers")
+	fs.IntVar(&lsc.Goconst.NumberMin, "goconst.min",
+		3, "minimum value, only works with goconst.numbers")
+	hideFlag("goconst.min")
+	fs.IntVar(&lsc.Goconst.NumberMax, "goconst.max",
+		3, "maximum value, only works with goconst.numbers")
+	hideFlag("goconst.max")
+	fs.BoolVar(&lsc.Goconst.IgnoreCalls, "goconst.ignore-calls",
+		true, "Goconst: ignore when constant is not used as function argument")
+	hideFlag("goconst.ignore-calls")
 
 	// (@dixonwille) These flag is only used for testing purposes.
 	fs.StringSliceVar(&lsc.Depguard.Packages, "depguard.packages", nil,
@@ -259,7 +271,7 @@ func (e *Executor) getConfigForCommandLine() (*config.Config, error) {
 func (e *Executor) initRun() {
 	e.runCmd = &cobra.Command{
 		Use:   "run",
-		Short: welcomeMessage,
+		Short: "Run the linters",
 		Run:   e.executeRun,
 		PreRun: func(_ *cobra.Command, _ []string) {
 			if ok := e.acquireFileLock(); !ok {
@@ -272,7 +284,8 @@ func (e *Executor) initRun() {
 	}
 	e.rootCmd.AddCommand(e.runCmd)
 
-	e.runCmd.SetOutput(logutils.StdOut) // use custom output to properly color it in Windows terminals
+	e.runCmd.SetOut(logutils.StdOut) // use custom output to properly color it in Windows terminals
+	e.runCmd.SetErr(logutils.StdErr)
 
 	e.initRunConfiguration(e.runCmd)
 }

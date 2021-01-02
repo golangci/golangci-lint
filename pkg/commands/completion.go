@@ -35,6 +35,13 @@ func (e *Executor) initCompletion() {
 		RunE:  e.executeFishCompletion,
 	}
 	completionCmd.AddCommand(fishCmd)
+
+	powerShell := &cobra.Command{
+		Use:   "powershell",
+		Short: "Output powershell completion script",
+		RunE:  e.executePowerShellCompletion,
+	}
+	completionCmd.AddCommand(powerShell)
 }
 
 func (e *Executor) executeBashCompletion(cmd *cobra.Command, args []string) error {
@@ -63,6 +70,15 @@ func (e *Executor) executeFishCompletion(cmd *cobra.Command, args []string) erro
 	err := cmd.Root().GenFishCompletion(os.Stdout, true)
 	if err != nil {
 		return errors.Wrap(err, "generate fish completion")
+	}
+
+	return nil
+}
+
+func (e *Executor) executePowerShellCompletion(cmd *cobra.Command, args []string) error {
+	err := cmd.Root().GenPowerShellCompletion(os.Stdout)
+	if err != nil {
+		return errors.Wrap(err, "generate powershell completion")
 	}
 
 	return nil

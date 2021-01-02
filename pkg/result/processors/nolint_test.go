@@ -149,6 +149,28 @@ func TestNolintInvalidLinterName(t *testing.T) {
 	p.Finish()
 }
 
+func TestNolintInvalidLinterNameWithViolationOnTheSameLine(t *testing.T) {
+	log := getMockLog()
+	log.On("Warnf", "Found unknown linters in //nolint directives: %s", "foobar")
+	issues := []result.Issue{
+		{
+			Pos: token.Position{
+				Filename: filepath.Join("testdata", "nolint_apply_to_unknown.go"),
+				Line:     4,
+			},
+			FromLinter: "gofmt",
+		},
+	}
+
+	p := newTestNolintProcessor(log)
+	processedIssues, err := p.Process(issues)
+	p.Finish()
+
+	assert.Len(t, processedIssues, 1)
+	assert.Equal(t, issues, processedIssues)
+	assert.NoError(t, err)
+}
+
 func TestNolintAliases(t *testing.T) {
 	p := newTestNolintProcessor(getMockLog())
 	for _, line := range []int{47, 49, 51} {
