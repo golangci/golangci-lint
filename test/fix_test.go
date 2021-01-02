@@ -31,7 +31,7 @@ func TestFix(t *testing.T) {
 			os.RemoveAll(tmpDir)
 		})
 	} else {
-		os.RemoveAll(tmpDir)
+		defer os.RemoveAll(tmpDir)
 	}
 
 	fixDir := filepath.Join(testdataDir, "fix")
