@@ -29,7 +29,7 @@
     "gatsby-plugin-sitemap": "^2.9.0",
     "gatsby-remark-autolink-headers": "^2.8.0",
     "gatsby-remark-copy-linked-files": "^2.3.12",
-    "gatsby-remark-embedder": "^4.0.0",
+    "gatsby-remark-embedder": "^4.1.0",
     "gatsby-remark-external-links": "0.0.4",
     "gatsby-remark-images": "^3.8.1",
     "gatsby-remark-mermaid": "^2.1.0",
