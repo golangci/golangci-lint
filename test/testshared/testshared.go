@@ -5,6 +5,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"sync"
 	"syscall"
@@ -15,6 +16,14 @@ import (
 	"github.com/golangci/golangci-lint/pkg/exitcodes"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 )
+
+func binaryName() string {
+	name := "golangci-lint"
+	if runtime.GOOS == "windows" {
+		name += ".exe"
+	}
+	return name
+}
 
 type LintRunner struct {
 	t           assert.TestingT
@@ -95,7 +104,7 @@ func (r *LintRunner) Run(args ...string) *RunResult {
 func (r *LintRunner) RunCommand(command string, args ...string) *RunResult {
 	r.Install()
 
-	binPath := filepath.Join("..", "golangci-lint")
+	binPath := filepath.Join("..", binaryName())
 	runArgs := append([]string{command}, args...)
 	defer func(startedAt time.Time) {
 		r.log.Infof("ran [%s %s] in %s", binPath, strings.Join(runArgs, " "), time.Since(startedAt))

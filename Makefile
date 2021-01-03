@@ -4,17 +4,22 @@
 # enable consistent Go 1.12/1.13 GOPROXY behavior.
 export GOPROXY = https://proxy.golang.org
 
+BINARY = golangci-lint
+ifeq ($(OS),Windows_NT)
+	BINARY := $(BINARY).exe
+endif
+
 # Build
 
 build: golangci-lint
 .PHONY: build
 
 build_race:
-	go build -race -o golangci-lint ./cmd/golangci-lint
+	go build -race -o $(BINARY) ./cmd/golangci-lint
 .PHONY: build_race
 
 clean:
-	rm -f golangci-lint
+	rm -f $(BINARY)
 	rm -f test/path
 	rm -f tools/Dracula.itermcolors
 	rm -f tools/godownloader
@@ -26,12 +31,12 @@ clean:
 # Test
 test: export GOLANGCI_LINT_INSTALLED = true
 test: build
-	GL_TEST_RUN=1 ./golangci-lint run -v
+	GL_TEST_RUN=1 ./$(BINARY) run -v
 	GL_TEST_RUN=1 go test -v -parallel 2 ./...
 .PHONY: test
 
 test_race: build_race
-	GL_TEST_RUN=1 ./golangci-lint run -v --timeout=5m
+	GL_TEST_RUN=1 ./$(BINARY) run -v --timeout=5m
 .PHONY: test_race
 
 test_linters:
@@ -70,7 +75,7 @@ snapshot: .goreleaser.yml tools/goreleaser
 # Non-PHONY targets (real files)
 
 golangci-lint: FORCE
-	go build -o $@ ./cmd/golangci-lint
+	go build -o $(BINARY) ./cmd/golangci-lint
 
 tools/godownloader: export GOFLAGS = -mod=readonly
 tools/godownloader: tools/go.mod tools/go.sum
