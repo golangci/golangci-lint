@@ -17,8 +17,8 @@ import (
 	"github.com/golangci/golangci-lint/pkg/logutils"
 )
 
-func binaryName() string {
-	name := "golangci-lint"
+func BinaryName() string {
+	name := filepath.Join("..", "golangci-lint")
 	if runtime.GOOS == "windows" {
 		name += ".exe"
 	}
@@ -104,13 +104,12 @@ func (r *LintRunner) Run(args ...string) *RunResult {
 func (r *LintRunner) RunCommand(command string, args ...string) *RunResult {
 	r.Install()
 
-	binPath := filepath.Join("..", binaryName())
 	runArgs := append([]string{command}, args...)
 	defer func(startedAt time.Time) {
-		r.log.Infof("ran [%s %s] in %s", binPath, strings.Join(runArgs, " "), time.Since(startedAt))
+		r.log.Infof("ran [%s %s] in %s", BinaryName(), strings.Join(runArgs, " "), time.Since(startedAt))
 	}(time.Now())
 
-	cmd := exec.Command(binPath, runArgs...)
+	cmd := exec.Command(BinaryName(), runArgs...)
 	cmd.Env = append(os.Environ(), r.env...)
 	out, err := cmd.CombinedOutput()
 	if err != nil {

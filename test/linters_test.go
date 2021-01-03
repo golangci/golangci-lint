@@ -154,7 +154,7 @@ func testOneSource(t *testing.T, sourcePath string) {
 
 		caseArgs = append(caseArgs, sourcePath)
 
-		cmd := exec.Command(binName, caseArgs...)
+		cmd := exec.Command(testshared.BinaryName(), caseArgs...)
 		t.Log(caseArgs)
 		runGoErrchk(cmd, []string{sourcePath}, t)
 	}
