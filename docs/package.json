@@ -43,7 +43,7 @@
     "prop-types": "^15.7.2",
     "puppeteer": "^5.5.0",
     "react": "^16.14.0",
-    "react-dom": "^16.12.0",
+    "react-dom": "^16.14.0",
     "react-headroom": "^3.0.1",
     "react-helmet": "^6.1.0",
     "react-icons": "^3.11.0",
