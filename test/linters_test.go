@@ -102,16 +102,17 @@ func TestGciLocal(t *testing.T) {
 func saveConfig(t *testing.T, cfg map[string]interface{}) (cfgPath string, finishFunc func()) {
 	f, err := ioutil.TempFile("", "golangci_lint_test")
 	assert.NoError(t, err)
+	name := f.Name()
+	assert.NoError(t, f.Close())
 
-	cfgPath = f.Name() + ".yml"
-	err = os.Rename(f.Name(), cfgPath)
+	cfgPath = name + ".yml"
+	err = os.Rename(name, cfgPath)
 	assert.NoError(t, err)
 
 	err = yaml.NewEncoder(f).Encode(cfg)
 	assert.NoError(t, err)
 
 	return cfgPath, func() {
-		assert.NoError(t, f.Close())
 		if os.Getenv("GL_KEEP_TEMP_FILES") != "1" {
 			assert.NoError(t, os.Remove(cfgPath))
 		}
