@@ -44,7 +44,7 @@
     "puppeteer": "^5.5.0",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
-    "react-headroom": "^3.0.1",
+    "react-headroom": "^3.1.0",
     "react-helmet": "^6.1.0",
     "react-icons": "^4.1.0",
     "react-live": "^2.2.3",
