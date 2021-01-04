@@ -32,7 +32,7 @@ jobs:
       - name: lint
         uses: golangci/golangci-lint-action@v2.3.0
         with:
-          version: v1.34.0
+          version: latest
   tests-on-windows:
     needs: golangci-lint # run after golangci-lint action to not produce duplicated errors
     runs-on: windows-latest
