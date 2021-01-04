@@ -242,13 +242,7 @@ func (s *GocriticSettings) Validate(log logutils.Log) error {
 		return errors.Wrap(err, "validate disabled checks")
 	}
 
-	for checkName := range s.SettingsPerCheck {
-		if !s.IsCheckEnabled(checkName) {
-			log.Warnf("Gocritic settings were provided for not enabled check %q", checkName)
-		}
-	}
-
-	if err := s.validateCheckerNames(); err != nil {
+	if err := s.validateCheckerNames(log); err != nil {
 		return errors.Wrap(err, "validation failed")
 	}
 
@@ -272,6 +266,7 @@ func sprintStrings(ss []string) string {
 	return fmt.Sprint(ss)
 }
 
+// getAllCheckerNames returns a map containing all checker names supported by gocritic.
 func getAllCheckerNames() map[string]bool {
 	allCheckerNames := map[string]bool{}
 	for _, checker := range allGocriticCheckers {
@@ -311,7 +306,7 @@ func getDefaultDisabledGocriticCheckersNames() []string {
 	return disabled
 }
 
-func (s *GocriticSettings) validateCheckerNames() error {
+func (s *GocriticSettings) validateCheckerNames(log logutils.Log) error {
 	allowedNames := getAllCheckerNames()
 
 	for _, name := range s.EnabledChecks {
@@ -325,6 +320,16 @@ func (s *GocriticSettings) validateCheckerNames() error {
 		if !allowedNames[strings.ToLower(name)] {
 			return fmt.Errorf("disabled checker %s doesn't exist, all existing checkers: %s",
 				name, sprintAllowedCheckerNames(allowedNames))
+		}
+	}
+
+	for checkName := range s.SettingsPerCheck {
+		if _, ok := allowedNames[checkName]; !ok {
+			return fmt.Errorf("invalid setting, checker %s doesn't exist, all existing checkers: %s",
+				checkName, sprintAllowedCheckerNames(allowedNames))
+		}
+		if !s.IsCheckEnabled(checkName) {
+			log.Warnf("Gocritic settings were provided for not enabled check %q", checkName)
 		}
 	}
 
