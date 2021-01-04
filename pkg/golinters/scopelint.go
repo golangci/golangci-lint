@@ -165,8 +165,7 @@ func (f *Node) Visit(node ast.Node) ast.Visitor {
 // It returns the new Problem.
 //nolint:interfacer
 func (f *Node) errorf(n ast.Node, format string, args ...interface{}) {
-	pos := f.fset.Position(n.Pos())
-	f.errorAtf(pos, format, args...)
+	f.errorAtf(f.fset.Position(n.Pos()), format, args...)
 }
 
 func (f *Node) errorAtf(pos token.Position, format string, args ...interface{}) {
