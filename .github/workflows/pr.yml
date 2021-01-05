@@ -15,7 +15,7 @@ jobs:
       - name: Install Go
         uses: actions/setup-go@v2
         with:
-          go-version: 1.15
+          go-version: 1.15.4
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Check go mod
@@ -26,7 +26,6 @@ jobs:
   # We already run the current golangci-lint in tests, but here we test
   # our GitHub action with the latest stable golangci-lint.
   golangci-lint:
-    needs: go-mod
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
