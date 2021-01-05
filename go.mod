@@ -73,7 +73,7 @@ require (
 	golang.org/x/tools v0.0.0-20210105210202-9ed45478a130
 	gopkg.in/yaml.v2 v2.4.0
 	honnef.co/go/tools v0.0.1-2020.1.6
-	mvdan.cc/gofumpt v0.0.0-20201129102820-5c11c50e9475
+	mvdan.cc/gofumpt v0.1.0
 	mvdan.cc/interfacer v0.0.0-20180901003855-c20040233aed
 	mvdan.cc/lint v0.0.0-20170908181259-adc824a0674b // indirect
 	mvdan.cc/unparam v0.0.0-20200501210554-b37ab49443f7
