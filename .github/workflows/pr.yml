@@ -26,7 +26,7 @@ jobs:
   # We already run the current golangci-lint in tests, but here we test
   # our GitHub action with the latest stable golangci-lint.
   golangci-lint:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
       - name: lint
