@@ -131,7 +131,8 @@ issues:
         - gocritic
       text: "unnecessaryDefer:"
 
-    # TODO temporary rule must be removed.
+    # TODO temporary rule, must be removed, seems related to v0.34.1
+    # but I was not able to reproduce locally only the CI seems affected by this issue.
     - path: pkg/golinters/scopelint.go
       text: 'directive `//nolint:interfacer` is unused for linter interfacer'
 
