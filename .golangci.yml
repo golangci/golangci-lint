@@ -134,8 +134,8 @@ issues:
     # TODO temporary rule, must be removed, seems related to v0.34.1
     # but I was not able to reproduce locally only the CI seems affected by this issue.
     # I was also not able to reproduce in the CI of a fork.
-#    - path: pkg/golinters/scopelint.go
-#      text: 'directive `//nolint:interfacer` is unused for linter interfacer'
+    - path: pkg/golinters/scopelint.go
+      text: 'directive `//nolint:interfacer` is unused for linter interfacer'
 
 run:
   skip-dirs:
