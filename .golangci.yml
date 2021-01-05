@@ -131,9 +131,10 @@ issues:
         - gocritic
       text: "unnecessaryDefer:"
 
-    # TODO temporary rule, must be removed, seems related to v0.34.1
-    # but I was not able to reproduce locally only the CI seems affected by this issue.
-    # I was also not able to reproduce in the CI of a fork.
+    # TODO temporary rule, must be removed
+    # seems related to v0.34.1, but I was not able to reproduce locally,
+    # I was also not able to reproduce in the CI of a fork,
+    # only the golangci-lint CI seems to affected by this invalid analysis.
     - path: pkg/golinters/scopelint.go
       text: 'directive `//nolint:interfacer` is unused for linter interfacer'
 
