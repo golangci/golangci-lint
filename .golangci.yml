@@ -131,6 +131,9 @@ issues:
         - gocritic
       text: "unnecessaryDefer:"
 
+    - path: pkg/golinters/scopelint.go
+      text: "directive `//nolint:interfacer,dupl` is unused for linter interfacer"
+
 run:
   skip-dirs:
     - test/testdata_etc
