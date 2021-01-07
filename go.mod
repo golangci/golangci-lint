@@ -43,6 +43,7 @@ require (
 	github.com/moricho/tparallel v0.2.1
 	github.com/nakabonne/nestif v0.3.0
 	github.com/nishanths/exhaustive v0.1.0
+	github.com/nishanths/predeclared v0.2.1
 	github.com/pkg/errors v0.9.1
 	github.com/polyfloyd/go-errorlint v0.0.0-20201127212506-19bd8db6546f
 	github.com/ryancurrah/gomodguard v1.2.0
@@ -69,7 +70,7 @@ require (
 	github.com/valyala/quicktemplate v1.6.3
 	golang.org/x/sys v0.0.0-20201009025420-dfb3f7c4e634 // indirect
 	golang.org/x/text v0.3.4 // indirect
-	golang.org/x/tools v0.0.0-20201121010211-780cb80bd7fb
+	golang.org/x/tools v0.0.0-20210101214203-2dba1e4ea05c
 	gopkg.in/yaml.v2 v2.4.0
 	honnef.co/go/tools v0.0.1-2020.1.6
 	mvdan.cc/gofumpt v0.0.0-20201129102820-5c11c50e9475
