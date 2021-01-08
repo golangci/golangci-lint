@@ -215,7 +215,8 @@ func extractRunContextFromComments(t *testing.T, sourcePath string) *runContext 
 		if !strings.HasPrefix(line, "//") {
 			return rc
 		}
-		line = strings.TrimPrefix(line, "//")
+
+		line = strings.TrimLeft(strings.TrimPrefix(line, "//"), " ")
 		if strings.HasPrefix(line, "args: ") {
 			assert.Nil(t, rc.args)
 			args := strings.TrimPrefix(line, "args: ")

@@ -1,5 +1,5 @@
-//args: -Egofumpt
-//config: linters-settings.gofumpt.extra-rules=true
+// args: -Egofumpt
+// config: linters-settings.gofumpt.extra-rules=true
 package testdata
 
 import "fmt"
