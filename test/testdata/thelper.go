@@ -28,3 +28,22 @@ func bhelperWithNotFirst(s string, b *testing.B, i int) { // ERROR "parameter \*
 func bhelperWithIncorrectName(o *testing.B) { // ERROR "parameter \*testing.B should have name b"
 	o.Helper()
 }
+
+func TestSubtestShouldNotBeChecked(t *testing.T) {
+	testCases := []struct {
+		desc string
+	}{
+		{
+			desc: "example",
+		},
+	}
+
+	for _, test := range testCases {
+		test := test
+		t.Run(test.desc, func(t *testing.T) {
+			t.Parallel()
+
+			t.Error("test")
+		})
+	}
+}
