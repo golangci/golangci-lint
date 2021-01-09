@@ -29,7 +29,7 @@ func bhelperWithIncorrectName(o *testing.B) { // ERROR "parameter \*testing.B sh
 	o.Helper()
 }
 
-func TestTHelper(t *testing.T) {
+func TestSubtestShouldNotBeChecked(t *testing.T) {
 	testCases := []struct {
 		desc string
 	}{
