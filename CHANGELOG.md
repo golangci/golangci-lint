@@ -7,8 +7,9 @@ There is the most valuable changes log:
    * `predeclared`: https://github.com/nishanths/predeclared
 2. update linters:
    * `go-critic` from 0.5.2 to 0.5.3
-   * `thelper` from 0.1.0 to 0.2.0
+   * `thelper` from 0.1.0 to 0.2.0, to 0.2.1
    * Validate `go-critic` settings
+   * `gofumpt` to v0.1.0
 3. fix: modules-download-mode support
 4. documentation:
    * bump documentation dependencies
