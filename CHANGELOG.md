@@ -10,6 +10,7 @@ There is the most valuable changes log:
    * `thelper` from 0.1.0 to 0.2.0, to 0.2.1
    * Validate `go-critic` settings
    * `gofumpt` to v0.1.0
+   * `gci` to v0.2.8
 3. fix: modules-download-mode support
 4. documentation:
    * bump documentation dependencies
