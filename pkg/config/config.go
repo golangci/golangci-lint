@@ -271,6 +271,7 @@ type LintersSettings struct {
 	Thelper     ThelperSettings
 	Forbidigo   ForbidigoSettings
 	Predeclared PredeclaredSettings
+	Goone       GooneSettings
 
 	Custom map[string]CustomLinterSettings
 }
@@ -415,6 +416,10 @@ type ForbidigoSettings struct {
 type PredeclaredSettings struct {
 	Ignore    string `mapstructure:"ignore"`
 	Qualified bool   `mapstructure:"q"`
+}
+
+type GooneSettings struct {
+	ConfigPath string `mapstructure:"config-path"`
 }
 
 var defaultLintersSettings = LintersSettings{

@@ -35,6 +35,7 @@ require (
 	github.com/kunwardeep/paralleltest v1.0.2
 	github.com/kyoh86/exportloopref v0.1.8
 	github.com/maratori/testpackage v1.0.1
+	github.com/masibw/goone v1.4.0
 	github.com/matoous/godox v0.0.0-20190911065817-5d6d842e92eb // v1.0
 	github.com/mattn/go-colorable v0.1.8
 	github.com/mbilski/exhaustivestruct v1.1.0
@@ -70,7 +71,7 @@ require (
 	github.com/valyala/quicktemplate v1.6.3
 	golang.org/x/sys v0.0.0-20201009025420-dfb3f7c4e634 // indirect
 	golang.org/x/text v0.3.4 // indirect
-	golang.org/x/tools v0.0.0-20210105210202-9ed45478a130
+	golang.org/x/tools v0.0.0-20210112230658-8b4aab62c064
 	gopkg.in/yaml.v2 v2.4.0
 	honnef.co/go/tools v0.0.1-2020.1.6
 	mvdan.cc/gofumpt v0.1.0

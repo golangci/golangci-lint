@@ -95,6 +95,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 	var errorlintCfg *config.ErrorLintSettings
 	var thelperCfg *config.ThelperSettings
 	var predeclaredCfg *config.PredeclaredSettings
+	var gooneCfg *config.GooneSettings
 	if m.cfg != nil {
 		govetCfg = &m.cfg.LintersSettings.Govet
 		testpackageCfg = &m.cfg.LintersSettings.Testpackage
@@ -102,9 +103,13 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		errorlintCfg = &m.cfg.LintersSettings.ErrorLint
 		thelperCfg = &m.cfg.LintersSettings.Thelper
 		predeclaredCfg = &m.cfg.LintersSettings.Predeclared
+		gooneCfg = &m.cfg.LintersSettings.Goone
 	}
 	const megacheckName = "megacheck"
 	lcs := []*linter.Config{
+		linter.NewConfig(golinters.NewGoone(gooneCfg)).
+			WithPresets(linter.PresetPerformance).
+			WithURL("https://github.com/masibw/goone"),
 		linter.NewConfig(golinters.NewGovet(govetCfg)).
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetBugs).
