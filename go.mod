@@ -9,7 +9,7 @@ require (
 	github.com/ashanbrown/forbidigo v1.0.0
 	github.com/ashanbrown/makezero v0.0.0-20201205152432-7b7cdbb3025a
 	github.com/bombsimon/wsl/v3 v3.1.0
-	github.com/daixiang0/gci v0.2.7
+	github.com/daixiang0/gci v0.2.8
 	github.com/denis-tingajkin/go-header v0.4.2
 	github.com/fatih/color v1.10.0
 	github.com/go-critic/go-critic v0.5.3
