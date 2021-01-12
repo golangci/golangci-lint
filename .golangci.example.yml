@@ -500,6 +500,9 @@ issues:
   # Show only new issues created in git patch with set file path.
   new-from-patch: path/to/patch/file
 
+  # Fix found issues (if it's supported by the linter)
+  fix: true
+
 severity:
   # Default value is empty string.
   # Set the default severity for issues. If severity rules are defined and the issues
