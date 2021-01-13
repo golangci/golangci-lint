@@ -9,19 +9,18 @@ func p(x int) int {
 	return x + 1
 }
 
-func multiple(val interface{}, times uint) interface{} {
-
-	switch hogehoge := val.(type) {
+func typeSwitchNoError(val interface{}, times uint) interface{} {
+	switch hoge := val.(type) {
 	case int:
 		return 12
 	case string:
-		return strings.Repeat(hogehoge, int(times))
+		return strings.Repeat(hoge, int(times))
 	default:
 		return nil
 	}
 }
 
-func noUseParams(params string) int {
+func noUseParamsNoError(params string) int {
 	a := 12
 	println(a)
 	return a
