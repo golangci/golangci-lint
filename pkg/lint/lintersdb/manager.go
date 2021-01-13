@@ -105,6 +105,26 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 	}
 	const megacheckName = "megacheck"
 	lcs := []*linter.Config{
+		linter.NewConfig(golinters.NewIDMustBigInt()).
+			WithLoadForGoAnalysis().
+			WithPresets(linter.PresetBugs).
+			WithAlternativeNames(megacheckName).
+			WithURL("github.com/tokopedia/mitralib/go/tokolinter/id-must-bigint"),
+		linter.NewConfig(golinters.NewMissingFuncDoc()).
+			WithLoadForGoAnalysis().
+			WithPresets(linter.PresetBugs).
+			WithAlternativeNames(megacheckName).
+			WithURL("github.com/tokopedia/mitralib/go/tokolinter/missing-func-doc"),
+		linter.NewConfig(golinters.NewInterfaceSuffixEr()).
+			WithLoadForGoAnalysis().
+			WithPresets(linter.PresetBugs).
+			WithAlternativeNames(megacheckName).
+			WithURL("github.com/tokopedia/mitralib/go/tokolinter/interface-suffix-er"),
+		linter.NewConfig(golinters.NewNoParamReassign()).
+			WithLoadForGoAnalysis().
+			WithPresets(linter.PresetBugs).
+			WithAlternativeNames(megacheckName).
+			WithURL("github.com/tokopedia/mitralib/go/tokolinter/no-param-reassign"),
 		linter.NewConfig(golinters.NewGovet(govetCfg)).
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetBugs).
@@ -356,15 +376,19 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 
 	isLocalRun := os.Getenv("GOLANGCI_COM_RUN") == ""
 	enabledByDefault := map[string]bool{
-		golinters.NewGovet(nil).Name():    true,
-		golinters.NewErrcheck().Name():    true,
-		golinters.NewStaticcheck().Name(): true,
-		golinters.NewUnused().Name():      true,
-		golinters.NewGosimple().Name():    true,
-		golinters.NewStructcheck().Name(): true,
-		golinters.NewVarcheck().Name():    true,
-		golinters.NewIneffassign().Name(): true,
-		golinters.NewDeadcode().Name():    true,
+		golinters.NewMissingFuncDoc().Name():    true,
+		golinters.NewIDMustBigInt().Name():      true,
+		golinters.NewInterfaceSuffixEr().Name(): true,
+		golinters.NewNoParamReassign().Name():   true,
+		golinters.NewGovet(nil).Name():          true,
+		golinters.NewErrcheck().Name():          true,
+		golinters.NewStaticcheck().Name():       true,
+		golinters.NewUnused().Name():            true,
+		golinters.NewGosimple().Name():          true,
+		golinters.NewStructcheck().Name():       true,
+		golinters.NewVarcheck().Name():          true,
+		golinters.NewIneffassign().Name():       true,
+		golinters.NewDeadcode().Name():          true,
 
 		// don't typecheck for golangci.com: too many troubles
 		golinters.NewTypecheck().Name(): isLocalRun,
