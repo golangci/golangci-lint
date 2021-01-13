@@ -367,6 +367,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		linter.NewConfig(golinters.NewPredeclared(predeclaredCfg)).
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/nishanths/predeclared"),
+<<<<<<< HEAD
 		linter.NewConfig(golinters.NewRevive(reviveCfg)).
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/mgechev/revive"),
@@ -374,6 +375,12 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetBugs).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/charithe/durationcheck"),
+=======
+		linter.NewConfig(golinters.NewWastedAssign()).
+			WithLoadForGoAnalysis().
+			WithPresets(linter.PresetStyle).
+			WithURL("https://github.com/sanposhiho/wastedassign"),
+>>>>>>> efdda8eb... Add linter wastedassign
 
 		// nolintlint must be last because it looks at the results of all the previous linters for unused nolint directives
 		linter.NewConfig(golinters.NewNoLintLint()).
