@@ -1,9 +1,10 @@
 package golinters
 
 import (
-	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 	"github.com/sanposhiho/wastedassign"
 	"golang.org/x/tools/go/analysis"
+
+	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 )
 
 func NewWastedAssign() *goanalysis.Linter {
