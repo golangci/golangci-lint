@@ -271,6 +271,7 @@ type LintersSettings struct {
 	Thelper     ThelperSettings
 	Forbidigo   ForbidigoSettings
 	Ifshort     IfshortSettings
+	Predeclared PredeclaredSettings
 
 	Custom map[string]CustomLinterSettings
 }
@@ -417,6 +418,11 @@ type ForbidigoSettings struct {
 	Forbid []string `mapstructure:"forbid"`
 }
 
+type PredeclaredSettings struct {
+	Ignore    string `mapstructure:"ignore"`
+	Qualified bool   `mapstructure:"q"`
+}
+
 var defaultLintersSettings = LintersSettings{
 	Lll: LllSettings{
 		LineLength: 120,
@@ -476,6 +482,10 @@ var defaultLintersSettings = LintersSettings{
 	},
 	ErrorLint: ErrorLintSettings{
 		Errorf: true,
+	},
+	Predeclared: PredeclaredSettings{
+		Ignore:    "",
+		Qualified: false,
 	},
 }
 

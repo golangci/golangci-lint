@@ -1,6 +1,20 @@
 Follow the news and releases on our [twitter](https://twitter.com/golangci) and our [blog](https://medium.com/golangci).
 There is the most valuable changes log:
 
+## January 2021
+
+1. new linters:
+   * `predeclared`: https://github.com/nishanths/predeclared
+2. update linters:
+   * `go-critic` from 0.5.2 to 0.5.3
+   * `thelper` from 0.1.0 to 0.2.0, to 0.2.1
+   * Validate `go-critic` settings
+   * `gofumpt` to v0.1.0
+   * `gci` to v0.2.8
+3. fix: modules-download-mode support
+4. documentation:
+   * bump documentation dependencies
+
 ## December 2020
 
 1. new linters:

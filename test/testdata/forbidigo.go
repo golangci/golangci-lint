@@ -5,5 +5,5 @@ package testdata
 import "fmt"
 
 func Forbidigo() {
-	fmt.Printf("too noisy!!!") // ERROR "use of `fmt.Printf` forbidden by pattern `fmt\\.Print.*`"
+	fmt.Printf("too noisy!!!") // ERROR "use of `fmt\\.Printf` forbidden by pattern `fmt\\\\.Print\\.\\*`"
 }
