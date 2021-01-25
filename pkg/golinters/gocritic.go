@@ -118,17 +118,17 @@ func buildEnabledCheckers(lintCtx *linter.Context, linterCtx *gocriticlinter.Con
 			continue
 		}
 
-		if err := func() (er error) {
+		if err := func() (err error) {
 			defer func() {
 				// Recover when a gocritic checker panics during initialization.
 				// In particular, this can happen if the ruleguard 'failOnError' flag is set to true
 				// and one or more ruleguard input rules have a syntax error.
 				if r := recover(); r != nil {
-					er = fmt.Errorf("gocritic checker '%v' initialization failed: %v", info.Name, r)
+					err = fmt.Errorf("gocritic checker '%v' initialization failed: %v", info.Name, r)
 				}
 			}()
-			if er = configureCheckerInfo(info, allParams); er != nil {
-				return er
+			if err := configureCheckerInfo(info, allParams); err != nil {
+				return err
 			}
 			c := gocriticlinter.NewChecker(linterCtx, info)
 			enabledCheckers = append(enabledCheckers, c)
