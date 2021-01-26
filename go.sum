@@ -409,8 +409,8 @@ github.com/timakin/bodyclose v0.0.0-20190930140734-f7f2e9bca95e/go.mod h1:Qimiff
 github.com/tmc/grpc-websocket-proxy v0.0.0-20190109142713-0ad062ec5ee5/go.mod h1:ncp9v5uamzpCO7NfCPTXjqaC+bZgJeR0sMTm6dMHP7U=
 github.com/tomarrell/wrapcheck v0.0.0-20200807122107-df9e8bcb914d h1:3EZyvNUMsGD1QA8cu0STNn1L7I77rvhf2IhOcHYQhSw=
 github.com/tomarrell/wrapcheck v0.0.0-20200807122107-df9e8bcb914d/go.mod h1:yiFB6fFoV7saXirUGfuK+cPtUh4NX/Hf5y2WC2lehu0=
-github.com/tommy-muehle/go-mnd v1.3.1-0.20201008215730-16041ac3fe65 h1:Y0bLA422kvb32uZI4fy/Plop/Tbld0l9pSzl+j1FWok=
-github.com/tommy-muehle/go-mnd v1.3.1-0.20201008215730-16041ac3fe65/go.mod h1:T22e7iRN4LsFPZGyRLRXeF+DWVXFuV9thsyO7NjbbTI=
+github.com/tommy-muehle/go-mnd/v2 v2.3.1 h1:a1S4+4HSXDJMgeODJH/t0EEKxcVla6Tasw+Zx9JJMog=
+github.com/tommy-muehle/go-mnd/v2 v2.3.1/go.mod h1:WsUAkMJMYww6l/ufffCD3m+P7LEvr8TnZn9lwVDlgzw=
 github.com/ultraware/funlen v0.0.3 h1:5ylVWm8wsNwH5aWo9438pwvsK0QiqVuUrt9bn7S/iLA=
 github.com/ultraware/funlen v0.0.3/go.mod h1:Dp4UiAus7Wdb9KUZsYWZEWiRzGuM2kXM1lPbfaF6xhA=
 github.com/ultraware/whitespace v0.0.4 h1:If7Va4cM03mpgrNH9k49/VOicWpGoG70XPBFFODYDsg=
