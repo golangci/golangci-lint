@@ -5,12 +5,16 @@ There is the most valuable changes log:
 
 1. new linters:
    * `predeclared`: https://github.com/nishanths/predeclared
+   * `ifshort`: https://github.com/esimonov/ifshort
 2. update linters:
    * `go-critic` from 0.5.2 to 0.5.3
    * `thelper` from 0.1.0 to 0.2.0, to 0.2.1
    * Validate `go-critic` settings
    * `gofumpt` to v0.1.0
    * `gci` to v0.2.8
+   * `go-mnd` to v2.3.1
+   * `gosec` from 2.5.0 to 2.6.1
+   * `godot` from 1.3.2 to 1.4.3
 3. fix: modules-download-mode support
 4. documentation:
    * bump documentation dependencies
