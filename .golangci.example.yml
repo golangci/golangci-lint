@@ -193,6 +193,10 @@ linters-settings:
   godot:
     # comments to be checked: `declarations`, `toplevel`, or `all`
     scope: declarations
+    # list of regexps for excluding particular comment lines from check
+    exclude:
+      # example: exclude comments which contain numbers
+      # - '[0-9]+'
     # check that each sentence starts with a capital letter
     capital: false
   godox:
@@ -294,7 +298,7 @@ linters-settings:
       # specify an error message to output when a blacklisted package is used
       - github.com/sirupsen/logrus: "logging is allowed only by logutils.Log"
   ifshort:
-    # Maximum length of variable declaration measured in number of lines, after which linter won't suggest using short syntax. 
+    # Maximum length of variable declaration measured in number of lines, after which linter won't suggest using short syntax.
     # Has higher priority than max-decl-chars.
     max-decl-lines: 1
     # Maximum length of variable declaration measured in number of characters, after which linter won't suggest using short syntax.
