@@ -11,7 +11,7 @@ require (
 	github.com/bombsimon/wsl/v3 v3.1.0
 	github.com/daixiang0/gci v0.2.8
 	github.com/denis-tingajkin/go-header v0.4.2
-	github.com/esimonov/ifshort v1.0.0
+	github.com/esimonov/ifshort v1.0.1
 	github.com/fatih/color v1.10.0
 	github.com/go-critic/go-critic v0.5.3
 	github.com/go-xmlfmt/xmlfmt v0.0.0-20191208150333-d5b6f63a941b
