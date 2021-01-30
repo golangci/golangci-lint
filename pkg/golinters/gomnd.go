@@ -1,7 +1,7 @@
 package golinters
 
 import (
-	mnd "github.com/tommy-muehle/go-mnd"
+	mnd "github.com/tommy-muehle/go-mnd/v2"
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/config"

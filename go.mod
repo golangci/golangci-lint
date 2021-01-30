@@ -30,7 +30,7 @@ require (
 	github.com/golangci/revgrep v0.0.0-20180526074752-d9c87f5ffaf0
 	github.com/golangci/unconvert v0.0.0-20180507085042-28b1c447d1f4
 	github.com/jgautheron/goconst v0.0.0-20201117150253-ccae5bf973f3
-	github.com/jingyugao/rowserrcheck v0.0.0-20191204022205-72ab7603b68a
+	github.com/jingyugao/rowserrcheck v0.0.0-20210130005344-c6a0c12dd98d
 	github.com/jirfag/go-printf-func-name v0.0.0-20191110105641-45db9963cdd3
 	github.com/kulti/thelper v0.2.1
 	github.com/kunwardeep/paralleltest v1.0.2
@@ -49,7 +49,7 @@ require (
 	github.com/polyfloyd/go-errorlint v0.0.0-20201127212506-19bd8db6546f
 	github.com/ryancurrah/gomodguard v1.2.0
 	github.com/ryanrolds/sqlclosecheck v0.3.0
-	github.com/securego/gosec/v2 v2.5.0
+	github.com/securego/gosec/v2 v2.6.1
 	github.com/shazow/go-diff v0.0.0-20160112020656-b6b7b6733b8c
 	github.com/shirou/gopsutil v0.0.0-20190901111213-e4ec7b275ada // v2.19.8
 	github.com/sirupsen/logrus v1.7.0
@@ -59,12 +59,12 @@ require (
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.7.1
 	github.com/ssgreg/nlreturn/v2 v2.1.0
-	github.com/stretchr/testify v1.6.1
+	github.com/stretchr/testify v1.7.0
 	github.com/tdakkota/asciicheck v0.0.0-20200416190851-d7f85be797a2
-	github.com/tetafro/godot v1.3.2
+	github.com/tetafro/godot v1.4.3
 	github.com/timakin/bodyclose v0.0.0-20190930140734-f7f2e9bca95e
 	github.com/tomarrell/wrapcheck v0.0.0-20200807122107-df9e8bcb914d
-	github.com/tommy-muehle/go-mnd v1.3.1-0.20201008215730-16041ac3fe65
+	github.com/tommy-muehle/go-mnd/v2 v2.3.1
 	github.com/ultraware/funlen v0.0.3
 	github.com/ultraware/whitespace v0.0.4
 	github.com/uudashr/gocognit v1.0.1
