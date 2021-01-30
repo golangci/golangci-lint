@@ -14,14 +14,10 @@ func RowsErrNotChecked(db *sql.DB) {
 	}
 }
 
-func issue943_1() {
-	db, err := sql.Open("postgres", "postgres://localhost:5432/postgres")
-	if err != nil {
-		panic(err)
-	}
-	defer db.Close()
-
+func issue943(db *sql.DB) {
 	var rows *sql.Rows
+	var err error
+
 	if rand.Float64() < 0.5 {
 		rows, err = db.Query("select 1")
 	} else {
@@ -30,35 +26,13 @@ func issue943_1() {
 	if err != nil {
 		panic(err)
 	}
+
 	defer rows.Close()
+
 	for rows.Next() {
 		fmt.Println("new rows")
 	}
-	if err := rows.Err(); err != nil {
-		panic(err)
-	}
-}
 
-func issue943_1() {
-	db, err := sql.Open("postgres", "postgres://localhost:5432/postgres")
-	if err != nil {
-		panic(err)
-	}
-	defer db.Close()
-
-	var rows *sql.Rows
-	if rand.Float64() < 0.5 {
-		rows, err = db.Query("select 1") // ERROR "rows.Err must be checked"
-	} else {
-		rows, err = db.Query("select 2") // ERROR "rows.Err must be checked"
-	}
-	if err != nil {
-		panic(err)
-	}
-	defer rows.Close()
-	for rows.Next() {
-		fmt.Println("new rows")
-	}
 	if err := rows.Err(); err != nil {
 		panic(err)
 	}
