@@ -30,7 +30,7 @@ require (
 	github.com/golangci/revgrep v0.0.0-20180526074752-d9c87f5ffaf0
 	github.com/golangci/unconvert v0.0.0-20180507085042-28b1c447d1f4
 	github.com/jgautheron/goconst v0.0.0-20201117150253-ccae5bf973f3
-	github.com/jingyugao/rowserrcheck v0.0.0-20191204022205-72ab7603b68a
+	github.com/jingyugao/rowserrcheck v0.0.0-20210130005344-c6a0c12dd98d
 	github.com/jirfag/go-printf-func-name v0.0.0-20191110105641-45db9963cdd3
 	github.com/kulti/thelper v0.2.1
 	github.com/kunwardeep/paralleltest v1.0.2
