@@ -95,6 +95,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 	var errorlintCfg *config.ErrorLintSettings
 	var thelperCfg *config.ThelperSettings
 	var predeclaredCfg *config.PredeclaredSettings
+	var ifshortCfg *config.IfshortSettings
 	if m.cfg != nil {
 		govetCfg = &m.cfg.LintersSettings.Govet
 		testpackageCfg = &m.cfg.LintersSettings.Testpackage
@@ -102,6 +103,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		errorlintCfg = &m.cfg.LintersSettings.ErrorLint
 		thelperCfg = &m.cfg.LintersSettings.Thelper
 		predeclaredCfg = &m.cfg.LintersSettings.Predeclared
+		ifshortCfg = &m.cfg.LintersSettings.Ifshort
 	}
 	const megacheckName = "megacheck"
 	lcs := []*linter.Config{
@@ -344,7 +346,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		linter.NewConfig(golinters.NewForbidigo()).
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/ashanbrown/forbidigo"),
-		linter.NewConfig(golinters.NewIfshort()).
+		linter.NewConfig(golinters.NewIfshort(ifshortCfg)).
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/esimonov/ifshort"),
 		linter.NewConfig(golinters.NewPredeclared(predeclaredCfg)).
