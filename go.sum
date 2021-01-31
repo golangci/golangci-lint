@@ -73,6 +73,8 @@ github.com/go-critic/go-critic v0.5.3 h1:xQEweNxzBNpSqI3wotXZAixRarETng3PTG4pkcr
 github.com/go-critic/go-critic v0.5.3/go.mod h1:2Lrs1m4jtOnnG/EdezbSpAoL0F2pRW+9HWJUZ+QaktY=
 github.com/go-critic/go-critic v0.5.4-0.20210131194654-6090d88757f4 h1:73zIKiNknr7JRuAu0LPz1DQJgb9GtSTUy6mXDN72bCk=
 github.com/go-critic/go-critic v0.5.4-0.20210131194654-6090d88757f4/go.mod h1:cjB4YGw+n/+X8gREApej7150Uyy1Tg8If6F2XOAUXNE=
+github.com/go-critic/go-critic v0.5.4 h1:fPNMqImVjELN6Du7NVVuvKA4cgASNmc7e4zSYQCOnv8=
+github.com/go-critic/go-critic v0.5.4/go.mod h1:cjB4YGw+n/+X8gREApej7150Uyy1Tg8If6F2XOAUXNE=
 github.com/go-gl/glfw v0.0.0-20190409004039-e6da0acd62b1/go.mod h1:vR7hzQXu2zJy9AVAgeJqvqgH9Q5CA+iKCZ2gyEVpxRU=
 github.com/go-kit/kit v0.8.0/go.mod h1:xBxKIO96dXMWWy0MnWVtmwkA9/13aqxPnvrjFYMA2as=
 github.com/go-logfmt/logfmt v0.3.0/go.mod h1:Qt1PoO58o5twSAckw1HlFXLmHsOX5/0LbT9GBnD5lWE=
