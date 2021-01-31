@@ -117,9 +117,11 @@ func buildEnabledCheckers(lintCtx *linter.Context, linterCtx *gocriticlinter.Con
 		if !s.IsCheckEnabled(info.Name) {
 			continue
 		}
+
 		if err := configureCheckerInfo(info, allParams); err != nil {
 			return nil, err
 		}
+
 		if c, err := gocriticlinter.NewChecker(linterCtx, info); err != nil {
 			return nil, err
 		} else {
