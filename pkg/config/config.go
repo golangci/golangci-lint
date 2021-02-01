@@ -416,7 +416,8 @@ type IfshortSettings struct {
 }
 
 type ForbidigoSettings struct {
-	Forbid []string `mapstructure:"forbid"`
+	Forbid               []string `mapstructure:"forbid"`
+	ExcludeGodocExamples bool     `mapstructure:"exclude-godoc-examples"`
 }
 
 type PredeclaredSettings struct {
@@ -487,6 +488,9 @@ var defaultLintersSettings = LintersSettings{
 	Predeclared: PredeclaredSettings{
 		Ignore:    "",
 		Qualified: false,
+	},
+	Forbidigo: ForbidigoSettings{
+		ExcludeGodocExamples: true,
 	},
 }
 
