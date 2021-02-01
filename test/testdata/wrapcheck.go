@@ -1,13 +1,9 @@
 //args: -Ewrapcheck
-package main
+package testdata
 
 import (
 	"encoding/json"
 )
-
-func main() {
-	do()
-}
 
 func do() error {
 	_, err := json.Marshal(struct{}{})
