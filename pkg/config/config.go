@@ -485,6 +485,10 @@ var defaultLintersSettings = LintersSettings{
 	ErrorLint: ErrorLintSettings{
 		Errorf: true,
 	},
+	Ifshort: IfshortSettings{
+		MaxDeclLines: 1,
+		MaxDeclChars: 30,
+	},
 	Predeclared: PredeclaredSettings{
 		Ignore:    "",
 		Qualified: false,
