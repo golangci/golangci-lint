@@ -122,7 +122,10 @@ func buildEnabledCheckers(lintCtx *linter.Context, linterCtx *gocriticlinter.Con
 			return nil, err
 		}
 
-		c := gocriticlinter.NewChecker(linterCtx, info)
+		c, err := gocriticlinter.NewChecker(linterCtx, info)
+		if err != nil {
+			return nil, err
+		}
 		enabledCheckers = append(enabledCheckers, c)
 	}
 
