@@ -414,6 +414,8 @@ linters-settings:
       - fmt.Errorf # consider errors.Errorf in github.com/pkg/errors
       - fmt.Print.* # too much log noise
       - ginkgo\\.F.* # these are used just for local development
+    # Exclude godoc examples from forbidigo checks.  Default is true.
+    exclude_godoc_examples: false
 
   # The custom section can be used to define linter plugins to be loaded at runtime. See README doc
   #  for more info.

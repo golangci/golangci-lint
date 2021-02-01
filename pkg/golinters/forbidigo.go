@@ -31,7 +31,12 @@ func NewForbidigo() *goanalysis.Linter {
 
 		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
 			var res []goanalysis.Issue
-			forbid, err := forbidigo.NewLinter(s.Forbid)
+			options := []forbidigo.Option{
+				forbidigo.OptionExcludeGodocExamples(s.ExcludeGodocExamples),
+				// disable "//permit" directives so only "//nolint" directives matters within golangci lint
+				forbidigo.OptionIgnorePermitDirectives(true),
+			}
+			forbid, err := forbidigo.NewLinter(s.Forbid, options...)
 			if err != nil {
 				return nil, errors.Wrapf(err, "failed to create linter %q", linterName)
 			}
