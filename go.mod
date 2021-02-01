@@ -13,7 +13,7 @@ require (
 	github.com/denis-tingajkin/go-header v0.4.2
 	github.com/esimonov/ifshort v1.0.1
 	github.com/fatih/color v1.10.0
-	github.com/go-critic/go-critic v0.5.3
+	github.com/go-critic/go-critic v0.5.4
 	github.com/go-xmlfmt/xmlfmt v0.0.0-20191208150333-d5b6f63a941b
 	github.com/gofrs/flock v0.8.0
 	github.com/golangci/check v0.0.0-20180506172741-cfe4005ccda2
