@@ -7,7 +7,7 @@ ARG DATE
 
 COPY / /golangci
 WORKDIR /golangci
-RUN CGO_ENABLED=0 go build -ldflags "-s -w -X main.version=$VERSION -X main.commit=$SHORT_COMMIT -X main.date=$DATE" -o golangci-lint ./cmd/golangci-lint/main.go
+RUN CGO_ENABLED=0 go build -trimpath -ldflags "-s -w -X main.version=$VERSION -X main.commit=$SHORT_COMMIT -X main.date=$DATE" -o golangci-lint ./cmd/golangci-lint/main.go
 
 # stage 2
 FROM golang:1.15

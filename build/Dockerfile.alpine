@@ -12,7 +12,7 @@ WORKDIR /golangci
 # git and mercurial are needed most times for go get`, etc.
 # See https://github.com/docker-library/golang/issues/80
 RUN apk --no-cache add gcc musl-dev git mercurial
-RUN CGO_ENABLED=0 go build -ldflags "-s -w -X main.version=$VERSION -X main.commit=$SHORT_COMMIT -X main.date=$DATE" -o golangci-lint ./cmd/golangci-lint/main.go
+RUN CGO_ENABLED=0 go build -trimpath -ldflags "-s -w -X main.version=$VERSION -X main.commit=$SHORT_COMMIT -X main.date=$DATE" -o golangci-lint ./cmd/golangci-lint/main.go
 
 # stage 2
 FROM golang:1.15-alpine
