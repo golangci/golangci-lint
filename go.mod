@@ -79,3 +79,5 @@ require (
 	mvdan.cc/lint v0.0.0-20170908181259-adc824a0674b // indirect
 	mvdan.cc/unparam v0.0.0-20200501210554-b37ab49443f7
 )
+
+replace 4d63.com/gochecknoglobals => github.com/leighmcculloch/gochecknoglobals v0.0.0-20201008074935-acfc0b28355a
