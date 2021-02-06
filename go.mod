@@ -6,6 +6,7 @@ require (
 	4d63.com/gochecknoglobals v0.0.0-20201008074935-acfc0b28355a
 	github.com/Djarvur/go-err113 v0.0.0-20200511133814-5174e21577d5
 	github.com/OpenPeeDeeP/depguard v1.0.1
+	github.com/alexkohler/prealloc v0.0.0-20210204145425-77a5b5dd9799
 	github.com/ashanbrown/forbidigo v1.1.0
 	github.com/ashanbrown/makezero v0.0.0-20201205152432-7b7cdbb3025a
 	github.com/bombsimon/wsl/v3 v3.1.0
@@ -26,7 +27,6 @@ require (
 	github.com/golangci/lint-1 v0.0.0-20191013205115-297bf364a8e0
 	github.com/golangci/maligned v0.0.0-20180506175553-b1d89398deca
 	github.com/golangci/misspell v0.0.0-20180809174111-950f5d19e770
-	github.com/golangci/prealloc v0.0.0-20180630174525-215b22d4de21
 	github.com/golangci/revgrep v0.0.0-20180526074752-d9c87f5ffaf0
 	github.com/golangci/unconvert v0.0.0-20180507085042-28b1c447d1f4
 	github.com/jgautheron/goconst v0.0.0-20201117150253-ccae5bf973f3
