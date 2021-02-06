@@ -408,6 +408,11 @@ type ThelperSettings struct {
 		Name  bool `mapstructure:"name"`
 		Begin bool `mapstructure:"begin"`
 	} `mapstructure:"benchmark"`
+	TB struct {
+		First bool `mapstructure:"first"`
+		Name  bool `mapstructure:"name"`
+		Begin bool `mapstructure:"begin"`
+	} `mapstructure:"tb"`
 }
 
 type IfshortSettings struct {
