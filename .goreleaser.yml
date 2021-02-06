@@ -33,6 +33,8 @@ builds:
       - goos: freebsd
         goarch: arm64
     main: ./cmd/golangci-lint/
+    flags:
+      - -trimpath
     ldflags: -s -w -X main.version={{.Version}} -X main.commit={{.ShortCommit}} -X main.date={{.Date}}
 
 archives:
