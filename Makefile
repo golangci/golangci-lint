@@ -17,7 +17,6 @@ clean:
 	rm -f golangci-lint
 	rm -f test/path
 	rm -f tools/Dracula.itermcolors
-	rm -f tools/godownloader
 	rm -f tools/goreleaser
 	rm -f tools/svg-term
 	rm -rf tools/node_modules
@@ -40,24 +39,13 @@ test_linters:
 
 # Maintenance
 
-generate: install.sh assets/github-action-config.json
 fast_generate: assets/github-action-config.json
-.PHONY: generate fast_generate
-
-maintainer-clean: clean
-	rm -rf install.sh
-.PHONY: maintainer-clean
+.PHONY: fast_generate
 
 fast_check_generated:
 	$(MAKE) --always-make fast_generate
 	git checkout -- go.mod go.sum # can differ between go1.12 and go1.13
 	git diff --exit-code # check no changes
-
-check_generated:
-	$(MAKE) --always-make generate
-	git checkout -- go.mod go.sum # can differ between go1.12 and go1.13
-	git diff --exit-code # check no changes
-.PHONY: check_generated
 
 release: .goreleaser.yml tools/goreleaser
 	./tools/goreleaser
@@ -71,10 +59,6 @@ snapshot: .goreleaser.yml tools/goreleaser
 
 golangci-lint: FORCE
 	go build -o $@ ./cmd/golangci-lint
-
-tools/godownloader: export GOFLAGS = -mod=readonly
-tools/godownloader: tools/go.mod tools/go.sum
-	cd tools && go build github.com/goreleaser/godownloader
 
 tools/goreleaser: export GOFLAGS = -mod=readonly
 tools/goreleaser: tools/go.mod tools/go.sum
@@ -92,9 +76,6 @@ tools/Dracula.itermcolors:
 # TODO: migrate to docs/
 assets/demo.svg: tools/svg-term tools/Dracula.itermcolors
 	./tools/svg-term --cast=183662 --out assets/demo.svg --window --width 110 --height 30 --from 2000 --to 20000 --profile ./tools/Dracula.itermcolors --term iterm2
-
-install.sh: .goreleaser.yml tools/godownloader
-	./tools/godownloader .goreleaser.yml | sed '/DO NOT EDIT/s/ on [0-9TZ:-]*//' > $@
 
 assets/github-action-config.json: FORCE golangci-lint
 	go run ./scripts/gen_github_action_config/main.go $@
