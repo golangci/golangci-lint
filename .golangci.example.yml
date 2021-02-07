@@ -298,7 +298,7 @@ linters-settings:
       # specify an error message to output when a blacklisted package is used
       - github.com/sirupsen/logrus: "logging is allowed only by logutils.Log"
   ifshort:
-    # Maximum length of variable declaration measured in number of lines, after which linter won't suggest using short syntax. 
+    # Maximum length of variable declaration measured in number of lines, after which linter won't suggest using short syntax.
     # Has higher priority than max-decl-chars.
     max-decl-lines: 1
     # Maximum length of variable declaration measured in number of characters, after which linter won't suggest using short syntax.
@@ -361,6 +361,10 @@ linters-settings:
       name: true
       begin: true
     benchmark:
+      first: true
+      name: true
+      begin: true
+    tb:
       first: true
       name: true
       begin: true

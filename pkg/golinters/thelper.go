@@ -37,6 +37,16 @@ func NewThelper(cfg *config.ThelperSettings) *goanalysis.Linter {
 			opts = append(opts, "b_first")
 		}
 
+		if cfg.TB.Name {
+			opts = append(opts, "tb_name")
+		}
+		if cfg.TB.Begin {
+			opts = append(opts, "tb_begin")
+		}
+		if cfg.TB.First {
+			opts = append(opts, "tb_first")
+		}
+
 		cfgMap[a.Name] = map[string]interface{}{
 			"checks": strings.Join(opts, ","),
 		}
