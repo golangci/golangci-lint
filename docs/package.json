@@ -19,7 +19,7 @@
     "gatsby-plugin-google-analytics": "^2.8.0",
     "gatsby-plugin-manifest": "^2.9.1",
     "gatsby-plugin-mdx": "^1.7.1",
-    "gatsby-plugin-netlify": "^2.8.0",
+    "gatsby-plugin-netlify": "^2.11.0",
     "gatsby-plugin-netlify-cache": "^1.2.0",
     "gatsby-plugin-offline": "^3.7.1",
     "gatsby-plugin-react-helmet": "^3.7.0",
