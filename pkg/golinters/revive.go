@@ -160,6 +160,10 @@ func SetReviveConfig(cfg *config.ReviveSettings) (*lint.Config, error) {
 		conf.Confidence = cfg.Confidence
 	}
 
+	// By default golangci-lint ignores missing doc comments, follow same convention by removing this default rule
+	// Relevant issue: https://github.com/golangci/golangci-lint/issues/456
+	delete(conf.Rules, "exported")
+
 	if len(cfg.Rules) != 0 {
 		// Clear default rules, only use rules defined in config
 		conf.Rules = map[string]lint.RuleConfig{}
