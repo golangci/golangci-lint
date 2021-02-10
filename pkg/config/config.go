@@ -268,6 +268,7 @@ type LintersSettings struct {
 	Gofumpt     GofumptSettings
 	ErrorLint   ErrorLintSettings
 	Makezero    MakezeroSettings
+	Revive      ReviveSettings
 	Thelper     ThelperSettings
 	Forbidigo   ForbidigoSettings
 	Ifshort     IfshortSettings
@@ -395,6 +396,23 @@ type ErrorLintSettings struct {
 
 type MakezeroSettings struct {
 	Always bool
+}
+
+type ReviveSettings struct {
+	IgnoreGeneratedHeader bool `mapstructure:"ignore-generated-header"`
+	Confidence            float64
+	Severity              string
+	Rules                 []struct {
+		Name      string
+		Arguments []interface{}
+		Severity  string
+	}
+	ErrorCode   int `mapstructure:"error-code"`
+	WarningCode int `mapstructure:"warning-code"`
+	Directives  []struct {
+		Name     string
+		Severity string
+	}
 }
 
 type ThelperSettings struct {
