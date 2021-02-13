@@ -5,18 +5,16 @@ import (
 	"fmt"
 	"go/token"
 	"io/ioutil"
-	"strings"
 
 	"github.com/mgechev/dots"
+	reviveConfig "github.com/mgechev/revive/config"
+	"github.com/mgechev/revive/lint"
+	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
-
-	reviveConfig "github.com/mgechev/revive/config"
-	"github.com/mgechev/revive/lint"
-	"golang.org/x/tools/go/analysis"
 )
 
 const (
@@ -46,15 +44,13 @@ func NewRevive(cfg *config.ReviveSettings) *goanalysis.Linter {
 		nil,
 	).WithContextSetter(func(lintCtx *linter.Context) {
 		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
-			var (
-				files = []string{}
-			)
+			var files []string
 
 			for _, file := range pass.Files {
 				files = append(files, pass.Fset.PositionFor(file.Pos(), false).Filename)
 			}
 
-			conf, err := SetReviveConfig(cfg)
+			conf, err := setReviveConfig(cfg)
 			if err != nil {
 				return nil, err
 			}
@@ -71,7 +67,7 @@ func NewRevive(cfg *config.ReviveSettings) *goanalysis.Linter {
 				return nil, err
 			}
 
-			packages, err := dots.ResolvePackages(files, normalizeSplit([]string{}))
+			packages, err := dots.ResolvePackages(files, []string{})
 			if err != nil {
 				return nil, err
 			}
@@ -131,18 +127,7 @@ func NewRevive(cfg *config.ReviveSettings) *goanalysis.Linter {
 	}).WithLoadMode(goanalysis.LoadModeSyntax)
 }
 
-func normalizeSplit(strs []string) []string {
-	res := []string{}
-	for _, s := range strs {
-		t := strings.Trim(s, " \t")
-		if len(t) > 0 {
-			res = append(res, t)
-		}
-	}
-	return res
-}
-
-func SetReviveConfig(cfg *config.ReviveSettings) (*lint.Config, error) {
+func setReviveConfig(cfg *config.ReviveSettings) (*lint.Config, error) {
 	// Get revive default configuration
 	conf, err := reviveConfig.GetConfig("")
 	if err != nil {
@@ -166,7 +151,7 @@ func SetReviveConfig(cfg *config.ReviveSettings) (*lint.Config, error) {
 
 	if len(cfg.Rules) != 0 {
 		// Clear default rules, only use rules defined in config
-		conf.Rules = map[string]lint.RuleConfig{}
+		conf.Rules = make(map[string]lint.RuleConfig, len(cfg.Rules))
 	}
 	for _, r := range cfg.Rules {
 		conf.Rules[r.Name] = lint.RuleConfig{Arguments: r.Arguments, Severity: lint.Severity(r.Severity)}
@@ -177,7 +162,7 @@ func SetReviveConfig(cfg *config.ReviveSettings) (*lint.Config, error) {
 
 	if len(cfg.Directives) != 0 {
 		// Clear default Directives, only use Directives defined in config
-		conf.Directives = map[string]lint.DirectiveConfig{}
+		conf.Directives = make(map[string]lint.DirectiveConfig, len(cfg.Directives))
 	}
 	for _, d := range cfg.Directives {
 		conf.Directives[d.Name] = lint.DirectiveConfig{Severity: lint.Severity(d.Severity)}
