@@ -168,10 +168,6 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetUnused).
 			WithURL("https://github.com/opennota/check"),
-		linter.NewConfig(golinters.NewInterfacer()).
-			WithLoadForGoAnalysis().
-			WithPresets(linter.PresetStyle).
-			WithURL("https://github.com/mvdan/interfacer"),
 		linter.NewConfig(golinters.NewUnconvert()).
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetStyle).
