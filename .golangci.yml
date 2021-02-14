@@ -117,6 +117,7 @@ linters:
   # - nestif
   # - prealloc
   # - testpackage
+  # - revive
   # - wsl
 
 issues:

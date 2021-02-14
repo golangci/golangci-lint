@@ -28,7 +28,7 @@ require (
 	github.com/golangci/lint-1 v0.0.0-20191013205115-297bf364a8e0
 	github.com/golangci/maligned v0.0.0-20180506175553-b1d89398deca
 	github.com/golangci/misspell v0.0.0-20180809174111-950f5d19e770
-	github.com/golangci/revgrep v0.0.0-20180526074752-d9c87f5ffaf0
+	github.com/golangci/revgrep v0.0.0-20210208091834-cd28932614b5
 	github.com/golangci/unconvert v0.0.0-20180507085042-28b1c447d1f4
 	github.com/jgautheron/goconst v0.0.0-20201117150253-ccae5bf973f3
 	github.com/jingyugao/rowserrcheck v0.0.0-20210130005344-c6a0c12dd98d
@@ -40,6 +40,8 @@ require (
 	github.com/matoous/godox v0.0.0-20190911065817-5d6d842e92eb // v1.0
 	github.com/mattn/go-colorable v0.1.8
 	github.com/mbilski/exhaustivestruct v1.2.0
+	github.com/mgechev/dots v0.0.0-20190921121421-c36f7dcfbb81
+	github.com/mgechev/revive v1.0.3
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/mitchellh/go-ps v1.0.0
 	github.com/moricho/tparallel v0.2.1
