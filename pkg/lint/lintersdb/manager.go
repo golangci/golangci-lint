@@ -357,6 +357,10 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		linter.NewConfig(golinters.NewRevive(reviveCfg)).
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/mgechev/revive"),
+		linter.NewConfig(golinters.NewDurationCheck()).
+			WithPresets(linter.PresetBugs).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/charithe/durationcheck"),
 
 		// nolintlint must be last because it looks at the results of all the previous linters for unused nolint directives
 		linter.NewConfig(golinters.NewNoLintLint()).
