@@ -351,6 +351,7 @@ linters-settings:
     packages:
       - github.com/jmoiron/sqlx
   revive:
+    # see https://github.com/mgechev/revive#available-rules for details.
     ignore-generated-header: true
     severity: warning
     rules:
