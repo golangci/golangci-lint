@@ -96,6 +96,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 	var thelperCfg *config.ThelperSettings
 	var predeclaredCfg *config.PredeclaredSettings
 	var ifshortCfg *config.IfshortSettings
+	var reviveCfg *config.ReviveSettings
 	if m.cfg != nil {
 		govetCfg = &m.cfg.LintersSettings.Govet
 		testpackageCfg = &m.cfg.LintersSettings.Testpackage
@@ -104,6 +105,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		thelperCfg = &m.cfg.LintersSettings.Thelper
 		predeclaredCfg = &m.cfg.LintersSettings.Predeclared
 		ifshortCfg = &m.cfg.LintersSettings.Ifshort
+		reviveCfg = &m.cfg.LintersSettings.Revive
 	}
 	const megacheckName = "megacheck"
 	lcs := []*linter.Config{
@@ -352,6 +354,9 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		linter.NewConfig(golinters.NewPredeclared(predeclaredCfg)).
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/nishanths/predeclared"),
+		linter.NewConfig(golinters.NewRevive(reviveCfg)).
+			WithPresets(linter.PresetStyle).
+			WithURL("https://github.com/mgechev/revive"),
 
 		// nolintlint must be last because it looks at the results of all the previous linters for unused nolint directives
 		linter.NewConfig(golinters.NewNoLintLint()).
