@@ -201,6 +201,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithURL(""),
 		linter.NewConfig(golinters.NewAsciicheck()).
 			WithPresets(linter.PresetBugs, linter.PresetStyle).
+			WithLoadForGoAnalysis().
 			WithURL("https://github.com/tdakkota/asciicheck"),
 
 		linter.NewConfig(golinters.NewGofmt()).
