@@ -2,8 +2,10 @@
 //config_path: testdata/configs/revive.yml
 package testdata
 
-func testRevive(t string) error {
-	if t == "" {
+import "time"
+
+func testRevive(t *time.Duration) error {
+	if t == nil {
 		return nil
 	} else { // ERROR "if block ends with a return statement, so drop this else and outdent its block"
 		return nil

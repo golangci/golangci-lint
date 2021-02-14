@@ -17,9 +17,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-const (
-	reviveName = "revive"
-)
+const reviveName = "revive"
 
 // jsonObject defines a JSON object of an failure
 type jsonObject struct {
@@ -29,17 +27,16 @@ type jsonObject struct {
 
 // NewNewRevive returns a new Revive linter.
 func NewRevive(cfg *config.ReviveSettings) *goanalysis.Linter {
-	var (
-		issues   []goanalysis.Issue
-		analyzer = &analysis.Analyzer{
-			Name: goanalysis.TheOnlyAnalyzerName,
-			Doc:  goanalysis.TheOnlyanalyzerDoc,
-		}
-	)
+	var issues []goanalysis.Issue
+
+	analyzer := &analysis.Analyzer{
+		Name: goanalysis.TheOnlyAnalyzerName,
+		Doc:  goanalysis.TheOnlyanalyzerDoc,
+	}
 
 	return goanalysis.NewLinter(
 		reviveName,
-		"Fast, configurable, extensible, flexible, and beautiful linter for Go",
+		"Fast, configurable, extensible, flexible, and beautiful linter for Go. Drop-in replacement of golint.",
 		[]*analysis.Analyzer{analyzer},
 		nil,
 	).WithContextSetter(func(lintCtx *linter.Context) {
@@ -81,10 +78,13 @@ func NewRevive(cfg *config.ReviveSettings) *goanalysis.Linter {
 			exitChan := make(chan bool)
 
 			var output string
-			go (func() {
-				output, _ = formatter.Format(formatChan, *conf)
+			go func() {
+				output, err = formatter.Format(formatChan, *conf)
+				if err != nil {
+					lintCtx.Log.Errorf("Format error: %v", err)
+				}
 				exitChan <- true
-			})()
+			}()
 
 			for f := range failures {
 				if f.Confidence < conf.Confidence {
@@ -120,6 +120,7 @@ func NewRevive(cfg *config.ReviveSettings) *goanalysis.Linter {
 					FromLinter: reviveName,
 				}, pass))
 			}
+
 			return nil, nil
 		}
 	}).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
