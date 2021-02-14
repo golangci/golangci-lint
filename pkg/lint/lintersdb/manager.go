@@ -345,6 +345,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithURL("https://github.com/kunwardeep/paralleltest"),
 		linter.NewConfig(golinters.NewMakezero()).
 			WithPresets(linter.PresetStyle, linter.PresetBugs).
+			WithLoadForGoAnalysis().
 			WithURL("https://github.com/ashanbrown/makezero"),
 		linter.NewConfig(golinters.NewForbidigo()).
 			WithPresets(linter.PresetStyle).
