@@ -305,6 +305,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithURL("https://github.com/nakabonne/nestif"),
 		linter.NewConfig(golinters.NewExportLoopRef()).
 			WithPresets(linter.PresetBugs).
+			WithLoadForGoAnalysis().
 			WithURL("https://github.com/kyoh86/exportloopref"),
 		linter.NewConfig(golinters.NewExhaustive(exhaustiveCfg)).
 			WithPresets(linter.PresetBugs).
