@@ -203,6 +203,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithURL(""),
 		linter.NewConfig(golinters.NewAsciicheck()).
 			WithPresets(linter.PresetBugs, linter.PresetStyle).
+			WithLoadForGoAnalysis().
 			WithURL("https://github.com/tdakkota/asciicheck"),
 
 		linter.NewConfig(golinters.NewGofmt()).
@@ -306,6 +307,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithURL("https://github.com/nakabonne/nestif"),
 		linter.NewConfig(golinters.NewExportLoopRef()).
 			WithPresets(linter.PresetBugs).
+			WithLoadForGoAnalysis().
 			WithURL("https://github.com/kyoh86/exportloopref"),
 		linter.NewConfig(golinters.NewExhaustive(exhaustiveCfg)).
 			WithPresets(linter.PresetBugs).
@@ -333,6 +335,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithURL("https://github.com/moricho/tparallel"),
 		linter.NewConfig(golinters.NewExhaustiveStruct()).
 			WithPresets(linter.PresetStyle).
+			WithLoadForGoAnalysis().
 			WithURL("https://github.com/mbilski/exhaustivestruct"),
 		linter.NewConfig(golinters.NewErrorLint(errorlintCfg)).
 			WithPresets(linter.PresetBugs).
@@ -344,6 +347,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithURL("https://github.com/kunwardeep/paralleltest"),
 		linter.NewConfig(golinters.NewMakezero()).
 			WithPresets(linter.PresetStyle, linter.PresetBugs).
+			WithLoadForGoAnalysis().
 			WithURL("https://github.com/ashanbrown/makezero"),
 		linter.NewConfig(golinters.NewForbidigo()).
 			WithPresets(linter.PresetStyle).
