@@ -194,6 +194,10 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		linter.NewConfig(golinters.NewGocyclo()).
 			WithPresets(linter.PresetComplexity).
 			WithURL("https://github.com/alecthomas/gocyclo"),
+		linter.NewConfig(golinters.NewCyclop()).
+			WithLoadForGoAnalysis().
+			WithPresets(linter.PresetComplexity).
+			WithURL("https://github.com/bkielbasa/cyclop"),
 		linter.NewConfig(golinters.NewGocognit()).
 			WithPresets(linter.PresetComplexity).
 			WithURL("https://github.com/uudashr/gocognit"),

@@ -183,6 +183,11 @@ type LintersSettings struct {
 	Gocyclo struct {
 		MinComplexity int `mapstructure:"min-complexity"`
 	}
+	Cyclop struct {
+		MaxComplexity  int     `mapstructure:"max-complexity"`
+		PackageAverage float64 `mapstructure:"package-average"`
+		SkipTests      bool    `mapstructure:"skip-tests"`
+	}
 	Varcheck struct {
 		CheckExportedFields bool `mapstructure:"exported-fields"`
 	}
