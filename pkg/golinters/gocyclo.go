@@ -6,7 +6,7 @@ import (
 	"sort"
 	"sync"
 
-	gocycloAPI "github.com/golangci/gocyclo/pkg/gocyclo"
+	"github.com/fzipp/gocyclo"
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
@@ -31,9 +31,9 @@ func NewGocyclo() *goanalysis.Linter {
 		nil,
 	).WithContextSetter(func(lintCtx *linter.Context) {
 		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
-			var stats []gocycloAPI.Stat
+			var stats []gocyclo.Stat
 			for _, f := range pass.Files {
-				stats = gocycloAPI.BuildStats(f, pass.Fset, stats)
+				stats = gocyclo.AnalyzeASTFile(f, pass.Fset, stats)
 			}
 			if len(stats) == 0 {
 				return nil, nil
