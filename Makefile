@@ -44,7 +44,7 @@ fast_generate: assets/github-action-config.json
 
 fast_check_generated:
 	$(MAKE) --always-make fast_generate
-	git checkout -- go.mod go.sum # can differ between go1.12 and go1.13
+	git checkout -- go.mod go.sum # can differ between go1.15 and go1.16
 	git diff --exit-code # check no changes
 
 release: .goreleaser.yml tools/goreleaser
@@ -78,7 +78,8 @@ assets/demo.svg: tools/svg-term tools/Dracula.itermcolors
 	./tools/svg-term --cast=183662 --out assets/demo.svg --window --width 110 --height 30 --from 2000 --to 20000 --profile ./tools/Dracula.itermcolors --term iterm2
 
 assets/github-action-config.json: FORCE golangci-lint
-	go run ./scripts/gen_github_action_config/main.go $@
+	# go run ./scripts/gen_github_action_config/main.go $@
+	cd ./scripts/gen_github_action_config/; go run ./main.go ../../$@
 
 go.mod: FORCE
 	go mod tidy

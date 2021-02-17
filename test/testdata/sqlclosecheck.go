@@ -6,15 +6,11 @@ import (
 	"database/sql"
 	"log"
 	"strings"
-
-	_ "github.com/go-sql-driver/mysql"
-	"github.com/jmoiron/sqlx"
 )
 
 var (
 	ctx    context.Context
 	db     *sql.DB
-	dbx    *sqlx.DB
 	age    = 27
 	userID = 43
 )
@@ -258,85 +254,4 @@ func stmtReturn() (*sql.Stmt, error) {
 
 func stmtReturnShort() (*sql.Stmt, error) {
 	return db.PrepareContext(ctx, "SELECT username FROM users WHERE id = ?")
-}
-
-func sqlxCorrectDefer() {
-	rows, err := dbx.Queryx("SELECT name FROM users WHERE age=?", age)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	defer rows.Close()
-
-	names := make([]string, 0)
-	for rows.Next() {
-		var name string
-		if err := rows.Scan(&name); err != nil {
-			log.Fatal(err)
-		}
-		names = append(names, name)
-	}
-
-	// Check for errors from iterating over rows.
-	if err := rows.Err(); err != nil {
-		log.Fatal(err)
-	}
-	log.Printf("%s are %d years old", strings.Join(names, ", "), age)
-}
-
-func sqlxNonDeferClose() {
-	rows, err := dbx.Queryx("SELECT name FROM users WHERE age=?", age)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	names := make([]string, 0)
-	for rows.Next() {
-		var name string
-		if err := rows.Scan(&name); err != nil {
-			log.Fatal(err)
-		}
-		names = append(names, name)
-	}
-
-	// Check for errors from iterating over rows.
-	if err := rows.Err(); err != nil {
-		log.Fatal(err)
-	}
-	log.Printf("%s are %d years old", strings.Join(names, ", "), age)
-
-	rows.Close() // ERROR "Close should use defer"
-}
-
-func sqlxMissingClose() {
-	rows, err := dbx.Queryx("SELECT name FROM users WHERE age=?", age) // ERROR "Rows/Stmt was not closed"
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// defer rows.Close()
-
-	names := make([]string, 0)
-	for rows.Next() {
-		var name string
-		if err := rows.Scan(&name); err != nil {
-			log.Fatal(err)
-		}
-		names = append(names, name)
-	}
-
-	// Check for errors from iterating over rows.
-	if err := rows.Err(); err != nil {
-		log.Fatal(err)
-	}
-	log.Printf("%s are %d years old", strings.Join(names, ", "), age)
-}
-
-func sqlxReturnRows() (*sqlx.Rows, error) {
-	rows, err := dbx.Queryx("SELECT name FROM users WHERE age=?", age)
-	if err != nil {
-		return nil, err
-	}
-
-	return rows, nil
 }
