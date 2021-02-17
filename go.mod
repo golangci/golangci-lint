@@ -16,6 +16,7 @@ require (
 	github.com/denis-tingajkin/go-header v0.4.2
 	github.com/esimonov/ifshort v1.0.1
 	github.com/fatih/color v1.10.0
+	github.com/fzipp/gocyclo v0.3.1
 	github.com/go-critic/go-critic v0.5.4
 	github.com/go-xmlfmt/xmlfmt v0.0.0-20191208150333-d5b6f63a941b
 	github.com/gofrs/flock v0.8.0
@@ -23,7 +24,6 @@ require (
 	github.com/golangci/dupl v0.0.0-20180902072040-3e9179ac440a
 	github.com/golangci/errcheck v0.0.0-20181223084120-ef45e06d44b6
 	github.com/golangci/go-misc v0.0.0-20180628070357-927a3d87b613
-	github.com/golangci/gocyclo v0.0.0-20180528144436-0a533e8fa43d
 	github.com/golangci/gofmt v0.0.0-20190930125516-244bba706f1a
 	github.com/golangci/ineffassign v0.0.0-20190609212857-42439a7714cc
 	github.com/golangci/lint-1 v0.0.0-20191013205115-297bf364a8e0
