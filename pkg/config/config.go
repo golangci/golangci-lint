@@ -183,11 +183,6 @@ type LintersSettings struct {
 	Gocyclo struct {
 		MinComplexity int `mapstructure:"min-complexity"`
 	}
-	Cyclop struct {
-		MaxComplexity  int     `mapstructure:"max-complexity"`
-		PackageAverage float64 `mapstructure:"package-average"`
-		SkipTests      bool    `mapstructure:"skip-tests"`
-	}
 	Varcheck struct {
 		CheckExportedFields bool `mapstructure:"exported-fields"`
 	}
@@ -278,6 +273,7 @@ type LintersSettings struct {
 	Forbidigo   ForbidigoSettings
 	Ifshort     IfshortSettings
 	Predeclared PredeclaredSettings
+	Cyclop      Cyclop
 
 	Custom map[string]CustomLinterSettings
 }
@@ -451,6 +447,12 @@ type ForbidigoSettings struct {
 type PredeclaredSettings struct {
 	Ignore    string `mapstructure:"ignore"`
 	Qualified bool   `mapstructure:"q"`
+}
+
+type Cyclop struct {
+	MaxComplexity  int     `mapstructure:"max-complexity"`
+	PackageAverage float64 `mapstructure:"package-average"`
+	SkipTests      bool    `mapstructure:"skip-tests"`
 }
 
 var defaultLintersSettings = LintersSettings{
