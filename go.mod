@@ -9,6 +9,7 @@ require (
 	github.com/alexkohler/prealloc v0.0.0-20210204145425-77a5b5dd9799
 	github.com/ashanbrown/forbidigo v1.1.0
 	github.com/ashanbrown/makezero v0.0.0-20201205152432-7b7cdbb3025a
+	github.com/bkielbasa/cyclop v1.2.0
 	github.com/bombsimon/wsl/v3 v3.1.0
 	github.com/charithe/durationcheck v0.0.3
 	github.com/daixiang0/gci v0.2.8
