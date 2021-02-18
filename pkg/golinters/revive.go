@@ -1,14 +1,17 @@
 package golinters
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"go/token"
 	"io/ioutil"
 
+	"github.com/BurntSushi/toml"
 	"github.com/mgechev/dots"
 	reviveConfig "github.com/mgechev/revive/config"
 	"github.com/mgechev/revive/lint"
+	"github.com/mgechev/revive/rule"
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/config"
@@ -47,7 +50,7 @@ func NewRevive(cfg *config.ReviveSettings) *goanalysis.Linter {
 				files = append(files, pass.Fset.PositionFor(file.Pos(), false).Filename)
 			}
 
-			conf, err := setReviveConfig(cfg)
+			conf, err := getReviveConfig(cfg)
 			if err != nil {
 				return nil, err
 			}
@@ -128,46 +131,129 @@ func NewRevive(cfg *config.ReviveSettings) *goanalysis.Linter {
 	}).WithLoadMode(goanalysis.LoadModeSyntax)
 }
 
-func setReviveConfig(cfg *config.ReviveSettings) (*lint.Config, error) {
-	// Get revive default configuration
-	conf, err := reviveConfig.GetConfig("")
+// This function mimics the GetConfig function of revive.
+// This allow to get default values and right types.
+// https://github.com/golangci/golangci-lint/issues/1745
+// https://github.com/mgechev/revive/blob/389ba853b0b3587f0c3b71b5f0c61ea4e23928ec/config/config.go#L155
+func getReviveConfig(cfg *config.ReviveSettings) (*lint.Config, error) {
+	rawRoot := createConfigMap(cfg)
+
+	buf := bytes.NewBuffer(nil)
+
+	err := toml.NewEncoder(buf).Encode(rawRoot)
 	if err != nil {
 		return nil, err
 	}
 
-	// Default is false
-	conf.IgnoreGeneratedHeader = cfg.IgnoreGeneratedHeader
+	conf := defaultConfig()
 
-	if cfg.Severity != "" {
-		conf.Severity = lint.Severity(cfg.Severity)
+	_, err = toml.DecodeReader(buf, conf)
+	if err != nil {
+		return nil, err
 	}
 
-	if cfg.Confidence != 0 {
-		conf.Confidence = cfg.Confidence
-	}
+	normalizeConfig(conf)
 
 	// By default golangci-lint ignores missing doc comments, follow same convention by removing this default rule
 	// Relevant issue: https://github.com/golangci/golangci-lint/issues/456
+	delete(conf.Rules, "package-comments")
 	delete(conf.Rules, "exported")
 
-	if len(cfg.Rules) != 0 {
-		// Clear default rules, only use rules defined in config
-		conf.Rules = make(map[string]lint.RuleConfig, len(cfg.Rules))
-	}
-	for _, r := range cfg.Rules {
-		conf.Rules[r.Name] = lint.RuleConfig{Arguments: r.Arguments, Severity: lint.Severity(r.Severity)}
-	}
-
-	conf.ErrorCode = cfg.ErrorCode
-	conf.WarningCode = cfg.WarningCode
-
-	if len(cfg.Directives) != 0 {
-		// Clear default Directives, only use Directives defined in config
-		conf.Directives = make(map[string]lint.DirectiveConfig, len(cfg.Directives))
-	}
-	for _, d := range cfg.Directives {
-		conf.Directives[d.Name] = lint.DirectiveConfig{Severity: lint.Severity(d.Severity)}
-	}
-
 	return conf, nil
+}
+
+func createConfigMap(cfg *config.ReviveSettings) map[string]interface{} {
+	rawRoot := map[string]interface{}{
+		"ignoreGeneratedHeader": cfg.IgnoreGeneratedHeader,
+		"confidence":            cfg.Confidence,
+		"severity":              cfg.Severity,
+		"errorCode":             cfg.ErrorCode,
+		"warningCode":           cfg.WarningCode,
+	}
+
+	rawDirectives := map[string]map[string]interface{}{}
+	for _, directive := range cfg.Directives {
+		rawDirectives[directive.Name] = map[string]interface{}{
+			"severity": directive.Severity,
+		}
+	}
+
+	if len(rawDirectives) > 0 {
+		rawRoot["directive"] = rawDirectives
+	}
+
+	rawRules := map[string]map[string]interface{}{}
+	for _, s := range cfg.Rules {
+		rawRules[s.Name] = map[string]interface{}{
+			"severity":  s.Severity,
+			"arguments": s.Arguments,
+		}
+	}
+
+	if len(rawRules) > 0 {
+		rawRoot["rule"] = rawRules
+	}
+
+	return rawRoot
+}
+
+// This element is not exported by revive, so we need copy the code.
+// Extracted from https://github.com/mgechev/revive/blob/389ba853b0b3587f0c3b71b5f0c61ea4e23928ec/config/config.go#L15
+var defaultRules = []lint.Rule{
+	&rule.VarDeclarationsRule{},
+	&rule.PackageCommentsRule{},
+	&rule.DotImportsRule{},
+	&rule.BlankImportsRule{},
+	&rule.ExportedRule{},
+	&rule.VarNamingRule{},
+	&rule.IndentErrorFlowRule{},
+	&rule.IfReturnRule{},
+	&rule.RangeRule{},
+	&rule.ErrorfRule{},
+	&rule.ErrorNamingRule{},
+	&rule.ErrorStringsRule{},
+	&rule.ReceiverNamingRule{},
+	&rule.IncrementDecrementRule{},
+	&rule.ErrorReturnRule{},
+	&rule.UnexportedReturnRule{},
+	&rule.TimeNamingRule{},
+	&rule.ContextKeysType{},
+	&rule.ContextAsArgumentRule{},
+}
+
+// This element is not exported by revive, so we need copy the code.
+// Extracted from https://github.com/mgechev/revive/blob/389ba853b0b3587f0c3b71b5f0c61ea4e23928ec/config/config.go#L133
+func normalizeConfig(cfg *lint.Config) {
+	if cfg.Confidence == 0 {
+		cfg.Confidence = 0.8
+	}
+	severity := cfg.Severity
+	if severity != "" {
+		for k, v := range cfg.Rules {
+			if v.Severity == "" {
+				v.Severity = severity
+			}
+			cfg.Rules[k] = v
+		}
+		for k, v := range cfg.Directives {
+			if v.Severity == "" {
+				v.Severity = severity
+			}
+			cfg.Directives[k] = v
+		}
+	}
+}
+
+// This element is not exported by revive, so we need copy the code.
+// Extracted from https://github.com/mgechev/revive/blob/389ba853b0b3587f0c3b71b5f0c61ea4e23928ec/config/config.go#L182
+func defaultConfig() *lint.Config {
+	defaultConfig := lint.Config{
+		Confidence: 0.0,
+		Severity:   lint.SeverityWarning,
+		Rules:      map[string]lint.RuleConfig{},
+	}
+	for _, r := range defaultRules {
+		defaultConfig.Rules[r.Name()] = lint.RuleConfig{}
+	}
+	return &defaultConfig
 }

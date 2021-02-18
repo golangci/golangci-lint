@@ -5,3 +5,15 @@ linters-settings:
     rules:
       - name: indent-error-flow
         severity: warning
+      - name: cognitive-complexity
+        arguments: [ 7 ]
+      - name: line-length-limit
+        arguments: [ 110 ]
+      - name: function-result-limit
+        arguments: [ 3 ]
+      - name: argument-limit
+        arguments: [ 4 ]
+      - name: cyclomatic
+        arguments: [ 10 ]
+      - name: max-public-structs
+        arguments: [ 3 ]
