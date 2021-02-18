@@ -1,30 +1,15 @@
-// args: -Ecyclop
+//args: -Ecyclop
+//config: linters-settings.cyclop.max-complexity=15
 package testdata
 
-import "math"
-
-func cyclopComplexFunc() { // ERROR "calculated cyclomatic complexity for function cyclopComplexFunc is 11, max is 10"
-	i := math.MaxInt8
-	if i > 2 {
-		if i > 2 {
-		}
-		if i > 2 {
-		}
-		if i > 2 {
-		}
-		if i > 2 {
-		}
-	} else {
-		if i > 2 {
-		}
-		if i > 2 {
-		}
-		if i > 2 {
-		}
-		if i > 2 {
-		}
+func cyclopComplexFunc(s string) { // ERROR "calculated cyclomatic complexity for function cyclopComplexFunc is 22, max is 15"
+	if s == "1" || s == "2" || s == "3" || s == "4" || s == "5" || s == "6" || s == "7" {
+		return
 	}
-
-	if i > 2 {
+	if s == "1" || s == "2" || s == "3" || s == "4" || s == "5" || s == "6" || s == "7" {
+		return
+	}
+	if s == "1" || s == "2" || s == "3" || s == "4" || s == "5" || s == "6" || s == "7" {
+		return
 	}
 }
