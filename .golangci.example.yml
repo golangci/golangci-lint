@@ -111,6 +111,12 @@ linters-settings:
     # 'default' case is present, even if all enum members aren't listed in the
     # switch
     default-signifies-exhaustive: false
+  exhaustivestruct:
+    struct-patterns:
+      - '*.Test'
+      - '*.Test2'
+      - '*.Embedded'
+      - '*.External'
   funlen:
     lines: 60
     statements: 40

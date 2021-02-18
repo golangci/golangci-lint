@@ -249,31 +249,32 @@ type LintersSettings struct {
 		} `mapstructure:"blocked"`
 	}
 
-	WSL         WSLSettings
-	Lll         LllSettings
-	Unparam     UnparamSettings
-	Nakedret    NakedretSettings
-	Prealloc    PreallocSettings
-	Errcheck    ErrcheckSettings
-	Gocritic    GocriticSettings
-	Godox       GodoxSettings
-	Dogsled     DogsledSettings
-	Gocognit    GocognitSettings
-	Godot       GodotSettings
-	Goheader    GoHeaderSettings
-	Testpackage TestpackageSettings
-	Nestif      NestifSettings
-	NoLintLint  NoLintLintSettings
-	Exhaustive  ExhaustiveSettings
-	Gofumpt     GofumptSettings
-	ErrorLint   ErrorLintSettings
-	Makezero    MakezeroSettings
-	Revive      ReviveSettings
-	Thelper     ThelperSettings
-	Forbidigo   ForbidigoSettings
-	Ifshort     IfshortSettings
-	Predeclared PredeclaredSettings
-	Cyclop      Cyclop
+	WSL              WSLSettings
+	Lll              LllSettings
+	Unparam          UnparamSettings
+	Nakedret         NakedretSettings
+	Prealloc         PreallocSettings
+	Errcheck         ErrcheckSettings
+	Gocritic         GocriticSettings
+	Godox            GodoxSettings
+	Dogsled          DogsledSettings
+	Gocognit         GocognitSettings
+	Godot            GodotSettings
+	Goheader         GoHeaderSettings
+	Testpackage      TestpackageSettings
+	Nestif           NestifSettings
+	NoLintLint       NoLintLintSettings
+	Exhaustive       ExhaustiveSettings
+	ExhaustiveStruct ExhaustiveStructSettings
+	Gofumpt          GofumptSettings
+	ErrorLint        ErrorLintSettings
+	Makezero         MakezeroSettings
+	Revive           ReviveSettings
+	Thelper          ThelperSettings
+	Forbidigo        ForbidigoSettings
+	Ifshort          IfshortSettings
+	Predeclared      PredeclaredSettings
+	Cyclop           Cyclop
 
 	Custom map[string]CustomLinterSettings
 }
@@ -385,6 +386,10 @@ type NestifSettings struct {
 type ExhaustiveSettings struct {
 	CheckGenerated             bool `mapstructure:"check-generated"`
 	DefaultSignifiesExhaustive bool `mapstructure:"default-signifies-exhaustive"`
+}
+
+type ExhaustiveStructSettings struct {
+	StructPatterns []string `mapstructure:"struct-patterns"`
 }
 
 type GofumptSettings struct {
