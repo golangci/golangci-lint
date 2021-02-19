@@ -26,12 +26,10 @@ func TestFix(t *testing.T) {
 
 	if os.Getenv("GL_KEEP_TEMP_FILES") == "1" {
 		t.Logf("Temp dir for fix test: %s", tmpDir)
-	} else if tCleanupExists {
-		registerCleanup(t, func() {
+	} else {
+		t.Cleanup(func() {
 			os.RemoveAll(tmpDir)
 		})
-	} else {
-		defer os.RemoveAll(tmpDir)
 	}
 
 	fixDir := filepath.Join(testdataDir, "fix")
@@ -42,10 +40,8 @@ func TestFix(t *testing.T) {
 	for _, input := range inputs {
 		input := input
 		t.Run(filepath.Base(input), func(t *testing.T) {
-			// if t.Cleanup does not exist, don't run these tests concurrently because we need to use defer for clean up
-			if tCleanupExists {
-				t.Parallel()
-			}
+			t.Parallel()
+
 			args := []string{
 				"--disable-all", "--print-issued-lines=false", "--print-linter-name=false", "--out-format=line-number",
 				"--allow-parallel-runners", "--fix",
