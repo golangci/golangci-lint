@@ -17,6 +17,7 @@ import (
 	"golang.org/x/tools/go/analysis/passes/errorsas"
 	"golang.org/x/tools/go/analysis/passes/findcall"
 	"golang.org/x/tools/go/analysis/passes/httpresponse"
+	"golang.org/x/tools/go/analysis/passes/ifaceassert"
 	_ "golang.org/x/tools/go/analysis/passes/inspect" // unused internal analyzer
 	"golang.org/x/tools/go/analysis/passes/loopclosure"
 	"golang.org/x/tools/go/analysis/passes/lostcancel"
@@ -28,6 +29,7 @@ import (
 	"golang.org/x/tools/go/analysis/passes/shift"
 	"golang.org/x/tools/go/analysis/passes/sortslice"
 	"golang.org/x/tools/go/analysis/passes/stdmethods"
+	"golang.org/x/tools/go/analysis/passes/stringintconv"
 	"golang.org/x/tools/go/analysis/passes/structtag"
 	"golang.org/x/tools/go/analysis/passes/testinggoroutine"
 	"golang.org/x/tools/go/analysis/passes/tests"
@@ -55,6 +57,7 @@ var (
 		errorsas.Analyzer,
 		findcall.Analyzer,
 		httpresponse.Analyzer,
+		ifaceassert.Analyzer,
 		loopclosure.Analyzer,
 		lostcancel.Analyzer,
 		nilfunc.Analyzer,
@@ -64,6 +67,7 @@ var (
 		shift.Analyzer,
 		sortslice.Analyzer,
 		stdmethods.Analyzer,
+		stringintconv.Analyzer,
 		structtag.Analyzer,
 		testinggoroutine.Analyzer,
 		tests.Analyzer,
@@ -90,6 +94,7 @@ var (
 		printf.Analyzer,
 		shift.Analyzer,
 		stdmethods.Analyzer,
+		stringintconv.Analyzer,
 		structtag.Analyzer,
 		tests.Analyzer,
 		unmarshal.Analyzer,

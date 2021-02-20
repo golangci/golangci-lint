@@ -8,7 +8,7 @@ import (
 	"os"
 )
 
-func Govet() error {
+func GovetComposites() error {
 	return &os.PathError{"first", "path", os.ErrNotExist} // ERROR "composites: \\`(os|io/fs)\\.PathError\\` composite literal uses unkeyed fields"
 }
 
@@ -35,4 +35,9 @@ func GovetNolintVetShadow() error {
 func GovetPrintf() {
 	x := "dummy"
 	fmt.Printf("%d", x) // ERROR "printf: Printf format %d has arg x of wrong type string"
+}
+
+func GovetStringIntConv() {
+	i := 42
+	fmt.Println("i = " + string(i)) // ERROR "stringintconv: conversion from int to string yields a string of one rune, not a string of digits \\(did you mean fmt.Sprint\\(x\\)\\?\\)"
 }
