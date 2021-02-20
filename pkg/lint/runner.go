@@ -50,6 +50,13 @@ func NewRunner(cfg *config.Config, log logutils.Log, goenv *goutil.Env, es *lint
 		return nil, errors.Wrap(err, "failed to get enabled linters")
 	}
 
+	// print deprecated messages
+	for name, lc := range enabledLinters {
+		if lc.IsDeprecated() {
+			log.Warnf("The linter '%s' is deprecated due to: %s", name, lc.DeprecatedMessage)
+		}
+	}
+
 	return &Runner{
 		Processors: []processors.Processor{
 			processors.NewCgo(goenv),
