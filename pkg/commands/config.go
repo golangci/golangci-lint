@@ -33,6 +33,14 @@ func (e *Executor) initConfig() {
 	}
 	e.initRunConfiguration(pathCmd) // allow --config
 	cmd.AddCommand(pathCmd)
+
+	enableNewCmd := &cobra.Command{
+		Use:   "enable-new",
+		Short: "Enable all linters not explicitly disabled in config file",
+		Run:   e.executeEnableNewCmd,
+	}
+	e.initRunConfiguration(enableNewCmd) // allow --config
+	cmd.AddCommand(enableNewCmd)
 }
 
 func (e *Executor) getUsedConfig() string {
@@ -55,12 +63,12 @@ func (e *Executor) executePathCmd(_ *cobra.Command, args []string) {
 		e.log.Fatalf("Usage: golangci-lint config path")
 	}
 
-	usedConfigFile := e.getUsedConfig()
-	if usedConfigFile == "" {
+	usedConfigFilePath := e.getUsedConfig()
+	if usedConfigFilePath == "" {
 		e.log.Warnf("No config file detected")
 		os.Exit(exitcodes.NoConfigFileDetected)
 	}
 
-	fmt.Println(usedConfigFile)
+	fmt.Println(usedConfigFilePath)
 	os.Exit(0)
 }
