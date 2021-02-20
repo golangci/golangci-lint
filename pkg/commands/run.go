@@ -206,6 +206,11 @@ func initFlagSet(fs *pflag.FlagSet, cfg *config.Config, m *lintersdb.Manager, is
 			"them. This option implies option --disable-all", strings.Join(m.AllPresets(), "|"))))
 	fs.BoolVar(&lc.Fast, "fast", false, wh("Run only fast linters from enabled linters set (first run won't be fast)"))
 
+	fs.BoolVar(&cfg.InternalCmdTest, "internal-cmd-test", false, wh("TODO")) // FIXME
+	if err := fs.MarkHidden("internal-cmd-test"); err != nil {
+		panic(err)
+	}
+
 	// Issues config
 	ic := &cfg.Issues
 	fs.StringSliceVarP(&ic.ExcludePatterns, "exclude", "e", nil, wh("Exclude issue by regexp"))
