@@ -411,6 +411,8 @@ linters-settings:
     # Allow calls and assignments to be cuddled as long as the lines have any
     # matching variables, fields or types. Default is true.
     allow-assign-and-call: true
+    # Allow assignments to be cuddled with anything. Default is false.
+    allow-assign-and-anything: false
     # Allow multiline assignments to be cuddled. Default is true.
     allow-multiline-assign: true
     # Allow declarations (var) to be cuddled.
