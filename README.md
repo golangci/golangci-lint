@@ -110,7 +110,7 @@ The Core Team has the following responsibilities:
 </table>
 
 <details>
-<summary>And 192 more our team members</summary>
+<summary>And 193 more our team members</summary>
 
 <table>
 <tr>
@@ -151,36 +151,36 @@ The Core Team has the following responsibilities:
 </tr>
 <tr>
   <td align="center"><a href="https://ferhatelmas.com?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/648018?u=22a8813458f8832e73d2b3b12b5e3685547ba0e9&v=4" width="100px;" alt=""/><br /><sub><b>ferhat elmas</b></sub></a></td>
+  <td align="center"><a href="https://lukasmalkmus.io?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/9931588?u=51de6132f5f0e8f88aedf265a5205d9a91f4e1aa&v=4" width="100px;" alt=""/><br /><sub><b>Lukas Malkmus</b></sub></a></td>
   <td align="center"><a href="twitter.com/migueljimeno96?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/6826244?u=03bcd0f7f342886d3abc5281311c932e832b3146&v=4" width="100px;" alt=""/><br /><sub><b>M. Ángel Jimeno</b></sub></a></td>
   <td align="center"><a href="https://github.com/crsdrw?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/811010?v=4" width="100px;" alt=""/><br /><sub><b>Chris Drew</b></sub></a></td>
+  <td align="center"><a href="https://github.com/maratori?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/16486128?v=4" width="100px;" alt=""/><br /><sub><b>Marat Reymers</b></sub></a></td>
   <td align="center"><a href="http://teivah.io?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/934784?u=a205b19f43dc3f90c3cbf5b1d6198328c2dff6c3&v=4" width="100px;" alt=""/><br /><sub><b>Teiva Harsanyi</b></sub></a></td>
   <td align="center"><a href="https://github.com/csilvers?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/1445223?v=4" width="100px;" alt=""/><br /><sub><b>Craig Silverstein</b></sub></a></td>
-  <td align="center"><a href="entgo.io?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/7413593?u=bd1180bdbb558d7f74be9e0a0a840529b1442c1e&v=4" width="100px;" alt=""/><br /><sub><b>Ariel Mashraki</b></sub></a></td>
-  <td align="center"><a href="https://github.com/idenx?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/1843231?v=4" width="100px;" alt=""/><br /><sub><b>Denis Isaev</b></sub></a></td>
 </tr>
 <tr>
+  <td align="center"><a href="https://patrickkuca.com?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/9790383?u=f3ee6bab4997260734040e0119d4cb35810973d7&v=4" width="100px;" alt=""/><br /><sub><b>Patrick Kuca</b></sub></a></td>
+  <td align="center"><a href="entgo.io?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/7413593?u=bd1180bdbb558d7f74be9e0a0a840529b1442c1e&v=4" width="100px;" alt=""/><br /><sub><b>Ariel Mashraki</b></sub></a></td>
+  <td align="center"><a href="https://www.linkedin.com/in/daniel-helfand-068aaa30/?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/34258252?u=68dad1d1d85d47c4bab2de0112ab495c89b6fd49&v=4" width="100px;" alt=""/><br /><sub><b>Daniel Helfand</b></sub></a></td>
+  <td align="center"><a href="https://github.com/idenx?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/1843231?v=4" width="100px;" alt=""/><br /><sub><b>Denis Isaev</b></sub></a></td>
   <td align="center"><a href="http://twpayne.blogspot.com/?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/6942?u=227a4496aba8d3f526c53bdb6aa7713b22c56906&v=4" width="100px;" alt=""/><br /><sub><b>Tom Payne</b></sub></a></td>
-  <td align="center"><a href="https://fsouza.dev?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/108725?u=d69de2efaa5f1a5ac03cbba2e3fded4f1e4512cb&v=4" width="100px;" alt=""/><br /><sub><b>francisco souza</b></sub></a></td>
-  <td align="center"><a href="https://lukasmalkmus.io?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/9931588?u=51de6132f5f0e8f88aedf265a5205d9a91f4e1aa&v=4" width="100px;" alt=""/><br /><sub><b>Lukas Malkmus</b></sub></a></td>
+  <td align="center"><a href="https://fsouza.dev?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/108725?u=b8d5f2610fa65b1ff6e54ff6f2b16a4643c8d849&v=4" width="100px;" alt=""/><br /><sub><b>francisco souza</b></sub></a></td>
   <td align="center"><a href="https://www.pedanticorderliness.com?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/343979?u=6443fee0e543d22b07b02edf0ed8fb1ce4943b5a&v=4" width="100px;" alt=""/><br /><sub><b>Ryan Olds</b></sub></a></td>
+</tr>
+<tr>
   <td align="center"><a href="https://www.suezawa.net/?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/1150301?u=ef7565231d0940a9bcf4b52496268cb56773ba0a&v=4" width="100px;" alt=""/><br /><sub><b>Hiroki Suezawa</b></sub></a></td>
   <td align="center"><a href="https://github.com/jfrabaute?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/100247?v=4" width="100px;" alt=""/><br /><sub><b>Fabrice</b></sub></a></td>
   <td align="center"><a href="https://github.com/elliots?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/622455?v=4" width="100px;" alt=""/><br /><sub><b>☃ Elliot Shepherd</b></sub></a></td>
-</tr>
-<tr>
   <td align="center"><a href="https://github.com/cblecker?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/1431969?v=4" width="100px;" alt=""/><br /><sub><b>Christoph Blecker</b></sub></a></td>
   <td align="center"><a href="http://immutables.pl?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/909896?u=8c37517f61b02e529477ea1e68e52b453d849312&v=4" width="100px;" alt=""/><br /><sub><b>Mateusz Bilski</b></sub></a></td>
   <td align="center"><a href="https://github.com/RX14?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/2788811?u=af7e6311b7c6a7288c691caaccd8d9bbe5978967&v=4" width="100px;" alt=""/><br /><sub><b>Stephanie Wilde-Hobbs</b></sub></a></td>
   <td align="center"><a href="http://www.twitter.com/corylanou?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/585100?u=7a1c046e387bdd6358e970e75a9f8ff06d0cf75c&v=4" width="100px;" alt=""/><br /><sub><b>Cory LaNou</b></sub></a></td>
-  <td align="center"><a href="https://patrickkuca.com?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/9790383?u=f3ee6bab4997260734040e0119d4cb35810973d7&v=4" width="100px;" alt=""/><br /><sub><b>Patrick Kuca</b></sub></a></td>
-  <td align="center"><a href="https://github.com/vitalyisaev2?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/5507054?u=a6015f53f3ce999d065218ecf43242f11b6c72ad&v=4" width="100px;" alt=""/><br /><sub><b>Vitaly Isaev</b></sub></a></td>
-  <td align="center"><a href="https://kilabit.info?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/43306?v=4" width="100px;" alt=""/><br /><sub><b>Shulhan</b></sub></a></td>
 </tr>
 <tr>
+  <td align="center"><a href="https://github.com/vitalyisaev2?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/5507054?u=a6015f53f3ce999d065218ecf43242f11b6c72ad&v=4" width="100px;" alt=""/><br /><sub><b>Vitaly Isaev</b></sub></a></td>
+  <td align="center"><a href="https://kilabit.info?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/43306?v=4" width="100px;" alt=""/><br /><sub><b>Shulhan</b></sub></a></td>
   <td align="center"><a href="https://renatosuero.dev/?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/1093214?u=c37ab360f4fa3a6c7f168aaf706e8a47323dc101&v=4" width="100px;" alt=""/><br /><sub><b>Renato Suero</b></sub></a></td>
-  <td align="center"><a href="https://www.linkedin.com/in/daniel-helfand-068aaa30/?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/34258252?u=68dad1d1d85d47c4bab2de0112ab495c89b6fd49&v=4" width="100px;" alt=""/><br /><sub><b>Daniel Helfand</b></sub></a></td>
   <td align="center"><a href="https://github.com/bvwells?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/22873967?u=033f18ad6e723a44fb01eed9e3a4665457de5636&v=4" width="100px;" alt=""/><br /><sub><b>Ben Wells</b></sub></a></td>
-  <td align="center"><a href="https://github.com/maratori?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/16486128?v=4" width="100px;" alt=""/><br /><sub><b>Marat Reymers</b></sub></a></td>
   <td align="center"><a href="https://github.com/bflad?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/189114?v=4" width="100px;" alt=""/><br /><sub><b>Brian Flad</b></sub></a></td>
   <td align="center"><a href="https://github.com/grongor?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/972493?v=4" width="100px;" alt=""/><br /><sub><b>Jakub Chábek</b></sub></a></td>
   <td align="center"><a href="https://github.com/tdakkota?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/15220500?u=41aad36b4fcc340495e2d1d0193255e4010e6a59&v=4" width="100px;" alt=""/><br /><sub><b>tdakkota</b></sub></a></td>
@@ -195,46 +195,46 @@ The Core Team has the following responsibilities:
   <td align="center"><a href="https://aofeisheng.com?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/5037285?u=2f1c2a9317d995c4a84461d5197c552ab0d89e43&v=4" width="100px;" alt=""/><br /><sub><b>Aofei Sheng</b></sub></a></td>
 </tr>
 <tr>
+  <td align="center"><a href="https://developer20.com?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/1235620?u=8dcb00ac7132f4de19392d7f8b1b4e2b17e692b7&v=4" width="100px;" alt=""/><br /><sub><b>Bartłomiej Klimczak</b></sub></a></td>
   <td align="center"><a href="https://github.com/mxpv?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/865334?u=a47007c3fc95832646d2c935da12aaff81a48ca3&v=4" width="100px;" alt=""/><br /><sub><b>Maksym Pavlenko</b></sub></a></td>
   <td align="center"><a href="https://github.com/chappjc?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/9373513?u=e78e21f230dd575a53a060c37dee051806ae0572&v=4" width="100px;" alt=""/><br /><sub><b>Jonathan Chappelow</b></sub></a></td>
   <td align="center"><a href="http://sitano.github.io/?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/564610?u=1830fc4bffb6829093a7f4404ee581c43d909c36&v=4" width="100px;" alt=""/><br /><sub><b>Ivan</b></sub></a></td>
   <td align="center"><a href="http://magnetikonline.com?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/1818757?u=27ca8c53c66113faa67f6b48aeb8841717c0ee2f&v=4" width="100px;" alt=""/><br /><sub><b>Peter Mescalchin</b></sub></a></td>
   <td align="center"><a href="jlucktay.dev?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/460028?u=2cbe899ed33b64bdc02128467bc42f0bc2c7330e&v=4" width="100px;" alt=""/><br /><sub><b>James Lucktaylor</b></sub></a></td>
   <td align="center"><a href="https://github.com/dhui?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/896205?u=3e4fbfd18cabace9d5f7c72b7e1da12dcce5b955&v=4" width="100px;" alt=""/><br /><sub><b>Dale Hui</b></sub></a></td>
-  <td align="center"><a href="linkedin.com/in/ofabry?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/32484950?u=b1dd24de988ecfb2b60c94de997b9110a103ae80&v=4" width="100px;" alt=""/><br /><sub><b>Ondrej Fabry</b></sub></a></td>
 </tr>
 <tr>
+  <td align="center"><a href="linkedin.com/in/ofabry?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/32484950?u=b1dd24de988ecfb2b60c94de997b9110a103ae80&v=4" width="100px;" alt=""/><br /><sub><b>Ondrej Fabry</b></sub></a></td>
   <td align="center"><a href="https://github.com/proton-ab?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/25139420?u=53918e67ce92a25351b1ea2ee9ce98435bea0cc8&v=4" width="100px;" alt=""/><br /><sub><b>proton</b></sub></a></td>
   <td align="center"><a href="markwalther.ch?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/5138316?u=abf836167fb8e5131459b17b6961e20126338a47&v=4" width="100px;" alt=""/><br /><sub><b>Markus</b></sub></a></td>
   <td align="center"><a href="https://github.com/laverya?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/2318911?u=12f6803204811ffd8ce33c1fef0281554fdcbb20&v=4" width="100px;" alt=""/><br /><sub><b>Andrew Lavery</b></sub></a></td>
   <td align="center"><a href="https://kishaningithub.github.io/?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/763760?u=55a5f3e937025e54e2736ca1fc38f0ab3788527f&v=4" width="100px;" alt=""/><br /><sub><b>Kishan B</b></sub></a></td>
   <td align="center"><a href="https://github.com/rliebz?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/5321575?v=4" width="100px;" alt=""/><br /><sub><b>Robert Liebowitz</b></sub></a></td>
   <td align="center"><a href="https://twitter.com/tariq1890?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/2658224?u=5719f58847e3414945290592663045c82b04b272&v=4" width="100px;" alt=""/><br /><sub><b>Tariq Ibrahim</b></sub></a></td>
-  <td align="center"><a href="https://github.com/pstibrany?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/895919?v=4" width="100px;" alt=""/><br /><sub><b>Peter Štibraný</b></sub></a></td>
 </tr>
 <tr>
+  <td align="center"><a href="https://github.com/pstibrany?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/895919?v=4" width="100px;" alt=""/><br /><sub><b>Peter Štibraný</b></sub></a></td>
   <td align="center"><a href="https://github.com/kaka19ace?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/1320568?u=9f02e3ae234ea1e76a3682ada8166c905104f555&v=4" width="100px;" alt=""/><br /><sub><b>kaixiang zhong</b></sub></a></td>
   <td align="center"><a href="https://github.com/ced42?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/17880812?v=4" width="100px;" alt=""/><br /><sub><b>@ced42</b></sub></a></td>
   <td align="center"><a href="https://github.com/dgsb?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/5495748?v=4" width="100px;" alt=""/><br /><sub><b>David Bariod</b></sub></a></td>
   <td align="center"><a href="https://github.com/masibw?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/43804414?u=cc47091557adf2a950b10400b15d76916ff5f97f&v=4" width="100px;" alt=""/><br /><sub><b>@masibw</b></sub></a></td>
   <td align="center"><a href="http://derekperkins.com?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/3588778?v=4" width="100px;" alt=""/><br /><sub><b>Derek Perkins</b></sub></a></td>
   <td align="center"><a href="https://github.com/beono?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/539474?u=6a91ec994f805519330015aa6251677a307ada59&v=4" width="100px;" alt=""/><br /><sub><b>Eldar Rakhimberdin</b></sub></a></td>
-  <td align="center"><a href="https://blog.schoentoon.blue?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/417618?u=294670670fd504a353586a57b32cf0fe4843f8eb&v=4" width="100px;" alt=""/><br /><sub><b>Toon Schoenmakers</b></sub></a></td>
 </tr>
 <tr>
+  <td align="center"><a href="https://blog.schoentoon.blue?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/417618?u=294670670fd504a353586a57b32cf0fe4843f8eb&v=4" width="100px;" alt=""/><br /><sub><b>Toon Schoenmakers</b></sub></a></td>
   <td align="center"><a href="https://github.com/cezarsa?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/11041?u=cde690e3dd7a6ebf895e11f3ff144b27f8fcb46c&v=4" width="100px;" alt=""/><br /><sub><b>Cezar Sá Espinola</b></sub></a></td>
   <td align="center"><a href="https://github.com/benpaxton-hf?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/24317933?v=4" width="100px;" alt=""/><br /><sub><b>Ben Paxton</b></sub></a></td>
   <td align="center"><a href="https://github.com/a-kuchin?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/44059234?u=9ebb304fb79a5359199738bfa08a0c98a0d28090&v=4" width="100px;" alt=""/><br /><sub><b>Andrey Kuchin</b></sub></a></td>
   <td align="center"><a href="https://connoradams.co.uk?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/10026538?u=532bda717283aa1bba2d47f74b19107787fead82&v=4" width="100px;" alt=""/><br /><sub><b>Connor Adams</b></sub></a></td>
   <td align="center"><a href="https://draveness.me/?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/6493255?u=63f81c96cc52db210f104df233899342b280a2e2&v=4" width="100px;" alt=""/><br /><sub><b>Draven</b></sub></a></td>
   <td align="center"><a href="https://martins.irbe.dev?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/13367583?u=aa82d43331fd575f1ff3cf039aaaeb9913e63dc3&v=4" width="100px;" alt=""/><br /><sub><b>Martins Irbe</b></sub></a></td>
-  <td align="center"><a href="https://www.linkedin.com/in/mark-sartakov?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/34810318?u=a1865af09b2fc37cd72885f6d7f38af949c63e1c&v=4" width="100px;" alt=""/><br /><sub><b>Mark Sart</b></sub></a></td>
 </tr>
 <tr>
+  <td align="center"><a href="https://www.linkedin.com/in/mark-sartakov?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/34810318?u=a1865af09b2fc37cd72885f6d7f38af949c63e1c&v=4" width="100px;" alt=""/><br /><sub><b>Mark Sart</b></sub></a></td>
   <td align="center"><a href="https://jawa.dev?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/194275?u=afa97022f150dbd6625f5a6a69fd74e6204a4c1b&v=4" width="100px;" alt=""/><br /><sub><b>Joshua Rubin</b></sub></a></td>
   <td align="center"><a href="https://kyoh86.dev?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/5582459?u=062f9074b6d432f073b7e09940e70fc1c092e072&v=4" width="100px;" alt=""/><br /><sub><b>Kyoichiro Yamada</b></sub></a></td>
   <td align="center"><a href="https://github.com/sspaink?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/3441183?u=363c9e9b586bf4abe1f876d6b2072bc6e98e032f&v=4" width="100px;" alt=""/><br /><sub><b>Sebastian Spaink</b></sub></a></td>
-  <td align="center"><a href="https://developer20.com?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/1235620?u=8dcb00ac7132f4de19392d7f8b1b4e2b17e692b7&v=4" width="100px;" alt=""/><br /><sub><b>Bartłomiej Klimczak</b></sub></a></td>
   <td align="center"><a href="https://brito.com.br?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/7620947?u=1a38797fbcd5e0b847cbbffc2b8a9e6e281da93d&v=4" width="100px;" alt=""/><br /><sub><b>Rodrigo Brito</b></sub></a></td>
   <td align="center"><a href="https://funloop.org?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/725613?u=7e1ec57b59f6f93d3e94d9b9d2473f8bdd89ba0d&v=4" width="100px;" alt=""/><br /><sub><b>Linus Arver</b></sub></a></td>
   <td align="center"><a href="http://stainlessed.co.uk?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/151272?u=8a3688637befe674727827e9c2050c7c5b016c26&v=4" width="100px;" alt=""/><br /><sub><b>Glen Mailer</b></sub></a></td>
@@ -335,29 +335,30 @@ The Core Team has the following responsibilities:
   <td align="center"><a href="https://github.com/mhutchinson?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/1355668?u=8b132f310be9c4f2e877ba220b300fda1b09ae33&v=4" width="100px;" alt=""/><br /><sub><b>Martin Hutchinson</b></sub></a></td>
   <td align="center"><a href="https://github.com/l0nax?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/29659953?u=01b40c160e224232fe42bf4c4c3c2051bfd2b82c&v=4" width="100px;" alt=""/><br /><sub><b>Emanuel Bennici</b></sub></a></td>
   <td align="center"><a href="https://sanposhiho.com?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/44139130?u=d0a40ab2af9d5c6c5a1379b80d26a0e8361161e9&v=4" width="100px;" alt=""/><br /><sub><b>Kensei Nakada</b></sub></a></td>
+  <td align="center"><a href="https://eric.jain.name/?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/1323903?v=4" width="100px;" alt=""/><br /><sub><b>Eric Jain</b></sub></a></td>
   <td align="center"><a href="https://www.patreon.com/cclauss?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/3709715?u=0745d1d2473894c33f3b35f0b965d71cc9aec553&v=4" width="100px;" alt=""/><br /><sub><b>Christian Clauss</b></sub></a></td>
-  <td align="center"><a href="ru.gravatar.com/korjavin?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/148765?v=4" width="100px;" alt=""/><br /><sub><b>Korjavin Ivan</b></sub></a></td>
 </tr>
 <tr>
+  <td align="center"><a href="ru.gravatar.com/korjavin?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/148765?v=4" width="100px;" alt=""/><br /><sub><b>Korjavin Ivan</b></sub></a></td>
   <td align="center"><a href="francois.parquet.cc?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/24575934?u=afb7942a02e997bd463a3b99ca9b309b54e0f249&v=4" width="100px;" alt=""/><br /><sub><b>Francois Parquet</b></sub></a></td>
   <td align="center"><a href="http://23doors.com?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/1051101?u=92cef9a943a64f6ec3d0c6b08e1f3de4b41b5d7c&v=4" width="100px;" alt=""/><br /><sub><b>Robert Kopaczewski</b></sub></a></td>
   <td align="center"><a href="https://gitlab.com/opennota?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/5520115?u=78b6cb0cbe25dd4d6a8ca73d042e374859d92b26&v=4" width="100px;" alt=""/><br /><sub><b>@opennota</b></sub></a></td>
   <td align="center"><a href="https://sea-race.fr?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/3671279?u=bdf269f1656ffe128c482e286db345f772ee2833&v=4" width="100px;" alt=""/><br /><sub><b>Cyrille Meichel</b></sub></a></td>
   <td align="center"><a href="https://twitter.com/neglect_yp?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/20413543?v=4" width="100px;" alt=""/><br /><sub><b>neglect-yp</b></sub></a></td>
-  <td align="center"><a href="https://github.com/jumpeiMano?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/6240874?u=779a2ed4b4ddd4117bac58c315013f6b7df7f50a&v=4" width="100px;" alt=""/><br /><sub><b>@jumpeiMano</b></sub></a></td>
-  <td align="center"><a href="https://github.com/weijiangan?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/6372144?u=6a8a13854375e531dca35bfbd67d37aeabb3a43a&v=4" width="100px;" alt=""/><br /><sub><b>Wei Jian Gan</b></sub></a></td>
+  <td align="center"><a href="https://yeya24.github.io/?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/25150124?u=ab29fc5924354378ccdafd8d6e19cb4eb3d3ad5b&v=4" width="100px;" alt=""/><br /><sub><b>Ben Ye</b></sub></a></td>
 </tr>
 <tr>
+  <td align="center"><a href="https://github.com/jumpeiMano?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/6240874?u=779a2ed4b4ddd4117bac58c315013f6b7df7f50a&v=4" width="100px;" alt=""/><br /><sub><b>@jumpeiMano</b></sub></a></td>
+  <td align="center"><a href="https://github.com/weijiangan?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/6372144?u=6a8a13854375e531dca35bfbd67d37aeabb3a43a&v=4" width="100px;" alt=""/><br /><sub><b>Wei Jian Gan</b></sub></a></td>
   <td align="center"><a href="https://github.com/tgulacsi?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/256074?v=4" width="100px;" alt=""/><br /><sub><b>Tamás Gulácsi</b></sub></a></td>
   <td align="center"><a href="jackwilsdon.me?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/1843197?u=0e5b9858f4ded98ffe7dfbbe9f5e4315cd597cd8&v=4" width="100px;" alt=""/><br /><sub><b>Jack Wilsdon</b></sub></a></td>
   <td align="center"><a href="https://github.com/Gobonoid?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/15029578?u=7fed21f2429bdca932dd55a69c8ec0ee36e772a2&v=4" width="100px;" alt=""/><br /><sub><b>Michał Suchwałko</b></sub></a></td>
   <td align="center"><a href="https://github.com/aLekSer?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/5626814?u=f23f71d0b298f243de664879d949af6b808b1017&v=4" width="100px;" alt=""/><br /><sub><b>Alexander Apalikov</b></sub></a></td>
   <td align="center"><a href="https://git.sr.ht/~domust?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/54954739?v=4" width="100px;" alt=""/><br /><sub><b>Domas Tamašauskas</b></sub></a></td>
-  <td align="center"><a href="iomelette.fr?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/7288655?u=c340284bba9db0444293d7f48e7f8ce2f33db653&v=4" width="100px;" alt=""/><br /><sub><b>Stéphane Chausson</b></sub></a></td>
-  <td align="center"><a href="https://plus.google.com/u/0/104675305010518579165?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/1690210?u=152b7c1086a84a7e756d35c3c71767ed676ed4f8&v=4" width="100px;" alt=""/><br /><sub><b>neo_sli</b></sub></a></td>
 </tr>
 <tr>
-  <td align="center"><a href="https://yeya24.github.io/?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/25150124?u=ab29fc5924354378ccdafd8d6e19cb4eb3d3ad5b&v=4" width="100px;" alt=""/><br /><sub><b>Ben Ye</b></sub></a></td>
+  <td align="center"><a href="iomelette.fr?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/7288655?u=c340284bba9db0444293d7f48e7f8ce2f33db653&v=4" width="100px;" alt=""/><br /><sub><b>Stéphane Chausson</b></sub></a></td>
+  <td align="center"><a href="https://plus.google.com/u/0/104675305010518579165?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/1690210?u=152b7c1086a84a7e756d35c3c71767ed676ed4f8&v=4" width="100px;" alt=""/><br /><sub><b>neo_sli</b></sub></a></td>
   <td align="center"><a href="https://github.com/srdhoni?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/20898452?v=4" width="100px;" alt=""/><br /><sub><b>@srdhoni</b></sub></a></td>
   <td align="center"><a href="https://github.com/tbonfort?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/358469?u=bf6e92907c9f7b5f37221ac32fc72bff90ba683c&v=4" width="100px;" alt=""/><br /><sub><b>Thomas Bonfort</b></sub></a></td>
 </tr>
