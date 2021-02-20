@@ -36,7 +36,7 @@ func (e *Executor) initConfig() {
 
 	enableNewCmd := &cobra.Command{
 		Use:   "enable-new",
-		Short: "Enable all linters not explicitly disabled in config file",
+		Short: "Enable all linters not explicitly disabled in the active config file",
 		Run:   e.executeEnableNewCmd,
 	}
 	e.initRunConfiguration(enableNewCmd) // allow --config
