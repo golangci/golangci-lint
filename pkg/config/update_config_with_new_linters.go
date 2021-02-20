@@ -16,7 +16,7 @@ func UpdateConfigFileWithNewLinters(configFilePath string, newLinters []string) 
 	}
 
 	var docNode yaml.Node
-	if err := yaml.Unmarshal(configData, &docNode); err != nil {
+	if err = yaml.Unmarshal(configData, &docNode); err != nil {
 		return errors.Wrapf(err, "failed to unmarshal config file %q", configFilePath)
 	}
 
