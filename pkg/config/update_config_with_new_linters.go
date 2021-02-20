@@ -38,10 +38,10 @@ GuessSpaces:
 		}
 	}
 
-	lintersNode := findOrInsertKeyedValue(configNode, "linters", yaml.Node{Kind: yaml.MappingNode})
+	lintersNode := findOrInsertKeyedValue(configNode, "linters", &yaml.Node{Kind: yaml.MappingNode})
 
 	// find the "linters" -> "enable" node (or create it)
-	enableNode := findOrInsertKeyedValue(lintersNode, "enable", yaml.Node{Kind: yaml.SequenceNode})
+	enableNode := findOrInsertKeyedValue(lintersNode, "enable", &yaml.Node{Kind: yaml.SequenceNode})
 
 	for _, l := range newLinters {
 		node := &yaml.Node{}
@@ -66,7 +66,7 @@ GuessSpaces:
 	return errors.Wrapf(err, "failed to update config file %q", configFilePath)
 }
 
-func findOrInsertKeyedValue(node *yaml.Node, key string, value yaml.Node) *yaml.Node {
+func findOrInsertKeyedValue(node *yaml.Node, key string, value *yaml.Node) *yaml.Node {
 	for i, n := range node.Content {
 		var childKey string
 		err := n.Decode(&childKey)
@@ -76,6 +76,6 @@ func findOrInsertKeyedValue(node *yaml.Node, key string, value yaml.Node) *yaml.
 	}
 	keyNode := &yaml.Node{}
 	keyNode.SetString(key)
-	node.Content = append(node.Content, keyNode, &value)
-	return &value
+	node.Content = append(node.Content, keyNode, value)
+	return value
 }

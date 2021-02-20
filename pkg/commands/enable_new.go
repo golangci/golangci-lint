@@ -38,7 +38,9 @@ func (e *Executor) executeEnableNewCmd(_ *cobra.Command, args []string) {
 	color.Yellow("\nEnabling the following new linters in %q:\n", configFilePath)
 	printLinterConfigs(unmentionedLinters)
 
-	config.UpdateConfigFileWithNewLinters(configFilePath, newLinterNames)
+	if err = config.UpdateConfigFileWithNewLinters(configFilePath, newLinterNames); err != nil {
+		e.log.Fatalf("failed to update config file: %s", err)
+	}
 
 	os.Exit(0)
 }
