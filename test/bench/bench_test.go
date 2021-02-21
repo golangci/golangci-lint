@@ -14,7 +14,7 @@ import (
 	"time"
 
 	gops "github.com/mitchellh/go-ps"
-	"github.com/shirou/gopsutil/process"
+	"github.com/shirou/gopsutil/v3/process"
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/test/testshared"
