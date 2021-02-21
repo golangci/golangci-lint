@@ -4,17 +4,17 @@ package testdata
 import "os"
 
 func SimpleEqual(e1, e2 error) bool {
-	return e1 == e2 // ERROR `err113: do not compare errors directly, use errors.Is\(\) instead: "e1 == e2"`
+	return e1 == e2 // ERROR `err113: do not compare errors directly "e1 == e2", use "errors.Is\(e1, e2\)" instead`
 }
 
 func SimpleNotEqual(e1, e2 error) bool {
-	return e1 != e2 // ERROR `err113: do not compare errors directly, use errors.Is\(\) instead: "e1 != e2"`
+	return e1 != e2 // ERROR `err113: do not compare errors directly "e1 != e2", use "!errors.Is\(e1, e2\)" instead`
 }
 
 func CheckGoerr13Import(e error) bool {
 	f, err := os.Create("f.txt")
 	if err != nil {
-		return err == e  // ERROR `err113: do not compare errors directly, use errors.Is\(\) instead: "err == e"`
+		return err == e // ERROR `err113: do not compare errors directly "err == e", use "errors.Is\(err, e\)" instead`
 	}
 	f.Close()
 	return false

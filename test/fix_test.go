@@ -27,7 +27,9 @@ func TestFix(t *testing.T) {
 	if os.Getenv("GL_KEEP_TEMP_FILES") == "1" {
 		t.Logf("Temp dir for fix test: %s", tmpDir)
 	} else {
-		defer os.RemoveAll(tmpDir)
+		t.Cleanup(func() {
+			os.RemoveAll(tmpDir)
+		})
 	}
 
 	fixDir := filepath.Join(testdataDir, "fix")
@@ -38,9 +40,11 @@ func TestFix(t *testing.T) {
 	for _, input := range inputs {
 		input := input
 		t.Run(filepath.Base(input), func(t *testing.T) {
+			t.Parallel()
+
 			args := []string{
 				"--disable-all", "--print-issued-lines=false", "--print-linter-name=false", "--out-format=line-number",
-				"--fix",
+				"--allow-parallel-runners", "--fix",
 				input,
 			}
 			rc := extractRunContextFromComments(t, input)

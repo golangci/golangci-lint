@@ -64,6 +64,7 @@ changelog:
     - '^test:'
     - '^dev:'
     - 'README'
+    - 'build\(deps\): bump .* in /docs \(#\d+\)'
     - Merge pull request
     - Merge branch
 
