@@ -177,7 +177,8 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		linter.NewConfig(golinters.NewInterfacer()).
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetStyle).
-			WithURL("https://github.com/mvdan/interfacer"),
+			WithURL("https://github.com/mvdan/interfacer").
+			Deprecated("The repository of the linter has been archived by the owner."),
 		linter.NewConfig(golinters.NewUnconvert()).
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetStyle).

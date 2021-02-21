@@ -88,7 +88,6 @@ linters:
     - gosimple
     - govet
     - ineffassign
-    - interfacer
     - lll
     - misspell
     - nakedret
@@ -113,6 +112,7 @@ linters:
   # - godot
   # - godox
   # - goerr113
+  # - interfacer
   # - maligned
   # - nestif
   # - prealloc
