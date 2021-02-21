@@ -5,7 +5,7 @@ go 1.13
 require (
 	4d63.com/gochecknoglobals v0.0.0-20201008074935-acfc0b28355a
 	github.com/BurntSushi/toml v0.3.1
-	github.com/Djarvur/go-err113 v0.0.0-20200511133814-5174e21577d5
+	github.com/Djarvur/go-err113 v0.0.0-20210108212216-aea10b59be24
 	github.com/OpenPeeDeeP/depguard v1.0.1
 	github.com/alexkohler/prealloc v0.0.0-20210204145425-77a5b5dd9799
 	github.com/ashanbrown/forbidigo v1.1.0
