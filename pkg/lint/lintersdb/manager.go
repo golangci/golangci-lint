@@ -375,8 +375,8 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/charithe/durationcheck"),
 		linter.NewConfig(golinters.NewWastedAssign()).
-			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetStyle).
+			WithLoadForGoAnalysis().
 			WithURL("https://github.com/sanposhiho/wastedassign"),
 
 		// nolintlint must be last because it looks at the results of all the previous linters for unused nolint directives
