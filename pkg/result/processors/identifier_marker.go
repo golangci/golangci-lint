@@ -23,6 +23,9 @@ var replacePatterns = []replacePattern{
 	{`^(\S+) - (\S+) always receives (.*)$`, "`${1}` - `${2}` always receives `${3}`"},
 	{`^(\S+) - result (\S+) is always (\S+)`, "`${1}` - result `${2}` is always `${3}`"},
 
+	// interfacer
+	{`^(\S+) can be (\S+)$`, "`${1}` can be `${2}`"},
+
 	// govet
 	{`^printf: (\S+) arg list ends with redundant newline$`, "printf: `${1}` arg list ends with redundant newline"},
 	{`^composites: (\S+) composite literal uses unkeyed fields$`, "composites: `${1}` composite literal uses unkeyed fields"},
