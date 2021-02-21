@@ -16,7 +16,6 @@ import (
 	gops "github.com/mitchellh/go-ps"
 	"github.com/shirou/gopsutil/v3/process"
 
-	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/test/testshared"
 )
 
@@ -36,7 +35,7 @@ func prepareGithubProject(owner, name string) func(*testing.B) {
 		_, err := os.Stat(dir)
 		if os.IsNotExist(err) {
 			repo := fmt.Sprintf("https://github.com/%s/%s.git", owner, name)
-			err = exec.Command("git", "clone", repo).Run()
+			err = exec.Command("git", "clone", repo, dir).Run()
 			if err != nil {
 				b.Fatalf("can't git clone %s/%s: %s", owner, name, err)
 			}
@@ -56,7 +55,6 @@ func getBenchLintersArgsNoMegacheck() []string {
 		"--enable=errcheck",
 		"--enable=dupl",
 		"--enable=ineffassign",
-		"--enable=interfacer",
 		"--enable=unconvert",
 		"--enable=goconst",
 		"--enable=gosec",
@@ -69,21 +67,6 @@ func getBenchLintersArgs() []string {
 	}, getBenchLintersArgsNoMegacheck()...)
 }
 
-func getGometalinterCommonArgs() []string {
-	return []string{
-		"--deadline=30m",
-		"--skip=testdata",
-		"--skip=builtin",
-		"--vendor",
-		"--cyclo-over=30",
-		"--dupl-threshold=150",
-		"--exclude", fmt.Sprintf("(%s)", strings.Join(config.GetDefaultExcludePatternsStrings(), "|")),
-		"--disable-all",
-		"--enable=vet",
-		"--enable=vetshadow",
-	}
-}
-
 func printCommand(cmd string, args ...string) {
 	if os.Getenv("PRINT_CMD") != "1" {
 		return
@@ -94,16 +77,6 @@ func printCommand(cmd string, args ...string) {
 	}
 
 	log.Printf("%s %s", cmd, strings.Join(quotedArgs, " "))
-}
-
-func runGometalinter(b *testing.B) {
-	args := []string{}
-	args = append(args, getGometalinterCommonArgs()...)
-	args = append(args, getBenchLintersArgs()...)
-	args = append(args, "./...")
-
-	printCommand("gometalinter", args...)
-	_ = exec.Command("gometalinter", args...).Run()
 }
 
 func getGolangciLintCommonArgs() []string {
@@ -211,20 +184,6 @@ type runResult struct {
 	duration  time.Duration
 }
 
-func compare(b *testing.B, gometalinterRun, golangciLintRun func(*testing.B), repoName, mode string, kLOC int) {
-	gometalinterRes := runOne(b, gometalinterRun, "gometalinter")
-	golangciLintRes := runOne(b, golangciLintRun, "golangci-lint")
-
-	if mode != "" {
-		mode = " " + mode
-	}
-	log.Printf("%s (%d kLoC): golangci-lint%s: time: %s, %.1f times faster; memory: %dMB, %.1f times less",
-		repoName, kLOC, mode,
-		golangciLintRes.duration, gometalinterRes.duration.Seconds()/golangciLintRes.duration.Seconds(),
-		golangciLintRes.peakMemMB, float64(gometalinterRes.peakMemMB)/float64(golangciLintRes.peakMemMB),
-	)
-}
-
 func runOne(b *testing.B, run func(*testing.B), progName string) *runResult {
 	doneCh := make(chan struct{})
 	peakMemCh := trackPeakMemoryUsage(b, doneCh, progName)
@@ -240,7 +199,7 @@ func runOne(b *testing.B, run func(*testing.B), progName string) *runResult {
 	}
 }
 
-func BenchmarkWithGometalinter(b *testing.B) {
+func BenchmarkGolangciLint(b *testing.B) {
 	testshared.NewLintRunner(b).Install()
 
 	type bcase struct {
@@ -251,10 +210,6 @@ func BenchmarkWithGometalinter(b *testing.B) {
 		{
 			name:    "self repo",
 			prepare: prepareGithubProject("golangci", "golangci-lint"),
-		},
-		{
-			name:    "gometalinter repo",
-			prepare: prepareGithubProject("alecthomas", "gometalinter"),
 		},
 		{
 			name:    "hugo",
@@ -284,7 +239,12 @@ func BenchmarkWithGometalinter(b *testing.B) {
 	for _, bc := range bcases {
 		bc.prepare(b)
 		lc := getGoLinesTotalCount(b)
+		result := runOne(b, runGolangciLintForBench, "golangci-lint")
 
-		compare(b, runGometalinter, runGolangciLintForBench, bc.name, "", lc/1000)
+		log.Printf("%s (%d kLoC): time: %s, memory: %dMB",
+			bc.name, lc/1000,
+			result.duration,
+			result.peakMemMB,
+		)
 	}
 }
