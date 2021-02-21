@@ -54,6 +54,7 @@ require (
 	github.com/polyfloyd/go-errorlint v0.0.0-20201127212506-19bd8db6546f
 	github.com/ryancurrah/gomodguard v1.2.0
 	github.com/ryanrolds/sqlclosecheck v0.3.0
+	github.com/sanposhiho/wastedassign v0.1.3
 	github.com/securego/gosec/v2 v2.6.1
 	github.com/shazow/go-diff v0.0.0-20160112020656-b6b7b6733b8c
 	github.com/shirou/gopsutil/v3 v3.21.1
