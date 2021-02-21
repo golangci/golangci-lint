@@ -4,7 +4,7 @@ import (
 	"go/types"
 
 	"golang.org/x/tools/go/analysis"
-	"golang.org/x/tools/go/loader" //nolint:staticcheck // it's an adapter for golang.org/x/tools/go/packages
+	"golang.org/x/tools/go/loader"
 )
 
 func MakeFakeLoaderProgram(pass *analysis.Pass) *loader.Program {
