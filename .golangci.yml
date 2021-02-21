@@ -139,6 +139,18 @@ issues:
     - path: pkg/golinters/scopelint.go
       text: 'directive `//nolint:interfacer` is unused for linter interfacer'
 
+    # TODO temporary rule, must be removed
+    # related to https://github.com/golangci/golangci-lint/pull/1756
+    # must be replaced by '//nolint:staticcheck // require changes in github.com/OpenPeeDeeP/depguard'
+    - path: pkg/golinters/depguard.go
+      text: 'SA1019: package golang.org/x/tools/go/loader is deprecated'
+
+    # TODO temporary rule, must be removed
+    # related to https://github.com/golangci/golangci-lint/pull/1756
+    # must be replaced by '///nolint:staticcheck // it's an adapter for golang.org/x/tools/go/packages'
+    - path: pkg/golinters/goanalysis/adapters.go
+      text: 'SA1019: package golang.org/x/tools/go/loader is deprecated'
+
 run:
   skip-dirs:
     - test/testdata_etc
