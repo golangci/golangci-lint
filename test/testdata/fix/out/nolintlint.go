@@ -1,4 +1,5 @@
 //args: -Enolintlint -Elll
+//expected_linter: nolintlint
 //config: linters-settings.nolintlint.allow-leading-space=false
 package p
 
