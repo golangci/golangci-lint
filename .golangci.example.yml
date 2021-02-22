@@ -297,6 +297,7 @@ linters-settings:
           - (github.com/golangci/golangci-lint/pkg/logutils.Log).Fatalf
 
     # enable or disable analyzers by name
+    # run `go tool vet help` to see all analyzers
     enable:
       - atomicalign
     enable-all: false
