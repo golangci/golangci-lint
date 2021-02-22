@@ -35,7 +35,7 @@ func NewGocritic() *goanalysis.Linter {
 		gocriticName,
 		`Provides many diagnostics that check for bugs, performance and style issues.
 Extensible without recompilation through dynamic rules.
-Dynamic rules are written declaratively with AST patterns, filters, message to be printed if the pattern matches and optionally a suggestion.`,
+Dynamic rules are written declaratively with AST patterns, filters, report message and optional suggestion.`,
 		[]*analysis.Analyzer{analyzer},
 		nil,
 	).WithContextSetter(func(lintCtx *linter.Context) {
