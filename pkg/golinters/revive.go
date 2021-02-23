@@ -109,7 +109,7 @@ func NewRevive(cfg *config.ReviveSettings) *goanalysis.Linter {
 			for i := range results {
 				issues = append(issues, goanalysis.NewIssue(&result.Issue{
 					Severity: string(results[i].Severity),
-					Text:     fmt.Sprintf("%q", results[i].Failure.Failure),
+					Text:     fmt.Sprintf("%s: %s", results[i].RuleName, results[i].Failure.Failure),
 					Pos: token.Position{
 						Filename: results[i].Position.Start.Filename,
 						Line:     results[i].Position.Start.Line,
