@@ -220,18 +220,31 @@ func buildIssues(diags []Diagnostic, linterNameBuilder func(diag *Diagnostic) st
 	for i := range diags {
 		diag := &diags[i]
 		linterName := linterNameBuilder(diag)
+
 		var text string
 		if diag.Analyzer.Name == linterName {
 			text = diag.Message
 		} else {
 			text = fmt.Sprintf("%s: %s", diag.Analyzer.Name, diag.Message)
 		}
+
 		issues = append(issues, result.Issue{
 			FromLinter: linterName,
 			Text:       text,
 			Pos:        diag.Position,
 			Pkg:        diag.Pkg,
 		})
+
+		if len(diag.Related) > 0 {
+			for _, info := range diag.Related {
+				issues = append(issues, result.Issue{
+					FromLinter: linterName,
+					Text:       fmt.Sprintf("%s(related information): %s", diag.Analyzer.Name, info.Message),
+					Pos:        diag.Pkg.Fset.Position(info.Pos),
+					Pkg:        diag.Pkg,
+				})
+			}
+		}
 	}
 	return issues
 }
