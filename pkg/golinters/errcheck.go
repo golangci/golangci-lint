@@ -55,25 +55,31 @@ func NewErrcheck() *goanalysis.Linter {
 				TypesInfo: pass.TypesInfo,
 			}
 
-			errcheckIssues := checker.CheckPackage(pkg)
+			errcheckIssues := checker.CheckPackage(pkg).Unique()
 			if len(errcheckIssues.UncheckedErrors) == 0 {
 				return nil, nil
 			}
 
-			issues := make([]goanalysis.Issue, 0, len(errcheckIssues.UncheckedErrors))
-			for _, i := range errcheckIssues.UncheckedErrors {
+			issues := make([]goanalysis.Issue, len(errcheckIssues.UncheckedErrors))
+			for i, err := range errcheckIssues.UncheckedErrors {
 				var text string
-				if i.FuncName != "" {
-					text = fmt.Sprintf("Error return value of %s is not checked", formatCode(i.FuncName, lintCtx.Cfg))
+				if err.FuncName != "" {
+					text = fmt.Sprintf(
+						"Error return value of %s is not checked",
+						formatCode(err.SelectorName, lintCtx.Cfg),
+					)
 				} else {
 					text = "Error return value is not checked"
 				}
 
-				issues = append(issues, goanalysis.NewIssue(&result.Issue{
-					FromLinter: linterName,
-					Text:       text,
-					Pos:        i.Pos,
-				}, pass))
+				issues[i] = goanalysis.NewIssue(
+					&result.Issue{
+						FromLinter: linterName,
+						Text:       text,
+						Pos:        err.Pos,
+					},
+					pass,
+				)
 			}
 
 			mu.Lock()
