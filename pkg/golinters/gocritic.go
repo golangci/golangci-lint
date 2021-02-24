@@ -33,7 +33,9 @@ func NewGocritic() *goanalysis.Linter {
 	}
 	return goanalysis.NewLinter(
 		gocriticName,
-		"The most opinionated Go source code linter",
+		`Provides many diagnostics that check for bugs, performance and style issues.
+Extensible without recompilation through dynamic rules.
+Dynamic rules are written declaratively with AST patterns, filters, report message and optional suggestion.`,
 		[]*analysis.Analyzer{analyzer},
 		nil,
 	).WithContextSetter(func(lintCtx *linter.Context) {
