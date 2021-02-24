@@ -51,7 +51,7 @@ run:
   # If invoked with -mod=vendor, the go command assumes that the vendor
   # directory holds the correct copies of dependencies and ignores
   # the dependency descriptions in go.mod.
-  modules-download-mode: readonly|release|vendor
+  modules-download-mode: readonly|vendor|mod
 
   # Allow multiple parallel golangci-lint instances running.
   # If false (default) - golangci-lint acquires file lock on start.
@@ -111,6 +111,12 @@ linters-settings:
     # 'default' case is present, even if all enum members aren't listed in the
     # switch
     default-signifies-exhaustive: false
+  exhaustivestruct:
+    struct-patterns:
+      - '*.Test'
+      - '*.Test2'
+      - '*.Embedded'
+      - '*.External'
   funlen:
     lines: 60
     statements: 40
@@ -152,10 +158,10 @@ linters-settings:
     # Settings passed to gocritic.
     # The settings key is the name of a supported gocritic checker.
     # The list of supported checkers can be find in https://go-critic.github.io/overview.
-    settings: 
+    settings:
       captLocal: # must be valid enabled check name
         # whether to restrict checker to params only (default true)
-        paramsOnly: true 
+        paramsOnly: true
       elseif:
         # whether to skip balanced if-else pairs (default true)
         skipBalanced: true
@@ -190,9 +196,21 @@ linters-settings:
   gocyclo:
     # minimal code complexity to report, 30 by default (but we recommend 10-20)
     min-complexity: 10
+
+  cyclop:
+    # the maximal code complexity to report
+    max-complexity: 10
+    # the maximal average package complexity. If it's higher than 0.0 (float) the check is enabled (default 0.0)
+    package-average: 0.0
+    # should ignore tests (default false)
+    skip-tests: false
   godot:
     # comments to be checked: `declarations`, `toplevel`, or `all`
     scope: declarations
+    # list of regexps for excluding particular comment lines from check
+    exclude:
+      # example: exclude comments which contain numbers
+      # - '[0-9]+'
     # check that each sentence starts with a capital letter
     capital: false
   godox:
@@ -209,27 +227,28 @@ linters-settings:
     values:
       const:
         # define here const type values in format k:v, for example:
-        # YEAR: 2020
         # COMPANY: MY COMPANY
       regexp:
         # define here regexp type values, for example
         # AUTHOR: .*@mycompany\.com
-    template:
+    template: # |
       # put here copyright header template for source code files, for example:
-      #    {{ AUTHOR }} {{ COMPANY }} {{ YEAR }}
-      #    SPDX-License-Identifier: Apache-2.0
+      # Note: {{ YEAR }} is a builtin value that returns the year relative to the current machine time.
       #
-      #    Licensed under the Apache License, Version 2.0 (the "License");
-      #    you may not use this file except in compliance with the License.
-      #    You may obtain a copy of the License at:
-      #
-      #      http://www.apache.org/licenses/LICENSE-2.0
-      #
-      #    Unless required by applicable law or agreed to in writing, software
-      #    distributed under the License is distributed on an "AS IS" BASIS,
-      #    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-      #    See the License for the specific language governing permissions and
-      #    limitations under the License.
+      # {{ AUTHOR }} {{ COMPANY }} {{ YEAR }}
+      # SPDX-License-Identifier: Apache-2.0
+
+      # Licensed under the Apache License, Version 2.0 (the "License");
+      # you may not use this file except in compliance with the License.
+      # You may obtain a copy of the License at:
+
+      #   http://www.apache.org/licenses/LICENSE-2.0
+
+      # Unless required by applicable law or agreed to in writing, software
+      # distributed under the License is distributed on an "AS IS" BASIS,
+      # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+      # See the License for the specific language governing permissions and
+      # limitations under the License.
     template-path:
       # also as alternative of directive 'template' you may put the path to file with the template source
   goimports:
@@ -278,6 +297,7 @@ linters-settings:
           - (github.com/golangci/golangci-lint/pkg/logutils.Log).Fatalf
 
     # enable or disable analyzers by name
+    # run `go tool vet help` to see all analyzers
     enable:
       - atomicalign
     enable-all: false
@@ -292,6 +312,12 @@ linters-settings:
     packages-with-error-message:
       # specify an error message to output when a blacklisted package is used
       - github.com/sirupsen/logrus: "logging is allowed only by logutils.Log"
+  ifshort:
+    # Maximum length of variable declaration measured in number of lines, after which linter won't suggest using short syntax.
+    # Has higher priority than max-decl-chars.
+    max-decl-lines: 1
+    # Maximum length of variable declaration measured in number of characters, after which linter won't suggest using short syntax.
+    max-decl-chars: 30
   lll:
     # max line length, lines longer will be reported. Default is 120.
     # '\t' is counted as 1 character by default, and can be changed with the tab-width option
@@ -320,6 +346,11 @@ linters-settings:
     simple: true
     range-loops: true # Report preallocation suggestions on range loops, true by default
     for-loops: false # Report preallocation suggestions on for loops, false by default
+  predeclared:
+    # comma-separated list of predeclared identifiers to not report on
+    ignore: ""
+    # include method names and field names (i.e., qualified names) in checks
+    q: false
   nolintlint:
     # Enable to ensure that nolint directives are all used. Default is true.
     allow-unused: false
@@ -334,6 +365,13 @@ linters-settings:
   rowserrcheck:
     packages:
       - github.com/jmoiron/sqlx
+  revive:
+    # see https://github.com/mgechev/revive#available-rules for details.
+    ignore-generated-header: true
+    severity: warning
+    rules:
+      - name: indent-error-flow
+        severity: warning
   testpackage:
     # regexp pattern to skip files
     skip-regexp: (export|internal)_test\.go
@@ -345,6 +383,10 @@ linters-settings:
       name: true
       begin: true
     benchmark:
+      first: true
+      name: true
+      begin: true
+    tb:
       first: true
       name: true
       begin: true
@@ -370,6 +412,8 @@ linters-settings:
     # Allow calls and assignments to be cuddled as long as the lines have any
     # matching variables, fields or types. Default is true.
     allow-assign-and-call: true
+    # Allow assignments to be cuddled with anything. Default is false.
+    allow-assign-and-anything: false
     # Allow multiline assignments to be cuddled. Default is true.
     allow-multiline-assign: true
     # Allow declarations (var) to be cuddled.
@@ -398,6 +442,8 @@ linters-settings:
       - fmt.Errorf # consider errors.Errorf in github.com/pkg/errors
       - fmt.Print.* # too much log noise
       - ginkgo\\.F.* # these are used just for local development
+    # Exclude godoc examples from forbidigo checks.  Default is true.
+    exclude_godoc_examples: false
 
   # The custom section can be used to define linter plugins to be loaded at runtime. See README doc
   #  for more info.
@@ -493,6 +539,9 @@ issues:
 
   # Show only new issues created in git patch with set file path.
   new-from-patch: path/to/patch/file
+
+  # Fix found issues (if it's supported by the linter)
+  fix: true
 
 severity:
   # Default value is empty string.

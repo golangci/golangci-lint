@@ -19,6 +19,12 @@ golangci-lint run -h
 {.RunHelpText}
 ```
 
+When the `--cpu-profile-path` or `--mem-profile-path` arguments are specified, `golangci-lint` writes runtime profiling data
+in the format expected by the [pprof](https://github.com/google/pprof) visualization tool.
+
+When the `--trace-path` argument is specified, `golangci-lint` writes runtime tracing data in the format expected by
+the `go tool trace` command and visualization tool.
+
 ## Config File
 
 GolangCI-Lint looks for config files in the following paths from the current working directory:

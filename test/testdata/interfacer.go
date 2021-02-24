@@ -1,4 +1,4 @@
-//args: -Einterfacer
+//args: -Einterfacer --internal-cmd-test
 package testdata
 
 import "io"

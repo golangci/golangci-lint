@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/pkg/errors"
+	gopackages "golang.org/x/tools/go/packages"
 
 	"github.com/golangci/golangci-lint/internal/errorutil"
 	"github.com/golangci/golangci-lint/pkg/config"
@@ -20,8 +21,6 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 	"github.com/golangci/golangci-lint/pkg/result/processors"
 	"github.com/golangci/golangci-lint/pkg/timeutils"
-
-	gopackages "golang.org/x/tools/go/packages"
 )
 
 type Runner struct {
@@ -48,6 +47,15 @@ func NewRunner(cfg *config.Config, log logutils.Log, goenv *goutil.Env, es *lint
 	enabledLinters, err := es.GetEnabledLintersMap()
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to get enabled linters")
+	}
+
+	// print deprecated messages
+	if !cfg.InternalCmdTest {
+		for name, lc := range enabledLinters {
+			if lc.IsDeprecated() {
+				log.Warnf("The linter '%s' is deprecated due to: %s", name, lc.DeprecatedMessage)
+			}
+		}
 	}
 
 	return &Runner{

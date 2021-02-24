@@ -1,5 +1,6 @@
 //args: -Enolintlint -Evarcheck
 //config: linters-settings.nolintlint.allow-unused=false
+//expected_linter: nolintlint
 package testdata
 
 import "fmt"

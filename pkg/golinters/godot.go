@@ -30,6 +30,7 @@ func NewGodot() *goanalysis.Linter {
 		cfg := lintCtx.Cfg.LintersSettings.Godot
 		settings := godot.Settings{
 			Scope:   godot.Scope(cfg.Scope),
+			Exclude: cfg.Exclude,
 			Period:  true,
 			Capital: cfg.Capital,
 		}
