@@ -25,8 +25,9 @@ type InlineFix struct {
 }
 
 type Issue struct {
-	FromLinter string
-	Text       string
+	FromLinter     string
+	Text           string
+	SuggestedFixes string
 
 	Severity string
 

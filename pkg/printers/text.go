@@ -47,6 +47,7 @@ func (p *Text) Print(ctx context.Context, issues []result.Issue) error {
 
 		p.printSourceCode(&issues[i])
 		p.printUnderLinePointer(&issues[i])
+		p.printSuggestedFixes(&issues[i])
 	}
 
 	return nil
@@ -62,6 +63,13 @@ func (p Text) printIssue(i *result.Issue) {
 		pos += fmt.Sprintf(":%d", i.Pos.Column)
 	}
 	fmt.Fprintf(logutils.StdOut, "%s: %s\n", pos, text)
+}
+
+func (p Text) printSuggestedFixes(i *result.Issue) {
+	suggestedFixes := strings.TrimSpace(i.SuggestedFixes)
+	if suggestedFixes != "" {
+		fmt.Fprintln(logutils.StdOut, suggestedFixes)
+	}
 }
 
 func (p Text) printSourceCode(i *result.Issue) {
