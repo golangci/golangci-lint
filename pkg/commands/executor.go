@@ -205,7 +205,9 @@ func computeConfigSalt(cfg *config.Config) ([]byte, error) {
 	configData.WriteString("\nbuild-tags=%s" + strings.Join(cfg.Run.BuildTags, ","))
 
 	h := sha256.New()
-	h.Write(configData.Bytes()) //nolint:errcheck
+	if _, err := h.Write(configData.Bytes()); err != nil {
+		return nil, err
+	}
 	return h.Sum(nil), nil
 }
 

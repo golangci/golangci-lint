@@ -55,7 +55,9 @@ func updateStateFile(replacements map[string]string) error {
 	}
 
 	h := sha256.New()
-	h.Write(replBytes) //nolint:errcheck
+	if _, err := h.Write(replBytes); err != nil {
+		return err
+	}
 
 	var contentBuf bytes.Buffer
 	contentBuf.WriteString("This file stores hash of website templates to trigger " +

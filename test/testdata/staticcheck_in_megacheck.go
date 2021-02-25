@@ -5,7 +5,7 @@ import "fmt"
 
 func StaticcheckInMegacheck() {
 	var x int
-	x = x // ERROR "self-assignment of x to x"
+	x = x // ERROR staticcheck "self-assignment of x to x"
 	fmt.Printf("%d", x)
 }
 
@@ -17,4 +17,10 @@ func StaticcheckNolintStaticcheckInMegacheck() {
 func StaticcheckNolintMegacheckInMegacheck() {
 	var x int
 	x = x //nolint:megacheck
+}
+
+func Staticcheck2() {
+	var x int
+	x = x // ERROR staticcheck "self-assignment of x to x"
+	fmt.Printf("%d", x)
 }

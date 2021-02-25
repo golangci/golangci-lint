@@ -15,7 +15,7 @@ import (
 	"github.com/golangci/golangci-lint/test/testshared"
 )
 
-func runGoErrchk(c *exec.Cmd, files []string, t *testing.T) {
+func runGoErrchk(c *exec.Cmd, defaultExpectedLinter string, files []string, t *testing.T) {
 	output, err := c.CombinedOutput()
 	// The returned error will be nil if the test file does not have any issues
 	// and thus the linter exits with exit code 0. So perform the additional
@@ -33,7 +33,7 @@ func runGoErrchk(c *exec.Cmd, files []string, t *testing.T) {
 		fullshort = append(fullshort, f, filepath.Base(f))
 	}
 
-	err = errorCheck(string(output), false, fullshort...)
+	err = errorCheck(string(output), false, defaultExpectedLinter, fullshort...)
 	assert.NoError(t, err)
 }
 
@@ -124,7 +124,6 @@ func testOneSource(t *testing.T, sourcePath string) {
 		"--allow-parallel-runners",
 		"--disable-all",
 		"--print-issued-lines=false",
-		"--print-linter-name=false",
 		"--out-format=line-number",
 		"--max-same-issues=100",
 	}
@@ -156,14 +155,15 @@ func testOneSource(t *testing.T, sourcePath string) {
 
 		cmd := exec.Command(binName, caseArgs...)
 		t.Log(caseArgs)
-		runGoErrchk(cmd, []string{sourcePath}, t)
+		runGoErrchk(cmd, rc.expectedLinter, []string{sourcePath}, t)
 	}
 }
 
 type runContext struct {
-	args       []string
-	config     map[string]interface{}
-	configPath string
+	args           []string
+	config         map[string]interface{}
+	configPath     string
+	expectedLinter string
 }
 
 func buildConfigFromShortRepr(t *testing.T, repr string, config map[string]interface{}) {
@@ -213,7 +213,7 @@ func extractRunContextFromComments(t *testing.T, sourcePath string) *runContext 
 			continue
 		}
 		if !strings.HasPrefix(line, "//") {
-			return rc
+			break
 		}
 
 		line = strings.TrimLeft(strings.TrimPrefix(line, "//"), " ")
@@ -242,7 +242,27 @@ func extractRunContextFromComments(t *testing.T, sourcePath string) *runContext 
 			continue
 		}
 
+		if strings.HasPrefix(line, "expected_linter: ") {
+			expectedLinter := strings.TrimPrefix(line, "expected_linter: ")
+			assert.NotEmpty(t, expectedLinter)
+			rc.expectedLinter = expectedLinter
+			continue
+		}
+
 		assert.Fail(t, "invalid prefix of comment line %s", line)
+	}
+
+	// guess the expected linter if none is specified
+	if rc.expectedLinter == "" {
+		for _, arg := range rc.args {
+			if strings.HasPrefix(arg, "-E") && !strings.Contains(arg, ",") {
+				if rc.expectedLinter != "" {
+					assert.Fail(t, "could not infer expected linter for errors because multiple linters are enabled. Please use the `expected_linter: ` directive in your test to indicate the linter-under-test.") //nolint:lll
+					break
+				}
+				rc.expectedLinter = arg[2:]
+			}
+		}
 	}
 
 	return rc
