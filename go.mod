@@ -34,7 +34,7 @@ require (
 	github.com/jgautheron/goconst v0.0.0-20201117150253-ccae5bf973f3
 	github.com/jingyugao/rowserrcheck v0.0.0-20210130005344-c6a0c12dd98d
 	github.com/jirfag/go-printf-func-name v0.0.0-20191110105641-45db9963cdd3
-	github.com/kisielk/errcheck v1.5.1-0.20210225024930-4174a4ae53d4
+	github.com/kisielk/errcheck v1.6.0
 	github.com/kulti/thelper v0.4.0
 	github.com/kunwardeep/paralleltest v1.0.2
 	github.com/kyoh86/exportloopref v0.1.8
