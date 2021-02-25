@@ -184,6 +184,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/mdempsky/unconvert"),
 		linter.NewConfig(golinters.NewIneffassign()).
+			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetUnused).
 			WithURL("https://github.com/gordonklaus/ineffassign"),
 		linter.NewConfig(golinters.NewDupl()).
