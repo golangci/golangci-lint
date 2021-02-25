@@ -66,9 +66,20 @@ func (p Text) printIssue(i *result.Issue) {
 }
 
 func (p Text) printSuggestedFixes(i *result.Issue) {
-	suggestedFixes := strings.TrimSpace(i.SuggestedFixes)
-	if suggestedFixes != "" {
-		fmt.Fprintln(logutils.StdOut, suggestedFixes)
+	var text string
+	if len(i.SuggestedFixes) > 0 {
+		for _, fix := range i.SuggestedFixes {
+			text += p.SprintfColored(color.FgRed, "%s\n", strings.TrimSpace(fix.Message))
+			elems := []string{}
+			for _, text := range fix.TextEdits {
+				elems = append(elems, strings.TrimSpace(string(text.NewText)))
+			}
+			text += strings.Join(elems, "\n") + "\n"
+		}
+	}
+
+	if text != "" {
+		fmt.Fprintln(logutils.StdOut, text)
 	}
 }
 

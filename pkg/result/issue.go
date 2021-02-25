@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"go/token"
 
+	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/packages"
 )
 
@@ -27,7 +28,7 @@ type InlineFix struct {
 type Issue struct {
 	FromLinter     string
 	Text           string
-	SuggestedFixes string
+	SuggestedFixes []analysis.SuggestedFix
 
 	Severity string
 

@@ -98,10 +98,11 @@ func buildIssues(diags []Diagnostic, linterNameBuilder func(diag *Diagnostic) st
 		}
 
 		issues = append(issues, result.Issue{
-			FromLinter: linterName,
-			Text:       text,
-			Pos:        diag.Position,
-			Pkg:        diag.Pkg,
+			FromLinter:     linterName,
+			Text:           text,
+			SuggestedFixes: diag.SuggestedFixes,
+			Pos:            diag.Position,
+			Pkg:            diag.Pkg,
 		})
 
 		if len(diag.Related) > 0 {
