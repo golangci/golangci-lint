@@ -43,8 +43,10 @@ func NewErrcheck() *goanalysis.Linter {
 		// copied from errcheck
 		checker, err := getChecker(&lintCtx.Settings().Errcheck)
 		if err != nil {
-			panic(err.Error())
+			lintCtx.Log.Errorf("failed to get checker: %v", err)
+			return
 		}
+
 		checker.Tags = lintCtx.Cfg.Run.BuildTags
 
 		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
