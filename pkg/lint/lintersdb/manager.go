@@ -99,6 +99,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 	var ifshortCfg *config.IfshortSettings
 	var reviveCfg *config.ReviveSettings
 	var cyclopCfg *config.Cyclop
+	var importAsCfg *config.ImportAsSettings
 	if m.cfg != nil {
 		govetCfg = &m.cfg.LintersSettings.Govet
 		testpackageCfg = &m.cfg.LintersSettings.Testpackage
@@ -110,6 +111,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		ifshortCfg = &m.cfg.LintersSettings.Ifshort
 		reviveCfg = &m.cfg.LintersSettings.Revive
 		cyclopCfg = &m.cfg.LintersSettings.Cyclop
+		importAsCfg = &m.cfg.LintersSettings.ImportAs
 	}
 	const megacheckName = "megacheck"
 	lcs := []*linter.Config{
@@ -380,6 +382,10 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/sanposhiho/wastedassign"),
+		linter.NewConfig(golinters.NewImportAs(importAsCfg)).
+			WithPresets(linter.PresetStyle).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/julz/importas"),
 
 		// nolintlint must be last because it looks at the results of all the previous linters for unused nolint directives
 		linter.NewConfig(golinters.NewNoLintLint()).

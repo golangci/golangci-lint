@@ -444,6 +444,11 @@ linters-settings:
       - ginkgo\\.F.* # these are used just for local development
     # Exclude godoc examples from forbidigo checks.  Default is true.
     exclude_godoc_examples: false
+  importas:
+    # using `servingv1` alias for `knative.dev/serving/pkg/apis/serving/v1` package
+    servingv1: knative.dev/serving/pkg/apis/serving/v1
+    # using `autoscalingv1alpha1` alias for `knative.dev/serving/pkg/apis/autoscaling/v1alpha1` package
+    autoscalingv1alpha1: knative.dev/serving/pkg/apis/autoscaling/v1alpha1
 
   # The custom section can be used to define linter plugins to be loaded at runtime. See README doc
   #  for more info.
