@@ -275,6 +275,7 @@ type LintersSettings struct {
 	Ifshort          IfshortSettings
 	Predeclared      PredeclaredSettings
 	Cyclop           Cyclop
+	ImportAs         ImportAsSettings
 
 	Custom map[string]CustomLinterSettings
 }
@@ -460,6 +461,8 @@ type Cyclop struct {
 	PackageAverage float64 `mapstructure:"package-average"`
 	SkipTests      bool    `mapstructure:"skip-tests"`
 }
+
+type ImportAsSettings map[string]string
 
 var defaultLintersSettings = LintersSettings{
 	Lll: LllSettings{
