@@ -99,6 +99,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 	var ifshortCfg *config.IfshortSettings
 	var reviveCfg *config.ReviveSettings
 	var cyclopCfg *config.Cyclop
+	var gooneCfg *config.GooneSettings
 	if m.cfg != nil {
 		govetCfg = &m.cfg.LintersSettings.Govet
 		testpackageCfg = &m.cfg.LintersSettings.Testpackage
@@ -110,9 +111,14 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		ifshortCfg = &m.cfg.LintersSettings.Ifshort
 		reviveCfg = &m.cfg.LintersSettings.Revive
 		cyclopCfg = &m.cfg.LintersSettings.Cyclop
+		gooneCfg = &m.cfg.LintersSettings.Goone
 	}
 	const megacheckName = "megacheck"
 	lcs := []*linter.Config{
+		linter.NewConfig(golinters.NewGoone(gooneCfg)).
+			WithLoadForGoAnalysis().
+			WithPresets(linter.PresetPerformance).
+			WithURL("https://github.com/masibw/goone"),
 		linter.NewConfig(golinters.NewGovet(govetCfg)).
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetBugs).

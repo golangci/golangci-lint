@@ -39,6 +39,7 @@ require (
 	github.com/kunwardeep/paralleltest v1.0.2
 	github.com/kyoh86/exportloopref v0.1.8
 	github.com/maratori/testpackage v1.0.1
+	github.com/masibw/goone v1.4.0
 	github.com/matoous/godox v0.0.0-20190911065817-5d6d842e92eb // v1.0
 	github.com/mattn/go-colorable v0.1.8
 	github.com/mbilski/exhaustivestruct v1.2.0

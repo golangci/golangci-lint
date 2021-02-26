@@ -190,7 +190,7 @@ linters-settings:
       underef:
         # whether to skip (*x).method() calls where x is a pointer receiver (default true)
         skipRecvDeref: true
-    	unnamedResult:
+      unnamedResult:
         # whether to check exported functions
         checkExported: true
   gocyclo:
@@ -444,6 +444,9 @@ linters-settings:
       - ginkgo\\.F.* # these are used just for local development
     # Exclude godoc examples from forbidigo checks.  Default is true.
     exclude_godoc_examples: false
+
+  goone:
+    config-path: /myapp/goone.yml # absolute path for goone config
 
   # The custom section can be used to define linter plugins to be loaded at runtime. See README doc
   #  for more info.
