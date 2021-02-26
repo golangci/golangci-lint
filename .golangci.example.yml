@@ -231,7 +231,7 @@ linters-settings:
       regexp:
         # define here regexp type values, for example
         # AUTHOR: .*@mycompany\.com
-    template: # |
+    template: # |-
       # put here copyright header template for source code files, for example:
       # Note: {{ YEAR }} is a builtin value that returns the year relative to the current machine time.
       #
