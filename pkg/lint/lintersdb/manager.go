@@ -390,6 +390,10 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetBugs).
 			WithURL("https://github.com/gostaticanalysis/nilerr"),
+		linter.NewConfig(golinters.NewForceTypeAssert()).
+			WithPresets(linter.PresetStyle).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/gostaticanalysis/forcetypeassert"),
 
 		// nolintlint must be last because it looks at the results of all the previous linters for unused nolint directives
 		linter.NewConfig(golinters.NewNoLintLint()).
