@@ -31,6 +31,7 @@ require (
 	github.com/golangci/revgrep v0.0.0-20210208091834-cd28932614b5
 	github.com/golangci/unconvert v0.0.0-20180507085042-28b1c447d1f4
 	github.com/gordonklaus/ineffassign v0.0.0-20210225214923-2e10b2664254
+	github.com/gostaticanalysis/forcetypeassert v0.0.0-20200621232751-01d4955beaa5
 	github.com/gostaticanalysis/nilerr v0.1.1
 	github.com/jgautheron/goconst v1.4.0
 	github.com/jingyugao/rowserrcheck v0.0.0-20210130005344-c6a0c12dd98d
