@@ -116,6 +116,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 	const megacheckName = "megacheck"
 	lcs := []*linter.Config{
 		linter.NewConfig(golinters.NewGoone(gooneCfg)).
+			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetPerformance).
 			WithURL("https://github.com/masibw/goone"),
 		linter.NewConfig(golinters.NewGovet(govetCfg)).

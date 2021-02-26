@@ -2,9 +2,9 @@
 package testdata
 
 import (
-	"database/sql"
-	"fmt"
-	"log"
+"database/sql"
+"fmt"
+"log"
 )
 
 type Person struct {
@@ -32,7 +32,7 @@ func ForStmt() {
 		}
 
 		var job Job
-		err := cnn.QueryRow("SELECT job_id, name FROM Jobs WHERE job_id = ?", person.JobID).Scan(&job.JobID, &job.Name)//ERROR"this query is called in a loop"
+		err := cnn.QueryRow("SELECT job_id, name FROM Jobs WHERE job_id = ?", person.JobID).Scan(&job.JobID, &job.Name)// ERROR "this query is called in a loop"
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -63,7 +63,7 @@ func rangeStmt() {
 	for _, person := range persons {
 
 		var job Job
-		err := cnn.QueryRow("SELECT job_id, name FROM Jobs WHERE job_id = ?", person.JobID).Scan(&job.JobID, &job.Name) //ERROR "this query is called in a loop"
+		err := cnn.QueryRow("SELECT job_id, name FROM Jobs WHERE job_id = ?", person.JobID).Scan(&job.JobID, &job.Name) // ERROR "this query is called in a loop"
 		if err != nil {
 			log.Fatal(err)
 		}
