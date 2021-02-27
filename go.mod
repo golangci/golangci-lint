@@ -7,7 +7,7 @@ require (
 	github.com/BurntSushi/toml v0.3.1
 	github.com/Djarvur/go-err113 v0.0.0-20210108212216-aea10b59be24
 	github.com/OpenPeeDeeP/depguard v1.0.1
-	github.com/alexkohler/prealloc v0.0.0-20210204145425-77a5b5dd9799
+	github.com/alexkohler/prealloc v1.0.0
 	github.com/ashanbrown/forbidigo v1.1.0
 	github.com/ashanbrown/makezero v0.0.0-20201205152432-7b7cdbb3025a
 	github.com/bkielbasa/cyclop v1.2.0
@@ -27,7 +27,7 @@ require (
 	github.com/golangci/gofmt v0.0.0-20190930125516-244bba706f1a
 	github.com/golangci/lint-1 v0.0.0-20191013205115-297bf364a8e0
 	github.com/golangci/maligned v0.0.0-20180506175553-b1d89398deca
-	github.com/golangci/misspell v0.0.0-20180809174111-950f5d19e770
+	github.com/golangci/misspell v0.3.5
 	github.com/golangci/revgrep v0.0.0-20210208091834-cd28932614b5
 	github.com/golangci/unconvert v0.0.0-20180507085042-28b1c447d1f4
 	github.com/gordonklaus/ineffassign v0.0.0-20210225214923-2e10b2664254
@@ -35,14 +35,14 @@ require (
 	github.com/gostaticanalysis/nilerr v0.1.1
 	github.com/jgautheron/goconst v1.4.0
 	github.com/jingyugao/rowserrcheck v0.0.0-20210130005344-c6a0c12dd98d
-	github.com/jirfag/go-printf-func-name v0.0.0-20191110105641-45db9963cdd3
+	github.com/jirfag/go-printf-func-name v0.0.0-20200119135958-7558a9eaa5af
 	github.com/julz/importas v0.0.0-20210226073942-60b4fa260dd0
 	github.com/kisielk/errcheck v1.6.0
 	github.com/kulti/thelper v0.4.0
 	github.com/kunwardeep/paralleltest v1.0.2
 	github.com/kyoh86/exportloopref v0.1.8
 	github.com/maratori/testpackage v1.0.1
-	github.com/matoous/godox v0.0.0-20190911065817-5d6d842e92eb // v1.0
+	github.com/matoous/godox v0.0.0-20210227103229-6504466cf951 // v1.0
 	github.com/mattn/go-colorable v0.1.8
 	github.com/mbilski/exhaustivestruct v1.2.0
 	github.com/mgechev/dots v0.0.0-20190921121421-c36f7dcfbb81
@@ -69,21 +69,20 @@ require (
 	github.com/spf13/viper v1.7.1
 	github.com/ssgreg/nlreturn/v2 v2.1.0
 	github.com/stretchr/testify v1.7.0
-	github.com/tdakkota/asciicheck v0.0.0-20200416190851-d7f85be797a2
+	github.com/tdakkota/asciicheck v0.0.0-20200416200610-e657995f937b
 	github.com/tetafro/godot v1.4.4
 	github.com/timakin/bodyclose v0.0.0-20200424151742-cb6215831a94
-	github.com/tomarrell/wrapcheck v0.0.0-20200807122107-df9e8bcb914d
+	github.com/tomarrell/wrapcheck v0.0.0-20201130113247-1683564d9756
 	github.com/tommy-muehle/go-mnd/v2 v2.3.1
 	github.com/ultraware/funlen v0.0.3
 	github.com/ultraware/whitespace v0.0.4
 	github.com/uudashr/gocognit v1.0.1
 	github.com/valyala/quicktemplate v1.6.3
-	golang.org/x/text v0.3.4 // indirect
 	golang.org/x/tools v0.1.0
 	gopkg.in/yaml.v2 v2.4.0
 	honnef.co/go/tools v0.1.2
 	mvdan.cc/gofumpt v0.1.0
 	mvdan.cc/interfacer v0.0.0-20180901003855-c20040233aed
 	mvdan.cc/lint v0.0.0-20170908181259-adc824a0674b // indirect
-	mvdan.cc/unparam v0.0.0-20200501210554-b37ab49443f7
+	mvdan.cc/unparam v0.0.0-20210104141923-aac4ce9116a7
 )
