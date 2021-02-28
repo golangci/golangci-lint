@@ -201,7 +201,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithURL("https://github.com/remyoudompheng/go-misc/tree/master/deadcode"),
 		linter.NewConfig(golinters.NewGocyclo()).
 			WithPresets(linter.PresetComplexity).
-			WithURL("https://github.com/alecthomas/gocyclo"),
+			WithURL("https://github.com/fzipp/gocyclo"),
 		linter.NewConfig(golinters.NewCyclop(cyclopCfg)).
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetComplexity).
