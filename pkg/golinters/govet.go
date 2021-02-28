@@ -17,6 +17,7 @@ import (
 	"golang.org/x/tools/go/analysis/passes/errorsas"
 	"golang.org/x/tools/go/analysis/passes/fieldalignment"
 	"golang.org/x/tools/go/analysis/passes/findcall"
+	"golang.org/x/tools/go/analysis/passes/framepointer"
 	"golang.org/x/tools/go/analysis/passes/httpresponse"
 	"golang.org/x/tools/go/analysis/passes/ifaceassert"
 	_ "golang.org/x/tools/go/analysis/passes/inspect" // unused internal analyzer
@@ -58,6 +59,7 @@ var (
 		errorsas.Analyzer,
 		fieldalignment.Analyzer,
 		findcall.Analyzer,
+		framepointer.Analyzer,
 		httpresponse.Analyzer,
 		ifaceassert.Analyzer,
 		loopclosure.Analyzer,
@@ -89,7 +91,9 @@ var (
 		composite.Analyzer,
 		copylock.Analyzer,
 		errorsas.Analyzer,
+		framepointer.Analyzer,
 		httpresponse.Analyzer,
+		ifaceassert.Analyzer,
 		loopclosure.Analyzer,
 		lostcancel.Analyzer,
 		nilfunc.Analyzer,
@@ -98,6 +102,7 @@ var (
 		stdmethods.Analyzer,
 		stringintconv.Analyzer,
 		structtag.Analyzer,
+		testinggoroutine.Analyzer,
 		tests.Analyzer,
 		unmarshal.Analyzer,
 		unreachable.Analyzer,
