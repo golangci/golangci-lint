@@ -99,8 +99,8 @@ jobs:
       - name: Install Go
         uses: actions/setup-go@v2
         with:
-          go-version: 1.15
-        - uses: actions/setup-node@v2
+          go-version: 1.16
+      - uses: actions/setup-node@v2
 
       - name: Update GitHub action config
         run: make assets/github-action-config.json
