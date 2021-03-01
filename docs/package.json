@@ -41,7 +41,7 @@
     "polished": "^4.1.1",
     "prism-react-renderer": "^1.1.1",
     "prop-types": "^15.7.2",
-    "puppeteer": "^7.0.1",
+    "puppeteer": "^8.0.0",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
     "react-headroom": "^3.1.0",
