@@ -30,7 +30,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: lint
-        uses: golangci/golangci-lint-action@v2.4.0
+        uses: golangci/golangci-lint-action@v2.5.1
         with:
           version: latest
   tests-on-windows:
