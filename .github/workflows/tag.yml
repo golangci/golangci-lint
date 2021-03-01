@@ -94,6 +94,8 @@ jobs:
   update-docs-and-assets:
     needs: docker-release
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GOLANGCI_LINT_TOKEN }}
     steps:
       - uses: actions/checkout@v2
       - name: Install Go
