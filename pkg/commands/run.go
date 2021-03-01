@@ -47,9 +47,6 @@ func getDefaultDirectoryExcludeHelp() string {
 	return strings.Join(parts, "\n")
 }
 
-const welcomeMessage = "Run this tool in cloud on every github pull " +
-	"request in https://golangci.com for free (public repos)"
-
 func wh(text string) string {
 	return color.GreenString(text)
 }
@@ -84,6 +81,11 @@ func initFlagSet(fs *pflag.FlagSet, cfg *config.Config, m *lintersdb.Manager, is
 	fs.BoolVar(&oc.PrintWelcomeMessage, "print-welcome", false, wh("Print welcome message"))
 	fs.StringVar(&oc.PathPrefix, "path-prefix", "", wh("Path prefix to add to output"))
 	hideFlag("print-welcome") // no longer used
+
+	fs.BoolVar(&cfg.InternalCmdTest, "internal-cmd-test", false, wh("Option is used only for testing golangci-lint command, don't use it"))
+	if err := fs.MarkHidden("internal-cmd-test"); err != nil {
+		panic(err)
+	}
 
 	// Run config
 	rc := &cfg.Run
@@ -274,7 +276,7 @@ func (e *Executor) getConfigForCommandLine() (*config.Config, error) {
 func (e *Executor) initRun() {
 	e.runCmd = &cobra.Command{
 		Use:   "run",
-		Short: welcomeMessage,
+		Short: "Run the linters",
 		Run:   e.executeRun,
 		PreRun: func(_ *cobra.Command, _ []string) {
 			if ok := e.acquireFileLock(); !ok {
@@ -287,7 +289,8 @@ func (e *Executor) initRun() {
 	}
 	e.rootCmd.AddCommand(e.runCmd)
 
-	e.runCmd.SetOutput(logutils.StdOut) // use custom output to properly color it in Windows terminals
+	e.runCmd.SetOut(logutils.StdOut) // use custom output to properly color it in Windows terminals
+	e.runCmd.SetErr(logutils.StdErr)
 
 	e.initRunConfiguration(e.runCmd)
 }
