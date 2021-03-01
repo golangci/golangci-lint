@@ -95,3 +95,10 @@ jobs:
           go-version: 1.16
       - name: Check generated files are up to date
         run: make fast_check_generated
+
+  check_token:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GOLANGCI_LINT_TOKEN }}
+    steps:
+      - run: curl -i https:/${GITHUB_TOKEN}:x-oauth-basic@api.github.com/user | grep -i "X-OAuth-Scopes:"
