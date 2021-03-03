@@ -1,0 +1,43 @@
+name: "Publish release documentation"
+on:
+  release:
+    types:
+      - published
+
+jobs:
+  update-docs-and-assets:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GOLANGCI_LINT_TOKEN }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.16
+
+      - name: Update GitHub action config
+        run: make assets/github-action-config.json
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "15"
+          check-latest: true
+      - name: npm install
+        working-directory: .github/contributors
+        run: npm install
+      - name: Update Contributors list
+        run: make update_contributors_list # may take 15 min
+
+      - name: Update netlify state hash
+        run: make update_netlify_state
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          base: master
+          token: ${{ secrets.GOLANGCI_LINT_TOKEN }}
+          branch-suffix: timestamp
+          title: "Update documentation and assets"
+          team-reviewers: golangci/team
+          delete-branch: true
