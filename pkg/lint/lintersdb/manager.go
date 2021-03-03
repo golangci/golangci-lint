@@ -394,6 +394,9 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/gostaticanalysis/forcetypeassert"),
+		linter.NewConfig(golinters.NewNoreplace()).
+			WithAutoFix().
+			WithURL("https://git.sr.ht/~urandom/noreplace"),
 
 		// nolintlint must be last because it looks at the results of all the previous linters for unused nolint directives
 		linter.NewConfig(golinters.NewNoLintLint()).

@@ -4,6 +4,7 @@ go 1.14
 
 require (
 	4d63.com/gochecknoglobals v0.0.0-20201008074935-acfc0b28355a
+	git.sr.ht/~urandom/noreplace v0.0.0-20210303085701-97f39e5a1bba
 	github.com/BurntSushi/toml v0.3.1
 	github.com/Djarvur/go-err113 v0.0.0-20210108212216-aea10b59be24
 	github.com/OpenPeeDeeP/depguard v1.0.1
