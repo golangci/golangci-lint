@@ -27,7 +27,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GOLANGCI_LINT_TOKEN }}
 
   docker-release:
-    needs: [ release ]
+    needs: release
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -48,23 +48,23 @@ jobs:
       - name: Prepare
         id: prepare
         run: |
-            TAG=${GITHUB_REF#refs/tags/}
-            MAJOR=${TAG%.*}
-            SHORT_COMMIT=${GITHUB_SHA::8}
-            DATE=$(date '+%Y-%m-%dT%H:%M:%SZ')
-            echo ::set-output name=tag_name::${TAG}
-            echo ::set-output name=major_tag::${MAJOR}
-            echo ::set-output name=short_commit::${SHORT_COMMIT}
-            echo ::set-output name=date::${DATE}
-            if [[ ${{ matrix.target.Dockerfile }} == *"alpine"* ]]; then
-              echo ::set-output name=full_tag_name::${TAG}-alpine
-              echo ::set-output name=full_major_tag::${MAJOR}-alpine
-              echo ::set-output name=latest_tag::latest-alpine
-            else
-              echo ::set-output name=full_tag_name::${TAG}
-              echo ::set-output name=full_major_tag::${MAJOR}
-              echo ::set-output name=latest_tag::latest
-            fi
+          TAG=${GITHUB_REF#refs/tags/}
+          MAJOR=${TAG%.*}
+          SHORT_COMMIT=${GITHUB_SHA::8}
+          DATE=$(date '+%Y-%m-%dT%H:%M:%SZ')
+          echo ::set-output name=tag_name::${TAG}
+          echo ::set-output name=major_tag::${MAJOR}
+          echo ::set-output name=short_commit::${SHORT_COMMIT}
+          echo ::set-output name=date::${DATE}
+          if [[ ${{ matrix.target.Dockerfile }} == *"alpine"* ]]; then
+            echo ::set-output name=full_tag_name::${TAG}-alpine
+            echo ::set-output name=full_major_tag::${MAJOR}-alpine
+            echo ::set-output name=latest_tag::latest-alpine
+          else
+            echo ::set-output name=full_tag_name::${TAG}
+            echo ::set-output name=full_major_tag::${MAJOR}
+            echo ::set-output name=latest_tag::latest
+          fi
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
