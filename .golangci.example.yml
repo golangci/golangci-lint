@@ -424,7 +424,7 @@ linters-settings:
     force-case-trailing-whitespace: 0
     # Force cuddling of err checks with err var assignment
     force-err-cuddling: false
-    # Allow leading comments to be separated with empty liens
+    # Allow leading comments to be separated with empty lines
     allow-separated-leading-comment: false
   gofumpt:
     # Choose whether or not to use the extra rules that are disabled
