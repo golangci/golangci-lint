@@ -246,8 +246,8 @@ github.com/kunwardeep/paralleltest v1.0.2 h1:/jJRv0TiqPoEy/Y8dQxCFJhD56uS/pnvtat
 github.com/kunwardeep/paralleltest v1.0.2/go.mod h1:ZPqNm1fVHPllh5LPVujzbVz1JN2GhLxSfY+oqUsvG30=
 github.com/kyoh86/exportloopref v0.1.8 h1:5Ry/at+eFdkX9Vsdw3qU4YkvGtzuVfzT4X7S77LoN/M=
 github.com/kyoh86/exportloopref v0.1.8/go.mod h1:1tUcJeiioIs7VWe5gcOObrux3lb66+sBqGZrRkMwPgg=
-github.com/ldez/gomodreplace v0.1.0 h1:WurUDAl9AvpK9OOS1TNe9rFPw3TTV3TJVDM+Iceyk3E=
-github.com/ldez/gomodreplace v0.1.0/go.mod h1:pP8BDbGsG/aVnjFdgOvInjHOg4GzKMnqJS4OM1goIyU=
+github.com/ldez/gomodreplace v0.2.0 h1:kSpO8kgsLCXj+y1K7i8qQGO5jOi8SxI47gtG4MiPzKU=
+github.com/ldez/gomodreplace v0.2.0/go.mod h1:pP8BDbGsG/aVnjFdgOvInjHOg4GzKMnqJS4OM1goIyU=
 github.com/lib/pq v1.0.0/go.mod h1:5WUZQaWbwv1U+lTReE5YruASi9Al49XbQIvNi/34Woo=
 github.com/lib/pq v1.9.0/go.mod h1:AlVN5x4E4T544tWzH6hKfbfQvm3HdbOxrmggDNAPY9o=
 github.com/logrusorgru/aurora v0.0.0-20181002194514-a7b3b318ed4e/go.mod h1:7rIyQOR62GCctdiQpZ/zOJlFyk6y+94wXzv6RNZgaR4=
