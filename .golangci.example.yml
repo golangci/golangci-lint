@@ -449,6 +449,12 @@ linters-settings:
     servingv1: knative.dev/serving/pkg/apis/serving/v1
     # using `autoscalingv1alpha1` alias for `knative.dev/serving/pkg/apis/autoscaling/v1alpha1` package
     autoscalingv1alpha1: knative.dev/serving/pkg/apis/autoscaling/v1alpha1
+  gomodreplace:
+    # Allow local `replace` directives. Default is false.
+    local: false
+    # List of allowed `replace` directives. Default is empty.
+    allow-list:
+      - launchpad.net/gocheck
 
   # The custom section can be used to define linter plugins to be loaded at runtime. See README doc
   #  for more info.
