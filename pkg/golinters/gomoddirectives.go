@@ -17,7 +17,7 @@ const goModDirectivesName = "gomoddirectives"
 // NewGoModDirectives returns a new gomoddirectives linter.
 func NewGoModDirectives(settings *config.GoModDirectivesSettings) *goanalysis.Linter {
 	var issues []goanalysis.Issue
-	var mu sync.Mutex
+	var once sync.Once
 
 	var opts gomoddirectives.Options
 	if settings != nil {
@@ -39,24 +39,22 @@ func NewGoModDirectives(settings *config.GoModDirectivesSettings) *goanalysis.Li
 		nil,
 	).WithContextSetter(func(lintCtx *linter.Context) {
 		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
-			results, err := gomoddirectives.Analyze(opts)
-			if err != nil {
-				lintCtx.Log.Warnf("running %s failed: %s: "+
-					"if you are not using go modules it is suggested to disable this linter", goModDirectivesName, err)
-				return nil, nil
-			}
+			once.Do(func() {
+				results, err := gomoddirectives.Analyze(opts)
+				if err != nil {
+					lintCtx.Log.Warnf("running %s failed: %s: "+
+						"if you are not using go modules it is suggested to disable this linter", goModDirectivesName, err)
+					return
+				}
 
-			mu.Lock()
-
-			for _, p := range results {
-				issues = append(issues, goanalysis.NewIssue(&result.Issue{
-					FromLinter: goModDirectivesName,
-					Pos:        p.Start,
-					Text:       p.Reason,
-				}, pass))
-			}
-
-			mu.Unlock()
+				for _, p := range results {
+					issues = append(issues, goanalysis.NewIssue(&result.Issue{
+						FromLinter: goModDirectivesName,
+						Pos:        p.Start,
+						Text:       p.Reason,
+					}, pass))
+				}
+			})
 
 			return nil, nil
 		}
