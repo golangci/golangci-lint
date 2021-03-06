@@ -3,26 +3,28 @@ package golinters
 import (
 	"sync"
 
-	"github.com/golangci/golangci-lint/pkg/config"
-	"github.com/ldez/gomodreplace"
+	"github.com/ldez/gomoddirectives"
 	"golang.org/x/tools/go/analysis"
 
+	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-const goModReplaceName = "gomodreplace"
+const goModDirectivesName = "gomoddirectives"
 
-// NewGoModReplace returns a new gomodreplace linter.
-func NewGoModReplace(settings *config.GoModReplaceSettings) *goanalysis.Linter {
+// NewGoModDirectives returns a new gomoddirectives linter.
+func NewGoModDirectives(settings *config.GoModDirectivesSettings) *goanalysis.Linter {
 	var issues []goanalysis.Issue
 	var mu sync.Mutex
 
-	var opts gomodreplace.Options
+	var opts gomoddirectives.Options
 	if settings != nil {
-		opts.AllowLocal = settings.Local
-		opts.AllowList = settings.AllowList
+		opts.ReplaceAllowLocal = settings.ReplaceLocal
+		opts.ReplaceAllowList = settings.ReplaceAllowList
+		opts.RetractAllowNoExplanation = settings.RetractAllowNoExplanation
+		opts.ExcludeForbidden = settings.ExcludeForbidden
 	}
 
 	analyzer := &analysis.Analyzer{
@@ -31,16 +33,16 @@ func NewGoModReplace(settings *config.GoModReplaceSettings) *goanalysis.Linter {
 	}
 
 	return goanalysis.NewLinter(
-		goModReplaceName,
-		"Manage the use of replace directives in go.mod.",
+		goModDirectivesName,
+		"Manage the use of 'replace', 'retract', and 'excludes' directives in go.mod.",
 		[]*analysis.Analyzer{analyzer},
 		nil,
 	).WithContextSetter(func(lintCtx *linter.Context) {
 		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
-			results, err := gomodreplace.Analyze(opts)
+			results, err := gomoddirectives.Analyze(opts)
 			if err != nil {
 				lintCtx.Log.Warnf("running %s failed: %s: "+
-					"if you are not using go modules it is suggested to disable this linter", goModReplaceName, err)
+					"if you are not using go modules it is suggested to disable this linter", goModDirectivesName, err)
 				return nil, nil
 			}
 
@@ -48,7 +50,7 @@ func NewGoModReplace(settings *config.GoModReplaceSettings) *goanalysis.Linter {
 
 			for _, p := range results {
 				issues = append(issues, goanalysis.NewIssue(&result.Issue{
-					FromLinter: goModReplaceName,
+					FromLinter: goModDirectivesName,
 					Pos:        p.Start,
 					Text:       p.Reason,
 				}, pass))
