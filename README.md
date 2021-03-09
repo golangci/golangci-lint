@@ -138,6 +138,7 @@ The Core Team has the following responsibilities:
   <td align="center"><a href="https://dev.to/vearutop?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/1381436?v=4" width="100px;" alt=""/><br /><sub><b>Viacheslav Poturaev</b></sub></a></td>
   <td align="center"><a href="https://lukasmalkmus.io?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/9931588?u=51de6132f5f0e8f88aedf265a5205d9a91f4e1aa&v=4" width="100px;" alt=""/><br /><sub><b>Lukas Malkmus</b></sub></a></td>
   <td align="center"><a href="https://github.com/dbraley?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/2067019?u=47d3d161a65b877714779c39d2eb6dc686d427ec&v=4" width="100px;" alt=""/><br /><sub><b>David Braley</b></sub></a></td>
+  <td align="center"><a href="https://lukasmalkmus.io?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/9931588?u=51de6132f5f0e8f88aedf265a5205d9a91f4e1aa&v=4" width="100px;" alt=""/><br /><sub><b>Lukas Malkmus</b></sub></a></td>
   <td align="center"><a href="https://github.com/kulti?utm_source=golangci-lint-contributors"><img src="https://avatars.githubusercontent.com/u/1286683?u=d6b6fa0c86e3b714f7cb744bc79c052f81e5678c&v=4" width="100px;" alt=""/><br /><sub><b>Aleksey Bakin</b></sub></a></td>
 </tr>
 <tr>
