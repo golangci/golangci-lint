@@ -1,64 +1,64 @@
 //args: -Ewastedassign
 package testdata
 
-import (
-	"strings"
-)
+import "strings"
 
-func p(x int) int {
+func pa(x int) int {
 	return x + 1
 }
 
-func typeSwitchNoError(val interface{}, times uint) interface{} {
-	switch hoge := val.(type) {
+func multiple(val interface{}, times uint) interface{} {
+
+	switch hogehoge := val.(type) {
 	case int:
 		return 12
 	case string:
-		return strings.Repeat(hoge, int(times))
+		return strings.Repeat(hogehoge, int(times))
 	default:
 		return nil
 	}
 }
 
-func noUseParamsNoError(params string) int {
+func noUseParams(params string) int {
 	a := 12
 	println(a)
 	return a
 }
 
-func manyif(param int) int {
+func f(param int) int {
 	println(param)
-	useOutOfIf := 1212121 // ERROR "wasted assignment"
+	useOutOfIf := 1212121 // ERROR "reassigned, but reassigned without using the value"
 	ret := 0
 	if false {
 		useOutOfIf = 200 // ERROR "reassigned, but never used afterwards"
 		return 0
 	} else if param == 100 {
-		useOutOfIf = 100 // ERROR "wasted assignment"
+		useOutOfIf = 100 // ERROR "reassigned, but reassigned without using the value"
 		useOutOfIf = 201
-		useOutOfIf = p(useOutOfIf)
-		useOutOfIf += 200 // ERROR "wasted assignment"
+		useOutOfIf = pa(useOutOfIf)
+		useOutOfIf += 200 // ERROR "reassigned, but reassigned without using the value"
 	} else {
 		useOutOfIf = 100
 		useOutOfIf += 100
-		useOutOfIf = p(useOutOfIf)
-		useOutOfIf += 200 // ERROR "wasted assignment"
+		useOutOfIf = pa(useOutOfIf)
+		useOutOfIf += 200 // ERROR "reassigned, but reassigned without using the value"
 	}
 
 	if false {
 		useOutOfIf = 200 // ERROR "reassigned, but never used afterwards"
 		return 0
 	} else if param == 200 {
-		useOutOfIf = 100 // ERROR "wasted assignment"
+		useOutOfIf = 100 // ERROR "reassigned, but reassigned without using the value"
 		useOutOfIf = 201
-		useOutOfIf = p(useOutOfIf)
+		useOutOfIf = pa(useOutOfIf)
 		useOutOfIf += 200
 	} else {
 		useOutOfIf = 100
 		useOutOfIf += 100
-		useOutOfIf = p(useOutOfIf)
+		useOutOfIf = pa(useOutOfIf)
 		useOutOfIf += 200
 	}
+	// useOutOfIf = 12
 	println(useOutOfIf)
 	useOutOfIf = 192
 	useOutOfIf += 100
@@ -81,11 +81,35 @@ func checkLoopTest() int {
 	return hoge
 }
 
-func infinity() {
+func r(param int) int {
+	println(param)
+	useOutOfIf := 1212121
+	ret := 0
+	if false {
+		useOutOfIf = 200 // ERROR "reassigned, but never used afterwards"
+		return 0
+	} else if param == 100 {
+		ret = useOutOfIf
+	} else if param == 200 {
+		useOutOfIf = 100 // ERROR "reassigned, but reassigned without using the value"
+		useOutOfIf = 100
+		useOutOfIf = pa(useOutOfIf)
+		useOutOfIf += 200 // ERROR "reassigned, but reassigned without using the value"
+	}
+	useOutOfIf = 12
+	println(useOutOfIf)
+	useOutOfIf = 192
+	useOutOfIf += 100
+	useOutOfIf += 200 // ERROR "reassigned, but never used afterwards"
+	return ret
+}
+
+func mugen() {
 	var i int
 	var hoge int
 	for {
-		hoge = 5 // ERROR "reassigned, but never used afterwards"
+		hoge = 5 // ERROR "reassigned, but reassigned without using the value"
+		// break
 	}
 
 	println(i)
@@ -93,7 +117,7 @@ func infinity() {
 	return
 }
 
-func infinity2() {
+func noMugen() {
 	var i int
 	var hoge int
 	for {
@@ -104,4 +128,27 @@ func infinity2() {
 	println(i)
 	println(hoge)
 	return
+}
+
+func reassignInsideLoop() {
+	bar := func(b []byte) ([]byte, error) { return b, nil }
+	var err error
+	var rest []byte
+	for {
+		rest, err = bar(rest)
+		if err == nil {
+			break
+		}
+	}
+	return
+}
+
+func reassignInsideLoop2() {
+	var x int = 0
+	var y int = 1
+	for i := 1; i < 3; i++ {
+		x += y
+		y *= 2 * i
+	}
+	println(x)
 }
