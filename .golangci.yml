@@ -133,35 +133,9 @@ issues:
         - gocritic
       text: "unnecessaryDefer:"
 
-    # TODO temporary rule, must be removed
-    # seems related to v0.34.1, but I was not able to reproduce locally,
-    # I was also not able to reproduce in the CI of a fork,
-    # only the golangci-lint CI seems to be affected by this invalid analysis.
-    - path: pkg/golinters/scopelint.go
-      text: 'directive `//nolint:interfacer` is unused for linter interfacer'
-
-    # TODO temporary rule, must be removed
-    # related to https://github.com/golangci/golangci-lint/pull/1756
-    # must be replaced by '//nolint:staticcheck // require changes in github.com/OpenPeeDeeP/depguard'
-    - path: pkg/golinters/depguard.go
-      text: 'SA1019: package golang.org/x/tools/go/loader is deprecated'
-
-    # TODO temporary rule, must be removed
-    # related to https://github.com/golangci/golangci-lint/pull/1756
-    # must be replaced by '///nolint:staticcheck // it's an adapter for golang.org/x/tools/go/packages'
-    - path: pkg/golinters/goanalysis/adapters.go
-      text: 'SA1019: package golang.org/x/tools/go/loader is deprecated'
-
 run:
   skip-dirs:
     - test/testdata_etc
     - internal/cache
     - internal/renameio
     - internal/robustio
-
-# golangci.com configuration
-# https://github.com/golangci/golangci/wiki/Configuration
-service:
-  golangci-lint-version: 1.23.x # use the fixed version to not introduce new linters unexpectedly
-  prepare:
-    - echo "here I can run custom commands, but no preparation needed for this repo"
