@@ -7,21 +7,47 @@ There is the most valuable changes log:
    * `durationcheck`: https://github.com/charithe/durationcheck
    * `revive`: https://github.com/mgechev/revive
    * `cyclop`: https://github.com/bkielbasa/cyclop
+   * `wastedassign`: https://github.com/sanposhiho/wastedassign
+   * `importas`: https://github.com/julz/importas
+   * `nilerr`: https://github.com/gostaticanalysis/nilerr
+   * `forcetypeassert`: https://github.com/gostaticanalysis/forcetypeassert
+   * `govet`: add `stringintconv` and `ifaceassert`
 2. update linters:
-   * prealloc: Use upstream version
-   * Use upstream gocyclo
+   * `prealloc`: Use upstream version
+   * `errcheck`: Use upstream version
+   * `ineffassign`: Use upstream version
+   * `gocyclo`: Use upstream version
    * `godot` from 1.3.2 to 1.4.3
    * `exhaustivestruct` from 1.1.0 to 1.2.0
    * `forbidigo` from 1.0.0 to 1.1.0
    * `thelper` from 0.2.1 to 0.3.1
    * `ruleguard`: print error message and exit with non-zero status when parsing error occurs
    * fix wrong load mode for `asciicheck`, `exhaustivestruct`, `exportloopref`, and `makezero`
+   * `wsl`: bump to v3.2.0
+   * `durationcheck`: from 0.0.4 to 0.0.6
+   * `staticcheck`: from 2020.1.6 to v0.1.2 (2020.2.2)
+   * `thelper` from 0.3.1 to 0.4.0
+   * `bodyclose`: bump to HEAD
+   * `go-err113`: bump to HEAD
+   * `interfacer`: deprecated
+   * `maligned`: deprecated (govet `fieldalignment` as replacement)
+   * `govet`: use same default linter as go vet
+   * `go-printf-func-name`: to `v0.0.0-20200119135958-7558a9eaa5af`
+   * `godox`: to `v0.0.0-20210227103229-6504466cf951`
+   * `asciicheck`: to `v0.0.0-20200416200610-e657995f937b`
+   * `wrapcheck`: to `v0.0.0-20201130113247-1683564d9756`
+   * `unparam`: to `v0.0.0-20210104141923-aac4ce9116a7`
 3. CLI: truncate multiline descriptions
 4. fix: new-from-rev for a large repository
-5. use go1.16 to create binaries 
-6. fix: MIPS release
-7. documentation:
+5. Support RelatedInformation for analysis Diagnostic
+6. use go1.16 to create binaries 
+7. fix: MIPS release
+8. documentation:
    * bump documentation dependencies
+   * fix `go-header` usage
+   * improve `gocritic` description
+   * update deprecated hyperlink for Sublime Text plugin
+   * add docs on using homebrew tap
 
 ## January 2021
 
