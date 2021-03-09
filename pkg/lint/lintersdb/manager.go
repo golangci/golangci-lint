@@ -271,7 +271,8 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithURL("https://github.com/alexkohler/prealloc"),
 		linter.NewConfig(golinters.NewScopelint()).
 			WithPresets(linter.PresetBugs).
-			WithURL("https://github.com/kyoh86/scopelint"),
+			WithURL("https://github.com/kyoh86/scopelint").
+			Deprecated("The repository of the linter has been deprecated by the owner. Use 'exportloopref' instead."),
 		linter.NewConfig(golinters.NewGocritic()).
 			WithPresets(linter.PresetStyle).
 			WithLoadForGoAnalysis().
