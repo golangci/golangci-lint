@@ -100,6 +100,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 	var reviveCfg *config.ReviveSettings
 	var cyclopCfg *config.Cyclop
 	var importAsCfg *config.ImportAsSettings
+	var goModDirectivesCfg *config.GoModDirectivesSettings
 	if m.cfg != nil {
 		govetCfg = &m.cfg.LintersSettings.Govet
 		testpackageCfg = &m.cfg.LintersSettings.Testpackage
@@ -112,6 +113,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		reviveCfg = &m.cfg.LintersSettings.Revive
 		cyclopCfg = &m.cfg.LintersSettings.Cyclop
 		importAsCfg = &m.cfg.LintersSettings.ImportAs
+		goModDirectivesCfg = &m.cfg.LintersSettings.GoModDirectives
 	}
 	const megacheckName = "megacheck"
 	lcs := []*linter.Config{
@@ -394,6 +396,10 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/gostaticanalysis/forcetypeassert"),
+		linter.NewConfig(golinters.NewGoModDirectives(goModDirectivesCfg)).
+			WithPresets(linter.PresetStyle).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/ldez/gomoddirectives"),
 
 		// nolintlint must be last because it looks at the results of all the previous linters for unused nolint directives
 		linter.NewConfig(golinters.NewNoLintLint()).

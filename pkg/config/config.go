@@ -276,6 +276,7 @@ type LintersSettings struct {
 	Predeclared      PredeclaredSettings
 	Cyclop           Cyclop
 	ImportAs         ImportAsSettings
+	GoModDirectives  GoModDirectivesSettings
 
 	Custom map[string]CustomLinterSettings
 }
@@ -463,6 +464,13 @@ type Cyclop struct {
 }
 
 type ImportAsSettings map[string]string
+
+type GoModDirectivesSettings struct {
+	ReplaceAllowList          []string `mapstructure:"replace-allow-list"`
+	ReplaceLocal              bool     `mapstructure:"replace-local"`
+	ExcludeForbidden          bool     `mapstructure:"exclude-forbidden"`
+	RetractAllowNoExplanation bool     `mapstructure:"retract-allow-no-explanation"`
+}
 
 var defaultLintersSettings = LintersSettings{
 	Lll: LllSettings{

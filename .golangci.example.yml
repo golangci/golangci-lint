@@ -449,6 +449,16 @@ linters-settings:
     servingv1: knative.dev/serving/pkg/apis/serving/v1
     # using `autoscalingv1alpha1` alias for `knative.dev/serving/pkg/apis/autoscaling/v1alpha1` package
     autoscalingv1alpha1: knative.dev/serving/pkg/apis/autoscaling/v1alpha1
+  gomoddirectives:
+    # Allow local `replace` directives. Default is false.
+    replace-local: false
+    # List of allowed `replace` directives. Default is empty.
+    replace-allow-list:
+      - launchpad.net/gocheck
+    # Allow to not explain why the version has been retracted in the `retract` directives. Default is false.
+    retract-allow-no-explanation: false
+    # Forbid the use of the `exclude` directives. Default is false.
+    exclude-forbidden: false
 
   # The custom section can be used to define linter plugins to be loaded at runtime. See README doc
   #  for more info.
