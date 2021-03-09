@@ -17,7 +17,6 @@ import (
 	"strings"
 
 	"github.com/golangci/golangci-lint/internal/renameio"
-
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
 )

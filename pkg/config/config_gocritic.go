@@ -5,10 +5,9 @@ import (
 	"sort"
 	"strings"
 
+	_ "github.com/go-critic/go-critic/checkers" // this import register checkers
 	"github.com/go-critic/go-critic/framework/linter"
 	"github.com/pkg/errors"
-
-	_ "github.com/go-critic/go-critic/checkers" // this import register checkers
 
 	"github.com/golangci/golangci-lint/pkg/logutils"
 )

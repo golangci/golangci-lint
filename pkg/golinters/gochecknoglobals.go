@@ -1,9 +1,8 @@
 package golinters
 
 import (
-	"golang.org/x/tools/go/analysis"
-
 	"4d63.com/gochecknoglobals/checknoglobals"
+	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 )
