@@ -73,6 +73,7 @@ linters:
     - dogsled
     - dupl
     - errcheck
+    - exportloopref
     - exhaustive
     - funlen
     - gochecknoinits
@@ -94,7 +95,6 @@ linters:
     - noctx
     - nolintlint
     - rowserrcheck
-    - scopelint
     - staticcheck
     - structcheck
     - stylecheck
@@ -107,6 +107,7 @@ linters:
 
   # don't enable:
   # - asciicheck
+  # - scopelint
   # - gochecknoglobals
   # - gocognit
   # - godot

@@ -337,9 +337,9 @@ func TestPathPrefix(t *testing.T) {
 	} {
 		t.Run(tt.Name, func(t *testing.T) {
 			testshared.NewLintRunner(t).Run(
-				append(tt.Args, getTestDataDir("withtests"))..., //nolint:scopelint
+				append(tt.Args, getTestDataDir("withtests"))...,
 			).ExpectOutputRegexp(
-				tt.Pattern, //nolint:scopelint
+				tt.Pattern,
 			)
 		})
 	}

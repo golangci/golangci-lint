@@ -27,11 +27,11 @@ func TestPathPrefixer_Process(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			r := require.New(t)
 
-			p := NewPathPrefixer(tt.prefix)  //nolint:scopelint
-			got, err := p.Process(tt.issues) //nolint:scopelint
+			p := NewPathPrefixer(tt.prefix)
+			got, err := p.Process(tt.issues)
 			r.NoError(err, "prefixer should never error")
 
-			r.Equal(got, tt.want) //nolint:scopelint
+			r.Equal(got, tt.want)
 		})
 	}
 }
