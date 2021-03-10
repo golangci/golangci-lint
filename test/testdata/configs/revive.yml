@@ -3,12 +3,10 @@ linters-settings:
     ignore-generated-header: true
     severity: warning
     rules:
-      - name: indent-error-flow
-        severity: warning
       - name: cognitive-complexity
         arguments: [ 7 ]
       - name: line-length-limit
-        arguments: [ 110 ]
+        arguments: [ 130 ]
       - name: function-result-limit
         arguments: [ 3 ]
       - name: argument-limit
