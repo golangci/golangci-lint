@@ -4,16 +4,26 @@ import (
 	"io/ioutil"
 	"os"
 	"os/exec"
+	"path/filepath"
+	"runtime"
 	"strings"
 	"sync"
 	"syscall"
 	"time"
 
-	"github.com/stretchr/testify/assert"
+	assert "github.com/stretchr/testify/require"
 
 	"github.com/golangci/golangci-lint/pkg/exitcodes"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 )
+
+func BinaryName() string {
+	name := filepath.Join("..", "golangci-lint")
+	if runtime.GOOS == "windows" {
+		name += ".exe"
+	}
+	return name
+}
 
 type LintRunner struct {
 	t           assert.TestingT
@@ -98,10 +108,10 @@ func (r *LintRunner) RunCommand(command string, args ...string) *RunResult {
 	runArgs = append(runArgs, args...)
 
 	defer func(startedAt time.Time) {
-		r.log.Infof("ran [../golangci-lint %s] in %s", strings.Join(runArgs, " "), time.Since(startedAt))
+		r.log.Infof("ran [%s %s] in %s", BinaryName(), strings.Join(runArgs, " "), time.Since(startedAt))
 	}(time.Now())
 
-	cmd := exec.Command("../golangci-lint", runArgs...)
+	cmd := exec.Command(BinaryName(), runArgs...)
 	cmd.Env = append(os.Environ(), r.env...)
 	out, err := cmd.CombinedOutput()
 	if err != nil {
@@ -116,7 +126,11 @@ func (r *LintRunner) RunCommand(command string, args ...string) *RunResult {
 		}
 
 		r.t.Errorf("can't get error code from %s", err)
-		return nil
+		return &RunResult{
+			t:        r.t,
+			output:   err.Error(),
+			exitCode: -1,
+		}
 	}
 
 	// success, exitCode should be 0 if go is ok
