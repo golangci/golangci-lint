@@ -40,3 +40,9 @@ Long answer:
 
 Because the first run caches type information. All subsequent runs will be fast.
 Usually this options is used during development on local machine and compilation was already performed.
+
+## How does `golangci-lint` find go source files?
+
+`golangci-lint` uses go modules to find golang files. If your project is a go module, it should *just work*.
+
+If your project is not a go module, you can still use `golangci-lint` for your project. You can do this by setting the environment variable `GO111MODULE=off` when you run `golangci-lint`. Make sure you set this in your CI toolchain appropriately.
