@@ -1,11 +1,8 @@
 module github.com/golangci/golangci-lint/tools
 
-go 1.12
+go 1.13
 
-require (
-	github.com/goreleaser/godownloader v0.1.0
-	github.com/goreleaser/goreleaser v0.136.0
-)
+require github.com/goreleaser/goreleaser v0.155.0
 
-// Fix invalid pseudo-version: revision is longer than canonical (6fd6a9bfe14e)
-replace github.com/go-macaron/cors => github.com/go-macaron/cors v0.0.0-20190418220122-6fd6a9bfe14e
+// https://github.com/mattn/go-shellwords/pull/39
+replace github.com/mattn/go-shellwords => github.com/caarlos0/go-shellwords v1.0.11

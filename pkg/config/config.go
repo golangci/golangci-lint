@@ -249,29 +249,34 @@ type LintersSettings struct {
 		} `mapstructure:"blocked"`
 	}
 
-	WSL         WSLSettings
-	Lll         LllSettings
-	Unparam     UnparamSettings
-	Nakedret    NakedretSettings
-	Prealloc    PreallocSettings
-	Errcheck    ErrcheckSettings
-	Gocritic    GocriticSettings
-	Godox       GodoxSettings
-	Dogsled     DogsledSettings
-	Gocognit    GocognitSettings
-	Godot       GodotSettings
-	Goheader    GoHeaderSettings
-	Testpackage TestpackageSettings
-	Nestif      NestifSettings
-	NoLintLint  NoLintLintSettings
-	Exhaustive  ExhaustiveSettings
-	Gofumpt     GofumptSettings
-	ErrorLint   ErrorLintSettings
-	Makezero    MakezeroSettings
-	Thelper     ThelperSettings
-	Forbidigo   ForbidigoSettings
-	Ifshort     IfshortSettings
-	Predeclared PredeclaredSettings
+	WSL              WSLSettings
+	Lll              LllSettings
+	Unparam          UnparamSettings
+	Nakedret         NakedretSettings
+	Prealloc         PreallocSettings
+	Errcheck         ErrcheckSettings
+	Gocritic         GocriticSettings
+	Godox            GodoxSettings
+	Dogsled          DogsledSettings
+	Gocognit         GocognitSettings
+	Godot            GodotSettings
+	Goheader         GoHeaderSettings
+	Testpackage      TestpackageSettings
+	Nestif           NestifSettings
+	NoLintLint       NoLintLintSettings
+	Exhaustive       ExhaustiveSettings
+	ExhaustiveStruct ExhaustiveStructSettings
+	Gofumpt          GofumptSettings
+	ErrorLint        ErrorLintSettings
+	Makezero         MakezeroSettings
+	Revive           ReviveSettings
+	Thelper          ThelperSettings
+	Forbidigo        ForbidigoSettings
+	Ifshort          IfshortSettings
+	Predeclared      PredeclaredSettings
+	Cyclop           Cyclop
+	ImportAs         ImportAsSettings
+	GoModDirectives  GoModDirectivesSettings
 
 	Custom map[string]CustomLinterSettings
 }
@@ -347,6 +352,7 @@ type GocognitSettings struct {
 type WSLSettings struct {
 	StrictAppend                     bool `mapstructure:"strict-append"`
 	AllowAssignAndCallCuddle         bool `mapstructure:"allow-assign-and-call"`
+	AllowAssignAndAnythingCuddle     bool `mapstructure:"allow-assign-and-anything"`
 	AllowMultiLineAssignCuddle       bool `mapstructure:"allow-multiline-assign"`
 	AllowCuddleDeclaration           bool `mapstructure:"allow-cuddle-declarations"`
 	AllowTrailingComment             bool `mapstructure:"allow-trailing-comment"`
@@ -385,6 +391,10 @@ type ExhaustiveSettings struct {
 	DefaultSignifiesExhaustive bool `mapstructure:"default-signifies-exhaustive"`
 }
 
+type ExhaustiveStructSettings struct {
+	StructPatterns []string `mapstructure:"struct-patterns"`
+}
+
 type GofumptSettings struct {
 	ExtraRules bool `mapstructure:"extra-rules"`
 }
@@ -395,6 +405,23 @@ type ErrorLintSettings struct {
 
 type MakezeroSettings struct {
 	Always bool
+}
+
+type ReviveSettings struct {
+	IgnoreGeneratedHeader bool `mapstructure:"ignore-generated-header"`
+	Confidence            float64
+	Severity              string
+	Rules                 []struct {
+		Name      string
+		Arguments []interface{}
+		Severity  string
+	}
+	ErrorCode   int `mapstructure:"error-code"`
+	WarningCode int `mapstructure:"warning-code"`
+	Directives  []struct {
+		Name     string
+		Severity string
+	}
 }
 
 type ThelperSettings struct {
@@ -408,6 +435,11 @@ type ThelperSettings struct {
 		Name  bool `mapstructure:"name"`
 		Begin bool `mapstructure:"begin"`
 	} `mapstructure:"benchmark"`
+	TB struct {
+		First bool `mapstructure:"first"`
+		Name  bool `mapstructure:"name"`
+		Begin bool `mapstructure:"begin"`
+	} `mapstructure:"tb"`
 }
 
 type IfshortSettings struct {
@@ -416,12 +448,28 @@ type IfshortSettings struct {
 }
 
 type ForbidigoSettings struct {
-	Forbid []string `mapstructure:"forbid"`
+	Forbid               []string `mapstructure:"forbid"`
+	ExcludeGodocExamples bool     `mapstructure:"exclude-godoc-examples"`
 }
 
 type PredeclaredSettings struct {
 	Ignore    string `mapstructure:"ignore"`
 	Qualified bool   `mapstructure:"q"`
+}
+
+type Cyclop struct {
+	MaxComplexity  int     `mapstructure:"max-complexity"`
+	PackageAverage float64 `mapstructure:"package-average"`
+	SkipTests      bool    `mapstructure:"skip-tests"`
+}
+
+type ImportAsSettings map[string]string
+
+type GoModDirectivesSettings struct {
+	ReplaceAllowList          []string `mapstructure:"replace-allow-list"`
+	ReplaceLocal              bool     `mapstructure:"replace-local"`
+	ExcludeForbidden          bool     `mapstructure:"exclude-forbidden"`
+	RetractAllowNoExplanation bool     `mapstructure:"retract-allow-no-explanation"`
 }
 
 var defaultLintersSettings = LintersSettings{
@@ -455,6 +503,7 @@ var defaultLintersSettings = LintersSettings{
 	WSL: WSLSettings{
 		StrictAppend:                     true,
 		AllowAssignAndCallCuddle:         true,
+		AllowAssignAndAnythingCuddle:     false,
 		AllowMultiLineAssignCuddle:       true,
 		AllowCuddleDeclaration:           false,
 		AllowTrailingComment:             false,
@@ -484,9 +533,16 @@ var defaultLintersSettings = LintersSettings{
 	ErrorLint: ErrorLintSettings{
 		Errorf: true,
 	},
+	Ifshort: IfshortSettings{
+		MaxDeclLines: 1,
+		MaxDeclChars: 30,
+	},
 	Predeclared: PredeclaredSettings{
 		Ignore:    "",
 		Qualified: false,
+	},
+	Forbidigo: ForbidigoSettings{
+		ExcludeGodocExamples: true,
 	},
 }
 
@@ -618,7 +674,8 @@ type Config struct {
 	Severity        Severity
 	Version         Version
 
-	InternalTest bool // Option is used only for testing golangci-lint code, don't use it
+	InternalCmdTest bool `mapstructure:"internal-cmd-test"` // Option is used only for testing golangci-lint command, don't use it
+	InternalTest    bool // Option is used only for testing golangci-lint code, don't use it
 }
 
 func NewDefault() *Config {

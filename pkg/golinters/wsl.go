@@ -39,6 +39,7 @@ func NewWSL() *goanalysis.Linter {
 				processorCfg = wsl.Configuration{
 					StrictAppend:                     linterCfg.StrictAppend,
 					AllowAssignAndCallCuddle:         linterCfg.AllowAssignAndCallCuddle,
+					AllowAssignAndAnythingCuddle:     linterCfg.AllowAssignAndAnythingCuddle,
 					AllowMultiLineAssignCuddle:       linterCfg.AllowMultiLineAssignCuddle,
 					AllowCuddleDeclaration:           linterCfg.AllowCuddleDeclaration,
 					AllowTrailingComment:             linterCfg.AllowTrailingComment,

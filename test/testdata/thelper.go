@@ -29,6 +29,19 @@ func bhelperWithIncorrectName(o *testing.B) { // ERROR `parameter \*testing.B sh
 	o.Helper()
 }
 
+func tbhelperWithHelperAfterAssignment(tb testing.TB) { // ERROR "test helper function should start from tb.Helper()"
+	_ = 0
+	tb.Helper()
+}
+
+func tbhelperWithNotFirst(s string, tb testing.TB, i int) { // ERROR `parameter testing.TB should be the first`
+	tb.Helper()
+}
+
+func tbhelperWithIncorrectName(o testing.TB) { // ERROR `parameter testing.TB should have name tb`
+	o.Helper()
+}
+
 func TestSubtestShouldNotBeChecked(t *testing.T) {
 	testCases := []struct {
 		desc string

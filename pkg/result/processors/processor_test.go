@@ -4,9 +4,9 @@ import (
 	"go/token"
 	"testing"
 
-	"github.com/golangci/golangci-lint/pkg/result"
-
 	"github.com/stretchr/testify/assert"
+
+	"github.com/golangci/golangci-lint/pkg/result"
 )
 
 type issueTestCase struct {
