@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	assert "github.com/stretchr/testify/require"
+	"github.com/stretchr/testify/require"
 	yaml "gopkg.in/yaml.v2"
 
 	"github.com/golangci/golangci-lint/test/testshared"
@@ -16,8 +16,8 @@ import (
 func TestFix(t *testing.T) {
 	findSources := func(pathPatterns ...string) []string {
 		sources, err := filepath.Glob(filepath.Join(pathPatterns...))
-		assert.NoError(t, err)
-		assert.NotEmpty(t, sources)
+		require.NoError(t, err)
+		require.NotEmpty(t, sources)
 		return sources
 	}
 
@@ -34,7 +34,7 @@ func TestFix(t *testing.T) {
 
 	fixDir := filepath.Join(testdataDir, "fix")
 	err := exec.Command("cp", "-R", fixDir, tmpDir).Run()
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	inputs := findSources(tmpDir, "in", "*.go")
 	for _, input := range inputs {
@@ -51,16 +51,16 @@ func TestFix(t *testing.T) {
 			args = append(args, rc.args...)
 
 			cfg, err := yaml.Marshal(rc.config)
-			assert.NoError(t, err)
+			require.NoError(t, err)
 
 			testshared.NewLintRunner(t).RunWithYamlConfig(string(cfg), args...)
 			output, err := ioutil.ReadFile(input)
-			assert.NoError(t, err)
+			require.NoError(t, err)
 
 			expectedOutput, err := ioutil.ReadFile(filepath.Join(testdataDir, "fix", "out", filepath.Base(input)))
-			assert.NoError(t, err)
+			require.NoError(t, err)
 
-			assert.Equal(t, string(expectedOutput), string(output))
+			require.Equal(t, string(expectedOutput), string(output))
 		})
 	}
 }
