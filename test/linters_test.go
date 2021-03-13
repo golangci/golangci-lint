@@ -9,9 +9,10 @@ import (
 	"strings"
 	"testing"
 
-	assert "github.com/stretchr/testify/require"
-	yaml "gopkg.in/yaml.v2"
+	"github.com/stretchr/testify/require"
+	"gopkg.in/yaml.v2"
 
+	"github.com/golangci/golangci-lint/pkg/exitcodes"
 	"github.com/golangci/golangci-lint/test/testshared"
 )
 
@@ -21,12 +22,10 @@ func runGoErrchk(c *exec.Cmd, defaultExpectedLinter string, files []string, t *t
 	// and thus the linter exits with exit code 0. So perform the additional
 	// assertions only if the error is non-nil.
 	if err != nil {
-		_, ok := err.(*exec.ExitError)
-		assert.True(t, ok, err)
+		var exitErr *exec.ExitError
+		require.ErrorAs(t, err, &exitErr)
+		require.Equal(t, exitcodes.IssuesFound, exitErr.ExitCode())
 	}
-
-	// TODO: uncomment after deprecating go1.11
-	// assert.Equal(t, exitcodes.IssuesFound, exitErr.ExitCode())
 
 	fullshort := make([]string, 0, len(files)*2)
 	for _, f := range files {
@@ -34,7 +33,7 @@ func runGoErrchk(c *exec.Cmd, defaultExpectedLinter string, files []string, t *t
 	}
 
 	err = errorCheck(string(output), false, defaultExpectedLinter, fullshort...)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 }
 
 func testSourcesFromDir(t *testing.T, dir string) {
@@ -42,8 +41,8 @@ func testSourcesFromDir(t *testing.T, dir string) {
 
 	findSources := func(pathPatterns ...string) []string {
 		sources, err := filepath.Glob(filepath.Join(pathPatterns...))
-		assert.NoError(t, err)
-		assert.NotEmpty(t, sources)
+		require.NoError(t, err)
+		require.NotEmpty(t, sources)
 		return sources
 	}
 	sources := findSources(dir, "*.go")
@@ -77,7 +76,7 @@ func TestGoimportsLocal(t *testing.T) {
 	args = append(args, rc.args...)
 
 	cfg, err := yaml.Marshal(rc.config)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	testshared.NewLintRunner(t).RunWithYamlConfig(string(cfg), args...).
 		ExpectHasIssue("testdata/goimports/goimports.go:8: File is not `goimports`-ed")
@@ -93,7 +92,7 @@ func TestGciLocal(t *testing.T) {
 	args = append(args, rc.args...)
 
 	cfg, err := yaml.Marshal(rc.config)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	testshared.NewLintRunner(t).RunWithYamlConfig(string(cfg), args...).
 		ExpectHasIssue("testdata/gci/gci.go:7: File is not `gci`-ed")
@@ -101,19 +100,19 @@ func TestGciLocal(t *testing.T) {
 
 func saveConfig(t *testing.T, cfg map[string]interface{}) (cfgPath string, finishFunc func()) {
 	f, err := ioutil.TempFile("", "golangci_lint_test")
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	cfgPath = f.Name() + ".yml"
 	err = os.Rename(f.Name(), cfgPath)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	err = yaml.NewEncoder(f).Encode(cfg)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	return cfgPath, func() {
-		assert.NoError(t, f.Close())
+		require.NoError(t, f.Close())
 		if os.Getenv("GL_KEEP_TEMP_FILES") != "1" {
-			assert.NoError(t, os.Remove(cfgPath))
+			require.NoError(t, os.Remove(cfgPath))
 		}
 	}
 }
@@ -168,10 +167,10 @@ type runContext struct {
 
 func buildConfigFromShortRepr(t *testing.T, repr string, config map[string]interface{}) {
 	kv := strings.Split(repr, "=")
-	assert.Len(t, kv, 2)
+	require.Len(t, kv, 2)
 
 	keyParts := strings.Split(kv[0], ".")
-	assert.True(t, len(keyParts) >= 2, len(keyParts))
+	require.True(t, len(keyParts) >= 2, len(keyParts))
 
 	lastObj := config
 	for _, k := range keyParts[:len(keyParts)-1] {
@@ -197,7 +196,7 @@ func skipMultilineComment(scanner *bufio.Scanner) {
 
 func extractRunContextFromComments(t *testing.T, sourcePath string) *runContext {
 	f, err := os.Open(sourcePath)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	defer f.Close()
 
 	rc := &runContext{}
@@ -218,16 +217,16 @@ func extractRunContextFromComments(t *testing.T, sourcePath string) *runContext 
 
 		line = strings.TrimLeft(strings.TrimPrefix(line, "//"), " ")
 		if strings.HasPrefix(line, "args: ") {
-			assert.Nil(t, rc.args)
+			require.Nil(t, rc.args)
 			args := strings.TrimPrefix(line, "args: ")
-			assert.NotEmpty(t, args)
+			require.NotEmpty(t, args)
 			rc.args = strings.Split(args, " ")
 			continue
 		}
 
 		if strings.HasPrefix(line, "config: ") {
 			repr := strings.TrimPrefix(line, "config: ")
-			assert.NotEmpty(t, repr)
+			require.NotEmpty(t, repr)
 			if rc.config == nil {
 				rc.config = map[string]interface{}{}
 			}
@@ -237,19 +236,19 @@ func extractRunContextFromComments(t *testing.T, sourcePath string) *runContext 
 
 		if strings.HasPrefix(line, "config_path: ") {
 			configPath := strings.TrimPrefix(line, "config_path: ")
-			assert.NotEmpty(t, configPath)
+			require.NotEmpty(t, configPath)
 			rc.configPath = configPath
 			continue
 		}
 
 		if strings.HasPrefix(line, "expected_linter: ") {
 			expectedLinter := strings.TrimPrefix(line, "expected_linter: ")
-			assert.NotEmpty(t, expectedLinter)
+			require.NotEmpty(t, expectedLinter)
 			rc.expectedLinter = expectedLinter
 			continue
 		}
 
-		assert.Fail(t, "invalid prefix of comment line %s", line)
+		require.Fail(t, "invalid prefix of comment line %s", line)
 	}
 
 	// guess the expected linter if none is specified
@@ -257,7 +256,7 @@ func extractRunContextFromComments(t *testing.T, sourcePath string) *runContext 
 		for _, arg := range rc.args {
 			if strings.HasPrefix(arg, "-E") && !strings.Contains(arg, ",") {
 				if rc.expectedLinter != "" {
-					assert.Fail(t, "could not infer expected linter for errors because multiple linters are enabled. Please use the `expected_linter: ` directive in your test to indicate the linter-under-test.") //nolint:lll
+					require.Fail(t, "could not infer expected linter for errors because multiple linters are enabled. Please use the `expected_linter: ` directive in your test to indicate the linter-under-test.") //nolint:lll
 					break
 				}
 				rc.expectedLinter = arg[2:]
@@ -270,7 +269,7 @@ func extractRunContextFromComments(t *testing.T, sourcePath string) *runContext 
 
 func TestExtractRunContextFromComments(t *testing.T) {
 	rc := extractRunContextFromComments(t, filepath.Join(testdataDir, "goimports", "goimports.go"))
-	assert.Equal(t, []string{"-Egoimports"}, rc.args)
+	require.Equal(t, []string{"-Egoimports"}, rc.args)
 }
 
 func TestTparallel(t *testing.T) {
@@ -284,7 +283,7 @@ func TestTparallel(t *testing.T) {
 		args = append(args, rc.args...)
 
 		cfg, err := yaml.Marshal(rc.config)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 
 		testshared.NewLintRunner(t).RunWithYamlConfig(string(cfg), args...).
 			ExpectHasIssue(
@@ -302,7 +301,7 @@ func TestTparallel(t *testing.T) {
 		args = append(args, rc.args...)
 
 		cfg, err := yaml.Marshal(rc.config)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 
 		testshared.NewLintRunner(t).RunWithYamlConfig(string(cfg), args...).
 			ExpectHasIssue(
@@ -320,7 +319,7 @@ func TestTparallel(t *testing.T) {
 		args = append(args, rc.args...)
 
 		cfg, err := yaml.Marshal(rc.config)
-		assert.NoError(t, err)
+		require.NoError(t, err)
 
 		testshared.NewLintRunner(t).RunWithYamlConfig(string(cfg), args...).ExpectNoIssues()
 	})
