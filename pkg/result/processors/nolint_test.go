@@ -291,11 +291,29 @@ func TestNolintUnused(t *testing.T) {
 		ExpectedNoLintLinter: "varcheck",
 	}
 
+	// the issue below is another nolintlint issue that would be generated for the test file
+	nolintlintIssueVarcheckUnusedOK := result.Issue{
+		Pos: token.Position{
+			Filename: fileName,
+			Line:     5,
+		},
+		FromLinter:           golinters.NolintlintName,
+		ExpectNoLint:         true,
+		ExpectedNoLintLinter: "varcheck",
+	}
+
 	t.Run("when an issue does not occur, it is not removed from the nolintlint issues", func(t *testing.T) {
 		p := createProcessor(t, log, []string{"nolintlint", "varcheck"})
 		defer p.Finish()
 
 		processAssertSame(t, p, nolintlintIssueVarcheck)
+	})
+
+	t.Run("when an issue does not occur but nolintlint is nolinted, it is removed from the nolintlint issues", func(t *testing.T) {
+		p := createProcessor(t, log, []string{"nolintlint", "varcheck"})
+		defer p.Finish()
+
+		processAssertEmpty(t, p, nolintlintIssueVarcheckUnusedOK)
 	})
 
 	t.Run("when an issue occurs, it is removed from the nolintlint issues", func(t *testing.T) {
