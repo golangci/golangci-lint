@@ -12,6 +12,7 @@ import (
 	assert "github.com/stretchr/testify/require"
 	yaml "gopkg.in/yaml.v2"
 
+	"github.com/golangci/golangci-lint/pkg/exitcodes"
 	"github.com/golangci/golangci-lint/test/testshared"
 )
 
@@ -21,12 +22,10 @@ func runGoErrchk(c *exec.Cmd, defaultExpectedLinter string, files []string, t *t
 	// and thus the linter exits with exit code 0. So perform the additional
 	// assertions only if the error is non-nil.
 	if err != nil {
-		_, ok := err.(*exec.ExitError)
-		assert.True(t, ok, err)
+		var exitErr *exec.ExitError
+		assert.ErrorAs(t, err, &exitErr)
+		assert.Equal(t, exitcodes.IssuesFound, exitErr.ExitCode())
 	}
-
-	// TODO: uncomment after deprecating go1.11
-	// assert.Equal(t, exitcodes.IssuesFound, exitErr.ExitCode())
 
 	fullshort := make([]string, 0, len(files)*2)
 	for _, f := range files {
