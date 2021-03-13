@@ -40,10 +40,10 @@ func foo() {
 	other() //nolintother
 }`,
 			expected: []issueWithReplacement{
-				{"directive `//nolint` should provide explanation such as `//nolint // this is why` at testing.go:5:1", nil},
-				{"directive `//nolint` should provide explanation such as `//nolint // this is why` at testing.go:7:9", nil},
-				{"directive `//nolint //` should provide explanation such as `//nolint // this is why` at testing.go:8:9", nil},
-				{"directive `//nolint // ` should provide explanation such as `//nolint // this is why` at testing.go:9:9", nil},
+				{issue: "directive `//nolint` should provide explanation such as `//nolint // this is why` at testing.go:5:1"},
+				{issue: "directive `//nolint` should provide explanation such as `//nolint // this is why` at testing.go:7:9"},
+				{issue: "directive `//nolint //` should provide explanation such as `//nolint // this is why` at testing.go:8:9"},
+				{issue: "directive `//nolint // ` should provide explanation such as `//nolint // this is why` at testing.go:9:9"},
 			},
 		},
 		{
@@ -57,7 +57,7 @@ package bar
 //nolint:dupl
 func foo() {}`,
 			expected: []issueWithReplacement{
-				{"directive `//nolint:dupl` should provide explanation such as `//nolint:dupl // this is why` at testing.go:6:1", nil},
+				{issue: "directive `//nolint:dupl` should provide explanation such as `//nolint:dupl // this is why` at testing.go:6:1"},
 			},
 		},
 		{
@@ -83,8 +83,8 @@ func foo() {
   bad() // nolint // because
 }`,
 			expected: []issueWithReplacement{
-				{"directive `//nolint` should mention specific linter such as `//nolint:my-linter` at testing.go:6:9", nil},
-				{"directive `// nolint // because` should mention specific linter such as `// nolint:my-linter` at testing.go:7:9", nil},
+				{issue: "directive `//nolint` should mention specific linter such as `//nolint:my-linter` at testing.go:6:9"},
+				{issue: "directive `// nolint // because` should mention specific linter such as `// nolint:my-linter` at testing.go:7:9"},
 			},
 		},
 		{
@@ -99,8 +99,8 @@ func foo() {
 }`,
 			expected: []issueWithReplacement{
 				{
-					"directive `// nolint` should be written without leading space as `//nolint` at testing.go:5:9",
-					&result.Replacement{
+					issue: "directive `// nolint` should be written without leading space as `//nolint` at testing.go:5:9",
+					replacement: &result.Replacement{
 						Inline: &result.InlineFix{
 							StartCol:  10,
 							Length:    1,
@@ -121,8 +121,8 @@ func foo() {
 }`,
 			expected: []issueWithReplacement{
 				{
-					"directive `//  nolint` should not have more than one leading space at testing.go:5:9",
-					&result.Replacement{
+					issue: "directive `//  nolint` should not have more than one leading space at testing.go:5:9",
+					replacement: &result.Replacement{
 						Inline: &result.InlineFix{
 							StartCol:  10,
 							Length:    2,
@@ -144,7 +144,7 @@ func foo() {
   good() // nolint: linter1, linter2
 }`,
 			expected: []issueWithReplacement{
-				{"directive `// nolint:linter1 linter2` should match `// nolint[:<comma-separated-linters>] [// <explanation>]` at testing.go:6:9", nil}, //nolint:lll // this is a string
+				{issue: "directive `// nolint:linter1 linter2` should match `// nolint[:<comma-separated-linters>] [// <explanation>]` at testing.go:6:9"}, //nolint:lll // this is a string
 			},
 		},
 		{
@@ -168,8 +168,8 @@ func foo() {
 }`,
 			expected: []issueWithReplacement{
 				{
-					"directive `//nolint` is unused at testing.go:5:9",
-					&result.Replacement{
+					issue: "directive `//nolint` is unused at testing.go:5:9",
+					replacement: &result.Replacement{
 						Inline: &result.InlineFix{
 							StartCol:  8,
 							Length:    8,
@@ -190,8 +190,8 @@ func foo() {
 }`,
 			expected: []issueWithReplacement{
 				{
-					"directive `//nolint:somelinter` is unused for linter \"somelinter\" at testing.go:5:9",
-					&result.Replacement{
+					issue: "directive `//nolint:somelinter` is unused for linter \"somelinter\" at testing.go:5:9",
+					replacement: &result.Replacement{
 						Inline: &result.InlineFix{
 							StartCol:  8,
 							Length:    19,
@@ -212,12 +212,10 @@ func foo() {
 }`,
 			expected: []issueWithReplacement{
 				{
-					"directive `//nolint:linter1,linter2` is unused for linter \"linter1\" at testing.go:5:9",
-					nil,
+					issue: "directive `//nolint:linter1,linter2` is unused for linter \"linter1\" at testing.go:5:9",
 				},
 				{
-					"directive `//nolint:linter1,linter2` is unused for linter \"linter2\" at testing.go:5:9",
-					nil,
+					issue: "directive `//nolint:linter1,linter2` is unused for linter \"linter2\" at testing.go:5:9",
 				},
 			},
 		},
