@@ -376,6 +376,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithURL("https://github.com/nishanths/predeclared"),
 		linter.NewConfig(golinters.NewRevive(reviveCfg)).
 			WithPresets(linter.PresetStyle).
+			ConsiderSlow().
 			WithURL("https://github.com/mgechev/revive"),
 		linter.NewConfig(golinters.NewDurationCheck()).
 			WithPresets(linter.PresetBugs).
