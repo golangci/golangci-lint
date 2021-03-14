@@ -237,6 +237,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/denis-tingajkin/go-header"),
 		linter.NewConfig(golinters.NewGci()).
+			WithPresets(linter.PresetFormatting).
 			WithLoadForGoAnalysis().
 			WithAutoFix().
 			WithURL("https://github.com/daixiang0/gci"),
@@ -254,8 +255,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithAutoFix().
 			WithURL("https://github.com/client9/misspell"),
 		linter.NewConfig(golinters.NewLLL()).
-			WithPresets(linter.PresetStyle).
-			WithURL("https://github.com/walle/lll"),
+			WithPresets(linter.PresetStyle),
 		linter.NewConfig(golinters.NewUnparam()).
 			WithPresets(linter.PresetUnused).
 			WithLoadForGoAnalysis().
