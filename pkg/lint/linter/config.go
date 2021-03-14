@@ -35,7 +35,7 @@ func (lc *Config) ConsiderSlow() *Config {
 }
 
 func (lc *Config) IsSlowLinter() bool {
-	return lc.IsSlow || (lc.LoadMode&packages.NeedTypesInfo != 0 && lc.LoadMode&packages.NeedDeps != 0)
+	return lc.IsSlow
 }
 
 func (lc *Config) WithLoadFiles() *Config {
