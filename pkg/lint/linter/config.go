@@ -5,12 +5,19 @@ import (
 )
 
 const (
-	PresetFormatting  = "format"
-	PresetComplexity  = "complexity"
-	PresetStyle       = "style"
 	PresetBugs        = "bugs"
-	PresetUnused      = "unused"
+	PresetComment     = "comment"
+	PresetComplexity  = "complexity"
+	PresetError       = "error"
+	PresetFormatting  = "format"
+	PresetImport      = "import"
+	PresetMetaLinter  = "metalinter"
+	PresetModule      = "module"
 	PresetPerformance = "performance"
+	PresetSQL         = "sql"
+	PresetStyle       = "style"
+	PresetTest        = "test"
+	PresetUnused      = "unused"
 )
 
 type Config struct {
