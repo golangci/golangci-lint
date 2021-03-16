@@ -34,6 +34,8 @@ type Config struct {
 	IsSlow            bool
 	DoesChangeTypes   bool
 	DeprecatedMessage string
+
+	Since string
 }
 
 func (lc *Config) ConsiderSlow() *Config {
@@ -79,6 +81,11 @@ func (lc *Config) WithAutoFix() *Config {
 
 func (lc *Config) WithChangeTypes() *Config {
 	lc.DoesChangeTypes = true
+	return lc
+}
+
+func (lc *Config) WithSince(version string) *Config {
+	lc.Since = version
 	return lc
 }
 
