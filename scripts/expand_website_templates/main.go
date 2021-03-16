@@ -237,7 +237,7 @@ func getLintersListMarkdown(enabled bool) string {
 			getDesc(lc),
 			strings.Join(lc.InPresets, ", "),
 			check(lc.CanAutoFix, "Auto fix supported"),
-			check(lc.DeprecatedMessage != "", "Deprecated"),
+			check(lc.IsDeprecated(), "Deprecated"), // FIXME improve message
 		)
 		lines = append(lines, line)
 	}
@@ -252,7 +252,8 @@ func getName(lc *linter.Config) string {
 		name = fmt.Sprintf("[%s](%s)", lc.Name(), lc.OriginalURL)
 	}
 
-	if lc.DeprecatedMessage != "" {
+	if lc.IsDeprecated() {
+		// FIXME improve info
 		name += ` <span title="deprecated">⚠</span>`
 	}
 
@@ -261,8 +262,8 @@ func getName(lc *linter.Config) string {
 
 func getDesc(lc *linter.Config) string {
 	desc := lc.Linter.Desc()
-	if lc.DeprecatedMessage != "" {
-		desc = lc.DeprecatedMessage
+	if lc.IsDeprecated() {
+		desc = lc.Deprecation.Message // FIXME improve message
 	}
 
 	return strings.ReplaceAll(desc, "\n", "<br/>")

@@ -210,7 +210,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/mvdan/interfacer").
-			Deprecated("The repository of the linter has been archived by the owner."),
+			Deprecated("The repository of the linter has been archived by the owner.", "v1.38.0", ""),
 		linter.NewConfig(golinters.NewUnconvert()).
 			WithSince("v1.0.0").
 			WithLoadForGoAnalysis().
@@ -289,7 +289,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetPerformance).
 			WithURL("https://github.com/mdempsky/maligned").
-			Deprecated("The repository of the linter has been archived by the owner. Use govet 'fieldalignment' instead."),
+			Deprecated("The repository of the linter has been archived by the owner.", "v1.38.0", "govet 'fieldalignment'"),
 		linter.NewConfig(golinters.NewDepguard()).
 			WithSince("v1.4.0").
 			WithLoadForGoAnalysis().
@@ -324,7 +324,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithSince("v1.12.0").
 			WithPresets(linter.PresetBugs).
 			WithURL("https://github.com/kyoh86/scopelint").
-			Deprecated("The repository of the linter has been deprecated by the owner. Use 'exportloopref' instead."),
+			Deprecated("The repository of the linter has been deprecated by the owner.", "v1.39.0", "exportloopref"),
 		linter.NewConfig(golinters.NewGocritic()).
 			WithSince("v1.12.0").
 			WithPresets(linter.PresetStyle, linter.PresetMetaLinter).
