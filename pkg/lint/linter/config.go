@@ -5,12 +5,19 @@ import (
 )
 
 const (
-	PresetFormatting  = "format"
-	PresetComplexity  = "complexity"
-	PresetStyle       = "style"
-	PresetBugs        = "bugs"
-	PresetUnused      = "unused"
-	PresetPerformance = "performance"
+	PresetBugs        = "bugs"        // Related to bugs detection.
+	PresetComment     = "comment"     // Related to comments analysis.
+	PresetComplexity  = "complexity"  // Related to code complexity analysis.
+	PresetError       = "error"       // Related to error handling analysis.
+	PresetFormatting  = "format"      // Related to code formatting.
+	PresetImport      = "import"      // Related to imports analysis.
+	PresetMetaLinter  = "metalinter"  // Related to linter that contains multiple rules or multiple linters.
+	PresetModule      = "module"      // Related to Go modules analysis.
+	PresetPerformance = "performance" // Related to performance.
+	PresetSQL         = "sql"         // Related to SQL.
+	PresetStyle       = "style"       // Related to coding style.
+	PresetTest        = "test"        // Related to the analysis of the code of the tests.
+	PresetUnused      = "unused"      // Related to the detection of unused code.
 )
 
 type Config struct {

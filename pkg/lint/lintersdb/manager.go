@@ -59,8 +59,19 @@ func (m *Manager) WithCustomLinters() *Manager {
 
 func (Manager) AllPresets() []string {
 	return []string{
-		linter.PresetBugs, linter.PresetComplexity, linter.PresetFormatting,
-		linter.PresetPerformance, linter.PresetStyle, linter.PresetUnused,
+		linter.PresetBugs,
+		linter.PresetComment,
+		linter.PresetComplexity,
+		linter.PresetError,
+		linter.PresetFormatting,
+		linter.PresetImport,
+		linter.PresetMetaLinter,
+		linter.PresetModule,
+		linter.PresetPerformance,
+		linter.PresetSQL,
+		linter.PresetStyle,
+		linter.PresetTest,
+		linter.PresetUnused,
 	}
 }
 
@@ -119,7 +130,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 	lcs := []*linter.Config{
 		linter.NewConfig(golinters.NewGovet(govetCfg)).
 			WithLoadForGoAnalysis().
-			WithPresets(linter.PresetBugs).
+			WithPresets(linter.PresetBugs, linter.PresetMetaLinter).
 			WithAlternativeNames("vet", "vetshadow").
 			WithURL("https://golang.org/cmd/vet/"),
 		linter.NewConfig(golinters.NewBodyclose()).
@@ -132,7 +143,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithURL("https://github.com/sonatard/noctx"),
 		linter.NewConfig(golinters.NewErrcheck()).
 			WithLoadForGoAnalysis().
-			WithPresets(linter.PresetBugs).
+			WithPresets(linter.PresetBugs, linter.PresetError).
 			WithURL("https://github.com/kisielk/errcheck"),
 		linter.NewConfig(golinters.NewGolint()).
 			WithLoadForGoAnalysis().
@@ -140,12 +151,12 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithURL("https://github.com/golang/lint"),
 		linter.NewConfig(golinters.NewRowsErrCheck()).
 			WithLoadForGoAnalysis().
-			WithPresets(linter.PresetPerformance, linter.PresetBugs).
+			WithPresets(linter.PresetBugs, linter.PresetSQL).
 			WithURL("https://github.com/jingyugao/rowserrcheck"),
 
 		linter.NewConfig(golinters.NewStaticcheck()).
 			WithLoadForGoAnalysis().
-			WithPresets(linter.PresetBugs).
+			WithPresets(linter.PresetBugs, linter.PresetMetaLinter).
 			WithAlternativeNames(megacheckName).
 			WithURL("https://staticcheck.io/"),
 		linter.NewConfig(golinters.NewUnused()).
@@ -229,7 +240,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithAutoFix().
 			WithURL("https://github.com/mvdan/gofumpt"),
 		linter.NewConfig(golinters.NewGoimports()).
-			WithPresets(linter.PresetFormatting).
+			WithPresets(linter.PresetFormatting, linter.PresetImport).
 			WithAutoFix().
 			WithURL("https://godoc.org/golang.org/x/tools/cmd/goimports"),
 		linter.NewConfig(golinters.NewGoHeader()).
@@ -237,7 +248,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/denis-tingajkin/go-header"),
 		linter.NewConfig(golinters.NewGci()).
-			WithPresets(linter.PresetFormatting).
+			WithPresets(linter.PresetFormatting, linter.PresetImport).
 			WithLoadForGoAnalysis().
 			WithAutoFix().
 			WithURL("https://github.com/daixiang0/gci"),
@@ -248,10 +259,10 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			Deprecated("The repository of the linter has been archived by the owner. Use govet 'fieldalignment' instead."),
 		linter.NewConfig(golinters.NewDepguard()).
 			WithLoadForGoAnalysis().
-			WithPresets(linter.PresetStyle).
+			WithPresets(linter.PresetStyle, linter.PresetImport, linter.PresetModule).
 			WithURL("https://github.com/OpenPeeDeeP/depguard"),
 		linter.NewConfig(golinters.NewMisspell()).
-			WithPresets(linter.PresetStyle).
+			WithPresets(linter.PresetStyle, linter.PresetComment).
 			WithAutoFix().
 			WithURL("https://github.com/client9/misspell"),
 		linter.NewConfig(golinters.NewLLL()).
@@ -264,7 +275,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/alexkohler/dogsled"),
 		linter.NewConfig(golinters.NewNakedret()).
-			WithPresets(linter.PresetComplexity).
+			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/alexkohler/nakedret"),
 		linter.NewConfig(golinters.NewPrealloc()).
 			WithPresets(linter.PresetPerformance).
@@ -274,7 +285,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithURL("https://github.com/kyoh86/scopelint").
 			Deprecated("The repository of the linter has been deprecated by the owner. Use 'exportloopref' instead."),
 		linter.NewConfig(golinters.NewGocritic()).
-			WithPresets(linter.PresetStyle).
+			WithPresets(linter.PresetStyle, linter.PresetMetaLinter).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/go-critic/go-critic"),
 		linter.NewConfig(golinters.NewGochecknoinits()).
@@ -284,10 +295,10 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/leighmcculloch/gochecknoglobals"),
 		linter.NewConfig(golinters.NewGodox()).
-			WithPresets(linter.PresetStyle).
+			WithPresets(linter.PresetStyle, linter.PresetComment).
 			WithURL("https://github.com/matoous/godox"),
 		linter.NewConfig(golinters.NewFunlen()).
-			WithPresets(linter.PresetStyle).
+			WithPresets(linter.PresetComplexity).
 			WithURL("https://github.com/ultraware/funlen"),
 		linter.NewConfig(golinters.NewWhitespace()).
 			WithPresets(linter.PresetStyle).
@@ -303,19 +314,19 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/tommy-muehle/go-mnd"),
 		linter.NewConfig(golinters.NewGoerr113()).
-			WithPresets(linter.PresetStyle).
+			WithPresets(linter.PresetStyle, linter.PresetError).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/Djarvur/go-err113"),
 		linter.NewConfig(golinters.NewGomodguard()).
-			WithPresets(linter.PresetStyle).
+			WithPresets(linter.PresetStyle, linter.PresetImport, linter.PresetModule).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/ryancurrah/gomodguard"),
 		linter.NewConfig(golinters.NewGodot()).
-			WithPresets(linter.PresetStyle).
+			WithPresets(linter.PresetStyle, linter.PresetComment).
 			WithAutoFix().
 			WithURL("https://github.com/tetafro/godot"),
 		linter.NewConfig(golinters.NewTestpackage(testpackageCfg)).
-			WithPresets(linter.PresetStyle).
+			WithPresets(linter.PresetStyle, linter.PresetTest).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/maratori/testpackage"),
 		linter.NewConfig(golinters.NewNestif()).
@@ -330,7 +341,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/nishanths/exhaustive"),
 		linter.NewConfig(golinters.NewSQLCloseCheck()).
-			WithPresets(linter.PresetBugs).
+			WithPresets(linter.PresetBugs, linter.PresetSQL).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/ryanrolds/sqlclosecheck"),
 		linter.NewConfig(golinters.NewNLReturn()).
@@ -338,7 +349,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/ssgreg/nlreturn"),
 		linter.NewConfig(golinters.NewWrapcheck()).
-			WithPresets(linter.PresetStyle).
+			WithPresets(linter.PresetStyle, linter.PresetError).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/tomarrell/wrapcheck"),
 		linter.NewConfig(golinters.NewThelper(thelperCfg)).
@@ -346,19 +357,19 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/kulti/thelper"),
 		linter.NewConfig(golinters.NewTparallel()).
-			WithPresets(linter.PresetStyle).
+			WithPresets(linter.PresetStyle, linter.PresetTest).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/moricho/tparallel"),
 		linter.NewConfig(golinters.NewExhaustiveStruct(exhaustiveStructCfg)).
-			WithPresets(linter.PresetStyle).
+			WithPresets(linter.PresetStyle, linter.PresetTest).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/mbilski/exhaustivestruct"),
 		linter.NewConfig(golinters.NewErrorLint(errorlintCfg)).
-			WithPresets(linter.PresetBugs).
+			WithPresets(linter.PresetBugs, linter.PresetError).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/polyfloyd/go-errorlint"),
 		linter.NewConfig(golinters.NewParallelTest()).
-			WithPresets(linter.PresetStyle).
+			WithPresets(linter.PresetStyle, linter.PresetTest).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/kunwardeep/paralleltest"),
 		linter.NewConfig(golinters.NewMakezero()).
@@ -375,7 +386,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/nishanths/predeclared"),
 		linter.NewConfig(golinters.NewRevive(reviveCfg)).
-			WithPresets(linter.PresetStyle).
+			WithPresets(linter.PresetStyle, linter.PresetMetaLinter).
 			ConsiderSlow().
 			WithURL("https://github.com/mgechev/revive"),
 		linter.NewConfig(golinters.NewDurationCheck()).
@@ -399,7 +410,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/gostaticanalysis/forcetypeassert"),
 		linter.NewConfig(golinters.NewGoModDirectives(goModDirectivesCfg)).
-			WithPresets(linter.PresetStyle).
+			WithPresets(linter.PresetStyle, linter.PresetModule).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/ldez/gomoddirectives"),
 
