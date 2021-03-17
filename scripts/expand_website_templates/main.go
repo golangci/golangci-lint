@@ -227,8 +227,8 @@ func getLintersListMarkdown(enabled bool) string {
 	})
 
 	lines := []string{
-		"|Name|Description|Presets|AutoFix|Deprecated|",
-		"|---|---|---|---|---|",
+		"|Name|Description|Presets|AutoFix|Since|",
+		"|---|---|---|---|---|---|",
 	}
 
 	for _, lc := range neededLcs {
@@ -237,7 +237,7 @@ func getLintersListMarkdown(enabled bool) string {
 			getDesc(lc),
 			strings.Join(lc.InPresets, ", "),
 			check(lc.CanAutoFix, "Auto fix supported"),
-			check(lc.DeprecatedMessage != "", "Deprecated"),
+			lc.Since,
 		)
 		lines = append(lines, line)
 	}
@@ -252,17 +252,25 @@ func getName(lc *linter.Config) string {
 		name = fmt.Sprintf("[%s](%s)", lc.Name(), lc.OriginalURL)
 	}
 
-	if lc.DeprecatedMessage != "" {
-		name += ` <span title="deprecated">⚠</span>`
+	if !lc.IsDeprecated() {
+		return name
 	}
 
-	return name
+	title := "deprecated"
+	if lc.Deprecation.Replacement != "" {
+		title += fmt.Sprintf(" since %s", lc.Deprecation.Since)
+	}
+
+	return name + " " + span(title, "⚠")
 }
 
 func getDesc(lc *linter.Config) string {
 	desc := lc.Linter.Desc()
-	if lc.DeprecatedMessage != "" {
-		desc = lc.DeprecatedMessage
+	if lc.IsDeprecated() {
+		desc = lc.Deprecation.Message
+		if lc.Deprecation.Replacement != "" {
+			desc += fmt.Sprintf(" Replaced by %s.", lc.Deprecation.Replacement)
+		}
 	}
 
 	return strings.ReplaceAll(desc, "\n", "<br/>")
@@ -270,9 +278,13 @@ func getDesc(lc *linter.Config) string {
 
 func check(b bool, title string) string {
 	if b {
-		return `<span title="` + title + `">✔</span>`
+		return span(title, "✔")
 	}
 	return ""
+}
+
+func span(title, icon string) string {
+	return fmt.Sprintf(`<span title="%s">%s</span>`, title, icon)
 }
 
 func getThanksList() string {

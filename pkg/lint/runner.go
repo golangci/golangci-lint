@@ -52,9 +52,16 @@ func NewRunner(cfg *config.Config, log logutils.Log, goenv *goutil.Env, es *lint
 	// print deprecated messages
 	if !cfg.InternalCmdTest {
 		for name, lc := range enabledLinters {
-			if lc.IsDeprecated() {
-				log.Warnf("The linter '%s' is deprecated due to: %s", name, lc.DeprecatedMessage)
+			if !lc.IsDeprecated() {
+				continue
 			}
+
+			var extra string
+			if lc.Deprecation.Replacement != "" {
+				extra = fmt.Sprintf(" Replaced by %s.", lc.Deprecation.Replacement)
+			}
+
+			log.Warnf("The linter '%s' is deprecated (since %s) due to: %s %s", name, lc.Deprecation.Since, lc.Deprecation.Message, extra)
 		}
 	}
 

@@ -9,31 +9,35 @@ from scratch and integrate it into `golangci-lint`.
 
 ## How to add a public linter to `golangci-lint`
 
-You need to implement a new linter using `go/analysis` API. We don't accept not `go/analysis` linters.
+You need to implement a new linter using `go/analysis` API.
+We don't accept not `go/analysis` linters.
 
 After that:
 
-1. Implement functional tests for the linter: add one file into directory [`test/testdata`](https://github.com/golangci/golangci-lint/tree/master/test/testdata).
-   Run `T=yourlintername.go make test_linters` to ensure that test fails.
-2. Add a new file `pkg/golinters/{yourlintername}.go`. Look at other linters in this directory. Implement linter integration and check that test passes.
+1. Implement functional tests for the linter:
+    - Add one file into directory [`test/testdata`](https://github.com/golangci/golangci-lint/tree/master/test/testdata).
+    - Run `T=yourlintername.go make test_linters` to ensure that test fails.
+    - Run `go run ./cmd/golangci-lint/ run --no-config --disable-all --enable=yourlintername ./test/testdata/yourlintername.go`
+2. Add a new file `pkg/golinters/{yourlintername}.go`.
+   Look at other linters in this directory.
+   Implement linter integration and check that test passes.
 3. Add the new struct for the linter (which you've implemented in `pkg/golinters/{yourlintername}.go`) to the
    list of all supported linters in [`pkg/lint/lintersdb/manager.go`](https://github.com/golangci/golangci-lint/blob/master/pkg/lint/lintersdb/manager.go)
-   to the function `GetAllSupportedLinterConfigs`. Enable it by default only if you are sure.
-4. Find out what options do you need to configure for the linter. For example, `nakedret` has
-   only 1 option: [`max-func-lines`](https://github.com/golangci/golangci-lint/blob/master/.golangci.example.yml).
+   to the function `GetAllSupportedLinterConfigs`.
+    - Add `WithSince("next_version")`, where `next_version` must be replaced by the next minor version. (ex: v1.2.0 if the current version is v1.1.0)
+4. Find out what options do you need to configure for the linter.
+   For example, `nakedret` has only 1 option: [`max-func-lines`](https://github.com/golangci/golangci-lint/blob/master/.golangci.example.yml).
    Choose default values to not being annoying for users of golangci-lint. Add configuration options to:
-
-- [.golangci.example.yml](https://github.com/golangci/golangci-lint/blob/master/.golangci.example.yml) - the example of a configuration file. You can also add
-  them to [.golangci.yml](https://github.com/golangci/golangci-lint/blob/master/.golangci.yml) if you think
-  that this project needs not default values.
-- [config struct](https://github.com/golangci/golangci-lint/blob/master/pkg/config/config.go) - don't forget
-  about `mapstructure` tag for proper configuration files parsing by [pflag](https://github.com/spf13/pflag).
-
-5. Take a look at the example of [Pull Request with new linter support](https://github.com/golangci/golangci-lint/pull/850).
+    - [.golangci.example.yml](https://github.com/golangci/golangci-lint/blob/master/.golangci.example.yml) - the example of a configuration file.
+      You can also add them to [.golangci.yml](https://github.com/golangci/golangci-lint/blob/master/.golangci.yml)
+      if you think that this project needs not default values.
+    - [config struct](https://github.com/golangci/golangci-lint/blob/master/pkg/config/config.go) -
+      don't forget about `mapstructure` tag for proper configuration files parsing by [pflag](https://github.com/spf13/pflag).
+5. Take a look at the example of [Pull Request with new linter support](https://github.com/golangci/golangci-lint/pulls?q=is%3Apr+is%3Amerged+label%3A%22linter%3A+new%22).
 
 ## How to add a private linter to `golangci-lint`
 
-Some people and organizations may choose to have custom made linters run as a part of `golangci-lint`.
+Some people and organizations may choose to have custom-made linters run as a part of `golangci-lint`.
 Typically, these linters can't be open-sourced or too specific.
 Such linters can be added through Go's plugin library.
 
