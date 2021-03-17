@@ -29,7 +29,15 @@ After that:
 - [config struct](https://github.com/golangci/golangci-lint/blob/master/pkg/config/config.go) - don't forget
   about `mapstructure` tag for proper configuration files parsing by [pflag](https://github.com/spf13/pflag).
 
-5. Take a look at the example of [Pull Request with new linter support](https://github.com/golangci/golangci-lint/pull/850).
+5. You can add your linter to lint golangci-lint codebase. [.golangci.yml](https://github.com/golangci/golangci-lint/blob/master/.golangci.yml).
+   You have to comment out in this PR. CI fails if enable your new linter. Github Actions uses latest release version which doesn't have your new linter.
+
+```yaml
+  # Enable in next release
+  # - yourlintername
+```
+
+6. Take a look at the example of [Pull Request with new linter support](https://github.com/golangci/golangci-lint/pull/850).
 
 ## How to add a private linter to `golangci-lint`
 
