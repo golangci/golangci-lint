@@ -59,7 +59,7 @@ func NewUnused() *goanalysis.Linter {
 		nil,
 	).WithIssuesReporter(func(lintCtx *linter.Context) []goanalysis.Issue {
 		return resIssues
-	}).WithLoadMode(goanalysis.LoadModeSyntax | goanalysis.LoadModeTypesInfo)
+	}).WithLoadMode(goanalysis.LoadModeWholeProgram)
 
 	return lnt
 }
