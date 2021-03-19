@@ -131,6 +131,12 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 	const megacheckName = "megacheck"
 
 	lcs := []*linter.Config{
+		linter.NewConfig(golinters.NewTypecheck()).
+			WithSince("v1.3.0").
+			WithLoadForGoAnalysis().
+			WithPresets(linter.PresetBugs).
+			WithURL(""),
+
 		linter.NewConfig(golinters.NewGovet(govetCfg)).
 			WithSince("v1.0.0").
 			WithLoadForGoAnalysis().
@@ -247,11 +253,6 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithSince("v1.20.0").
 			WithPresets(linter.PresetComplexity).
 			WithURL("https://github.com/uudashr/gocognit"),
-		linter.NewConfig(golinters.NewTypecheck()).
-			WithSince("v1.3.0").
-			WithLoadForGoAnalysis().
-			WithPresets(linter.PresetBugs).
-			WithURL(""),
 		linter.NewConfig(golinters.NewAsciicheck()).
 			WithSince("v1.26.0").
 			WithPresets(linter.PresetBugs, linter.PresetStyle).

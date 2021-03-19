@@ -20,6 +20,14 @@ const (
 	PresetUnused      = "unused"      // Related to the detection of unused code.
 )
 
+const (
+	// typecheck must be first because it checks the compiling errors.
+	FirstLinter = "typecheck"
+
+	// nolintlint must be last because it looks at the results of all the previous linters for unused nolint directives.
+	LastLinter = "nolintlint"
+)
+
 type Deprecation struct {
 	Since       string
 	Message     string

@@ -200,7 +200,7 @@ func (r Runner) Run(ctx context.Context, linters []*linter.Config, lintCtx *lint
 		sw.TrackStage(lc.Name(), func() {
 			linterIssues, err := r.runLinterSafe(ctx, lintCtx, lc)
 			if err != nil {
-				r.Log.Warnf("Can't run linter %s: %s", lc.Linter.Name(), err)
+				r.Log.Warnf("Can't run linter %s: %v", lc.Linter.Name(), err)
 				if os.Getenv("GOLANGCI_COM_RUN") == "" {
 					// Don't stop all linters on one linter failure for golangci.com.
 					runErr = err
@@ -209,6 +209,10 @@ func (r Runner) Run(ctx context.Context, linters []*linter.Config, lintCtx *lint
 			}
 			issues = append(issues, linterIssues...)
 		})
+
+		if lc.Name() == linter.FirstLinter && len(issues) > 0 {
+			return r.processLintResults(issues), nil
+		}
 	}
 
 	return r.processLintResults(issues), runErr
