@@ -74,24 +74,16 @@ func runAnalyzers(cfg runAnalyzersConfig, lintCtx *linter.Context) ([]result.Iss
 		return retIssues
 	}
 
-	if cfg.isTypecheckMode() {
-		errIssues, err := buildIssuesFromErrorsForTypecheckMode(errs, lintCtx)
-		if err != nil {
-			return nil, err
-		}
+	errIssues, err := buildIssuesFromIllTypedError(errs, lintCtx)
+	if err != nil {
+		return nil, err
+	}
 
-		issues = append(issues, errIssues...)
+	issues = append(issues, errIssues...)
+	if len(errIssues) == 0 {
 		issues = append(issues, buildAllIssues()...)
-
-		return issues, nil
 	}
 
-	// Don't print all errs: they can duplicate.
-	if len(errs) != 0 {
-		return nil, errs[0]
-	}
-
-	issues = append(issues, buildAllIssues()...)
 	return issues, nil
 }
 

@@ -7,6 +7,7 @@ import (
 	"runtime/debug"
 	"time"
 
+	"github.com/hashicorp/go-multierror"
 	"github.com/pkg/errors"
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/packages"
@@ -117,15 +118,20 @@ func (act *action) analyze() {
 	}(time.Now())
 
 	// Report an error if any dependency failures.
-	var depErr FailedPrerequisitesError
+	var depErrors *multierror.Error
 	for _, dep := range act.deps {
 		if dep.err == nil {
 			continue
 		}
-		depErr.Consume(dep.String(), dep.err)
+
+		depErrors = multierror.Append(depErrors, errors.Cause(dep.err))
 	}
-	if depErr.NotEmpty() {
-		act.err = depErr
+	if depErrors != nil {
+		depErrors.ErrorFormat = func(e []error) string {
+			return fmt.Sprintf("failed prerequisites: %v", e)
+		}
+
+		act.err = depErrors
 		return
 	}
 

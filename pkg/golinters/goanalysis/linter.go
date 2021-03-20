@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/pkg/errors"
 	"golang.org/x/tools/go/analysis"
 
