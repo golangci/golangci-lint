@@ -20,6 +20,9 @@ const (
 	PresetUnused      = "unused"      // Related to the detection of unused code.
 )
 
+// LastLinter nolintlint must be last because it looks at the results of all the previous linters for unused nolint directives.
+const LastLinter = "nolintlint"
+
 type Deprecation struct {
 	Since       string
 	Message     string
