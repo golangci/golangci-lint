@@ -23,7 +23,6 @@ type runAnalyzersConfig interface {
 	getLinterNameForDiagnostic(*Diagnostic) string
 	getAnalyzers() []*analysis.Analyzer
 	useOriginalPackages() bool
-	isTypecheckMode() bool
 	reportIssues(*linter.Context) []Issue
 	getLoadMode() LoadMode
 }

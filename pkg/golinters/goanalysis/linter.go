@@ -49,7 +49,6 @@ type Linter struct {
 	contextSetter           func(*linter.Context)
 	loadMode                LoadMode
 	needUseOriginalPackages bool
-	isTypecheckModeOn       bool
 }
 
 func NewLinter(name, desc string, analyzers []*analysis.Analyzer, cfg map[string]map[string]interface{}) *Linter {
@@ -66,10 +65,6 @@ func (lnt *Linter) Run(_ context.Context, lintCtx *linter.Context) ([]result.Iss
 
 func (lnt *Linter) UseOriginalPackages() {
 	lnt.needUseOriginalPackages = true
-}
-
-func (lnt *Linter) SetTypecheckMode() {
-	lnt.isTypecheckModeOn = true
 }
 
 func (lnt *Linter) LoadMode() LoadMode {
@@ -179,10 +174,6 @@ func (lnt *Linter) getAnalyzers() []*analysis.Analyzer {
 
 func (lnt *Linter) useOriginalPackages() bool {
 	return lnt.needUseOriginalPackages
-}
-
-func (lnt *Linter) isTypecheckMode() bool {
-	return lnt.isTypecheckModeOn
 }
 
 func (lnt *Linter) reportIssues(lintCtx *linter.Context) []Issue {

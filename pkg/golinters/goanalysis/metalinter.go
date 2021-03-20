@@ -39,15 +39,6 @@ func (ml MetaLinter) Desc() string {
 	return ""
 }
 
-func (ml MetaLinter) isTypecheckMode() bool {
-	for _, l := range ml.linters {
-		if l.isTypecheckMode() {
-			return true
-		}
-	}
-	return false
-}
-
 func (ml MetaLinter) getLoadMode() LoadMode {
 	loadMode := LoadModeNone
 	for _, l := range ml.linters {
