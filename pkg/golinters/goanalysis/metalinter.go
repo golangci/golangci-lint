@@ -21,6 +21,16 @@ func NewMetaLinter(linters []*Linter) *MetaLinter {
 	return ml
 }
 
+func (ml MetaLinter) Run(_ context.Context, lintCtx *linter.Context) ([]result.Issue, error) {
+	for _, l := range ml.linters {
+		if err := l.preRun(lintCtx); err != nil {
+			return nil, errors.Wrapf(err, "failed to pre-run %s", l.Name())
+		}
+	}
+
+	return runAnalyzers(ml, lintCtx)
+}
+
 func (ml MetaLinter) Name() string {
 	return "goanalysis_metalinter"
 }
@@ -30,8 +40,8 @@ func (ml MetaLinter) Desc() string {
 }
 
 func (ml MetaLinter) isTypecheckMode() bool {
-	for _, linter := range ml.linters {
-		if linter.isTypecheckMode() {
+	for _, l := range ml.linters {
+		if l.isTypecheckMode() {
 			return true
 		}
 	}
@@ -40,9 +50,9 @@ func (ml MetaLinter) isTypecheckMode() bool {
 
 func (ml MetaLinter) getLoadMode() LoadMode {
 	loadMode := LoadModeNone
-	for _, linter := range ml.linters {
-		if linter.loadMode > loadMode {
-			loadMode = linter.loadMode
+	for _, l := range ml.linters {
+		if l.loadMode > loadMode {
+			loadMode = l.loadMode
 		}
 	}
 	return loadMode
@@ -50,8 +60,8 @@ func (ml MetaLinter) getLoadMode() LoadMode {
 
 func (ml MetaLinter) getAnalyzers() []*analysis.Analyzer {
 	var allAnalyzers []*analysis.Analyzer
-	for _, linter := range ml.linters {
-		allAnalyzers = append(allAnalyzers, linter.analyzers...)
+	for _, l := range ml.linters {
+		allAnalyzers = append(allAnalyzers, l.analyzers...)
 	}
 	return allAnalyzers
 }
@@ -80,20 +90,10 @@ func (ml MetaLinter) getLinterNameForDiagnostic(diag *Diagnostic) string {
 
 func (ml MetaLinter) getAnalyzerToLinterNameMapping() map[*analysis.Analyzer]string {
 	analyzerToLinterName := map[*analysis.Analyzer]string{}
-	for _, linter := range ml.linters {
-		for _, a := range linter.analyzers {
-			analyzerToLinterName[a] = linter.Name()
+	for _, l := range ml.linters {
+		for _, a := range l.analyzers {
+			analyzerToLinterName[a] = l.Name()
 		}
 	}
 	return analyzerToLinterName
-}
-
-func (ml MetaLinter) Run(ctx context.Context, lintCtx *linter.Context) ([]result.Issue, error) {
-	for _, linter := range ml.linters {
-		if err := linter.preRun(lintCtx); err != nil {
-			return nil, errors.Wrapf(err, "failed to pre-run %s", linter.Name())
-		}
-	}
-
-	return runAnalyzers(ml, lintCtx)
 }
