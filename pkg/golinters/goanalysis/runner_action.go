@@ -177,21 +177,19 @@ func (act *action) analyze() {
 	act.r.passToPkg[pass] = act.pkg
 	act.r.passToPkgGuard.Unlock()
 
-	var err error
 	if act.pkg.IllTyped {
 		// It looks like there should be !pass.Analyzer.RunDespiteErrors
 		// but govet's cgocall crashes on it. Govet itself contains !pass.Analyzer.RunDespiteErrors condition here
 		// but it exit before it if packages.Load have failed.
-		err = errors.Wrap(&IllTypedError{Pkg: act.pkg}, "analysis skipped")
+		act.err = errors.Wrap(&IllTypedError{Pkg: act.pkg}, "analysis skipped")
 	} else {
 		startedAt = time.Now()
-		act.result, err = pass.Analyzer.Run(pass)
+		act.result, act.err = pass.Analyzer.Run(pass)
 		analyzedIn := time.Since(startedAt)
 		if analyzedIn > time.Millisecond*10 {
 			debugf("%s: run analyzer in %s", act, analyzedIn)
 		}
 	}
-	act.err = err
 
 	// disallow calls after Run
 	pass.ExportObjectFact = nil

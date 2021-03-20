@@ -79,9 +79,7 @@ func runAnalyzers(cfg runAnalyzersConfig, lintCtx *linter.Context) ([]result.Iss
 	}
 
 	issues = append(issues, errIssues...)
-	if len(errIssues) == 0 {
-		issues = append(issues, buildAllIssues()...)
-	}
+	issues = append(issues, buildAllIssues()...)
 
 	return issues, nil
 }
