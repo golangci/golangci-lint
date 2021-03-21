@@ -9,7 +9,7 @@ require (
 	github.com/OpenPeeDeeP/depguard v1.0.1
 	github.com/alexkohler/prealloc v1.0.0
 	github.com/ashanbrown/forbidigo v1.1.0
-	github.com/ashanbrown/makezero v0.0.0-20201205152432-7b7cdbb3025a
+	github.com/ashanbrown/makezero v0.0.0-20210308000810-4155955488a0
 	github.com/bkielbasa/cyclop v1.2.0
 	github.com/bombsimon/wsl/v3 v3.2.0
 	github.com/charithe/durationcheck v0.0.6
