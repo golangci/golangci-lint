@@ -17,5 +17,5 @@ func NewParallelTest() *goanalysis.Linter {
 		"paralleltest detects missing usage of t.Parallel() method in your Go test",
 		analyzers,
 		nil,
-	).WithLoadMode(goanalysis.LoadModeTypesInfo)
+	).WithLoadMode(goanalysis.LoadModeSyntax)
 }

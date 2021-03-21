@@ -13,5 +13,5 @@ func NewIneffassign() *goanalysis.Linter {
 		"Detects when assignments to existing variables are not used",
 		[]*analysis.Analyzer{ineffassign.Analyzer},
 		nil,
-	).WithLoadMode(goanalysis.LoadModeTypesInfo)
+	).WithLoadMode(goanalysis.LoadModeSyntax)
 }

@@ -218,7 +218,6 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithURL("https://github.com/mdempsky/unconvert"),
 		linter.NewConfig(golinters.NewIneffassign()).
 			WithSince("v1.0.0").
-			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetUnused).
 			WithURL("https://github.com/gordonklaus/ineffassign"),
 		linter.NewConfig(golinters.NewDupl()).
@@ -226,7 +225,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/mibk/dupl"),
 		linter.NewConfig(golinters.NewGoconst()).
-			WithSince("").
+			WithSince("v1.0.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/jgautheron/goconst"),
 		linter.NewConfig(golinters.NewDeadcode()).
@@ -255,7 +254,6 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		linter.NewConfig(golinters.NewAsciicheck()).
 			WithSince("v1.26.0").
 			WithPresets(linter.PresetBugs, linter.PresetStyle).
-			WithLoadForGoAnalysis().
 			WithURL("https://github.com/tdakkota/asciicheck"),
 
 		linter.NewConfig(golinters.NewGofmt()).
@@ -276,12 +274,10 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		linter.NewConfig(golinters.NewGoHeader()).
 			WithSince("v1.28.0").
 			WithPresets(linter.PresetStyle).
-			WithLoadForGoAnalysis().
 			WithURL("https://github.com/denis-tingajkin/go-header"),
 		linter.NewConfig(golinters.NewGci()).
 			WithSince("v1.30.0").
 			WithPresets(linter.PresetFormatting, linter.PresetImport).
-			WithLoadForGoAnalysis().
 			WithAutoFix().
 			WithURL("https://github.com/daixiang0/gci"),
 		linter.NewConfig(golinters.NewMaligned()).
@@ -371,7 +367,6 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		linter.NewConfig(golinters.NewGomodguard()).
 			WithSince("v1.25.0").
 			WithPresets(linter.PresetStyle, linter.PresetImport, linter.PresetModule).
-			WithLoadForGoAnalysis().
 			WithURL("https://github.com/ryancurrah/gomodguard"),
 		linter.NewConfig(golinters.NewGodot()).
 			WithSince("v1.25.0").
@@ -381,7 +376,6 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		linter.NewConfig(golinters.NewTestpackage(testpackageCfg)).
 			WithSince("v1.25.0").
 			WithPresets(linter.PresetStyle, linter.PresetTest).
-			WithLoadForGoAnalysis().
 			WithURL("https://github.com/maratori/testpackage"),
 		linter.NewConfig(golinters.NewNestif()).
 			WithSince("v1.25.0").
@@ -405,7 +399,6 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		linter.NewConfig(golinters.NewNLReturn()).
 			WithSince("v1.30.0").
 			WithPresets(linter.PresetStyle).
-			WithLoadForGoAnalysis().
 			WithURL("https://github.com/ssgreg/nlreturn"),
 		linter.NewConfig(golinters.NewWrapcheck()).
 			WithSince("v1.32.0").
@@ -435,7 +428,6 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		linter.NewConfig(golinters.NewParallelTest()).
 			WithSince("v1.33.0").
 			WithPresets(linter.PresetStyle, linter.PresetTest).
-			WithLoadForGoAnalysis().
 			WithURL("https://github.com/kunwardeep/paralleltest"),
 		linter.NewConfig(golinters.NewMakezero()).
 			WithSince("v1.34.0").
@@ -482,12 +474,10 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		linter.NewConfig(golinters.NewForceTypeAssert()).
 			WithSince("v1.38.0").
 			WithPresets(linter.PresetStyle).
-			WithLoadForGoAnalysis().
 			WithURL("https://github.com/gostaticanalysis/forcetypeassert"),
 		linter.NewConfig(golinters.NewGoModDirectives(goModDirectivesCfg)).
 			WithSince("v1.39.0").
 			WithPresets(linter.PresetStyle, linter.PresetModule).
-			WithLoadForGoAnalysis().
 			WithURL("https://github.com/ldez/gomoddirectives"),
 
 		// nolintlint must be last because it looks at the results of all the previous linters for unused nolint directives
