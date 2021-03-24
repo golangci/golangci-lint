@@ -49,7 +49,7 @@ func (e *Executor) initVersion() {
 				}
 				fmt.Println(string(data))
 			default:
-				cmd.Printf("golangci-lint has version %s built from %s on %s\n", e.version, e.commit, e.date)
+				fmt.Printf("golangci-lint has version %s built from %s on %s\n", e.version, e.commit, e.date)
 			}
 			return nil
 		},
