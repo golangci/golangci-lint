@@ -2,6 +2,7 @@ package commands
 
 import (
 	"encoding/json"
+	"os"
 	"strings"
 
 	"github.com/spf13/cobra"
@@ -33,6 +34,7 @@ func (e *Executor) initVersion() {
 		Use:   "version",
 		Short: "Version",
 		RunE: func(cmd *cobra.Command, _ []string) error {
+			cmd.SetOut(os.Stdout)
 			switch strings.ToLower(e.cfg.Version.Format) {
 			case "short":
 				cmd.Println(e.version)
