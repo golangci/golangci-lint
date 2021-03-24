@@ -107,7 +107,7 @@ Loading packages is listing all packages and their recursive dependencies for an
 Also, depending from enabled linters set some parsing of a source code can be performed
 at this step.
 
-Packages loading stars here:
+Packages loading starts here:
 
 ```go title=pkg/lint/load.go
 func (cl *ContextLoader) Load(ctx context.Context, linters []*linter.Config) (*linter.Context, error) {
@@ -150,12 +150,12 @@ func (lc *Config) WithLoadForGoAnalysis() *Config {
 }
 ```
 
-After finding a load mode we run `go/packages`: the library get list of dirs (or `./...` as the default value) as input
+After finding a load mode, we run `go/packages`: the library get list of dirs (or `./...` as the default value) as input
 and outputs list of packages and requested information about them: filenames, type information, AST, etc.
 
 ## Run Linters
 
-First, we need to find all enaled linters. All linters are registered here:
+First, we need to find all enabled linters. All linters are registered here:
 
 ```go title=pkg/lint/lintersdb/manager.go
 func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
@@ -209,7 +209,7 @@ The `unused` isn't merged because it has high memory usage.
 
 Linters execution starts in `runAnalyzers`. It's the most complex part of the `golangci-lint`.
 We use custom [go/analysis](https://godoc.org/golang.org/x/tools/go/analysis) runner there. It runs as much as it can in parallel. It lazy-loads as much as it can
-to reduce memory usage. Also, it set all heavyweight data to `nil` as becomes unneeded to save memory.
+to reduce memory usage. Also, it sets all heavyweight data to `nil` as becomes unneeded to save memory.
 
 We don't use existing [multichecker](https://godoc.org/golang.org/x/tools/go/analysis/multichecker) because
 it doesn't use caching and doesn't have some important performance optimizations.
@@ -297,7 +297,7 @@ A processor can hide issues (`nolint`, `exclude`) or change issues (`path_shorte
 
 ## Print Issues
 
-We have an abstraction for printint found issues.
+We have an abstraction for printing found issues.
 
 ```sh
 $ tree -L 1 ./pkg/printers/
