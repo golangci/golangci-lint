@@ -54,3 +54,9 @@ than the default and have more strict settings:
 ```yaml
 { .GolangciYaml }
 ```
+
+## Cache
+
+GolangCI-Lint stores its cache in the [default user cache directory](https://golang.org/pkg/os/#UserCacheDir).
+
+You can override the default cache directory with the environment variable `GOLANGCI_LINT_CACHE`; the path must be absolute.
