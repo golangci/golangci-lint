@@ -1,6 +1,36 @@
 Follow the news and releases on our [twitter](https://twitter.com/golangci) and our [blog](https://medium.com/golangci).
 There is the most valuable changes log:
 
+## March 2021
+
+1. new linters:
+   * `gomoddirectives`: https://github.com/ldez/gomoddirectives
+2. update linters:
+   * `go-critic`: from 0.5.4 to 0.5.5
+   * `gofumpt`: from v0.1.0 to v0.1.1
+   * `gosec`: from 2.6.1 to 2.7.0
+   * `ifshort`: bump to v1.0.2
+   * `importas`: bump to HEAD
+   * `makezero`: bump to HEAD
+   * `nolintlint`: allow to fix //nolint lines
+   * `revive`: from 1.0.3 to 1.0.5
+   * `revive`: the default configuration is only applied when no dedicated configuration
+   * `rowserrcheck`: bump to HEAD
+   * ⚠ `scopelint`: deprecated
+   * `staticcheck`: from v0.1.2 (2020.2.2) to v0.1.3 (2020.2.3)
+   * 🎉 `typecheck`: display compilation errors as report instead of error
+   * `wastedassign`: bump to v0.2.0
+   * `wrapcheck`: bump to v1.0.0
+3. documentation:
+   * improve [linters page](https://golangci-lint.run/usage/linters/) (versions, deprecation, and presets)
+   * add [cache directory](https://golangci-lint.run/usage/configuration/#cache) information
+   * adding missing format options
+   * fix typos
+4. Misc:
+   * Set `version` command output to Stdout
+   * fix linters load mode
+   * Restore fast linters meaning
+
 ## February 2021
 
 1. new linters:
@@ -29,8 +59,8 @@ There is the most valuable changes log:
    * `thelper` from 0.3.1 to 0.4.0
    * `bodyclose`: bump to HEAD
    * `go-err113`: bump to HEAD
-   * `interfacer`: deprecated
-   * `maligned`: deprecated (govet `fieldalignment` as replacement)
+   * ⚠ `interfacer`: deprecated
+   * ⚠ `maligned`: deprecated (govet `fieldalignment` as replacement)
    * `govet`: use same default linter as go vet
    * `go-printf-func-name`: to `v0.0.0-20200119135958-7558a9eaa5af`
    * `godox`: to `v0.0.0-20210227103229-6504466cf951`
