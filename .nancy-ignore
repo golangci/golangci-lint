@@ -2,3 +2,6 @@
 CVE-2020-15114
 CVE-2020-15115
 CVE-2020-15136
+
+# Skip for indirect dependency github.com/gogo/protobuf@1.3.1
+CVE-2021-3121

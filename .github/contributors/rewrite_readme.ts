@@ -41,7 +41,7 @@ ${rows
         .map(
           (c) =>
             `  <td align="center"><a href="${
-              c.websiteUrl ? c.websiteUrl : `https://github.com/${c.login}`
+              c.websiteUrl ? (c.websiteUrl.startsWith("http") ? c.websiteUrl : `https://${c.websiteUrl}`) : `https://github.com/${c.login}`
             }?utm_source=golangci-lint-contributors"><img src="${c.avatarUrl}" width="100px;" alt=""/><br /><sub><b>${
               c.name ? c.name : `@${c.login}`
             }</b></sub></a></td>`
