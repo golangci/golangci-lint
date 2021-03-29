@@ -459,7 +459,8 @@ type PredeclaredSettings struct {
 }
 
 type PromlinterSettings struct {
-	Strict bool `mapstructure:"strict"`
+	Strict          bool     `mapstructure:"strict"`
+	DisabledLinters []string `mapstructure:"disabled-linters"`
 }
 
 type Cyclop struct {

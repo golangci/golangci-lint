@@ -30,6 +30,7 @@ func NewPromlinter() *goanalysis.Linter {
 		nil,
 	).WithContextSetter(func(lintCtx *linter.Context) {
 		strict := lintCtx.Cfg.LintersSettings.Promlinter.Strict
+		disabledLinters := lintCtx.Cfg.LintersSettings.Promlinter.DisabledLinters
 
 		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
 			files := make([]*ast.File, 0)
@@ -41,7 +42,10 @@ func NewPromlinter() *goanalysis.Linter {
 
 				files = append(files, f)
 			}
-			issues := promlinter.Run(pass.Fset, files, strict)
+			issues := promlinter.RunLint(pass.Fset, files, promlinter.Setting{
+				Strict:            strict,
+				DisabledLintFuncs: disabledLinters,
+			})
 
 			if len(issues) == 0 {
 				return nil, nil
@@ -66,5 +70,5 @@ func NewPromlinter() *goanalysis.Linter {
 		}
 	}).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
 		return resIssues
-	}).WithLoadMode(goanalysis.LoadModeSyntax)
+	}).WithLoadMode(goanalysis.LoadModeNone)
 }
