@@ -70,5 +70,5 @@ func NewPromlinter() *goanalysis.Linter {
 		}
 	}).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
 		return resIssues
-	}).WithLoadMode(goanalysis.LoadModeNone)
+	}).WithLoadMode(goanalysis.LoadModeSyntax)
 }

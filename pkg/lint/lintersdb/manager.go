@@ -480,6 +480,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle, linter.PresetModule).
 			WithURL("https://github.com/ldez/gomoddirectives"),
 		linter.NewConfig(golinters.NewPromlinter()).
+			WithSince("v1.40.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/yeya24/promlinter"),
 		// nolintlint must be last because it looks at the results of all the previous linters for unused nolint directives
