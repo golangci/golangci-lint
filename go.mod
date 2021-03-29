@@ -33,7 +33,7 @@ require (
 	github.com/gordonklaus/ineffassign v0.0.0-20210225214923-2e10b2664254
 	github.com/gostaticanalysis/forcetypeassert v0.0.0-20200621232751-01d4955beaa5
 	github.com/gostaticanalysis/nilerr v0.1.1
-	github.com/hashicorp/go-multierror v1.0.0
+	github.com/hashicorp/go-multierror v1.1.1
 	github.com/jgautheron/goconst v1.4.0
 	github.com/jingyugao/rowserrcheck v0.0.0-20210315055705-d907ca737bb1
 	github.com/jirfag/go-printf-func-name v0.0.0-20200119135958-7558a9eaa5af
