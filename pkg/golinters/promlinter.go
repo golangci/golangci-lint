@@ -2,8 +2,6 @@ package golinters
 
 import (
 	"fmt"
-	"go/ast"
-	"strings"
 	"sync"
 
 	"github.com/yeya24/promlinter"
@@ -33,16 +31,7 @@ func NewPromlinter() *goanalysis.Linter {
 		disabledLinters := lintCtx.Cfg.LintersSettings.Promlinter.DisabledLinters
 
 		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
-			files := make([]*ast.File, 0)
-
-			for _, f := range pass.Files {
-				if strings.HasSuffix(pass.Fset.Position(f.Pos()).Filename, "_test.go") {
-					continue
-				}
-
-				files = append(files, f)
-			}
-			issues := promlinter.RunLint(pass.Fset, files, promlinter.Setting{
+			issues := promlinter.RunLint(pass.Fset, pass.Files, promlinter.Setting{
 				Strict:            strict,
 				DisabledLintFuncs: disabledLinters,
 			})
