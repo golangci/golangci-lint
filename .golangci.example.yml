@@ -347,6 +347,20 @@ linters-settings:
     simple: true
     range-loops: true # Report preallocation suggestions on range loops, true by default
     for-loops: false # Report preallocation suggestions on for loops, false by default
+  promlinter:
+    # Promlinter cannot infer all metrics name in static analysis.
+    # Enable strict mode will also include the errors caused by failing to parse the args.
+    strict: false
+    # Please refer to https://github.com/yeya24/promlinter#usage for detailed usage.
+    disabled-linters:
+    #  - "Help"
+    #  - "MetricUnits"
+    #  - "Counter"
+    #  - "HistogramSummaryReserved"
+    #  - "MetricTypeInName"
+    #  - "ReservedChars"
+    #  - "CamelCase"
+    #  - "lintUnitAbbreviations"
   predeclared:
     # comma-separated list of predeclared identifiers to not report on
     ignore: ""

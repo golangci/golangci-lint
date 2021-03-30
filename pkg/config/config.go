@@ -277,6 +277,7 @@ type LintersSettings struct {
 	Cyclop           Cyclop
 	ImportAs         ImportAsSettings
 	GoModDirectives  GoModDirectivesSettings
+	Promlinter       PromlinterSettings
 
 	Custom map[string]CustomLinterSettings
 }
@@ -455,6 +456,11 @@ type ForbidigoSettings struct {
 type PredeclaredSettings struct {
 	Ignore    string `mapstructure:"ignore"`
 	Qualified bool   `mapstructure:"q"`
+}
+
+type PromlinterSettings struct {
+	Strict          bool     `mapstructure:"strict"`
+	DisabledLinters []string `mapstructure:"disabled-linters"`
 }
 
 type Cyclop struct {
