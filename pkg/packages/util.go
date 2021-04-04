@@ -2,10 +2,15 @@ package packages
 
 import (
 	"fmt"
+	"regexp"
 	"strings"
 
 	"golang.org/x/tools/go/packages"
 )
+
+// reFile matches a line who starts with path and position.
+// ex: `/example/main.go:11:17: foobar`
+var reFile = regexp.MustCompile(`^.+\.go:\d+:\d+: .+`)
 
 func ExtractErrors(pkg *packages.Package) []packages.Error {
 	errors := extractErrorsImpl(pkg, map[*packages.Package]bool{})
@@ -88,6 +93,10 @@ func stackCrusher(msg string) string {
 	}
 
 	frag := msg[index+1 : lastIndex]
+
+	if !reFile.MatchString(frag) {
+		return msg
+	}
 
 	return stackCrusher(frag)
 }
