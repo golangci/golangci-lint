@@ -30,7 +30,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: lint
-        uses: golangci/golangci-lint-action@v2.5.1
+        uses: golangci/golangci-lint-action@v2.5.2
         with:
           version: latest
           # skip cache because of flaky behaviors
