@@ -478,6 +478,20 @@ linters-settings:
     retract-allow-no-explanation: false
     # Forbid the use of the `exclude` directives. Default is false.
     exclude-forbidden: false
+  tagliatelle:
+    # check the struck tag name case
+    case:
+      # use the struct field name to check the name of the struct tag
+      use-field-name: true
+      rules:
+        # any struct tag type can be used.
+        # support string case: `camel`, `pascal`, `kebab`, `snake`, `goCamel`, `goPascal`, `goKebab`, `goSnake`, `upper`, `lower`
+        json: camel
+        yaml: camel
+        xml: camel
+        bson: camel
+        avro: snake
+        mapstructure: kebab
 
   # The custom section can be used to define linter plugins to be loaded at runtime. See README doc
   #  for more info.

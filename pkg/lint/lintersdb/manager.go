@@ -112,6 +112,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 	var cyclopCfg *config.Cyclop
 	var importAsCfg *config.ImportAsSettings
 	var goModDirectivesCfg *config.GoModDirectivesSettings
+	var tagliatelleCfg *config.TagliatelleSettings
 
 	if m.cfg != nil {
 		govetCfg = &m.cfg.LintersSettings.Govet
@@ -126,6 +127,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		cyclopCfg = &m.cfg.LintersSettings.Cyclop
 		importAsCfg = &m.cfg.LintersSettings.ImportAs
 		goModDirectivesCfg = &m.cfg.LintersSettings.GoModDirectives
+		tagliatelleCfg = &m.cfg.LintersSettings.Tagliatelle
 	}
 
 	const megacheckName = "megacheck"
@@ -483,6 +485,11 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithSince("v1.40.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/yeya24/promlinter"),
+		linter.NewConfig(golinters.NewTagliatelle(tagliatelleCfg)).
+			WithSince("v1.40.0").
+			WithPresets(linter.PresetStyle).
+			WithURL("https://github.com/ldez/tagliatelle"),
+
 		// nolintlint must be last because it looks at the results of all the previous linters for unused nolint directives
 		linter.NewConfig(golinters.NewNoLintLint()).
 			WithSince("v1.26.0").
