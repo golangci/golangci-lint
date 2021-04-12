@@ -603,8 +603,8 @@ github.com/subosito/gotenv v1.2.0 h1:Slr1R9HxAlEKefgq5jn9U+DnETlIUa6HfgEzj0g5d7s
 github.com/subosito/gotenv v1.2.0/go.mod h1:N0PQaV/YGNqwC0u51sEeR/aUtSLEXKX9iv69rRypqCw=
 github.com/tdakkota/asciicheck v0.0.0-20200416200610-e657995f937b h1:HxLVTlqcHhFAz3nWUcuvpH7WuOMv8LQoCWmruLfFH2U=
 github.com/tdakkota/asciicheck v0.0.0-20200416200610-e657995f937b/go.mod h1:yHp0ai0Z9gUljN3o0xMhYJnH/IcvkdTBOX2fmJ93JEM=
-github.com/tetafro/godot v1.4.4 h1:VAtLEoAMmopIzHVWVBrztjVWDeYm1OD/DKqhqXR4828=
-github.com/tetafro/godot v1.4.4/go.mod h1:FVDd4JuKliW3UgjswZfJfHq4vAx0bD/Jd5brJjGeaz4=
+github.com/tetafro/godot v1.4.5 h1:VGxN2ACIRxhlD71tVf0spBr3Ieo9cemUWQP6ad7ul/A=
+github.com/tetafro/godot v1.4.5/go.mod h1:FVDd4JuKliW3UgjswZfJfHq4vAx0bD/Jd5brJjGeaz4=
 github.com/timakin/bodyclose v0.0.0-20200424151742-cb6215831a94 h1:ig99OeTyDwQWhPe2iw9lwfQVF1KB3Q4fpP3X7/2VBG8=
 github.com/timakin/bodyclose v0.0.0-20200424151742-cb6215831a94/go.mod h1:Qimiffbc6q9tBWlVV6x0P9sat/ao1xEkREYPPj9hphk=
 github.com/tklauser/go-sysconf v0.3.4 h1:HT8SVixZd3IzLdfs/xlpq0jeSfTX57g1v6wB1EuzV7M=
