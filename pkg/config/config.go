@@ -278,6 +278,7 @@ type LintersSettings struct {
 	ImportAs         ImportAsSettings
 	GoModDirectives  GoModDirectivesSettings
 	Promlinter       PromlinterSettings
+	Tagliatelle      TagliatelleSettings
 
 	Custom map[string]CustomLinterSettings
 }
@@ -476,6 +477,13 @@ type GoModDirectivesSettings struct {
 	ReplaceLocal              bool     `mapstructure:"replace-local"`
 	ExcludeForbidden          bool     `mapstructure:"exclude-forbidden"`
 	RetractAllowNoExplanation bool     `mapstructure:"retract-allow-no-explanation"`
+}
+
+type TagliatelleSettings struct {
+	Case struct {
+		Rules        map[string]string
+		UseFieldName bool `mapstructure:"use-field-name"`
+	}
 }
 
 var defaultLintersSettings = LintersSettings{
