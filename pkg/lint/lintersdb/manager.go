@@ -2,7 +2,6 @@ package lintersdb
 
 import (
 	"fmt"
-	"os"
 	"path/filepath"
 	"plugin"
 
@@ -497,7 +496,6 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithURL("https://github.com/golangci/golangci-lint/blob/master/pkg/golinters/nolintlint/README.md"),
 	}
 
-	isLocalRun := os.Getenv("GOLANGCI_COM_RUN") == ""
 	enabledByDefault := map[string]bool{
 		golinters.NewGovet(nil).Name():    true,
 		golinters.NewErrcheck().Name():    true,
@@ -508,9 +506,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		golinters.NewVarcheck().Name():    true,
 		golinters.NewIneffassign().Name(): true,
 		golinters.NewDeadcode().Name():    true,
-
-		// don't typecheck for golangci.com: too many troubles
-		golinters.NewTypecheck().Name(): isLocalRun,
+		golinters.NewTypecheck().Name():   true,
 	}
 	return enableLinterConfigs(lcs, func(lc *linter.Config) bool {
 		return enabledByDefault[lc.Name()]
