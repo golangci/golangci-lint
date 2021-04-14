@@ -38,6 +38,6 @@ jobs:
           base: master
           token: ${{ secrets.GOLANGCI_LINT_TOKEN }}
           branch-suffix: timestamp
-          title: "Update documentation and assets"
+          title: "docs: Update documentation and assets"
           team-reviewers: golangci/team
           delete-branch: true

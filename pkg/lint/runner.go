@@ -3,7 +3,6 @@ package lint
 import (
 	"context"
 	"fmt"
-	"os"
 	"runtime/debug"
 	"strings"
 
@@ -194,24 +193,19 @@ func (r Runner) Run(ctx context.Context, linters []*linter.Config, lintCtx *lint
 	defer sw.Print()
 
 	var issues []result.Issue
-	var runErr error
 	for _, lc := range linters {
 		lc := lc
 		sw.TrackStage(lc.Name(), func() {
 			linterIssues, err := r.runLinterSafe(ctx, lintCtx, lc)
 			if err != nil {
 				r.Log.Warnf("Can't run linter %s: %v", lc.Linter.Name(), err)
-				if os.Getenv("GOLANGCI_COM_RUN") == "" {
-					// Don't stop all linters on one linter failure for golangci.com.
-					runErr = err
-				}
 				return
 			}
 			issues = append(issues, linterIssues...)
 		})
 	}
 
-	return r.processLintResults(issues), runErr
+	return r.processLintResults(issues), nil
 }
 
 func (r *Runner) processIssues(issues []result.Issue, sw *timeutils.Stopwatch, statPerProcessor map[string]processorStat) []result.Issue {

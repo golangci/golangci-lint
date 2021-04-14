@@ -8,7 +8,6 @@ daysUntilClose: 30
 exemptLabels:
   - pinned
   - security
-  - bug
   - blocked
   - protected
   - triaged
