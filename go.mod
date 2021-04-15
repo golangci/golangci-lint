@@ -42,6 +42,7 @@ require (
 	github.com/kulti/thelper v0.4.0
 	github.com/kunwardeep/paralleltest v1.0.2
 	github.com/kyoh86/exportloopref v0.1.8
+	github.com/kyoh86/looppointer v0.1.7
 	github.com/ldez/gomoddirectives v0.2.1
 	github.com/ldez/tagliatelle v0.2.0
 	github.com/maratori/testpackage v1.0.1
