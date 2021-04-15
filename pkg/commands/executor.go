@@ -30,6 +30,11 @@ import (
 	"github.com/golangci/golangci-lint/pkg/timeutils"
 )
 
+var (
+	stderr = io.Writer(os.Stderr)
+	stdout = io.Writer(os.Stdout)
+)
+
 type Executor struct {
 	rootCmd    *cobra.Command
 	runCmd     *cobra.Command
@@ -92,7 +97,7 @@ func NewExecutor(version, commit, date string) *Executor {
 
 	// init of commands must be done before config file reading because
 	// init sets config with the default values of flags
-	e.initRoot()
+	e.initRoot(stderr, stdout)
 	e.initRun()
 	e.initHelp()
 	e.initLinters()

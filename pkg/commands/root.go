@@ -2,6 +2,7 @@ package commands
 
 import (
 	"fmt"
+	"io"
 	"os"
 	"runtime"
 	"runtime/pprof"
@@ -114,7 +115,7 @@ func getDefaultConcurrency() int {
 	return runtime.NumCPU()
 }
 
-func (e *Executor) initRoot() {
+func (e *Executor) initRoot(stderr, stdout io.Writer) {
 	rootCmd := &cobra.Command{
 		Use:   "golangci-lint",
 		Short: "golangci-lint is a smart linters runner.",
@@ -130,6 +131,8 @@ func (e *Executor) initRoot() {
 		PersistentPreRun:  e.persistentPreRun,
 		PersistentPostRun: e.persistentPostRun,
 	}
+	rootCmd.SetErr(stderr)
+	rootCmd.SetOut(stdout)
 
 	initRootFlagSet(rootCmd.PersistentFlags(), e.cfg, e.needVersionOption())
 	e.rootCmd = rootCmd
