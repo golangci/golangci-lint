@@ -313,8 +313,15 @@ func fixSlicesFlags(fs *pflag.FlagSet) {
 			return
 		}
 
+		var safe []string
+		for _, v := range s {
+			// add quotes to escape comma because spf13/pflag use a CSV parser:
+			// https://github.com/spf13/pflag/blob/85dd5c8bc61cfa382fecd072378089d4e856579d/string_slice.go#L43
+			safe = append(safe, `"`+v+`"`)
+		}
+
 		// calling Set sets Changed to true: next Set calls will append, not overwrite
-		_ = f.Value.Set(strings.Join(s, ","))
+		_ = f.Value.Set(strings.Join(safe, ","))
 	})
 }
 
