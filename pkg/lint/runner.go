@@ -237,9 +237,9 @@ func (r *Runner) processIssues(issues []result.Issue, sw *timeutils.Stopwatch, s
 
 func getExcludeProcessor(cfg *config.Issues) processors.Processor {
 	var excludeTotalPattern string
-	excludeGlobalPatterns := cfg.ExcludePatterns
-	if len(excludeGlobalPatterns) != 0 {
-		excludeTotalPattern = fmt.Sprintf("(%s)", strings.Join(excludeGlobalPatterns, "|"))
+
+	if len(cfg.ExcludePatterns) != 0 {
+		excludeTotalPattern = fmt.Sprintf("(%s)", strings.Join(cfg.ExcludePatterns, "|"))
 	}
 
 	var excludeProcessor processors.Processor
