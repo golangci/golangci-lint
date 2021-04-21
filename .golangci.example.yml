@@ -518,26 +518,19 @@ linters-settings:
     multi-func: false # Enforces newlines (or comments) after every multi-line function signature
 
   wsl:
-    # If true append is only allowed to be cuddled if appending value is
-    # matching variables, fields or types on line above. Default is true.
-    strict-append: true
-    # Allow calls and assignments to be cuddled as long as the lines have any
-    # matching variables, fields or types. Default is true.
-    allow-assign-and-call: true
-    # Allow assignments to be cuddled with anything. Default is false.
+    # See https://github.com/bombsimon/wsl/blob/master/doc/configuration.md for
+    # documentation of available settings. These are the defaults for
+    # `golangci-lint`.
     allow-assign-and-anything: false
-    # Allow multiline assignments to be cuddled. Default is true.
-    allow-multiline-assign: true
-    # Allow declarations (var) to be cuddled.
+    allow-assign-and-call: true
     allow-cuddle-declarations: false
-    # Allow trailing comments in ending of blocks
-    allow-trailing-comment: false
-    # Force newlines in end of case at this limit (0 = never).
-    force-case-trailing-whitespace: 0
-    # Force cuddling of err checks with err var assignment
-    force-err-cuddling: false
-    # Allow leading comments to be separated with empty lines
+    allow-multiline-assign: true
     allow-separated-leading-comment: false
+    allow-trailing-comment: false
+    force-case-trailing-whitespace: 0
+    force-err-cuddling: false
+    force-short-decl-cuddling: false
+    strict-append: true
 
   # The custom section can be used to define linter plugins to be loaded at runtime. See README doc
   #  for more info.

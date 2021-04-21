@@ -46,6 +46,7 @@ func NewWSL() *goanalysis.Linter {
 					AllowSeparatedLeadingComment:     linterCfg.AllowSeparatedLeadingComment,
 					ForceCuddleErrCheckAndAssign:     linterCfg.ForceCuddleErrCheckAndAssign,
 					ForceCaseTrailingWhitespaceLimit: linterCfg.ForceCaseTrailingWhitespaceLimit,
+					ForceExclusiveShortDeclarations:  linterCfg.ForceExclusiveShortDeclarations,
 					AllowCuddleWithCalls:             []string{"Lock", "RLock"},
 					AllowCuddleWithRHS:               []string{"Unlock", "RUnlock"},
 					ErrorVariableNames:               []string{"err"},
