@@ -360,6 +360,7 @@ type WSLSettings struct {
 	AllowTrailingComment             bool `mapstructure:"allow-trailing-comment"`
 	AllowSeparatedLeadingComment     bool `mapstructure:"allow-separated-leading-comment"`
 	ForceCuddleErrCheckAndAssign     bool `mapstructure:"force-err-cuddling"`
+	ForceExclusiveShortDeclarations  bool `mapstructure:"force-short-decl-cuddling"`
 	ForceCaseTrailingWhitespaceLimit int  `mapstructure:"force-case-trailing-whitespace"`
 }
 
@@ -523,6 +524,7 @@ var defaultLintersSettings = LintersSettings{
 		AllowTrailingComment:             false,
 		AllowSeparatedLeadingComment:     false,
 		ForceCuddleErrCheckAndAssign:     false,
+		ForceExclusiveShortDeclarations:  false,
 		ForceCaseTrailingWhitespaceLimit: 0,
 	},
 	NoLintLint: NoLintLintSettings{

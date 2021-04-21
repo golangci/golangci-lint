@@ -11,7 +11,7 @@ require (
 	github.com/ashanbrown/forbidigo v1.1.0
 	github.com/ashanbrown/makezero v0.0.0-20210308000810-4155955488a0
 	github.com/bkielbasa/cyclop v1.2.0
-	github.com/bombsimon/wsl/v3 v3.2.0
+	github.com/bombsimon/wsl/v3 v3.3.0
 	github.com/charithe/durationcheck v0.0.6
 	github.com/daixiang0/gci v0.2.8
 	github.com/denis-tingajkin/go-header v0.4.2
