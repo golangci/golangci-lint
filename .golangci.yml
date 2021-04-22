@@ -127,9 +127,6 @@ issues:
     - path: _test\.go
       linters:
         - gomnd
-    # FIXME must replaced by `//nolint:gocritic // Build a temporary list of analyzers.` after the release of v1.40.0
-    - path: pkg/golinters/govet_test.go
-      text: 'appendAssign: append result not assigned to the same slice'
 
 run:
   skip-dirs:
