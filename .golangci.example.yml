@@ -334,6 +334,18 @@ linters-settings:
         #     reason: "testing if blocked version constraint works."  # Reason why the version constraint exists. (Optional)
       local_replace_directives: false                                 # Set to true to raise lint issues for packages that are loaded from a local path via replace directive
 
+  gosec:
+    # To select a subset of rules to run.
+    # Available rules: https://github.com/securego/gosec#available-rules
+    includes:
+      - G401
+      - G501
+      - G204
+    # To specify a set of rules to explicitly exclude.
+    # Available rules: https://github.com/securego/gosec#available-rules
+    excludes:
+      - G204
+
   govet:
     # report about shadowed variables
     check-shadowing: true

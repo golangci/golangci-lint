@@ -103,6 +103,7 @@ type LintersSettings struct {
 	Gomnd            GoMndSettings
 	GoModDirectives  GoModDirectivesSettings
 	Gomodguard       GoModGuardSettings
+	Gosec            GoSecSettings
 	Govet            GovetSettings
 	Ifshort          IfshortSettings
 	ImportAs         ImportAsSettings
@@ -266,6 +267,11 @@ type GoModGuardSettings struct {
 		} `mapstructure:"versions"`
 		LocalReplaceDirectives bool `mapstructure:"local_replace_directives"`
 	} `mapstructure:"blocked"`
+}
+
+type GoSecSettings struct {
+	Includes []string
+	Excludes []string
 }
 
 type GovetSettings struct {

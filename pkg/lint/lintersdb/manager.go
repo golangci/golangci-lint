@@ -112,6 +112,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 	var importAsCfg *config.ImportAsSettings
 	var goModDirectivesCfg *config.GoModDirectivesSettings
 	var tagliatelleCfg *config.TagliatelleSettings
+	var gosecCfg *config.GoSecSettings
 
 	if m.cfg != nil {
 		govetCfg = &m.cfg.LintersSettings.Govet
@@ -127,6 +128,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		importAsCfg = &m.cfg.LintersSettings.ImportAs
 		goModDirectivesCfg = &m.cfg.LintersSettings.GoModDirectives
 		tagliatelleCfg = &m.cfg.LintersSettings.Tagliatelle
+		gosecCfg = &m.cfg.LintersSettings.Gosec
 	}
 
 	const megacheckName = "megacheck"
@@ -190,7 +192,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/dominikh/go-tools/tree/master/stylecheck"),
-		linter.NewConfig(golinters.NewGosec()).
+		linter.NewConfig(golinters.NewGosec(gosecCfg)).
 			WithSince("v1.0.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetBugs).
