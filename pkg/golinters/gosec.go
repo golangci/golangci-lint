@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"strconv"
+	"strings"
 	"sync"
 
 	"github.com/securego/gosec/v2"
@@ -30,6 +31,12 @@ func NewGosec(settings *config.GoSecSettings) *goanalysis.Linter {
 	var filters []rules.RuleFilter
 	if settings != nil {
 		filters = gosecRuleFilters(settings.Includes, settings.Excludes)
+
+		for k, v := range settings.Config {
+			// Uses ToUpper because the parsing of the map's key change the key to lowercase.
+			// The value is not impacted by that: the case is respected.
+			gasConfig.Set(strings.ToUpper(k), v)
+		}
 	}
 
 	ruleDefinitions := rules.Generate(filters...)
