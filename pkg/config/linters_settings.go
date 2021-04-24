@@ -78,88 +78,25 @@ var defaultLintersSettings = LintersSettings{
 }
 
 type LintersSettings struct {
-	Gci struct {
-		LocalPrefixes string `mapstructure:"local-prefixes"`
-	}
-	Govet  GovetSettings
-	Golint struct {
-		MinConfidence float64 `mapstructure:"min-confidence"`
-	}
-	Gofmt struct {
-		Simplify bool
-	}
-	Goimports struct {
-		LocalPrefixes string `mapstructure:"local-prefixes"`
-	}
-	Gocyclo struct {
-		MinComplexity int `mapstructure:"min-complexity"`
-	}
-	Varcheck struct {
-		CheckExportedFields bool `mapstructure:"exported-fields"`
-	}
-	Structcheck struct {
-		CheckExportedFields bool `mapstructure:"exported-fields"`
-	}
-	Maligned struct {
-		SuggestNewOrder bool `mapstructure:"suggest-new"`
-	}
-	Dupl struct {
-		Threshold int
-	}
-	Goconst struct {
-		MatchWithConstants  bool `mapstructure:"match-constant"`
-		MinStringLen        int  `mapstructure:"min-len"`
-		MinOccurrencesCount int  `mapstructure:"min-occurrences"`
-		ParseNumbers        bool `mapstructure:"numbers"`
-		NumberMin           int  `mapstructure:"min"`
-		NumberMax           int  `mapstructure:"max"`
-		IgnoreCalls         bool `mapstructure:"ignore-calls"`
-	}
-	Gomnd struct {
-		Settings map[string]map[string]interface{}
-	}
-	Depguard struct {
-		ListType                 string `mapstructure:"list-type"`
-		Packages                 []string
-		IncludeGoRoot            bool              `mapstructure:"include-go-root"`
-		PackagesWithErrorMessage map[string]string `mapstructure:"packages-with-error-message"`
-	}
-	Misspell struct {
-		Locale      string
-		IgnoreWords []string `mapstructure:"ignore-words"`
-	}
-	Unused struct {
-		CheckExported bool `mapstructure:"check-exported"`
-	}
-	Funlen struct {
-		Lines      int
-		Statements int
-	}
-	Whitespace struct {
-		MultiIf   bool `mapstructure:"multi-if"`
-		MultiFunc bool `mapstructure:"multi-func"`
-	}
-	RowsErrCheck struct {
-		Packages []string
-	}
-	Gomodguard struct {
-		Allowed struct {
-			Modules []string `mapstructure:"modules"`
-			Domains []string `mapstructure:"domains"`
-		} `mapstructure:"allowed"`
-		Blocked struct {
-			Modules []map[string]struct {
-				Recommendations []string `mapstructure:"recommendations"`
-				Reason          string   `mapstructure:"reason"`
-			} `mapstructure:"modules"`
-			Versions []map[string]struct {
-				Version string `mapstructure:"version"`
-				Reason  string `mapstructure:"reason"`
-			} `mapstructure:"versions"`
-			LocalReplaceDirectives bool `mapstructure:"local_replace_directives"`
-		} `mapstructure:"blocked"`
-	}
-
+	Gci              GciSettings
+	Govet            GovetSettings
+	Golint           GoLintSettings
+	Gofmt            GoFmtSettings
+	Goimports        GoImportsSettings
+	Gocyclo          GoCycloSettings
+	Varcheck         VarCheckSettings
+	Structcheck      StructCheckSettings
+	Maligned         MalignedSettings
+	Dupl             DuplSettings
+	Goconst          GoConstSettings
+	Gomnd            GoMndSettings
+	Depguard         DepGuardSettings
+	Misspell         MisspellSettings
+	Unused           UnusedSettings
+	Funlen           FunlenSettings
+	Whitespace       WhitespaceSettings
+	RowsErrCheck     RowsErrCheckSettings
+	Gomodguard       GoModGuardSettings
 	WSL              WSLSettings
 	Lll              LllSettings
 	Unparam          UnparamSettings
@@ -192,6 +129,104 @@ type LintersSettings struct {
 	Tagliatelle      TagliatelleSettings
 
 	Custom map[string]CustomLinterSettings
+}
+
+type GciSettings struct {
+	LocalPrefixes string `mapstructure:"local-prefixes"`
+}
+
+type GoLintSettings struct {
+	MinConfidence float64 `mapstructure:"min-confidence"`
+}
+
+type GoFmtSettings struct {
+	Simplify bool
+}
+
+type GoImportsSettings struct {
+	LocalPrefixes string `mapstructure:"local-prefixes"`
+}
+
+type GoCycloSettings struct {
+	MinComplexity int `mapstructure:"min-complexity"`
+}
+
+type VarCheckSettings struct {
+	CheckExportedFields bool `mapstructure:"exported-fields"`
+}
+
+type StructCheckSettings struct {
+	CheckExportedFields bool `mapstructure:"exported-fields"`
+}
+
+type MalignedSettings struct {
+	SuggestNewOrder bool `mapstructure:"suggest-new"`
+}
+
+type DuplSettings struct {
+	Threshold int
+}
+
+type GoConstSettings struct {
+	MatchWithConstants  bool `mapstructure:"match-constant"`
+	MinStringLen        int  `mapstructure:"min-len"`
+	MinOccurrencesCount int  `mapstructure:"min-occurrences"`
+	ParseNumbers        bool `mapstructure:"numbers"`
+	NumberMin           int  `mapstructure:"min"`
+	NumberMax           int  `mapstructure:"max"`
+	IgnoreCalls         bool `mapstructure:"ignore-calls"`
+}
+
+type GoMndSettings struct {
+	Settings map[string]map[string]interface{}
+}
+
+type DepGuardSettings struct {
+	ListType                 string `mapstructure:"list-type"`
+	Packages                 []string
+	IncludeGoRoot            bool              `mapstructure:"include-go-root"`
+	PackagesWithErrorMessage map[string]string `mapstructure:"packages-with-error-message"`
+}
+
+type MisspellSettings struct {
+	Locale      string
+	IgnoreWords []string `mapstructure:"ignore-words"`
+}
+
+type UnusedSettings struct {
+	CheckExported bool `mapstructure:"check-exported"`
+}
+
+type FunlenSettings struct {
+	Lines      int
+	Statements int
+}
+
+type WhitespaceSettings struct {
+	MultiIf   bool `mapstructure:"multi-if"`
+	MultiFunc bool `mapstructure:"multi-func"`
+}
+
+type RowsErrCheckSettings struct {
+	Packages []string
+}
+
+type GoModGuardSettings struct {
+	Allowed struct {
+		Modules []string `mapstructure:"modules"`
+		Domains []string `mapstructure:"domains"`
+	} `mapstructure:"allowed"`
+	Blocked struct {
+		Modules []map[string]struct {
+			Recommendations []string `mapstructure:"recommendations"`
+			Reason          string   `mapstructure:"reason"`
+		} `mapstructure:"modules"`
+		Versions []map[string]struct {
+			Version string `mapstructure:"version"`
+			Reason  string `mapstructure:"reason"`
+		} `mapstructure:"versions"`
+		LocalReplaceDirectives bool `mapstructure:"local_replace_directives"`
+	} `mapstructure:"blocked"`
 }
 
 type GoHeaderSettings struct {
