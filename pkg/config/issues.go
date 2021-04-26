@@ -77,6 +77,18 @@ var DefaultExcludePatterns = []ExcludePattern{
 		Linter: "stylecheck",
 		Why:    "Annoying issue about not having a comment. The rare codebase has such comments",
 	},
+	{
+		ID:      "EXC0012",
+		Pattern: "exported (method|function|type|const) (.+) should have comment or be unexported",
+		Linter:  "revive",
+		Why:     "Annoying issue about not having a comment. The rare codebase has such comments",
+	},
+	{
+		ID:      "EXC0013",
+		Pattern: `package comment should be of the form "Package (.+) ..."`,
+		Linter:  "revive",
+		Why:     "Annoying issue about not having a comment. The rare codebase has such comments",
+	},
 }
 
 type Issues struct {
