@@ -21,7 +21,8 @@ type ignoredRange struct {
 	linters                []string
 	matchedIssueFromLinter map[string]bool
 	result.Range
-	col int
+	col           int
+	originalRange *ignoredRange // pre-expanded range (used to match nolintlint issues)
 }
 
 func (i *ignoredRange) doesMatch(issue *result.Issue) bool {
@@ -29,23 +30,27 @@ func (i *ignoredRange) doesMatch(issue *result.Issue) bool {
 		return false
 	}
 
+	// only allow selective nolinting of nolintlint
+	nolintFoundForLinter := len(i.linters) == 0 && issue.FromLinter != golinters.NolintlintName
+
+	for _, linterName := range i.linters {
+		if linterName == issue.FromLinter {
+			nolintFoundForLinter = true
+			break
+		}
+	}
+
+	if nolintFoundForLinter {
+		return true
+	}
+
 	// handle possible unused nolint directives
 	// nolintlint generates potential issues for every nolint directive and they are filtered out here
-	if issue.ExpectNoLint {
+	if  issue.FromLinter == golinters.NolintlintName && issue.ExpectNoLint {
 		if issue.ExpectedNoLintLinter != "" {
 			return i.matchedIssueFromLinter[issue.ExpectedNoLintLinter]
 		}
 		return len(i.matchedIssueFromLinter) > 0
-	}
-
-	if len(i.linters) == 0 {
-		return true
-	}
-
-	for _, linterName := range i.linters {
-		if linterName == issue.FromLinter {
-			return true
-		}
 	}
 
 	return false
@@ -141,19 +146,14 @@ func (p *Nolint) buildIgnoredRangesForFile(f *ast.File, fset *token.FileSet, fil
 
 func (p *Nolint) shouldPassIssue(i *result.Issue) (bool, error) {
 	nolintDebugf("got issue: %v", *i)
-	if i.FromLinter == golinters.NolintlintName {
-		// always pass nolintlint issues except ones trying find unused nolint directives
-		if !i.ExpectNoLint {
-			return true, nil
+
+	if i.FromLinter == golinters.NolintlintName && i.ExpectNoLint && i.ExpectedNoLintLinter != "" {
+		// don't expect disabled linters to cover their nolint statements
+		nolintDebugf("enabled linters: %v", p.enabledLinters)
+		if p.enabledLinters[i.ExpectedNoLintLinter] == nil {
+			return false, nil
 		}
-		if i.ExpectedNoLintLinter != "" {
-			// don't expect disabled linters to cover their nolint statements
-			nolintDebugf("enabled linters: %v", p.enabledLinters)
-			if p.enabledLinters[i.ExpectedNoLintLinter] == nil {
-				return false, nil
-			}
-			nolintDebugf("checking that lint issue was used for %s: %v", i.ExpectedNoLintLinter, i)
-		}
+		nolintDebugf("checking that lint issue was used for %s: %v", i.ExpectedNoLintLinter, i)
 	}
 
 	fd, err := p.getOrCreateFileData(i)
@@ -163,7 +163,11 @@ func (p *Nolint) shouldPassIssue(i *result.Issue) (bool, error) {
 
 	for _, ir := range fd.ignoredRanges {
 		if ir.doesMatch(i) {
+			nolintDebugf("found ignored range for issue %v: %v", i, ir)
 			ir.matchedIssueFromLinter[i.FromLinter] = true
+			if ir.originalRange != nil {
+				ir.originalRange.matchedIssueFromLinter[i.FromLinter] = true
+			}
 			return false, nil
 		}
 	}
@@ -199,9 +203,14 @@ func (e *rangeExpander) Visit(node ast.Node) ast.Visitor {
 	}
 
 	expandedRange := *foundRange
+	// store the original unexpanded range for matching nolintlint issues
+	if expandedRange.originalRange == nil {
+		expandedRange.originalRange = foundRange
+	}
 	if expandedRange.To < nodeEndLine {
 		expandedRange.To = nodeEndLine
 	}
+
 	nolintDebugf("found range is %v for node %#v [%d;%d], expanded range is %v",
 		*foundRange, node, nodeStartLine, nodeEndLine, expandedRange)
 	e.expandedRanges = append(e.expandedRanges, expandedRange)

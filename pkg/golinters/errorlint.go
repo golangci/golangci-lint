@@ -19,7 +19,7 @@ func NewErrorLint(cfg *config.ErrorLintSettings) *goanalysis.Linter {
 	return goanalysis.NewLinter(
 		"errorlint",
 		"go-errorlint is a source code linter for Go software "+
-			"that can be used to find code that will cause problems"+
+			"that can be used to find code that will cause problems "+
 			"with the error wrapping scheme introduced in Go 1.13.",
 		[]*analysis.Analyzer{a},
 		cfgMap,

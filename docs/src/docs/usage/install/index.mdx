@@ -53,7 +53,14 @@ brew install golangci-lint
 brew upgrade golangci-lint
 ```
 
-Note: previously we use [tap](https://github.com/golangci/homebrew-tap), but it is obsoleted. We recommend using official formula instead of an obsolete tap.
+Note: Previously we used a [homebrew tap](https://github.com/golangci/homebrew-tap). We recommend using official formula instead of the tap, but sometimes the most recent release 
+isn't immediately available via homebrew core due to manual updates that need to occur from homebrew core maintainers. In this case, the tap formula, which is updated automatically,
+can be used to install the latest version of `golangci-lint`:
+
+```sh
+brew tap golangci/tap
+brew install golangci/tap/golangci-lint
+```
 
 It can also be installed through [macports](https://www.macports.org/)
 The macports installation mode is community driven, and not officially maintained by golangci team.

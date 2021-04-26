@@ -94,7 +94,9 @@ func (r *LintRunner) Run(args ...string) *RunResult {
 func (r *LintRunner) RunCommand(command string, args ...string) *RunResult {
 	r.Install()
 
-	runArgs := append([]string{command}, args...)
+	runArgs := append([]string{command}, "--internal-cmd-test")
+	runArgs = append(runArgs, args...)
+
 	defer func(startedAt time.Time) {
 		r.log.Infof("ran [../golangci-lint %s] in %s", strings.Join(runArgs, " "), time.Since(startedAt))
 	}(time.Now())

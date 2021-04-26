@@ -57,7 +57,7 @@ func (f Fixer) Process(issues []result.Issue) []result.Issue {
 	for file, issuesToFix := range issuesToFixPerFile {
 		var err error
 		f.sw.TrackStage("all", func() {
-			err = f.fixIssuesInFile(file, issuesToFix) //nolint:scopelint
+			err = f.fixIssuesInFile(file, issuesToFix)
 		})
 		if err != nil {
 			f.log.Errorf("Failed to fix issues in file %s: %s", file, err)

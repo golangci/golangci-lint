@@ -72,6 +72,7 @@ func NewNoLintLint() *goanalysis.Linter {
 					Pos:                  i.Position(),
 					ExpectNoLint:         expectNoLint,
 					ExpectedNoLintLinter: expectedNolintLinter,
+					Replacement:          i.Replacement(),
 				}
 				res = append(res, goanalysis.NewIssue(issue, pass))
 			}

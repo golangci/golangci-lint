@@ -104,7 +104,7 @@ func (cl *ContextLoader) makeBuildFlags() ([]string, error) {
 	mod := cl.cfg.Run.ModulesDownloadMode
 	if mod != "" {
 		// go help modules
-		allowedMods := []string{"release", "readonly", "vendor"}
+		allowedMods := []string{"mod", "readonly", "vendor"}
 		var ok bool
 		for _, am := range allowedMods {
 			if am == mod {

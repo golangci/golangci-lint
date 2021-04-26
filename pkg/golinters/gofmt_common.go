@@ -176,7 +176,7 @@ func (p *hunkChangesParser) parse(h *diffpkg.Hunk) []Change {
 	for i := 0; i < len(p.lines); {
 		line := p.lines[i]
 		if line.typ == diffLineOriginal {
-			p.handleOriginalLine(line, &i) //nolint:scopelint
+			p.handleOriginalLine(line, &i)
 			continue
 		}
 

@@ -3,11 +3,11 @@ package lint
 import (
 	"context"
 	"fmt"
-	"os"
 	"runtime/debug"
 	"strings"
 
 	"github.com/pkg/errors"
+	gopackages "golang.org/x/tools/go/packages"
 
 	"github.com/anduril/golangci-lint/internal/errorutil"
 	"github.com/anduril/golangci-lint/pkg/config"
@@ -20,8 +20,6 @@ import (
 	"github.com/anduril/golangci-lint/pkg/result"
 	"github.com/anduril/golangci-lint/pkg/result/processors"
 	"github.com/anduril/golangci-lint/pkg/timeutils"
-
-	gopackages "golang.org/x/tools/go/packages"
 )
 
 type Runner struct {
@@ -48,6 +46,22 @@ func NewRunner(cfg *config.Config, log logutils.Log, goenv *goutil.Env, es *lint
 	enabledLinters, err := es.GetEnabledLintersMap()
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to get enabled linters")
+	}
+
+	// print deprecated messages
+	if !cfg.InternalCmdTest {
+		for name, lc := range enabledLinters {
+			if !lc.IsDeprecated() {
+				continue
+			}
+
+			var extra string
+			if lc.Deprecation.Replacement != "" {
+				extra = fmt.Sprintf(" Replaced by %s.", lc.Deprecation.Replacement)
+			}
+
+			log.Warnf("The linter '%s' is deprecated (since %s) due to: %s %s", name, lc.Deprecation.Since, lc.Deprecation.Message, extra)
+		}
 	}
 
 	return &Runner{
@@ -91,6 +105,8 @@ func (r *Runner) runLinterSafe(ctx context.Context, lintCtx *linter.Context,
 	defer func() {
 		if panicData := recover(); panicData != nil {
 			if pe, ok := panicData.(*errorutil.PanicError); ok {
+				err = fmt.Errorf("%s: %w", lc.Name(), pe)
+
 				// Don't print stacktrace from goroutines twice
 				lintCtx.Log.Warnf("Panic: %s: %s", pe, pe.Stack())
 			} else {
@@ -177,24 +193,19 @@ func (r Runner) Run(ctx context.Context, linters []*linter.Config, lintCtx *lint
 	defer sw.Print()
 
 	var issues []result.Issue
-	var runErr error
 	for _, lc := range linters {
 		lc := lc
 		sw.TrackStage(lc.Name(), func() {
 			linterIssues, err := r.runLinterSafe(ctx, lintCtx, lc)
 			if err != nil {
-				r.Log.Warnf("Can't run linter %s: %s", lc.Linter.Name(), err)
-				if os.Getenv("GOLANGCI_COM_RUN") == "" {
-					// Don't stop all linters on one linter failure for golangci.com.
-					runErr = err
-				}
+				r.Log.Warnf("Can't run linter %s: %v", lc.Linter.Name(), err)
 				return
 			}
 			issues = append(issues, linterIssues...)
 		})
 	}
 
-	return r.processLintResults(issues), runErr
+	return r.processLintResults(issues), nil
 }
 
 func (r *Runner) processIssues(issues []result.Issue, sw *timeutils.Stopwatch, statPerProcessor map[string]processorStat) []result.Issue {
@@ -226,9 +237,9 @@ func (r *Runner) processIssues(issues []result.Issue, sw *timeutils.Stopwatch, s
 
 func getExcludeProcessor(cfg *config.Issues) processors.Processor {
 	var excludeTotalPattern string
-	excludeGlobalPatterns := cfg.ExcludePatterns
-	if len(excludeGlobalPatterns) != 0 {
-		excludeTotalPattern = fmt.Sprintf("(%s)", strings.Join(excludeGlobalPatterns, "|"))
+
+	if len(cfg.ExcludePatterns) != 0 {
+		excludeTotalPattern = fmt.Sprintf("(%s)", strings.Join(cfg.ExcludePatterns, "|"))
 	}
 
 	var excludeProcessor processors.Processor

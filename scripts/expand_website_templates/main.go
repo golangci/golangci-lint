@@ -55,7 +55,9 @@ func updateStateFile(replacements map[string]string) error {
 	}
 
 	h := sha256.New()
-	h.Write(replBytes) //nolint:errcheck
+	if _, err := h.Write(replBytes); err != nil {
+		return err
+	}
 
 	var contentBuf bytes.Buffer
 	contentBuf.WriteString("This file stores hash of website templates to trigger " +
@@ -224,19 +226,66 @@ func getLintersListMarkdown(enabled bool) string {
 	sort.Slice(neededLcs, func(i, j int) bool {
 		return neededLcs[i].Name() < neededLcs[j].Name()
 	})
-	var lines []string
+
+	lines := []string{
+		"|Name|Description|Presets|AutoFix|Since|",
+		"|---|---|---|---|---|---|",
+	}
+
 	for _, lc := range neededLcs {
-		var link string
-		if lc.OriginalURL != "" {
-			link = fmt.Sprintf("[%s](%s)", lc.Name(), lc.OriginalURL)
-		} else {
-			link = lc.Name()
-		}
-		line := fmt.Sprintf("- %s - %s", link, lc.Linter.Desc())
+		line := fmt.Sprintf("|%s|%s|%s|%v|%s|",
+			getName(lc),
+			getDesc(lc),
+			strings.Join(lc.InPresets, ", "),
+			check(lc.CanAutoFix, "Auto fix supported"),
+			lc.Since,
+		)
 		lines = append(lines, line)
 	}
 
 	return strings.Join(lines, "\n")
+}
+
+func getName(lc *linter.Config) string {
+	name := lc.Name()
+
+	if lc.OriginalURL != "" {
+		name = fmt.Sprintf("[%s](%s)", lc.Name(), lc.OriginalURL)
+	}
+
+	if !lc.IsDeprecated() {
+		return name
+	}
+
+	title := "deprecated"
+	if lc.Deprecation.Replacement != "" {
+		title += fmt.Sprintf(" since %s", lc.Deprecation.Since)
+	}
+
+	return name + " " + span(title, "⚠")
+}
+
+func getDesc(lc *linter.Config) string {
+	desc := lc.Linter.Desc()
+	if lc.IsDeprecated() {
+		desc = lc.Deprecation.Message
+		if lc.Deprecation.Replacement != "" {
+			desc += fmt.Sprintf(" Replaced by %s.", lc.Deprecation.Replacement)
+		}
+	}
+
+	return strings.ReplaceAll(desc, "\n", "<br/>")
+}
+
+func check(b bool, title string) string {
+	if b {
+		return span(title, "✔")
+	}
+	return ""
+}
+
+func span(title, icon string) string {
+	return fmt.Sprintf(`<span title="%s">%s</span>`, title, icon)
 }
 
 func getThanksList() string {

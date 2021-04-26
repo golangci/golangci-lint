@@ -50,7 +50,11 @@ func NewGoHeader() *goanalysis.Linter {
 			a := goheader.New(goheader.WithTemplate(template), goheader.WithValues(values))
 			var res []goanalysis.Issue
 			for _, file := range pass.Files {
-				i := a.Analyze(file)
+				path := pass.Fset.Position(file.Pos()).Filename
+				i := a.Analyze(&goheader.Target{
+					File: file,
+					Path: path,
+				})
 				if i == nil {
 					continue
 				}
@@ -58,7 +62,7 @@ func NewGoHeader() *goanalysis.Linter {
 					Pos: token.Position{
 						Line:     i.Location().Line + 1,
 						Column:   i.Location().Position,
-						Filename: pass.Fset.Position(file.Pos()).Filename,
+						Filename: path,
 					},
 					Text:       i.Message(),
 					FromLinter: goHeaderName,

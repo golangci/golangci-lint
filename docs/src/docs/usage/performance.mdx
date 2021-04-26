@@ -21,8 +21,9 @@ Less `GOGC` values trigger garbage collection more frequently and golangci-lint 
 ## Why `golangci-lint` is so fast
 
 1. Work sharing
-   The key difference with gometalinter is that golangci-lint shares work between specific linters (golint, govet, ...).
-   We don't fork to call specific linter but use its API.
+
+   During operation, `golangci-lint` shares work between specific linters (like `golint`, `govet`, etc.).
+   We don't fork to call a specific linter, but instead use its API.
    For small and medium projects 50-90% of work between linters can be reused.
 
    - load `[]*packages.Package` by `go/packages` once

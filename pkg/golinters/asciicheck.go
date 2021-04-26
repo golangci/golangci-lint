@@ -15,5 +15,5 @@ func NewAsciicheck() *goanalysis.Linter {
 			asciicheck.NewAnalyzer(),
 		},
 		nil,
-	)
+	).WithLoadMode(goanalysis.LoadModeSyntax)
 }

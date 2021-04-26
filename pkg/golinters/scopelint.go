@@ -162,7 +162,6 @@ func (f *Node) Visit(node ast.Node) ast.Visitor {
 
 // The variadic arguments may start with link and category types,
 // and must end with a format string and any arguments.
-// It returns the new Problem.
 //nolint:interfacer
 func (f *Node) errorf(n ast.Node, format string, args ...interface{}) {
 	pos := f.fset.Position(n.Pos())

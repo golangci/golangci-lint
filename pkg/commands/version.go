@@ -2,6 +2,7 @@ package commands
 
 import (
 	"encoding/json"
+	"fmt"
 	"strings"
 
 	"github.com/spf13/cobra"
@@ -35,7 +36,7 @@ func (e *Executor) initVersion() {
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			switch strings.ToLower(e.cfg.Version.Format) {
 			case "short":
-				cmd.Println(e.version)
+				fmt.Println(e.version)
 			case "json":
 				ver := jsonVersion{
 					Version: e.version,
@@ -46,9 +47,9 @@ func (e *Executor) initVersion() {
 				if err != nil {
 					return err
 				}
-				cmd.Println(string(data))
+				fmt.Println(string(data))
 			default:
-				cmd.Printf("golangci-lint has version %s built from %s on %s\n", e.version, e.commit, e.date)
+				fmt.Printf("golangci-lint has version %s built from %s on %s\n", e.version, e.commit, e.date)
 			}
 			return nil
 		},
