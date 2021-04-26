@@ -2,6 +2,7 @@ package golinters
 
 import (
 	"fmt"
+	"strconv"
 
 	"github.com/julz/importas" // nolint: misspell
 	"golang.org/x/tools/go/analysis"
@@ -24,7 +25,12 @@ func NewImportAs(settings *config.ImportAsSettings) *goanalysis.Linter {
 			return
 		}
 
-		for alias, pkg := range *settings {
+		err := analyzer.Flags.Set("no-unaliased", strconv.FormatBool(settings.NoUnaliased))
+		if err != nil {
+			lintCtx.Log.Errorf("failed to parse configuration: %v", err)
+		}
+
+		for alias, pkg := range settings.Alias {
 			err := analyzer.Flags.Set("alias", fmt.Sprintf("%s:%s", pkg, alias))
 			if err != nil {
 				lintCtx.Log.Errorf("failed to parse configuration: %v", err)
