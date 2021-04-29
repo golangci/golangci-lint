@@ -197,6 +197,7 @@ uname_os() {
     cygwin_nt*) os="windows" ;;
     mingw*) os="windows" ;;
     msys_nt*) os="windows" ;;
+    windows_nt*) os="windows" ;; 
   esac
   echo "$os"
 }
