@@ -104,6 +104,7 @@ type LintersSettings struct {
 	GoModDirectives  GoModDirectivesSettings
 	Gomodguard       GoModGuardSettings
 	Gosec            GoSecSettings
+	Gosimple         StaticCheckSettings
 	Govet            GovetSettings
 	Ifshort          IfshortSettings
 	ImportAs         ImportAsSettings
@@ -119,12 +120,14 @@ type LintersSettings struct {
 	Promlinter       PromlinterSettings
 	Revive           ReviveSettings
 	RowsErrCheck     RowsErrCheckSettings
+	Staticcheck      StaticCheckSettings
 	Structcheck      StructCheckSettings
+	Stylecheck       StaticCheckSettings
 	Tagliatelle      TagliatelleSettings
 	Testpackage      TestpackageSettings
 	Thelper          ThelperSettings
 	Unparam          UnparamSettings
-	Unused           UnusedSettings
+	Unused           StaticCheckSettings
 	Varcheck         VarCheckSettings
 	Whitespace       WhitespaceSettings
 	WSL              WSLSettings
@@ -376,6 +379,10 @@ type RowsErrCheckSettings struct {
 	Packages []string
 }
 
+type StaticCheckSettings struct {
+	GoVersion string `mapstructure:"go"`
+}
+
 type StructCheckSettings struct {
 	CheckExportedFields bool `mapstructure:"exported-fields"`
 }
@@ -412,10 +419,6 @@ type ThelperSettings struct {
 type UnparamSettings struct {
 	CheckExported bool `mapstructure:"check-exported"`
 	Algo          string
-}
-
-type UnusedSettings struct {
-	CheckExported bool `mapstructure:"check-exported"`
 }
 
 type VarCheckSettings struct {

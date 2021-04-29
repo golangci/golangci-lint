@@ -3,12 +3,12 @@ package golinters
 import (
 	"honnef.co/go/tools/stylecheck"
 
+	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 )
 
-func NewStylecheck() *goanalysis.Linter {
-	analyzers := analyzersMapToSlice(stylecheck.Analyzers)
-	setAnalyzersGoVersion(analyzers)
+func NewStylecheck(settings *config.StaticCheckSettings) *goanalysis.Linter {
+	analyzers := setupStaticCheckAnalyzers(stylecheck.Analyzers, settings)
 
 	return goanalysis.NewLinter(
 		"stylecheck",
