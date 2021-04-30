@@ -551,6 +551,9 @@ linters-settings:
     multi-func: false # Enforces newlines (or comments) after every multi-line function signature
 
   wrapcheck:
+    # See https://github.com/tomarrell/wrapcheck#configuration for documentation
+    # about available settings. The set of signatures below is considered the
+    # default set if no sigs are provided.
     ignoreSigs:
       - .Errorf(
       - errors.New(
