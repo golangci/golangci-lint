@@ -494,6 +494,10 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetBugs).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/anduril/golangci-lint"),
+		linter.NewConfig(golinters.NewRuntimeFormat()).
+			WithPresets(linter.PresetBugs).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/anduril/golangci-lint"),
 		linter.NewConfig(golinters.NewTestifyAssertEqualProto()).
 			WithPresets(linter.PresetBugs).
 			WithLoadForGoAnalysis().
