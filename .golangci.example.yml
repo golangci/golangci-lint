@@ -358,6 +358,10 @@ linters-settings:
         per_char_threshold: "3.0"
         truncate: "32"
 
+  gosimple:
+    # Select the Go version to target. The default is '1.13'.
+    go: "1.15"
+
   govet:
     # report about shadowed variables
     check-shadowing: true
@@ -488,6 +492,14 @@ linters-settings:
       - name: indent-error-flow
         severity: warning
 
+  staticcheck:
+    # Select the Go version to target. The default is '1.13'.
+    go: "1.15"
+
+  stylecheck:
+    # Select the Go version to target. The default is '1.13'.
+    go: "1.15"
+
   tagliatelle:
     # check the struck tag name case
     case:
@@ -531,11 +543,8 @@ linters-settings:
     check-exported: false
 
   unused:
-    # treat code as a program (not a library) and report unused exported identifiers; default is false.
-    # XXX: if you enable this setting, unused will report a lot of false-positives in text editors:
-    # if it's called for subdir of a project it can't find funcs usages. All text editor integrations
-    # with golangci-lint call it on a directory with the changed file.
-    check-exported: false
+    # Select the Go version to target. The default is '1.13'.
+    go: "1.15"
 
   whitespace:
     multi-if: false   # Enforces newlines (or comments) after every multi-line if statement
@@ -556,8 +565,8 @@ linters-settings:
     force-short-decl-cuddling: false
     strict-append: true
 
-  # The custom section can be used to define linter plugins to be loaded at runtime. See README doc
-  #  for more info.
+  # The custom section can be used to define linter plugins to be loaded at runtime.
+  # See README doc for more info.
   custom:
     # Each custom linter should have a unique name.
      example:

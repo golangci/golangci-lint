@@ -113,6 +113,10 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 	var goModDirectivesCfg *config.GoModDirectivesSettings
 	var tagliatelleCfg *config.TagliatelleSettings
 	var gosecCfg *config.GoSecSettings
+	var gosimpleCfg *config.StaticCheckSettings
+	var staticcheckCfg *config.StaticCheckSettings
+	var stylecheckCfg *config.StaticCheckSettings
+	var unusedCfg *config.StaticCheckSettings
 
 	if m.cfg != nil {
 		govetCfg = &m.cfg.LintersSettings.Govet
@@ -129,6 +133,10 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		goModDirectivesCfg = &m.cfg.LintersSettings.GoModDirectives
 		tagliatelleCfg = &m.cfg.LintersSettings.Tagliatelle
 		gosecCfg = &m.cfg.LintersSettings.Gosec
+		gosimpleCfg = &m.cfg.LintersSettings.Gosimple
+		staticcheckCfg = &m.cfg.LintersSettings.Staticcheck
+		stylecheckCfg = &m.cfg.LintersSettings.Stylecheck
+		unusedCfg = &m.cfg.LintersSettings.Unused
 	}
 
 	const megacheckName = "megacheck"
@@ -166,13 +174,13 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetBugs, linter.PresetSQL).
 			WithURL("https://github.com/jingyugao/rowserrcheck"),
 
-		linter.NewConfig(golinters.NewStaticcheck()).
+		linter.NewConfig(golinters.NewStaticcheck(staticcheckCfg)).
 			WithSince("v1.0.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetBugs, linter.PresetMetaLinter).
 			WithAlternativeNames(megacheckName).
 			WithURL("https://staticcheck.io/"),
-		linter.NewConfig(golinters.NewUnused()).
+		linter.NewConfig(golinters.NewUnused(unusedCfg)).
 			WithSince("v1.20.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetUnused).
@@ -180,14 +188,14 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			ConsiderSlow().
 			WithChangeTypes().
 			WithURL("https://github.com/dominikh/go-tools/tree/master/unused"),
-		linter.NewConfig(golinters.NewGosimple()).
+		linter.NewConfig(golinters.NewGosimple(gosimpleCfg)).
 			WithSince("v1.20.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetStyle).
 			WithAlternativeNames(megacheckName).
 			WithURL("https://github.com/dominikh/go-tools/tree/master/simple"),
 
-		linter.NewConfig(golinters.NewStylecheck()).
+		linter.NewConfig(golinters.NewStylecheck(stylecheckCfg)).
 			WithSince("v1.20.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetStyle).
@@ -499,16 +507,16 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 	}
 
 	enabledByDefault := map[string]bool{
-		golinters.NewGovet(nil).Name():    true,
-		golinters.NewErrcheck().Name():    true,
-		golinters.NewStaticcheck().Name(): true,
-		golinters.NewUnused().Name():      true,
-		golinters.NewGosimple().Name():    true,
-		golinters.NewStructcheck().Name(): true,
-		golinters.NewVarcheck().Name():    true,
-		golinters.NewIneffassign().Name(): true,
-		golinters.NewDeadcode().Name():    true,
-		golinters.NewTypecheck().Name():   true,
+		golinters.NewGovet(nil).Name():                  true,
+		golinters.NewErrcheck().Name():                  true,
+		golinters.NewStaticcheck(staticcheckCfg).Name(): true,
+		golinters.NewUnused(unusedCfg).Name():           true,
+		golinters.NewGosimple(gosimpleCfg).Name():       true,
+		golinters.NewStructcheck().Name():               true,
+		golinters.NewVarcheck().Name():                  true,
+		golinters.NewIneffassign().Name():               true,
+		golinters.NewDeadcode().Name():                  true,
+		golinters.NewTypecheck().Name():                 true,
 	}
 	return enableLinterConfigs(lcs, func(lc *linter.Config) bool {
 		return enabledByDefault[lc.Name()]
