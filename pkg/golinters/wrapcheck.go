@@ -13,7 +13,9 @@ const wrapcheckName = "wrapcheck"
 func NewWrapcheck(cfg *config.WrapcheckSettings) *goanalysis.Linter {
 	c := wrapcheck.NewDefaultConfig()
 	if cfg != nil {
-		c.IgnoreSigs = cfg.IgnoreSigs
+		if len(cfg.IgnoreSigs) != 0 {
+			c.IgnoreSigs = cfg.IgnoreSigs
+		}
 	}
 
 	a := wrapcheck.NewAnalyzer(c)
