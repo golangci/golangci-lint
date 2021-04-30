@@ -117,6 +117,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 	var staticcheckCfg *config.StaticCheckSettings
 	var stylecheckCfg *config.StaticCheckSettings
 	var unusedCfg *config.StaticCheckSettings
+	var wrapcheckCfg *config.WrapcheckSettings
 
 	if m.cfg != nil {
 		govetCfg = &m.cfg.LintersSettings.Govet
@@ -137,6 +138,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		staticcheckCfg = &m.cfg.LintersSettings.Staticcheck
 		stylecheckCfg = &m.cfg.LintersSettings.Stylecheck
 		unusedCfg = &m.cfg.LintersSettings.Unused
+		wrapcheckCfg = &m.cfg.LintersSettings.Wrapcheck
 	}
 
 	const megacheckName = "megacheck"
@@ -411,7 +413,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithSince("v1.30.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/ssgreg/nlreturn"),
-		linter.NewConfig(golinters.NewWrapcheck()).
+		linter.NewConfig(golinters.NewWrapcheck(wrapcheckCfg)).
 			WithSince("v1.32.0").
 			WithPresets(linter.PresetStyle, linter.PresetError).
 			WithLoadForGoAnalysis().

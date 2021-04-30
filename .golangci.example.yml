@@ -550,6 +550,15 @@ linters-settings:
     multi-if: false   # Enforces newlines (or comments) after every multi-line if statement
     multi-func: false # Enforces newlines (or comments) after every multi-line function signature
 
+  wrapcheck:
+    ignoreSigs:
+      - .Errorf(
+      - errors.New(
+      - errors.Unwrap(
+      - .Wrap(
+      - .Wrapf(
+      - .WithMessage(
+
   wsl:
     # See https://github.com/bombsimon/wsl/blob/master/doc/configuration.md for
     # documentation of available settings. These are the defaults for

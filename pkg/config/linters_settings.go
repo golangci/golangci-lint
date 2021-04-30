@@ -130,6 +130,7 @@ type LintersSettings struct {
 	Unused           StaticCheckSettings
 	Varcheck         VarCheckSettings
 	Whitespace       WhitespaceSettings
+	Wrapcheck        WrapcheckSettings
 	WSL              WSLSettings
 
 	Custom map[string]CustomLinterSettings
@@ -428,6 +429,10 @@ type VarCheckSettings struct {
 type WhitespaceSettings struct {
 	MultiIf   bool `mapstructure:"multi-if"`
 	MultiFunc bool `mapstructure:"multi-func"`
+}
+
+type WrapcheckSettings struct {
+	IgnoreSigs []string `mapstructure:"ignoreSigs"`
 }
 
 type WSLSettings struct {
