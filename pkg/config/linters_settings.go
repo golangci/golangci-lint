@@ -62,7 +62,9 @@ var defaultLintersSettings = LintersSettings{
 		ExtraRules: false,
 	},
 	ErrorLint: ErrorLintSettings{
-		Errorf: true,
+		Errorf:     true,
+		Asserts:    true,
+		Comparison: true,
 	},
 	Ifshort: IfshortSettings{
 		MaxDeclLines: 1,
@@ -165,7 +167,9 @@ type ErrcheckSettings struct {
 }
 
 type ErrorLintSettings struct {
-	Errorf bool `mapstructure:"errorf"`
+	Errorf     bool `mapstructure:"errorf"`
+	Asserts    bool `mapstructure:"asserts"`
+	Comparison bool `mapstructure:"comparison"`
 }
 
 type ExhaustiveSettings struct {

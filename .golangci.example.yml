@@ -118,8 +118,12 @@ linters-settings:
     exclude: /path/to/file.txt
 
   errorlint:
-    # Report non-wrapping error creation using fmt.Errorf
+    # Check whether fmt.Errorf uses the %w verb for formatting errors. See the readme for caveats
     errorf: true
+    # Check for plain type assertions and type switches
+    asserts: true
+    # Check for plain error comparisons
+    comparison: true
 
   exhaustive:
     # check switch statements in generated files also
