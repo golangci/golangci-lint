@@ -29,7 +29,7 @@ type jsonObject struct {
 	lint.Failure `json:",inline"`
 }
 
-// NewNewRevive returns a new Revive linter.
+// NewRevive returns a new Revive linter.
 func NewRevive(cfg *config.ReviveSettings) *goanalysis.Linter {
 	var issues []goanalysis.Issue
 
@@ -156,11 +156,6 @@ func getReviveConfig(cfg *config.ReviveSettings) (*lint.Config, error) {
 	}
 
 	normalizeConfig(conf)
-
-	// By default golangci-lint ignores missing doc comments, follow same convention by removing this default rule
-	// Relevant issue: https://github.com/golangci/golangci-lint/issues/456
-	delete(conf.Rules, "package-comments")
-	delete(conf.Rules, "exported")
 
 	return conf, nil
 }
