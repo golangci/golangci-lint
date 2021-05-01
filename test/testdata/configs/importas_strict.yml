@@ -1,5 +1,6 @@
 linters-settings:
   importas:
+    no-unaliased: true
     alias:
       fff: fmt
       std_os: os

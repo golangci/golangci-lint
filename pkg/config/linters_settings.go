@@ -311,7 +311,10 @@ type IfshortSettings struct {
 	MaxDeclChars int `mapstructure:"max-decl-chars"`
 }
 
-type ImportAsSettings map[string]string
+type ImportAsSettings struct {
+	Alias       map[string]string
+	NoUnaliased bool `mapstructure:"no-unaliased"`
+}
 
 type LllSettings struct {
 	LineLength int `mapstructure:"line-length"`

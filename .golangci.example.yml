@@ -405,14 +405,18 @@ linters-settings:
     max-decl-chars: 30
 
   importas:
-    # using `servingv1` alias for `knative.dev/serving/pkg/apis/serving/v1` package
-    servingv1: knative.dev/serving/pkg/apis/serving/v1
-    # using `autoscalingv1alpha1` alias for `knative.dev/serving/pkg/apis/autoscaling/v1alpha1` package
-    autoscalingv1alpha1: knative.dev/serving/pkg/apis/autoscaling/v1alpha1
-    # You can specify the package path by regular expression,
-    # and alias by regular expression expansion syntax like below.
-    # see https://github.com/julz/importas#use-regular-expression for details
-    "$1$2": 'knative.dev/serving/pkg/apis/(\w+)/(v[\w\d]+)'
+    # if set to `true`, force to use alias.
+    no-unaliased: true
+    # List of aliases
+    alias:
+      # using `servingv1` alias for `knative.dev/serving/pkg/apis/serving/v1` package
+      servingv1: knative.dev/serving/pkg/apis/serving/v1
+      # using `autoscalingv1alpha1` alias for `knative.dev/serving/pkg/apis/autoscaling/v1alpha1` package
+      autoscalingv1alpha1: knative.dev/serving/pkg/apis/autoscaling/v1alpha1
+      # You can specify the package path by regular expression,
+      # and alias by regular expression expansion syntax like below.
+      # see https://github.com/julz/importas#use-regular-expression for details
+      "$1$2": 'knative.dev/serving/pkg/apis/(\w+)/(v[\w\d]+)'
 
   lll:
     # max line length, lines longer will be reported. Default is 120.
