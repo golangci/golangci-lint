@@ -27,8 +27,10 @@ import (
 	"golang.org/x/tools/go/analysis/passes/nilness"
 	_ "golang.org/x/tools/go/analysis/passes/pkgfact" // unused, internal analyzer
 	"golang.org/x/tools/go/analysis/passes/printf"
+	"golang.org/x/tools/go/analysis/passes/reflectvaluecompare"
 	"golang.org/x/tools/go/analysis/passes/shadow"
 	"golang.org/x/tools/go/analysis/passes/shift"
+	"golang.org/x/tools/go/analysis/passes/sigchanyzer"
 	"golang.org/x/tools/go/analysis/passes/sortslice"
 	"golang.org/x/tools/go/analysis/passes/stdmethods"
 	"golang.org/x/tools/go/analysis/passes/stringintconv"
@@ -39,6 +41,7 @@ import (
 	"golang.org/x/tools/go/analysis/passes/unreachable"
 	"golang.org/x/tools/go/analysis/passes/unsafeptr"
 	"golang.org/x/tools/go/analysis/passes/unusedresult"
+	"golang.org/x/tools/go/analysis/passes/unusedwrite"
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
@@ -67,8 +70,10 @@ var (
 		nilfunc.Analyzer,
 		nilness.Analyzer,
 		printf.Analyzer,
+		reflectvaluecompare.Analyzer,
 		shadow.Analyzer,
 		shift.Analyzer,
+		sigchanyzer.Analyzer,
 		sortslice.Analyzer,
 		stdmethods.Analyzer,
 		stringintconv.Analyzer,
@@ -79,6 +84,7 @@ var (
 		unreachable.Analyzer,
 		unsafeptr.Analyzer,
 		unusedresult.Analyzer,
+		unusedwrite.Analyzer,
 	}
 
 	defaultAnalyzers = []*analysis.Analyzer{
@@ -99,6 +105,7 @@ var (
 		nilfunc.Analyzer,
 		printf.Analyzer,
 		shift.Analyzer,
+		sigchanyzer.Analyzer,
 		stdmethods.Analyzer,
 		stringintconv.Analyzer,
 		structtag.Analyzer,
