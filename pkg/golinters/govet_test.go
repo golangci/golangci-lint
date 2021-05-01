@@ -18,9 +18,10 @@ import (
 
 func TestGovet(t *testing.T) {
 	// Checking that every default analyzer is in "all analyzers" list.
-	checkList := append(defaultAnalyzers,
-		shadow.Analyzer, // special case, used in analyzersFromConfig
-	)
+	var checkList []*analysis.Analyzer
+	checkList = append(checkList, defaultAnalyzers...)
+	checkList = append(checkList, shadow.Analyzer) // special case, used in analyzersFromConfig
+
 	for _, defaultAnalyzer := range checkList {
 		found := false
 		for _, a := range allAnalyzers {
