@@ -24,6 +24,9 @@ func NewImportAs(settings *config.ImportAsSettings) *goanalysis.Linter {
 		if settings == nil {
 			return
 		}
+		if len(settings.Alias) == 0 {
+			lintCtx.Log.Infof("importas settings found, but no aliases listed. List aliases under alias: key.") // nolint: misspell
+		}
 
 		err := analyzer.Flags.Set("no-unaliased", strconv.FormatBool(settings.NoUnaliased))
 		if err != nil {
