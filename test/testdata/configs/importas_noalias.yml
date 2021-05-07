@@ -1,4 +1,4 @@
 linters-settings:
   importas:
-    fff: fmt
-    std_os: os
+    fmt: fff
+    os: std_os

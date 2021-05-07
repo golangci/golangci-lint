@@ -33,7 +33,7 @@ func NewImportAs(settings *config.ImportAsSettings) *goanalysis.Linter {
 			lintCtx.Log.Errorf("failed to parse configuration: %v", err)
 		}
 
-		for alias, pkg := range settings.Alias {
+		for pkg, alias := range settings.Alias {
 			err := analyzer.Flags.Set("alias", fmt.Sprintf("%s:%s", pkg, alias))
 			if err != nil {
 				lintCtx.Log.Errorf("failed to parse configuration: %v", err)

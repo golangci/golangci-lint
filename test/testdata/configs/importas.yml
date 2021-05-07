@@ -1,5 +1,5 @@
 linters-settings:
   importas:
     alias:
-      fff: fmt
-      std_os: os
+      fmt: fff
+      os: std_os
