@@ -1,5 +1,9 @@
 linters-settings:
   importas:
     alias:
-      fff: fmt
-      std_os: os
+      - pkg: fmt
+        alias: fff
+      - pkg: os
+        alias: std_os
+      - pkg: github.com/pkg/errors
+        alias: pkgerr

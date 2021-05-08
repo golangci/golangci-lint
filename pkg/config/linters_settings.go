@@ -312,8 +312,13 @@ type IfshortSettings struct {
 }
 
 type ImportAsSettings struct {
-	Alias       map[string]string
+	Alias       []ImportAsAlias
 	NoUnaliased bool `mapstructure:"no-unaliased"`
+}
+
+type ImportAsAlias struct {
+	Pkg   string
+	Alias string
 }
 
 type LllSettings struct {
