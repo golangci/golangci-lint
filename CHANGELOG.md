@@ -1,6 +1,48 @@
 Follow the news and releases on our [twitter](https://twitter.com/golangci) and our [blog](https://medium.com/golangci).
 There is the most valuable changes log:
 
+## Mai 2021
+
+1. new linters:
+   * `tagliatelle`: https://github.com/ldez/tagliatelle
+   * `promlinter`: https://github.com/yeya24/promlinter
+2. update linters:
+   * `staticcheck`: from 0.1.3 to 0.1.4
+   * `wastedassign`: from 0.2.0 to 1.0.0
+   * `go-critic`: from 0.5.5 to 0.5.6
+   * `wrapcheck`: from 1.2.0 to 2.1.0
+   * `importas`: bump to HEAD
+   * `errorlint`: bump to HEAD
+   * `importas`: allow repeated aliases
+   * `revive`: convert hard coded excludes into default exclude patterns
+   * `govet`: Update vet passes
+3. documentation:
+   * bump documentation dependencies
+   * fix typos
+4. Misc:
+   * set the minimum Go version to go1.15
+
+## April 2021
+
+1. new linters:
+   * `tagliatelle`: https://github.com/ldez/tagliatelle
+   * `promlinter`: https://github.com/yeya24/promlinter
+2. update linters:
+   * `godot`: from 1.4.4 to 1.4.6
+   * `wrapcheck`: from 1.0.0 to 1.2.0
+   * `go-mnd`: from 2.3.1 to 2.3.2
+   * `wsl`: from 3.2.0 to 3.3.0
+   * `revive`: from 1.0.5 to 1.0.6
+   * `importas`: bump to HEAD
+   * `staticcheck`: configurable Go version
+   * `gosec`: add configuration
+   * `typecheck`: improve error stack parsing
+3. documentation:
+   * bump documentation dependencies
+   * fix typos
+4. Misc:
+   * fix: comma in exclude pattern leads to unexpected results
+
 ## March 2021
 
 1. new linters:
