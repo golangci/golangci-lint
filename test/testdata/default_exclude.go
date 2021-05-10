@@ -1,4 +1,4 @@
-//args: -Estylecheck,golint
+//args: -Estylecheck,golint --internal-cmd-test
 //config_path: testdata/configs/default_exclude.yml
 
 /*Package testdata ...*/

@@ -169,7 +169,8 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithSince("v1.0.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetStyle).
-			WithURL("https://github.com/golang/lint"),
+			WithURL("https://github.com/golang/lint").
+			Deprecated("The repository of the linter has been archived by the owner.", "v1.41.0", "revive"),
 		linter.NewConfig(golinters.NewRowsErrCheck()).
 			WithSince("v1.23.0").
 			WithLoadForGoAnalysis().
