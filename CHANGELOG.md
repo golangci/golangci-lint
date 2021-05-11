@@ -1,7 +1,7 @@
 Follow the news and releases on our [twitter](https://twitter.com/golangci) and our [blog](https://medium.com/golangci).
 There is the most valuable changes log:
 
-## Mai 2021
+## May 2021
 
 1. new linters:
    * `tagliatelle`: https://github.com/ldez/tagliatelle
