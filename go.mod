@@ -82,7 +82,7 @@ require (
 	github.com/uudashr/gocognit v1.0.1
 	github.com/valyala/quicktemplate v1.6.3
 	github.com/yeya24/promlinter v0.1.0
-	golang.org/x/tools v0.1.1-0.20210430200834-7a6108e9b210
+	golang.org/x/tools v0.1.2-0.20210512205948-8287d5da45e4
 	gopkg.in/yaml.v2 v2.4.0
 	honnef.co/go/tools v0.1.4
 	mvdan.cc/gofumpt v0.1.1
