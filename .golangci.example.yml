@@ -227,7 +227,7 @@ linters-settings:
       underef:
         # whether to skip (*x).method() calls where x is a pointer receiver (default true)
         skipRecvDeref: true
-    	unnamedResult:
+      unnamedResult:
         # whether to check exported functions
         checkExported: true
 
