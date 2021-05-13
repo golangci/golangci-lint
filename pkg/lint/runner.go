@@ -108,10 +108,10 @@ func (r *Runner) runLinterSafe(ctx context.Context, lintCtx *linter.Context,
 				err = fmt.Errorf("%s: %w", lc.Name(), pe)
 
 				// Don't print stacktrace from goroutines twice
-				lintCtx.Log.Warnf("Panic: %s: %s", pe, pe.Stack())
+				r.Log.Errorf("Panic: %s: %s", pe, pe.Stack())
 			} else {
 				err = fmt.Errorf("panic occurred: %s", panicData)
-				r.Log.Warnf("Panic stack trace: %s", debug.Stack())
+				r.Log.Errorf("Panic stack trace: %s", debug.Stack())
 			}
 		}
 	}()
