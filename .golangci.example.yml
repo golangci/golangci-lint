@@ -134,11 +134,13 @@ linters-settings:
     default-signifies-exhaustive: false
 
   exhaustivestruct:
+    # Struct Patterns is list of expressions to match struct packages and names
+    # The struct packages have the form example.com/package.ExampleStruct
+    # The matching patterns can use matching syntax from https://pkg.go.dev/path#Match
+    # If this list is empty, all structs are tested.
     struct-patterns:
       - '*.Test'
-      - '*.Test2'
-      - '*.Embedded'
-      - '*.External'
+      - 'example.com/package.ExampleStruct'
 
   forbidigo:
     # Forbid the following identifiers
