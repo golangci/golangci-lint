@@ -16,11 +16,14 @@ There is the most valuable changes log:
    * `importas`: allow repeated aliases
    * `revive`: convert hard coded excludes into default exclude patterns
    * `govet`: Update vet passes
+   * `govet`: fix `sigchanyzer`
+   * ⚠ `golint`: deprecated
 3. documentation:
    * bump documentation dependencies
    * fix typos
 4. Misc:
    * set the minimum Go version to go1.15
+   * non-zero exit code when a linter produces a panic
 
 ## April 2021
 
