@@ -1,7 +1,7 @@
 Follow the news and releases on our [twitter](https://twitter.com/golangci) and our [blog](https://medium.com/golangci).
 There is the most valuable changes log:
 
-## May 2021
+### May 2021
 
 1. new linters:
    * `tagliatelle`: https://github.com/ldez/tagliatelle
@@ -25,7 +25,7 @@ There is the most valuable changes log:
    * set the minimum Go version to go1.15
    * non-zero exit code when a linter produces a panic
 
-## April 2021
+### April 2021
 
 1. new linters:
    * `tagliatelle`: https://github.com/ldez/tagliatelle
@@ -46,7 +46,7 @@ There is the most valuable changes log:
 4. Misc:
    * fix: comma in exclude pattern leads to unexpected results
 
-## March 2021
+### March 2021
 
 1. new linters:
    * `gomoddirectives`: https://github.com/ldez/gomoddirectives
@@ -76,7 +76,7 @@ There is the most valuable changes log:
    * fix linters load mode
    * Restore fast linters meaning
 
-## February 2021
+### February 2021
 
 1. new linters:
    * `durationcheck`: https://github.com/charithe/durationcheck
@@ -124,7 +124,7 @@ There is the most valuable changes log:
    * update deprecated hyperlink for Sublime Text plugin
    * add docs on using homebrew tap
 
-## January 2021
+### January 2021
 
 1. new linters:
    * `predeclared`: https://github.com/nishanths/predeclared
@@ -144,7 +144,7 @@ There is the most valuable changes log:
 4. documentation:
    * bump documentation dependencies
 
-## December 2020
+### December 2020
 
 1. new linters:
    * `forbidigo`: https://github.com/ashanbrown/forbidigo
