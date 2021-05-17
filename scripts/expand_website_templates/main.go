@@ -16,6 +16,8 @@ import (
 	"sort"
 	"strings"
 
+	"gopkg.in/yaml.v3"
+
 	"github.com/golangci/golangci-lint/internal/renameio"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
@@ -158,12 +160,12 @@ func getLatestVersion() (string, error) {
 }
 
 func buildTemplateContext() (map[string]string, error) {
-	golangciYaml, err := ioutil.ReadFile(".golangci.yml")
+	golangciYamlExample, err := ioutil.ReadFile(".golangci.example.yml")
 	if err != nil {
-		return nil, fmt.Errorf("can't read .golangci.yml: %s", err)
+		return nil, fmt.Errorf("can't read .golangci.example.yml: %s", err)
 	}
 
-	golangciYamlExample, err := ioutil.ReadFile(".golangci.example.yml")
+	lintersCfg, err := getLintersConfiguration(golangciYamlExample)
 	if err != nil {
 		return nil, fmt.Errorf("can't read .golangci.example.yml: %s", err)
 	}
@@ -200,7 +202,7 @@ func buildTemplateContext() (map[string]string, error) {
 	}
 
 	return map[string]string{
-		"GolangciYaml":                     strings.TrimSpace(string(golangciYaml)),
+		"LintersExample":                   lintersCfg,
 		"GolangciYamlExample":              strings.TrimSpace(string(golangciYamlExample)),
 		"LintersCommandOutputEnabledOnly":  string(lintersOutParts[0]),
 		"LintersCommandOutputDisabledOnly": string(lintersOutParts[1]),
@@ -313,4 +315,60 @@ func getThanksList() string {
 	}
 
 	return strings.Join(lines, "\n")
+}
+
+func getLintersConfiguration(example []byte) (string, error) {
+	builder := &strings.Builder{}
+
+	var data yaml.Node
+	err := yaml.Unmarshal(example, &data)
+	if err != nil {
+		return "", err
+	}
+
+	root := data.Content[0]
+
+	for j, node := range root.Content {
+		if node.Value != "linters-settings" {
+			continue
+		}
+
+		nodes := root.Content[j+1]
+
+		for i := 0; i < len(nodes.Content); i += 2 {
+			r := &yaml.Node{
+				Kind:  nodes.Kind,
+				Style: nodes.Style,
+				Tag:   nodes.Tag,
+				Value: node.Value,
+				Content: []*yaml.Node{
+					{
+						Kind:  root.Content[j].Kind,
+						Value: root.Content[j].Value,
+					},
+					{
+						Kind:    nodes.Kind,
+						Content: []*yaml.Node{nodes.Content[i], nodes.Content[i+1]},
+					},
+				},
+			}
+
+			_, _ = fmt.Fprintf(builder, "### %s\n\n", nodes.Content[i].Value)
+			_, _ = fmt.Fprintln(builder, "```yaml")
+
+			const ident = 2
+			encoder := yaml.NewEncoder(builder)
+			encoder.SetIndent(ident)
+
+			err = encoder.Encode(r)
+			if err != nil {
+				return "", err
+			}
+
+			_, _ = fmt.Fprintln(builder, "```")
+			_, _ = fmt.Fprintln(builder)
+		}
+	}
+
+	return builder.String(), nil
 }
