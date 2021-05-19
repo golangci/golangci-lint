@@ -143,9 +143,9 @@ linters-settings:
       - 'example.com/package.ExampleStruct'
 
   forbidigo:
-    # Forbid the following identifiers
+    # Forbid the following identifiers (identifiers are written using regexp):
     forbid:
-      - ^print.*$ # Identifiers are written using regexp.
+      - ^print.*$
       - 'fmt\.Print.*'
     # Exclude godoc examples from forbidigo checks.  Default is true.
     exclude_godoc_examples: false
