@@ -112,21 +112,7 @@ func NewRevive(cfg *config.ReviveSettings) *goanalysis.Linter {
 			}
 
 			for i := range results {
-				issues = append(issues, goanalysis.NewIssue(&result.Issue{
-					Severity: string(results[i].Severity),
-					Text:     fmt.Sprintf("%s: %s", results[i].RuleName, results[i].Failure.Failure),
-					Pos: token.Position{
-						Filename: results[i].Position.Start.Filename,
-						Line:     results[i].Position.Start.Line,
-						Offset:   results[i].Position.Start.Offset,
-						Column:   results[i].Position.Start.Column,
-					},
-					LineRange: &result.Range{
-						From: results[i].Position.Start.Line,
-						To:   results[i].Position.End.Line,
-					},
-					FromLinter: reviveName,
-				}, pass))
+				issues = append(issues, reviveToIssue(pass, &results[i]))
 			}
 
 			return nil, nil
@@ -134,6 +120,29 @@ func NewRevive(cfg *config.ReviveSettings) *goanalysis.Linter {
 	}).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
 		return issues
 	}).WithLoadMode(goanalysis.LoadModeSyntax)
+}
+
+func reviveToIssue(pass *analysis.Pass, object *jsonObject) goanalysis.Issue {
+	lineRangeTo := object.Position.End.Line
+	if object.RuleName == (&rule.ExportedRule{}).Name() {
+		lineRangeTo = object.Position.Start.Line
+	}
+
+	return goanalysis.NewIssue(&result.Issue{
+		Severity: string(object.Severity),
+		Text:     fmt.Sprintf("%s: %s", object.RuleName, object.Failure.Failure),
+		Pos: token.Position{
+			Filename: object.Position.Start.Filename,
+			Line:     object.Position.Start.Line,
+			Offset:   object.Position.Start.Offset,
+			Column:   object.Position.Start.Column,
+		},
+		LineRange: &result.Range{
+			From: object.Position.Start.Line,
+			To:   lineRangeTo,
+		},
+		FromLinter: reviveName,
+	}, pass)
 }
 
 // This function mimics the GetConfig function of revive.
