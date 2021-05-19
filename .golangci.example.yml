@@ -143,11 +143,10 @@ linters-settings:
       - 'example.com/package.ExampleStruct'
 
   forbidigo:
-    # Forbid the following identifiers
+    # Forbid the following identifiers (identifiers are written using regexp):
     forbid:
-      - fmt.Errorf # consider errors.Errorf in github.com/pkg/errors
-      - fmt.Print.* # too much log noise
-      - ginkgo\\.F.* # these are used just for local development
+      - ^print.*$
+      - 'fmt\.Print.*'
     # Exclude godoc examples from forbidigo checks.  Default is true.
     exclude_godoc_examples: false
 
