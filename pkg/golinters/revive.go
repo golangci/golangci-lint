@@ -13,15 +13,19 @@ import (
 	reviveConfig "github.com/mgechev/revive/config"
 	"github.com/mgechev/revive/lint"
 	"github.com/mgechev/revive/rule"
+	"github.com/pkg/errors"
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
+	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
 const reviveName = "revive"
+
+var reviveDebugf = logutils.Debug("revive")
 
 // jsonObject defines a JSON object of an failure
 type jsonObject struct {
@@ -145,17 +149,19 @@ func getReviveConfig(cfg *config.ReviveSettings) (*lint.Config, error) {
 
 		err := toml.NewEncoder(buf).Encode(rawRoot)
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "failed to encode configuration")
 		}
 
 		conf = &lint.Config{}
 		_, err = toml.DecodeReader(buf, conf)
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "failed to decode configuration")
 		}
 	}
 
 	normalizeConfig(conf)
+
+	reviveDebugf("revive configuration: %#v", conf)
 
 	return conf, nil
 }
@@ -184,7 +190,7 @@ func createConfigMap(cfg *config.ReviveSettings) map[string]interface{} {
 	for _, s := range cfg.Rules {
 		rawRules[s.Name] = map[string]interface{}{
 			"severity":  s.Severity,
-			"arguments": s.Arguments,
+			"arguments": safeTomlSlice(s.Arguments),
 		}
 	}
 
@@ -193,6 +199,28 @@ func createConfigMap(cfg *config.ReviveSettings) map[string]interface{} {
 	}
 
 	return rawRoot
+}
+
+func safeTomlSlice(r []interface{}) []interface{} {
+	if len(r) == 0 {
+		return nil
+	}
+
+	if _, ok := r[0].(map[interface{}]interface{}); !ok {
+		return r
+	}
+
+	var typed []interface{}
+	for _, elt := range r {
+		item := map[string]interface{}{}
+		for k, v := range elt.(map[interface{}]interface{}) {
+			item[k.(string)] = v
+		}
+
+		typed = append(typed, item)
+	}
+
+	return typed
 }
 
 // This element is not exported by revive, so we need copy the code.
