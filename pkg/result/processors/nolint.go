@@ -124,7 +124,7 @@ func (p *Nolint) getOrCreateFileData(i *result.Issue) (*fileData, error) {
 }
 
 func (p *Nolint) buildIgnoredRangesForFile(f *ast.File, fset *token.FileSet, filePath string) []ignoredRange {
-	inlineRanges := p.extractFileCommentsInlineRanges(fset, f.Comments...)
+	inlineRanges := p.extractFileCommentsRanges(fset, f.Comments...)
 	nolintDebugf("file %s: inline nolint ranges are %+v", filePath, inlineRanges)
 
 	if len(inlineRanges) == 0 {
@@ -218,18 +218,104 @@ func (e *rangeExpander) Visit(node ast.Node) ast.Visitor {
 	return e
 }
 
-func (p *Nolint) extractFileCommentsInlineRanges(fset *token.FileSet, comments ...*ast.CommentGroup) []ignoredRange {
+func (p *Nolint) extractFileCommentsRanges(fset *token.FileSet, comments ...*ast.CommentGroup) []ignoredRange {
 	var ret []ignoredRange
+	ignoredRangeMap := map[string]*ignoredRange{}
 	for _, g := range comments {
 		for _, c := range g.List {
-			ir := p.extractInlineRangeFromComment(c.Text, g, fset)
+			ignoredRangeMap = p.extractRangeBeginFromComment(c.Text, g, fset, ignoredRangeMap)
+
+			var ir *ignoredRange
+			ignoredRangeMap, ir = p.extractRangeEndFromComment(c.Text, g, fset, ignoredRangeMap)
+			if ir != nil {
+				ret = append(ret, *ir)
+			}
+
+			ir = p.extractInlineRangeFromComment(c.Text, g, fset)
 			if ir != nil {
 				ret = append(ret, *ir)
 			}
 		}
 	}
 
+	for _, v := range ignoredRangeMap {
+		ret = append(ret, *v)
+	}
+
 	return ret
+}
+
+func (p *Nolint) extractRangeBeginFromComment(
+	text string,
+	g ast.Node,
+	fset *token.FileSet,
+	ignoredRangeMap map[string]*ignoredRange,
+) map[string]*ignoredRange {
+	text = strings.TrimLeft(text, "/ ")
+	if strings.HasPrefix(text, "nolint-begin:") {
+		linterItems := strings.Split(strings.TrimPrefix(text, "nolint-begin:"), ",")
+		for _, l := range linterItems {
+			l = strings.TrimSpace(l)
+			if l == "" {
+				continue
+			}
+			_, ok := ignoredRangeMap[l]
+			if ok {
+				// If there are two consecutive nolint-begins, the first nolint-begin is valid.
+				continue
+			}
+			ignoredRangeMap[l] = &ignoredRange{
+				Range: result.Range{
+					From: fset.Position(g.Pos()).Line,
+					To:   fset.File(g.End()).LineCount(),
+				},
+				linters:                []string{l},
+				matchedIssueFromLinter: make(map[string]bool),
+			}
+		}
+		return ignoredRangeMap
+	}
+
+	if strings.HasPrefix(text, "nolint-begin") {
+		key := ""
+		ignoredRangeMap[key] = &ignoredRange{
+			Range: result.Range{
+				From: fset.Position(g.Pos()).Line,
+				To:   fset.File(g.End()).LineCount(),
+			},
+			linters:                nil,
+			matchedIssueFromLinter: make(map[string]bool),
+		}
+	}
+	return ignoredRangeMap
+}
+
+func (p *Nolint) extractRangeEndFromComment(
+	text string,
+	g ast.Node,
+	fset *token.FileSet,
+	ignoredRangeMap map[string]*ignoredRange,
+) (map[string]*ignoredRange, *ignoredRange) {
+	text = strings.TrimLeft(text, "/ ")
+	if strings.HasPrefix(text, "nolint-end") {
+		var linters []string
+		if strings.HasPrefix(text, "nolint-end:") {
+			linters = strings.Split(strings.TrimPrefix(text, "nolint-end:"), ",")
+		} else {
+			linters = []string{""}
+		}
+
+		for _, linter := range linters {
+			linter = strings.TrimSpace(linter)
+			ir := ignoredRangeMap[linter]
+			if ir != nil {
+				ir.Range.To = fset.Position(g.End()).Line
+				delete(ignoredRangeMap, linter)
+				return ignoredRangeMap, ir
+			}
+		}
+	}
+	return ignoredRangeMap, nil
 }
 
 func (p *Nolint) extractInlineRangeFromComment(text string, g ast.Node, fset *token.FileSet) *ignoredRange {
@@ -251,13 +337,18 @@ func (p *Nolint) extractInlineRangeFromComment(text string, g ast.Node, fset *to
 		}
 	}
 
-	if !strings.HasPrefix(text, "nolint:") {
+	text = strings.Split(text, "//")[0] // allow another comment after this comment
+	text = strings.TrimSpace(text)
+	if text == "nolint" {
 		return buildRange(nil) // ignore all linters
+	}
+
+	if !strings.HasPrefix(text, "nolint:") {
+		return nil
 	}
 
 	// ignore specific linters
 	var linters []string
-	text = strings.Split(text, "//")[0] // allow another comment after this comment
 	linterItems := strings.Split(strings.TrimPrefix(text, "nolint:"), ",")
 	for _, linter := range linterItems {
 		linterName := strings.ToLower(strings.TrimSpace(linter))
