@@ -18,4 +18,9 @@ func Sleuth() {
 	for _, tt := range testdata {
 		t3 = append(t3, tt) // OK
 	}
+
+	t4 := make([]int, 0, 5)
+	for _, tt := range testdata {
+		t4 = append(t4, tt) // OK
+	}
 }
