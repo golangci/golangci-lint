@@ -6,4 +6,4 @@ import (
 
 func main() {
 	lib.PublicFunc()
-}	
+}
