@@ -92,6 +92,7 @@ linters:
     - noctx
     - nolintlint
     - rowserrcheck
+    - sleuth
     - staticcheck
     - structcheck
     - stylecheck
