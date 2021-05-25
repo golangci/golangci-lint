@@ -336,7 +336,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithURL("https://github.com/kyoh86/scopelint").
 			Deprecated("The repository of the linter has been deprecated by the owner.", "v1.39.0", "exportloopref"),
 		linter.NewConfig(golinters.NewSleuth()).
-			WithSince("v1.40.2").
+			WithSince("v1.41.0").
 			WithPresets(linter.PresetBugs, linter.PresetStyle).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/sivchari/sleuth"),
