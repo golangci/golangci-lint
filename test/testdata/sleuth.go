@@ -6,7 +6,7 @@ func Sleuth() {
 
 	t1 := make([]int, 5)
 	for _, tt := range testdata {
-		t1 = append(t1, tt) // ERROR "sleuth detects illegal"
+		t1 = append(t1, tt) // ERROR "sleuth found you are trying append to a slice with length"
 	}
 
 	t2 := make([]int, 5, 5)
