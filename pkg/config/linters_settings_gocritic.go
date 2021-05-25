@@ -72,7 +72,7 @@ func gocriticCheckerTagsDebugf() {
 
 	tagToCheckers := buildGocriticTagToCheckersMap()
 
-	var allTags []string
+	allTags := make([]string, 0, len(tagToCheckers))
 	for tag := range tagToCheckers {
 		allTags = append(allTags, tag)
 	}
@@ -253,7 +253,7 @@ func (s *GocriticSettings) IsCheckEnabled(name string) bool {
 }
 
 func sprintAllowedCheckerNames(allowedNames map[string]bool) string {
-	var namesSlice []string
+	namesSlice := make([]string, 0, len(allowedNames))
 	for name := range allowedNames {
 		namesSlice = append(namesSlice, name)
 	}

@@ -253,7 +253,7 @@ func getExcludeProcessor(cfg *config.Issues) processors.Processor {
 }
 
 func getExcludeRulesProcessor(cfg *config.Issues, log logutils.Log, lineCache *fsutils.LineCache) processors.Processor {
-	var excludeRules []processors.ExcludeRule
+	excludeRules := make([]processors.ExcludeRule, 0, len(cfg.ExcludeRules))
 	for _, r := range cfg.ExcludeRules {
 		excludeRules = append(excludeRules, processors.ExcludeRule{
 			BaseRule: processors.BaseRule{
@@ -295,7 +295,7 @@ func getExcludeRulesProcessor(cfg *config.Issues, log logutils.Log, lineCache *f
 }
 
 func getSeverityRulesProcessor(cfg *config.Severity, log logutils.Log, lineCache *fsutils.LineCache) processors.Processor {
-	var severityRules []processors.SeverityRule
+	severityRules := make([]processors.SeverityRule, 0, len(cfg.Rules))
 	for _, r := range cfg.Rules {
 		severityRules = append(severityRules, processors.SeverityRule{
 			Severity: r.Severity,

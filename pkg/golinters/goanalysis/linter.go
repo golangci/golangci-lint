@@ -95,7 +95,7 @@ func (lnt *Linter) Desc() string {
 }
 
 func (lnt *Linter) allAnalyzerNames() []string {
-	var ret []string
+	ret := make([]string, 0, len(lnt.analyzers))
 	for _, a := range lnt.analyzers {
 		ret = append(ret, a.Name)
 	}

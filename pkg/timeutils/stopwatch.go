@@ -36,7 +36,7 @@ type stageDuration struct {
 }
 
 func (s *Stopwatch) stageDurationsSorted() []stageDuration {
-	stageDurations := []stageDuration{}
+	stageDurations := make([]stageDuration, 0, len(s.stages))
 	for n, d := range s.stages {
 		stageDurations = append(stageDurations, stageDuration{
 			name: n,
@@ -56,7 +56,7 @@ func (s *Stopwatch) sprintStages() string {
 
 	stageDurations := s.stageDurationsSorted()
 
-	stagesStrings := []string{}
+	stagesStrings := make([]string, 0, len(stageDurations))
 	for _, s := range stageDurations {
 		stagesStrings = append(stagesStrings, fmt.Sprintf("%s: %s", s.name, s.d))
 	}
