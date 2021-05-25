@@ -14,8 +14,8 @@ func NewSleuth() *goanalysis.Linter {
 
 	return goanalysis.NewLinter(
 		"sleuth",
-		"sleuth checks that you declared a slice with length and you are trying append to the slice.",
+		"Detects when an append is used on a slice with an initial size.",
 		analyzers,
 		nil,
-	).WithLoadMode(goanalysis.LoadModeTypesInfo)
+	).WithLoadMode(goanalysis.LoadModeSyntax)
 }

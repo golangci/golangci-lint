@@ -335,11 +335,6 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetBugs).
 			WithURL("https://github.com/kyoh86/scopelint").
 			Deprecated("The repository of the linter has been deprecated by the owner.", "v1.39.0", "exportloopref"),
-		linter.NewConfig(golinters.NewSleuth()).
-			WithSince("v1.41.0").
-			WithPresets(linter.PresetBugs, linter.PresetStyle).
-			WithLoadForGoAnalysis().
-			WithURL("https://github.com/sivchari/sleuth"),
 		linter.NewConfig(golinters.NewGocritic()).
 			WithSince("v1.12.0").
 			WithPresets(linter.PresetStyle, linter.PresetMetaLinter).
@@ -506,6 +501,10 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithSince("v1.40.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/ldez/tagliatelle"),
+		linter.NewConfig(golinters.NewSleuth()).
+			WithSince("v1.41.0").
+			WithPresets(linter.PresetBugs, linter.PresetStyle).
+			WithURL("https://github.com/sivchari/sleuth"),
 
 		// nolintlint must be last because it looks at the results of all the previous linters for unused nolint directives
 		linter.NewConfig(golinters.NewNoLintLint()).
