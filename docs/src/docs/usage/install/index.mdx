@@ -18,11 +18,11 @@ Also, the action creates GitHub annotations for found issues: you don't need to 
 
 ### Other CI
 
-It's important to have reproducible CI:
-don't start to fail all builds at the same time. With golangci-lint this can happen if you
-use deprecated option `--enable-all` and a new linter is added or even without `--enable-all`: when one upstream linter is upgraded.
+It's important to have reproducible CI: don't start to fail all builds at the same time.
+With golangci-lint this can happen if you use option `--enable-all` and a new linter is added
+or even without `--enable-all` when one upstream linter is upgraded.
 
-It's highly recommended to install a specific version of golangci-lint available on the [releases page](https://github.com/golangci/golangci-lint/releases).
+**IMPORTANT**: It's highly recommended installing a specific version of golangci-lint available on the [releases page](https://github.com/golangci/golangci-lint/releases).
 
 Here is the recommended way to install golangci-lint {.LatestVersion}:
 
