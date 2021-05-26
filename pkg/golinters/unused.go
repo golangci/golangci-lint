@@ -54,7 +54,7 @@ func NewUnused(settings *config.StaticCheckSettings) *goanalysis.Linter {
 		},
 	}
 
-	setAnalyzerGoVersion(analyzer, settings)
+	setAnalyzerGoVersion(analyzer, getGoVersion(settings))
 
 	lnt := goanalysis.NewLinter(
 		name,
