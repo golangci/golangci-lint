@@ -165,6 +165,10 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetBugs, linter.PresetError).
 			WithURL("https://github.com/kisielk/errcheck"),
+		linter.NewConfig(golinters.NewVarErr()).
+			WithSince("v1.41.0").
+			WithPresets(linter.PresetStyle).
+			WithURL("https://github.com/sivchari/varerr"),
 		linter.NewConfig(golinters.NewGolint()).
 			WithSince("v1.0.0").
 			WithLoadForGoAnalysis().
