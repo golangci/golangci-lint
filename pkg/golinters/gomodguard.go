@@ -72,7 +72,7 @@ func NewGomodguard() *goanalysis.Linter {
 		}
 
 		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
-			files := []string{}
+			var files []string
 
 			for _, file := range pass.Files {
 				files = append(files, pass.Fset.PositionFor(file.Pos(), false).Filename)
