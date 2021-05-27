@@ -24,8 +24,8 @@ func NewGomodguard() *goanalysis.Linter {
 		issues   []goanalysis.Issue
 		mu       = sync.Mutex{}
 		analyzer = &analysis.Analyzer{
-			Name: gomodguardName,
-			Doc:  gomodguardDesc,
+			Name: goanalysis.TheOnlyAnalyzerName,
+			Doc:  goanalysis.TheOnlyanalyzerDoc,
 		}
 	)
 
