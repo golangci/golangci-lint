@@ -366,6 +366,8 @@ linters-settings:
   gosimple:
     # Select the Go version to target. The default is '1.13'.
     go: "1.15"
+    # https://staticcheck.io/docs/options#checks
+    checks: [ "all" ]
 
   govet:
     # report about shadowed variables
@@ -514,10 +516,21 @@ linters-settings:
   staticcheck:
     # Select the Go version to target. The default is '1.13'.
     go: "1.15"
+    # https://staticcheck.io/docs/options#checks
+    checks: [ "all" ]
 
   stylecheck:
     # Select the Go version to target. The default is '1.13'.
     go: "1.15"
+    # https://staticcheck.io/docs/options#checks
+    checks: [ "all", "-ST1000", "-ST1003", "-ST1016", "-ST1020", "-ST1021", "-ST1022" ]
+    # https://staticcheck.io/docs/options#dot_import_whitelist
+    dot-import-whitelist:
+      - fmt
+    # https://staticcheck.io/docs/options#initialisms
+    initialisms: [ "ACL", "API", "ASCII", "CPU", "CSS", "DNS", "EOF", "GUID", "HTML", "HTTP", "HTTPS", "ID", "IP", "JSON", "QPS", "RAM", "RPC", "SLA", "SMTP", "SQL", "SSH", "TCP", "TLS", "TTL", "UDP", "UI", "GID", "UID", "UUID", "URI", "URL", "UTF8", "VM", "XML", "XMPP", "XSRF", "XSS" ]
+    # https://staticcheck.io/docs/options#http_status_code_whitelist
+    http-status-code-whitelist: [ "200", "400", "404", "500" ]
 
   tagliatelle:
     # check the struck tag name case

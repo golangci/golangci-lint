@@ -8,7 +8,9 @@ import (
 )
 
 func NewGosimple(settings *config.StaticCheckSettings) *goanalysis.Linter {
-	analyzers := setupStaticCheckAnalyzers(simple.Analyzers, settings)
+	cfg := staticCheckConfig(settings)
+
+	analyzers := setupStaticCheckAnalyzers(simple.Analyzers, getGoVersion(settings), cfg.Checks)
 
 	return goanalysis.NewLinter(
 		"gosimple",
