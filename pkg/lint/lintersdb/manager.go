@@ -501,6 +501,11 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithSince("v1.40.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/ldez/tagliatelle"),
+		linter.NewConfig(golinters.NewStringLenCompare()).
+			WithSince("v1.41.0").
+			WithPresets(linter.PresetStyle).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/johejo/stringlencompare"),
 
 		// nolintlint must be last because it looks at the results of all the previous linters for unused nolint directives
 		linter.NewConfig(golinters.NewNoLintLint()).
