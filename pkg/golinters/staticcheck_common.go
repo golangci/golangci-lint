@@ -5,6 +5,7 @@ import (
 	"unicode"
 
 	"golang.org/x/tools/go/analysis"
+	"honnef.co/go/tools/analysis/lint"
 	scconfig "honnef.co/go/tools/config"
 
 	"github.com/golangci/golangci-lint/pkg/config"
@@ -27,19 +28,19 @@ func getGoVersion(settings *config.StaticCheckSettings) string {
 	return "1.13"
 }
 
-func setupStaticCheckAnalyzers(src map[string]*analysis.Analyzer, goVersion string, checks []string) []*analysis.Analyzer {
+func setupStaticCheckAnalyzers(src []*lint.Analyzer, goVersion string, checks []string) []*analysis.Analyzer {
 	var names []string
-	for name := range src {
-		names = append(names, name)
+	for _, a := range src {
+		names = append(names, a.Analyzer.Name)
 	}
 
 	filter := filterAnalyzerNames(names, checks)
 
 	var ret []*analysis.Analyzer
-	for name, a := range src {
-		if filter[name] {
-			setAnalyzerGoVersion(a, goVersion)
-			ret = append(ret, a)
+	for _, a := range src {
+		if filter[a.Analyzer.Name] {
+			setAnalyzerGoVersion(a.Analyzer, goVersion)
+			ret = append(ret, a.Analyzer)
 		}
 	}
 
