@@ -5,6 +5,7 @@ import (
 	"go/ast"
 	"go/parser"
 	"go/token"
+	"regexp"
 	"sort"
 	"strings"
 
@@ -46,7 +47,7 @@ func (i *ignoredRange) doesMatch(issue *result.Issue) bool {
 
 	// handle possible unused nolint directives
 	// nolintlint generates potential issues for every nolint directive and they are filtered out here
-	if  issue.FromLinter == golinters.NolintlintName && issue.ExpectNoLint {
+	if issue.FromLinter == golinters.NolintlintName && issue.ExpectNoLint {
 		if issue.ExpectedNoLintLinter != "" {
 			return i.matchedIssueFromLinter[issue.ExpectedNoLintLinter]
 		}
@@ -146,7 +147,6 @@ func (p *Nolint) buildIgnoredRangesForFile(f *ast.File, fset *token.FileSet, fil
 
 func (p *Nolint) shouldPassIssue(i *result.Issue) (bool, error) {
 	nolintDebugf("got issue: %v", *i)
-
 	if i.FromLinter == golinters.NolintlintName && i.ExpectNoLint && i.ExpectedNoLintLinter != "" {
 		// don't expect disabled linters to cover their nolint statements
 		nolintDebugf("enabled linters: %v", p.enabledLinters)
@@ -234,7 +234,7 @@ func (p *Nolint) extractFileCommentsInlineRanges(fset *token.FileSet, comments .
 
 func (p *Nolint) extractInlineRangeFromComment(text string, g ast.Node, fset *token.FileSet) *ignoredRange {
 	text = strings.TrimLeft(text, "/ ")
-	if !strings.HasPrefix(text, "nolint") {
+	if ok, _ := regexp.MatchString(`^nolint( |:|$)`, text); !ok {
 		return nil
 	}
 

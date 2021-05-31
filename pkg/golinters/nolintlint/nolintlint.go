@@ -1,4 +1,4 @@
-// nolintlint provides a linter to ensure that all //nolint directives are followed by explanations
+// Package nolintlint provides a linter to ensure that all //nolint directives are followed by explanations
 package nolintlint
 
 import (
@@ -19,10 +19,12 @@ type BaseIssue struct {
 	replacement                       *result.Replacement
 }
 
+//nolint:gocritic // TODO must be change in the future.
 func (b BaseIssue) Position() token.Position {
 	return b.position
 }
 
+//nolint:gocritic // TODO must be change in the future.
 func (b BaseIssue) Replacement() *result.Replacement {
 	return b.replacement
 }
@@ -31,45 +33,53 @@ type ExtraLeadingSpace struct {
 	BaseIssue
 }
 
+//nolint:gocritic // TODO must be change in the future.
 func (i ExtraLeadingSpace) Details() string {
 	return fmt.Sprintf("directive `%s` should not have more than one leading space", i.fullDirective)
 }
 
+//nolint:gocritic // TODO must be change in the future.
 func (i ExtraLeadingSpace) String() string { return toString(i) }
 
 type NotMachine struct {
 	BaseIssue
 }
 
+//nolint:gocritic // TODO must be change in the future.
 func (i NotMachine) Details() string {
 	expected := i.fullDirective[:2] + strings.TrimLeftFunc(i.fullDirective[2:], unicode.IsSpace)
 	return fmt.Sprintf("directive `%s` should be written without leading space as `%s`",
 		i.fullDirective, expected)
 }
 
+//nolint:gocritic // TODO must be change in the future.
 func (i NotMachine) String() string { return toString(i) }
 
 type NotSpecific struct {
 	BaseIssue
 }
 
+//nolint:gocritic // TODO must be change in the future.
 func (i NotSpecific) Details() string {
 	return fmt.Sprintf("directive `%s` should mention specific linter such as `%s:my-linter`",
 		i.fullDirective, i.directiveWithOptionalLeadingSpace)
 }
 
+//nolint:gocritic // TODO must be change in the future.
 func (i NotSpecific) String() string { return toString(i) }
 
 type ParseError struct {
 	BaseIssue
 }
 
+//nolint:gocritic // TODO must be change in the future.
 func (i ParseError) Details() string {
 	return fmt.Sprintf("directive `%s` should match `%s[:<comma-separated-linters>] [// <explanation>]`",
 		i.fullDirective,
 		i.directiveWithOptionalLeadingSpace)
 }
 
+//nolint:gocritic // TODO must be change in the future.
 func (i ParseError) String() string { return toString(i) }
 
 type NoExplanation struct {
@@ -77,11 +87,13 @@ type NoExplanation struct {
 	fullDirectiveWithoutExplanation string
 }
 
+//nolint:gocritic // TODO must be change in the future.
 func (i NoExplanation) Details() string {
 	return fmt.Sprintf("directive `%s` should provide explanation such as `%s // this is why`",
 		i.fullDirective, i.fullDirectiveWithoutExplanation)
 }
 
+//nolint:gocritic // TODO must be change in the future.
 func (i NoExplanation) String() string { return toString(i) }
 
 type UnusedCandidate struct {
@@ -89,6 +101,7 @@ type UnusedCandidate struct {
 	ExpectedLinter string
 }
 
+//nolint:gocritic // TODO must be change in the future.
 func (i UnusedCandidate) Details() string {
 	details := fmt.Sprintf("directive `%s` is unused", i.fullDirective)
 	if i.ExpectedLinter != "" {
@@ -97,6 +110,7 @@ func (i UnusedCandidate) Details() string {
 	return details
 }
 
+//nolint:gocritic // TODO must be change in the future.
 func (i UnusedCandidate) String() string { return toString(i) }
 
 func toString(i Issue) string {
@@ -126,8 +140,7 @@ var commentPattern = regexp.MustCompile(`^//\s*(nolint)(:\s*[\w-]+\s*(?:,\s*[\w-
 var fullDirectivePattern = regexp.MustCompile(`^//\s*nolint(?::(\s*[\w-]+\s*(?:,\s*[\w-]+\s*)*))?\s*(//.*)?\s*\n?$`)
 
 type Linter struct {
-	excludes        []string // lists individual linters that don't require explanations
-	needs           Needs    // indicates which linter checks to perform
+	needs           Needs // indicates which linter checks to perform
 	excludeByLinter map[string]bool
 }
 
@@ -147,6 +160,7 @@ func NewLinter(needs Needs, excludes []string) (*Linter, error) {
 var leadingSpacePattern = regexp.MustCompile(`^//(\s*)`)
 var trailingBlankExplanation = regexp.MustCompile(`\s*(//\s*)?$`)
 
+//nolint:funlen,gocyclo
 func (l Linter) Run(fset *token.FileSet, nodes ...ast.Node) ([]Issue, error) {
 	var issues []Issue
 
@@ -214,7 +228,6 @@ func (l Linter) Run(fset *token.FileSet, nodes ...ast.Node) ([]Issue, error) {
 
 				lintersText, explanation := fullMatches[1], fullMatches[2]
 				var linters []string
-				var linterRange []result.Range
 				if len(lintersText) > 0 {
 					lls := strings.Split(lintersText, ",")
 					linters = make([]string, 0, len(lls))
@@ -227,7 +240,6 @@ func (l Linter) Run(fset *token.FileSet, nodes ...ast.Node) ([]Issue, error) {
 						trimmedLinterName := strings.TrimSpace(ll)
 						if trimmedLinterName != "" {
 							linters = append(linters, trimmedLinterName)
-							linterRange = append(linterRange, result.Range{From: rangeStart, To: rangeEnd})
 						}
 						rangeStart = rangeEnd
 					}
