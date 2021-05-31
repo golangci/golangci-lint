@@ -124,6 +124,19 @@ issues:
     - path: _test\.go
       linters:
         - gomnd
+    # TODO must be removed after the release of the next version (v1.41.0)
+    - path: pkg/commands/run.go
+      linters:
+        - gomnd
+    # TODO must be removed after the release of the next version (v1.41.0)
+    - path: pkg/golinters/nolintlint/nolintlint.go
+      linters:
+        - gomnd
+    # TODO must be removed after the release of the next version (v1.41.0)
+    - path: pkg/printers/tab.go
+      linters:
+        - gomnd
+
 
 run:
   skip-dirs:
