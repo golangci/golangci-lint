@@ -34,7 +34,7 @@ func GovetNolintVetShadow() error {
 
 func GovetPrintf() {
 	x := "dummy"
-	fmt.Printf("%d", x) // ERROR "printf: Printf format %d has arg x of wrong type string"
+	fmt.Printf("%d", x) // ERROR "printf: fmt.Printf format %d has arg x of wrong type string"
 }
 
 func GovetStringIntConv() {
