@@ -82,7 +82,6 @@ require (
 	github.com/uudashr/gocognit v1.0.1
 	github.com/valyala/quicktemplate v1.6.3
 	github.com/yeya24/promlinter v0.1.0
-	golang.org/x/crypto v0.0.0-20210220033148-5ea612d1eb83 // indirect
 	golang.org/x/tools v0.1.2-0.20210512205948-8287d5da45e4
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
 	honnef.co/go/tools v0.2.0
