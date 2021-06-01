@@ -17,7 +17,7 @@
     "gatsby-plugin-emotion": "^5.0.0",
     "gatsby-plugin-google-analytics": "^2.11.0",
     "gatsby-plugin-manifest": "^2.12.1",
-    "gatsby-plugin-mdx": "^2.2.0",
+    "gatsby-plugin-mdx": "^2.6.0",
     "gatsby-plugin-netlify": "^2.11.1",
     "gatsby-plugin-netlify-cache": "^1.2.0",
     "gatsby-plugin-offline": "^3.10.2",
