@@ -433,8 +433,8 @@ func (e *Executor) createPrinter() (printers.Printer, error) {
 		p = printers.NewCheckstyle()
 	case config.OutFormatCodeClimate:
 		p = printers.NewCodeClimate()
-	case config.OutFormatHtml:
-		p = printers.NewHtml()
+	case config.OutFormatHTML:
+		p = printers.NewHTML()
 	case config.OutFormatJunitXML:
 		p = printers.NewJunitXML()
 	case config.OutFormatGithubActions:
