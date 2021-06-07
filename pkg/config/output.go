@@ -7,6 +7,7 @@ const (
 	OutFormatTab               = "tab"
 	OutFormatCheckstyle        = "checkstyle"
 	OutFormatCodeClimate       = "code-climate"
+	OutFormatHTML              = "html"
 	OutFormatJunitXML          = "junit-xml"
 	OutFormatGithubActions     = "github-actions"
 )
@@ -18,6 +19,7 @@ var OutFormats = []string{
 	OutFormatTab,
 	OutFormatCheckstyle,
 	OutFormatCodeClimate,
+	OutFormatHTML,
 	OutFormatJunitXML,
 	OutFormatGithubActions,
 }
