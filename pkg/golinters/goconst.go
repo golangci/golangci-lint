@@ -47,6 +47,7 @@ func NewGoconst() *goanalysis.Linter {
 
 func checkConstants(pass *analysis.Pass, lintCtx *linter.Context) ([]goanalysis.Issue, error) {
 	cfg := goconstAPI.Config{
+		IgnoreTests:        lintCtx.Settings().Goconst.IgnoreTests,
 		MatchWithConstants: lintCtx.Settings().Goconst.MatchWithConstants,
 		MinStringLength:    lintCtx.Settings().Goconst.MinStringLen,
 		MinOccurrences:     lintCtx.Settings().Goconst.MinOccurrencesCount,

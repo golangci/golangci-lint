@@ -200,6 +200,7 @@ type GocognitSettings struct {
 }
 
 type GoConstSettings struct {
+	IgnoreTests         bool `mapstructure:"ignore-tests"`
 	MatchWithConstants  bool `mapstructure:"match-constant"`
 	MinStringLen        int  `mapstructure:"min-len"`
 	MinOccurrencesCount int  `mapstructure:"min-occurrences"`
