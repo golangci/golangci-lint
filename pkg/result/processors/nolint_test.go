@@ -122,6 +122,41 @@ func TestNolint(t *testing.T) {
 	}
 }
 
+func newNolintRangeFileIssue(line int, fromLinter string) result.Issue {
+	return result.Issue{
+		Pos: token.Position{
+			Filename: filepath.Join("testdata", "nolintrange.go"),
+			Line:     line,
+		},
+		FromLinter: fromLinter,
+	}
+}
+
+func TestNolintRange(t *testing.T) {
+	p := newTestNolintProcessor(getMockLog())
+	defer p.Finish()
+
+	// normal nolint range
+	for i := 3; i <= 6; i++ {
+		processAssertEmpty(t, p, newNolintRangeFileIssue(i, "gofmt"))
+	}
+
+	processAssertSame(t, p, newNolintRangeFileIssue(7, "any"))
+
+	// nested nolint range
+	for i := 8; i <= 13; i++ {
+		processAssertEmpty(t, p, newNolintRangeFileIssue(i, "unused"))
+	}
+	for i := 9; i <= 12; i++ {
+		processAssertEmpty(t, p, newNolintRangeFileIssue(i, "gofmt"))
+	}
+
+	// without nolint-end
+	for i := 15; i <= 20; i++ {
+		processAssertEmpty(t, p, newNolintRangeFileIssue(i, "deadcode"))
+	}
+}
+
 func TestNolintInvalidLinterName(t *testing.T) {
 	fileName := filepath.Join("testdata", "nolint_bad_names.go")
 	issues := []result.Issue{

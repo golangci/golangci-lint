@@ -18,6 +18,10 @@ import (
 
 var nolintDebugf = logutils.Debug("nolint")
 
+const (
+	nolintKey = "nolint"
+)
+
 type ignoredRange struct {
 	linters                []string
 	matchedIssueFromLinter map[string]bool
@@ -85,7 +89,7 @@ func NewNolint(log logutils.Log, dbManager *lintersdb.Manager, enabledLinters ma
 var _ Processor = &Nolint{}
 
 func (p Nolint) Name() string {
-	return "nolint"
+	return nolintKey
 }
 
 func (p *Nolint) Process(issues []result.Issue) ([]result.Issue, error) {
@@ -339,7 +343,7 @@ func (p *Nolint) extractInlineRangeFromComment(text string, g ast.Node, fset *to
 
 	text = strings.Split(text, "//")[0] // allow another comment after this comment
 	text = strings.TrimSpace(text)
-	if text == "nolint" {
+	if text == nolintKey {
 		return buildRange(nil) // ignore all linters
 	}
 
