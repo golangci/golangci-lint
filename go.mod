@@ -34,7 +34,7 @@ require (
 	github.com/gostaticanalysis/forcetypeassert v0.0.0-20200621232751-01d4955beaa5
 	github.com/gostaticanalysis/nilerr v0.1.1
 	github.com/hashicorp/go-multierror v1.1.1
-	github.com/jgautheron/goconst v1.4.0
+	github.com/jgautheron/goconst v1.5.1
 	github.com/jingyugao/rowserrcheck v1.1.0
 	github.com/jirfag/go-printf-func-name v0.0.0-20200119135958-7558a9eaa5af
 	github.com/julz/importas v0.0.0-20210419104244-841f0c0fe66d
