@@ -89,6 +89,8 @@ github.com/cespare/xxhash/v2 v2.1.1 h1:6MnRN8NT7+YBpUIWxHtefFZOKTAPgGjpQSxqLNn0+
 github.com/cespare/xxhash/v2 v2.1.1/go.mod h1:VGX0DQ3Q6kWi7AoAeZDth3/j3BFtOZR5XLFGgcrjCOs=
 github.com/charithe/durationcheck v0.0.7 h1:cv5xuz97Hq1loSIirX7bJyUF9mFAH+n1VJetfeU2N/Q=
 github.com/charithe/durationcheck v0.0.7/go.mod h1:SSbRIBVfMjCi/kEB6K65XEA83D6prSM8ap1UCpNKtgg=
+github.com/charithe/durationcheck v0.0.8 h1:cnZrThioNW9gSV5JsRIXmkyHUbcDH7Y9hkzFDVc9/j0=
+github.com/charithe/durationcheck v0.0.8/go.mod h1:SSbRIBVfMjCi/kEB6K65XEA83D6prSM8ap1UCpNKtgg=
 github.com/chavacava/garif v0.0.0-20210405164556-e8a0a408d6af h1:spmv8nSH9h5oCQf40jt/ufBCt9j0/58u4G+rkeMqXGI=
 github.com/chavacava/garif v0.0.0-20210405164556-e8a0a408d6af/go.mod h1:Qjyv4H3//PWVzTeCezG2b9IRn6myJxJSr4TD/xo6ojU=
 github.com/chzyer/logex v1.1.10/go.mod h1:+Ywpsq7O8HXn0nuIou7OrIPyXbp3wmkHB+jjWRnGsAI=
