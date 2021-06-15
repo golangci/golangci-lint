@@ -200,6 +200,7 @@ func createConfigMap(cfg *config.ReviveSettings) map[string]interface{} {
 		rawRules[s.Name] = map[string]interface{}{
 			"severity":  s.Severity,
 			"arguments": safeTomlSlice(s.Arguments),
+			"disabled":  s.Disabled,
 		}
 	}
 
