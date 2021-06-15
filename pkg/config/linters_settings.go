@@ -380,6 +380,7 @@ type ReviveSettings struct {
 		Name      string
 		Arguments []interface{}
 		Severity  string
+		Disabled  bool
 	}
 	ErrorCode   int `mapstructure:"error-code"`
 	WarningCode int `mapstructure:"warning-code"`
