@@ -136,7 +136,7 @@ func getLatestVersion() (string, error) {
 	req, err := http.NewRequest( // nolint:noctx
 		http.MethodGet,
 		"https://api.github.com/repos/golangci/golangci-lint/releases/latest",
-		nil,
+		http.NoBody,
 	)
 	if err != nil {
 		return "", fmt.Errorf("failed to prepare a http request: %s", err)

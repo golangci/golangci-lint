@@ -117,7 +117,10 @@ linters:
   # - wsl
 
 issues:
-  # Excluding configuration per-path, per-linter, per-text and per-source
+  exclude:
+    # disable this rule for go1.15 compatibility
+    - 'ioutilDeprecated:'
+    # Excluding configuration per-path, per-linter, per-text and per-source
   exclude-rules:
     - path: _test\.go
       linters:
