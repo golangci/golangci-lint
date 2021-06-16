@@ -1,24 +1,55 @@
 Follow the news and releases on our [twitter](https://twitter.com/golangci) and our [blog](https://medium.com/golangci).
 There is the most valuable changes log:
 
+### June 2021
+
+1. update linters:
+   * `revive`: allow to disable rule
+   * `durationcheck`: from 0.0.7 to 0.0.8
+   * `goconst`: from 0.5.6 to 0.5.7
+2. documentation:
+   * add all integrations to docs introduction page
+3. Misc:
+   * 🎉 Un-deprecate enable-all option
+   * output: generate HTML report
+
 ### May 2021
 
 1. new linters:
    * `tagliatelle`: https://github.com/ldez/tagliatelle
    * `promlinter`: https://github.com/yeya24/promlinter
 2. update linters:
-   * `staticcheck`: from 0.1.3 to 0.1.4
-   * `wastedassign`: from 0.2.0 to 1.0.0
-   * `go-critic`: from 0.5.5 to 0.5.6
-   * `wrapcheck`: from 1.2.0 to 2.1.0
-   * `importas`: bump to HEAD
+   * `durationcheck`: from 0.0.6 to 0.0.7
    * `errorlint`: bump to HEAD
-   * `importas`: allow repeated aliases
-   * `revive`: convert hard coded excludes into default exclude patterns
-   * `govet`: Update vet passes
-   * `govet`: fix `sigchanyzer`
+   * `forbidigo`: from 1.1.0 to 1.2.0
+   * `go-critic`: from 0.5.5 to 0.5.6
+   * `godot`: from 1.4.6 to 1.4.7
    * ⚠ `golint`: deprecated
+   * `gomnd`: from 2.3.2 to 2.4.0
+   * `gomodguard`: fix problem where duplicate issues were reported
+   * `gosec`: from 2.7.0 to 2.8.0
+   * `govet`: fix `sigchanyzer`
+   * `govet`: Update vet passes
+   * `importas`: allow repeated aliases
+   * `importas`: bump to HEAD
+   * `makezero`: bump to HEAD
+   * `nolintlint`: fix false positive
+   * `revive`: convert hard coded excludes into default exclude patterns
+   * `revive`: fix add-constant rule support
+   * `revive`: fix excludes
+   * `revive`: from 1.0.6 to 1.0.7
+   * `revive`: improve 'exported' rule output
+   * `rowserrcheck`: bump to v1.1.0
+   * `staticcheck`: configuration for `staticcheck`, `gosimple`, `stylecheck`
+   * `staticcheck`: from 0.1.3 to 0.1.4
+   * `staticcheck`: from v0.1.4 to v0.2.0
+   * `wastedassign`: from 0.2.0 to 1.0.0
+   * `wastedassign`: from 1.0.0 to v2.0.6
+   * `wrapcheck`: from 1.2.0 to 2.1.0
 3. documentation:
+   * improve linters page
+   * `exhaustivestruct` example explanation
+   * fix pattern of `forbidigo` in example config yaml
    * bump documentation dependencies
    * fix typos
 4. Misc:
