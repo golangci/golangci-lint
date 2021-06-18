@@ -79,7 +79,7 @@ var DefaultExcludePatterns = []ExcludePattern{
 	},
 	{
 		ID:      "EXC0012",
-		Pattern: `exported (.+) should have comment or be unexported`,
+		Pattern: `exported (.+) should have comment( \(or a comment on this block\))? or be unexported`,
 		Linter:  "revive",
 		Why:     "Annoying issue about not having a comment. The rare codebase has such comments",
 	},
