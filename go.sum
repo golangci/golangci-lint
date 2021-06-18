@@ -541,8 +541,8 @@ github.com/rogpeppe/go-internal v1.6.2/go.mod h1:xXDCJY+GAPziupqXw64V24skbSoqbTE
 github.com/rs/cors v1.7.0/go.mod h1:gFx+x8UowdsKA9AchylcLynDq+nNFfI8FkUZdN/jGCU=
 github.com/russross/blackfriday v1.5.2/go.mod h1:JO/DiYxRf+HjHt06OyowR9PTA263kcR/rfWxYHBV53g=
 github.com/russross/blackfriday/v2 v2.0.1/go.mod h1:+Rmxgy9KzJVeS9/2gXHxylqXiyQDYRxCVz55jmeOWTM=
-github.com/ryancurrah/gomodguard v1.2.1 h1:t1WWL0RGJJBo5KZ0u2c/FGY1QQgx2gUbHWzBmOKWs98=
-github.com/ryancurrah/gomodguard v1.2.1/go.mod h1:tpI+C/nzvfUR3bF28b5QHpTn/jM/zlGniI++6ZlIWeE=
+github.com/ryancurrah/gomodguard v1.2.2 h1:ZJQeYHZ2kaJpojoQBaGqpsn5g7GMcePY36uUGW1umbs=
+github.com/ryancurrah/gomodguard v1.2.2/go.mod h1:tpI+C/nzvfUR3bF28b5QHpTn/jM/zlGniI++6ZlIWeE=
 github.com/ryanrolds/sqlclosecheck v0.3.0 h1:AZx+Bixh8zdUBxUA1NxbxVAS78vTPq4rCb8OUZI9xFw=
 github.com/ryanrolds/sqlclosecheck v0.3.0/go.mod h1:1gREqxyTGR3lVtpngyFo3hZAgk0KCtEdgEkHwDbigdA=
 github.com/ryanuber/columnize v0.0.0-20160712163229-9b3edd62028f/go.mod h1:sm1tb6uqfes/u+d4ooFouqFdy9/2g9QGwK3SQygK0Ts=
