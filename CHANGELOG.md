@@ -4,9 +4,11 @@ There is the most valuable changes log:
 ### June 2021
 
 1. update linters:
-   * `revive`: allow to disable rule
    * `durationcheck`: from 0.0.7 to 0.0.8
    * `goconst`: from 0.5.6 to 0.5.7
+   * `gomodguard`: from 1.2.1 to 1.2.2
+   * `revive`: allow to disable rule
+   * `revive`: fix exclude comment rule for const block
 2. documentation:
    * add all integrations to docs introduction page
 3. Misc:
