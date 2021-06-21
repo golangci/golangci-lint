@@ -59,7 +59,8 @@ var defaultLintersSettings = LintersSettings{
 		DefaultSignifiesExhaustive: false,
 	},
 	Gofumpt: GofumptSettings{
-		ExtraRules: false,
+		LangVersion: "",
+		ExtraRules:  false,
 	},
 	ErrorLint: ErrorLintSettings{
 		Errorf:     true,
@@ -232,7 +233,8 @@ type GoFmtSettings struct {
 }
 
 type GofumptSettings struct {
-	ExtraRules bool `mapstructure:"extra-rules"`
+	LangVersion string `mapstructure:"lang-version"`
+	ExtraRules  bool   `mapstructure:"extra-rules"`
 }
 
 type GoHeaderSettings struct {
