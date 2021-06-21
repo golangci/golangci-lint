@@ -75,7 +75,7 @@ require (
 	github.com/tdakkota/asciicheck v0.0.0-20200416200610-e657995f937b
 	github.com/tetafro/godot v1.4.7
 	github.com/timakin/bodyclose v0.0.0-20200424151742-cb6215831a94
-	github.com/tomarrell/wrapcheck/v2 v2.1.0
+	github.com/tomarrell/wrapcheck/v2 v2.2.0
 	github.com/tommy-muehle/go-mnd/v2 v2.4.0
 	github.com/ultraware/funlen v0.0.3
 	github.com/ultraware/whitespace v0.0.4
