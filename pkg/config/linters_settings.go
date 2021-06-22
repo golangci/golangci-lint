@@ -376,6 +376,7 @@ type ReviveSettings struct {
 	IgnoreGeneratedHeader bool `mapstructure:"ignore-generated-header"`
 	Confidence            float64
 	Severity              string
+	EnableAllRules        bool `mapstructure:"enable-all-rules"`
 	Rules                 []struct {
 		Name      string
 		Arguments []interface{}
