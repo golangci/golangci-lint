@@ -259,6 +259,9 @@ linters-settings:
     simplify: true
 
   gofumpt:
+    # Select the Go version to target. The default is `1.15`.
+    lang-version: "1.15"
+
     # Choose whether or not to use the extra rules that are disabled
     # by default
     extra-rules: false
