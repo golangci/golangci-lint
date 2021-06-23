@@ -34,9 +34,9 @@ func NewGofumpt() *goanalysis.Linter {
 		nil,
 	).WithContextSetter(func(lintCtx *linter.Context) {
 		settings := lintCtx.Settings().Gofumpt
-		langVersion := getLangVersion(settings)
+
 		options := format.Options{
-			LangVersion: langVersion,
+			LangVersion: getLangVersion(settings),
 			ExtraRules:  settings.ExtraRules,
 		}
 
@@ -100,12 +100,9 @@ func NewGofumpt() *goanalysis.Linter {
 }
 
 func getLangVersion(settings config.GofumptSettings) string {
-	langVersion := settings.LangVersion
-
-	if langVersion != "" {
-		return langVersion
+	if settings.LangVersion == "" {
+		// TODO: defaults to "1.15", in the future (v2) must be set by using build.Default.ReleaseTags like staticcheck.
+		return "1.15"
 	}
-
-	// TODO: defaults to "1.15", in the future (v2) must be set by using build.Default.ReleaseTags like staticcheck.
-	return "1.15"
+	return settings.LangVersion
 }
