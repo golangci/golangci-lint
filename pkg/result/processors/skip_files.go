@@ -11,7 +11,7 @@ type SkipFiles struct {
 	patterns []*regexp.Regexp
 }
 
-var _ Processor = SkipFiles{}
+var _ Processor = (*SkipFiles)(nil)
 
 func NewSkipFiles(patterns []string) (*SkipFiles, error) {
 	var patternsRe []*regexp.Regexp
