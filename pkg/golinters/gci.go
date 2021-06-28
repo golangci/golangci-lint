@@ -3,6 +3,7 @@ package golinters
 import (
 	"bytes"
 	"fmt"
+	"strings"
 	"sync"
 
 	"github.com/daixiang0/gci/pkg/gci"
@@ -47,7 +48,7 @@ func NewGci() *goanalysis.Linter {
 			var issues []goanalysis.Issue
 
 			for _, f := range fileNames {
-				source, result, err := gci.Run(f, &gci.FlagSet{LocalFlag: localFlag})
+				source, result, err := gci.Run(f, &gci.FlagSet{LocalFlag: strings.Split(localFlag, ",")})
 				if err != nil {
 					return nil, err
 				}
