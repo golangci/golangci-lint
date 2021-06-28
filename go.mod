@@ -49,7 +49,7 @@ require (
 	github.com/mattn/go-colorable v0.1.8
 	github.com/mbilski/exhaustivestruct v1.2.0
 	github.com/mgechev/dots v0.0.0-20190921121421-c36f7dcfbb81
-	github.com/mgechev/revive v1.0.7
+	github.com/mgechev/revive v1.0.8
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/mitchellh/go-ps v1.0.0
 	github.com/moricho/tparallel v0.2.1
@@ -83,7 +83,7 @@ require (
 	github.com/uudashr/gocognit v1.0.1
 	github.com/valyala/quicktemplate v1.6.3
 	github.com/yeya24/promlinter v0.1.0
-	golang.org/x/tools v0.1.3
+	golang.org/x/tools v0.1.4
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
 	honnef.co/go/tools v0.2.0
 	mvdan.cc/gofumpt v0.1.1
