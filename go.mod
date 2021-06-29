@@ -13,7 +13,7 @@ require (
 	github.com/bkielbasa/cyclop v1.2.0
 	github.com/bombsimon/wsl/v3 v3.3.0
 	github.com/charithe/durationcheck v0.0.8
-	github.com/daixiang0/gci v0.2.8
+	github.com/daixiang0/gci v0.2.9
 	github.com/denis-tingajkin/go-header v0.4.2
 	github.com/esimonov/ifshort v1.0.2
 	github.com/fatih/color v1.12.0
