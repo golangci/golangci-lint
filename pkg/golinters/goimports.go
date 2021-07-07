@@ -24,7 +24,7 @@ func NewGoimports() *goanalysis.Linter {
 	}
 	return goanalysis.NewLinter(
 		goimportsName,
-		"Goimports does everything that gofmt does. Additionally it checks unused imports",
+		"In addition to fixing imports, goimports also formats your code in the same style as gofmt.",
 		[]*analysis.Analyzer{analyzer},
 		nil,
 	).WithContextSetter(func(lintCtx *linter.Context) {
