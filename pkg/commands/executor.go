@@ -97,7 +97,6 @@ func NewExecutor(version, commit, date string) *Executor {
 	e.initHelp()
 	e.initLinters()
 	e.initConfig()
-	e.initCompletion()
 	e.initVersion()
 	e.initCache()
 
