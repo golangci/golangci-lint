@@ -133,9 +133,6 @@ func initFlagSet(fs *pflag.FlagSet, cfg *config.Config, m *lintersdb.Manager, is
 	fs.StringVar(&lsc.Errcheck.Exclude, "errcheck.exclude", "",
 		"Path to a file containing a list of functions to exclude from checking")
 	hideFlag("errcheck.exclude")
-	fs.StringSliceVar(&lsc.Errcheck.ExcludeFunctions, "errcheck.exclude-functions", nil,
-		"List of functions to exclude from checking")
-	hideFlag("errcheck.exclude-functions")
 	fs.StringVar(&lsc.Errcheck.Ignore, "errcheck.ignore", "fmt:.*",
 		`Comma-separated list of pairs of the form pkg:regex. The regex is used to ignore names within pkg`)
 	hideFlag("errcheck.ignore")
