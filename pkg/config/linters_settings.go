@@ -174,8 +174,9 @@ type ErrorLintSettings struct {
 }
 
 type ExhaustiveSettings struct {
-	CheckGenerated             bool `mapstructure:"check-generated"`
-	DefaultSignifiesExhaustive bool `mapstructure:"default-signifies-exhaustive"`
+	CheckGenerated             bool   `mapstructure:"check-generated"`
+	DefaultSignifiesExhaustive bool   `mapstructure:"default-signifies-exhaustive"`
+	IgnorePattern              string `mapstructure:"ignore-pattern"`
 }
 
 type ExhaustiveStructSettings struct {
