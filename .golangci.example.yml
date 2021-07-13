@@ -113,9 +113,17 @@ linters-settings:
     # see https://github.com/kisielk/errcheck#the-deprecated-method for details
     ignore: fmt:.*,io/ioutil:^Read.*
 
+    # [deprecated] use exclude-functions instead.
     # path to a file containing a list of functions to exclude from checking
     # see https://github.com/kisielk/errcheck#excluding-functions for details
     exclude: /path/to/file.txt
+
+    # list of functions to exclude from checking, where each entry is a single function to exclude.
+    # see https://github.com/kisielk/errcheck#excluding-functions for details
+    exclude-functions:
+      - io/ioutil.ReadFile
+      - io.Copy(*bytes.Buffer)
+      - io.Copy(os.Stdout)
 
   errorlint:
     # Check whether fmt.Errorf uses the %w verb for formatting errors. See the readme for caveats

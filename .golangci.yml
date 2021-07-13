@@ -122,6 +122,12 @@ issues:
     - path: _test\.go
       linters:
         - gomnd
+
+    - path: pkg/golinters/errcheck.go
+      text: "SA1019: errCfg.Exclude is deprecated: use ExcludeFunctions instead"
+    - path: pkg/commands/run.go
+      text: "SA1019: lsc.Errcheck.Exclude is deprecated: use ExcludeFunctions instead"
+
     # TODO must be removed after the release of the next version (v1.41.0)
     - path: pkg/commands/run.go
       linters:

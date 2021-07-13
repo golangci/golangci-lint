@@ -161,10 +161,13 @@ type DuplSettings struct {
 }
 
 type ErrcheckSettings struct {
-	CheckTypeAssertions bool   `mapstructure:"check-type-assertions"`
-	CheckAssignToBlank  bool   `mapstructure:"check-blank"`
-	Ignore              string `mapstructure:"ignore"`
-	Exclude             string `mapstructure:"exclude"`
+	CheckTypeAssertions bool     `mapstructure:"check-type-assertions"`
+	CheckAssignToBlank  bool     `mapstructure:"check-blank"`
+	Ignore              string   `mapstructure:"ignore"`
+	ExcludeFunctions    []string `mapstructure:"exclude-functions"`
+
+	// Deprecated: use ExcludeFunctions instead
+	Exclude string `mapstructure:"exclude"`
 }
 
 type ErrorLintSettings struct {
