@@ -4,6 +4,7 @@ go 1.12
 
 require (
 	4d63.com/gochecknoglobals v0.0.0-20201008074935-acfc0b28355a
+	github.com/Antonboom/errname v0.1.2
 	github.com/Djarvur/go-err113 v0.0.0-20200511133814-5174e21577d5
 	github.com/OpenPeeDeeP/depguard v1.0.1
 	github.com/bombsimon/wsl/v3 v3.1.0
@@ -63,8 +64,7 @@ require (
 	github.com/ultraware/whitespace v0.0.4
 	github.com/uudashr/gocognit v1.0.1
 	github.com/valyala/quicktemplate v1.6.3
-	golang.org/x/sys v0.0.0-20201009025420-dfb3f7c4e634 // indirect
-	golang.org/x/tools v0.0.0-20201013201025-64a9e34f3752
+	golang.org/x/tools v0.1.5
 	gopkg.in/yaml.v2 v2.3.0
 	honnef.co/go/tools v0.0.1-2020.1.6
 	mvdan.cc/gofumpt v0.0.0-20200802201014-ab5a8192947d
