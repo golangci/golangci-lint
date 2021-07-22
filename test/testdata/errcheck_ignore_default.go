@@ -3,9 +3,16 @@
 package testdata
 
 import (
+	"crypto/sha256"
 	"fmt"
 	"os"
 )
+
+func TestErrcheckIgnoreHashWriteByDefault() []byte {
+	h := sha256.New()
+	h.Write([]byte("food"))
+	return h.Sum(nil)
+}
 
 func TestErrcheckIgnoreFmtByDefault(s string) int {
 	n, _ := fmt.Println(s)

@@ -91,7 +91,7 @@ func TestTimeoutInConfig(t *testing.T) {
 
 func TestTestsAreLintedByDefault(t *testing.T) {
 	testshared.NewLintRunner(t).Run(getTestDataDir("withtests")).
-		ExpectHasIssue("`if` block ends with a `return`")
+		ExpectHasIssue("don't use `init` function")
 }
 
 func TestCgoOk(t *testing.T) {
@@ -135,7 +135,7 @@ func TestSortedResults(t *testing.T) {
 			"--sort-results=false",
 			strings.Join([]string{
 				"testdata/sort_results/main.go:12:5: `db` is unused (deadcode)",
-				"testdata/sort_results/main.go:15:13: Error return value of `returnError` is not checked (errcheck)",
+				"testdata/sort_results/main.go:15:13: Error return value is not checked (errcheck)",
 				"testdata/sort_results/main.go:8:6: func `returnError` is unused (unused)",
 			}, "\n"),
 		},
@@ -144,7 +144,7 @@ func TestSortedResults(t *testing.T) {
 			strings.Join([]string{
 				"testdata/sort_results/main.go:8:6: func `returnError` is unused (unused)",
 				"testdata/sort_results/main.go:12:5: `db` is unused (deadcode)",
-				"testdata/sort_results/main.go:15:13: Error return value of `returnError` is not checked (errcheck)",
+				"testdata/sort_results/main.go:15:13: Error return value is not checked (errcheck)",
 			}, "\n"),
 		},
 	}
@@ -185,8 +185,6 @@ func TestLintFilesWithLineDirective(t *testing.T) {
 		Run("-Egomodguard", "--disable-all", "--config=testdata/linedirective/gomodguard.yml", getTestDataDir("linedirective")).
 		ExpectHasIssue("import of package `github.com/ryancurrah/gomodguard` is blocked because the module is not " +
 			"in the allowed modules list. (gomodguard)")
-	r.Run("-Eineffassign", "--disable-all", "--no-config", getTestDataDir("linedirective")).
-		ExpectHasIssue("ineffectual assignment to `x` (ineffassign)")
 	r.Run("-Elll", "--disable-all", "--config=testdata/linedirective/lll.yml", getTestDataDir("linedirective")).
 		ExpectHasIssue("line is 57 characters (lll)")
 	r.Run("-Emisspell", "--disable-all", "--no-config", getTestDataDir("linedirective")).
@@ -339,9 +337,9 @@ func TestPathPrefix(t *testing.T) {
 	} {
 		t.Run(tt.Name, func(t *testing.T) {
 			testshared.NewLintRunner(t).Run(
-				append(tt.Args, getTestDataDir("withtests"))..., //nolint:scopelint
+				append(tt.Args, getTestDataDir("withtests"))...,
 			).ExpectOutputRegexp(
-				tt.Pattern, //nolint:scopelint
+				tt.Pattern,
 			)
 		})
 	}

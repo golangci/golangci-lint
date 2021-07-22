@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	homedir "github.com/mitchellh/go-homedir"
+	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/viper"
 
 	"github.com/golangci/golangci-lint/pkg/fsutils"

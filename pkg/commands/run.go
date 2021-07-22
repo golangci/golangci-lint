@@ -47,9 +47,6 @@ func getDefaultDirectoryExcludeHelp() string {
 	return strings.Join(parts, "\n")
 }
 
-const welcomeMessage = "Run this tool in cloud on every github pull " +
-	"request in https://golangci.com for free (public repos)"
-
 func wh(text string) string {
 	return color.GreenString(text)
 }
@@ -84,6 +81,11 @@ func initFlagSet(fs *pflag.FlagSet, cfg *config.Config, m *lintersdb.Manager, is
 	fs.BoolVar(&oc.PrintWelcomeMessage, "print-welcome", false, wh("Print welcome message"))
 	fs.StringVar(&oc.PathPrefix, "path-prefix", "", wh("Path prefix to add to output"))
 	hideFlag("print-welcome") // no longer used
+
+	fs.BoolVar(&cfg.InternalCmdTest, "internal-cmd-test", false, wh("Option is used only for testing golangci-lint command, don't use it"))
+	if err := fs.MarkHidden("internal-cmd-test"); err != nil {
+		panic(err)
+	}
 
 	// Run config
 	rc := &cfg.Run
@@ -158,12 +160,27 @@ func initFlagSet(fs *pflag.FlagSet, cfg *config.Config, m *lintersdb.Manager, is
 		150, "Dupl: Minimal threshold to detect copy-paste")
 	hideFlag("dupl.threshold")
 
+	fs.BoolVar(&lsc.Goconst.MatchWithConstants, "goconst.match-constant",
+		true, "Goconst: look for existing constants matching the values")
+	hideFlag("goconst.match-constant")
 	fs.IntVar(&lsc.Goconst.MinStringLen, "goconst.min-len",
 		3, "Goconst: minimum constant string length")
 	hideFlag("goconst.min-len")
 	fs.IntVar(&lsc.Goconst.MinOccurrencesCount, "goconst.min-occurrences",
 		3, "Goconst: minimum occurrences of constant string count to trigger issue")
 	hideFlag("goconst.min-occurrences")
+	fs.BoolVar(&lsc.Goconst.ParseNumbers, "goconst.numbers",
+		false, "Goconst: search also for duplicated numbers")
+	hideFlag("goconst.numbers")
+	fs.IntVar(&lsc.Goconst.NumberMin, "goconst.min",
+		3, "minimum value, only works with goconst.numbers")
+	hideFlag("goconst.min")
+	fs.IntVar(&lsc.Goconst.NumberMax, "goconst.max",
+		3, "maximum value, only works with goconst.numbers")
+	hideFlag("goconst.max")
+	fs.BoolVar(&lsc.Goconst.IgnoreCalls, "goconst.ignore-calls",
+		true, "Goconst: ignore when constant is not used as function argument")
+	hideFlag("goconst.ignore-calls")
 
 	// (@dixonwille) These flag is only used for testing purposes.
 	fs.StringSliceVar(&lsc.Depguard.Packages, "depguard.packages", nil,
@@ -186,7 +203,6 @@ func initFlagSet(fs *pflag.FlagSet, cfg *config.Config, m *lintersdb.Manager, is
 	if err := fs.MarkHidden("enable-all"); err != nil {
 		panic(err)
 	}
-	// TODO: run hideFlag("enable-all") to print deprecation message.
 
 	fs.BoolVar(&lc.DisableAll, "disable-all", false, wh("Disable all linters"))
 	fs.StringSliceVarP(&lc.Presets, "presets", "p", nil,
@@ -259,7 +275,7 @@ func (e *Executor) getConfigForCommandLine() (*config.Config, error) {
 func (e *Executor) initRun() {
 	e.runCmd = &cobra.Command{
 		Use:   "run",
-		Short: welcomeMessage,
+		Short: "Run the linters",
 		Run:   e.executeRun,
 		PreRun: func(_ *cobra.Command, _ []string) {
 			if ok := e.acquireFileLock(); !ok {
@@ -272,7 +288,8 @@ func (e *Executor) initRun() {
 	}
 	e.rootCmd.AddCommand(e.runCmd)
 
-	e.runCmd.SetOutput(logutils.StdOut) // use custom output to properly color it in Windows terminals
+	e.runCmd.SetOut(logutils.StdOut) // use custom output to properly color it in Windows terminals
+	e.runCmd.SetErr(logutils.StdErr)
 
 	e.initRunConfiguration(e.runCmd)
 }
@@ -295,8 +312,15 @@ func fixSlicesFlags(fs *pflag.FlagSet) {
 			return
 		}
 
+		var safe []string
+		for _, v := range s {
+			// add quotes to escape comma because spf13/pflag use a CSV parser:
+			// https://github.com/spf13/pflag/blob/85dd5c8bc61cfa382fecd072378089d4e856579d/string_slice.go#L43
+			safe = append(safe, `"`+v+`"`)
+		}
+
 		// calling Set sets Changed to true: next Set calls will append, not overwrite
-		_ = f.Value.Set(strings.Join(s, ","))
+		_ = f.Value.Set(strings.Join(safe, ","))
 	})
 }
 
@@ -408,6 +432,8 @@ func (e *Executor) createPrinter() (printers.Printer, error) {
 		p = printers.NewCheckstyle()
 	case config.OutFormatCodeClimate:
 		p = printers.NewCodeClimate()
+	case config.OutFormatHTML:
+		p = printers.NewHTML()
 	case config.OutFormatJunitXML:
 		p = printers.NewJunitXML()
 	case config.OutFormatGithubActions:

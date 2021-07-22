@@ -16,8 +16,9 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/golangci/golangci-lint/internal/renameio"
+	"gopkg.in/yaml.v3"
 
+	"github.com/golangci/golangci-lint/internal/renameio"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
 )
@@ -55,7 +56,9 @@ func updateStateFile(replacements map[string]string) error {
 	}
 
 	h := sha256.New()
-	h.Write(replBytes) //nolint:errcheck
+	if _, err := h.Write(replBytes); err != nil {
+		return err
+	}
 
 	var contentBuf bytes.Buffer
 	contentBuf.WriteString("This file stores hash of website templates to trigger " +
@@ -157,12 +160,12 @@ func getLatestVersion() (string, error) {
 }
 
 func buildTemplateContext() (map[string]string, error) {
-	golangciYaml, err := ioutil.ReadFile(".golangci.yml")
+	golangciYamlExample, err := ioutil.ReadFile(".golangci.example.yml")
 	if err != nil {
-		return nil, fmt.Errorf("can't read .golangci.yml: %s", err)
+		return nil, fmt.Errorf("can't read .golangci.example.yml: %s", err)
 	}
 
-	golangciYamlExample, err := ioutil.ReadFile(".golangci.example.yml")
+	lintersCfg, err := getLintersConfiguration(golangciYamlExample)
 	if err != nil {
 		return nil, fmt.Errorf("can't read .golangci.example.yml: %s", err)
 	}
@@ -199,7 +202,7 @@ func buildTemplateContext() (map[string]string, error) {
 	}
 
 	return map[string]string{
-		"GolangciYaml":                     strings.TrimSpace(string(golangciYaml)),
+		"LintersExample":                   lintersCfg,
 		"GolangciYamlExample":              strings.TrimSpace(string(golangciYamlExample)),
 		"LintersCommandOutputEnabledOnly":  string(lintersOutParts[0]),
 		"LintersCommandOutputDisabledOnly": string(lintersOutParts[1]),
@@ -224,19 +227,66 @@ func getLintersListMarkdown(enabled bool) string {
 	sort.Slice(neededLcs, func(i, j int) bool {
 		return neededLcs[i].Name() < neededLcs[j].Name()
 	})
-	var lines []string
+
+	lines := []string{
+		"|Name|Description|Presets|AutoFix|Since|",
+		"|---|---|---|---|---|---|",
+	}
+
 	for _, lc := range neededLcs {
-		var link string
-		if lc.OriginalURL != "" {
-			link = fmt.Sprintf("[%s](%s)", lc.Name(), lc.OriginalURL)
-		} else {
-			link = lc.Name()
-		}
-		line := fmt.Sprintf("- %s - %s", link, lc.Linter.Desc())
+		line := fmt.Sprintf("|%s|%s|%s|%v|%s|",
+			getName(lc),
+			getDesc(lc),
+			strings.Join(lc.InPresets, ", "),
+			check(lc.CanAutoFix, "Auto fix supported"),
+			lc.Since,
+		)
 		lines = append(lines, line)
 	}
 
 	return strings.Join(lines, "\n")
+}
+
+func getName(lc *linter.Config) string {
+	name := lc.Name()
+
+	if lc.OriginalURL != "" {
+		name = fmt.Sprintf("[%s](%s)", lc.Name(), lc.OriginalURL)
+	}
+
+	if !lc.IsDeprecated() {
+		return name
+	}
+
+	title := "deprecated"
+	if lc.Deprecation.Replacement != "" {
+		title += fmt.Sprintf(" since %s", lc.Deprecation.Since)
+	}
+
+	return name + " " + span(title, "⚠")
+}
+
+func getDesc(lc *linter.Config) string {
+	desc := lc.Linter.Desc()
+	if lc.IsDeprecated() {
+		desc = lc.Deprecation.Message
+		if lc.Deprecation.Replacement != "" {
+			desc += fmt.Sprintf(" Replaced by %s.", lc.Deprecation.Replacement)
+		}
+	}
+
+	return strings.ReplaceAll(desc, "\n", "<br/>")
+}
+
+func check(b bool, title string) string {
+	if b {
+		return span(title, "✔")
+	}
+	return ""
+}
+
+func span(title, icon string) string {
+	return fmt.Sprintf(`<span title="%s">%s</span>`, title, icon)
 }
 
 func getThanksList() string {
@@ -265,4 +315,60 @@ func getThanksList() string {
 	}
 
 	return strings.Join(lines, "\n")
+}
+
+func getLintersConfiguration(example []byte) (string, error) {
+	builder := &strings.Builder{}
+
+	var data yaml.Node
+	err := yaml.Unmarshal(example, &data)
+	if err != nil {
+		return "", err
+	}
+
+	root := data.Content[0]
+
+	for j, node := range root.Content {
+		if node.Value != "linters-settings" {
+			continue
+		}
+
+		nodes := root.Content[j+1]
+
+		for i := 0; i < len(nodes.Content); i += 2 {
+			r := &yaml.Node{
+				Kind:  nodes.Kind,
+				Style: nodes.Style,
+				Tag:   nodes.Tag,
+				Value: node.Value,
+				Content: []*yaml.Node{
+					{
+						Kind:  root.Content[j].Kind,
+						Value: root.Content[j].Value,
+					},
+					{
+						Kind:    nodes.Kind,
+						Content: []*yaml.Node{nodes.Content[i], nodes.Content[i+1]},
+					},
+				},
+			}
+
+			_, _ = fmt.Fprintf(builder, "### %s\n\n", nodes.Content[i].Value)
+			_, _ = fmt.Fprintln(builder, "```yaml")
+
+			const ident = 2
+			encoder := yaml.NewEncoder(builder)
+			encoder.SetIndent(ident)
+
+			err = encoder.Encode(r)
+			if err != nil {
+				return "", err
+			}
+
+			_, _ = fmt.Fprintln(builder, "```")
+			_, _ = fmt.Fprintln(builder)
+		}
+	}
+
+	return builder.String(), nil
 }

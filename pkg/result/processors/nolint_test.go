@@ -149,6 +149,28 @@ func TestNolintInvalidLinterName(t *testing.T) {
 	p.Finish()
 }
 
+func TestNolintInvalidLinterNameWithViolationOnTheSameLine(t *testing.T) {
+	log := getMockLog()
+	log.On("Warnf", "Found unknown linters in //nolint directives: %s", "foobar")
+	issues := []result.Issue{
+		{
+			Pos: token.Position{
+				Filename: filepath.Join("testdata", "nolint_apply_to_unknown.go"),
+				Line:     4,
+			},
+			FromLinter: "gofmt",
+		},
+	}
+
+	p := newTestNolintProcessor(log)
+	processedIssues, err := p.Process(issues)
+	p.Finish()
+
+	assert.Len(t, processedIssues, 1)
+	assert.Equal(t, issues, processedIssues)
+	assert.NoError(t, err)
+}
+
 func TestNolintAliases(t *testing.T) {
 	p := newTestNolintProcessor(getMockLog())
 	for _, line := range []int{47, 49, 51} {
@@ -269,11 +291,29 @@ func TestNolintUnused(t *testing.T) {
 		ExpectedNoLintLinter: "varcheck",
 	}
 
+	// the issue below is another nolintlint issue that would be generated for the test file
+	nolintlintIssueVarcheckUnusedOK := result.Issue{
+		Pos: token.Position{
+			Filename: fileName,
+			Line:     5,
+		},
+		FromLinter:           golinters.NolintlintName,
+		ExpectNoLint:         true,
+		ExpectedNoLintLinter: "varcheck",
+	}
+
 	t.Run("when an issue does not occur, it is not removed from the nolintlint issues", func(t *testing.T) {
 		p := createProcessor(t, log, []string{"nolintlint", "varcheck"})
 		defer p.Finish()
 
 		processAssertSame(t, p, nolintlintIssueVarcheck)
+	})
+
+	t.Run("when an issue does not occur but nolintlint is nolinted, it is removed from the nolintlint issues", func(t *testing.T) {
+		p := createProcessor(t, log, []string{"nolintlint", "varcheck"})
+		defer p.Finish()
+
+		processAssertEmpty(t, p, nolintlintIssueVarcheckUnusedOK)
 	})
 
 	t.Run("when an issue occurs, it is removed from the nolintlint issues", func(t *testing.T) {

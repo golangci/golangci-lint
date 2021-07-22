@@ -22,9 +22,12 @@ builds:
       - s390x
       - mips64
       - mips64le
+      - riscv64
     goarm:
       - 6
       - 7
+    gomips:
+      - hardfloat
     env:
       - CGO_ENABLED=0
     ignore:
@@ -33,6 +36,8 @@ builds:
       - goos: freebsd
         goarch: arm64
     main: ./cmd/golangci-lint/
+    flags:
+      - -trimpath
     ldflags: -s -w -X main.version={{.Version}} -X main.commit={{.ShortCommit}} -X main.date={{.Date}}
 
 archives:
@@ -60,6 +65,7 @@ changelog:
     - '^test:'
     - '^dev:'
     - 'README'
+    - 'build\(deps\): bump .* in /docs \(#\d+\)'
     - Merge pull request
     - Merge branch
 

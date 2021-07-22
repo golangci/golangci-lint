@@ -34,8 +34,6 @@ linters-settings:
     min-complexity: 15
   goimports:
     local-prefixes: github.com/golangci/golangci-lint
-  golint:
-    min-confidence: 0
   gomnd:
     settings:
       mnd:
@@ -63,8 +61,6 @@ linters-settings:
     require-specific: false # don't require nolint directives to be specific about which linter is being skipped
 
 linters:
-  # please, do not use `enable-all`: it's deprecated and will be removed soon.
-  # inverted configuration with `enable-all` and `disable` is not scalable during updates of golangci-lint
   disable-all: true
   enable:
     - bodyclose
@@ -73,6 +69,7 @@ linters:
     - dogsled
     - dupl
     - errcheck
+    - exportloopref
     - exhaustive
     - funlen
     - gochecknoinits
@@ -81,21 +78,18 @@ linters:
     - gocyclo
     - gofmt
     - goimports
-    - golint
     - gomnd
     - goprintffuncname
     - gosec
     - gosimple
     - govet
     - ineffassign
-    - interfacer
     - lll
     - misspell
     - nakedret
     - noctx
     - nolintlint
     - rowserrcheck
-    - scopelint
     - staticcheck
     - structcheck
     - stylecheck
@@ -108,15 +102,18 @@ linters:
 
   # don't enable:
   # - asciicheck
+  # - scopelint
   # - gochecknoglobals
   # - gocognit
   # - godot
   # - godox
   # - goerr113
+  # - interfacer
   # - maligned
   # - nestif
   # - prealloc
   # - testpackage
+  # - revive
   # - wsl
 
 issues:
@@ -126,10 +123,24 @@ issues:
       linters:
         - gomnd
 
-    # https://github.com/go-critic/go-critic/issues/926
-    - linters:
-        - gocritic
-      text: "unnecessaryDefer:"
+    - path: pkg/golinters/errcheck.go
+      text: "SA1019: errCfg.Exclude is deprecated: use ExcludeFunctions instead"
+    - path: pkg/commands/run.go
+      text: "SA1019: lsc.Errcheck.Exclude is deprecated: use ExcludeFunctions instead"
+
+    # TODO must be removed after the release of the next version (v1.41.0)
+    - path: pkg/commands/run.go
+      linters:
+        - gomnd
+    # TODO must be removed after the release of the next version (v1.41.0)
+    - path: pkg/golinters/nolintlint/nolintlint.go
+      linters:
+        - gomnd
+    # TODO must be removed after the release of the next version (v1.41.0)
+    - path: pkg/printers/tab.go
+      linters:
+        - gomnd
+
 
 run:
   skip-dirs:
@@ -137,10 +148,3 @@ run:
     - internal/cache
     - internal/renameio
     - internal/robustio
-
-# golangci.com configuration
-# https://github.com/golangci/golangci/wiki/Configuration
-service:
-  golangci-lint-version: 1.23.x # use the fixed version to not introduce new linters unexpectedly
-  prepare:
-    - echo "here I can run custom commands, but no preparation needed for this repo"

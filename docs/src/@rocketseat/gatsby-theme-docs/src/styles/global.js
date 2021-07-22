@@ -1,6 +1,5 @@
 import React from 'react';
-import { Global, css } from '@emotion/core';
-import { useTheme } from 'emotion-theming';
+import { Global, css, useTheme } from '@emotion/react';
 import { lighten } from 'polished';
 
 export default function GlobalStyle() {

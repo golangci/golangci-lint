@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"strconv"
+	"strings"
 	"sync"
 
 	"github.com/securego/gosec/v2"
@@ -13,6 +14,7 @@ import (
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/packages"
 
+	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
@@ -20,12 +22,25 @@ import (
 
 const gosecName = "gosec"
 
-func NewGosec() *goanalysis.Linter {
+func NewGosec(settings *config.GoSecSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
 
 	gasConfig := gosec.NewConfig()
-	enabledRules := rules.Generate()
+
+	var filters []rules.RuleFilter
+	if settings != nil {
+		filters = gosecRuleFilters(settings.Includes, settings.Excludes)
+
+		for k, v := range settings.Config {
+			// Uses ToUpper because the parsing of the map's key change the key to lowercase.
+			// The value is not impacted by that: the case is respected.
+			gasConfig.Set(strings.ToUpper(k), v)
+		}
+	}
+
+	ruleDefinitions := rules.Generate(filters...)
+
 	logger := log.New(ioutil.Discard, "", 0)
 
 	analyzer := &analysis.Analyzer{
@@ -40,7 +55,8 @@ func NewGosec() *goanalysis.Linter {
 	).WithContextSetter(func(lintCtx *linter.Context) {
 		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
 			gosecAnalyzer := gosec.NewAnalyzer(gasConfig, true, logger)
-			gosecAnalyzer.LoadRules(enabledRules.Builders())
+			gosecAnalyzer.LoadRules(ruleDefinitions.Builders())
+
 			pkg := &packages.Package{
 				Fset:      pass.Fset,
 				Syntax:    pass.Files,
@@ -94,4 +110,19 @@ func NewGosec() *goanalysis.Linter {
 	}).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
 		return resIssues
 	}).WithLoadMode(goanalysis.LoadModeTypesInfo)
+}
+
+// based on https://github.com/securego/gosec/blob/569328eade2ccbad4ce2d0f21ee158ab5356a5cf/cmd/gosec/main.go#L170-L188
+func gosecRuleFilters(includes, excludes []string) []rules.RuleFilter {
+	var filters []rules.RuleFilter
+
+	if len(includes) > 0 {
+		filters = append(filters, rules.NewRuleFilter(false, includes...))
+	}
+
+	if len(excludes) > 0 {
+		filters = append(filters, rules.NewRuleFilter(true, excludes...))
+	}
+
+	return filters
 }

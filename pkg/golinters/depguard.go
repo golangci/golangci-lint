@@ -7,7 +7,7 @@ import (
 
 	"github.com/OpenPeeDeeP/depguard"
 	"golang.org/x/tools/go/analysis"
-	"golang.org/x/tools/go/loader"
+	"golang.org/x/tools/go/loader" //nolint:staticcheck // require changes in github.com/OpenPeeDeeP/depguard
 
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
