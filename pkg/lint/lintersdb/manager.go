@@ -485,6 +485,10 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetBugs).
 			WithURL("https://github.com/gostaticanalysis/nilerr"),
+		linter.NewConfig(golinters.NewNilAssign()).
+			WithSince("v1.42.0").
+			WithPresets(linter.PresetBugs, linter.PresetStyle).
+			WithURL("https://github.com/sivchari/nilassign"),
 		linter.NewConfig(golinters.NewForceTypeAssert()).
 			WithSince("v1.38.0").
 			WithPresets(linter.PresetStyle).
