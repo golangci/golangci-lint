@@ -1,10 +1,10 @@
 package golinters
 
 import (
+	"github.com/sivchari/nilassign"
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
-	"github.com/sivchari/nilassign"
 )
 
 func NewNilAssign() *goanalysis.Linter {
@@ -17,5 +17,5 @@ func NewNilAssign() *goanalysis.Linter {
 		"Finds that assigning to invalid memory address or nil pointer dereference.",
 		analyzers,
 		nil,
-	).WithLoadMode(goanalysis.LoadModeSyntax)
+	).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }
