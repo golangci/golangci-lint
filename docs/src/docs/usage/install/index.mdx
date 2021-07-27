@@ -16,6 +16,17 @@ Also, the action creates GitHub annotations for found issues: you don't need to 
 
 ![GitHub annotations of the action](./annotations.png)
 
+### GitLab CI
+
+This setup uses the our official docker image. Simply add this to your `.gitlab-ci.yaml`:
+
+```yaml
+lint:
+  image: golangci/golangci-lint:v1.41.1
+  script:
+    - golangci-lint run -v
+```
+
 ### Other CI
 
 It's important to have reproducible CI: don't start to fail all builds at the same time.
