@@ -23,6 +23,7 @@ func NewIssue(i *result.Issue, pass *analysis.Pass) Issue {
 type EncodingIssue struct {
 	FromLinter           string
 	Text                 string
+	SuggestedFixes       []result.SuggestedFix
 	Pos                  token.Position
 	LineRange            *result.Range
 	Replacement          *result.Replacement

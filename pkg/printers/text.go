@@ -47,6 +47,7 @@ func (p *Text) Print(ctx context.Context, issues []result.Issue) error {
 
 		p.printSourceCode(&issues[i])
 		p.printUnderLinePointer(&issues[i])
+		p.printSuggestedEdits(&issues[i])
 	}
 
 	return nil
@@ -88,4 +89,20 @@ func (p Text) printUnderLinePointer(i *result.Issue) {
 	}
 
 	fmt.Fprintf(logutils.StdOut, "%s%s\n", string(prefixRunes), p.SprintfColored(color.FgYellow, "^"))
+}
+
+func (p Text) printSuggestedEdits(i *result.Issue) {
+	var text string
+	if len(i.SuggestedFixes) > 0 {
+		for _, fix := range i.SuggestedFixes {
+			text += p.SprintfColored(color.FgRed, "%s\n", strings.TrimSpace(fix.Message))
+			var suggestedEdits []string
+			for _, textEdit := range fix.TextEdits {
+				suggestedEdits = append(suggestedEdits, strings.TrimSpace(textEdit.NewText))
+			}
+			text += strings.Join(suggestedEdits, "\n") + "\n"
+		}
+	}
+
+	fmt.Fprintln(logutils.StdOut, text)
 }

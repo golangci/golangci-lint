@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"go/token"
 
+	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/packages"
 )
 
@@ -24,9 +25,47 @@ type InlineFix struct {
 	NewString string
 }
 
+type SuggestedFix struct {
+	// A description for this suggested fix to be shown to a user deciding
+	// whether to accept it.
+	Message   string
+	TextEdits []TextEdit
+}
+
+type TextEdit struct {
+	Pos     token.Pos
+	End     token.Pos
+	NewText string
+}
+
+func BuildSuggestedFixes(fixes []analysis.SuggestedFix) []SuggestedFix {
+	if len(fixes) == 0 {
+		return nil
+	}
+
+	suggestedFixes := make([]SuggestedFix, 0, len(fixes))
+	for _, fix := range fixes {
+		textEdits := make([]TextEdit, 0, len(fix.TextEdits))
+		for _, edit := range fix.TextEdits {
+			textEdits = append(textEdits, TextEdit{
+				Pos:     edit.Pos,
+				End:     edit.End,
+				NewText: string(edit.NewText),
+			})
+		}
+		suggestedFixes = append(suggestedFixes, SuggestedFix{
+			Message:   fix.Message,
+			TextEdits: textEdits,
+		})
+	}
+
+	return suggestedFixes
+}
+
 type Issue struct {
-	FromLinter string
-	Text       string
+	FromLinter     string
+	Text           string
+	SuggestedFixes []SuggestedFix
 
 	Severity string
 

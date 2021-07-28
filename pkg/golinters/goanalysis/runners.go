@@ -98,10 +98,11 @@ func buildIssues(diags []Diagnostic, linterNameBuilder func(diag *Diagnostic) st
 		}
 
 		issues = append(issues, result.Issue{
-			FromLinter: linterName,
-			Text:       text,
-			Pos:        diag.Position,
-			Pkg:        diag.Pkg,
+			FromLinter:     linterName,
+			Text:           text,
+			SuggestedFixes: result.BuildSuggestedFixes(diag.SuggestedFixes),
+			Pos:            diag.Position,
+			Pkg:            diag.Pkg,
 		})
 
 		if len(diag.Related) > 0 {
@@ -150,6 +151,7 @@ func saveIssuesToCache(allPkgs []*packages.Package, pkgsFromCache map[*packages.
 					encodedIssues = append(encodedIssues, EncodingIssue{
 						FromLinter:           i.FromLinter,
 						Text:                 i.Text,
+						SuggestedFixes:       i.SuggestedFixes,
 						Pos:                  i.Pos,
 						LineRange:            i.LineRange,
 						Replacement:          i.Replacement,
@@ -221,6 +223,7 @@ func loadIssuesFromCache(pkgs []*packages.Package, lintCtx *linter.Context,
 					issues = append(issues, result.Issue{
 						FromLinter:           i.FromLinter,
 						Text:                 i.Text,
+						SuggestedFixes:       i.SuggestedFixes,
 						Pos:                  i.Pos,
 						LineRange:            i.LineRange,
 						Replacement:          i.Replacement,
