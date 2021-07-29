@@ -59,6 +59,25 @@ const templateContent = `<!doctype html>
     }
   }
 
+  class SuggestedEdit extends React.Component {
+    render() {
+      if (this.props.data.SuggestedFix && this.props.data.SuggestedFix.length) {
+        return (
+          <div>
+            <div>
+              <strong>Suggested Edits</strong>
+            </div>
+            <div className="highlight">
+              <Highlight code={this.props.data.SuggestedFix}/>
+            </div>
+          </div>
+        )
+      }
+
+      return null
+    }
+  }
+
   class Issue extends React.Component {
     render() {
       return (
@@ -77,6 +96,7 @@ const templateContent = `<!doctype html>
           <div className="highlight">
             <Highlight code={this.props.data.Code}/>
           </div>
+          <SuggestedEdit data={this.props.data}/>
         </div>
       );
     }
@@ -117,10 +137,11 @@ const templateContent = `<!doctype html>
 </html>`
 
 type htmlIssue struct {
-	Title  string
-	Pos    string
-	Linter string
-	Code   string
+	Title        string
+	Pos          string
+	SuggestedFix string
+	Linter       string
+	Code         string
 }
 
 type HTML struct{}
@@ -139,10 +160,11 @@ func (h HTML) Print(_ context.Context, issues []result.Issue) error {
 		}
 
 		htmlIssues = append(htmlIssues, htmlIssue{
-			Title:  strings.TrimSpace(issues[i].Text),
-			Pos:    pos,
-			Linter: issues[i].FromLinter,
-			Code:   strings.Join(issues[i].SourceLines, "\n"),
+			Title:        strings.TrimSpace(issues[i].Text),
+			Pos:          pos,
+			SuggestedFix: h.getSuggestedFix(&issues[i]),
+			Linter:       issues[i].FromLinter,
+			Code:         strings.Join(issues[i].SourceLines, "\n"),
 		})
 	}
 
@@ -152,4 +174,20 @@ func (h HTML) Print(_ context.Context, issues []result.Issue) error {
 	}
 
 	return t.Execute(logutils.StdOut, struct{ Issues []htmlIssue }{Issues: htmlIssues})
+}
+
+func (h HTML) getSuggestedFix(i *result.Issue) string {
+	var text string
+	if len(i.SuggestedFixes) > 0 {
+		for _, fix := range i.SuggestedFixes {
+			text += fmt.Sprintf("%s\n", strings.TrimSpace(fix.Message))
+			var suggestedEdits []string
+			for _, textEdit := range fix.TextEdits {
+				suggestedEdits = append(suggestedEdits, strings.TrimSpace(textEdit.NewText))
+			}
+			text += strings.Join(suggestedEdits, "\n") + "\n"
+		}
+	}
+
+	return text
 }
