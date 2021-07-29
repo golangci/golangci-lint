@@ -1,8 +1,13 @@
 package config
 
 import (
+	"context"
 	"errors"
 	"fmt"
+	"io"
+	"io/ioutil"
+	"net/http"
+	"net/url"
 	"os"
 	"path/filepath"
 	"strings"
@@ -19,6 +24,7 @@ type FileReader struct {
 	log            logutils.Log
 	cfg            *Config
 	commandLineCfg *Config
+	remoteConfig   bool
 }
 
 func NewFileReader(toCfg, commandLineCfg *Config, log logutils.Log) *FileReader {
@@ -42,6 +48,8 @@ func (r *FileReader) Read() error {
 
 		return fmt.Errorf("can't parse --config option: %s", err)
 	}
+
+	defer r.cleanConfigFile(configFile)
 
 	if configFile != "" {
 		viper.SetConfigFile(configFile)
@@ -212,10 +220,69 @@ func (r *FileReader) parseConfigOption() (string, error) {
 		return "", errConfigDisabled
 	}
 
+	r.remoteConfig = r.isRemoteFile(configFile)
+
+	if r.remoteConfig {
+		r.log.Infof("Provided config file is remote %s", configFile)
+
+		ctx, cancel := context.WithTimeout(context.Background(), r.commandLineCfg.Run.RemoteConfigDownloadTimeout)
+		defer cancel()
+
+		tmpConfigFile, err := r.downloadFile(ctx, configFile)
+		if err != nil {
+			return "", fmt.Errorf("failed to download config file")
+		}
+		return tmpConfigFile, nil
+	}
+
 	configFile, err := homedir.Expand(configFile)
 	if err != nil {
 		return "", fmt.Errorf("failed to expand configuration path")
 	}
 
 	return configFile, nil
+}
+
+func (r *FileReader) isRemoteFile(configFile string) bool {
+	u, err := url.Parse(configFile)
+	return err == nil && u.Scheme != "" && u.Host != "" && (u.Scheme == "http" || u.Scheme == "https")
+}
+
+func (r *FileReader) downloadFile(ctx context.Context, configFile string) (string, error) {
+	tmpfile, err := ioutil.TempFile("", "*.golangci.yml")
+	if err != nil {
+		return "", err
+	}
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, configFile, nil)
+	if err != nil {
+		return "", err
+	}
+
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return "", err
+	}
+	defer resp.Body.Close()
+
+	_, err = io.Copy(tmpfile, resp.Body)
+	if err != nil {
+		return "", err
+	}
+
+	err = tmpfile.Close()
+	if err != nil {
+		return "", err
+	}
+
+	return tmpfile.Name(), nil
+}
+
+func (r *FileReader) cleanConfigFile(configFile string) {
+	if r.remoteConfig {
+		err := os.Remove(configFile)
+		if err != nil {
+			r.log.Warnf("Can't clean config file: %s", err)
+		}
+	}
 }

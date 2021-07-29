@@ -51,7 +51,10 @@ func wh(text string) string {
 	return color.GreenString(text)
 }
 
-const defaultTimeout = time.Minute
+const (
+	defaultTimeout                     = time.Minute
+	defaultRemoteConfigDownloadTimeout = 10 * time.Second
+)
 
 //nolint:funlen
 func initFlagSet(fs *pflag.FlagSet, cfg *config.Config, m *lintersdb.Manager, isFinalInit bool) {
@@ -104,7 +107,9 @@ func initFlagSet(fs *pflag.FlagSet, cfg *config.Config, m *lintersdb.Manager, is
 	fs.BoolVar(&rc.AnalyzeTests, "tests", true, wh("Analyze tests (*_test.go)"))
 	fs.BoolVar(&rc.PrintResourcesUsage, "print-resources-usage", false,
 		wh("Print avg and max memory usage of golangci-lint and total time"))
-	fs.StringVarP(&rc.Config, "config", "c", "", wh("Read config from file path `PATH`"))
+	fs.StringVarP(&rc.Config, "config", "c", "", wh("Read config from file path `PATH` or remote using (should start with http or https)"))
+	fs.DurationVar(&rc.RemoteConfigDownloadTimeout, "config-download-timeout", defaultRemoteConfigDownloadTimeout,
+		wh("Timeout for the remote config file download"))
 	fs.BoolVar(&rc.NoConfig, "no-config", false, wh("Don't read config"))
 	fs.StringSliceVar(&rc.SkipDirs, "skip-dirs", nil, wh("Regexps of directories to skip"))
 	fs.BoolVar(&rc.UseDefaultSkipDirs, "skip-dirs-use-default", true, getDefaultDirectoryExcludeHelp())

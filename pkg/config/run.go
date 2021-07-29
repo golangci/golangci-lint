@@ -11,8 +11,9 @@ type Run struct {
 	Concurrency         int
 	PrintResourcesUsage bool `mapstructure:"print-resources-usage"`
 
-	Config   string
-	NoConfig bool
+	Config                      string
+	RemoteConfigDownloadTimeout time.Duration `mapstructure:"config-download-timeout"`
+	NoConfig                    bool
 
 	Args []string
 
