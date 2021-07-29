@@ -3,6 +3,7 @@ package printers
 import (
 	"context"
 	"encoding/xml"
+	"fmt"
 	"strings"
 
 	"github.com/golangci/golangci-lint/pkg/logutils"
@@ -41,7 +42,7 @@ func NewJunitXML() *JunitXML {
 	return &JunitXML{}
 }
 
-func (JunitXML) Print(ctx context.Context, issues []result.Issue) error {
+func (j JunitXML) Print(ctx context.Context, issues []result.Issue) error {
 	suites := make(map[string]testSuiteXML) // use a map to group by file
 
 	for ind := range issues {
@@ -52,12 +53,14 @@ func (JunitXML) Print(ctx context.Context, issues []result.Issue) error {
 		testSuite.Tests++
 		testSuite.Failures++
 
+		content := strings.Join(i.SourceLines, "\n")
+		content += j.getSuggestedFix(&issues[ind])
 		tc := testCaseXML{
 			Name:      i.FromLinter,
 			ClassName: i.Pos.String(),
 			Failure: failureXML{
 				Message: i.Text,
-				Content: strings.Join(i.SourceLines, "\n"),
+				Content: content,
 			},
 		}
 
@@ -76,4 +79,24 @@ func (JunitXML) Print(ctx context.Context, issues []result.Issue) error {
 		return err
 	}
 	return nil
+}
+
+func (j JunitXML) getSuggestedFix(i *result.Issue) string {
+	var text string
+	if len(i.SuggestedFixes) > 0 {
+		for _, fix := range i.SuggestedFixes {
+			text += fmt.Sprintf("%s\n", strings.TrimSpace(fix.Message))
+			var suggestedEdits []string
+			for _, textEdit := range fix.TextEdits {
+				suggestedEdits = append(suggestedEdits, strings.TrimSpace(textEdit.NewText))
+			}
+			text += strings.Join(suggestedEdits, "\n") + "\n"
+		}
+	}
+
+	if text != "" {
+		return fmt.Sprintf("\n\n%s", text)
+	}
+
+	return ""
 }
