@@ -616,6 +616,9 @@ linters-settings:
       - .Wrap(
       - .Wrapf(
       - .WithMessage(
+      - .WithMessagef(
+      - .WithStack(
+    ignorePackageGlobs: []
 
   wsl:
     # See https://github.com/bombsimon/wsl/blob/master/doc/configuration.md for
