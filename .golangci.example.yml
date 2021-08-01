@@ -618,7 +618,9 @@ linters-settings:
       - .WithMessage(
       - .WithMessagef(
       - .WithStack(
-    ignorePackageGlobs: []
+    ignorePackageGlobs:
+        - encoding/*
+        - github.com/pkg/*
 
   wsl:
     # See https://github.com/bombsimon/wsl/blob/master/doc/configuration.md for
