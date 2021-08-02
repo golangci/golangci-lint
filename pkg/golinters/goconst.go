@@ -46,19 +46,23 @@ func NewGoconst() *goanalysis.Linter {
 }
 
 func checkConstants(pass *analysis.Pass, lintCtx *linter.Context) ([]goanalysis.Issue, error) {
+	settings := lintCtx.Settings().Goconst
+
 	cfg := goconstAPI.Config{
-		IgnoreTests:        lintCtx.Settings().Goconst.IgnoreTests,
-		MatchWithConstants: lintCtx.Settings().Goconst.MatchWithConstants,
-		MinStringLength:    lintCtx.Settings().Goconst.MinStringLen,
-		MinOccurrences:     lintCtx.Settings().Goconst.MinOccurrencesCount,
-		ParseNumbers:       lintCtx.Settings().Goconst.ParseNumbers,
-		NumberMin:          lintCtx.Settings().Goconst.NumberMin,
-		NumberMax:          lintCtx.Settings().Goconst.NumberMax,
+		IgnoreTests:        settings.IgnoreTests,
+		MatchWithConstants: settings.MatchWithConstants,
+		MinStringLength:    settings.MinStringLen,
+		MinOccurrences:     settings.MinOccurrencesCount,
+		ParseNumbers:       settings.ParseNumbers,
+		NumberMin:          settings.NumberMin,
+		NumberMax:          settings.NumberMax,
 		ExcludeTypes:       map[goconstAPI.Type]bool{},
 	}
-	if lintCtx.Settings().Goconst.IgnoreCalls {
+
+	if settings.IgnoreCalls {
 		cfg.ExcludeTypes[goconstAPI.Call] = true
 	}
+
 	goconstIssues, err := goconstAPI.Run(pass.Files, pass.Fset, &cfg)
 	if err != nil {
 		return nil, err
