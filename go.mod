@@ -60,14 +60,13 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/polyfloyd/go-errorlint v0.0.0-20210510181950-ab96adb96fea
 	github.com/prometheus/procfs v0.6.0 // indirect
-	github.com/ryancurrah/gomodguard v1.2.2
+	github.com/ryancurrah/gomodguard v1.2.3
 	github.com/ryanrolds/sqlclosecheck v0.3.0
 	github.com/sanposhiho/wastedassign/v2 v2.0.6
 	github.com/securego/gosec/v2 v2.8.1
 	github.com/shazow/go-diff v0.0.0-20160112020656-b6b7b6733b8c
-	github.com/shirou/gopsutil/v3 v3.21.6
+	github.com/shirou/gopsutil/v3 v3.21.7
 	github.com/sirupsen/logrus v1.8.1
-	github.com/sivchari/nilassign v0.1.0
 	github.com/sonatard/noctx v0.0.1
 	github.com/sourcegraph/go-diff v0.6.1
 	github.com/spf13/cobra v1.2.1
@@ -78,7 +77,7 @@ require (
 	github.com/tdakkota/asciicheck v0.0.0-20200416200610-e657995f937b
 	github.com/tetafro/godot v1.4.8
 	github.com/timakin/bodyclose v0.0.0-20200424151742-cb6215831a94
-	github.com/tomarrell/wrapcheck/v2 v2.2.0
+	github.com/tomarrell/wrapcheck/v2 v2.3.0
 	github.com/tommy-muehle/go-mnd/v2 v2.4.0
 	github.com/ultraware/funlen v0.0.3
 	github.com/ultraware/whitespace v0.0.4
