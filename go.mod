@@ -64,7 +64,7 @@ require (
 	github.com/sanposhiho/wastedassign/v2 v2.0.6
 	github.com/securego/gosec/v2 v2.8.1
 	github.com/shazow/go-diff v0.0.0-20160112020656-b6b7b6733b8c
-	github.com/shirou/gopsutil/v3 v3.21.6
+	github.com/shirou/gopsutil/v3 v3.21.7
 	github.com/sirupsen/logrus v1.8.1
 	github.com/sivchari/nilassign v0.1.0
 	github.com/sonatard/noctx v0.0.1
