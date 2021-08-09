@@ -542,6 +542,10 @@ linters-settings:
     # https://staticcheck.io/docs/options#checks
     checks: [ "all" ]
 
+  structfield:
+    # The numbers of non-labeled fields allowed on struct literal.
+    limit: 2
+
   stylecheck:
     # Select the Go version to target. The default is '1.13'.
     go: "1.15"

@@ -506,6 +506,10 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/Antonboom/errname").
 			WithSince("v1.42.0"),
+		linter.NewConfig(golinters.NewStructfield()).
+			WithSince("v1.42.0").
+			WithPresets(linter.PresetStyle).
+			WithURL("http://github.com/uudashr/structfield"),
 
 		// nolintlint must be last because it looks at the results of all the previous linters for unused nolint directives
 		linter.NewConfig(golinters.NewNoLintLint()).

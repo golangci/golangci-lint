@@ -82,6 +82,7 @@ require (
 	github.com/ultraware/funlen v0.0.3
 	github.com/ultraware/whitespace v0.0.4
 	github.com/uudashr/gocognit v1.0.5
+	github.com/uudashr/structfield v1.0.0
 	github.com/valyala/quicktemplate v1.6.3
 	github.com/yeya24/promlinter v0.1.0
 	golang.org/x/tools v0.1.5

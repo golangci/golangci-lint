@@ -78,6 +78,9 @@ var defaultLintersSettings = LintersSettings{
 	Forbidigo: ForbidigoSettings{
 		ExcludeGodocExamples: true,
 	},
+	Structfield: StructFieldSettings{
+		Limit: 2,
+	},
 }
 
 type LintersSettings struct {
@@ -125,6 +128,7 @@ type LintersSettings struct {
 	RowsErrCheck     RowsErrCheckSettings
 	Staticcheck      StaticCheckSettings
 	Structcheck      StructCheckSettings
+	Structfield      StructFieldSettings
 	Stylecheck       StaticCheckSettings
 	Tagliatelle      TagliatelleSettings
 	Testpackage      TestpackageSettings
@@ -483,4 +487,8 @@ type CustomLinterSettings struct {
 	Path        string
 	Description string
 	OriginalURL string `mapstructure:"original-url"`
+}
+
+type StructFieldSettings struct {
+	Limit int `mapstructure:"limit"`
 }
