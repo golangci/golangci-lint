@@ -1,19 +1,49 @@
 Follow the news and releases on our [twitter](https://twitter.com/golangci) and our [blog](https://medium.com/golangci).
 There is the most valuable changes log:
 
+### August 2021
+
+1. new linters:
+   * Add `errname` linter
+2. update linters:
+   * `gomodguard`: from 1.2.2 to 1.2.3
+   * `revive`: from 1.0.9 to 1.1.0
+   * `staticcheck`: bump to 2021.1.1 (v0.2.1)
+   * `wrapcheck`: bump to v2.3.0
+
+### July 2021
+
+1. update linters:
+   * `errcheck`: allow exclude config without extra file
+   * `exhaustive`: from 0.1.0 to 0.2.3
+   * `gocognit`: from 1.0.1 to 1.0.5
+   * `godot`: from 1.4.7 to 1.4.8
+   * `gomoddirectives`: from 0.2.1 to 0.2.2
+   * `revive`: from 1.0.8 to 1.0.9
+2. documentation:
+   * improve `goconst` documentation
+   * improve `goimports` description
+
 ### June 2021
 
 1. update linters:
    * `durationcheck`: from 0.0.7 to 0.0.8
+   * `gci`: from 0.2.8 to 0.2.9
    * `goconst`: from 0.5.6 to 0.5.7
+   * `gofumpt`: Add lang-version option
    * `gomodguard`: from 1.2.1 to 1.2.2
+   * `gosec`: from 2.8.0 to 2.8.1
+   * `revive`: add enable-all-rules.
    * `revive`: allow to disable rule
    * `revive`: fix exclude comment rule for const block
+   * `revive`: from 1.0.7 to 1.0.8
+   * `wrapcheck`: from 2.1.0 to 2.2.0
 2. documentation:
    * add all integrations to docs introduction page
 3. Misc:
    * 🎉 Un-deprecate enable-all option
    * output: generate HTML report
+   * Support RISV64
 
 ### May 2021
 
