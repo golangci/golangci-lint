@@ -5,16 +5,15 @@ import (
 	"go/ast"
 	"go/token"
 	"go/types"
-	"sync"
-
-	"golang.org/x/tools/go/analysis"
-	"golang.org/x/tools/go/analysis/passes/inspect"
-	"golang.org/x/tools/go/ast/inspector"
 	"golang.org/x/tools/go/types/typeutil"
+	"sync"
 
 	"github.com/anduril/golangci-lint/pkg/golinters/goanalysis"
 	"github.com/anduril/golangci-lint/pkg/lint/linter"
 	"github.com/anduril/golangci-lint/pkg/result"
+	"golang.org/x/tools/go/analysis"
+	"golang.org/x/tools/go/analysis/passes/inspect"
+	"golang.org/x/tools/go/ast/inspector"
 )
 
 const testifyAssertEqualProto = "testifyeqproto"

@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func testRevive(t *time.Duration) error {
+func SampleRevive(t *time.Duration) error {
 	if t == nil {
 		return nil
 	} else {

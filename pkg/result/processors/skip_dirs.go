@@ -24,7 +24,7 @@ type SkipDirs struct {
 	skippedDirsCache map[string]bool
 }
 
-var _ Processor = SkipFiles{}
+var _ Processor = (*SkipDirs)(nil)
 
 const goFileSuffix = ".go"
 

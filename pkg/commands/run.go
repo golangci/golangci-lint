@@ -203,7 +203,6 @@ func initFlagSet(fs *pflag.FlagSet, cfg *config.Config, m *lintersdb.Manager, is
 	if err := fs.MarkHidden("enable-all"); err != nil {
 		panic(err)
 	}
-	// TODO: run hideFlag("enable-all") to print deprecation message.
 
 	fs.BoolVar(&lc.DisableAll, "disable-all", false, wh("Disable all linters"))
 	fs.StringSliceVarP(&lc.Presets, "presets", "p", nil,
@@ -433,6 +432,8 @@ func (e *Executor) createPrinter() (printers.Printer, error) {
 		p = printers.NewCheckstyle()
 	case config.OutFormatCodeClimate:
 		p = printers.NewCodeClimate()
+	case config.OutFormatHTML:
+		p = printers.NewHTML()
 	case config.OutFormatJunitXML:
 		p = printers.NewJunitXML()
 	case config.OutFormatGithubActions:

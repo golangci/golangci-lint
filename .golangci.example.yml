@@ -113,13 +113,25 @@ linters-settings:
     # see https://github.com/kisielk/errcheck#the-deprecated-method for details
     ignore: fmt:.*,io/ioutil:^Read.*
 
+    # [deprecated] use exclude-functions instead.
     # path to a file containing a list of functions to exclude from checking
     # see https://github.com/kisielk/errcheck#excluding-functions for details
     exclude: /path/to/file.txt
 
+    # list of functions to exclude from checking, where each entry is a single function to exclude.
+    # see https://github.com/kisielk/errcheck#excluding-functions for details
+    exclude-functions:
+      - io/ioutil.ReadFile
+      - io.Copy(*bytes.Buffer)
+      - io.Copy(os.Stdout)
+
   errorlint:
-    # Report non-wrapping error creation using fmt.Errorf
+    # Check whether fmt.Errorf uses the %w verb for formatting errors. See the readme for caveats
     errorf: true
+    # Check for plain type assertions and type switches
+    asserts: true
+    # Check for plain error comparisons
+    comparison: true
 
   exhaustive:
     # check switch statements in generated files also
@@ -130,18 +142,19 @@ linters-settings:
     default-signifies-exhaustive: false
 
   exhaustivestruct:
+    # Struct Patterns is list of expressions to match struct packages and names
+    # The struct packages have the form example.com/package.ExampleStruct
+    # The matching patterns can use matching syntax from https://pkg.go.dev/path#Match
+    # If this list is empty, all structs are tested.
     struct-patterns:
       - '*.Test'
-      - '*.Test2'
-      - '*.Embedded'
-      - '*.External'
+      - 'example.com/package.ExampleStruct'
 
   forbidigo:
-    # Forbid the following identifiers
+    # Forbid the following identifiers (identifiers are written using regexp):
     forbid:
-      - fmt.Errorf # consider errors.Errorf in github.com/pkg/errors
-      - fmt.Print.* # too much log noise
-      - ginkgo\\.F.* # these are used just for local development
+      - ^print.*$
+      - 'fmt\.Print.*'
     # Exclude godoc examples from forbidigo checks.  Default is true.
     exclude_godoc_examples: false
 
@@ -166,8 +179,20 @@ linters-settings:
   goconst:
     # minimal length of string constant, 3 by default
     min-len: 3
-    # minimal occurrences count to trigger, 3 by default
+    # minimum occurrences of constant string count to trigger issue, 3 by default
     min-occurrences: 3
+    # ignore test files, false by default
+    ignore-tests: false
+    # look for existing constants matching the values, true by default
+    match-constant: true
+    # search also for duplicated numbers, false by default
+    numbers: false
+    # minimum value, only works with goconst.numbers, 3 by default
+    min: 3
+    # maximum value, only works with goconst.numbers, 3 by default
+    max: 3
+    # ignore when constant is not used as function argument, true by default
+    ignore-calls: true
 
   gocritic:
     # Which checks should be enabled; can't be combined with 'disabled-checks';
@@ -223,7 +248,7 @@ linters-settings:
       underef:
         # whether to skip (*x).method() calls where x is a pointer receiver (default true)
         skipRecvDeref: true
-    	unnamedResult:
+      unnamedResult:
         # whether to check exported functions
         checkExported: true
 
@@ -254,6 +279,9 @@ linters-settings:
     simplify: true
 
   gofumpt:
+    # Select the Go version to target. The default is `1.15`.
+    lang-version: "1.15"
+
     # Choose whether or not to use the extra rules that are disabled
     # by default
     extra-rules: false
@@ -334,6 +362,36 @@ linters-settings:
         #     reason: "testing if blocked version constraint works."  # Reason why the version constraint exists. (Optional)
       local_replace_directives: false                                 # Set to true to raise lint issues for packages that are loaded from a local path via replace directive
 
+  gosec:
+    # To select a subset of rules to run.
+    # Available rules: https://github.com/securego/gosec#available-rules
+    includes:
+      - G401
+      - G306
+      - G101
+    # To specify a set of rules to explicitly exclude.
+    # Available rules: https://github.com/securego/gosec#available-rules
+    excludes:
+      - G204
+    # To specify the configuration of rules.
+    # The configuration of rules is not fully documented by gosec:
+    # https://github.com/securego/gosec#configuration
+    # https://github.com/securego/gosec/blob/569328eade2ccbad4ce2d0f21ee158ab5356a5cf/rules/rulelist.go#L60-L102
+    config:
+      G306: "0600"
+      G101:
+        pattern: "(?i)example"
+        ignore_entropy: false
+        entropy_threshold: "80.0"
+        per_char_threshold: "3.0"
+        truncate: "32"
+
+  gosimple:
+    # Select the Go version to target. The default is '1.13'.
+    go: "1.15"
+    # https://staticcheck.io/docs/options#checks
+    checks: [ "all" ]
+
   govet:
     # report about shadowed variables
     check-shadowing: true
@@ -373,14 +431,21 @@ linters-settings:
     max-decl-chars: 30
 
   importas:
-    # using `servingv1` alias for `knative.dev/serving/pkg/apis/serving/v1` package
-    servingv1: knative.dev/serving/pkg/apis/serving/v1
-    # using `autoscalingv1alpha1` alias for `knative.dev/serving/pkg/apis/autoscaling/v1alpha1` package
-    autoscalingv1alpha1: knative.dev/serving/pkg/apis/autoscaling/v1alpha1
-    # You can specify the package path by regular expression,
-    # and alias by regular expression expansion syntax like below.
-    # see https://github.com/julz/importas#use-regular-expression for details
-    "$1$2": 'knative.dev/serving/pkg/apis/(\w+)/(v[\w\d]+)'
+    # if set to `true`, force to use alias.
+    no-unaliased: true
+    # List of aliases
+    alias:
+      # using `servingv1` alias for `knative.dev/serving/pkg/apis/serving/v1` package
+      - pkg: knative.dev/serving/pkg/apis/serving/v1
+        alias: servingv1
+      # using `autoscalingv1alpha1` alias for `knative.dev/serving/pkg/apis/autoscaling/v1alpha1` package
+      - pkg: knative.dev/serving/pkg/apis/autoscaling/v1alpha1
+        alias: autoscalingv1alpha1
+      # You can specify the package path by regular expression,
+      # and alias by regular expression expansion syntax like below.
+      # see https://github.com/julz/importas#use-regular-expression for details
+      - pkg: knative.dev/serving/pkg/apis/(\w+)/(v[\w\d]+)
+        alias: $1$2
 
   lll:
     # max line length, lines longer will be reported. Default is 120.
@@ -455,7 +520,6 @@ linters-settings:
   rowserrcheck:
     packages:
       - github.com/jmoiron/sqlx
-      -
   revive:
     # see https://github.com/mgechev/revive#available-rules for details.
     ignore-generated-header: true
@@ -463,6 +527,32 @@ linters-settings:
     rules:
       - name: indent-error-flow
         severity: warning
+      - name: add-constant
+        severity: warning
+        arguments:
+          - maxLitCount: "3"
+            allowStrs: '""'
+            allowInts: "0,1,2"
+            allowFloats: "0.0,0.,1.0,1.,2.0,2."
+
+  staticcheck:
+    # Select the Go version to target. The default is '1.13'.
+    go: "1.15"
+    # https://staticcheck.io/docs/options#checks
+    checks: [ "all" ]
+
+  stylecheck:
+    # Select the Go version to target. The default is '1.13'.
+    go: "1.15"
+    # https://staticcheck.io/docs/options#checks
+    checks: [ "all", "-ST1000", "-ST1003", "-ST1016", "-ST1020", "-ST1021", "-ST1022" ]
+    # https://staticcheck.io/docs/options#dot_import_whitelist
+    dot-import-whitelist:
+      - fmt
+    # https://staticcheck.io/docs/options#initialisms
+    initialisms: [ "ACL", "API", "ASCII", "CPU", "CSS", "DNS", "EOF", "GUID", "HTML", "HTTP", "HTTPS", "ID", "IP", "JSON", "QPS", "RAM", "RPC", "SLA", "SMTP", "SQL", "SSH", "TCP", "TLS", "TTL", "UDP", "UI", "GID", "UID", "UUID", "URI", "URL", "UTF8", "VM", "XML", "XMPP", "XSRF", "XSS" ]
+    # https://staticcheck.io/docs/options#http_status_code_whitelist
+    http-status-code-whitelist: [ "200", "400", "404", "500" ]
 
   tagliatelle:
     # check the struck tag name case
@@ -507,15 +597,29 @@ linters-settings:
     check-exported: false
 
   unused:
-    # treat code as a program (not a library) and report unused exported identifiers; default is false.
-    # XXX: if you enable this setting, unused will report a lot of false-positives in text editors:
-    # if it's called for subdir of a project it can't find funcs usages. All text editor integrations
-    # with golangci-lint call it on a directory with the changed file.
-    check-exported: false
+    # Select the Go version to target. The default is '1.13'.
+    go: "1.15"
 
   whitespace:
     multi-if: false   # Enforces newlines (or comments) after every multi-line if statement
     multi-func: false # Enforces newlines (or comments) after every multi-line function signature
+
+  wrapcheck:
+    # An array of strings that specify substrings of signatures to ignore.
+    # If this set, it will override the default set of ignored signatures.
+    # See https://github.com/tomarrell/wrapcheck#configuration for more information.
+    ignoreSigs:
+      - .Errorf(
+      - errors.New(
+      - errors.Unwrap(
+      - .Wrap(
+      - .Wrapf(
+      - .WithMessage(
+      - .WithMessagef(
+      - .WithStack(
+    ignorePackageGlobs:
+        - encoding/*
+        - github.com/pkg/*
 
   wsl:
     # See https://github.com/bombsimon/wsl/blob/master/doc/configuration.md for
@@ -532,8 +636,8 @@ linters-settings:
     force-short-decl-cuddling: false
     strict-append: true
 
-  # The custom section can be used to define linter plugins to be loaded at runtime. See README doc
-  #  for more info.
+  # The custom section can be used to define linter plugins to be loaded at runtime.
+  # See README doc for more info.
   custom:
     # Each custom linter should have a unique name.
      example:
@@ -545,13 +649,14 @@ linters-settings:
       original-url: github.com/golangci/example-linter
 
 linters:
+  disable-all: true
   enable:
     - megacheck
     - govet
+  enable-all: true
   disable:
     - maligned
     - prealloc
-  disable-all: false
   presets:
     - bugs
     - unused

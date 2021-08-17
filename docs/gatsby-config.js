@@ -118,11 +118,11 @@ module.exports = {
       options: {
         env: {
           development: {
-            host: domain,
+            host: siteUrl,
             policy: [{ userAgent: "*", disallow: ["/"] }],
           },
           production: {
-            host: domain,
+            host: siteUrl,
             policy: [{ userAgent: "*", disallow: ["/page-data/"] }],
           },
         },

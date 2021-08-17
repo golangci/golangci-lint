@@ -1,0 +1,13 @@
+linters-settings:
+  gosec:
+    includes:
+      - G306
+      - G101
+    config:
+      G306: "0666"
+      G101:
+        pattern: "(?i)simple"
+        ignore_entropy: false
+        entropy_threshold: "80.0"
+        per_char_threshold: "3.0"
+        truncate: "32"
