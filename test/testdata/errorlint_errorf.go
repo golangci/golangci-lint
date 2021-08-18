@@ -1,5 +1,5 @@
 //args: -Eerrorlint
-//config: linters-settings.errorlint.errorf=true
+//config_path: testdata/configs/errorlint_errorf.yml
 package testdata
 
 import (
@@ -13,7 +13,7 @@ func (customError) Error() string {
 	return "oops"
 }
 
-func wraps() {
+func errorLintErrorf() {
 	err := errors.New("oops")
 	fmt.Errorf("error: %w", err)
 	fmt.Errorf("error: %v", err)         // ERROR "non-wrapping format verb for fmt.Errorf. Use `%w` to format errors"

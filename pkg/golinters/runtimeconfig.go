@@ -104,8 +104,11 @@ func checkPointerArg(arg ast.Expr, argName, defType string, pos token.Pos, pass 
 		if !isRef {
 			pass.Reportf(pos, "expected ref as 3rd arg to Get")
 		}
-		if cl, ok := t.Type.(*ast.Ident); ok {
-			checkSameType(cl, argName, defType, pass)
+		switch sl := t.Type.(type) {
+		case *ast.Ident:
+			checkSameType(sl, argName, defType, pass)
+		case *ast.SelectorExpr:
+			checkSameType(sl.Sel, argName, defType, pass)
 		}
 	default:
 		pass.Reportf(pos, "expected ref as 3rd arg to Get")
@@ -170,10 +173,10 @@ func validateAssignConversion(arg ast.Expr, argName, defType string, pass *analy
 }
 
 func checkSameType(ident *ast.Ident, argName, defType string, pass *analysis.Pass) {
-	if !strings.HasSuffix(defType, ident.Obj.Name) {
+	if !strings.HasSuffix(defType, ident.Name) {
 		pass.Reportf(ident.Pos(),
 			"the configuration object (arg %s) has to match the type of the default argument, expected type: %s but found %s",
-			argName, defType, ident.Obj.Name,
+			argName, defType, ident.Name,
 		)
 	}
 }

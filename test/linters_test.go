@@ -10,7 +10,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
-	"gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 
 	"github.com/anduril/golangci-lint/pkg/exitcodes"
 	"github.com/anduril/golangci-lint/test/testshared"

@@ -152,6 +152,8 @@ func getChecker(errCfg *config.ErrcheckSettings) (*errcheck.Checker, error) {
 		checker.Exclusions.Symbols = append(checker.Exclusions.Symbols, exclude...)
 	}
 
+	checker.Exclusions.Symbols = append(checker.Exclusions.Symbols, errCfg.ExcludeFunctions...)
+
 	return &checker, nil
 }
 

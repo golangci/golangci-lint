@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	"github.com/anduril/golangci-lint/pkg/config"
-
 	"github.com/anduril/golangci-lint/pkg/logutils"
 )
 

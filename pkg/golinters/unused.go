@@ -7,12 +7,17 @@ import (
 	"golang.org/x/tools/go/analysis"
 	"honnef.co/go/tools/unused"
 
+	"github.com/anduril/golangci-lint/pkg/config"
 	"github.com/anduril/golangci-lint/pkg/golinters/goanalysis"
 	"github.com/anduril/golangci-lint/pkg/lint/linter"
 	"github.com/anduril/golangci-lint/pkg/result"
 )
 
-func NewUnused() *goanalysis.Linter {
+type UnusedSettings struct {
+	GoVersion string
+}
+
+func NewUnused(settings *config.StaticCheckSettings) *goanalysis.Linter {
 	const name = "unused"
 
 	var mu sync.Mutex
@@ -20,10 +25,10 @@ func NewUnused() *goanalysis.Linter {
 
 	analyzer := &analysis.Analyzer{
 		Name:     name,
-		Doc:      unused.Analyzer.Doc,
-		Requires: unused.Analyzer.Requires,
+		Doc:      unused.Analyzer.Analyzer.Doc,
+		Requires: unused.Analyzer.Analyzer.Requires,
 		Run: func(pass *analysis.Pass) (interface{}, error) {
-			res, err := unused.Analyzer.Run(pass)
+			res, err := unused.Analyzer.Analyzer.Run(pass)
 			if err != nil {
 				return nil, err
 			}
@@ -49,13 +54,12 @@ func NewUnused() *goanalysis.Linter {
 		},
 	}
 
-	analyzers := []*analysis.Analyzer{analyzer}
-	setAnalyzersGoVersion(analyzers)
+	setAnalyzerGoVersion(analyzer, getGoVersion(settings))
 
 	lnt := goanalysis.NewLinter(
 		name,
 		"Checks Go code for unused constants, variables, functions and types",
-		analyzers,
+		[]*analysis.Analyzer{analyzer},
 		nil,
 	).WithIssuesReporter(func(lintCtx *linter.Context) []goanalysis.Issue {
 		return resIssues

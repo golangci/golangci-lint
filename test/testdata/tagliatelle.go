@@ -26,7 +26,6 @@ type TglBir struct {
 
 type Bur struct {
 	Name    string
-	Value   string `yaml:"Value"` // ERROR `yaml\(camel\): got 'Value' want 'value'`
 	More    string `json:"-"`
 	Also    string `json:",omitempty"`
 	ReqPerS string `avro:"req_per_s"`

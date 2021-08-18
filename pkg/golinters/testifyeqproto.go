@@ -2,6 +2,10 @@
 package golinters
 
 import (
+	"github.com/anduril/golangci-lint/pkg/golinters/goanalysis"
+	"github.com/anduril/golangci-lint/pkg/lint/linter"
+	"github.com/anduril/golangci-lint/pkg/result"
+
 	"go/ast"
 	"go/token"
 	"go/types"
@@ -11,10 +15,6 @@ import (
 	"golang.org/x/tools/go/analysis/passes/inspect"
 	"golang.org/x/tools/go/ast/inspector"
 	"golang.org/x/tools/go/types/typeutil"
-
-	"github.com/anduril/golangci-lint/pkg/golinters/goanalysis"
-	"github.com/anduril/golangci-lint/pkg/lint/linter"
-	"github.com/anduril/golangci-lint/pkg/result"
 )
 
 const testifyAssertEqualProto = "testifyeqproto"

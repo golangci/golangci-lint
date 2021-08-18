@@ -91,7 +91,7 @@ func TestTimeoutInConfig(t *testing.T) {
 
 func TestTestsAreLintedByDefault(t *testing.T) {
 	testshared.NewLintRunner(t).Run(getTestDataDir("withtests")).
-		ExpectHasIssue("`if` block ends with a `return`")
+		ExpectHasIssue("don't use `init` function")
 }
 
 func TestCgoOk(t *testing.T) {

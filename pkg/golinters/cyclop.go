@@ -21,6 +21,8 @@ func NewCyclop(settings *config.Cyclop) *goanalysis.Linter {
 
 		if settings.MaxComplexity != 0 {
 			d["maxComplexity"] = settings.MaxComplexity
+		} else {
+			d["maxComplexity"] = 20
 		}
 
 		if settings.PackageAverage != 0 {

@@ -1,0 +1,6 @@
+linters-settings:
+  errcheck:
+    check-blank: true
+    exclude-functions:
+      - io/ioutil.ReadFile
+      - io/ioutil.ReadDir

@@ -21,6 +21,7 @@ const (
 	testifyAssertEqualGrpcMsg = "call to assert.Equal made error type returned from " +
 		"'google.golang.org/grpc/status': Use assert.EqualError or assert.Nil instead."
 	grpcStatusPkg = "google.golang.org/grpc/status"
+	stackSize     = 32
 )
 
 func NewTestifyAssertEqualGrpc() *goanalysis.Linter {
@@ -69,7 +70,7 @@ func runFunc(pass *analysis.Pass, n ast.Node) []goanalysis.Issue { // nolint:goc
 	var issues []goanalysis.Issue
 
 	var statusVars []*ast.Ident
-	stack := make([]ast.Node, 0, 32)
+	stack := make([]ast.Node, 0, stackSize)
 	ast.Inspect(n, func(n ast.Node) bool {
 		switch n.(type) {
 		case *ast.FuncLit:
