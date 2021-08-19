@@ -44,7 +44,7 @@ fast_generate: assets/github-action-config.json
 
 fast_check_generated:
 	$(MAKE) --always-make fast_generate
-	git checkout -- go.mod go.sum # can differ between go1.15 and go1.16
+	git checkout -- go.mod go.sum # can differ between go1.16 and go1.17
 	git diff --exit-code # check no changes
 
 release: .goreleaser.yml tools/goreleaser
