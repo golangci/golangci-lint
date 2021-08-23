@@ -21,7 +21,7 @@ var andurilDisableLinters = []string{
 	"goerr113",
 	"goerr113",
 	"goimports",
-	"goimports",
+	"golint",
 	"gofumpt",
 	"gomnd",
 	"interfacer",
