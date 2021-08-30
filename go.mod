@@ -1,6 +1,6 @@
 module github.com/golangci/golangci-lint
 
-go 1.15
+go 1.17
 
 require (
 	4d63.com/gochecknoglobals v0.0.0-20201008074935-acfc0b28355a
@@ -91,4 +91,63 @@ require (
 	mvdan.cc/interfacer v0.0.0-20180901003855-c20040233aed
 	mvdan.cc/lint v0.0.0-20170908181259-adc824a0674b // indirect
 	mvdan.cc/unparam v0.0.0-20210104141923-aac4ce9116a7
+)
+
+require (
+	github.com/Masterminds/semver v1.5.0 // indirect
+	github.com/StackExchange/wmi v1.2.1 // indirect
+	github.com/beorn7/perks v1.0.1 // indirect
+	github.com/cespare/xxhash/v2 v2.1.1 // indirect
+	github.com/chavacava/garif v0.0.0-20210405164556-e8a0a408d6af // indirect
+	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/ettle/strcase v0.1.1 // indirect
+	github.com/fatih/structtag v1.2.0 // indirect
+	github.com/fsnotify/fsnotify v1.4.9 // indirect
+	github.com/go-ole/go-ole v1.2.5 // indirect
+	github.com/go-toolsmith/astcast v1.0.0 // indirect
+	github.com/go-toolsmith/astcopy v1.0.0 // indirect
+	github.com/go-toolsmith/astequal v1.0.0 // indirect
+	github.com/go-toolsmith/astfmt v1.0.0 // indirect
+	github.com/go-toolsmith/astp v1.0.0 // indirect
+	github.com/go-toolsmith/strparse v1.0.0 // indirect
+	github.com/go-toolsmith/typep v1.0.2 // indirect
+	github.com/gobwas/glob v0.2.3 // indirect
+	github.com/golang/protobuf v1.5.2 // indirect
+	github.com/google/go-cmp v0.5.5 // indirect
+	github.com/gostaticanalysis/analysisutil v0.4.1 // indirect
+	github.com/gostaticanalysis/comment v1.4.1 // indirect
+	github.com/hashicorp/errwrap v1.0.0 // indirect
+	github.com/hashicorp/hcl v1.0.0 // indirect
+	github.com/inconshreveable/mousetrap v1.0.0 // indirect
+	github.com/kisielk/gotool v1.0.0 // indirect
+	github.com/magiconair/properties v1.8.5 // indirect
+	github.com/mattn/go-isatty v0.0.12 // indirect
+	github.com/mattn/go-runewidth v0.0.9 // indirect
+	github.com/matttproud/golang_protobuf_extensions v1.0.1 // indirect
+	github.com/mitchellh/mapstructure v1.4.1 // indirect
+	github.com/nbutton23/zxcvbn-go v0.0.0-20210217022336-fa2cb2858354 // indirect
+	github.com/olekukonko/tablewriter v0.0.5 // indirect
+	github.com/pelletier/go-toml v1.9.3 // indirect
+	github.com/phayes/checkstyle v0.0.0-20170904204023-bfd46e6a821d // indirect
+	github.com/pmezard/go-difflib v1.0.0 // indirect
+	github.com/prometheus/client_golang v1.7.1 // indirect
+	github.com/prometheus/client_model v0.2.0 // indirect
+	github.com/prometheus/common v0.10.0 // indirect
+	github.com/quasilyte/go-ruleguard v0.3.4 // indirect
+	github.com/quasilyte/regex/syntax v0.0.0-20200407221936-30656e2c4a95 // indirect
+	github.com/spf13/afero v1.6.0 // indirect
+	github.com/spf13/cast v1.3.1 // indirect
+	github.com/spf13/jwalterweatherman v1.1.0 // indirect
+	github.com/stretchr/objx v0.1.1 // indirect
+	github.com/subosito/gotenv v1.2.0 // indirect
+	github.com/tklauser/go-sysconf v0.3.7 // indirect
+	github.com/tklauser/numcpus v0.2.3 // indirect
+	github.com/valyala/bytebufferpool v1.0.0 // indirect
+	golang.org/x/mod v0.4.2 // indirect
+	golang.org/x/sys v0.0.0-20210630005230-0f9fa26af87c // indirect
+	golang.org/x/text v0.3.6 // indirect
+	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
+	google.golang.org/protobuf v1.26.0 // indirect
+	gopkg.in/ini.v1 v1.62.0 // indirect
+	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
