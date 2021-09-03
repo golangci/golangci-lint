@@ -3,7 +3,6 @@ package golinters
 import (
 	"bytes"
 	"fmt"
-	"strings"
 	"sync"
 
 	"github.com/daixiang0/gci/pkg/gci"
