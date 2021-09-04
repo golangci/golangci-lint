@@ -11,7 +11,7 @@ func NewContextCheck() *goanalysis.Linter {
 	analyzer := contextcheck.NewAnalyzer()
 	return goanalysis.NewLinter(
 		"contextcheck",
-		"check for using context.Background() and context.TODO() directly",
+		"check the function whether use a non-inherited context",
 		[]*analysis.Analyzer{analyzer},
 		nil,
 	).WithLoadMode(goanalysis.LoadModeTypesInfo)

@@ -21,7 +21,7 @@ func contextcheckCase2(ctx context.Context) {
 		funcWithCtx(ctx)
 	}(ctx)
 
-	funcWithCtx(context.Background()) // ERROR `The context param may be context.TODO\(\) or context.Background\(\), please replace it with another way, such as context.WithValue\(ctx, key, val\)`
+	funcWithCtx(context.Background()) // ERROR "Non-inherited new context, use function like `context.WithXXX` instead"
 }
 
 func contextcheckCase3(ctx context.Context) {
@@ -29,7 +29,13 @@ func contextcheckCase3(ctx context.Context) {
 		funcWithCtx(ctx)
 	}()
 
-	ctx = context.Background() // ERROR `Invalid call to get new context, please replace it with another way, such as context.WithValue\(ctx, key, val\)`
+	ctx = context.Background() // ERROR "Non-inherited new context, use function like `context.WithXXX` instead"
+	funcWithCtx(ctx)
+}
+
+func contextcheckCase4(ctx context.Context) {
+	ctx, cancel := getNewCtx(ctx)
+	defer cancel()
 	funcWithCtx(ctx)
 }
 
@@ -37,4 +43,8 @@ func funcWithCtx(ctx context.Context) {}
 
 func funcWithoutCtx() {
 	funcWithCtx(context.TODO())
+}
+
+func getNewCtx(ctx context.Context) (newCtx context.Context, cancel context.CancelFunc) {
+	return context.WithCancel(ctx)
 }
