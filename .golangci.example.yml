@@ -447,6 +447,27 @@ linters-settings:
       - pkg: knative.dev/serving/pkg/apis/(\w+)/(v[\w\d]+)
         alias: $1$2
 
+  ireturn:
+    # ireturn allows to use either `allow` or `reject` settings at the same time.
+    # both settings are a lists of the keywords (`empty` for interface{}`,
+    # `error` for errors, `stdlib` for standard library, `anon` for anonymouse
+    # interfaces ) and reglar expresssions matched to interfaces or packages.
+
+    allow:
+    # default settings are allow to use errors, empty interfaces, anonymouse
+    # interfaces, and interfaces provided by standard library.
+    - anon
+    - error
+    - empty
+    - stdlib
+    # You can specify idiomatic endings for interface
+    - (or|er)$
+
+
+    # or you can specify reject patterns
+    reject:
+    - github.com\/user\/package\/v4\.Type
+
   lll:
     # max line length, lines longer will be reported. Default is 120.
     # '\t' is counted as 1 character by default, and can be changed with the tab-width option
