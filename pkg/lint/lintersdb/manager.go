@@ -109,6 +109,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 	var ifshortCfg *config.IfshortSettings
 	var reviveCfg *config.ReviveSettings
 	var cyclopCfg *config.Cyclop
+	var argslenCfg *config.ArgsLen
 	var importAsCfg *config.ImportAsSettings
 	var goModDirectivesCfg *config.GoModDirectivesSettings
 	var tagliatelleCfg *config.TagliatelleSettings
@@ -130,6 +131,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		ifshortCfg = &m.cfg.LintersSettings.Ifshort
 		reviveCfg = &m.cfg.LintersSettings.Revive
 		cyclopCfg = &m.cfg.LintersSettings.Cyclop
+		argslenCfg = &m.cfg.LintersSettings.ArgsLen
 		importAsCfg = &m.cfg.LintersSettings.ImportAs
 		goModDirectivesCfg = &m.cfg.LintersSettings.GoModDirectives
 		tagliatelleCfg = &m.cfg.LintersSettings.Tagliatelle
@@ -269,6 +271,10 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithSince("v1.26.0").
 			WithPresets(linter.PresetBugs, linter.PresetStyle).
 			WithURL("https://github.com/tdakkota/asciicheck"),
+		linter.NewConfig(golinters.NewArgslen(argslenCfg)).
+			WithSince("v1.43.0").
+			WithPresets(linter.PresetStyle).
+			WithURL("https://github.com/guerinoni/argslen"),
 
 		linter.NewConfig(golinters.NewGofmt()).
 			WithSince("v1.0.0").

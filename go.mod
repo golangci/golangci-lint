@@ -34,6 +34,7 @@ require (
 	github.com/gordonklaus/ineffassign v0.0.0-20210225214923-2e10b2664254
 	github.com/gostaticanalysis/forcetypeassert v0.0.0-20200621232751-01d4955beaa5
 	github.com/gostaticanalysis/nilerr v0.1.1
+	github.com/guerinoni/argslen v0.0.0-20210906213733-bd64655c3950
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/jgautheron/goconst v1.5.1
 	github.com/jingyugao/rowserrcheck v1.1.0

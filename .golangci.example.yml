@@ -83,6 +83,12 @@ output:
 # all available settings of specific linters
 linters-settings:
 
+  argslen:
+  # max arguments allowed for function.
+  maxArguments: 5
+  # should the linter execute on test files as well
+  skipTests: false
+
   cyclop:
     # the maximal code complexity to report
     max-complexity: 10

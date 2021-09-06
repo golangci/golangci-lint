@@ -3,6 +3,10 @@ package config
 import "github.com/pkg/errors"
 
 var defaultLintersSettings = LintersSettings{
+	ArgsLen: ArgsLen{
+		MaxArguments: 5,
+		SkipTests:    false,
+	},
 	Lll: LllSettings{
 		LineLength: 120,
 		TabWidth:   1,
@@ -81,6 +85,7 @@ var defaultLintersSettings = LintersSettings{
 }
 
 type LintersSettings struct {
+	ArgsLen          ArgsLen
 	Cyclop           Cyclop
 	Depguard         DepGuardSettings
 	Dogsled          DogsledSettings
@@ -137,6 +142,11 @@ type LintersSettings struct {
 	WSL              WSLSettings
 
 	Custom map[string]CustomLinterSettings
+}
+
+type ArgsLen struct {
+	MaxArguments int  `mapstructure:"maxArguments"`
+	SkipTests    bool `mapstructure:"skipTests"`
 }
 
 type Cyclop struct {
