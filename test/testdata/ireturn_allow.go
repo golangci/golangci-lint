@@ -1,5 +1,5 @@
 // args: -Eireturn
-// config: linters-settings.ireturn.allow=["IreturnAllowDoer"]
+// config_path: testdata/configs/ireturn.yml
 package testdata
 
 type (
