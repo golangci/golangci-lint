@@ -4,6 +4,7 @@ package testdata
 import (
 	"errors"
 	"fmt"
+	"strings"
 )
 
 var (
@@ -53,3 +54,31 @@ func (s *someTypeWithPtr) Error() string { return "someTypeWithPtr" }
 
 type SomeTypeWithPtr struct{}            // ERROR "the type name `SomeTypeWithPtr` should conform to the `XxxError` format"
 func (s *SomeTypeWithPtr) Error() string { return "SomeTypeWithPtr" }
+
+type ValidationErrors []string
+
+func (ve ValidationErrors) Error() string { return strings.Join(ve, "\n") }
+
+type validationErrors []string
+
+func (ve validationErrors) Error() string { return strings.Join(ve, "\n") }
+
+type TenErrors [10]string
+
+func (te TenErrors) Error() string { return strings.Join(te[:], "\n") }
+
+type tenErrors [10]string
+
+func (te tenErrors) Error() string { return strings.Join(te[:], "\n") }
+
+type MultiError []error             // ERROR "the type name `MultiError` should conform to the `XxxErrors` format"
+func (me MultiError) Error() string { return "" }
+
+type multiError []error             // ERROR "the type name `multiError` should conform to the `xxxErrors` format"
+func (me multiError) Error() string { return "" }
+
+type TwoError [2]error            // ERROR "the type name `TwoError` should conform to the `XxxErrors` format"
+func (te TwoError) Error() string { return te[0].Error() + "\n" + te[1].Error() }
+
+type twoError [2]error            // ERROR "the type name `twoError` should conform to the `xxxErrors` format"
+func (te twoError) Error() string { return te[0].Error() + "\n" + te[1].Error() }
