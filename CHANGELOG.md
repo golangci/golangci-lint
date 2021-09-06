@@ -1,15 +1,26 @@
 Follow the news and releases on our [twitter](https://twitter.com/golangci) and our [blog](https://medium.com/golangci).
 There is the most valuable changes log:
 
+### September 2021
+
+1. update linters:
+   * `errcheck`: update to HEAD
+   * `gci`: Parse the settings more similarly to the CLI
+
 ### August 2021
 
 1. new linters:
    * Add `errname` linter
 2. update linters:
+   * `errname` from 0.1.3 to 0.1.4
+   * `go-critic`: fix invalid type conversions.
+   * `godot`: from 1.4.8 to 1.4.9
    * `gomodguard`: from 1.2.2 to 1.2.3
-   * `revive`: from 1.0.9 to 1.1.0
+   * `revive`: from 1.0.9 to 1.1.1
    * `staticcheck`: bump to 2021.1.1 (v0.2.1)
    * `wrapcheck`: bump to v2.3.0
+4. Misc:
+   * build binaries and Docker images with go1.17
 
 ### July 2021
 
