@@ -189,7 +189,7 @@ type ExhaustiveStructSettings struct {
 
 type IreturnSettings struct {
 	Allow  []string `mapstructure:"allow"`
-	Reject []string `mapstructure:"return"`
+	Reject []string `mapstructure:"reject"`
 }
 
 type ForbidigoSettings struct {
