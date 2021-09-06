@@ -448,14 +448,14 @@ linters-settings:
         alias: $1$2
 
   ireturn:
-    # ireturn allows to use either `allow` or `reject` settings at the same time.
-    # both settings are a lists of the keywords (`empty` for interface{}`,
-    # `error` for errors, `stdlib` for standard library, `anon` for anonymouse
-    # interfaces ) and reglar expresssions matched to interfaces or packages.
+    # ireturn allows using either `allow` or `reject` settings at the same time.
+    # both settings are lists of the keywords (`empty` for interface{}`,
+    # `error` for errors, `stdlib` for standard library, `anon` for anonymous
+    # interfaces ) and regular expressions matched to interfaces or packages.
 
     allow:
-    # default settings are allow to use errors, empty interfaces, anonymouse
-    # interfaces, and interfaces provided by standard library.
+    # default settings are allowed to use errors, empty interfaces, anonymous
+    # interfaces, and interfaces provided by the standard library.
     - anon
     - error
     - empty
