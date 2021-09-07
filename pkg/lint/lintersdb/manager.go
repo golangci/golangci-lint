@@ -511,6 +511,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		linter.NewConfig(golinters.NewIreturn(ireturnCfg)).
 			WithSince("v1.43.0").
 			WithPresets(linter.PresetStyle).
+			WithLoadForGoAnalysis().
 			WithURL("https://github.com/butuzov/ireturn"),
 
 		// nolintlint must be last because it looks at the results of all the previous linters for unused nolint directives
