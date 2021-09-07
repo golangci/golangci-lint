@@ -13,23 +13,18 @@ import (
 func NewIreturn(settings *config.IreturnSettings) *goanalysis.Linter {
 	a := analyzer.NewAnalyzer()
 
+	cfg := map[string]map[string]interface{}{}
+	if settings != nil {
+		cfg[a.Name] = map[string]interface{}{
+			"allow":  strings.Join(settings.Allow, ","),
+			"reject": strings.Join(settings.Reject, ","),
+		}
+	}
+
 	return goanalysis.NewLinter(
 		a.Name,
 		a.Doc,
 		[]*analysis.Analyzer{a},
-		ireturnSettings(a.Name, settings),
+		cfg,
 	).WithLoadMode(goanalysis.LoadModeTypesInfo)
-}
-
-func ireturnSettings(name string, s *config.IreturnSettings) map[string]map[string]interface{} {
-	if s == nil {
-		return nil
-	}
-
-	return map[string]map[string]interface{}{
-		name: {
-			"allow":  strings.Join(s.Allow, ","),
-			"reject": strings.Join(s.Reject, ","),
-		},
-	}
 }
