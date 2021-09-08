@@ -26,7 +26,7 @@ func NewTenv(settings *config.TenvSettings) *goanalysis.Linter {
 
 	return goanalysis.NewLinter(
 		a.Name,
-		"tenv is analyzer that detects using os.Setenv instead of t.Setenv since Go1.17",
+		a.Doc,
 		analyzers,
 		cfg,
 	).WithLoadMode(goanalysis.LoadModeSyntax)
