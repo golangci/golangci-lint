@@ -158,11 +158,6 @@ linters-settings:
     # Exclude godoc examples from forbidigo checks.  Default is true.
     exclude_godoc_examples: false
 
-  nlreturn:
-    # size of the block (including return statement that are still "OK")
-    # so no return split required.
-    block-size: 1
-
   funlen:
     lines: 60
     statements: 40
@@ -510,6 +505,11 @@ linters-settings:
       - iface
       - map
       - chan
+
+  nlreturn:
+    # size of the block (including return statement that is still "OK")
+    # so no return split required.
+    block-size: 1
 
   nolintlint:
     # Enable to ensure that nolint directives are all used. Default is true.
