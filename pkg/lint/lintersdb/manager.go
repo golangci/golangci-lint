@@ -99,46 +99,48 @@ func enableLinterConfigs(lcs []*linter.Config, isEnabled func(lc *linter.Config)
 
 //nolint:funlen
 func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
-	var govetCfg *config.GovetSettings
-	var testpackageCfg *config.TestpackageSettings
+	var cyclopCfg *config.Cyclop
+	var errorlintCfg *config.ErrorLintSettings
 	var exhaustiveCfg *config.ExhaustiveSettings
 	var exhaustiveStructCfg *config.ExhaustiveStructSettings
-	var errorlintCfg *config.ErrorLintSettings
-	var thelperCfg *config.ThelperSettings
-	var predeclaredCfg *config.PredeclaredSettings
-	var ifshortCfg *config.IfshortSettings
-	var reviveCfg *config.ReviveSettings
-	var cyclopCfg *config.Cyclop
-	var importAsCfg *config.ImportAsSettings
-	var ireturnCfg *config.IreturnSettings
 	var goModDirectivesCfg *config.GoModDirectivesSettings
-	var tagliatelleCfg *config.TagliatelleSettings
 	var gosecCfg *config.GoSecSettings
 	var gosimpleCfg *config.StaticCheckSettings
+	var govetCfg *config.GovetSettings
+	var ifshortCfg *config.IfshortSettings
+	var importAsCfg *config.ImportAsSettings
+	var ireturnCfg *config.IreturnSettings
+	var nilNilCfg *config.NilNilSettings
+	var predeclaredCfg *config.PredeclaredSettings
+	var reviveCfg *config.ReviveSettings
 	var staticcheckCfg *config.StaticCheckSettings
 	var stylecheckCfg *config.StaticCheckSettings
+	var tagliatelleCfg *config.TagliatelleSettings
+	var testpackageCfg *config.TestpackageSettings
+	var thelperCfg *config.ThelperSettings
 	var unusedCfg *config.StaticCheckSettings
 	var wrapcheckCfg *config.WrapcheckSettings
 
 	if m.cfg != nil {
-		govetCfg = &m.cfg.LintersSettings.Govet
-		testpackageCfg = &m.cfg.LintersSettings.Testpackage
+		cyclopCfg = &m.cfg.LintersSettings.Cyclop
+		errorlintCfg = &m.cfg.LintersSettings.ErrorLint
 		exhaustiveCfg = &m.cfg.LintersSettings.Exhaustive
 		exhaustiveStructCfg = &m.cfg.LintersSettings.ExhaustiveStruct
-		errorlintCfg = &m.cfg.LintersSettings.ErrorLint
-		thelperCfg = &m.cfg.LintersSettings.Thelper
-		predeclaredCfg = &m.cfg.LintersSettings.Predeclared
-		ifshortCfg = &m.cfg.LintersSettings.Ifshort
-		reviveCfg = &m.cfg.LintersSettings.Revive
-		cyclopCfg = &m.cfg.LintersSettings.Cyclop
-		importAsCfg = &m.cfg.LintersSettings.ImportAs
-		ireturnCfg = &m.cfg.LintersSettings.Ireturn
 		goModDirectivesCfg = &m.cfg.LintersSettings.GoModDirectives
-		tagliatelleCfg = &m.cfg.LintersSettings.Tagliatelle
 		gosecCfg = &m.cfg.LintersSettings.Gosec
 		gosimpleCfg = &m.cfg.LintersSettings.Gosimple
+		govetCfg = &m.cfg.LintersSettings.Govet
+		ifshortCfg = &m.cfg.LintersSettings.Ifshort
+		importAsCfg = &m.cfg.LintersSettings.ImportAs
+		ireturnCfg = &m.cfg.LintersSettings.Ireturn
+		nilNilCfg = &m.cfg.LintersSettings.NilNil
+		predeclaredCfg = &m.cfg.LintersSettings.Predeclared
+		reviveCfg = &m.cfg.LintersSettings.Revive
 		staticcheckCfg = &m.cfg.LintersSettings.Staticcheck
 		stylecheckCfg = &m.cfg.LintersSettings.Stylecheck
+		tagliatelleCfg = &m.cfg.LintersSettings.Tagliatelle
+		testpackageCfg = &m.cfg.LintersSettings.Testpackage
+		thelperCfg = &m.cfg.LintersSettings.Thelper
 		unusedCfg = &m.cfg.LintersSettings.Unused
 		wrapcheckCfg = &m.cfg.LintersSettings.Wrapcheck
 	}
@@ -513,6 +515,11 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/butuzov/ireturn"),
+		linter.NewConfig(golinters.NewNilNil(nilNilCfg)).
+			WithPresets(linter.PresetStyle).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/Antonboom/nilnil").
+			WithSince("v1.43.0"),
 
 		// nolintlint must be last because it looks at the results of all the previous linters for unused nolint directives
 		linter.NewConfig(golinters.NewNoLintLint()).
