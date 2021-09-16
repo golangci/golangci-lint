@@ -110,6 +110,7 @@ type LintersSettings struct {
 	Gosimple         StaticCheckSettings
 	Govet            GovetSettings
 	Ifshort          IfshortSettings
+	Ireturn          IreturnSettings
 	ImportAs         ImportAsSettings
 	Lll              LllSettings
 	Makezero         MakezeroSettings
@@ -184,6 +185,11 @@ type ExhaustiveSettings struct {
 
 type ExhaustiveStructSettings struct {
 	StructPatterns []string `mapstructure:"struct-patterns"`
+}
+
+type IreturnSettings struct {
+	Allow  []string `mapstructure:"allow"`
+	Reject []string `mapstructure:"reject"`
 }
 
 type ForbidigoSettings struct {

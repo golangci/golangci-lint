@@ -110,6 +110,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 	var reviveCfg *config.ReviveSettings
 	var cyclopCfg *config.Cyclop
 	var importAsCfg *config.ImportAsSettings
+	var ireturnCfg *config.IreturnSettings
 	var goModDirectivesCfg *config.GoModDirectivesSettings
 	var tagliatelleCfg *config.TagliatelleSettings
 	var gosecCfg *config.GoSecSettings
@@ -131,6 +132,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		reviveCfg = &m.cfg.LintersSettings.Revive
 		cyclopCfg = &m.cfg.LintersSettings.Cyclop
 		importAsCfg = &m.cfg.LintersSettings.ImportAs
+		ireturnCfg = &m.cfg.LintersSettings.Ireturn
 		goModDirectivesCfg = &m.cfg.LintersSettings.GoModDirectives
 		tagliatelleCfg = &m.cfg.LintersSettings.Tagliatelle
 		gosecCfg = &m.cfg.LintersSettings.Gosec
@@ -506,6 +508,11 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/Antonboom/errname").
 			WithSince("v1.42.0"),
+		linter.NewConfig(golinters.NewIreturn(ireturnCfg)).
+			WithSince("v1.43.0").
+			WithPresets(linter.PresetStyle).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/butuzov/ireturn"),
 
 		// nolintlint must be last because it looks at the results of all the previous linters for unused nolint directives
 		linter.NewConfig(golinters.NewNoLintLint()).
