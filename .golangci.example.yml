@@ -630,6 +630,9 @@ linters-settings:
   tenv:
     # The following configurations enable checks prior to Go 1.17.
     force: false
+    # The all option will run against all method in test file.
+    # By default, only methods that take *testing.T, *testing.B, and testing.TB as arguments are checked.
+    all: false
 
   unparam:
     # Inspect exported functions, default is false. Set to true if no external program/library imports your code.

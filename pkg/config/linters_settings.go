@@ -466,6 +466,7 @@ type ThelperSettings struct {
 
 type TenvSettings struct {
 	Force bool `mapstructure:"force"`
+	All   bool `mapstructure:"all"`
 }
 
 type UnparamSettings struct {

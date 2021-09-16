@@ -1,5 +1,5 @@
 // args: -Etenv
-// config_path: testdata/configs/tenv_force.yml
+// config_path: testdata/configs/tenv_all_force.yml
 package testdata
 
 import (
@@ -8,12 +8,12 @@ import (
 )
 
 var (
-	e = os.Setenv("a", "b") // OK
+	e = os.Setenv("a", "b") // ERROR "variable e is not using testing.Setenv"
 )
 
 func setup() {
-	os.Setenv("a", "b")        // OK
-	err := os.Setenv("a", "b") // OK
+	os.Setenv("a", "b")        // ERROR "func setup is not using testing.Setenv"
+	err := os.Setenv("a", "b") // ERROR "func setup is not using testing.Setenv"
 	if err != nil {
 		_ = err
 	}
