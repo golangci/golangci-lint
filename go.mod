@@ -78,6 +78,7 @@ require (
 	github.com/stretchr/testify v1.7.0
 	github.com/tdakkota/asciicheck v0.0.0-20200416200610-e657995f937b
 	github.com/tetafro/godot v1.4.10
+	github.com/thepwagner/golangci-lint-yaml v0.0.1 // indirect
 	github.com/timakin/bodyclose v0.0.0-20200424151742-cb6215831a94
 	github.com/tomarrell/wrapcheck/v2 v2.3.0
 	github.com/tommy-muehle/go-mnd/v2 v2.4.0

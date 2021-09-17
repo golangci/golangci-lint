@@ -1,0 +1,3 @@
+# TODO: host a preset in the golangci org?
+presets:
+ - github.com/thepwagner/golangci-lint-yaml

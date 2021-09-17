@@ -1,7 +1,8 @@
 package config
 
 type Config struct {
-	Run Run
+	Run     Run
+	Presets []string
 
 	Output Output
 

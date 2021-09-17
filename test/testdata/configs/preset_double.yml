@@ -1,0 +1,11 @@
+linters:
+  # overwrite the value in preset_single.yml
+  fast: false
+
+# add a new value
+output:
+  print-issued-lines: true
+
+presets:
+  - ./preset_parent.yml
+  - ./preset_single.yml

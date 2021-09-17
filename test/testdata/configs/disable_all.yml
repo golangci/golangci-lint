@@ -1,0 +1,6 @@
+linters:
+  disable:
+    - deadcode
+    - errcheck
+    - gosimple
+    - govet

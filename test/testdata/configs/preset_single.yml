@@ -1,0 +1,11 @@
+linters:
+  # overwrite a value in preset_parent.yml
+  enable-all: false
+  # enable and disable a linter
+  enable:
+    - govet
+  disable:
+    - deadcode
+
+presets:
+ - ./preset_parent.yml

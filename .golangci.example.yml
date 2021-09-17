@@ -1,6 +1,11 @@
 # This file contains all available configuration options
 # with their default values.
 
+# configuration presets to use, each can be:
+# - a file path beginning with '.', which will be resolved relative to this config file
+# - a go module path, which will be searched for .golangci.yaml, .golangci.json etc
+presets: []
+
 # options for analysis running
 run:
   # default concurrency is a available CPU number

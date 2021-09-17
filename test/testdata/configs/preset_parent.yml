@@ -1,0 +1,7 @@
+linters:
+   enable-all: true
+   fast: true
+   enable:
+      - deadcode
+      - errcheck
+      - gosimple

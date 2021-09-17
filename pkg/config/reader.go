@@ -5,10 +5,12 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 
 	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/viper"
+	"golang.org/x/tools/go/packages"
 
 	"github.com/golangci/golangci-lint/pkg/fsutils"
 	"github.com/golangci/golangci-lint/pkg/logutils"
@@ -43,17 +45,18 @@ func (r *FileReader) Read() error {
 		return fmt.Errorf("can't parse --config option: %s", err)
 	}
 
+	v := viper.New()
 	if configFile != "" {
-		viper.SetConfigFile(configFile)
+		v.SetConfigFile(configFile)
 	} else {
-		r.setupConfigFileSearch()
+		r.setupConfigFileSearch(v)
 	}
 
-	return r.parseConfig()
+	return r.parseConfig(v)
 }
 
-func (r *FileReader) parseConfig() error {
-	if err := viper.ReadInConfig(); err != nil {
+func (r *FileReader) parseConfig(v *viper.Viper) error {
+	if err := v.ReadInConfig(); err != nil {
 		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
 			return nil
 		}
@@ -61,7 +64,7 @@ func (r *FileReader) parseConfig() error {
 		return fmt.Errorf("can't read viper config: %s", err)
 	}
 
-	usedConfigFile := viper.ConfigFileUsed()
+	usedConfigFile := v.ConfigFileUsed()
 	if usedConfigFile == "" {
 		return nil
 	}
@@ -72,8 +75,12 @@ func (r *FileReader) parseConfig() error {
 	}
 	r.log.Infof("Used config file %s", usedConfigFile)
 
-	if err := viper.Unmarshal(r.cfg); err != nil {
+	if err := v.Unmarshal(r.cfg); err != nil {
 		return fmt.Errorf("can't unmarshal config by viper: %s", err)
+	}
+
+	if err := r.mergePresets(v); err != nil {
+		return fmt.Errorf("can't merge presets: %s", err)
 	}
 
 	if err := r.validateConfig(); err != nil {
@@ -128,6 +135,105 @@ func (r *FileReader) validateConfig() error {
 	return nil
 }
 
+func (r *FileReader) mergePresets(v *viper.Viper) error {
+	if len(r.cfg.Presets) == 0 {
+		return nil
+	}
+	presets, err := r.loadPresets(v)
+	if err != nil {
+		return err
+	}
+
+	// Merge via viper, with special handling for .linters.{en,dis}abled slice
+	mergedV := viper.New()
+	lintersEnabled := map[string]struct{}{}
+	lintersDisabled := map[string]struct{}{}
+	for _, cfg := range append(presets, v) {
+		if err := mergedV.MergeConfigMap(cfg.AllSettings()); err != nil {
+			return fmt.Errorf("can't merge config %q: %w", cfg.ConfigFileUsed(), err)
+		}
+
+		for _, l := range cfg.GetStringSlice("linters.enable") {
+			lintersEnabled[l] = struct{}{}
+			delete(lintersDisabled, l)
+		}
+		for _, l := range cfg.GetStringSlice("linters.disable") {
+			lintersDisabled[l] = struct{}{}
+			delete(lintersEnabled, l)
+		}
+	}
+
+	if err := mergedV.Unmarshal(r.cfg); err != nil {
+		return fmt.Errorf("can't unmarshal merged config: %w", err)
+	}
+
+	if len(lintersEnabled) > 0 {
+		r.cfg.Linters.Enable = make([]string, 0, len(lintersEnabled))
+		for l := range lintersEnabled {
+			r.cfg.Linters.Enable = append(r.cfg.Linters.Enable, l)
+		}
+		sort.Strings(r.cfg.Linters.Enable)
+	} else {
+		r.cfg.Linters.Enable = nil
+	}
+	if len(lintersDisabled) > 0 {
+		r.cfg.Linters.Disable = make([]string, 0, len(lintersDisabled))
+		for l := range lintersDisabled {
+			r.cfg.Linters.Disable = append(r.cfg.Linters.Disable, l)
+		}
+		sort.Strings(r.cfg.Linters.Disable)
+	} else {
+		r.cfg.Linters.Disable = nil
+	}
+
+	return nil
+}
+
+const configName = ".golangci"
+
+func (r *FileReader) loadPresets(v *viper.Viper) ([]*viper.Viper, error) {
+	cfgBase := filepath.Dir(v.ConfigFileUsed())
+	presets := make([]*viper.Viper, 0, len(r.cfg.Presets))
+	for _, preset := range r.cfg.Presets {
+		presetV := viper.New()
+		if strings.HasPrefix(preset, ".") {
+			cfgFile := filepath.Join(cfgBase, preset)
+			presetV.SetConfigFile(cfgFile)
+		} else {
+			modDir, err := findModDir(preset)
+			if err != nil {
+				return nil, err
+			}
+			presetV.AddConfigPath(modDir)
+			presetV.SetConfigName(configName)
+		}
+
+		if err := presetV.ReadInConfig(); err != nil {
+			return nil, fmt.Errorf("can't read preset config %q: %w", preset, err)
+		}
+		r.log.Infof("Read preset module config file %s", presetV.ConfigFileUsed())
+
+		presets = append(presets, presetV)
+	}
+	return presets, nil
+}
+
+func findModDir(mod string) (string, error) {
+	cfg := &packages.Config{Mode: packages.NeedFiles}
+	pkgs, err := packages.Load(cfg, mod)
+	if err != nil {
+		return "", fmt.Errorf("can't load preset module %q: %w", mod, err)
+	}
+	pkg := pkgs[0]
+	if len(pkg.Errors) > 0 {
+		return "", fmt.Errorf("can't load preset module package %q: %+v", mod, pkg.Errors)
+	}
+	if len(pkg.GoFiles) == 0 {
+		return "", fmt.Errorf("empty preset module package: add at least one .go file %s", mod)
+	}
+	return filepath.Dir(pkg.GoFiles[0]), nil
+}
+
 func getFirstPathArg() string {
 	args := os.Args
 
@@ -153,7 +259,7 @@ func getFirstPathArg() string {
 	return firstArg
 }
 
-func (r *FileReader) setupConfigFileSearch() {
+func (r *FileReader) setupConfigFileSearch(v *viper.Viper) {
 	firstArg := getFirstPathArg()
 	absStartPath, err := filepath.Abs(firstArg)
 	if err != nil {
@@ -189,9 +295,10 @@ func (r *FileReader) setupConfigFileSearch() {
 	}
 
 	r.log.Infof("Config search paths: %s", configSearchPaths)
-	viper.SetConfigName(".golangci")
+
+	v.SetConfigName(configName)
 	for _, p := range configSearchPaths {
-		viper.AddConfigPath(p)
+		v.AddConfigPath(p)
 	}
 }
 

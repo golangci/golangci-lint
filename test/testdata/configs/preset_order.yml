@@ -1,0 +1,5 @@
+presets:
+ - ./preset_parent.yml
+ - ./preset_single.yml
+ # appears last, overwriting previously enabled checks
+ - ./disable_all.yml
