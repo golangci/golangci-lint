@@ -172,10 +172,6 @@ linters-settings:
     # minimal code complexity to report, 30 by default (but we recommend 10-20)
     min-complexity: 10
 
-  nestif:
-    # minimal complexity of if statements to report, 5 by default
-    min-complexity: 4
-
   goconst:
     # minimal length of string constant, 3 by default
     min-len: 3
@@ -497,6 +493,31 @@ linters-settings:
     # make an issue if func has more lines of code than this setting and it has naked returns; default is 30
     max-func-lines: 30
 
+  nestif:
+    # minimal complexity of if statements to report, 5 by default
+    min-complexity: 4
+
+  nilnil:
+    # By default, nilnil checks all returned types below.
+    checked-types:
+      - ptr
+      - func
+      - iface
+      - map
+      - chan
+
+  nolintlint:
+    # Enable to ensure that nolint directives are all used. Default is true.
+    allow-unused: false
+    # Disable to ensure that nolint directives don't have a leading space. Default is true.
+    allow-leading-space: true
+    # Exclude following linters from requiring an explanation.  Default is [].
+    allow-no-explanation: [ ]
+    # Enable to require an explanation of nonzero length after each nolint directive. Default is false.
+    require-explanation: true
+    # Enable to require nolint directives to mention the specific linter being suppressed. Default is false.
+    require-specific: true
+
   prealloc:
     # XXX: we don't recommend using this linter before doing performance profiling.
     # For most programs usage of prealloc will be a premature optimization.
@@ -527,18 +548,6 @@ linters-settings:
     ignore: ""
     # include method names and field names (i.e., qualified names) in checks
     q: false
-
-  nolintlint:
-    # Enable to ensure that nolint directives are all used. Default is true.
-    allow-unused: false
-    # Disable to ensure that nolint directives don't have a leading space. Default is true.
-    allow-leading-space: true
-    # Exclude following linters from requiring an explanation.  Default is [].
-    allow-no-explanation: []
-    # Enable to require an explanation of nonzero length after each nolint directive. Default is false.
-    require-explanation: true
-    # Enable to require nolint directives to mention the specific linter being suppressed. Default is false.
-    require-specific: true
 
   rowserrcheck:
     packages:

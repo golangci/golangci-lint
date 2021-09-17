@@ -118,6 +118,7 @@ type LintersSettings struct {
 	Misspell         MisspellSettings
 	Nakedret         NakedretSettings
 	Nestif           NestifSettings
+	NilNil           NilNilSettings
 	NoLintLint       NoLintLintSettings
 	Prealloc         PreallocSettings
 	Predeclared      PredeclaredSettings
@@ -358,6 +359,10 @@ type NakedretSettings struct {
 
 type NestifSettings struct {
 	MinComplexity int `mapstructure:"min-complexity"`
+}
+
+type NilNilSettings struct {
+	CheckedTypes []string `mapstructure:"checked-types"`
 }
 
 type NoLintLintSettings struct {
