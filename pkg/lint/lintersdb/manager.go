@@ -524,7 +524,6 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithSince("v1.43.0"),
 		linter.NewConfig(golinters.NewVarnamelen(varnamelenCfg)).
 			WithPresets(linter.PresetStyle).
-			WithLoadForGoAnalysis().
 			WithURL("https://github.com/blizzy78/varnamelen").
 			WithSince("v1.43.0"),
 
