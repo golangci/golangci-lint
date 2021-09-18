@@ -647,7 +647,6 @@ linters-settings:
     # Optional list of variable names that should be ignored completely. (defaults to empty list)
     ignore-names:
       - err
-      - ctx
 
   whitespace:
     multi-if: false   # Enforces newlines (or comments) after every multi-line if statement
