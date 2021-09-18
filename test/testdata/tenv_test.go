@@ -7,7 +7,7 @@ import (
 )
 
 var (
-	e = os.Setenv("a", "b") // OK
+	e = os.Setenv("a", "b") // never seen
 )
 
 func setup() {
@@ -19,22 +19,22 @@ func setup() {
 }
 
 func TestF(t *testing.T) {
-	os.Setenv("a", "b")                         // ERROR "func TestF is not using testing.Setenv"
-	if err := os.Setenv("a", "b"); err != nil { // ERROR "func TestF is not using testing.Setenv"
+	os.Setenv("a", "b")                         // ERROR "os\\.Setenv\\(\\) can be replaced by `t\\.Setenv\\(\\)` in TestF"
+	if err := os.Setenv("a", "b"); err != nil { // ERROR "os\\.Setenv\\(\\) can be replaced by `t\\.Setenv\\(\\)` in TestF"
 		_ = err
 	}
 }
 
 func BenchmarkF(b *testing.B) {
-	os.Setenv("a", "b")                         // ERROR "func BenchmarkF is not using testing.Setenv"
-	if err := os.Setenv("a", "b"); err != nil { // ERROR "func BenchmarkF is not using testing.Setenv"
+	os.Setenv("a", "b")                         // ERROR "os\\.Setenv\\(\\) can be replaced by `b\\.Setenv\\(\\)` in BenchmarkF"
+	if err := os.Setenv("a", "b"); err != nil { // ERROR "os\\.Setenv\\(\\) can be replaced by `b\\.Setenv\\(\\)` in BenchmarkF"
 		_ = err
 	}
 }
 
 func testTB(tb testing.TB) {
-	os.Setenv("a", "b")                         // ERROR "func testTB is not using testing.Setenv"
-	if err := os.Setenv("a", "b"); err != nil { // ERROR "func testTB is not using testing.Setenv"
+	os.Setenv("a", "b")                         // ERROR "os\\.Setenv\\(\\) can be replaced by `tb\\.Setenv\\(\\)` in testTB"
+	if err := os.Setenv("a", "b"); err != nil { // ERROR "os\\.Setenv\\(\\) can be replaced by `tb\\.Setenv\\(\\)` in testTB"
 		_ = err
 	}
 }

@@ -628,8 +628,8 @@ linters-settings:
       begin: true
 
   tenv:
-    # The all option will run against all method in test file.
-    # By default, only methods that take *testing.T, *testing.B, and testing.TB as arguments are checked.
+    # The option `all` will run against whole test files (`_test.go`) regardless of method/function signatures.
+    # By default, only methods that take `*testing.T`, `*testing.B`, and `testing.TB` as arguments are checked.
     all: false
 
   unparam:
