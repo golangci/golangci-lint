@@ -119,6 +119,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 	var testpackageCfg *config.TestpackageSettings
 	var thelperCfg *config.ThelperSettings
 	var unusedCfg *config.StaticCheckSettings
+	var varnamelenCfg *config.VarnamelenSettings
 	var wrapcheckCfg *config.WrapcheckSettings
 
 	if m.cfg != nil {
@@ -142,6 +143,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		testpackageCfg = &m.cfg.LintersSettings.Testpackage
 		thelperCfg = &m.cfg.LintersSettings.Thelper
 		unusedCfg = &m.cfg.LintersSettings.Unused
+		varnamelenCfg = &m.cfg.LintersSettings.Varnamelen
 		wrapcheckCfg = &m.cfg.LintersSettings.Wrapcheck
 	}
 
@@ -519,6 +521,11 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/Antonboom/nilnil").
+			WithSince("v1.43.0"),
+		linter.NewConfig(golinters.NewVarnamelen(varnamelenCfg)).
+			WithPresets(linter.PresetStyle).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/blizzy78/varnamelen").
 			WithSince("v1.43.0"),
 
 		// nolintlint must be last because it looks at the results of all the previous linters for unused nolint directives
