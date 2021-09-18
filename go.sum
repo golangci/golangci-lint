@@ -97,6 +97,8 @@ github.com/bkielbasa/cyclop v1.2.0 h1:7Jmnh0yL2DjKfw28p86YTd/B4lRGcNuu12sKE35sM7
 github.com/bkielbasa/cyclop v1.2.0/go.mod h1:qOI0yy6A7dYC4Zgsa72Ppm9kONl0RoIlPbzot9mhmeI=
 github.com/blizzy78/varnamelen v0.1.0 h1:l3ArUruFr3dpTNayXMvd+NSgsESVV9dNMotPAP+kLW0=
 github.com/blizzy78/varnamelen v0.1.0/go.mod h1:hbwRdBvoBqxk34XyQ6HA0UH3G0/1TKuv5AC4eaBT0Ec=
+github.com/blizzy78/varnamelen v0.2.0 h1:OVTE0Lqf+COJQf47FJpGooTIxhcOhmR1Zvutd0ZZ/9M=
+github.com/blizzy78/varnamelen v0.2.0/go.mod h1:hbwRdBvoBqxk34XyQ6HA0UH3G0/1TKuv5AC4eaBT0Ec=
 github.com/bombsimon/wsl/v3 v3.3.0 h1:Mka/+kRLoQJq7g2rggtgQsjuI/K5Efd87WX96EWFxjM=
 github.com/bombsimon/wsl/v3 v3.3.0/go.mod h1:st10JtZYLE4D5sC7b8xV4zTKZwAQjCH/Hy2Pm1FNZIc=
 github.com/butuzov/ireturn v0.1.0 h1:fMNgwuKMwsV9qtPNFgI7/NUOF3+CfbdLPGX6ZhDaMgA=

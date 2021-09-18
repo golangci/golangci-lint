@@ -17,7 +17,9 @@ func NewVarnamelen(settings *config.VarnamelenSettings) *goanalysis.Linter {
 	cfg := map[string]map[string]interface{}{}
 	if settings != nil {
 		vnlCfg := map[string]interface{}{
-			"ignoreNames": strings.Join(settings.IgnoreNames, ","),
+			"checkReceiver": boolString(settings.CheckReceiver),
+			"checkReturn":   boolString(settings.CheckReturn),
+			"ignoreNames":   strings.Join(settings.IgnoreNames, ","),
 		}
 
 		if settings.MaxDistance > 0 {
@@ -36,4 +38,11 @@ func NewVarnamelen(settings *config.VarnamelenSettings) *goanalysis.Linter {
 		[]*analysis.Analyzer{a},
 		cfg,
 	)
+}
+
+func boolString(b bool) string {
+	if b {
+		return "true"
+	}
+	return "false"
 }
