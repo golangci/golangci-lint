@@ -119,6 +119,7 @@ type LintersSettings struct {
 	Nakedret         NakedretSettings
 	Nestif           NestifSettings
 	NilNil           NilNilSettings
+	Nlreturn         NlreturnSettings
 	NoLintLint       NoLintLintSettings
 	Prealloc         PreallocSettings
 	Predeclared      PredeclaredSettings
@@ -363,6 +364,10 @@ type NestifSettings struct {
 
 type NilNilSettings struct {
 	CheckedTypes []string `mapstructure:"checked-types"`
+}
+
+type NlreturnSettings struct {
+	BlockSize int `mapstructure:"block-size"`
 }
 
 type NoLintLintSettings struct {
