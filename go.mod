@@ -43,7 +43,7 @@ require (
 	github.com/julz/importas v0.0.0-20210419104244-841f0c0fe66d
 	github.com/kisielk/errcheck v1.6.0
 	github.com/kulti/thelper v0.4.0
-	github.com/kunwardeep/paralleltest v1.0.2
+	github.com/kunwardeep/paralleltest v1.0.3
 	github.com/kyoh86/exportloopref v0.1.8
 	github.com/ldez/gomoddirectives v0.2.2
 	github.com/ldez/tagliatelle v0.2.0
