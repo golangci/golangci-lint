@@ -629,7 +629,7 @@ linters-settings:
 
   tenv:
     # The following configurations enable checks prior to Go 1.17.
-    f: false
+    force: false
 
   unparam:
     # Inspect exported functions, default is false. Set to true if no external program/library imports your code.
