@@ -627,6 +627,10 @@ linters-settings:
       name: true
       begin: true
 
+  tenv:
+    # The following configurations enable checks prior to Go 1.17.
+    f: false
+
   unparam:
     # Inspect exported functions, default is false. Set to true if no external program/library imports your code.
     # XXX: if you enable this setting, unparam will report a lot of false-positives in text editors:
