@@ -14,7 +14,7 @@ require (
 	github.com/ashanbrown/makezero v0.0.0-20210520155254-b6261585ddde
 	github.com/bkielbasa/cyclop v1.2.0
 	github.com/bombsimon/wsl/v3 v3.3.0
-	github.com/butuzov/ireturn v0.1.0
+	github.com/butuzov/ireturn v0.1.1
 	github.com/charithe/durationcheck v0.0.8
 	github.com/daixiang0/gci v0.2.9
 	github.com/denis-tingajkin/go-header v0.4.2

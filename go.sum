@@ -46,8 +46,6 @@ contrib.go.opencensus.io/exporter/stackdriver v0.13.4/go.mod h1:aXENhDJ1Y4lIg4EU
 dmitri.shuralyov.com/gpu/mtl v0.0.0-20190408044501-666a987793e9/go.mod h1:H6x//7gZCb22OMCxBHrMx7a5I7Hp++hsVxbQ4BYO7hU=
 github.com/Antonboom/errname v0.1.4 h1:lGSlI42Gm4bI1e+IITtXJXvxFM8N7naWimVFKcb0McY=
 github.com/Antonboom/errname v0.1.4/go.mod h1:jRXo3m0E0EuCnK3wbsSVH3X55Z4iTDLl6ZfCxwFj4TM=
-github.com/Antonboom/nilnil v0.0.0-20210914182304-d33f75a9101c h1:GZ/bAqfmHdiHy8O0jwbGwLsK0qyw+8iuCaqNbCcV/to=
-github.com/Antonboom/nilnil v0.0.0-20210914182304-d33f75a9101c/go.mod h1:PhHLvRPSghY5Y7mX4TW+BHZQYo1A8flE5H20D3IPZBo=
 github.com/Antonboom/nilnil v0.1.0 h1:DLDavmg0a6G/F4Lt9t7Enrbgb3Oph6LnDE6YVsmTt74=
 github.com/Antonboom/nilnil v0.1.0/go.mod h1:PhHLvRPSghY5Y7mX4TW+BHZQYo1A8flE5H20D3IPZBo=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
@@ -99,8 +97,8 @@ github.com/bkielbasa/cyclop v1.2.0 h1:7Jmnh0yL2DjKfw28p86YTd/B4lRGcNuu12sKE35sM7
 github.com/bkielbasa/cyclop v1.2.0/go.mod h1:qOI0yy6A7dYC4Zgsa72Ppm9kONl0RoIlPbzot9mhmeI=
 github.com/bombsimon/wsl/v3 v3.3.0 h1:Mka/+kRLoQJq7g2rggtgQsjuI/K5Efd87WX96EWFxjM=
 github.com/bombsimon/wsl/v3 v3.3.0/go.mod h1:st10JtZYLE4D5sC7b8xV4zTKZwAQjCH/Hy2Pm1FNZIc=
-github.com/butuzov/ireturn v0.1.0 h1:fMNgwuKMwsV9qtPNFgI7/NUOF3+CfbdLPGX6ZhDaMgA=
-github.com/butuzov/ireturn v0.1.0/go.mod h1:Wh6Zl3IMtTpaIKbmwzqi6olnM9ptYQxxVacMsOEFPoc=
+github.com/butuzov/ireturn v0.1.1 h1:QvrO2QF2+/Cx1WA/vETCIYBKtRjc30vesdoPUNo1EbY=
+github.com/butuzov/ireturn v0.1.1/go.mod h1:Wh6Zl3IMtTpaIKbmwzqi6olnM9ptYQxxVacMsOEFPoc=
 github.com/census-instrumentation/opencensus-proto v0.2.1/go.mod h1:f6KPmirojxKA12rnyqOA5BBL4O983OfeGPqjHWSTneU=
 github.com/cespare/xxhash v1.1.0 h1:a6HrQnmkObjyL+Gs60czilIUGqrzKutQD6XZog3p+ko=
 github.com/cespare/xxhash v1.1.0/go.mod h1:XrSqR1VqqWfGrhpAt58auRo0WTKS1nRRg3ghfAqPWnc=
@@ -651,10 +649,6 @@ github.com/spf13/viper v1.3.2/go.mod h1:ZiWeW+zYFKm7srdB9IoDzzZXaJaI5eL9QjNiN/DM
 github.com/spf13/viper v1.7.1/go.mod h1:8WkrPz2fc9jxqZNCJI/76HCieCp4Q8HaLFoCha5qpdg=
 github.com/spf13/viper v1.8.1 h1:Kq1fyeebqsBfbjZj4EL7gj2IO0mMaiyjYUWcUsl2O44=
 github.com/spf13/viper v1.8.1/go.mod h1:o0Pch8wJ9BVSWGQMbra6iw0oQ5oktSIBaujf1rJH9Ns=
-github.com/ssgreg/nlreturn/v2 v2.1.0 h1:6/s4Rc49L6Uo6RLjhWZGBpWWjfzk2yrf1nIW8m4wgVA=
-github.com/ssgreg/nlreturn/v2 v2.1.0/go.mod h1:E/iiPB78hV7Szg2YfRgyIrk1AD6JVMTRkkxBiELzh2I=
-github.com/ssgreg/nlreturn/v2 v2.2.1-0.20210917114810-3d6ba68b229e h1://7YGfVLvQOQ5CkrrpKj0hZO9EaH0fpcV7zTeNcV1Y0=
-github.com/ssgreg/nlreturn/v2 v2.2.1-0.20210917114810-3d6ba68b229e/go.mod h1:E/iiPB78hV7Szg2YfRgyIrk1AD6JVMTRkkxBiELzh2I=
 github.com/ssgreg/nlreturn/v2 v2.2.1 h1:X4XDI7jstt3ySqGU86YGAURbxw3oTDPK9sPEi6YEwQ0=
 github.com/ssgreg/nlreturn/v2 v2.2.1/go.mod h1:E/iiPB78hV7Szg2YfRgyIrk1AD6JVMTRkkxBiELzh2I=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
