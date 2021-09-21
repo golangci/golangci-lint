@@ -1,4 +1,3 @@
 linters-settings:
   tenv:
-    force: true
     all: true

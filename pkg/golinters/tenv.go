@@ -19,7 +19,6 @@ func NewTenv(settings *config.TenvSettings) *goanalysis.Linter {
 	if settings != nil {
 		cfg = map[string]map[string]interface{}{
 			a.Name: {
-				tenv.F: settings.Force,
 				tenv.A: settings.All,
 			},
 		}

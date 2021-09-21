@@ -19,22 +19,22 @@ func setup() {
 }
 
 func TestF(t *testing.T) {
-	os.Setenv("a", "b")                         // OK
-	if err := os.Setenv("a", "b"); err != nil { // OK
+	os.Setenv("a", "b")                         // ERROR "func TestF is not using testing.Setenv"
+	if err := os.Setenv("a", "b"); err != nil { // ERROR "func TestF is not using testing.Setenv"
 		_ = err
 	}
 }
 
 func BenchmarkF(b *testing.B) {
-	os.Setenv("a", "b")                         // OK
-	if err := os.Setenv("a", "b"); err != nil { // OK
+	os.Setenv("a", "b")                         // ERROR "func BenchmarkF is not using testing.Setenv"
+	if err := os.Setenv("a", "b"); err != nil { // ERROR "func BenchmarkF is not using testing.Setenv"
 		_ = err
 	}
 }
 
 func testTB(tb testing.TB) {
-	os.Setenv("a", "b")                         // OK
-	if err := os.Setenv("a", "b"); err != nil { // OK
+	os.Setenv("a", "b")                         // ERROR "func testTB is not using testing.Setenv"
+	if err := os.Setenv("a", "b"); err != nil { // ERROR "func testTB is not using testing.Setenv"
 		_ = err
 	}
 }
