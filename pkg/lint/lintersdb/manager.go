@@ -526,7 +526,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithSince("v1.43.0"),
 		linter.NewConfig(golinters.NewTenv(tenvCfg)).
 			WithSince("v1.43.0").
-			WithPresets(linter.PresetPerformance, linter.PresetStyle).
+			WithPresets(linter.PresetStyle).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/sivchari/tenv"),
 
