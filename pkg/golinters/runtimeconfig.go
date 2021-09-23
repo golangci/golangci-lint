@@ -110,6 +110,10 @@ func checkPointerArg(arg ast.Expr, argName, defType string, pos token.Pos, pass 
 		case *ast.SelectorExpr:
 			checkSameType(sl.Sel, argName, defType, pass)
 		}
+	case *ast.SelectorExpr:
+		if !isRef {
+			pass.Reportf(pos, "expected ref as 3rd arg to Get")
+		}
 	default:
 		pass.Reportf(pos, "expected ref as 3rd arg to Get")
 	}
