@@ -1,0 +1,3 @@
+linters-settings:
+  nlreturn:
+    block-size: 2

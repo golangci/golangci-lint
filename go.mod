@@ -4,7 +4,7 @@ go 1.15
 
 require (
 	4d63.com/gochecknoglobals v0.0.0-20201008074935-acfc0b28355a
-	github.com/Antonboom/errname v0.1.4
+	github.com/Antonboom/errname v0.1.5
 	github.com/Antonboom/nilnil v0.1.0
 	github.com/BurntSushi/toml v0.4.1
 	github.com/Djarvur/go-err113 v0.0.0-20210108212216-aea10b59be24
@@ -15,7 +15,7 @@ require (
 	github.com/bkielbasa/cyclop v1.2.0
 	github.com/blizzy78/varnamelen v0.3.0
 	github.com/bombsimon/wsl/v3 v3.3.0
-	github.com/butuzov/ireturn v0.1.0
+	github.com/butuzov/ireturn v0.1.1
 	github.com/charithe/durationcheck v0.0.8
 	github.com/daixiang0/gci v0.2.9
 	github.com/denis-tingajkin/go-header v0.4.2
@@ -44,13 +44,13 @@ require (
 	github.com/julz/importas v0.0.0-20210419104244-841f0c0fe66d
 	github.com/kisielk/errcheck v1.6.0
 	github.com/kulti/thelper v0.4.0
-	github.com/kunwardeep/paralleltest v1.0.2
+	github.com/kunwardeep/paralleltest v1.0.3
 	github.com/kyoh86/exportloopref v0.1.8
 	github.com/ldez/gomoddirectives v0.2.2
 	github.com/ldez/tagliatelle v0.2.0
 	github.com/maratori/testpackage v1.0.1
 	github.com/matoous/godox v0.0.0-20210227103229-6504466cf951 // v1.0
-	github.com/mattn/go-colorable v0.1.8
+	github.com/mattn/go-colorable v0.1.9
 	github.com/mbilski/exhaustivestruct v1.2.0
 	github.com/mgechev/dots v0.0.0-20190921121421-c36f7dcfbb81
 	github.com/mgechev/revive v1.1.1
@@ -74,18 +74,18 @@ require (
 	github.com/sourcegraph/go-diff v0.6.1
 	github.com/spf13/cobra v1.2.1
 	github.com/spf13/pflag v1.0.5
-	github.com/spf13/viper v1.8.1
-	github.com/ssgreg/nlreturn/v2 v2.1.0
+	github.com/spf13/viper v1.9.0
+	github.com/ssgreg/nlreturn/v2 v2.2.1
 	github.com/stretchr/testify v1.7.0
 	github.com/tdakkota/asciicheck v0.0.0-20200416200610-e657995f937b
-	github.com/tetafro/godot v1.4.10
+	github.com/tetafro/godot v1.4.11
 	github.com/timakin/bodyclose v0.0.0-20200424151742-cb6215831a94
 	github.com/tomarrell/wrapcheck/v2 v2.3.0
 	github.com/tommy-muehle/go-mnd/v2 v2.4.0
 	github.com/ultraware/funlen v0.0.3
 	github.com/ultraware/whitespace v0.0.4
 	github.com/uudashr/gocognit v1.0.5
-	github.com/valyala/quicktemplate v1.6.3
+	github.com/valyala/quicktemplate v1.7.0
 	github.com/yeya24/promlinter v0.1.0
 	golang.org/x/tools v0.1.6
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b

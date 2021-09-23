@@ -506,6 +506,11 @@ linters-settings:
       - map
       - chan
 
+  nlreturn:
+    # size of the block (including return statement that is still "OK")
+    # so no return split required.
+    block-size: 1
+
   nolintlint:
     # Enable to ensure that nolint directives are all used. Default is true.
     allow-unused: false

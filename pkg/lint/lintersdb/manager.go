@@ -121,6 +121,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 	var unusedCfg *config.StaticCheckSettings
 	var varnamelenCfg *config.VarnamelenSettings
 	var wrapcheckCfg *config.WrapcheckSettings
+	var nlreturnCfg *config.NlreturnSettings
 
 	if m.cfg != nil {
 		cyclopCfg = &m.cfg.LintersSettings.Cyclop
@@ -145,6 +146,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		unusedCfg = &m.cfg.LintersSettings.Unused
 		varnamelenCfg = &m.cfg.LintersSettings.Varnamelen
 		wrapcheckCfg = &m.cfg.LintersSettings.Wrapcheck
+		nlreturnCfg = &m.cfg.LintersSettings.Nlreturn
 	}
 
 	const megacheckName = "megacheck"
@@ -416,7 +418,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetBugs, linter.PresetSQL).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/ryanrolds/sqlclosecheck"),
-		linter.NewConfig(golinters.NewNLReturn()).
+		linter.NewConfig(golinters.NewNLReturn(nlreturnCfg)).
 			WithSince("v1.30.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/ssgreg/nlreturn"),
