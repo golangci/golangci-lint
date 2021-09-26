@@ -69,6 +69,7 @@ require (
 	github.com/shazow/go-diff v0.0.0-20160112020656-b6b7b6733b8c
 	github.com/shirou/gopsutil/v3 v3.21.8
 	github.com/sirupsen/logrus v1.8.1
+	github.com/sivchari/tenv v1.4.7
 	github.com/sonatard/noctx v0.0.1
 	github.com/sourcegraph/go-diff v0.6.1
 	github.com/spf13/cobra v1.2.1

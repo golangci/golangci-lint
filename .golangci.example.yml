@@ -627,6 +627,11 @@ linters-settings:
       name: true
       begin: true
 
+  tenv:
+    # The option `all` will run against whole test files (`_test.go`) regardless of method/function signatures.
+    # By default, only methods that take `*testing.T`, `*testing.B`, and `testing.TB` as arguments are checked.
+    all: false
+
   unparam:
     # Inspect exported functions, default is false. Set to true if no external program/library imports your code.
     # XXX: if you enable this setting, unparam will report a lot of false-positives in text editors:

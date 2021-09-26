@@ -116,6 +116,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 	var staticcheckCfg *config.StaticCheckSettings
 	var stylecheckCfg *config.StaticCheckSettings
 	var tagliatelleCfg *config.TagliatelleSettings
+	var tenvCfg *config.TenvSettings
 	var testpackageCfg *config.TestpackageSettings
 	var thelperCfg *config.ThelperSettings
 	var unusedCfg *config.StaticCheckSettings
@@ -140,6 +141,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		staticcheckCfg = &m.cfg.LintersSettings.Staticcheck
 		stylecheckCfg = &m.cfg.LintersSettings.Stylecheck
 		tagliatelleCfg = &m.cfg.LintersSettings.Tagliatelle
+		tenvCfg = &m.cfg.LintersSettings.Tenv
 		testpackageCfg = &m.cfg.LintersSettings.Testpackage
 		thelperCfg = &m.cfg.LintersSettings.Thelper
 		unusedCfg = &m.cfg.LintersSettings.Unused
@@ -522,6 +524,11 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/Antonboom/nilnil").
 			WithSince("v1.43.0"),
+		linter.NewConfig(golinters.NewTenv(tenvCfg)).
+			WithSince("v1.43.0").
+			WithPresets(linter.PresetStyle).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/sivchari/tenv"),
 
 		// nolintlint must be last because it looks at the results of all the previous linters for unused nolint directives
 		linter.NewConfig(golinters.NewNoLintLint()).

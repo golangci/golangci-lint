@@ -132,6 +132,7 @@ type LintersSettings struct {
 	Tagliatelle      TagliatelleSettings
 	Testpackage      TestpackageSettings
 	Thelper          ThelperSettings
+	Tenv             TenvSettings
 	Unparam          UnparamSettings
 	Unused           StaticCheckSettings
 	Varcheck         VarCheckSettings
@@ -461,6 +462,10 @@ type ThelperSettings struct {
 		Name  bool `mapstructure:"name"`
 		Begin bool `mapstructure:"begin"`
 	} `mapstructure:"tb"`
+}
+
+type TenvSettings struct {
+	All bool `mapstructure:"all"`
 }
 
 type UnparamSettings struct {
