@@ -115,6 +115,7 @@ type Issues struct {
 
 	DiffFromRevision  string `mapstructure:"new-from-rev"`
 	DiffPatchFilePath string `mapstructure:"new-from-patch"`
+	WholeFiles        bool   `mapstructure:"whole-files"`
 	Diff              bool   `mapstructure:"new"`
 
 	NeedFix bool `mapstructure:"fix"`

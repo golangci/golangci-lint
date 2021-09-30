@@ -233,6 +233,8 @@ func initFlagSet(fs *pflag.FlagSet, cfg *config.Config, m *lintersdb.Manager, is
 		wh("Show only new issues created after git revision `REV`"))
 	fs.StringVar(&ic.DiffPatchFilePath, "new-from-patch", "",
 		wh("Show only new issues created in git patch with file path `PATH`"))
+	fs.BoolVar(&ic.WholeFiles, "whole-files", false,
+		wh("Show issues in any part of update files (requires new-from-rev or new-from-patch)"))
 	fs.BoolVar(&ic.NeedFix, "fix", false, "Fix found issues (if it's supported by the linter)")
 }
 

@@ -17,16 +17,18 @@ type Diff struct {
 	onlyNew       bool
 	fromRev       string
 	patchFilePath string
+	wholeFiles    bool
 	patch         string
 }
 
 var _ Processor = Diff{}
 
-func NewDiff(onlyNew bool, fromRev, patchFilePath string) *Diff {
+func NewDiff(onlyNew bool, fromRev, patchFilePath string, wholeFiles bool) *Diff {
 	return &Diff{
 		onlyNew:       onlyNew,
 		fromRev:       fromRev,
 		patchFilePath: patchFilePath,
+		wholeFiles:    wholeFiles,
 		patch:         os.Getenv("GOLANGCI_DIFF_PROCESSOR_PATCH"),
 	}
 }
@@ -54,6 +56,7 @@ func (p Diff) Process(issues []result.Issue) ([]result.Issue, error) {
 	c := revgrep.Checker{
 		Patch:        patchReader,
 		RevisionFrom: p.fromRev,
+		WholeFiles:   p.wholeFiles,
 	}
 	if err := c.Prepare(); err != nil {
 		return nil, fmt.Errorf("can't prepare diff by revgrep: %s", err)
