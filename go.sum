@@ -278,8 +278,8 @@ github.com/golangci/maligned v0.0.0-20180506175553-b1d89398deca h1:kNY3/svz5T29M
 github.com/golangci/maligned v0.0.0-20180506175553-b1d89398deca/go.mod h1:tvlJhZqDe4LMs4ZHD0oMUlt9G2LWuDGoisJTBzLMV9o=
 github.com/golangci/misspell v0.3.5 h1:pLzmVdl3VxTOncgzHcvLOKirdvcx/TydsClUQXTehjo=
 github.com/golangci/misspell v0.3.5/go.mod h1:dEbvlSfYbMQDtrpRMQU675gSDLDNa8sCPPChZ7PhiVA=
-github.com/golangci/revgrep v0.0.0-20210208091834-cd28932614b5 h1:c9Mqqrm/Clj5biNaG7rABrmwUq88nHh0uABo2b/WYmc=
-github.com/golangci/revgrep v0.0.0-20210208091834-cd28932614b5/go.mod h1:LK+zW4MpyytAWQRz0M4xnzEk50lSvqDQKfx304apFkY=
+github.com/golangci/revgrep v0.0.0-20210930125155-c22e5001d4f2 h1:SgM7GDZTxtTTQPU84heOxy34iG5Du7F2jcoZnvp+fXI=
+github.com/golangci/revgrep v0.0.0-20210930125155-c22e5001d4f2/go.mod h1:LK+zW4MpyytAWQRz0M4xnzEk50lSvqDQKfx304apFkY=
 github.com/golangci/unconvert v0.0.0-20180507085042-28b1c447d1f4 h1:zwtduBRr5SSWhqsYNgcuWO2kFlpdOZbP0+yRjmvPGys=
 github.com/golangci/unconvert v0.0.0-20180507085042-28b1c447d1f4/go.mod h1:Izgrg8RkN3rCIMLGE9CyYmU9pY2Jer6DgANEnZ/L/cQ=
 github.com/google/btree v0.0.0-20180813153112-4030bb1f1f0c/go.mod h1:lNA+9X1NB3Zf8V7Ke586lFgjr2dZNuvo3lPJSGZ5JPQ=
