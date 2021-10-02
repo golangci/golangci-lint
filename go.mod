@@ -20,7 +20,7 @@ require (
 	github.com/daixiang0/gci v0.2.9
 	github.com/denis-tingajkin/go-header v0.4.2
 	github.com/esimonov/ifshort v1.0.2
-	github.com/fatih/color v1.12.0
+	github.com/fatih/color v1.13.0
 	github.com/fzipp/gocyclo v0.3.1
 	github.com/go-critic/go-critic v0.5.6
 	github.com/go-xmlfmt/xmlfmt v0.0.0-20191208150333-d5b6f63a941b
@@ -32,7 +32,7 @@ require (
 	github.com/golangci/lint-1 v0.0.0-20191013205115-297bf364a8e0
 	github.com/golangci/maligned v0.0.0-20180506175553-b1d89398deca
 	github.com/golangci/misspell v0.3.5
-	github.com/golangci/revgrep v0.0.0-20210208091834-cd28932614b5
+	github.com/golangci/revgrep v0.0.0-20210930125155-c22e5001d4f2
 	github.com/golangci/unconvert v0.0.0-20180507085042-28b1c447d1f4
 	github.com/gordonklaus/ineffassign v0.0.0-20210225214923-2e10b2664254
 	github.com/gostaticanalysis/forcetypeassert v0.0.0-20200621232751-01d4955beaa5
@@ -50,7 +50,7 @@ require (
 	github.com/ldez/tagliatelle v0.2.0
 	github.com/maratori/testpackage v1.0.1
 	github.com/matoous/godox v0.0.0-20210227103229-6504466cf951 // v1.0
-	github.com/mattn/go-colorable v0.1.9
+	github.com/mattn/go-colorable v0.1.10
 	github.com/mbilski/exhaustivestruct v1.2.0
 	github.com/mgechev/dots v0.0.0-20190921121421-c36f7dcfbb81
 	github.com/mgechev/revive v1.1.1
@@ -70,6 +70,7 @@ require (
 	github.com/shazow/go-diff v0.0.0-20160112020656-b6b7b6733b8c
 	github.com/shirou/gopsutil/v3 v3.21.8
 	github.com/sirupsen/logrus v1.8.1
+	github.com/sivchari/tenv v1.4.7
 	github.com/sonatard/noctx v0.0.1
 	github.com/sourcegraph/go-diff v0.6.1
 	github.com/spf13/cobra v1.2.1

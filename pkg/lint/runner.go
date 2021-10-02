@@ -86,7 +86,7 @@ func NewRunner(cfg *config.Config, log logutils.Log, goenv *goutil.Env, es *lint
 			processors.NewNolint(log.Child("nolint"), dbManager, enabledLinters),
 
 			processors.NewUniqByLine(cfg),
-			processors.NewDiff(cfg.Issues.Diff, cfg.Issues.DiffFromRevision, cfg.Issues.DiffPatchFilePath),
+			processors.NewDiff(cfg.Issues.Diff, cfg.Issues.DiffFromRevision, cfg.Issues.DiffPatchFilePath, cfg.Issues.WholeFiles),
 			processors.NewMaxPerFileFromLinter(cfg),
 			processors.NewMaxSameIssues(cfg.Issues.MaxSameIssues, log.Child("max_same_issues"), cfg),
 			processors.NewMaxFromLinter(cfg.Issues.MaxIssuesPerLinter, log.Child("max_from_linter"), cfg),
