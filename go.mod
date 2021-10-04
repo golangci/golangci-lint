@@ -77,6 +77,7 @@ require (
 	github.com/spf13/viper v1.9.0
 	github.com/ssgreg/nlreturn/v2 v2.2.1
 	github.com/stretchr/testify v1.7.0
+	github.com/sylvia7788/contextcheck v1.0.4
 	github.com/tdakkota/asciicheck v0.0.0-20200416200610-e657995f937b
 	github.com/tetafro/godot v1.4.11
 	github.com/timakin/bodyclose v0.0.0-20200424151742-cb6215831a94
