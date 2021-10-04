@@ -51,8 +51,8 @@ require (
 	github.com/matoous/godox v0.0.0-20210227103229-6504466cf951 // v1.0
 	github.com/mattn/go-colorable v0.1.10
 	github.com/mbilski/exhaustivestruct v1.2.0
-	github.com/mgechev/dots v0.0.0-20190921121421-c36f7dcfbb81
-	github.com/mgechev/revive v1.1.1
+	github.com/mgechev/dots v0.0.0-20210922191527-e955255bf517
+	github.com/mgechev/revive v1.1.2
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/mitchellh/go-ps v1.0.0
 	github.com/moricho/tparallel v0.2.1
@@ -87,7 +87,7 @@ require (
 	github.com/uudashr/gocognit v1.0.5
 	github.com/valyala/quicktemplate v1.7.0
 	github.com/yeya24/promlinter v0.1.0
-	golang.org/x/tools v0.1.6
+	golang.org/x/tools v0.1.7
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
 	honnef.co/go/tools v0.2.1
 	mvdan.cc/gofumpt v0.1.1
