@@ -67,7 +67,7 @@ require (
 	github.com/sanposhiho/wastedassign/v2 v2.0.6
 	github.com/securego/gosec/v2 v2.8.1
 	github.com/shazow/go-diff v0.0.0-20160112020656-b6b7b6733b8c
-	github.com/shirou/gopsutil/v3 v3.21.8
+	github.com/shirou/gopsutil/v3 v3.21.9
 	github.com/sirupsen/logrus v1.8.1
 	github.com/sivchari/tenv v1.4.7
 	github.com/sonatard/noctx v0.0.1
@@ -87,7 +87,7 @@ require (
 	github.com/uudashr/gocognit v1.0.5
 	github.com/valyala/quicktemplate v1.7.0
 	github.com/yeya24/promlinter v0.1.0
-	golang.org/x/tools v0.1.6
+	golang.org/x/tools v0.1.7
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
 	honnef.co/go/tools v0.2.1
 	mvdan.cc/gofumpt v0.1.1
