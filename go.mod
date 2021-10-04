@@ -49,7 +49,7 @@ require (
 	github.com/ldez/tagliatelle v0.2.0
 	github.com/maratori/testpackage v1.0.1
 	github.com/matoous/godox v0.0.0-20210227103229-6504466cf951 // v1.0
-	github.com/mattn/go-colorable v0.1.10
+	github.com/mattn/go-colorable v0.1.11
 	github.com/mbilski/exhaustivestruct v1.2.0
 	github.com/mgechev/dots v0.0.0-20210922191527-e955255bf517
 	github.com/mgechev/revive v1.1.2
