@@ -44,7 +44,7 @@ func TestFix(t *testing.T) {
 
 			args := []string{
 				"--disable-all", "--print-issued-lines=false", "--print-linter-name=false", "--out-format=line-number",
-				"--allow-parallel-runners", "--fix",
+				"--allow-parallel-runners", "--fix", "--path-prefix=mock",
 				input,
 			}
 			rc := extractRunContextFromComments(t, input)

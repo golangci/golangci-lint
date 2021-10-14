@@ -57,7 +57,12 @@ func (f Fixer) Process(issues []result.Issue) []result.Issue {
 	for file, issuesToFix := range issuesToFixPerFile {
 		var err error
 		f.sw.TrackStage("all", func() {
-			err = f.fixIssuesInFile(file, issuesToFix)
+			fileWithoutPathPrefix := file
+
+			if f.cfg.Output.PathPrefix != "" {
+				fileWithoutPathPrefix = strings.Replace(fileWithoutPathPrefix, f.cfg.Output.PathPrefix+string(filepath.Separator), "", 1)
+			}
+			err = f.fixIssuesInFile(fileWithoutPathPrefix, issuesToFix)
 		})
 		if err != nil {
 			f.log.Errorf("Failed to fix issues in file %s: %s", file, err)
