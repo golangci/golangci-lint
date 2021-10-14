@@ -53,6 +53,7 @@ func TestFix(t *testing.T) {
 					"--print-linter-name=false",
 					"--out-format=line-number",
 					"--fix",
+					"--path-prefix=mock",
 				).
 				WithRunContext(rc).
 				WithTargetPath(input).
