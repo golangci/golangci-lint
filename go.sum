@@ -62,6 +62,8 @@ github.com/Djarvur/go-err113 v0.0.0-20210108212216-aea10b59be24 h1:sHglBQTwgx+rW
 github.com/Djarvur/go-err113 v0.0.0-20210108212216-aea10b59be24/go.mod h1:4UJr5HIiMZrwgkSPdsjy2uOQExX/WEILpIrO9UPGuXs=
 github.com/Ghvstcode/goBadWord v0.0.0-20211015210719-b05965904cb7 h1:lAv+sdziE7USttljuOcIGTmZ3rgte/IBt2rsugZCdMY=
 github.com/Ghvstcode/goBadWord v0.0.0-20211015210719-b05965904cb7/go.mod h1:tErWIwRLWOUPihWE/ofpjpJeOCQBzVACLFL8gpYqSwg=
+github.com/Ghvstcode/goBadWord v0.0.0-20211016122609-f965cdf7e900 h1:qmuAm1Vin3VlPFI0msnC86eQuXF/YGkE+Q7siOQnoC4=
+github.com/Ghvstcode/goBadWord v0.0.0-20211016122609-f965cdf7e900/go.mod h1:tErWIwRLWOUPihWE/ofpjpJeOCQBzVACLFL8gpYqSwg=
 github.com/Masterminds/goutils v1.1.0/go.mod h1:8cTjp+g8YejhMuvIA5y2vz3BpJxksy863GQaJW2MFNU=
 github.com/Masterminds/semver v1.4.2/go.mod h1:MB6lktGJrhw8PrUyiEoblNEGEQ+RzHPF078ddwwvV3Y=
 github.com/Masterminds/semver v1.5.0 h1:H65muMkzWKEuNDnfl9d70GUjFniHKHRbFPGBuZ3QEww=
