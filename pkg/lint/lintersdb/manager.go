@@ -122,9 +122,12 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 	var unusedCfg *config.StaticCheckSettings
 	var wrapcheckCfg *config.WrapcheckSettings
 	var nlreturnCfg *config.NlreturnSettings
+	var goBadWordCfg *config.GoBadWordSettings
+
 
 	if m.cfg != nil {
 		cyclopCfg = &m.cfg.LintersSettings.Cyclop
+		goBadWordCfg = &m.cfg.LintersSettings.GoBadWord
 		errorlintCfg = &m.cfg.LintersSettings.ErrorLint
 		exhaustiveCfg = &m.cfg.LintersSettings.Exhaustive
 		exhaustiveStructCfg = &m.cfg.LintersSettings.ExhaustiveStruct
@@ -534,7 +537,10 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/sylvia7788/contextcheck").
 			WithSince("v1.43.0"),
-
+		linter.NewConfig(golinters.NewGoBadWords(goBadWordCfg)).
+			WithSince("v1.0.0").
+			WithPresets(linter.PresetStyle).
+			WithURL("https://github.com/Ghvstcode/goBadWord"),
 		// nolintlint must be last because it looks at the results of all the previous linters for unused nolint directives
 		linter.NewConfig(golinters.NewNoLintLint()).
 			WithSince("v1.26.0").

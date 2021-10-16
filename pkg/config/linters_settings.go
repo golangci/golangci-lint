@@ -93,6 +93,7 @@ type LintersSettings struct {
 	Funlen           FunlenSettings
 	Gci              GciSettings
 	Gocognit         GocognitSettings
+	GoBadWord GoBadWordSettings
 	Goconst          GoConstSettings
 	Gocritic         GocriticSettings
 	Gocyclo          GoCycloSettings
@@ -141,6 +142,10 @@ type LintersSettings struct {
 	WSL              WSLSettings
 
 	Custom map[string]CustomLinterSettings
+}
+
+type GoBadWordSettings struct {
+	BadWords string `mapstructure:"bad-words"`
 }
 
 type Cyclop struct {

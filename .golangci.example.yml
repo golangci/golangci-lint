@@ -133,6 +133,11 @@ linters-settings:
     # Check for plain error comparisons
     comparison: true
 
+  goBadWord:
+    # specify the list of bad words you will like this linter to check for;
+    # By Default, it checks for vulgar language in code
+    bad-words: "shit, fuck"
+
   exhaustive:
     # check switch statements in generated files also
     check-generated: false
