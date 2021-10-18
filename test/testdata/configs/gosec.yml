@@ -3,6 +3,8 @@ linters-settings:
     includes:
       - G306
       - G101
+    serveity: "low"
+    confidence: "low"
     config:
       G306: "0666"
       G101:
