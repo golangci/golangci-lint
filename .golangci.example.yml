@@ -372,9 +372,9 @@ linters-settings:
     # Exclude generated files
     exclude-generated: true
     # Filter out the issues with a lower severity than the given value. Valid options are: low, medium, high.
-    severity: "high"
+    severity: "low"
     # Filter out the issues with a lower confidence than the given value. Valid options are: low, medium, high.
-    confidence: "medium"
+    confidence: "low"
     # To specify the configuration of rules.
     # The configuration of rules is not fully documented by gosec:
     # https://github.com/securego/gosec#configuration

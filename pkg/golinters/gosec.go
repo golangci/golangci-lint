@@ -71,12 +71,12 @@ func NewGosec(settings *config.GoSecSettings) *goanalysis.Linter {
 			}
 			severity, err := convertToScore(settings.Severity)
 			if err != nil {
-				lintCtx.Log.Warnf("The provided severity %q is invalid, use low instead. Valid options: low, medium, high", err)
+				lintCtx.Log.Warnf("The provided severity %v", err)
 			}
 
 			confidence, err := convertToScore(settings.Confidence)
 			if err != nil {
-				lintCtx.Log.Warnf("The provided confidence %q is invalid, use low instead. Valid options: low, medium, high", err)
+				lintCtx.Log.Warnf("The provided confidence %v", err)
 			}
 			issues = filterIssues(issues, severity, confidence)
 			res := make([]goanalysis.Issue, 0, len(issues))
@@ -148,7 +148,7 @@ func convertToScore(str string) (gosec.Score, error) {
 	case "high":
 		return gosec.High, nil
 	default:
-		return gosec.Low, errors.Errorf("'%s' not valid", str)
+		return gosec.Low, errors.Errorf("'%s' is invalid, use low instead. Valid options: low, medium, high", str)
 	}
 }
 
