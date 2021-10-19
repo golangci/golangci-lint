@@ -372,7 +372,7 @@ linters-settings:
     # Exclude generated files
     exclude-generated: true
     # Filter out the issues with a lower severity than the given value. Valid options are: low, medium, high.
-    serveity: "high"
+    severity: "high"
     # Filter out the issues with a lower confidence than the given value. Valid options are: low, medium, high.
     confidence: "medium"
     # To specify the configuration of rules.

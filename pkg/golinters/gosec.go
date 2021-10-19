@@ -71,12 +71,12 @@ func NewGosec(settings *config.GoSecSettings) *goanalysis.Linter {
 			}
 			severity, err := convertToScore(settings.Severity)
 			if err != nil {
-				lintCtx.Log.Warnf("Provided severity %s, use low instead. Valid options: low, medium, high", err)
+				lintCtx.Log.Warnf("The provided severity %q is invalid, use low instead. Valid options: low, medium, high", err)
 			}
 
 			confidence, err := convertToScore(settings.Confidence)
 			if err != nil {
-				lintCtx.Log.Warnf("Provided string %s, use low instead. Valid options: low, medium, high", err)
+				lintCtx.Log.Warnf("The provided confidence %q is invalid, use low instead. Valid options: low, medium, high", err)
 			}
 			issues = filterIssues(issues, severity, confidence)
 			res := make([]goanalysis.Issue, 0, len(issues))
@@ -137,6 +137,7 @@ func gosecRuleFilters(includes, excludes []string) []rules.RuleFilter {
 	return filters
 }
 
+// code borrowed from https://github.com/securego/gosec/blob/69213955dacfd560562e780f723486ef1ca6d486/cmd/gosec/main.go#L250-L262
 func convertToScore(str string) (gosec.Score, error) {
 	str = strings.ToLower(str)
 	switch str {
@@ -151,6 +152,7 @@ func convertToScore(str string) (gosec.Score, error) {
 	}
 }
 
+// code borrowed from https://github.com/securego/gosec/blob/69213955dacfd560562e780f723486ef1ca6d486/cmd/gosec/main.go#L264-L276
 func filterIssues(issues []*gosec.Issue, severity, confidence gosec.Score) []*gosec.Issue {
 	res := make([]*gosec.Issue, 0)
 	for _, issue := range issues {
