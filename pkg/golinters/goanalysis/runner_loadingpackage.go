@@ -492,6 +492,6 @@ func sizeOfReflectValueTreeBytes(rv reflect.Value, visitedPtrs map[uintptr]struc
 	case reflect.Invalid:
 		return 0
 	default:
-		panic("unknown rv of type " + fmt.Sprint(rv))
+		panic("unknown rv of type " + rv.String())
 	}
 }
