@@ -50,8 +50,6 @@ linters-settings:
           - (github.com/golangci/golangci-lint/pkg/logutils.Log).Fatalf
   lll:
     line-length: 140
-  maligned:
-    suggest-new: true
   misspell:
     locale: US
   nolintlint:
@@ -143,7 +141,6 @@ issues:
     - path: pkg/printers/tab.go
       linters:
         - gomnd
-
 
 run:
   skip-dirs:
