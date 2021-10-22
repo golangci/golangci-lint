@@ -50,8 +50,6 @@ linters-settings:
           - (github.com/golangci/golangci-lint/pkg/logutils.Log).Fatalf
   lll:
     line-length: 140
-  maligned:
-    suggest-new: true
   misspell:
     locale: US
   nolintlint:
@@ -117,6 +115,9 @@ linters:
   # - wsl
 
 issues:
+  exclude:
+    # disable this rule for go1.15 compatibility
+    - 'ioutilDeprecated:'
   # Excluding configuration per-path, per-linter, per-text and per-source
   exclude-rules:
     - path: _test\.go
@@ -140,7 +141,6 @@ issues:
     - path: pkg/printers/tab.go
       linters:
         - gomnd
-
 
 run:
   skip-dirs:

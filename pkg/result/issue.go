@@ -92,7 +92,7 @@ func (i *Issue) Fingerprint() string {
 	}
 
 	hash := md5.New() //nolint:gosec
-	_, _ = hash.Write([]byte(fmt.Sprintf("%s%s%s", i.Pos.Filename, i.Text, firstLine)))
+	_, _ = fmt.Fprintf(hash, "%s%s%s", i.Pos.Filename, i.Text, firstLine)
 
 	return fmt.Sprintf("%X", hash.Sum(nil))
 }

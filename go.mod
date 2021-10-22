@@ -1,6 +1,6 @@
 module github.com/golangci/golangci-lint
 
-go 1.15
+go 1.16
 
 require (
 	4d63.com/gochecknoglobals v0.0.0-20201008074935-acfc0b28355a
@@ -21,7 +21,7 @@ require (
 	github.com/esimonov/ifshort v1.0.2
 	github.com/fatih/color v1.13.0
 	github.com/fzipp/gocyclo v0.3.1
-	github.com/go-critic/go-critic v0.5.6
+	github.com/go-critic/go-critic v0.6.1
 	github.com/go-xmlfmt/xmlfmt v0.0.0-20191208150333-d5b6f63a941b
 	github.com/gofrs/flock v0.8.1
 	github.com/golangci/check v0.0.0-20180506172741-cfe4005ccda2
