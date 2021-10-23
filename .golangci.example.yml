@@ -236,10 +236,18 @@ linters-settings:
         # whether to check test functions (default true)
         skipTestFuncs: true
       ruleguard:
-        # Enable debug for the specified named ruleguard rule group.
-        # When debug is enabled, ruleguard provides an explanation on why a rule
-        # is rejected (e.g. which Where() condition failed).
-        debug: 'm.Match(`!($x != $y)`)'
+        # Enable debug to identify which 'Where' condition was rejected.
+        # The value of the parameter is the name of a function in a ruleguard file.
+        #
+        # When a rule is evaluated:
+        # If:
+        #   The Match() clause is accepted; and
+        #   One of the conditions in the Where() clause is rejected,
+        # Then:
+        #   ruleguard prints the specific Where() condition that was rejected.
+        #
+        # The flag is passed to the ruleguard 'debug-group' argument.
+        debug: 'emptyDecl'
         # Deprecated, use 'failOn' param.
         # If set to true, identical to failOn='all', otherwise failOn=''
         failOnError: false
