@@ -236,8 +236,26 @@ linters-settings:
         # whether to check test functions (default true)
         skipTestFuncs: true
       ruleguard:
+        # Enable debug for the specified named ruleguard rule group.
+        # When debug is enabled, ruleguard provides an explanation on why a rule
+        # is rejected (e.g. which Where() condition failed).
+        debug: 'm.Match(`!($x != $y)`)'
+        # Deprecated, use failOn param
+        # If set to true, identical to failOn='all', otherwise failOn=''
+        failOnError: false
+        # Determines the behavior when an error occurs while parsing ruleguard files.
+    	  # If flag is not set, log error and skip rule files that contain an error.
+    	  # If flag is set, the value must be a comma-separated list of error conditions.
+    	  # * 'import': rule refers to a package that cannot be loaded.
+    	  # * 'dsl':    gorule file does not comply with the ruleguard DSL.
+        failOn: dsl
+        # Comma-separated list of gorule file paths.
+        # Glob patterns such as 'rules-*.go' may be specified
         # path to a gorules file for the ruleguard checker
-        rules: ''
+        rules: 'rules-*.go,myrule1.go,myrules/rule1.go'
+      tooManyResultsChecker:
+    	  # maximum number of results (default 5)
+        maxResults: 10
       truncateCmp:
         # whether to skip int/uint/uintptr types (default true)
         skipArchDependent: true
