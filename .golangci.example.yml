@@ -246,9 +246,9 @@ linters-settings:
         # Determines the behavior when an error occurs while parsing ruleguard files.
         # If flag is not set, log error and skip rule files that contain an error.
         # If flag is set, the value must be a comma-separated list of error conditions.
-        # * 'all':    fail on all errors.
-        # * 'import': rule refers to a package that cannot be loaded.
-        # * 'dsl':    gorule file does not comply with the ruleguard DSL.
+        # - 'all':    fail on all errors.
+        # - 'import': ruleguard rule imports a package that cannot be found.
+        # - 'dsl':    gorule file does not comply with the ruleguard DSL.
         failOn: dsl
         # Comma-separated list of gorule file paths.
         # Glob patterns such as 'rules-*.go' may be specified
