@@ -100,6 +100,7 @@ func enableLinterConfigs(lcs []*linter.Config, isEnabled func(lc *linter.Config)
 //nolint:funlen
 func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 	var cyclopCfg *config.Cyclop
+	var duplessCfg *config.DuplessSettings
 	var errorlintCfg *config.ErrorLintSettings
 	var exhaustiveCfg *config.ExhaustiveSettings
 	var exhaustiveStructCfg *config.ExhaustiveStructSettings
@@ -125,6 +126,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 
 	if m.cfg != nil {
 		cyclopCfg = &m.cfg.LintersSettings.Cyclop
+		duplessCfg = &m.cfg.LintersSettings.Dupless
 		errorlintCfg = &m.cfg.LintersSettings.ErrorLint
 		exhaustiveCfg = &m.cfg.LintersSettings.Exhaustive
 		exhaustiveStructCfg = &m.cfg.LintersSettings.ExhaustiveStruct
@@ -242,6 +244,10 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithSince("v1.0.0").
 			WithPresets(linter.PresetUnused).
 			WithURL("https://github.com/gordonklaus/ineffassign"),
+		linter.NewConfig(golinters.NewDupless(duplessCfg)).
+			WithSince("v1.1.0").
+			WithPresets(linter.PresetStyle).
+			WithURL("https://github.com/bkielbasa/dupless"),
 		linter.NewConfig(golinters.NewDupl()).
 			WithSince("v1.0.0").
 			WithPresets(linter.PresetStyle).

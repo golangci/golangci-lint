@@ -95,6 +95,17 @@ linters-settings:
     # checks assignments with too many blank identifiers; default is 2
     max-blank-identifiers: 2
 
+  dupless:
+    # default: ^util[s]$", "^helper[s]$", "^base$", "^interfaces$
+    package-names:
+      - ^util[s]$
+      - ^helpers$
+    function-names:
+      - ^fword$
+    varable-names:
+      # no 1 letter variable
+      - $[a-z]{1}$
+
   dupl:
     # tokens count to trigger issue, 150 by default
     threshold: 100

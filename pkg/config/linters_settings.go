@@ -85,6 +85,7 @@ type LintersSettings struct {
 	Depguard         DepGuardSettings
 	Dogsled          DogsledSettings
 	Dupl             DuplSettings
+	Dupless          DuplessSettings
 	Errcheck         ErrcheckSettings
 	ErrorLint        ErrorLintSettings
 	Exhaustive       ExhaustiveSettings
@@ -147,6 +148,12 @@ type Cyclop struct {
 	MaxComplexity  int     `mapstructure:"max-complexity"`
 	PackageAverage float64 `mapstructure:"package-average"`
 	SkipTests      bool    `mapstructure:"skip-tests"`
+}
+
+type DuplessSettings struct {
+	PackageNames  []string `mapstructure:"package-names"`
+	FunctionNames []string `mapstructure:"function-names"`
+	VariableNames []string `mapstructure:"variable-names"`
 }
 
 type DepGuardSettings struct {
