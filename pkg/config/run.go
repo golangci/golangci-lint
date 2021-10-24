@@ -2,6 +2,7 @@ package config
 
 import "time"
 
+// Run encapsulates the config options for running the linter analysis.
 type Run struct {
 	IsVerbose           bool `mapstructure:"verbose"`
 	Silent              bool

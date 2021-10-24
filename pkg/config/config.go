@@ -1,5 +1,6 @@
 package config
 
+// Config encapsulates the config data specified in the golangci yaml config file.
 type Config struct {
 	Run Run
 
