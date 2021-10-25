@@ -55,6 +55,7 @@ type Executor struct {
 	flock     *flock.Flock
 }
 
+// NewExecutor creates and initializes a new command executor.
 func NewExecutor(version, commit, date string) *Executor {
 	startedAt := time.Now()
 	e := &Executor{

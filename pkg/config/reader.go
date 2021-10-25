@@ -75,6 +75,7 @@ func (r *FileReader) parseConfig() error {
 	if err := viper.Unmarshal(r.cfg); err != nil {
 		return fmt.Errorf("can't unmarshal config by viper: %s", err)
 	}
+	r.cfg.cfgDir = filepath.Dir(usedConfigFile)
 
 	if err := r.validateConfig(); err != nil {
 		return fmt.Errorf("can't validate config: %s", err)
