@@ -130,8 +130,10 @@ func normalizeCheckerParamsValue(lintCtx *linter.Context, p interface{}) interfa
 	case reflect.String:
 		v := rv.String()
 		// Perform variable substitution.
-		fmt.Printf("Config dir: %s\n", lintCtx.Cfg.GetConfigDir())
-		return strings.ReplaceAll(v, "${configDir}", lintCtx.Cfg.GetConfigDir())
+		if path, err := filepath.Abs(lintCtx.Cfg.GetConfigDir()); err == nil {
+			v = strings.ReplaceAll(v, "${configDir}", path)
+		}
+		return v
 	default:
 		return p
 	}
