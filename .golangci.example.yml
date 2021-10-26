@@ -260,7 +260,6 @@ linters-settings:
         failOn: dsl
         # Comma-separated list of gorule file paths.
         # Glob patterns such as 'rules-*.go' may be specified.
-        # path to a gorules file for the ruleguard checker
         rules: 'rules-*.go,myrule1.go,myrules/rule1.go'
       tooManyResultsChecker:
         # maximum number of results (default 5)
