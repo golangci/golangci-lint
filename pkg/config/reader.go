@@ -71,11 +71,15 @@ func (r *FileReader) parseConfig() error {
 		r.log.Warnf("Can't pretty print config file path: %s", err)
 	}
 	r.log.Infof("Used config file %s", usedConfigFile)
+	usedConfigDir := filepath.Dir(usedConfigFile)
+	if usedConfigDir, err = filepath.Abs(usedConfigDir); err != nil {
+		return fmt.Errorf("can't get config directory")
+	}
+	r.cfg.cfgDir = usedConfigDir
 
 	if err := viper.Unmarshal(r.cfg); err != nil {
 		return fmt.Errorf("can't unmarshal config by viper: %s", err)
 	}
-	r.cfg.cfgDir = filepath.Dir(usedConfigFile)
 
 	if err := r.validateConfig(); err != nil {
 		return fmt.Errorf("can't validate config: %s", err)
