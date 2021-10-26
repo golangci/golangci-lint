@@ -259,7 +259,7 @@ linters-settings:
         # - 'dsl':    gorule file does not comply with the ruleguard DSL.
         failOn: dsl
         # Comma-separated list of gorule file paths.
-        # Glob patterns such as 'rules-*.go' may be specified
+        # Glob patterns such as 'rules-*.go' may be specified.
         # path to a gorules file for the ruleguard checker
         rules: 'rules-*.go,myrule1.go,myrules/rule1.go'
       tooManyResultsChecker:
