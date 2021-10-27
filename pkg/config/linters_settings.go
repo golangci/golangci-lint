@@ -136,6 +136,7 @@ type LintersSettings struct {
 	Unparam          UnparamSettings
 	Unused           StaticCheckSettings
 	Varcheck         VarCheckSettings
+	Varnamelen       VarnamelenSettings
 	Whitespace       WhitespaceSettings
 	Wrapcheck        WrapcheckSettings
 	WSL              WSLSettings
@@ -476,6 +477,14 @@ type UnparamSettings struct {
 
 type VarCheckSettings struct {
 	CheckExportedFields bool `mapstructure:"exported-fields"`
+}
+
+type VarnamelenSettings struct {
+	MaxDistance   int      `mapstructure:"max-distance"`
+	MinNameLength int      `mapstructure:"min-name-length"`
+	CheckReceiver bool     `mapstructure:"check-receiver"`
+	CheckReturn   bool     `mapstructure:"check-return"`
+	IgnoreNames   []string `mapstructure:"ignore-names"`
 }
 
 type WhitespaceSettings struct {

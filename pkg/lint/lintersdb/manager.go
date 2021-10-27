@@ -121,6 +121,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 	var testpackageCfg *config.TestpackageSettings
 	var thelperCfg *config.ThelperSettings
 	var unusedCfg *config.StaticCheckSettings
+	var varnamelenCfg *config.VarnamelenSettings
 	var wrapcheckCfg *config.WrapcheckSettings
 	var nlreturnCfg *config.NlreturnSettings
 
@@ -146,6 +147,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		testpackageCfg = &m.cfg.LintersSettings.Testpackage
 		thelperCfg = &m.cfg.LintersSettings.Thelper
 		unusedCfg = &m.cfg.LintersSettings.Unused
+		varnamelenCfg = &m.cfg.LintersSettings.Varnamelen
 		wrapcheckCfg = &m.cfg.LintersSettings.Wrapcheck
 		nlreturnCfg = &m.cfg.LintersSettings.Nlreturn
 	}
@@ -511,30 +513,35 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/ldez/tagliatelle"),
 		linter.NewConfig(golinters.NewErrName()).
+			WithSince("v1.42.0").
 			WithPresets(linter.PresetStyle).
 			WithLoadForGoAnalysis().
-			WithURL("https://github.com/Antonboom/errname").
-			WithSince("v1.42.0"),
+			WithURL("https://github.com/Antonboom/errname"),
 		linter.NewConfig(golinters.NewIreturn(ireturnCfg)).
 			WithSince("v1.43.0").
 			WithPresets(linter.PresetStyle).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/butuzov/ireturn"),
 		linter.NewConfig(golinters.NewNilNil(nilNilCfg)).
+			WithSince("v1.43.0").
 			WithPresets(linter.PresetStyle).
 			WithLoadForGoAnalysis().
-			WithURL("https://github.com/Antonboom/nilnil").
-			WithSince("v1.43.0"),
+			WithURL("https://github.com/Antonboom/nilnil"),
 		linter.NewConfig(golinters.NewTenv(tenvCfg)).
 			WithSince("v1.43.0").
 			WithPresets(linter.PresetStyle).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/sivchari/tenv"),
 		linter.NewConfig(golinters.NewContextCheck()).
+			WithSince("v1.43.0").
 			WithPresets(linter.PresetBugs).
 			WithLoadForGoAnalysis().
-			WithURL("https://github.com/sylvia7788/contextcheck").
-			WithSince("v1.43.0"),
+			WithURL("https://github.com/sylvia7788/contextcheck"),
+		linter.NewConfig(golinters.NewVarnamelen(varnamelenCfg)).
+			WithSince("v1.43.0").
+			WithPresets(linter.PresetStyle).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/blizzy78/varnamelen"),
 
 		// nolintlint must be last because it looks at the results of all the previous linters for unused nolint directives
 		linter.NewConfig(golinters.NewNoLintLint()).
