@@ -369,6 +369,8 @@ linters-settings:
     # Available rules: https://github.com/securego/gosec#available-rules
     excludes:
       - G204
+    # Exclude generated files
+    exclude-generated: true
     # To specify the configuration of rules.
     # The configuration of rules is not fully documented by gosec:
     # https://github.com/securego/gosec#configuration

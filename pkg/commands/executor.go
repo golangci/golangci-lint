@@ -38,7 +38,7 @@ type Executor struct {
 	exitCode              int
 	version, commit, date string
 
-	cfg               *config.Config
+	cfg               *config.Config // cfg is the unmarshaled data from the golangci config file.
 	log               logutils.Log
 	reportData        report.Data
 	DBManager         *lintersdb.Manager

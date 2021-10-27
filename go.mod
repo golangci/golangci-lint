@@ -1,6 +1,6 @@
 module github.com/golangci/golangci-lint
 
-go 1.15
+go 1.16
 
 require (
 	4d63.com/gochecknoglobals v0.0.0-20201008074935-acfc0b28355a
@@ -16,13 +16,13 @@ require (
 	github.com/blizzy78/varnamelen v0.3.0
 	github.com/bombsimon/wsl/v3 v3.3.0
 	github.com/butuzov/ireturn v0.1.1
-	github.com/charithe/durationcheck v0.0.8
+	github.com/charithe/durationcheck v0.0.9
 	github.com/daixiang0/gci v0.2.9
 	github.com/denis-tingajkin/go-header v0.4.2
-	github.com/esimonov/ifshort v1.0.2
+	github.com/esimonov/ifshort v1.0.3
 	github.com/fatih/color v1.13.0
 	github.com/fzipp/gocyclo v0.3.1
-	github.com/go-critic/go-critic v0.5.6
+	github.com/go-critic/go-critic v0.6.1
 	github.com/go-xmlfmt/xmlfmt v0.0.0-20191208150333-d5b6f63a941b
 	github.com/gofrs/flock v0.8.1
 	github.com/golangci/check v0.0.0-20180506172741-cfe4005ccda2
@@ -50,10 +50,10 @@ require (
 	github.com/ldez/tagliatelle v0.2.0
 	github.com/maratori/testpackage v1.0.1
 	github.com/matoous/godox v0.0.0-20210227103229-6504466cf951 // v1.0
-	github.com/mattn/go-colorable v0.1.10
+	github.com/mattn/go-colorable v0.1.11
 	github.com/mbilski/exhaustivestruct v1.2.0
-	github.com/mgechev/dots v0.0.0-20190921121421-c36f7dcfbb81
-	github.com/mgechev/revive v1.1.1
+	github.com/mgechev/dots v0.0.0-20210922191527-e955255bf517
+	github.com/mgechev/revive v1.1.2
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/mitchellh/go-ps v1.0.0
 	github.com/moricho/tparallel v0.2.1
@@ -66,9 +66,9 @@ require (
 	github.com/ryancurrah/gomodguard v1.2.3
 	github.com/ryanrolds/sqlclosecheck v0.3.0
 	github.com/sanposhiho/wastedassign/v2 v2.0.6
-	github.com/securego/gosec/v2 v2.8.1
+	github.com/securego/gosec/v2 v2.9.1
 	github.com/shazow/go-diff v0.0.0-20160112020656-b6b7b6733b8c
-	github.com/shirou/gopsutil/v3 v3.21.8
+	github.com/shirou/gopsutil/v3 v3.21.9
 	github.com/sirupsen/logrus v1.8.1
 	github.com/sivchari/tenv v1.4.7
 	github.com/sonatard/noctx v0.0.1
@@ -78,17 +78,18 @@ require (
 	github.com/spf13/viper v1.9.0
 	github.com/ssgreg/nlreturn/v2 v2.2.1
 	github.com/stretchr/testify v1.7.0
+	github.com/sylvia7788/contextcheck v1.0.4
 	github.com/tdakkota/asciicheck v0.0.0-20200416200610-e657995f937b
 	github.com/tetafro/godot v1.4.11
 	github.com/timakin/bodyclose v0.0.0-20200424151742-cb6215831a94
-	github.com/tomarrell/wrapcheck/v2 v2.3.0
+	github.com/tomarrell/wrapcheck/v2 v2.3.1
 	github.com/tommy-muehle/go-mnd/v2 v2.4.0
 	github.com/ultraware/funlen v0.0.3
 	github.com/ultraware/whitespace v0.0.4
 	github.com/uudashr/gocognit v1.0.5
 	github.com/valyala/quicktemplate v1.7.0
 	github.com/yeya24/promlinter v0.1.0
-	golang.org/x/tools v0.1.6
+	golang.org/x/tools v0.1.7
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
 	honnef.co/go/tools v0.2.1
 	mvdan.cc/gofumpt v0.1.1

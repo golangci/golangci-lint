@@ -35,6 +35,7 @@ func NewManager(cfg *config.Config, log logutils.Log) *Manager {
 	return m
 }
 
+// WithCustomLinters loads private linters that are specified in the golangci config file.
 func (m *Manager) WithCustomLinters() *Manager {
 	if m.log == nil {
 		m.log = report.NewLogWrapper(logutils.NewStderrLog(""), &report.Data{})
@@ -512,29 +513,35 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/ldez/tagliatelle"),
 		linter.NewConfig(golinters.NewErrName()).
+			WithSince("v1.42.0").
 			WithPresets(linter.PresetStyle).
 			WithLoadForGoAnalysis().
-			WithURL("https://github.com/Antonboom/errname").
-			WithSince("v1.42.0"),
+			WithURL("https://github.com/Antonboom/errname"),
 		linter.NewConfig(golinters.NewIreturn(ireturnCfg)).
 			WithSince("v1.43.0").
 			WithPresets(linter.PresetStyle).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/butuzov/ireturn"),
 		linter.NewConfig(golinters.NewNilNil(nilNilCfg)).
+			WithSince("v1.43.0").
 			WithPresets(linter.PresetStyle).
 			WithLoadForGoAnalysis().
-			WithURL("https://github.com/Antonboom/nilnil").
-			WithSince("v1.43.0"),
+			WithURL("https://github.com/Antonboom/nilnil"),
 		linter.NewConfig(golinters.NewTenv(tenvCfg)).
 			WithSince("v1.43.0").
 			WithPresets(linter.PresetStyle).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/sivchari/tenv"),
+		linter.NewConfig(golinters.NewContextCheck()).
+			WithSince("v1.43.0").
+			WithPresets(linter.PresetBugs).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/sylvia7788/contextcheck"),
 		linter.NewConfig(golinters.NewVarnamelen(varnamelenCfg)).
+			WithSince("v1.43.0").
 			WithPresets(linter.PresetStyle).
-			WithURL("https://github.com/blizzy78/varnamelen").
-			WithSince("v1.43.0"),
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/blizzy78/varnamelen"),
 
 		// nolintlint must be last because it looks at the results of all the previous linters for unused nolint directives
 		linter.NewConfig(golinters.NewNoLintLint()).
@@ -595,6 +602,8 @@ func (m Manager) GetAllLinterConfigsForPreset(p string) []*linter.Config {
 	return ret
 }
 
+// loadCustomLinterConfig loads the configuration of private linters.
+// Private linters are dynamically loaded from .so plugin files.
 func (m Manager) loadCustomLinterConfig(name string, settings config.CustomLinterSettings) (*linter.Config, error) {
 	analyzer, err := m.getAnalyzerPlugin(settings.Path)
 	if err != nil {
@@ -617,6 +626,11 @@ type AnalyzerPlugin interface {
 	GetAnalyzers() []*analysis.Analyzer
 }
 
+// getAnalyzerPlugin loads a private linter as specified in the config file,
+// loads the plugin from a .so file, and returns the 'AnalyzerPlugin' interface
+// implemented by the private plugin.
+// An error is returned if the private linter cannot be loaded or the linter
+// does not implement the AnalyzerPlugin interface.
 func (m Manager) getAnalyzerPlugin(path string) (AnalyzerPlugin, error) {
 	if !filepath.IsAbs(path) {
 		// resolve non-absolute paths relative to config file's directory

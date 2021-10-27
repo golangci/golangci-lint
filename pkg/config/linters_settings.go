@@ -295,9 +295,10 @@ type GoModGuardSettings struct {
 }
 
 type GoSecSettings struct {
-	Includes []string
-	Excludes []string
-	Config   map[string]interface{} `mapstructure:"config"`
+	Includes         []string
+	Excludes         []string
+	ExcludeGenerated bool                   `mapstructure:"exclude-generated"`
+	Config           map[string]interface{} `mapstructure:"config"`
 }
 
 type GovetSettings struct {
@@ -509,8 +510,20 @@ type WSLSettings struct {
 	ForceCaseTrailingWhitespaceLimit int  `mapstructure:"force-case-trailing-whitespace"`
 }
 
+// CustomLinterSettings encapsulates the meta-data of a private linter.
+// For example, a private linter may be added to the golangci config file as shown below.
+//
+// linters-settings:
+//  custom:
+//    example:
+//      path: /example.so
+//      description: The description of the linter
+//      original-url: github.com/golangci/example-linter
 type CustomLinterSettings struct {
-	Path        string
+	// Path to a plugin *.so file that implements the private linter.
+	Path string
+	// Description describes the purpose of the private linter.
 	Description string
+	// The URL containing the source code for the private linter.
 	OriginalURL string `mapstructure:"original-url"`
 }
