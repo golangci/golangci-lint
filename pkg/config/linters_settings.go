@@ -297,6 +297,8 @@ type GoModGuardSettings struct {
 type GoSecSettings struct {
 	Includes         []string
 	Excludes         []string
+	Severity         string
+	Confidence       string
 	ExcludeGenerated bool                   `mapstructure:"exclude-generated"`
 	Config           map[string]interface{} `mapstructure:"config"`
 }
