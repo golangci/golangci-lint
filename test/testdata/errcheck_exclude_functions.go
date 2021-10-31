@@ -3,17 +3,16 @@
 package testdata
 
 import (
-	"io"
-	"os"
+	"io/ioutil"
 )
 
 func TestErrcheckExcludeFunctions() []byte {
-	ret, _ := os.ReadFile("f.txt")
-	os.ReadDir("dir")
+	ret, _ := ioutil.ReadFile("f.txt")
+	ioutil.ReadDir("dir")
 	return ret
 }
 
 func TestErrcheckNoExcludeFunctions() []byte {
-	ret, _ := io.ReadAll(nil) // ERROR "Error return value of `io.ReadAll` is not checked"
+	ret, _ := ioutil.ReadAll(nil) // ERROR "Error return value of `ioutil.ReadAll` is not checked"
 	return ret
 }

@@ -2,11 +2,11 @@
 package testdata
 
 import (
-	"io"
+	"io/ioutil"
 	"net/http"
 )
 
 func BodycloseNotClosed() {
 	resp, _ := http.Get("https://google.com") // ERROR "response body must be closed"
-	_, _ = io.ReadAll(resp.Body)
+	_, _ = ioutil.ReadAll(resp.Body)
 }
