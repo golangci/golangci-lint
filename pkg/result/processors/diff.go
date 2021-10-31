@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 	"strings"
 
@@ -44,7 +43,7 @@ func (p Diff) Process(issues []result.Issue) ([]result.Issue, error) {
 
 	var patchReader io.Reader
 	if p.patchFilePath != "" {
-		patch, err := ioutil.ReadFile(p.patchFilePath)
+		patch, err := os.ReadFile(p.patchFilePath)
 		if err != nil {
 			return nil, fmt.Errorf("can't read from patch file %s: %s", p.patchFilePath, err)
 		}

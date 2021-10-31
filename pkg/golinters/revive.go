@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"go/token"
-	"io/ioutil"
+	"os"
 	"reflect"
 
 	"github.com/BurntSushi/toml"
@@ -65,7 +65,7 @@ func NewRevive(cfg *config.ReviveSettings) *goanalysis.Linter {
 				return nil, err
 			}
 
-			revive := lint.New(ioutil.ReadFile)
+			revive := lint.New(os.ReadFile)
 
 			lintingRules, err := reviveConfig.GetLintingRules(conf)
 			if err != nil {

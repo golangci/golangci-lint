@@ -7,7 +7,7 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -96,7 +96,7 @@ func rewriteDocs(replacements map[string]string) error {
 }
 
 func processDoc(path string, replacements map[string]string, madeReplacements map[string]bool) error {
-	contentBytes, err := ioutil.ReadFile(path)
+	contentBytes, err := os.ReadFile(path)
 	if err != nil {
 		return fmt.Errorf("failed to read %s: %w", path, err)
 	}
@@ -147,7 +147,7 @@ func getLatestVersion() (string, error) {
 		return "", fmt.Errorf("failed to get http response for the latest tag: %s", err)
 	}
 	defer resp.Body.Close()
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return "", fmt.Errorf("failed to read a body for the latest tag: %s", err)
 	}
@@ -160,7 +160,7 @@ func getLatestVersion() (string, error) {
 }
 
 func buildTemplateContext() (map[string]string, error) {
-	golangciYamlExample, err := ioutil.ReadFile(".golangci.example.yml")
+	golangciYamlExample, err := os.ReadFile(".golangci.example.yml")
 	if err != nil {
 		return nil, fmt.Errorf("can't read .golangci.example.yml: %s", err)
 	}
@@ -191,7 +191,7 @@ func buildTemplateContext() (map[string]string, error) {
 
 	helpLines := bytes.Split(help, []byte("\n"))
 	shortHelp := bytes.Join(helpLines[2:], []byte("\n"))
-	changeLog, err := ioutil.ReadFile("CHANGELOG.md")
+	changeLog, err := os.ReadFile("CHANGELOG.md")
 	if err != nil {
 		return nil, err
 	}

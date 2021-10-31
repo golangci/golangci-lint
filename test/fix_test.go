@@ -1,7 +1,6 @@
 package test
 
 import (
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -54,10 +53,10 @@ func TestFix(t *testing.T) {
 			require.NoError(t, err)
 
 			testshared.NewLintRunner(t).RunWithYamlConfig(string(cfg), args...)
-			output, err := ioutil.ReadFile(input)
+			output, err := os.ReadFile(input)
 			require.NoError(t, err)
 
-			expectedOutput, err := ioutil.ReadFile(filepath.Join(testdataDir, "fix", "out", filepath.Base(input)))
+			expectedOutput, err := os.ReadFile(filepath.Join(testdataDir, "fix", "out", filepath.Base(input)))
 			require.NoError(t, err)
 
 			require.Equal(t, string(expectedOutput), string(output))

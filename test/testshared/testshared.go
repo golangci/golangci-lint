@@ -1,7 +1,6 @@
 package testshared
 
 import (
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"strings"
@@ -134,7 +133,7 @@ func (r *LintRunner) RunWithYamlConfig(cfg string, args ...string) *RunResult {
 }
 
 func (r *LintRunner) RunCommandWithYamlConfig(cfg, command string, args ...string) *RunResult {
-	f, err := ioutil.TempFile("", "golangci_lint_test")
+	f, err := os.CreateTemp("", "golangci_lint_test")
 	assert.NoError(r.t, err)
 	f.Close()
 
@@ -149,7 +148,7 @@ func (r *LintRunner) RunCommandWithYamlConfig(cfg, command string, args ...strin
 	cfg = strings.TrimSpace(cfg)
 	cfg = strings.Replace(cfg, "\t", " ", -1)
 
-	err = ioutil.WriteFile(cfgPath, []byte(cfg), os.ModePerm)
+	err = os.WriteFile(cfgPath, []byte(cfg), os.ModePerm)
 	assert.NoError(r.t, err)
 
 	pargs := append([]string{"-c", cfgPath}, args...)
