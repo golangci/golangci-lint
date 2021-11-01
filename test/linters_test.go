@@ -2,7 +2,6 @@ package test
 
 import (
 	"bufio"
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -99,7 +98,7 @@ func TestGciLocal(t *testing.T) {
 }
 
 func saveConfig(t *testing.T, cfg map[string]interface{}) (cfgPath string, finishFunc func()) {
-	f, err := ioutil.TempFile("", "golangci_lint_test")
+	f, err := os.CreateTemp("", "golangci_lint_test")
 	require.NoError(t, err)
 
 	cfgPath = f.Name() + ".yml"

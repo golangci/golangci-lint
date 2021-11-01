@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"log"
+	"os"
 	"regexp"
 	"strconv"
 	"strings"
@@ -183,7 +183,7 @@ var (
 func wantedErrors(file, short, defaultLinter string) (errs []wantedError) {
 	cache := make(map[string]*regexp.Regexp)
 
-	src, err := ioutil.ReadFile(file)
+	src, err := os.ReadFile(file)
 	if err != nil {
 		log.Fatal(err)
 	}

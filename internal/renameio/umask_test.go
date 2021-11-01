@@ -7,7 +7,6 @@
 package renameio
 
 import (
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"syscall"
@@ -15,7 +14,7 @@ import (
 )
 
 func TestWriteFileModeAppliesUmask(t *testing.T) {
-	dir, err := ioutil.TempDir("", "renameio")
+	dir, err := os.MkdirTemp("", "renameio")
 	if err != nil {
 		t.Fatalf("Failed to create temporary directory: %v", err)
 	}

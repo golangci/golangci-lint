@@ -3,7 +3,7 @@ package golinters
 import (
 	"fmt"
 	"go/token"
-	"io/ioutil"
+	"io"
 	"log"
 	"strconv"
 	"strings"
@@ -42,7 +42,7 @@ func NewGosec(settings *config.GoSecSettings) *goanalysis.Linter {
 
 	ruleDefinitions := rules.Generate(filters...)
 
-	logger := log.New(ioutil.Discard, "", 0)
+	logger := log.New(io.Discard, "", 0)
 
 	analyzer := &analysis.Analyzer{
 		Name: gosecName,

@@ -3,7 +3,7 @@ package commands
 import (
 	"context"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
 	"os"
 	"runtime"
@@ -390,7 +390,7 @@ func (e *Executor) runAndPrint(ctx context.Context, args []string) error {
 
 	if !logutils.HaveDebugTag("linters_output") {
 		// Don't allow linters and loader to print anything
-		log.SetOutput(ioutil.Discard)
+		log.SetOutput(io.Discard)
 		savedStdout, savedStderr := e.setOutputToDevNull()
 		defer func() {
 			os.Stdout, os.Stderr = savedStdout, savedStderr

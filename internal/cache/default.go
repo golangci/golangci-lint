@@ -6,7 +6,6 @@ package cache
 
 import (
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
@@ -39,7 +38,7 @@ func initDefaultCache() {
 	}
 	if _, err := os.Stat(filepath.Join(dir, "README")); err != nil {
 		// Best effort.
-		if wErr := ioutil.WriteFile(filepath.Join(dir, "README"), []byte(cacheREADME), 0666); wErr != nil {
+		if wErr := os.WriteFile(filepath.Join(dir, "README"), []byte(cacheREADME), 0666); wErr != nil {
 			log.Fatalf("Failed to write README file to cache dir %s: %s", dir, err)
 		}
 	}
