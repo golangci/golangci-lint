@@ -15,7 +15,7 @@
     "gatsby-plugin-canonical-urls": "^2.10.0",
     "gatsby-plugin-catch-links": "^2.10.0",
     "gatsby-plugin-emotion": "^5.0.0",
-    "gatsby-plugin-google-analytics": "^3.14.0",
+    "gatsby-plugin-google-analytics": "^4.0.0",
     "gatsby-plugin-manifest": "^2.12.1",
     "gatsby-plugin-mdx": "^2.14.0",
     "gatsby-plugin-netlify": "^2.11.1",
