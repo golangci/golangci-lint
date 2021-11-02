@@ -1,8 +1,9 @@
+// go:build ruleguard
 package gorules
 
 import "github.com/quasilyte/go-ruleguard/dsl"
 
-func stringsSimplify(m dsl.Matcher) {
+func StringsSimplify(m dsl.Matcher) {
 	// Some issues have simple fixes that can be expressed as
 	// a replacement pattern. Rules can use Suggest() function
 	// to add a quickfix action for such issues.

@@ -1,3 +1,4 @@
+// go:build ruleguard
 package gorules
 
 import "github.com/quasilyte/go-ruleguard/dsl"
@@ -8,8 +9,7 @@ import "github.com/quasilyte/go-ruleguard/dsl"
 // `f() && f()` can make sense (although it's not the best piece of code).
 //
 // This is where *filters* come to the rescue.
-
-func dupSubExpr(m dsl.Matcher) {
+func DupSubExpr(m dsl.Matcher) {
 	// All filters are written as a Where() argument.
 	// In our case, we need to assert that $x is "pure".
 	// It can be achieved by checking the m["x"] member Pure field.
