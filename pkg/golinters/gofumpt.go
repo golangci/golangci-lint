@@ -3,7 +3,7 @@ package golinters
 import (
 	"bytes"
 	"fmt"
-	"io/ioutil"
+	"os"
 	"sync"
 
 	"github.com/pkg/errors"
@@ -50,7 +50,7 @@ func NewGofumpt() *goanalysis.Linter {
 			var issues []goanalysis.Issue
 
 			for _, f := range fileNames {
-				input, err := ioutil.ReadFile(f)
+				input, err := os.ReadFile(f)
 				if err != nil {
 					return nil, fmt.Errorf("unable to open file %s: %w", f, err)
 				}

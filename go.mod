@@ -3,7 +3,7 @@ module github.com/golangci/golangci-lint
 go 1.16
 
 require (
-	4d63.com/gochecknoglobals v0.0.0-20201008074935-acfc0b28355a
+	4d63.com/gochecknoglobals v0.1.0
 	github.com/Antonboom/errname v0.1.5
 	github.com/Antonboom/nilnil v0.1.0
 	github.com/BurntSushi/toml v0.4.1
@@ -13,6 +13,7 @@ require (
 	github.com/ashanbrown/forbidigo v1.2.0
 	github.com/ashanbrown/makezero v0.0.0-20210520155254-b6261585ddde
 	github.com/bkielbasa/cyclop v1.2.0
+	github.com/blizzy78/varnamelen v0.3.0
 	github.com/bombsimon/wsl/v3 v3.3.0
 	github.com/butuzov/ireturn v0.1.1
 	github.com/charithe/durationcheck v0.0.9
@@ -67,7 +68,7 @@ require (
 	github.com/sanposhiho/wastedassign/v2 v2.0.6
 	github.com/securego/gosec/v2 v2.9.1
 	github.com/shazow/go-diff v0.0.0-20160112020656-b6b7b6733b8c
-	github.com/shirou/gopsutil/v3 v3.21.9
+	github.com/shirou/gopsutil/v3 v3.21.10
 	github.com/sirupsen/logrus v1.8.1
 	github.com/sivchari/tenv v1.4.7
 	github.com/sonatard/noctx v0.0.1
@@ -81,7 +82,7 @@ require (
 	github.com/tdakkota/asciicheck v0.0.0-20200416200610-e657995f937b
 	github.com/tetafro/godot v1.4.11
 	github.com/timakin/bodyclose v0.0.0-20200424151742-cb6215831a94
-	github.com/tomarrell/wrapcheck/v2 v2.3.1
+	github.com/tomarrell/wrapcheck/v2 v2.4.0
 	github.com/tommy-muehle/go-mnd/v2 v2.4.0
 	github.com/ultraware/funlen v0.0.3
 	github.com/ultraware/whitespace v0.0.4
