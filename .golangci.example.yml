@@ -239,8 +239,36 @@ linters-settings:
         # whether to check test functions (default true)
         skipTestFuncs: true
       ruleguard:
-        # path to a gorules file for the ruleguard checker
-        rules: ''
+        # Enable debug to identify which 'Where' condition was rejected.
+        # The value of the parameter is the name of a function in a ruleguard file.
+        #
+        # When a rule is evaluated:
+        # If:
+        #   The Match() clause is accepted; and
+        #   One of the conditions in the Where() clause is rejected,
+        # Then:
+        #   ruleguard prints the specific Where() condition that was rejected.
+        #
+        # The flag is passed to the ruleguard 'debug-group' argument.
+        debug: 'emptyDecl'
+        # Deprecated, use 'failOn' param.
+        # If set to true, identical to failOn='all', otherwise failOn=''
+        failOnError: false
+        # Determines the behavior when an error occurs while parsing ruleguard files.
+        # If flag is not set, log error and skip rule files that contain an error.
+        # If flag is set, the value must be a comma-separated list of error conditions.
+        # - 'all':    fail on all errors.
+        # - 'import': ruleguard rule imports a package that cannot be found.
+        # - 'dsl':    gorule file does not comply with the ruleguard DSL.
+        failOn: dsl
+        # Comma-separated list of file paths containing ruleguard rules.
+        # If a path is relative, it is relative to the directory where the golangci-lint command is executed.
+        # The special '${configDir}' variable is substituted with the absolute directory containing the golangci config file.
+        # Glob patterns such as 'rules-*.go' may be specified.
+        rules: '${configDir}/ruleguard/rules-*.go,${configDir}/myrule1.go'
+      tooManyResultsChecker:
+        # maximum number of results (default 5)
+        maxResults: 10
       truncateCmp:
         # whether to skip int/uint/uintptr types (default true)
         skipArchDependent: true
