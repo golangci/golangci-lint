@@ -262,7 +262,7 @@ linters-settings:
         # If a path is relative, it is relative to the directory where the golangci-lint command is executed.
         # The special '${configDir}' variable is substituted with the absolute directory containing the golangci config file.
         # Glob patterns such as 'rules-*.go' may be specified.
-        rules: 'rules-*.go,myrule1.go,myrules/rule1.go'
+        rules: '${configDir}/ruleguard/rules-*.go,${configDir}/myrule1.go'
       tooManyResultsChecker:
         # maximum number of results (default 5)
         maxResults: 10
