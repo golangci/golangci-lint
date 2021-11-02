@@ -80,7 +80,7 @@ func (e *Executor) executeLintersHelp(_ *cobra.Command, args []string) {
 	color.Green("\nLinters presets:")
 	for _, p := range e.DBManager.AllPresets() {
 		linters := e.DBManager.GetAllLinterConfigsForPreset(p)
-		linterNames := []string{}
+		linterNames := make([]string, 0, len(linters))
 		for _, lc := range linters {
 			linterNames = append(linterNames, lc.Name())
 		}
