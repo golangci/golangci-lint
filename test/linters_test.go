@@ -23,7 +23,7 @@ func runGoErrchk(c *exec.Cmd, defaultExpectedLinter string, files []string, t *t
 	if err != nil {
 		var exitErr *exec.ExitError
 		require.ErrorAs(t, err, &exitErr)
-		require.Equal(t, exitcodes.IssuesFound, exitErr.ExitCode())
+		require.Equal(t, exitcodes.IssuesFound, exitErr.ExitCode(), "Unexpected exit code: %s", string(output))
 	}
 
 	fullshort := make([]string, 0, len(files)*2)

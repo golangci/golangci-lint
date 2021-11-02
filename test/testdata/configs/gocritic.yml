@@ -3,6 +3,12 @@ linters-settings:
     enabled-checks:
       - rangeValCopy
       - flagDeref
+      - ruleguard
     settings:
       rangevalcopy:
         sizethreshold: 2
+      ruleguard:
+        debug: dupSubExpr
+        failOn: dsl,import
+        # comma-separated paths to ruleguard files.
+        rules: '${configDir}/ruleguard/strings_simplify.go,${configDir}/ruleguard/dup.go'
