@@ -33,12 +33,12 @@ func gocriticRangeValCopySize2(ss []size2) {
 
 func gocriticStringSimplify() {
 	s := "Most of the time, travellers worry about their luggage."
-	s = strings.Replace(s, ",", "", -1) // ERROR "ruleguard: "
+	s = strings.Replace(s, ",", "", -1) // ERROR "ruleguard: this Replace call can be simplified.*"
 	log.Print(s)
 }
 
 func gocriticDup(x bool) {
-	if x && x { // ERROR "ruleguard: "
+	if x && x { // ERROR "ruleguard: suspicious identical LHS and RHS.*"
 		log.Print("x is true")
 	}
 }

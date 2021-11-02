@@ -11,4 +11,5 @@ linters-settings:
         debug: dupSubExpr
         failOn: dsl,import
         # comma-separated paths to ruleguard files.
+        # The ${configDir} is substituted by the directory containing the golangci-lint config file.
         rules: '${configDir}/ruleguard/strings_simplify.go,${configDir}/ruleguard/dup.go'

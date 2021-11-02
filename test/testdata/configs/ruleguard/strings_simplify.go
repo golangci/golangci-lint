@@ -7,7 +7,7 @@ func stringsSimplify(m dsl.Matcher) {
 	// a replacement pattern. Rules can use Suggest() function
 	// to add a quickfix action for such issues.
 	m.Match(`strings.Replace($s, $old, $new, -1)`).
-		Report(`this Replace() call can be simplified`).
+		Report(`this Replace call can be simplified`).
 		Suggest(`strings.ReplaceAll($s, $old, $new)`)
 
 	// Suggest() can be used without Report().
