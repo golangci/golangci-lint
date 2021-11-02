@@ -284,7 +284,7 @@ func (p Nolint) Finish() {
 		return
 	}
 
-	unknownLinters := []string{}
+	unknownLinters := make([]string, 0, len(p.unknownLintersSet))
 	for name := range p.unknownLintersSet {
 		unknownLinters = append(unknownLinters, name)
 	}
