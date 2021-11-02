@@ -542,6 +542,10 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/blizzy78/varnamelen"),
+		linter.NewConfig(golinters.NewBiDiChkFuncName()).
+			WithSince("1.43.0").
+			WithPresets(linter.PresetBugs).
+			WithURL("https://github.com/breml/bidichk"),
 
 		// nolintlint must be last because it looks at the results of all the previous linters for unused nolint directives
 		linter.NewConfig(golinters.NewNoLintLint()).
