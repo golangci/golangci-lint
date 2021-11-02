@@ -12,7 +12,7 @@ type Run struct {
 	Concurrency         int
 	PrintResourcesUsage bool `mapstructure:"print-resources-usage"`
 
-	Config   string
+	Config   string // The path to the golangci config file, as specified with the --config argument.
 	NoConfig bool
 
 	Args []string

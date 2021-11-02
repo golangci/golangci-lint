@@ -323,6 +323,7 @@ func fixSlicesFlags(fs *pflag.FlagSet) {
 	})
 }
 
+// runAnalysis executes the linters that have been enabled in the configuration.
 func (e *Executor) runAnalysis(ctx context.Context, args []string) ([]result.Issue, error) {
 	e.cfg.Run.Args = args
 
@@ -444,6 +445,7 @@ func (e *Executor) createPrinter() (printers.Printer, error) {
 	return p, nil
 }
 
+// executeRun executes the 'run' CLI command, which runs the linters.
 func (e *Executor) executeRun(_ *cobra.Command, args []string) {
 	needTrackResources := e.cfg.Run.IsVerbose || e.cfg.Run.PrintResourcesUsage
 	trackResourcesEndCh := make(chan struct{})

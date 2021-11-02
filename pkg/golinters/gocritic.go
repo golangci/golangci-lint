@@ -78,7 +78,10 @@ func normalizeCheckerInfoParams(info *gocriticlinter.CheckerInfo) gocriticlinter
 	return ret
 }
 
-func configureCheckerInfo(info *gocriticlinter.CheckerInfo, allParams map[string]config.GocriticCheckSettings) error {
+func configureCheckerInfo(
+	lintCtx *linter.Context,
+	info *gocriticlinter.CheckerInfo,
+	allParams map[string]config.GocriticCheckSettings) error {
 	params := allParams[strings.ToLower(info.Name)]
 	if params == nil { // no config for this checker
 		return nil
@@ -88,7 +91,7 @@ func configureCheckerInfo(info *gocriticlinter.CheckerInfo, allParams map[string
 	for k, p := range params {
 		v, ok := infoParams[k]
 		if ok {
-			v.Value = normalizeCheckerParamsValue(p)
+			v.Value = normalizeCheckerParamsValue(lintCtx, p)
 			continue
 		}
 
@@ -117,7 +120,7 @@ func configureCheckerInfo(info *gocriticlinter.CheckerInfo, allParams map[string
 // then we have to convert value types into the expected value types.
 // Maybe in the future, this kind of conversion will be done in go-critic itself.
 //nolint:exhaustive // only 3 types (int, bool, and string) are supported by CheckerParam.Value
-func normalizeCheckerParamsValue(p interface{}) interface{} {
+func normalizeCheckerParamsValue(lintCtx *linter.Context, p interface{}) interface{} {
 	rv := reflect.ValueOf(p)
 	switch rv.Type().Kind() {
 	case reflect.Int64, reflect.Int32, reflect.Int16, reflect.Int8, reflect.Int:
@@ -125,7 +128,8 @@ func normalizeCheckerParamsValue(p interface{}) interface{} {
 	case reflect.Bool:
 		return rv.Bool()
 	case reflect.String:
-		return rv.String()
+		// Perform variable substitution.
+		return strings.ReplaceAll(rv.String(), "${configDir}", lintCtx.Cfg.GetConfigDir())
 	default:
 		return p
 	}
@@ -141,7 +145,7 @@ func buildEnabledCheckers(lintCtx *linter.Context, linterCtx *gocriticlinter.Con
 			continue
 		}
 
-		if err := configureCheckerInfo(info, allParams); err != nil {
+		if err := configureCheckerInfo(lintCtx, info, allParams); err != nil {
 			return nil, err
 		}
 
