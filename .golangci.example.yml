@@ -807,7 +807,7 @@ severity:
   # selected out format.
   # - Code climate: https://docs.codeclimate.com/docs/issues#issue-severity
   # -   Checkstyle: https://checkstyle.sourceforge.io/property_types.html#severity
-  # -       Github: https://help.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-error-message
+  # -       GitHub: https://help.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-error-message
   default-severity: error
 
   # The default value is false.
