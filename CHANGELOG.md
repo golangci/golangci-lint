@@ -1,25 +1,68 @@
 Follow the news and releases on our [twitter](https://twitter.com/golangci) and our [blog](https://medium.com/golangci).
 There is the most valuable changes log:
 
+### November 2021
+
+1. new linters:
+   * `bidichk`: https://github.com/breml/bidichk
+2. update linters:
+   * `nestif`: from 0.3.0 to 0.3.1
+   * `rowserrcheck`: from 1.1.0 to 1.1.1
+   * `gopsutil`: from 3.21.9 to 3.21.10
+   * `wrapcheck`: from 2.3.1 to 2.4.0
+   * `gocritic`: add support for variable substitution in `ruleguard` path settings
+3. documentation:
+   * improve `go-critic` documentation
+   * improve `nolintlint` documentation
+4. Misc:
+   * cli: don't hide `enable-all` option
+
+### october 2021
+
+1. new linters:
+   * `contextcheck`: https://github.com/sylvia7788/contextcheck
+   * `varnamelen`: https://github.com/blizzy78/varnamelen
+2. update linters:
+   * `gochecknoglobals`: to v0.1.0
+   * `gosec`: filter issues according to the severity and confidence
+   * `errcheck`: empty selector name.
+   * `ifshort`: from 1.0.2 to 1.0.3
+   * `go-critic`: from 0.5.6 to 0.6.0
+   * `gosec`: from 2.8.1 to 2.9.1
+   * `durationcheck`: from 0.0.8 to 0.0.9
+   * `wrapcheck`: from 2.3.0 to 2.3.1
+   * `revive`: from 1.1.1 to 1.1.2
+
 ### September 2021
 
-1. update linters:
+1. new linters:
+   * `ireturn`: https://github.com/butuzov/ireturn
+   * `nilnil`: https://github.com/Antonboom/nilnil
+   * `tenv`: https://github.com/sivchari/tenv
+2. update linters:
    * `errcheck`: update to HEAD
+   * `errname`: from 0.1.4 to 0.1.5
    * `gci`: Parse the settings more similarly to the CLI
+   * `godot`: from 1.4.9  to 1.4.11
+   * `ireturn`: from 0.1.0 to 0.1.1
+   * `nlreturn`: add block-size option
+   * `paralleltest`: from 1.0.2 to 1.0.3
+3. Misc:
+   * new-from-rev: add support for finding issues in entire files in a diff
 
 ### August 2021
 
 1. new linters:
-   * Add `errname` linter
+   * `errname`: https://github.com/Antonboom/errname
 2. update linters:
-   * `errname` from 0.1.3 to 0.1.4
+   * `errname`: from 0.1.3 to 0.1.4
    * `go-critic`: fix invalid type conversions.
    * `godot`: from 1.4.8 to 1.4.9
    * `gomodguard`: from 1.2.2 to 1.2.3
    * `revive`: from 1.0.9 to 1.1.1
    * `staticcheck`: bump to 2021.1.1 (v0.2.1)
    * `wrapcheck`: bump to v2.3.0
-4. Misc:
+3. Misc:
    * build binaries and Docker images with go1.17
 
 ### July 2021
