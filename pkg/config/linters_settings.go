@@ -57,6 +57,8 @@ var defaultLintersSettings = LintersSettings{
 	Exhaustive: ExhaustiveSettings{
 		CheckGenerated:             false,
 		DefaultSignifiesExhaustive: false,
+		IgnoreEnumMembers:          "",
+		CheckingStrategy:           "value",
 	},
 	Gofumpt: GofumptSettings{
 		LangVersion: "",
@@ -184,7 +186,9 @@ type ErrorLintSettings struct {
 type ExhaustiveSettings struct {
 	CheckGenerated             bool   `mapstructure:"check-generated"`
 	DefaultSignifiesExhaustive bool   `mapstructure:"default-signifies-exhaustive"`
-	IgnorePattern              string `mapstructure:"ignore-pattern"`
+	IgnorePattern              string `mapstructure:"ignore-pattern"` // Deprecated: this setting has no effect; see IgnoreEnumMembers instead.
+	IgnoreEnumMembers          string `mapstructure:"ignore-enum-members"`
+	CheckingStrategy           string `mapstructure:"checking-strategy"`
 }
 
 type ExhaustiveStructSettings struct {
