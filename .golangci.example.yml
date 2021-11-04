@@ -136,10 +136,16 @@ linters-settings:
   exhaustive:
     # check switch statements in generated files also
     check-generated: false
-    # indicates that switch statements are to be considered exhaustive if a
-    # 'default' case is present, even if all enum members aren't listed in the
-    # switch
+    # presence of "default" case in switch statements satisfies exhaustiveness,
+    # even if all enum members are not listed
     default-signifies-exhaustive: false
+    # enum members matching the supplied regex do not have to be listed in
+    # switch statements to satisfy exhaustiveness
+    ignore-enum-members: ""
+    # strategy to use when checking exhaustiveness of switch statements; one of:
+    # "name", "value"; see documentation for details:
+    # https://pkg.go.dev/github.com/nishanths/exhaustive#section-documentation
+    checking-strategy: "value"
 
   exhaustivestruct:
     # Struct Patterns is list of expressions to match struct packages and names
