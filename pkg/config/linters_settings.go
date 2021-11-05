@@ -486,11 +486,15 @@ type VarCheckSettings struct {
 }
 
 type VarnamelenSettings struct {
-	MaxDistance   int      `mapstructure:"max-distance"`
-	MinNameLength int      `mapstructure:"min-name-length"`
-	CheckReceiver bool     `mapstructure:"check-receiver"`
-	CheckReturn   bool     `mapstructure:"check-return"`
-	IgnoreNames   []string `mapstructure:"ignore-names"`
+	MaxDistance        int      `mapstructure:"max-distance"`
+	MinNameLength      int      `mapstructure:"min-name-length"`
+	CheckReceiver      bool     `mapstructure:"check-receiver"`
+	CheckReturn        bool     `mapstructure:"check-return"`
+	IgnoreNames        []string `mapstructure:"ignore-names"`
+	IgnoreTypeAssertOk bool     `mapstructure:"ignore-type-assert-ok"`
+	IgnoreMapIndexOk   bool     `mapstructure:"ignore-map-index-ok"`
+	IgnoreChanRecvOk   bool     `mapstructure:"ignore-chan-recv-ok"`
+	IgnoreDecls        []string `mapstructure:"ignore-decls"`
 }
 
 type WhitespaceSettings struct {

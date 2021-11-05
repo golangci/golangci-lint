@@ -17,9 +17,13 @@ func NewVarnamelen(settings *config.VarnamelenSettings) *goanalysis.Linter {
 	cfg := map[string]map[string]interface{}{}
 	if settings != nil {
 		vnlCfg := map[string]interface{}{
-			"checkReceiver": strconv.FormatBool(settings.CheckReceiver),
-			"checkReturn":   strconv.FormatBool(settings.CheckReturn),
-			"ignoreNames":   strings.Join(settings.IgnoreNames, ","),
+			"checkReceiver":      strconv.FormatBool(settings.CheckReceiver),
+			"checkReturn":        strconv.FormatBool(settings.CheckReturn),
+			"ignoreNames":        strings.Join(settings.IgnoreNames, ","),
+			"ignoreTypeAssertOk": strconv.FormatBool(settings.IgnoreTypeAssertOk),
+			"ignoreMapIndexOk":   strconv.FormatBool(settings.IgnoreMapIndexOk),
+			"ignoreChanRecvOk":   strconv.FormatBool(settings.IgnoreChanRecvOk),
+			"ignoreDecls":        strings.Join(settings.IgnoreDecls, ","),
 		}
 
 		if settings.MaxDistance > 0 {
