@@ -3,9 +3,8 @@ package golinters
 import (
 	"strings"
 
-	"golang.org/x/tools/go/analysis"
-
 	"github.com/breml/bidichk/pkg/bidichk"
+	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
