@@ -83,6 +83,7 @@ var defaultLintersSettings = LintersSettings{
 }
 
 type LintersSettings struct {
+	BiDiChk          BiDiChkSettings
 	Cyclop           Cyclop
 	Depguard         DepGuardSettings
 	Dogsled          DogsledSettings
@@ -144,6 +145,18 @@ type LintersSettings struct {
 	WSL              WSLSettings
 
 	Custom map[string]CustomLinterSettings
+}
+
+type BiDiChkSettings struct {
+	LeftToRightEmbedding     bool `mapstructure:"left-to-right-embedding"`
+	RightToLeftEmbedding     bool `mapstructure:"right-to-left-embedding"`
+	PopDirectionalFormatting bool `mapstructure:"pop-directional-formatting"`
+	LeftToRightOverride      bool `mapstructure:"left-to-right-override"`
+	RightToLeftOverride      bool `mapstructure:"right-to-left-override"`
+	LeftToRightIsolate       bool `mapstructure:"left-to-right-isolate"`
+	RightToLeftIsolate       bool `mapstructure:"right-to-left-isolate"`
+	FirstStrongIsolate       bool `mapstructure:"first-strong-isolate"`
+	PopDirectionalIsolate    bool `mapstructure:"pop-directional-isolate"`
 }
 
 type Cyclop struct {

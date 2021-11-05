@@ -82,6 +82,18 @@ output:
 
 # all available settings of specific linters
 linters-settings:
+  bidichk:
+    # The following configurations check for all mentioned invisible unicode
+    # runes. It can be omitted because all runes are enabled by default.
+    left-to-right-embedding: true
+    right-to-left-embedding: true
+    pop-directional-formatting: true
+    left-to-right-override: true
+    right-to-left-override: true
+    left-to-right-isolate: true
+    right-to-left-isolate: true
+    first-strong-isolate: true
+    pop-directional-isolate: true
 
   cyclop:
     # the maximal code complexity to report

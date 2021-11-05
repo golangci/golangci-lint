@@ -100,6 +100,7 @@ func enableLinterConfigs(lcs []*linter.Config, isEnabled func(lc *linter.Config)
 
 //nolint:funlen
 func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
+	var bidichkCfg *config.BiDiChkSettings
 	var cyclopCfg *config.Cyclop
 	var errorlintCfg *config.ErrorLintSettings
 	var exhaustiveCfg *config.ExhaustiveSettings
@@ -126,6 +127,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 	var nlreturnCfg *config.NlreturnSettings
 
 	if m.cfg != nil {
+		bidichkCfg = &m.cfg.LintersSettings.BiDiChk
 		cyclopCfg = &m.cfg.LintersSettings.Cyclop
 		errorlintCfg = &m.cfg.LintersSettings.ErrorLint
 		exhaustiveCfg = &m.cfg.LintersSettings.Exhaustive
@@ -542,7 +544,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/blizzy78/varnamelen"),
-		linter.NewConfig(golinters.NewBiDiChkFuncName()).
+		linter.NewConfig(golinters.NewBiDiChkFuncName(bidichkCfg)).
 			WithSince("1.43.0").
 			WithPresets(linter.PresetBugs).
 			WithURL("https://github.com/breml/bidichk"),
