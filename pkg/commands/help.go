@@ -53,6 +53,10 @@ func printLinterConfigs(lcs []*linter.Config) {
 			linterDescription = linterDescription[:firstNewline]
 		}
 
+		if lc.IsDeprecated() {
+			altNamesStr += " (deprecated)"
+		}
+
 		fmt.Fprintf(logutils.StdOut, "%s%s: %s [fast: %t, auto-fix: %t]\n", color.YellowString(lc.Name()),
 			altNamesStr, linterDescription, !lc.IsSlowLinter(), lc.CanAutoFix)
 	}
