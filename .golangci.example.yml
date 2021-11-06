@@ -103,6 +103,11 @@ linters-settings:
     # should ignore tests (default false)
     skip-tests: false
 
+  errchkjson:
+    # with omit-safe set to true, errchkjson does not warn about errors from json encoding functions that are safe
+    # to be ignored, because they are not possible to happen (default false)
+    omit-safe: false
+
   dogsled:
     # checks assignments with too many blank identifiers; default is 2
     max-blank-identifiers: 2

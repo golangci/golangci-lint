@@ -89,6 +89,7 @@ type LintersSettings struct {
 	Dogsled          DogsledSettings
 	Dupl             DuplSettings
 	Errcheck         ErrcheckSettings
+	ErrChkJSON       ErrChkJSONSettings
 	ErrorLint        ErrorLintSettings
 	Exhaustive       ExhaustiveSettings
 	ExhaustiveStruct ExhaustiveStructSettings
@@ -163,6 +164,10 @@ type Cyclop struct {
 	MaxComplexity  int     `mapstructure:"max-complexity"`
 	PackageAverage float64 `mapstructure:"package-average"`
 	SkipTests      bool    `mapstructure:"skip-tests"`
+}
+
+type ErrChkJSONSettings struct {
+	OmitSafe bool `mapstructure:"omit-safe"`
 }
 
 type DepGuardSettings struct {
