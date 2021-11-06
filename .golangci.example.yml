@@ -697,9 +697,23 @@ linters-settings:
     check-receiver: false
     # Check named return values. (defaults to false)
     check-return: false
+    # Ignore "ok" variables that hold the bool return value of a type assertion. (defaults to false)
+    ignore-type-assert-ok: false
+    # Ignore "ok" variables that hold the bool return value of a map index. (defaults to false)
+    ignore-map-index-ok: false
+    # Ignore "ok" variables that hold the bool return value of a channel receive. (defaults to false)
+    ignore-chan-recv-ok: false
     # Optional list of variable names that should be ignored completely. (defaults to empty list)
     ignore-names:
       - err
+    # Optional list of variable declarations that should be ignored completely. (defaults to empty list)
+    # Entries must be in the form of "<variable name> <type>" or "<variable name> *<type>".
+    ignore-decls:
+      - c echo.Context
+      - t testing.T
+      - f *foo.Bar
+      - e error
+      - i int
 
   whitespace:
     multi-if: false   # Enforces newlines (or comments) after every multi-line if statement
