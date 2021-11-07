@@ -393,6 +393,7 @@ func JSONMarshalUnsafeTypes() {
 	var err error
 
 	var f32 float32
+	json.Marshal(f32)          // ERROR "Error return value of `encoding/json.Marshal` is not checked: unsafe type `float32` found"
 	_, _ = json.Marshal(f32)   // ERROR "Error return value of `encoding/json.Marshal` is not checked: unsafe type `float32` found"
 	_, err = json.Marshal(f32) // err is checked
 	_ = err
@@ -516,6 +517,7 @@ func JSONMarshalInvalidTypes() {
 	var err error
 
 	var c64 complex64
+	json.Marshal(c64)          // ERROR "`encoding/json.Marshal` for unsupported type `complex64` found"
 	_, _ = json.Marshal(c64)   // ERROR "`encoding/json.Marshal` for unsupported type `complex64` found"
 	_, err = json.Marshal(c64) // ERROR "`encoding/json.Marshal` for unsupported type `complex64` found"
 	_ = err
@@ -611,4 +613,29 @@ func NotJSONMarshal() {
 	_ = s
 	f := func() bool { return false }
 	_ = f()
+}
+
+// JSONMarshalStructWithoutExportedFields contains a struct without exported fields.
+func JSONMarshalStructWithoutExportedFields() {
+	var err error
+
+	var withoutExportedFields struct {
+		privateField            bool
+		ExportedButOmittedField bool `json:"-"`
+	}
+	_, err = json.Marshal(withoutExportedFields) // want "Error argument passed to `encoding/json.Marshal` does not contain any exported field"
+	_ = err
+}
+
+// JSONMarshalStructWithoutExportedFields contains a struct without exported fields.
+func JSONMarshalStructWithNestedStructWithoutExportedFields() {
+	var err error
+
+	var withNestedStructWithoutExportedFields struct {
+		ExportedStruct struct {
+			privatField bool
+		}
+	}
+	_, err = json.Marshal(withNestedStructWithoutExportedFields)
+	_ = err
 }
