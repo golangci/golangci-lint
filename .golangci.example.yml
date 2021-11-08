@@ -107,6 +107,8 @@ linters-settings:
     # with omit-safe set to true, errchkjson does not warn about errors from json encoding functions that are safe
     # to be ignored, because they are not possible to happen (default false)
     omit-safe: false
+    # if report-no-exported is true, encoding a struct without exported fields is reported as issue (default false)
+    report-no-exported: false
 
   dogsled:
     # checks assignments with too many blank identifiers; default is 2

@@ -167,7 +167,8 @@ type Cyclop struct {
 }
 
 type ErrChkJSONSettings struct {
-	OmitSafe bool `mapstructure:"omit-safe"`
+	OmitSafe         bool `mapstructure:"omit-safe"`
+	ReportNoExported bool `mapstructure:"report-no-exported"`
 }
 
 type DepGuardSettings struct {

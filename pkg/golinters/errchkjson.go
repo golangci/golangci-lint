@@ -14,10 +14,13 @@ func NewErrChkJSONFuncName(cfg *config.ErrChkJSONSettings) *goanalysis.Linter {
 
 	cfgMap := map[string]map[string]interface{}{}
 	if cfg != nil {
+		cfgMap[a.Name] = map[string]interface{}{}
+
 		if cfg.OmitSafe {
-			cfgMap[a.Name] = map[string]interface{}{
-				"omit-safe": "true",
-			}
+			cfgMap[a.Name]["omit-safe"] = true
+		}
+		if cfg.ReportNoExported {
+			cfgMap[a.Name]["report-no-exported"] = true
 		}
 	}
 
