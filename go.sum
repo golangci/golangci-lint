@@ -106,8 +106,8 @@ github.com/blizzy78/varnamelen v0.4.0 h1:TER4mfhjU4D4+k5VJgI/ZG8oT+yGqq7iEi0xjNd
 github.com/blizzy78/varnamelen v0.4.0/go.mod h1:Mc0nLBKI1/FP0Ga4kqMOgBig0eS5QtR107JnMAb1Wuc=
 github.com/bombsimon/wsl/v3 v3.3.0 h1:Mka/+kRLoQJq7g2rggtgQsjuI/K5Efd87WX96EWFxjM=
 github.com/bombsimon/wsl/v3 v3.3.0/go.mod h1:st10JtZYLE4D5sC7b8xV4zTKZwAQjCH/Hy2Pm1FNZIc=
-github.com/breml/bidichk v0.2.0 h1:kBrsPFWq0GTrExB4G55zd1fCiw+0XN4o505lMx9XnFM=
-github.com/breml/bidichk v0.2.0/go.mod h1:zbfeitpevDUGI7V91Uzzuwrn4Vls8MoBMrwtt78jmso=
+github.com/breml/bidichk v0.2.1 h1:SRNtZuLdfkxtocj+xyHXKC1Uv3jVi6EPYx+NHSTNQvE=
+github.com/breml/bidichk v0.2.1/go.mod h1:zbfeitpevDUGI7V91Uzzuwrn4Vls8MoBMrwtt78jmso=
 github.com/butuzov/ireturn v0.1.1 h1:QvrO2QF2+/Cx1WA/vETCIYBKtRjc30vesdoPUNo1EbY=
 github.com/butuzov/ireturn v0.1.1/go.mod h1:Wh6Zl3IMtTpaIKbmwzqi6olnM9ptYQxxVacMsOEFPoc=
 github.com/census-instrumentation/opencensus-proto v0.2.1/go.mod h1:f6KPmirojxKA12rnyqOA5BBL4O983OfeGPqjHWSTneU=
