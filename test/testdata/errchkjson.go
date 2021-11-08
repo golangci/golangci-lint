@@ -1,5 +1,6 @@
-// args: -Eerrchkjson
+// args: -Eerrchkjson -Eerrcheck
 // config_path: testdata/configs/errchkjson.yml
+// expected_linter: errchkjson
 package testdata
 
 import (

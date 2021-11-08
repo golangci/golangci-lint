@@ -100,8 +100,11 @@ func enableLinterConfigs(lcs []*linter.Config, isEnabled func(lc *linter.Config)
 
 //nolint:funlen
 func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
+	var linters *config.Linters
+
 	var bidichkCfg *config.BiDiChkSettings
 	var cyclopCfg *config.Cyclop
+	var errcheckCfg *config.ErrcheckSettings
 	var errchkjsonCfg *config.ErrChkJSONSettings
 	var errorlintCfg *config.ErrorLintSettings
 	var exhaustiveCfg *config.ExhaustiveSettings
@@ -128,8 +131,10 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 	var nlreturnCfg *config.NlreturnSettings
 
 	if m.cfg != nil {
+		linters = &m.cfg.Linters
 		bidichkCfg = &m.cfg.LintersSettings.BiDiChk
 		cyclopCfg = &m.cfg.LintersSettings.Cyclop
+		errcheckCfg = &m.cfg.LintersSettings.Errcheck
 		errchkjsonCfg = &m.cfg.LintersSettings.ErrChkJSON
 		errorlintCfg = &m.cfg.LintersSettings.ErrorLint
 		exhaustiveCfg = &m.cfg.LintersSettings.Exhaustive
@@ -175,6 +180,11 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetPerformance, linter.PresetBugs).
 			WithURL("https://github.com/sonatard/noctx"),
+		linter.NewConfig(golinters.NewErrChkJSONFuncName(linters, errchkjsonCfg, errcheckCfg)).
+			WithSince("1.44.0").
+			WithPresets(linter.PresetBugs, linter.PresetUnused).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/breml/errchkjson"),
 		linter.NewConfig(golinters.NewErrcheck()).
 			WithSince("v1.0.0").
 			WithLoadForGoAnalysis().
@@ -550,11 +560,6 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithSince("1.43.0").
 			WithPresets(linter.PresetBugs).
 			WithURL("https://github.com/breml/bidichk"),
-		linter.NewConfig(golinters.NewErrChkJSONFuncName(errchkjsonCfg)).
-			WithSince("1.44.0").
-			WithPresets(linter.PresetBugs, linter.PresetUnused).
-			WithLoadForGoAnalysis().
-			WithURL("https://github.com/breml/errchkjson"),
 
 		// nolintlint must be last because it looks at the results of all the previous linters for unused nolint directives
 		linter.NewConfig(golinters.NewNoLintLint()).
