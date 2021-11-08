@@ -351,7 +351,7 @@ func JSONMarshalSaveStructWithUnexportedFieldsWithNoSafe() {
 func JSONMarshalSaveStructWithOmittedFieldsWithNoSafe() {
 	var err error
 
-	var ommitInStruct struct {
+	var omitInStruct struct {
 		Bool bool // safe exported
 
 		F64                  float64                         `json:"-"` // unsafe exported but omitted
@@ -381,9 +381,9 @@ func JSONMarshalSaveStructWithOmittedFieldsWithNoSafe() {
 		UnsafePtr    unsafe.Pointer       `json:"-"` // invalid exported but omitted
 		MapStructStr map[structKey]string `json:"-"` // invalid exported but omitted
 	}
-	_ = ommitInStruct.MapStructStr[structKey{1}]
-	_, _ = json.Marshal(ommitInStruct)   // ERROR "Error return value of `encoding/json.Marshal` is not checked"
-	_, err = json.Marshal(ommitInStruct) // struct containing unsafe but omitted, exported fields is safe, but omit-safe is set
+	_ = omitInStruct.MapStructStr[structKey{1}]
+	_, _ = json.Marshal(omitInStruct)   // ERROR "Error return value of `encoding/json.Marshal` is not checked"
+	_, err = json.Marshal(omitInStruct) // struct containing unsafe but omitted, exported fields is safe, but omit-safe is set
 	_ = err
 }
 
