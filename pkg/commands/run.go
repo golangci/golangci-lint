@@ -243,7 +243,7 @@ func (e *Executor) initRunConfiguration(cmd *cobra.Command) {
 
 func (e *Executor) getConfigForCommandLine() (*config.Config, error) {
 	// We use another pflag.FlagSet here to not set `changed` flag
-	// on cmd.Flags() options. Otherwise string slice options will be duplicated.
+	// on cmd.Flags() options. Otherwise, string slice options will be duplicated.
 	fs := pflag.NewFlagSet("config flag set", pflag.ContinueOnError)
 
 	var cfg config.Config
@@ -259,7 +259,7 @@ func (e *Executor) getConfigForCommandLine() (*config.Config, error) {
 	// cfg vs e.cfg.
 	initRootFlagSet(fs, &cfg, true)
 
-	fs.Usage = func() {} // otherwise help text will be printed twice
+	fs.Usage = func() {} // otherwise, help text will be printed twice
 	if err := fs.Parse(os.Args); err != nil {
 		if err == pflag.ErrHelp {
 			return nil, err

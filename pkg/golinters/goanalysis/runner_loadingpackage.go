@@ -61,7 +61,7 @@ func (lp *loadingPackage) analyze(loadMode LoadMode, loadSem chan struct{}) {
 	if err := lp.loadWithFacts(loadMode); err != nil {
 		werr := errors.Wrapf(err, "failed to load package %s", lp.pkg.Name)
 		// Don't need to write error to errCh, it will be extracted and reported on another layer.
-		// Unblock depending actions and propagate error.
+		// Unblock depending on actions and propagate error.
 		for _, act := range lp.actions {
 			close(act.analysisDoneCh)
 			act.err = werr
@@ -269,16 +269,16 @@ func (lp *loadingPackage) loadImportedPackageWithFacts(loadMode LoadMode) error 
 	// Load package from export data
 	if loadMode >= LoadModeTypesInfo {
 		if err := lp.loadFromExportData(); err != nil {
-			// We asked Go to give us up to date export data, yet
+			// We asked Go to give us up-to-date export data, yet
 			// we can't load it. There must be something wrong.
 			//
 			// Attempt loading from source. This should fail (because
 			// otherwise there would be export data); we just want to
 			// get the compile errors. If loading from source succeeds
-			// we discard the result, anyway. Otherwise we'll fail
+			// we discard the result, anyway. Otherwise, we'll fail
 			// when trying to reload from export data later.
 
-			// Otherwise it panics because uses already existing (from exported data) types.
+			// Otherwise, it panics because uses already existing (from exported data) types.
 			pkg.Types = types.NewPackage(pkg.PkgPath, pkg.Name)
 			if srcErr := lp.loadFromSource(loadMode); srcErr != nil {
 				return srcErr
@@ -311,7 +311,7 @@ func (lp *loadingPackage) loadImportedPackageWithFacts(loadMode LoadMode) error 
 		// Cached facts loading failed: analyze later the action from source. To perform
 		// the analysis we need to load the package from source code.
 
-		// Otherwise it panics because uses already existing (from exported data) types.
+		// Otherwise, it panics because uses already existing (from exported data) types.
 		if loadMode >= LoadModeTypesInfo {
 			pkg.Types = types.NewPackage(pkg.PkgPath, pkg.Name)
 		}

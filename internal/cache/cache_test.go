@@ -233,7 +233,7 @@ func TestCacheTrim(t *testing.T) {
 		t.Fatalf("second trim did work: %q -> %q", data, data2)
 	}
 
-	// Fast forward and do another trim just before the 5 day cutoff.
+	// Fast-forward and do another trim just before the 5-day cutoff.
 	// Note that because of usedQuantum the cutoff is actually 5 days + 1 hour.
 	// We used c.Get(id) just now, so 5 days later it should still be kept.
 	// On the other hand almost a full day has gone by since we wrote dummyID(2)

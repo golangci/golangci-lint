@@ -179,8 +179,8 @@ func (act *action) analyze() {
 
 	if act.pkg.IllTyped {
 		// It looks like there should be !pass.Analyzer.RunDespiteErrors
-		// but govet's cgocall crashes on it. Govet itself contains !pass.Analyzer.RunDespiteErrors condition here
-		// but it exit before it if packages.Load have failed.
+		// but govet's cgocall crashes on it. Govet itself contains !pass.Analyzer.RunDespiteErrors condition here,
+		// but it exits before it if packages.Load have failed.
 		act.err = errors.Wrap(&IllTypedError{Pkg: act.pkg}, "analysis skipped")
 	} else {
 		startedAt = time.Now()

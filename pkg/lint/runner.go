@@ -123,7 +123,7 @@ func (r *Runner) runLinterSafe(ctx context.Context, lintCtx *linter.Context,
 		// which affects to the next analysis.
 		// To avoid this issue, we clear type information from the packages.
 		// See https://github.com/golangci/golangci-lint/pull/944.
-		// Currently DoesChangeTypes is true only for `unused`.
+		// Currently, DoesChangeTypes is true only for `unused`.
 		lintCtx.ClearTypesInPackages()
 	}
 
