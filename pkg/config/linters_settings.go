@@ -199,9 +199,11 @@ type ErrorLintSettings struct {
 type ExhaustiveSettings struct {
 	CheckGenerated             bool   `mapstructure:"check-generated"`
 	DefaultSignifiesExhaustive bool   `mapstructure:"default-signifies-exhaustive"`
-	IgnorePattern              string `mapstructure:"ignore-pattern"` // Deprecated: this setting has no effect; see IgnoreEnumMembers instead.
 	IgnoreEnumMembers          string `mapstructure:"ignore-enum-members"`
-	CheckingStrategy           string `mapstructure:"checking-strategy"`
+	PackageScopeOnly           bool   `mapstructure:"package-scope-only"`
+
+	IgnorePattern    string `mapstructure:"ignore-pattern"`    // Deprecated: this setting has no effect; see IgnoreEnumMembers instead.
+	CheckingStrategy string `mapstructure:"checking-strategy"` // Deprecated.
 }
 
 type ExhaustiveStructSettings struct {
