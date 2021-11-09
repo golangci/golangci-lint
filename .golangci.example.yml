@@ -154,10 +154,8 @@ linters-settings:
     # enum members matching the supplied regex do not have to be listed in
     # switch statements to satisfy exhaustiveness
     ignore-enum-members: ""
-    # strategy to use when checking exhaustiveness of switch statements; one of:
-    # "name", "value"; see documentation for details:
-    # https://pkg.go.dev/github.com/nishanths/exhaustive#section-documentation
-    checking-strategy: "value"
+    # consider enums only in package scopes, not in inner scopes
+    package-scope-only: false
 
   exhaustivestruct:
     # Struct Patterns is list of expressions to match struct packages and names
