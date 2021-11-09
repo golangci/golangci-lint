@@ -60,7 +60,7 @@ func (f Fixer) Process(issues []result.Issue) []result.Issue {
 			fileWithoutPathPrefix := file
 
 			if f.cfg.Output.PathPrefix != "" {
-				fileWithoutPathPrefix = strings.Replace(fileWithoutPathPrefix, f.cfg.Output.PathPrefix+string(filepath.Separator), "", 1)
+				fileWithoutPathPrefix = strings.TrimPrefix(fileWithoutPathPrefix, f.cfg.Output.PathPrefix+string(filepath.Separator))
 			}
 			err = f.fixIssuesInFile(fileWithoutPathPrefix, issuesToFix)
 		})
