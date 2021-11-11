@@ -1,0 +1,105 @@
+name: Bug Report
+description: "Create a report to help us improve."
+labels: [bug]
+body:
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Welcome
+      options:
+        - label: Yes, I'm using a binary release within 2 latest major releases. Only such installations are supported.
+          required: true
+        - label: Yes, I've searched similar issues on GitHub and didn't find any.
+          required: true
+        - label: Yes, I've included all information below (version, config, etc).
+          required: true
+        - label: Yes, I've tried with the standalone linter if available. (https://golangci-lint.run/usage/linters/)
+          required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Description of the problem
+      placeholder: Your problem description
+    validations:
+      required: true
+
+  - type: textarea
+    id: version
+    attributes:
+      label: Version of golangci-lint
+      value: |-
+        <details>
+
+        ```console
+        $ golangci-lint --version
+        # Paste output here
+        ```
+
+        </details>
+    validations:
+      required: true
+
+  - type: textarea
+    id: config
+    attributes:
+      label: Configuration file
+      value: |-
+        <details>
+
+        ```console
+        $ cat .golangci.yml
+        # paste output here
+        ```
+
+        </details>
+    validations:
+      required: true
+
+  - type: textarea
+    id: go-env
+    attributes:
+      label: Go environment
+      value: |-
+        <details>
+
+        ```console
+        $ go version && go env
+        # paste output here
+        ```
+
+        </details>
+    validations:
+      required: true
+
+  - type: textarea
+    id: verbose-output
+    attributes:
+      label: Verbose output of running
+      value: |-
+        <details>
+
+        ```console
+        $ golangci-lint cache clean
+        $ golangci-lint run -v
+        # paste output here
+        ```
+
+        </details>
+    validations:
+      required: true
+
+  - type: textarea
+    id: code-example
+    attributes:
+      label: Code example or link to a public repository
+      value: |-
+        <details>
+
+        ```go
+        // add your code here
+        ```
+
+        </details>
+    validations:
+      required: true

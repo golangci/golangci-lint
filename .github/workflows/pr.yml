@@ -15,7 +15,7 @@ jobs:
       - name: Install Go
         uses: actions/setup-go@v2
         with:
-          go-version: 1.16
+          go-version: 1.17
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Check go mod
@@ -45,7 +45,7 @@ jobs:
       - name: Install Go
         uses: actions/setup-go@v2
         with:
-          go-version: 1.16 # test only the latest go version to speed up CI
+          go-version: 1.17 # test only the latest go version to speed up CI
       - name: Run tests
         run: make.exe test
         continue-on-error: true
@@ -57,7 +57,7 @@ jobs:
       - name: Install Go
         uses: actions/setup-go@v2
         with:
-          go-version: 1.16 # test only the latest go version to speed up CI
+          go-version: 1.17 # test only the latest go version to speed up CI
       - name: Run tests
         run: make test
   tests-on-unix:
@@ -66,15 +66,15 @@ jobs:
     strategy:
       matrix:
         golang:
-          - 1.15
           - 1.16
+          - 1.17
     steps:
       - uses: actions/checkout@v2
       - name: Install Go
         uses: actions/setup-go@v2
         with:
           go-version: ${{ matrix.golang }}
-      - uses: actions/cache@v2.1.5
+      - uses: actions/cache@v2.1.6
         with:
           path: ~/go/pkg/mod
           key: ${{ runner.os }}-go-${{ matrix.golang }}-${{ hashFiles('**/go.sum') }}
@@ -95,6 +95,6 @@ jobs:
       - name: Install Go
         uses: actions/setup-go@v2
         with:
-          go-version: 1.16
+          go-version: 1.17
       - name: Check generated files are up to date
         run: make fast_check_generated

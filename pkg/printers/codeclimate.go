@@ -31,7 +31,7 @@ func NewCodeClimate() *CodeClimate {
 }
 
 func (p CodeClimate) Print(ctx context.Context, issues []result.Issue) error {
-	codeClimateIssues := []CodeClimateIssue{}
+	codeClimateIssues := make([]CodeClimateIssue, 0, len(issues))
 	for i := range issues {
 		issue := &issues[i]
 		codeClimateIssue := CodeClimateIssue{}

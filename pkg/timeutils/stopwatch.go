@@ -15,10 +15,10 @@ const noStagesText = "no stages"
 type Stopwatch struct {
 	name      string
 	startedAt time.Time
-	stages    map[string]time.Duration
 	log       logutils.Log
 
-	sync.Mutex
+	stages map[string]time.Duration
+	mu     sync.Mutex
 }
 
 func NewStopwatch(name string, log logutils.Log) *Stopwatch {
@@ -36,7 +36,7 @@ type stageDuration struct {
 }
 
 func (s *Stopwatch) stageDurationsSorted() []stageDuration {
-	stageDurations := []stageDuration{}
+	stageDurations := make([]stageDuration, 0, len(s.stages))
 	for n, d := range s.stages {
 		stageDurations = append(stageDurations, stageDuration{
 			name: n,
@@ -56,7 +56,7 @@ func (s *Stopwatch) sprintStages() string {
 
 	stageDurations := s.stageDurationsSorted()
 
-	stagesStrings := []string{}
+	stagesStrings := make([]string, 0, len(stageDurations))
 	for _, s := range stageDurations {
 		stagesStrings = append(stagesStrings, fmt.Sprintf("%s: %s", s.name, s.d))
 	}
@@ -110,7 +110,7 @@ func (s *Stopwatch) TrackStage(name string, f func()) {
 	startedAt := time.Now()
 	f()
 
-	s.Lock()
+	s.mu.Lock()
 	s.stages[name] += time.Since(startedAt)
-	s.Unlock()
+	s.mu.Unlock()
 }

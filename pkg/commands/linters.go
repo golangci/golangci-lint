@@ -20,6 +20,7 @@ func (e *Executor) initLinters() {
 	e.initRunConfiguration(e.lintersCmd)
 }
 
+// executeLinters runs the 'linters' CLI command, which displays the supported linters.
 func (e *Executor) executeLinters(_ *cobra.Command, args []string) {
 	if len(args) != 0 {
 		e.log.Fatalf("Usage: golangci-lint linters")

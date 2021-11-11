@@ -35,6 +35,7 @@ func NewManager(cfg *config.Config, log logutils.Log) *Manager {
 	return m
 }
 
+// WithCustomLinters loads private linters that are specified in the golangci config file.
 func (m *Manager) WithCustomLinters() *Manager {
 	if m.log == nil {
 		m.log = report.NewLogWrapper(logutils.NewStderrLog(""), &report.Data{})
@@ -99,46 +100,58 @@ func enableLinterConfigs(lcs []*linter.Config, isEnabled func(lc *linter.Config)
 
 //nolint:funlen
 func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
-	var govetCfg *config.GovetSettings
-	var testpackageCfg *config.TestpackageSettings
+	var bidichkCfg *config.BiDiChkSettings
+	var cyclopCfg *config.Cyclop
+	var errorlintCfg *config.ErrorLintSettings
 	var exhaustiveCfg *config.ExhaustiveSettings
 	var exhaustiveStructCfg *config.ExhaustiveStructSettings
-	var errorlintCfg *config.ErrorLintSettings
-	var thelperCfg *config.ThelperSettings
-	var predeclaredCfg *config.PredeclaredSettings
-	var ifshortCfg *config.IfshortSettings
-	var reviveCfg *config.ReviveSettings
-	var cyclopCfg *config.Cyclop
-	var importAsCfg *config.ImportAsSettings
 	var goModDirectivesCfg *config.GoModDirectivesSettings
-	var tagliatelleCfg *config.TagliatelleSettings
 	var gosecCfg *config.GoSecSettings
 	var gosimpleCfg *config.StaticCheckSettings
+	var govetCfg *config.GovetSettings
+	var ifshortCfg *config.IfshortSettings
+	var importAsCfg *config.ImportAsSettings
+	var ireturnCfg *config.IreturnSettings
+	var nilNilCfg *config.NilNilSettings
+	var predeclaredCfg *config.PredeclaredSettings
+	var reviveCfg *config.ReviveSettings
 	var staticcheckCfg *config.StaticCheckSettings
 	var stylecheckCfg *config.StaticCheckSettings
+	var tagliatelleCfg *config.TagliatelleSettings
+	var tenvCfg *config.TenvSettings
+	var testpackageCfg *config.TestpackageSettings
+	var thelperCfg *config.ThelperSettings
 	var unusedCfg *config.StaticCheckSettings
+	var varnamelenCfg *config.VarnamelenSettings
 	var wrapcheckCfg *config.WrapcheckSettings
+	var nlreturnCfg *config.NlreturnSettings
 
 	if m.cfg != nil {
-		govetCfg = &m.cfg.LintersSettings.Govet
-		testpackageCfg = &m.cfg.LintersSettings.Testpackage
+		bidichkCfg = &m.cfg.LintersSettings.BiDiChk
+		cyclopCfg = &m.cfg.LintersSettings.Cyclop
+		errorlintCfg = &m.cfg.LintersSettings.ErrorLint
 		exhaustiveCfg = &m.cfg.LintersSettings.Exhaustive
 		exhaustiveStructCfg = &m.cfg.LintersSettings.ExhaustiveStruct
-		errorlintCfg = &m.cfg.LintersSettings.ErrorLint
-		thelperCfg = &m.cfg.LintersSettings.Thelper
-		predeclaredCfg = &m.cfg.LintersSettings.Predeclared
-		ifshortCfg = &m.cfg.LintersSettings.Ifshort
-		reviveCfg = &m.cfg.LintersSettings.Revive
-		cyclopCfg = &m.cfg.LintersSettings.Cyclop
-		importAsCfg = &m.cfg.LintersSettings.ImportAs
 		goModDirectivesCfg = &m.cfg.LintersSettings.GoModDirectives
-		tagliatelleCfg = &m.cfg.LintersSettings.Tagliatelle
 		gosecCfg = &m.cfg.LintersSettings.Gosec
 		gosimpleCfg = &m.cfg.LintersSettings.Gosimple
+		govetCfg = &m.cfg.LintersSettings.Govet
+		ifshortCfg = &m.cfg.LintersSettings.Ifshort
+		importAsCfg = &m.cfg.LintersSettings.ImportAs
+		ireturnCfg = &m.cfg.LintersSettings.Ireturn
+		nilNilCfg = &m.cfg.LintersSettings.NilNil
+		predeclaredCfg = &m.cfg.LintersSettings.Predeclared
+		reviveCfg = &m.cfg.LintersSettings.Revive
 		staticcheckCfg = &m.cfg.LintersSettings.Staticcheck
 		stylecheckCfg = &m.cfg.LintersSettings.Stylecheck
+		tagliatelleCfg = &m.cfg.LintersSettings.Tagliatelle
+		tenvCfg = &m.cfg.LintersSettings.Tenv
+		testpackageCfg = &m.cfg.LintersSettings.Testpackage
+		thelperCfg = &m.cfg.LintersSettings.Thelper
 		unusedCfg = &m.cfg.LintersSettings.Unused
+		varnamelenCfg = &m.cfg.LintersSettings.Varnamelen
 		wrapcheckCfg = &m.cfg.LintersSettings.Wrapcheck
+		nlreturnCfg = &m.cfg.LintersSettings.Nlreturn
 	}
 
 	const megacheckName = "megacheck"
@@ -169,7 +182,8 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithSince("v1.0.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetStyle).
-			WithURL("https://github.com/golang/lint"),
+			WithURL("https://github.com/golang/lint").
+			Deprecated("The repository of the linter has been archived by the owner.", "v1.41.0", "revive"),
 		linter.NewConfig(golinters.NewRowsErrCheck()).
 			WithSince("v1.23.0").
 			WithLoadForGoAnalysis().
@@ -409,7 +423,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetBugs, linter.PresetSQL).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/ryanrolds/sqlclosecheck"),
-		linter.NewConfig(golinters.NewNLReturn()).
+		linter.NewConfig(golinters.NewNLReturn(nlreturnCfg)).
 			WithSince("v1.30.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/ssgreg/nlreturn"),
@@ -500,6 +514,40 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithSince("v1.40.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/ldez/tagliatelle"),
+		linter.NewConfig(golinters.NewErrName()).
+			WithSince("v1.42.0").
+			WithPresets(linter.PresetStyle).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/Antonboom/errname"),
+		linter.NewConfig(golinters.NewIreturn(ireturnCfg)).
+			WithSince("v1.43.0").
+			WithPresets(linter.PresetStyle).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/butuzov/ireturn"),
+		linter.NewConfig(golinters.NewNilNil(nilNilCfg)).
+			WithSince("v1.43.0").
+			WithPresets(linter.PresetStyle).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/Antonboom/nilnil"),
+		linter.NewConfig(golinters.NewTenv(tenvCfg)).
+			WithSince("v1.43.0").
+			WithPresets(linter.PresetStyle).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/sivchari/tenv"),
+		linter.NewConfig(golinters.NewContextCheck()).
+			WithSince("v1.43.0").
+			WithPresets(linter.PresetBugs).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/sylvia7788/contextcheck"),
+		linter.NewConfig(golinters.NewVarnamelen(varnamelenCfg)).
+			WithSince("v1.43.0").
+			WithPresets(linter.PresetStyle).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/blizzy78/varnamelen"),
+		linter.NewConfig(golinters.NewBiDiChkFuncName(bidichkCfg)).
+			WithSince("1.43.0").
+			WithPresets(linter.PresetBugs).
+			WithURL("https://github.com/breml/bidichk"),
 
 		linter.NewConfig(golinters.NewCheckBannedFunc()).
 			WithPresets(linter.PresetStyle),
@@ -563,6 +611,8 @@ func (m Manager) GetAllLinterConfigsForPreset(p string) []*linter.Config {
 	return ret
 }
 
+// loadCustomLinterConfig loads the configuration of private linters.
+// Private linters are dynamically loaded from .so plugin files.
 func (m Manager) loadCustomLinterConfig(name string, settings config.CustomLinterSettings) (*linter.Config, error) {
 	analyzer, err := m.getAnalyzerPlugin(settings.Path)
 	if err != nil {
@@ -585,6 +635,11 @@ type AnalyzerPlugin interface {
 	GetAnalyzers() []*analysis.Analyzer
 }
 
+// getAnalyzerPlugin loads a private linter as specified in the config file,
+// loads the plugin from a .so file, and returns the 'AnalyzerPlugin' interface
+// implemented by the private plugin.
+// An error is returned if the private linter cannot be loaded or the linter
+// does not implement the AnalyzerPlugin interface.
 func (m Manager) getAnalyzerPlugin(path string) (AnalyzerPlugin, error) {
 	if !filepath.IsAbs(path) {
 		// resolve non-absolute paths relative to config file's directory

@@ -42,7 +42,7 @@ func ExtractErrors(pkg *packages.Package) []packages.Error {
 				continue
 			}
 
-			// change pos to local file to properly process it by processors (properly read line etc)
+			// change pos to local file to properly process it by processors (properly read line etc.)
 			uniqErrors[i].Msg = fmt.Sprintf("%s: %s", uniqErrors[i].Pos, uniqErrors[i].Msg)
 			uniqErrors[i].Pos = fmt.Sprintf("%s:1", pkg.GoFiles[0])
 		}
@@ -65,7 +65,7 @@ func extractErrorsImpl(pkg *packages.Package, seenPackages map[*packages.Package
 	}
 	seenPackages[pkg] = true
 
-	if !pkg.IllTyped { // otherwise it may take hours to traverse all deps many times
+	if !pkg.IllTyped { // otherwise, it may take hours to traverse all deps many times
 		return nil
 	}
 

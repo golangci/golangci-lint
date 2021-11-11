@@ -8,7 +8,6 @@ import (
 	"bytes"
 	"encoding/binary"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"testing"
@@ -22,7 +21,7 @@ func init() {
 func TestBasic(t *testing.T) {
 	t.Parallel()
 
-	dir, err := ioutil.TempDir("", "cachetest-")
+	dir, err := os.MkdirTemp("", "cachetest-")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -69,7 +68,7 @@ func TestBasic(t *testing.T) {
 func TestGrowth(t *testing.T) {
 	t.Parallel()
 
-	dir, err := ioutil.TempDir("", "cachetest-")
+	dir, err := os.MkdirTemp("", "cachetest-")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -122,7 +121,7 @@ func TestVerifyPanic(t *testing.T) {
 		t.Fatal("initEnv did not set verify")
 	}
 
-	dir, err := ioutil.TempDir("", "cachetest-")
+	dir, err := os.MkdirTemp("", "cachetest-")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -157,7 +156,7 @@ func dummyID(x int) [HashSize]byte {
 func TestCacheTrim(t *testing.T) {
 	t.Parallel()
 
-	dir, err := ioutil.TempDir("", "cachetest-")
+	dir, err := os.MkdirTemp("", "cachetest-")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -213,7 +212,7 @@ func TestCacheTrim(t *testing.T) {
 		t.Fatal(err)
 	}
 	c.OutputFile(entry.OutputID)
-	data, err := ioutil.ReadFile(filepath.Join(dir, "trim.txt"))
+	data, err := os.ReadFile(filepath.Join(dir, "trim.txt"))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -226,7 +225,7 @@ func TestCacheTrim(t *testing.T) {
 		t.Fatal(err)
 	}
 	c.OutputFile(entry.OutputID)
-	data2, err := ioutil.ReadFile(filepath.Join(dir, "trim.txt"))
+	data2, err := os.ReadFile(filepath.Join(dir, "trim.txt"))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -234,7 +233,7 @@ func TestCacheTrim(t *testing.T) {
 		t.Fatalf("second trim did work: %q -> %q", data, data2)
 	}
 
-	// Fast forward and do another trim just before the 5 day cutoff.
+	// Fast-forward and do another trim just before the 5-day cutoff.
 	// Note that because of usedQuantum the cutoff is actually 5 days + 1 hour.
 	// We used c.Get(id) just now, so 5 days later it should still be kept.
 	// On the other hand almost a full day has gone by since we wrote dummyID(2)

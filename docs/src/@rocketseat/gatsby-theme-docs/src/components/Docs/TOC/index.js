@@ -13,9 +13,14 @@ export default function TableOfContents({ headings }) {
         <nav>
           <ul>
             {headings
-              .filter(heading => heading.depth === 2)
+              .filter((heading) => heading.depth === 2 || heading.depth === 3)
               .map(heading => (
-                <li key={heading.value}>
+                <li
+                  key={heading.value}
+                  style={{
+                    marginLeft: heading.depth === 3 ? `8px` : null,
+                  }}
+                >
                   <a href={`#${slug(heading.value)}`}>{heading.value}</a>
                 </li>
               ))}

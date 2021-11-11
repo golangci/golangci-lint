@@ -2,6 +2,7 @@ package config
 
 import "time"
 
+// Run encapsulates the config options for running the linter analysis.
 type Run struct {
 	IsVerbose           bool `mapstructure:"verbose"`
 	Silent              bool
@@ -11,7 +12,7 @@ type Run struct {
 	Concurrency         int
 	PrintResourcesUsage bool `mapstructure:"print-resources-usage"`
 
-	Config   string
+	Config   string // The path to the golangci config file, as specified with the --config argument.
 	NoConfig bool
 
 	Args []string

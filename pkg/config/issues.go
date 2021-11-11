@@ -79,13 +79,25 @@ var DefaultExcludePatterns = []ExcludePattern{
 	},
 	{
 		ID:      "EXC0012",
-		Pattern: "exported (method|function|type|const) (.+) should have comment or be unexported",
+		Pattern: `exported (.+) should have comment( \(or a comment on this block\))? or be unexported`,
 		Linter:  "revive",
 		Why:     "Annoying issue about not having a comment. The rare codebase has such comments",
 	},
 	{
 		ID:      "EXC0013",
-		Pattern: `package comment should be of the form "Package (.+) ..."`,
+		Pattern: `package comment should be of the form "(.+)...`,
+		Linter:  "revive",
+		Why:     "Annoying issue about not having a comment. The rare codebase has such comments",
+	},
+	{
+		ID:      "EXC0014",
+		Pattern: `comment on exported (.+) should be of the form "(.+)..."`,
+		Linter:  "revive",
+		Why:     "Annoying issue about not having a comment. The rare codebase has such comments",
+	},
+	{
+		ID:      "EXC0015",
+		Pattern: `should have a package comment, unless it's in another file for this package`,
 		Linter:  "revive",
 		Why:     "Annoying issue about not having a comment. The rare codebase has such comments",
 	},
@@ -103,6 +115,7 @@ type Issues struct {
 
 	DiffFromRevision  string `mapstructure:"new-from-rev"`
 	DiffPatchFilePath string `mapstructure:"new-from-patch"`
+	WholeFiles        bool   `mapstructure:"whole-files"`
 	Diff              bool   `mapstructure:"new"`
 
 	NeedFix bool `mapstructure:"fix"`

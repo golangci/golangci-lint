@@ -2,7 +2,6 @@ package test
 
 import (
 	"bufio"
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -10,7 +9,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
-	"gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 
 	"github.com/golangci/golangci-lint/pkg/exitcodes"
 	"github.com/golangci/golangci-lint/test/testshared"
@@ -24,7 +23,7 @@ func runGoErrchk(c *exec.Cmd, defaultExpectedLinter string, files []string, t *t
 	if err != nil {
 		var exitErr *exec.ExitError
 		require.ErrorAs(t, err, &exitErr)
-		require.Equal(t, exitcodes.IssuesFound, exitErr.ExitCode())
+		require.Equal(t, exitcodes.IssuesFound, exitErr.ExitCode(), "Unexpected exit code: %s", string(output))
 	}
 
 	fullshort := make([]string, 0, len(files)*2)
@@ -99,7 +98,7 @@ func TestGciLocal(t *testing.T) {
 }
 
 func saveConfig(t *testing.T, cfg map[string]interface{}) (cfgPath string, finishFunc func()) {
-	f, err := ioutil.TempFile("", "golangci_lint_test")
+	f, err := os.CreateTemp("", "golangci_lint_test")
 	require.NoError(t, err)
 
 	cfgPath = f.Name() + ".yml"

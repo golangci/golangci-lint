@@ -7,7 +7,7 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -15,6 +15,8 @@ import (
 	"path/filepath"
 	"sort"
 	"strings"
+
+	"gopkg.in/yaml.v3"
 
 	"github.com/golangci/golangci-lint/internal/renameio"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
@@ -94,7 +96,7 @@ func rewriteDocs(replacements map[string]string) error {
 }
 
 func processDoc(path string, replacements map[string]string, madeReplacements map[string]bool) error {
-	contentBytes, err := ioutil.ReadFile(path)
+	contentBytes, err := os.ReadFile(path)
 	if err != nil {
 		return fmt.Errorf("failed to read %s: %w", path, err)
 	}
@@ -134,7 +136,7 @@ func getLatestVersion() (string, error) {
 	req, err := http.NewRequest( // nolint:noctx
 		http.MethodGet,
 		"https://api.github.com/repos/golangci/golangci-lint/releases/latest",
-		nil,
+		http.NoBody,
 	)
 	if err != nil {
 		return "", fmt.Errorf("failed to prepare a http request: %s", err)
@@ -145,7 +147,7 @@ func getLatestVersion() (string, error) {
 		return "", fmt.Errorf("failed to get http response for the latest tag: %s", err)
 	}
 	defer resp.Body.Close()
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return "", fmt.Errorf("failed to read a body for the latest tag: %s", err)
 	}
@@ -158,12 +160,12 @@ func getLatestVersion() (string, error) {
 }
 
 func buildTemplateContext() (map[string]string, error) {
-	golangciYaml, err := ioutil.ReadFile(".golangci.yml")
+	golangciYamlExample, err := os.ReadFile(".golangci.example.yml")
 	if err != nil {
-		return nil, fmt.Errorf("can't read .golangci.yml: %s", err)
+		return nil, fmt.Errorf("can't read .golangci.example.yml: %s", err)
 	}
 
-	golangciYamlExample, err := ioutil.ReadFile(".golangci.example.yml")
+	lintersCfg, err := getLintersConfiguration(golangciYamlExample)
 	if err != nil {
 		return nil, fmt.Errorf("can't read .golangci.example.yml: %s", err)
 	}
@@ -189,7 +191,7 @@ func buildTemplateContext() (map[string]string, error) {
 
 	helpLines := bytes.Split(help, []byte("\n"))
 	shortHelp := bytes.Join(helpLines[2:], []byte("\n"))
-	changeLog, err := ioutil.ReadFile("CHANGELOG.md")
+	changeLog, err := os.ReadFile("CHANGELOG.md")
 	if err != nil {
 		return nil, err
 	}
@@ -200,7 +202,7 @@ func buildTemplateContext() (map[string]string, error) {
 	}
 
 	return map[string]string{
-		"GolangciYaml":                     strings.TrimSpace(string(golangciYaml)),
+		"LintersExample":                   lintersCfg,
 		"GolangciYamlExample":              strings.TrimSpace(string(golangciYamlExample)),
 		"LintersCommandOutputEnabledOnly":  string(lintersOutParts[0]),
 		"LintersCommandOutputDisabledOnly": string(lintersOutParts[1]),
@@ -284,7 +286,7 @@ func check(b bool, title string) string {
 }
 
 func span(title, icon string) string {
-	return fmt.Sprintf(`<span title="%s">%s</span>`, title, icon)
+	return fmt.Sprintf(`<span title=%q>%s</span>`, title, icon)
 }
 
 func getThanksList() string {
@@ -313,4 +315,60 @@ func getThanksList() string {
 	}
 
 	return strings.Join(lines, "\n")
+}
+
+func getLintersConfiguration(example []byte) (string, error) {
+	builder := &strings.Builder{}
+
+	var data yaml.Node
+	err := yaml.Unmarshal(example, &data)
+	if err != nil {
+		return "", err
+	}
+
+	root := data.Content[0]
+
+	for j, node := range root.Content {
+		if node.Value != "linters-settings" {
+			continue
+		}
+
+		nodes := root.Content[j+1]
+
+		for i := 0; i < len(nodes.Content); i += 2 {
+			r := &yaml.Node{
+				Kind:  nodes.Kind,
+				Style: nodes.Style,
+				Tag:   nodes.Tag,
+				Value: node.Value,
+				Content: []*yaml.Node{
+					{
+						Kind:  root.Content[j].Kind,
+						Value: root.Content[j].Value,
+					},
+					{
+						Kind:    nodes.Kind,
+						Content: []*yaml.Node{nodes.Content[i], nodes.Content[i+1]},
+					},
+				},
+			}
+
+			_, _ = fmt.Fprintf(builder, "### %s\n\n", nodes.Content[i].Value)
+			_, _ = fmt.Fprintln(builder, "```yaml")
+
+			const ident = 2
+			encoder := yaml.NewEncoder(builder)
+			encoder.SetIndent(ident)
+
+			err = encoder.Encode(r)
+			if err != nil {
+				return "", err
+			}
+
+			_, _ = fmt.Fprintln(builder, "```")
+			_, _ = fmt.Fprintln(builder)
+		}
+	}
+
+	return builder.String(), nil
 }

@@ -3,12 +3,13 @@ package golinters
 import (
 	"fmt"
 	"go/token"
-	"io/ioutil"
+	"io"
 	"log"
 	"strconv"
 	"strings"
 	"sync"
 
+	"github.com/pkg/errors"
 	"github.com/securego/gosec/v2"
 	"github.com/securego/gosec/v2/rules"
 	"golang.org/x/tools/go/analysis"
@@ -41,7 +42,7 @@ func NewGosec(settings *config.GoSecSettings) *goanalysis.Linter {
 
 	ruleDefinitions := rules.Generate(filters...)
 
-	logger := log.New(ioutil.Discard, "", 0)
+	logger := log.New(io.Discard, "", 0)
 
 	analyzer := &analysis.Analyzer{
 		Name: gosecName,
@@ -54,7 +55,7 @@ func NewGosec(settings *config.GoSecSettings) *goanalysis.Linter {
 		nil,
 	).WithContextSetter(func(lintCtx *linter.Context) {
 		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
-			gosecAnalyzer := gosec.NewAnalyzer(gasConfig, true, logger)
+			gosecAnalyzer := gosec.NewAnalyzer(gasConfig, true, settings.ExcludeGenerated, logger)
 			gosecAnalyzer.LoadRules(ruleDefinitions.Builders())
 
 			pkg := &packages.Package{
@@ -68,7 +69,16 @@ func NewGosec(settings *config.GoSecSettings) *goanalysis.Linter {
 			if len(issues) == 0 {
 				return nil, nil
 			}
+			severity, err := convertToScore(settings.Severity)
+			if err != nil {
+				lintCtx.Log.Warnf("The provided severity %v", err)
+			}
 
+			confidence, err := convertToScore(settings.Confidence)
+			if err != nil {
+				lintCtx.Log.Warnf("The provided confidence %v", err)
+			}
+			issues = filterIssues(issues, severity, confidence)
 			res := make([]goanalysis.Issue, 0, len(issues))
 			for _, i := range issues {
 				text := fmt.Sprintf("%s: %s", i.RuleID, i.What) // TODO: use severity and confidence
@@ -125,4 +135,30 @@ func gosecRuleFilters(includes, excludes []string) []rules.RuleFilter {
 	}
 
 	return filters
+}
+
+// code borrowed from https://github.com/securego/gosec/blob/69213955dacfd560562e780f723486ef1ca6d486/cmd/gosec/main.go#L250-L262
+func convertToScore(str string) (gosec.Score, error) {
+	str = strings.ToLower(str)
+	switch str {
+	case "", "low":
+		return gosec.Low, nil
+	case "medium":
+		return gosec.Medium, nil
+	case "high":
+		return gosec.High, nil
+	default:
+		return gosec.Low, errors.Errorf("'%s' is invalid, use low instead. Valid options: low, medium, high", str)
+	}
+}
+
+// code borrowed from https://github.com/securego/gosec/blob/69213955dacfd560562e780f723486ef1ca6d486/cmd/gosec/main.go#L264-L276
+func filterIssues(issues []*gosec.Issue, severity, confidence gosec.Score) []*gosec.Issue {
+	res := make([]*gosec.Issue, 0)
+	for _, issue := range issues {
+		if issue.Severity >= severity && issue.Confidence >= confidence {
+			res = append(res, issue)
+		}
+	}
+	return res
 }

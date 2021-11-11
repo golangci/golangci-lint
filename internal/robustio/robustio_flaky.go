@@ -7,7 +7,6 @@
 package robustio
 
 import (
-	"io/ioutil"
 	"math/rand"
 	"os"
 	"syscall"
@@ -54,7 +53,7 @@ func retry(f func() (err error, mayRetry bool)) error {
 
 // rename is like os.Rename, but retries ephemeral errors.
 //
-// On windows it wraps os.Rename, which (as of 2019-06-04) uses MoveFileEx with
+// On Windows it wraps os.Rename, which (as of 2019-06-04) uses MoveFileEx with
 // MOVEFILE_REPLACE_EXISTING.
 //
 // Windows also provides a different system call, ReplaceFile,
@@ -70,11 +69,11 @@ func rename(oldpath, newpath string) (err error) {
 	})
 }
 
-// readFile is like ioutil.ReadFile, but retries ephemeral errors.
+// readFile is like os.ReadFile, but retries ephemeral errors.
 func readFile(filename string) ([]byte, error) {
 	var b []byte
 	err := retry(func() (err error, mayRetry bool) {
-		b, err = ioutil.ReadFile(filename)
+		b, err = os.ReadFile(filename)
 
 		// Unlike in rename, we do not retry errFileNotFound here: it can occur
 		// as a spurious error, but the file may also genuinely not exist, so the

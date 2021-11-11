@@ -1,0 +1,4 @@
+linters-settings:
+  gosec:
+    severity: "medium"
+    confidence: "medium"

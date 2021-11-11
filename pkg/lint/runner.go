@@ -86,7 +86,7 @@ func NewRunner(cfg *config.Config, log logutils.Log, goenv *goutil.Env, es *lint
 			processors.NewNolint(log.Child("nolint"), dbManager, enabledLinters),
 
 			processors.NewUniqByLine(cfg),
-			processors.NewDiff(cfg.Issues.Diff, cfg.Issues.DiffFromRevision, cfg.Issues.DiffPatchFilePath),
+			processors.NewDiff(cfg.Issues.Diff, cfg.Issues.DiffFromRevision, cfg.Issues.DiffPatchFilePath, cfg.Issues.WholeFiles),
 			processors.NewMaxPerFileFromLinter(cfg),
 			processors.NewMaxSameIssues(cfg.Issues.MaxSameIssues, log.Child("max_same_issues"), cfg),
 			processors.NewMaxFromLinter(cfg.Issues.MaxIssuesPerLinter, log.Child("max_from_linter"), cfg),
@@ -108,10 +108,10 @@ func (r *Runner) runLinterSafe(ctx context.Context, lintCtx *linter.Context,
 				err = fmt.Errorf("%s: %w", lc.Name(), pe)
 
 				// Don't print stacktrace from goroutines twice
-				lintCtx.Log.Warnf("Panic: %s: %s", pe, pe.Stack())
+				r.Log.Errorf("Panic: %s: %s", pe, pe.Stack())
 			} else {
 				err = fmt.Errorf("panic occurred: %s", panicData)
-				r.Log.Warnf("Panic stack trace: %s", debug.Stack())
+				r.Log.Errorf("Panic stack trace: %s", debug.Stack())
 			}
 		}
 	}()
@@ -123,7 +123,7 @@ func (r *Runner) runLinterSafe(ctx context.Context, lintCtx *linter.Context,
 		// which affects to the next analysis.
 		// To avoid this issue, we clear type information from the packages.
 		// See https://github.com/golangci/golangci-lint/pull/944.
-		// Currently DoesChangeTypes is true only for `unused`.
+		// Currently, DoesChangeTypes is true only for `unused`.
 		lintCtx.ClearTypesInPackages()
 	}
 

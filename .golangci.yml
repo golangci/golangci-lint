@@ -34,8 +34,6 @@ linters-settings:
     min-complexity: 15
   goimports:
     local-prefixes: github.com/golangci/golangci-lint
-  golint:
-    min-confidence: 0
   gomnd:
     settings:
       mnd:
@@ -52,8 +50,6 @@ linters-settings:
           - (github.com/golangci/golangci-lint/pkg/logutils.Log).Fatalf
   lll:
     line-length: 140
-  maligned:
-    suggest-new: true
   misspell:
     locale: US
   nolintlint:
@@ -63,8 +59,6 @@ linters-settings:
     require-specific: false # don't require nolint directives to be specific about which linter is being skipped
 
 linters:
-  # please, do not use `enable-all`: it's deprecated and will be removed soon.
-  # inverted configuration with `enable-all` and `disable` is not scalable during updates of golangci-lint
   disable-all: true
   enable:
     - bodyclose
@@ -82,7 +76,6 @@ linters:
     - gocyclo
     - gofmt
     - goimports
-    - golint
     - gomnd
     - goprintffuncname
     - gosec
@@ -122,9 +115,30 @@ linters:
   # - wsl
 
 issues:
+  exclude:
+    # disable this rule for go1.15 compatibility
+    - 'ioutilDeprecated:'
   # Excluding configuration per-path, per-linter, per-text and per-source
   exclude-rules:
     - path: _test\.go
+      linters:
+        - gomnd
+
+    - path: pkg/golinters/errcheck.go
+      text: "SA1019: errCfg.Exclude is deprecated: use ExcludeFunctions instead"
+    - path: pkg/commands/run.go
+      text: "SA1019: lsc.Errcheck.Exclude is deprecated: use ExcludeFunctions instead"
+
+    # TODO must be removed after the release of the next version (v1.41.0)
+    - path: pkg/commands/run.go
+      linters:
+        - gomnd
+    # TODO must be removed after the release of the next version (v1.41.0)
+    - path: pkg/golinters/nolintlint/nolintlint.go
+      linters:
+        - gomnd
+    # TODO must be removed after the release of the next version (v1.41.0)
+    - path: pkg/printers/tab.go
       linters:
         - gomnd
 

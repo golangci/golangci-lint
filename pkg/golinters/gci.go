@@ -46,8 +46,12 @@ func NewGci() *goanalysis.Linter {
 
 			var issues []goanalysis.Issue
 
+			flagSet := gci.FlagSet{
+				LocalFlag: gci.ParseLocalFlag(localFlag),
+			}
+
 			for _, f := range fileNames {
-				source, result, err := gci.Run(f, &gci.FlagSet{LocalFlag: localFlag})
+				source, result, err := gci.Run(f, &flagSet)
 				if err != nil {
 					return nil, err
 				}

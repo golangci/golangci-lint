@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"go/token"
-	"io/ioutil"
+	"os"
 	"reflect"
 
 	"github.com/BurntSushi/toml"
@@ -13,17 +13,21 @@ import (
 	reviveConfig "github.com/mgechev/revive/config"
 	"github.com/mgechev/revive/lint"
 	"github.com/mgechev/revive/rule"
+	"github.com/pkg/errors"
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
+	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
 const reviveName = "revive"
 
-// jsonObject defines a JSON object of an failure
+var reviveDebugf = logutils.Debug("revive")
+
+// jsonObject defines a JSON object of a failure
 type jsonObject struct {
 	Severity     lint.Severity
 	lint.Failure `json:",inline"`
@@ -61,7 +65,7 @@ func NewRevive(cfg *config.ReviveSettings) *goanalysis.Linter {
 				return nil, err
 			}
 
-			revive := lint.New(ioutil.ReadFile)
+			revive := lint.New(os.ReadFile)
 
 			lintingRules, err := reviveConfig.GetLintingRules(conf)
 			if err != nil {
@@ -108,21 +112,7 @@ func NewRevive(cfg *config.ReviveSettings) *goanalysis.Linter {
 			}
 
 			for i := range results {
-				issues = append(issues, goanalysis.NewIssue(&result.Issue{
-					Severity: string(results[i].Severity),
-					Text:     fmt.Sprintf("%s: %s", results[i].RuleName, results[i].Failure.Failure),
-					Pos: token.Position{
-						Filename: results[i].Position.Start.Filename,
-						Line:     results[i].Position.Start.Line,
-						Offset:   results[i].Position.Start.Offset,
-						Column:   results[i].Position.Start.Column,
-					},
-					LineRange: &result.Range{
-						From: results[i].Position.Start.Line,
-						To:   results[i].Position.End.Line,
-					},
-					FromLinter: reviveName,
-				}, pass))
+				issues = append(issues, reviveToIssue(pass, &results[i]))
 			}
 
 			return nil, nil
@@ -132,8 +122,31 @@ func NewRevive(cfg *config.ReviveSettings) *goanalysis.Linter {
 	}).WithLoadMode(goanalysis.LoadModeSyntax)
 }
 
+func reviveToIssue(pass *analysis.Pass, object *jsonObject) goanalysis.Issue {
+	lineRangeTo := object.Position.End.Line
+	if object.RuleName == (&rule.ExportedRule{}).Name() {
+		lineRangeTo = object.Position.Start.Line
+	}
+
+	return goanalysis.NewIssue(&result.Issue{
+		Severity: string(object.Severity),
+		Text:     fmt.Sprintf("%s: %s", object.RuleName, object.Failure.Failure),
+		Pos: token.Position{
+			Filename: object.Position.Start.Filename,
+			Line:     object.Position.Start.Line,
+			Offset:   object.Position.Start.Offset,
+			Column:   object.Position.Start.Column,
+		},
+		LineRange: &result.Range{
+			From: object.Position.Start.Line,
+			To:   lineRangeTo,
+		},
+		FromLinter: reviveName,
+	}, pass)
+}
+
 // This function mimics the GetConfig function of revive.
-// This allow to get default values and right types.
+// This allows to get default values and right types.
 // https://github.com/golangci/golangci-lint/issues/1745
 // https://github.com/mgechev/revive/blob/389ba853b0b3587f0c3b71b5f0c61ea4e23928ec/config/config.go#L155
 func getReviveConfig(cfg *config.ReviveSettings) (*lint.Config, error) {
@@ -145,17 +158,19 @@ func getReviveConfig(cfg *config.ReviveSettings) (*lint.Config, error) {
 
 		err := toml.NewEncoder(buf).Encode(rawRoot)
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "failed to encode configuration")
 		}
 
 		conf = &lint.Config{}
 		_, err = toml.DecodeReader(buf, conf)
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "failed to decode configuration")
 		}
 	}
 
 	normalizeConfig(conf)
+
+	reviveDebugf("revive configuration: %#v", conf)
 
 	return conf, nil
 }
@@ -167,6 +182,7 @@ func createConfigMap(cfg *config.ReviveSettings) map[string]interface{} {
 		"severity":              cfg.Severity,
 		"errorCode":             cfg.ErrorCode,
 		"warningCode":           cfg.WarningCode,
+		"enableAllRules":        cfg.EnableAllRules,
 	}
 
 	rawDirectives := map[string]map[string]interface{}{}
@@ -184,7 +200,8 @@ func createConfigMap(cfg *config.ReviveSettings) map[string]interface{} {
 	for _, s := range cfg.Rules {
 		rawRules[s.Name] = map[string]interface{}{
 			"severity":  s.Severity,
-			"arguments": s.Arguments,
+			"arguments": safeTomlSlice(s.Arguments),
+			"disabled":  s.Disabled,
 		}
 	}
 
@@ -193,6 +210,28 @@ func createConfigMap(cfg *config.ReviveSettings) map[string]interface{} {
 	}
 
 	return rawRoot
+}
+
+func safeTomlSlice(r []interface{}) []interface{} {
+	if len(r) == 0 {
+		return nil
+	}
+
+	if _, ok := r[0].(map[interface{}]interface{}); !ok {
+		return r
+	}
+
+	var typed []interface{}
+	for _, elt := range r {
+		item := map[string]interface{}{}
+		for k, v := range elt.(map[interface{}]interface{}) {
+			item[k.(string)] = v
+		}
+
+		typed = append(typed, item)
+	}
+
+	return typed
 }
 
 // This element is not exported by revive, so we need copy the code.
@@ -205,7 +244,6 @@ var defaultRules = []lint.Rule{
 	&rule.ExportedRule{},
 	&rule.VarNamingRule{},
 	&rule.IndentErrorFlowRule{},
-	&rule.IfReturnRule{},
 	&rule.RangeRule{},
 	&rule.ErrorfRule{},
 	&rule.ErrorNamingRule{},

@@ -1,7 +1,169 @@
 Follow the news and releases on our [twitter](https://twitter.com/golangci) and our [blog](https://medium.com/golangci).
 There is the most valuable changes log:
 
-## March 2021
+### November 2021
+
+1. new linters:
+   * `bidichk`: https://github.com/breml/bidichk
+2. update linters:
+   * `nestif`: from 0.3.0 to 0.3.1
+   * `rowserrcheck`: from 1.1.0 to 1.1.1
+   * `gopsutil`: from 3.21.9 to 3.21.10
+   * `wrapcheck`: from 2.3.1 to 2.4.0
+   * `gocritic`: add support for variable substitution in `ruleguard` path settings
+3. documentation:
+   * improve `go-critic` documentation
+   * improve `nolintlint` documentation
+4. Misc:
+   * cli: don't hide `enable-all` option
+
+### october 2021
+
+1. new linters:
+   * `contextcheck`: https://github.com/sylvia7788/contextcheck
+   * `varnamelen`: https://github.com/blizzy78/varnamelen
+2. update linters:
+   * `gochecknoglobals`: to v0.1.0
+   * `gosec`: filter issues according to the severity and confidence
+   * `errcheck`: empty selector name.
+   * `ifshort`: from 1.0.2 to 1.0.3
+   * `go-critic`: from 0.5.6 to 0.6.0
+   * `gosec`: from 2.8.1 to 2.9.1
+   * `durationcheck`: from 0.0.8 to 0.0.9
+   * `wrapcheck`: from 2.3.0 to 2.3.1
+   * `revive`: from 1.1.1 to 1.1.2
+
+### September 2021
+
+1. new linters:
+   * `ireturn`: https://github.com/butuzov/ireturn
+   * `nilnil`: https://github.com/Antonboom/nilnil
+   * `tenv`: https://github.com/sivchari/tenv
+2. update linters:
+   * `errcheck`: update to HEAD
+   * `errname`: from 0.1.4 to 0.1.5
+   * `gci`: Parse the settings more similarly to the CLI
+   * `godot`: from 1.4.9  to 1.4.11
+   * `ireturn`: from 0.1.0 to 0.1.1
+   * `nlreturn`: add block-size option
+   * `paralleltest`: from 1.0.2 to 1.0.3
+3. Misc:
+   * new-from-rev: add support for finding issues in entire files in a diff
+
+### August 2021
+
+1. new linters:
+   * `errname`: https://github.com/Antonboom/errname
+2. update linters:
+   * `errname`: from 0.1.3 to 0.1.4
+   * `go-critic`: fix invalid type conversions.
+   * `godot`: from 1.4.8 to 1.4.9
+   * `gomodguard`: from 1.2.2 to 1.2.3
+   * `revive`: from 1.0.9 to 1.1.1
+   * `staticcheck`: bump to 2021.1.1 (v0.2.1)
+   * `wrapcheck`: bump to v2.3.0
+3. Misc:
+   * build binaries and Docker images with go1.17
+
+### July 2021
+
+1. update linters:
+   * `errcheck`: allow exclude config without extra file
+   * `exhaustive`: from 0.1.0 to 0.2.3
+   * `gocognit`: from 1.0.1 to 1.0.5
+   * `godot`: from 1.4.7 to 1.4.8
+   * `gomoddirectives`: from 0.2.1 to 0.2.2
+   * `revive`: from 1.0.8 to 1.0.9
+2. documentation:
+   * improve `goconst` documentation
+   * improve `goimports` description
+
+### June 2021
+
+1. update linters:
+   * `durationcheck`: from 0.0.7 to 0.0.8
+   * `gci`: from 0.2.8 to 0.2.9
+   * `goconst`: from 0.5.6 to 0.5.7
+   * `gofumpt`: Add lang-version option
+   * `gomodguard`: from 1.2.1 to 1.2.2
+   * `gosec`: from 2.8.0 to 2.8.1
+   * `revive`: add enable-all-rules.
+   * `revive`: allow to disable rule
+   * `revive`: fix exclude comment rule for const block
+   * `revive`: from 1.0.7 to 1.0.8
+   * `wrapcheck`: from 2.1.0 to 2.2.0
+2. documentation:
+   * add all integrations to docs introduction page
+3. Misc:
+   * 🎉 Un-deprecate enable-all option
+   * output: generate HTML report
+   * Support RISV64
+
+### May 2021
+
+1. new linters:
+   * `tagliatelle`: https://github.com/ldez/tagliatelle
+   * `promlinter`: https://github.com/yeya24/promlinter
+2. update linters:
+   * `durationcheck`: from 0.0.6 to 0.0.7
+   * `errorlint`: bump to HEAD
+   * `forbidigo`: from 1.1.0 to 1.2.0
+   * `go-critic`: from 0.5.5 to 0.5.6
+   * `godot`: from 1.4.6 to 1.4.7
+   * ⚠ `golint`: deprecated
+   * `gomnd`: from 2.3.2 to 2.4.0
+   * `gomodguard`: fix problem where duplicate issues were reported
+   * `gosec`: from 2.7.0 to 2.8.0
+   * `govet`: fix `sigchanyzer`
+   * `govet`: Update vet passes
+   * `importas`: allow repeated aliases
+   * `importas`: bump to HEAD
+   * `makezero`: bump to HEAD
+   * `nolintlint`: fix false positive
+   * `revive`: convert hard coded excludes into default exclude patterns
+   * `revive`: fix add-constant rule support
+   * `revive`: fix excludes
+   * `revive`: from 1.0.6 to 1.0.7
+   * `revive`: improve 'exported' rule output
+   * `rowserrcheck`: bump to v1.1.0
+   * `staticcheck`: configuration for `staticcheck`, `gosimple`, `stylecheck`
+   * `staticcheck`: from 0.1.3 to 0.1.4
+   * `staticcheck`: from v0.1.4 to v0.2.0
+   * `wastedassign`: from 0.2.0 to 1.0.0
+   * `wastedassign`: from 1.0.0 to v2.0.6
+   * `wrapcheck`: from 1.2.0 to 2.1.0
+3. documentation:
+   * improve linters page
+   * `exhaustivestruct` example explanation
+   * fix pattern of `forbidigo` in example config yaml
+   * bump documentation dependencies
+   * fix typos
+4. Misc:
+   * set the minimum Go version to go1.15
+   * non-zero exit code when a linter produces a panic
+
+### April 2021
+
+1. new linters:
+   * `tagliatelle`: https://github.com/ldez/tagliatelle
+   * `promlinter`: https://github.com/yeya24/promlinter
+2. update linters:
+   * `godot`: from 1.4.4 to 1.4.6
+   * `wrapcheck`: from 1.0.0 to 1.2.0
+   * `go-mnd`: from 2.3.1 to 2.3.2
+   * `wsl`: from 3.2.0 to 3.3.0
+   * `revive`: from 1.0.5 to 1.0.6
+   * `importas`: bump to HEAD
+   * `staticcheck`: configurable Go version
+   * `gosec`: add configuration
+   * `typecheck`: improve error stack parsing
+3. documentation:
+   * bump documentation dependencies
+   * fix typos
+4. Misc:
+   * fix: comma in exclude pattern leads to unexpected results
+
+### March 2021
 
 1. new linters:
    * `gomoddirectives`: https://github.com/ldez/gomoddirectives
@@ -31,7 +193,7 @@ There is the most valuable changes log:
    * fix linters load mode
    * Restore fast linters meaning
 
-## February 2021
+### February 2021
 
 1. new linters:
    * `durationcheck`: https://github.com/charithe/durationcheck
@@ -79,7 +241,7 @@ There is the most valuable changes log:
    * update deprecated hyperlink for Sublime Text plugin
    * add docs on using homebrew tap
 
-## January 2021
+### January 2021
 
 1. new linters:
    * `predeclared`: https://github.com/nishanths/predeclared
@@ -99,7 +261,7 @@ There is the most valuable changes log:
 4. documentation:
    * bump documentation dependencies
 
-## December 2020
+### December 2020
 
 1. new linters:
    * `forbidigo`: https://github.com/ashanbrown/forbidigo

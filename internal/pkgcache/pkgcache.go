@@ -26,7 +26,7 @@ const (
 )
 
 // Cache is a per-package data cache. A cached data is invalidated when
-// package or it's dependencies change.
+// package, or it's dependencies change.
 type Cache struct {
 	lowLevelCache *cache.Cache
 	pkgHashes     sync.Map

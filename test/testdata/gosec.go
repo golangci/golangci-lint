@@ -34,5 +34,5 @@ func GosecG204SubprocWithFunc() {
 		return "/tmp/dummy"
 	}
 
-	exec.Command("ls", arg()).Run() // ERROR "G204: Subprocess launched with function call as argument or cmd arguments"
+	exec.Command("ls", arg()).Run() // ERROR "G204: Subprocess launched with a potential tainted input or cmd arguments"
 }
