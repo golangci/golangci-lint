@@ -146,7 +146,7 @@ func reviveToIssue(pass *analysis.Pass, object *jsonObject) goanalysis.Issue {
 }
 
 // This function mimics the GetConfig function of revive.
-// This allow to get default values and right types.
+// This allows to get default values and right types.
 // https://github.com/golangci/golangci-lint/issues/1745
 // https://github.com/mgechev/revive/blob/389ba853b0b3587f0c3b71b5f0c61ea4e23928ec/config/config.go#L155
 func getReviveConfig(cfg *config.ReviveSettings) (*lint.Config, error) {

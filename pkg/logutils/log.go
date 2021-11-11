@@ -17,11 +17,11 @@ const (
 	// Debug messages, write to debug logs only by logutils.Debug.
 	LogLevelDebug LogLevel = 0
 
-	// Information messages, don't write too much messages,
+	// Information messages, don't write too many messages,
 	// only useful ones: they are shown when running with -v.
 	LogLevelInfo LogLevel = 1
 
-	// Hidden errors: non critical errors: work can be continued, no need to fail whole program;
+	// Hidden errors: non-critical errors: work can be continued, no need to fail whole program;
 	// tests will crash if any warning occurred.
 	LogLevelWarn LogLevel = 2
 
