@@ -132,6 +132,7 @@ issues:
       text: "SA1019: e.cfg.Run.Deadline is deprecated: Deadline exists for historical compatibility and should not be used."
 
 run:
+  timeout: 5m
   skip-dirs:
     - test/testdata_etc
     - internal/cache
