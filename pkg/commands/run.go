@@ -53,7 +53,7 @@ func wh(text string) string {
 
 const defaultTimeout = time.Minute
 
-//nolint:funlen
+//nolint:funlen,gomnd
 func initFlagSet(fs *pflag.FlagSet, cfg *config.Config, m *lintersdb.Manager, isFinalInit bool) {
 	hideFlag := func(name string) {
 		if err := fs.MarkHidden(name); err != nil {
@@ -479,7 +479,6 @@ func (e *Executor) executeRun(_ *cobra.Command, args []string) {
 
 // to be removed when deadline is finally decommissioned
 func (e *Executor) setTimeoutToDeadlineIfOnlyDeadlineIsSet() {
-	// nolint:staticcheck
 	deadlineValue := e.cfg.Run.Deadline
 	if deadlineValue != 0 && e.cfg.Run.Timeout == defaultTimeout {
 		e.cfg.Run.Timeout = deadlineValue
