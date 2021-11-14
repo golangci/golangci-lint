@@ -496,7 +496,7 @@ func (e *Executor) setupExitCode(ctx context.Context) {
 		return
 	}
 
-	needFailOnWarnings := (os.Getenv("GL_TEST_RUN") == "1" || os.Getenv("FAIL_ON_WARNINGS") == "1")
+	needFailOnWarnings := os.Getenv("GL_TEST_RUN") == "1" || os.Getenv("FAIL_ON_WARNINGS") == "1"
 	if needFailOnWarnings && len(e.reportData.Warnings) != 0 {
 		e.exitCode = exitcodes.WarningInTest
 		return
