@@ -30,6 +30,9 @@ func (p JSON) Print(ctx context.Context, issues []result.Issue) error {
 		Issues: issues,
 		Report: p.rd,
 	}
+	if res.Issues == nil {
+		res.Issues = []result.Issue{}
+	}
 
 	outputJSON, err := json.Marshal(res)
 	if err != nil {
