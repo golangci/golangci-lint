@@ -53,7 +53,7 @@ func wh(text string) string {
 
 const defaultTimeout = time.Minute
 
-//nolint:funlen
+//nolint:funlen,gomnd
 func initFlagSet(fs *pflag.FlagSet, cfg *config.Config, m *lintersdb.Manager, isFinalInit bool) {
 	hideFlag := func(name string) {
 		if err := fs.MarkHidden(name); err != nil {
@@ -479,7 +479,6 @@ func (e *Executor) executeRun(_ *cobra.Command, args []string) {
 
 // to be removed when deadline is finally decommissioned
 func (e *Executor) setTimeoutToDeadlineIfOnlyDeadlineIsSet() {
-	// nolint:staticcheck
 	deadlineValue := e.cfg.Run.Deadline
 	if deadlineValue != 0 && e.cfg.Run.Timeout == defaultTimeout {
 		e.cfg.Run.Timeout = deadlineValue
@@ -497,7 +496,7 @@ func (e *Executor) setupExitCode(ctx context.Context) {
 		return
 	}
 
-	needFailOnWarnings := (os.Getenv("GL_TEST_RUN") == "1" || os.Getenv("FAIL_ON_WARNINGS") == "1")
+	needFailOnWarnings := os.Getenv("GL_TEST_RUN") == "1" || os.Getenv("FAIL_ON_WARNINGS") == "1"
 	if needFailOnWarnings && len(e.reportData.Warnings) != 0 {
 		e.exitCode = exitcodes.WarningInTest
 		return

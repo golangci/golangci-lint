@@ -39,6 +39,9 @@ linters-settings:
       mnd:
         # don't include the "operation" and "assign"
         checks: argument,case,condition,return
+        ignored-numbers: 0,1,2,3
+        ignored-functions: strings.SplitN
+
   govet:
     check-shadowing: true
     settings:
@@ -115,9 +118,6 @@ linters:
   # - wsl
 
 issues:
-  exclude:
-    # disable this rule for go1.15 compatibility
-    - 'ioutilDeprecated:'
   # Excluding configuration per-path, per-linter, per-text and per-source
   exclude-rules:
     - path: _test\.go
@@ -128,21 +128,11 @@ issues:
       text: "SA1019: errCfg.Exclude is deprecated: use ExcludeFunctions instead"
     - path: pkg/commands/run.go
       text: "SA1019: lsc.Errcheck.Exclude is deprecated: use ExcludeFunctions instead"
-
-    # TODO must be removed after the release of the next version (v1.41.0)
     - path: pkg/commands/run.go
-      linters:
-        - gomnd
-    # TODO must be removed after the release of the next version (v1.41.0)
-    - path: pkg/golinters/nolintlint/nolintlint.go
-      linters:
-        - gomnd
-    # TODO must be removed after the release of the next version (v1.41.0)
-    - path: pkg/printers/tab.go
-      linters:
-        - gomnd
+      text: "SA1019: e.cfg.Run.Deadline is deprecated: Deadline exists for historical compatibility and should not be used."
 
 run:
+  timeout: 5m
   skip-dirs:
     - test/testdata_etc
     - internal/cache

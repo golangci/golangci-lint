@@ -9,7 +9,6 @@ import (
 	"github.com/pkg/errors"
 )
 
-//nolint:gomnd
 func ParseErrorPosition(pos string) (*token.Position, error) {
 	// file:line(<optional>:colon)
 	parts := strings.Split(pos, ":")
