@@ -53,7 +53,7 @@ func retry(f func() (err error, mayRetry bool)) error {
 
 // rename is like os.Rename, but retries ephemeral errors.
 //
-// On windows it wraps os.Rename, which (as of 2019-06-04) uses MoveFileEx with
+// On Windows it wraps os.Rename, which (as of 2019-06-04) uses MoveFileEx with
 // MOVEFILE_REPLACE_EXISTING.
 //
 // Windows also provides a different system call, ReplaceFile,

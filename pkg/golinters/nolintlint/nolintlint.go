@@ -199,7 +199,7 @@ func (l Linter) Run(fset *token.FileSet, nodes ...ast.Node) ([]Issue, error) {
 					position:                          pos,
 				}
 
-				// check for, report and eliminate leading spaces so we can check for other issues
+				// check for, report and eliminate leading spaces, so we can check for other issues
 				if len(leadingSpace) > 0 {
 					removeWhitespace := &result.Replacement{
 						Inline: &result.InlineFix{
@@ -281,7 +281,7 @@ func (l Linter) Run(fset *token.FileSet, nodes ...ast.Node) ([]Issue, error) {
 
 				if (l.needs&NeedsExplanation) != 0 && (explanation == "" || strings.TrimSpace(explanation) == "//") {
 					needsExplanation := len(linters) == 0 // if no linters are mentioned, we must have explanation
-					// otherwise, check if we are excluding all of the mentioned linters
+					// otherwise, check if we are excluding all the mentioned linters
 					for _, ll := range linters {
 						if !l.excludeByLinter[ll] { // if a linter does require explanation
 							needsExplanation = true

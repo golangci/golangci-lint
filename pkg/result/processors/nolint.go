@@ -46,7 +46,7 @@ func (i *ignoredRange) doesMatch(issue *result.Issue) bool {
 	}
 
 	// handle possible unused nolint directives
-	// nolintlint generates potential issues for every nolint directive and they are filtered out here
+	// nolintlint generates potential issues for every nolint directive, and they are filtered out here
 	if issue.FromLinter == golinters.NolintlintName && issue.ExpectNoLint {
 		if issue.ExpectedNoLintLinter != "" {
 			return i.matchedIssueFromLinter[issue.ExpectedNoLintLinter]

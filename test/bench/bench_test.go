@@ -71,7 +71,7 @@ func printCommand(cmd string, args ...string) {
 	if os.Getenv("PRINT_CMD") != "1" {
 		return
 	}
-	quotedArgs := []string{}
+	var quotedArgs []string
 	for _, a := range args {
 		quotedArgs = append(quotedArgs, strconv.Quote(a))
 	}

@@ -17,7 +17,7 @@ type Config struct {
 	InternalTest    bool // Option is used only for testing golangci-lint code, don't use it
 }
 
-// getConfigDir returns the directory that contains golangci config file.
+// GetConfigDir returns the directory that contains golangci config file.
 func (c *Config) GetConfigDir() string {
 	return c.cfgDir
 }

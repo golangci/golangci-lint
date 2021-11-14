@@ -17,9 +17,11 @@ func NewExhaustive(settings *config.ExhaustiveSettings) *goanalysis.Linter {
 			a.Name: {
 				exhaustive.CheckGeneratedFlag:             settings.CheckGenerated,
 				exhaustive.DefaultSignifiesExhaustiveFlag: settings.DefaultSignifiesExhaustive,
-				exhaustive.IgnorePatternFlag:              settings.IgnorePattern,
 				exhaustive.IgnoreEnumMembersFlag:          settings.IgnoreEnumMembers,
-				exhaustive.CheckingStrategyFlag:           settings.CheckingStrategy,
+				exhaustive.PackageScopeOnly:               settings.PackageScopeOnly,
+
+				exhaustive.IgnorePatternFlag:    settings.IgnorePattern,
+				exhaustive.CheckingStrategyFlag: settings.CheckingStrategy,
 			},
 		}
 	}

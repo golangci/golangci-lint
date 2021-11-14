@@ -83,6 +83,7 @@ var defaultLintersSettings = LintersSettings{
 }
 
 type LintersSettings struct {
+	BiDiChk          BiDiChkSettings
 	Cyclop           Cyclop
 	Depguard         DepGuardSettings
 	Dogsled          DogsledSettings
@@ -146,6 +147,18 @@ type LintersSettings struct {
 	Custom map[string]CustomLinterSettings
 }
 
+type BiDiChkSettings struct {
+	LeftToRightEmbedding     bool `mapstructure:"left-to-right-embedding"`
+	RightToLeftEmbedding     bool `mapstructure:"right-to-left-embedding"`
+	PopDirectionalFormatting bool `mapstructure:"pop-directional-formatting"`
+	LeftToRightOverride      bool `mapstructure:"left-to-right-override"`
+	RightToLeftOverride      bool `mapstructure:"right-to-left-override"`
+	LeftToRightIsolate       bool `mapstructure:"left-to-right-isolate"`
+	RightToLeftIsolate       bool `mapstructure:"right-to-left-isolate"`
+	FirstStrongIsolate       bool `mapstructure:"first-strong-isolate"`
+	PopDirectionalIsolate    bool `mapstructure:"pop-directional-isolate"`
+}
+
 type Cyclop struct {
 	MaxComplexity  int     `mapstructure:"max-complexity"`
 	PackageAverage float64 `mapstructure:"package-average"`
@@ -186,9 +199,11 @@ type ErrorLintSettings struct {
 type ExhaustiveSettings struct {
 	CheckGenerated             bool   `mapstructure:"check-generated"`
 	DefaultSignifiesExhaustive bool   `mapstructure:"default-signifies-exhaustive"`
-	IgnorePattern              string `mapstructure:"ignore-pattern"` // Deprecated: this setting has no effect; see IgnoreEnumMembers instead.
 	IgnoreEnumMembers          string `mapstructure:"ignore-enum-members"`
-	CheckingStrategy           string `mapstructure:"checking-strategy"`
+	PackageScopeOnly           bool   `mapstructure:"package-scope-only"`
+
+	IgnorePattern    string `mapstructure:"ignore-pattern"`    // Deprecated: this setting has no effect; see IgnoreEnumMembers instead.
+	CheckingStrategy string `mapstructure:"checking-strategy"` // Deprecated.
 }
 
 type ExhaustiveStructSettings struct {
@@ -486,11 +501,15 @@ type VarCheckSettings struct {
 }
 
 type VarnamelenSettings struct {
-	MaxDistance   int      `mapstructure:"max-distance"`
-	MinNameLength int      `mapstructure:"min-name-length"`
-	CheckReceiver bool     `mapstructure:"check-receiver"`
-	CheckReturn   bool     `mapstructure:"check-return"`
-	IgnoreNames   []string `mapstructure:"ignore-names"`
+	MaxDistance        int      `mapstructure:"max-distance"`
+	MinNameLength      int      `mapstructure:"min-name-length"`
+	CheckReceiver      bool     `mapstructure:"check-receiver"`
+	CheckReturn        bool     `mapstructure:"check-return"`
+	IgnoreNames        []string `mapstructure:"ignore-names"`
+	IgnoreTypeAssertOk bool     `mapstructure:"ignore-type-assert-ok"`
+	IgnoreMapIndexOk   bool     `mapstructure:"ignore-map-index-ok"`
+	IgnoreChanRecvOk   bool     `mapstructure:"ignore-chan-recv-ok"`
+	IgnoreDecls        []string `mapstructure:"ignore-decls"`
 }
 
 type WhitespaceSettings struct {

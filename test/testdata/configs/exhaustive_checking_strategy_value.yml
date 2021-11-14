@@ -1,3 +1,0 @@
-linters-settings:
-  exhaustive:
-    checking-strategy: "value"

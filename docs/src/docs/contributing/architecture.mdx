@@ -73,7 +73,7 @@ In the function `NewExecutor` we do the following:
 2. init [cobra](https://github.com/spf13/cobra) commands
 3. parse config file using [viper](https://github.com/spf13/viper) and merge it with command line args.
 
-The following execution is controlled by `cobra`. If user a user executes `golangci-lint run`
+The following execution is controlled by `cobra`. If a user executes `golangci-lint run`
 then `cobra` executes `e.runCmd`.
 
 Different `cobra` commands have different runners, e.g. a `run` command is configured in the following way:
@@ -104,7 +104,7 @@ The primary execution function of the `run` command is `executeRun`.
 ## Load Packages
 
 Loading packages is listing all packages and their recursive dependencies for analysis.
-Also, depending from enabled linters set some parsing of a source code can be performed
+Also, depending on the enabled linters set some parsing of the source code can be performed
 at this step.
 
 Packages loading starts here:
