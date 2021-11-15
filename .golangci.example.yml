@@ -565,7 +565,7 @@ linters-settings:
     block-size: 1
 
   nolintlint:
-    # Disable to ensure that all nolint directives actually have an effect. Default is true.
+    # Disable to ensure that all nolint directives actually have an effect. Default is false.
     allow-unused: false
     # Disable to ensure that nolint directives don't have a leading space. Default is true.
     allow-leading-space: true
