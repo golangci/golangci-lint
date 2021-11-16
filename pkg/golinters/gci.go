@@ -3,6 +3,7 @@ package golinters
 import (
 	"bytes"
 	"fmt"
+	"strings"
 	"sync"
 
 	"github.com/daixiang0/gci/pkg/gci"
@@ -32,9 +33,30 @@ func NewGci() *goanalysis.Linter {
 		nil,
 	).WithContextSetter(func(lintCtx *linter.Context) {
 		localFlag := lintCtx.Settings().Gci.LocalPrefixes
+
+		if localFlag == "" && lintCtx.Settings().Gci.LocalPrefixModule {
+			var modules []string
+
+			for _, module := range lintCtx.Modules {
+				modules = append(modules, module.Path)
+			}
+
+			localFlag = strings.Join(modules, ",")
+		}
+
 		goimportsFlag := lintCtx.Settings().Goimports.LocalPrefixes
 		if localFlag == "" && goimportsFlag != "" {
 			localFlag = goimportsFlag
+		}
+
+		if localFlag == "" && lintCtx.Settings().Goimports.LocalPrefixModule {
+			var modules []string
+
+			for _, module := range lintCtx.Modules {
+				modules = append(modules, module.Path)
+			}
+
+			localFlag = strings.Join(modules, ",")
 		}
 
 		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {

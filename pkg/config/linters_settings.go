@@ -226,7 +226,8 @@ type FunlenSettings struct {
 }
 
 type GciSettings struct {
-	LocalPrefixes string `mapstructure:"local-prefixes"`
+	LocalPrefixes     string `mapstructure:"local-prefixes"`
+	LocalPrefixModule bool   `mapstructure:"local-prefix-module"`
 }
 
 type GocognitSettings struct {
