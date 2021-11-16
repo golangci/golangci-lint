@@ -277,7 +277,8 @@ type GoHeaderSettings struct {
 }
 
 type GoImportsSettings struct {
-	LocalPrefixes string `mapstructure:"local-prefixes"`
+	LocalPrefixes     string `mapstructure:"local-prefixes"`
+	LocalPrefixModule bool   `mapstructure:"local-prefix-module"`
 }
 
 type GoLintSettings struct {
