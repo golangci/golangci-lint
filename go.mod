@@ -66,7 +66,7 @@ require (
 	github.com/prometheus/procfs v0.6.0 // indirect
 	github.com/quasilyte/go-ruleguard/dsl v0.3.10
 	github.com/ryancurrah/gomodguard v1.2.3
-	github.com/ryanrolds/sqlclosecheck v0.3.0
+	github.com/ryanrolds/sqlclosecheck v0.3.1-0.20200727151525-d07596347ac2
 	github.com/sanposhiho/wastedassign/v2 v2.0.6
 	github.com/securego/gosec/v2 v2.9.1
 	github.com/shazow/go-diff v0.0.0-20160112020656-b6b7b6733b8c
