@@ -64,5 +64,5 @@ func (e *Executor) executePathCmd(_ *cobra.Command, args []string) {
 	}
 
 	fmt.Println(usedConfigFile)
-	os.Exit(0)
+	os.Exit(exitcodes.Success)
 }
