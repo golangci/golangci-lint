@@ -8,6 +8,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/golangci/golangci-lint/internal/cache"
+	"github.com/golangci/golangci-lint/pkg/exitcodes"
 	"github.com/golangci/golangci-lint/pkg/fsutils"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 )
@@ -51,7 +52,7 @@ func (e *Executor) executeCleanCache(_ *cobra.Command, args []string) {
 		e.log.Fatalf("Failed to remove dir %s: %s", cacheDir, err)
 	}
 
-	os.Exit(0)
+	os.Exit(exitcodes.Success)
 }
 
 func (e *Executor) executeCacheStatus(_ *cobra.Command, args []string) {
@@ -66,7 +67,7 @@ func (e *Executor) executeCacheStatus(_ *cobra.Command, args []string) {
 		fmt.Fprintf(logutils.StdOut, "Size: %s\n", fsutils.PrettifyBytesCount(cacheSizeBytes))
 	}
 
-	os.Exit(0)
+	os.Exit(exitcodes.Success)
 }
 
 func dirSizeBytes(path string) (int64, error) {

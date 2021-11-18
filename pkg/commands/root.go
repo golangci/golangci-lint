@@ -12,13 +12,14 @@ import (
 	"github.com/spf13/pflag"
 
 	"github.com/golangci/golangci-lint/pkg/config"
+	"github.com/golangci/golangci-lint/pkg/exitcodes"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 )
 
 func (e *Executor) persistentPreRun(_ *cobra.Command, _ []string) {
 	if e.cfg.Run.PrintVersion {
 		fmt.Fprintf(logutils.StdOut, "golangci-lint has version %s built from %s on %s\n", e.version, e.commit, e.date)
-		os.Exit(0)
+		os.Exit(exitcodes.Success)
 	}
 
 	runtime.GOMAXPROCS(e.cfg.Run.Concurrency)
