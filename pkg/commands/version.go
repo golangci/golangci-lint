@@ -3,7 +3,6 @@ package commands
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/golangci/golangci-lint/pkg/exitcodes"
 	"os"
 	"strings"
 
@@ -11,6 +10,7 @@ import (
 	"github.com/spf13/pflag"
 
 	"github.com/golangci/golangci-lint/pkg/config"
+	"github.com/golangci/golangci-lint/pkg/exitcodes"
 )
 
 type jsonVersion struct {
