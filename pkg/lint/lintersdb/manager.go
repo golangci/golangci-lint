@@ -493,6 +493,11 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/julz/importas"),
+		linter.NewConfig(golinters.NewSamealias()).
+			WithSince("v1.38.0").
+			WithPresets(linter.PresetStyle).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/LilithGames/samealias"),
 		linter.NewConfig(golinters.NewNilErr()).
 			WithSince("v1.38.0").
 			WithLoadForGoAnalysis().
