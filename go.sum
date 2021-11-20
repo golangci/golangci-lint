@@ -104,6 +104,8 @@ github.com/bkielbasa/cyclop v1.2.0 h1:7Jmnh0yL2DjKfw28p86YTd/B4lRGcNuu12sKE35sM7
 github.com/bkielbasa/cyclop v1.2.0/go.mod h1:qOI0yy6A7dYC4Zgsa72Ppm9kONl0RoIlPbzot9mhmeI=
 github.com/blizzy78/varnamelen v0.4.0 h1:TER4mfhjU4D4+k5VJgI/ZG8oT+yGqq7iEi0xjNdjI/U=
 github.com/blizzy78/varnamelen v0.4.0/go.mod h1:Mc0nLBKI1/FP0Ga4kqMOgBig0eS5QtR107JnMAb1Wuc=
+github.com/blizzy78/varnamelen v0.5.0 h1:v9LpMwxzTqAJC4lsD/jR7zWb8a66trcqhTEH4Mk6Fio=
+github.com/blizzy78/varnamelen v0.5.0/go.mod h1:Mc0nLBKI1/FP0Ga4kqMOgBig0eS5QtR107JnMAb1Wuc=
 github.com/bombsimon/wsl/v3 v3.3.0 h1:Mka/+kRLoQJq7g2rggtgQsjuI/K5Efd87WX96EWFxjM=
 github.com/bombsimon/wsl/v3 v3.3.0/go.mod h1:st10JtZYLE4D5sC7b8xV4zTKZwAQjCH/Hy2Pm1FNZIc=
 github.com/breml/bidichk v0.2.1 h1:SRNtZuLdfkxtocj+xyHXKC1Uv3jVi6EPYx+NHSTNQvE=
