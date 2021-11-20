@@ -36,7 +36,7 @@ func NewGodot() *goanalysis.Linter {
 		}
 
 		// Convert deprecated setting
-		if cfg.CheckAll { // nolint: staticcheck
+		if cfg.CheckAll { // nolint:staticcheck
 			settings.Scope = godot.TopLevelScope
 		}
 
