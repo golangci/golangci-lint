@@ -93,7 +93,7 @@ require (
 	github.com/yeya24/promlinter v0.1.0
 	golang.org/x/tools v0.1.7
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
-	honnef.co/go/tools v0.2.1
+	honnef.co/go/tools v0.2.2
 	mvdan.cc/gofumpt v0.1.1
 	mvdan.cc/interfacer v0.0.0-20180901003855-c20040233aed
 	mvdan.cc/lint v0.0.0-20170908181259-adc824a0674b // indirect
