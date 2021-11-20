@@ -59,7 +59,7 @@ require (
 	github.com/mitchellh/go-ps v1.0.0
 	github.com/moricho/tparallel v0.2.1
 	github.com/nakabonne/nestif v0.3.1
-	github.com/nishanths/exhaustive v0.6.0
+	github.com/nishanths/exhaustive v0.7.11
 	github.com/nishanths/predeclared v0.2.1
 	github.com/pkg/errors v0.9.1
 	github.com/polyfloyd/go-errorlint v0.0.0-20210722154253-910bb7978349
