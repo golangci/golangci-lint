@@ -552,7 +552,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithURL("https://github.com/breml/bidichk"),
 		linter.NewConfig(golinters.NewErrChkJSONFuncName(errchkjsonCfg)).
 			WithSince("1.44.0").
-			WithPresets(linter.PresetBugs, linter.PresetUnused).
+			WithPresets(linter.PresetBugs).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/breml/errchkjson"),
 
