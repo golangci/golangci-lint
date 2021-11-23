@@ -2,7 +2,6 @@ package golinters
 
 import (
 	"golang.org/x/tools/go/analysis"
-
 	"github.com/breml/errchkjson"
 
 	"github.com/golangci/golangci-lint/pkg/config"
