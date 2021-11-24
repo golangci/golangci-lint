@@ -519,6 +519,7 @@ type WhitespaceSettings struct {
 
 type WrapcheckSettings struct {
 	IgnoreSigs         []string `mapstructure:"ignoreSigs"`
+	IgnoreSigRegexps   []string `mapstructure:"ignoreSigRegexps"`
 	IgnorePackageGlobs []string `mapstructure:"ignorePackageGlobs"`
 }
 
