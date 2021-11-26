@@ -102,6 +102,7 @@ func enableLinterConfigs(lcs []*linter.Config, isEnabled func(lc *linter.Config)
 func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 	var bidichkCfg *config.BiDiChkSettings
 	var cyclopCfg *config.Cyclop
+	var errchkjsonCfg *config.ErrChkJSONSettings
 	var errorlintCfg *config.ErrorLintSettings
 	var exhaustiveCfg *config.ExhaustiveSettings
 	var exhaustiveStructCfg *config.ExhaustiveStructSettings
@@ -129,6 +130,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 	if m.cfg != nil {
 		bidichkCfg = &m.cfg.LintersSettings.BiDiChk
 		cyclopCfg = &m.cfg.LintersSettings.Cyclop
+		errchkjsonCfg = &m.cfg.LintersSettings.ErrChkJSON
 		errorlintCfg = &m.cfg.LintersSettings.ErrorLint
 		exhaustiveCfg = &m.cfg.LintersSettings.Exhaustive
 		exhaustiveStructCfg = &m.cfg.LintersSettings.ExhaustiveStruct
@@ -548,6 +550,11 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithSince("1.43.0").
 			WithPresets(linter.PresetBugs).
 			WithURL("https://github.com/breml/bidichk"),
+		linter.NewConfig(golinters.NewErrChkJSONFuncName(errchkjsonCfg)).
+			WithSince("1.44.0").
+			WithPresets(linter.PresetBugs).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/breml/errchkjson"),
 
 		// nolintlint must be last because it looks at the results of all the previous linters for unused nolint directives
 		linter.NewConfig(golinters.NewNoLintLint()).
