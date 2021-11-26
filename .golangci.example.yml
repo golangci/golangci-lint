@@ -762,9 +762,11 @@ linters-settings:
       - .WithMessage(
       - .WithMessagef(
       - .WithStack(
+    ignoreSigRegexps:
+      - \.New.*Error\(
     ignorePackageGlobs:
-        - encoding/*
-        - github.com/pkg/*
+      - encoding/*
+      - github.com/pkg/*
 
   wsl:
     # See https://github.com/bombsimon/wsl/blob/master/doc/configuration.md for
