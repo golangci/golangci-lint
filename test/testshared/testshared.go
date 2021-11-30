@@ -76,6 +76,11 @@ func (r *RunResult) ExpectOutputContains(s string) *RunResult {
 	return r
 }
 
+func (r *RunResult) ExpectOutputNotContains(s string) *RunResult {
+	assert.NotContains(r.t, r.output, s, "exit code is %d", r.exitCode)
+	return r
+}
+
 func (r *RunResult) ExpectOutputEq(s string) *RunResult {
 	assert.Equal(r.t, s, r.output, "exit code is %d", r.exitCode)
 	return r
