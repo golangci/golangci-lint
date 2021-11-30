@@ -97,6 +97,23 @@ func TestGciLocal(t *testing.T) {
 		ExpectHasIssue("testdata/gci/gci.go:7: File is not `gci`-ed")
 }
 
+func TestMultipleOutputs(t *testing.T) {
+	sourcePath := filepath.Join(testdataDir, "gci", "gci.go")
+	args := []string{
+		"--disable-all", "--print-issued-lines=false", "--print-linter-name=false", "--out-format=line-number,json",
+		sourcePath,
+	}
+	rc := extractRunContextFromComments(t, sourcePath)
+	args = append(args, rc.args...)
+
+	cfg, err := yaml.Marshal(rc.config)
+	require.NoError(t, err)
+
+	testshared.NewLintRunner(t).RunWithYamlConfig(string(cfg), args...).
+		ExpectHasIssue("testdata/gci/gci.go:7: File is not `gci`-ed").
+		ExpectOutputContains(`"Issues":[`)
+}
+
 func saveConfig(t *testing.T, cfg map[string]interface{}) (cfgPath string, finishFunc func()) {
 	f, err := os.CreateTemp("", "golangci_lint_test")
 	require.NoError(t, err)
