@@ -115,6 +115,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 	var nilNilCfg *config.NilNilSettings
 	var predeclaredCfg *config.PredeclaredSettings
 	var reviveCfg *config.ReviveSettings
+	var samealiasCfg *config.SameAlias
 	var staticcheckCfg *config.StaticCheckSettings
 	var stylecheckCfg *config.StaticCheckSettings
 	var tagliatelleCfg *config.TagliatelleSettings
@@ -142,6 +143,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		nilNilCfg = &m.cfg.LintersSettings.NilNil
 		predeclaredCfg = &m.cfg.LintersSettings.Predeclared
 		reviveCfg = &m.cfg.LintersSettings.Revive
+		samealiasCfg = &m.cfg.LintersSettings.SameAlias
 		staticcheckCfg = &m.cfg.LintersSettings.Staticcheck
 		stylecheckCfg = &m.cfg.LintersSettings.Stylecheck
 		tagliatelleCfg = &m.cfg.LintersSettings.Tagliatelle
@@ -493,8 +495,8 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/julz/importas"),
-		linter.NewConfig(golinters.NewSamealias()).
-			WithSince("v1.38.0").
+		linter.NewConfig(golinters.NewSamealias(samealiasCfg)).
+			WithSince("v1.42.0").
 			WithPresets(linter.PresetStyle).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/LilithGames/samealias"),
