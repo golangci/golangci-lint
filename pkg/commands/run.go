@@ -439,7 +439,7 @@ func (e *Executor) runAndPrint(ctx context.Context, args []string) error {
 }
 
 func (e *Executor) createWriter(path string) (io.Writer, bool, error) {
-	if path == "stdout" {
+	if path == "" || path == "stdout" {
 		return logutils.StdOut, false, nil
 	}
 	if path == "stderr" {
