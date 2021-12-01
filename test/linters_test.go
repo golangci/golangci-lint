@@ -3,9 +3,9 @@ package test
 import (
 	"bufio"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"os/exec"
+	"path"
 	"path/filepath"
 	"strings"
 	"testing"
@@ -134,12 +134,7 @@ func TestStderrOutput(t *testing.T) {
 }
 
 func TestFileOutput(t *testing.T) {
-	f, err := os.CreateTemp("", "golangci_lint_test_result")
-	require.NoError(t, err)
-	f.Close()
-
-	resultPath := f.Name()
-	defer os.Remove(resultPath)
+	resultPath := path.Join(t.TempDir(), "golangci_lint_test_result")
 
 	sourcePath := filepath.Join(testdataDir, "gci", "gci.go")
 	args := []string{
@@ -157,7 +152,7 @@ func TestFileOutput(t *testing.T) {
 		ExpectHasIssue("testdata/gci/gci.go:7: File is not `gci`-ed").
 		ExpectOutputNotContains(`"Issues":[`)
 
-	b, err := ioutil.ReadFile(resultPath)
+	b, err := os.ReadFile(resultPath)
 	require.NoError(t, err)
 	require.Contains(t, string(b), `"Issues":[`)
 }
