@@ -6,7 +6,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@emotion/react": "^11.5.0",
+    "@emotion/react": "^11.7.0",
     "@emotion/styled": "^11.3.0",
     "@mdx-js/mdx": "^1.6.22",
     "@mdx-js/react": "^1.6.16",
