@@ -555,6 +555,10 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetBugs).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/breml/errchkjson"),
+		linter.NewConfig(golinters.NewMultiImport()).
+			WithSince("1.44.0").
+			WithPresets(linter.PresetStyle).
+			WithLoadForGoAnalysis(),
 
 		// nolintlint must be last because it looks at the results of all the previous linters for unused nolint directives
 		linter.NewConfig(golinters.NewNoLintLint()).
