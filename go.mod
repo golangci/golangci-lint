@@ -8,7 +8,7 @@ require (
 	github.com/Antonboom/nilnil v0.1.0
 	github.com/BurntSushi/toml v0.4.1
 	github.com/Djarvur/go-err113 v0.0.0-20210108212216-aea10b59be24
-	github.com/LilithGames/samealias v1.0.2
+	github.com/LilithGames/samealias v1.0.3
 	github.com/OpenPeeDeeP/depguard v1.0.1
 	github.com/alexkohler/prealloc v1.0.0
 	github.com/ashanbrown/forbidigo v1.2.0
