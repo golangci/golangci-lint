@@ -69,7 +69,7 @@ require (
 	github.com/ryancurrah/gomodguard v1.2.3
 	github.com/ryanrolds/sqlclosecheck v0.3.0
 	github.com/sanposhiho/wastedassign/v2 v2.0.6
-	github.com/securego/gosec/v2 v2.9.3
+	github.com/securego/gosec/v2 v2.9.5
 	github.com/shazow/go-diff v0.0.0-20160112020656-b6b7b6733b8c
 	github.com/shirou/gopsutil/v3 v3.21.11
 	github.com/sirupsen/logrus v1.8.1
@@ -92,7 +92,7 @@ require (
 	github.com/uudashr/gocognit v1.0.5
 	github.com/valyala/quicktemplate v1.7.0
 	github.com/yeya24/promlinter v0.1.0
-	golang.org/x/tools v0.1.8-0.20211102182255-bb4add04ddef
+	golang.org/x/tools v0.1.8
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
 	honnef.co/go/tools v0.2.2
 	mvdan.cc/gofumpt v0.2.0
