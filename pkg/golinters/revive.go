@@ -235,7 +235,7 @@ func safeTomlSlice(r []interface{}) []interface{} {
 }
 
 // This element is not exported by revive, so we need copy the code.
-// Extracted from https://github.com/mgechev/revive/blob/389ba853b0b3587f0c3b71b5f0c61ea4e23928ec/config/config.go#L15
+// Extracted from https://github.com/mgechev/revive/blob/111721be475b73b5a2304dd01ccbcab587357fca/config/config.go#L15
 var defaultRules = []lint.Rule{
 	&rule.VarDeclarationsRule{},
 	&rule.PackageCommentsRule{},
@@ -257,12 +257,80 @@ var defaultRules = []lint.Rule{
 	&rule.ContextAsArgumentRule{},
 }
 
+var allRules = append([]lint.Rule{
+	&rule.ArgumentsLimitRule{},
+	&rule.CyclomaticRule{},
+	&rule.FileHeaderRule{},
+	&rule.EmptyBlockRule{},
+	&rule.SuperfluousElseRule{},
+	&rule.ConfusingNamingRule{},
+	&rule.GetReturnRule{},
+	&rule.ModifiesParamRule{},
+	&rule.ConfusingResultsRule{},
+	&rule.DeepExitRule{},
+	&rule.UnusedParamRule{},
+	&rule.UnreachableCodeRule{},
+	&rule.AddConstantRule{},
+	&rule.FlagParamRule{},
+	&rule.UnnecessaryStmtRule{},
+	&rule.StructTagRule{},
+	&rule.ModifiesValRecRule{},
+	&rule.ConstantLogicalExprRule{},
+	&rule.BoolLiteralRule{},
+	&rule.RedefinesBuiltinIDRule{},
+	&rule.ImportsBlacklistRule{},
+	&rule.FunctionResultsLimitRule{},
+	&rule.MaxPublicStructsRule{},
+	&rule.RangeValInClosureRule{},
+	&rule.RangeValAddress{},
+	&rule.WaitGroupByValueRule{},
+	&rule.AtomicRule{},
+	&rule.EmptyLinesRule{},
+	&rule.LineLengthLimitRule{},
+	&rule.CallToGCRule{},
+	&rule.DuplicatedImportsRule{},
+	&rule.ImportShadowingRule{},
+	&rule.BareReturnRule{},
+	&rule.UnusedReceiverRule{},
+	&rule.UnhandledErrorRule{},
+	&rule.CognitiveComplexityRule{},
+	&rule.StringOfIntRule{},
+	&rule.StringFormatRule{},
+	&rule.EarlyReturnRule{},
+	&rule.UnconditionalRecursionRule{},
+	&rule.IdenticalBranchesRule{},
+	&rule.DeferRule{},
+	&rule.UnexportedNamingRule{},
+	&rule.FunctionLength{},
+	&rule.NestedStructs{},
+	&rule.IfReturnRule{},
+	&rule.UselessBreak{},
+}, defaultRules...)
+
 // This element is not exported by revive, so we need copy the code.
-// Extracted from https://github.com/mgechev/revive/blob/389ba853b0b3587f0c3b71b5f0c61ea4e23928ec/config/config.go#L133
+// Extracted from https://github.com/mgechev/revive/blob/111721be475b73b5a2304dd01ccbcab587357fca/config/config.go#L143
 func normalizeConfig(cfg *lint.Config) {
+	const defaultConfidence = 0.8
 	if cfg.Confidence == 0 {
-		cfg.Confidence = 0.8
+		cfg.Confidence = defaultConfidence
 	}
+
+	if len(cfg.Rules) == 0 {
+		cfg.Rules = map[string]lint.RuleConfig{}
+	}
+	if cfg.EnableAllRules {
+		// Add to the configuration all rules not yet present in it
+		for _, rule := range allRules {
+			ruleName := rule.Name()
+			_, alreadyInConf := cfg.Rules[ruleName]
+			if alreadyInConf {
+				continue
+			}
+			// Add the rule with an empty conf for
+			cfg.Rules[ruleName] = lint.RuleConfig{}
+		}
+	}
+
 	severity := cfg.Severity
 	if severity != "" {
 		for k, v := range cfg.Rules {
@@ -281,7 +349,7 @@ func normalizeConfig(cfg *lint.Config) {
 }
 
 // This element is not exported by revive, so we need copy the code.
-// Extracted from https://github.com/mgechev/revive/blob/389ba853b0b3587f0c3b71b5f0c61ea4e23928ec/config/config.go#L182
+// Extracted from https://github.com/mgechev/revive/blob/111721be475b73b5a2304dd01ccbcab587357fca/config/config.go#L210
 func defaultConfig() *lint.Config {
 	defaultConfig := lint.Config{
 		Confidence: 0.0,
