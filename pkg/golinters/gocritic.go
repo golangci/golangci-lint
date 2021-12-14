@@ -121,7 +121,6 @@ func configureCheckerInfo(
 // Maybe in the future, this kind of conversion will be done in go-critic itself.
 func normalizeCheckerParamsValue(lintCtx *linter.Context, p interface{}) interface{} {
 	rv := reflect.ValueOf(p)
-	// nolint:exhaustive // only 3 types (int, bool, and string) are supported by CheckerParam.Value
 	switch rv.Type().Kind() {
 	case reflect.Int64, reflect.Int32, reflect.Int16, reflect.Int8, reflect.Int:
 		return int(rv.Int())
