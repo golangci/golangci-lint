@@ -16,6 +16,29 @@ Also, the action creates GitHub annotations for found issues: you don't need to 
 
 ![GitHub annotations of the action](./annotations.png)
 
+### Woodpecker CI
+
+It's very easy to use `golangci-lint` with a [Woodpecker CI](https://woodpecker-ci.org/) installation, be that a self-hosted instance or otherwise. Just add a pipeline step for `golangci-lint` in your Woodpecker CI configuration file (usually `.woodpecker.yml`) as follows:
+
+```yaml
+golangci-lint:
+  image: golangci/golangci-lint:v1.43.0
+  commands:
+    - golangci-lint run
+```
+
+A complete Woodpecker CI configuration file running only `golangci-lint`, therefore, would look like this:
+
+```yaml
+%YAML 1.1
+---
+pipeline:
+  golangci-lint:
+    image: golangci/golangci-lint:v1.43.0
+    commands:
+      - golangci-lint run
+```
+
 ### Other CI
 
 It's important to have reproducible CI: don't start to fail all builds at the same time.
