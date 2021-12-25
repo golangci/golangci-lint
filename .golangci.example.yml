@@ -1117,6 +1117,10 @@ linters-settings:
     force-short-decl-cuddling: false
     strict-append: true
 
+  maintidx:
+    # show functions with maintainability index < N only.
+    under: 20
+
   # The custom section can be used to define linter plugins to be loaded at runtime.
   # See README doc for more info.
   custom:
