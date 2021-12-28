@@ -3,20 +3,25 @@ package config
 import "github.com/pkg/errors"
 
 var defaultLintersSettings = LintersSettings{
-	Lll: LllSettings{
-		LineLength: 120,
-		TabWidth:   1,
+	Dogsled: DogsledSettings{
+		MaxBlankIdentifiers: 2,
 	},
-	Unparam: UnparamSettings{
-		Algo: "cha",
+	ErrorLint: ErrorLintSettings{
+		Errorf:     true,
+		Asserts:    true,
+		Comparison: true,
 	},
-	Nakedret: NakedretSettings{
-		MaxFuncLines: 30,
+	Exhaustive: ExhaustiveSettings{
+		CheckGenerated:             false,
+		DefaultSignifiesExhaustive: false,
+		IgnoreEnumMembers:          "",
+		CheckingStrategy:           "value",
 	},
-	Prealloc: PreallocSettings{
-		Simple:     true,
-		RangeLoops: true,
-		ForLoops:   false,
+	Forbidigo: ForbidigoSettings{
+		ExcludeGodocExamples: true,
+	},
+	Gocognit: GocognitSettings{
+		MinComplexity: 30,
 	},
 	Gocritic: GocriticSettings{
 		SettingsPerCheck: map[string]GocriticCheckSettings{},
@@ -24,11 +29,44 @@ var defaultLintersSettings = LintersSettings{
 	Godox: GodoxSettings{
 		Keywords: []string{},
 	},
-	Dogsled: DogsledSettings{
-		MaxBlankIdentifiers: 2,
+	Gofumpt: GofumptSettings{
+		LangVersion: "",
+		ExtraRules:  false,
 	},
-	Gocognit: GocognitSettings{
-		MinComplexity: 30,
+	Ifshort: IfshortSettings{
+		MaxDeclLines: 1,
+		MaxDeclChars: 30,
+	},
+	Lll: LllSettings{
+		LineLength: 120,
+		TabWidth:   1,
+	},
+	Nakedret: NakedretSettings{
+		MaxFuncLines: 30,
+	},
+	Nestif: NestifSettings{
+		MinComplexity: 5,
+	},
+	NoLintLint: NoLintLintSettings{
+		RequireExplanation: false,
+		AllowLeadingSpace:  true,
+		RequireSpecific:    false,
+		AllowUnused:        false,
+	},
+	Prealloc: PreallocSettings{
+		Simple:     true,
+		RangeLoops: true,
+		ForLoops:   false,
+	},
+	Predeclared: PredeclaredSettings{
+		Ignore:    "",
+		Qualified: false,
+	},
+	Testpackage: TestpackageSettings{
+		SkipRegexp: `(export|internal)_test\.go`,
+	},
+	Unparam: UnparamSettings{
+		Algo: "cha",
 	},
 	WSL: WSLSettings{
 		StrictAppend:                     true,
@@ -41,44 +79,6 @@ var defaultLintersSettings = LintersSettings{
 		ForceCuddleErrCheckAndAssign:     false,
 		ForceExclusiveShortDeclarations:  false,
 		ForceCaseTrailingWhitespaceLimit: 0,
-	},
-	NoLintLint: NoLintLintSettings{
-		RequireExplanation: false,
-		AllowLeadingSpace:  true,
-		RequireSpecific:    false,
-		AllowUnused:        false,
-	},
-	Testpackage: TestpackageSettings{
-		SkipRegexp: `(export|internal)_test\.go`,
-	},
-	Nestif: NestifSettings{
-		MinComplexity: 5,
-	},
-	Exhaustive: ExhaustiveSettings{
-		CheckGenerated:             false,
-		DefaultSignifiesExhaustive: false,
-		IgnoreEnumMembers:          "",
-		CheckingStrategy:           "value",
-	},
-	Gofumpt: GofumptSettings{
-		LangVersion: "",
-		ExtraRules:  false,
-	},
-	ErrorLint: ErrorLintSettings{
-		Errorf:     true,
-		Asserts:    true,
-		Comparison: true,
-	},
-	Ifshort: IfshortSettings{
-		MaxDeclLines: 1,
-		MaxDeclChars: 30,
-	},
-	Predeclared: PredeclaredSettings{
-		Ignore:    "",
-		Qualified: false,
-	},
-	Forbidigo: ForbidigoSettings{
-		ExcludeGodocExamples: true,
 	},
 }
 
@@ -114,8 +114,8 @@ type LintersSettings struct {
 	Gosimple         StaticCheckSettings
 	Govet            GovetSettings
 	Ifshort          IfshortSettings
-	Ireturn          IreturnSettings
 	ImportAs         ImportAsSettings
+	Ireturn          IreturnSettings
 	Lll              LllSettings
 	Makezero         MakezeroSettings
 	Maligned         MalignedSettings
@@ -134,9 +134,9 @@ type LintersSettings struct {
 	Structcheck      StructCheckSettings
 	Stylecheck       StaticCheckSettings
 	Tagliatelle      TagliatelleSettings
+	Tenv             TenvSettings
 	Testpackage      TestpackageSettings
 	Thelper          ThelperSettings
-	Tenv             TenvSettings
 	Unparam          UnparamSettings
 	Unused           StaticCheckSettings
 	Varcheck         VarCheckSettings
@@ -166,11 +166,6 @@ type Cyclop struct {
 	SkipTests      bool    `mapstructure:"skip-tests"`
 }
 
-type ErrChkJSONSettings struct {
-	CheckErrorFreeEncoding bool `mapstructure:"check-error-free-encoding"`
-	ReportNoExported       bool `mapstructure:"report-no-exported"`
-}
-
 type DepGuardSettings struct {
 	ListType                 string `mapstructure:"list-type"`
 	Packages                 []string
@@ -196,6 +191,11 @@ type ErrcheckSettings struct {
 	Exclude string `mapstructure:"exclude"`
 }
 
+type ErrChkJSONSettings struct {
+	CheckErrorFreeEncoding bool `mapstructure:"check-error-free-encoding"`
+	ReportNoExported       bool `mapstructure:"report-no-exported"`
+}
+
 type ErrorLintSettings struct {
 	Errorf     bool `mapstructure:"errorf"`
 	Asserts    bool `mapstructure:"asserts"`
@@ -214,11 +214,6 @@ type ExhaustiveSettings struct {
 
 type ExhaustiveStructSettings struct {
 	StructPatterns []string `mapstructure:"struct-patterns"`
-}
-
-type IreturnSettings struct {
-	Allow  []string `mapstructure:"allow"`
-	Reject []string `mapstructure:"reject"`
 }
 
 type ForbidigoSettings struct {
@@ -364,6 +359,11 @@ type ImportAsSettings struct {
 type ImportAsAlias struct {
 	Pkg   string
 	Alias string
+}
+
+type IreturnSettings struct {
+	Allow  []string `mapstructure:"allow"`
+	Reject []string `mapstructure:"reject"`
 }
 
 type LllSettings struct {
