@@ -158,6 +158,8 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 
 	const megacheckName = "megacheck"
 
+	// The linters are in the alphabetical order (case-insensitive).
+	// When a new linter is added the version in `WithSince(...)` must be the next version of golangci-lint.
 	lcs := []*linter.Config{
 		linter.NewConfig(golinters.NewAsciicheck()).
 			WithSince("v1.26.0").
@@ -233,6 +235,12 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/Antonboom/errname"),
 
+		linter.NewConfig(golinters.NewErrorLint(errorlintCfg)).
+			WithSince("v1.32.0").
+			WithPresets(linter.PresetBugs, linter.PresetError).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/polyfloyd/go-errorlint"),
+
 		linter.NewConfig(golinters.NewExhaustive(exhaustiveCfg)).
 			WithSince(" v1.28.0").
 			WithPresets(linter.PresetBugs).
@@ -272,39 +280,6 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithAutoFix().
 			WithURL("https://github.com/daixiang0/gci"),
 
-		linter.NewConfig(golinters.NewGocritic()).
-			WithSince("v1.12.0").
-			WithPresets(linter.PresetStyle, linter.PresetMetaLinter).
-			WithLoadForGoAnalysis().
-			WithURL("https://github.com/go-critic/go-critic"),
-
-		linter.NewConfig(golinters.NewGoerr113()).
-			WithSince("v1.26.0").
-			WithPresets(linter.PresetStyle, linter.PresetError).
-			WithLoadForGoAnalysis().
-			WithURL("https://github.com/Djarvur/go-err113"),
-
-		linter.NewConfig(golinters.NewErrorLint(errorlintCfg)).
-			WithSince("v1.32.0").
-			WithPresets(linter.PresetBugs, linter.PresetError).
-			WithLoadForGoAnalysis().
-			WithURL("https://github.com/polyfloyd/go-errorlint"),
-
-		linter.NewConfig(golinters.NewGoHeader()).
-			WithSince("v1.28.0").
-			WithPresets(linter.PresetStyle).
-			WithURL("https://github.com/denis-tingajkin/go-header"),
-
-		linter.NewConfig(golinters.NewGoMND(m.cfg)).
-			WithSince("v1.22.0").
-			WithPresets(linter.PresetStyle).
-			WithURL("https://github.com/tommy-muehle/go-mnd"),
-
-		linter.NewConfig(golinters.NewGoPrintfFuncName()).
-			WithSince("v1.23.0").
-			WithPresets(linter.PresetStyle).
-			WithURL("https://github.com/jirfag/go-printf-func-name"),
-
 		linter.NewConfig(golinters.NewGochecknoglobals()).
 			WithSince("v1.12.0").
 			WithPresets(linter.PresetStyle).
@@ -325,6 +300,12 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/jgautheron/goconst"),
 
+		linter.NewConfig(golinters.NewGocritic()).
+			WithSince("v1.12.0").
+			WithPresets(linter.PresetStyle, linter.PresetMetaLinter).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/go-critic/go-critic"),
+
 		linter.NewConfig(golinters.NewGocyclo()).
 			WithSince("v1.0.0").
 			WithPresets(linter.PresetComplexity).
@@ -341,6 +322,12 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle, linter.PresetComment).
 			WithURL("https://github.com/matoous/godox"),
 
+		linter.NewConfig(golinters.NewGoerr113()).
+			WithSince("v1.26.0").
+			WithPresets(linter.PresetStyle, linter.PresetError).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/Djarvur/go-err113"),
+
 		linter.NewConfig(golinters.NewGofmt()).
 			WithSince("v1.0.0").
 			WithPresets(linter.PresetFormatting).
@@ -353,11 +340,28 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithAutoFix().
 			WithURL("https://github.com/mvdan/gofumpt"),
 
+		linter.NewConfig(golinters.NewGoHeader()).
+			WithSince("v1.28.0").
+			WithPresets(linter.PresetStyle).
+			WithURL("https://github.com/denis-tingajkin/go-header"),
+
 		linter.NewConfig(golinters.NewGoimports()).
 			WithSince("v1.20.0").
 			WithPresets(linter.PresetFormatting, linter.PresetImport).
 			WithAutoFix().
 			WithURL("https://godoc.org/golang.org/x/tools/cmd/goimports"),
+
+		linter.NewConfig(golinters.NewGolint()).
+			WithSince("v1.0.0").
+			WithLoadForGoAnalysis().
+			WithPresets(linter.PresetStyle).
+			WithURL("https://github.com/golang/lint").
+			Deprecated("The repository of the linter has been archived by the owner.", "v1.41.0", "revive"),
+
+		linter.NewConfig(golinters.NewGoMND(m.cfg)).
+			WithSince("v1.22.0").
+			WithPresets(linter.PresetStyle).
+			WithURL("https://github.com/tommy-muehle/go-mnd"),
 
 		linter.NewConfig(golinters.NewGoModDirectives(goModDirectivesCfg)).
 			WithSince("v1.39.0").
@@ -368,6 +372,11 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithSince("v1.25.0").
 			WithPresets(linter.PresetStyle, linter.PresetImport, linter.PresetModule).
 			WithURL("https://github.com/ryancurrah/gomodguard"),
+
+		linter.NewConfig(golinters.NewGoPrintfFuncName()).
+			WithSince("v1.23.0").
+			WithPresets(linter.PresetStyle).
+			WithURL("https://github.com/jirfag/go-printf-func-name"),
 
 		linter.NewConfig(golinters.NewGosec(gosecCfg)).
 			WithSince("v1.0.0").
@@ -418,13 +427,6 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/butuzov/ireturn"),
-
-		linter.NewConfig(golinters.NewGolint()).
-			WithSince("v1.0.0").
-			WithLoadForGoAnalysis().
-			WithPresets(linter.PresetStyle).
-			WithURL("https://github.com/golang/lint").
-			Deprecated("The repository of the linter has been archived by the owner.", "v1.41.0", "revive"),
 
 		linter.NewConfig(golinters.NewLLL()).
 			WithSince("v1.8.0").
@@ -624,16 +626,16 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithAutoFix().
 			WithURL("https://github.com/ultraware/whitespace"),
 
-		linter.NewConfig(golinters.NewWSL()).
-			WithSince("v1.20.0").
-			WithPresets(linter.PresetStyle).
-			WithURL("https://github.com/bombsimon/wsl"),
-
 		linter.NewConfig(golinters.NewWrapcheck(wrapcheckCfg)).
 			WithSince("v1.32.0").
 			WithPresets(linter.PresetStyle, linter.PresetError).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/tomarrell/wrapcheck"),
+
+		linter.NewConfig(golinters.NewWSL()).
+			WithSince("v1.20.0").
+			WithPresets(linter.PresetStyle).
+			WithURL("https://github.com/bombsimon/wsl"),
 
 		// nolintlint must be last because it looks at the results of all the previous linters for unused nolint directives
 		linter.NewConfig(golinters.NewNoLintLint()).
