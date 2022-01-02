@@ -1,4 +1,5 @@
 //args: -Egocritic
+//config_path: testdata/configs/gocritic.yml
 package p
 
 func gocritic() {
