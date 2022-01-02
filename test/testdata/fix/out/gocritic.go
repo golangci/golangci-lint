@@ -1,5 +1,6 @@
 //args: -Egocritic
-//config_path: testdata/configs/gocritic.yml
+//config: linters-settings.gocritic.enabled-checks=ruleguard
+//config: linters-settings.gocritic.settings.ruleguard.rules=ruleguard/rangeExprCopy.go
 package p
 
 func gocritic() {
