@@ -48,8 +48,9 @@ Dynamic rules are written declaratively with AST patterns, filters, report messa
 			}
 
 			linterCtx.SetPackageInfo(pass.TypesInfo, pass.Pkg)
-			var res []goanalysis.Issue
 			pkgIssues := runGocriticOnPackage(linterCtx, enabledCheckers, pass.Files)
+			res := make([]goanalysis.Issue, 0, len(pkgIssues))
+
 			for i := range pkgIssues {
 				res = append(res, goanalysis.NewIssue(&pkgIssues[i], pass))
 			}
@@ -179,11 +180,23 @@ func runGocriticOnFile(ctx *gocriticlinter.Context, f *ast.File, checkers []*goc
 		// as read-only structure, so no copying is required.
 		for _, warn := range c.Check(f) {
 			pos := ctx.FileSet.Position(warn.Node.Pos())
-			res = append(res, result.Issue{
+			issue := result.Issue{
 				Pos:        pos,
 				Text:       fmt.Sprintf("%s: %s", c.Info.Name, warn.Text),
 				FromLinter: gocriticName,
-			})
+			}
+
+			if warn.HasQuickFix() {
+				issue.Replacement = &result.Replacement{
+					Inline: &result.InlineFix{
+						StartCol:  pos.Column - 1,
+						Length:    int(warn.Node.End() - warn.Node.Pos()),
+						NewString: string(warn.Suggestion.Replacement),
+					},
+				}
+			}
+
+			res = append(res, issue)
 		}
 	}
 
