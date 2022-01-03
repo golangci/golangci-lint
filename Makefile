@@ -29,6 +29,8 @@ test: build
 	GL_TEST_RUN=1 go test -v -parallel 2 ./...
 .PHONY: test
 
+# ex: T=gofmt.go make test_fix
+# the value of `T` is the name of a file from `test/testdata/fix`
 test_fix: build
 	GL_TEST_RUN=1 go test -v ./test -count 1 -run TestFix/$T
 .PHONY: test_fix

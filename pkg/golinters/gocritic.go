@@ -190,7 +190,7 @@ func runGocriticOnFile(ctx *gocriticlinter.Context, f *ast.File, checkers []*goc
 				issue.Replacement = &result.Replacement{
 					Inline: &result.InlineFix{
 						StartCol:  pos.Column - 1,
-						Length:    int(warn.Node.End()) - int(warn.Node.Pos()),
+						Length:    int(warn.Node.End() - warn.Node.Pos()),
 						NewString: string(warn.Suggestion.Replacement),
 					},
 				}
