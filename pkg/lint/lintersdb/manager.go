@@ -126,6 +126,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 	var varnamelenCfg *config.VarnamelenSettings
 	var wrapcheckCfg *config.WrapcheckSettings
 	var nlreturnCfg *config.NlreturnSettings
+	var decorderCfg *config.DecorderSettings
 
 	if m.cfg != nil {
 		bidichkCfg = &m.cfg.LintersSettings.BiDiChk
@@ -154,6 +155,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		varnamelenCfg = &m.cfg.LintersSettings.Varnamelen
 		wrapcheckCfg = &m.cfg.LintersSettings.Wrapcheck
 		nlreturnCfg = &m.cfg.LintersSettings.Nlreturn
+		decorderCfg = &m.cfg.LintersSettings.Decorder
 	}
 
 	const megacheckName = "megacheck"
@@ -315,6 +317,11 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetPerformance).
 			WithURL("https://github.com/mdempsky/maligned").
 			Deprecated("The repository of the linter has been archived by the owner.", "v1.38.0", "govet 'fieldalignment'"),
+		linter.NewConfig(golinters.NewDecorder(decorderCfg)).
+			WithSince("v1.44.0").
+			WithLoadForGoAnalysis().
+			WithPresets(linter.PresetFormatting, linter.PresetStyle).
+			WithURL("https://gitlab.com/bosi/decorder"),
 		linter.NewConfig(golinters.NewDepguard()).
 			WithSince("v1.4.0").
 			WithLoadForGoAnalysis().
