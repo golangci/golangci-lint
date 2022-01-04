@@ -747,6 +747,9 @@ linters-settings:
       - name: exported
         severity: warning
         disable: false
+        arguments:
+        - "checkPrivateReceivers"
+        - "sayRepetitiveInsteadOfStutters"
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#file-header
       - name: file-header
         severity: warning
@@ -761,6 +764,7 @@ linters-settings:
       - name: function-result-limit
         severity: warning
         disable: false
+        arguments: [ 2 ]
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#function-length
       - name: function-length
         severity: warning
@@ -878,8 +882,8 @@ linters-settings:
         severity: warning
         disable: false
         arguments:
-          - - ID
-          - - VM
+        - [ "ID" ] # Allowlist
+        - [ "VM" ] # Denylist
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#var-declaration
       - name: var-declaration
         severity: warning
