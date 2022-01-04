@@ -3,9 +3,9 @@ package printers
 import (
 	"context"
 	"encoding/xml"
+	"io"
 	"strings"
 
-	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
@@ -35,13 +35,14 @@ type failureXML struct {
 }
 
 type JunitXML struct {
+	w io.Writer
 }
 
-func NewJunitXML() *JunitXML {
-	return &JunitXML{}
+func NewJunitXML(w io.Writer) *JunitXML {
+	return &JunitXML{w: w}
 }
 
-func (JunitXML) Print(ctx context.Context, issues []result.Issue) error {
+func (p JunitXML) Print(ctx context.Context, issues []result.Issue) error {
 	suites := make(map[string]testSuiteXML) // use a map to group by file
 
 	for ind := range issues {
@@ -70,7 +71,7 @@ func (JunitXML) Print(ctx context.Context, issues []result.Issue) error {
 		res.TestSuites = append(res.TestSuites, val)
 	}
 
-	enc := xml.NewEncoder(logutils.StdOut)
+	enc := xml.NewEncoder(p.w)
 	enc.Indent("", "  ")
 	if err := enc.Encode(res); err != nil {
 		return err

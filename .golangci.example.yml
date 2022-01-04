@@ -62,6 +62,10 @@ run:
 output:
   # colored-line-number|line-number|json|tab|checkstyle|code-climate|junit-xml|github-actions
   # default is "colored-line-number"
+  # multiple can be specified by separating them by comma, output can be provided
+  # for each of them by separating format name and path by colon symbol.
+  # Output path can be either `stdout`, `stderr` or path to the file to write to.
+  # Example "checkstyle:report.json,colored-line-number"
   format: colored-line-number
 
   # print lines of code with issue, default is true
