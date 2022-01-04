@@ -113,13 +113,16 @@ linters-settings:
       - func
 
     # if true, order of declarations is not checked at all
-    disable-dec-order-check: true
+    # default: true (disabled)
+    disable-dec-order-check: false
 
     # if true, init func can be anywhere in file (must not be declared before all other functions)
-    disable-init-func-first-check: true
+    # default: true (disabled)
+    disable-init-func-first-check: false
 
     # if true, multiple global type, const and var declarations are allowed
-    disable-dec-num-check: true
+    # default: true (disabled)
+    disable-dec-num-check: false
 
   dogsled:
     # checks assignments with too many blank identifiers; default is 2

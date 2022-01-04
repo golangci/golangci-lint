@@ -15,22 +15,24 @@ func NewDecorder(settings *config.DecorderSettings) *goanalysis.Linter {
 
 	analyzers := []*analysis.Analyzer{a}
 
-	var cfg map[string]map[string]interface{}
+	// disable all rules/checks by default
+	cfg := map[string]interface{}{
+		"disable-dec-num-check":         true,
+		"disable-dec-order-check":       true,
+		"disable-init-func-first-check": true,
+	}
+
 	if settings != nil {
-		cfg = map[string]map[string]interface{}{
-			a.Name: {
-				"dec-order":                     strings.Join(settings.DecOrder, ","),
-				"disable-dec-num-check":         settings.DisableDecNumCheck,
-				"disable-dec-order-check":       settings.DisableDecOrderCheck,
-				"disable-init-func-first-check": settings.DisableInitFuncFirstCheck,
-			},
-		}
+		cfg["dec-order"] = strings.Join(settings.DecOrder, ",")
+		cfg["disable-dec-num-check"] = settings.DisableDecNumCheck
+		cfg["disable-dec-order-check"] = settings.DisableDecOrderCheck
+		cfg["disable-init-func-first-check"] = settings.DisableInitFuncFirstCheck
 	}
 
 	return goanalysis.NewLinter(
 		a.Name,
 		a.Doc,
 		analyzers,
-		cfg,
+		map[string]map[string]interface{}{a.Name: cfg},
 	).WithLoadMode(goanalysis.LoadModeSyntax)
 }
