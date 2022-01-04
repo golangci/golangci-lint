@@ -1,6 +1,5 @@
-//args: -Egocritic
-//config: linters-settings.gocritic.enabled-checks=ruleguard
-//config: linters-settings.gocritic.settings.ruleguard.rules=ruleguard/rangeExprCopy.go,ruleguard/strings_simplify.go
+// args: -Egocritic
+// config_path: testdata/configs/gocritic-fix.yml
 package p
 
 import (
