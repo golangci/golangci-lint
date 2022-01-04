@@ -1,8 +1,10 @@
 // args: -Edecorder
 package testdata
 
+import "math"
+
 const (
-	decoh = 1
+	decoh = math.MaxInt
 	decoi = 1
 )
 

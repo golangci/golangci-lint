@@ -193,7 +193,6 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 
 		linter.NewConfig(golinters.NewDecorder(decorderCfg)).
 			WithSince("v1.44.0").
-			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetFormatting, linter.PresetStyle).
 			WithURL("https://gitlab.com/bosi/decorder"),
 

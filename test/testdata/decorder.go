@@ -2,8 +2,10 @@
 //config_path: testdata/configs/decorder.yml
 package testdata
 
+import "math"
+
 const (
-	decoc = 1
+	decoc = math.MaxInt
 	decod = 1
 )
 
