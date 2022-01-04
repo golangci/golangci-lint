@@ -4,7 +4,10 @@ import "github.com/pkg/errors"
 
 var defaultLintersSettings = LintersSettings{
 	Decorder: DecorderSettings{
-		DecOrder: []string{"type", "const", "var", "func"},
+		DecOrder:                  []string{"type", "const", "var", "func"},
+		DisableDecNumCheck:        true,
+		DisableDecOrderCheck:      true,
+		DisableInitFuncFirstCheck: true,
 	},
 	Dogsled: DogsledSettings{
 		MaxBlankIdentifiers: 2,

@@ -156,7 +156,6 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		unusedCfg = &m.cfg.LintersSettings.Unused
 		varnamelenCfg = &m.cfg.LintersSettings.Varnamelen
 		wrapcheckCfg = &m.cfg.LintersSettings.Wrapcheck
-		nlreturnCfg = &m.cfg.LintersSettings.Nlreturn
 	}
 
 	const megacheckName = "megacheck"
