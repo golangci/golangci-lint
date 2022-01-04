@@ -17,9 +17,7 @@ const defaultGithubSeverity = "error"
 // NewGithub output format outputs issues according to GitHub actions format:
 // https://help.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-error-message
 func NewGithub(w io.Writer) Printer {
-	return &github{
-		w: w,
-	}
+	return &github{w: w}
 }
 
 // print each line as: ::error file=app.js,line=10,col=15::Something went wrong

@@ -39,9 +39,7 @@ type JunitXML struct {
 }
 
 func NewJunitXML(w io.Writer) *JunitXML {
-	return &JunitXML{
-		w: w,
-	}
+	return &JunitXML{w: w}
 }
 
 func (p JunitXML) Print(ctx context.Context, issues []result.Issue) error {

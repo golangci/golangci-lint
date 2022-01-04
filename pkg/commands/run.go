@@ -26,6 +26,8 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result/processors"
 )
 
+const defaultFileMode = 0644
+
 func getDefaultIssueExcludeHelp() string {
 	parts := []string{"Use or not use default excludes:"}
 	for _, ep := range config.DefaultExcludePatterns {
@@ -381,8 +383,6 @@ func (e *Executor) setExitCodeIfIssuesFound(issues []result.Issue) {
 	}
 }
 
-const defaultFileMode = 0644
-
 func (e *Executor) runAndPrint(ctx context.Context, args []string) error {
 	if err := e.goenv.Discover(ctx); err != nil {
 		e.log.Warnf("Failed to discover go env: %s", err)
@@ -408,32 +408,44 @@ func (e *Executor) runAndPrint(ctx context.Context, args []string) error {
 		if len(out) < 2 {
 			out = append(out, "")
 		}
-		w, shouldClose, err := e.createWriter(out[1])
-		if err != nil {
-			return fmt.Errorf("can't create output for %s: %w", out[1], err)
-		}
 
-		p, err := e.createPrinter(out[0], w)
+		err := e.printReports(ctx, issues, out[1], out[0])
 		if err != nil {
-			if file, ok := w.(io.Closer); shouldClose && ok {
-				file.Close()
-			}
 			return err
-		}
-		if err = p.Print(ctx, issues); err != nil {
-			if file, ok := w.(io.Closer); shouldClose && ok {
-				file.Close()
-			}
-			return fmt.Errorf("can't print %d issues: %s", len(issues), err)
-		}
-		if file, ok := w.(io.Closer); shouldClose && ok {
-			file.Close()
 		}
 	}
 
 	e.setExitCodeIfIssuesFound(issues)
 
 	e.fileCache.PrintStats(e.log)
+
+	return nil
+}
+
+func (e *Executor) printReports(ctx context.Context, issues []result.Issue, path, format string) error {
+	w, shouldClose, err := e.createWriter(path)
+	if err != nil {
+		return fmt.Errorf("can't create output for %s: %w", path, err)
+	}
+
+	p, err := e.createPrinter(format, w)
+	if err != nil {
+		if file, ok := w.(io.Closer); shouldClose && ok {
+			_ = file.Close()
+		}
+		return err
+	}
+
+	if err = p.Print(ctx, issues); err != nil {
+		if file, ok := w.(io.Closer); shouldClose && ok {
+			_ = file.Close()
+		}
+		return fmt.Errorf("can't print %d issues: %s", len(issues), err)
+	}
+
+	if file, ok := w.(io.Closer); shouldClose && ok {
+		_ = file.Close()
+	}
 
 	return nil
 }

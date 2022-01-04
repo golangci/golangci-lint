@@ -3,7 +3,6 @@ package printers
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"io"
 
 	"github.com/golangci/golangci-lint/pkg/report"
@@ -36,11 +35,5 @@ func (p JSON) Print(ctx context.Context, issues []result.Issue) error {
 		res.Issues = []result.Issue{}
 	}
 
-	outputJSON, err := json.Marshal(res)
-	if err != nil {
-		return err
-	}
-
-	fmt.Fprint(p.w, string(outputJSON))
-	return nil
+	return json.NewEncoder(p.w).Encode(res)
 }

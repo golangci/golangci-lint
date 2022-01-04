@@ -28,9 +28,7 @@ type CodeClimate struct {
 }
 
 func NewCodeClimate(w io.Writer) *CodeClimate {
-	return &CodeClimate{
-		w: w,
-	}
+	return &CodeClimate{w: w}
 }
 
 func (p CodeClimate) Print(ctx context.Context, issues []result.Issue) error {
@@ -55,6 +53,9 @@ func (p CodeClimate) Print(ctx context.Context, issues []result.Issue) error {
 		return err
 	}
 
-	fmt.Fprint(p.w, string(outputJSON))
+	_, err = fmt.Fprint(p.w, string(outputJSON))
+	if err != nil {
+		return err
+	}
 	return nil
 }

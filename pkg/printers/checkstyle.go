@@ -37,9 +37,7 @@ type Checkstyle struct {
 }
 
 func NewCheckstyle(w io.Writer) *Checkstyle {
-	return &Checkstyle{
-		w: w,
-	}
+	return &Checkstyle{w: w}
 }
 
 func (p Checkstyle) Print(ctx context.Context, issues []result.Issue) error {
@@ -86,6 +84,10 @@ func (p Checkstyle) Print(ctx context.Context, issues []result.Issue) error {
 		return err
 	}
 
-	fmt.Fprintf(p.w, "%s%s\n", xml.Header, xmlfmt.FormatXML(string(data), "", "  "))
+	_, err = fmt.Fprintf(p.w, "%s%s\n", xml.Header, xmlfmt.FormatXML(string(data), "", "  "))
+	if err != nil {
+		return err
+	}
+
 	return nil
 }

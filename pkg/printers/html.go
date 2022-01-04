@@ -128,9 +128,7 @@ type HTML struct {
 }
 
 func NewHTML(w io.Writer) *HTML {
-	return &HTML{
-		w: w,
-	}
+	return &HTML{w: w}
 }
 
 func (p HTML) Print(_ context.Context, issues []result.Issue) error {
