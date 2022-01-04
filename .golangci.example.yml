@@ -882,8 +882,8 @@ linters-settings:
         severity: warning
         disable: false
         arguments:
-        - [ "ID" ] # Whitelist
-        - [ "VM" ] # Blacklist
+        - [ "ID" ] # Allowlist
+        - [ "VM" ] # Denylist
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#var-declaration
       - name: var-declaration
         severity: warning
