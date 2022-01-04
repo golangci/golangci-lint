@@ -57,8 +57,8 @@ func (p JunitXML) Print(ctx context.Context, issues []result.Issue) error {
 			Name:      i.FromLinter,
 			ClassName: i.Pos.String(),
 			Failure: failureXML{
-				Message: i.Text,
-				Content: i.Text + ":\n" + strings.Join(i.SourceLines, "\n"),
+				Message: i.Pos.String() + ": " + i.Text,
+				Content: i.Pos.String() + ": " + i.Text + "\n" + strings.Join(i.SourceLines, "\n"),
 			},
 		}
 
