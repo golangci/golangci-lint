@@ -107,6 +107,27 @@ linters-settings:
     # should ignore tests (default false)
     skip-tests: false
 
+  decorder:
+    # required order of type, const, var and func declarations inside a file
+    # default: types before constants before variables before functions
+    dec-order:
+      - type
+      - const
+      - var
+      - func
+
+    # if true, order of declarations is not checked at all
+    # default: true (disabled)
+    disable-dec-order-check: false
+
+    # if true, init func can be anywhere in file (must not be declared before all other functions)
+    # default: true (disabled)
+    disable-init-func-first-check: false
+
+    # if true, multiple global type, const and var declarations are allowed
+    # default: true (disabled)
+    disable-dec-num-check: false
+
   dogsled:
     # checks assignments with too many blank identifiers; default is 2
     max-blank-identifiers: 2

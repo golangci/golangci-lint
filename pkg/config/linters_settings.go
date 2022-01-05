@@ -3,6 +3,12 @@ package config
 import "github.com/pkg/errors"
 
 var defaultLintersSettings = LintersSettings{
+	Decorder: DecorderSettings{
+		DecOrder:                  []string{"type", "const", "var", "func"},
+		DisableDecNumCheck:        true,
+		DisableDecOrderCheck:      true,
+		DisableInitFuncFirstCheck: true,
+	},
 	Dogsled: DogsledSettings{
 		MaxBlankIdentifiers: 2,
 	},
@@ -85,6 +91,7 @@ var defaultLintersSettings = LintersSettings{
 type LintersSettings struct {
 	BiDiChk          BiDiChkSettings
 	Cyclop           Cyclop
+	Decorder         DecorderSettings
 	Depguard         DepGuardSettings
 	Dogsled          DogsledSettings
 	Dupl             DuplSettings
@@ -171,6 +178,13 @@ type DepGuardSettings struct {
 	Packages                 []string
 	IncludeGoRoot            bool              `mapstructure:"include-go-root"`
 	PackagesWithErrorMessage map[string]string `mapstructure:"packages-with-error-message"`
+}
+
+type DecorderSettings struct {
+	DecOrder                  []string `mapstructure:"dec-order"`
+	DisableDecNumCheck        bool     `mapstructure:"disable-dec-num-check"`
+	DisableDecOrderCheck      bool     `mapstructure:"disable-dec-order-check"`
+	DisableInitFuncFirstCheck bool     `mapstructure:"disable-init-func-first-check"`
 }
 
 type DogsledSettings struct {

@@ -102,6 +102,7 @@ func enableLinterConfigs(lcs []*linter.Config, isEnabled func(lc *linter.Config)
 func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 	var bidichkCfg *config.BiDiChkSettings
 	var cyclopCfg *config.Cyclop
+	var decorderCfg *config.DecorderSettings
 	var errchkjsonCfg *config.ErrChkJSONSettings
 	var errorlintCfg *config.ErrorLintSettings
 	var exhaustiveCfg *config.ExhaustiveSettings
@@ -131,6 +132,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		bidichkCfg = &m.cfg.LintersSettings.BiDiChk
 		cyclopCfg = &m.cfg.LintersSettings.Cyclop
 		errchkjsonCfg = &m.cfg.LintersSettings.ErrChkJSON
+		decorderCfg = &m.cfg.LintersSettings.Decorder
 		errorlintCfg = &m.cfg.LintersSettings.ErrorLint
 		exhaustiveCfg = &m.cfg.LintersSettings.Exhaustive
 		exhaustiveStructCfg = &m.cfg.LintersSettings.ExhaustiveStruct
@@ -188,6 +190,11 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetComplexity).
 			WithURL("https://github.com/bkielbasa/cyclop"),
+
+		linter.NewConfig(golinters.NewDecorder(decorderCfg)).
+			WithSince("v1.44.0").
+			WithPresets(linter.PresetFormatting, linter.PresetStyle).
+			WithURL("https://gitlab.com/bosi/decorder"),
 
 		linter.NewConfig(golinters.NewDeadcode()).
 			WithSince("v1.0.0").
