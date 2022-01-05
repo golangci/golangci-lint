@@ -4,7 +4,7 @@ package testdata
 import "math"
 
 const (
-	decoh = math.MaxInt
+	decoh = math.MaxInt64
 	decoi = 1
 )
 

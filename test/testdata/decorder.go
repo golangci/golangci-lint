@@ -1,11 +1,11 @@
 // args: -Edecorder
-//config_path: testdata/configs/decorder.yml
+// config_path: testdata/configs/decorder.yml
 package testdata
 
 import "math"
 
 const (
-	decoc = math.MaxInt
+	decoc = math.MaxInt64
 	decod = 1
 )
 
