@@ -5,6 +5,7 @@ import (
 	"encoding/xml"
 	"fmt"
 	"io"
+	"sort"
 
 	"github.com/go-xmlfmt/xmlfmt"
 
@@ -78,6 +79,10 @@ func (p Checkstyle) Print(ctx context.Context, issues []result.Issue) error {
 	for _, file := range files {
 		out.Files = append(out.Files, file)
 	}
+
+	sort.Slice(out.Files, func(i, j int) bool {
+		return out.Files[i].Name < out.Files[j].Name
+	})
 
 	data, err := xml.Marshal(&out)
 	if err != nil {

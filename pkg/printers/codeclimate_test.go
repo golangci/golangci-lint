@@ -1,3 +1,4 @@
+//nolint:dupl
 package printers
 
 import (
@@ -12,7 +13,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-func TestGithub_Print(t *testing.T) {
+func TestCodeClimate_Print(t *testing.T) {
 	issues := []result.Issue{
 		{
 			FromLinter: "linter-a",
@@ -44,31 +45,13 @@ func TestGithub_Print(t *testing.T) {
 	}
 
 	buf := new(bytes.Buffer)
-	printer := NewGithub(buf)
+	printer := NewCodeClimate(buf)
 
 	err := printer.Print(context.Background(), issues)
 	require.NoError(t, err)
 
-	expected := `::warning file=path/to/filea.go,line=10,col=4::some issue (linter-a)
-::error file=path/to/fileb.go,line=300,col=9::another issue (linter-b)
-`
+	//nolint:lll
+	expected := `[{"description":"linter-a: some issue","severity":"warning","fingerprint":"BA73C5DF4A6FD8462FFF1D3140235777","location":{"path":"path/to/filea.go","lines":{"begin":10}}},{"description":"linter-b: another issue","severity":"error","fingerprint":"0777B4FE60242BD8B2E9B7E92C4B9521","location":{"path":"path/to/fileb.go","lines":{"begin":300}}}]`
 
 	assert.Equal(t, expected, buf.String())
-}
-
-func TestFormatGithubIssue(t *testing.T) {
-	sampleIssue := result.Issue{
-		FromLinter: "sample-linter",
-		Text:       "some issue",
-		Pos: token.Position{
-			Filename: "path/to/file.go",
-			Offset:   2,
-			Line:     10,
-			Column:   4,
-		},
-	}
-	require.Equal(t, "::error file=path/to/file.go,line=10,col=4::some issue (sample-linter)", formatIssueAsGithub(&sampleIssue))
-
-	sampleIssue.Pos.Column = 0
-	require.Equal(t, "::error file=path/to/file.go,line=10::some issue (sample-linter)", formatIssueAsGithub(&sampleIssue))
 }

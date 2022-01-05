@@ -1,3 +1,4 @@
+//nolint:dupl
 package printers
 
 import (
@@ -12,7 +13,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-func TestGithub_Print(t *testing.T) {
+func TestJunitXML_Print(t *testing.T) {
 	issues := []result.Issue{
 		{
 			FromLinter: "linter-a",
@@ -44,31 +45,33 @@ func TestGithub_Print(t *testing.T) {
 	}
 
 	buf := new(bytes.Buffer)
-	printer := NewGithub(buf)
+	printer := NewJunitXML(buf)
 
 	err := printer.Print(context.Background(), issues)
 	require.NoError(t, err)
 
-	expected := `::warning file=path/to/filea.go,line=10,col=4::some issue (linter-a)
-::error file=path/to/fileb.go,line=300,col=9::another issue (linter-b)
-`
+	expected := `<testsuites>
+  <testsuite name="path/to/filea.go" tests="1" errors="0" failures="1">
+    <testcase name="linter-a" classname="path/to/filea.go:10:4">
+      <failure message="path/to/filea.go:10:4: some issue" type="warning"><![CDATA[warning: some issue
+Category: linter-a
+File: path/to/filea.go
+Line: 10
+Details: ]]></failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="path/to/fileb.go" tests="1" errors="0" failures="1">
+    <testcase name="linter-b" classname="path/to/fileb.go:300:9">
+      <failure message="path/to/fileb.go:300:9: another issue" type="error"><![CDATA[error: another issue
+Category: linter-b
+File: path/to/fileb.go
+Line: 300
+Details: func foo() {
+	fmt.Println("bar")
+}]]></failure>
+    </testcase>
+  </testsuite>
+</testsuites>`
 
 	assert.Equal(t, expected, buf.String())
-}
-
-func TestFormatGithubIssue(t *testing.T) {
-	sampleIssue := result.Issue{
-		FromLinter: "sample-linter",
-		Text:       "some issue",
-		Pos: token.Position{
-			Filename: "path/to/file.go",
-			Offset:   2,
-			Line:     10,
-			Column:   4,
-		},
-	}
-	require.Equal(t, "::error file=path/to/file.go,line=10,col=4::some issue (sample-linter)", formatIssueAsGithub(&sampleIssue))
-
-	sampleIssue.Pos.Column = 0
-	require.Equal(t, "::error file=path/to/file.go,line=10::some issue (sample-linter)", formatIssueAsGithub(&sampleIssue))
 }

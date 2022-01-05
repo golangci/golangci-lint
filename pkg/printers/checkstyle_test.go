@@ -1,3 +1,4 @@
+//nolint:dupl
 package printers
 
 import (
@@ -12,7 +13,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-func TestGithub_Print(t *testing.T) {
+func TestCheckstyle_Print(t *testing.T) {
 	issues := []result.Issue{
 		{
 			FromLinter: "linter-a",
@@ -44,31 +45,13 @@ func TestGithub_Print(t *testing.T) {
 	}
 
 	buf := new(bytes.Buffer)
-	printer := NewGithub(buf)
+	printer := NewCheckstyle(buf)
 
 	err := printer.Print(context.Background(), issues)
 	require.NoError(t, err)
 
-	expected := `::warning file=path/to/filea.go,line=10,col=4::some issue (linter-a)
-::error file=path/to/fileb.go,line=300,col=9::another issue (linter-b)
-`
+	//nolint:lll
+	expected := "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\r\n<checkstyle version=\"5.0\">\r\n  <file name=\"path/to/filea.go\">\r\n    <error column=\"4\" line=\"10\" message=\"some issue\" severity=\"warning\" source=\"linter-a\">\r\n    </error>\r\n  </file>\r\n  <file name=\"path/to/fileb.go\">\r\n    <error column=\"9\" line=\"300\" message=\"another issue\" severity=\"error\" source=\"linter-b\">\r\n    </error>\r\n  </file>\r\n</checkstyle>\n"
 
 	assert.Equal(t, expected, buf.String())
-}
-
-func TestFormatGithubIssue(t *testing.T) {
-	sampleIssue := result.Issue{
-		FromLinter: "sample-linter",
-		Text:       "some issue",
-		Pos: token.Position{
-			Filename: "path/to/file.go",
-			Offset:   2,
-			Line:     10,
-			Column:   4,
-		},
-	}
-	require.Equal(t, "::error file=path/to/file.go,line=10,col=4::some issue (sample-linter)", formatIssueAsGithub(&sampleIssue))
-
-	sampleIssue.Pos.Column = 0
-	require.Equal(t, "::error file=path/to/file.go,line=10::some issue (sample-linter)", formatIssueAsGithub(&sampleIssue))
 }
