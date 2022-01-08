@@ -26,6 +26,8 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result/processors"
 )
 
+const defaultFileMode = 0644
+
 func getDefaultIssueExcludeHelp() string {
 	parts := []string{"Use or not use default excludes:"}
 	for _, ep := range config.DefaultExcludePatterns {
@@ -400,44 +402,89 @@ func (e *Executor) runAndPrint(ctx context.Context, args []string) error {
 		return err // XXX: don't loose type
 	}
 
-	p, err := e.createPrinter()
-	if err != nil {
-		return err
+	formats := strings.Split(e.cfg.Output.Format, ",")
+	for _, format := range formats {
+		out := strings.SplitN(format, ":", 2)
+		if len(out) < 2 {
+			out = append(out, "")
+		}
+
+		err := e.printReports(ctx, issues, out[1], out[0])
+		if err != nil {
+			return err
+		}
 	}
 
 	e.setExitCodeIfIssuesFound(issues)
-
-	if err = p.Print(ctx, issues); err != nil {
-		return fmt.Errorf("can't print %d issues: %s", len(issues), err)
-	}
 
 	e.fileCache.PrintStats(e.log)
 
 	return nil
 }
 
-func (e *Executor) createPrinter() (printers.Printer, error) {
+func (e *Executor) printReports(ctx context.Context, issues []result.Issue, path, format string) error {
+	w, shouldClose, err := e.createWriter(path)
+	if err != nil {
+		return fmt.Errorf("can't create output for %s: %w", path, err)
+	}
+
+	p, err := e.createPrinter(format, w)
+	if err != nil {
+		if file, ok := w.(io.Closer); shouldClose && ok {
+			_ = file.Close()
+		}
+		return err
+	}
+
+	if err = p.Print(ctx, issues); err != nil {
+		if file, ok := w.(io.Closer); shouldClose && ok {
+			_ = file.Close()
+		}
+		return fmt.Errorf("can't print %d issues: %s", len(issues), err)
+	}
+
+	if file, ok := w.(io.Closer); shouldClose && ok {
+		_ = file.Close()
+	}
+
+	return nil
+}
+
+func (e *Executor) createWriter(path string) (io.Writer, bool, error) {
+	if path == "" || path == "stdout" {
+		return logutils.StdOut, false, nil
+	}
+	if path == "stderr" {
+		return logutils.StdErr, false, nil
+	}
+	f, err := os.OpenFile(path, os.O_CREATE|os.O_TRUNC|os.O_WRONLY, defaultFileMode)
+	if err != nil {
+		return nil, false, err
+	}
+	return f, true, nil
+}
+
+func (e *Executor) createPrinter(format string, w io.Writer) (printers.Printer, error) {
 	var p printers.Printer
-	format := e.cfg.Output.Format
 	switch format {
 	case config.OutFormatJSON:
-		p = printers.NewJSON(&e.reportData)
+		p = printers.NewJSON(&e.reportData, w)
 	case config.OutFormatColoredLineNumber, config.OutFormatLineNumber:
 		p = printers.NewText(e.cfg.Output.PrintIssuedLine,
 			format == config.OutFormatColoredLineNumber, e.cfg.Output.PrintLinterName,
-			e.log.Child("text_printer"))
+			e.log.Child("text_printer"), w)
 	case config.OutFormatTab:
-		p = printers.NewTab(e.cfg.Output.PrintLinterName, e.log.Child("tab_printer"))
+		p = printers.NewTab(e.cfg.Output.PrintLinterName, e.log.Child("tab_printer"), w)
 	case config.OutFormatCheckstyle:
-		p = printers.NewCheckstyle()
+		p = printers.NewCheckstyle(w)
 	case config.OutFormatCodeClimate:
-		p = printers.NewCodeClimate()
+		p = printers.NewCodeClimate(w)
 	case config.OutFormatHTML:
-		p = printers.NewHTML()
+		p = printers.NewHTML(w)
 	case config.OutFormatJunitXML:
-		p = printers.NewJunitXML()
+		p = printers.NewJunitXML(w)
 	case config.OutFormatGithubActions:
-		p = printers.NewGithub()
+		p = printers.NewGithub(w)
 	default:
 		return nil, fmt.Errorf("unknown output format %s", format)
 	}

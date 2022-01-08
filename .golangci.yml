@@ -71,7 +71,6 @@ linters:
     - dupl
     - errcheck
     - exportloopref
-    - exhaustive
     - funlen
     - gochecknoinits
     - goconst
@@ -90,7 +89,6 @@ linters:
     - nakedret
     - noctx
     - nolintlint
-    - rowserrcheck
     - staticcheck
     - structcheck
     - stylecheck

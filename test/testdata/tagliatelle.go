@@ -1,4 +1,4 @@
-//args: -Etagliatelle
+// args: -Etagliatelle
 package testdata
 
 import "time"
@@ -28,6 +28,6 @@ type Bur struct {
 	Name    string
 	Value   string `yaml:"Value"` // ERROR `yaml\(camel\): got 'Value' want 'value'`
 	More    string `json:"-"`
-	Also    string `json:",omitempty"`
+	Also    string `json:"also,omitempty"`
 	ReqPerS string `avro:"req_per_s"`
 }

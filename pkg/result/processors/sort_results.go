@@ -63,7 +63,6 @@ func (c compareResult) isNeutral() bool {
 	return c == None || c == Equal
 }
 
-//nolint:exhaustive
 func (c compareResult) String() string {
 	switch c {
 	case Less:
