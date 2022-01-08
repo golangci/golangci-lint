@@ -63,48 +63,59 @@ func NewDepguard() *goanalysis.Linter {
 	).WithContextSetter(func(lintCtx *linter.Context) {
 		dgSettings := &lintCtx.Settings().Depguard
 		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
-			prog := goanalysis.MakeFakeLoaderProgram(pass)
-			dg := &depguard.Depguard{
-				Packages:        dgSettings.Packages,
-				IncludeGoRoot:   dgSettings.IncludeGoRoot,
-				IgnoreFileRules: dgSettings.IgnoreFileRules,
-			}
-			if err := setDepguardListType(dg, lintCtx); err != nil {
-				return nil, err
-			}
-			setupDepguardPackages(dg, lintCtx)
-
 			loadConfig := &loader.Config{
 				Cwd:   "",  // fallbacked to os.Getcwd
 				Build: nil, // fallbacked to build.Default
 			}
-			issues, err := dg.Run(loadConfig, prog)
-			if err != nil {
-				return nil, err
-			}
-			if len(issues) == 0 {
-				return nil, nil
-			}
-			msgSuffix := "is in the blacklist"
-			if dg.ListType == depguard.LTWhitelist {
-				msgSuffix = "is not in the whitelist"
-			}
-			res := make([]goanalysis.Issue, 0, len(issues))
-			for _, i := range issues {
-				userSuppliedMsgSuffix := dgSettings.PackagesWithErrorMessage[i.PackageName]
-				if userSuppliedMsgSuffix != "" {
-					userSuppliedMsgSuffix = ": " + userSuppliedMsgSuffix
-				}
-				res = append(res, goanalysis.NewIssue(&result.Issue{
-					Pos:        i.Position,
-					Text:       fmt.Sprintf("%s %s%s", formatCode(i.PackageName, lintCtx.Cfg), msgSuffix, userSuppliedMsgSuffix),
-					FromLinter: linterName,
-				}, pass))
-			}
-			mu.Lock()
-			resIssues = append(resIssues, res...)
-			mu.Unlock()
+			prog := goanalysis.MakeFakeLoaderProgram(pass)
 
+			var dgs []*depguard.Depguard
+			dgs = append(dgs, &depguard.Depguard{
+				Packages:        dgSettings.Packages,
+				IncludeGoRoot:   dgSettings.IncludeGoRoot,
+				IgnoreFileRules: dgSettings.IgnoreFileRules,
+			})
+			for _, additionalGuard := range dgSettings.AdditionalGuards {
+				dgs = append(dgs, &depguard.Depguard{
+					Packages:        additionalGuard.Packages,
+					IncludeGoRoot:   additionalGuard.IncludeGoRoot,
+					IgnoreFileRules: additionalGuard.IgnoreFileRules,
+				})
+			}
+
+			for _, dg := range dgs {
+				if err := setDepguardListType(dg, lintCtx); err != nil {
+					return nil, err
+				}
+				setupDepguardPackages(dg, lintCtx)
+
+				issues, err := dg.Run(loadConfig, prog)
+				if err != nil {
+					return nil, err
+				}
+				if len(issues) == 0 {
+					return nil, nil
+				}
+				msgSuffix := "is in the blacklist"
+				if dg.ListType == depguard.LTWhitelist {
+					msgSuffix = "is not in the whitelist"
+				}
+				res := make([]goanalysis.Issue, 0, len(issues))
+				for _, i := range issues {
+					userSuppliedMsgSuffix := dgSettings.PackagesWithErrorMessage[i.PackageName]
+					if userSuppliedMsgSuffix != "" {
+						userSuppliedMsgSuffix = ": " + userSuppliedMsgSuffix
+					}
+					res = append(res, goanalysis.NewIssue(&result.Issue{
+						Pos:        i.Position,
+						Text:       fmt.Sprintf("%s %s%s", formatCode(i.PackageName, lintCtx.Cfg), msgSuffix, userSuppliedMsgSuffix),
+						FromLinter: linterName,
+					}, pass))
+				}
+				mu.Lock()
+				resIssues = append(resIssues, res...)
+				mu.Unlock()
+			}
 			return nil, nil
 		}
 	}).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
