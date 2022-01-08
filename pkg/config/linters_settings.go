@@ -178,6 +178,7 @@ type DepGuardSettings struct {
 	Packages                 []string
 	IncludeGoRoot            bool              `mapstructure:"include-go-root"`
 	PackagesWithErrorMessage map[string]string `mapstructure:"packages-with-error-message"`
+	IgnoreFileRules          []string          `mapstructure:"ignore-file-rules"`
 }
 
 type DecorderSettings struct {

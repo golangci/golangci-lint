@@ -65,8 +65,9 @@ func NewDepguard() *goanalysis.Linter {
 		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
 			prog := goanalysis.MakeFakeLoaderProgram(pass)
 			dg := &depguard.Depguard{
-				Packages:      dgSettings.Packages,
-				IncludeGoRoot: dgSettings.IncludeGoRoot,
+				Packages:        dgSettings.Packages,
+				IncludeGoRoot:   dgSettings.IncludeGoRoot,
+				IgnoreFileRules: dgSettings.IgnoreFileRules,
 			}
 			if err := setDepguardListType(dg, lintCtx); err != nil {
 				return nil, err
