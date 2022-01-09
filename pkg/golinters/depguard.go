@@ -15,121 +15,25 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-func parseDepguardSettings(dgSettings *config.DepGuardSettings) (map[*depguard.Depguard]map[string]string, error) {
-	parsedDgSettings := make(map[*depguard.Depguard]map[string]string)
-	dg := &depguard.Depguard{
-		Packages:        dgSettings.Packages,
-		IncludeGoRoot:   dgSettings.IncludeGoRoot,
-		IgnoreFileRules: dgSettings.IgnoreFileRules,
-	}
-
-	if err := setDepguardListType(dg, dgSettings.ListType); err != nil {
-		return nil, err
-	}
-	setupDepguardPackages(dg, dgSettings.PackagesWithErrorMessage)
-	if dgSettings.PackagesWithErrorMessage != nil {
-		parsedDgSettings[dg] = dgSettings.PackagesWithErrorMessage
-	} else {
-		parsedDgSettings[dg] = make(map[string]string)
-	}
-
-	for _, additionalGuard := range dgSettings.AdditionalGuards {
-		additionalDg := &depguard.Depguard{
-			Packages:        additionalGuard.Packages,
-			IncludeGoRoot:   additionalGuard.IncludeGoRoot,
-			IgnoreFileRules: additionalGuard.IgnoreFileRules,
-		}
-
-		if err := setDepguardListType(additionalDg, additionalGuard.ListType); err != nil {
-			return nil, err
-		}
-		setupDepguardPackages(additionalDg, additionalGuard.PackagesWithErrorMessage)
-		if additionalGuard.PackagesWithErrorMessage != nil {
-			parsedDgSettings[additionalDg] = additionalGuard.PackagesWithErrorMessage
-		} else {
-			parsedDgSettings[additionalDg] = make(map[string]string)
-		}
-	}
-
-	return parsedDgSettings, nil
-}
-
-func postProcessIssue(
-	issue *depguard.Issue,
-	dg *depguard.Depguard,
-	packagesWithErrorMessage map[string]string,
-	lintCtx *linter.Context,
-) *result.Issue {
-	msgSuffix := "is in the blacklist"
-	if dg.ListType == depguard.LTWhitelist {
-		msgSuffix = "is not in the whitelist"
-	}
-
-	userSuppliedMsgSuffix := packagesWithErrorMessage[issue.PackageName]
-	if userSuppliedMsgSuffix != "" {
-		userSuppliedMsgSuffix = ": " + userSuppliedMsgSuffix
-	}
-
-	return &result.Issue{
-		Pos:        issue.Position,
-		Text:       fmt.Sprintf("%s %s%s", formatCode(issue.PackageName, lintCtx.Cfg), msgSuffix, userSuppliedMsgSuffix),
-		FromLinter: linterName,
-	}
-}
-
-func setDepguardListType(dg *depguard.Depguard, listType string) error {
-	var found bool
-	dg.ListType, found = depguard.StringToListType[strings.ToLower(listType)]
-	if !found {
-		if listType != "" {
-			return fmt.Errorf("unsure what list type %s is", listType)
-		}
-		dg.ListType = depguard.LTBlacklist
-	}
-
-	return nil
-}
-
-func setupDepguardPackages(
-	dg *depguard.Depguard,
-	packagesWithErrorMessage map[string]string,
-) {
-	if dg.ListType == depguard.LTBlacklist {
-		// if the list type was a blacklist the packages with error messages should
-		// be included in the blacklist package list
-
-		noMessagePackages := make(map[string]bool)
-		for _, pkg := range dg.Packages {
-			noMessagePackages[pkg] = true
-		}
-
-		for pkg := range packagesWithErrorMessage {
-			if _, ok := noMessagePackages[pkg]; !ok {
-				dg.Packages = append(dg.Packages, pkg)
-			}
-		}
-	}
-}
-
-const linterName = "depguard"
+const depguardLinterName = "depguard"
 
 func NewDepguard() *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
 
 	analyzer := &analysis.Analyzer{
-		Name: linterName,
+		Name: depguardLinterName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 	}
 	return goanalysis.NewLinter(
-		linterName,
+		depguardLinterName,
 		"Go linter that checks if package imports are in a list of acceptable packages",
 		[]*analysis.Analyzer{analyzer},
 		nil,
 	).WithContextSetter(func(lintCtx *linter.Context) {
-		dgSettings := &lintCtx.Settings().Depguard
+		parsedSettings, err := parseDepguardSettings(&lintCtx.Settings().Depguard)
+
 		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
-			parsedDgSettings, err := parseDepguardSettings(dgSettings)
 			if err != nil {
 				return nil, err
 			}
@@ -138,25 +42,116 @@ func NewDepguard() *goanalysis.Linter {
 				Cwd:   "",  // fallbacked to os.Getcwd
 				Build: nil, // fallbacked to build.Default
 			}
+
 			prog := goanalysis.MakeFakeLoaderProgram(pass)
 
-			for dg, packagesWithErrorMessage := range parsedDgSettings {
-				issues, err := dg.Run(loadConfig, prog)
-				if err != nil {
-					return nil, err
+			for dg, pkgsWithErrorMessage := range parsedSettings {
+				issues, errRun := dg.Run(loadConfig, prog)
+				if errRun != nil {
+					return nil, errRun
 				}
+
 				res := make([]goanalysis.Issue, 0, len(issues))
 				for _, i := range issues {
-					lintIssue := postProcessIssue(i, dg, packagesWithErrorMessage, lintCtx)
+					lintIssue := postProcessIssue(i, dg, pkgsWithErrorMessage, lintCtx)
 					res = append(res, goanalysis.NewIssue(lintIssue, pass))
 				}
+
 				mu.Lock()
 				resIssues = append(resIssues, res...)
 				mu.Unlock()
 			}
+
 			return nil, nil
 		}
 	}).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
 		return resIssues
 	}).WithLoadMode(goanalysis.LoadModeTypesInfo)
+}
+
+func parseDepguardSettings(settings *config.DepGuardSettings) (map[*depguard.Depguard]map[string]string, error) {
+	parsedSettings := make(map[*depguard.Depguard]map[string]string)
+
+	err := parseDGSettings(settings, parsedSettings)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, additional := range settings.AdditionalGuards {
+		add := additional
+		err := parseDGSettings(&add, parsedSettings)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	return parsedSettings, nil
+}
+
+func parseDGSettings(settings *config.DepGuardSettings, parsedSettings map[*depguard.Depguard]map[string]string) error {
+	dg := &depguard.Depguard{
+		Packages:        settings.Packages,
+		IncludeGoRoot:   settings.IncludeGoRoot,
+		IgnoreFileRules: settings.IgnoreFileRules,
+	}
+
+	var err error
+	dg.ListType, err = getDepGuardListType(settings.ListType)
+	if err != nil {
+		return err
+	}
+
+	// if the list type was a blacklist the packages with error messages should  be included in the blacklist package list
+	if dg.ListType == depguard.LTBlacklist {
+		noMessagePackages := make(map[string]bool)
+		for _, pkg := range dg.Packages {
+			noMessagePackages[pkg] = true
+		}
+
+		for pkg := range settings.PackagesWithErrorMessage {
+			if _, ok := noMessagePackages[pkg]; !ok {
+				dg.Packages = append(dg.Packages, pkg)
+			}
+		}
+	}
+
+	if settings.PackagesWithErrorMessage != nil {
+		parsedSettings[dg] = settings.PackagesWithErrorMessage
+	} else {
+		parsedSettings[dg] = make(map[string]string)
+	}
+
+	return nil
+}
+
+func postProcessIssue(issue *depguard.Issue, dg *depguard.Depguard,
+	pkgsWithErrorMessage map[string]string, lintCtx *linter.Context) *result.Issue {
+	msgSuffix := "is in the blacklist"
+	if dg.ListType == depguard.LTWhitelist {
+		msgSuffix = "is not in the whitelist"
+	}
+
+	userSuppliedMsgSuffix := pkgsWithErrorMessage[issue.PackageName]
+	if userSuppliedMsgSuffix != "" {
+		userSuppliedMsgSuffix = ": " + userSuppliedMsgSuffix
+	}
+
+	return &result.Issue{
+		Pos:        issue.Position,
+		Text:       fmt.Sprintf("%s %s%s", formatCode(issue.PackageName, lintCtx.Cfg), msgSuffix, userSuppliedMsgSuffix),
+		FromLinter: depguardLinterName,
+	}
+}
+
+func getDepGuardListType(listType string) (depguard.ListType, error) {
+	if listType == "" {
+		return depguard.LTBlacklist, nil
+	}
+
+	listT, found := depguard.StringToListType[strings.ToLower(listType)]
+	if !found {
+		return depguard.LTBlacklist, fmt.Errorf("unsure what list type %s is", listType)
+	}
+
+	return listT, nil
 }

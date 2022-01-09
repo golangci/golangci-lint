@@ -193,10 +193,6 @@ func initFlagSet(fs *pflag.FlagSet, cfg *config.Config, m *lintersdb.Manager, is
 		"Depguard: check list against standard lib")
 	hideFlag("depguard.include-go-root")
 
-	fs.StringSliceVar(&lsc.Depguard.IgnoreFileRules, "depguard.ignore-file-rules", nil,
-		"Depguard: rules to ignore certain files for consideration")
-	hideFlag("depguard.ignore-file-rules")
-
 	fs.IntVar(&lsc.Lll.TabWidth, "lll.tab-width", 1,
 		"Lll: tab width in spaces")
 	hideFlag("lll.tab-width")
