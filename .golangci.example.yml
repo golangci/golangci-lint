@@ -507,13 +507,24 @@ linters-settings:
     disable-all: false
 
   depguard:
-    list-type: blacklist
+    list-type: denylist
     include-go-root: false
     packages:
       - github.com/sirupsen/logrus
     packages-with-error-message:
-      # specify an error message to output when a blacklisted package is used
+      # specify an error message to output when a denied package is used
       - github.com/sirupsen/logrus: "logging is allowed only by logutils.Log"
+    # create additional guards that follow the same configuration pattern
+    # results from all guards are aggregated together
+    additional-guards:
+      - list-type: denylist
+        include-go-root: false
+        packages:
+          - github.com/stretchr/testify
+        # specify rules by which the linter ignores certain files for consideration
+        ignore-file-rules:
+          - "**/*_test.go"
+          - "**/mock/**/*.go"
 
   ifshort:
     # Maximum length of variable declaration measured in number of lines, after which linter won't suggest using short syntax.
