@@ -1,12 +1,14 @@
 linters-settings:
   depguard:
+    list-type: denylist
     include-go-root: true
     packages: 
       - compress/*
     packages-with-error-message:
       log: "don't use log"
     additional-guards:
-      - include-go-root: true
+      - list-type: denylist
+        include-go-root: true
         packages:
           - fmt
         packages-with-error-message:
