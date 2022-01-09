@@ -145,9 +145,6 @@ func NewDepguard() *goanalysis.Linter {
 				if err != nil {
 					return nil, err
 				}
-				if len(issues) == 0 {
-					return nil, nil
-				}
 				res := make([]goanalysis.Issue, 0, len(issues))
 				for _, i := range issues {
 					lintIssue := postProcessIssue(i, dg, packagesWithErrorMessage, lintCtx)
