@@ -31,7 +31,7 @@ func NewDepguard() *goanalysis.Linter {
 		[]*analysis.Analyzer{analyzer},
 		nil,
 	).WithContextSetter(func(lintCtx *linter.Context) {
-		parsedSettings, err := parseDepguardSettings(&lintCtx.Settings().Depguard)
+		parsedSettings, err := parseDepGuardSettings(&lintCtx.Settings().Depguard)
 
 		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
 			if err != nil {
@@ -46,19 +46,13 @@ func NewDepguard() *goanalysis.Linter {
 			prog := goanalysis.MakeFakeLoaderProgram(pass)
 
 			for dg, pkgsWithErrorMessage := range parsedSettings {
-				issues, errRun := dg.Run(loadConfig, prog)
+				issues, errRun := runDepGuard(dg, pkgsWithErrorMessage, loadConfig, prog, pass)
 				if errRun != nil {
 					return nil, errRun
 				}
 
-				res := make([]goanalysis.Issue, 0, len(issues))
-				for _, i := range issues {
-					lintIssue := postProcessIssue(i, dg, pkgsWithErrorMessage, lintCtx)
-					res = append(res, goanalysis.NewIssue(lintIssue, pass))
-				}
-
 				mu.Lock()
-				resIssues = append(resIssues, res...)
+				resIssues = append(resIssues, issues...)
 				mu.Unlock()
 			}
 
@@ -69,7 +63,7 @@ func NewDepguard() *goanalysis.Linter {
 	}).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }
 
-func parseDepguardSettings(settings *config.DepGuardSettings) (map[*depguard.Depguard]map[string]string, error) {
+func parseDepGuardSettings(settings *config.DepGuardSettings) (map[*depguard.Depguard]map[string]string, error) {
 	parsedSettings := make(map[*depguard.Depguard]map[string]string)
 
 	err := parseDGSettings(settings, parsedSettings)
@@ -124,25 +118,6 @@ func parseDGSettings(settings *config.DepGuardSettings, parsedSettings map[*depg
 	return nil
 }
 
-func postProcessIssue(issue *depguard.Issue, dg *depguard.Depguard,
-	pkgsWithErrorMessage map[string]string, lintCtx *linter.Context) *result.Issue {
-	msgSuffix := "is in the blacklist"
-	if dg.ListType == depguard.LTWhitelist {
-		msgSuffix = "is not in the whitelist"
-	}
-
-	userSuppliedMsgSuffix := pkgsWithErrorMessage[issue.PackageName]
-	if userSuppliedMsgSuffix != "" {
-		userSuppliedMsgSuffix = ": " + userSuppliedMsgSuffix
-	}
-
-	return &result.Issue{
-		Pos:        issue.Position,
-		Text:       fmt.Sprintf("%s %s%s", formatCode(issue.PackageName, lintCtx.Cfg), msgSuffix, userSuppliedMsgSuffix),
-		FromLinter: depguardLinterName,
-	}
-}
-
 func getDepGuardListType(listType string) (depguard.ListType, error) {
 	if listType == "" {
 		return depguard.LTBlacklist, nil
@@ -154,4 +129,36 @@ func getDepGuardListType(listType string) (depguard.ListType, error) {
 	}
 
 	return listT, nil
+}
+
+func runDepGuard(dg *depguard.Depguard, pkgsWithErrorMessage map[string]string,
+	loadConfig *loader.Config, prog *loader.Program, pass *analysis.Pass) ([]goanalysis.Issue, error) {
+	issues, err := dg.Run(loadConfig, prog)
+	if err != nil {
+		return nil, err
+	}
+
+	res := make([]goanalysis.Issue, 0, len(issues))
+
+	for _, issue := range issues {
+		msgSuffix := "is in the blacklist"
+		if dg.ListType == depguard.LTWhitelist {
+			msgSuffix = "is not in the whitelist"
+		}
+
+		userSuppliedMsgSuffix := pkgsWithErrorMessage[issue.PackageName]
+		if userSuppliedMsgSuffix != "" {
+			userSuppliedMsgSuffix = ": " + userSuppliedMsgSuffix
+		}
+
+		res = append(res,
+			goanalysis.NewIssue(&result.Issue{
+				Pos:        issue.Position,
+				Text:       fmt.Sprintf("%s %s%s", formatCode(issue.PackageName, nil), msgSuffix, userSuppliedMsgSuffix),
+				FromLinter: depguardLinterName,
+			}, pass),
+		)
+	}
+
+	return res, nil
 }
