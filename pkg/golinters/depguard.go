@@ -9,13 +9,44 @@ import (
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/loader" //nolint:staticcheck // require changes in github.com/OpenPeeDeeP/depguard
 
+	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-func setDepguardListType(dg *depguard.Depguard, lintCtx *linter.Context) error {
-	listType := lintCtx.Settings().Depguard.ListType
+func parseDepguardSettings(dgSettings *config.DepGuardSettings) ([]*depguard.Depguard, error) {
+	var dgs []*depguard.Depguard
+	dg := &depguard.Depguard{
+		Packages:        dgSettings.Packages,
+		IncludeGoRoot:   dgSettings.IncludeGoRoot,
+		IgnoreFileRules: dgSettings.IgnoreFileRules,
+	}
+
+	if err := setDepguardListType(dg, dgSettings.ListType); err != nil {
+		return nil, err
+	}
+	setupDepguardPackages(dg, dgSettings.PackagesWithErrorMessage)
+	dgs = append(dgs, dg)
+
+	for _, additionalGuard := range dgSettings.AdditionalGuards {
+		additionalDg := &depguard.Depguard{
+			Packages:        additionalGuard.Packages,
+			IncludeGoRoot:   additionalGuard.IncludeGoRoot,
+			IgnoreFileRules: additionalGuard.IgnoreFileRules,
+		}
+
+		if err := setDepguardListType(additionalDg, additionalGuard.ListType); err != nil {
+			return nil, err
+		}
+		setupDepguardPackages(additionalDg, additionalGuard.PackagesWithErrorMessage)
+		dgs = append(dgs, additionalDg)
+	}
+
+	return dgs, nil
+}
+
+func setDepguardListType(dg *depguard.Depguard, listType string) error {
 	var found bool
 	dg.ListType, found = depguard.StringToListType[strings.ToLower(listType)]
 	if !found {
@@ -28,7 +59,10 @@ func setDepguardListType(dg *depguard.Depguard, lintCtx *linter.Context) error {
 	return nil
 }
 
-func setupDepguardPackages(dg *depguard.Depguard, lintCtx *linter.Context) {
+func setupDepguardPackages(
+	dg *depguard.Depguard,
+	packagesWithErrorMessage map[string]string,
+) {
 	if dg.ListType == depguard.LTBlacklist {
 		// if the list type was a blacklist the packages with error messages should
 		// be included in the blacklist package list
@@ -38,7 +72,7 @@ func setupDepguardPackages(dg *depguard.Depguard, lintCtx *linter.Context) {
 			noMessagePackages[pkg] = true
 		}
 
-		for pkg := range lintCtx.Settings().Depguard.PackagesWithErrorMessage {
+		for pkg := range packagesWithErrorMessage {
 			if _, ok := noMessagePackages[pkg]; !ok {
 				dg.Packages = append(dg.Packages, pkg)
 			}
@@ -63,32 +97,18 @@ func NewDepguard() *goanalysis.Linter {
 	).WithContextSetter(func(lintCtx *linter.Context) {
 		dgSettings := &lintCtx.Settings().Depguard
 		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
+			dgs, err := parseDepguardSettings(dgSettings)
+			if err != nil {
+				return nil, err
+			}
+
 			loadConfig := &loader.Config{
 				Cwd:   "",  // fallbacked to os.Getcwd
 				Build: nil, // fallbacked to build.Default
 			}
 			prog := goanalysis.MakeFakeLoaderProgram(pass)
 
-			var dgs []*depguard.Depguard
-			dgs = append(dgs, &depguard.Depguard{
-				Packages:        dgSettings.Packages,
-				IncludeGoRoot:   dgSettings.IncludeGoRoot,
-				IgnoreFileRules: dgSettings.IgnoreFileRules,
-			})
-			for _, additionalGuard := range dgSettings.AdditionalGuards {
-				dgs = append(dgs, &depguard.Depguard{
-					Packages:        additionalGuard.Packages,
-					IncludeGoRoot:   additionalGuard.IncludeGoRoot,
-					IgnoreFileRules: additionalGuard.IgnoreFileRules,
-				})
-			}
-
 			for _, dg := range dgs {
-				if err := setDepguardListType(dg, lintCtx); err != nil {
-					return nil, err
-				}
-				setupDepguardPackages(dg, lintCtx)
-
 				issues, err := dg.Run(loadConfig, prog)
 				if err != nil {
 					return nil, err
