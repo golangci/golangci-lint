@@ -15,8 +15,8 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-func parseDepguardSettings(dgSettings *config.DepGuardSettings) ([]*depguard.Depguard, error) {
-	var dgs []*depguard.Depguard
+func parseDepguardSettings(dgSettings *config.DepGuardSettings) (map[*depguard.Depguard]map[string]string, error) {
+	parsedDgSettings := make(map[*depguard.Depguard]map[string]string)
 	dg := &depguard.Depguard{
 		Packages:        dgSettings.Packages,
 		IncludeGoRoot:   dgSettings.IncludeGoRoot,
@@ -27,7 +27,11 @@ func parseDepguardSettings(dgSettings *config.DepGuardSettings) ([]*depguard.Dep
 		return nil, err
 	}
 	setupDepguardPackages(dg, dgSettings.PackagesWithErrorMessage)
-	dgs = append(dgs, dg)
+	if dgSettings.PackagesWithErrorMessage != nil {
+		parsedDgSettings[dg] = dgSettings.PackagesWithErrorMessage
+	} else {
+		parsedDgSettings[dg] = make(map[string]string)
+	}
 
 	for _, additionalGuard := range dgSettings.AdditionalGuards {
 		additionalDg := &depguard.Depguard{
@@ -40,10 +44,37 @@ func parseDepguardSettings(dgSettings *config.DepGuardSettings) ([]*depguard.Dep
 			return nil, err
 		}
 		setupDepguardPackages(additionalDg, additionalGuard.PackagesWithErrorMessage)
-		dgs = append(dgs, additionalDg)
+		if additionalGuard.PackagesWithErrorMessage != nil {
+			parsedDgSettings[additionalDg] = additionalGuard.PackagesWithErrorMessage
+		} else {
+			parsedDgSettings[additionalDg] = make(map[string]string)
+		}
 	}
 
-	return dgs, nil
+	return parsedDgSettings, nil
+}
+
+func postProcessIssue(
+	issue *depguard.Issue,
+	dg *depguard.Depguard,
+	packagesWithErrorMessage map[string]string,
+	lintCtx *linter.Context,
+) *result.Issue {
+	msgSuffix := "is in the blacklist"
+	if dg.ListType == depguard.LTWhitelist {
+		msgSuffix = "is not in the whitelist"
+	}
+
+	userSuppliedMsgSuffix := packagesWithErrorMessage[issue.PackageName]
+	if userSuppliedMsgSuffix != "" {
+		userSuppliedMsgSuffix = ": " + userSuppliedMsgSuffix
+	}
+
+	return &result.Issue{
+		Pos:        issue.Position,
+		Text:       fmt.Sprintf("%s %s%s", formatCode(issue.PackageName, lintCtx.Cfg), msgSuffix, userSuppliedMsgSuffix),
+		FromLinter: linterName,
+	}
 }
 
 func setDepguardListType(dg *depguard.Depguard, listType string) error {
@@ -80,8 +111,9 @@ func setupDepguardPackages(
 	}
 }
 
+const linterName = "depguard"
+
 func NewDepguard() *goanalysis.Linter {
-	const linterName = "depguard"
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
 
@@ -97,7 +129,7 @@ func NewDepguard() *goanalysis.Linter {
 	).WithContextSetter(func(lintCtx *linter.Context) {
 		dgSettings := &lintCtx.Settings().Depguard
 		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
-			dgs, err := parseDepguardSettings(dgSettings)
+			parsedDgSettings, err := parseDepguardSettings(dgSettings)
 			if err != nil {
 				return nil, err
 			}
@@ -108,7 +140,7 @@ func NewDepguard() *goanalysis.Linter {
 			}
 			prog := goanalysis.MakeFakeLoaderProgram(pass)
 
-			for _, dg := range dgs {
+			for dg, packagesWithErrorMessage := range parsedDgSettings {
 				issues, err := dg.Run(loadConfig, prog)
 				if err != nil {
 					return nil, err
@@ -116,21 +148,10 @@ func NewDepguard() *goanalysis.Linter {
 				if len(issues) == 0 {
 					return nil, nil
 				}
-				msgSuffix := "is in the blacklist"
-				if dg.ListType == depguard.LTWhitelist {
-					msgSuffix = "is not in the whitelist"
-				}
 				res := make([]goanalysis.Issue, 0, len(issues))
 				for _, i := range issues {
-					userSuppliedMsgSuffix := dgSettings.PackagesWithErrorMessage[i.PackageName]
-					if userSuppliedMsgSuffix != "" {
-						userSuppliedMsgSuffix = ": " + userSuppliedMsgSuffix
-					}
-					res = append(res, goanalysis.NewIssue(&result.Issue{
-						Pos:        i.Position,
-						Text:       fmt.Sprintf("%s %s%s", formatCode(i.PackageName, lintCtx.Cfg), msgSuffix, userSuppliedMsgSuffix),
-						FromLinter: linterName,
-					}, pass))
+					lintIssue := postProcessIssue(i, dg, packagesWithErrorMessage, lintCtx)
+					res = append(res, goanalysis.NewIssue(lintIssue, pass))
 				}
 				mu.Lock()
 				resIssues = append(resIssues, res...)
