@@ -213,10 +213,7 @@ func (r Runner) Run(ctx context.Context, linters []*linter.Config, lintCtx *lint
 	}
 
 	if len(failedLinters) > 0 {
-		linterErr = fmt.Errorf(
-			"one or more linters failed to run: %s",
-			strings.Join(failedLinters, ", "),
-		)
+		linterErr = errors.New("one or more linters failed to run: " + strings.Join(failedLinters, ", "))
 	}
 
 	return r.processLintResults(issues), linterErr
