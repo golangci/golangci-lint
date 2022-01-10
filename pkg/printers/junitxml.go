@@ -5,6 +5,7 @@ import (
 	"encoding/xml"
 	"fmt"
 	"io"
+	"sort"
 	"strings"
 
 	"github.com/golangci/golangci-lint/pkg/result"
@@ -74,6 +75,10 @@ func (p JunitXML) Print(ctx context.Context, issues []result.Issue) error {
 	for _, val := range suites {
 		res.TestSuites = append(res.TestSuites, val)
 	}
+
+	sort.Slice(res.TestSuites, func(i, j int) bool {
+		return res.TestSuites[i].Suite < res.TestSuites[j].Suite
+	})
 
 	enc := xml.NewEncoder(p.w)
 	enc.Indent("", "  ")

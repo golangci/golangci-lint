@@ -12,7 +12,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-func TestGithub_Print(t *testing.T) {
+func TestJSON_Print(t *testing.T) {
 	issues := []result.Issue{
 		{
 			FromLinter: "linter-a",
@@ -44,31 +44,15 @@ func TestGithub_Print(t *testing.T) {
 	}
 
 	buf := new(bytes.Buffer)
-	printer := NewGithub(buf)
+
+	printer := NewJSON(nil, buf)
 
 	err := printer.Print(context.Background(), issues)
 	require.NoError(t, err)
 
-	expected := `::warning file=path/to/filea.go,line=10,col=4::some issue (linter-a)
-::error file=path/to/fileb.go,line=300,col=9::another issue (linter-b)
+	//nolint:lll
+	expected := `{"Issues":[{"FromLinter":"linter-a","Text":"some issue","Severity":"warning","SourceLines":null,"Replacement":null,"Pos":{"Filename":"path/to/filea.go","Offset":2,"Line":10,"Column":4},"ExpectNoLint":false,"ExpectedNoLintLinter":""},{"FromLinter":"linter-b","Text":"another issue","Severity":"error","SourceLines":["func foo() {","\tfmt.Println(\"bar\")","}"],"Replacement":null,"Pos":{"Filename":"path/to/fileb.go","Offset":5,"Line":300,"Column":9},"ExpectNoLint":false,"ExpectedNoLintLinter":""}],"Report":null}
 `
 
 	assert.Equal(t, expected, buf.String())
-}
-
-func TestFormatGithubIssue(t *testing.T) {
-	sampleIssue := result.Issue{
-		FromLinter: "sample-linter",
-		Text:       "some issue",
-		Pos: token.Position{
-			Filename: "path/to/file.go",
-			Offset:   2,
-			Line:     10,
-			Column:   4,
-		},
-	}
-	require.Equal(t, "::error file=path/to/file.go,line=10,col=4::some issue (sample-linter)", formatIssueAsGithub(&sampleIssue))
-
-	sampleIssue.Pos.Column = 0
-	require.Equal(t, "::error file=path/to/file.go,line=10::some issue (sample-linter)", formatIssueAsGithub(&sampleIssue))
 }
