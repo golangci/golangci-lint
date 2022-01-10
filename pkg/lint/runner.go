@@ -192,20 +192,34 @@ func (r Runner) Run(ctx context.Context, linters []*linter.Config, lintCtx *lint
 	sw := timeutils.NewStopwatch("linters", r.Log)
 	defer sw.Print()
 
-	var issues []result.Issue
+	var (
+		linterErr     error
+		failedLinters []string
+		issues        []result.Issue
+	)
+
 	for _, lc := range linters {
 		lc := lc
 		sw.TrackStage(lc.Name(), func() {
 			linterIssues, err := r.runLinterSafe(ctx, lintCtx, lc)
 			if err != nil {
+				failedLinters = append(failedLinters, lc.Linter.Name())
 				r.Log.Warnf("Can't run linter %s: %v", lc.Linter.Name(), err)
+
 				return
 			}
 			issues = append(issues, linterIssues...)
 		})
 	}
 
-	return r.processLintResults(issues), nil
+	if len(failedLinters) > 0 {
+		linterErr = fmt.Errorf(
+			"one or more linters failed to run: %s",
+			strings.Join(failedLinters, ", "),
+		)
+	}
+
+	return r.processLintResults(issues), linterErr
 }
 
 func (r *Runner) processIssues(issues []result.Issue, sw *timeutils.Stopwatch, statPerProcessor map[string]processorStat) []result.Issue {
