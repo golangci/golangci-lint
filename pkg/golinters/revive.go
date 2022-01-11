@@ -305,6 +305,8 @@ var allRules = append([]lint.Rule{
 	&rule.NestedStructs{},
 	&rule.IfReturnRule{},
 	&rule.UselessBreak{},
+	&rule.OptimizeOperandsOrderRule{},
+	&rule.TimeEqualRule{},
 }, defaultRules...)
 
 // This element is not exported by revive, so we need copy the code.
