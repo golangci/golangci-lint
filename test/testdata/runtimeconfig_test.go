@@ -61,6 +61,21 @@ func GetTest() {
 
 	// valid usage
 	rtc.Get("", T1{}, &t1)
+
+	rtcv2 := setupv2()
+
+	// nil or primitive values are not allowed
+	rtcv2.Get("", nil)   // __ERROR__ "expected configuration object as 2nd arg but got nil"
+	rtcv2.Get("", false) // __ERROR__ "expected configuration object as 2nd arg but got nil"
+	rtcv2.Get("", "")    // __ERROR__ "expected ref as 2nd arg to Get"
+	rtcv2.Get("", 456)   // __ERROR__ "expected ref as 2nd arg to Get"
+
+	// 3rd arg needs to be a ref (update in-place)
+	t1 = T1{}
+	rtcv2.Get("", t1) // __ERROR__ "expected ref as 2nd arg to Get"
+
+	// valid usage
+	rtcv2.Get("", T1{}, &t1)
 }
 
 func SubscribeTest() {
@@ -119,5 +134,15 @@ func setup() graphene.RuntimeConfigRegistry {
 	})
 	return rtc
 }
+
+func setupv2() graphene.RuntimeConfigRegistry2 {
+	var rtc graphene.RuntimeConfigRegistry2
+	_, _ = graphene.Create("asdf", 123, 123, nil, func(g *graphene.Graphene) error {
+		rtc = g.RuntimeConfig2()
+		return nil
+	})
+	return rtc
+}
+
 
 */

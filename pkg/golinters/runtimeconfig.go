@@ -47,11 +47,12 @@ func run(pass *analysis.Pass) (interface{}, error) {
 	i.Preorder(nodeFilter, func(n ast.Node) {
 		call := n.(*ast.CallExpr)
 		target := typeutil.Callee(pass.TypesInfo, call)
-		numArgs := 3
+		numArgs := len(call.Args)
 		if target == nil {
 			return
 		} else if target.Pkg() == nil || !(target.Pkg().Path() == "ghe.anduril.dev/anduril/graphene-go/pkg/graphene" &&
-			(target.Name() == getFn || target.Name() == subscribeFn)) || len(call.Args) != numArgs {
+			((target.Name() == getFn && (numArgs == 2 || numArgs == 3)) ||
+				(target.Name() == subscribeFn) && numArgs != 3)) {
 			return
 		}
 		if selector, ok := call.Fun.(*ast.SelectorExpr); ok {
@@ -59,23 +60,30 @@ func run(pass *analysis.Pass) (interface{}, error) {
 			isGetConfig := fnName == getFn
 			isSubscribeConfig := fnName == subscribeFn
 			if isGetConfig || isSubscribeConfig {
-				defaultConfArg := call.Args[1]
-				defaultConfArgType := pass.TypesInfo.Types[defaultConfArg].Type
-				defaultConfig := getStructType(defaultConfArgType)
-				if defaultConfig == nil {
-					pass.Reportf(
-						defaultConfArg.Pos(),
-						"expected 2nd arg to be non nil but got %v",
-						defaultConfig,
-					)
-					return
-				}
-				validateFieldSerialization(pass, defaultConfArg.Pos(), defaultConfig, defaultConfArgType.String())
-				arg3 := call.Args[2]
-				if isSubscribeConfig {
-					validateTypeConversion(arg3, defaultConfArgType.String(), pass)
-				} else if isGetConfig {
-					checkPointerArg(arg3, "", defaultConfArgType.String(), arg3.Pos(), pass, false)
+				if numArgs == 3 {
+					// Using Subscribe or Get from RuntimeConfig
+					defaultConfArg := call.Args[1]
+					defaultConfArgType := pass.TypesInfo.Types[defaultConfArg].Type
+					defaultConfig := getStructType(defaultConfArgType)
+					if defaultConfig == nil {
+						pass.Reportf(
+							defaultConfArg.Pos(),
+							"expected 2nd arg to be non nil but got %v",
+							defaultConfig,
+						)
+						return
+					}
+					validateFieldSerialization(pass, defaultConfArg.Pos(), defaultConfig, defaultConfArgType.String())
+					arg3 := call.Args[2]
+					if isSubscribeConfig {
+						validateTypeConversion(arg3, defaultConfArgType.String(), pass)
+					} else if isGetConfig {
+						checkPointerArg(arg3, "", defaultConfArgType.String(), arg3.Pos(), pass, "3rd", false)
+					}
+				} else {
+					// Using Get from RuntimeConfigV2
+					arg2 := call.Args[1]
+					checkPointerArg(arg2, "", "", arg2.Pos(), pass, "2nd", false)
 				}
 			}
 		}
@@ -83,26 +91,30 @@ func run(pass *analysis.Pass) (interface{}, error) {
 	return nil, nil
 }
 
-func checkPointerArg(arg ast.Expr, argName, defType string, pos token.Pos, pass *analysis.Pass, isRef bool) {
+func checkPointerArg(arg ast.Expr, argName, defType string, pos token.Pos, pass *analysis.Pass, numArgsString string, isRef bool) {
 	switch t := arg.(type) {
 	case *ast.Ident:
 		if t.Obj == nil {
-			pass.Reportf(t.Pos(), "expected configuration object as 3rd arg but got nil")
+			pass.Reportf(t.Pos(), "expected configuration object as %s arg but got nil", numArgsString)
 			return
 		}
 		if varDec, ok := t.Obj.Decl.(*ast.AssignStmt); ok {
 			if len(varDec.Rhs) == 1 {
-				checkPointerArg(varDec.Rhs[0], t.Name, defType, pos, pass, isRef)
+				checkPointerArg(varDec.Rhs[0], t.Name, defType, pos, pass, numArgsString, isRef)
 			}
 		}
 	case *ast.UnaryExpr:
 		if !t.Op.IsOperator() || t.Op.String() != "&" {
-			pass.Reportf(pos, "expected ref as 3rd arg to Get")
+			pass.Reportf(pos, "expected ref as %s arg to Get", numArgsString)
 		}
-		checkPointerArg(t.X, argName, defType, pos, pass, true)
+		checkPointerArg(t.X, argName, defType, pos, pass, numArgsString, true)
 	case *ast.CompositeLit:
 		if !isRef {
-			pass.Reportf(pos, "expected ref as 3rd arg to Get")
+			pass.Reportf(pos, "expected ref as %s arg to Get", numArgsString)
+		}
+		if defType == "" {
+			// Using RuntimeConfigV2, skip SameType checks
+			return
 		}
 		switch sl := t.Type.(type) {
 		case *ast.Ident:
@@ -112,10 +124,10 @@ func checkPointerArg(arg ast.Expr, argName, defType string, pos token.Pos, pass 
 		}
 	case *ast.SelectorExpr:
 		if !isRef {
-			pass.Reportf(pos, "expected ref as 3rd arg to Get")
+			pass.Reportf(pos, "expected ref as %s arg to Get", numArgsString)
 		}
 	default:
-		pass.Reportf(pos, "expected ref as 3rd arg to Get")
+		pass.Reportf(pos, "expected ref as %s arg to Get", numArgsString)
 	}
 }
 
