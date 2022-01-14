@@ -21,7 +21,7 @@ var defaultLintersSettings = LintersSettings{
 		CheckGenerated:             false,
 		DefaultSignifiesExhaustive: false,
 		IgnoreEnumMembers:          "",
-		CheckingStrategy:           "value",
+		PackageScopeOnly:           false,
 	},
 	Forbidigo: ForbidigoSettings{
 		ExcludeGodocExamples: true,
@@ -223,9 +223,6 @@ type ExhaustiveSettings struct {
 	DefaultSignifiesExhaustive bool   `mapstructure:"default-signifies-exhaustive"`
 	IgnoreEnumMembers          string `mapstructure:"ignore-enum-members"`
 	PackageScopeOnly           bool   `mapstructure:"package-scope-only"`
-
-	IgnorePattern    string `mapstructure:"ignore-pattern"`    // Deprecated: this setting has no effect; see IgnoreEnumMembers instead.
-	CheckingStrategy string `mapstructure:"checking-strategy"` // Deprecated.
 }
 
 type ExhaustiveStructSettings struct {
