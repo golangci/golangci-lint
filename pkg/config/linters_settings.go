@@ -29,6 +29,10 @@ var defaultLintersSettings = LintersSettings{
 	Godox: GodoxSettings{
 		Keywords: []string{},
 	},
+	Godot: GodotSettings{
+		Scope:  "declarations",
+		Period: true,
+	},
 	Gofumpt: GofumptSettings{
 		LangVersion: "",
 		ExtraRules:  false,
@@ -253,6 +257,7 @@ type GodotSettings struct {
 	Scope   string   `mapstructure:"scope"`
 	Exclude []string `mapstructure:"exclude"`
 	Capital bool     `mapstructure:"capital"`
+	Period  bool     `mapstructure:"period"`
 
 	// Deprecated: use `Scope` instead
 	CheckAll bool `mapstructure:"check-all"`
