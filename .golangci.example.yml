@@ -414,10 +414,17 @@ linters-settings:
     settings:
       mnd:
         # the list of enabled checks, see https://github.com/tommy-muehle/go-mnd/#checks for description.
-        checks: argument,case,condition,operation,return,assign
-        # ignored-numbers: 1000
-        # ignored-files: magic_.*.go
-        # ignored-functions: math.*
+        checks:
+        - argument
+        - case
+        - condition
+        - operation
+        - return
+        - assign
+        # Next settings are expecting comma separated string values
+        ignored-numbers: "0666,0755,42"                   # values always ignored: 1, 1.0, 0 and 0.0
+        ignored-files: "magic1_.*.go"                     # values always ignored:_test.go
+        ignored-functions: "math.*,http.StatusText,make"  # values always ignored: time.Time
 
   gomoddirectives:
     # Allow local `replace` directives. Default is false.
