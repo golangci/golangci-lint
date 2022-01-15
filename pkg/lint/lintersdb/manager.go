@@ -441,7 +441,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithSince("v1.8.0").
 			WithPresets(linter.PresetStyle),
 
-		linter.NewConfig(golinters.NewMaintIdx()).
+		linter.NewConfig(golinters.NewMaintIdx(maintIdxCfg)).
 			WithSince("v1.1.0").
 			WithPresets(linter.PresetComplexity).
 			WithLoadForGoAnalysis().
