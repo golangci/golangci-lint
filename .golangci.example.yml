@@ -343,14 +343,17 @@ linters-settings:
     min-complexity: 10
 
   godot:
-    # comments to be checked: `declarations`, `toplevel`, or `all`
-    scope: declarations
+    # comments to be checked: `declarations`, `toplevel`, or `all` (default: declarations)
+    scope: toplevel
     # list of regexps for excluding particular comment lines from check
     exclude:
-      # example: exclude comments which contain numbers
-      # - '[0-9]+'
-    # check that each sentence starts with a capital letter
-    capital: false
+      # exclude todo and fixme comments
+      - "^fixme:"
+      - "^todo:"
+    # check that each sentence ends with a period (default: true)
+    period: false
+    # check that each sentence starts with a capital letter (default: false)
+    capital: true
 
   godox:
     # report any comments starting with keywords, this is useful for TODO or FIXME comments that
