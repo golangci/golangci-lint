@@ -325,7 +325,7 @@ linters-settings:
     # exclude todo and fixme comments
     - "^fixme:"
     - "^todo:"
-    # don't check that each sentence ends with a period (default: true)
+    # check that each sentence ends with a period (default: true)
     period: false
     # check that each sentence starts with a capital letter (default: false)
     capital: true
