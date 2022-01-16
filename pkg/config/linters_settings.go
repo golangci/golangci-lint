@@ -51,6 +51,9 @@ var defaultLintersSettings = LintersSettings{
 		LineLength: 120,
 		TabWidth:   1,
 	},
+	MaintIdx: MaintIdxSettings{
+		Under: 20,
+	},
 	Nakedret: NakedretSettings{
 		MaxFuncLines: 30,
 	},

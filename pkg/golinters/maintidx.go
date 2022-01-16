@@ -11,9 +11,8 @@ import (
 func NewMaintIdx(cfg *config.MaintIdxSettings) *goanalysis.Linter {
 	analyzer := maintidx.Analyzer
 
-	cfgMap := map[string]map[string]interface{}{}
-	cfgMap[analyzer.Name] = map[string]interface{}{
-		"under": 20,
+	cfgMap := map[string]map[string]interface{}{
+		analyzer.Name: {"under": 20},
 	}
 
 	if cfg != nil {

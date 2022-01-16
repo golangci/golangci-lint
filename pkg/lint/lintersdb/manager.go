@@ -442,9 +442,8 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle),
 
 		linter.NewConfig(golinters.NewMaintIdx(maintIdxCfg)).
-			WithSince("v1.1.0").
+			WithSince("v1.44.0").
 			WithPresets(linter.PresetComplexity).
-			WithLoadForGoAnalysis().
 			WithURL("https://github.com/yagipy/maintidx"),
 
 		linter.NewConfig(golinters.NewMakezero()).
