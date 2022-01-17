@@ -162,7 +162,7 @@ func getReviveConfig(cfg *config.ReviveSettings) (*lint.Config, error) {
 		}
 
 		conf = &lint.Config{}
-		_, err = toml.DecodeReader(buf, conf)
+		_, err = toml.NewDecoder(buf).Decode(conf)
 		if err != nil {
 			return nil, errors.Wrap(err, "failed to decode configuration")
 		}
