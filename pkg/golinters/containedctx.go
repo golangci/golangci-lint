@@ -10,14 +10,10 @@ import (
 func NewContainedCtx() *goanalysis.Linter {
 	a := containedctx.Analyzer
 
-	analyzers := []*analysis.Analyzer{
-		a,
-	}
-
 	return goanalysis.NewLinter(
 		a.Name,
 		a.Doc,
-		analyzers,
+		[]*analysis.Analyzer{a},
 		nil,
 	).WithLoadMode(goanalysis.LoadModeSyntax)
 }
