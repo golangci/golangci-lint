@@ -590,6 +590,12 @@ linters-settings:
     # tab width in spaces. Default to 1.
     tab-width: 1
 
+  maintidx:
+    # Show functions with maintainability index lower than N.
+    # A high index indicates better maintainability (it's kind of the opposite of complexity).
+    # default: 20
+    under: 100
+
   makezero:
     # Allow only slices initialized with a length of zero. Default is false.
     always: false

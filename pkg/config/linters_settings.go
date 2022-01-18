@@ -51,6 +51,9 @@ var defaultLintersSettings = LintersSettings{
 		LineLength: 120,
 		TabWidth:   1,
 	},
+	MaintIdx: MaintIdxSettings{
+		Under: 20,
+	},
 	Nakedret: NakedretSettings{
 		MaxFuncLines: 30,
 	},
@@ -128,6 +131,7 @@ type LintersSettings struct {
 	ImportAs         ImportAsSettings
 	Ireturn          IreturnSettings
 	Lll              LllSettings
+	MaintIdx         MaintIdxSettings
 	Makezero         MakezeroSettings
 	Maligned         MalignedSettings
 	Misspell         MisspellSettings
@@ -387,6 +391,10 @@ type IreturnSettings struct {
 type LllSettings struct {
 	LineLength int `mapstructure:"line-length"`
 	TabWidth   int `mapstructure:"tab-width"`
+}
+
+type MaintIdxSettings struct {
+	Under int `mapstructure:"under"`
 }
 
 type MakezeroSettings struct {

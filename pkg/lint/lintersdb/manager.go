@@ -114,6 +114,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 	var ifshortCfg *config.IfshortSettings
 	var importAsCfg *config.ImportAsSettings
 	var ireturnCfg *config.IreturnSettings
+	var maintIdxCfg *config.MaintIdxSettings
 	var nilNilCfg *config.NilNilSettings
 	var nlreturnCfg *config.NlreturnSettings
 	var predeclaredCfg *config.PredeclaredSettings
@@ -143,6 +144,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		ifshortCfg = &m.cfg.LintersSettings.Ifshort
 		importAsCfg = &m.cfg.LintersSettings.ImportAs
 		ireturnCfg = &m.cfg.LintersSettings.Ireturn
+		maintIdxCfg = &m.cfg.LintersSettings.MaintIdx
 		nilNilCfg = &m.cfg.LintersSettings.NilNil
 		nlreturnCfg = &m.cfg.LintersSettings.Nlreturn
 		predeclaredCfg = &m.cfg.LintersSettings.Predeclared
@@ -438,6 +440,11 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		linter.NewConfig(golinters.NewLLL()).
 			WithSince("v1.8.0").
 			WithPresets(linter.PresetStyle),
+
+		linter.NewConfig(golinters.NewMaintIdx(maintIdxCfg)).
+			WithSince("v1.44.0").
+			WithPresets(linter.PresetComplexity).
+			WithURL("https://github.com/yagipy/maintidx"),
 
 		linter.NewConfig(golinters.NewMakezero()).
 			WithSince("v1.34.0").
