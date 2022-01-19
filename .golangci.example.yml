@@ -128,6 +128,26 @@ linters-settings:
     # default: true (disabled)
     disable-dec-num-check: false
 
+  depguard:
+    list-type: denylist
+    include-go-root: false
+    packages:
+      - github.com/sirupsen/logrus
+    packages-with-error-message:
+      # specify an error message to output when a denied package is used
+      - github.com/sirupsen/logrus: "logging is allowed only by logutils.Log"
+    # create additional guards that follow the same configuration pattern
+    # results from all guards are aggregated together
+    additional-guards:
+      - list-type: denylist
+        include-go-root: false
+        packages:
+          - github.com/stretchr/testify
+        # specify rules by which the linter ignores certain files for consideration
+        ignore-file-rules:
+          - "**/*_test.go"
+          - "**/mock/**/*.go"
+
   dogsled:
     # checks assignments with too many blank identifiers; default is 2
     max-blank-identifiers: 2
@@ -163,21 +183,12 @@ linters-settings:
       - io.Copy(os.Stdout)
 
   errchkjson:
-    # with check-error-free-encoding set to true, errchkjson does warn about errors
-    # from json encoding functions that are safe to be ignored,
-    # because they are not possible to happen (default false)
-    #
-    # if check-error-free-encoding is set to true and errcheck linter is enabled,
-    # it is recommended to add the following exceptions to prevent from false positives:
-    #
-    #     linters-settings:
-    #       errcheck:
-    #         exclude-functions:
-    #           - encoding/json.Marshal
-    #           - encoding/json.MarshalIndent
-    #           - (*encoding/json.Encoder).Encode
-    check-error-free-encoding: false
-    # if report-no-exported is true, encoding a struct without exported fields is reported as issue (default false)
+    # Issue on errors from json encoding package (safe to be ignored).
+    # default: false
+    check-error-free-encoding: true
+
+    # Issue on struct encoding that doesn't have exported fields.
+    # default: false
     report-no-exported: false
 
   errorlint:
@@ -210,11 +221,12 @@ linters-settings:
       - 'example.com/package.ExampleStruct'
 
   forbidigo:
-    # Forbid the following identifiers (identifiers are written using regexp):
+    # Forbid the following identifiers (list of regexp):
     forbid:
       - ^print.*$
       - 'fmt\.Print.*'
-    # Exclude godoc examples from forbidigo checks.  Default is true.
+    # Exclude godoc examples from forbidigo checks.
+    # default: true
     exclude_godoc_examples: false
 
   funlen:
@@ -228,25 +240,34 @@ linters-settings:
     local-prefixes: github.com/org/project
 
   gocognit:
-    # minimal code complexity to report, 30 by default (but we recommend 10-20)
+    # Minimal code complexity to report
+    # default: 30, (but we recommended 10-20)
     min-complexity: 10
 
   goconst:
-    # minimal length of string constant, 3 by default
+    # Minimal length of string constant
+    # default: 3
     min-len: 3
-    # minimum occurrences of constant string count to trigger issue, 3 by default
+    # Minimum occurrences of constant string count to trigger issue
+    # default: 3
     min-occurrences: 3
-    # ignore test files, false by default
+    # Ignore test files
+    # default: false
     ignore-tests: false
-    # look for existing constants matching the values, true by default
+    # Look for existing constants matching the values
+    # default: true
     match-constant: true
-    # search also for duplicated numbers, false by default
+    # Search also for duplicated numbers.
+    # default: false
     numbers: false
-    # minimum value, only works with goconst.numbers, 3 by default
+    # Minimum value, only works with goconst.numbers
+    # default: 3
     min: 3
-    # maximum value, only works with goconst.numbers, 3 by default
+    # Maximum value, only works with goconst.numbers
+    # default: 3
     max: 3
-    # ignore when constant is not used as function argument, true by default
+    # Ignore when constant is not used as function argument
+    # default: true
     ignore-calls: true
 
   gocritic:
@@ -458,6 +479,12 @@ linters-settings:
         #     reason: "testing if blocked version constraint works."  # Reason why the version constraint exists. (Optional)
       local_replace_directives: false                                 # Set to true to raise lint issues for packages that are loaded from a local path via replace directive
 
+  gosimple:
+    # Select the Go version to target. The default is '1.13'.
+    go: "1.15"
+    # https://staticcheck.io/docs/options#checks
+    checks: [ "all" ]
+
   gosec:
     # To select a subset of rules to run.
     # Available rules: https://github.com/securego/gosec#available-rules
@@ -488,12 +515,6 @@ linters-settings:
         per_char_threshold: "3.0"
         truncate: "32"
 
-  gosimple:
-    # Select the Go version to target. The default is '1.13'.
-    go: "1.15"
-    # https://staticcheck.io/docs/options#checks
-    checks: [ "all" ]
-
   govet:
     # report about shadowed variables
     check-shadowing: true
@@ -515,26 +536,6 @@ linters-settings:
     disable:
       - shadow
     disable-all: false
-
-  depguard:
-    list-type: denylist
-    include-go-root: false
-    packages:
-      - github.com/sirupsen/logrus
-    packages-with-error-message:
-      # specify an error message to output when a denied package is used
-      - github.com/sirupsen/logrus: "logging is allowed only by logutils.Log"
-    # create additional guards that follow the same configuration pattern
-    # results from all guards are aggregated together
-    additional-guards:
-      - list-type: denylist
-        include-go-root: false
-        packages:
-          - github.com/stretchr/testify
-        # specify rules by which the linter ignores certain files for consideration
-        ignore-file-rules:
-          - "**/*_test.go"
-          - "**/mock/**/*.go"
 
   ifshort:
     # Maximum length of variable declaration measured in number of lines, after which linter won't suggest using short syntax.
@@ -579,9 +580,8 @@ linters-settings:
     # You can specify idiomatic endings for interface
     - (or|er)$
 
-    # Reject patterns
-    reject:
-    - github.com\/user\/package\/v4\.Type
+    # reject:
+    # - github.com\/user\/package\/v4\.Type
 
   lll:
     # max line length, lines longer will be reported. Default is 120.
@@ -656,30 +656,26 @@ linters-settings:
     range-loops: true # Report preallocation suggestions on range loops, true by default
     for-loops: false # Report preallocation suggestions on for loops, false by default
 
-  promlinter:
-    # Promlinter cannot infer all metrics name in static analysis.
-    # Enable strict mode will also include the errors caused by failing to parse the args.
-    strict: false
-    # Please refer to https://github.com/yeya24/promlinter#usage for detailed usage.
-    disabled-linters:
-    #  - "Help"
-    #  - "MetricUnits"
-    #  - "Counter"
-    #  - "HistogramSummaryReserved"
-    #  - "MetricTypeInName"
-    #  - "ReservedChars"
-    #  - "CamelCase"
-    #  - "lintUnitAbbreviations"
-
   predeclared:
     # comma-separated list of predeclared identifiers to not report on
     ignore: ""
     # include method names and field names (i.e., qualified names) in checks
     q: false
 
-  rowserrcheck:
-    packages:
-      - github.com/jmoiron/sqlx
+  promlinter:
+    # Promlinter cannot infer all metrics name in static analysis.
+    # Enable strict mode will also include the errors caused by failing to parse the args.
+    strict: false
+    # Please refer to https://github.com/yeya24/promlinter#usage for detailed usage.
+    disabled-linters:
+     - "Help"
+     - "MetricUnits"
+     - "Counter"
+     - "HistogramSummaryReserved"
+     - "MetricTypeInName"
+     - "ReservedChars"
+     - "CamelCase"
+     - "UnitAbbreviations"
 
   revive:
     # see https://github.com/mgechev/revive#available-rules for details.
@@ -984,6 +980,10 @@ linters-settings:
         severity: warning
         disable: false
 
+  rowserrcheck:
+    packages:
+      - github.com/jmoiron/sqlx
+
   staticcheck:
     # Select the Go version to target. The default is '1.13'.
     go: "1.15"
@@ -1018,6 +1018,11 @@ linters-settings:
         avro: snake
         mapstructure: kebab
 
+  tenv:
+    # The option `all` will run against whole test files (`_test.go`) regardless of method/function signatures.
+    # By default, only methods that take `*testing.T`, `*testing.B`, and `testing.TB` as arguments are checked.
+    all: false
+
   testpackage:
     # regexp pattern to skip files
     skip-regexp: (export|internal)_test\.go
@@ -1038,10 +1043,6 @@ linters-settings:
       name: true
       begin: true
 
-  tenv:
-    # The option `all` will run against whole test files (`_test.go`) regardless of method/function signatures.
-    # By default, only methods that take `*testing.T`, `*testing.B`, and `testing.TB` as arguments are checked.
-    all: false
 
   unparam:
     # Inspect exported functions, default is false. Set to true if no external program/library imports your code.
@@ -1050,9 +1051,9 @@ linters-settings:
     # with golangci-lint call it on a directory with the changed file.
     check-exported: false
 
-  unused:
-    # Select the Go version to target. The default is '1.13'.
-    go: "1.15"
+  varcheck:
+    # Check usage of exported fields and variables.
+    exported-fields: true
 
   varnamelen:
     # The longest distance, in source lines, that is being considered a "small scope." (defaults to 5)
