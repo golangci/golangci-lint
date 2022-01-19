@@ -183,7 +183,19 @@ linters-settings:
       - io.Copy(os.Stdout)
 
   errchkjson:
-    # Issue on errors from json encoding package (safe to be ignored).
+    # With check-error-free-encoding set to true, errchkjson does warn about errors
+    # from json encoding functions that are safe to be ignored,
+    # because they are not possible to happen.
+    #
+    # if check-error-free-encoding is set to true and errcheck linter is enabled,
+    # it is recommended to add the following exceptions to prevent from false positives:
+    #
+    #     linters-settings:
+    #       errcheck:
+    #         exclude-functions:
+    #           - encoding/json.Marshal
+    #           - encoding/json.MarshalIndent
+    #
     # default: false
     check-error-free-encoding: true
 
