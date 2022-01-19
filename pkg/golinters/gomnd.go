@@ -16,13 +16,22 @@ func NewGoMND(settings *config.GoMndSettings) *goanalysis.Linter {
 		if len(settings.Settings) > 0 {
 			linterCfg = settings.Settings
 		} else {
+			cfg := make(map[string]interface{})
+			if len(settings.Checks) > 0 {
+				cfg["checks"] = settings.Checks
+			}
+			if len(settings.IgnoredNumbers) > 0 {
+				cfg["ignored-numbers"] = settings.IgnoredNumbers
+			}
+			if len(settings.IgnoredFiles) > 0 {
+				cfg["ignored-files"] = settings.IgnoredFiles
+			}
+			if len(settings.IgnoredFunctions) > 0 {
+				cfg["ignored-functions"] = settings.IgnoredFunctions
+			}
+
 			linterCfg = map[string]map[string]interface{}{
-				"mnd": {
-					"checks":            settings.Checks,
-					"ignored-numbers":   settings.IgnoredNumbers,
-					"ignored-files":     settings.IgnoredFiles,
-					"ignored-functions": settings.IgnoredFunctions,
-				},
+				"mnd": cfg,
 			}
 		}
 	}
