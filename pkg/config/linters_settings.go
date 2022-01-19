@@ -81,6 +81,10 @@ var defaultLintersSettings = LintersSettings{
 	Unparam: UnparamSettings{
 		Algo: "cha",
 	},
+	Varnamelen: VarnamelenSettings{
+		MaxDistance:   5,
+		MinNameLength: 3,
+	},
 	WSL: WSLSettings{
 		StrictAppend:                     true,
 		AllowAssignAndCallCuddle:         true,
