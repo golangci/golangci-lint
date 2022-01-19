@@ -347,7 +347,7 @@ func extractExampleSnippets(example []byte) (*SettingSnippets, error) {
 
 	snippets := SettingSnippets{}
 
-	buffer := bytes.NewBufferString("")
+	builder := strings.Builder{}
 
 	for j, node := range root.Content {
 		switch node.Value {
@@ -385,7 +385,7 @@ func extractExampleSnippets(example []byte) (*SettingSnippets, error) {
 				return nil, err
 			}
 
-			_, _ = buffer.WriteString(
+			_, _ = builder.WriteString(
 				fmt.Sprintf(
 					"### `%s` configuration\n\nSee the dedicated [linters-settings](/usage/linters) documentation section.\n\n",
 					node.Value,
@@ -407,7 +407,7 @@ func extractExampleSnippets(example []byte) (*SettingSnippets, error) {
 			return nil, errSnip
 		}
 
-		_, _ = buffer.WriteString(fmt.Sprintf("### `%s` configuration\n\n%s", node.Value, snippet))
+		_, _ = builder.WriteString(fmt.Sprintf("### `%s` configuration\n\n%s", node.Value, snippet))
 	}
 
 	overview, err := marshallSnippet(globalNode)
@@ -415,7 +415,7 @@ func extractExampleSnippets(example []byte) (*SettingSnippets, error) {
 		return nil, err
 	}
 
-	snippets.ConfigurationFile = overview + buffer.String()
+	snippets.ConfigurationFile = overview + builder.String()
 
 	return &snippets, nil
 }
@@ -444,9 +444,8 @@ func getLintersSettingSnippets(node, nextNode *yaml.Node) (string, error) {
 		_, _ = fmt.Fprintf(builder, "### %s\n\n", nextNode.Content[i].Value)
 		_, _ = fmt.Fprintln(builder, "```yaml")
 
-		const ident = 2
 		encoder := yaml.NewEncoder(builder)
-		encoder.SetIndent(ident)
+		encoder.SetIndent(2)
 
 		err := encoder.Encode(r)
 		if err != nil {
@@ -468,9 +467,8 @@ func marshallSnippet(node *yaml.Node) (string, error) {
 	}
 	_, _ = fmt.Fprintln(builder, "```yaml")
 
-	const ident = 2
 	encoder := yaml.NewEncoder(builder)
-	encoder.SetIndent(ident)
+	encoder.SetIndent(2)
 
 	err := encoder.Encode(node)
 	if err != nil {
