@@ -806,6 +806,20 @@ linters-settings:
       - unusedresult
       - unusedwrite
 
+  grouper:
+    # const
+    const-require-single-const: false
+    const-require-grouping: false
+    # import
+    import-require-single-import: false
+    import-require-grouping: false
+    # type
+    type-require-single-type: false
+    type-require-grouping: false
+    # var
+    var-require-single-var: false
+    var-require-grouping: false
+
   ifshort:
     # Maximum length of variable declaration measured in number of lines, after which linter won't suggest using short syntax.
     # Has higher priority than max-decl-chars.

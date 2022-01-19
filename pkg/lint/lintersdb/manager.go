@@ -112,6 +112,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 	var gosecCfg *config.GoSecSettings
 	var gosimpleCfg *config.StaticCheckSettings
 	var govetCfg *config.GovetSettings
+	var grouperCfg *config.GrouperSettings
 	var ifshortCfg *config.IfshortSettings
 	var importAsCfg *config.ImportAsSettings
 	var ireturnCfg *config.IreturnSettings
@@ -143,6 +144,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		gosecCfg = &m.cfg.LintersSettings.Gosec
 		gosimpleCfg = &m.cfg.LintersSettings.Gosimple
 		govetCfg = &m.cfg.LintersSettings.Govet
+		grouperCfg = &m.cfg.LintersSettings.Grouper
 		ifshortCfg = &m.cfg.LintersSettings.Ifshort
 		importAsCfg = &m.cfg.LintersSettings.ImportAs
 		ireturnCfg = &m.cfg.LintersSettings.Ireturn
@@ -414,6 +416,11 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetBugs, linter.PresetMetaLinter).
 			WithAlternativeNames("vet", "vetshadow").
 			WithURL("https://golang.org/cmd/vet/"),
+
+		linter.NewConfig(golinters.NewGrouper(grouperCfg)).
+			WithSince("v1.44.0").
+			WithPresets(linter.PresetStyle).
+			WithURL("https://github.com/leonklingele/grouper"),
 
 		linter.NewConfig(golinters.NewIfshort(ifshortCfg)).
 			WithSince("v1.36.0").
