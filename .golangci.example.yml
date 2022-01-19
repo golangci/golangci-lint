@@ -580,8 +580,8 @@ linters-settings:
     # You can specify idiomatic endings for interface
     - (or|er)$
 
-    # reject:
-    # - github.com\/user\/package\/v4\.Type
+    reject:
+    - github.com\/user\/package\/v4\.Type
 
   lll:
     # max line length, lines longer will be reported. Default is 120.
