@@ -414,20 +414,30 @@ linters-settings:
     min-confidence: 0.8
 
   gomnd:
-    settings:
-      mnd:
-        # the list of enabled checks, see https://github.com/tommy-muehle/go-mnd/#checks for description.
-        checks:
-        - argument
-        - case
-        - condition
-        - operation
-        - return
-        - assign
-        # Next settings are expecting comma separated string values
-        ignored-numbers: "0666,0755,42"                   # values always ignored: 1, 1.0, 0 and 0.0
-        ignored-files: "magic1_.*.go"                     # values always ignored:_test.go
-        ignored-functions: "math.*,http.StatusText,make"  # values always ignored: time.Time
+    # List of enabled checks, see https://github.com/tommy-muehle/go-mnd/#checks for description.
+    checks:
+      - argument
+      - case
+      - condition
+      - operation
+      - return
+      - assign
+    # List of numbers to exclude from analysis.
+    # The numbers should be written as string.
+    # Values always ignored: "1", "1.0", "0" and "0.0"
+    ignored-numbers:
+      - '0666'
+      - '0755'
+      - '42'
+    # List of file patterns to exclude from analysis.
+    # Values always ignored: `.+_test.go`
+    ignored-files:
+      - 'magic1_.*.go'
+    # List of function patterns to exclude from analysis.
+    # Values always ignored: `time.Time`
+    ignored-functions:
+      - 'math.*'
+      - 'http.StatusText'
 
   gomoddirectives:
     # Allow local `replace` directives. Default is false.

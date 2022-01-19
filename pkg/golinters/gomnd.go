@@ -8,20 +8,29 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 )
 
-func NewGoMND(cfg *config.Config) *goanalysis.Linter {
-	analyzers := []*analysis.Analyzer{
-		mnd.Analyzer,
-	}
-
+func NewGoMND(settings *config.GoMndSettings) *goanalysis.Linter {
 	var linterCfg map[string]map[string]interface{}
-	if cfg != nil {
-		linterCfg = cfg.LintersSettings.Gomnd.Settings
+
+	if settings != nil {
+		// TODO(ldez) For compatibility only, must be drop in v2.
+		if len(settings.Settings) > 0 {
+			linterCfg = settings.Settings
+		} else {
+			linterCfg = map[string]map[string]interface{}{
+				"mnd": {
+					"checks":            settings.Checks,
+					"ignored-numbers":   settings.IgnoredNumbers,
+					"ignored-files":     settings.IgnoredFiles,
+					"ignored-functions": settings.IgnoredFunctions,
+				},
+			}
+		}
 	}
 
 	return goanalysis.NewLinter(
 		"gomnd",
 		"An analyzer to detect magic numbers.",
-		analyzers,
+		[]*analysis.Analyzer{mnd.Analyzer},
 		linterCfg,
 	).WithLoadMode(goanalysis.LoadModeSyntax)
 }
