@@ -108,6 +108,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 	var exhaustiveCfg *config.ExhaustiveSettings
 	var exhaustiveStructCfg *config.ExhaustiveStructSettings
 	var goModDirectivesCfg *config.GoModDirectivesSettings
+	var goMndCfg *config.GoMndSettings
 	var gosecCfg *config.GoSecSettings
 	var gosimpleCfg *config.StaticCheckSettings
 	var govetCfg *config.GovetSettings
@@ -138,6 +139,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		exhaustiveCfg = &m.cfg.LintersSettings.Exhaustive
 		exhaustiveStructCfg = &m.cfg.LintersSettings.ExhaustiveStruct
 		goModDirectivesCfg = &m.cfg.LintersSettings.GoModDirectives
+		goMndCfg = &m.cfg.LintersSettings.Gomnd
 		gosecCfg = &m.cfg.LintersSettings.Gosec
 		gosimpleCfg = &m.cfg.LintersSettings.Gosimple
 		govetCfg = &m.cfg.LintersSettings.Govet
@@ -367,7 +369,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithURL("https://github.com/golang/lint").
 			Deprecated("The repository of the linter has been archived by the owner.", "v1.41.0", "revive"),
 
-		linter.NewConfig(golinters.NewGoMND(m.cfg)).
+		linter.NewConfig(golinters.NewGoMND(goMndCfg)).
 			WithSince("v1.22.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/tommy-muehle/go-mnd"),

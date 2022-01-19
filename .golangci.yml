@@ -35,6 +35,7 @@ linters-settings:
   goimports:
     local-prefixes: github.com/golangci/golangci-lint
   gomnd:
+    # TODO(ldez) must be rewritten after the v1.44.0 release.
     settings:
       mnd:
         # don't include the "operation" and "assign"

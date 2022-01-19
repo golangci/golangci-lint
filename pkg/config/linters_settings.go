@@ -312,7 +312,11 @@ type GoLintSettings struct {
 }
 
 type GoMndSettings struct {
-	Settings map[string]map[string]interface{}
+	Settings         map[string]map[string]interface{} // Deprecated
+	Checks           []string                          `mapstructure:"checks"`
+	IgnoredNumbers   []string                          `mapstructure:"ignored-numbers"`
+	IgnoredFiles     []string                          `mapstructure:"ignored-files"`
+	IgnoredFunctions []string                          `mapstructure:"ignored-functions"`
 }
 
 type GoModDirectivesSettings struct {
