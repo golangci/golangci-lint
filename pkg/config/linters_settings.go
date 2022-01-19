@@ -382,8 +382,9 @@ type IfshortSettings struct {
 }
 
 type ImportAsSettings struct {
-	Alias       []ImportAsAlias
-	NoUnaliased bool `mapstructure:"no-unaliased"`
+	Alias          []ImportAsAlias
+	NoUnaliased    bool `mapstructure:"no-unaliased"`
+	NoExtraAliases bool `mapstructure:"no-extra-aliases"`
 }
 
 type ImportAsAlias struct {

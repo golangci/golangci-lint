@@ -28,8 +28,11 @@ func NewImportAs(settings *config.ImportAsSettings) *goanalysis.Linter {
 			lintCtx.Log.Infof("importas settings found, but no aliases listed. List aliases under alias: key.") // nolint: misspell
 		}
 
-		err := analyzer.Flags.Set("no-unaliased", strconv.FormatBool(settings.NoUnaliased))
-		if err != nil {
+		if err := analyzer.Flags.Set("no-unaliased", strconv.FormatBool(settings.NoUnaliased)); err != nil {
+			lintCtx.Log.Errorf("failed to parse configuration: %v", err)
+		}
+
+		if err := analyzer.Flags.Set("no-extra-aliases", strconv.FormatBool(settings.NoUnaliased)); err != nil {
 			lintCtx.Log.Errorf("failed to parse configuration: %v", err)
 		}
 

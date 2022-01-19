@@ -554,8 +554,10 @@ linters-settings:
     max-decl-chars: 30
 
   importas:
-    # if set to `true`, force to use alias.
+    # Do not allow unaliased imports of aliased packages.
     no-unaliased: true
+    # Do not allow non-required aliases.
+    no-extra-aliases: true
     # List of aliases
     alias:
       # using `servingv1` alias for `knative.dev/serving/pkg/apis/serving/v1` package
