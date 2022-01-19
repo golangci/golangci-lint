@@ -82,11 +82,8 @@ var defaultLintersSettings = LintersSettings{
 		Algo: "cha",
 	},
 	Varnamelen: VarnamelenSettings{
-		MaxDistance:        5,
-		MinNameLength:      3,
-		IgnoreTypeAssertOk: true,
-		IgnoreMapIndexOk:   true,
-		IgnoreChanRecvOk:   true,
+		MaxDistance:   5,
+		MinNameLength: 3,
 	},
 	WSL: WSLSettings{
 		StrictAppend:                     true,
