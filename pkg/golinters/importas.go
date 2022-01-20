@@ -32,7 +32,7 @@ func NewImportAs(settings *config.ImportAsSettings) *goanalysis.Linter {
 			lintCtx.Log.Errorf("failed to parse configuration: %v", err)
 		}
 
-		if err := analyzer.Flags.Set("no-extra-aliases", strconv.FormatBool(settings.NoUnaliased)); err != nil {
+		if err := analyzer.Flags.Set("no-extra-aliases", strconv.FormatBool(settings.NoExtraAliases)); err != nil {
 			lintCtx.Log.Errorf("failed to parse configuration: %v", err)
 		}
 
