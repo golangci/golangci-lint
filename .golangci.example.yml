@@ -310,7 +310,7 @@ linters-settings:
     # By default, list of stable checks is used.
     enabled-checks:
       - nestingReduce
-      - unnamedresult
+      - unnamedResult
       - ruleguard
       - truncateCmp
 
@@ -602,6 +602,7 @@ linters-settings:
 
   govet:
     # Report about shadowed variables.
+    # Default: false
     check-shadowing: true
 
     # Settings per analyzer.
@@ -710,8 +711,10 @@ linters-settings:
 
   importas:
     # Do not allow unaliased imports of aliased packages.
+    # Default: false
     no-unaliased: true
     # Do not allow non-required aliases.
+    # Default: false
     no-extra-aliases: true
     # List of aliases
     alias:
@@ -1191,6 +1194,7 @@ linters-settings:
     # Check the struck tag name case.
     case:
       # Use the struct field name to check the name of the struct tag.
+      # Default: false
       use-field-name: true
       rules:
         # Any struct tag type can be used.
