@@ -16,7 +16,7 @@ linters-settings:
     local-prefixes: github.com/golangci/golangci-lint
   goconst:
     min-len: 2
-    min-occurrences: 2
+    min-occurrences: 3
   gocritic:
     enabled-tags:
       - diagnostic
