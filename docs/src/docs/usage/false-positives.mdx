@@ -2,17 +2,101 @@
 title: False Positives
 ---
 
-False positives are inevitable, but we did our best to reduce their count. For example, we have a default enabled set of [exclude patterns](/usage/configuration#command-line-options). If a false positive occurred you have the following choices:
+False positives are inevitable, but we did our best to reduce their count.
+For example, we have a default enabled set of [exclude patterns](/usage/configuration#command-line-options).
 
-1. Exclude issue by text using command-line option `-e` or config option `issues.exclude`. It's helpful when you decided to ignore all issues of this type. Also, you can use `issues.exclude-rules` config option for per-path or per-linter configuration.
-2. Exclude this one issue by using special comment `//nolint` (see [the section](#nolint) below).
-3. Exclude issues in path by `run.skip-dirs`, `run.skip-files` or `issues.exclude-rules` config options.
+If a false positive occurred, you have the several choices.
 
-Please create [GitHub Issues here](https://github.com/golangci/golangci-lint/issues/new) if you find any false positives. We will add it to the default exclude list if it's common or we will fix underlying linter.
+## Specific Linter Excludes
 
-## Nolint
+Most of the linters has a configuration, sometimes false-positives can be related to a bad configuration of a linter.
+So it's recommended to check the linters configuration.
 
-To exclude issues from all linters use `//nolint`. For example, if it's used inline (not from the beginning of the line) it excludes issues only for this line.
+Otherwise, some linters have dedicated configuration to exclude or disable rules.
+
+An example with `staticcheck`:
+
+```yml
+linters-settings:
+  staticcheck:
+    checks:
+      - all
+      - '-SA1000' # disable the rule SA1000
+      - '-SA1004' # disable the rule SA1004
+```
+
+## Exclude or Skip
+
+### Exclude Issue by Text
+
+Exclude issue by text using command-line option `-e` or config option `issues.exclude`.
+It's helpful when you decided to ignore all issues of this type.
+Also, you can use `issues.exclude-rules` config option for per-path or per-linter configuration.
+
+In the following example, all the reports that contains the sentences defined in `exclude` are excluded:
+
+```yml
+issues:
+  exclude:
+    - "Error return value of .((os\\.)?std(out|err)\\..*|.*Close|.*Flush|os\\.Remove(All)?|.*printf?|os\\.(Un)?Setenv). is not checked"
+    - "exported (type|method|function) (.+) should have comment or be unexported"
+    - "ST1000: at least one file in a package should have a package comment"
+```
+
+In the following example, all the reports from the linters (`linters`) that contains the text (`text`) are excluded:
+
+```yml
+issues:
+  exclude-rules:
+    - linters:
+        - gomnd
+      text: "mnd: Magic number: 9"
+```
+
+In the following example, all the reports that contains the text (`text`) in the path (`path`) are excluded:
+
+```yml
+issues:
+  exclude-rules:
+    - path: path/to/a/file.go
+      text: "string `example` has (\\d+) occurrences, make it a constant"
+```
+
+### Exclude Issues by Path
+
+Exclude issues in path by `run.skip-dirs`, `run.skip-files` or `issues.exclude-rules` config options.
+
+In the following example, all the reports from the linters (`linters`) that concerns the path (`path`) are excluded:
+
+```yml
+issues:
+  exclude-rules:
+    - path: '(.+)_test\.go'
+      linters:
+        - funlen
+        - goconst
+```
+
+In the following example, all the reports related to the files (`skip-files`) are excluded:
+
+```yml
+run:
+  skip-files:
+    - path/to/a/file.go
+```
+
+In the following example, all the reports related to the directories (`skip-dirs`) are excluded:
+
+```yml
+run:
+  skip-dirs:
+    - path/to/a/dir/
+```
+
+## Nolint Directive
+
+To exclude issues from all linters use `//nolint`.
+For example, if it's used inline (not from the beginning of the line) it excludes issues only for this line.
 
 ```go
 var bad_name int //nolint
