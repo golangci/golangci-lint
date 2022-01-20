@@ -378,16 +378,15 @@ func (cfg GovetSettings) Validate() error {
 }
 
 type GrouperSettings struct {
-	// const analyzer options
 	ConstRequireSingleConst bool `mapstructure:"const-require-single-const"`
 	ConstRequireGrouping    bool `mapstructure:"const-require-grouping"`
-	// import analyzer options
+
 	ImportRequireSingleImport bool `mapstructure:"import-require-single-import"`
 	ImportRequireGrouping     bool `mapstructure:"import-require-grouping"`
-	// type analyzer options
+
 	TypeRequireSingleType bool `mapstructure:"type-require-single-type"`
 	TypeRequireGrouping   bool `mapstructure:"type-require-grouping"`
-	// var analyzer options
+
 	VarRequireSingleVar bool `mapstructure:"var-require-single-var"`
 	VarRequireGrouping  bool `mapstructure:"var-require-grouping"`
 }
