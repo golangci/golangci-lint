@@ -83,7 +83,7 @@ require (
 	github.com/ssgreg/nlreturn/v2 v2.2.1
 	github.com/stretchr/testify v1.7.0
 	github.com/sylvia7788/contextcheck v1.0.4
-	github.com/tdakkota/asciicheck v0.0.0-20200416200610-e657995f937b
+	github.com/tdakkota/asciicheck v0.1.1
 	github.com/tetafro/godot v1.4.11
 	github.com/timakin/bodyclose v0.0.0-20210704033933-f49887972144
 	github.com/tomarrell/wrapcheck/v2 v2.4.0
