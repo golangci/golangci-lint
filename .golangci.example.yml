@@ -47,7 +47,6 @@ run:
     - ".*\\.my\\.go$"
     - lib/bad.go
 
-  # By default, it isn't set.
   # If set we pass it to "go list -mod={option}". From "go help modules":
   # If invoked with -mod=readonly, the go command is disallowed from the implicit
   # automatic updating of go.mod described above. Instead, it fails when any changes
@@ -56,7 +55,10 @@ run:
   # If invoked with -mod=vendor, the go command assumes that the vendor
   # directory holds the correct copies of dependencies and ignores
   # the dependency descriptions in go.mod.
-  modules-download-mode: readonly|vendor|mod
+  #
+  # Allowed values: readonly|vendor|mod
+  # By default, it isn't set.
+  modules-download-mode: readonly
 
   # Allow multiple parallel golangci-lint instances running.
   # If false (default) - golangci-lint acquires file lock on start.
@@ -143,13 +145,26 @@ linters-settings:
     disable-dec-num-check: false
 
   depguard:
-    list-type: denylist
-    include-go-root: false
+    # Kind of list is passed in.
+    # Allowed values: allowlist|denylist
+    # Default: denylist
+    list-type: allowlist
+
+    # Check the list against standard lib.
+    # Default: false
+    include-go-root: true
+
+    # A list of packages for the list type specified.
+    # Default: []
     packages:
       - github.com/sirupsen/logrus
+
+    # A list of packages for the list type specified.
+    # Specify an error message to output when a denied package is used.
+    # Default: []
     packages-with-error-message:
-      # Specify an error message to output when a denied package is used.
       - github.com/sirupsen/logrus: 'logging is allowed only by logutils.Log'
+
     # Create additional guards that follow the same configuration pattern.
     # Results from all guards are aggregated together.
     additional-guards:
@@ -226,23 +241,30 @@ linters-settings:
   errorlint:
     # Check whether fmt.Errorf uses the %w verb for formatting errors.
     # See the https://github.com/polyfloyd/go-errorlint for caveats.
-    errorf: true
+    # Default: true
+    errorf: false
     # Check for plain type assertions and type switches.
-    asserts: true
+    # Default: true
+    asserts: false
     # Check for plain error comparisons.
-    comparison: true
+    # Default: true
+    comparison: false
 
   exhaustive:
     # Check switch statements in generated files also.
-    check-generated: false
+    # Default: false
+    check-generated: true
     # Presence of "default" case in switch statements satisfies exhaustiveness,
     # even if all enum members are not listed.
-    default-signifies-exhaustive: false
+    # Default: false
+    default-signifies-exhaustive: true
     # Enum members matching the supplied regex do not have to be listed in
     # switch statements to satisfy exhaustiveness.
-    ignore-enum-members: ""
+    # Default: ""
+    ignore-enum-members: "Example.+"
     # Consider enums only in package scopes, not in inner scopes.
-    package-scope-only: false
+    # Default: false
+    package-scope-only: true
 
   exhaustivestruct:
     # Struct Patterns is list of expressions to match struct packages and names.
@@ -263,8 +285,14 @@ linters-settings:
     exclude_godoc_examples: false
 
   funlen:
-    lines: 60
-    statements: 40
+    # Checks the number of lines in a function.
+    # If lower than 0, disable the check.
+    # Default: 60
+    lines: -1
+    # Checks the number of statements in a function.
+    # If lower than 0, disable the check.
+    # Default: 40
+    statements: -1
 
   gci:
     # Put imports beginning with prefix after 3rd-party packages.
@@ -274,7 +302,7 @@ linters-settings:
 
   gocognit:
     # Minimal code complexity to report
-    # Default: 30, (but we recommend 10-20)
+    # Default: 30 (but we recommend 10-20)
     min-complexity: 10
 
   goconst:
@@ -323,9 +351,17 @@ linters-settings:
     # See https://github.com/go-critic/go-critic#usage -> section "Tags".
     # Default: []
     enabled-tags:
+      - diagnostic
+      - style
       - performance
-    disabled-tags:
       - experimental
+      - opinionated
+    disabled-tags:
+      - diagnostic
+      - style
+      - performance
+      - experimental
+      - opinionated
 
     # Settings passed to gocritic.
     # The settings key is the name of a supported gocritic checker.
@@ -408,7 +444,7 @@ linters-settings:
 
   gocyclo:
     # Minimal code complexity to report.
-    # Default: 30, (but we recommend 10-20)
+    # Default: 30 (but we recommend 10-20)
     min-complexity: 10
 
   godot:
@@ -444,23 +480,26 @@ linters-settings:
   gofumpt:
     # Select the Go version to target.
     # Default: 1.15
-    lang-version: "1.15"
+    lang-version: "1.17"
 
     # Choose whether to use the extra rules.
     # Default: false
     extra-rules: true
 
   goheader:
+    # Supports two types 'const` and `regexp`.
+    # Values can be used recursively.
     values:
       const:
         # Define here const type values in format k:v.
         # For example:
-        # COMPANY: MY COMPANY
+        COMPANY: MY COMPANY
       regexp:
         # Define here regexp type values.
         # for example:
-        # AUTHOR: .*@mycompany\.com
-    template: # |-
+        AUTHOR: .*@mycompany\.com
+    # The template use for checking.
+    template: |-
       # Put here copyright header template for source code files
       # For example:
       # Note: {{ YEAR }} is a builtin value that returns the year relative to the current machine time.
@@ -479,8 +518,9 @@ linters-settings:
       # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
       # See the License for the specific language governing permissions and
       # limitations under the License.
-    template-path:
-      # Also, as alternative of directive 'template' you may put the path to file with the template source.
+    # As alternative of directive 'template', you may put the path to file with the template source.
+    # Useful if you need to load the template from a specific file.
+    template-path: /path/to/my/template.tmpl
 
   goimports:
     # Put imports beginning with prefix after 3rd-party packages.
@@ -575,18 +615,26 @@ linters-settings:
       - G401
       - G306
       - G101
+
     # To specify a set of rules to explicitly exclude.
     # Available rules: https://github.com/securego/gosec#available-rules
     excludes:
       - G204
+
     # Exclude generated files
+    # Default: false
     exclude-generated: true
+
     # Filter out the issues with a lower severity than the given value.
     # Valid options are: low, medium, high.
-    severity: "low"
+    # Default: low
+    severity: medium
+
     # Filter out the issues with a lower confidence than the given value.
     # Valid options are: low, medium, high.
-    confidence: "low"
+    # Default: low
+    confidence: medium
+
     # To specify the configuration of rules.
     # The configuration of rules is not fully documented by gosec:
     # https://github.com/securego/gosec#configuration
@@ -705,9 +753,11 @@ linters-settings:
   ifshort:
     # Maximum length of variable declaration measured in number of lines, after which linter won't suggest using short syntax.
     # Has higher priority than max-decl-chars.
-    max-decl-lines: 1
+    # Default: 1
+    max-decl-lines: 2
     # Maximum length of variable declaration measured in number of characters, after which linter won't suggest using short syntax.
-    max-decl-chars: 30
+    # Default: 30
+    max-decl-chars: 40
 
   importas:
     # Do not allow unaliased imports of aliased packages.
@@ -809,15 +859,16 @@ linters-settings:
   nlreturn:
     # Size of the block (including return statement that is still "OK")
     # so no return split required.
-    block-size: 1
+    # Default: 1
+    block-size: 2
 
   nolintlint:
     # Disable to ensure that all nolint directives actually have an effect.
     # Default: false
-    allow-unused: false
+    allow-unused: true
     # Disable to ensure that nolint directives don't have a leading space.
     # Default: true
-    allow-leading-space: true
+    allow-leading-space: false
     # Exclude following linters from requiring an explanation.
     # Default: []
     allow-no-explanation: [ ]
@@ -844,9 +895,11 @@ linters-settings:
 
   predeclared:
     # Comma-separated list of predeclared identifiers to not report on.
-    ignore: ""
+    # Default: ""
+    ignore: "new,int"
     # Include method names and field names (i.e., qualified names) in checks.
-    q: false
+    # Default: false
+    q: true
 
   promlinter:
     # Promlinter cannot infer all metrics name in static analysis.
@@ -1172,13 +1225,15 @@ linters-settings:
       - github.com/jmoiron/sqlx
 
   staticcheck:
-    # Select the Go version to target. The default is '1.13'.
+    # Select the Go version to target.
+    # Default: 1.13
     go: "1.15"
     # https://staticcheck.io/docs/options#checks
     checks: [ "all" ]
 
   stylecheck:
-    # Select the Go version to target. The default is '1.13'.
+    # Select the Go version to target.
+    # Default: 1.13
     go: "1.15"
     # https://staticcheck.io/docs/options#checks
     checks: [ "all", "-ST1000", "-ST1003", "-ST1016", "-ST1020", "-ST1021", "-ST1022" ]
@@ -1244,6 +1299,7 @@ linters-settings:
 
   varcheck:
     # Check usage of exported fields and variables.
+    # Default: false
     exported-fields: true
 
   varnamelen:
@@ -1288,9 +1344,11 @@ linters-settings:
 
   whitespace:
     # Enforces newlines (or comments) after every multi-line if statement.
-    multi-if: false
+    # Default: false
+    multi-if: true
     # Enforces newlines (or comments) after every multi-line function signature.
-    multi-func: false
+    # Default: false
+    multi-func: true
 
   wrapcheck:
     # An array of strings that specify substrings of signatures to ignore.
@@ -1379,6 +1437,7 @@ linters-settings:
       # Intended to point to the repo location of the linter.
       # Optional.
       original-url: github.com/golangci/example-linter
+
 
 linters:
   # Disable all linters.
@@ -1661,6 +1720,7 @@ issues:
 
   # Fix found issues (if it's supported by the linter).
   fix: true
+
 
 severity:
   # Set the default severity for issues.
