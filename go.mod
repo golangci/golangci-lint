@@ -55,7 +55,7 @@ require (
 	github.com/mattn/go-colorable v0.1.12
 	github.com/mbilski/exhaustivestruct v1.2.0
 	github.com/mgechev/dots v0.0.0-20210922191527-e955255bf517
-	github.com/mgechev/revive v1.1.2
+	github.com/mgechev/revive v1.1.3
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/mitchellh/go-ps v1.0.0
 	github.com/moricho/tparallel v0.2.1

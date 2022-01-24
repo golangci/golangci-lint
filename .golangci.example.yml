@@ -1275,6 +1275,19 @@ linters-settings:
       - name: waitgroup-by-value
         severity: warning
         disable: false
+      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#time-equal
+      - name: time-equal
+        severity: warning
+        disable: false
+      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#banned-characters
+      - name: banned-characters
+        severity: warning
+        disable: false
+        arguments: ["Ω","Σ","σ"]
+      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#optimize-operands-order
+      - name: optimize-operands-order
+        severity: warning
+        disable: false
 
   rowserrcheck:
     packages:
