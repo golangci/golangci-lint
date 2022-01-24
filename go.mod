@@ -87,7 +87,7 @@ require (
 	github.com/tetafro/godot v1.4.11
 	github.com/timakin/bodyclose v0.0.0-20210704033933-f49887972144
 	github.com/tomarrell/wrapcheck/v2 v2.4.0
-	github.com/tommy-muehle/go-mnd/v2 v2.4.0
+	github.com/tommy-muehle/go-mnd/v2 v2.5.0
 	github.com/ultraware/funlen v0.0.3
 	github.com/ultraware/whitespace v0.0.4
 	github.com/uudashr/gocognit v1.0.5
