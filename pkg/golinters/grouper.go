@@ -12,17 +12,14 @@ func NewGrouper(settings *config.GrouperSettings) *goanalysis.Linter {
 	linterCfg := map[string]map[string]interface{}{}
 	if settings != nil {
 		linterCfg["grouper"] = map[string]interface{}{
-			"const-require-single-const": settings.ConstRequireSingleConst,
-			"const-require-grouping":     settings.ConstRequireGrouping,
-
+			"const-require-single-const":   settings.ConstRequireSingleConst,
+			"const-require-grouping":       settings.ConstRequireGrouping,
 			"import-require-single-import": settings.ImportRequireSingleImport,
 			"import-require-grouping":      settings.ImportRequireGrouping,
-
-			"type-require-single-type": settings.TypeRequireSingleType,
-			"type-require-grouping":    settings.TypeRequireGrouping,
-
-			"var-require-single-var": settings.VarRequireSingleVar,
-			"var-require-grouping":   settings.VarRequireGrouping,
+			"type-require-single-type":     settings.TypeRequireSingleType,
+			"type-require-grouping":        settings.TypeRequireGrouping,
+			"var-require-single-var":       settings.VarRequireSingleVar,
+			"var-require-grouping":         settings.VarRequireGrouping,
 		}
 	}
 
