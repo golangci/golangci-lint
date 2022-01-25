@@ -48,7 +48,7 @@ There is the most valuable changes log:
    * `revive`: add a more detailed configuration
 4. misc:
    * outputs: Add support for multiple outputs
-   * outputs: Print error text in <failure> tag content for more readable JUnit output
+   * outputs: Print error text in `<failure>` tag content for more readable JUnit output
    * outputs: ensure that the Issues key in JSON format is a list
    * Return error if any linter fails to run
    * cli: Show deprecated mark in the CLI linters help
