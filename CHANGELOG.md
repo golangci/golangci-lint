@@ -1,6 +1,58 @@
 Follow the news and releases on our [twitter](https://twitter.com/golangci) and our [blog](https://medium.com/golangci).
 There is the most valuable changes log:
 
+### v1.44.0
+
+1. new linters:
+   * `containedctx`: https://github.com/sivchari/containedctx
+   * `decorder`: https://gitlab.com/bosi/decorder
+   * `errchkjson`: https://github.com/breml/errchkjson
+   * `maintidx`: https://github.com/yagipy/maintidx
+   * `grouper`: https://github.com/leonklingele/grouper
+2. updated linters:
+   * `asciicheck`: bump to v0.1.1
+   * `bidichk`: from 0.1.1 to 0.2.1
+   * `bodyclose`: bump to HEAD
+   * `decorder`: from 0.2.0 to 0.2.1
+   * `depguard`: from 1.0.1 to 1.1.0
+   * `errchkjson`: from 0.2.0 to 0.2.1
+   * `errorlint`: bump to HEAD
+   * `exhaustive`: drop deprecated/unused settings
+   * `exhaustive`: from v0.2.3 to 0.7.11
+   * `forbidigo`: from 1.2.0 to 1.3.0
+   * `forcetypeassert`: bump to v0.1.0
+   * `gocritic`: from 0.6.1 to 0.6.2
+   * `gocritic`: support autofix
+   * `gocyclo`: from 0.3.1 to 0.4.0
+   * `godot`: add period option
+   * `gofumpt`: from 0.1.1 to 0.2.1
+   * `gomnd`: from 2.4.0 to 2.5.0
+   * `gomnd`: new configuration
+   * `gosec`: from 2.9.1 to 2.9.6
+   * `ifshort`: from 1.0.3 to 1.0.4
+   * `ineffassign`: bump to HEAD
+   * `makezero`: to v1.1.0
+   * `promlinter`: from v0.1.0 to HEAD
+   * `revive`: fix `enableAllRules`
+   * `revive`: from 1.1.2 to 1.1.3
+   * `staticcheck`: from 0.2.1 to 0.2.2
+   * `tagliatelle`: from 0.2.0 to 0.3.0
+   * `thelper`: from 0.4.0 to 0.5.0
+   * `unparam`: bump to HEAD
+   * `varnamelen`: bump to v0.5.0
+   * `wrapcheck`: update configuration to include `ignoreSignRegexps`
+3. documentation:
+   * linters: improve pages about configuration
+   * improve page about false-positive
+   * `nolintlint`: fix wrong default value in comment
+   * `revive`: add a more detailed configuration
+4. misc:
+   * outputs: Add support for multiple outputs
+   * outputs: Print error text in <failure> tag content for more readable JUnit output
+   * outputs: ensure that the Issues key in JSON format is a list
+   * Return error if any linter fails to run
+   * cli: Show deprecated mark in the CLI linters help
+
 ### November 2021
 
 1. new linters:
