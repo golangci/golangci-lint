@@ -131,6 +131,7 @@ type LintersSettings struct {
 	Gosec            GoSecSettings
 	Gosimple         StaticCheckSettings
 	Govet            GovetSettings
+	Grouper          GrouperSettings
 	Ifshort          IfshortSettings
 	ImportAs         ImportAsSettings
 	Ireturn          IreturnSettings
@@ -374,6 +375,17 @@ func (cfg GovetSettings) Validate() error {
 		return errors.New("disable-all and disable can't be combined")
 	}
 	return nil
+}
+
+type GrouperSettings struct {
+	ConstRequireSingleConst   bool `mapstructure:"const-require-single-const"`
+	ConstRequireGrouping      bool `mapstructure:"const-require-grouping"`
+	ImportRequireSingleImport bool `mapstructure:"import-require-single-import"`
+	ImportRequireGrouping     bool `mapstructure:"import-require-grouping"`
+	TypeRequireSingleType     bool `mapstructure:"type-require-single-type"`
+	TypeRequireGrouping       bool `mapstructure:"type-require-grouping"`
+	VarRequireSingleVar       bool `mapstructure:"var-require-single-var"`
+	VarRequireGrouping        bool `mapstructure:"var-require-grouping"`
 }
 
 type IfshortSettings struct {

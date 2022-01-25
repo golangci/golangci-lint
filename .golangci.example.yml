@@ -806,6 +806,35 @@ linters-settings:
       - unusedresult
       - unusedwrite
 
+  grouper:
+    # Require the use of a single global 'const' declaration only.
+    # Default: false
+    const-require-single-const: true
+    # Require the use of grouped global 'const' declarations.
+    # Default: false
+    const-require-grouping: true
+
+    # Require the use of a single 'import' declaration only.
+    # Default: false
+    import-require-single-import: true
+    # Require the use of grouped 'import' declarations.
+    # Default: false
+    import-require-grouping: true
+
+    # Require the use of a single global 'type' declaration only.
+    # Default: false
+    type-require-single-type: true
+    # Require the use of grouped global 'type' declarations.
+    # Default: false
+    type-require-grouping: true
+
+    # Require the use of a single global 'var' declaration only.
+    # Default: false
+    var-require-single-var: true
+    # Require the use of grouped global 'var' declarations.
+    # Default: false
+    var-require-grouping: true
+
   ifshort:
     # Maximum length of variable declaration measured in number of lines, after which linter won't suggest using short syntax.
     # Has higher priority than max-decl-chars.
