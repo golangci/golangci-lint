@@ -112,6 +112,7 @@ type LintersSettings struct {
 	Exhaustive       ExhaustiveSettings
 	ExhaustiveStruct ExhaustiveStructSettings
 	Forbidigo        ForbidigoSettings
+	FuncResult       FuncResultSettings
 	Funlen           FunlenSettings
 	Gci              GciSettings
 	Gocognit         GocognitSettings
@@ -245,6 +246,18 @@ type ExhaustiveStructSettings struct {
 type ForbidigoSettings struct {
 	Forbid               []string `mapstructure:"forbid"`
 	ExcludeGodocExamples bool     `mapstructure:"exclude-godoc-examples"`
+}
+
+type FuncResultSettings struct {
+	RequireNamed   bool `mapstructure:"require-named"`
+	RequireUnnamed bool `mapstructure:"require-unnamed"`
+}
+
+func (cfg FuncResultSettings) Validate() error {
+	if cfg.RequireNamed && cfg.RequireUnnamed {
+		return errors.New("require-named and require-unnamed can't be combined")
+	}
+	return nil
 }
 
 type FunlenSettings struct {

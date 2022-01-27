@@ -50,6 +50,7 @@ require (
 	github.com/kyoh86/exportloopref v0.1.8
 	github.com/ldez/gomoddirectives v0.2.2
 	github.com/ldez/tagliatelle v0.3.0
+	github.com/leonklingele/funcresult v1.0.0
 	github.com/leonklingele/grouper v1.1.0
 	github.com/maratori/testpackage v1.0.1
 	github.com/matoous/godox v0.0.0-20210227103229-6504466cf951 // v1.0
@@ -96,7 +97,8 @@ require (
 	github.com/yagipy/maintidx v1.0.0
 	github.com/yeya24/promlinter v0.1.1-0.20210918184747-d757024714a1
 	gitlab.com/bosi/decorder v0.2.1
-	golang.org/x/tools v0.1.9-0.20211228192929-ee1ca4ffc4da
+	golang.org/x/sys v0.0.0-20220114195835-da31bd327af9 // indirect
+	golang.org/x/tools v0.1.9
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
 	honnef.co/go/tools v0.2.2
 	mvdan.cc/gofumpt v0.2.1
