@@ -1042,6 +1042,11 @@ linters-settings:
             allowInts: "0,1,2"
             allowFloats: "0.0,0.,1.0,1.,2.0,2."
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#atomic
+      - name: argument-limit
+        severity: warning
+        disabled: false
+        arguments: [4]
+      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#atomic
       - name: atomic
         severity: warning
         disabled: false
