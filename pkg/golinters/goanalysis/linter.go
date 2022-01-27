@@ -49,6 +49,7 @@ type Linter struct {
 	contextSetter           func(*linter.Context)
 	loadMode                LoadMode
 	needUseOriginalPackages bool
+	noCache                 bool
 }
 
 func NewLinter(name, desc string, analyzers []*analysis.Analyzer, cfg map[string]map[string]interface{}) *Linter {
@@ -83,6 +84,11 @@ func (lnt *Linter) WithIssuesReporter(r func(*linter.Context) []Issue) *Linter {
 
 func (lnt *Linter) WithContextSetter(cs func(*linter.Context)) *Linter {
 	lnt.contextSetter = cs
+	return lnt
+}
+
+func (lnt *Linter) WithNoCache() *Linter {
+	lnt.noCache = true
 	return lnt
 }
 
@@ -185,6 +191,10 @@ func (lnt *Linter) reportIssues(lintCtx *linter.Context) []Issue {
 
 func (lnt *Linter) getLoadMode() LoadMode {
 	return lnt.loadMode
+}
+
+func (lnt *Linter) withoutCache() bool {
+	return lnt.noCache
 }
 
 func allFlagNames(fs *flag.FlagSet) []string {

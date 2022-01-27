@@ -5,6 +5,7 @@ import (
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
+	"github.com/golangci/golangci-lint/pkg/lint/linter"
 )
 
 func NewContextCheck() *goanalysis.Linter {
@@ -14,5 +15,8 @@ func NewContextCheck() *goanalysis.Linter {
 		"check the function whether use a non-inherited context",
 		[]*analysis.Analyzer{analyzer},
 		nil,
-	).WithLoadMode(goanalysis.LoadModeTypesInfo)
+	).WithLoadMode(goanalysis.LoadModeTypesInfo).WithNoCache().
+		WithContextSetter(func(lintCtx *linter.Context) {
+			analyzer.Run = contextcheck.NewRun(lintCtx.Packages)
+		})
 }

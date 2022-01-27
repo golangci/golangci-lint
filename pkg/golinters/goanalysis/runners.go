@@ -25,6 +25,7 @@ type runAnalyzersConfig interface {
 	useOriginalPackages() bool
 	reportIssues(*linter.Context) []Issue
 	getLoadMode() LoadMode
+	withoutCache() bool
 }
 
 func runAnalyzers(cfg runAnalyzersConfig, lintCtx *linter.Context) ([]result.Issue, error) {
@@ -41,7 +42,11 @@ func runAnalyzers(cfg runAnalyzersConfig, lintCtx *linter.Context) ([]result.Iss
 		pkgs = lintCtx.OriginalPackages
 	}
 
-	issues, pkgsFromCache := loadIssuesFromCache(pkgs, lintCtx, cfg.getAnalyzers())
+	var issues []result.Issue
+	var pkgsFromCache map[*packages.Package]bool
+	if !cfg.withoutCache() {
+		issues, pkgsFromCache = loadIssuesFromCache(pkgs, lintCtx, cfg.getAnalyzers())
+	}
 	var pkgsToAnalyze []*packages.Package
 	for _, pkg := range pkgs {
 		if !pkgsFromCache[pkg] {
@@ -52,7 +57,7 @@ func runAnalyzers(cfg runAnalyzersConfig, lintCtx *linter.Context) ([]result.Iss
 	diags, errs, passToPkg := runner.run(cfg.getAnalyzers(), pkgsToAnalyze)
 
 	defer func() {
-		if len(errs) == 0 {
+		if len(errs) == 0 && !cfg.withoutCache() {
 			// If we try to save to cache even if we have compilation errors
 			// we won't see them on repeated runs.
 			saveIssuesToCache(pkgs, pkgsFromCache, issues, lintCtx, cfg.getAnalyzers())

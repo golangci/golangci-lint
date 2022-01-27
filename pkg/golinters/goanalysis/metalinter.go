@@ -88,3 +88,12 @@ func (ml MetaLinter) getAnalyzerToLinterNameMapping() map[*analysis.Analyzer]str
 	}
 	return analyzerToLinterName
 }
+
+func (ml MetaLinter) withoutCache() bool {
+	for _, l := range ml.linters {
+		if l.withoutCache() {
+			return true
+		}
+	}
+	return false
+}
