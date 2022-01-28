@@ -104,3 +104,5 @@ require (
 	mvdan.cc/lint v0.0.0-20170908181259-adc824a0674b // indirect
 	mvdan.cc/unparam v0.0.0-20211214103731-d0ef000c54e5
 )
+
+replace github.com/golangci/golangci-lint => github.com/nozzle/golangci-lint v1.44.0

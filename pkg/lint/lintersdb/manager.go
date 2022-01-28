@@ -169,6 +169,13 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 	// The linters are sorted in the alphabetical order (case-insensitive).
 	// When a new linter is added the version in `WithSince(...)` must be the next minor version of golangci-lint.
 	lcs := []*linter.Config{
+		// nozzle linters:
+		linter.NewConfig(golinters.NewExtractorLint()).
+			WithSince("v1.44.0").
+			WithPresets(linter.PresetStyle, linter.PresetTest).
+			WithURL("https://github.com/nozzle/golangci-lint/pkg/golinters/nozzle/extractorlint"),
+
+		// golangci-lint linters:
 		linter.NewConfig(golinters.NewAsciicheck()).
 			WithSince("v1.26.0").
 			WithPresets(linter.PresetBugs, linter.PresetStyle).
