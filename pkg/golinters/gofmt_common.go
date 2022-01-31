@@ -225,15 +225,6 @@ func getErrorTextForLinter(lintCtx *linter.Context, linterName string) string {
 		if lintCtx.Settings().Goimports.LocalPrefixes != "" {
 			text += " with -local " + lintCtx.Settings().Goimports.LocalPrefixes
 		}
-	case gciName:
-		optionsText := []string{}
-		if lintCtx.Settings().Gci.NoInlineComments {
-			optionsText = append(optionsText, "NoInlineComments")
-		}
-		if lintCtx.Settings().Gci.NoPrefixComments {
-			optionsText = append(optionsText, "NoPrefixComments")
-		}
-		text = fmt.Sprintf("File does not conform to the import format configured for `Gci`(%s)", strings.Join(optionsText, ","))
 	}
 	return text
 }
