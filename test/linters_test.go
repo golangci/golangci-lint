@@ -92,11 +92,11 @@ func TestGciLocal(t *testing.T) {
 	rc := extractRunContextFromComments(t, sourcePath)
 	args = append(args, rc.args...)
 
-	cfg, err := yaml.Marshal(rc.config)
+	cfg, err := os.ReadFile(rc.configPath)
 	require.NoError(t, err)
 
 	testshared.NewLintRunner(t).RunWithYamlConfig(string(cfg), args...).
-		ExpectHasIssue("testdata/gci/gci.go:7: File is not `gci`-ed")
+		ExpectHasIssue("testdata/gci/gci.go:9:1: Expected '\\n', Found '\\t'")
 }
 
 func TestMultipleOutputs(t *testing.T) {
@@ -108,11 +108,11 @@ func TestMultipleOutputs(t *testing.T) {
 	rc := extractRunContextFromComments(t, sourcePath)
 	args = append(args, rc.args...)
 
-	cfg, err := yaml.Marshal(rc.config)
+	cfg, err := os.ReadFile(rc.configPath)
 	require.NoError(t, err)
 
 	testshared.NewLintRunner(t).RunWithYamlConfig(string(cfg), args...).
-		ExpectHasIssue("testdata/gci/gci.go:7: File is not `gci`-ed").
+		ExpectHasIssue("testdata/gci/gci.go:9:1: Expected '\\n', Found '\\t'").
 		ExpectOutputContains(`"Issues":[`)
 }
 
@@ -125,11 +125,11 @@ func TestStderrOutput(t *testing.T) {
 	rc := extractRunContextFromComments(t, sourcePath)
 	args = append(args, rc.args...)
 
-	cfg, err := yaml.Marshal(rc.config)
+	cfg, err := os.ReadFile(rc.configPath)
 	require.NoError(t, err)
 
 	testshared.NewLintRunner(t).RunWithYamlConfig(string(cfg), args...).
-		ExpectHasIssue("testdata/gci/gci.go:7: File is not `gci`-ed").
+		ExpectHasIssue("testdata/gci/gci.go:9:1: Expected '\\n', Found '\\t'").
 		ExpectOutputContains(`"Issues":[`)
 }
 
@@ -145,11 +145,11 @@ func TestFileOutput(t *testing.T) {
 	rc := extractRunContextFromComments(t, sourcePath)
 	args = append(args, rc.args...)
 
-	cfg, err := yaml.Marshal(rc.config)
+	cfg, err := os.ReadFile(rc.configPath)
 	require.NoError(t, err)
 
 	testshared.NewLintRunner(t).RunWithYamlConfig(string(cfg), args...).
-		ExpectHasIssue("testdata/gci/gci.go:7: File is not `gci`-ed").
+		ExpectHasIssue("testdata/gci/gci.go:9:1: Expected '\\n', Found '\\t'").
 		ExpectOutputNotContains(`"Issues":[`)
 
 	b, err := os.ReadFile(resultPath)

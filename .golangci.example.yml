@@ -295,10 +295,18 @@ linters-settings:
     statements: -1
 
   gci:
-    # Put imports beginning with prefix after 3rd-party packages.
-    # Only support one prefix.
-    # If not set, use `goimports.local-prefixes`.
-    local-prefixes: github.com/org/project
+    # Checks that no inline Comments are present
+    no-inlineComments: false
+    # Checks that no prefix Comments(comment lines above an import) are present
+    no-prefixComments: false
+    # Section configuration to compare against.
+    # Run gci print -h for a detailed explanation
+    sections:
+      - Standard
+      - Default
+    # Separators that should be present between sections
+    sectionSeparators:
+      - Newline
 
   gocognit:
     # Minimal code complexity to report

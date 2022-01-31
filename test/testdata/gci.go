@@ -1,10 +1,12 @@
 //args: -Egci
+//config_path: testdata/configs/gci.yml
 package testdata
 
 import (
 	"fmt"
 
 	"github.com/golangci/golangci-lint/pkg/config"
+
 	"github.com/pkg/errors"
 )
 
