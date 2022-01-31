@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	gciAnalyzer "github.com/daixiang0/gci/pkg/analyzer"
+	gci "github.com/daixiang0/gci/pkg/analyzer"
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/config"
@@ -18,26 +18,26 @@ func NewGci(settings *config.GciSettings) *goanalysis.Linter {
 
 	if settings != nil {
 		cfg := map[string]interface{}{
-			gciAnalyzer.NoInlineCommentsFlag:  settings.NoInlineComments,
-			gciAnalyzer.NoPrefixCommentsFlag:  settings.NoPrefixComments,
-			gciAnalyzer.SectionsFlag:          strings.Join(settings.Sections, gciAnalyzer.SectionDelimiter),
-			gciAnalyzer.SectionSeparatorsFlag: strings.Join(settings.SectionSeparator, gciAnalyzer.SectionDelimiter),
+			gci.NoInlineCommentsFlag:  settings.NoInlineComments,
+			gci.NoPrefixCommentsFlag:  settings.NoPrefixComments,
+			gci.SectionsFlag:          strings.Join(settings.Sections, gci.SectionDelimiter),
+			gci.SectionSeparatorsFlag: strings.Join(settings.SectionSeparator, gci.SectionDelimiter),
 		}
 
 		if settings.LocalPrefixes != "" {
-			prefix := []string{"Standard", "Default", fmt.Sprintf("Prefix(%s)", settings.LocalPrefixes)}
-			cfg[gciAnalyzer.SectionsFlag] = strings.Join(prefix, gciAnalyzer.SectionDelimiter)
+			prefix := []string{"standard", "default", fmt.Sprintf("prefix(%s)", settings.LocalPrefixes)}
+			cfg[gci.SectionsFlag] = strings.Join(prefix, gci.SectionDelimiter)
 		}
 
 		linterCfg = map[string]map[string]interface{}{
-			gciAnalyzer.Analyzer.Name: cfg,
+			gci.Analyzer.Name: cfg,
 		}
 	}
 
 	return goanalysis.NewLinter(
 		gciName,
 		"Gci controls golang package import order and makes it always deterministic.",
-		[]*analysis.Analyzer{gciAnalyzer.Analyzer},
+		[]*analysis.Analyzer{gci.Analyzer},
 		linterCfg,
 	).WithLoadMode(goanalysis.LoadModeSyntax)
 }
