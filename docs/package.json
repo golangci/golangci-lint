@@ -37,7 +37,7 @@
     "gatsby-transformer-remark": "^2.16.1",
     "gatsby-transformer-sharp": "^2.12.1",
     "gatsby-transformer-yaml": "^2.11.0",
-    "polished": "^4.1.3",
+    "polished": "^4.1.4",
     "prism-react-renderer": "^1.2.1",
     "prop-types": "^15.8.1",
     "puppeteer": "^13.0.1",
