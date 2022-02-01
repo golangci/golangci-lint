@@ -9,6 +9,7 @@ import (
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
+	"github.com/golangci/golangci-lint/pkg/lint/linter"
 )
 
 const gciName = "gci"
@@ -39,5 +40,9 @@ func NewGci(settings *config.GciSettings) *goanalysis.Linter {
 		"Gci controls golang package import order and makes it always deterministic.",
 		[]*analysis.Analyzer{gci.Analyzer},
 		linterCfg,
-	).WithLoadMode(goanalysis.LoadModeSyntax)
+	).WithContextSetter(func(lintCtx *linter.Context) {
+		if settings.LocalPrefixes != "" {
+			lintCtx.Log.Warnf("gci: `local-prefixes` is deprecated, use `sections` and `prefix(%s)` instead.", settings.LocalPrefixes)
+		}
+	}).WithLoadMode(goanalysis.LoadModeSyntax)
 }
