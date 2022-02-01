@@ -46,7 +46,7 @@
     "react-headroom": "^3.2.0",
     "react-helmet": "^6.1.0",
     "react-icons": "^4.3.1",
-    "react-live": "^2.3.0",
+    "react-live": "^2.4.1",
     "url-join": "^4.0.1"
   },
   "devDependencies": {},
