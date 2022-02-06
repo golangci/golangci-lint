@@ -13,7 +13,7 @@ require (
 	github.com/ashanbrown/forbidigo v1.3.0
 	github.com/ashanbrown/makezero v1.1.0
 	github.com/bkielbasa/cyclop v1.2.0
-	github.com/blizzy78/varnamelen v0.5.0
+	github.com/blizzy78/varnamelen v0.6.0
 	github.com/bombsimon/wsl/v3 v3.3.0
 	github.com/breml/bidichk v0.2.1
 	github.com/breml/errchkjson v0.2.1
@@ -96,7 +96,7 @@ require (
 	github.com/yagipy/maintidx v1.0.0
 	github.com/yeya24/promlinter v0.1.1-0.20210918184747-d757024714a1
 	gitlab.com/bosi/decorder v0.2.1
-	golang.org/x/tools v0.1.9-0.20211228192929-ee1ca4ffc4da
+	golang.org/x/tools v0.1.9
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
 	honnef.co/go/tools v0.2.2
 	mvdan.cc/gofumpt v0.2.1
