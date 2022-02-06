@@ -1,8 +1,11 @@
 [context.production.environment]
   GO_VERSION = "1.16"
+  NODE_VERSION = "17"
 
 [context.deploy-preview.environment]
   GO_VERSION = "1.16"
+  NODE_VERSION = "17"
 
 [context.branch-deploy.environment]
   GO_VERSION = "1.16"
+  NODE_VERSION = "17"
