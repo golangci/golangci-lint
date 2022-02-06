@@ -41,5 +41,5 @@ func NewVarnamelen(settings *config.VarnamelenSettings) *goanalysis.Linter {
 		"checks that the length of a variable's name matches its scope",
 		[]*analysis.Analyzer{a},
 		cfg,
-	).WithLoadMode(goanalysis.LoadModeSyntax)
+	).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }
