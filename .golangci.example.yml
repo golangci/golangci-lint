@@ -136,7 +136,7 @@ linters-settings:
     # Default: true (disabled)
     disable-dec-order-check: false
 
-    # If true, `init` func can be anywhere in file (must not be declared before all other functions).
+    # If true, `init` func can be anywhere in file (does not have to be declared before all other functions).
     # Default: true (disabled)
     disable-init-func-first-check: false
 
