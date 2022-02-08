@@ -20,6 +20,8 @@ type Context struct {
 	// version for each of packages
 	OriginalPackages []*packages.Package
 
+	Modules []*packages.Module
+
 	Cfg       *config.Config
 	FileCache *fsutils.FileCache
 	LineCache *fsutils.LineCache

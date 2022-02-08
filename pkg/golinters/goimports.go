@@ -1,6 +1,7 @@
 package golinters
 
 import (
+	"strings"
 	"sync"
 
 	goimportsAPI "github.com/golangci/gofmt/goimports"
@@ -29,6 +30,17 @@ func NewGoimports() *goanalysis.Linter {
 		nil,
 	).WithContextSetter(func(lintCtx *linter.Context) {
 		imports.LocalPrefix = lintCtx.Settings().Goimports.LocalPrefixes
+
+		if imports.LocalPrefix == "" && lintCtx.Settings().Goimports.LocalPrefixModule {
+			var modules []string
+
+			for _, module := range lintCtx.Modules {
+				modules = append(modules, module.Path)
+			}
+
+			imports.LocalPrefix = strings.Join(modules, ",")
+		}
+
 		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
 			var fileNames []string
 			for _, f := range pass.Files {

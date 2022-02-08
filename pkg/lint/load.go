@@ -65,7 +65,7 @@ func (cl *ContextLoader) prepareBuildContext() {
 }
 
 func (cl *ContextLoader) findLoadMode(linters []*linter.Config) packages.LoadMode {
-	loadMode := packages.LoadMode(0)
+	loadMode := packages.LoadMode(0) | packages.NeedModule // TODO: make this part of the linter load mode?
 	for _, lc := range linters {
 		loadMode |= lc.LoadMode
 	}
@@ -283,6 +283,20 @@ func (cl *ContextLoader) filterDuplicatePackages(pkgs []*packages.Package) []*pa
 	return retPkgs
 }
 
+func (cl *ContextLoader) getModules(pkgs []*packages.Package) []*packages.Module {
+	modules := []*packages.Module{}
+	moduleIndex := map[string]bool{}
+
+	for _, pkg := range pkgs {
+		if pkg.Module != nil && moduleIndex[pkg.Module.Path] == false {
+			moduleIndex[pkg.Module.Path] = true
+			modules = append(modules, pkg.Module)
+		}
+	}
+
+	return modules
+}
+
 func (cl *ContextLoader) Load(ctx context.Context, linters []*linter.Config) (*linter.Context, error) {
 	loadMode := cl.findLoadMode(linters)
 	pkgs, err := cl.loadPackages(ctx, loadMode)
@@ -296,12 +310,16 @@ func (cl *ContextLoader) Load(ctx context.Context, linters []*linter.Config) (*l
 		return nil, exitcodes.ErrNoGoFiles
 	}
 
+	modules := cl.getModules(pkgs)
+
 	ret := &linter.Context{
 		Packages: deduplicatedPkgs,
 
 		// At least `unused` linters works properly only on original (not deduplicated) packages,
 		// see https://github.com/golangci/golangci-lint/pull/585.
 		OriginalPackages: pkgs,
+
+		Modules: modules,
 
 		Cfg:       cl.cfg,
 		Log:       cl.log,
