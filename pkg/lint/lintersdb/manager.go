@@ -107,6 +107,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 	var errorlintCfg *config.ErrorLintSettings
 	var exhaustiveCfg *config.ExhaustiveSettings
 	var exhaustiveStructCfg *config.ExhaustiveStructSettings
+	var gciCfg *config.GciSettings
 	var goModDirectivesCfg *config.GoModDirectivesSettings
 	var goMndCfg *config.GoMndSettings
 	var gosecCfg *config.GoSecSettings
@@ -139,6 +140,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		errorlintCfg = &m.cfg.LintersSettings.ErrorLint
 		exhaustiveCfg = &m.cfg.LintersSettings.Exhaustive
 		exhaustiveStructCfg = &m.cfg.LintersSettings.ExhaustiveStruct
+		gciCfg = &m.cfg.LintersSettings.Gci
 		goModDirectivesCfg = &m.cfg.LintersSettings.GoModDirectives
 		goMndCfg = &m.cfg.LintersSettings.Gomnd
 		gosecCfg = &m.cfg.LintersSettings.Gosec
@@ -292,7 +294,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetComplexity).
 			WithURL("https://github.com/ultraware/funlen"),
 
-		linter.NewConfig(golinters.NewGci()).
+		linter.NewConfig(golinters.NewGci(gciCfg)).
 			WithSince("v1.30.0").
 			WithPresets(linter.PresetFormatting, linter.PresetImport).
 			WithAutoFix().

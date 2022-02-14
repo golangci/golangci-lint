@@ -26,6 +26,10 @@ var defaultLintersSettings = LintersSettings{
 	Forbidigo: ForbidigoSettings{
 		ExcludeGodocExamples: true,
 	},
+	Gci: GciSettings{
+		Sections:         []string{"default", "standard"},
+		SectionSeparator: []string{"newline"},
+	},
 	Gocognit: GocognitSettings{
 		MinComplexity: 30,
 	},
@@ -253,7 +257,11 @@ type FunlenSettings struct {
 }
 
 type GciSettings struct {
-	LocalPrefixes string `mapstructure:"local-prefixes"`
+	LocalPrefixes    string   `mapstructure:"local-prefixes"` // Deprecated
+	NoInlineComments bool     `mapstructure:"no-inlineComments"`
+	NoPrefixComments bool     `mapstructure:"no-prefixComments"`
+	Sections         []string `mapstructure:"sections"`
+	SectionSeparator []string `mapstructure:"sectionSeparators"`
 }
 
 type GocognitSettings struct {
