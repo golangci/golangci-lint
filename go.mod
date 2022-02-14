@@ -15,7 +15,7 @@ require (
 	github.com/bkielbasa/cyclop v1.2.0
 	github.com/blizzy78/varnamelen v0.6.0
 	github.com/bombsimon/wsl/v3 v3.3.0
-	github.com/breml/bidichk v0.2.1
+	github.com/breml/bidichk v0.2.2
 	github.com/breml/errchkjson v0.2.2
 	github.com/butuzov/ireturn v0.1.1
 	github.com/charithe/durationcheck v0.0.9
