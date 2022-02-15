@@ -65,7 +65,7 @@ func NewRevive(cfg *config.ReviveSettings) *goanalysis.Linter {
 				return nil, err
 			}
 
-			revive := lint.New(os.ReadFile)
+			revive := lint.New(os.ReadFile, cfg.MaxOpenFiles)
 
 			lintingRules, err := reviveConfig.GetLintingRules(conf)
 			if err != nil {
