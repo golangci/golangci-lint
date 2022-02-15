@@ -90,7 +90,7 @@ require (
 	github.com/tomarrell/wrapcheck/v2 v2.4.0
 	github.com/tommy-muehle/go-mnd/v2 v2.5.0
 	github.com/ultraware/funlen v0.0.3
-	github.com/ultraware/whitespace v0.0.4
+	github.com/ultraware/whitespace v0.0.5
 	github.com/uudashr/gocognit v1.0.5
 	github.com/valyala/quicktemplate v1.7.0
 	github.com/yagipy/maintidx v1.0.0
