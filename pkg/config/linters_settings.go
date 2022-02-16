@@ -480,6 +480,7 @@ type PromlinterSettings struct {
 }
 
 type ReviveSettings struct {
+	MaxOpenFiles          int  `mapstructure:"max-open-files"`
 	IgnoreGeneratedHeader bool `mapstructure:"ignore-generated-header"`
 	Confidence            float64
 	Severity              string
