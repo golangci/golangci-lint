@@ -4,6 +4,8 @@ updates:
     directory: "/"
     schedule:
       interval: weekly
+      day: "sunday"
+      time: "11:00" # 11am UTC
     ignore:
       # ignore forked linters because of their versioning issues. TODO: fix it.
       - dependency-name: "github.com/golangci/*"
@@ -31,5 +33,6 @@ updates:
     directory: "/docs"
     schedule:
       interval: monthly
+      day: wednesday
     reviewers:
       - "golangci/team"
