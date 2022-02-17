@@ -1569,6 +1569,7 @@ linters-settings:
 
 linters:
   # Disable all linters.
+  # Default: false
   disable-all: true
   # Enable specific linter
   # https://golangci-lint.run/usage/linters/#enabled-by-default-linters
@@ -1658,6 +1659,7 @@ linters:
     - wsl
 
   # Enable all available linters.
+  # Default: false
   enable-all: true
   # Disable specific linter
   # https://golangci-lint.run/usage/linters/#disabled-by-default-linters--e--enable

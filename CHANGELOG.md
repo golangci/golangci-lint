@@ -1,6 +1,23 @@
 Follow the news and releases on our [twitter](https://twitter.com/golangci) and our [blog](https://medium.com/golangci).
 There is the most valuable changes log:
 
+### v1.44.1
+
+1. updated linters:
+   * `bidichk`: from 0.2.1 to 0.2.2
+   * `errchkjson`: from 0.2.1 to 0.2.3
+   * `thelper`: from 0.5.0 to 0.5.1
+   * `tagliatelle`: from 0.3.0 to 0.3.1
+   * `gopsutil`: from 3.21.12 to 3.22.1
+   * `gci`: from 0.2.9 to 0.3.0
+   * `revive`: from v1.1.3 to v1.1.4
+   * `varnamelen`: from v0.5.0 to v0.6.0
+2. documentation:
+   * linters: improve configuration pages
+   * `decorder`: fix `disable-init-func-first-check: false` elaboration
+3. misc:
+   * fix debug output
+
 ### v1.44.0
 
 1. new linters:
