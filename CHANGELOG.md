@@ -1,6 +1,15 @@
 Follow the news and releases on our [twitter](https://twitter.com/golangci) and our [blog](https://medium.com/golangci).
 There is the most valuable changes log:
 
+### v1.44.2
+
+1. updated linters:
+   * `gci`: bump to HEAD
+   * `gci`: restore defaults for sections
+   * `whitespace`: from 0.0.4 to 0.0.5
+2. documentation:
+   * add link to configuration in the linters list
+
 ### v1.44.1
 
 1. updated linters:
