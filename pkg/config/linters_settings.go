@@ -27,7 +27,7 @@ var defaultLintersSettings = LintersSettings{
 		ExcludeGodocExamples: true,
 	},
 	Gci: GciSettings{
-		Sections:         []string{"default", "standard"},
+		Sections:         []string{"standard", "default"},
 		SectionSeparator: []string{"newline"},
 	},
 	Gocognit: GocognitSettings{
