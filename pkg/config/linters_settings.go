@@ -258,10 +258,10 @@ type FunlenSettings struct {
 
 type GciSettings struct {
 	LocalPrefixes    string   `mapstructure:"local-prefixes"` // Deprecated
-	NoInlineComments bool     `mapstructure:"no-inlineComments"`
-	NoPrefixComments bool     `mapstructure:"no-prefixComments"`
+	NoInlineComments bool     `mapstructure:"no-inline-comments"`
+	NoPrefixComments bool     `mapstructure:"no-prefix-comments"`
 	Sections         []string `mapstructure:"sections"`
-	SectionSeparator []string `mapstructure:"sectionSeparators"`
+	SectionSeparator []string `mapstructure:"section-separators"`
 }
 
 type GocognitSettings struct {
