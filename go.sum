@@ -158,8 +158,8 @@ github.com/cpuguy83/go-md2man/v2 v2.0.0/go.mod h1:maD7wRr/U5Z6m/iR4s+kqSMx2CaBsr
 github.com/cpuguy83/go-md2man/v2 v2.0.1/go.mod h1:tgQtvFlXSQOSOSIRvRPT7W67SCa46tRHOmNcaadrF8o=
 github.com/creack/pty v1.1.7/go.mod h1:lj5s0c3V2DBrqTV7llrYr5NG6My20zk30Fl46Y7DoTY=
 github.com/creack/pty v1.1.9/go.mod h1:oKZEueFk5CKHvIhNR5MUki03XCEU+Q6VDXinZuGJ33E=
-github.com/daixiang0/gci v0.3.0 h1:6x2xp99la0TfGmdDJ6T2VrLtCoZwYUVp4/5zT8J7+Go=
-github.com/daixiang0/gci v0.3.0/go.mod h1:jaASoJmv/ykO9dAAPy31iJnreV19248qKDdVWf3QgC4=
+github.com/daixiang0/gci v0.3.1-0.20220208004058-76d765e3ab48 h1:9rJGqaC5do9zkvKrtRdx0HJoxj7Jd6vDa0O2eBU0AbU=
+github.com/daixiang0/gci v0.3.1-0.20220208004058-76d765e3ab48/go.mod h1:jaASoJmv/ykO9dAAPy31iJnreV19248qKDdVWf3QgC4=
 github.com/davecgh/go-spew v0.0.0-20161028175848-04cdfd42973b/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
