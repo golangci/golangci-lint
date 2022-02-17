@@ -300,11 +300,11 @@ linters-settings:
 
     # Checks that no inline Comments are present.
     # Default: false
-    no-inlineComments: true
+    no-inline-comments: true
 
     # Checks that no prefix Comments(comment lines above an import) are present.
     # Default: false
-    no-prefixComments: true
+    no-prefix-comments: true
 
     # Section configuration to compare against.
     # Section names are case-insensitive and may contain parameters in ().
@@ -318,7 +318,7 @@ linters-settings:
 
     # Separators that should be present between sections.
     # Default: ["newLine"]
-    sectionSeparators:
+    section-separators:
       - newLine
 
   gocognit:
