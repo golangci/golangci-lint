@@ -13,12 +13,14 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"reflect"
 	"sort"
 	"strings"
 
 	"gopkg.in/yaml.v3"
 
 	"github.com/golangci/golangci-lint/internal/renameio"
+	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
 )
@@ -251,7 +253,11 @@ func getName(lc *linter.Config) string {
 	name := lc.Name()
 
 	if lc.OriginalURL != "" {
-		name = fmt.Sprintf("[%s](%s)", lc.Name(), lc.OriginalURL)
+		name = fmt.Sprintf("[%s](%s)", name, lc.OriginalURL)
+	}
+
+	if hasSettings(lc.Name()) {
+		name = fmt.Sprintf("%s [%s](#%s)", name, span("Configuration", "⚙️"), lc.Name())
 	}
 
 	if !lc.IsDeprecated() {
@@ -283,6 +289,18 @@ func check(b bool, title string) string {
 		return span(title, "✔")
 	}
 	return ""
+}
+
+func hasSettings(name string) bool {
+	tp := reflect.TypeOf(config.LintersSettings{})
+
+	for i := 0; i < tp.NumField(); i++ {
+		if strings.EqualFold(name, tp.Field(i).Name) {
+			return true
+		}
+	}
+
+	return false
 }
 
 func span(title, icon string) string {
