@@ -33,6 +33,5 @@ updates:
     directory: "/docs"
     schedule:
       interval: monthly
-      day: wednesday
     reviewers:
       - "golangci/team"
