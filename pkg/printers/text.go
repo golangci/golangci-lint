@@ -14,6 +14,7 @@ import (
 
 type Text struct {
 	printIssuedLine bool
+	printSeverity   bool
 	useColors       bool
 	printLinterName bool
 
@@ -21,9 +22,10 @@ type Text struct {
 	w   io.Writer
 }
 
-func NewText(printIssuedLine, useColors, printLinterName bool, log logutils.Log, w io.Writer) *Text {
+func NewText(printIssuedLine, useColors, printLinterName, printSeverity bool, log logutils.Log, w io.Writer) *Text {
 	return &Text{
 		printIssuedLine: printIssuedLine,
+		printSeverity:   printSeverity,
 		useColors:       useColors,
 		printLinterName: printLinterName,
 		log:             log,
@@ -56,9 +58,17 @@ func (p *Text) Print(ctx context.Context, issues []result.Issue) error {
 }
 
 func (p Text) printIssue(i *result.Issue) {
-	text := p.SprintfColored(color.FgRed, "%s", strings.TrimSpace(i.Text))
+	issueColor := color.FgRed
+	if i.Severity == "warning" {
+		issueColor = color.FgYellow
+	}
+
+	text := p.SprintfColored(issueColor, "%s", strings.TrimSpace(i.Text))
 	if p.printLinterName {
 		text += fmt.Sprintf(" (%s)", i.FromLinter)
+	}
+	if p.printSeverity {
+		text += fmt.Sprintf(" %s", i.Severity)
 	}
 	pos := p.SprintfColored(color.Bold, "%s:%d", i.FilePath(), i.Line())
 	if i.Pos.Column != 0 {

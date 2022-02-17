@@ -378,8 +378,13 @@ func (e *Executor) setOutputToDevNull() (savedStdout, savedStderr *os.File) {
 }
 
 func (e *Executor) setExitCodeIfIssuesFound(issues []result.Issue) {
-	if len(issues) != 0 {
-		e.exitCode = e.cfg.Run.ExitCodeIfIssuesFound
+	for i := range issues {
+		// If we find an issue with a severity equal to the default (non-modified)
+		// then we exit with the normal issues exit code.
+		if issues[i].Severity == e.cfg.Severity.Default {
+			e.exitCode = e.cfg.Run.ExitCodeIfIssuesFound
+			break
+		}
 	}
 }
 
@@ -471,7 +476,7 @@ func (e *Executor) createPrinter(format string, w io.Writer) (printers.Printer, 
 		p = printers.NewJSON(&e.reportData, w)
 	case config.OutFormatColoredLineNumber, config.OutFormatLineNumber:
 		p = printers.NewText(e.cfg.Output.PrintIssuedLine,
-			format == config.OutFormatColoredLineNumber, e.cfg.Output.PrintLinterName,
+			format == config.OutFormatColoredLineNumber, e.cfg.Output.PrintLinterName, e.cfg.Output.PrintSeverity,
 			e.log.Child("text_printer"), w)
 	case config.OutFormatTab:
 		p = printers.NewTab(e.cfg.Output.PrintLinterName, e.log.Child("tab_printer"), w)

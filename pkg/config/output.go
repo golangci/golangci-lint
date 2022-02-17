@@ -29,6 +29,7 @@ type Output struct {
 	Color               string
 	PrintIssuedLine     bool   `mapstructure:"print-issued-lines"`
 	PrintLinterName     bool   `mapstructure:"print-linter-name"`
+	PrintSeverity       bool   `mapstructure:"print-severity"`
 	UniqByLine          bool   `mapstructure:"uniq-by-line"`
 	SortResults         bool   `mapstructure:"sort-results"`
 	PrintWelcomeMessage bool   `mapstructure:"print-welcome"`
