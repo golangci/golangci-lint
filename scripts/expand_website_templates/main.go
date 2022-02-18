@@ -257,7 +257,7 @@ func getName(lc *linter.Config) string {
 	}
 
 	if hasSettings(lc.Name()) {
-		name = fmt.Sprintf("%s [%s](#%s)", name, span("Configuration", "⚙️"), lc.Name())
+		name = fmt.Sprintf("%s&nbsp;[%s](#%s)", name, span("Configuration", "⚙️"), lc.Name())
 	}
 
 	if !lc.IsDeprecated() {
@@ -269,7 +269,7 @@ func getName(lc *linter.Config) string {
 		title += fmt.Sprintf(" since %s", lc.Deprecation.Since)
 	}
 
-	return name + " " + span(title, "⚠")
+	return name + "&nbsp;" + span(title, "⚠")
 }
 
 func getDesc(lc *linter.Config) string {
