@@ -280,6 +280,9 @@ linters-settings:
     forbid:
       - ^print.*$
       - 'fmt\.Print.*'
+      # Optionally put comments at the end of the regex, surrounded by `(# )?`
+      # Escape any special characters.
+      - 'fmt\.Print.*(# Do not commit print statements\.)?'
     # Exclude godoc examples from forbidigo checks.
     # Default: true
     exclude_godoc_examples: false
