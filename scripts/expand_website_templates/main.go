@@ -25,6 +25,8 @@ import (
 	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
 )
 
+const listItemPrefix = "list-item-"
+
 var stateFilePath = filepath.Join("docs", "template_data.state")
 
 func main() {
@@ -257,7 +259,7 @@ func getName(lc *linter.Config) string {
 	}
 
 	if hasSettings(lc.Name()) {
-		name = fmt.Sprintf("%s [%s](#%s)", name, span("Configuration", "⚙️"), lc.Name())
+		name = fmt.Sprintf("%s&nbsp;[%s](#%s)", name, spanWithID(listItemPrefix+lc.Name(), "Configuration", "⚙️"), lc.Name())
 	}
 
 	if !lc.IsDeprecated() {
@@ -269,7 +271,7 @@ func getName(lc *linter.Config) string {
 		title += fmt.Sprintf(" since %s", lc.Deprecation.Since)
 	}
 
-	return name + " " + span(title, "⚠")
+	return name + "&nbsp;" + span(title, "⚠")
 }
 
 func getDesc(lc *linter.Config) string {
@@ -305,6 +307,10 @@ func hasSettings(name string) bool {
 
 func span(title, icon string) string {
 	return fmt.Sprintf(`<span title=%q>%s</span>`, title, icon)
+}
+
+func spanWithID(id, title, icon string) string {
+	return fmt.Sprintf(`<span id=%q title=%q>%s</span>`, id, title, icon)
 }
 
 func getThanksList() string {
@@ -471,6 +477,8 @@ func getLintersSettingSnippets(node, nextNode *yaml.Node) (string, error) {
 		}
 
 		_, _ = fmt.Fprintln(builder, "```")
+		_, _ = fmt.Fprintln(builder)
+		_, _ = fmt.Fprintf(builder, "[%s](#%s)\n\n", span("Back to the top", "🔼"), listItemPrefix+nextNode.Content[i].Value)
 		_, _ = fmt.Fprintln(builder)
 	}
 
