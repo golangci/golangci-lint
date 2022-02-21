@@ -123,6 +123,7 @@ type LintersSettings struct {
 	ErrorLint        ErrorLintSettings
 	Exhaustive       ExhaustiveSettings
 	ExhaustiveStruct ExhaustiveStructSettings
+	FloatCompare     FloatCompareSettings
 	Forbidigo        ForbidigoSettings
 	Funlen           FunlenSettings
 	Gci              GciSettings
@@ -253,6 +254,10 @@ type ExhaustiveSettings struct {
 
 type ExhaustiveStructSettings struct {
 	StructPatterns []string `mapstructure:"struct-patterns"`
+}
+
+type FloatCompareSettings struct {
+	EqualOnly bool `mapstructure:"equal-only"`
 }
 
 type ForbidigoSettings struct {

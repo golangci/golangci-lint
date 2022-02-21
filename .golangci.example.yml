@@ -285,6 +285,11 @@ linters-settings:
       - '*.Test'
       - 'example.com/package.ExampleStruct'
 
+  floatcompare:
+    # Search only for == and != no other comparisons
+    # Default: false
+    equal-only: true
+
   forbidigo:
     # Forbid the following identifiers (list of regexp).
     forbid:
@@ -1636,6 +1641,7 @@ linters:
     - exhaustive
     - exhaustivestruct
     - exportloopref
+    - floatcompare
     - forbidigo
     - forcetypeassert
     - funlen
@@ -1726,6 +1732,7 @@ linters:
     - exhaustive
     - exhaustivestruct
     - exportloopref
+    - floatcompare
     - forbidigo
     - forcetypeassert
     - funlen
