@@ -140,8 +140,11 @@ func getChecker(errCfg *config.ErrcheckSettings) (*errcheck.Checker, error) {
 			BlankAssignments:       !errCfg.CheckAssignToBlank,
 			TypeAssertions:         !errCfg.CheckTypeAssertions,
 			SymbolRegexpsByPackage: map[string]*regexp.Regexp{},
-			Symbols:                append([]string{}, errcheck.DefaultExcludedSymbols...),
 		},
+	}
+
+	if !errCfg.DisableDefaultExclusions {
+		checker.Exclusions.Symbols = append(checker.Exclusions.Symbols, errcheck.DefaultExcludedSymbols...)
 	}
 
 	for pkg, re := range ignoreConfig {
