@@ -90,7 +90,6 @@ func createPatchAndExtractIssues(lintCtx *linter.Context, linterName, filename s
 		B:       difflib.SplitLines(string(dst)),
 		Context: 3,
 	}
-
 	if err := difflib.WriteUnifiedDiff(&out, d); err != nil {
 		return nil, errors.Wrap(err, "can't create diff")
 	}

@@ -7,7 +7,7 @@ import (
 	"sync"
 
 	"github.com/pkg/errors"
-	"github.com/shazow/go-diff/difflib"
+	"github.com/pmezard/go-difflib/difflib"
 	"golang.org/x/tools/go/analysis"
 	"mvdan.cc/gofumpt/format"
 
@@ -29,7 +29,6 @@ func NewGofumpt() *goanalysis.Linter {
 
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
-	differ := difflib.New()
 
 	analyzer := &analysis.Analyzer{
 		Name: gofumptName,
@@ -75,9 +74,13 @@ func NewGofumpt() *goanalysis.Linter {
 						return nil, fmt.Errorf("error while running gofumpt: %w", err)
 					}
 
-					err = differ.Diff(&out, bytes.NewReader(input), bytes.NewReader(output))
-					if err != nil {
-						return nil, fmt.Errorf("error while running gofumpt: %w", err)
+					d := difflib.UnifiedDiff{
+						A:       difflib.SplitLines(string(input)),
+						B:       difflib.SplitLines(string(output)),
+						Context: 3,
+					}
+					if err := difflib.WriteUnifiedDiff(&out, d); err != nil {
+						return nil, errors.Wrap(err, "can't create diff")
 					}
 
 					diff := out.String()
