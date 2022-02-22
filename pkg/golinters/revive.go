@@ -9,7 +9,6 @@ import (
 	"reflect"
 
 	"github.com/BurntSushi/toml"
-	"github.com/mgechev/dots"
 	reviveConfig "github.com/mgechev/revive/config"
 	"github.com/mgechev/revive/lint"
 	"github.com/mgechev/revive/rule"
@@ -50,10 +49,10 @@ func NewRevive(cfg *config.ReviveSettings) *goanalysis.Linter {
 	).WithContextSetter(func(lintCtx *linter.Context) {
 		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
 			var files []string
-
 			for _, file := range pass.Files {
 				files = append(files, pass.Fset.PositionFor(file.Pos(), false).Filename)
 			}
+			packages := [][]string{files}
 
 			conf, err := getReviveConfig(cfg)
 			if err != nil {
@@ -68,11 +67,6 @@ func NewRevive(cfg *config.ReviveSettings) *goanalysis.Linter {
 			revive := lint.New(os.ReadFile, cfg.MaxOpenFiles)
 
 			lintingRules, err := reviveConfig.GetLintingRules(conf)
-			if err != nil {
-				return nil, err
-			}
-
-			packages, err := dots.ResolvePackages(files, []string{})
 			if err != nil {
 				return nil, err
 			}
@@ -315,6 +309,16 @@ const defaultConfidence = 0.8
 // This element is not exported by revive, so we need copy the code.
 // Extracted from https://github.com/mgechev/revive/blob/v1.1.4/config/config.go#L145
 func normalizeConfig(cfg *lint.Config) {
+	// NOTE(ldez): this custom section for golangci-lint should be kept.
+	// ---
+	if cfg.Confidence == 0 {
+		cfg.Confidence = defaultConfidence
+	}
+	if cfg.Severity == "" {
+		cfg.Severity = lint.SeverityWarning
+	}
+	// ---
+
 	if len(cfg.Rules) == 0 {
 		cfg.Rules = map[string]lint.RuleConfig{}
 	}
