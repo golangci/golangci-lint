@@ -15,6 +15,14 @@ import (
 const goimportsName = "goimports"
 
 func NewGoimports() *goanalysis.Linter {
+	goanalysis.SetTextModifier(goimportsName, func(lintCtx *linter.Context, _ string) string {
+		text := "File is not `goimports`-ed"
+		if lintCtx.Settings().Goimports.LocalPrefixes != "" {
+			text += " with -local " + lintCtx.Settings().Goimports.LocalPrefixes
+		}
+		return text
+	})
+
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
 
@@ -47,7 +55,7 @@ func NewGoimports() *goanalysis.Linter {
 					continue
 				}
 
-				is, err := extractIssuesFromPatch(string(diff), lintCtx.Log, lintCtx, goimportsName)
+				is, err := goanalysis.ExtractIssuesFromPatch(string(diff), lintCtx.Log, lintCtx, goimportsName)
 				if err != nil {
 					return nil, errors.Wrapf(err, "can't extract issues from gofmt diff output %q", string(diff))
 				}

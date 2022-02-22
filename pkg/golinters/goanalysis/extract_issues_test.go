@@ -1,4 +1,4 @@
-package golinters
+package goanalysis
 
 import (
 	"testing"

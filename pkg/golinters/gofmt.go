@@ -14,6 +14,14 @@ import (
 const gofmtName = "gofmt"
 
 func NewGofmt() *goanalysis.Linter {
+	goanalysis.SetTextModifier(gofmtName, func(lintCtx *linter.Context, _ string) string {
+		text := "File is not `gofmt`-ed"
+		if lintCtx.Settings().Gofmt.Simplify {
+			text += " with `-s`"
+		}
+		return text
+	})
+
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
 
@@ -46,7 +54,7 @@ func NewGofmt() *goanalysis.Linter {
 					continue
 				}
 
-				is, err := extractIssuesFromPatch(string(diff), lintCtx.Log, lintCtx, gofmtName)
+				is, err := goanalysis.ExtractIssuesFromPatch(string(diff), lintCtx.Log, lintCtx, gofmtName)
 				if err != nil {
 					return nil, errors.Wrapf(err, "can't extract issues from gofmt diff output %q", string(diff))
 				}

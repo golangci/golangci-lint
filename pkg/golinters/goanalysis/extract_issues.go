@@ -1,10 +1,11 @@
-package golinters
+package goanalysis
 
 import (
 	"bytes"
 	"fmt"
 	"go/token"
 	"strings"
+	"sync"
 
 	"github.com/pkg/errors"
 	diffpkg "github.com/sourcegraph/go-diff/diff"
@@ -207,29 +208,30 @@ func (p *hunkChangesParser) parse(h *diffpkg.Hunk) []Change {
 	return p.ret
 }
 
+type TextModifier = func(lintCtx *linter.Context, text string) string
+
+var (
+	textModifier     = make(map[string]TextModifier)
+	textModifierLock = sync.RWMutex{}
+)
+
+func SetTextModifier(linterName string, modifier TextModifier) {
+	textModifierLock.Lock()
+	defer textModifierLock.Unlock()
+	textModifier[linterName] = modifier
+}
+
 func getErrorTextForLinter(lintCtx *linter.Context, linterName string) string {
 	text := "File is not formatted"
-	switch linterName {
-	case gofumptName:
-		text = "File is not `gofumpt`-ed"
-		if lintCtx.Settings().Gofumpt.ExtraRules {
-			text += " with `-extra`"
-		}
-	case gofmtName:
-		text = "File is not `gofmt`-ed"
-		if lintCtx.Settings().Gofmt.Simplify {
-			text += " with `-s`"
-		}
-	case goimportsName:
-		text = "File is not `goimports`-ed"
-		if lintCtx.Settings().Goimports.LocalPrefixes != "" {
-			text += " with -local " + lintCtx.Settings().Goimports.LocalPrefixes
-		}
+	textModifierLock.RLock()
+	defer textModifierLock.RUnlock()
+	if f, ok := textModifier[linterName]; ok {
+		return f(lintCtx, text)
 	}
 	return text
 }
 
-func extractIssuesFromPatch(patch string, log logutils.Log, lintCtx *linter.Context, linterName string) ([]result.Issue, error) {
+func ExtractIssuesFromPatch(patch string, log logutils.Log, lintCtx *linter.Context, linterName string) ([]result.Issue, error) {
 	diffs, err := diffpkg.ParseMultiFileDiff([]byte(patch))
 	if err != nil {
 		return nil, errors.Wrap(err, "can't parse patch")

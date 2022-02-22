@@ -59,7 +59,7 @@ func runAnalyzers(cfg runAnalyzersConfig, lintCtx *linter.Context) ([]result.Iss
 		}
 	}()
 
-	buildAllIssues := func() []result.Issue {
+	buildAllIssues := func() ([]result.Issue, error) {
 		var retIssues []result.Issue
 		reportedIssues := cfg.reportIssues(lintCtx)
 		for i := range reportedIssues {
@@ -69,8 +69,13 @@ func runAnalyzers(cfg runAnalyzersConfig, lintCtx *linter.Context) ([]result.Iss
 			}
 			retIssues = append(retIssues, *issue)
 		}
-		retIssues = append(retIssues, buildIssues(diags, cfg.getLinterNameForDiagnostic)...)
-		return retIssues
+		newIssues, err := buildIssues(lintCtx, diags, cfg.getLinterNameForDiagnostic)
+		if err != nil {
+			return nil, err
+		}
+
+		retIssues = append(retIssues, newIssues...)
+		return retIssues, nil
 	}
 
 	errIssues, err := buildIssuesFromIllTypedError(errs, lintCtx)
@@ -79,12 +84,16 @@ func runAnalyzers(cfg runAnalyzersConfig, lintCtx *linter.Context) ([]result.Iss
 	}
 
 	issues = append(issues, errIssues...)
-	issues = append(issues, buildAllIssues()...)
+	newIssues, err := buildAllIssues()
+	if err != nil {
+		return nil, err
+	}
+	issues = append(issues, newIssues...)
 
 	return issues, nil
 }
 
-func buildIssues(diags []Diagnostic, linterNameBuilder func(diag *Diagnostic) string) []result.Issue {
+func buildIssues(lintCtx *linter.Context, diags []Diagnostic, linterNameBuilder func(diag *Diagnostic) string) ([]result.Issue, error) {
 	var issues []result.Issue
 	for i := range diags {
 		diag := &diags[i]
@@ -97,25 +106,31 @@ func buildIssues(diags []Diagnostic, linterNameBuilder func(diag *Diagnostic) st
 			text = fmt.Sprintf("%s: %s", diag.Analyzer.Name, diag.Message)
 		}
 
-		issues = append(issues, result.Issue{
-			FromLinter: linterName,
-			Text:       text,
-			Pos:        diag.Position,
-			Pkg:        diag.Pkg,
-		})
-
-		if len(diag.Related) > 0 {
-			for _, info := range diag.Related {
-				issues = append(issues, result.Issue{
-					FromLinter: linterName,
-					Text:       fmt.Sprintf("%s(related information): %s", diag.Analyzer.Name, info.Message),
-					Pos:        diag.Pkg.Fset.Position(info.Pos),
-					Pkg:        diag.Pkg,
-				})
+		if lintCtx.Cfg.Issues.NeedFix && len(diag.SuggestedFixes) > 0 {
+			newIssues, err := convertSuggestedFixes(lintCtx, linterName, diag)
+			if err != nil {
+				return nil, err
 			}
+			issues = append(issues, newIssues...)
+		} else {
+			issues = append(issues, result.Issue{
+				FromLinter: linterName,
+				Text:       text,
+				Pos:        diag.Position,
+				Pkg:        diag.Pkg,
+			})
+		}
+
+		for _, info := range diag.Related {
+			issues = append(issues, result.Issue{
+				FromLinter: linterName,
+				Text:       fmt.Sprintf("%s(related information): %s", diag.Analyzer.Name, info.Message),
+				Pos:        diag.Pkg.Fset.Position(info.Pos),
+				Pkg:        diag.Pkg,
+			})
 		}
 	}
-	return issues
+	return issues, nil
 }
 
 func getIssuesCacheKey(analyzers []*analysis.Analyzer) string {

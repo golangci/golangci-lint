@@ -19,6 +19,14 @@ import (
 const gofumptName = "gofumpt"
 
 func NewGofumpt() *goanalysis.Linter {
+	goanalysis.SetTextModifier(gofumptName, func(lintCtx *linter.Context, _ string) string {
+		text := "File is not `gofumpt`-ed"
+		if lintCtx.Settings().Gofumpt.ExtraRules {
+			text += " with `-extra`"
+		}
+		return text
+	})
+
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
 	differ := difflib.New()
@@ -73,7 +81,7 @@ func NewGofumpt() *goanalysis.Linter {
 					}
 
 					diff := out.String()
-					is, err := extractIssuesFromPatch(diff, lintCtx.Log, lintCtx, gofumptName)
+					is, err := goanalysis.ExtractIssuesFromPatch(diff, lintCtx.Log, lintCtx, gofumptName)
 					if err != nil {
 						return nil, errors.Wrapf(err, "can't extract issues from gofumpt diff output %q", diff)
 					}
