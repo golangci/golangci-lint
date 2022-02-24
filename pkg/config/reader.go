@@ -46,6 +46,11 @@ func (r *FileReader) Read() error {
 
 	if configFile != "" {
 		viper.SetConfigFile(configFile)
+
+		// Assume YAML if the file has no extension.
+		if filepath.Ext(configFile) == "" {
+			viper.SetConfigType("yaml")
+		}
 	} else {
 		r.setupConfigFileSearch()
 	}
