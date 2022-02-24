@@ -1033,16 +1033,29 @@ linters-settings:
 
   revive:
     # Maximum number of open files at the same time.
-    # https://github.com/mgechev/revive#command-line-flags
+    # See https://github.com/mgechev/revive#command-line-flags
     # Defaults to unlimited.
     max-open-files: 2048
+
+    # When set to false, ignores files with "GENERATED" header, similar to golint.
     # See https://github.com/mgechev/revive#available-rules for details.
+    # Default: false
     ignore-generated-header: true
-    severity: warning
-    enable-all-rules: false
-    # confidence: 0.8
-    # error-code: 0
-    # warning-code: 0
+
+    # Sets the default severity.
+    # See https://github.com/mgechev/revive#configuration
+    # Default: warning
+    severity: error
+
+    # Enable all available rules.
+    # Default: false
+    enable-all-rules: true
+
+    # Sets the default failure confidence.
+    # This means that linting errors with less than 0.8 confidence will be ignored.
+    # Default: 0.8
+    confidence: 0.1
+
     rules:
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#add-constant
       - name: add-constant
