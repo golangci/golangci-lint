@@ -720,6 +720,10 @@ linters-settings:
     # Default: low
     confidence: medium
 
+    # Concurrency value.
+    # Default: the number of logical CPUs usable by the current process.
+    concurrency: 12
+
     # To specify the configuration of rules.
     # The configuration of rules is not fully documented by gosec:
     # https://github.com/securego/gosec#configuration
