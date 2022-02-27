@@ -1,6 +1,10 @@
 package config
 
-import "github.com/pkg/errors"
+import (
+	"runtime"
+
+	"github.com/pkg/errors"
+)
 
 var defaultLintersSettings = LintersSettings{
 	Decorder: DecorderSettings{
@@ -46,6 +50,9 @@ var defaultLintersSettings = LintersSettings{
 	Gofumpt: GofumptSettings{
 		LangVersion: "",
 		ExtraRules:  false,
+	},
+	Gosec: GoSecSettings{
+		Concurrency: runtime.NumCPU(),
 	},
 	Ifshort: IfshortSettings{
 		MaxDeclLines: 1,
@@ -355,12 +362,13 @@ type GoModGuardSettings struct {
 }
 
 type GoSecSettings struct {
-	Includes         []string
-	Excludes         []string
-	Severity         string
-	Confidence       string
+	Includes         []string               `mapstructure:"includes"`
+	Excludes         []string               `mapstructure:"excludes"`
+	Severity         string                 `mapstructure:"severity"`
+	Confidence       string                 `mapstructure:"confidence"`
 	ExcludeGenerated bool                   `mapstructure:"exclude-generated"`
 	Config           map[string]interface{} `mapstructure:"config"`
+	Concurrency      int                    `mapstructure:"concurrency"`
 }
 
 type GovetSettings struct {

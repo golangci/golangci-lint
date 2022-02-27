@@ -55,7 +55,7 @@ func NewGosec(settings *config.GoSecSettings) *goanalysis.Linter {
 		nil,
 	).WithContextSetter(func(lintCtx *linter.Context) {
 		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
-			gosecAnalyzer := gosec.NewAnalyzer(gasConfig, true, settings.ExcludeGenerated, false, logger)
+			gosecAnalyzer := gosec.NewAnalyzer(gasConfig, true, settings.ExcludeGenerated, false, settings.Concurrency, logger)
 			gosecAnalyzer.LoadRules(ruleDefinitions.RulesInfo())
 
 			pkg := &packages.Package{
