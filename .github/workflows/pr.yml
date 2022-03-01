@@ -1,12 +1,13 @@
----
 name: CI
 on:
   push:
-    tags:
-      - v*
     branches:
       - master
   pull_request:
+
+env:
+  GO_VERSION: 1.17
+
 jobs:
   # Check if there any dirty change for go mod tidy
   go-mod:
@@ -15,7 +16,7 @@ jobs:
       - name: Install Go
         uses: actions/setup-go@v2
         with:
-          go-version: 1.17
+          go-version: ${{ env.GO_VERSION }}
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Check go mod
@@ -29,8 +30,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Install Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ env.GO_VERSION }}
       - name: lint
-        uses: golangci/golangci-lint-action@v2.5.2
+        uses: golangci/golangci-lint-action@v3.1.0
         with:
           version: latest
           # skip cache because of flaky behaviors
@@ -45,10 +50,11 @@ jobs:
       - name: Install Go
         uses: actions/setup-go@v2
         with:
-          go-version: 1.17 # test only the latest go version to speed up CI
+          go-version: ${{ env.GO_VERSION }} # test only the latest go version to speed up CI
       - name: Run tests
         run: make.exe test
         continue-on-error: true
+
   tests-on-macos:
     needs: golangci-lint # run after golangci-lint action to not produce duplicated errors
     runs-on: macos-latest
@@ -57,9 +63,10 @@ jobs:
       - name: Install Go
         uses: actions/setup-go@v2
         with:
-          go-version: 1.17 # test only the latest go version to speed up CI
+          go-version: ${{ env.GO_VERSION }} # test only the latest go version to speed up CI
       - name: Run tests
         run: make test
+
   tests-on-unix:
     needs: golangci-lint # run after golangci-lint action to not produce duplicated errors
     runs-on: ubuntu-latest
@@ -82,6 +89,7 @@ jobs:
             ${{ runner.os }}-go-${{ matrix.golang }}-
       - name: Run tests
         run: make test
+
   check_generated:
     needs: golangci-lint # run after golangci-lint action to not produce duplicated errors
     runs-on: ubuntu-latest
@@ -95,6 +103,6 @@ jobs:
       - name: Install Go
         uses: actions/setup-go@v2
         with:
-          go-version: 1.17
+          go-version: ${{ env.GO_VERSION }}
       - name: Check generated files are up to date
         run: make fast_check_generated
