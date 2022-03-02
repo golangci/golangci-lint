@@ -68,8 +68,7 @@ func run(pass *analysis.Pass) (interface{}, error) {
 					if defaultConfig == nil {
 						pass.Reportf(
 							defaultConfArg.Pos(),
-							"expected 2nd arg to be non nil but got %v",
-							defaultConfig,
+							"expected non nil struct as 2nd arg to Get",
 						)
 						return
 					}

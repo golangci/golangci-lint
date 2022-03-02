@@ -35,12 +35,12 @@ func GetTest() {
 	rtc := setup()
 
 	// nil or primitive values are not allowed
-	rtc.Get("", nil, nil)    // __ERROR__ "expected 2nd arg to be non nil but got <nil>"
+	rtc.Get("", nil, nil)    // __ERROR__ "expected non nil struct as 2nd arg to Get"
 	rtc.Get("", T1{}, nil)   // __ERROR__ "expected configuration object as 3rd arg but got nil"
-	rtc.Get("", nil, &T1{})  // __ERROR__ "expected 2nd arg to be non nil but got <nil>"
-	rtc.Get("", true, false) // __ERROR__ "expected 2nd arg to be non nil but got <nil>"
-	rtc.Get("", "", "")      // __ERROR__ "expected 2nd arg to be non nil but got <nil>"
-	rtc.Get("", 123, 456)    // __ERROR__ "expected 2nd arg to be non nil but got <nil>"
+	rtc.Get("", nil, &T1{})  // __ERROR__ "expected non nil struct as 2nd arg to Get"
+	rtc.Get("", true, false) // __ERROR__ "expected non nil struct as 2nd arg to Get"
+	rtc.Get("", "", "")      // __ERROR__ "expected non nil struct as 2nd arg to Get"
+	rtc.Get("", 123, 456)    // __ERROR__ "expected non nil struct as 2nd arg to Get"
 
 	// 3rd arg needs to be a ref (update in-place)
 	t1 := T1{}
@@ -82,8 +82,8 @@ func SubscribeTest() {
 	rtc := setup()
 
 	// nil args
-	rtc.Subscribe("", nil, nil)                                       // __ERROR__ "expected 2nd arg to be non nil but got <nil>"
-	rtc.Subscribe("", nil, func(c interface{}) *graphene.ApplyError { // __ERROR__ "expected 2nd arg to be non nil but got <nil>"
+	rtc.Subscribe("", nil, nil)                                       // __ERROR__ "expected non nil struct as 2nd arg to Get"
+	rtc.Subscribe("", nil, func(c interface{}) *graphene.ApplyError { // __ERROR__ "expected non nil struct as 2nd arg to Get"
 		return nil
 	})
 	t1 := T1{}
