@@ -71,7 +71,7 @@ require (
 	github.com/sanposhiho/wastedassign/v2 v2.0.6
 	github.com/securego/gosec/v2 v2.10.0
 	github.com/shazow/go-diff v0.0.0-20160112020656-b6b7b6733b8c
-	github.com/shirou/gopsutil/v3 v3.22.1
+	github.com/shirou/gopsutil/v3 v3.22.2
 	github.com/sirupsen/logrus v1.8.1
 	github.com/sivchari/containedctx v1.0.2
 	github.com/sivchari/tenv v1.4.7
