@@ -513,7 +513,7 @@ linters-settings:
 
     # Module path which contains the source code being formatted.
     # Default: empty string
-    module-path: "github.com/golangci/golangci-lint"
+    module-path: github.com/org/project
 
     # Choose whether to use the extra rules.
     # Default: false
