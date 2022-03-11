@@ -49,6 +49,7 @@ var defaultLintersSettings = LintersSettings{
 	},
 	Gofumpt: GofumptSettings{
 		LangVersion: "",
+		ModulePath:  "",
 		ExtraRules:  false,
 	},
 	Gosec: GoSecSettings{
@@ -311,6 +312,7 @@ type GoFmtSettings struct {
 
 type GofumptSettings struct {
 	LangVersion string `mapstructure:"lang-version"`
+	ModulePath  string `mapstructure:"module-path"`
 	ExtraRules  bool   `mapstructure:"extra-rules"`
 }
 
