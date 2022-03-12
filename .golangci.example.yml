@@ -511,6 +511,10 @@ linters-settings:
     # Default: 1.15
     lang-version: "1.17"
 
+    # Module path which contains the source code being formatted.
+    # Default: empty string
+    module-path: github.com/org/project
+
     # Choose whether to use the extra rules.
     # Default: false
     extra-rules: true
