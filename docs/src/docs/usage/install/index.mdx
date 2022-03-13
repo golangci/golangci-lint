@@ -16,6 +16,24 @@ Also, the action creates GitHub annotations for found issues: you don't need to 
 
 ![GitHub annotations of the action](./annotations.png)
 
+### GitLab CI
+
+The easiest way to use `golangci-lint` in CI for GitLab projects, is by using a Docker image in the pipeline job.
+
+**Example**
+
+```yaml 
+stages:
+  - lint
+
+golangci-lint:
+  stage: lint
+  image: golangci/golangci-lint:{.LatestVersion}
+  script:
+    golangci-lint run -v
+```
+
+
 ### Other CI
 
 It's important to have reproducible CI: don't start to fail all builds at the same time.
