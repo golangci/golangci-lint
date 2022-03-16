@@ -78,6 +78,12 @@ var defaultLintersSettings = LintersSettings{
 		RequireSpecific:    false,
 		AllowUnused:        false,
 	},
+	NoPanic: NoPanicSettings{
+		AllowPanicMainFunc:    true,
+		AllowPanicMainPackage: false,
+		AllowExitMainFunc:     true,
+		AllowExitMainPackage:  false,
+	},
 	Prealloc: PreallocSettings{
 		Simple:     true,
 		RangeLoops: true,
@@ -157,6 +163,7 @@ type LintersSettings struct {
 	NilNil           NilNilSettings
 	Nlreturn         NlreturnSettings
 	NoLintLint       NoLintLintSettings
+	NoPanic          NoPanicSettings
 	Prealloc         PreallocSettings
 	Predeclared      PredeclaredSettings
 	Promlinter       PromlinterSettings
@@ -472,6 +479,13 @@ type NoLintLintSettings struct {
 	RequireSpecific    bool     `mapstructure:"require-specific"`
 	AllowNoExplanation []string `mapstructure:"allow-no-explanation"`
 	AllowUnused        bool     `mapstructure:"allow-unused"`
+}
+
+type NoPanicSettings struct {
+	AllowPanicMainFunc    bool `mapstructure:"allow-panic-main-func"`
+	AllowPanicMainPackage bool `mapstructure:"allow-panic-main-package"`
+	AllowExitMainFunc     bool `mapstructure:"allow-exit-main-func"`
+	AllowExitMainPackage  bool `mapstructure:"allow-exit-main-package"`
 }
 
 type PreallocSettings struct {

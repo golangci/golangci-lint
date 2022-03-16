@@ -120,6 +120,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 	var maintIdxCfg *config.MaintIdxSettings
 	var nilNilCfg *config.NilNilSettings
 	var nlreturnCfg *config.NlreturnSettings
+	var noPanicCfg *config.NoPanicSettings
 	var predeclaredCfg *config.PredeclaredSettings
 	var reviveCfg *config.ReviveSettings
 	var staticcheckCfg *config.StaticCheckSettings
@@ -153,6 +154,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		maintIdxCfg = &m.cfg.LintersSettings.MaintIdx
 		nilNilCfg = &m.cfg.LintersSettings.NilNil
 		nlreturnCfg = &m.cfg.LintersSettings.Nlreturn
+		noPanicCfg = &m.cfg.LintersSettings.NoPanic
 		predeclaredCfg = &m.cfg.LintersSettings.Predeclared
 		reviveCfg = &m.cfg.LintersSettings.Revive
 		staticcheckCfg = &m.cfg.LintersSettings.Staticcheck
@@ -512,6 +514,12 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetPerformance, linter.PresetBugs).
 			WithURL("https://github.com/sonatard/noctx"),
+
+		linter.NewConfig(golinters.NewNoPanic(noPanicCfg)).
+			WithSince("v.1.45.0").
+			WithPresets(linter.PresetBugs).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/vladopajic/nopanic"),
 
 		linter.NewConfig(golinters.NewParallelTest()).
 			WithSince("v1.33.0").
