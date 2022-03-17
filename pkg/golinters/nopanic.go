@@ -9,14 +9,11 @@ import (
 )
 
 func NewNoPanic(settings *config.NoPanicSettings) *goanalysis.Linter {
-	a := nopanic.NewAnalyzer()
-	analyzers := []*analysis.Analyzer{
-		a,
-	}
+	analyzers := []*analysis.Analyzer{nopanic.NewAnalyzer()}
 
 	cfg := map[string]map[string]interface{}{}
 	if settings != nil {
-		cfg[a.Name] = map[string]interface{}{
+		cfg[nopanic.AnalyzerName] = map[string]interface{}{
 			nopanic.FlagAllowPanicMainFunc:    settings.AllowPanicMainFunc,
 			nopanic.FlagAllowPanicMainPackage: settings.AllowPanicMainPackage,
 			nopanic.FlagAllowExitMainFunc:     settings.AllowExitMainFunc,
@@ -25,8 +22,8 @@ func NewNoPanic(settings *config.NoPanicSettings) *goanalysis.Linter {
 	}
 
 	return goanalysis.NewLinter(
-		a.Name,
-		a.Doc,
+		nopanic.AnalyzerName,
+		nopanic.AnalyzerDoc,
 		analyzers,
 		cfg,
 	).WithLoadMode(goanalysis.LoadModeTypesInfo)
