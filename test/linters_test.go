@@ -96,7 +96,7 @@ func TestGciLocal(t *testing.T) {
 	require.NoError(t, err)
 
 	testshared.NewLintRunner(t).RunWithYamlConfig(string(cfg), args...).
-		ExpectHasIssue("testdata/gci/gci.go:9:1: Expected '\\n', Found '\\t'")
+		ExpectHasIssue("testdata/gci/gci.go:8: File is not `gci`-ed")
 }
 
 func TestMultipleOutputs(t *testing.T) {
@@ -112,7 +112,7 @@ func TestMultipleOutputs(t *testing.T) {
 	require.NoError(t, err)
 
 	testshared.NewLintRunner(t).RunWithYamlConfig(string(cfg), args...).
-		ExpectHasIssue("testdata/gci/gci.go:9:1: Expected '\\n', Found '\\t'").
+		ExpectHasIssue("testdata/gci/gci.go:8: File is not `gci`-ed").
 		ExpectOutputContains(`"Issues":[`)
 }
 
@@ -129,7 +129,7 @@ func TestStderrOutput(t *testing.T) {
 	require.NoError(t, err)
 
 	testshared.NewLintRunner(t).RunWithYamlConfig(string(cfg), args...).
-		ExpectHasIssue("testdata/gci/gci.go:9:1: Expected '\\n', Found '\\t'").
+		ExpectHasIssue("testdata/gci/gci.go:8: File is not `gci`-ed").
 		ExpectOutputContains(`"Issues":[`)
 }
 
@@ -149,7 +149,7 @@ func TestFileOutput(t *testing.T) {
 	require.NoError(t, err)
 
 	testshared.NewLintRunner(t).RunWithYamlConfig(string(cfg), args...).
-		ExpectHasIssue("testdata/gci/gci.go:9:1: Expected '\\n', Found '\\t'").
+		ExpectHasIssue("testdata/gci/gci.go:8: File is not `gci`-ed").
 		ExpectOutputNotContains(`"Issues":[`)
 
 	b, err := os.ReadFile(resultPath)
