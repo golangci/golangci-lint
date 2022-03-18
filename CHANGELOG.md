@@ -1,6 +1,30 @@
 Follow the news and releases on our [twitter](https://twitter.com/golangci) and our [blog](https://medium.com/golangci).
 There is the most valuable changes log:
 
+### v1.45.0
+
+1. updated linters:
+   * `cobra`: from 1.3.0 to 1.4.0
+   * `containedctx`: from 1.0.1 to 1.0.2
+   * `errcheck`: add an option to remove default exclusions
+   * `gci`: from 0.3.1 to 0.3.2
+   * `go-header`: from 0.4.2 to 0.4.3
+   * `gofumpt`: add module-path setting
+   * `gofumpt`: from 0.2.1 to 0.3.0
+   * `gopsutil`: from 3.22.1 to 3.22.2
+   * `gosec`: from 2.9.6 to 2.10.0
+   * `makezero`: from 1.1.0 to 1.1.1
+   * `revive`: fix default values
+   * `wrapcheck`: from 2.4.0 to 2.5.0
+2. documentation:
+   * docs: add "back to the top" button
+   * docs: add `forbidigo` example that uses comments
+   * docs: improve linters page
+3. misc:
+   * go1.18 support 🎉
+   * Add an option to manage the targeted version of Go
+   * Default to YAML when config file has no extension
+
 ### v1.44.2
 
 1. updated linters:
