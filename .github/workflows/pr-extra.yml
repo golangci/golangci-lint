@@ -12,6 +12,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-go@v2
+        with:
+          # stable: 'false' # Keep this line to be able to use rc and beta version of Go (ex: 1.18.0-rc1).
+          go-version: 1.18
       - name: Run go list
         run: go list -json -m all > go.list
       - name: Nancy
