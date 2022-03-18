@@ -80,9 +80,9 @@ var defaultLintersSettings = LintersSettings{
 	},
 	NoPanic: NoPanicSettings{
 		AllowPanicMainFunc:    true,
-		AllowPanicMainPackage: false,
+		AllowPanicMainPackage: true,
 		AllowExitMainFunc:     true,
-		AllowExitMainPackage:  false,
+		AllowExitMainPackage:  true,
 	},
 	Prealloc: PreallocSettings{
 		Simple:     true,

@@ -1006,14 +1006,14 @@ linters-settings:
     # Default: true
     allow-panic-main-func: true
     # Controls if linter should report `panic` usage in places other then main package.
-    # Default: false
-    allow-panic-main-package: false
+    # Default: true
+    allow-panic-main-package: true
     # Controls if linter should report `os.Exit()` usage in places other then main function.
     # Default: true
     allow-exit-main-func: true
     # Controls if linter should report `os.Exit()` usage in places other then main package.
-    # Default: false
-    allow-exit-main-package: false
+    # Default: true
+    allow-exit-main-package: true
     
   prealloc:
     # IMPORTANT: we don't recommend using this linter before doing performance profiling.

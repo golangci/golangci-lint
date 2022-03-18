@@ -803,8 +803,8 @@ github.com/valyala/quicktemplate v1.7.0 h1:LUPTJmlVcb46OOUY3IeD9DojFpAVbsG+5WFTc
 github.com/valyala/quicktemplate v1.7.0/go.mod h1:sqKJnoaOF88V07vkO+9FL8fb9uZg/VPSJnLYn+LmLk8=
 github.com/valyala/tcplisten v1.0.0/go.mod h1:T0xQ8SeCZGxckz9qRXTfG43PvQ/mcWh7FwZEA7Ioqkc=
 github.com/viki-org/dnscache v0.0.0-20130720023526-c70c1f23c5d8/go.mod h1:dniwbG03GafCjFohMDmz6Zc6oCuiqgH6tGNyXTkHzXE=
-github.com/vladopajic/nopanic v1.0.1 h1:q8n8SpgBSIrjE9F5Dj8Sh6mQ4vbIbbYi2/SYr4ZytPg=
-github.com/vladopajic/nopanic v1.0.1/go.mod h1:vSo0zenEJIMP2fARRdGD5DXfXn+gWwozD+ueWAYSZgY=
+github.com/vladopajic/nopanic v1.0.2 h1:Z2ARFwxaNpD+a5bpT2CV/T3qUWoasKQG59Q/OcOLBio=
+github.com/vladopajic/nopanic v1.0.2/go.mod h1:vSo0zenEJIMP2fARRdGD5DXfXn+gWwozD+ueWAYSZgY=
 github.com/xiang90/probing v0.0.0-20190116061207-43a291ad63a2/go.mod h1:UETIi67q53MR2AWcXfiuqkDkRtnGDLqkBTpCHuJHxtU=
 github.com/xo/terminfo v0.0.0-20210125001918-ca9a967f8778/go.mod h1:2MuV+tbUrU1zIOPMxZ5EncGwgmMJsa+9ucAQZXxsObs=
 github.com/xordataexchange/crypt v0.0.3-0.20170626215501-b2862e3d0a77/go.mod h1:aYKd//L2LvnjZzWKhF00oedf4jCCReLcmhLdhm1A27Q=
