@@ -207,9 +207,36 @@ func (p *hunkChangesParser) parse(h *diffpkg.Hunk) []Change {
 	return p.ret
 }
 
+func getErrorTextForGci(lintCtx *linter.Context) string {
+	text := "File is not `gci`-ed"
+	noInLineComments := lintCtx.Settings().Gci.NoInlineComments
+	noPrefixComments := lintCtx.Settings().Gci.NoPrefixComments
+	sections := lintCtx.Settings().Gci.Sections
+	sectionSeparator := lintCtx.Settings().Gci.SectionSeparator
+	hasOptions := noInLineComments || noPrefixComments || len(sections) > 0 || len(sectionSeparator) > 0
+	if hasOptions {
+		text += " with"
+	}
+	if noInLineComments {
+		text += " -NoInlineComments"
+	}
+	if noPrefixComments {
+		text += " -NoPrefixComments"
+	}
+	if len(sections) > 0 {
+		text += " -s " + strings.Join(sections, ",")
+	}
+	if len(sectionSeparator) > 0 {
+		text += " -x " + strings.Join(sectionSeparator, ",")
+	}
+	return text
+}
+
 func getErrorTextForLinter(lintCtx *linter.Context, linterName string) string {
 	text := "File is not formatted"
 	switch linterName {
+	case gciName:
+		text = getErrorTextForGci(lintCtx)
 	case gofumptName:
 		text = "File is not `gofumpt`-ed"
 		if lintCtx.Settings().Gofumpt.ExtraRules {
