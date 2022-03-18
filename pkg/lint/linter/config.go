@@ -1,7 +1,13 @@
 package linter
 
 import (
+	"strings"
+
+	hcversion "github.com/hashicorp/go-version"
+	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/packages"
+
+	"github.com/golangci/golangci-lint/pkg/config"
 )
 
 const (
@@ -119,9 +125,41 @@ func (lc *Config) Name() string {
 	return lc.Linter.Name()
 }
 
+func (lc *Config) WithNoopFallback(cfg *config.Config) *Config {
+	if isGreaterThanOrEqualGo118(cfg) {
+		lc.Linter = &Noop{
+			name: lc.Linter.Name(),
+			desc: lc.Linter.Desc(),
+			run: func(pass *analysis.Pass) (interface{}, error) {
+				return nil, nil
+			},
+		}
+	}
+
+	return lc
+}
+
 func NewConfig(linter Linter) *Config {
 	lc := &Config{
 		Linter: linter,
 	}
 	return lc.WithLoadFiles()
+}
+
+func isGreaterThanOrEqualGo118(cfg *config.Config) bool {
+	if cfg == nil {
+		return false
+	}
+
+	v1, err := hcversion.NewVersion(strings.TrimPrefix(cfg.Run.Go, "go"))
+	if err != nil {
+		return false
+	}
+
+	limit, err := hcversion.NewVersion("1.18")
+	if err != nil {
+		return false
+	}
+
+	return v1.GreaterThanOrEqual(limit)
 }

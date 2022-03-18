@@ -1,6 +1,6 @@
 module github.com/golangci/golangci-lint
 
-go 1.16
+go 1.18
 
 require (
 	4d63.com/gochecknoglobals v0.1.0
@@ -19,7 +19,7 @@ require (
 	github.com/breml/errchkjson v0.2.3
 	github.com/butuzov/ireturn v0.1.1
 	github.com/charithe/durationcheck v0.0.9
-	github.com/daixiang0/gci v0.3.2
+	github.com/daixiang0/gci v0.3.3
 	github.com/denis-tingaikin/go-header v0.4.3
 	github.com/esimonov/ifshort v1.0.4
 	github.com/fatih/color v1.13.0
@@ -64,7 +64,6 @@ require (
 	github.com/nishanths/predeclared v0.2.1
 	github.com/pkg/errors v0.9.1
 	github.com/polyfloyd/go-errorlint v0.0.0-20211125173453-6d6d39c5bb8b
-	github.com/prometheus/procfs v0.6.0 // indirect
 	github.com/quasilyte/go-ruleguard/dsl v0.3.17
 	github.com/ryancurrah/gomodguard v1.2.3
 	github.com/ryanrolds/sqlclosecheck v0.3.0
@@ -95,11 +94,81 @@ require (
 	github.com/yagipy/maintidx v1.0.0
 	github.com/yeya24/promlinter v0.1.1-0.20210918184747-d757024714a1
 	gitlab.com/bosi/decorder v0.2.1
-	golang.org/x/tools v0.1.9
+	golang.org/x/tools v0.1.10
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
 	honnef.co/go/tools v0.2.2
 	mvdan.cc/gofumpt v0.3.0
 	mvdan.cc/interfacer v0.0.0-20180901003855-c20040233aed
-	mvdan.cc/lint v0.0.0-20170908181259-adc824a0674b // indirect
 	mvdan.cc/unparam v0.0.0-20211214103731-d0ef000c54e5
+)
+
+require (
+	github.com/Masterminds/semver v1.5.0 // indirect
+	github.com/beorn7/perks v1.0.1 // indirect
+	github.com/cespare/xxhash/v2 v2.1.2 // indirect
+	github.com/chavacava/garif v0.0.0-20210405164556-e8a0a408d6af // indirect
+	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/ettle/strcase v0.1.1 // indirect
+	github.com/fatih/structtag v1.2.0 // indirect
+	github.com/fsnotify/fsnotify v1.5.1 // indirect
+	github.com/go-ole/go-ole v1.2.6 // indirect
+	github.com/go-toolsmith/astcast v1.0.0 // indirect
+	github.com/go-toolsmith/astcopy v1.0.0 // indirect
+	github.com/go-toolsmith/astequal v1.0.1 // indirect
+	github.com/go-toolsmith/astfmt v1.0.0 // indirect
+	github.com/go-toolsmith/astp v1.0.0 // indirect
+	github.com/go-toolsmith/strparse v1.0.0 // indirect
+	github.com/go-toolsmith/typep v1.0.2 // indirect
+	github.com/gobwas/glob v0.2.3 // indirect
+	github.com/golang/protobuf v1.5.2 // indirect
+	github.com/google/go-cmp v0.5.7 // indirect
+	github.com/gostaticanalysis/analysisutil v0.7.1 // indirect
+	github.com/gostaticanalysis/comment v1.4.2 // indirect
+	github.com/hashicorp/errwrap v1.0.0 // indirect
+	github.com/hashicorp/hcl v1.0.0 // indirect
+	github.com/inconshreveable/mousetrap v1.0.0 // indirect
+	github.com/kisielk/gotool v1.0.0 // indirect
+	github.com/lufia/plan9stats v0.0.0-20211012122336-39d0f177ccd0 // indirect
+	github.com/magiconair/properties v1.8.5 // indirect
+	github.com/mattn/go-isatty v0.0.14 // indirect
+	github.com/mattn/go-runewidth v0.0.9 // indirect
+	github.com/matttproud/golang_protobuf_extensions v1.0.1 // indirect
+	github.com/mitchellh/mapstructure v1.4.3 // indirect
+	github.com/nbutton23/zxcvbn-go v0.0.0-20210217022336-fa2cb2858354 // indirect
+	github.com/olekukonko/tablewriter v0.0.5 // indirect
+	github.com/pelletier/go-toml v1.9.4 // indirect
+	github.com/phayes/checkstyle v0.0.0-20170904204023-bfd46e6a821d // indirect
+	github.com/pmezard/go-difflib v1.0.0 // indirect
+	github.com/power-devops/perfstat v0.0.0-20210106213030-5aafc221ea8c // indirect
+	github.com/prometheus/client_golang v1.7.1 // indirect
+	github.com/prometheus/client_model v0.2.0 // indirect
+	github.com/prometheus/common v0.10.0 // indirect
+	github.com/prometheus/procfs v0.6.0 // indirect
+	github.com/quasilyte/go-ruleguard v0.3.15 // indirect
+	github.com/quasilyte/gogrep v0.0.0-20220103110004-ffaa07af02e3 // indirect
+	github.com/quasilyte/regex/syntax v0.0.0-20200407221936-30656e2c4a95 // indirect
+	github.com/spf13/afero v1.6.0 // indirect
+	github.com/spf13/cast v1.4.1 // indirect
+	github.com/spf13/jwalterweatherman v1.1.0 // indirect
+	github.com/stretchr/objx v0.1.1 // indirect
+	github.com/subosito/gotenv v1.2.0 // indirect
+	github.com/tklauser/go-sysconf v0.3.9 // indirect
+	github.com/tklauser/numcpus v0.3.0 // indirect
+	github.com/valyala/bytebufferpool v1.0.0 // indirect
+	github.com/yusufpapurcu/wmi v1.2.2 // indirect
+	golang.org/x/mod v0.6.0-dev.0.20220106191415-9b9b3d81d5e3 // indirect
+	golang.org/x/sys v0.0.0-20220209214540-3681064d5158 // indirect
+	golang.org/x/text v0.3.7 // indirect
+	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
+	google.golang.org/protobuf v1.27.1 // indirect
+	gopkg.in/ini.v1 v1.66.2 // indirect
+	gopkg.in/yaml.v2 v2.4.0 // indirect
+	mvdan.cc/lint v0.0.0-20170908181259-adc824a0674b // indirect
+)
+
+require github.com/hashicorp/go-version v1.2.1
+
+require (
+	github.com/hexops/gotextdiff v1.0.3 // indirect
+	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect
 )
