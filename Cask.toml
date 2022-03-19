@@ -1,0 +1,19 @@
+[package]
+name = "github.com/golangci/golangci-lint"
+bin = "golangci-lint"
+keywords = ["go", "golang", "ci", "linter"]
+repository = "https://github.com/golangci/golangci-lint"
+description = """
+Fast linters Runner for Go
+"""
+
+[darwin]
+x86_64 = "https://github.com/golangci/golangci-lint/releases/download/v{version}/golangci-lint-{version}-darwin-amd64.tar.gz"
+aarch64 = "https://github.com/golangci/golangci-lint/releases/download/v{version}/golangci-lint-{version}-darwin-arm64.tar.gz"
+
+[windows]
+x86_64 = "https://github.com/golangci/golangci-lint/releases/download/v{version}/golangci-lint-{version}-windows-amd64.tar.gz"
+
+[linux]
+x86_64 = "https://github.com/golangci/golangci-lint/releases/download/v{version}/golangci-lint-{version}-linux-amd64.tar.gz"
+aarch64 = "https://github.com/golangci/golangci-lint/releases/download/v{version}/golangci-lint-{version}-linux-arm64.tar.gz"
