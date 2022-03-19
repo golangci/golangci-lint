@@ -1,6 +1,7 @@
 [package]
 name = "github.com/golangci/golangci-lint"
 bin = "golangci-lint"
+authors = []
 keywords = ["go", "golang", "ci", "linter"]
 repository = "https://github.com/golangci/golangci-lint"
 description = """
