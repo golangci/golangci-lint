@@ -166,7 +166,7 @@ require (
 	mvdan.cc/lint v0.0.0-20170908181259-adc824a0674b // indirect
 )
 
-require github.com/hashicorp/go-version v1.2.1
+require github.com/hashicorp/go-version v1.4.0
 
 require (
 	github.com/hexops/gotextdiff v1.0.3 // indirect
