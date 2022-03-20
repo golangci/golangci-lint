@@ -106,6 +106,8 @@ require (
 	mvdan.cc/unparam v0.0.0-20211214103731-d0ef000c54e5
 )
 
+require github.com/GaijinEntertainment/go-exhaustruct v1.0.0
+
 require (
 	github.com/Masterminds/semver v1.5.0 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
