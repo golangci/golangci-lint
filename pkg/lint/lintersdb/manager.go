@@ -219,7 +219,6 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 
 		linter.NewConfig(golinters.NewDepguard()).
 			WithSince("v1.4.0").
-			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetStyle, linter.PresetImport, linter.PresetModule).
 			WithURL("https://github.com/OpenPeeDeeP/depguard"),
 
