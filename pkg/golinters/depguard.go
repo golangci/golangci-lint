@@ -51,7 +51,7 @@ func NewDepguard() *goanalysis.Linter {
 		}
 	}).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
 		return resIssues
-	}).WithLoadMode(goanalysis.LoadModeTypesInfo)
+	}).WithLoadMode(goanalysis.LoadModeSyntax)
 }
 
 type depGuard struct {
