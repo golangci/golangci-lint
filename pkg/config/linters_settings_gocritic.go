@@ -355,8 +355,9 @@ func filterByDisableTags(enabledChecks, disableTags []string, log logutils.Log) 
 		if len(hitTags) != 0 {
 			delete(enabledChecksSet, enabledCheck)
 		}
-		debugChecksListf(enabledChecks, "Disabled by config tags %s", sprintStrings(disableTags))
 	}
+	debugChecksListf(enabledChecks, "Disabled by config tags %s", sprintStrings(disableTags))
+
 	enabledChecks = nil
 	for enabledCheck := range enabledChecksSet {
 		enabledChecks = append(enabledChecks, enabledCheck)

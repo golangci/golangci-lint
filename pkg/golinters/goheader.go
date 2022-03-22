@@ -4,7 +4,7 @@ import (
 	"go/token"
 	"sync"
 
-	goheader "github.com/denis-tingajkin/go-header"
+	goheader "github.com/denis-tingaikin/go-header"
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"

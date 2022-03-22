@@ -31,13 +31,14 @@ func NewGodot() *goanalysis.Linter {
 		settings := godot.Settings{
 			Scope:   godot.Scope(cfg.Scope),
 			Exclude: cfg.Exclude,
-			Period:  true,
+			Period:  cfg.Period,
 			Capital: cfg.Capital,
 		}
 
 		// Convert deprecated setting
-		if cfg.CheckAll { // nolint: staticcheck
-			settings.Scope = godot.TopLevelScope
+		// todo(butuzov): remove on v2 release
+		if cfg.CheckAll { // nolint:staticcheck
+			settings.Scope = godot.AllScope
 		}
 
 		if settings.Scope == "" {

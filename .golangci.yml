@@ -12,11 +12,9 @@ linters-settings:
   funlen:
     lines: 100
     statements: 50
-  gci:
-    local-prefixes: github.com/golangci/golangci-lint
   goconst:
     min-len: 2
-    min-occurrences: 2
+    min-occurrences: 3
   gocritic:
     enabled-tags:
       - diagnostic
@@ -35,6 +33,7 @@ linters-settings:
   goimports:
     local-prefixes: github.com/golangci/golangci-lint
   gomnd:
+    # TODO(ldez) must be rewritten after the v1.44.0 release.
     settings:
       mnd:
         # don't include the "operation" and "assign"
@@ -71,7 +70,6 @@ linters:
     - dupl
     - errcheck
     - exportloopref
-    - exhaustive
     - funlen
     - gochecknoinits
     - goconst
@@ -90,7 +88,6 @@ linters:
     - nakedret
     - noctx
     - nolintlint
-    - rowserrcheck
     - staticcheck
     - structcheck
     - stylecheck

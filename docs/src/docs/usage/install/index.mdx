@@ -88,11 +88,12 @@ On Windows, you can run the above commands with Git Bash, which comes with [Git 
 
 ### Install from Source
 
-Note: such `go get` installation aren't guaranteed to work. We recommend using binary installation.
+Note: such `go install`/`go get` installation aren't guaranteed to work. We recommend using binary installation.
+
 <details>
 <summary>Why?</summary>
 
-`go get` installation isn't recommended because of the following points:
+`go install`/`go get` installation isn't recommended because of the following points:
 
 1. some users use `-u` flag for `go get`, which upgrades our dependencies. Resulting configuration wasn't tested and isn't guaranteed to work.
 2. [`go.mod`](https://github.com/golangci/golangci-lint/blob/master/go.mod) replacement directive doesn't apply. It means a user will be using patched version of `golangci-lint` if we use such replacements.

@@ -1,22 +1,41 @@
 package config
 
-import "github.com/pkg/errors"
+import (
+	"runtime"
+
+	"github.com/pkg/errors"
+)
 
 var defaultLintersSettings = LintersSettings{
-	Lll: LllSettings{
-		LineLength: 120,
-		TabWidth:   1,
+	Decorder: DecorderSettings{
+		DecOrder:                  []string{"type", "const", "var", "func"},
+		DisableDecNumCheck:        true,
+		DisableDecOrderCheck:      true,
+		DisableInitFuncFirstCheck: true,
 	},
-	Unparam: UnparamSettings{
-		Algo: "cha",
+	Dogsled: DogsledSettings{
+		MaxBlankIdentifiers: 2,
 	},
-	Nakedret: NakedretSettings{
-		MaxFuncLines: 30,
+	ErrorLint: ErrorLintSettings{
+		Errorf:     true,
+		Asserts:    true,
+		Comparison: true,
 	},
-	Prealloc: PreallocSettings{
-		Simple:     true,
-		RangeLoops: true,
-		ForLoops:   false,
+	Exhaustive: ExhaustiveSettings{
+		CheckGenerated:             false,
+		DefaultSignifiesExhaustive: false,
+		IgnoreEnumMembers:          "",
+		PackageScopeOnly:           false,
+	},
+	Forbidigo: ForbidigoSettings{
+		ExcludeGodocExamples: true,
+	},
+	Gci: GciSettings{
+		Sections:         []string{"standard", "default"},
+		SectionSeparator: []string{"newline"},
+	},
+	Gocognit: GocognitSettings{
+		MinComplexity: 30,
 	},
 	Gocritic: GocriticSettings{
 		SettingsPerCheck: map[string]GocriticCheckSettings{},
@@ -24,11 +43,59 @@ var defaultLintersSettings = LintersSettings{
 	Godox: GodoxSettings{
 		Keywords: []string{},
 	},
-	Dogsled: DogsledSettings{
-		MaxBlankIdentifiers: 2,
+	Godot: GodotSettings{
+		Scope:  "declarations",
+		Period: true,
 	},
-	Gocognit: GocognitSettings{
-		MinComplexity: 30,
+	Gofumpt: GofumptSettings{
+		LangVersion: "",
+		ModulePath:  "",
+		ExtraRules:  false,
+	},
+	Gosec: GoSecSettings{
+		Concurrency: runtime.NumCPU(),
+	},
+	Ifshort: IfshortSettings{
+		MaxDeclLines: 1,
+		MaxDeclChars: 30,
+	},
+	Lll: LllSettings{
+		LineLength: 120,
+		TabWidth:   1,
+	},
+	MaintIdx: MaintIdxSettings{
+		Under: 20,
+	},
+	Nakedret: NakedretSettings{
+		MaxFuncLines: 30,
+	},
+	Nestif: NestifSettings{
+		MinComplexity: 5,
+	},
+	NoLintLint: NoLintLintSettings{
+		RequireExplanation: false,
+		AllowLeadingSpace:  true,
+		RequireSpecific:    false,
+		AllowUnused:        false,
+	},
+	Prealloc: PreallocSettings{
+		Simple:     true,
+		RangeLoops: true,
+		ForLoops:   false,
+	},
+	Predeclared: PredeclaredSettings{
+		Ignore:    "",
+		Qualified: false,
+	},
+	Testpackage: TestpackageSettings{
+		SkipRegexp: `(export|internal)_test\.go`,
+	},
+	Unparam: UnparamSettings{
+		Algo: "cha",
+	},
+	Varnamelen: VarnamelenSettings{
+		MaxDistance:   5,
+		MinNameLength: 3,
 	},
 	WSL: WSLSettings{
 		StrictAppend:                     true,
@@ -42,53 +109,17 @@ var defaultLintersSettings = LintersSettings{
 		ForceExclusiveShortDeclarations:  false,
 		ForceCaseTrailingWhitespaceLimit: 0,
 	},
-	NoLintLint: NoLintLintSettings{
-		RequireExplanation: false,
-		AllowLeadingSpace:  true,
-		RequireSpecific:    false,
-		AllowUnused:        false,
-	},
-	Testpackage: TestpackageSettings{
-		SkipRegexp: `(export|internal)_test\.go`,
-	},
-	Nestif: NestifSettings{
-		MinComplexity: 5,
-	},
-	Exhaustive: ExhaustiveSettings{
-		CheckGenerated:             false,
-		DefaultSignifiesExhaustive: false,
-		IgnoreEnumMembers:          "",
-		CheckingStrategy:           "value",
-	},
-	Gofumpt: GofumptSettings{
-		LangVersion: "",
-		ExtraRules:  false,
-	},
-	ErrorLint: ErrorLintSettings{
-		Errorf:     true,
-		Asserts:    true,
-		Comparison: true,
-	},
-	Ifshort: IfshortSettings{
-		MaxDeclLines: 1,
-		MaxDeclChars: 30,
-	},
-	Predeclared: PredeclaredSettings{
-		Ignore:    "",
-		Qualified: false,
-	},
-	Forbidigo: ForbidigoSettings{
-		ExcludeGodocExamples: true,
-	},
 }
 
 type LintersSettings struct {
 	BiDiChk          BiDiChkSettings
 	Cyclop           Cyclop
+	Decorder         DecorderSettings
 	Depguard         DepGuardSettings
 	Dogsled          DogsledSettings
 	Dupl             DuplSettings
 	Errcheck         ErrcheckSettings
+	ErrChkJSON       ErrChkJSONSettings
 	ErrorLint        ErrorLintSettings
 	Exhaustive       ExhaustiveSettings
 	ExhaustiveStruct ExhaustiveStructSettings
@@ -112,10 +143,12 @@ type LintersSettings struct {
 	Gosec            GoSecSettings
 	Gosimple         StaticCheckSettings
 	Govet            GovetSettings
+	Grouper          GrouperSettings
 	Ifshort          IfshortSettings
-	Ireturn          IreturnSettings
 	ImportAs         ImportAsSettings
+	Ireturn          IreturnSettings
 	Lll              LllSettings
+	MaintIdx         MaintIdxSettings
 	Makezero         MakezeroSettings
 	Maligned         MalignedSettings
 	Misspell         MisspellSettings
@@ -134,9 +167,9 @@ type LintersSettings struct {
 	Structcheck      StructCheckSettings
 	Stylecheck       StaticCheckSettings
 	Tagliatelle      TagliatelleSettings
+	Tenv             TenvSettings
 	Testpackage      TestpackageSettings
 	Thelper          ThelperSettings
-	Tenv             TenvSettings
 	Unparam          UnparamSettings
 	Unused           StaticCheckSettings
 	Varcheck         VarCheckSettings
@@ -169,8 +202,17 @@ type Cyclop struct {
 type DepGuardSettings struct {
 	ListType                 string `mapstructure:"list-type"`
 	Packages                 []string
-	IncludeGoRoot            bool              `mapstructure:"include-go-root"`
-	PackagesWithErrorMessage map[string]string `mapstructure:"packages-with-error-message"`
+	IncludeGoRoot            bool               `mapstructure:"include-go-root"`
+	PackagesWithErrorMessage map[string]string  `mapstructure:"packages-with-error-message"`
+	IgnoreFileRules          []string           `mapstructure:"ignore-file-rules"`
+	AdditionalGuards         []DepGuardSettings `mapstructure:"additional-guards"`
+}
+
+type DecorderSettings struct {
+	DecOrder                  []string `mapstructure:"dec-order"`
+	DisableDecNumCheck        bool     `mapstructure:"disable-dec-num-check"`
+	DisableDecOrderCheck      bool     `mapstructure:"disable-dec-order-check"`
+	DisableInitFuncFirstCheck bool     `mapstructure:"disable-init-func-first-check"`
 }
 
 type DogsledSettings struct {
@@ -182,13 +224,19 @@ type DuplSettings struct {
 }
 
 type ErrcheckSettings struct {
-	CheckTypeAssertions bool     `mapstructure:"check-type-assertions"`
-	CheckAssignToBlank  bool     `mapstructure:"check-blank"`
-	Ignore              string   `mapstructure:"ignore"`
-	ExcludeFunctions    []string `mapstructure:"exclude-functions"`
+	DisableDefaultExclusions bool     `mapstructure:"disable-default-exclusions"`
+	CheckTypeAssertions      bool     `mapstructure:"check-type-assertions"`
+	CheckAssignToBlank       bool     `mapstructure:"check-blank"`
+	Ignore                   string   `mapstructure:"ignore"`
+	ExcludeFunctions         []string `mapstructure:"exclude-functions"`
 
 	// Deprecated: use ExcludeFunctions instead
 	Exclude string `mapstructure:"exclude"`
+}
+
+type ErrChkJSONSettings struct {
+	CheckErrorFreeEncoding bool `mapstructure:"check-error-free-encoding"`
+	ReportNoExported       bool `mapstructure:"report-no-exported"`
 }
 
 type ErrorLintSettings struct {
@@ -202,18 +250,10 @@ type ExhaustiveSettings struct {
 	DefaultSignifiesExhaustive bool   `mapstructure:"default-signifies-exhaustive"`
 	IgnoreEnumMembers          string `mapstructure:"ignore-enum-members"`
 	PackageScopeOnly           bool   `mapstructure:"package-scope-only"`
-
-	IgnorePattern    string `mapstructure:"ignore-pattern"`    // Deprecated: this setting has no effect; see IgnoreEnumMembers instead.
-	CheckingStrategy string `mapstructure:"checking-strategy"` // Deprecated.
 }
 
 type ExhaustiveStructSettings struct {
 	StructPatterns []string `mapstructure:"struct-patterns"`
-}
-
-type IreturnSettings struct {
-	Allow  []string `mapstructure:"allow"`
-	Reject []string `mapstructure:"reject"`
 }
 
 type ForbidigoSettings struct {
@@ -227,7 +267,11 @@ type FunlenSettings struct {
 }
 
 type GciSettings struct {
-	LocalPrefixes string `mapstructure:"local-prefixes"`
+	LocalPrefixes    string   `mapstructure:"local-prefixes"` // Deprecated
+	NoInlineComments bool     `mapstructure:"no-inline-comments"`
+	NoPrefixComments bool     `mapstructure:"no-prefix-comments"`
+	Sections         []string `mapstructure:"sections"`
+	SectionSeparator []string `mapstructure:"section-separators"`
 }
 
 type GocognitSettings struct {
@@ -253,6 +297,7 @@ type GodotSettings struct {
 	Scope   string   `mapstructure:"scope"`
 	Exclude []string `mapstructure:"exclude"`
 	Capital bool     `mapstructure:"capital"`
+	Period  bool     `mapstructure:"period"`
 
 	// Deprecated: use `Scope` instead
 	CheckAll bool `mapstructure:"check-all"`
@@ -268,6 +313,7 @@ type GoFmtSettings struct {
 
 type GofumptSettings struct {
 	LangVersion string `mapstructure:"lang-version"`
+	ModulePath  string `mapstructure:"module-path"`
 	ExtraRules  bool   `mapstructure:"extra-rules"`
 }
 
@@ -286,7 +332,11 @@ type GoLintSettings struct {
 }
 
 type GoMndSettings struct {
-	Settings map[string]map[string]interface{}
+	Settings         map[string]map[string]interface{} // Deprecated
+	Checks           []string                          `mapstructure:"checks"`
+	IgnoredNumbers   []string                          `mapstructure:"ignored-numbers"`
+	IgnoredFiles     []string                          `mapstructure:"ignored-files"`
+	IgnoredFunctions []string                          `mapstructure:"ignored-functions"`
 }
 
 type GoModDirectivesSettings struct {
@@ -315,12 +365,13 @@ type GoModGuardSettings struct {
 }
 
 type GoSecSettings struct {
-	Includes         []string
-	Excludes         []string
-	Severity         string
-	Confidence       string
+	Includes         []string               `mapstructure:"includes"`
+	Excludes         []string               `mapstructure:"excludes"`
+	Severity         string                 `mapstructure:"severity"`
+	Confidence       string                 `mapstructure:"confidence"`
 	ExcludeGenerated bool                   `mapstructure:"exclude-generated"`
 	Config           map[string]interface{} `mapstructure:"config"`
+	Concurrency      int                    `mapstructure:"concurrency"`
 }
 
 type GovetSettings struct {
@@ -346,14 +397,26 @@ func (cfg GovetSettings) Validate() error {
 	return nil
 }
 
+type GrouperSettings struct {
+	ConstRequireSingleConst   bool `mapstructure:"const-require-single-const"`
+	ConstRequireGrouping      bool `mapstructure:"const-require-grouping"`
+	ImportRequireSingleImport bool `mapstructure:"import-require-single-import"`
+	ImportRequireGrouping     bool `mapstructure:"import-require-grouping"`
+	TypeRequireSingleType     bool `mapstructure:"type-require-single-type"`
+	TypeRequireGrouping       bool `mapstructure:"type-require-grouping"`
+	VarRequireSingleVar       bool `mapstructure:"var-require-single-var"`
+	VarRequireGrouping        bool `mapstructure:"var-require-grouping"`
+}
+
 type IfshortSettings struct {
 	MaxDeclLines int `mapstructure:"max-decl-lines"`
 	MaxDeclChars int `mapstructure:"max-decl-chars"`
 }
 
 type ImportAsSettings struct {
-	Alias       []ImportAsAlias
-	NoUnaliased bool `mapstructure:"no-unaliased"`
+	Alias          []ImportAsAlias
+	NoUnaliased    bool `mapstructure:"no-unaliased"`
+	NoExtraAliases bool `mapstructure:"no-extra-aliases"`
 }
 
 type ImportAsAlias struct {
@@ -361,9 +424,18 @@ type ImportAsAlias struct {
 	Alias string
 }
 
+type IreturnSettings struct {
+	Allow  []string `mapstructure:"allow"`
+	Reject []string `mapstructure:"reject"`
+}
+
 type LllSettings struct {
 	LineLength int `mapstructure:"line-length"`
 	TabWidth   int `mapstructure:"tab-width"`
+}
+
+type MaintIdxSettings struct {
+	Under int `mapstructure:"under"`
 }
 
 type MakezeroSettings struct {
@@ -420,6 +492,7 @@ type PromlinterSettings struct {
 }
 
 type ReviveSettings struct {
+	MaxOpenFiles          int  `mapstructure:"max-open-files"`
 	IgnoreGeneratedHeader bool `mapstructure:"ignore-generated-header"`
 	Confidence            float64
 	Severity              string
@@ -524,6 +597,7 @@ type WhitespaceSettings struct {
 
 type WrapcheckSettings struct {
 	IgnoreSigs         []string `mapstructure:"ignoreSigs"`
+	IgnoreSigRegexps   []string `mapstructure:"ignoreSigRegexps"`
 	IgnorePackageGlobs []string `mapstructure:"ignorePackageGlobs"`
 }
 

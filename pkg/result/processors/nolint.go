@@ -17,6 +17,7 @@ import (
 )
 
 var nolintDebugf = logutils.Debug("nolint")
+var nolintRe = regexp.MustCompile(`^nolint( |:|$)`)
 
 type ignoredRange struct {
 	linters                []string
@@ -234,7 +235,7 @@ func (p *Nolint) extractFileCommentsInlineRanges(fset *token.FileSet, comments .
 
 func (p *Nolint) extractInlineRangeFromComment(text string, g ast.Node, fset *token.FileSet) *ignoredRange {
 	text = strings.TrimLeft(text, "/ ")
-	if ok, _ := regexp.MatchString(`^nolint( |:|$)`, text); !ok {
+	if !nolintRe.MatchString(text) {
 		return nil
 	}
 
