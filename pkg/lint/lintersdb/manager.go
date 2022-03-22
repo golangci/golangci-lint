@@ -689,6 +689,11 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithSince("v1.26.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/golangci/golangci-lint/blob/master/pkg/golinters/nolintlint/README.md"),
+
+		linter.NewConfig(golinters.NewExecinQuery()).
+			WithSince("1.0.0").
+			WithPresets(linter.PresetStyle).
+			WithURL("https://github.com/lufeee/execinquery"),
 	}
 
 	enabledByDefault := map[string]bool{
