@@ -87,7 +87,7 @@ jobs:
         with:
           # stable: 'false' # Keep this line to be able to use rc and beta version of Go (ex: 1.18.0-rc1).
           go-version: ${{ matrix.golang }}
-      - uses: actions/cache@v2.1.7
+      - uses: actions/cache@v3
         with:
           path: ~/go/pkg/mod
           key: ${{ runner.os }}-go-${{ matrix.golang }}-${{ hashFiles('**/go.sum') }}
