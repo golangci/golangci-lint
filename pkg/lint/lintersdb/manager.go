@@ -450,7 +450,8 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/mvdan/interfacer").
-			Deprecated("The repository of the linter has been archived by the owner.", "v1.38.0", ""),
+			Deprecated("The repository of the linter has been archived by the owner.", "v1.38.0", "").
+			WithNoopFallback(m.cfg),
 
 		linter.NewConfig(golinters.NewIreturn(ireturnCfg)).
 			WithSince("v1.43.0").
