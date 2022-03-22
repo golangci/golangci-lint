@@ -10,7 +10,6 @@ import (
 )
 
 func NewSamealias(settings *config.SameAlias) *goanalysis.Linter {
-
 	a := samealias.NewAnalyzer()
 
 	var cfg map[string]map[string]interface{}
