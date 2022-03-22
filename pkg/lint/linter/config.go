@@ -134,6 +134,9 @@ func (lc *Config) WithNoopFallback(cfg *config.Config) *Config {
 				return nil, nil
 			},
 		}
+
+		lc.LoadMode = 0
+		return lc.WithLoadFiles()
 	}
 
 	return lc

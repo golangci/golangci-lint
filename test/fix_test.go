@@ -43,6 +43,7 @@ func TestFix(t *testing.T) {
 			t.Parallel()
 
 			args := []string{
+				"--go=1.17", //  TODO(ldez): we force to use an old version of Go for the CI and the tests.
 				"--disable-all", "--print-issued-lines=false", "--print-linter-name=false", "--out-format=line-number",
 				"--allow-parallel-runners", "--fix",
 				input,

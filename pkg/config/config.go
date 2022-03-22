@@ -1,5 +1,9 @@
 package config
 
+import (
+	"github.com/ldez/gomoddirectives"
+)
+
 // Config encapsulates the config data specified in the golangci yaml config file.
 type Config struct {
 	cfgDir string // The directory containing the golangci config file.
@@ -30,4 +34,19 @@ func NewDefault() *Config {
 
 type Version struct {
 	Format string `mapstructure:"format"`
+}
+
+func DetectGoVersion() string {
+	const defaultGo = "1.17"
+
+	file, err := gomoddirectives.GetModuleFile()
+	if err != nil {
+		return defaultGo
+	}
+
+	if file != nil && file.Go != nil {
+		return file.Go.Version
+	}
+
+	return defaultGo
 }

@@ -98,7 +98,10 @@ func (r *LintRunner) Run(args ...string) *RunResult {
 func (r *LintRunner) RunCommand(command string, args ...string) *RunResult {
 	r.Install()
 
-	runArgs := append([]string{command}, "--internal-cmd-test")
+	runArgs := append([]string{command},
+		"--go=1.17", //  TODO(ldez): we force to use an old version of Go for the CI and the tests.
+		"--internal-cmd-test",
+	)
 	runArgs = append(runArgs, args...)
 
 	defer func(startedAt time.Time) {
