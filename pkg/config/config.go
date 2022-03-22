@@ -1,6 +1,9 @@
 package config
 
 import (
+	"strings"
+
+	hcversion "github.com/hashicorp/go-version"
 	"github.com/ldez/gomoddirectives"
 )
 
@@ -34,6 +37,20 @@ func NewDefault() *Config {
 
 type Version struct {
 	Format string `mapstructure:"format"`
+}
+
+func IsGreaterThanOrEqualGo118(v string) bool {
+	v1, err := hcversion.NewVersion(strings.TrimPrefix(v, "go"))
+	if err != nil {
+		return false
+	}
+
+	limit, err := hcversion.NewVersion("1.18")
+	if err != nil {
+		return false
+	}
+
+	return v1.GreaterThanOrEqual(limit)
 }
 
 func DetectGoVersion() string {

@@ -164,6 +164,10 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		unusedCfg = &m.cfg.LintersSettings.Unused
 		varnamelenCfg = &m.cfg.LintersSettings.Varnamelen
 		wrapcheckCfg = &m.cfg.LintersSettings.Wrapcheck
+
+		if govetCfg != nil {
+			govetCfg.Go = m.cfg.Run.Go
+		}
 	}
 
 	const megacheckName = "megacheck"
