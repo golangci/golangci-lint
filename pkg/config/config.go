@@ -1,6 +1,7 @@
 package config
 
 import (
+	"os"
 	"strings"
 
 	hcversion "github.com/hashicorp/go-version"
@@ -54,16 +55,16 @@ func IsGreaterThanOrEqualGo118(v string) bool {
 }
 
 func DetectGoVersion() string {
-	const defaultGo = "1.17"
-
-	file, err := gomoddirectives.GetModuleFile()
-	if err != nil {
-		return defaultGo
-	}
+	file, _ := gomoddirectives.GetModuleFile()
 
 	if file != nil && file.Go != nil {
 		return file.Go.Version
 	}
 
-	return defaultGo
+	v := os.Getenv("GOVERSION")
+	if v != "" {
+		return v
+	}
+
+	return "1.17"
 }
