@@ -85,7 +85,7 @@ require (
 	github.com/tdakkota/asciicheck v0.1.1
 	github.com/tetafro/godot v1.4.11
 	github.com/timakin/bodyclose v0.0.0-20210704033933-f49887972144
-	github.com/tomarrell/wrapcheck/v2 v2.5.0
+	github.com/tomarrell/wrapcheck/v2 v2.6.0
 	github.com/tommy-muehle/go-mnd/v2 v2.5.0
 	github.com/ultraware/funlen v0.0.3
 	github.com/ultraware/whitespace v0.0.5
@@ -172,3 +172,5 @@ require (
 	github.com/hexops/gotextdiff v1.0.3 // indirect
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect
 )
+
+//replace github.com/tomarrell/wrapcheck/v2 v2.5.0 => github.com/bigbluedisco/wrapcheck/v2 v3.2.1

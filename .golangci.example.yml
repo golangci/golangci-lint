@@ -1530,6 +1530,8 @@ linters-settings:
     ignorePackageGlobs:
       - encoding/*
       - github.com/pkg/*
+    ignoreInterfaceRegexps:
+      - ^(?i)c(?-i)ach(ing|e)
 
   wsl:
     # See https://github.com/bombsimon/wsl/blob/master/doc/configuration.md for documentation of available settings.
