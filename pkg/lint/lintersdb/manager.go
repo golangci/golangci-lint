@@ -691,7 +691,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithURL("https://github.com/golangci/golangci-lint/blob/master/pkg/golinters/nolintlint/README.md"),
 
 		linter.NewConfig(golinters.NewExecinQuery()).
-			WithSince("1.0.0").
+			WithSince("v1.46.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/lufeee/execinquery"),
 	}
