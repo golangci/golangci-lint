@@ -95,7 +95,7 @@ func initFlagSet(fs *pflag.FlagSet, cfg *config.Config, m *lintersdb.Manager, is
 		"Modules download mode. If not empty, passed as -mod=<mode> to go tools")
 	fs.IntVar(&rc.ExitCodeIfIssuesFound, "issues-exit-code",
 		exitcodes.IssuesFound, wh("Exit code when issues were found"))
-	fs.StringVar(&rc.Go, "go", "1.17", wh("Targeted Go version"))
+	fs.StringVar(&rc.Go, "go", "", wh("Targeted Go version"))
 	fs.StringSliceVar(&rc.BuildTags, "build-tags", nil, wh("Build tags"))
 
 	fs.DurationVar(&rc.Timeout, "deadline", defaultTimeout, wh("Deadline for total work"))

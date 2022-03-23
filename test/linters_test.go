@@ -179,6 +179,7 @@ func saveConfig(t *testing.T, cfg map[string]interface{}) (cfgPath string, finis
 func testOneSource(t *testing.T, sourcePath string) {
 	args := []string{
 		"run",
+		"--go=1.17", //  TODO(ldez): we force to use an old version of Go for the CI and the tests.
 		"--allow-parallel-runners",
 		"--disable-all",
 		"--print-issued-lines=false",

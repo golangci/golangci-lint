@@ -374,7 +374,8 @@ type GoSecSettings struct {
 }
 
 type GovetSettings struct {
-	CheckShadowing bool `mapstructure:"check-shadowing"`
+	Go             string `mapstructure:"-"`
+	CheckShadowing bool   `mapstructure:"check-shadowing"`
 	Settings       map[string]map[string]interface{}
 
 	Enable     []string
@@ -383,7 +384,7 @@ type GovetSettings struct {
 	DisableAll bool `mapstructure:"disable-all"`
 }
 
-func (cfg GovetSettings) Validate() error {
+func (cfg *GovetSettings) Validate() error {
 	if cfg.EnableAll && cfg.DisableAll {
 		return errors.New("enable-all and disable-all can't be combined")
 	}
