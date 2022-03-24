@@ -1,6 +1,23 @@
 Follow the news and releases on our [twitter](https://twitter.com/golangci) and our [blog](https://medium.com/golangci).
 There is the most valuable changes log:
 
+### v1.45.2
+
+1. misc:
+   * fix: help command
+
+### v1.45.1
+
+1. updated linters:
+   * `interfacer`: inactivate with go1.18
+   * `govet`: inactivate unsupported analyzers (go1.18)
+   * `depguard`: reduce requirements
+   * `structcheck`: inactivate with go1.18
+   * `varnamelen`: bump from v0.6.0 to v0.6.1
+2. misc:
+   * Automatic Go version detection 🎉 (go1.18)
+   * docker: update base images (go1.18)
+
 ### v1.45.0
 
 1. updated linters:
