@@ -143,22 +143,22 @@ func getLatestVersion() (string, error) {
 		http.NoBody,
 	)
 	if err != nil {
-		return "", fmt.Errorf("failed to prepare a http request: %s", err)
+		return "", fmt.Errorf("failed to prepare a http request: %w", err)
 	}
 	req.Header.Add("Accept", "application/vnd.github.v3+json")
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
-		return "", fmt.Errorf("failed to get http response for the latest tag: %s", err)
+		return "", fmt.Errorf("failed to get http response for the latest tag: %w", err)
 	}
 	defer resp.Body.Close()
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return "", fmt.Errorf("failed to read a body for the latest tag: %s", err)
+		return "", fmt.Errorf("failed to read a body for the latest tag: %w", err)
 	}
 	release := latestRelease{}
 	err = json.Unmarshal(body, &release)
 	if err != nil {
-		return "", fmt.Errorf("failed to unmarshal the body for the latest tag: %s", err)
+		return "", fmt.Errorf("failed to unmarshal the body for the latest tag: %w", err)
 	}
 	return release.TagName, nil
 }
@@ -166,21 +166,21 @@ func getLatestVersion() (string, error) {
 func buildTemplateContext() (map[string]string, error) {
 	golangciYamlExample, err := os.ReadFile(".golangci.example.yml")
 	if err != nil {
-		return nil, fmt.Errorf("can't read .golangci.example.yml: %s", err)
+		return nil, fmt.Errorf("can't read .golangci.example.yml: %w", err)
 	}
 
 	snippets, err := extractExampleSnippets(golangciYamlExample)
 	if err != nil {
-		return nil, fmt.Errorf("can't read .golangci.example.yml: %s", err)
+		return nil, fmt.Errorf("can't read .golangci.example.yml: %w", err)
 	}
 
 	if err = exec.Command("make", "build").Run(); err != nil {
-		return nil, fmt.Errorf("can't run go install: %s", err)
+		return nil, fmt.Errorf("can't run go install: %w", err)
 	}
 
 	lintersOut, err := exec.Command("./golangci-lint", "help", "linters").Output()
 	if err != nil {
-		return nil, fmt.Errorf("can't run linters cmd: %s", err)
+		return nil, fmt.Errorf("can't run linters cmd: %w", err)
 	}
 
 	lintersOutParts := bytes.Split(lintersOut, []byte("\n\n"))
@@ -190,7 +190,7 @@ func buildTemplateContext() (map[string]string, error) {
 	helpCmd.Env = append(helpCmd.Env, "HELP_RUN=1") // make default concurrency stable: don't depend on machine CPU number
 	help, err := helpCmd.Output()
 	if err != nil {
-		return nil, fmt.Errorf("can't run help cmd: %s", err)
+		return nil, fmt.Errorf("can't run help cmd: %w", err)
 	}
 
 	helpLines := bytes.Split(help, []byte("\n"))
@@ -202,7 +202,7 @@ func buildTemplateContext() (map[string]string, error) {
 
 	latestVersion, err := getLatestVersion()
 	if err != nil {
-		return nil, fmt.Errorf("failed to get latest version: %s", err)
+		return nil, fmt.Errorf("failed to get the latest version: %w", err)
 	}
 
 	return map[string]string{
