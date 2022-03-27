@@ -592,9 +592,11 @@ type WhitespaceSettings struct {
 }
 
 type WrapcheckSettings struct {
-	IgnoreSigs         []string `mapstructure:"ignoreSigs"`
-	IgnoreSigRegexps   []string `mapstructure:"ignoreSigRegexps"`
-	IgnorePackageGlobs []string `mapstructure:"ignorePackageGlobs"`
+	// TODO(ldez): v2 the options must be renamed to use hyphen.
+	IgnoreSigs             []string `mapstructure:"ignoreSigs"`
+	IgnoreSigRegexps       []string `mapstructure:"ignoreSigRegexps"`
+	IgnorePackageGlobs     []string `mapstructure:"ignorePackageGlobs"`
+	IgnoreInterfaceRegexps []string `mapstructure:"ignoreInterfaceRegexps"`
 }
 
 type WSLSettings struct {
