@@ -23,7 +23,7 @@ require (
 	github.com/denis-tingaikin/go-header v0.4.3
 	github.com/esimonov/ifshort v1.0.4
 	github.com/fatih/color v1.13.0
-	github.com/fzipp/gocyclo v0.4.0
+	github.com/fzipp/gocyclo v0.5.0
 	github.com/go-critic/go-critic v0.6.2
 	github.com/go-xmlfmt/xmlfmt v0.0.0-20191208150333-d5b6f63a941b
 	github.com/gofrs/flock v0.8.1
