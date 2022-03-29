@@ -266,6 +266,11 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/polyfloyd/go-errorlint"),
 
+		linter.NewConfig(golinters.NewExecInQuery()).
+			WithSince("v1.46.0").
+			WithPresets(linter.PresetSQL).
+			WithURL("https://github.com/lufeee/execinquery"),
+
 		linter.NewConfig(golinters.NewExhaustive(exhaustiveCfg)).
 			WithSince(" v1.28.0").
 			WithPresets(linter.PresetBugs).

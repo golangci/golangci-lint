@@ -40,6 +40,7 @@ require (
 	github.com/gostaticanalysis/forcetypeassert v0.1.0
 	github.com/gostaticanalysis/nilerr v0.1.1
 	github.com/hashicorp/go-multierror v1.1.1
+	github.com/hashicorp/go-version v1.4.0
 	github.com/jgautheron/goconst v1.5.1
 	github.com/jingyugao/rowserrcheck v1.1.1
 	github.com/jirfag/go-printf-func-name v0.0.0-20200119135958-7558a9eaa5af
@@ -51,6 +52,7 @@ require (
 	github.com/ldez/gomoddirectives v0.2.2
 	github.com/ldez/tagliatelle v0.3.1
 	github.com/leonklingele/grouper v1.1.0
+	github.com/lufeee/execinquery v1.0.0
 	github.com/maratori/testpackage v1.0.1
 	github.com/matoous/godox v0.0.0-20210227103229-6504466cf951 // v1.0
 	github.com/mattn/go-colorable v0.1.12
@@ -126,6 +128,7 @@ require (
 	github.com/gostaticanalysis/comment v1.4.2 // indirect
 	github.com/hashicorp/errwrap v1.0.0 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
+	github.com/hexops/gotextdiff v1.0.3 // indirect
 	github.com/inconshreveable/mousetrap v1.0.0 // indirect
 	github.com/kisielk/gotool v1.0.0 // indirect
 	github.com/lufia/plan9stats v0.0.0-20211012122336-39d0f177ccd0 // indirect
@@ -157,6 +160,7 @@ require (
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/yusufpapurcu/wmi v1.2.2 // indirect
 	golang.org/x/mod v0.6.0-dev.0.20220106191415-9b9b3d81d5e3 // indirect
+	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect
 	golang.org/x/sys v0.0.0-20220319134239-a9b59b0215f8 // indirect
 	golang.org/x/text v0.3.7 // indirect
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
@@ -164,11 +168,4 @@ require (
 	gopkg.in/ini.v1 v1.66.2 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	mvdan.cc/lint v0.0.0-20170908181259-adc824a0674b // indirect
-)
-
-require github.com/hashicorp/go-version v1.4.0
-
-require (
-	github.com/hexops/gotextdiff v1.0.3 // indirect
-	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect
 )
