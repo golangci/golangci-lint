@@ -11,7 +11,7 @@ func NewExecInQuery() *goanalysis.Linter {
 	a := execinquery.Analyzer
 
 	return goanalysis.NewLinter(
-		a.Name,
+		"execinquery",
 		a.Doc,
 		[]*analysis.Analyzer{a},
 		nil,
