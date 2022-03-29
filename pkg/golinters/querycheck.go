@@ -7,7 +7,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 )
 
-func NewExecinQuery() *goanalysis.Linter {
+func NewExecInQuery() *goanalysis.Linter {
 	a := execinquery.Analyzer
 
 	return goanalysis.NewLinter(
