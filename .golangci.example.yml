@@ -1473,12 +1473,15 @@ linters-settings:
     # Variable names that are at least this long will be ignored.
     # Default: 3
     min-name-length: 2
-    # Check method receiver names.
+    # Check method receivers.
     # Default: false
     check-receiver: true
     # Check named return values.
     # Default: false
     check-return: true
+    # Check type parameters.
+    # Default: false
+    check-type-param: true
     # Ignore "ok" variables that hold the bool return value of a type assertion.
     # Default: false
     ignore-type-assert-ok: true
@@ -1493,8 +1496,11 @@ linters-settings:
     ignore-names:
       - err
     # Optional list of variable declarations that should be ignored completely.
-    # Entries must be in the form of "<variable name> <type>" or "<variable name> *<type>"
-    # for variables, or "const <name>" for constants.
+    # Entries must be in one of the following forms (see below for examples):
+    # - for variables, parameters, named return values, method receivers, or type parameters:
+    #   <name> <type>  (<type> can also be a pointer/slice/map/chan/...)
+    # - for constants: const <name>
+    #
     # Default: []
     ignore-decls:
       - c echo.Context
@@ -1503,6 +1509,8 @@ linters-settings:
       - e error
       - i int
       - const C
+      - T any
+      - m map[string]int
 
   whitespace:
     # Enforces newlines (or comments) after every multi-line if statement.

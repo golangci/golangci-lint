@@ -13,7 +13,7 @@ require (
 	github.com/ashanbrown/forbidigo v1.3.0
 	github.com/ashanbrown/makezero v1.1.1
 	github.com/bkielbasa/cyclop v1.2.0
-	github.com/blizzy78/varnamelen v0.6.2
+	github.com/blizzy78/varnamelen v0.8.0
 	github.com/bombsimon/wsl/v3 v3.3.0
 	github.com/breml/bidichk v0.2.3
 	github.com/breml/errchkjson v0.3.0
