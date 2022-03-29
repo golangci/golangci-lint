@@ -108,6 +108,7 @@ linters:
   # - goerr113
   # - interfacer
   # - maligned
+  # - namedreturnlint
   # - nestif
   # - prealloc
   # - testpackage
