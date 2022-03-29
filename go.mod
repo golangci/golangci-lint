@@ -169,7 +169,7 @@ require (
 require github.com/hashicorp/go-version v1.4.0
 
 require (
-	github.com/firefart/namedreturnlint v0.0.0-20220329082522-77714df50eeb // indirect
+	github.com/firefart/namedreturnlint v0.0.0-20220329091228-7012af2b64be // indirect
 	github.com/hexops/gotextdiff v1.0.3 // indirect
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect
 )
