@@ -8,13 +8,10 @@ import (
 )
 
 func NewExecInQuery() *goanalysis.Linter {
-	const linterName = "execinquery"
-
 	a := execinquery.Analyzer
-	a.Name = linterName // TODO the name must change inside the linter.
 
 	return goanalysis.NewLinter(
-		linterName,
+		a.Name,
 		a.Doc,
 		[]*analysis.Analyzer{a},
 		nil,
