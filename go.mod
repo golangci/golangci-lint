@@ -8,6 +8,7 @@ require (
 	github.com/Antonboom/nilnil v0.1.1
 	github.com/BurntSushi/toml v1.1.0
 	github.com/Djarvur/go-err113 v0.0.0-20210108212216-aea10b59be24
+	github.com/GaijinEntertainment/go-exhaustruct v1.0.0
 	github.com/OpenPeeDeeP/depguard v1.1.0
 	github.com/alexkohler/prealloc v1.0.0
 	github.com/ashanbrown/forbidigo v1.3.0
@@ -105,8 +106,6 @@ require (
 	mvdan.cc/interfacer v0.0.0-20180901003855-c20040233aed
 	mvdan.cc/unparam v0.0.0-20211214103731-d0ef000c54e5
 )
-
-require github.com/GaijinEntertainment/go-exhaustruct v1.0.0
 
 require (
 	github.com/Masterminds/semver v1.5.0 // indirect
