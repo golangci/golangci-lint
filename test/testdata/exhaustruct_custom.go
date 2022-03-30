@@ -1,11 +1,10 @@
-//args: -Eexhaustruct
-//config: linters-settings.exhaustruct.include=.*\.Test1$
-//config: linters-settings.exhaustruct.exclude=.*\.Test3$
+// args: -Eexhaustruct
+// config_path: testdata/configs/exhaustruct.yml
 package testdata
 
 import "time"
 
-type Test1 struct {
+type ExhaustructCustom struct {
 	A string
 	B int
 	c bool // private field inside the same package are not ignored
@@ -13,35 +12,42 @@ type Test1 struct {
 	E time.Time
 }
 
-var passTest1 = Test1{
-	A: "a",
-	B: 0,
-	c: false,
-	D: 1.0,
-	E: time.Now(),
+func exhaustructCustom() {
+	// pass
+	_ = ExhaustructCustom{
+		A: "a",
+		B: 0,
+		c: false,
+		D: 1.0,
+		E: time.Now(),
+	}
+
+	// fail
+	_ = ExhaustructCustom{ // ERROR "B is missing in ExhaustructCustom"
+		A: "a",
+		c: false,
+		D: 1.0,
+		E: time.Now(),
+	}
+
+	// failMultiple
+	_ = ExhaustructCustom{ // ERROR "B, D are missing in ExhaustructCustom"
+		A: "a",
+		c: false,
+		E: time.Now(),
+	}
+
+	//  failPrivate
+	_ = ExhaustructCustom{ // ERROR "c is missing in ExhaustructCustom"
+		A: "a",
+		B: 0,
+		D: 1.0,
+		E: time.Now(),
+	}
+
 }
 
-var failTest1 = Test1{ // ERROR "B is missing in Test"
-	A: "a",
-	c: false,
-	D: 1.0,
-	E: time.Now(),
-}
-
-var failMultipleTest1 = Test1{ // ERROR "B, D are missing in Test"
-	A: "a",
-	c: false,
-	E: time.Now(),
-}
-
-var failPrivateTest1 = Test1{ // ERROR "c is missing in Test"
-	A: "a",
-	B: 0,
-	D: 1.0,
-	E: time.Now(),
-}
-
-type Test2 struct {
+type ExhaustructCustom1 struct {
 	A string
 	B int
 	c bool // private field inside the same package are not ignored
@@ -49,35 +55,42 @@ type Test2 struct {
 	E time.Time
 }
 
-var passTest2 = Test1{
-	A: "a",
-	B: 0,
-	c: false,
-	D: 1.0,
-	E: time.Now(),
+func exhaustructCustom1() {
+	// pass
+	_ = ExhaustructCustom{
+		A: "a",
+		B: 0,
+		c: false,
+		D: 1.0,
+		E: time.Now(),
+	}
+
+	// fail
+	_ = ExhaustructCustom1{
+		A: "a",
+		c: false,
+		D: 1.0,
+		E: time.Now(),
+	}
+
+	// failMultiple
+	_ = ExhaustructCustom1{
+		A: "a",
+		c: false,
+		E: time.Now(),
+	}
+
+	// failPrivate
+	_ = ExhaustructCustom1{
+		A: "a",
+		B: 0,
+		D: 1.0,
+		E: time.Now(),
+	}
+
 }
 
-var failTest2 = Test2{
-	A: "a",
-	c: false,
-	D: 1.0,
-	E: time.Now(),
-}
-
-var failMultipleTest2 = Test2{
-	A: "a",
-	c: false,
-	E: time.Now(),
-}
-
-var failPrivateTest2 = Test2{
-	A: "a",
-	B: 0,
-	D: 1.0,
-	E: time.Now(),
-}
-
-type Test3 struct {
+type ExhaustructCustom2 struct {
 	A string
 	B int
 	c bool // private field inside the same package are not ignored
@@ -85,30 +98,36 @@ type Test3 struct {
 	E time.Time
 }
 
-var passTest3 = Test3{
-	A: "a",
-	B: 0,
-	c: false,
-	D: 1.0,
-	E: time.Now(),
-}
+func exhaustructCustom2() {
+	// pass
+	_ = ExhaustructCustom2{
+		A: "a",
+		B: 0,
+		c: false,
+		D: 1.0,
+		E: time.Now(),
+	}
 
-var failTest3 = Test3{
-	A: "a",
-	c: false,
-	D: 1.0,
-	E: time.Now(),
-}
+	// fail
+	_ = ExhaustructCustom2{
+		A: "a",
+		c: false,
+		D: 1.0,
+		E: time.Now(),
+	}
 
-var failMultipleTest3 = Test3{
-	A: "a",
-	c: false,
-	E: time.Now(),
-}
+	// failMultiple
+	_ = ExhaustructCustom2{
+		A: "a",
+		c: false,
+		E: time.Now(),
+	}
 
-var failPrivateTest3 = Test3{
-	A: "a",
-	B: 0,
-	D: 1.0,
-	E: time.Now(),
+	// failPrivate
+	_ = ExhaustructCustom2{
+		A: "a",
+		B: 0,
+		D: 1.0,
+		E: time.Now(),
+	}
 }

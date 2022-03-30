@@ -284,7 +284,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle, linter.PresetTest).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/mbilski/exhaustivestruct").
-			Deprecated("Owner seems to abandon linter.", "v1.46.0", "exhaustruct"),
+			Deprecated("The owner seems to have abandoned the linter.", "v1.46.0", "exhaustruct"),
 
 		linter.NewConfig(golinters.NewExhaustruct(exhaustructCfg)).
 			WithSince("v1.46.0").

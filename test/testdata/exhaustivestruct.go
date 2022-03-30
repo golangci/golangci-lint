@@ -1,9 +1,9 @@
-//args: -Eexhaustivestruct
+// args: -Eexhaustivestruct --internal-cmd-test
 package testdata
 
 import "time"
 
-type Test struct {
+type ExhaustiveStruct struct {
 	A string
 	B int
 	c bool // private field inside the same package are not ignored
@@ -11,30 +11,36 @@ type Test struct {
 	E time.Time
 }
 
-var pass = Test{
-	A: "a",
-	B: 0,
-	c: false,
-	D: 1.0,
-	E: time.Now(),
-}
+func exhaustiveStruct() {
+	// pass
+	_ = ExhaustiveStruct{
+		A: "a",
+		B: 0,
+		c: false,
+		D: 1.0,
+		E: time.Now(),
+	}
 
-var failPrivate = Test{ // ERROR "c is missing in Test"
-	A: "a",
-	B: 0,
-	D: 1.0,
-	E: time.Now(),
-}
+	// failPrivate
+	_ = ExhaustiveStruct{ // ERROR "c is missing in ExhaustiveStruct"
+		A: "a",
+		B: 0,
+		D: 1.0,
+		E: time.Now(),
+	}
 
-var fail = Test{ // ERROR "B is missing in Test"
-	A: "a",
-	c: false,
-	D: 1.0,
-	E: time.Now(),
-}
+	// fail
+	_ = ExhaustiveStruct{ // ERROR "B is missing in ExhaustiveStruct"
+		A: "a",
+		c: false,
+		D: 1.0,
+		E: time.Now(),
+	}
 
-var failMultiple = Test{ // ERROR "B, D are missing in Test"
-	A: "a",
-	c: false,
-	E: time.Now(),
+	// failMultiple
+	_ = ExhaustiveStruct{ // ERROR "B, D are missing in ExhaustiveStruct"
+		A: "a",
+		c: false,
+		E: time.Now(),
+	}
 }
