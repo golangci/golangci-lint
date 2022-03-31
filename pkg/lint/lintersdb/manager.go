@@ -492,15 +492,15 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithAutoFix().
 			WithURL("https://github.com/client9/misspell"),
 
-		linter.NewConfig(golinters.NewNamedReturnLint()).
-			WithSince("v1.45.3").
-			WithPresets(linter.PresetStyle).
-			WithURL("https://github.com/FireFart/namedreturnlint"),
-
 		linter.NewConfig(golinters.NewNakedret()).
 			WithSince("v1.19.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/alexkohler/nakedret"),
+
+		linter.NewConfig(golinters.NewNamedReturnLint()).
+			WithSince("v1.45.3").
+			WithPresets(linter.PresetStyle).
+			WithURL("https://github.com/FireFart/namedreturnlint"),
 
 		linter.NewConfig(golinters.NewNestif()).
 			WithSince("v1.25.0").
