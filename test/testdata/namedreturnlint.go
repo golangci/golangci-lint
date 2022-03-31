@@ -1,6 +1,8 @@
 //args: -Enamedreturnlint
 package testdata
 
+import "fmt"
+
 type asdf struct {
 	test string
 }
@@ -10,7 +12,8 @@ func noParams() {
 }
 
 func argl(i string, a, b int) (ret1 string, ret2 interface{}, ret3, ret4 int, ret5 asdf) { // ERROR `named return ret1 \(string\) found in function argl`
-	return "", nil, 1, 2, asdf{}
+	x := "dummy"
+	return fmt.Sprintf("%s", x), nil, 1, 2, asdf{}
 }
 
 func good(i string) string {
