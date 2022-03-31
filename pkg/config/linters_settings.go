@@ -579,6 +579,7 @@ type VarnamelenSettings struct {
 	MinNameLength      int      `mapstructure:"min-name-length"`
 	CheckReceiver      bool     `mapstructure:"check-receiver"`
 	CheckReturn        bool     `mapstructure:"check-return"`
+	CheckTypeParam     bool     `mapstructure:"check-type-param"`
 	IgnoreNames        []string `mapstructure:"ignore-names"`
 	IgnoreTypeAssertOk bool     `mapstructure:"ignore-type-assert-ok"`
 	IgnoreMapIndexOk   bool     `mapstructure:"ignore-map-index-ok"`
