@@ -2,10 +2,9 @@ package golinters
 
 import (
 	"github.com/firefart/namedreturnlint/analyzer"
+	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
-
-	"golang.org/x/tools/go/analysis"
 )
 
 func NewNamedReturnLint() *goanalysis.Linter {
