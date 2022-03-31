@@ -498,7 +498,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithURL("https://github.com/alexkohler/nakedret"),
 
 		linter.NewConfig(golinters.NewNamedReturnLint()).
-			WithSince("v1.45.3").
+			WithSince("v1.46.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/FireFart/namedreturnlint"),
 
