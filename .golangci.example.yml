@@ -788,6 +788,7 @@ linters-settings:
       - ifaceassert
       - loopclosure
       - lostcancel
+      - namedreturnlint
       - nilfunc
       - nilness
       - printf
