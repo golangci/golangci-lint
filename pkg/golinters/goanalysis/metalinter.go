@@ -49,7 +49,7 @@ func (ml MetaLinter) getLoadMode() LoadMode {
 	return loadMode
 }
 
-func (ml MetaLinter) getAnalyzers() []*analysis.Analyzer {
+func (ml MetaLinter) GetAnalyzers() []*analysis.Analyzer {
 	var allAnalyzers []*analysis.Analyzer
 	for _, l := range ml.linters {
 		allAnalyzers = append(allAnalyzers, l.analyzers...)

@@ -168,7 +168,7 @@ func (lnt *Linter) getLinterNameForDiagnostic(*Diagnostic) string {
 	return lnt.name
 }
 
-func (lnt *Linter) getAnalyzers() []*analysis.Analyzer {
+func (lnt *Linter) GetAnalyzers() []*analysis.Analyzer {
 	return lnt.analyzers
 }
 
