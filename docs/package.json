@@ -47,7 +47,7 @@
     "react-helmet": "^6.1.0",
     "react-icons": "^4.3.1",
     "react-live": "^3.0.0",
-    "url-join": "^4.0.1"
+    "url-join": "^5.0.0"
   },
   "devDependencies": {},
   "scripts": {
