@@ -1,4 +1,4 @@
-//args: -Enamedreturnlint
+//args: -Enonamedreturnlint
 package testdata
 
 import "fmt"
