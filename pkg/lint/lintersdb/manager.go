@@ -497,11 +497,6 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/alexkohler/nakedret"),
 
-		linter.NewConfig(golinters.NewNamedReturnLint()).
-			WithSince("v1.46.0").
-			WithPresets(linter.PresetStyle).
-			WithURL("https://github.com/FireFart/namedreturnlint"),
-
 		linter.NewConfig(golinters.NewNestif()).
 			WithSince("v1.25.0").
 			WithPresets(linter.PresetComplexity).
@@ -531,6 +526,11 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetPerformance, linter.PresetBugs).
 			WithURL("https://github.com/sonatard/noctx").
 			WithNoopFallback(m.cfg),
+
+		linter.NewConfig(golinters.NewNoNamedReturnLint()).
+			WithSince("v1.46.0").
+			WithPresets(linter.PresetStyle).
+			WithURL("https://github.com/FireFart/nonamedreturnlint"),
 
 		linter.NewConfig(golinters.NewParallelTest()).
 			WithSince("v1.33.0").
