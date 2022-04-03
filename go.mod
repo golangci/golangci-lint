@@ -75,7 +75,7 @@ require (
 	github.com/shirou/gopsutil/v3 v3.22.2
 	github.com/sirupsen/logrus v1.8.1
 	github.com/sivchari/containedctx v1.0.2
-	github.com/sivchari/tenv v1.4.7
+	github.com/sivchari/tenv v1.5.0
 	github.com/sonatard/noctx v0.0.1
 	github.com/sourcegraph/go-diff v0.6.1
 	github.com/spf13/cobra v1.4.0
