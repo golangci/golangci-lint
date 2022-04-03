@@ -1,15 +1,15 @@
 package golinters
 
 import (
-	"github.com/firefart/nonamedreturnlint/analyzer"
+	"github.com/firefart/nonamedreturns/analyzer"
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 )
 
-func NewNoNamedReturnLint() *goanalysis.Linter {
+func NewNoNamedReturns() *goanalysis.Linter {
 	return goanalysis.NewLinter(
-		"nonamedreturnlint",
+		"nonamedreturns",
 		"Reports all named returns",
 		[]*analysis.Analyzer{analyzer.Analyzer},
 		nil,

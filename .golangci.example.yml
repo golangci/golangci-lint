@@ -790,7 +790,7 @@ linters-settings:
       - lostcancel
       - nilfunc
       - nilness
-      - nonamedreturnlint
+      - nonamedreturns
       - printf
       - reflectvaluecompare
       - shadow
@@ -834,7 +834,7 @@ linters-settings:
       - lostcancel
       - nilfunc
       - nilness
-      - nonamedreturnlint
+      - nonamedreturns
       - printf
       - reflectvaluecompare
       - shadow
