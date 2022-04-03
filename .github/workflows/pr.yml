@@ -34,9 +34,8 @@ jobs:
       - name: Install Go
         uses: actions/setup-go@v2
         with:
-          go-version: 1.17 # TODO(ldez) the binary compiled with go1.17 doesn't work on go1.18
           # stable: 'false'  # Keep this line to be able to use rc and beta version of Go (ex: 1.18.0-rc1).
-          # go-version: ${{ env.GO_VERSION }} # TODO(ldez) the binary compiled with go1.17 doesn't work on go1.18
+          go-version: ${{ env.GO_VERSION }}
       - name: lint
         uses: golangci/golangci-lint-action@v3.1.0
         with:
