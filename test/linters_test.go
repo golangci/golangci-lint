@@ -3,13 +3,16 @@ package test
 import (
 	"bufio"
 	"fmt"
+	"go/build/constraint"
 	"os"
 	"os/exec"
 	"path"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"testing"
 
+	hcversion "github.com/hashicorp/go-version"
 	"github.com/stretchr/testify/require"
 	"gopkg.in/yaml.v3"
 
@@ -73,7 +76,10 @@ func TestGoimportsLocal(t *testing.T) {
 		"--disable-all", "--print-issued-lines=false", "--print-linter-name=false", "--out-format=line-number",
 		sourcePath,
 	}
+
 	rc := extractRunContextFromComments(t, sourcePath)
+	require.NotNil(t, rc)
+
 	args = append(args, rc.args...)
 
 	cfg, err := yaml.Marshal(rc.config)
@@ -89,7 +95,10 @@ func TestGciLocal(t *testing.T) {
 		"--disable-all", "--print-issued-lines=false", "--print-linter-name=false", "--out-format=line-number",
 		sourcePath,
 	}
+
 	rc := extractRunContextFromComments(t, sourcePath)
+	require.NotNil(t, rc)
+
 	args = append(args, rc.args...)
 
 	cfg, err := os.ReadFile(rc.configPath)
@@ -105,7 +114,10 @@ func TestMultipleOutputs(t *testing.T) {
 		"--disable-all", "--print-issued-lines=false", "--print-linter-name=false", "--out-format=line-number,json:stdout",
 		sourcePath,
 	}
+
 	rc := extractRunContextFromComments(t, sourcePath)
+	require.NotNil(t, rc)
+
 	args = append(args, rc.args...)
 
 	cfg, err := os.ReadFile(rc.configPath)
@@ -122,7 +134,10 @@ func TestStderrOutput(t *testing.T) {
 		"--disable-all", "--print-issued-lines=false", "--print-linter-name=false", "--out-format=line-number,json:stderr",
 		sourcePath,
 	}
+
 	rc := extractRunContextFromComments(t, sourcePath)
+	require.NotNil(t, rc)
+
 	args = append(args, rc.args...)
 
 	cfg, err := os.ReadFile(rc.configPath)
@@ -142,7 +157,10 @@ func TestFileOutput(t *testing.T) {
 		fmt.Sprintf("--out-format=json:%s,line-number", resultPath),
 		sourcePath,
 	}
+
 	rc := extractRunContextFromComments(t, sourcePath)
+	require.NotNil(t, rc)
+
 	args = append(args, rc.args...)
 
 	cfg, err := os.ReadFile(rc.configPath)
@@ -188,8 +206,11 @@ func testOneSource(t *testing.T, sourcePath string) {
 	}
 
 	rc := extractRunContextFromComments(t, sourcePath)
-	var cfgPath string
+	if rc == nil {
+		t.Skipf("Skipped: %s", sourcePath)
+	}
 
+	var cfgPath string
 	if rc.config != nil {
 		p, finish := saveConfig(t, rc.config)
 		defer finish()
@@ -254,6 +275,7 @@ func skipMultilineComment(scanner *bufio.Scanner) {
 	}
 }
 
+//nolint:gocyclo,funlen
 func extractRunContextFromComments(t *testing.T, sourcePath string) *runContext {
 	f, err := os.Open(sourcePath)
 	require.NoError(t, err)
@@ -273,6 +295,17 @@ func extractRunContextFromComments(t *testing.T, sourcePath string) *runContext 
 		}
 		if !strings.HasPrefix(line, "//") {
 			break
+		}
+
+		if strings.HasPrefix(line, "//go:build") || strings.HasPrefix(line, "// +build") {
+			parse, err := constraint.Parse(line)
+			require.NoError(t, err)
+
+			if !parse.Eval(buildTagGoVersion) {
+				return nil
+			}
+
+			continue
 		}
 
 		line = strings.TrimLeft(strings.TrimPrefix(line, "//"), " ")
@@ -315,10 +348,7 @@ func extractRunContextFromComments(t *testing.T, sourcePath string) *runContext 
 	if rc.expectedLinter == "" {
 		for _, arg := range rc.args {
 			if strings.HasPrefix(arg, "-E") && !strings.Contains(arg, ",") {
-				if rc.expectedLinter != "" {
-					require.Fail(t, "could not infer expected linter for errors because multiple linters are enabled. Please use the `expected_linter: ` directive in your test to indicate the linter-under-test.") //nolint:lll
-					break
-				}
+				require.Empty(t, rc.expectedLinter, "could not infer expected linter for errors because multiple linters are enabled. Please use the `expected_linter: ` directive in your test to indicate the linter-under-test.") //nolint:lll
 				rc.expectedLinter = arg[2:]
 			}
 		}
@@ -327,8 +357,23 @@ func extractRunContextFromComments(t *testing.T, sourcePath string) *runContext 
 	return rc
 }
 
+func buildTagGoVersion(tag string) bool {
+	vRuntime, err := hcversion.NewVersion(strings.TrimPrefix(runtime.Version(), "go"))
+	if err != nil {
+		return false
+	}
+
+	vTag, err := hcversion.NewVersion(strings.TrimPrefix(tag, "go"))
+	if err != nil {
+		return false
+	}
+
+	return vRuntime.GreaterThanOrEqual(vTag)
+}
+
 func TestExtractRunContextFromComments(t *testing.T) {
 	rc := extractRunContextFromComments(t, filepath.Join(testdataDir, "goimports", "goimports.go"))
+	require.NotNil(t, rc)
 	require.Equal(t, []string{"-Egoimports"}, rc.args)
 }
 
@@ -336,10 +381,14 @@ func TestTparallel(t *testing.T) {
 	t.Run("should fail on missing top-level Parallel()", func(t *testing.T) {
 		sourcePath := filepath.Join(testdataDir, "tparallel", "missing_toplevel_test.go")
 		args := []string{
-			"--disable-all", "--print-issued-lines=false", "--print-linter-name=false", "--out-format=line-number", "--enable", "tparallel",
+			"--disable-all", "--enable", "tparallel",
+			"--print-issued-lines=false", "--print-linter-name=false", "--out-format=line-number",
 			sourcePath,
 		}
+
 		rc := extractRunContextFromComments(t, sourcePath)
+		require.NotNil(t, rc)
+
 		args = append(args, rc.args...)
 
 		cfg, err := yaml.Marshal(rc.config)
@@ -354,10 +403,14 @@ func TestTparallel(t *testing.T) {
 	t.Run("should fail on missing subtest Parallel()", func(t *testing.T) {
 		sourcePath := filepath.Join(testdataDir, "tparallel", "missing_subtest_test.go")
 		args := []string{
-			"--disable-all", "--print-issued-lines=false", "--print-linter-name=false", "--out-format=line-number", "--enable", "tparallel",
+			"--disable-all", "--enable", "tparallel",
+			"--print-issued-lines=false", "--print-linter-name=false", "--out-format=line-number",
 			sourcePath,
 		}
+
 		rc := extractRunContextFromComments(t, sourcePath)
+		require.NotNil(t, rc)
+
 		args = append(args, rc.args...)
 
 		cfg, err := yaml.Marshal(rc.config)
@@ -372,10 +425,14 @@ func TestTparallel(t *testing.T) {
 	t.Run("should pass on parallel test with no subtests", func(t *testing.T) {
 		sourcePath := filepath.Join(testdataDir, "tparallel", "happy_path_test.go")
 		args := []string{
-			"--disable-all", "--print-issued-lines=false", "--print-linter-name=false", "--out-format=line-number", "--enable", "tparallel",
+			"--disable-all", "--enable", "tparallel",
+			"--print-issued-lines=false", "--print-linter-name=false", "--out-format=line-number",
 			sourcePath,
 		}
+
 		rc := extractRunContextFromComments(t, sourcePath)
+		require.NotNil(t, rc)
+
 		args = append(args, rc.args...)
 
 		cfg, err := yaml.Marshal(rc.config)

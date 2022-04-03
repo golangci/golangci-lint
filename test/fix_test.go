@@ -49,6 +49,11 @@ func TestFix(t *testing.T) {
 				input,
 			}
 			rc := extractRunContextFromComments(t, input)
+			if rc == nil {
+				t.Logf("Skipped: %s", input)
+				return
+			}
+
 			args = append(args, rc.args...)
 
 			cfg, err := yaml.Marshal(rc.config)
