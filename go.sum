@@ -661,8 +661,8 @@ github.com/sirupsen/logrus v1.8.1 h1:dJKuHgqk1NNQlqoA6BTlM1Wf9DOH3NBjQyu0h9+AZZE
 github.com/sirupsen/logrus v1.8.1/go.mod h1:yWOB1SBYBC5VeMP7gHvWumXLIWorT60ONWic61uBYv0=
 github.com/sivchari/containedctx v1.0.2 h1:0hLQKpgC53OVF1VT7CeoFHk9YKstur1XOgfYIc1yrHI=
 github.com/sivchari/containedctx v1.0.2/go.mod h1:PwZOeqm4/DLoJOqMSIJs3aKqXRX4YO+uXww087KZ7Bw=
-github.com/sivchari/tenv v1.4.7 h1:FdTpgRlTue5eb5nXIYgS/lyVXSjugU8UUVDwhP1NLU8=
-github.com/sivchari/tenv v1.4.7/go.mod h1:5nF+bITvkebQVanjU6IuMbvIot/7ReNsUV7I5NbprB0=
+github.com/sivchari/tenv v1.5.0 h1:wxW0mFpKI6DIb3s6m1jCDYvkWXCskrimXMuGd0K/kSQ=
+github.com/sivchari/tenv v1.5.0/go.mod h1:64yStXKSOxDfX47NlhVwND4dHwfZDdbp2Lyl018Icvg=
 github.com/soheilhy/cmux v0.1.4/go.mod h1:IM3LyeVVIOuxMH7sFAkER9+bJ4dT7Ms6E4xg4kGIyLM=
 github.com/sonatard/noctx v0.0.1 h1:VC1Qhl6Oxx9vvWo3UDgrGXYCeKCe3Wbw7qAWL6FrmTY=
 github.com/sonatard/noctx v0.0.1/go.mod h1:9D2D/EoULe8Yy2joDHJj7bv3sZoq9AaSb8B4lqBjiZI=
