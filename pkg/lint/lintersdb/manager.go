@@ -419,8 +419,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetStyle).
 			WithAlternativeNames(megacheckName).
-			WithURL("https://github.com/dominikh/go-tools/tree/master/simple").
-			WithNoopFallback(m.cfg),
+			WithURL("https://github.com/dominikh/go-tools/tree/master/simple"),
 
 		linter.NewConfig(golinters.NewGovet(govetCfg)).
 			WithSince("v1.0.0").
@@ -578,8 +577,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetBugs, linter.PresetMetaLinter).
 			WithAlternativeNames(megacheckName).
-			WithURL("https://staticcheck.io/").
-			WithNoopFallback(m.cfg),
+			WithURL("https://staticcheck.io/"),
 
 		linter.NewConfig(golinters.NewStructcheck()).
 			WithSince("v1.0.0").
@@ -592,8 +590,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithSince("v1.20.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetStyle).
-			WithURL("https://github.com/dominikh/go-tools/tree/master/stylecheck").
-			WithNoopFallback(m.cfg),
+			WithURL("https://github.com/dominikh/go-tools/tree/master/stylecheck"),
 
 		linter.NewConfig(golinters.NewTagliatelle(tagliatelleCfg)).
 			WithSince("v1.40.0").
@@ -650,8 +647,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithAlternativeNames(megacheckName).
 			ConsiderSlow().
 			WithChangeTypes().
-			WithURL("https://github.com/dominikh/go-tools/tree/master/unused").
-			WithNoopFallback(m.cfg),
+			WithURL("https://github.com/dominikh/go-tools/tree/master/unused"),
 
 		linter.NewConfig(golinters.NewVarcheck()).
 			WithSince("v1.0.0").
