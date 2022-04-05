@@ -38,7 +38,8 @@ func NewStderrLog(name string) *StderrLog {
 
 	sl.logger.Out = StdErr
 	formatter := &logrus.TextFormatter{
-		DisableTimestamp: true, // `INFO[0007] msg` -> `INFO msg`
+		DisableTimestamp:          true, // `INFO[0007] msg` -> `INFO msg`
+		EnvironmentOverrideColors: true,
 	}
 	if os.Getenv("LOG_TIMESTAMP") == "1" {
 		formatter.DisableTimestamp = false
