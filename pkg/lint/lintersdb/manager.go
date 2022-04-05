@@ -419,8 +419,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetStyle).
 			WithAlternativeNames(megacheckName).
-			WithURL("https://github.com/dominikh/go-tools/tree/master/simple").
-			WithNoopFallback(m.cfg),
+			WithURL("https://github.com/dominikh/go-tools/tree/master/simple"),
 
 		linter.NewConfig(golinters.NewGovet(govetCfg)).
 			WithSince("v1.0.0").
@@ -484,7 +483,8 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetPerformance).
 			WithURL("https://github.com/mdempsky/maligned").
-			Deprecated("The repository of the linter has been archived by the owner.", "v1.38.0", "govet 'fieldalignment'"),
+			Deprecated("The repository of the linter has been archived by the owner.", "v1.38.0",
+				"govet 'fieldalignment'"),
 
 		linter.NewConfig(golinters.NewMisspell()).
 			WithSince("v1.8.0").
@@ -578,8 +578,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetBugs, linter.PresetMetaLinter).
 			WithAlternativeNames(megacheckName).
-			WithURL("https://staticcheck.io/").
-			WithNoopFallback(m.cfg),
+			WithURL("https://staticcheck.io/"),
 
 		linter.NewConfig(golinters.NewStructcheck()).
 			WithSince("v1.0.0").
@@ -592,8 +591,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithSince("v1.20.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetStyle).
-			WithURL("https://github.com/dominikh/go-tools/tree/master/stylecheck").
-			WithNoopFallback(m.cfg),
+			WithURL("https://github.com/dominikh/go-tools/tree/master/stylecheck"),
 
 		linter.NewConfig(golinters.NewTagliatelle(tagliatelleCfg)).
 			WithSince("v1.40.0").
@@ -650,8 +648,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithAlternativeNames(megacheckName).
 			ConsiderSlow().
 			WithChangeTypes().
-			WithURL("https://github.com/dominikh/go-tools/tree/master/unused").
-			WithNoopFallback(m.cfg),
+			WithURL("https://github.com/dominikh/go-tools/tree/master/unused"),
 
 		linter.NewConfig(golinters.NewVarcheck()).
 			WithSince("v1.0.0").
@@ -783,7 +780,8 @@ func (m Manager) getAnalyzerPlugin(path string) (AnalyzerPlugin, error) {
 		configFilePath := viper.ConfigFileUsed()
 		absConfigFilePath, err := filepath.Abs(configFilePath)
 		if err != nil {
-			return nil, fmt.Errorf("could not get absolute representation of config file path %q: %v", configFilePath, err)
+			return nil, fmt.Errorf("could not get absolute representation of config file path %q: %v", configFilePath,
+				err)
 		}
 		path = filepath.Join(filepath.Dir(absConfigFilePath), path)
 	}
