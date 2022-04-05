@@ -483,8 +483,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetPerformance).
 			WithURL("https://github.com/mdempsky/maligned").
-			Deprecated("The repository of the linter has been archived by the owner.", "v1.38.0",
-				"govet 'fieldalignment'"),
+			Deprecated("The repository of the linter has been archived by the owner.", "v1.38.0", "govet 'fieldalignment'"),
 
 		linter.NewConfig(golinters.NewMisspell()).
 			WithSince("v1.8.0").
@@ -780,8 +779,7 @@ func (m Manager) getAnalyzerPlugin(path string) (AnalyzerPlugin, error) {
 		configFilePath := viper.ConfigFileUsed()
 		absConfigFilePath, err := filepath.Abs(configFilePath)
 		if err != nil {
-			return nil, fmt.Errorf("could not get absolute representation of config file path %q: %v", configFilePath,
-				err)
+			return nil, fmt.Errorf("could not get absolute representation of config file path %q: %v", configFilePath, err)
 		}
 		path = filepath.Join(filepath.Dir(absConfigFilePath), path)
 	}
