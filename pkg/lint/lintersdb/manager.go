@@ -407,6 +407,11 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/jirfag/go-printf-func-name"),
 
+		linter.NewConfig(golinters.NewGoSprintfHostPort()).
+			WithSince("v1.46.0").
+			WithPresets(linter.PresetStyle).
+			WithURL("https://github.com/stbenjam/go-sprintf-host-port"),
+
 		linter.NewConfig(golinters.NewGosec(gosecCfg)).
 			WithSince("v1.0.0").
 			WithLoadForGoAnalysis().
