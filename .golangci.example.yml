@@ -1662,6 +1662,7 @@ linters:
     - goprintffuncname
     - gosec
     - gosimple
+    - gosprintfhostport
     - govet
     - ifshort
     - importas
@@ -1752,6 +1753,7 @@ linters:
     - goprintffuncname
     - gosec
     - gosimple
+    - gosprintfhostport
     - govet
     - ifshort
     - importas
