@@ -27,6 +27,16 @@ func NewThelper(cfg *config.ThelperSettings) *goanalysis.Linter {
 			opts = append(opts, "t_first")
 		}
 
+		if cfg.Fuzz.Name {
+			opts = append(opts, "f_name")
+		}
+		if cfg.Fuzz.Begin {
+			opts = append(opts, "f_begin")
+		}
+		if cfg.Fuzz.First {
+			opts = append(opts, "f_first")
+		}
+
 		if cfg.Benchmark.Name {
 			opts = append(opts, "b_name")
 		}

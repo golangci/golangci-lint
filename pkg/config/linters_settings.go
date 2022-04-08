@@ -549,6 +549,11 @@ type ThelperSettings struct {
 		Name  bool `mapstructure:"name"`
 		Begin bool `mapstructure:"begin"`
 	} `mapstructure:"test"`
+	Fuzz struct {
+		First bool `mapstructure:"first"`
+		Name  bool `mapstructure:"name"`
+		Begin bool `mapstructure:"begin"`
+	} `mapstructure:"fuzz"`
 	Benchmark struct {
 		First bool `mapstructure:"first"`
 		Name  bool `mapstructure:"name"`
