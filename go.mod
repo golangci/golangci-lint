@@ -97,7 +97,7 @@ require (
 	github.com/yagipy/maintidx v1.0.0
 	github.com/yeya24/promlinter v0.1.1-0.20210918184747-d757024714a1
 	gitlab.com/bosi/decorder v0.2.1
-	golang.org/x/tools v0.1.11-0.20220408144541-fe932b4680bd
+	golang.org/x/tools v0.1.11-0.20220316014157-77aa08bb151a
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
 	honnef.co/go/tools v0.3.0
 	mvdan.cc/gofumpt v0.3.1
@@ -161,9 +161,9 @@ require (
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/yusufpapurcu/wmi v1.2.2 // indirect
 	golang.org/x/exp/typeparams v0.0.0-20220218215828-6cf2b201936e // indirect
-	golang.org/x/mod v0.6.0-dev.0.20220330205332-605edab4323b // indirect
+	golang.org/x/mod v0.6.0-dev.0.20220106191415-9b9b3d81d5e3 // indirect
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect
-	golang.org/x/sys v0.0.0-20220408201424-a24fb2fb8a0f // indirect
+	golang.org/x/sys v0.0.0-20220403020550-483a9cbc67c0 // indirect
 	golang.org/x/text v0.3.7 // indirect
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
 	google.golang.org/protobuf v1.27.1 // indirect
