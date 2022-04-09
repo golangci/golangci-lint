@@ -107,6 +107,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 	var errorlintCfg *config.ErrorLintSettings
 	var exhaustiveCfg *config.ExhaustiveSettings
 	var exhaustiveStructCfg *config.ExhaustiveStructSettings
+	var floatCompareStructCfg *config.FloatCompareSettings
 	var gciCfg *config.GciSettings
 	var goModDirectivesCfg *config.GoModDirectivesSettings
 	var goMndCfg *config.GoMndSettings
@@ -140,6 +141,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		errorlintCfg = &m.cfg.LintersSettings.ErrorLint
 		exhaustiveCfg = &m.cfg.LintersSettings.Exhaustive
 		exhaustiveStructCfg = &m.cfg.LintersSettings.ExhaustiveStruct
+		floatCompareStructCfg = &m.cfg.LintersSettings.FloatCompare
 		gciCfg = &m.cfg.LintersSettings.Gci
 		goModDirectivesCfg = &m.cfg.LintersSettings.GoModDirectives
 		goMndCfg = &m.cfg.LintersSettings.Gomnd
@@ -288,6 +290,12 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetBugs).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/kyoh86/exportloopref"),
+
+		linter.NewConfig(golinters.NewFloatCompare(floatCompareStructCfg)).
+			WithSince("v1.46.0").
+			WithPresets(linter.PresetBugs).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/mweb/floatcompare"),
 
 		linter.NewConfig(golinters.NewForbidigo()).
 			WithSince("v1.34.0").
