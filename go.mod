@@ -63,7 +63,7 @@ require (
 	github.com/moricho/tparallel v0.2.1
 	github.com/nakabonne/nestif v0.3.1
 	github.com/nishanths/exhaustive v0.7.11
-	github.com/nishanths/predeclared v0.2.1
+	github.com/nishanths/predeclared v0.2.2
 	github.com/pkg/errors v0.9.1
 	github.com/polyfloyd/go-errorlint v0.0.0-20211125173453-6d6d39c5bb8b
 	github.com/quasilyte/go-ruleguard/dsl v0.3.19
