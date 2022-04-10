@@ -1,9 +1,7 @@
 package golinters
 
 import (
-	"strings"
-
-	"github.com/GaijinEntertainment/go-exhaustruct/pkg/analyzer"
+	"github.com/GaijinEntertainment/go-exhaustruct/v2/pkg/analyzer"
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/config"
@@ -11,22 +9,15 @@ import (
 )
 
 func NewExhaustruct(settings *config.ExhaustructSettings) *goanalysis.Linter {
-	a := analyzer.Analyzer
+	include, exclude := []string{}, []string{}
 
-	var cfg map[string]map[string]interface{}
 	if settings != nil {
-		cfg = map[string]map[string]interface{}{
-			a.Name: {
-				"include": strings.Join(settings.Include, ","),
-				"exclude": strings.Join(settings.Exclude, ","),
-			},
-		}
+		include = settings.Include
+		exclude = settings.Exclude
 	}
 
-	return goanalysis.NewLinter(
-		a.Name,
-		a.Doc,
-		[]*analysis.Analyzer{a},
-		cfg,
-	).WithLoadMode(goanalysis.LoadModeTypesInfo)
+	a := analyzer.MustNewAnalyzer(include, exclude)
+
+	return goanalysis.NewLinter(a.Name, a.Doc, []*analysis.Analyzer{a}, nil).
+		WithLoadMode(goanalysis.LoadModeTypesInfo)
 }

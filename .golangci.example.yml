@@ -290,7 +290,7 @@ linters-settings:
     # If this list is empty, all structs are tested.
     include:
       - '.*\.Test'
-      - 'example\.com/package\.ExampleStruct'
+      - 'example\.com/package\.ExampleStruct[\d]{1,2}'
     # List of regular expressions to exclude struct packages and names from check.
     exclude:
       - 'cobra\.Command$'
