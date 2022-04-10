@@ -5,7 +5,7 @@ go 1.18
 require (
 	4d63.com/gochecknoglobals v0.1.0
 	github.com/Antonboom/errname v0.1.6
-	github.com/Antonboom/nilnil v0.1.0
+	github.com/Antonboom/nilnil v0.1.1
 	github.com/BurntSushi/toml v1.0.0
 	github.com/Djarvur/go-err113 v0.0.0-20210108212216-aea10b59be24
 	github.com/OpenPeeDeeP/depguard v1.1.0
