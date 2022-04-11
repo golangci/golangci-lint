@@ -3,7 +3,6 @@ package lintersdb
 import (
 	"os"
 	"sort"
-	"strings"
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
@@ -123,7 +122,7 @@ func (es EnabledSet) GetOptimizedLinters() ([]*linter.Config, error) {
 		if a.DoesChangeTypes != b.DoesChangeTypes {
 			return b.DoesChangeTypes // move type-changing linters to the end to optimize speed
 		}
-		return strings.Compare(a.Name(), b.Name()) < 0
+		return a.Name() < b.Name()
 	})
 
 	return resultLinters, nil
@@ -168,7 +167,7 @@ func (es EnabledSet) combineGoAnalysisLinters(linters map[string]*linter.Config)
 			return false
 		}
 
-		return strings.Compare(a.Name(), b.Name()) <= 0
+		return a.Name() <= b.Name()
 	})
 
 	ml := goanalysis.NewMetaLinter(goanalysisLinters)
