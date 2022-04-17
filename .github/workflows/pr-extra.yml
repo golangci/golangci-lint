@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-go@v2
+      - uses: actions/setup-go@v3
         with:
           # stable: 'false' # Keep this line to be able to use rc and beta version of Go (ex: 1.18.0-rc1).
           go-version: 1.18

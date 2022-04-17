@@ -39,7 +39,7 @@ func (e *Executor) initHelp() {
 
 func printLinterConfigs(lcs []*linter.Config) {
 	sort.Slice(lcs, func(i, j int) bool {
-		return strings.Compare(lcs[i].Name(), lcs[j].Name()) < 0
+		return lcs[i].Name() < lcs[j].Name()
 	})
 	for _, lc := range lcs {
 		altNamesStr := ""
