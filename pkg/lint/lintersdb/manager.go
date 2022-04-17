@@ -526,6 +526,11 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithURL("https://github.com/sonatard/noctx").
 			WithNoopFallback(m.cfg),
 
+		linter.NewConfig(golinters.NewNoNamedReturns()).
+			WithSince("v1.46.0").
+			WithPresets(linter.PresetStyle).
+			WithURL("https://github.com/firefart/nonamedreturns"),
+
 		linter.NewConfig(golinters.NewParallelTest()).
 			WithSince("v1.33.0").
 			WithPresets(linter.PresetStyle, linter.PresetTest).
