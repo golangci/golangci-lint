@@ -37,7 +37,7 @@ func NewGodot() *goanalysis.Linter {
 
 		// Convert deprecated setting
 		// todo(butuzov): remove on v2 release
-		if cfg.CheckAll { // nolint:staticcheck
+		if cfg.CheckAll { // nolint:staticcheck // Keep for retro-compatibility.
 			settings.Scope = godot.AllScope
 		}
 
