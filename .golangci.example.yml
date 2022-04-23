@@ -117,6 +117,50 @@ linters-settings:
     first-strong-isolate: false
     pop-directional-isolate: false
 
+  consistent:
+    # check function/method parameter type (ignore/explicit/implicit)
+    # Default: explicit
+    params: explicit
+    # check function/method return value types (ignore/explicit/implicit)
+    # Default: explicit
+    returns: explicit
+    # check function type parameter types (ignore/explicit/implicit)
+    # Default: explicit
+    type-params: explicit
+    # check single import declarations (ignore/bare/parens)
+    # Default: bare
+    single-imports: bare
+    # check allocations using new (ignore/literal/new)
+    # Default: literal
+    new-allocs: literal
+    # check allocations using make (ignore/literal/make)
+    # Default: literal
+    make-allocs: literal
+    # check upper/lowercase in hex literals (ignore/lower/upper)
+    # Default: lower
+    hex-lits: lower
+    # check range checks (ignore/left/center)
+    # Default: left
+    range-checks: left
+    # check AND-NOT expressions (ignore/and-not/and-comp)
+    # Default: and-not
+    and-nots: and-not
+    # check floating-point literals (ignore/explicit/implicit)
+    # Default: explicit
+    float-lits: explicit
+    # check len/cap checks (ignore/equal-zero/compare-zero/compare-one)
+    # Default: equal-zero
+    len-checks: equal-zero
+    # check switch case clauses (ignore/comma/or)
+    # Default: comma
+    switch-cases: comma
+    # check switch default clauses (ignore/last/first)
+    # Default: last
+    switch-defaults: last
+    # check labels against regexp ('' to ignore)
+    # Default: ^[a-z][a-zA-Z0-9]*$
+    labels-regexp: ^[a-z][a-zA-Z0-9]*$
+
   cyclop:
     # The maximal code complexity to report.
     max-complexity: 10

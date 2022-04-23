@@ -113,6 +113,7 @@ var defaultLintersSettings = LintersSettings{
 
 type LintersSettings struct {
 	BiDiChk          BiDiChkSettings
+	Consistent       ConsistentSettings
 	Cyclop           Cyclop
 	Decorder         DecorderSettings
 	Depguard         DepGuardSettings
@@ -190,6 +191,23 @@ type BiDiChkSettings struct {
 	RightToLeftIsolate       bool `mapstructure:"right-to-left-isolate"`
 	FirstStrongIsolate       bool `mapstructure:"first-strong-isolate"`
 	PopDirectionalIsolate    bool `mapstructure:"pop-directional-isolate"`
+}
+
+type ConsistentSettings struct {
+	Params         string `mapstructure:"params"`
+	Returns        string `mapstructure:"returns"`
+	TypeParams     string `mapstructure:"type-params"`
+	SingleImports  string `mapstructure:"single-imports"`
+	NewAllocs      string `mapstructure:"new-allocs"`
+	MakeAllocs     string `mapstructure:"make-allocs"`
+	HexLits        string `mapstructure:"hex-lits"`
+	RangeChecks    string `mapstructure:"range-checks"`
+	AndNOTs        string `mapstructure:"and-nots"`
+	FloatLits      string `mapstructure:"float-lits"`
+	LenChecks      string `mapstructure:"len-checks"`
+	SwitchCases    string `mapstructure:"switch-cases"`
+	SwitchDefaults string `mapstructure:"switch-defaults"`
+	LabelsRegexp   string `mapstructure:"labels-regexp"`
 }
 
 type Cyclop struct {

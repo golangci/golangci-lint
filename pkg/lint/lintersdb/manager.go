@@ -101,6 +101,7 @@ func enableLinterConfigs(lcs []*linter.Config, isEnabled func(lc *linter.Config)
 //nolint:funlen
 func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 	var bidichkCfg *config.BiDiChkSettings
+	var consistentCfg *config.ConsistentSettings
 	var cyclopCfg *config.Cyclop
 	var decorderCfg *config.DecorderSettings
 	var errchkjsonCfg *config.ErrChkJSONSettings
@@ -134,6 +135,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 
 	if m.cfg != nil {
 		bidichkCfg = &m.cfg.LintersSettings.BiDiChk
+		consistentCfg = &m.cfg.LintersSettings.Consistent
 		cyclopCfg = &m.cfg.LintersSettings.Cyclop
 		errchkjsonCfg = &m.cfg.LintersSettings.ErrChkJSON
 		decorderCfg = &m.cfg.LintersSettings.Decorder
@@ -191,6 +193,12 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetPerformance, linter.PresetBugs).
 			WithURL("https://github.com/timakin/bodyclose").
 			WithNoopFallback(m.cfg),
+
+		linter.NewConfig(golinters.NewConsistent(consistentCfg)).
+			WithSince("v1.46.0").
+			WithPresets(linter.PresetStyle).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/blizzy78/consistent"),
 
 		linter.NewConfig(golinters.NewContainedCtx()).
 			WithSince("1.44.0").
