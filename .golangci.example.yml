@@ -1679,6 +1679,7 @@ linters:
     - nlreturn
     - noctx
     - nolintlint
+    - nosprintfhostport
     - paralleltest
     - prealloc
     - predeclared
@@ -1769,6 +1770,7 @@ linters:
     - nlreturn
     - noctx
     - nolintlint
+    - nosprintfhostport
     - paralleltest
     - prealloc
     - predeclared
