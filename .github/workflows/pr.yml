@@ -8,6 +8,9 @@ on:
 env:
   GO_VERSION: 1.18
 
+permissions:
+  contents: read
+
 jobs:
   # Check if there any dirty change for go mod tidy
   go-mod:
@@ -28,6 +31,9 @@ jobs:
   # We already run the current golangci-lint in tests, but here we test
   # our GitHub action with the latest stable golangci-lint.
   golangci-lint:
+    permissions:
+      contents: read  # for actions/checkout to fetch code
+      pull-requests: read  # for golangci/golangci-lint-action to fetch pull requests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
