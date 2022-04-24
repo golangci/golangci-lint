@@ -1669,6 +1669,7 @@ linters:
     - asciicheck
     - bidichk
     - bodyclose
+    - consistent
     - contextcheck
     - cyclop
     - deadcode
@@ -1759,6 +1760,7 @@ linters:
     - asciicheck
     - bidichk
     - bodyclose
+    - consistent
     - contextcheck
     - cyclop
     - deadcode
