@@ -24,7 +24,7 @@ require (
 	github.com/denis-tingaikin/go-header v0.4.3
 	github.com/esimonov/ifshort v1.0.4
 	github.com/fatih/color v1.13.0
-	github.com/firefart/nonamedreturns v1.0.0
+	github.com/firefart/nonamedreturns v1.0.1
 	github.com/fzipp/gocyclo v0.5.1
 	github.com/go-critic/go-critic v0.6.3
 	github.com/go-xmlfmt/xmlfmt v0.0.0-20191208150333-d5b6f63a941b
@@ -84,6 +84,7 @@ require (
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.11.0
 	github.com/ssgreg/nlreturn/v2 v2.2.1
+	github.com/stbenjam/no-sprintf-host-port v0.1.1
 	github.com/stretchr/testify v1.7.1
 	github.com/sylvia7788/contextcheck v1.0.4
 	github.com/tdakkota/asciicheck v0.1.1
@@ -100,7 +101,7 @@ require (
 	gitlab.com/bosi/decorder v0.2.1
 	golang.org/x/tools v0.1.11-0.20220316014157-77aa08bb151a
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
-	honnef.co/go/tools v0.3.0
+	honnef.co/go/tools v0.3.1
 	mvdan.cc/gofumpt v0.3.1
 	mvdan.cc/interfacer v0.0.0-20180901003855-c20040233aed
 	mvdan.cc/unparam v0.0.0-20211214103731-d0ef000c54e5
