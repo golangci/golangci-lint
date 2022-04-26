@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/pkg/errors"
+	"golang.org/x/tools/go/packages"
 
 	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
@@ -28,7 +29,7 @@ var _ Processor = (*SkipDirs)(nil)
 
 const goFileSuffix = ".go"
 
-func NewSkipDirs(patterns []string, log logutils.Log, runArgs []string) (*SkipDirs, error) {
+func NewSkipDirs(patterns []string, log logutils.Log, runArgs []string, pkgs []*packages.Package) (*SkipDirs, error) {
 	var patternsRe []*regexp.Regexp
 	for _, p := range patterns {
 		p = normalizePathInRegex(p)
@@ -37,6 +38,14 @@ func NewSkipDirs(patterns []string, log logutils.Log, runArgs []string) (*SkipDi
 			return nil, errors.Wrapf(err, "can't compile regexp %q", p)
 		}
 		patternsRe = append(patternsRe, patternRe)
+
+		for _, patternRe := range patternsRe {
+			for i, pkg := range pkgs {
+				if patternRe.MatchString(pkg.PkgPath) && len(pkgs) >= i+1 {
+					pkgs = append(pkgs[:i], pkgs[i+1:]...)
+				}
+			}
+		}
 	}
 
 	if len(runArgs) == 0 {

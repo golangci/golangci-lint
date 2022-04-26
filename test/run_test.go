@@ -195,11 +195,9 @@ func TestLintFilesWithLineDirective(t *testing.T) {
 
 func TestSkippedDirsNoMatchArg(t *testing.T) {
 	dir := getTestDataDir("skipdirs", "skip_me", "nested")
-	res := testshared.NewLintRunner(t).Run("--print-issued-lines=false", "--no-config", "--skip-dirs", dir, "-Egolint", dir)
-
-	res.ExpectExitCode(exitcodes.IssuesFound).
-		ExpectOutputEq("testdata/skipdirs/skip_me/nested/with_issue.go:8:9: `if` block ends with " +
-			"a `return` statement, so drop this `else` and outdent its block (golint)\n")
+	testshared.NewLintRunner(t).Run("--print-issued-lines=false", "--no-config", "--skip-dirs", dir, "-Egolint", dir).
+		ExpectExitCode(exitcodes.NoGoFiles).
+		ExpectOutputContains(": no go files to analyze")
 }
 
 func TestSkippedDirsTestdata(t *testing.T) {

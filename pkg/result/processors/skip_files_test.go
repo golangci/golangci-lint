@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"golang.org/x/tools/go/packages"
 
 	"github.com/golangci/golangci-lint/pkg/result"
 )
@@ -18,7 +19,7 @@ func newFileIssue(file string) result.Issue {
 }
 
 func newTestSkipFiles(t *testing.T, patterns ...string) *SkipFiles {
-	p, err := NewSkipFiles(patterns)
+	p, err := NewSkipFiles(patterns, []*packages.Package{})
 	assert.NoError(t, err)
 	return p
 }
@@ -44,7 +45,7 @@ func TestSkipFiles(t *testing.T) {
 }
 
 func TestSkipFilesInvalidPattern(t *testing.T) {
-	p, err := NewSkipFiles([]string{"\\o"})
+	p, err := NewSkipFiles([]string{"\\o"}, []*packages.Package{})
 	assert.Error(t, err)
 	assert.Nil(t, p)
 }

@@ -30,7 +30,7 @@ type Runner struct {
 
 func NewRunner(cfg *config.Config, log logutils.Log, goenv *goutil.Env, es *lintersdb.EnabledSet,
 	lineCache *fsutils.LineCache, dbManager *lintersdb.Manager, pkgs []*gopackages.Package) (*Runner, error) {
-	skipFilesProcessor, err := processors.NewSkipFiles(cfg.Run.SkipFiles)
+	skipFilesProcessor, err := processors.NewSkipFiles(cfg.Run.SkipFiles, pkgs)
 	if err != nil {
 		return nil, err
 	}
@@ -39,7 +39,7 @@ func NewRunner(cfg *config.Config, log logutils.Log, goenv *goutil.Env, es *lint
 	if cfg.Run.UseDefaultSkipDirs {
 		skipDirs = append(skipDirs, packages.StdExcludeDirRegexps...)
 	}
-	skipDirsProcessor, err := processors.NewSkipDirs(skipDirs, log.Child("skip dirs"), cfg.Run.Args)
+	skipDirsProcessor, err := processors.NewSkipDirs(skipDirs, log.Child("skip dirs"), cfg.Run.Args, pkgs)
 	if err != nil {
 		return nil, err
 	}
