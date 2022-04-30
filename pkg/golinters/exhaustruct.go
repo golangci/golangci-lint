@@ -16,7 +16,10 @@ func NewExhaustruct(settings *config.ExhaustructSettings) *goanalysis.Linter {
 		exclude = settings.Exclude
 	}
 
-	a := analyzer.MustNewAnalyzer(include, exclude)
+	a, err := analyzer.NewAnalyzer(include, exclude)
+	if err != nil {
+		linterLogger.Fatalf("exhaustruct configuration: %v", err)
+	}
 
 	return goanalysis.NewLinter(a.Name, a.Doc, []*analysis.Analyzer{a}, nil).
 		WithLoadMode(goanalysis.LoadModeTypesInfo)
