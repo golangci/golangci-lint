@@ -285,6 +285,16 @@ linters-settings:
       - '*.Test'
       - 'example.com/package.ExampleStruct'
 
+  exhaustruct:
+    # List of regular expressions to match struct packages and names.
+    # If this list is empty, all structs are tested.
+    include:
+      - '.*\.Test'
+      - 'example\.com/package\.ExampleStruct[\d]{1,2}'
+    # List of regular expressions to exclude struct packages and names from check.
+    exclude:
+      - 'cobra\.Command$'
+
   forbidigo:
     # Forbid the following identifiers (list of regexp).
     forbid:

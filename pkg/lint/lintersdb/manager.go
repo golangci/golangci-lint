@@ -107,6 +107,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 	var errorlintCfg *config.ErrorLintSettings
 	var exhaustiveCfg *config.ExhaustiveSettings
 	var exhaustiveStructCfg *config.ExhaustiveStructSettings
+	var exhaustructCfg *config.ExhaustructSettings
 	var gciCfg *config.GciSettings
 	var goModDirectivesCfg *config.GoModDirectivesSettings
 	var goMndCfg *config.GoMndSettings
@@ -140,6 +141,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		errorlintCfg = &m.cfg.LintersSettings.ErrorLint
 		exhaustiveCfg = &m.cfg.LintersSettings.Exhaustive
 		exhaustiveStructCfg = &m.cfg.LintersSettings.ExhaustiveStruct
+		exhaustructCfg = &m.cfg.LintersSettings.Exhaustruct
 		gciCfg = &m.cfg.LintersSettings.Gci
 		goModDirectivesCfg = &m.cfg.LintersSettings.GoModDirectives
 		goMndCfg = &m.cfg.LintersSettings.Gomnd
@@ -281,7 +283,14 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithSince("v1.32.0").
 			WithPresets(linter.PresetStyle, linter.PresetTest).
 			WithLoadForGoAnalysis().
-			WithURL("https://github.com/mbilski/exhaustivestruct"),
+			WithURL("https://github.com/mbilski/exhaustivestruct").
+			Deprecated("The owner seems to have abandoned the linter.", "v1.46.0", "exhaustruct"),
+
+		linter.NewConfig(golinters.NewExhaustruct(exhaustructCfg)).
+			WithSince("v1.46.0").
+			WithPresets(linter.PresetStyle, linter.PresetTest).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/GaijinEntertainment/go-exhaustruct"),
 
 		linter.NewConfig(golinters.NewExportLoopRef()).
 			WithSince("v1.28.0").

@@ -1,10 +1,10 @@
-// args: -Eexhaustivestruct --internal-cmd-test
-// config_path: testdata/configs/exhaustivestruct.yml
+// args: -Eexhaustruct
+// config_path: testdata/configs/exhaustruct.yml
 package testdata
 
 import "time"
 
-type ExhaustiveStructCustom struct {
+type ExhaustructCustom struct {
 	A string
 	B int
 	c bool // private field inside the same package are not ignored
@@ -12,9 +12,9 @@ type ExhaustiveStructCustom struct {
 	E time.Time
 }
 
-func exhaustiveStructCustom() {
+func exhaustructCustom() {
 	// pass
-	_ = ExhaustiveStructCustom{
+	_ = ExhaustructCustom{
 		A: "a",
 		B: 0,
 		c: false,
@@ -23,7 +23,7 @@ func exhaustiveStructCustom() {
 	}
 
 	// fail
-	_ = ExhaustiveStructCustom{ // ERROR "B is missing in ExhaustiveStructCustom"
+	_ = ExhaustructCustom{ // ERROR "B is missing in ExhaustructCustom"
 		A: "a",
 		c: false,
 		D: 1.0,
@@ -31,14 +31,14 @@ func exhaustiveStructCustom() {
 	}
 
 	// failMultiple
-	_ = ExhaustiveStructCustom{ // ERROR "B, D are missing in ExhaustiveStructCustom"
+	_ = ExhaustructCustom{ // ERROR "B, D are missing in ExhaustructCustom"
 		A: "a",
 		c: false,
 		E: time.Now(),
 	}
 
-	// failPrivate
-	_ = ExhaustiveStructCustom{ // ERROR "c is missing in ExhaustiveStructCustom"
+	//  failPrivate
+	_ = ExhaustructCustom{ // ERROR "c is missing in ExhaustructCustom"
 		A: "a",
 		B: 0,
 		D: 1.0,
@@ -47,7 +47,7 @@ func exhaustiveStructCustom() {
 
 }
 
-type ExhaustiveStructCustom1 struct {
+type ExhaustructCustom1 struct {
 	A string
 	B int
 	c bool // private field inside the same package are not ignored
@@ -55,47 +55,9 @@ type ExhaustiveStructCustom1 struct {
 	E time.Time
 }
 
-func exhaustiveStructCustom1() {
-	_ = ExhaustiveStructCustom1{
-		A: "a",
-		B: 0,
-		c: false,
-		D: 1.0,
-		E: time.Now(),
-	}
-
-	_ = ExhaustiveStructCustom1{
-		A: "a",
-		c: false,
-		D: 1.0,
-		E: time.Now(),
-	}
-
-	_ = ExhaustiveStructCustom1{
-		A: "a",
-		c: false,
-		E: time.Now(),
-	}
-
-	_ = ExhaustiveStructCustom1{
-		A: "a",
-		B: 0,
-		D: 1.0,
-		E: time.Now(),
-	}
-}
-
-type ExhaustiveStructCustom2 struct {
-	A string
-	B int
-	c bool // private field inside the same package are not ignored
-	D float64
-	E time.Time
-}
-
-func exhaustiveStructCustom2() {
+func exhaustructCustom1() {
 	// pass
-	_ = ExhaustiveStructCustom2{
+	_ = ExhaustructCustom{
 		A: "a",
 		B: 0,
 		c: false,
@@ -104,7 +66,7 @@ func exhaustiveStructCustom2() {
 	}
 
 	// fail
-	_ = ExhaustiveStructCustom2{ // ERROR "B is missing in ExhaustiveStructCustom2"
+	_ = ExhaustructCustom1{
 		A: "a",
 		c: false,
 		D: 1.0,
@@ -112,18 +74,60 @@ func exhaustiveStructCustom2() {
 	}
 
 	// failMultiple
-	_ = ExhaustiveStructCustom2{ // ERROR "B, D are missing in ExhaustiveStructCustom2"
+	_ = ExhaustructCustom1{
 		A: "a",
 		c: false,
 		E: time.Now(),
 	}
 
 	// failPrivate
-	_ = ExhaustiveStructCustom2{ // ERROR "c is missing in ExhaustiveStructCustom2"
+	_ = ExhaustructCustom1{
 		A: "a",
 		B: 0,
 		D: 1.0,
 		E: time.Now(),
 	}
 
+}
+
+type ExhaustructCustom2 struct {
+	A string
+	B int
+	c bool // private field inside the same package are not ignored
+	D float64
+	E time.Time
+}
+
+func exhaustructCustom2() {
+	// pass
+	_ = ExhaustructCustom2{
+		A: "a",
+		B: 0,
+		c: false,
+		D: 1.0,
+		E: time.Now(),
+	}
+
+	// fail
+	_ = ExhaustructCustom2{
+		A: "a",
+		c: false,
+		D: 1.0,
+		E: time.Now(),
+	}
+
+	// failMultiple
+	_ = ExhaustructCustom2{
+		A: "a",
+		c: false,
+		E: time.Now(),
+	}
+
+	// failPrivate
+	_ = ExhaustructCustom2{
+		A: "a",
+		B: 0,
+		D: 1.0,
+		E: time.Now(),
+	}
 }

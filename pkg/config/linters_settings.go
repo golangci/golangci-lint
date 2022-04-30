@@ -123,6 +123,7 @@ type LintersSettings struct {
 	ErrorLint        ErrorLintSettings
 	Exhaustive       ExhaustiveSettings
 	ExhaustiveStruct ExhaustiveStructSettings
+	Exhaustruct      ExhaustructSettings
 	Forbidigo        ForbidigoSettings
 	Funlen           FunlenSettings
 	Gci              GciSettings
@@ -253,6 +254,11 @@ type ExhaustiveSettings struct {
 
 type ExhaustiveStructSettings struct {
 	StructPatterns []string `mapstructure:"struct-patterns"`
+}
+
+type ExhaustructSettings struct {
+	Include []string `mapstructure:"include"`
+	Exclude []string `mapstructure:"exclude"`
 }
 
 type ForbidigoSettings struct {
