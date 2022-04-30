@@ -62,8 +62,6 @@ github.com/BurntSushi/toml v1.1.0/go.mod h1:CxXYINrC8qIiEnFrOxCa7Jy5BFHlXnUU2pbi
 github.com/BurntSushi/xgb v0.0.0-20160522181843-27f122750802/go.mod h1:IVnqGOEym/WlBOVXweHU+Q+/VP0lqqI8lqeDx9IjBqo=
 github.com/Djarvur/go-err113 v0.0.0-20210108212216-aea10b59be24 h1:sHglBQTwgx+rWPdisA5ynNEsoARbiCBOyGcJM4/OzsM=
 github.com/Djarvur/go-err113 v0.0.0-20210108212216-aea10b59be24/go.mod h1:4UJr5HIiMZrwgkSPdsjy2uOQExX/WEILpIrO9UPGuXs=
-github.com/GaijinEntertainment/go-exhaustruct v1.0.0 h1:z+MQsgpeFDwmVZqB78E1nig4TX8IAGXr/LczFNbqRPU=
-github.com/GaijinEntertainment/go-exhaustruct v1.0.0/go.mod h1:jXk57htv8oR5kz8IClFCxBykWOwS2VWHRuRT4V+a5Xc=
 github.com/GaijinEntertainment/go-exhaustruct/v2 v2.0.1 h1:a3kOgrlUghvW/JYGy4t0OVe1VgebwoX0wV85PC2i+VU=
 github.com/GaijinEntertainment/go-exhaustruct/v2 v2.0.1/go.mod h1:LGOGuvEgCfCQsy3JF2tRmpGDpzA53iZfyGEWSPwQ6/4=
 github.com/Masterminds/goutils v1.1.0/go.mod h1:8cTjp+g8YejhMuvIA5y2vz3BpJxksy863GQaJW2MFNU=

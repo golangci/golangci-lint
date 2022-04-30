@@ -9,7 +9,7 @@ import (
 )
 
 func NewExhaustruct(settings *config.ExhaustructSettings) *goanalysis.Linter {
-	include, exclude := []string{}, []string{}
+	var include, exclude []string
 
 	if settings != nil {
 		include = settings.Include
