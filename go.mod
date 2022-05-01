@@ -8,6 +8,7 @@ require (
 	github.com/Antonboom/nilnil v0.1.1
 	github.com/BurntSushi/toml v1.1.0
 	github.com/Djarvur/go-err113 v0.0.0-20210108212216-aea10b59be24
+	github.com/GaijinEntertainment/go-exhaustruct/v2 v2.1.0
 	github.com/OpenPeeDeeP/depguard v1.1.0
 	github.com/alexkohler/prealloc v1.0.0
 	github.com/ashanbrown/forbidigo v1.3.0
@@ -51,7 +52,7 @@ require (
 	github.com/kulti/thelper v0.6.2
 	github.com/kunwardeep/paralleltest v1.0.3
 	github.com/kyoh86/exportloopref v0.1.8
-	github.com/ldez/gomoddirectives v0.2.2
+	github.com/ldez/gomoddirectives v0.2.3
 	github.com/ldez/tagliatelle v0.3.1
 	github.com/leonklingele/grouper v1.1.0
 	github.com/lufeee/execinquery v1.0.0
@@ -74,7 +75,7 @@ require (
 	github.com/sanposhiho/wastedassign/v2 v2.0.6
 	github.com/securego/gosec/v2 v2.11.0
 	github.com/shazow/go-diff v0.0.0-20160112020656-b6b7b6733b8c
-	github.com/shirou/gopsutil/v3 v3.22.3
+	github.com/shirou/gopsutil/v3 v3.22.4
 	github.com/sirupsen/logrus v1.8.1
 	github.com/sivchari/containedctx v1.0.2
 	github.com/sivchari/tenv v1.5.0
@@ -90,14 +91,14 @@ require (
 	github.com/tdakkota/asciicheck v0.1.1
 	github.com/tetafro/godot v1.4.11
 	github.com/timakin/bodyclose v0.0.0-20210704033933-f49887972144
-	github.com/tomarrell/wrapcheck/v2 v2.6.0
+	github.com/tomarrell/wrapcheck/v2 v2.6.1
 	github.com/tommy-muehle/go-mnd/v2 v2.5.0
 	github.com/ultraware/funlen v0.0.3
 	github.com/ultraware/whitespace v0.0.5
 	github.com/uudashr/gocognit v1.0.5
 	github.com/valyala/quicktemplate v1.7.0
 	github.com/yagipy/maintidx v1.0.0
-	github.com/yeya24/promlinter v0.1.1-0.20210918184747-d757024714a1
+	github.com/yeya24/promlinter v0.2.0
 	gitlab.com/bosi/decorder v0.2.1
 	golang.org/x/tools v0.1.11-0.20220316014157-77aa08bb151a
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
@@ -115,7 +116,7 @@ require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/ettle/strcase v0.1.1 // indirect
 	github.com/fatih/structtag v1.2.0 // indirect
-	github.com/fsnotify/fsnotify v1.5.1 // indirect
+	github.com/fsnotify/fsnotify v1.5.4 // indirect
 	github.com/go-ole/go-ole v1.2.6 // indirect
 	github.com/go-toolsmith/astcast v1.0.0 // indirect
 	github.com/go-toolsmith/astcopy v1.0.0 // indirect
@@ -139,18 +140,18 @@ require (
 	github.com/mattn/go-isatty v0.0.14 // indirect
 	github.com/mattn/go-runewidth v0.0.9 // indirect
 	github.com/matttproud/golang_protobuf_extensions v1.0.1 // indirect
-	github.com/mitchellh/mapstructure v1.4.3 // indirect
+	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/nbutton23/zxcvbn-go v0.0.0-20210217022336-fa2cb2858354 // indirect
 	github.com/olekukonko/tablewriter v0.0.5 // indirect
-	github.com/pelletier/go-toml v1.9.4 // indirect
-	github.com/pelletier/go-toml/v2 v2.0.0-beta.8 // indirect
+	github.com/pelletier/go-toml v1.9.5 // indirect
+	github.com/pelletier/go-toml/v2 v2.0.0 // indirect
 	github.com/phayes/checkstyle v0.0.0-20170904204023-bfd46e6a821d // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/power-devops/perfstat v0.0.0-20210106213030-5aafc221ea8c // indirect
-	github.com/prometheus/client_golang v1.7.1 // indirect
+	github.com/prometheus/client_golang v1.12.1 // indirect
 	github.com/prometheus/client_model v0.2.0 // indirect
-	github.com/prometheus/common v0.10.0 // indirect
-	github.com/prometheus/procfs v0.6.0 // indirect
+	github.com/prometheus/common v0.32.1 // indirect
+	github.com/prometheus/procfs v0.7.3 // indirect
 	github.com/quasilyte/go-ruleguard v0.3.16-0.20220213074421-6aa060fab41a // indirect
 	github.com/quasilyte/gogrep v0.0.0-20220120141003-628d8b3623b5 // indirect
 	github.com/quasilyte/regex/syntax v0.0.0-20200407221936-30656e2c4a95 // indirect
