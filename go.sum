@@ -767,6 +767,8 @@ github.com/tomarrell/wrapcheck/v2 v2.6.0/go.mod h1:68bQ/eJg55BROaRTbMjC7vuhL2Ogf
 github.com/tomasen/realip v0.0.0-20180522021738-f0c99a92ddce/go.mod h1:o8v6yHRoik09Xen7gje4m9ERNah1d1PPsVq1VEx9vE4=
 github.com/tommy-muehle/go-mnd/v2 v2.5.0 h1:iAj0a8e6+dXSL7Liq0aXPox36FiN1dBbjA6lt9fl65s=
 github.com/tommy-muehle/go-mnd/v2 v2.5.0/go.mod h1:WsUAkMJMYww6l/ufffCD3m+P7LEvr8TnZn9lwVDlgzw=
+github.com/typenaming/typenaming v1.1.1 h1:a825wSpl7LpFLTX1Xv7rd4ZjxJKK9Pxmy7tEFAHCIxI=
+github.com/typenaming/typenaming v1.1.1/go.mod h1:mMIHMtUDlrXGi4aN9XuAcdjJWbGSUwgAYDnYsVv9YiM=
 github.com/ugorji/go/codec v0.0.0-20181204163529-d75b2dcb6bc8/go.mod h1:VFNgLljTbGfSG7qAOspJ7OScBnGdDN/yBr0sguwnwf0=
 github.com/ultraware/funlen v0.0.3 h1:5ylVWm8wsNwH5aWo9438pwvsK0QiqVuUrt9bn7S/iLA=
 github.com/ultraware/funlen v0.0.3/go.mod h1:Dp4UiAus7Wdb9KUZsYWZEWiRzGuM2kXM1lPbfaF6xhA=
