@@ -25,7 +25,7 @@
     "gatsby-plugin-react-svg": "^3.1.0",
     "gatsby-plugin-robots-txt": "^1.7.0",
     "gatsby-plugin-sharp": "^4.13.0",
-    "gatsby-plugin-sitemap": "^5.11.1",
+    "gatsby-plugin-sitemap": "^5.13.0",
     "gatsby-remark-autolink-headers": "^5.13.0",
     "gatsby-remark-copy-linked-files": "^5.13.0",
     "gatsby-remark-external-links": "^0.0.4",
