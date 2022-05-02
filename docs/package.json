@@ -10,7 +10,7 @@
     "@emotion/styled": "^11.8.1",
     "@mdx-js/mdx": "^1.6.22",
     "@mdx-js/react": "^1.6.16",
-    "gatsby": "^4.11.1",
+    "gatsby": "^4.13.1",
     "gatsby-alias-imports": "^1.0.6",
     "gatsby-plugin-canonical-urls": "^4.11.0",
     "gatsby-plugin-catch-links": "^4.11.0",
