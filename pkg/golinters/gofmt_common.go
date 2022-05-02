@@ -7,8 +7,11 @@ import (
 	"strings"
 
 	"github.com/pkg/errors"
+	"github.com/shazow/go-diff/difflib"
 	diffpkg "github.com/sourcegraph/go-diff/diff"
+	"golang.org/x/tools/go/analysis"
 
+	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
@@ -229,8 +232,68 @@ func getErrorTextForLinter(lintCtx *linter.Context, linterName string) string {
 	return text
 }
 
-func extractIssuesFromPatch(patch string, log logutils.Log, lintCtx *linter.Context, linterName string) ([]result.Issue, error) {
-	diffs, err := diffpkg.ParseMultiFileDiff([]byte(patch))
+func runFormatAndDiffLinter(
+	pass *analysis.Pass,
+	lintCtx *linter.Context,
+	linterName string,
+	format func(filename string, src []byte) ([]byte, error),
+) (issues []goanalysis.Issue, _ error) {
+	for _, f := range pass.Files {
+		pos := pass.Fset.PositionFor(f.Pos(), false)
+		filename := pos.Filename
+
+		input, err := lintCtx.FileCache.GetFileBytes(filename)
+		if err != nil {
+			return nil, err
+		}
+
+		output, err := format(filename, input)
+		if err != nil {
+			return nil, err
+		}
+
+		if bytes.Equal(input, output) {
+			continue
+		}
+
+		is, err := extractIssuesFromDiff(input, output, filename, lintCtx, linterName)
+		if err != nil {
+			return nil, err
+		}
+
+		for i := range is {
+			issues = append(issues, goanalysis.NewIssue(&is[i], pass))
+		}
+	}
+
+	return issues, nil
+}
+
+func extractIssuesFromDiff(
+	input, output []byte, filename string,
+	lintCtx *linter.Context,
+	linterName string,
+) ([]result.Issue, error) {
+	out := bytes.Buffer{}
+	if _, err := out.WriteString(fmt.Sprintf("--- %[1]s\n+++ %[1]s\n", filename)); err != nil {
+		return nil, fmt.Errorf("error while running %s: %w", linterName, err)
+	}
+
+	err := difflib.New().Diff(&out, bytes.NewReader(input), bytes.NewReader(output))
+	if err != nil {
+		return nil, fmt.Errorf("error while running %s: %w", linterName, err)
+	}
+
+	is, err := extractIssuesFromPatch(out.Bytes(), lintCtx.Log, lintCtx, linterName)
+	if err != nil {
+		return nil, errors.Wrapf(err, "can't extract issues from gofumpt diff output %q", out.Bytes())
+	}
+
+	return is, nil
+}
+
+func extractIssuesFromPatch(patch []byte, log logutils.Log, lintCtx *linter.Context, linterName string) ([]result.Issue, error) {
+	diffs, err := diffpkg.ParseMultiFileDiff(patch)
 	if err != nil {
 		return nil, errors.Wrap(err, "can't parse patch")
 	}

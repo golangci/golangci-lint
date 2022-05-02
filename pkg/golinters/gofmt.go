@@ -1,10 +1,9 @@
 package golinters
 
 import (
+	"go/format"
 	"sync"
 
-	gofmtAPI "github.com/golangci/gofmt/gofmt"
-	"github.com/pkg/errors"
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
@@ -29,33 +28,14 @@ func NewGofmt() *goanalysis.Linter {
 		nil,
 	).WithContextSetter(func(lintCtx *linter.Context) {
 		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
-			var fileNames []string
-			for _, f := range pass.Files {
-				pos := pass.Fset.PositionFor(f.Pos(), false)
-				fileNames = append(fileNames, pos.Filename)
+			cb := func(_ string, src []byte) ([]byte, error) {
+				return format.Source(src)
 			}
 
-			var issues []goanalysis.Issue
-
-			for _, f := range fileNames {
-				diff, err := gofmtAPI.Run(f, lintCtx.Settings().Gofmt.Simplify)
-				if err != nil { // TODO: skip
-					return nil, err
-				}
-				if diff == nil {
-					continue
-				}
-
-				is, err := extractIssuesFromPatch(string(diff), lintCtx.Log, lintCtx, gofmtName)
-				if err != nil {
-					return nil, errors.Wrapf(err, "can't extract issues from gofmt diff output %q", string(diff))
-				}
-
-				for i := range is {
-					issues = append(issues, goanalysis.NewIssue(&is[i], pass))
-				}
+			issues, err := runFormatAndDiffLinter(pass, lintCtx, gofmtName, cb)
+			if err != nil {
+				return nil, err
 			}
-
 			if len(issues) == 0 {
 				return nil, nil
 			}

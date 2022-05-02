@@ -1,13 +1,8 @@
 package golinters
 
 import (
-	"bytes"
-	"fmt"
-	"os"
 	"sync"
 
-	"github.com/pkg/errors"
-	"github.com/shazow/go-diff/difflib"
 	"golang.org/x/tools/go/analysis"
 	"mvdan.cc/gofumpt/format"
 
@@ -19,9 +14,10 @@ import (
 const gofumptName = "gofumpt"
 
 func NewGofumpt() *goanalysis.Linter {
-	var mu sync.Mutex
-	var resIssues []goanalysis.Issue
-	differ := difflib.New()
+	var (
+		mu        sync.Mutex
+		resIssues []goanalysis.Issue
+	)
 
 	analyzer := &analysis.Analyzer{
 		Name: gofumptName,
@@ -42,49 +38,14 @@ func NewGofumpt() *goanalysis.Linter {
 		}
 
 		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
-			var fileNames []string
-			for _, f := range pass.Files {
-				pos := pass.Fset.PositionFor(f.Pos(), false)
-				fileNames = append(fileNames, pos.Filename)
+			cb := func(_ string, src []byte) ([]byte, error) {
+				return format.Source(src, options)
 			}
 
-			var issues []goanalysis.Issue
-
-			for _, f := range fileNames {
-				input, err := os.ReadFile(f)
-				if err != nil {
-					return nil, fmt.Errorf("unable to open file %s: %w", f, err)
-				}
-
-				output, err := format.Source(input, options)
-				if err != nil {
-					return nil, fmt.Errorf("error while running gofumpt: %w", err)
-				}
-
-				if !bytes.Equal(input, output) {
-					out := bytes.Buffer{}
-					_, err = out.WriteString(fmt.Sprintf("--- %[1]s\n+++ %[1]s\n", f))
-					if err != nil {
-						return nil, fmt.Errorf("error while running gofumpt: %w", err)
-					}
-
-					err = differ.Diff(&out, bytes.NewReader(input), bytes.NewReader(output))
-					if err != nil {
-						return nil, fmt.Errorf("error while running gofumpt: %w", err)
-					}
-
-					diff := out.String()
-					is, err := extractIssuesFromPatch(diff, lintCtx.Log, lintCtx, gofumptName)
-					if err != nil {
-						return nil, errors.Wrapf(err, "can't extract issues from gofumpt diff output %q", diff)
-					}
-
-					for i := range is {
-						issues = append(issues, goanalysis.NewIssue(&is[i], pass))
-					}
-				}
+			issues, err := runFormatAndDiffLinter(pass, lintCtx, gofumptName, cb)
+			if err != nil {
+				return nil, err
 			}
-
 			if len(issues) == 0 {
 				return nil, nil
 			}

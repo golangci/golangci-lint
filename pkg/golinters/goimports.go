@@ -3,8 +3,6 @@ package golinters
 import (
 	"sync"
 
-	goimportsAPI "github.com/golangci/gofmt/goimports"
-	"github.com/pkg/errors"
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/imports"
 
@@ -15,8 +13,16 @@ import (
 const goimportsName = "goimports"
 
 func NewGoimports() *goanalysis.Linter {
-	var mu sync.Mutex
-	var resIssues []goanalysis.Issue
+	var (
+		mu        sync.Mutex
+		resIssues []goanalysis.Issue
+		options   = &imports.Options{
+			TabWidth:  8,
+			TabIndent: true,
+			Comments:  true,
+			Fragment:  true,
+		}
+	)
 
 	analyzer := &analysis.Analyzer{
 		Name: goimportsName,
@@ -30,33 +36,14 @@ func NewGoimports() *goanalysis.Linter {
 	).WithContextSetter(func(lintCtx *linter.Context) {
 		imports.LocalPrefix = lintCtx.Settings().Goimports.LocalPrefixes
 		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
-			var fileNames []string
-			for _, f := range pass.Files {
-				pos := pass.Fset.PositionFor(f.Pos(), false)
-				fileNames = append(fileNames, pos.Filename)
+			cb := func(filename string, src []byte) ([]byte, error) {
+				return imports.Process(filename, src, options)
 			}
 
-			var issues []goanalysis.Issue
-
-			for _, f := range fileNames {
-				diff, err := goimportsAPI.Run(f)
-				if err != nil { // TODO: skip
-					return nil, err
-				}
-				if diff == nil {
-					continue
-				}
-
-				is, err := extractIssuesFromPatch(string(diff), lintCtx.Log, lintCtx, goimportsName)
-				if err != nil {
-					return nil, errors.Wrapf(err, "can't extract issues from gofmt diff output %q", string(diff))
-				}
-
-				for i := range is {
-					issues = append(issues, goanalysis.NewIssue(&is[i], pass))
-				}
+			issues, err := runFormatAndDiffLinter(pass, lintCtx, goimportsName, cb)
+			if err != nil {
+				return nil, err
 			}
-
 			if len(issues) == 0 {
 				return nil, nil
 			}
