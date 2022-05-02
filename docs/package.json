@@ -33,7 +33,7 @@
     "gatsby-remark-mermaid": "^2.1.0",
     "gatsby-remark-responsive-iframe": "^5.13.0",
     "gatsby-source-filesystem": "^4.13.0",
-    "gatsby-transformer-remark": "^5.11.1",
+    "gatsby-transformer-remark": "^5.13.0",
     "gatsby-transformer-sharp": "^4.13.0",
     "gatsby-transformer-yaml": "^4.11.0",
     "polished": "^4.1.4",
