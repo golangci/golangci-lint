@@ -38,7 +38,7 @@ type Executor struct {
 	exitCode              int
 	version, commit, date string
 
-	cfg               *config.Config
+	cfg               *config.Config // cfg is the unmarshaled data from the golangci config file.
 	log               logutils.Log
 	reportData        report.Data
 	DBManager         *lintersdb.Manager
@@ -55,6 +55,7 @@ type Executor struct {
 	flock     *flock.Flock
 }
 
+// NewExecutor creates and initializes a new command executor.
 func NewExecutor(version, commit, date string) *Executor {
 	startedAt := time.Now()
 	e := &Executor{
@@ -109,10 +110,8 @@ func NewExecutor(version, commit, date string) *Executor {
 		e.log.Fatalf("Can't read config: %s", err)
 	}
 
-	// Anduril-specific config
-	err = modifyConfigAnduril(e.cfg)
-	if err != nil {
-		e.log.Fatalf("Error handling Anduril config: %s", err)
+	if (commandLineCfg == nil || commandLineCfg.Run.Go == "") && e.cfg != nil && e.cfg.Run.Go == "" {
+		e.cfg.Run.Go = config.DetectGoVersion()
 	}
 
 	// recreate after getting config

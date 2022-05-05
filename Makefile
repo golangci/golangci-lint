@@ -29,6 +29,12 @@ test: build
 	GL_TEST_RUN=1 go test -v -parallel 2 ./...
 .PHONY: test
 
+# ex: T=gofmt.go make test_fix
+# the value of `T` is the name of a file from `test/testdata/fix`
+test_fix: build
+	GL_TEST_RUN=1 go test -v ./test -count 1 -run TestFix/$T
+.PHONY: test_fix
+
 test_race: build_race
 	GL_TEST_RUN=1 ./golangci-lint run -v --timeout=5m
 .PHONY: test_race
@@ -44,7 +50,7 @@ fast_generate: assets/github-action-config.json
 
 fast_check_generated:
 	$(MAKE) --always-make fast_generate
-	git checkout -- go.mod go.sum # can differ between go1.15 and go1.16
+	git checkout -- go.mod go.sum # can differ between go1.16 and go1.17
 	git diff --exit-code # check no changes
 
 release: .goreleaser.yml tools/goreleaser

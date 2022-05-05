@@ -1,7 +1,6 @@
 package testshared
 
 import (
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"strings"
@@ -77,6 +76,11 @@ func (r *RunResult) ExpectOutputContains(s string) *RunResult {
 	return r
 }
 
+func (r *RunResult) ExpectOutputNotContains(s string) *RunResult {
+	assert.NotContains(r.t, r.output, s, "exit code is %d", r.exitCode)
+	return r
+}
+
 func (r *RunResult) ExpectOutputEq(s string) *RunResult {
 	assert.Equal(r.t, s, r.output, "exit code is %d", r.exitCode)
 	return r
@@ -94,7 +98,10 @@ func (r *LintRunner) Run(args ...string) *RunResult {
 func (r *LintRunner) RunCommand(command string, args ...string) *RunResult {
 	r.Install()
 
-	runArgs := append([]string{command}, "--internal-cmd-test")
+	runArgs := append([]string{command},
+		"--go=1.17", //  TODO(ldez): we force to use an old version of Go for the CI and the tests.
+		"--internal-cmd-test",
+	)
 	runArgs = append(runArgs, args...)
 
 	defer func(startedAt time.Time) {
@@ -134,7 +141,7 @@ func (r *LintRunner) RunWithYamlConfig(cfg string, args ...string) *RunResult {
 }
 
 func (r *LintRunner) RunCommandWithYamlConfig(cfg, command string, args ...string) *RunResult {
-	f, err := ioutil.TempFile("", "golangci_lint_test")
+	f, err := os.CreateTemp("", "golangci_lint_test")
 	assert.NoError(r.t, err)
 	f.Close()
 
@@ -149,7 +156,7 @@ func (r *LintRunner) RunCommandWithYamlConfig(cfg, command string, args ...strin
 	cfg = strings.TrimSpace(cfg)
 	cfg = strings.Replace(cfg, "\t", " ", -1)
 
-	err = ioutil.WriteFile(cfgPath, []byte(cfg), os.ModePerm)
+	err = os.WriteFile(cfgPath, []byte(cfg), os.ModePerm)
 	assert.NoError(r.t, err)
 
 	pargs := append([]string{"-c", cfgPath}, args...)

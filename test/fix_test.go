@@ -1,7 +1,6 @@
 package test
 
 import (
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -10,7 +9,8 @@ import (
 	"github.com/stretchr/testify/require"
 	"gopkg.in/yaml.v3"
 
-	"github.com/anduril/golangci-lint/test/testshared"
+	"github.com/anduril/golangci-lint/pkg/exitcodes"
+	"github.com/golangci/golangci-lint/test/testshared"
 )
 
 func TestFix(t *testing.T) {
@@ -43,6 +43,7 @@ func TestFix(t *testing.T) {
 			t.Parallel()
 
 			args := []string{
+				"--go=1.17", //  TODO(ldez): we force to use an old version of Go for the CI and the tests.
 				"--disable-all", "--print-issued-lines=false", "--print-linter-name=false", "--out-format=line-number",
 				"--allow-parallel-runners", "--fix",
 				input,
@@ -53,11 +54,23 @@ func TestFix(t *testing.T) {
 			cfg, err := yaml.Marshal(rc.config)
 			require.NoError(t, err)
 
-			testshared.NewLintRunner(t).RunWithYamlConfig(string(cfg), args...)
-			output, err := ioutil.ReadFile(input)
+			var runResult *testshared.RunResult
+			if rc.configPath != "" {
+				args = append(args, "-c", rc.configPath)
+				runResult = testshared.NewLintRunner(t).RunCommand("run", args...)
+			} else {
+				runResult = testshared.NewLintRunner(t).RunWithYamlConfig(string(cfg), args...)
+			}
+
+			// nolintlint test uses non existing linters (bob, alice)
+			if rc.expectedLinter != "nolintlint" {
+				runResult.ExpectExitCode(exitcodes.Success)
+			}
+
+			output, err := os.ReadFile(input)
 			require.NoError(t, err)
 
-			expectedOutput, err := ioutil.ReadFile(filepath.Join(testdataDir, "fix", "out", filepath.Base(input)))
+			expectedOutput, err := os.ReadFile(filepath.Join(testdataDir, "fix", "out", filepath.Base(input)))
 			require.NoError(t, err)
 
 			require.Equal(t, string(expectedOutput), string(output))

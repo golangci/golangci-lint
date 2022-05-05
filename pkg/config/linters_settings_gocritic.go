@@ -156,7 +156,7 @@ func (s *GocriticSettings) InferEnabledChecks(log logutils.Log) {
 		enabledChecksSet := stringsSliceToSet(enabledChecks)
 		for _, disabledCheck := range s.DisabledChecks {
 			if !enabledChecksSet[disabledCheck] {
-				log.Warnf("Gocritic check %q was explicitly disabled via config. However, as this check"+
+				log.Warnf("Gocritic check %q was explicitly disabled via config. However, as this check "+
 					"is disabled by default, there is no need to explicitly disable it via config.", disabledCheck)
 				continue
 			}
@@ -355,8 +355,9 @@ func filterByDisableTags(enabledChecks, disableTags []string, log logutils.Log) 
 		if len(hitTags) != 0 {
 			delete(enabledChecksSet, enabledCheck)
 		}
-		debugChecksListf(enabledChecks, "Disabled by config tags %s", sprintStrings(disableTags))
 	}
+	debugChecksListf(enabledChecks, "Disabled by config tags %s", sprintStrings(disableTags))
+
 	enabledChecks = nil
 	for enabledCheck := range enabledChecksSet {
 		enabledChecks = append(enabledChecks, enabledCheck)

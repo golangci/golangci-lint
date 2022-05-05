@@ -21,7 +21,7 @@ func (v Validator) validateLintersNames(cfg *config.Linters) error {
 	allNames := append([]string{}, cfg.Enable...)
 	allNames = append(allNames, cfg.Disable...)
 
-	unknownNames := []string{}
+	var unknownNames []string
 
 	for _, name := range allNames {
 		if v.m.GetLinterConfigs(name) == nil {

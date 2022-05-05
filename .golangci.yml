@@ -12,11 +12,9 @@ linters-settings:
   funlen:
     lines: 100
     statements: 50
-  gci:
-    local-prefixes: github.com/anduril/golangci-lint
   goconst:
     min-len: 2
-    min-occurrences: 2
+    min-occurrences: 3
   gocritic:
     enabled-tags:
       - diagnostic
@@ -33,14 +31,16 @@ linters-settings:
   gocyclo:
     min-complexity: 15
   goimports:
-    local-prefixes: github.com/anduril/golangci-lint
-  golint:
-    min-confidence: 0
+    local-prefixes: github.com/golangci/golangci-lint
   gomnd:
+    # TODO(ldez) must be rewritten after the v1.44.0 release.
     settings:
       mnd:
         # don't include the "operation" and "assign"
         checks: argument,case,condition,return
+        ignored-numbers: 0,1,2,3
+        ignored-functions: strings.SplitN
+
   govet:
     check-shadowing: true
     settings:
@@ -52,8 +52,6 @@ linters-settings:
           - (github.com/anduril/golangci-lint/pkg/logutils.Log).Fatalf
   lll:
     line-length: 140
-  maligned:
-    suggest-new: true
   misspell:
     locale: US
   nolintlint:
@@ -72,7 +70,6 @@ linters:
     - dupl
     - errcheck
     - exportloopref
-    - exhaustive
     - funlen
     - gochecknoinits
     - goconst
@@ -91,7 +88,6 @@ linters:
     - nakedret
     - noctx
     - nolintlint
-    - rowserrcheck
     - staticcheck
     - structcheck
     - stylecheck
@@ -124,26 +120,17 @@ issues:
     - path: _test\.go
       linters:
         - gomnd
+
     - path: pkg/golinters/errcheck.go
       text: "SA1019: errCfg.Exclude is deprecated: use ExcludeFunctions instead"
     - path: pkg/commands/run.go
       text: "SA1019: lsc.Errcheck.Exclude is deprecated: use ExcludeFunctions instead"
-
-    # TODO must be removed after the release of the next version (v1.41.0)
     - path: pkg/commands/run.go
-      linters:
-        - gomnd
-    # TODO must be removed after the release of the next version (v1.41.0)
-    - path: pkg/golinters/nolintlint/nolintlint.go
-      linters:
-        - gomnd
-    # TODO must be removed after the release of the next version (v1.41.0)
-    - path: pkg/printers/tab.go
-      linters:
-        - gomnd
-
+      text: "SA1019: e.cfg.Run.Deadline is deprecated: Deadline exists for historical compatibility and should not be used."
 
 run:
+  timeout: 5m
+  go: '1.17' # TODO(ldez): we force to use an old version of Go for the CI and the tests.
   skip-dirs:
     - test/testdata_etc
     - internal/cache

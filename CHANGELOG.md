@@ -1,19 +1,205 @@
 Follow the news and releases on our [twitter](https://twitter.com/golangci) and our [blog](https://medium.com/golangci).
 There is the most valuable changes log:
 
+### v1.45.0
+
+1. updated linters:
+   * `cobra`: from 1.3.0 to 1.4.0
+   * `containedctx`: from 1.0.1 to 1.0.2
+   * `errcheck`: add an option to remove default exclusions
+   * `gci`: from 0.3.1 to 0.3.2
+   * `go-header`: from 0.4.2 to 0.4.3
+   * `gofumpt`: add module-path setting
+   * `gofumpt`: from 0.2.1 to 0.3.0
+   * `gopsutil`: from 3.22.1 to 3.22.2
+   * `gosec`: from 2.9.6 to 2.10.0
+   * `makezero`: from 1.1.0 to 1.1.1
+   * `revive`: fix default values
+   * `wrapcheck`: from 2.4.0 to 2.5.0
+2. documentation:
+   * docs: add "back to the top" button
+   * docs: add `forbidigo` example that uses comments
+   * docs: improve linters page
+3. misc:
+   * go1.18 support 🎉
+   * Add an option to manage the targeted version of Go
+   * Default to YAML when config file has no extension
+
+### v1.44.2
+
+1. updated linters:
+   * `gci`: bump to HEAD
+   * `gci`: restore defaults for sections
+   * `whitespace`: from 0.0.4 to 0.0.5
+2. documentation:
+   * add link to configuration in the linters list
+
+### v1.44.1
+
+1. updated linters:
+   * `bidichk`: from 0.2.1 to 0.2.2
+   * `errchkjson`: from 0.2.1 to 0.2.3
+   * `thelper`: from 0.5.0 to 0.5.1
+   * `tagliatelle`: from 0.3.0 to 0.3.1
+   * `gopsutil`: from 3.21.12 to 3.22.1
+   * `gci`: from 0.2.9 to 0.3.0
+   * `revive`: from v1.1.3 to v1.1.4
+   * `varnamelen`: from v0.5.0 to v0.6.0
+2. documentation:
+   * linters: improve configuration pages
+   * `decorder`: fix `disable-init-func-first-check: false` elaboration
+3. misc:
+   * fix debug output
+
+### v1.44.0
+
+1. new linters:
+   * `containedctx`: https://github.com/sivchari/containedctx
+   * `decorder`: https://gitlab.com/bosi/decorder
+   * `errchkjson`: https://github.com/breml/errchkjson
+   * `maintidx`: https://github.com/yagipy/maintidx
+   * `grouper`: https://github.com/leonklingele/grouper
+2. updated linters:
+   * `asciicheck`: bump to v0.1.1
+   * `bidichk`: from 0.1.1 to 0.2.1
+   * `bodyclose`: bump to HEAD
+   * `decorder`: from 0.2.0 to 0.2.1
+   * `depguard`: from 1.0.1 to 1.1.0
+   * `errchkjson`: from 0.2.0 to 0.2.1
+   * `errorlint`: bump to HEAD
+   * `exhaustive`: drop deprecated/unused settings
+   * `exhaustive`: from v0.2.3 to 0.7.11
+   * `forbidigo`: from 1.2.0 to 1.3.0
+   * `forcetypeassert`: bump to v0.1.0
+   * `gocritic`: from 0.6.1 to 0.6.2
+   * `gocritic`: support autofix
+   * `gocyclo`: from 0.3.1 to 0.4.0
+   * `godot`: add period option
+   * `gofumpt`: from 0.1.1 to 0.2.1
+   * `gomnd`: from 2.4.0 to 2.5.0
+   * `gomnd`: new configuration
+   * `gosec`: from 2.9.1 to 2.9.6
+   * `ifshort`: from 1.0.3 to 1.0.4
+   * `ineffassign`: bump to HEAD
+   * `makezero`: to v1.1.0
+   * `promlinter`: from v0.1.0 to HEAD
+   * `revive`: fix `enableAllRules`
+   * `revive`: from 1.1.2 to 1.1.3
+   * `staticcheck`: from 0.2.1 to 0.2.2
+   * `tagliatelle`: from 0.2.0 to 0.3.0
+   * `thelper`: from 0.4.0 to 0.5.0
+   * `unparam`: bump to HEAD
+   * `varnamelen`: bump to v0.5.0
+   * `wrapcheck`: update configuration to include `ignoreSignRegexps`
+3. documentation:
+   * linters: improve pages about configuration
+   * improve page about false-positive
+   * `nolintlint`: fix wrong default value in comment
+   * `revive`: add a more detailed configuration
+4. misc:
+   * outputs: Add support for multiple outputs
+   * outputs: Print error text in `<failure>` tag content for more readable JUnit output
+   * outputs: ensure that the Issues key in JSON format is a list
+   * Return error if any linter fails to run
+   * cli: Show deprecated mark in the CLI linters help
+
+### November 2021
+
+1. new linters:
+   * `bidichk`: https://github.com/breml/bidichk
+2. update linters:
+   * `nestif`: from 0.3.0 to 0.3.1
+   * `rowserrcheck`: from 1.1.0 to 1.1.1
+   * `gopsutil`: from 3.21.9 to 3.21.10
+   * `wrapcheck`: from 2.3.1 to 2.4.0
+   * `gocritic`: add support for variable substitution in `ruleguard` path settings
+3. documentation:
+   * improve `go-critic` documentation
+   * improve `nolintlint` documentation
+4. Misc:
+   * cli: don't hide `enable-all` option
+
+### october 2021
+
+1. new linters:
+   * `contextcheck`: https://github.com/sylvia7788/contextcheck
+   * `varnamelen`: https://github.com/blizzy78/varnamelen
+2. update linters:
+   * `gochecknoglobals`: to v0.1.0
+   * `gosec`: filter issues according to the severity and confidence
+   * `errcheck`: empty selector name.
+   * `ifshort`: from 1.0.2 to 1.0.3
+   * `go-critic`: from 0.5.6 to 0.6.0
+   * `gosec`: from 2.8.1 to 2.9.1
+   * `durationcheck`: from 0.0.8 to 0.0.9
+   * `wrapcheck`: from 2.3.0 to 2.3.1
+   * `revive`: from 1.1.1 to 1.1.2
+
+### September 2021
+
+1. new linters:
+   * `ireturn`: https://github.com/butuzov/ireturn
+   * `nilnil`: https://github.com/Antonboom/nilnil
+   * `tenv`: https://github.com/sivchari/tenv
+2. update linters:
+   * `errcheck`: update to HEAD
+   * `errname`: from 0.1.4 to 0.1.5
+   * `gci`: Parse the settings more similarly to the CLI
+   * `godot`: from 1.4.9  to 1.4.11
+   * `ireturn`: from 0.1.0 to 0.1.1
+   * `nlreturn`: add block-size option
+   * `paralleltest`: from 1.0.2 to 1.0.3
+3. Misc:
+   * new-from-rev: add support for finding issues in entire files in a diff
+
+### August 2021
+
+1. new linters:
+   * `errname`: https://github.com/Antonboom/errname
+2. update linters:
+   * `errname`: from 0.1.3 to 0.1.4
+   * `go-critic`: fix invalid type conversions.
+   * `godot`: from 1.4.8 to 1.4.9
+   * `gomodguard`: from 1.2.2 to 1.2.3
+   * `revive`: from 1.0.9 to 1.1.1
+   * `staticcheck`: bump to 2021.1.1 (v0.2.1)
+   * `wrapcheck`: bump to v2.3.0
+3. Misc:
+   * build binaries and Docker images with go1.17
+
+### July 2021
+
+1. update linters:
+   * `errcheck`: allow exclude config without extra file
+   * `exhaustive`: from 0.1.0 to 0.2.3
+   * `gocognit`: from 1.0.1 to 1.0.5
+   * `godot`: from 1.4.7 to 1.4.8
+   * `gomoddirectives`: from 0.2.1 to 0.2.2
+   * `revive`: from 1.0.8 to 1.0.9
+2. documentation:
+   * improve `goconst` documentation
+   * improve `goimports` description
+
 ### June 2021
 
 1. update linters:
    * `durationcheck`: from 0.0.7 to 0.0.8
+   * `gci`: from 0.2.8 to 0.2.9
    * `goconst`: from 0.5.6 to 0.5.7
+   * `gofumpt`: Add lang-version option
    * `gomodguard`: from 1.2.1 to 1.2.2
+   * `gosec`: from 2.8.0 to 2.8.1
+   * `revive`: add enable-all-rules.
    * `revive`: allow to disable rule
    * `revive`: fix exclude comment rule for const block
+   * `revive`: from 1.0.7 to 1.0.8
+   * `wrapcheck`: from 2.1.0 to 2.2.0
 2. documentation:
    * add all integrations to docs introduction page
 3. Misc:
    * 🎉 Un-deprecate enable-all option
    * output: generate HTML report
+   * Support RISV64
 
 ### May 2021
 
@@ -406,7 +592,7 @@ There is the most valuable changes log:
 1. Support the newest `go vet` (with `go/analysis`)
 2. Support configuration of `go vet`: e.g. you can set print functions by `linters-settings.govet.settings.printf.funcs`
 3. Update megacheck (staticcheck) to 2019.1.1
-4. Add [information](https://github.com/anduril/golangci-lint#memory-usage-of-golangci-lint) about controlling space-time trade-off into README
+4. Add [information](https://github.com/golangci/golangci-lint#memory-usage-of-golangci-lint) about controlling space-time trade-off into README
 5. Exclude issues by source code line regexp by `issues.exclude-rules[i].source`
 6. Build and test on go 1.12
 7. Support `--color` option

@@ -24,7 +24,7 @@ func Pattern(filename string) string {
 	return filepath.Join(filepath.Dir(filename), filepath.Base(filename)+patternSuffix)
 }
 
-// WriteFile is like ioutil.WriteFile, but first writes data to an arbitrary
+// WriteFile is like os.WriteFile, but first writes data to an arbitrary
 // file in the same directory as filename, then renames it atomically to the
 // final name.
 //
@@ -79,7 +79,7 @@ func tempFile(dir, prefix string, perm os.FileMode) (f *os.File, err error) {
 	return
 }
 
-// ReadFile is like ioutil.ReadFile, but on Windows retries spurious errors that
+// ReadFile is like os.ReadFile, but on Windows retries spurious errors that
 // may occur if the file is concurrently replaced.
 //
 // Errors are classified heuristically and retries are bounded, so even this

@@ -7,6 +7,7 @@ import (
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 
+	"github.com/anduril/golangci-lint/pkg/exitcodes"
 	"github.com/anduril/golangci-lint/pkg/lint/linter"
 )
 
@@ -20,6 +21,7 @@ func (e *Executor) initLinters() {
 	e.initRunConfiguration(e.lintersCmd)
 }
 
+// executeLinters runs the 'linters' CLI command, which displays the supported linters.
 func (e *Executor) executeLinters(_ *cobra.Command, args []string) {
 	if len(args) != 0 {
 		e.log.Fatalf("Usage: golangci-lint linters")
@@ -47,5 +49,5 @@ func (e *Executor) executeLinters(_ *cobra.Command, args []string) {
 	color.Red("\nDisabled by your configuration linters:\n")
 	printLinterConfigs(disabledLCs)
 
-	os.Exit(0)
+	os.Exit(exitcodes.Success)
 }

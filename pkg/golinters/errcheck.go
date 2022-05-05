@@ -66,9 +66,14 @@ func NewErrcheck() *goanalysis.Linter {
 			for i, err := range errcheckIssues.UncheckedErrors {
 				var text string
 				if err.FuncName != "" {
+					code := err.SelectorName
+					if err.SelectorName == "" {
+						code = err.FuncName
+					}
+
 					text = fmt.Sprintf(
 						"Error return value of %s is not checked",
-						formatCode(err.SelectorName, lintCtx.Cfg),
+						formatCode(code, lintCtx.Cfg),
 					)
 				} else {
 					text = "Error return value is not checked"
@@ -135,8 +140,11 @@ func getChecker(errCfg *config.ErrcheckSettings) (*errcheck.Checker, error) {
 			BlankAssignments:       !errCfg.CheckAssignToBlank,
 			TypeAssertions:         !errCfg.CheckTypeAssertions,
 			SymbolRegexpsByPackage: map[string]*regexp.Regexp{},
-			Symbols:                append([]string{}, errcheck.DefaultExcludedSymbols...),
 		},
+	}
+
+	if !errCfg.DisableDefaultExclusions {
+		checker.Exclusions.Symbols = append(checker.Exclusions.Symbols, errcheck.DefaultExcludedSymbols...)
 	}
 
 	for pkg, re := range ignoreConfig {

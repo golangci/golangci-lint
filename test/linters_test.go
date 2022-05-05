@@ -2,9 +2,10 @@ package test
 
 import (
 	"bufio"
-	"io/ioutil"
+	"fmt"
 	"os"
 	"os/exec"
+	"path"
 	"path/filepath"
 	"strings"
 	"testing"
@@ -13,7 +14,7 @@ import (
 	"gopkg.in/yaml.v3"
 
 	"github.com/anduril/golangci-lint/pkg/exitcodes"
-	"github.com/anduril/golangci-lint/test/testshared"
+	"github.com/golangci/golangci-lint/test/testshared"
 )
 
 func runGoErrchk(c *exec.Cmd, defaultExpectedLinter string, files []string, t *testing.T) {
@@ -24,7 +25,7 @@ func runGoErrchk(c *exec.Cmd, defaultExpectedLinter string, files []string, t *t
 	if err != nil {
 		var exitErr *exec.ExitError
 		require.ErrorAs(t, err, &exitErr)
-		require.Equal(t, exitcodes.IssuesFound, exitErr.ExitCode())
+		require.Equal(t, exitcodes.IssuesFound, exitErr.ExitCode(), "Unexpected exit code: %s", string(output))
 	}
 
 	fullshort := make([]string, 0, len(files)*2)
@@ -91,15 +92,73 @@ func TestGciLocal(t *testing.T) {
 	rc := extractRunContextFromComments(t, sourcePath)
 	args = append(args, rc.args...)
 
-	cfg, err := yaml.Marshal(rc.config)
+	cfg, err := os.ReadFile(rc.configPath)
 	require.NoError(t, err)
 
 	testshared.NewLintRunner(t).RunWithYamlConfig(string(cfg), args...).
-		ExpectHasIssue("testdata/gci/gci.go:7: File is not `gci`-ed")
+		ExpectHasIssue("testdata/gci/gci.go:9:1: Expected '\\n', Found '\\t'")
+}
+
+func TestMultipleOutputs(t *testing.T) {
+	sourcePath := filepath.Join(testdataDir, "gci", "gci.go")
+	args := []string{
+		"--disable-all", "--print-issued-lines=false", "--print-linter-name=false", "--out-format=line-number,json:stdout",
+		sourcePath,
+	}
+	rc := extractRunContextFromComments(t, sourcePath)
+	args = append(args, rc.args...)
+
+	cfg, err := os.ReadFile(rc.configPath)
+	require.NoError(t, err)
+
+	testshared.NewLintRunner(t).RunWithYamlConfig(string(cfg), args...).
+		ExpectHasIssue("testdata/gci/gci.go:9:1: Expected '\\n', Found '\\t'").
+		ExpectOutputContains(`"Issues":[`)
+}
+
+func TestStderrOutput(t *testing.T) {
+	sourcePath := filepath.Join(testdataDir, "gci", "gci.go")
+	args := []string{
+		"--disable-all", "--print-issued-lines=false", "--print-linter-name=false", "--out-format=line-number,json:stderr",
+		sourcePath,
+	}
+	rc := extractRunContextFromComments(t, sourcePath)
+	args = append(args, rc.args...)
+
+	cfg, err := os.ReadFile(rc.configPath)
+	require.NoError(t, err)
+
+	testshared.NewLintRunner(t).RunWithYamlConfig(string(cfg), args...).
+		ExpectHasIssue("testdata/gci/gci.go:9:1: Expected '\\n', Found '\\t'").
+		ExpectOutputContains(`"Issues":[`)
+}
+
+func TestFileOutput(t *testing.T) {
+	resultPath := path.Join(t.TempDir(), "golangci_lint_test_result")
+
+	sourcePath := filepath.Join(testdataDir, "gci", "gci.go")
+	args := []string{
+		"--disable-all", "--print-issued-lines=false", "--print-linter-name=false",
+		fmt.Sprintf("--out-format=json:%s,line-number", resultPath),
+		sourcePath,
+	}
+	rc := extractRunContextFromComments(t, sourcePath)
+	args = append(args, rc.args...)
+
+	cfg, err := os.ReadFile(rc.configPath)
+	require.NoError(t, err)
+
+	testshared.NewLintRunner(t).RunWithYamlConfig(string(cfg), args...).
+		ExpectHasIssue("testdata/gci/gci.go:9:1: Expected '\\n', Found '\\t'").
+		ExpectOutputNotContains(`"Issues":[`)
+
+	b, err := os.ReadFile(resultPath)
+	require.NoError(t, err)
+	require.Contains(t, string(b), `"Issues":[`)
 }
 
 func saveConfig(t *testing.T, cfg map[string]interface{}) (cfgPath string, finishFunc func()) {
-	f, err := ioutil.TempFile("", "golangci_lint_test")
+	f, err := os.CreateTemp("", "golangci_lint_test")
 	require.NoError(t, err)
 
 	cfgPath = f.Name() + ".yml"
@@ -120,6 +179,7 @@ func saveConfig(t *testing.T, cfg map[string]interface{}) (cfgPath string, finis
 func testOneSource(t *testing.T, sourcePath string) {
 	args := []string{
 		"run",
+		"--go=1.17", //  TODO(ldez): we force to use an old version of Go for the CI and the tests.
 		"--allow-parallel-runners",
 		"--disable-all",
 		"--print-issued-lines=false",

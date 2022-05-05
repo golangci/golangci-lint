@@ -17,6 +17,7 @@ import (
 )
 
 var nolintDebugf = logutils.Debug("nolint")
+var nolintRe = regexp.MustCompile(`^nolint( |:|$)`)
 
 type ignoredRange struct {
 	linters                []string
@@ -46,7 +47,7 @@ func (i *ignoredRange) doesMatch(issue *result.Issue) bool {
 	}
 
 	// handle possible unused nolint directives
-	// nolintlint generates potential issues for every nolint directive and they are filtered out here
+	// nolintlint generates potential issues for every nolint directive, and they are filtered out here
 	if issue.FromLinter == golinters.NolintlintName && issue.ExpectNoLint {
 		if issue.ExpectedNoLintLinter != "" {
 			return i.matchedIssueFromLinter[issue.ExpectedNoLintLinter]
@@ -234,7 +235,7 @@ func (p *Nolint) extractFileCommentsInlineRanges(fset *token.FileSet, comments .
 
 func (p *Nolint) extractInlineRangeFromComment(text string, g ast.Node, fset *token.FileSet) *ignoredRange {
 	text = strings.TrimLeft(text, "/ ")
-	if ok, _ := regexp.MatchString(`^nolint( |:|$)`, text); !ok {
+	if !nolintRe.MatchString(text) {
 		return nil
 	}
 
@@ -284,7 +285,7 @@ func (p Nolint) Finish() {
 		return
 	}
 
-	unknownLinters := []string{}
+	unknownLinters := make([]string, 0, len(p.unknownLintersSet))
 	for name := range p.unknownLintersSet {
 		unknownLinters = append(unknownLinters, name)
 	}

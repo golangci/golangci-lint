@@ -1,20 +1,21 @@
----
 name: "Release a tag"
 on:
   push:
     tags:
       - v*
+
 jobs:
   release:
     runs-on: ubuntu-latest
     env:
       GITHUB_TOKEN: ${{ secrets.GOLANGCI_LINT_TOKEN }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Install Go
         uses: actions/setup-go@v2
         with:
-          go-version: 1.16
+          # stable: 'false' # Keep this line to be able to use rc and beta version of Go (ex: 1.18.0-rc1).
+          go-version: 1.18
       - name: Unshallow
         run: git fetch --prune --unshallow
 
@@ -35,12 +36,13 @@ jobs:
           - Dockerfile: build/Dockerfile
           - Dockerfile: build/Dockerfile.alpine
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Install Go
         uses: actions/setup-go@v2
         with:
-          go-version: 1.16
+          # stable: 'false' # Keep this line to be able to use rc and beta version of Go (ex: 1.18.0-rc1).
+          go-version: 1.18
 
       - name: Unshallow
         run: git fetch --prune --unshallow

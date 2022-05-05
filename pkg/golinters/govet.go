@@ -119,35 +119,18 @@ var (
 	}
 )
 
-func isAnalyzerEnabled(name string, cfg *config.GovetSettings, defaultAnalyzers []*analysis.Analyzer) bool {
-	if cfg.EnableAll {
-		for _, n := range cfg.Disable {
-			if n == name {
-				return false
-			}
-		}
-		return true
+func NewGovet(cfg *config.GovetSettings) *goanalysis.Linter {
+	var settings map[string]map[string]interface{}
+	if cfg != nil {
+		settings = cfg.Settings
 	}
-	// Raw for loops should be OK on small slice lengths.
-	for _, n := range cfg.Enable {
-		if n == name {
-			return true
-		}
-	}
-	for _, n := range cfg.Disable {
-		if n == name {
-			return false
-		}
-	}
-	if cfg.DisableAll {
-		return false
-	}
-	for _, a := range defaultAnalyzers {
-		if a.Name == name {
-			return true
-		}
-	}
-	return false
+	return goanalysis.NewLinter(
+		"govet",
+		"Vet examines Go source code and reports suspicious constructs, "+
+			"such as Printf calls whose arguments do not align with the format string",
+		analyzersFromConfig(cfg),
+		settings,
+	).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }
 
 func analyzersFromConfig(cfg *config.GovetSettings) []*analysis.Analyzer {
@@ -170,16 +153,42 @@ func analyzersFromConfig(cfg *config.GovetSettings) []*analysis.Analyzer {
 	return enabledAnalyzers
 }
 
-func NewGovet(cfg *config.GovetSettings) *goanalysis.Linter {
-	var settings map[string]map[string]interface{}
-	if cfg != nil {
-		settings = cfg.Settings
+func isAnalyzerEnabled(name string, cfg *config.GovetSettings, defaultAnalyzers []*analysis.Analyzer) bool {
+	if (name == nilness.Analyzer.Name || name == unusedwrite.Analyzer.Name) &&
+		config.IsGreaterThanOrEqualGo118(cfg.Go) {
+		return false
 	}
-	return goanalysis.NewLinter(
-		"govet",
-		"Vet examines Go source code and reports suspicious constructs, "+
-			"such as Printf calls whose arguments do not align with the format string",
-		analyzersFromConfig(cfg),
-		settings,
-	).WithLoadMode(goanalysis.LoadModeTypesInfo)
+
+	if cfg.EnableAll {
+		for _, n := range cfg.Disable {
+			if n == name {
+				return false
+			}
+		}
+		return true
+	}
+
+	// Raw for loops should be OK on small slice lengths.
+	for _, n := range cfg.Enable {
+		if n == name {
+			return true
+		}
+	}
+
+	for _, n := range cfg.Disable {
+		if n == name {
+			return false
+		}
+	}
+
+	if cfg.DisableAll {
+		return false
+	}
+
+	for _, a := range defaultAnalyzers {
+		if a.Name == name {
+			return true
+		}
+	}
+	return false
 }

@@ -185,7 +185,7 @@ func (r *runner) prepareAnalysis(pkgs []*packages.Package,
 	// and analysis-to-analysis (horizontal) dependencies.
 
 	// This place is memory-intensive: e.g. Istio project has 120k total actions.
-	// Therefore optimize it carefully.
+	// Therefore, optimize it carefully.
 	markedActions := make(map[actKey]struct{}, len(analyzers)*len(pkgs))
 	for _, a := range analyzers {
 		for _, pkg := range pkgs {

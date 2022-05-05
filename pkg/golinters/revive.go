@@ -5,11 +5,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"go/token"
-	"io/ioutil"
+	"os"
 	"reflect"
 
 	"github.com/BurntSushi/toml"
-	"github.com/mgechev/dots"
 	reviveConfig "github.com/mgechev/revive/config"
 	"github.com/mgechev/revive/lint"
 	"github.com/mgechev/revive/rule"
@@ -35,27 +34,12 @@ type jsonObject struct {
 
 // NewRevive returns a new Revive linter.
 func NewRevive(cfg *config.ReviveSettings) *goanalysis.Linter {
-	andurilRules := []struct {
-		Name      string
-		Arguments []interface{}
-		Severity  string
-		Disabled  bool
-	}{
-		{Name: "unexported-return", Disabled: true},
-		{Name: "exported", Disabled: true},
-	}
 	var issues []goanalysis.Issue
 
 	analyzer := &analysis.Analyzer{
 		Name: goanalysis.TheOnlyAnalyzerName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 	}
-
-	if cfg == nil {
-		cfg = &config.ReviveSettings{}
-	}
-	// Putting default rules first allows them to be overwritten by config
-	cfg.Rules = append(andurilRules, cfg.Rules...)
 
 	return goanalysis.NewLinter(
 		reviveName,
@@ -65,10 +49,10 @@ func NewRevive(cfg *config.ReviveSettings) *goanalysis.Linter {
 	).WithContextSetter(func(lintCtx *linter.Context) {
 		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
 			var files []string
-
 			for _, file := range pass.Files {
 				files = append(files, pass.Fset.PositionFor(file.Pos(), false).Filename)
 			}
+			packages := [][]string{files}
 
 			conf, err := getReviveConfig(cfg)
 			if err != nil {
@@ -80,14 +64,9 @@ func NewRevive(cfg *config.ReviveSettings) *goanalysis.Linter {
 				return nil, err
 			}
 
-			revive := lint.New(ioutil.ReadFile)
+			revive := lint.New(os.ReadFile, cfg.MaxOpenFiles)
 
 			lintingRules, err := reviveConfig.GetLintingRules(conf)
-			if err != nil {
-				return nil, err
-			}
-
-			packages, err := dots.ResolvePackages(files, []string{})
 			if err != nil {
 				return nil, err
 			}
@@ -161,9 +140,9 @@ func reviveToIssue(pass *analysis.Pass, object *jsonObject) goanalysis.Issue {
 }
 
 // This function mimics the GetConfig function of revive.
-// This allow to get default values and right types.
+// This allows to get default values and right types.
 // https://github.com/golangci/golangci-lint/issues/1745
-// https://github.com/mgechev/revive/blob/389ba853b0b3587f0c3b71b5f0c61ea4e23928ec/config/config.go#L155
+// https://github.com/mgechev/revive/blob/v1.1.4/config/config.go#L182
 func getReviveConfig(cfg *config.ReviveSettings) (*lint.Config, error) {
 	conf := defaultConfig()
 
@@ -177,7 +156,7 @@ func getReviveConfig(cfg *config.ReviveSettings) (*lint.Config, error) {
 		}
 
 		conf = &lint.Config{}
-		_, err = toml.DecodeReader(buf, conf)
+		_, err = toml.NewDecoder(buf).Decode(conf)
 		if err != nil {
 			return nil, errors.Wrap(err, "failed to decode configuration")
 		}
@@ -250,7 +229,7 @@ func safeTomlSlice(r []interface{}) []interface{} {
 }
 
 // This element is not exported by revive, so we need copy the code.
-// Extracted from https://github.com/mgechev/revive/blob/389ba853b0b3587f0c3b71b5f0c61ea4e23928ec/config/config.go#L15
+// Extracted from https://github.com/mgechev/revive/blob/v1.1.4/config/config.go#L15
 var defaultRules = []lint.Rule{
 	&rule.VarDeclarationsRule{},
 	&rule.PackageCommentsRule{},
@@ -272,12 +251,90 @@ var defaultRules = []lint.Rule{
 	&rule.ContextAsArgumentRule{},
 }
 
+var allRules = append([]lint.Rule{
+	&rule.ArgumentsLimitRule{},
+	&rule.CyclomaticRule{},
+	&rule.FileHeaderRule{},
+	&rule.EmptyBlockRule{},
+	&rule.SuperfluousElseRule{},
+	&rule.ConfusingNamingRule{},
+	&rule.GetReturnRule{},
+	&rule.ModifiesParamRule{},
+	&rule.ConfusingResultsRule{},
+	&rule.DeepExitRule{},
+	&rule.UnusedParamRule{},
+	&rule.UnreachableCodeRule{},
+	&rule.AddConstantRule{},
+	&rule.FlagParamRule{},
+	&rule.UnnecessaryStmtRule{},
+	&rule.StructTagRule{},
+	&rule.ModifiesValRecRule{},
+	&rule.ConstantLogicalExprRule{},
+	&rule.BoolLiteralRule{},
+	&rule.RedefinesBuiltinIDRule{},
+	&rule.ImportsBlacklistRule{},
+	&rule.FunctionResultsLimitRule{},
+	&rule.MaxPublicStructsRule{},
+	&rule.RangeValInClosureRule{},
+	&rule.RangeValAddress{},
+	&rule.WaitGroupByValueRule{},
+	&rule.AtomicRule{},
+	&rule.EmptyLinesRule{},
+	&rule.LineLengthLimitRule{},
+	&rule.CallToGCRule{},
+	&rule.DuplicatedImportsRule{},
+	&rule.ImportShadowingRule{},
+	&rule.BareReturnRule{},
+	&rule.UnusedReceiverRule{},
+	&rule.UnhandledErrorRule{},
+	&rule.CognitiveComplexityRule{},
+	&rule.StringOfIntRule{},
+	&rule.StringFormatRule{},
+	&rule.EarlyReturnRule{},
+	&rule.UnconditionalRecursionRule{},
+	&rule.IdenticalBranchesRule{},
+	&rule.DeferRule{},
+	&rule.UnexportedNamingRule{},
+	&rule.FunctionLength{},
+	&rule.NestedStructs{},
+	&rule.IfReturnRule{},
+	&rule.UselessBreak{},
+	&rule.TimeEqualRule{},
+	&rule.BannedCharsRule{},
+	&rule.OptimizeOperandsOrderRule{},
+}, defaultRules...)
+
+const defaultConfidence = 0.8
+
 // This element is not exported by revive, so we need copy the code.
-// Extracted from https://github.com/mgechev/revive/blob/389ba853b0b3587f0c3b71b5f0c61ea4e23928ec/config/config.go#L133
+// Extracted from https://github.com/mgechev/revive/blob/v1.1.4/config/config.go#L145
 func normalizeConfig(cfg *lint.Config) {
+	// NOTE(ldez): this custom section for golangci-lint should be kept.
+	// ---
 	if cfg.Confidence == 0 {
-		cfg.Confidence = 0.8
+		cfg.Confidence = defaultConfidence
 	}
+	if cfg.Severity == "" {
+		cfg.Severity = lint.SeverityWarning
+	}
+	// ---
+
+	if len(cfg.Rules) == 0 {
+		cfg.Rules = map[string]lint.RuleConfig{}
+	}
+	if cfg.EnableAllRules {
+		// Add to the configuration all rules not yet present in it
+		for _, rule := range allRules {
+			ruleName := rule.Name()
+			_, alreadyInConf := cfg.Rules[ruleName]
+			if alreadyInConf {
+				continue
+			}
+			// Add the rule with an empty conf for
+			cfg.Rules[ruleName] = lint.RuleConfig{}
+		}
+	}
+
 	severity := cfg.Severity
 	if severity != "" {
 		for k, v := range cfg.Rules {
@@ -296,10 +353,10 @@ func normalizeConfig(cfg *lint.Config) {
 }
 
 // This element is not exported by revive, so we need copy the code.
-// Extracted from https://github.com/mgechev/revive/blob/389ba853b0b3587f0c3b71b5f0c61ea4e23928ec/config/config.go#L182
+// Extracted from https://github.com/mgechev/revive/blob/v1.1.4/config/config.go#L214
 func defaultConfig() *lint.Config {
 	defaultConfig := lint.Config{
-		Confidence: 0.0,
+		Confidence: defaultConfidence,
 		Severity:   lint.SeverityWarning,
 		Rules:      map[string]lint.RuleConfig{},
 	}

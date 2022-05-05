@@ -8,7 +8,6 @@ package renameio
 
 import (
 	"encoding/binary"
-	"io/ioutil"
 	"math/rand"
 	"os"
 	"path/filepath"
@@ -23,7 +22,7 @@ import (
 )
 
 func TestConcurrentReadsAndWrites(t *testing.T) {
-	dir, err := ioutil.TempDir("", "renameio")
+	dir, err := os.MkdirTemp("", "renameio")
 	if err != nil {
 		t.Fatal(err)
 	}

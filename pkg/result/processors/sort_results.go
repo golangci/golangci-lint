@@ -9,7 +9,7 @@ import (
 )
 
 // Base propose of this functionality to sort results (issues)
-// produced by various linters by analyzing code. We achieving this
+// produced by various linters by analyzing code. We're achieving this
 // by sorting results.Issues using processor step, and chain based
 // rules that can compare different properties of the Issues struct.
 
@@ -63,7 +63,6 @@ func (c compareResult) isNeutral() bool {
 	return c == None || c == Equal
 }
 
-//nolint:exhaustive
 func (c compareResult) String() string {
 	switch c {
 	case Less:

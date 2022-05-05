@@ -16,7 +16,7 @@ import (
 	gops "github.com/mitchellh/go-ps"
 	"github.com/shirou/gopsutil/v3/process"
 
-	"github.com/anduril/golangci-lint/test/testshared"
+	"github.com/golangci/golangci-lint/test/testshared"
 )
 
 func chdir(b *testing.B, dir string) {
@@ -71,7 +71,7 @@ func printCommand(cmd string, args ...string) {
 	if os.Getenv("PRINT_CMD") != "1" {
 		return
 	}
-	quotedArgs := []string{}
+	var quotedArgs []string
 	for _, a := range args {
 		quotedArgs = append(quotedArgs, strconv.Quote(a))
 	}
