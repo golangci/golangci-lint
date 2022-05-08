@@ -71,6 +71,11 @@ func (lc *Config) WithLoadForGoAnalysis() *Config {
 	return lc
 }
 
+func (lc *Config) WithNeedTypesInfo() *Config {
+	lc.LoadMode |= packages.NeedTypesInfo | packages.NeedTypes
+	return lc
+}
+
 func (lc *Config) WithPresets(presets ...string) *Config {
 	lc.InPresets = presets
 	return lc

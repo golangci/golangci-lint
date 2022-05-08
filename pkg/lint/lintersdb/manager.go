@@ -444,6 +444,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 
 		linter.NewConfig(golinters.NewInterfaceCaptureCheck()).
 			WithSince("v1.46.0").
+			WithNeedTypesInfo().
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/dgunay/ifacecapture"),
 
