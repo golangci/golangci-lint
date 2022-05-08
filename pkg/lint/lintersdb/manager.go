@@ -115,6 +115,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 	var gosimpleCfg *config.StaticCheckSettings
 	var govetCfg *config.GovetSettings
 	var grouperCfg *config.GrouperSettings
+	var ifacecaptureCfg *config.IfaceCaptureSettings
 	var ifshortCfg *config.IfshortSettings
 	var importAsCfg *config.ImportAsSettings
 	var ireturnCfg *config.IreturnSettings
@@ -442,7 +443,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/leonklingele/grouper"),
 
-		linter.NewConfig(golinters.NewInterfaceCaptureCheck()).
+		linter.NewConfig(golinters.NewInterfaceCaptureCheck(ifacecaptureCfg)).
 			WithSince("v1.46.0").
 			WithNeedTypesInfo().
 			WithPresets(linter.PresetStyle).

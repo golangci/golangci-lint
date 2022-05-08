@@ -414,6 +414,12 @@ type GrouperSettings struct {
 	VarRequireGrouping        bool `mapstructure:"var-require-grouping"`
 }
 
+type IfaceCaptureSettings struct {
+	LogLevel         string   `mapstructure:"log-level"`
+	IgnoreInterfaces []string `mapstructure:"ignore-interfaces"`
+	AllowInterfaces  []string `mapstructure:"allow-interfaces"`
+}
+
 type IfshortSettings struct {
 	MaxDeclLines int `mapstructure:"max-decl-lines"`
 	MaxDeclChars int `mapstructure:"max-decl-chars"`
