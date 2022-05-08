@@ -442,6 +442,11 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/leonklingele/grouper"),
 
+		linter.NewConfig(golinters.NewInterfaceCaptureCheck()).
+			WithSince("v1.46.0").
+			WithPresets(linter.PresetStyle).
+			WithURL("https://github.com/dgunay/ifacecapture"),
+
 		linter.NewConfig(golinters.NewIfshort(ifshortCfg)).
 			WithSince("v1.36.0").
 			WithPresets(linter.PresetStyle).
