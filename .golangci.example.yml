@@ -891,6 +891,16 @@ linters-settings:
     # Default: false
     var-require-grouping: true
 
+  ifacecapture:
+    # Interface parameter types to check for when checking captured variables.
+    # Overrides ignore-interfaces.
+    allow-interfaces: []
+    # Interface parameter types to ignore when checking captured variables.
+    ignore-interfaces: []
+    # How much information to log (useful for gathering info for bug reports).
+    # Can be any valid Logrus log level.
+    loglvl: info
+
   ifshort:
     # Maximum length of variable declaration measured in number of lines, after which linter won't suggest using short syntax.
     # Has higher priority than max-decl-chars.
@@ -1673,6 +1683,7 @@ linters:
     - gosec
     - gosimple
     - govet
+    - ifacecapture
     - ifshort
     - importas
     - ineffassign
@@ -1764,6 +1775,7 @@ linters:
     - gosec
     - gosimple
     - govet
+    - ifacecapture
     - ifshort
     - importas
     - ineffassign
