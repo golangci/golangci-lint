@@ -1,6 +1,41 @@
 Follow the news and releases on our [twitter](https://twitter.com/golangci) and our [blog](https://medium.com/golangci).
 There is the most valuable changes log:
 
+### v1.46.0
+
+1. new linters:
+   * `execinquery`: https://github.com/lufeee/execinquery
+   * `nonamedreturns`: https://github.com/firefart/nonamedreturns
+   * `nosprintfhostport`: https://github.com/stbenjam/no-sprintf-host-port
+   * `exhaustruct`: https://github.com/GaijinEntertainment/go-exhaustruc
+2. updated linters:
+   * `bidichk`: from 0.2.2 to 0.2.3
+   * `deadcode`: bump to HEAD
+   * `errchkjson`: from 0.2.3 to 0.3.0
+   * `errname`: from 0.1.5 to 0.1.6
+   * `go-critic`: from 0.6.2 to 0.6.3
+   * `gocyclo`: from 0.4.0 to 0.5.1
+   * `gofumpt` from 0.3.0 to 0.3.1
+   * `gomoddirectives`: from 0.2.2 to 0.2.3
+   * `gosec`: from 2.10.0 to 2.11.0
+   * `honnef.co/go/tools`: from 0.2.2to 0.3.1 (go1.18 support)
+   * `nilnil`: from 0.1.0 to 0.1.1
+   * `nonamedreturns`: bump from 1.0.0 to 1.0.1
+   * `predeclared`: from 0.2.1 to 0.2.2
+   * `promlinter`: bump to v0.2.0
+   * `revive`: from 1.1.4 to 1.2.1
+   * `tenv`: from 1.4.7 to 1.5.0
+   * `thelper`: from 0.5.1 to 0.6.2
+   * `unused`: fix false-positive
+   * `varnamelen`: bump to v0.8.0
+   * `wrapcheck`: from 2.5.0 to 2.6.1
+   * `exhaustivestruct`: This linter is deprecated use `exhaustruct` instead.
+3. documentation:
+   * Update "Shell Completion" instruction on Linux
+   * Update FAQ page
+4. misc:
+   * log: enable override coloring based on `CLICOLOR` and `CLICOLOR_FORCE`
+
 ### v1.45.2
 
 1. misc:
