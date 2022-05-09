@@ -656,8 +656,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithSince("v1.9.0").
 			WithPresets(linter.PresetUnused).
 			WithLoadForGoAnalysis().
-			WithURL("https://github.com/mvdan/unparam").
-			WithNoopFallback(m.cfg),
+			WithURL("https://github.com/mvdan/unparam"),
 
 		linter.NewConfig(golinters.NewUnused(unusedCfg)).
 			WithSince("v1.20.0").

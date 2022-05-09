@@ -104,7 +104,7 @@ require (
 	honnef.co/go/tools v0.3.1
 	mvdan.cc/gofumpt v0.3.1
 	mvdan.cc/interfacer v0.0.0-20180901003855-c20040233aed
-	mvdan.cc/unparam v0.0.0-20211214103731-d0ef000c54e5
+	mvdan.cc/unparam v0.0.0-20220316160445-06cc5682983b
 )
 
 require (
