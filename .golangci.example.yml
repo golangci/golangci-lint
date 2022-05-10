@@ -800,7 +800,6 @@ linters-settings:
       - lostcancel
       - nilfunc
       - nilness
-      - nonamedreturns
       - printf
       - reflectvaluecompare
       - shadow
@@ -844,7 +843,6 @@ linters-settings:
       - lostcancel
       - nilfunc
       - nilness
-      - nonamedreturns
       - printf
       - reflectvaluecompare
       - shadow
@@ -1635,18 +1633,23 @@ linters:
     - asciicheck
     - bidichk
     - bodyclose
+    - containedctx
     - contextcheck
     - cyclop
     - deadcode
+    - decorder
     - depguard
     - dogsled
     - dupl
     - durationcheck
     - errcheck
+    - errchkjson
     - errname
     - errorlint
+    - execinquery
     - exhaustive
     - exhaustivestruct
+    - exhaustruct
     - exportloopref
     - forbidigo
     - forcetypeassert
@@ -1673,12 +1676,14 @@ linters:
     - gosec
     - gosimple
     - govet
+    - grouper
     - ifshort
     - importas
     - ineffassign
     - interfacer
     - ireturn
     - lll
+    - maintidx
     - makezero
     - maligned
     - misspell
@@ -1689,6 +1694,7 @@ linters:
     - nlreturn
     - noctx
     - nolintlint
+    - nonamedreturns
     - nosprintfhostport
     - paralleltest
     - prealloc
@@ -1726,18 +1732,23 @@ linters:
     - asciicheck
     - bidichk
     - bodyclose
+    - containedctx
     - contextcheck
     - cyclop
     - deadcode
+    - decorder
     - depguard
     - dogsled
     - dupl
     - durationcheck
     - errcheck
+    - errchkjson
     - errname
     - errorlint
+    - execinquery
     - exhaustive
     - exhaustivestruct
+    - exhaustruct
     - exportloopref
     - forbidigo
     - forcetypeassert
@@ -1764,12 +1775,14 @@ linters:
     - gosec
     - gosimple
     - govet
+    - grouper
     - ifshort
     - importas
     - ineffassign
     - interfacer
     - ireturn
     - lll
+    - maintidx
     - makezero
     - maligned
     - misspell
@@ -1780,6 +1793,7 @@ linters:
     - nlreturn
     - noctx
     - nolintlint
+    - nonamedreturns
     - nosprintfhostport
     - paralleltest
     - prealloc
