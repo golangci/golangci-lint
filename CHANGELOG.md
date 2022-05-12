@@ -1,6 +1,13 @@
 Follow the news and releases on our [twitter](https://twitter.com/golangci) and our [blog](https://medium.com/golangci).
 There is the most valuable changes log:
 
+### v1.46.1
+
+1. updated linters:
+   * `execinquery`: bump from v0.6.0 to v0.6.1
+2. documentation:
+   * add missing linters
+
 ### v1.46.0
 
 1. new linters:
