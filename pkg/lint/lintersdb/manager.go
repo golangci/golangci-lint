@@ -271,6 +271,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		linter.NewConfig(golinters.NewExecInQuery()).
 			WithSince("v1.46.0").
 			WithPresets(linter.PresetSQL).
+			WithLoadForGoAnalysis().
 			WithURL("https://github.com/lufeee/execinquery"),
 
 		linter.NewConfig(golinters.NewExhaustive(exhaustiveCfg)).
