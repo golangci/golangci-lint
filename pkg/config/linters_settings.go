@@ -550,26 +550,16 @@ type TestpackageSettings struct {
 }
 
 type ThelperSettings struct {
-	Test struct {
-		First bool `mapstructure:"first"`
-		Name  bool `mapstructure:"name"`
-		Begin bool `mapstructure:"begin"`
-	} `mapstructure:"test"`
-	Fuzz struct {
-		First bool `mapstructure:"first"`
-		Name  bool `mapstructure:"name"`
-		Begin bool `mapstructure:"begin"`
-	} `mapstructure:"fuzz"`
-	Benchmark struct {
-		First bool `mapstructure:"first"`
-		Name  bool `mapstructure:"name"`
-		Begin bool `mapstructure:"begin"`
-	} `mapstructure:"benchmark"`
-	TB struct {
-		First bool `mapstructure:"first"`
-		Name  bool `mapstructure:"name"`
-		Begin bool `mapstructure:"begin"`
-	} `mapstructure:"tb"`
+	Test      ThelperOptions `mapstructure:"test"`
+	Fuzz      ThelperOptions `mapstructure:"fuzz"`
+	Benchmark ThelperOptions `mapstructure:"benchmark"`
+	TB        ThelperOptions `mapstructure:"tb"`
+}
+
+type ThelperOptions struct {
+	First *bool `mapstructure:"first"`
+	Name  *bool `mapstructure:"name"`
+	Begin *bool `mapstructure:"begin"`
 }
 
 type TenvSettings struct {
