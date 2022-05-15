@@ -164,14 +164,14 @@ func getLatestVersion() (string, error) {
 }
 
 func buildTemplateContext() (map[string]string, error) {
-	golangciYamlExample, err := os.ReadFile(".golangci.example.yml")
+	golangciYamlExample, err := os.ReadFile(".golangci.reference.yml")
 	if err != nil {
-		return nil, fmt.Errorf("can't read .golangci.example.yml: %w", err)
+		return nil, fmt.Errorf("can't read .golangci.reference.yml: %w", err)
 	}
 
 	snippets, err := extractExampleSnippets(golangciYamlExample)
 	if err != nil {
-		return nil, fmt.Errorf("can't read .golangci.example.yml: %w", err)
+		return nil, fmt.Errorf("can't read .golangci.reference.yml: %w", err)
 	}
 
 	if err = exec.Command("make", "build").Run(); err != nil {

@@ -1,5 +1,8 @@
 # This file contains all available configuration options
 # with their default values (in comments).
+#
+# This file is not a configuration example,
+# it contains the exhaustive configuration with explanations of the options.
 
 # Options for analysis running.
 run:
