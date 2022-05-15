@@ -681,6 +681,11 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/blizzy78/varnamelen"),
 
+		linter.NewConfig(golinters.NewVerifyIface()).
+			WithSince("v1.47.0").
+			WithPresets(linter.PresetStyle).
+			WithURL("https://github.com/dcu/verifyiface"),
+
 		linter.NewConfig(golinters.NewWastedAssign()).
 			WithSince("v1.38.0").
 			WithPresets(linter.PresetStyle).
