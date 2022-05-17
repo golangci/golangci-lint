@@ -1,6 +1,16 @@
 Follow the news and releases on our [twitter](https://twitter.com/golangci) and our [blog](https://medium.com/golangci).
 There is the most valuable changes log:
 
+### v1.46.2
+
+1. updated linters:
+   * `execinquery`: bump from v1.2.0 to v1.2.1
+   * `errorlint`: bump to v1.0.0
+   * `thelper`: allow to disable one option
+2. documentation:
+   * rename `.golangci.example.yml` to `.golangci.reference.yml`
+   * add `containedctx` linter to the list of available linters
+
 ### v1.46.1
 
 1. updated linters:
