@@ -49,12 +49,12 @@ type hunkChangesParser struct {
 
 func (p *hunkChangesParser) parseDiffLines(h *diffpkg.Hunk) {
 	lines := bytes.Split(h.Body, []byte{'\n'})
-	currentOriginalLineNumer := int(h.OrigStartLine)
+	currentOriginalLineNumber := int(h.OrigStartLine)
 	var ret []diffLine
 
 	for i, line := range lines {
 		dl := diffLine{
-			originalNumber: currentOriginalLineNumer,
+			originalNumber: currentOriginalLineNumber,
 		}
 
 		lineStr := string(line)
@@ -62,7 +62,7 @@ func (p *hunkChangesParser) parseDiffLines(h *diffpkg.Hunk) {
 		if strings.HasPrefix(lineStr, "-") {
 			dl.typ = diffLineDeleted
 			dl.data = strings.TrimPrefix(lineStr, "-")
-			currentOriginalLineNumer++
+			currentOriginalLineNumber++
 		} else if strings.HasPrefix(lineStr, "+") {
 			dl.typ = diffLineAdded
 			dl.data = strings.TrimPrefix(lineStr, "+")
@@ -74,7 +74,7 @@ func (p *hunkChangesParser) parseDiffLines(h *diffpkg.Hunk) {
 
 			dl.typ = diffLineOriginal
 			dl.data = strings.TrimPrefix(lineStr, " ")
-			currentOriginalLineNumer++
+			currentOriginalLineNumber++
 		}
 
 		ret = append(ret, dl)
