@@ -24,7 +24,7 @@ There is the most valuable changes log:
    * `execinquery`: https://github.com/lufeee/execinquery
    * `nonamedreturns`: https://github.com/firefart/nonamedreturns
    * `nosprintfhostport`: https://github.com/stbenjam/no-sprintf-host-port
-   * `exhaustruct`: https://github.com/GaijinEntertainment/go-exhaustruc
+   * `exhaustruct`: https://github.com/GaijinEntertainment/go-exhaustruct
 2. updated linters:
    * `bidichk`: from 0.2.2 to 0.2.3
    * `deadcode`: bump to HEAD
