@@ -8,14 +8,10 @@ import (
 )
 
 func NewParallelTest() *goanalysis.Linter {
-	analyzers := []*analysis.Analyzer{
-		paralleltest.NewAnalyzer(),
-	}
-
 	return goanalysis.NewLinter(
 		"paralleltest",
 		"paralleltest detects missing usage of t.Parallel() method in your Go test",
-		analyzers,
+		[]*analysis.Analyzer{paralleltest.NewAnalyzer()},
 		nil,
 	).WithLoadMode(goanalysis.LoadModeSyntax)
 }

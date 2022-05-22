@@ -126,7 +126,7 @@ func stringifyLoadMode(mode packages.LoadMode) string {
 	m := map[packages.LoadMode]string{
 		packages.NeedCompiledGoFiles: "compiled_files",
 		packages.NeedDeps:            "deps",
-		packages.NeedExportsFile:     "exports_file",
+		packages.NeedExportFile:      "exports_file",
 		packages.NeedFiles:           "files",
 		packages.NeedImports:         "imports",
 		packages.NeedName:            "name",
@@ -192,7 +192,7 @@ func (cl *ContextLoader) loadPackages(ctx context.Context, loadMode packages.Loa
 		Context:    ctx,
 		BuildFlags: buildFlags,
 		Logf:       cl.debugf,
-		//TODO: use fset, parsefile, overlay
+		// TODO: use fset, parsefile, overlay
 	}
 
 	args := cl.buildArgs()

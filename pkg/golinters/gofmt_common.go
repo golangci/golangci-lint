@@ -229,7 +229,7 @@ func getErrorTextForLinter(lintCtx *linter.Context, linterName string) string {
 	return text
 }
 
-func extractIssuesFromPatch(patch string, log logutils.Log, lintCtx *linter.Context, linterName string) ([]result.Issue, error) {
+func extractIssuesFromPatch(patch string, lintCtx *linter.Context, linterName string) ([]result.Issue, error) {
 	diffs, err := diffpkg.ParseMultiFileDiff([]byte(patch))
 	if err != nil {
 		return nil, errors.Wrap(err, "can't parse patch")
@@ -239,18 +239,20 @@ func extractIssuesFromPatch(patch string, log logutils.Log, lintCtx *linter.Cont
 		return nil, fmt.Errorf("got no diffs from patch parser: %v", diffs)
 	}
 
-	issues := []result.Issue{}
+	var issues []result.Issue
 	for _, d := range diffs {
 		if len(d.Hunks) == 0 {
-			log.Warnf("Got no hunks in diff %+v", d)
+			lintCtx.Log.Warnf("Got no hunks in diff %+v", d)
 			continue
 		}
 
 		for _, hunk := range d.Hunks {
 			p := hunkChangesParser{
-				log: log,
+				log: lintCtx.Log,
 			}
+
 			changes := p.parse(hunk)
+
 			for _, change := range changes {
 				change := change // fix scope
 				i := result.Issue{
