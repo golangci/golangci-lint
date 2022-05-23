@@ -211,3 +211,7 @@ func valueToString(v interface{}) string {
 
 	return fmt.Sprint(v)
 }
+
+func DummyRun(_ *analysis.Pass) (interface{}, error) {
+	return nil, nil
+}

@@ -3,6 +3,7 @@ package golinters
 import (
 	"bytes"
 	"fmt"
+	"io"
 	"os"
 	"sync"
 
@@ -18,71 +19,42 @@ import (
 
 const gofumptName = "gofumpt"
 
-func NewGofumpt() *goanalysis.Linter {
+type differ interface {
+	Diff(out io.Writer, a io.ReadSeeker, b io.ReadSeeker) error
+}
+
+func NewGofumpt(settings *config.GofumptSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
-	differ := difflib.New()
+
+	diff := difflib.New()
+
+	var options format.Options
+
+	if settings != nil {
+		options = format.Options{
+			LangVersion: getLangVersion(settings),
+			ModulePath:  settings.ModulePath,
+			ExtraRules:  settings.ExtraRules,
+		}
+	}
 
 	analyzer := &analysis.Analyzer{
 		Name: gofumptName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
+		Run:  goanalysis.DummyRun,
 	}
+
 	return goanalysis.NewLinter(
 		gofumptName,
 		"Gofumpt checks whether code was gofumpt-ed.",
 		[]*analysis.Analyzer{analyzer},
 		nil,
 	).WithContextSetter(func(lintCtx *linter.Context) {
-		settings := lintCtx.Settings().Gofumpt
-
-		options := format.Options{
-			LangVersion: getLangVersion(settings),
-			ModulePath:  settings.ModulePath,
-			ExtraRules:  settings.ExtraRules,
-		}
-
 		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
-			var fileNames []string
-			for _, f := range pass.Files {
-				pos := pass.Fset.PositionFor(f.Pos(), false)
-				fileNames = append(fileNames, pos.Filename)
-			}
-
-			var issues []goanalysis.Issue
-
-			for _, f := range fileNames {
-				input, err := os.ReadFile(f)
-				if err != nil {
-					return nil, fmt.Errorf("unable to open file %s: %w", f, err)
-				}
-
-				output, err := format.Source(input, options)
-				if err != nil {
-					return nil, fmt.Errorf("error while running gofumpt: %w", err)
-				}
-
-				if !bytes.Equal(input, output) {
-					out := bytes.Buffer{}
-					_, err = out.WriteString(fmt.Sprintf("--- %[1]s\n+++ %[1]s\n", f))
-					if err != nil {
-						return nil, fmt.Errorf("error while running gofumpt: %w", err)
-					}
-
-					err = differ.Diff(&out, bytes.NewReader(input), bytes.NewReader(output))
-					if err != nil {
-						return nil, fmt.Errorf("error while running gofumpt: %w", err)
-					}
-
-					diff := out.String()
-					is, err := extractIssuesFromPatch(diff, lintCtx.Log, lintCtx, gofumptName)
-					if err != nil {
-						return nil, errors.Wrapf(err, "can't extract issues from gofumpt diff output %q", diff)
-					}
-
-					for i := range is {
-						issues = append(issues, goanalysis.NewIssue(&is[i], pass))
-					}
-				}
+			issues, err := runGofumpt(lintCtx, pass, diff, options)
+			if err != nil {
+				return nil, err
 			}
 
 			if len(issues) == 0 {
@@ -100,8 +72,55 @@ func NewGofumpt() *goanalysis.Linter {
 	}).WithLoadMode(goanalysis.LoadModeSyntax)
 }
 
-func getLangVersion(settings config.GofumptSettings) string {
-	if settings.LangVersion == "" {
+func runGofumpt(lintCtx *linter.Context, pass *analysis.Pass, diff differ, options format.Options) ([]goanalysis.Issue, error) {
+	var fileNames []string
+	for _, f := range pass.Files {
+		pos := pass.Fset.PositionFor(f.Pos(), false)
+		fileNames = append(fileNames, pos.Filename)
+	}
+
+	var issues []goanalysis.Issue
+
+	for _, f := range fileNames {
+		input, err := os.ReadFile(f)
+		if err != nil {
+			return nil, fmt.Errorf("unable to open file %s: %w", f, err)
+		}
+
+		output, err := format.Source(input, options)
+		if err != nil {
+			return nil, fmt.Errorf("error while running gofumpt: %w", err)
+		}
+
+		if !bytes.Equal(input, output) {
+			out := bytes.Buffer{}
+			_, err = out.WriteString(fmt.Sprintf("--- %[1]s\n+++ %[1]s\n", f))
+			if err != nil {
+				return nil, fmt.Errorf("error while running gofumpt: %w", err)
+			}
+
+			err = diff.Diff(&out, bytes.NewReader(input), bytes.NewReader(output))
+			if err != nil {
+				return nil, fmt.Errorf("error while running gofumpt: %w", err)
+			}
+
+			diff := out.String()
+			is, err := extractIssuesFromPatch(diff, lintCtx, gofumptName)
+			if err != nil {
+				return nil, errors.Wrapf(err, "can't extract issues from gofumpt diff output %q", diff)
+			}
+
+			for i := range is {
+				issues = append(issues, goanalysis.NewIssue(&is[i], pass))
+			}
+		}
+	}
+
+	return issues, nil
+}
+
+func getLangVersion(settings *config.GofumptSettings) string {
+	if settings == nil || settings.LangVersion == "" {
 		// TODO: defaults to "1.15", in the future (v2) must be set by using build.Default.ReleaseTags like staticcheck.
 		return "1.15"
 	}

@@ -15,6 +15,7 @@ import (
 
 const scopelintName = "scopelint"
 
+//nolint:dupl
 func NewScopelint() *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
@@ -22,41 +23,51 @@ func NewScopelint() *goanalysis.Linter {
 	analyzer := &analysis.Analyzer{
 		Name: scopelintName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
+		Run: func(pass *analysis.Pass) (interface{}, error) {
+			issues := runScopeLint(pass)
+
+			if len(issues) == 0 {
+				return nil, nil
+			}
+
+			mu.Lock()
+			resIssues = append(resIssues, issues...)
+			mu.Unlock()
+
+			return nil, nil
+		},
 	}
+
 	return goanalysis.NewLinter(
 		scopelintName,
 		"Scopelint checks for unpinned variables in go programs",
 		[]*analysis.Analyzer{analyzer},
 		nil,
-	).WithContextSetter(func(lintCtx *linter.Context) {
-		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
-			var res []result.Issue
-			for _, file := range pass.Files {
-				n := Node{
-					fset:          pass.Fset,
-					DangerObjects: map[*ast.Object]int{},
-					UnsafeObjects: map[*ast.Object]int{},
-					SkipFuncs:     map[*ast.FuncLit]int{},
-					issues:        &res,
-				}
-				ast.Walk(&n, file)
-			}
-
-			if len(res) == 0 {
-				return nil, nil
-			}
-
-			mu.Lock()
-			for i := range res {
-				resIssues = append(resIssues, goanalysis.NewIssue(&res[i], pass))
-			}
-			mu.Unlock()
-
-			return nil, nil
-		}
-	}).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
+	).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
 		return resIssues
 	}).WithLoadMode(goanalysis.LoadModeSyntax)
+}
+
+func runScopeLint(pass *analysis.Pass) []goanalysis.Issue {
+	var lintIssues []result.Issue
+
+	for _, file := range pass.Files {
+		n := Node{
+			fset:          pass.Fset,
+			DangerObjects: map[*ast.Object]int{},
+			UnsafeObjects: map[*ast.Object]int{},
+			SkipFuncs:     map[*ast.FuncLit]int{},
+			issues:        &lintIssues,
+		}
+		ast.Walk(&n, file)
+	}
+
+	var issues []goanalysis.Issue
+	for i := range lintIssues {
+		issues = append(issues, goanalysis.NewIssue(&lintIssues[i], pass))
+	}
+
+	return issues
 }
 
 // The code below is copy-pasted from https://github.com/kyoh86/scopelint 92cbe2cc9276abda0e309f52cc9e309d407f174e

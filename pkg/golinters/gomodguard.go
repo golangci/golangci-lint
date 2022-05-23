@@ -6,6 +6,7 @@ import (
 	"github.com/ryancurrah/gomodguard"
 	"golang.org/x/tools/go/analysis"
 
+	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
@@ -19,31 +20,18 @@ const (
 )
 
 // NewGomodguard returns a new Gomodguard linter.
-func NewGomodguard() *goanalysis.Linter {
-	var (
-		issues   []goanalysis.Issue
-		mu       = sync.Mutex{}
-		analyzer = &analysis.Analyzer{
-			Name: goanalysis.TheOnlyAnalyzerName,
-			Doc:  goanalysis.TheOnlyanalyzerDoc,
-		}
-	)
+func NewGomodguard(settings *config.GoModGuardSettings) *goanalysis.Linter {
+	var issues []goanalysis.Issue
+	var mu sync.Mutex
 
-	return goanalysis.NewLinter(
-		gomodguardName,
-		gomodguardDesc,
-		[]*analysis.Analyzer{analyzer},
-		nil,
-	).WithContextSetter(func(lintCtx *linter.Context) {
-		linterCfg := lintCtx.Cfg.LintersSettings.Gomodguard
+	processorCfg := &gomodguard.Configuration{}
+	if settings != nil {
+		processorCfg.Allowed.Modules = settings.Allowed.Modules
+		processorCfg.Allowed.Domains = settings.Allowed.Domains
+		processorCfg.Blocked.LocalReplaceDirectives = settings.Blocked.LocalReplaceDirectives
 
-		processorCfg := &gomodguard.Configuration{}
-		processorCfg.Allowed.Modules = linterCfg.Allowed.Modules
-		processorCfg.Allowed.Domains = linterCfg.Allowed.Domains
-		processorCfg.Blocked.LocalReplaceDirectives = linterCfg.Blocked.LocalReplaceDirectives
-
-		for n := range linterCfg.Blocked.Modules {
-			for k, v := range linterCfg.Blocked.Modules[n] {
+		for n := range settings.Blocked.Modules {
+			for k, v := range settings.Blocked.Modules[n] {
 				m := map[string]gomodguard.BlockedModule{k: {
 					Recommendations: v.Recommendations,
 					Reason:          v.Reason,
@@ -53,8 +41,8 @@ func NewGomodguard() *goanalysis.Linter {
 			}
 		}
 
-		for n := range linterCfg.Blocked.Versions {
-			for k, v := range linterCfg.Blocked.Versions[n] {
+		for n := range settings.Blocked.Versions {
+			for k, v := range settings.Blocked.Versions[n] {
 				m := map[string]gomodguard.BlockedVersion{k: {
 					Version: v.Version,
 					Reason:  v.Reason,
@@ -63,7 +51,20 @@ func NewGomodguard() *goanalysis.Linter {
 				break
 			}
 		}
+	}
 
+	analyzer := &analysis.Analyzer{
+		Name: goanalysis.TheOnlyAnalyzerName,
+		Doc:  goanalysis.TheOnlyanalyzerDoc,
+		Run:  goanalysis.DummyRun,
+	}
+
+	return goanalysis.NewLinter(
+		gomodguardName,
+		gomodguardDesc,
+		[]*analysis.Analyzer{analyzer},
+		nil,
+	).WithContextSetter(func(lintCtx *linter.Context) {
 		processor, err := gomodguard.NewProcessor(processorCfg)
 		if err != nil {
 			lintCtx.Log.Warnf("running gomodguard failed: %s: if you are not using go modules "+
@@ -73,7 +74,6 @@ func NewGomodguard() *goanalysis.Linter {
 
 		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
 			var files []string
-
 			for _, file := range pass.Files {
 				files = append(files, pass.Fset.PositionFor(file.Pos(), false).Filename)
 			}

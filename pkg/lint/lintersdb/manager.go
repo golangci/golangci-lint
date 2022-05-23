@@ -100,51 +100,104 @@ func enableLinterConfigs(lcs []*linter.Config, isEnabled func(lc *linter.Config)
 
 //nolint:funlen
 func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
-	var bidichkCfg *config.BiDiChkSettings
-	var cyclopCfg *config.Cyclop
-	var decorderCfg *config.DecorderSettings
-	var errchkjsonCfg *config.ErrChkJSONSettings
-	var errorlintCfg *config.ErrorLintSettings
-	var exhaustiveCfg *config.ExhaustiveSettings
-	var exhaustiveStructCfg *config.ExhaustiveStructSettings
-	var exhaustructCfg *config.ExhaustructSettings
-	var gciCfg *config.GciSettings
-	var goModDirectivesCfg *config.GoModDirectivesSettings
-	var goMndCfg *config.GoMndSettings
-	var gosecCfg *config.GoSecSettings
-	var gosimpleCfg *config.StaticCheckSettings
-	var govetCfg *config.GovetSettings
-	var grouperCfg *config.GrouperSettings
-	var ifshortCfg *config.IfshortSettings
-	var importAsCfg *config.ImportAsSettings
-	var ireturnCfg *config.IreturnSettings
-	var maintIdxCfg *config.MaintIdxSettings
-	var nilNilCfg *config.NilNilSettings
-	var nlreturnCfg *config.NlreturnSettings
-	var predeclaredCfg *config.PredeclaredSettings
-	var reviveCfg *config.ReviveSettings
-	var staticcheckCfg *config.StaticCheckSettings
-	var stylecheckCfg *config.StaticCheckSettings
-	var tagliatelleCfg *config.TagliatelleSettings
-	var tenvCfg *config.TenvSettings
-	var testpackageCfg *config.TestpackageSettings
-	var thelperCfg *config.ThelperSettings
-	var unusedCfg *config.StaticCheckSettings
-	var varnamelenCfg *config.VarnamelenSettings
-	var wrapcheckCfg *config.WrapcheckSettings
+	var (
+		bidichkCfg          *config.BiDiChkSettings
+		cyclopCfg           *config.Cyclop
+		decorderCfg         *config.DecorderSettings
+		depGuardCfg         *config.DepGuardSettings
+		dogsledCfg          *config.DogsledSettings
+		duplCfg             *config.DuplSettings
+		errcheckCfg         *config.ErrcheckSettings
+		errchkjsonCfg       *config.ErrChkJSONSettings
+		errorlintCfg        *config.ErrorLintSettings
+		exhaustiveCfg       *config.ExhaustiveSettings
+		exhaustiveStructCfg *config.ExhaustiveStructSettings
+		exhaustructCfg      *config.ExhaustructSettings
+		forbidigoCfg        *config.ForbidigoSettings
+		funlenCfg           *config.FunlenSettings
+		gciCfg              *config.GciSettings
+		gocognitCfg         *config.GocognitSettings
+		goconstCfg          *config.GoConstSettings
+		gocriticCfg         *config.GocriticSettings
+		gocycloCfg          *config.GoCycloSettings
+		godotCfg            *config.GodotSettings
+		godoxCfg            *config.GodoxSettings
+		gofmtCfg            *config.GoFmtSettings
+		gofumptCfg          *config.GofumptSettings
+		goheaderCfg         *config.GoHeaderSettings
+		goimportsCfg        *config.GoImportsSettings
+		golintCfg           *config.GoLintSettings
+		goMndCfg            *config.GoMndSettings
+		goModDirectivesCfg  *config.GoModDirectivesSettings
+		gomodguardCfg       *config.GoModGuardSettings
+		gosecCfg            *config.GoSecSettings
+		gosimpleCfg         *config.StaticCheckSettings
+		govetCfg            *config.GovetSettings
+		grouperCfg          *config.GrouperSettings
+		ifshortCfg          *config.IfshortSettings
+		importAsCfg         *config.ImportAsSettings
+		ireturnCfg          *config.IreturnSettings
+		lllCfg              *config.LllSettings
+		maintIdxCfg         *config.MaintIdxSettings
+		makezeroCfg         *config.MakezeroSettings
+		malignedCfg         *config.MalignedSettings
+		misspellCfg         *config.MisspellSettings
+		nakedretCfg         *config.NakedretSettings
+		nestifCfg           *config.NestifSettings
+		nilNilCfg           *config.NilNilSettings
+		nlreturnCfg         *config.NlreturnSettings
+		noLintLintCfg       *config.NoLintLintSettings
+		preallocCfg         *config.PreallocSettings
+		predeclaredCfg      *config.PredeclaredSettings
+		promlinterCfg       *config.PromlinterSettings
+		reviveCfg           *config.ReviveSettings
+		rowserrcheckCfg     *config.RowsErrCheckSettings
+		staticcheckCfg      *config.StaticCheckSettings
+		structcheckCfg      *config.StructCheckSettings
+		stylecheckCfg       *config.StaticCheckSettings
+		tagliatelleCfg      *config.TagliatelleSettings
+		tenvCfg             *config.TenvSettings
+		testpackageCfg      *config.TestpackageSettings
+		thelperCfg          *config.ThelperSettings
+		unparamCfg          *config.UnparamSettings
+		unusedCfg           *config.StaticCheckSettings
+		varcheckCfg         *config.VarCheckSettings
+		varnamelenCfg       *config.VarnamelenSettings
+		whitespaceCfg       *config.WhitespaceSettings
+		wrapcheckCfg        *config.WrapcheckSettings
+		wslCfg              *config.WSLSettings
+	)
 
 	if m.cfg != nil {
 		bidichkCfg = &m.cfg.LintersSettings.BiDiChk
 		cyclopCfg = &m.cfg.LintersSettings.Cyclop
-		errchkjsonCfg = &m.cfg.LintersSettings.ErrChkJSON
 		decorderCfg = &m.cfg.LintersSettings.Decorder
+		depGuardCfg = &m.cfg.LintersSettings.Depguard
+		dogsledCfg = &m.cfg.LintersSettings.Dogsled
+		duplCfg = &m.cfg.LintersSettings.Dupl
+		errcheckCfg = &m.cfg.LintersSettings.Errcheck
+		errchkjsonCfg = &m.cfg.LintersSettings.ErrChkJSON
 		errorlintCfg = &m.cfg.LintersSettings.ErrorLint
 		exhaustiveCfg = &m.cfg.LintersSettings.Exhaustive
 		exhaustiveStructCfg = &m.cfg.LintersSettings.ExhaustiveStruct
 		exhaustructCfg = &m.cfg.LintersSettings.Exhaustruct
+		forbidigoCfg = &m.cfg.LintersSettings.Forbidigo
+		funlenCfg = &m.cfg.LintersSettings.Funlen
 		gciCfg = &m.cfg.LintersSettings.Gci
-		goModDirectivesCfg = &m.cfg.LintersSettings.GoModDirectives
+		gocognitCfg = &m.cfg.LintersSettings.Gocognit
+		goconstCfg = &m.cfg.LintersSettings.Goconst
+		gocriticCfg = &m.cfg.LintersSettings.Gocritic
+		gocycloCfg = &m.cfg.LintersSettings.Gocyclo
+		godotCfg = &m.cfg.LintersSettings.Godot
+		godoxCfg = &m.cfg.LintersSettings.Godox
+		gofmtCfg = &m.cfg.LintersSettings.Gofmt
+		gofumptCfg = &m.cfg.LintersSettings.Gofumpt
+		goheaderCfg = &m.cfg.LintersSettings.Goheader
+		goimportsCfg = &m.cfg.LintersSettings.Goimports
+		golintCfg = &m.cfg.LintersSettings.Golint
 		goMndCfg = &m.cfg.LintersSettings.Gomnd
+		goModDirectivesCfg = &m.cfg.LintersSettings.GoModDirectives
+		gomodguardCfg = &m.cfg.LintersSettings.Gomodguard
 		gosecCfg = &m.cfg.LintersSettings.Gosec
 		gosimpleCfg = &m.cfg.LintersSettings.Gosimple
 		govetCfg = &m.cfg.LintersSettings.Govet
@@ -152,20 +205,35 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		ifshortCfg = &m.cfg.LintersSettings.Ifshort
 		importAsCfg = &m.cfg.LintersSettings.ImportAs
 		ireturnCfg = &m.cfg.LintersSettings.Ireturn
+		lllCfg = &m.cfg.LintersSettings.Lll
 		maintIdxCfg = &m.cfg.LintersSettings.MaintIdx
+		makezeroCfg = &m.cfg.LintersSettings.Makezero
+		malignedCfg = &m.cfg.LintersSettings.Maligned
+		misspellCfg = &m.cfg.LintersSettings.Misspell
+		nakedretCfg = &m.cfg.LintersSettings.Nakedret
+		nestifCfg = &m.cfg.LintersSettings.Nestif
 		nilNilCfg = &m.cfg.LintersSettings.NilNil
 		nlreturnCfg = &m.cfg.LintersSettings.Nlreturn
+		noLintLintCfg = &m.cfg.LintersSettings.NoLintLint
+		preallocCfg = &m.cfg.LintersSettings.Prealloc
 		predeclaredCfg = &m.cfg.LintersSettings.Predeclared
+		promlinterCfg = &m.cfg.LintersSettings.Promlinter
 		reviveCfg = &m.cfg.LintersSettings.Revive
+		rowserrcheckCfg = &m.cfg.LintersSettings.RowsErrCheck
 		staticcheckCfg = &m.cfg.LintersSettings.Staticcheck
+		structcheckCfg = &m.cfg.LintersSettings.Structcheck
 		stylecheckCfg = &m.cfg.LintersSettings.Stylecheck
 		tagliatelleCfg = &m.cfg.LintersSettings.Tagliatelle
 		tenvCfg = &m.cfg.LintersSettings.Tenv
 		testpackageCfg = &m.cfg.LintersSettings.Testpackage
 		thelperCfg = &m.cfg.LintersSettings.Thelper
+		unparamCfg = &m.cfg.LintersSettings.Unparam
 		unusedCfg = &m.cfg.LintersSettings.Unused
+		varcheckCfg = &m.cfg.LintersSettings.Varcheck
 		varnamelenCfg = &m.cfg.LintersSettings.Varnamelen
+		whitespaceCfg = &m.cfg.LintersSettings.Whitespace
 		wrapcheckCfg = &m.cfg.LintersSettings.Wrapcheck
+		wslCfg = &m.cfg.LintersSettings.WSL
 
 		if govetCfg != nil {
 			govetCfg.Go = m.cfg.Run.Go
@@ -223,17 +291,17 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetUnused).
 			WithURL("https://github.com/remyoudompheng/go-misc/tree/master/deadcode"),
 
-		linter.NewConfig(golinters.NewDepguard()).
+		linter.NewConfig(golinters.NewDepguard(depGuardCfg)).
 			WithSince("v1.4.0").
 			WithPresets(linter.PresetStyle, linter.PresetImport, linter.PresetModule).
 			WithURL("https://github.com/OpenPeeDeeP/depguard"),
 
-		linter.NewConfig(golinters.NewDogsled()).
+		linter.NewConfig(golinters.NewDogsled(dogsledCfg)).
 			WithSince("v1.19.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/alexkohler/dogsled"),
 
-		linter.NewConfig(golinters.NewDupl()).
+		linter.NewConfig(golinters.NewDupl(duplCfg)).
 			WithSince("v1.0.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/mibk/dupl"),
@@ -244,7 +312,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/charithe/durationcheck"),
 
-		linter.NewConfig(golinters.NewErrcheck()).
+		linter.NewConfig(golinters.NewErrcheck(errcheckCfg)).
 			WithSince("v1.0.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetBugs, linter.PresetError).
@@ -299,7 +367,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/kyoh86/exportloopref"),
 
-		linter.NewConfig(golinters.NewForbidigo()).
+		linter.NewConfig(golinters.NewForbidigo(forbidigoCfg)).
 			WithSince("v1.34.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/ashanbrown/forbidigo"),
@@ -309,7 +377,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/gostaticanalysis/forcetypeassert"),
 
-		linter.NewConfig(golinters.NewFunlen()).
+		linter.NewConfig(golinters.NewFunlen(funlenCfg)).
 			WithSince("v1.18.0").
 			WithPresets(linter.PresetComplexity).
 			WithURL("https://github.com/ultraware/funlen"),
@@ -329,34 +397,34 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/leighmcculloch/gochecknoinits"),
 
-		linter.NewConfig(golinters.NewGocognit()).
+		linter.NewConfig(golinters.NewGocognit(gocognitCfg)).
 			WithSince("v1.20.0").
 			WithPresets(linter.PresetComplexity).
 			WithURL("https://github.com/uudashr/gocognit"),
 
-		linter.NewConfig(golinters.NewGoconst()).
+		linter.NewConfig(golinters.NewGoconst(goconstCfg)).
 			WithSince("v1.0.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/jgautheron/goconst"),
 
-		linter.NewConfig(golinters.NewGocritic()).
+		linter.NewConfig(golinters.NewGocritic(gocriticCfg, m.cfg)).
 			WithSince("v1.12.0").
 			WithPresets(linter.PresetStyle, linter.PresetMetaLinter).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/go-critic/go-critic"),
 
-		linter.NewConfig(golinters.NewGocyclo()).
+		linter.NewConfig(golinters.NewGocyclo(gocycloCfg)).
 			WithSince("v1.0.0").
 			WithPresets(linter.PresetComplexity).
 			WithURL("https://github.com/fzipp/gocyclo"),
 
-		linter.NewConfig(golinters.NewGodot()).
+		linter.NewConfig(golinters.NewGodot(godotCfg)).
 			WithSince("v1.25.0").
 			WithPresets(linter.PresetStyle, linter.PresetComment).
 			WithAutoFix().
 			WithURL("https://github.com/tetafro/godot"),
 
-		linter.NewConfig(golinters.NewGodox()).
+		linter.NewConfig(golinters.NewGodox(godoxCfg)).
 			WithSince("v1.19.0").
 			WithPresets(linter.PresetStyle, linter.PresetComment).
 			WithURL("https://github.com/matoous/godox"),
@@ -367,30 +435,30 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/Djarvur/go-err113"),
 
-		linter.NewConfig(golinters.NewGofmt()).
+		linter.NewConfig(golinters.NewGofmt(gofmtCfg)).
 			WithSince("v1.0.0").
 			WithPresets(linter.PresetFormatting).
 			WithAutoFix().
 			WithURL("https://golang.org/cmd/gofmt/"),
 
-		linter.NewConfig(golinters.NewGofumpt()).
+		linter.NewConfig(golinters.NewGofumpt(gofumptCfg)).
 			WithSince("v1.28.0").
 			WithPresets(linter.PresetFormatting).
 			WithAutoFix().
 			WithURL("https://github.com/mvdan/gofumpt"),
 
-		linter.NewConfig(golinters.NewGoHeader()).
+		linter.NewConfig(golinters.NewGoHeader(goheaderCfg)).
 			WithSince("v1.28.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/denis-tingaikin/go-header"),
 
-		linter.NewConfig(golinters.NewGoimports()).
+		linter.NewConfig(golinters.NewGoimports(goimportsCfg)).
 			WithSince("v1.20.0").
 			WithPresets(linter.PresetFormatting, linter.PresetImport).
 			WithAutoFix().
 			WithURL("https://godoc.org/golang.org/x/tools/cmd/goimports"),
 
-		linter.NewConfig(golinters.NewGolint()).
+		linter.NewConfig(golinters.NewGolint(golintCfg)).
 			WithSince("v1.0.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetStyle).
@@ -407,7 +475,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle, linter.PresetModule).
 			WithURL("https://github.com/ldez/gomoddirectives"),
 
-		linter.NewConfig(golinters.NewGomodguard()).
+		linter.NewConfig(golinters.NewGomodguard(gomodguardCfg)).
 			WithSince("v1.25.0").
 			WithPresets(linter.PresetStyle, linter.PresetImport, linter.PresetModule).
 			WithURL("https://github.com/ryancurrah/gomodguard"),
@@ -473,7 +541,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/butuzov/ireturn"),
 
-		linter.NewConfig(golinters.NewLLL()).
+		linter.NewConfig(golinters.NewLLL(lllCfg)).
 			WithSince("v1.8.0").
 			WithPresets(linter.PresetStyle),
 
@@ -482,31 +550,31 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetComplexity).
 			WithURL("https://github.com/yagipy/maintidx"),
 
-		linter.NewConfig(golinters.NewMakezero()).
+		linter.NewConfig(golinters.NewMakezero(makezeroCfg)).
 			WithSince("v1.34.0").
 			WithPresets(linter.PresetStyle, linter.PresetBugs).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/ashanbrown/makezero"),
 
-		linter.NewConfig(golinters.NewMaligned()).
+		linter.NewConfig(golinters.NewMaligned(malignedCfg)).
 			WithSince("v1.0.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetPerformance).
 			WithURL("https://github.com/mdempsky/maligned").
 			Deprecated("The repository of the linter has been archived by the owner.", "v1.38.0", "govet 'fieldalignment'"),
 
-		linter.NewConfig(golinters.NewMisspell()).
+		linter.NewConfig(golinters.NewMisspell(misspellCfg)).
 			WithSince("v1.8.0").
 			WithPresets(linter.PresetStyle, linter.PresetComment).
 			WithAutoFix().
 			WithURL("https://github.com/client9/misspell"),
 
-		linter.NewConfig(golinters.NewNakedret()).
+		linter.NewConfig(golinters.NewNakedret(nakedretCfg)).
 			WithSince("v1.19.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/alexkohler/nakedret"),
 
-		linter.NewConfig(golinters.NewNestif()).
+		linter.NewConfig(golinters.NewNestif(nestifCfg)).
 			WithSince("v1.25.0").
 			WithPresets(linter.PresetComplexity).
 			WithURL("https://github.com/nakabonne/nestif"),
@@ -551,7 +619,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle, linter.PresetTest).
 			WithURL("https://github.com/kunwardeep/paralleltest"),
 
-		linter.NewConfig(golinters.NewPrealloc()).
+		linter.NewConfig(golinters.NewPreAlloc(preallocCfg)).
 			WithSince("v1.19.0").
 			WithPresets(linter.PresetPerformance).
 			WithURL("https://github.com/alexkohler/prealloc"),
@@ -561,7 +629,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/nishanths/predeclared"),
 
-		linter.NewConfig(golinters.NewPromlinter()).
+		linter.NewConfig(golinters.NewPromlinter(promlinterCfg)).
 			WithSince("v1.40.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/yeya24/promlinter"),
@@ -572,7 +640,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			ConsiderSlow().
 			WithURL("https://github.com/mgechev/revive"),
 
-		linter.NewConfig(golinters.NewRowsErrCheck()).
+		linter.NewConfig(golinters.NewRowsErrCheck(rowserrcheckCfg)).
 			WithSince("v1.23.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetBugs, linter.PresetSQL).
@@ -599,7 +667,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithAlternativeNames(megacheckName).
 			WithURL("https://staticcheck.io/"),
 
-		linter.NewConfig(golinters.NewStructcheck()).
+		linter.NewConfig(golinters.NewStructcheck(structcheckCfg)).
 			WithSince("v1.0.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetUnused).
@@ -653,7 +721,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/mdempsky/unconvert"),
 
-		linter.NewConfig(golinters.NewUnparam()).
+		linter.NewConfig(golinters.NewUnparam(unparamCfg)).
 			WithSince("v1.9.0").
 			WithPresets(linter.PresetUnused).
 			WithLoadForGoAnalysis().
@@ -669,7 +737,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithChangeTypes().
 			WithURL("https://github.com/dominikh/go-tools/tree/master/unused"),
 
-		linter.NewConfig(golinters.NewVarcheck()).
+		linter.NewConfig(golinters.NewVarcheck(varcheckCfg)).
 			WithSince("v1.0.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetUnused).
@@ -688,7 +756,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithURL("https://github.com/sanposhiho/wastedassign").
 			WithNoopFallback(m.cfg),
 
-		linter.NewConfig(golinters.NewWhitespace()).
+		linter.NewConfig(golinters.NewWhitespace(whitespaceCfg)).
 			WithSince("v1.19.0").
 			WithPresets(linter.PresetStyle).
 			WithAutoFix().
@@ -700,13 +768,13 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/tomarrell/wrapcheck"),
 
-		linter.NewConfig(golinters.NewWSL()).
+		linter.NewConfig(golinters.NewWSL(wslCfg)).
 			WithSince("v1.20.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/bombsimon/wsl"),
 
 		// nolintlint must be last because it looks at the results of all the previous linters for unused nolint directives
-		linter.NewConfig(golinters.NewNoLintLint()).
+		linter.NewConfig(golinters.NewNoLintLint(noLintLintCfg)).
 			WithSince("v1.26.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/golangci/golangci-lint/blob/master/pkg/golinters/nolintlint/README.md"),
@@ -714,12 +782,12 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 
 	enabledByDefault := map[string]bool{
 		golinters.NewGovet(nil).Name():                  true,
-		golinters.NewErrcheck().Name():                  true,
+		golinters.NewErrcheck(errcheckCfg).Name():       true,
 		golinters.NewStaticcheck(staticcheckCfg).Name(): true,
 		golinters.NewUnused(unusedCfg).Name():           true,
 		golinters.NewGosimple(gosimpleCfg).Name():       true,
-		golinters.NewStructcheck().Name():               true,
-		golinters.NewVarcheck().Name():                  true,
+		golinters.NewStructcheck(structcheckCfg).Name(): true,
+		golinters.NewVarcheck(varcheckCfg).Name():       true,
 		golinters.NewIneffassign().Name():               true,
 		golinters.NewDeadcode().Name():                  true,
 		golinters.NewTypecheck().Name():                 true,

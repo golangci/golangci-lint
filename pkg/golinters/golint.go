@@ -2,35 +2,71 @@ package golinters
 
 import (
 	"fmt"
-	"go/ast"
-	"go/token"
-	"go/types"
 	"sync"
 
 	lintAPI "github.com/golangci/lint-1"
 	"golang.org/x/tools/go/analysis"
 
+	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-func golintProcessPkg(minConfidence float64, files []*ast.File, fset *token.FileSet,
-	typesPkg *types.Package, typesInfo *types.Info) ([]result.Issue, error) {
+const golintName = "golint"
+
+//nolint:dupl
+func NewGolint(settings *config.GoLintSettings) *goanalysis.Linter {
+	var mu sync.Mutex
+	var resIssues []goanalysis.Issue
+
+	analyzer := &analysis.Analyzer{
+		Name: golintName,
+		Doc:  goanalysis.TheOnlyanalyzerDoc,
+		Run: func(pass *analysis.Pass) (interface{}, error) {
+			issues, err := runGoLint(pass, settings)
+			if err != nil {
+				return nil, err
+			}
+
+			if len(issues) == 0 {
+				return nil, nil
+			}
+
+			mu.Lock()
+			resIssues = append(resIssues, issues...)
+			mu.Unlock()
+
+			return nil, nil
+		},
+	}
+
+	return goanalysis.NewLinter(
+		golintName,
+		"Golint differs from gofmt. Gofmt reformats Go source code, whereas golint prints out style mistakes",
+		[]*analysis.Analyzer{analyzer},
+		nil,
+	).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
+		return resIssues
+	}).WithLoadMode(goanalysis.LoadModeTypesInfo)
+}
+
+func runGoLint(pass *analysis.Pass, settings *config.GoLintSettings) ([]goanalysis.Issue, error) {
 	l := new(lintAPI.Linter)
-	ps, err := l.LintPkg(files, fset, typesPkg, typesInfo)
+
+	ps, err := l.LintPkg(pass.Files, pass.Fset, pass.Pkg, pass.TypesInfo)
 	if err != nil {
-		return nil, fmt.Errorf("can't lint %d files: %s", len(files), err)
+		return nil, fmt.Errorf("can't lint %d files: %s", len(pass.Files), err)
 	}
 
 	if len(ps) == 0 {
 		return nil, nil
 	}
 
-	issues := make([]result.Issue, 0, len(ps)) // This is worst case
+	lintIssues := make([]*result.Issue, 0, len(ps)) // This is worst case
 	for idx := range ps {
-		if ps[idx].Confidence >= minConfidence {
-			issues = append(issues, result.Issue{
+		if ps[idx].Confidence >= settings.MinConfidence {
+			lintIssues = append(lintIssues, &result.Issue{
 				Pos:        ps[idx].Position,
 				Text:       ps[idx].Text,
 				FromLinter: golintName,
@@ -39,40 +75,10 @@ func golintProcessPkg(minConfidence float64, files []*ast.File, fset *token.File
 		}
 	}
 
-	return issues, nil
-}
-
-const golintName = "golint"
-
-func NewGolint() *goanalysis.Linter {
-	var mu sync.Mutex
-	var resIssues []goanalysis.Issue
-
-	analyzer := &analysis.Analyzer{
-		Name: golintName,
-		Doc:  goanalysis.TheOnlyanalyzerDoc,
+	issues := make([]goanalysis.Issue, 0, len(lintIssues))
+	for _, issue := range lintIssues {
+		issues = append(issues, goanalysis.NewIssue(issue, pass))
 	}
-	return goanalysis.NewLinter(
-		golintName,
-		"Golint differs from gofmt. Gofmt reformats Go source code, whereas golint prints out style mistakes",
-		[]*analysis.Analyzer{analyzer},
-		nil,
-	).WithContextSetter(func(lintCtx *linter.Context) {
-		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
-			res, err := golintProcessPkg(lintCtx.Settings().Golint.MinConfidence, pass.Files, pass.Fset, pass.Pkg, pass.TypesInfo)
-			if err != nil || len(res) == 0 {
-				return nil, err
-			}
 
-			mu.Lock()
-			for i := range res {
-				resIssues = append(resIssues, goanalysis.NewIssue(&res[i], pass))
-			}
-			mu.Unlock()
-
-			return nil, nil
-		}
-	}).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
-		return resIssues
-	}).WithLoadMode(goanalysis.LoadModeTypesInfo)
+	return issues, nil
 }

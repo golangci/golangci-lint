@@ -7,6 +7,7 @@ import (
 	goconstAPI "github.com/jgautheron/goconst"
 	"golang.org/x/tools/go/analysis"
 
+	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
@@ -14,24 +15,22 @@ import (
 
 const goconstName = "goconst"
 
-func NewGoconst() *goanalysis.Linter {
+//nolint:dupl
+func NewGoconst(settings *config.GoConstSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
 
 	analyzer := &analysis.Analyzer{
 		Name: goconstName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
-	}
-	return goanalysis.NewLinter(
-		goconstName,
-		"Finds repeated strings that could be replaced by a constant",
-		[]*analysis.Analyzer{analyzer},
-		nil,
-	).WithContextSetter(func(lintCtx *linter.Context) {
-		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
-			issues, err := checkConstants(pass, lintCtx)
-			if err != nil || len(issues) == 0 {
+		Run: func(pass *analysis.Pass) (interface{}, error) {
+			issues, err := runGoconst(pass, settings)
+			if err != nil {
 				return nil, err
+			}
+
+			if len(issues) == 0 {
+				return nil, nil
 			}
 
 			mu.Lock()
@@ -39,15 +38,20 @@ func NewGoconst() *goanalysis.Linter {
 			mu.Unlock()
 
 			return nil, nil
-		}
-	}).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
+		},
+	}
+
+	return goanalysis.NewLinter(
+		goconstName,
+		"Finds repeated strings that could be replaced by a constant",
+		[]*analysis.Analyzer{analyzer},
+		nil,
+	).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
 		return resIssues
 	}).WithLoadMode(goanalysis.LoadModeSyntax)
 }
 
-func checkConstants(pass *analysis.Pass, lintCtx *linter.Context) ([]goanalysis.Issue, error) {
-	settings := lintCtx.Settings().Goconst
-
+func runGoconst(pass *analysis.Pass, settings *config.GoConstSettings) ([]goanalysis.Issue, error) {
 	cfg := goconstAPI.Config{
 		IgnoreTests:        settings.IgnoreTests,
 		MatchWithConstants: settings.MatchWithConstants,
@@ -63,27 +67,28 @@ func checkConstants(pass *analysis.Pass, lintCtx *linter.Context) ([]goanalysis.
 		cfg.ExcludeTypes[goconstAPI.Call] = true
 	}
 
-	goconstIssues, err := goconstAPI.Run(pass.Files, pass.Fset, &cfg)
+	lintIssues, err := goconstAPI.Run(pass.Files, pass.Fset, &cfg)
 	if err != nil {
 		return nil, err
 	}
 
-	if len(goconstIssues) == 0 {
+	if len(lintIssues) == 0 {
 		return nil, nil
 	}
 
-	res := make([]goanalysis.Issue, 0, len(goconstIssues))
-	for _, i := range goconstIssues {
-		textBegin := fmt.Sprintf("string %s has %d occurrences", formatCode(i.Str, lintCtx.Cfg), i.OccurrencesCount)
-		var textEnd string
+	res := make([]goanalysis.Issue, 0, len(lintIssues))
+	for _, i := range lintIssues {
+		text := fmt.Sprintf("string %s has %d occurrences", formatCode(i.Str, nil), i.OccurrencesCount)
+
 		if i.MatchingConst == "" {
-			textEnd = ", make it a constant"
+			text += ", make it a constant"
 		} else {
-			textEnd = fmt.Sprintf(", but such constant %s already exists", formatCode(i.MatchingConst, lintCtx.Cfg))
+			text += fmt.Sprintf(", but such constant %s already exists", formatCode(i.MatchingConst, nil))
 		}
+
 		res = append(res, goanalysis.NewIssue(&result.Issue{
 			Pos:        i.Pos,
-			Text:       textBegin + textEnd,
+			Text:       text,
 			FromLinter: goconstName,
 		}, pass))
 	}

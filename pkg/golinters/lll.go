@@ -11,10 +11,73 @@ import (
 
 	"golang.org/x/tools/go/analysis"
 
+	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
+
+const lllName = "lll"
+
+//nolint:dupl
+func NewLLL(settings *config.LllSettings) *goanalysis.Linter {
+	var mu sync.Mutex
+	var resIssues []goanalysis.Issue
+
+	analyzer := &analysis.Analyzer{
+		Name: lllName,
+		Doc:  goanalysis.TheOnlyanalyzerDoc,
+		Run: func(pass *analysis.Pass) (interface{}, error) {
+			issues, err := runLll(pass, settings)
+			if err != nil {
+				return nil, err
+			}
+
+			if len(issues) == 0 {
+				return nil, nil
+			}
+
+			mu.Lock()
+			resIssues = append(resIssues, issues...)
+			mu.Unlock()
+
+			return nil, nil
+		},
+	}
+
+	return goanalysis.NewLinter(
+		lllName,
+		"Reports long lines",
+		[]*analysis.Analyzer{analyzer},
+		nil,
+	).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
+		return resIssues
+	}).WithLoadMode(goanalysis.LoadModeSyntax)
+}
+
+func runLll(pass *analysis.Pass, settings *config.LllSettings) ([]goanalysis.Issue, error) {
+	var fileNames []string
+	for _, f := range pass.Files {
+		pos := pass.Fset.PositionFor(f.Pos(), false)
+		fileNames = append(fileNames, pos.Filename)
+	}
+
+	spaces := strings.Repeat(" ", settings.TabWidth)
+
+	var issues []goanalysis.Issue
+	for _, f := range fileNames {
+		lintIssues, err := getLLLIssuesForFile(f, settings.LineLength, spaces)
+		if err != nil {
+			return nil, err
+		}
+
+		for i := range lintIssues {
+			issues = append(issues, goanalysis.NewIssue(&lintIssues[i], pass))
+		}
+	}
+
+	return issues, nil
+}
 
 func getLLLIssuesForFile(filename string, maxLineLen int, tabSpaces string) ([]result.Issue, error) {
 	var res []result.Issue
@@ -71,54 +134,4 @@ func getLLLIssuesForFile(filename string, maxLineLen int, tabSpaces string) ([]r
 	}
 
 	return res, nil
-}
-
-const lllName = "lll"
-
-func NewLLL() *goanalysis.Linter {
-	var mu sync.Mutex
-	var resIssues []goanalysis.Issue
-
-	analyzer := &analysis.Analyzer{
-		Name: lllName,
-		Doc:  goanalysis.TheOnlyanalyzerDoc,
-	}
-	return goanalysis.NewLinter(
-		lllName,
-		"Reports long lines",
-		[]*analysis.Analyzer{analyzer},
-		nil,
-	).WithContextSetter(func(lintCtx *linter.Context) {
-		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
-			var fileNames []string
-			for _, f := range pass.Files {
-				pos := pass.Fset.PositionFor(f.Pos(), false)
-				fileNames = append(fileNames, pos.Filename)
-			}
-
-			var res []goanalysis.Issue
-			spaces := strings.Repeat(" ", lintCtx.Settings().Lll.TabWidth)
-			for _, f := range fileNames {
-				issues, err := getLLLIssuesForFile(f, lintCtx.Settings().Lll.LineLength, spaces)
-				if err != nil {
-					return nil, err
-				}
-				for i := range issues {
-					res = append(res, goanalysis.NewIssue(&issues[i], pass))
-				}
-			}
-
-			if len(res) == 0 {
-				return nil, nil
-			}
-
-			mu.Lock()
-			resIssues = append(resIssues, res...)
-			mu.Unlock()
-
-			return nil, nil
-		}
-	}).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
-		return resIssues
-	}).WithLoadMode(goanalysis.LoadModeSyntax)
 }

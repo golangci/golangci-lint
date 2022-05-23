@@ -10,6 +10,7 @@ import (
 
 func NewTestpackage(cfg *config.TestpackageSettings) *goanalysis.Linter {
 	var a = testpackage.NewAnalyzer()
+
 	var settings map[string]map[string]interface{}
 	if cfg != nil {
 		settings = map[string]map[string]interface{}{
@@ -18,6 +19,7 @@ func NewTestpackage(cfg *config.TestpackageSettings) *goanalysis.Linter {
 			},
 		}
 	}
+
 	return goanalysis.NewLinter(a.Name, a.Doc, []*analysis.Analyzer{a}, settings).
 		WithLoadMode(goanalysis.LoadModeSyntax)
 }

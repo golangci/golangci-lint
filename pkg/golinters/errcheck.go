@@ -22,26 +22,27 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-func NewErrcheck() *goanalysis.Linter {
-	const linterName = "errcheck"
+const errcheckName = "errcheck"
 
+func NewErrcheck(settings *config.ErrcheckSettings) *goanalysis.Linter {
 	var mu sync.Mutex
-	var res []goanalysis.Issue
+	var resIssues []goanalysis.Issue
 
 	analyzer := &analysis.Analyzer{
-		Name: linterName,
+		Name: errcheckName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
+		Run:  goanalysis.DummyRun,
 	}
 
 	return goanalysis.NewLinter(
-		linterName,
+		errcheckName,
 		"Errcheck is a program for checking for unchecked errors "+
 			"in go programs. These unchecked errors can be critical bugs in some cases",
 		[]*analysis.Analyzer{analyzer},
 		nil,
 	).WithContextSetter(func(lintCtx *linter.Context) {
 		// copied from errcheck
-		checker, err := getChecker(&lintCtx.Settings().Errcheck)
+		checker, err := getChecker(settings)
 		if err != nil {
 			lintCtx.Log.Errorf("failed to get checker: %v", err)
 			return
@@ -50,54 +51,64 @@ func NewErrcheck() *goanalysis.Linter {
 		checker.Tags = lintCtx.Cfg.Run.BuildTags
 
 		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
-			pkg := &packages.Package{
-				Fset:      pass.Fset,
-				Syntax:    pass.Files,
-				Types:     pass.Pkg,
-				TypesInfo: pass.TypesInfo,
+			issues := runErrCheck(lintCtx, pass, checker)
+			if err != nil {
+				return nil, err
 			}
 
-			errcheckIssues := checker.CheckPackage(pkg).Unique()
-			if len(errcheckIssues.UncheckedErrors) == 0 {
+			if len(issues) == 0 {
 				return nil, nil
 			}
 
-			issues := make([]goanalysis.Issue, len(errcheckIssues.UncheckedErrors))
-			for i, err := range errcheckIssues.UncheckedErrors {
-				var text string
-				if err.FuncName != "" {
-					code := err.SelectorName
-					if err.SelectorName == "" {
-						code = err.FuncName
-					}
-
-					text = fmt.Sprintf(
-						"Error return value of %s is not checked",
-						formatCode(code, lintCtx.Cfg),
-					)
-				} else {
-					text = "Error return value is not checked"
-				}
-
-				issues[i] = goanalysis.NewIssue(
-					&result.Issue{
-						FromLinter: linterName,
-						Text:       text,
-						Pos:        err.Pos,
-					},
-					pass,
-				)
-			}
-
 			mu.Lock()
-			res = append(res, issues...)
+			resIssues = append(resIssues, issues...)
 			mu.Unlock()
 
 			return nil, nil
 		}
 	}).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
-		return res
+		return resIssues
 	}).WithLoadMode(goanalysis.LoadModeTypesInfo)
+}
+
+func runErrCheck(lintCtx *linter.Context, pass *analysis.Pass, checker *errcheck.Checker) []goanalysis.Issue {
+	pkg := &packages.Package{
+		Fset:      pass.Fset,
+		Syntax:    pass.Files,
+		Types:     pass.Pkg,
+		TypesInfo: pass.TypesInfo,
+	}
+
+	lintIssues := checker.CheckPackage(pkg).Unique()
+	if len(lintIssues.UncheckedErrors) == 0 {
+		return nil
+	}
+
+	issues := make([]goanalysis.Issue, len(lintIssues.UncheckedErrors))
+
+	for i, err := range lintIssues.UncheckedErrors {
+		text := "Error return value is not checked"
+
+		if err.FuncName != "" {
+			code := err.SelectorName
+			if err.SelectorName == "" {
+				code = err.FuncName
+			}
+
+			text = fmt.Sprintf("Error return value of %s is not checked", formatCode(code, lintCtx.Cfg))
+		}
+
+		issues[i] = goanalysis.NewIssue(
+			&result.Issue{
+				FromLinter: errcheckName,
+				Text:       text,
+				Pos:        err.Pos,
+			},
+			pass,
+		)
+	}
+
+	return issues
 }
 
 // parseIgnoreConfig was taken from errcheck in order to keep the API identical.

@@ -7,57 +7,71 @@ import (
 	"github.com/yeya24/promlinter"
 	"golang.org/x/tools/go/analysis"
 
+	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-func NewPromlinter() *goanalysis.Linter {
+const promlinterName = "promlinter"
+
+func NewPromlinter(settings *config.PromlinterSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
 
-	const linterName = "promlinter"
-	analyzer := &analysis.Analyzer{
-		Name: linterName,
-		Doc:  goanalysis.TheOnlyanalyzerDoc,
+	var promSettings promlinter.Setting
+	if settings != nil {
+		promSettings = promlinter.Setting{
+			Strict:            settings.Strict,
+			DisabledLintFuncs: settings.DisabledLinters,
+		}
 	}
-	return goanalysis.NewLinter(
-		linterName,
-		"Check Prometheus metrics naming via promlint",
-		[]*analysis.Analyzer{analyzer},
-		nil,
-	).WithContextSetter(func(lintCtx *linter.Context) {
-		strict := lintCtx.Cfg.LintersSettings.Promlinter.Strict
-		disabledLinters := lintCtx.Cfg.LintersSettings.Promlinter.DisabledLinters
 
-		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
-			issues := promlinter.RunLint(pass.Fset, pass.Files, promlinter.Setting{
-				Strict:            strict,
-				DisabledLintFuncs: disabledLinters,
-			})
+	analyzer := &analysis.Analyzer{
+		Name: promlinterName,
+		Doc:  goanalysis.TheOnlyanalyzerDoc,
+		Run: func(pass *analysis.Pass) (interface{}, error) {
+			issues := runPromLinter(pass, promSettings)
 
 			if len(issues) == 0 {
 				return nil, nil
 			}
 
-			res := make([]goanalysis.Issue, len(issues))
-			for k, i := range issues {
-				issue := result.Issue{
-					Pos:        i.Pos,
-					Text:       fmt.Sprintf("Metric: %s Error: %s", i.Metric, i.Text),
-					FromLinter: linterName,
-				}
-
-				res[k] = goanalysis.NewIssue(&issue, pass)
-			}
-
 			mu.Lock()
-			resIssues = append(resIssues, res...)
+			resIssues = append(resIssues, issues...)
 			mu.Unlock()
 
 			return nil, nil
-		}
-	}).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
+		},
+	}
+
+	return goanalysis.NewLinter(
+		promlinterName,
+		"Check Prometheus metrics naming via promlint",
+		[]*analysis.Analyzer{analyzer},
+		nil,
+	).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
 		return resIssues
 	}).WithLoadMode(goanalysis.LoadModeSyntax)
+}
+
+func runPromLinter(pass *analysis.Pass, promSettings promlinter.Setting) []goanalysis.Issue {
+	lintIssues := promlinter.RunLint(pass.Fset, pass.Files, promSettings)
+
+	if len(lintIssues) == 0 {
+		return nil
+	}
+
+	issues := make([]goanalysis.Issue, len(lintIssues))
+	for k, i := range lintIssues {
+		issue := result.Issue{
+			Pos:        i.Pos,
+			Text:       fmt.Sprintf("Metric: %s Error: %s", i.Metric, i.Text),
+			FromLinter: promlinterName,
+		}
+
+		issues[k] = goanalysis.NewIssue(&issue, pass)
+	}
+
+	return issues
 }
