@@ -24,20 +24,7 @@ func NewUnparam(settings *config.UnparamSettings) *goanalysis.Linter {
 		Name:     unparamName,
 		Doc:      goanalysis.TheOnlyanalyzerDoc,
 		Requires: []*analysis.Analyzer{buildssa.Analyzer},
-		Run:      goanalysis.DummyRun,
-	}
-
-	return goanalysis.NewLinter(
-		unparamName,
-		"Reports unused function parameters",
-		[]*analysis.Analyzer{analyzer},
-		nil,
-	).WithContextSetter(func(lintCtx *linter.Context) {
-		if settings.Algo != "cha" {
-			lintCtx.Log.Warnf("`linters-settings.unparam.algo` isn't supported by the newest `unparam`")
-		}
-
-		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
+		Run: func(pass *analysis.Pass) (interface{}, error) {
 			issues, err := runUnparam(pass, settings)
 			if err != nil {
 				return nil, err
@@ -52,6 +39,17 @@ func NewUnparam(settings *config.UnparamSettings) *goanalysis.Linter {
 			mu.Unlock()
 
 			return nil, nil
+		},
+	}
+
+	return goanalysis.NewLinter(
+		unparamName,
+		"Reports unused function parameters",
+		[]*analysis.Analyzer{analyzer},
+		nil,
+	).WithContextSetter(func(lintCtx *linter.Context) {
+		if settings.Algo != "cha" {
+			lintCtx.Log.Warnf("`linters-settings.unparam.algo` isn't supported by the newest `unparam`")
 		}
 	}).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
 		return resIssues

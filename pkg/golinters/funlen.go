@@ -38,6 +38,7 @@ func NewFunlen(settings *config.FunlenSettings) *goanalysis.Linter {
 			return nil, nil
 		},
 	}
+
 	return goanalysis.NewLinter(
 		funlenName,
 		"Tool for detection of long functions",

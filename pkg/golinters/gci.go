@@ -16,7 +16,6 @@ const gciName = "gci"
 
 func NewGci(settings *config.GciSettings) *goanalysis.Linter {
 	var linterCfg map[string]map[string]interface{}
-
 	if settings != nil {
 		cfg := map[string]interface{}{
 			gci.NoInlineCommentsFlag:  settings.NoInlineComments,
