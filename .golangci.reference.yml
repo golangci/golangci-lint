@@ -479,11 +479,11 @@ linters-settings:
         # Comma-separated list of enabled groups or skip empty to enable everything.
         # Tags can be defined with # character prefix.
         # Default: "<all>"
-        enable: "badLock,httpNoBody,#experimental,#style"
+        enable: "myGroupName,#myTagName"
         # Comma-separated list of disabled groups or skip empty to enable everything.
         # Tags can be defined with # character prefix.
         # Default: ""
-        disable: "badLock,httpNoBody,#experimental,#style"
+        disable: "myGroupName,#myTagName"
       tooManyResultsChecker:
         # Maximum number of results.
         # Default: 5
