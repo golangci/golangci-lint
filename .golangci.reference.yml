@@ -182,6 +182,7 @@ linters-settings:
     # This allows for more precise control, but it is only available for glob patterns.
     # Default: []
     ignore-file-rules:
+      - "ignore/**/*.go"
       - "!**/*_test.go"
 
     # Create additional guards that follow the same configuration pattern.
