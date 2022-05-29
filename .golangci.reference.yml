@@ -122,6 +122,7 @@ linters-settings:
 
   cyclop:
     # The maximal code complexity to report.
+    # Default: 10
     max-complexity: 10
     # The maximal average package complexity.
     # If it's higher than 0.0 (float) the check is enabled
@@ -284,6 +285,7 @@ linters-settings:
     # The struct packages have the form `example.com/package.ExampleStruct`.
     # The matching patterns can use matching syntax from https://pkg.go.dev/path#Match.
     # If this list is empty, all structs are tested.
+    # Default: []
     struct-patterns:
       - '*.Test'
       - 'example.com/package.ExampleStruct'
@@ -291,19 +293,22 @@ linters-settings:
   exhaustruct:
     # List of regular expressions to match struct packages and names.
     # If this list is empty, all structs are tested.
+    # Default: []
     include:
       - '.*\.Test'
       - 'example\.com/package\.ExampleStruct[\d]{1,2}'
     # List of regular expressions to exclude struct packages and names from check.
+    # Default: []
     exclude:
       - 'cobra\.Command$'
 
   forbidigo:
     # Forbid the following identifiers (list of regexp).
+    # Default: ["^(fmt\\.Print(|f|ln)|print|println)$"]
     forbid:
       - ^print.*$
       - 'fmt\.Print.*'
-      # Optionally put comments at the end of the regex, surrounded by `(# )?`
+      # Optionally put comments at the end of the regex, surrounded by `(# )?`
       # Escape any special characters.
       - 'fmt\.Print.*(# Do not commit print statements\.)?'
     # Exclude godoc examples from forbidigo checks.
@@ -487,6 +492,7 @@ linters-settings:
         skipRecvDeref: false
       unnamedResult:
         # Whether to check exported functions.
+        # Default: false
         checkExported: true
 
   gocyclo:
@@ -499,6 +505,7 @@ linters-settings:
     # Default: declarations
     scope: toplevel
     # List of regexps for excluding particular comment lines from check.
+    # Default: []
     exclude:
       # Exclude todo and fixme comments.
       - "^fixme:"
@@ -513,7 +520,7 @@ linters-settings:
   godox:
     # Report any comments starting with keywords, this is useful for TODO or FIXME comments that
     # might be left in the code accidentally and should be resolved before merging.
-    # Default: TODO, BUG, and FIXME.
+    # Default: ["TODO", "BUG", "FIXME"]
     keywords:
       - NOTE
       - OPTIMIZE # marks code that should be optimized before merging
@@ -526,11 +533,11 @@ linters-settings:
 
   gofumpt:
     # Select the Go version to target.
-    # Default: 1.15
+    # Default: "1.15"
     lang-version: "1.17"
 
     # Module path which contains the source code being formatted.
-    # Default: empty string
+    # Default: ""
     module-path: github.com/org/project
 
     # Choose whether to use the extra rules.
@@ -540,6 +547,7 @@ linters-settings:
   goheader:
     # Supports two types 'const` and `regexp`.
     # Values can be used recursively.
+    # Default: {}
     values:
       const:
         # Define here const type values in format k:v.
@@ -550,6 +558,7 @@ linters-settings:
         # for example:
         AUTHOR: .*@mycompany\.com
     # The template use for checking.
+    # Default: ""
     template: |-
       # Put here copyright header template for source code files
       # For example:
@@ -571,11 +580,13 @@ linters-settings:
       # limitations under the License.
     # As alternative of directive 'template', you may put the path to file with the template source.
     # Useful if you need to load the template from a specific file.
+    # Default: ""
     template-path: /path/to/my/template.tmpl
 
   goimports:
     # Put imports beginning with prefix after 3rd-party packages.
     # It's a comma-separated list of prefixes.
+    # Default: ""
     local-prefixes: github.com/org/project
 
   golint:
@@ -585,6 +596,7 @@ linters-settings:
 
   gomnd:
     # List of enabled checks, see https://github.com/tommy-muehle/go-mnd/#checks for description.
+    # Default: ["argument", "case", "condition", "operation", "return", "assign"]
     checks:
       - argument
       - case
@@ -595,22 +607,26 @@ linters-settings:
     # List of numbers to exclude from analysis.
     # The numbers should be written as string.
     # Values always ignored: "1", "1.0", "0" and "0.0"
+    # Default: []
     ignored-numbers:
       - '0666'
       - '0755'
       - '42'
     # List of file patterns to exclude from analysis.
     # Values always ignored: `.+_test.go`
+    # Default: []
     ignored-files:
       - 'magic1_.*.go'
     # List of function patterns to exclude from analysis.
     # Values always ignored: `time.Time`
+    # Default: []
     ignored-functions:
       - 'math.*'
       - 'http.StatusText'
 
   gomoddirectives:
     # Allow local `replace` directives.
+    # Default: false
     replace-local: false
     # List of allowed `replace` directives.
     # Default: []
@@ -626,13 +642,16 @@ linters-settings:
   gomodguard:
     allowed:
       # List of allowed modules.
+      # Default: []
       modules:
          - gopkg.in/yaml.v2
       # List of allowed module domains.
+      # Default: []
       domains:
          - golang.org
     blocked:
       # List of blocked modules.
+      # Default: []
       modules:
         # Blocked module.
         - github.com/uudashr/go-module:
@@ -642,6 +661,7 @@ linters-settings:
             # Reason why the recommended module should be used. (Optional)
             reason: "`mod` is the official go.mod parser library."
       # List of blocked module version constraints.
+      # Default: []
       versions:
         # Blocked module with version constraint.
         - github.com/mitchellh/go-homedir:
@@ -650,6 +670,7 @@ linters-settings:
             # Reason why the version constraint exists. (Optional)
             reason: "testing if blocked version constraint works."
       # Set to true to raise lint issues for packages that are loaded from a local path via replace directive.
+      # Default: false
       local_replace_directives: false
 
   gosimple:
@@ -657,6 +678,7 @@ linters-settings:
     # Default: 1.13
     go: "1.15"
     # https://staticcheck.io/docs/options#checks
+    # Default: ["*"]
     checks: [ "all" ]
 
   gosec:
@@ -909,6 +931,7 @@ linters-settings:
     # Default: false
     no-extra-aliases: true
     # List of aliases
+    # Default: []
     alias:
       # Using `servingv1` alias for `knative.dev/serving/pkg/apis/serving/v1` package.
       - pkg: knative.dev/serving/pkg/apis/serving/v1
@@ -975,6 +998,7 @@ linters-settings:
     # Setting locale to US will correct the British spelling of 'colour' to 'color'.
     # Default is to use a neutral variety of English.
     locale: US
+    # Default: []
     ignore-words:
       - someword
 
@@ -990,7 +1014,7 @@ linters-settings:
 
   nilnil:
     # Checks that there is no simultaneous return of `nil` error and an invalid value.
-    # Default: ptr, func, iface, map, chan
+    # Default: ["ptr", "func", "iface", "map", "chan"]
     checked-types:
       - ptr
       - func
@@ -1049,6 +1073,7 @@ linters-settings:
     # Default: false
     strict: true
     # Please refer to https://github.com/yeya24/promlinter#usage for detailed usage.
+    # Default: []
     disabled-linters:
      - Help
      - MetricUnits
@@ -1398,14 +1423,17 @@ linters-settings:
         disabled: false
 
   rowserrcheck:
+    # database/sql is always checked
+    # Default: []
     packages:
       - github.com/jmoiron/sqlx
 
   staticcheck:
     # Select the Go version to target.
-    # Default: 1.13
+    # Default: "1.13"
     go: "1.15"
     # https://staticcheck.io/docs/options#checks
+    # Default: ["*"]
     checks: [ "all" ]
 
   stylecheck:
@@ -1413,13 +1441,17 @@ linters-settings:
     # Default: 1.13
     go: "1.15"
     # https://staticcheck.io/docs/options#checks
+    # Default: ["*"]
     checks: [ "all", "-ST1000", "-ST1003", "-ST1016", "-ST1020", "-ST1021", "-ST1022" ]
     # https://staticcheck.io/docs/options#dot_import_whitelist
+    # Default: ["github.com/mmcloughlin/avo/build", "github.com/mmcloughlin/avo/operand", "github.com/mmcloughlin/avo/reg"]
     dot-import-whitelist:
       - fmt
     # https://staticcheck.io/docs/options#initialisms
-    initialisms: [ "ACL", "API", "ASCII", "CPU", "CSS", "DNS", "EOF", "GUID", "HTML", "HTTP", "HTTPS", "ID", "IP", "JSON", "QPS", "RAM", "RPC", "SLA", "SMTP", "SQL", "SSH", "TCP", "TLS", "TTL", "UDP", "UI", "GID", "UID", "UUID", "URI", "URL", "UTF8", "VM", "XML", "XMPP", "XSRF", "XSS" ]
+    # Default: ["ACL", "API", "ASCII", "CPU", "CSS", "DNS", "EOF", "GUID", "HTML", "HTTP", "HTTPS", "ID", "IP", "JSON", "QPS", "RAM", "RPC", "SLA", "SMTP", "SQL", "SSH", "TCP", "TLS", "TTL", "UDP", "UI", "GID", "UID", "UUID", "URI", "URL", "UTF8", "VM", "XML", "XMPP", "XSRF", "XSS", "SIP", "RTP", "AMQP", "DB", "TS"]
+    initialisms: [ "ACL", "API", "ASCII", "CPU", "CSS", "DNS", "EOF", "GUID", "HTML", "HTTP", "HTTPS", "ID", "IP", "JSON", "QPS", "RAM", "RPC", "SLA", "SMTP", "SQL", "SSH", "TCP", "TLS", "TTL", "UDP", "UI", "GID", "UID", "UUID", "URI", "URL", "UTF8", "VM", "XML", "XMPP", "XSRF", "XSS", "SIP", "RTP", "AMQP", "DB", "TS" ]
     # https://staticcheck.io/docs/options#http_status_code_whitelist
+    # Default: ["200", "400", "404", "500"]
     http-status-code-whitelist: [ "200", "400", "404", "500" ]
 
   tagliatelle:
@@ -1428,6 +1460,8 @@ linters-settings:
       # Use the struct field name to check the name of the struct tag.
       # Default: false
       use-field-name: true
+      # `camel` is used for `json` and `yaml` (can be overridden)
+      # Default: {}
       rules:
         # Any struct tag type can be used.
         # Support string case: `camel`, `pascal`, `kebab`, `snake`, `goCamel`, `goPascal`, `goKebab`, `goSnake`, `upper`, `lower`
@@ -1440,11 +1474,13 @@ linters-settings:
 
   tenv:
     # The option `all` will run against whole test files (`_test.go`) regardless of method/function signatures.
-    # By default, only methods that take `*testing.T`, `*testing.B`, and `testing.TB` as arguments are checked.
+    # Otherwise, only methods that take `*testing.T`, `*testing.B`, and `testing.TB` as arguments are checked.
+    # Default: false
     all: false
 
   testpackage:
-    # regexp pattern to skip files
+    # Regexp pattern to skip files.
+    # Default: "(export|internal)_test\\.go"
     skip-regexp: (export|internal)_test\.go
 
   thelper:
@@ -1539,6 +1575,7 @@ linters-settings:
     # An array of strings that specify substrings of signatures to ignore.
     # If this set, it will override the default set of ignored signatures.
     # See https://github.com/tomarrell/wrapcheck#configuration for more information.
+    # Default: [".Errorf(", "errors.New(", "errors.Unwrap(", ".Wrap(", ".Wrapf(", ".WithMessage(", ".WithMessagef(", ".WithStack("]
     ignoreSigs:
       - .Errorf(
       - errors.New(
@@ -1548,11 +1585,17 @@ linters-settings:
       - .WithMessage(
       - .WithMessagef(
       - .WithStack(
+    # An array of strings that specify regular expressions of signatures to ignore.
+    # Default: []
     ignoreSigRegexps:
       - \.New.*Error\(
+    # An array of strings that specify globs of packages to ignore.
+    # Default: []
     ignorePackageGlobs:
       - encoding/*
       - github.com/pkg/*
+    # An array of strings that specify regular expressions of interfaces to ignore.
+    # Default: []
     ignoreInterfaceRegexps:
       - ^(?i)c(?-i)ach(ing|e)
 
