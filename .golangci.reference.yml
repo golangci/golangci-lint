@@ -684,6 +684,7 @@ linters-settings:
   gosec:
     # To select a subset of rules to run.
     # Available rules: https://github.com/securego/gosec#available-rules
+    # Default: [] - means include all rules
     includes:
       - G101
       - G102
@@ -719,6 +720,7 @@ linters-settings:
 
     # To specify a set of rules to explicitly exclude.
     # Available rules: https://github.com/securego/gosec#available-rules
+    # Default: []
     excludes:
       - G101
       - G102
@@ -771,17 +773,66 @@ linters-settings:
     concurrency: 12
 
     # To specify the configuration of rules.
-    # The configuration of rules is not fully documented by gosec:
-    # https://github.com/securego/gosec#configuration
-    # https://github.com/securego/gosec/blob/569328eade2ccbad4ce2d0f21ee158ab5356a5cf/rules/rulelist.go#L60-L102
     config:
-      G306: "0600"
       G101:
+        # Regexp pattern for variables and constants to find.
+        # Default: "(?i)passwd|pass|password|pwd|secret|token|pw|apiKey|bearer|cred"
         pattern: "(?i)example"
+        # If true, complain about all cases (even with low entropy).
+        # Default: false
         ignore_entropy: false
+        # Maximum allowed entropy of the string.
+        # Default: "80.0"
         entropy_threshold: "80.0"
+        # Maximum allowed value of entropy/string length.
+        # Is taken into account if entropy >= entropy_threshold/2.
+        # Default: "3.0"
         per_char_threshold: "3.0"
+        # Calculate entropy for first N chars of the string.
+        # Default: "16"
         truncate: "32"
+      # Additional functions to ignore while checking unhandled errors.
+      # Following functions always ignored:
+      #   bytes.Buffer:
+      #     - Write
+      #     - WriteByte
+      #     - WriteRune
+      #     - WriteString
+      #   fmt:
+      #     - Print
+      #     - Printf
+      #     - Println
+      #     - Fprint
+      #     - Fprintf
+      #     - Fprintln
+      #   strings.Builder:
+      #     - Write
+      #     - WriteByte
+      #     - WriteRune
+      #     - WriteString
+      #   io.PipeWriter:
+      #     - CloseWithError
+      #   hash.Hash:
+      #     - Write
+      #   os:
+      #     - Unsetenv
+      # Default: {}
+      G104:
+        fmt:
+          - Fscanf
+      G111:
+        # Regexp pattern to find potential directory traversal.
+        # Default: "http\\.Dir\\(\"\\/\"\\)|http\\.Dir\\('\\/'\\)"
+        pattern: "custom\\.Dir\\(\\)"
+      # Maximum allowed permissions mode for os.Mkdir and os.MkdirAll
+      # Default: "0750"
+      G301: "0750"
+      # Maximum allowed permissions mode for os.OpenFile and os.Chmod
+      # Default: "0600"
+      G302: "0600"
+      # Maximum allowed permissions mode for os.WriteFile and ioutil.WriteFile
+      # Default: "0600"
+      G306: "0600"
 
   govet:
     # Report about shadowed variables.
