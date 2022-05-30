@@ -792,18 +792,36 @@ linters-settings:
     settings:
       # Analyzer name, run `go tool vet help` to see all analyzers.
       printf:
-        # Run `go tool vet help printf` to see available settings for `printf` analyzer.
+        # Comma-separated list of print function names to check (in addition to default, see `go tool vet help printf`).
+        # Default: []
         funcs:
           - (github.com/golangci/golangci-lint/pkg/logutils.Log).Infof
           - (github.com/golangci/golangci-lint/pkg/logutils.Log).Warnf
           - (github.com/golangci/golangci-lint/pkg/logutils.Log).Errorf
           - (github.com/golangci/golangci-lint/pkg/logutils.Log).Fatalf
+      shadow:
+        # Whether to be strict about shadowing; can be noisy.
+        # Default: false
+        strict: true
+      unusedresult:
+        # Comma-separated list of functions whose results must be used
+        # (in addition to defaults context.WithCancel,context.WithDeadline,context.WithTimeout,context.WithValue,
+        # errors.New,fmt.Errorf,fmt.Sprint,fmt.Sprintf,sort.Reverse)
+        # Default []
+        funcs:
+          - pkg.MyFunc
+        # Comma-separated list of names of methods of type func() string whose results must be used
+        # (in addition to default Error,String)
+        # Default []
+        stringmethods:
+          - MyMethod
 
     # Disable all analyzers.
     # Default: false
     disable-all: true
-    # Enable analyzers by name.
+    # Enable analyzers by name (in addition to default).
     # Run `go tool vet help` to see all analyzers.
+    # Default: []
     enable:
       - asmdecl
       - assign
@@ -847,6 +865,7 @@ linters-settings:
     enable-all: true
     # Disable analyzers by name.
     # Run `go tool vet help` to see all analyzers.
+    # Default: []
     disable:
       - asmdecl
       - assign
