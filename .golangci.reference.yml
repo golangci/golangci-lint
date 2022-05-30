@@ -164,15 +164,27 @@ linters-settings:
     include-go-root: true
 
     # A list of packages for the list type specified.
+    # Can accept both string prefixes and string glob patterns.
     # Default: []
     packages:
       - github.com/sirupsen/logrus
+      - allow/**/pkg
 
     # A list of packages for the list type specified.
     # Specify an error message to output when a denied package is used.
     # Default: []
     packages-with-error-message:
       - github.com/sirupsen/logrus: 'logging is allowed only by logutils.Log'
+
+    # Specify rules by which the linter ignores certain files for consideration.
+    # Can accept both string prefixes and string glob patterns.
+    # The ! character in front of the rule is a special character
+    # which signals that the linter should negate the rule.
+    # This allows for more precise control, but it is only available for glob patterns.
+    # Default: []
+    ignore-file-rules:
+      - "ignore/**/*.go"
+      - "!**/*_test.go"
 
     # Create additional guards that follow the same configuration pattern.
     # Results from all guards are aggregated together.
