@@ -333,8 +333,7 @@ func getThanksList() string {
 		}
 		addedAuthors[githubAuthor] = true
 
-		line := fmt.Sprintf("- [%s](https://github.com/%s)",
-			githubAuthor, githubAuthor)
+		line := fmt.Sprintf("- [%[1]s](https://github.com/sponsors/%[1]s)", githubAuthor)
 		lines = append(lines, line)
 	}
 
