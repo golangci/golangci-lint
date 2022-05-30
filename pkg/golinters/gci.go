@@ -1,10 +1,11 @@
 package golinters
 
 import (
-	"fmt"
-	"strings"
+	"sync"
 
-	gci "github.com/daixiang0/gci/pkg/analyzer"
+	gcicfg "github.com/daixiang0/gci/pkg/configuration"
+	"github.com/daixiang0/gci/pkg/gci"
+	"github.com/pkg/errors"
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/config"
@@ -15,33 +16,64 @@ import (
 const gciName = "gci"
 
 func NewGci(settings *config.GciSettings) *goanalysis.Linter {
-	var linterCfg map[string]map[string]interface{}
+	var cfg *gci.GciConfiguration
+	var resIssues []goanalysis.Issue
+	var err error
+
+	analyzer := &analysis.Analyzer{
+		Name: gciName,
+		Doc:  goanalysis.TheOnlyanalyzerDoc,
+		Run:  goanalysis.DummyRun,
+	}
+
 	if settings != nil {
-		cfg := map[string]interface{}{
-			gci.NoInlineCommentsFlag:  settings.NoInlineComments,
-			gci.NoPrefixCommentsFlag:  settings.NoPrefixComments,
-			gci.SectionsFlag:          strings.Join(settings.Sections, gci.SectionDelimiter),
-			gci.SectionSeparatorsFlag: strings.Join(settings.SectionSeparator, gci.SectionDelimiter),
+		strcfg := gci.GciStringConfiguration{
+			Cfg: gcicfg.FormatterConfiguration{
+				NoInlineComments: settings.NoInlineComments,
+				NoPrefixComments: settings.NoPrefixComments,
+			},
+			SectionStrings:          settings.Sections,
+			SectionSeparatorStrings: settings.SectionSeparator,
 		}
-
-		if settings.LocalPrefixes != "" {
-			prefix := []string{"standard", "default", fmt.Sprintf("prefix(%s)", settings.LocalPrefixes)}
-			cfg[gci.SectionsFlag] = strings.Join(prefix, gci.SectionDelimiter)
-		}
-
-		linterCfg = map[string]map[string]interface{}{
-			gci.Analyzer.Name: cfg,
-		}
+		cfg, _ = strcfg.Parse()
 	}
 
 	return goanalysis.NewLinter(
 		gciName,
 		"Gci controls golang package import order and makes it always deterministic.",
-		[]*analysis.Analyzer{gci.Analyzer},
-		linterCfg,
+		[]*analysis.Analyzer{analyzer},
+		nil,
 	).WithContextSetter(func(lintCtx *linter.Context) {
-		if settings.LocalPrefixes != "" {
-			lintCtx.Log.Warnf("gci: `local-prefixes` is deprecated, use `sections` and `prefix(%s)` instead.", settings.LocalPrefixes)
+		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
+			var fileNames []string
+			for _, f := range pass.Files {
+				pos := pass.Fset.PositionFor(f.Pos(), false)
+				fileNames = append(fileNames, pos.Filename)
+			}
+			var lock sync.Mutex
+			var diffs []string
+			err = gci.DiffFormattedFilesToArray(fileNames, *cfg, &diffs, &lock)
+			if err != nil {
+				return nil, err
+			}
+			for _, diff := range diffs {
+				if diff == "" {
+					continue
+				}
+
+				is, err := extractIssuesFromPatch(diff, lintCtx, gciName)
+				if err != nil {
+					return nil, errors.Wrapf(err, "can't extract issues from gci diff output %s", diff)
+				}
+
+				for i := range is {
+					resIssues = append(resIssues, goanalysis.NewIssue(&is[i], pass))
+				}
+			}
+
+			return nil, nil
 		}
+	}).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
+		return resIssues
 	}).WithLoadMode(goanalysis.LoadModeSyntax)
 }
