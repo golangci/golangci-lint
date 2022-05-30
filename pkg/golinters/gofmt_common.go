@@ -208,27 +208,33 @@ func (p *hunkChangesParser) parse(h *diffpkg.Hunk) []Change {
 }
 
 func getErrorTextForGci(lintCtx *linter.Context) string {
+	settings := lintCtx.Settings().Gci
+
 	text := "File is not `gci`-ed"
-	noInLineComments := lintCtx.Settings().Gci.NoInlineComments
-	noPrefixComments := lintCtx.Settings().Gci.NoPrefixComments
-	sections := lintCtx.Settings().Gci.Sections
-	sectionSeparator := lintCtx.Settings().Gci.SectionSeparator
-	hasOptions := noInLineComments || noPrefixComments || len(sections) > 0 || len(sectionSeparator) > 0
-	if hasOptions {
-		text += " with"
+
+	hasOptions := settings.NoInlineComments || settings.NoPrefixComments || len(settings.Sections) > 0 || len(settings.SectionSeparator) > 0
+	if !hasOptions {
+		return text
 	}
-	if noInLineComments {
+
+	text += " with"
+
+	if settings.NoInlineComments {
 		text += " -NoInlineComments"
 	}
-	if noPrefixComments {
+
+	if settings.NoPrefixComments {
 		text += " -NoPrefixComments"
 	}
-	if len(sections) > 0 {
-		text += " -s " + strings.Join(sections, ",")
+
+	if len(settings.Sections) > 0 {
+		text += " -s " + strings.Join(settings.Sections, ",")
 	}
-	if len(sectionSeparator) > 0 {
-		text += " -x " + strings.Join(sectionSeparator, ",")
+
+	if len(settings.SectionSeparator) > 0 {
+		text += " -x " + strings.Join(settings.SectionSeparator, ",")
 	}
+
 	return text
 }
 
