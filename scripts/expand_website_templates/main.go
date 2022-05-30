@@ -313,28 +313,47 @@ func spanWithID(id, title, icon string) string {
 	return fmt.Sprintf(`<span id=%q title=%q>%s</span>`, id, title, icon)
 }
 
+type authorDetails struct {
+	Linters []string
+	Profile string
+	Avatar  string
+}
+
 func getThanksList() string {
-	addedAuthors := map[string]string{}
+	addedAuthors := map[string]*authorDetails{}
 
 	for _, lc := range lintersdb.NewManager(nil, nil).GetAllSupportedLinterConfigs() {
 		if lc.OriginalURL == "" {
 			continue
 		}
 
-		var line, author string
-		if author = extractAuthor(lc.OriginalURL, "https://github.com/"); author != "" && author != "golangci" {
-			line = fmt.Sprintf(`- <img src="https://github.com/%[1]s.png" alt="%[1]s" style="max-width: 20%%;" width="20px;"></img> <a href="https://github.com/sponsors/%[1]s">%[1]s</a>`, author)
-		} else if author = extractAuthor(lc.OriginalURL, "https://gitlab.com/"); author != "" {
-			line = fmt.Sprintf("- [%[1]s](https://gitlab.com/%[1]s)", author)
+		linterURL := lc.OriginalURL
+		if lc.Name() == "staticcheck" {
+			linterURL = "https://github.com/dominikh/go-tools"
+		}
+
+		if author := extractAuthor(linterURL, "https://github.com/"); author != "" && author != "golangci" {
+			if _, ok := addedAuthors[author]; ok {
+				addedAuthors[author].Linters = append(addedAuthors[author].Linters, lc.Name())
+			} else {
+				addedAuthors[author] = &authorDetails{
+					Linters: []string{lc.Name()},
+					Profile: fmt.Sprintf("[%[1]s](https://github.com/sponsors/%[1]s)", author),
+					Avatar:  fmt.Sprintf(`<img src="https://github.com/%[1]s.png" alt="%[1]s" style="max-width: 100%%;" width="20px;" />`, author),
+				}
+			}
+		} else if author := extractAuthor(linterURL, "https://gitlab.com/"); author != "" {
+			if _, ok := addedAuthors[author]; ok {
+				addedAuthors[author].Linters = append(addedAuthors[author].Linters, lc.Name())
+			} else {
+				addedAuthors[author] = &authorDetails{
+					Linters: []string{lc.Name()},
+					Profile: fmt.Sprintf("[%[1]s](https://gitlab.com/%[1]s)", author),
+				}
+			}
 		} else {
 			continue
 		}
-
-		if addedAuthors[author] != "" {
-			continue
-		}
-
-		addedAuthors[author] = line
 	}
 
 	var authors []string
@@ -346,9 +365,14 @@ func getThanksList() string {
 		return strings.ToLower(authors[i]) < strings.ToLower(authors[j])
 	})
 
-	var lines []string
+	lines := []string{
+		"|Author|Linter(s)|",
+		"|---|---|",
+	}
+
 	for _, author := range authors {
-		lines = append(lines, addedAuthors[author])
+		lines = append(lines, fmt.Sprintf("|%s %s|%s|",
+			addedAuthors[author].Avatar, addedAuthors[author].Profile, strings.Join(addedAuthors[author].Linters, ", ")))
 	}
 
 	return strings.Join(lines, "\n")
