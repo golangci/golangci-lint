@@ -314,30 +314,45 @@ func spanWithID(id, title, icon string) string {
 }
 
 func getThanksList() string {
+	addedLines := map[string]bool{}
+
 	var lines []string
-	addedAuthors := map[string]bool{}
 	for _, lc := range lintersdb.NewManager(nil, nil).GetAllSupportedLinterConfigs() {
 		if lc.OriginalURL == "" {
 			continue
 		}
 
-		const githubPrefix = "https://github.com/"
-		if !strings.HasPrefix(lc.OriginalURL, githubPrefix) {
+		var line string
+		if author := extractAuthor(lc.OriginalURL, "https://github.com/"); author != "" && author != "golangci" {
+			line = fmt.Sprintf("- [%[1]s](https://github.com/sponsors/%[1]s)", author)
+		} else if author := extractAuthor(lc.OriginalURL, "https://gitlab.com/"); author != "" {
+			line = fmt.Sprintf("- [%[1]s](https://gitlab.com/%[1]s)", author)
+		} else {
 			continue
 		}
 
-		githubSuffix := strings.TrimPrefix(lc.OriginalURL, githubPrefix)
-		githubAuthor := strings.Split(githubSuffix, "/")[0]
-		if addedAuthors[githubAuthor] {
+		if addedLines[line] {
 			continue
 		}
-		addedAuthors[githubAuthor] = true
 
-		line := fmt.Sprintf("- [%[1]s](https://github.com/sponsors/%[1]s)", githubAuthor)
+		addedLines[line] = true
+
 		lines = append(lines, line)
 	}
 
+	sort.Slice(lines, func(i, j int) bool {
+		return strings.ToLower(lines[i]) < strings.ToLower(lines[j])
+	})
+
 	return strings.Join(lines, "\n")
+}
+
+func extractAuthor(originalURL, prefix string) string {
+	if !strings.HasPrefix(originalURL, prefix) {
+		return ""
+	}
+
+	return strings.SplitN(strings.TrimPrefix(originalURL, prefix), "/", 2)[0]
 }
 
 type SettingSnippets struct {
