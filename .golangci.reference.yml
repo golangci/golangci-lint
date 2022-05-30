@@ -1503,19 +1503,45 @@ linters-settings:
     skip-regexp: (export|internal)_test\.go
 
   thelper:
-    # The following configurations enable all checks.
-    # All checks are enabled by default.
     test:
+      # Check *testing.T is first param (or after context.Context) of helper function.
+      # Default: true
       first: false
+      # Check *testing.T param has name t.
+      # Default: true
       name: false
+      # Check t.Helper() begins helper function.
+      # Default: true
       begin: false
     benchmark:
+      # Check *testing.B is first param (or after context.Context) of helper function.
+      # Default: true
       first: false
+      # Check *testing.B param has name b.
+      # Default: true
       name: false
+      # Check b.Helper() begins helper function.
+      # Default: true
       begin: false
     tb:
+      # Check *testing.TB is first param (or after context.Context) of helper function.
+      # Default: true
       first: false
+      # Check *testing.TB param has name tb.
+      # Default: true
       name: false
+      # Check tb.Helper() begins helper function.
+      # Default: true
+      begin: false
+    fuzz:
+      # Check *testing.F is first param (or after context.Context) of helper function.
+      # Default: true
+      first: false
+      # Check *testing.F param has name f.
+      # Default: true
+      name: false
+      # Check f.Helper() begins helper function.
+      # Default: true
       begin: false
 
   unparam:
