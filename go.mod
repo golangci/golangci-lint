@@ -20,6 +20,7 @@ require (
 	github.com/breml/errchkjson v0.3.0
 	github.com/butuzov/ireturn v0.1.1
 	github.com/charithe/durationcheck v0.0.9
+	github.com/daixiang0/gci v0.3.4-0.20220530072138-bf921fe4731b
 	github.com/denis-tingaikin/go-header v0.4.3
 	github.com/esimonov/ifshort v1.0.4
 	github.com/fatih/color v1.13.0
@@ -105,8 +106,6 @@ require (
 	mvdan.cc/interfacer v0.0.0-20180901003855-c20040233aed
 	mvdan.cc/unparam v0.0.0-20211214103731-d0ef000c54e5
 )
-
-require github.com/daixiang0/gci v0.3.4-0.20220530072138-bf921fe4731b
 
 require (
 	github.com/Masterminds/semver v1.5.0 // indirect
