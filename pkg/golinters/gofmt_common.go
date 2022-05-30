@@ -9,6 +9,7 @@ import (
 	"github.com/pkg/errors"
 	diffpkg "github.com/sourcegraph/go-diff/diff"
 
+	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
@@ -207,56 +208,25 @@ func (p *hunkChangesParser) parse(h *diffpkg.Hunk) []Change {
 	return p.ret
 }
 
-func getErrorTextForGci(lintCtx *linter.Context) string {
-	settings := lintCtx.Settings().Gci
-
-	text := "File is not `gci`-ed"
-
-	hasOptions := settings.NoInlineComments || settings.NoPrefixComments || len(settings.Sections) > 0 || len(settings.SectionSeparator) > 0
-	if !hasOptions {
-		return text
-	}
-
-	text += " with"
-
-	if settings.NoInlineComments {
-		text += " -NoInlineComments"
-	}
-
-	if settings.NoPrefixComments {
-		text += " -NoPrefixComments"
-	}
-
-	if len(settings.Sections) > 0 {
-		text += " -s " + strings.Join(settings.Sections, ",")
-	}
-
-	if len(settings.SectionSeparator) > 0 {
-		text += " -x " + strings.Join(settings.SectionSeparator, ",")
-	}
-
-	return text
-}
-
-func getErrorTextForLinter(lintCtx *linter.Context, linterName string) string {
+func getErrorTextForLinter(settings *config.LintersSettings, linterName string) string {
 	text := "File is not formatted"
 	switch linterName {
 	case gciName:
-		text = getErrorTextForGci(lintCtx)
+		text = getErrorTextForGci(settings.Gci)
 	case gofumptName:
 		text = "File is not `gofumpt`-ed"
-		if lintCtx.Settings().Gofumpt.ExtraRules {
+		if settings.Gofumpt.ExtraRules {
 			text += " with `-extra`"
 		}
 	case gofmtName:
 		text = "File is not `gofmt`-ed"
-		if lintCtx.Settings().Gofmt.Simplify {
+		if settings.Gofmt.Simplify {
 			text += " with `-s`"
 		}
 	case goimportsName:
 		text = "File is not `goimports`-ed"
-		if lintCtx.Settings().Goimports.LocalPrefixes != "" {
-			text += " with -local " + lintCtx.Settings().Goimports.LocalPrefixes
+		if settings.Goimports.LocalPrefixes != "" {
+			text += " with -local " + settings.Goimports.LocalPrefixes
 		}
 	}
 	return text
@@ -280,9 +250,7 @@ func extractIssuesFromPatch(patch string, lintCtx *linter.Context, linterName st
 		}
 
 		for _, hunk := range d.Hunks {
-			p := hunkChangesParser{
-				log: lintCtx.Log,
-			}
+			p := hunkChangesParser{log: lintCtx.Log}
 
 			changes := p.parse(hunk)
 
@@ -294,7 +262,7 @@ func extractIssuesFromPatch(patch string, lintCtx *linter.Context, linterName st
 						Filename: d.NewName,
 						Line:     change.LineRange.From,
 					},
-					Text:        getErrorTextForLinter(lintCtx, linterName),
+					Text:        getErrorTextForLinter(lintCtx.Settings(), linterName),
 					Replacement: &change.Replacement,
 				}
 				if change.LineRange.From != change.LineRange.To {
