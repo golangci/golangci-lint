@@ -314,35 +314,42 @@ func spanWithID(id, title, icon string) string {
 }
 
 func getThanksList() string {
-	addedLines := map[string]bool{}
+	addedAuthors := map[string]string{}
 
-	var lines []string
 	for _, lc := range lintersdb.NewManager(nil, nil).GetAllSupportedLinterConfigs() {
 		if lc.OriginalURL == "" {
 			continue
 		}
 
-		var line string
-		if author := extractAuthor(lc.OriginalURL, "https://github.com/"); author != "" && author != "golangci" {
-			line = fmt.Sprintf("- [%[1]s](https://github.com/sponsors/%[1]s)", author)
-		} else if author := extractAuthor(lc.OriginalURL, "https://gitlab.com/"); author != "" {
+		var line, author string
+		if author = extractAuthor(lc.OriginalURL, "https://github.com/"); author != "" && author != "golangci" {
+			line = fmt.Sprintf(`- <img src="https://github.com/%[1]s.png" alt="%[1]s" style="max-width: 20%%;" width="20px;"></img> <a href="https://github.com/sponsors/%[1]s">%[1]s</a>`, author)
+		} else if author = extractAuthor(lc.OriginalURL, "https://gitlab.com/"); author != "" {
 			line = fmt.Sprintf("- [%[1]s](https://gitlab.com/%[1]s)", author)
 		} else {
 			continue
 		}
 
-		if addedLines[line] {
+		if addedAuthors[author] != "" {
 			continue
 		}
 
-		addedLines[line] = true
-
-		lines = append(lines, line)
+		addedAuthors[author] = line
 	}
 
-	sort.Slice(lines, func(i, j int) bool {
-		return strings.ToLower(lines[i]) < strings.ToLower(lines[j])
+	var authors []string
+	for author := range addedAuthors {
+		authors = append(authors, author)
+	}
+
+	sort.Slice(authors, func(i, j int) bool {
+		return strings.ToLower(authors[i]) < strings.ToLower(authors[j])
 	})
+
+	var lines []string
+	for _, author := range authors {
+		lines = append(lines, addedAuthors[author])
+	}
 
 	return strings.Join(lines, "\n")
 }
