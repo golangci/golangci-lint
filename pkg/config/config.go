@@ -66,5 +66,5 @@ func DetectGoVersion() string {
 		return v
 	}
 
-	return "1.18"
+	return "1.17"
 }
