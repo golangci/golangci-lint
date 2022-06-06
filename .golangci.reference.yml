@@ -641,7 +641,7 @@ linters-settings:
     ignored-files:
       - 'magic1_.*.go'
     # List of function patterns to exclude from analysis.
-    # Values always ignored: `time.Time`
+    # Values always ignored: `time.Date`
     # Default: []
     ignored-functions:
       - 'math.*'
