@@ -616,6 +616,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 
 		linter.NewConfig(golinters.NewParallelTest()).
 			WithSince("v1.33.0").
+			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetStyle, linter.PresetTest).
 			WithURL("https://github.com/kunwardeep/paralleltest"),
 
