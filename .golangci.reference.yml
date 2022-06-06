@@ -797,6 +797,20 @@ linters-settings:
 
     # To specify the configuration of rules.
     config:
+      # Globals are applicable to all rules.
+      global:
+        # If true, ignore #nosec in comments (and an alternative as well).
+        # Default: false
+        nosec: true
+        # Add an alternative comment prefix to #nosec (both will work at the same time).
+        # Default: ""
+        "#nosec": "#my-custom-nosec"
+        # Define whether nosec issues are counted as finding or not.
+        # Default: false
+        show-ignored: true
+        # Audit mode enables addition checks that for normal code analysis might be too nosy.
+        # Default: false
+        audit: true
       G101:
         # Regexp pattern for variables and constants to find.
         # Default: "(?i)passwd|pass|password|pwd|secret|token|pw|apiKey|bearer|cred"

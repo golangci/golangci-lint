@@ -34,9 +34,12 @@ func NewGosec(settings *config.GoSecSettings) *goanalysis.Linter {
 		filters = gosecRuleFilters(settings.Includes, settings.Excludes)
 
 		for k, v := range settings.Config {
-			// Uses ToUpper because the parsing of the map's key change the key to lowercase.
-			// The value is not impacted by that: the case is respected.
-			conf.Set(strings.ToUpper(k), v)
+			if k != gosec.Globals {
+				// Uses ToUpper because the parsing of the map's key change the key to lowercase.
+				// The value is not impacted by that: the case is respected.
+				k = strings.ToUpper(k)
+			}
+			conf.Set(k, v)
 		}
 	}
 
