@@ -9,7 +9,6 @@ import (
 
 func NewStaticcheck(settings *config.StaticCheckSettings) *goanalysis.Linter {
 	cfg := staticCheckConfig(settings)
-
 	analyzers := setupStaticCheckAnalyzers(staticcheck.Analyzers, getGoVersion(settings), cfg.Checks)
 
 	return goanalysis.NewLinter(
