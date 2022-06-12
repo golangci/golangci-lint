@@ -147,6 +147,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		nilNilCfg           *config.NilNilSettings
 		nlreturnCfg         *config.NlreturnSettings
 		noLintLintCfg       *config.NoLintLintSettings
+		noNamedReturnsCfg   *config.NoNamedReturnsSettings
 		preallocCfg         *config.PreallocSettings
 		predeclaredCfg      *config.PredeclaredSettings
 		promlinterCfg       *config.PromlinterSettings
@@ -215,6 +216,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		nilNilCfg = &m.cfg.LintersSettings.NilNil
 		nlreturnCfg = &m.cfg.LintersSettings.Nlreturn
 		noLintLintCfg = &m.cfg.LintersSettings.NoLintLint
+		noNamedReturnsCfg = &m.cfg.LintersSettings.NoNamedReturns
 		preallocCfg = &m.cfg.LintersSettings.Prealloc
 		predeclaredCfg = &m.cfg.LintersSettings.Predeclared
 		promlinterCfg = &m.cfg.LintersSettings.Promlinter
@@ -604,7 +606,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithURL("https://github.com/sonatard/noctx").
 			WithNoopFallback(m.cfg),
 
-		linter.NewConfig(golinters.NewNoNamedReturns()).
+		linter.NewConfig(golinters.NewNoNamedReturns(noNamedReturnsCfg)).
 			WithSince("v1.46.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/firefart/nonamedreturns"),

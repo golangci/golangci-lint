@@ -158,6 +158,7 @@ type LintersSettings struct {
 	NilNil           NilNilSettings
 	Nlreturn         NlreturnSettings
 	NoLintLint       NoLintLintSettings
+	NoNamedReturns   NoNamedReturnsSettings
 	Prealloc         PreallocSettings
 	Predeclared      PredeclaredSettings
 	Promlinter       PromlinterSettings
@@ -479,6 +480,10 @@ type NoLintLintSettings struct {
 	RequireSpecific    bool     `mapstructure:"require-specific"`
 	AllowNoExplanation []string `mapstructure:"allow-no-explanation"`
 	AllowUnused        bool     `mapstructure:"allow-unused"`
+}
+
+type NoNamedReturnsSettings struct {
+	AllowErrorInDefer bool `mapstructure:"allow-error-in-defer"`
 }
 
 type PreallocSettings struct {
