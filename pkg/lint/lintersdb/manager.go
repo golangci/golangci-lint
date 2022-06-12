@@ -147,6 +147,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		nilNilCfg           *config.NilNilSettings
 		nlreturnCfg         *config.NlreturnSettings
 		noLintLintCfg       *config.NoLintLintSettings
+		parallelTestCfg     *config.ParallelTestSettings
 		preallocCfg         *config.PreallocSettings
 		predeclaredCfg      *config.PredeclaredSettings
 		promlinterCfg       *config.PromlinterSettings
@@ -216,6 +217,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		nlreturnCfg = &m.cfg.LintersSettings.Nlreturn
 		noLintLintCfg = &m.cfg.LintersSettings.NoLintLint
 		preallocCfg = &m.cfg.LintersSettings.Prealloc
+		parallelTestCfg = &m.cfg.LintersSettings.ParallelTest
 		predeclaredCfg = &m.cfg.LintersSettings.Predeclared
 		promlinterCfg = &m.cfg.LintersSettings.Promlinter
 		reviveCfg = &m.cfg.LintersSettings.Revive
@@ -614,7 +616,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/stbenjam/no-sprintf-host-port"),
 
-		linter.NewConfig(golinters.NewParallelTest()).
+		linter.NewConfig(golinters.NewParallelTest(parallelTestCfg)).
 			WithSince("v1.33.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetStyle, linter.PresetTest).
