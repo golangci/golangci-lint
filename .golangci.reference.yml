@@ -557,6 +557,7 @@ linters-settings:
   gofumpt:
     # Select the Go version to target.
     # Default: "1.15"
+    # Deprecated: use the global `run.go` instead.
     lang-version: "1.17"
 
     # Module path which contains the source code being formatted.
@@ -699,6 +700,7 @@ linters-settings:
   gosimple:
     # Select the Go version to target.
     # Default: 1.13
+    # Deprecated: use the global `run.go` instead.
     go: "1.15"
     # https://staticcheck.io/docs/options#checks
     # Default: ["*"]
@@ -1543,6 +1545,7 @@ linters-settings:
   staticcheck:
     # Select the Go version to target.
     # Default: "1.13"
+    # Deprecated: use the global `run.go` instead.
     go: "1.15"
     # https://staticcheck.io/docs/options#checks
     # Default: ["*"]
@@ -1551,6 +1554,7 @@ linters-settings:
   stylecheck:
     # Select the Go version to target.
     # Default: 1.13
+    # Deprecated: use the global `run.go` instead.
     go: "1.15"
     # https://staticcheck.io/docs/options#checks
     # Default: ["*"]

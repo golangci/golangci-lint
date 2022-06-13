@@ -24,8 +24,7 @@ func getGoVersion(settings *config.StaticCheckSettings) string {
 		return goVersion
 	}
 
-	// TODO: uses "1.13" for backward compatibility, but in the future (v2) must be set by using build.Default.ReleaseTags like staticcheck.
-	return "1.13"
+	return "1.17"
 }
 
 func setupStaticCheckAnalyzers(src []*lint.Analyzer, goVersion string, checks []string) []*analysis.Analyzer {

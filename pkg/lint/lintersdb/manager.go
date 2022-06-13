@@ -240,6 +240,23 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		if govetCfg != nil {
 			govetCfg.Go = m.cfg.Run.Go
 		}
+
+		if gofumptCfg != nil && gofumptCfg.LangVersion == "" {
+			gofumptCfg.LangVersion = m.cfg.Run.Go
+		}
+
+		if staticcheckCfg != nil && staticcheckCfg.GoVersion == "" {
+			staticcheckCfg.GoVersion = m.cfg.Run.Go
+		}
+		if gosimpleCfg != nil && gosimpleCfg.GoVersion == "" {
+			gosimpleCfg.GoVersion = m.cfg.Run.Go
+		}
+		if stylecheckCfg != nil && stylecheckCfg.GoVersion != "" {
+			stylecheckCfg.GoVersion = m.cfg.Run.Go
+		}
+		if unusedCfg != nil && unusedCfg.GoVersion == "" {
+			unusedCfg.GoVersion = m.cfg.Run.Go
+		}
 	}
 
 	const megacheckName = "megacheck"

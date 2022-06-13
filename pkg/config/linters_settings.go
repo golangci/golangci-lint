@@ -318,9 +318,11 @@ type GoFmtSettings struct {
 }
 
 type GofumptSettings struct {
+	ModulePath string `mapstructure:"module-path"`
+	ExtraRules bool   `mapstructure:"extra-rules"`
+
+	// Deprecated: use the global `run.go` instead.
 	LangVersion string `mapstructure:"lang-version"`
-	ModulePath  string `mapstructure:"module-path"`
-	ExtraRules  bool   `mapstructure:"extra-rules"`
 }
 
 type GoHeaderSettings struct {
@@ -527,6 +529,7 @@ type RowsErrCheckSettings struct {
 }
 
 type StaticCheckSettings struct {
+	// Deprecated: use the global `run.go` instead.
 	GoVersion string `mapstructure:"go"`
 
 	Checks                  []string `mapstructure:"checks"`
