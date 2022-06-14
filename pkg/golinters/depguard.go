@@ -122,7 +122,7 @@ func newGuardian(settings *config.DepGuardSettings) (*guardian, error) {
 		return nil, err
 	}
 
-	// if the list type was a blacklist the packages with error messages should be included in the blacklist package list
+	// if the list type was a denylist the packages with error messages should be included in the denylist package list
 	if dg.ListType == depguard.LTBlacklist {
 		noMessagePackages := make(map[string]bool)
 		for _, pkg := range dg.Packages {
@@ -164,9 +164,9 @@ func (g guardian) run(loadConfig *loader.Config, prog *loader.Program, pass *ana
 }
 
 func (g guardian) createMsg(pkgName string) string {
-	msgSuffix := "is in the blacklist"
+	msgSuffix := "is in the denylist"
 	if g.ListType == depguard.LTWhitelist {
-		msgSuffix = "is not in the whitelist"
+		msgSuffix = "is not in the allowlist"
 	}
 
 	var userSuppliedMsgSuffix string
