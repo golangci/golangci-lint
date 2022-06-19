@@ -158,6 +158,7 @@ type LintersSettings struct {
 	NilNil           NilNilSettings
 	Nlreturn         NlreturnSettings
 	NoLintLint       NoLintLintSettings
+	NoNamedReturns   NoNamedReturnsSettings
 	ParallelTest     ParallelTestSettings
 	Prealloc         PreallocSettings
 	Predeclared      PredeclaredSettings
@@ -484,6 +485,9 @@ type NoLintLintSettings struct {
 	AllowUnused        bool     `mapstructure:"allow-unused"`
 }
 
+type NoNamedReturnsSettings struct {
+	AllowErrorInDefer bool `mapstructure:"allow-error-in-defer"`
+}
 type ParallelTestSettings struct {
 	IgnoreMissing bool `mapstructure:"ignore-missing"`
 }

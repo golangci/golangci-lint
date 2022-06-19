@@ -1,0 +1,3 @@
+linters-settings:
+  nonamedreturns:
+    allow-error-in-defer: true
