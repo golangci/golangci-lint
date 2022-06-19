@@ -721,6 +721,8 @@ linters-settings:
       - G109
       - G110
       - G111
+      - G112
+      - G113
       - G201
       - G202
       - G203
@@ -757,6 +759,8 @@ linters-settings:
       - G109
       - G110
       - G111
+      - G112
+      - G113
       - G201
       - G202
       - G203
