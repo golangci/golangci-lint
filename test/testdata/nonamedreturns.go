@@ -1,4 +1,4 @@
-//args: -Enonamedreturns
+// args: -Enonamedreturns
 package testdata
 
 import "fmt"
@@ -24,6 +24,17 @@ var e = func() (err error) { // ERROR `named return "err" with type "error" foun
 	return
 }
 
+var e2 = func() (_ error) {
+	return
+}
+
+func deferWithError() (err error) { // ERROR `named return "err" with type "error" found`
+	defer func() {
+		err = nil // use flag to allow this
+	}()
+	return
+}
+
 var (
 	f = func() {
 		return
@@ -35,6 +46,10 @@ var (
 
 	h = func() (err error) { // ERROR `named return "err" with type "error" found`
 		err = nil
+		return
+	}
+
+	h2 = func() (_ error) {
 		return
 	}
 )
@@ -50,8 +65,21 @@ func funcDefintionImpl2(arg1, arg2 interface{}) (num int, err error) { // ERROR 
 	return 0, nil
 }
 
+func funcDefintionImpl3(arg1, arg2 interface{}) (num int, _ error) { // ERROR `named return "num" with type "int" found`
+	return 0, nil
+}
+
+func funcDefintionImpl4(arg1, arg2 interface{}) (_ int, _ error) {
+	return 0, nil
+}
+
 var funcVar = func() (msg string) { // ERROR `named return "msg" with type "string" found`
 	msg = "c"
+	return msg
+}
+
+var funcVar2 = func() (_ string) {
+	msg := "c"
 	return msg
 }
 
@@ -92,3 +120,5 @@ func myLog(format string, args ...interface{}) {
 type obj struct{}
 
 func (o *obj) func1() (err error) { return nil } // ERROR `named return "err" with type "error" found`
+
+func (o *obj) func2() (_ error) { return nil }
