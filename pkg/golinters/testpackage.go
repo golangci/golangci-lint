@@ -1,6 +1,8 @@
 package golinters
 
 import (
+	"strings"
+
 	"github.com/maratori/testpackage/pkg/testpackage"
 	"golang.org/x/tools/go/analysis"
 
@@ -15,7 +17,8 @@ func NewTestpackage(cfg *config.TestpackageSettings) *goanalysis.Linter {
 	if cfg != nil {
 		settings = map[string]map[string]interface{}{
 			a.Name: {
-				testpackage.SkipRegexpFlagName: cfg.SkipRegexp,
+				testpackage.SkipRegexpFlagName:    cfg.SkipRegexp,
+				testpackage.AllowPackagesFlagName: strings.Join(cfg.AllowPackages, ","),
 			},
 		}
 	}
