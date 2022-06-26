@@ -24,7 +24,7 @@ require (
 	github.com/denis-tingaikin/go-header v0.4.3
 	github.com/esimonov/ifshort v1.0.4
 	github.com/fatih/color v1.13.0
-	github.com/firefart/nonamedreturns v1.0.2
+	github.com/firefart/nonamedreturns v1.0.4
 	github.com/fzipp/gocyclo v0.6.0
 	github.com/go-critic/go-critic v0.6.3
 	github.com/go-xmlfmt/xmlfmt v0.0.0-20191208150333-d5b6f63a941b
@@ -170,7 +170,7 @@ require (
 	golang.org/x/exp/typeparams v0.0.0-20220218215828-6cf2b201936e // indirect
 	golang.org/x/mod v0.6.0-dev.0.20220419223038-86c51ed26bb4 // indirect
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect
-	golang.org/x/sys v0.0.0-20220610221304-9f5ed59c137d // indirect
+	golang.org/x/sys v0.0.0-20220624220833-87e55d714810 // indirect
 	golang.org/x/text v0.3.7 // indirect
 	google.golang.org/protobuf v1.28.0 // indirect
 	gopkg.in/ini.v1 v1.66.6 // indirect
