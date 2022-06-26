@@ -730,8 +730,8 @@ github.com/yuin/goldmark v1.3.5/go.mod h1:mwnBkeHKe2W/ZEtQ+71ViKU8L12m81fl3OWwC1
 github.com/yuin/goldmark v1.4.1/go.mod h1:mwnBkeHKe2W/ZEtQ+71ViKU8L12m81fl3OWwC1Zlc8k=
 github.com/yusufpapurcu/wmi v1.2.2 h1:KBNDSne4vP5mbSWnJbO+51IMOXJB67QiYCSBrubbPRg=
 github.com/yusufpapurcu/wmi v1.2.2/go.mod h1:SBZ9tNy3G9/m5Oi98Zks0QjeHVDvuK0qfxQmPyzfmi0=
-gitlab.com/bosi/decorder v0.2.1 h1:ehqZe8hI4w7O4b1vgsDZw1YU1PE7iJXrQWFMsocbQ1w=
-gitlab.com/bosi/decorder v0.2.1/go.mod h1:6C/nhLSbF6qZbYD8bRmISBwc6vcWdNsiIBkRvjJFrH0=
+gitlab.com/bosi/decorder v0.2.2 h1:LRfb3lP6mZWjUzpMOCLTVjcnl/SqZWBWmKNqQvMocQs=
+gitlab.com/bosi/decorder v0.2.2/go.mod h1:9K1RB5+VPNQYtXtTDAzd2OEftsZb1oV0IrJrzChSdGE=
 go.etcd.io/bbolt v1.3.3/go.mod h1:IbVyRI1SCnLcuJnV2u8VeU0CEYM7e686BmAb1XKL+uU=
 go.etcd.io/bbolt v1.3.4/go.mod h1:G5EMThwa9y8QZGBClrRx5EY+Yw9kAhnjy3bSjsnlVTQ=
 go.etcd.io/etcd v0.0.0-20200513171258-e048e166ab9c/go.mod h1:xCI7ZzBfRuGgBXyXO6yfWfDmlWd35khcWpUa4L0xI/k=
