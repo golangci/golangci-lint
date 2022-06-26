@@ -486,7 +486,7 @@ type NoLintLintSettings struct {
 }
 
 type NoNamedReturnsSettings struct {
-	AllowErrorInDefer bool `mapstructure:"allow-error-in-defer"`
+	ReportErrorInDefer bool `mapstructure:"report-error-in-defer"`
 }
 type ParallelTestSettings struct {
 	IgnoreMissing bool `mapstructure:"ignore-missing"`

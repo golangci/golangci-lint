@@ -1159,9 +1159,9 @@ linters-settings:
     require-specific: true
 
   nonamedreturns:
-    # Do not complain about named error, if it is assigned inside defer.
+    # Report named error if it is assigned inside defer.
     # Default: false
-    allow-error-in-defer: true
+    report-error-in-defer: true
 
   paralleltest:
     # Ignore missing calls to `t.Parallel()` and only report incorrect uses of it.

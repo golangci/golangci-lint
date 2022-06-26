@@ -1,124 +1,281 @@
 // args: -Enonamedreturns
 package testdata
 
-import "fmt"
+import "errors"
 
-type asdf struct {
-	test string
-}
-
-func noParams() {
-	return
-}
-
-var c = func() {
-	return
-}
-
-var d = func() error {
-	return nil
-}
-
-var e = func() (err error) { // ERROR `named return "err" with type "error" found`
-	err = nil
-	return
-}
-
-var e2 = func() (_ error) {
-	return
-}
-
-func deferWithError() (err error) { // ERROR `named return "err" with type "error" found`
+func simple() (err error) {
 	defer func() {
-		err = nil // use flag to allow this
+		err = nil
 	}()
 	return
 }
 
-var (
-	f = func() {
-		return
-	}
-
-	g = func() error {
-		return nil
-	}
-
-	h = func() (err error) { // ERROR `named return "err" with type "error" found`
+func twoReturnParams() (i int, err error) { // ERROR `named return "i" with type "int" found`
+	defer func() {
+		i = 0
 		err = nil
-		return
-	}
-
-	h2 = func() (_ error) {
-		return
-	}
-)
-
-// this should not match as the implementation does not need named parameters (see below)
-type funcDefintion func(arg1, arg2 interface{}) (num int, err error)
-
-func funcDefintionImpl(arg1, arg2 interface{}) (int, error) {
-	return 0, nil
-}
-
-func funcDefintionImpl2(arg1, arg2 interface{}) (num int, err error) { // ERROR `named return "num" with type "int" found`
-	return 0, nil
-}
-
-func funcDefintionImpl3(arg1, arg2 interface{}) (num int, _ error) { // ERROR `named return "num" with type "int" found`
-	return 0, nil
-}
-
-func funcDefintionImpl4(arg1, arg2 interface{}) (_ int, _ error) {
-	return 0, nil
-}
-
-var funcVar = func() (msg string) { // ERROR `named return "msg" with type "string" found`
-	msg = "c"
-	return msg
-}
-
-var funcVar2 = func() (_ string) {
-	msg := "c"
-	return msg
-}
-
-func test() {
-	a := funcVar()
-	_ = a
-
-	var function funcDefintion
-	function = funcDefintionImpl
-	i, err := function("", "")
-	_ = i
-	_ = err
-	function = funcDefintionImpl2
-	i, err = function("", "")
-	_ = i
-	_ = err
-}
-
-func good(i string) string {
-	return i
-}
-
-func bad(i string, a, b int) (ret1 string, ret2 interface{}, ret3, ret4 int, ret5 asdf) { // ERROR `named return "ret1" with type "string" found`
-	x := "dummy"
-	return fmt.Sprintf("%s", x), nil, 1, 2, asdf{}
-}
-
-func bad2() (msg string, err error) { // ERROR `named return "msg" with type "string" found`
-	msg = ""
-	err = nil
+	}()
 	return
 }
 
-func myLog(format string, args ...interface{}) {
+func allUnderscoresExceptError() (_ int, err error) {
+	defer func() {
+		err = nil
+	}()
 	return
 }
 
-type obj struct{}
+func customName() (myName error) {
+	defer func() {
+		myName = nil
+	}()
+	return
+}
 
-func (o *obj) func1() (err error) { return nil } // ERROR `named return "err" with type "error" found`
+func errorIsNoAssigned() (err error) { // ERROR `named return "err" with type "error" found`
+	defer func() {
+		_ = err
+		processError(err)
+		if err == nil {
+		}
+		switch err {
+		case nil:
+		default:
+		}
+	}()
+	return
+}
 
-func (o *obj) func2() (_ error) { return nil }
+func shadowVariable() (err error) { // ERROR `named return "err" with type "error" found`
+	defer func() {
+		err := errors.New("xxx")
+		_ = err
+	}()
+	return
+}
+
+func shadowVariableButAssign() (err error) {
+	defer func() {
+		{
+			err := errors.New("xxx")
+			_ = err
+		}
+		err = nil
+	}()
+	return
+}
+
+func shadowVariable2() (err error) { // ERROR `named return "err" with type "error" found`
+	defer func() {
+		a, err := doSomething()
+		_ = a
+		_ = err
+	}()
+	return
+}
+
+type errorAlias = error
+
+func errorAliasIsTheSame() (err errorAlias) {
+	defer func() {
+		err = nil
+	}()
+	return
+}
+
+type myError error // linter doesn't check underlying type (yet?)
+
+func customTypeWithErrorUnderline() (err myError) { // ERROR `named return "err" with type "myError" found`
+	defer func() {
+		err = nil
+	}()
+	return
+}
+
+type myError2 interface{ error } // linter doesn't check interfaces
+
+func customTypeWithTheSameInterface() (err myError2) { // ERROR `named return "err" with type "myError2" found`
+	defer func() {
+		err = nil
+	}()
+	return
+}
+
+var _ error = myError3{}
+
+type myError3 struct{} // linter doesn't check interfaces
+
+func (m myError3) Error() string { return "" }
+
+func customTypeImplementingErrorInterface() (err myError3) { // ERROR `named return "err" with type "myError3" found`
+	defer func() {
+		err = struct{}{}
+	}()
+	return
+}
+
+func shadowErrorType() {
+	type error interface { // linter understands that this is not built-in error, even if it has the same name
+		Error() string
+	}
+	do := func() (err error) { // ERROR `named return "err" with type "error" found`
+		defer func() {
+			err = nil
+		}()
+		return
+	}
+	do()
+}
+
+func notTheLast() (err error, _ int) {
+	defer func() {
+		err = nil
+	}()
+	return
+}
+
+func twoErrorsCombined() (err1, err2 error) {
+	defer func() {
+		err1 = nil
+		err2 = nil
+	}()
+	return
+}
+
+func twoErrorsSeparated() (err1 error, err2 error) {
+	defer func() {
+		err1 = nil
+		err2 = nil
+	}()
+	return
+}
+
+func errorSlice() (err []error) { // ERROR `named return "err" with type "\[\]error" found`
+	defer func() {
+		err = nil
+	}()
+	return
+}
+
+func deferWithVariable() (err error) { // ERROR `named return "err" with type "error" found`
+	f := func() {
+		err = nil
+	}
+	defer f() // linter can't catch closure passed via variable (yet?)
+	return
+}
+
+func uberMultierr() (err error) { // ERROR `named return "err" with type "error" found`
+	defer func() {
+		multierrAppendInto(&err, nil) // linter doesn't allow it (yet?)
+	}()
+	return
+}
+
+func deferInDefer() (err error) {
+	defer func() {
+		defer func() {
+			err = nil
+		}()
+	}()
+	return
+}
+
+func twoDefers() (err error) {
+	defer func() {}()
+	defer func() {
+		err = nil
+	}()
+	return
+}
+
+func callFunction() (err error) {
+	defer func() {
+		_, err = doSomething()
+	}()
+	return
+}
+
+func callFunction2() (err error) {
+	defer func() {
+		var a int
+		a, err = doSomething()
+		_ = a
+	}()
+	return
+}
+
+func deepInside() (err error) {
+	if true {
+		switch true {
+		case false:
+			for i := 0; i < 10; i++ {
+				go func() {
+					select {
+					default:
+						defer func() {
+							if true {
+								switch true {
+								case false:
+									for j := 0; j < 10; j++ {
+										go func() {
+											select {
+											default:
+												err = nil
+											}
+										}()
+									}
+								}
+							}
+						}()
+					}
+				}()
+			}
+		}
+	}
+	return
+}
+
+var goodFuncLiteral = func() (err error) {
+	defer func() {
+		err = nil
+	}()
+	return
+}
+
+var badFuncLiteral = func() (err error) { // ERROR `named return "err" with type "error" found`
+	defer func() {
+		_ = err
+	}()
+	return
+}
+
+func funcLiteralInsideFunc() error {
+	do := func() (err error) {
+		defer func() {
+			err = nil
+		}()
+		return
+	}
+	return do()
+}
+
+type x struct{}
+
+func (x) goodMethod() (err error) {
+	defer func() {
+		err = nil
+	}()
+	return
+}
+
+func (x) badMethod() (err error) { // ERROR `named return "err" with type "error" found`
+	defer func() {
+		_ = err
+	}()
+	return
+}
+
+func processError(error)                    {}
+func doSomething() (int, error)             { return 10, nil }
+func multierrAppendInto(*error, error) bool { return false } // https://pkg.go.dev/go.uber.org/multierr#AppendInto
