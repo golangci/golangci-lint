@@ -627,6 +627,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 
 		linter.NewConfig(golinters.NewNoNamedReturns(noNamedReturnsCfg)).
 			WithSince("v1.46.0").
+			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/firefart/nonamedreturns"),
 

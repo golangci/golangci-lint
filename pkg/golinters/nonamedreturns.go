@@ -15,7 +15,7 @@ func NewNoNamedReturns(settings *config.NoNamedReturnsSettings) *goanalysis.Lint
 	if settings != nil {
 		cfg = map[string]map[string]interface{}{
 			a.Name: {
-				analyzer.FlagAllowErrorInDefer: settings.AllowErrorInDefer,
+				analyzer.FlagReportErrorInDefer: settings.ReportErrorInDefer,
 			},
 		}
 	}
@@ -25,5 +25,5 @@ func NewNoNamedReturns(settings *config.NoNamedReturnsSettings) *goanalysis.Lint
 		a.Doc,
 		[]*analysis.Analyzer{a},
 		cfg,
-	).WithLoadMode(goanalysis.LoadModeSyntax)
+	).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }

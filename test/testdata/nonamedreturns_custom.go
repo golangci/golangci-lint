@@ -2,224 +2,124 @@
 // config_path: testdata/configs/nonamedreturns.yml
 package testdata
 
-func simple() (err error) {
+import "fmt"
+
+type asdf struct {
+	test string
+}
+
+func noParams() {
+	return
+}
+
+var c = func() {
+	return
+}
+
+var d = func() error {
+	return nil
+}
+
+var e = func() (err error) { // ERROR `named return "err" with type "error" found`
+	err = nil
+	return
+}
+
+var e2 = func() (_ error) {
+	return
+}
+
+func deferWithError() (err error) { // ERROR `named return "err" with type "error" found`
 	defer func() {
-		err = nil
+		err = nil // use flag to allow this
 	}()
 	return
 }
 
-func twoReturnParams() (i int, err error) { // ERROR `named return "i" with type "int" found`
-	defer func() {
-		i = 0
-		err = nil
-	}()
-	return
-}
-
-func allUnderscoresExceptError() (_ int, err error) {
-	defer func() {
-		err = nil
-	}()
-	return
-}
-
-func customName() (myName error) {
-	defer func() {
-		myName = nil
-	}()
-	return
-}
-
-func errorIsNoAssigned() (err error) { // ERROR `named return "err" with type "error" found`
-	defer func() {
-		_ = err
-		processError(err)
-		if err == nil {
-		}
-		switch err {
-		case nil:
-		default:
-		}
-	}()
-	return
-}
-
-func shadowVariable() (err error) {
-	defer func() {
-		err := 123 // linter doesn't understand that this is different variable (even if different type) (yet?)
-		_ = err
-	}()
-	return
-}
-
-func shadowVariable2() (err error) {
-	defer func() {
-		a, err := doSomething() // linter doesn't understand that this is different variable (yet?)
-		_ = a
-		_ = err
-	}()
-	return
-}
-
-type myError = error // linter doesn't understand that this is the same type (yet?)
-
-func customType() (err myError) { // ERROR `named return "err" with type "myError" found`
-	defer func() {
-		err = nil
-	}()
-	return
-}
-
-func notTheLast() (err error, _ int) {
-	defer func() {
-		err = nil
-	}()
-	return
-}
-
-func twoErrorsCombined() (err1, err2 error) {
-	defer func() {
-		err1 = nil
-		err2 = nil
-	}()
-	return
-}
-
-func twoErrorsSeparated() (err1 error, err2 error) {
-	defer func() {
-		err1 = nil
-		err2 = nil
-	}()
-	return
-}
-
-func errorSlice() (err []error) { // ERROR `named return "err" with type "\[\]error" found`
-	defer func() {
-		err = nil
-	}()
-	return
-}
-
-func deferWithVariable() (err error) { // ERROR `named return "err" with type "error" found`
-	f := func() {
-		err = nil
-	}
-	defer f() // linter can't catch closure passed via variable (yet?)
-	return
-}
-
-func uberMultierr() (err error) { // ERROR `named return "err" with type "error" found`
-	defer func() {
-		multierrAppendInto(&err, nil) // linter doesn't allow it (yet?)
-	}()
-	return
-}
-
-func deferInDefer() (err error) {
-	defer func() {
-		defer func() {
-			err = nil
-		}()
-	}()
-	return
-}
-
-func twoDefers() (err error) {
-	defer func() {}()
-	defer func() {
-		err = nil
-	}()
-	return
-}
-
-func callFunction() (err error) {
-	defer func() {
-		_, err = doSomething()
-	}()
-	return
-}
-
-func callFunction2() (err error) {
-	defer func() {
-		var a int
-		a, err = doSomething()
-		_ = a
-	}()
-	return
-}
-
-func deepInside() (err error) {
-	if true {
-		switch true {
-		case false:
-			for i := 0; i < 10; i++ {
-				go func() {
-					select {
-					default:
-						defer func() {
-							if true {
-								switch true {
-								case false:
-									for j := 0; j < 10; j++ {
-										go func() {
-											select {
-											default:
-												err = nil
-											}
-										}()
-									}
-								}
-							}
-						}()
-					}
-				}()
-			}
-		}
-	}
-	return
-}
-
-var goodFuncLiteral = func() (err error) {
-	defer func() {
-		err = nil
-	}()
-	return
-}
-
-var badFuncLiteral = func() (err error) { // ERROR `named return "err" with type "error" found`
-	defer func() {
-		_ = err
-	}()
-	return
-}
-
-func funcLiteralInsideFunc() error {
-	do := func() (err error) {
-		defer func() {
-			err = nil
-		}()
+var (
+	f = func() {
 		return
 	}
-	return do()
-}
 
-type x struct{}
+	g = func() error {
+		return nil
+	}
 
-func (x) goodMethod() (err error) {
-	defer func() {
+	h = func() (err error) { // ERROR `named return "err" with type "error" found`
 		err = nil
-	}()
+		return
+	}
+
+	h2 = func() (_ error) {
+		return
+	}
+)
+
+// this should not match as the implementation does not need named parameters (see below)
+type funcDefintion func(arg1, arg2 interface{}) (num int, err error)
+
+func funcDefintionImpl(arg1, arg2 interface{}) (int, error) {
+	return 0, nil
+}
+
+func funcDefintionImpl2(arg1, arg2 interface{}) (num int, err error) { // ERROR `named return "num" with type "int" found`
+	return 0, nil
+}
+
+func funcDefintionImpl3(arg1, arg2 interface{}) (num int, _ error) { // ERROR `named return "num" with type "int" found`
+	return 0, nil
+}
+
+func funcDefintionImpl4(arg1, arg2 interface{}) (_ int, _ error) {
+	return 0, nil
+}
+
+var funcVar = func() (msg string) { // ERROR `named return "msg" with type "string" found`
+	msg = "c"
+	return msg
+}
+
+var funcVar2 = func() (_ string) {
+	msg := "c"
+	return msg
+}
+
+func test() {
+	a := funcVar()
+	_ = a
+
+	var function funcDefintion
+	function = funcDefintionImpl
+	i, err := function("", "")
+	_ = i
+	_ = err
+	function = funcDefintionImpl2
+	i, err = function("", "")
+	_ = i
+	_ = err
+}
+
+func good(i string) string {
+	return i
+}
+
+func bad(i string, a, b int) (ret1 string, ret2 interface{}, ret3, ret4 int, ret5 asdf) { // ERROR `named return "ret1" with type "string" found`
+	x := "dummy"
+	return fmt.Sprintf("%s", x), nil, 1, 2, asdf{}
+}
+
+func bad2() (msg string, err error) { // ERROR `named return "msg" with type "string" found`
+	msg = ""
+	err = nil
 	return
 }
 
-func (x) badMethod() (err error) { // ERROR `named return "err" with type "error" found`
-	defer func() {
-		_ = err
-	}()
+func myLog(format string, args ...interface{}) {
 	return
 }
 
-func processError(error)                    {}
-func doSomething() (int, error)             { return 10, nil }
-func multierrAppendInto(*error, error) bool { return false } // https://pkg.go.dev/go.uber.org/multierr#AppendInto
+type obj struct{}
+
+func (o *obj) func1() (err error) { return nil } // ERROR `named return "err" with type "error" found`
+
+func (o *obj) func2() (_ error) { return nil }
