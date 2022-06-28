@@ -88,7 +88,8 @@ var defaultLintersSettings = LintersSettings{
 		Qualified: false,
 	},
 	Testpackage: TestpackageSettings{
-		SkipRegexp: `(export|internal)_test\.go`,
+		SkipRegexp:    `(export|internal)_test\.go`,
+		AllowPackages: []string{"main"},
 	},
 	Unparam: UnparamSettings{
 		Algo: "cha",
@@ -558,7 +559,8 @@ type TagliatelleSettings struct {
 }
 
 type TestpackageSettings struct {
-	SkipRegexp string `mapstructure:"skip-regexp"`
+	SkipRegexp    string   `mapstructure:"skip-regexp"`
+	AllowPackages []string `mapstructure:"allow-packages"`
 }
 
 type ThelperSettings struct {
