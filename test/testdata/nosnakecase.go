@@ -1,18 +1,149 @@
-// args: -Enosnakecase
+//args: -Enosnakecase
 package testdata
 
-func a_() { // ERROR "a_ is used under score. You should use mixedCap or MixedCap."
+import (
+	_ "fmt"
+	f_m_t "fmt" // ERROR "f_m_t is used under score. You should use mixedCap or MixedCap."
+)
+
+// global variable name with underscore.
+var v_v = 0 // ERROR "v_v is used under score. You should use mixedCap or MixedCap."
+
+// global constant name with underscore.
+const c_c = 0 // ERROR "c_c is used under score. You should use mixedCap or MixedCap."
+
+// struct name with underscore.
+type S_a struct { // ERROR "S_a is used under score. You should use mixedCap or MixedCap."
+	fi int
 }
 
-func b(a_a int) { // ERROR "a_a is used under score. You should use mixedCap or MixedCap."
+// non-exported struct field name with underscore.
+type Sa struct {
+	fi_a int // // ERROR "fi_a is used under score. You should use mixedCap or MixedCap."
 }
 
-func c() (c_c int) { // ERROR "c_c is used under score. You should use mixedCap or MixedCap."
-	c_c = 1    // ERROR "c_c is used under score. You should use mixedCap or MixedCap."
-	return c_c // It's never detected, because `c_c` is already detected.
+// function as struct field, with parameter name with underscore.
+type Sb struct {
+	fib func(p_a int) // ERROR "p_a is used under score. You should use mixedCap or MixedCap."
 }
 
-func d() {
-	var d_d int // ERROR "d_d is used under score. You should use mixedCap or MixedCap."
-	_ = d_d     // It's never detected, because `_` is meaningful in Go and `d_d` is already detected.
+// exported struct field with underscore.
+type Sc struct {
+	Fi_A int // ERROR "Fi_A is used under score. You should use mixedCap or MixedCap."
+}
+
+// function as struct field, with return name with underscore.
+type Sd struct {
+	fib func(p int) (r_a int) // ERROR "r_a is used under score. You should use mixedCap or MixedCap."
+}
+
+// interface name with underscore.
+type I_a interface { // ERROR "I_a is used under score. You should use mixedCap or MixedCap."
+	fn(p int)
+}
+
+// interface with parameter name with underscore.
+type Ia interface {
+	fn(p_a int) // ERROR "p_a is used under score. You should use mixedCap or MixedCap."
+}
+
+// interface with parameter name with underscore.
+type Ib interface {
+	Fn(p_a int) // ERROR "p_a is used under score. You should use mixedCap or MixedCap."
+}
+
+// function as struct field, with return name with underscore.
+type Ic interface {
+	Fn_a() // ERROR "Fn_a is used under score. You should use mixedCap or MixedCap."
+}
+
+// interface with return name with underscore.
+type Id interface {
+	Fn() (r_a int) // ERROR "r_a is used under score. You should use mixedCap or MixedCap."
+}
+
+// function name with underscore.
+func f_a() {} // ERROR "f_a is used under score. You should use mixedCap or MixedCap."
+
+// function's parameter name with underscore.
+func fb(p_a int) {} // ERROR "p_a is used under score. You should use mixedCap or MixedCap."
+
+// named return with underscore.
+func fc() (r_b int) { // ERROR "r_b is used under score. You should use mixedCap or MixedCap."
+	return 0
+}
+
+// local variable (short declaration) with underscore.
+func fd(p int) int {
+	v_b := p * 2 // ERROR "v_b is used under score. You should use mixedCap or MixedCap."
+
+	return v_b // ERROR "v_b is used under score. You should use mixedCap or MixedCap."
+}
+
+// local constant with underscore.
+func fe(p int) int {
+	const v_b = 2 // ERROR "v_b is used under score. You should use mixedCap or MixedCap."
+
+	return v_b * p // ERROR "v_b is used under score. You should use mixedCap or MixedCap."
+}
+
+// local variable with underscore.
+func ff(p int) int {
+	var v_b = 2 // ERROR "v_b is used under score. You should use mixedCap or MixedCap."
+
+	return v_b * p // ERROR "v_b is used under score. You should use mixedCap or MixedCap."
+}
+
+// inner function, parameter name with underscore.
+func fg() {
+	fgl := func(p_a int) {} // ERROR "p_a is used under score. You should use mixedCap or MixedCap."
+	fgl(1)
+}
+
+type Foo struct{}
+
+// method name with underscore.
+func (f Foo) f_a() {} // ERROR "f_a is used under score. You should use mixedCap or MixedCap."
+
+// method's parameter name with underscore.
+func (f Foo) fb(p_a int) {} // ERROR "p_a is used under score. You should use mixedCap or MixedCap."
+
+// named return with underscore.
+func (f Foo) fc() (r_b int) { return 0 } // ERROR "r_b is used under score. You should use mixedCap or MixedCap."
+
+// local variable (short declaration) with underscore.
+func (f Foo) fd(p int) int {
+	v_b := p * 2 // ERROR "v_b is used under score. You should use mixedCap or MixedCap."
+
+	return v_b // ERROR "v_b is used under score. You should use mixedCap or MixedCap."
+}
+
+// local constant with underscore.
+func (f Foo) fe(p int) int {
+	const v_b = 2 // ERROR "v_b is used under score. You should use mixedCap or MixedCap."
+
+	return v_b * p // ERROR "v_b is used under score. You should use mixedCap or MixedCap."
+}
+
+// local variable with underscore.
+func (f Foo) ff(p int) int {
+	var v_b = 2 // ERROR "v_b is used under score. You should use mixedCap or MixedCap."
+
+	return v_b * p // ERROR "v_b is used under score. You should use mixedCap or MixedCap."
+}
+
+func fna(a, p_a int) {} // ERROR "p_a is used under score. You should use mixedCap or MixedCap."
+
+func fna1(a string, p_a int) {} // ERROR "p_a is used under score. You should use mixedCap or MixedCap."
+
+func fnb(a, b, p_a int) {} // ERROR "p_a is used under score. You should use mixedCap or MixedCap."
+
+func fnb1(a, b string, p_a int) {} // ERROR "p_a is used under score. You should use mixedCap or MixedCap."
+
+func fnd(
+	p_a int, // ERROR "p_a is used under score. You should use mixedCap or MixedCap."
+	p_b int, // ERROR "p_b is used under score. You should use mixedCap or MixedCap."
+	p_c int, // ERROR "p_c is used under score. You should use mixedCap or MixedCap."
+) {
+	f_m_t.Println("") // ERROR "f_m_t is used under score. You should use mixedCap or MixedCap."
 }
