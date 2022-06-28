@@ -95,7 +95,7 @@ func TestTestsAreLintedByDefault(t *testing.T) {
 }
 
 func TestCgoOk(t *testing.T) {
-	testshared.NewLintRunner(t).Run("--no-config", "--enable-all", getTestDataDir("cgo")).ExpectNoIssues()
+	testshared.NewLintRunner(t).Run("--no-config", "--enable-all", "-D", "nosnakecase", getTestDataDir("cgo")).ExpectNoIssues()
 }
 
 func TestCgoWithIssues(t *testing.T) {
