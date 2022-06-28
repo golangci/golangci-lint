@@ -632,7 +632,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithURL("https://github.com/firefart/nonamedreturns"),
 
 		linter.NewConfig(golinters.NewNoSnakeCase()).
-			WithSince("v1.46.0").
+			WithSince("v1.47.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/sivchari/nosnakecase"),
 
