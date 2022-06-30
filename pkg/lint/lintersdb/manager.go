@@ -631,6 +631,11 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/firefart/nonamedreturns"),
 
+		linter.NewConfig(golinters.NewNoSnakeCase()).
+			WithSince("v1.47.0").
+			WithPresets(linter.PresetStyle).
+			WithURL("https://github.com/sivchari/nosnakecase"),
+
 		linter.NewConfig(golinters.NewNoSprintfHostPort()).
 			WithSince("v1.46.0").
 			WithPresets(linter.PresetStyle).
