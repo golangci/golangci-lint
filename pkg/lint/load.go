@@ -75,6 +75,11 @@ func (cl *ContextLoader) findLoadMode(linters []*linter.Config) packages.LoadMod
 
 func (cl *ContextLoader) buildArgs() []string {
 	args := cl.cfg.Run.Args
+	// disable vcs stamping to avoid git exit status 128 errors
+	if cl.cfg.Run.Go == "1.18" && len(args) == 0 {
+		return []string{"-buildvcs=false", "./..."}
+	}
+
 	if len(args) == 0 {
 		return []string{"./..."}
 	}
