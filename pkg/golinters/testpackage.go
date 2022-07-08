@@ -3,11 +3,11 @@ package golinters
 import (
 	"strings"
 
-	"github.com/maratori/testpackage/pkg/testpackage"
-	"golang.org/x/tools/go/analysis"
-
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
+
+	"github.com/maratori/testpackage/pkg/testpackage"
+	"golang.org/x/tools/go/analysis"
 )
 
 func NewTestpackage(cfg *config.TestpackageSettings) *goanalysis.Linter {

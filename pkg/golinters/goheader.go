@@ -4,13 +4,13 @@ import (
 	"go/token"
 	"sync"
 
-	goheader "github.com/denis-tingaikin/go-header"
-	"golang.org/x/tools/go/analysis"
-
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
+
+	goheader "github.com/denis-tingaikin/go-header"
+	"golang.org/x/tools/go/analysis"
 )
 
 const goHeaderName = "goheader"

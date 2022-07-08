@@ -11,12 +11,12 @@ import (
 	"sync"
 	"sync/atomic"
 
+	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis/load"
+	"github.com/golangci/golangci-lint/pkg/logutils"
+
 	"github.com/pkg/errors"
 	"golang.org/x/tools/go/gcexportdata"
 	"golang.org/x/tools/go/packages"
-
-	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis/load"
-	"github.com/golangci/golangci-lint/pkg/logutils"
 )
 
 const unsafePkgName = "unsafe"

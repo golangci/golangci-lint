@@ -4,9 +4,9 @@ import (
 	"go/token"
 	"testing"
 
-	"github.com/stretchr/testify/require"
-
 	"github.com/golangci/golangci-lint/pkg/result"
+
+	"github.com/stretchr/testify/require"
 )
 
 func TestPathPrefixer_Process(t *testing.T) {

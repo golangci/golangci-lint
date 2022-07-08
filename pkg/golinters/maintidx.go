@@ -1,11 +1,11 @@
 package golinters
 
 import (
-	"github.com/yagipy/maintidx"
-	"golang.org/x/tools/go/analysis"
-
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
+
+	"github.com/yagipy/maintidx"
+	"golang.org/x/tools/go/analysis"
 )
 
 func NewMaintIdx(cfg *config.MaintIdxSettings) *goanalysis.Linter {

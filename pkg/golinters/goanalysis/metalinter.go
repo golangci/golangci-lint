@@ -3,11 +3,11 @@ package goanalysis
 import (
 	"context"
 
-	"github.com/pkg/errors"
-	"golang.org/x/tools/go/analysis"
-
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
+
+	"github.com/pkg/errors"
+	"golang.org/x/tools/go/analysis"
 )
 
 type MetaLinter struct {

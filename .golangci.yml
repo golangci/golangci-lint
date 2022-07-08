@@ -12,6 +12,11 @@ linters-settings:
   funlen:
     lines: 100
     statements: 50
+  gci:
+    sections:
+      - standard
+      - default
+      - prefix(github.com/golangci/golangci-lint)
   goconst:
     min-len: 2
     min-occurrences: 3
@@ -77,6 +82,7 @@ linters:
     - errcheck
     - exportloopref
     - funlen
+    - gci
     - gochecknoinits
     - goconst
     - gocritic

@@ -4,11 +4,11 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/blizzy78/varnamelen"
-	"golang.org/x/tools/go/analysis"
-
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
+
+	"github.com/blizzy78/varnamelen"
+	"golang.org/x/tools/go/analysis"
 )
 
 func NewVarnamelen(settings *config.VarnamelenSettings) *goanalysis.Linter {

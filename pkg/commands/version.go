@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/golangci/golangci-lint/pkg/config"
+
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
-
-	"github.com/golangci/golangci-lint/pkg/config"
 )
 
 type jsonVersion struct {

@@ -3,11 +3,11 @@ package golinters
 import (
 	"strings"
 
-	"github.com/butuzov/ireturn/analyzer"
-	"golang.org/x/tools/go/analysis"
-
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
+
+	"github.com/butuzov/ireturn/analyzer"
+	"golang.org/x/tools/go/analysis"
 )
 
 func NewIreturn(settings *config.IreturnSettings) *goanalysis.Linter {

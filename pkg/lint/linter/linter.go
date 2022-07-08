@@ -3,9 +3,9 @@ package linter
 import (
 	"context"
 
-	"golang.org/x/tools/go/analysis"
-
 	"github.com/golangci/golangci-lint/pkg/result"
+
+	"golang.org/x/tools/go/analysis"
 )
 
 type Linter interface {

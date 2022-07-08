@@ -5,10 +5,10 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/pkg/errors"
-
 	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
+
+	"github.com/pkg/errors"
 )
 
 type skipStat struct {

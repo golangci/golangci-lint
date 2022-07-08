@@ -10,16 +10,16 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/kisielk/errcheck/errcheck"
-	"github.com/pkg/errors"
-	"golang.org/x/tools/go/analysis"
-	"golang.org/x/tools/go/packages"
-
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/fsutils"
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
+
+	"github.com/kisielk/errcheck/errcheck"
+	"github.com/pkg/errors"
+	"golang.org/x/tools/go/analysis"
+	"golang.org/x/tools/go/packages"
 )
 
 const errcheckName = "errcheck"

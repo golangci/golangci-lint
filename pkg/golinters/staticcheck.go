@@ -1,10 +1,10 @@
 package golinters
 
 import (
-	"honnef.co/go/tools/staticcheck"
-
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
+
+	"honnef.co/go/tools/staticcheck"
 )
 
 func NewStaticcheck(settings *config.StaticCheckSettings) *goanalysis.Linter {

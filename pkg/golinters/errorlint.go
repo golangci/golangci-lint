@@ -1,11 +1,11 @@
 package golinters
 
 import (
-	"github.com/polyfloyd/go-errorlint/errorlint"
-	"golang.org/x/tools/go/analysis"
-
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
+
+	"github.com/polyfloyd/go-errorlint/errorlint"
+	"golang.org/x/tools/go/analysis"
 )
 
 func NewErrorLint(cfg *config.ErrorLintSettings) *goanalysis.Linter {

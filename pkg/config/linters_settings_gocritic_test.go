@@ -5,9 +5,9 @@ import (
 	"sort"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-
 	"github.com/golangci/golangci-lint/pkg/logutils"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestUtils(t *testing.T) {

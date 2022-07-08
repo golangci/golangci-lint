@@ -1,10 +1,10 @@
 package golinters
 
 import (
+	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
+
 	"github.com/Djarvur/go-err113"
 	"golang.org/x/tools/go/analysis"
-
-	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 )
 
 func NewGoerr113() *goanalysis.Linter {

@@ -3,11 +3,11 @@ package golinters
 import (
 	"strings"
 
-	"gitlab.com/bosi/decorder"
-	"golang.org/x/tools/go/analysis"
-
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
+
+	"gitlab.com/bosi/decorder"
+	"golang.org/x/tools/go/analysis"
 )
 
 func NewDecorder(settings *config.DecorderSettings) *goanalysis.Linter {

@@ -6,10 +6,6 @@ import (
 	"runtime/debug"
 	"strings"
 
-	"github.com/hashicorp/go-multierror"
-	"github.com/pkg/errors"
-	gopackages "golang.org/x/tools/go/packages"
-
 	"github.com/golangci/golangci-lint/internal/errorutil"
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/fsutils"
@@ -21,6 +17,10 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 	"github.com/golangci/golangci-lint/pkg/result/processors"
 	"github.com/golangci/golangci-lint/pkg/timeutils"
+
+	"github.com/hashicorp/go-multierror"
+	"github.com/pkg/errors"
+	gopackages "golang.org/x/tools/go/packages"
 )
 
 type Runner struct {

@@ -1,10 +1,10 @@
 package linter
 
 import (
+	"github.com/golangci/golangci-lint/pkg/config"
+
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/packages"
-
-	"github.com/golangci/golangci-lint/pkg/config"
 )
 
 const (

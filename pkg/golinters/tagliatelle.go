@@ -1,11 +1,11 @@
 package golinters
 
 import (
-	"github.com/ldez/tagliatelle"
-	"golang.org/x/tools/go/analysis"
-
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
+
+	"github.com/ldez/tagliatelle"
+	"golang.org/x/tools/go/analysis"
 )
 
 func NewTagliatelle(settings *config.TagliatelleSettings) *goanalysis.Linter {

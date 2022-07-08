@@ -7,14 +7,14 @@ import (
 	"os"
 	"sync"
 
+	"github.com/golangci/golangci-lint/pkg/config"
+	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
+	"github.com/golangci/golangci-lint/pkg/lint/linter"
+
 	"github.com/pkg/errors"
 	"github.com/shazow/go-diff/difflib"
 	"golang.org/x/tools/go/analysis"
 	"mvdan.cc/gofumpt/format"
-
-	"github.com/golangci/golangci-lint/pkg/config"
-	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
-	"github.com/golangci/golangci-lint/pkg/lint/linter"
 )
 
 const gofumptName = "gofumpt"

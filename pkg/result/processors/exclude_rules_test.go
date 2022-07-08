@@ -4,10 +4,10 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-
 	"github.com/golangci/golangci-lint/pkg/fsutils"
 	"github.com/golangci/golangci-lint/pkg/result"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestExcludeRulesMultiple(t *testing.T) {

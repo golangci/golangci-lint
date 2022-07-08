@@ -5,15 +5,15 @@ import (
 	"path/filepath"
 	"plugin"
 
-	"github.com/spf13/viper"
-	"golang.org/x/tools/go/analysis"
-
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/golinters"
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/report"
+
+	"github.com/spf13/viper"
+	"golang.org/x/tools/go/analysis"
 )
 
 type Manager struct {

@@ -8,10 +8,10 @@ import (
 	"sync"
 	"time"
 
-	"golang.org/x/tools/go/packages"
-
 	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
+
+	"golang.org/x/tools/go/packages"
 )
 
 type posMapper func(pos token.Position) token.Position

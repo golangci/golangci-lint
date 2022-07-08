@@ -7,9 +7,9 @@ import (
 	"io"
 	"sort"
 
-	"github.com/go-xmlfmt/xmlfmt"
-
 	"github.com/golangci/golangci-lint/pkg/result"
+
+	"github.com/go-xmlfmt/xmlfmt"
 )
 
 type checkstyleOutput struct {

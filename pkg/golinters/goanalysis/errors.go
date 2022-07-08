@@ -3,12 +3,12 @@ package goanalysis
 import (
 	"fmt"
 
-	"github.com/pkg/errors"
-	"golang.org/x/tools/go/packages"
-
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	libpackages "github.com/golangci/golangci-lint/pkg/packages"
 	"github.com/golangci/golangci-lint/pkg/result"
+
+	"github.com/pkg/errors"
+	"golang.org/x/tools/go/packages"
 )
 
 type IllTypedError struct {

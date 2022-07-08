@@ -11,13 +11,13 @@ import (
 	"strings"
 	"sync"
 
-	gocriticlinter "github.com/go-critic/go-critic/framework/linter"
-	"golang.org/x/tools/go/analysis"
-
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
+
+	gocriticlinter "github.com/go-critic/go-critic/framework/linter"
+	"golang.org/x/tools/go/analysis"
 )
 
 const gocriticName = "gocritic"

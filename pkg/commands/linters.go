@@ -4,11 +4,11 @@ import (
 	"log"
 	"os"
 
-	"github.com/fatih/color"
-	"github.com/spf13/cobra"
-
 	"github.com/golangci/golangci-lint/pkg/exitcodes"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
+
+	"github.com/fatih/color"
+	"github.com/spf13/cobra"
 )
 
 func (e *Executor) initLinters() {

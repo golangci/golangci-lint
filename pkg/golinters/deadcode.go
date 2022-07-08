@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"sync"
 
-	deadcodeAPI "github.com/golangci/go-misc/deadcode"
-	"golang.org/x/tools/go/analysis"
-
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
+
+	deadcodeAPI "github.com/golangci/go-misc/deadcode"
+	"golang.org/x/tools/go/analysis"
 )
 
 const deadcodeName = "deadcode"

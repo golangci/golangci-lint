@@ -4,12 +4,12 @@ import (
 	"strings"
 	"unicode"
 
+	"github.com/golangci/golangci-lint/pkg/config"
+	"github.com/golangci/golangci-lint/pkg/logutils"
+
 	"golang.org/x/tools/go/analysis"
 	"honnef.co/go/tools/analysis/lint"
 	scconfig "honnef.co/go/tools/config"
-
-	"github.com/golangci/golangci-lint/pkg/config"
-	"github.com/golangci/golangci-lint/pkg/logutils"
 )
 
 var debugf = logutils.Debug("megacheck")

@@ -1,11 +1,11 @@
 package golinters
 
 import (
-	"github.com/sivchari/tenv"
-	"golang.org/x/tools/go/analysis"
-
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
+
+	"github.com/sivchari/tenv"
+	"golang.org/x/tools/go/analysis"
 )
 
 func NewTenv(settings *config.TenvSettings) *goanalysis.Linter {

@@ -7,14 +7,14 @@ import (
 	"runtime/debug"
 	"time"
 
+	"github.com/golangci/golangci-lint/internal/errorutil"
+	"github.com/golangci/golangci-lint/internal/pkgcache"
+
 	"github.com/hashicorp/go-multierror"
 	"github.com/pkg/errors"
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/packages"
 	"golang.org/x/tools/go/types/objectpath"
-
-	"github.com/golangci/golangci-lint/internal/errorutil"
-	"github.com/golangci/golangci-lint/internal/pkgcache"
 )
 
 type actionAllocator struct {

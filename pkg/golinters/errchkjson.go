@@ -1,11 +1,11 @@
 package golinters
 
 import (
-	"github.com/breml/errchkjson"
-	"golang.org/x/tools/go/analysis"
-
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
+
+	"github.com/breml/errchkjson"
+	"golang.org/x/tools/go/analysis"
 )
 
 func NewErrChkJSONFuncName(cfg *config.ErrChkJSONSettings) *goanalysis.Linter {

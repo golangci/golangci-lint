@@ -4,6 +4,8 @@ import (
 	"sort"
 	"testing"
 
+	"github.com/golangci/golangci-lint/pkg/config"
+
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/analysis/passes/asmdecl"
 	"golang.org/x/tools/go/analysis/passes/assign"
@@ -12,8 +14,6 @@ import (
 	"golang.org/x/tools/go/analysis/passes/buildtag"
 	"golang.org/x/tools/go/analysis/passes/cgocall"
 	"golang.org/x/tools/go/analysis/passes/shadow"
-
-	"github.com/golangci/golangci-lint/pkg/config"
 )
 
 func TestGovet(t *testing.T) {

@@ -1,12 +1,12 @@
 package golinters
 
 import (
+	"github.com/golangci/golangci-lint/pkg/config"
+	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
+
 	"golang.org/x/tools/go/analysis"
 	scconfig "honnef.co/go/tools/config"
 	"honnef.co/go/tools/stylecheck"
-
-	"github.com/golangci/golangci-lint/pkg/config"
-	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 )
 
 func NewStylecheck(settings *config.StaticCheckSettings) *goanalysis.Linter {

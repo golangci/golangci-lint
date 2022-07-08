@@ -1,10 +1,10 @@
 package golinters
 
 import (
+	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
+
 	"github.com/gostaticanalysis/nilerr"
 	"golang.org/x/tools/go/analysis"
-
-	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 )
 
 func NewNilErr() *goanalysis.Linter {

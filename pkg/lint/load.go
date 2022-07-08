@@ -11,9 +11,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/pkg/errors"
-	"golang.org/x/tools/go/packages"
-
 	"github.com/golangci/golangci-lint/internal/pkgcache"
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/exitcodes"
@@ -22,6 +19,9 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goutil"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/logutils"
+
+	"github.com/pkg/errors"
+	"golang.org/x/tools/go/packages"
 )
 
 type ContextLoader struct {

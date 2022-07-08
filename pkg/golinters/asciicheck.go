@@ -1,10 +1,10 @@
 package golinters
 
 import (
+	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
+
 	"github.com/tdakkota/asciicheck"
 	"golang.org/x/tools/go/analysis"
-
-	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 )
 
 func NewAsciicheck() *goanalysis.Linter {
