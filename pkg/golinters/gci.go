@@ -5,7 +5,7 @@ import (
 	"strings"
 	"sync"
 
-	gcicfg "github.com/daixiang0/gci/pkg/configuration"
+	gcicfg "github.com/daixiang0/gci/pkg/config"
 	"github.com/daixiang0/gci/pkg/gci"
 	"github.com/pkg/errors"
 	"golang.org/x/tools/go/analysis"
@@ -27,15 +27,13 @@ func NewGci(settings *config.GciSettings) *goanalysis.Linter {
 		Run:  goanalysis.DummyRun,
 	}
 
-	var cfg *gci.GciConfiguration
+	var cfg *gcicfg.Config
 	if settings != nil {
-		rawCfg := gci.GciStringConfiguration{
-			Cfg: gcicfg.FormatterConfiguration{
-				NoInlineComments: settings.NoInlineComments,
-				NoPrefixComments: settings.NoPrefixComments,
+		rawCfg := gcicfg.YamlConfig{
+			Cfg: gcicfg.BoolConfig{
+				SkipGenerated: settings.SkipGenerated,
 			},
-			SectionStrings:          settings.Sections,
-			SectionSeparatorStrings: settings.SectionSeparator,
+			SectionStrings: settings.Sections,
 		}
 
 		if settings.LocalPrefixes != "" {
@@ -75,7 +73,7 @@ func NewGci(settings *config.GciSettings) *goanalysis.Linter {
 	}).WithLoadMode(goanalysis.LoadModeSyntax)
 }
 
-func runGci(pass *analysis.Pass, lintCtx *linter.Context, cfg *gci.GciConfiguration, lock *sync.Mutex) ([]goanalysis.Issue, error) {
+func runGci(pass *analysis.Pass, lintCtx *linter.Context, cfg *gcicfg.Config, lock *sync.Mutex) ([]goanalysis.Issue, error) {
 	var fileNames []string
 	for _, f := range pass.Files {
 		pos := pass.Fset.PositionFor(f.Pos(), false)
@@ -111,27 +109,19 @@ func runGci(pass *analysis.Pass, lintCtx *linter.Context, cfg *gci.GciConfigurat
 func getErrorTextForGci(settings config.GciSettings) string {
 	text := "File is not `gci`-ed"
 
-	hasOptions := settings.NoInlineComments || settings.NoPrefixComments || len(settings.Sections) > 0 || len(settings.SectionSeparator) > 0
+	hasOptions := settings.SkipGenerated || len(settings.Sections) > 0
 	if !hasOptions {
 		return text
 	}
 
 	text += " with"
 
-	if settings.NoInlineComments {
-		text += " -NoInlineComments"
-	}
-
-	if settings.NoPrefixComments {
-		text += " -NoPrefixComments"
+	if settings.SkipGenerated {
+		text += " -skip-generated"
 	}
 
 	if len(settings.Sections) > 0 {
 		text += " -s " + strings.Join(settings.Sections, ",")
-	}
-
-	if len(settings.SectionSeparator) > 0 {
-		text += " -x " + strings.Join(settings.SectionSeparator, ",")
 	}
 
 	return text
