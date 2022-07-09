@@ -1,6 +1,7 @@
 package golinters
 
 import (
+	"fmt"
 	"strings"
 	"sync"
 
@@ -33,6 +34,11 @@ func NewGci(settings *config.GciSettings) *goanalysis.Linter {
 				SkipGenerated: settings.SkipGenerated,
 			},
 			SectionStrings: settings.Sections,
+		}
+
+		if settings.LocalPrefixes != "" {
+			prefix := []string{"standard", "default", fmt.Sprintf("prefix(%s)", settings.LocalPrefixes)}
+			rawCfg.SectionStrings = prefix
 		}
 
 		cfg, _ = rawCfg.Parse()

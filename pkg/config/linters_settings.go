@@ -31,7 +31,8 @@ var defaultLintersSettings = LintersSettings{
 		ExcludeGodocExamples: true,
 	},
 	Gci: GciSettings{
-		Sections: []string{"standard", "default"},
+		Sections:      []string{"standard", "default"},
+		SkipGenerated: true,
 	},
 	Gocognit: GocognitSettings{
 		MinComplexity: 30,
@@ -274,6 +275,7 @@ type FunlenSettings struct {
 }
 
 type GciSettings struct {
+	LocalPrefixes string   `mapstructure:"local-prefixes"` // Deprecated
 	Sections      []string `mapstructure:"sections"`
 	SkipGenerated bool     `mapstructure:"skip-generated"`
 }
