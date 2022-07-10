@@ -187,8 +187,8 @@ type LintersSettings struct {
 
 type AsasalintSettings struct {
 	Exclude          []string `mapstructure:"exclude"`
-	NoDefaultExclude bool     `mapstructure:"no_default_exclude"`
-	IgnoreInTest     bool     `mapstructure:"ignore_in_test"`
+	IgnoreInTest     bool     `mapstructure:"ignore-in-test"`
+	NoDefaultExclude bool     `mapstructure:"no-default-exclude"`
 }
 
 type BiDiChkSettings struct {

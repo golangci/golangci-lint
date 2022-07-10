@@ -112,9 +112,10 @@ linters-settings:
     exclude:
       - Append
       - Log
+    # ignore found case in *_test.go file
+    ignore-in-test: false
     # if true, will disable the default exclude see https://github.com/alingse/asasalint/blob/main/asasalint.go#L15 like: Printf,Println,Errorf,Debugf ...
-    no_default_exclude: false
-    ignore_in_test: false
+    no-default-exclude: false
   bidichk:
     # The following configurations check for all mentioned invisible unicode runes.
     # All runes are enabled by default.

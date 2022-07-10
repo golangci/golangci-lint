@@ -8,14 +8,15 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 )
 
-func NewAsasalint(cfg *config.AsasalintSettings) *goanalysis.Linter {
-	setting := asasalint.LinterSetting{}
-	if cfg != nil {
-		setting.Exclude = cfg.Exclude
-		setting.NoDefaultExclude = cfg.NoDefaultExclude
-		setting.IgnoreInTest = cfg.IgnoreInTest
+func NewAsasalint(setting *config.AsasalintSettings) *goanalysis.Linter {
+	cfg := asasalint.LinterSetting{}
+	if setting != nil {
+		cfg.Exclude = setting.Exclude
+		cfg.IgnoreInTest = setting.IgnoreInTest
+		cfg.NoDefaultExclude = setting.NoDefaultExclude
 	}
-	a := asasalint.NewAnalyzer(setting)
+
+	a := asasalint.NewAnalyzer(cfg)
 
 	return goanalysis.NewLinter(
 		a.Name,
