@@ -113,6 +113,7 @@ var defaultLintersSettings = LintersSettings{
 }
 
 type LintersSettings struct {
+	Asasalint        AsasalintSettings
 	BiDiChk          BiDiChkSettings
 	Cyclop           Cyclop
 	Decorder         DecorderSettings
@@ -182,6 +183,12 @@ type LintersSettings struct {
 	WSL              WSLSettings
 
 	Custom map[string]CustomLinterSettings
+}
+
+type AsasalintSettings struct {
+	Exclude          []string `mapstructure:"exclude"`
+	NoDefaultExclude bool     `mapstructure:"no_default_exclude"`
+	IgnoreInTest     bool     `mapstructure:"ignore_in_test"`
 }
 
 type BiDiChkSettings struct {
