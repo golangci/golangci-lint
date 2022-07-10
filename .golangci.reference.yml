@@ -109,12 +109,15 @@ output:
 linters-settings:
   asasalint:
     # Add FuncName to exclude for some bad case report.
+    # Default: []
     exclude:
       - Append
       - Log
     # ignore found case in *_test.go file
+    # Default: false
     ignore-in-test: false
     # if true, will disable the default exclude see https://github.com/alingse/asasalint/blob/main/asasalint.go#L15 like: Printf,Println,Errorf,Debugf ...
+    # Default: false
     no-default-exclude: false
   bidichk:
     # The following configurations check for all mentioned invisible unicode runes.
