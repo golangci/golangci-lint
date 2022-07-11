@@ -343,12 +343,11 @@ linters-settings:
 
     # Section configuration to compare against.
     # Section names are case-insensitive and may contain parameters in ().
-    # The order of sections is standard > default > custom, which has nothing to do with below configuration order.
     # Default: ["standard", "default"]
     sections:
-      - standard                       # standard section, captures all standard packages, built in Golang.
-      - default                        # default section, contains all imports that could not be matched to another section type.
-      - prefix(github.com/org/project) # custom section, groups all imports with the specified Prefix.
+      - standard                       # Standard section: captures all standard packages.
+      - default                        # Default section: contains all imports that could not be matched to another section type.
+      - prefix(github.com/org/project) # Custom section: groups all imports with the specified Prefix.
 
     # Skip generated files.
     # Default: true
