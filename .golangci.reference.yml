@@ -343,6 +343,8 @@ linters-settings:
 
     # Section configuration to compare against.
     # Section names are case-insensitive and may contain parameters in ().
+    # The order of sections is always `standard > default > custom`,
+    # it cannot be changed and doesn't follow the order of `sections` option.
     # Default: ["standard", "default"]
     sections:
       - standard                       # Standard section: captures all standard packages.
