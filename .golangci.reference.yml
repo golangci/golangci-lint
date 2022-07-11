@@ -343,11 +343,13 @@ linters-settings:
 
     # Section configuration to compare against.
     # Section names are case-insensitive and may contain parameters in ().
+    # The order of sections is always `standard > default > custom`,
+    # it cannot be changed and doesn't follow the order of `sections` option.
     # Default: ["standard", "default"]
     sections:
-      - standard                       # Captures all standard packages if they do not match another section.
-      - default                        # Contains all imports that could not be matched to another section type.
-      - prefix(github.com/org/project) # Groups all imports with the specified Prefix.
+      - standard                       # Standard section: captures all standard packages.
+      - default                        # Default section: contains all imports that could not be matched to another section type.
+      - prefix(github.com/org/project) # Custom section: groups all imports with the specified Prefix.
 
     # Skip generated files.
     # Default: true
