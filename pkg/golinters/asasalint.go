@@ -13,7 +13,7 @@ func NewAsasalint(setting *config.AsasalintSettings) *goanalysis.Linter {
 	if setting != nil {
 		cfg.Exclude = setting.Exclude
 		cfg.IgnoreInTest = setting.IgnoreInTest
-		cfg.NoDefaultExclude = setting.NoDefaultExclude
+		cfg.NoBuiltinExclude = setting.NoBuiltinExclude
 	}
 
 	a := asasalint.NewAnalyzer(cfg)
