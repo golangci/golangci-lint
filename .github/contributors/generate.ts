@@ -123,6 +123,7 @@ const main = async () => {
       renovate: true,
       fossabot: true,
       golangcibot: true,
+      kortschak: true,
     }
 
     const res: DataJSON = {
