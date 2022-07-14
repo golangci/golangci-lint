@@ -121,14 +121,7 @@ func (lp *loadingPackage) loadFromSource(loadMode LoadMode) error {
 
 	pkg.IllTyped = true
 
-	pkg.TypesInfo = &types.Info{
-		Types:      make(map[ast.Expr]types.TypeAndValue),
-		Defs:       make(map[*ast.Ident]types.Object),
-		Uses:       make(map[*ast.Ident]types.Object),
-		Implicits:  make(map[ast.Node]types.Object),
-		Scopes:     make(map[ast.Node]*types.Scope),
-		Selections: make(map[*ast.SelectorExpr]*types.Selection),
-	}
+	pkg.TypesInfo = newTypesInfo()
 
 	importer := func(path string) (*types.Package, error) {
 		if path == unsafePkgName {
