@@ -77,7 +77,6 @@ var defaultLintersSettings = LintersSettings{
 	},
 	NoLintLint: NoLintLintSettings{
 		RequireExplanation: false,
-		AllowLeadingSpace:  true,
 		RequireSpecific:    false,
 		AllowUnused:        false,
 	},
@@ -488,7 +487,6 @@ type NlreturnSettings struct {
 
 type NoLintLintSettings struct {
 	RequireExplanation bool     `mapstructure:"require-explanation"`
-	AllowLeadingSpace  bool     `mapstructure:"allow-leading-space"`
 	RequireSpecific    bool     `mapstructure:"require-specific"`
 	AllowNoExplanation []string `mapstructure:"allow-no-explanation"`
 	AllowUnused        bool     `mapstructure:"allow-unused"`

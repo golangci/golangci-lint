@@ -12,7 +12,7 @@ import (
 )
 
 //nolint:funlen
-func TestNoLintLint(t *testing.T) {
+func TestLinter_Run(t *testing.T) {
 	type issueWithReplacement struct {
 		issue       string
 		replacement *result.Replacement
@@ -80,21 +80,21 @@ package bar
 func foo() {
   good() //nolint:my-linter
   bad() //nolint
-  bad() // nolint // because
+  bad() //nolint // because
 }`,
 			expected: []issueWithReplacement{
 				{issue: "directive `//nolint` should mention specific linter such as `//nolint:my-linter` at testing.go:6:9"},
-				{issue: "directive `// nolint // because` should mention specific linter such as `// nolint:my-linter` at testing.go:7:9"},
+				{issue: "directive `//nolint // because` should mention specific linter such as `//nolint:my-linter` at testing.go:7:9"},
 			},
 		},
 		{
-			desc:  "when machine-readable style isn't used",
-			needs: NeedsMachineOnly,
+			desc: "when machine-readable style isn't used",
 			contents: `
 package bar
 
 func foo() {
   bad() // nolint
+  bad() //   nolint
   good() //nolint
 }`,
 			expected: []issueWithReplacement{
@@ -108,25 +108,13 @@ func foo() {
 						},
 					},
 				},
-			},
-		},
-		{
-			desc: "extra spaces in front of directive are reported",
-			contents: `
-package bar
-
-func foo() {
-  bad() //  nolint
-  good() // nolint
-}`,
-			expected: []issueWithReplacement{
 				{
-					issue: "directive `//  nolint` should not have more than one leading space at testing.go:5:9",
+					issue: "directive `//   nolint` should be written without leading space as `//nolint` at testing.go:6:9",
 					replacement: &result.Replacement{
 						Inline: &result.InlineFix{
 							StartCol:  10,
-							Length:    2,
-							NewString: " ",
+							Length:    3,
+							NewString: "",
 						},
 					},
 				},
@@ -138,13 +126,13 @@ func foo() {
 package bar
 
 func foo() {
-  good() // nolint:linter1,linter-two
-  bad() // nolint:linter1 linter2
-  good() // nolint: linter1,linter2
-  good() // nolint: linter1, linter2
+  good() //nolint:linter1,linter-two
+  bad() //nolint:linter1 linter2
+  good() //nolint: linter1,linter2
+  good() //nolint: linter1, linter2
 }`,
 			expected: []issueWithReplacement{
-				{issue: "directive `// nolint:linter1 linter2` should match `// nolint[:<comma-separated-linters>] [// <explanation>]` at testing.go:6:9"}, //nolint:lll // this is a string
+				{issue: "directive `//nolint:linter1 linter2` should match `//nolint[:<comma-separated-linters>] [// <explanation>]` at testing.go:6:9"}, //nolint:lll // this is a string
 			},
 		},
 		{
