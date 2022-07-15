@@ -1,4 +1,4 @@
-//args: -Emegacheck
+//golangcitest:args -Emegacheck
 package testdata
 
 import "fmt"

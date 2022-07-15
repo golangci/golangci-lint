@@ -1,4 +1,4 @@
-// args: -Eexhaustruct
+//golangcitest:args -Eexhaustruct
 package testdata
 
 import "time"

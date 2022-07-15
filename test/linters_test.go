@@ -248,7 +248,7 @@ type runContext struct {
 
 func buildConfigFromShortRepr(t *testing.T, repr string, config map[string]interface{}) {
 	kv := strings.Split(repr, "=")
-	require.Len(t, kv, 2)
+	require.Len(t, kv, 2, "repr: %s", repr)
 
 	keyParts := strings.Split(kv[0], ".")
 	require.True(t, len(keyParts) >= 2, len(keyParts))
@@ -308,47 +308,55 @@ func extractRunContextFromComments(t *testing.T, sourcePath string) *runContext 
 			continue
 		}
 
-		line = strings.TrimLeft(strings.TrimPrefix(line, "//"), " ")
-		if strings.HasPrefix(line, "args: ") {
-			require.Nil(t, rc.args)
-			args := strings.TrimPrefix(line, "args: ")
-			require.NotEmpty(t, args)
-			rc.args = strings.Split(args, " ")
-			continue
+		if !strings.HasPrefix(line, "//golangcitest:") {
+			require.Failf(t, "invalid prefix of comment line %s", line)
 		}
 
-		if strings.HasPrefix(line, "config: ") {
-			repr := strings.TrimPrefix(line, "config: ")
-			require.NotEmpty(t, repr)
+		// TODO(ldez) replace that by strings.Cut when we will drop go1.17
+		var before string
+		var after string
+		if i := strings.Index(line, " "); i >= 0 {
+			before = line[:i]
+			after = strings.TrimSpace(line[i+len(" "):])
+		} else {
+			require.Failf(t, "invalid prefix of comment line %s", line)
+		}
+
+		switch before {
+		case "//golangcitest:args":
+			require.Nil(t, rc.args)
+			require.NotEmpty(t, after)
+			rc.args = strings.Split(after, " ")
+			continue
+
+		case "//golangcitest:config":
+			require.NotEmpty(t, after)
 			if rc.config == nil {
 				rc.config = map[string]interface{}{}
 			}
-			buildConfigFromShortRepr(t, repr, rc.config)
+			buildConfigFromShortRepr(t, after, rc.config)
 			continue
-		}
 
-		if strings.HasPrefix(line, "config_path: ") {
-			configPath := strings.TrimPrefix(line, "config_path: ")
-			require.NotEmpty(t, configPath)
-			rc.configPath = configPath
+		case "//golangcitest:config_path":
+			require.NotEmpty(t, after)
+			rc.configPath = after
 			continue
-		}
 
-		if strings.HasPrefix(line, "expected_linter: ") {
-			expectedLinter := strings.TrimPrefix(line, "expected_linter: ")
-			require.NotEmpty(t, expectedLinter)
-			rc.expectedLinter = expectedLinter
+		case "//golangcitest:expected_linter":
+			require.NotEmpty(t, after)
+			rc.expectedLinter = after
 			continue
-		}
 
-		require.Fail(t, "invalid prefix of comment line %s", line)
+		default:
+			require.Failf(t, "invalid prefix of comment line %s", line)
+		}
 	}
 
 	// guess the expected linter if none is specified
 	if rc.expectedLinter == "" {
 		for _, arg := range rc.args {
 			if strings.HasPrefix(arg, "-E") && !strings.Contains(arg, ",") {
-				require.Empty(t, rc.expectedLinter, "could not infer expected linter for errors because multiple linters are enabled. Please use the `expected_linter: ` directive in your test to indicate the linter-under-test.") //nolint:lll
+				require.Empty(t, rc.expectedLinter, "could not infer expected linter for errors because multiple linters are enabled. Please use the `//golangcitest:expected_linter ` directive in your test to indicate the linter-under-test.") //nolint:lll
 				rc.expectedLinter = arg[2:]
 			}
 		}

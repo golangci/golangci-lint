@@ -1,5 +1,5 @@
-//args: -Egci
-//config_path: testdata/configs/gci.yml
+//golangcitest:args -Egci
+//golangcitest:config_path testdata/configs/gci.yml
 package testdata
 
 import (

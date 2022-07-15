@@ -1,4 +1,4 @@
-//args: -Enlreturn
+//golangcitest:args -Enlreturn
 package testdata
 
 func cha() {

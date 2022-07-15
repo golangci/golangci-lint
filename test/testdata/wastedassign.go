@@ -1,4 +1,4 @@
-//args: -Ewastedassign
+//golangcitest:args -Ewastedassign
 package testdata
 
 import "strings"

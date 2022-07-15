@@ -1,5 +1,5 @@
-//args: -Eexhaustive
-//config_path: testdata/configs/exhaustive_ignore_enum_members.yml
+//golangcitest:args -Eexhaustive
+//golangcitest:config_path testdata/configs/exhaustive_ignore_enum_members.yml
 package testdata
 
 type Direction int

@@ -1,4 +1,4 @@
-//args: -Esqlclosecheck
+//golangcitest:args -Esqlclosecheck
 package testdata
 
 import (

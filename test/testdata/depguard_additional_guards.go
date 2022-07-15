@@ -1,5 +1,5 @@
-//args: -Edepguard
-//config_path: testdata/configs/depguard_additional_guards.yml
+//golangcitest:args -Edepguard
+//golangcitest:config_path testdata/configs/depguard_additional_guards.yml
 package testdata
 
 import (

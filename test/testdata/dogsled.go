@@ -1,4 +1,4 @@
-//args: -Edogsled
+//golangcitest:args -Edogsled
 package testdata
 
 func Dogsled() {

@@ -1,4 +1,4 @@
-//args: -Enilnil
+//golangcitest:args -Enilnil
 package testdata
 
 import (

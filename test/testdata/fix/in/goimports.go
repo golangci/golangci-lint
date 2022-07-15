@@ -1,4 +1,4 @@
-//args: -Egofmt,goimports
+//golangcitest:args -Egofmt,goimports
 package p
 
 import (

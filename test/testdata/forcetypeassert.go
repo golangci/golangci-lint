@@ -1,4 +1,4 @@
-//args: -Eforcetypeassert
+//golangcitest:args -Eforcetypeassert
 package testdata
 
 import "fmt"

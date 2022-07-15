@@ -1,6 +1,6 @@
-//args: -Ewhitespace
-//config: linters-settings.whitespace.multi-if=true
-//config: linters-settings.whitespace.multi-func=true
+//golangcitest:args -Ewhitespace
+//golangcitest:config linters-settings.whitespace.multi-if=true
+//golangcitest:config linters-settings.whitespace.multi-func=true
 package p
 
 import "fmt"

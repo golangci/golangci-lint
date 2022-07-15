@@ -1,5 +1,5 @@
-//args: -Egocritic
-//config_path: testdata/configs/gocritic.yml
+//golangcitest:args -Egocritic
+//golangcitest:config_path testdata/configs/gocritic.yml
 package testdata
 
 import (

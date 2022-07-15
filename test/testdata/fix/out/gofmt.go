@@ -1,4 +1,4 @@
-//args: -Egofmt
+//golangcitest:args -Egofmt
 package p
 
 func gofmt(a, b int) int {

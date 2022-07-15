@@ -1,4 +1,4 @@
-//args: -Ethelper
+//golangcitest:args -Ethelper
 package testdata
 
 import "testing"

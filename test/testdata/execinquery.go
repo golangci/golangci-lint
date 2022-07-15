@@ -1,4 +1,4 @@
-// args: -Eexecinquery
+//golangcitest:args -Eexecinquery
 package testdata
 
 import (

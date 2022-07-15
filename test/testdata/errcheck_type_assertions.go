@@ -1,5 +1,5 @@
-//args: -Eerrcheck
-//config: linters-settings.errcheck.check-type-assertions=true
+//golangcitest:args -Eerrcheck
+//golangcitest:config linters-settings.errcheck.check-type-assertions=true
 package testdata
 
 func ErrorTypeAssertion(filter map[string]interface{}) bool {

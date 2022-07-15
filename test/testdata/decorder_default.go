@@ -1,4 +1,4 @@
-// args: -Edecorder
+//golangcitest:args -Edecorder
 package testdata
 
 import "math"

@@ -1,4 +1,4 @@
-//args: -Eunused
+//golangcitest:args -Eunused
 package testdata
 
 func fn1() {} // ERROR "func `fn1` is unused"

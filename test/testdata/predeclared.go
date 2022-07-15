@@ -1,4 +1,4 @@
-//args: -Epredeclared
+//golangcitest:args -Epredeclared
 package testdata
 
 func hello() {

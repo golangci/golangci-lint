@@ -1,4 +1,4 @@
-//args: -Egochecknoinits
+//golangcitest:args -Egochecknoinits
 package testdata
 
 import "fmt"

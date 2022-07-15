@@ -1,4 +1,4 @@
-//args: -Egoerr113
+//golangcitest:args -Egoerr113
 package testdata
 
 import "os"

@@ -310,7 +310,7 @@ index 2c9f78d..c0d5791 100644
 --- a/gofmt.go
 +++ b/gofmt.go
 @@ -1,9 +1,9 @@
- //args: -Egofmt
+ //golangcitest:args -Egofmt
  package p
 
 - func gofmt(a, b int) int {

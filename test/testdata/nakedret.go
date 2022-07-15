@@ -1,4 +1,4 @@
-//args: -Enakedret
+//golangcitest:args -Enakedret
 package testdata
 
 func NakedretIssue() (a int, b string) {
