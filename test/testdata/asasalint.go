@@ -4,6 +4,8 @@ package testdata
 import "fmt"
 
 func getArgsLength(args ...interface{}) int {
+	// this line will not report as error
+	fmt.Println(args)
 	return len(args)
 }
 
