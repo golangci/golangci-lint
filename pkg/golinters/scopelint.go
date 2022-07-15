@@ -84,6 +84,7 @@ type Node struct {
 // Visit method is invoked for each node encountered by Walk.
 // If the result visitor w is not nil, Walk visits each of the children
 // of node with the visitor w, followed by a call of w.Visit(nil).
+//
 //nolint:gocyclo,gocritic
 func (f *Node) Visit(node ast.Node) ast.Visitor {
 	switch typedNode := node.(type) {
@@ -173,6 +174,7 @@ func (f *Node) Visit(node ast.Node) ast.Visitor {
 
 // The variadic arguments may start with link and category types,
 // and must end with a format string and any arguments.
+//
 //nolint:interfacer
 func (f *Node) errorf(n ast.Node, format string, args ...interface{}) {
 	pos := f.fset.Position(n.Pos())
