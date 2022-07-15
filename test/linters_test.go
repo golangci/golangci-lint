@@ -312,15 +312,10 @@ func extractRunContextFromComments(t *testing.T, sourcePath string) *runContext 
 			require.Failf(t, "invalid prefix of comment line %s", line)
 		}
 
-		// TODO(ldez) replace that by strings.Cut when we will drop go1.17
-		var before string
-		var after string
-		if i := strings.Index(line, " "); i >= 0 {
-			before = line[:i]
-			after = strings.TrimSpace(line[i+len(" "):])
-		} else {
-			require.Failf(t, "invalid prefix of comment line %s", line)
-		}
+		before, after, found := strings.Cut(line, " ")
+		require.Truef(t, found, "invalid prefix of comment line %s", line)
+
+		after = strings.TrimSpace(after)
 
 		switch before {
 		case "//golangcitest:args":
