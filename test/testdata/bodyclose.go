@@ -1,4 +1,4 @@
-//args: -Ebodyclose
+//golangcitest:args -Ebodyclose
 package testdata
 
 import (

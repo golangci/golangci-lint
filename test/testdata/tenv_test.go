@@ -1,4 +1,4 @@
-// args: -Etenv
+//golangcitest:args -Etenv
 package testdata
 
 import (

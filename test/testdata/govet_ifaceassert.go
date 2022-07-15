@@ -1,5 +1,5 @@
-//args: -Egovet
-//config: linters-settings.govet.enable=ifaceassert
+//golangcitest:args -Egovet
+//golangcitest:config linters-settings.govet.enable=ifaceassert
 package testdata
 
 import (

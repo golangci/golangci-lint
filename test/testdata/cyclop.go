@@ -1,5 +1,5 @@
-//args: -Ecyclop
-//config: linters-settings.cyclop.max-complexity=15
+//golangcitest:args -Ecyclop
+//golangcitest:config linters-settings.cyclop.max-complexity=15
 package testdata
 
 func cyclopComplexFunc(s string) { // ERROR "calculated cyclomatic complexity for function cyclopComplexFunc is 22, max is 15"

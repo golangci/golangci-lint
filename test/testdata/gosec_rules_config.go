@@ -1,5 +1,5 @@
-//args: -Egosec
-//config_path: testdata/configs/gosec.yml
+//golangcitest:args -Egosec
+//golangcitest:config_path testdata/configs/gosec.yml
 package testdata
 
 import "io/ioutil"

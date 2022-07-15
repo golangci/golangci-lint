@@ -1,4 +1,4 @@
-// args: -Enonamedreturns
+//golangcitest:args -Enonamedreturns
 package testdata
 
 import "errors"

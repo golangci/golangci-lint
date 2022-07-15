@@ -1,4 +1,4 @@
-//args: -Enilerr
+//golangcitest:args -Enilerr
 package testdata
 
 import "os"

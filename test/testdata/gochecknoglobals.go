@@ -1,4 +1,4 @@
-//args: -Egochecknoglobals
+//golangcitest:args -Egochecknoglobals
 package testdata
 
 import (

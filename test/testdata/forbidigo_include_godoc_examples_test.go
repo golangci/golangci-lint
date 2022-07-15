@@ -1,5 +1,5 @@
-//args: -Eforbidigo
-//config: linters-settings.forbidigo.exclude-godoc-examples=false
+//golangcitest:args -Eforbidigo
+//golangcitest:config linters-settings.forbidigo.exclude-godoc-examples=false
 package testdata
 
 import "fmt"

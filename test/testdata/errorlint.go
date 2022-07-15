@@ -1,4 +1,4 @@
-//args: -Eerrorlint
+//golangcitest:args -Eerrorlint
 package testdata
 
 import (

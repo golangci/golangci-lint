@@ -1,5 +1,5 @@
-//args: -Eerrcheck
-//config: linters-settings.errcheck.check-blank=true
+//golangcitest:args -Eerrcheck
+//golangcitest:config linters-settings.errcheck.check-blank=true
 package testdata
 
 import (

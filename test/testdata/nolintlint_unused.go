@@ -1,6 +1,6 @@
-//args: -Enolintlint -Evarcheck
-//config: linters-settings.nolintlint.allow-unused=false
-//expected_linter: nolintlint
+//golangcitest:args -Enolintlint -Evarcheck
+//golangcitest:config linters-settings.nolintlint.allow-unused=false
+//golangcitest:expected_linter nolintlint
 package testdata
 
 import "fmt"

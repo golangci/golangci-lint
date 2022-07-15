@@ -1,5 +1,5 @@
-// args: -Emaintidx
-// config_path: testdata/configs/maintidx_under_100.yml
+//golangcitest:args -Emaintidx
+//golangcitest:config_path testdata/configs/maintidx_under_100.yml
 package testdata
 
 func over20() { // ERROR "Function name: over20, Cyclomatic Complexity: 1, Halstead Volume: 8.00, Maintainability Index: 86"

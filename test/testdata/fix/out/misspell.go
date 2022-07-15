@@ -1,4 +1,4 @@
-//args: -Emisspell
+//golangcitest:args -Emisspell
 package p
 
 import "log"

@@ -1,4 +1,4 @@
-//args: -Edeadcode
+//golangcitest:args -Edeadcode
 package testdata
 
 var y int

@@ -1,4 +1,4 @@
-//args: -Eifshort
+//golangcitest:args -Eifshort
 package testdata
 
 func DontUseShortSyntaxWhenPossible() {

@@ -1,4 +1,4 @@
-//args: -Epromlinter
+//golangcitest:args -Epromlinter
 package testdata
 
 import (

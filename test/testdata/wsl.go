@@ -1,5 +1,5 @@
-//args: -Ewsl
-//config: linters-settings.wsl.tests=1
+//golangcitest:args -Ewsl
+//golangcitest:config linters-settings.wsl.tests=1
 package testdata
 
 import (

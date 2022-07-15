@@ -1,4 +1,4 @@
-//args: -Egoconst
+//golangcitest:args -Egoconst
 package testdata
 
 import "fmt"

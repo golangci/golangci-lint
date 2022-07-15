@@ -1,5 +1,5 @@
-//args: -Egomodguard
-//config_path: testdata/configs/gomodguard.yml
+//golangcitest:args -Egomodguard
+//golangcitest:config_path testdata/configs/gomodguard.yml
 package testdata
 
 import (

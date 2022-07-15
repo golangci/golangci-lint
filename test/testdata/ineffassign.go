@@ -1,4 +1,4 @@
-//args: -Eineffassign
+//golangcitest:args -Eineffassign
 package testdata
 
 import "math"

@@ -1,4 +1,4 @@
-//args: -Econtextcheck
+//golangcitest:args -Econtextcheck
 package testdata
 
 import "context"

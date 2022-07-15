@@ -1,4 +1,4 @@
-// args: -Eexhaustivestruct --internal-cmd-test
+//golangcitest:args -Eexhaustivestruct --internal-cmd-test
 package testdata
 
 import "time"

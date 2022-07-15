@@ -1,4 +1,4 @@
-//args: -Edurationcheck
+//golangcitest:args -Edurationcheck
 package testdata
 
 import (

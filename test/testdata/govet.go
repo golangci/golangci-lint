@@ -1,5 +1,5 @@
-//args: -Egovet
-//config: linters-settings.govet.check-shadowing=true
+//golangcitest:args -Egovet
+//golangcitest:config linters-settings.govet.check-shadowing=true
 package testdata
 
 import (
