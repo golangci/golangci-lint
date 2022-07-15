@@ -1,4 +1,4 @@
-//args: -Easasalint
+//golangcitest:args -Easasalint
 package testdata
 
 import "fmt"
