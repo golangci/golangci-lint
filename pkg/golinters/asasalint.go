@@ -18,7 +18,7 @@ func NewAsasalint(setting *config.AsasalintSettings) *goanalysis.Linter {
 
 	a, err := asasalint.NewAnalyzer(cfg)
 	if err != nil {
-		linterLogger.Fatalf("asasalint: create analyzer")
+		linterLogger.Fatalf("asasalint: create analyzer: %v", err)
 	}
 
 	return goanalysis.NewLinter(
