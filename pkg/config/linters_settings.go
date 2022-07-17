@@ -7,6 +7,9 @@ import (
 )
 
 var defaultLintersSettings = LintersSettings{
+	Asasalint: AsasalintSettings{
+		UseBuiltinExclusions: true,
+	},
 	Decorder: DecorderSettings{
 		DecOrder:                  []string{"type", "const", "var", "func"},
 		DisableDecNumCheck:        true,
@@ -186,9 +189,9 @@ type LintersSettings struct {
 }
 
 type AsasalintSettings struct {
-	Exclude          []string `mapstructure:"exclude"`
-	IgnoreInTest     bool     `mapstructure:"ignore-in-test"`
-	NoBuiltinExclude bool     `mapstructure:"no-builtin-exclude"`
+	Exclude              []string `mapstructure:"exclude"`
+	UseBuiltinExclusions bool     `mapstructure:"use-builtin-exclusions"`
+	IgnoreTest           bool     `mapstructure:"ignore-test"`
 }
 
 type BiDiChkSettings struct {

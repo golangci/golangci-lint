@@ -12,11 +12,14 @@ func NewAsasalint(setting *config.AsasalintSettings) *goanalysis.Linter {
 	cfg := asasalint.LinterSetting{}
 	if setting != nil {
 		cfg.Exclude = setting.Exclude
-		cfg.IgnoreInTest = setting.IgnoreInTest
-		cfg.NoBuiltinExclude = setting.NoBuiltinExclude
+		cfg.NoBuiltinExclusions = !setting.UseBuiltinExclusions
+		cfg.IgnoreTest = setting.IgnoreTest
 	}
 
-	a := asasalint.NewAnalyzer(cfg)
+	a, err := asasalint.NewAnalyzer(cfg)
+	if err != nil {
+		linterLogger.Fatalf("asasalint: create analyzer")
+	}
 
 	return goanalysis.NewLinter(
 		a.Name,

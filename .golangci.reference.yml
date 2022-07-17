@@ -108,20 +108,20 @@ output:
 # All available settings of specific linters.
 linters-settings:
   asasalint:
-    # Add FuncName to exclude for avoid some bad case report.
-    # the asasalint has also some builtin exclude func names, not need to config here,
-    # and can disabled by `no-builtin-exclude` option.
-    # they are `Printf,Println,Fprintf,Fprintln,Fatal,Fatalf,Panic,Panicf,Panicln,Print,Printf,Println,Sprintf,Sprintln,Error,Errorf,Info,Infof,Warn,Warnf,Debug,Debugf`.
-    # Default: []
+    # To specify a set of function names to exclude.
+    # The values are merged with the builtin exclusions.
+    # The builtin exclusions can be disabled by setting `use-builtin-exclusions` to `false`.
+    # Default: ["^(fmt|log|logger)\.(Print|Fprint|Sprint|Fatal|Panic|Error|Warn|Warning|Info|Debug)(|f|ln)$"]
     exclude:
       - Append
-      - Log
-    # ignore found case in *_test.go file
+      - \.Wrapf
+    # To enable/disable the asasalint builtin exclusions of function names.
+    # See the default value of `exclude` to get the builtin exclusions.
+    # Default: true
+    use-builtin-exclusions: false
+    # Ignore *_test.go files.
     # Default: false
-    ignore-in-test: true
-    # if true, will disable the builtin exclude see https://github.com/alingse/asasalint/blob/main/asasalint.go#L15 like: Printf,Println,Errorf,Debugf ...
-    # Default: false
-    no-builtin-exclude: true
+    ignore-test: true
 
   bidichk:
     # The following configurations check for all mentioned invisible unicode runes.
