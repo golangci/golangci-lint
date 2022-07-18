@@ -141,7 +141,7 @@ func getErrorTextForGci(settings config.GciSettings) string {
 	text += " with"
 
 	if settings.SkipGenerated {
-		text += " -skip-generated"
+		text += " --skip-generated"
 	}
 
 	if len(settings.Sections) > 0 {
