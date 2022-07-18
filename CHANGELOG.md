@@ -1,6 +1,45 @@
 Follow the news and releases on our [twitter](https://twitter.com/golangci) and our [blog](https://medium.com/golangci).
 There is the most valuable changes log:
 
+### v1.47.0
+
+1. new linters:
+   * `asasalint`: https://github.com/alingse/asasalint
+   * `nosnakecase`: https://github.com/sivchari/nosnakecase
+2. updated linters:
+   * `errname`: from 0.1.6 to 0.1.7
+   * `gci`: from 0.3.4 to 0.4.2
+   * `nonamedreturns`: from 1.0.1 to 1.0.4
+   * `gocyclo`: from 0.5.1 to 0.6.0
+   * `go-exhaustruct`: from 2.1.0 to 2.2.0
+   * `errcheck`: from 1.6.0 to 1.6.1
+   * `thelper`: from 0.6.2 to 0.6.3
+   * `paralleltest`: from 1.0.3 to 1.0.6
+   * `testpackage`: from 1.0.1 to 1.1.0
+   * `exhaustive`: from 0.7.11 to 0.8.1
+   * `go-ruleguard`: from 0.3.19 to 0.3.21
+   * `gosec`: from 2.11.0 to 2.12.0
+   * `tenv`: from 1.5.0 to 1.6.0
+   * `wrapcheck`: from 2.6.1 to 2.6.2
+   * `gocognit`: from 1.0.5 to 1.0.6
+   * `decorder`: from 0.2.1 to 0.2.2
+   * `honnef.co/go/tools`: from 0.3.1 to 0.3.2
+   * `golang.org/x/tools`: bump to HEAD
+   * `gci`: fix issues and re-enable autofix
+   * `gosec`: allow `global` config
+   * `staticcheck`: fix generics
+3. documentation:
+   * add thanks page
+   * add a clear explanation about the `staticcheck` integration.
+   * `depguard`: add `ignore-file-rules`
+   * `depguard`: adjust phrasing
+   * `gocritic`: add `enable` and `disable` ruleguard settings
+   * `gomnd`: fix typo
+   * `gosec`: add configs for all existing rules
+   * `govet`: add settings for `shadow` and `unusedresult`
+   * `thelper`: add `fuzz` config and description
+   * linters: add defaults
+
 ### v1.46.2
 
 1. updated linters:
