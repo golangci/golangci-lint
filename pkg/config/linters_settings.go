@@ -7,6 +7,9 @@ import (
 )
 
 var defaultLintersSettings = LintersSettings{
+	Asasalint: AsasalintSettings{
+		UseBuiltinExclusions: true,
+	},
 	Decorder: DecorderSettings{
 		DecOrder:                  []string{"type", "const", "var", "func"},
 		DisableDecNumCheck:        true,
@@ -113,6 +116,7 @@ var defaultLintersSettings = LintersSettings{
 }
 
 type LintersSettings struct {
+	Asasalint        AsasalintSettings
 	BiDiChk          BiDiChkSettings
 	Cyclop           Cyclop
 	Decorder         DecorderSettings
@@ -182,6 +186,12 @@ type LintersSettings struct {
 	WSL              WSLSettings
 
 	Custom map[string]CustomLinterSettings
+}
+
+type AsasalintSettings struct {
+	Exclude              []string `mapstructure:"exclude"`
+	UseBuiltinExclusions bool     `mapstructure:"use-builtin-exclusions"`
+	IgnoreTest           bool     `mapstructure:"ignore-test"`
 }
 
 type BiDiChkSettings struct {

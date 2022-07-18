@@ -107,6 +107,22 @@ output:
 
 # All available settings of specific linters.
 linters-settings:
+  asasalint:
+    # To specify a set of function names to exclude.
+    # The values are merged with the builtin exclusions.
+    # The builtin exclusions can be disabled by setting `use-builtin-exclusions` to `false`.
+    # Default: ["^(fmt|log|logger)\.(Print|Fprint|Sprint|Fatal|Panic|Error|Warn|Warning|Info|Debug)(|f|ln)$"]
+    exclude:
+      - Append
+      - \.Wrapf
+    # To enable/disable the asasalint builtin exclusions of function names.
+    # See the default value of `exclude` to get the builtin exclusions.
+    # Default: true
+    use-builtin-exclusions: false
+    # Ignore *_test.go files.
+    # Default: false
+    ignore-test: true
+
   bidichk:
     # The following configurations check for all mentioned invisible unicode runes.
     # All runes are enabled by default.
@@ -1823,6 +1839,7 @@ linters:
   # Enable specific linter
   # https://golangci-lint.run/usage/linters/#enabled-by-default-linters
   enable:
+    - asasalint
     - asciicheck
     - bidichk
     - bodyclose
@@ -1922,6 +1939,7 @@ linters:
   # Disable specific linter
   # https://golangci-lint.run/usage/linters/#disabled-by-default-linters--e--enable
   disable:
+    - asasalint
     - asciicheck
     - bidichk
     - bodyclose

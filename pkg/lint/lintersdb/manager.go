@@ -101,6 +101,7 @@ func enableLinterConfigs(lcs []*linter.Config, isEnabled func(lc *linter.Config)
 //nolint:funlen
 func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 	var (
+		asasalintCfg        *config.AsasalintSettings
 		bidichkCfg          *config.BiDiChkSettings
 		cyclopCfg           *config.Cyclop
 		decorderCfg         *config.DecorderSettings
@@ -171,6 +172,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 	)
 
 	if m.cfg != nil {
+		asasalintCfg = &m.cfg.LintersSettings.Asasalint
 		bidichkCfg = &m.cfg.LintersSettings.BiDiChk
 		cyclopCfg = &m.cfg.LintersSettings.Cyclop
 		decorderCfg = &m.cfg.LintersSettings.Decorder
@@ -266,6 +268,12 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 	// The linters are sorted in the alphabetical order (case-insensitive).
 	// When a new linter is added the version in `WithSince(...)` must be the next minor version of golangci-lint.
 	lcs := []*linter.Config{
+		linter.NewConfig(golinters.NewAsasalint(asasalintCfg)).
+			WithSince("1.47.0").
+			WithPresets(linter.PresetBugs).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/alingse/asasalint"),
+
 		linter.NewConfig(golinters.NewAsciicheck()).
 			WithSince("v1.26.0").
 			WithPresets(linter.PresetBugs, linter.PresetStyle).
