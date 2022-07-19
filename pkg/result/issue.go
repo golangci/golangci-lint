@@ -96,3 +96,19 @@ func (i *Issue) Fingerprint() string {
 
 	return fmt.Sprintf("%X", hash.Sum(nil))
 }
+
+type Issues []Issue
+
+func (is Issues) Len() int {
+	return len(is)
+}
+
+func (is Issues) Less(i, j int) bool {
+	return !(is[i].Pos.Filename > is[j].Pos.Filename ||
+		is[i].Pos.Filename == is[j].Pos.Filename && is[i].Pos.Line > is[j].Pos.Line ||
+		is[i].Pos.Filename == is[j].Pos.Filename && is[i].Pos.Line == is[j].Pos.Line && is[i].Pos.Column > is[j].Pos.Column)
+}
+
+func (is Issues) Swap(i, j int) {
+	is[i], is[j] = is[j], is[i]
+}

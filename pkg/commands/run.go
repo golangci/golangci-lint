@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"runtime"
+	"sort"
 	"strings"
 	"time"
 
@@ -403,6 +404,7 @@ func (e *Executor) runAndPrint(ctx context.Context, args []string) error {
 		return err // XXX: don't loose type
 	}
 
+	sort.Sort(result.Issues(issues))
 	formats := strings.Split(e.cfg.Output.Format, ",")
 	for _, format := range formats {
 		out := strings.SplitN(format, ":", 2)
