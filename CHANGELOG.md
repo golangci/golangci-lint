@@ -1,6 +1,15 @@
 Follow the news and releases on our [twitter](https://twitter.com/golangci) and our [blog](https://medium.com/golangci).
 There is the most valuable changes log:
 
+### v1.47.1
+
+1. updated linters:
+   * `gci`: from 0.4.2 to 0.4.3
+   * `gci`: remove the use of stdin
+   * `gci`: fix options display
+   * `tenv`: from 1.6.0 to 1.7.0
+   * `unparam`: bump to HEAD
+
 ### v1.47.0
 
 1. new linters:
