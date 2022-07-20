@@ -155,11 +155,6 @@ func analyzersFromConfig(settings *config.GovetSettings) []*analysis.Analyzer {
 }
 
 func isAnalyzerEnabled(name string, cfg *config.GovetSettings, defaultAnalyzers []*analysis.Analyzer) bool {
-	if (name == nilness.Analyzer.Name || name == unusedwrite.Analyzer.Name) &&
-		config.IsGreaterThanOrEqualGo118(cfg.Go) {
-		return false
-	}
-
 	if cfg.EnableAll {
 		for _, n := range cfg.Disable {
 			if n == name {
