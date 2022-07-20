@@ -7,6 +7,7 @@ import (
 	"go/token"
 	"os"
 	"reflect"
+	"strings"
 	"sync"
 
 	"github.com/BurntSushi/toml"
@@ -186,6 +187,7 @@ func getReviveConfig(cfg *config.ReviveSettings) (*lint.Config, error) {
 	}
 
 	normalizeConfig(conf)
+	ignoreRules(conf)
 
 	reviveDebugf("revive configuration: %#v", conf)
 
@@ -254,7 +256,7 @@ func safeTomlSlice(r []interface{}) []interface{} {
 // This element is not exported by revive, so we need copy the code.
 // Extracted from https://github.com/mgechev/revive/blob/v1.1.4/config/config.go#L15
 var defaultRules = []lint.Rule{
-	&rule.VarDeclarationsRule{},
+	// &rule.VarDeclarationsRule{}, // TODO(ldez) https://github.com/golangci/golangci-lint/issues/2997 (var-declaration)
 	&rule.PackageCommentsRule{},
 	&rule.DotImportsRule{},
 	&rule.BlankImportsRule{},
@@ -262,15 +264,15 @@ var defaultRules = []lint.Rule{
 	&rule.VarNamingRule{},
 	&rule.IndentErrorFlowRule{},
 	&rule.RangeRule{},
-	&rule.ErrorfRule{},
+	// &rule.ErrorfRule{}, // TODO(ldez) https://github.com/golangci/golangci-lint/issues/2997 (errorf
 	&rule.ErrorNamingRule{},
 	&rule.ErrorStringsRule{},
 	&rule.ReceiverNamingRule{},
 	&rule.IncrementDecrementRule{},
 	&rule.ErrorReturnRule{},
-	&rule.UnexportedReturnRule{},
-	&rule.TimeNamingRule{},
-	&rule.ContextKeysType{},
+	// &rule.UnexportedReturnRule{}, // TODO(ldez) https://github.com/golangci/golangci-lint/issues/2997 (unexported-return)
+	// &rule.TimeNamingRule{}, // TODO(ldez) https://github.com/golangci/golangci-lint/issues/2997 (time-naming)
+	// &rule.ContextKeysType{}, // TODO(ldez) https://github.com/golangci/golangci-lint/issues/2997 (context-keys-type)
 	&rule.ContextAsArgumentRule{},
 }
 
@@ -291,7 +293,7 @@ var allRules = append([]lint.Rule{
 	&rule.FlagParamRule{},
 	&rule.UnnecessaryStmtRule{},
 	&rule.StructTagRule{},
-	&rule.ModifiesValRecRule{},
+	// &rule.ModifiesValRecRule{}, // TODO(ldez) https://github.com/golangci/golangci-lint/issues/2997 (modifies-value-receiver)
 	&rule.ConstantLogicalExprRule{},
 	&rule.BoolLiteralRule{},
 	&rule.RedefinesBuiltinIDRule{},
@@ -299,7 +301,7 @@ var allRules = append([]lint.Rule{
 	&rule.FunctionResultsLimitRule{},
 	&rule.MaxPublicStructsRule{},
 	&rule.RangeValInClosureRule{},
-	&rule.RangeValAddress{},
+	// &rule.RangeValAddress{}, // TODO(ldez) https://github.com/golangci/golangci-lint/issues/2997 (range-val-address)
 	&rule.WaitGroupByValueRule{},
 	&rule.AtomicRule{},
 	&rule.EmptyLinesRule{},
@@ -309,9 +311,9 @@ var allRules = append([]lint.Rule{
 	&rule.ImportShadowingRule{},
 	&rule.BareReturnRule{},
 	&rule.UnusedReceiverRule{},
-	&rule.UnhandledErrorRule{},
+	// &rule.UnhandledErrorRule{}, // TODO(ldez) https://github.com/golangci/golangci-lint/issues/2997 (unhandled-error)
 	&rule.CognitiveComplexityRule{},
-	&rule.StringOfIntRule{},
+	// &rule.StringOfIntRule{}, // TODO(ldez) https://github.com/golangci/golangci-lint/issues/2997 (string-of-int)
 	&rule.StringFormatRule{},
 	&rule.EarlyReturnRule{},
 	&rule.UnconditionalRecursionRule{},
@@ -322,7 +324,7 @@ var allRules = append([]lint.Rule{
 	&rule.NestedStructs{},
 	&rule.IfReturnRule{},
 	&rule.UselessBreak{},
-	&rule.TimeEqualRule{},
+	// &rule.TimeEqualRule{}, // TODO(ldez) https://github.com/golangci/golangci-lint/issues/2997 (time-equal)
 	&rule.BannedCharsRule{},
 	&rule.OptimizeOperandsOrderRule{},
 }, defaultRules...)
@@ -387,4 +389,34 @@ func defaultConfig() *lint.Config {
 		defaultConfig.Rules[r.Name()] = lint.RuleConfig{}
 	}
 	return &defaultConfig
+}
+
+// TODO(ldez) https://github.com/golangci/golangci-lint/issues/2997
+func ignoreRules(conf *lint.Config) {
+	f := []string{
+		"context-keys-type",
+		"errorf",
+		"modifies-value-receiver",
+		"range-val-address",
+		"string-of-int",
+		"time-equal",
+		"time-naming",
+		"unexported-return",
+		"unhandled-error",
+		"var-declaration",
+	}
+
+	var ignored []string
+	for _, s := range f {
+		if _, ok := conf.Rules[s]; ok {
+			delete(conf.Rules, s)
+			ignored = append(ignored, s)
+		}
+	}
+
+	if len(ignored) > 0 {
+		linterLogger.Warnf("revive: the following rules (%s) are ignored due to a performance problem "+
+			"(https://github.com/golangci/golangci-lint/issues/2997)",
+			strings.Join(ignored, ","))
+	}
 }
