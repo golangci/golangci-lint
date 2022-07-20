@@ -7,6 +7,7 @@ import (
 	"go/token"
 	"os"
 	"reflect"
+	"strings"
 	"sync"
 
 	"github.com/BurntSushi/toml"
@@ -405,7 +406,17 @@ func ignoreRules(conf *lint.Config) {
 		"var-declaration",
 	}
 
+	var ignored []string
 	for _, s := range f {
-		delete(conf.Rules, s)
+		if _, ok := conf.Rules[s]; ok {
+			delete(conf.Rules, s)
+			ignored = append(ignored, s)
+		}
+	}
+
+	if len(ignored) > 0 {
+		linterLogger.Warnf("revive: the following rules (%s) are ignored due to a performance problem "+
+			"(https://github.com/golangci/golangci-lint/issues/2997)",
+			strings.Join(ignored, ","))
 	}
 }
