@@ -815,7 +815,6 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		golinters.NewStaticcheck(staticcheckCfg).Name(): true,
 		golinters.NewUnused(unusedCfg).Name():           true,
 		golinters.NewGosimple(gosimpleCfg).Name():       true,
-		golinters.NewStructcheck(structcheckCfg).Name(): true,
 		golinters.NewVarcheck(varcheckCfg).Name():       true,
 		golinters.NewIneffassign().Name():               true,
 		golinters.NewDeadcode().Name():                  true,
