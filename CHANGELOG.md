@@ -1,6 +1,11 @@
 Follow the news and releases on our [twitter](https://twitter.com/golangci) and our [blog](https://medium.com/golangci).
 There is the most valuable changes log:
 
+### v1.47.2
+
+1. updated linters:
+   * `revive`: ignore slow rules
+
 ### v1.47.1
 
 1. updated linters:
