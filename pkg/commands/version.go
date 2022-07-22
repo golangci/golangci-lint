@@ -33,7 +33,10 @@ func (e *Executor) initVersion() {
 	versionCmd := &cobra.Command{
 		Use:   "version",
 		Short: "Version",
-		RunE: func(cmd *cobra.Command, _ []string) error {
+		RunE: func(cmd *cobra.Command, args []string) error {
+			if len(args) != 0 {
+				e.log.Fatalf("Usage: golangci-lint version")
+			}
 			switch strings.ToLower(e.cfg.Version.Format) {
 			case "short":
 				fmt.Println(e.version)
