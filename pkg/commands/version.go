@@ -31,8 +31,9 @@ func initVersionFlagSet(fs *pflag.FlagSet, cfg *config.Config) {
 
 func (e *Executor) initVersion() {
 	versionCmd := &cobra.Command{
-		Use:   "version",
-		Short: "Version",
+		Use:               "version",
+		Short:             "Version",
+		ValidArgsFunction: cobra.NoFileCompletions,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if len(args) != 0 {
 				e.log.Fatalf("Usage: golangci-lint version")

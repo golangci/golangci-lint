@@ -13,9 +13,10 @@ import (
 
 func (e *Executor) initLinters() {
 	e.lintersCmd = &cobra.Command{
-		Use:   "linters",
-		Short: "List current linters configuration",
-		Run:   e.executeLinters,
+		Use:               "linters",
+		Short:             "List current linters configuration",
+		ValidArgsFunction: cobra.NoFileCompletions,
+		Run:               e.executeLinters,
 	}
 	e.rootCmd.AddCommand(e.lintersCmd)
 	e.initRunConfiguration(e.lintersCmd)

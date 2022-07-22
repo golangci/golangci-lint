@@ -29,14 +29,16 @@ func (e *Executor) initCache() {
 	e.rootCmd.AddCommand(cacheCmd)
 
 	cacheCmd.AddCommand(&cobra.Command{
-		Use:   "clean",
-		Short: "Clean cache",
-		Run:   e.executeCleanCache,
+		Use:               "clean",
+		Short:             "Clean cache",
+		ValidArgsFunction: cobra.NoFileCompletions,
+		Run:               e.executeCleanCache,
 	})
 	cacheCmd.AddCommand(&cobra.Command{
-		Use:   "status",
-		Short: "Show cache status",
-		Run:   e.executeCacheStatus,
+		Use:               "status",
+		Short:             "Show cache status",
+		ValidArgsFunction: cobra.NoFileCompletions,
+		Run:               e.executeCacheStatus,
 	})
 
 	// TODO: add trim command?
