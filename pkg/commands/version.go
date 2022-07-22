@@ -31,8 +31,9 @@ func initVersionFlagSet(fs *pflag.FlagSet, cfg *config.Config) {
 
 func (e *Executor) initVersion() {
 	versionCmd := &cobra.Command{
-		Use:   "version",
-		Short: "Version",
+		Use:               "version",
+		Short:             "Version",
+		ValidArgsFunction: cobra.NoFileCompletions,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			switch strings.ToLower(e.cfg.Version.Format) {
 			case "short":

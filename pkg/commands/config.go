@@ -27,9 +27,10 @@ func (e *Executor) initConfig() {
 	e.rootCmd.AddCommand(cmd)
 
 	pathCmd := &cobra.Command{
-		Use:   "path",
-		Short: "Print used config path",
-		Run:   e.executePathCmd,
+		Use:               "path",
+		Short:             "Print used config path",
+		ValidArgsFunction: cobra.NoFileCompletions,
+		Run:               e.executePathCmd,
 	}
 	e.initRunConfiguration(pathCmd) // allow --config
 	cmd.AddCommand(pathCmd)
