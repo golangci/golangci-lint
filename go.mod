@@ -11,7 +11,7 @@ require (
 	github.com/GaijinEntertainment/go-exhaustruct/v2 v2.2.0
 	github.com/OpenPeeDeeP/depguard v1.1.0
 	github.com/alexkohler/prealloc v1.0.0
-	github.com/alingse/asasalint v0.0.10
+	github.com/alingse/asasalint v0.0.11
 	github.com/ashanbrown/forbidigo v1.3.0
 	github.com/ashanbrown/makezero v1.1.1
 	github.com/bkielbasa/cyclop v1.2.0
