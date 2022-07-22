@@ -279,10 +279,11 @@ func (e *Executor) initRun() {
 		Use:   "run",
 		Short: "Run the linters",
 		Run:   e.executeRun,
-		PreRun: func(_ *cobra.Command, _ []string) {
+		PreRunE: func(_ *cobra.Command, _ []string) error {
 			if ok := e.acquireFileLock(); !ok {
-				e.log.Fatalf("Parallel golangci-lint is running")
+				return fmt.Errorf("parallel golangci-lint is running")
 			}
+			return nil
 		},
 		PostRun: func(_ *cobra.Command, _ []string) {
 			e.releaseFileLock()

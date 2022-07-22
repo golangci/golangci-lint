@@ -12,14 +12,13 @@ import (
 	"github.com/spf13/pflag"
 
 	"github.com/golangci/golangci-lint/pkg/config"
-	"github.com/golangci/golangci-lint/pkg/exitcodes"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 )
 
-func (e *Executor) persistentPreRun(_ *cobra.Command, _ []string) {
+func (e *Executor) persistentPreRun(_ *cobra.Command, _ []string) error {
 	if e.cfg.Run.PrintVersion {
-		fmt.Fprintf(logutils.StdOut, "golangci-lint has version %s built from %s on %s\n", e.version, e.commit, e.date)
-		os.Exit(exitcodes.Success)
+		_, _ = fmt.Fprintf(logutils.StdOut, "golangci-lint has version %s built from %s on %s\n", e.version, e.commit, e.date)
+		return nil
 	}
 
 	runtime.GOMAXPROCS(e.cfg.Run.Concurrency)
@@ -27,10 +26,10 @@ func (e *Executor) persistentPreRun(_ *cobra.Command, _ []string) {
 	if e.cfg.Run.CPUProfilePath != "" {
 		f, err := os.Create(e.cfg.Run.CPUProfilePath)
 		if err != nil {
-			e.log.Fatalf("Can't create file %s: %s", e.cfg.Run.CPUProfilePath, err)
+			return fmt.Errorf("can't create file %s: %w", e.cfg.Run.CPUProfilePath, err)
 		}
 		if err := pprof.StartCPUProfile(f); err != nil {
-			e.log.Fatalf("Can't start CPU profiling: %s", err)
+			return fmt.Errorf("can't start CPU profiling: %w", err)
 		}
 	}
 
@@ -43,22 +42,25 @@ func (e *Executor) persistentPreRun(_ *cobra.Command, _ []string) {
 	if e.cfg.Run.TracePath != "" {
 		f, err := os.Create(e.cfg.Run.TracePath)
 		if err != nil {
-			e.log.Fatalf("Can't create file %s: %s", e.cfg.Run.TracePath, err)
+			return fmt.Errorf("can't create file %s: %w", e.cfg.Run.TracePath, err)
 		}
 		if err = trace.Start(f); err != nil {
-			e.log.Fatalf("Can't start tracing: %s", err)
+			return fmt.Errorf("can't start tracing: %w", err)
 		}
 	}
+
+	return nil
 }
 
-func (e *Executor) persistentPostRun(_ *cobra.Command, _ []string) {
+func (e *Executor) persistentPostRun(_ *cobra.Command, _ []string) error {
 	if e.cfg.Run.CPUProfilePath != "" {
 		pprof.StopCPUProfile()
 	}
+
 	if e.cfg.Run.MemProfilePath != "" {
 		f, err := os.Create(e.cfg.Run.MemProfilePath)
 		if err != nil {
-			e.log.Fatalf("Can't create file %s: %s", e.cfg.Run.MemProfilePath, err)
+			return fmt.Errorf("can't create file %s: %w", e.cfg.Run.MemProfilePath, err)
 		}
 
 		var ms runtime.MemStats
@@ -66,15 +68,18 @@ func (e *Executor) persistentPostRun(_ *cobra.Command, _ []string) {
 		printMemStats(&ms, e.log)
 
 		if err := pprof.WriteHeapProfile(f); err != nil {
-			e.log.Fatalf("Can't write heap profile: %s", err)
+			return fmt.Errorf("cCan't write heap profile: %w", err)
 		}
-		f.Close()
+		_ = f.Close()
 	}
+
 	if e.cfg.Run.TracePath != "" {
 		trace.Stop()
 	}
 
 	os.Exit(e.exitCode)
+
+	return nil
 }
 
 func printMemStats(ms *runtime.MemStats, logger logutils.Log) {
@@ -120,16 +125,12 @@ func (e *Executor) initRoot() {
 		Use:   "golangci-lint",
 		Short: "golangci-lint is a smart linters runner.",
 		Long:  `Smart, fast linters runner. Run it in cloud for every GitHub pull request on https://golangci.com`,
-		Run: func(cmd *cobra.Command, args []string) {
-			if len(args) != 0 {
-				e.log.Fatalf("Usage: golangci-lint")
-			}
-			if err := cmd.Help(); err != nil {
-				e.log.Fatalf("Can't run help: %s", err)
-			}
+		Args:  cobra.NoArgs,
+		RunE: func(cmd *cobra.Command, _ []string) error {
+			return cmd.Help()
 		},
-		PersistentPreRun:  e.persistentPreRun,
-		PersistentPostRun: e.persistentPostRun,
+		PersistentPreRunE:  e.persistentPreRun,
+		PersistentPostRunE: e.persistentPostRun,
 	}
 
 	initRootFlagSet(rootCmd.PersistentFlags(), e.cfg, e.needVersionOption())
