@@ -281,7 +281,7 @@ func (e *Executor) initRun() {
 		Run:   e.executeRun,
 		PreRunE: func(_ *cobra.Command, _ []string) error {
 			if ok := e.acquireFileLock(); !ok {
-				return fmt.Errorf("parallel golangci-lint is running")
+				return errors.New("parallel golangci-lint is running")
 			}
 			return nil
 		},

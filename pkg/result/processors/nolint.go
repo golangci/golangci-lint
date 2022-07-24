@@ -1,7 +1,7 @@
 package processors
 
 import (
-	"fmt"
+	"errors"
 	"go/ast"
 	"go/parser"
 	"go/token"
@@ -105,7 +105,7 @@ func (p *Nolint) getOrCreateFileData(i *result.Issue) (*fileData, error) {
 	p.cache[i.FilePath()] = fd
 
 	if i.FilePath() == "" {
-		return nil, fmt.Errorf("no file path for issue")
+		return nil, errors.New("no file path for issue")
 	}
 
 	// TODO: migrate this parsing to go/analysis facts

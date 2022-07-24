@@ -5,6 +5,7 @@
 package cache
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -69,7 +70,7 @@ func DefaultDir() string {
 			return
 		}
 		if defaultDir != "" {
-			defaultDirErr = fmt.Errorf("GOLANGCI_LINT_CACHE is not an absolute path")
+			defaultDirErr = errors.New("GOLANGCI_LINT_CACHE is not an absolute path")
 			return
 		}
 

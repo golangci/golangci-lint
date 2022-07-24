@@ -79,7 +79,7 @@ func (r *FileReader) parseConfig() error {
 	r.log.Infof("Used config file %s", usedConfigFile)
 	usedConfigDir := filepath.Dir(usedConfigFile)
 	if usedConfigDir, err = filepath.Abs(usedConfigDir); err != nil {
-		return fmt.Errorf("can't get config directory")
+		return errors.New("can't get config directory")
 	}
 	r.cfg.cfgDir = usedConfigDir
 
@@ -216,7 +216,7 @@ func (r *FileReader) parseConfigOption() (string, error) {
 
 	configFile := cfg.Run.Config
 	if cfg.Run.NoConfig && configFile != "" {
-		return "", fmt.Errorf("can't combine option --config and --no-config")
+		return "", errors.New("can't combine option --config and --no-config")
 	}
 
 	if cfg.Run.NoConfig {
@@ -225,7 +225,7 @@ func (r *FileReader) parseConfigOption() (string, error) {
 
 	configFile, err := homedir.Expand(configFile)
 	if err != nil {
-		return "", fmt.Errorf("failed to expand configuration path")
+		return "", errors.New("failed to expand configuration path")
 	}
 
 	return configFile, nil
