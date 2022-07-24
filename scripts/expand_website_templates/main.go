@@ -50,7 +50,7 @@ func main() {
 	if err := rewriteDocs(replacements); err != nil {
 		log.Fatalf("Failed to rewrite docs: %s", err)
 	}
-	log.Printf("Successfully expanded templates")
+	log.Print("Successfully expanded templates")
 }
 
 func updateStateFile(replacements map[string]string) error {

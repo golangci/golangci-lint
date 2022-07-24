@@ -21,23 +21,23 @@ func TestUtils(t *testing.T) {
 type tLog struct{}
 
 func (l *tLog) Fatalf(format string, args ...interface{}) {
-	fmt.Printf(fmt.Sprintf(format, args...) + "\n")
+	fmt.Println(fmt.Sprintf(format, args...))
 }
 
 func (l *tLog) Panicf(format string, args ...interface{}) {
-	fmt.Printf(fmt.Sprintf(format, args...) + "\n")
+	fmt.Println(fmt.Sprintf(format, args...))
 }
 
 func (l *tLog) Errorf(format string, args ...interface{}) {
-	fmt.Printf(fmt.Sprintf(format, args...) + "\n")
+	fmt.Println(fmt.Sprintf(format, args...))
 }
 
 func (l *tLog) Warnf(format string, args ...interface{}) {
-	fmt.Printf(fmt.Sprintf(format, args...) + "\n")
+	fmt.Println(fmt.Sprintf(format, args...))
 }
 
 func (l *tLog) Infof(format string, args ...interface{}) {
-	fmt.Printf(fmt.Sprintf(format, args...) + "\n")
+	fmt.Println(fmt.Sprintf(format, args...))
 }
 
 func (l *tLog) Child(name string) logutils.Log { return nil }

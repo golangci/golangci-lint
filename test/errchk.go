@@ -96,7 +96,7 @@ func errorCheck(outStr string, wantAuto bool, defaultWantedLinter string, fullsh
 	}
 
 	if len(out) > 0 {
-		errs = append(errs, fmt.Errorf("unmatched errors"))
+		errs = append(errs, errors.New("unmatched errors"))
 		for _, errLine := range out {
 			errs = append(errs, fmt.Errorf("%s", errLine))
 		}

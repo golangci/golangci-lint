@@ -2,6 +2,7 @@ package bench
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"go/build"
 	"log"
@@ -123,7 +124,7 @@ func getLinterMemoryMB(b *testing.B, progName string) (int, error) {
 		}
 	}
 	if progPID == 0 {
-		return 0, fmt.Errorf("no process")
+		return 0, errors.New("no process")
 	}
 
 	allProgPIDs := []int{progPID}
