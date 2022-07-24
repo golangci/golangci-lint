@@ -1925,6 +1925,7 @@ linters:
     - tparallel
     - typecheck
     - unconvert
+    - unf
     - unparam
     - unused
     - varcheck
@@ -2026,6 +2027,7 @@ linters:
     - tparallel
     - typecheck
     - unconvert
+    - unf
     - unparam
     - unused
     - varcheck
