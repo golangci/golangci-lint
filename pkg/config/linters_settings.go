@@ -179,6 +179,7 @@ type LintersSettings struct {
 	Thelper          ThelperSettings
 	Unparam          UnparamSettings
 	Unused           StaticCheckSettings
+	UseStdlibVars    UseStdlibVarsSettings
 	Varcheck         VarCheckSettings
 	Varnamelen       VarnamelenSettings
 	Whitespace       WhitespaceSettings
@@ -586,6 +587,15 @@ type ThelperOptions struct {
 
 type TenvSettings struct {
 	All bool `mapstructure:"all"`
+}
+
+type UseStdlibVarsSettings struct {
+	HTTPMethod     bool `mapstructure:"http-method"`
+	HTTPStatusCode bool `mapstructure:"http-status-code"`
+	TimeWeekday    bool `mapstructure:"time-weekday"`
+	TimeMonth      bool `mapstructure:"time-month"`
+	TimeLayout     bool `mapstructure:"time-layout"`
+	CryptoHash     bool `mapstructure:"crypto-hash"`
 }
 
 type UnparamSettings struct {

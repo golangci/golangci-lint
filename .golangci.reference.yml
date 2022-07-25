@@ -1662,6 +1662,20 @@ linters-settings:
       # Default: true
       begin: false
 
+  usestdlibvars:
+    # Suggest the use of http.MethodXX
+    http-method: true
+    # Suggest the use of http.StatusXX
+    http-status-code: true
+    # Suggest the use of time.Weekday
+    time-weekday: false
+    # Suggest the use of time.Month
+    time-month: false
+    # Suggest the use of time.Layout
+    time-layout: false
+    # Suggest the use of crypto.Hash
+    crypto-hash: false
+
   unparam:
     # Inspect exported functions.
     #
@@ -1927,6 +1941,7 @@ linters:
     - unconvert
     - unparam
     - unused
+    - usestdlibvars
     - varcheck
     - varnamelen
     - wastedassign
@@ -2028,6 +2043,7 @@ linters:
     - unconvert
     - unparam
     - unused
+    - usestdlibvars
     - varcheck
     - varnamelen
     - wastedassign
