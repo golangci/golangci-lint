@@ -665,6 +665,11 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/yeya24/promlinter"),
 
+		linter.NewConfig(golinters.NewReuseStdlibVars()).
+			WithSince("v1.48.0").
+			WithPresets(linter.PresetStyle).
+			WithURL("https://github.com/sashamelentyev/reusestdlibvars"),
+
 		linter.NewConfig(golinters.NewRevive(reviveCfg)).
 			WithSince("v1.37.0").
 			WithPresets(linter.PresetStyle, linter.PresetMetaLinter).

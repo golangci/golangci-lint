@@ -1911,6 +1911,7 @@ linters:
     - prealloc
     - predeclared
     - promlinter
+    - reusestdlibvars
     - revive
     - rowserrcheck
     - scopelint
@@ -2012,6 +2013,7 @@ linters:
     - prealloc
     - predeclared
     - promlinter
+    - reusestdlibvars
     - revive
     - rowserrcheck
     - scopelint
