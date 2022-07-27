@@ -46,7 +46,11 @@ func NewGci(settings *config.GciSettings) *goanalysis.Linter {
 			rawCfg.SectionStrings = prefix
 		}
 
-		cfg, _ = rawCfg.Parse()
+		var err error
+		cfg, err = rawCfg.Parse()
+		if err != nil {
+			linterLogger.Fatalf("gci: configuration parsing: %v", err)
+		}
 	}
 
 	var lock sync.Mutex
