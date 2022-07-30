@@ -55,11 +55,7 @@ func NewDupl(settings *config.DuplSettings) *goanalysis.Linter {
 }
 
 func runDupl(pass *analysis.Pass, settings *config.DuplSettings) ([]goanalysis.Issue, error) {
-	var fileNames []string
-	for _, f := range pass.Files {
-		pos := pass.Fset.PositionFor(f.Pos(), false)
-		fileNames = append(fileNames, pos.Filename)
-	}
+	fileNames := getFileNames(pass)
 
 	issues, err := duplAPI.Run(fileNames, settings.Threshold)
 	if err != nil {

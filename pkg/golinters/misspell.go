@@ -61,12 +61,7 @@ func NewMisspell(settings *config.MisspellSettings) *goanalysis.Linter {
 }
 
 func runMisspell(lintCtx *linter.Context, pass *analysis.Pass, replacer *misspell.Replacer) ([]goanalysis.Issue, error) {
-	var fileNames []string
-
-	for _, f := range pass.Files {
-		pos := pass.Fset.PositionFor(f.Pos(), false)
-		fileNames = append(fileNames, pos.Filename)
-	}
+	fileNames := getFileNames(pass)
 
 	var issues []goanalysis.Issue
 	for _, filename := range fileNames {

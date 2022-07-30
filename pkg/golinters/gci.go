@@ -83,11 +83,7 @@ func NewGci(settings *config.GciSettings) *goanalysis.Linter {
 }
 
 func runGci(pass *analysis.Pass, lintCtx *linter.Context, cfg *gcicfg.Config, lock *sync.Mutex) ([]goanalysis.Issue, error) {
-	var fileNames []string
-	for _, f := range pass.Files {
-		pos := pass.Fset.PositionFor(f.Pos(), false)
-		fileNames = append(fileNames, pos.Filename)
-	}
+	fileNames := getFileNames(pass)
 
 	var diffs []string
 	err := diffFormattedFilesToArray(fileNames, *cfg, &diffs, lock)

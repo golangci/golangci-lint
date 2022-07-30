@@ -73,11 +73,7 @@ func NewGofumpt(settings *config.GofumptSettings) *goanalysis.Linter {
 }
 
 func runGofumpt(lintCtx *linter.Context, pass *analysis.Pass, diff differ, options format.Options) ([]goanalysis.Issue, error) {
-	var fileNames []string
-	for _, f := range pass.Files {
-		pos := pass.Fset.PositionFor(f.Pos(), false)
-		fileNames = append(fileNames, pos.Filename)
-	}
+	fileNames := getFileNames(pass)
 
 	var issues []goanalysis.Issue
 
