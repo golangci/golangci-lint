@@ -1903,6 +1903,7 @@ linters:
     - nilnil
     - nlreturn
     - noctx
+    - noloopclosure
     - nolintlint
     - nonamedreturns
     - nosnakecase

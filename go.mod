@@ -24,6 +24,7 @@ require (
 	github.com/daixiang0/gci v0.4.3
 	github.com/denis-tingaikin/go-header v0.4.3
 	github.com/esimonov/ifshort v1.0.4
+	github.com/fatanugraha/noloopclosure v0.1.0
 	github.com/fatih/color v1.13.0
 	github.com/firefart/nonamedreturns v1.0.4
 	github.com/fzipp/gocyclo v0.6.0
@@ -101,7 +102,7 @@ require (
 	github.com/yagipy/maintidx v1.0.0
 	github.com/yeya24/promlinter v0.2.0
 	gitlab.com/bosi/decorder v0.2.2
-	golang.org/x/tools v0.1.12-0.20220628192153-7743d1d949f1
+	golang.org/x/tools v0.1.12
 	gopkg.in/yaml.v3 v3.0.1
 	honnef.co/go/tools v0.3.2
 	mvdan.cc/gofumpt v0.3.1
@@ -171,8 +172,8 @@ require (
 	go.uber.org/zap v1.17.0 // indirect
 	golang.org/x/exp/typeparams v0.0.0-20220613132600-b0d781184e0d // indirect
 	golang.org/x/mod v0.6.0-dev.0.20220419223038-86c51ed26bb4 // indirect
-	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect
-	golang.org/x/sys v0.0.0-20220715151400-c0bba94af5f8 // indirect
+	golang.org/x/sync v0.0.0-20220722155255-886fb9371eb4 // indirect
+	golang.org/x/sys v0.0.0-20220722155257-8c9f86f7a55f // indirect
 	golang.org/x/text v0.3.7 // indirect
 	google.golang.org/protobuf v1.28.0 // indirect
 	gopkg.in/ini.v1 v1.66.6 // indirect
