@@ -1664,17 +1664,23 @@ linters-settings:
 
   usestdlibvars:
     # Suggest the use of http.MethodXX
-    http-method: true
+    # Default: true
+    http-method: false
     # Suggest the use of http.StatusXX
-    http-status-code: true
+    # Default: true
+    http-status-code: false
     # Suggest the use of time.Weekday
-    time-weekday: false
+    # Default: true
+    time-weekday: true
     # Suggest the use of time.Month
-    time-month: false
+    # Default: false
+    time-month: true
     # Suggest the use of time.Layout
-    time-layout: false
+    # Default: false
+    time-layout: true
     # Suggest the use of crypto.Hash
-    crypto-hash: false
+    # Default: false
+    crypto-hash: true
 
   unparam:
     # Inspect exported functions.
