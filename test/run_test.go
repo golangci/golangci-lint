@@ -106,6 +106,8 @@ func TestCgoWithIssues(t *testing.T) {
 		ExpectHasIssue("SA5009: Printf format %t has arg #1 of wrong type")
 	r.Run("--no-config", "--disable-all", "-Egofmt", getTestDataDir("cgo_with_issues")).
 		ExpectHasIssue("File is not `gofmt`-ed with `-s` (gofmt)")
+	r.Run("--no-config", "--disable-all", "-Erevive", getTestDataDir("cgo_with_issues")).
+		ExpectHasIssue("indent-error-flow: if block ends with a return statement")
 }
 
 func TestUnsafeOk(t *testing.T) {
@@ -129,7 +131,7 @@ func TestLineDirectiveProcessedFilesLiteLoading(t *testing.T) {
 }
 
 func TestSortedResults(t *testing.T) {
-	var testCases = []struct {
+	testCases := []struct {
 		opt  string
 		want string
 	}{

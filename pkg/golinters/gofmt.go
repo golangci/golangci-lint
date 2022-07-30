@@ -53,11 +53,7 @@ func NewGofmt(settings *config.GoFmtSettings) *goanalysis.Linter {
 }
 
 func runGofmt(lintCtx *linter.Context, pass *analysis.Pass, settings *config.GoFmtSettings) ([]goanalysis.Issue, error) {
-	var fileNames []string
-	for _, f := range pass.Files {
-		pos := pass.Fset.PositionFor(f.Pos(), false)
-		fileNames = append(fileNames, pos.Filename)
-	}
+	fileNames := getFileNames(pass)
 
 	var issues []goanalysis.Issue
 

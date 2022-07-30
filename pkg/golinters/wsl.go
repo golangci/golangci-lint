@@ -67,15 +67,11 @@ func NewWSL(settings *config.WSLSettings) *goanalysis.Linter {
 }
 
 func runWSL(pass *analysis.Pass, conf *wsl.Configuration) []goanalysis.Issue {
-	var files = make([]string, 0, len(pass.Files))
-	for _, file := range pass.Files {
-		files = append(files, pass.Fset.PositionFor(file.Pos(), false).Filename)
-	}
-
 	if conf == nil {
 		return nil
 	}
 
+	files := getFileNames(pass)
 	wslErrors, _ := wsl.NewProcessorWithConfig(*conf).ProcessFiles(files)
 	if len(wslErrors) == 0 {
 		return nil
