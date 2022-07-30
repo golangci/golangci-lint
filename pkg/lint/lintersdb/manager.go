@@ -557,6 +557,12 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetUnused).
 			WithURL("https://github.com/gordonklaus/ineffassign"),
 
+		linter.NewConfig(golinters.NewInterfaceBloat()).
+			WithSince("v1.48.0").
+			WithLoadForGoAnalysis().
+			WithPresets(linter.PresetStyle).
+			WithURL("https://github.com/sashamelentyev/interfacebloat"),
+
 		linter.NewConfig(golinters.NewInterfacer()).
 			WithSince("v1.0.0").
 			WithLoadForGoAnalysis().
