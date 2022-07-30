@@ -104,6 +104,8 @@ func TestCgoWithIssues(t *testing.T) {
 		ExpectHasIssue("Printf format %t has arg cs of wrong type")
 	r.Run("--no-config", "--disable-all", "-Estaticcheck", getTestDataDir("cgo_with_issues")).
 		ExpectHasIssue("SA5009: Printf format %t has arg #1 of wrong type")
+	r.Run("--no-config", "--disable-all", "-Egofmt", getTestDataDir("cgo_with_issues")).
+		ExpectHasIssue("File is not `gofmt`-ed with `-s` (gofmt)")
 }
 
 func TestUnsafeOk(t *testing.T) {
