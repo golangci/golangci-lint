@@ -1903,8 +1903,8 @@ linters:
     - nilnil
     - nlreturn
     - noctx
-    - noloopclosure
     - nolintlint
+    - noloopclosure
     - nonamedreturns
     - nosnakecase
     - nosprintfhostport
@@ -2006,6 +2006,7 @@ linters:
     - nlreturn
     - noctx
     - nolintlint
+    - noloopclosure
     - nonamedreturns
     - nosnakecase
     - nosprintfhostport
