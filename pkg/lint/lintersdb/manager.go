@@ -135,6 +135,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		gosimpleCfg         *config.StaticCheckSettings
 		govetCfg            *config.GovetSettings
 		grouperCfg          *config.GrouperSettings
+		ifshortCfg          *config.IfshortSettings
 		importAsCfg         *config.ImportAsSettings
 		ireturnCfg          *config.IreturnSettings
 		lllCfg              *config.LllSettings
@@ -205,6 +206,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		gosimpleCfg = &m.cfg.LintersSettings.Gosimple
 		govetCfg = &m.cfg.LintersSettings.Govet
 		grouperCfg = &m.cfg.LintersSettings.Grouper
+		ifshortCfg = &m.cfg.LintersSettings.Ifshort
 		importAsCfg = &m.cfg.LintersSettings.ImportAs
 		ireturnCfg = &m.cfg.LintersSettings.Ireturn
 		lllCfg = &m.cfg.LintersSettings.Lll
@@ -535,6 +537,11 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithSince("v1.44.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/leonklingele/grouper"),
+
+		linter.NewConfig(golinters.NewIfshort(ifshortCfg)).
+			WithSince("v1.36.0").
+			WithPresets(linter.PresetStyle).
+			WithURL("https://github.com/esimonov/ifshort"),
 
 		linter.NewConfig(golinters.NewImportAs(importAsCfg)).
 			WithSince("v1.38.0").
