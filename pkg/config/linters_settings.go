@@ -58,10 +58,6 @@ var defaultLintersSettings = LintersSettings{
 	Gosec: GoSecSettings{
 		Concurrency: runtime.NumCPU(),
 	},
-	Ifshort: IfshortSettings{
-		MaxDeclLines: 1,
-		MaxDeclChars: 30,
-	},
 	Lll: LllSettings{
 		LineLength: 120,
 		TabWidth:   1,
@@ -150,7 +146,6 @@ type LintersSettings struct {
 	Gosimple         StaticCheckSettings
 	Govet            GovetSettings
 	Grouper          GrouperSettings
-	Ifshort          IfshortSettings
 	ImportAs         ImportAsSettings
 	Ireturn          IreturnSettings
 	Lll              LllSettings
@@ -425,11 +420,6 @@ type GrouperSettings struct {
 	TypeRequireGrouping       bool `mapstructure:"type-require-grouping"`
 	VarRequireSingleVar       bool `mapstructure:"var-require-single-var"`
 	VarRequireGrouping        bool `mapstructure:"var-require-grouping"`
-}
-
-type IfshortSettings struct {
-	MaxDeclLines int `mapstructure:"max-decl-lines"`
-	MaxDeclChars int `mapstructure:"max-decl-chars"`
 }
 
 type ImportAsSettings struct {

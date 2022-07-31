@@ -1036,15 +1036,6 @@ linters-settings:
     # Default: false
     var-require-grouping: true
 
-  ifshort:
-    # Maximum length of variable declaration measured in number of lines, after which linter won't suggest using short syntax.
-    # Has higher priority than max-decl-chars.
-    # Default: 1
-    max-decl-lines: 2
-    # Maximum length of variable declaration measured in number of characters, after which linter won't suggest using short syntax.
-    # Default: 30
-    max-decl-chars: 40
-
   importas:
     # Do not allow unaliased imports of aliased packages.
     # Default: false
@@ -1889,7 +1880,6 @@ linters:
     - gosimple
     - govet
     - grouper
-    - ifshort
     - importas
     - ineffassign
     - interfacer
@@ -1990,7 +1980,6 @@ linters:
     - gosimple
     - govet
     - grouper
-    - ifshort
     - importas
     - ineffassign
     - interfacer
