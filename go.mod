@@ -103,7 +103,7 @@ require (
 	gitlab.com/bosi/decorder v0.2.3
 	golang.org/x/tools v0.1.12
 	gopkg.in/yaml.v3 v3.0.1
-	honnef.co/go/tools v0.3.2
+	honnef.co/go/tools v0.3.3
 	mvdan.cc/gofumpt v0.3.1
 	mvdan.cc/interfacer v0.0.0-20180901003855-c20040233aed
 	mvdan.cc/unparam v0.0.0-20220706161116-678bad134442
