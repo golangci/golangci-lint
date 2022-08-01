@@ -35,7 +35,8 @@ jobs:
         uses: actions/setup-go@v3
         with:
           stable: 'false'  # Keep this line to be able to use rc and beta version of Go (ex: 1.18.0-rc.1).
-          go-version: ${{ env.GO_VERSION }}
+#          go-version: ${{ env.GO_VERSION }}
+          go-version: 1.18
       - name: lint
         uses: golangci/golangci-lint-action@v3.2.0
         with:
