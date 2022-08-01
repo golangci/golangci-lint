@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/julz/importas" // nolint: misspell
+	"github.com/julz/importas" //nolint:misspell
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/config"
@@ -25,7 +25,7 @@ func NewImportAs(settings *config.ImportAsSettings) *goanalysis.Linter {
 			return
 		}
 		if len(settings.Alias) == 0 {
-			lintCtx.Log.Infof("importas settings found, but no aliases listed. List aliases under alias: key.") // nolint: misspell
+			lintCtx.Log.Infof("importas settings found, but no aliases listed. List aliases under alias: key.") //nolint:misspell
 		}
 
 		if err := analyzer.Flags.Set("no-unaliased", strconv.FormatBool(settings.NoUnaliased)); err != nil {

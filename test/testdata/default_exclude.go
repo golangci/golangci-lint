@@ -11,10 +11,11 @@ func ExportedFunc1() {
 }
 
 // InvalidFuncComment // ERROR stylecheck `ST1020: comment on exported function ExportedFunc2 should be of the form "ExportedFunc2 ..."`
-// nolint:golint
+//
+//nolint:golint
 func ExportedFunc2() {
 }
 
-// nolint:stylecheck
+//nolint:stylecheck
 func IgnoreAll() {
 }

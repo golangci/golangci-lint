@@ -12,13 +12,13 @@ import (
 // Something just some struct
 type Something struct{}
 
-func aAllowedImport() { // nolint: deadcode,unused
+func aAllowedImport() { //nolint:deadcode,unused
 	mfile, _ := modfile.Parse("go.mod", []byte{}, nil)
 
 	log.Println(mfile)
 }
 
-func aBlockedImport() { // nolint: deadcode,unused
+func aBlockedImport() { //nolint:deadcode,unused
 	data := []byte{}
 	something := Something{}
 	_ = yaml.Unmarshal(data, &something)

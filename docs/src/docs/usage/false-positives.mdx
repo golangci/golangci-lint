@@ -95,11 +95,11 @@ run:
 
 ## Nolint Directive
 
-To exclude issues from all linters use `//nolint`.
+To exclude issues from all linters use `//nolint:all`.
 For example, if it's used inline (not from the beginning of the line) it excludes issues only for this line.
 
 ```go
-var bad_name int //nolint
+var bad_name int //nolint:all
 ```
 
 To exclude issues from specific linters only:
@@ -111,7 +111,7 @@ var bad_name int //nolint:golint,unused
 To exclude issues for the block of code use this directive on the beginning of a line:
 
 ```go
-//nolint
+//nolint:all
 func allIssuesInThisFunctionAreExcluded() *string {
   // ...
 }
