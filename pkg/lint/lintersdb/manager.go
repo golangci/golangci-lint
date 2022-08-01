@@ -541,7 +541,8 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		linter.NewConfig(golinters.NewIfshort(ifshortCfg)).
 			WithSince("v1.36.0").
 			WithPresets(linter.PresetStyle).
-			WithURL("https://github.com/esimonov/ifshort"),
+			WithURL("https://github.com/esimonov/ifshort").
+			Deprecated("The repository of the linter has been deprecated by the owner.", "v1.48.0", ""),
 
 		linter.NewConfig(golinters.NewImportAs(importAsCfg)).
 			WithSince("v1.38.0").
