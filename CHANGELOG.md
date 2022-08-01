@@ -1,6 +1,21 @@
 Follow the news and releases on our [twitter](https://twitter.com/golangci) and our [blog](https://medium.com/golangci).
 There is the most valuable changes log:
 
+### v1.47.3
+
+1. updated linters:
+   * remove some go1.18 limitations
+   * `asasalint`: from 0.0.10 to 0.0.11
+   * `decorder`: from 0.2.2 to v0.2.3
+   * `gci`: fix panic with invalid configuration option
+   * `gci`: from 0.4.3 to v0.5.0
+   * `go-exhaustruct`: from 2.2.0 to 2.2.2
+   * `gomodguard`: from 1.2.3 to 1.2.4
+   * `nosnakecase`: from 1.5.0 to 1.7.0
+   * `honnef.co/go/tools`: from 0.3.2 to v0.3.3
+2. misc
+   * cgo: fix linters ignoring CGo files
+
 ### v1.47.2
 
 1. updated linters:
