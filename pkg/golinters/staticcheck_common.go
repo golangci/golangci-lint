@@ -98,7 +98,7 @@ func staticCheckConfig(settings *config.StaticCheckSettings) *scconfig.Config {
 }
 
 // https://github.com/dominikh/go-tools/blob/9bf17c0388a65710524ba04c2d821469e639fdc2/lintcmd/lint.go#L437-L477
-// nolint // Keep the original source code.
+//nolint:gocritic // Keep the original source code.
 func filterAnalyzerNames(analyzers []string, checks []string) map[string]bool {
 	allowedChecks := map[string]bool{}
 

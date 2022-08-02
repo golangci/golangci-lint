@@ -95,7 +95,7 @@ func TestTestsAreLintedByDefault(t *testing.T) {
 }
 
 func TestCgoOk(t *testing.T) {
-	testshared.NewLintRunner(t).Run("--no-config", "--enable-all", "-D", "nosnakecase", getTestDataDir("cgo")).ExpectNoIssues()
+	testshared.NewLintRunner(t).Run("--no-config", "--enable-all", "-D", "nosnakecase,gci", getTestDataDir("cgo")).ExpectNoIssues()
 }
 
 func TestCgoWithIssues(t *testing.T) {
@@ -104,6 +104,10 @@ func TestCgoWithIssues(t *testing.T) {
 		ExpectHasIssue("Printf format %t has arg cs of wrong type")
 	r.Run("--no-config", "--disable-all", "-Estaticcheck", getTestDataDir("cgo_with_issues")).
 		ExpectHasIssue("SA5009: Printf format %t has arg #1 of wrong type")
+	r.Run("--no-config", "--disable-all", "-Egofmt", getTestDataDir("cgo_with_issues")).
+		ExpectHasIssue("File is not `gofmt`-ed with `-s` (gofmt)")
+	r.Run("--no-config", "--disable-all", "-Erevive", getTestDataDir("cgo_with_issues")).
+		ExpectHasIssue("indent-error-flow: if block ends with a return statement")
 }
 
 func TestUnsafeOk(t *testing.T) {
@@ -127,7 +131,7 @@ func TestLineDirectiveProcessedFilesLiteLoading(t *testing.T) {
 }
 
 func TestSortedResults(t *testing.T) {
-	var testCases = []struct {
+	testCases := []struct {
 		opt  string
 		want string
 	}{

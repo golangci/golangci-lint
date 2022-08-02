@@ -8,7 +8,7 @@ require (
 	github.com/Antonboom/nilnil v0.1.1
 	github.com/BurntSushi/toml v1.2.0
 	github.com/Djarvur/go-err113 v0.0.0-20210108212216-aea10b59be24
-	github.com/GaijinEntertainment/go-exhaustruct/v2 v2.2.0
+	github.com/GaijinEntertainment/go-exhaustruct/v2 v2.2.2
 	github.com/OpenPeeDeeP/depguard v1.1.0
 	github.com/alexkohler/prealloc v1.0.0
 	github.com/alingse/asasalint v0.0.11
@@ -21,7 +21,7 @@ require (
 	github.com/breml/errchkjson v0.3.0
 	github.com/butuzov/ireturn v0.1.1
 	github.com/charithe/durationcheck v0.0.9
-	github.com/daixiang0/gci v0.4.3
+	github.com/daixiang0/gci v0.6.0
 	github.com/denis-tingaikin/go-header v0.4.3
 	github.com/esimonov/ifshort v1.0.4
 	github.com/fatih/color v1.13.0
@@ -71,7 +71,7 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/polyfloyd/go-errorlint v1.0.0
 	github.com/quasilyte/go-ruleguard/dsl v0.3.21
-	github.com/ryancurrah/gomodguard v1.2.3
+	github.com/ryancurrah/gomodguard v1.2.4
 	github.com/ryanrolds/sqlclosecheck v0.3.0
 	github.com/sanposhiho/wastedassign/v2 v2.0.6
 	github.com/sashamelentyev/usestdlibvars v1.7.0
@@ -101,10 +101,10 @@ require (
 	github.com/valyala/quicktemplate v1.7.0
 	github.com/yagipy/maintidx v1.0.0
 	github.com/yeya24/promlinter v0.2.0
-	gitlab.com/bosi/decorder v0.2.2
-	golang.org/x/tools v0.1.12-0.20220628192153-7743d1d949f1
+	gitlab.com/bosi/decorder v0.2.3
+	golang.org/x/tools v0.1.12
 	gopkg.in/yaml.v3 v3.0.1
-	honnef.co/go/tools v0.3.2
+	honnef.co/go/tools v0.3.3
 	mvdan.cc/gofumpt v0.3.1
 	mvdan.cc/interfacer v0.0.0-20180901003855-c20040233aed
 	mvdan.cc/unparam v0.0.0-20220706161116-678bad134442
@@ -172,8 +172,8 @@ require (
 	go.uber.org/zap v1.17.0 // indirect
 	golang.org/x/exp/typeparams v0.0.0-20220613132600-b0d781184e0d // indirect
 	golang.org/x/mod v0.6.0-dev.0.20220419223038-86c51ed26bb4 // indirect
-	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect
-	golang.org/x/sys v0.0.0-20220715151400-c0bba94af5f8 // indirect
+	golang.org/x/sync v0.0.0-20220722155255-886fb9371eb4 // indirect
+	golang.org/x/sys v0.0.0-20220722155257-8c9f86f7a55f // indirect
 	golang.org/x/text v0.3.7 // indirect
 	google.golang.org/protobuf v1.28.0 // indirect
 	gopkg.in/ini.v1 v1.66.6 // indirect

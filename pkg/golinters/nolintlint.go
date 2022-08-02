@@ -57,9 +57,6 @@ func runNoLintLint(pass *analysis.Pass, settings *config.NoLintLintSettings) ([]
 	if settings.RequireExplanation {
 		needs |= nolintlint.NeedsExplanation
 	}
-	if !settings.AllowLeadingSpace {
-		needs |= nolintlint.NeedsMachineOnly
-	}
 	if settings.RequireSpecific {
 		needs |= nolintlint.NeedsSpecific
 	}

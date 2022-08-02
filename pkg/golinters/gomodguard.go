@@ -73,12 +73,7 @@ func NewGomodguard(settings *config.GoModGuardSettings) *goanalysis.Linter {
 		}
 
 		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
-			var files []string
-			for _, file := range pass.Files {
-				files = append(files, pass.Fset.PositionFor(file.Pos(), false).Filename)
-			}
-
-			gomodguardIssues := processor.ProcessFiles(files)
+			gomodguardIssues := processor.ProcessFiles(getFileNames(pass))
 
 			mu.Lock()
 			defer mu.Unlock()
