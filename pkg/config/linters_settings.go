@@ -588,12 +588,13 @@ type TenvSettings struct {
 }
 
 type UseStdlibVarsSettings struct {
-	HTTPMethod     bool `mapstructure:"http-method"`
-	HTTPStatusCode bool `mapstructure:"http-status-code"`
-	TimeWeekday    bool `mapstructure:"time-weekday"`
-	TimeMonth      bool `mapstructure:"time-month"`
-	TimeLayout     bool `mapstructure:"time-layout"`
-	CryptoHash     bool `mapstructure:"crypto-hash"`
+	HTTPMethod         bool `mapstructure:"http-method"`
+	HTTPStatusCode     bool `mapstructure:"http-status-code"`
+	TimeWeekday        bool `mapstructure:"time-weekday"`
+	TimeMonth          bool `mapstructure:"time-month"`
+	TimeLayout         bool `mapstructure:"time-layout"`
+	CryptoHash         bool `mapstructure:"crypto-hash"`
+	DefaultRPCPathFlag bool `mapstructure:"default-rpc-path"`
 }
 
 type UnparamSettings struct {

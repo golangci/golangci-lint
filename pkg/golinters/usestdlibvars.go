@@ -20,6 +20,7 @@ func NewUseStdlibVars(cfg *config.UseStdlibVarsSettings) *goanalysis.Linter {
 			analyzer.TimeMonthFlag:      cfg.TimeMonth,
 			analyzer.TimeLayoutFlag:     cfg.TimeLayout,
 			analyzer.CryptoHashFlag:     cfg.CryptoHash,
+			analyzer.DefaultRPCPathFlag: cfg.DefaultRPCPathFlag,
 		}
 	}
 
