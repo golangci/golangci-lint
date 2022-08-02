@@ -388,6 +388,12 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/GaijinEntertainment/go-exhaustruct"),
 
+		linter.NewConfig(golinters.NewExplicitReturn()).
+			WithSince("v1.48.0").
+			WithPresets(linter.PresetStyle).
+			WithLoadForGoAnalysis().
+			WithURL("https://tildegit.org/indigo/explicitreturn"),
+
 		linter.NewConfig(golinters.NewExportLoopRef()).
 			WithSince("v1.28.0").
 			WithPresets(linter.PresetBugs).

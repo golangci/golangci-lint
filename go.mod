@@ -107,6 +107,7 @@ require (
 	mvdan.cc/gofumpt v0.3.1
 	mvdan.cc/interfacer v0.0.0-20180901003855-c20040233aed
 	mvdan.cc/unparam v0.0.0-20220706161116-678bad134442
+	tildegit.org/indigo/explicitreturn v0.0.0-20220802220915-02f24a7ea1f1
 )
 
 require (
