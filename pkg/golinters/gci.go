@@ -37,6 +37,7 @@ func NewGci(settings *config.GciSettings) *goanalysis.Linter {
 		rawCfg := gcicfg.YamlConfig{
 			Cfg: gcicfg.BoolConfig{
 				SkipGenerated: settings.SkipGenerated,
+				CustomOrder:   settings.CustomOrder,
 			},
 			SectionStrings: settings.Sections,
 		}

@@ -287,6 +287,7 @@ type GciSettings struct {
 	LocalPrefixes string   `mapstructure:"local-prefixes"` // Deprecated
 	Sections      []string `mapstructure:"sections"`
 	SkipGenerated bool     `mapstructure:"skip-generated"`
+	CustomOrder   bool     `mapstructure:"custom-order"`
 }
 
 type GocognitSettings struct {
