@@ -14,8 +14,10 @@ jobs:
       - name: Install Go
         uses: actions/setup-go@v3
         with:
-          # stable: 'false' # Keep this line to be able to use rc and beta version of Go (ex: 1.18.0-rc1).
-          go-version: 1.18
+          # Keep the following comment to be able to use rc and beta version of Go (ex: 1.18.0-rc.1).
+          # https://github.com/actions/setup-go#supported-version-syntax
+          # stable: 'false'
+          go-version: 1.19
 
       - name: Update GitHub action config
         run: make assets/github-action-config.json
