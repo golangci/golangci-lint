@@ -164,6 +164,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		thelperCfg          *config.ThelperSettings
 		unparamCfg          *config.UnparamSettings
 		unusedCfg           *config.StaticCheckSettings
+		usestdlibvars       *config.UseStdlibVarsSettings
 		varcheckCfg         *config.VarCheckSettings
 		varnamelenCfg       *config.VarnamelenSettings
 		whitespaceCfg       *config.WhitespaceSettings
@@ -766,6 +767,11 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			ConsiderSlow().
 			WithChangeTypes().
 			WithURL("https://github.com/dominikh/go-tools/tree/master/unused"),
+
+		linter.NewConfig(golinters.NewUseStdlibVars(usestdlibvars)).
+			WithSince("v1.48.0").
+			WithPresets(linter.PresetStyle).
+			WithURL("https://github.com/sashamelentyev/usestdlibvars"),
 
 		linter.NewConfig(golinters.NewVarcheck(varcheckCfg)).
 			WithSince("v1.0.0").

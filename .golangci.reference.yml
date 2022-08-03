@@ -1669,6 +1669,29 @@ linters-settings:
       # Default: true
       begin: false
 
+  usestdlibvars:
+    # Suggest the use of http.MethodXX
+    # Default: true
+    http-method: false
+    # Suggest the use of http.StatusXX
+    # Default: true
+    http-status-code: false
+    # Suggest the use of time.Weekday
+    # Default: true
+    time-weekday: true
+    # Suggest the use of time.Month
+    # Default: false
+    time-month: true
+    # Suggest the use of time.Layout
+    # Default: false
+    time-layout: true
+    # Suggest the use of crypto.Hash
+    # Default: false
+    crypto-hash: true
+    # Suggest the use of pc.DefaultXXPath
+    # Default: false
+    default-rpc-path: true
+
   unparam:
     # Inspect exported functions.
     #
@@ -1934,6 +1957,7 @@ linters:
     - unconvert
     - unparam
     - unused
+    - usestdlibvars
     - varcheck
     - varnamelen
     - wastedassign
@@ -2035,6 +2059,7 @@ linters:
     - unconvert
     - unparam
     - unused
+    - usestdlibvars
     - varcheck
     - varnamelen
     - wastedassign
