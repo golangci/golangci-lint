@@ -1,6 +1,23 @@
 Follow the news and releases on our [twitter](https://twitter.com/golangci) and our [blog](https://medium.com/golangci).
 There is the most valuable changes log:
 
+### v1.48.0
+
+1. new linters
+   * `usestdlibvars`:https://github.com/sashamelentyev/usestdlibvars
+2. updated linters
+   * `contextcheck`: disable linter
+   * `errcheck`: from 1.6.1 to 1.6.2
+   * `gci`: add missing `custom-order` setting
+   * `gci`: from 0.5.0 to 0.6.0
+   * `ifshort`: deprecate linter
+   * `nolint`: drop allow-leading-space option and add "nolint:all"
+   * `revgrep`: bump to HEAD
+3. documentation
+   * remove outdated info on source install
+4. misc
+   * go1.19 support
+
 ### v1.47.3
 
 1. updated linters:
