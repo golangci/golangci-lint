@@ -14,6 +14,10 @@ jobs:
       - name: Install Go
         uses: actions/setup-go@v3
         with:
+          # https://github.com/actions/setup-go#supported-version-syntax
+          # ex:
+          # - 1.18beta1 -> 1.18.0-beta.1
+          # - 1.18rc1 -> 1.18.0-rc.1
           go-version: 1.19
 
       - name: Update GitHub action config
