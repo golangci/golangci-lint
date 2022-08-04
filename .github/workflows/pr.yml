@@ -16,9 +16,10 @@ jobs:
       - name: Install Go
         uses: actions/setup-go@v3
         with:
-          # Keep the following comment to be able to use rc and beta version of Go (ex: 1.18.0-rc.1).
           # https://github.com/actions/setup-go#supported-version-syntax
-          # stable: 'false'
+          # ex:
+          # - 1.18beta1 -> 1.18.0-beta.1
+          # - 1.18rc1 -> 1.18.0-rc.1
           go-version: ${{ env.GO_VERSION }}
       - name: Checkout code
         uses: actions/checkout@v3
@@ -36,9 +37,10 @@ jobs:
       - name: Install Go
         uses: actions/setup-go@v3
         with:
-          # Keep the following comment to be able to use rc and beta version of Go (ex: 1.18.0-rc.1).
           # https://github.com/actions/setup-go#supported-version-syntax
-          # stable: 'false'
+          # ex:
+          # - 1.18beta1 -> 1.18.0-beta.1
+          # - 1.18rc1 -> 1.18.0-rc.1
 #          go-version: ${{ env.GO_VERSION }} # todo(ldez) uncomment after the next release v1.48.0
           go-version: 1.18
       - name: lint
@@ -57,9 +59,10 @@ jobs:
       - name: Install Go
         uses: actions/setup-go@v3
         with:
-          # Keep the following comment to be able to use rc and beta version of Go (ex: 1.18.0-rc.1).
           # https://github.com/actions/setup-go#supported-version-syntax
-          # stable: 'false'
+          # ex:
+          # - 1.18beta1 -> 1.18.0-beta.1
+          # - 1.18rc1 -> 1.18.0-rc.1
           go-version: ${{ env.GO_VERSION }} # test only the latest go version to speed up CI
       - name: Run tests
         run: make.exe test
@@ -73,9 +76,10 @@ jobs:
       - name: Install Go
         uses: actions/setup-go@v3
         with:
-          # Keep the following comment to be able to use rc and beta version of Go (ex: 1.18.0-rc.1).
           # https://github.com/actions/setup-go#supported-version-syntax
-          # stable: 'false'
+          # ex:
+          # - 1.18beta1 -> 1.18.0-beta.1
+          # - 1.18rc1 -> 1.18.0-rc.1
           go-version: ${{ env.GO_VERSION }} # test only the latest go version to speed up CI
       - name: Run tests
         run: make test
@@ -93,9 +97,10 @@ jobs:
       - name: Install Go
         uses: actions/setup-go@v3
         with:
-          # Keep the following comment to be able to use rc and beta version of Go (ex: 1.18.0-rc.1).
           # https://github.com/actions/setup-go#supported-version-syntax
-          # stable: 'false'
+          # ex:
+          # - 1.18beta1 -> 1.18.0-beta.1
+          # - 1.18rc1 -> 1.18.0-rc.1
           go-version: ${{ matrix.golang }}
       - uses: actions/cache@v3
         with:
@@ -119,9 +124,10 @@ jobs:
       - name: Install Go
         uses: actions/setup-go@v3
         with:
-          # Keep the following comment to be able to use rc and beta version of Go (ex: 1.18.0-rc.1).
           # https://github.com/actions/setup-go#supported-version-syntax
-          # stable: 'false'
+          # ex:
+          # - 1.18beta1 -> 1.18.0-beta.1
+          # - 1.18rc1 -> 1.18.0-rc.1
           go-version: ${{ env.GO_VERSION }}
       - name: Check generated files are up to date
         run: make fast_check_generated
