@@ -37,7 +37,7 @@ require (
 	github.com/golangci/lint-1 v0.0.0-20191013205115-297bf364a8e0
 	github.com/golangci/maligned v0.0.0-20180506175553-b1d89398deca
 	github.com/golangci/misspell v0.3.5
-	github.com/golangci/revgrep v0.0.0-20210930125155-c22e5001d4f2
+	github.com/golangci/revgrep v0.0.0-20220804021717-745bb2f7c2e6
 	github.com/golangci/unconvert v0.0.0-20180507085042-28b1c447d1f4
 	github.com/gordonklaus/ineffassign v0.0.0-20210914165742-4cc7213b9bc8
 	github.com/gostaticanalysis/forcetypeassert v0.1.0
