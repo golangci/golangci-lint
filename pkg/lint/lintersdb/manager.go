@@ -154,6 +154,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		preallocCfg         *config.PreallocSettings
 		predeclaredCfg      *config.PredeclaredSettings
 		promlinterCfg       *config.PromlinterSettings
+		reassignCfg         *config.ReassignSettings
 		reviveCfg           *config.ReviveSettings
 		rowserrcheckCfg     *config.RowsErrCheckSettings
 		staticcheckCfg      *config.StaticCheckSettings
@@ -227,6 +228,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		parallelTestCfg = &m.cfg.LintersSettings.ParallelTest
 		predeclaredCfg = &m.cfg.LintersSettings.Predeclared
 		promlinterCfg = &m.cfg.LintersSettings.Promlinter
+		reassignCfg = &m.cfg.LintersSettings.Reassign
 		reviveCfg = &m.cfg.LintersSettings.Revive
 		rowserrcheckCfg = &m.cfg.LintersSettings.RowsErrCheck
 		staticcheckCfg = &m.cfg.LintersSettings.Staticcheck
@@ -682,6 +684,11 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithSince("v1.40.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/yeya24/promlinter"),
+
+		linter.NewConfig(golinters.NewReassign(reassignCfg)).
+			WithSince("1.49.0").
+			WithPresets(linter.PresetBugs).
+			WithURL("https://github.com/curioswitch/go-reassign"),
 
 		linter.NewConfig(golinters.NewRevive(reviveCfg)).
 			WithSince("v1.37.0").

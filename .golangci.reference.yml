@@ -1225,6 +1225,12 @@ linters-settings:
      - CamelCase
      - UnitAbbreviations
 
+  reassign:
+    # Pattern for variables that are checked for reassignment.
+    # See https://github.com/curioswitch/go-reassign#usage
+    # Defaults to "^(EOF|Err.*)$"
+    pattern: ".*"
+
   revive:
     # Maximum number of open files at the same time.
     # See https://github.com/mgechev/revive#command-line-flags
@@ -1951,6 +1957,7 @@ linters:
     - prealloc
     - predeclared
     - promlinter
+    - reassign
     - revive
     - rowserrcheck
     - scopelint
