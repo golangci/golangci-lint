@@ -61,7 +61,6 @@ linters-settings:
   misspell:
     locale: US
   nolintlint:
-    allow-leading-space: false
     allow-unused: false # report any unused nolint directives
     require-explanation: false # don't require an explanation for nolint directives
     require-specific: false # don't require nolint directives to be specific about which linter is being skipped
