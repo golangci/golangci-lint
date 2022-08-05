@@ -1,4 +1,4 @@
-//golangcitest:args -Enosnakecase
+//golangcitest:args -Enosnakecase --internal-cmd-test
 package testdata
 
 import (
