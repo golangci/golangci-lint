@@ -1,6 +1,6 @@
 module github.com/golangci/golangci-lint
 
-go 1.19
+go 1.17
 
 require (
 	4d63.com/gochecknoglobals v0.1.0
