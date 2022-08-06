@@ -1,5 +1,5 @@
 //golangcitest:args -Egovet
-//golangcitest:config linters-settings.govet.enable=fieldalignment
+//golangcitest:config_path testdata/configs/govet_fieldalignment.yml
 package testdata
 
 type gvfaGood struct {

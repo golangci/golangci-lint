@@ -82,7 +82,7 @@ func TestGoimportsLocal(t *testing.T) {
 
 	args = append(args, rc.args...)
 
-	cfg, err := yaml.Marshal(rc.config)
+	cfg, err := os.ReadFile(rc.configPath)
 	require.NoError(t, err)
 
 	testshared.NewLintRunner(t).RunWithYamlConfig(string(cfg), args...).

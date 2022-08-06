@@ -1,5 +1,5 @@
 //golangcitest:args -Egocyclo
-//golangcitest:config linters-settings.gocyclo.min-complexity=20
+//golangcitest:config_path testdata/configs/gocyclo.yml
 package testdata
 
 import "net/http"

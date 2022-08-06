@@ -1,5 +1,5 @@
 //golangcitest:args -Egoconst
-//golangcitest:config linters-settings.goconst.ignore-tests=false
+//golangcitest:config_path testdata/configs/goconst_dont_ignore.yml
 package testdata
 
 import (

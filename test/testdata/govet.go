@@ -1,5 +1,5 @@
 //golangcitest:args -Egovet
-//golangcitest:config linters-settings.govet.check-shadowing=true
+//golangcitest:config_path testdata/configs/govet.yml
 package testdata
 
 import (

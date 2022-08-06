@@ -1,5 +1,5 @@
 //golangcitest:args -Egofmt
-//golangcitest:config linters-settings.gofmt.simplify=false
+//golangcitest:config_path testdata/configs/gofmt_no_simplify.yml
 package testdata
 
 import "fmt"
