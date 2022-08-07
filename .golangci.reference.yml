@@ -1692,7 +1692,7 @@ linters-settings:
     # Suggest the use of crypto.Hash
     # Default: false
     crypto-hash: true
-    # Suggest the use of pc.DefaultXXPath
+    # Suggest the use of rpc.DefaultXXPath
     # Default: false
     default-rpc-path: true
 
