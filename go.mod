@@ -21,7 +21,7 @@ require (
 	github.com/breml/errchkjson v0.3.0
 	github.com/butuzov/ireturn v0.1.1
 	github.com/charithe/durationcheck v0.0.9
-	github.com/daixiang0/gci v0.6.2
+	github.com/daixiang0/gci v0.6.3
 	github.com/denis-tingaikin/go-header v0.4.3
 	github.com/esimonov/ifshort v1.0.4
 	github.com/fatih/color v1.13.0
@@ -77,7 +77,7 @@ require (
 	github.com/sashamelentyev/usestdlibvars v1.8.0
 	github.com/securego/gosec/v2 v2.12.0
 	github.com/shazow/go-diff v0.0.0-20160112020656-b6b7b6733b8c
-	github.com/shirou/gopsutil/v3 v3.22.6
+	github.com/shirou/gopsutil/v3 v3.22.7
 	github.com/sirupsen/logrus v1.9.0
 	github.com/sivchari/containedctx v1.0.2
 	github.com/sivchari/tenv v1.7.0
