@@ -321,6 +321,7 @@ var allRules = append([]lint.Rule{
 	&rule.TimeEqualRule{},
 	&rule.BannedCharsRule{},
 	&rule.OptimizeOperandsOrderRule{},
+	&rule.DataRaceRule{},
 }, defaultRules...)
 
 const defaultConfidence = 0.8
