@@ -213,6 +213,12 @@ uname_arch() {
     armv6*) arch="armv6" ;;
     armv7*) arch="armv7" ;;
   esac
+
+  longbit_arch="bit_$(getconf LONG_BIT)"
+  case $longbit_arch in
+    bit_32) arch="386" ;;
+  esac
+
   echo ${arch}
 }
 uname_os_check() {
