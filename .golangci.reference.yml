@@ -1683,6 +1683,9 @@ linters-settings:
     # Suggest the use of time.Weekday
     # Default: true
     time-weekday: true
+    # Suggest the use of http.NoBody
+    # Default: false
+    http-no-body: true
     # Suggest the use of time.Month
     # Default: false
     time-month: true

@@ -591,6 +591,7 @@ type TenvSettings struct {
 type UseStdlibVarsSettings struct {
 	HTTPMethod         bool `mapstructure:"http-method"`
 	HTTPStatusCode     bool `mapstructure:"http-status-code"`
+	HTTPNoBody         bool `mapstructure:"http-no-body"`
 	TimeWeekday        bool `mapstructure:"time-weekday"`
 	TimeMonth          bool `mapstructure:"time-month"`
 	TimeLayout         bool `mapstructure:"time-layout"`

@@ -16,6 +16,7 @@ func NewUseStdlibVars(cfg *config.UseStdlibVarsSettings) *goanalysis.Linter {
 		cfgMap[a.Name] = map[string]interface{}{
 			analyzer.HTTPMethodFlag:     cfg.HTTPMethod,
 			analyzer.HTTPStatusCodeFlag: cfg.HTTPStatusCode,
+			analyzer.HTTPNoBodyFlag:     cfg.HTTPNoBody,
 			analyzer.TimeWeekdayFlag:    cfg.TimeWeekday,
 			analyzer.TimeMonthFlag:      cfg.TimeMonth,
 			analyzer.TimeLayoutFlag:     cfg.TimeLayout,
