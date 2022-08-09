@@ -17,9 +17,10 @@ import (
 )
 
 type Manager struct {
-	nameToLCs map[string][]*linter.Config
-	cfg       *config.Config
-	log       logutils.Log
+	nameToLCs       map[string][]*linter.Config
+	nameToCustomLCs map[string][]*linter.Config
+	cfg             *config.Config
+	log             logutils.Log
 }
 
 func NewManager(cfg *config.Config, log logutils.Log) *Manager {
@@ -37,6 +38,7 @@ func NewManager(cfg *config.Config, log logutils.Log) *Manager {
 
 // WithCustomLinters loads private linters that are specified in the golangci config file.
 func (m *Manager) WithCustomLinters() *Manager {
+	nameToCustomLCs := make(map[string][]*linter.Config)
 	if m.log == nil {
 		m.log = report.NewLogWrapper(logutils.NewStderrLog(""), &report.Data{})
 	}
@@ -50,10 +52,11 @@ func (m *Manager) WithCustomLinters() *Manager {
 					settings.Path,
 					err)
 			} else {
-				m.nameToLCs[name] = append(m.nameToLCs[name], lc)
+				nameToCustomLCs[name] = append(nameToCustomLCs[name], lc)
 			}
 		}
 	}
+	m.nameToCustomLCs = nameToCustomLCs
 	return m
 }
 
@@ -84,7 +87,10 @@ func (m Manager) allPresetsSet() map[string]bool {
 }
 
 func (m Manager) GetLinterConfigs(name string) []*linter.Config {
-	return m.nameToLCs[name]
+	if v, ok := m.nameToLCs[name]; ok {
+		return v
+	}
+	return m.nameToCustomLCs[name]
 }
 
 func enableLinterConfigs(lcs []*linter.Config, isEnabled func(lc *linter.Config) bool) []*linter.Config {
@@ -816,6 +822,9 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithSince("v1.26.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/golangci/golangci-lint/blob/master/pkg/golinters/nolintlint/README.md"),
+	}
+	for _, configs := range m.nameToCustomLCs {
+		lcs = append(lcs, configs...)
 	}
 
 	enabledByDefault := map[string]bool{
