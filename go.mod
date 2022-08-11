@@ -61,7 +61,7 @@ require (
 	github.com/matoous/godox v0.0.0-20210227103229-6504466cf951 // v1.0
 	github.com/mattn/go-colorable v0.1.12
 	github.com/mbilski/exhaustivestruct v1.2.0
-	github.com/mgechev/revive v1.2.2
+	github.com/mgechev/revive v1.2.3
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/mitchellh/go-ps v1.0.0
 	github.com/moricho/tparallel v0.2.1
