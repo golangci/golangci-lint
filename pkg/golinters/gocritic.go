@@ -11,6 +11,7 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/go-critic/go-critic/checkers"
 	gocriticlinter "github.com/go-critic/go-critic/framework/linter"
 	"golang.org/x/tools/go/analysis"
 
@@ -28,7 +29,7 @@ func NewGocritic(settings *config.GocriticSettings, cfg *config.Config) *goanaly
 
 	sizes := types.SizesFor("gc", runtime.GOARCH)
 
-	wrapper := goCriticWrapper{
+	wrapper := &goCriticWrapper{
 		settings: settings,
 		cfg:      cfg,
 		sizes:    sizes,
@@ -71,9 +72,12 @@ type goCriticWrapper struct {
 	settings *config.GocriticSettings
 	cfg      *config.Config
 	sizes    types.Sizes
+	once     sync.Once
 }
 
-func (w goCriticWrapper) run(pass *analysis.Pass) ([]goanalysis.Issue, error) {
+func (w *goCriticWrapper) run(pass *analysis.Pass) ([]goanalysis.Issue, error) {
+	w.once.Do(checkers.InitEmbeddedRules)
+
 	linterCtx := gocriticlinter.NewContext(pass.Fset, w.sizes)
 
 	enabledCheckers, err := w.buildEnabledCheckers(linterCtx)
@@ -93,7 +97,7 @@ func (w goCriticWrapper) run(pass *analysis.Pass) ([]goanalysis.Issue, error) {
 	return issues, nil
 }
 
-func (w goCriticWrapper) buildEnabledCheckers(linterCtx *gocriticlinter.Context) ([]*gocriticlinter.Checker, error) {
+func (w *goCriticWrapper) buildEnabledCheckers(linterCtx *gocriticlinter.Context) ([]*gocriticlinter.Checker, error) {
 	allParams := w.settings.GetLowercasedParams()
 
 	var enabledCheckers []*gocriticlinter.Checker
@@ -116,23 +120,23 @@ func (w goCriticWrapper) buildEnabledCheckers(linterCtx *gocriticlinter.Context)
 	return enabledCheckers, nil
 }
 
-func runGocriticOnPackage(linterCtx *gocriticlinter.Context, checkers []*gocriticlinter.Checker,
+func runGocriticOnPackage(linterCtx *gocriticlinter.Context, checks []*gocriticlinter.Checker,
 	files []*ast.File) []result.Issue {
 	var res []result.Issue
 	for _, f := range files {
 		filename := filepath.Base(linterCtx.FileSet.Position(f.Pos()).Filename)
 		linterCtx.SetFileInfo(filename, f)
 
-		issues := runGocriticOnFile(linterCtx, f, checkers)
+		issues := runGocriticOnFile(linterCtx, f, checks)
 		res = append(res, issues...)
 	}
 	return res
 }
 
-func runGocriticOnFile(linterCtx *gocriticlinter.Context, f *ast.File, checkers []*gocriticlinter.Checker) []result.Issue {
+func runGocriticOnFile(linterCtx *gocriticlinter.Context, f *ast.File, checks []*gocriticlinter.Checker) []result.Issue {
 	var res []result.Issue
 
-	for _, c := range checkers {
+	for _, c := range checks {
 		// All checkers are expected to use *lint.Context
 		// as read-only structure, so no copying is required.
 		for _, warn := range c.Check(f) {
@@ -160,7 +164,7 @@ func runGocriticOnFile(linterCtx *gocriticlinter.Context, f *ast.File, checkers 
 	return res
 }
 
-func (w goCriticWrapper) configureCheckerInfo(info *gocriticlinter.CheckerInfo, allParams map[string]config.GocriticCheckSettings) error {
+func (w *goCriticWrapper) configureCheckerInfo(info *gocriticlinter.CheckerInfo, allParams map[string]config.GocriticCheckSettings) error {
 	params := allParams[strings.ToLower(info.Name)]
 	if params == nil { // no config for this checker
 		return nil
@@ -208,7 +212,7 @@ func normalizeCheckerInfoParams(info *gocriticlinter.CheckerInfo) gocriticlinter
 // but the file parsers (TOML, YAML, JSON) don't create the same representation for raw type.
 // then we have to convert value types into the expected value types.
 // Maybe in the future, this kind of conversion will be done in go-critic itself.
-func (w goCriticWrapper) normalizeCheckerParamsValue(p interface{}) interface{} {
+func (w *goCriticWrapper) normalizeCheckerParamsValue(p interface{}) interface{} {
 	rv := reflect.ValueOf(p)
 	switch rv.Type().Kind() {
 	case reflect.Int64, reflect.Int32, reflect.Int16, reflect.Int8, reflect.Int:
