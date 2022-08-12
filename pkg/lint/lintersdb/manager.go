@@ -582,6 +582,12 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithSince("v1.8.0").
 			WithPresets(linter.PresetStyle),
 
+		linter.NewConfig(golinters.NewLogrLint()).
+			WithSince("v1.49.0").
+			WithLoadForGoAnalysis().
+			WithPresets(linter.PresetBugs).
+			WithURL("https://github.com/timonwong/logrlint"),
+
 		linter.NewConfig(golinters.NewMaintIdx(maintIdxCfg)).
 			WithSince("v1.44.0").
 			WithPresets(linter.PresetComplexity).

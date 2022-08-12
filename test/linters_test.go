@@ -117,3 +117,7 @@ func findSources(t *testing.T, pathPatterns ...string) []string {
 
 	return sources
 }
+
+func TestLogrLint(t *testing.T) {
+	testSourcesFromDir(t, filepath.Join(testdataDir, "logrlint"))
+}

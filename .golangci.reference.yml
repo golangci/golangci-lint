@@ -1932,6 +1932,7 @@ linters:
     - interfacer
     - ireturn
     - lll
+    - logrlint
     - maintidx
     - makezero
     - maligned
