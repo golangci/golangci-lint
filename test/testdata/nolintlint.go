@@ -2,7 +2,6 @@
 //golangcitest:expected_linter nolintlint
 //golangcitest:config linters-settings.nolintlint.require-explanation=true
 //golangcitest:config linters-settings.nolintlint.require-specific=true
-//golangcitest:config linters-settings.nolintlint.allow-leading-space=false
 package testdata
 
 import "fmt"
