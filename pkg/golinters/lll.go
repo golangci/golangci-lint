@@ -88,7 +88,7 @@ func getLLLIssuesForFile(filename string, maxLineLen int, tabSpaces string) ([]r
 	scanner := bufio.NewScanner(f)
 	for scanner.Scan() {
 		line := scanner.Text()
-		line = strings.Replace(line, "\t", tabSpaces, -1)
+		line = strings.ReplaceAll(line, "\t", tabSpaces)
 		lineLen := utf8.RuneCountInString(line)
 		if lineLen > maxLineLen {
 			res = append(res, result.Issue{
