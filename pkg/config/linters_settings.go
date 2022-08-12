@@ -185,6 +185,7 @@ type LintersSettings struct {
 	Whitespace       WhitespaceSettings
 	Wrapcheck        WrapcheckSettings
 	WSL              WSLSettings
+	ContextCheck     ContextCheckSettings
 
 	Custom map[string]CustomLinterSettings
 }
@@ -659,6 +660,10 @@ type WSLSettings struct {
 	ForceCuddleErrCheckAndAssign     bool `mapstructure:"force-err-cuddling"`
 	ForceExclusiveShortDeclarations  bool `mapstructure:"force-short-decl-cuddling"`
 	ForceCaseTrailingWhitespaceLimit int  `mapstructure:"force-case-trailing-whitespace"`
+}
+
+type ContextCheckSettings struct {
+	DisableFact bool `mapstructure:"disable-fact"`
 }
 
 // CustomLinterSettings encapsulates the meta-data of a private linter.

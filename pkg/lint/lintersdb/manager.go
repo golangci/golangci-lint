@@ -171,6 +171,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		whitespaceCfg       *config.WhitespaceSettings
 		wrapcheckCfg        *config.WrapcheckSettings
 		wslCfg              *config.WSLSettings
+		contextcheckCfg     *config.ContextCheckSettings
 	)
 
 	if m.cfg != nil {
@@ -243,6 +244,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		whitespaceCfg = &m.cfg.LintersSettings.Whitespace
 		wrapcheckCfg = &m.cfg.LintersSettings.Wrapcheck
 		wslCfg = &m.cfg.LintersSettings.WSL
+		contextcheckCfg = &m.cfg.LintersSettings.ContextCheck
 
 		if govetCfg != nil {
 			govetCfg.Go = m.cfg.Run.Go
@@ -298,12 +300,11 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/sivchari/containedctx"),
 
-		linter.NewConfig(golinters.NewContextCheck()).
+		linter.NewConfig(golinters.NewContextCheck(contextcheckCfg)).
 			WithSince("v1.43.0").
 			WithPresets(linter.PresetBugs).
 			WithLoadForGoAnalysis().
-			WithURL("https://github.com/sylvia7788/contextcheck").
-			WithNoopFallback(m.cfg),
+			WithURL("https://github.com/sylvia7788/contextcheck"),
 
 		linter.NewConfig(golinters.NewCyclop(cyclopCfg)).
 			WithSince("v1.37.0").
