@@ -42,3 +42,7 @@ func gocriticDup(x bool) {
 		log.Print("x is true")
 	}
 }
+
+func gocriticRuleWrapperFunc() {
+	strings.Replace("abcabc", "a", "d", -1) // ERROR "ruleguard: this Replace call can be simplified.*"
+}

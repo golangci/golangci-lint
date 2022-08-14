@@ -119,7 +119,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		gciCfg              *config.GciSettings
 		gocognitCfg         *config.GocognitSettings
 		goconstCfg          *config.GoConstSettings
-		gocriticCfg         *config.GocriticSettings
+		gocriticCfg         *config.GoCriticSettings
 		gocycloCfg          *config.GoCycloSettings
 		godotCfg            *config.GodotSettings
 		godoxCfg            *config.GodoxSettings
@@ -436,7 +436,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/jgautheron/goconst"),
 
-		linter.NewConfig(golinters.NewGocritic(gocriticCfg, m.cfg)).
+		linter.NewConfig(golinters.NewGoCritic(gocriticCfg, m.cfg)).
 			WithSince("v1.12.0").
 			WithPresets(linter.PresetStyle, linter.PresetMetaLinter).
 			WithLoadForGoAnalysis().

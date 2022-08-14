@@ -1113,7 +1113,7 @@ linters-settings:
   makezero:
     # Allow only slices initialized with a length of zero.
     # Default: false
-    always: false
+    always: true
 
   maligned:
     # Print struct with more effective memory layout or not.

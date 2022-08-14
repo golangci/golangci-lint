@@ -40,8 +40,8 @@ var defaultLintersSettings = LintersSettings{
 	Gocognit: GocognitSettings{
 		MinComplexity: 30,
 	},
-	Gocritic: GocriticSettings{
-		SettingsPerCheck: map[string]GocriticCheckSettings{},
+	Gocritic: GoCriticSettings{
+		SettingsPerCheck: map[string]GoCriticCheckSettings{},
 	},
 	Godox: GodoxSettings{
 		Keywords: []string{},
@@ -133,7 +133,7 @@ type LintersSettings struct {
 	Gci              GciSettings
 	Gocognit         GocognitSettings
 	Goconst          GoConstSettings
-	Gocritic         GocriticSettings
+	Gocritic         GoCriticSettings
 	Gocyclo          GoCycloSettings
 	Godot            GodotSettings
 	Godox            GodoxSettings
@@ -305,6 +305,16 @@ type GoConstSettings struct {
 	NumberMax           int  `mapstructure:"max"`
 	IgnoreCalls         bool `mapstructure:"ignore-calls"`
 }
+
+type GoCriticSettings struct {
+	EnabledChecks    []string                         `mapstructure:"enabled-checks"`
+	DisabledChecks   []string                         `mapstructure:"disabled-checks"`
+	EnabledTags      []string                         `mapstructure:"enabled-tags"`
+	DisabledTags     []string                         `mapstructure:"disabled-tags"`
+	SettingsPerCheck map[string]GoCriticCheckSettings `mapstructure:"settings"`
+}
+
+type GoCriticCheckSettings map[string]interface{}
 
 type GoCycloSettings struct {
 	MinComplexity int `mapstructure:"min-complexity"`

@@ -1,4 +1,4 @@
-package config
+package golinters
 
 import (
 	"log"
@@ -25,7 +25,9 @@ func Test_filterByDisableTags(t *testing.T) {
 	disabledTags := []string{"experimental", "opinionated"}
 	enabledChecks := []string{"appendAssign", "sortSlice", "caseOrder", "dupImport"}
 
-	filterEnabledChecks := filterByDisableTags(enabledChecks, disabledTags, &tLog{})
+	settingsWrapper := newGoCriticSettingsWrapper(nil)
+
+	filterEnabledChecks := settingsWrapper.filterByDisableTags(enabledChecks, disabledTags, &tLog{})
 
 	sort.Strings(filterEnabledChecks)
 
