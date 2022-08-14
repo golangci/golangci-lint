@@ -33,7 +33,7 @@ func errorCheck(outStr string, wantAuto bool, defaultWantedLinter string, fullsh
 	for i := range out {
 		for j := 0; j < len(fullshort); j += 2 {
 			full, short := fullshort[j], fullshort[j+1]
-			out[i] = strings.Replace(out[i], full, short, -1)
+			out[i] = strings.ReplaceAll(out[i], full, short)
 		}
 	}
 

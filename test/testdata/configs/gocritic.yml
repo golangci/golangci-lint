@@ -3,10 +3,11 @@ linters-settings:
     enabled-checks:
       - rangeValCopy
       - flagDeref
+      - wrapperFunc
       - ruleguard
     settings:
-      rangevalcopy:
-        sizethreshold: 2
+      rangeValCopy:
+        sizeThreshold: 2
       ruleguard:
         debug: dupSubExpr
         failOn: dsl,import
