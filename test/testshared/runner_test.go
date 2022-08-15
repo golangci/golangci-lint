@@ -1,9 +1,12 @@
 package testshared
 
 import (
+	"regexp"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+
+	"github.com/golangci/golangci-lint/pkg/exitcodes"
 )
 
 //nolint:funlen
@@ -182,4 +185,41 @@ func TestRunnerBuilder_Runner(t *testing.T) {
 			assert.Equal(t, test.expected.args, runner.args)
 		})
 	}
+}
+
+func TestRunnerResult_ExpectExitCode(t *testing.T) {
+	r := &RunnerResult{tb: t, exitCode: exitcodes.Success}
+	r.ExpectExitCode(exitcodes.Failure, exitcodes.Success)
+}
+
+func TestRunnerResult_ExpectNoIssues(t *testing.T) {
+	r := &RunnerResult{tb: t}
+	r.ExpectNoIssues()
+}
+
+func TestRunnerResult_ExpectOutputContains(t *testing.T) {
+	r := &RunnerResult{tb: t, output: "this is an output"}
+	r.ExpectOutputContains("an")
+}
+
+func TestRunnerResult_ExpectHasIssue(t *testing.T) {
+	r := &RunnerResult{tb: t, exitCode: exitcodes.IssuesFound, output: "this is an output"}
+	r.ExpectHasIssue("an")
+}
+
+func TestRunnerResult_ExpectOutputEq(t *testing.T) {
+	r := &RunnerResult{tb: t, output: "this is an output"}
+	r.ExpectOutputEq("this is an output")
+}
+
+func TestRunnerResult_ExpectOutputNotContains(t *testing.T) {
+	r := &RunnerResult{tb: t, output: "this is an output"}
+	r.ExpectOutputNotContains("one")
+}
+
+func TestRunnerResult_ExpectOutputRegexp(t *testing.T) {
+	r := &RunnerResult{tb: t, output: "this is an output"}
+	r.ExpectOutputRegexp(regexp.MustCompile(`an.+`))
+	r.ExpectOutputRegexp(`an.+`)
+	r.ExpectOutputRegexp("an")
 }

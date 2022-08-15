@@ -16,6 +16,8 @@ import (
 	"github.com/golangci/golangci-lint/pkg/logutils"
 )
 
+const binName = "../golangci-lint"
+
 type RunnerBuilder struct {
 	tb  testing.TB
 	log logutils.Log
@@ -194,10 +196,10 @@ func (r *Runner) Run() *RunnerResult {
 	runArgs := append([]string{r.command}, r.args...)
 
 	defer func(startedAt time.Time) {
-		r.log.Infof("ran [../golangci-lint %s] in %s", strings.Join(runArgs, " "), time.Since(startedAt))
+		r.log.Infof("ran [%s %s] in %s", binName, strings.Join(runArgs, " "), time.Since(startedAt))
 	}(time.Now())
 
-	cmd := exec.Command("../golangci-lint", runArgs...)
+	cmd := exec.Command(binName, runArgs...)
 	cmd.Env = append(os.Environ(), r.env...)
 
 	out, err := cmd.CombinedOutput()
