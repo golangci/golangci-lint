@@ -1,3 +1,3 @@
 linters-settings:
   wsl:
-    tests: 1
+    allow-cuddle-declarations: false
