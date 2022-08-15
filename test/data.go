@@ -5,7 +5,6 @@ import (
 )
 
 const testdataDir = "testdata"
-const binName = "../golangci-lint"
 
 var minimalPkg = getTestDataDir("minimalpkg")
 
