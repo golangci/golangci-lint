@@ -1,5 +1,5 @@
 //golangcitest:args -Emakezero
-//golangcitest:config linters-settings.makezero.always=true
+//golangcitest:config_path testdata/configs/makezero_always.yml
 package testdata
 
 import "math"

@@ -1,6 +1,5 @@
 //golangcitest:args -Efunlen
-//golangcitest:config linters-settings.funlen.lines=20
-//golangcitest:config linters-settings.funlen.statements=10
+//golangcitest:config_path testdata/configs/funlen.yml
 package testdata
 
 func TooManyLines() { // ERROR `Function 'TooManyLines' is too long \(22 > 20\)`

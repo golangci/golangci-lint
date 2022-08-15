@@ -1,0 +1,3 @@
+linters-settings:
+  cyclop:
+    max-complexity: 15

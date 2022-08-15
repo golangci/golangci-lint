@@ -1,5 +1,5 @@
 //golangcitest:args -Ewsl
-//golangcitest:config linters-settings.wsl.tests=1
+//golangcitest:config_path testdata/configs/wsl.yml
 package testdata
 
 import (

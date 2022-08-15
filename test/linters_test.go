@@ -14,7 +14,6 @@ import (
 
 	hcversion "github.com/hashicorp/go-version"
 	"github.com/stretchr/testify/require"
-	"gopkg.in/yaml.v3"
 
 	"github.com/golangci/golangci-lint/pkg/exitcodes"
 	"github.com/golangci/golangci-lint/test/testshared"
@@ -82,7 +81,7 @@ func TestGoimportsLocal(t *testing.T) {
 
 	args = append(args, rc.args...)
 
-	cfg, err := yaml.Marshal(rc.config)
+	cfg, err := os.ReadFile(rc.configPath)
 	require.NoError(t, err)
 
 	testshared.NewLintRunner(t).RunWithYamlConfig(string(cfg), args...).
@@ -175,25 +174,6 @@ func TestFileOutput(t *testing.T) {
 	require.Contains(t, string(b), `"Issues":[`)
 }
 
-func saveConfig(t *testing.T, cfg map[string]interface{}) (cfgPath string, finishFunc func()) {
-	f, err := os.CreateTemp("", "golangci_lint_test")
-	require.NoError(t, err)
-
-	cfgPath = f.Name() + ".yml"
-	err = os.Rename(f.Name(), cfgPath)
-	require.NoError(t, err)
-
-	err = yaml.NewEncoder(f).Encode(cfg)
-	require.NoError(t, err)
-
-	return cfgPath, func() {
-		require.NoError(t, f.Close())
-		if os.Getenv("GL_KEEP_TEMP_FILES") != "1" {
-			require.NoError(t, os.Remove(cfgPath))
-		}
-	}
-}
-
 func testOneSource(t *testing.T, sourcePath string) {
 	args := []string{
 		"run",
@@ -210,25 +190,16 @@ func testOneSource(t *testing.T, sourcePath string) {
 		t.Skipf("Skipped: %s", sourcePath)
 	}
 
-	var cfgPath string
-	if rc.config != nil {
-		p, finish := saveConfig(t, rc.config)
-		defer finish()
-		cfgPath = p
-	} else if rc.configPath != "" {
-		cfgPath = rc.configPath
-	}
-
 	for _, addArg := range []string{"", "-Etypecheck"} {
 		caseArgs := append([]string{}, args...)
 		caseArgs = append(caseArgs, rc.args...)
 		if addArg != "" {
 			caseArgs = append(caseArgs, addArg)
 		}
-		if cfgPath == "" {
+		if rc.configPath == "" {
 			caseArgs = append(caseArgs, "--no-config")
 		} else {
-			caseArgs = append(caseArgs, "-c", cfgPath)
+			caseArgs = append(caseArgs, "-c", rc.configPath)
 		}
 
 		caseArgs = append(caseArgs, sourcePath)
@@ -241,32 +212,8 @@ func testOneSource(t *testing.T, sourcePath string) {
 
 type runContext struct {
 	args           []string
-	config         map[string]interface{}
 	configPath     string
 	expectedLinter string
-}
-
-func buildConfigFromShortRepr(t *testing.T, repr string, config map[string]interface{}) {
-	kv := strings.Split(repr, "=")
-	require.Len(t, kv, 2, "repr: %s", repr)
-
-	keyParts := strings.Split(kv[0], ".")
-	require.True(t, len(keyParts) >= 2, len(keyParts))
-
-	lastObj := config
-	for _, k := range keyParts[:len(keyParts)-1] {
-		var v map[string]interface{}
-		if lastObj[k] == nil {
-			v = map[string]interface{}{}
-		} else {
-			v = lastObj[k].(map[string]interface{})
-		}
-
-		lastObj[k] = v
-		lastObj = v
-	}
-
-	lastObj[keyParts[len(keyParts)-1]] = kv[1]
 }
 
 func skipMultilineComment(scanner *bufio.Scanner) {
@@ -275,7 +222,7 @@ func skipMultilineComment(scanner *bufio.Scanner) {
 	}
 }
 
-//nolint:gocyclo,funlen
+//nolint:gocyclo
 func extractRunContextFromComments(t *testing.T, sourcePath string) *runContext {
 	f, err := os.Open(sourcePath)
 	require.NoError(t, err)
@@ -322,14 +269,6 @@ func extractRunContextFromComments(t *testing.T, sourcePath string) *runContext 
 			require.Nil(t, rc.args)
 			require.NotEmpty(t, after)
 			rc.args = strings.Split(after, " ")
-			continue
-
-		case "//golangcitest:config":
-			require.NotEmpty(t, after)
-			if rc.config == nil {
-				rc.config = map[string]interface{}{}
-			}
-			buildConfigFromShortRepr(t, after, rc.config)
 			continue
 
 		case "//golangcitest:config_path":
@@ -394,10 +333,7 @@ func TestTparallel(t *testing.T) {
 
 		args = append(args, rc.args...)
 
-		cfg, err := yaml.Marshal(rc.config)
-		require.NoError(t, err)
-
-		testshared.NewLintRunner(t).RunWithYamlConfig(string(cfg), args...).
+		testshared.NewLintRunner(t).RunWithYamlConfig("", args...).
 			ExpectHasIssue(
 				"testdata/tparallel/missing_toplevel_test.go:7:6: TestTopLevel should call t.Parallel on the top level as well as its subtests\n",
 			)
@@ -416,10 +352,7 @@ func TestTparallel(t *testing.T) {
 
 		args = append(args, rc.args...)
 
-		cfg, err := yaml.Marshal(rc.config)
-		require.NoError(t, err)
-
-		testshared.NewLintRunner(t).RunWithYamlConfig(string(cfg), args...).
+		testshared.NewLintRunner(t).RunWithYamlConfig("", args...).
 			ExpectHasIssue(
 				"testdata/tparallel/missing_subtest_test.go:7:6: TestSubtests's subtests should call t.Parallel\n",
 			)
@@ -438,9 +371,6 @@ func TestTparallel(t *testing.T) {
 
 		args = append(args, rc.args...)
 
-		cfg, err := yaml.Marshal(rc.config)
-		require.NoError(t, err)
-
-		testshared.NewLintRunner(t).RunWithYamlConfig(string(cfg), args...).ExpectNoIssues()
+		testshared.NewLintRunner(t).RunWithYamlConfig("", args...).ExpectNoIssues()
 	})
 }

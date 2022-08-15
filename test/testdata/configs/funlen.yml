@@ -1,0 +1,4 @@
+linters-settings:
+  funlen:
+    lines: 20
+    statements: 10

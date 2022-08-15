@@ -7,7 +7,6 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
-	"gopkg.in/yaml.v3"
 
 	"github.com/golangci/golangci-lint/pkg/exitcodes"
 	"github.com/golangci/golangci-lint/test/testshared"
@@ -56,15 +55,12 @@ func TestFix(t *testing.T) {
 
 			args = append(args, rc.args...)
 
-			cfg, err := yaml.Marshal(rc.config)
-			require.NoError(t, err)
-
 			var runResult *testshared.RunResult
 			if rc.configPath != "" {
 				args = append(args, "-c", rc.configPath)
 				runResult = testshared.NewLintRunner(t).RunCommand("run", args...)
 			} else {
-				runResult = testshared.NewLintRunner(t).RunWithYamlConfig(string(cfg), args...)
+				runResult = testshared.NewLintRunner(t).RunWithYamlConfig("", args...)
 			}
 
 			// nolintlint test uses non existing linters (bob, alice)

@@ -153,8 +153,7 @@ func (r *LintRunner) RunCommandWithYamlConfig(cfg, command string, args ...strin
 		defer os.Remove(cfgPath)
 	}
 
-	cfg = strings.TrimSpace(cfg)
-	cfg = strings.ReplaceAll(cfg, "\t", " ")
+	cfg = strings.ReplaceAll(strings.TrimSpace(cfg), "\t", " ")
 
 	err = os.WriteFile(cfgPath, []byte(cfg), os.ModePerm)
 	assert.NoError(r.t, err)

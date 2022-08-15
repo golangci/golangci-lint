@@ -1,5 +1,5 @@
 //golangcitest:args -Egocognit
-//golangcitest:config linters-settings.gocognit.min-complexity=2
+//golangcitest:config_path testdata/configs/gocognit.yml
 package testdata
 
 func GoCognit_CC4_GetWords(number int) string { // ERROR "cognitive complexity 4 of func .* is high .*"
