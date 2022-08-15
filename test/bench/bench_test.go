@@ -201,7 +201,7 @@ func runOne(b *testing.B, run func(*testing.B), progName string) *runResult {
 }
 
 func BenchmarkGolangciLint(b *testing.B) {
-	testshared.NewLintRunner(b).Install()
+	testshared.InstallGolangciLint(b)
 
 	type bcase struct {
 		name    string

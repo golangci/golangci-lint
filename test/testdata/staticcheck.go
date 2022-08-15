@@ -3,7 +3,6 @@ package testdata
 
 import (
 	"fmt"
-	"runtime"
 )
 
 func Staticcheck() {
@@ -20,10 +19,6 @@ func StaticcheckNolintStaticcheck() {
 func StaticcheckNolintMegacheck() {
 	var x int
 	x = x //nolint:megacheck
-}
-
-func StaticcheckDeprecated() {
-	_ = runtime.CPUProfile() // ERROR "SA1019: runtime.CPUProfile has been deprecated .*"
 }
 
 func StaticcheckPrintf() {

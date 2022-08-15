@@ -35,36 +35,34 @@ func TestFix(t *testing.T) {
 	err := exec.Command("cp", "-R", fixDir, tmpDir).Run()
 	require.NoError(t, err)
 
+	testshared.InstallGolangciLint(t)
+
 	inputs := findSources(tmpDir, "in", "*.go")
 	for _, input := range inputs {
 		input := input
 		t.Run(filepath.Base(input), func(t *testing.T) {
 			t.Parallel()
 
-			args := []string{
-				"--go=1.17", //  TODO(ldez): we force to use an old version of Go for the CI and the tests.
-				"--disable-all", "--print-issued-lines=false", "--print-linter-name=false", "--out-format=line-number",
-				"--allow-parallel-runners", "--fix",
-				input,
-			}
-			rc := extractRunContextFromComments(t, input)
+			rc := testshared.ParseTestDirectives(t, input)
 			if rc == nil {
 				t.Logf("Skipped: %s", input)
 				return
 			}
 
-			args = append(args, rc.args...)
-
-			var runResult *testshared.RunResult
-			if rc.configPath != "" {
-				args = append(args, "-c", rc.configPath)
-				runResult = testshared.NewLintRunner(t).RunCommand("run", args...)
-			} else {
-				runResult = testshared.NewLintRunner(t).RunWithYamlConfig("", args...)
-			}
+			runResult := testshared.NewRunnerBuilder(t).
+				WithRunContext(rc).
+				WithTargetPath(input).
+				WithArgs(
+					"--disable-all",
+					"--print-issued-lines=false",
+					"--print-linter-name=false",
+					"--out-format=line-number",
+					"--fix").
+				Runner().
+				Run()
 
 			// nolintlint test uses non existing linters (bob, alice)
-			if rc.expectedLinter != "nolintlint" {
+			if rc.ExpectedLinter != "nolintlint" {
 				runResult.ExpectExitCode(exitcodes.Success)
 			}
 
