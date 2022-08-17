@@ -111,10 +111,10 @@ func NewExecutor(version, commit, date string) *Executor {
 	}
 
 	// Anduril-specific config
-	//err = modifyConfigAnduril(e.cfg)
-	//if err != nil {
-	//	e.log.Fatalf("Error handling Anduril config: %s", err)
-	//}
+	err = modifyConfigAnduril(e.cfg)
+	if err != nil {
+		e.log.Fatalf("Error handling Anduril config: %s", err)
+	}
 
 	if (commandLineCfg == nil || commandLineCfg.Run.Go == "") && e.cfg != nil && e.cfg.Run.Go == "" {
 		e.cfg.Run.Go = config.DetectGoVersion()
