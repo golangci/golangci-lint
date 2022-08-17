@@ -85,7 +85,7 @@ func testOneSource(t *testing.T, sourcePath string) {
 			require.Equal(t, exitcodes.IssuesFound, exitErr.ExitCode(), "Unexpected exit code: %s", string(output))
 		}
 
-		analyze(t, sourcePath, output)
+		testshared.Analyze(t, sourcePath, output)
 	}
 }
 

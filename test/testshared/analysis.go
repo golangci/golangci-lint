@@ -1,4 +1,4 @@
-package test
+package testshared
 
 import (
 	"encoding/json"
@@ -21,6 +21,8 @@ import (
 
 const keyword = "want"
 
+const testdataDir = "testdata"
+
 type jsonResult struct {
 	Issues []*result.Issue
 }
@@ -36,8 +38,9 @@ type key struct {
 	line int
 }
 
+// Analyze analyzes the test expectations ('want').
 // inspired by https://github.com/golang/tools/blob/b3b5c13b291f9653da6f31b95db100a2e26bd186/go/analysis/analysistest/analysistest.go
-func analyze(t *testing.T, sourcePath string, rawData []byte) {
+func Analyze(t *testing.T, sourcePath string, rawData []byte) {
 	fileData, err := os.ReadFile(sourcePath)
 	require.NoError(t, err)
 
