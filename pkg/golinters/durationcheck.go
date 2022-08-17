@@ -10,6 +10,10 @@ import (
 func NewDurationCheck() *goanalysis.Linter {
 	a := durationcheck.Analyzer
 
-	return goanalysis.NewLinter(a.Name, a.Doc, []*analysis.Analyzer{a}, nil).
-		WithLoadMode(goanalysis.LoadModeTypesInfo)
+	return goanalysis.NewLinter(
+		a.Name,
+		a.Doc,
+		[]*analysis.Analyzer{a},
+		nil,
+	).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }

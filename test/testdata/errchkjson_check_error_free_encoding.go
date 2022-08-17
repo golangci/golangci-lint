@@ -1,5 +1,5 @@
-// args: -Eerrchkjson
-// config_path: testdata/configs/errchkjson_check_error_free_encoding.yml
+//golangcitest:args -Eerrchkjson
+//golangcitest:config_path testdata/configs/errchkjson_check_error_free_encoding.yml
 package testdata
 
 import (
@@ -34,9 +34,9 @@ func JSONMarshalSafeTypes() {
 	_ = err
 
 	enc := json.NewEncoder(ioutil.Discard)
-	_ = enc.Encode(nil)   // nil is safe
-	enc.Encode(nil)       // nil is safe
-	err = enc.Encode(nil) // ERROR "Error return value of `\\([*]encoding/json.Encoder\\).Encode` is checked but passed argument is safe"
+	_ = enc.Encode(nil) // ERROR "Error return value of `\\([*]encoding/json.Encoder\\).Encode` is not checked"
+	enc.Encode(nil)     // ERROR "Error return value of `\\([*]encoding/json.Encoder\\).Encode` is not checked"
+	err = enc.Encode(nil)
 	_ = err
 
 	var b bool

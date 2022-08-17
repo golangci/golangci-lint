@@ -23,6 +23,10 @@ func NewExhaustive(settings *config.ExhaustiveSettings) *goanalysis.Linter {
 		}
 	}
 
-	return goanalysis.NewLinter(a.Name, a.Doc, []*analysis.Analyzer{a}, cfg).
-		WithLoadMode(goanalysis.LoadModeTypesInfo)
+	return goanalysis.NewLinter(
+		a.Name,
+		a.Doc,
+		[]*analysis.Analyzer{a},
+		cfg,
+	).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }

@@ -1,5 +1,5 @@
-// args: -Eireturn
-// config_path: testdata/configs/ireturn_stdlib_reject.yml
+//golangcitest:args -Eireturn
+//golangcitest:config_path testdata/configs/ireturn_stdlib_reject.yml
 package testdata
 
 import (

@@ -1,5 +1,5 @@
-//args: -Edupl
-//config: linters-settings.dupl.threshold=20
+//golangcitest:args -Edupl
+//golangcitest:config linters-settings.dupl.threshold=20
 package testdata
 
 type DuplLogger struct{}

@@ -10,7 +10,7 @@ import (
 	"gopkg.in/yaml.v3"
 
 	"github.com/anduril/golangci-lint/pkg/exitcodes"
-	"github.com/golangci/golangci-lint/test/testshared"
+	"github.com/anduril/golangci-lint/test/testshared"
 )
 
 func TestFix(t *testing.T) {
@@ -49,6 +49,11 @@ func TestFix(t *testing.T) {
 				input,
 			}
 			rc := extractRunContextFromComments(t, input)
+			if rc == nil {
+				t.Logf("Skipped: %s", input)
+				return
+			}
+
 			args = append(args, rc.args...)
 
 			cfg, err := yaml.Marshal(rc.config)

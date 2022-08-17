@@ -1,4 +1,4 @@
-//args: -Etypecheck
+//golangcitest:args -Etypecheck
 package testdata
 
 func TypeCheckBadCalls() {

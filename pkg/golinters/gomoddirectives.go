@@ -30,6 +30,7 @@ func NewGoModDirectives(settings *config.GoModDirectivesSettings) *goanalysis.Li
 	analyzer := &analysis.Analyzer{
 		Name: goanalysis.TheOnlyAnalyzerName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
+		Run:  goanalysis.DummyRun,
 	}
 
 	return goanalysis.NewLinter(

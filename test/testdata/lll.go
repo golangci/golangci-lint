@@ -1,5 +1,5 @@
-//args: -Elll
-//config: linters-settings.lll.tab-width=4
+//golangcitest:args -Elll
+//golangcitest:config linters-settings.lll.tab-width=4
 package testdata
 
 func Lll() {

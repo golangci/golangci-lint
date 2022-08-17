@@ -1,4 +1,4 @@
-//args: -Etestifyeqgrpc
+//golangcitest:args -Etestifyeqgrpc
 package testdata
 
 /*

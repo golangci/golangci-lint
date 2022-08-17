@@ -3,18 +3,21 @@ package test
 import (
 	"bufio"
 	"fmt"
+	"go/build/constraint"
 	"os"
 	"os/exec"
 	"path"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"testing"
 
+	hcversion "github.com/hashicorp/go-version"
 	"github.com/stretchr/testify/require"
 	"gopkg.in/yaml.v3"
 
 	"github.com/anduril/golangci-lint/pkg/exitcodes"
-	"github.com/golangci/golangci-lint/test/testshared"
+	"github.com/anduril/golangci-lint/test/testshared"
 )
 
 func runGoErrchk(c *exec.Cmd, defaultExpectedLinter string, files []string, t *testing.T) {
@@ -73,7 +76,10 @@ func TestGoimportsLocal(t *testing.T) {
 		"--disable-all", "--print-issued-lines=false", "--print-linter-name=false", "--out-format=line-number",
 		sourcePath,
 	}
+
 	rc := extractRunContextFromComments(t, sourcePath)
+	require.NotNil(t, rc)
+
 	args = append(args, rc.args...)
 
 	cfg, err := yaml.Marshal(rc.config)
@@ -89,14 +95,17 @@ func TestGciLocal(t *testing.T) {
 		"--disable-all", "--print-issued-lines=false", "--print-linter-name=false", "--out-format=line-number",
 		sourcePath,
 	}
+
 	rc := extractRunContextFromComments(t, sourcePath)
+	require.NotNil(t, rc)
+
 	args = append(args, rc.args...)
 
 	cfg, err := os.ReadFile(rc.configPath)
 	require.NoError(t, err)
 
 	testshared.NewLintRunner(t).RunWithYamlConfig(string(cfg), args...).
-		ExpectHasIssue("testdata/gci/gci.go:9:1: Expected '\\n', Found '\\t'")
+		ExpectHasIssue("testdata/gci/gci.go:8: File is not `gci`-ed")
 }
 
 func TestMultipleOutputs(t *testing.T) {
@@ -105,14 +114,17 @@ func TestMultipleOutputs(t *testing.T) {
 		"--disable-all", "--print-issued-lines=false", "--print-linter-name=false", "--out-format=line-number,json:stdout",
 		sourcePath,
 	}
+
 	rc := extractRunContextFromComments(t, sourcePath)
+	require.NotNil(t, rc)
+
 	args = append(args, rc.args...)
 
 	cfg, err := os.ReadFile(rc.configPath)
 	require.NoError(t, err)
 
 	testshared.NewLintRunner(t).RunWithYamlConfig(string(cfg), args...).
-		ExpectHasIssue("testdata/gci/gci.go:9:1: Expected '\\n', Found '\\t'").
+		ExpectHasIssue("testdata/gci/gci.go:8: File is not `gci`-ed").
 		ExpectOutputContains(`"Issues":[`)
 }
 
@@ -122,14 +134,17 @@ func TestStderrOutput(t *testing.T) {
 		"--disable-all", "--print-issued-lines=false", "--print-linter-name=false", "--out-format=line-number,json:stderr",
 		sourcePath,
 	}
+
 	rc := extractRunContextFromComments(t, sourcePath)
+	require.NotNil(t, rc)
+
 	args = append(args, rc.args...)
 
 	cfg, err := os.ReadFile(rc.configPath)
 	require.NoError(t, err)
 
 	testshared.NewLintRunner(t).RunWithYamlConfig(string(cfg), args...).
-		ExpectHasIssue("testdata/gci/gci.go:9:1: Expected '\\n', Found '\\t'").
+		ExpectHasIssue("testdata/gci/gci.go:8: File is not `gci`-ed").
 		ExpectOutputContains(`"Issues":[`)
 }
 
@@ -142,14 +157,17 @@ func TestFileOutput(t *testing.T) {
 		fmt.Sprintf("--out-format=json:%s,line-number", resultPath),
 		sourcePath,
 	}
+
 	rc := extractRunContextFromComments(t, sourcePath)
+	require.NotNil(t, rc)
+
 	args = append(args, rc.args...)
 
 	cfg, err := os.ReadFile(rc.configPath)
 	require.NoError(t, err)
 
 	testshared.NewLintRunner(t).RunWithYamlConfig(string(cfg), args...).
-		ExpectHasIssue("testdata/gci/gci.go:9:1: Expected '\\n', Found '\\t'").
+		ExpectHasIssue("testdata/gci/gci.go:8: File is not `gci`-ed").
 		ExpectOutputNotContains(`"Issues":[`)
 
 	b, err := os.ReadFile(resultPath)
@@ -188,8 +206,11 @@ func testOneSource(t *testing.T, sourcePath string) {
 	}
 
 	rc := extractRunContextFromComments(t, sourcePath)
-	var cfgPath string
+	if rc == nil {
+		t.Skipf("Skipped: %s", sourcePath)
+	}
 
+	var cfgPath string
 	if rc.config != nil {
 		p, finish := saveConfig(t, rc.config)
 		defer finish()
@@ -227,7 +248,7 @@ type runContext struct {
 
 func buildConfigFromShortRepr(t *testing.T, repr string, config map[string]interface{}) {
 	kv := strings.Split(repr, "=")
-	require.Len(t, kv, 2)
+	require.Len(t, kv, 2, "repr: %s", repr)
 
 	keyParts := strings.Split(kv[0], ".")
 	require.True(t, len(keyParts) >= 2, len(keyParts))
@@ -254,6 +275,7 @@ func skipMultilineComment(scanner *bufio.Scanner) {
 	}
 }
 
+//nolint:gocyclo,funlen
 func extractRunContextFromComments(t *testing.T, sourcePath string) *runContext {
 	f, err := os.Open(sourcePath)
 	require.NoError(t, err)
@@ -275,50 +297,61 @@ func extractRunContextFromComments(t *testing.T, sourcePath string) *runContext 
 			break
 		}
 
-		line = strings.TrimLeft(strings.TrimPrefix(line, "//"), " ")
-		if strings.HasPrefix(line, "args: ") {
-			require.Nil(t, rc.args)
-			args := strings.TrimPrefix(line, "args: ")
-			require.NotEmpty(t, args)
-			rc.args = strings.Split(args, " ")
+		if strings.HasPrefix(line, "//go:build") || strings.HasPrefix(line, "// +build") {
+			parse, err := constraint.Parse(line)
+			require.NoError(t, err)
+
+			if !parse.Eval(buildTagGoVersion) {
+				return nil
+			}
+
 			continue
 		}
 
-		if strings.HasPrefix(line, "config: ") {
-			repr := strings.TrimPrefix(line, "config: ")
-			require.NotEmpty(t, repr)
+		if !strings.HasPrefix(line, "//golangcitest:") {
+			require.Failf(t, "invalid prefix of comment line %s", line)
+		}
+
+		before, after, found := strings.Cut(line, " ")
+		require.Truef(t, found, "invalid prefix of comment line %s", line)
+
+		after = strings.TrimSpace(after)
+
+		switch before {
+		case "//golangcitest:args":
+			require.Nil(t, rc.args)
+			require.NotEmpty(t, after)
+			rc.args = strings.Split(after, " ")
+			continue
+
+		case "//golangcitest:config":
+			require.NotEmpty(t, after)
 			if rc.config == nil {
 				rc.config = map[string]interface{}{}
 			}
-			buildConfigFromShortRepr(t, repr, rc.config)
+			buildConfigFromShortRepr(t, after, rc.config)
 			continue
-		}
 
-		if strings.HasPrefix(line, "config_path: ") {
-			configPath := strings.TrimPrefix(line, "config_path: ")
-			require.NotEmpty(t, configPath)
-			rc.configPath = configPath
+		case "//golangcitest:config_path":
+			require.NotEmpty(t, after)
+			rc.configPath = after
 			continue
-		}
 
-		if strings.HasPrefix(line, "expected_linter: ") {
-			expectedLinter := strings.TrimPrefix(line, "expected_linter: ")
-			require.NotEmpty(t, expectedLinter)
-			rc.expectedLinter = expectedLinter
+		case "//golangcitest:expected_linter":
+			require.NotEmpty(t, after)
+			rc.expectedLinter = after
 			continue
-		}
 
-		require.Fail(t, "invalid prefix of comment line %s", line)
+		default:
+			require.Failf(t, "invalid prefix of comment line %s", line)
+		}
 	}
 
 	// guess the expected linter if none is specified
 	if rc.expectedLinter == "" {
 		for _, arg := range rc.args {
 			if strings.HasPrefix(arg, "-E") && !strings.Contains(arg, ",") {
-				if rc.expectedLinter != "" {
-					require.Fail(t, "could not infer expected linter for errors because multiple linters are enabled. Please use the `expected_linter: ` directive in your test to indicate the linter-under-test.") //nolint:lll
-					break
-				}
+				require.Empty(t, rc.expectedLinter, "could not infer expected linter for errors because multiple linters are enabled. Please use the `//golangcitest:expected_linter ` directive in your test to indicate the linter-under-test.") //nolint:lll
 				rc.expectedLinter = arg[2:]
 			}
 		}
@@ -327,8 +360,23 @@ func extractRunContextFromComments(t *testing.T, sourcePath string) *runContext 
 	return rc
 }
 
+func buildTagGoVersion(tag string) bool {
+	vRuntime, err := hcversion.NewVersion(strings.TrimPrefix(runtime.Version(), "go"))
+	if err != nil {
+		return false
+	}
+
+	vTag, err := hcversion.NewVersion(strings.TrimPrefix(tag, "go"))
+	if err != nil {
+		return false
+	}
+
+	return vRuntime.GreaterThanOrEqual(vTag)
+}
+
 func TestExtractRunContextFromComments(t *testing.T) {
 	rc := extractRunContextFromComments(t, filepath.Join(testdataDir, "goimports", "goimports.go"))
+	require.NotNil(t, rc)
 	require.Equal(t, []string{"-Egoimports"}, rc.args)
 }
 
@@ -336,10 +384,14 @@ func TestTparallel(t *testing.T) {
 	t.Run("should fail on missing top-level Parallel()", func(t *testing.T) {
 		sourcePath := filepath.Join(testdataDir, "tparallel", "missing_toplevel_test.go")
 		args := []string{
-			"--disable-all", "--print-issued-lines=false", "--print-linter-name=false", "--out-format=line-number", "--enable", "tparallel",
+			"--disable-all", "--enable", "tparallel",
+			"--print-issued-lines=false", "--print-linter-name=false", "--out-format=line-number",
 			sourcePath,
 		}
+
 		rc := extractRunContextFromComments(t, sourcePath)
+		require.NotNil(t, rc)
+
 		args = append(args, rc.args...)
 
 		cfg, err := yaml.Marshal(rc.config)
@@ -354,10 +406,14 @@ func TestTparallel(t *testing.T) {
 	t.Run("should fail on missing subtest Parallel()", func(t *testing.T) {
 		sourcePath := filepath.Join(testdataDir, "tparallel", "missing_subtest_test.go")
 		args := []string{
-			"--disable-all", "--print-issued-lines=false", "--print-linter-name=false", "--out-format=line-number", "--enable", "tparallel",
+			"--disable-all", "--enable", "tparallel",
+			"--print-issued-lines=false", "--print-linter-name=false", "--out-format=line-number",
 			sourcePath,
 		}
+
 		rc := extractRunContextFromComments(t, sourcePath)
+		require.NotNil(t, rc)
+
 		args = append(args, rc.args...)
 
 		cfg, err := yaml.Marshal(rc.config)
@@ -372,10 +428,14 @@ func TestTparallel(t *testing.T) {
 	t.Run("should pass on parallel test with no subtests", func(t *testing.T) {
 		sourcePath := filepath.Join(testdataDir, "tparallel", "happy_path_test.go")
 		args := []string{
-			"--disable-all", "--print-issued-lines=false", "--print-linter-name=false", "--out-format=line-number", "--enable", "tparallel",
+			"--disable-all", "--enable", "tparallel",
+			"--print-issued-lines=false", "--print-linter-name=false", "--out-format=line-number",
 			sourcePath,
 		}
+
 		rc := extractRunContextFromComments(t, sourcePath)
+		require.NotNil(t, rc)
+
 		args = append(args, rc.args...)
 
 		cfg, err := yaml.Marshal(rc.config)

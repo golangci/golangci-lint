@@ -1,5 +1,5 @@
-//args: -Emisspell
-//config_path: testdata/configs/misspell.yml
+//golangcitest:args -Emisspell
+//golangcitest:config_path testdata/configs/misspell.yml
 package testdata
 
 func Misspell() {

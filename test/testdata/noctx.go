@@ -1,4 +1,4 @@
-//args: -Enoctx
+//golangcitest:args -Enoctx
 package testdata
 
 import (

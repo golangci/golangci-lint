@@ -1,6 +1,143 @@
 Follow the news and releases on our [twitter](https://twitter.com/golangci) and our [blog](https://medium.com/golangci).
 There is the most valuable changes log:
 
+### v1.47.3
+
+1. updated linters:
+   * remove some go1.18 limitations
+   * `asasalint`: from 0.0.10 to 0.0.11
+   * `decorder`: from 0.2.2 to v0.2.3
+   * `gci`: fix panic with invalid configuration option
+   * `gci`: from 0.4.3 to v0.5.0
+   * `go-exhaustruct`: from 2.2.0 to 2.2.2
+   * `gomodguard`: from 1.2.3 to 1.2.4
+   * `nosnakecase`: from 1.5.0 to 1.7.0
+   * `honnef.co/go/tools`: from 0.3.2 to v0.3.3
+2. misc
+   * cgo: fix linters ignoring CGo files
+
+### v1.47.2
+
+1. updated linters:
+   * `revive`: ignore slow rules
+
+### v1.47.1
+
+1. updated linters:
+   * `gci`: from 0.4.2 to 0.4.3
+   * `gci`: remove the use of stdin
+   * `gci`: fix options display
+   * `tenv`: from 1.6.0 to 1.7.0
+   * `unparam`: bump to HEAD
+
+### v1.47.0
+
+1. new linters:
+   * `asasalint`: https://github.com/alingse/asasalint
+   * `nosnakecase`: https://github.com/sivchari/nosnakecase
+2. updated linters:
+   * `decorder`: from 0.2.1 to 0.2.2
+   * `errcheck`: from 1.6.0 to 1.6.1
+   * `errname`: from 0.1.6 to 0.1.7
+   * `exhaustive`: from 0.7.11 to 0.8.1
+   * `gci`: fix issues and re-enable autofix
+   * `gci`: from 0.3.4 to 0.4.2
+   * `go-exhaustruct`: from 2.1.0 to 2.2.0
+   * `go-ruleguard`: from 0.3.19 to 0.3.21
+   * `gocognit`: from 1.0.5 to 1.0.6
+   * `gocyclo`: from 0.5.1 to 0.6.0
+   * `golang.org/x/tools`: bump to HEAD
+   * `gosec`: allow `global` config
+   * `gosec`: from 2.11.0 to 2.12.0
+   * `nonamedreturns`: from 1.0.1 to 1.0.4
+   * `paralleltest`: from 1.0.3 to 1.0.6
+   * `staticcheck`: fix generics
+   * `staticcheck`: from 0.3.1 to 0.3.2
+   * `tenv`: from 1.5.0 to 1.6.0
+   * `testpackage`: from 1.0.1 to 1.1.0
+   * `thelper`: from 0.6.2 to 0.6.3
+   * `wrapcheck`: from 2.6.1 to 2.6.2
+3. documentation:
+   * add thanks page
+   * add a clear explanation about the `staticcheck` integration.
+   * `depguard`: add `ignore-file-rules`
+   * `depguard`: adjust phrasing
+   * `gocritic`: add `enable` and `disable` ruleguard settings
+   * `gomnd`: fix typo
+   * `gosec`: add configs for all existing rules
+   * `govet`: add settings for `shadow` and `unusedresult`
+   * `thelper`: add `fuzz` config and description
+   * linters: add defaults
+
+### v1.46.2
+
+1. updated linters:
+   * `execinquery`: bump from v1.2.0 to v1.2.1
+   * `errorlint`: bump to v1.0.0
+   * `thelper`: allow to disable one option
+2. documentation:
+   * rename `.golangci.example.yml` to `.golangci.reference.yml`
+   * add `containedctx` linter to the list of available linters
+
+### v1.46.1
+
+1. updated linters:
+   * `execinquery`: bump from v0.6.0 to v0.6.1
+2. documentation:
+   * add missing linters
+
+### v1.46.0
+
+1. new linters:
+   * `execinquery`: https://github.com/lufeee/execinquery
+   * `nonamedreturns`: https://github.com/firefart/nonamedreturns
+   * `nosprintfhostport`: https://github.com/stbenjam/no-sprintf-host-port
+   * `exhaustruct`: https://github.com/GaijinEntertainment/go-exhaustruct
+2. updated linters:
+   * `bidichk`: from 0.2.2 to 0.2.3
+   * `deadcode`: bump to HEAD
+   * `errchkjson`: from 0.2.3 to 0.3.0
+   * `errname`: from 0.1.5 to 0.1.6
+   * `go-critic`: from 0.6.2 to 0.6.3
+   * `gocyclo`: from 0.4.0 to 0.5.1
+   * `gofumpt` from 0.3.0 to 0.3.1
+   * `gomoddirectives`: from 0.2.2 to 0.2.3
+   * `gosec`: from 2.10.0 to 2.11.0
+   * `honnef.co/go/tools`: from 0.2.2to 0.3.1 (go1.18 support)
+   * `nilnil`: from 0.1.0 to 0.1.1
+   * `nonamedreturns`: bump from 1.0.0 to 1.0.1
+   * `predeclared`: from 0.2.1 to 0.2.2
+   * `promlinter`: bump to v0.2.0
+   * `revive`: from 1.1.4 to 1.2.1
+   * `tenv`: from 1.4.7 to 1.5.0
+   * `thelper`: from 0.5.1 to 0.6.2
+   * `unused`: fix false-positive
+   * `varnamelen`: bump to v0.8.0
+   * `wrapcheck`: from 2.5.0 to 2.6.1
+   * `exhaustivestruct`: This linter is deprecated use `exhaustruct` instead.
+3. documentation:
+   * Update "Shell Completion" instruction on Linux
+   * Update FAQ page
+4. misc:
+   * log: enable override coloring based on `CLICOLOR` and `CLICOLOR_FORCE`
+
+### v1.45.2
+
+1. misc:
+   * fix: help command
+
+### v1.45.1
+
+1. updated linters:
+   * `interfacer`: inactivate with go1.18
+   * `govet`: inactivate unsupported analyzers (go1.18)
+   * `depguard`: reduce requirements
+   * `structcheck`: inactivate with go1.18
+   * `varnamelen`: bump from v0.6.0 to v0.6.1
+2. misc:
+   * Automatic Go version detection 🎉 (go1.18)
+   * docker: update base images (go1.18)
+
 ### v1.45.0
 
 1. updated linters:
@@ -592,7 +729,7 @@ There is the most valuable changes log:
 1. Support the newest `go vet` (with `go/analysis`)
 2. Support configuration of `go vet`: e.g. you can set print functions by `linters-settings.govet.settings.printf.funcs`
 3. Update megacheck (staticcheck) to 2019.1.1
-4. Add [information](https://github.com/golangci/golangci-lint#memory-usage-of-golangci-lint) about controlling space-time trade-off into README
+4. Add [information](https://github.com/anduril/golangci-lint#memory-usage-of-golangci-lint) about controlling space-time trade-off into README
 5. Exclude issues by source code line regexp by `issues.exclude-rules[i].source`
 6. Build and test on go 1.12
 7. Support `--color` option

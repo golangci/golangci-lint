@@ -1,4 +1,4 @@
-//args: -Emaintidx
+//golangcitest:args -Emaintidx
 package testdata
 
 func over20() {

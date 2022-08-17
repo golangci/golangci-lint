@@ -12,13 +12,14 @@ import (
 )
 
 func NewVarnamelen(settings *config.VarnamelenSettings) *goanalysis.Linter {
-	a := varnamelen.NewAnalyzer()
-
+	analyzer := varnamelen.NewAnalyzer()
 	cfg := map[string]map[string]interface{}{}
+
 	if settings != nil {
 		vnlCfg := map[string]interface{}{
 			"checkReceiver":      strconv.FormatBool(settings.CheckReceiver),
 			"checkReturn":        strconv.FormatBool(settings.CheckReturn),
+			"checkTypeParam":     strconv.FormatBool(settings.CheckTypeParam),
 			"ignoreNames":        strings.Join(settings.IgnoreNames, ","),
 			"ignoreTypeAssertOk": strconv.FormatBool(settings.IgnoreTypeAssertOk),
 			"ignoreMapIndexOk":   strconv.FormatBool(settings.IgnoreMapIndexOk),
@@ -33,13 +34,13 @@ func NewVarnamelen(settings *config.VarnamelenSettings) *goanalysis.Linter {
 			vnlCfg["minNameLength"] = strconv.Itoa(settings.MinNameLength)
 		}
 
-		cfg[a.Name] = vnlCfg
+		cfg[analyzer.Name] = vnlCfg
 	}
 
 	return goanalysis.NewLinter(
-		a.Name,
+		analyzer.Name,
 		"checks that the length of a variable's name matches its scope",
-		[]*analysis.Analyzer{a},
+		[]*analysis.Analyzer{analyzer},
 		cfg,
 	).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }

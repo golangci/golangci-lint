@@ -1,4 +1,4 @@
-//args: -Evarnamelen
+//golangcitest:args -Evarnamelen
 package testdata
 
 import "math"

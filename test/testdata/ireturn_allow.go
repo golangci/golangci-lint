@@ -1,5 +1,5 @@
-// args: -Eireturn
-// config_path: testdata/configs/ireturn.yml
+//golangcitest:args -Eireturn
+//golangcitest:config_path testdata/configs/ireturn.yml
 package testdata
 
 type (

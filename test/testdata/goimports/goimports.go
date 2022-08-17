@@ -1,5 +1,5 @@
-//args: -Egoimports
-//config: linters-settings.goimports.local-prefixes=github.com/anduril/golangci-lint
+//golangcitest:args -Egoimports
+//golangcitest:config linters-settings.goimports.local-prefixes=github.com/anduril/golangci-lint
 package goimports
 
 import (

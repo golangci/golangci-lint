@@ -1,5 +1,5 @@
-//args: -Egoconst
-//config: linters-settings.goconst.ignore-calls=false
+//golangcitest:args -Egoconst
+//golangcitest:config linters-settings.goconst.ignore-calls=false
 package testdata
 
 import "fmt"

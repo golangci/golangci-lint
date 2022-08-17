@@ -1,5 +1,5 @@
-//args: -Estylecheck,golint --internal-cmd-test
-//config_path: testdata/configs/default_exclude.yml
+//golangcitest:args -Estylecheck,golint --internal-cmd-test
+//golangcitest:config_path testdata/configs/default_exclude.yml
 
 /*Package testdata ...*/
 package testdata
@@ -11,10 +11,11 @@ func ExportedFunc1() {
 }
 
 // InvalidFuncComment // ERROR stylecheck `ST1020: comment on exported function ExportedFunc2 should be of the form "ExportedFunc2 ..."`
-// nolint:golint
+//
+//nolint:golint
 func ExportedFunc2() {
 }
 
-// nolint:stylecheck
+//nolint:stylecheck
 func IgnoreAll() {
 }

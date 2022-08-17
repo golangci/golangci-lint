@@ -1,6 +1,7 @@
 package lintersdb
 
 import (
+	"errors"
 	"fmt"
 	"strings"
 
@@ -47,7 +48,7 @@ func (v Validator) validatePresets(cfg *config.Linters) error {
 	}
 
 	if len(cfg.Presets) != 0 && cfg.EnableAll {
-		return fmt.Errorf("--presets is incompatible with --enable-all")
+		return errors.New("--presets is incompatible with --enable-all")
 	}
 
 	return nil
@@ -55,12 +56,12 @@ func (v Validator) validatePresets(cfg *config.Linters) error {
 
 func (v Validator) validateAllDisableEnableOptions(cfg *config.Linters) error {
 	if cfg.EnableAll && cfg.DisableAll {
-		return fmt.Errorf("--enable-all and --disable-all options must not be combined")
+		return errors.New("--enable-all and --disable-all options must not be combined")
 	}
 
 	if cfg.DisableAll {
 		if len(cfg.Enable) == 0 && len(cfg.Presets) == 0 {
-			return fmt.Errorf("all linters were disabled, but no one linter was enabled: must enable at least one")
+			return errors.New("all linters were disabled, but no one linter was enabled: must enable at least one")
 		}
 
 		if len(cfg.Disable) != 0 {

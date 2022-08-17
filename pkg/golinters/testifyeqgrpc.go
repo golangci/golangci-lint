@@ -32,6 +32,7 @@ func NewTestifyAssertEqualGrpc() *goanalysis.Linter {
 		Name:     testifyAssertEqualGrpc,
 		Doc:      goanalysis.TheOnlyanalyzerDoc,
 		Requires: []*analysis.Analyzer{inspect.Analyzer},
+		Run:      goanalysis.DummyRun,
 	}
 	return goanalysis.NewLinter(
 		testifyAssertEqualGrpc,

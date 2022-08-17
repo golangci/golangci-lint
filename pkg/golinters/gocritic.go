@@ -22,16 +22,39 @@ import (
 
 const gocriticName = "gocritic"
 
-func NewGocritic() *goanalysis.Linter {
+func NewGocritic(settings *config.GocriticSettings, cfg *config.Config) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
 
 	sizes := types.SizesFor("gc", runtime.GOARCH)
 
+	wrapper := goCriticWrapper{
+		settings: settings,
+		cfg:      cfg,
+		sizes:    sizes,
+	}
+
 	analyzer := &analysis.Analyzer{
 		Name: gocriticName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
+		Run: func(pass *analysis.Pass) (interface{}, error) {
+			issues, err := wrapper.run(pass)
+			if err != nil {
+				return nil, err
+			}
+
+			if len(issues) == 0 {
+				return nil, nil
+			}
+
+			mu.Lock()
+			resIssues = append(resIssues, issues...)
+			mu.Unlock()
+
+			return nil, nil
+		},
 	}
+
 	return goanalysis.NewLinter(
 		gocriticName,
 		`Provides diagnostics that check for bugs, performance and style issues.
@@ -39,113 +62,47 @@ Extensible without recompilation through dynamic rules.
 Dynamic rules are written declaratively with AST patterns, filters, report message and optional suggestion.`,
 		[]*analysis.Analyzer{analyzer},
 		nil,
-	).WithContextSetter(func(lintCtx *linter.Context) {
-		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
-			linterCtx := gocriticlinter.NewContext(pass.Fset, sizes)
-			enabledCheckers, err := buildEnabledCheckers(lintCtx, linterCtx)
-			if err != nil {
-				return nil, err
-			}
-
-			linterCtx.SetPackageInfo(pass.TypesInfo, pass.Pkg)
-			pkgIssues := runGocriticOnPackage(linterCtx, enabledCheckers, pass.Files)
-			res := make([]goanalysis.Issue, 0, len(pkgIssues))
-
-			for i := range pkgIssues {
-				res = append(res, goanalysis.NewIssue(&pkgIssues[i], pass))
-			}
-			if len(res) == 0 {
-				return nil, nil
-			}
-
-			mu.Lock()
-			resIssues = append(resIssues, res...)
-			mu.Unlock()
-
-			return nil, nil
-		}
-	}).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
+	).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
 		return resIssues
 	}).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }
 
-func normalizeCheckerInfoParams(info *gocriticlinter.CheckerInfo) gocriticlinter.CheckerParams {
-	// lowercase info param keys here because golangci-lint's config parser lowercases all strings
-	ret := gocriticlinter.CheckerParams{}
-	for k, v := range info.Params {
-		ret[strings.ToLower(k)] = v
-	}
-
-	return ret
+type goCriticWrapper struct {
+	settings *config.GocriticSettings
+	cfg      *config.Config
+	sizes    types.Sizes
 }
 
-func configureCheckerInfo(
-	lintCtx *linter.Context,
-	info *gocriticlinter.CheckerInfo,
-	allParams map[string]config.GocriticCheckSettings) error {
-	params := allParams[strings.ToLower(info.Name)]
-	if params == nil { // no config for this checker
-		return nil
+func (w goCriticWrapper) run(pass *analysis.Pass) ([]goanalysis.Issue, error) {
+	linterCtx := gocriticlinter.NewContext(pass.Fset, w.sizes)
+
+	enabledCheckers, err := w.buildEnabledCheckers(linterCtx)
+	if err != nil {
+		return nil, err
 	}
 
-	infoParams := normalizeCheckerInfoParams(info)
-	for k, p := range params {
-		v, ok := infoParams[k]
-		if ok {
-			v.Value = normalizeCheckerParamsValue(lintCtx, p)
-			continue
-		}
+	linterCtx.SetPackageInfo(pass.TypesInfo, pass.Pkg)
 
-		// param `k` isn't supported
-		if len(info.Params) == 0 {
-			return fmt.Errorf("checker %s config param %s doesn't exist: checker doesn't have params",
-				info.Name, k)
-		}
+	pkgIssues := runGocriticOnPackage(linterCtx, enabledCheckers, pass.Files)
 
-		var supportedKeys []string
-		for sk := range info.Params {
-			supportedKeys = append(supportedKeys, sk)
-		}
-		sort.Strings(supportedKeys)
-
-		return fmt.Errorf("checker %s config param %s doesn't exist, all existing: %s",
-			info.Name, k, supportedKeys)
+	issues := make([]goanalysis.Issue, 0, len(pkgIssues))
+	for i := range pkgIssues {
+		issues = append(issues, goanalysis.NewIssue(&pkgIssues[i], pass))
 	}
 
-	return nil
+	return issues, nil
 }
 
-// normalizeCheckerParamsValue normalizes value types.
-// go-critic asserts that CheckerParam.Value has some specific types,
-// but the file parsers (TOML, YAML, JSON) don't create the same representation for raw type.
-// then we have to convert value types into the expected value types.
-// Maybe in the future, this kind of conversion will be done in go-critic itself.
-func normalizeCheckerParamsValue(lintCtx *linter.Context, p interface{}) interface{} {
-	rv := reflect.ValueOf(p)
-	switch rv.Type().Kind() {
-	case reflect.Int64, reflect.Int32, reflect.Int16, reflect.Int8, reflect.Int:
-		return int(rv.Int())
-	case reflect.Bool:
-		return rv.Bool()
-	case reflect.String:
-		// Perform variable substitution.
-		return strings.ReplaceAll(rv.String(), "${configDir}", lintCtx.Cfg.GetConfigDir())
-	default:
-		return p
-	}
-}
-
-func buildEnabledCheckers(lintCtx *linter.Context, linterCtx *gocriticlinter.Context) ([]*gocriticlinter.Checker, error) {
-	s := lintCtx.Settings().Gocritic
-	allParams := s.GetLowercasedParams()
+func (w goCriticWrapper) buildEnabledCheckers(linterCtx *gocriticlinter.Context) ([]*gocriticlinter.Checker, error) {
+	allParams := w.settings.GetLowercasedParams()
 
 	var enabledCheckers []*gocriticlinter.Checker
 	for _, info := range gocriticlinter.GetCheckersInfo() {
-		if !s.IsCheckEnabled(info.Name) {
+		if !w.settings.IsCheckEnabled(info.Name) {
 			continue
 		}
 
-		if err := configureCheckerInfo(lintCtx, info, allParams); err != nil {
+		if err := w.configureCheckerInfo(info, allParams); err != nil {
 			return nil, err
 		}
 
@@ -172,14 +129,14 @@ func runGocriticOnPackage(linterCtx *gocriticlinter.Context, checkers []*gocriti
 	return res
 }
 
-func runGocriticOnFile(ctx *gocriticlinter.Context, f *ast.File, checkers []*gocriticlinter.Checker) []result.Issue {
+func runGocriticOnFile(linterCtx *gocriticlinter.Context, f *ast.File, checkers []*gocriticlinter.Checker) []result.Issue {
 	var res []result.Issue
 
 	for _, c := range checkers {
 		// All checkers are expected to use *lint.Context
 		// as read-only structure, so no copying is required.
 		for _, warn := range c.Check(f) {
-			pos := ctx.FileSet.Position(warn.Node.Pos())
+			pos := linterCtx.FileSet.Position(warn.Node.Pos())
 			issue := result.Issue{
 				Pos:        pos,
 				Text:       fmt.Sprintf("%s: %s", c.Info.Name, warn.Text),
@@ -201,4 +158,67 @@ func runGocriticOnFile(ctx *gocriticlinter.Context, f *ast.File, checkers []*goc
 	}
 
 	return res
+}
+
+func (w goCriticWrapper) configureCheckerInfo(info *gocriticlinter.CheckerInfo, allParams map[string]config.GocriticCheckSettings) error {
+	params := allParams[strings.ToLower(info.Name)]
+	if params == nil { // no config for this checker
+		return nil
+	}
+
+	infoParams := normalizeCheckerInfoParams(info)
+	for k, p := range params {
+		v, ok := infoParams[k]
+		if ok {
+			v.Value = w.normalizeCheckerParamsValue(p)
+			continue
+		}
+
+		// param `k` isn't supported
+		if len(info.Params) == 0 {
+			return fmt.Errorf("checker %s config param %s doesn't exist: checker doesn't have params",
+				info.Name, k)
+		}
+
+		var supportedKeys []string
+		for sk := range info.Params {
+			supportedKeys = append(supportedKeys, sk)
+		}
+		sort.Strings(supportedKeys)
+
+		return fmt.Errorf("checker %s config param %s doesn't exist, all existing: %s",
+			info.Name, k, supportedKeys)
+	}
+
+	return nil
+}
+
+func normalizeCheckerInfoParams(info *gocriticlinter.CheckerInfo) gocriticlinter.CheckerParams {
+	// lowercase info param keys here because golangci-lint's config parser lowercases all strings
+	ret := gocriticlinter.CheckerParams{}
+	for k, v := range info.Params {
+		ret[strings.ToLower(k)] = v
+	}
+
+	return ret
+}
+
+// normalizeCheckerParamsValue normalizes value types.
+// go-critic asserts that CheckerParam.Value has some specific types,
+// but the file parsers (TOML, YAML, JSON) don't create the same representation for raw type.
+// then we have to convert value types into the expected value types.
+// Maybe in the future, this kind of conversion will be done in go-critic itself.
+func (w goCriticWrapper) normalizeCheckerParamsValue(p interface{}) interface{} {
+	rv := reflect.ValueOf(p)
+	switch rv.Type().Kind() {
+	case reflect.Int64, reflect.Int32, reflect.Int16, reflect.Int8, reflect.Int:
+		return int(rv.Int())
+	case reflect.Bool:
+		return rv.Bool()
+	case reflect.String:
+		// Perform variable substitution.
+		return strings.ReplaceAll(rv.String(), "${configDir}", w.cfg.GetConfigDir())
+	default:
+		return p
+	}
 }

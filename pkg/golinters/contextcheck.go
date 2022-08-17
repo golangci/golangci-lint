@@ -8,11 +8,10 @@ import (
 )
 
 func NewContextCheck() *goanalysis.Linter {
-	analyzer := contextcheck.NewAnalyzer()
 	return goanalysis.NewLinter(
 		"contextcheck",
 		"check the function whether use a non-inherited context",
-		[]*analysis.Analyzer{analyzer},
+		[]*analysis.Analyzer{contextcheck.NewAnalyzer()},
 		nil,
 	).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }

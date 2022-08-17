@@ -27,6 +27,7 @@ func NewTestifyAssertEqualProto() *goanalysis.Linter {
 		Name:     testifyAssertEqualProto,
 		Doc:      goanalysis.TheOnlyanalyzerDoc,
 		Requires: []*analysis.Analyzer{inspect.Analyzer},
+		Run: 	    goanalysis.DummyRun,
 	}
 	return goanalysis.NewLinter(
 		testifyAssertEqualProto,

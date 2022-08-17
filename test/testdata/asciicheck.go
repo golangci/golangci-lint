@@ -1,4 +1,4 @@
-//args: -Easciicheck
+//golangcitest:args -Easciicheck
 package testdata
 
 import (

@@ -10,7 +10,7 @@ import (
 func Test_extractExampleSnippets(t *testing.T) {
 	t.Skip("only for debugging purpose")
 
-	example, err := os.ReadFile("../../../golangci-lint/.golangci.example.yml")
+	example, err := os.ReadFile("../../../golangci-lint/.golangci.reference.yml")
 	require.NoError(t, err)
 
 	m, err := extractExampleSnippets(example)

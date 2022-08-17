@@ -1,12 +1,12 @@
-//args: -Edepguard
-//config_path: testdata/configs/depguard_additional_guards.yml
+//golangcitest:args -Edepguard
+//golangcitest:config_path testdata/configs/depguard_additional_guards.yml
 package testdata
 
 import (
-	"compress/gzip" // ERROR "`compress/gzip` is in the blacklist"
-	"fmt"           // ERROR "`fmt` is in the blacklist"
-	"log"           // ERROR "`log` is in the blacklist: don't use log"
-	"strings"       // ERROR "`strings` is in the blacklist: disallowed in additional guard"
+	"compress/gzip" // ERROR "`compress/gzip` is in the denylist"
+	"fmt"           // ERROR "`fmt` is in the denylist"
+	"log"           // ERROR "`log` is in the denylist: don't use log"
+	"strings"       // ERROR "`strings` is in the denylist: disallowed in additional guard"
 )
 
 func SpewDebugInfo() {

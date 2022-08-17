@@ -20,6 +20,7 @@ func NewTickerInLoop() *goanalysis.Linter {
 	analyzer := &analysis.Analyzer{
 		Name: tickerInLoopName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
+		Run:  goanalysis.DummyRun,
 	}
 	return goanalysis.NewLinter(
 		tickerInLoopName,

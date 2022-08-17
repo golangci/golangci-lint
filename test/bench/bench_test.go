@@ -2,6 +2,7 @@ package bench
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"go/build"
 	"log"
@@ -16,7 +17,7 @@ import (
 	gops "github.com/mitchellh/go-ps"
 	"github.com/shirou/gopsutil/v3/process"
 
-	"github.com/golangci/golangci-lint/test/testshared"
+	"github.com/anduril/golangci-lint/test/testshared"
 )
 
 func chdir(b *testing.B, dir string) {
@@ -123,7 +124,7 @@ func getLinterMemoryMB(b *testing.B, progName string) (int, error) {
 		}
 	}
 	if progPID == 0 {
-		return 0, fmt.Errorf("no process")
+		return 0, errors.New("no process")
 	}
 
 	allProgPIDs := []int{progPID}

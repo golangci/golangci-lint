@@ -123,6 +123,7 @@ func (lp *loadingPackage) loadFromSource(loadMode LoadMode) error {
 
 	pkg.TypesInfo = &types.Info{
 		Types:      make(map[ast.Expr]types.TypeAndValue),
+		Instances:  make(map[*ast.Ident]types.Instance),
 		Defs:       make(map[*ast.Ident]types.Object),
 		Uses:       make(map[*ast.Ident]types.Object),
 		Implicits:  make(map[ast.Node]types.Object),

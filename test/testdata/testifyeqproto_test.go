@@ -1,4 +1,4 @@
-//args: -Etestifyeqproto
+//golangcitest:args -Etestifyeqproto
 package testdata
 
 import (

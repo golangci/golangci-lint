@@ -1,5 +1,5 @@
-// args: -Eerrchkjson
-// config_path: testdata/configs/errchkjson_no_exported.yml
+//golangcitest:args -Eerrchkjson
+//golangcitest:config_path testdata/configs/errchkjson_no_exported.yml
 package testdata
 
 import (

@@ -7,6 +7,8 @@ import (
 	"go/token"
 	"os"
 	"reflect"
+	"strings"
+	"sync"
 
 	"github.com/BurntSushi/toml"
 	reviveConfig "github.com/mgechev/revive/config"
@@ -33,12 +35,16 @@ type jsonObject struct {
 }
 
 // NewRevive returns a new Revive linter.
-func NewRevive(cfg *config.ReviveSettings) *goanalysis.Linter {
-	var issues []goanalysis.Issue
+//
+//nolint:dupl
+func NewRevive(settings *config.ReviveSettings) *goanalysis.Linter {
+	var mu sync.Mutex
+	var resIssues []goanalysis.Issue
 
 	analyzer := &analysis.Analyzer{
 		Name: goanalysis.TheOnlyAnalyzerName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
+		Run:  goanalysis.DummyRun,
 	}
 
 	return goanalysis.NewLinter(
@@ -48,72 +54,86 @@ func NewRevive(cfg *config.ReviveSettings) *goanalysis.Linter {
 		nil,
 	).WithContextSetter(func(lintCtx *linter.Context) {
 		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
-			var files []string
-			for _, file := range pass.Files {
-				files = append(files, pass.Fset.PositionFor(file.Pos(), false).Filename)
-			}
-			packages := [][]string{files}
-
-			conf, err := getReviveConfig(cfg)
+			issues, err := runRevive(lintCtx, pass, settings)
 			if err != nil {
 				return nil, err
 			}
 
-			formatter, err := reviveConfig.GetFormatter("json")
-			if err != nil {
-				return nil, err
+			if len(issues) == 0 {
+				return nil, nil
 			}
 
-			revive := lint.New(os.ReadFile, cfg.MaxOpenFiles)
-
-			lintingRules, err := reviveConfig.GetLintingRules(conf)
-			if err != nil {
-				return nil, err
-			}
-
-			failures, err := revive.Lint(packages, lintingRules, *conf)
-			if err != nil {
-				return nil, err
-			}
-
-			formatChan := make(chan lint.Failure)
-			exitChan := make(chan bool)
-
-			var output string
-			go func() {
-				output, err = formatter.Format(formatChan, *conf)
-				if err != nil {
-					lintCtx.Log.Errorf("Format error: %v", err)
-				}
-				exitChan <- true
-			}()
-
-			for f := range failures {
-				if f.Confidence < conf.Confidence {
-					continue
-				}
-
-				formatChan <- f
-			}
-
-			close(formatChan)
-			<-exitChan
-
-			var results []jsonObject
-			err = json.Unmarshal([]byte(output), &results)
-			if err != nil {
-				return nil, err
-			}
-
-			for i := range results {
-				issues = append(issues, reviveToIssue(pass, &results[i]))
-			}
+			mu.Lock()
+			resIssues = append(resIssues, issues...)
+			mu.Unlock()
 
 			return nil, nil
 		}
 	}).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
-		return issues
+		return resIssues
 	}).WithLoadMode(goanalysis.LoadModeSyntax)
+}
+
+func runRevive(lintCtx *linter.Context, pass *analysis.Pass, settings *config.ReviveSettings) ([]goanalysis.Issue, error) {
+	packages := [][]string{getFileNames(pass)}
+
+	conf, err := getReviveConfig(settings)
+	if err != nil {
+		return nil, err
+	}
+
+	formatter, err := reviveConfig.GetFormatter("json")
+	if err != nil {
+		return nil, err
+	}
+
+	revive := lint.New(os.ReadFile, settings.MaxOpenFiles)
+
+	lintingRules, err := reviveConfig.GetLintingRules(conf, []lint.Rule{})
+	if err != nil {
+		return nil, err
+	}
+
+	failures, err := revive.Lint(packages, lintingRules, *conf)
+	if err != nil {
+		return nil, err
+	}
+
+	formatChan := make(chan lint.Failure)
+	exitChan := make(chan bool)
+
+	var output string
+	go func() {
+		output, err = formatter.Format(formatChan, *conf)
+		if err != nil {
+			lintCtx.Log.Errorf("Format error: %v", err)
+		}
+		exitChan <- true
+	}()
+
+	for f := range failures {
+		if f.Confidence < conf.Confidence {
+			continue
+		}
+
+		formatChan <- f
+	}
+
+	close(formatChan)
+	<-exitChan
+
+	var results []jsonObject
+	err = json.Unmarshal([]byte(output), &results)
+	if err != nil {
+		return nil, err
+	}
+
+	var issues []goanalysis.Issue
+	for i := range results {
+		issues = append(issues, reviveToIssue(pass, &results[i]))
+	}
+
+	return issues, nil
 }
 
 func reviveToIssue(pass *analysis.Pass, object *jsonObject) goanalysis.Issue {
@@ -141,7 +161,7 @@ func reviveToIssue(pass *analysis.Pass, object *jsonObject) goanalysis.Issue {
 
 // This function mimics the GetConfig function of revive.
 // This allows to get default values and right types.
-// https://github.com/golangci/golangci-lint/issues/1745
+// https://github.com/anduril/golangci-lint/issues/1745
 // https://github.com/mgechev/revive/blob/v1.1.4/config/config.go#L182
 func getReviveConfig(cfg *config.ReviveSettings) (*lint.Config, error) {
 	conf := defaultConfig()
@@ -163,6 +183,7 @@ func getReviveConfig(cfg *config.ReviveSettings) (*lint.Config, error) {
 	}
 
 	normalizeConfig(conf)
+	ignoreRules(conf)
 
 	reviveDebugf("revive configuration: %#v", conf)
 
@@ -231,7 +252,7 @@ func safeTomlSlice(r []interface{}) []interface{} {
 // This element is not exported by revive, so we need copy the code.
 // Extracted from https://github.com/mgechev/revive/blob/v1.1.4/config/config.go#L15
 var defaultRules = []lint.Rule{
-	&rule.VarDeclarationsRule{},
+	// &rule.VarDeclarationsRule{}, // TODO(ldez) https://github.com/anduril/golangci-lint/issues/2997 (var-declaration)
 	&rule.PackageCommentsRule{},
 	&rule.DotImportsRule{},
 	&rule.BlankImportsRule{},
@@ -239,15 +260,15 @@ var defaultRules = []lint.Rule{
 	&rule.VarNamingRule{},
 	&rule.IndentErrorFlowRule{},
 	&rule.RangeRule{},
-	&rule.ErrorfRule{},
+	// &rule.ErrorfRule{}, // TODO(ldez) https://github.com/anduril/golangci-lint/issues/2997 (errorf
 	&rule.ErrorNamingRule{},
 	&rule.ErrorStringsRule{},
 	&rule.ReceiverNamingRule{},
 	&rule.IncrementDecrementRule{},
 	&rule.ErrorReturnRule{},
-	&rule.UnexportedReturnRule{},
-	&rule.TimeNamingRule{},
-	&rule.ContextKeysType{},
+	// &rule.UnexportedReturnRule{}, // TODO(ldez) https://github.com/anduril/golangci-lint/issues/2997 (unexported-return)
+	// &rule.TimeNamingRule{}, // TODO(ldez) https://github.com/anduril/golangci-lint/issues/2997 (time-naming)
+	// &rule.ContextKeysType{}, // TODO(ldez) https://github.com/anduril/golangci-lint/issues/2997 (context-keys-type)
 	&rule.ContextAsArgumentRule{},
 }
 
@@ -268,7 +289,7 @@ var allRules = append([]lint.Rule{
 	&rule.FlagParamRule{},
 	&rule.UnnecessaryStmtRule{},
 	&rule.StructTagRule{},
-	&rule.ModifiesValRecRule{},
+	// &rule.ModifiesValRecRule{}, // TODO(ldez) https://github.com/anduril/golangci-lint/issues/2997 (modifies-value-receiver)
 	&rule.ConstantLogicalExprRule{},
 	&rule.BoolLiteralRule{},
 	&rule.RedefinesBuiltinIDRule{},
@@ -276,7 +297,7 @@ var allRules = append([]lint.Rule{
 	&rule.FunctionResultsLimitRule{},
 	&rule.MaxPublicStructsRule{},
 	&rule.RangeValInClosureRule{},
-	&rule.RangeValAddress{},
+	// &rule.RangeValAddress{}, // TODO(ldez) https://github.com/anduril/golangci-lint/issues/2997 (range-val-address)
 	&rule.WaitGroupByValueRule{},
 	&rule.AtomicRule{},
 	&rule.EmptyLinesRule{},
@@ -286,9 +307,9 @@ var allRules = append([]lint.Rule{
 	&rule.ImportShadowingRule{},
 	&rule.BareReturnRule{},
 	&rule.UnusedReceiverRule{},
-	&rule.UnhandledErrorRule{},
+	// &rule.UnhandledErrorRule{}, // TODO(ldez) https://github.com/anduril/golangci-lint/issues/2997 (unhandled-error)
 	&rule.CognitiveComplexityRule{},
-	&rule.StringOfIntRule{},
+	// &rule.StringOfIntRule{}, // TODO(ldez) https://github.com/anduril/golangci-lint/issues/2997 (string-of-int)
 	&rule.StringFormatRule{},
 	&rule.EarlyReturnRule{},
 	&rule.UnconditionalRecursionRule{},
@@ -299,7 +320,7 @@ var allRules = append([]lint.Rule{
 	&rule.NestedStructs{},
 	&rule.IfReturnRule{},
 	&rule.UselessBreak{},
-	&rule.TimeEqualRule{},
+	// &rule.TimeEqualRule{}, // TODO(ldez) https://github.com/anduril/golangci-lint/issues/2997 (time-equal)
 	&rule.BannedCharsRule{},
 	&rule.OptimizeOperandsOrderRule{},
 }, defaultRules...)
@@ -364,4 +385,34 @@ func defaultConfig() *lint.Config {
 		defaultConfig.Rules[r.Name()] = lint.RuleConfig{}
 	}
 	return &defaultConfig
+}
+
+// TODO(ldez) https://github.com/anduril/golangci-lint/issues/2997
+func ignoreRules(conf *lint.Config) {
+	f := []string{
+		"context-keys-type",
+		"errorf",
+		"modifies-value-receiver",
+		"range-val-address",
+		"string-of-int",
+		"time-equal",
+		"time-naming",
+		"unexported-return",
+		"unhandled-error",
+		"var-declaration",
+	}
+
+	var ignored []string
+	for _, s := range f {
+		if _, ok := conf.Rules[s]; ok {
+			delete(conf.Rules, s)
+			ignored = append(ignored, s)
+		}
+	}
+
+	if len(ignored) > 0 {
+		linterLogger.Warnf("revive: the following rules (%s) are ignored due to a performance problem "+
+			"(https://github.com/anduril/golangci-lint/issues/2997)",
+			strings.Join(ignored, ","))
+	}
 }

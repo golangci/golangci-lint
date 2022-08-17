@@ -13,8 +13,6 @@ import (
 func NewDecorder(settings *config.DecorderSettings) *goanalysis.Linter {
 	a := decorder.Analyzer
 
-	analyzers := []*analysis.Analyzer{a}
-
 	// disable all rules/checks by default
 	cfg := map[string]interface{}{
 		"disable-dec-num-check":         true,
@@ -32,7 +30,7 @@ func NewDecorder(settings *config.DecorderSettings) *goanalysis.Linter {
 	return goanalysis.NewLinter(
 		a.Name,
 		a.Doc,
-		analyzers,
+		[]*analysis.Analyzer{a},
 		map[string]map[string]interface{}{a.Name: cfg},
 	).WithLoadMode(goanalysis.LoadModeSyntax)
 }

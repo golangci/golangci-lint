@@ -50,7 +50,7 @@ func main() {
 	if err := rewriteDocs(replacements); err != nil {
 		log.Fatalf("Failed to rewrite docs: %s", err)
 	}
-	log.Printf("Successfully expanded templates")
+	log.Print("Successfully expanded templates")
 }
 
 func updateStateFile(replacements map[string]string) error {
@@ -137,7 +137,7 @@ type latestRelease struct {
 }
 
 func getLatestVersion() (string, error) {
-	req, err := http.NewRequest( // nolint:noctx
+	req, err := http.NewRequest( //nolint:noctx
 		http.MethodGet,
 		"https://api.github.com/repos/golangci/golangci-lint/releases/latest",
 		http.NoBody,
@@ -164,14 +164,14 @@ func getLatestVersion() (string, error) {
 }
 
 func buildTemplateContext() (map[string]string, error) {
-	golangciYamlExample, err := os.ReadFile(".golangci.example.yml")
+	golangciYamlExample, err := os.ReadFile(".golangci.reference.yml")
 	if err != nil {
-		return nil, fmt.Errorf("can't read .golangci.example.yml: %w", err)
+		return nil, fmt.Errorf("can't read .golangci.reference.yml: %w", err)
 	}
 
 	snippets, err := extractExampleSnippets(golangciYamlExample)
 	if err != nil {
-		return nil, fmt.Errorf("can't read .golangci.example.yml: %w", err)
+		return nil, fmt.Errorf("can't read .golangci.reference.yml: %w", err)
 	}
 
 	if err = exec.Command("make", "build").Run(); err != nil {
@@ -313,32 +313,77 @@ func spanWithID(id, title, icon string) string {
 	return fmt.Sprintf(`<span id=%q title=%q>%s</span>`, id, title, icon)
 }
 
+type authorDetails struct {
+	Linters []string
+	Profile string
+	Avatar  string
+}
+
 func getThanksList() string {
-	var lines []string
-	addedAuthors := map[string]bool{}
+	addedAuthors := map[string]*authorDetails{}
+
 	for _, lc := range lintersdb.NewManager(nil, nil).GetAllSupportedLinterConfigs() {
 		if lc.OriginalURL == "" {
 			continue
 		}
 
-		const githubPrefix = "https://github.com/"
-		if !strings.HasPrefix(lc.OriginalURL, githubPrefix) {
-			continue
+		linterURL := lc.OriginalURL
+		if lc.Name() == "staticcheck" {
+			linterURL = "https://github.com/dominikh/go-tools"
 		}
 
-		githubSuffix := strings.TrimPrefix(lc.OriginalURL, githubPrefix)
-		githubAuthor := strings.Split(githubSuffix, "/")[0]
-		if addedAuthors[githubAuthor] {
+		if author := extractAuthor(linterURL, "https://github.com/"); author != "" && author != "golangci" {
+			if _, ok := addedAuthors[author]; ok {
+				addedAuthors[author].Linters = append(addedAuthors[author].Linters, lc.Name())
+			} else {
+				addedAuthors[author] = &authorDetails{
+					Linters: []string{lc.Name()},
+					Profile: fmt.Sprintf("[%[1]s](https://github.com/sponsors/%[1]s)", author),
+					Avatar:  fmt.Sprintf(`<img src="https://github.com/%[1]s.png" alt="%[1]s" style="max-width: 100%%;" width="20px;" />`, author),
+				}
+			}
+		} else if author := extractAuthor(linterURL, "https://gitlab.com/"); author != "" {
+			if _, ok := addedAuthors[author]; ok {
+				addedAuthors[author].Linters = append(addedAuthors[author].Linters, lc.Name())
+			} else {
+				addedAuthors[author] = &authorDetails{
+					Linters: []string{lc.Name()},
+					Profile: fmt.Sprintf("[%[1]s](https://gitlab.com/%[1]s)", author),
+				}
+			}
+		} else {
 			continue
 		}
-		addedAuthors[githubAuthor] = true
+	}
 
-		line := fmt.Sprintf("- [%s](https://github.com/%s)",
-			githubAuthor, githubAuthor)
-		lines = append(lines, line)
+	var authors []string
+	for author := range addedAuthors {
+		authors = append(authors, author)
+	}
+
+	sort.Slice(authors, func(i, j int) bool {
+		return strings.ToLower(authors[i]) < strings.ToLower(authors[j])
+	})
+
+	lines := []string{
+		"|Author|Linter(s)|",
+		"|---|---|",
+	}
+
+	for _, author := range authors {
+		lines = append(lines, fmt.Sprintf("|%s %s|%s|",
+			addedAuthors[author].Avatar, addedAuthors[author].Profile, strings.Join(addedAuthors[author].Linters, ", ")))
 	}
 
 	return strings.Join(lines, "\n")
+}
+
+func extractAuthor(originalURL, prefix string) string {
+	if !strings.HasPrefix(originalURL, prefix) {
+		return ""
+	}
+
+	return strings.SplitN(strings.TrimPrefix(originalURL, prefix), "/", 2)[0]
 }
 
 type SettingSnippets struct {

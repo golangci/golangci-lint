@@ -1,4 +1,4 @@
-// args: -Eunused
+//golangcitest:args -Eunused
 package testdata
 
 // TESTS WORK LOCALLY BUT NOT ON GITHUB DUE TO GRAPHENE BEING IN A PRIVATE REPO AND NOT ACCESSIBLE

@@ -8,3 +8,12 @@ CVE-2021-3121
 
 # Skip for indirect dependency github.com/dgrijalva/jwt-go@3.2.0
 CVE-2020-26160
+
+# Skip for indirect dependencies:
+# golang/github.com/hashicorp/consul/api@v1.12.0
+# golang/github.com/hashicorp/consul/sdk@v0.8.0
+CVE-2022-29153
+CVE-2022-24687
+
+# Skip for indirect dependencies golang/github.com/valyala/fasthttp@v1.30.0
+CVE-2022-21221

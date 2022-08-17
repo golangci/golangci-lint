@@ -1,4 +1,4 @@
-//args: -Egoimports
+//golangcitest:args -Egoimports
 package testdata
 
 import (

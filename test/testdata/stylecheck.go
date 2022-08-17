@@ -1,4 +1,4 @@
-//args: -Estylecheck
+//golangcitest:args -Estylecheck
 package testdata
 
 func Stylecheck(x int) {

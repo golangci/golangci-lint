@@ -1,5 +1,5 @@
-//args: -Egovet
-//config: linters-settings.govet.check-shadowing=true
+//golangcitest:args -Egovet
+//golangcitest:config linters-settings.govet.check-shadowing=true
 package testdata
 
 import (
@@ -9,7 +9,7 @@ import (
 )
 
 func GovetComposites() error {
-	return &os.PathError{"first", "path", os.ErrNotExist} // ERROR "composites: \\`(os|io/fs)\\.PathError\\` composite literal uses unkeyed fields"
+	return &os.PathError{"first", "path", os.ErrNotExist} // ERROR "composites: io/fs\\.PathError struct literal uses unkeyed fields"
 }
 
 func GovetShadow(f io.Reader, buf []byte) (err error) {

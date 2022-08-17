@@ -3,6 +3,7 @@ package commands
 import (
 	"encoding/json"
 	"fmt"
+	"os"
 	"strings"
 
 	"github.com/spf13/cobra"
@@ -31,27 +32,28 @@ func initVersionFlagSet(fs *pflag.FlagSet, cfg *config.Config) {
 
 func (e *Executor) initVersion() {
 	versionCmd := &cobra.Command{
-		Use:   "version",
-		Short: "Version",
+		Use:               "version",
+		Short:             "Version",
+		Args:              cobra.NoArgs,
+		ValidArgsFunction: cobra.NoFileCompletions,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			switch strings.ToLower(e.cfg.Version.Format) {
 			case "short":
 				fmt.Println(e.version)
+				return nil
+
 			case "json":
 				ver := jsonVersion{
 					Version: e.version,
 					Commit:  e.commit,
 					Date:    e.date,
 				}
-				data, err := json.Marshal(&ver)
-				if err != nil {
-					return err
-				}
-				fmt.Println(string(data))
+				return json.NewEncoder(os.Stdout).Encode(&ver)
+
 			default:
 				fmt.Printf("golangci-lint has version %s built from %s on %s\n", e.version, e.commit, e.date)
+				return nil
 			}
-			return nil
 		},
 	}
 

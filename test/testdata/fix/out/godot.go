@@ -1,4 +1,4 @@
-//args: -Egodot
+//golangcitest:args -Egodot
 package p
 
 /*

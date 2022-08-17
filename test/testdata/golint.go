@@ -1,4 +1,4 @@
-//args: -Egolint --internal-cmd-test
+//golangcitest:args -Egolint --internal-cmd-test
 package testdata
 
 var Go_lint string // ERROR "don't use underscores in Go names; var `Go_lint` should be `GoLint`"

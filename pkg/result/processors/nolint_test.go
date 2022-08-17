@@ -286,7 +286,7 @@ func TestNolintUnused(t *testing.T) {
 			Filename: fileName,
 			Line:     3,
 		},
-		FromLinter:           golinters.NolintlintName,
+		FromLinter:           golinters.NoLintLintName,
 		ExpectNoLint:         true,
 		ExpectedNoLintLinter: "varcheck",
 	}
@@ -297,7 +297,7 @@ func TestNolintUnused(t *testing.T) {
 			Filename: fileName,
 			Line:     5,
 		},
-		FromLinter:           golinters.NolintlintName,
+		FromLinter:           golinters.NoLintLintName,
 		ExpectNoLint:         true,
 		ExpectedNoLintLinter: "varcheck",
 	}

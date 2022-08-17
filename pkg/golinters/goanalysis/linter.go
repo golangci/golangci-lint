@@ -108,7 +108,7 @@ func (lnt *Linter) configureAnalyzer(a *analysis.Analyzer, cfg map[string]interf
 		if f == nil {
 			validFlagNames := allFlagNames(&a.Flags)
 			if len(validFlagNames) == 0 {
-				return fmt.Errorf("analyzer doesn't have settings")
+				return errors.New("analyzer doesn't have settings")
 			}
 
 			return fmt.Errorf("analyzer doesn't have setting %q, valid settings: %v",
@@ -210,4 +210,8 @@ func valueToString(v interface{}) string {
 	}
 
 	return fmt.Sprint(v)
+}
+
+func DummyRun(_ *analysis.Pass) (interface{}, error) {
+	return nil, nil
 }

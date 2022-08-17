@@ -19,7 +19,7 @@ func MakeFakeLoaderProgram(pass *analysis.Pass) *loader.Program {
 			{
 				Pkg:                   pass.Pkg,
 				Importable:            true, // not used
-				TransitivelyErrorFree: true, // TODO
+				TransitivelyErrorFree: true, // TODO ???
 
 				Files:  pass.Files,
 				Errors: nil,

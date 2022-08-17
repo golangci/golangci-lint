@@ -22,6 +22,9 @@ func NewWrapcheck(settings *config.WrapcheckSettings) *goanalysis.Linter {
 		if len(settings.IgnorePackageGlobs) != 0 {
 			cfg.IgnorePackageGlobs = settings.IgnorePackageGlobs
 		}
+		if len(settings.IgnoreInterfaceRegexps) != 0 {
+			cfg.IgnoreInterfaceRegexps = settings.IgnoreInterfaceRegexps
+		}
 	}
 
 	a := wrapcheck.NewAnalyzer(cfg)

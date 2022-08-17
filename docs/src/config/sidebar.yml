@@ -24,6 +24,8 @@
   items:
     - label: "Roadmap"
       link: "/product/roadmap/"
+    - label: "Thanks"
+      link: "/product/thanks/"
     - label: "Trusted By"
       link: "/product/trusted-by/"
     - label: "GitHub"

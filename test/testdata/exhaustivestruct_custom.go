@@ -1,10 +1,10 @@
-//args: -Eexhaustivestruct
-//config: linters-settings.exhaustivestruct.struct-patterns=*.Test1,*.Test3
+//golangcitest:args -Eexhaustivestruct --internal-cmd-test
+//golangcitest:config_path testdata/configs/exhaustivestruct.yml
 package testdata
 
 import "time"
 
-type Test1 struct {
+type ExhaustiveStructCustom struct {
 	A string
 	B int
 	c bool // private field inside the same package are not ignored
@@ -12,35 +12,42 @@ type Test1 struct {
 	E time.Time
 }
 
-var passTest1 = Test1{
-	A: "a",
-	B: 0,
-	c: false,
-	D: 1.0,
-	E: time.Now(),
+func exhaustiveStructCustom() {
+	// pass
+	_ = ExhaustiveStructCustom{
+		A: "a",
+		B: 0,
+		c: false,
+		D: 1.0,
+		E: time.Now(),
+	}
+
+	// fail
+	_ = ExhaustiveStructCustom{ // ERROR "B is missing in ExhaustiveStructCustom"
+		A: "a",
+		c: false,
+		D: 1.0,
+		E: time.Now(),
+	}
+
+	// failMultiple
+	_ = ExhaustiveStructCustom{ // ERROR "B, D are missing in ExhaustiveStructCustom"
+		A: "a",
+		c: false,
+		E: time.Now(),
+	}
+
+	// failPrivate
+	_ = ExhaustiveStructCustom{ // ERROR "c is missing in ExhaustiveStructCustom"
+		A: "a",
+		B: 0,
+		D: 1.0,
+		E: time.Now(),
+	}
+
 }
 
-var failTest1 = Test1{ // ERROR "B is missing in Test"
-	A: "a",
-	c: false,
-	D: 1.0,
-	E: time.Now(),
-}
-
-var failMultipleTest1 = Test1{ // ERROR "B, D are missing in Test"
-	A: "a",
-	c: false,
-	E: time.Now(),
-}
-
-var failPrivateTest1 = Test1{ // ERROR "c is missing in Test"
-	A: "a",
-	B: 0,
-	D: 1.0,
-	E: time.Now(),
-}
-
-type Test2 struct {
+type ExhaustiveStructCustom1 struct {
 	A string
 	B int
 	c bool // private field inside the same package are not ignored
@@ -48,35 +55,37 @@ type Test2 struct {
 	E time.Time
 }
 
-var passTest2 = Test1{
-	A: "a",
-	B: 0,
-	c: false,
-	D: 1.0,
-	E: time.Now(),
+func exhaustiveStructCustom1() {
+	_ = ExhaustiveStructCustom1{
+		A: "a",
+		B: 0,
+		c: false,
+		D: 1.0,
+		E: time.Now(),
+	}
+
+	_ = ExhaustiveStructCustom1{
+		A: "a",
+		c: false,
+		D: 1.0,
+		E: time.Now(),
+	}
+
+	_ = ExhaustiveStructCustom1{
+		A: "a",
+		c: false,
+		E: time.Now(),
+	}
+
+	_ = ExhaustiveStructCustom1{
+		A: "a",
+		B: 0,
+		D: 1.0,
+		E: time.Now(),
+	}
 }
 
-var failTest2 = Test2{
-	A: "a",
-	c: false,
-	D: 1.0,
-	E: time.Now(),
-}
-
-var failMultipleTest2 = Test2{
-	A: "a",
-	c: false,
-	E: time.Now(),
-}
-
-var failPrivateTest2 = Test2{
-	A: "a",
-	B: 0,
-	D: 1.0,
-	E: time.Now(),
-}
-
-type Test3 struct {
+type ExhaustiveStructCustom2 struct {
 	A string
 	B int
 	c bool // private field inside the same package are not ignored
@@ -84,30 +93,37 @@ type Test3 struct {
 	E time.Time
 }
 
-var passTest3 = Test3{
-	A: "a",
-	B: 0,
-	c: false,
-	D: 1.0,
-	E: time.Now(),
-}
+func exhaustiveStructCustom2() {
+	// pass
+	_ = ExhaustiveStructCustom2{
+		A: "a",
+		B: 0,
+		c: false,
+		D: 1.0,
+		E: time.Now(),
+	}
 
-var failTest3 = Test3{ // ERROR "B is missing in Test"
-	A: "a",
-	c: false,
-	D: 1.0,
-	E: time.Now(),
-}
+	// fail
+	_ = ExhaustiveStructCustom2{ // ERROR "B is missing in ExhaustiveStructCustom2"
+		A: "a",
+		c: false,
+		D: 1.0,
+		E: time.Now(),
+	}
 
-var failMultipleTest3 = Test3{ // ERROR "B, D are missing in Test"
-	A: "a",
-	c: false,
-	E: time.Now(),
-}
+	// failMultiple
+	_ = ExhaustiveStructCustom2{ // ERROR "B, D are missing in ExhaustiveStructCustom2"
+		A: "a",
+		c: false,
+		E: time.Now(),
+	}
 
-var failPrivateTest3 = Test3{ // ERROR "c is missing in Test"
-	A: "a",
-	B: 0,
-	D: 1.0,
-	E: time.Now(),
+	// failPrivate
+	_ = ExhaustiveStructCustom2{ // ERROR "c is missing in ExhaustiveStructCustom2"
+		A: "a",
+		B: 0,
+		D: 1.0,
+		E: time.Now(),
+	}
+
 }

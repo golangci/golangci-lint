@@ -1,4 +1,4 @@
-//args: -Etickerinloop
+//golangcitest:args -Etickerinloop
 package testdata
 
 import "time"

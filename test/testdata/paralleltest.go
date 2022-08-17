@@ -1,4 +1,4 @@
-//args: -Eparalleltest
+//golangcitest:args -Eparalleltest
 package testdata
 
 import (

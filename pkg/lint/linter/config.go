@@ -66,7 +66,7 @@ func (lc *Config) WithLoadFiles() *Config {
 
 func (lc *Config) WithLoadForGoAnalysis() *Config {
 	lc = lc.WithLoadFiles()
-	lc.LoadMode |= packages.NeedImports | packages.NeedDeps | packages.NeedExportsFile | packages.NeedTypesSizes
+	lc.LoadMode |= packages.NeedImports | packages.NeedDeps | packages.NeedExportFile | packages.NeedTypesSizes
 	lc.IsSlow = true
 	return lc
 }

@@ -1,4 +1,4 @@
-//args: -Ebidichk
+//golangcitest:args -Ebidichk
 package testdata
 
 import "fmt"

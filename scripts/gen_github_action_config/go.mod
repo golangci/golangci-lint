@@ -1,4 +1,4 @@
-module github.com/golangci/golangci-lint/scripts/gen_github_action_config
+module github.com/anduril/golangci-lint/scripts/gen_github_action_config
 
 go 1.16
 
