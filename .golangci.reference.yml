@@ -1854,6 +1854,11 @@ linters-settings:
     # Default: true
     strict-append: true
 
+  contextcheck:
+    # If you use contextcheck in docker ci, and feel a little bit slow, you can turn on this option.
+    # Default: false
+    disable-fact: true
+
   # The custom section can be used to define linter plugins to be loaded at runtime.
   # See README documentation for more info.
   custom:
@@ -1974,6 +1979,7 @@ linters:
     - whitespace
     - wrapcheck
     - wsl
+    - contextcheck
 
   # Enable all available linters.
   # Default: false
@@ -2078,6 +2084,7 @@ linters:
     - whitespace
     - wrapcheck
     - wsl
+    - contextcheck
 
   # Enable presets.
   # https://golangci-lint.run/usage/linters
