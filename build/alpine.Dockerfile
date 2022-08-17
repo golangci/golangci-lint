@@ -16,6 +16,8 @@ RUN CGO_ENABLED=0 go build -trimpath -ldflags "-s -w -X main.version=$VERSION -X
 
 # stage 2
 FROM golang:1.19-alpine
+# related to https://github.com/golangci/golangci-lint/issues/3107
+ENV GOROOT /usr/local/go
 # gcc is required to support cgo;
 # git and mercurial are needed most times for go get`, etc.
 # See https://github.com/docker-library/golang/issues/80
