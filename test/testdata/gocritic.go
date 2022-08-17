@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-var _ = *flag.Bool("global1", false, "") // ERROR `flagDeref: immediate deref in \*flag.Bool\(.global1., false, ..\) is most likely an error; consider using flag\.BoolVar`
+var _ = *flag.Bool("global1", false, "") // want `flagDeref: immediate deref in \*flag.Bool\(.global1., false, ..\) is most likely an error; consider using flag\.BoolVar`
 
 type size1 struct {
 	a bool
@@ -26,23 +26,23 @@ func gocriticRangeValCopySize1(ss []size1) {
 }
 
 func gocriticRangeValCopySize2(ss []size2) {
-	for _, s := range ss { // ERROR "rangeValCopy: each iteration copies 2 bytes.*"
+	for _, s := range ss { // want "rangeValCopy: each iteration copies 2 bytes.*"
 		log.Print(s)
 	}
 }
 
 func gocriticStringSimplify() {
 	s := "Most of the time, travellers worry about their luggage."
-	s = strings.Replace(s, ",", "", -1) // ERROR "ruleguard: this Replace call can be simplified.*"
+	s = strings.Replace(s, ",", "", -1) // want "ruleguard: this Replace call can be simplified.*"
 	log.Print(s)
 }
 
 func gocriticDup(x bool) {
-	if x && x { // ERROR "ruleguard: suspicious identical LHS and RHS.*"
+	if x && x { // want "ruleguard: suspicious identical LHS and RHS.*"
 		log.Print("x is true")
 	}
 }
 
 func gocriticRuleWrapperFunc() {
-	strings.Replace("abcabc", "a", "d", -1) // ERROR "ruleguard: this Replace call can be simplified.*"
+	strings.Replace("abcabc", "a", "d", -1) // want "ruleguard: this Replace call can be simplified.*"
 }

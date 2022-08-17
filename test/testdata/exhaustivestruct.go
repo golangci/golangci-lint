@@ -22,7 +22,7 @@ func exhaustiveStruct() {
 	}
 
 	// failPrivate
-	_ = ExhaustiveStruct{ // ERROR "c is missing in ExhaustiveStruct"
+	_ = ExhaustiveStruct{ // want "c is missing in ExhaustiveStruct"
 		A: "a",
 		B: 0,
 		D: 1.0,
@@ -30,7 +30,7 @@ func exhaustiveStruct() {
 	}
 
 	// fail
-	_ = ExhaustiveStruct{ // ERROR "B is missing in ExhaustiveStruct"
+	_ = ExhaustiveStruct{ // want "B is missing in ExhaustiveStruct"
 		A: "a",
 		c: false,
 		D: 1.0,
@@ -38,7 +38,7 @@ func exhaustiveStruct() {
 	}
 
 	// failMultiple
-	_ = ExhaustiveStruct{ // ERROR "B, D are missing in ExhaustiveStruct"
+	_ = ExhaustiveStruct{ // want "B, D are missing in ExhaustiveStruct"
 		A: "a",
 		c: false,
 		E: time.Now(),

@@ -15,7 +15,7 @@ func foo1(n int) int {
 	if n == 1 {
 		n2 := n * n
 		n3 := n2 * n
-		return n3 // ERROR "return with no blank line before"
+		return n3 // want "return with no blank line before"
 	}
 
 	return 1

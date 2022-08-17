@@ -9,14 +9,14 @@ import (
 
 func UseMagicNumber() {
 	c := &http.Client{
-		Timeout: 2 * time.Second, // ERROR "Magic number: 2, in <assign> detected"
+		Timeout: 2 * time.Second, // want "Magic number: 2, in <assign> detected"
 	}
 
 	res, err := c.Get("http://www.google.com")
 	if err != nil {
 		log.Fatal(err)
 	}
-	if res.StatusCode != 200 { // ERROR "Magic number: 200, in <condition> detected"
+	if res.StatusCode != 200 { // want "Magic number: 200, in <condition> detected"
 		log.Println("Something went wrong")
 	}
 }

@@ -12,7 +12,7 @@ func JSONMarshalStructWithoutExportedFields() {
 		privateField            bool
 		ExportedButOmittedField bool `json:"-"`
 	}
-	_, err := json.Marshal(withoutExportedFields) // ERROR "Error argument passed to `encoding/json.Marshal` does not contain any exported field"
+	_, err := json.Marshal(withoutExportedFields) // want "Error argument passed to `encoding/json.Marshal` does not contain any exported field"
 	_ = err
 }
 

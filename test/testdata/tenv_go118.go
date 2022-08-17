@@ -10,10 +10,10 @@ import (
 )
 
 func FuzzF(f *testing.F) {
-	os.Setenv("a", "b")        // ERROR "os\\.Setenv\\(\\) can be replaced by `f\\.Setenv\\(\\)` in FuzzF"
-	err := os.Setenv("a", "b") // ERROR "os\\.Setenv\\(\\) can be replaced by `f\\.Setenv\\(\\)` in FuzzF"
+	os.Setenv("a", "b")        // want "os\\.Setenv\\(\\) can be replaced by `f\\.Setenv\\(\\)` in FuzzF"
+	err := os.Setenv("a", "b") // want "os\\.Setenv\\(\\) can be replaced by `f\\.Setenv\\(\\)` in FuzzF"
 	_ = err
-	if err := os.Setenv("a", "b"); err != nil { // ERROR "os\\.Setenv\\(\\) can be replaced by `f\\.Setenv\\(\\)` in FuzzF"
+	if err := os.Setenv("a", "b"); err != nil { // want "os\\.Setenv\\(\\) can be replaced by `f\\.Setenv\\(\\)` in FuzzF"
 		_ = err
 	}
 }

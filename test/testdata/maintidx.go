@@ -4,7 +4,7 @@ package testdata
 func over20() {
 }
 
-func under20() { // ERROR "Function name: under20, Cyclomatic Complexity: 76, Halstead Volume: 1636.00, Maintainability Index: 17"
+func under20() { // want "Function name: under20, Cyclomatic Complexity: 76, Halstead Volume: 1636.00, Maintainability Index: 17"
 	for true {
 		if false {
 			if false {

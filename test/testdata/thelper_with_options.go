@@ -4,12 +4,12 @@ package testdata
 
 import "testing"
 
-func thelperWithHelperAfterAssignmentWO(t *testing.T) { // ERROR "test helper function should start from t.Helper()"
+func thelperWithHelperAfterAssignmentWO(t *testing.T) { // want "test helper function should start from t.Helper()"
 	_ = 0
 	t.Helper()
 }
 
-func thelperWithNotFirstWO(s string, t *testing.T, i int) { // ERROR `parameter \*testing.T should be the first`
+func thelperWithNotFirstWO(s string, t *testing.T, i int) { // want `parameter \*testing.T should be the first`
 	t.Helper()
 }
 

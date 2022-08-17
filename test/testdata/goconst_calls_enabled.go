@@ -7,7 +7,7 @@ import "fmt"
 const FooBar = "foobar"
 
 func Baz() {
-	a := "foobar" // ERROR "string `foobar` has 4 occurrences, but such constant `FooBar` already exists"
+	a := "foobar" // want "string `foobar` has 4 occurrences, but such constant `FooBar` already exists"
 	fmt.Print(a)
 	b := "foobar"
 	fmt.Print(b)

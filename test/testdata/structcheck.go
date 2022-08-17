@@ -2,5 +2,5 @@
 package testdata
 
 type t struct {
-	unusedField int // ERROR "`unusedField` is unused"
+	unusedField int // want "`unusedField` is unused"
 }

@@ -12,6 +12,6 @@ func TestErrcheckExclude() []byte {
 }
 
 func TestErrcheckNoExclude() []byte {
-	ret, _ := ioutil.ReadAll(nil) // ERROR "Error return value of `ioutil.ReadAll` is not checked"
+	ret, _ := ioutil.ReadAll(nil) // want "Error return value of `ioutil.ReadAll` is not checked"
 	return ret
 }

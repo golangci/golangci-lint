@@ -49,17 +49,16 @@ func testSourcesFromDir(t *testing.T, dir string) {
 func testOneSource(t *testing.T, sourcePath string) {
 	t.Helper()
 
-	args := []string{
-		"--allow-parallel-runners",
-		"--disable-all",
-		"--print-issued-lines=false",
-		"--out-format=line-number",
-		"--max-same-issues=100",
-	}
-
 	rc := testshared.ParseTestDirectives(t, sourcePath)
 	if rc == nil {
 		t.Skipf("Skipped: %s", sourcePath)
+	}
+
+	args := []string{
+		"--allow-parallel-runners",
+		"--disable-all",
+		"--out-format=json",
+		"--max-same-issues=100",
 	}
 
 	for _, addArg := range []string{"", "-Etypecheck"} {
@@ -68,8 +67,6 @@ func testOneSource(t *testing.T, sourcePath string) {
 		if addArg != "" {
 			caseArgs = append(caseArgs, addArg)
 		}
-
-		files := []string{sourcePath}
 
 		runner := testshared.NewRunnerBuilder(t).
 			WithNoParallelRunners().
@@ -88,13 +85,7 @@ func testOneSource(t *testing.T, sourcePath string) {
 			require.Equal(t, exitcodes.IssuesFound, exitErr.ExitCode(), "Unexpected exit code: %s", string(output))
 		}
 
-		fullshort := make([]string, 0, len(files)*2)
-		for _, f := range files {
-			fullshort = append(fullshort, f, filepath.Base(f))
-		}
-
-		err = errorCheck(string(output), false, rc.ExpectedLinter, fullshort...)
-		require.NoError(t, err)
+		analyze(t, sourcePath, output)
 	}
 }
 

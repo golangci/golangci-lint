@@ -3,8 +3,8 @@
 package testdata
 
 import (
-	"compress/gzip" // ERROR "`compress/gzip` is in the denylist"
-	"log"           // ERROR "`log` is in the denylist: don't use log"
+	"compress/gzip" // want "`compress/gzip` is in the denylist"
+	"log"           // want "`log` is in the denylist: don't use log"
 )
 
 func SpewDebugInfo() {

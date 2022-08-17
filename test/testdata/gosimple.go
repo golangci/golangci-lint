@@ -6,7 +6,7 @@ import (
 )
 
 func Gosimple(ss []string) {
-	if ss != nil { // ERROR "S1031: unnecessary nil check around range"
+	if ss != nil { // want "S1031: unnecessary nil check around range"
 		for _, s := range ss {
 			log.Printf(s)
 		}

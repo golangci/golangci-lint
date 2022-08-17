@@ -20,5 +20,5 @@ func TestErrcheckIgnoreFmtByDefault(s string) int {
 }
 
 func TestErrcheckNoIgnoreOs() {
-	_, _ = os.Open("f.txt") // ERROR "Error return value of `os.Open` is not checked"
+	_, _ = os.Open("f.txt") // want "Error return value of `os.Open` is not checked"
 }

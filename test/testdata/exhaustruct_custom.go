@@ -23,7 +23,7 @@ func exhaustructCustom() {
 	}
 
 	// fail
-	_ = ExhaustructCustom{ // ERROR "B is missing in ExhaustructCustom"
+	_ = ExhaustructCustom{ // want "B is missing in ExhaustructCustom"
 		A: "a",
 		c: false,
 		D: 1.0,
@@ -31,14 +31,14 @@ func exhaustructCustom() {
 	}
 
 	// failMultiple
-	_ = ExhaustructCustom{ // ERROR "B, D are missing in ExhaustructCustom"
+	_ = ExhaustructCustom{ // want "B, D are missing in ExhaustructCustom"
 		A: "a",
 		c: false,
 		E: time.Now(),
 	}
 
 	//  failPrivate
-	_ = ExhaustructCustom{ // ERROR "c is missing in ExhaustructCustom"
+	_ = ExhaustructCustom{ // want "c is missing in ExhaustructCustom"
 		A: "a",
 		B: 0,
 		D: 1.0,

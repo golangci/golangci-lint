@@ -5,10 +5,10 @@ import "fmt"
 
 func forcetypeassertInvalid() {
 	var a interface{}
-	_ = a.(int) // ERROR "type assertion must be checked"
+	_ = a.(int) // want "type assertion must be checked"
 
 	var b interface{}
-	bi := b.(int) // ERROR "type assertion must be checked"
+	bi := b.(int) // want "type assertion must be checked"
 	fmt.Println(bi)
 }
 
