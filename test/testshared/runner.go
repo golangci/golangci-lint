@@ -3,6 +3,7 @@ package testshared
 import (
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strings"
 	"sync"
 	"syscall"
@@ -122,8 +123,8 @@ func (b *RunnerBuilder) WithArgs(args ...string) *RunnerBuilder {
 	return b
 }
 
-func (b *RunnerBuilder) WithTargetPath(target string) *RunnerBuilder {
-	b.target = target
+func (b *RunnerBuilder) WithTargetPath(targets ...string) *RunnerBuilder {
+	b.target = filepath.Join(targets...)
 
 	return b
 }

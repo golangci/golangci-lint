@@ -21,13 +21,13 @@ func TestFix(t *testing.T) {
 	}
 
 	tmpDir := filepath.Join(testdataDir, "fix.tmp")
-	os.RemoveAll(tmpDir) // cleanup after previous runs
+	_ = os.RemoveAll(tmpDir) // cleanup previous runs
 
 	if os.Getenv("GL_KEEP_TEMP_FILES") == "1" {
 		t.Logf("Temp dir for fix test: %s", tmpDir)
 	} else {
 		t.Cleanup(func() {
-			os.RemoveAll(tmpDir)
+			_ = os.RemoveAll(tmpDir)
 		})
 	}
 
@@ -61,7 +61,7 @@ func TestFix(t *testing.T) {
 				Runner().
 				Run()
 
-			// nolintlint test uses non existing linters (bob, alice)
+			// nolintlint test uses non-existing linters (bob, alice)
 			if rc.ExpectedLinter != "nolintlint" {
 				runResult.ExpectExitCode(exitcodes.Success)
 			}

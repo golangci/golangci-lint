@@ -14,6 +14,8 @@ import (
 	"github.com/golangci/golangci-lint/test/testshared"
 )
 
+const testdataDir = "testdata"
+
 func TestSourcesFromTestdataWithIssuesDir(t *testing.T) {
 	testSourcesFromDir(t, testdataDir)
 }
