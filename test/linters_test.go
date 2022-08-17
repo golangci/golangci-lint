@@ -1,10 +1,7 @@
 package test
 
 import (
-	"fmt"
-	"os"
 	"os/exec"
-	"path"
 	"path/filepath"
 	"testing"
 
@@ -16,7 +13,7 @@ import (
 
 const testdataDir = "testdata"
 
-func TestSourcesFromTestdataWithIssuesDir(t *testing.T) {
+func TestSourcesFromTestdata(t *testing.T) {
 	testSourcesFromDir(t, testdataDir)
 }
 
@@ -88,164 +85,5 @@ func testOneSource(t *testing.T, sourcePath string) {
 		}
 
 		testshared.Analyze(t, sourcePath, output)
-	}
-}
-
-func TestMultipleOutputs(t *testing.T) {
-	sourcePath := filepath.Join(testdataDir, "gci", "gci.go")
-
-	testshared.NewRunnerBuilder(t).
-		WithArgs(
-			"--disable-all",
-			"--print-issued-lines=false",
-			"--print-linter-name=false",
-			"--out-format=line-number,json:stdout",
-		).
-		WithDirectives(sourcePath).
-		WithTargetPath(sourcePath).
-		Runner().
-		Install().
-		Run().
-		ExpectHasIssue("testdata/gci/gci.go:8: File is not `gci`-ed").
-		ExpectOutputContains(`"Issues":[`)
-}
-
-func TestStderrOutput(t *testing.T) {
-	sourcePath := filepath.Join(testdataDir, "gci", "gci.go")
-
-	testshared.NewRunnerBuilder(t).
-		WithArgs(
-			"--disable-all",
-			"--print-issued-lines=false",
-			"--print-linter-name=false",
-			"--out-format=line-number,json:stderr",
-		).
-		WithDirectives(sourcePath).
-		WithTargetPath(sourcePath).
-		Runner().
-		Install().
-		Run().
-		ExpectHasIssue("testdata/gci/gci.go:8: File is not `gci`-ed").
-		ExpectOutputContains(`"Issues":[`)
-}
-
-func TestFileOutput(t *testing.T) {
-	resultPath := path.Join(t.TempDir(), "golangci_lint_test_result")
-
-	sourcePath := filepath.Join(testdataDir, "gci", "gci.go")
-
-	testshared.NewRunnerBuilder(t).
-		WithArgs(
-			"--disable-all",
-			"--print-issued-lines=false",
-			"--print-linter-name=false",
-			fmt.Sprintf("--out-format=json:%s,line-number", resultPath),
-		).
-		WithDirectives(sourcePath).
-		WithTargetPath(sourcePath).
-		Runner().
-		Install().
-		Run().
-		ExpectHasIssue("testdata/gci/gci.go:8: File is not `gci`-ed").
-		ExpectOutputNotContains(`"Issues":[`)
-
-	b, err := os.ReadFile(resultPath)
-	require.NoError(t, err)
-	require.Contains(t, string(b), `"Issues":[`)
-}
-
-func TestLinter_goimports_local(t *testing.T) {
-	sourcePath := filepath.Join(testdataDir, "goimports", "goimports.go")
-
-	testshared.NewRunnerBuilder(t).
-		WithArgs(
-			"--disable-all",
-			"--print-issued-lines=false",
-			"--print-linter-name=false",
-			"--out-format=line-number",
-		).
-		WithDirectives(sourcePath).
-		WithTargetPath(sourcePath).
-		Runner().
-		Install().
-		Run().
-		ExpectHasIssue("testdata/goimports/goimports.go:8: File is not `goimports`-ed")
-}
-
-func TestLinter_gci_Local(t *testing.T) {
-	sourcePath := filepath.Join(testdataDir, "gci", "gci.go")
-
-	testshared.NewRunnerBuilder(t).
-		WithArgs(
-			"--disable-all",
-			"--print-issued-lines=false",
-			"--print-linter-name=false",
-			"--out-format=line-number",
-		).
-		WithDirectives(sourcePath).
-		WithTargetPath(sourcePath).
-		Runner().
-		Install().
-		Run().
-		ExpectHasIssue("testdata/gci/gci.go:8: File is not `gci`-ed")
-}
-
-// TODO(ldez) need to be converted to a classic linter test.
-func TestLinter_tparallel(t *testing.T) {
-	testCases := []struct {
-		desc       string
-		sourcePath string
-		expected   func(result *testshared.RunnerResult)
-	}{
-		{
-			desc:       "should fail on missing top-level Parallel()",
-			sourcePath: filepath.Join(testdataDir, "tparallel", "missing_toplevel_test.go"),
-			expected: func(result *testshared.RunnerResult) {
-				result.ExpectHasIssue(
-					"testdata/tparallel/missing_toplevel_test.go:7:6: TestTopLevel should call t.Parallel on the top level as well as its subtests\n",
-				)
-			},
-		},
-		{
-			desc:       "should fail on missing subtest Parallel()",
-			sourcePath: filepath.Join(testdataDir, "tparallel", "missing_subtest_test.go"),
-			expected: func(result *testshared.RunnerResult) {
-				result.ExpectHasIssue(
-					"testdata/tparallel/missing_subtest_test.go:7:6: TestSubtests's subtests should call t.Parallel\n",
-				)
-			},
-		},
-		{
-			desc:       "should pass on parallel test with no subtests",
-			sourcePath: filepath.Join(testdataDir, "tparallel", "happy_path_test.go"),
-			expected: func(result *testshared.RunnerResult) {
-				result.ExpectNoIssues()
-			},
-		},
-	}
-
-	testshared.InstallGolangciLint(t)
-
-	for _, test := range testCases {
-		test := test
-		t.Run(test.desc, func(t *testing.T) {
-			t.Parallel()
-
-			result := testshared.NewRunnerBuilder(t).
-				WithDirectives(test.sourcePath).
-				WithArgs(
-					"--disable-all",
-					"--enable",
-					"tparallel",
-					"--print-issued-lines=false",
-					"--print-linter-name=false",
-					"--out-format=line-number",
-				).
-				WithTargetPath(test.sourcePath).
-				Runner().
-				Run()
-
-			test.expected(result)
-		})
 	}
 }

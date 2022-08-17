@@ -1,3 +1,4 @@
+//golangcitest:args -Etparallel
 package testdata
 
 import (

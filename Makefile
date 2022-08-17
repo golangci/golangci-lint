@@ -40,7 +40,7 @@ test_race: build_race
 .PHONY: test_race
 
 test_linters:
-	GL_TEST_RUN=1 go test -v ./test -count 1 -run TestSourcesFromTestdataWithIssuesDir/$T
+	GL_TEST_RUN=1 go test -v ./test -count 1 -run TestSourcesFromTestdata/$T
 .PHONY: test_linters
 
 # Maintenance
