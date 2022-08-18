@@ -5,9 +5,9 @@ import (
 	"path/filepath"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/golangci/golangci-lint/pkg/exitcodes"
 	"github.com/golangci/golangci-lint/test/testshared"
 )
 
@@ -26,13 +26,7 @@ func testSourcesFromDir(t *testing.T, dir string) {
 
 	t.Log(filepath.Join(dir, "*.go"))
 
-	findSources := func(pathPatterns ...string) []string {
-		sources, err := filepath.Glob(filepath.Join(pathPatterns...))
-		require.NoError(t, err)
-		require.NotEmpty(t, sources)
-		return sources
-	}
-	sources := findSources(dir, "*.go")
+	sources := findSources(t, dir, "*.go")
 
 	testshared.InstallGolangciLint(t)
 
@@ -67,23 +61,36 @@ func testOneSource(t *testing.T, sourcePath string) {
 			caseArgs = append(caseArgs, addArg)
 		}
 
-		runner := testshared.NewRunnerBuilder(t).
+		cmd := testshared.NewRunnerBuilder(t).
 			WithNoParallelRunners().
 			WithArgs(caseArgs...).
 			WithRunContext(rc).
 			WithTargetPath(sourcePath).
-			Runner()
+			Runner().
+			Command()
 
-		output, err := runner.RawRun()
+		output, err := cmd.CombinedOutput()
+
 		// The returned error will be nil if the test file does not have any issues
 		// and thus the linter exits with exit code 0.
 		// So perform the additional assertions only if the error is non-nil.
 		if err != nil {
 			var exitErr *exec.ExitError
 			require.ErrorAs(t, err, &exitErr)
-			require.Equal(t, exitcodes.IssuesFound, exitErr.ExitCode(), "Unexpected exit code: %s", string(output))
 		}
+
+		assert.Equal(t, rc.ExitCode, cmd.ProcessState.ExitCode(), "Unexpected exit code: %s", string(output))
 
 		testshared.Analyze(t, sourcePath, output)
 	}
+}
+
+func findSources(t *testing.T, pathPatterns ...string) []string {
+	t.Helper()
+
+	sources, err := filepath.Glob(filepath.Join(pathPatterns...))
+	require.NoError(t, err)
+	require.NotEmpty(t, sources)
+
+	return sources
 }

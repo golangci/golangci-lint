@@ -1,5 +1,6 @@
 //golangcitest:args -Egci
 //golangcitest:config_path testdata/configs/gci.yml
+//golangcitest:expected_exitcode 0
 package gci
 
 import (

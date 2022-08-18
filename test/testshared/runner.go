@@ -234,7 +234,7 @@ func (r *Runner) Run() *RunnerResult {
 	}
 }
 
-func (r *Runner) RawRun() ([]byte, error) {
+func (r *Runner) Command() *exec.Cmd {
 	r.tb.Helper()
 
 	runArgs := append([]string{r.command}, r.args...)
@@ -246,7 +246,7 @@ func (r *Runner) RawRun() ([]byte, error) {
 	cmd := exec.Command("../golangci-lint", runArgs...)
 	cmd.Env = append(os.Environ(), r.env...)
 
-	return cmd.CombinedOutput()
+	return cmd
 }
 
 type RunnerResult struct {
