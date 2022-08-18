@@ -320,6 +320,10 @@ func InstallGolangciLint(tb testing.TB) {
 
 	cmd := exec.Command("make", "-C", "..", "build")
 
-	err := cmd.Run()
-	assert.NoError(tb, err, "Can't go install golangci-lint")
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		tb.Log(string(output))
+	}
+
+	require.NoError(tb, err, "Can't go install golangci-lint")
 }
