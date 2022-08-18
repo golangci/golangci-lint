@@ -1,5 +1,5 @@
-//args: -Enestif
-//config: linters-settings.nestif.min-complexity=1
+//golangcitest:args -Enestif
+//golangcitest:config_path testdata/configs/nestif.yml
 package testdata
 
 func _() {

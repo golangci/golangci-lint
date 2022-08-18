@@ -1,10 +1,10 @@
-//args: -Edepguard
-//config_path: testdata/configs/depguard.yml
+//golangcitest:args -Edepguard
+//golangcitest:config_path testdata/configs/depguard.yml
 package testdata
 
 import (
-	"compress/gzip" // ERROR "`compress/gzip` is in the blacklist"
-	"log"           // ERROR "`log` is in the blacklist: don't use log"
+	"compress/gzip" // ERROR "`compress/gzip` is in the denylist"
+	"log"           // ERROR "`log` is in the denylist: don't use log"
 )
 
 func SpewDebugInfo() {

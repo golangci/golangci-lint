@@ -1,4 +1,4 @@
-//args: -Emegacheck
+//golangcitest:args -Emegacheck
 package testdata
 
 func StylecheckNotInMegacheck(x int) {

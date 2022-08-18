@@ -1,4 +1,4 @@
-//args: -Ewrapcheck
+//golangcitest:args -Ewrapcheck
 package testdata
 
 import (

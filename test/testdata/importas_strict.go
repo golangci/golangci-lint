@@ -1,5 +1,5 @@
-//args: -Eimportas
-//config_path: testdata/configs/importas_strict.yml
+//golangcitest:args -Eimportas
+//golangcitest:config_path testdata/configs/importas_strict.yml
 package testdata
 
 import (

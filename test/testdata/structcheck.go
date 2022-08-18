@@ -1,4 +1,4 @@
-//args: -Estructcheck
+//golangcitest:args -Estructcheck
 package testdata
 
 type t struct {

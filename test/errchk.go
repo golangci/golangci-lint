@@ -24,6 +24,7 @@ var errorLineRx = regexp.MustCompile(`^\S+?: (.*)\((\S+?)\)$`)
 //
 // Sources files are supplied as fullshort slice.
 // It consists of pairs: full path to source file and its base name.
+//
 //nolint:gocyclo,funlen
 func errorCheck(outStr string, wantAuto bool, defaultWantedLinter string, fullshort ...string) (err error) {
 	var errs []error
@@ -32,7 +33,7 @@ func errorCheck(outStr string, wantAuto bool, defaultWantedLinter string, fullsh
 	for i := range out {
 		for j := 0; j < len(fullshort); j += 2 {
 			full, short := fullshort[j], fullshort[j+1]
-			out[i] = strings.Replace(out[i], full, short, -1)
+			out[i] = strings.ReplaceAll(out[i], full, short)
 		}
 	}
 
@@ -95,7 +96,7 @@ func errorCheck(outStr string, wantAuto bool, defaultWantedLinter string, fullsh
 	}
 
 	if len(out) > 0 {
-		errs = append(errs, fmt.Errorf("unmatched errors"))
+		errs = append(errs, errors.New("unmatched errors"))
 		for _, errLine := range out {
 			errs = append(errs, fmt.Errorf("%s", errLine))
 		}
@@ -179,6 +180,7 @@ var (
 )
 
 // wantedErrors parses expected errors from comments in a file.
+//
 //nolint:nakedret
 func wantedErrors(file, short, defaultLinter string) (errs []wantedError) {
 	cache := make(map[string]*regexp.Regexp)

@@ -1,4 +1,4 @@
-//args: -Enosprintfhostport
+//golangcitest:args -Enosprintfhostport
 package testdata
 
 import (

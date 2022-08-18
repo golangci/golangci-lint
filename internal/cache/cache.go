@@ -58,7 +58,7 @@ func Open(dir string) (*Cache, error) {
 		return nil, err
 	}
 	if !info.IsDir() {
-		return nil, &os.PathError{Op: "open", Path: dir, Err: fmt.Errorf("not a directory")}
+		return nil, &os.PathError{Op: "open", Path: dir, Err: errors.New("not a directory")}
 	}
 	for i := 0; i < 256; i++ {
 		name := filepath.Join(dir, fmt.Sprintf("%02x", i))
@@ -504,7 +504,7 @@ func (c *Cache) copyFile(file io.ReadSeeker, out OutputID, size int64) error {
 	sum := h.Sum(nil)
 	if !bytes.Equal(sum, out[:]) {
 		_ = f.Truncate(0)
-		return fmt.Errorf("file content changed underfoot")
+		return errors.New("file content changed underfoot")
 	}
 
 	// Commit cache file entry.

@@ -1,8 +1,6 @@
-//args: -Enolintlint -Emisspell
-//expected_linter: nolintlint
-//config: linters-settings.nolintlint.require-explanation=true
-//config: linters-settings.nolintlint.require-specific=true
-//config: linters-settings.nolintlint.allow-leading-space=false
+//golangcitest:args -Enolintlint -Emisspell
+//golangcitest:expected_linter nolintlint
+//golangcitest:config_path testdata/configs/nolintlint.yml
 package testdata
 
 import "fmt"

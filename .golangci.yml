@@ -1,6 +1,6 @@
 linters-settings:
   depguard:
-    list-type: blacklist
+    list-type: denylist
     packages:
       # logging is allowed only by logutils.Log, logrus
       # is allowed to use only in logutils package
@@ -27,7 +27,6 @@ linters-settings:
       - ifElseChain
       - octalLiteral
       - whyNoLint
-      - wrapperFunc
   gocyclo:
     min-complexity: 15
   goimports:
@@ -61,7 +60,6 @@ linters-settings:
   misspell:
     locale: US
   nolintlint:
-    allow-leading-space: true # don't require machine-readable nolint directives (i.e. with no leading space)
     allow-unused: false # report any unused nolint directives
     require-explanation: false # don't require an explanation for nolint directives
     require-specific: false # don't require nolint directives to be specific about which linter is being skipped
@@ -133,6 +131,14 @@ issues:
       text: "SA1019: lsc.Errcheck.Exclude is deprecated: use ExcludeFunctions instead"
     - path: pkg/commands/run.go
       text: "SA1019: e.cfg.Run.Deadline is deprecated: Deadline exists for historical compatibility and should not be used."
+
+    - path: pkg/golinters/gofumpt.go
+      text: "SA1019: settings.LangVersion is deprecated: use the global `run.go` instead."
+    - path: pkg/golinters/staticcheck_common.go
+      text: "SA1019: settings.GoVersion is deprecated: use the global `run.go` instead."
+    - path: pkg/lint/lintersdb/manager.go
+      text: "SA1019: (.+).(GoVersion|LangVersion) is deprecated: use the global `run.go` instead."
+
 
 run:
   timeout: 5m

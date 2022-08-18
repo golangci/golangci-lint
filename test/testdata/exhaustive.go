@@ -1,4 +1,4 @@
-//args: -Eexhaustive
+//golangcitest:args -Eexhaustive
 package testdata
 
 type Direction int

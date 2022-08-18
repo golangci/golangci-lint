@@ -1,4 +1,4 @@
-//args: -Eexportloopref
+//golangcitest:args -Eexportloopref
 package testdata
 
 import "fmt"

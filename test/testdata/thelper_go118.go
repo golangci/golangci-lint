@@ -1,7 +1,7 @@
 //go:build go1.18
 // +build go1.18
 
-//args: -Ethelper
+//golangcitest:args -Ethelper
 package testdata
 
 import "testing"

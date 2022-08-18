@@ -8,57 +8,69 @@ import (
 	"github.com/ultraware/funlen"
 	"golang.org/x/tools/go/analysis"
 
+	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-const funlenLinterName = "funlen"
+const funlenName = "funlen"
 
-func NewFunlen() *goanalysis.Linter {
+//nolint:dupl
+func NewFunlen(settings *config.FunlenSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
 
 	analyzer := &analysis.Analyzer{
-		Name: funlenLinterName,
+		Name: funlenName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
-	}
-	return goanalysis.NewLinter(
-		funlenLinterName,
-		"Tool for detection of long functions",
-		[]*analysis.Analyzer{analyzer},
-		nil,
-	).WithContextSetter(func(lintCtx *linter.Context) {
-		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
-			var issues []funlen.Message
-			for _, file := range pass.Files {
-				fileIssues := funlen.Run(file, pass.Fset, lintCtx.Settings().Funlen.Lines, lintCtx.Settings().Funlen.Statements)
-				issues = append(issues, fileIssues...)
-			}
+		Run: func(pass *analysis.Pass) (interface{}, error) {
+			issues := runFunlen(pass, settings)
 
 			if len(issues) == 0 {
 				return nil, nil
 			}
 
-			res := make([]goanalysis.Issue, len(issues))
-			for k, i := range issues {
-				res[k] = goanalysis.NewIssue(&result.Issue{
-					Pos: token.Position{
-						Filename: i.Pos.Filename,
-						Line:     i.Pos.Line,
-					},
-					Text:       strings.TrimRight(i.Message, "\n"),
-					FromLinter: funlenLinterName,
-				}, pass)
-			}
-
 			mu.Lock()
-			resIssues = append(resIssues, res...)
+			resIssues = append(resIssues, issues...)
 			mu.Unlock()
 
 			return nil, nil
-		}
-	}).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
+		},
+	}
+
+	return goanalysis.NewLinter(
+		funlenName,
+		"Tool for detection of long functions",
+		[]*analysis.Analyzer{analyzer},
+		nil,
+	).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
 		return resIssues
 	}).WithLoadMode(goanalysis.LoadModeSyntax)
+}
+
+func runFunlen(pass *analysis.Pass, settings *config.FunlenSettings) []goanalysis.Issue {
+	var lintIssues []funlen.Message
+	for _, file := range pass.Files {
+		fileIssues := funlen.Run(file, pass.Fset, settings.Lines, settings.Statements)
+		lintIssues = append(lintIssues, fileIssues...)
+	}
+
+	if len(lintIssues) == 0 {
+		return nil
+	}
+
+	issues := make([]goanalysis.Issue, len(lintIssues))
+	for k, i := range lintIssues {
+		issues[k] = goanalysis.NewIssue(&result.Issue{
+			Pos: token.Position{
+				Filename: i.Pos.Filename,
+				Line:     i.Pos.Line,
+			},
+			Text:       strings.TrimRight(i.Message, "\n"),
+			FromLinter: funlenName,
+		}, pass)
+	}
+
+	return issues
 }

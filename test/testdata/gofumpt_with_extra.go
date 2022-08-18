@@ -1,5 +1,5 @@
-// args: -Egofumpt
-// config: linters-settings.gofumpt.extra-rules=true
+//golangcitest:args -Egofumpt
+//golangcitest:config_path testdata/configs/gofumpt_with_extra.yml
 package testdata
 
 import "fmt"

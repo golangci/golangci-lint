@@ -1,5 +1,5 @@
-// args: -Eerrchkjson
-// config_path: testdata/configs/errchkjson_check_error_free_encoding.yml
+//golangcitest:args -Eerrchkjson
+//golangcitest:config_path testdata/configs/errchkjson_check_error_free_encoding.yml
 package testdata
 
 import (

@@ -1,4 +1,4 @@
-// args: -Etagliatelle
+//golangcitest:args -Etagliatelle
 package testdata
 
 import "time"

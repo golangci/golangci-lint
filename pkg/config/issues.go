@@ -97,7 +97,7 @@ var DefaultExcludePatterns = []ExcludePattern{
 	},
 	{
 		ID:      "EXC0015",
-		Pattern: `should have a package comment, unless it's in another file for this package`,
+		Pattern: `should have a package comment`,
 		Linter:  "revive",
 		Why:     "Annoying issue about not having a comment. The rare codebase has such comments",
 	},

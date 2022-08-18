@@ -1,0 +1,5 @@
+linters-settings:
+  godox:
+    keywords:
+      - FIXME
+      - TODO

@@ -1,4 +1,4 @@
-//args: -Eunconvert
+//golangcitest:args -Eunconvert
 package testdata
 
 import "log"

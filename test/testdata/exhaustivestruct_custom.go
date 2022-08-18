@@ -1,5 +1,5 @@
-// args: -Eexhaustivestruct --internal-cmd-test
-// config_path: testdata/configs/exhaustivestruct.yml
+//golangcitest:args -Eexhaustivestruct --internal-cmd-test
+//golangcitest:config_path testdata/configs/exhaustivestruct.yml
 package testdata
 
 import "time"

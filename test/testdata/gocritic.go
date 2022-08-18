@@ -1,5 +1,5 @@
-//args: -Egocritic
-//config_path: testdata/configs/gocritic.yml
+//golangcitest:args -Egocritic
+//golangcitest:config_path testdata/configs/gocritic.yml
 package testdata
 
 import (
@@ -41,4 +41,8 @@ func gocriticDup(x bool) {
 	if x && x { // ERROR "ruleguard: suspicious identical LHS and RHS.*"
 		log.Print("x is true")
 	}
+}
+
+func gocriticRuleWrapperFunc() {
+	strings.Replace("abcabc", "a", "d", -1) // ERROR "ruleguard: this Replace call can be simplified.*"
 }

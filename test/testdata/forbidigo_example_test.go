@@ -1,5 +1,5 @@
-//args: -Eforbidigo
-//config_path: testdata/configs/forbidigo.yml
+//golangcitest:args -Eforbidigo
+//golangcitest:config_path testdata/configs/forbidigo.yml
 package testdata
 
 import "fmt"

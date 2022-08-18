@@ -7,6 +7,7 @@ import (
 	"github.com/alexkohler/prealloc/pkg"
 	"golang.org/x/tools/go/analysis"
 
+	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
@@ -14,44 +15,51 @@ import (
 
 const preallocName = "prealloc"
 
-func NewPrealloc() *goanalysis.Linter {
+//nolint:dupl
+func NewPreAlloc(settings *config.PreallocSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
 
 	analyzer := &analysis.Analyzer{
 		Name: preallocName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
-	}
-	return goanalysis.NewLinter(
-		preallocName,
-		"Finds slice declarations that could potentially be preallocated",
-		[]*analysis.Analyzer{analyzer},
-		nil,
-	).WithContextSetter(func(lintCtx *linter.Context) {
-		s := &lintCtx.Settings().Prealloc
+		Run: func(pass *analysis.Pass) (interface{}, error) {
+			issues := runPreAlloc(pass, settings)
 
-		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
-			var res []goanalysis.Issue
-			hints := pkg.Check(pass.Files, s.Simple, s.RangeLoops, s.ForLoops)
-			for _, hint := range hints {
-				res = append(res, goanalysis.NewIssue(&result.Issue{
-					Pos:        pass.Fset.Position(hint.Pos),
-					Text:       fmt.Sprintf("Consider preallocating %s", formatCode(hint.DeclaredSliceName, lintCtx.Cfg)),
-					FromLinter: preallocName,
-				}, pass))
-			}
-
-			if len(res) == 0 {
+			if len(issues) == 0 {
 				return nil, nil
 			}
 
 			mu.Lock()
-			resIssues = append(resIssues, res...)
+			resIssues = append(resIssues, issues...)
 			mu.Unlock()
 
 			return nil, nil
-		}
-	}).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
+		},
+	}
+
+	return goanalysis.NewLinter(
+		preallocName,
+		"Finds slice declarations that could potentially be pre-allocated",
+		[]*analysis.Analyzer{analyzer},
+		nil,
+	).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
 		return resIssues
 	}).WithLoadMode(goanalysis.LoadModeSyntax)
+}
+
+func runPreAlloc(pass *analysis.Pass, settings *config.PreallocSettings) []goanalysis.Issue {
+	var issues []goanalysis.Issue
+
+	hints := pkg.Check(pass.Files, settings.Simple, settings.RangeLoops, settings.ForLoops)
+
+	for _, hint := range hints {
+		issues = append(issues, goanalysis.NewIssue(&result.Issue{
+			Pos:        pass.Fset.Position(hint.Pos),
+			Text:       fmt.Sprintf("Consider pre-allocating %s", formatCode(hint.DeclaredSliceName, nil)),
+			FromLinter: preallocName,
+		}, pass))
+	}
+
+	return issues
 }

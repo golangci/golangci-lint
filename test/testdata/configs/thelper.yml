@@ -1,0 +1,5 @@
+linters-settings:
+  thelper:
+    test:
+      name: false
+      begin: true

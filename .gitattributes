@@ -1,1 +1,2 @@
 go.sum linguist-generated
+Dockerfile.* linguist-language=Dockerfile

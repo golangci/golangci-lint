@@ -1,6 +1,5 @@
-//args: -Eerrcheck
-//config: linters-settings.errcheck.check-blank=true
-//config: linters-settings.errcheck.exclude=testdata/errcheck/exclude.txt
+//golangcitest:args -Eerrcheck
+//golangcitest:config_path testdata/configs/errcheck_exclude.yml
 package testdata
 
 import (

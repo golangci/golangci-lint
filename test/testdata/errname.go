@@ -1,4 +1,4 @@
-//args: -Eerrname
+//golangcitest:args -Eerrname
 package testdata
 
 import (

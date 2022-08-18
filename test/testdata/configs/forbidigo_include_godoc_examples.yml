@@ -1,0 +1,4 @@
+linters-settings:
+  forbidigo:
+   exclude-godoc-examples: false
+

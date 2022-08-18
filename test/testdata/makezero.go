@@ -1,4 +1,4 @@
-//args: -Emakezero
+//golangcitest:args -Emakezero
 package testdata
 
 import "math"

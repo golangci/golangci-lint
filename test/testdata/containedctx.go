@@ -1,4 +1,4 @@
-// args: -Econtainedctx
+//golangcitest:args -Econtainedctx
 package testdata
 
 import "context"

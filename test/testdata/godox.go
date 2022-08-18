@@ -1,5 +1,5 @@
-//args: -Egodox
-//config: linters-settings.godox.keywords=FIXME,TODO
+//golangcitest:args -Egodox
+//golangcitest:config_path testdata/configs/godox.yml
 package testdata
 
 func todoLeftInCode() {

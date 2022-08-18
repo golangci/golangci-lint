@@ -1,4 +1,4 @@
-// args: -Eireturn
+//golangcitest:args -Eireturn
 package testdata
 
 type (

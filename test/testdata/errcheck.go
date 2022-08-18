@@ -1,4 +1,4 @@
-//args: -Eerrcheck
+//golangcitest:args -Eerrcheck
 package testdata
 
 import (
