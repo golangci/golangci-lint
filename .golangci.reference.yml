@@ -176,6 +176,9 @@ linters-settings:
     # check switch default clauses (ignore/last/first)
     # Default: last
     switch-defaults: last
+    # check empty interfaces (ignore/any/iface)
+    # Default: any
+    empty-ifaces: any
     # check labels against regexp ('' to ignore)
     # Default: ^[a-z][a-zA-Z0-9]*$
     labels-regexp: ^[a-z][a-zA-Z0-9]*$

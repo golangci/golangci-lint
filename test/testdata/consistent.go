@@ -1,4 +1,4 @@
-//args: -Econsistent
+//golangcitest:args -Econsistent
 package testdata
 
 import ( // ERROR "remove parens around single import declaration"
@@ -33,6 +33,8 @@ func consistent() {
 	default: // ERROR "move switch default clause to the end"
 	case 1 < 2:
 	}
+
+	type empty interface{} // ERROR "use any instead of interface{}"
 
 test_loop: // ERROR `change label to match regular expression: .*`
 	for {

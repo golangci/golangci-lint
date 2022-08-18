@@ -221,6 +221,7 @@ type ConsistentSettings struct {
 	LenChecks      string `mapstructure:"len-checks"`
 	SwitchCases    string `mapstructure:"switch-cases"`
 	SwitchDefaults string `mapstructure:"switch-defaults"`
+	EmptyIfaces    string `mapstructure:"empty-ifaces"`
 	LabelsRegexp   string `mapstructure:"labels-regexp"`
 }
 

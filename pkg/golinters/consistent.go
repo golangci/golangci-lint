@@ -49,6 +49,7 @@ func NewConsistent(settings *config.ConsistentSettings) *goanalysis.Linter {
 		set("lenChecks", settings.LenChecks)
 		set("switchCases", settings.SwitchCases)
 		set("switchDefaults", settings.SwitchDefaults)
+		set("emptyIfaces", settings.EmptyIfaces)
 		set("labelsRegexp", settings.LabelsRegexp)
 
 		cfg[analyzer.Name] = analyzerCfg
