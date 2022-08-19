@@ -1,8 +1,10 @@
 //golangcitest:args -Einterfacebloat
 package testdata
 
-type _ interface { // want "length of interface greater than 10"
-	a()
+import "time"
+
+type _ interface { // ERROR "length of interface greater than 10"
+	a() time.Duration
 	b()
 	c()
 	d()
@@ -16,8 +18,8 @@ type _ interface { // want "length of interface greater than 10"
 }
 
 func _() {
-	var _ interface { // want "length of interface greater than 10"
-		a()
+	var _ interface { // ERROR "length of interface greater than 10"
+		a() time.Duration
 		b()
 		c()
 		d()
@@ -31,8 +33,8 @@ func _() {
 	}
 }
 
-func __() interface { // want "length of interface greater than 10"
-	a()
+func __() interface { // ERROR "length of interface greater than 10"
+	a() time.Duration
 	b()
 	c()
 	d()

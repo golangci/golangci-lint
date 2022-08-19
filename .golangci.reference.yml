@@ -1075,7 +1075,9 @@ linters-settings:
         alias: $1$2
 
   interfacebloat:
-    interface-len: 10
+    # The number of allowed methods for an interface.
+    # Default: 10
+    len: 5
 
   ireturn:
     # ireturn allows using `allow` and `reject` settings at the same time.
