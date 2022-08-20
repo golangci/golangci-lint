@@ -14,7 +14,7 @@ func NewInterfaceBloat(settings *config.InterfaceBloatSettings) *goanalysis.Lint
 	cfgMap := make(map[string]map[string]interface{})
 	if settings != nil {
 		cfgMap[a.Name] = map[string]interface{}{
-			analyzer.InterfaceLenFlag: settings.Len,
+			analyzer.InterfaceMaxMethodsFlag: settings.Max,
 		}
 	}
 

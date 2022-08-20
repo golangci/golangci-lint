@@ -456,7 +456,7 @@ type ImportAsAlias struct {
 }
 
 type InterfaceBloatSettings struct {
-	Len int `mapstructure:"len"`
+	Max int `mapstructure:"max"`
 }
 
 type IreturnSettings struct {
