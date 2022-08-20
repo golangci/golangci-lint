@@ -212,11 +212,27 @@ func buildTemplateContext() (map[string]string, error) {
 		"LintersCommandOutputDisabledOnly": string(lintersOutParts[1]),
 		"EnabledByDefaultLinters":          getLintersListMarkdown(true),
 		"DisabledByDefaultLinters":         getLintersListMarkdown(false),
+		"DefaultExclusions":                getDefaultExclusions(),
 		"ThanksList":                       getThanksList(),
 		"RunHelpText":                      string(shortHelp),
 		"ChangeLog":                        string(changeLog),
 		"LatestVersion":                    latestVersion,
 	}, nil
+}
+
+func getDefaultExclusions() string {
+	bufferString := bytes.NewBufferString("")
+
+	for _, pattern := range config.DefaultExcludePatterns {
+		_, _ = fmt.Fprintln(bufferString)
+		_, _ = fmt.Fprintf(bufferString, "### %s\n", pattern.ID)
+		_, _ = fmt.Fprintln(bufferString)
+		_, _ = fmt.Fprintf(bufferString, "- linter: `%s`\n", pattern.Linter)
+		_, _ = fmt.Fprintf(bufferString, "- pattern: `%s`\n", strings.ReplaceAll(pattern.Pattern, "`", "&grave;"))
+		_, _ = fmt.Fprintf(bufferString, "- why: %s\n", pattern.Why)
+	}
+
+	return bufferString.String()
 }
 
 func getLintersListMarkdown(enabled bool) string {
