@@ -9,5 +9,5 @@ func _200() {
 
 func _200_1() {
 	var w http.ResponseWriter
-	w.WriteHeader(200) // ERROR `"200" can be replaced by http.StatusOK`
+	w.WriteHeader(200) // want `"200" can be replaced by http.StatusOK`
 }

@@ -1,5 +1,6 @@
 //golangcitest:args -Egocritic
 //golangcitest:config_path testdata/configs/gocritic-fix.yml
+//golangcitest:expected_exitcode 0
 package p
 
 import (

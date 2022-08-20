@@ -23,7 +23,7 @@ func exhaustiveStructCustom() {
 	}
 
 	// fail
-	_ = ExhaustiveStructCustom{ // ERROR "B is missing in ExhaustiveStructCustom"
+	_ = ExhaustiveStructCustom{ // want "B is missing in ExhaustiveStructCustom"
 		A: "a",
 		c: false,
 		D: 1.0,
@@ -31,14 +31,14 @@ func exhaustiveStructCustom() {
 	}
 
 	// failMultiple
-	_ = ExhaustiveStructCustom{ // ERROR "B, D are missing in ExhaustiveStructCustom"
+	_ = ExhaustiveStructCustom{ // want "B, D are missing in ExhaustiveStructCustom"
 		A: "a",
 		c: false,
 		E: time.Now(),
 	}
 
 	// failPrivate
-	_ = ExhaustiveStructCustom{ // ERROR "c is missing in ExhaustiveStructCustom"
+	_ = ExhaustiveStructCustom{ // want "c is missing in ExhaustiveStructCustom"
 		A: "a",
 		B: 0,
 		D: 1.0,
@@ -104,7 +104,7 @@ func exhaustiveStructCustom2() {
 	}
 
 	// fail
-	_ = ExhaustiveStructCustom2{ // ERROR "B is missing in ExhaustiveStructCustom2"
+	_ = ExhaustiveStructCustom2{ // want "B is missing in ExhaustiveStructCustom2"
 		A: "a",
 		c: false,
 		D: 1.0,
@@ -112,14 +112,14 @@ func exhaustiveStructCustom2() {
 	}
 
 	// failMultiple
-	_ = ExhaustiveStructCustom2{ // ERROR "B, D are missing in ExhaustiveStructCustom2"
+	_ = ExhaustiveStructCustom2{ // want "B, D are missing in ExhaustiveStructCustom2"
 		A: "a",
 		c: false,
 		E: time.Now(),
 	}
 
 	// failPrivate
-	_ = ExhaustiveStructCustom2{ // ERROR "c is missing in ExhaustiveStructCustom2"
+	_ = ExhaustiveStructCustom2{ // want "c is missing in ExhaustiveStructCustom2"
 		A: "a",
 		B: 0,
 		D: 1.0,

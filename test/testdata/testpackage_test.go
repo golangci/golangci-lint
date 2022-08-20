@@ -1,2 +1,2 @@
 //golangcitest:args -Etestpackage
-package testdata // ERROR "package should be `testdata_test` instead of `testdata`"
+package testdata // want "package should be `testdata_test` instead of `testdata`"

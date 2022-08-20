@@ -3,6 +3,7 @@ package testshared
 import (
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strings"
 	"sync"
 	"syscall"
@@ -122,8 +123,8 @@ func (b *RunnerBuilder) WithArgs(args ...string) *RunnerBuilder {
 	return b
 }
 
-func (b *RunnerBuilder) WithTargetPath(target string) *RunnerBuilder {
-	b.target = target
+func (b *RunnerBuilder) WithTargetPath(targets ...string) *RunnerBuilder {
+	b.target = filepath.Join(targets...)
 
 	return b
 }
@@ -233,7 +234,7 @@ func (r *Runner) Run() *RunnerResult {
 	}
 }
 
-func (r *Runner) RawRun() ([]byte, error) {
+func (r *Runner) Command() *exec.Cmd {
 	r.tb.Helper()
 
 	runArgs := append([]string{r.command}, r.args...)
@@ -245,7 +246,7 @@ func (r *Runner) RawRun() ([]byte, error) {
 	cmd := exec.Command("../golangci-lint", runArgs...)
 	cmd.Env = append(os.Environ(), r.env...)
 
-	return cmd.CombinedOutput()
+	return cmd
 }
 
 type RunnerResult struct {
@@ -319,6 +320,10 @@ func InstallGolangciLint(tb testing.TB) {
 
 	cmd := exec.Command("make", "-C", "..", "build")
 
-	err := cmd.Run()
-	assert.NoError(tb, err, "Can't go install golangci-lint")
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		tb.Log(string(output))
+	}
+
+	require.NoError(tb, err, "Can't go install golangci-lint")
 }

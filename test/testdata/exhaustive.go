@@ -11,7 +11,7 @@ const (
 )
 
 func processDirection(d Direction) {
-	switch d { // ERROR "missing cases in switch of type Direction: East, West"
+	switch d { // want "missing cases in switch of type Direction: East, West"
 	case North, South:
 	}
 }

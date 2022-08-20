@@ -2,7 +2,7 @@
 //golangcitest:config_path testdata/configs/gocognit.yml
 package testdata
 
-func GoCognit_CC4_GetWords(number int) string { // ERROR "cognitive complexity 4 of func .* is high .*"
+func GoCognit_CC4_GetWords(number int) string { // want "cognitive complexity 4 of func .* is high .*"
 	if number == 1 { // +1
 		return "one"
 	} else if number == 2 { // +1
@@ -27,7 +27,7 @@ func GoCognit_CC1_GetWords(number int) string {
 	}
 } // Cognitive complexity = 1
 
-func GoCognit_CC3_Fact(n int) int { // ERROR "cognitive complexity 3 of func .* is high .*"
+func GoCognit_CC3_Fact(n int) int { // want "cognitive complexity 3 of func .* is high .*"
 	if n <= 1 { // +1
 		return 1
 	} else { // +1
@@ -35,7 +35,7 @@ func GoCognit_CC3_Fact(n int) int { // ERROR "cognitive complexity 3 of func .* 
 	}
 } // total complexity = 3
 
-func GoCognit_CC7_SumOfPrimes(max int) int { // ERROR "cognitive complexity 7 of func .* is high .*"
+func GoCognit_CC7_SumOfPrimes(max int) int { // want "cognitive complexity 7 of func .* is high .*"
 	var total int
 
 OUT:

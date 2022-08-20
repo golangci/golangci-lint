@@ -1,7 +1,7 @@
 //golangcitest:args -Egolint --internal-cmd-test
 package testdata
 
-var Go_lint string // ERROR "don't use underscores in Go names; var `Go_lint` should be `GoLint`"
+var Go_lint string // want "don't use underscores in Go names; var `Go_lint` should be `GoLint`"
 
 func ExportedFuncWithNoComment() {
 }
@@ -19,4 +19,4 @@ type GolintTest struct{}
 
 func (receiver1 GolintTest) A() {}
 
-func (receiver2 GolintTest) B() {} // ERROR "receiver name receiver2 should be consistent with previous receiver name receiver1 for GolintTest"
+func (receiver2 GolintTest) B() {} // want "receiver name receiver2 should be consistent with previous receiver name receiver1 for GolintTest"

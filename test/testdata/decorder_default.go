@@ -1,4 +1,5 @@
 //golangcitest:args -Edecorder
+//golangcitest:expected_exitcode 0
 package testdata
 
 import "math"

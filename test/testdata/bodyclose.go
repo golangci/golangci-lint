@@ -7,6 +7,6 @@ import (
 )
 
 func BodycloseNotClosed() {
-	resp, _ := http.Get("https://google.com") // ERROR "response body must be closed"
+	resp, _ := http.Get("https://google.com") // want "response body must be closed"
 	_, _ = ioutil.ReadAll(resp.Body)
 }

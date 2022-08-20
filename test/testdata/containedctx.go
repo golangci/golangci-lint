@@ -9,7 +9,7 @@ type ok struct {
 }
 
 type ng struct {
-	ctx context.Context // ERROR "found a struct that contains a context.Context field"
+	ctx context.Context // want "found a struct that contains a context.Context field"
 }
 
 type empty struct{}

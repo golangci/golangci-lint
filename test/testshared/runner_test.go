@@ -140,7 +140,7 @@ func TestRunnerBuilder_Runner(t *testing.T) {
 					"--go=1.17",
 					"--internal-cmd-test",
 					"--allow-parallel-runners",
-					"./testdata/all.go",
+					"testdata/all.go",
 				},
 			},
 		},

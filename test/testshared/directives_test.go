@@ -5,6 +5,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+
+	"github.com/golangci/golangci-lint/pkg/exitcodes"
 )
 
 func TestParseTestDirectives(t *testing.T) {
@@ -15,6 +17,7 @@ func TestParseTestDirectives(t *testing.T) {
 		Args:           []string{"-Efoo", "--simple", "--hello=world"},
 		ConfigPath:     "testdata/example.yml",
 		ExpectedLinter: "bar",
+		ExitCode:       exitcodes.Success,
 	}
 	assert.Equal(t, expected, rc)
 }

@@ -15,7 +15,7 @@ func SampleRevive(t *time.Duration) error {
 	}
 }
 
-func testReviveComplexity(s string) { // ERROR "cyclomatic: function testReviveComplexity has cyclomatic complexity 22"
+func testReviveComplexity(s string) { // want "cyclomatic: function testReviveComplexity has cyclomatic complexity 22"
 	if s == http.MethodGet || s == "2" || s == "3" || s == "4" || s == "5" || s == "6" || s == "7" {
 		return
 	}

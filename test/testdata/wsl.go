@@ -11,46 +11,46 @@ func main() {
 	var (
 		y = 0
 	)
-	if y < 1 { // ERROR "if statements should only be cuddled with assignments"
+	if y < 1 { // want "if statements should only be cuddled with assignments"
 		fmt.Println("tight")
 	}
 
 	thisIsNotUsedInIf := true
-	if 2 > 1 { // ERROR "if statements should only be cuddled with assignments used in the if statement itself"
+	if 2 > 1 { // want "if statements should only be cuddled with assignments used in the if statement itself"
 		return
 	}
 
 	one := 1
 	two := 2
 	three := 3
-	if three == 3 { // ERROR "only one cuddle assignment allowed before if statement"
+	if three == 3 { // want "only one cuddle assignment allowed before if statement"
 		fmt.Println("too many cuddled assignments", one, two, thisIsNotUsedInIf)
 	}
 
 	var a = "a"
-	var b = "b" // ERROR "declarations should never be cuddled"
+	var b = "b" // want "declarations should never be cuddled"
 
 	if true {
 		return
 	}
-	if false { // ERROR "if statements should only be cuddled with assignments"
+	if false { // want "if statements should only be cuddled with assignments"
 		return
 	}
 
 	for i := range make([]int, 10) {
 		fmt.Println(i)
 		fmt.Println(i + i)
-		continue // ERROR "branch statements should not be cuddled if block has more than two lines"
+		continue // want "branch statements should not be cuddled if block has more than two lines"
 	}
 
 	assignOne := a
 	fmt.Println(assignOne)
-	assignTwo := b // ERROR "assignments should only be cuddled with other assignments"
+	assignTwo := b // want "assignments should only be cuddled with other assignments"
 	fmt.Println(assignTwo)
 
 	_, cf1 := context.WithCancel(context.Background())
 	_, cf2 := context.WithCancel(context.Background())
-	defer cf1() // ERROR "only one cuddle assignment allowed before defer statement"
+	defer cf1() // want "only one cuddle assignment allowed before defer statement"
 	defer cf2()
 
 	err := multiline(
@@ -65,7 +65,7 @@ func main() {
 		"spanning",
 		"multiple",
 	)
-	if err != nil { // ERROR "if statements should only be cuddled with assignments used in the if statement itself"
+	if err != nil { // want "if statements should only be cuddled with assignments used in the if statement itself"
 		panic("not from the line above")
 	}
 
@@ -89,7 +89,7 @@ func f1() int {
 func f2() int {
 	x := 1
 	y := 3
-	return x + y // ERROR "return statements should not be cuddled if block has more than two lines"
+	return x + y // want "return statements should not be cuddled if block has more than two lines"
 }
 
 func f3() int {
@@ -99,7 +99,7 @@ func f3() int {
 	}
 
 	notSum := 0
-	for _, v := range []int{1, 2, 4} { // ERROR "ranges should only be cuddled with assignments used in the iteration"
+	for _, v := range []int{1, 2, 4} { // want "ranges should only be cuddled with assignments used in the iteration"
 		sum += v
 	}
 
@@ -133,7 +133,7 @@ func sliceExpr() {
 	}
 
 	notOk := 1
-	if v := aSlice[start]; v == 1 { // ERROR "if statements should only be cuddled with assignments used in the if statement itself"
+	if v := aSlice[start]; v == 1 { // want "if statements should only be cuddled with assignments used in the if statement itself"
 		fmt.Println("notOk")
 		fmt.Println(notOk)
 	}
@@ -153,7 +153,7 @@ func indexExpr() {
 	}
 
 	xxx := "xxx"
-	if _, ok := aMap[key]; ok { // ERROR "if statements should only be cuddled with assignments used in the if statement itself"
+	if _, ok := aMap[key]; ok { // want "if statements should only be cuddled with assignments used in the if statement itself"
 		fmt.Println("not ok")
 		fmt.Println(xxx)
 	}
@@ -199,7 +199,7 @@ func IncDecStmt() {
 }
 
 func AnonymousBlock() {
-	func(a, b int) { // ERROR "block should not start with a whitespace"
+	func(a, b int) { // want "block should not start with a whitespace"
 
 		fmt.Println(a + b)
 	}(1, 1)

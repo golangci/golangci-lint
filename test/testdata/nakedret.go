@@ -31,7 +31,7 @@ func NakedretIssue() (a int, b string) {
 	// ...
 
 	// len of this function is 31
-	return // ERROR "naked return in func `NakedretIssue` with 31 lines of code"
+	return // want "naked return in func `NakedretIssue` with 31 lines of code"
 }
 
 func NoNakedretIssue() (a int, b string) {

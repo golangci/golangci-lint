@@ -10,7 +10,7 @@ func simple() (err error) {
 	return
 }
 
-func twoReturnParams() (i int, err error) { // ERROR `named return "i" with type "int" found`
+func twoReturnParams() (i int, err error) { // want `named return "i" with type "int" found`
 	defer func() {
 		i = 0
 		err = nil
@@ -32,7 +32,7 @@ func customName() (myName error) {
 	return
 }
 
-func errorIsNoAssigned() (err error) { // ERROR `named return "err" with type "error" found`
+func errorIsNoAssigned() (err error) { // want `named return "err" with type "error" found`
 	defer func() {
 		_ = err
 		processError(err)
@@ -46,7 +46,7 @@ func errorIsNoAssigned() (err error) { // ERROR `named return "err" with type "e
 	return
 }
 
-func shadowVariable() (err error) { // ERROR `named return "err" with type "error" found`
+func shadowVariable() (err error) { // want `named return "err" with type "error" found`
 	defer func() {
 		err := errors.New("xxx")
 		_ = err
@@ -65,7 +65,7 @@ func shadowVariableButAssign() (err error) {
 	return
 }
 
-func shadowVariable2() (err error) { // ERROR `named return "err" with type "error" found`
+func shadowVariable2() (err error) { // want `named return "err" with type "error" found`
 	defer func() {
 		a, err := doSomething()
 		_ = a
@@ -85,7 +85,7 @@ func errorAliasIsTheSame() (err errorAlias) {
 
 type myError error // linter doesn't check underlying type (yet?)
 
-func customTypeWithErrorUnderline() (err myError) { // ERROR `named return "err" with type "myError" found`
+func customTypeWithErrorUnderline() (err myError) { // want `named return "err" with type "myError" found`
 	defer func() {
 		err = nil
 	}()
@@ -94,7 +94,7 @@ func customTypeWithErrorUnderline() (err myError) { // ERROR `named return "err"
 
 type myError2 interface{ error } // linter doesn't check interfaces
 
-func customTypeWithTheSameInterface() (err myError2) { // ERROR `named return "err" with type "myError2" found`
+func customTypeWithTheSameInterface() (err myError2) { // want `named return "err" with type "myError2" found`
 	defer func() {
 		err = nil
 	}()
@@ -107,7 +107,7 @@ type myError3 struct{} // linter doesn't check interfaces
 
 func (m myError3) Error() string { return "" }
 
-func customTypeImplementingErrorInterface() (err myError3) { // ERROR `named return "err" with type "myError3" found`
+func customTypeImplementingErrorInterface() (err myError3) { // want `named return "err" with type "myError3" found`
 	defer func() {
 		err = struct{}{}
 	}()
@@ -118,7 +118,7 @@ func shadowErrorType() {
 	type error interface { // linter understands that this is not built-in error, even if it has the same name
 		Error() string
 	}
-	do := func() (err error) { // ERROR `named return "err" with type "error" found`
+	do := func() (err error) { // want `named return "err" with type "error" found`
 		defer func() {
 			err = nil
 		}()
@@ -150,14 +150,14 @@ func twoErrorsSeparated() (err1 error, err2 error) {
 	return
 }
 
-func errorSlice() (err []error) { // ERROR `named return "err" with type "\[\]error" found`
+func errorSlice() (err []error) { // want `named return "err" with type "\[\]error" found`
 	defer func() {
 		err = nil
 	}()
 	return
 }
 
-func deferWithVariable() (err error) { // ERROR `named return "err" with type "error" found`
+func deferWithVariable() (err error) { // want `named return "err" with type "error" found`
 	f := func() {
 		err = nil
 	}
@@ -165,7 +165,7 @@ func deferWithVariable() (err error) { // ERROR `named return "err" with type "e
 	return
 }
 
-func uberMultierr() (err error) { // ERROR `named return "err" with type "error" found`
+func uberMultierr() (err error) { // want `named return "err" with type "error" found`
 	defer func() {
 		multierrAppendInto(&err, nil) // linter doesn't allow it (yet?)
 	}()
@@ -243,7 +243,7 @@ var goodFuncLiteral = func() (err error) {
 	return
 }
 
-var badFuncLiteral = func() (err error) { // ERROR `named return "err" with type "error" found`
+var badFuncLiteral = func() (err error) { // want `named return "err" with type "error" found`
 	defer func() {
 		_ = err
 	}()
@@ -269,7 +269,7 @@ func (x) goodMethod() (err error) {
 	return
 }
 
-func (x) badMethod() (err error) { // ERROR `named return "err" with type "error" found`
+func (x) badMethod() (err error) { // want `named return "err" with type "error" found`
 	defer func() {
 		_ = err
 	}()

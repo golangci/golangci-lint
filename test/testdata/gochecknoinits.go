@@ -3,7 +3,7 @@ package testdata
 
 import "fmt"
 
-func init() { // ERROR "don't use `init` function"
+func init() { // want "don't use `init` function"
 	fmt.Println()
 }
 

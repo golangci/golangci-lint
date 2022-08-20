@@ -10,12 +10,12 @@ const (
 )
 
 var decoa = 1
-var decob = 1 // ERROR "multiple \"var\" declarations are not allowed; use parentheses instead"
+var decob = 1 // want "multiple \"var\" declarations are not allowed; use parentheses instead"
 
-type decoe int // ERROR "type must not be placed after const"
+type decoe int // want "type must not be placed after const"
 
 func decof() {
 	const decog = 1
 }
 
-func init() {} // ERROR "init func must be the first function in file"
+func init() {} // want "init func must be the first function in file"

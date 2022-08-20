@@ -1,3 +1,5 @@
+//golangcitest:args -Etparallel
+//golangcitest:expected_exitcode 0
 package testdata
 
 import (
