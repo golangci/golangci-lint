@@ -3,7 +3,7 @@ package testdata
 
 import "time"
 
-type InterfaceBloatExample01 interface { // ERROR "the interface has more than 10 methods: 11"
+type InterfaceBloatExample01 interface { // want "the interface has more than 10 methods: 11"
 	a01() time.Duration
 	a02()
 	a03()
@@ -18,7 +18,7 @@ type InterfaceBloatExample01 interface { // ERROR "the interface has more than 1
 }
 
 func InterfaceBloatExample02() {
-	var _ interface { // ERROR "the interface has more than 10 methods: 11"
+	var _ interface { // want "the interface has more than 10 methods: 11"
 		a01() time.Duration
 		a02()
 		a03()
@@ -33,7 +33,7 @@ func InterfaceBloatExample02() {
 	}
 }
 
-func InterfaceBloatExample03() interface { // ERROR "the interface has more than 10 methods: 11"
+func InterfaceBloatExample03() interface { // want "the interface has more than 10 methods: 11"
 	a01() time.Duration
 	a02()
 	a03()
@@ -50,7 +50,7 @@ func InterfaceBloatExample03() interface { // ERROR "the interface has more than
 }
 
 type InterfaceBloatExample04 struct {
-	Foo interface { // ERROR "the interface has more than 10 methods: 11"
+	Foo interface { // want "the interface has more than 10 methods: 11"
 		a01() time.Duration
 		a02()
 		a03()
@@ -88,7 +88,7 @@ type InterfaceBloatExample05 interface {
 }
 
 type InterfaceBloatExample06 interface {
-	interface { // ERROR "the interface has more than 10 methods: 11"
+	interface { // want "the interface has more than 10 methods: 11"
 		a01() time.Duration
 		a02()
 		a03()
