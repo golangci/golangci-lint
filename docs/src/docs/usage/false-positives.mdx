@@ -142,3 +142,10 @@ func someLegacyFunction() *string {
 You can see more examples of using `//nolint` in [our tests](https://github.com/golangci/golangci-lint/tree/master/pkg/result/processors/testdata) for it.
 
 Use `//nolint` instead of `// nolint` because machine-readable comments should have no space by Go convention.
+
+## Default Exclusions
+
+Some exclusions are considered as common, to help golangci-lint users those common exclusions are used as default exclusions.
+
+If you don't want to use it you can set `issues.exclude-use-default` to `false`.
+{.DefaultExclusions}
