@@ -253,13 +253,11 @@ func TestSortedResults(t *testing.T) {
 			want: strings.Join([]string{
 				"testdata/sort_results/main.go:15:13: Error return value is not checked (errcheck)",
 				"testdata/sort_results/main.go:12:5: var `db` is unused (unused)",
-				"testdata/sort_results/main.go:8:6: func `returnError` is unused (unused)",
 			}, "\n"),
 		},
 		{
 			opt: "--sort-results=true",
 			want: strings.Join([]string{
-				"testdata/sort_results/main.go:8:6: func `returnError` is unused (unused)",
 				"testdata/sort_results/main.go:12:5: var `db` is unused (unused)",
 				"testdata/sort_results/main.go:15:13: Error return value is not checked (errcheck)",
 			}, "\n"),

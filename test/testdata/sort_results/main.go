@@ -11,6 +11,6 @@ func returnError() error {
 
 var db *sql.DB
 
-func _() {
+func Example() {
 	returnError()
 }
