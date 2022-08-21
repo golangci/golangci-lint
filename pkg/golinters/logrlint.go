@@ -7,13 +7,13 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 )
 
-const LogrLintName = "logrlint"
-
 func NewLogrLint() *goanalysis.Linter {
+	a := logrlint.Analyzer
+
 	return goanalysis.NewLinter(
-		LogrLintName,
-		logrlint.Doc,
-		[]*analysis.Analyzer{logrlint.Analyzer},
+		a.Name,
+		a.Doc,
+		[]*analysis.Analyzer{a},
 		nil,
 	).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }
