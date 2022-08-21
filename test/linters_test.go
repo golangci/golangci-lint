@@ -1,13 +1,17 @@
 package test
 
 import (
+	"os"
 	"os/exec"
 	"path/filepath"
+	"strings"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
+	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/test/testshared"
 )
 
@@ -28,18 +32,32 @@ func testSourcesFromDir(t *testing.T, dir string) {
 
 	sources := findSources(t, dir, "*.go")
 
-	testshared.InstallGolangciLint(t)
+	binPath := testshared.InstallGolangciLint(t)
 
-	for _, s := range sources {
-		s := s
-		t.Run(filepath.Base(s), func(subTest *testing.T) {
+	cwd, err := os.Getwd()
+	require.NoError(t, err)
+	t.Cleanup(func() { _ = os.Chdir(cwd) })
+
+	err = os.Chdir(dir)
+	require.NoError(t, err)
+
+	log := logutils.NewStderrLog("test")
+	log.SetLevel(logutils.LogLevelInfo)
+
+	for _, source := range sources {
+		source := source
+		t.Run(filepath.Base(source), func(subTest *testing.T) {
 			subTest.Parallel()
-			testOneSource(subTest, s)
+
+			rel, err := filepath.Rel(dir, sources[0])
+			require.NoError(t, err)
+
+			testOneSource(subTest, log, binPath, rel)
 		})
 	}
 }
 
-func testOneSource(t *testing.T, sourcePath string) {
+func testOneSource(t *testing.T, log *logutils.StderrLog, binPath, sourcePath string) {
 	t.Helper()
 
 	rc := testshared.ParseTestDirectives(t, sourcePath)
@@ -62,6 +80,7 @@ func testOneSource(t *testing.T, sourcePath string) {
 		}
 
 		cmd := testshared.NewRunnerBuilder(t).
+			WithBinPath(binPath).
 			WithNoParallelRunners().
 			WithArgs(caseArgs...).
 			WithRunContext(rc).
@@ -69,7 +88,11 @@ func testOneSource(t *testing.T, sourcePath string) {
 			Runner().
 			Command()
 
+		startedAt := time.Now()
+
 		output, err := cmd.CombinedOutput()
+
+		log.Infof("ran [%s] in %s", strings.Join(cmd.Args, " "), time.Since(startedAt))
 
 		// The returned error will be nil if the test file does not have any issues
 		// and thus the linter exits with exit code 0.
