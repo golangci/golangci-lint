@@ -37,7 +37,7 @@ jobs:
       matrix:
         target:
           - Dockerfile: build/Dockerfile
-          - Dockerfile: build/Dockerfile.alpine
+          - Dockerfile: build/alpine.Dockerfile
     steps:
       - uses: actions/checkout@v3
 
