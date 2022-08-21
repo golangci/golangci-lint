@@ -137,6 +137,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		grouperCfg          *config.GrouperSettings
 		ifshortCfg          *config.IfshortSettings
 		importAsCfg         *config.ImportAsSettings
+		interfaceBloatCfg   *config.InterfaceBloatSettings
 		ireturnCfg          *config.IreturnSettings
 		lllCfg              *config.LllSettings
 		maintIdxCfg         *config.MaintIdxSettings
@@ -209,6 +210,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		grouperCfg = &m.cfg.LintersSettings.Grouper
 		ifshortCfg = &m.cfg.LintersSettings.Ifshort
 		importAsCfg = &m.cfg.LintersSettings.ImportAs
+		interfaceBloatCfg = &m.cfg.LintersSettings.InterfaceBloat
 		ireturnCfg = &m.cfg.LintersSettings.Ireturn
 		lllCfg = &m.cfg.LintersSettings.Lll
 		maintIdxCfg = &m.cfg.LintersSettings.MaintIdx
@@ -556,6 +558,11 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithSince("v1.0.0").
 			WithPresets(linter.PresetUnused).
 			WithURL("https://github.com/gordonklaus/ineffassign"),
+
+		linter.NewConfig(golinters.NewInterfaceBloat(interfaceBloatCfg)).
+			WithSince("v1.49.0").
+			WithPresets(linter.PresetStyle).
+			WithURL("https://github.com/sashamelentyev/interfacebloat"),
 
 		linter.NewConfig(golinters.NewInterfacer()).
 			WithSince("v1.0.0").

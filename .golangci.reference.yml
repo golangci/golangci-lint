@@ -1074,6 +1074,11 @@ linters-settings:
       - pkg: knative.dev/serving/pkg/apis/(\w+)/(v[\w\d]+)
         alias: $1$2
 
+  interfacebloat:
+    # The maximum number of methods allowed for an interface.
+    # Default: 10
+    max: 5
+
   ireturn:
     # ireturn allows using `allow` and `reject` settings at the same time.
     # Both settings are lists of the keywords and regular expressions matched to interface or package names.
@@ -1923,6 +1928,7 @@ linters:
     - ifshort
     - importas
     - ineffassign
+    - interfacebloat
     - interfacer
     - ireturn
     - lll
@@ -2025,6 +2031,7 @@ linters:
     - ifshort
     - importas
     - ineffassign
+    - interfacebloat
     - interfacer
     - ireturn
     - lll
