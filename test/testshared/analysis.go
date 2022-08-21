@@ -6,7 +6,6 @@ import (
 	"go/parser"
 	"go/token"
 	"os"
-	"path/filepath"
 	"regexp"
 	"sort"
 	"strconv"
@@ -20,8 +19,6 @@ import (
 )
 
 const keyword = "want"
-
-const testdataDir = "testdata"
 
 type jsonResult struct {
 	Issues []*result.Issue
@@ -52,9 +49,6 @@ func Analyze(t *testing.T, sourcePath string, rawData []byte) {
 	require.NoError(t, err)
 
 	for _, issue := range reportData.Issues {
-		if !strings.HasPrefix(issue.Pos.Filename, testdataDir) {
-			issue.Pos.Filename = filepath.Join(testdataDir, issue.Pos.Filename)
-		}
 		checkMessage(t, want, issue.Pos, "diagnostic", issue.FromLinter, issue.Text)
 	}
 

@@ -17,12 +17,13 @@ import (
 	"github.com/golangci/golangci-lint/pkg/logutils"
 )
 
-const binName = "../golangci-lint"
+const defaultBinPath = "../golangci-lint"
 
 type RunnerBuilder struct {
 	tb  testing.TB
 	log logutils.Log
 
+	binPath string
 	command string
 	env     []string
 
@@ -42,9 +43,16 @@ func NewRunnerBuilder(tb testing.TB) *RunnerBuilder {
 	return &RunnerBuilder{
 		tb:                   tb,
 		log:                  log,
+		binPath:              defaultBinPath,
 		command:              "run",
 		allowParallelRunners: true,
 	}
+}
+
+func (b *RunnerBuilder) WithBinPath(binPath string) *RunnerBuilder {
+	b.binPath = binPath
+
+	return b
 }
 
 func (b *RunnerBuilder) WithCommand(command string) *RunnerBuilder {
@@ -162,6 +170,7 @@ func (b *RunnerBuilder) Runner() *Runner {
 	}
 
 	return &Runner{
+		binPath: b.binPath,
 		log:     b.log,
 		tb:      b.tb,
 		env:     b.env,
@@ -174,6 +183,7 @@ type Runner struct {
 	log logutils.Log
 	tb  testing.TB
 
+	binPath string
 	env     []string
 	command string
 	args    []string
@@ -197,11 +207,10 @@ func (r *Runner) Run() *RunnerResult {
 	runArgs := append([]string{r.command}, r.args...)
 
 	defer func(startedAt time.Time) {
-		r.log.Infof("ran [%s %s] in %s", binName, strings.Join(runArgs, " "), time.Since(startedAt))
+		r.log.Infof("ran [%s %s] in %s", r.binPath, strings.Join(runArgs, " "), time.Since(startedAt))
 	}(time.Now())
 
-	cmd := exec.Command(binName, runArgs...)
-	cmd.Env = append(os.Environ(), r.env...)
+	cmd := r.Command()
 
 	out, err := cmd.CombinedOutput()
 	if err != nil {
@@ -239,11 +248,8 @@ func (r *Runner) Command() *exec.Cmd {
 
 	runArgs := append([]string{r.command}, r.args...)
 
-	defer func(startedAt time.Time) {
-		r.log.Infof("ran [../golangci-lint %s] in %s", strings.Join(runArgs, " "), time.Since(startedAt))
-	}(time.Now())
-
-	cmd := exec.Command("../golangci-lint", runArgs...)
+	//nolint:gosec
+	cmd := exec.Command(r.binPath, runArgs...)
 	cmd.Env = append(os.Environ(), r.env...)
 
 	return cmd
@@ -311,19 +317,22 @@ func (r *RunnerResult) ExpectHasIssue(issueText string) *RunnerResult {
 	return r.ExpectExitCode(exitcodes.IssuesFound).ExpectOutputContains(issueText)
 }
 
-func InstallGolangciLint(tb testing.TB) {
+func InstallGolangciLint(tb testing.TB) string {
 	tb.Helper()
 
-	if os.Getenv("GOLANGCI_LINT_INSTALLED") == "true" {
-		return
+	if os.Getenv("GOLANGCI_LINT_INSTALLED") != "true" {
+		cmd := exec.Command("make", "-C", "..", "build")
+
+		output, err := cmd.CombinedOutput()
+		if err != nil {
+			tb.Log(string(output))
+		}
+
+		require.NoError(tb, err, "Can't go install golangci-lint")
 	}
 
-	cmd := exec.Command("make", "-C", "..", "build")
+	abs, err := filepath.Abs(defaultBinPath)
+	require.NoError(tb, err)
 
-	output, err := cmd.CombinedOutput()
-	if err != nil {
-		tb.Log(string(output))
-	}
-
-	require.NoError(tb, err, "Can't go install golangci-lint")
+	return abs
 }
