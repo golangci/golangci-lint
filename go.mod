@@ -59,7 +59,7 @@ require (
 	github.com/lufeee/execinquery v1.2.1
 	github.com/maratori/testpackage v1.1.0
 	github.com/matoous/godox v0.0.0-20210227103229-6504466cf951 // v1.0
-	github.com/mattn/go-colorable v0.1.12
+	github.com/mattn/go-colorable v0.1.13
 	github.com/mbilski/exhaustivestruct v1.2.0
 	github.com/mgechev/revive v1.2.3
 	github.com/mitchellh/go-homedir v1.1.0
@@ -138,7 +138,7 @@ require (
 	github.com/kisielk/gotool v1.0.0 // indirect
 	github.com/lufia/plan9stats v0.0.0-20211012122336-39d0f177ccd0 // indirect
 	github.com/magiconair/properties v1.8.6 // indirect
-	github.com/mattn/go-isatty v0.0.14 // indirect
+	github.com/mattn/go-isatty v0.0.16 // indirect
 	github.com/mattn/go-runewidth v0.0.9 // indirect
 	github.com/matttproud/golang_protobuf_extensions v1.0.1 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
