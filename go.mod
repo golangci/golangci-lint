@@ -8,7 +8,7 @@ require (
 	github.com/Antonboom/nilnil v0.1.1
 	github.com/BurntSushi/toml v1.2.0
 	github.com/Djarvur/go-err113 v0.0.0-20210108212216-aea10b59be24
-	github.com/GaijinEntertainment/go-exhaustruct/v2 v2.2.2
+	github.com/GaijinEntertainment/go-exhaustruct/v2 v2.3.0
 	github.com/OpenPeeDeeP/depguard v1.1.0
 	github.com/alexkohler/prealloc v1.0.0
 	github.com/alingse/asasalint v0.0.11
@@ -180,3 +180,5 @@ require (
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	mvdan.cc/lint v0.0.0-20170908181259-adc824a0674b // indirect
 )
+
+require golang.org/x/exp v0.0.0-20220722155223-a9213eeb770e // indirect
