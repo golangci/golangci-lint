@@ -6,16 +6,16 @@ package testdata
 
 import "testing"
 
-func fhelperWithHelperAfterAssignment(f *testing.F) { // ERROR "test helper function should start from f.Helper()"
+func fhelperWithHelperAfterAssignment(f *testing.F) { // want "test helper function should start from f.Helper()"
 	_ = 0
 	f.Helper()
 }
 
-func fhelperWithNotFirst(s string, f *testing.F, i int) { // ERROR `parameter \*testing.F should be the first`
+func fhelperWithNotFirst(s string, f *testing.F, i int) { // want `parameter \*testing.F should be the first`
 	f.Helper()
 }
 
-func fhelperWithIncorrectName(o *testing.F) { // ERROR `parameter \*testing.F should have name f`
+func fhelperWithIncorrectName(o *testing.F) { // want `parameter \*testing.F should have name f`
 	o.Helper()
 }
 

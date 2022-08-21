@@ -4,8 +4,8 @@ package testdata
 func Dogsled() {
 	_ = ret1()
 	_, _ = ret2()
-	_, _, _ = ret3()    // ERROR "declaration has 3 blank identifiers"
-	_, _, _, _ = ret4() // ERROR "declaration has 4 blank identifiers"
+	_, _, _ = ret3()    // want "declaration has 3 blank identifiers"
+	_, _, _, _ = ret4() // want "declaration has 4 blank identifiers"
 }
 
 func ret1() (a int) {

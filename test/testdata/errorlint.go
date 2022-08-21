@@ -17,14 +17,14 @@ func (*errLintBar) Error() string {
 
 func errorLintAll() {
 	err := func() error { return nil }()
-	if err == errLintFoo { // ERROR "comparing with == will fail on wrapped errors. Use errors.Is to check for a specific error"
+	if err == errLintFoo { // want "comparing with == will fail on wrapped errors. Use errors.Is to check for a specific error"
 		log.Println("errCompare")
 	}
 
 	err = errors.New("oops")
-	fmt.Errorf("error: %v", err) // ERROR "non-wrapping format verb for fmt.Errorf. Use `%w` to format errors"
+	fmt.Errorf("error: %v", err) // want "non-wrapping format verb for fmt.Errorf. Use `%w` to format errors"
 
-	switch err.(type) { // ERROR "type switch on error will fail on wrapped errors. Use errors.As to check for specific errors"
+	switch err.(type) { // want "type switch on error will fail on wrapped errors. Use errors.As to check for specific errors"
 	case *errLintBar:
 		log.Println("errLintBar")
 	}

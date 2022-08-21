@@ -5,11 +5,14 @@ import (
 	"go/build/constraint"
 	"os"
 	"runtime"
+	"strconv"
 	"strings"
 	"testing"
 
 	hcversion "github.com/hashicorp/go-version"
 	"github.com/stretchr/testify/require"
+
+	"github.com/golangci/golangci-lint/pkg/exitcodes"
 )
 
 // RunContext FIXME rename?
@@ -17,11 +20,12 @@ type RunContext struct {
 	Args           []string
 	ConfigPath     string
 	ExpectedLinter string
+	ExitCode       int
 }
 
 // ParseTestDirectives parses test directives from sources files.
 //
-//nolint:gocyclo
+//nolint:gocyclo,funlen
 func ParseTestDirectives(tb testing.TB, sourcePath string) *RunContext {
 	tb.Helper()
 
@@ -29,7 +33,9 @@ func ParseTestDirectives(tb testing.TB, sourcePath string) *RunContext {
 	require.NoError(tb, err)
 	tb.Cleanup(func() { _ = f.Close() })
 
-	rc := &RunContext{}
+	rc := &RunContext{
+		ExitCode: exitcodes.IssuesFound,
+	}
 
 	scanner := bufio.NewScanner(f)
 	for scanner.Scan() {
@@ -80,6 +86,14 @@ func ParseTestDirectives(tb testing.TB, sourcePath string) *RunContext {
 		case "//golangcitest:expected_linter":
 			require.NotEmpty(tb, after)
 			rc.ExpectedLinter = after
+			continue
+
+		case "//golangcitest:expected_exitcode":
+			require.NotEmpty(tb, after)
+			val, err := strconv.Atoi(after)
+			require.NoError(tb, err)
+
+			rc.ExitCode = val
 			continue
 
 		default:

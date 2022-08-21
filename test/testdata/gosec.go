@@ -2,7 +2,7 @@
 package testdata
 
 import (
-	"crypto/md5" // ERROR "G501: Blocklisted import crypto/md5: weak cryptographic primitive"
+	"crypto/md5" // want "G501: Blocklisted import crypto/md5: weak cryptographic primitive"
 	"fmt"
 	"log"
 	"os"
@@ -10,7 +10,7 @@ import (
 )
 
 func Gosec() {
-	h := md5.New() // ERROR "G401: Use of weak cryptographic primitive"
+	h := md5.New() // want "G401: Use of weak cryptographic primitive"
 	log.Print(h)
 }
 
@@ -34,5 +34,5 @@ func GosecG204SubprocWithFunc() {
 		return "/tmp/dummy"
 	}
 
-	exec.Command("ls", arg()).Run() // ERROR "G204: Subprocess launched with a potential tainted input or cmd arguments"
+	exec.Command("ls", arg()).Run() // want "G204: Subprocess launched with a potential tainted input or cmd arguments"
 }

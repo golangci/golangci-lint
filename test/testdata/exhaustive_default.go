@@ -1,5 +1,6 @@
 //golangcitest:args -Eexhaustive
 //golangcitest:config_path testdata/configs/exhaustive_default.yml
+//golangcitest:expected_exitcode 0
 package testdata
 
 type Direction int

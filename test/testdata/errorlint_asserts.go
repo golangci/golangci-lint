@@ -23,23 +23,23 @@ func errorLintAsserts() {
 	if errors.As(err, &me) {
 		log.Println("myError")
 	}
-	_, ok := err.(*myError) // ERROR "type assertion on error will fail on wrapped errors. Use errors.As to check for specific errors"
+	_, ok := err.(*myError) // want "type assertion on error will fail on wrapped errors. Use errors.As to check for specific errors"
 	if ok {
 		log.Println("myError")
 	}
-	switch err.(type) { // ERROR "type switch on error will fail on wrapped errors. Use errors.As to check for specific errors"
+	switch err.(type) { // want "type switch on error will fail on wrapped errors. Use errors.As to check for specific errors"
 	case *myError:
 		log.Println("myError")
 	}
-	switch errorLintDoAnotherThing().(type) { // ERROR "type switch on error will fail on wrapped errors. Use errors.As to check for specific errors"
+	switch errorLintDoAnotherThing().(type) { // want "type switch on error will fail on wrapped errors. Use errors.As to check for specific errors"
 	case *myError:
 		log.Println("myError")
 	}
-	switch t := err.(type) { // ERROR "type switch on error will fail on wrapped errors. Use errors.As to check for specific errors"
+	switch t := err.(type) { // want "type switch on error will fail on wrapped errors. Use errors.As to check for specific errors"
 	case *myError:
 		log.Println("myError", t)
 	}
-	switch t := errorLintDoAnotherThing().(type) { // ERROR "type switch on error will fail on wrapped errors. Use errors.As to check for specific errors"
+	switch t := errorLintDoAnotherThing().(type) { // want "type switch on error will fail on wrapped errors. Use errors.As to check for specific errors"
 	case *myError:
 		log.Println("myError", t)
 	}

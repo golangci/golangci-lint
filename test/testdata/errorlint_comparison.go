@@ -30,23 +30,23 @@ func errorLintComparison() {
 	if nil != err {
 		log.Println("nil")
 	}
-	if err == errCompare { // ERROR "comparing with == will fail on wrapped errors. Use errors.Is to check for a specific error"
+	if err == errCompare { // want "comparing with == will fail on wrapped errors. Use errors.Is to check for a specific error"
 		log.Println("errCompare")
 	}
-	if err != errCompare { // ERROR "comparing with != will fail on wrapped errors. Use errors.Is to check for a specific error"
+	if err != errCompare { // want "comparing with != will fail on wrapped errors. Use errors.Is to check for a specific error"
 		log.Println("not errCompare")
 	}
-	if errCompare == err { // ERROR "comparing with == will fail on wrapped errors. Use errors.Is to check for a specific error"
+	if errCompare == err { // want "comparing with == will fail on wrapped errors. Use errors.Is to check for a specific error"
 		log.Println("errCompare")
 	}
-	if errCompare != err { // ERROR "comparing with != will fail on wrapped errors. Use errors.Is to check for a specific error"
+	if errCompare != err { // want "comparing with != will fail on wrapped errors. Use errors.Is to check for a specific error"
 		log.Println("not errCompare")
 	}
-	switch err { // ERROR "switch on an error will fail on wrapped errors. Use errors.Is to check for specific errors"
+	switch err { // want "switch on an error will fail on wrapped errors. Use errors.Is to check for specific errors"
 	case errCompare:
 		log.Println("errCompare")
 	}
-	switch errorLintDoThing() { // ERROR "switch on an error will fail on wrapped errors. Use errors.Is to check for specific errors"
+	switch errorLintDoThing() { // want "switch on an error will fail on wrapped errors. Use errors.Is to check for specific errors"
 	case errCompare:
 		log.Println("errCompare")
 	}

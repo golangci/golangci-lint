@@ -8,7 +8,7 @@ require (
 	github.com/Antonboom/nilnil v0.1.1
 	github.com/BurntSushi/toml v1.2.0
 	github.com/Djarvur/go-err113 v0.0.0-20210108212216-aea10b59be24
-	github.com/GaijinEntertainment/go-exhaustruct/v2 v2.2.2
+	github.com/GaijinEntertainment/go-exhaustruct/v2 v2.3.0
 	github.com/OpenPeeDeeP/depguard v1.1.0
 	github.com/alexkohler/prealloc v1.0.0
 	github.com/alingse/asasalint v0.0.11
@@ -60,7 +60,7 @@ require (
 	github.com/lufeee/execinquery v1.2.1
 	github.com/maratori/testpackage v1.1.0
 	github.com/matoous/godox v0.0.0-20210227103229-6504466cf951 // v1.0
-	github.com/mattn/go-colorable v0.1.12
+	github.com/mattn/go-colorable v0.1.13
 	github.com/mbilski/exhaustivestruct v1.2.0
 	github.com/mgechev/revive v1.2.3
 	github.com/mitchellh/go-homedir v1.1.0
@@ -75,8 +75,9 @@ require (
 	github.com/ryancurrah/gomodguard v1.2.4
 	github.com/ryanrolds/sqlclosecheck v0.3.0
 	github.com/sanposhiho/wastedassign/v2 v2.0.6
-	github.com/sashamelentyev/usestdlibvars v1.10.0
-	github.com/securego/gosec/v2 v2.12.0
+	github.com/sashamelentyev/interfacebloat v1.1.0
+	github.com/sashamelentyev/usestdlibvars v1.13.0
+	github.com/securego/gosec/v2 v2.13.1
 	github.com/shazow/go-diff v0.0.0-20160112020656-b6b7b6733b8c
 	github.com/shirou/gopsutil/v3 v3.22.7
 	github.com/sirupsen/logrus v1.9.0
@@ -139,7 +140,7 @@ require (
 	github.com/kisielk/gotool v1.0.0 // indirect
 	github.com/lufia/plan9stats v0.0.0-20211012122336-39d0f177ccd0 // indirect
 	github.com/magiconair/properties v1.8.6 // indirect
-	github.com/mattn/go-isatty v0.0.14 // indirect
+	github.com/mattn/go-isatty v0.0.16 // indirect
 	github.com/mattn/go-runewidth v0.0.9 // indirect
 	github.com/matttproud/golang_protobuf_extensions v1.0.1 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
@@ -171,10 +172,11 @@ require (
 	go.uber.org/atomic v1.7.0 // indirect
 	go.uber.org/multierr v1.6.0 // indirect
 	go.uber.org/zap v1.17.0 // indirect
+	golang.org/x/exp v0.0.0-20220722155223-a9213eeb770e // indirect
 	golang.org/x/exp/typeparams v0.0.0-20220722155223-a9213eeb770e // indirect
 	golang.org/x/mod v0.6.0-dev.0.20220419223038-86c51ed26bb4 // indirect
 	golang.org/x/sync v0.0.0-20220722155255-886fb9371eb4 // indirect
-	golang.org/x/sys v0.0.0-20220808155132-1c4a2a72c664 // indirect
+	golang.org/x/sys v0.0.0-20220811171246-fbc7d0a398ab // indirect
 	golang.org/x/text v0.3.7 // indirect
 	google.golang.org/protobuf v1.28.0 // indirect
 	gopkg.in/ini.v1 v1.66.6 // indirect

@@ -23,6 +23,6 @@ func TestErrcheckIgnoreIoutil() []byte {
 }
 
 func TestErrcheckNoIgnoreIoutil() []byte {
-	ret, _ := ioutil.ReadAll(nil) // ERROR "Error return value of `ioutil.ReadAll` is not checked"
+	ret, _ := ioutil.ReadAll(nil) // want "Error return value of `ioutil.ReadAll` is not checked"
 	return ret
 }

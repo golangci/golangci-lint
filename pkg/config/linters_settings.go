@@ -152,6 +152,7 @@ type LintersSettings struct {
 	Grouper          GrouperSettings
 	Ifshort          IfshortSettings
 	ImportAs         ImportAsSettings
+	InterfaceBloat   InterfaceBloatSettings
 	Ireturn          IreturnSettings
 	Lll              LllSettings
 	MaintIdx         MaintIdxSettings
@@ -471,6 +472,10 @@ type ImportAsSettings struct {
 type ImportAsAlias struct {
 	Pkg   string
 	Alias string
+}
+
+type InterfaceBloatSettings struct {
+	Max int `mapstructure:"max"`
 }
 
 type IreturnSettings struct {

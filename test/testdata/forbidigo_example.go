@@ -8,6 +8,6 @@ import (
 )
 
 func Forbidigo() {
-	fmt.Printf("too noisy!!!")  // ERROR "use of `fmt\\.Printf` forbidden by pattern `fmt\\\\.Print\\.\\*`"
-	time.Sleep(time.Nanosecond) // ERROR "no sleeping!"
+	fmt.Printf("too noisy!!!")  // want "use of `fmt\\.Printf` forbidden by pattern `fmt\\\\.Print\\.\\*`"
+	time.Sleep(time.Nanosecond) // want "no sleeping!"
 }

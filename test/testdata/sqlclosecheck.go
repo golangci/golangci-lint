@@ -69,7 +69,7 @@ func rowsCorrectDefer() {
 }
 
 func rowsMissingClose() {
-	rows, err := db.QueryContext(ctx, "SELECT name FROM users WHERE age=?", age) // ERROR "Rows/Stmt was not closed"
+	rows, err := db.QueryContext(ctx, "SELECT name FROM users WHERE age=?", age) // want "Rows/Stmt was not closed"
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -112,7 +112,7 @@ func rowsNonDeferClose() {
 	}
 	log.Printf("%s are %d years old", strings.Join(names, ", "), age)
 
-	rows.Close() // ERROR "Close should use defer"
+	rows.Close() // want "Close should use defer"
 }
 
 func rowsPassedAndClosed() {
@@ -202,7 +202,7 @@ func stmtCorrectDefer() {
 
 func stmtMissingClose() {
 	// In normal use, create one Stmt when your process starts.
-	stmt, err := db.PrepareContext(ctx, "SELECT username FROM users WHERE id = ?") // ERROR "Rows/Stmt was not closed"
+	stmt, err := db.PrepareContext(ctx, "SELECT username FROM users WHERE id = ?") // want "Rows/Stmt was not closed"
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -240,7 +240,7 @@ func stmtNonDeferClose() {
 		log.Printf("username is %s\n", username)
 	}
 
-	stmt.Close() // ERROR "Close should use defer"
+	stmt.Close() // want "Close should use defer"
 }
 
 func stmtReturn() (*sql.Stmt, error) {

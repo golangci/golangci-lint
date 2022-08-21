@@ -8,7 +8,7 @@ import (
 )
 
 func TestGoConstA(t *testing.T) {
-	a := "needconst" // ERROR "string `needconst` has 5 occurrences, make it a constant"
+	a := "needconst" // want "string `needconst` has 5 occurrences, make it a constant"
 	fmt.Print(a)
 	b := "needconst"
 	fmt.Print(b)
@@ -26,7 +26,7 @@ func TestGoConstB(t *testing.T) {
 const AlreadyHasConst = "alreadyhasconst"
 
 func TestGoConstC(t *testing.T) {
-	a := "alreadyhasconst" // ERROR "string `alreadyhasconst` has 3 occurrences, but such constant `AlreadyHasConst` already exists"
+	a := "alreadyhasconst" // want "string `alreadyhasconst` has 3 occurrences, but such constant `AlreadyHasConst` already exists"
 	fmt.Print(a)
 	b := "alreadyhasconst"
 	fmt.Print(b)

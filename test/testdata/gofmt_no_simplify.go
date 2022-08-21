@@ -9,5 +9,5 @@ func GofmtNotSimplifiedOk() {
 	fmt.Print(x[1:len(x)])
 }
 
-func GofmtBadFormat(){  // ERROR "^File is not `gofmt`-ed"
+func GofmtBadFormat(){  // want "^File is not `gofmt`-ed"
 }

@@ -6,7 +6,7 @@ import "context"
 type MyString string
 
 func contextcheckCase1(ctx context.Context) {
-	funcWithoutCtx() // ERROR "Function `funcWithoutCtx` should pass the context parameter"
+	funcWithoutCtx() // want "Function `funcWithoutCtx` should pass the context parameter"
 }
 
 func contextcheckCase2(ctx context.Context) {
@@ -21,7 +21,7 @@ func contextcheckCase2(ctx context.Context) {
 		funcWithCtx(ctx)
 	}(ctx)
 
-	funcWithCtx(context.Background()) // ERROR "Non-inherited new context, use function like `context.WithXXX` instead"
+	funcWithCtx(context.Background()) // want "Non-inherited new context, use function like `context.WithXXX` instead"
 }
 
 func contextcheckCase3(ctx context.Context) {
@@ -29,7 +29,7 @@ func contextcheckCase3(ctx context.Context) {
 		funcWithCtx(ctx)
 	}()
 
-	ctx = context.Background() // ERROR "Non-inherited new context, use function like `context.WithXXX` instead"
+	ctx = context.Background() // want "Non-inherited new context, use function like `context.WithXXX` instead"
 	funcWithCtx(ctx)
 }
 

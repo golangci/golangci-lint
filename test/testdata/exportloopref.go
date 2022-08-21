@@ -12,11 +12,11 @@ func dummyFunction() {
 	fmt.Println("loop expecting 10, 11, 12, 13")
 	for i, p := range []int{10, 11, 12, 13} {
 		printp(&p)
-		slice = append(slice, &p) // ERROR "exporting a pointer for the loop variable p"
-		array[i] = &p             // ERROR "exporting a pointer for the loop variable p"
+		slice = append(slice, &p) // want "exporting a pointer for the loop variable p"
+		array[i] = &p             // want "exporting a pointer for the loop variable p"
 		if i%2 == 0 {
-			ref = &p   // ERROR "exporting a pointer for the loop variable p"
-			str.x = &p // ERROR "exporting a pointer for the loop variable p"
+			ref = &p   // want "exporting a pointer for the loop variable p"
+			str.x = &p // want "exporting a pointer for the loop variable p"
 		}
 		var vStr struct{ x *int }
 		var vArray [4]*int

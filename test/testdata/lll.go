@@ -3,5 +3,5 @@
 package testdata
 
 func Lll() {
-	// In my experience, long lines are the lines with comments, not the code. So this is a long comment // ERROR "line is 138 characters"
+	// In my experience, long lines are the lines with comments, not the code. So this is a long comment // want "line is 137 characters"
 }

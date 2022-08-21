@@ -188,15 +188,16 @@ func GetDefaultExcludePatternsStrings() []string {
 	return ret
 }
 
+// TODO(ldez): this behavior must be changed in v2, because this is confusing.
 func GetExcludePatterns(include []string) []ExcludePattern {
-	includeMap := make(map[string]bool, len(include))
+	includeMap := make(map[string]struct{}, len(include))
 	for _, inc := range include {
-		includeMap[inc] = true
+		includeMap[inc] = struct{}{}
 	}
 
 	var ret []ExcludePattern
 	for _, p := range DefaultExcludePatterns {
-		if !includeMap[p.ID] {
+		if _, ok := includeMap[p.ID]; !ok {
 			ret = append(ret, p)
 		}
 	}

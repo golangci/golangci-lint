@@ -3,10 +3,10 @@
 package testdata
 
 import (
-	"compress/gzip" // ERROR "`compress/gzip` is in the denylist"
-	"fmt"           // ERROR "`fmt` is in the denylist"
-	"log"           // ERROR "`log` is in the denylist: don't use log"
-	"strings"       // ERROR "`strings` is in the denylist: disallowed in additional guard"
+	"compress/gzip" // want "`compress/gzip` is in the denylist"
+	"fmt"           // want "`fmt` is in the denylist"
+	"log"           // want "`log` is in the denylist: don't use log"
+	"strings"       // want "`strings` is in the denylist: disallowed in additional guard"
 )
 
 func SpewDebugInfo() {
