@@ -1,4 +1,4 @@
-//golangcitest:args -Edeadcode
+//golangcitest:args -Edeadcode --internal-cmd-test
 package testdata
 
 var y int
