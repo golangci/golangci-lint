@@ -251,8 +251,8 @@ func TestSortedResults(t *testing.T) {
 		{
 			opt: "--sort-results=false",
 			want: strings.Join([]string{
-				"testdata/sort_results/main.go:12:5: `db` is unused (deadcode)",
 				"testdata/sort_results/main.go:15:13: Error return value is not checked (errcheck)",
+				"testdata/sort_results/main.go:12:5: var `db` is unused (unused)",
 				"testdata/sort_results/main.go:8:6: func `returnError` is unused (unused)",
 			}, "\n"),
 		},
@@ -260,7 +260,7 @@ func TestSortedResults(t *testing.T) {
 			opt: "--sort-results=true",
 			want: strings.Join([]string{
 				"testdata/sort_results/main.go:8:6: func `returnError` is unused (unused)",
-				"testdata/sort_results/main.go:12:5: `db` is unused (deadcode)",
+				"testdata/sort_results/main.go:12:5: var `db` is unused (unused)",
 				"testdata/sort_results/main.go:15:13: Error return value is not checked (errcheck)",
 			}, "\n"),
 		},
@@ -433,17 +433,6 @@ func TestSkippedDirsTestdata(t *testing.T) {
 		Install().
 		Run().
 		ExpectNoIssues() // all was skipped because in testdata
-}
-
-func TestDeadcodeNoFalsePositivesInMainPkg(t *testing.T) {
-	testshared.NewRunnerBuilder(t).
-		WithNoConfig().
-		WithArgs("--disable-all", "-Edeadcode").
-		WithTargetPath(testdataDir, "deadcode_main_pkg").
-		Runner().
-		Install().
-		Run().
-		ExpectNoIssues()
 }
 
 func TestIdentifierUsedOnlyInTests(t *testing.T) {
