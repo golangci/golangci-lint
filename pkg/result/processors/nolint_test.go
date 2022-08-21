@@ -128,16 +128,23 @@ func TestNolintInvalidLinterName(t *testing.T) {
 		{
 			Pos: token.Position{
 				Filename: fileName,
-				Line:     3,
+				Line:     10,
 			},
-			FromLinter: "varcheck",
+			FromLinter: "errcheck",
 		},
 		{
 			Pos: token.Position{
 				Filename: fileName,
-				Line:     6,
+				Line:     13,
 			},
-			FromLinter: "deadcode",
+			FromLinter: "errcheck",
+		},
+		{
+			Pos: token.Position{
+				Filename: fileName,
+				Line:     22,
+			},
+			FromLinter: "ineffassign",
 		},
 	}
 
@@ -244,22 +251,22 @@ func TestIgnoredRangeMatches(t *testing.T) {
 func TestNolintWholeFile(t *testing.T) {
 	fileName := filepath.Join("testdata", "nolint_whole_file.go")
 
-	p := newTestNolintProcessor(nil)
+	p := newTestNolintProcessor(getMockLog())
 	defer p.Finish()
 
 	processAssertEmpty(t, p, result.Issue{
 		Pos: token.Position{
 			Filename: fileName,
-			Line:     4,
+			Line:     9,
 		},
-		FromLinter: "varcheck",
+		FromLinter: "errcheck",
 	})
 	processAssertSame(t, p, result.Issue{
 		Pos: token.Position{
 			Filename: fileName,
-			Line:     4,
+			Line:     14,
 		},
-		FromLinter: "deadcode",
+		FromLinter: "govet",
 	})
 }
 

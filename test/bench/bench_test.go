@@ -47,12 +47,7 @@ func prepareGithubProject(owner, name string) func(*testing.B) {
 
 func getBenchLintersArgsNoMegacheck() []string {
 	return []string{
-		"--enable=deadcode",
 		"--enable=gocyclo",
-		"--enable=golint",
-		"--enable=varcheck",
-		"--enable=structcheck",
-		"--enable=maligned",
 		"--enable=errcheck",
 		"--enable=dupl",
 		"--enable=ineffassign",

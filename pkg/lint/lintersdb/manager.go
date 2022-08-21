@@ -320,7 +320,8 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithSince("v1.0.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetUnused).
-			WithURL("https://github.com/remyoudompheng/go-misc/tree/master/deadcode"),
+			WithURL("https://github.com/remyoudompheng/go-misc/tree/master/deadcode").
+			Deprecated("The owner seems to have abandoned the linter.", "v1.49.0", "unused"),
 
 		linter.NewConfig(golinters.NewDepguard(depGuardCfg)).
 			WithSince("v1.4.0").
@@ -714,6 +715,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetUnused).
 			WithURL("https://github.com/opennota/check").
+			Deprecated("The owner seems to have abandoned the linter.", "v1.49.0", "unused").
 			WithNoopFallback(m.cfg),
 
 		linter.NewConfig(golinters.NewStylecheck(stylecheckCfg)).
@@ -786,7 +788,8 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithSince("v1.0.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetUnused).
-			WithURL("https://github.com/opennota/check"),
+			WithURL("https://github.com/opennota/check").
+			Deprecated("The owner seems to have abandoned the linter.", "v1.49.0", "unused"),
 
 		linter.NewConfig(golinters.NewVarnamelen(varnamelenCfg)).
 			WithSince("v1.43.0").
@@ -831,9 +834,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		golinters.NewStaticcheck(staticcheckCfg).Name(): true,
 		golinters.NewUnused(unusedCfg).Name():           true,
 		golinters.NewGosimple(gosimpleCfg).Name():       true,
-		golinters.NewVarcheck(varcheckCfg).Name():       true,
 		golinters.NewIneffassign().Name():               true,
-		golinters.NewDeadcode().Name():                  true,
 		golinters.NewTypecheck().Name():                 true,
 	}
 	return enableLinterConfigs(lcs, func(lc *linter.Config) bool {
