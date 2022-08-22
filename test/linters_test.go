@@ -61,7 +61,7 @@ func testSourcesFromDir(t *testing.T, dir string) {
 		t.Run(filepath.Base(source), func(subTest *testing.T) {
 			subTest.Parallel()
 
-			rel, err := filepath.Rel(dir, sources[0])
+			rel, err := filepath.Rel(dir, source)
 			require.NoError(t, err)
 
 			testOneSource(subTest, log, binPath, rel)

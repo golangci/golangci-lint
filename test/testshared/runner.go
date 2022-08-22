@@ -104,7 +104,17 @@ func (b *RunnerBuilder) WithRunContext(rc *RunContext) *RunnerBuilder {
 		return b
 	}
 
-	return b.WithConfigFile(rc.ConfigPath).WithArgs(rc.Args...)
+	dir, err := os.Getwd()
+	require.NoError(b.tb, err)
+
+	configPath := filepath.FromSlash(rc.ConfigPath)
+
+	base := filepath.Base(dir)
+	if strings.HasPrefix(configPath, base) {
+		configPath = strings.TrimPrefix(configPath, base+string(filepath.Separator))
+	}
+
+	return b.WithConfigFile(configPath).WithArgs(rc.Args...)
 }
 
 func (b *RunnerBuilder) WithDirectives(sourcePath string) *RunnerBuilder {
