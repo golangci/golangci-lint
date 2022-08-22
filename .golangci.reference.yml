@@ -1932,6 +1932,7 @@ linters:
     - interfacer
     - ireturn
     - lll
+    - logrlint
     - maintidx
     - makezero
     - maligned
@@ -2035,6 +2036,7 @@ linters:
     - interfacer
     - ireturn
     - lll
+    - logrlint
     - maintidx
     - makezero
     - maligned

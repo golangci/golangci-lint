@@ -25,6 +25,18 @@ func TestTypecheck(t *testing.T) {
 	testSourcesFromDir(t, filepath.Join(testdataDir, "notcompiles"))
 }
 
+func TestSourcesFromTestdataSubDir(t *testing.T) {
+	subDirs := []string{
+		"logrlint",
+	}
+
+	for _, dir := range subDirs {
+		t.Run(dir, func(t *testing.T) {
+			testSourcesFromDir(t, filepath.Join(testdataDir, dir))
+		})
+	}
+}
+
 func testSourcesFromDir(t *testing.T, dir string) {
 	t.Helper()
 

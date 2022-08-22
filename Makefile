@@ -43,6 +43,10 @@ test_linters:
 	GL_TEST_RUN=1 go test -v ./test -count 1 -run TestSourcesFromTestdata/$T
 .PHONY: test_linters
 
+test_linters_sub:
+	GL_TEST_RUN=1 go test -v ./test -count 1 -run TestSourcesFromTestdataSubDir/$T
+.PHONY: test_linters_sub
+
 # Maintenance
 
 fast_generate: assets/github-action-config.json
