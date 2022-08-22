@@ -1,6 +1,9 @@
 package golinters
 
 import (
+	"fmt"
+	"strings"
+
 	"github.com/curioswitch/go-reassign"
 	"golang.org/x/tools/go/analysis"
 
@@ -12,10 +15,11 @@ func NewReassign(settings *config.ReassignSettings) *goanalysis.Linter {
 	a := reassign.NewAnalyzer()
 
 	var cfg map[string]map[string]interface{}
-	if settings != nil {
+	if settings != nil && len(settings.Patterns) > 0 {
+		patternStr := fmt.Sprintf("^(%s)$", strings.Join(settings.Patterns, "|"))
 		cfg = map[string]map[string]interface{}{
 			a.Name: {
-				reassign.FlagPattern: settings.Pattern,
+				reassign.FlagPattern: patternStr,
 			},
 		}
 	}

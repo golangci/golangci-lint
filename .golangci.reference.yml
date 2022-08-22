@@ -1226,10 +1226,11 @@ linters-settings:
      - UnitAbbreviations
 
   reassign:
-    # Pattern for variables that are checked for reassignment.
+    # Patterns for variables that are checked for reassignment.
     # See https://github.com/curioswitch/go-reassign#usage
-    # Defaults to "^(EOF|Err.*)$"
-    pattern: ".*"
+    # Defaults to [EOF, Err.*]
+    patterns:
+     - ".*"
 
   revive:
     # Maximum number of open files at the same time.
