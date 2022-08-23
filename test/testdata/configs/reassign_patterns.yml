@@ -1,5 +1,5 @@
 linters-settings:
   reassign:
     patterns:
-      - EOF
       - DefaultClient
+      - DefaultTransport
