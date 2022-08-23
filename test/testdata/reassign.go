@@ -8,6 +8,6 @@ import (
 )
 
 func breakIO() {
-	http.DefaultClient = nil // ERROR `reassigning variable DefaultClient in other package http`
-	io.EOF = nil             // ERROR `reassigning variable EOF in other package io`
+	http.DefaultClient = nil // want `reassigning variable DefaultClient in other package http`
+	io.EOF = nil             // want `reassigning variable EOF in other package io`
 }
