@@ -1226,9 +1226,9 @@ linters-settings:
      - UnitAbbreviations
 
   reassign:
-    # Patterns for variables that are checked for reassignment.
+    # Patterns for global variable names that are checked for reassignment.
     # See https://github.com/curioswitch/go-reassign#usage
-    # Defaults to [EOF, Err.*]
+    # Default: ["EOF", "Err.*"]
     patterns:
      - ".*"
 
