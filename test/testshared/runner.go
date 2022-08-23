@@ -4,6 +4,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"sync"
 	"syscall"
@@ -17,7 +18,13 @@ import (
 	"github.com/golangci/golangci-lint/pkg/logutils"
 )
 
-const defaultBinPath = "../golangci-lint"
+func defaultBinaryName() string {
+	name := filepath.Join("..", "golangci-lint")
+	if runtime.GOOS == "windows" {
+		name += ".exe"
+	}
+	return name
+}
 
 type RunnerBuilder struct {
 	tb  testing.TB
@@ -43,7 +50,7 @@ func NewRunnerBuilder(tb testing.TB) *RunnerBuilder {
 	return &RunnerBuilder{
 		tb:                   tb,
 		log:                  log,
-		binPath:              defaultBinPath,
+		binPath:              defaultBinaryName(),
 		command:              "run",
 		allowParallelRunners: true,
 	}
@@ -68,7 +75,10 @@ func (b *RunnerBuilder) WithNoConfig() *RunnerBuilder {
 }
 
 func (b *RunnerBuilder) WithConfigFile(cfgPath string) *RunnerBuilder {
-	b.configPath = cfgPath
+	if cfgPath != "" {
+		b.configPath = filepath.FromSlash(cfgPath)
+	}
+
 	b.noConfig = cfgPath == ""
 
 	return b
@@ -338,10 +348,10 @@ func InstallGolangciLint(tb testing.TB) string {
 			tb.Log(string(output))
 		}
 
-		require.NoError(tb, err, "Can't go install golangci-lint")
+		assert.NoError(tb, err, "Can't go install golangci-lint %s", string(output))
 	}
 
-	abs, err := filepath.Abs(defaultBinPath)
+	abs, err := filepath.Abs(defaultBinaryName())
 	require.NoError(tb, err)
 
 	return abs
