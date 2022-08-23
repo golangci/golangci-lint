@@ -534,7 +534,7 @@ type PromlinterSettings struct {
 }
 
 type ReassignSettings struct {
-	Patterns []string `mapstructure:"pattern"`
+	Patterns []string `mapstructure:"patterns"`
 }
 
 type ReviveSettings struct {
