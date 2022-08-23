@@ -9,7 +9,7 @@ env:
   GO_VERSION: 1.19
 
 jobs:
-  # Check if there any dirty change for go mod tidy
+  # Check if there is any dirty change for go mod tidy
   go-mod:
     runs-on: ubuntu-latest
     steps:
@@ -41,8 +41,7 @@ jobs:
           # ex:
           # - 1.18beta1 -> 1.18.0-beta.1
           # - 1.18rc1 -> 1.18.0-rc.1
-#          go-version: ${{ env.GO_VERSION }} # todo(ldez) uncomment after the next release v1.48.0
-          go-version: 1.18
+          go-version: ${{ env.GO_VERSION }}
       - name: lint
         uses: golangci/golangci-lint-action@v3.2.0
         with:
@@ -66,7 +65,6 @@ jobs:
           go-version: ${{ env.GO_VERSION }} # test only the latest go version to speed up CI
       - name: Run tests
         run: make.exe test
-        continue-on-error: true
 
   tests-on-macos:
     needs: golangci-lint # run after golangci-lint action to not produce duplicated errors
