@@ -1,4 +1,4 @@
-linter-settings:
+linters-settings:
   reassign:
     patterns:
       - EOF
