@@ -168,6 +168,7 @@ type LintersSettings struct {
 	Prealloc         PreallocSettings
 	Predeclared      PredeclaredSettings
 	Promlinter       PromlinterSettings
+	Reassign         ReassignSettings
 	Revive           ReviveSettings
 	RowsErrCheck     RowsErrCheckSettings
 	Staticcheck      StaticCheckSettings
@@ -530,6 +531,10 @@ type PredeclaredSettings struct {
 type PromlinterSettings struct {
 	Strict          bool     `mapstructure:"strict"`
 	DisabledLinters []string `mapstructure:"disabled-linters"`
+}
+
+type ReassignSettings struct {
+	Patterns []string `mapstructure:"patterns"`
 }
 
 type ReviveSettings struct {
