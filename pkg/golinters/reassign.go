@@ -16,10 +16,9 @@ func NewReassign(settings *config.ReassignSettings) *goanalysis.Linter {
 
 	var cfg map[string]map[string]interface{}
 	if settings != nil && len(settings.Patterns) > 0 {
-		patternStr := fmt.Sprintf("^(%s)$", strings.Join(settings.Patterns, "|"))
 		cfg = map[string]map[string]interface{}{
 			a.Name: {
-				reassign.FlagPattern: patternStr,
+				reassign.FlagPattern: fmt.Sprintf("^(%s)$", strings.Join(settings.Patterns, "|")),
 			},
 		}
 	}
