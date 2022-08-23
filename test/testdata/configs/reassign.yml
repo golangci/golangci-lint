@@ -1,0 +1,5 @@
+linter-settings:
+  reassign:
+    patterns:
+      - EOF
+      - DefaultClient

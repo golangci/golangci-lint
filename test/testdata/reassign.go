@@ -1,8 +1,13 @@
 //golangcitest:args -Ereassign
+//golangcitest:config_path testdata/configs/reassign.yml
 package testdata
 
-import "io"
+import (
+	"io"
+	"net/http"
+)
 
 func breakIO() {
-	io.EOF = nil // ERROR `reassigning variable EOF in other package io`
+	http.DefaultClient = nil // ERROR `reassigning variable DefaultClient in other package http`
+	io.EOF = nil             // ERROR `reassigning variable EOF in other package io`
 }
