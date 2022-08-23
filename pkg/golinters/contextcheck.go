@@ -9,15 +9,14 @@ import (
 )
 
 func NewContextCheck() *goanalysis.Linter {
-	conf := contextcheck.Configuration{}
-	analyzer := contextcheck.NewAnalyzer(conf)
+	analyzer := contextcheck.NewAnalyzer(contextcheck.Configuration{})
+
 	return goanalysis.NewLinter(
-		"contextcheck",
-		"check the function whether use a non-inherited context",
+		analyzer.Name,
+		analyzer.Doc,
 		[]*analysis.Analyzer{analyzer},
 		nil,
-	).WithLoadMode(goanalysis.LoadModeTypesInfo).
-		WithContextSetter(func(lintCtx *linter.Context) {
-			analyzer.Run = contextcheck.NewRun(lintCtx.Packages, conf.DisableFact)
-		})
+	).WithContextSetter(func(lintCtx *linter.Context) {
+		analyzer.Run = contextcheck.NewRun(lintCtx.Packages, false)
+	}).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }
