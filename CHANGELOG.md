@@ -1,6 +1,39 @@
 Follow the news and releases on our [twitter](https://twitter.com/golangci) and our [blog](https://medium.com/golangci).
 There is the most valuable changes log:
 
+### v1.49.0
+
+IMPORTANT: `varcheck` and `deadcode` has been removed of default linters.
+
+1. new linters
+   * `interfacebloat`: https://github.com/sashamelentyev/interfacebloat
+   * `logrlint`: https://github.com/timonwong/logrlint
+   * `reassign`: https://github.com/curioswitch/go-reass
+2. updated linters
+   * `go-colorable`: from 0.1.12 to 0.1.13
+   * `go-critic`: from 0.6.3 to 0.6.4
+   * `go-errorlint`: from 1.0.0 to 1.0.2
+   * `go-exhaustruct`: from 2.2.2 to 2.3.0
+   * `gopsutil`: from 3.22.6 to 3.22.7
+   * `gosec`: from 2.12.0 to 2.13.1
+   * `revive`: from 1.2.1 to 1.2.3
+   * `usestdlibvars`: from 1.8.0 to 1.13.0
+   * `contextcheck`: from v1.0.4 to v1.0.6 && re-enable
+   * `nosnakecase`: This linter is deprecated.
+   * `varcheck`: This linter is deprecated use `unused` instead.
+   * `deadcode`: This linter is deprecated use `unused` instead.
+   * `structcheck`: This linter is deprecated use `unused` instead.
+3. documentation
+   * `revive`: fix wrong URL
+   * Add a section about default exclusions
+   * `usestdlibvars`: fix typo in documentation
+   * `nolintlint`: remove allow-leading-space option
+   * Update documentation and assets
+4. misc.
+   * dev: rewrite the internal tests framework
+   * fix: exit early on run --version
+   * fix: set an explicit `GOROOT` in the Docker image for `go-critic`
+
 ### v1.48.0
 
 1. new linters
