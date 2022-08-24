@@ -297,7 +297,7 @@ func (r *RunnerResult) ExpectExitCode(possibleCodes ...int) *RunnerResult {
 func (r *RunnerResult) ExpectOutputRegexp(s string) *RunnerResult {
 	r.tb.Helper()
 
-	assert.Regexp(r.tb, normalizeFilePathInRegex(s), r.output, "exit code is %d", r.exitCode)
+	assert.Regexp(r.tb, normalizePathInRegex(s), r.output, "exit code is %d", r.exitCode)
 	return r
 }
 

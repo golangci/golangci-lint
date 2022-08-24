@@ -7,25 +7,30 @@ import (
 	"testing"
 )
 
+// SkipOnWindows it's a noop function on Unix.
 func SkipOnWindows(_ testing.TB) {}
 
+// NormalizeFilePathInJSON it's a noop function on Unix.
 func NormalizeFilePathInJSON(in string) string {
 	return in
 }
 
-// NormalizeFileInString normalizes in quoted string.
+// NormalizeFileInString it's a noop function on Unix.
 func NormalizeFileInString(in string) string {
 	return in
 }
 
+// defaultBinaryName returns the path to the default binary.
 func defaultBinaryName() string {
 	return filepath.Join("..", "golangci-lint")
 }
 
+// normalizeFilePath it's a noop function on Unix.
 func normalizeFilePath(in string) string {
 	return in
 }
 
-func normalizeFilePathInRegex(path string) string {
+// normalizePathInRegex it's a noop function on Unix.
+func normalizePathInRegex(path string) string {
 	return path
 }

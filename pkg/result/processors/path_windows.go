@@ -10,12 +10,10 @@ import (
 
 var separatorToReplace = regexp.QuoteMeta(string(filepath.Separator))
 
+// normalizePathInRegex normalizes path in regular expressions.
+// noop on Unix.
+// This replacing should be safe because "/" are disallowed in Windows
+// https://docs.microsoft.com/windows/win32/fileio/naming-a-file
 func normalizePathInRegex(path string) string {
-	if filepath.Separator == '/' {
-		return path
-	}
-
-	// This replacing should be safe because "/" are disallowed in Windows
-	// https://docs.microsoft.com/ru-ru/windows/win32/fileio/naming-a-file
 	return strings.ReplaceAll(path, "/", separatorToReplace)
 }
