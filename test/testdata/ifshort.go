@@ -1,3 +1,5 @@
+//go:build !windows
+
 //golangcitest:args -Eifshort --internal-cmd-test
 package testdata
 

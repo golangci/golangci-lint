@@ -12,6 +12,8 @@ import (
 )
 
 func TestFix(t *testing.T) {
+	testshared.SkipOnWindows(t)
+
 	tmpDir := filepath.Join(testdataDir, "fix.tmp")
 	_ = os.RemoveAll(tmpDir) // cleanup previous runs
 
