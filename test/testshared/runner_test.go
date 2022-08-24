@@ -2,7 +2,6 @@ package testshared
 
 import (
 	"path/filepath"
-	"regexp"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -220,7 +219,6 @@ func TestRunnerResult_ExpectOutputNotContains(t *testing.T) {
 
 func TestRunnerResult_ExpectOutputRegexp(t *testing.T) {
 	r := &RunnerResult{tb: t, output: "this is an output"}
-	r.ExpectOutputRegexp(regexp.MustCompile(`an.+`))
 	r.ExpectOutputRegexp(`an.+`)
 	r.ExpectOutputRegexp("an")
 }

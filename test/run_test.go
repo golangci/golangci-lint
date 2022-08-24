@@ -2,7 +2,6 @@ package test
 
 import (
 	"path/filepath"
-	"regexp"
 	"strings"
 	"testing"
 
@@ -46,7 +45,7 @@ func TestNotExistingDirRun(t *testing.T) {
 		Run().
 		ExpectExitCode(exitcodes.Failure).
 		ExpectOutputContains("cannot find package").
-		ExpectOutputContains("/testdata/no_such_dir")
+		ExpectOutputContains(testshared.NormalizeFileInString("/testdata/no_such_dir"))
 }
 
 func TestSymlinkLoop(t *testing.T) {
@@ -681,18 +680,7 @@ func TestPathPrefix(t *testing.T) {
 				WithTargetPath(testdataDir, "withtests").
 				Runner().
 				Run().
-				ExpectOutputRegexp(normalizePathInRegex(test.pattern))
+				ExpectOutputRegexp(test.pattern)
 		})
 	}
-}
-
-// FIXME(ldez) see utils.normalizePathInRegex(...) and maybe move into RunnerResult.ExpectOutputRegexp(...)
-func normalizePathInRegex(path string) string {
-	if filepath.Separator == '/' {
-		return path
-	}
-
-	// This replacing should be safe because "/" are disallowed in Windows
-	// https://docs.microsoft.com/windows/win32/fileio/naming-a-file
-	return strings.ReplaceAll(path, "/", regexp.QuoteMeta(string(filepath.Separator)))
 }

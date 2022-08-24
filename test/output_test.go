@@ -3,7 +3,6 @@ package test
 import (
 	"fmt"
 	"os"
-	"path"
 	"path/filepath"
 	"testing"
 
@@ -50,11 +49,11 @@ func TestOutput_Stderr(t *testing.T) {
 		Runner().
 		Install().
 		Run().
-		ExpectHasIssue(expectedJSONOutput)
+		ExpectHasIssue(testshared.NormalizeFilePathInJSON(expectedJSONOutput))
 }
 
 func TestOutput_File(t *testing.T) {
-	resultPath := path.Join(t.TempDir(), "golangci_lint_test_result")
+	resultPath := filepath.Join(t.TempDir(), "golangci_lint_test_result")
 
 	sourcePath := filepath.Join(testdataDir, "misspell.go")
 
@@ -74,7 +73,7 @@ func TestOutput_File(t *testing.T) {
 
 	b, err := os.ReadFile(resultPath)
 	require.NoError(t, err)
-	require.Contains(t, string(b), expectedJSONOutput)
+	require.Contains(t, string(b), testshared.NormalizeFilePathInJSON(expectedJSONOutput))
 }
 
 func TestOutput_Multiple(t *testing.T) {
@@ -94,5 +93,5 @@ func TestOutput_Multiple(t *testing.T) {
 		Run().
 		//nolint:misspell
 		ExpectHasIssue("testdata/misspell.go:6:38: `occured` is a misspelling of `occurred`").
-		ExpectOutputContains(expectedJSONOutput)
+		ExpectOutputContains(testshared.NormalizeFilePathInJSON(expectedJSONOutput))
 }

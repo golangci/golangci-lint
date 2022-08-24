@@ -4,7 +4,6 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-	"runtime"
 	"strings"
 	"sync"
 	"syscall"
@@ -17,14 +16,6 @@ import (
 	"github.com/golangci/golangci-lint/pkg/exitcodes"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 )
-
-func defaultBinaryName() string {
-	name := filepath.Join("..", "golangci-lint")
-	if runtime.GOOS == "windows" {
-		name += ".exe"
-	}
-	return name
-}
 
 type RunnerBuilder struct {
 	tb  testing.TB
@@ -303,17 +294,17 @@ func (r *RunnerResult) ExpectExitCode(possibleCodes ...int) *RunnerResult {
 }
 
 // ExpectOutputRegexp can be called with either a string or compiled regexp
-func (r *RunnerResult) ExpectOutputRegexp(s interface{}) *RunnerResult {
+func (r *RunnerResult) ExpectOutputRegexp(s string) *RunnerResult {
 	r.tb.Helper()
 
-	assert.Regexp(r.tb, s, r.output, "exit code is %d", r.exitCode)
+	assert.Regexp(r.tb, normalizeFilePathInRegex(s), r.output, "exit code is %d", r.exitCode)
 	return r
 }
 
 func (r *RunnerResult) ExpectOutputContains(s string) *RunnerResult {
 	r.tb.Helper()
 
-	assert.Contains(r.tb, r.output, s, "exit code is %d", r.exitCode)
+	assert.Contains(r.tb, r.output, normalizeFilePath(s), "exit code is %d", r.exitCode)
 	return r
 }
 
@@ -327,7 +318,7 @@ func (r *RunnerResult) ExpectOutputNotContains(s string) *RunnerResult {
 func (r *RunnerResult) ExpectOutputEq(s string) *RunnerResult {
 	r.tb.Helper()
 
-	assert.Equal(r.tb, s, r.output, "exit code is %d", r.exitCode)
+	assert.Equal(r.tb, normalizeFilePath(s), r.output, "exit code is %d", r.exitCode)
 	return r
 }
 
@@ -355,10 +346,4 @@ func InstallGolangciLint(tb testing.TB) string {
 	require.NoError(tb, err)
 
 	return abs
-}
-
-func SkipOnWindows(tb testing.TB) {
-	if runtime.GOOS == "windows" {
-		tb.Skip("not supported on Windows")
-	}
 }
