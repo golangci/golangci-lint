@@ -2,6 +2,7 @@ package test
 
 import (
 	"path/filepath"
+	"regexp"
 	"strings"
 	"testing"
 
@@ -680,7 +681,18 @@ func TestPathPrefix(t *testing.T) {
 				WithTargetPath(testdataDir, "withtests").
 				Runner().
 				Run().
-				ExpectOutputRegexp(test.pattern)
+				ExpectOutputRegexp(normalizePathInRegex(test.pattern))
 		})
 	}
+}
+
+// FIXME(ldez) see utils.normalizePathInRegex(...) and maybe move into RunnerResult.ExpectOutputRegexp(...)
+func normalizePathInRegex(path string) string {
+	if filepath.Separator == '/' {
+		return path
+	}
+
+	// This replacing should be safe because "/" are disallowed in Windows
+	// https://docs.microsoft.com/windows/win32/fileio/naming-a-file
+	return strings.ReplaceAll(path, "/", regexp.QuoteMeta(string(filepath.Separator)))
 }
