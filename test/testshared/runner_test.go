@@ -1,6 +1,7 @@
 package testshared
 
 import (
+	"path/filepath"
 	"regexp"
 	"testing"
 
@@ -67,7 +68,7 @@ func TestRunnerBuilder_Runner(t *testing.T) {
 					"--internal-cmd-test",
 					"--allow-parallel-runners",
 					"-c",
-					"./testdata/example.yml",
+					filepath.FromSlash("./testdata/example.yml"),
 				},
 			},
 		},
@@ -82,7 +83,7 @@ func TestRunnerBuilder_Runner(t *testing.T) {
 					"--internal-cmd-test",
 					"--allow-parallel-runners",
 					"-c",
-					"testdata/example.yml",
+					filepath.FromSlash("testdata/example.yml"),
 					"-Efoo",
 					"--simple",
 					"--hello=world",
@@ -140,7 +141,7 @@ func TestRunnerBuilder_Runner(t *testing.T) {
 					"--go=1.17",
 					"--internal-cmd-test",
 					"--allow-parallel-runners",
-					"testdata/all.go",
+					filepath.FromSlash("testdata/all.go"),
 				},
 			},
 		},
@@ -149,7 +150,7 @@ func TestRunnerBuilder_Runner(t *testing.T) {
 			builder: NewRunnerBuilder(t).
 				WithRunContext(&RunContext{
 					Args:           []string{"-Efoo", "--simple", "--hello=world"},
-					ConfigPath:     "testdata/example.yml",
+					ConfigPath:     filepath.FromSlash("testdata/example.yml"),
 					ExpectedLinter: "test",
 				}),
 			expected: &Runner{
@@ -160,7 +161,7 @@ func TestRunnerBuilder_Runner(t *testing.T) {
 					"--internal-cmd-test",
 					"--allow-parallel-runners",
 					"-c",
-					"testdata/example.yml",
+					filepath.FromSlash("testdata/example.yml"),
 					"-Efoo",
 					"--simple",
 					"--hello=world",
