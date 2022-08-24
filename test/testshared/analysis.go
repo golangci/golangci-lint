@@ -46,7 +46,7 @@ func Analyze(t *testing.T, sourcePath string, rawData []byte) {
 
 	var reportData jsonResult
 	err = json.Unmarshal(rawData, &reportData)
-	require.NoError(t, err)
+	require.NoError(t, err, string(rawData))
 
 	for _, issue := range reportData.Issues {
 		checkMessage(t, want, issue.Pos, "diagnostic", issue.FromLinter, issue.Text)

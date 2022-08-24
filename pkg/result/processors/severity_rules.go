@@ -49,7 +49,8 @@ func createSeverityRules(rules []SeverityRule, prefix string) []severityRule {
 			parsedRule.source = regexp.MustCompile(prefix + rule.Source)
 		}
 		if rule.Path != "" {
-			parsedRule.path = regexp.MustCompile(rule.Path)
+			path := normalizePathInRegex(rule.Path)
+			parsedRule.path = regexp.MustCompile(path)
 		}
 		parsedRules = append(parsedRules, parsedRule)
 	}

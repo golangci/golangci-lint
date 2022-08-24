@@ -45,7 +45,7 @@ func TestNotExistingDirRun(t *testing.T) {
 		Run().
 		ExpectExitCode(exitcodes.Failure).
 		ExpectOutputContains("cannot find package").
-		ExpectOutputContains("/testdata/no_such_dir")
+		ExpectOutputContains(testshared.NormalizeFileInString("/testdata/no_such_dir"))
 }
 
 func TestSymlinkLoop(t *testing.T) {

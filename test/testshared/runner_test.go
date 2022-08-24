@@ -1,7 +1,7 @@
 package testshared
 
 import (
-	"regexp"
+	"path/filepath"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -67,7 +67,7 @@ func TestRunnerBuilder_Runner(t *testing.T) {
 					"--internal-cmd-test",
 					"--allow-parallel-runners",
 					"-c",
-					"./testdata/example.yml",
+					filepath.FromSlash("./testdata/example.yml"),
 				},
 			},
 		},
@@ -82,7 +82,7 @@ func TestRunnerBuilder_Runner(t *testing.T) {
 					"--internal-cmd-test",
 					"--allow-parallel-runners",
 					"-c",
-					"testdata/example.yml",
+					filepath.FromSlash("testdata/example.yml"),
 					"-Efoo",
 					"--simple",
 					"--hello=world",
@@ -140,7 +140,7 @@ func TestRunnerBuilder_Runner(t *testing.T) {
 					"--go=1.17",
 					"--internal-cmd-test",
 					"--allow-parallel-runners",
-					"testdata/all.go",
+					filepath.FromSlash("testdata/all.go"),
 				},
 			},
 		},
@@ -149,7 +149,7 @@ func TestRunnerBuilder_Runner(t *testing.T) {
 			builder: NewRunnerBuilder(t).
 				WithRunContext(&RunContext{
 					Args:           []string{"-Efoo", "--simple", "--hello=world"},
-					ConfigPath:     "testdata/example.yml",
+					ConfigPath:     filepath.FromSlash("testdata/example.yml"),
 					ExpectedLinter: "test",
 				}),
 			expected: &Runner{
@@ -160,7 +160,7 @@ func TestRunnerBuilder_Runner(t *testing.T) {
 					"--internal-cmd-test",
 					"--allow-parallel-runners",
 					"-c",
-					"testdata/example.yml",
+					filepath.FromSlash("testdata/example.yml"),
 					"-Efoo",
 					"--simple",
 					"--hello=world",
@@ -219,7 +219,6 @@ func TestRunnerResult_ExpectOutputNotContains(t *testing.T) {
 
 func TestRunnerResult_ExpectOutputRegexp(t *testing.T) {
 	r := &RunnerResult{tb: t, output: "this is an output"}
-	r.ExpectOutputRegexp(regexp.MustCompile(`an.+`))
 	r.ExpectOutputRegexp(`an.+`)
 	r.ExpectOutputRegexp("an")
 }

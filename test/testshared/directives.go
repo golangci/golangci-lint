@@ -15,7 +15,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/exitcodes"
 )
 
-// RunContext FIXME rename?
+// RunContext the information extracted from directives.
 type RunContext struct {
 	Args           []string
 	ConfigPath     string
@@ -51,11 +51,8 @@ func ParseTestDirectives(tb testing.TB, sourcePath string) *RunContext {
 			break
 		}
 
-		if strings.HasPrefix(line, "//go:build") || strings.HasPrefix(line, "// +build") {
-			parse, err := constraint.Parse(line)
-			require.NoError(tb, err)
-
-			if !parse.Eval(buildTagGoVersion) {
+		if constraint.IsGoBuild(line) {
+			if !evaluateBuildTags(tb, line) {
 				return nil
 			}
 
@@ -118,6 +115,25 @@ func skipMultilineComment(scanner *bufio.Scanner) {
 	for line := scanner.Text(); !strings.Contains(line, "*/") && scanner.Scan(); {
 		line = scanner.Text()
 	}
+}
+
+// evaluateBuildTags Naive implementation of the evaluation of the build tags.
+// Inspired by https://github.com/golang/go/blob/1dcef7b3bdcea4a829ea22c821e6a9484c325d61/src/cmd/go/internal/modindex/build.go#L914-L972
+func evaluateBuildTags(tb testing.TB, line string) bool {
+	parse, err := constraint.Parse(line)
+	require.NoError(tb, err)
+
+	return parse.Eval(func(tag string) bool {
+		if tag == runtime.GOOS {
+			return true
+		}
+
+		if buildTagGoVersion(tag) {
+			return true
+		}
+
+		return false
+	})
 }
 
 func buildTagGoVersion(tag string) bool {

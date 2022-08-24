@@ -17,8 +17,6 @@ import (
 	"github.com/golangci/golangci-lint/pkg/logutils"
 )
 
-const defaultBinPath = "../golangci-lint"
-
 type RunnerBuilder struct {
 	tb  testing.TB
 	log logutils.Log
@@ -43,7 +41,7 @@ func NewRunnerBuilder(tb testing.TB) *RunnerBuilder {
 	return &RunnerBuilder{
 		tb:                   tb,
 		log:                  log,
-		binPath:              defaultBinPath,
+		binPath:              defaultBinaryName(),
 		command:              "run",
 		allowParallelRunners: true,
 	}
@@ -68,7 +66,10 @@ func (b *RunnerBuilder) WithNoConfig() *RunnerBuilder {
 }
 
 func (b *RunnerBuilder) WithConfigFile(cfgPath string) *RunnerBuilder {
-	b.configPath = cfgPath
+	if cfgPath != "" {
+		b.configPath = filepath.FromSlash(cfgPath)
+	}
+
 	b.noConfig = cfgPath == ""
 
 	return b
@@ -293,17 +294,17 @@ func (r *RunnerResult) ExpectExitCode(possibleCodes ...int) *RunnerResult {
 }
 
 // ExpectOutputRegexp can be called with either a string or compiled regexp
-func (r *RunnerResult) ExpectOutputRegexp(s interface{}) *RunnerResult {
+func (r *RunnerResult) ExpectOutputRegexp(s string) *RunnerResult {
 	r.tb.Helper()
 
-	assert.Regexp(r.tb, s, r.output, "exit code is %d", r.exitCode)
+	assert.Regexp(r.tb, normalizePathInRegex(s), r.output, "exit code is %d", r.exitCode)
 	return r
 }
 
 func (r *RunnerResult) ExpectOutputContains(s string) *RunnerResult {
 	r.tb.Helper()
 
-	assert.Contains(r.tb, r.output, s, "exit code is %d", r.exitCode)
+	assert.Contains(r.tb, r.output, normalizeFilePath(s), "exit code is %d", r.exitCode)
 	return r
 }
 
@@ -317,7 +318,7 @@ func (r *RunnerResult) ExpectOutputNotContains(s string) *RunnerResult {
 func (r *RunnerResult) ExpectOutputEq(s string) *RunnerResult {
 	r.tb.Helper()
 
-	assert.Equal(r.tb, s, r.output, "exit code is %d", r.exitCode)
+	assert.Equal(r.tb, normalizeFilePath(s), r.output, "exit code is %d", r.exitCode)
 	return r
 }
 
@@ -338,10 +339,10 @@ func InstallGolangciLint(tb testing.TB) string {
 			tb.Log(string(output))
 		}
 
-		require.NoError(tb, err, "Can't go install golangci-lint")
+		assert.NoError(tb, err, "Can't go install golangci-lint %s", string(output))
 	}
 
-	abs, err := filepath.Abs(defaultBinPath)
+	abs, err := filepath.Abs(defaultBinaryName())
 	require.NoError(tb, err)
 
 	return abs

@@ -1,7 +1,7 @@
 package processors
 
 import (
-	"path"
+	"path/filepath"
 
 	"github.com/golangci/golangci-lint/pkg/result"
 )
@@ -27,7 +27,7 @@ func (*PathPrefixer) Name() string {
 func (p *PathPrefixer) Process(issues []result.Issue) ([]result.Issue, error) {
 	if p.prefix != "" {
 		for i := range issues {
-			issues[i].Pos.Filename = path.Join(p.prefix, issues[i].Pos.Filename)
+			issues[i].Pos.Filename = filepath.Join(p.prefix, issues[i].Pos.Filename)
 		}
 	}
 	return issues, nil
