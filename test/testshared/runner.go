@@ -356,3 +356,9 @@ func InstallGolangciLint(tb testing.TB) string {
 
 	return abs
 }
+
+func SkipOnWindows(tb testing.TB) {
+	if runtime.GOOS == "windows" {
+		tb.Skip("not supported on Windows")
+	}
+}

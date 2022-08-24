@@ -22,6 +22,8 @@ func TestSourcesFromTestdata(t *testing.T) {
 }
 
 func TestTypecheck(t *testing.T) {
+	testshared.SkipOnWindows(t)
+
 	testSourcesFromDir(t, filepath.Join(testdataDir, "notcompiles"))
 }
 
