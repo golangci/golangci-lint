@@ -2133,6 +2133,7 @@ issues:
 
     # Exclude known linters from partially hard-vendored code,
     # which is impossible to exclude via `nolint` comments.
+    # `/` will be replaced by current OS file path separator to properly work on Windows.
     - path: internal/hmac/
       text: "weak cryptographic primitive"
       linters:
