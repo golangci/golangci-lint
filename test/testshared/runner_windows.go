@@ -39,8 +39,6 @@ func normalizeFilePath(in string) string {
 }
 
 // normalizeFilePathInRegex normalizes path in regular expressions.
-// FIXME(ldez) see utils.normalizeFilePathInRegex(...) and maybe move into RunnerResult.ExpectOutputRegexp(...)
-// FIXME(ldez) use the same approach as normalizeFilePath and NormalizeFilePathInJSON.
 func normalizeFilePathInRegex(path string) string {
 	// This replacing should be safe because "/" are disallowed in Windows
 	// https://docs.microsoft.com/windows/win32/fileio/naming-a-file

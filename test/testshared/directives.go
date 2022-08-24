@@ -15,7 +15,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/exitcodes"
 )
 
-// RunContext FIXME rename?
+// RunContext the information extracted from directives.
 type RunContext struct {
 	Args           []string
 	ConfigPath     string
@@ -51,8 +51,7 @@ func ParseTestDirectives(tb testing.TB, sourcePath string) *RunContext {
 			break
 		}
 
-		// FIXME(ldez) remove IsPlusBuild?
-		if constraint.IsGoBuild(line) || constraint.IsPlusBuild(line) {
+		if constraint.IsGoBuild(line) {
 			if !evaluateBuildTags(tb, line) {
 				return nil
 			}
