@@ -1,3 +1,5 @@
+//golangcitest:args -Egovet
+//golangcitest:expected_exitcode 0
 package main
 
 import (

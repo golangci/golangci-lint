@@ -301,10 +301,13 @@ func (r *RunnerResult) ExpectOutputRegexp(s string) *RunnerResult {
 	return r
 }
 
-func (r *RunnerResult) ExpectOutputContains(s string) *RunnerResult {
+func (r *RunnerResult) ExpectOutputContains(s ...string) *RunnerResult {
 	r.tb.Helper()
 
-	assert.Contains(r.tb, r.output, normalizeFilePath(s), "exit code is %d", r.exitCode)
+	for _, expected := range s {
+		assert.Contains(r.tb, r.output, normalizeFilePath(expected), "exit code is %d", r.exitCode)
+	}
+
 	return r
 }
 

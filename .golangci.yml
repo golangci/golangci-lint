@@ -136,7 +136,6 @@ issues:
     - path: pkg/lint/lintersdb/manager.go
       text: "SA1019: (.+).(GoVersion|LangVersion) is deprecated: use the global `run.go` instead."
 
-
 run:
   timeout: 5m
   go: '1.17' # TODO(ldez): we force to use an old version of Go for the CI and the tests.

@@ -1,4 +1,4 @@
 linters-settings:
   errcheck:
     check-blank: true
-    exclude: testdata/errcheck/exclude.txt
+    exclude: errcheck_exclude.txt
