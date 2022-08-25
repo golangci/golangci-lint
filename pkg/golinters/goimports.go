@@ -30,28 +30,32 @@ func NewGoimports(settings *config.GoImportsSettings) *goanalysis.Linter {
 		"In addition to fixing imports, goimports also formats your code in the same style as gofmt.",
 		[]*analysis.Analyzer{analyzer},
 		nil,
-	).WithContextSetter(func(lintCtx *linter.Context) {
-		imports.LocalPrefix = settings.LocalPrefixes
+	).WithContextSetter(
+		func(lintCtx *linter.Context) {
+			imports.LocalPrefix = settings.LocalPrefixes
 
-		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
-			issues, err := runGoiImports(lintCtx, pass)
-			if err != nil {
-				return nil, err
-			}
+			analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
+				issues, err := runGoiImports(lintCtx, pass)
+				if err != nil {
+					return nil, err
+				}
 
-			if len(issues) == 0 {
+				if len(issues) == 0 {
+					return nil, nil
+				}
+
+				mu.Lock()
+				resIssues = append(resIssues, issues...)
+				mu.Unlock()
+
 				return nil, nil
 			}
-
-			mu.Lock()
-			resIssues = append(resIssues, issues...)
-			mu.Unlock()
-
-			return nil, nil
-		}
-	}).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
-		return resIssues
-	}).WithLoadMode(goanalysis.LoadModeSyntax)
+		},
+	).WithIssuesReporter(
+		func(*linter.Context) []goanalysis.Issue {
+			return resIssues
+		},
+	).WithLoadMode(goanalysis.LoadModeSyntax)
 }
 
 func runGoiImports(lintCtx *linter.Context, pass *analysis.Pass) ([]goanalysis.Issue, error) {
@@ -64,6 +68,7 @@ func runGoiImports(lintCtx *linter.Context, pass *analysis.Pass) ([]goanalysis.I
 		if err != nil { // TODO: skip
 			return nil, err
 		}
+
 		if diff == nil {
 			continue
 		}

@@ -41,8 +41,7 @@ jobs:
           # ex:
           # - 1.18beta1 -> 1.18.0-beta.1
           # - 1.18rc1 -> 1.18.0-rc.1
-#          go-version: ${{ env.GO_VERSION }} # todo(ldez) uncomment after the next release v1.48.0
-          go-version: 1.18
+          go-version: ${{ env.GO_VERSION }}
       - name: lint
         uses: golangci/golangci-lint-action@v3.2.0
         with:

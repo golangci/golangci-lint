@@ -1,0 +1,42 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+indent_size = tab
+indent_style = tab
+insert_final_newline = true
+tab_width = 4
+ij_smart_tabs = true
+ij_continuation_indent_size = 4
+max_line_length = 150
+ij_visual_guides = 80, 120
+
+[*.json]
+tab_width = 2
+indent_style = space
+ij_json_keep_indents_on_empty_lines = false
+ij_json_keep_line_breaks = false
+ij_json_wrap_long_lines = false
+
+[*.go]
+ij_go_add_leading_space_to_comments = true
+
+ij_go_GROUP_CURRENT_PROJECT_IMPORTS = true
+ij_go_group_stdlib_imports = true
+ij_go_use_back_quotes_for_imports = false
+ij_go_import_sorting = goimports
+ij_go_move_all_stdlib_imports_in_one_group = true
+ij_go_remove_redundant_import_aliases = true
+ij_go_move_all_imports_in_one_declaration = true
+
+ij_go_run_go_fmt_on_reformat = true
+ij_go_call_parameters_wrap = on_every_item
+
+[*.yml]
+tab_width = 2
+ij_wrap_on_typing = false
+ij_yaml_keep_indents_on_empty_lines = false
+
+[.idea/*.xml]
+insert_final_newline = false
