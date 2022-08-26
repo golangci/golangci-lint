@@ -1,5 +1,5 @@
 //golangcitest:args -Elogrlint
-package loggercheck
+package logrlint
 
 import (
 	"fmt"
