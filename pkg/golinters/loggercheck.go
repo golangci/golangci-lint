@@ -21,7 +21,7 @@ func NewLoggerCheck(settings *config.LoggerCheckSettings) *goanalysis.Linter {
 		if !settings.Klog {
 			disabled = append(disabled, "klog")
 		}
-		if !settings.Logr {
+		if !settings.Zap {
 			disabled = append(disabled, "zap")
 		}
 		linterCfg := map[string]interface{}{
