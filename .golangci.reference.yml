@@ -1111,6 +1111,12 @@ linters-settings:
     # Default: 1
     tab-width: 1
 
+  logrlint:
+    disable-all: false
+    # By default, both logr and klog will be checked.
+    enable: []
+    disable: []
+
   maintidx:
     # Show functions with maintainability index lower than N.
     # A high index indicates better maintainability (it's kind of the opposite of complexity).

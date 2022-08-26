@@ -140,6 +140,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		interfaceBloatCfg   *config.InterfaceBloatSettings
 		ireturnCfg          *config.IreturnSettings
 		lllCfg              *config.LllSettings
+		logrlintCfg         *config.LogrLintSettings
 		maintIdxCfg         *config.MaintIdxSettings
 		makezeroCfg         *config.MakezeroSettings
 		malignedCfg         *config.MalignedSettings
@@ -214,6 +215,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		interfaceBloatCfg = &m.cfg.LintersSettings.InterfaceBloat
 		ireturnCfg = &m.cfg.LintersSettings.Ireturn
 		lllCfg = &m.cfg.LintersSettings.Lll
+		logrlintCfg = &m.cfg.LintersSettings.LogrLint
 		maintIdxCfg = &m.cfg.LintersSettings.MaintIdx
 		makezeroCfg = &m.cfg.LintersSettings.Makezero
 		malignedCfg = &m.cfg.LintersSettings.Maligned
@@ -583,7 +585,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithSince("v1.8.0").
 			WithPresets(linter.PresetStyle),
 
-		linter.NewConfig(golinters.NewLogrLint()).
+		linter.NewConfig(golinters.NewLogrLint(logrlintCfg)).
 			WithSince("v1.49.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetBugs).

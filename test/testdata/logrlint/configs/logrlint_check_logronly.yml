@@ -1,0 +1,4 @@
+linters-settings:
+  logrlint:
+    disable-all: true
+    enable: [logr]

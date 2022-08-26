@@ -66,6 +66,11 @@ var defaultLintersSettings = LintersSettings{
 		LineLength: 120,
 		TabWidth:   1,
 	},
+	LogrLint: LogrLintSettings{
+		DisableAll: false,
+		Enable:     nil,
+		Disable:    nil,
+	},
 	MaintIdx: MaintIdxSettings{
 		Under: 20,
 	},
@@ -154,6 +159,7 @@ type LintersSettings struct {
 	InterfaceBloat   InterfaceBloatSettings
 	Ireturn          IreturnSettings
 	Lll              LllSettings
+	LogrLint         LogrLintSettings
 	MaintIdx         MaintIdxSettings
 	Makezero         MakezeroSettings
 	Maligned         MalignedSettings
@@ -468,6 +474,12 @@ type IreturnSettings struct {
 type LllSettings struct {
 	LineLength int `mapstructure:"line-length"`
 	TabWidth   int `mapstructure:"tab-width"`
+}
+
+type LogrLintSettings struct {
+	DisableAll bool     `mapstructure:"disable-all"`
+	Enable     []string `mapstructure:"enable"`
+	Disable    []string `mapstructure:"disable"`
 }
 
 type MaintIdxSettings struct {
