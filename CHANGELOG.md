@@ -8,7 +8,7 @@ IMPORTANT: `varcheck` and `deadcode` has been removed of default linters.
 1. new linters
    * `interfacebloat`: https://github.com/sashamelentyev/interfacebloat
    * `logrlint`: https://github.com/timonwong/logrlint
-   * `reassign`: https://github.com/curioswitch/go-reass
+   * `reassign`: https://github.com/curioswitch/go-reassign
 2. updated linters
    * `go-colorable`: from 0.1.12 to 0.1.13
    * `go-critic`: from 0.6.3 to 0.6.4
