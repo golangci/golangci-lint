@@ -716,7 +716,7 @@ linters-settings:
     # Default: 1.13
     # Deprecated: use the global `run.go` instead.
     go: "1.15"
-    # https://staticcheck.io/docs/options#checks
+    # https://staticcheck.io/docs/configuration/options/#checks
     # Default: ["*"]
     checks: [ "all" ]
 
@@ -1585,7 +1585,7 @@ linters-settings:
     # Default: "1.13"
     # Deprecated: use the global `run.go` instead.
     go: "1.15"
-    # https://staticcheck.io/docs/options#checks
+    # https://staticcheck.io/docs/configuration/options/#checks
     # Default: ["*"]
     checks: [ "all" ]
 
@@ -1594,17 +1594,17 @@ linters-settings:
     # Default: 1.13
     # Deprecated: use the global `run.go` instead.
     go: "1.15"
-    # https://staticcheck.io/docs/options#checks
+    # https://staticcheck.io/docs/configuration/options/#checks
     # Default: ["*"]
     checks: [ "all", "-ST1000", "-ST1003", "-ST1016", "-ST1020", "-ST1021", "-ST1022" ]
-    # https://staticcheck.io/docs/options#dot_import_whitelist
+    # https://staticcheck.io/docs/configuration/options/#dot_import_whitelist
     # Default: ["github.com/mmcloughlin/avo/build", "github.com/mmcloughlin/avo/operand", "github.com/mmcloughlin/avo/reg"]
     dot-import-whitelist:
       - fmt
-    # https://staticcheck.io/docs/options#initialisms
+    # https://staticcheck.io/docs/configuration/options/#initialisms
     # Default: ["ACL", "API", "ASCII", "CPU", "CSS", "DNS", "EOF", "GUID", "HTML", "HTTP", "HTTPS", "ID", "IP", "JSON", "QPS", "RAM", "RPC", "SLA", "SMTP", "SQL", "SSH", "TCP", "TLS", "TTL", "UDP", "UI", "GID", "UID", "UUID", "URI", "URL", "UTF8", "VM", "XML", "XMPP", "XSRF", "XSS", "SIP", "RTP", "AMQP", "DB", "TS"]
     initialisms: [ "ACL", "API", "ASCII", "CPU", "CSS", "DNS", "EOF", "GUID", "HTML", "HTTP", "HTTPS", "ID", "IP", "JSON", "QPS", "RAM", "RPC", "SLA", "SMTP", "SQL", "SSH", "TCP", "TLS", "TTL", "UDP", "UI", "GID", "UID", "UUID", "URI", "URL", "UTF8", "VM", "XML", "XMPP", "XSRF", "XSS", "SIP", "RTP", "AMQP", "DB", "TS" ]
-    # https://staticcheck.io/docs/options#http_status_code_whitelist
+    # https://staticcheck.io/docs/configuration/options/#http_status_code_whitelist
     # Default: ["200", "400", "404", "500"]
     http-status-code-whitelist: [ "200", "400", "404", "500" ]
 
@@ -1882,7 +1882,7 @@ linters:
   # Default: false
   disable-all: true
   # Enable specific linter
-  # https://golangci-lint.run/usage/linters/#enabled-by-default-linters
+  # https://golangci-lint.run/usage/linters/#enabled-by-default
   enable:
     - asasalint
     - asciicheck
@@ -1987,7 +1987,7 @@ linters:
   # Default: false
   enable-all: true
   # Disable specific linter
-  # https://golangci-lint.run/usage/linters/#disabled-by-default-linters--e--enable
+  # https://golangci-lint.run/usage/linters/#disabled-by-default
   disable:
     - asasalint
     - asciicheck
@@ -2215,7 +2215,7 @@ severity:
   # this will be the default severity applied.
   # Severities should match the supported severity names of the selected out format.
   # - Code climate: https://docs.codeclimate.com/docs/issues#issue-severity
-  # - Checkstyle: https://checkstyle.sourceforge.io/property_types.html#severity
+  # - Checkstyle: https://checkstyle.sourceforge.io/property_types.html#SeverityLevel
   # - GitHub: https://help.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-error-message
   #
   # Default value is an empty string.
