@@ -1119,6 +1119,11 @@ linters-settings:
     # Default: 1
     tab-width: 1
 
+  loggercheck:
+    logr: true
+    klog: true
+    zap: true
+
   maintidx:
     # Show functions with maintainability index lower than N.
     # A high index indicates better maintainability (it's kind of the opposite of complexity).
@@ -1956,7 +1961,7 @@ linters:
     - interfacer
     - ireturn
     - lll
-    - logrlint
+    - loggercheck
     - maintidx
     - makezero
     - maligned
@@ -2061,7 +2066,7 @@ linters:
     - interfacer
     - ireturn
     - lll
-    - logrlint
+    - loggercheck
     - maintidx
     - makezero
     - maligned

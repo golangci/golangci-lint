@@ -140,6 +140,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		interfaceBloatCfg   *config.InterfaceBloatSettings
 		ireturnCfg          *config.IreturnSettings
 		lllCfg              *config.LllSettings
+		loggerCheckCfg      *config.LoggerCheckSettings
 		maintIdxCfg         *config.MaintIdxSettings
 		makezeroCfg         *config.MakezeroSettings
 		malignedCfg         *config.MalignedSettings
@@ -214,6 +215,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		interfaceBloatCfg = &m.cfg.LintersSettings.InterfaceBloat
 		ireturnCfg = &m.cfg.LintersSettings.Ireturn
 		lllCfg = &m.cfg.LintersSettings.Lll
+		loggerCheckCfg = &m.cfg.LintersSettings.LoggerCheck
 		maintIdxCfg = &m.cfg.LintersSettings.MaintIdx
 		makezeroCfg = &m.cfg.LintersSettings.Makezero
 		malignedCfg = &m.cfg.LintersSettings.Maligned
@@ -583,11 +585,19 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithSince("v1.8.0").
 			WithPresets(linter.PresetStyle),
 
+		linter.NewConfig(golinters.NewLoggerCheck(loggerCheckCfg)).
+			WithSince("v1.50.0").
+			WithLoadForGoAnalysis().
+			WithPresets(linter.PresetBugs).
+			WithAlternativeNames("logrlint").
+			WithURL("https://github.com/timonwong/loggercheck"),
+
 		linter.NewConfig(golinters.NewLogrLint()).
 			WithSince("v1.49.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetBugs).
-			WithURL("https://github.com/timonwong/logrlint"),
+			WithURL("https://github.com/timonwong/logrlint").
+			Deprecated("The repository of the linter has been archived by the owner.", "v1.50.0", "loggercheck"),
 
 		linter.NewConfig(golinters.NewMaintIdx(maintIdxCfg)).
 			WithSince("v1.44.0").

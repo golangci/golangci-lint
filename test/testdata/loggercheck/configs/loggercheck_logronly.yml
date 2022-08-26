@@ -1,0 +1,5 @@
+linters-settings:
+  loggercheck:
+    logr: true
+    klog: false
+    zap: false
