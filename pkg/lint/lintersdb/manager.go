@@ -586,7 +586,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle),
 
 		linter.NewConfig(golinters.NewLoggerCheck(loggerCheckCfg)).
-			WithSince("v1.50.0").
+			WithSince("v1.49.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetBugs).
 			WithAlternativeNames("logrlint").
