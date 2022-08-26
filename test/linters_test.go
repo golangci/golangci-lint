@@ -30,7 +30,6 @@ func TestTypecheck(t *testing.T) {
 func TestSourcesFromTestdataSubDir(t *testing.T) {
 	subDirs := []string{
 		"loggercheck",
-		"logrlint", // deprecated linter
 	}
 
 	for _, dir := range subDirs {

@@ -592,13 +592,6 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithAlternativeNames("logrlint").
 			WithURL("https://github.com/timonwong/loggercheck"),
 
-		linter.NewConfig(golinters.NewLogrLint()).
-			WithSince("v1.49.0").
-			WithLoadForGoAnalysis().
-			WithPresets(linter.PresetBugs).
-			WithURL("https://github.com/timonwong/logrlint").
-			Deprecated("The repository of the linter has been archived by the owner.", "v1.50.0", "loggercheck"),
-
 		linter.NewConfig(golinters.NewMaintIdx(maintIdxCfg)).
 			WithSince("v1.44.0").
 			WithPresets(linter.PresetComplexity).
