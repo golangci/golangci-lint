@@ -12,6 +12,7 @@ import (
 
 func NewLoggerCheck(settings *config.LoggerCheckSettings) *goanalysis.Linter {
 	analyzer := loggercheck.NewAnalyzer()
+
 	cfg := map[string]map[string]interface{}{}
 	if settings != nil {
 		var disabled []string
