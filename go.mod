@@ -76,7 +76,7 @@ require (
 	github.com/ryanrolds/sqlclosecheck v0.3.0
 	github.com/sanposhiho/wastedassign/v2 v2.0.6
 	github.com/sashamelentyev/interfacebloat v1.1.0
-	github.com/sashamelentyev/usestdlibvars v1.13.0
+	github.com/sashamelentyev/usestdlibvars v1.14.0
 	github.com/securego/gosec/v2 v2.13.1
 	github.com/shazow/go-diff v0.0.0-20160112020656-b6b7b6733b8c
 	github.com/shirou/gopsutil/v3 v3.22.7
