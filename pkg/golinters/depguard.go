@@ -2,6 +2,8 @@ package golinters
 
 import (
 	"fmt"
+	"path/filepath"
+	"regexp"
 	"strings"
 	"sync"
 
@@ -104,16 +106,31 @@ func (d depGuard) run(pass *analysis.Pass) ([]goanalysis.Issue, error) {
 	return resIssues, nil
 }
 
+var separatorToReplace = regexp.QuoteMeta(string(filepath.Separator))
+
+// normalizePathInRegex normalizes path in regular expressions.
+// noop on Unix.
+// This replacing should be safe because "/" are disallowed in Windows
+// https://docs.microsoft.com/windows/win32/fileio/naming-a-file
+func normalizePathInRegex(path string) string {
+	return strings.ReplaceAll(path, "/", separatorToReplace)
+}
+
 type guardian struct {
 	*depguard.Depguard
 	pkgsWithErrorMessage map[string]string
 }
 
 func newGuardian(settings *config.DepGuardSettings) (*guardian, error) {
+	var ignoreFileRules []string
+	for _, rule := range settings.IgnoreFileRules {
+		ignoreFileRules = append(ignoreFileRules, normalizePathInRegex(rule))
+	}
+
 	dg := &depguard.Depguard{
 		Packages:        settings.Packages,
 		IncludeGoRoot:   settings.IncludeGoRoot,
-		IgnoreFileRules: settings.IgnoreFileRules,
+		IgnoreFileRules: ignoreFileRules,
 	}
 
 	var err error
