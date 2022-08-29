@@ -24,7 +24,7 @@ require (
 	github.com/daixiang0/gci v0.4.3
 	github.com/denis-tingaikin/go-header v0.4.3
 	github.com/esimonov/ifshort v1.0.4
-	github.com/fatanugraha/noloopclosure v0.1.0
+	github.com/fatanugraha/noloopclosure v0.1.1
 	github.com/fatih/color v1.13.0
 	github.com/firefart/nonamedreturns v1.0.4
 	github.com/fzipp/gocyclo v0.6.0
