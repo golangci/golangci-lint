@@ -1,4 +1,4 @@
-//golangcitest:args -Elogrlint
+//golangcitest:args -Eloggercheck
 package loggercheck
 
 import (
@@ -9,7 +9,7 @@ import (
 	"k8s.io/klog/v2"
 )
 
-func ExampleLogrlintLogr() {
+func ExampleDefaultLogr() {
 	log := logr.Discard()
 	log = log.WithValues("key")                                         // want `odd number of arguments passed as key-value pairs for logging`
 	log.Info("message", "key1", "value1", "key2", "value2", "key3")     // want `odd number of arguments passed as key-value pairs for logging`
@@ -17,11 +17,11 @@ func ExampleLogrlintLogr() {
 	log.Error(fmt.Errorf("error"), "message", "key1", "value1", "key2", "value2")
 }
 
-func ExampleLogrlintKlog() {
+func ExampleDefaultKlog() {
 	klog.InfoS("message", "key1") // want `odd number of arguments passed as key-value pairs for logging`
 }
 
-func ExampleLogrlintZapSugar() {
+func ExampleZapSugarNotChecked() {
 	sugar := zap.NewExample().Sugar()
 	defer sugar.Sync()
 	sugar.Infow("message", "key1", "value1", "key2")

@@ -72,7 +72,7 @@ var defaultLintersSettings = LintersSettings{
 	LoggerCheck: LoggerCheckSettings{
 		Logr: true,
 		Klog: true,
-		Zap:  true,
+		Zap:  false,
 	},
 	MaintIdx: MaintIdxSettings{
 		Under: 20,
