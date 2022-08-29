@@ -25,9 +25,9 @@ func Test_filterByDisableTags(t *testing.T) {
 	disabledTags := []string{"experimental", "opinionated"}
 	enabledChecks := []string{"appendAssign", "sortSlice", "caseOrder", "dupImport"}
 
-	settingsWrapper := newGoCriticSettingsWrapper(nil)
+	settingsWrapper := newGoCriticSettingsWrapper(nil, &tLog{})
 
-	filterEnabledChecks := settingsWrapper.filterByDisableTags(enabledChecks, disabledTags, &tLog{})
+	filterEnabledChecks := settingsWrapper.filterByDisableTags(enabledChecks, disabledTags)
 
 	sort.Strings(filterEnabledChecks)
 
