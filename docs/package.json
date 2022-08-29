@@ -14,7 +14,7 @@
     "gatsby-alias-imports": "^1.0.6",
     "gatsby-plugin-canonical-urls": "^4.13.0",
     "gatsby-plugin-catch-links": "^4.17.0",
-    "gatsby-plugin-emotion": "^7.19.0",
+    "gatsby-plugin-emotion": "^7.21.0",
     "gatsby-plugin-google-analytics": "^4.17.0",
     "gatsby-plugin-manifest": "^4.21.0",
     "gatsby-plugin-mdx": "^3.15.2",
