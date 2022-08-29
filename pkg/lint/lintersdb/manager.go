@@ -630,7 +630,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetPerformance, linter.PresetBugs).
 			WithURL("https://github.com/sonatard/noctx"),
 
-		linter.NewConfig(golinters.NewNoLoopClosure()).
+		linter.NewConfig(golinters.NewNoLoopClosure(noloopclosureCfg)).
 			WithSince("v1.48.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetBugs).
