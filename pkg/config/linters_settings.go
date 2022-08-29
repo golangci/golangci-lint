@@ -486,9 +486,10 @@ type LllSettings struct {
 }
 
 type LoggerCheckSettings struct {
-	Logr bool `mapstructure:"logr"`
-	Klog bool `mapstructure:"klog"`
-	Zap  bool `mapstructure:"zap"`
+	Logr  bool     `mapstructure:"logr"`
+	Klog  bool     `mapstructure:"klog"`
+	Zap   bool     `mapstructure:"zap"`
+	Rules []string `mapstructure:"rules"`
 }
 
 type MaintIdxSettings struct {

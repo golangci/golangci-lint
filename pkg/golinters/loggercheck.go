@@ -1,8 +1,6 @@
 package golinters
 
 import (
-	"strings"
-
 	"github.com/timonwong/loggercheck"
 	"golang.org/x/tools/go/analysis"
 
@@ -11,30 +9,31 @@ import (
 )
 
 func NewLoggerCheck(settings *config.LoggerCheckSettings) *goanalysis.Linter {
-	analyzer := loggercheck.NewAnalyzer()
+	var (
+		disable []string
+		rules   []string
+	)
 
-	cfg := map[string]map[string]interface{}{}
 	if settings != nil {
-		var disabled []string
 		if !settings.Logr {
-			disabled = append(disabled, "logr")
+			disable = append(disable, "logr")
 		}
 		if !settings.Klog {
-			disabled = append(disabled, "klog")
+			disable = append(disable, "klog")
 		}
 		if !settings.Zap {
-			disabled = append(disabled, "zap")
+			disable = append(disable, "zap")
 		}
-		linterCfg := map[string]interface{}{
-			"disable": strings.Join(disabled, ","),
-		}
-		cfg[analyzer.Name] = linterCfg
+
+		rules = settings.Rules
 	}
 
+	analyzer := loggercheck.NewAnalyzer(loggercheck.WithDisable(disable),
+		loggercheck.WithRules(rules))
 	return goanalysis.NewLinter(
 		analyzer.Name,
 		analyzer.Doc,
 		[]*analysis.Analyzer{analyzer},
-		cfg,
+		nil,
 	).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }
