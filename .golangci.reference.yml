@@ -1148,6 +1148,11 @@ linters-settings:
     # Default: 1
     block-size: 2
 
+  noloopclosure:
+    # Enable to lint test files (files that has _test.go suffix).
+    # Default: false
+    include-test-files: true
+
   nolintlint:
     # Disable to ensure that all nolint directives actually have an effect.
     # Default: false
