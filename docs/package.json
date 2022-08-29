@@ -12,7 +12,7 @@
     "@mdx-js/react": "^1.6.16",
     "gatsby": "^4.19.2",
     "gatsby-alias-imports": "^1.0.6",
-    "gatsby-plugin-canonical-urls": "^4.13.0",
+    "gatsby-plugin-canonical-urls": "^4.21.0",
     "gatsby-plugin-catch-links": "^4.21.0",
     "gatsby-plugin-emotion": "^7.21.0",
     "gatsby-plugin-google-analytics": "^4.17.0",
