@@ -147,6 +147,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		nestifCfg           *config.NestifSettings
 		nilNilCfg           *config.NilNilSettings
 		nlreturnCfg         *config.NlreturnSettings
+		noloopclosureCfg    *config.NoloopclosureSettings
 		noLintLintCfg       *config.NoLintLintSettings
 		noNamedReturnsCfg   *config.NoNamedReturnsSettings
 		parallelTestCfg     *config.ParallelTestSettings
@@ -218,6 +219,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		nestifCfg = &m.cfg.LintersSettings.Nestif
 		nilNilCfg = &m.cfg.LintersSettings.NilNil
 		nlreturnCfg = &m.cfg.LintersSettings.Nlreturn
+		noloopclosureCfg = &m.cfg.LintersSettings.Noloopclosure
 		noLintLintCfg = &m.cfg.LintersSettings.NoLintLint
 		noNamedReturnsCfg = &m.cfg.LintersSettings.NoNamedReturns
 		preallocCfg = &m.cfg.LintersSettings.Prealloc

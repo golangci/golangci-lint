@@ -75,6 +75,9 @@ var defaultLintersSettings = LintersSettings{
 	Nestif: NestifSettings{
 		MinComplexity: 5,
 	},
+	Noloopclosure: NoloopclosureSettings{
+		IncludeTestFiles: false,
+	},
 	NoLintLint: NoLintLintSettings{
 		RequireExplanation: false,
 		AllowLeadingSpace:  true,
@@ -162,6 +165,7 @@ type LintersSettings struct {
 	Nestif           NestifSettings
 	NilNil           NilNilSettings
 	Nlreturn         NlreturnSettings
+	Noloopclosure    NoloopclosureSettings
 	NoLintLint       NoLintLintSettings
 	NoNamedReturns   NoNamedReturnsSettings
 	ParallelTest     ParallelTestSettings
@@ -484,6 +488,10 @@ type NilNilSettings struct {
 
 type NlreturnSettings struct {
 	BlockSize int `mapstructure:"block-size"`
+}
+
+type NoloopclosureSettings struct {
+	IncludeTestFiles bool `mapstructure:"include-test-files"`
 }
 
 type NoLintLintSettings struct {
