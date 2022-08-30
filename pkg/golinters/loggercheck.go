@@ -9,12 +9,10 @@ import (
 )
 
 func NewLoggerCheck(settings *config.LoggerCheckSettings) *goanalysis.Linter {
-	var (
-		disable []string
-		rules   []string
-	)
+	var opts []loggercheck.Option
 
 	if settings != nil {
+		var disable []string
 		if !settings.Logr {
 			disable = append(disable, "logr")
 		}
@@ -25,11 +23,14 @@ func NewLoggerCheck(settings *config.LoggerCheckSettings) *goanalysis.Linter {
 			disable = append(disable, "zap")
 		}
 
-		rules = settings.Rules
+		opts = []loggercheck.Option{
+			loggercheck.WithDisable(disable),
+			loggercheck.WithRequireStringKey(settings.RequireStringKey),
+			loggercheck.WithRules(settings.Rules),
+		}
 	}
 
-	analyzer := loggercheck.NewAnalyzer(loggercheck.WithDisable(disable),
-		loggercheck.WithRules(rules))
+	analyzer := loggercheck.NewAnalyzer(opts...)
 	return goanalysis.NewLinter(
 		analyzer.Name,
 		analyzer.Doc,

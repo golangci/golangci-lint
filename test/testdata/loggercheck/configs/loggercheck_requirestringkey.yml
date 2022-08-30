@@ -1,0 +1,3 @@
+linters-settings:
+  loggercheck:
+    require-string-key: true

@@ -70,9 +70,11 @@ var defaultLintersSettings = LintersSettings{
 		TabWidth:   1,
 	},
 	LoggerCheck: LoggerCheckSettings{
-		Logr: true,
-		Klog: true,
-		Zap:  false,
+		Logr:             true,
+		Klog:             true,
+		Zap:              false,
+		RequireStringKey: false,
+		Rules:            nil,
 	},
 	MaintIdx: MaintIdxSettings{
 		Under: 20,
@@ -486,10 +488,11 @@ type LllSettings struct {
 }
 
 type LoggerCheckSettings struct {
-	Logr  bool     `mapstructure:"logr"`
-	Klog  bool     `mapstructure:"klog"`
-	Zap   bool     `mapstructure:"zap"`
-	Rules []string `mapstructure:"rules"`
+	Logr             bool     `mapstructure:"logr"`
+	Klog             bool     `mapstructure:"klog"`
+	Zap              bool     `mapstructure:"zap"`
+	RequireStringKey bool     `mapstructure:"require-string-key"`
+	Rules            []string `mapstructure:"rules"`
 }
 
 type MaintIdxSettings struct {

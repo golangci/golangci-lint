@@ -1129,13 +1129,15 @@ linters-settings:
     # Allow check for the "sugar logger" from go.uber.org/zap library.
     # Default: false
     zap: true
+    # Require all logging keys to be inlined constant strings
+    # Default false
+    require-string-key: true
     # List of custom rules to check against, where each rule is a single logger pattern.
     # Default: empty
     rules:
       - k8s.io/klog/v2.InfoS   # package level exported functions
       - (github.com/go-logr/logr.Logger).Error  # "Methods"
       - (*go.uber.org/zap.SugaredLogger).With  # Also "Methods", but with a pointer receiver
-
   maintidx:
     # Show functions with maintainability index lower than N.
     # A high index indicates better maintainability (it's kind of the opposite of complexity).
