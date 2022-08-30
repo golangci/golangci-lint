@@ -1129,7 +1129,8 @@ linters-settings:
     # Allow check for the "sugar logger" from go.uber.org/zap library.
     # Default: false
     zap: true
-    # List of rules to check against, where each rule is a single logger pattern.
+    # List of custom rules to check against, where each rule is a single logger pattern.
+    # Default: empty
     rules:
       - k8s.io/klog/v2.InfoS   # package level exported functions
       - (github.com/go-logr/logr.Logger).Error  # "Methods"
