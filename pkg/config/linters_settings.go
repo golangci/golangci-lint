@@ -488,8 +488,9 @@ type LllSettings struct {
 }
 
 type LoggerCheckSettings struct {
-	Logr             bool     `mapstructure:"logr"`
+	Kitlog           bool     `mapstructure:"kitlog"`
 	Klog             bool     `mapstructure:"klog"`
+	Logr             bool     `mapstructure:"logr"`
 	Zap              bool     `mapstructure:"zap"`
 	RequireStringKey bool     `mapstructure:"require-string-key"`
 	Rules            []string `mapstructure:"rules"`

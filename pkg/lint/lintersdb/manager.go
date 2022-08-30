@@ -588,7 +588,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		linter.NewConfig(golinters.NewLoggerCheck(loggerCheckCfg)).
 			WithSince("v1.49.0").
 			WithLoadForGoAnalysis().
-			WithPresets(linter.PresetBugs).
+			WithPresets(linter.PresetStyle, linter.PresetBugs).
 			WithAlternativeNames("logrlint").
 			WithURL("https://github.com/timonwong/loggercheck"),
 

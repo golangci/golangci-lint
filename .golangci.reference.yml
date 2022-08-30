@@ -1120,6 +1120,9 @@ linters-settings:
     tab-width: 1
 
   loggercheck:
+    # Allow check for the github.com/go-kit/log library.
+    # Default: false
+    kitlog: true
     # Allow check for the k8s.io/klog/v2 library.
     # Default: true
     klog: false

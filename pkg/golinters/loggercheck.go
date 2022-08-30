@@ -13,11 +13,14 @@ func NewLoggerCheck(settings *config.LoggerCheckSettings) *goanalysis.Linter {
 
 	if settings != nil {
 		var disable []string
-		if !settings.Logr {
-			disable = append(disable, "logr")
+		if !settings.Kitlog {
+			disable = append(disable, "kitlog")
 		}
 		if !settings.Klog {
 			disable = append(disable, "klog")
+		}
+		if !settings.Logr {
+			disable = append(disable, "logr")
 		}
 		if !settings.Zap {
 			disable = append(disable, "zap")
