@@ -24,5 +24,5 @@ func ExampleLogrlintKlog() {
 func ExampleLogrlintZapSugar() {
 	sugar := zap.NewExample().Sugar()
 	defer sugar.Sync()
-	sugar.Infow("message", "key1", "value1", "key2")
+	sugar.Infow("message", "key1", "value1", "key2") // want `odd number of arguments passed as key-value pairs for logging`
 }

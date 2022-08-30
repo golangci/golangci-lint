@@ -1,3 +1,0 @@
-linters-settings:
-  loggercheck:
-    zap: true

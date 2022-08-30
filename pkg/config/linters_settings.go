@@ -70,9 +70,10 @@ var defaultLintersSettings = LintersSettings{
 		TabWidth:   1,
 	},
 	LoggerCheck: LoggerCheckSettings{
-		Logr:             true,
+		Kitlog:           true,
 		Klog:             true,
-		Zap:              false,
+		Logr:             true,
+		Zap:              true,
 		RequireStringKey: false,
 		Rules:            nil,
 	},

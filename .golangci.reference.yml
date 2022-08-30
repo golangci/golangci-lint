@@ -1121,8 +1121,8 @@ linters-settings:
 
   loggercheck:
     # Allow check for the github.com/go-kit/log library.
-    # Default: false
-    kitlog: true
+    # Default: true
+    kitlog: false
     # Allow check for the k8s.io/klog/v2 library.
     # Default: true
     klog: false
@@ -1130,10 +1130,10 @@ linters-settings:
     # Default: true
     logr: false
     # Allow check for the "sugar logger" from go.uber.org/zap library.
-    # Default: false
-    zap: true
+    # Default: true
+    zap: false
     # Require all logging keys to be inlined constant strings
-    # Default false
+    # Default: false
     require-string-key: true
     # List of custom rules to check against, where each rule is a single logger pattern.
     # Default: empty
