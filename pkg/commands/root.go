@@ -125,7 +125,7 @@ func (e *Executor) initRoot() {
 	rootCmd := &cobra.Command{
 		Use:   "golangci-lint",
 		Short: "golangci-lint is a smart linters runner.",
-		Long:  `Smart, fast linters runner. Run it in cloud for every GitHub pull request on https://golangci.com`,
+		Long:  `Smart, fast linters runner.`,
 		Args:  cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			return cmd.Help()
