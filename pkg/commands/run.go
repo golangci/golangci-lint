@@ -151,6 +151,9 @@ func initFlagSet(fs *pflag.FlagSet, cfg *config.Config, m *lintersdb.Manager, is
 	fs.BoolVar(&lsc.Gofmt.Simplify, "gofmt.simplify", true, "Gofmt: simplify code")
 	hideFlag("gofmt.simplify")
 
+	fs.StringVar(&lsc.Gofmt.Rewrite, "gofmt.rewrite", "", "Gofmt: rewrite code")
+	hideFlag("gofmt.rewrite")
+
 	fs.IntVar(&lsc.Gocyclo.MinComplexity, "gocyclo.min-complexity",
 		30, "Minimal complexity of function to report it")
 	hideFlag("gocyclo.min-complexity")

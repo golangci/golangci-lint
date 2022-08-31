@@ -58,7 +58,7 @@ func runGofmt(lintCtx *linter.Context, pass *analysis.Pass, settings *config.GoF
 	var issues []goanalysis.Issue
 
 	for _, f := range fileNames {
-		diff, err := gofmtAPI.Run(f, settings.Simplify)
+		diff, err := gofmtAPI.RunRewrite(f, settings.Simplify, settings.Rewrite)
 		if err != nil { // TODO: skip
 			return nil, err
 		}

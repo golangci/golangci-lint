@@ -223,6 +223,9 @@ func getErrorTextForLinter(settings *config.LintersSettings, linterName string) 
 		if settings.Gofmt.Simplify {
 			text += " with `-s`"
 		}
+		if settings.Gofmt.Rewrite != "" {
+			text += fmt.Sprintf(" `-r '%s'`", settings.Gofmt.Rewrite)
+		}
 	case goimportsName:
 		text = "File is not `goimports`-ed"
 		if settings.Goimports.LocalPrefixes != "" {

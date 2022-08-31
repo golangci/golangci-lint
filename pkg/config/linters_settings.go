@@ -336,6 +336,7 @@ type GodoxSettings struct {
 
 type GoFmtSettings struct {
 	Simplify bool
+	Rewrite  string
 }
 
 type GofumptSettings struct {
