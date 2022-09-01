@@ -337,7 +337,13 @@ type GodoxSettings struct {
 }
 
 type GoFmtSettings struct {
-	Simplify bool
+	Simplify     bool
+	RewriteRules []GoFmtRewriteRule `mapstructure:"rewrite-rules"`
+}
+
+type GoFmtRewriteRule struct {
+	Pattern     string
+	Replacement string
 }
 
 type GofumptSettings struct {
