@@ -1132,9 +1132,12 @@ linters-settings:
     # Allow check for the "sugar logger" from go.uber.org/zap library.
     # Default: true
     zap: false
-    # Require all logging keys to be inlined constant strings
+    # Require all logging keys to be inlined constant strings.
     # Default: false
     require-string-key: true
+    # Require printf-like format specifier (%s, %d for example) not present.
+    # Default: false
+    no-printf-like: true
     # List of custom rules to check against, where each rule is a single logger pattern.
     # Default: empty
     rules:

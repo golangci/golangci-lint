@@ -75,6 +75,7 @@ var defaultLintersSettings = LintersSettings{
 		Logr:             true,
 		Zap:              true,
 		RequireStringKey: false,
+		NoPrintfLike:     false,
 		Rules:            nil,
 	},
 	MaintIdx: MaintIdxSettings{
@@ -494,6 +495,7 @@ type LoggerCheckSettings struct {
 	Logr             bool     `mapstructure:"logr"`
 	Zap              bool     `mapstructure:"zap"`
 	RequireStringKey bool     `mapstructure:"require-string-key"`
+	NoPrintfLike     bool     `mapstructure:"no-printf-like"`
 	Rules            []string `mapstructure:"rules"`
 }
 

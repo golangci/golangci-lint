@@ -30,6 +30,7 @@ func NewLoggerCheck(settings *config.LoggerCheckSettings) *goanalysis.Linter {
 			loggercheck.WithDisable(disable),
 			loggercheck.WithRequireStringKey(settings.RequireStringKey),
 			loggercheck.WithRules(settings.Rules),
+			loggercheck.WithNoPrintfLike(settings.NoPrintfLike),
 		}
 	}
 
