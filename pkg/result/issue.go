@@ -6,6 +6,8 @@ import (
 	"go/token"
 
 	"golang.org/x/tools/go/packages"
+
+	"github.com/golangci/golangci-lint/pkg/config"
 )
 
 type Range struct {
@@ -28,7 +30,7 @@ type Issue struct {
 	FromLinter string
 	Text       string
 
-	Severity string
+	Severity config.SeverityLevel
 
 	// Source lines of a code with the issue to show
 	SourceLines []string

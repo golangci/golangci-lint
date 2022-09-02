@@ -60,7 +60,7 @@ func (p JunitXML) Print(ctx context.Context, issues []result.Issue) error {
 			Name:      i.FromLinter,
 			ClassName: i.Pos.String(),
 			Failure: failureXML{
-				Type:    i.Severity,
+				Type:    string(i.Severity),
 				Message: i.Pos.String() + ": " + i.Text,
 				Content: fmt.Sprintf("%s: %s\nCategory: %s\nFile: %s\nLine: %d\nDetails: %s",
 					i.Severity, i.Text, i.FromLinter, i.Pos.Filename, i.Pos.Line, strings.Join(i.SourceLines, "\n")),

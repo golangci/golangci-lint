@@ -142,7 +142,7 @@ func reviveToIssue(pass *analysis.Pass, object *jsonObject) goanalysis.Issue {
 	}
 
 	return goanalysis.NewIssue(&result.Issue{
-		Severity: string(object.Severity),
+		Severity: config.SeverityLevel(object.Severity),
 		Text:     fmt.Sprintf("%s: %s", object.RuleName, object.Failure.Failure),
 		Pos: token.Position{
 			Filename: object.Position.Start.Filename,

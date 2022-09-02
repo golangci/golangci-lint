@@ -42,7 +42,7 @@ func (p CodeClimate) Print(ctx context.Context, issues []result.Issue) error {
 		codeClimateIssue.Fingerprint = issue.Fingerprint()
 
 		if issue.Severity != "" {
-			codeClimateIssue.Severity = issue.Severity
+			codeClimateIssue.Severity = string(issue.Severity)
 		}
 
 		codeClimateIssues = append(codeClimateIssues, codeClimateIssue)

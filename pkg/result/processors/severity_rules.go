@@ -3,6 +3,7 @@ package processors
 import (
 	"regexp"
 
+	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/fsutils"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
@@ -10,22 +11,27 @@ import (
 
 type severityRule struct {
 	baseRule
-	severity string
+	severity config.SeverityLevel
 }
 
 type SeverityRule struct {
 	BaseRule
-	Severity string
+	Severity config.SeverityLevel
 }
 
 type SeverityRules struct {
-	defaultSeverity string
+	defaultSeverity config.SeverityLevel
 	rules           []severityRule
 	lineCache       *fsutils.LineCache
 	log             logutils.Log
 }
 
-func NewSeverityRules(defaultSeverity string, rules []SeverityRule, lineCache *fsutils.LineCache, log logutils.Log) *SeverityRules {
+func NewSeverityRules(
+	defaultSeverity config.SeverityLevel,
+	rules []SeverityRule,
+	lineCache *fsutils.LineCache,
+	log logutils.Log,
+) *SeverityRules {
 	r := &SeverityRules{
 		lineCache:       lineCache,
 		log:             log,
@@ -89,7 +95,7 @@ type SeverityRulesCaseSensitive struct {
 	*SeverityRules
 }
 
-func NewSeverityRulesCaseSensitive(defaultSeverity string, rules []SeverityRule,
+func NewSeverityRulesCaseSensitive(defaultSeverity config.SeverityLevel, rules []SeverityRule,
 	lineCache *fsutils.LineCache, log logutils.Log) *SeverityRulesCaseSensitive {
 	r := &SeverityRules{
 		lineCache:       lineCache,

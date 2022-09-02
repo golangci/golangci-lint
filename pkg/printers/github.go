@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 
+	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
@@ -12,7 +13,7 @@ type github struct {
 	w io.Writer
 }
 
-const defaultGithubSeverity = "error"
+const defaultGithubSeverity config.SeverityLevel = config.SeverityErrorLevel
 
 // NewGithub output format outputs issues according to GitHub actions format:
 // https://help.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-error-message

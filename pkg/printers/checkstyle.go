@@ -9,6 +9,7 @@ import (
 
 	"github.com/go-xmlfmt/xmlfmt"
 
+	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
@@ -31,7 +32,7 @@ type checkstyleError struct {
 	Source   string `xml:"source,attr"`
 }
 
-const defaultCheckstyleSeverity = "error"
+const defaultCheckstyleSeverity config.SeverityLevel = config.SeverityErrorLevel
 
 type Checkstyle struct {
 	w io.Writer
@@ -69,7 +70,7 @@ func (p Checkstyle) Print(ctx context.Context, issues []result.Issue) error {
 			Line:     issue.Line(),
 			Message:  issue.Text,
 			Source:   issue.FromLinter,
-			Severity: severity,
+			Severity: string(severity),
 		}
 
 		file.Errors = append(file.Errors, newError)

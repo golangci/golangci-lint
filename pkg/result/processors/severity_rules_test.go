@@ -88,7 +88,7 @@ func TestSeverityRulesMultiple(t *testing.T) {
 			Linter:   i.FromLinter,
 			Text:     i.Text,
 			Line:     i.Line(),
-			Severity: i.Severity,
+			Severity: string(i.Severity),
 		})
 	}
 	expectedCases := []issueTestCase{
@@ -153,7 +153,7 @@ func TestSeverityRulesOnlyDefault(t *testing.T) {
 			Linter:   i.FromLinter,
 			Text:     i.Text,
 			Line:     i.Line(),
-			Severity: i.Severity,
+			Severity: string(i.Severity),
 		})
 	}
 	expectedCases := []issueTestCase{
@@ -194,7 +194,7 @@ func TestSeverityRulesCaseSensitive(t *testing.T) {
 			Linter:   i.FromLinter,
 			Text:     i.Text,
 			Line:     i.Line(),
-			Severity: i.Severity,
+			Severity: string(i.Severity),
 		})
 	}
 	expectedCases := []issueTestCase{

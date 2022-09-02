@@ -380,7 +380,20 @@ func (e *Executor) setOutputToDevNull() (savedStdout, savedStderr *os.File) {
 }
 
 func (e *Executor) setExitCodeIfIssuesFound(issues []result.Issue) {
-	if len(issues) != 0 {
+	if len(issues) == 0 {
+		return
+	}
+
+	// Let's count how many Errors do we have overall?
+	errorsCount := 0
+	for _, i := range issues {
+		if i.Severity == config.SeverityErrorLevel {
+			errorsCount++
+		}
+	}
+
+	// Okay, we've got some errors, so we need to return some non-zero exit-code
+	if errorsCount > 0 {
 		e.exitCode = e.cfg.Run.ExitCodeIfIssuesFound
 	}
 }
