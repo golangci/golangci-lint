@@ -79,7 +79,7 @@ require (
 	github.com/sashamelentyev/usestdlibvars v1.14.0
 	github.com/securego/gosec/v2 v2.13.1
 	github.com/shazow/go-diff v0.0.0-20160112020656-b6b7b6733b8c
-	github.com/shirou/gopsutil/v3 v3.22.7
+	github.com/shirou/gopsutil/v3 v3.22.8
 	github.com/sirupsen/logrus v1.9.0
 	github.com/sivchari/containedctx v1.0.2
 	github.com/sivchari/tenv v1.7.0
