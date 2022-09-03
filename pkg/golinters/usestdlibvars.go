@@ -14,13 +14,16 @@ func NewUseStdlibVars(cfg *config.UseStdlibVarsSettings) *goanalysis.Linter {
 	cfgMap := make(map[string]map[string]interface{})
 	if cfg != nil {
 		cfgMap[a.Name] = map[string]interface{}{
-			analyzer.HTTPMethodFlag:     cfg.HTTPMethod,
-			analyzer.HTTPStatusCodeFlag: cfg.HTTPStatusCode,
-			analyzer.TimeWeekdayFlag:    cfg.TimeWeekday,
-			analyzer.TimeMonthFlag:      cfg.TimeMonth,
-			analyzer.TimeLayoutFlag:     cfg.TimeLayout,
-			analyzer.CryptoHashFlag:     cfg.CryptoHash,
-			analyzer.DefaultRPCPathFlag: cfg.DefaultRPCPathFlag,
+			analyzer.HTTPMethodFlag:         cfg.HTTPMethod,
+			analyzer.HTTPStatusCodeFlag:     cfg.HTTPStatusCode,
+			analyzer.TimeWeekdayFlag:        cfg.TimeWeekday,
+			analyzer.TimeMonthFlag:          cfg.TimeMonth,
+			analyzer.TimeLayoutFlag:         cfg.TimeLayout,
+			analyzer.CryptoHashFlag:         cfg.CryptoHash,
+			analyzer.RPCDefaultPathFlag:     cfg.DefaultRPCPathFlag,
+			analyzer.OSDevNullFlag:          cfg.OSDevNullFlag,
+			analyzer.SQLIsolationLevelFlag:  cfg.SQLIsolationLevelFlag,
+			analyzer.TLSSignatureSchemeFlag: cfg.TLSSignatureSchemeFlag,
 		}
 	}
 
