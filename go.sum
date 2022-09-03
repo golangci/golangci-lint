@@ -105,8 +105,8 @@ github.com/creack/pty v1.1.9/go.mod h1:oKZEueFk5CKHvIhNR5MUki03XCEU+Q6VDXinZuGJ3
 github.com/cristalhq/acmd v0.8.1/go.mod h1:LG5oa43pE/BbxtfMoImHCQN++0Su7dzipdgBjMCBVDQ=
 github.com/curioswitch/go-reassign v0.1.2 h1:ekM07+z+VFT560Exz4mTv0/s1yU9gem6CJc/tlYpkmI=
 github.com/curioswitch/go-reassign v0.1.2/go.mod h1:bFJIHgtTM3hRm2sKXSPkbwNjSFyGURQXyn4IXD2qwfQ=
-github.com/daixiang0/gci v0.6.3 h1:wUAqXChk8HbwXn8AfxD9DYSCp9Bpz1L3e6Q4Roe+q9E=
-github.com/daixiang0/gci v0.6.3/go.mod h1:EpVfrztufwVgQRXjnX4zuNinEpLj5OmMjtu/+MB0V0c=
+github.com/daixiang0/gci v0.7.0 h1:HNMLrke+ycKtL0d55TxzNqRw/5lNjBXZLCJ6916RWaA=
+github.com/daixiang0/gci v0.7.0/go.mod h1:EpVfrztufwVgQRXjnX4zuNinEpLj5OmMjtu/+MB0V0c=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
