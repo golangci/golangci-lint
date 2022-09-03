@@ -1699,21 +1699,30 @@ linters-settings:
     # Suggest the use of http.StatusXX
     # Default: true
     http-status-code: false
-    # Suggest the use of time.Weekday
+    # Suggest the use of time.Weekday.String()
     # Default: true
     time-weekday: true
-    # Suggest the use of time.Month
+    # Suggest the use of time.Month.String()
     # Default: false
     time-month: true
     # Suggest the use of time.Layout
     # Default: false
     time-layout: true
-    # Suggest the use of crypto.Hash
+    # Suggest the use of crypto.Hash.String()
     # Default: false
     crypto-hash: true
     # Suggest the use of rpc.DefaultXXPath
     # Default: false
     default-rpc-path: true
+    # Suggest the use of os.DevNull
+    # Default: false
+    os-dev-null: true
+    # Suggest the use of sql.LevelXX.String()
+    # Default: false
+    sql-isolation-level: true
+    # Suggest the use of tls.SignatureScheme.String()
+    # Default: false
+    tls-signature-scheme: true
 
   unparam:
     # Inspect exported functions.
