@@ -62,6 +62,9 @@ var defaultLintersSettings = LintersSettings{
 		MaxDeclLines: 1,
 		MaxDeclChars: 30,
 	},
+	InterfaceBloat: InterfaceBloatSettings{
+		Max: 10,
+	},
 	Lll: LllSettings{
 		LineLength: 120,
 		TabWidth:   1,
