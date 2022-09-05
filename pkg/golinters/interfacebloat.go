@@ -22,6 +22,6 @@ func NewInterfaceBloat(settings *config.InterfaceBloatSettings) *goanalysis.Lint
 		a.Name,
 		a.Doc,
 		[]*analysis.Analyzer{a},
-		nil,
+		cfgMap,
 	).WithLoadMode(goanalysis.LoadModeSyntax)
 }
