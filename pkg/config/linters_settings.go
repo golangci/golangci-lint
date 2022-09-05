@@ -19,6 +19,9 @@ var defaultLintersSettings = LintersSettings{
 	Dogsled: DogsledSettings{
 		MaxBlankIdentifiers: 2,
 	},
+	DupWord: DupWordSettings{
+		KeyWord: []string{"the", "and", "a"},
+	},
 	ErrorLint: ErrorLintSettings{
 		Errorf:     true,
 		Asserts:    true,
@@ -140,6 +143,7 @@ type LintersSettings struct {
 	Depguard         DepGuardSettings
 	Dogsled          DogsledSettings
 	Dupl             DuplSettings
+	DupWord          DupWordSettings
 	Errcheck         ErrcheckSettings
 	ErrChkJSON       ErrChkJSONSettings
 	ErrorLint        ErrorLintSettings
@@ -255,6 +259,10 @@ type DogsledSettings struct {
 
 type DuplSettings struct {
 	Threshold int
+}
+
+type DupWordSettings struct {
+	KeyWord []string `mapstructure:"keyword"`
 }
 
 type ErrcheckSettings struct {
