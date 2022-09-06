@@ -10,13 +10,20 @@ import (
 	"github.com/golangci/golangci-lint/pkg/exitcodes"
 )
 
+const (
+	// envLogLevel values: "error", "err", "warning", "warn","info"
+	envLogLevel = "LOG_LEVEL"
+	// envLogTimestamp value: "1"
+	envLogTimestamp = "LOG_TIMESTAMP"
+)
+
 type StderrLog struct {
 	name   string
 	logger *logrus.Logger
 	level  LogLevel
 }
 
-var _ Log = NewStderrLog("")
+var _ Log = NewStderrLog(DebugKeyEmpty)
 
 func NewStderrLog(name string) *StderrLog {
 	sl := &StderrLog{
@@ -25,7 +32,7 @@ func NewStderrLog(name string) *StderrLog {
 		level:  LogLevelWarn,
 	}
 
-	switch os.Getenv("LOG_LEVEL") {
+	switch os.Getenv(envLogLevel) {
 	case "error", "err":
 		sl.logger.SetLevel(logrus.ErrorLevel)
 	case "warning", "warn":
@@ -41,7 +48,7 @@ func NewStderrLog(name string) *StderrLog {
 		DisableTimestamp:          true, // `INFO[0007] msg` -> `INFO msg`
 		EnvironmentOverrideColors: true,
 	}
-	if os.Getenv("LOG_TIMESTAMP") == "1" {
+	if os.Getenv(envLogTimestamp) == "1" {
 		formatter.DisableTimestamp = false
 		formatter.FullTimestamp = true
 		formatter.TimestampFormat = time.StampMilli

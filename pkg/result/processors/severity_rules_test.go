@@ -14,7 +14,7 @@ import (
 
 func TestSeverityRulesMultiple(t *testing.T) {
 	lineCache := fsutils.NewLineCache(fsutils.NewFileCache())
-	log := report.NewLogWrapper(logutils.NewStderrLog(""), &report.Data{})
+	log := report.NewLogWrapper(logutils.NewStderrLog(logutils.DebugKeyEmpty), &report.Data{})
 	p := NewSeverityRules("error", []SeverityRule{
 		{
 			Severity: "info",
@@ -134,7 +134,7 @@ func TestSeverityRulesText(t *testing.T) {
 
 func TestSeverityRulesOnlyDefault(t *testing.T) {
 	lineCache := fsutils.NewLineCache(fsutils.NewFileCache())
-	log := report.NewLogWrapper(logutils.NewStderrLog(""), &report.Data{})
+	log := report.NewLogWrapper(logutils.NewStderrLog(logutils.DebugKeyEmpty), &report.Data{})
 	p := NewSeverityRules("info", []SeverityRule{}, lineCache, log)
 
 	cases := []issueTestCase{

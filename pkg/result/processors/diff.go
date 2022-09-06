@@ -12,6 +12,8 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
+const envGolangciDiffProcessorPatch = "GOLANGCI_DIFF_PROCESSOR_PATCH"
+
 type Diff struct {
 	onlyNew       bool
 	fromRev       string
@@ -28,7 +30,7 @@ func NewDiff(onlyNew bool, fromRev, patchFilePath string, wholeFiles bool) *Diff
 		fromRev:       fromRev,
 		patchFilePath: patchFilePath,
 		wholeFiles:    wholeFiles,
-		patch:         os.Getenv("GOLANGCI_DIFF_PROCESSOR_PATCH"),
+		patch:         os.Getenv(envGolangciDiffProcessorPatch),
 	}
 }
 

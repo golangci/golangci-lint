@@ -9,7 +9,7 @@ import (
 )
 
 func TestMaxSameIssues(t *testing.T) {
-	p := NewMaxSameIssues(1, logutils.NewStderrLog(""), &config.Config{})
+	p := NewMaxSameIssues(1, logutils.NewStderrLog(logutils.DebugKeyEmpty), &config.Config{})
 	i1 := result.Issue{
 		Text: "1",
 	}

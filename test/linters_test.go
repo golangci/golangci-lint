@@ -55,7 +55,7 @@ func testSourcesFromDir(t *testing.T, dir string) {
 	err = os.Chdir(dir)
 	require.NoError(t, err)
 
-	log := logutils.NewStderrLog("test")
+	log := logutils.NewStderrLog(logutils.DebugKeyTest)
 	log.SetLevel(logutils.LogLevelInfo)
 
 	for _, source := range sources {

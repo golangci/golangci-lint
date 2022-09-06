@@ -28,6 +28,13 @@ import (
 
 const defaultFileMode = 0644
 
+const (
+	// envFailOnWarnings value: "1"
+	envFailOnWarnings = "FAIL_ON_WARNINGS"
+	// envMemLogEvery value: "1"
+	envMemLogEvery = "GL_MEM_LOG_EVERY"
+)
+
 func getDefaultIssueExcludeHelp() string {
 	parts := []string{"Use or not use default excludes:"}
 	for _, ep := range config.DefaultExcludePatterns {
@@ -350,9 +357,9 @@ func (e *Executor) runAnalysis(ctx context.Context, args []string) ([]result.Iss
 	if err != nil {
 		return nil, errors.Wrap(err, "context loading failed")
 	}
-	lintCtx.Log = e.log.Child("linters context")
+	lintCtx.Log = e.log.Child(logutils.DebugKeyLintersContext)
 
-	runner, err := lint.NewRunner(e.cfg, e.log.Child("runner"),
+	runner, err := lint.NewRunner(e.cfg, e.log.Child(logutils.DebugKeyRunner),
 		e.goenv, e.EnabledLintersSet, e.lineCache, e.DBManager, lintCtx.Packages)
 	if err != nil {
 		return nil, err
@@ -390,7 +397,7 @@ func (e *Executor) runAndPrint(ctx context.Context, args []string) error {
 		e.log.Warnf("Failed to discover go env: %s", err)
 	}
 
-	if !logutils.HaveDebugTag("linters_output") {
+	if !logutils.HaveDebugTag(logutils.DebugKeyLintersOutput) {
 		// Don't allow linters and loader to print anything
 		log.SetOutput(io.Discard)
 		savedStdout, savedStderr := e.setOutputToDevNull()
@@ -474,9 +481,9 @@ func (e *Executor) createPrinter(format string, w io.Writer) (printers.Printer, 
 	case config.OutFormatColoredLineNumber, config.OutFormatLineNumber:
 		p = printers.NewText(e.cfg.Output.PrintIssuedLine,
 			format == config.OutFormatColoredLineNumber, e.cfg.Output.PrintLinterName,
-			e.log.Child("text_printer"), w)
+			e.log.Child(logutils.DebugKeyTextPrinter), w)
 	case config.OutFormatTab:
-		p = printers.NewTab(e.cfg.Output.PrintLinterName, e.log.Child("tab_printer"), w)
+		p = printers.NewTab(e.cfg.Output.PrintLinterName, e.log.Child(logutils.DebugKeyTabPrinter), w)
 	case config.OutFormatCheckstyle:
 		p = printers.NewCheckstyle(w)
 	case config.OutFormatCodeClimate:
@@ -545,7 +552,7 @@ func (e *Executor) setupExitCode(ctx context.Context) {
 		return
 	}
 
-	needFailOnWarnings := os.Getenv("GL_TEST_RUN") == "1" || os.Getenv("FAIL_ON_WARNINGS") == "1"
+	needFailOnWarnings := os.Getenv(lintersdb.EnvTestRun) == "1" || os.Getenv(envFailOnWarnings) == "1"
 	if needFailOnWarnings && len(e.reportData.Warnings) != 0 {
 		e.exitCode = exitcodes.WarningInTest
 		return
@@ -569,7 +576,7 @@ func watchResources(ctx context.Context, done chan struct{}, logger logutils.Log
 	ticker := time.NewTicker(intervalMS * time.Millisecond)
 	defer ticker.Stop()
 
-	logEveryRecord := os.Getenv("GL_MEM_LOG_EVERY") == "1"
+	logEveryRecord := os.Getenv(envMemLogEvery) == "1"
 	const MB = 1024 * 1024
 
 	track := func() {

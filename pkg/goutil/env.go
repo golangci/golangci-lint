@@ -30,7 +30,7 @@ func NewEnv(log logutils.Log) *Env {
 	return &Env{
 		vars:   map[string]string{},
 		log:    log,
-		debugf: logutils.Debug("env"),
+		debugf: logutils.Debug(logutils.DebugKeyEnv),
 	}
 }
 

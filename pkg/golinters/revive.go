@@ -25,7 +25,7 @@ import (
 
 const reviveName = "revive"
 
-var reviveDebugf = logutils.Debug("revive")
+var reviveDebugf = logutils.Debug(logutils.DebugKeyRevive)
 
 // jsonObject defines a JSON object of a failure
 type jsonObject struct {

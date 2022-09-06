@@ -12,7 +12,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-var autogenDebugf = logutils.Debug("autogen_exclude")
+var autogenDebugf = logutils.Debug(logutils.DebugKeyAutogenExclude)
 
 type ageFileSummary struct {
 	isGenerated bool
