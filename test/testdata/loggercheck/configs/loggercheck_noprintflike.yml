@@ -1,0 +1,3 @@
+linters-settings:
+  loggercheck:
+    no-printf-like: true

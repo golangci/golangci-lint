@@ -1,0 +1,13 @@
+linters-settings:
+  loggercheck:
+    rules:
+      - (*command-line-arguments.Logger).Debugw
+      - (*command-line-arguments.Logger).Infow
+      - (*command-line-arguments.Logger).Warnw
+      - (*command-line-arguments.Logger).Errorw
+      - (*command-line-arguments.Logger).With
+      - command-line-arguments.Debugw
+      - command-line-arguments.Infow
+      - command-line-arguments.Warnw
+      - command-line-arguments.Errorw
+      - command-line-arguments.With

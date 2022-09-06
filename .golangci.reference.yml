@@ -1119,6 +1119,32 @@ linters-settings:
     # Default: 1
     tab-width: 1
 
+  loggercheck:
+    # Allow check for the github.com/go-kit/log library.
+    # Default: true
+    kitlog: false
+    # Allow check for the k8s.io/klog/v2 library.
+    # Default: true
+    klog: false
+    # Allow check for the github.com/go-logr/logr library.
+    # Default: true
+    logr: false
+    # Allow check for the "sugar logger" from go.uber.org/zap library.
+    # Default: true
+    zap: false
+    # Require all logging keys to be inlined constant strings.
+    # Default: false
+    require-string-key: true
+    # Require printf-like format specifier (%s, %d for example) not present.
+    # Default: false
+    no-printf-like: true
+    # List of custom rules to check against, where each rule is a single logger pattern, useful for wrapped loggers.
+    # For example: https://github.com/timonwong/loggercheck/blob/7395ab86595781e33f7afba27ad7b55e6956ebcd/testdata/custom-rules.txt
+    # Default: empty
+    rules:
+      - k8s.io/klog/v2.InfoS   # package level exported functions
+      - (github.com/go-logr/logr.Logger).Error  # "Methods"
+      - (*go.uber.org/zap.SugaredLogger).With  # Also "Methods", but with a pointer receiver
   maintidx:
     # Show functions with maintainability index lower than N.
     # A high index indicates better maintainability (it's kind of the opposite of complexity).
@@ -1956,7 +1982,7 @@ linters:
     - interfacer
     - ireturn
     - lll
-    - logrlint
+    - loggercheck
     - maintidx
     - makezero
     - maligned
@@ -2061,7 +2087,7 @@ linters:
     - interfacer
     - ireturn
     - lll
-    - logrlint
+    - loggercheck
     - maintidx
     - makezero
     - maligned

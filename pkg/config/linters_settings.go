@@ -69,6 +69,15 @@ var defaultLintersSettings = LintersSettings{
 		LineLength: 120,
 		TabWidth:   1,
 	},
+	LoggerCheck: LoggerCheckSettings{
+		Kitlog:           true,
+		Klog:             true,
+		Logr:             true,
+		Zap:              true,
+		RequireStringKey: false,
+		NoPrintfLike:     false,
+		Rules:            nil,
+	},
 	MaintIdx: MaintIdxSettings{
 		Under: 20,
 	},
@@ -157,6 +166,7 @@ type LintersSettings struct {
 	InterfaceBloat   InterfaceBloatSettings
 	Ireturn          IreturnSettings
 	Lll              LllSettings
+	LoggerCheck      LoggerCheckSettings
 	MaintIdx         MaintIdxSettings
 	Makezero         MakezeroSettings
 	Maligned         MalignedSettings
@@ -477,6 +487,16 @@ type IreturnSettings struct {
 type LllSettings struct {
 	LineLength int `mapstructure:"line-length"`
 	TabWidth   int `mapstructure:"tab-width"`
+}
+
+type LoggerCheckSettings struct {
+	Kitlog           bool     `mapstructure:"kitlog"`
+	Klog             bool     `mapstructure:"klog"`
+	Logr             bool     `mapstructure:"logr"`
+	Zap              bool     `mapstructure:"zap"`
+	RequireStringKey bool     `mapstructure:"require-string-key"`
+	NoPrintfLike     bool     `mapstructure:"no-printf-like"`
+	Rules            []string `mapstructure:"rules"`
 }
 
 type MaintIdxSettings struct {

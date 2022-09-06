@@ -29,7 +29,7 @@ func TestTypecheck(t *testing.T) {
 
 func TestSourcesFromTestdataSubDir(t *testing.T) {
 	subDirs := []string{
-		"logrlint",
+		"loggercheck",
 	}
 
 	for _, dir := range subDirs {
