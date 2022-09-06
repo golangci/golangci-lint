@@ -13,7 +13,7 @@ import (
 //nolint:funlen
 func TestEnabledLinters(t *testing.T) {
 	// require to display the message "Active x linters: [x,y]"
-	t.Setenv("GL_TEST_RUN", "1")
+	t.Setenv(lintersdb.EnvTestRun, "1")
 
 	cases := []struct {
 		name           string

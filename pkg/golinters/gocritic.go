@@ -26,8 +26,8 @@ import (
 const goCriticName = "gocritic"
 
 var (
-	goCriticDebugf  = logutils.Debug(goCriticName)
-	isGoCriticDebug = logutils.HaveDebugTag(goCriticName)
+	goCriticDebugf  = logutils.Debug(logutils.DebugKeyGoCritic)
+	isGoCriticDebug = logutils.HaveDebugTag(logutils.DebugKeyGoCritic)
 )
 
 func NewGoCritic(settings *config.GoCriticSettings, cfg *config.Config) *goanalysis.Linter {

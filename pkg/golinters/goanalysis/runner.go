@@ -28,17 +28,17 @@ import (
 )
 
 var (
-	debugf = logutils.Debug("goanalysis")
+	debugf = logutils.Debug(logutils.DebugKeyGoAnalysis)
 
-	analyzeDebugf     = logutils.Debug("goanalysis/analyze")
-	isMemoryDebug     = logutils.HaveDebugTag("goanalysis/memory")
-	issuesCacheDebugf = logutils.Debug("goanalysis/issues/cache")
+	analyzeDebugf     = logutils.Debug(logutils.DebugKeyGoAnalysisAnalyze)
+	isMemoryDebug     = logutils.HaveDebugTag(logutils.DebugKeyGoAnalysisMemory)
+	issuesCacheDebugf = logutils.Debug(logutils.DebugKeyGoAnalysisIssuesCache)
 
-	factsDebugf        = logutils.Debug("goanalysis/facts")
-	factsCacheDebugf   = logutils.Debug("goanalysis/facts/cache")
-	factsInheritDebugf = logutils.Debug("goanalysis/facts/inherit")
-	factsExportDebugf  = logutils.Debug("goanalysis/facts")
-	isFactsExportDebug = logutils.HaveDebugTag("goanalysis/facts/export")
+	factsDebugf        = logutils.Debug(logutils.DebugKeyGoAnalysisFacts)
+	factsCacheDebugf   = logutils.Debug(logutils.DebugKeyGoAnalysisFactsCache)
+	factsInheritDebugf = logutils.Debug(logutils.DebugKeyGoAnalysisFactsInherit)
+	factsExportDebugf  = logutils.Debug(logutils.DebugKeyGoAnalysisFacts)
+	isFactsExportDebug = logutils.HaveDebugTag(logutils.DebugKeyGoAnalysisFactsExport)
 )
 
 type Diagnostic struct {

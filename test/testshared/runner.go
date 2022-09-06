@@ -17,6 +17,13 @@ import (
 	"github.com/golangci/golangci-lint/pkg/logutils"
 )
 
+const (
+	// value: "1"
+	envKeepTempFiles = "GL_KEEP_TEMP_FILES"
+	// value: "true"
+	envGolangciLintInstalled = "GOLANGCI_LINT_INSTALLED"
+)
+
 type RunnerBuilder struct {
 	tb  testing.TB
 	log logutils.Log
@@ -35,7 +42,7 @@ type RunnerBuilder struct {
 func NewRunnerBuilder(tb testing.TB) *RunnerBuilder {
 	tb.Helper()
 
-	log := logutils.NewStderrLog("test")
+	log := logutils.NewStderrLog(logutils.DebugKeyTest)
 	log.SetLevel(logutils.LogLevelInfo)
 
 	return &RunnerBuilder{
@@ -89,7 +96,7 @@ func (b *RunnerBuilder) WithConfig(cfg string) *RunnerBuilder {
 
 	cfgPath := cfgFile.Name()
 	b.tb.Cleanup(func() {
-		if os.Getenv("GL_KEEP_TEMP_FILES") != "1" {
+		if os.Getenv(envKeepTempFiles) != "1" {
 			_ = os.Remove(cfgPath)
 		}
 	})
@@ -334,7 +341,7 @@ func (r *RunnerResult) ExpectHasIssue(issueText string) *RunnerResult {
 func InstallGolangciLint(tb testing.TB) string {
 	tb.Helper()
 
-	if os.Getenv("GOLANGCI_LINT_INSTALLED") != "true" {
+	if os.Getenv(envGolangciLintInstalled) != "true" {
 		cmd := exec.Command("make", "-C", "..", "build")
 
 		output, err := cmd.CombinedOutput()

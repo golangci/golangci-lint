@@ -46,7 +46,7 @@ func TestText_Print(t *testing.T) {
 
 	buf := new(bytes.Buffer)
 
-	printer := NewText(true, false, true, logutils.NewStderrLog(""), buf)
+	printer := NewText(true, false, true, logutils.NewStderrLog(logutils.DebugKeyEmpty), buf)
 
 	err := printer.Print(context.Background(), issues)
 	require.NoError(t, err)

@@ -46,7 +46,7 @@ func TestTab_Print(t *testing.T) {
 
 	buf := new(bytes.Buffer)
 
-	printer := NewTab(true, logutils.NewStderrLog(""), buf)
+	printer := NewTab(true, logutils.NewStderrLog(logutils.DebugKeyEmpty), buf)
 
 	err := printer.Print(context.Background(), issues)
 	require.NoError(t, err)

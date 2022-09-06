@@ -11,13 +11,16 @@ import (
 	"github.com/golangci/golangci-lint/test/testshared"
 )
 
+// value: "1"
+const envKeepTempFiles = "GL_KEEP_TEMP_FILES"
+
 func TestFix(t *testing.T) {
 	testshared.SkipOnWindows(t)
 
 	tmpDir := filepath.Join(testdataDir, "fix.tmp")
 	_ = os.RemoveAll(tmpDir) // cleanup previous runs
 
-	if os.Getenv("GL_KEEP_TEMP_FILES") == "1" {
+	if os.Getenv(envKeepTempFiles) == "1" {
 		t.Logf("Temp dir for fix test: %s", tmpDir)
 	} else {
 		t.Cleanup(func() { _ = os.RemoveAll(tmpDir) })

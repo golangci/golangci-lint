@@ -38,7 +38,7 @@ func NewManager(cfg *config.Config, log logutils.Log) *Manager {
 // WithCustomLinters loads private linters that are specified in the golangci config file.
 func (m *Manager) WithCustomLinters() *Manager {
 	if m.log == nil {
-		m.log = report.NewLogWrapper(logutils.NewStderrLog(""), &report.Data{})
+		m.log = report.NewLogWrapper(logutils.NewStderrLog(logutils.DebugKeyEmpty), &report.Data{})
 	}
 	if m.cfg != nil {
 		for name, settings := range m.cfg.LintersSettings.Custom {

@@ -41,7 +41,7 @@ func NewContextLoader(cfg *config.Config, log logutils.Log, goenv *goutil.Env,
 	return &ContextLoader{
 		cfg:         cfg,
 		log:         log,
-		debugf:      logutils.Debug("loader"),
+		debugf:      logutils.Debug(logutils.DebugKeyLoader),
 		goenv:       goenv,
 		pkgTestIDRe: regexp.MustCompile(`^(.*) \[(.*)\.test\]`),
 		lineCache:   lineCache,
@@ -59,7 +59,7 @@ func (cl *ContextLoader) prepareBuildContext() {
 		return
 	}
 
-	os.Setenv("GOROOT", goroot)
+	os.Setenv(string(goutil.EnvGoRoot), goroot)
 	build.Default.GOROOT = goroot
 	build.Default.BuildTags = cl.cfg.Run.BuildTags
 }

@@ -14,6 +14,7 @@ import (
 
 	"github.com/golangci/golangci-lint/internal/pkgcache"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
+	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
 	"github.com/golangci/golangci-lint/pkg/timeutils"
 )
@@ -28,7 +29,7 @@ type runAnalyzersConfig interface {
 }
 
 func runAnalyzers(cfg runAnalyzersConfig, lintCtx *linter.Context) ([]result.Issue, error) {
-	log := lintCtx.Log.Child("goanalysis")
+	log := lintCtx.Log.Child(logutils.DebugKeyGoAnalysis)
 	sw := timeutils.NewStopwatch("analyzers", log)
 
 	const stagesToPrint = 10
