@@ -1138,7 +1138,8 @@ linters-settings:
     # Require printf-like format specifier (%s, %d for example) not present.
     # Default: false
     no-printf-like: true
-    # List of custom rules to check against, where each rule is a single logger pattern.
+    # List of custom rules to check against, where each rule is a single logger pattern, useful for wrapped loggers.
+    # For example: https://github.com/timonwong/loggercheck/blob/7395ab86595781e33f7afba27ad7b55e6956ebcd/testdata/custom-rules.txt
     # Default: empty
     rules:
       - k8s.io/klog/v2.InfoS   # package level exported functions
