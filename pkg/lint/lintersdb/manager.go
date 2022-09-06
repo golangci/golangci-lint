@@ -750,6 +750,11 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/sivchari/tenv"),
 
+		linter.NewConfig(golinters.NewTestableexamples()).
+			WithSince("v1.50.0").
+			WithPresets(linter.PresetTest).
+			WithURL("https://github.com/maratori/testableexamples"),
+
 		linter.NewConfig(golinters.NewTestpackage(testpackageCfg)).
 			WithSince("v1.25.0").
 			WithPresets(linter.PresetStyle, linter.PresetTest).
