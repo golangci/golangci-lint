@@ -8,7 +8,12 @@ import (
 )
 
 func NewTestableexamples() *goanalysis.Linter {
-	var a = testableexamples.NewAnalyzer()
-	return goanalysis.NewLinter(a.Name, a.Doc, []*analysis.Analyzer{a}, nil).
-		WithLoadMode(goanalysis.LoadModeSyntax)
+	a := testableexamples.NewAnalyzer()
+
+	return goanalysis.NewLinter(
+		a.Name,
+		a.Doc,
+		[]*analysis.Analyzer{a},
+		nil,
+	).WithLoadMode(goanalysis.LoadModeSyntax)
 }
