@@ -306,7 +306,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithSince("v1.43.0").
 			WithPresets(linter.PresetBugs).
 			WithLoadForGoAnalysis().
-			WithURL("https://github.com/sylvia7788/contextcheck"),
+			WithURL("https://github.com/kkHAIKE/contextcheck"),
 
 		linter.NewConfig(golinters.NewCyclop(cyclopCfg)).
 			WithSince("v1.37.0").
