@@ -1,8 +1,8 @@
 //golangcitest:args -Evisibilityorder
 package testdata
 
-func visibilityorderTestunexported() { // ERROR
+func visibilityorderTest_UnexportedFunc() {
 }
 
-func visibilityorderTestExported() {
+func VisibilityorderTest_ExportedFunc() { // want `exported symbol VisibilityorderTest_ExportedFunc appears after unexported symbol visibilityorderTest_UnexportedFunc`
 }
