@@ -224,6 +224,7 @@ type LintersSettings struct {
 	Whitespace       WhitespaceSettings
 	Wrapcheck        WrapcheckSettings
 	WSL              WSLSettings
+	Vulncheck        VulncheckSettings
 
 	Custom map[string]CustomLinterSettings
 }
@@ -742,6 +743,10 @@ type VarnamelenSettings struct {
 	IgnoreMapIndexOk   bool     `mapstructure:"ignore-map-index-ok"`
 	IgnoreChanRecvOk   bool     `mapstructure:"ignore-chan-recv-ok"`
 	IgnoreDecls        []string `mapstructure:"ignore-decls"`
+}
+
+type VulncheckSettings struct {
+	VulnDatabase []string `mapstructure:"vuln-database"`
 }
 
 type WhitespaceSettings struct {
