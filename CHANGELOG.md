@@ -309,7 +309,7 @@ IMPORTANT: `varcheck` and `deadcode` has been removed of default linters.
 ### october 2021
 
 1. new linters:
-   * `contextcheck`: https://github.com/sylvia7788/contextcheck
+   * `contextcheck`: https://github.com/kkHAIKE/contextcheck
    * `varnamelen`: https://github.com/blizzy78/varnamelen
 2. update linters:
    * `gochecknoglobals`: to v0.1.0

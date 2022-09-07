@@ -1,7 +1,7 @@
 package golinters
 
 import (
-	"github.com/sylvia7788/contextcheck"
+	"github.com/kkHAIKE/contextcheck"
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
