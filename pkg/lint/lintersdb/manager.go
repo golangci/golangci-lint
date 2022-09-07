@@ -666,6 +666,11 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/stbenjam/no-sprintf-host-port"),
 
+		linter.NewConfig(golinters.NewOnlyAny()).
+			WithSince("v1.50.0").
+			WithPresets(linter.PresetStyle).
+			WithURL("https://github.com/dorfire/go-analyzers"),
+
 		linter.NewConfig(golinters.NewParallelTest(parallelTestCfg)).
 			WithSince("v1.33.0").
 			WithLoadForGoAnalysis().
@@ -816,6 +821,11 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/blizzy78/varnamelen"),
+
+		linter.NewConfig(golinters.NewVisibilityOrder()).
+			WithSince("v1.50.0").
+			WithPresets(linter.PresetStyle).
+			WithURL("https://github.com/dorfire/go-analyzers"),
 
 		linter.NewConfig(golinters.NewWastedAssign()).
 			WithSince("v1.38.0").

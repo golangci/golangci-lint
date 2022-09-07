@@ -1997,6 +1997,7 @@ linters:
     - nonamedreturns
     - nosnakecase
     - nosprintfhostport
+    - onlyany
     - paralleltest
     - prealloc
     - predeclared
@@ -2022,6 +2023,7 @@ linters:
     - usestdlibvars
     - varcheck
     - varnamelen
+    - visibilityorder
     - wastedassign
     - whitespace
     - wrapcheck
@@ -2103,6 +2105,7 @@ linters:
     - nonamedreturns
     - nosnakecase
     - nosprintfhostport
+    - onlyany
     - paralleltest
     - prealloc
     - predeclared
@@ -2128,6 +2131,7 @@ linters:
     - usestdlibvars
     - varcheck
     - varnamelen
+    - visibilityorder
     - wastedassign
     - whitespace
     - wrapcheck
