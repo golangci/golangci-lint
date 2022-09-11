@@ -3,6 +3,7 @@ package goanalysis
 import (
 	"fmt"
 	"go/types"
+	"io"
 	"reflect"
 	"runtime/debug"
 	"time"
@@ -331,7 +332,7 @@ func (act *action) loadPersistedFacts() bool {
 	var facts []Fact
 	key := fmt.Sprintf("%s/facts", act.a.Name)
 	if err := act.r.pkgCache.Get(act.pkg, pkgcache.HashModeNeedAllDeps, key, &facts); err != nil {
-		if err != pkgcache.ErrMissing {
+		if !errors.Is(err, pkgcache.ErrMissing) && !errors.Is(err, io.EOF) {
 			act.r.log.Warnf("Failed to get persisted facts: %s", err)
 		}
 
