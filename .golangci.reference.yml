@@ -293,6 +293,11 @@ linters-settings:
     comparison: false
 
   exhaustive:
+    # Program elements to check for exhaustiveness.
+    # Default: [ switch ]
+    check:
+      - switch
+      - map
     # Check switch statements in generated files also.
     # Default: false
     check-generated: true
@@ -307,10 +312,10 @@ linters-settings:
     # Consider enums only in package scopes, not in inner scopes.
     # Default: false
     package-scope-only: true
-    # only run exhaustive check on switches with "//exhaustive:enforce" comment
+    # Only run exhaustive check on switches with "//exhaustive:enforce" comment.
     # Default: false
     explicit-exhaustive-switch: true
-    # only run exhaustive check on map literals with "//exhaustive:enforce" comment.
+    # Only run exhaustive check on map literals with "//exhaustive:enforce" comment.
     # Default: false
     explicit-exhaustive-map: true
 

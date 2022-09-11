@@ -15,11 +15,13 @@ func NewExhaustive(settings *config.ExhaustiveSettings) *goanalysis.Linter {
 	if settings != nil {
 		cfg = map[string]map[string]interface{}{
 			a.Name: {
+				exhaustive.CheckFlag:                      settings.Check,
 				exhaustive.CheckGeneratedFlag:             settings.CheckGenerated,
 				exhaustive.DefaultSignifiesExhaustiveFlag: settings.DefaultSignifiesExhaustive,
-				exhaustive.ExplicitExhaustiveMapFlag:      settings.ExplicitExhaustiveMap,
-				exhaustive.ExplicitExhaustiveSwitchFlag:   settings.PackageScopeOnly,
 				exhaustive.IgnoreEnumMembersFlag:          settings.IgnoreEnumMembers,
+				exhaustive.PackageScopeOnlyFlag:           settings.PackageScopeOnly,
+				exhaustive.ExplicitExhaustiveMapFlag:      settings.ExplicitExhaustiveMap,
+				exhaustive.ExplicitExhaustiveSwitchFlag:   settings.ExplicitExhaustiveSwitch,
 			},
 		}
 	}
