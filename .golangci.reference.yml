@@ -1755,6 +1755,9 @@ linters-settings:
     # Suggest the use of tls.SignatureScheme.String()
     # Default: false
     tls-signature-scheme: true
+    # suggest the use of constant.Kind.String()
+    # Default: false
+    constant-kind: true
 
   unparam:
     # Inspect exported functions.

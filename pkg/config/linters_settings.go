@@ -650,6 +650,7 @@ type UseStdlibVarsSettings struct {
 	OSDevNullFlag          bool `mapstructure:"os-dev-null-flag"`
 	SQLIsolationLevelFlag  bool `mapstructure:"sql-isolation-level-flag"`
 	TLSSignatureSchemeFlag bool `mapstructure:"tls-signature-scheme-flag"`
+	ConstantKind           bool `mapstructure:"constant-kind"`
 }
 
 type UnparamSettings struct {
