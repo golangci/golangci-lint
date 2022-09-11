@@ -9,7 +9,7 @@ func duplicateWordInComments() {
 }
 
 func duplicateWordInStr() {
-	a := "this line include duplicate word and and"                  // want `Duplicate words \(and\) found`
-	b := "print the\n the line, print the the \n\t the line.and and" // want `Duplicate words \(the,and\) found`
+	a := "this line include duplicate word and and"                   // want `Duplicate words \(and\) found`
+	b := "print the\n the line, print the the \n\t the line. and and" // want `Duplicate words \(and,the\) found`
 	fmt.Println(a, b)
 }
