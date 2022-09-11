@@ -25,10 +25,13 @@ var defaultLintersSettings = LintersSettings{
 		Comparison: true,
 	},
 	Exhaustive: ExhaustiveSettings{
+		Check:                      []string{"switch"},
 		CheckGenerated:             false,
 		DefaultSignifiesExhaustive: false,
 		IgnoreEnumMembers:          "",
 		PackageScopeOnly:           false,
+		ExplicitExhaustiveMap:      false,
+		ExplicitExhaustiveSwitch:   false,
 	},
 	Forbidigo: ForbidigoSettings{
 		ExcludeGodocExamples: true,
@@ -274,12 +277,13 @@ type ErrorLintSettings struct {
 }
 
 type ExhaustiveSettings struct {
-	CheckGenerated             bool   `mapstructure:"check-generated"`
-	DefaultSignifiesExhaustive bool   `mapstructure:"default-signifies-exhaustive"`
-	IgnoreEnumMembers          string `mapstructure:"ignore-enum-members"`
-	PackageScopeOnly           bool   `mapstructure:"package-scope-only"`
-	ExplicitExhaustiveMap      bool   `mapstructure:"explicit-exhaustive-map"`
-	ExplicitExhaustiveSwitch   bool   `mapstructure:"explicit-exhaustive-switch"`
+	Check                      []string `mapstructure:"check"`
+	CheckGenerated             bool     `mapstructure:"check-generated"`
+	DefaultSignifiesExhaustive bool     `mapstructure:"default-signifies-exhaustive"`
+	IgnoreEnumMembers          string   `mapstructure:"ignore-enum-members"`
+	PackageScopeOnly           bool     `mapstructure:"package-scope-only"`
+	ExplicitExhaustiveMap      bool     `mapstructure:"explicit-exhaustive-map"`
+	ExplicitExhaustiveSwitch   bool     `mapstructure:"explicit-exhaustive-switch"`
 }
 
 type ExhaustiveStructSettings struct {
