@@ -225,8 +225,8 @@ linters-settings:
     threshold: 100
 
   dupword:
-    # key words for detecting duplicate words, will override default value
-    # Default: the, and, a
+    # Keywords for detecting duplicate words, only the words defined in this list will be detected.
+    # Default: []
     keyword:
     - "the"
     - "and"

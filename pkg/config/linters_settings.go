@@ -19,9 +19,6 @@ var defaultLintersSettings = LintersSettings{
 	Dogsled: DogsledSettings{
 		MaxBlankIdentifiers: 2,
 	},
-	DupWord: DupWordSettings{
-		KeyWord: []string{"the", "and", "a"},
-	},
 	ErrorLint: ErrorLintSettings{
 		Errorf:     true,
 		Asserts:    true,

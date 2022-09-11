@@ -346,7 +346,6 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		linter.NewConfig(golinters.NewDupWord(dupwordCfg)).
 			WithSince("1.50.0").
 			WithPresets(linter.PresetComment).
-			WithLoadForGoAnalysis().
 			WithAutoFix().
 			WithURL("https://github.com/Abirdcfly/dupword"),
 
