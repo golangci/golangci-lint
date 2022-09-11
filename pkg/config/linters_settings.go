@@ -278,6 +278,8 @@ type ExhaustiveSettings struct {
 	DefaultSignifiesExhaustive bool   `mapstructure:"default-signifies-exhaustive"`
 	IgnoreEnumMembers          string `mapstructure:"ignore-enum-members"`
 	PackageScopeOnly           bool   `mapstructure:"package-scope-only"`
+	ExplicitExhaustiveMap      bool   `mapstructure:"explicit-exhaustive-map"`
+	ExplicitExhaustiveSwitch   bool   `mapstructure:"explicit-exhaustive-switch"`
 }
 
 type ExhaustiveStructSettings struct {
