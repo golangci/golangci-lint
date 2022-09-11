@@ -307,6 +307,12 @@ linters-settings:
     # Consider enums only in package scopes, not in inner scopes.
     # Default: false
     package-scope-only: true
+    # only run exhaustive check on switches with "//exhaustive:enforce" comment
+    # Default: false
+    explicit-exhaustive-switch: true
+    # only run exhaustive check on map literals with "//exhaustive:enforce" comment.
+    # Default: false
+    explicit-exhaustive-map: true
 
   exhaustivestruct:
     # Struct Patterns is list of expressions to match struct packages and names.
