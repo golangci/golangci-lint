@@ -51,7 +51,6 @@ type Cache struct {
 // to share a cache directory (for example, if the directory were stored
 // in a network file system). File locking is notoriously unreliable in
 // network file systems and may not suffice to protect the cache.
-//
 func Open(dir string) (*Cache, error) {
 	info, err := os.Stat(dir)
 	if err != nil {
@@ -159,7 +158,7 @@ func (c *Cache) get(id ActionID) (Entry, error) {
 	defer f.Close()
 	entry := make([]byte, entrySize+1) // +1 to detect whether f is too long
 	if n, readErr := io.ReadFull(f, entry); n != entrySize || readErr != io.ErrUnexpectedEOF {
-		return failed(fmt.Errorf("read %d/%d bytes from %s with error %s", n, entrySize, fileName, readErr))
+		return failed(fmt.Errorf("read %d/%d bytes from %s with error %w", n, entrySize, fileName, readErr))
 	}
 	if entry[0] != 'v' || entry[1] != '1' || entry[2] != ' ' || entry[3+hexSize] != ' ' || entry[3+hexSize+1+hexSize] != ' ' || entry[3+hexSize+1+hexSize+1+20] != ' ' || entry[entrySize-1] != '\n' {
 		return failed(fmt.Errorf("bad data in %s", fileName))
@@ -181,7 +180,7 @@ func (c *Cache) get(id ActionID) (Entry, error) {
 	}
 	size, err := strconv.ParseInt(string(esize[i:]), 10, 64)
 	if err != nil || size < 0 {
-		return failed(fmt.Errorf("failed to parse esize int from %s with error %s", fileName, err))
+		return failed(fmt.Errorf("failed to parse esize int from %s with error %w", fileName, err))
 	}
 	i = 0
 	for i < len(etime) && etime[i] == ' ' {
@@ -189,7 +188,7 @@ func (c *Cache) get(id ActionID) (Entry, error) {
 	}
 	tm, err := strconv.ParseInt(string(etime[i:]), 10, 64)
 	if err != nil || tm < 0 {
-		return failed(fmt.Errorf("failed to parse etime int from %s with error %s", fileName, err))
+		return failed(fmt.Errorf("failed to parse etime int from %s with error %w", fileName, err))
 	}
 
 	if err = c.used(fileName); err != nil {
@@ -498,7 +497,7 @@ func (c *Cache) copyFile(file io.ReadSeeker, out OutputID, size int64) error {
 		return err
 	}
 	if n, wErr := h.Write(buf); n != len(buf) {
-		return fmt.Errorf("wrote to hash %d/%d bytes with error %s", n, len(buf), wErr)
+		return fmt.Errorf("wrote to hash %d/%d bytes with error %w", n, len(buf), wErr)
 	}
 
 	sum := h.Sum(nil)

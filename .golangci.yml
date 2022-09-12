@@ -138,9 +138,8 @@ issues:
 
 run:
   timeout: 5m
-  go: '1.17' # TODO(ldez): we force to use an old version of Go for the CI and the tests.
   skip-dirs:
-    - test/testdata_etc
-    - internal/cache
-    - internal/renameio
-    - internal/robustio
+    - test/testdata_etc # test files
+    - internal/cache # extracted from Go code
+    - internal/renameio # extracted from Go code
+    - internal/robustio # extracted from Go code
