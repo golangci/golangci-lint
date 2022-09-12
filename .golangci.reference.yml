@@ -701,11 +701,11 @@ linters-settings:
       # List of allowed modules.
       # Default: []
       modules:
-         - gopkg.in/yaml.v2
+        - gopkg.in/yaml.v2
       # List of allowed module domains.
       # Default: []
       domains:
-         - golang.org
+        - golang.org
     blocked:
       # List of blocked modules.
       # Default: []
@@ -1261,21 +1261,21 @@ linters-settings:
     # Please refer to https://github.com/yeya24/promlinter#usage for detailed usage.
     # Default: []
     disabled-linters:
-     - Help
-     - MetricUnits
-     - Counter
-     - HistogramSummaryReserved
-     - MetricTypeInName
-     - ReservedChars
-     - CamelCase
-     - UnitAbbreviations
+      - Help
+      - MetricUnits
+      - Counter
+      - HistogramSummaryReserved
+      - MetricTypeInName
+      - ReservedChars
+      - CamelCase
+      - UnitAbbreviations
 
   reassign:
     # Patterns for global variable names that are checked for reassignment.
     # See https://github.com/curioswitch/go-reassign#usage
     # Default: ["EOF", "Err.*"]
     patterns:
-     - ".*"
+      - ".*"
 
   revive:
     # Maximum number of open files at the same time.
@@ -1316,7 +1316,7 @@ linters-settings:
       - name: argument-limit
         severity: warning
         disabled: false
-        arguments: [4]
+        arguments: [ 4 ]
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#atomic
       - name: atomic
         severity: warning
@@ -1325,7 +1325,7 @@ linters-settings:
       - name: banned-characters
         severity: warning
         disabled: false
-        arguments: ["Ω","Σ","σ", "7"]
+        arguments: [ "Ω","Σ","σ", "7" ]
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#bare-return
       - name: bare-return
         severity: warning
@@ -1427,8 +1427,8 @@ linters-settings:
         severity: warning
         disabled: false
         arguments:
-        - "checkPrivateReceivers"
-        - "sayRepetitiveInsteadOfStutters"
+          - "checkPrivateReceivers"
+          - "sayRepetitiveInsteadOfStutters"
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#file-header
       - name: file-header
         severity: warning
@@ -1569,8 +1569,8 @@ linters-settings:
         severity: warning
         disabled: false
         arguments:
-        - [ "ID" ] # AllowList
-        - [ "VM" ] # DenyList
+          - [ "ID" ] # AllowList
+          - [ "VM" ] # DenyList
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#var-declaration
       - name: var-declaration
         severity: warning
@@ -1868,55 +1868,56 @@ linters-settings:
     # See https://github.com/bombsimon/wsl/blob/master/doc/configuration.md for documentation of available settings.
     # These are the defaults for `golangci-lint`.
 
-    # Controls if you may cuddle assignments and anything without needing an empty line between them.
-    # Default: false
-    allow-assign-and-anything: false
-
-    # Controls if you may cuddle assignments and calls without needing an empty line between them.
-    # Default: true
-    allow-assign-and-call: true
-
-    # Controls if you're allowed to cuddle multiple declarations.
-    # This is false by default to encourage you to group them in one var block.
-    # One major benefit with this is that if the variables are assigned the assignments will be tabulated.
-    # Default: false
-    allow-cuddle-declarations: false
-
-    # Controls if you may cuddle assignments even if they span over multiple lines.
-    # Default: true
-    allow-multiline-assign: true
-
-    # This option allows whitespace after each comment group that begins a block.
-    # Default: false
-    allow-separated-leading-comment: false
-
-    # Controls if blocks can end with comments.
-    # This is not encouraged sine it's usually code smell but might be useful do improve understanding or learning purposes.
-    # To be allowed there must be no whitespace between the comment and the last statement or the comment and the closing brace.
-    # Default: false
-    allow-trailing-comment: false
-
-    # Can be set to force trailing newlines at the end of case blocks to improve readability.
-    # If the number of lines (including comments) in a case block exceeds this number
-    # a linter error will be yielded if the case does not end with a newline.
-    # Default: 0
-    force-case-trailing-whitespace: 0
-
-    # Enforces that an `if` statement checking an error variable is cuddled
-    # with the line that assigned that error variable.
-    # Default: false
-    force-err-cuddling: false
-
-    # Enforces that an assignment which is actually a short declaration (using `:=`)
-    # is only allowed to cuddle with other short declarations, and not plain assignments, blocks, etc.
-    # This rule helps make declarations stand out by themselves, much the same as grouping var statement.
-    # Default: false
-    force-short-decl-cuddling: false
-
-    # Controls if the checks for slice append should be "strict"
-    # in the sense that it will only allow these assignments to be cuddled with variables being appended.
-    # Default: true
+    # Do strict checking when assigning from append (x = append(x, y)). If
+    # this is set to true - the append call must append either a variable
+    # assigned, called or used on the line above.
     strict-append: true
+    
+    # Allows assignments to be cuddled with variables used in calls on
+    # line above and calls to be cuddled with assignments of variables
+    # used in call on line above.
+    allow-assign-and-call: true
+    
+    # Allows assignments to be cuddled with anything.
+    allow-assign-and-anything: false
+    
+    # Allows cuddling to assignments even if they span over multiple lines.
+    allow-multiline-assign: true
+    
+    # If the number of lines in a case block is equal to or lager than this
+    # number, the case *must* end white a newline.
+    force-case-trailing-whitespace: 0
+    
+    # Allow blocks to end with comments.
+    allow-trailing-comment: false
+    
+    # Allow multiple comments in the beginning of a block separated with newline.
+    allow-separated-leading-comment: false
+    
+    # Allow multiple var/declaration statements to be cuddled.
+    allow-cuddle-declarations: false
+    
+    # Aa list of call idents that everything can be cuddled with.
+    # Defaults to calls looking like locks.
+    allow-cuddle-with-calls: [ "Lock", "RLock" ]
+    
+    # AllowCuddleWithRHS is a list of right hand side variables that is allowed
+    # to be cuddled with anything. Defaults to assignments or calls looking
+    # like unlocks.
+    allow-cuddle-with-rhs: [ "Unlock", "RUnlock" ]
+    
+    # Causes an error when an If statement that checks an error variable doesn't
+    # cuddle with the assignment of that variable.
+    enforce-err-cuddling: false
+    
+    # When enforce-err-cuddling is enabled this is a list of names
+    # used for error variables to check for in the conditional.
+    error-variable-names: [ "err" ]
+    
+    # Causes an error if a short declaration (:=) cuddles with anything other than
+    # another short declaration.
+    # This logic overrides enforce-err-cuddling among others.
+    force-short-decl-cuddling: false
 
   # The custom section can be used to define linter plugins to be loaded at runtime.
   # See README documentation for more info.
@@ -2292,5 +2293,5 @@ severity:
   # Default: []
   rules:
     - linters:
-      - dupl
+        - dupl
       severity: info

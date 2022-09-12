@@ -120,12 +120,15 @@ var defaultLintersSettings = LintersSettings{
 		AllowAssignAndCallCuddle:         true,
 		AllowAssignAndAnythingCuddle:     false,
 		AllowMultiLineAssignCuddle:       true,
-		AllowCuddleDeclaration:           false,
+		ForceCaseTrailingWhitespaceLimit: 0,
 		AllowTrailingComment:             false,
 		AllowSeparatedLeadingComment:     false,
+		AllowCuddleDeclaration:           false,
+		AllowCuddleWithCalls:             []string{"Lock", "RLock"},
+		AllowCuddleWithRHS:               []string{"Unlock", "RUnlock"},
 		ForceCuddleErrCheckAndAssign:     false,
+		ErrorVariableNames:               []string{"err"},
 		ForceExclusiveShortDeclarations:  false,
-		ForceCaseTrailingWhitespaceLimit: 0,
 	},
 }
 
@@ -693,16 +696,19 @@ type WrapcheckSettings struct {
 }
 
 type WSLSettings struct {
-	StrictAppend                     bool `mapstructure:"strict-append"`
-	AllowAssignAndCallCuddle         bool `mapstructure:"allow-assign-and-call"`
-	AllowAssignAndAnythingCuddle     bool `mapstructure:"allow-assign-and-anything"`
-	AllowMultiLineAssignCuddle       bool `mapstructure:"allow-multiline-assign"`
-	AllowCuddleDeclaration           bool `mapstructure:"allow-cuddle-declarations"`
-	AllowTrailingComment             bool `mapstructure:"allow-trailing-comment"`
-	AllowSeparatedLeadingComment     bool `mapstructure:"allow-separated-leading-comment"`
-	ForceCuddleErrCheckAndAssign     bool `mapstructure:"force-err-cuddling"`
-	ForceExclusiveShortDeclarations  bool `mapstructure:"force-short-decl-cuddling"`
-	ForceCaseTrailingWhitespaceLimit int  `mapstructure:"force-case-trailing-whitespace"`
+	StrictAppend                     bool     `mapstructure:"strict-append"`
+	AllowAssignAndCallCuddle         bool     `mapstructure:"allow-assign-and-call"`
+	AllowAssignAndAnythingCuddle     bool     `mapstructure:"allow-assign-and-anything"`
+	AllowMultiLineAssignCuddle       bool     `mapstructure:"allow-multiline-assign"`
+	ForceCaseTrailingWhitespaceLimit int      `mapstructure:"force-case-trailing-whitespace"`
+	AllowTrailingComment             bool     `mapstructure:"allow-trailing-comment"`
+	AllowSeparatedLeadingComment     bool     `mapstructure:"allow-separated-leading-comment"`
+	AllowCuddleDeclaration           bool     `mapstructure:"allow-cuddle-declarations"`
+	AllowCuddleWithCalls             []string `mapstructure:"allow-cuddle-with-calls"`
+	AllowCuddleWithRHS               []string `mapstructure:"allow-cuddle-with-rhs"`
+	ForceCuddleErrCheckAndAssign     bool     `mapstructure:"enforce-err-cuddling"`
+	ErrorVariableNames               []string `mapstructure:"error-variable-names"`
+	ForceExclusiveShortDeclarations  bool     `mapstructure:"force-short-decl-cuddling"`
 }
 
 // CustomLinterSettings encapsulates the meta-data of a private linter.
