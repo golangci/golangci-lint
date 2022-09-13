@@ -735,7 +735,7 @@ linters-settings:
     # Default: 1.13
     # Deprecated: use the global `run.go` instead.
     go: "1.15"
-    # https://staticcheck.io/docs/configuration/options/#checks
+    # Sxxxx checks in https://staticcheck.io/docs/configuration/options/#checks
     # Default: ["*"]
     checks: [ "all" ]
 
@@ -1630,7 +1630,7 @@ linters-settings:
     # Default: "1.13"
     # Deprecated: use the global `run.go` instead.
     go: "1.15"
-    # https://staticcheck.io/docs/configuration/options/#checks
+    # SAxxxx checks in https://staticcheck.io/docs/configuration/options/#checks
     # Default: ["*"]
     checks: [ "all" ]
 
@@ -1639,7 +1639,7 @@ linters-settings:
     # Default: 1.13
     # Deprecated: use the global `run.go` instead.
     go: "1.15"
-    # https://staticcheck.io/docs/configuration/options/#checks
+    # STxxxx checks in https://staticcheck.io/docs/configuration/options/#checks
     # Default: ["*"]
     checks: [ "all", "-ST1000", "-ST1003", "-ST1016", "-ST1020", "-ST1021", "-ST1022" ]
     # https://staticcheck.io/docs/configuration/options/#dot_import_whitelist
