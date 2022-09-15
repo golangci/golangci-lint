@@ -23,7 +23,7 @@ func NewVulncheck(settings *config.VulncheckSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
 
-	var analyzer = &analysis.Analyzer{
+	analyzer := &analysis.Analyzer{
 		Name: vulncheckName,
 		Doc:  vulncheckDoc,
 		Run:  goanalysis.DummyRun,
@@ -37,7 +37,6 @@ func NewVulncheck(settings *config.VulncheckSettings) *goanalysis.Linter {
 	).WithContextSetter(func(lintCtx *linter.Context) {
 		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
 			issues, err := vulncheckRun(lintCtx, pass, settings)
-
 			if err != nil {
 				return nil, err
 			}
@@ -72,7 +71,7 @@ func vulncheckRun(lintCtx *linter.Context, pass *analysis.Pass, settings *config
 		return nil, err
 	}
 
-	issues := make([]goanalysis.Issue, len(r.Vulns))
+	issues := make([]goanalysis.Issue, 0, len(r.Vulns))
 
 	for _, vuln := range r.Vulns {
 		issues = append(issues, goanalysis.NewIssue(&result.Issue{
