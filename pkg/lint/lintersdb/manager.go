@@ -108,6 +108,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		depGuardCfg         *config.DepGuardSettings
 		dogsledCfg          *config.DogsledSettings
 		duplCfg             *config.DuplSettings
+		dupwordCfg          *config.DupWordSettings
 		errcheckCfg         *config.ErrcheckSettings
 		errchkjsonCfg       *config.ErrChkJSONSettings
 		errorlintCfg        *config.ErrorLintSettings
@@ -183,6 +184,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		depGuardCfg = &m.cfg.LintersSettings.Depguard
 		dogsledCfg = &m.cfg.LintersSettings.Dogsled
 		duplCfg = &m.cfg.LintersSettings.Dupl
+		dupwordCfg = &m.cfg.LintersSettings.DupWord
 		errcheckCfg = &m.cfg.LintersSettings.Errcheck
 		errchkjsonCfg = &m.cfg.LintersSettings.ErrChkJSON
 		errorlintCfg = &m.cfg.LintersSettings.ErrorLint
@@ -340,6 +342,12 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithSince("v1.0.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/mibk/dupl"),
+
+		linter.NewConfig(golinters.NewDupWord(dupwordCfg)).
+			WithSince("1.50.0").
+			WithPresets(linter.PresetComment).
+			WithAutoFix().
+			WithURL("https://github.com/Abirdcfly/dupword"),
 
 		linter.NewConfig(golinters.NewDurationCheck()).
 			WithSince("v1.37.0").

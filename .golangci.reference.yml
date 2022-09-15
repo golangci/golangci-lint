@@ -224,6 +224,15 @@ linters-settings:
     # Default: 150
     threshold: 100
 
+  dupword:
+    # Keywords for detecting duplicate words.
+    # If this list is not empty, only the words defined in this list will be detected.
+    # Default: []
+    keywords:
+    - "the"
+    - "and"
+    - "a"
+
   errcheck:
     # Report about not checking of errors in type assertions: `a := b.(MyStruct)`.
     # Such cases aren't reported by default.
@@ -1954,6 +1963,7 @@ linters:
     - depguard
     - dogsled
     - dupl
+    - dupword
     - durationcheck
     - errcheck
     - errchkjson
@@ -2060,6 +2070,7 @@ linters:
     - depguard
     - dogsled
     - dupl
+    - dupword
     - durationcheck
     - errcheck
     - errchkjson

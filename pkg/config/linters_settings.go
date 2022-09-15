@@ -140,6 +140,7 @@ type LintersSettings struct {
 	Depguard         DepGuardSettings
 	Dogsled          DogsledSettings
 	Dupl             DuplSettings
+	DupWord          DupWordSettings
 	Errcheck         ErrcheckSettings
 	ErrChkJSON       ErrChkJSONSettings
 	ErrorLint        ErrorLintSettings
@@ -255,6 +256,10 @@ type DogsledSettings struct {
 
 type DuplSettings struct {
 	Threshold int
+}
+
+type DupWordSettings struct {
+	Keywords []string `mapstructure:"keywords"`
 }
 
 type ErrcheckSettings struct {
