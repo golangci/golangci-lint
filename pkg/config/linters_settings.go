@@ -259,7 +259,7 @@ type DuplSettings struct {
 }
 
 type DupWordSettings struct {
-	KeyWord []string `mapstructure:"keyword"`
+	Keywords []string `mapstructure:"keywords"`
 }
 
 type ErrcheckSettings struct {

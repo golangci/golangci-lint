@@ -16,7 +16,7 @@ func NewDupWord(setting *config.DupWordSettings) *goanalysis.Linter {
 	cfgMap := map[string]map[string]interface{}{}
 	if setting != nil {
 		cfgMap[a.Name] = map[string]interface{}{
-			"keyword": strings.Join(setting.KeyWord, ","),
+			"keyword": strings.Join(setting.Keywords, ","),
 		}
 	}
 
