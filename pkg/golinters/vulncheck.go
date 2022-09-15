@@ -1,6 +1,8 @@
 package golinters
 
 import (
+	"fmt"
+	"strings"
 	"sync"
 
 	"golang.org/x/net/context"
@@ -71,13 +73,34 @@ func vulncheckRun(lintCtx *linter.Context, pass *analysis.Pass, settings *config
 		return nil, err
 	}
 
+	imports := vulncheck.ImportChains(r)
 	issues := make([]goanalysis.Issue, 0, len(r.Vulns))
 
-	for _, vuln := range r.Vulns {
+	for idx, vuln := range r.Vulns {
 		issues = append(issues, goanalysis.NewIssue(&result.Issue{
-			Text: vuln.OSV.ID,
+			Text: writeVulnerability(idx, vuln.OSV.ID, vuln.OSV.Details, writeImorts(imports[vuln])),
 		}, pass))
 	}
 
 	return issues, nil
+}
+
+func writeImorts(imports []vulncheck.ImportChain) string {
+	var s strings.Builder
+	for _, i := range imports {
+		indent := 0
+		for _, pkg := range i {
+			s.WriteString(fmt.Sprintf("%s|_ %s", strings.Repeat(" ", indent), pkg.Name))
+		}
+	}
+
+	return s.String()
+}
+
+func writeVulnerability(idx int, id, details, imports string) string {
+	return fmt.Sprintf(`Vulnerability #%d: %s
+%s
+%s
+  More info: https://pkg.go.dev/vuln/%s
+`, idx, id, details, imports, id)
 }
