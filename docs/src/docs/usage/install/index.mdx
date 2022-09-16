@@ -75,7 +75,21 @@ sudo port install golangci-lint
 docker run --rm -v $(pwd):/app -w /app golangci/golangci-lint:{.LatestVersion} golangci-lint run -v
 ```
 
-### Linux and Windows
+### Linux
+
+#### Fedora
+
+Available in [COPR](https://copr.fedorainfracloud.org/coprs/enmanuelmoreira/mapanare-labs/):
+
+```bash
+sudo dnf copr enable enmanuelmoreira/mapanare-labs -y
+sudo dnf update
+sudo dnf install -y golangci-lint
+
+golangci-lint --version
+```
+
+#### Binary (Linux and Windows)
 
 ```sh
 # binary will be $(go env GOPATH)/bin/golangci-lint
