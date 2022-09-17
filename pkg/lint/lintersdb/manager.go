@@ -152,6 +152,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		nlreturnCfg         *config.NlreturnSettings
 		noLintLintCfg       *config.NoLintLintSettings
 		noNamedReturnsCfg   *config.NoNamedReturnsSettings
+		pairedBracketsCfg   *config.PairedBracketsSettings
 		parallelTestCfg     *config.ParallelTestSettings
 		preallocCfg         *config.PreallocSettings
 		predeclaredCfg      *config.PredeclaredSettings
@@ -229,6 +230,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		noLintLintCfg = &m.cfg.LintersSettings.NoLintLint
 		noNamedReturnsCfg = &m.cfg.LintersSettings.NoNamedReturns
 		preallocCfg = &m.cfg.LintersSettings.Prealloc
+		pairedBracketsCfg = &m.cfg.LintersSettings.PairedBrackets
 		parallelTestCfg = &m.cfg.LintersSettings.ParallelTest
 		predeclaredCfg = &m.cfg.LintersSettings.Predeclared
 		promlinterCfg = &m.cfg.LintersSettings.Promlinter
@@ -673,6 +675,12 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithSince("v1.46.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/stbenjam/no-sprintf-host-port"),
+
+		linter.NewConfig(golinters.NewPairedbrackets(pairedBracketsCfg)).
+			WithSince("v1.50.0").
+			WithPresets(linter.PresetFormatting).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/maratori/pairedbrackets"),
 
 		linter.NewConfig(golinters.NewParallelTest(parallelTestCfg)).
 			WithSince("v1.33.0").

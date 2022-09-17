@@ -95,6 +95,12 @@ var defaultLintersSettings = LintersSettings{
 		RequireSpecific:    false,
 		AllowUnused:        false,
 	},
+	PairedBrackets: PairedBracketsSettings{
+		IgnoreFuncCalls: []string{
+			"github.com/stretchr/testify/assert",
+			"github.com/stretchr/testify/require",
+		},
+	},
 	Prealloc: PreallocSettings{
 		Simple:     true,
 		RangeLoops: true,
@@ -184,6 +190,7 @@ type LintersSettings struct {
 	Nlreturn         NlreturnSettings
 	NoLintLint       NoLintLintSettings
 	NoNamedReturns   NoNamedReturnsSettings
+	PairedBrackets   PairedBracketsSettings
 	ParallelTest     ParallelTestSettings
 	Prealloc         PreallocSettings
 	Predeclared      PredeclaredSettings
@@ -556,6 +563,11 @@ type NoLintLintSettings struct {
 type NoNamedReturnsSettings struct {
 	ReportErrorInDefer bool `mapstructure:"report-error-in-defer"`
 }
+
+type PairedBracketsSettings struct {
+	IgnoreFuncCalls []string `mapstructure:"ignore-func-calls"`
+}
+
 type ParallelTestSettings struct {
 	IgnoreMissing bool `mapstructure:"ignore-missing"`
 }

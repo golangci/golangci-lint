@@ -60,6 +60,7 @@ require (
 	github.com/ldez/tagliatelle v0.3.1
 	github.com/leonklingele/grouper v1.1.0
 	github.com/lufeee/execinquery v1.2.1
+	github.com/maratori/pairedbrackets v1.0.0
 	github.com/maratori/testableexamples v1.0.0
 	github.com/maratori/testpackage v1.1.0
 	github.com/matoous/godox v0.0.0-20210227103229-6504466cf951 // v1.0
@@ -179,7 +180,7 @@ require (
 	golang.org/x/exp/typeparams v0.0.0-20220827204233-334a2380cb91 // indirect
 	golang.org/x/mod v0.6.0-dev.0.20220419223038-86c51ed26bb4 // indirect
 	golang.org/x/sync v0.0.0-20220722155255-886fb9371eb4 // indirect
-	golang.org/x/sys v0.0.0-20220829200755-d48e67d00261 // indirect
+	golang.org/x/sys v0.0.0-20220909162455-aba9fc2a8ff2 // indirect
 	golang.org/x/text v0.3.7 // indirect
 	google.golang.org/protobuf v1.28.0 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
