@@ -98,6 +98,7 @@ require (
 	github.com/tetafro/godot v1.4.11
 	github.com/timakin/bodyclose v0.0.0-20210704033933-f49887972144
 	github.com/timonwong/loggercheck v0.9.3
+	github.com/timonwong/todolint v0.2.0
 	github.com/tomarrell/wrapcheck/v2 v2.6.2
 	github.com/tommy-muehle/go-mnd/v2 v2.5.0
 	github.com/ultraware/funlen v0.0.3

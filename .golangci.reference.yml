@@ -1738,6 +1738,14 @@ linters-settings:
       # Default: true
       begin: false
 
+  todolint:
+    # List of case-insensitive "TODO" keywords to check for.
+    # Default: ["TODO", "FIXME"]
+    keywords:
+      - TODO
+      - FIXME
+      - XXX
+
   usestdlibvars:
     # Suggest the use of http.MethodXX
     # Default: true

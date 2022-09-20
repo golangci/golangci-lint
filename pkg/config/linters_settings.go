@@ -198,6 +198,7 @@ type LintersSettings struct {
 	Tenv             TenvSettings
 	Testpackage      TestpackageSettings
 	Thelper          ThelperSettings
+	TODOLint         TODOLintSettings
 	Unparam          UnparamSettings
 	Unused           StaticCheckSettings
 	UseStdlibVars    UseStdlibVarsSettings
@@ -649,6 +650,10 @@ type ThelperOptions struct {
 
 type TenvSettings struct {
 	All bool `mapstructure:"all"`
+}
+
+type TODOLintSettings struct {
+	Keywords []string `mapstructure:"keywords"`
 }
 
 type UseStdlibVarsSettings struct {

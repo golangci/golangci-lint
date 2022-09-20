@@ -166,6 +166,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		tenvCfg             *config.TenvSettings
 		testpackageCfg      *config.TestpackageSettings
 		thelperCfg          *config.ThelperSettings
+		todoLintCfg         *config.TODOLintSettings
 		unparamCfg          *config.UnparamSettings
 		unusedCfg           *config.StaticCheckSettings
 		usestdlibvars       *config.UseStdlibVarsSettings
@@ -242,6 +243,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		tenvCfg = &m.cfg.LintersSettings.Tenv
 		testpackageCfg = &m.cfg.LintersSettings.Testpackage
 		thelperCfg = &m.cfg.LintersSettings.Thelper
+		todoLintCfg = &m.cfg.LintersSettings.TODOLint
 		unparamCfg = &m.cfg.LintersSettings.Unparam
 		unusedCfg = &m.cfg.LintersSettings.Unused
 		varcheckCfg = &m.cfg.LintersSettings.Varcheck
@@ -773,6 +775,12 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/kulti/thelper"),
+
+		linter.NewConfig(golinters.NewTODOLint(todoLintCfg)).
+			WithSince("v1.50.0").
+			WithPresets(linter.PresetStyle, linter.PresetComment).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/timonwong/todolint"),
 
 		linter.NewConfig(golinters.NewTparallel()).
 			WithSince("v1.32.0").
