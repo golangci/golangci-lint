@@ -2047,6 +2047,7 @@ linters:
     - testableexamples
     - testpackage
     - thelper
+    - logrlint
     - tparallel
     - typecheck
     - unconvert
@@ -2154,6 +2155,7 @@ linters:
     - testableexamples
     - testpackage
     - thelper
+    - logrlint
     - tparallel
     - typecheck
     - unconvert
