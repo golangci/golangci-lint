@@ -1,0 +1,3 @@
+linters-settings:
+  paralleltest:
+    ignore-missing: true
