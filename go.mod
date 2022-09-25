@@ -23,7 +23,7 @@ require (
 	github.com/butuzov/ireturn v0.1.1
 	github.com/charithe/durationcheck v0.0.9
 	github.com/curioswitch/go-reassign v0.2.0
-	github.com/daixiang0/gci v0.7.0
+	github.com/daixiang0/gci v0.8.0
 	github.com/denis-tingaikin/go-header v0.4.3
 	github.com/esimonov/ifshort v1.0.4
 	github.com/fatih/color v1.13.0
