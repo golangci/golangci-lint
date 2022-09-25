@@ -28,5 +28,5 @@ func NewReassign(settings *config.ReassignSettings) *goanalysis.Linter {
 		a.Doc,
 		[]*analysis.Analyzer{a},
 		cfg,
-	).WithLoadMode(goanalysis.LoadModeSyntax)
+	).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }
