@@ -1739,37 +1739,37 @@ linters-settings:
       begin: false
 
   usestdlibvars:
-    # Suggest the use of http.MethodXX
+    # Suggest the use of http.MethodXX.
     # Default: true
     http-method: false
-    # Suggest the use of http.StatusXX
+    # Suggest the use of http.StatusXX.
     # Default: true
     http-status-code: false
-    # Suggest the use of time.Weekday.String()
+    # Suggest the use of time.Weekday.String().
     # Default: true
     time-weekday: true
-    # Suggest the use of time.Month.String()
+    # Suggest the use of time.Month.String().
     # Default: false
     time-month: true
-    # Suggest the use of time.Layout
+    # Suggest the use of time.Layout.
     # Default: false
     time-layout: true
-    # Suggest the use of crypto.Hash.String()
+    # Suggest the use of crypto.Hash.String().
     # Default: false
     crypto-hash: true
-    # Suggest the use of rpc.DefaultXXPath
+    # Suggest the use of rpc.DefaultXXPath.
     # Default: false
     default-rpc-path: true
-    # Suggest the use of os.DevNull
+    # Suggest the use of os.DevNull.
     # Default: false
     os-dev-null: true
-    # Suggest the use of sql.LevelXX.String()
+    # Suggest the use of sql.LevelXX.String().
     # Default: false
     sql-isolation-level: true
-    # Suggest the use of tls.SignatureScheme.String()
+    # Suggest the use of tls.SignatureScheme.String().
     # Default: false
     tls-signature-scheme: true
-    # suggest the use of constant.Kind.String()
+    # Suggest the use of constant.Kind.String().
     # Default: false
     constant-kind: true
 
