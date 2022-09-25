@@ -312,8 +312,8 @@ github.com/kisielk/errcheck v1.6.2 h1:uGQ9xI8/pgc9iOoCe7kWQgRE6SBTrCGmTSf0LrEtY7
 github.com/kisielk/errcheck v1.6.2/go.mod h1:nXw/i/MfnvRHqXa7XXmQMUB0oNFGuBrNI8d8NLy0LPw=
 github.com/kisielk/gotool v1.0.0 h1:AV2c/EiW3KqPNT9ZKl07ehoAGi4C5/01Cfbblndcapg=
 github.com/kisielk/gotool v1.0.0/go.mod h1:XhKaO+MFFWcvkIS/tQcRk01m1F5IRFswLeQ+oQHNcck=
-github.com/kkHAIKE/contextcheck v1.1.1 h1:dP6wuc8nyjiDVvmCf1iqtLzUDg5K+yMf4AT+Drdyb2A=
-github.com/kkHAIKE/contextcheck v1.1.1/go.mod h1:PG/cwd6c0705/LM0KTr1acO2gORUxkSVWyLJOFW5qoo=
+github.com/kkHAIKE/contextcheck v1.1.2 h1:BYUSG/GhMhqVz//yjl8IkBDlMEws+9DtCmkz18QO1gg=
+github.com/kkHAIKE/contextcheck v1.1.2/go.mod h1:PG/cwd6c0705/LM0KTr1acO2gORUxkSVWyLJOFW5qoo=
 github.com/klauspost/compress v1.13.4/go.mod h1:8dP1Hq4DHOhN9w426knH3Rhby4rFm6D8eO+e+Dq5Gzg=
 github.com/klauspost/compress v1.13.5/go.mod h1:/3/Vjq9QcHkK5uEr5lBEmyoZ1iFhe47etQ6QUkpK6sk=
 github.com/konsorten/go-windows-terminal-sequences v1.0.1/go.mod h1:T0+1ngSBFLxvqU3pZ+m/2kptfBszLMUkC4ZK/EgS/cQ=
