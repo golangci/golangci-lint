@@ -698,6 +698,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		linter.NewConfig(golinters.NewReassign(reassignCfg)).
 			WithSince("1.49.0").
 			WithPresets(linter.PresetBugs).
+			WithLoadForGoAnalysis().
 			WithURL("https://github.com/curioswitch/go-reassign"),
 
 		linter.NewConfig(golinters.NewRevive(reviveCfg)).
