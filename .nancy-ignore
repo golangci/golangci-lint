@@ -14,6 +14,7 @@ CVE-2020-26160
 # golang/github.com/hashicorp/consul/sdk@v0.8.0
 CVE-2022-29153
 CVE-2022-24687
+CVE-2021-41803
 
 # Skip for indirect dependencies golang/github.com/valyala/fasthttp@v1.30.0
 CVE-2022-21221
