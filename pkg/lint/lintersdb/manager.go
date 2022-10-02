@@ -277,6 +277,12 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 	// The linters are sorted in the alphabetical order (case-insensitive).
 	// When a new linter is added the version in `WithSince(...)` must be the next minor version of golangci-lint.
 	lcs := []*linter.Config{
+		linter.NewConfig(golinters.NewAllfields()).
+			WithSince("1.50.0").
+			WithPresets(linter.PresetBugs).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/subtle-byte/allfields"),
+
 		linter.NewConfig(golinters.NewAsasalint(asasalintCfg)).
 			WithSince("1.47.0").
 			WithPresets(linter.PresetBugs).
