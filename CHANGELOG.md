@@ -1,6 +1,36 @@
 Follow the news and releases on our [twitter](https://twitter.com/golangci) and our [blog](https://medium.com/golangci).
 There is the most valuable changes log:
 
+### v1.50.0
+
+1. new linters
+   * `dupword`: https://github.com/Abirdcfly/dupword
+   * `testableexamples`: https://github.com/maratori/testableexamples
+2. updated linters
+   * `contextcheck`: change owner
+   * `contextcheck`: from 1.0.6 to 1.1.2
+   * `depguard`: from 1.1.0 to 1.1.1
+   * `exhaustive`: add missing config
+   * `exhaustive`: from 0.8.1 to 0.8.3
+   * `gci`: from 0.6.3 to 0.8.0
+   * `go-critic`: from 0.6.4 to 0.6.5
+   * `go-errorlint`: from 1.0.2 to 1.0.5
+   * `go-reassign`: v0.1.2 to v0.2.0
+   * `gofmt`: add option `rewrite-rules`
+   * `gofumpt` from 0.3.1 to 0.4.0
+   * `goimports`: update to HEAD
+   * `interfacebloat`: fix configuration loading
+   * `logrlint`: rename `logrlint` to `loggercheck`
+   * `paralleltest`: add tests of the ignore-missing option
+   * `revive`: from 1.2.3 to 1.2.4
+   * `usestdlibvars`: from 1.13.0 to 1.20.0
+   * `wsl`: support all configs and update docs
+3. misc.
+   * Normalize `exclude-rules` paths for Windows
+   * add riscv64 to the install script
+4. Documentation
+   * cli: remove reference to old service
+
 ### v1.49.0
 
 IMPORTANT: `varcheck` and `deadcode` has been removed of default linters.
