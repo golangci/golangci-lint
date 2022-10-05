@@ -14,6 +14,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/golangci/golangci-lint/pkg/exitcodes"
+	"github.com/golangci/golangci-lint/pkg/fsutils"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 )
 
@@ -304,7 +305,7 @@ func (r *RunnerResult) ExpectExitCode(possibleCodes ...int) *RunnerResult {
 func (r *RunnerResult) ExpectOutputRegexp(s string) *RunnerResult {
 	r.tb.Helper()
 
-	assert.Regexp(r.tb, normalizePathInRegex(s), r.output, "exit code is %d", r.exitCode)
+	assert.Regexp(r.tb, fsutils.NormalizePathInRegex(s), r.output, "exit code is %d", r.exitCode)
 	return r
 }
 

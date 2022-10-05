@@ -41,11 +41,3 @@ func normalizeFilePath(in string) string {
 		return strings.ReplaceAll(s, "/", "\\")
 	})
 }
-
-// normalizePathInRegex normalizes path in regular expressions.
-// Replace all `/` with `\\`.
-// This replacing should be safe because "/" are disallowed in Windows
-// https://docs.microsoft.com/windows/win32/fileio/naming-a-file
-func normalizePathInRegex(path string) string {
-	return strings.ReplaceAll(path, "/", regexp.QuoteMeta(string(filepath.Separator)))
-}
