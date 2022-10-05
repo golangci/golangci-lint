@@ -1992,6 +1992,7 @@ linters:
     - goheader
     - goimports
     - golint
+    - gomegacheck
     - gomnd
     - gomoddirectives
     - gomodguard
@@ -2099,6 +2100,7 @@ linters:
     - goheader
     - goimports
     - golint
+    - gomegacheck
     - gomnd
     - gomoddirectives
     - gomodguard

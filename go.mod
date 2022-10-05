@@ -186,3 +186,5 @@ require (
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	mvdan.cc/lint v0.0.0-20170908181259-adc824a0674b // indirect
 )
+
+require github.com/gardener/gardener/hack/tools/gomegacheck v0.0.0-20221004145958-3f57fd0f4151

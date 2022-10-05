@@ -135,6 +135,8 @@ github.com/fsnotify/fsnotify v1.5.4 h1:jRbGcIw6P2Meqdwuo0H1p6JVLbL5DHKAKlYndzMwV
 github.com/fsnotify/fsnotify v1.5.4/go.mod h1:OVB6XrOHzAwXMpEM7uPOzcehqUV2UqJxmVXmkdnm1bU=
 github.com/fzipp/gocyclo v0.6.0 h1:lsblElZG7d3ALtGMx9fmxeTKZaLLpU8mET09yN4BBLo=
 github.com/fzipp/gocyclo v0.6.0/go.mod h1:rXPyn8fnlpa0R2csP/31uerbiVBugk5whMdlyaLkLoA=
+github.com/gardener/gardener/hack/tools/gomegacheck v0.0.0-20221004145958-3f57fd0f4151 h1:cm/eXC5wUourlh7Ag9tWWF0057c64GCdB4ZePTtskgQ=
+github.com/gardener/gardener/hack/tools/gomegacheck v0.0.0-20221004145958-3f57fd0f4151/go.mod h1:TcHHjqWfEy44bLuVq2Qv0pJzqKgIQfwCEiv2DOs4vKs=
 github.com/go-critic/go-critic v0.6.5 h1:fDaR/5GWURljXwF8Eh31T2GZNz9X4jeboS912mWF8Uo=
 github.com/go-critic/go-critic v0.6.5/go.mod h1:ezfP/Lh7MA6dBNn4c6ab5ALv3sKnZVLx37tr00uuaOY=
 github.com/go-gl/glfw v0.0.0-20190409004039-e6da0acd62b1/go.mod h1:vR7hzQXu2zJy9AVAgeJqvqgH9Q5CA+iKCZ2gyEVpxRU=
