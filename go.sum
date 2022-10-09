@@ -541,8 +541,8 @@ github.com/tklauser/go-sysconf v0.3.10 h1:IJ1AZGZRWbY8T5Vfk04D9WOA5WSejdflXxP03O
 github.com/tklauser/go-sysconf v0.3.10/go.mod h1:C8XykCvCb+Gn0oNCWPIlcb0RuglQTYaQ2hGm7jmxEFk=
 github.com/tklauser/numcpus v0.4.0 h1:E53Dm1HjH1/R2/aoCtXtPgzmElmn51aOkhCFSuZq//o=
 github.com/tklauser/numcpus v0.4.0/go.mod h1:1+UI3pD8NW14VMwdgJNJ1ESk2UnwhAnz5hMwiKKqXCQ=
-github.com/tomarrell/wrapcheck/v2 v2.6.2 h1:3dI6YNcrJTQ/CJQ6M/DUkc0gnqYSIk6o0rChn9E/D0M=
-github.com/tomarrell/wrapcheck/v2 v2.6.2/go.mod h1:ao7l5p0aOlUNJKI0qVwB4Yjlqutd0IvAB9Rdwyilxvg=
+github.com/tomarrell/wrapcheck/v2 v2.7.0 h1:J/F8DbSKJC83bAvC6FoZaRjZiZ/iKoueSdrEkmGeacA=
+github.com/tomarrell/wrapcheck/v2 v2.7.0/go.mod h1:ao7l5p0aOlUNJKI0qVwB4Yjlqutd0IvAB9Rdwyilxvg=
 github.com/tommy-muehle/go-mnd/v2 v2.5.0 h1:iAj0a8e6+dXSL7Liq0aXPox36FiN1dBbjA6lt9fl65s=
 github.com/tommy-muehle/go-mnd/v2 v2.5.0/go.mod h1:WsUAkMJMYww6l/ufffCD3m+P7LEvr8TnZn9lwVDlgzw=
 github.com/ultraware/funlen v0.0.3 h1:5ylVWm8wsNwH5aWo9438pwvsK0QiqVuUrt9bn7S/iLA=
