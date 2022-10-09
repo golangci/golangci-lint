@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"go/token"
 	"os"
+	"regexp"
 	"strings"
 	"sync"
 	"unicode/utf8"
@@ -18,6 +19,9 @@ import (
 )
 
 const lllName = "lll"
+
+var lllMultiImportStartRegexp = regexp.MustCompile(`^import \($`)
+var lllSingleImportRegexp = regexp.MustCompile(`^import \".+\"$`)
 
 //nolint:dupl
 func NewLLL(settings *config.LllSettings) *goanalysis.Linter {
@@ -86,9 +90,33 @@ func getLLLIssuesForFile(filename string, maxLineLen int, tabSpaces string) ([]r
 
 	lineNumber := 1
 	scanner := bufio.NewScanner(f)
+	importsEnded := false
+	multiImportEnabled := false
 	for scanner.Scan() {
 		line := scanner.Text()
 		line = strings.ReplaceAll(line, "\t", tabSpaces)
+		// Skips imports
+		if !importsEnded {
+			if lllSingleImportRegexp.MatchString(line) {
+				lineNumber++
+				continue
+			}
+
+			if lllMultiImportStartRegexp.MatchString(line) {
+				multiImportEnabled = true
+				lineNumber++
+				continue
+			}
+
+			if multiImportEnabled && line == ")" {
+				importsEnded = true
+				lineNumber++
+				continue
+			}
+
+			importsEnded = true
+		}
+
 		lineLen := utf8.RuneCountInString(line)
 		if lineLen > maxLineLen {
 			res = append(res, result.Issue{
