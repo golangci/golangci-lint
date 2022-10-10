@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"go/token"
 	"os"
-	"regexp"
 	"strings"
 	"sync"
 	"unicode/utf8"
@@ -19,9 +18,6 @@ import (
 )
 
 const lllName = "lll"
-
-var lllMultiImportStartRegexp = regexp.MustCompile(`^import \($`)
-var lllSingleImportRegexp = regexp.MustCompile(`^import \".+\"$`)
 
 //nolint:dupl
 func NewLLL(settings *config.LllSettings) *goanalysis.Linter {
@@ -97,19 +93,16 @@ func getLLLIssuesForFile(filename string, maxLineLen int, tabSpaces string) ([]r
 		line = strings.ReplaceAll(line, "\t", tabSpaces)
 		// Skips imports
 		if !importsEnded {
-			if lllSingleImportRegexp.MatchString(line) {
+			if strings.HasPrefix(line, "import") {
+				if strings.HasSuffix(line, "(") {
+					multiImportEnabled = true
+				}
+
 				lineNumber++
 				continue
 			}
 
-			if lllMultiImportStartRegexp.MatchString(line) {
-				multiImportEnabled = true
-				lineNumber++
-				continue
-			}
-
-			if multiImportEnabled && line == ")" {
-				importsEnded = true
+			if multiImportEnabled && line != ")" {
 				lineNumber++
 				continue
 			}
