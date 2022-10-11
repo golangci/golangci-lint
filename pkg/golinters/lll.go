@@ -86,28 +86,25 @@ func getLLLIssuesForFile(filename string, maxLineLen int, tabSpaces string) ([]r
 
 	lineNumber := 1
 	scanner := bufio.NewScanner(f)
-	importsEnded := false
 	multiImportEnabled := false
 	for scanner.Scan() {
 		line := scanner.Text()
 		line = strings.ReplaceAll(line, "\t", tabSpaces)
-		// Skips imports
-		if !importsEnded {
-			if strings.HasPrefix(line, "import") {
-				if strings.HasSuffix(line, "(") {
-					multiImportEnabled = true
-				}
-
-				lineNumber++
-				continue
+		if strings.HasPrefix(line, "import") {
+			if strings.HasSuffix(line, "(") {
+				multiImportEnabled = true
 			}
 
-			if multiImportEnabled && line != ")" {
-				lineNumber++
-				continue
+			lineNumber++
+			continue
+		}
+		if multiImportEnabled {
+			if line == ")" {
+				multiImportEnabled = false
 			}
 
-			importsEnded = true
+			lineNumber++
+			continue
 		}
 
 		lineLen := utf8.RuneCountInString(line)
