@@ -40,6 +40,7 @@ func (p CodeClimate) Print(ctx context.Context, issues []result.Issue) error {
 		codeClimateIssue.Location.Path = issue.Pos.Filename
 		codeClimateIssue.Location.Lines.Begin = issue.Pos.Line
 		codeClimateIssue.Fingerprint = issue.Fingerprint()
+		codeClimateIssue.Severity = "critical"
 
 		if issue.Severity != "" {
 			codeClimateIssue.Severity = issue.Severity
