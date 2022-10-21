@@ -335,17 +335,17 @@ func fixSlicesFlags(fs *pflag.FlagSet) {
 }
 
 // runAnalysis executes the linters that have been enabled in the configuration.
-func (e *Executor) runAnalysis(ctx context.Context, args []string) ([]result.Issue, error) {
+func (e *Executor) runAnalysis(ctx context.Context, args []string) (issues []result.Issue, fixedNum int, err error) {
 	e.cfg.Run.Args = args
 
 	lintersToRun, err := e.EnabledLintersSet.GetOptimizedLinters()
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 
 	enabledLintersMap, err := e.EnabledLintersSet.GetEnabledLintersMap()
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 
 	for _, lc := range e.DBManager.GetAllSupportedLinterConfigs() {
@@ -355,23 +355,25 @@ func (e *Executor) runAnalysis(ctx context.Context, args []string) ([]result.Iss
 
 	lintCtx, err := e.contextLoader.Load(ctx, lintersToRun)
 	if err != nil {
-		return nil, errors.Wrap(err, "context loading failed")
+		return nil, 0, errors.Wrap(err, "context loading failed")
 	}
 	lintCtx.Log = e.log.Child(logutils.DebugKeyLintersContext)
 
 	runner, err := lint.NewRunner(e.cfg, e.log.Child(logutils.DebugKeyRunner),
 		e.goenv, e.EnabledLintersSet, e.lineCache, e.DBManager, lintCtx.Packages)
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 
-	issues, err := runner.Run(ctx, lintersToRun, lintCtx)
+	issues, err = runner.Run(ctx, lintersToRun, lintCtx)
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 
 	fixer := processors.NewFixer(e.cfg, e.log, e.fileCache)
-	return fixer.Process(issues), nil
+	total := len(issues)
+	remain := fixer.Process(issues)
+	return remain, total - len(remain), nil
 }
 
 func (e *Executor) setOutputToDevNull() (savedStdout, savedStderr *os.File) {
@@ -386,8 +388,8 @@ func (e *Executor) setOutputToDevNull() (savedStdout, savedStderr *os.File) {
 	return
 }
 
-func (e *Executor) setExitCodeIfIssuesFound(issues []result.Issue) {
-	if len(issues) != 0 {
+func (e *Executor) setExitCodeIfIssuesFound(issues []result.Issue, fixedNum int) {
+	if len(issues) != 0 || fixedNum != 0 {
 		e.exitCode = e.cfg.Run.ExitCodeIfIssuesFound
 	}
 }
@@ -406,7 +408,7 @@ func (e *Executor) runAndPrint(ctx context.Context, args []string) error {
 		}()
 	}
 
-	issues, err := e.runAnalysis(ctx, args)
+	issues, fixedNum, err := e.runAnalysis(ctx, args)
 	if err != nil {
 		return err // XXX: don't loose type
 	}
@@ -424,7 +426,7 @@ func (e *Executor) runAndPrint(ctx context.Context, args []string) error {
 		}
 	}
 
-	e.setExitCodeIfIssuesFound(issues)
+	e.setExitCodeIfIssuesFound(issues, fixedNum)
 
 	e.fileCache.PrintStats(e.log)
 

@@ -1,6 +1,6 @@
 //golangcitest:args -Ewhitespace
 //golangcitest:config_path testdata/configs/whitespace-fix.yml
-//golangcitest:expected_exitcode 0
+//golangcitest:expected_exitcode 1
 package p
 
 import "fmt"

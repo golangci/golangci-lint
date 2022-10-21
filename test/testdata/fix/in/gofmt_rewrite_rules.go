@@ -1,6 +1,6 @@
 //golangcitest:args -Egofmt
 //golangcitest:config_path testdata/configs/gofmt_rewrite_rules.yml
-//golangcitest:expected_exitcode 0
+//golangcitest:expected_exitcode 1
 package p
 
 import "fmt"

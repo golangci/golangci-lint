@@ -1,5 +1,5 @@
 //golangcitest:args -Egofmt,goimports
-//golangcitest:expected_exitcode 0
+//golangcitest:expected_exitcode 1
 package p
 
 func goimports(a, b int) int {

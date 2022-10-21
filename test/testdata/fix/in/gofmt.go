@@ -1,5 +1,5 @@
 //golangcitest:args -Egofmt
-//golangcitest:expected_exitcode 0
+//golangcitest:expected_exitcode 1
 package p
 
  func gofmt(a, b int) int {
