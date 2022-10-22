@@ -7,7 +7,7 @@ require (
 	github.com/Abirdcfly/dupword v0.0.7
 	github.com/Antonboom/errname v0.1.7
 	github.com/Antonboom/nilnil v0.1.1
-	github.com/BurntSushi/toml v1.2.0
+	github.com/BurntSushi/toml v1.2.1
 	github.com/Djarvur/go-err113 v0.0.0-20210108212216-aea10b59be24
 	github.com/GaijinEntertainment/go-exhaustruct/v2 v2.3.0
 	github.com/OpenPeeDeeP/depguard v1.1.1
