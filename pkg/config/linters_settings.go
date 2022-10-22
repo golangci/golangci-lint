@@ -659,10 +659,11 @@ type UseStdlibVarsSettings struct {
 	TimeLayout             bool `mapstructure:"time-layout"`
 	CryptoHash             bool `mapstructure:"crypto-hash"`
 	DefaultRPCPathFlag     bool `mapstructure:"default-rpc-path"`
-	OSDevNullFlag          bool `mapstructure:"os-dev-null-flag"`
-	SQLIsolationLevelFlag  bool `mapstructure:"sql-isolation-level-flag"`
-	TLSSignatureSchemeFlag bool `mapstructure:"tls-signature-scheme-flag"`
+	OSDevNullFlag          bool `mapstructure:"os-dev-null"`
+	SQLIsolationLevelFlag  bool `mapstructure:"sql-isolation-level"`
+	TLSSignatureSchemeFlag bool `mapstructure:"tls-signature-scheme"`
 	ConstantKind           bool `mapstructure:"constant-kind"`
+	SyslogPriorityFlag     bool `mapstructure:"syslog-priority"`
 }
 
 type UnparamSettings struct {

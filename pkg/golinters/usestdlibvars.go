@@ -21,6 +21,7 @@ func NewUseStdlibVars(cfg *config.UseStdlibVarsSettings) *goanalysis.Linter {
 			analyzer.OSDevNullFlag:          cfg.OSDevNullFlag,
 			analyzer.RPCDefaultPathFlag:     cfg.DefaultRPCPathFlag,
 			analyzer.SQLIsolationLevelFlag:  cfg.SQLIsolationLevelFlag,
+			analyzer.SyslogPriorityFlag:     cfg.SyslogPriorityFlag,
 			analyzer.TimeLayoutFlag:         cfg.TimeLayout,
 			analyzer.TimeMonthFlag:          cfg.TimeMonth,
 			analyzer.TimeWeekdayFlag:        cfg.TimeWeekday,
