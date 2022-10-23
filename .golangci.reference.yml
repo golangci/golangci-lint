@@ -1776,6 +1776,9 @@ linters-settings:
     # Suggest the use of constant.Kind.String().
     # Default: false
     constant-kind: true
+    # Suggest the use of syslog.Priority.
+    # Default: false
+    syslog-priority: true
 
   unparam:
     # Inspect exported functions.
