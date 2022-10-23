@@ -142,7 +142,7 @@ func (f Fixer) mergeLineIssues(lineNum int, lineIssues []result.Issue, origFileL
 		r := i.Replacement
 		if r.Inline == nil || len(r.NewLines) != 0 || r.NeedOnlyDelete {
 			f.log.Infof("Line %d has multiple issues but at least one of them isn't inline: %#v", lineNum, lineIssues)
-			return &lineIssues[0]
+			return i
 		}
 
 		if r.Inline.StartCol < 0 || r.Inline.Length <= 0 || r.Inline.StartCol+r.Inline.Length > len(origLine) {
