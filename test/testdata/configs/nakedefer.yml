@@ -1,0 +1,3 @@
+linters-settings:
+  nakedefer:
+    exclude: os\.(Create|WriteFile|Chmod),fmt\.Print.*,io\.Close

@@ -11,6 +11,7 @@ require (
 	github.com/BurntSushi/toml v1.2.1
 	github.com/Djarvur/go-err113 v0.0.0-20210108212216-aea10b59be24
 	github.com/GaijinEntertainment/go-exhaustruct/v2 v2.3.0
+    github.com/GaijinEntertainment/go-nakedefer v1.4.0
 	github.com/OpenPeeDeeP/depguard v1.1.1
 	github.com/alexkohler/prealloc v1.0.0
 	github.com/alingse/asasalint v0.0.11

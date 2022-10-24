@@ -148,6 +148,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		malignedCfg         *config.MalignedSettings
 		misspellCfg         *config.MisspellSettings
 		musttagCfg          *config.MustTagSettings
+		nakedeferCfg        *config.NakedeferSettings
 		nakedretCfg         *config.NakedretSettings
 		nestifCfg           *config.NestifSettings
 		nilNilCfg           *config.NilNilSettings
@@ -226,6 +227,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		malignedCfg = &m.cfg.LintersSettings.Maligned
 		misspellCfg = &m.cfg.LintersSettings.Misspell
 		musttagCfg = &m.cfg.LintersSettings.MustTag
+		nakedeferCfg = &m.cfg.LintersSettings.Nakedefer
 		nakedretCfg = &m.cfg.LintersSettings.Nakedret
 		nestifCfg = &m.cfg.LintersSettings.Nestif
 		nilNilCfg = &m.cfg.LintersSettings.NilNil
@@ -644,6 +646,12 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetStyle, linter.PresetBugs).
 			WithURL("https://github.com/junk1tm/musttag"),
+
+		linter.NewConfig(golinters.NewNakedefer(nakedeferCfg)).
+			WithSince("v1.51.0").
+			WithPresets(linter.PresetStyle).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/GaijinEntertainment/go-nakedefer"),
 
 		linter.NewConfig(golinters.NewNakedret(nakedretCfg)).
 			WithSince("v1.19.0").
