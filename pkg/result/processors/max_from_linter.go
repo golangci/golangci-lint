@@ -24,7 +24,7 @@ func NewMaxFromLinter(limit int, log logutils.Log, cfg *config.Config) *MaxFromL
 	}
 }
 
-func (p MaxFromLinter) Name() string {
+func (p *MaxFromLinter) Name() string {
 	return "max_from_linter"
 }
 
@@ -44,7 +44,7 @@ func (p *MaxFromLinter) Process(issues []result.Issue) ([]result.Issue, error) {
 	}), nil
 }
 
-func (p MaxFromLinter) Finish() {
+func (p *MaxFromLinter) Finish() {
 	walkStringToIntMapSortedByValue(p.lc, func(linter string, count int) {
 		if count > p.limit {
 			p.log.Infof("%d/%d issues from linter %s were hidden, use --max-issues-per-linter",

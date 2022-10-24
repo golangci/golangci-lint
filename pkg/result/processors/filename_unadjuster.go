@@ -97,7 +97,7 @@ func NewFilenameUnadjuster(pkgs []*packages.Package, log logutils.Log) *Filename
 	}
 }
 
-func (p FilenameUnadjuster) Name() string {
+func (p *FilenameUnadjuster) Name() string {
 	return "filename_unadjuster"
 }
 
@@ -128,4 +128,4 @@ func (p *FilenameUnadjuster) Process(issues []result.Issue) ([]result.Issue, err
 	}), nil
 }
 
-func (FilenameUnadjuster) Finish() {}
+func (p *FilenameUnadjuster) Finish() {}

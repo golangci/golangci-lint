@@ -22,7 +22,7 @@ func NewUniqByLine(cfg *config.Config) *UniqByLine {
 
 var _ Processor = &UniqByLine{}
 
-func (p UniqByLine) Name() string {
+func (p *UniqByLine) Name() string {
 	return "uniq_by_line"
 }
 
@@ -55,4 +55,4 @@ func (p *UniqByLine) Process(issues []result.Issue) ([]result.Issue, error) {
 	}), nil
 }
 
-func (p UniqByLine) Finish() {}
+func (p *UniqByLine) Finish() {}
