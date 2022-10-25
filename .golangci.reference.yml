@@ -655,6 +655,12 @@ linters-settings:
     # Default: ""
     local-prefixes: github.com/org/project
 
+  gokeyword:
+    # Detecting the go keyword is a very opininated rule. Be sure to add details explaining why it is enabled.
+    # Suggest a link to documentation + alternatives (ie a helper function that spawns a new go routine
+    # and recovers from panics)
+    details: https://example.com/gokeyword
+
   golint:
     # Minimal confidence for issues.
     # Default: 0.8
@@ -1998,6 +2004,7 @@ linters:
     - gofumpt
     - goheader
     - goimports
+    - gokeyword
     - golint
     - gomnd
     - gomoddirectives
@@ -2105,6 +2112,7 @@ linters:
     - gofumpt
     - goheader
     - goimports
+    - gokeyword
     - golint
     - gomnd
     - gomoddirectives
