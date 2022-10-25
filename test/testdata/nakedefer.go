@@ -32,11 +32,11 @@ func ignoreFunc() error {
 func testCaseValid1() {
 	defer funcNotReturnAnyType() // ignore
 
-	defer func() { //ignore
+	defer func() { // ignore
 		funcNotReturnAnyType()
 	}()
 
-	defer func() { //ignore
+	defer func() { // ignore
 		_ = funcReturnErr()
 	}()
 }
@@ -65,8 +65,8 @@ func testCase1() {
 		w.WriteHeader(http.StatusOK)
 		_, _ = w.Write([]byte("DONE"))
 	}))
-	defer srv.Close()                  //ignore
-	defer srv.CloseClientConnections() //ignore
+	defer srv.Close()                  // ignore
+	defer srv.CloseClientConnections() // ignore
 	defer srv.Certificate()            // want "deferred call should not return anything"
 }
 
