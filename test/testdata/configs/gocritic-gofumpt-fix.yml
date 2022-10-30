@@ -3,4 +3,4 @@ linters-settings:
     extra-rules: true
   gocritic:
     enabled-checks:
-      - commentedOutCode
+      - commentFormatting
