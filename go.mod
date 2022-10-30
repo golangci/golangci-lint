@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	4d63.com/gochecknoglobals v0.1.0
-	github.com/Abirdcfly/dupword v0.0.7
+	github.com/Abirdcfly/dupword v0.0.8
 	github.com/Antonboom/errname v0.1.7
 	github.com/Antonboom/nilnil v0.1.1
 	github.com/BurntSushi/toml v1.2.1
