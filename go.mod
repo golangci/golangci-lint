@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	4d63.com/gochecknoglobals v0.1.0
-	github.com/Abirdcfly/dupword v0.0.7
+	github.com/Abirdcfly/dupword v0.0.8
 	github.com/Antonboom/errname v0.1.7
 	github.com/Antonboom/nilnil v0.1.1
 	github.com/BurntSushi/toml v1.2.1
@@ -23,7 +23,7 @@ require (
 	github.com/butuzov/ireturn v0.1.1
 	github.com/charithe/durationcheck v0.0.9
 	github.com/curioswitch/go-reassign v0.2.0
-	github.com/daixiang0/gci v0.8.1
+	github.com/daixiang0/gci v0.8.2
 	github.com/denis-tingaikin/go-header v0.4.3
 	github.com/esimonov/ifshort v1.0.4
 	github.com/fatih/color v1.13.0
@@ -85,15 +85,15 @@ require (
 	github.com/shirou/gopsutil/v3 v3.22.9
 	github.com/sirupsen/logrus v1.9.0
 	github.com/sivchari/containedctx v1.0.2
-	github.com/sivchari/tenv v1.7.0
+	github.com/sivchari/tenv v1.7.1
 	github.com/sonatard/noctx v0.0.1
 	github.com/sourcegraph/go-diff v0.6.1
-	github.com/spf13/cobra v1.6.0
+	github.com/spf13/cobra v1.6.1
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.12.0
 	github.com/ssgreg/nlreturn/v2 v2.2.1
 	github.com/stbenjam/no-sprintf-host-port v0.1.1
-	github.com/stretchr/testify v1.8.0
+	github.com/stretchr/testify v1.8.1
 	github.com/tdakkota/asciicheck v0.1.1
 	github.com/tetafro/godot v1.4.11
 	github.com/timakin/bodyclose v0.0.0-20210704033933-f49887972144
@@ -166,7 +166,7 @@ require (
 	github.com/spf13/afero v1.8.2 // indirect
 	github.com/spf13/cast v1.5.0 // indirect
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
-	github.com/stretchr/objx v0.4.0 // indirect
+	github.com/stretchr/objx v0.5.0 // indirect
 	github.com/subosito/gotenv v1.4.1 // indirect
 	github.com/tklauser/go-sysconf v0.3.10 // indirect
 	github.com/tklauser/numcpus v0.4.0 // indirect
