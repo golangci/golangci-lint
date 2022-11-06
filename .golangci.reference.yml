@@ -1636,6 +1636,14 @@ linters-settings:
         severity: warning
         disabled: false
 
+  rowserr:
+    # packages sets additional packages to check.
+    # The following know sql packages are always checked:
+    # - database/sql
+    # - github.com/jmoiron/sqlx
+    # Default: []
+    packages: []
+
   rowserrcheck:
     # database/sql is always checked
     # Default: []
@@ -2039,6 +2047,7 @@ linters:
     - promlinter
     - reassign
     - revive
+    - rowserr
     - rowserrcheck
     - scopelint
     - sqlclosecheck
@@ -2146,6 +2155,7 @@ linters:
     - promlinter
     - reassign
     - revive
+    - rowserr
     - rowserrcheck
     - scopelint
     - sqlclosecheck

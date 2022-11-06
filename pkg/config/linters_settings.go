@@ -190,6 +190,7 @@ type LintersSettings struct {
 	Promlinter       PromlinterSettings
 	Reassign         ReassignSettings
 	Revive           ReviveSettings
+	RowsErr          RowsErrSettings
 	RowsErrCheck     RowsErrCheckSettings
 	Staticcheck      StaticCheckSettings
 	Structcheck      StructCheckSettings
@@ -599,6 +600,9 @@ type ReviveSettings struct {
 		Name     string
 		Severity string
 	}
+}
+type RowsErrSettings struct {
+	Packages []string
 }
 
 type RowsErrCheckSettings struct {
