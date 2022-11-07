@@ -27,7 +27,8 @@ func NewGoimports(settings *config.GoImportsSettings) *goanalysis.Linter {
 
 	return goanalysis.NewLinter(
 		goimportsName,
-		"Check go import statements are formatted according to the 'goimport' command.",
+		"Check import statements are formatted according to the 'goimport' command. "+
+			"Reformats code when the '--fix' option is specified.",
 		[]*analysis.Analyzer{analyzer},
 		nil,
 	).WithContextSetter(func(lintCtx *linter.Context) {

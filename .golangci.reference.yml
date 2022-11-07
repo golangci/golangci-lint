@@ -652,8 +652,6 @@ linters-settings:
   goimports:
     # A comma-separated list of prefixes, which, if set, checks import paths
     # with the given prefixes are grouped after 3rd-party packages.
-    # Unlike the `goimports` command, the `goimports` linter does not reformat code.
-    # Instead, it checks the imports are grouped as expected.    local-prefixes: github.com/org/project
     # Default: ""
     local-prefixes: github.com/org/project
 
