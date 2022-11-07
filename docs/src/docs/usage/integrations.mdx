@@ -4,32 +4,50 @@ title: Integrations
 
 ## Editor Integration
 
-1. [Go for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=ms-vscode.Go).
-   Recommended settings for VS Code are:
+###  [Go for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=ms-vscode.Go).
 
-   ```json
-   "go.lintTool":"golangci-lint",
-   "go.lintFlags": [
-     "--fast"
-   ]
-   ```
+Recommended settings for VS Code are:
 
-   Using it in an editor without `--fast` can freeze your editor.
-   Golangci-lint automatically discovers `.golangci.yml` config for edited file: you don't need to configure it in VS Code settings.
+```json
+"go.lintTool": "golangci-lint",
+"go.lintFlags": [
+  "--fast"
+]
+```
 
-2. Sublime Text - [plugin](https://github.com/SublimeLinter/SublimeLinter-golangcilint) for SublimeLinter.
-3. GoLand
-   - Install [plugin](https://plugins.jetbrains.com/plugin/12496-go-linter)
-   - Add [File Watcher](https://www.jetbrains.com/help/go/settings-tools-file-watchers.html) using existing `golangci-lint` template.
-   - If your version of GoLand does not have the `golangci-lint` [File Watcher](https://www.jetbrains.com/help/go/settings-tools-file-watchers.html) template you can configure your own and use arguments `run --disable=typecheck $FileDir$`.
-4. GNU Emacs
-   - [Spacemacs](https://github.com/syl20bnr/spacemacs/blob/develop/layers/+lang/go/README.org#linting)
-   - [flycheck checker](https://github.com/weijiangan/flycheck-golangci-lint).
-5. Vim
-   - [vim-go](https://github.com/fatih/vim-go)
-   - syntastic [merged pull request](https://github.com/vim-syntastic/syntastic/pull/2190) with golangci-lint support
-   - ale [merged pull request](https://github.com/w0rp/ale/pull/1890) with golangci-lint support
-6. Atom - [go-plus](https://atom.io/packages/go-plus) supports golangci-lint.
+Using it in an editor without `--fast` can freeze your editor.
+Golangci-lint automatically discovers `.golangci.yml` config for edited file: you don't need to configure it in VS Code settings.
+
+### Sublime Text
+
+There is a [plugin](https://github.com/SublimeLinter/SublimeLinter-golangcilint) for SublimeLinter.
+
+### GoLand
+
+How to configure:
+
+- Install [plugin](https://plugins.jetbrains.com/plugin/12496-go-linter)
+- Add [File Watcher](https://www.jetbrains.com/help/go/settings-tools-file-watchers.html) using existing `golangci-lint` template.
+- If your version of GoLand does not have the `golangci-lint` [File Watcher](https://www.jetbrains.com/help/go/settings-tools-file-watchers.html) template you can configure your own and use arguments `run --disable=typecheck $FileDir$`.
+
+### GNU Emacs
+
+There are available plugins:
+
+- [Spacemacs](https://github.com/syl20bnr/spacemacs/blob/develop/layers/+lang/go/README.org#linting)
+- [flycheck checker](https://github.com/weijiangan/flycheck-golangci-lint).
+
+### Vim
+
+The following plugins support `golangci-lint`:
+
+- [vim-go](https://github.com/fatih/vim-go);
+- [ALE](https://github.com/w0rp/ale);
+- [Syntastic](https://github.com/vim-syntastic/syntastic).
+
+### Atom
+
+[go-plus](https://atom.io/packages/go-plus) supports golangci-lint.
 
 ## Shell Completion
 

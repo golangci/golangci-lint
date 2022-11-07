@@ -18,13 +18,14 @@ func NewUseStdlibVars(cfg *config.UseStdlibVarsSettings) *goanalysis.Linter {
 			analyzer.CryptoHashFlag:         cfg.CryptoHash,
 			analyzer.HTTPMethodFlag:         cfg.HTTPMethod,
 			analyzer.HTTPStatusCodeFlag:     cfg.HTTPStatusCode,
-			analyzer.OSDevNullFlag:          cfg.OSDevNullFlag,
-			analyzer.RPCDefaultPathFlag:     cfg.DefaultRPCPathFlag,
-			analyzer.SQLIsolationLevelFlag:  cfg.SQLIsolationLevelFlag,
+			analyzer.OSDevNullFlag:          cfg.OSDevNull,
+			analyzer.RPCDefaultPathFlag:     cfg.DefaultRPCPath,
+			analyzer.SQLIsolationLevelFlag:  cfg.SQLIsolationLevel,
+			analyzer.SyslogPriorityFlag:     cfg.SyslogPriority,
 			analyzer.TimeLayoutFlag:         cfg.TimeLayout,
 			analyzer.TimeMonthFlag:          cfg.TimeMonth,
 			analyzer.TimeWeekdayFlag:        cfg.TimeWeekday,
-			analyzer.TLSSignatureSchemeFlag: cfg.TLSSignatureSchemeFlag,
+			analyzer.TLSSignatureSchemeFlag: cfg.TLSSignatureScheme,
 		}
 	}
 

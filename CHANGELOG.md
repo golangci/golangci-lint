@@ -1,6 +1,18 @@
 Follow the news and releases on our [twitter](https://twitter.com/golangci) and our [blog](https://medium.com/golangci).
 There is the most valuable changes log:
 
+### v1.50.1
+
+1. updated linters
+   * `contextcheck`: from 1.1.2 to 1.1.3
+   * `go-mnd`: from 2.5.0 to 2.5.1
+   * `wrapcheck`: from 2.6.2 to 2.7.0
+   * `revive`: fix configuration parsing
+   * `lll`: skip imports
+2. misc.
+   * windows: remove redundant character escape '\/'
+   * code-climate: add default severity
+
 ### v1.50.0
 
 1. new linters
