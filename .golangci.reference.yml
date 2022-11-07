@@ -1636,14 +1636,6 @@ linters-settings:
         severity: warning
         disabled: false
 
-  rowserr:
-    # packages sets additional packages to check.
-    # The following know sql packages are always checked:
-    # - database/sql
-    # - github.com/jmoiron/sqlx
-    # Default: []
-    packages: []
-
   rowserrcheck:
     # database/sql is always checked
     # Default: []
@@ -1753,6 +1745,28 @@ linters-settings:
       # Check f.Helper() begins helper function.
       # Default: true
       begin: false
+
+  uncalled:
+    rules:
+      # Check for uncalled Rows.Err
+      - name: sql.Rows
+        disabled: false
+        severity: warning
+        packages:
+          - database/sql
+          - github.com/jmoiron/sqlx
+        call:
+          methods: []
+          results:
+            - type: .Rows
+              pointer: true
+            - type: error
+              pointer: false
+        expect:
+          method: .Err
+          resultIndex: 0
+          args: []
+
 
   usestdlibvars:
     # Suggest the use of http.MethodXX.
@@ -2047,7 +2061,6 @@ linters:
     - promlinter
     - reassign
     - revive
-    - rowserr
     - rowserrcheck
     - scopelint
     - sqlclosecheck
@@ -2061,6 +2074,7 @@ linters:
     - thelper
     - tparallel
     - typecheck
+    - uncalled
     - unconvert
     - unparam
     - unused
@@ -2155,7 +2169,6 @@ linters:
     - promlinter
     - reassign
     - revive
-    - rowserr
     - rowserrcheck
     - scopelint
     - sqlclosecheck
@@ -2169,6 +2182,7 @@ linters:
     - thelper
     - tparallel
     - typecheck
+    - uncalled
     - unconvert
     - unparam
     - unused

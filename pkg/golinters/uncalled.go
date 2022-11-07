@@ -1,15 +1,15 @@
 package golinters
 
 import (
-	"github.com/stevenh/go-rowserr/pkg/rowserr"
+	"github.com/stevenh/go-uncalled/pkg/uncalled"
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 )
 
-func NewRowsErr(settings *config.RowsErrSettings) *goanalysis.Linter {
-	a := rowserr.NewAnalyzer(settings.Packages...)
+func NewUncalled(settings *config.UncalledSettings) *goanalysis.Linter {
+	a := uncalled.NewAnalyzer(settings)
 	return goanalysis.NewLinter(
 		a.Name,
 		a.Doc,

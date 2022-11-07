@@ -4,6 +4,7 @@ import (
 	"runtime"
 
 	"github.com/pkg/errors"
+	"github.com/stevenh/go-uncalled/pkg/uncalled"
 )
 
 var defaultLintersSettings = LintersSettings{
@@ -190,7 +191,6 @@ type LintersSettings struct {
 	Promlinter       PromlinterSettings
 	Reassign         ReassignSettings
 	Revive           ReviveSettings
-	RowsErr          RowsErrSettings
 	RowsErrCheck     RowsErrCheckSettings
 	Staticcheck      StaticCheckSettings
 	Structcheck      StructCheckSettings
@@ -199,6 +199,7 @@ type LintersSettings struct {
 	Tenv             TenvSettings
 	Testpackage      TestpackageSettings
 	Thelper          ThelperSettings
+	Uncalled         UncalledSettings
 	Unparam          UnparamSettings
 	Unused           StaticCheckSettings
 	UseStdlibVars    UseStdlibVarsSettings
@@ -601,9 +602,8 @@ type ReviveSettings struct {
 		Severity string
 	}
 }
-type RowsErrSettings struct {
-	Packages []string
-}
+
+type UncalledSettings = uncalled.Config
 
 type RowsErrCheckSettings struct {
 	Packages []string

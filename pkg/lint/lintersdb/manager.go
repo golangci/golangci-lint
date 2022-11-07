@@ -158,7 +158,6 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		promlinterCfg       *config.PromlinterSettings
 		reassignCfg         *config.ReassignSettings
 		reviveCfg           *config.ReviveSettings
-		rowserrCfg          *config.RowsErrSettings
 		rowserrcheckCfg     *config.RowsErrCheckSettings
 		staticcheckCfg      *config.StaticCheckSettings
 		structcheckCfg      *config.StructCheckSettings
@@ -167,6 +166,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		tenvCfg             *config.TenvSettings
 		testpackageCfg      *config.TestpackageSettings
 		thelperCfg          *config.ThelperSettings
+		uncalledCfg         *config.UncalledSettings
 		unparamCfg          *config.UnparamSettings
 		unusedCfg           *config.StaticCheckSettings
 		usestdlibvars       *config.UseStdlibVarsSettings
@@ -235,7 +235,6 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		promlinterCfg = &m.cfg.LintersSettings.Promlinter
 		reassignCfg = &m.cfg.LintersSettings.Reassign
 		reviveCfg = &m.cfg.LintersSettings.Revive
-		rowserrCfg = &m.cfg.LintersSettings.RowsErr
 		rowserrcheckCfg = &m.cfg.LintersSettings.RowsErrCheck
 		staticcheckCfg = &m.cfg.LintersSettings.Staticcheck
 		structcheckCfg = &m.cfg.LintersSettings.Structcheck
@@ -244,6 +243,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		tenvCfg = &m.cfg.LintersSettings.Tenv
 		testpackageCfg = &m.cfg.LintersSettings.Testpackage
 		thelperCfg = &m.cfg.LintersSettings.Thelper
+		uncalledCfg = &m.cfg.LintersSettings.Uncalled
 		unparamCfg = &m.cfg.LintersSettings.Unparam
 		unusedCfg = &m.cfg.LintersSettings.Unused
 		varcheckCfg = &m.cfg.LintersSettings.Varcheck
@@ -709,12 +709,6 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			ConsiderSlow().
 			WithURL("https://github.com/mgechev/revive"),
 
-		linter.NewConfig(golinters.NewRowsErr(rowserrCfg)).
-			WithSince("v1.51.0").
-			WithLoadForGoAnalysis().
-			WithPresets(linter.PresetBugs, linter.PresetSQL).
-			WithURL("https://github.com/stevenh/go-rowserr"),
-
 		linter.NewConfig(golinters.NewRowsErrCheck(rowserrcheckCfg)).
 			WithSince("v1.23.0").
 			WithLoadForGoAnalysis().
@@ -794,6 +788,12 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetBugs).
 			WithURL(""),
+
+		linter.NewConfig(golinters.NewUncalled(uncalledCfg)).
+			WithSince("v1.51.0").
+			WithLoadForGoAnalysis().
+			WithPresets(linter.PresetBugs, linter.PresetSQL).
+			WithURL("https://github.com/stevenh/go-uncalled"),
 
 		linter.NewConfig(golinters.NewUnconvert()).
 			WithSince("v1.0.0").
