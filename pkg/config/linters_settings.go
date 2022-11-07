@@ -652,17 +652,18 @@ type TenvSettings struct {
 }
 
 type UseStdlibVarsSettings struct {
-	HTTPMethod             bool `mapstructure:"http-method"`
-	HTTPStatusCode         bool `mapstructure:"http-status-code"`
-	TimeWeekday            bool `mapstructure:"time-weekday"`
-	TimeMonth              bool `mapstructure:"time-month"`
-	TimeLayout             bool `mapstructure:"time-layout"`
-	CryptoHash             bool `mapstructure:"crypto-hash"`
-	DefaultRPCPathFlag     bool `mapstructure:"default-rpc-path"`
-	OSDevNullFlag          bool `mapstructure:"os-dev-null-flag"`
-	SQLIsolationLevelFlag  bool `mapstructure:"sql-isolation-level-flag"`
-	TLSSignatureSchemeFlag bool `mapstructure:"tls-signature-scheme-flag"`
-	ConstantKind           bool `mapstructure:"constant-kind"`
+	HTTPMethod         bool `mapstructure:"http-method"`
+	HTTPStatusCode     bool `mapstructure:"http-status-code"`
+	TimeWeekday        bool `mapstructure:"time-weekday"`
+	TimeMonth          bool `mapstructure:"time-month"`
+	TimeLayout         bool `mapstructure:"time-layout"`
+	CryptoHash         bool `mapstructure:"crypto-hash"`
+	DefaultRPCPath     bool `mapstructure:"default-rpc-path"`
+	OSDevNull          bool `mapstructure:"os-dev-null"`
+	SQLIsolationLevel  bool `mapstructure:"sql-isolation-level"`
+	TLSSignatureScheme bool `mapstructure:"tls-signature-scheme"`
+	ConstantKind       bool `mapstructure:"constant-kind"`
+	SyslogPriority     bool `mapstructure:"syslog-priority"`
 }
 
 type UnparamSettings struct {
