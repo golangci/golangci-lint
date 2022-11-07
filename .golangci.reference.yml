@@ -651,7 +651,8 @@ linters-settings:
 
   goimports:
     # Put imports beginning with prefix after 3rd-party packages.
-    # It's a comma-separated list of prefixes.
+    # It's a comma-separated list of prefixes, which, if set, instructs to sort the import paths
+    # with the given prefixes into another group after 3rd-party packages.
     # Default: ""
     local-prefixes: github.com/org/project
 
