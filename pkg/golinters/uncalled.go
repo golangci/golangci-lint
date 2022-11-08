@@ -9,7 +9,7 @@ import (
 )
 
 func NewUncalled(settings *config.UncalledSettings) *goanalysis.Linter {
-	a := uncalled.NewAnalyzer(settings)
+	a := uncalled.NewAnalyzer(uncalled.ConfigOpt(settings))
 	return goanalysis.NewLinter(
 		a.Name,
 		a.Doc,

@@ -1747,25 +1747,57 @@ linters-settings:
       begin: false
 
   uncalled:
+    default-category: uncalled
     rules:
-      # Check for uncalled Rows.Err
-      - name: sql.Rows
-        disabled: false
-        severity: warning
+      # Checks for missing sql Rows.Err() calls.
+      - name: sql-rows-err
+        # Default: false
+        disabled: true
+        category: sql
         packages:
           - database/sql
           - github.com/jmoiron/sqlx
-        call:
-          methods: []
-          results:
-            - type: .Rows
-              pointer: true
-            - type: error
-              pointer: false
-        expect:
-          method: .Err
-          resultIndex: 0
-          args: []
+        methods: []
+        results:
+          - type: .Rows
+            pointer: true
+            expect:
+              call: .Err
+              args: []
+          - type: error
+            pointer: false
+      # Checks for missing http Reponse.Body.Close() calls.
+      - name: http-response-body-close
+        # Default: false
+        disabled: true
+        category: http
+        packages:
+          - net/http
+        methods: []
+        results:
+          - type: .Response
+            pointer: true
+            expect:
+              call: .Body.Close
+              args: []
+          - type: error
+            pointer: false
+      # Checks for missing context CancelFunc() calls.
+      - name: context-cancel
+        # Default: false
+        disabled: true
+        category: context
+        packages:
+          - context
+        methods: []
+        results:
+          - type: .Context
+            pointer: false
+          - type: .CancelFunc
+            pointer: false
+            expect:
+              call:
+              args: []
 
 
   usestdlibvars:
