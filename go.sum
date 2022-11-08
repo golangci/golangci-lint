@@ -515,12 +515,8 @@ github.com/ssgreg/nlreturn/v2 v2.2.1 h1:X4XDI7jstt3ySqGU86YGAURbxw3oTDPK9sPEi6YE
 github.com/ssgreg/nlreturn/v2 v2.2.1/go.mod h1:E/iiPB78hV7Szg2YfRgyIrk1AD6JVMTRkkxBiELzh2I=
 github.com/stbenjam/no-sprintf-host-port v0.1.1 h1:tYugd/yrm1O0dV+ThCbaKZh195Dfm07ysF0U6JQXczc=
 github.com/stbenjam/no-sprintf-host-port v0.1.1/go.mod h1:TLhvtIvONRzdmkFiio4O8LHsN9N74I+PhRquPsxpL0I=
-github.com/stevenh/go-uncalled v0.5.0 h1:oHVQm8N0mdVBq55GH02wiht4fFM3gVFBc5N7BeZlJ1I=
-github.com/stevenh/go-uncalled v0.5.0/go.mod h1:ejM8/UAWnsuI68d3Fpy/lLXwpdrvoweCSutU/Z4kNjc=
-github.com/stevenh/go-uncalled v0.7.0 h1:0w7kXgJoLH40y0NLTJARXywi0ZKTMITCes8vsunvVp8=
-github.com/stevenh/go-uncalled v0.7.0/go.mod h1:ejM8/UAWnsuI68d3Fpy/lLXwpdrvoweCSutU/Z4kNjc=
-github.com/stevenh/go-uncalled v0.7.1 h1:6C3aV7txvAW9Ip0kN7l1jM8Pb315hhlKzYObBdt3xJg=
-github.com/stevenh/go-uncalled v0.7.1/go.mod h1:ejM8/UAWnsuI68d3Fpy/lLXwpdrvoweCSutU/Z4kNjc=
+github.com/stevenh/go-uncalled v0.7.3 h1:nME2E+qUieDR2dC8gFJdo9BeV153rsu0NVwCBr42qKg=
+github.com/stevenh/go-uncalled v0.7.3/go.mod h1:ejM8/UAWnsuI68d3Fpy/lLXwpdrvoweCSutU/Z4kNjc=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/objx v0.1.1/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/objx v0.4.0/go.mod h1:YvHI0jy2hoMjB+UWwv71VJQ9isScKT/TqJzVSSt89Yw=

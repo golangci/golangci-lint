@@ -1,4 +1,4 @@
-//golangcitest:args -Erowserr
+//golangcitest:args -Euncalled
 package testdata
 
 import (
@@ -6,7 +6,7 @@ import (
 )
 
 func RowsErrNotChecked(db *sql.DB) {
-	rows, err := db.Query("select id from tb") // want "rows.Err\\(\\) must be checked"
+	rows, err := db.Query("select id from tb") // want "rows.Err\\(\\) must be called"
 	if err != nil {
 		// Handle error.
 	}

@@ -109,6 +109,7 @@ var defaultLintersSettings = LintersSettings{
 		SkipRegexp:    `(export|internal)_test\.go`,
 		AllowPackages: []string{"main"},
 	},
+	Uncalled: uncalled.DefaultConfig(),
 	Unparam: UnparamSettings{
 		Algo: "cha",
 	},

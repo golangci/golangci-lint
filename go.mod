@@ -93,7 +93,7 @@ require (
 	github.com/spf13/viper v1.12.0
 	github.com/ssgreg/nlreturn/v2 v2.2.1
 	github.com/stbenjam/no-sprintf-host-port v0.1.1
-	github.com/stevenh/go-uncalled v0.7.1
+	github.com/stevenh/go-uncalled v0.7.3
 	github.com/stretchr/testify v1.8.1
 	github.com/tdakkota/asciicheck v0.1.1
 	github.com/tetafro/godot v1.4.11
