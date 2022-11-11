@@ -109,7 +109,12 @@ var defaultLintersSettings = LintersSettings{
 		SkipRegexp:    `(export|internal)_test\.go`,
 		AllowPackages: []string{"main"},
 	},
-	Uncalled: uncalled.DefaultConfig(),
+	Uncalled: UncalledSettings{
+		DisableAll: false,
+		Enabled:    nil,
+		Disabled:   nil,
+		Rules:      nil,
+	},
 	Unparam: UnparamSettings{
 		Algo: "cha",
 	},
@@ -604,8 +609,6 @@ type ReviveSettings struct {
 	}
 }
 
-type UncalledSettings = uncalled.Config
-
 type RowsErrCheckSettings struct {
 	Packages []string
 }
@@ -671,6 +674,8 @@ type UseStdlibVarsSettings struct {
 	ConstantKind       bool `mapstructure:"constant-kind"`
 	SyslogPriority     bool `mapstructure:"syslog-priority"`
 }
+
+type UncalledSettings = uncalled.Config
 
 type UnparamSettings struct {
 	CheckExported bool `mapstructure:"check-exported"`
