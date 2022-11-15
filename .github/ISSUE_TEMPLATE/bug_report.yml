@@ -11,9 +11,9 @@ body:
           required: true
         - label: Yes, I've searched similar issues on GitHub and didn't find any.
           required: true
-        - label: Yes, I've included all information below (version, config, etc).
+        - label: Yes, I've included all information below (version, config, etc.).
           required: true
-        - label: Yes, I've tried with the standalone linter if available. (https://golangci-lint.run/usage/linters/)
+        - label: Yes, I've tried with the standalone linter if available (e.g., gocritic, go vet, etc.). (https://golangci-lint.run/usage/linters/)
           required: true
 
   - type: textarea
