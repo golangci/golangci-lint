@@ -402,8 +402,21 @@ linters-settings:
     # Default: false
     custom-order: true
 
+  ginkgolinter:
+    # Suppress the wrong length assertion warning.
+    # Default: false
+    suppress-len-assertion: true
+
+    # Suppress the wrong nil assertion warning.
+    # Default: false
+    suppress-nil-assertion: true
+
+    # Suppress the wrong error assertion warning.
+    # Default: false
+    suppress-err-assertion: true
+
   gocognit:
-    # Minimal code complexity to report
+    # Minimal code complexity to report.
     # Default: 30 (but we recommend 10-20)
     min-complexity: 10
 
@@ -1989,6 +2002,7 @@ linters:
     - forcetypeassert
     - funlen
     - gci
+    - ginkgolinter
     - gochecknoglobals
     - gochecknoinits
     - gocognit
@@ -2096,6 +2110,7 @@ linters:
     - forcetypeassert
     - funlen
     - gci
+    - ginkgolinter
     - gochecknoglobals
     - gochecknoinits
     - gocognit

@@ -118,6 +118,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		forbidigoCfg        *config.ForbidigoSettings
 		funlenCfg           *config.FunlenSettings
 		gciCfg              *config.GciSettings
+		ginkgolinterCfg     *config.GinkgoLinterSettings
 		gocognitCfg         *config.GocognitSettings
 		goconstCfg          *config.GoConstSettings
 		gocriticCfg         *config.GoCriticSettings
@@ -194,6 +195,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		forbidigoCfg = &m.cfg.LintersSettings.Forbidigo
 		funlenCfg = &m.cfg.LintersSettings.Funlen
 		gciCfg = &m.cfg.LintersSettings.Gci
+		ginkgolinterCfg = &m.cfg.LintersSettings.GinkgoLinter
 		gocognitCfg = &m.cfg.LintersSettings.Gocognit
 		goconstCfg = &m.cfg.LintersSettings.Goconst
 		gocriticCfg = &m.cfg.LintersSettings.Gocritic
@@ -429,6 +431,12 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithSince("v1.30.0").
 			WithPresets(linter.PresetFormatting, linter.PresetImport).
 			WithURL("https://github.com/daixiang0/gci"),
+
+		linter.NewConfig(golinters.NewGinkgoLinter(ginkgolinterCfg)).
+			WithSince("v1.51.0").
+			WithLoadForGoAnalysis().
+			WithPresets(linter.PresetStyle).
+			WithURL("https://github.com/nunnatsa/ginkgolinter"),
 
 		linter.NewConfig(golinters.NewGochecknoglobals()).
 			WithSince("v1.12.0").
