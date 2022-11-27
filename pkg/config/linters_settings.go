@@ -289,6 +289,7 @@ type ExhaustiveSettings struct {
 	CheckGenerated             bool     `mapstructure:"check-generated"`
 	DefaultSignifiesExhaustive bool     `mapstructure:"default-signifies-exhaustive"`
 	IgnoreEnumMembers          string   `mapstructure:"ignore-enum-members"`
+	IgnoreEnumTypes            string   `mapstructure:"ignore-enum-types"`
 	PackageScopeOnly           bool     `mapstructure:"package-scope-only"`
 	ExplicitExhaustiveMap      bool     `mapstructure:"explicit-exhaustive-map"`
 	ExplicitExhaustiveSwitch   bool     `mapstructure:"explicit-exhaustive-switch"`
