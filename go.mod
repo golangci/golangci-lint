@@ -25,6 +25,7 @@ require (
 	github.com/curioswitch/go-reassign v0.2.0
 	github.com/daixiang0/gci v0.9.0
 	github.com/denis-tingaikin/go-header v0.4.3
+	github.com/drichelson/gokeyword v1.0.2
 	github.com/esimonov/ifshort v1.0.4
 	github.com/fatih/color v1.13.0
 	github.com/firefart/nonamedreturns v1.0.4

@@ -160,6 +160,7 @@ type LintersSettings struct {
 	Gofumpt          GofumptSettings
 	Goheader         GoHeaderSettings
 	Goimports        GoImportsSettings
+	GoKeyword        GoKeywordSettings
 	Golint           GoLintSettings
 	Gomnd            GoMndSettings
 	GoModDirectives  GoModDirectivesSettings
@@ -390,6 +391,10 @@ type GoHeaderSettings struct {
 
 type GoImportsSettings struct {
 	LocalPrefixes string `mapstructure:"local-prefixes"`
+}
+
+type GoKeywordSettings struct {
+	Details string `mapstructure:"details"`
 }
 
 type GoLintSettings struct {

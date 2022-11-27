@@ -1,0 +1,4 @@
+linters-settings:
+  gokeyword:
+    details: via test/testdata/configs/gokeyword.yml
+
