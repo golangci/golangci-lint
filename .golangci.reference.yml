@@ -318,6 +318,10 @@ linters-settings:
     # switch statements to satisfy exhaustiveness.
     # Default: ""
     ignore-enum-members: "Example.+"
+    # Enum types matching the supplied regex do not have to be listed in
+    # switch statements to satisfy exhaustiveness.
+    # Default: ""
+    ignore-enum-types: "Example.+"
     # Consider enums only in package scopes, not in inner scopes.
     # Default: false
     package-scope-only: true

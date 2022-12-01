@@ -23,7 +23,7 @@ require (
 	github.com/butuzov/ireturn v0.1.1
 	github.com/charithe/durationcheck v0.0.9
 	github.com/curioswitch/go-reassign v0.2.0
-	github.com/daixiang0/gci v0.8.2
+	github.com/daixiang0/gci v0.9.0
 	github.com/denis-tingaikin/go-header v0.4.3
 	github.com/esimonov/ifshort v1.0.4
 	github.com/fatih/color v1.13.0
@@ -55,10 +55,10 @@ require (
 	github.com/kkHAIKE/contextcheck v1.1.3
 	github.com/kulti/thelper v0.6.3
 	github.com/kunwardeep/paralleltest v1.0.6
-	github.com/kyoh86/exportloopref v0.1.9
+	github.com/kyoh86/exportloopref v0.1.11
 	github.com/ldez/gomoddirectives v0.2.3
 	github.com/ldez/tagliatelle v0.3.1
-	github.com/leonklingele/grouper v1.1.0
+	github.com/leonklingele/grouper v1.1.1
 	github.com/lufeee/execinquery v1.2.1
 	github.com/maratori/testableexamples v1.0.0
 	github.com/maratori/testpackage v1.1.0
@@ -70,10 +70,10 @@ require (
 	github.com/mitchellh/go-ps v1.0.0
 	github.com/moricho/tparallel v0.2.1
 	github.com/nakabonne/nestif v0.3.1
-	github.com/nishanths/exhaustive v0.8.3
+	github.com/nishanths/exhaustive v0.9.2
 	github.com/nishanths/predeclared v0.2.2
 	github.com/pkg/errors v0.9.1
-	github.com/polyfloyd/go-errorlint v1.0.5
+	github.com/polyfloyd/go-errorlint v1.0.6
 	github.com/quasilyte/go-ruleguard/dsl v0.3.21
 	github.com/ryancurrah/gomodguard v1.2.4
 	github.com/ryanrolds/sqlclosecheck v0.3.0
@@ -96,7 +96,7 @@ require (
 	github.com/stretchr/testify v1.8.1
 	github.com/tdakkota/asciicheck v0.1.1
 	github.com/tetafro/godot v1.4.11
-	github.com/timakin/bodyclose v0.0.0-20210704033933-f49887972144
+	github.com/timakin/bodyclose v0.0.0-20221125081123-e39cf3fc478e
 	github.com/timonwong/loggercheck v0.9.3
 	github.com/tomarrell/wrapcheck/v2 v2.7.0
 	github.com/tommy-muehle/go-mnd/v2 v2.5.1
@@ -180,7 +180,7 @@ require (
 	golang.org/x/mod v0.7.0 // indirect
 	golang.org/x/sync v0.1.0 // indirect
 	golang.org/x/sys v0.2.0 // indirect
-	golang.org/x/text v0.3.8 // indirect
+	golang.org/x/text v0.4.0 // indirect
 	google.golang.org/protobuf v1.28.0 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
