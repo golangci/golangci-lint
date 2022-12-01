@@ -26,10 +26,6 @@ func ExtractErrors(pkg *packages.Package) []packages.Error {
 			continue
 		}
 
-		if msg != err.Error() {
-			continue
-		}
-
 		seenErrors[msg] = true
 
 		uniqErrors = append(uniqErrors, err)
