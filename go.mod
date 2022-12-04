@@ -82,7 +82,7 @@ require (
 	github.com/sashamelentyev/usestdlibvars v1.21.1
 	github.com/securego/gosec/v2 v2.14.0
 	github.com/shazow/go-diff v0.0.0-20160112020656-b6b7b6733b8c
-	github.com/shirou/gopsutil/v3 v3.22.10
+	github.com/shirou/gopsutil/v3 v3.22.11
 	github.com/sirupsen/logrus v1.9.0
 	github.com/sivchari/containedctx v1.0.2
 	github.com/sivchari/tenv v1.7.1
@@ -168,8 +168,8 @@ require (
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/stretchr/objx v0.5.0 // indirect
 	github.com/subosito/gotenv v1.4.1 // indirect
-	github.com/tklauser/go-sysconf v0.3.10 // indirect
-	github.com/tklauser/numcpus v0.4.0 // indirect
+	github.com/tklauser/go-sysconf v0.3.11 // indirect
+	github.com/tklauser/numcpus v0.6.0 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/yusufpapurcu/wmi v1.2.2 // indirect
 	go.uber.org/atomic v1.7.0 // indirect
