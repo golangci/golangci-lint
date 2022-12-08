@@ -895,6 +895,10 @@ func linterConfigsToMap(lcs []*linter.Config) map[string]*linter.Config {
 func (m Manager) GetAllLinterConfigsForPreset(p string) []*linter.Config {
 	var ret []*linter.Config
 	for _, lc := range m.GetAllSupportedLinterConfigs() {
+		if lc.IsDeprecated() {
+			continue
+		}
+
 		for _, ip := range lc.InPresets {
 			if p == ip {
 				ret = append(ret, lc)
