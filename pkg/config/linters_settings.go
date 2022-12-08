@@ -713,7 +713,7 @@ type WSLSettings struct {
 	AllowCuddleDeclaration           bool     `mapstructure:"allow-cuddle-declarations"`
 	AllowCuddleWithCalls             []string `mapstructure:"allow-cuddle-with-calls"`
 	AllowCuddleWithRHS               []string `mapstructure:"allow-cuddle-with-rhs"`
-	ForceCuddleErrCheckAndAssign     bool     `mapstructure:"enforce-err-cuddling"`
+	ForceCuddleErrCheckAndAssign     bool     `mapstructure:"force-err-cuddling"`
 	ErrorVariableNames               []string `mapstructure:"error-variable-names"`
 	ForceExclusiveShortDeclarations  bool     `mapstructure:"force-short-decl-cuddling"`
 }
