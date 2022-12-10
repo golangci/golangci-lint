@@ -1944,6 +1944,9 @@ linters-settings:
       - T any
       - m map[string]int
 
+  vulncheck:
+    vuln-database: [https://vuln.go.dev]
+
   whitespace:
     # Enforces newlines (or comments) after every multi-line if statement.
     # Default: false
@@ -2159,6 +2162,7 @@ linters:
     - usestdlibvars
     - varcheck
     - varnamelen
+    - vulncheck
     - wastedassign
     - whitespace
     - wrapcheck
@@ -2272,6 +2276,7 @@ linters:
     - usestdlibvars
     - varcheck
     - varnamelen
+    - vulncheck
     - wastedassign
     - whitespace
     - wrapcheck
