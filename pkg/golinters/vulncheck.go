@@ -78,14 +78,14 @@ func vulncheckRun(lintCtx *linter.Context, pass *analysis.Pass, settings *config
 
 	for idx, vuln := range r.Vulns {
 		issues = append(issues, goanalysis.NewIssue(&result.Issue{
-			Text: writeVulnerability(idx, vuln.OSV.ID, vuln.OSV.Details, writeImorts(imports[vuln])),
+			Text: writeVulnerability(idx, vuln.OSV.ID, vuln.OSV.Details, writeImports(imports[vuln])),
 		}, pass))
 	}
 
 	return issues, nil
 }
 
-func writeImorts(imports []vulncheck.ImportChain) string {
+func writeImports(imports []vulncheck.ImportChain) string {
 	var s strings.Builder
 	for _, i := range imports {
 		indent := 0
