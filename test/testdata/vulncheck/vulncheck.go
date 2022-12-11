@@ -1,7 +1,13 @@
+//golangcitest:args -Evulncheck
 package vulncheck
 
-import "golang.org/x/text/language"
+import (
+	"fmt"
 
-func testvuln() {
-	_ = language.MustParseRegion("US")
+	"golang.org/x/text/language"
+)
+
+func ParseRegion() {
+	us := language.MustParseRegion("US")
+	fmt.Println(us)
 }
