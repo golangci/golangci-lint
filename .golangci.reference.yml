@@ -1928,15 +1928,15 @@ linters-settings:
     
     # Causes an error when an If statement that checks an error variable doesn't
     # cuddle with the assignment of that variable.
-    enforce-err-cuddling: false
+    force-err-cuddling: false
     
-    # When enforce-err-cuddling is enabled this is a list of names
+    # When force-err-cuddling is enabled this is a list of names
     # used for error variables to check for in the conditional.
     error-variable-names: [ "err" ]
     
     # Causes an error if a short declaration (:=) cuddles with anything other than
     # another short declaration.
-    # This logic overrides enforce-err-cuddling among others.
+    # This logic overrides force-err-cuddling among others.
     force-short-decl-cuddling: false
 
   # The custom section can be used to define linter plugins to be loaded at runtime.
