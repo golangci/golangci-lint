@@ -75,6 +75,16 @@ sudo port install golangci-lint
 docker run --rm -v $(pwd):/app -w /app golangci/golangci-lint:{.LatestVersion} golangci-lint run -v
 ```
 
+Preserving cache between consecutive runs:
+```sh
+docker run --rm -v $(pwd):/app -v ~/.cache/golangci-lint/{.LatestVersion}:/root/.cache -w /app golangci/golangci-lint:{.LatestVersion} golangci-lint run -v
+```
+
+Colored output:
+```sh
+docker run -t --rm -v $(pwd):/app -w /app golangci/golangci-lint:{.LatestVersion} golangci-lint run -v
+```
+
 ### Linux and Windows
 
 ```sh

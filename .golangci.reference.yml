@@ -654,8 +654,8 @@ linters-settings:
     template-path: /path/to/my/template.tmpl
 
   goimports:
-    # Put imports beginning with prefix after 3rd-party packages.
-    # It's a comma-separated list of prefixes.
+    # A comma-separated list of prefixes, which, if set, checks import paths
+    # with the given prefixes are grouped after 3rd-party packages.
     # Default: ""
     local-prefixes: github.com/org/project
 
