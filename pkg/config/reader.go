@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/mitchellh/go-homedir"
+	"github.com/mitchellh/mapstructure"
 	"github.com/spf13/viper"
 	"golang.org/x/exp/slices"
 
@@ -91,7 +92,14 @@ func (r *FileReader) parseConfig() error {
 	}
 	r.cfg.cfgDir = usedConfigDir
 
-	if err := viper.Unmarshal(r.cfg); err != nil {
+	if err := viper.Unmarshal(r.cfg, viper.DecodeHook(mapstructure.ComposeDecodeHookFunc(
+		// Default hooks (https://github.com/spf13/viper/blob/518241257478c557633ab36e474dfcaeb9a3c623/viper.go#L135-L138).
+		mapstructure.StringToTimeDurationHookFunc(),
+		mapstructure.StringToSliceHookFunc(","),
+
+		// Needed for forbidigo.
+		mapstructure.TextUnmarshallerHookFunc(),
+	))); err != nil {
 		return fmt.Errorf("can't unmarshal config by viper: %s", err)
 	}
 
