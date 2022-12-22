@@ -1746,6 +1746,37 @@ linters-settings:
       # Default: true
       begin: false
 
+  uncalled:
+    # Disables all rules.
+    # Default: false
+    disabled-all: true
+    # Disables the given rules.
+    # Default: []
+    disabled:
+      - context-cancel
+    # Enables specific rules, in combination with disable all.
+    # Default: []
+    enabled:
+      - sql-rows-err
+    # Add or override default rules.
+    # Default: []
+    rules:
+      # Check for missing context CancelFunc() calls.
+      - name: context-cancel
+        category: context
+        packages:
+          - context
+        methods: []
+        results:
+          - type: .Context
+            pointer: false
+          - type: .CancelFunc
+            pointer: false
+            expect:
+              call:
+              args: []
+
+
   usestdlibvars:
     # Suggest the use of http.MethodXX.
     # Default: true
@@ -2052,6 +2083,7 @@ linters:
     - thelper
     - tparallel
     - typecheck
+    - uncalled
     - unconvert
     - unparam
     - unused
@@ -2159,6 +2191,7 @@ linters:
     - thelper
     - tparallel
     - typecheck
+    - uncalled
     - unconvert
     - unparam
     - unused

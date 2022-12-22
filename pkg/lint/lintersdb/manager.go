@@ -166,6 +166,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		tenvCfg             *config.TenvSettings
 		testpackageCfg      *config.TestpackageSettings
 		thelperCfg          *config.ThelperSettings
+		uncalledCfg         *config.UncalledSettings
 		unparamCfg          *config.UnparamSettings
 		unusedCfg           *config.StaticCheckSettings
 		usestdlibvars       *config.UseStdlibVarsSettings
@@ -242,6 +243,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		tenvCfg = &m.cfg.LintersSettings.Tenv
 		testpackageCfg = &m.cfg.LintersSettings.Testpackage
 		thelperCfg = &m.cfg.LintersSettings.Thelper
+		uncalledCfg = &m.cfg.LintersSettings.Uncalled
 		unparamCfg = &m.cfg.LintersSettings.Unparam
 		unusedCfg = &m.cfg.LintersSettings.Unused
 		varcheckCfg = &m.cfg.LintersSettings.Varcheck
@@ -786,6 +788,12 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetBugs).
 			WithURL(""),
+
+		linter.NewConfig(golinters.NewUncalled(uncalledCfg)).
+			WithSince("v1.51.0").
+			WithLoadForGoAnalysis().
+			WithPresets(linter.PresetBugs, linter.PresetSQL).
+			WithURL("https://github.com/stevenh/go-uncalled"),
 
 		linter.NewConfig(golinters.NewUnconvert()).
 			WithSince("v1.0.0").

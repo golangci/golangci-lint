@@ -4,6 +4,7 @@ import (
 	"runtime"
 
 	"github.com/pkg/errors"
+	"github.com/stevenh/go-uncalled/pkg/uncalled"
 )
 
 var defaultLintersSettings = LintersSettings{
@@ -108,6 +109,12 @@ var defaultLintersSettings = LintersSettings{
 		SkipRegexp:    `(export|internal)_test\.go`,
 		AllowPackages: []string{"main"},
 	},
+	Uncalled: UncalledSettings{
+		DisableAll: false,
+		Enabled:    nil,
+		Disabled:   nil,
+		Rules:      nil,
+	},
 	Unparam: UnparamSettings{
 		Algo: "cha",
 	},
@@ -198,6 +205,7 @@ type LintersSettings struct {
 	Tenv             TenvSettings
 	Testpackage      TestpackageSettings
 	Thelper          ThelperSettings
+	Uncalled         UncalledSettings
 	Unparam          UnparamSettings
 	Unused           StaticCheckSettings
 	UseStdlibVars    UseStdlibVarsSettings
@@ -666,6 +674,8 @@ type UseStdlibVarsSettings struct {
 	ConstantKind       bool `mapstructure:"constant-kind"`
 	SyslogPriority     bool `mapstructure:"syslog-priority"`
 }
+
+type UncalledSettings = uncalled.Config
 
 type UnparamSettings struct {
 	CheckExported bool `mapstructure:"check-exported"`
