@@ -150,6 +150,7 @@ type LintersSettings struct {
 	Forbidigo        ForbidigoSettings
 	Funlen           FunlenSettings
 	Gci              GciSettings
+	GinkgoLinter     GinkgoLinterSettings
 	Gocognit         GocognitSettings
 	Goconst          GoConstSettings
 	Gocritic         GoCriticSettings
@@ -319,6 +320,12 @@ type GciSettings struct {
 	Sections      []string `mapstructure:"sections"`
 	SkipGenerated bool     `mapstructure:"skip-generated"`
 	CustomOrder   bool     `mapstructure:"custom-order"`
+}
+
+type GinkgoLinterSettings struct {
+	SuppressLenAssertion bool `mapstructure:"suppress-len-assertion"`
+	SuppressNilAssertion bool `mapstructure:"suppress-nil-assertion"`
+	SuppressErrAssertion bool `mapstructure:"suppress-err-assertion"`
 }
 
 type GocognitSettings struct {
