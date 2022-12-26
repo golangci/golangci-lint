@@ -90,7 +90,7 @@ jobs:
     strategy:
       matrix:
         golang:
-          - 1.18
+          - 1.19
           - 1.20.0-rc.1
     steps:
       - uses: actions/checkout@v3
