@@ -1,3 +1,5 @@
+//go:build go1.20
+
 //golangcitest:args -Etypecheck
 package testdata
 
