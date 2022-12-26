@@ -242,7 +242,7 @@ func extractIssuesFromPatch(patch string, lintCtx *linter.Context, linterName st
 	}
 
 	if len(diffs) == 0 {
-		return nil, fmt.Errorf("got no diffs from patch parser: %v", diffs)
+		return nil, fmt.Errorf("got no diffs from patch parser: %v", patch)
 	}
 
 	var issues []result.Issue
