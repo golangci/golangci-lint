@@ -13,6 +13,7 @@ builds:
       - windows
       - linux
       - freebsd
+      - netbsd
     goarch:
       - amd64
       - arm64
