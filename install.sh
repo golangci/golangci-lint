@@ -87,6 +87,10 @@ get_binaries() {
     linux/ppc64le) BINARIES="golangci-lint" ;;
     linux/s390x) BINARIES="golangci-lint" ;;
     linux/riscv64) BINARIES="golangci-lint" ;;
+    netbsd/386) BINARIES="golangci-lint" ;;
+    netbsd/amd64) BINARIES="golangci-lint" ;;
+    netbsd/armv6) BINARIES="golangci-lint" ;;
+    netbsd/armv7) BINARIES="golangci-lint" ;;
     windows/386) BINARIES="golangci-lint" ;;
     windows/amd64) BINARIES="golangci-lint" ;;
     windows/arm64) BINARIES="golangci-lint" ;;
