@@ -70,7 +70,7 @@ require (
 	github.com/mitchellh/go-ps v1.0.0
 	github.com/moricho/tparallel v0.2.1
 	github.com/nakabonne/nestif v0.3.1
-	github.com/nishanths/exhaustive v0.9.3
+	github.com/nishanths/exhaustive v0.9.5
 	github.com/nishanths/predeclared v0.2.2
 	github.com/nunnatsa/ginkgolinter v0.6.0
 	github.com/pkg/errors v0.9.1
