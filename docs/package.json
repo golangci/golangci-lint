@@ -29,7 +29,7 @@
     "gatsby-remark-autolink-headers": "^5.24.0",
     "gatsby-remark-copy-linked-files": "^5.24.0",
     "gatsby-remark-external-links": "^0.0.4",
-    "gatsby-remark-images": "^6.21.0",
+    "gatsby-remark-images": "^6.25.0",
     "gatsby-remark-mermaid": "^2.1.0",
     "gatsby-remark-responsive-iframe": "^5.24.0",
     "gatsby-source-filesystem": "^4.22.0",
