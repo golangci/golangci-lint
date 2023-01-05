@@ -61,6 +61,12 @@ var defaultLintersSettings = LintersSettings{
 	Gosec: GoSecSettings{
 		Concurrency: runtime.NumCPU(),
 	},
+	Gosmopolitan: GosmopolitanSettings{
+		AllowTimeLocal:  false,
+		EscapeHatches:   []string{},
+		IgnoreTests:     true,
+		WatchForScripts: []string{"Han"},
+	},
 	Ifshort: IfshortSettings{
 		MaxDeclLines: 1,
 		MaxDeclChars: 30,
@@ -167,6 +173,7 @@ type LintersSettings struct {
 	Gomodguard       GoModGuardSettings
 	Gosec            GoSecSettings
 	Gosimple         StaticCheckSettings
+	Gosmopolitan     GosmopolitanSettings
 	Govet            GovetSettings
 	Grouper          GrouperSettings
 	Ifshort          IfshortSettings
@@ -447,6 +454,13 @@ type GoSecSettings struct {
 	ExcludeGenerated bool                   `mapstructure:"exclude-generated"`
 	Config           map[string]interface{} `mapstructure:"config"`
 	Concurrency      int                    `mapstructure:"concurrency"`
+}
+
+type GosmopolitanSettings struct {
+	AllowTimeLocal  bool     `mapstructure:"allow-time-local"`
+	EscapeHatches   []string `mapstructure:"escape-hatches"`
+	IgnoreTests     bool     `mapstructure:"ignore-tests"`
+	WatchForScripts []string `mapstructure:"watch-for-scripts"`
 }
 
 type GovetSettings struct {
