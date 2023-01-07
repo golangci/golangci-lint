@@ -74,6 +74,7 @@ linters:
     - errcheck
     - exportloopref
     - funlen
+    - gocheckdirectives
     - gochecknoinits
     - goconst
     - gocritic
