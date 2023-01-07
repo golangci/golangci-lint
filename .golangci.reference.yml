@@ -2052,6 +2052,7 @@ linters:
     - predeclared
     - promlinter
     - reassign
+    - reuseconn
     - revive
     - rowserrcheck
     - scopelint
@@ -2160,6 +2161,7 @@ linters:
     - predeclared
     - promlinter
     - reassign
+    - reuseconn
     - revive
     - rowserrcheck
     - scopelint
