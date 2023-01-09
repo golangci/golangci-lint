@@ -301,6 +301,11 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetPerformance, linter.PresetBugs).
 			WithURL("https://github.com/timakin/bodyclose"),
 
+		linter.NewConfig(golinters.NewConstantcheck()).
+			WithSince("v1.51.0").
+			WithPresets(linter.PresetStyle).
+			WithURL("https://github.com/AntonBraer/constantcheck"),
+
 		linter.NewConfig(golinters.NewContainedCtx()).
 			WithSince("1.44.0").
 			WithPresets(linter.PresetStyle).

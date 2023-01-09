@@ -40,6 +40,8 @@ cloud.google.com/go/storage v1.14.0/go.mod h1:GrKmX003DSIwi9o29oFT7YDnHYwZoctc3f
 dmitri.shuralyov.com/gpu/mtl v0.0.0-20190408044501-666a987793e9/go.mod h1:H6x//7gZCb22OMCxBHrMx7a5I7Hp++hsVxbQ4BYO7hU=
 github.com/Abirdcfly/dupword v0.0.9 h1:MxprGjKq3yDBICXDgEEsyGirIXfMYXkLNT/agPsE1tk=
 github.com/Abirdcfly/dupword v0.0.9/go.mod h1:PzmHVLLZ27MvHSzV7eFmMXSFArWXZPZmfuuziuUrf2g=
+github.com/AntonBraer/constantcheck v1.0.1 h1:kLqRpGI96NJOzvZG8G8fpOUysIg/LRo75B0IvfQt43I=
+github.com/AntonBraer/constantcheck v1.0.1/go.mod h1:X195gIJCZrk8FeowvT8SqSvmkV0U5Jdy8F/mVGRZQoQ=
 github.com/Antonboom/errname v0.1.7 h1:mBBDKvEYwPl4WFFNwec1CZO096G6vzK9vvDQzAwkako=
 github.com/Antonboom/errname v0.1.7/go.mod h1:g0ONh16msHIPgJSGsecu1G/dcF2hlYR/0SddnIAGavU=
 github.com/Antonboom/nilnil v0.1.1 h1:PHhrh5ANKFWRBh7TdYmyyq2gyT2lotnvFvvFbylF81Q=
