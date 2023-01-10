@@ -1,5 +1,5 @@
 //golangcitest:args -Egocheckdirectives
-package testdat
+package testdata
 
 import _ "embed"
 
