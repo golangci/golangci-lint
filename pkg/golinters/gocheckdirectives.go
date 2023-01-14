@@ -1,24 +1,24 @@
 package golinters
 
 import (
-	"github.com/leighmcculloch/gocheckdirectives/checkdirectives"
+	"4d63.com/gocheckcompilerdirectives/checkcompilerdirectives"
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 )
 
-func NewGocheckdirectives() *goanalysis.Linter {
-	gocheckdirectives := checkdirectives.Analyzer()
+func NewGocheckcompilerdirectives() *goanalysis.Linter {
+	gocheckcompilerdirectives := checkcompilerdirectives.Analyzer()
 
-	// gocheckdirectives has no config.
+	// gocheckcompilerdirectives has no config.
 	linterConfig := map[string]map[string]interface{}{
-		gocheckdirectives.Name: {},
+		gocheckcompilerdirectives.Name: {},
 	}
 
 	return goanalysis.NewLinter(
-		gocheckdirectives.Name,
-		gocheckdirectives.Doc,
-		[]*analysis.Analyzer{gocheckdirectives},
+		gocheckcompilerdirectives.Name,
+		gocheckcompilerdirectives.Doc,
+		[]*analysis.Analyzer{gocheckcompilerdirectives},
 		linterConfig,
 	).WithLoadMode(goanalysis.LoadModeSyntax)
 }

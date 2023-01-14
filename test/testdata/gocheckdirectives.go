@@ -1,4 +1,4 @@
-//golangcitest:args -Egocheckdirectives
+//golangcitest:args -Egocheckcompilerdirectives
 package testdata
 
 import _ "embed"
@@ -14,8 +14,8 @@ var Value string
 
 // Problematic cases:
 
-// go:embed // want "go directive contains leading space: // go:embed"
+// go:embed // want "compiler directive contains space: // go:embed"
 
-//    go:embed // want "go directive contains leading space: //    go:embed"
+//    go:embed // want "compiler directive contains space: //    go:embed"
 
-//go:genrate // want "unrecognized go directive: //go:genrate"
+//go:genrate // want "compiler directive unrecognized: //go:genrate"
