@@ -334,8 +334,8 @@ github.com/kyoh86/exportloopref v0.1.11 h1:1Z0bcmTypkL3Q4k+IDHMWTcnCliEZcaPiIe0/
 github.com/kyoh86/exportloopref v0.1.11/go.mod h1:qkV4UF1zGl6EkF1ox8L5t9SwyeBAZ3qLMd6up458uqA=
 github.com/ldez/gomoddirectives v0.2.3 h1:y7MBaisZVDYmKvt9/l1mjNCiSA1BVn34U0ObUcJwlhA=
 github.com/ldez/gomoddirectives v0.2.3/go.mod h1:cpgBogWITnCfRq2qGoDkKMEVSaarhdBr6g8G04uz6d0=
-github.com/ldez/tagliatelle v0.3.1 h1:3BqVVlReVUZwafJUwQ+oxbx2BEX2vUG4Yu/NOfMiKiM=
-github.com/ldez/tagliatelle v0.3.1/go.mod h1:8s6WJQwEYHbKZDsp/LjArytKOG8qaMrKQQ3mFukHs88=
+github.com/ldez/tagliatelle v0.4.0 h1:sylp7d9kh6AdXN2DpVGHBRb5guTVAgOxqNGhbqc4b1c=
+github.com/ldez/tagliatelle v0.4.0/go.mod h1:mNtTfrHy2haaBAw+VT7IBV6VXBThS7TCreYWbBcJ87I=
 github.com/leonklingele/grouper v1.1.1 h1:suWXRU57D4/Enn6pXR0QVqqWWrnJ9Osrz+5rjt8ivzU=
 github.com/leonklingele/grouper v1.1.1/go.mod h1:uk3I3uDfi9B6PeUjsCKi6ndcf63Uy7snXgR4yDYQVDY=
 github.com/lib/pq v1.0.0/go.mod h1:5WUZQaWbwv1U+lTReE5YruASi9Al49XbQIvNi/34Woo=

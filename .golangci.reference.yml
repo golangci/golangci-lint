@@ -1689,11 +1689,11 @@ linters-settings:
       # Use the struct field name to check the name of the struct tag.
       # Default: false
       use-field-name: true
-      # `camel` is used for `json` and `yaml` (can be overridden)
+      # `camel` is used for `json` and `yaml`, and `header` is used for `header` (can be overridden)
       # Default: {}
       rules:
         # Any struct tag type can be used.
-        # Support string case: `camel`, `pascal`, `kebab`, `snake`, `goCamel`, `goPascal`, `goKebab`, `goSnake`, `upper`, `lower`
+        # Support string case: `camel`, `pascal`, `kebab`, `snake`, `goCamel`, `goPascal`, `goKebab`, `goSnake`, `upper`, `lower`, `header`
         json: camel
         yaml: camel
         xml: camel
