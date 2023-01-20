@@ -14,6 +14,6 @@ func NewGocheckcompilerdirectives() *goanalysis.Linter {
 		gocheckcompilerdirectives.Name,
 		gocheckcompilerdirectives.Doc,
 		[]*analysis.Analyzer{gocheckcompilerdirectives},
-		linterConfig,
+		nil,
 	).WithLoadMode(goanalysis.LoadModeSyntax)
 }
