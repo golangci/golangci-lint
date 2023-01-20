@@ -13,6 +13,7 @@ builds:
       - windows
       - linux
       - freebsd
+      - netbsd
     goarch:
       - amd64
       - arm64
@@ -23,6 +24,7 @@ builds:
       - mips64
       - mips64le
       - riscv64
+      - loong64
     goarm:
       - 6
       - 7

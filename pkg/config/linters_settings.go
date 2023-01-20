@@ -150,6 +150,7 @@ type LintersSettings struct {
 	Forbidigo        ForbidigoSettings
 	Funlen           FunlenSettings
 	Gci              GciSettings
+	GinkgoLinter     GinkgoLinterSettings
 	Gocognit         GocognitSettings
 	Goconst          GoConstSettings
 	Gocritic         GoCriticSettings
@@ -289,6 +290,7 @@ type ExhaustiveSettings struct {
 	CheckGenerated             bool     `mapstructure:"check-generated"`
 	DefaultSignifiesExhaustive bool     `mapstructure:"default-signifies-exhaustive"`
 	IgnoreEnumMembers          string   `mapstructure:"ignore-enum-members"`
+	IgnoreEnumTypes            string   `mapstructure:"ignore-enum-types"`
 	PackageScopeOnly           bool     `mapstructure:"package-scope-only"`
 	ExplicitExhaustiveMap      bool     `mapstructure:"explicit-exhaustive-map"`
 	ExplicitExhaustiveSwitch   bool     `mapstructure:"explicit-exhaustive-switch"`
@@ -318,6 +320,12 @@ type GciSettings struct {
 	Sections      []string `mapstructure:"sections"`
 	SkipGenerated bool     `mapstructure:"skip-generated"`
 	CustomOrder   bool     `mapstructure:"custom-order"`
+}
+
+type GinkgoLinterSettings struct {
+	SuppressLenAssertion bool `mapstructure:"suppress-len-assertion"`
+	SuppressNilAssertion bool `mapstructure:"suppress-nil-assertion"`
+	SuppressErrAssertion bool `mapstructure:"suppress-err-assertion"`
 }
 
 type GocognitSettings struct {
@@ -712,7 +720,7 @@ type WSLSettings struct {
 	AllowCuddleDeclaration           bool     `mapstructure:"allow-cuddle-declarations"`
 	AllowCuddleWithCalls             []string `mapstructure:"allow-cuddle-with-calls"`
 	AllowCuddleWithRHS               []string `mapstructure:"allow-cuddle-with-rhs"`
-	ForceCuddleErrCheckAndAssign     bool     `mapstructure:"enforce-err-cuddling"`
+	ForceCuddleErrCheckAndAssign     bool     `mapstructure:"force-err-cuddling"`
 	ErrorVariableNames               []string `mapstructure:"error-variable-names"`
 	ForceExclusiveShortDeclarations  bool     `mapstructure:"force-short-decl-cuddling"`
 }
