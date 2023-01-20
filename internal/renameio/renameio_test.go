@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
+//go:build !plan9
 // +build !plan9
 
 package renameio
@@ -9,7 +10,6 @@ package renameio
 import (
 	"encoding/binary"
 	"math/rand"
-	"os"
 	"path/filepath"
 	"runtime"
 	"sync"
@@ -22,12 +22,7 @@ import (
 )
 
 func TestConcurrentReadsAndWrites(t *testing.T) {
-	dir, err := os.MkdirTemp("", "renameio")
-	if err != nil {
-		t.Fatal(err)
-	}
-	defer os.RemoveAll(dir)
-	path := filepath.Join(dir, "blob.bin")
+	path := filepath.Join(t.TempDir(), "blob.bin")
 
 	const chunkWords = 8 << 10
 	buf := make([]byte, 2*chunkWords*8)
