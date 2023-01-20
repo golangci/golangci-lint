@@ -10,11 +10,6 @@ import (
 func NewGocheckcompilerdirectives() *goanalysis.Linter {
 	gocheckcompilerdirectives := checkcompilerdirectives.Analyzer()
 
-	// gocheckcompilerdirectives has no config.
-	linterConfig := map[string]map[string]interface{}{
-		gocheckcompilerdirectives.Name: {},
-	}
-
 	return goanalysis.NewLinter(
 		gocheckcompilerdirectives.Name,
 		gocheckcompilerdirectives.Doc,
