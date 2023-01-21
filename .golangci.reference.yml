@@ -2014,6 +2014,7 @@ linters:
     - funlen
     - gci
     - ginkgolinter
+    - gocheckcompilerdirectives
     - gochecknoglobals
     - gochecknoinits
     - gocognit
@@ -2123,6 +2124,7 @@ linters:
     - funlen
     - gci
     - ginkgolinter
+    - gocheckcompilerdirectives
     - gochecknoglobals
     - gochecknoinits
     - gocognit
