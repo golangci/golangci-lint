@@ -1,4 +1,5 @@
 //golangcitest:args -Emusttag
+//golangcitest:config_path testdata/configs/musttag.yml
 package testdata
 
 import (
@@ -7,7 +8,7 @@ import (
 )
 
 // builtin functions:
-func musttagJSON() {
+func musttagJSONCustom() {
 	var user struct { // want `exported fields should be annotated with the "json" tag`
 		Name  string
 		Email string `json:"email"`
@@ -17,8 +18,8 @@ func musttagJSON() {
 }
 
 // custom functions from config:
-func musttagASN1() {
-	var user struct {
+func musttagASN1Custom() {
+	var user struct { // want `exported fields should be annotated with the "asn1" tag`
 		Name  string
 		Email string `asn1:"email"`
 	}

@@ -1211,7 +1211,7 @@ linters-settings:
 
   musttag:
     # A set of custom functions to check in addition to the builtin ones.
-    # Default: []
+    # Default: json, xml, gopkg.in/yaml.v3, BurntSushi/toml, mitchellh/mapstructure
     functions:
         # The full name of the function, including the package.
       - name: github.com/jmoiron/sqlx.Get
