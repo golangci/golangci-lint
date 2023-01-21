@@ -10,6 +10,7 @@ import (
 
 func NewMustTag(setting *config.MustTagSettings) *goanalysis.Linter {
 	var funcs []musttag.Func
+
 	if setting != nil {
 		for _, fn := range setting.Functions {
 			funcs = append(funcs, musttag.Func{

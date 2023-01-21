@@ -543,7 +543,7 @@ type MustTagSettings struct {
 	Functions []struct {
 		Name   string `mapstructure:"name"`
 		Tag    string `mapstructure:"tag"`
-		ArgPos int    `mapstructure:"argpos"`
+		ArgPos int    `mapstructure:"arg-pos"`
 	} `mapstructure:"functions"`
 }
 

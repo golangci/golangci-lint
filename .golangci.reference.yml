@@ -1218,7 +1218,7 @@ linters-settings:
         # The struct tag whose presence should be ensured.
         tag: db
         # The position of the argument to check.
-        argpos: 1
+        arg-pos: 1
 
   nakedret:
     # Make an issue if func has more lines of code than this setting, and it has naked returns.
