@@ -440,7 +440,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/nunnatsa/ginkgolinter"),
 
-		linter.NewConfig(golinters.NewGocheckcompilerdirectives()).
+		linter.NewConfig(golinters.NewGoCheckCompilerDirectives()).
 			WithSince("v1.51.0").
 			WithPresets(linter.PresetBugs).
 			WithURL("https://github.com/leighmcculloch/gocheckcompilerdirectives"),

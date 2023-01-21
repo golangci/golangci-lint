@@ -7,13 +7,13 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 )
 
-func NewGocheckcompilerdirectives() *goanalysis.Linter {
-	gocheckcompilerdirectives := checkcompilerdirectives.Analyzer()
+func NewGoCheckCompilerDirectives() *goanalysis.Linter {
+	a := checkcompilerdirectives.Analyzer()
 
 	return goanalysis.NewLinter(
-		gocheckcompilerdirectives.Name,
-		gocheckcompilerdirectives.Doc,
-		[]*analysis.Analyzer{gocheckcompilerdirectives},
+		a.Name,
+		a.Doc,
+		[]*analysis.Analyzer{a},
 		nil,
 	).WithLoadMode(goanalysis.LoadModeSyntax)
 }
