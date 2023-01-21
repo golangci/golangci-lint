@@ -1,0 +1,9 @@
+linters-settings:
+  musttag:
+    functions:
+      - name: encoding/asn1.Marshal
+        tag: asn1
+        arg-pos: 0
+      - name: encoding/asn1.Unmarshal
+        tag: asn1
+        arg-pos: 1

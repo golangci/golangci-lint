@@ -179,6 +179,7 @@ type LintersSettings struct {
 	Makezero         MakezeroSettings
 	Maligned         MalignedSettings
 	Misspell         MisspellSettings
+	MustTag          MustTagSettings
 	Nakedret         NakedretSettings
 	Nestif           NestifSettings
 	NilNil           NilNilSettings
@@ -536,6 +537,14 @@ type MalignedSettings struct {
 type MisspellSettings struct {
 	Locale      string
 	IgnoreWords []string `mapstructure:"ignore-words"`
+}
+
+type MustTagSettings struct {
+	Functions []struct {
+		Name   string `mapstructure:"name"`
+		Tag    string `mapstructure:"tag"`
+		ArgPos int    `mapstructure:"arg-pos"`
+	} `mapstructure:"functions"`
 }
 
 type NakedretSettings struct {

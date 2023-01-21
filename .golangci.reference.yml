@@ -1209,6 +1209,17 @@ linters-settings:
     ignore-words:
       - someword
 
+  musttag:
+    # A set of custom functions to check in addition to the builtin ones.
+    # Default: json, xml, gopkg.in/yaml.v3, BurntSushi/toml, mitchellh/mapstructure
+    functions:
+        # The full name of the function, including the package.
+      - name: github.com/jmoiron/sqlx.Get
+        # The struct tag whose presence should be ensured.
+        tag: db
+        # The position of the argument to check.
+        arg-pos: 1
+
   nakedret:
     # Make an issue if func has more lines of code than this setting, and it has naked returns.
     # Default: 30
@@ -2037,6 +2048,7 @@ linters:
     - makezero
     - maligned
     - misspell
+    - musttag
     - nakedret
     - nestif
     - nilerr
@@ -2145,6 +2157,7 @@ linters:
     - makezero
     - maligned
     - misspell
+    - musttag
     - nakedret
     - nestif
     - nilerr
