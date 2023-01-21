@@ -1225,6 +1225,7 @@ linters-settings:
 
   nakedefer:
     # List of regular expressions to exclude function names from check.
+    # Default: []
     exclude:
       - 'os\.(Create|WriteFile|Chmod)'
       - 'fmt\.Print.*'
