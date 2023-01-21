@@ -31,7 +31,7 @@ func NewText(printIssuedLine, useColors, printLinterName bool, log logutils.Log,
 	}
 }
 
-func (p Text) SprintfColored(ca color.Attribute, format string, args ...interface{}) string {
+func (p *Text) SprintfColored(ca color.Attribute, format string, args ...interface{}) string {
 	if !p.useColors {
 		return fmt.Sprintf(format, args...)
 	}
@@ -55,7 +55,7 @@ func (p *Text) Print(ctx context.Context, issues []result.Issue) error {
 	return nil
 }
 
-func (p Text) printIssue(i *result.Issue) {
+func (p *Text) printIssue(i *result.Issue) {
 	text := p.SprintfColored(color.FgRed, "%s", strings.TrimSpace(i.Text))
 	if p.printLinterName {
 		text += fmt.Sprintf(" (%s)", i.FromLinter)
@@ -67,7 +67,7 @@ func (p Text) printIssue(i *result.Issue) {
 	fmt.Fprintf(p.w, "%s: %s\n", pos, text)
 }
 
-func (p Text) printSourceCode(i *result.Issue) {
+func (p *Text) printSourceCode(i *result.Issue) {
 	for _, line := range i.SourceLines {
 		fmt.Fprintln(p.w, line)
 	}
