@@ -448,6 +448,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		linter.NewConfig(golinters.NewGochecknoglobals()).
 			WithSince("v1.12.0").
 			WithPresets(linter.PresetStyle).
+			WithLoadForGoAnalysis().
 			WithURL("https://github.com/leighmcculloch/gochecknoglobals"),
 
 		linter.NewConfig(golinters.NewGochecknoinits()).
