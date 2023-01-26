@@ -3,7 +3,8 @@ module github.com/golangci/golangci-lint
 go 1.19
 
 require (
-	4d63.com/gochecknoglobals v0.1.0
+	4d63.com/gocheckcompilerdirectives v1.2.0
+	4d63.com/gochecknoglobals v0.2.1
 	github.com/Abirdcfly/dupword v0.0.9
 	github.com/Antonboom/errname v0.1.7
 	github.com/Antonboom/nilnil v0.1.1
@@ -52,13 +53,14 @@ require (
 	github.com/jingyugao/rowserrcheck v1.1.1
 	github.com/jirfag/go-printf-func-name v0.0.0-20200119135958-7558a9eaa5af
 	github.com/julz/importas v0.1.0
-	github.com/kisielk/errcheck v1.6.2
+	github.com/junk1tm/musttag v0.4.3
+	github.com/kisielk/errcheck v1.6.3
 	github.com/kkHAIKE/contextcheck v1.1.3
 	github.com/kulti/thelper v0.6.3
 	github.com/kunwardeep/paralleltest v1.0.6
 	github.com/kyoh86/exportloopref v0.1.11
 	github.com/ldez/gomoddirectives v0.2.3
-	github.com/ldez/tagliatelle v0.3.1
+	github.com/ldez/tagliatelle v0.4.0
 	github.com/leonklingele/grouper v1.1.1
 	github.com/lufeee/execinquery v1.2.1
 	github.com/maratori/testableexamples v1.0.0
@@ -73,7 +75,7 @@ require (
 	github.com/nakabonne/nestif v0.3.1
 	github.com/nishanths/exhaustive v0.9.5
 	github.com/nishanths/predeclared v0.2.2
-	github.com/nunnatsa/ginkgolinter v0.6.0
+	github.com/nunnatsa/ginkgolinter v0.7.1
 	github.com/pkg/errors v0.9.1
 	github.com/polyfloyd/go-errorlint v1.0.6
 	github.com/quasilyte/go-ruleguard/dsl v0.3.22

@@ -31,7 +31,7 @@ func NewMaxPerFileFromLinter(cfg *config.Config) *MaxPerFileFromLinter {
 	}
 }
 
-func (p MaxPerFileFromLinter) Name() string {
+func (p *MaxPerFileFromLinter) Name() string {
 	return "max_per_file_from_linter"
 }
 
@@ -56,4 +56,4 @@ func (p *MaxPerFileFromLinter) Process(issues []result.Issue) ([]result.Issue, e
 	}), nil
 }
 
-func (p MaxPerFileFromLinter) Finish() {}
+func (p *MaxPerFileFromLinter) Finish() {}

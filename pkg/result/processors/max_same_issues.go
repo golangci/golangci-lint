@@ -28,7 +28,7 @@ func NewMaxSameIssues(limit int, log logutils.Log, cfg *config.Config) *MaxSameI
 	}
 }
 
-func (MaxSameIssues) Name() string {
+func (p *MaxSameIssues) Name() string {
 	return "max_same_issues"
 }
 
@@ -48,7 +48,7 @@ func (p *MaxSameIssues) Process(issues []result.Issue) ([]result.Issue, error) {
 	}), nil
 }
 
-func (p MaxSameIssues) Finish() {
+func (p *MaxSameIssues) Finish() {
 	walkStringToIntMapSortedByValue(p.tc, func(text string, count int) {
 		if count > p.limit {
 			p.log.Infof("%d/%d issues with text %q were hidden, use --max-same-issues",

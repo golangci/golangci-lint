@@ -85,7 +85,7 @@ func NewNolint(log logutils.Log, dbManager *lintersdb.Manager, enabledLinters ma
 
 var _ Processor = &Nolint{}
 
-func (p Nolint) Name() string {
+func (p *Nolint) Name() string {
 	return "nolint"
 }
 
@@ -284,7 +284,7 @@ func (p *Nolint) extractInlineRangeFromComment(text string, g ast.Node, fset *to
 	return buildRange(linters)
 }
 
-func (p Nolint) Finish() {
+func (p *Nolint) Finish() {
 	if len(p.unknownLintersSet) == 0 {
 		return
 	}

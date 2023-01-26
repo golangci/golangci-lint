@@ -26,7 +26,7 @@ func NewTab(printLinterName bool, log logutils.Log, w io.Writer) *Tab {
 	}
 }
 
-func (p Tab) SprintfColored(ca color.Attribute, format string, args ...interface{}) string {
+func (p *Tab) SprintfColored(ca color.Attribute, format string, args ...interface{}) string {
 	c := color.New(ca)
 	return c.Sprintf(format, args...)
 }
@@ -45,7 +45,7 @@ func (p *Tab) Print(ctx context.Context, issues []result.Issue) error {
 	return nil
 }
 
-func (p Tab) printIssue(i *result.Issue, w io.Writer) {
+func (p *Tab) printIssue(i *result.Issue, w io.Writer) {
 	text := p.SprintfColored(color.FgRed, "%s", i.Text)
 	if p.printLinterName {
 		text = fmt.Sprintf("%s\t%s", i.FromLinter, text)

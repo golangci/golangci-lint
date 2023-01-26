@@ -25,5 +25,5 @@ func NewGochecknoglobals() *goanalysis.Linter {
 		gochecknoglobals.Doc,
 		[]*analysis.Analyzer{gochecknoglobals},
 		linterConfig,
-	).WithLoadMode(goanalysis.LoadModeSyntax)
+	).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }

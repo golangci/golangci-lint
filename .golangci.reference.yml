@@ -1209,6 +1209,17 @@ linters-settings:
     ignore-words:
       - someword
 
+  musttag:
+    # A set of custom functions to check in addition to the builtin ones.
+    # Default: json, xml, gopkg.in/yaml.v3, BurntSushi/toml, mitchellh/mapstructure
+    functions:
+        # The full name of the function, including the package.
+      - name: github.com/jmoiron/sqlx.Get
+        # The struct tag whose presence should be ensured.
+        tag: db
+        # The position of the argument to check.
+        arg-pos: 1
+
   nakedret:
     # Make an issue if func has more lines of code than this setting, and it has naked returns.
     # Default: 30
@@ -1689,11 +1700,11 @@ linters-settings:
       # Use the struct field name to check the name of the struct tag.
       # Default: false
       use-field-name: true
-      # `camel` is used for `json` and `yaml` (can be overridden)
+      # `camel` is used for `json` and `yaml`, and `header` is used for `header` (can be overridden)
       # Default: {}
       rules:
         # Any struct tag type can be used.
-        # Support string case: `camel`, `pascal`, `kebab`, `snake`, `goCamel`, `goPascal`, `goKebab`, `goSnake`, `upper`, `lower`
+        # Support string case: `camel`, `pascal`, `kebab`, `snake`, `goCamel`, `goPascal`, `goKebab`, `goSnake`, `upper`, `lower`, `header`
         json: camel
         yaml: camel
         xml: camel
@@ -2004,6 +2015,7 @@ linters:
     - funlen
     - gci
     - ginkgolinter
+    - gocheckcompilerdirectives
     - gochecknoglobals
     - gochecknoinits
     - gocognit
@@ -2038,6 +2050,7 @@ linters:
     - makezero
     - maligned
     - misspell
+    - musttag
     - nakedret
     - nestif
     - nilerr
@@ -2113,6 +2126,7 @@ linters:
     - funlen
     - gci
     - ginkgolinter
+    - gocheckcompilerdirectives
     - gochecknoglobals
     - gochecknoinits
     - gocognit
@@ -2147,6 +2161,7 @@ linters:
     - makezero
     - maligned
     - misspell
+    - musttag
     - nakedret
     - nestif
     - nilerr
