@@ -274,6 +274,9 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		if unusedCfg != nil && unusedCfg.GoVersion == "" {
 			unusedCfg.GoVersion = m.cfg.Run.Go
 		}
+		if goimportsCfg != nil && goimportsCfg.LocalPrefixes == "" && goimportsCfg.AutoLocalPrefix {
+			goimportsCfg.LocalPrefixes = m.cfg.Run.Module
+		}
 	}
 
 	const megacheckName = "megacheck"

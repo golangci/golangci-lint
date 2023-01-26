@@ -1,0 +1,3 @@
+linters-settings:
+  goimports:
+    auto-local-prefix: true

@@ -68,3 +68,8 @@ func DetectGoVersion() string {
 
 	return "1.17"
 }
+
+func DetectGoModuleName() string {
+	file, _ := gomoddirectives.GetModuleFile()
+	return file.Module.Mod.Path
+}

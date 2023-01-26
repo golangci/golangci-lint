@@ -110,8 +110,14 @@ func NewExecutor(version, commit, date string) *Executor {
 		e.log.Fatalf("Can't read config: %s", err)
 	}
 
-	if (commandLineCfg == nil || commandLineCfg.Run.Go == "") && e.cfg != nil && e.cfg.Run.Go == "" {
-		e.cfg.Run.Go = config.DetectGoVersion()
+	if e.cfg != nil {
+		if (commandLineCfg == nil || commandLineCfg.Run.Go == "") && e.cfg.Run.Go == "" {
+			e.cfg.Run.Go = config.DetectGoVersion()
+		}
+
+		if (commandLineCfg == nil || commandLineCfg.Run.Module == "") && e.cfg.Run.Module == "" {
+			e.cfg.Run.Module = config.DetectGoModuleName()
+		}
 	}
 
 	// recreate after getting config

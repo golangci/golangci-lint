@@ -671,6 +671,9 @@ linters-settings:
     # with the given prefixes are grouped after 3rd-party packages.
     # Default: ""
     local-prefixes: github.com/org/project
+    # If set to true and local-prefixes is empty, the module name from go.mod
+    # will automatically be used as the local prefix.
+    auto-local-prefix: false
 
   golint:
     # Minimal confidence for issues.

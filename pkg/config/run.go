@@ -17,7 +17,8 @@ type Run struct {
 
 	Args []string
 
-	Go string `mapstructure:"go"`
+	Go     string `mapstructure:"go"`
+	Module string `mapstructure:"module"`
 
 	BuildTags           []string `mapstructure:"build-tags"`
 	ModulesDownloadMode string   `mapstructure:"modules-download-mode"`
