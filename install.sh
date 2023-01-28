@@ -317,7 +317,7 @@ http_copy() {
 github_release() {
   owner_repo=$1
   version=$2
-  if [ -z "$version" ]; then
+  if [ -z "$version" ] || [ "$version" = "latest" ]; then
       giturl="https://api.github.com/repos/${owner_repo}/releases/latest"
   else
       giturl="https://api.github.com/repos/${owner_repo}/releases/tags/${version}"
