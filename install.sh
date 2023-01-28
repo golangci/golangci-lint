@@ -317,8 +317,11 @@ http_copy() {
 github_release() {
   owner_repo=$1
   version=$2
-  test -z "$version" && version="latest"
-  giturl="https://api.github.com/repos/${owner_repo}/releases/tags/${version}"
+  if [ -z "$version" ]; then
+      giturl="https://api.github.com/repos/${owner_repo}/releases/tags/${version}"
+  else
+      giturl="https://api.github.com/repos/${owner_repo}/releases/latest"
+  fi
   json=$(http_copy "$giturl" "Accept:application/json")
   test -z "$json" && return 1
   version=$(echo "$json" | tr -s '\n' ' ' | sed 's/.*"tag_name": "//' | sed 's/".*//')
