@@ -318,9 +318,9 @@ github_release() {
   owner_repo=$1
   version=$2
   if [ -z "$version" ]; then
-      giturl="https://api.github.com/repos/${owner_repo}/releases/tags/${version}"
-  else
       giturl="https://api.github.com/repos/${owner_repo}/releases/latest"
+  else
+      giturl="https://api.github.com/repos/${owner_repo}/releases/tags/${version}"
   fi
   json=$(http_copy "$giturl" "Accept:application/json")
   test -z "$json" && return 1
