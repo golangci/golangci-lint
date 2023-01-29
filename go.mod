@@ -67,7 +67,7 @@ require (
 	github.com/matoous/godox v0.0.0-20210227103229-6504466cf951 // v1.0
 	github.com/mattn/go-colorable v0.1.13
 	github.com/mbilski/exhaustivestruct v1.2.0
-	github.com/mgechev/revive v1.2.4
+	github.com/mgechev/revive v1.2.5
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/mitchellh/go-ps v1.0.0
 	github.com/moricho/tparallel v0.2.1
@@ -122,7 +122,7 @@ require (
 	github.com/Masterminds/semver v1.5.0 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect
-	github.com/chavacava/garif v0.0.0-20220630083739-93517212f375 // indirect
+	github.com/chavacava/garif v0.0.0-20221024190013-b3ef35877348 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/ettle/strcase v0.1.1 // indirect
 	github.com/fatih/structtag v1.2.0 // indirect
