@@ -170,6 +170,7 @@ require (
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/stretchr/objx v0.5.0 // indirect
 	github.com/subosito/gotenv v1.4.1 // indirect
+	github.com/t-yuki/gocover-cobertura v0.0.0-20180217150009-aaee18c8195c // indirect
 	github.com/tklauser/go-sysconf v0.3.11 // indirect
 	github.com/tklauser/numcpus v0.6.0 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
@@ -188,5 +189,3 @@ require (
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	mvdan.cc/lint v0.0.0-20170908181259-adc824a0674b // indirect
 )
-
-require github.com/t-yuki/gocover-cobertura v0.0.0-20180217150009-aaee18c8195c // indirect
