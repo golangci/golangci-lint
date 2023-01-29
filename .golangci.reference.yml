@@ -1018,48 +1018,51 @@ linters-settings:
       - unusedwrite
 
     # Enable all analyzers.
+    # enable-all and disable-all cannot both be true, therefore this section is
+    # commented out.
+    #
     # Default: false
-    enable-all: true
+    # enable-all: true
     # Disable analyzers by name.
     # Run `go tool vet help` to see all analyzers.
     # Default: []
-    disable:
-      - asmdecl
-      - assign
-      - atomic
-      - atomicalign
-      - bools
-      - buildtag
-      - cgocall
-      - composites
-      - copylocks
-      - deepequalerrors
-      - errorsas
-      - fieldalignment
-      - findcall
-      - framepointer
-      - httpresponse
-      - ifaceassert
-      - loopclosure
-      - lostcancel
-      - nilfunc
-      - nilness
-      - printf
-      - reflectvaluecompare
-      - shadow
-      - shift
-      - sigchanyzer
-      - sortslice
-      - stdmethods
-      - stringintconv
-      - structtag
-      - testinggoroutine
-      - tests
-      - unmarshal
-      - unreachable
-      - unsafeptr
-      - unusedresult
-      - unusedwrite
+    # disable:
+    #   - asmdecl
+    #   - assign
+    #   - atomic
+    #   - atomicalign
+    #   - bools
+    #   - buildtag
+    #   - cgocall
+    #   - composites
+    #   - copylocks
+    #   - deepequalerrors
+    #   - errorsas
+    #   - fieldalignment
+    #   - findcall
+    #   - framepointer
+    #   - httpresponse
+    #   - ifaceassert
+    #   - loopclosure
+    #   - lostcancel
+    #   - nilfunc
+    #   - nilness
+    #   - printf
+    #   - reflectvaluecompare
+    #   - shadow
+    #   - shift
+    #   - sigchanyzer
+    #   - sortslice
+    #   - stdmethods
+    #   - stringintconv
+    #   - structtag
+    #   - testinggoroutine
+    #   - tests
+    #   - unmarshal
+    #   - unreachable
+    #   - unsafeptr
+    #   - unusedresult
+    #   - unusedwrite
 
   grouper:
     # Require the use of a single global 'const' declaration only.
