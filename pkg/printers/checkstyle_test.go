@@ -1,10 +1,10 @@
-//nolint:dupl
 package printers
 
 import (
 	"bytes"
 	"context"
 	"go/token"
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -51,7 +51,7 @@ func TestCheckstyle_Print(t *testing.T) {
 	require.NoError(t, err)
 
 	//nolint:lll
-	expected := "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\r\n<checkstyle version=\"5.0\">\r\n  <file name=\"path/to/filea.go\">\r\n    <error column=\"4\" line=\"10\" message=\"some issue\" severity=\"warning\" source=\"linter-a\">\r\n    </error>\r\n  </file>\r\n  <file name=\"path/to/fileb.go\">\r\n    <error column=\"9\" line=\"300\" message=\"another issue\" severity=\"error\" source=\"linter-b\">\r\n    </error>\r\n  </file>\r\n</checkstyle>\n"
+	expected := "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<checkstyle version=\"5.0\">\n  <file name=\"path/to/filea.go\">\n    <error column=\"4\" line=\"10\" message=\"some issue\" severity=\"warning\" source=\"linter-a\"></error>\n  </file>\n  <file name=\"path/to/fileb.go\">\n    <error column=\"9\" line=\"300\" message=\"another issue\" severity=\"error\" source=\"linter-b\"></error>\n  </file>\n</checkstyle>\n"
 
-	assert.Equal(t, expected, buf.String())
+	assert.Equal(t, expected, strings.ReplaceAll(buf.String(), "\r", ""))
 }
