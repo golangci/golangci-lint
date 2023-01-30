@@ -84,7 +84,7 @@ jobs:
         run: docker login -u golangci -p ${{ secrets.GOLANGCI_LINT_DOCKER_TOKEN }}
 
       - name: Build and publish ${{ matrix.target.Dockerfile }}
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           context: .
           file: ${{ matrix.target.Dockerfile }}
