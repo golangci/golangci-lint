@@ -2064,6 +2064,7 @@ linters:
     - nlreturn
     - noctx
     - nolintlint
+    - nomainreturn
     - nonamedreturns
     - nosnakecase
     - nosprintfhostport
@@ -2174,6 +2175,7 @@ linters:
     - nlreturn
     - noctx
     - nolintlint
+    - nomainreturn
     - nonamedreturns
     - nosnakecase
     - nosprintfhostport

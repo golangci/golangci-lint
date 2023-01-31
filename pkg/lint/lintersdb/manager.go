@@ -679,6 +679,11 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetPerformance, linter.PresetBugs).
 			WithURL("https://github.com/sonatard/noctx"),
 
+		linter.NewConfig(golinters.NewNoMainReturn()).
+			WithSince("v1.51.0").
+			WithPresets(linter.PresetBugs).
+			WithURL("https://github.com/bedakb/nomainreturn"),
+
 		linter.NewConfig(golinters.NewNoNamedReturns(noNamedReturnsCfg)).
 			WithSince("v1.46.0").
 			WithLoadForGoAnalysis().
