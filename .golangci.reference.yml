@@ -2096,6 +2096,7 @@ linters:
     - whitespace
     - wrapcheck
     - wsl
+    - zero
 
   # Enable all available linters.
   # Default: false
@@ -2206,6 +2207,7 @@ linters:
     - whitespace
     - wrapcheck
     - wsl
+    - zero
 
   # Enable presets.
   # https://golangci-lint.run/usage/linters
