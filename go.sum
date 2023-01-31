@@ -357,6 +357,8 @@ github.com/matoous/godox v0.0.0-20210227103229-6504466cf951 h1:pWxk9e//NbPwfxat7
 github.com/matoous/godox v0.0.0-20210227103229-6504466cf951/go.mod h1:1BELzlh859Sh1c6+90blK8lbYy0kwQf1bYlBhBysy1s=
 github.com/matryer/is v1.4.0 h1:sosSmIWwkYITGrxZ25ULNDeKiMNzFSr4V/eqBQP0PeE=
 github.com/matryer/is v1.4.0/go.mod h1:8I/i5uYgLzgsgEloJE1U6xx5HkBQpAZvepWuujKwMRU=
+github.com/matthewloring/validjson v0.2.0 h1:vmqsgBrKoKSA3CcRtGcrnJyittDXbGwg2PLwkeoBDHs=
+github.com/matthewloring/validjson v0.2.0/go.mod h1:gDZkywm1HGWITqIwAxCs5eL5zdjAYZl0qcprWcRqf4s=
 github.com/mattn/go-colorable v0.1.13 h1:fFA4WZxdEF4tXPZVKMLwD8oUnCTTo08duU7wxecdEvA=
 github.com/mattn/go-colorable v0.1.13/go.mod h1:7S9/ev0klgBDR4GtXTXX8a3vIGJpMovkB8vQcUbaXHg=
 github.com/mattn/go-isatty v0.0.16/go.mod h1:kYGgaQfpe5nmfYZH+SKPsOc2e4SrIfOl2e/yFXSvRLM=

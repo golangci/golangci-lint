@@ -835,6 +835,11 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/sashamelentyev/usestdlibvars"),
 
+		linter.NewConfig(golinters.NewValidJSON()).
+			WithSince("v1.51.0").
+			WithPresets(linter.PresetBugs).
+			WithURL("https://github.com/matthewloring/validjson"),
+
 		linter.NewConfig(golinters.NewVarcheck(varcheckCfg)).
 			WithSince("v1.0.0").
 			WithLoadForGoAnalysis().
