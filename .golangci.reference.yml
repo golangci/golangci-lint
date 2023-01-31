@@ -2086,6 +2086,7 @@ linters:
     - thelper
     - tparallel
     - typecheck
+    - typeswitch
     - unconvert
     - unparam
     - unused
@@ -2196,6 +2197,7 @@ linters:
     - thelper
     - tparallel
     - typecheck
+    - typeswitch
     - unconvert
     - unparam
     - unused

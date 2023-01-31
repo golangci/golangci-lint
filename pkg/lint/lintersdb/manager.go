@@ -803,6 +803,11 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/moricho/tparallel"),
 
+		linter.NewConfig(golinters.NewTypeswitch()).
+			WithSince("v1.51.0").
+			WithPresets(linter.PresetBugs).
+			WithURL("https://github.com/gostaticanalysis/typeswitch"),
+
 		linter.NewConfig(golinters.NewTypecheck()).
 			WithSince("v1.3.0").
 			WithLoadForGoAnalysis().
