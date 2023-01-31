@@ -2047,6 +2047,7 @@ linters:
     - ifshort
     - importas
     - ineffassign
+    - innertypealias
     - interfacebloat
     - interfacer
     - ireturn
@@ -2157,6 +2158,7 @@ linters:
     - ifshort
     - importas
     - ineffassign
+    - innertypealias
     - interfacebloat
     - interfacer
     - ireturn
