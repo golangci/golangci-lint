@@ -1,6 +1,52 @@
 Follow the news and releases on our [twitter](https://twitter.com/golangci) and our [blog](https://medium.com/golangci).
 There is the most valuable changes log:
 
+### v1.51.0
+
+1. new linters
+   * `ginkgolinter`: https://github.com/nunnatsa/ginkgolinter
+   * `musttag`: https://github.com/junk1tm/musttag
+   * `gocheckcompilerdirectives`: https://github.com/leighmcculloch/gocheckcompilerdirectives
+2. updated linters
+   * `bodyclose`: to HEAD
+   * `dupword`: from 0.0.7 to 0.0.9
+   * `errcheck`: from 1.6.2 to 1.6.3
+   * `exhaustive`: from 0.8.3 to 0.9.5
+   * `exportloopref`: from 0.1.8 to 0.1.11
+   * `gci`: from 0.8.1 to 0.9.0
+   * `ginkgolinter`: from 0.6.0 to 0.7.1
+   * `go-errorlint`: from 1.0.5 to 1.0.6
+   * `go-ruleguard`: from 0.3.21 to 0.3.22
+   * `gocheckcompilerdirectives`: from 1.1.0 to 1.2.1
+   * `gochecknoglobals`: from 0.1.0 to 0.2.1
+   * `gomodguard`: from 1.2.4 to 1.3.0
+   * `gosec`: from 2.13.1 to 2.14.0
+   * `govet`: Add `timeformat` to analysers
+   * `grouper`: from 1.1.0 to 1.1.1
+   * `musttag`: from 0.4.1 to 0.4.3
+   * `revive`: from 1.2.4 to 1.2.5
+   * `tagliatelle`: from 0.3.1 to 0.4.0
+   * `tenv`: from 1.7.0 to 1.7.1
+   * `unparam`: bump to HEAD
+   * `usestdlibvars`: from 1.20.0 to 1.21.1
+   * `wsl`: fix `force-err-cuddling` flag
+3. misc.
+   * go1.20 support
+   * remove deprecated linters from presets
+   * Build NetBSD binaries
+   * Build loong64 binaries
+4. Documentation
+   * `goimport`: improve documentation for local-prefixes
+   * `gomnd`: add missing always ignored functions
+   * `nolint`: fix typo
+   * `tagliatelle` usage typo
+   * add note about binary requirement for plugin
+   * cache preserving and colored output on docker runs
+   * improve documentation about debugging.
+   * improve Editor Integration section
+   * More specific default cache directory
+   * update output example to use valid checkstyle example; add json example
+
 ### v1.50.1
 
 1. updated linters
