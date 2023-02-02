@@ -39,7 +39,7 @@ require (
 	github.com/golangci/gofmt v0.0.0-20220901101216-f2edd75033f2
 	github.com/golangci/lint-1 v0.0.0-20191013205115-297bf364a8e0
 	github.com/golangci/maligned v0.0.0-20180506175553-b1d89398deca
-	github.com/golangci/misspell v0.3.5
+	github.com/golangci/misspell v0.4.0
 	github.com/golangci/revgrep v0.0.0-20220804021717-745bb2f7c2e6
 	github.com/golangci/unconvert v0.0.0-20180507085042-28b1c447d1f4
 	github.com/gordonklaus/ineffassign v0.0.0-20210914165742-4cc7213b9bc8
@@ -112,7 +112,7 @@ require (
 	gitlab.com/bosi/decorder v0.2.3
 	golang.org/x/tools v0.5.0
 	gopkg.in/yaml.v3 v3.0.1
-	honnef.co/go/tools v0.3.3
+	honnef.co/go/tools v0.4.0-0.dev.0.20221209223220-58c4d7e4b720
 	mvdan.cc/gofumpt v0.4.0
 	mvdan.cc/interfacer v0.0.0-20180901003855-c20040233aed
 	mvdan.cc/unparam v0.0.0-20221223090309-7455f1af531d
@@ -179,7 +179,7 @@ require (
 	go.uber.org/multierr v1.6.0 // indirect
 	go.uber.org/zap v1.17.0 // indirect
 	golang.org/x/exp v0.0.0-20220722155223-a9213eeb770e // indirect
-	golang.org/x/exp/typeparams v0.0.0-20220827204233-334a2380cb91 // indirect
+	golang.org/x/exp/typeparams v0.0.0-20221208152030-732eee02a75a // indirect
 	golang.org/x/mod v0.7.0 // indirect
 	golang.org/x/sync v0.1.0 // indirect
 	golang.org/x/sys v0.4.0 // indirect

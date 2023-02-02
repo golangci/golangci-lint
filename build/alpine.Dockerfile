@@ -1,5 +1,5 @@
 # stage 1 building the code
-FROM golang:1.19-alpine as builder
+FROM golang:1.20-alpine as builder
 
 ARG VERSION
 ARG SHORT_COMMIT
@@ -15,7 +15,7 @@ RUN apk --no-cache add gcc musl-dev git mercurial
 RUN CGO_ENABLED=0 go build -trimpath -ldflags "-s -w -X main.version=$VERSION -X main.commit=$SHORT_COMMIT -X main.date=$DATE" -o golangci-lint ./cmd/golangci-lint/main.go
 
 # stage 2
-FROM golang:1.19-alpine
+FROM golang:1.20-alpine
 # related to https://github.com/golangci/golangci-lint/issues/3107
 ENV GOROOT /usr/local/go
 # gcc is required to support cgo;

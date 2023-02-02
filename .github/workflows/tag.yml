@@ -18,7 +18,7 @@ jobs:
           # ex:
           # - 1.18beta1 -> 1.18.0-beta.1
           # - 1.18rc1 -> 1.18.0-rc.1
-          go-version: 1.19
+          go-version: '1.20'
       - name: Unshallow
         run: git fetch --prune --unshallow
 
@@ -48,7 +48,7 @@ jobs:
           # ex:
           # - 1.18beta1 -> 1.18.0-beta.1
           # - 1.18rc1 -> 1.18.0-rc.1
-          go-version: 1.19
+          go-version: '1.20'
 
       - name: Unshallow
         run: git fetch --prune --unshallow

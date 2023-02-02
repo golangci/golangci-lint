@@ -208,6 +208,7 @@ func (r Runner) Run(ctx context.Context, linters []*linter.Config, lintCtx *lint
 
 				return
 			}
+
 			issues = append(issues, linterIssues...)
 		})
 	}

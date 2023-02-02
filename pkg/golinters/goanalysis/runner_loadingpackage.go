@@ -434,6 +434,7 @@ func (lp *loadingPackage) convertError(err error) []packages.Error {
 		// If you see this error message, please file a bug.
 		lp.log.Warnf("Internal error: error %q (%T) without position", err, err)
 	}
+
 	return errs
 }
 
