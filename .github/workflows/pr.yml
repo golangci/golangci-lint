@@ -6,7 +6,7 @@ on:
   pull_request:
 
 env:
-  GO_VERSION: 1.20
+  GO_VERSION: '1.20'
 
 jobs:
   # Check if there is any dirty change for go mod tidy
@@ -88,8 +88,8 @@ jobs:
     strategy:
       matrix:
         golang:
-          - 1.19
-          - 1.20
+          - '1.19'
+          - '1.20'
     steps:
       - uses: actions/checkout@v3
       - name: Install Go
