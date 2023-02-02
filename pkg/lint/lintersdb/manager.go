@@ -453,7 +453,8 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 
 		linter.NewConfig(golinters.NewGochecknoinits()).
 			WithSince("v1.12.0").
-			WithPresets(linter.PresetStyle),
+			WithPresets(linter.PresetStyle).
+			WithURL("https://github.com/leighmcculloch/gochecknoinits"),
 
 		linter.NewConfig(golinters.NewGocognit(gocognitCfg)).
 			WithSince("v1.20.0").
