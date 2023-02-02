@@ -85,12 +85,12 @@ require (
 	github.com/sashamelentyev/usestdlibvars v1.21.1
 	github.com/securego/gosec/v2 v2.14.0
 	github.com/shazow/go-diff v0.0.0-20160112020656-b6b7b6733b8c
-	github.com/shirou/gopsutil/v3 v3.22.12
+	github.com/shirou/gopsutil/v3 v3.23.1
 	github.com/sirupsen/logrus v1.9.0
 	github.com/sivchari/containedctx v1.0.2
 	github.com/sivchari/tenv v1.7.1
 	github.com/sonatard/noctx v0.0.1
-	github.com/sourcegraph/go-diff v0.6.2-0.20221031073116-7ef5f68ebea1
+	github.com/sourcegraph/go-diff v0.7.0
 	github.com/spf13/cobra v1.6.1
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.12.0
