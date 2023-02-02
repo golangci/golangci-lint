@@ -44,6 +44,7 @@ require (
 	github.com/golangci/unconvert v0.0.0-20180507085042-28b1c447d1f4
 	github.com/gordonklaus/ineffassign v0.0.0-20210914165742-4cc7213b9bc8
 	github.com/gostaticanalysis/forcetypeassert v0.1.0
+	github.com/gostaticanalysis/innertypealias v0.1.1
 	github.com/gostaticanalysis/nilerr v0.1.1
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/hashicorp/go-version v1.6.0
