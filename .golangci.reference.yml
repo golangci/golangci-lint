@@ -2089,6 +2089,7 @@ linters:
     - unconvert
     - unparam
     - unused
+    - unusedtypeparam
     - usestdlibvars
     - varcheck
     - varnamelen
@@ -2199,6 +2200,7 @@ linters:
     - unconvert
     - unparam
     - unused
+    - unusedtypeparam
     - usestdlibvars
     - varcheck
     - varnamelen

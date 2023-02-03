@@ -762,6 +762,12 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			Deprecated("The owner seems to have abandoned the linter.", "v1.49.0", "unused").
 			WithNoopFallback(m.cfg),
 
+		linter.NewConfig(golinters.NewUnusedTypeParam()).
+			WithSince("v1.52.0").
+			WithLoadForGoAnalysis().
+			WithPresets(linter.PresetUnused).
+			WithURL("https://github.com/sivchari/unusedtypeparam"),
+
 		linter.NewConfig(golinters.NewStylecheck(stylecheckCfg)).
 			WithSince("v1.20.0").
 			WithLoadForGoAnalysis().
