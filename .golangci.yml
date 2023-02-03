@@ -135,6 +135,8 @@ issues:
       text: "SA1019: settings.GoVersion is deprecated: use the global `run.go` instead."
     - path: pkg/lint/lintersdb/manager.go
       text: "SA1019: (.+).(GoVersion|LangVersion) is deprecated: use the global `run.go` instead."
+    - path: pkg/golinters/unused.go
+      text: "rangeValCopy: each iteration copies 160 bytes \\(consider pointers or indexing\\)"
 
 run:
   timeout: 5m

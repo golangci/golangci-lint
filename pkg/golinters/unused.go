@@ -63,22 +63,16 @@ func runUnused(pass *analysis.Pass) ([]goanalysis.Issue, error) {
 		return nil, err
 	}
 
-	sr := unused.Serialize(pass, res.(unused.Result), pass.Fset)
-
 	used := make(map[string]bool)
-	for _, obj := range sr.Used {
+	for _, obj := range res.(unused.Result).Used {
 		used[fmt.Sprintf("%s %d %s", obj.Position.Filename, obj.Position.Line, obj.Name)] = true
 	}
 
 	var issues []goanalysis.Issue
 
 	// Inspired by https://github.com/dominikh/go-tools/blob/d694aadcb1f50c2d8ac0a1dd06217ebb9f654764/lintcmd/lint.go#L177-L197
-	for _, object := range sr.Unused {
+	for _, object := range res.(unused.Result).Unused {
 		if object.Kind == "type param" {
-			continue
-		}
-
-		if object.InGenerated {
 			continue
 		}
 
