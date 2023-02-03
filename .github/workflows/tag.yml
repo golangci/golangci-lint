@@ -60,18 +60,18 @@ jobs:
           MAJOR=${TAG%.*}
           SHORT_COMMIT=${GITHUB_SHA::8}
           DATE=$(date '+%Y-%m-%dT%H:%M:%SZ')
-          echo ::set-output name=tag_name::${TAG}
-          echo ::set-output name=major_tag::${MAJOR}
-          echo ::set-output name=short_commit::${SHORT_COMMIT}
-          echo ::set-output name=date::${DATE}
+          echo tag_name=${TAG} >> $GITHUB_OUTPUT
+          echo major_tag=${MAJOR} >> $GITHUB_OUTPUT
+          echo short_commit=${SHORT_COMMIT} >> $GITHUB_OUTPUT
+          echo date=${DATE} >> $GITHUB_OUTPUT
           if [[ ${{ matrix.target.Dockerfile }} == *"alpine"* ]]; then
-            echo ::set-output name=full_tag_name::${TAG}-alpine
-            echo ::set-output name=full_major_tag::${MAJOR}-alpine
-            echo ::set-output name=latest_tag::latest-alpine
+            echo full_tag_name=${TAG}-alpine >> $GITHUB_OUTPUT
+            echo full_major_tag=${MAJOR}-alpine >> $GITHUB_OUTPUT
+            echo latest_tag=latest-alpine >> $GITHUB_OUTPUT
           else
-            echo ::set-output name=full_tag_name::${TAG}
-            echo ::set-output name=full_major_tag::${MAJOR}
-            echo ::set-output name=latest_tag::latest
+            echo full_tag_name=${TAG} >> $GITHUB_OUTPUT
+            echo full_major_tag=${MAJOR} >> $GITHUB_OUTPUT
+            echo latest_tag=latest >> $GITHUB_OUTPUT
           fi
 
       - name: Set up QEMU
