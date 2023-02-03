@@ -153,8 +153,9 @@ github.com/go-ole/go-ole v1.2.6/go.mod h1:pprOEPIfldk/42T2oK7lQ4v4JSDwmV0As9GaiU
 github.com/go-stack/stack v1.8.0/go.mod h1:v0f6uXyyMGvRgIKkXu+yp6POWl0qKG85gN/melR3HDY=
 github.com/go-toolsmith/astcast v1.0.0 h1:JojxlmI6STnFVG9yOImLeGREv8W2ocNUM+iOhR6jE7g=
 github.com/go-toolsmith/astcast v1.0.0/go.mod h1:mt2OdQTeAQcY4DQgPSArJjHCcOwlX+Wl/kwN+LbLGQ4=
-github.com/go-toolsmith/astcopy v1.0.2 h1:YnWf5Rnh1hUudj11kei53kI57quN/VH6Hp1n+erozn0=
 github.com/go-toolsmith/astcopy v1.0.2/go.mod h1:4TcEdbElGc9twQEYpVo/aieIXfHhiuLh4aLAck6dO7Y=
+github.com/go-toolsmith/astcopy v1.0.3 h1:r0bgSRlMOAgO+BdQnVAcpMSMkrQCnV6ZJmIkrJgcJj0=
+github.com/go-toolsmith/astcopy v1.0.3/go.mod h1:4TcEdbElGc9twQEYpVo/aieIXfHhiuLh4aLAck6dO7Y=
 github.com/go-toolsmith/astequal v1.0.0/go.mod h1:H+xSiq0+LtiDC11+h1G32h7Of5O3CYFJ99GVbS5lDKY=
 github.com/go-toolsmith/astequal v1.0.2/go.mod h1:9Ai4UglvtR+4up+bAD4+hCj7iTo4m/OXVTSLnCyTAx4=
 github.com/go-toolsmith/astequal v1.0.3 h1:+LVdyRatFS+XO78SGV4I3TCEA0AC7fKEGma+fH+674o=
@@ -392,8 +393,6 @@ github.com/nishanths/exhaustive v0.9.5 h1:TzssWan6orBiLYVqewCG8faud9qlFntJE30ACp
 github.com/nishanths/exhaustive v0.9.5/go.mod h1:IbwrGdVMizvDcIxPYGVdQn5BqWJaOwpCvg4RGb8r/TA=
 github.com/nishanths/predeclared v0.2.2 h1:V2EPdZPliZymNAn79T8RkNApBjMmVKh5XRpLm/w98Vk=
 github.com/nishanths/predeclared v0.2.2/go.mod h1:RROzoN6TnGQupbC+lqggsOlcgysk3LMK/HI84Mp280c=
-github.com/nunnatsa/ginkgolinter v0.7.1 h1:j4mzqx1hkE75mXHs3AUlWghZBi59c3GDWXp6zzcI+kE=
-github.com/nunnatsa/ginkgolinter v0.7.1/go.mod h1:jTgd60EAdXDmmIPZi+xoMDqAYo/4AakhWNmnPisd7Rc=
 github.com/nunnatsa/ginkgolinter v0.8.0 h1:YSDyuN7l/aBFnFHkTbTAYmL3enfSq/DEG990zGTPIS8=
 github.com/nunnatsa/ginkgolinter v0.8.0/go.mod h1:+GntEXV3IsiuQicDsSBegtnMEZFQ9ulOSs9mCT6rnvQ=
 github.com/olekukonko/tablewriter v0.0.5 h1:P2Ga83D34wi1o9J6Wh1mRuqd4mF/x/lgBS7N7AbDhec=
