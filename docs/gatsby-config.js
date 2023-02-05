@@ -21,6 +21,7 @@ module.exports = {
     footer: `© ${new Date().getFullYear()}`,
   },
   plugins: [
+    `gatsby-plugin-netlify`,
     `gatsby-alias-imports`,
     `gatsby-transformer-sharp`,
     `gatsby-plugin-sharp`,
