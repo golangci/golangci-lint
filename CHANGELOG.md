@@ -1,6 +1,17 @@
 Follow the news and releases on our [twitter](https://twitter.com/golangci) and our [blog](https://medium.com/golangci).
 There is the most valuable changes log:
 
+### v1.51.1
+
+1. updated linters
+   * `ginkgolinter`: from 0.7.1 to 0.8.1
+   * `ineffassign`: bump to HEAD
+   * `musttag`: from 0.4.3 to 0.4.4
+   * `sqlclosecheck`: from 0.3.0 to 0.4.0
+   * `staticcheck`: bump to v0.4.0
+   * `wastedassign`: from 2.0.6 to 2.0.7
+   * `wrapcheck`: from 2.7.0 to 2.8.0
+
 ### v1.51.0
 
 1. new linters
