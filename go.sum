@@ -309,8 +309,8 @@ github.com/julienschmidt/httprouter v1.2.0/go.mod h1:SYymIcj16QtmaHHD7aYtjjsJG7V
 github.com/julienschmidt/httprouter v1.3.0/go.mod h1:JR6WtHb+2LUe8TCKY3cZOxFyyO8IZAc4RVcycCCAKdM=
 github.com/julz/importas v0.1.0 h1:F78HnrsjY3cR7j0etXy5+TU1Zuy7Xt08X/1aJnH5xXY=
 github.com/julz/importas v0.1.0/go.mod h1:oSFU2R4XK/P7kNBrnL/FEQlDGN1/6WoxXEjSSXO0DV0=
-github.com/junk1tm/musttag v0.4.3 h1:I8UHQkDj2u/MClcGU8PbMoYwhykiSQFEbXKKMjixPyk=
-github.com/junk1tm/musttag v0.4.3/go.mod h1:XkcL/9O6RmD88JBXb+I15nYRl9W4ExhgQeCBEhfMC8U=
+github.com/junk1tm/musttag v0.4.4 h1:VK4L7v7lvWAhKDDx0cUJgbb0UBNipYinv8pPeHJzH9Q=
+github.com/junk1tm/musttag v0.4.4/go.mod h1:XkcL/9O6RmD88JBXb+I15nYRl9W4ExhgQeCBEhfMC8U=
 github.com/kisielk/errcheck v1.6.3 h1:dEKh+GLHcWm2oN34nMvDzn1sqI0i0WxPvrgiJA5JuM8=
 github.com/kisielk/errcheck v1.6.3/go.mod h1:nXw/i/MfnvRHqXa7XXmQMUB0oNFGuBrNI8d8NLy0LPw=
 github.com/kisielk/gotool v1.0.0 h1:AV2c/EiW3KqPNT9ZKl07ehoAGi4C5/01Cfbblndcapg=
