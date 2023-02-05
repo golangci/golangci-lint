@@ -106,7 +106,6 @@ module.exports = {
       },
     },
     `gatsby-plugin-netlify`,
-    `gatsby-plugin-netlify-cache`,
     `gatsby-plugin-catch-links`,
     `gatsby-plugin-emotion`,
     `gatsby-plugin-react-helmet`,
