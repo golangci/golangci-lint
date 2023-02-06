@@ -27,13 +27,12 @@ func TestHash(t *testing.T) {
 }
 
 func TestHashFile(t *testing.T) {
-	f, err := os.CreateTemp("", "cmd-go-test-")
+	f, err := os.CreateTemp(t.TempDir(), "cmd-go-test-")
 	if err != nil {
 		t.Fatal(err)
 	}
 	name := f.Name()
 	fmt.Fprintf(f, "hello world")
-	defer os.Remove(name)
 	if err := f.Close(); err != nil {
 		t.Fatal(err)
 	}
