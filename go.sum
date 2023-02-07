@@ -466,8 +466,8 @@ github.com/sanposhiho/wastedassign/v2 v2.0.7 h1:J+6nrY4VW+gC9xFzUc+XjPD3g3wF3je/
 github.com/sanposhiho/wastedassign/v2 v2.0.7/go.mod h1:KyZ0MWTwxxBmfwn33zh3k1dmsbF2ud9pAAGfoLfjhtI=
 github.com/sashamelentyev/interfacebloat v1.1.0 h1:xdRdJp0irL086OyW1H/RTZTr1h/tMEOsumirXcOJqAw=
 github.com/sashamelentyev/interfacebloat v1.1.0/go.mod h1:+Y9yU5YdTkrNvoX0xHc84dxiN1iBi9+G8zZIhPVoNjQ=
-github.com/sashamelentyev/usestdlibvars v1.21.1 h1:GQGlReyL9Ek8DdJmwtwhHbhwHnuPfsKaprpjnrPcjxc=
-github.com/sashamelentyev/usestdlibvars v1.21.1/go.mod h1:MPI52Qq99iO9sFZZcKJ2y/bx6BNjs+/2bw3PCggIbew=
+github.com/sashamelentyev/usestdlibvars v1.22.0 h1:7ZyG1CVpjH5O3gvuuVoOZ0xYZKm0aaIILMRAVLKYN0k=
+github.com/sashamelentyev/usestdlibvars v1.22.0/go.mod h1:1T21P9pG3rMZnbTP4IBuKSGgU4UfUCsz7u129/5PMMM=
 github.com/securego/gosec/v2 v2.15.0 h1:v4Ym7FF58/jlykYmmhZ7mTm7FQvN/setNm++0fgIAtw=
 github.com/securego/gosec/v2 v2.15.0/go.mod h1:VOjTrZOkUtSDt2QLSJmQBMWnvwiQPEjg0l+5juIqGk8=
 github.com/shazow/go-diff v0.0.0-20160112020656-b6b7b6733b8c h1:W65qqJCIOVP4jpqPQ0YvHYKwcMEMVWIzWC5iNQQfBTU=
