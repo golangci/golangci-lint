@@ -3,7 +3,6 @@
 package testdata
 
 import (
-	_ "embed"
 	_ "unsafe"
 )
 
@@ -19,6 +18,3 @@ type MyLllInterface interface {
 func VeryLongNameForTestAndLinkNameFunction()
 
 func VeryLongNameForTestAndLinkedNameFunction() {}
-
-//go:embed this_is_a_text_file_with_a_very_long_name_repeat_this_is_a_text_file_with_a_very_long_name_repeat_this_is_a_text_file_with_a_very_long_name.txt
-var _ string

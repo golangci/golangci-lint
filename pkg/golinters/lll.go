@@ -22,7 +22,6 @@ const lllName = "lll"
 const (
 	generate = "//go:generate"
 	linkname = "//go:linkname"
-	embed    = "//go:embed"
 )
 
 //nolint:dupl
@@ -100,7 +99,7 @@ func getLLLIssuesForFile(filename string, maxLineLen int, tabSpaces string) ([]r
 		line := scanner.Text()
 		line = strings.ReplaceAll(line, "\t", tabSpaces)
 
-		if strings.HasPrefix(line, generate) || strings.HasPrefix(line, linkname) || strings.HasPrefix(line, embed) {
+		if strings.HasPrefix(line, generate) || strings.HasPrefix(line, linkname) {
 			continue
 		}
 
