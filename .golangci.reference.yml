@@ -1799,7 +1799,7 @@ linters-settings:
     # Suggest the use of rpc.DefaultXXPath.
     # Default: false
     default-rpc-path: true
-    # Suggest the use of os.DevNull.
+    # DEPRECATED Suggest the use of os.DevNull.
     # Default: false
     os-dev-null: true
     # Suggest the use of sql.LevelXX.String().
@@ -1811,7 +1811,7 @@ linters-settings:
     # Suggest the use of constant.Kind.String().
     # Default: false
     constant-kind: true
-    # Suggest the use of syslog.Priority.
+    # DEPRECATED Suggest the use of syslog.Priority.
     # Default: false
     syslog-priority: true
 
