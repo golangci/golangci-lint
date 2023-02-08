@@ -17,15 +17,15 @@ type ExcludeRule struct {
 }
 
 type ExcludeRules struct {
-	rules     []excludeRule
-	lineCache *fsutils.LineCache
-	log       logutils.Log
+	rules []excludeRule
+	files *fsutils.Files
+	log   logutils.Log
 }
 
-func NewExcludeRules(rules []ExcludeRule, lineCache *fsutils.LineCache, log logutils.Log) *ExcludeRules {
+func NewExcludeRules(rules []ExcludeRule, files *fsutils.Files, log logutils.Log) *ExcludeRules {
 	r := &ExcludeRules{
-		lineCache: lineCache,
-		log:       log,
+		files: files,
+		log:   log,
 	}
 	r.rules = createRules(rules, "(?i)")
 
@@ -59,7 +59,7 @@ func (p ExcludeRules) Process(issues []result.Issue) ([]result.Issue, error) {
 	return filterIssues(issues, func(i *result.Issue) bool {
 		for _, rule := range p.rules {
 			rule := rule
-			if rule.match(i, p.lineCache, p.log) {
+			if rule.match(i, p.files, p.log) {
 				return false
 			}
 		}
@@ -76,10 +76,10 @@ type ExcludeRulesCaseSensitive struct {
 	*ExcludeRules
 }
 
-func NewExcludeRulesCaseSensitive(rules []ExcludeRule, lineCache *fsutils.LineCache, log logutils.Log) *ExcludeRulesCaseSensitive {
+func NewExcludeRulesCaseSensitive(rules []ExcludeRule, files *fsutils.Files, log logutils.Log) *ExcludeRulesCaseSensitive {
 	r := &ExcludeRules{
-		lineCache: lineCache,
-		log:       log,
+		files: files,
+		log:   log,
 	}
 	r.rules = createRules(rules, "")
 

@@ -22,13 +22,14 @@ type SkipDirs struct {
 	skippedDirs      map[string]*skipStat
 	absArgsDirs      []string
 	skippedDirsCache map[string]bool
+	pathPrefix       string
 }
 
 var _ Processor = (*SkipDirs)(nil)
 
 const goFileSuffix = ".go"
 
-func NewSkipDirs(patterns []string, log logutils.Log, runArgs []string) (*SkipDirs, error) {
+func NewSkipDirs(patterns []string, log logutils.Log, runArgs []string, pathPrefix string) (*SkipDirs, error) {
 	var patternsRe []*regexp.Regexp
 	for _, p := range patterns {
 		p = fsutils.NormalizePathInRegex(p)
@@ -62,6 +63,7 @@ func NewSkipDirs(patterns []string, log logutils.Log, runArgs []string) (*SkipDi
 		skippedDirs:      map[string]*skipStat{},
 		absArgsDirs:      absArgsDirs,
 		skippedDirsCache: map[string]bool{},
+		pathPrefix:       pathPrefix,
 	}, nil
 }
 
@@ -120,8 +122,9 @@ func (p *SkipDirs) shouldPassIssueDirs(issueRelDir, issueAbsDir string) bool {
 	// The alternative solution is to find relative to args path, but it has
 	// disadvantages (https://github.com/golangci/golangci-lint/pull/313).
 
+	path := fsutils.WithPathPrefix(p.pathPrefix, issueRelDir)
 	for _, pattern := range p.patterns {
-		if pattern.MatchString(issueRelDir) {
+		if pattern.MatchString(path) {
 			ps := pattern.String()
 			if p.skippedDirs[issueRelDir] == nil {
 				p.skippedDirs[issueRelDir] = &skipStat{

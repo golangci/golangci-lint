@@ -20,7 +20,7 @@ func newFileIssue(file string) result.Issue {
 }
 
 func newTestSkipFiles(t *testing.T, patterns ...string) *SkipFiles {
-	p, err := NewSkipFiles(patterns)
+	p, err := NewSkipFiles(patterns, "")
 	assert.NoError(t, err)
 	return p
 }
@@ -47,7 +47,7 @@ func TestSkipFiles(t *testing.T) {
 }
 
 func TestSkipFilesInvalidPattern(t *testing.T) {
-	p, err := NewSkipFiles([]string{"\\o"})
+	p, err := NewSkipFiles([]string{"\\o"}, "")
 	assert.Error(t, err)
 	assert.Nil(t, p)
 }

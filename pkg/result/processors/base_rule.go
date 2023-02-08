@@ -26,14 +26,14 @@ func (r *baseRule) isEmpty() bool {
 	return r.text == nil && r.source == nil && r.path == nil && len(r.linters) == 0
 }
 
-func (r *baseRule) match(issue *result.Issue, lineCache *fsutils.LineCache, log logutils.Log) bool {
+func (r *baseRule) match(issue *result.Issue, files *fsutils.Files, log logutils.Log) bool {
 	if r.isEmpty() {
 		return false
 	}
 	if r.text != nil && !r.text.MatchString(issue.Text) {
 		return false
 	}
-	if r.path != nil && !r.path.MatchString(issue.FilePath()) {
+	if r.path != nil && !r.path.MatchString(files.WithPathPrefix(issue.FilePath())) {
 		return false
 	}
 	if len(r.linters) != 0 && !r.matchLinter(issue) {
@@ -41,7 +41,7 @@ func (r *baseRule) match(issue *result.Issue, lineCache *fsutils.LineCache, log 
 	}
 
 	// the most heavyweight checking last
-	if r.source != nil && !r.matchSource(issue, lineCache, log) {
+	if r.source != nil && !r.matchSource(issue, files.LineCache, log) {
 		return false
 	}
 

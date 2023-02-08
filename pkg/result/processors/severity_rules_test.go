@@ -1,6 +1,7 @@
 package processors
 
 import (
+	"path"
 	"path/filepath"
 	"testing"
 
@@ -14,6 +15,7 @@ import (
 
 func TestSeverityRulesMultiple(t *testing.T) {
 	lineCache := fsutils.NewLineCache(fsutils.NewFileCache())
+	files := fsutils.NewFiles(lineCache, "")
 	log := report.NewLogWrapper(logutils.NewStderrLog(logutils.DebugKeyEmpty), &report.Data{})
 	p := NewSeverityRules("error", []SeverityRule{
 		{
@@ -64,7 +66,7 @@ func TestSeverityRulesMultiple(t *testing.T) {
 		{
 			Severity: "info",
 		},
-	}, lineCache, log)
+	}, files, log)
 
 	cases := []issueTestCase{
 		{Path: "ssl.go", Text: "ssl", Linter: "gosec"},
@@ -104,6 +106,47 @@ func TestSeverityRulesMultiple(t *testing.T) {
 	assert.Equal(t, expectedCases, resultingCases)
 }
 
+func TestSeverityRulesPathPrefix(t *testing.T) {
+	lineCache := fsutils.NewLineCache(fsutils.NewFileCache())
+	pathPrefix := path.Join("some", "dir")
+	files := fsutils.NewFiles(lineCache, pathPrefix)
+	log := report.NewLogWrapper(logutils.NewStderrLog(logutils.DebugKeyEmpty), &report.Data{})
+	p := NewSeverityRules("error", []SeverityRule{
+		{
+			Severity: "info",
+			BaseRule: BaseRule{
+				Text: "some",
+				Path: `some/dir/e\.go`,
+			},
+		},
+	}, files, log)
+
+	cases := []issueTestCase{
+		{Path: "e.go", Text: "some", Linter: "linter"},
+		{Path: "other.go", Text: "some", Linter: "linter"},
+	}
+	var issues []result.Issue
+	for _, c := range cases {
+		issues = append(issues, newIssueFromIssueTestCase(c))
+	}
+	processedIssues := process(t, p, issues...)
+	var resultingCases []issueTestCase
+	for _, i := range processedIssues {
+		resultingCases = append(resultingCases, issueTestCase{
+			Path:     i.FilePath(),
+			Linter:   i.FromLinter,
+			Text:     i.Text,
+			Line:     i.Line(),
+			Severity: i.Severity,
+		})
+	}
+	expectedCases := []issueTestCase{
+		{Path: "e.go", Text: "some", Linter: "linter", Severity: "info"},
+		{Path: "other.go", Text: "some", Linter: "linter", Severity: "error"},
+	}
+	assert.Equal(t, expectedCases, resultingCases)
+}
+
 func TestSeverityRulesText(t *testing.T) {
 	p := NewSeverityRules("", []SeverityRule{
 		{
@@ -134,8 +177,9 @@ func TestSeverityRulesText(t *testing.T) {
 
 func TestSeverityRulesOnlyDefault(t *testing.T) {
 	lineCache := fsutils.NewLineCache(fsutils.NewFileCache())
+	files := fsutils.NewFiles(lineCache, "")
 	log := report.NewLogWrapper(logutils.NewStderrLog(logutils.DebugKeyEmpty), &report.Data{})
-	p := NewSeverityRules("info", []SeverityRule{}, lineCache, log)
+	p := NewSeverityRules("info", []SeverityRule{}, files, log)
 
 	cases := []issueTestCase{
 		{Path: "ssl.go", Text: "ssl", Linter: "gosec"},
@@ -169,6 +213,7 @@ func TestSeverityRulesEmpty(t *testing.T) {
 
 func TestSeverityRulesCaseSensitive(t *testing.T) {
 	lineCache := fsutils.NewLineCache(fsutils.NewFileCache())
+	files := fsutils.NewFiles(lineCache, "")
 	p := NewSeverityRulesCaseSensitive("error", []SeverityRule{
 		{
 			Severity: "info",
@@ -177,7 +222,7 @@ func TestSeverityRulesCaseSensitive(t *testing.T) {
 				Linters: []string{"gosec", "someotherlinter"},
 			},
 		},
-	}, lineCache, nil)
+	}, files, nil)
 
 	cases := []issueTestCase{
 		{Path: "e.go", Text: "ssL", Linter: "gosec"},
