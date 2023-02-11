@@ -55,7 +55,7 @@ func WriteToFile(filename string, data io.Reader, perm os.FileMode) (err error) 
 	}
 	// Sync the file before renaming it: otherwise, after a crash the reader may
 	// observe a 0-length file instead of the actual contents.
-	// See https://golang.org/issue/22397#issuecomment-380831736.
+	// See https://go.dev/issue/22397#issuecomment-380831736.
 	if err := f.Sync(); err != nil {
 		return err
 	}

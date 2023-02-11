@@ -136,7 +136,7 @@ func TestConcurrentReadsAndWrites(t *testing.T) {
 
 	case "darwin":
 		// The filesystem on macOS 10.14 occasionally fails with "no such file or
-		// directory" errors. See https://golang.org/issue/33041. The flake rate is
+		// directory" errors. See https://go.dev/issue/33041. The flake rate is
 		// fairly low, so ensure that at least 75% of attempts succeed.
 		minReadSuccesses = attempts - (attempts / 4)
 	}
