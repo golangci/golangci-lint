@@ -126,7 +126,7 @@ func (cl *ContextLoader) Load(ctx context.Context, linters []*linter.Config) (*l
 ```
 
 First, we find a load mode as union of load modes for all enabled linters.
-We use [go/packages](https://godoc.org/golang.org/x/tools/go/packages) for packages loading and use it's enum `packages.Need*` for load modes.
+We use [go/packages](https://pkg.go.dev/golang.org/x/tools/go/packages) for packages loading and use it's enum `packages.Need*` for load modes.
 Load mode sets which data does a linter needs for execution.
 
 A linter that works only with AST need minimum of information: only filenames and AST. There is no need for
@@ -165,7 +165,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetBugs).
 			WithAlternativeNames("vet", "vetshadow").
-			WithURL("https://golang.org/cmd/vet/"),
+			WithURL("https://pkg.go.dev/cmd/vet"),
 		linter.NewConfig(golinters.NewBodyclose()).
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetPerformance, linter.PresetBugs).
@@ -208,10 +208,10 @@ Currently, all linters except `unused` can be merged into this meta linter.
 The `unused` isn't merged because it has high memory usage.
 
 Linters execution starts in `runAnalyzers`. It's the most complex part of the `golangci-lint`.
-We use custom [go/analysis](https://godoc.org/golang.org/x/tools/go/analysis) runner there. It runs as much as it can in parallel. It lazy-loads as much as it can
+We use custom [go/analysis](https://pkg.go.dev/golang.org/x/tools/go/analysis) runner there. It runs as much as it can in parallel. It lazy-loads as much as it can
 to reduce memory usage. Also, it sets all heavyweight data to `nil` as becomes unneeded to save memory.
 
-We don't use existing [multichecker](https://godoc.org/golang.org/x/tools/go/analysis/multichecker) because
+We don't use existing [multichecker](https://pkg.go.dev/golang.org/x/tools/go/analysis/multichecker) because
 it doesn't use caching and doesn't have some important performance optimizations.
 
 All found by linters issues are represented with `result.Issue` struct:

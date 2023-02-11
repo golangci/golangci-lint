@@ -497,7 +497,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithSince("v1.0.0").
 			WithPresets(linter.PresetFormatting).
 			WithAutoFix().
-			WithURL("https://golang.org/cmd/gofmt/"),
+			WithURL("https://pkg.go.dev/cmd/gofmt"),
 
 		linter.NewConfig(golinters.NewGofumpt(gofumptCfg)).
 			WithSince("v1.28.0").
@@ -514,7 +514,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithSince("v1.20.0").
 			WithPresets(linter.PresetFormatting, linter.PresetImport).
 			WithAutoFix().
-			WithURL("https://godoc.org/golang.org/x/tools/cmd/goimports"),
+			WithURL("https://pkg.go.dev/golang.org/x/tools/cmd/goimports"),
 
 		linter.NewConfig(golinters.NewGolint(golintCfg)).
 			WithSince("v1.0.0").
@@ -562,7 +562,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetBugs, linter.PresetMetaLinter).
 			WithAlternativeNames("vet", "vetshadow").
-			WithURL("https://golang.org/cmd/vet/"),
+			WithURL("https://pkg.go.dev/cmd/vet"),
 
 		linter.NewConfig(golinters.NewGrouper(grouperCfg)).
 			WithSince("v1.44.0").
