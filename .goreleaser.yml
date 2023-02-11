@@ -1,6 +1,10 @@
 ---
 project_name: golangci-lint
 
+source:
+  enabled: true
+  name_template: '{{ .ProjectName }}_{{ .Version }}_source_code'
+
 release:
   github:
     owner: golangci
