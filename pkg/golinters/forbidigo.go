@@ -64,7 +64,7 @@ func runForbidigo(pass *analysis.Pass, settings *config.ForbidigoSettings) ([]go
 
 	var issues []goanalysis.Issue
 	for _, file := range pass.Files {
-		hints, err := forbid.Run(pass.Fset, file)
+		hints, err := forbid.RunWithConfig(forbidigo.RunConfig{Fset: pass.Fset}, file)
 		if err != nil {
 			return nil, errors.Wrapf(err, "forbidigo linter failed on file %q", file.Name.String())
 		}
