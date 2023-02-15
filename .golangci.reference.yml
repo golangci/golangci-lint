@@ -1923,48 +1923,48 @@ linters-settings:
     # this is set to true - the append call must append either a variable
     # assigned, called or used on the line above.
     strict-append: true
-    
+
     # Allows assignments to be cuddled with variables used in calls on
     # line above and calls to be cuddled with assignments of variables
     # used in call on line above.
     allow-assign-and-call: true
-    
+
     # Allows assignments to be cuddled with anything.
     allow-assign-and-anything: false
-    
+
     # Allows cuddling to assignments even if they span over multiple lines.
     allow-multiline-assign: true
-    
+
     # If the number of lines in a case block is equal to or lager than this
     # number, the case *must* end white a newline.
     force-case-trailing-whitespace: 0
-    
+
     # Allow blocks to end with comments.
     allow-trailing-comment: false
-    
+
     # Allow multiple comments in the beginning of a block separated with newline.
     allow-separated-leading-comment: false
-    
+
     # Allow multiple var/declaration statements to be cuddled.
     allow-cuddle-declarations: false
-    
+
     # A list of call idents that everything can be cuddled with.
     # Defaults to calls looking like locks.
     allow-cuddle-with-calls: [ "Lock", "RLock" ]
-    
+
     # AllowCuddleWithRHS is a list of right hand side variables that is allowed
     # to be cuddled with anything. Defaults to assignments or calls looking
     # like unlocks.
     allow-cuddle-with-rhs: [ "Unlock", "RUnlock" ]
-    
+
     # Causes an error when an If statement that checks an error variable doesn't
     # cuddle with the assignment of that variable.
     force-err-cuddling: false
-    
+
     # When force-err-cuddling is enabled this is a list of names
     # used for error variables to check for in the conditional.
     error-variable-names: [ "err" ]
-    
+
     # Causes an error if a short declaration (:=) cuddles with anything other than
     # another short declaration.
     # This logic overrides force-err-cuddling among others.
