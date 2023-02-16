@@ -58,7 +58,7 @@ func NewRunner(cfg *config.Config, log logutils.Log, goenv *goutil.Env, es *lint
 
 			var extra string
 			if lc.Deprecation.Replacement != "" {
-				extra = fmt.Sprintf(" Replaced by %s.", lc.Deprecation.Replacement)
+				extra = fmt.Sprintf("Replaced by %s.", lc.Deprecation.Replacement)
 			}
 
 			log.Warnf("The linter '%s' is deprecated (since %s) due to: %s %s", name, lc.Deprecation.Since, lc.Deprecation.Message, extra)
