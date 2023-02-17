@@ -179,8 +179,6 @@ func TestRunnerBuilder_Runner(t *testing.T) {
 			assert.NotNil(t, runner.log)
 			assert.NotNil(t, runner.tb)
 			assert.Equal(t, test.expected.env, runner.env)
-			assert.Equal(t, test.expected.env, runner.env)
-			assert.Equal(t, test.expected.env, runner.env)
 			assert.Equal(t, test.expected.command, runner.command)
 			assert.Equal(t, test.expected.args, runner.args)
 		})
