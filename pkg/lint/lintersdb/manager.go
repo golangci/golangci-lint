@@ -538,6 +538,12 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle, linter.PresetImport, linter.PresetModule).
 			WithURL("https://github.com/ryancurrah/gomodguard"),
 
+		linter.NewConfig(golinters.NewNoStdGlobals()).
+			WithSince("v1.52.0").
+			WithPresets(linter.PresetUnused).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/katsadim/nostdglobals"),
+
 		linter.NewConfig(golinters.NewGoPrintfFuncName()).
 			WithSince("v1.23.0").
 			WithPresets(linter.PresetStyle).

@@ -2039,6 +2039,7 @@ linters:
     - gomnd
     - gomoddirectives
     - gomodguard
+    - gonostdglobals
     - goprintffuncname
     - gosec
     - gosimple
@@ -2149,6 +2150,7 @@ linters:
     - gomnd
     - gomoddirectives
     - gomodguard
+    - gonostdglobals
     - goprintffuncname
     - gosec
     - gosimple
