@@ -1,10 +1,6 @@
 ---
 project_name: golangci-lint
 
-source:
-  enabled: true
-  name_template: '{{ .ProjectName }}_{{ .Version }}_source_code'
-
 release:
   github:
     owner: golangci
@@ -76,6 +72,10 @@ changelog:
       - '^build\(deps\): bump .* in /\.github/peril \(#\d+\)'
       - Merge pull request
       - Merge branch
+
+source:
+  enabled: true
+  name_template: '{{ .ProjectName }}-{{ .Version }}-source'
 
 brews:
   - tap:
