@@ -89,6 +89,7 @@ var (
 		unusedwrite.Analyzer,
 	}
 
+	// https://github.com/golang/go/blob/9f834a559c9ed6cdf883e29b36e21e5f956df74f/src/cmd/vet/main.go#L46-L76
 	defaultAnalyzers = []*analysis.Analyzer{
 		asmdecl.Analyzer,
 		assign.Analyzer,
