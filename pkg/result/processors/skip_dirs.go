@@ -1,11 +1,10 @@
 package processors
 
 import (
+	"fmt"
 	"path/filepath"
 	"regexp"
 	"strings"
-
-	"github.com/pkg/errors"
 
 	"github.com/golangci/golangci-lint/pkg/fsutils"
 	"github.com/golangci/golangci-lint/pkg/logutils"
@@ -35,7 +34,7 @@ func NewSkipDirs(patterns []string, log logutils.Log, runArgs []string) (*SkipDi
 		p = fsutils.NormalizePathInRegex(p)
 		patternRe, err := regexp.Compile(p)
 		if err != nil {
-			return nil, errors.Wrapf(err, "can't compile regexp %q", p)
+			return nil, fmt.Errorf("can't compile regexp %q: %w", p, err)
 		}
 		patternsRe = append(patternsRe, patternRe)
 	}
@@ -52,7 +51,7 @@ func NewSkipDirs(patterns []string, log logutils.Log, runArgs []string) (*SkipDi
 
 		absArg, err := filepath.Abs(arg)
 		if err != nil {
-			return nil, errors.Wrapf(err, "failed to abs-ify arg %q", arg)
+			return nil, fmt.Errorf("failed to abs-ify arg %q: %w", arg, err)
 		}
 		absArgsDirs = append(absArgsDirs, absArg)
 	}

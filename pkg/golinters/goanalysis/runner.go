@@ -11,12 +11,12 @@ package goanalysis
 
 import (
 	"encoding/gob"
+	"fmt"
 	"go/token"
 	"runtime"
 	"sort"
 	"sync"
 
-	"github.com/pkg/errors"
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/packages"
 
@@ -311,7 +311,7 @@ func extractDiagnostics(roots []*action) (retDiags []Diagnostic, retErrors []err
 			if pe, ok := act.err.(*errorutil.PanicError); ok {
 				panic(pe)
 			}
-			retErrors = append(retErrors, errors.Wrap(act.err, act.a.Name))
+			retErrors = append(retErrors, fmt.Errorf("%s: %w", act.a.Name, act.err))
 			return
 		}
 

@@ -1,7 +1,7 @@
 package processors
 
 import (
-	"github.com/pkg/errors"
+	"fmt"
 
 	"github.com/golangci/golangci-lint/pkg/result"
 )
@@ -22,7 +22,7 @@ func filterIssuesErr(issues []result.Issue, filter func(i *result.Issue) (bool, 
 	for i := range issues {
 		ok, err := filter(&issues[i])
 		if err != nil {
-			return nil, errors.Wrapf(err, "can't filter issue %#v", issues[i])
+			return nil, fmt.Errorf("can't filter issue %#v: %w", issues[i], err)
 		}
 
 		if ok {

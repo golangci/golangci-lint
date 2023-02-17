@@ -4,8 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	"sync"
-
-	"github.com/pkg/errors"
 )
 
 type fileLinesCache [][]byte
@@ -39,7 +37,7 @@ func (lc *LineCache) GetLine(filePath string, index1 int) (string, error) {
 func (lc *LineCache) getRawLine(filePath string, index0 int) ([]byte, error) {
 	fc, err := lc.getFileCache(filePath)
 	if err != nil {
-		return nil, errors.Wrapf(err, "failed to get file %s lines cache", filePath)
+		return nil, fmt.Errorf("failed to get file %s lines cache: %w", filePath, err)
 	}
 
 	if index0 < 0 {
@@ -61,7 +59,7 @@ func (lc *LineCache) getFileCache(filePath string) (fileLinesCache, error) {
 
 	fileBytes, err := lc.fileCache.GetFileBytes(filePath)
 	if err != nil {
-		return nil, errors.Wrapf(err, "can't get file %s bytes from cache", filePath)
+		return nil, fmt.Errorf("can't get file %s bytes from cache: %w", filePath, err)
 	}
 
 	fc := bytes.Split(fileBytes, []byte("\n"))

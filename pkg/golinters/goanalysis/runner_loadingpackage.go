@@ -1,6 +1,7 @@
 package goanalysis
 
 import (
+	"errors"
 	"fmt"
 	"go/ast"
 	"go/parser"
@@ -11,7 +12,6 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/pkg/errors"
 	"golang.org/x/tools/go/gcexportdata"
 	"golang.org/x/tools/go/packages"
 
@@ -59,7 +59,7 @@ func (lp *loadingPackage) analyze(loadMode LoadMode, loadSem chan struct{}) {
 	defer lp.decUse(loadMode < LoadModeWholeProgram)
 
 	if err := lp.loadWithFacts(loadMode); err != nil {
-		werr := errors.Wrapf(err, "failed to load package %s", lp.pkg.Name)
+		werr := fmt.Errorf("failed to load package %s: %w", lp.pkg.Name, err)
 		// Don't need to write error to errCh, it will be extracted and reported on another layer.
 		// Unblock depending on actions and propagate error.
 		for _, act := range lp.actions {
@@ -290,7 +290,7 @@ func (lp *loadingPackage) loadImportedPackageWithFacts(loadMode LoadMode) error 
 				Msg:  fmt.Sprintf("could not load export data: %s", err),
 				Kind: packages.ParseError,
 			})
-			return errors.Wrap(err, "could not load export data")
+			return fmt.Errorf("could not load export data: %w", err)
 		}
 	}
 

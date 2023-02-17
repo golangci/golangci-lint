@@ -1,6 +1,7 @@
 package golinters
 
 import (
+	"errors"
 	"fmt"
 	"go/ast"
 	"go/types"
@@ -13,7 +14,6 @@ import (
 
 	"github.com/go-critic/go-critic/checkers"
 	gocriticlinter "github.com/go-critic/go-critic/framework/linter"
-	"github.com/pkg/errors"
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/config"
@@ -425,7 +425,7 @@ func (s *goCriticSettingsWrapper) validate() error {
 		}
 	} else {
 		if err := validateStringsUniq(s.EnabledTags); err != nil {
-			return errors.Wrap(err, "validate enabled tags")
+			return fmt.Errorf("validate enabled tags: %w", err)
 		}
 
 		tagToCheckers := s.buildTagToCheckersMap()
@@ -447,15 +447,15 @@ func (s *goCriticSettingsWrapper) validate() error {
 	}
 
 	if err := validateStringsUniq(s.EnabledChecks); err != nil {
-		return errors.Wrap(err, "validate enabled checks")
+		return fmt.Errorf("validate enabled checks: %w", err)
 	}
 
 	if err := validateStringsUniq(s.DisabledChecks); err != nil {
-		return errors.Wrap(err, "validate disabled checks")
+		return fmt.Errorf("validate disabled checks: %w", err)
 	}
 
 	if err := s.validateCheckerNames(); err != nil {
-		return errors.Wrap(err, "validation failed")
+		return fmt.Errorf("validation failed: %w", err)
 	}
 
 	return nil
