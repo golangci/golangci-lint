@@ -1,6 +1,7 @@
 package goanalysis
 
 import (
+	"errors"
 	"fmt"
 	"go/types"
 	"io"
@@ -8,8 +9,6 @@ import (
 	"runtime/debug"
 	"time"
 
-	"github.com/hashicorp/go-multierror"
-	"github.com/pkg/errors"
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/packages"
 	"golang.org/x/tools/go/types/objectpath"
@@ -119,20 +118,16 @@ func (act *action) analyze() {
 	}(time.Now())
 
 	// Report an error if any dependency failures.
-	var depErrors *multierror.Error
+	var depErrors error
 	for _, dep := range act.deps {
 		if dep.err == nil {
 			continue
 		}
 
-		depErrors = multierror.Append(depErrors, errors.Cause(dep.err))
+		depErrors = errors.Join(depErrors, errors.Unwrap(dep.err))
 	}
 	if depErrors != nil {
-		depErrors.ErrorFormat = func(e []error) string {
-			return fmt.Sprintf("failed prerequisites: %v", e)
-		}
-
-		act.err = depErrors
+		act.err = fmt.Errorf("failed prerequisites: %v", depErrors)
 		return
 	}
 
@@ -182,7 +177,7 @@ func (act *action) analyze() {
 		// It looks like there should be !pass.Analyzer.RunDespiteErrors
 		// but govet's cgocall crashes on it. Govet itself contains !pass.Analyzer.RunDespiteErrors condition here,
 		// but it exits before it if packages.Load have failed.
-		act.err = errors.Wrap(&IllTypedError{Pkg: act.pkg}, "analysis skipped")
+		act.err = fmt.Errorf("analysis skipped: %w", &IllTypedError{Pkg: act.pkg})
 	} else {
 		startedAt = time.Now()
 		act.result, act.err = pass.Analyzer.Run(pass)

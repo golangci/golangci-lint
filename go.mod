@@ -45,7 +45,6 @@ require (
 	github.com/gordonklaus/ineffassign v0.0.0-20230107090616-13ace0543b28
 	github.com/gostaticanalysis/forcetypeassert v0.1.0
 	github.com/gostaticanalysis/nilerr v0.1.1
-	github.com/hashicorp/go-multierror v1.1.1
 	github.com/hashicorp/go-version v1.6.0
 	github.com/hexops/gotextdiff v1.0.3
 	github.com/jgautheron/goconst v1.5.1
@@ -140,7 +139,6 @@ require (
 	github.com/google/go-cmp v0.5.9 // indirect
 	github.com/gostaticanalysis/analysisutil v0.7.1 // indirect
 	github.com/gostaticanalysis/comment v1.4.2 // indirect
-	github.com/hashicorp/errwrap v1.0.0 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/inconshreveable/mousetrap v1.0.1 // indirect
 	github.com/kisielk/gotool v1.0.0 // indirect
