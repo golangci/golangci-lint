@@ -2072,6 +2072,7 @@ linters:
     - predeclared
     - promlinter
     - reassign
+    - responsewriterlint
     - revive
     - rowserrcheck
     - scopelint
