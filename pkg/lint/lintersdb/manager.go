@@ -725,7 +725,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		linter.NewConfig(golinters.NewResponseWriterLint(nil)).
 			WithSince("1.52.0").
 			WithPresets(linter.PresetBugs).
-			ConsiderSlow().
+			WithLoadForGoAnalysis().
 			WithURL("https://github.com/javorszky/go-responsewriter-lint"),
 
 		linter.NewConfig(golinters.NewRevive(reviveCfg)).
