@@ -1,6 +1,27 @@
 Follow the news and releases on our [twitter](https://twitter.com/golangci) and our [blog](https://medium.com/golangci).
 There is the most valuable changes log:
 
+### v1.51.2
+
+1. updated linters
+   * `forbidigo`: from 1.3.0 to 1.4.0
+   * `gci`: from 0.9.0 to 0.9.1
+   * `go-critic`: from 0.6.5 to 0.6.7
+   * `go-errorlint`: from 1.0.6 to 1.1.0
+   * `gosec`: from 2.14.0 to 2.15.0
+   * `musttag`: from 0.4.4 to 0.4.5
+   * `staticcheck`: from 0.4.0 to 0.4.2
+   * `tools`: from 0.5.0 to 0.6.0
+   * `usestdlibvars`: from 1.21.1 to 1.23.0
+   * `wsl`: from 3.3.0 to 3.4.0
+   * `govet`: enable `timeformat` by default
+2. misc.
+   * fix: cache status size calculation
+   * add new source archive
+3. Documentation
+   * Improve installation section
+   * Replace links to godoc.org with pkg.go.dev
+
 ### v1.51.1
 
 1. updated linters
