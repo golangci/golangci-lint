@@ -8,7 +8,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 )
 
-func NewResponseWriterLint(_ *config.ReassignSettings) *goanalysis.Linter {
+func NewResponseWriterLint() *goanalysis.Linter {
 	a := analyzer.New()
 
 	return goanalysis.NewLinter(
