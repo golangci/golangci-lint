@@ -40,6 +40,13 @@ func TestSeverityRulesMultiple(t *testing.T) {
 			},
 		},
 		{
+			Severity: "info",
+			BaseRule: BaseRule{
+				Text:       "^nontestonly$",
+				PathExcept: `_test\.go`,
+			},
+		},
+		{
 			BaseRule: BaseRule{
 				Source:  "^//go:generate ",
 				Linters: []string{"lll"},
@@ -72,6 +79,8 @@ func TestSeverityRulesMultiple(t *testing.T) {
 		{Path: "ssl.go", Text: "ssl", Linter: "gosec"},
 		{Path: "e.go", Text: "some", Linter: "linter"},
 		{Path: "e_test.go", Text: "testonly", Linter: "testlinter"},
+		{Path: "e.go", Text: "nontestonly", Linter: "testlinter"},
+		{Path: "e_test.go", Text: "nontestonly", Linter: "testlinter"},
 		{Path: filepath.Join("testdata", "exclude_rules.go"), Line: 3, Linter: "lll"},
 		{Path: filepath.Join("testdata", "severity_rules.go"), Line: 3, Linter: "invalidgo"},
 		{Path: "someotherlinter.go", Text: "someotherlinter", Linter: "someotherlinter"},
@@ -97,6 +106,8 @@ func TestSeverityRulesMultiple(t *testing.T) {
 		{Path: "ssl.go", Text: "ssl", Linter: "gosec", Severity: "info"},
 		{Path: "e.go", Text: "some", Linter: "linter", Severity: "info"},
 		{Path: "e_test.go", Text: "testonly", Linter: "testlinter", Severity: "info"},
+		{Path: "e.go", Text: "nontestonly", Linter: "testlinter", Severity: "info"},       // matched
+		{Path: "e_test.go", Text: "nontestonly", Linter: "testlinter", Severity: "error"}, // not matched
 		{Path: filepath.Join("testdata", "exclude_rules.go"), Line: 3, Linter: "lll", Severity: "error"},
 		{Path: filepath.Join("testdata", "severity_rules.go"), Line: 3, Linter: "invalidgo", Severity: "info"},
 		{Path: "someotherlinter.go", Text: "someotherlinter", Linter: "someotherlinter", Severity: "info"},
