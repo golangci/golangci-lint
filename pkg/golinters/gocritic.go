@@ -173,7 +173,7 @@ func runGocriticOnFile(linterCtx *gocriticlinter.Context, f *ast.File, checks []
 		// All checkers are expected to use *lint.Context
 		// as read-only structure, so no copying is required.
 		for _, warn := range c.Check(f) {
-			pos := linterCtx.FileSet.Position(warn.Node.Pos())
+			pos := linterCtx.FileSet.Position(warn.Pos)
 			issue := result.Issue{
 				Pos:        pos,
 				Text:       fmt.Sprintf("%s: %s", c.Info.Name, warn.Text),
@@ -184,7 +184,7 @@ func runGocriticOnFile(linterCtx *gocriticlinter.Context, f *ast.File, checks []
 				issue.Replacement = &result.Replacement{
 					Inline: &result.InlineFix{
 						StartCol:  pos.Column - 1,
-						Length:    int(warn.Node.End() - warn.Node.Pos()),
+						Length:    int(warn.Suggestion.To - warn.Suggestion.From),
 						NewString: string(warn.Suggestion.Replacement),
 					},
 				}
