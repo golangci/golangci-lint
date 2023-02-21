@@ -418,6 +418,14 @@ linters-settings:
     # Default: false
     suppress-err-assertion: true
 
+    # Suppress the wrong comparison assertion warning.
+    # Default: false
+    suppress-compare-assertion: true
+
+    # Don't trigger warnings for HaveLen(0)
+    # Default: false
+    allow-havelen-zero: true
+
   gocognit:
     # Minimal code complexity to report.
     # Default: 30 (but we recommend 10-20)

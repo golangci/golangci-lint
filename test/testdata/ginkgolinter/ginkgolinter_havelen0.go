@@ -1,4 +1,4 @@
-//golangcitest:config_path configs/ginkgolinter_suppress_len.yml
+//golangcitest:config_path configs/ginkgolinter_allow_havelen0.yml
 //golangcitest:args --disable-all -Eginkgolinter
 package ginkgolinter
 
@@ -7,25 +7,24 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-// LenUsecase_len should not trigger any warning
-func LenUsecase_len() {
+func LenUsecase_havelen0() {
 	var fakeVarUnderTest []int
 	Expect(fakeVarUnderTest).Should(BeEmpty())     // valid
 	Expect(fakeVarUnderTest).ShouldNot(HaveLen(5)) // valid
 
-	Expect(len(fakeVarUnderTest)).Should(Equal(0))
-	Expect(len(fakeVarUnderTest)).ShouldNot(Equal(2))
-	Expect(len(fakeVarUnderTest)).To(BeNumerically("==", 0))
+	Expect(len(fakeVarUnderTest)).Should(Equal(0))           // want "ginkgo-linter: wrong length assertion; consider using .Expect\\(fakeVarUnderTest\\)\\.Should\\(BeEmpty\\(\\)\\). instead"
+	Expect(len(fakeVarUnderTest)).ShouldNot(Equal(2))        // want "ginkgo-linter: wrong length assertion; consider using .Expect\\(fakeVarUnderTest\\)\\.ShouldNot\\(HaveLen\\(2\\)\\). instead"
+	Expect(len(fakeVarUnderTest)).To(BeNumerically("==", 0)) // // want "ginkgo-linter: wrong length assertion; consider using .Expect\\(fakeVarUnderTest\\)\\.To\\(BeEmpty\\(\\)\\). instead"
 
 	fakeVarUnderTest = append(fakeVarUnderTest, 3)
-	Expect(len(fakeVarUnderTest)).ShouldNot(Equal(0))
-	Expect(len(fakeVarUnderTest)).Should(Equal(1))
-	Expect(len(fakeVarUnderTest)).To(BeNumerically(">", 0))
-	Expect(len(fakeVarUnderTest)).To(BeNumerically(">=", 1))
-	Expect(len(fakeVarUnderTest)).To(BeNumerically("!=", 0))
+	Expect(len(fakeVarUnderTest)).ShouldNot(Equal(0))        // want "ginkgo-linter: wrong length assertion; consider using .Expect\\(fakeVarUnderTest\\)\\.ShouldNot\\(BeEmpty\\(\\)\\). instead"
+	Expect(len(fakeVarUnderTest)).Should(Equal(1))           // want "ginkgo-linter: wrong length assertion; consider using .Expect\\(fakeVarUnderTest\\)\\.Should\\(HaveLen\\(1\\)\\). instead"
+	Expect(len(fakeVarUnderTest)).To(BeNumerically(">", 0))  // want "ginkgo-linter: wrong length assertion; consider using .Expect\\(fakeVarUnderTest\\)\\.ToNot\\(BeEmpty\\(\\)\\). instead"
+	Expect(len(fakeVarUnderTest)).To(BeNumerically(">=", 1)) // want "ginkgo-linter: wrong length assertion; consider using .Expect\\(fakeVarUnderTest\\)\\.ToNot\\(BeEmpty\\(\\)\\). instead"
+	Expect(len(fakeVarUnderTest)).To(BeNumerically("!=", 0)) // want "ginkgo-linter: wrong length assertion; consider using .Expect\\(fakeVarUnderTest\\)\\.ToNot\\(BeEmpty\\(\\)\\). instead"
 }
 
-func NilUsecase_len() {
+func NilUsecase_havelen0() {
 	y := 5
 	x := &y
 	Expect(x == nil).To(Equal(true)) // want "ginkgo-linter: wrong nil assertion; consider using .Expect\\(x\\)\\.To\\(BeNil\\(\\)\\). instead"
@@ -34,14 +33,14 @@ func NilUsecase_len() {
 	Expect(x == nil).To(BeTrue())    // want "ginkgo-linter: wrong nil assertion; consider using .Expect\\(x\\)\\.To\\(BeNil\\(\\)\\). instead"
 	Expect(x == nil).To(BeFalse())   // want "ginkgo-linter: wrong nil assertion; consider using .Expect\\(x\\)\\.ToNot\\(BeNil\\(\\)\\). instead"
 }
-func BooleanUsecase_len() {
+func BooleanUsecase_havelen0() {
 	x := true
 	Expect(x).To(Equal(true)) // want "ginkgo-linter: wrong boolean assertion; consider using .Expect\\(x\\)\\.To\\(BeTrue\\(\\)\\). instead"
 	x = false
 	Expect(x).To(Equal(false)) // want "ginkgo-linter: wrong boolean assertion; consider using .Expect\\(x\\)\\.To\\(BeFalse\\(\\)\\). instead"
 }
 
-func ErrorUsecase_len() {
+func ErrorUsecase_havelen0() {
 	err := errors.New("fake error")
 	funcReturnsErr := func() error { return err }
 
@@ -52,12 +51,12 @@ func ErrorUsecase_len() {
 	Expect(funcReturnsErr()).To(BeNil()) // want "ginkgo-linter: wrong error assertion; consider using .Expect\\(funcReturnsErr\\(\\)\\)\\.To\\(Succeed\\(\\)\\). instead"
 }
 
-func HaveLen0Usecase_len() {
+func HaveLen0Usecase_havelen0() {
 	x := make([]string, 0)
-	Expect(x).To(HaveLen(0)) // want "ginkgo-linter: wrong length assertion; consider using .Expect\\(x\\)\\.To\\(BeEmpty\\(\\)\\). instead"
+	Expect(x).To(HaveLen(0))
 }
 
-func WrongComparisonUsecase_len() {
+func WrongComparisonUsecase_havelen0() {
 	x := 8
 	Expect(x == 8).To(BeTrue())    // want "ginkgo-linter: wrong comparison assertion; consider using .Expect\\(x\\)\\.To\\(Equal\\(8\\)\\). instead"
 	Expect(x < 9).To(BeTrue())     // want "ginkgo-linter: wrong comparison assertion; consider using .Expect\\(x\\)\\.To\\(BeNumerically\\(\"<\", 9\\)\\). instead"
