@@ -1,6 +1,7 @@
 package test
 
 import (
+	"fmt"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -16,58 +17,68 @@ const envKeepTempFiles = "GL_KEEP_TEMP_FILES"
 
 func TestFix(t *testing.T) {
 	testshared.SkipOnWindows(t)
-
-	tmpDir := filepath.Join(testdataDir, "fix.tmp")
-	_ = os.RemoveAll(tmpDir) // cleanup previous runs
-
-	if os.Getenv(envKeepTempFiles) == "1" {
-		t.Logf("Temp dir for fix test: %s", tmpDir)
-	} else {
-		t.Cleanup(func() { _ = os.RemoveAll(tmpDir) })
-	}
-
+	testshared.InstallGolangciLint(t)
 	sourcesDir := filepath.Join(testdataDir, "fix")
 
-	err := exec.Command("cp", "-R", sourcesDir, tmpDir).Run()
-	require.NoError(t, err)
+	tests := []struct {
+		Args      []string
+		DirSuffix string
+	}{
+		{[]string{}, ""},
+		{[]string{"--path-prefix=simple-prefix"}, "-simple-prefix"},
+		{[]string{"--path-prefix=slash-prefix/"}, "-slash-prefix"},
+	}
 
-	testshared.InstallGolangciLint(t)
+	for _, test := range tests {
+		tmpDir := filepath.Join(testdataDir, fmt.Sprintf("fix%s.tmp", test.DirSuffix))
+		_ = os.RemoveAll(tmpDir) // cleanup previous runs
 
-	sources := findSources(t, tmpDir, "in", "*.go")
+		if os.Getenv(envKeepTempFiles) == "1" {
+			t.Logf("Temp dir for fix with args %v test: %s", test.Args, tmpDir)
+		} else {
+			t.Cleanup(func() { _ = os.RemoveAll(tmpDir) })
+		}
 
-	for _, input := range sources {
-		input := input
-		t.Run(filepath.Base(input), func(t *testing.T) {
-			t.Parallel()
+		err := exec.Command("cp", "-R", sourcesDir, tmpDir).Run()
+		require.NoError(t, err)
 
-			rc := testshared.ParseTestDirectives(t, input)
-			if rc == nil {
-				t.Logf("Skipped: %s", input)
-				return
-			}
+		sources := findSources(t, tmpDir, "in", "*.go")
 
-			testshared.NewRunnerBuilder(t).
-				WithArgs(
+		for _, input := range sources {
+			input := input
+			t.Run(filepath.Base(input)+test.DirSuffix, func(t *testing.T) {
+				t.Parallel()
+
+				rc := testshared.ParseTestDirectives(t, input)
+				if rc == nil {
+					t.Logf("Skipped: %s", input)
+					return
+				}
+
+				args := []string{
 					"--disable-all",
 					"--print-issued-lines=false",
 					"--print-linter-name=false",
 					"--out-format=line-number",
 					"--fix",
-					"--path-prefix=mock",
-				).
-				WithRunContext(rc).
-				WithTargetPath(input).
-				Runner().
-				Run().
-				ExpectExitCode(rc.ExitCode)
+				}
+				args = append(args, test.Args...)
+				testshared.NewRunnerBuilder(t).
+					WithArgs(args...).
+					WithRunContext(rc).
+					WithTargetPath(input).
+					Runner().
+					Run().
+					ExpectExitCode(rc.ExitCode)
 
-			output, err := os.ReadFile(input)
-			require.NoError(t, err)
+				output, err := os.ReadFile(input)
+				require.NoError(t, err)
 
-			expectedOutput, err := os.ReadFile(filepath.Join(testdataDir, "fix", "out", filepath.Base(input)))
-			require.NoError(t, err)
+				expectedOutput, err := os.ReadFile(filepath.Join(testdataDir, "fix", "out", filepath.Base(input)))
+				require.NoError(t, err)
 
-			require.Equal(t, string(expectedOutput), string(output))
-		})
+				require.Equal(t, string(expectedOutput), string(output))
+			})
+		}
 	}
 }
