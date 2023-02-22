@@ -19,10 +19,7 @@ import (
 
 const lllName = "lll"
 
-const (
-	generate = "//go:generate"
-	linkname = "//go:linkname"
-)
+const goCommentDirectivePrefix = "//go:"
 
 //nolint:dupl
 func NewLLL(settings *config.LllSettings) *goanalysis.Linter {
