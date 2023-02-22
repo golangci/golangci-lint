@@ -1,9 +1,8 @@
 package config
 
 import (
+	"errors"
 	"runtime"
-
-	"github.com/pkg/errors"
 )
 
 var defaultLintersSettings = LintersSettings{

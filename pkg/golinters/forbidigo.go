@@ -1,10 +1,10 @@
 package golinters
 
 import (
+	"fmt"
 	"sync"
 
 	"github.com/ashanbrown/forbidigo/forbidigo"
-	"github.com/pkg/errors"
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/config"
@@ -59,14 +59,14 @@ func runForbidigo(pass *analysis.Pass, settings *config.ForbidigoSettings) ([]go
 
 	forbid, err := forbidigo.NewLinter(settings.Forbid, options...)
 	if err != nil {
-		return nil, errors.Wrapf(err, "failed to create linter %q", forbidigoName)
+		return nil, fmt.Errorf("failed to create linter %q: %w", forbidigoName, err)
 	}
 
 	var issues []goanalysis.Issue
 	for _, file := range pass.Files {
 		hints, err := forbid.RunWithConfig(forbidigo.RunConfig{Fset: pass.Fset}, file)
 		if err != nil {
-			return nil, errors.Wrapf(err, "forbidigo linter failed on file %q", file.Name.String())
+			return nil, fmt.Errorf("forbidigo linter failed on file %q: %w", file.Name.String(), err)
 		}
 
 		for _, hint := range hints {

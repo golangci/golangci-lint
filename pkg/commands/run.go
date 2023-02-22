@@ -2,6 +2,7 @@ package commands
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"io"
 	"log"
@@ -11,7 +12,6 @@ import (
 	"time"
 
 	"github.com/fatih/color"
-	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 
@@ -355,7 +355,7 @@ func (e *Executor) runAnalysis(ctx context.Context, args []string) ([]result.Iss
 
 	lintCtx, err := e.contextLoader.Load(ctx, lintersToRun)
 	if err != nil {
-		return nil, errors.Wrap(err, "context loading failed")
+		return nil, fmt.Errorf("context loading failed: %w", err)
 	}
 	lintCtx.Log = e.log.Child(logutils.DebugKeyLintersContext)
 
@@ -522,7 +522,8 @@ func (e *Executor) executeRun(_ *cobra.Command, args []string) {
 	if err := e.runAndPrint(ctx, args); err != nil {
 		e.log.Errorf("Running error: %s", err)
 		if e.exitCode == exitcodes.Success {
-			if exitErr, ok := errors.Cause(err).(*exitcodes.ExitError); ok {
+			var exitErr *exitcodes.ExitError
+			if errors.As(err, &exitErr) {
 				e.exitCode = exitErr.Code
 			} else {
 				e.exitCode = exitcodes.Failure

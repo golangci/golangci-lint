@@ -1,9 +1,9 @@
 package goanalysis
 
 import (
+	"errors"
 	"fmt"
 
-	"github.com/pkg/errors"
 	"golang.org/x/tools/go/packages"
 
 	"github.com/golangci/golangci-lint/pkg/lint/linter"

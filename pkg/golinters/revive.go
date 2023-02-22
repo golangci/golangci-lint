@@ -13,7 +13,6 @@ import (
 	reviveConfig "github.com/mgechev/revive/config"
 	"github.com/mgechev/revive/lint"
 	"github.com/mgechev/revive/rule"
-	"github.com/pkg/errors"
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/config"
@@ -171,13 +170,13 @@ func getReviveConfig(cfg *config.ReviveSettings) (*lint.Config, error) {
 
 		err := toml.NewEncoder(buf).Encode(rawRoot)
 		if err != nil {
-			return nil, errors.Wrap(err, "failed to encode configuration")
+			return nil, fmt.Errorf("failed to encode configuration: %w", err)
 		}
 
 		conf = &lint.Config{}
 		_, err = toml.NewDecoder(buf).Decode(conf)
 		if err != nil {
-			return nil, errors.Wrap(err, "failed to decode configuration")
+			return nil, fmt.Errorf("failed to decode configuration: %w", err)
 		}
 	}
 
