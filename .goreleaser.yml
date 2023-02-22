@@ -73,6 +73,10 @@ changelog:
       - Merge pull request
       - Merge branch
 
+source:
+  enabled: true
+  name_template: '{{ .ProjectName }}-{{ .Version }}-source'
+
 brews:
   - tap:
       owner: golangci

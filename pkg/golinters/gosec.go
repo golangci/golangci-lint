@@ -9,7 +9,6 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/pkg/errors"
 	"github.com/securego/gosec/v2"
 	"github.com/securego/gosec/v2/rules"
 	"golang.org/x/tools/go/analysis"
@@ -167,7 +166,7 @@ func convertToScore(str string) (gosec.Score, error) {
 	case "high":
 		return gosec.High, nil
 	default:
-		return gosec.Low, errors.Errorf("'%s' is invalid, use low instead. Valid options: low, medium, high", str)
+		return gosec.Low, fmt.Errorf("'%s' is invalid, use low instead. Valid options: low, medium, high", str)
 	}
 }
 

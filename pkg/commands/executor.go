@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"crypto/sha256"
+	"fmt"
 	"io"
 	"os"
 	"path/filepath"
@@ -12,7 +13,6 @@ import (
 
 	"github.com/fatih/color"
 	"github.com/gofrs/flock"
-	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"gopkg.in/yaml.v3"
@@ -149,12 +149,12 @@ func (e *Executor) Execute() error {
 func (e *Executor) initHashSalt(version string) error {
 	binSalt, err := computeBinarySalt(version)
 	if err != nil {
-		return errors.Wrap(err, "failed to calculate binary salt")
+		return fmt.Errorf("failed to calculate binary salt: %w", err)
 	}
 
 	configSalt, err := computeConfigSalt(e.cfg)
 	if err != nil {
-		return errors.Wrap(err, "failed to calculate config salt")
+		return fmt.Errorf("failed to calculate config salt: %w", err)
 	}
 
 	var b bytes.Buffer
@@ -195,7 +195,7 @@ func computeConfigSalt(cfg *config.Config) ([]byte, error) {
 
 	lintersSettingsBytes, err := yaml.Marshal(cfg.LintersSettings)
 	if err != nil {
-		return nil, errors.Wrap(err, "failed to json marshal config linter settings")
+		return nil, fmt.Errorf("failed to json marshal config linter settings: %w", err)
 	}
 
 	var configData bytes.Buffer

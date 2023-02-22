@@ -7,7 +7,6 @@ import (
 	"strings"
 
 	"github.com/hashicorp/go-multierror"
-	"github.com/pkg/errors"
 	gopackages "golang.org/x/tools/go/packages"
 
 	"github.com/golangci/golangci-lint/internal/errorutil"
@@ -46,7 +45,7 @@ func NewRunner(cfg *config.Config, log logutils.Log, goenv *goutil.Env, es *lint
 
 	enabledLinters, err := es.GetEnabledLintersMap()
 	if err != nil {
-		return nil, errors.Wrap(err, "failed to get enabled linters")
+		return nil, fmt.Errorf("failed to get enabled linters: %w", err)
 	}
 
 	// print deprecated messages
@@ -58,7 +57,7 @@ func NewRunner(cfg *config.Config, log logutils.Log, goenv *goutil.Env, es *lint
 
 			var extra string
 			if lc.Deprecation.Replacement != "" {
-				extra = fmt.Sprintf(" Replaced by %s.", lc.Deprecation.Replacement)
+				extra = fmt.Sprintf("Replaced by %s.", lc.Deprecation.Replacement)
 			}
 
 			log.Warnf("The linter '%s' is deprecated (since %s) due to: %s %s", name, lc.Deprecation.Since, lc.Deprecation.Message, extra)
