@@ -3,6 +3,7 @@ package commands
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"os"
 	"strings"
 
@@ -11,12 +12,6 @@ import (
 
 	"github.com/golangci/golangci-lint/pkg/config"
 )
-
-type jsonVersion struct {
-	Version string `json:"version"`
-	Commit  string `json:"commit"`
-	Date    string `json:"date"`
-}
 
 func (e *Executor) initVersionConfiguration(cmd *cobra.Command) {
 	fs := cmd.Flags()
@@ -39,24 +34,24 @@ func (e *Executor) initVersion() {
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			switch strings.ToLower(e.cfg.Version.Format) {
 			case "short":
-				fmt.Println(e.version)
+				fmt.Println(e.buildInfo.Version)
 				return nil
 
 			case "json":
-				ver := jsonVersion{
-					Version: e.version,
-					Commit:  e.commit,
-					Date:    e.date,
-				}
-				return json.NewEncoder(os.Stdout).Encode(&ver)
+				return json.NewEncoder(os.Stdout).Encode(e.buildInfo)
 
 			default:
-				fmt.Printf("golangci-lint has version %s built from %s on %s\n", e.version, e.commit, e.date)
-				return nil
+				return printVersion(os.Stdout, e.buildInfo)
 			}
 		},
 	}
 
 	e.rootCmd.AddCommand(versionCmd)
 	e.initVersionConfiguration(versionCmd)
+}
+
+func printVersion(w io.Writer, buildInfo BuildInfo) error {
+	_, err := fmt.Fprintf(w, "golangci-lint has version %s built with %s from %s on %s\n",
+		buildInfo.Version, buildInfo.GoVersion, buildInfo.Commit, buildInfo.Date)
+	return err
 }
