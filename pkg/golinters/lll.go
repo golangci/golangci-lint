@@ -96,7 +96,7 @@ func getLLLIssuesForFile(filename string, maxLineLen int, tabSpaces string) ([]r
 		line := scanner.Text()
 		line = strings.ReplaceAll(line, "\t", tabSpaces)
 
-		if strings.HasPrefix(line, generate) || strings.HasPrefix(line, linkname) {
+		if strings.HasPrefix(line, goCommentDirectivePrefix) {
 			continue
 		}
 
