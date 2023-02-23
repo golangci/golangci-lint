@@ -8,12 +8,11 @@ import (
 
 // builtin functions:
 func musttagJSON() {
-	var user struct { // want `exported fields should be annotated with the "json" tag`
+	var user struct { // want "`anonymous struct` should be annotated with the `json` tag as it is passed to `json.Marshal` at test(/|\\\\)testdata(/|\\\\)musttag.go:15:2"
 		Name  string
 		Email string `json:"email"`
 	}
 	json.Marshal(user)
-	json.Unmarshal(nil, &user)
 }
 
 // custom functions from config:
@@ -23,5 +22,4 @@ func musttagASN1() {
 		Email string `asn1:"email"`
 	}
 	asn1.Marshal(user)
-	asn1.Unmarshal(nil, &user)
 }
