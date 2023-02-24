@@ -3,6 +3,7 @@ package goanalysis
 import (
 	"errors"
 	"fmt"
+	"go/token"
 
 	"golang.org/x/tools/go/packages"
 
@@ -25,6 +26,13 @@ func buildIssuesFromIllTypedError(errs []error, lintCtx *linter.Context) ([]resu
 
 	var other error
 
+	type key struct {
+		*packages.Package
+		token.Position
+		text string
+	}
+	seenIssue := make(map[key]bool)
+
 	for _, err := range errs {
 		err := err
 
@@ -38,6 +46,13 @@ func buildIssuesFromIllTypedError(errs []error, lintCtx *linter.Context) ([]resu
 
 		for _, err := range libpackages.ExtractErrors(ill.Pkg) {
 			i, perr := parseError(err)
+
+			k := key{i.Pkg, i.Pos, i.Text}
+			if seenIssue[k] {
+				continue
+			}
+			seenIssue[k] = true
+
 			if perr != nil { // failed to parse
 				if uniqReportedIssues[err.Msg] {
 					continue
