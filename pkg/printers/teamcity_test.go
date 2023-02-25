@@ -9,7 +9,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/golangci/golangci-lint/pkg/report"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
@@ -55,26 +54,16 @@ func TestTeamCity_Print(t *testing.T) {
 	}
 
 	buf := new(bytes.Buffer)
-	rd := &report.Data{
-		Linters: []report.LinterData{
-			{Name: "linter-a", Enabled: true},
-			{Name: "linter-b", Enabled: false},
-		},
-	}
-	nower := func() string {
-		return "2023-02-17T15:42:23.630"
-	}
-	printer := NewTeamCity(rd, buf, nower)
+	printer := NewTeamCity(buf)
 
 	err := printer.Print(context.Background(), issues)
 	require.NoError(t, err)
 
-	expected := `##teamcity[testStarted timestamp='2023-02-17T15:42:23.630' name='linter: linter-a']
-##teamcity[testStdErr timestamp='2023-02-17T15:42:23.630' name='linter: linter-a' out='path/to/filea.go:10:4 - some issue']
-##teamcity[testStdErr timestamp='2023-02-17T15:42:23.630' name='linter: linter-a' out='path/to/filea.go:10 - some issue 2']
-##teamcity[testFailed timestamp='2023-02-17T15:42:23.630' name='linter: linter-a']
-##teamcity[testStarted timestamp='2023-02-17T15:42:23.630' name='linter: linter-b']
-##teamcity[testIgnored timestamp='2023-02-17T15:42:23.630' name='linter: linter-b']
+	expected := `##teamcity[inspectionType id='linter-a' name='linter-a' description='linter-a' category='Golangci-lint reports']
+##teamcity[inspection typeId='linter-a' message='some issue' file='path/to/filea.go' line='10' additional attribute='error']
+##teamcity[inspection typeId='linter-a' message='some issue 2' file='path/to/filea.go' line='10' additional attribute='error']
+##teamcity[inspectionType id='linter-b' name='linter-b' description='linter-b' category='Golangci-lint reports']
+##teamcity[inspection typeId='linter-b' message='another issue' file='path/to/fileb.go' line='300' additional attribute='error']
 `
 
 	assert.Equal(t, expected, buf.String())
