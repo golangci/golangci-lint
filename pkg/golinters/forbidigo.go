@@ -47,7 +47,7 @@ func NewForbidigo(settings *config.ForbidigoSettings) *goanalysis.Linter {
 		nil,
 	).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
 		return resIssues
-	}).WithLoadMode(goanalysis.LoadModeSyntax)
+	}).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }
 
 func runForbidigo(pass *analysis.Pass, settings *config.ForbidigoSettings) ([]goanalysis.Issue, error) {
