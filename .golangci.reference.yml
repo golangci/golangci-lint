@@ -294,6 +294,9 @@ linters-settings:
     # See the https://github.com/polyfloyd/go-errorlint for caveats.
     # Default: true
     errorf: false
+    # Permit more than 1 %w verb, valid per Go 1.20 (Requires errorf:true)
+    # Default: true
+    errorf-multi: false
     # Check for plain type assertions and type switches.
     # Default: true
     asserts: false
