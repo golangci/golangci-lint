@@ -417,6 +417,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		linter.NewConfig(golinters.NewForbidigo(forbidigoCfg)).
 			WithSince("v1.34.0").
 			WithPresets(linter.PresetStyle).
+			WithLoadForGoAnalysis().
 			WithURL("https://github.com/ashanbrown/forbidigo"),
 
 		linter.NewConfig(golinters.NewForceTypeAssert()).

@@ -69,8 +69,8 @@ github.com/alingse/asasalint v0.0.11 h1:SFwnQXJ49Kx/1GghOFz1XGqHYKp21Kq1nHad/0WQ
 github.com/alingse/asasalint v0.0.11/go.mod h1:nCaoMhw7a9kSJObvQyVzNTPBDbNpdocqrSP7t/cW5+I=
 github.com/andybalholm/brotli v1.0.2/go.mod h1:loMXtMfwqflxFJPmdbJO0a3KNoPuLBgiu3qAvBg8x/Y=
 github.com/andybalholm/brotli v1.0.3/go.mod h1:fO7iG3H7G2nSZ7m0zPUDn85XEX2GTukHGRSepvi9Eig=
-github.com/ashanbrown/forbidigo v1.4.0 h1:spdPbupaSqtWORq1Q4eHBoPBmHtwVyLKwaedbSLc5Sw=
-github.com/ashanbrown/forbidigo v1.4.0/go.mod h1:IvgwB5Y4fzqSAj/WVXKWigoTkB0dzI2FBbpKWuh7ph8=
+github.com/ashanbrown/forbidigo v1.5.1 h1:WXhzLjOlnuDYPYQo/eFlcFMi8X/kLfvWLYu6CSoebis=
+github.com/ashanbrown/forbidigo v1.5.1/go.mod h1:Y8j9jy9ZYAEHXdu723cUlraTqbzjKF1MUyfOKL+AjcU=
 github.com/ashanbrown/makezero v1.1.1 h1:iCQ87C0V0vSyO+M9E/FZYbu65auqH0lnsOkf5FcB28s=
 github.com/ashanbrown/makezero v1.1.1/go.mod h1:i1bJLCRSCHOcOa9Y6MyF2FTfMZMFdHvxKHxgO5Z1axI=
 github.com/beorn7/perks v0.0.0-20180321164747-3a771d992973/go.mod h1:Dwedo/Wpr24TaqPxmxbtue+5NUziq4I4S80YR8gNf3Q=
