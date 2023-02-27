@@ -62,11 +62,14 @@ func (p *TeamCity) Print(_ context.Context, issues []result.Issue) error {
 		}
 
 		instance := InspectionInstance{
-			typeID:              issue.FromLinter,
-			message:             issue.Text,
-			file:                issue.FilePath(),
-			line:                issue.Line(),
-			additionalAttribute: issue.Severity,
+			typeID:  issue.FromLinter,
+			message: issue.Text,
+			file:    issue.FilePath(),
+			line:    issue.Line(),
+		}
+
+		if issue.Severity != "" {
+			instance.additionalAttribute = issue.Severity
 		}
 
 		_, err := instance.Print(p.w, p.escaper)
