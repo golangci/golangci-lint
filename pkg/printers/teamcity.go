@@ -66,7 +66,7 @@ func (p *TeamCity) Print(_ context.Context, issues []result.Issue) error {
 			message:             issue.Text,
 			file:                issue.FilePath(),
 			line:                issue.Line(),
-			additionalAttribute: issue.Severity,
+			additionalAttribute: strings.TrimSpace(issue.Severity),
 		}
 
 		_, err := instance.Print(p.w, p.escaper)
@@ -104,8 +104,25 @@ type InspectionInstance struct {
 }
 
 func (i InspectionInstance) Print(w io.Writer, replacer *strings.Replacer) (int, error) {
-	return fmt.Fprintf(w, "##teamcity[inspection typeId='%s' message='%s' file='%s' line='%d' additional attribute='%s']\n",
-		limit(i.typeID, smallLimit), limit(replacer.Replace(i.message), largeLimit), limit(i.file, largeLimit), i.line, i.additionalAttribute)
+	_, err := fmt.Fprintf(w, "##teamcity[inspection typeId='%s' message='%s' file='%s' line='%d'",
+		limit(i.typeID, smallLimit), limit(replacer.Replace(i.message), largeLimit), limit(i.file, largeLimit), i.line)
+	if err != nil {
+		return 0, err
+	}
+
+	if i.additionalAttribute != "" {
+		_, err = fmt.Fprintf(w, " additional attribute='%s'", i.additionalAttribute)
+		if err != nil {
+			return 0, err
+		}
+	}
+
+	_, err = fmt.Fprintln(w, "]")
+	if err != nil {
+		return 0, err
+	}
+
+	return 0, nil
 }
 
 func limit(s string, max int) string {
