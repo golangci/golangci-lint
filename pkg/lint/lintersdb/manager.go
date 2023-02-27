@@ -648,7 +648,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithURL("https://github.com/junk1tm/musttag"),
 
 		linter.NewConfig(golinters.NewNakedefer(nakedeferCfg)).
-			WithSince("v1.51.0").
+			WithSince("v1.52.0").
 			WithPresets(linter.PresetStyle).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/GaijinEntertainment/go-nakedefer"),
