@@ -495,7 +495,7 @@ func (e *Executor) createPrinter(format string, w io.Writer) (printers.Printer, 
 	case config.OutFormatGithubActions:
 		p = printers.NewGithub(w)
 	case config.OutFormatTeamCity:
-		p = printers.NewTeamCity(w)
+		p = printers.NewTeamCity(w, e.DBManager)
 	default:
 		return nil, fmt.Errorf("unknown output format %s", format)
 	}

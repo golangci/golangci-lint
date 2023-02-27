@@ -9,6 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
+	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
@@ -16,8 +17,8 @@ func TestTeamCity_Print(t *testing.T) {
 	issues := []result.Issue{
 		{
 			FromLinter: "linter-a",
-			Severity:   "error",
-			Text:       "some issue",
+			Severity:   "warning",
+			Text:       "warning issue",
 			Pos: token.Position{
 				Filename: "path/to/filea.go",
 				Offset:   2,
@@ -28,7 +29,7 @@ func TestTeamCity_Print(t *testing.T) {
 		{
 			FromLinter: "linter-a",
 			Severity:   "error",
-			Text:       "some issue 2",
+			Text:       "error issue",
 			Pos: token.Position{
 				Filename: "path/to/filea.go",
 				Offset:   2,
@@ -37,8 +38,8 @@ func TestTeamCity_Print(t *testing.T) {
 		},
 		{
 			FromLinter: "linter-b",
-			Severity:   "error",
-			Text:       "another issue",
+			Severity:   "info",
+			Text:       "info issue",
 			SourceLines: []string{
 				"func foo() {",
 				"\tfmt.Println(\"bar\")",
@@ -54,22 +55,35 @@ func TestTeamCity_Print(t *testing.T) {
 	}
 
 	buf := new(bytes.Buffer)
-	printer := NewTeamCity(buf)
+	printer := NewTeamCity(buf, configerMock(
+		map[string][]*linter.Config{
+			"linter-a": {
+				{
+					Linter: &linterMock{name: "linter-a", desc: "description for linter-a"},
+				},
+			},
+			"linter-b": {
+				{
+					Linter: &linterMock{name: "linter-b", desc: "description for linter-b with escape '\n\r|[] characters"},
+				},
+			},
+		},
+	))
 
 	err := printer.Print(context.Background(), issues)
 	require.NoError(t, err)
 
-	expected := `##teamcity[inspectionType id='linter-a' name='linter-a' description='linter-a' category='Golangci-lint reports']
-##teamcity[inspection typeId='linter-a' message='some issue' file='path/to/filea.go' line='10' additional attribute='error']
-##teamcity[inspection typeId='linter-a' message='some issue 2' file='path/to/filea.go' line='10' additional attribute='error']
-##teamcity[inspectionType id='linter-b' name='linter-b' description='linter-b' category='Golangci-lint reports']
-##teamcity[inspection typeId='linter-b' message='another issue' file='path/to/fileb.go' line='300' additional attribute='error']
+	expected := `##teamcity[inspectionType id='linter-a' name='linter-a' description='description for linter-a' category='Golangci-lint reports']
+##teamcity[inspection typeId='linter-a' message='warning issue' file='path/to/filea.go' line='10' SEVERITY='WARNING']
+##teamcity[inspection typeId='linter-a' message='error issue' file='path/to/filea.go' line='10' SEVERITY='ERROR']
+##teamcity[inspectionType id='linter-b' name='linter-b' description='description for linter-b with escape |'|n|r|||[|] characters' category='Golangci-lint reports']
+##teamcity[inspection typeId='linter-b' message='info issue' file='path/to/fileb.go' line='300' SEVERITY='INFO']
 `
 
 	assert.Equal(t, expected, buf.String())
 }
 
-func TestLimit(t *testing.T) {
+func TestTeamCity_limit(t *testing.T) {
 	tests := []struct {
 		input    string
 		max      int
@@ -106,3 +120,19 @@ func TestLimit(t *testing.T) {
 		require.Equal(t, tc.expected, limit(tc.input, tc.max))
 	}
 }
+
+type configerMock map[string][]*linter.Config
+
+func (c configerMock) GetLinterConfigs(name string) []*linter.Config {
+	return c[name]
+}
+
+type linterMock struct {
+	linter.Noop
+	name string
+	desc string
+}
+
+func (l linterMock) Name() string { return l.name }
+
+func (l linterMock) Desc() string { return l.desc }
