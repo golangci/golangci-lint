@@ -5,5 +5,5 @@ linters-settings:
         alias: fff
       - pkg: os
         alias: std_os
-      - pkg: github.com/pkg/errors
-        alias: pkgerr
+      - pkg: golang.org/x/tools/go/analysis
+        alias: ananas

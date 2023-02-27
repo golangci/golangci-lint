@@ -75,7 +75,7 @@ run:
 
 # output configuration options
 output:
-  # Format: colored-line-number|line-number|json|tab|checkstyle|code-climate|junit-xml|github-actions
+  # Format: colored-line-number|line-number|json|tab|checkstyle|code-climate|junit-xml|github-actions|teamcity
   #
   # Multiple can be specified by separating them by comma, output can be provided
   # for each of them by separating format name and path by colon symbol.
