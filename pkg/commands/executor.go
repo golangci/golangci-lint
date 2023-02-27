@@ -157,8 +157,7 @@ func (e *Executor) initHashSalt(version string) error {
 		return fmt.Errorf("failed to calculate config salt: %w", err)
 	}
 
-	var b bytes.Buffer
-	b.Write(binSalt)
+	b := bytes.NewBuffer(binSalt)
 	b.Write(configSalt)
 	cache.SetSalt(b.Bytes())
 	return nil
@@ -198,8 +197,7 @@ func computeConfigSalt(cfg *config.Config) ([]byte, error) {
 		return nil, fmt.Errorf("failed to json marshal config linter settings: %w", err)
 	}
 
-	var configData bytes.Buffer
-	configData.WriteString("linters-settings=")
+	configData := bytes.NewBufferString("linters-settings=")
 	configData.Write(lintersSettingsBytes)
 	configData.WriteString("\nbuild-tags=%s" + strings.Join(cfg.Run.BuildTags, ","))
 

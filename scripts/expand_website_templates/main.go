@@ -64,8 +64,7 @@ func updateStateFile(replacements map[string]string) error {
 		return err
 	}
 
-	var contentBuf bytes.Buffer
-	contentBuf.WriteString("This file stores hash of website templates to trigger " +
+	contentBuf := bytes.NewBufferString("This file stores hash of website templates to trigger " +
 		"Netlify rebuild when something changes, e.g. new linter is added.\n")
 	contentBuf.WriteString(hex.EncodeToString(h.Sum(nil)))
 
