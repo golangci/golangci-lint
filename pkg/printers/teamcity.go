@@ -117,12 +117,7 @@ func (i InspectionInstance) Print(w io.Writer, replacer *strings.Replacer) (int,
 		}
 	}
 
-	_, err = fmt.Fprintln(w, "]")
-	if err != nil {
-		return 0, err
-	}
-
-	return 0, nil
+	return fmt.Fprintln(w, "]")
 }
 
 func limit(s string, max int) string {
