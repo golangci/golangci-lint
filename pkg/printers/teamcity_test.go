@@ -68,3 +68,41 @@ func TestTeamCity_Print(t *testing.T) {
 
 	assert.Equal(t, expected, buf.String())
 }
+
+func TestLimit(t *testing.T) {
+	tests := []struct {
+		input    string
+		max      int
+		expected string
+	}{
+		{
+			input:    "golangci-lint",
+			max:      0,
+			expected: "",
+		},
+		{
+			input:    "golangci-lint",
+			max:      8,
+			expected: "golangci",
+		},
+		{
+			input:    "golangci-lint",
+			max:      13,
+			expected: "golangci-lint",
+		},
+		{
+			input:    "golangci-lint",
+			max:      15,
+			expected: "golangci-lint",
+		},
+		{
+			input:    "こんにちは",
+			max:      3,
+			expected: "こんに",
+		},
+	}
+
+	for _, tc := range tests {
+		require.Equal(t, tc.expected, limit(tc.input, tc.max))
+	}
+}
