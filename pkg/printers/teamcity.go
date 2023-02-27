@@ -7,7 +7,6 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
@@ -17,23 +16,16 @@ const (
 	largeLimit = 4000
 )
 
-// Configer used for accessing linter.Config by its name for printing instanceType values.
-type Configer interface {
-	GetLinterConfigs(name string) []*linter.Config
-}
-
 // TeamCity printer for TeamCity format.
 type TeamCity struct {
 	w       io.Writer
-	conf    Configer
 	escaper *strings.Replacer
 }
 
 // NewTeamCity output format outputs issues according to TeamCity service message format.
-func NewTeamCity(w io.Writer, conf Configer) *TeamCity {
+func NewTeamCity(w io.Writer) *TeamCity {
 	return &TeamCity{
-		w:    w,
-		conf: conf,
+		w: w,
 		// https://www.jetbrains.com/help/teamcity/service-messages.html#Escaped+Values
 		escaper: strings.NewReplacer(
 			"'", "|'",
@@ -54,25 +46,22 @@ func (p *TeamCity) Print(_ context.Context, issues []result.Issue) error {
 
 		_, ok := uniqLinters[issue.FromLinter]
 		if !ok {
-			linterConfigs := p.conf.GetLinterConfigs(issue.FromLinter)
-			for _, config := range linterConfigs {
-				inspectionType := inspectionType{
-					id:          config.Linter.Name(),
-					name:        config.Linter.Name(),
-					description: config.Linter.Desc(),
-					category:    "Golangci-lint reports",
-				}
+			inspectionType := InspectionType{
+				id:          issue.FromLinter,
+				name:        issue.FromLinter,
+				description: issue.FromLinter,
+				category:    "Golangci-lint reports",
+			}
 
-				_, err := inspectionType.Print(p.w, p.escaper)
-				if err != nil {
-					return err
-				}
+			_, err := inspectionType.Print(p.w, p.escaper)
+			if err != nil {
+				return err
 			}
 
 			uniqLinters[issue.FromLinter] = struct{}{}
 		}
 
-		instance := inspectionInstance{
+		instance := InspectionInstance{
 			typeID:   issue.FromLinter,
 			message:  issue.Text,
 			file:     issue.FilePath(),
@@ -89,36 +78,38 @@ func (p *TeamCity) Print(_ context.Context, issues []result.Issue) error {
 	return nil
 }
 
-// inspectionType is the unique description of the conducted inspection. Each specific warning or
+// InspectionType is the unique description of the conducted inspection. Each specific warning or
 // an error in code (inspection instance) has an inspection type.
 // https://www.jetbrains.com/help/teamcity/service-messages.html#Inspection+Type
-type inspectionType struct {
+type InspectionType struct {
 	id          string // (mandatory) limited by 255 characters.
 	name        string // (mandatory) limited by 255 characters.
 	description string // (mandatory) limited by 255 characters.
 	category    string // (mandatory) limited by 4000 characters.
 }
 
-func (i inspectionType) Print(w io.Writer, escaper *strings.Replacer) (int, error) {
-	return fmt.Fprintf(w, "##teamcity[inspectionType id='%s' name='%s' description='%s' category='%s']\n",
+func (i InspectionType) Print(w io.Writer, escaper *strings.Replacer) (int, error) {
+	return fmt.Fprintf(w, "##teamcity[InspectionType id='%s' name='%s' description='%s' category='%s']\n",
 		limit(i.id, smallLimit), limit(i.name, smallLimit), limit(escaper.Replace(i.description), largeLimit), limit(i.category, smallLimit))
 }
 
-// inspectionInstance reports a specific defect, warning, error message.
+// InspectionInstance reports a specific defect, warning, error message.
 // Includes location, description, and various optional and custom attributes.
 // https://www.jetbrains.com/help/teamcity/service-messages.html#Inspection+Instance
-type inspectionInstance struct {
+type InspectionInstance struct {
 	typeID   string // (mandatory) limited by 255 characters.
 	message  string // (optional)  limited by 4000 characters.
 	file     string // (mandatory) file path limited by 4000 characters.
 	line     int    // (optional)  line of the file.
-	severity string // (optional)  severity attribute: INFO, ERROR, WARNING, WEAK WARNING.
+	severity string // (optional) any linter severity.
 }
 
-func (i inspectionInstance) Print(w io.Writer, replacer *strings.Replacer) (int, error) {
+func (i InspectionInstance) Print(w io.Writer, replacer *strings.Replacer) (int, error) {
 	return fmt.Fprintf(w, "##teamcity[inspection typeId='%s' message='%s' file='%s' line='%d' SEVERITY='%s']\n",
-		limit(i.typeID, smallLimit), limit(replacer.Replace(i.message), largeLimit), limit(i.file, largeLimit), i.line,
-		strings.ToUpper(i.severity))
+		limit(i.typeID, smallLimit),
+		limit(replacer.Replace(i.message), largeLimit),
+		limit(i.file, largeLimit),
+		i.line, strings.ToUpper(i.severity))
 }
 
 func limit(s string, max int) string {

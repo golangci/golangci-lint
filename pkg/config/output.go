@@ -10,7 +10,7 @@ const (
 	OutFormatHTML              = "html"
 	OutFormatJunitXML          = "junit-xml"
 	OutFormatGithubActions     = "github-actions"
-	OutFormatTeamCity          = "team-city"
+	OutFormatTeamCity          = "teamcity"
 )
 
 var OutFormats = []string{
