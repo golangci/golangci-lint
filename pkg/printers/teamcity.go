@@ -100,7 +100,7 @@ type InspectionInstance struct {
 	message             string // (optional)  limited by 4000 characters.
 	file                string // (mandatory) file path limited by 4000 characters.
 	line                int    // (optional) line of the file, integer.
-	additionalAttribute string
+	additionalAttribute string // (optional) severity of the inspection; debug, info, warning, error, etc.
 }
 
 func (i InspectionInstance) Print(w io.Writer, replacer *strings.Replacer) (int, error) {
