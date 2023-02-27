@@ -19,9 +19,10 @@ var defaultLintersSettings = LintersSettings{
 		MaxBlankIdentifiers: 2,
 	},
 	ErrorLint: ErrorLintSettings{
-		Errorf:     true,
-		Asserts:    true,
-		Comparison: true,
+		Errorf:      true,
+		ErrorfMulti: true,
+		Asserts:     true,
+		Comparison:  true,
 	},
 	Exhaustive: ExhaustiveSettings{
 		Check:                      []string{"switch"},
@@ -280,9 +281,10 @@ type ErrChkJSONSettings struct {
 }
 
 type ErrorLintSettings struct {
-	Errorf     bool `mapstructure:"errorf"`
-	Asserts    bool `mapstructure:"asserts"`
-	Comparison bool `mapstructure:"comparison"`
+	Errorf      bool `mapstructure:"errorf"`
+	ErrorfMulti bool `mapstructure:"errorf-multi"`
+	Asserts     bool `mapstructure:"asserts"`
+	Comparison  bool `mapstructure:"comparison"`
 }
 
 type ExhaustiveSettings struct {
