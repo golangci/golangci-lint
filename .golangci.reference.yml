@@ -2339,6 +2339,7 @@ severity:
   # - Code climate: https://docs.codeclimate.com/docs/issues#issue-severity
   # - Checkstyle: https://checkstyle.sourceforge.io/property_types.html#SeverityLevel
   # - GitHub: https://help.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-error-message
+  # - TeamCity: https://www.jetbrains.com/help/teamcity/service-messages.html#Inspection+Instance
   #
   # Default value is an empty string.
   default-severity: error
