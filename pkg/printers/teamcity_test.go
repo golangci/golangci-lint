@@ -73,6 +73,7 @@ func TestTeamCity_Print(t *testing.T) {
 	err := printer.Print(context.Background(), issues)
 	require.NoError(t, err)
 
+	//nolint:lll
 	expected := `##teamcity[inspectionType id='linter-a' name='linter-a' description='description for linter-a' category='Golangci-lint reports']
 ##teamcity[inspection typeId='linter-a' message='warning issue' file='path/to/filea.go' line='10' SEVERITY='WARNING']
 ##teamcity[inspection typeId='linter-a' message='error issue' file='path/to/filea.go' line='10' SEVERITY='ERROR']
