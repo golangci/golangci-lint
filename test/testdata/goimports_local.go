@@ -6,11 +6,11 @@ import (
 	"fmt"
 
 	"github.com/golangci/golangci-lint/pkg/config" // want "File is not `goimports`-ed with -local github.com/golangci/golangci-lint"
-	"github.com/pkg/errors"
+	"golang.org/x/tools/go/analysis"
 )
 
 func GoimportsLocalPrefixTest() {
 	fmt.Print("x")
 	_ = config.Config{}
-	_ = errors.New("")
+	_ = analysis.Analyzer{}
 }

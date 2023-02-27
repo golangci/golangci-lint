@@ -6,7 +6,7 @@ package gci
 import (
 	"fmt"
 
-	"github.com/pkg/errors"
+	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/config"
 )
@@ -14,5 +14,5 @@ import (
 func GoimportsLocalTest() {
 	fmt.Print("x")
 	_ = config.Config{}
-	_ = errors.New("")
+	_ = analysis.Analyzer{}
 }
