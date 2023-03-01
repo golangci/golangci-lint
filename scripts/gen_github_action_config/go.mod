@@ -1,10 +1,10 @@
 module github.com/golangci/golangci-lint/scripts/gen_github_action_config
 
-go 1.18
+go 1.19
 
 require (
-	github.com/shurcooL/githubv4 v0.0.0-20220922232305-70b4d362a8cb
-	golang.org/x/oauth2 v0.0.0-20221014153046-6fdb5e3db783
+	github.com/shurcooL/githubv4 v0.0.0-20230215024106-420ad0987b9b
+	golang.org/x/oauth2 v0.5.0
 )
 
 require (
