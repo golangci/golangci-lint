@@ -18,20 +18,17 @@ var (
 	date    = ""
 )
 
-//nolint:gochecknoinits
-func init() {
-	if info, available := debug.ReadBuildInfo(); available {
-		goVersion = info.GoVersion
+func main() {
+	if buildInfo, available := debug.ReadBuildInfo(); available {
+		goVersion = buildInfo.GoVersion
 
 		if date == "" {
-			version = info.Main.Version
-			commit = fmt.Sprintf("(unknown, mod sum: %q)", info.Main.Sum)
+			version = buildInfo.Main.Version
+			commit = fmt.Sprintf("(unknown, mod sum: %q)", buildInfo.Main.Sum)
 			date = "(unknown)"
 		}
 	}
-}
 
-func main() {
 	info := commands.BuildInfo{
 		GoVersion: goVersion,
 		Version:   version,
