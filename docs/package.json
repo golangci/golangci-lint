@@ -33,7 +33,7 @@
     "gatsby-source-filesystem": "^4.22.0",
     "gatsby-transformer-remark": "^5.25.1",
     "gatsby-transformer-sharp": "^4.21.0",
-    "gatsby-transformer-yaml": "^4.21.0",
+    "gatsby-transformer-yaml": "^4.25.0",
     "polished": "^4.2.2",
     "postcss": "^8.4.20",
     "prism-react-renderer": "^1.3.5",
