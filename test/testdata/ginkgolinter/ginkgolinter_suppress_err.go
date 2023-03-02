@@ -40,6 +40,7 @@ func BooleanUsecase_err() {
 	Expect(x).To(Equal(false)) // want "ginkgo-linter: wrong boolean assertion; consider using .Expect\\(x\\)\\.To\\(BeFalse\\(\\)\\). instead"
 }
 
+// ErrorUsecase_err should not trigger any warning
 func ErrorUsecase_err() {
 	err := errors.New("fake error")
 	funcReturnsErr := func() error { return err }
@@ -49,4 +50,19 @@ func ErrorUsecase_err() {
 	Expect(err == nil).To(BeFalse())
 	Expect(err != nil).To(BeTrue())
 	Expect(funcReturnsErr()).To(BeNil())
+}
+
+func HaveLen0Usecase_err() {
+	x := make([]string, 0)
+	Expect(x).To(HaveLen(0)) // want "ginkgo-linter: wrong length assertion; consider using .Expect\\(x\\)\\.To\\(BeEmpty\\(\\)\\). instead"
+}
+
+func WrongComparisonUsecase_err() {
+	x := 8
+	Expect(x == 8).To(BeTrue())    // want "ginkgo-linter: wrong comparison assertion; consider using .Expect\\(x\\)\\.To\\(Equal\\(8\\)\\). instead"
+	Expect(x < 9).To(BeTrue())     // want "ginkgo-linter: wrong comparison assertion; consider using .Expect\\(x\\)\\.To\\(BeNumerically\\(\"<\", 9\\)\\). instead"
+	Expect(x < 7).To(Equal(false)) // want "ginkgo-linter: wrong comparison assertion; consider using .Expect\\(x\\)\\.ToNot\\(BeNumerically\\(\"<\", 7\\)\\). instead"
+
+	p1, p2 := &x, &x
+	Expect(p1 == p2).To(Equal(true)) // want "ginkgo-linter: wrong comparison assertion; consider using .Expect\\(p1\\).To\\(BeIdenticalTo\\(p2\\)\\). instead"
 }

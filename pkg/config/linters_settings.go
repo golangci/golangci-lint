@@ -325,9 +325,11 @@ type GciSettings struct {
 }
 
 type GinkgoLinterSettings struct {
-	SuppressLenAssertion bool `mapstructure:"suppress-len-assertion"`
-	SuppressNilAssertion bool `mapstructure:"suppress-nil-assertion"`
-	SuppressErrAssertion bool `mapstructure:"suppress-err-assertion"`
+	SuppressLenAssertion     bool `mapstructure:"suppress-len-assertion"`
+	SuppressNilAssertion     bool `mapstructure:"suppress-nil-assertion"`
+	SuppressErrAssertion     bool `mapstructure:"suppress-err-assertion"`
+	SuppressCompareAssertion bool `mapstructure:"suppress-compare-assertion"`
+	AllowHaveLenZero         bool `mapstructure:"allow-havelen-zero"`
 }
 
 type GocognitSettings struct {
