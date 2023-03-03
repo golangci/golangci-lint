@@ -57,7 +57,7 @@ func NewGci(settings *config.GciSettings) *goanalysis.Linter {
 
 	return goanalysis.NewLinter(
 		gciName,
-		"Gci controls golang package import order and makes it always deterministic.",
+		"Gci controls Go package import order and makes it always deterministic.",
 		[]*analysis.Analyzer{analyzer},
 		nil,
 	).WithContextSetter(func(lintCtx *linter.Context) {
