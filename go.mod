@@ -22,7 +22,7 @@ require (
 	github.com/breml/bidichk v0.2.3
 	github.com/breml/errchkjson v0.3.0
 	github.com/butuzov/ireturn v0.1.1
-	github.com/charithe/durationcheck v0.0.9
+	github.com/charithe/durationcheck v0.0.10
 	github.com/curioswitch/go-reassign v0.2.0
 	github.com/daixiang0/gci v0.9.1
 	github.com/denis-tingaikin/go-header v0.4.3
@@ -182,7 +182,7 @@ require (
 	golang.org/x/mod v0.8.0 // indirect
 	golang.org/x/sync v0.1.0 // indirect
 	golang.org/x/sys v0.5.0 // indirect
-	golang.org/x/text v0.6.0 // indirect
+	golang.org/x/text v0.7.0 // indirect
 	google.golang.org/protobuf v1.28.0 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
