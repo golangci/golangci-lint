@@ -625,8 +625,6 @@ linters-settings:
         replacement: 'a[b:]'
 
   gofumpt:
-    # Select the Go version to target.
-    # Default: "1.15"
     # Deprecated: use the global `run.go` instead.
     lang-version: "1.17"
 
@@ -770,8 +768,6 @@ linters-settings:
       local_replace_directives: false
 
   gosimple:
-    # Select the Go version to target.
-    # Default: 1.13
     # Deprecated: use the global `run.go` instead.
     go: "1.15"
     # Sxxxx checks in https://staticcheck.io/docs/configuration/options/#checks
@@ -1685,8 +1681,6 @@ linters-settings:
       - github.com/jmoiron/sqlx
 
   staticcheck:
-    # Select the Go version to target.
-    # Default: "1.13"
     # Deprecated: use the global `run.go` instead.
     go: "1.15"
     # SAxxxx checks in https://staticcheck.io/docs/configuration/options/#checks
@@ -1694,8 +1688,6 @@ linters-settings:
     checks: [ "all" ]
 
   stylecheck:
-    # Select the Go version to target.
-    # Default: 1.13
     # Deprecated: use the global `run.go` instead.
     go: "1.15"
     # STxxxx checks in https://staticcheck.io/docs/configuration/options/#checks
