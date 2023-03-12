@@ -729,6 +729,12 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			ConsiderSlow().
 			WithURL("https://github.com/mgechev/revive"),
 
+		linter.NewConfig(golinters.NewReuseconn()).
+			WithSince("v1.51.0").
+			WithLoadForGoAnalysis().
+			WithPresets(linter.PresetPerformance, linter.PresetBugs).
+			WithURL("https://github.com/atzoum/reuseconn"),
+
 		linter.NewConfig(golinters.NewRowsErrCheck(rowserrcheckCfg)).
 			WithSince("v1.23.0").
 			WithLoadForGoAnalysis().

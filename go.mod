@@ -188,3 +188,5 @@ require (
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	mvdan.cc/lint v0.0.0-20170908181259-adc824a0674b // indirect
 )
+
+require github.com/atzoum/reuseconn v0.1.0 // indirect
