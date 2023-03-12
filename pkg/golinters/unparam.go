@@ -37,7 +37,6 @@ func NewUnparam(settings *config.UnparamSettings) *goanalysis.Linter {
 			mu.Lock()
 			resIssues = append(resIssues, issues...)
 			mu.Unlock()
-
 			return nil, nil
 		},
 	}
