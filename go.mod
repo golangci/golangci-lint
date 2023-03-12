@@ -27,7 +27,7 @@ require (
 	github.com/daixiang0/gci v0.9.1
 	github.com/denis-tingaikin/go-header v0.4.3
 	github.com/esimonov/ifshort v1.0.4
-	github.com/fatih/color v1.14.1
+	github.com/fatih/color v1.15.0
 	github.com/firefart/nonamedreturns v1.0.4
 	github.com/fzipp/gocyclo v0.6.0
 	github.com/go-critic/go-critic v0.6.7
