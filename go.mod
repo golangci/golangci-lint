@@ -75,7 +75,7 @@ require (
 	github.com/nishanths/exhaustive v0.9.5
 	github.com/nishanths/predeclared v0.2.2
 	github.com/nunnatsa/ginkgolinter v0.9.0
-	github.com/polyfloyd/go-errorlint v1.2.0
+	github.com/polyfloyd/go-errorlint v1.3.0
 	github.com/quasilyte/go-ruleguard/dsl v0.3.22
 	github.com/ryancurrah/gomodguard v1.3.0
 	github.com/ryanrolds/sqlclosecheck v0.4.0
