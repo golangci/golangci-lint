@@ -851,8 +851,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithSince("v1.38.0").
 			WithPresets(linter.PresetStyle).
 			WithLoadForGoAnalysis().
-			WithURL("https://github.com/sanposhiho/wastedassign").
-			WithNoopFallback(m.cfg),
+			WithURL("https://github.com/sanposhiho/wastedassign"),
 
 		linter.NewConfig(golinters.NewWhitespace(whitespaceCfg)).
 			WithSince("v1.19.0").

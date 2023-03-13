@@ -117,6 +117,18 @@ func mugen() {
 	return
 }
 
+func mugenG[T ~int](hoge T) {
+	var i int
+	for {
+		hoge = 5 // want "assigned to hoge, but reassigned without using the value"
+		// break
+	}
+
+	println(i)
+	println(hoge)
+	return
+}
+
 func noMugen() {
 	var i int
 	var hoge int
