@@ -16,7 +16,6 @@ var (
 )
 
 func rowsCorrectDeferBlock() {
-
 	rows, err := db.QueryContext(ctx, "SELECT name FROM users WHERE age=?", age)
 	if err != nil {
 		log.Fatal(err)
@@ -89,6 +88,13 @@ func rowsMissingClose() {
 		log.Fatal(err)
 	}
 	log.Printf("%s are %d years old", strings.Join(names, ", "), age)
+}
+
+func rowsMissingCloseG[T ~int64](db *sql.DB, a T) {
+	rows, _ := db.Query("select id from tb") // want "Rows/Stmt was not closed"
+	for rows.Next() {
+		// ...
+	}
 }
 
 func rowsNonDeferClose() {
