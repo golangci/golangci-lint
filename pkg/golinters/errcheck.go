@@ -35,8 +35,8 @@ func NewErrcheck(settings *config.ErrcheckSettings) *goanalysis.Linter {
 
 	return goanalysis.NewLinter(
 		errcheckName,
-		"Errcheck is a program for checking for unchecked errors "+
-			"in go programs. These unchecked errors can be critical bugs in some cases",
+		"errcheck is a program for checking for unchecked errors in Go code. "+
+			"These unchecked errors can be critical bugs in some cases",
 		[]*analysis.Analyzer{analyzer},
 		nil,
 	).WithContextSetter(func(lintCtx *linter.Context) {
