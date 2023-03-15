@@ -247,7 +247,7 @@ func safeTomlSlice(r []interface{}) []interface{} {
 }
 
 // This element is not exported by revive, so we need copy the code.
-// Extracted from https://github.com/mgechev/revive/blob/v1.1.4/config/config.go#L15
+// Extracted from https://github.com/mgechev/revive/blob/v1.3.0/config/config.go#L15
 var defaultRules = []lint.Rule{
 	&rule.VarDeclarationsRule{},
 	&rule.PackageCommentsRule{},
@@ -267,21 +267,23 @@ var defaultRules = []lint.Rule{
 	&rule.TimeNamingRule{},
 	&rule.ContextKeysType{},
 	&rule.ContextAsArgumentRule{},
+	&rule.IfReturnRule{},
+	&rule.EmptyBlockRule{},
+	&rule.SuperfluousElseRule{},
+	&rule.UnusedParamRule{},
+	&rule.UnreachableCodeRule{},
+	&rule.RedefinesBuiltinIDRule{},
 }
 
 var allRules = append([]lint.Rule{
 	&rule.ArgumentsLimitRule{},
 	&rule.CyclomaticRule{},
 	&rule.FileHeaderRule{},
-	&rule.EmptyBlockRule{},
-	&rule.SuperfluousElseRule{},
 	&rule.ConfusingNamingRule{},
 	&rule.GetReturnRule{},
 	&rule.ModifiesParamRule{},
 	&rule.ConfusingResultsRule{},
 	&rule.DeepExitRule{},
-	&rule.UnusedParamRule{},
-	&rule.UnreachableCodeRule{},
 	&rule.AddConstantRule{},
 	&rule.FlagParamRule{},
 	&rule.UnnecessaryStmtRule{},
@@ -289,7 +291,6 @@ var allRules = append([]lint.Rule{
 	&rule.ModifiesValRecRule{},
 	&rule.ConstantLogicalExprRule{},
 	&rule.BoolLiteralRule{},
-	&rule.RedefinesBuiltinIDRule{},
 	&rule.ImportsBlacklistRule{},
 	&rule.FunctionResultsLimitRule{},
 	&rule.MaxPublicStructsRule{},
@@ -315,12 +316,13 @@ var allRules = append([]lint.Rule{
 	&rule.UnexportedNamingRule{},
 	&rule.FunctionLength{},
 	&rule.NestedStructs{},
-	&rule.IfReturnRule{},
 	&rule.UselessBreak{},
 	&rule.TimeEqualRule{},
 	&rule.BannedCharsRule{},
 	&rule.OptimizeOperandsOrderRule{},
+	&rule.UseAnyRule{},
 	&rule.DataRaceRule{},
+	&rule.CommentSpacingsRule{},
 }, defaultRules...)
 
 const defaultConfidence = 0.8

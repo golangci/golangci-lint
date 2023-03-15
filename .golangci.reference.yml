@@ -1605,6 +1605,9 @@ linters-settings:
             - must not contain line breaks
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#struct-tag
       - name: struct-tag
+        arguments:
+          - "json,inline"
+          - "bson,outline,gnu"
         severity: warning
         disabled: false
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#superfluous-else
