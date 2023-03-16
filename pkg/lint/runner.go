@@ -29,9 +29,9 @@ type Runner struct {
 
 func NewRunner(cfg *config.Config, log logutils.Log, goenv *goutil.Env, es *lintersdb.EnabledSet,
 	lineCache *fsutils.LineCache, dbManager *lintersdb.Manager, pkgs []*gopackages.Package) (*Runner, error) {
-	// Beware that some processors need to add the path prefix when working
-	// with paths because they get invoked before the path prefixer
-	// (exclude and severity rules) or process other paths (skip files).
+	// Beware that some processors need to add the path prefix when working with paths
+	// because they get invoked before the path prefixer (exclude and severity rules)
+	// or process other paths (skip files).
 	files := fsutils.NewFiles(lineCache, cfg.Output.PathPrefix)
 
 	skipFilesProcessor, err := processors.NewSkipFiles(cfg.Run.SkipFiles, cfg.Output.PathPrefix)
