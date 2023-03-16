@@ -98,6 +98,9 @@ func NewRunner(cfg *config.Config, log logutils.Log, goenv *goutil.Env, es *lint
 			processors.NewSourceCode(lineCache, log.Child(logutils.DebugKeySourceCode)),
 			processors.NewPathShortener(),
 			getSeverityRulesProcessor(&cfg.Severity, log, files),
+			// The fixer still needs to see paths for the issues that are relative to the current directory.
+			processors.NewFixer(cfg, log, lineCache.GetFileCache()),
+			// Now we can modify the issues for output.
 			processors.NewPathPrefixer(cfg.Output.PathPrefix),
 			processors.NewSortResults(cfg),
 		},

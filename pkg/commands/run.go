@@ -23,7 +23,6 @@ import (
 	"github.com/golangci/golangci-lint/pkg/packages"
 	"github.com/golangci/golangci-lint/pkg/printers"
 	"github.com/golangci/golangci-lint/pkg/result"
-	"github.com/golangci/golangci-lint/pkg/result/processors"
 )
 
 const defaultFileMode = 0644
@@ -365,13 +364,7 @@ func (e *Executor) runAnalysis(ctx context.Context, args []string) ([]result.Iss
 		return nil, err
 	}
 
-	issues, err := runner.Run(ctx, lintersToRun, lintCtx)
-	if err != nil {
-		return nil, err
-	}
-
-	fixer := processors.NewFixer(e.cfg, e.log, e.fileCache)
-	return fixer.Process(issues), nil
+	return runner.Run(ctx, lintersToRun, lintCtx)
 }
 
 func (e *Executor) setOutputToDevNull() (savedStdout, savedStderr *os.File) {

@@ -19,6 +19,8 @@ func NewLineCache(fc *FileCache) *LineCache {
 	}
 }
 
+func (lc *LineCache) GetFileCache() *FileCache { return lc.fileCache }
+
 // GetLine returns the index1-th (1-based index) line from the file on filePath
 func (lc *LineCache) GetLine(filePath string, index1 int) (string, error) {
 	if index1 == 0 { // some linters, e.g. gosec can do it: it really means first line
