@@ -1,4 +1,7 @@
 linters-settings:
+  toomanyparams:
+    max_returns: 3
+    max_params: 5
   depguard:
     list-type: denylist
     packages:

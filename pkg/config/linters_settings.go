@@ -208,6 +208,7 @@ type LintersSettings struct {
 	Whitespace       WhitespaceSettings
 	Wrapcheck        WrapcheckSettings
 	WSL              WSLSettings
+	TooManyParams    TooManyParamsSettings
 
 	Custom map[string]CustomLinterSettings
 }
@@ -508,6 +509,11 @@ type InterfaceBloatSettings struct {
 type IreturnSettings struct {
 	Allow  []string `mapstructure:"allow"`
 	Reject []string `mapstructure:"reject"`
+}
+
+type TooManyParamsSettings struct {
+	MaxParams  int `mapstructure:"max_params"`
+	MaxReturns int `mapstructure:"max_returns"`
 }
 
 type LllSettings struct {

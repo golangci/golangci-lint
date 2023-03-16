@@ -176,6 +176,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		whitespaceCfg       *config.WhitespaceSettings
 		wrapcheckCfg        *config.WrapcheckSettings
 		wslCfg              *config.WSLSettings
+		tooManyParamsCfg    *config.TooManyParamsSettings
 	)
 
 	if m.cfg != nil {
@@ -253,6 +254,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		whitespaceCfg = &m.cfg.LintersSettings.Whitespace
 		wrapcheckCfg = &m.cfg.LintersSettings.Wrapcheck
 		wslCfg = &m.cfg.LintersSettings.WSL
+		tooManyParamsCfg = &m.cfg.LintersSettings.TooManyParams
 
 		if govetCfg != nil {
 			govetCfg.Go = m.cfg.Run.Go
@@ -874,16 +876,22 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithSince("v1.26.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/golangci/golangci-lint/blob/master/pkg/golinters/nolintlint/README.md"),
+
+		linter.NewConfig(golinters.NewTooManyParams(tooManyParamsCfg)).
+			WithSince("v1.0.0").
+			WithPresets(linter.PresetStyle).
+			WithURL("github.com/hitzhangjie"),
 	}
 
 	enabledByDefault := map[string]bool{
-		golinters.NewGovet(nil).Name():                  true,
-		golinters.NewErrcheck(errcheckCfg).Name():       true,
-		golinters.NewStaticcheck(staticcheckCfg).Name(): true,
-		golinters.NewUnused(unusedCfg).Name():           true,
-		golinters.NewGosimple(gosimpleCfg).Name():       true,
-		golinters.NewIneffassign().Name():               true,
-		golinters.NewTypecheck().Name():                 true,
+		golinters.NewGovet(nil).Name():                      true,
+		golinters.NewErrcheck(errcheckCfg).Name():           true,
+		golinters.NewStaticcheck(staticcheckCfg).Name():     true,
+		golinters.NewUnused(unusedCfg).Name():               true,
+		golinters.NewGosimple(gosimpleCfg).Name():           true,
+		golinters.NewIneffassign().Name():                   true,
+		golinters.NewTypecheck().Name():                     true,
+		golinters.NewTooManyParams(tooManyParamsCfg).Name(): true,
 	}
 	return enableLinterConfigs(lcs, func(lc *linter.Config) bool {
 		return enabledByDefault[lc.Name()]
