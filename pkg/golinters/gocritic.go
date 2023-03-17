@@ -13,7 +13,7 @@ import (
 	"sync"
 
 	"github.com/go-critic/go-critic/checkers"
-	gocriticlinter "github.com/go-critic/go-critic/framework/linter"
+	gocriticlinter "github.com/go-critic/go-critic/linter"
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/config"
