@@ -27,7 +27,8 @@ run:
     - mytag
 
   # Which dirs to skip: issues from them won't be reported.
-  # Can use regexp here: `generated.*`, regexp is applied on full path.
+  # Can use regexp here: `generated.*`, regexp is applied on full path,
+  # including the path prefix if one is set.
   # Default value is empty list,
   # but default dirs are skipped independently of this option's value (see skip-dirs-use-default).
   # "/" will be replaced by current OS file path separator to properly work on Windows.
