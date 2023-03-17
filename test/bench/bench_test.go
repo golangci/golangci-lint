@@ -20,18 +20,18 @@ import (
 	"github.com/golangci/golangci-lint/test/testshared"
 )
 
-func chdir(b *testing.B, dir string) {
+func chdir(b testing.TB, dir string) {
 	if err := os.Chdir(dir); err != nil {
 		b.Fatalf("can't chdir to %s: %s", dir, err)
 	}
 }
 
-func benchPrepareGoSource(b *testing.B) {
+func prepareGoSource(b testing.TB) {
 	chdir(b, filepath.Join(build.Default.GOROOT, "src"))
 }
 
-func prepareGithubProject(owner, name string) func(*testing.B) {
-	return func(b *testing.B) {
+func prepareGithubProject(owner, name string) func(testing.TB) {
+	return func(b testing.TB) {
 		dir := filepath.Join(build.Default.GOPATH, "src", "github.com", owner, name)
 		_, err := os.Stat(dir)
 		if os.IsNotExist(err) {
@@ -79,7 +79,7 @@ func getGolangciLintCommonArgs() []string {
 	return []string{"run", "--no-config", "--issues-exit-code=0", "--deadline=30m", "--disable-all", "--enable=govet"}
 }
 
-func benchRunGolangciLintForBench(b *testing.B) {
+func runGolangciLintForBench(b testing.TB) {
 	args := getGolangciLintCommonArgs()
 	args = append(args, getBenchLintersArgs()...)
 	printCommand("golangci-lint", args...)
@@ -180,7 +180,7 @@ type runResult struct {
 	duration  time.Duration
 }
 
-func runOne(b *testing.B, run func(*testing.B), progName string) *runResult {
+func runOne(b *testing.B, run func(testing.TB), progName string) *runResult {
 	doneCh := make(chan struct{})
 	peakMemCh := trackPeakMemoryUsage(b, doneCh, progName)
 	startedAt := time.Now()
@@ -200,7 +200,7 @@ func BenchmarkGolangciLint(b *testing.B) {
 
 	type bcase struct {
 		name    string
-		prepare func(*testing.B)
+		prepare func(testing.TB)
 	}
 	bcases := []bcase{
 		{
@@ -229,13 +229,13 @@ func BenchmarkGolangciLint(b *testing.B) {
 		},
 		{
 			name:    "go source code",
-			prepare: benchPrepareGoSource,
+			prepare: prepareGoSource,
 		},
 	}
 	for _, bc := range bcases {
 		bc.prepare(b)
 		lc := getGoLinesTotalCount(b)
-		result := runOne(b, benchRunGolangciLintForBench, "golangci-lint")
+		result := runOne(b, runGolangciLintForBench, "golangci-lint")
 
 		log.Printf("%s (%d kLoC): time: %s, memory: %dMB",
 			bc.name, lc/1000,
