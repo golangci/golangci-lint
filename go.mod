@@ -30,7 +30,7 @@ require (
 	github.com/fatih/color v1.15.0
 	github.com/firefart/nonamedreturns v1.0.4
 	github.com/fzipp/gocyclo v0.6.0
-	github.com/go-critic/go-critic v0.6.7
+	github.com/go-critic/go-critic v0.7.0
 	github.com/go-xmlfmt/xmlfmt v1.1.2
 	github.com/gofrs/flock v0.8.1
 	github.com/golangci/check v0.0.0-20180506172741-cfe4005ccda2
@@ -161,7 +161,7 @@ require (
 	github.com/prometheus/procfs v0.7.3 // indirect
 	github.com/quasilyte/go-ruleguard v0.3.19 // indirect
 	github.com/quasilyte/gogrep v0.5.0 // indirect
-	github.com/quasilyte/regex/syntax v0.0.0-20200407221936-30656e2c4a95 // indirect
+	github.com/quasilyte/regex/syntax v0.0.0-20210819130434-b3f0c404a727 // indirect
 	github.com/quasilyte/stdinfo v0.0.0-20220114132959-f7386bf02567 // indirect
 	github.com/sivchari/nosnakecase v1.7.0
 	github.com/spf13/afero v1.8.2 // indirect
