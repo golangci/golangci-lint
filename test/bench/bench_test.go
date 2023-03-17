@@ -26,8 +26,10 @@ func chdir(b *testing.B, dir string) {
 	}
 }
 
-func prepareGoSource(b *testing.B) {
-	chdir(b, filepath.Join(build.Default.GOROOT, "src"))
+func prepareGoSource() func(b *testing.B) {
+	return func(b *testing.B) {
+		chdir(b, filepath.Join(build.Default.GOROOT, "src"))
+	}
 }
 
 func prepareGithubProject(owner, name string) func(*testing.B) {
@@ -79,13 +81,15 @@ func getGolangciLintCommonArgs() []string {
 	return []string{"run", "--no-config", "--issues-exit-code=0", "--deadline=30m", "--disable-all", "--enable=govet"}
 }
 
-func runGolangciLintForBench(b *testing.B) {
-	args := getGolangciLintCommonArgs()
-	args = append(args, getBenchLintersArgs()...)
-	printCommand("golangci-lint", args...)
-	out, err := exec.Command("golangci-lint", args...).CombinedOutput()
-	if err != nil {
-		b.Fatalf("can't run golangci-lint: %s, %s", err, out)
+func runGolangciLintForBench() func(b *testing.B) {
+	return func(b *testing.B) {
+		args := getGolangciLintCommonArgs()
+		args = append(args, getBenchLintersArgs()...)
+		printCommand("golangci-lint", args...)
+		out, err := exec.Command("golangci-lint", args...).CombinedOutput()
+		if err != nil {
+			b.Fatalf("can't run golangci-lint: %s, %s", err, out)
+		}
 	}
 }
 
@@ -229,13 +233,13 @@ func BenchmarkGolangciLint(b *testing.B) {
 		},
 		{
 			name:    "go source code",
-			prepare: prepareGoSource,
+			prepare: prepareGoSource(),
 		},
 	}
 	for _, bc := range bcases {
 		bc.prepare(b)
 		lc := getGoLinesTotalCount(b)
-		result := runOne(b, runGolangciLintForBench, "golangci-lint")
+		result := runOne(b, runGolangciLintForBench(), "golangci-lint")
 
 		log.Printf("%s (%d kLoC): time: %s, memory: %dMB",
 			bc.name, lc/1000,
