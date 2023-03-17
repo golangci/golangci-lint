@@ -4,6 +4,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"sort"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -35,25 +36,42 @@ func TestFix(t *testing.T) {
 
 	sources := findSources(t, tmpDir, "in", "*.go")
 
-	for _, input := range sources {
+	// The combination with --path gets tested for the first test case.
+	// This is arbitrary. It could also be tested for all of them,
+	// but then each test would have to run twice (with and without).
+	// To make this determinstic, the sources get sorted by name.
+	sort.Strings(sources)
+
+	for i, input := range sources {
+		withPathPrefix := i == 0
 		input := input
 		t.Run(filepath.Base(input), func(t *testing.T) {
 			t.Parallel()
 
 			rc := testshared.ParseTestDirectives(t, input)
 			if rc == nil {
+				if withPathPrefix {
+					t.Errorf("The testcase %s should not get skipped, it's used for testing --path.", input)
+					return
+				}
 				t.Logf("Skipped: %s", input)
 				return
 			}
 
+			args := []string{
+				"--disable-all",
+				"--print-issued-lines=false",
+				"--print-linter-name=false",
+				"--out-format=line-number",
+				"--fix",
+			}
+			if withPathPrefix {
+				t.Log("Testing with --path-prefix.")
+				// This must not break fixing...
+				args = append(args, "--path-prefix=foobar/")
+			}
 			testshared.NewRunnerBuilder(t).
-				WithArgs(
-					"--disable-all",
-					"--print-issued-lines=false",
-					"--print-linter-name=false",
-					"--out-format=line-number",
-					"--fix",
-				).
+				WithArgs(args...).
 				WithRunContext(rc).
 				WithTargetPath(input).
 				Runner().
