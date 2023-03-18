@@ -166,7 +166,7 @@ type LintersSettings struct {
 	GoModDirectives  GoModDirectivesSettings
 	Gomodguard       GoModGuardSettings
 	Gosec            GoSecSettings
-	Gosimple         StaticCheckSettings
+	Gosimple         StaticCheckGoSimpleSettings
 	Govet            GovetSettings
 	Grouper          GrouperSettings
 	Ifshort          IfshortSettings
@@ -195,13 +195,12 @@ type LintersSettings struct {
 	RowsErrCheck     RowsErrCheckSettings
 	Staticcheck      StaticCheckSettings
 	Structcheck      StructCheckSettings
-	Stylecheck       StaticCheckSettings
+	Stylecheck       StaticCheckStyleCheckSettings
 	Tagliatelle      TagliatelleSettings
 	Tenv             TenvSettings
 	Testpackage      TestpackageSettings
 	Thelper          ThelperSettings
 	Unparam          UnparamSettings
-	Unused           StaticCheckSettings
 	UseStdlibVars    UseStdlibVarsSettings
 	Varcheck         VarCheckSettings
 	Varnamelen       VarnamelenSettings
@@ -386,11 +385,9 @@ type GoFmtRewriteRule struct {
 }
 
 type GofumptSettings struct {
-	ModulePath string `mapstructure:"module-path"`
-	ExtraRules bool   `mapstructure:"extra-rules"`
-
-	// Deprecated: use the global `run.go` instead.
-	LangVersion string `mapstructure:"lang-version"`
+	LangVersion string `mapstructure:"-"`
+	ModulePath  string `mapstructure:"module-path"`
+	ExtraRules  bool   `mapstructure:"extra-rules"`
 }
 
 type GoHeaderSettings struct {
@@ -625,17 +622,34 @@ type RowsErrCheckSettings struct {
 }
 
 type StaticCheckSettings struct {
-	// Deprecated: use the global `run.go` instead.
-	GoVersion string `mapstructure:"go"`
-
-	Checks                  []string `mapstructure:"checks"`
-	Initialisms             []string `mapstructure:"initialisms"`                // only for stylecheck
-	DotImportWhitelist      []string `mapstructure:"dot-import-whitelist"`       // only for stylecheck
-	HTTPStatusCodeWhitelist []string `mapstructure:"http-status-code-whitelist"` // only for stylecheck
+	Go     string   `mapstructure:"-"`
+	Checks []string `mapstructure:"checks"`
 }
 
-func (s *StaticCheckSettings) HasConfiguration() bool {
-	return len(s.Initialisms) > 0 || len(s.HTTPStatusCodeWhitelist) > 0 || len(s.DotImportWhitelist) > 0 || len(s.Checks) > 0
+func (s StaticCheckSettings) GoVersion() string {
+	return s.Go
+}
+
+func (s StaticCheckSettings) ChecksList() []string {
+	result := make([]string, len(s.Checks))
+	copy(result, s.Checks)
+	return result
+}
+
+type StaticCheckGoSimpleSettings struct {
+	StaticCheckSettings
+}
+
+type StaticCheckStyleCheckSettings struct {
+	StaticCheckSettings
+	Initialisms             []string `mapstructure:"initialisms"`
+	DotImportWhitelist      []string `mapstructure:"dot-import-whitelist"`
+	HTTPStatusCodeWhitelist []string `mapstructure:"http-status-code-whitelist"`
+}
+
+type StaticCheckUnusedSettings struct {
+	StaticCheckSettings
+	Checks []string `mapstructure:"-"`
 }
 
 type StructCheckSettings struct {

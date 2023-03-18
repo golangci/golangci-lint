@@ -14,16 +14,10 @@ import (
 
 var debugf = logutils.Debug(logutils.DebugKeyMegacheck)
 
-func getGoVersion(settings *config.StaticCheckSettings) string {
-	var goVersion string
-	if settings != nil {
-		goVersion = settings.GoVersion
-	}
-
-	if goVersion != "" {
+func getGoVersion(versionable interface{ GoVersion() string }) string {
+	if goVersion := versionable.GoVersion(); goVersion != "" {
 		return goVersion
 	}
-
 	return "1.17"
 }
 
@@ -54,23 +48,15 @@ func setAnalyzerGoVersion(a *analysis.Analyzer, goVersion string) {
 	}
 }
 
-func staticCheckConfig(settings *config.StaticCheckSettings) *scconfig.Config {
-	var cfg *scconfig.Config
-
-	if settings == nil || !settings.HasConfiguration() {
-		return &scconfig.Config{
-			Checks:                  []string{"*"}, // override for compatibility reason. Must drop in the next major version.
-			Initialisms:             scconfig.DefaultConfig.Initialisms,
-			DotImportWhitelist:      scconfig.DefaultConfig.DotImportWhitelist,
-			HTTPStatusCodeWhitelist: scconfig.DefaultConfig.HTTPStatusCodeWhitelist,
-		}
+func staticCheckConfig(settings interface{ ChecksList() []string }) *scconfig.Config {
+	cfg := &scconfig.Config{
+		Checks: settings.ChecksList(),
 	}
 
-	cfg = &scconfig.Config{
-		Checks:                  settings.Checks,
-		Initialisms:             settings.Initialisms,
-		DotImportWhitelist:      settings.DotImportWhitelist,
-		HTTPStatusCodeWhitelist: settings.HTTPStatusCodeWhitelist,
+	if v, ok := settings.(config.StaticCheckStyleCheckSettings); ok {
+		cfg.Initialisms = v.Initialisms
+		cfg.DotImportWhitelist = v.DotImportWhitelist
+		cfg.HTTPStatusCodeWhitelist = v.HTTPStatusCodeWhitelist
 	}
 
 	if len(cfg.Checks) == 0 {

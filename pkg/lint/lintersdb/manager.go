@@ -134,7 +134,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		goModDirectivesCfg  *config.GoModDirectivesSettings
 		gomodguardCfg       *config.GoModGuardSettings
 		gosecCfg            *config.GoSecSettings
-		gosimpleCfg         *config.StaticCheckSettings
+		gosimpleCfg         config.StaticCheckGoSimpleSettings
 		govetCfg            *config.GovetSettings
 		grouperCfg          *config.GrouperSettings
 		ifshortCfg          *config.IfshortSettings
@@ -161,15 +161,15 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		reassignCfg         *config.ReassignSettings
 		reviveCfg           *config.ReviveSettings
 		rowserrcheckCfg     *config.RowsErrCheckSettings
-		staticcheckCfg      *config.StaticCheckSettings
+		staticcheckCfg      config.StaticCheckSettings
 		structcheckCfg      *config.StructCheckSettings
-		stylecheckCfg       *config.StaticCheckSettings
+		stylecheckCfg       config.StaticCheckStyleCheckSettings
 		tagliatelleCfg      *config.TagliatelleSettings
 		tenvCfg             *config.TenvSettings
 		testpackageCfg      *config.TestpackageSettings
 		thelperCfg          *config.ThelperSettings
 		unparamCfg          *config.UnparamSettings
-		unusedCfg           *config.StaticCheckSettings
+		unusedCfg           config.StaticCheckUnusedSettings
 		usestdlibvars       *config.UseStdlibVarsSettings
 		varcheckCfg         *config.VarCheckSettings
 		varnamelenCfg       *config.VarnamelenSettings
@@ -212,7 +212,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		goModDirectivesCfg = &m.cfg.LintersSettings.GoModDirectives
 		gomodguardCfg = &m.cfg.LintersSettings.Gomodguard
 		gosecCfg = &m.cfg.LintersSettings.Gosec
-		gosimpleCfg = &m.cfg.LintersSettings.Gosimple
+		gosimpleCfg = m.cfg.LintersSettings.Gosimple
 		govetCfg = &m.cfg.LintersSettings.Govet
 		grouperCfg = &m.cfg.LintersSettings.Grouper
 		ifshortCfg = &m.cfg.LintersSettings.Ifshort
@@ -239,15 +239,15 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		reassignCfg = &m.cfg.LintersSettings.Reassign
 		reviveCfg = &m.cfg.LintersSettings.Revive
 		rowserrcheckCfg = &m.cfg.LintersSettings.RowsErrCheck
-		staticcheckCfg = &m.cfg.LintersSettings.Staticcheck
+		staticcheckCfg = m.cfg.LintersSettings.Staticcheck
 		structcheckCfg = &m.cfg.LintersSettings.Structcheck
-		stylecheckCfg = &m.cfg.LintersSettings.Stylecheck
+		stylecheckCfg = m.cfg.LintersSettings.Stylecheck
 		tagliatelleCfg = &m.cfg.LintersSettings.Tagliatelle
 		tenvCfg = &m.cfg.LintersSettings.Tenv
 		testpackageCfg = &m.cfg.LintersSettings.Testpackage
 		thelperCfg = &m.cfg.LintersSettings.Thelper
 		unparamCfg = &m.cfg.LintersSettings.Unparam
-		unusedCfg = &m.cfg.LintersSettings.Unused
+		unusedCfg = config.StaticCheckUnusedSettings{}
 		varcheckCfg = &m.cfg.LintersSettings.Varcheck
 		varnamelenCfg = &m.cfg.LintersSettings.Varnamelen
 		whitespaceCfg = &m.cfg.LintersSettings.Whitespace
@@ -258,22 +258,14 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			govetCfg.Go = m.cfg.Run.Go
 		}
 
-		if gofumptCfg != nil && gofumptCfg.LangVersion == "" {
+		if gofumptCfg != nil {
 			gofumptCfg.LangVersion = m.cfg.Run.Go
 		}
 
-		if staticcheckCfg != nil && staticcheckCfg.GoVersion == "" {
-			staticcheckCfg.GoVersion = m.cfg.Run.Go
-		}
-		if gosimpleCfg != nil && gosimpleCfg.GoVersion == "" {
-			gosimpleCfg.GoVersion = m.cfg.Run.Go
-		}
-		if stylecheckCfg != nil && stylecheckCfg.GoVersion != "" {
-			stylecheckCfg.GoVersion = m.cfg.Run.Go
-		}
-		if unusedCfg != nil && unusedCfg.GoVersion == "" {
-			unusedCfg.GoVersion = m.cfg.Run.Go
-		}
+		gosimpleCfg.Go = m.cfg.Run.Go
+		staticcheckCfg.Go = m.cfg.Run.Go
+		stylecheckCfg.Go = m.cfg.Run.Go
+		unusedCfg.Go = m.cfg.Run.Go
 	}
 
 	const megacheckName = "megacheck"

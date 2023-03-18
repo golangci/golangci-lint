@@ -626,9 +626,6 @@ linters-settings:
         replacement: 'a[b:]'
 
   gofumpt:
-    # Deprecated: use the global `run.go` instead.
-    lang-version: "1.17"
-
     # Module path which contains the source code being formatted.
     # Default: ""
     module-path: github.com/org/project
@@ -769,9 +766,7 @@ linters-settings:
       local_replace_directives: false
 
   gosimple:
-    # Deprecated: use the global `run.go` instead.
-    go: "1.15"
-    # Sxxxx checks in https://staticcheck.io/docs/configuration/options/#checks
+    # Sxxxx checks in https://staticcheck.io/docs/checks/#S
     # Default: ["*"]
     checks: [ "all" ]
 
@@ -1685,16 +1680,12 @@ linters-settings:
       - github.com/jmoiron/sqlx
 
   staticcheck:
-    # Deprecated: use the global `run.go` instead.
-    go: "1.15"
-    # SAxxxx checks in https://staticcheck.io/docs/configuration/options/#checks
+    # SAxxxx checks in https://staticcheck.io/docs/checks/#SA
     # Default: ["*"]
     checks: [ "all" ]
 
   stylecheck:
-    # Deprecated: use the global `run.go` instead.
-    go: "1.15"
-    # STxxxx checks in https://staticcheck.io/docs/configuration/options/#checks
+    # STxxxx checks in https://staticcheck.io/docs/checks/#ST
     # Default: ["*"]
     checks: [ "all", "-ST1000", "-ST1003", "-ST1016", "-ST1020", "-ST1021", "-ST1022" ]
     # https://staticcheck.io/docs/configuration/options/#dot_import_whitelist

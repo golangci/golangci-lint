@@ -19,7 +19,7 @@ type UnusedSettings struct {
 	GoVersion string
 }
 
-func NewUnused(settings *config.StaticCheckSettings) *goanalysis.Linter {
+func NewUnused(settings config.StaticCheckUnusedSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
 
