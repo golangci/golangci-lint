@@ -360,8 +360,8 @@ github.com/matttproud/golang_protobuf_extensions v1.0.1 h1:4hp9jkHxhMHkqkrB3Ix0j
 github.com/matttproud/golang_protobuf_extensions v1.0.1/go.mod h1:D8He9yQNgCq6Z5Ld7szi9bcBfOoFv/3dc6xSMkL2PC0=
 github.com/mbilski/exhaustivestruct v1.2.0 h1:wCBmUnSYufAHO6J4AVWY6ff+oxWxsVFrwgOdMUQePUo=
 github.com/mbilski/exhaustivestruct v1.2.0/go.mod h1:OeTBVxQWoEmB2J2JCHmXWPJ0aksxSUOUy+nvtVEfzXc=
-github.com/mgechev/revive v1.3.0 h1:VqHghSkgbMQEFmGtgcAfL1Gn38ySoMDbgGxb+KHFLMo=
-github.com/mgechev/revive v1.3.0/go.mod h1:YlD6TTWl2B8A103R9KWJSPVI9DrEf+oqr15q21Ld+5I=
+github.com/mgechev/revive v1.3.1 h1:OlQkcH40IB2cGuprTPcjB0iIUddgVZgGmDX3IAMR8D4=
+github.com/mgechev/revive v1.3.1/go.mod h1:YlD6TTWl2B8A103R9KWJSPVI9DrEf+oqr15q21Ld+5I=
 github.com/mitchellh/go-homedir v1.1.0 h1:lukF9ziXFxDFPkA1vsr5zpc1XuPDn/wFntq5mG+4E0Y=
 github.com/mitchellh/go-homedir v1.1.0/go.mod h1:SfyaCUpYCn1Vlf4IUYiD9fPX4A5wJrkLzIz1N1q0pr0=
 github.com/mitchellh/go-ps v1.0.0 h1:i6ampVEEF4wQFF+bkYfwYgY+F/uYJDktmvLPf7qIgjc=
