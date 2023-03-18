@@ -247,7 +247,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		testpackageCfg = &m.cfg.LintersSettings.Testpackage
 		thelperCfg = &m.cfg.LintersSettings.Thelper
 		unparamCfg = &m.cfg.LintersSettings.Unparam
-		unusedCfg = &m.cfg.LintersSettings.Unused
+		unusedCfg = new(config.StaticCheckSettings)
 		varcheckCfg = &m.cfg.LintersSettings.Varcheck
 		varnamelenCfg = &m.cfg.LintersSettings.Varnamelen
 		whitespaceCfg = &m.cfg.LintersSettings.Whitespace
