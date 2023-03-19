@@ -24,6 +24,7 @@ func NewTagAlign(settings *config.TagAlignSettings) *goanalysis.Linter {
 		Doc:  "check if struct tags are well aligned",
 		Run: func(p *analysis.Pass) (any, error) {
 			var options []tagalign.Option
+			options = append(options, tagalign.WithMode(tagalign.GolangciLintMode))
 			if settings.AutoSort {
 				if len(settings.FixedOrder) > 0 {
 					options = append(options, tagalign.WithAutoSort(settings.FixedOrder...))
