@@ -5,6 +5,7 @@ go 1.19
 require (
 	4d63.com/gocheckcompilerdirectives v1.2.1
 	4d63.com/gochecknoglobals v0.2.1
+	github.com/4meepo/tagalign v1.1.1
 	github.com/Abirdcfly/dupword v0.0.11
 	github.com/Antonboom/errname v0.1.9
 	github.com/Antonboom/nilnil v0.1.3
@@ -116,8 +117,6 @@ require (
 	mvdan.cc/interfacer v0.0.0-20180901003855-c20040233aed
 	mvdan.cc/unparam v0.0.0-20221223090309-7455f1af531d
 )
-
-require github.com/4meepo/tagalign v1.1.1
 
 require (
 	github.com/Masterminds/semver v1.5.0 // indirect
