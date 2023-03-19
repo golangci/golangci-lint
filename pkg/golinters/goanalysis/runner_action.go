@@ -98,6 +98,12 @@ func (act *action) waitUntilDependingAnalyzersWorked() {
 func (act *action) analyzeSafe() {
 	defer func() {
 		if p := recover(); p != nil {
+			// This line allows to display "hidden" panic with analyzers like buildssa.
+			// Some linters are dependent of sub-analyzers but when a sub-analyzer fails the linter is not aware of that,
+			// this results to another panic (ex: "interface conversion: interface {} is nil, not *buildssa.SSA").
+			// This line will create a duplication of the panic message on purpose.
+			act.r.log.Errorf("panic during analysis: %v, %s", p, string(debug.Stack()))
+
 			act.err = errorutil.NewPanicError(fmt.Sprintf("%s: package %q (isInitialPkg: %t, needAnalyzeSource: %t): %s",
 				act.a.Name, act.pkg.Name, act.isInitialPkg, act.needAnalyzeSource, p), debug.Stack())
 		}
