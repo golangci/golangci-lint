@@ -196,6 +196,7 @@ type LintersSettings struct {
 	Staticcheck      StaticCheckSettings
 	Structcheck      StructCheckSettings
 	Stylecheck       StaticCheckSettings
+	TagAlign         TagAlignSettings
 	Tagliatelle      TagliatelleSettings
 	Tenv             TenvSettings
 	Testpackage      TestpackageSettings
@@ -639,6 +640,11 @@ func (s *StaticCheckSettings) HasConfiguration() bool {
 
 type StructCheckSettings struct {
 	CheckExportedFields bool `mapstructure:"exported-fields"`
+}
+
+type TagAlignSettings struct {
+	AutoSort   bool     `mapstructure:"auto-sort"`
+	FixedOrder []string `mapstructure:"fixed-order"`
 }
 
 type TagliatelleSettings struct {

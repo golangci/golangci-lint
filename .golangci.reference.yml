@@ -1708,6 +1708,13 @@ linters-settings:
     # Default: ["200", "400", "404", "500"]
     http-status-code-whitelist: [ "200", "400", "404", "500" ]
 
+  tagalign:
+    # whether enable tags auto sort.
+    auto-sort: true
+    # spcify the fixed order of tags, the other tags will be sorted by name.
+    # this options will be ignored if `auto-sort` is false.
+    fixed-order: ["json", "yaml", "yml", "binding", "validate"]
+
   tagliatelle:
     # Check the struct tag name case.
     case:
@@ -2086,6 +2093,7 @@ linters:
     - staticcheck
     - structcheck
     - stylecheck
+    - tagalign
     - tagliatelle
     - tenv
     - testableexamples
@@ -2196,6 +2204,7 @@ linters:
     - staticcheck
     - structcheck
     - stylecheck
+    - tagalign
     - tagliatelle
     - tenv
     - testableexamples

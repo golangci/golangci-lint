@@ -117,6 +117,8 @@ require (
 	mvdan.cc/unparam v0.0.0-20221223090309-7455f1af531d
 )
 
+require github.com/4meepo/tagalign v1.1.1
+
 require (
 	github.com/Masterminds/semver v1.5.0 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
