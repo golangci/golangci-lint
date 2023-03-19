@@ -102,7 +102,7 @@ func (act *action) analyzeSafe() {
 			// Some linters are dependent of sub-analyzers but when a sub-analyzer fails the linter is not aware of that,
 			// this results to another panic (ex: "interface conversion: interface {} is nil, not *buildssa.SSA").
 			// This line will create a duplication of the panic message on purpose.
-			act.r.log.Errorf("panic during analysis: %v, %s", p, string(debug.Stack()))
+			act.r.log.Errorf("%s: panic during analysis: %v, %s", act.a.Name, p, string(debug.Stack()))
 
 			act.err = errorutil.NewPanicError(fmt.Sprintf("%s: package %q (isInitialPkg: %t, needAnalyzeSource: %t): %s",
 				act.a.Name, act.pkg.Name, act.isInitialPkg, act.needAnalyzeSource, p), debug.Stack())
