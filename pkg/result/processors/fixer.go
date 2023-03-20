@@ -16,6 +16,8 @@ import (
 	"github.com/golangci/golangci-lint/pkg/timeutils"
 )
 
+var _ Processor = Fixer{}
+
 type Fixer struct {
 	cfg       *config.Config
 	log       logutils.Log
@@ -75,8 +77,6 @@ func (f Fixer) Name() string {
 }
 
 func (f Fixer) Finish() {}
-
-var _ Processor = Fixer{}
 
 func (f Fixer) fixIssuesInFile(filePath string, issues []result.Issue) error {
 	// TODO: don't read the whole file into memory: read line by line;

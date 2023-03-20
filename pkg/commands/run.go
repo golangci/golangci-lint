@@ -359,7 +359,7 @@ func (e *Executor) runAnalysis(ctx context.Context, args []string) ([]result.Iss
 	lintCtx.Log = e.log.Child(logutils.DebugKeyLintersContext)
 
 	runner, err := lint.NewRunner(e.cfg, e.log.Child(logutils.DebugKeyRunner),
-		e.goenv, e.EnabledLintersSet, e.lineCache, e.DBManager, lintCtx.Packages)
+		e.goenv, e.EnabledLintersSet, e.lineCache, e.fileCache, e.DBManager, lintCtx.Packages)
 	if err != nil {
 		return nil, err
 	}
