@@ -1709,10 +1709,13 @@ linters-settings:
     http-status-code-whitelist: [ "200", "400", "404", "500" ]
 
   tagalign:
-    # whether enable tags auto sort.
+    # whether enable tags auto sort. if true, the tags will be sorted by name in ascending order.
+    # eg: `xml:"bar" json:"bar" validate:"required"` -> `json:"bar" validate:"required" xml:"bar"`
+    # Default: false
     auto-sort: true
     # spcify the fixed order of tags, the other tags will be sorted by name.
     # this options will be ignored if `auto-sort` is false.
+    # Default: []
     fixed-order: ["json", "yaml", "yml", "binding", "validate"]
 
   tagliatelle:
