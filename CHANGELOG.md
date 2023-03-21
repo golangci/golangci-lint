@@ -1,6 +1,12 @@
 Follow the news and releases on our [twitter](https://twitter.com/golangci) and our [blog](https://medium.com/golangci).
 There is the most valuable changes log:
 
+### v1.52.1
+
+1. misc.
+   * fix: improve panic management
+   * fix: the combination of --fix and --path-prefix
+
 ### v1.52.0
 
 1. updated linters
