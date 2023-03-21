@@ -36,18 +36,18 @@ func NewTagAlign(settings *config.TagAlignSettings) *goanalysis.Linter {
 			tagalignIssues := tagalign.Run(p, options...)
 
 			issues := make([]goanalysis.Issue, len(tagalignIssues))
-			for i, issues := range tagalignIssues {
+			for i, issue := range tagalignIssues {
 				replacement := result.Replacement{
 					Inline: &result.InlineFix{
-						StartCol:  issus.InlineFix.StartCol,
-						Length:    issus.InlineFix.Length,
-						NewString: issus.InlineFix.NewString,
+						StartCol:  issue.InlineFix.StartCol,
+						Length:    issue.InlineFix.Length,
+						NewString: issue.InlineFix.NewString,
 					},
 				}
-				issues[idx] = goanalysis.NewIssue(&result.Issue{
+				issues[i] = goanalysis.NewIssue(&result.Issue{
 					FromLinter:  tagalignName,
-					Pos:         issus.Pos,
-					Text:        issus.Message,
+					Pos:         issue.Pos,
+					Text:        issue.Message,
 					Replacement: &replacement,
 				}, p)
 			}
