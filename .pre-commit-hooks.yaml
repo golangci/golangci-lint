@@ -2,7 +2,7 @@
   name: golangci-lint
   description: Fast linters runner for Go.
   entry: golangci-lint run --new-from-rev HEAD --fix
-  require_serial: true
   types: [go]
   language: golang
-  pass_filenames: true
+  require_serial: true
+  pass_filenames: false
