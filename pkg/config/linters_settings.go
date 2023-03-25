@@ -643,8 +643,8 @@ type StructCheckSettings struct {
 }
 
 type TagAlignSettings struct {
-	AutoSort   bool     `mapstructure:"auto-sort"`
-	FixedOrder []string `mapstructure:"fixed-order"`
+	Sort  bool     `mapstructure:"sort"`
+	Order []string `mapstructure:"order"`
 }
 
 type TagliatelleSettings struct {

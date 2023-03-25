@@ -4,7 +4,6 @@ import (
 	"sync"
 
 	"github.com/4meepo/tagalign"
-	"github.com/leonklingele/grouper/pkg/analyzer"
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/config"
@@ -13,60 +12,57 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-const tagalignName = "tagalign"
-
 func NewTagAlign(settings *config.TagAlignSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
 
-	a := &analysis.Analyzer{
-		Name: "tagalign",
-		Doc:  "check if struct tags are well aligned",
-		Run: func(p *analysis.Pass) (any, error) {
-			var options []tagalign.Option
-			options = append(options, tagalign.WithMode(tagalign.GolangciLintMode))
-			if settings.AutoSort {
-				if len(settings.FixedOrder) > 0 {
-					options = append(options, tagalign.WithAutoSort(settings.FixedOrder...))
-				} else {
-					options = append(options, tagalign.WithAutoSort())
-				}
-			}
+	options := []tagalign.Option{tagalign.WithMode(tagalign.GolangciLintMode)}
 
-			tagalignIssues := tagalign.Run(p, options...)
+	if settings != nil && settings.Sort {
+		if len(settings.Order) > 0 {
+			options = append(options, tagalign.WithAutoSort(settings.Order...))
+		} else {
+			options = append(options, tagalign.WithAutoSort())
+		}
+	}
 
-			issues := make([]goanalysis.Issue, len(tagalignIssues))
-			for i, issue := range tagalignIssues {
-				replacement := result.Replacement{
+	analyzer := tagalign.NewAnalyzer(options...)
+	analyzer.Run = func(pass *analysis.Pass) (any, error) {
+		taIssues := tagalign.Run(pass, options...)
+
+		issues := make([]goanalysis.Issue, len(taIssues))
+		for i, issue := range taIssues {
+			report := &result.Issue{
+				FromLinter: analyzer.Name,
+				Pos:        issue.Pos,
+				Text:       issue.Message,
+				Replacement: &result.Replacement{
 					Inline: &result.InlineFix{
 						StartCol:  issue.InlineFix.StartCol,
 						Length:    issue.InlineFix.Length,
 						NewString: issue.InlineFix.NewString,
 					},
-				}
-				issues[i] = goanalysis.NewIssue(&result.Issue{
-					FromLinter:  tagalignName,
-					Pos:         issue.Pos,
-					Text:        issue.Message,
-					Replacement: &replacement,
-				}, p)
+				},
 			}
 
-			if len(issues) == 0 {
-				return nil, nil
-			}
+			issues[i] = goanalysis.NewIssue(report, pass)
+		}
 
-			mu.Lock()
-			resIssues = append(resIssues, issues...)
-			mu.Unlock()
-
+		if len(issues) == 0 {
 			return nil, nil
-		},
+		}
+
+		mu.Lock()
+		resIssues = append(resIssues, issues...)
+		mu.Unlock()
+
+		return nil, nil
 	}
+
 	return goanalysis.NewLinter(
-		tagalignName,
+		analyzer.Name,
 		analyzer.Doc,
-		[]*analysis.Analyzer{a},
+		[]*analysis.Analyzer{analyzer},
 		nil,
 	).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
 		return resIssues
