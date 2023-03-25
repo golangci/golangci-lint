@@ -548,6 +548,8 @@ github.com/valyala/fasthttp v1.30.0/go.mod h1:2rsYD01CKFrjjsvFxx75KlEUNpWNBY9JWD
 github.com/valyala/quicktemplate v1.7.0 h1:LUPTJmlVcb46OOUY3IeD9DojFpAVbsG+5WFTcjMJzCM=
 github.com/valyala/quicktemplate v1.7.0/go.mod h1:sqKJnoaOF88V07vkO+9FL8fb9uZg/VPSJnLYn+LmLk8=
 github.com/valyala/tcplisten v1.0.0/go.mod h1:T0xQ8SeCZGxckz9qRXTfG43PvQ/mcWh7FwZEA7Ioqkc=
+github.com/xen0n/gosmopolitan v1.2.1 h1:3pttnTuFumELBRSh+KQs1zcz4fN6Zy7aB0xlnQSn1Iw=
+github.com/xen0n/gosmopolitan v1.2.1/go.mod h1:JsHq/Brs1o050OOdmzHeOr0N7OtlnKRAGAsElF8xBQA=
 github.com/yagipy/maintidx v1.0.0 h1:h5NvIsCz+nRDapQ0exNv4aJ0yXSI0420omVANTv3GJM=
 github.com/yagipy/maintidx v1.0.0/go.mod h1:0qNf/I/CCZXSMhsRsrEPDZ+DkekpKLXAJfsTACwgXLk=
 github.com/yeya24/promlinter v0.2.0 h1:xFKDQ82orCU5jQujdaD8stOHiv8UN68BSdn2a8u8Y3o=

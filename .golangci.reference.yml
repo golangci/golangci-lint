@@ -948,6 +948,37 @@ linters-settings:
       # Default: "0600"
       G306: "0600"
 
+  gosmopolitan:
+    # Allow and ignore `time.Local` usages.
+    #
+    # Default: false
+    allow-time-local: true
+    # List of fully qualified names in the `full/pkg/path.name` form, to act as "i18n escape hatches".
+    # String literals inside call-like expressions to, or struct literals of those names,
+    # are exempt from the writing system check.
+    #
+    # Default: []
+    escape-hatches:
+      - 'github.com/nicksnyder/go-i18n/v2/i18n.Message'
+      - 'example.com/your/project/i18n/markers.Raw'
+      - 'example.com/your/project/i18n/markers.OK'
+      - 'example.com/your/project/i18n/markers.TODO'
+      - 'command-line-arguments.Simple'
+    # Ignore test files.
+    #
+    # Default: true
+    ignore-tests: false
+    # List of Unicode scripts to watch for any usage in string literals.
+    # https://pkg.go.dev/unicode#pkg-variables
+    #
+    # Default: ["Han"]
+    watch-for-scripts:
+      - Devanagari
+      - Han
+      - Hangul
+      - Hiragana
+      - Katakana
+
   govet:
     # Report about shadowed variables.
     # Default: false
@@ -2049,6 +2080,7 @@ linters:
     - goprintffuncname
     - gosec
     - gosimple
+    - gosmopolitan
     - govet
     - grouper
     - ifshort
@@ -2159,6 +2191,7 @@ linters:
     - goprintffuncname
     - gosec
     - gosimple
+    - gosmopolitan
     - govet
     - grouper
     - ifshort

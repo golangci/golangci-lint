@@ -135,6 +135,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		gomodguardCfg       *config.GoModGuardSettings
 		gosecCfg            *config.GoSecSettings
 		gosimpleCfg         *config.StaticCheckSettings
+		gosmopolitanCfg     *config.GosmopolitanSettings
 		govetCfg            *config.GovetSettings
 		grouperCfg          *config.GrouperSettings
 		ifshortCfg          *config.IfshortSettings
@@ -213,6 +214,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		gomodguardCfg = &m.cfg.LintersSettings.Gomodguard
 		gosecCfg = &m.cfg.LintersSettings.Gosec
 		gosimpleCfg = &m.cfg.LintersSettings.Gosimple
+		gosmopolitanCfg = &m.cfg.LintersSettings.Gosmopolitan
 		govetCfg = &m.cfg.LintersSettings.Govet
 		grouperCfg = &m.cfg.LintersSettings.Grouper
 		ifshortCfg = &m.cfg.LintersSettings.Ifshort
@@ -557,6 +559,12 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithAlternativeNames(megacheckName).
 			WithURL("https://github.com/dominikh/go-tools/tree/master/simple"),
+
+		linter.NewConfig(golinters.NewGosmopolitan(gosmopolitanCfg)).
+			WithSince("v1.53.0").
+			WithLoadForGoAnalysis().
+			WithPresets(linter.PresetBugs).
+			WithURL("https://github.com/xen0n/gosmopolitan"),
 
 		linter.NewConfig(golinters.NewGovet(govetCfg)).
 			WithSince("v1.0.0").

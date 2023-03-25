@@ -106,6 +106,7 @@ require (
 	github.com/ultraware/whitespace v0.0.5
 	github.com/uudashr/gocognit v1.0.6
 	github.com/valyala/quicktemplate v1.7.0
+	github.com/xen0n/gosmopolitan v1.2.1
 	github.com/yagipy/maintidx v1.0.0
 	github.com/yeya24/promlinter v0.2.0
 	gitlab.com/bosi/decorder v0.2.3
