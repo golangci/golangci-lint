@@ -643,6 +643,7 @@ type StructCheckSettings struct {
 }
 
 type TagAlignSettings struct {
+	Align *bool    `mapstructure:"align"`
 	Sort  bool     `mapstructure:"sort"`
 	Order []string `mapstructure:"order"`
 }

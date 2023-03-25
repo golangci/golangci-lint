@@ -4,10 +4,10 @@ package testdata
 import "time"
 
 type TagAlignSortExampleNoSortExample struct {
-	Foo    time.Duration `json:"foo"        validate:"required"`                    // want `json:"foo"`
+	Foo    time.Duration `json:"foo"        validate:"required"`                    // want `json:"foo"                 validate:"required"`
 	Bar    string        `json:"___bar___,omitempty"  validate:"required"`          // want `json:"___bar___,omitempty" validate:"required"`
-	FooFoo int8          `json:"foo_foo"    validate:"required"      yaml:"fooFoo"` // want `json:"foo_foo"`
-	BarBar int           `json:"bar_bar"         validate:"required"`               // want `json:"bar_bar"`
+	FooFoo int8          `json:"foo_foo"    validate:"required"      yaml:"fooFoo"` // want `json:"foo_foo"             validate:"required" yaml:"fooFoo"`
+	BarBar int           `json:"bar_bar"         validate:"required"`               // want `json:"bar_bar"             validate:"required"`
 	FooBar struct {
 		Foo    int    `json:"foo"    yaml:"foo"     validate:"required"` // want `json:"foo"    yaml:"foo"          validate:"required"`
 		Bar222 string `json:"bar222"   validate:"required"  yaml:"bar"`  // want `json:"bar222" validate:"required" yaml:"bar"`

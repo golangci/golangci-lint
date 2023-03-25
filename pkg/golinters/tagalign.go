@@ -18,11 +18,12 @@ func NewTagAlign(settings *config.TagAlignSettings) *goanalysis.Linter {
 
 	options := []tagalign.Option{tagalign.WithMode(tagalign.GolangciLintMode)}
 
-	if settings != nil && settings.Sort {
-		if len(settings.Order) > 0 {
-			options = append(options, tagalign.WithAutoSort(settings.Order...))
-		} else {
-			options = append(options, tagalign.WithAutoSort())
+	if settings != nil {
+		if settings.Align != nil {
+			options = append(options, tagalign.WithAlign(*settings.Align))
+		}
+		if settings.Sort {
+			options = append(options, tagalign.WithSort(settings.Order...))
 		}
 	}
 
