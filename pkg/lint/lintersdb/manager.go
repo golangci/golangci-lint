@@ -561,7 +561,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithURL("https://github.com/dominikh/go-tools/tree/master/simple"),
 
 		linter.NewConfig(golinters.NewGosmopolitan(gosmopolitanCfg)).
-			WithSince("v1.51.0").
+			WithSince("v1.53.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetBugs).
 			WithURL("https://github.com/xen0n/gosmopolitan"),
