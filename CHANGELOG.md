@@ -1,6 +1,13 @@
 Follow the news and releases on our [twitter](https://twitter.com/golangci) and our [blog](https://medium.com/golangci).
 There is the most valuable changes log:
 
+### v1.52.2
+
+1. updated linters
+   * `tparallel`: from 0.3.0 to 0.3.1
+2. misc.
+   * fix: pre-commit `require_serial` and `pass_filenames`
+
 ### v1.52.1
 
 1. misc.
