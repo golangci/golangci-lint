@@ -23,7 +23,6 @@ func TestRunnerBuilder_Runner(t *testing.T) {
 				env:     []string(nil),
 				command: "run",
 				args: []string{
-					"--go=1.17",
 					"--internal-cmd-test",
 					"--allow-parallel-runners",
 				},
@@ -36,7 +35,6 @@ func TestRunnerBuilder_Runner(t *testing.T) {
 				env:     []string(nil),
 				command: "example",
 				args: []string{
-					"--go=1.17",
 					"--internal-cmd-test",
 					"--allow-parallel-runners",
 				},
@@ -49,7 +47,6 @@ func TestRunnerBuilder_Runner(t *testing.T) {
 				env:     []string(nil),
 				command: "run",
 				args: []string{
-					"--go=1.17",
 					"--internal-cmd-test",
 					"--allow-parallel-runners",
 					"--no-config",
@@ -63,7 +60,6 @@ func TestRunnerBuilder_Runner(t *testing.T) {
 				env:     []string(nil),
 				command: "run",
 				args: []string{
-					"--go=1.17",
 					"--internal-cmd-test",
 					"--allow-parallel-runners",
 					"-c",
@@ -78,7 +74,6 @@ func TestRunnerBuilder_Runner(t *testing.T) {
 				env:     []string(nil),
 				command: "run",
 				args: []string{
-					"--go=1.17",
 					"--internal-cmd-test",
 					"--allow-parallel-runners",
 					"-c",
@@ -96,7 +91,6 @@ func TestRunnerBuilder_Runner(t *testing.T) {
 				env:     []string{"FOO=BAR", "FII=BIR"},
 				command: "run",
 				args: []string{
-					"--go=1.17",
 					"--internal-cmd-test",
 					"--allow-parallel-runners",
 				},
@@ -109,7 +103,6 @@ func TestRunnerBuilder_Runner(t *testing.T) {
 				env:     []string(nil),
 				command: "run",
 				args: []string{
-					"--go=1.17",
 					"--internal-cmd-test",
 				},
 			},
@@ -121,7 +114,6 @@ func TestRunnerBuilder_Runner(t *testing.T) {
 				env:     []string(nil),
 				command: "run",
 				args: []string{
-					"--go=1.17",
 					"--internal-cmd-test",
 					"--allow-parallel-runners",
 					"-Efoo",
@@ -137,7 +129,6 @@ func TestRunnerBuilder_Runner(t *testing.T) {
 				env:     []string(nil),
 				command: "run",
 				args: []string{
-					"--go=1.17",
 					"--internal-cmd-test",
 					"--allow-parallel-runners",
 					filepath.FromSlash("testdata/all.go"),
@@ -156,7 +147,6 @@ func TestRunnerBuilder_Runner(t *testing.T) {
 				env:     []string(nil),
 				command: "run",
 				args: []string{
-					"--go=1.17",
 					"--internal-cmd-test",
 					"--allow-parallel-runners",
 					"-c",
