@@ -475,8 +475,10 @@ func (e *Executor) createPrinter(format string, w io.Writer) (printers.Printer, 
 		p = printers.NewText(e.cfg.Output.PrintIssuedLine,
 			format == config.OutFormatColoredLineNumber, e.cfg.Output.PrintLinterName,
 			e.log.Child(logutils.DebugKeyTextPrinter), w)
-	case config.OutFormatTab:
-		p = printers.NewTab(e.cfg.Output.PrintLinterName, e.log.Child(logutils.DebugKeyTabPrinter), w)
+	case config.OutFormatTab, config.OutFormatColoredTab:
+		p = printers.NewTab(e.cfg.Output.PrintLinterName,
+			format == config.OutFormatColoredTab,
+			e.log.Child(logutils.DebugKeyTabPrinter), w)
 	case config.OutFormatCheckstyle:
 		p = printers.NewCheckstyle(w)
 	case config.OutFormatCodeClimate:

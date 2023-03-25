@@ -14,13 +14,16 @@ import (
 
 type Tab struct {
 	printLinterName bool
-	log             logutils.Log
-	w               io.Writer
+	useColors       bool
+
+	log logutils.Log
+	w   io.Writer
 }
 
-func NewTab(printLinterName bool, log logutils.Log, w io.Writer) *Tab {
+func NewTab(printLinterName, useColors bool, log logutils.Log, w io.Writer) *Tab {
 	return &Tab{
 		printLinterName: printLinterName,
+		useColors:       useColors,
 		log:             log,
 		w:               w,
 	}
@@ -28,6 +31,11 @@ func NewTab(printLinterName bool, log logutils.Log, w io.Writer) *Tab {
 
 func (p *Tab) SprintfColored(ca color.Attribute, format string, args ...any) string {
 	c := color.New(ca)
+
+	if !p.useColors {
+		c.DisableColor()
+	}
+
 	return c.Sprintf(format, args...)
 }
 
