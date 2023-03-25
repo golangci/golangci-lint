@@ -953,11 +953,9 @@ linters-settings:
     #
     # Default: false
     allow-time-local: true
-    # List of fully qualified names in the `full/pkg/path.name` form, to act
-    # as "i18n escape hatches".
-    #
-    # String literals inside call-like expressions to, or struct literals of
-    # those names, are exempt from the writing system check.
+    # List of fully qualified names in the `full/pkg/path.name` form, to act as "i18n escape hatches".
+    # String literals inside call-like expressions to, or struct literals of those names,
+    # are exempt from the writing system check.
     #
     # Default: []
     escape-hatches:
@@ -971,7 +969,7 @@ linters-settings:
     # Default: true
     ignore-tests: false
     # List of Unicode scripts to watch for any usage in string literals.
-    # If empty the default of ["Han"] will be used.
+    # https://pkg.go.dev/unicode#pkg-variables
     #
     # Default: ["Han"]
     watch-for-scripts:
