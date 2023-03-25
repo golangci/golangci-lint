@@ -10,7 +10,7 @@ linters-settings:
   dupl:
     threshold: 100
   funlen:
-    lines: 100
+    lines: -1 # the number of lines (code + empty lines) is not a right metric and leads to code without empty line or one-liner.
     statements: 50
   goconst:
     min-len: 2

@@ -10,7 +10,6 @@ import (
 	"github.com/golangci/golangci-lint/test/testshared"
 )
 
-//nolint:funlen
 func TestEnabledLinters(t *testing.T) {
 	// require to display the message "Active x linters: [x,y]"
 	t.Setenv(lintersdb.EnvTestRun, "1")

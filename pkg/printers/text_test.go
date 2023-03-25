@@ -97,7 +97,8 @@ func foo() {
 			printIssuedLine: true,
 			printLinterName: true,
 			useColors:       true,
-			expected:        "\x1b[1mpath/to/filea.go:10\x1b[0m:4: \x1b[31msome issue\x1b[0m (linter-a)\n\x1b[1mpath/to/fileb.go:300\x1b[0m:9: \x1b[31manother issue\x1b[0m (linter-b)\nfunc foo() {\n\tfmt.Println(\"bar\")\n}\n",
+			//nolint:lll // color characters must be in a simple string.
+			expected: "\x1b[1mpath/to/filea.go:10\x1b[0m:4: \x1b[31msome issue\x1b[0m (linter-a)\n\x1b[1mpath/to/fileb.go:300\x1b[0m:9: \x1b[31manother issue\x1b[0m (linter-b)\nfunc foo() {\n\tfmt.Println(\"bar\")\n}\n",
 		},
 		{
 			desc:            "disable all options",
