@@ -5,7 +5,7 @@ package testdata
 import "time"
 
 type TagAlignExampleOrderOnlyKO struct {
-	Foo    time.Time `xml:"foo" json:"foo,omitempty" yaml:"foo" gorm:"column:foo" validate:"required" zip:"foo"`                // want `xml:"foo" json:"foo,omitempty" yaml:"foo" gorm:"column:foo" validate:"required" zip:"foo"`
+	Foo    time.Time `xml:"foo" json:"foo,omitempty" yaml:"foo" gorm:"column:foo" validate:"required" zip:"foo"`
 	FooBar struct{}  `gorm:"column:fooBar" validate:"required" zip:"fooBar" xml:"fooBar" json:"fooBar,omitempty" yaml:"fooBar"` // want `xml:"fooBar" json:"fooBar,omitempty" yaml:"fooBar" gorm:"column:fooBar" validate:"required" zip:"fooBar"`
 }
 
