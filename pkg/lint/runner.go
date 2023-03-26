@@ -27,8 +27,10 @@ type Runner struct {
 	Log        logutils.Log
 }
 
-func NewRunner(cfg *config.Config, log logutils.Log, goenv *goutil.Env, es *lintersdb.EnabledSet,
-	lineCache *fsutils.LineCache, dbManager *lintersdb.Manager, pkgs []*gopackages.Package) (*Runner, error) {
+func NewRunner(cfg *config.Config, log logutils.Log, goenv *goutil.Env,
+	es *lintersdb.EnabledSet,
+	lineCache *fsutils.LineCache, fileCache *fsutils.FileCache,
+	dbManager *lintersdb.Manager, pkgs []*gopackages.Package) (*Runner, error) {
 	// Beware that some processors need to add the path prefix when working with paths
 	// because they get invoked before the path prefixer (exclude and severity rules)
 	// or process other paths (skip files).
@@ -98,6 +100,11 @@ func NewRunner(cfg *config.Config, log logutils.Log, goenv *goutil.Env, es *lint
 			processors.NewSourceCode(lineCache, log.Child(logutils.DebugKeySourceCode)),
 			processors.NewPathShortener(),
 			getSeverityRulesProcessor(&cfg.Severity, log, files),
+
+			// The fixer still needs to see paths for the issues that are relative to the current directory.
+			processors.NewFixer(cfg, log, fileCache),
+
+			// Now we can modify the issues for output.
 			processors.NewPathPrefixer(cfg.Output.PathPrefix),
 			processors.NewSortResults(cfg),
 		},

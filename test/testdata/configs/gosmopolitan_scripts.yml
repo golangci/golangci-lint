@@ -1,0 +1,6 @@
+linters-settings:
+  gosmopolitan:
+    watch-for-scripts:
+      - Hiragana
+      - Katakana
+      - Latin

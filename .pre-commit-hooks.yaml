@@ -4,4 +4,5 @@
   entry: golangci-lint run --new-from-rev HEAD --fix
   types: [go]
   language: golang
-  pass_filenames: true
+  require_serial: true
+  pass_filenames: false

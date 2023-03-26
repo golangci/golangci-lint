@@ -71,7 +71,7 @@ require (
 	github.com/mgechev/revive v1.3.1
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/mitchellh/go-ps v1.0.0
-	github.com/moricho/tparallel v0.3.0
+	github.com/moricho/tparallel v0.3.1
 	github.com/nakabonne/nestif v0.3.1
 	github.com/nishanths/exhaustive v0.9.5
 	github.com/nishanths/predeclared v0.2.2
@@ -107,6 +107,7 @@ require (
 	github.com/ultraware/whitespace v0.0.5
 	github.com/uudashr/gocognit v1.0.6
 	github.com/valyala/quicktemplate v1.7.0
+	github.com/xen0n/gosmopolitan v1.2.1
 	github.com/yagipy/maintidx v1.0.0
 	github.com/yeya24/promlinter v0.2.0
 	gitlab.com/bosi/decorder v0.2.3
