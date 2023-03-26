@@ -6,9 +6,10 @@ import (
 
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
+	"golang.org/x/exp/slices"
 )
 
-func bad() {
+func expectWarnings() {
 	log.Error() // want "must be dispatched by Msg or Send method"
 	log.Info()  // want "must be dispatched by Msg or Send method"
 	log.Fatal() // want "must be dispatched by Msg or Send method"
@@ -38,7 +39,7 @@ func bad() {
 	logger2.Str("foo", "bar")
 }
 
-func ok() {
+func expectNoWarnings() {
 	log.Fatal().Send()
 	log.Panic().Msg("")
 	log.Debug().Send()
@@ -67,4 +68,10 @@ func ok() {
 		logger2 = log.Error()
 	}
 	logger2.Send()
+}
+
+// https://github.com/ykadowak/zerologlint/pull/2
+func packageNil() {
+	s := []int{1, 2, 3}
+	slices.Sort(s)
 }
