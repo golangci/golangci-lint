@@ -307,6 +307,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 
 		linter.NewConfig(golinters.NewContainedCtx()).
 			WithSince("1.44.0").
+			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/sivchari/containedctx"),
 

@@ -15,5 +15,5 @@ func NewContainedCtx() *goanalysis.Linter {
 		a.Doc,
 		[]*analysis.Analyzer{a},
 		nil,
-	).WithLoadMode(goanalysis.LoadModeSyntax)
+	).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }
