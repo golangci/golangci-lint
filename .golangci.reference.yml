@@ -1754,16 +1754,23 @@ linters-settings:
     #     FooFoo int8   `json:"foo_foo" validate:"required"`
     # }
     # Default: true.
-    align: true
+    align: false
     # Whether enable tags sort.
     # If true, the tags will be sorted by name in ascending order.
     # eg: `xml:"bar" json:"bar" validate:"required"` -> `json:"bar" validate:"required" xml:"bar"`
-    # Default: false
-    sort: true
+    # Default: true
+    sort: false
     # Specify the order of tags, the other tags will be sorted by name.
     # This option will be ignored if `sort` is false.
     # Default: []
-    order: ["json", "yaml", "yml", "binding", "validate"]
+    order:
+      - json
+      - yaml
+      - yml
+      - toml
+      - mapstructure
+      - binding
+      - validate
 
   tagliatelle:
     # Check the struct tag name case.

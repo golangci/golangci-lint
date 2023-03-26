@@ -4,15 +4,12 @@ package testdata
 
 import "time"
 
-// TagAlignSortExampleNoAlignExample
-// Enable sort with order 'xml,json,yaml' but disable align.
-type TagAlignSortExampleNoAlignExample struct {
-	// not aligned but sorted, should not be reported
-	Foo    int      `xml:"baz" json:"foo,omitempty"     yaml:"bar"     binding:"required"      gorm:"column:foo" validate:"required"     zip:"foo" `
-	Bar    struct{} `xml:"bar"        json:"bar,omitempty" yaml:"foo"            gorm:"column:bar"  validate:"required"     zip:"bar" `
-	FooBar int      `xml:"bar"           json:"bar,omitempty"             yaml:"foo"   gorm:"column:bar"   `
-	// aligned but not sorted, should be reported
-	BarFoo int `xml:"bar" yaml:"foo" json:"bar,omitempty" gorm:"column:bar" validate:"required" zip:"bar"` // want `xml:"bar" json:"bar,omitempty" yaml:"foo" gorm:"column:bar" validate:"required" zip:"bar"`
-	// not aligned but sorted, should not be reported
-	FooBarFoo time.Duration `xml:"bar"    json:"bar,omitempty"       yaml:"foo"       gorm:"column:bar" validate:"required" zip:"bar"`
+type TagAlignExampleSortOnlyKO struct {
+	Foo    time.Time `xml:"foo" json:"foo,omitempty" yaml:"foo" gorm:"column:foo" validate:"required" zip:"foo"`                // want `gorm:"column:foo" json:"foo,omitempty" validate:"required" xml:"foo" yaml:"foo" zip:"foo"`
+	FooBar struct{}  `gorm:"column:fooBar" validate:"required" zip:"fooBar" xml:"fooBar" json:"fooBar,omitempty" yaml:"fooBar"` // want `gorm:"column:fooBar" json:"fooBar,omitempty" validate:"required" xml:"fooBar" yaml:"bar" zip:"fooBar"`
+}
+
+type TagAlignExampleSortOnlyOK struct {
+	Foo    time.Time `gorm:"column:foo" json:"foo,omitempty" validate:"required" xml:"foo" yaml:"foo" zip:"foo"`
+	FooBar struct{}  `gorm:"column:fooBar" json:"fooBar,omitempty" validate:"required" xml:"fooBar" yaml:"fooBar" zip:"fooBar"`
 }

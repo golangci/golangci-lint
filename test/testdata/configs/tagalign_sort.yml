@@ -1,4 +1,0 @@
-linters-settings:
-  tagalign:
-    sort: true
-    order: ["json", "yaml", "xml"]

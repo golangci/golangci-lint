@@ -3,28 +3,13 @@ package testdata
 
 import "time"
 
-type TagAlignSortExampleNoSortExample struct {
-	Foo    time.Duration `json:"foo"        validate:"required"`                    // want `json:"foo"                 validate:"required"`
-	Bar    string        `json:"___bar___,omitempty"  validate:"required"`          // want `json:"___bar___,omitempty" validate:"required"`
-	FooFoo int8          `json:"foo_foo"    validate:"required"      yaml:"fooFoo"` // want `json:"foo_foo"             validate:"required" yaml:"fooFoo"`
-	BarBar int           `json:"bar_bar"         validate:"required"`               // want `json:"bar_bar"             validate:"required"`
-	FooBar struct {
-		Foo    int    `json:"foo"    yaml:"foo"     validate:"required"` // want `json:"foo"    yaml:"foo"          validate:"required"`
-		Bar222 string `json:"bar222"   validate:"required"  yaml:"bar"`  // want `json:"bar222" validate:"required" yaml:"bar"`
-	} `json:"foo_bar" validate:"required"`
-	FooFooFoo struct {
-		BarBarBar struct {
-			BarBarBarBar    string `json:"bar_bar_bar_bar" validate:"required"`                // want `json:"bar_bar_bar_bar"     validate:"required"`
-			BarBarBarFooBar string `json:"bar_bar_bar_foo_bar" yaml:"bar" validate:"required"` // want `json:"bar_bar_bar_foo_bar" yaml:"bar"          validate:"required"`
-		} `json:"bar_bar_bar" validate:"required"`
-	}
-	BarFooBarFoo struct{}
-
-	BarFoo    string `json:"bar_foo" validate:"required"` // want `json:"bar_foo"     validate:"required"`
-	BarFooBar string `json:"bar_foo_bar" validate:"required"`
+type TagAlignExampleAlignSort struct {
+	Foo    time.Duration `json:"foo,omitempty" yaml:"foo" xml:"foo" binding:"required" gorm:"column:foo" zip:"foo" validate:"required"`                   // want `binding:"required" gorm:"column:foo"    json:"foo,omitempty"    validate:"required" xml:"foo"    yaml:"foo"    zip:"foo"`
+	Bar    int           `validate:"required"  yaml:"bar" xml:"bar" binding:"required" json:"bar,omitempty" gorm:"column:bar" zip:"bar" `                 // want `binding:"required" gorm:"column:bar"    json:"bar,omitempty"    validate:"required" xml:"bar"    yaml:"bar"    zip:"bar"`
+	FooBar int           `gorm:"column:fooBar" validate:"required"   xml:"fooBar" binding:"required" json:"fooBar,omitempty"  zip:"fooBar" yaml:"fooBar"` // want `binding:"required" gorm:"column:fooBar" json:"fooBar,omitempty" validate:"required" xml:"fooBar" yaml:"fooBar" zip:"fooBar"`
 }
 
-type TagAlignSortExampleNoSortExample2 struct {
-	Foo int ` xml:"baz"  json:"foo,omitempty" yaml:"bar"  zip:"foo" validate:"required"`       // want `xml:"baz"           json:"foo,omitempty" yaml:"bar" zip:"foo"          validate:"required"`
-	Bar int `validate:"required" yaml:"foo" xml:"bar" binding:"required" json:"bar,omitempty"` // want `validate:"required" yaml:"foo"           xml:"bar"  binding:"required" json:"bar,omitempty"`
+type TagAlignExampleAlignSort2 struct {
+	Foo int ` xml:"foo"  json:"foo,omitempty" yaml:"foo"  zip:"foo"  binding:"required" gorm:"column:foo"  validate:"required"` // want `binding:"required" gorm:"column:foo" json:"foo,omitempty" validate:"required" xml:"foo" yaml:"foo" zip:"foo"`
+	Bar int `validate:"required" gorm:"column:bar"  yaml:"bar" xml:"bar" binding:"required" json:"bar" zip:"bar" `              // want `binding:"required" gorm:"column:bar" json:"bar"           validate:"required" xml:"bar" yaml:"bar" zip:"bar"`
 }
