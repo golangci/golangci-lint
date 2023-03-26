@@ -423,6 +423,10 @@ linters-settings:
     # Default: false
     suppress-compare-assertion: true
 
+    # Suppress the function all in async assertion warning.
+    # Default: false
+    suppress-async-assertion: true
+
     # Don't trigger warnings for HaveLen(0)
     # Default: false
     allow-havelen-zero: true

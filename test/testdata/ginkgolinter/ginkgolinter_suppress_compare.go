@@ -4,6 +4,8 @@ package ginkgolinter
 
 import (
 	"errors"
+	"time"
+
 	. "github.com/onsi/gomega"
 )
 
@@ -65,4 +67,14 @@ func WrongComparisonUsecase_compare() {
 
 	p1, p2 := &x, &x
 	Expect(p1 == p2).To(Equal(true))
+}
+
+func slowInt_compare() int {
+	time.Sleep(time.Second)
+	return 42
+}
+
+func WrongEventuallyWithFunction_compare() {
+	Eventually(slowInt_compare).Should(Equal(42))   // valid
+	Eventually(slowInt_compare()).Should(Equal(42)) // want "ginkgo-linter: use a function call in Eventually. This actually checks nothing, because Eventually receives the function returned value, instead of function itself, and this value is never changed; consider using .Eventually\\(slowInt_compare\\)\\.Should\\(Equal\\(42\\)\\). instead"
 }
