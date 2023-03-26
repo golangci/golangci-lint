@@ -770,8 +770,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetUnused).
 			WithURL("https://github.com/opennota/check").
-			Deprecated("The owner seems to have abandoned the linter.", "v1.49.0", "unused").
-			WithNoopFallback(m.cfg),
+			Deprecated("The owner seems to have abandoned the linter.", "v1.49.0", "unused"),
 
 		linter.NewConfig(golinters.NewStylecheck(stylecheckCfg)).
 			WithSince("v1.20.0").
