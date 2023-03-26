@@ -2,6 +2,8 @@
 package zerologlint
 
 import (
+	"fmt"
+
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 )
@@ -13,7 +15,7 @@ func bad() {
 	log.Debug() // want "must be dispatched by Msg or Send method"
 	log.Warn()  // want "must be dispatched by Msg or Send method"
 
-	var err error
+	err := fmt.Errorf("foobarerror")
 	log.Error().Err(err)                                 // want "must be dispatched by Msg or Send method"
 	log.Error().Err(err).Str("foo", "bar").Int("foo", 1) // want "must be dispatched by Msg or Send method"
 
@@ -45,7 +47,7 @@ func ok() {
 	log.Error().Msg("")
 
 	log.Error().Str("foo", "bar").Send()
-	var err error
+	err := fmt.Errorf("foobarerror")
 	log.Error().Err(err).Str("foo", "bar").Int("foo", 1).Msg("")
 
 	logger := log.Error()
