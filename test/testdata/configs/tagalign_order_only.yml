@@ -1,0 +1,7 @@
+linters-settings:
+  tagalign:
+    align: false
+    order:
+      - "xml"
+      - "json"
+      - "yaml"

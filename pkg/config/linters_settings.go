@@ -110,6 +110,11 @@ var defaultLintersSettings = LintersSettings{
 		Ignore:    "",
 		Qualified: false,
 	},
+	TagAlign: TagAlignSettings{
+		Align: true,
+		Sort:  true,
+		Order: nil,
+	},
 	Testpackage: TestpackageSettings{
 		SkipRegexp:    `(export|internal)_test\.go`,
 		AllowPackages: []string{"main"},
@@ -203,6 +208,7 @@ type LintersSettings struct {
 	Staticcheck      StaticCheckSettings
 	Structcheck      StructCheckSettings
 	Stylecheck       StaticCheckSettings
+	TagAlign         TagAlignSettings
 	Tagliatelle      TagliatelleSettings
 	Tenv             TenvSettings
 	Testpackage      TestpackageSettings
@@ -653,6 +659,12 @@ func (s *StaticCheckSettings) HasConfiguration() bool {
 
 type StructCheckSettings struct {
 	CheckExportedFields bool `mapstructure:"exported-fields"`
+}
+
+type TagAlignSettings struct {
+	Align bool     `mapstructure:"align"`
+	Sort  bool     `mapstructure:"sort"`
+	Order []string `mapstructure:"order"`
 }
 
 type TagliatelleSettings struct {

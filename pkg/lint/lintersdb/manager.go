@@ -165,6 +165,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		staticcheckCfg      *config.StaticCheckSettings
 		structcheckCfg      *config.StructCheckSettings
 		stylecheckCfg       *config.StaticCheckSettings
+		tagalignCfg         *config.TagAlignSettings
 		tagliatelleCfg      *config.TagliatelleSettings
 		tenvCfg             *config.TenvSettings
 		testpackageCfg      *config.TestpackageSettings
@@ -244,6 +245,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		staticcheckCfg = &m.cfg.LintersSettings.Staticcheck
 		structcheckCfg = &m.cfg.LintersSettings.Structcheck
 		stylecheckCfg = &m.cfg.LintersSettings.Stylecheck
+		tagalignCfg = &m.cfg.LintersSettings.TagAlign
 		tagliatelleCfg = &m.cfg.LintersSettings.Tagliatelle
 		tenvCfg = &m.cfg.LintersSettings.Tenv
 		testpackageCfg = &m.cfg.LintersSettings.Testpackage
@@ -776,6 +778,12 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/dominikh/go-tools/tree/master/stylecheck"),
+
+		linter.NewConfig(golinters.NewTagAlign(tagalignCfg)).
+			WithSince("v1.53.0").
+			WithPresets(linter.PresetStyle, linter.PresetFormatting).
+			WithAutoFix().
+			WithURL("https://github.com/4meepo/tagalign"),
 
 		linter.NewConfig(golinters.NewTagliatelle(tagliatelleCfg)).
 			WithSince("v1.40.0").

@@ -5,6 +5,7 @@ go 1.19
 require (
 	4d63.com/gocheckcompilerdirectives v1.2.1
 	4d63.com/gochecknoglobals v0.2.1
+	github.com/4meepo/tagalign v1.2.2
 	github.com/Abirdcfly/dupword v0.0.11
 	github.com/Antonboom/errname v0.1.9
 	github.com/Antonboom/nilnil v0.1.3
