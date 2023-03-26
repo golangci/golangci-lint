@@ -189,6 +189,7 @@ type LintersSettings struct {
 	MustTag          MustTagSettings
 	Nakedret         NakedretSettings
 	Nestif           NestifSettings
+	NeverNester      NeverNesterSettings
 	NilNil           NilNilSettings
 	Nlreturn         NlreturnSettings
 	NoLintLint       NoLintLintSettings
@@ -569,6 +570,12 @@ type NakedretSettings struct {
 
 type NestifSettings struct {
 	MinComplexity int `mapstructure:"min-complexity"`
+}
+
+type NeverNesterSettings struct {
+	SkipTests      bool `mapstructure:"skip-tests"`
+	SkipBenchmarks bool `mapstructure:"skip-benchmarks"`
+	MaxNesting     int  `mapstructure:"max-nesting"`
 }
 
 type NilNilSettings struct {

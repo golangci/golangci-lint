@@ -151,6 +151,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		musttagCfg          *config.MustTagSettings
 		nakedretCfg         *config.NakedretSettings
 		nestifCfg           *config.NestifSettings
+		nevernesterCfg      *config.NeverNesterSettings
 		nilNilCfg           *config.NilNilSettings
 		nlreturnCfg         *config.NlreturnSettings
 		noLintLintCfg       *config.NoLintLintSettings
@@ -230,6 +231,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		musttagCfg = &m.cfg.LintersSettings.MustTag
 		nakedretCfg = &m.cfg.LintersSettings.Nakedret
 		nestifCfg = &m.cfg.LintersSettings.Nestif
+		nevernesterCfg = &m.cfg.LintersSettings.NeverNester
 		nilNilCfg = &m.cfg.LintersSettings.NilNil
 		nlreturnCfg = &m.cfg.LintersSettings.Nlreturn
 		noLintLintCfg = &m.cfg.LintersSettings.NoLintLint
@@ -663,6 +665,12 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithSince("v1.25.0").
 			WithPresets(linter.PresetComplexity).
 			WithURL("https://github.com/nakabonne/nestif"),
+
+		linter.NewConfig(golinters.NewNeverNester(nevernesterCfg)).
+			WithSince("v1.53.0").
+			WithLoadForGoAnalysis().
+			WithPresets(linter.PresetComplexity, linter.PresetStyle).
+			WithURL("https://github.com/raffepaffe/nevernester"),
 
 		linter.NewConfig(golinters.NewNilErr()).
 			WithSince("v1.38.0").
