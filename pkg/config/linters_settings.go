@@ -341,6 +341,7 @@ type GinkgoLinterSettings struct {
 	SuppressNilAssertion     bool `mapstructure:"suppress-nil-assertion"`
 	SuppressErrAssertion     bool `mapstructure:"suppress-err-assertion"`
 	SuppressCompareAssertion bool `mapstructure:"suppress-compare-assertion"`
+	SuppressAsyncAssertion   bool `mapstructure:"suppress-async-assertion"`
 	AllowHaveLenZero         bool `mapstructure:"allow-havelen-zero"`
 }
 

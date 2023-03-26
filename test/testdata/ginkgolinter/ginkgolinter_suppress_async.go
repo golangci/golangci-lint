@@ -1,4 +1,4 @@
-//golangcitest:config_path configs/ginkgolinter_allow_havelen0.yml
+//golangcitest:config_path configs/ginkgolinter_suppress_async.yml
 //golangcitest:args --disable-all -Eginkgolinter
 package ginkgolinter
 
@@ -9,7 +9,7 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-func LenUsecase_havelen0() {
+func LenUsecase_async() {
 	var fakeVarUnderTest []int
 	Expect(fakeVarUnderTest).Should(BeEmpty())     // valid
 	Expect(fakeVarUnderTest).ShouldNot(HaveLen(5)) // valid
@@ -26,7 +26,7 @@ func LenUsecase_havelen0() {
 	Expect(len(fakeVarUnderTest)).To(BeNumerically("!=", 0)) // want "ginkgo-linter: wrong length assertion; consider using .Expect\\(fakeVarUnderTest\\)\\.ToNot\\(BeEmpty\\(\\)\\). instead"
 }
 
-func NilUsecase_havelen0() {
+func NilUsecase_async() {
 	y := 5
 	x := &y
 	Expect(x == nil).To(Equal(true)) // want "ginkgo-linter: wrong nil assertion; consider using .Expect\\(x\\)\\.To\\(BeNil\\(\\)\\). instead"
@@ -35,14 +35,14 @@ func NilUsecase_havelen0() {
 	Expect(x == nil).To(BeTrue())    // want "ginkgo-linter: wrong nil assertion; consider using .Expect\\(x\\)\\.To\\(BeNil\\(\\)\\). instead"
 	Expect(x == nil).To(BeFalse())   // want "ginkgo-linter: wrong nil assertion; consider using .Expect\\(x\\)\\.ToNot\\(BeNil\\(\\)\\). instead"
 }
-func BooleanUsecase_havelen0() {
+func BooleanUsecase_async() {
 	x := true
 	Expect(x).To(Equal(true)) // want "ginkgo-linter: wrong boolean assertion; consider using .Expect\\(x\\)\\.To\\(BeTrue\\(\\)\\). instead"
 	x = false
 	Expect(x).To(Equal(false)) // want "ginkgo-linter: wrong boolean assertion; consider using .Expect\\(x\\)\\.To\\(BeFalse\\(\\)\\). instead"
 }
 
-func ErrorUsecase_havelen0() {
+func ErrorUsecase_async() {
 	err := errors.New("fake error")
 	funcReturnsErr := func() error { return err }
 
@@ -53,12 +53,12 @@ func ErrorUsecase_havelen0() {
 	Expect(funcReturnsErr()).To(BeNil()) // want "ginkgo-linter: wrong error assertion; consider using .Expect\\(funcReturnsErr\\(\\)\\)\\.To\\(Succeed\\(\\)\\). instead"
 }
 
-func HaveLen0Usecase_havelen0() {
+func HaveLen0Usecase_async() {
 	x := make([]string, 0)
-	Expect(x).To(HaveLen(0))
+	Expect(x).To(HaveLen(0)) // want "ginkgo-linter: wrong length assertion; consider using .Expect\\(x\\)\\.To\\(BeEmpty\\(\\)\\). instead"
 }
 
-func WrongComparisonUsecase_havelen0() {
+func WrongComparisonUsecase_async() {
 	x := 8
 	Expect(x == 8).To(BeTrue())    // want "ginkgo-linter: wrong comparison assertion; consider using .Expect\\(x\\)\\.To\\(Equal\\(8\\)\\). instead"
 	Expect(x < 9).To(BeTrue())     // want "ginkgo-linter: wrong comparison assertion; consider using .Expect\\(x\\)\\.To\\(BeNumerically\\(\"<\", 9\\)\\). instead"
@@ -68,12 +68,13 @@ func WrongComparisonUsecase_havelen0() {
 	Expect(p1 == p2).To(Equal(true)) // want "ginkgo-linter: wrong comparison assertion; consider using .Expect\\(p1\\).To\\(BeIdenticalTo\\(p2\\)\\). instead"
 }
 
-func slowInt_havelen0() int {
+func slowInt_async() int {
 	time.Sleep(time.Second)
 	return 42
 }
 
-func WrongEventuallyWithFunction_havelen0() {
-	Eventually(slowInt_havelen0).Should(Equal(42))   // valid
-	Eventually(slowInt_havelen0()).Should(Equal(42)) // want "ginkgo-linter: use a function call in Eventually. This actually checks nothing, because Eventually receives the function returned value, instead of function itself, and this value is never changed; consider using .Eventually\\(slowInt_havelen0\\)\\.Should\\(Equal\\(42\\)\\). instead"
+// WrongEventuallyWithFunction_async Should trigger no warning
+func WrongEventuallyWithFunction_async() {
+	Eventually(slowInt_async).Should(Equal(42))   // valid
+	Eventually(slowInt_async()).Should(Equal(42)) // suppressed
 }

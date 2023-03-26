@@ -18,6 +18,7 @@ func NewGinkgoLinter(cfg *config.GinkgoLinterSettings) *goanalysis.Linter {
 			"suppress-nil-assertion":     cfg.SuppressNilAssertion,
 			"suppress-err-assertion":     cfg.SuppressErrAssertion,
 			"suppress-compare-assertion": cfg.SuppressCompareAssertion,
+			"suppress-async-assertion":   cfg.SuppressAsyncAssertion,
 			"allow-havelen-0":            cfg.AllowHaveLenZero,
 		}
 	}
