@@ -128,7 +128,17 @@ func (r *Runner) runLinterSafe(ctx context.Context, lintCtx *linter.Context,
 		}
 	}()
 
-	issues, err := lc.Linter.Run(ctx, lintCtx)
+	var issues []result.Issue
+	doneCh := make(chan struct{}, 1)
+	go func() {
+		issues, err = lc.Linter.Run(ctx, lintCtx)
+		doneCh <- struct{}{}
+	}()
+	select {
+	case <-doneCh:
+	case <-ctx.Done():
+		err = ctx.Err()
+	}
 
 	if lc.DoesChangeTypes {
 		// Packages in lintCtx might be dirty due to the last analysis,
