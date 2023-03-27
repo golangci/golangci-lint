@@ -1,0 +1,3 @@
+linters-settings:
+  ginkgolinter:
+    allow-havelen-zero: true

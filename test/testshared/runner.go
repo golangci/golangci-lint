@@ -164,7 +164,6 @@ func (b *RunnerBuilder) Runner() *Runner {
 	}
 
 	arguments := []string{
-		"--go=1.17", //  TODO(ldez): we force to use an old version of Go for the CI and the tests.
 		"--internal-cmd-test",
 	}
 

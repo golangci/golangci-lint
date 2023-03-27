@@ -1,6 +1,7 @@
 package processors
 
 import (
+	"path"
 	"path/filepath"
 	"testing"
 
@@ -12,6 +13,8 @@ import (
 
 func TestExcludeRulesMultiple(t *testing.T) {
 	lineCache := fsutils.NewLineCache(fsutils.NewFileCache())
+	files := fsutils.NewFiles(lineCache, "")
+
 	p := NewExcludeRules([]ExcludeRule{
 		{
 			BaseRule: BaseRule{
@@ -37,7 +40,7 @@ func TestExcludeRulesMultiple(t *testing.T) {
 				Linters: []string{"lll"},
 			},
 		},
-	}, lineCache, nil)
+	}, files, nil)
 
 	cases := []issueTestCase{
 		{Path: "e.go", Text: "exclude", Linter: "linter"},
@@ -66,6 +69,43 @@ func TestExcludeRulesMultiple(t *testing.T) {
 		{Path: "e.go", Text: "some", Linter: "linter"},
 		{Path: "e_Test.go", Text: "normal", Linter: "testlinter"},
 		{Path: "e_test.go", Text: "another", Linter: "linter"},
+	}
+	assert.Equal(t, expectedCases, resultingCases)
+}
+
+func TestExcludeRulesPathPrefix(t *testing.T) {
+	lineCache := fsutils.NewLineCache(fsutils.NewFileCache())
+	pathPrefix := path.Join("some", "dir")
+	files := fsutils.NewFiles(lineCache, pathPrefix)
+
+	p := NewExcludeRules([]ExcludeRule{
+		{
+			BaseRule: BaseRule{
+				Path: `some/dir/e\.go`,
+			},
+		},
+	}, files, nil)
+
+	cases := []issueTestCase{
+		{Path: "e.go"},
+		{Path: "other.go"},
+	}
+	var issues []result.Issue
+	for _, c := range cases {
+		issues = append(issues, newIssueFromIssueTestCase(c))
+	}
+	processedIssues := process(t, p, issues...)
+	var resultingCases []issueTestCase
+	for _, i := range processedIssues {
+		resultingCases = append(resultingCases, issueTestCase{
+			Path:   i.FilePath(),
+			Linter: i.FromLinter,
+			Text:   i.Text,
+			Line:   i.Line(),
+		})
+	}
+	expectedCases := []issueTestCase{
+		{Path: "other.go"},
 	}
 	assert.Equal(t, expectedCases, resultingCases)
 }
@@ -104,6 +144,7 @@ func TestExcludeRulesEmpty(t *testing.T) {
 
 func TestExcludeRulesCaseSensitiveMultiple(t *testing.T) {
 	lineCache := fsutils.NewLineCache(fsutils.NewFileCache())
+	files := fsutils.NewFiles(lineCache, "")
 	p := NewExcludeRulesCaseSensitive([]ExcludeRule{
 		{
 			BaseRule: BaseRule{
@@ -129,7 +170,7 @@ func TestExcludeRulesCaseSensitiveMultiple(t *testing.T) {
 				Linters: []string{"lll"},
 			},
 		},
-	}, lineCache, nil)
+	}, files, nil)
 
 	cases := []issueTestCase{
 		{Path: "e.go", Text: "exclude", Linter: "linter"},

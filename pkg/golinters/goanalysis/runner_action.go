@@ -1,6 +1,7 @@
 package goanalysis
 
 import (
+	"errors"
 	"fmt"
 	"go/types"
 	"io"
@@ -9,7 +10,6 @@ import (
 	"time"
 
 	"github.com/hashicorp/go-multierror"
-	"github.com/pkg/errors"
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/packages"
 	"golang.org/x/tools/go/types/objectpath"
@@ -98,6 +98,13 @@ func (act *action) waitUntilDependingAnalyzersWorked() {
 func (act *action) analyzeSafe() {
 	defer func() {
 		if p := recover(); p != nil {
+			if !act.isroot {
+				// This line allows to display "hidden" panic with analyzers like buildssa.
+				// Some linters are dependent of sub-analyzers but when a sub-analyzer fails the linter is not aware of that,
+				// this results to another panic (ex: "interface conversion: interface {} is nil, not *buildssa.SSA").
+				act.r.log.Errorf("%s: panic during analysis: %v, %s", act.a.Name, p, string(debug.Stack()))
+			}
+
 			act.err = errorutil.NewPanicError(fmt.Sprintf("%s: package %q (isInitialPkg: %t, needAnalyzeSource: %t): %s",
 				act.a.Name, act.pkg.Name, act.isInitialPkg, act.needAnalyzeSource, p), debug.Stack())
 		}
@@ -125,7 +132,7 @@ func (act *action) analyze() {
 			continue
 		}
 
-		depErrors = multierror.Append(depErrors, errors.Cause(dep.err))
+		depErrors = multierror.Append(depErrors, errors.Unwrap(dep.err))
 	}
 	if depErrors != nil {
 		depErrors.ErrorFormat = func(e []error) string {
@@ -182,7 +189,7 @@ func (act *action) analyze() {
 		// It looks like there should be !pass.Analyzer.RunDespiteErrors
 		// but govet's cgocall crashes on it. Govet itself contains !pass.Analyzer.RunDespiteErrors condition here,
 		// but it exits before it if packages.Load have failed.
-		act.err = errors.Wrap(&IllTypedError{Pkg: act.pkg}, "analysis skipped")
+		act.err = fmt.Errorf("analysis skipped: %w", &IllTypedError{Pkg: act.pkg})
 	} else {
 		startedAt = time.Now()
 		act.result, act.err = pass.Analyzer.Run(pass)

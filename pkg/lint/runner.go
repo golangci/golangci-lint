@@ -7,7 +7,6 @@ import (
 	"strings"
 
 	"github.com/hashicorp/go-multierror"
-	"github.com/pkg/errors"
 	gopackages "golang.org/x/tools/go/packages"
 
 	"github.com/golangci/golangci-lint/internal/errorutil"
@@ -28,9 +27,16 @@ type Runner struct {
 	Log        logutils.Log
 }
 
-func NewRunner(cfg *config.Config, log logutils.Log, goenv *goutil.Env, es *lintersdb.EnabledSet,
-	lineCache *fsutils.LineCache, dbManager *lintersdb.Manager, pkgs []*gopackages.Package) (*Runner, error) {
-	skipFilesProcessor, err := processors.NewSkipFiles(cfg.Run.SkipFiles)
+func NewRunner(cfg *config.Config, log logutils.Log, goenv *goutil.Env,
+	es *lintersdb.EnabledSet,
+	lineCache *fsutils.LineCache, fileCache *fsutils.FileCache,
+	dbManager *lintersdb.Manager, pkgs []*gopackages.Package) (*Runner, error) {
+	// Beware that some processors need to add the path prefix when working with paths
+	// because they get invoked before the path prefixer (exclude and severity rules)
+	// or process other paths (skip files).
+	files := fsutils.NewFiles(lineCache, cfg.Output.PathPrefix)
+
+	skipFilesProcessor, err := processors.NewSkipFiles(cfg.Run.SkipFiles, cfg.Output.PathPrefix)
 	if err != nil {
 		return nil, err
 	}
@@ -39,14 +45,14 @@ func NewRunner(cfg *config.Config, log logutils.Log, goenv *goutil.Env, es *lint
 	if cfg.Run.UseDefaultSkipDirs {
 		skipDirs = append(skipDirs, packages.StdExcludeDirRegexps...)
 	}
-	skipDirsProcessor, err := processors.NewSkipDirs(skipDirs, log.Child(logutils.DebugKeySkipDirs), cfg.Run.Args)
+	skipDirsProcessor, err := processors.NewSkipDirs(skipDirs, log.Child(logutils.DebugKeySkipDirs), cfg.Run.Args, cfg.Output.PathPrefix)
 	if err != nil {
 		return nil, err
 	}
 
 	enabledLinters, err := es.GetEnabledLintersMap()
 	if err != nil {
-		return nil, errors.Wrap(err, "failed to get enabled linters")
+		return nil, fmt.Errorf("failed to get enabled linters: %w", err)
 	}
 
 	// print deprecated messages
@@ -58,7 +64,7 @@ func NewRunner(cfg *config.Config, log logutils.Log, goenv *goutil.Env, es *lint
 
 			var extra string
 			if lc.Deprecation.Replacement != "" {
-				extra = fmt.Sprintf(" Replaced by %s.", lc.Deprecation.Replacement)
+				extra = fmt.Sprintf("Replaced by %s.", lc.Deprecation.Replacement)
 			}
 
 			log.Warnf("The linter '%s' is deprecated (since %s) due to: %s %s", name, lc.Deprecation.Since, lc.Deprecation.Message, extra)
@@ -83,7 +89,7 @@ func NewRunner(cfg *config.Config, log logutils.Log, goenv *goutil.Env, es *lint
 			processors.NewIdentifierMarker(),
 
 			getExcludeProcessor(&cfg.Issues),
-			getExcludeRulesProcessor(&cfg.Issues, log, lineCache),
+			getExcludeRulesProcessor(&cfg.Issues, log, files),
 			processors.NewNolint(log.Child(logutils.DebugKeyNolint), dbManager, enabledLinters),
 
 			processors.NewUniqByLine(cfg),
@@ -93,7 +99,12 @@ func NewRunner(cfg *config.Config, log logutils.Log, goenv *goutil.Env, es *lint
 			processors.NewMaxFromLinter(cfg.Issues.MaxIssuesPerLinter, log.Child(logutils.DebugKeyMaxFromLinter), cfg),
 			processors.NewSourceCode(lineCache, log.Child(logutils.DebugKeySourceCode)),
 			processors.NewPathShortener(),
-			getSeverityRulesProcessor(&cfg.Severity, log, lineCache),
+			getSeverityRulesProcessor(&cfg.Severity, log, files),
+
+			// The fixer still needs to see paths for the issues that are relative to the current directory.
+			processors.NewFixer(cfg, log, fileCache),
+
+			// Now we can modify the issues for output.
 			processors.NewPathPrefixer(cfg.Output.PathPrefix),
 			processors.NewSortResults(cfg),
 		},
@@ -260,7 +271,7 @@ func getExcludeProcessor(cfg *config.Issues) processors.Processor {
 	return excludeProcessor
 }
 
-func getExcludeRulesProcessor(cfg *config.Issues, log logutils.Log, lineCache *fsutils.LineCache) processors.Processor {
+func getExcludeRulesProcessor(cfg *config.Issues, log logutils.Log, files *fsutils.Files) processors.Processor {
 	var excludeRules []processors.ExcludeRule
 	for _, r := range cfg.ExcludeRules {
 		excludeRules = append(excludeRules, processors.ExcludeRule{
@@ -288,13 +299,13 @@ func getExcludeRulesProcessor(cfg *config.Issues, log logutils.Log, lineCache *f
 	if cfg.ExcludeCaseSensitive {
 		excludeRulesProcessor = processors.NewExcludeRulesCaseSensitive(
 			excludeRules,
-			lineCache,
+			files,
 			log.Child(logutils.DebugKeyExcludeRules),
 		)
 	} else {
 		excludeRulesProcessor = processors.NewExcludeRules(
 			excludeRules,
-			lineCache,
+			files,
 			log.Child(logutils.DebugKeyExcludeRules),
 		)
 	}
@@ -302,7 +313,7 @@ func getExcludeRulesProcessor(cfg *config.Issues, log logutils.Log, lineCache *f
 	return excludeRulesProcessor
 }
 
-func getSeverityRulesProcessor(cfg *config.Severity, log logutils.Log, lineCache *fsutils.LineCache) processors.Processor {
+func getSeverityRulesProcessor(cfg *config.Severity, log logutils.Log, files *fsutils.Files) processors.Processor {
 	var severityRules []processors.SeverityRule
 	for _, r := range cfg.Rules {
 		severityRules = append(severityRules, processors.SeverityRule{
@@ -321,14 +332,14 @@ func getSeverityRulesProcessor(cfg *config.Severity, log logutils.Log, lineCache
 		severityRulesProcessor = processors.NewSeverityRulesCaseSensitive(
 			cfg.Default,
 			severityRules,
-			lineCache,
+			files,
 			log.Child(logutils.DebugKeySeverityRules),
 		)
 	} else {
 		severityRulesProcessor = processors.NewSeverityRules(
 			cfg.Default,
 			severityRules,
-			lineCache,
+			files,
 			log.Child(logutils.DebugKeySeverityRules),
 		)
 	}

@@ -1,9 +1,8 @@
 package config
 
 import (
+	"errors"
 	"runtime"
-
-	"github.com/pkg/errors"
 )
 
 var defaultLintersSettings = LintersSettings{
@@ -20,9 +19,10 @@ var defaultLintersSettings = LintersSettings{
 		MaxBlankIdentifiers: 2,
 	},
 	ErrorLint: ErrorLintSettings{
-		Errorf:     true,
-		Asserts:    true,
-		Comparison: true,
+		Errorf:      true,
+		ErrorfMulti: true,
+		Asserts:     true,
+		Comparison:  true,
 	},
 	Exhaustive: ExhaustiveSettings{
 		Check:                      []string{"switch"},
@@ -60,6 +60,12 @@ var defaultLintersSettings = LintersSettings{
 	},
 	Gosec: GoSecSettings{
 		Concurrency: runtime.NumCPU(),
+	},
+	Gosmopolitan: GosmopolitanSettings{
+		AllowTimeLocal:  false,
+		EscapeHatches:   []string{},
+		IgnoreTests:     true,
+		WatchForScripts: []string{"Han"},
 	},
 	Ifshort: IfshortSettings{
 		MaxDeclLines: 1,
@@ -103,6 +109,11 @@ var defaultLintersSettings = LintersSettings{
 	Predeclared: PredeclaredSettings{
 		Ignore:    "",
 		Qualified: false,
+	},
+	TagAlign: TagAlignSettings{
+		Align: true,
+		Sort:  true,
+		Order: nil,
 	},
 	Testpackage: TestpackageSettings{
 		SkipRegexp:    `(export|internal)_test\.go`,
@@ -167,6 +178,7 @@ type LintersSettings struct {
 	Gomodguard       GoModGuardSettings
 	Gosec            GoSecSettings
 	Gosimple         StaticCheckSettings
+	Gosmopolitan     GosmopolitanSettings
 	Govet            GovetSettings
 	Grouper          GrouperSettings
 	Ifshort          IfshortSettings
@@ -196,12 +208,12 @@ type LintersSettings struct {
 	Staticcheck      StaticCheckSettings
 	Structcheck      StructCheckSettings
 	Stylecheck       StaticCheckSettings
+	TagAlign         TagAlignSettings
 	Tagliatelle      TagliatelleSettings
 	Tenv             TenvSettings
 	Testpackage      TestpackageSettings
 	Thelper          ThelperSettings
 	Unparam          UnparamSettings
-	Unused           StaticCheckSettings
 	UseStdlibVars    UseStdlibVarsSettings
 	Varcheck         VarCheckSettings
 	Varnamelen       VarnamelenSettings
@@ -281,9 +293,10 @@ type ErrChkJSONSettings struct {
 }
 
 type ErrorLintSettings struct {
-	Errorf     bool `mapstructure:"errorf"`
-	Asserts    bool `mapstructure:"asserts"`
-	Comparison bool `mapstructure:"comparison"`
+	Errorf      bool `mapstructure:"errorf"`
+	ErrorfMulti bool `mapstructure:"errorf-multi"`
+	Asserts     bool `mapstructure:"asserts"`
+	Comparison  bool `mapstructure:"comparison"`
 }
 
 type ExhaustiveSettings struct {
@@ -324,9 +337,12 @@ type GciSettings struct {
 }
 
 type GinkgoLinterSettings struct {
-	SuppressLenAssertion bool `mapstructure:"suppress-len-assertion"`
-	SuppressNilAssertion bool `mapstructure:"suppress-nil-assertion"`
-	SuppressErrAssertion bool `mapstructure:"suppress-err-assertion"`
+	SuppressLenAssertion     bool `mapstructure:"suppress-len-assertion"`
+	SuppressNilAssertion     bool `mapstructure:"suppress-nil-assertion"`
+	SuppressErrAssertion     bool `mapstructure:"suppress-err-assertion"`
+	SuppressCompareAssertion bool `mapstructure:"suppress-compare-assertion"`
+	SuppressAsyncAssertion   bool `mapstructure:"suppress-async-assertion"`
+	AllowHaveLenZero         bool `mapstructure:"allow-havelen-zero"`
 }
 
 type GocognitSettings struct {
@@ -445,6 +461,13 @@ type GoSecSettings struct {
 	ExcludeGenerated bool                   `mapstructure:"exclude-generated"`
 	Config           map[string]interface{} `mapstructure:"config"`
 	Concurrency      int                    `mapstructure:"concurrency"`
+}
+
+type GosmopolitanSettings struct {
+	AllowTimeLocal  bool     `mapstructure:"allow-time-local"`
+	EscapeHatches   []string `mapstructure:"escape-hatches"`
+	IgnoreTests     bool     `mapstructure:"ignore-tests"`
+	WatchForScripts []string `mapstructure:"watch-for-scripts"`
 }
 
 type GovetSettings struct {
@@ -637,6 +660,12 @@ func (s *StaticCheckSettings) HasConfiguration() bool {
 
 type StructCheckSettings struct {
 	CheckExportedFields bool `mapstructure:"exported-fields"`
+}
+
+type TagAlignSettings struct {
+	Align bool     `mapstructure:"align"`
+	Sort  bool     `mapstructure:"sort"`
+	Order []string `mapstructure:"order"`
 }
 
 type TagliatelleSettings struct {

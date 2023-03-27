@@ -4,7 +4,7 @@ title: Performance
 
 ## Memory Usage
 
-A trade-off between memory usage and execution time can be controlled by [`GOGC`](https://golang.org/pkg/runtime/#hdr-Environment_Variables) environment variable.
+A trade-off between memory usage and execution time can be controlled by [`GOGC`](https://pkg.go.dev/runtime#hdr-Environment_Variables) environment variable.
 Less `GOGC` values trigger garbage collection more frequently and golangci-lint consumes less memory and more CPU. Below is the trade-off table for running on this repo:
 
 | `GOGC`          | Peak Memory, GB | Execution Time, s |

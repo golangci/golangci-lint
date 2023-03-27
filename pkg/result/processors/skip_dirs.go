@@ -1,11 +1,10 @@
 package processors
 
 import (
+	"fmt"
 	"path/filepath"
 	"regexp"
 	"strings"
-
-	"github.com/pkg/errors"
 
 	"github.com/golangci/golangci-lint/pkg/fsutils"
 	"github.com/golangci/golangci-lint/pkg/logutils"
@@ -23,19 +22,20 @@ type SkipDirs struct {
 	skippedDirs      map[string]*skipStat
 	absArgsDirs      []string
 	skippedDirsCache map[string]bool
+	pathPrefix       string
 }
 
 var _ Processor = (*SkipDirs)(nil)
 
 const goFileSuffix = ".go"
 
-func NewSkipDirs(patterns []string, log logutils.Log, runArgs []string) (*SkipDirs, error) {
+func NewSkipDirs(patterns []string, log logutils.Log, runArgs []string, pathPrefix string) (*SkipDirs, error) {
 	var patternsRe []*regexp.Regexp
 	for _, p := range patterns {
 		p = fsutils.NormalizePathInRegex(p)
 		patternRe, err := regexp.Compile(p)
 		if err != nil {
-			return nil, errors.Wrapf(err, "can't compile regexp %q", p)
+			return nil, fmt.Errorf("can't compile regexp %q: %w", p, err)
 		}
 		patternsRe = append(patternsRe, patternRe)
 	}
@@ -52,7 +52,7 @@ func NewSkipDirs(patterns []string, log logutils.Log, runArgs []string) (*SkipDi
 
 		absArg, err := filepath.Abs(arg)
 		if err != nil {
-			return nil, errors.Wrapf(err, "failed to abs-ify arg %q", arg)
+			return nil, fmt.Errorf("failed to abs-ify arg %q: %w", arg, err)
 		}
 		absArgsDirs = append(absArgsDirs, absArg)
 	}
@@ -63,6 +63,7 @@ func NewSkipDirs(patterns []string, log logutils.Log, runArgs []string) (*SkipDi
 		skippedDirs:      map[string]*skipStat{},
 		absArgsDirs:      absArgsDirs,
 		skippedDirsCache: map[string]bool{},
+		pathPrefix:       pathPrefix,
 	}, nil
 }
 
@@ -121,8 +122,9 @@ func (p *SkipDirs) shouldPassIssueDirs(issueRelDir, issueAbsDir string) bool {
 	// The alternative solution is to find relative to args path, but it has
 	// disadvantages (https://github.com/golangci/golangci-lint/pull/313).
 
+	path := fsutils.WithPathPrefix(p.pathPrefix, issueRelDir)
 	for _, pattern := range p.patterns {
-		if pattern.MatchString(issueRelDir) {
+		if pattern.MatchString(path) {
 			ps := pattern.String()
 			if p.skippedDirs[issueRelDir] == nil {
 				p.skippedDirs[issueRelDir] = &skipStat{

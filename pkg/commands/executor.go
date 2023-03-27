@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"crypto/sha256"
+	"fmt"
 	"io"
 	"os"
 	"path/filepath"
@@ -12,7 +13,6 @@ import (
 
 	"github.com/fatih/color"
 	"github.com/gofrs/flock"
-	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"gopkg.in/yaml.v3"
@@ -30,13 +30,20 @@ import (
 	"github.com/golangci/golangci-lint/pkg/timeutils"
 )
 
+type BuildInfo struct {
+	GoVersion string `json:"goVersion"`
+	Version   string `json:"version"`
+	Commit    string `json:"commit"`
+	Date      string `json:"date"`
+}
+
 type Executor struct {
 	rootCmd    *cobra.Command
 	runCmd     *cobra.Command
 	lintersCmd *cobra.Command
 
-	exitCode              int
-	version, commit, date string
+	exitCode  int
+	buildInfo BuildInfo
 
 	cfg               *config.Config // cfg is the unmarshaled data from the golangci config file.
 	log               logutils.Log
@@ -56,13 +63,11 @@ type Executor struct {
 }
 
 // NewExecutor creates and initializes a new command executor.
-func NewExecutor(version, commit, date string) *Executor {
+func NewExecutor(buildInfo BuildInfo) *Executor {
 	startedAt := time.Now()
 	e := &Executor{
 		cfg:       config.NewDefault(),
-		version:   version,
-		commit:    commit,
-		date:      date,
+		buildInfo: buildInfo,
 		DBManager: lintersdb.NewManager(nil, nil),
 		debugf:    logutils.Debug(logutils.DebugKeyExec),
 	}
@@ -135,7 +140,7 @@ func NewExecutor(version, commit, date string) *Executor {
 	e.loadGuard = load.NewGuard()
 	e.contextLoader = lint.NewContextLoader(e.cfg, e.log.Child(logutils.DebugKeyLoader), e.goenv,
 		e.lineCache, e.fileCache, e.pkgCache, e.loadGuard)
-	if err = e.initHashSalt(version); err != nil {
+	if err = e.initHashSalt(buildInfo.Version); err != nil {
 		e.log.Fatalf("Failed to init hash salt: %s", err)
 	}
 	e.debugf("Initialized executor in %s", time.Since(startedAt))
@@ -149,16 +154,15 @@ func (e *Executor) Execute() error {
 func (e *Executor) initHashSalt(version string) error {
 	binSalt, err := computeBinarySalt(version)
 	if err != nil {
-		return errors.Wrap(err, "failed to calculate binary salt")
+		return fmt.Errorf("failed to calculate binary salt: %w", err)
 	}
 
 	configSalt, err := computeConfigSalt(e.cfg)
 	if err != nil {
-		return errors.Wrap(err, "failed to calculate config salt")
+		return fmt.Errorf("failed to calculate config salt: %w", err)
 	}
 
-	var b bytes.Buffer
-	b.Write(binSalt)
+	b := bytes.NewBuffer(binSalt)
 	b.Write(configSalt)
 	cache.SetSalt(b.Bytes())
 	return nil
@@ -195,11 +199,10 @@ func computeConfigSalt(cfg *config.Config) ([]byte, error) {
 
 	lintersSettingsBytes, err := yaml.Marshal(cfg.LintersSettings)
 	if err != nil {
-		return nil, errors.Wrap(err, "failed to json marshal config linter settings")
+		return nil, fmt.Errorf("failed to json marshal config linter settings: %w", err)
 	}
 
-	var configData bytes.Buffer
-	configData.WriteString("linters-settings=")
+	configData := bytes.NewBufferString("linters-settings=")
 	configData.Write(lintersSettingsBytes)
 	configData.WriteString("\nbuild-tags=%s" + strings.Join(cfg.Run.BuildTags, ","))
 

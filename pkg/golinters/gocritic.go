@@ -1,6 +1,7 @@
 package golinters
 
 import (
+	"errors"
 	"fmt"
 	"go/ast"
 	"go/types"
@@ -12,8 +13,7 @@ import (
 	"sync"
 
 	"github.com/go-critic/go-critic/checkers"
-	gocriticlinter "github.com/go-critic/go-critic/framework/linter"
-	"github.com/pkg/errors"
+	gocriticlinter "github.com/go-critic/go-critic/linter"
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/config"
@@ -173,7 +173,7 @@ func runGocriticOnFile(linterCtx *gocriticlinter.Context, f *ast.File, checks []
 		// All checkers are expected to use *lint.Context
 		// as read-only structure, so no copying is required.
 		for _, warn := range c.Check(f) {
-			pos := linterCtx.FileSet.Position(warn.Node.Pos())
+			pos := linterCtx.FileSet.Position(warn.Pos)
 			issue := result.Issue{
 				Pos:        pos,
 				Text:       fmt.Sprintf("%s: %s", c.Info.Name, warn.Text),
@@ -184,7 +184,7 @@ func runGocriticOnFile(linterCtx *gocriticlinter.Context, f *ast.File, checks []
 				issue.Replacement = &result.Replacement{
 					Inline: &result.InlineFix{
 						StartCol:  pos.Column - 1,
-						Length:    int(warn.Node.End() - warn.Node.Pos()),
+						Length:    int(warn.Suggestion.To - warn.Suggestion.From),
 						NewString: string(warn.Suggestion.Replacement),
 					},
 				}
@@ -425,7 +425,7 @@ func (s *goCriticSettingsWrapper) validate() error {
 		}
 	} else {
 		if err := validateStringsUniq(s.EnabledTags); err != nil {
-			return errors.Wrap(err, "validate enabled tags")
+			return fmt.Errorf("validate enabled tags: %w", err)
 		}
 
 		tagToCheckers := s.buildTagToCheckersMap()
@@ -447,15 +447,15 @@ func (s *goCriticSettingsWrapper) validate() error {
 	}
 
 	if err := validateStringsUniq(s.EnabledChecks); err != nil {
-		return errors.Wrap(err, "validate enabled checks")
+		return fmt.Errorf("validate enabled checks: %w", err)
 	}
 
 	if err := validateStringsUniq(s.DisabledChecks); err != nil {
-		return errors.Wrap(err, "validate disabled checks")
+		return fmt.Errorf("validate disabled checks: %w", err)
 	}
 
 	if err := s.validateCheckerNames(); err != nil {
-		return errors.Wrap(err, "validation failed")
+		return fmt.Errorf("validation failed: %w", err)
 	}
 
 	return nil

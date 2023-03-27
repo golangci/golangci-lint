@@ -1,6 +1,88 @@
 Follow the news and releases on our [twitter](https://twitter.com/golangci) and our [blog](https://medium.com/golangci).
 There is the most valuable changes log:
 
+### v1.52.2
+
+1. updated linters
+   * `tparallel`: from 0.3.0 to 0.3.1
+2. misc.
+   * fix: pre-commit `require_serial` and `pass_filenames`
+
+### v1.52.1
+
+1. misc.
+   * fix: improve panic management
+   * fix: the combination of --fix and --path-prefix
+
+### v1.52.0
+
+1. updated linters
+   * `asciicheck`: from 0.1.1 to 0.2.0
+   * `bidichk`: from 0.2.3 to 0.2.4
+   * `contextcheck`: from 1.1.3 to 1.1.4
+   * `dupword`: from 0.0.9 to 0.0.11
+   * `durationcheck`: from 0.0.9 to 0.0.10
+   * `errchkjson`: from 0.3.0 to 0.3.1
+   * `errname`: from 0.1.7 to 0.1.9
+   * `forbidigo`: from 1.4.0 to 1.5.1
+   * `gci`: from 0.9.1 to 0.10.1
+   * `ginkgolinter`: from 0.8.1 to 0.9.0
+   * `go-critic`: from 0.6.7 to 0.7.0
+   * `go-errorlint`: from 1.1.0  to 1.4.0
+   * `godox`: bump to HEAD
+   * `lll`: skip go command
+   * `loggercheck`: from 0.9.3 to 0.9.4
+   * `musttag`: from 0.4.5 to 0.5.0
+   * `nilnil`: from 0.1.1 to 0.1.3
+   * `noctx`: from 0.0.1 to 0.0.2
+   * `revive`: from 1.2.5 to 1.3.1
+   * `rowserrcheck`: remove limitation related to generics support
+   * `staticcheck`: from 0.4.2 to 0.4.3
+   * `testpackage`: from 1.1.0 to 1.1.1
+   * `tparallel`: from 0.2.1 to 0.3.0
+   * `wastedassign`: remove limitation related to generics support
+   * `wrapcheck`: from 2.8.0 to 2.8.1
+2. misc.
+   * Add TeamCity output format
+   * Consider path prefix when matching path patterns
+   * Add Go version to version information
+3. Documentation
+   * Add Tekton in Trusted By page
+   * Clarify that custom linters are not enabled by default
+   * Remove description for deprecated "go" option
+
+### v1.51.2
+
+1. updated linters
+   * `forbidigo`: from 1.3.0 to 1.4.0
+   * `gci`: from 0.9.0 to 0.9.1
+   * `go-critic`: from 0.6.5 to 0.6.7
+   * `go-errorlint`: from 1.0.6 to 1.1.0
+   * `gosec`: from 2.14.0 to 2.15.0
+   * `musttag`: from 0.4.4 to 0.4.5
+   * `staticcheck`: from 0.4.0 to 0.4.2
+   * `tools`: from 0.5.0 to 0.6.0
+   * `usestdlibvars`: from 1.21.1 to 1.23.0
+   * `wsl`: from 3.3.0 to 3.4.0
+   * `govet`: enable `timeformat` by default
+2. misc.
+   * fix: cache status size calculation
+   * add new source archive
+3. Documentation
+   * Improve installation section
+   * Replace links to godoc.org with pkg.go.dev
+
+### v1.51.1
+
+1. updated linters
+   * `ginkgolinter`: from 0.7.1 to 0.8.1
+   * `ineffassign`: bump to HEAD
+   * `musttag`: from 0.4.3 to 0.4.4
+   * `sqlclosecheck`: from 0.3.0 to 0.4.0
+   * `staticcheck`: bump to v0.4.0
+   * `wastedassign`: from 2.0.6 to 2.0.7
+   * `wrapcheck`: from 2.7.0 to 2.8.0
+
 ### v1.51.0
 
 1. new linters

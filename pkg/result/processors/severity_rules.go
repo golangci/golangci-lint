@@ -21,13 +21,13 @@ type SeverityRule struct {
 type SeverityRules struct {
 	defaultSeverity string
 	rules           []severityRule
-	lineCache       *fsutils.LineCache
+	files           *fsutils.Files
 	log             logutils.Log
 }
 
-func NewSeverityRules(defaultSeverity string, rules []SeverityRule, lineCache *fsutils.LineCache, log logutils.Log) *SeverityRules {
+func NewSeverityRules(defaultSeverity string, rules []SeverityRule, files *fsutils.Files, log logutils.Log) *SeverityRules {
 	r := &SeverityRules{
-		lineCache:       lineCache,
+		files:           files,
 		log:             log,
 		defaultSeverity: defaultSeverity,
 	}
@@ -70,7 +70,7 @@ func (p SeverityRules) Process(issues []result.Issue) ([]result.Issue, error) {
 				ruleSeverity = rule.severity
 			}
 
-			if rule.match(i, p.lineCache, p.log) {
+			if rule.match(i, p.files, p.log) {
 				i.Severity = ruleSeverity
 				return i
 			}
@@ -90,9 +90,9 @@ type SeverityRulesCaseSensitive struct {
 }
 
 func NewSeverityRulesCaseSensitive(defaultSeverity string, rules []SeverityRule,
-	lineCache *fsutils.LineCache, log logutils.Log) *SeverityRulesCaseSensitive {
+	files *fsutils.Files, log logutils.Log) *SeverityRulesCaseSensitive {
 	r := &SeverityRules{
-		lineCache:       lineCache,
+		files:           files,
 		log:             log,
 		defaultSeverity: defaultSeverity,
 	}

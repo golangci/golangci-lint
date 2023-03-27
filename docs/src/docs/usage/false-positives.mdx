@@ -66,6 +66,10 @@ issues:
 
 Exclude issues in path by `run.skip-dirs`, `run.skip-files` or `issues.exclude-rules` config options.
 
+Beware that the paths that get matched here are relative to the current working directory.
+When the configuration contains path patterns that check for specific directories,
+the `--path-prefix` parameter can be used to extend the paths before matching.
+
 In the following example, all the reports from the linters (`linters`) that concerns the path (`path`) are excluded:
 
 ```yml

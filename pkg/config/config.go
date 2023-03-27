@@ -38,6 +38,7 @@ func NewDefault() *Config {
 
 type Version struct {
 	Format string `mapstructure:"format"`
+	Debug  bool   `mapstructure:"debug"`
 }
 
 func IsGreaterThanOrEqualGo118(v string) bool {

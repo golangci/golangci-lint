@@ -27,7 +27,8 @@ run:
     - mytag
 
   # Which dirs to skip: issues from them won't be reported.
-  # Can use regexp here: `generated.*`, regexp is applied on full path.
+  # Can use regexp here: `generated.*`, regexp is applied on full path,
+  # including the path prefix if one is set.
   # Default value is empty list,
   # but default dirs are skipped independently of this option's value (see skip-dirs-use-default).
   # "/" will be replaced by current OS file path separator to properly work on Windows.
@@ -75,7 +76,7 @@ run:
 
 # output configuration options
 output:
-  # Format: colored-line-number|line-number|json|tab|checkstyle|code-climate|junit-xml|github-actions
+  # Format: colored-line-number|line-number|json|tab|checkstyle|code-climate|junit-xml|github-actions|teamcity
   #
   # Multiple can be specified by separating them by comma, output can be provided
   # for each of them by separating format name and path by colon symbol.
@@ -294,6 +295,9 @@ linters-settings:
     # See the https://github.com/polyfloyd/go-errorlint for caveats.
     # Default: true
     errorf: false
+    # Permit more than 1 %w verb, valid per Go 1.20 (Requires errorf:true)
+    # Default: true
+    errorf-multi: false
     # Check for plain type assertions and type switches.
     # Default: true
     asserts: false
@@ -414,6 +418,18 @@ linters-settings:
     # Suppress the wrong error assertion warning.
     # Default: false
     suppress-err-assertion: true
+
+    # Suppress the wrong comparison assertion warning.
+    # Default: false
+    suppress-compare-assertion: true
+
+    # Suppress the function all in async assertion warning.
+    # Default: false
+    suppress-async-assertion: true
+
+    # Don't trigger warnings for HaveLen(0)
+    # Default: false
+    allow-havelen-zero: true
 
   gocognit:
     # Minimal code complexity to report.
@@ -614,8 +630,6 @@ linters-settings:
         replacement: 'a[b:]'
 
   gofumpt:
-    # Select the Go version to target.
-    # Default: "1.15"
     # Deprecated: use the global `run.go` instead.
     lang-version: "1.17"
 
@@ -759,8 +773,6 @@ linters-settings:
       local_replace_directives: false
 
   gosimple:
-    # Select the Go version to target.
-    # Default: 1.13
     # Deprecated: use the global `run.go` instead.
     go: "1.15"
     # Sxxxx checks in https://staticcheck.io/docs/configuration/options/#checks
@@ -939,6 +951,37 @@ linters-settings:
       # Maximum allowed permissions mode for os.WriteFile and ioutil.WriteFile
       # Default: "0600"
       G306: "0600"
+
+  gosmopolitan:
+    # Allow and ignore `time.Local` usages.
+    #
+    # Default: false
+    allow-time-local: true
+    # List of fully qualified names in the `full/pkg/path.name` form, to act as "i18n escape hatches".
+    # String literals inside call-like expressions to, or struct literals of those names,
+    # are exempt from the writing system check.
+    #
+    # Default: []
+    escape-hatches:
+      - 'github.com/nicksnyder/go-i18n/v2/i18n.Message'
+      - 'example.com/your/project/i18n/markers.Raw'
+      - 'example.com/your/project/i18n/markers.OK'
+      - 'example.com/your/project/i18n/markers.TODO'
+      - 'command-line-arguments.Simple'
+    # Ignore test files.
+    #
+    # Default: true
+    ignore-tests: false
+    # List of Unicode scripts to watch for any usage in string literals.
+    # https://pkg.go.dev/unicode#pkg-variables
+    #
+    # Default: ["Han"]
+    watch-for-scripts:
+      - Devanagari
+      - Han
+      - Hangul
+      - Hiragana
+      - Katakana
 
   govet:
     # Report about shadowed variables.
@@ -1598,6 +1641,9 @@ linters-settings:
             - must not contain line breaks
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#struct-tag
       - name: struct-tag
+        arguments:
+          - "json,inline"
+          - "bson,outline,gnu"
         severity: warning
         disabled: false
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#superfluous-else
@@ -1674,8 +1720,6 @@ linters-settings:
       - github.com/jmoiron/sqlx
 
   staticcheck:
-    # Select the Go version to target.
-    # Default: "1.13"
     # Deprecated: use the global `run.go` instead.
     go: "1.15"
     # SAxxxx checks in https://staticcheck.io/docs/configuration/options/#checks
@@ -1683,8 +1727,6 @@ linters-settings:
     checks: [ "all" ]
 
   stylecheck:
-    # Select the Go version to target.
-    # Default: 1.13
     # Deprecated: use the global `run.go` instead.
     go: "1.15"
     # STxxxx checks in https://staticcheck.io/docs/configuration/options/#checks
@@ -1700,6 +1742,39 @@ linters-settings:
     # https://staticcheck.io/docs/configuration/options/#http_status_code_whitelist
     # Default: ["200", "400", "404", "500"]
     http-status-code-whitelist: [ "200", "400", "404", "500" ]
+
+  tagalign:
+    # Align and sort can be used together or separately.
+    #
+    # Whether enable align. If true, the struct tags will be aligned.
+    # eg:
+    # type FooBar struct {
+    #     Bar    string `json:"bar" validate:"required"`
+    #     FooFoo int8   `json:"foo_foo" validate:"required"`
+    # }
+    # will be formatted to:
+    # type FooBar struct {
+    #     Bar    string `json:"bar"     validate:"required"`
+    #     FooFoo int8   `json:"foo_foo" validate:"required"`
+    # }
+    # Default: true.
+    align: false
+    # Whether enable tags sort.
+    # If true, the tags will be sorted by name in ascending order.
+    # eg: `xml:"bar" json:"bar" validate:"required"` -> `json:"bar" validate:"required" xml:"bar"`
+    # Default: true
+    sort: false
+    # Specify the order of tags, the other tags will be sorted by name.
+    # This option will be ignored if `sort` is false.
+    # Default: []
+    order:
+      - json
+      - yaml
+      - yml
+      - toml
+      - mapstructure
+      - binding
+      - validate
 
   tagliatelle:
     # Check the struct tag name case.
@@ -1799,7 +1874,7 @@ linters-settings:
     # Suggest the use of rpc.DefaultXXPath.
     # Default: false
     default-rpc-path: true
-    # Suggest the use of os.DevNull.
+    # DEPRECATED Suggest the use of os.DevNull.
     # Default: false
     os-dev-null: true
     # Suggest the use of sql.LevelXX.String().
@@ -1811,7 +1886,7 @@ linters-settings:
     # Suggest the use of constant.Kind.String().
     # Default: false
     constant-kind: true
-    # Suggest the use of syslog.Priority.
+    # DEPRECATED Suggest the use of syslog.Priority.
     # Default: false
     syslog-priority: true
 
@@ -1923,48 +1998,48 @@ linters-settings:
     # this is set to true - the append call must append either a variable
     # assigned, called or used on the line above.
     strict-append: true
-    
+
     # Allows assignments to be cuddled with variables used in calls on
     # line above and calls to be cuddled with assignments of variables
     # used in call on line above.
     allow-assign-and-call: true
-    
+
     # Allows assignments to be cuddled with anything.
     allow-assign-and-anything: false
-    
+
     # Allows cuddling to assignments even if they span over multiple lines.
     allow-multiline-assign: true
-    
+
     # If the number of lines in a case block is equal to or lager than this
     # number, the case *must* end white a newline.
     force-case-trailing-whitespace: 0
-    
+
     # Allow blocks to end with comments.
     allow-trailing-comment: false
-    
+
     # Allow multiple comments in the beginning of a block separated with newline.
     allow-separated-leading-comment: false
-    
+
     # Allow multiple var/declaration statements to be cuddled.
     allow-cuddle-declarations: false
-    
+
     # A list of call idents that everything can be cuddled with.
     # Defaults to calls looking like locks.
     allow-cuddle-with-calls: [ "Lock", "RLock" ]
-    
+
     # AllowCuddleWithRHS is a list of right hand side variables that is allowed
     # to be cuddled with anything. Defaults to assignments or calls looking
     # like unlocks.
     allow-cuddle-with-rhs: [ "Unlock", "RUnlock" ]
-    
+
     # Causes an error when an If statement that checks an error variable doesn't
     # cuddle with the assignment of that variable.
     force-err-cuddling: false
-    
+
     # When force-err-cuddling is enabled this is a list of names
     # used for error variables to check for in the conditional.
     error-variable-names: [ "err" ]
-    
+
     # Causes an error if a short declaration (:=) cuddles with anything other than
     # another short declaration.
     # This logic overrides force-err-cuddling among others.
@@ -2042,6 +2117,7 @@ linters:
     - goprintffuncname
     - gosec
     - gosimple
+    - gosmopolitan
     - govet
     - grouper
     - ifshort
@@ -2079,6 +2155,7 @@ linters:
     - staticcheck
     - structcheck
     - stylecheck
+    - tagalign
     - tagliatelle
     - tenv
     - testableexamples
@@ -2152,6 +2229,7 @@ linters:
     - goprintffuncname
     - gosec
     - gosimple
+    - gosmopolitan
     - govet
     - grouper
     - ifshort
@@ -2189,6 +2267,7 @@ linters:
     - staticcheck
     - structcheck
     - stylecheck
+    - tagalign
     - tagliatelle
     - tenv
     - testableexamples
@@ -2336,6 +2415,7 @@ severity:
   # - Code climate: https://docs.codeclimate.com/docs/issues#issue-severity
   # - Checkstyle: https://checkstyle.sourceforge.io/property_types.html#SeverityLevel
   # - GitHub: https://help.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-error-message
+  # - TeamCity: https://www.jetbrains.com/help/teamcity/service-messages.html#Inspection+Instance
   #
   # Default value is an empty string.
   default-severity: error

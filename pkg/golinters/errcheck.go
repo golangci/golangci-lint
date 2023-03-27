@@ -11,7 +11,6 @@ import (
 	"sync"
 
 	"github.com/kisielk/errcheck/errcheck"
-	"github.com/pkg/errors"
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/packages"
 
@@ -36,8 +35,8 @@ func NewErrcheck(settings *config.ErrcheckSettings) *goanalysis.Linter {
 
 	return goanalysis.NewLinter(
 		errcheckName,
-		"Errcheck is a program for checking for unchecked errors "+
-			"in go programs. These unchecked errors can be critical bugs in some cases",
+		"errcheck is a program for checking for unchecked errors in Go code. "+
+			"These unchecked errors can be critical bugs in some cases",
 		[]*analysis.Analyzer{analyzer},
 		nil,
 	).WithContextSetter(func(lintCtx *linter.Context) {
@@ -143,7 +142,7 @@ func parseIgnoreConfig(s string) (map[string]*regexp.Regexp, error) {
 func getChecker(errCfg *config.ErrcheckSettings) (*errcheck.Checker, error) {
 	ignoreConfig, err := parseIgnoreConfig(errCfg.Ignore)
 	if err != nil {
-		return nil, errors.Wrap(err, "failed to parse 'ignore' directive")
+		return nil, fmt.Errorf("failed to parse 'ignore' directive: %w", err)
 	}
 
 	checker := errcheck.Checker{
@@ -252,7 +251,7 @@ func readExcludeFile(name string) ([]string, error) {
 	}
 
 	if fh == nil {
-		return nil, errors.Wrapf(err, "failed reading exclude file: %s", name)
+		return nil, fmt.Errorf("failed reading exclude file: %s: %w", name, err)
 	}
 
 	scanner := bufio.NewScanner(fh)
@@ -263,7 +262,7 @@ func readExcludeFile(name string) ([]string, error) {
 	}
 
 	if err := scanner.Err(); err != nil {
-		return nil, errors.Wrapf(err, "failed scanning file: %s", name)
+		return nil, fmt.Errorf("failed scanning file: %s: %w", name, err)
 	}
 
 	return excludes, nil

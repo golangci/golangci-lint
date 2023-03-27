@@ -165,7 +165,7 @@ exports.onPreBootstrap = ({ store, reporter }, themeOptions) => {
 
   dirs.forEach((dir) => {
     if (!fs.existsSync(dir)) {
-      reporter.success(`docs: intialized the ${dir} directory`);
+      reporter.success(`docs: initialized the ${dir} directory`);
       fs.mkdirSync(dir);
     }
   });

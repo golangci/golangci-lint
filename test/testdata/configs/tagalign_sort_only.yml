@@ -1,0 +1,4 @@
+linters-settings:
+  tagalign:
+    align: false
+    sort: true

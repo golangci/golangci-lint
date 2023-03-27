@@ -2,6 +2,7 @@ package commands
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"io"
 	"log"
@@ -11,7 +12,6 @@ import (
 	"time"
 
 	"github.com/fatih/color"
-	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 
@@ -23,7 +23,6 @@ import (
 	"github.com/golangci/golangci-lint/pkg/packages"
 	"github.com/golangci/golangci-lint/pkg/printers"
 	"github.com/golangci/golangci-lint/pkg/result"
-	"github.com/golangci/golangci-lint/pkg/result/processors"
 )
 
 const defaultFileMode = 0644
@@ -355,23 +354,17 @@ func (e *Executor) runAnalysis(ctx context.Context, args []string) ([]result.Iss
 
 	lintCtx, err := e.contextLoader.Load(ctx, lintersToRun)
 	if err != nil {
-		return nil, errors.Wrap(err, "context loading failed")
+		return nil, fmt.Errorf("context loading failed: %w", err)
 	}
 	lintCtx.Log = e.log.Child(logutils.DebugKeyLintersContext)
 
 	runner, err := lint.NewRunner(e.cfg, e.log.Child(logutils.DebugKeyRunner),
-		e.goenv, e.EnabledLintersSet, e.lineCache, e.DBManager, lintCtx.Packages)
+		e.goenv, e.EnabledLintersSet, e.lineCache, e.fileCache, e.DBManager, lintCtx.Packages)
 	if err != nil {
 		return nil, err
 	}
 
-	issues, err := runner.Run(ctx, lintersToRun, lintCtx)
-	if err != nil {
-		return nil, err
-	}
-
-	fixer := processors.NewFixer(e.cfg, e.log, e.fileCache)
-	return fixer.Process(issues), nil
+	return runner.Run(ctx, lintersToRun, lintCtx)
 }
 
 func (e *Executor) setOutputToDevNull() (savedStdout, savedStderr *os.File) {
@@ -494,6 +487,8 @@ func (e *Executor) createPrinter(format string, w io.Writer) (printers.Printer, 
 		p = printers.NewJunitXML(w)
 	case config.OutFormatGithubActions:
 		p = printers.NewGithub(w)
+	case config.OutFormatTeamCity:
+		p = printers.NewTeamCity(w)
 	default:
 		return nil, fmt.Errorf("unknown output format %s", format)
 	}
@@ -522,7 +517,8 @@ func (e *Executor) executeRun(_ *cobra.Command, args []string) {
 	if err := e.runAndPrint(ctx, args); err != nil {
 		e.log.Errorf("Running error: %s", err)
 		if e.exitCode == exitcodes.Success {
-			if exitErr, ok := errors.Cause(err).(*exitcodes.ExitError); ok {
+			var exitErr *exitcodes.ExitError
+			if errors.As(err, &exitErr) {
 				e.exitCode = exitErr.Code
 			} else {
 				e.exitCode = exitcodes.Failure
