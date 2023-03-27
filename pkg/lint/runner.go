@@ -6,6 +6,7 @@ import (
 	"runtime/debug"
 	"strings"
 
+	"github.com/hashicorp/go-multierror"
 	gopackages "golang.org/x/tools/go/packages"
 
 	"github.com/golangci/golangci-lint/internal/errorutil"
@@ -128,12 +129,15 @@ func (r *Runner) runLinterSafe(ctx context.Context, lintCtx *linter.Context,
 	}()
 
 	var issues []result.Issue
+	doneCh := make(chan struct{}, 1)
 	go func() {
 		issues, err = lc.Linter.Run(ctx, lintCtx)
+		doneCh <- struct{}{}
 	}()
 	select {
-	case <-quit:
+	case <-doneCh:
 	case <-ctx.Done():
+		err = ctx.Err()
 	}
 
 	if lc.DoesChangeTypes {
