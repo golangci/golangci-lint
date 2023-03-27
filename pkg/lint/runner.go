@@ -6,7 +6,6 @@ import (
 	"runtime/debug"
 	"strings"
 
-	"github.com/hashicorp/go-multierror"
 	gopackages "golang.org/x/tools/go/packages"
 
 	"github.com/golangci/golangci-lint/internal/errorutil"
@@ -128,7 +127,14 @@ func (r *Runner) runLinterSafe(ctx context.Context, lintCtx *linter.Context,
 		}
 	}()
 
-	issues, err := lc.Linter.Run(ctx, lintCtx)
+	var issues []result.Issue
+	go func() {
+		issues, err = lc.Linter.Run(ctx, lintCtx)
+	}()
+	select {
+	case <-quit:
+	case <-ctx.Done():
+	}
 
 	if lc.DoesChangeTypes {
 		// Packages in lintCtx might be dirty due to the last analysis,
