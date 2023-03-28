@@ -87,6 +87,7 @@ get_binaries() {
     linux/ppc64le) BINARIES="golangci-lint" ;;
     linux/s390x) BINARIES="golangci-lint" ;;
     linux/riscv64) BINARIES="golangci-lint" ;;
+    linux/loong64) BINARIES="golangci-lint" ;;
     netbsd/386) BINARIES="golangci-lint" ;;
     netbsd/amd64) BINARIES="golangci-lint" ;;
     netbsd/armv6) BINARIES="golangci-lint" ;;
@@ -215,6 +216,7 @@ uname_arch() {
     armv5*) arch="armv5" ;;
     armv6*) arch="armv6" ;;
     armv7*) arch="armv7" ;;
+    loongarch64) arch="loong64" ;;
   esac
   echo ${arch}
 }
@@ -254,6 +256,7 @@ uname_arch_check() {
     s390x) return 0 ;;
     riscv64) return 0 ;;
     amd64p32) return 0 ;;
+    loong64) return 0 ;;
   esac
   log_crit "uname_arch_check '$(uname -m)' got converted to '$arch' which is not a GOARCH value."
   return 1
