@@ -1,11 +1,11 @@
 package logutils
 
 type Log interface {
-	Fatalf(format string, args ...interface{})
-	Panicf(format string, args ...interface{})
-	Errorf(format string, args ...interface{})
-	Warnf(format string, args ...interface{})
-	Infof(format string, args ...interface{})
+	Fatalf(format string, args ...any)
+	Panicf(format string, args ...any)
+	Errorf(format string, args ...any)
+	Warnf(format string, args ...any)
+	Infof(format string, args ...any)
 
 	Child(name string) Log
 	SetLevel(level LogLevel)

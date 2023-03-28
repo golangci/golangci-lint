@@ -24,7 +24,7 @@ func NewGocognit(settings *config.GocognitSettings) *goanalysis.Linter {
 	analyzer := &analysis.Analyzer{
 		Name: goanalysis.TheOnlyAnalyzerName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
-		Run: func(pass *analysis.Pass) (interface{}, error) {
+		Run: func(pass *analysis.Pass) (any, error) {
 			issues := runGocognit(pass, settings)
 
 			if len(issues) == 0 {

@@ -47,7 +47,7 @@ func NewThelper(cfg *config.ThelperSettings) *goanalysis.Linter {
 		args = append(args, k)
 	}
 
-	cfgMap := map[string]map[string]interface{}{
+	cfgMap := map[string]map[string]any{
 		a.Name: {
 			"checks": strings.Join(args, ","),
 		},

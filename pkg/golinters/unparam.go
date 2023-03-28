@@ -24,7 +24,7 @@ func NewUnparam(settings *config.UnparamSettings) *goanalysis.Linter {
 		Name:     unparamName,
 		Doc:      goanalysis.TheOnlyanalyzerDoc,
 		Requires: []*analysis.Analyzer{buildssa.Analyzer},
-		Run: func(pass *analysis.Pass) (interface{}, error) {
+		Run: func(pass *analysis.Pass) (any, error) {
 			issues, err := runUnparam(pass, settings)
 			if err != nil {
 				return nil, err

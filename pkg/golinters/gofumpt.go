@@ -50,7 +50,7 @@ func NewGofumpt(settings *config.GofumptSettings) *goanalysis.Linter {
 		[]*analysis.Analyzer{analyzer},
 		nil,
 	).WithContextSetter(func(lintCtx *linter.Context) {
-		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
+		analyzer.Run = func(pass *analysis.Pass) (any, error) {
 			issues, err := runGofumpt(lintCtx, pass, diff, options)
 			if err != nil {
 				return nil, err

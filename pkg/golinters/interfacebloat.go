@@ -11,9 +11,9 @@ import (
 func NewInterfaceBloat(settings *config.InterfaceBloatSettings) *goanalysis.Linter {
 	a := analyzer.New()
 
-	var cfg map[string]map[string]interface{}
+	var cfg map[string]map[string]any
 	if settings != nil {
-		cfg = map[string]map[string]interface{}{
+		cfg = map[string]map[string]any{
 			a.Name: {
 				analyzer.InterfaceMaxMethodsFlag: settings.Max,
 			},

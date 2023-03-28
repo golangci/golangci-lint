@@ -49,7 +49,7 @@ func NewErrcheck(settings *config.ErrcheckSettings) *goanalysis.Linter {
 
 		checker.Tags = lintCtx.Cfg.Run.BuildTags
 
-		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
+		analyzer.Run = func(pass *analysis.Pass) (any, error) {
 			issues := runErrCheck(lintCtx, pass, checker)
 			if err != nil {
 				return nil, err

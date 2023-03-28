@@ -14,7 +14,7 @@ func NewGochecknoglobals() *goanalysis.Linter {
 	// pass the `t` flag as true to the analyzer before running it. This can be
 	// turned off by using the regular golangci-lint flags such as `--tests` or
 	// `--skip-files`.
-	linterConfig := map[string]map[string]interface{}{
+	linterConfig := map[string]map[string]any{
 		gochecknoglobals.Name: {
 			"t": true,
 		},

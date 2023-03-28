@@ -11,9 +11,9 @@ import (
 func NewPredeclared(settings *config.PredeclaredSettings) *goanalysis.Linter {
 	a := predeclared.Analyzer
 
-	var cfg map[string]map[string]interface{}
+	var cfg map[string]map[string]any
 	if settings != nil {
-		cfg = map[string]map[string]interface{}{
+		cfg = map[string]map[string]any{
 			a.Name: {
 				predeclared.IgnoreFlag:    settings.Ignore,
 				predeclared.QualifiedFlag: settings.Qualified,

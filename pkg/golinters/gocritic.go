@@ -42,7 +42,7 @@ func NewGoCritic(settings *config.GoCriticSettings, cfg *config.Config) *goanaly
 	analyzer := &analysis.Analyzer{
 		Name: goCriticName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
-		Run: func(pass *analysis.Pass) (interface{}, error) {
+		Run: func(pass *analysis.Pass) (any, error) {
 			issues, err := wrapper.run(pass)
 			if err != nil {
 				return nil, err
@@ -245,7 +245,7 @@ func normalizeCheckerInfoParams(info *gocriticlinter.CheckerInfo) gocriticlinter
 // but the file parsers (TOML, YAML, JSON) don't create the same representation for raw type.
 // then we have to convert value types into the expected value types.
 // Maybe in the future, this kind of conversion will be done in go-critic itself.
-func (w *goCriticWrapper) normalizeCheckerParamsValue(p interface{}) interface{} {
+func (w *goCriticWrapper) normalizeCheckerParamsValue(p any) any {
 	rv := reflect.ValueOf(p)
 	switch rv.Type().Kind() {
 	case reflect.Int64, reflect.Int32, reflect.Int16, reflect.Int8, reflect.Int:
@@ -621,7 +621,7 @@ func sprintStrings(ss []string) string {
 	return fmt.Sprint(ss)
 }
 
-func debugChecksListf(checks []string, format string, args ...interface{}) {
+func debugChecksListf(checks []string, format string, args ...any) {
 	if !isGoCriticDebug {
 		return
 	}

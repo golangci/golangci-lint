@@ -13,9 +13,9 @@ import (
 func NewNilNil(cfg *config.NilNilSettings) *goanalysis.Linter {
 	a := analyzer.New()
 
-	cfgMap := make(map[string]map[string]interface{})
+	cfgMap := make(map[string]map[string]any)
 	if cfg != nil && len(cfg.CheckedTypes) != 0 {
-		cfgMap[a.Name] = map[string]interface{}{
+		cfgMap[a.Name] = map[string]any{
 			"checked-types": strings.Join(cfg.CheckedTypes, ","),
 		}
 	}

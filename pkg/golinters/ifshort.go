@@ -9,9 +9,9 @@ import (
 )
 
 func NewIfshort(settings *config.IfshortSettings) *goanalysis.Linter {
-	var cfg map[string]map[string]interface{}
+	var cfg map[string]map[string]any
 	if settings != nil {
-		cfg = map[string]map[string]interface{}{
+		cfg = map[string]map[string]any{
 			analyzer.Analyzer.Name: {
 				"max-decl-lines": settings.MaxDeclLines,
 				"max-decl-chars": settings.MaxDeclChars,

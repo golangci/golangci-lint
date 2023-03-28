@@ -446,7 +446,7 @@ type importerFunc func(path string) (*types.Package, error)
 
 func (f importerFunc) Import(path string) (*types.Package, error) { return f(path) }
 
-func sizeOfValueTreeBytes(v interface{}) int {
+func sizeOfValueTreeBytes(v any) int {
 	return sizeOfReflectValueTreeBytes(reflect.ValueOf(v), map[uintptr]struct{}{})
 }
 

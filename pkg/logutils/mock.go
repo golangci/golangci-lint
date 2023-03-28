@@ -12,28 +12,28 @@ func NewMockLog() *MockLog {
 	return &MockLog{}
 }
 
-func (m *MockLog) Fatalf(format string, args ...interface{}) {
-	mArgs := []interface{}{format}
+func (m *MockLog) Fatalf(format string, args ...any) {
+	mArgs := []any{format}
 	m.Called(append(mArgs, args...)...)
 }
 
-func (m *MockLog) Panicf(format string, args ...interface{}) {
-	mArgs := []interface{}{format}
+func (m *MockLog) Panicf(format string, args ...any) {
+	mArgs := []any{format}
 	m.Called(append(mArgs, args...)...)
 }
 
-func (m *MockLog) Errorf(format string, args ...interface{}) {
-	mArgs := []interface{}{format}
+func (m *MockLog) Errorf(format string, args ...any) {
+	mArgs := []any{format}
 	m.Called(append(mArgs, args...)...)
 }
 
-func (m *MockLog) Warnf(format string, args ...interface{}) {
-	mArgs := []interface{}{format}
+func (m *MockLog) Warnf(format string, args ...any) {
+	mArgs := []any{format}
 	m.Called(append(mArgs, args...)...)
 }
 
-func (m *MockLog) Infof(format string, args ...interface{}) {
-	mArgs := []interface{}{format}
+func (m *MockLog) Infof(format string, args ...any) {
+	mArgs := []any{format}
 	m.Called(append(mArgs, args...)...)
 }
 

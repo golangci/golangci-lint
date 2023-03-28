@@ -23,7 +23,7 @@ func NewScopelint() *goanalysis.Linter {
 	analyzer := &analysis.Analyzer{
 		Name: scopelintName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
-		Run: func(pass *analysis.Pass) (interface{}, error) {
+		Run: func(pass *analysis.Pass) (any, error) {
 			issues := runScopeLint(pass)
 
 			if len(issues) == 0 {
@@ -176,12 +176,12 @@ func (f *Node) Visit(node ast.Node) ast.Visitor {
 // and must end with a format string and any arguments.
 //
 //nolint:interfacer
-func (f *Node) errorf(n ast.Node, format string, args ...interface{}) {
+func (f *Node) errorf(n ast.Node, format string, args ...any) {
 	pos := f.fset.Position(n.Pos())
 	f.errorAtf(pos, format, args...)
 }
 
-func (f *Node) errorAtf(pos token.Position, format string, args ...interface{}) {
+func (f *Node) errorAtf(pos token.Position, format string, args ...any) {
 	*f.issues = append(*f.issues, result.Issue{
 		Pos:        pos,
 		Text:       fmt.Sprintf(format, args...),

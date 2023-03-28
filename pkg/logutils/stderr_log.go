@@ -67,17 +67,17 @@ func (sl StderrLog) prefix() string {
 	return prefix
 }
 
-func (sl StderrLog) Fatalf(format string, args ...interface{}) {
+func (sl StderrLog) Fatalf(format string, args ...any) {
 	sl.logger.Errorf("%s%s", sl.prefix(), fmt.Sprintf(format, args...))
 	os.Exit(exitcodes.Failure)
 }
 
-func (sl StderrLog) Panicf(format string, args ...interface{}) {
+func (sl StderrLog) Panicf(format string, args ...any) {
 	v := fmt.Sprintf("%s%s", sl.prefix(), fmt.Sprintf(format, args...))
 	panic(v)
 }
 
-func (sl StderrLog) Errorf(format string, args ...interface{}) {
+func (sl StderrLog) Errorf(format string, args ...any) {
 	if sl.level > LogLevelError {
 		return
 	}
@@ -88,7 +88,7 @@ func (sl StderrLog) Errorf(format string, args ...interface{}) {
 	// called on hidden errors, see log levels comments.
 }
 
-func (sl StderrLog) Warnf(format string, args ...interface{}) {
+func (sl StderrLog) Warnf(format string, args ...any) {
 	if sl.level > LogLevelWarn {
 		return
 	}
@@ -96,7 +96,7 @@ func (sl StderrLog) Warnf(format string, args ...interface{}) {
 	sl.logger.Warnf("%s%s", sl.prefix(), fmt.Sprintf(format, args...))
 }
 
-func (sl StderrLog) Infof(format string, args ...interface{}) {
+func (sl StderrLog) Infof(format string, args ...any) {
 	if sl.level > LogLevelInfo {
 		return
 	}
@@ -104,7 +104,7 @@ func (sl StderrLog) Infof(format string, args ...interface{}) {
 	sl.logger.Infof("%s%s", sl.prefix(), fmt.Sprintf(format, args...))
 }
 
-func (sl StderrLog) Debugf(format string, args ...interface{}) {
+func (sl StderrLog) Debugf(format string, args ...any) {
 	if sl.level > LogLevelDebug {
 		return
 	}

@@ -27,7 +27,7 @@ func NewUnused(settings *config.StaticCheckSettings) *goanalysis.Linter {
 		Name:     unusedName,
 		Doc:      unused.Analyzer.Analyzer.Doc,
 		Requires: unused.Analyzer.Analyzer.Requires,
-		Run: func(pass *analysis.Pass) (interface{}, error) {
+		Run: func(pass *analysis.Pass) (any, error) {
 			issues, err := runUnused(pass)
 			if err != nil {
 				return nil, err

@@ -36,23 +36,23 @@ func Test_filterByDisableTags(t *testing.T) {
 
 type tLog struct{}
 
-func (l *tLog) Fatalf(format string, args ...interface{}) {
+func (l *tLog) Fatalf(format string, args ...any) {
 	log.Printf(format, args...)
 }
 
-func (l *tLog) Panicf(format string, args ...interface{}) {
+func (l *tLog) Panicf(format string, args ...any) {
 	log.Printf(format, args...)
 }
 
-func (l *tLog) Errorf(format string, args ...interface{}) {
+func (l *tLog) Errorf(format string, args ...any) {
 	log.Printf(format, args...)
 }
 
-func (l *tLog) Warnf(format string, args ...interface{}) {
+func (l *tLog) Warnf(format string, args ...any) {
 	log.Printf(format, args...)
 }
 
-func (l *tLog) Infof(format string, args ...interface{}) {
+func (l *tLog) Infof(format string, args ...any) {
 	log.Printf(format, args...)
 }
 

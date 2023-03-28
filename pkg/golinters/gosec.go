@@ -58,7 +58,7 @@ func NewGosec(settings *config.GoSecSettings) *goanalysis.Linter {
 		[]*analysis.Analyzer{analyzer},
 		nil,
 	).WithContextSetter(func(lintCtx *linter.Context) {
-		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
+		analyzer.Run = func(pass *analysis.Pass) (any, error) {
 			// The `gosecAnalyzer` is here because of concurrency issue.
 			gosecAnalyzer := gosec.NewAnalyzer(conf, true, settings.ExcludeGenerated, false, settings.Concurrency, logger)
 			gosecAnalyzer.LoadRules(ruleDefinitions.RulesInfo())

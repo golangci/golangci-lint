@@ -13,9 +13,9 @@ import (
 func NewExhaustiveStruct(settings *config.ExhaustiveStructSettings) *goanalysis.Linter {
 	a := analyzer.Analyzer
 
-	var cfg map[string]map[string]interface{}
+	var cfg map[string]map[string]any
 	if settings != nil {
-		cfg = map[string]map[string]interface{}{
+		cfg = map[string]map[string]any{
 			a.Name: {
 				"struct_patterns": strings.Join(settings.StructPatterns, ","),
 			},

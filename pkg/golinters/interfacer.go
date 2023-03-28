@@ -22,7 +22,7 @@ func NewInterfacer() *goanalysis.Linter {
 		Name:     interfacerName,
 		Doc:      goanalysis.TheOnlyanalyzerDoc,
 		Requires: []*analysis.Analyzer{buildssa.Analyzer},
-		Run: func(pass *analysis.Pass) (interface{}, error) {
+		Run: func(pass *analysis.Pass) (any, error) {
 			issues, err := runInterfacer(pass)
 			if err != nil {
 				return nil, err

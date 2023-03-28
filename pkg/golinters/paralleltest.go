@@ -11,9 +11,9 @@ import (
 func NewParallelTest(settings *config.ParallelTestSettings) *goanalysis.Linter {
 	a := paralleltest.Analyzer
 
-	var cfg map[string]map[string]interface{}
+	var cfg map[string]map[string]any
 	if settings != nil {
-		cfg = map[string]map[string]interface{}{
+		cfg = map[string]map[string]any{
 			a.Name: {
 				"i": settings.IgnoreMissing,
 			},

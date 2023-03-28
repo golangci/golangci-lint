@@ -215,7 +215,7 @@ func fetchAllReleases(ctx context.Context) ([]release, error) {
 		} `graphql:"repository(owner: $owner, name: $name)"`
 	}
 
-	vars := map[string]interface{}{
+	vars := map[string]any{
 		"owner":          githubv4.String("golangci"),
 		"name":           githubv4.String("golangci-lint"),
 		"releasesCursor": (*githubv4.String)(nil),

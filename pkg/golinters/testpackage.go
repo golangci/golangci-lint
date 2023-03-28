@@ -13,9 +13,9 @@ import (
 func NewTestpackage(cfg *config.TestpackageSettings) *goanalysis.Linter {
 	var a = testpackage.NewAnalyzer()
 
-	var settings map[string]map[string]interface{}
+	var settings map[string]map[string]any
 	if cfg != nil {
-		settings = map[string]map[string]interface{}{
+		settings = map[string]map[string]any{
 			a.Name: {
 				testpackage.SkipRegexpFlagName:    cfg.SkipRegexp,
 				testpackage.AllowPackagesFlagName: strings.Join(cfg.AllowPackages, ","),

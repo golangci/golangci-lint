@@ -35,7 +35,7 @@ func NewMisspell(settings *config.MisspellSettings) *goanalysis.Linter {
 	).WithContextSetter(func(lintCtx *linter.Context) {
 		replacer, ruleErr := createMisspellReplacer(settings)
 
-		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
+		analyzer.Run = func(pass *analysis.Pass) (any, error) {
 			if ruleErr != nil {
 				return nil, ruleErr
 			}

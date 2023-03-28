@@ -11,9 +11,9 @@ import (
 func NewGinkgoLinter(cfg *config.GinkgoLinterSettings) *goanalysis.Linter {
 	a := ginkgolinter.NewAnalyzer()
 
-	cfgMap := make(map[string]map[string]interface{})
+	cfgMap := make(map[string]map[string]any)
 	if cfg != nil {
-		cfgMap[a.Name] = map[string]interface{}{
+		cfgMap[a.Name] = map[string]any{
 			"suppress-len-assertion":     cfg.SuppressLenAssertion,
 			"suppress-nil-assertion":     cfg.SuppressNilAssertion,
 			"suppress-err-assertion":     cfg.SuppressErrAssertion,

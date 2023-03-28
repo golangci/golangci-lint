@@ -21,7 +21,7 @@ func NewUnconvert() *goanalysis.Linter {
 	analyzer := &analysis.Analyzer{
 		Name: unconvertName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
-		Run: func(pass *analysis.Pass) (interface{}, error) {
+		Run: func(pass *analysis.Pass) (any, error) {
 			issues := runUnconvert(pass)
 
 			if len(issues) == 0 {

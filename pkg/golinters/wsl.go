@@ -40,7 +40,7 @@ func NewWSL(settings *config.WSLSettings) *goanalysis.Linter {
 	analyzer := &analysis.Analyzer{
 		Name: goanalysis.TheOnlyAnalyzerName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
-		Run: func(pass *analysis.Pass) (interface{}, error) {
+		Run: func(pass *analysis.Pass) (any, error) {
 			issues := runWSL(pass, &conf)
 
 			if len(issues) == 0 {

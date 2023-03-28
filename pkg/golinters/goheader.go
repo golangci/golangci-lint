@@ -31,7 +31,7 @@ func NewGoHeader(settings *config.GoHeaderSettings) *goanalysis.Linter {
 	analyzer := &analysis.Analyzer{
 		Name: goHeaderName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
-		Run: func(pass *analysis.Pass) (interface{}, error) {
+		Run: func(pass *analysis.Pass) (any, error) {
 			issues, err := runGoHeader(pass, conf)
 			if err != nil {
 				return nil, err
