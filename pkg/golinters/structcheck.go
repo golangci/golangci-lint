@@ -23,7 +23,7 @@ func NewStructcheck(settings *config.StructCheckSettings) *goanalysis.Linter {
 	analyzer := &analysis.Analyzer{
 		Name: structcheckName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
-		Run: func(pass *analysis.Pass) (interface{}, error) {
+		Run: func(pass *analysis.Pass) (any, error) {
 			issues := runStructCheck(pass, settings)
 
 			if len(issues) == 0 {

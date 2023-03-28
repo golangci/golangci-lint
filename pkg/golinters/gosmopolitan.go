@@ -13,9 +13,9 @@ import (
 func NewGosmopolitan(s *config.GosmopolitanSettings) *goanalysis.Linter {
 	a := gosmopolitan.NewAnalyzer()
 
-	cfgMap := map[string]map[string]interface{}{}
+	cfgMap := map[string]map[string]any{}
 	if s != nil {
-		cfgMap[a.Name] = map[string]interface{}{
+		cfgMap[a.Name] = map[string]any{
 			"allowtimelocal":  s.AllowTimeLocal,
 			"escapehatches":   strings.Join(s.EscapeHatches, ","),
 			"lookattests":     !s.IgnoreTests,

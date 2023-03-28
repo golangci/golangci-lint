@@ -30,7 +30,7 @@ func NewPromlinter(settings *config.PromlinterSettings) *goanalysis.Linter {
 	analyzer := &analysis.Analyzer{
 		Name: promlinterName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
-		Run: func(pass *analysis.Pass) (interface{}, error) {
+		Run: func(pass *analysis.Pass) (any, error) {
 			issues := runPromLinter(pass, promSettings)
 
 			if len(issues) == 0 {

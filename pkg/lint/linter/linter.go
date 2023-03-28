@@ -17,7 +17,7 @@ type Linter interface {
 type Noop struct {
 	name string
 	desc string
-	run  func(pass *analysis.Pass) (interface{}, error)
+	run  func(pass *analysis.Pass) (any, error)
 }
 
 func (n Noop) Run(_ context.Context, lintCtx *Context) ([]result.Issue, error) {

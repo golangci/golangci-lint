@@ -24,7 +24,7 @@ func NewDogsled(settings *config.DogsledSettings) *goanalysis.Linter {
 	analyzer := &analysis.Analyzer{
 		Name: dogsledName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
-		Run: func(pass *analysis.Pass) (interface{}, error) {
+		Run: func(pass *analysis.Pass) (any, error) {
 			issues := runDogsled(pass, settings)
 
 			if len(issues) == 0 {

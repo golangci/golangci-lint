@@ -31,7 +31,7 @@ func NewText(printIssuedLine, useColors, printLinterName bool, log logutils.Log,
 	}
 }
 
-func (p *Text) SprintfColored(ca color.Attribute, format string, args ...interface{}) string {
+func (p *Text) SprintfColored(ca color.Attribute, format string, args ...any) string {
 	if !p.useColors {
 		return fmt.Sprintf(format, args...)
 	}

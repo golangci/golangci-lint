@@ -123,7 +123,7 @@ var (
 )
 
 func NewGovet(settings *config.GovetSettings) *goanalysis.Linter {
-	var conf map[string]map[string]interface{}
+	var conf map[string]map[string]any
 	if settings != nil {
 		conf = settings.Settings
 	}

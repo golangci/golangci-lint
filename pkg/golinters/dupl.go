@@ -25,7 +25,7 @@ func NewDupl(settings *config.DuplSettings) *goanalysis.Linter {
 	analyzer := &analysis.Analyzer{
 		Name: duplName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
-		Run: func(pass *analysis.Pass) (interface{}, error) {
+		Run: func(pass *analysis.Pass) (any, error) {
 			issues, err := runDupl(pass, settings)
 			if err != nil {
 				return nil, err

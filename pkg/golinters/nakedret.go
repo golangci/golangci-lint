@@ -24,7 +24,7 @@ func NewNakedret(settings *config.NakedretSettings) *goanalysis.Linter {
 	analyzer := &analysis.Analyzer{
 		Name: nakedretName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
-		Run: func(pass *analysis.Pass) (interface{}, error) {
+		Run: func(pass *analysis.Pass) (any, error) {
 			issues := runNakedRet(pass, settings)
 
 			if len(issues) == 0 {

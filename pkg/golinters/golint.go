@@ -23,7 +23,7 @@ func NewGolint(settings *config.GoLintSettings) *goanalysis.Linter {
 	analyzer := &analysis.Analyzer{
 		Name: golintName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
-		Run: func(pass *analysis.Pass) (interface{}, error) {
+		Run: func(pass *analysis.Pass) (any, error) {
 			issues, err := runGoLint(pass, settings)
 			if err != nil {
 				return nil, err

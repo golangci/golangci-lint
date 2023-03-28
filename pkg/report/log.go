@@ -20,20 +20,20 @@ func NewLogWrapper(log logutils.Log, reportData *Data) *LogWrapper {
 	}
 }
 
-func (lw LogWrapper) Fatalf(format string, args ...interface{}) {
+func (lw LogWrapper) Fatalf(format string, args ...any) {
 	lw.origLog.Fatalf(format, args...)
 }
 
-func (lw LogWrapper) Panicf(format string, args ...interface{}) {
+func (lw LogWrapper) Panicf(format string, args ...any) {
 	lw.origLog.Panicf(format, args...)
 }
 
-func (lw LogWrapper) Errorf(format string, args ...interface{}) {
+func (lw LogWrapper) Errorf(format string, args ...any) {
 	lw.origLog.Errorf(format, args...)
 	lw.rd.Error = fmt.Sprintf(format, args...)
 }
 
-func (lw LogWrapper) Warnf(format string, args ...interface{}) {
+func (lw LogWrapper) Warnf(format string, args ...any) {
 	lw.origLog.Warnf(format, args...)
 	w := Warning{
 		Tag:  strings.Join(lw.tags, "/"),
@@ -43,7 +43,7 @@ func (lw LogWrapper) Warnf(format string, args ...interface{}) {
 	lw.rd.Warnings = append(lw.rd.Warnings, w)
 }
 
-func (lw LogWrapper) Infof(format string, args ...interface{}) {
+func (lw LogWrapper) Infof(format string, args ...any) {
 	lw.origLog.Infof(format, args...)
 }
 

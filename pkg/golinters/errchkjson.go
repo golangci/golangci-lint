@@ -11,12 +11,12 @@ import (
 func NewErrChkJSONFuncName(cfg *config.ErrChkJSONSettings) *goanalysis.Linter {
 	a := errchkjson.NewAnalyzer()
 
-	cfgMap := map[string]map[string]interface{}{}
-	cfgMap[a.Name] = map[string]interface{}{
+	cfgMap := map[string]map[string]any{}
+	cfgMap[a.Name] = map[string]any{
 		"omit-safe": true,
 	}
 	if cfg != nil {
-		cfgMap[a.Name] = map[string]interface{}{
+		cfgMap[a.Name] = map[string]any{
 			"omit-safe":          !cfg.CheckErrorFreeEncoding,
 			"report-no-exported": cfg.ReportNoExported,
 		}

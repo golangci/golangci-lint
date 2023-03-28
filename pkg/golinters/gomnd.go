@@ -9,14 +9,14 @@ import (
 )
 
 func NewGoMND(settings *config.GoMndSettings) *goanalysis.Linter {
-	var linterCfg map[string]map[string]interface{}
+	var linterCfg map[string]map[string]any
 
 	if settings != nil {
 		// TODO(ldez) For compatibility only, must be drop in v2.
 		if len(settings.Settings) > 0 {
 			linterCfg = settings.Settings
 		} else {
-			cfg := make(map[string]interface{})
+			cfg := make(map[string]any)
 			if len(settings.Checks) > 0 {
 				cfg["checks"] = settings.Checks
 			}
@@ -30,7 +30,7 @@ func NewGoMND(settings *config.GoMndSettings) *goanalysis.Linter {
 				cfg["ignored-functions"] = settings.IgnoredFunctions
 			}
 
-			linterCfg = map[string]map[string]interface{}{
+			linterCfg = map[string]map[string]any{
 				"mnd": cfg,
 			}
 		}

@@ -23,7 +23,7 @@ func NewMaligned(settings *config.MalignedSettings) *goanalysis.Linter {
 	analyzer := &analysis.Analyzer{
 		Name: malignedName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
-		Run: func(pass *analysis.Pass) (interface{}, error) {
+		Run: func(pass *analysis.Pass) (any, error) {
 			issues := runMaligned(pass, settings)
 
 			if len(issues) == 0 {

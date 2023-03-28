@@ -54,7 +54,7 @@ func PrettifyBytesCount(n int64) string {
 func (fc *FileCache) PrintStats(log logutils.Log) {
 	var size int64
 	var mapLen int
-	fc.files.Range(func(_, fileBytes interface{}) bool {
+	fc.files.Range(func(_, fileBytes any) bool {
 		mapLen++
 		size += int64(len(fileBytes.([]byte)))
 

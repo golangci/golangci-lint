@@ -368,7 +368,7 @@ type GoCriticSettings struct {
 	SettingsPerCheck map[string]GoCriticCheckSettings `mapstructure:"settings"`
 }
 
-type GoCriticCheckSettings map[string]interface{}
+type GoCriticCheckSettings map[string]any
 
 type GoCycloSettings struct {
 	MinComplexity int `mapstructure:"min-complexity"`
@@ -421,11 +421,11 @@ type GoLintSettings struct {
 }
 
 type GoMndSettings struct {
-	Settings         map[string]map[string]interface{} // Deprecated
-	Checks           []string                          `mapstructure:"checks"`
-	IgnoredNumbers   []string                          `mapstructure:"ignored-numbers"`
-	IgnoredFiles     []string                          `mapstructure:"ignored-files"`
-	IgnoredFunctions []string                          `mapstructure:"ignored-functions"`
+	Settings         map[string]map[string]any // Deprecated
+	Checks           []string                  `mapstructure:"checks"`
+	IgnoredNumbers   []string                  `mapstructure:"ignored-numbers"`
+	IgnoredFiles     []string                  `mapstructure:"ignored-files"`
+	IgnoredFunctions []string                  `mapstructure:"ignored-functions"`
 }
 
 type GoModDirectivesSettings struct {
@@ -454,13 +454,13 @@ type GoModGuardSettings struct {
 }
 
 type GoSecSettings struct {
-	Includes         []string               `mapstructure:"includes"`
-	Excludes         []string               `mapstructure:"excludes"`
-	Severity         string                 `mapstructure:"severity"`
-	Confidence       string                 `mapstructure:"confidence"`
-	ExcludeGenerated bool                   `mapstructure:"exclude-generated"`
-	Config           map[string]interface{} `mapstructure:"config"`
-	Concurrency      int                    `mapstructure:"concurrency"`
+	Includes         []string       `mapstructure:"includes"`
+	Excludes         []string       `mapstructure:"excludes"`
+	Severity         string         `mapstructure:"severity"`
+	Confidence       string         `mapstructure:"confidence"`
+	ExcludeGenerated bool           `mapstructure:"exclude-generated"`
+	Config           map[string]any `mapstructure:"config"`
+	Concurrency      int            `mapstructure:"concurrency"`
 }
 
 type GosmopolitanSettings struct {
@@ -473,7 +473,7 @@ type GosmopolitanSettings struct {
 type GovetSettings struct {
 	Go             string `mapstructure:"-"`
 	CheckShadowing bool   `mapstructure:"check-shadowing"`
-	Settings       map[string]map[string]interface{}
+	Settings       map[string]map[string]any
 
 	Enable     []string
 	Disable    []string
@@ -628,7 +628,7 @@ type ReviveSettings struct {
 	EnableAllRules        bool `mapstructure:"enable-all-rules"`
 	Rules                 []struct {
 		Name      string
-		Arguments []interface{}
+		Arguments []any
 		Severity  string
 		Disabled  bool
 	}

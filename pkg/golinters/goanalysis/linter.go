@@ -44,14 +44,14 @@ const (
 type Linter struct {
 	name, desc              string
 	analyzers               []*analysis.Analyzer
-	cfg                     map[string]map[string]interface{}
+	cfg                     map[string]map[string]any
 	issuesReporter          func(*linter.Context) []Issue
 	contextSetter           func(*linter.Context)
 	loadMode                LoadMode
 	needUseOriginalPackages bool
 }
 
-func NewLinter(name, desc string, analyzers []*analysis.Analyzer, cfg map[string]map[string]interface{}) *Linter {
+func NewLinter(name, desc string, analyzers []*analysis.Analyzer, cfg map[string]map[string]any) *Linter {
 	return &Linter{name: name, desc: desc, analyzers: analyzers, cfg: cfg}
 }
 
@@ -102,7 +102,7 @@ func (lnt *Linter) allAnalyzerNames() []string {
 	return ret
 }
 
-func (lnt *Linter) configureAnalyzer(a *analysis.Analyzer, cfg map[string]interface{}) error {
+func (lnt *Linter) configureAnalyzer(a *analysis.Analyzer, cfg map[string]any) error {
 	for k, v := range cfg {
 		f := a.Flags.Lookup(k)
 		if f == nil {
@@ -195,12 +195,12 @@ func allFlagNames(fs *flag.FlagSet) []string {
 	return ret
 }
 
-func valueToString(v interface{}) string {
+func valueToString(v any) string {
 	if ss, ok := v.([]string); ok {
 		return strings.Join(ss, ",")
 	}
 
-	if is, ok := v.([]interface{}); ok {
+	if is, ok := v.([]any); ok {
 		var ss []string
 		for _, i := range is {
 			ss = append(ss, fmt.Sprint(i))
@@ -212,6 +212,6 @@ func valueToString(v interface{}) string {
 	return fmt.Sprint(v)
 }
 
-func DummyRun(_ *analysis.Pass) (interface{}, error) {
+func DummyRun(_ *analysis.Pass) (any, error) {
 	return nil, nil
 }

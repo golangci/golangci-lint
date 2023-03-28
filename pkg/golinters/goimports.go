@@ -34,7 +34,7 @@ func NewGoimports(settings *config.GoImportsSettings) *goanalysis.Linter {
 	).WithContextSetter(func(lintCtx *linter.Context) {
 		imports.LocalPrefix = settings.LocalPrefixes
 
-		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
+		analyzer.Run = func(pass *analysis.Pass) (any, error) {
 			issues, err := runGoImports(lintCtx, pass)
 			if err != nil {
 				return nil, err

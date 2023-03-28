@@ -36,7 +36,7 @@ func NewDepguard(settings *config.DepGuardSettings) *goanalysis.Linter {
 	).WithContextSetter(func(lintCtx *linter.Context) {
 		dg, err := newDepGuard(settings)
 
-		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
+		analyzer.Run = func(pass *analysis.Pass) (any, error) {
 			if err != nil {
 				return nil, err
 			}
