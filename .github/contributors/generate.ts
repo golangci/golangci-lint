@@ -124,6 +124,7 @@ const main = async () => {
       fossabot: true,
       golangcibot: true,
       kortschak: true,
+      "golanci-releaser": true,
     }
 
     const res: DataJSON = {
