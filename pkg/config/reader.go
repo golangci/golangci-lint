@@ -74,15 +74,16 @@ func (r *FileReader) parseConfig() error {
 
 	if usedConfigFile == os.Stdin.Name() {
 		usedConfigFile = ""
+		r.log.Infof("Reading config file stdin")
 	} else {
 		var err error
 		usedConfigFile, err = fsutils.ShortestRelPath(usedConfigFile, "")
 		if err != nil {
 			r.log.Warnf("Can't pretty print config file path: %v", err)
 		}
-	}
 
-	r.log.Infof("Used config file %s", usedConfigFile)
+		r.log.Infof("Used config file %s", usedConfigFile)
+	}
 
 	usedConfigDir, err := filepath.Abs(filepath.Dir(usedConfigFile))
 	if err != nil {
