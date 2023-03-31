@@ -2,6 +2,7 @@ package golinters
 
 import (
 	"go/token"
+	"path/filepath"
 	"sync"
 
 	goheader "github.com/denis-tingaikin/go-header"
@@ -21,10 +22,14 @@ func NewGoHeader(settings *config.GoHeaderSettings) *goanalysis.Linter {
 
 	conf := &goheader.Configuration{}
 	if settings != nil {
+		path := settings.TemplatePath
+		if path != "" && !filepath.IsAbs(path) {
+			path = filepath.Join(settings.LintConfigDir, path)
+		}
 		conf = &goheader.Configuration{
 			Values:       settings.Values,
 			Template:     settings.Template,
-			TemplatePath: settings.TemplatePath,
+			TemplatePath: path,
 		}
 	}
 

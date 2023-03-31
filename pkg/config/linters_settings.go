@@ -478,9 +478,10 @@ type GofumptSettings struct {
 }
 
 type GoHeaderSettings struct {
-	Values       map[string]map[string]string `mapstructure:"values"`
-	Template     string                       `mapstructure:"template"`
-	TemplatePath string                       `mapstructure:"template-path"`
+	Values        map[string]map[string]string `mapstructure:"values"`
+	Template      string                       `mapstructure:"template"`
+	TemplatePath  string                       `mapstructure:"template-path"`
+	LintConfigDir string                       `mapstructure:"lint-config-dir"`
 }
 
 type GoImportsSettings struct {
