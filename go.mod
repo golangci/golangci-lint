@@ -119,8 +119,6 @@ require (
 	mvdan.cc/unparam v0.0.0-20221223090309-7455f1af531d
 )
 
-require github.com/shoenig/go-m1cpu v0.1.4 // indirect
-
 require (
 	github.com/Masterminds/semver v1.5.0 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
@@ -167,6 +165,7 @@ require (
 	github.com/quasilyte/gogrep v0.5.0 // indirect
 	github.com/quasilyte/regex/syntax v0.0.0-20210819130434-b3f0c404a727 // indirect
 	github.com/quasilyte/stdinfo v0.0.0-20220114132959-f7386bf02567 // indirect
+	github.com/shoenig/go-m1cpu v0.1.4 // indirect
 	github.com/sivchari/nosnakecase v1.7.0
 	github.com/spf13/afero v1.8.2 // indirect
 	github.com/spf13/cast v1.5.0 // indirect
