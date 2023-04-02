@@ -8,7 +8,7 @@ require (
 	github.com/4meepo/tagalign v1.2.2
 	github.com/Abirdcfly/dupword v0.0.11
 	github.com/Antonboom/errname v0.1.9
-	github.com/Antonboom/nilnil v0.1.3
+	github.com/Antonboom/nilnil v0.1.4
 	github.com/BurntSushi/toml v1.2.1
 	github.com/Djarvur/go-err113 v0.0.0-20210108212216-aea10b59be24
 	github.com/GaijinEntertainment/go-exhaustruct/v2 v2.3.0
