@@ -388,8 +388,8 @@ github.com/nishanths/exhaustive v0.10.0 h1:BMznKAcVa9WOoLq/kTGp4NJOJSMwEpcpjFNAV
 github.com/nishanths/exhaustive v0.10.0/go.mod h1:IbwrGdVMizvDcIxPYGVdQn5BqWJaOwpCvg4RGb8r/TA=
 github.com/nishanths/predeclared v0.2.2 h1:V2EPdZPliZymNAn79T8RkNApBjMmVKh5XRpLm/w98Vk=
 github.com/nishanths/predeclared v0.2.2/go.mod h1:RROzoN6TnGQupbC+lqggsOlcgysk3LMK/HI84Mp280c=
-github.com/nunnatsa/ginkgolinter v0.10.0 h1:rvyeUUkkqqmSsxm2Lb9K9+2TYxvOUDpks1O2+7MV6Tc=
-github.com/nunnatsa/ginkgolinter v0.10.0/go.mod h1:KOhl2jFTkMIWZUxXToYuq2hQsM0VHSCdPoK2+52e5JI=
+github.com/nunnatsa/ginkgolinter v0.11.0 h1:yRKz5FQXw8vL8/KlqdSoFkb38zf73wyZZ/D5LyE5C6U=
+github.com/nunnatsa/ginkgolinter v0.11.0/go.mod h1:KOhl2jFTkMIWZUxXToYuq2hQsM0VHSCdPoK2+52e5JI=
 github.com/olekukonko/tablewriter v0.0.5 h1:P2Ga83D34wi1o9J6Wh1mRuqd4mF/x/lgBS7N7AbDhec=
 github.com/olekukonko/tablewriter v0.0.5/go.mod h1:hPp6KlRPjbx+hW8ykQs1w3UBbZlj6HuIJcUGPhkA7kY=
 github.com/onsi/ginkgo/v2 v2.8.0 h1:pAM+oBNPrpXRs+E/8spkeGx9QgekbRVyr74EUvRVOUI=
