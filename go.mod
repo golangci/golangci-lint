@@ -85,7 +85,7 @@ require (
 	github.com/sashamelentyev/usestdlibvars v1.23.0
 	github.com/securego/gosec/v2 v2.15.0
 	github.com/shazow/go-diff v0.0.0-20160112020656-b6b7b6733b8c
-	github.com/shirou/gopsutil/v3 v3.23.2
+	github.com/shirou/gopsutil/v3 v3.23.3
 	github.com/sirupsen/logrus v1.9.0
 	github.com/sivchari/containedctx v1.0.3
 	github.com/sivchari/tenv v1.7.1
@@ -118,6 +118,8 @@ require (
 	mvdan.cc/interfacer v0.0.0-20180901003855-c20040233aed
 	mvdan.cc/unparam v0.0.0-20221223090309-7455f1af531d
 )
+
+require github.com/shoenig/go-m1cpu v0.1.4 // indirect
 
 require (
 	github.com/Masterminds/semver v1.5.0 // indirect
