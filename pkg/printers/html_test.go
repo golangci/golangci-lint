@@ -2,7 +2,6 @@ package printers
 
 import (
 	"bytes"
-	"context"
 	"go/token"
 	"testing"
 
@@ -153,7 +152,7 @@ func TestHTML_Print(t *testing.T) {
 	buf := new(bytes.Buffer)
 	printer := NewHTML(buf)
 
-	err := printer.Print(context.Background(), issues)
+	err := printer.Print(issues)
 	require.NoError(t, err)
 
 	assert.Equal(t, expectedHTML, buf.String())

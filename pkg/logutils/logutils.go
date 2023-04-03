@@ -79,7 +79,7 @@ var enabledDebugs = getEnabledDebugs()
 
 type DebugFunc func(format string, args ...any)
 
-func nopDebugf(format string, args ...any) {}
+func nopDebugf(_ string, _ ...any) {}
 
 func Debug(tag string) DebugFunc {
 	if !enabledDebugs[tag] {

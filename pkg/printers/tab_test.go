@@ -2,7 +2,6 @@ package printers
 
 import (
 	"bytes"
-	"context"
 	"go/token"
 	"testing"
 
@@ -48,7 +47,7 @@ func TestTab_Print(t *testing.T) {
 
 	printer := NewTab(true, logutils.NewStderrLog(logutils.DebugKeyEmpty), buf)
 
-	err := printer.Print(context.Background(), issues)
+	err := printer.Print(issues)
 	require.NoError(t, err)
 
 	expected := `path/to/filea.go:10:4   linter-a  some issue

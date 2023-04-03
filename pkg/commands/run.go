@@ -411,7 +411,7 @@ func (e *Executor) runAndPrint(ctx context.Context, args []string) error {
 			out = append(out, "")
 		}
 
-		err := e.printReports(ctx, issues, out[1], out[0])
+		err := e.printReports(issues, out[1], out[0])
 		if err != nil {
 			return err
 		}
@@ -424,7 +424,7 @@ func (e *Executor) runAndPrint(ctx context.Context, args []string) error {
 	return nil
 }
 
-func (e *Executor) printReports(ctx context.Context, issues []result.Issue, path, format string) error {
+func (e *Executor) printReports(issues []result.Issue, path, format string) error {
 	w, shouldClose, err := e.createWriter(path)
 	if err != nil {
 		return fmt.Errorf("can't create output for %s: %w", path, err)
@@ -438,7 +438,7 @@ func (e *Executor) printReports(ctx context.Context, issues []result.Issue, path
 		return err
 	}
 
-	if err = p.Print(ctx, issues); err != nil {
+	if err = p.Print(issues); err != nil {
 		if file, ok := w.(io.Closer); shouldClose && ok {
 			_ = file.Close()
 		}
