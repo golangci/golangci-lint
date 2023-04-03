@@ -3,7 +3,7 @@ package testdata
 
 func NakedretIssue() (a int, b string) {
 	if a > 0 {
-		return
+		return // want "naked return in func `NakedretIssue` with 31 lines of code"
 	}
 
 	if b == "" {
