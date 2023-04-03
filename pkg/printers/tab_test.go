@@ -6,6 +6,7 @@ import (
 	"go/token"
 	"testing"
 
+	"github.com/fatih/color"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
@@ -14,6 +15,13 @@ import (
 )
 
 func TestTab_Print(t *testing.T) {
+	// force color globally
+	backup := color.NoColor
+	t.Cleanup(func() {
+		color.NoColor = backup
+	})
+	color.NoColor = false
+
 	issues := []result.Issue{
 		{
 			FromLinter: "linter-a",
@@ -44,16 +52,50 @@ func TestTab_Print(t *testing.T) {
 		},
 	}
 
-	buf := new(bytes.Buffer)
-
-	printer := NewTab(true, logutils.NewStderrLog(logutils.DebugKeyEmpty), buf)
-
-	err := printer.Print(context.Background(), issues)
-	require.NoError(t, err)
-
-	expected := `path/to/filea.go:10:4   linter-a  some issue
+	testCases := []struct {
+		desc            string
+		printLinterName bool
+		useColors       bool
+		expected        string
+	}{
+		{
+			desc:            "with linter name",
+			printLinterName: true,
+			useColors:       false,
+			expected: `path/to/filea.go:10:4   linter-a  some issue
 path/to/fileb.go:300:9  linter-b  another issue
-`
+`,
+		},
+		{
+			desc:            "disable all options",
+			printLinterName: false,
+			useColors:       false,
+			expected: `path/to/filea.go:10:4   some issue
+path/to/fileb.go:300:9  another issue
+`,
+		},
+		{
+			desc:            "enable all options",
+			printLinterName: true,
+			useColors:       true,
+			//nolint:lll // color characters must be in a simple string.
+			expected: "\x1b[1mpath/to/filea.go:10\x1b[0m:4   linter-a  \x1b[31msome issue\x1b[0m\n\x1b[1mpath/to/fileb.go:300\x1b[0m:9  linter-b  \x1b[31manother issue\x1b[0m\n",
+		},
+	}
 
-	assert.Equal(t, expected, buf.String())
+	for _, test := range testCases {
+		test := test
+		t.Run(test.desc, func(t *testing.T) {
+			t.Parallel()
+
+			buf := new(bytes.Buffer)
+
+			printer := NewTab(test.printLinterName, test.useColors, logutils.NewStderrLog(logutils.DebugKeyEmpty), buf)
+
+			err := printer.Print(context.Background(), issues)
+			require.NoError(t, err)
+
+			assert.Equal(t, test.expected, buf.String())
+		})
+	}
 }

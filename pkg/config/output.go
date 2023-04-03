@@ -5,6 +5,7 @@ const (
 	OutFormatLineNumber        = "line-number"
 	OutFormatColoredLineNumber = "colored-line-number"
 	OutFormatTab               = "tab"
+	OutFormatColoredTab        = "colored-tab"
 	OutFormatCheckstyle        = "checkstyle"
 	OutFormatCodeClimate       = "code-climate"
 	OutFormatHTML              = "html"
@@ -28,11 +29,13 @@ var OutFormats = []string{
 
 type Output struct {
 	Format              string
-	Color               string
 	PrintIssuedLine     bool   `mapstructure:"print-issued-lines"`
 	PrintLinterName     bool   `mapstructure:"print-linter-name"`
 	UniqByLine          bool   `mapstructure:"uniq-by-line"`
 	SortResults         bool   `mapstructure:"sort-results"`
 	PrintWelcomeMessage bool   `mapstructure:"print-welcome"`
 	PathPrefix          string `mapstructure:"path-prefix"`
+
+	// only work with CLI flags because the setup of logs is done before the config file parsing.
+	Color string
 }

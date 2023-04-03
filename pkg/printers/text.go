@@ -14,8 +14,8 @@ import (
 
 type Text struct {
 	printIssuedLine bool
-	useColors       bool
 	printLinterName bool
+	useColors       bool
 
 	log logutils.Log
 	w   io.Writer
@@ -24,19 +24,20 @@ type Text struct {
 func NewText(printIssuedLine, useColors, printLinterName bool, log logutils.Log, w io.Writer) *Text {
 	return &Text{
 		printIssuedLine: printIssuedLine,
-		useColors:       useColors,
 		printLinterName: printLinterName,
+		useColors:       useColors,
 		log:             log,
 		w:               w,
 	}
 }
 
 func (p *Text) SprintfColored(ca color.Attribute, format string, args ...any) string {
+	c := color.New(ca)
+
 	if !p.useColors {
-		return fmt.Sprintf(format, args...)
+		c.DisableColor()
 	}
 
-	c := color.New(ca)
 	return c.Sprintf(format, args...)
 }
 
@@ -73,7 +74,7 @@ func (p *Text) printSourceCode(i *result.Issue) {
 	}
 }
 
-func (p Text) printUnderLinePointer(i *result.Issue) {
+func (p *Text) printUnderLinePointer(i *result.Issue) {
 	// if column == 0 it means column is unknown (e.g. for gosec)
 	if len(i.SourceLines) != 1 || i.Pos.Column == 0 {
 		return

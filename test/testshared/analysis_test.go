@@ -8,7 +8,6 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-//nolint:funlen
 func Test_parseComments(t *testing.T) {
 	testCases := []struct {
 		filename string

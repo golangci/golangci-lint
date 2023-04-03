@@ -9,7 +9,6 @@ import (
 	"github.com/golangci/golangci-lint/pkg/exitcodes"
 )
 
-//nolint:funlen
 func TestRunnerBuilder_Runner(t *testing.T) {
 	testCases := []struct {
 		desc     string

@@ -11,7 +11,6 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-//nolint:funlen
 func TestLinter_Run(t *testing.T) {
 	type issueWithReplacement struct {
 		issue       string
