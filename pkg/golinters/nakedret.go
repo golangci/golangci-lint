@@ -57,6 +57,7 @@ func runNakedRet(pass *analysis.Pass, settings *config.NakedretSettings) []goana
 			maxLength: settings.MaxFuncLines,
 			f:         pass.Fset,
 		}
+		v.root = &v
 
 		ast.Walk(&v, file)
 
@@ -72,63 +73,68 @@ type nakedretVisitor struct {
 	maxLength int
 	f         *token.FileSet
 	issues    []result.Issue
+	root      *nakedretVisitor
+
+	// Details of the function we're currently dealing with
+	funcName    string
+	funcLength  int
+	reportNaked bool
 }
 
-func (v *nakedretVisitor) processFuncDecl(funcDecl *ast.FuncDecl) {
-	file := v.f.File(funcDecl.Pos())
-	functionLineLength := file.Position(funcDecl.End()).Line - file.Position(funcDecl.Pos()).Line
-
-	// Scan the body for usage of the named returns
-	for _, stmt := range funcDecl.Body.List {
-		s, ok := stmt.(*ast.ReturnStmt)
-		if !ok {
-			continue
-		}
-
-		if len(s.Results) != 0 {
-			continue
-		}
-
-		file := v.f.File(s.Pos())
-		if file == nil || functionLineLength <= v.maxLength {
-			continue
-		}
-		if funcDecl.Name == nil {
-			continue
-		}
-
-		v.issues = append(v.issues, result.Issue{
-			FromLinter: nakedretName,
-			Text: fmt.Sprintf("naked return in func `%s` with %d lines of code",
-				funcDecl.Name.Name, functionLineLength),
-			Pos: v.f.Position(s.Pos()),
-		})
+func hasNamedReturns(funcType *ast.FuncType) bool {
+	if funcType == nil || funcType.Results == nil {
+		return false
 	}
-}
-
-func (v *nakedretVisitor) Visit(node ast.Node) ast.Visitor {
-	funcDecl, ok := node.(*ast.FuncDecl)
-	if !ok {
-		return v
-	}
-
-	var namedReturns []*ast.Ident
-
-	// We've found a function
-	if funcDecl.Type != nil && funcDecl.Type.Results != nil {
-		for _, field := range funcDecl.Type.Results.List {
-			for _, ident := range field.Names {
-				if ident != nil {
-					namedReturns = append(namedReturns, ident)
-				}
+	for _, field := range funcType.Results.List {
+		for _, ident := range field.Names {
+			if ident != nil {
+				return true
 			}
 		}
 	}
+	return false
+}
 
-	if len(namedReturns) == 0 || funcDecl.Body == nil {
-		return v
+func (v *nakedretVisitor) Visit(node ast.Node) ast.Visitor {
+	var (
+		funcType *ast.FuncType
+		funcName string
+	)
+	switch s := node.(type) {
+	case *ast.FuncDecl:
+		// We've found a function
+		funcType = s.Type
+		funcName = s.Name.Name
+	case *ast.FuncLit:
+		// We've found a function literal
+		funcType = s.Type
+		file := v.f.File(s.Pos())
+		funcName = fmt.Sprintf("<func():%v>", file.Position(s.Pos()).Line)
+	case *ast.ReturnStmt:
+		// We've found a possibly naked return statement
+		if v.reportNaked && len(s.Results) == 0 {
+			v.root.issues = append(v.root.issues, result.Issue{
+				FromLinter: nakedretName,
+				Text: fmt.Sprintf("naked return in func `%s` with %d lines of code",
+					v.funcName, v.funcLength),
+				Pos: v.f.Position(s.Pos()),
+			})
+		}
 	}
 
-	v.processFuncDecl(funcDecl)
+	if funcType != nil {
+		// Create a new visitor to track returns for this function
+		file := v.f.File(node.Pos())
+		length := file.Position(node.End()).Line - file.Position(node.Pos()).Line
+		return &nakedretVisitor{
+			f:           v.f,
+			root:        v.root,
+			maxLength:   v.maxLength,
+			funcName:    funcName,
+			funcLength:  length,
+			reportNaked: length > v.maxLength && hasNamedReturns(funcType),
+		}
+	}
+
 	return v
 }
