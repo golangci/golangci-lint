@@ -51,7 +51,7 @@ func NewImportAs(settings *config.ImportAsSettings) *goanalysis.Linter {
 			}
 
 			if v, ok := uniqAliases[a.Alias]; ok {
-				lintCtx.Log.Errorf("invalid configuration, multiple packages with the same alias: pkg=%s packages=[%s,%s]", a.Alias, a.Pkg, v.Pkg)
+				lintCtx.Log.Errorf("invalid configuration, multiple packages with the same alias: alias=%s packages=[%s,%s]", a.Alias, a.Pkg, v.Pkg)
 			} else {
 				uniqAliases[a.Alias] = a
 			}
