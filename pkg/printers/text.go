@@ -1,7 +1,6 @@
 package printers
 
 import (
-	"context"
 	"fmt"
 	"io"
 	"strings"
@@ -41,7 +40,7 @@ func (p *Text) SprintfColored(ca color.Attribute, format string, args ...any) st
 	return c.Sprintf(format, args...)
 }
 
-func (p *Text) Print(ctx context.Context, issues []result.Issue) error {
+func (p *Text) Print(issues []result.Issue) error {
 	for i := range issues {
 		p.printIssue(&issues[i])
 

@@ -1,7 +1,6 @@
 package printers
 
 import (
-	"context"
 	"encoding/json"
 	"io"
 
@@ -26,7 +25,7 @@ type JSONResult struct {
 	Report *report.Data
 }
 
-func (p JSON) Print(ctx context.Context, issues []result.Issue) error {
+func (p JSON) Print(issues []result.Issue) error {
 	res := JSONResult{
 		Issues: issues,
 		Report: p.rd,

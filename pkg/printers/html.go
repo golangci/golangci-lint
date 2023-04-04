@@ -1,7 +1,6 @@
 package printers
 
 import (
-	"context"
 	"fmt"
 	"html/template"
 	"io"
@@ -131,7 +130,7 @@ func NewHTML(w io.Writer) *HTML {
 	return &HTML{w: w}
 }
 
-func (p HTML) Print(_ context.Context, issues []result.Issue) error {
+func (p HTML) Print(issues []result.Issue) error {
 	var htmlIssues []htmlIssue
 
 	for i := range issues {

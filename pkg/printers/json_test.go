@@ -2,7 +2,6 @@ package printers
 
 import (
 	"bytes"
-	"context"
 	"go/token"
 	"testing"
 
@@ -47,7 +46,7 @@ func TestJSON_Print(t *testing.T) {
 
 	printer := NewJSON(nil, buf)
 
-	err := printer.Print(context.Background(), issues)
+	err := printer.Print(issues)
 	require.NoError(t, err)
 
 	//nolint:lll
