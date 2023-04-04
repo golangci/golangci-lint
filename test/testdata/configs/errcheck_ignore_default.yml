@@ -1,0 +1,3 @@
+linters-settings:
+  errcheck:
+    check-blank: true

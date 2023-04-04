@@ -1,6 +1,5 @@
-//args: -Enolintlint -Elll
-//expected_linter: nolintlint
-//config: linters-settings.nolintlint.allow-leading-space=false
+//golangcitest:args -Enolintlint -Elll
+//golangcitest:expected_linter nolintlint
 package p
 
 import "fmt"

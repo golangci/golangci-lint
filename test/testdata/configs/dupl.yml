@@ -1,0 +1,3 @@
+linters-settings:
+  dupl:
+    threshold: 20

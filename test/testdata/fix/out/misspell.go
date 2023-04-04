@@ -1,4 +1,5 @@
-//args: -Emisspell
+//golangcitest:args -Emisspell
+//golangcitest:expected_exitcode 0
 package p
 
 import "log"

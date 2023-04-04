@@ -21,3 +21,15 @@ func Example() {
 	fmt.Printf("bad format %t", cs)
 	C.free(unsafe.Pointer(cs))
 }
+
+func notFormattedForGofmt()  {
+}
+
+func errorForRevive(p *int) error {
+	if p == nil {
+		return nil
+	} else {
+		return nil
+	}
+}
+

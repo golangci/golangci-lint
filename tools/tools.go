@@ -1,3 +1,4 @@
+//go:build tools
 // +build tools
 
 package tools
@@ -7,7 +8,7 @@ package tools
 // https://github.com/golang/go/wiki/Modules#how-can-i-track-tool-dependencies-for-a-module
 // https://github.com/golang/go/issues/25922
 //
-// nolint
+//nolint:all
 import (
 	_ "github.com/goreleaser/goreleaser"
 )

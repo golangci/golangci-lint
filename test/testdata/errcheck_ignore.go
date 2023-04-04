@@ -1,5 +1,5 @@
-//args: -Eerrcheck
-//config_path: testdata/errcheck/ignore_config.yml
+//golangcitest:args -Eerrcheck
+//golangcitest:config_path testdata/configs/ignore_config.yml
 package testdata
 
 import (
@@ -23,6 +23,6 @@ func TestErrcheckIgnoreIoutil() []byte {
 }
 
 func TestErrcheckNoIgnoreIoutil() []byte {
-	ret, _ := ioutil.ReadAll(nil) // ERROR "Error return value of `ioutil.ReadAll` is not checked"
+	ret, _ := ioutil.ReadAll(nil) // want "Error return value of `ioutil.ReadAll` is not checked"
 	return ret
 }

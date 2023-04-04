@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 	"html/template"
+	"io"
 	"strings"
 
-	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
@@ -123,13 +123,15 @@ type htmlIssue struct {
 	Code   string
 }
 
-type HTML struct{}
-
-func NewHTML() *HTML {
-	return &HTML{}
+type HTML struct {
+	w io.Writer
 }
 
-func (h HTML) Print(_ context.Context, issues []result.Issue) error {
+func NewHTML(w io.Writer) *HTML {
+	return &HTML{w: w}
+}
+
+func (p HTML) Print(_ context.Context, issues []result.Issue) error {
 	var htmlIssues []htmlIssue
 
 	for i := range issues {
@@ -151,5 +153,5 @@ func (h HTML) Print(_ context.Context, issues []result.Issue) error {
 		return err
 	}
 
-	return t.Execute(logutils.StdOut, struct{ Issues []htmlIssue }{Issues: htmlIssues})
+	return t.Execute(p.w, struct{ Issues []htmlIssue }{Issues: htmlIssues})
 }

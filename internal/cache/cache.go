@@ -12,6 +12,7 @@ import (
 	"bytes"
 	"crypto/sha256"
 	"encoding/hex"
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -19,8 +20,6 @@ import (
 	"strconv"
 	"strings"
 	"time"
-
-	"github.com/pkg/errors"
 
 	"github.com/golangci/golangci-lint/internal/renameio"
 	"github.com/golangci/golangci-lint/internal/robustio"
@@ -51,14 +50,13 @@ type Cache struct {
 // to share a cache directory (for example, if the directory were stored
 // in a network file system). File locking is notoriously unreliable in
 // network file systems and may not suffice to protect the cache.
-//
 func Open(dir string) (*Cache, error) {
 	info, err := os.Stat(dir)
 	if err != nil {
 		return nil, err
 	}
 	if !info.IsDir() {
-		return nil, &os.PathError{Op: "open", Path: dir, Err: fmt.Errorf("not a directory")}
+		return nil, &os.PathError{Op: "open", Path: dir, Err: errors.New("not a directory")}
 	}
 	for i := 0; i < 256; i++ {
 		name := filepath.Join(dir, fmt.Sprintf("%02x", i))
@@ -81,7 +79,7 @@ func (c *Cache) fileName(id [HashSize]byte, key string) string {
 var errMissing = errors.New("cache entry not found")
 
 func IsErrMissing(err error) bool {
-	return errors.Cause(err) == errMissing
+	return errors.Is(err, errMissing)
 }
 
 const (
@@ -159,7 +157,7 @@ func (c *Cache) get(id ActionID) (Entry, error) {
 	defer f.Close()
 	entry := make([]byte, entrySize+1) // +1 to detect whether f is too long
 	if n, readErr := io.ReadFull(f, entry); n != entrySize || readErr != io.ErrUnexpectedEOF {
-		return failed(fmt.Errorf("read %d/%d bytes from %s with error %s", n, entrySize, fileName, readErr))
+		return failed(fmt.Errorf("read %d/%d bytes from %s with error %w", n, entrySize, fileName, readErr))
 	}
 	if entry[0] != 'v' || entry[1] != '1' || entry[2] != ' ' || entry[3+hexSize] != ' ' || entry[3+hexSize+1+hexSize] != ' ' || entry[3+hexSize+1+hexSize+1+20] != ' ' || entry[entrySize-1] != '\n' {
 		return failed(fmt.Errorf("bad data in %s", fileName))
@@ -170,10 +168,10 @@ func (c *Cache) get(id ActionID) (Entry, error) {
 	etime := entry[1 : 1+20]
 	var buf [HashSize]byte
 	if _, err = hex.Decode(buf[:], eid); err != nil || buf != id {
-		return failed(errors.Wrapf(err, "failed to hex decode eid data in %s", fileName))
+		return failed(fmt.Errorf("failed to hex decode eid data in %s: %w", fileName, err))
 	}
 	if _, err = hex.Decode(buf[:], eout); err != nil {
-		return failed(errors.Wrapf(err, "failed to hex decode eout data in %s", fileName))
+		return failed(fmt.Errorf("failed to hex decode eout data in %s: %w", fileName, err))
 	}
 	i := 0
 	for i < len(esize) && esize[i] == ' ' {
@@ -181,7 +179,7 @@ func (c *Cache) get(id ActionID) (Entry, error) {
 	}
 	size, err := strconv.ParseInt(string(esize[i:]), 10, 64)
 	if err != nil || size < 0 {
-		return failed(fmt.Errorf("failed to parse esize int from %s with error %s", fileName, err))
+		return failed(fmt.Errorf("failed to parse esize int from %s with error %w", fileName, err))
 	}
 	i = 0
 	for i < len(etime) && etime[i] == ' ' {
@@ -189,11 +187,11 @@ func (c *Cache) get(id ActionID) (Entry, error) {
 	}
 	tm, err := strconv.ParseInt(string(etime[i:]), 10, 64)
 	if err != nil || tm < 0 {
-		return failed(fmt.Errorf("failed to parse etime int from %s with error %s", fileName, err))
+		return failed(fmt.Errorf("failed to parse etime int from %s with error %w", fileName, err))
 	}
 
 	if err = c.used(fileName); err != nil {
-		return failed(errors.Wrapf(err, "failed to mark %s as used", fileName))
+		return failed(fmt.Errorf("failed to mark %s as used: %w", fileName, err))
 	}
 
 	return Entry{buf, size, time.Unix(0, tm)}, nil
@@ -265,7 +263,7 @@ func (c *Cache) used(file string) error {
 		if os.IsNotExist(err) {
 			return errMissing
 		}
-		return errors.Wrapf(err, "failed to stat file %s", file)
+		return fmt.Errorf("failed to stat file %s: %w", file, err)
 	}
 
 	if c.now().Sub(info.ModTime()) < mtimeInterval {
@@ -273,7 +271,7 @@ func (c *Cache) used(file string) error {
 	}
 
 	if err := os.Chtimes(file, c.now(), c.now()); err != nil {
-		return errors.Wrapf(err, "failed to change time of file %s", file)
+		return fmt.Errorf("failed to change time of file %s: %w", file, err)
 	}
 
 	return nil
@@ -386,7 +384,7 @@ func (c *Cache) putIndexEntry(id ActionID, out OutputID, size int64, allowVerify
 		return err
 	}
 	if err = os.Chtimes(file, c.now(), c.now()); err != nil { // mainly for tests
-		return errors.Wrapf(err, "failed to change time of file %s", file)
+		return fmt.Errorf("failed to change time of file %s: %w", file, err)
 	}
 
 	return nil
@@ -444,7 +442,7 @@ func (c *Cache) copyFile(file io.ReadSeeker, out OutputID, size int64) error {
 		if f, openErr := os.Open(name); openErr == nil {
 			h := sha256.New()
 			if _, copyErr := io.Copy(h, f); copyErr != nil {
-				return errors.Wrap(copyErr, "failed to copy to sha256")
+				return fmt.Errorf("failed to copy to sha256: %w", copyErr)
 			}
 
 			f.Close()
@@ -498,13 +496,13 @@ func (c *Cache) copyFile(file io.ReadSeeker, out OutputID, size int64) error {
 		return err
 	}
 	if n, wErr := h.Write(buf); n != len(buf) {
-		return fmt.Errorf("wrote to hash %d/%d bytes with error %s", n, len(buf), wErr)
+		return fmt.Errorf("wrote to hash %d/%d bytes with error %w", n, len(buf), wErr)
 	}
 
 	sum := h.Sum(nil)
 	if !bytes.Equal(sum, out[:]) {
 		_ = f.Truncate(0)
-		return fmt.Errorf("file content changed underfoot")
+		return errors.New("file content changed underfoot")
 	}
 
 	// Commit cache file entry.
@@ -520,7 +518,7 @@ func (c *Cache) copyFile(file io.ReadSeeker, out OutputID, size int64) error {
 		return err
 	}
 	if err = os.Chtimes(name, c.now(), c.now()); err != nil { // mainly for tests
-		return errors.Wrapf(err, "failed to change time of file %s", name)
+		return fmt.Errorf("failed to change time of file %s: %w", name, err)
 	}
 
 	return nil

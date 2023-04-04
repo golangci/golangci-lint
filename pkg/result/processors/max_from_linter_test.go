@@ -8,7 +8,7 @@ import (
 )
 
 func TestMaxFromLinter(t *testing.T) {
-	p := NewMaxFromLinter(1, logutils.NewStderrLog(""), &config.Config{})
+	p := NewMaxFromLinter(1, logutils.NewStderrLog(logutils.DebugKeyEmpty), &config.Config{})
 	gosimple := newFromLinterIssue("gosimple")
 	gofmt := newFromLinterIssue("gofmt")
 	processAssertSame(t, p, gosimple)  // ok

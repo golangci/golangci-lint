@@ -22,7 +22,7 @@ func NewGochecknoinits() *goanalysis.Linter {
 	analyzer := &analysis.Analyzer{
 		Name: gochecknoinitsName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
-		Run: func(pass *analysis.Pass) (interface{}, error) {
+		Run: func(pass *analysis.Pass) (any, error) {
 			var res []goanalysis.Issue
 			for _, file := range pass.Files {
 				fileIssues := checkFileForInits(file, pass.Fset)
@@ -41,6 +41,7 @@ func NewGochecknoinits() *goanalysis.Linter {
 			return nil, nil
 		},
 	}
+
 	return goanalysis.NewLinter(
 		gochecknoinitsName,
 		"Checks that no init functions are present in Go code",

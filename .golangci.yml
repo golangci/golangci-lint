@@ -1,6 +1,6 @@
 linters-settings:
   depguard:
-    list-type: blacklist
+    list-type: denylist
     packages:
       # logging is allowed only by logutils.Log, logrus
       # is allowed to use only in logutils package
@@ -10,13 +10,11 @@ linters-settings:
   dupl:
     threshold: 100
   funlen:
-    lines: 100
+    lines: -1 # the number of lines (code + empty lines) is not a right metric and leads to code without empty line or one-liner.
     statements: 50
-  gci:
-    local-prefixes: github.com/golangci/golangci-lint
   goconst:
     min-len: 2
-    min-occurrences: 2
+    min-occurrences: 3
   gocritic:
     enabled-tags:
       - diagnostic
@@ -29,16 +27,25 @@ linters-settings:
       - ifElseChain
       - octalLiteral
       - whyNoLint
-      - wrapperFunc
   gocyclo:
     min-complexity: 15
   goimports:
     local-prefixes: github.com/golangci/golangci-lint
   gomnd:
-    settings:
-      mnd:
-        # don't include the "operation" and "assign"
-        checks: argument,case,condition,return
+    # don't include the "operation" and "assign"
+    checks:
+      - argument
+      - case
+      - condition
+      - return
+    ignored-numbers:
+      - '0'
+      - '1'
+      - '2'
+      - '3'
+    ignored-functions:
+      - strings.SplitN
+
   govet:
     check-shadowing: true
     settings:
@@ -53,22 +60,23 @@ linters-settings:
   misspell:
     locale: US
   nolintlint:
-    allow-leading-space: true # don't require machine-readable nolint directives (i.e. with no leading space)
     allow-unused: false # report any unused nolint directives
     require-explanation: false # don't require an explanation for nolint directives
     require-specific: false # don't require nolint directives to be specific about which linter is being skipped
+  revive:
+    rules:
+      - name: unexported-return
+        disabled: true
 
 linters:
   disable-all: true
   enable:
     - bodyclose
-    - deadcode
     - depguard
     - dogsled
     - dupl
     - errcheck
     - exportloopref
-    - exhaustive
     - funlen
     - gochecknoinits
     - goconst
@@ -87,15 +95,13 @@ linters:
     - nakedret
     - noctx
     - nolintlint
-    - rowserrcheck
+    - revive
     - staticcheck
-    - structcheck
     - stylecheck
     - typecheck
     - unconvert
     - unparam
     - unused
-    - varcheck
     - whitespace
 
   # don't enable:
@@ -111,13 +117,9 @@ linters:
   # - nestif
   # - prealloc
   # - testpackage
-  # - revive
   # - wsl
 
 issues:
-  exclude:
-    # disable this rule for go1.15 compatibility
-    - 'ioutilDeprecated:'
   # Excluding configuration per-path, per-linter, per-text and per-source
   exclude-rules:
     - path: _test\.go
@@ -128,23 +130,22 @@ issues:
       text: "SA1019: errCfg.Exclude is deprecated: use ExcludeFunctions instead"
     - path: pkg/commands/run.go
       text: "SA1019: lsc.Errcheck.Exclude is deprecated: use ExcludeFunctions instead"
-
-    # TODO must be removed after the release of the next version (v1.41.0)
     - path: pkg/commands/run.go
-      linters:
-        - gomnd
-    # TODO must be removed after the release of the next version (v1.41.0)
-    - path: pkg/golinters/nolintlint/nolintlint.go
-      linters:
-        - gomnd
-    # TODO must be removed after the release of the next version (v1.41.0)
-    - path: pkg/printers/tab.go
-      linters:
-        - gomnd
+      text: "SA1019: e.cfg.Run.Deadline is deprecated: Deadline exists for historical compatibility and should not be used."
+
+    - path: pkg/golinters/gofumpt.go
+      text: "SA1019: settings.LangVersion is deprecated: use the global `run.go` instead."
+    - path: pkg/golinters/staticcheck_common.go
+      text: "SA1019: settings.GoVersion is deprecated: use the global `run.go` instead."
+    - path: pkg/lint/lintersdb/manager.go
+      text: "SA1019: (.+).(GoVersion|LangVersion) is deprecated: use the global `run.go` instead."
+    - path: pkg/golinters/unused.go
+      text: "rangeValCopy: each iteration copies 160 bytes \\(consider pointers or indexing\\)"
 
 run:
+  timeout: 5m
   skip-dirs:
-    - test/testdata_etc
-    - internal/cache
-    - internal/renameio
-    - internal/robustio
+    - test/testdata_etc # test files
+    - internal/cache # extracted from Go code
+    - internal/renameio # extracted from Go code
+    - internal/robustio # extracted from Go code

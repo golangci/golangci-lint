@@ -6,24 +6,11 @@ The config file has lower priority than command-line options. If the same bool/s
 and in the config file, the option from command-line will be used.
 Slice options (e.g. list of enabled/disabled linters) are combined from the command-line and config file.
 
-To see a list of enabled by your configuration linters:
+To see a list of linters enabled by your configuration use:
 
 ```sh
 golangci-lint linters
 ```
-
-## Command-Line Options
-
-```sh
-golangci-lint run -h
-{.RunHelpText}
-```
-
-When the `--cpu-profile-path` or `--mem-profile-path` arguments are specified, `golangci-lint` writes runtime profiling data
-in the format expected by the [pprof](https://github.com/google/pprof) visualization tool.
-
-When the `--trace-path` argument is specified, `golangci-lint` writes runtime tracing data in the format expected by
-the `go tool trace` command and visualization tool.
 
 ## Config File
 
@@ -41,15 +28,26 @@ To see which config file is being used and where it was sourced from run golangc
 Config options inside the file are identical to command-line options.
 You can configure specific linters' options only within the config file (not the command-line).
 
-There is a [`.golangci.example.yml`](https://github.com/golangci/golangci-lint/blob/master/.golangci.example.yml) example
-config file with all supported options, their description and default value:
+There is a [`.golangci.reference.yml`](https://github.com/golangci/golangci-lint/blob/master/.golangci.reference.yml) file with all supported options, their description, and default values.
+This file is a neither a working example nor recommended configuration, it's just a reference to display all the configuration options.
 
-```yaml
-{ .GolangciYamlExample }
+{ .ConfigurationExample }
+
+## Command-Line Options
+
+```sh
+golangci-lint run -h
+{.RunHelpText}
 ```
+
+When the `--cpu-profile-path` or `--mem-profile-path` arguments are specified, `golangci-lint` writes runtime profiling data
+in the format expected by the [pprof](https://github.com/google/pprof) visualization tool.
+
+When the `--trace-path` argument is specified, `golangci-lint` writes runtime tracing data in the format expected by
+the `go tool trace` command and visualization tool.
 
 ## Cache
 
-GolangCI-Lint stores its cache in the [default user cache directory](https://golang.org/pkg/os/#UserCacheDir).
+GolangCI-Lint stores its cache in the subdirectory `golangci-lint` inside the [default user cache directory](https://pkg.go.dev/os#UserCacheDir).
 
 You can override the default cache directory with the environment variable `GOLANGCI_LINT_CACHE`; the path must be absolute.

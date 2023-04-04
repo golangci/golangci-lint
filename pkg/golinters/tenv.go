@@ -11,13 +11,9 @@ import (
 func NewTenv(settings *config.TenvSettings) *goanalysis.Linter {
 	a := tenv.Analyzer
 
-	analyzers := []*analysis.Analyzer{
-		a,
-	}
-
-	var cfg map[string]map[string]interface{}
+	var cfg map[string]map[string]any
 	if settings != nil {
-		cfg = map[string]map[string]interface{}{
+		cfg = map[string]map[string]any{
 			a.Name: {
 				tenv.A: settings.All,
 			},
@@ -27,7 +23,7 @@ func NewTenv(settings *config.TenvSettings) *goanalysis.Linter {
 	return goanalysis.NewLinter(
 		a.Name,
 		a.Doc,
-		analyzers,
+		[]*analysis.Analyzer{a},
 		cfg,
 	).WithLoadMode(goanalysis.LoadModeSyntax)
 }

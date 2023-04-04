@@ -123,6 +123,8 @@ const main = async () => {
       renovate: true,
       fossabot: true,
       golangcibot: true,
+      kortschak: true,
+      "golanci-releaser": true,
     }
 
     const res: DataJSON = {

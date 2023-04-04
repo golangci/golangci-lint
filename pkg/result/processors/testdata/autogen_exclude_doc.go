@@ -4,7 +4,7 @@ package testdata
 
 import "fmt"
 
-// nolint
+//nolint:all
 func PrintString(s string) {
 	fmt.Printf("%s", s)
 }

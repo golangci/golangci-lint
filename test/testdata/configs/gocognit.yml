@@ -1,0 +1,3 @@
+linters-settings:
+  gocognit:
+    min-complexity: 2

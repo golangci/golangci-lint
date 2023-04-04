@@ -11,9 +11,9 @@ import (
 func NewNLReturn(settings *config.NlreturnSettings) *goanalysis.Linter {
 	a := nlreturn.NewAnalyzer()
 
-	cfg := map[string]map[string]interface{}{}
+	cfg := map[string]map[string]any{}
 	if settings != nil {
-		cfg[a.Name] = map[string]interface{}{
+		cfg[a.Name] = map[string]any{
 			"block-size": settings.BlockSize,
 		}
 	}

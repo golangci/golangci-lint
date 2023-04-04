@@ -1,5 +1,5 @@
-// args: -Eireturn
-// config_path: testdata/configs/ireturn_stdlib_reject.yml
+//golangcitest:args -Eireturn
+//golangcitest:config_path testdata/configs/ireturn_stdlib_reject.yml
 package testdata
 
 import (
@@ -7,7 +7,7 @@ import (
 	"io"
 )
 
-func NewWriter() io.Writer { // ERROR `NewWriter returns interface \(io.Writer\)`
+func NewWriter() io.Writer { // want `NewWriter returns interface \(io.Writer\)`
 	var buf bytes.Buffer
 	return &buf
 }

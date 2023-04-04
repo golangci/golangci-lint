@@ -14,23 +14,33 @@ import (
 
 type Tab struct {
 	printLinterName bool
-	log             logutils.Log
+	useColors       bool
+
+	log logutils.Log
+	w   io.Writer
 }
 
-func NewTab(printLinterName bool, log logutils.Log) *Tab {
+func NewTab(printLinterName, useColors bool, log logutils.Log, w io.Writer) *Tab {
 	return &Tab{
 		printLinterName: printLinterName,
+		useColors:       useColors,
 		log:             log,
+		w:               w,
 	}
 }
 
-func (p Tab) SprintfColored(ca color.Attribute, format string, args ...interface{}) string {
+func (p *Tab) SprintfColored(ca color.Attribute, format string, args ...any) string {
 	c := color.New(ca)
+
+	if !p.useColors {
+		c.DisableColor()
+	}
+
 	return c.Sprintf(format, args...)
 }
 
 func (p *Tab) Print(ctx context.Context, issues []result.Issue) error {
-	w := tabwriter.NewWriter(logutils.StdOut, 0, 0, 2, ' ', 0)
+	w := tabwriter.NewWriter(p.w, 0, 0, 2, ' ', 0)
 
 	for i := range issues {
 		p.printIssue(&issues[i], w)
@@ -43,7 +53,7 @@ func (p *Tab) Print(ctx context.Context, issues []result.Issue) error {
 	return nil
 }
 
-func (p Tab) printIssue(i *result.Issue, w io.Writer) {
+func (p *Tab) printIssue(i *result.Issue, w io.Writer) {
 	text := p.SprintfColored(color.FgRed, "%s", i.Text)
 	if p.printLinterName {
 		text = fmt.Sprintf("%s\t%s", i.FromLinter, text)

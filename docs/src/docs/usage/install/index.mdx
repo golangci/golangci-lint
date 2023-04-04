@@ -44,7 +44,37 @@ and is constantly being improved. For any problems with `golangci-lint`, check o
 
 ## Local Installation
 
+### Binaries
+
+```sh
+# binary will be $(go env GOPATH)/bin/golangci-lint
+curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin {.LatestVersion}
+
+golangci-lint --version
+```
+
+On Windows, you can run the above commands with Git Bash, which comes with [Git for Windows](https://git-scm.com/download/win).
+
+### Docker
+
+```sh
+docker run --rm -v $(pwd):/app -w /app golangci/golangci-lint:{.LatestVersion} golangci-lint run -v
+```
+
+Preserving cache between consecutive runs:
+```sh
+docker run --rm -v $(pwd):/app -v ~/.cache/golangci-lint/{.LatestVersion}:/root/.cache -w /app golangci/golangci-lint:{.LatestVersion} golangci-lint run -v
+```
+
+Colored output:
+```sh
+docker run -t --rm -v $(pwd):/app -w /app golangci/golangci-lint:{.LatestVersion} golangci-lint run -v
+```
+
 ### macOS
+
+Note: brew can use a non-expected version of Go to build the binary,
+so we recommend either using our binaries or be sure of the version of Go used to build.
 
 You can install a binary release on macOS using [brew](https://brew.sh/):
 
@@ -53,7 +83,7 @@ brew install golangci-lint
 brew upgrade golangci-lint
 ```
 
-Note: Previously we used a [homebrew tap](https://github.com/golangci/homebrew-tap). We recommend using official formula instead of the tap, but sometimes the most recent release 
+Note: Previously we used a [homebrew tap](https://github.com/golangci/homebrew-tap). We recommend using official formula instead of the tap, but sometimes the most recent release
 isn't immediately available via homebrew core due to manual updates that need to occur from homebrew core maintainers. In this case, the tap formula, which is updated automatically,
 can be used to install the latest version of `golangci-lint`:
 
@@ -69,30 +99,14 @@ The macports installation mode is community driven, and not officially maintaine
 sudo port install golangci-lint
 ```
 
-### Docker
-
-```sh
-docker run --rm -v $(pwd):/app -w /app golangci/golangci-lint:{.LatestVersion} golangci-lint run -v
-```
-
-### Linux and Windows
-
-```sh
-# binary will be $(go env GOPATH)/bin/golangci-lint
-curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin {.LatestVersion}
-
-golangci-lint --version
-```
-
-On Windows, you can run the above commands with Git Bash, which comes with [Git for Windows](https://git-scm.com/download/win).
-
 ### Install from Source
 
-Note: such `go get` installation aren't guaranteed to work. We recommend using binary installation.
+Note: such `go install`/`go get` installation aren't guaranteed to work. We recommend using binary installation.
+
 <details>
 <summary>Why?</summary>
 
-`go get` installation isn't recommended because of the following points:
+`go install`/`go get` installation isn't recommended because of the following points:
 
 1. some users use `-u` flag for `go get`, which upgrades our dependencies. Resulting configuration wasn't tested and isn't guaranteed to work.
 2. [`go.mod`](https://github.com/golangci/golangci-lint/blob/master/go.mod) replacement directive doesn't apply. It means a user will be using patched version of `golangci-lint` if we use such replacements.
@@ -106,11 +120,7 @@ Note: such `go get` installation aren't guaranteed to work. We recommend using b
 <div style="margin-top: 2em;">
 
 ```sh
-# Go 1.16+
 go install github.com/golangci/golangci-lint/cmd/golangci-lint@{.LatestVersion}
-
-# Go version < 1.16
-go get -u github.com/golangci/golangci-lint/cmd/golangci-lint@{.LatestVersion}
 ```
 
 </div>

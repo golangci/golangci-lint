@@ -1,0 +1,4 @@
+linters-settings:
+  errcheck:
+    check-blank: true
+    exclude: errcheck_exclude.txt

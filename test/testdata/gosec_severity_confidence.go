@@ -1,5 +1,5 @@
-//args: -Egosec
-//config_path: testdata/configs/gosec_severity_confidence.yml
+//golangcitest:args -Egosec
+//golangcitest:config_path testdata/configs/gosec_severity_confidence.yml
 package testdata
 
 import (
@@ -11,7 +11,7 @@ import (
 var url string = "https://www.abcdefghijk.com"
 
 func gosecVariableURL() {
-	resp, err := http.Get(url) // ERROR "G107: Potential HTTP request made with variable url"
+	resp, err := http.Get(url) // want "G107: Potential HTTP request made with variable url"
 	if err != nil {
 		panic(err)
 	}

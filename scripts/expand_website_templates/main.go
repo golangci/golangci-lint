@@ -13,15 +13,19 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"reflect"
 	"sort"
 	"strings"
 
 	"gopkg.in/yaml.v3"
 
 	"github.com/golangci/golangci-lint/internal/renameio"
+	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
 )
+
+const listItemPrefix = "list-item-"
 
 var stateFilePath = filepath.Join("docs", "template_data.state")
 
@@ -46,7 +50,7 @@ func main() {
 	if err := rewriteDocs(replacements); err != nil {
 		log.Fatalf("Failed to rewrite docs: %s", err)
 	}
-	log.Printf("Successfully expanded templates")
+	log.Print("Successfully expanded templates")
 }
 
 func updateStateFile(replacements map[string]string) error {
@@ -60,8 +64,7 @@ func updateStateFile(replacements map[string]string) error {
 		return err
 	}
 
-	var contentBuf bytes.Buffer
-	contentBuf.WriteString("This file stores hash of website templates to trigger " +
+	contentBuf := bytes.NewBufferString("This file stores hash of website templates to trigger " +
 		"Netlify rebuild when something changes, e.g. new linter is added.\n")
 	contentBuf.WriteString(hex.EncodeToString(h.Sum(nil)))
 
@@ -133,50 +136,50 @@ type latestRelease struct {
 }
 
 func getLatestVersion() (string, error) {
-	req, err := http.NewRequest( // nolint:noctx
+	req, err := http.NewRequest( //nolint:noctx
 		http.MethodGet,
 		"https://api.github.com/repos/golangci/golangci-lint/releases/latest",
 		http.NoBody,
 	)
 	if err != nil {
-		return "", fmt.Errorf("failed to prepare a http request: %s", err)
+		return "", fmt.Errorf("failed to prepare a http request: %w", err)
 	}
 	req.Header.Add("Accept", "application/vnd.github.v3+json")
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
-		return "", fmt.Errorf("failed to get http response for the latest tag: %s", err)
+		return "", fmt.Errorf("failed to get http response for the latest tag: %w", err)
 	}
 	defer resp.Body.Close()
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return "", fmt.Errorf("failed to read a body for the latest tag: %s", err)
+		return "", fmt.Errorf("failed to read a body for the latest tag: %w", err)
 	}
 	release := latestRelease{}
 	err = json.Unmarshal(body, &release)
 	if err != nil {
-		return "", fmt.Errorf("failed to unmarshal the body for the latest tag: %s", err)
+		return "", fmt.Errorf("failed to unmarshal the body for the latest tag: %w", err)
 	}
 	return release.TagName, nil
 }
 
 func buildTemplateContext() (map[string]string, error) {
-	golangciYamlExample, err := os.ReadFile(".golangci.example.yml")
+	golangciYamlExample, err := os.ReadFile(".golangci.reference.yml")
 	if err != nil {
-		return nil, fmt.Errorf("can't read .golangci.example.yml: %s", err)
+		return nil, fmt.Errorf("can't read .golangci.reference.yml: %w", err)
 	}
 
-	lintersCfg, err := getLintersConfiguration(golangciYamlExample)
+	snippets, err := extractExampleSnippets(golangciYamlExample)
 	if err != nil {
-		return nil, fmt.Errorf("can't read .golangci.example.yml: %s", err)
+		return nil, fmt.Errorf("can't read .golangci.reference.yml: %w", err)
 	}
 
 	if err = exec.Command("make", "build").Run(); err != nil {
-		return nil, fmt.Errorf("can't run go install: %s", err)
+		return nil, fmt.Errorf("can't run go install: %w", err)
 	}
 
 	lintersOut, err := exec.Command("./golangci-lint", "help", "linters").Output()
 	if err != nil {
-		return nil, fmt.Errorf("can't run linters cmd: %s", err)
+		return nil, fmt.Errorf("can't run linters cmd: %w", err)
 	}
 
 	lintersOutParts := bytes.Split(lintersOut, []byte("\n\n"))
@@ -186,7 +189,7 @@ func buildTemplateContext() (map[string]string, error) {
 	helpCmd.Env = append(helpCmd.Env, "HELP_RUN=1") // make default concurrency stable: don't depend on machine CPU number
 	help, err := helpCmd.Output()
 	if err != nil {
-		return nil, fmt.Errorf("can't run help cmd: %s", err)
+		return nil, fmt.Errorf("can't run help cmd: %w", err)
 	}
 
 	helpLines := bytes.Split(help, []byte("\n"))
@@ -198,21 +201,37 @@ func buildTemplateContext() (map[string]string, error) {
 
 	latestVersion, err := getLatestVersion()
 	if err != nil {
-		return nil, fmt.Errorf("failed to get latest version: %s", err)
+		return nil, fmt.Errorf("failed to get the latest version: %w", err)
 	}
 
 	return map[string]string{
-		"LintersExample":                   lintersCfg,
-		"GolangciYamlExample":              strings.TrimSpace(string(golangciYamlExample)),
+		"LintersExample":                   snippets.LintersSettings,
+		"ConfigurationExample":             snippets.ConfigurationFile,
 		"LintersCommandOutputEnabledOnly":  string(lintersOutParts[0]),
 		"LintersCommandOutputDisabledOnly": string(lintersOutParts[1]),
 		"EnabledByDefaultLinters":          getLintersListMarkdown(true),
 		"DisabledByDefaultLinters":         getLintersListMarkdown(false),
+		"DefaultExclusions":                getDefaultExclusions(),
 		"ThanksList":                       getThanksList(),
 		"RunHelpText":                      string(shortHelp),
 		"ChangeLog":                        string(changeLog),
 		"LatestVersion":                    latestVersion,
 	}, nil
+}
+
+func getDefaultExclusions() string {
+	bufferString := bytes.NewBufferString("")
+
+	for _, pattern := range config.DefaultExcludePatterns {
+		_, _ = fmt.Fprintln(bufferString)
+		_, _ = fmt.Fprintf(bufferString, "### %s\n", pattern.ID)
+		_, _ = fmt.Fprintln(bufferString)
+		_, _ = fmt.Fprintf(bufferString, "- linter: `%s`\n", pattern.Linter)
+		_, _ = fmt.Fprintf(bufferString, "- pattern: `%s`\n", strings.ReplaceAll(pattern.Pattern, "`", "&grave;"))
+		_, _ = fmt.Fprintf(bufferString, "- why: %s\n", pattern.Why)
+	}
+
+	return bufferString.String()
 }
 
 func getLintersListMarkdown(enabled bool) string {
@@ -251,7 +270,11 @@ func getName(lc *linter.Config) string {
 	name := lc.Name()
 
 	if lc.OriginalURL != "" {
-		name = fmt.Sprintf("[%s](%s)", lc.Name(), lc.OriginalURL)
+		name = fmt.Sprintf("[%s](%s)", name, lc.OriginalURL)
+	}
+
+	if hasSettings(lc.Name()) {
+		name = fmt.Sprintf("%s&nbsp;[%s](#%s)", name, spanWithID(listItemPrefix+lc.Name(), "Configuration", "⚙️"), lc.Name())
 	}
 
 	if !lc.IsDeprecated() {
@@ -263,7 +286,7 @@ func getName(lc *linter.Config) string {
 		title += fmt.Sprintf(" since %s", lc.Deprecation.Since)
 	}
 
-	return name + " " + span(title, "⚠")
+	return name + "&nbsp;" + span(title, "⚠")
 }
 
 func getDesc(lc *linter.Config) string {
@@ -285,90 +308,261 @@ func check(b bool, title string) string {
 	return ""
 }
 
+func hasSettings(name string) bool {
+	tp := reflect.TypeOf(config.LintersSettings{})
+
+	for i := 0; i < tp.NumField(); i++ {
+		if strings.EqualFold(name, tp.Field(i).Name) {
+			return true
+		}
+	}
+
+	return false
+}
+
 func span(title, icon string) string {
 	return fmt.Sprintf(`<span title=%q>%s</span>`, title, icon)
 }
 
+func spanWithID(id, title, icon string) string {
+	return fmt.Sprintf(`<span id=%q title=%q>%s</span>`, id, title, icon)
+}
+
+type authorDetails struct {
+	Linters []string
+	Profile string
+	Avatar  string
+}
+
 func getThanksList() string {
-	var lines []string
-	addedAuthors := map[string]bool{}
+	addedAuthors := map[string]*authorDetails{}
+
 	for _, lc := range lintersdb.NewManager(nil, nil).GetAllSupportedLinterConfigs() {
 		if lc.OriginalURL == "" {
 			continue
 		}
 
-		const githubPrefix = "https://github.com/"
-		if !strings.HasPrefix(lc.OriginalURL, githubPrefix) {
-			continue
+		linterURL := lc.OriginalURL
+		if lc.Name() == "staticcheck" {
+			linterURL = "https://github.com/dominikh/go-tools"
 		}
 
-		githubSuffix := strings.TrimPrefix(lc.OriginalURL, githubPrefix)
-		githubAuthor := strings.Split(githubSuffix, "/")[0]
-		if addedAuthors[githubAuthor] {
+		if author := extractAuthor(linterURL, "https://github.com/"); author != "" && author != "golangci" {
+			if _, ok := addedAuthors[author]; ok {
+				addedAuthors[author].Linters = append(addedAuthors[author].Linters, lc.Name())
+			} else {
+				addedAuthors[author] = &authorDetails{
+					Linters: []string{lc.Name()},
+					Profile: fmt.Sprintf("[%[1]s](https://github.com/sponsors/%[1]s)", author),
+					Avatar:  fmt.Sprintf(`<img src="https://github.com/%[1]s.png" alt="%[1]s" style="max-width: 100%%;" width="20px;" />`, author),
+				}
+			}
+		} else if author := extractAuthor(linterURL, "https://gitlab.com/"); author != "" {
+			if _, ok := addedAuthors[author]; ok {
+				addedAuthors[author].Linters = append(addedAuthors[author].Linters, lc.Name())
+			} else {
+				addedAuthors[author] = &authorDetails{
+					Linters: []string{lc.Name()},
+					Profile: fmt.Sprintf("[%[1]s](https://gitlab.com/%[1]s)", author),
+				}
+			}
+		} else {
 			continue
 		}
-		addedAuthors[githubAuthor] = true
+	}
 
-		line := fmt.Sprintf("- [%s](https://github.com/%s)",
-			githubAuthor, githubAuthor)
-		lines = append(lines, line)
+	var authors []string
+	for author := range addedAuthors {
+		authors = append(authors, author)
+	}
+
+	sort.Slice(authors, func(i, j int) bool {
+		return strings.ToLower(authors[i]) < strings.ToLower(authors[j])
+	})
+
+	lines := []string{
+		"|Author|Linter(s)|",
+		"|---|---|",
+	}
+
+	for _, author := range authors {
+		lines = append(lines, fmt.Sprintf("|%s %s|%s|",
+			addedAuthors[author].Avatar, addedAuthors[author].Profile, strings.Join(addedAuthors[author].Linters, ", ")))
 	}
 
 	return strings.Join(lines, "\n")
 }
 
-func getLintersConfiguration(example []byte) (string, error) {
-	builder := &strings.Builder{}
+func extractAuthor(originalURL, prefix string) string {
+	if !strings.HasPrefix(originalURL, prefix) {
+		return ""
+	}
 
+	return strings.SplitN(strings.TrimPrefix(originalURL, prefix), "/", 2)[0]
+}
+
+type SettingSnippets struct {
+	ConfigurationFile string
+	LintersSettings   string
+}
+
+func extractExampleSnippets(example []byte) (*SettingSnippets, error) {
 	var data yaml.Node
 	err := yaml.Unmarshal(example, &data)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
 	root := data.Content[0]
 
+	globalNode := &yaml.Node{
+		Kind:        root.Kind,
+		Style:       root.Style,
+		Tag:         root.Tag,
+		Value:       root.Value,
+		Anchor:      root.Anchor,
+		Alias:       root.Alias,
+		HeadComment: root.HeadComment,
+		LineComment: root.LineComment,
+		FootComment: root.FootComment,
+		Line:        root.Line,
+		Column:      root.Column,
+	}
+
+	snippets := SettingSnippets{}
+
+	builder := strings.Builder{}
+
 	for j, node := range root.Content {
-		if node.Value != "linters-settings" {
+		switch node.Value {
+		case "run", "output", "linters", "linters-settings", "issues", "severity":
+		default:
 			continue
 		}
 
-		nodes := root.Content[j+1]
+		nextNode := root.Content[j+1]
 
-		for i := 0; i < len(nodes.Content); i += 2 {
-			r := &yaml.Node{
-				Kind:  nodes.Kind,
-				Style: nodes.Style,
-				Tag:   nodes.Tag,
-				Value: node.Value,
-				Content: []*yaml.Node{
-					{
-						Kind:  root.Content[j].Kind,
-						Value: root.Content[j].Value,
-					},
-					{
-						Kind:    nodes.Kind,
-						Content: []*yaml.Node{nodes.Content[i], nodes.Content[i+1]},
-					},
+		newNode := &yaml.Node{
+			Kind: nextNode.Kind,
+			Content: []*yaml.Node{
+				{
+					HeadComment: fmt.Sprintf("See the dedicated %q documentation section.", node.Value),
+					Kind:        node.Kind,
+					Style:       node.Style,
+					Tag:         node.Tag,
+					Value:       "option",
 				},
-			}
-
-			_, _ = fmt.Fprintf(builder, "### %s\n\n", nodes.Content[i].Value)
-			_, _ = fmt.Fprintln(builder, "```yaml")
-
-			const ident = 2
-			encoder := yaml.NewEncoder(builder)
-			encoder.SetIndent(ident)
-
-			err = encoder.Encode(r)
-			if err != nil {
-				return "", err
-			}
-
-			_, _ = fmt.Fprintln(builder, "```")
-			_, _ = fmt.Fprintln(builder)
+				{
+					Kind:  node.Kind,
+					Style: node.Style,
+					Tag:   node.Tag,
+					Value: "value",
+				},
+			},
 		}
+
+		globalNode.Content = append(globalNode.Content, node, newNode)
+
+		if node.Value == "linters-settings" {
+			snippets.LintersSettings, err = getLintersSettingSnippets(node, nextNode)
+			if err != nil {
+				return nil, err
+			}
+
+			_, _ = builder.WriteString(
+				fmt.Sprintf(
+					"### `%s` configuration\n\nSee the dedicated [linters-settings](/usage/linters) documentation section.\n\n",
+					node.Value,
+				),
+			)
+			continue
+		}
+
+		nodeSection := &yaml.Node{
+			Kind:    root.Kind,
+			Style:   root.Style,
+			Tag:     root.Tag,
+			Value:   root.Value,
+			Content: []*yaml.Node{node, nextNode},
+		}
+
+		snippet, errSnip := marshallSnippet(nodeSection)
+		if errSnip != nil {
+			return nil, errSnip
+		}
+
+		_, _ = builder.WriteString(fmt.Sprintf("### `%s` configuration\n\n%s", node.Value, snippet))
 	}
+
+	overview, err := marshallSnippet(globalNode)
+	if err != nil {
+		return nil, err
+	}
+
+	snippets.ConfigurationFile = overview + builder.String()
+
+	return &snippets, nil
+}
+
+func getLintersSettingSnippets(node, nextNode *yaml.Node) (string, error) {
+	builder := &strings.Builder{}
+
+	for i := 0; i < len(nextNode.Content); i += 2 {
+		r := &yaml.Node{
+			Kind:  nextNode.Kind,
+			Style: nextNode.Style,
+			Tag:   nextNode.Tag,
+			Value: node.Value,
+			Content: []*yaml.Node{
+				{
+					Kind:  node.Kind,
+					Value: node.Value,
+				},
+				{
+					Kind:    nextNode.Kind,
+					Content: []*yaml.Node{nextNode.Content[i], nextNode.Content[i+1]},
+				},
+			},
+		}
+
+		_, _ = fmt.Fprintf(builder, "### %s\n\n", nextNode.Content[i].Value)
+		_, _ = fmt.Fprintln(builder, "```yaml")
+
+		encoder := yaml.NewEncoder(builder)
+		encoder.SetIndent(2)
+
+		err := encoder.Encode(r)
+		if err != nil {
+			return "", err
+		}
+
+		_, _ = fmt.Fprintln(builder, "```")
+		_, _ = fmt.Fprintln(builder)
+		_, _ = fmt.Fprintf(builder, "[%s](#%s)\n\n", span("Back to the top", "🔼"), listItemPrefix+nextNode.Content[i].Value)
+		_, _ = fmt.Fprintln(builder)
+	}
+
+	return builder.String(), nil
+}
+
+func marshallSnippet(node *yaml.Node) (string, error) {
+	builder := &strings.Builder{}
+
+	if node.Value != "" {
+		_, _ = fmt.Fprintf(builder, "### %s\n\n", node.Value)
+	}
+	_, _ = fmt.Fprintln(builder, "```yaml")
+
+	encoder := yaml.NewEncoder(builder)
+	encoder.SetIndent(2)
+
+	err := encoder.Encode(node)
+	if err != nil {
+		return "", err
+	}
+
+	_, _ = fmt.Fprintln(builder, "```")
+	_, _ = fmt.Fprintln(builder)
 
 	return builder.String(), nil
 }

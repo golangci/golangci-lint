@@ -5,8 +5,6 @@ import (
 	"os"
 	"sync"
 
-	"github.com/pkg/errors"
-
 	"github.com/golangci/golangci-lint/pkg/logutils"
 )
 
@@ -26,7 +24,7 @@ func (fc *FileCache) GetFileBytes(filePath string) ([]byte, error) {
 
 	fileBytes, err := os.ReadFile(filePath)
 	if err != nil {
-		return nil, errors.Wrapf(err, "can't read file %s", filePath)
+		return nil, fmt.Errorf("can't read file %s: %w", filePath, err)
 	}
 
 	fc.files.Store(filePath, fileBytes)
@@ -56,7 +54,7 @@ func PrettifyBytesCount(n int64) string {
 func (fc *FileCache) PrintStats(log logutils.Log) {
 	var size int64
 	var mapLen int
-	fc.files.Range(func(_, fileBytes interface{}) bool {
+	fc.files.Range(func(_, fileBytes any) bool {
 		mapLen++
 		size += int64(len(fileBytes.([]byte)))
 

@@ -1,4 +1,4 @@
-//args: -Escopelint --internal-cmd-test
+//golangcitest:args -Escopelint --internal-cmd-test
 package testdata
 
 import "fmt"
@@ -8,7 +8,7 @@ func ScopelintTest() {
 	var funcs []func()
 	for _, val := range values {
 		funcs = append(funcs, func() {
-			fmt.Println(val) // ERROR "Using the variable on range scope `val` in function literal"
+			fmt.Println(val) // want "Using the variable on range scope `val` in function literal"
 		})
 	}
 	for _, f := range funcs {

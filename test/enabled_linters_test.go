@@ -10,6 +10,130 @@ import (
 	"github.com/golangci/golangci-lint/test/testshared"
 )
 
+func TestEnabledLinters(t *testing.T) {
+	// require to display the message "Active x linters: [x,y]"
+	t.Setenv(lintersdb.EnvTestRun, "1")
+
+	cases := []struct {
+		name           string
+		cfg            string
+		enabledLinters []string
+		args           []string
+		noImplicitFast bool
+	}{
+		{
+			name: "disable govet in config",
+			cfg: `
+			linters:
+				disable:
+					- govet
+			`,
+			enabledLinters: getEnabledByDefaultFastLintersExcept("govet"),
+		},
+		{
+			name: "enable revive in config",
+			cfg: `
+			linters:
+				enable:
+					- revive
+			`,
+			enabledLinters: getEnabledByDefaultFastLintersWith("revive"),
+		},
+		{
+			name:           "disable govet in cmd",
+			args:           []string{"-Dgovet"},
+			enabledLinters: getEnabledByDefaultFastLintersExcept("govet"),
+		},
+		{
+			name: "enable gofmt in cmd and enable revive in config",
+			args: []string{"-Egofmt"},
+			cfg: `
+			linters:
+				enable:
+					- revive
+			`,
+			enabledLinters: getEnabledByDefaultFastLintersWith("revive", "gofmt"),
+		},
+		{
+			name: "fast option in config",
+			cfg: `
+			linters:
+				fast: true
+			`,
+			enabledLinters: getEnabledByDefaultFastLintersWith(),
+			noImplicitFast: true,
+		},
+		{
+			name: "explicitly unset fast option in config",
+			cfg: `
+			linters:
+				fast: false
+			`,
+			enabledLinters: getEnabledByDefaultLinters(),
+			noImplicitFast: true,
+		},
+		{
+			name:           "set fast option in command-line",
+			args:           []string{"--fast"},
+			enabledLinters: getEnabledByDefaultFastLintersWith(),
+			noImplicitFast: true,
+		},
+		{
+			name: "fast option in command-line has higher priority to enable",
+			cfg: `
+			linters:
+				fast: false
+			`,
+			args:           []string{"--fast"},
+			enabledLinters: getEnabledByDefaultFastLintersWith(),
+			noImplicitFast: true,
+		},
+		{
+			name: "fast option in command-line has higher priority to disable",
+			cfg: `
+			linters:
+				fast: true
+			`,
+			args:           []string{"--fast=false"},
+			enabledLinters: getEnabledByDefaultLinters(),
+			noImplicitFast: true,
+		},
+		{
+			name:           "fast option combined with enable and enable-all",
+			args:           []string{"--enable-all", "--fast", "--enable=unused"},
+			enabledLinters: getAllFastLintersWith("unused"),
+			noImplicitFast: true,
+		},
+	}
+
+	testshared.InstallGolangciLint(t)
+
+	for _, c := range cases {
+		c := c
+		t.Run(c.name, func(t *testing.T) {
+			t.Parallel()
+
+			args := []string{"--verbose"}
+			if !c.noImplicitFast {
+				args = append(args, "--fast")
+			}
+
+			r := testshared.NewRunnerBuilder(t).
+				WithCommand("linters").
+				WithArgs(args...).
+				WithArgs(c.args...).
+				WithConfig(c.cfg).
+				Runner().
+				Run()
+
+			sort.StringSlice(c.enabledLinters).Sort()
+
+			r.ExpectOutputContains(fmt.Sprintf("Active %d linters: [%s]",
+				len(c.enabledLinters), strings.Join(c.enabledLinters, " ")))
+		})
+	}
+}
+
 func inSlice(s []string, v string) bool {
 	for _, sv := range s {
 		if sv == v {
@@ -23,7 +147,7 @@ func inSlice(s []string, v string) bool {
 func getEnabledByDefaultFastLintersExcept(except ...string) []string {
 	m := lintersdb.NewManager(nil, nil)
 	ebdl := m.GetAllEnabledByDefaultLinters()
-	ret := []string{}
+	var ret []string
 	for _, lc := range ebdl {
 		if lc.IsSlowLinter() {
 			continue
@@ -52,7 +176,7 @@ func getAllFastLintersWith(with ...string) []string {
 
 func getEnabledByDefaultLinters() []string {
 	ebdl := lintersdb.NewManager(nil, nil).GetAllEnabledByDefaultLinters()
-	ret := []string{}
+	var ret []string
 	for _, lc := range ebdl {
 		ret = append(ret, lc.Name())
 	}
@@ -72,122 +196,4 @@ func getEnabledByDefaultFastLintersWith(with ...string) []string {
 	}
 
 	return ret
-}
-
-//nolint:funlen
-func TestEnabledLinters(t *testing.T) {
-	type tc struct {
-		name           string
-		cfg            string
-		el             []string
-		args           string
-		noImplicitFast bool
-	}
-
-	cases := []tc{
-		{
-			name: "disable govet in config",
-			cfg: `
-			linters:
-				disable:
-					- govet
-			`,
-			el: getEnabledByDefaultFastLintersExcept("govet"),
-		},
-		{
-			name: "enable golint in config",
-			cfg: `
-			linters:
-				enable:
-					- golint
-			`,
-			el: getEnabledByDefaultFastLintersWith("golint"),
-		},
-		{
-			name: "disable govet in cmd",
-			args: "-Dgovet",
-			el:   getEnabledByDefaultFastLintersExcept("govet"),
-		},
-		{
-			name: "enable gofmt in cmd and enable golint in config",
-			args: "-Egofmt",
-			cfg: `
-			linters:
-				enable:
-					- golint
-			`,
-			el: getEnabledByDefaultFastLintersWith("golint", "gofmt"),
-		},
-		{
-			name: "fast option in config",
-			cfg: `
-			linters:
-				fast: true
-			`,
-			el:             getEnabledByDefaultFastLintersWith(),
-			noImplicitFast: true,
-		},
-		{
-			name: "explicitly unset fast option in config",
-			cfg: `
-			linters:
-				fast: false
-			`,
-			el:             getEnabledByDefaultLinters(),
-			noImplicitFast: true,
-		},
-		{
-			name:           "set fast option in command-line",
-			args:           "--fast",
-			el:             getEnabledByDefaultFastLintersWith(),
-			noImplicitFast: true,
-		},
-		{
-			name: "fast option in command-line has higher priority to enable",
-			cfg: `
-			linters:
-				fast: false
-			`,
-			args:           "--fast",
-			el:             getEnabledByDefaultFastLintersWith(),
-			noImplicitFast: true,
-		},
-		{
-			name: "fast option in command-line has higher priority to disable",
-			cfg: `
-			linters:
-				fast: true
-			`,
-			args:           "--fast=false",
-			el:             getEnabledByDefaultLinters(),
-			noImplicitFast: true,
-		},
-		{
-			name:           "fast option combined with enable and enable-all",
-			args:           "--enable-all --fast --enable=unused",
-			el:             getAllFastLintersWith("unused"),
-			noImplicitFast: true,
-		},
-	}
-
-	runner := testshared.NewLintRunner(t)
-	for _, c := range cases {
-		c := c
-		t.Run(c.name, func(t *testing.T) {
-			t.Parallel()
-
-			runArgs := []string{"--verbose"}
-			if !c.noImplicitFast {
-				runArgs = append(runArgs, "--fast")
-			}
-			if c.args != "" {
-				runArgs = append(runArgs, strings.Split(c.args, " ")...)
-			}
-			r := runner.RunCommandWithYamlConfig(c.cfg, "linters", runArgs...)
-			sort.StringSlice(c.el).Sort()
-
-			expectedLine := fmt.Sprintf("Active %d linters: [%s]", len(c.el), strings.Join(c.el, " "))
-			r.ExpectOutputContains(expectedLine)
-		})
-	}
 }

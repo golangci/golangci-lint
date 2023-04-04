@@ -1,10 +1,10 @@
-//args: -Egocyclo
-//config: linters-settings.gocyclo.min-complexity=20
+//golangcitest:args -Egocyclo
+//golangcitest:config_path testdata/configs/gocyclo.yml
 package testdata
 
 import "net/http"
 
-func GocycloBigComplexity(s string) { // ERROR "cyclomatic complexity .* of func .* is high .*"
+func GocycloBigComplexity(s string) { // want "cyclomatic complexity .* of func .* is high .*"
 	if s == http.MethodGet || s == "2" || s == "3" || s == "4" || s == "5" || s == "6" || s == "7" {
 		return
 	}

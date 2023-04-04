@@ -1,0 +1,3 @@
+linters-settings:
+  gofmt:
+    simplify: false

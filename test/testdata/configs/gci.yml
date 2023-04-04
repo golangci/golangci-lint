@@ -1,0 +1,6 @@
+linters-settings:
+  gci:
+    sections:
+      - standard
+      - prefix(github.com/golangci/golangci-lint)
+      - default

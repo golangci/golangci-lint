@@ -11,21 +11,26 @@ import (
 func NewExhaustive(settings *config.ExhaustiveSettings) *goanalysis.Linter {
 	a := exhaustive.Analyzer
 
-	var cfg map[string]map[string]interface{}
+	var cfg map[string]map[string]any
 	if settings != nil {
-		cfg = map[string]map[string]interface{}{
+		cfg = map[string]map[string]any{
 			a.Name: {
+				exhaustive.CheckFlag:                      settings.Check,
 				exhaustive.CheckGeneratedFlag:             settings.CheckGenerated,
 				exhaustive.DefaultSignifiesExhaustiveFlag: settings.DefaultSignifiesExhaustive,
 				exhaustive.IgnoreEnumMembersFlag:          settings.IgnoreEnumMembers,
-				exhaustive.PackageScopeOnly:               settings.PackageScopeOnly,
-
-				exhaustive.IgnorePatternFlag:    settings.IgnorePattern,
-				exhaustive.CheckingStrategyFlag: settings.CheckingStrategy,
+				exhaustive.IgnoreEnumTypesFlag:            settings.IgnoreEnumTypes,
+				exhaustive.PackageScopeOnlyFlag:           settings.PackageScopeOnly,
+				exhaustive.ExplicitExhaustiveMapFlag:      settings.ExplicitExhaustiveMap,
+				exhaustive.ExplicitExhaustiveSwitchFlag:   settings.ExplicitExhaustiveSwitch,
 			},
 		}
 	}
 
-	return goanalysis.NewLinter(a.Name, a.Doc, []*analysis.Analyzer{a}, cfg).
-		WithLoadMode(goanalysis.LoadModeTypesInfo)
+	return goanalysis.NewLinter(
+		a.Name,
+		a.Doc,
+		[]*analysis.Analyzer{a},
+		cfg,
+	).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }

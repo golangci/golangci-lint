@@ -1,4 +1,5 @@
-//args: -Egofmt,goimports
+//golangcitest:args -Egofmt,goimports
+//golangcitest:expected_exitcode 0
 package p
 
 import (

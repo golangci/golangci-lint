@@ -71,7 +71,7 @@ func (s *Stopwatch) sprintTopStages(n int) string {
 
 	stageDurations := s.stageDurationsSorted()
 
-	stagesStrings := []string{}
+	var stagesStrings []string
 	for i := 0; i < len(stageDurations) && i < n; i++ {
 		s := stageDurations[i]
 		stagesStrings = append(stagesStrings, fmt.Sprintf("%s: %s", s.name, s.d))

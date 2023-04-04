@@ -1,6 +1,7 @@
 package goanalysis
 
 import (
+	"errors"
 	"fmt"
 	"go/ast"
 	"go/parser"
@@ -11,7 +12,6 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/pkg/errors"
 	"golang.org/x/tools/go/gcexportdata"
 	"golang.org/x/tools/go/packages"
 
@@ -59,7 +59,7 @@ func (lp *loadingPackage) analyze(loadMode LoadMode, loadSem chan struct{}) {
 	defer lp.decUse(loadMode < LoadModeWholeProgram)
 
 	if err := lp.loadWithFacts(loadMode); err != nil {
-		werr := errors.Wrapf(err, "failed to load package %s", lp.pkg.Name)
+		werr := fmt.Errorf("failed to load package %s: %w", lp.pkg.Name, err)
 		// Don't need to write error to errCh, it will be extracted and reported on another layer.
 		// Unblock depending on actions and propagate error.
 		for _, act := range lp.actions {
@@ -123,6 +123,7 @@ func (lp *loadingPackage) loadFromSource(loadMode LoadMode) error {
 
 	pkg.TypesInfo = &types.Info{
 		Types:      make(map[ast.Expr]types.TypeAndValue),
+		Instances:  make(map[*ast.Ident]types.Instance),
 		Defs:       make(map[*ast.Ident]types.Object),
 		Uses:       make(map[*ast.Ident]types.Object),
 		Implicits:  make(map[ast.Node]types.Object),
@@ -289,7 +290,7 @@ func (lp *loadingPackage) loadImportedPackageWithFacts(loadMode LoadMode) error 
 				Msg:  fmt.Sprintf("could not load export data: %s", err),
 				Kind: packages.ParseError,
 			})
-			return errors.Wrap(err, "could not load export data")
+			return fmt.Errorf("could not load export data: %w", err)
 		}
 	}
 
@@ -433,6 +434,7 @@ func (lp *loadingPackage) convertError(err error) []packages.Error {
 		// If you see this error message, please file a bug.
 		lp.log.Warnf("Internal error: error %q (%T) without position", err, err)
 	}
+
 	return errs
 }
 
@@ -444,7 +446,7 @@ type importerFunc func(path string) (*types.Package, error)
 
 func (f importerFunc) Import(path string) (*types.Package, error) { return f(path) }
 
-func sizeOfValueTreeBytes(v interface{}) int {
+func sizeOfValueTreeBytes(v any) int {
 	return sizeOfReflectValueTreeBytes(reflect.ValueOf(v), map[uintptr]struct{}{})
 }
 

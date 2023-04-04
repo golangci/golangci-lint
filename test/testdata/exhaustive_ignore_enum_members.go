@@ -1,5 +1,5 @@
-//args: -Eexhaustive
-//config_path: testdata/configs/exhaustive_ignore_enum_members.yml
+//golangcitest:args -Eexhaustive
+//golangcitest:config_path testdata/configs/exhaustive_ignore_enum_members.yml
 package testdata
 
 type Direction int
@@ -15,7 +15,7 @@ const (
 // using the ignore-enum-members setting.
 
 func processDirectionIgnoreEnumMembers(d Direction) {
-	switch d { // ERROR "missing cases in switch of type Direction: East"
+	switch d { // want "missing cases in switch of type testdata.Direction: testdata.East"
 	case North, South:
 	}
 }

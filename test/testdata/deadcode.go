@@ -1,14 +1,14 @@
-//args: -Edeadcode
+//golangcitest:args -Edeadcode --internal-cmd-test
 package testdata
 
 var y int
 
-var unused int // ERROR "`unused` is unused"
+var unused int // want "`unused` is unused"
 
 func f(x int) {
 }
 
-func g(x int) { // ERROR "`g` is unused"
+func g(x int) { // want "`g` is unused"
 }
 
 func H(x int) {

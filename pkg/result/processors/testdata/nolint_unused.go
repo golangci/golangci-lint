@@ -1,5 +1,5 @@
 package testdata
 
-var nolintVarcheck int // nolint:varcheck
+var nolintVarcheck int //nolint:varcheck
 
-var nolintVarcheckUnusedOK int // nolint:varcheck,nolintlint
+var nolintVarcheckUnusedOK int //nolint:varcheck,nolintlint

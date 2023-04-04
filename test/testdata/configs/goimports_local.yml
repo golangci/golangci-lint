@@ -1,0 +1,3 @@
+linters-settings:
+  goimports:
+    local-prefixes: github.com/golangci/golangci-lint

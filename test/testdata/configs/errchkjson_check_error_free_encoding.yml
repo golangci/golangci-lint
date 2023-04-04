@@ -1,0 +1,5 @@
+issues:
+  max-issues-per-linter: 100
+linters-settings:
+  errchkjson:
+    check-error-free-encoding: true

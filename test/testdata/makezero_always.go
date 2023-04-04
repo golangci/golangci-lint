@@ -1,11 +1,11 @@
-//args: -Emakezero
-//config: linters-settings.makezero.always=true
+//golangcitest:args -Emakezero
+//golangcitest:config_path testdata/configs/makezero_always.yml
 package testdata
 
 import "math"
 
 func MakezeroAlways() []int {
-	x := make([]int, math.MaxInt8) // ERROR "slice `x` does not have non-zero initial length"
+	x := make([]int, math.MaxInt8) // want "slice `x` does not have non-zero initial length"
 	return x
 }
 

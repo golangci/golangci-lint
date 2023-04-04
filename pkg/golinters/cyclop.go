@@ -13,9 +13,9 @@ const cyclopName = "cyclop"
 func NewCyclop(settings *config.Cyclop) *goanalysis.Linter {
 	a := analyzer.NewAnalyzer()
 
-	var cfg map[string]map[string]interface{}
+	var cfg map[string]map[string]any
 	if settings != nil {
-		d := map[string]interface{}{
+		d := map[string]any{
 			"skipTests": settings.SkipTests,
 		}
 
@@ -27,7 +27,7 @@ func NewCyclop(settings *config.Cyclop) *goanalysis.Linter {
 			d["packageAverage"] = settings.PackageAverage
 		}
 
-		cfg = map[string]map[string]interface{}{a.Name: d}
+		cfg = map[string]map[string]any{a.Name: d}
 	}
 
 	return goanalysis.NewLinter(

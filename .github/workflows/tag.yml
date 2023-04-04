@@ -1,25 +1,29 @@
----
 name: "Release a tag"
 on:
   push:
     tags:
       - v*
+
 jobs:
   release:
     runs-on: ubuntu-latest
     env:
       GITHUB_TOKEN: ${{ secrets.GOLANGCI_LINT_TOKEN }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Install Go
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@v4
         with:
-          go-version: 1.17
+          # https://github.com/actions/setup-go#supported-version-syntax
+          # ex:
+          # - 1.18beta1 -> 1.18.0-beta.1
+          # - 1.18rc1 -> 1.18.0-rc.1
+          go-version: '1.20'
       - name: Unshallow
         run: git fetch --prune --unshallow
 
       - name: Create release
-        uses: goreleaser/goreleaser-action@v2
+        uses: goreleaser/goreleaser-action@v4
         with:
           version: latest
           args: release --rm-dist
@@ -33,14 +37,18 @@ jobs:
       matrix:
         target:
           - Dockerfile: build/Dockerfile
-          - Dockerfile: build/Dockerfile.alpine
+          - Dockerfile: build/alpine.Dockerfile
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Install Go
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@v4
         with:
-          go-version: 1.17
+          # https://github.com/actions/setup-go#supported-version-syntax
+          # ex:
+          # - 1.18beta1 -> 1.18.0-beta.1
+          # - 1.18rc1 -> 1.18.0-rc.1
+          go-version: '1.20'
 
       - name: Unshallow
         run: git fetch --prune --unshallow
@@ -52,31 +60,31 @@ jobs:
           MAJOR=${TAG%.*}
           SHORT_COMMIT=${GITHUB_SHA::8}
           DATE=$(date '+%Y-%m-%dT%H:%M:%SZ')
-          echo ::set-output name=tag_name::${TAG}
-          echo ::set-output name=major_tag::${MAJOR}
-          echo ::set-output name=short_commit::${SHORT_COMMIT}
-          echo ::set-output name=date::${DATE}
+          echo tag_name=${TAG} >> $GITHUB_OUTPUT
+          echo major_tag=${MAJOR} >> $GITHUB_OUTPUT
+          echo short_commit=${SHORT_COMMIT} >> $GITHUB_OUTPUT
+          echo date=${DATE} >> $GITHUB_OUTPUT
           if [[ ${{ matrix.target.Dockerfile }} == *"alpine"* ]]; then
-            echo ::set-output name=full_tag_name::${TAG}-alpine
-            echo ::set-output name=full_major_tag::${MAJOR}-alpine
-            echo ::set-output name=latest_tag::latest-alpine
+            echo full_tag_name=${TAG}-alpine >> $GITHUB_OUTPUT
+            echo full_major_tag=${MAJOR}-alpine >> $GITHUB_OUTPUT
+            echo latest_tag=latest-alpine >> $GITHUB_OUTPUT
           else
-            echo ::set-output name=full_tag_name::${TAG}
-            echo ::set-output name=full_major_tag::${MAJOR}
-            echo ::set-output name=latest_tag::latest
+            echo full_tag_name=${TAG} >> $GITHUB_OUTPUT
+            echo full_major_tag=${MAJOR} >> $GITHUB_OUTPUT
+            echo latest_tag=latest >> $GITHUB_OUTPUT
           fi
 
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v1
+        uses: docker/setup-qemu-action@v2
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@v2
 
       - name: Login do docker.io
         run: docker login -u golangci -p ${{ secrets.GOLANGCI_LINT_DOCKER_TOKEN }}
 
       - name: Build and publish ${{ matrix.target.Dockerfile }}
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v4
         with:
           context: .
           file: ${{ matrix.target.Dockerfile }}

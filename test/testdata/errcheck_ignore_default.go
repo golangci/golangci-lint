@@ -1,5 +1,5 @@
-//args: -Eerrcheck
-//config: linters-settings.errcheck.check-blank=true
+//golangcitest:args -Eerrcheck
+//golangcitest:config_path testdata/configs/errcheck_ignore_default.yml
 package testdata
 
 import (
@@ -20,5 +20,5 @@ func TestErrcheckIgnoreFmtByDefault(s string) int {
 }
 
 func TestErrcheckNoIgnoreOs() {
-	_, _ = os.Open("f.txt") // ERROR "Error return value of `os.Open` is not checked"
+	_, _ = os.Open("f.txt") // want "Error return value of `os.Open` is not checked"
 }

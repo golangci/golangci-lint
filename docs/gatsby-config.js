@@ -21,8 +21,8 @@ module.exports = {
     footer: `© ${new Date().getFullYear()}`,
   },
   plugins: [
+    `gatsby-plugin-netlify`,
     `gatsby-alias-imports`,
-
     `gatsby-transformer-sharp`,
     `gatsby-plugin-sharp`,
     {
@@ -52,7 +52,6 @@ module.exports = {
         gatsbyRemarkPlugins: [
           `gatsby-remark-autolink-headers`,
           `gatsby-remark-external-links`,
-          `gatsby-remark-embedder`,
           {
             resolve: `gatsby-remark-images`,
             options: {
@@ -108,8 +107,6 @@ module.exports = {
       },
     },
     `gatsby-plugin-netlify`,
-    `gatsby-plugin-netlify-cache`,
-
     `gatsby-plugin-catch-links`,
     `gatsby-plugin-emotion`,
     `gatsby-plugin-react-helmet`,

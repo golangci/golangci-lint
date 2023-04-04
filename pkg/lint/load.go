@@ -11,7 +11,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/pkg/errors"
 	"golang.org/x/tools/go/packages"
 
 	"github.com/golangci/golangci-lint/internal/pkgcache"
@@ -41,7 +40,7 @@ func NewContextLoader(cfg *config.Config, log logutils.Log, goenv *goutil.Env,
 	return &ContextLoader{
 		cfg:         cfg,
 		log:         log,
-		debugf:      logutils.Debug("loader"),
+		debugf:      logutils.Debug(logutils.DebugKeyLoader),
 		goenv:       goenv,
 		pkgTestIDRe: regexp.MustCompile(`^(.*) \[(.*)\.test\]`),
 		lineCache:   lineCache,
@@ -59,7 +58,7 @@ func (cl *ContextLoader) prepareBuildContext() {
 		return
 	}
 
-	os.Setenv("GOROOT", goroot)
+	os.Setenv(string(goutil.EnvGoRoot), goroot)
 	build.Default.GOROOT = goroot
 	build.Default.BuildTags = cl.cfg.Run.BuildTags
 }
@@ -126,7 +125,7 @@ func stringifyLoadMode(mode packages.LoadMode) string {
 	m := map[packages.LoadMode]string{
 		packages.NeedCompiledGoFiles: "compiled_files",
 		packages.NeedDeps:            "deps",
-		packages.NeedExportsFile:     "exports_file",
+		packages.NeedExportFile:      "exports_file",
 		packages.NeedFiles:           "files",
 		packages.NeedImports:         "imports",
 		packages.NeedName:            "name",
@@ -160,15 +159,27 @@ func (cl *ContextLoader) debugPrintLoadedPackages(pkgs []*packages.Package) {
 
 func (cl *ContextLoader) parseLoadedPackagesErrors(pkgs []*packages.Package) error {
 	for _, pkg := range pkgs {
+		var errs []packages.Error
 		for _, err := range pkg.Errors {
+			// quick fix: skip error related to `go list` invocation by packages.Load()
+			// The behavior has been changed between go1.19 and go1.20, the error is now inside the JSON content.
+			// https://github.com/golangci/golangci-lint/pull/3414#issuecomment-1364756303
+			if strings.Contains(err.Msg, "# command-line-arguments") {
+				continue
+			}
+
+			errs = append(errs, err)
+
 			if strings.Contains(err.Msg, "no Go files") {
-				return errors.Wrapf(exitcodes.ErrNoGoFiles, "package %s", pkg.PkgPath)
+				return fmt.Errorf("package %s: %w", pkg.PkgPath, exitcodes.ErrNoGoFiles)
 			}
 			if strings.Contains(err.Msg, "cannot find package") {
 				// when analyzing not existing directory
-				return errors.Wrap(exitcodes.ErrFailure, err.Msg)
+				return fmt.Errorf("%v: %w", err.Msg, exitcodes.ErrFailure)
 			}
 		}
+
+		pkg.Errors = errs
 	}
 
 	return nil
@@ -183,7 +194,7 @@ func (cl *ContextLoader) loadPackages(ctx context.Context, loadMode packages.Loa
 
 	buildFlags, err := cl.makeBuildFlags()
 	if err != nil {
-		return nil, errors.Wrap(err, "failed to make build flags for go list")
+		return nil, fmt.Errorf("failed to make build flags for go list: %w", err)
 	}
 
 	conf := &packages.Config{
@@ -192,21 +203,21 @@ func (cl *ContextLoader) loadPackages(ctx context.Context, loadMode packages.Loa
 		Context:    ctx,
 		BuildFlags: buildFlags,
 		Logf:       cl.debugf,
-		//TODO: use fset, parsefile, overlay
+		// TODO: use fset, parsefile, overlay
 	}
 
 	args := cl.buildArgs()
 	cl.debugf("Built loader args are %s", args)
 	pkgs, err := packages.Load(conf, args...)
 	if err != nil {
-		return nil, errors.Wrap(err, "failed to load with go/packages")
+		return nil, fmt.Errorf("failed to load with go/packages: %w", err)
 	}
 
 	// Currently, go/packages doesn't guarantee that error will be returned
 	// if context was canceled. See
 	// https://github.com/golang/tools/commit/c5cec6710e927457c3c29d6c156415e8539a5111#r39261855
 	if ctx.Err() != nil {
-		return nil, errors.Wrap(ctx.Err(), "timed out to load packages")
+		return nil, fmt.Errorf("timed out to load packages: %w", ctx.Err())
 	}
 
 	if loadMode&packages.NeedSyntax == 0 {
@@ -287,7 +298,7 @@ func (cl *ContextLoader) Load(ctx context.Context, linters []*linter.Config) (*l
 	loadMode := cl.findLoadMode(linters)
 	pkgs, err := cl.loadPackages(ctx, loadMode)
 	if err != nil {
-		return nil, errors.Wrap(err, "failed to load packages")
+		return nil, fmt.Errorf("failed to load packages: %w", err)
 	}
 
 	deduplicatedPkgs := cl.filterDuplicatePackages(pkgs)

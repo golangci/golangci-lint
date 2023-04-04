@@ -11,8 +11,9 @@ import (
 func NewTagliatelle(settings *config.TagliatelleSettings) *goanalysis.Linter {
 	cfg := tagliatelle.Config{
 		Rules: map[string]string{
-			"json": "camel",
-			"yaml": "camel",
+			"json":   "camel",
+			"yaml":   "camel",
+			"header": "header",
 		},
 	}
 
@@ -25,6 +26,10 @@ func NewTagliatelle(settings *config.TagliatelleSettings) *goanalysis.Linter {
 
 	a := tagliatelle.New(cfg)
 
-	return goanalysis.NewLinter(a.Name, a.Doc, []*analysis.Analyzer{a}, nil).
-		WithLoadMode(goanalysis.LoadModeSyntax)
+	return goanalysis.NewLinter(
+		a.Name,
+		a.Doc,
+		[]*analysis.Analyzer{a},
+		nil,
+	).WithLoadMode(goanalysis.LoadModeSyntax)
 }

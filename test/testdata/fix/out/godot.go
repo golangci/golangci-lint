@@ -1,4 +1,5 @@
-//args: -Egodot
+//golangcitest:args -Egodot
+//golangcitest:expected_exitcode 0
 package p
 
 /*

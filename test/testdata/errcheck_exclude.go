@@ -1,6 +1,5 @@
-//args: -Eerrcheck
-//config: linters-settings.errcheck.check-blank=true
-//config: linters-settings.errcheck.exclude=testdata/errcheck/exclude.txt
+//golangcitest:args -Eerrcheck
+//golangcitest:config_path testdata/configs/errcheck_exclude.yml
 package testdata
 
 import (
@@ -13,6 +12,6 @@ func TestErrcheckExclude() []byte {
 }
 
 func TestErrcheckNoExclude() []byte {
-	ret, _ := ioutil.ReadAll(nil) // ERROR "Error return value of `ioutil.ReadAll` is not checked"
+	ret, _ := ioutil.ReadAll(nil) // want "Error return value of `ioutil.ReadAll` is not checked"
 	return ret
 }

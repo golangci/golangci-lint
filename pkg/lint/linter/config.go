@@ -1,7 +1,10 @@
 package linter
 
 import (
+	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/packages"
+
+	"github.com/golangci/golangci-lint/pkg/config"
 )
 
 const (
@@ -63,7 +66,7 @@ func (lc *Config) WithLoadFiles() *Config {
 
 func (lc *Config) WithLoadForGoAnalysis() *Config {
 	lc = lc.WithLoadFiles()
-	lc.LoadMode |= packages.NeedImports | packages.NeedDeps | packages.NeedExportsFile | packages.NeedTypesSizes
+	lc.LoadMode |= packages.NeedImports | packages.NeedDeps | packages.NeedExportFile | packages.NeedTypesSizes
 	lc.IsSlow = true
 	return lc
 }
@@ -117,6 +120,23 @@ func (lc *Config) AllNames() []string {
 
 func (lc *Config) Name() string {
 	return lc.Linter.Name()
+}
+
+func (lc *Config) WithNoopFallback(cfg *config.Config) *Config {
+	if cfg != nil && config.IsGreaterThanOrEqualGo118(cfg.Run.Go) {
+		lc.Linter = &Noop{
+			name: lc.Linter.Name(),
+			desc: lc.Linter.Desc(),
+			run: func(pass *analysis.Pass) (any, error) {
+				return nil, nil
+			},
+		}
+
+		lc.LoadMode = 0
+		return lc.WithLoadFiles()
+	}
+
+	return lc
 }
 
 func NewConfig(linter Linter) *Config {

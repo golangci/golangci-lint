@@ -1,14 +1,14 @@
 package exitcodes
 
 const (
-	Success              = 0
-	IssuesFound          = 1
-	WarningInTest        = 2
-	Failure              = 3
-	Timeout              = 4
-	NoGoFiles            = 5
-	NoConfigFileDetected = 6
-	ErrorWasLogged       = 7
+	Success = iota
+	IssuesFound
+	WarningInTest
+	Failure
+	Timeout
+	NoGoFiles
+	NoConfigFileDetected
+	ErrorWasLogged
 )
 
 type ExitError struct {
@@ -30,5 +30,3 @@ var (
 		Code:    Failure,
 	}
 )
-
-// 1

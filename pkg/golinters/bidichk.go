@@ -13,7 +13,7 @@ import (
 func NewBiDiChkFuncName(cfg *config.BiDiChkSettings) *goanalysis.Linter {
 	a := bidichk.NewAnalyzer()
 
-	cfgMap := map[string]map[string]interface{}{}
+	cfgMap := map[string]map[string]any{}
 	if cfg != nil {
 		var opts []string
 
@@ -45,7 +45,7 @@ func NewBiDiChkFuncName(cfg *config.BiDiChkSettings) *goanalysis.Linter {
 			opts = append(opts, "POP-DIRECTIONAL-ISOLATE")
 		}
 
-		cfgMap[a.Name] = map[string]interface{}{
+		cfgMap[a.Name] = map[string]any{
 			"disallowed-runes": strings.Join(opts, ","),
 		}
 	}

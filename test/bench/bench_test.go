@@ -2,6 +2,7 @@ package bench
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"go/build"
 	"log"
@@ -19,18 +20,18 @@ import (
 	"github.com/golangci/golangci-lint/test/testshared"
 )
 
-func chdir(b *testing.B, dir string) {
+func chdir(b testing.TB, dir string) {
 	if err := os.Chdir(dir); err != nil {
 		b.Fatalf("can't chdir to %s: %s", dir, err)
 	}
 }
 
-func prepareGoSource(b *testing.B) {
+func prepareGoSource(b testing.TB) {
 	chdir(b, filepath.Join(build.Default.GOROOT, "src"))
 }
 
-func prepareGithubProject(owner, name string) func(*testing.B) {
-	return func(b *testing.B) {
+func prepareGithubProject(owner, name string) func(testing.TB) {
+	return func(b testing.TB) {
 		dir := filepath.Join(build.Default.GOPATH, "src", "github.com", owner, name)
 		_, err := os.Stat(dir)
 		if os.IsNotExist(err) {
@@ -46,12 +47,7 @@ func prepareGithubProject(owner, name string) func(*testing.B) {
 
 func getBenchLintersArgsNoMegacheck() []string {
 	return []string{
-		"--enable=deadcode",
 		"--enable=gocyclo",
-		"--enable=golint",
-		"--enable=varcheck",
-		"--enable=structcheck",
-		"--enable=maligned",
 		"--enable=errcheck",
 		"--enable=dupl",
 		"--enable=ineffassign",
@@ -71,7 +67,7 @@ func printCommand(cmd string, args ...string) {
 	if os.Getenv("PRINT_CMD") != "1" {
 		return
 	}
-	quotedArgs := []string{}
+	var quotedArgs []string
 	for _, a := range args {
 		quotedArgs = append(quotedArgs, strconv.Quote(a))
 	}
@@ -83,7 +79,7 @@ func getGolangciLintCommonArgs() []string {
 	return []string{"run", "--no-config", "--issues-exit-code=0", "--deadline=30m", "--disable-all", "--enable=govet"}
 }
 
-func runGolangciLintForBench(b *testing.B) {
+func runGolangciLintForBench(b testing.TB) {
 	args := getGolangciLintCommonArgs()
 	args = append(args, getBenchLintersArgs()...)
 	printCommand("golangci-lint", args...)
@@ -123,7 +119,7 @@ func getLinterMemoryMB(b *testing.B, progName string) (int, error) {
 		}
 	}
 	if progPID == 0 {
-		return 0, fmt.Errorf("no process")
+		return 0, errors.New("no process")
 	}
 
 	allProgPIDs := []int{progPID}
@@ -184,7 +180,7 @@ type runResult struct {
 	duration  time.Duration
 }
 
-func runOne(b *testing.B, run func(*testing.B), progName string) *runResult {
+func runOne(b *testing.B, run func(testing.TB), progName string) *runResult {
 	doneCh := make(chan struct{})
 	peakMemCh := trackPeakMemoryUsage(b, doneCh, progName)
 	startedAt := time.Now()
@@ -200,11 +196,11 @@ func runOne(b *testing.B, run func(*testing.B), progName string) *runResult {
 }
 
 func BenchmarkGolangciLint(b *testing.B) {
-	testshared.NewLintRunner(b).Install()
+	testshared.InstallGolangciLint(b)
 
 	type bcase struct {
 		name    string
-		prepare func(*testing.B)
+		prepare func(testing.TB)
 	}
 	bcases := []bcase{
 		{

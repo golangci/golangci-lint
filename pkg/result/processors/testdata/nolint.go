@@ -1,28 +1,28 @@
 package testdata
 
-var nolintSpecific int    // nolint:gofmt
+var nolintSpecific int    //nolint:gofmt
 var nolintSpace int       // nolint: gofmt
-var nolintSpaces int      //nolint: gofmt, govet
-var nolintAll int         // nolint
-var nolintAndAppendix int // nolint // another comment
+var nolintSpaces int      //nolint:gofmt, govet
+var nolintAll int         // nolint:all
+var nolintAndAppendix int // nolint:all // another comment
 
-//nolint
+//nolint:all
 var nolintVarByPrecedingComment int
 
-//nolint
+//nolint:all
 
 var dontNolintVarByPrecedingCommentBecauseOfNewLine int
 
-var nolintPrecedingVar string //nolint
+var nolintPrecedingVar string //nolint:all
 var dontNolintVarByPrecedingCommentBecauseOfDifferentColumn int
 
-//nolint
+//nolint:all
 func nolintFuncByPrecedingComment() *string {
 	xv := "v"
 	return &xv
 }
 
-//nolint
+//nolint:all
 // second line
 func nolintFuncByPrecedingMultilineComment1() *string {
 	xv := "v"
@@ -30,14 +30,14 @@ func nolintFuncByPrecedingMultilineComment1() *string {
 }
 
 // first line
-//nolint
+//nolint:all
 func nolintFuncByPrecedingMultilineComment2() *string {
 	xv := "v"
 	return &xv
 }
 
 // first line
-//nolint
+//nolint:all
 // third line
 func nolintFuncByPrecedingMultilineComment3() *string {
 	xv := "v"

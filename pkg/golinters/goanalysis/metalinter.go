@@ -2,8 +2,8 @@ package goanalysis
 
 import (
 	"context"
+	"fmt"
 
-	"github.com/pkg/errors"
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
@@ -24,7 +24,7 @@ func NewMetaLinter(linters []*Linter) *MetaLinter {
 func (ml MetaLinter) Run(_ context.Context, lintCtx *linter.Context) ([]result.Issue, error) {
 	for _, l := range ml.linters {
 		if err := l.preRun(lintCtx); err != nil {
-			return nil, errors.Wrapf(err, "failed to pre-run %s", l.Name())
+			return nil, fmt.Errorf("failed to pre-run %s: %w", l.Name(), err)
 		}
 	}
 

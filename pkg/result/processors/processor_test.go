@@ -35,17 +35,23 @@ func newIssueFromTextTestCase(text string) result.Issue {
 }
 
 func process(t *testing.T, p Processor, issues ...result.Issue) []result.Issue {
+	t.Helper()
+
 	processedIssues, err := p.Process(issues)
 	assert.NoError(t, err)
 	return processedIssues
 }
 
 func processAssertSame(t *testing.T, p Processor, issues ...result.Issue) {
+	t.Helper()
+
 	processedIssues := process(t, p, issues...)
 	assert.Equal(t, issues, processedIssues)
 }
 
 func processAssertEmpty(t *testing.T, p Processor, issues ...result.Issue) {
+	t.Helper()
+
 	processedIssues := process(t, p, issues...)
 	assert.Empty(t, processedIssues)
 }

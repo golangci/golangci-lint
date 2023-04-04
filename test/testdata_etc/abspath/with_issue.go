@@ -6,6 +6,6 @@ func f() {
 	if true {
 		return
 	} else {
-		fmt.Printf("")
+		fmt.Print("")
 	}
 }

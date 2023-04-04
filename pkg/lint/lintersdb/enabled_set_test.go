@@ -10,7 +10,6 @@ import (
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 )
 
-//nolint:funlen
 func TestGetEnabledLintersSet(t *testing.T) {
 	type cs struct {
 		cfg  config.Linters

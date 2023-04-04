@@ -1,5 +1,5 @@
-//args: -Etypecheck
+//golangcitest:args -Etypecheck
 package testdata
 
-fun NotCompiles() { // ERROR "expected declaration, found.* fun"
+fun NotCompiles() { // want "expected declaration, found.* fun"
 }
