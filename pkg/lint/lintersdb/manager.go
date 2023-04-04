@@ -734,6 +734,12 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/curioswitch/go-reassign"),
 
+		linter.NewConfig(golinters.NewResponseWriterLint()).
+			WithSince("1.52.0").
+			WithPresets(linter.PresetBugs).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/javorszky/go-responsewriter-lint"),
+
 		linter.NewConfig(golinters.NewRevive(reviveCfg)).
 			WithSince("v1.37.0").
 			WithPresets(linter.PresetStyle, linter.PresetMetaLinter).
