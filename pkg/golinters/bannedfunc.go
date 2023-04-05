@@ -32,15 +32,15 @@ func NewBannedFunc(ban *config.BannedFuncSettings) *goanalysis.Linter {
 				Name:     "bannedfunc",
 				Doc:      "Checks for use of banned functions",
 				Requires: []*analysis.Analyzer{inspect.Analyzer},
-				Run:      bf.RunBannedFunc,
+				Run:      bf.Run,
 			},
 		},
 		nil,
 	).WithLoadMode(goanalysis.LoadModeSyntax)
 }
 
-// RunBannedFunc runs the banned function linter.
-func (bf *bannedFunc) RunBannedFunc(pass *analysis.Pass) (interface{}, error) {
+// Run runs the banned function linter.
+func (bf *bannedFunc) Run(pass *analysis.Pass) (interface{}, error) {
 	var (
 		confMap = bf.parseBannedFunc()
 		usedMap = make(map[string]map[string]string)

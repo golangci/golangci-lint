@@ -23,7 +23,7 @@ func (f errorfunc) Errorf(format string, args ...interface{}) {
 	f(fmt.Sprintf(format, args...))
 }
 
-func TestBannedFunc_RunBannedFunc(t *testing.T) {
+func TestBannedFunc_Run(t *testing.T) {
 	files := map[string]string{
 		"a/b.go": `
 package main
@@ -58,7 +58,7 @@ func main() {
 			},
 		},
 	}
-	analysistest.Run(fakeT, dir, &analysis.Analyzer{Run: bf.RunBannedFunc}, "a")
+	analysistest.Run(fakeT, dir, &analysis.Analyzer{Run: bf.Run}, "a")
 	want := []string{
 		`a/b.go:9:14: unexpected diagnostic: Disable fmt.Println`,
 		`a/b.go:10:6: unexpected diagnostic: Disable time.Now`,
