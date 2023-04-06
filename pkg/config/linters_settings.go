@@ -141,6 +141,7 @@ var defaultLintersSettings = LintersSettings{
 		ErrorVariableNames:               []string{"err"},
 		ForceExclusiveShortDeclarations:  false,
 	},
+	BannedFunc: BannedFuncSettings{},
 }
 
 type LintersSettings struct {
@@ -220,6 +221,7 @@ type LintersSettings struct {
 	Whitespace       WhitespaceSettings
 	Wrapcheck        WrapcheckSettings
 	WSL              WSLSettings
+	BannedFunc       BannedFuncSettings
 
 	Custom map[string]CustomLinterSettings
 }
@@ -761,6 +763,11 @@ type WSLSettings struct {
 	ForceCuddleErrCheckAndAssign     bool     `mapstructure:"force-err-cuddling"`
 	ErrorVariableNames               []string `mapstructure:"error-variable-names"`
 	ForceExclusiveShortDeclarations  bool     `mapstructure:"force-short-decl-cuddling"`
+}
+
+// BannedFuncSettings banned functions settings.
+type BannedFuncSettings struct {
+	Funcs map[string]string `yaml:"bannedfunc,flow"`
 }
 
 // CustomLinterSettings encapsulates the meta-data of a private linter.

@@ -178,6 +178,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		whitespaceCfg       *config.WhitespaceSettings
 		wrapcheckCfg        *config.WrapcheckSettings
 		wslCfg              *config.WSLSettings
+		bannedfuncCfg       *config.BannedFuncSettings
 	)
 
 	if m.cfg != nil {
@@ -884,6 +885,11 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithSince("v1.20.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/bombsimon/wsl"),
+
+		linter.NewConfig(golinters.NewBannedFunc(bannedfuncCfg)).
+			WithSince("v1.53.0").
+			WithPresets(linter.PresetStyle).
+			WithURL("https://github.com/demoManito/bannedfunc"),
 
 		// nolintlint must be last because it looks at the results of all the previous linters for unused nolint directives
 		linter.NewConfig(golinters.NewNoLintLint(noLintLintCfg)).
