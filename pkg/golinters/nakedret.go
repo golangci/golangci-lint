@@ -1,7 +1,7 @@
 package golinters
 
 import (
-	"github.com/alexkohler/nakedret"
+	"github.com/alexkohler/nakedret/v2"
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/config"
