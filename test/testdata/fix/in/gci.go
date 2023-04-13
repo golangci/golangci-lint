@@ -6,11 +6,15 @@ package gci
 import (
 	"github.com/golangci/golangci-lint/pkg/config"
 	"golang.org/x/tools/go/analysis"
+
 	"fmt"
+
+	gcicfg "github.com/daixiang0/gci/pkg/config"
 )
 
 func GoimportsLocalTest() {
 	fmt.Print("x")
 	_ = config.Config{}
 	_ = analysis.Analyzer{}
+	_ = gcicfg.BoolConfig{}
 }

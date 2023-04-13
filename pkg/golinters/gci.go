@@ -2,7 +2,6 @@ package golinters
 
 import (
 	"fmt"
-	"strings"
 	"sync"
 
 	gcicfg "github.com/daixiang0/gci/pkg/config"
@@ -145,7 +144,13 @@ func getErrorTextForGci(settings config.GciSettings) string {
 	}
 
 	if len(settings.Sections) > 0 {
-		text += " -s " + strings.Join(settings.Sections, ",")
+		for _, section := range settings.Sections {
+			text += " -s " + section
+		}
+	}
+
+	if settings.CustomOrder {
+		text += " --custom-order"
 	}
 
 	return text
