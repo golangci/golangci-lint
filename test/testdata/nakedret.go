@@ -1,10 +1,14 @@
 //golangcitest:args -Enakedret
 package testdata
 
+import "fmt"
+
 func NakedretIssue() (a int, b string) {
 	if a > 0 {
-		return
+		return // want "naked return in func `NakedretIssue` with 33 lines of code"
 	}
+
+	fmt.Println("nakedret")
 
 	if b == "" {
 		return 0, "0"
@@ -30,8 +34,8 @@ func NakedretIssue() (a int, b string) {
 	// ...
 	// ...
 
-	// len of this function is 31
-	return // want "naked return in func `NakedretIssue` with 31 lines of code"
+	// len of this function is 33
+	return // want "naked return in func `NakedretIssue` with 33 lines of code"
 }
 
 func NoNakedretIssue() (a int, b string) {
