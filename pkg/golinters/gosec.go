@@ -22,51 +22,6 @@ import (
 
 const gosecName = "gosec"
 
-// see gosec#Config.convertGlobals
-func convertGosecGlobals(settings *config.GoSecSettings, conf gosec.Config) {
-	if len(settings.Config) < 1 {
-		return
-	}
-
-	globalOptionFromConfig, exists := settings.Config[gosec.Globals]
-	if !exists {
-		return
-	}
-
-	globalOptionMap, ok := globalOptionFromConfig.(map[string]any)
-	if !ok {
-		return
-	}
-	for k, v := range globalOptionMap {
-		conf.SetGlobal(gosec.GlobalOption(k), fmt.Sprintf("%v", v))
-	}
-}
-
-func toGosecConfig(settings *config.GoSecSettings) gosec.Config {
-	conf := gosec.NewConfig()
-
-	if len(settings.Config) < 1 {
-		return conf
-	}
-
-	// global section
-	convertGosecGlobals(settings, conf)
-
-	// non-global section
-	for k, v := range settings.Config {
-		if k == gosec.Globals {
-			continue
-		}
-
-		// Uses ToUpper because the parsing of the map's key change the key to lowercase.
-		// The value is not impacted by that: the case is respected.
-		k = strings.ToUpper(k)
-		conf.Set(k, v)
-	}
-
-	return conf
-}
-
 func NewGosec(settings *config.GoSecSettings) *goanalysis.Linter {
 	var (
 		mu        sync.Mutex
@@ -217,4 +172,49 @@ func filterIssues(issues []*gosec.Issue, severity, confidence gosec.Score) []*go
 		}
 	}
 	return res
+}
+
+// see gosec#Config.convertGlobals
+func convertGosecGlobals(settings *config.GoSecSettings, conf gosec.Config) {
+	if len(settings.Config) < 1 {
+		return
+	}
+
+	globalOptionFromConfig, exists := settings.Config[gosec.Globals]
+	if !exists {
+		return
+	}
+
+	globalOptionMap, ok := globalOptionFromConfig.(map[string]any)
+	if !ok {
+		return
+	}
+	for k, v := range globalOptionMap {
+		conf.SetGlobal(gosec.GlobalOption(k), fmt.Sprintf("%v", v))
+	}
+}
+
+func toGosecConfig(settings *config.GoSecSettings) gosec.Config {
+	conf := gosec.NewConfig()
+
+	if len(settings.Config) < 1 {
+		return conf
+	}
+
+	// global section
+	convertGosecGlobals(settings, conf)
+
+	// non-global section
+	for k, v := range settings.Config {
+		if k == gosec.Globals {
+			continue
+		}
+
+		// Uses ToUpper because the parsing of the map's key change the key to lowercase.
+		// The value is not impacted by that: the case is respected.
+		k = strings.ToUpper(k)
+		conf.Set(k, v)
+	}
+
+	return conf
 }
