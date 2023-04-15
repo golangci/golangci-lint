@@ -6,11 +6,11 @@ import (
 
 // PanicError can be used to not print stacktrace twice
 type PanicError struct {
-	recovered interface{}
+	recovered any
 	stack     []byte
 }
 
-func NewPanicError(recovered interface{}, stack []byte) *PanicError {
+func NewPanicError(recovered any, stack []byte) *PanicError {
 	return &PanicError{recovered: recovered, stack: stack}
 }
 
