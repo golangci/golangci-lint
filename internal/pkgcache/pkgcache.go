@@ -54,7 +54,7 @@ func (c *Cache) Trim() {
 	})
 }
 
-func (c *Cache) Put(pkg *packages.Package, mode HashMode, key string, data interface{}) error {
+func (c *Cache) Put(pkg *packages.Package, mode HashMode, key string, data any) error {
 	var err error
 	buf := &bytes.Buffer{}
 	c.sw.TrackStage("gob", func() {
@@ -93,7 +93,7 @@ func (c *Cache) Put(pkg *packages.Package, mode HashMode, key string, data inter
 
 var ErrMissing = errors.New("missing data")
 
-func (c *Cache) Get(pkg *packages.Package, mode HashMode, key string, data interface{}) error {
+func (c *Cache) Get(pkg *packages.Package, mode HashMode, key string, data any) error {
 	var aID cache.ActionID
 	var err error
 	c.sw.TrackStage("key build", func() {
