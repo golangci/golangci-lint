@@ -4,9 +4,10 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/securego/gosec/v2"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/golangci/golangci-lint/pkg/config"
 )
 
 func TestToGosecConfig(t *testing.T) {
