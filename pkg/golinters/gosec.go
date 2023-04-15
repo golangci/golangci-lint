@@ -22,24 +22,62 @@ import (
 
 const gosecName = "gosec"
 
-func NewGosec(settings *config.GoSecSettings) *goanalysis.Linter {
-	var mu sync.Mutex
-	var resIssues []goanalysis.Issue
+// see gosec#Config.convertGlobals
+func convertGosecGlobals(settings *config.GoSecSettings, conf gosec.Config) {
+	if len(settings.Config) < 1 {
+		return
+	}
 
+	globalOptionFromConfig, exists := settings.Config[gosec.Globals]
+	if !exists {
+		return
+	}
+
+	globalOptionMap, ok := globalOptionFromConfig.(map[string]any)
+	if !ok {
+		return
+	}
+	for k, v := range globalOptionMap {
+		conf.SetGlobal(gosec.GlobalOption(k), fmt.Sprintf("%v", v))
+	}
+}
+
+func toGosecConfig(settings *config.GoSecSettings) gosec.Config {
 	conf := gosec.NewConfig()
 
-	var filters []rules.RuleFilter
+	if len(settings.Config) < 1 {
+		return conf
+	}
+
+	// global section
+	convertGosecGlobals(settings, conf)
+
+	// non-global section
+	for k, v := range settings.Config {
+		if k == gosec.Globals {
+			continue
+		}
+
+		// Uses ToUpper because the parsing of the map's key change the key to lowercase.
+		// The value is not impacted by that: the case is respected.
+		k = strings.ToUpper(k)
+		conf.Set(k, v)
+	}
+
+	return conf
+}
+
+func NewGosec(settings *config.GoSecSettings) *goanalysis.Linter {
+	var (
+		mu        sync.Mutex
+		resIssues []goanalysis.Issue
+		filters   []rules.RuleFilter
+		conf      gosec.Config
+	)
+
 	if settings != nil {
 		filters = gosecRuleFilters(settings.Includes, settings.Excludes)
-
-		for k, v := range settings.Config {
-			if k != gosec.Globals {
-				// Uses ToUpper because the parsing of the map's key change the key to lowercase.
-				// The value is not impacted by that: the case is respected.
-				k = strings.ToUpper(k)
-			}
-			conf.Set(k, v)
-		}
+		conf = toGosecConfig(settings)
 	}
 
 	logger := log.New(io.Discard, "", 0)
