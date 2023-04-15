@@ -62,9 +62,11 @@ func TestToGosecConfig(t *testing.T) {
 		}
 
 		gosecConfig := toGosecConfig(settings)
-		assert.Len(t, gosecConfig, 3)
-		assert.Contains(t, gosecConfig, gosec.Globals)
-		assert.Contains(t, gosecConfig, "G101")
-		assert.Contains(t, gosecConfig, "G301")
+		assert.Equal(t,
+			gosec.Config{
+				"G101":   map[string]any{"pattern": "(?i)example"},
+				"G301":   "0750",
+				"global": map[gosec.GlobalOption]string{}},
+			gosecConfig)
 	})
 }
