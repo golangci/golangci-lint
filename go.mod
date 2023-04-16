@@ -61,7 +61,7 @@ require (
 	github.com/kunwardeep/paralleltest v1.0.6
 	github.com/kyoh86/exportloopref v0.1.11
 	github.com/ldez/gomoddirectives v0.2.3
-	github.com/ldez/tagliatelle v0.4.0
+	github.com/ldez/tagliatelle v0.5.0
 	github.com/leonklingele/grouper v1.1.1
 	github.com/lufeee/execinquery v1.2.1
 	github.com/maratori/testableexamples v1.0.0
