@@ -47,6 +47,7 @@ require (
 	github.com/gordonklaus/ineffassign v0.0.0-20230107090616-13ace0543b28
 	github.com/gostaticanalysis/forcetypeassert v0.1.0
 	github.com/gostaticanalysis/nilerr v0.1.1
+	github.com/gostaticanalysis/zero v0.1.0
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/hashicorp/go-version v1.6.0
 	github.com/hexops/gotextdiff v1.0.3
