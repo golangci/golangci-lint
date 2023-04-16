@@ -3,7 +3,6 @@ package printers
 
 import (
 	"bytes"
-	"context"
 	"go/token"
 	"testing"
 
@@ -47,7 +46,7 @@ func TestGithub_Print(t *testing.T) {
 	buf := new(bytes.Buffer)
 	printer := NewGithub(buf)
 
-	err := printer.Print(context.Background(), issues)
+	err := printer.Print(issues)
 	require.NoError(t, err)
 
 	expected := `::warning file=path/to/filea.go,line=10,col=4::some issue (linter-a)

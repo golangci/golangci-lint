@@ -1,7 +1,6 @@
 package printers
 
 import (
-	"context"
 	"fmt"
 	"io"
 	"strings"
@@ -38,7 +37,7 @@ func NewTeamCity(w io.Writer) *TeamCity {
 	}
 }
 
-func (p *TeamCity) Print(_ context.Context, issues []result.Issue) error {
+func (p *TeamCity) Print(issues []result.Issue) error {
 	uniqLinters := map[string]struct{}{}
 
 	for i := range issues {

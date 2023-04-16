@@ -1,7 +1,6 @@
 package printers
 
 import (
-	"context"
 	"encoding/xml"
 	"fmt"
 	"io"
@@ -45,7 +44,7 @@ func NewJunitXML(w io.Writer) *JunitXML {
 	return &JunitXML{w: w}
 }
 
-func (p JunitXML) Print(ctx context.Context, issues []result.Issue) error {
+func (p JunitXML) Print(issues []result.Issue) error {
 	suites := make(map[string]testSuiteXML) // use a map to group by file
 
 	for ind := range issues {

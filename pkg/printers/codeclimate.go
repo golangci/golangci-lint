@@ -1,7 +1,6 @@
 package printers
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -35,7 +34,7 @@ func NewCodeClimate(w io.Writer) *CodeClimate {
 	return &CodeClimate{w: w}
 }
 
-func (p CodeClimate) Print(ctx context.Context, issues []result.Issue) error {
+func (p CodeClimate) Print(issues []result.Issue) error {
 	codeClimateIssues := make([]CodeClimateIssue, 0, len(issues))
 	for i := range issues {
 		issue := &issues[i]

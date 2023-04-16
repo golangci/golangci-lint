@@ -1,7 +1,6 @@
 package printers
 
 import (
-	"context"
 	"fmt"
 	"io"
 
@@ -36,7 +35,7 @@ func formatIssueAsGithub(issue *result.Issue) string {
 	return ret
 }
 
-func (p *github) Print(_ context.Context, issues []result.Issue) error {
+func (p *github) Print(issues []result.Issue) error {
 	for ind := range issues {
 		_, err := fmt.Fprintln(p.w, formatIssueAsGithub(&issues[ind]))
 		if err != nil {

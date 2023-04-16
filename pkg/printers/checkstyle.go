@@ -1,7 +1,6 @@
 package printers
 
 import (
-	"context"
 	"encoding/xml"
 	"fmt"
 	"io"
@@ -41,7 +40,7 @@ func NewCheckstyle(w io.Writer) *Checkstyle {
 	return &Checkstyle{w: w}
 }
 
-func (p Checkstyle) Print(ctx context.Context, issues []result.Issue) error {
+func (p Checkstyle) Print(issues []result.Issue) error {
 	out := checkstyleOutput{
 		Version: "5.0",
 	}

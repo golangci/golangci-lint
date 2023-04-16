@@ -2,7 +2,6 @@ package printers
 
 import (
 	"bytes"
-	"context"
 	"go/token"
 	"testing"
 
@@ -54,7 +53,7 @@ func TestTeamCity_Print(t *testing.T) {
 	buf := new(bytes.Buffer)
 	printer := NewTeamCity(buf)
 
-	err := printer.Print(context.Background(), issues)
+	err := printer.Print(issues)
 	require.NoError(t, err)
 
 	expected := `##teamcity[InspectionType id='linter-a' name='linter-a' description='linter-a' category='Golangci-lint reports']
