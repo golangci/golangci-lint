@@ -1,6 +1,10 @@
 //golangcitest:args -Egochecksumtype
 package testdata
 
+import (
+	"log"
+)
+
 //sumtype:decl
 type SumType interface{ isSumType() }
 
@@ -22,6 +26,7 @@ func sumTypeTest() {
 	switch sum.(type) { // want "exhaustiveness check failed for sum type.*SumType.*missing cases for Two"
 	case One:
 	default:
+		log.Println("??")
 		panic("??")
 	}
 
