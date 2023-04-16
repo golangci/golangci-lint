@@ -27,15 +27,19 @@ func NewGoCheckSumType() *goanalysis.Linter {
 			if err != nil {
 				return nil, err
 			}
+
 			if len(issues) == 0 {
 				return nil, nil
 			}
+
 			mu.Lock()
 			resIssues = append(resIssues, issues...)
 			mu.Unlock()
+
 			return nil, nil
 		},
 	}
+
 	return goanalysis.NewLinter(
 		goCheckSumTypeName,
 		`Run exhaustiveness checks on Go "sum types"`,
@@ -47,13 +51,15 @@ func NewGoCheckSumType() *goanalysis.Linter {
 }
 
 func runGoCheckSumType(pass *analysis.Pass) ([]goanalysis.Issue, error) {
-	resIssues := []goanalysis.Issue{}
+	var resIssues []goanalysis.Issue
+
 	pkg := &packages.Package{
 		Fset:      pass.Fset,
 		Syntax:    pass.Files,
 		Types:     pass.Pkg,
 		TypesInfo: pass.TypesInfo,
 	}
+
 	var unknownError error
 	errors := gochecksumtype.Run([]*packages.Package{pkg})
 	for _, err := range errors {
@@ -62,12 +68,13 @@ func runGoCheckSumType(pass *analysis.Pass) ([]goanalysis.Issue, error) {
 			unknownError = err
 			continue
 		}
-		prefix := err.Pos().String() + ": "
+
 		resIssues = append(resIssues, goanalysis.NewIssue(&result.Issue{
 			FromLinter: goCheckSumTypeName,
-			Text:       strings.TrimPrefix(err.Error(), prefix),
+			Text:       strings.TrimPrefix(err.Error(), err.Pos().String()+": "),
 			Pos:        err.Pos(),
 		}, pass))
 	}
+
 	return resIssues, unknownError
 }
