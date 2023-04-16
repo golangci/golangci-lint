@@ -26,9 +26,10 @@ func sumTypeTest() {
 	switch sum.(type) { // want "exhaustiveness check failed for sum type.*SumType.*missing cases for Two"
 	case One:
 	default:
-		log.Println("??")
 		panic("??")
 	}
+
+	log.Println("??")
 
 	switch sum.(type) {
 	case One:
