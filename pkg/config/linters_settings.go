@@ -192,6 +192,7 @@ type LintersSettings struct {
 	Maligned         MalignedSettings
 	Misspell         MisspellSettings
 	MustTag          MustTagSettings
+	Nakedefer        NakedeferSettings
 	Nakedret         NakedretSettings
 	Nestif           NestifSettings
 	NilNil           NilNilSettings
@@ -568,6 +569,10 @@ type MustTagSettings struct {
 		Tag    string `mapstructure:"tag"`
 		ArgPos int    `mapstructure:"arg-pos"`
 	} `mapstructure:"functions"`
+}
+
+type NakedeferSettings struct {
+	Exclude []string `mapstructure:"exclude"`
 }
 
 type NakedretSettings struct {
