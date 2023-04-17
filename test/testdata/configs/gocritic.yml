@@ -1,3 +1,5 @@
+run:
+  go: 1.14
 linters-settings:
   gocritic:
     enabled-checks:
@@ -5,6 +7,7 @@ linters-settings:
       - flagDeref
       - wrapperFunc
       - ruleguard
+      - syncMapLoadAndDelete # ignored because sync#Map.LoadAndDelete added in Go 1.15
     settings:
       rangeValCopy:
         sizeThreshold: 2
