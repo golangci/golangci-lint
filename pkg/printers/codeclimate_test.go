@@ -2,7 +2,6 @@ package printers
 
 import (
 	"bytes"
-	"context"
 	"go/token"
 	"testing"
 
@@ -61,7 +60,7 @@ func TestCodeClimate_Print(t *testing.T) {
 	buf := new(bytes.Buffer)
 	printer := NewCodeClimate(buf)
 
-	err := printer.Print(context.Background(), issues)
+	err := printer.Print(issues)
 	require.NoError(t, err)
 
 	//nolint:lll

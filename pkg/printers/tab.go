@@ -1,7 +1,6 @@
 package printers
 
 import (
-	"context"
 	"fmt"
 	"io"
 	"text/tabwriter"
@@ -39,7 +38,7 @@ func (p *Tab) SprintfColored(ca color.Attribute, format string, args ...any) str
 	return c.Sprintf(format, args...)
 }
 
-func (p *Tab) Print(ctx context.Context, issues []result.Issue) error {
+func (p *Tab) Print(issues []result.Issue) error {
 	w := tabwriter.NewWriter(p.w, 0, 0, 2, ' ', 0)
 
 	for i := range issues {

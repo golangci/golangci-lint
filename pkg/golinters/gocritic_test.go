@@ -56,6 +56,6 @@ func (l *tLog) Infof(format string, args ...any) {
 	log.Printf(format, args...)
 }
 
-func (l *tLog) Child(name string) logutils.Log { return nil }
+func (l *tLog) Child(_ string) logutils.Log { return nil }
 
-func (l *tLog) SetLevel(level logutils.LogLevel) {}
+func (l *tLog) SetLevel(_ logutils.LogLevel) {}

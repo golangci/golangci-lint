@@ -61,7 +61,7 @@ require (
 	github.com/kunwardeep/paralleltest v1.0.6
 	github.com/kyoh86/exportloopref v0.1.11
 	github.com/ldez/gomoddirectives v0.2.3
-	github.com/ldez/tagliatelle v0.4.0
+	github.com/ldez/tagliatelle v0.5.0
 	github.com/leonklingele/grouper v1.1.1
 	github.com/lufeee/execinquery v1.2.1
 	github.com/maratori/testableexamples v1.0.0
@@ -111,6 +111,7 @@ require (
 	github.com/xen0n/gosmopolitan v1.2.1
 	github.com/yagipy/maintidx v1.0.0
 	github.com/yeya24/promlinter v0.2.0
+	github.com/ykadowak/zerologlint v0.1.1
 	gitlab.com/bosi/decorder v0.2.3
 	golang.org/x/tools v0.8.0
 	gopkg.in/yaml.v3 v3.0.1

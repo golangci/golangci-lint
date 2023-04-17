@@ -2,7 +2,6 @@ package printers
 
 import (
 	"bytes"
-	"context"
 	"go/token"
 	"testing"
 
@@ -92,7 +91,7 @@ path/to/fileb.go:300:9  another issue
 
 			printer := NewTab(test.printLinterName, test.useColors, logutils.NewStderrLog(logutils.DebugKeyEmpty), buf)
 
-			err := printer.Print(context.Background(), issues)
+			err := printer.Print(issues)
 			require.NoError(t, err)
 
 			assert.Equal(t, test.expected, buf.String())
