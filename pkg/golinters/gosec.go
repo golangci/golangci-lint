@@ -23,13 +23,11 @@ import (
 const gosecName = "gosec"
 
 func NewGosec(settings *config.GoSecSettings) *goanalysis.Linter {
-	var (
-		mu        sync.Mutex
-		resIssues []goanalysis.Issue
-		filters   []rules.RuleFilter
-		conf      gosec.Config
-	)
+	var mu sync.Mutex
+	var resIssues []goanalysis.Issue
 
+	var filters []rules.RuleFilter
+	conf := gosec.NewConfig()
 	if settings != nil {
 		filters = gosecRuleFilters(settings.Includes, settings.Excludes)
 		conf = toGosecConfig(settings)
@@ -133,6 +131,35 @@ func runGoSec(lintCtx *linter.Context, pass *analysis.Pass, settings *config.GoS
 	return issues
 }
 
+func toGosecConfig(settings *config.GoSecSettings) gosec.Config {
+	conf := gosec.NewConfig()
+
+	for k, v := range settings.Config {
+		if k == gosec.Globals {
+			convertGosecGlobals(v, conf)
+			continue
+		}
+
+		// Uses ToUpper because the parsing of the map's key change the key to lowercase.
+		// The value is not impacted by that: the case is respected.
+		conf.Set(strings.ToUpper(k), v)
+	}
+
+	return conf
+}
+
+// based on https://github.com/securego/gosec/blob/47bfd4eb6fc7395940933388550b547538b4c946/config.go#L52-L62
+func convertGosecGlobals(globalOptionFromConfig any, conf gosec.Config) {
+	globalOptionMap, ok := globalOptionFromConfig.(map[string]any)
+	if !ok {
+		return
+	}
+
+	for k, v := range globalOptionMap {
+		conf.SetGlobal(gosec.GlobalOption(k), fmt.Sprintf("%v", v))
+	}
+}
+
 // based on https://github.com/securego/gosec/blob/569328eade2ccbad4ce2d0f21ee158ab5356a5cf/cmd/gosec/main.go#L170-L188
 func gosecRuleFilters(includes, excludes []string) []rules.RuleFilter {
 	var filters []rules.RuleFilter
@@ -166,55 +193,12 @@ func convertToScore(str string) (gosec.Score, error) {
 // code borrowed from https://github.com/securego/gosec/blob/69213955dacfd560562e780f723486ef1ca6d486/cmd/gosec/main.go#L264-L276
 func filterIssues(issues []*gosec.Issue, severity, confidence gosec.Score) []*gosec.Issue {
 	res := make([]*gosec.Issue, 0)
+
 	for _, issue := range issues {
 		if issue.Severity >= severity && issue.Confidence >= confidence {
 			res = append(res, issue)
 		}
 	}
+
 	return res
-}
-
-// see gosec#Config.convertGlobals
-func convertGosecGlobals(settings *config.GoSecSettings, conf gosec.Config) {
-	if len(settings.Config) < 1 {
-		return
-	}
-
-	globalOptionFromConfig, exists := settings.Config[gosec.Globals]
-	if !exists {
-		return
-	}
-
-	globalOptionMap, ok := globalOptionFromConfig.(map[string]any)
-	if !ok {
-		return
-	}
-	for k, v := range globalOptionMap {
-		conf.SetGlobal(gosec.GlobalOption(k), fmt.Sprintf("%v", v))
-	}
-}
-
-func toGosecConfig(settings *config.GoSecSettings) gosec.Config {
-	conf := gosec.NewConfig()
-
-	if len(settings.Config) < 1 {
-		return conf
-	}
-
-	// global section
-	convertGosecGlobals(settings, conf)
-
-	// non-global section
-	for k, v := range settings.Config {
-		if k == gosec.Globals {
-			continue
-		}
-
-		// Uses ToUpper because the parsing of the map's key change the key to lowercase.
-		// The value is not impacted by that: the case is respected.
-		k = strings.ToUpper(k)
-		conf.Set(k, v)
-	}
-
-	return conf
 }
