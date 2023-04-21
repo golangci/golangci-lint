@@ -1,7 +1,7 @@
 package golinters
 
 import (
-	"github.com/junk1tm/musttag"
+	"go.tmz.dev/musttag"
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/config"
