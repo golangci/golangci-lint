@@ -2,5 +2,6 @@ linters-settings:
   gci:
     sections:
       - standard
-      - prefix(github.com/golangci/golangci-lint)
+      - prefix(github.com/golangci/golangci-lint,github.com/daixiang0/gci)
       - default
+    custom-order: true
