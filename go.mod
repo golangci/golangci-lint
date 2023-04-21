@@ -54,7 +54,6 @@ require (
 	github.com/jingyugao/rowserrcheck v1.1.1
 	github.com/jirfag/go-printf-func-name v0.0.0-20200119135958-7558a9eaa5af
 	github.com/julz/importas v0.1.0
-	github.com/junk1tm/musttag v0.5.0
 	github.com/kisielk/errcheck v1.6.3
 	github.com/kkHAIKE/contextcheck v1.1.4
 	github.com/kulti/thelper v0.6.3
@@ -113,6 +112,7 @@ require (
 	github.com/yeya24/promlinter v0.2.0
 	github.com/ykadowak/zerologlint v0.1.1
 	gitlab.com/bosi/decorder v0.2.3
+	go.tmz.dev/musttag v0.6.0
 	golang.org/x/tools v0.8.0
 	gopkg.in/yaml.v3 v3.0.1
 	honnef.co/go/tools v0.4.3

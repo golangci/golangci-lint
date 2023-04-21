@@ -87,7 +87,7 @@ There is the most valuable changes log:
 
 1. new linters
    * `ginkgolinter`: https://github.com/nunnatsa/ginkgolinter
-   * `musttag`: https://github.com/junk1tm/musttag
+   * `musttag`: https://github.com/tmzane/musttag
    * `gocheckcompilerdirectives`: https://github.com/leighmcculloch/gocheckcompilerdirectives
 2. updated linters
    * `bodyclose`: to HEAD
