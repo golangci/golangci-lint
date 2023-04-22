@@ -99,7 +99,7 @@ require (
 	github.com/stretchr/testify v1.8.2
 	github.com/tdakkota/asciicheck v0.2.0
 	github.com/tetafro/godot v1.4.11
-	github.com/timakin/bodyclose v0.0.0-20221125081123-e39cf3fc478e
+	github.com/timakin/bodyclose v0.0.0-20230421092635-574207250966
 	github.com/timonwong/loggercheck v0.9.4
 	github.com/tomarrell/wrapcheck/v2 v2.8.1
 	github.com/tommy-muehle/go-mnd/v2 v2.5.1
