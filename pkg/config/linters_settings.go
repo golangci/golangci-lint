@@ -122,6 +122,10 @@ var defaultLintersSettings = LintersSettings{
 	Unparam: UnparamSettings{
 		Algo: "cha",
 	},
+	UseStdlibVars: UseStdlibVarsSettings{
+		HTTPMethod:     true,
+		HTTPStatusCode: true,
+	},
 	Varnamelen: VarnamelenSettings{
 		MaxDistance:   5,
 		MinNameLength: 3,
