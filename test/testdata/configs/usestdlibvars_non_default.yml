@@ -1,0 +1,12 @@
+linters-settings:
+  usestdlibvars:
+    http-method: false
+    http-status-code: false
+    time-weekday: true
+    time-month: true
+    time-layout: true
+    crypto-hash: true
+    default-rpc-path: true
+    sql-isolation-level: true
+    tls-signature-scheme: true
+    constant-kind: true

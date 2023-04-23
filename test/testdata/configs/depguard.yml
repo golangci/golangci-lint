@@ -1,7 +1,12 @@
 linters-settings:
   depguard:
-    include-go-root: true
-    packages: 
-      - compress/*
-    packages-with-error-message:
-      log: "don't use log"
+    rules:
+      main:
+        deny:
+          - pkg: compress
+            desc: "nope"
+          - pkg: log
+            desc: "don't use log"
+          - pkg: "golang.org/x/tools/go/analysis"
+            desc: "example import with dot"
+

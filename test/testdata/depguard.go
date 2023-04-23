@@ -3,10 +3,13 @@
 package testdata
 
 import (
-	"compress/gzip" // want "`compress/gzip` is in the denylist"
-	"log"           // want "`log` is in the denylist: don't use log"
+	"compress/gzip" // want "import 'compress/gzip' is not allowed from list 'main': nope"
+	"log"           // want "import 'log' is not allowed from list 'main': don't use log"
+
+	"golang.org/x/tools/go/analysis" // want "import 'golang.org/x/tools/go/analysis' is not allowed from list 'main': example import with dot"
 )
 
 func SpewDebugInfo() {
 	log.Println(gzip.BestCompression)
+	_ = analysis.Analyzer{}
 }

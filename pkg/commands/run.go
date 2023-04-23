@@ -191,15 +191,6 @@ func initFlagSet(fs *pflag.FlagSet, cfg *config.Config, m *lintersdb.Manager, is
 		true, "Goconst: ignore when constant is not used as function argument")
 	hideFlag("goconst.ignore-calls")
 
-	// (@dixonwille) These flag is only used for testing purposes.
-	fs.StringSliceVar(&lsc.Depguard.Packages, "depguard.packages", nil,
-		"Depguard: packages to add to the list")
-	hideFlag("depguard.packages")
-
-	fs.BoolVar(&lsc.Depguard.IncludeGoRoot, "depguard.include-go-root", false,
-		"Depguard: check list against standard lib")
-	hideFlag("depguard.include-go-root")
-
 	fs.IntVar(&lsc.Lll.TabWidth, "lll.tab-width", 1,
 		"Lll: tab width in spaces")
 	hideFlag("lll.tab-width")

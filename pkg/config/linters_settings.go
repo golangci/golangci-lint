@@ -122,6 +122,10 @@ var defaultLintersSettings = LintersSettings{
 	Unparam: UnparamSettings{
 		Algo: "cha",
 	},
+	UseStdlibVars: UseStdlibVarsSettings{
+		HTTPMethod:     true,
+		HTTPStatusCode: true,
+	},
 	Varnamelen: VarnamelenSettings{
 		MaxDistance:   5,
 		MinNameLength: 3,
@@ -249,12 +253,18 @@ type Cyclop struct {
 }
 
 type DepGuardSettings struct {
-	ListType                 string `mapstructure:"list-type"`
-	Packages                 []string
-	IncludeGoRoot            bool               `mapstructure:"include-go-root"`
-	PackagesWithErrorMessage map[string]string  `mapstructure:"packages-with-error-message"`
-	IgnoreFileRules          []string           `mapstructure:"ignore-file-rules"`
-	AdditionalGuards         []DepGuardSettings `mapstructure:"additional-guards"`
+	Rules map[string]*DepGuardList `mapstructure:"rules"`
+}
+
+type DepGuardList struct {
+	Files []string       `mapstructure:"files"`
+	Allow []string       `mapstructure:"allow"`
+	Deny  []DepGuardDeny `mapstructure:"deny"`
+}
+
+type DepGuardDeny struct {
+	Pkg  string `mapstructure:"pkg"`
+	Desc string `mapstructure:"desc"`
 }
 
 type DecorderSettings struct {
