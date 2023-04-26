@@ -702,15 +702,15 @@ linters-settings:
     # Values always ignored: `.+_test.go`
     # Default: []
     ignored-files:
-      - 'magic1_.*.go'
+      - 'magic1_.+\.go$'
     # List of function patterns to exclude from analysis.
     # Following functions are always ignored: `time.Date`,
     # `strconv.FormatInt`, `strconv.FormatUint`, `strconv.FormatFloat`,
     # `strconv.ParseInt`, `strconv.ParseUint`, `strconv.ParseFloat`.
     # Default: []
     ignored-functions:
-      - 'math.*'
-      - 'http.StatusText'
+      - '^math\.'
+      - '^http\.StatusText$'
 
   gomoddirectives:
     # Allow local `replace` directives.
