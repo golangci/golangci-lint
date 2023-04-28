@@ -150,6 +150,7 @@ var defaultLintersSettings = LintersSettings{
 type LintersSettings struct {
 	Asasalint        AsasalintSettings
 	BiDiChk          BiDiChkSettings
+	CheckDeprecated  CheckDeprecated
 	Cyclop           Cyclop
 	Decorder         DecorderSettings
 	Depguard         DepGuardSettings
@@ -244,6 +245,11 @@ type BiDiChkSettings struct {
 	RightToLeftIsolate       bool `mapstructure:"right-to-left-isolate"`
 	FirstStrongIsolate       bool `mapstructure:"first-strong-isolate"`
 	PopDirectionalIsolate    bool `mapstructure:"pop-directional-isolate"`
+}
+
+type CheckDeprecated struct {
+	CheckComment bool     `mapstructure:"check-comment"`
+	Patterns     []string `mapstructure:"patterns"`
 }
 
 type Cyclop struct {

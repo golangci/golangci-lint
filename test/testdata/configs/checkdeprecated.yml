@@ -1,0 +1,5 @@
+linters-settings:
+  checkdeprecated:
+    check-comment: true
+    patterns:
+      - "MyDeprecated"

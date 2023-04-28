@@ -103,6 +103,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 	var (
 		asasalintCfg        *config.AsasalintSettings
 		bidichkCfg          *config.BiDiChkSettings
+		checkDeprecatedCfg  *config.CheckDeprecated
 		cyclopCfg           *config.Cyclop
 		decorderCfg         *config.DecorderSettings
 		depGuardCfg         *config.DepGuardSettings
@@ -183,6 +184,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 	if m.cfg != nil {
 		asasalintCfg = &m.cfg.LintersSettings.Asasalint
 		bidichkCfg = &m.cfg.LintersSettings.BiDiChk
+		checkDeprecatedCfg = &m.cfg.LintersSettings.CheckDeprecated
 		cyclopCfg = &m.cfg.LintersSettings.Cyclop
 		decorderCfg = &m.cfg.LintersSettings.Decorder
 		depGuardCfg = &m.cfg.LintersSettings.Depguard
@@ -319,6 +321,12 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetBugs).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/kkHAIKE/contextcheck"),
+
+		linter.NewConfig(golinters.NewCheckDeprecated(checkDeprecatedCfg)).
+			WithSince("v1.53.0").
+			WithLoadForGoAnalysis().
+			WithPresets(linter.PresetComment, linter.PresetStyle).
+			WithURL("https://github.com/black-06/check-deprecated"),
 
 		linter.NewConfig(golinters.NewCyclop(cyclopCfg)).
 			WithSince("v1.37.0").

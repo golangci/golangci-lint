@@ -137,6 +137,14 @@ linters-settings:
     first-strong-isolate: false
     pop-directional-isolate: false
 
+  checkdeprecated:
+    # report malformed deprecated comments. The proper format is `Deprecated: <text>`.
+    # Default: false
+    check-comment: true
+    # Custom Deprecated comment header.
+    patterns:
+      - "MyDeprecated"
+
   cyclop:
     # The maximal code complexity to report.
     # Default: 10
@@ -2062,6 +2070,7 @@ linters:
     - asciicheck
     - bidichk
     - bodyclose
+    - checkdeprecated
     - containedctx
     - contextcheck
     - cyclop
@@ -2175,6 +2184,7 @@ linters:
     - asciicheck
     - bidichk
     - bodyclose
+    - checkdeprecated
     - containedctx
     - contextcheck
     - cyclop
