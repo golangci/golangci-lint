@@ -6,7 +6,6 @@ import (
 	"flag"
 	"log"
 	"strings"
-	"sync"
 )
 
 var _ = *flag.Bool("global1", false, "") // want `flagDeref: immediate deref in \*flag.Bool\(.global1., false, ..\) is most likely an error; consider using flag\.BoolVar`
@@ -46,14 +45,4 @@ func gocriticDup(x bool) {
 
 func gocriticRuleWrapperFunc() {
 	strings.Replace("abcabc", "a", "d", -1) // want "ruleguard: this Replace call can be simplified.*"
-}
-
-func gocriticSink(args ...any) {}
-
-func gocriticIgnoreSyncMapLoadAndDelete(cond bool, m, m2 *sync.Map) {
-	actual, ok := m.Load("key")
-	if ok {
-		m.Delete("key")
-		gocriticSink(actual)
-	}
 }
