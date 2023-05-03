@@ -1776,13 +1776,15 @@ linters-settings:
       # Default: {}
       rules:
         # Any struct tag type can be used.
-        # Support string case: `camel`, `pascal`, `kebab`, `snake`, `goCamel`, `goPascal`, `goKebab`, `goSnake`, `upper`, `lower`, `header`
+        # Support string case: `camel`, `pascal`, `kebab`, `snake`, `upperSnake`, `goCamel`, `goPascal`, `goKebab`, `goSnake`, `upper`, `lower`, `header`
         json: camel
         yaml: camel
         xml: camel
         bson: camel
         avro: snake
         mapstructure: kebab
+        env: upperSnake
+        envconfig: upperSnake
 
   tenv:
     # The option `all` will run against whole test files (`_test.go`) regardless of method/function signatures.
