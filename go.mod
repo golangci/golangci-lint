@@ -113,6 +113,7 @@ require (
 	github.com/ykadowak/zerologlint v0.1.1
 	gitlab.com/bosi/decorder v0.2.3
 	go.tmz.dev/musttag v0.6.1
+	golang.org/x/exp v0.0.0-20230510235704-dd950f8aeaea
 	golang.org/x/tools v0.8.0
 	gopkg.in/yaml.v3 v3.0.1
 	honnef.co/go/tools v0.4.3
@@ -182,7 +183,6 @@ require (
 	go.uber.org/atomic v1.7.0 // indirect
 	go.uber.org/multierr v1.6.0 // indirect
 	go.uber.org/zap v1.24.0 // indirect
-	golang.org/x/exp v0.0.0-20220722155223-a9213eeb770e // indirect
 	golang.org/x/exp/typeparams v0.0.0-20230224173230-c95f2b4c22f2 // indirect
 	golang.org/x/mod v0.10.0 // indirect
 	golang.org/x/sync v0.1.0 // indirect
