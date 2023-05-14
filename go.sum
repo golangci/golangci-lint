@@ -411,8 +411,8 @@ github.com/pkg/errors v0.9.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINE
 github.com/pkg/sftp v1.13.1/go.mod h1:3HaPG6Dq1ILlpPZRO0HVMrsydcdLt6HRDccSgb87qRg=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
-github.com/polyfloyd/go-errorlint v1.4.1 h1:r8ru5FhXSn34YU1GJDOuoJv2LdsQkPmK325EOpPMJlM=
-github.com/polyfloyd/go-errorlint v1.4.1/go.mod h1:k6fU/+fQe38ednoZS51T7gSIGQW1y94d6TkSr35OzH8=
+github.com/polyfloyd/go-errorlint v1.4.2 h1:CU+O4181IxFDdPH6t/HT7IiDj1I7zxNi1RIUxYwn8d0=
+github.com/polyfloyd/go-errorlint v1.4.2/go.mod h1:k6fU/+fQe38ednoZS51T7gSIGQW1y94d6TkSr35OzH8=
 github.com/power-devops/perfstat v0.0.0-20210106213030-5aafc221ea8c h1:ncq/mPwQF4JjgDlrVEn3C11VoGHZN7m8qihwgMEtzYw=
 github.com/power-devops/perfstat v0.0.0-20210106213030-5aafc221ea8c/go.mod h1:OmDBASR4679mdNQnz2pUhc2G8CO2JrUAVFDRBDP/hJE=
 github.com/prometheus/client_golang v0.9.1/go.mod h1:7SWBe2y4D6OKWSNQJUaRYU/AaXPKyh/dDVn+NZz0KFw=
