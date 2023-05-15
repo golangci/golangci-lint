@@ -32,7 +32,7 @@ func NewMirror() *goanalysis.Linter {
 		}
 
 		for i := range violations {
-			tmp := violations[i].Issue(pass)
+			tmp := violations[i].Issue(pass.Fset)
 
 			issue := result.Issue{
 				FromLinter: a.Name,
