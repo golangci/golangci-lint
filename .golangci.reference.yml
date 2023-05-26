@@ -702,15 +702,15 @@ linters-settings:
     # Values always ignored: `.+_test.go`
     # Default: []
     ignored-files:
-      - 'magic1_.*.go'
+      - 'magic1_.+\.go$'
     # List of function patterns to exclude from analysis.
     # Following functions are always ignored: `time.Date`,
     # `strconv.FormatInt`, `strconv.FormatUint`, `strconv.FormatFloat`,
     # `strconv.ParseInt`, `strconv.ParseUint`, `strconv.ParseFloat`.
     # Default: []
     ignored-functions:
-      - 'math.*'
-      - 'http.StatusText'
+      - '^math\.'
+      - '^http\.StatusText$'
 
   gomoddirectives:
     # Allow local `replace` directives.
@@ -1159,13 +1159,14 @@ linters-settings:
     max: 5
 
   ireturn:
-    # ireturn allows using `allow` and `reject` settings at the same time.
+    # ireturn does not allow using `allow` and `reject` settings at the same time.
     # Both settings are lists of the keywords and regular expressions matched to interface or package names.
     # keywords:
     # - `empty` for `interface{}`
     # - `error` for errors
     # - `stdlib` for standard library
     # - `anon` for anonymous interfaces
+    # - `generic` for generic interfaces added in go 1.18
 
     # By default, it allows using errors, empty interfaces, anonymous interfaces,
     # and interfaces provided by the standard library.
@@ -1775,13 +1776,15 @@ linters-settings:
       # Default: {}
       rules:
         # Any struct tag type can be used.
-        # Support string case: `camel`, `pascal`, `kebab`, `snake`, `goCamel`, `goPascal`, `goKebab`, `goSnake`, `upper`, `lower`, `header`
+        # Support string case: `camel`, `pascal`, `kebab`, `snake`, `upperSnake`, `goCamel`, `goPascal`, `goKebab`, `goSnake`, `upper`, `lower`, `header`
         json: camel
         yaml: camel
         xml: camel
         bson: camel
         avro: snake
         mapstructure: kebab
+        env: upperSnake
+        envconfig: upperSnake
 
   tenv:
     # The option `all` will run against whole test files (`_test.go`) regardless of method/function signatures.

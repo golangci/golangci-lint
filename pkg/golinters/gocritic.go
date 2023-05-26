@@ -113,6 +113,8 @@ func (w *goCriticWrapper) run(pass *analysis.Pass) ([]goanalysis.Issue, error) {
 
 	linterCtx := gocriticlinter.NewContext(pass.Fset, w.sizes)
 
+	linterCtx.SetGoVersion(w.settingsWrapper.Go)
+
 	enabledCheckers, err := w.buildEnabledCheckers(linterCtx)
 	if err != nil {
 		return nil, err

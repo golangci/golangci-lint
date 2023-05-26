@@ -10,6 +10,7 @@ import (
 	"sync"
 
 	"github.com/securego/gosec/v2"
+	"github.com/securego/gosec/v2/issue"
 	"github.com/securego/gosec/v2/rules"
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/packages"
@@ -75,7 +76,7 @@ func runGoSec(lintCtx *linter.Context, pass *analysis.Pass, settings *config.GoS
 		TypesInfo: pass.TypesInfo,
 	}
 
-	analyzer.Check(pkg)
+	analyzer.CheckRules(pkg)
 
 	secIssues, _, _ := analyzer.Report()
 	if len(secIssues) == 0 {
@@ -176,27 +177,27 @@ func gosecRuleFilters(includes, excludes []string) []rules.RuleFilter {
 }
 
 // code borrowed from https://github.com/securego/gosec/blob/69213955dacfd560562e780f723486ef1ca6d486/cmd/gosec/main.go#L250-L262
-func convertToScore(str string) (gosec.Score, error) {
+func convertToScore(str string) (issue.Score, error) {
 	str = strings.ToLower(str)
 	switch str {
 	case "", "low":
-		return gosec.Low, nil
+		return issue.Low, nil
 	case "medium":
-		return gosec.Medium, nil
+		return issue.Medium, nil
 	case "high":
-		return gosec.High, nil
+		return issue.High, nil
 	default:
-		return gosec.Low, fmt.Errorf("'%s' is invalid, use low instead. Valid options: low, medium, high", str)
+		return issue.Low, fmt.Errorf("'%s' is invalid, use low instead. Valid options: low, medium, high", str)
 	}
 }
 
 // code borrowed from https://github.com/securego/gosec/blob/69213955dacfd560562e780f723486ef1ca6d486/cmd/gosec/main.go#L264-L276
-func filterIssues(issues []*gosec.Issue, severity, confidence gosec.Score) []*gosec.Issue {
-	res := make([]*gosec.Issue, 0)
+func filterIssues(issues []*issue.Issue, severity, confidence issue.Score) []*issue.Issue {
+	res := make([]*issue.Issue, 0)
 
-	for _, issue := range issues {
-		if issue.Severity >= severity && issue.Confidence >= confidence {
-			res = append(res, issue)
+	for _, i := range issues {
+		if i.Severity >= severity && i.Confidence >= confidence {
+			res = append(res, i)
 		}
 	}
 

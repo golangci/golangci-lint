@@ -9,11 +9,11 @@ import (
 
 	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/viper"
+	"golang.org/x/exp/slices"
 
 	"github.com/golangci/golangci-lint/pkg/exitcodes"
 	"github.com/golangci/golangci-lint/pkg/fsutils"
 	"github.com/golangci/golangci-lint/pkg/logutils"
-	"github.com/golangci/golangci-lint/pkg/sliceutil"
 )
 
 type FileReader struct {
@@ -203,7 +203,7 @@ func (r *FileReader) setupConfigFileSearch() {
 	// find home directory for global config
 	if home, err := homedir.Dir(); err != nil {
 		r.log.Warnf("Can't get user's home directory: %s", err.Error())
-	} else if !sliceutil.Contains(configSearchPaths, home) {
+	} else if !slices.Contains(configSearchPaths, home) {
 		configSearchPaths = append(configSearchPaths, home)
 	}
 
