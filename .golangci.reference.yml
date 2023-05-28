@@ -2143,6 +2143,7 @@ linters:
     - revive
     - rowserrcheck
     - scopelint
+    - slen
     - sqlclosecheck
     - staticcheck
     - structcheck
@@ -2256,6 +2257,7 @@ linters:
     - revive
     - rowserrcheck
     - scopelint
+    - slen
     - sqlclosecheck
     - staticcheck
     - structcheck
