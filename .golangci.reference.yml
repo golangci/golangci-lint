@@ -1244,14 +1244,14 @@ linters-settings:
 
   musttag:
     # A set of custom functions to check in addition to the builtin ones.
-    # Default: json, xml, gopkg.in/yaml.v3, BurntSushi/toml, mitchellh/mapstructure
+    # Default: json, xml, gopkg.in/yaml.v3, BurntSushi/toml, mitchellh/mapstructure, jmoiron/sqlx
     functions:
         # The full name of the function, including the package.
-      - name: github.com/jmoiron/sqlx.Get
+      - name: github.com/hashicorp/hcl/v2/hclsimple.DecodeFile
         # The struct tag whose presence should be ensured.
-        tag: db
+        tag: hcl
         # The position of the argument to check.
-        arg-pos: 1
+        arg-pos: 2
 
   nakedret:
     # Make an issue if func has more lines of code than this setting, and it has naked returns.
