@@ -1,7 +1,6 @@
 package lintersdb
 
 import (
-	"sort"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -109,10 +108,7 @@ func TestGetEnabledLintersSet(t *testing.T) {
 				enabledLinters = append(enabledLinters, ln)
 			}
 
-			sort.Strings(enabledLinters)
-			sort.Strings(c.exp)
-
-			assert.Equal(t, c.exp, enabledLinters)
+			assert.ElementsMatch(t, c.exp, enabledLinters)
 		})
 	}
 }
