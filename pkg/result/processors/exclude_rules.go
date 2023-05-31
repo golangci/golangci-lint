@@ -47,6 +47,10 @@ func createRules(rules []ExcludeRule, prefix string) []excludeRule {
 			path := fsutils.NormalizePathInRegex(rule.Path)
 			parsedRule.path = regexp.MustCompile(path)
 		}
+		if rule.PathExcept != "" {
+			pathExcept := fsutils.NormalizePathInRegex(rule.PathExcept)
+			parsedRule.pathExcept = regexp.MustCompile(pathExcept)
+		}
 		parsedRules = append(parsedRules, parsedRule)
 	}
 	return parsedRules

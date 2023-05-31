@@ -9,21 +9,23 @@ import (
 )
 
 type BaseRule struct {
-	Text    string
-	Source  string
-	Path    string
-	Linters []string
+	Text       string
+	Source     string
+	Path       string
+	PathExcept string
+	Linters    []string
 }
 
 type baseRule struct {
-	text    *regexp.Regexp
-	source  *regexp.Regexp
-	path    *regexp.Regexp
-	linters []string
+	text       *regexp.Regexp
+	source     *regexp.Regexp
+	path       *regexp.Regexp
+	pathExcept *regexp.Regexp
+	linters    []string
 }
 
 func (r *baseRule) isEmpty() bool {
-	return r.text == nil && r.source == nil && r.path == nil && len(r.linters) == 0
+	return r.text == nil && r.source == nil && r.path == nil && r.pathExcept == nil && len(r.linters) == 0
 }
 
 func (r *baseRule) match(issue *result.Issue, files *fsutils.Files, log logutils.Log) bool {
@@ -34,6 +36,9 @@ func (r *baseRule) match(issue *result.Issue, files *fsutils.Files, log logutils
 		return false
 	}
 	if r.path != nil && !r.path.MatchString(files.WithPathPrefix(issue.FilePath())) {
+		return false
+	}
+	if r.pathExcept != nil && r.pathExcept.MatchString(issue.FilePath()) {
 		return false
 	}
 	if len(r.linters) != 0 && !r.matchLinter(issue) {

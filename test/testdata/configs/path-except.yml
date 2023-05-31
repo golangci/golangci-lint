@@ -1,0 +1,13 @@
+linters-settings:
+  forbidigo:
+    forbid:
+      - fmt\.Print.*
+      - time.Sleep(# no sleeping!)?
+
+issues:
+  exclude-rules:
+    # Apply forbidigo only to test files, exclude
+    # it everywhere else.
+    - path-except: _test\.go
+      linters:
+        - forbidigo

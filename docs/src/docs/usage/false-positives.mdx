@@ -81,6 +81,18 @@ issues:
         - goconst
 ```
 
+The opposite, excluding reports **except** for specific paths, is also possible.
+In the following example, only test files get checked:
+
+```yml
+issues:
+  exclude-rules:
+    - path-except: '(.+)_test\.go'
+      linters:
+        - funlen
+        - goconst
+```
+
 In the following example, all the reports related to the files (`skip-files`) are excluded:
 
 ```yml

@@ -125,20 +125,24 @@ type ExcludeRule struct {
 	BaseRule `mapstructure:",squash"`
 }
 
-func (e ExcludeRule) Validate() error {
+func (e *ExcludeRule) Validate() error {
 	return e.BaseRule.Validate(excludeRuleMinConditionsCount)
 }
 
 type BaseRule struct {
-	Linters []string
-	Path    string
-	Text    string
-	Source  string
+	Linters    []string
+	Path       string
+	PathExcept string `mapstructure:"path-except"`
+	Text       string
+	Source     string
 }
 
-func (b BaseRule) Validate(minConditionsCount int) error {
+func (b *BaseRule) Validate(minConditionsCount int) error {
 	if err := validateOptionalRegex(b.Path); err != nil {
 		return fmt.Errorf("invalid path regex: %v", err)
+	}
+	if err := validateOptionalRegex(b.PathExcept); err != nil {
+		return fmt.Errorf("invalid path-except regex: %v", err)
 	}
 	if err := validateOptionalRegex(b.Text); err != nil {
 		return fmt.Errorf("invalid text regex: %v", err)
@@ -150,7 +154,10 @@ func (b BaseRule) Validate(minConditionsCount int) error {
 	if len(b.Linters) > 0 {
 		nonBlank++
 	}
-	if b.Path != "" {
+	// Filtering by path counts as one condition, regardless how it is done (one or both).
+	// Otherwise, a rule with Path and PathExcept set would pass validation
+	// whereas before the introduction of path-except that wouldn't have been precise enough.
+	if b.Path != "" || b.PathExcept != "" {
 		nonBlank++
 	}
 	if b.Text != "" {
@@ -160,7 +167,7 @@ func (b BaseRule) Validate(minConditionsCount int) error {
 		nonBlank++
 	}
 	if nonBlank < minConditionsCount {
-		return fmt.Errorf("at least %d of (text, source, path, linters) should be set", minConditionsCount)
+		return fmt.Errorf("at least %d of (text, source, path[-except],  linters) should be set", minConditionsCount)
 	}
 	return nil
 }

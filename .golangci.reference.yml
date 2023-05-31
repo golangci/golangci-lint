@@ -2323,6 +2323,11 @@ issues:
         - dupl
         - gosec
 
+    # Run some linter only for test files by excluding its issues for everything else.
+    - path-except: _test\.go
+      linters:
+        - forbidigo
+
     # Exclude known linters from partially hard-vendored code,
     # which is impossible to exclude via `nolint` comments.
     # `/` will be replaced by current OS file path separator to properly work on Windows.
