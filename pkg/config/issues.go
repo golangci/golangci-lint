@@ -154,10 +154,9 @@ func (b *BaseRule) Validate(minConditionsCount int) error {
 	if len(b.Linters) > 0 {
 		nonBlank++
 	}
-	// Filtering by path counts as one condition, regardless how it is done
-	// (one or both). Otherwise a rule with Path and PathExcept set would
-	// pass validation whereas before the introduction of path-except that
-	// would't have been precise enough.
+	// Filtering by path counts as one condition, regardless how it is done (one or both).
+	// Otherwise, a rule with Path and PathExcept set would pass validation
+	// whereas before the introduction of path-except that wouldn't have been precise enough.
 	if b.Path != "" || b.PathExcept != "" {
 		nonBlank++
 	}
@@ -168,7 +167,7 @@ func (b *BaseRule) Validate(minConditionsCount int) error {
 		nonBlank++
 	}
 	if nonBlank < minConditionsCount {
-		return fmt.Errorf("at least %d of (text, source, [not-]path,  linters) should be set", minConditionsCount)
+		return fmt.Errorf("at least %d of (text, source, path[-except],  linters) should be set", minConditionsCount)
 	}
 	return nil
 }
