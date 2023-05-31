@@ -427,6 +427,10 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		linter.NewConfig(golinters.NewForbidigo(forbidigoCfg)).
 			WithSince("v1.34.0").
 			WithPresets(linter.PresetStyle).
+			// Strictly speaking,
+			// the additional information is only needed when forbidigoCfg.AnalyzeTypes is chosen by the user.
+			// But we don't know that here in all cases (sometimes config is not loaded),
+			// so we have to assume that it is needed to be on the safe side.
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/ashanbrown/forbidigo"),
 

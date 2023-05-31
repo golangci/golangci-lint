@@ -1,0 +1,8 @@
+linters-settings:
+  forbidigo:
+    analyze-types: true
+    forbid:
+      - p: fmt\.Print.*
+        pkg: ^fmt$
+      - p: time.Sleep
+        msg: no sleeping!

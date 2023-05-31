@@ -351,14 +351,31 @@ linters-settings:
     # Forbid the following identifiers (list of regexp).
     # Default: ["^(fmt\\.Print(|f|ln)|print|println)$"]
     forbid:
+      # Builtin function:
       - ^print.*$
-      - 'fmt\.Print.*'
-      # Optionally put comments at the end of the regex, surrounded by `(# )?`
-      # Escape any special characters.
+      # Optional message that gets included in error reports.
+      - p: ^fmt\.Print.*$
+        msg: Do not commit print statements.
+      # Alternatively, put messages at the end of the regex, surrounded by `(# )?`
+      # Escape any special characters. Those messages get included in error reports.
       - 'fmt\.Print.*(# Do not commit print statements\.)?'
+      # Forbid spew Dump, whether it is called as function or method.
+      # Depends on analyze-types below.
+      - ^spew\.(ConfigState\.)?Dump$
+      # The package name might be ambiguous.
+      # The full import path can be used as additional criteria.
+      # Depends on analyze-types below.
+      - p: ^v1.Dump$
+        pkg: ^example.com/pkg/api/v1$
     # Exclude godoc examples from forbidigo checks.
     # Default: true
-    exclude_godoc_examples: false
+    exclude-godoc-examples: false
+    # Instead of matching the literal source code,
+    # use type information to replace expressions with strings that contain the package name
+    # and (for methods and fields) the type name.
+    # This makes it possible to handle import renaming and forbid struct fields and methods.
+    # Default: false
+    analyze-types: true
 
   funlen:
     # Checks the number of lines in a function.

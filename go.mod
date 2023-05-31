@@ -71,6 +71,7 @@ require (
 	github.com/mgechev/revive v1.3.2
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/mitchellh/go-ps v1.0.0
+	github.com/mitchellh/mapstructure v1.5.0
 	github.com/moricho/tparallel v0.3.1
 	github.com/nakabonne/nestif v0.3.1
 	github.com/nishanths/exhaustive v0.10.0
@@ -153,7 +154,6 @@ require (
 	github.com/mattn/go-isatty v0.0.17 // indirect
 	github.com/mattn/go-runewidth v0.0.9 // indirect
 	github.com/matttproud/golang_protobuf_extensions v1.0.1 // indirect
-	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/nbutton23/zxcvbn-go v0.0.0-20210217022336-fa2cb2858354 // indirect
 	github.com/olekukonko/tablewriter v0.0.5 // indirect
 	github.com/pelletier/go-toml v1.9.5 // indirect

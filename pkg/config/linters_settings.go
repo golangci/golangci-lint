@@ -1,8 +1,11 @@
 package config
 
 import (
+	"encoding"
 	"errors"
 	"runtime"
+
+	"gopkg.in/yaml.v3"
 )
 
 var defaultLintersSettings = LintersSettings{
@@ -330,8 +333,45 @@ type ExhaustructSettings struct {
 }
 
 type ForbidigoSettings struct {
-	Forbid               []string `mapstructure:"forbid"`
-	ExcludeGodocExamples bool     `mapstructure:"exclude-godoc-examples"`
+	Forbid               []ForbidigoPattern `mapstructure:"forbid"`
+	ExcludeGodocExamples bool               `mapstructure:"exclude-godoc-examples"`
+	AnalyzeTypes         bool               `mapstructure:"analyze-types"`
+}
+
+var _ encoding.TextUnmarshaler = &ForbidigoPattern{}
+
+// ForbidigoPattern corresponds to forbidigo.pattern and adds mapstructure support.
+// The YAML field names must match what forbidigo expects.
+type ForbidigoPattern struct {
+	// patternString gets populated when the config contains a string as entry in ForbidigoSettings.Forbid[]
+	// because ForbidigoPattern implements encoding.TextUnmarshaler
+	// and the reader uses the mapstructure.TextUnmarshallerHookFunc as decoder hook.
+	//
+	// If the entry is a map, then the other fields are set as usual by mapstructure.
+	patternString string
+
+	Pattern string `yaml:"p" mapstructure:"p"`
+	Package string `yaml:"pkg,omitempty" mapstructure:"pkg,omitempty"`
+	Msg     string `yaml:"msg,omitempty" mapstructure:"msg,omitempty"`
+}
+
+func (p *ForbidigoPattern) UnmarshalText(text []byte) error {
+	// Validation happens when instantiating forbidigo.
+	p.patternString = string(text)
+	return nil
+}
+
+// MarshalString converts the pattern into a string as needed by forbidigo.NewLinter.
+//
+// MarshalString is intentionally not called MarshalText,
+// although it has the same signature
+// because implementing encoding.TextMarshaler led to infinite recursion when yaml.Marshal called MarshalText.
+func (p *ForbidigoPattern) MarshalString() ([]byte, error) {
+	if p.patternString != "" {
+		return []byte(p.patternString), nil
+	}
+
+	return yaml.Marshal(p)
 }
 
 type FunlenSettings struct {
