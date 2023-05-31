@@ -370,10 +370,10 @@ linters-settings:
     # Exclude godoc examples from forbidigo checks.
     # Default: true
     exclude-godoc-examples: false
-    # Instead of matching the literal source code, use type information to
-    # replace expressions with strings that contain the package name and (for
-    # methods and fields) the type name. This makes it possible to handle
-    # import renaming and forbid struct fields and methods.
+    # Instead of matching the literal source code,
+    # use type information to replace expressions with strings that contain the package name
+    # and (for methods and fields) the type name.
+    # This makes it possible to handle import renaming and forbid struct fields and methods.
     # Default: false
     analyze-types: true
 
