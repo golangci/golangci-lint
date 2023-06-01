@@ -2140,6 +2140,7 @@ linters:
     - maintidx
     - makezero
     - maligned
+    - mirror
     - misspell
     - musttag
     - nakedret
@@ -2253,6 +2254,7 @@ linters:
     - maintidx
     - makezero
     - maligned
+    - mirror
     - misspell
     - musttag
     - nakedret

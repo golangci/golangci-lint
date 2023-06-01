@@ -94,6 +94,8 @@ github.com/breml/errchkjson v0.3.1 h1:hlIeXuspTyt8Y/UmP5qy1JocGNR00KQHgfaNtRAjox
 github.com/breml/errchkjson v0.3.1/go.mod h1:XroxrzKjdiutFyW3nWhw34VGg7kiMsDQox73yWCGI2U=
 github.com/butuzov/ireturn v0.2.0 h1:kCHi+YzC150GE98WFuZQu9yrTn6GEydO2AuPLbTgnO4=
 github.com/butuzov/ireturn v0.2.0/go.mod h1:Wh6Zl3IMtTpaIKbmwzqi6olnM9ptYQxxVacMsOEFPoc=
+github.com/butuzov/mirror v1.1.0 h1:ZqX54gBVMXu78QLoiqdwpl2mgmoOJTk7s4p4o+0avZI=
+github.com/butuzov/mirror v1.1.0/go.mod h1:8Q0BdQU6rC6WILDiBM60DBfvV78OLJmMmixe7GF45AE=
 github.com/census-instrumentation/opencensus-proto v0.2.1/go.mod h1:f6KPmirojxKA12rnyqOA5BBL4O983OfeGPqjHWSTneU=
 github.com/cespare/xxhash/v2 v2.1.1/go.mod h1:VGX0DQ3Q6kWi7AoAeZDth3/j3BFtOZR5XLFGgcrjCOs=
 github.com/cespare/xxhash/v2 v2.1.2 h1:YRXhKfTDauu4ajMg1TPgFO5jnlC2HCbmLXMcTG5cbYE=

@@ -654,6 +654,12 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithURL("https://github.com/mdempsky/maligned").
 			Deprecated("The repository of the linter has been archived by the owner.", "v1.38.0", "govet 'fieldalignment'"),
 
+		linter.NewConfig(golinters.NewMirror()).
+			WithSince("v1.53.0").
+			WithPresets(linter.PresetStyle).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/butuzov/mirror"),
+
 		linter.NewConfig(golinters.NewMisspell(misspellCfg)).
 			WithSince("v1.8.0").
 			WithPresets(linter.PresetStyle, linter.PresetComment).
