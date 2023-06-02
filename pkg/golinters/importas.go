@@ -3,6 +3,7 @@ package golinters
 import (
 	"fmt"
 	"strconv"
+	"strings"
 
 	"github.com/julz/importas" //nolint:misspell
 	"golang.org/x/tools/go/analysis"
@@ -50,7 +51,8 @@ func NewImportAs(settings *config.ImportAsSettings) *goanalysis.Linter {
 				uniqPackages[a.Pkg] = a
 			}
 
-			if v, ok := uniqAliases[a.Alias]; ok {
+			// skip the duplication check when the alias is a regular expression replacement pattern (ie. contains `$`).
+			if v, ok := uniqAliases[a.Alias]; ok && !strings.Contains(a.Alias, "$") {
 				lintCtx.Log.Errorf("invalid configuration, multiple packages with the same alias: alias=%s packages=[%s,%s]", a.Alias, a.Pkg, v.Pkg)
 			} else {
 				uniqAliases[a.Alias] = a
