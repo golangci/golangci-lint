@@ -1,7 +1,7 @@
 package golinters
 
 import (
-	"github.com/OpenPeeDeeP/depguard/v2"
+	"github.com/golangci/depguard/v2"
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/config"
