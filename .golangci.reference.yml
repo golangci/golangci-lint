@@ -185,7 +185,7 @@ linters-settings:
     #
     #  `$gostd` - matches all of go's standard library (Pulled from `GOROOT`)
     #
-    # Default: no rules.
+    # Default: Only allow $gostd in all files.
     rules:
       # Name of a rule.
       main:
