@@ -1,6 +1,50 @@
 Follow the news and releases on our [twitter](https://twitter.com/golangci) and our [blog](https://medium.com/golangci).
 There is the most valuable changes log:
 
+### v1.53.0
+
+1. new linters
+   * `gosmopolitan`: https://github.com/xen0n/gosmopolitan
+   * `mirror`: https://github.com/butuzov/mirror
+   * `tagalign`: https://github.com/4meepo/tagalign
+   * `zerologlint`: https://github.com/ykadowak/zerologlint
+2. updated linters
+   * `bodyclose`: bump to HEAD
+   * `containedctx`: from 1.0.2 to 1.0.3
+   * `depguard`: migrate to v2
+   * `errname`: from 0.1.9 to 0.1.10
+   * `exhaustive`: from 0.9.5 to 0.10.0
+   * `forbidigo`: better support for configuring complex rules
+   * `gci`: improve error message
+   * `ginkgolinter`: add suppress-async-assertion option
+   * `ginkgolinter`: from 0.9.0 to 0.12.0
+   * `go-critic`: from 0.7.0 to 0.8.1
+   * `go-errorlint`: from 1.4.0 to 1.4.2
+   * `gofumpt`: from 0.4.0 to 0.5.0
+   * `gosec`: convert global settings as map with proper key type
+   * `gosec`: from 2.15.0 to 2.16.0
+   * `importas`: detect duplicate alias or package in the configuration
+   * `importas`: fix typo in logs
+   * `ireturn`: from 0.1.1 to 0.2.0
+   * `musttag`: from 0.5.0 to 0.7.0
+   * `nakedret`: to 2.0.1
+   * `nilnil`: from 0.1.3 to 0.1.5
+   * `paralleltest`: from 1.0.6 to 1.0.7
+   * `revive`: from 1.3.1 to 1.3.2
+   * `tagliatelle`: from 0.4.0 to 0.5.0
+   * `usestdlibvars`: fix configuration
+3. misc.
+   * `golang.org/x/tools`: from 0.7.0 to 0.9.2
+   * add loongarch64 to the install script
+   * output: add colored-tab
+   * remove warning when the config file is explicitly stdin
+   * rules: support inverted path match
+4. Documentation
+   * `mnd`: clarify ignore usage examples to be regexps
+   * `tagliatelle`: update documentation
+   * improve features section
+   * update supported Go versions FAQ
+
 ### v1.52.2
 
 1. updated linters
