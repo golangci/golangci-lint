@@ -211,8 +211,8 @@ github.com/golang/protobuf v1.5.2/go.mod h1:XVQd3VNwM+JqD3oG2Ue2ip4fOMUkwXdXDdiu
 github.com/golang/snappy v0.0.3/go.mod h1:/XxbfmMg8lxefKM7IXC3fBNl/7bRcc72aCRzEWrmP2Q=
 github.com/golangci/check v0.0.0-20180506172741-cfe4005ccda2 h1:23T5iq8rbUYlhpt5DB4XJkc6BU31uODLD1o1gKvZmD0=
 github.com/golangci/check v0.0.0-20180506172741-cfe4005ccda2/go.mod h1:k9Qvh+8juN+UKMCS/3jFtGICgW8O96FVaZsaxdzDkR4=
-github.com/golangci/depguard/v2 v2.0.2-0.20230601235138-ed68d3771f48 h1:7HCx5L1RlH1KRijM95B57+ZraC7ddDW331jKPQY0iF4=
-github.com/golangci/depguard/v2 v2.0.2-0.20230601235138-ed68d3771f48/go.mod h1:e28gyM56ocHUQq3sLM1+C0iCx6NTPupOboWMllp1E/8=
+github.com/golangci/depguard/v2 v2.0.2-0.20230602133032-4f22f8585733 h1:8JUsvfXgBTLXGNvwL8QTYe4rmkeJUoiiqA+bAREQsBU=
+github.com/golangci/depguard/v2 v2.0.2-0.20230602133032-4f22f8585733/go.mod h1:e28gyM56ocHUQq3sLM1+C0iCx6NTPupOboWMllp1E/8=
 github.com/golangci/dupl v0.0.0-20180902072040-3e9179ac440a h1:w8hkcTqaFpzKqonE9uMCefW1WDie15eSP/4MssdenaM=
 github.com/golangci/dupl v0.0.0-20180902072040-3e9179ac440a/go.mod h1:ryS0uhF+x9jgbj/N71xsEqODy9BN81/GonCZiOzirOk=
 github.com/golangci/go-misc v0.0.0-20220329215616-d24fe342adfe h1:6RGUuS7EGotKx6J5HIP8ZtyMdiDscjMLfRBSPuzVVeo=
