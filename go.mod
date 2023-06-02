@@ -36,7 +36,7 @@ require (
 	github.com/go-xmlfmt/xmlfmt v1.1.2
 	github.com/gofrs/flock v0.8.1
 	github.com/golangci/check v0.0.0-20180506172741-cfe4005ccda2
-	github.com/golangci/depguard/v2 v2.0.2-0.20230601235138-ed68d3771f48
+	github.com/golangci/depguard/v2 v2.0.2-0.20230602133032-4f22f8585733
 	github.com/golangci/dupl v0.0.0-20180902072040-3e9179ac440a
 	github.com/golangci/go-misc v0.0.0-20220329215616-d24fe342adfe
 	github.com/golangci/gofmt v0.0.0-20220901101216-f2edd75033f2
