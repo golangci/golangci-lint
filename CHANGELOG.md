@@ -1,6 +1,12 @@
 Follow the news and releases on our [twitter](https://twitter.com/golangci) and our [blog](https://medium.com/golangci).
 There is the most valuable changes log:
 
+### v1.53.1
+
+1. misc.
+   * `depguard`: fix GOROOT detection
+   * `importas`: fix duplication detection when aliases use regular expression replacement pattern
+
 ### v1.53.0
 
 1. new linters
