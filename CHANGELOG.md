@@ -1,6 +1,13 @@
 Follow the news and releases on our [twitter](https://twitter.com/golangci) and our [blog](https://medium.com/golangci).
 There is the most valuable changes log:
 
+### v1.53.2
+
+1. updated linters
+   * `depguard`: from v2.0.1 to 2.1.0
+2. misc.
+   * `depguard`: throw error only when the linter is called
+
 ### v1.53.1
 
 1. misc.
