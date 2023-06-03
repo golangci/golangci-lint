@@ -1,7 +1,7 @@
 package golinters
 
 import (
-	"github.com/golangci/depguard/v2"
+	"github.com/OpenPeeDeeP/depguard/v2"
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/config"
@@ -33,19 +33,17 @@ func NewDepguard(settings *config.DepGuardSettings) *goanalysis.Linter {
 		}
 	}
 
-	a := depguard.NewCoreAnalyzer(depguard.CoreSettings{})
+	a := depguard.NewUncompiledAnalyzer(&conf)
 
 	return goanalysis.NewLinter(
-		a.Name,
-		a.Doc,
-		[]*analysis.Analyzer{a},
+		a.Analyzer.Name,
+		a.Analyzer.Doc,
+		[]*analysis.Analyzer{a.Analyzer},
 		nil,
 	).WithContextSetter(func(lintCtx *linter.Context) {
-		coreSettings, err := conf.Compile()
+		err := a.Compile()
 		if err != nil {
 			lintCtx.Log.Errorf("create analyzer: %v", err)
 		}
-
-		a.Run = coreSettings.Run
 	}).WithLoadMode(goanalysis.LoadModeSyntax)
 }
