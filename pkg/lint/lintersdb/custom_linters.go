@@ -1,6 +1,7 @@
 package lintersdb
 
 import (
+	"errors"
 	"fmt"
 	"path/filepath"
 	"plugin"
@@ -45,14 +46,14 @@ func (m *Manager) WithCustomLinters() *Manager {
 // loadCustomLinterConfig loads the configuration of private linters.
 // Private linters are dynamically loaded from .so plugin files.
 func (m *Manager) loadCustomLinterConfig(name string, settings config.CustomLinterSettings) (*linter.Config, error) {
-	analyzer, err := m.getAnalyzerPlugin(settings.Path)
+	analyzers, err := m.getAnalyzerPlugin(settings.Path, settings.Settings)
 	if err != nil {
 		return nil, err
 	}
 
 	m.log.Infof("Loaded %s: %s", settings.Path, name)
 
-	customLinter := goanalysis.NewLinter(name, settings.Description, analyzer.GetAnalyzers(), nil).
+	customLinter := goanalysis.NewLinter(name, settings.Description, analyzers, nil).
 		WithLoadMode(goanalysis.LoadModeTypesInfo)
 
 	linterConfig := linter.NewConfig(customLinter).
@@ -68,7 +69,7 @@ func (m *Manager) loadCustomLinterConfig(name string, settings config.CustomLint
 // and returns the 'AnalyzerPlugin' interface implemented by the private plugin.
 // An error is returned if the private linter cannot be loaded
 // or the linter does not implement the AnalyzerPlugin interface.
-func (m *Manager) getAnalyzerPlugin(path string) (AnalyzerPlugin, error) {
+func (m *Manager) getAnalyzerPlugin(path string, settings any) ([]*analysis.Analyzer, error) {
 	if !filepath.IsAbs(path) {
 		// resolve non-absolute paths relative to config file's directory
 		configFilePath := viper.ConfigFileUsed()
@@ -84,6 +85,34 @@ func (m *Manager) getAnalyzerPlugin(path string) (AnalyzerPlugin, error) {
 		return nil, err
 	}
 
+	analyzers, errP := lookupPluginNew(plug, settings)
+	if errP != nil {
+		// fallback to the old plugin interface.
+		analyzers, err = lookupAnalyzerPlugin(plug)
+		if err != nil {
+			return nil, fmt.Errorf("lookup plugin %s: %w", path, errors.Join(errP, err))
+		}
+	}
+
+	return analyzers, nil
+}
+
+func lookupPluginNew(plug *plugin.Plugin, settings any) ([]*analysis.Analyzer, error) {
+	symbol, err := plug.Lookup("New")
+	if err != nil {
+		return nil, err
+	}
+
+	// The type func cannot be used here, must be the explicit signature.
+	constructor, ok := symbol.(func(any) ([]*analysis.Analyzer, error))
+	if !ok {
+		return nil, fmt.Errorf("plugin does not abide by 'New' function: %T", symbol)
+	}
+
+	return constructor(settings)
+}
+
+func lookupAnalyzerPlugin(plug *plugin.Plugin) ([]*analysis.Analyzer, error) {
 	symbol, err := plug.Lookup("AnalyzerPlugin")
 	if err != nil {
 		return nil, err
@@ -91,8 +120,8 @@ func (m *Manager) getAnalyzerPlugin(path string) (AnalyzerPlugin, error) {
 
 	analyzerPlugin, ok := symbol.(AnalyzerPlugin)
 	if !ok {
-		return nil, fmt.Errorf("plugin %s does not abide by 'AnalyzerPlugin' interface", path)
+		return nil, fmt.Errorf("plugin does not abide by 'AnalyzerPlugin' interface: %T", symbol)
 	}
 
-	return analyzerPlugin, nil
+	return analyzerPlugin.GetAnalyzers(), nil
 }

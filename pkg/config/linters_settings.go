@@ -828,6 +828,9 @@ type CustomLinterSettings struct {
 	Path string
 	// Description describes the purpose of the private linter.
 	Description string
-	// The URL containing the source code for the private linter.
+	// OriginalURL The URL containing the source code for the private linter.
 	OriginalURL string `mapstructure:"original-url"`
+
+	// Settings plugin settings only work with linterdb.PluginConstructor symbol.
+	Settings any
 }
