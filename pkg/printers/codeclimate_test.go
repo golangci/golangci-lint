@@ -64,7 +64,8 @@ func TestCodeClimate_Print(t *testing.T) {
 	require.NoError(t, err)
 
 	//nolint:lll
-	expected := `[{"description":"linter-a: some issue","severity":"warning","fingerprint":"BA73C5DF4A6FD8462FFF1D3140235777","location":{"path":"path/to/filea.go","lines":{"begin":10}}},{"description":"linter-b: another issue","severity":"error","fingerprint":"0777B4FE60242BD8B2E9B7E92C4B9521","location":{"path":"path/to/fileb.go","lines":{"begin":300}}},{"description":"linter-c: issue c","severity":"critical","fingerprint":"BEE6E9FBB6BFA4B7DB9FB036697FB036","location":{"path":"path/to/filec.go","lines":{"begin":200}}}]`
+	expected := `[{"description":"linter-a: some issue","severity":"warning","fingerprint":"BA73C5DF4A6FD8462FFF1D3140235777","location":{"path":"path/to/filea.go","lines":{"begin":10}}},{"description":"linter-b: another issue","severity":"error","fingerprint":"0777B4FE60242BD8B2E9B7E92C4B9521","location":{"path":"path/to/fileb.go","lines":{"begin":300}}},{"description":"linter-c: issue c","severity":"critical","fingerprint":"BEE6E9FBB6BFA4B7DB9FB036697FB036","location":{"path":"path/to/filec.go","lines":{"begin":200}}}]
+`
 
 	assert.Equal(t, expected, buf.String())
 }

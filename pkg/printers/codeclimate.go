@@ -2,7 +2,6 @@ package printers
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
 
 	"github.com/golangci/golangci-lint/pkg/result"
@@ -52,12 +51,7 @@ func (p CodeClimate) Print(issues []result.Issue) error {
 		codeClimateIssues = append(codeClimateIssues, codeClimateIssue)
 	}
 
-	outputJSON, err := json.Marshal(codeClimateIssues)
-	if err != nil {
-		return err
-	}
-
-	_, err = fmt.Fprint(p.w, string(outputJSON))
+	err := json.NewEncoder(p.w).Encode(codeClimateIssues)
 	if err != nil {
 		return err
 	}
