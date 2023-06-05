@@ -1,0 +1,63 @@
+name: Documentation
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+
+  doc:
+    name: Build and deploy documentation
+    runs-on: ubuntu-latest
+    env:
+      GO_VERSION: '1.20'
+      NODE_VERSION: '20.x'
+      CGO_ENABLED: 0
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Go ${{ env.GO_VERSION }}
+        uses: actions/setup-go@v3
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: Cache Go modules
+        uses: actions/cache@v3
+        with:
+          # In order:
+          # * Module download cache
+          # * Build cache (Linux)
+          path: |
+            ~/go/pkg/mod
+            ~/.cache/go-build
+          key: docs-${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            docs-${{ runner.os }}-go-
+
+      - run: go mod download
+
+      - name: Use Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: docs/package-lock.json
+
+      - run:  npm install --legacy-peer-deps
+        working-directory: ./docs
+
+      - name: Build Documentation
+        run: npm run build
+        working-directory: ./docs
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          publish_dir: docs/public
+          force_orphan: true
+          github_token: ${{ secrets.GOLANGCI_LINT_TOKEN }}
