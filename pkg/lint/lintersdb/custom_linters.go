@@ -85,22 +85,23 @@ func (m *Manager) getAnalyzerPlugin(path string, settings any) ([]*analysis.Anal
 		return nil, err
 	}
 
-	analyzers, errP := lookupPluginNew(plug, settings)
-	if errP != nil {
-		// fallback to the old plugin interface.
-		analyzers, err = lookupAnalyzerPlugin(plug)
-		if err != nil {
-			return nil, fmt.Errorf("lookup plugin %s: %w", path, errors.Join(errP, err))
-		}
+	analyzers, err := lookupPlugin(plug, settings)
+	if err != nil {
+		return nil, fmt.Errorf("lookup plugin %s: %w", path, err)
 	}
 
 	return analyzers, nil
 }
 
-func lookupPluginNew(plug *plugin.Plugin, settings any) ([]*analysis.Analyzer, error) {
+func lookupPlugin(plug *plugin.Plugin, settings any) ([]*analysis.Analyzer, error) {
 	symbol, err := plug.Lookup("New")
 	if err != nil {
-		return nil, err
+		analyzers, errP := lookupAnalyzerPlugin(plug)
+		if err != nil {
+			return nil, errors.Join(err, errP)
+		}
+
+		return analyzers, nil
 	}
 
 	// The type func cannot be used here, must be the explicit signature.
