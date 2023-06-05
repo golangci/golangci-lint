@@ -18,7 +18,7 @@ require (
 	github.com/alingse/asasalint v0.0.11
 	github.com/ashanbrown/forbidigo v1.5.1
 	github.com/ashanbrown/makezero v1.1.1
-	github.com/bkielbasa/cyclop v1.2.0
+	github.com/bkielbasa/cyclop v1.2.1
 	github.com/blizzy78/varnamelen v0.8.0
 	github.com/bombsimon/wsl/v3 v3.4.0
 	github.com/breml/bidichk v0.2.4
