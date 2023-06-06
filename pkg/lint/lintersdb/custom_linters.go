@@ -1,7 +1,6 @@
 package lintersdb
 
 import (
-	"errors"
 	"fmt"
 	"path/filepath"
 	"plugin"
@@ -98,7 +97,8 @@ func (m *Manager) lookupPlugin(plug *plugin.Plugin, settings any) ([]*analysis.A
 	if err != nil {
 		analyzers, errP := m.lookupAnalyzerPlugin(plug)
 		if err != nil {
-			return nil, errors.Join(err, errP)
+			// TODO(ldez): use `errors.Join` when we will upgrade to go1.20.
+			return nil, fmt.Errorf("%s: %w", err, errP)
 		}
 
 		return analyzers, nil
@@ -119,7 +119,8 @@ func (m *Manager) lookupAnalyzerPlugin(plug *plugin.Plugin) ([]*analysis.Analyze
 		return nil, err
 	}
 
-	m.log.Warnf("plugin: 'AnalyzerPlugin' plugins are deprecated, please the new plugin signature: https://golangci-lint.run/contributing/new-linters/#create-a-plugin")
+	m.log.Warnf("plugin: 'AnalyzerPlugin' plugins are deprecated, please the new plugin signature:" +
+		"https://golangci-lint.run/contributing/new-linters/#create-a-plugin")
 
 	analyzerPlugin, ok := symbol.(AnalyzerPlugin)
 	if !ok {
