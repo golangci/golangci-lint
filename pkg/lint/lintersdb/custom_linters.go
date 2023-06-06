@@ -85,7 +85,7 @@ func (m *Manager) getAnalyzerPlugin(path string, settings any) ([]*analysis.Anal
 		return nil, err
 	}
 
-	analyzers, err := lookupPlugin(plug, settings)
+	analyzers, err := m.lookupPlugin(plug, settings)
 	if err != nil {
 		return nil, fmt.Errorf("lookup plugin %s: %w", path, err)
 	}
@@ -93,10 +93,10 @@ func (m *Manager) getAnalyzerPlugin(path string, settings any) ([]*analysis.Anal
 	return analyzers, nil
 }
 
-func lookupPlugin(plug *plugin.Plugin, settings any) ([]*analysis.Analyzer, error) {
+func (m *Manager) lookupPlugin(plug *plugin.Plugin, settings any) ([]*analysis.Analyzer, error) {
 	symbol, err := plug.Lookup("New")
 	if err != nil {
-		analyzers, errP := lookupAnalyzerPlugin(plug)
+		analyzers, errP := m.lookupAnalyzerPlugin(plug)
 		if err != nil {
 			return nil, errors.Join(err, errP)
 		}
@@ -113,11 +113,13 @@ func lookupPlugin(plug *plugin.Plugin, settings any) ([]*analysis.Analyzer, erro
 	return constructor(settings)
 }
 
-func lookupAnalyzerPlugin(plug *plugin.Plugin) ([]*analysis.Analyzer, error) {
+func (m *Manager) lookupAnalyzerPlugin(plug *plugin.Plugin) ([]*analysis.Analyzer, error) {
 	symbol, err := plug.Lookup("AnalyzerPlugin")
 	if err != nil {
 		return nil, err
 	}
+
+	m.log.Warnf("plugin: 'AnalyzerPlugin' plugins are deprecated, please the new plugin signature: https://golangci-lint.run/contributing/new-linters/#create-a-plugin")
 
 	analyzerPlugin, ok := symbol.(AnalyzerPlugin)
 	if !ok {
