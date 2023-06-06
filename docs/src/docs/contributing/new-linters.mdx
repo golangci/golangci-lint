@@ -86,6 +86,9 @@ That is all the configuration that is required to run a custom linter in your pr
 Custom linters are disabled by default, and are not enabled when `linters.enable-all` is specified.
 They can be enabled by adding them the `linters.enable` list, or providing the enabled option on the command line (`golangci-lint run -Eexample`).
 
+The configuration inside the `settings` field of linter have some limitations (there are NOT related to the plugin system itself):
+we use Viper to handle the configuration but Viper put all the keys in lowercase, and `.` cannot be used inside a key.
+
 ### Create a Plugin
 
 Your linter must provide one or more `golang.org/x/tools/go/analysis.Analyzer` structs.
