@@ -119,7 +119,7 @@ func (m *Manager) lookupAnalyzerPlugin(plug *plugin.Plugin) ([]*analysis.Analyze
 		return nil, err
 	}
 
-	m.log.Warnf("plugin: 'AnalyzerPlugin' plugins are deprecated, please the new plugin signature:" +
+	m.log.Warnf("plugin: 'AnalyzerPlugin' plugins are deprecated, please use the new plugin signature:" +
 		"https://golangci-lint.run/contributing/new-linters/#create-a-plugin")
 
 	analyzerPlugin, ok := symbol.(AnalyzerPlugin)
