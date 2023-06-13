@@ -5,6 +5,7 @@ import (
 	"path/filepath"
 	"plugin"
 
+	"github.com/hashicorp/go-multierror"
 	"github.com/spf13/viper"
 	"golang.org/x/tools/go/analysis"
 
@@ -98,7 +99,7 @@ func (m *Manager) lookupPlugin(plug *plugin.Plugin, settings any) ([]*analysis.A
 		analyzers, errP := m.lookupAnalyzerPlugin(plug)
 		if err != nil {
 			// TODO(ldez): use `errors.Join` when we will upgrade to go1.20.
-			return nil, fmt.Errorf("%s: %w", err, errP)
+			return nil, multierror.Append(err, errP)
 		}
 
 		return analyzers, nil
