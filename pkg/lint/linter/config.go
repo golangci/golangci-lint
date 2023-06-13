@@ -33,8 +33,8 @@ type Deprecation struct {
 }
 
 type Config struct {
-	Linter  Linter
-	Default bool
+	Linter           Linter
+	EnabledByDefault bool
 
 	LoadMode packages.LoadMode
 
@@ -50,8 +50,8 @@ type Config struct {
 	Deprecation *Deprecation
 }
 
-func (lc *Config) EnabledByDefault() *Config {
-	lc.Default = true
+func (lc *Config) WithEnabledByDefault() *Config {
+	lc.EnabledByDefault = true
 	return lc
 }
 

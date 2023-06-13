@@ -361,7 +361,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithURL("https://github.com/charithe/durationcheck"),
 
 		linter.NewConfig(golinters.NewErrcheck(errcheckCfg)).
-			EnabledByDefault().
+			WithEnabledByDefault().
 			WithSince("v1.0.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetBugs, linter.PresetError).
@@ -558,7 +558,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithAlternativeNames("gas"),
 
 		linter.NewConfig(golinters.NewGosimple(gosimpleCfg)).
-			EnabledByDefault().
+			WithEnabledByDefault().
 			WithSince("v1.20.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetStyle).
@@ -572,7 +572,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithURL("https://github.com/xen0n/gosmopolitan"),
 
 		linter.NewConfig(golinters.NewGovet(govetCfg)).
-			EnabledByDefault().
+			WithEnabledByDefault().
 			WithSince("v1.0.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetBugs, linter.PresetMetaLinter).
@@ -597,7 +597,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithURL("https://github.com/julz/importas"),
 
 		linter.NewConfig(golinters.NewIneffassign()).
-			EnabledByDefault().
+			WithEnabledByDefault().
 			WithSince("v1.0.0").
 			WithPresets(linter.PresetUnused).
 			WithURL("https://github.com/gordonklaus/ineffassign"),
@@ -769,7 +769,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithURL("https://github.com/ryanrolds/sqlclosecheck"),
 
 		linter.NewConfig(golinters.NewStaticcheck(staticcheckCfg)).
-			EnabledByDefault().
+			WithEnabledByDefault().
 			WithSince("v1.0.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetBugs, linter.PresetMetaLinter).
@@ -829,7 +829,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithURL("https://github.com/moricho/tparallel"),
 
 		linter.NewConfig(golinters.NewTypecheck()).
-			EnabledByDefault().
+			WithEnabledByDefault().
 			WithSince("v1.3.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetBugs).
@@ -848,7 +848,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithURL("https://github.com/mvdan/unparam"),
 
 		linter.NewConfig(golinters.NewUnused(unusedCfg)).
-			EnabledByDefault().
+			WithEnabledByDefault().
 			WithSince("v1.20.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetUnused).
@@ -915,7 +915,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 func (m Manager) GetAllEnabledByDefaultLinters() []*linter.Config {
 	var ret []*linter.Config
 	for _, lc := range m.GetAllSupportedLinterConfigs() {
-		if lc.Default {
+		if lc.EnabledByDefault {
 			ret = append(ret, lc)
 		}
 	}
@@ -966,7 +966,7 @@ func (m Manager) loadCustomLinterConfig(name string, settings config.CustomLinte
 		nil).WithLoadMode(goanalysis.LoadModeTypesInfo)
 
 	linterConfig := linter.NewConfig(customLinter).
-		EnabledByDefault().
+		WithEnabledByDefault().
 		WithLoadForGoAnalysis().
 		WithURL(settings.OriginalURL)
 
