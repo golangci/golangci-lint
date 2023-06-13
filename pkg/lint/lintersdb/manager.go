@@ -24,6 +24,7 @@ type Manager struct {
 
 func NewManager(cfg *config.Config, log logutils.Log) *Manager {
 	m := &Manager{cfg: cfg, log: log}
+
 	nameToLCs := make(map[string][]*linter.Config)
 	for _, lc := range m.GetAllSupportedLinterConfigs() {
 		for _, name := range lc.AllNames() {
@@ -32,6 +33,7 @@ func NewManager(cfg *config.Config, log logutils.Log) *Manager {
 	}
 
 	m.nameToLCs = nameToLCs
+
 	return m
 }
 
@@ -85,17 +87,6 @@ func (m Manager) allPresetsSet() map[string]bool {
 
 func (m Manager) GetLinterConfigs(name string) []*linter.Config {
 	return m.nameToLCs[name]
-}
-
-func enableLinterConfigs(lcs []*linter.Config, isEnabled func(lc *linter.Config) bool) []*linter.Config {
-	var ret []*linter.Config
-	for _, lc := range lcs {
-		lc := lc
-		lc.EnabledByDefault = isEnabled(lc)
-		ret = append(ret, lc)
-	}
-
-	return ret
 }
 
 //nolint:funlen
@@ -289,7 +280,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 
 	// The linters are sorted in the alphabetical order (case-insensitive).
 	// When a new linter is added the version in `WithSince(...)` must be the next minor version of golangci-lint.
-	lcs := []*linter.Config{
+	return []*linter.Config{
 		linter.NewConfig(golinters.NewAsasalint(asasalintCfg)).
 			WithSince("1.47.0").
 			WithPresets(linter.PresetBugs).
@@ -370,6 +361,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithURL("https://github.com/charithe/durationcheck"),
 
 		linter.NewConfig(golinters.NewErrcheck(errcheckCfg)).
+			WithEnabledByDefault().
 			WithSince("v1.0.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetBugs, linter.PresetError).
@@ -566,6 +558,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithAlternativeNames("gas"),
 
 		linter.NewConfig(golinters.NewGosimple(gosimpleCfg)).
+			WithEnabledByDefault().
 			WithSince("v1.20.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetStyle).
@@ -579,6 +572,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithURL("https://github.com/xen0n/gosmopolitan"),
 
 		linter.NewConfig(golinters.NewGovet(govetCfg)).
+			WithEnabledByDefault().
 			WithSince("v1.0.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetBugs, linter.PresetMetaLinter).
@@ -603,6 +597,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithURL("https://github.com/julz/importas"),
 
 		linter.NewConfig(golinters.NewIneffassign()).
+			WithEnabledByDefault().
 			WithSince("v1.0.0").
 			WithPresets(linter.PresetUnused).
 			WithURL("https://github.com/gordonklaus/ineffassign"),
@@ -774,6 +769,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithURL("https://github.com/ryanrolds/sqlclosecheck"),
 
 		linter.NewConfig(golinters.NewStaticcheck(staticcheckCfg)).
+			WithEnabledByDefault().
 			WithSince("v1.0.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetBugs, linter.PresetMetaLinter).
@@ -833,6 +829,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithURL("https://github.com/moricho/tparallel"),
 
 		linter.NewConfig(golinters.NewTypecheck()).
+			WithEnabledByDefault().
 			WithSince("v1.3.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetBugs).
@@ -851,6 +848,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithURL("https://github.com/mvdan/unparam"),
 
 		linter.NewConfig(golinters.NewUnused(unusedCfg)).
+			WithEnabledByDefault().
 			WithSince("v1.20.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetUnused).
@@ -912,19 +910,6 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/ykadowak/zerologlint"),
 	}
-
-	enabledByDefault := map[string]bool{
-		golinters.NewGovet(nil).Name():                  true,
-		golinters.NewErrcheck(errcheckCfg).Name():       true,
-		golinters.NewStaticcheck(staticcheckCfg).Name(): true,
-		golinters.NewUnused(unusedCfg).Name():           true,
-		golinters.NewGosimple(gosimpleCfg).Name():       true,
-		golinters.NewIneffassign().Name():               true,
-		golinters.NewTypecheck().Name():                 true,
-	}
-	return enableLinterConfigs(lcs, func(lc *linter.Config) bool {
-		return enabledByDefault[lc.Name()]
-	})
 }
 
 func (m Manager) GetAllEnabledByDefaultLinters() []*linter.Config {
@@ -979,10 +964,12 @@ func (m Manager) loadCustomLinterConfig(name string, settings config.CustomLinte
 		settings.Description,
 		analyzer.GetAnalyzers(),
 		nil).WithLoadMode(goanalysis.LoadModeTypesInfo)
-	linterConfig := linter.NewConfig(customLinter)
-	linterConfig.EnabledByDefault = true
-	linterConfig.IsSlow = false
-	linterConfig.WithURL(settings.OriginalURL)
+
+	linterConfig := linter.NewConfig(customLinter).
+		WithEnabledByDefault().
+		WithLoadForGoAnalysis().
+		WithURL(settings.OriginalURL)
+
 	return linterConfig, nil
 }
 

@@ -50,6 +50,11 @@ type Config struct {
 	Deprecation *Deprecation
 }
 
+func (lc *Config) WithEnabledByDefault() *Config {
+	lc.EnabledByDefault = true
+	return lc
+}
+
 func (lc *Config) ConsiderSlow() *Config {
 	lc.IsSlow = true
 	return lc
