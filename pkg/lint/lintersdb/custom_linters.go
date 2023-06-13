@@ -97,7 +97,7 @@ func (m *Manager) lookupPlugin(plug *plugin.Plugin, settings any) ([]*analysis.A
 	symbol, err := plug.Lookup("New")
 	if err != nil {
 		analyzers, errP := m.lookupAnalyzerPlugin(plug)
-		if err != nil {
+		if errP != nil {
 			// TODO(ldez): use `errors.Join` when we will upgrade to go1.20.
 			return nil, multierror.Append(err, errP)
 		}
@@ -120,7 +120,7 @@ func (m *Manager) lookupAnalyzerPlugin(plug *plugin.Plugin) ([]*analysis.Analyze
 		return nil, err
 	}
 
-	m.log.Warnf("plugin: 'AnalyzerPlugin' plugins are deprecated, please use the new plugin signature:" +
+	m.log.Warnf("plugin: 'AnalyzerPlugin' plugins are deprecated, please use the new plugin signature: " +
 		"https://golangci-lint.run/contributing/new-linters/#create-a-plugin")
 
 	analyzerPlugin, ok := symbol.(AnalyzerPlugin)
