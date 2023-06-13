@@ -63,7 +63,7 @@ func printLinterConfigs(lcs []*linter.Config) {
 func (e *Executor) executeLintersHelp(_ *cobra.Command, _ []string) {
 	var enabledLCs, disabledLCs []*linter.Config
 	for _, lc := range e.DBManager.GetAllSupportedLinterConfigs() {
-		if lc.EnabledByDefault {
+		if lc.Default {
 			enabledLCs = append(enabledLCs, lc)
 		} else {
 			disabledLCs = append(disabledLCs, lc)

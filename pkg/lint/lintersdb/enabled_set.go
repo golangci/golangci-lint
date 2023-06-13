@@ -182,7 +182,7 @@ func (es EnabledSet) combineGoAnalysisLinters(linters map[string]*linter.Config)
 
 	mlConfig := &linter.Config{
 		Linter:           ml,
-		EnabledByDefault: false,
+		Default:          false,
 		InPresets:        presets,
 		AlternativeNames: nil,
 		OriginalURL:      "",

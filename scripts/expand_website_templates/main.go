@@ -238,7 +238,7 @@ func getLintersListMarkdown(enabled bool) string {
 	var neededLcs []*linter.Config
 	lcs := lintersdb.NewManager(nil, nil).GetAllSupportedLinterConfigs()
 	for _, lc := range lcs {
-		if lc.EnabledByDefault == enabled {
+		if lc.Default == enabled {
 			neededLcs = append(neededLcs, lc)
 		}
 	}

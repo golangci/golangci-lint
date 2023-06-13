@@ -340,7 +340,7 @@ func (e *Executor) runAnalysis(ctx context.Context, args []string) ([]result.Iss
 
 	for _, lc := range e.DBManager.GetAllSupportedLinterConfigs() {
 		isEnabled := enabledLintersMap[lc.Name()] != nil
-		e.reportData.AddLinter(lc.Name(), isEnabled, lc.EnabledByDefault)
+		e.reportData.AddLinter(lc.Name(), isEnabled, lc.Default)
 	}
 
 	lintCtx, err := e.contextLoader.Load(ctx, lintersToRun)
