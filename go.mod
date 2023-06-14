@@ -16,7 +16,7 @@ require (
 	github.com/alexkohler/nakedret/v2 v2.0.1
 	github.com/alexkohler/prealloc v1.0.0
 	github.com/alingse/asasalint v0.0.11
-	github.com/ashanbrown/forbidigo v1.5.1
+	github.com/ashanbrown/forbidigo v1.5.3
 	github.com/ashanbrown/makezero v1.1.1
 	github.com/bkielbasa/cyclop v1.2.1
 	github.com/blizzy78/varnamelen v0.8.0
