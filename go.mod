@@ -13,7 +13,7 @@ require (
 	github.com/Djarvur/go-err113 v0.0.0-20210108212216-aea10b59be24
 	github.com/GaijinEntertainment/go-exhaustruct/v2 v2.3.0
 	github.com/OpenPeeDeeP/depguard/v2 v2.1.0
-	github.com/alexkohler/nakedret/v2 v2.0.1
+	github.com/alexkohler/nakedret/v2 v2.0.2
 	github.com/alexkohler/prealloc v1.0.0
 	github.com/alingse/asasalint v0.0.11
 	github.com/ashanbrown/forbidigo v1.5.3
