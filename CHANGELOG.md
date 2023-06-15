@@ -1,6 +1,20 @@
 Follow the news and releases on our [twitter](https://twitter.com/golangci) and our [blog](https://medium.com/golangci).
 There is the most valuable changes log:
 
+### v1.53.3
+
+1. updated linters:
+   * `cyclop`: from 1.2.0 to 1.2.1
+   * `exhaustive`: from 0.10.0 to 0.11.0
+   * `forbidigo`: from 1.5.1 to 1.5.3
+   * `ginkgolinter`: from 0.12.2 to 0.12.1
+   * `ineffassign`: bump to HEAD
+   * `nakedret`: from 2.0.1 to 2.0.2
+   * `zerologlint`: from 0.1.1 to 0.1.2
+2. misc.
+   * codeclimate: reduce memory allocation
+   * support illumos/amd64
+
 ### v1.53.2
 
 1. updated linters
