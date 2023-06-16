@@ -8,13 +8,16 @@ import (
 )
 
 type Manager struct {
-	nameToLCs map[string][]*linter.Config
-	cfg       *config.Config
-	log       logutils.Log
+	cfg *config.Config
+	log logutils.Log
+
+	nameToLCs     map[string][]*linter.Config
+	customLinters []*linter.Config
 }
 
 func NewManager(cfg *config.Config, log logutils.Log) *Manager {
 	m := &Manager{cfg: cfg, log: log}
+	m.customLinters = m.getCustomLinterConfigs()
 
 	nameToLCs := make(map[string][]*linter.Config)
 	for _, lc := range m.GetAllSupportedLinterConfigs() {
@@ -247,9 +250,12 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 
 	const megacheckName = "megacheck"
 
+	var linters []*linter.Config
+	linters = append(linters, m.customLinters...)
+
 	// The linters are sorted in the alphabetical order (case-insensitive).
 	// When a new linter is added the version in `WithSince(...)` must be the next minor version of golangci-lint.
-	return []*linter.Config{
+	linters = append(linters,
 		linter.NewConfig(golinters.NewAsasalint(asasalintCfg)).
 			WithSince("1.47.0").
 			WithPresets(linter.PresetBugs).
@@ -867,18 +873,20 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/bombsimon/wsl"),
 
-		// nolintlint must be last because it looks at the results of all the previous linters for unused nolint directives
-		linter.NewConfig(golinters.NewNoLintLint(noLintLintCfg)).
-			WithSince("v1.26.0").
-			WithPresets(linter.PresetStyle).
-			WithURL("https://github.com/golangci/golangci-lint/blob/master/pkg/golinters/nolintlint/README.md"),
-
 		linter.NewConfig(golinters.NewZerologLint()).
 			WithSince("v1.53.0").
 			WithPresets(linter.PresetBugs).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/ykadowak/zerologlint"),
-	}
+
+		// nolintlint must be last because it looks at the results of all the previous linters for unused nolint directives
+		linter.NewConfig(golinters.NewNoLintLint(noLintLintCfg)).
+			WithSince("v1.26.0").
+			WithPresets(linter.PresetStyle).
+			WithURL("https://github.com/golangci/golangci-lint/blob/master/pkg/golinters/nolintlint/README.md"),
+	)
+
+	return linters
 }
 
 func (m Manager) GetAllEnabledByDefaultLinters() []*linter.Config {

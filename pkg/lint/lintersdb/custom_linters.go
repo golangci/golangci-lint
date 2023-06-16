@@ -12,35 +12,30 @@ import (
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
-	"github.com/golangci/golangci-lint/pkg/logutils"
-	"github.com/golangci/golangci-lint/pkg/report"
 )
 
 type AnalyzerPlugin interface {
 	GetAnalyzers() []*analysis.Analyzer
 }
 
-// WithCustomLinters loads private linters that are specified in the golangci config file.
-func (m *Manager) WithCustomLinters() *Manager {
-	if m.log == nil {
-		m.log = report.NewLogWrapper(logutils.NewStderrLog(logutils.DebugKeyEmpty), &report.Data{})
+// getCustomLinterConfigs loads private linters that are specified in the golangci config file.
+func (m *Manager) getCustomLinterConfigs() []*linter.Config {
+	if m.cfg == nil || m.log == nil {
+		return nil
 	}
 
-	if m.cfg == nil {
-		return m
-	}
+	var linters []*linter.Config
 
 	for name, settings := range m.cfg.LintersSettings.Custom {
 		lc, err := m.loadCustomLinterConfig(name, settings)
-
 		if err != nil {
 			m.log.Errorf("Unable to load custom analyzer %s:%s, %v", name, settings.Path, err)
 		} else {
-			m.nameToLCs[name] = append(m.nameToLCs[name], lc)
+			linters = append(linters, lc)
 		}
 	}
 
-	return m
+	return linters
 }
 
 // loadCustomLinterConfig loads the configuration of private linters.
