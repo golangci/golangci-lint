@@ -14,6 +14,7 @@ import (
 	"golang.org/x/tools/go/analysis/passes/copylock"
 	_ "golang.org/x/tools/go/analysis/passes/ctrlflow" // unused, internal analyzer
 	"golang.org/x/tools/go/analysis/passes/deepequalerrors"
+	"golang.org/x/tools/go/analysis/passes/defers"
 	"golang.org/x/tools/go/analysis/passes/errorsas"
 	"golang.org/x/tools/go/analysis/passes/fieldalignment"
 	"golang.org/x/tools/go/analysis/passes/findcall"
@@ -60,6 +61,7 @@ var (
 		composite.Analyzer,
 		copylock.Analyzer,
 		deepequalerrors.Analyzer,
+		defers.Analyzer,
 		errorsas.Analyzer,
 		fieldalignment.Analyzer,
 		findcall.Analyzer,
