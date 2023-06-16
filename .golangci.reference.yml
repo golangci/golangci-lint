@@ -1039,6 +1039,7 @@ linters-settings:
       - composites
       - copylocks
       - deepequalerrors
+      - defers
       - errorsas
       - fieldalignment
       - findcall
