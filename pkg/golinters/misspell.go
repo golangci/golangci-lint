@@ -95,11 +95,11 @@ func createMisspellReplacer(settings *config.MisspellSettings) (*misspell.Replac
 	}
 
 	if len(settings.IgnoreWords) != 0 {
-		var ignoreWords []string
+		var ignoredRules []string
 		for _, word := range settings.IgnoreWords {
-			ignoreWords = append(ignoreWords, strings.ToLower(word))
+			ignoredRules = append(ignoredRules, strings.ToLower(word))
 		}
-		replacer.RemoveRule(ignoreWords)
+		replacer.RemoveRule(ignoredRules)
 	}
 
 	// It can panic.
