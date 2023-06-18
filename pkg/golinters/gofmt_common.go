@@ -80,6 +80,16 @@ func (p *hunkChangesParser) parseDiffLines(h *diffpkg.Hunk) {
 		ret = append(ret, dl)
 	}
 
+	// if > 0, then the original file had a 'No newline at end of file' mark
+	if h.OrigNoNewlineAt > 0 {
+		dl := diffLine{
+			originalNumber: currentOriginalLineNumber + 1,
+			typ:            diffLineAdded,
+			data:           "",
+		}
+		ret = append(ret, dl)
+	}
+
 	p.lines = ret
 }
 
