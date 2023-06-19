@@ -1,9 +1,6 @@
 .DEFAULT_GOAL = test
 .PHONY: FORCE
 
-# enable consistent Go 1.12/1.13 GOPROXY behavior.
-export GOPROXY = https://proxy.golang.org
-
 BINARY = golangci-lint
 ifeq ($(OS),Windows_NT)
 	BINARY := $(BINARY).exe
@@ -59,7 +56,6 @@ fast_generate: assets/github-action-config.json
 
 fast_check_generated:
 	$(MAKE) --always-make fast_generate
-	git checkout -- go.mod go.sum # can differ between go1.16 and go1.17
 	git diff --exit-code # check no changes
 
 release: .goreleaser.yml tools/goreleaser
