@@ -223,8 +223,8 @@ github.com/golangci/lint-1 v0.0.0-20191013205115-297bf364a8e0 h1:MfyDlzVjl1hoaPz
 github.com/golangci/lint-1 v0.0.0-20191013205115-297bf364a8e0/go.mod h1:66R6K6P6VWk9I95jvqGxkqJxVWGFy9XlDwLwVz1RCFg=
 github.com/golangci/maligned v0.0.0-20180506175553-b1d89398deca h1:kNY3/svz5T29MYHubXix4aDDuE3RWHkPvopM/EDv/MA=
 github.com/golangci/maligned v0.0.0-20180506175553-b1d89398deca/go.mod h1:tvlJhZqDe4LMs4ZHD0oMUlt9G2LWuDGoisJTBzLMV9o=
-github.com/golangci/misspell v0.4.0 h1:KtVB/hTK4bbL/S6bs64rYyk8adjmh1BygbBiaAiX+a0=
-github.com/golangci/misspell v0.4.0/go.mod h1:W6O/bwV6lGDxUCChm2ykw9NQdd5bYd1Xkjo88UcWyJc=
+github.com/golangci/misspell v0.4.1 h1:+y73iSicVy2PqyX7kmUefHusENlrP9YwuHZHPLGQj/g=
+github.com/golangci/misspell v0.4.1/go.mod h1:9mAN1quEo3DlpbaIKKyEvRxK1pwqR9s/Sea1bJCtlNI=
 github.com/golangci/revgrep v0.0.0-20220804021717-745bb2f7c2e6 h1:DIPQnGy2Gv2FSA4B/hh8Q7xx3B7AIDk3DAMeHclH1vQ=
 github.com/golangci/revgrep v0.0.0-20220804021717-745bb2f7c2e6/go.mod h1:0AKcRCkMoKvUvlf89F6O7H2LYdhr1zBh736mBItOdRs=
 github.com/golangci/unconvert v0.0.0-20180507085042-28b1c447d1f4 h1:zwtduBRr5SSWhqsYNgcuWO2kFlpdOZbP0+yRjmvPGys=
