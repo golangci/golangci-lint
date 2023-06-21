@@ -21,3 +21,6 @@ CVE-2022-21221
 
 # Skip for indirect dependencies golang/golang.org/x/net@v0.6.0
 CVE-2022-41723
+
+# Skip for indirect dependencies golang/google.golang.org/grpc@v1.46.2
+CVE-2023-32731
