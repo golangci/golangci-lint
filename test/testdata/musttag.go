@@ -8,7 +8,7 @@ import (
 
 // builtin functions:
 func musttagJSON() {
-	var user struct { // want "`anonymous struct` should be annotated with the `json` tag as it is passed to `json.Marshal` at test(/|\\\\)testdata(/|\\\\)musttag.go:15:2"
+	var user struct { // want "`anonymous struct` should be annotated with the `json` tag as it is passed to `json.Marshal` at "
 		Name  string
 		Email string `json:"email"`
 	}
