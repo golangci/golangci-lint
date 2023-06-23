@@ -113,7 +113,7 @@ require (
 	github.com/xen0n/gosmopolitan v1.2.1
 	github.com/yagipy/maintidx v1.0.0
 	github.com/yeya24/promlinter v0.2.0
-	github.com/ykadowak/zerologlint v0.1.2
+	github.com/ykadowak/zerologlint v0.1.3
 	gitlab.com/bosi/decorder v0.2.3
 	go.tmz.dev/musttag v0.7.0
 	golang.org/x/exp v0.0.0-20230510235704-dd950f8aeaea
