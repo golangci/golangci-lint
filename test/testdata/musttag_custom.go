@@ -9,7 +9,7 @@ import (
 
 // builtin functions:
 func musttagJSONCustom() {
-	var user struct { // want "`anonymous struct` should be annotated with the `json` tag as it is passed to `json.Marshal` at test(/|\\\\)testdata(/|\\\\)musttag_custom.go:16:2"
+	var user struct { // want "`anonymous struct` should be annotated with the `json` tag as it is passed to `json.Marshal` at "
 		Name  string
 		Email string `json:"email"`
 	}
@@ -18,7 +18,7 @@ func musttagJSONCustom() {
 
 // custom functions from config:
 func musttagASN1Custom() {
-	var user struct { // want "`anonymous struct` should be annotated with the `asn1` tag as it is passed to `asn1.Marshal` at test(/|\\\\)testdata(/|\\\\)musttag_custom.go:25:2"
+	var user struct { // want "`anonymous struct` should be annotated with the `asn1` tag as it is passed to `asn1.Marshal` at "
 		Name  string
 		Email string `asn1:"email"`
 	}
