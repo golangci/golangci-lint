@@ -452,6 +452,37 @@ func TestUnusedCheckExported(t *testing.T) {
 		ExpectNoIssues()
 }
 
+func TestSuccessfulExitOnInsufficientlySevereIssues(t *testing.T) {
+	testshared.NewRunnerBuilder(t).
+		WithConfigFile("testdata_etc/fail_on_severities/staticcheck_ignore_warning_level.yml").
+		WithTargetPath("testdata_etc/fail_on_severities/...").
+		Runner().
+		Install().
+		Run().
+		ExpectExitCode(exitcodes.Success)
+}
+
+func TestFailedExitOnSufficientlySevereIssues(t *testing.T) {
+	testshared.NewRunnerBuilder(t).
+		WithConfigFile("testdata_etc/fail_on_severities/staticcheck_ignore_info_level.yml").
+		WithTargetPath("testdata_etc/fail_on_severities/...").
+		Runner().
+		Install().
+		Run().
+		ExpectExitCode(exitcodes.IssuesFound)
+}
+
+func TestFailedExitOnSufficientlySevereIssuesCmdFlag(t *testing.T) {
+	testshared.NewRunnerBuilder(t).
+		WithConfigFile("testdata_etc/fail_on_severities/staticcheck_ignore_warning_level.yml").
+		WithTargetPath("testdata_etc/fail_on_severities/...").
+		WithArgs("--fail-on-severities", "warning,error").
+		Runner().
+		Install().
+		Run().
+		ExpectExitCode(exitcodes.IssuesFound)
+}
+
 func TestConfigFileIsDetected(t *testing.T) {
 	testshared.InstallGolangciLint(t)
 

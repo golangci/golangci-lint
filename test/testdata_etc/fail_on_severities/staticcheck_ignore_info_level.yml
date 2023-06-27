@@ -1,0 +1,18 @@
+linter-settings:
+  disable-all: true
+  enable:
+    - staticcheck 
+severity:
+  default-severity: error
+  fail-on-severities:
+    - warning
+    - error
+  rules:
+    - linters:
+        - staticcheck
+      severity: info
+      text: 'SA1019:'
+    - linters:
+        - staticcheck
+      severity: warning 
+      text: 'SA4016:'

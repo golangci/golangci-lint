@@ -233,6 +233,11 @@ func initFlagSet(fs *pflag.FlagSet, cfg *config.Config, m *lintersdb.Manager, is
 	fs.BoolVar(&ic.WholeFiles, "whole-files", false,
 		wh("Show issues in any part of update files (requires new-from-rev or new-from-patch)"))
 	fs.BoolVar(&ic.NeedFix, "fix", false, "Fix found issues (if it's supported by the linter)")
+
+	// Severities config
+	sc := &cfg.Severity
+	fs.StringSliceVar(&sc.FailOnSeverities, "fail-on-severities", nil,
+		wh("Fail only if issues matching these severities are found"))
 }
 
 func (e *Executor) initRunConfiguration(cmd *cobra.Command) {
@@ -371,8 +376,26 @@ func (e *Executor) setOutputToDevNull() (savedStdout, savedStderr *os.File) {
 }
 
 func (e *Executor) setExitCodeIfIssuesFound(issues []result.Issue) {
-	if len(issues) != 0 {
-		e.exitCode = e.cfg.Run.ExitCodeIfIssuesFound
+	if len(issues) == 0 {
+		return
+	}
+	// treat empty set of failure severities as "fail on all issues"
+	if len(e.cfg.Severity.FailOnSeverities) == 0 {
+		if len(issues) > 0 {
+			e.exitCode = e.cfg.Run.ExitCodeIfIssuesFound
+		}
+		return
+	}
+
+	failSeveritySet := map[string]struct{}{}
+	for _, s := range e.cfg.Severity.FailOnSeverities {
+		failSeveritySet[s] = struct{}{}
+	}
+	for i := range issues {
+		if _, isFailure := failSeveritySet[issues[i].Severity]; isFailure {
+			e.exitCode = e.cfg.Run.ExitCodeIfIssuesFound
+			return
+		}
 	}
 }
 

@@ -3,9 +3,10 @@ package config
 const severityRuleMinConditionsCount = 1
 
 type Severity struct {
-	Default       string         `mapstructure:"default-severity"`
-	CaseSensitive bool           `mapstructure:"case-sensitive"`
-	Rules         []SeverityRule `mapstructure:"rules"`
+	Default          string         `mapstructure:"default-severity"`
+	CaseSensitive    bool           `mapstructure:"case-sensitive"`
+	FailOnSeverities []string       `mapstructure:"fail-on-severities"`
+	Rules            []SeverityRule `mapstructure:"rules"`
 }
 
 type SeverityRule struct {

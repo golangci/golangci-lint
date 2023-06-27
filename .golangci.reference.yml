@@ -2443,6 +2443,12 @@ severity:
   # Default: false
   case-sensitive: true
 
+  # Issue severities required to cause an exit with a non-successful code. An empty list means
+  # that any issue severity will cause a non-successful exit code. Severities should match the
+  # supported severity names of the selected out format.
+  # Default: []
+  fail-on-severities: ["warning", "error"]
+
   # When a list of severity rules are provided, severity information will be added to lint issues.
   # Severity rules have the same filtering capability as exclude rules
   # except you are allowed to specify one matcher per severity rule.

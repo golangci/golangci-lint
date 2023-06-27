@@ -144,6 +144,9 @@ func (r *FileReader) validateConfig() error {
 	if len(c.Severity.Rules) > 0 && c.Severity.Default == "" {
 		return errors.New("can't set severity rule option: no default severity defined")
 	}
+	if len(c.Severity.FailOnSeverities) > 0 && c.Severity.Default == "" {
+		return errors.New("can't set severity failure set option: no default severity defined")
+	}
 	for i, rule := range c.Severity.Rules {
 		if err := rule.Validate(); err != nil {
 			return fmt.Errorf("error in severity rule #%d: %v", i, err)
