@@ -16,7 +16,9 @@ func TestGetEnabledLintersSet(t *testing.T) {
 		def  []string // enabled by default linters
 		exp  []string // alphabetically ordered enabled linter names
 	}
+
 	allMegacheckLinterNames := []string{"gosimple", "staticcheck", "unused"}
+
 	cases := []cs{
 		{
 			cfg: config.Linters{
@@ -24,7 +26,7 @@ func TestGetEnabledLintersSet(t *testing.T) {
 			},
 			name: "disable all linters from megacheck",
 			def:  allMegacheckLinterNames,
-			exp:  nil, // all disabled
+			exp:  []string{"typecheck"}, // all disabled
 		},
 		{
 			cfg: config.Linters{
@@ -32,12 +34,12 @@ func TestGetEnabledLintersSet(t *testing.T) {
 			},
 			name: "disable only staticcheck",
 			def:  allMegacheckLinterNames,
-			exp:  []string{"gosimple", "unused"},
+			exp:  []string{"gosimple", "typecheck", "unused"},
 		},
 		{
 			name: "don't merge into megacheck",
 			def:  allMegacheckLinterNames,
-			exp:  allMegacheckLinterNames,
+			exp:  []string{"gosimple", "staticcheck", "typecheck", "unused"},
 		},
 		{
 			name: "expand megacheck",
@@ -45,33 +47,33 @@ func TestGetEnabledLintersSet(t *testing.T) {
 				Enable: []string{"megacheck"},
 			},
 			def: nil,
-			exp: allMegacheckLinterNames,
+			exp: []string{"gosimple", "staticcheck", "typecheck", "unused"},
 		},
 		{
 			name: "don't disable anything",
-			def:  []string{"gofmt", "govet"},
-			exp:  []string{"gofmt", "govet"},
+			def:  []string{"gofmt", "govet", "typecheck"},
+			exp:  []string{"gofmt", "govet", "typecheck"},
 		},
 		{
 			name: "enable gosec by gas alias",
 			cfg: config.Linters{
 				Enable: []string{"gas"},
 			},
-			exp: []string{"gosec"},
+			exp: []string{"gosec", "typecheck"},
 		},
 		{
 			name: "enable gosec by primary name",
 			cfg: config.Linters{
 				Enable: []string{"gosec"},
 			},
-			exp: []string{"gosec"},
+			exp: []string{"gosec", "typecheck"},
 		},
 		{
 			name: "enable gosec by both names",
 			cfg: config.Linters{
 				Enable: []string{"gosec", "gas"},
 			},
-			exp: []string{"gosec"},
+			exp: []string{"gosec", "typecheck"},
 		},
 		{
 			name: "disable gosec by gas alias",
@@ -79,6 +81,7 @@ func TestGetEnabledLintersSet(t *testing.T) {
 				Disable: []string{"gas"},
 			},
 			def: []string{"gosec"},
+			exp: []string{"typecheck"},
 		},
 		{
 			name: "disable gosec by primary name",
@@ -86,11 +89,13 @@ func TestGetEnabledLintersSet(t *testing.T) {
 				Disable: []string{"gosec"},
 			},
 			def: []string{"gosec"},
+			exp: []string{"typecheck"},
 		},
 	}
 
 	m := NewManager(nil, nil)
 	es := NewEnabledSet(m, NewValidator(m), nil, nil)
+
 	for _, c := range cases {
 		c := c
 		t.Run(c.name, func(t *testing.T) {

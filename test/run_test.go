@@ -243,7 +243,7 @@ func TestLineDirective(t *testing.T) {
 			},
 			configPath: "testdata/linedirective/gomodguard.yml",
 			targetPath: "linedirective",
-			expected: "import of package `github.com/ryancurrah/gomodguard` is blocked because the module is not " +
+			expected: "import of package `golang.org/x/tools/go/analysis` is blocked because the module is not " +
 				"in the allowed modules list. (gomodguard)",
 		},
 		{

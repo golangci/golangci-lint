@@ -804,6 +804,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithURL("https://github.com/moricho/tparallel"),
 
 		linter.NewConfig(golinters.NewTypecheck()).
+			WithInternal().
 			WithEnabledByDefault().
 			WithSince("v1.3.0").
 			WithLoadForGoAnalysis().
