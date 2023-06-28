@@ -79,6 +79,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		exhaustiveStructCfg *config.ExhaustiveStructSettings
 		exhaustructCfg      *config.ExhaustructSettings
 		forbidigoCfg        *config.ForbidigoSettings
+		funcGuard           *config.FuncGuardSettings
 		funlenCfg           *config.FunlenSettings
 		gciCfg              *config.GciSettings
 		ginkgolinterCfg     *config.GinkgoLinterSettings
@@ -170,6 +171,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		godoxCfg = &m.cfg.LintersSettings.Godox
 		gofmtCfg = &m.cfg.LintersSettings.Gofmt
 		gofumptCfg = &m.cfg.LintersSettings.Gofumpt
+		funcGuard = &m.cfg.LintersSettings.FuncGuard
 		goheaderCfg = &m.cfg.LintersSettings.Goheader
 		goimportsCfg = &m.cfg.LintersSettings.Goimports
 		golintCfg = &m.cfg.LintersSettings.Golint
@@ -405,6 +407,12 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithSince("v1.38.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/gostaticanalysis/forcetypeassert"),
+
+		linter.NewConfig(golinters.NewFuncGuard(funcGuard)).
+			WithSince("v1.54.0").
+			WithPresets(linter.PresetStyle).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/simplesurance/funcguard"),
 
 		linter.NewConfig(golinters.NewFunlen(funlenCfg)).
 			WithSince("v1.18.0").

@@ -1,0 +1,5 @@
+linters-settings:
+  funcguard:
+    rules:
+      - function-path: "fmt.Println"
+        error-msg: do not use Println

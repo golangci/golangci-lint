@@ -166,6 +166,7 @@ type LintersSettings struct {
 	ExhaustiveStruct ExhaustiveStructSettings
 	Exhaustruct      ExhaustructSettings
 	Forbidigo        ForbidigoSettings
+	FuncGuard        FuncGuardSettings
 	Funlen           FunlenSettings
 	Gci              GciSettings
 	GinkgoLinter     GinkgoLinterSettings
@@ -455,6 +456,13 @@ type GofumptSettings struct {
 
 	// Deprecated: use the global `run.go` instead.
 	LangVersion string `mapstructure:"lang-version"`
+}
+
+type FuncGuardSettings struct {
+	Rules []struct {
+		FunctionPath string `mapstructure:"function-path"`
+		ErrorMsg     string `mapstructure:"error-msg"`
+	} `mapstructure:"rules"`
 }
 
 type GoHeaderSettings struct {
