@@ -107,5 +107,5 @@ body:
     attributes:
       label: Validation
       options:
-        - label: Yes, I've included all information below (version, config, etc.).
+        - label: Yes, I've included all information above (version, config, etc.).
           required: true
