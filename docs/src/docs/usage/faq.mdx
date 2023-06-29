@@ -43,7 +43,7 @@ Of course, this is just as good as the compiler itself and a lot of compilation 
 
 `typecheck` is not a real linter, it's just a way to parse compiling errors (produced by the `types.Checker`) and some linter errors.
 
-A linter that reports `typecheck` errors is not able to report other issues for a package because that kind of error doesn't allow it to perform its own analysis.
+If there are `typecheck` errors, golangci-lint will not able to produce other reports because that kind of error doesn't allow it to perform analysis.
 
 How to troubleshoot:
 
