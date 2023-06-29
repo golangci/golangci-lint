@@ -32,3 +32,22 @@ The same as the Go team (the 2 last minor versions)
 
 Because the first run caches type information. All subsequent runs will be fast.
 Usually this options is used during development on local machine and compilation was already performed.
+
+## Why do you have `typecheck` errors?
+
+`typecheck` is like the front-end of a Go compiler, parses and type-checks Go code, it manages compilation errors.
+
+It cannot be disabled because of that.
+
+Of course, this is just as good as the compiler itself and a lot of compilation issues will not properly show where in the code your error lies.
+
+`typecheck` is not a real linter, it's just a way to parse compiling errors (produced by the `types.Checker`) and some linter errors.
+
+If there are `typecheck` errors, golangci-lint will not able to produce other reports because that kind of error doesn't allow it to perform analysis.
+
+How to troubleshoot:
+
+- [ ] Ensure the version of `golangci-lint` is built with a compatible version of Go.
+- [ ] Ensure dependencies are up-to-date with `go mod tidy`.
+- [ ] Ensure building works with `go run ./...`/`go build ./...` - whole package.
+- [ ] If using CGO, ensure all require system libraries are installed.

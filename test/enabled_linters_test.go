@@ -170,6 +170,10 @@ func getEnabledByDefaultLinters() []string {
 	ebdl := lintersdb.NewManager(nil, nil).GetAllEnabledByDefaultLinters()
 	var ret []string
 	for _, lc := range ebdl {
+		if lc.Internal {
+			continue
+		}
+
 		ret = append(ret, lc.Name())
 	}
 

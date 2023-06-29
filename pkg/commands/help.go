@@ -63,6 +63,10 @@ func printLinterConfigs(lcs []*linter.Config) {
 func (e *Executor) executeLintersHelp(_ *cobra.Command, _ []string) {
 	var enabledLCs, disabledLCs []*linter.Config
 	for _, lc := range e.DBManager.GetAllSupportedLinterConfigs() {
+		if lc.Internal {
+			continue
+		}
+
 		if lc.EnabledByDefault {
 			enabledLCs = append(enabledLCs, lc)
 		} else {
@@ -78,8 +82,12 @@ func (e *Executor) executeLintersHelp(_ *cobra.Command, _ []string) {
 	color.Green("\nLinters presets:")
 	for _, p := range e.DBManager.AllPresets() {
 		linters := e.DBManager.GetAllLinterConfigsForPreset(p)
-		linterNames := make([]string, 0, len(linters))
+		var linterNames []string
 		for _, lc := range linters {
+			if lc.Internal {
+				continue
+			}
+
 			linterNames = append(linterNames, lc.Name())
 		}
 		sort.Strings(linterNames)
