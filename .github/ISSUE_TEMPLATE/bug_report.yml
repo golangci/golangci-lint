@@ -48,8 +48,7 @@ body:
         <details>
 
         ```console
-        $ cat .golangci.yml
-        # paste output here
+        # paste configuration file or CLI flags here
         ```
 
         </details>
