@@ -37,7 +37,7 @@ func NewVulncheck(settings *config.VulncheckSettings) *goanalysis.Linter {
 		[]*analysis.Analyzer{analyzer},
 		nil,
 	).WithContextSetter(func(lintCtx *linter.Context) {
-		analyzer.Run = func(pass *analysis.Pass) (interface{}, error) {
+		analyzer.Run = func(pass *analysis.Pass) (any, error) {
 			issues, err := vulncheckRun(lintCtx, pass, settings)
 			if err != nil {
 				return nil, err
