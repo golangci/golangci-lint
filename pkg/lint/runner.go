@@ -276,10 +276,11 @@ func getExcludeRulesProcessor(cfg *config.Issues, log logutils.Log, files *fsuti
 	for _, r := range cfg.ExcludeRules {
 		excludeRules = append(excludeRules, processors.ExcludeRule{
 			BaseRule: processors.BaseRule{
-				Text:    r.Text,
-				Source:  r.Source,
-				Path:    r.Path,
-				Linters: r.Linters,
+				Text:       r.Text,
+				Source:     r.Source,
+				Path:       r.Path,
+				PathExcept: r.PathExcept,
+				Linters:    r.Linters,
 			},
 		})
 	}
@@ -319,10 +320,11 @@ func getSeverityRulesProcessor(cfg *config.Severity, log logutils.Log, files *fs
 		severityRules = append(severityRules, processors.SeverityRule{
 			Severity: r.Severity,
 			BaseRule: processors.BaseRule{
-				Text:    r.Text,
-				Source:  r.Source,
-				Path:    r.Path,
-				Linters: r.Linters,
+				Text:       r.Text,
+				Source:     r.Source,
+				Path:       r.Path,
+				PathExcept: r.PathExcept,
+				Linters:    r.Linters,
 			},
 		})
 	}

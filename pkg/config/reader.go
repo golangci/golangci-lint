@@ -8,12 +8,13 @@ import (
 	"strings"
 
 	"github.com/mitchellh/go-homedir"
+	"github.com/mitchellh/mapstructure"
 	"github.com/spf13/viper"
+	"golang.org/x/exp/slices"
 
 	"github.com/golangci/golangci-lint/pkg/exitcodes"
 	"github.com/golangci/golangci-lint/pkg/fsutils"
 	"github.com/golangci/golangci-lint/pkg/logutils"
-	"github.com/golangci/golangci-lint/pkg/sliceutil"
 )
 
 type FileReader struct {
@@ -91,7 +92,14 @@ func (r *FileReader) parseConfig() error {
 	}
 	r.cfg.cfgDir = usedConfigDir
 
-	if err := viper.Unmarshal(r.cfg); err != nil {
+	if err := viper.Unmarshal(r.cfg, viper.DecodeHook(mapstructure.ComposeDecodeHookFunc(
+		// Default hooks (https://github.com/spf13/viper/blob/518241257478c557633ab36e474dfcaeb9a3c623/viper.go#L135-L138).
+		mapstructure.StringToTimeDurationHookFunc(),
+		mapstructure.StringToSliceHookFunc(","),
+
+		// Needed for forbidigo.
+		mapstructure.TextUnmarshallerHookFunc(),
+	))); err != nil {
 		return fmt.Errorf("can't unmarshal config by viper: %s", err)
 	}
 
@@ -203,7 +211,7 @@ func (r *FileReader) setupConfigFileSearch() {
 	// find home directory for global config
 	if home, err := homedir.Dir(); err != nil {
 		r.log.Warnf("Can't get user's home directory: %s", err.Error())
-	} else if !sliceutil.Contains(configSearchPaths, home) {
+	} else if !slices.Contains(configSearchPaths, home) {
 		configSearchPaths = append(configSearchPaths, home)
 	}
 

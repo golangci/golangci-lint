@@ -279,11 +279,15 @@ func TestNolintUnused(t *testing.T) {
 	createProcessor := func(t *testing.T, log *logutils.MockLog, enabledLinters []string) *Nolint {
 		enabledSetLog := logutils.NewMockLog()
 		enabledSetLog.On("Infof", "Active %d linters: %s", len(enabledLinters), enabledLinters)
+
 		cfg := &config.Config{Linters: config.Linters{DisableAll: true, Enable: enabledLinters}}
 		dbManager := lintersdb.NewManager(cfg, nil)
+
 		enabledLintersSet := lintersdb.NewEnabledSet(dbManager, lintersdb.NewValidator(dbManager), enabledSetLog, cfg)
+
 		enabledLintersMap, err := enabledLintersSet.GetEnabledLintersMap()
 		assert.NoError(t, err)
+
 		return NewNolint(log, dbManager, enabledLintersMap)
 	}
 

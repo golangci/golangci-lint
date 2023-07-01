@@ -2,4 +2,4 @@ linters-settings:
   gomodguard:
     allowed:
       domains:
-        - golang.org
+        - github.com

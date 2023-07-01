@@ -3,7 +3,7 @@
 package main
 
 import (
-	"github.com/ryancurrah/gomodguard"
+	"golang.org/x/tools/go/analysis"
 )
 
 func _() {
@@ -24,6 +24,10 @@ func a() {
 
 func b() {
 	fmt.Println("foo")
+}
+
+func c(){
+	_ = analysis.Analyzer{}
 }
 
 func wsl() bool {

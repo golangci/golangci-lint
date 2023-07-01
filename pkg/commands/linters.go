@@ -29,14 +29,22 @@ func (e *Executor) executeLinters(_ *cobra.Command, _ []string) error {
 	}
 
 	color.Green("Enabled by your configuration linters:\n")
-	enabledLinters := make([]*linter.Config, 0, len(enabledLintersMap))
-	for _, linter := range enabledLintersMap {
-		enabledLinters = append(enabledLinters, linter)
+	var enabledLinters []*linter.Config
+	for _, lc := range enabledLintersMap {
+		if lc.Internal {
+			continue
+		}
+
+		enabledLinters = append(enabledLinters, lc)
 	}
 	printLinterConfigs(enabledLinters)
 
 	var disabledLCs []*linter.Config
 	for _, lc := range e.DBManager.GetAllSupportedLinterConfigs() {
+		if lc.Internal {
+			continue
+		}
+
 		if enabledLintersMap[lc.Name()] == nil {
 			disabledLCs = append(disabledLCs, lc)
 		}

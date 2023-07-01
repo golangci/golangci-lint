@@ -1,15 +1,14 @@
 //golangcitest:args -Eforbidigo
-//golangcitest:config_path testdata/configs/forbidigo.yml
+//golangcitest:config_path testdata/configs/path-except.yml
 package testdata
 
 import (
 	"fmt"
-	fmt2 "fmt"
+	"testing"
 	"time"
 )
 
-func Forbidigo() {
+func TestForbidigo(t *testing.T) {
 	fmt.Printf("too noisy!!!")  // want "use of `fmt\\.Printf` forbidden by pattern `fmt\\\\.Print\\.\\*`"
-	fmt2.Printf("too noisy!!!") // Not detected because analyze-types is false by default for backward compatbility.
 	time.Sleep(time.Nanosecond) // want "no sleeping!"
 }

@@ -7,3 +7,4 @@ func Misspell() {
 }
 
 // the word langauge should be ignored here: it's set in config
+// the word Dialogue should be ignored here: it's set in config

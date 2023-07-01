@@ -10,6 +10,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
+	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
@@ -40,6 +41,9 @@ func NewForbidigo(settings *config.ForbidigoSettings) *goanalysis.Linter {
 		},
 	}
 
+	// Without AnalyzeTypes, LoadModeSyntax is enough.
+	// But we cannot make this depend on the settings and have to mirror the mode chosen in GetAllSupportedLinterConfigs,
+	// therefore we have to use LoadModeTypesInfo in all cases.
 	return goanalysis.NewLinter(
 		forbidigoName,
 		"Forbids identifiers",
@@ -55,16 +59,34 @@ func runForbidigo(pass *analysis.Pass, settings *config.ForbidigoSettings) ([]go
 		forbidigo.OptionExcludeGodocExamples(settings.ExcludeGodocExamples),
 		// disable "//permit" directives so only "//nolint" directives matters within golangci-lint
 		forbidigo.OptionIgnorePermitDirectives(true),
+		forbidigo.OptionAnalyzeTypes(settings.AnalyzeTypes),
 	}
 
-	forbid, err := forbidigo.NewLinter(settings.Forbid, options...)
+	// Convert patterns back to strings because that is what NewLinter accepts.
+	var patterns []string
+	for _, pattern := range settings.Forbid {
+		buffer, err := pattern.MarshalString()
+		if err != nil {
+			return nil, err
+		}
+		patterns = append(patterns, string(buffer))
+	}
+
+	forbid, err := forbidigo.NewLinter(patterns, options...)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create linter %q: %w", forbidigoName, err)
 	}
 
 	var issues []goanalysis.Issue
 	for _, file := range pass.Files {
-		hints, err := forbid.RunWithConfig(forbidigo.RunConfig{Fset: pass.Fset}, file)
+		runConfig := forbidigo.RunConfig{
+			Fset:     pass.Fset,
+			DebugLog: logutils.Debug(logutils.DebugKeyForbidigo),
+		}
+		if settings != nil && settings.AnalyzeTypes {
+			runConfig.TypesInfo = pass.TypesInfo
+		}
+		hints, err := forbid.RunWithConfig(runConfig, file)
 		if err != nil {
 			return nil, fmt.Errorf("forbidigo linter failed on file %q: %w", file.Name.String(), err)
 		}

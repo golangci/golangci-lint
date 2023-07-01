@@ -22,6 +22,7 @@ const (
 	DebugKeyExcludeRules       = "exclude_rules"
 	DebugKeyExec               = "exec"
 	DebugKeyFilenameUnadjuster = "filename_unadjuster"
+	DebugKeyForbidigo          = "forbidigo"
 	DebugKeyGoEnv              = "goenv"
 	DebugKeyLinter             = "linter"
 	DebugKeyLintersContext     = "linters_context"

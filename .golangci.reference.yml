@@ -185,7 +185,7 @@ linters-settings:
     #
     #  `$gostd` - matches all of go's standard library (Pulled from `GOROOT`)
     #
-    # Default: no rules.
+    # Default: Only allow $gostd in all files.
     rules:
       # Name of a rule.
       main:
@@ -351,14 +351,31 @@ linters-settings:
     # Forbid the following identifiers (list of regexp).
     # Default: ["^(fmt\\.Print(|f|ln)|print|println)$"]
     forbid:
+      # Builtin function:
       - ^print.*$
-      - 'fmt\.Print.*'
-      # Optionally put comments at the end of the regex, surrounded by `(# )?`
-      # Escape any special characters.
+      # Optional message that gets included in error reports.
+      - p: ^fmt\.Print.*$
+        msg: Do not commit print statements.
+      # Alternatively, put messages at the end of the regex, surrounded by `(# )?`
+      # Escape any special characters. Those messages get included in error reports.
       - 'fmt\.Print.*(# Do not commit print statements\.)?'
+      # Forbid spew Dump, whether it is called as function or method.
+      # Depends on analyze-types below.
+      - ^spew\.(ConfigState\.)?Dump$
+      # The package name might be ambiguous.
+      # The full import path can be used as additional criteria.
+      # Depends on analyze-types below.
+      - p: ^v1.Dump$
+        pkg: ^example.com/pkg/api/v1$
     # Exclude godoc examples from forbidigo checks.
     # Default: true
-    exclude_godoc_examples: false
+    exclude-godoc-examples: false
+    # Instead of matching the literal source code,
+    # use type information to replace expressions with strings that contain the package name
+    # and (for methods and fields) the type name.
+    # This makes it possible to handle import renaming and forbid struct fields and methods.
+    # Default: false
+    analyze-types: true
 
   funlen:
     # Checks the number of lines in a function.
@@ -702,15 +719,15 @@ linters-settings:
     # Values always ignored: `.+_test.go`
     # Default: []
     ignored-files:
-      - 'magic1_.*.go'
+      - 'magic1_.+\.go$'
     # List of function patterns to exclude from analysis.
     # Following functions are always ignored: `time.Date`,
     # `strconv.FormatInt`, `strconv.FormatUint`, `strconv.FormatFloat`,
     # `strconv.ParseInt`, `strconv.ParseUint`, `strconv.ParseFloat`.
     # Default: []
     ignored-functions:
-      - 'math.*'
-      - 'http.StatusText'
+      - '^math\.'
+      - '^http\.StatusText$'
 
   gomoddirectives:
     # Allow local `replace` directives.
@@ -1022,6 +1039,7 @@ linters-settings:
       - composites
       - copylocks
       - deepequalerrors
+      - defers
       - errorsas
       - fieldalignment
       - findcall
@@ -1244,14 +1262,14 @@ linters-settings:
 
   musttag:
     # A set of custom functions to check in addition to the builtin ones.
-    # Default: json, xml, gopkg.in/yaml.v3, BurntSushi/toml, mitchellh/mapstructure
+    # Default: json, xml, gopkg.in/yaml.v3, BurntSushi/toml, mitchellh/mapstructure, jmoiron/sqlx
     functions:
         # The full name of the function, including the package.
-      - name: github.com/jmoiron/sqlx.Get
+      - name: github.com/hashicorp/hcl/v2/hclsimple.DecodeFile
         # The struct tag whose presence should be ensured.
-        tag: db
+        tag: hcl
         # The position of the argument to check.
-        arg-pos: 1
+        arg-pos: 2
 
   nakedret:
     # Make an issue if func has more lines of code than this setting, and it has naked returns.
@@ -1776,13 +1794,15 @@ linters-settings:
       # Default: {}
       rules:
         # Any struct tag type can be used.
-        # Support string case: `camel`, `pascal`, `kebab`, `snake`, `goCamel`, `goPascal`, `goKebab`, `goSnake`, `upper`, `lower`, `header`
+        # Support string case: `camel`, `pascal`, `kebab`, `snake`, `upperSnake`, `goCamel`, `goPascal`, `goKebab`, `goSnake`, `upper`, `lower`, `header`
         json: camel
         yaml: camel
         xml: camel
         bson: camel
         avro: snake
         mapstructure: kebab
+        env: upperSnake
+        envconfig: upperSnake
 
   tenv:
     # The option `all` will run against whole test files (`_test.go`) regardless of method/function signatures.
@@ -2124,6 +2144,7 @@ linters:
     - maintidx
     - makezero
     - maligned
+    - mirror
     - misspell
     - musttag
     - nakedret
@@ -2238,6 +2259,7 @@ linters:
     - maintidx
     - makezero
     - maligned
+    - mirror
     - misspell
     - musttag
     - nakedret
@@ -2325,6 +2347,11 @@ issues:
         - errcheck
         - dupl
         - gosec
+
+    # Run some linter only for test files by excluding its issues for everything else.
+    - path-except: _test\.go
+      linters:
+        - forbidigo
 
     # Exclude known linters from partially hard-vendored code,
     # which is impossible to exclude via `nolint` comments.

@@ -77,6 +77,7 @@ get_binaries() {
     freebsd/mips64le) BINARIES="golangci-lint" ;;
     freebsd/ppc64le) BINARIES="golangci-lint" ;;
     freebsd/s390x) BINARIES="golangci-lint" ;;
+    illumos/amd64) BINARIES="golangci-lint" ;;
     linux/386) BINARIES="golangci-lint" ;;
     linux/amd64) BINARIES="golangci-lint" ;;
     linux/arm64) BINARIES="golangci-lint" ;;
@@ -202,6 +203,7 @@ uname_os() {
     mingw*) os="windows" ;;
     cygwin*) os="windows" ;;
     win*) os="windows" ;;
+    sunos) [ $(uname -o) == "illumos" ] && os=illumos ;;
   esac
   echo "$os"
 }
@@ -212,6 +214,7 @@ uname_arch() {
     x86) arch="386" ;;
     i686) arch="386" ;;
     i386) arch="386" ;;
+    i86pc) arch="amd64" ;;
     aarch64) arch="arm64" ;;
     armv5*) arch="armv5" ;;
     armv6*) arch="armv6" ;;
@@ -226,6 +229,7 @@ uname_os_check() {
     darwin) return 0 ;;
     dragonfly) return 0 ;;
     freebsd) return 0 ;;
+    illumos) return 0;;
     linux) return 0 ;;
     android) return 0 ;;
     nacl) return 0 ;;

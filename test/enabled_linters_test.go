@@ -6,6 +6,8 @@ import (
 	"strings"
 	"testing"
 
+	"golang.org/x/exp/slices"
+
 	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
 	"github.com/golangci/golangci-lint/test/testshared"
 )
@@ -134,16 +136,6 @@ func TestEnabledLinters(t *testing.T) {
 	}
 }
 
-func inSlice(s []string, v string) bool {
-	for _, sv := range s {
-		if sv == v {
-			return true
-		}
-	}
-
-	return false
-}
-
 func getEnabledByDefaultFastLintersExcept(except ...string) []string {
 	m := lintersdb.NewManager(nil, nil)
 	ebdl := m.GetAllEnabledByDefaultLinters()
@@ -153,7 +145,7 @@ func getEnabledByDefaultFastLintersExcept(except ...string) []string {
 			continue
 		}
 
-		if !inSlice(except, lc.Name()) {
+		if !slices.Contains(except, lc.Name()) {
 			ret = append(ret, lc.Name())
 		}
 	}
@@ -178,6 +170,10 @@ func getEnabledByDefaultLinters() []string {
 	ebdl := lintersdb.NewManager(nil, nil).GetAllEnabledByDefaultLinters()
 	var ret []string
 	for _, lc := range ebdl {
+		if lc.Internal {
+			continue
+		}
+
 		ret = append(ret, lc.Name())
 	}
 

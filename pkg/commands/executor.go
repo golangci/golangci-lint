@@ -120,7 +120,7 @@ func NewExecutor(buildInfo BuildInfo) *Executor {
 	}
 
 	// recreate after getting config
-	e.DBManager = lintersdb.NewManager(e.cfg, e.log).WithCustomLinters()
+	e.DBManager = lintersdb.NewManager(e.cfg, e.log)
 
 	// Slice options must be explicitly set for proper merging of config and command-line options.
 	fixSlicesFlags(e.runCmd.Flags())

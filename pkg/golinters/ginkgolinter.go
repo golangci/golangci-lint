@@ -25,7 +25,7 @@ func NewGinkgoLinter(cfg *config.GinkgoLinterSettings) *goanalysis.Linter {
 
 	return goanalysis.NewLinter(
 		a.Name,
-		a.Doc,
+		"enforces standards of using ginkgo and gomega",
 		[]*analysis.Analyzer{a},
 		cfgMap,
 	).WithLoadMode(goanalysis.LoadModeTypesInfo)
