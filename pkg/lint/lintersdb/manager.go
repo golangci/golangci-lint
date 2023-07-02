@@ -138,10 +138,10 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		usestdlibvars       *config.UseStdlibVarsSettings
 		varcheckCfg         *config.VarCheckSettings
 		varnamelenCfg       *config.VarnamelenSettings
+		vulncheckCfg        *config.VulncheckSettings
 		whitespaceCfg       *config.WhitespaceSettings
 		wrapcheckCfg        *config.WrapcheckSettings
 		wslCfg              *config.WSLSettings
-		vulncheckCfg        *config.VulncheckSettings
 	)
 
 	if m.cfg != nil {
@@ -219,10 +219,10 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		usestdlibvars = &m.cfg.LintersSettings.UseStdlibVars
 		varcheckCfg = &m.cfg.LintersSettings.Varcheck
 		varnamelenCfg = &m.cfg.LintersSettings.Varnamelen
+		vulncheckCfg = &m.cfg.LintersSettings.Vulncheck
 		whitespaceCfg = &m.cfg.LintersSettings.Whitespace
 		wrapcheckCfg = &m.cfg.LintersSettings.Wrapcheck
 		wslCfg = &m.cfg.LintersSettings.WSL
-		vulncheckCfg = &m.cfg.LintersSettings.Vulncheck
 
 		if govetCfg != nil {
 			govetCfg.Go = m.cfg.Run.Go
@@ -853,6 +853,11 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/blizzy78/varnamelen"),
 
+		linter.NewConfig(golinters.NewVulncheck(vulncheckCfg)).
+			WithSince("v1.53.0").
+			WithPresets(linter.PresetModule).
+			WithURL("https://vuln.go.dev/"),
+
 		linter.NewConfig(golinters.NewWastedAssign()).
 			WithSince("v1.38.0").
 			WithPresets(linter.PresetStyle).
@@ -881,11 +886,6 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetBugs).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/ykadowak/zerologlint"),
-
-		linter.NewConfig(golinters.NewVulncheck(vulncheckCfg)).
-			WithSince("v1.53.0").
-			WithPresets(linter.PresetModule).
-			WithURL("https://vuln.go.dev/"),
 
 		// nolintlint must be last because it looks at the results of all the previous linters for unused nolint directives
 		linter.NewConfig(golinters.NewNoLintLint(noLintLintCfg)).
