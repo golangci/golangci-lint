@@ -11,7 +11,7 @@ body:
           required: true
         - label: Yes, I've searched similar issues on GitHub and didn't find any.
           required: true
-        - label: Yes, I've included all information below (version, config, etc.).
+        - label: Yes, I've read the typecheck section of the FAQ (https://golangci-lint.run/usage/faq/#why-do-you-have-typecheck-errors).
           required: true
         - label: Yes, I've tried with the standalone linter if available (e.g., gocritic, go vet, etc.). (https://golangci-lint.run/usage/linters/)
           required: true
@@ -43,13 +43,12 @@ body:
   - type: textarea
     id: config
     attributes:
-      label: Configuration file
+      label: Configuration
       value: |-
         <details>
 
         ```console
-        $ cat .golangci.yml
-        # paste output here
+        # paste configuration file or CLI flags here
         ```
 
         </details>
@@ -103,3 +102,11 @@ body:
         </details>
     validations:
       required: true
+
+  - type: checkboxes
+    id: validation
+    attributes:
+      label: Validation
+      options:
+        - label: Yes, I've included all information above (version, config, etc.).
+          required: true
