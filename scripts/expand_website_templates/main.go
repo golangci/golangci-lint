@@ -302,7 +302,7 @@ func getDesc(lc *linter.Config) string {
 		}
 	}
 
-	return strings.ReplaceAll(desc, "\n", "<br/>")
+	return normalizeDesc(strings.ReplaceAll(desc, "\n", "<br/>"))
 }
 
 func check(b bool, title string) string {
@@ -577,4 +577,14 @@ func marshallSnippet(node *yaml.Node) (string, error) {
 	_, _ = fmt.Fprintln(builder)
 
 	return builder.String(), nil
+}
+
+func normalizeDesc(dsc string) string {
+	dsc = strings.ToUpper(dsc)
+	fmt.Println(dsc[len(dsc)-2:])
+	if dsc[len(dsc)-1:] != "." {
+		dsc = fmt.Sprintf("%s.", dsc)
+	}
+
+	return dsc
 }
