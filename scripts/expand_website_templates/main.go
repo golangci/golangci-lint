@@ -468,7 +468,14 @@ func extractExampleSnippets(example []byte) (*SettingSnippets, error) {
 		globalNode.Content = append(globalNode.Content, node, newNode)
 
 		if node.Value == "linters-settings" {
-			snippets.LintersSettings, err = getLintersSettingSnippets(node, nextNode)
+			var lintersDesc = make(map[string]string)
+			lcs := lintersdb.NewManager(nil, nil).GetAllSupportedLinterConfigs()
+
+			for _, lint := range lcs {
+				lintersDesc[getName(lint)] = getDesc(lint)
+			}
+
+			snippets.LintersSettings, err = getLintersSettingSnippets(node, nextNode, lintersDesc)
 			if err != nil {
 				return nil, err
 			}
@@ -508,7 +515,7 @@ func extractExampleSnippets(example []byte) (*SettingSnippets, error) {
 	return &snippets, nil
 }
 
-func getLintersSettingSnippets(node, nextNode *yaml.Node) (string, error) {
+func getLintersSettingSnippets(node, nextNode *yaml.Node, lintersDesc map[string]string) (string, error) {
 	builder := &strings.Builder{}
 
 	for i := 0; i < len(nextNode.Content); i += 2 {
@@ -530,6 +537,7 @@ func getLintersSettingSnippets(node, nextNode *yaml.Node) (string, error) {
 		}
 
 		_, _ = fmt.Fprintf(builder, "### %s\n\n", nextNode.Content[i].Value)
+		_, _ = fmt.Fprintf(builder, "%s\n\n", lintersDesc[nextNode.Content[i].Value])
 		_, _ = fmt.Fprintln(builder, "```yaml")
 
 		encoder := yaml.NewEncoder(builder)
