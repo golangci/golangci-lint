@@ -817,6 +817,13 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/mdempsky/unconvert"),
 
+		linter.NewConfig(golinters.NewUnexportedGlobal()).
+			WithSince("v1.54.0").
+			WithLoadForGoAnalysis().
+			WithPresets(linter.PresetStyle).
+			WithAutoFix().
+			WithURL("https://github.com/abhinav/unexportedglobal"),
+
 		linter.NewConfig(golinters.NewUnparam(unparamCfg)).
 			WithSince("v1.9.0").
 			WithPresets(linter.PresetUnused).

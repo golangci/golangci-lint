@@ -2175,6 +2175,7 @@ linters:
     - tparallel
     - typecheck
     - unconvert
+    - unexportedglobal
     - unparam
     - unused
     - usestdlibvars
@@ -2289,6 +2290,7 @@ linters:
     - tparallel
     - typecheck
     - unconvert
+    - unexportedglobal
     - unparam
     - unused
     - usestdlibvars
