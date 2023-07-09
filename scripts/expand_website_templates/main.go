@@ -582,6 +582,7 @@ func marshallSnippet(node *yaml.Node) (string, error) {
 func capitalizeAndAddFinalDot(dsc string) string {
 	runes := []rune(dsc)
 	runes[0] = unicode.ToUpper([]rune(dsc)[0])
+	dsc = string(runes)
 	if dsc[len(dsc)-1:] != "." {
 		dsc = fmt.Sprintf("%s.", dsc)
 	}
