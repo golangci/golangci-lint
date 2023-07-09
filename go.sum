@@ -42,8 +42,8 @@ cloud.google.com/go/storage v1.14.0/go.mod h1:GrKmX003DSIwi9o29oFT7YDnHYwZoctc3f
 dmitri.shuralyov.com/gpu/mtl v0.0.0-20190408044501-666a987793e9/go.mod h1:H6x//7gZCb22OMCxBHrMx7a5I7Hp++hsVxbQ4BYO7hU=
 github.com/4meepo/tagalign v1.2.2 h1:kQeUTkFTaBRtd/7jm8OKJl9iHk0gAO+TDFPHGSna0aw=
 github.com/4meepo/tagalign v1.2.2/go.mod h1:Q9c1rYMZJc9dPRkbQPpcBNCLEmY2njbAsXhQOZFE2dE=
-github.com/Abirdcfly/dupword v0.0.11 h1:z6v8rMETchZXUIuHxYNmlUAuKuB21PeaSymTed16wgU=
-github.com/Abirdcfly/dupword v0.0.11/go.mod h1:wH8mVGuf3CP5fsBTkfWwwwKTjDnVVCxtU8d8rgeVYXA=
+github.com/Abirdcfly/dupword v0.0.12 h1:56NnOyrXzChj07BDFjeRA+IUzSz01jmzEq+G4kEgFhc=
+github.com/Abirdcfly/dupword v0.0.12/go.mod h1:+us/TGct/nI9Ndcbcp3rgNcQzctTj68pq7TcgNpLfdI=
 github.com/Antonboom/errname v0.1.10 h1:RZ7cYo/GuZqjr1nuJLNe8ZH+a+Jd9DaZzttWzak9Bls=
 github.com/Antonboom/errname v0.1.10/go.mod h1:xLeiCIrvVNpUtsN0wxAh05bNIZpqE22/qDMnTBTttiA=
 github.com/Antonboom/nilnil v0.1.5 h1:X2JAdEVcbPaOom2TUa1FxZ3uyuUlex0XMLGYMemu6l0=
