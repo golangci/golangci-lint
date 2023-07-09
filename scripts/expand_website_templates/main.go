@@ -472,7 +472,7 @@ func extractExampleSnippets(example []byte) (*SettingSnippets, error) {
 			lcs := lintersdb.NewManager(nil, nil).GetAllSupportedLinterConfigs()
 
 			for _, lint := range lcs {
-				lintersDesc[getName(lint)] = getDesc(lint)
+				lintersDesc[lint.Name()] = getDesc(lint)
 			}
 
 			snippets.LintersSettings, err = getLintersSettingSnippets(node, nextNode, lintersDesc)
