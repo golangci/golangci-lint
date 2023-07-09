@@ -16,13 +16,13 @@ import (
 	"reflect"
 	"sort"
 	"strings"
-
-	"gopkg.in/yaml.v3"
+	"unicode"
 
 	"github.com/golangci/golangci-lint/internal/renameio"
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
+	"gopkg.in/yaml.v3"
 )
 
 const listItemPrefix = "list-item-"
@@ -580,8 +580,8 @@ func marshallSnippet(node *yaml.Node) (string, error) {
 }
 
 func normalizeDesc(dsc string) string {
-	dsc = strings.ToUpper(dsc)
-	fmt.Println(dsc[len(dsc)-2:])
+	runes := []rune(dsc)
+	runes[0] = unicode.ToUpper([]rune(dsc)[0])
 	if dsc[len(dsc)-1:] != "." {
 		dsc = fmt.Sprintf("%s.", dsc)
 	}
