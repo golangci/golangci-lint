@@ -584,8 +584,8 @@ func formatDesc(desc string) string {
 	runes := []rune(desc)
 	runes[0] = unicode.ToUpper([]rune(desc)[0])
 
-	if desc[len(desc)-1:] != "." {
-		desc = fmt.Sprintf("%s.", desc)
+	if runes[len(runes)-1] != '.' {
+		runes = append(runes, '.')
 	}
 
 	return strings.ReplaceAll(string(runes), "\n", "<br/>")
