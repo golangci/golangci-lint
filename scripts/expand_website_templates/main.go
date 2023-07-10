@@ -18,11 +18,12 @@ import (
 	"strings"
 	"unicode"
 
+	"gopkg.in/yaml.v3"
+
 	"github.com/golangci/golangci-lint/internal/renameio"
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
-	"gopkg.in/yaml.v3"
 )
 
 const listItemPrefix = "list-item-"
