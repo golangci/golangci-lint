@@ -303,7 +303,7 @@ func getDesc(lc *linter.Config) string {
 		}
 	}
 
-	return capitalizeAndAddFinalDot(strings.ReplaceAll(desc, "\n", "<br/>"))
+	return formatDesc(desc)
 }
 
 func check(b bool, title string) string {
@@ -580,13 +580,13 @@ func marshallSnippet(node *yaml.Node) (string, error) {
 	return builder.String(), nil
 }
 
-func capitalizeAndAddFinalDot(dsc string) string {
-	runes := []rune(dsc)
-	runes[0] = unicode.ToUpper([]rune(dsc)[0])
-	dsc = string(runes)
-	if dsc[len(dsc)-1:] != "." {
-		dsc = fmt.Sprintf("%s.", dsc)
+func formatDesc(desc string) string {
+	runes := []rune(desc)
+	runes[0] = unicode.ToUpper([]rune(desc)[0])
+
+	if desc[len(desc)-1:] != "." {
+		desc = fmt.Sprintf("%s.", desc)
 	}
 
-	return dsc
+	return strings.ReplaceAll(string(runes), "\n", "<br/>")
 }
