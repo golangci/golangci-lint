@@ -17,6 +17,7 @@ import (
 	"sort"
 	"strings"
 	"unicode"
+	"unicode/utf8"
 
 	"gopkg.in/yaml.v3"
 
@@ -306,6 +307,19 @@ func getDesc(lc *linter.Config) string {
 	return formatDesc(desc)
 }
 
+func formatDesc(desc string) string {
+	runes := []rune(desc)
+
+	r, _ := utf8.DecodeRuneInString(desc)
+	runes[0] = unicode.ToUpper(r)
+
+	if runes[len(runes)-1] != '.' {
+		runes = append(runes, '.')
+	}
+
+	return strings.ReplaceAll(string(runes), "\n", "<br/>")
+}
+
 func check(b bool, title string) string {
 	if b {
 		return span(title, "✔")
@@ -343,6 +357,10 @@ func getThanksList() string {
 	addedAuthors := map[string]*authorDetails{}
 
 	for _, lc := range lintersdb.NewManager(nil, nil).GetAllSupportedLinterConfigs() {
+		if lc.Internal {
+			continue
+		}
+
 		if lc.OriginalURL == "" {
 			continue
 		}
@@ -469,14 +487,7 @@ func extractExampleSnippets(example []byte) (*SettingSnippets, error) {
 		globalNode.Content = append(globalNode.Content, node, newNode)
 
 		if node.Value == "linters-settings" {
-			var lintersDesc = make(map[string]string)
-			lcs := lintersdb.NewManager(nil, nil).GetAllSupportedLinterConfigs()
-
-			for _, lint := range lcs {
-				lintersDesc[lint.Name()] = getDesc(lint)
-			}
-
-			snippets.LintersSettings, err = getLintersSettingSnippets(node, nextNode, lintersDesc)
+			snippets.LintersSettings, err = getLintersSettingSections(node, nextNode)
 			if err != nil {
 				return nil, err
 			}
@@ -516,7 +527,19 @@ func extractExampleSnippets(example []byte) (*SettingSnippets, error) {
 	return &snippets, nil
 }
 
-func getLintersSettingSnippets(node, nextNode *yaml.Node, lintersDesc map[string]string) (string, error) {
+func getLintersSettingSections(node, nextNode *yaml.Node) (string, error) {
+	lcs := lintersdb.NewManager(nil, nil).GetAllSupportedLinterConfigs()
+
+	var lintersDesc = make(map[string]string)
+	for _, lc := range lcs {
+		if lc.Internal {
+			continue
+		}
+
+		// it's important to use lc.Name() nor name because name can be alias
+		lintersDesc[lc.Name()] = getDesc(lc)
+	}
+
 	builder := &strings.Builder{}
 
 	for i := 0; i < len(nextNode.Content); i += 2 {
@@ -578,15 +601,4 @@ func marshallSnippet(node *yaml.Node) (string, error) {
 	_, _ = fmt.Fprintln(builder)
 
 	return builder.String(), nil
-}
-
-func formatDesc(desc string) string {
-	runes := []rune(desc)
-	runes[0] = unicode.ToUpper([]rune(desc)[0])
-
-	if runes[len(runes)-1] != '.' {
-		runes = append(runes, '.')
-	}
-
-	return strings.ReplaceAll(string(runes), "\n", "<br/>")
 }
