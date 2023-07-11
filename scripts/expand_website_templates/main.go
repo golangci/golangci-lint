@@ -16,6 +16,8 @@ import (
 	"reflect"
 	"sort"
 	"strings"
+	"unicode"
+	"unicode/utf8"
 
 	"gopkg.in/yaml.v3"
 
@@ -302,7 +304,20 @@ func getDesc(lc *linter.Config) string {
 		}
 	}
 
-	return strings.ReplaceAll(desc, "\n", "<br/>")
+	return formatDesc(desc)
+}
+
+func formatDesc(desc string) string {
+	runes := []rune(desc)
+
+	r, _ := utf8.DecodeRuneInString(desc)
+	runes[0] = unicode.ToUpper(r)
+
+	if runes[len(runes)-1] != '.' {
+		runes = append(runes, '.')
+	}
+
+	return strings.ReplaceAll(string(runes), "\n", "<br/>")
 }
 
 func check(b bool, title string) string {
@@ -342,6 +357,10 @@ func getThanksList() string {
 	addedAuthors := map[string]*authorDetails{}
 
 	for _, lc := range lintersdb.NewManager(nil, nil).GetAllSupportedLinterConfigs() {
+		if lc.Internal {
+			continue
+		}
+
 		if lc.OriginalURL == "" {
 			continue
 		}
@@ -468,7 +487,7 @@ func extractExampleSnippets(example []byte) (*SettingSnippets, error) {
 		globalNode.Content = append(globalNode.Content, node, newNode)
 
 		if node.Value == "linters-settings" {
-			snippets.LintersSettings, err = getLintersSettingSnippets(node, nextNode)
+			snippets.LintersSettings, err = getLintersSettingSections(node, nextNode)
 			if err != nil {
 				return nil, err
 			}
@@ -508,7 +527,19 @@ func extractExampleSnippets(example []byte) (*SettingSnippets, error) {
 	return &snippets, nil
 }
 
-func getLintersSettingSnippets(node, nextNode *yaml.Node) (string, error) {
+func getLintersSettingSections(node, nextNode *yaml.Node) (string, error) {
+	lcs := lintersdb.NewManager(nil, nil).GetAllSupportedLinterConfigs()
+
+	var lintersDesc = make(map[string]string)
+	for _, lc := range lcs {
+		if lc.Internal {
+			continue
+		}
+
+		// it's important to use lc.Name() nor name because name can be alias
+		lintersDesc[lc.Name()] = getDesc(lc)
+	}
+
 	builder := &strings.Builder{}
 
 	for i := 0; i < len(nextNode.Content); i += 2 {
@@ -530,6 +561,7 @@ func getLintersSettingSnippets(node, nextNode *yaml.Node) (string, error) {
 		}
 
 		_, _ = fmt.Fprintf(builder, "### %s\n\n", nextNode.Content[i].Value)
+		_, _ = fmt.Fprintf(builder, "%s\n\n", lintersDesc[nextNode.Content[i].Value])
 		_, _ = fmt.Fprintln(builder, "```yaml")
 
 		encoder := yaml.NewEncoder(builder)
