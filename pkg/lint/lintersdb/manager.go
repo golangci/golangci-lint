@@ -885,6 +885,10 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithSince("v1.26.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/golangci/golangci-lint/blob/master/pkg/golinters/nolintlint/README.md"),
+		linter.NewConfig(golinters.NewFuncReturn()).
+			WithLoadForGoAnalysis().
+			WithPresets(linter.PresetStyle).
+			WithURL("https://github.com/hsnks100/funcreturn"),
 	)
 
 	return linters
