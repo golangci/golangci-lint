@@ -158,6 +158,10 @@ linters-settings:
       - var
       - func
 
+    # If true, underscore vars (vars with "_" as the name) will be ignored at all checks
+    # Default: false (underscore vars are not ignored)
+    ignore-underscore-vars: false
+
     # If true, order of declarations is not checked at all.
     # Default: true (disabled)
     disable-dec-order-check: false
@@ -169,6 +173,18 @@ linters-settings:
     # If true, multiple global `type`, `const` and `var` declarations are allowed.
     # Default: true (disabled)
     disable-dec-num-check: false
+
+    # If true, type declarations will be ignored for dec num check
+    # Default: false (type statements are not ignored)
+    disable-type-dec-num-check: false
+
+    # If true, const declarations will be ignored for dec num check
+    # Default: false (const statements are not ignored)
+    disable-const-dec-num-check: false
+
+    # If true, var declarations will be ignored for dec num check
+    # Default: false (var statements are not ignored)
+    disable-var-dec-num-check: false
 
   depguard:
     # Rules to apply.
