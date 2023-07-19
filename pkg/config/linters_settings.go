@@ -272,7 +272,11 @@ type DepGuardDeny struct {
 
 type DecorderSettings struct {
 	DecOrder                  []string `mapstructure:"dec-order"`
+	IgnoreUnderscoreVars      bool     `mapstructure:"ignore-underscore-vars"`
 	DisableDecNumCheck        bool     `mapstructure:"disable-dec-num-check"`
+	DisableTypeDecNumCheck    bool     `mapstructure:"disable-type-dec-num-check"`
+	DisableConstDecNumCheck   bool     `mapstructure:"disable-const-dec-num-check"`
+	DisableVarDecNumCheck     bool     `mapstructure:"disable-var-dec-num-check"`
 	DisableDecOrderCheck      bool     `mapstructure:"disable-dec-order-check"`
 	DisableInitFuncFirstCheck bool     `mapstructure:"disable-init-func-first-check"`
 }
