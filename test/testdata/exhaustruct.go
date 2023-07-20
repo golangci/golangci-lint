@@ -22,7 +22,7 @@ func exhaustruct() {
 	}
 
 	// failPrivate
-	_ = Exhaustruct{ // want "c is missing in Exhaustruct"
+	_ = Exhaustruct{ // want "testdata.Exhaustruct is missing field c"
 		A: "a",
 		B: 0,
 		D: 1.0,
@@ -30,7 +30,7 @@ func exhaustruct() {
 	}
 
 	// fail
-	_ = Exhaustruct{ // want "B is missing in Exhaustruct"
+	_ = Exhaustruct{ // want "testdata.Exhaustruct is missing field B"
 		A: "a",
 		c: false,
 		D: 1.0,
@@ -38,7 +38,7 @@ func exhaustruct() {
 	}
 
 	// failMultiple
-	_ = Exhaustruct{ // want "B, D are missing in Exhaustruct"
+	_ = Exhaustruct{ // want "testdata.Exhaustruct is missing fields B, D"
 		A: "a",
 		c: false,
 		E: time.Now(),
