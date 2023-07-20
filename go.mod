@@ -108,7 +108,7 @@ require (
 	github.com/tommy-muehle/go-mnd/v2 v2.5.1
 	github.com/ultraware/funlen v0.0.3
 	github.com/ultraware/whitespace v0.0.5
-	github.com/uudashr/gocognit v1.0.6
+	github.com/uudashr/gocognit v1.0.7
 	github.com/valyala/quicktemplate v1.7.0
 	github.com/xen0n/gosmopolitan v1.2.1
 	github.com/yagipy/maintidx v1.0.0
