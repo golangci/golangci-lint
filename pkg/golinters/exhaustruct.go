@@ -1,7 +1,7 @@
 package golinters
 
 import (
-	"github.com/GaijinEntertainment/go-exhaustruct/v2/pkg/analyzer"
+	"github.com/GaijinEntertainment/go-exhaustruct/v3/analyzer"
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/config"
