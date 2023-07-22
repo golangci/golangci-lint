@@ -880,6 +880,11 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/ykadowak/zerologlint"),
 
+		linter.NewConfig(golinters.NewNilPointerReferenceCheck()).
+			WithSince("v1.53.1").
+			WithLoadForGoAnalysis().
+			WithPresets(linter.PresetBugs),
+
 		// nolintlint must be last because it looks at the results of all the previous linters for unused nolint directives
 		linter.NewConfig(golinters.NewNoLintLint(noLintLintCfg)).
 			WithSince("v1.26.0").
