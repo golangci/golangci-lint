@@ -1,5 +1,5 @@
-//golangcitest:config_path configs/ginkgolinter_suppress_async.yml
 //golangcitest:args --disable-all -Eginkgolinter
+//golangcitest:config_path configs/ginkgolinter_suppress_focused_containers.yml
 package ginkgolinter
 
 import (
@@ -10,7 +10,7 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-func LenUsecase_async() {
+func LenUsecase_focus() {
 	var fakeVarUnderTest []int
 	Expect(fakeVarUnderTest).Should(BeEmpty())     // valid
 	Expect(fakeVarUnderTest).ShouldNot(HaveLen(5)) // valid
@@ -27,7 +27,7 @@ func LenUsecase_async() {
 	Expect(len(fakeVarUnderTest)).To(BeNumerically("!=", 0)) // want "ginkgo-linter: wrong length assertion; consider using .Expect\\(fakeVarUnderTest\\)\\.ToNot\\(BeEmpty\\(\\)\\). instead"
 }
 
-func NilUsecase_async() {
+func NilUsecase_focus() {
 	y := 5
 	x := &y
 	Expect(x == nil).To(Equal(true)) // want "ginkgo-linter: wrong nil assertion; consider using .Expect\\(x\\)\\.To\\(BeNil\\(\\)\\). instead"
@@ -36,14 +36,14 @@ func NilUsecase_async() {
 	Expect(x == nil).To(BeTrue())    // want "ginkgo-linter: wrong nil assertion; consider using .Expect\\(x\\)\\.To\\(BeNil\\(\\)\\). instead"
 	Expect(x == nil).To(BeFalse())   // want "ginkgo-linter: wrong nil assertion; consider using .Expect\\(x\\)\\.ToNot\\(BeNil\\(\\)\\). instead"
 }
-func BooleanUsecase_async() {
+func BooleanUsecase_focus() {
 	x := true
 	Expect(x).To(Equal(true)) // want "ginkgo-linter: wrong boolean assertion; consider using .Expect\\(x\\)\\.To\\(BeTrue\\(\\)\\). instead"
 	x = false
 	Expect(x).To(Equal(false)) // want "ginkgo-linter: wrong boolean assertion; consider using .Expect\\(x\\)\\.To\\(BeFalse\\(\\)\\). instead"
 }
 
-func ErrorUsecase_async() {
+func ErrorUsecase_focus() {
 	err := errors.New("fake error")
 	funcReturnsErr := func() error { return err }
 
@@ -54,12 +54,12 @@ func ErrorUsecase_async() {
 	Expect(funcReturnsErr()).To(BeNil()) // want "ginkgo-linter: wrong error assertion; consider using .Expect\\(funcReturnsErr\\(\\)\\)\\.To\\(Succeed\\(\\)\\). instead"
 }
 
-func HaveLen0Usecase_async() {
+func HaveLen0Usecase_focus() {
 	x := make([]string, 0)
 	Expect(x).To(HaveLen(0)) // want "ginkgo-linter: wrong length assertion; consider using .Expect\\(x\\)\\.To\\(BeEmpty\\(\\)\\). instead"
 }
 
-func WrongComparisonUsecase_async() {
+func WrongComparisonUsecase_focus() {
 	x := 8
 	Expect(x == 8).To(BeTrue())    // want "ginkgo-linter: wrong comparison assertion; consider using .Expect\\(x\\)\\.To\\(Equal\\(8\\)\\). instead"
 	Expect(x < 9).To(BeTrue())     // want "ginkgo-linter: wrong comparison assertion; consider using .Expect\\(x\\)\\.To\\(BeNumerically\\(\"<\", 9\\)\\). instead"
@@ -69,21 +69,22 @@ func WrongComparisonUsecase_async() {
 	Expect(p1 == p2).To(Equal(true)) // want "ginkgo-linter: wrong comparison assertion; consider using .Expect\\(p1\\).To\\(BeIdenticalTo\\(p2\\)\\). instead"
 }
 
-func slowInt_async() int {
+func slowInt_focus() int {
 	time.Sleep(time.Second)
 	return 42
 }
 
-// WrongEventuallyWithFunction_async Should trigger no warning
-func WrongEventuallyWithFunction_async() {
-	Eventually(slowInt_async).Should(Equal(42))   // valid
-	Eventually(slowInt_async()).Should(Equal(42)) // suppressed
+func WrongEventuallyWithFunction_focus() {
+	Eventually(slowInt_focus).Should(Equal(42))   // valid
+	Eventually(slowInt_focus()).Should(Equal(42)) // want "ginkgo-linter: use a function call in Eventually. This actually checks nothing, because Eventually receives the function returned value, instead of function itself, and this value is never changed; consider using .Eventually\\(slowInt_focus\\)\\.Should\\(Equal\\(42\\)\\). instead"
 }
 
-var _ = Describe("Should warn for focused containers", func() {
-	FContext("should not allow FContext", func() { // want "ginkgo-linter: Focus container found. This is used only for local debug and should not be part of the actual source code, consider to replace with \"Context\""
-		FWhen("should not allow FWhen", func() { // want "ginkgo-linter: Focus container found. This is used only for local debug and should not be part of the actual source code, consider to replace with \"When\""
-			FIt("should not allow FIt", func() {}) // want "ginkgo-linter: Focus container found. This is used only for local debug and should not be part of the actual source code, consider to replace with \"It\""
+var _ = FDescribe("Should warn for focused containers", func() {
+	FContext("should not allow FContext", func() {
+		FWhen("should not allow FWhen", func() {
+			FIt("should not allow FIt", func() {
+
+			})
 		})
 	})
 })
