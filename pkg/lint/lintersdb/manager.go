@@ -883,7 +883,8 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		linter.NewConfig(golinters.NewNilPointerReferenceCheck()).
 			WithSince("v1.53.1").
 			WithLoadForGoAnalysis().
-			WithPresets(linter.PresetBugs),
+			WithPresets(linter.PresetBugs).
+			WithURL("https://github.com/chenfeining/go-npecheck"),
 
 		// nolintlint must be last because it looks at the results of all the previous linters for unused nolint directives
 		linter.NewConfig(golinters.NewNoLintLint(noLintLintCfg)).

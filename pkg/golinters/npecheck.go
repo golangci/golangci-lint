@@ -3,16 +3,15 @@ package golinters
 import (
 	"golang.org/x/tools/go/analysis"
 
+	check "github.com/chenfeining/go-npecheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
-	"github.com/golangci/golangci-lint/pkg/golinters/nilpointer"
 )
 
 func NewNilPointerReferenceCheck() *goanalysis.Linter {
-	a := nilpointer.Analyzer
-
+	a := check.Analyzer
 	return goanalysis.NewLinter(
 		a.Name,
-		nilpointer.Doc,
+		check.Doc,
 		[]*analysis.Analyzer{a},
 		nil,
 	).WithLoadMode(goanalysis.LoadModeWholeProgram)

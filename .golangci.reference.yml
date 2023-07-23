@@ -2174,6 +2174,7 @@ linters:
     - nonamedreturns
     - nosnakecase
     - nosprintfhostport
+    - npecheck
     - paralleltest
     - prealloc
     - predeclared
@@ -2288,6 +2289,7 @@ linters:
     - nonamedreturns
     - nosnakecase
     - nosprintfhostport
+    - npecheck
     - paralleltest
     - prealloc
     - predeclared

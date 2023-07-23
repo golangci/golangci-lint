@@ -26,6 +26,7 @@ require (
 	github.com/butuzov/ireturn v0.2.0
 	github.com/butuzov/mirror v1.1.0
 	github.com/charithe/durationcheck v0.0.10
+	github.com/chenfeining/go-npecheck v1.0.2
 	github.com/curioswitch/go-reassign v0.2.0
 	github.com/daixiang0/gci v0.10.1
 	github.com/denis-tingaikin/go-header v0.4.3
