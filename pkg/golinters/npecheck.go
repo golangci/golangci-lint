@@ -8,11 +8,11 @@ import (
 )
 
 func NewNilPointerReferenceCheck() *goanalysis.Linter {
-	a := check.Analyzer
+	analyzer := check.Analyzer
 	return goanalysis.NewLinter(
-		a.Name,
+		analyzer.Name,
 		check.Doc,
-		[]*analysis.Analyzer{a},
+		[]*analysis.Analyzer{analyzer},
 		nil,
 	).WithLoadMode(goanalysis.LoadModeWholeProgram)
 }
