@@ -5,6 +5,7 @@ import (
 	"errors"
 	"time"
 
+	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 )
 
@@ -76,3 +77,11 @@ func WrongEventuallyWithFunction() {
 	Eventually(slowInt).Should(Equal(42))   // valid
 	Eventually(slowInt()).Should(Equal(42)) // want "ginkgo-linter: use a function call in Eventually. This actually checks nothing, because Eventually receives the function returned value, instead of function itself, and this value is never changed; consider using .Eventually\\(slowInt\\)\\.Should\\(Equal\\(42\\)\\). instead"
 }
+
+var _ = Describe("Should warn for focused containers", func() {
+	FContext("should not allow FContext", func() { // want "ginkgo-linter: Focus container found. This is used only for local debug and should not be part of the actual source code, consider to replace with \"Context\""
+		FWhen("should not allow FWhen", func() { // want "ginkgo-linter: Focus container found. This is used only for local debug and should not be part of the actual source code, consider to replace with \"When\""
+			FIt("should not allow FIt", func() {}) // want "ginkgo-linter: Focus container found. This is used only for local debug and should not be part of the actual source code, consider to replace with \"It\""
+		})
+	})
+})
