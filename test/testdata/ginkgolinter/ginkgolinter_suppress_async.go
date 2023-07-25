@@ -80,10 +80,10 @@ func WrongEventuallyWithFunction_async() {
 	Eventually(slowInt_async()).Should(Equal(42)) // suppressed
 }
 
-var _ = Describe("Should warn for focused containers", func() {
-	FContext("should not allow FContext", func() { // want "ginkgo-linter: Focus container found. This is used only for local debug and should not be part of the actual source code, consider to replace with \"Context\""
-		FWhen("should not allow FWhen", func() { // want "ginkgo-linter: Focus container found. This is used only for local debug and should not be part of the actual source code, consider to replace with \"When\""
-			FIt("should not allow FIt", func() {}) // want "ginkgo-linter: Focus container found. This is used only for local debug and should not be part of the actual source code, consider to replace with \"It\""
+var _ = FDescribe("Should warn for focused containers", func() {
+	FContext("should not allow FContext", func() {
+		FWhen("should not allow FWhen", func() {
+			FIt("should not allow FIt", func() {})
 		})
 	})
 })

@@ -449,9 +449,9 @@ linters-settings:
     # Default: false
     suppress-async-assertion: true
 
-    # Suppress warning for ginkgo focus containers like FDescribe, FContext, FWhen or FIt
+    # Trigger warning for ginkgo focus containers like FDescribe, FContext, FWhen or FIt
     # Default: false
-    suppress-focus-container: true
+    forbid-focus-container: true
 
     # Don't trigger warnings for HaveLen(0)
     # Default: false
