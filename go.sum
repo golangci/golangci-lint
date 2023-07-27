@@ -142,8 +142,8 @@ github.com/fsnotify/fsnotify v1.5.4 h1:jRbGcIw6P2Meqdwuo0H1p6JVLbL5DHKAKlYndzMwV
 github.com/fsnotify/fsnotify v1.5.4/go.mod h1:OVB6XrOHzAwXMpEM7uPOzcehqUV2UqJxmVXmkdnm1bU=
 github.com/fzipp/gocyclo v0.6.0 h1:lsblElZG7d3ALtGMx9fmxeTKZaLLpU8mET09yN4BBLo=
 github.com/fzipp/gocyclo v0.6.0/go.mod h1:rXPyn8fnlpa0R2csP/31uerbiVBugk5whMdlyaLkLoA=
-github.com/go-critic/go-critic v0.8.1 h1:16omCF1gN3gTzt4j4J6fKI/HnRojhEp+Eks6EuKw3vw=
-github.com/go-critic/go-critic v0.8.1/go.mod h1:kpzXl09SIJX1cr9TB/g/sAG+eFEl7ZS9f9cqvZtyNl0=
+github.com/go-critic/go-critic v0.8.2 h1:mekhZ9jw5NBEj3I8o/EywXw5zBfGAJuMo4VVVjtxF80=
+github.com/go-critic/go-critic v0.8.2/go.mod h1:nZPlrtVfOuLOe8GpvWTfcMzfkG0QVZWAziAeXpivfQo=
 github.com/go-gl/glfw v0.0.0-20190409004039-e6da0acd62b1/go.mod h1:vR7hzQXu2zJy9AVAgeJqvqgH9Q5CA+iKCZ2gyEVpxRU=
 github.com/go-gl/glfw/v3.3/glfw v0.0.0-20191125211704-12ad95a8df72/go.mod h1:tQ2UAYgL5IevRw8kRxooKSPJfGvJ9fJQFa0TUsXzTg8=
 github.com/go-gl/glfw/v3.3/glfw v0.0.0-20200222043503-6f7a984d4dc4/go.mod h1:tQ2UAYgL5IevRw8kRxooKSPJfGvJ9fJQFa0TUsXzTg8=
