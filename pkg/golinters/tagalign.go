@@ -24,6 +24,10 @@ func NewTagAlign(settings *config.TagAlignSettings) *goanalysis.Linter {
 		if settings.Sort || len(settings.Order) > 0 {
 			options = append(options, tagalign.WithSort(settings.Order...))
 		}
+
+		if settings.Strict {
+			options = append(options, tagalign.WithStrictStyle())
+		}
 	}
 
 	analyzer := tagalign.NewAnalyzer(options...)

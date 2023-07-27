@@ -114,9 +114,10 @@ var defaultLintersSettings = LintersSettings{
 		Qualified: false,
 	},
 	TagAlign: TagAlignSettings{
-		Align: true,
-		Sort:  true,
-		Order: nil,
+		Align:  true,
+		Sort:   true,
+		Order:  nil,
+		Strict: false,
 	},
 	Testpackage: TestpackageSettings{
 		SkipRegexp:    `(export|internal)_test\.go`,
@@ -720,9 +721,10 @@ type StructCheckSettings struct {
 }
 
 type TagAlignSettings struct {
-	Align bool     `mapstructure:"align"`
-	Sort  bool     `mapstructure:"sort"`
-	Order []string `mapstructure:"order"`
+	Align  bool     `mapstructure:"align"`
+	Sort   bool     `mapstructure:"sort"`
+	Order  []string `mapstructure:"order"`
+	Strict bool     `mapstructure:"strict"`
 }
 
 type TagliatelleSettings struct {

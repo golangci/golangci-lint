@@ -1803,6 +1803,11 @@ linters-settings:
       - mapstructure
       - binding
       - validate
+    # Whether enable strict style.
+    # In this style, the tags will be sorted and aligned in the dictionary order,
+    # and the tags with the same name will be aligned together.
+    # Default: false
+    strict: true
 
   tagliatelle:
     # Check the struct tag name case.
