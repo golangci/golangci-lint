@@ -1806,6 +1806,7 @@ linters-settings:
     # Whether enable strict style.
     # In this style, the tags will be sorted and aligned in the dictionary order,
     # and the tags with the same name will be aligned together.
+    # Note: This option will be ignored if 'align' or 'sort' is false.
     # Default: false
     strict: true
 
