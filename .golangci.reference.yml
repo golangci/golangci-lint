@@ -2176,6 +2176,7 @@ linters:
     - nilnil
     - nlreturn
     - noctx
+    - noimportsasvar
     - nolintlint
     - nonamedreturns
     - nosnakecase
@@ -2290,6 +2291,7 @@ linters:
     - nilnil
     - nlreturn
     - noctx
+    - noimportsasvar
     - nolintlint
     - nonamedreturns
     - nosnakecase
