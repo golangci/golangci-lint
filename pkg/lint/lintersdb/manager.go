@@ -676,7 +676,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithURL("https://github.com/sonatard/noctx"),
 
 		linter.NewConfig(golinters.NewNoImportsAsVar()).
-			WithSince("v1.1.0").
+			WithSince("v1.54.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetStyle, linter.PresetBugs).
 			WithURL("https://github.com/HarryTennent/noimportsasvar"),
