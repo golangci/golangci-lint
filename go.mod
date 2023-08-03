@@ -58,7 +58,7 @@ require (
 	github.com/kisielk/errcheck v1.6.3
 	github.com/kkHAIKE/contextcheck v1.1.4
 	github.com/kulti/thelper v0.6.3
-	github.com/kunwardeep/paralleltest v1.0.7
+	github.com/kunwardeep/paralleltest v1.0.8
 	github.com/kyoh86/exportloopref v0.1.11
 	github.com/ldez/gomoddirectives v0.2.3
 	github.com/ldez/tagliatelle v0.5.0
@@ -117,7 +117,7 @@ require (
 	gitlab.com/bosi/decorder v0.4.0
 	go.tmz.dev/musttag v0.7.1
 	golang.org/x/exp v0.0.0-20230510235704-dd950f8aeaea
-	golang.org/x/tools v0.11.0
+	golang.org/x/tools v0.11.1
 	gopkg.in/yaml.v3 v3.0.1
 	honnef.co/go/tools v0.4.3
 	mvdan.cc/gofumpt v0.5.0

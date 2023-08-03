@@ -655,7 +655,8 @@ type NoNamedReturnsSettings struct {
 	ReportErrorInDefer bool `mapstructure:"report-error-in-defer"`
 }
 type ParallelTestSettings struct {
-	IgnoreMissing bool `mapstructure:"ignore-missing"`
+	IgnoreMissing         bool `mapstructure:"ignore-missing"`
+	IgnoreMissingSubtests bool `mapstructure:"ignore-missing-subtests"`
 }
 
 type PreallocSettings struct {
