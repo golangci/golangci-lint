@@ -1340,6 +1340,10 @@ linters-settings:
     # Ignore missing calls to `t.Parallel()` and only report incorrect uses of it.
     # Default: false
     ignore-missing: true
+    # Ignore missing calls to `t.Parallel()` in subtests. Top-level tests are
+    # still required to have `t.Parallel`, but subtests are allowed to skip it.
+    # Default: false
+    ignore-missing-subtests: true
 
   prealloc:
     # IMPORTANT: we don't recommend using this linter before doing performance profiling.
