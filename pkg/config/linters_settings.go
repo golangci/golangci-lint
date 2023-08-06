@@ -380,8 +380,9 @@ func (p *ForbidigoPattern) MarshalString() ([]byte, error) {
 }
 
 type FunlenSettings struct {
-	Lines      int
-	Statements int
+	Lines          int
+	Statements     int
+	IgnoreComments bool `mapstructure:"ignore-comments"`
 }
 
 type GciSettings struct {

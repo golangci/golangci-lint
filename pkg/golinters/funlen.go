@@ -52,7 +52,7 @@ func NewFunlen(settings *config.FunlenSettings) *goanalysis.Linter {
 func runFunlen(pass *analysis.Pass, settings *config.FunlenSettings) []goanalysis.Issue {
 	var lintIssues []funlen.Message
 	for _, file := range pass.Files {
-		fileIssues := funlen.Run(file, pass.Fset, settings.Lines, settings.Statements)
+		fileIssues := funlen.Run(file, pass.Fset, settings.Lines, settings.Statements, settings.IgnoreComments)
 		lintIssues = append(lintIssues, fileIssues...)
 	}
 

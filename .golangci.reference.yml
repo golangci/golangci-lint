@@ -402,6 +402,9 @@ linters-settings:
     # If lower than 0, disable the check.
     # Default: 40
     statements: -1
+    # Ignore comments when counting lines.
+    # Default false
+    ignore-comments: true
 
   gci:
     # DEPRECATED: use `sections` and `prefix(github.com/org/project)` instead.
