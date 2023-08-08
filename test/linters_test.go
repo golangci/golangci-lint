@@ -62,6 +62,12 @@ func testSourcesFromDir(t *testing.T, dir string) {
 
 	for _, source := range sources {
 		source := source
+
+		if filepath.Base(source) == "gocritic.go" {
+			t.Logf("skip gocritic because of a bug with ruleguard")
+			continue
+		}
+
 		t.Run(filepath.Base(source), func(subTest *testing.T) {
 			subTest.Parallel()
 
