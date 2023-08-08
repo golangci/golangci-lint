@@ -451,8 +451,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithSince("v1.12.0").
 			WithPresets(linter.PresetStyle, linter.PresetMetaLinter).
 			WithLoadForGoAnalysis().
-			WithURL("https://github.com/go-critic/go-critic").
-			WithNoopFallback(m.cfg),
+			WithURL("https://github.com/go-critic/go-critic"),
 
 		linter.NewConfig(golinters.NewGocyclo(gocycloCfg)).
 			WithSince("v1.0.0").
