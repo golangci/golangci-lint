@@ -1,6 +1,75 @@
 Follow the news and releases on our [twitter](https://twitter.com/golangci) and our [blog](https://medium.com/golangci).
 There is the most valuable changes log:
 
+### v1.54.0
+
+1. updated linters:
+   * `decorder`: from 0.2.3 to 0.4.0
+   * `dupword`: from 0.0.11 to 0.0.12
+   * `errorlint`: from 1.4.2 to 1.4.3
+   * `exhaustruct`: from 2.3.0 to 3.1.0
+   * `forbidigo`: from 1.5.3 to 1.6.0
+   * `funlen`: from 0.0.3 to 0.1.0
+   * `gci`: from 0.10.1 to 0.11.0
+   * `ginkgolinter`: from 0.12.1 to 0.13.3
+   * `go-critic`: from 0.8.1 to 0.8.2
+   * `go-errorlint`: from 1.4.2 to 1.4.3
+   * `go-exhaustruct`: from 2.3.0 to 3.1.0
+   * `gocognit`: from 1.0.6 to 1.0.7
+   * `gocritic`: from 0.8.1 to 0.8.2
+   * `gofmt`: autofix missing newline at EOF
+   * `misspell`: 0.4.0 to 0.4.1
+   * `musttag`: from 0.7.0 to 0.7.1
+   * `paralleltest`: from 1.0.7 to 1.0.8
+   * `tagalign`: from 1.2.2 to 1.3.2
+   * `typecheck`: explain it and remove it from the linter list
+   * `zerologlint`: from 0.1.2 to 0.1.3
+2. misc.
+   * 🎉 go1.21 support
+   * plugin: include custom linters in `enable-all`
+   * plugin: allow to use settings for plugins
+3. Documentation
+   * Add linter descriptions.
+
+#### Important
+
+`ruleguard` (a "rule" inside `gocritic`) is disabled, only with go1.21, due to a bug of `ruleguard`
+
+The Go version should be 1.21 inside `go.mod` or be defined inside the `run` section:
+
+<details><summary>go.mod</summary>
+
+```go
+module your/module/name
+
+go 1.21
+
+// ...
+
+```
+
+</details>
+
+<details><summary>.golangci.yml</summary>
+
+```yml
+run:
+    go: '1.21'
+```
+
+</details>
+
+<details><summary>CLI flags</summary>
+
+```bash
+--go=1.21
+```
+
+</details>
+
+
+You can follow this topic by subscribing to the [issue #3933](https://github.com/golangci/golangci-lint/issues/3933).
+
 ### v1.53.3
 
 1. updated linters:
