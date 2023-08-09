@@ -179,6 +179,7 @@ type LintersSettings struct {
 	Gofmt            GoFmtSettings
 	Gofumpt          GofumptSettings
 	Goheader         GoHeaderSettings
+	GoImportGroups   GoImportGroupsSettings
 	Goimports        GoImportsSettings
 	Golint           GoLintSettings
 	Gomnd            GoMndSettings
@@ -468,6 +469,10 @@ type GoHeaderSettings struct {
 	Values       map[string]map[string]string `mapstructure:"values"`
 	Template     string                       `mapstructure:"template"`
 	TemplatePath string                       `mapstructure:"template-path"`
+}
+
+type GoImportGroupsSettings struct {
+	Groups []string `mapstructure:"groups"`
 }
 
 type GoImportsSettings struct {

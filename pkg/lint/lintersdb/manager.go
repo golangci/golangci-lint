@@ -91,6 +91,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		gofmtCfg            *config.GoFmtSettings
 		gofumptCfg          *config.GofumptSettings
 		goheaderCfg         *config.GoHeaderSettings
+		goImportGroupsCfg   *config.GoImportGroupsSettings
 		goimportsCfg        *config.GoImportsSettings
 		golintCfg           *config.GoLintSettings
 		goMndCfg            *config.GoMndSettings
@@ -171,6 +172,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		gofmtCfg = &m.cfg.LintersSettings.Gofmt
 		gofumptCfg = &m.cfg.LintersSettings.Gofumpt
 		goheaderCfg = &m.cfg.LintersSettings.Goheader
+		goImportGroupsCfg = &m.cfg.LintersSettings.GoImportGroups
 		goimportsCfg = &m.cfg.LintersSettings.Goimports
 		golintCfg = &m.cfg.LintersSettings.Golint
 		goMndCfg = &m.cfg.LintersSettings.Gomnd
@@ -491,6 +493,11 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithSince("v1.28.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/denis-tingaikin/go-header"),
+
+		linter.NewConfig(golinters.NewGoImportGroups(goImportGroupsCfg)).
+			WithSince("v1.20.0").
+			WithPresets(linter.PresetFormatting, linter.PresetImport).
+			WithURL("github.com/kmirzavaziri/goimportgroups"),
 
 		linter.NewConfig(golinters.NewGoimports(goimportsCfg)).
 			WithSince("v1.20.0").

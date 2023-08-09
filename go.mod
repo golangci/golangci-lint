@@ -57,6 +57,7 @@ require (
 	github.com/julz/importas v0.1.0
 	github.com/kisielk/errcheck v1.6.3
 	github.com/kkHAIKE/contextcheck v1.1.4
+	github.com/kmirzavaziri/goimportgroups v0.0.0-20230809070549-2669303d5e58
 	github.com/kulti/thelper v0.6.3
 	github.com/kunwardeep/paralleltest v1.0.8
 	github.com/kyoh86/exportloopref v0.1.11
