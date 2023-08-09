@@ -155,6 +155,8 @@ issues:
       text: "SA1019: (.+).(GoVersion|LangVersion) is deprecated: use the global `run.go` instead."
     - path: pkg/golinters/unused.go
       text: "rangeValCopy: each iteration copies 160 bytes \\(consider pointers or indexing\\)"
+    - path: test/(fix|linters)_test.go
+      text: "string `gocritic.go` has 3 occurrences, make it a constant"
 
 run:
   timeout: 5m

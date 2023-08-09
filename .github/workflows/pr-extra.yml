@@ -17,7 +17,7 @@ jobs:
           # ex:
           # - 1.18beta1 -> 1.18.0-beta.1
           # - 1.18rc1 -> 1.18.0-rc.1
-          go-version: '1.20'
+          go-version: '1.21'
       - name: Run go list
         run: go list -json -m all > go.list
       - name: Nancy

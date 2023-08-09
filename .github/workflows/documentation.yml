@@ -11,7 +11,7 @@ jobs:
     name: Build and deploy documentation
     runs-on: ubuntu-latest
     env:
-      GO_VERSION: '1.20'
+      GO_VERSION: '1.21'
       NODE_VERSION: '20.x'
       CGO_ENABLED: 0
 
