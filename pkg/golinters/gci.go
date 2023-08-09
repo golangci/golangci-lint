@@ -118,7 +118,7 @@ func diffFormattedFilesToArray(paths []string, cfg gcicfg.Config, diffs *[]strin
 	log.InitLogger()
 	defer func() { _ = log.L().Sync() }()
 
-	return gci.ProcessFiles(io.GoFilesInPathsGenerator(paths), cfg, func(filePath string, unmodifiedFile, formattedFile []byte) error {
+	return gci.ProcessFiles(io.GoFilesInPathsGenerator(paths, true), cfg, func(filePath string, unmodifiedFile, formattedFile []byte) error {
 		fileURI := span.URIFromPath(filePath)
 		edits := myers.ComputeEdits(fileURI, string(unmodifiedFile), string(formattedFile))
 		unifiedEdits := gotextdiff.ToUnified(filePath, filePath, string(unmodifiedFile), edits)
