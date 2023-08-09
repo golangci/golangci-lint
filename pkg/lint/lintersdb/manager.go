@@ -1,6 +1,8 @@
 package lintersdb
 
 import (
+	"regexp"
+
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/golinters"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
@@ -227,7 +229,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		}
 
 		if gocriticCfg != nil {
-			gocriticCfg.Go = m.cfg.Run.Go
+			gocriticCfg.Go = trimGoVersion(m.cfg.Run.Go)
 		}
 
 		if gofumptCfg != nil && gofumptCfg.LangVersion == "" {
@@ -235,16 +237,16 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		}
 
 		if staticcheckCfg != nil && staticcheckCfg.GoVersion == "" {
-			staticcheckCfg.GoVersion = m.cfg.Run.Go
+			staticcheckCfg.GoVersion = trimGoVersion(m.cfg.Run.Go)
 		}
 		if gosimpleCfg != nil && gosimpleCfg.GoVersion == "" {
-			gosimpleCfg.GoVersion = m.cfg.Run.Go
+			gosimpleCfg.GoVersion = trimGoVersion(m.cfg.Run.Go)
 		}
 		if stylecheckCfg != nil && stylecheckCfg.GoVersion != "" {
-			stylecheckCfg.GoVersion = m.cfg.Run.Go
+			stylecheckCfg.GoVersion = trimGoVersion(m.cfg.Run.Go)
 		}
 		if unusedCfg != nil && unusedCfg.GoVersion == "" {
-			unusedCfg.GoVersion = m.cfg.Run.Go
+			unusedCfg.GoVersion = trimGoVersion(m.cfg.Run.Go)
 		}
 	}
 
@@ -927,4 +929,22 @@ func (m Manager) GetAllLinterConfigsForPreset(p string) []*linter.Config {
 	}
 
 	return ret
+}
+
+// Trims the Go version to keep only M.m.
+// Since Go 1.21 the version inside the go.mod can be a patched version (ex: 1.21.0).
+// https://go.dev/doc/toolchain#versions
+// This a problem with staticcheck and gocritic.
+func trimGoVersion(v string) string {
+	if v == "" {
+		return ""
+	}
+
+	exp := regexp.MustCompile(`(\d\.\d+)\.\d+`)
+
+	if exp.MatchString(v) {
+		return exp.FindStringSubmatch(v)[1]
+	}
+
+	return v
 }
