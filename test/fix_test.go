@@ -44,6 +44,7 @@ func TestFix(t *testing.T) {
 	for _, input := range sources {
 		input := input
 
+		// TODO(ldez): remove this limitation when gocritic/ruleguard will be fixed.
 		if filepath.Base(input) == "gocritic.go" {
 			t.Logf("skip gocritic because of a bug with ruleguard")
 			continue
@@ -87,6 +88,7 @@ func TestFix_pathPrefix(t *testing.T) {
 	for _, input := range sources {
 		input := input
 
+		// TODO(ldez): remove this limitation when gocritic/ruleguard will be fixed.
 		if filepath.Base(input) == "gocritic.go" {
 			t.Logf("skip gocritic because of a bug with ruleguard")
 			continue

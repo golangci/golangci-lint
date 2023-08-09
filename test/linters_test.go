@@ -63,6 +63,7 @@ func testSourcesFromDir(t *testing.T, dir string) {
 	for _, source := range sources {
 		source := source
 
+		// TODO(ldez): remove this limitation when gocritic/ruleguard will be fixed.
 		if filepath.Base(source) == "gocritic.go" {
 			t.Logf("skip gocritic because of a bug with ruleguard")
 			continue
