@@ -283,20 +283,6 @@ func newGoCriticSettingsWrapper(settings *config.GoCriticSettings, logger loguti
 		allCheckerMap[checkInfo.Name] = checkInfo
 	}
 
-	if settings != nil && config.IsGreaterThanOrEqualGo121(settings.Go) {
-		var enabledChecks []string
-		for _, check := range settings.EnabledChecks {
-			if check == "ruleguard" {
-				logger.Warnf("%s: check %q is disabled for go1.21 https://github.com/golangci/golangci-lint/issues/3933", goCriticName, "ruleguard")
-				continue
-			}
-
-			enabledChecks = append(enabledChecks, check)
-		}
-
-		settings.EnabledChecks = enabledChecks
-	}
-
 	return &goCriticSettingsWrapper{
 		GoCriticSettings:      settings,
 		logger:                logger,
