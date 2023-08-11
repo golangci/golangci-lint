@@ -1,5 +1,13 @@
-Follow the news and releases on our [twitter](https://twitter.com/golangci) and our [blog](https://medium.com/golangci).
+Follow the news and releases on [Mastodon](https://fosstodon.org/@golangcilint) and on [Twitter](https://twitter.com/golangci).
+
 There is the most valuable changes log:
+
+### v1.54.1
+
+1. updated linters:
+   * `go-critic`:  from 0.8.2 to 0.9.0
+2. misc.
+   * plugin: temporarily hide warning about using plugins using the old API
 
 ### v1.54.0
 
@@ -31,44 +39,11 @@ There is the most valuable changes log:
 3. Documentation
    * Add linter descriptions.
 
-#### Important
+**Important**
 
-`ruleguard` (a "rule" inside `gocritic`) is disabled, only with go1.21, due to a bug of `ruleguard`
+`ruleguard` (a "rule" inside `gocritic`) was disabled in this release (v1.54.0) and was enabled again in the next release (v1.54.1).
 
-The Go version should be 1.21 inside `go.mod` or be defined inside the `run` section:
-
-<details><summary>go.mod</summary>
-
-```go
-module your/module/name
-
-go 1.21
-
-// ...
-
-```
-
-</details>
-
-<details><summary>.golangci.yml</summary>
-
-```yml
-run:
-    go: '1.21'
-```
-
-</details>
-
-<details><summary>CLI flags</summary>
-
-```bash
---go=1.21
-```
-
-</details>
-
-
-You can follow this topic by subscribing to the [issue #3933](https://github.com/golangci/golangci-lint/issues/3933).
+`exhaustruct` has breaking changes with regular expressions, more details [here](https://github.com/GaijinEntertainment/go-exhaustruct/releases/tag/v3.0.0).
 
 ### v1.53.3
 
