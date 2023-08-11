@@ -91,7 +91,8 @@ body:
   - type: textarea
     id: code-example
     attributes:
-      label: Code example or link to a public repository
+      label: A minimal reproducible example or link to a public repository
+      description: if your problem is related to a private repository, a minimal reproducible example is required.
       value: |-
         <details>
 
