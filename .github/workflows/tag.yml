@@ -30,6 +30,16 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GOLANGCI_LINT_TOKEN }}
 
+      - name: Upload nfpms
+        run: |
+          gem install --no-document --user-install --bindir ~/.local/bin package_cloud
+          export CLICOLOR_FORCE=1
+          # deb: armv6 clashes with armv7, no loong64/mips64/riscv64 support (mips64le is ok)
+          ~/.local/bin/package_cloud push ${{ github.repository }}/any/any $(ls -1 dist/*.deb | grep -vwE 'armv6|loong64|mips64|riscv64')
+          ~/.local/bin/package_cloud push ${{ github.repository }}/rpm_any/rpm_any dist/*.rpm
+        env:
+          PACKAGECLOUD_TOKEN: ${{ secrets.PACKAGECLOUD_TOKEN }}
+
   docker-release:
     needs: release
     runs-on: ubuntu-latest

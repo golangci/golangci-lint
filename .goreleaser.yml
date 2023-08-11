@@ -5,6 +5,9 @@ release:
   github:
     owner: golangci
     name: golangci-lint
+  footer: >-
+    apt and dnf/yum package repositories are available at
+    [Packagecloud](https://packagecloud.io/golangci/golangci-lint).
 
 builds:
   - binary: golangci-lint
