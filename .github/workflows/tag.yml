@@ -26,9 +26,18 @@ jobs:
         uses: goreleaser/goreleaser-action@v4
         with:
           version: latest
-          args: release --rm-dist
+          args: release
         env:
           GITHUB_TOKEN: ${{ secrets.GOLANGCI_LINT_TOKEN }}
+
+      - name: Upload nfpms
+        run: |
+          gem install --no-document --user-install --bindir ~/.local/bin package_cloud
+          export CLICOLOR_FORCE=1
+          ~/.local/bin/package_cloud push ${{ github.repository }}/any/any dist/*.deb
+          ~/.local/bin/package_cloud push ${{ github.repository }}/rpm_any/rpm_any dist/*.rpm
+        env:
+          PACKAGECLOUD_TOKEN: ${{ secrets.PACKAGECLOUD_TOKEN }}
 
   docker-release:
     needs: release
