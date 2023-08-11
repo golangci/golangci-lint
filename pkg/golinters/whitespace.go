@@ -58,14 +58,13 @@ func NewWhitespace(settings *config.WhitespaceSettings) *goanalysis.Linter {
 					}
 
 				case whitespace.MessageTypeAdd:
-					position := pass.Fset.PositionFor(issue.Diagnostic, false)
-					bracketLine, err := lintCtx.LineCache.GetLine(position.Filename, position.Line)
-					if err != nil {
-						return nil, fmt.Errorf("failed to get line %s:%d: %w", position.Filename, position.Line, err)
-					}
-
+					report.Pos = pass.Fset.PositionFor(issue.FixStart, false)
 					report.Replacement = &result.Replacement{
-						NewLines: []string{bracketLine + "\n"},
+						Inline: &result.InlineFix{
+							StartCol:  0,
+							Length:    1,
+							NewString: "\n\t",
+						},
 					}
 
 				default:

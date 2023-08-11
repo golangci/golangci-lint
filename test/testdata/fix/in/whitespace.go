@@ -59,4 +59,15 @@ func multiIfFunc() {
 		2 == 2 {
 		fmt.Println("Hello multi-line world")
 	}
+
+	if true {
+		if true {
+			if true {
+				if 1 == 1 &&
+					2 == 2 {
+						fmt.Println("Hello nested multi-line world")
+				}
+			}
+		}
+	}
 }
