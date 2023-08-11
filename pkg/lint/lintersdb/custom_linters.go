@@ -116,8 +116,8 @@ func (m *Manager) lookupAnalyzerPlugin(plug *plugin.Plugin) ([]*analysis.Analyze
 		return nil, err
 	}
 
-	// TODO(ldez): remove this env var in the next minor version (v1.55.0)
-	if _, ok := os. LookupEnv("GOLANGCI_LINT_HIDE_WARNING_ABOUT_PLUGIN_API_DEPRECATION"); !ok {
+	// TODO(ldez): remove this env var (but keep the log) in the next minor version (v1.55.0)
+	if _, ok := os.LookupEnv("GOLANGCI_LINT_HIDE_WARNING_ABOUT_PLUGIN_API_DEPRECATION"); !ok {
 		m.log.Warnf("plugin: 'AnalyzerPlugin' plugins are deprecated, please use the new plugin signature: " +
 			"https://golangci-lint.run/contributing/new-linters/#create-a-plugin")
 	}
