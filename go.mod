@@ -85,7 +85,7 @@ require (
 	github.com/sanposhiho/wastedassign/v2 v2.0.7
 	github.com/sashamelentyev/interfacebloat v1.1.0
 	github.com/sashamelentyev/usestdlibvars v1.24.0
-	github.com/securego/gosec/v2 v2.16.0
+	github.com/securego/gosec/v2 v2.17.0
 	github.com/shazow/go-diff v0.0.0-20160112020656-b6b7b6733b8c
 	github.com/shirou/gopsutil/v3 v3.23.7
 	github.com/sirupsen/logrus v1.9.3
@@ -128,6 +128,7 @@ require (
 require (
 	github.com/Masterminds/semver v1.5.0 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
+	github.com/ccojocar/zxcvbn-go v1.0.1 // indirect
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect
 	github.com/chavacava/garif v0.0.0-20230227094218-b8c73b2037b8 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
@@ -156,7 +157,6 @@ require (
 	github.com/mattn/go-isatty v0.0.17 // indirect
 	github.com/mattn/go-runewidth v0.0.9 // indirect
 	github.com/matttproud/golang_protobuf_extensions v1.0.1 // indirect
-	github.com/nbutton23/zxcvbn-go v0.0.0-20210217022336-fa2cb2858354 // indirect
 	github.com/olekukonko/tablewriter v0.0.5 // indirect
 	github.com/pelletier/go-toml v1.9.5 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.5 // indirect
@@ -188,7 +188,7 @@ require (
 	golang.org/x/mod v0.12.0 // indirect
 	golang.org/x/sync v0.3.0 // indirect
 	golang.org/x/sys v0.11.0 // indirect
-	golang.org/x/text v0.9.0 // indirect
+	golang.org/x/text v0.12.0 // indirect
 	google.golang.org/protobuf v1.28.0 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
