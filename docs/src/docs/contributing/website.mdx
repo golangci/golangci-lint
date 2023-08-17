@@ -4,8 +4,7 @@ title: Website architecture
 
 ## Technology
 
-We use [Gatsby](https://www.gatsbyjs.org/) for static site generation because sites built with it
-are very fast.
+We use [Gatsby](https://www.gatsbyjs.org/) for static site generation because sites built with it are very fast.
 
 This framework uses React and JavaScript/TypeScript.
 
@@ -16,9 +15,8 @@ The website lives in `docs/` directory of [golangci-lint repository](https://git
 ## Theme
 
 Initially the site is based on [@rocketseat](https://rocketdocs.netlify.app/) theme.
-Later we've merged it's code into `src/@rocketseat` because we needed too much changes
-and [gatsby shadowing](https://www.gatsbyjs.org/docs/themes/shadowing/) doesn't
-allow shadowing `gatsby-node.js` or `gatsby-config.js`.
+Later we've merged its code into `src/@rocketseat` because we needed too much changes
+and [gatsby shadowing](https://www.gatsbyjs.org/docs/themes/shadowing/) doesn't allow shadowing `gatsby-node.js` or `gatsby-config.js`.
 
 ## Navigation
 
@@ -31,22 +29,15 @@ allowing to use `React` components.
 
 ## Templating
 
-We use templates like `{.SomeField}` inside our `mdx` files. There templates are expanded
-by running `make expand_website_templates` in the root of the repository.
+We use templates like `{.SomeField}` inside our `mdx` files.
+There templates are expanded by running `make expand_website_templates` in the root of the repository.
 It runs script `scripts/expand_website_templates/main.go` that rewrites `mdx` files with replaced templates.
-
-## CDN and DNS
-
-We use [CloudFlare](https://www.cloudflare.com/) for CDN, proxying and DNS management.
 
 ## Hosting
 
-We use [Netlify](https://www.netlify.com/) as static website hosting and CD.
-It's integrated into our pull requests: if `docs/` directory has changes Netlify
-will trigger website rebuild and deploy it's preview for a branch. You can view
-it to ensure that everything ok.
+We use GitHub Pages as static website hosting and CD.
 
-Netlify deploys the website to production after merging anything to a `master` branch.
+GitHub deploys the website to production after merging anything to a `master` branch.
 
 ## Local Testing
 
@@ -61,16 +52,10 @@ And navigate to `http://localhost:8000` after successful Gatsby build.
 There is no need to restart Gatsby server almost for all changes: it supports hot reload.
 Also, there is no need to refresh a webpage: hot reload updates changed content on the open page.
 
-## Trigger Website Rebuild
+## Website Build
 
-Currently, Netlify triggers rebuild only if anything has changes in `docs/` directory.
-But we can add a new linter and need to change a documentation to list the linter.
-
-To do it run
+To do it run:
 
 ```sh
-go run ./scripts/expand_website_templates/main.go -only-state
+go run ./scripts/expand_website_templates/main.go
 ```
-
-It saves a hash of template replacements (that include all linters, configs, etc)
-into `docs/template_data.state`.

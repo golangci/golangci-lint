@@ -33,9 +33,6 @@ jobs:
       - name: Update Contributors list
         run: make update_contributors_list # may take 15 min
 
-      - name: Update netlify state hash
-        run: make update_netlify_state
-
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
         with:
