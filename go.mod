@@ -77,7 +77,7 @@ require (
 	github.com/nakabonne/nestif v0.3.1
 	github.com/nishanths/exhaustive v0.11.0
 	github.com/nishanths/predeclared v0.2.2
-	github.com/nunnatsa/ginkgolinter v0.13.3
+	github.com/nunnatsa/ginkgolinter v0.13.5
 	github.com/polyfloyd/go-errorlint v1.4.3
 	github.com/quasilyte/go-ruleguard/dsl v0.3.22
 	github.com/ryancurrah/gomodguard v1.3.0
@@ -115,11 +115,11 @@ require (
 	github.com/yeya24/promlinter v0.2.0
 	github.com/ykadowak/zerologlint v0.1.3
 	gitlab.com/bosi/decorder v0.4.0
-	go.tmz.dev/musttag v0.7.1
+	go.tmz.dev/musttag v0.7.2
 	golang.org/x/exp v0.0.0-20230510235704-dd950f8aeaea
 	golang.org/x/tools v0.12.0
 	gopkg.in/yaml.v3 v3.0.1
-	honnef.co/go/tools v0.4.3
+	honnef.co/go/tools v0.4.4
 	mvdan.cc/gofumpt v0.5.0
 	mvdan.cc/interfacer v0.0.0-20180901003855-c20040233aed
 	mvdan.cc/unparam v0.0.0-20221223090309-7455f1af531d
