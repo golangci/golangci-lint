@@ -2,10 +2,7 @@ package main
 
 import (
 	"bytes"
-	"crypto/sha256"
-	"encoding/hex"
 	"encoding/json"
-	"flag"
 	"fmt"
 	"io"
 	"log"
@@ -29,48 +26,17 @@ import (
 
 const listItemPrefix = "list-item-"
 
-var stateFilePath = filepath.Join("docs", "template_data.state")
-
 func main() {
-	var onlyWriteState bool
-	flag.BoolVar(&onlyWriteState, "only-state", false, fmt.Sprintf("Only write hash of state to %s and exit", stateFilePath))
-	flag.Parse()
-
 	replacements, err := buildTemplateContext()
 	if err != nil {
 		log.Fatalf("Failed to build template context: %s", err)
 	}
 
-	if err = updateStateFile(replacements); err != nil {
-		log.Fatalf("Failed to update state file: %s", err)
-	}
-
-	if onlyWriteState {
-		return
-	}
-
 	if err := rewriteDocs(replacements); err != nil {
 		log.Fatalf("Failed to rewrite docs: %s", err)
 	}
+
 	log.Print("Successfully expanded templates")
-}
-
-func updateStateFile(replacements map[string]string) error {
-	replBytes, err := json.Marshal(replacements)
-	if err != nil {
-		return fmt.Errorf("failed to json marshal replacements: %w", err)
-	}
-
-	h := sha256.New()
-	if _, err := h.Write(replBytes); err != nil {
-		return err
-	}
-
-	contentBuf := bytes.NewBufferString("This file stores hash of website templates to trigger " +
-		"Netlify rebuild when something changes, e.g. new linter is added.\n")
-	contentBuf.WriteString(hex.EncodeToString(h.Sum(nil)))
-
-	return renameio.WriteFile(stateFilePath, contentBuf.Bytes(), os.ModePerm)
 }
 
 func rewriteDocs(replacements map[string]string) error {
