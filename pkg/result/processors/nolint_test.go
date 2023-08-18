@@ -244,7 +244,9 @@ func TestIgnoredRangeMatches(t *testing.T) {
 			},
 			linters: testcase.linters,
 		}
-		assert.Equal(t, testcase.expected, ir.doesMatch(&testcase.issue), testcase.doc)
+
+		l := testcase.issue
+		assert.Equal(t, testcase.expected, ir.doesMatch(&l), testcase.doc)
 	}
 }
 
