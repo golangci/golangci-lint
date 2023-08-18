@@ -46,8 +46,8 @@ github.com/Abirdcfly/dupword v0.0.12 h1:56NnOyrXzChj07BDFjeRA+IUzSz01jmzEq+G4kEg
 github.com/Abirdcfly/dupword v0.0.12/go.mod h1:+us/TGct/nI9Ndcbcp3rgNcQzctTj68pq7TcgNpLfdI=
 github.com/Antonboom/errname v0.1.10 h1:RZ7cYo/GuZqjr1nuJLNe8ZH+a+Jd9DaZzttWzak9Bls=
 github.com/Antonboom/errname v0.1.10/go.mod h1:xLeiCIrvVNpUtsN0wxAh05bNIZpqE22/qDMnTBTttiA=
-github.com/Antonboom/nilnil v0.1.5 h1:X2JAdEVcbPaOom2TUa1FxZ3uyuUlex0XMLGYMemu6l0=
-github.com/Antonboom/nilnil v0.1.5/go.mod h1:I24toVuBKhfP5teihGWctrRiPbRKHwZIFOvc6v3HZXk=
+github.com/Antonboom/nilnil v0.1.7 h1:ofgL+BA7vlA1K2wNQOsHzLJ2Pw5B5DpWRLdDAVvvTow=
+github.com/Antonboom/nilnil v0.1.7/go.mod h1:TP+ScQWVEq0eSIxqU8CbdT5DFWoHp0MbP+KMUO1BKYQ=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/BurntSushi/toml v1.3.2 h1:o7IhLm0Msx3BaB+n3Ag7L8EVlByGnpq14C4YWiu/gL8=
 github.com/BurntSushi/toml v1.3.2/go.mod h1:CxXYINrC8qIiEnFrOxCa7Jy5BFHlXnUU2pbicEuybxQ=
