@@ -101,7 +101,7 @@ require (
 	github.com/stbenjam/no-sprintf-host-port v0.1.1
 	github.com/stretchr/testify v1.8.4
 	github.com/tdakkota/asciicheck v0.2.0
-	github.com/tetafro/godot v1.4.11
+	github.com/tetafro/godot v1.4.14
 	github.com/timakin/bodyclose v0.0.0-20230421092635-574207250966
 	github.com/timonwong/loggercheck v0.9.4
 	github.com/tomarrell/wrapcheck/v2 v2.8.1
