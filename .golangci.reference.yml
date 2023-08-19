@@ -1063,6 +1063,7 @@ linters-settings:
       - copylocks
       - deepequalerrors
       - defers
+      - directive
       - errorsas
       - fieldalignment
       - findcall
@@ -1078,6 +1079,7 @@ linters-settings:
       - shadow
       - shift
       - sigchanyzer
+      - slog
       - sortslice
       - stdmethods
       - stringintconv
@@ -1107,6 +1109,8 @@ linters-settings:
       - composites
       - copylocks
       - deepequalerrors
+      - defers
+      - directive
       - errorsas
       - fieldalignment
       - findcall
@@ -1122,6 +1126,7 @@ linters-settings:
       - shadow
       - shift
       - sigchanyzer
+      - slog
       - sortslice
       - stdmethods
       - stringintconv
