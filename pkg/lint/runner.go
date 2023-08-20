@@ -100,6 +100,7 @@ func NewRunner(cfg *config.Config, log logutils.Log, goenv *goutil.Env,
 			processors.NewSourceCode(lineCache, log.Child(logutils.DebugKeySourceCode)),
 			processors.NewPathShortener(),
 			getSeverityRulesProcessor(&cfg.Severity, log, files),
+			getMessageAdjusterProcessor(&cfg.Issues),
 
 			// The fixer still needs to see paths for the issues that are relative to the current directory.
 			processors.NewFixer(cfg, log, fileCache),
@@ -347,4 +348,17 @@ func getSeverityRulesProcessor(cfg *config.Severity, log logutils.Log, files *fs
 	}
 
 	return severityRulesProcessor
+}
+
+func getMessageAdjusterProcessor(cfg *config.Issues) processors.Processor {
+	var msgRules []processors.MessageRule
+	for _, msg := range cfg.AdjustMessages {
+		msgRules = append(msgRules, processors.MessageRule{
+			Linter:          msg.Linter,
+			ExistingMessage: msg.ExistingMessage,
+			NewMessage:      msg.NewMessage,
+		})
+	}
+
+	return processors.NewMessageAdjuster(msgRules)
 }

@@ -149,6 +149,11 @@ func (r *FileReader) validateConfig() error {
 			return fmt.Errorf("error in severity rule #%d: %v", i, err)
 		}
 	}
+	for i, msg := range c.Issues.AdjustMessages {
+		if err := msg.Validate(); err != nil {
+			return fmt.Errorf("error in adjust messages #%d: %v", i, err)
+		}
+	}
 	if err := c.LintersSettings.Govet.Validate(); err != nil {
 		return fmt.Errorf("error in govet config: %v", err)
 	}

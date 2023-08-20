@@ -109,6 +109,7 @@ type Issues struct {
 	ExcludePatterns        []string      `mapstructure:"exclude"`
 	ExcludeRules           []ExcludeRule `mapstructure:"exclude-rules"`
 	UseDefaultExcludes     bool          `mapstructure:"exclude-use-default"`
+	AdjustMessages         []MessageRule `mapstructure:"adjust-messages"`
 
 	MaxIssuesPerLinter int `mapstructure:"max-issues-per-linter"`
 	MaxSameIssues      int `mapstructure:"max-same-issues"`
@@ -210,4 +211,23 @@ func GetExcludePatterns(include []string) []ExcludePattern {
 	}
 
 	return ret
+}
+
+type MessageRule struct {
+	Linter          string `mapstructure:"linter"`
+	ExistingMessage string `mapstructure:"existing-message"`
+	NewMessage      string `mapstructure:"new-message"`
+}
+
+func (b *MessageRule) Validate() error {
+	if b.ExistingMessage == "" {
+		return fmt.Errorf("existing-message should be set")
+	}
+	if b.NewMessage == "" {
+		return fmt.Errorf("new-message should be set")
+	}
+	if err := validateOptionalRegex(b.ExistingMessage); err != nil {
+		return fmt.Errorf("invalid existing-message regex: %v", err)
+	}
+	return nil
 }

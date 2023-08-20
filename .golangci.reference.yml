@@ -2434,6 +2434,16 @@ issues:
     - EXC0014
     - EXC0015
 
+  # Changing the content of messages.
+  # You can specify the existing-message by regular expression,
+  # and new-message by regular expression expansion syntax like below
+  # (see https://pkg.go.dev/regexp#Regexp.Expand for details).
+  # Specifying (optional) linter will speed up processing.
+  adjust-messages:
+    - linter: gocritic
+      existing-message: "^(appendAssign: append result not assigned to the same slice)$"
+      new-message: "${1}, use `slices.copyAndAppend` to safely concatenate two slices"
+
   # Maximum issues count per one linter.
   # Set to 0 to disable.
   # Default: 50
