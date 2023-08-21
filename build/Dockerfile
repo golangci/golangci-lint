@@ -13,6 +13,8 @@ RUN CGO_ENABLED=0 go build -trimpath -ldflags "-s -w -X main.version=$VERSION -X
 FROM golang:1.21
 # related to https://github.com/golangci/golangci-lint/issues/3107
 ENV GOROOT /usr/local/go
+# Set all directories as safe
+RUN git config --global --add safe.directory '*'
 # don't place it into $GOPATH/bin because Drone mounts $GOPATH as volume
 COPY --from=builder /golangci/golangci-lint /usr/bin/
 CMD ["golangci-lint"]

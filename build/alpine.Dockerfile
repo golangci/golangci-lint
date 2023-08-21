@@ -22,6 +22,8 @@ ENV GOROOT /usr/local/go
 # git and mercurial are needed most times for go get`, etc.
 # See https://github.com/docker-library/golang/issues/80
 RUN apk --no-cache add gcc musl-dev git mercurial
+# Set all directories as safe
+RUN git config --global --add safe.directory '*'
 # don't place it into $GOPATH/bin because Drone mounts $GOPATH as volume
 COPY --from=builder /golangci/golangci-lint /usr/bin/
 CMD ["golangci-lint"]
