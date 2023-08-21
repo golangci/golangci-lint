@@ -1,13 +1,5 @@
 linters-settings:
   depguard:
-    # old configuration. TODO(ldez): must be removed
-    list-type: denylist
-    packages:
-      # logging is allowed only by logutils.Log, logrus
-      # is allowed to use only in logutils package
-      - github.com/sirupsen/logrus
-    packages-with-error-message:
-      - github.com/sirupsen/logrus: "logging is allowed only by logutils.Log"
     # new configuration
     rules:
       logger:

@@ -2,6 +2,20 @@ Follow the news and releases on [Mastodon](https://fosstodon.org/@golangcilint) 
 
 There is the most valuable changes log:
 
+### v1.54.2
+
+1. updated linters:
+   * `errname`: from 0.1.10 to 0.1.12
+   * `ginkgolinter`: from 0.13.3 to 0.13.5
+   * `go-errorlint`: from 1.4.3 to 1.4.4
+   * `godot`: from 1.4.11 to 1.4.14
+   * `gosec`: from 2.16.0 to 2.17.0
+   * `musttag`: from 0.7.1 to 0.7.2
+   * `nilnil`: from 0.1.5 to 0.1.7
+   * `staticcheck`: from 0.4.3 to 0.4.5
+   * `usestdlibvars`: from 1.23.0 to 1.24.0
+   * `govet`: add missing `directive` and `slog` passes
+
 ### v1.54.1
 
 1. updated linters:
