@@ -41,9 +41,7 @@ jobs:
           # ex:
           # - 1.18beta1 -> 1.18.0-beta.1
           # - 1.18rc1 -> 1.18.0-rc.1
-          # TODO(ldez) must be changed after the first release of golangci-lint with go1.21
-          # go-version: ${{ env.GO_VERSION }}
-          go-version: '1.20'
+          go-version: ${{ env.GO_VERSION }}
       - name: lint
         uses: golangci/golangci-lint-action@v3.6.0
         with:
