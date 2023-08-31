@@ -114,7 +114,7 @@ require (
 	github.com/yagipy/maintidx v1.0.0
 	github.com/yeya24/promlinter v0.2.0
 	github.com/ykadowak/zerologlint v0.1.3
-	gitlab.com/bosi/decorder v0.4.0
+	gitlab.com/bosi/decorder v0.4.1
 	go.tmz.dev/musttag v0.7.2
 	golang.org/x/exp v0.0.0-20230510235704-dd950f8aeaea
 	golang.org/x/tools v0.12.0
