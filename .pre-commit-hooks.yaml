@@ -6,3 +6,11 @@
   language: golang
   require_serial: true
   pass_filenames: false
+- id: golangci-lint-diff
+  name: golangci-lint-diff
+  description: Fast linters runner for Go. Only runs on changed files.
+  entry: golangci-lint run --new-from-rev HEAD --fix
+  types: [go]
+  language: golang
+  require_serial: true
+  pass_filenames: false
