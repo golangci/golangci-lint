@@ -51,7 +51,7 @@ require (
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/hashicorp/go-version v1.6.0
 	github.com/hexops/gotextdiff v1.0.3
-	github.com/jgautheron/goconst v1.5.1
+	github.com/jgautheron/goconst v1.6.0
 	github.com/jingyugao/rowserrcheck v1.1.1
 	github.com/jirfag/go-printf-func-name v0.0.0-20200119135958-7558a9eaa5af
 	github.com/julz/importas v0.1.0
@@ -114,7 +114,7 @@ require (
 	github.com/yagipy/maintidx v1.0.0
 	github.com/yeya24/promlinter v0.2.0
 	github.com/ykadowak/zerologlint v0.1.3
-	gitlab.com/bosi/decorder v0.4.0
+	gitlab.com/bosi/decorder v0.4.1
 	go.tmz.dev/musttag v0.7.2
 	golang.org/x/exp v0.0.0-20230510235704-dd950f8aeaea
 	golang.org/x/tools v0.12.0
