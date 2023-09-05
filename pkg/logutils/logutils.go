@@ -59,7 +59,7 @@ const (
 	DebugKeyGoCritic  = "gocritic"  // Debugs `go-critic` linter.
 	DebugKeyMegacheck = "megacheck" // Debugs `staticcheck` related linters.
 	DebugKeyNolint    = "nolint"    // Debugs a filter excluding issues by `//nolint` comments.
-	DebugKeyRevive    = "revive"    // Debugs `revice` linter.
+	DebugKeyRevive    = "revive"    // Debugs `revive` linter.
 )
 
 func getEnabledDebugs() map[string]bool {
