@@ -27,7 +27,7 @@ require (
 	github.com/butuzov/mirror v1.1.0
 	github.com/charithe/durationcheck v0.0.10
 	github.com/curioswitch/go-reassign v0.2.0
-	github.com/daixiang0/gci v0.11.0
+	github.com/daixiang0/gci v0.11.1
 	github.com/denis-tingaikin/go-header v0.4.3
 	github.com/esimonov/ifshort v1.0.4
 	github.com/fatih/color v1.15.0
@@ -43,7 +43,7 @@ require (
 	github.com/golangci/lint-1 v0.0.0-20191013205115-297bf364a8e0
 	github.com/golangci/maligned v0.0.0-20180506175553-b1d89398deca
 	github.com/golangci/misspell v0.4.1
-	github.com/golangci/revgrep v0.0.0-20220804021717-745bb2f7c2e6
+	github.com/golangci/revgrep v0.5.0
 	github.com/golangci/unconvert v0.0.0-20180507085042-28b1c447d1f4
 	github.com/gordonklaus/ineffassign v0.0.0-20230610083614-0e73809eb601
 	github.com/gostaticanalysis/forcetypeassert v0.1.0
@@ -117,7 +117,7 @@ require (
 	gitlab.com/bosi/decorder v0.4.1
 	go.tmz.dev/musttag v0.7.2
 	golang.org/x/exp v0.0.0-20230510235704-dd950f8aeaea
-	golang.org/x/tools v0.12.0
+	golang.org/x/tools v0.13.0
 	gopkg.in/yaml.v3 v3.0.1
 	honnef.co/go/tools v0.4.5
 	mvdan.cc/gofumpt v0.5.0
@@ -187,7 +187,7 @@ require (
 	golang.org/x/exp/typeparams v0.0.0-20230307190834-24139beb5833 // indirect
 	golang.org/x/mod v0.12.0 // indirect
 	golang.org/x/sync v0.3.0 // indirect
-	golang.org/x/sys v0.11.0 // indirect
+	golang.org/x/sys v0.12.0 // indirect
 	golang.org/x/text v0.12.0 // indirect
 	google.golang.org/protobuf v1.28.0 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
