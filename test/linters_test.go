@@ -32,6 +32,7 @@ func TestSourcesFromTestdataSubDir(t *testing.T) {
 		"loggercheck",
 		"ginkgolinter",
 		"zerologlint",
+		"protogolint",
 	}
 
 	for _, dir := range subDirs {
