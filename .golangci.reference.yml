@@ -2234,6 +2234,7 @@ linters:
     - prealloc
     - predeclared
     - promlinter
+    - protogolint
     - reassign
     - revive
     - rowserrcheck
@@ -2348,6 +2349,7 @@ linters:
     - prealloc
     - predeclared
     - promlinter
+    - protogolint
     - reassign
     - revive
     - rowserrcheck

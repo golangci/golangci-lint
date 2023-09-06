@@ -12,7 +12,7 @@ type Test struct {
 }
 
 func testInvalid(t *proto.Test) {
-	func(...interface{}) {}(t.B, t.D)      // want "proto field read without getter:" "proto field read without getter:"
+	func(...interface{}) {}(t.B, t.D)      // want "proto field read without getter:"
 	func(...interface{}) {}(t.GetB(), t.D) // want "proto field read without getter:"
 	func(...interface{}) {}(t.B, t.GetD()) // want "proto field read without getter:"
 
@@ -52,7 +52,7 @@ func testInvalid(t *proto.Test) {
 	_ = many[3].Embedded.Embedded.S // want "proto field read without getter:"
 	_ = many[manyIndex].S           // want "proto field read without getter:"
 
-	test := many[0].Embedded.S == "" || t.Embedded.CustomMethod() == nil || t.S == "" || t.Embedded == nil // want "proto field read without getter:" "proto field read without getter:" "proto field read without getter:" "proto field read without getter:"
+	test := many[0].Embedded.S == "" || t.Embedded.CustomMethod() == nil || t.S == "" || t.Embedded == nil // want "proto field read without getter:"
 	_ = test
 
 	other := proto.Other{}
