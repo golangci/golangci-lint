@@ -68,7 +68,7 @@ func rowsCorrectDefer() {
 }
 
 func rowsMissingClose() {
-	rows, err := db.QueryContext(ctx, "SELECT name FROM users WHERE age=?", age) // want "Rows/Stmt was not closed"
+	rows, err := db.QueryContext(ctx, "SELECT name FROM users WHERE age=?", age) // want "Rows/Stmt/NamedStmt was not closed"
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -91,7 +91,7 @@ func rowsMissingClose() {
 }
 
 func rowsMissingCloseG[T ~int64](db *sql.DB, a T) {
-	rows, _ := db.Query("select id from tb") // want "Rows/Stmt was not closed"
+	rows, _ := db.Query("select id from tb") // want "Rows/Stmt/NamedStmt was not closed"
 	for rows.Next() {
 		// ...
 	}
@@ -208,7 +208,7 @@ func stmtCorrectDefer() {
 
 func stmtMissingClose() {
 	// In normal use, create one Stmt when your process starts.
-	stmt, err := db.PrepareContext(ctx, "SELECT username FROM users WHERE id = ?") // want "Rows/Stmt was not closed"
+	stmt, err := db.PrepareContext(ctx, "SELECT username FROM users WHERE id = ?") // want "Rows/Stmt/NamedStmt was not closed"
 	if err != nil {
 		log.Fatal(err)
 	}
