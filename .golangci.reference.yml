@@ -1292,7 +1292,7 @@ linters-settings:
     # A set of custom functions to check in addition to the builtin ones.
     # Default: json, xml, gopkg.in/yaml.v3, BurntSushi/toml, mitchellh/mapstructure, jmoiron/sqlx
     functions:
-      # The full name of the function, including the package.
+        # The full name of the function, including the package.
       - name: github.com/hashicorp/hcl/v2/hclsimple.DecodeFile
         # The struct tag whose presence should be ensured.
         tag: hcl

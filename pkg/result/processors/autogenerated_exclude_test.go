@@ -110,5 +110,5 @@ this one line comment also`,
 func TestGetDocFileWithLongLine(t *testing.T) {
 	fpath := filepath.Join("testdata", "autogen_exclude_long_line.go")
 	_, err := getDoc(fpath)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 }
