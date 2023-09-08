@@ -81,7 +81,7 @@ require (
 	github.com/polyfloyd/go-errorlint v1.4.4
 	github.com/quasilyte/go-ruleguard/dsl v0.3.22
 	github.com/ryancurrah/gomodguard v1.3.0
-	github.com/ryanrolds/sqlclosecheck v0.4.0
+	github.com/ryanrolds/sqlclosecheck v0.5.1
 	github.com/sanposhiho/wastedassign/v2 v2.0.7
 	github.com/sashamelentyev/interfacebloat v1.1.0
 	github.com/sashamelentyev/usestdlibvars v1.24.0
@@ -110,7 +110,7 @@ require (
 	github.com/ultraware/whitespace v0.0.5
 	github.com/uudashr/gocognit v1.0.7
 	github.com/valyala/quicktemplate v1.7.0
-	github.com/xen0n/gosmopolitan v1.2.1
+	github.com/xen0n/gosmopolitan v1.2.2
 	github.com/yagipy/maintidx v1.0.0
 	github.com/yeya24/promlinter v0.2.0
 	github.com/ykadowak/zerologlint v0.1.3
@@ -188,7 +188,7 @@ require (
 	golang.org/x/mod v0.12.0 // indirect
 	golang.org/x/sync v0.3.0 // indirect
 	golang.org/x/sys v0.12.0 // indirect
-	golang.org/x/text v0.12.0 // indirect
+	golang.org/x/text v0.13.0 // indirect
 	google.golang.org/protobuf v1.28.0 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
