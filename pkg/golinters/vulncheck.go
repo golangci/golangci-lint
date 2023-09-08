@@ -1,14 +1,13 @@
 package golinters
 
 import (
-	"fmt"
-	"strings"
+	"bytes"
+	"path/filepath"
 	"sync"
 
 	"golang.org/x/net/context"
 	"golang.org/x/tools/go/analysis"
-	"golang.org/x/vuln/client"
-	"golang.org/x/vuln/vulncheck"
+	"golang.org/x/vuln/scan"
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
@@ -18,7 +17,7 @@ import (
 
 const (
 	vulncheckName = "vulncheck"
-	vulncheckDoc  = "Package vulncheck detects uses of known vulnerabilities in Go programs."
+	vulncheckDoc  = "vulncheck detects uses of known vulnerabilities in Go programs."
 )
 
 func NewVulncheck(settings *config.VulncheckSettings) *goanalysis.Linter {
@@ -32,8 +31,8 @@ func NewVulncheck(settings *config.VulncheckSettings) *goanalysis.Linter {
 	}
 
 	return goanalysis.NewLinter(
-		"vulncheck",
-		"Package vulncheck detects uses of known vulnerabilities in Go programs.",
+		vulncheckName,
+		vulncheckDoc,
 		[]*analysis.Analyzer{analyzer},
 		nil,
 	).WithContextSetter(func(lintCtx *linter.Context) {
@@ -54,53 +53,33 @@ func NewVulncheck(settings *config.VulncheckSettings) *goanalysis.Linter {
 	})
 }
 
-func vulncheckRun(lintCtx *linter.Context, pass *analysis.Pass, settings *config.VulncheckSettings) ([]goanalysis.Issue, error) {
-	dbs := []string{"https://vuln.go.dev"}
-	if len(settings.VulnDatabase) > 0 {
-		dbs = settings.VulnDatabase
-	}
-	dbClient, err := client.NewClient(dbs, client.Options{})
-	if err != nil {
-		return nil, err
-	}
+func vulncheckRun(lintCtx *linter.Context, pass *analysis.Pass, _ *config.VulncheckSettings) ([]goanalysis.Issue, error) {
+	files := getFileNames(pass)
 
-	vcfg := &vulncheck.Config{Client: dbClient, SourceGoVersion: lintCtx.Cfg.Run.Go}
-	vpkgs := vulncheck.Convert(lintCtx.Packages)
 	ctx := context.Background()
+	lintCtx.Log.Errorf("%v\n", files)
 
-	r, err := vulncheck.Source(ctx, vpkgs, vcfg)
-	if err != nil {
-		return nil, err
-	}
-
-	imports := vulncheck.ImportChains(r)
-	issues := make([]goanalysis.Issue, 0, len(r.Vulns))
-
-	for idx, vuln := range r.Vulns {
-		issues = append(issues, goanalysis.NewIssue(&result.Issue{
-			Text: writeVulnerability(idx, vuln.OSV.ID, vuln.OSV.Details, writeImports(imports[vuln])),
-		}, pass))
-	}
-
-	return issues, nil
-}
-
-func writeImports(imports []vulncheck.ImportChain) string {
-	var s strings.Builder
-	for _, i := range imports {
-		indent := 0
-		for _, pkg := range i {
-			s.WriteString(fmt.Sprintf("%s|_ %s", strings.Repeat(" ", indent), pkg.Name))
+	issues := []goanalysis.Issue{}
+	for _, file := range files {
+		lintCtx.Log.Errorf("%s %s %s %s\n", "-json", "-C", filepath.Dir(file), ".")
+		cmd := scan.Command(ctx, "-json", "-C", filepath.Dir(file), ".")
+		buf := &bytes.Buffer{}
+		cmd.Stderr = buf
+		cmd.Stdout = buf
+		err := cmd.Start()
+		if err != nil {
+			return issues, err
 		}
+		err = cmd.Wait()
+		if err != nil {
+			return issues, err
+		}
+		issues = append(issues, goanalysis.NewIssue(&result.Issue{
+			Text:       buf.String(),
+			FromLinter: vulncheckName},
+			pass))
 	}
 
-	return s.String()
-}
-
-func writeVulnerability(idx int, id, details, imports string) string {
-	return fmt.Sprintf(`Vulnerability #%d: %s
-%s
-%s
-  More info: https://pkg.go.dev/vuln/%s
-`, idx, id, details, imports, id)
+	lintCtx.Log.Errorf("%v\n", issues)
+	return issues, nil
 }

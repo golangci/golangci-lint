@@ -69,6 +69,7 @@ func testSourcesFromDir(t *testing.T, dir string) {
 			rel, err := filepath.Rel(dir, source)
 			require.NoError(t, err)
 
+			log.Warnf("TESTING: [%v] [%v] [%v] [%v]", subTest, log, binPath, rel)
 			testOneSource(subTest, log, binPath, rel)
 		})
 	}

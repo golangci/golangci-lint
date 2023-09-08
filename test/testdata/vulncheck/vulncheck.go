@@ -1,4 +1,4 @@
-//golangcitest:args -Evulncheck
+//golangcitest:args --disable-all -Evulncheck .
 package vulncheck
 
 import (

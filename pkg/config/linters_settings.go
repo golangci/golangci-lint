@@ -224,10 +224,10 @@ type LintersSettings struct {
 	UseStdlibVars    UseStdlibVarsSettings
 	Varcheck         VarCheckSettings
 	Varnamelen       VarnamelenSettings
+	Vulncheck        VulncheckSettings
 	Whitespace       WhitespaceSettings
 	Wrapcheck        WrapcheckSettings
 	WSL              WSLSettings
-	Vulncheck        VulncheckSettings
 
 	Custom map[string]CustomLinterSettings
 }
