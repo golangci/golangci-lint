@@ -21,7 +21,7 @@ jobs:
         run: git fetch --prune --unshallow
 
       - name: Create release
-        uses: goreleaser/goreleaser-action@v4
+        uses: goreleaser/goreleaser-action@v5
         with:
           version: latest
           args: release --clean
