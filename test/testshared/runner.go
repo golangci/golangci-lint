@@ -349,7 +349,7 @@ func InstallGolangciLint(tb testing.TB) string {
 			tb.Log(string(output))
 		}
 
-		assert.NoError(tb, err, "Can't go install golangci-lint %s", string(output))
+		require.NoError(tb, err, "Can't go install golangci-lint %s", string(output))
 	}
 
 	abs, err := filepath.Abs(defaultBinaryName())

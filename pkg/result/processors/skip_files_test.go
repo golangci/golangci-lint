@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"github.com/golangci/golangci-lint/pkg/result"
 )
@@ -21,7 +22,7 @@ func newFileIssue(file string) result.Issue {
 
 func newTestSkipFiles(t *testing.T, patterns ...string) *SkipFiles {
 	p, err := NewSkipFiles(patterns, "")
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	return p
 }
 

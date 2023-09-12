@@ -4,7 +4,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	_ "github.com/valyala/quicktemplate"
 
 	"github.com/golangci/golangci-lint/pkg/exitcodes"
@@ -536,7 +536,7 @@ func TestEnabledPresetsAreNotDuplicated(t *testing.T) {
 func TestAbsPathDirAnalysis(t *testing.T) {
 	dir := filepath.Join("testdata_etc", "abspath") // abs paths don't work with testdata dir
 	absDir, err := filepath.Abs(dir)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	testshared.NewRunnerBuilder(t).
 		WithNoConfig().
@@ -555,7 +555,7 @@ func TestAbsPathDirAnalysis(t *testing.T) {
 func TestAbsPathFileAnalysis(t *testing.T) {
 	dir := filepath.Join("testdata_etc", "abspath", "with_issue.go") // abs paths don't work with testdata dir
 	absDir, err := filepath.Abs(dir)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	testshared.NewRunnerBuilder(t).
 		WithNoConfig().

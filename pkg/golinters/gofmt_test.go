@@ -6,6 +6,7 @@ import (
 	diffpkg "github.com/sourcegraph/go-diff/diff"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
+	"github.com/stretchr/testify/require"
 
 	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
@@ -14,10 +15,10 @@ import (
 func testDiffProducesChanges(t *testing.T, log logutils.Log, diff string, expectedChanges ...Change) {
 	diffs, err := diffpkg.ParseMultiFileDiff([]byte(diff))
 	if err != nil {
-		assert.NoError(t, err)
+		require.NoError(t, err)
 	}
 
-	assert.Len(t, diffs, 1)
+	require.Len(t, diffs, 1)
 	hunks := diffs[0].Hunks
 	assert.NotEmpty(t, hunks)
 
