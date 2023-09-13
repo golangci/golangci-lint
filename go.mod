@@ -119,7 +119,7 @@ require (
 	golang.org/x/exp v0.0.0-20230510235704-dd950f8aeaea
 	golang.org/x/tools v0.13.0
 	gopkg.in/yaml.v3 v3.0.1
-	honnef.co/go/tools v0.4.5
+	honnef.co/go/tools v0.4.6
 	mvdan.cc/gofumpt v0.5.0
 	mvdan.cc/interfacer v0.0.0-20180901003855-c20040233aed
 	mvdan.cc/unparam v0.0.0-20221223090309-7455f1af531d
