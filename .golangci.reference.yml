@@ -2036,7 +2036,7 @@ linters-settings:
     # Mark all function parameters as used.
     #
     # default: true
-    paramters-are-used: true
+    parameters-are-used: true
     # Mark all local variables as used.
     #
     # default: true
