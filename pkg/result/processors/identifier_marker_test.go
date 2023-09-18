@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"github.com/golangci/golangci-lint/pkg/result"
 )
@@ -50,7 +51,7 @@ func TestIdentifierMarker(t *testing.T) {
 
 	for _, c := range cases {
 		out, err := p.Process([]result.Issue{{Text: c.in}})
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t, []result.Issue{{Text: c.out}}, out)
 	}
 }

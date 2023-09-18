@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/result"
@@ -158,25 +159,19 @@ func TestNoSorting(t *testing.T) {
 	var sr = NewSortResults(&config.Config{})
 
 	results, err := sr.Process(tests)
+	require.NoError(t, err)
 	assert.Equal(t, tests, results)
-	assert.Nil(t, err, nil)
 }
 
 func TestSorting(t *testing.T) {
 	var tests = make([]result.Issue, len(issues))
 	copy(tests, issues)
 
-	var expected = make([]result.Issue, len(issues))
-	expected[0] = issues[3]
-	expected[1] = issues[2]
-	expected[2] = issues[1]
-	expected[3] = issues[0]
-
 	var cfg = config.Config{}
 	cfg.Output.SortResults = true
 	var sr = NewSortResults(&cfg)
 
 	results, err := sr.Process(tests)
-	assert.Equal(t, results, expected)
-	assert.Nil(t, err, nil)
+	require.NoError(t, err)
+	assert.Equal(t, []result.Issue{issues[3], issues[2], issues[1], issues[0]}, results)
 }

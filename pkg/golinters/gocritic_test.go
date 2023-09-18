@@ -2,7 +2,6 @@ package golinters
 
 import (
 	"log"
-	"sort"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -16,9 +15,7 @@ func Test_intersectStringSlice(t *testing.T) {
 
 	s3 := intersectStringSlice(s1, s2)
 
-	sort.Strings(s3)
-
-	assert.Equal(t, s3, []string{"experimental", "opinionated"})
+	assert.ElementsMatch(t, []string{"experimental", "opinionated"}, s3)
 }
 
 func Test_filterByDisableTags(t *testing.T) {
@@ -29,9 +26,7 @@ func Test_filterByDisableTags(t *testing.T) {
 
 	filterEnabledChecks := settingsWrapper.filterByDisableTags(enabledChecks, disabledTags)
 
-	sort.Strings(filterEnabledChecks)
-
-	assert.Equal(t, []string{"appendAssign", "caseOrder"}, filterEnabledChecks)
+	assert.ElementsMatch(t, filterEnabledChecks, []string{"appendAssign", "caseOrder"})
 }
 
 type tLog struct{}

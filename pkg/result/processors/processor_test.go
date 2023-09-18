@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"github.com/golangci/golangci-lint/pkg/result"
 )
@@ -38,7 +39,7 @@ func process(t *testing.T, p Processor, issues ...result.Issue) []result.Issue {
 	t.Helper()
 
 	processedIssues, err := p.Process(issues)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	return processedIssues
 }
 

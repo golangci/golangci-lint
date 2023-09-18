@@ -47,7 +47,7 @@ func TestPathPrefixer_Process(t *testing.T) {
 			got, err := p.Process(tt.issues)
 			require.NoError(t, err)
 
-			assert.Equal(t, got, tt.want)
+			assert.Equal(t, tt.want, got)
 		})
 	}
 }

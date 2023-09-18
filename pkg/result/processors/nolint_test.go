@@ -8,6 +8,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
+	"github.com/stretchr/testify/require"
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/golinters"
@@ -173,9 +174,8 @@ func TestNolintInvalidLinterNameWithViolationOnTheSameLine(t *testing.T) {
 	processedIssues, err := p.Process(issues)
 	p.Finish()
 
-	assert.Len(t, processedIssues, 1)
+	require.NoError(t, err)
 	assert.Equal(t, issues, processedIssues)
-	assert.NoError(t, err)
 }
 
 func TestNolintAliases(t *testing.T) {
@@ -288,7 +288,7 @@ func TestNolintUnused(t *testing.T) {
 		enabledLintersSet := lintersdb.NewEnabledSet(dbManager, lintersdb.NewValidator(dbManager), enabledSetLog, cfg)
 
 		enabledLintersMap, err := enabledLintersSet.GetEnabledLintersMap()
-		assert.NoError(t, err)
+		require.NoError(t, err)
 
 		return NewNolint(log, dbManager, enabledLintersMap)
 	}
@@ -351,7 +351,7 @@ func TestNolintUnused(t *testing.T) {
 		enabledLintersSet := lintersdb.NewEnabledSet(dbManager, lintersdb.NewValidator(dbManager), enabledSetLog, cfg)
 
 		enabledLintersMap, err := enabledLintersSet.GetEnabledLintersMap()
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		p := NewNolint(log, dbManager, enabledLintersMap)
 		defer p.Finish()
 
