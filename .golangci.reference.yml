@@ -1529,6 +1529,8 @@ linters-settings:
       - name: early-return
         severity: warning
         disabled: false
+        arguments:
+          - "preserveScope"
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#empty-block
       - name: empty-block
         severity: warning
@@ -1537,6 +1539,12 @@ linters-settings:
       - name: empty-lines
         severity: warning
         disabled: false
+      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#enforce-map-style
+      - name: enforce-map-style
+        severity: warning
+        disabled: false
+        arguments:
+          - "make"
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#error-naming
       - name: error-naming
         severity: warning
@@ -1558,6 +1566,7 @@ linters-settings:
         severity: warning
         disabled: false
         arguments:
+          - "preserveScope"
           - "checkPrivateReceivers"
           - "sayRepetitiveInsteadOfStutters"
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#file-header
@@ -1600,6 +1609,14 @@ linters-settings:
       - name: indent-error-flow
         severity: warning
         disabled: false
+        arguments:
+          - "preserveScope"
+      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#import-alias-naming
+      - name: import-alias-naming
+        severity: warning
+        disabled: false
+        arguments:
+          - "^[a-z][a-z0-9]{0,}$"
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#imports-blacklist
       - name: imports-blacklist
         severity: warning
@@ -1657,6 +1674,10 @@ linters-settings:
       - name: receiver-naming
         severity: warning
         disabled: false
+      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#redundant-import-alias
+      - name: redundant-import-alias
+        severity: warning
+        disabled: false
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#redefines-builtin-id
       - name: redefines-builtin-id
         severity: warning
@@ -1690,6 +1711,8 @@ linters-settings:
       - name: superfluous-else
         severity: warning
         disabled: false
+        arguments:
+          - "preserveScope"
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#time-equal
       - name: time-equal
         severity: warning
@@ -1705,6 +1728,7 @@ linters-settings:
         arguments:
           - [ "ID" ] # AllowList
           - [ "VM" ] # DenyList
+          - - upperCaseConst: true
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#var-declaration
       - name: var-declaration
         severity: warning
@@ -1740,10 +1764,14 @@ linters-settings:
       - name: unused-parameter
         severity: warning
         disabled: false
+        arguments:
+          - allowRegex: "^_"
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#unused-receiver
       - name: unused-receiver
         severity: warning
         disabled: false
+        arguments:
+          - allowRegex: "^_"
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#useless-break
       - name: useless-break
         severity: warning
