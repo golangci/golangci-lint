@@ -1,7 +1,10 @@
 package golinters
 
 import (
+	"os"
+
 	"github.com/OpenPeeDeeP/depguard/v2"
+	"golang.org/x/mod/modfile"
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/config"
@@ -9,8 +12,14 @@ import (
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 )
 
+const modFileName string = "go.mod"
+
 func NewDepguard(settings *config.DepGuardSettings) *goanalysis.Linter {
 	conf := depguard.LinterSettings{}
+
+	if currentModule := readCurrentModule(); currentModule != "" {
+		conf[currentModule] = &depguard.List{Allow: []string{currentModule}}
+	}
 
 	if settings != nil {
 		for s, rule := range settings.Rules {
@@ -46,4 +55,17 @@ func NewDepguard(settings *config.DepGuardSettings) *goanalysis.Linter {
 			lintCtx.Log.Errorf("create analyzer: %v", err)
 		}
 	}).WithLoadMode(goanalysis.LoadModeSyntax)
+}
+
+func readCurrentModule() string {
+	data, err := os.ReadFile(modFileName)
+	if err != nil {
+		return ""
+	}
+
+	modFile, err := modfile.Parse(modFileName, data, nil)
+	if err != nil {
+		return ""
+	}
+	return modFile.Module.Mod.String()
 }
