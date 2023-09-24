@@ -88,8 +88,8 @@ github.com/blizzy78/varnamelen v0.8.0 h1:oqSblyuQvFsW1hbBHh1zfwrKe3kcSj0rnXkKzsQ
 github.com/blizzy78/varnamelen v0.8.0/go.mod h1:V9TzQZ4fLJ1DSrjVDfl89H7aMnTvKkApdHeyESmyR7k=
 github.com/bombsimon/wsl/v3 v3.4.0 h1:RkSxjT3tmlptwfgEgTgU+KYKLI35p/tviNXNXiL2aNU=
 github.com/bombsimon/wsl/v3 v3.4.0/go.mod h1:KkIB+TXkqy6MvK9BDZVbZxKNYsE1/oLRJbIFtf14qqo=
-github.com/breml/bidichk v0.2.6 h1:m++e3nzqd4OwgJKFAuNpROkGB5QJFXCTD5/3TEFCfqc=
-github.com/breml/bidichk v0.2.6/go.mod h1:Uj07vpi03vZf+TJRNaBzUIcAe/dQ+POeJiuikz/b6Gs=
+github.com/breml/bidichk v0.2.7 h1:dAkKQPLl/Qrk7hnP6P+E0xOodrq8Us7+U0o4UBOAlQY=
+github.com/breml/bidichk v0.2.7/go.mod h1:YodjipAGI9fGcYM7II6wFvGhdMYsC5pHDlGzqvEW3tQ=
 github.com/breml/errchkjson v0.3.5 h1:KoiihlE4u+DR1Iq5KloYMFAlQ0UAryuSzc0bkvUgCeQ=
 github.com/breml/errchkjson v0.3.5/go.mod h1:0ip+8RwJ/ojc1Qkn0YIBqM7A8wnh6GRs/VJx9t9CohE=
 github.com/butuzov/ireturn v0.2.0 h1:kCHi+YzC150GE98WFuZQu9yrTn6GEydO2AuPLbTgnO4=
