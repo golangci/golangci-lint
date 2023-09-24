@@ -90,8 +90,8 @@ github.com/bombsimon/wsl/v3 v3.4.0 h1:RkSxjT3tmlptwfgEgTgU+KYKLI35p/tviNXNXiL2aN
 github.com/bombsimon/wsl/v3 v3.4.0/go.mod h1:KkIB+TXkqy6MvK9BDZVbZxKNYsE1/oLRJbIFtf14qqo=
 github.com/breml/bidichk v0.2.7 h1:dAkKQPLl/Qrk7hnP6P+E0xOodrq8Us7+U0o4UBOAlQY=
 github.com/breml/bidichk v0.2.7/go.mod h1:YodjipAGI9fGcYM7II6wFvGhdMYsC5pHDlGzqvEW3tQ=
-github.com/breml/errchkjson v0.3.5 h1:KoiihlE4u+DR1Iq5KloYMFAlQ0UAryuSzc0bkvUgCeQ=
-github.com/breml/errchkjson v0.3.5/go.mod h1:0ip+8RwJ/ojc1Qkn0YIBqM7A8wnh6GRs/VJx9t9CohE=
+github.com/breml/errchkjson v0.3.6 h1:VLhVkqSBH96AvXEyclMR37rZslRrY2kcyq+31HCsVrA=
+github.com/breml/errchkjson v0.3.6/go.mod h1:jhSDoFheAF2RSDOlCfhHO9KqhZgAYLyvHe7bRCX8f/U=
 github.com/butuzov/ireturn v0.2.0 h1:kCHi+YzC150GE98WFuZQu9yrTn6GEydO2AuPLbTgnO4=
 github.com/butuzov/ireturn v0.2.0/go.mod h1:Wh6Zl3IMtTpaIKbmwzqi6olnM9ptYQxxVacMsOEFPoc=
 github.com/butuzov/mirror v1.1.0 h1:ZqX54gBVMXu78QLoiqdwpl2mgmoOJTk7s4p4o+0avZI=
