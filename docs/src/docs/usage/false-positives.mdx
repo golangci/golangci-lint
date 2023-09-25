@@ -31,7 +31,7 @@ linters-settings:
 
 Exclude issue by text using command-line option `-e` or config option `issues.exclude`.
 It's helpful when you decided to ignore all issues of this type.
-Also, you can use `issues.exclude-rules` config option for per-path or per-linter configuration.
+Also, you can use `issues.exclude-rules` config option for per-path, per-linter, per-text or per-source configuration.
 
 In the following example, all the reports that contains the sentences defined in `exclude` are excluded:
 
@@ -62,7 +62,6 @@ issues:
         - lll
       source: "^//go:generate "
 ```
-
 
 In the following example, all the reports that contains the text (`text`) in the path (`path`) are excluded:
 
