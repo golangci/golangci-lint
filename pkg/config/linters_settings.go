@@ -292,6 +292,7 @@ type DuplSettings struct {
 
 type DupWordSettings struct {
 	Keywords []string `mapstructure:"keywords"`
+	Ignore   []string `mapstructure:"ignore"`
 }
 
 type ErrcheckSettings struct {

@@ -239,6 +239,11 @@ linters-settings:
     - "and"
     - "a"
 
+    # Keywords used to ignore detection.
+    # Default: []
+    ignore:
+    - "0C0C"
+
   errcheck:
     # Report about not checking of errors in type assertions: `a := b.(MyStruct)`.
     # Such cases aren't reported by default.
