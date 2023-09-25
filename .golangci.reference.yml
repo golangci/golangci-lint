@@ -235,9 +235,13 @@ linters-settings:
     # If this list is not empty, only the words defined in this list will be detected.
     # Default: []
     keywords:
-    - "the"
-    - "and"
-    - "a"
+      - "the"
+      - "and"
+      - "a"
+    # Keywords used to ignore detection.
+    # Default: []
+    ignore:
+      - "0C0C"
 
   errcheck:
     # Report about not checking of errors in type assertions: `a := b.(MyStruct)`.
