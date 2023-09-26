@@ -30,42 +30,42 @@ func Test_evaluateBuildTags(t *testing.T) {
 		assert assert.BoolAssertionFunc
 	}{
 		{
-			desc:   "",
+			desc:   "old build tag syntax, version inside the range",
 			tag:    "// +build go1.18",
 			assert: assert.True,
 		},
 		{
-			desc:   "",
+			desc:   "old build tag syntax, version outside the range",
 			tag:    "// +build go1.42",
 			assert: assert.False,
 		},
 		{
-			desc:   "",
+			desc:   "version inside the range",
 			tag:    "//go:build go1.18",
 			assert: assert.True,
 		},
 		{
-			desc:   "",
+			desc:   "version outside the range",
 			tag:    "//go:build go1.42",
 			assert: assert.False,
 		},
 		{
-			desc:   "",
+			desc:   "supported OS",
 			tag:    "//go:build " + runtime.GOOS,
 			assert: assert.True,
 		},
 		{
-			desc:   "",
+			desc:   "negate unsupported OS",
 			tag:    "//go:build !wondiws",
 			assert: assert.True,
 		},
 		{
-			desc:   "",
+			desc:   "unsupported OS",
 			tag:    "//go:build wondiws",
 			assert: assert.False,
 		},
 		{
-			desc:   "",
+			desc:   "version inside the range and supported OS",
 			tag:    "//go:build go1.18 && " + runtime.GOOS,
 			assert: assert.True,
 		},
