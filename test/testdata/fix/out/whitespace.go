@@ -41,7 +41,6 @@ func oneLeadingNewlineWithCommentFunc() {
 }
 
 func twoLeadingNewlines() {
-
 	fmt.Println("Hello world")
 }
 
