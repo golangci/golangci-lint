@@ -1,4 +1,4 @@
-module protogolint
+module protogetter
 
 go 1.19
 

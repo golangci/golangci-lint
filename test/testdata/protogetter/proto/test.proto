@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package = "github.com/ghostiam/protogolint/testdata/proto";
+option go_package = "github.com/ghostiam/protogetter/testdata/proto";
 
 message Test {
   double d = 1;

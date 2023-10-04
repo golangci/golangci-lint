@@ -3,7 +3,7 @@ package golinters
 import (
 	"sync"
 
-	"github.com/ghostiam/protogolint"
+	"github.com/ghostiam/protogetter"
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
@@ -11,13 +11,13 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-func NewProtoGoLint() *goanalysis.Linter {
+func NewProtoGetter() *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
 
-	a := protogolint.NewAnalyzer()
+	a := protogetter.NewAnalyzer()
 	a.Run = func(pass *analysis.Pass) (any, error) {
-		taIssues := protogolint.Run(pass, protogolint.GolangciLintMode)
+		taIssues := protogetter.Run(pass, protogetter.GolangciLintMode)
 
 		issues := make([]goanalysis.Issue, len(taIssues))
 		for i, issue := range taIssues {
