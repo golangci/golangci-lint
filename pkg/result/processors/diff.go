@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"runtime"
 	"strings"
 
 	"github.com/golangci/revgrep"
@@ -35,6 +36,10 @@ func NewDiff(onlyNew bool, fromRev, patchFilePath string, wholeFiles bool) *Diff
 }
 
 func (p Diff) Name() string {
+	if runtime.GOOS == "windows" {
+		return "diff.exe"
+	}
+
 	return "diff"
 }
 
