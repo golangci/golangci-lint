@@ -1,4 +1,5 @@
-// go:build ruleguard
+//go:build ruleguard
+
 package ruleguard
 
 import "github.com/quasilyte/go-ruleguard/dsl"
