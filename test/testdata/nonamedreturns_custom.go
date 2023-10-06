@@ -56,21 +56,21 @@ var (
 )
 
 // this should not match as the implementation does not need named parameters (see below)
-type funcDefintion func(arg1, arg2 interface{}) (num int, err error)
+type funcDefinition func(arg1, arg2 interface{}) (num int, err error)
 
-func funcDefintionImpl(arg1, arg2 interface{}) (int, error) {
+func funcDefinitionImpl(arg1, arg2 interface{}) (int, error) {
 	return 0, nil
 }
 
-func funcDefintionImpl2(arg1, arg2 interface{}) (num int, err error) { // want `named return "num" with type "int" found`
+func funcDefinitionImpl2(arg1, arg2 interface{}) (num int, err error) { // want `named return "num" with type "int" found`
 	return 0, nil
 }
 
-func funcDefintionImpl3(arg1, arg2 interface{}) (num int, _ error) { // want `named return "num" with type "int" found`
+func funcDefinitionImpl3(arg1, arg2 interface{}) (num int, _ error) { // want `named return "num" with type "int" found`
 	return 0, nil
 }
 
-func funcDefintionImpl4(arg1, arg2 interface{}) (_ int, _ error) {
+func funcDefinitionImpl4(arg1, arg2 interface{}) (_ int, _ error) {
 	return 0, nil
 }
 
@@ -88,12 +88,12 @@ func test() {
 	a := funcVar()
 	_ = a
 
-	var function funcDefintion
-	function = funcDefintionImpl
+	var function funcDefinition
+	function = funcDefinitionImpl
 	i, err := function("", "")
 	_ = i
 	_ = err
-	function = funcDefintionImpl2
+	function = funcDefinitionImpl2
 	i, err = function("", "")
 	_ = i
 	_ = err
