@@ -8,7 +8,7 @@ import (
 )
 
 var noGlobalsVar int // want "noGlobalsVar is a global variable"
-var ErrSomeType = errors.New("test that global erorrs aren't warned")
+var ErrSomeType = errors.New("test that global errors aren't warned")
 
 var (
 	OnlyDigites = regexp.MustCompile(`^\d+$`)
