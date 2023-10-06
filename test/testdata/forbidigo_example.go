@@ -10,6 +10,6 @@ import (
 
 func Forbidigo() {
 	fmt.Printf("too noisy!!!")  // want "use of `fmt\\.Printf` forbidden by pattern `fmt\\\\.Print\\.\\*`"
-	fmt2.Printf("too noisy!!!") // Not detected because analyze-types is false by default for backward compatbility.
+	fmt2.Printf("too noisy!!!") // Not detected because analyze-types is false by default for backward compatibility.
 	time.Sleep(time.Nanosecond) // want "no sleeping!"
 }
