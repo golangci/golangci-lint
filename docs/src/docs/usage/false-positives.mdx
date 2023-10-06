@@ -53,6 +53,16 @@ issues:
       text: "mnd: Magic number: 9"
 ```
 
+In the following example, all the reports from the linters (`linters`) that originated from the source (`source`) are excluded:
+
+```yml
+issues:
+  exclude-rules:
+    - linters:
+        - lll
+      source: "^//go:generate "
+```
+
 In the following example, all the reports that contains the text (`text`) in the path (`path`) are excluded:
 
 ```yml
