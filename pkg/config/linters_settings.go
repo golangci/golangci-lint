@@ -394,13 +394,14 @@ type GciSettings struct {
 }
 
 type GinkgoLinterSettings struct {
-	SuppressLenAssertion     bool `mapstructure:"suppress-len-assertion"`
-	SuppressNilAssertion     bool `mapstructure:"suppress-nil-assertion"`
-	SuppressErrAssertion     bool `mapstructure:"suppress-err-assertion"`
-	SuppressCompareAssertion bool `mapstructure:"suppress-compare-assertion"`
-	SuppressAsyncAssertion   bool `mapstructure:"suppress-async-assertion"`
-	ForbidFocusContainer     bool `mapstructure:"forbid-focus-container"`
-	AllowHaveLenZero         bool `mapstructure:"allow-havelen-zero"`
+	SuppressLenAssertion       bool `mapstructure:"suppress-len-assertion"`
+	SuppressNilAssertion       bool `mapstructure:"suppress-nil-assertion"`
+	SuppressErrAssertion       bool `mapstructure:"suppress-err-assertion"`
+	SuppressCompareAssertion   bool `mapstructure:"suppress-compare-assertion"`
+	SuppressAsyncAssertion     bool `mapstructure:"suppress-async-assertion"`
+	SuppressTypeCompareWarning bool `mapstructure:"suppress-type-compare-assertion"`
+	ForbidFocusContainer       bool `mapstructure:"forbid-focus-container"`
+	AllowHaveLenZero           bool `mapstructure:"allow-havelen-zero"`
 }
 
 type GocognitSettings struct {
