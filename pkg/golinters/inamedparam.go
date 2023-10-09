@@ -8,14 +8,12 @@ import (
 )
 
 func NewINamedParam() *goanalysis.Linter {
-	analyzer := inamedparam.Analyzer
+	a := inamedparam.Analyzer
 
 	return goanalysis.NewLinter(
-		analyzer.Name,
-		analyzer.Doc,
-		[]*analysis.Analyzer{
-			analyzer,
-		},
+		a.Name,
+		a.Doc,
+		[]*analysis.Analyzer{a},
 		nil,
 	).WithLoadMode(goanalysis.LoadModeSyntax)
 }
