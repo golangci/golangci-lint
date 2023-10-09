@@ -1888,8 +1888,8 @@ linters-settings:
     enable-all: true
     # Enable specific checkers.
     # https://github.com/Antonboom/testifylint#checkers
+    # Default: ["bool-compare", "compares", "empty", "error-is-as", "error-nil", "expected-actual", "float-compare", "len", "require-error", "suite-dont-use-pkg", "suite-extra-assert-call"]
     enable:
-      # Enabled by default:
       - bool-compare
       - compares
       - empty
@@ -1901,7 +1901,6 @@ linters-settings:
       - require-error
       - suite-dont-use-pkg
       - suite-extra-assert-call
-      # Disabled by default:
       - suite-thelper
     expected-actual:
       # Regexp for expected variable name.
