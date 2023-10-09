@@ -18,7 +18,7 @@ import (
 
 const unusedName = "unused"
 
-func NewUnused(settings *config.UnusedSettings, staticcheckSettings *config.StaticCheckSettings) *goanalysis.Linter {
+func NewUnused(settings *config.UnusedSettings, scSettings *config.StaticCheckSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
 
@@ -40,7 +40,7 @@ func NewUnused(settings *config.UnusedSettings, staticcheckSettings *config.Stat
 		},
 	}
 
-	setAnalyzerGoVersion(analyzer, getGoVersion(staticcheckSettings))
+	setAnalyzerGoVersion(analyzer, getGoVersion(scSettings))
 
 	return goanalysis.NewLinter(
 		unusedName,
