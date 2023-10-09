@@ -17,10 +17,10 @@ func NewProtoGetter() *goanalysis.Linter {
 
 	a := protogetter.NewAnalyzer()
 	a.Run = func(pass *analysis.Pass) (any, error) {
-		taIssues := protogetter.Run(pass, protogetter.GolangciLintMode)
+		pgIssues := protogetter.Run(pass, protogetter.GolangciLintMode)
 
-		issues := make([]goanalysis.Issue, len(taIssues))
-		for i, issue := range taIssues {
+		issues := make([]goanalysis.Issue, len(pgIssues))
+		for i, issue := range pgIssues {
 			report := &result.Issue{
 				FromLinter: a.Name,
 				Pos:        issue.Pos,
