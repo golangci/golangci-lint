@@ -218,6 +218,7 @@ type LintersSettings struct {
 	Stylecheck       StaticCheckSettings
 	TagAlign         TagAlignSettings
 	Tagliatelle      TagliatelleSettings
+	Testifylint      TestifylintSettings
 	Tenv             TenvSettings
 	Testpackage      TestpackageSettings
 	Thelper          ThelperSettings
@@ -736,6 +737,19 @@ type TagliatelleSettings struct {
 		Rules        map[string]string
 		UseFieldName bool `mapstructure:"use-field-name"`
 	}
+}
+
+type TestifylintSettings struct {
+	EnableAll       bool     `mapstructure:"enable-all"`
+	EnabledCheckers []string `mapstructure:"enable"`
+
+	ExpectedActual struct {
+		ExpVarPattern string `mapstructure:"pattern"`
+	} `mapstructure:"expected-actual"`
+
+	SuiteExtraAssertCall struct {
+		Mode string `mapstructure:"mode"`
+	} `mapstructure:"suite-extra-assert-call"`
 }
 
 type TestpackageSettings struct {

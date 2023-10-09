@@ -133,6 +133,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		tagalignCfg         *config.TagAlignSettings
 		tagliatelleCfg      *config.TagliatelleSettings
 		tenvCfg             *config.TenvSettings
+		testifylintCfg      *config.TestifylintSettings
 		testpackageCfg      *config.TestpackageSettings
 		thelperCfg          *config.ThelperSettings
 		unparamCfg          *config.UnparamSettings
@@ -213,6 +214,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		tagalignCfg = &m.cfg.LintersSettings.TagAlign
 		tagliatelleCfg = &m.cfg.LintersSettings.Tagliatelle
 		tenvCfg = &m.cfg.LintersSettings.Tenv
+		testifylintCfg = &m.cfg.LintersSettings.Testifylint
 		testpackageCfg = &m.cfg.LintersSettings.Testpackage
 		thelperCfg = &m.cfg.LintersSettings.Thelper
 		unparamCfg = &m.cfg.LintersSettings.Unparam
@@ -787,6 +789,12 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithSince("v1.50.0").
 			WithPresets(linter.PresetTest).
 			WithURL("https://github.com/maratori/testableexamples"),
+
+		linter.NewConfig(golinters.NewTestifylint(testifylintCfg)).
+			WithSince("v1.55.0").
+			WithPresets(linter.PresetTest, linter.PresetBugs).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/Antonboom/testifylint"),
 
 		linter.NewConfig(golinters.NewTestpackage(testpackageCfg)).
 			WithSince("v1.25.0").

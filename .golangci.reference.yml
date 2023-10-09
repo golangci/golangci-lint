@@ -1886,6 +1886,35 @@ linters-settings:
     # Default: false
     all: false
 
+  testifylint:
+    # Enable all checkers.
+    # Default: false
+    enable-all: true
+    # Enable specific checkers.
+    # https://github.com/Antonboom/testifylint#checkers
+    # Default: ["bool-compare", "compares", "empty", "error-is-as", "error-nil", "expected-actual", "float-compare", "len", "require-error", "suite-dont-use-pkg", "suite-extra-assert-call"]
+    enable:
+      - bool-compare
+      - compares
+      - empty
+      - error-is-as
+      - error-nil
+      - expected-actual
+      - float-compare
+      - len
+      - require-error
+      - suite-dont-use-pkg
+      - suite-extra-assert-call
+      - suite-thelper
+    expected-actual:
+      # Regexp for expected variable name.
+      # Default: (^(exp(ected)?|want(ed)?)([A-Z]\w*)?$)|(^(\w*[a-z])?(Exp(ected)?|Want(ed)?)$)
+      pattern: ^expected
+    suite-extra-assert-call:
+      # To require or remove extra Assert() call?
+      # Default: remove
+      mode: require
+
   testpackage:
     # Regexp pattern to skip files.
     # Default: "(export|internal)_test\\.go"
@@ -2246,6 +2275,7 @@ linters:
     - tagliatelle
     - tenv
     - testableexamples
+    - testifylint
     - testpackage
     - thelper
     - tparallel
@@ -2360,6 +2390,7 @@ linters:
     - tagliatelle
     - tenv
     - testableexamples
+    - testifylint
     - testpackage
     - thelper
     - tparallel
