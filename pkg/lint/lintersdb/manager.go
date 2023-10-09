@@ -442,7 +442,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle),
 
 		linter.NewConfig(golinters.NewGoCheckSumType()).
-			WithSince("v1.53.0").
+			WithSince("v1.55.0").
 			WithPresets(linter.PresetBugs).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/alecthomas/go-check-sumtype"),
