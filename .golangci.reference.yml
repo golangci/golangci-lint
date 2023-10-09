@@ -2290,6 +2290,7 @@ linters:
     - whitespace
     - wrapcheck
     - wsl
+    - xmlencoderclose
     - zerologlint
 
   # Enable all available linters.
@@ -2405,6 +2406,7 @@ linters:
     - whitespace
     - wrapcheck
     - wsl
+    - xmlencoderclose
     - zerologlint
 
   # Enable presets.

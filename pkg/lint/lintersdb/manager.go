@@ -884,6 +884,12 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/bombsimon/wsl"),
 
+		linter.NewConfig(golinters.NewXMLEncoderClose()).
+			WithSince("v1.54.0").
+			WithPresets(linter.PresetBugs).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/adamdecaf/xmlencoderclose"),
+
 		linter.NewConfig(golinters.NewZerologLint()).
 			WithSince("v1.53.0").
 			WithPresets(linter.PresetBugs).
