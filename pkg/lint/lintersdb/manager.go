@@ -137,7 +137,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		testpackageCfg      *config.TestpackageSettings
 		thelperCfg          *config.ThelperSettings
 		unparamCfg          *config.UnparamSettings
-		unusedCfg           *config.StaticCheckSettings
+		unusedCfg           *config.UnusedSettings
 		usestdlibvars       *config.UseStdlibVarsSettings
 		varcheckCfg         *config.VarCheckSettings
 		varnamelenCfg       *config.VarnamelenSettings
@@ -218,7 +218,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		testpackageCfg = &m.cfg.LintersSettings.Testpackage
 		thelperCfg = &m.cfg.LintersSettings.Thelper
 		unparamCfg = &m.cfg.LintersSettings.Unparam
-		unusedCfg = new(config.StaticCheckSettings)
+		unusedCfg = &m.cfg.LintersSettings.Unused
 		usestdlibvars = &m.cfg.LintersSettings.UseStdlibVars
 		varcheckCfg = &m.cfg.LintersSettings.Varcheck
 		varnamelenCfg = &m.cfg.LintersSettings.Varnamelen
@@ -246,9 +246,6 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		}
 		if stylecheckCfg != nil && stylecheckCfg.GoVersion != "" {
 			stylecheckCfg.GoVersion = trimGoVersion(m.cfg.Run.Go)
-		}
-		if unusedCfg != nil && unusedCfg.GoVersion == "" {
-			unusedCfg.GoVersion = trimGoVersion(m.cfg.Run.Go)
 		}
 	}
 
@@ -846,7 +843,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/mvdan/unparam"),
 
-		linter.NewConfig(golinters.NewUnused(unusedCfg)).
+		linter.NewConfig(golinters.NewUnused(unusedCfg, staticcheckCfg)).
 			WithEnabledByDefault().
 			WithSince("v1.20.0").
 			WithLoadForGoAnalysis().

@@ -126,6 +126,15 @@ var defaultLintersSettings = LintersSettings{
 	Unparam: UnparamSettings{
 		Algo: "cha",
 	},
+	Unused: UnusedSettings{
+		FieldWritesAreUses:     true,
+		PostStatementsAreReads: false,
+		ExportedIsUsed:         true,
+		ExportedFieldsAreUsed:  true,
+		ParametersAreUsed:      true,
+		LocalVariablesAreUsed:  true,
+		GeneratedIsUsed:        true,
+	},
 	UseStdlibVars: UseStdlibVarsSettings{
 		HTTPMethod:     true,
 		HTTPStatusCode: true,
@@ -223,6 +232,7 @@ type LintersSettings struct {
 	Testpackage      TestpackageSettings
 	Thelper          ThelperSettings
 	Unparam          UnparamSettings
+	Unused           UnusedSettings
 	UseStdlibVars    UseStdlibVarsSettings
 	Varcheck         VarCheckSettings
 	Varnamelen       VarnamelenSettings
@@ -792,6 +802,16 @@ type UseStdlibVarsSettings struct {
 type UnparamSettings struct {
 	CheckExported bool `mapstructure:"check-exported"`
 	Algo          string
+}
+
+type UnusedSettings struct {
+	FieldWritesAreUses     bool `mapstructure:"field-writes-are-uses"`
+	PostStatementsAreReads bool `mapstructure:"post-statements-are-reads"`
+	ExportedIsUsed         bool `mapstructure:"exported-is-used"`
+	ExportedFieldsAreUsed  bool `mapstructure:"exported-fields-are-used"`
+	ParametersAreUsed      bool `mapstructure:"parameters-are-used"`
+	LocalVariablesAreUsed  bool `mapstructure:"local-variables-are-used"`
+	GeneratedIsUsed        bool `mapstructure:"generated-is-used"`
 }
 
 type VarCheckSettings struct {

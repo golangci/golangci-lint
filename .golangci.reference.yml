@@ -2016,6 +2016,29 @@ linters-settings:
     # Default: false
     check-exported: true
 
+  unused:
+    # Mark all struct fields that have been written to as used.
+    # Default: true
+    field-writes-are-uses: false
+    # Treat IncDec statement (e.g. `i++` or `i--`) as both read and write operation instead of just write.
+    # Default: false
+    post-statements-are-reads: true
+    # Mark all exported identifiers as used.
+    # Default: true
+    exported-is-used: false
+    # Mark all exported fields as used.
+    # default: true
+    exported-fields-are-used: false
+    # Mark all function parameters as used.
+    # default: true
+    parameters-are-used: false
+    # Mark all local variables as used.
+    # default: true
+    local-variables-are-used: false
+    # Mark all identifiers inside generated files as used.
+    # Default: true
+    generated-is-used: false
+
   varcheck:
     # Check usage of exported fields and variables.
     # Default: false
