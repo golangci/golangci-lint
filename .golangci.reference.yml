@@ -456,6 +456,10 @@ linters-settings:
     # Default: false
     suppress-async-assertion: true
 
+    # Suppress warning for comparing values from different types, like int32 and uint32
+    # Default: false
+    suppress-type-compare-assertion: true
+
     # Trigger warning for ginkgo focus containers like FDescribe, FContext, FWhen or FIt
     # Default: false
     forbid-focus-container: true
