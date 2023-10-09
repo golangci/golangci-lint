@@ -717,6 +717,13 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/yeya24/promlinter"),
 
+		linter.NewConfig(golinters.NewProtoGetter()).
+			WithSince("v1.55.0").
+			WithPresets(linter.PresetBugs).
+			WithLoadForGoAnalysis().
+			WithAutoFix().
+			WithURL("https://github.com/ghostiam/protogetter"),
+
 		linter.NewConfig(golinters.NewReassign(reassignCfg)).
 			WithSince("1.49.0").
 			WithPresets(linter.PresetBugs).

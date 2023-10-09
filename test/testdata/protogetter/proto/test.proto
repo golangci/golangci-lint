@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+option go_package = "github.com/ghostiam/protogetter/testdata/proto";
+
+message Test {
+  double d = 1;
+  float f = 2;
+  int32 i32 = 3;
+  int64 i64 = 4;
+  uint32 u32 = 5;
+  uint64 u64 = 6;
+  bool t = 7;
+  bytes b = 8;
+  string s = 9;
+  Embedded embedded = 10;
+  repeated Embedded repeated_embeddeds = 11;
+}
+
+message Embedded {
+  string s = 1;
+  Embedded embedded = 2;
+}
+
+service Testing {
+  rpc call(Test) returns (Test);
+}
