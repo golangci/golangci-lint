@@ -97,7 +97,7 @@ var (
 		unusedwrite.Analyzer,
 	}
 
-	// https://github.com/golang/go/blob/b56645a87b28840a180d64077877cb46570b4176/src/cmd/vet/main.go#L49
+	// https://github.com/golang/go/blob/b56645a87b28840a180d64077877cb46570b4176/src/cmd/vet/main.go#L49-L81
 	defaultAnalyzers = []*analysis.Analyzer{
 		appends.Analyzer,
 		asmdecl.Analyzer,

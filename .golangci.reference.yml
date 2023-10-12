@@ -1060,7 +1060,7 @@ linters-settings:
     disable-all: true
     # Enable analyzers by name (in addition to default).
     # Run `go tool vet help` to see all analyzers.
-    # Default: ["appends", "asmdecl", "assign",  "atomic", "bools", "buildtag", "cgocall", "composites", "copylocks", "defers", "directive", "errorsas", "framepointer", "httpresponse", "ifaceassert", "loopclosure", "lostcancel", "nilfunc", "printf", "shift", "sigchanyzer", "slog", "stdmethods", "stringintconv", "structtag", "testinggoroutine", "tests", "timeformat", "unmarshal", "unreachable", "unsafeptr", "unusedresult"]
+    # Default: []
     enable:
       - appends
       - asmdecl
@@ -1108,7 +1108,7 @@ linters-settings:
     enable-all: true
     # Disable analyzers by name.
     # Run `go tool vet help` to see all analyzers.
-    # Default: ["atomicalign", "deepequalerrors", "fieldalignment", "findcall", "nilness", "reflectvaluecompare", "shadow", "sortslice", "timeformat", "unusedwrite"]
+    # Default: []
     disable:
       - appends
       - asmdecl
