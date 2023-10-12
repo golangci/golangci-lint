@@ -578,6 +578,11 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/julz/importas"),
 
+		linter.NewConfig(golinters.NewINamedParam()).
+			WithSince("v1.55.0").
+			WithPresets(linter.PresetStyle).
+			WithURL("https://github.com/macabu/inamedparam"),
+
 		linter.NewConfig(golinters.NewIneffassign()).
 			WithEnabledByDefault().
 			WithSince("v1.0.0").

@@ -2263,6 +2263,7 @@ linters:
     - grouper
     - ifshort
     - importas
+    - inamedparam
     - ineffassign
     - interfacebloat
     - interfacer
@@ -2380,6 +2381,7 @@ linters:
     - grouper
     - ifshort
     - importas
+    - inamedparam
     - ineffassign
     - interfacebloat
     - interfacer
