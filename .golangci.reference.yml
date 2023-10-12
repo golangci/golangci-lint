@@ -1062,6 +1062,7 @@ linters-settings:
     # Run `go tool vet help` to see all analyzers.
     # Default: []
     enable:
+      - appends
       - asmdecl
       - assign
       - atomic
@@ -1109,6 +1110,7 @@ linters-settings:
     # Run `go tool vet help` to see all analyzers.
     # Default: []
     disable:
+      - appends
       - asmdecl
       - assign
       - atomic
