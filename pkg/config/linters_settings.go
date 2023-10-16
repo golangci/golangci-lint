@@ -113,6 +113,12 @@ var defaultLintersSettings = LintersSettings{
 		Ignore:    "",
 		Qualified: false,
 	},
+	SlogLint: SlogLintSettings{
+		KVOnly:         false,
+		AttrOnly:       false,
+		NoRawKeys:      false,
+		ArgsOnSepLines: false,
+	},
 	TagAlign: TagAlignSettings{
 		Align:  true,
 		Sort:   true,
@@ -222,6 +228,7 @@ type LintersSettings struct {
 	Reassign         ReassignSettings
 	Revive           ReviveSettings
 	RowsErrCheck     RowsErrCheckSettings
+	SlogLint         SlogLintSettings
 	Staticcheck      StaticCheckSettings
 	Structcheck      StructCheckSettings
 	Stylecheck       StaticCheckSettings
@@ -715,6 +722,13 @@ type ReviveSettings struct {
 
 type RowsErrCheckSettings struct {
 	Packages []string
+}
+
+type SlogLintSettings struct {
+	KVOnly         bool `mapstructure:"kv-only"`
+	AttrOnly       bool `mapstructure:"attr-only"`
+	NoRawKeys      bool `mapstructure:"no-raw-keys"`
+	ArgsOnSepLines bool `mapstructure:"args-on-sep-lines"`
 }
 
 type StaticCheckSettings struct {

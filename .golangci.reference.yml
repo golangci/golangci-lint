@@ -1799,6 +1799,20 @@ linters-settings:
     packages:
       - github.com/jmoiron/sqlx
 
+  sloglint:
+    # Enforce using key-value pairs only (incompatible with attr-only).
+    # Default: false
+    kv-only: true
+    # Enforce using attributes only (incompatible with kv-only).
+    # Default: false
+    attr-only: true
+    # Enforce using constants instead of raw keys.
+    # Default: false
+    no-raw-keys: true
+    # Enforce putting arguments on separate lines.
+    # Default: false
+    args-on-sep-lines: true
+
   staticcheck:
     # Deprecated: use the global `run.go` instead.
     go: "1.15"
@@ -2295,6 +2309,7 @@ linters:
     - revive
     - rowserrcheck
     - scopelint
+    - sloglint
     - sqlclosecheck
     - staticcheck
     - structcheck
@@ -2413,6 +2428,7 @@ linters:
     - revive
     - rowserrcheck
     - scopelint
+    - sloglint
     - sqlclosecheck
     - staticcheck
     - structcheck
