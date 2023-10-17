@@ -1,3 +1,5 @@
+//go:build go1.21
+
 //golangcitest:args -Esloglint
 package testdata
 

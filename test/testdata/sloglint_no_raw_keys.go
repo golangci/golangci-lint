@@ -1,3 +1,5 @@
+//go:build go1.21
+
 //golangcitest:args -Esloglint
 //golangcitest:config_path testdata/configs/sloglint_no_raw_keys.yml
 package testdata
