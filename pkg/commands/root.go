@@ -149,10 +149,10 @@ func (e *Executor) needVersionOption() bool {
 }
 
 func initRootFlagSet(fs *pflag.FlagSet, cfg *config.Config, needVersionOption bool) {
-	fs.BoolVarP(&cfg.Run.IsVerbose, "verbose", "v", false, wh("verbose output"))
+	fs.BoolVarP(&cfg.Run.IsVerbose, "verbose", "v", false, wh("Verbose output"))
 
 	var silent bool
-	fs.BoolVarP(&silent, "silent", "s", false, wh("disables congrats outputs"))
+	fs.BoolVarP(&silent, "silent", "s", false, wh("Disables congrats outputs"))
 	if err := fs.MarkHidden("silent"); err != nil {
 		panic(err)
 	}
