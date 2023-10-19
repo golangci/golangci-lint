@@ -7,7 +7,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 )
 
-func NewGoStrconv() *goanalysis.Linter {
+func NewPerfSprint() *goanalysis.Linter {
 	return goanalysis.NewLinter(
 		"perfsprint",
 		"Checks usages of `fmt.Sprintf` which have faster alternatives.",

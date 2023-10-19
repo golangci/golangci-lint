@@ -714,7 +714,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 
 		linter.NewConfig(golinters.NewPerfSprint()).
 			WithSince("v1.54.2").
-			WithPresets(linter.PresetStyle).
+			WithPresets(linter.PresetPerformance).
 			WithURL("https://github.com/catenacyber/perfsprint"),
 
 		linter.NewConfig(golinters.NewPreAlloc(preallocCfg)).
