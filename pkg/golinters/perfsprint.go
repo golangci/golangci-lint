@@ -8,10 +8,12 @@ import (
 )
 
 func NewPerfSprint() *goanalysis.Linter {
+	a := analyzer.Analyzer
+
 	return goanalysis.NewLinter(
-		"perfsprint",
-		"Checks usages of `fmt.Sprintf` which have faster alternatives.",
-		[]*analysis.Analyzer{analyzer.Analyzer},
+		a.Name,
+		a.Doc,
+		[]*analysis.Analyzer{a},
 		nil,
-	).WithLoadMode(goanalysis.LoadModeSyntax)
+	).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }
