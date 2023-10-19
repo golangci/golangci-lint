@@ -127,6 +127,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		reassignCfg         *config.ReassignSettings
 		reviveCfg           *config.ReviveSettings
 		rowserrcheckCfg     *config.RowsErrCheckSettings
+		sloglintCfg         *config.SlogLintSettings
 		staticcheckCfg      *config.StaticCheckSettings
 		structcheckCfg      *config.StructCheckSettings
 		stylecheckCfg       *config.StaticCheckSettings
@@ -208,6 +209,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		reassignCfg = &m.cfg.LintersSettings.Reassign
 		reviveCfg = &m.cfg.LintersSettings.Revive
 		rowserrcheckCfg = &m.cfg.LintersSettings.RowsErrCheck
+		sloglintCfg = &m.cfg.LintersSettings.SlogLint
 		staticcheckCfg = &m.cfg.LintersSettings.Staticcheck
 		structcheckCfg = &m.cfg.LintersSettings.Structcheck
 		stylecheckCfg = &m.cfg.LintersSettings.Stylecheck
@@ -749,6 +751,12 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetBugs, linter.PresetSQL).
 			WithURL("https://github.com/jingyugao/rowserrcheck"),
+
+		linter.NewConfig(golinters.NewSlogLint(sloglintCfg)).
+			WithSince("v1.55.0").
+			WithLoadForGoAnalysis().
+			WithPresets(linter.PresetStyle, linter.PresetFormatting).
+			WithURL("https://github.com/go-simpler/sloglint"),
 
 		linter.NewConfig(golinters.NewScopelint()).
 			WithSince("v1.12.0").

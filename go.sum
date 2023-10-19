@@ -587,6 +587,8 @@ github.com/yusufpapurcu/wmi v1.2.3/go.mod h1:SBZ9tNy3G9/m5Oi98Zks0QjeHVDvuK0qfxQ
 gitlab.com/bosi/decorder v0.4.1 h1:VdsdfxhstabyhZovHafFw+9eJ6eU0d2CkFNJcZz/NU4=
 gitlab.com/bosi/decorder v0.4.1/go.mod h1:jecSqWUew6Yle1pCr2eLWTensJMmsxHsBwt+PVbkAqA=
 go-simpler.org/assert v0.6.0 h1:QxSrXa4oRuo/1eHMXSBFHKvJIpWABayzKldqZyugG7E=
+go-simpler.org/sloglint v0.1.2 h1:IjdhF8NPxyn0Ckn2+fuIof7ntSnVUAqBFcQRrnG9AiM=
+go-simpler.org/sloglint v0.1.2/go.mod h1:2LL+QImPfTslD5muNPydAEYmpXIj6o/WYcqnJjLi4o4=
 go.opencensus.io v0.21.0/go.mod h1:mSImk1erAIZhrmZN+AvHh14ztQfjbGwt4TtuofqLduU=
 go.opencensus.io v0.22.0/go.mod h1:+kGneAE2xo2IficOXnaByMWTGM9T73dGwxeWcUqIpI8=
 go.opencensus.io v0.22.2/go.mod h1:yxeiOL68Rb0Xd1ddK5vPZ/oVn4vY4Ynel7k9FzqtOIw=
