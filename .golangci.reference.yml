@@ -1284,6 +1284,7 @@ linters-settings:
       - k8s.io/klog/v2.InfoS   # package level exported functions
       - (github.com/go-logr/logr.Logger).Error  # "Methods"
       - (*go.uber.org/zap.SugaredLogger).With  # Also "Methods", but with a pointer receiver
+
   maintidx:
     # Show functions with maintainability index lower than N.
     # A high index indicates better maintainability (it's kind of the opposite of complexity).
