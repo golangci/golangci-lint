@@ -1043,7 +1043,8 @@ linters-settings:
         # Default: false
         strict: true
       unusedresult:
-        # Comma-separated list of functions whose results must be used (in addition to default
+        # Comma-separated list of functions whose results must be used
+        # (in addition to default:
         #   context.WithCancel, context.WithDeadline, context.WithTimeout, context.WithValue, errors.New, fmt.Errorf,
         #   fmt.Sprint, fmt.Sprintf, sort.Reverse
         # ).
@@ -1059,7 +1060,8 @@ linters-settings:
     # Disable all analyzers.
     # Default: false
     disable-all: true
-    # Enable analyzers by name (in addition to default
+    # Enable analyzers by name.
+    # (in addition to default:
     #   appends, asmdecl, assign, atomic, bools, buildtag, cgocall, composites, copylocks, defers, directive, errorsas,
     #   framepointer, httpresponse, ifaceassert, loopclosure, lostcancel, nilfunc, printf, shift, sigchanyzer, slog,
     #   stdmethods, stringintconv, structtag, testinggoroutine, tests, timeformat, unmarshal, unreachable, unsafeptr,
@@ -1112,7 +1114,8 @@ linters-settings:
     # Enable all analyzers.
     # Default: false
     enable-all: true
-    # Disable analyzers by name (in addition to default
+    # Disable analyzers by name.
+    # (in addition to default
     #   atomicalign, deepequalerrors, fieldalignment, findcall, nilness, reflectvaluecompare, shadow, sortslice,
     #   timeformat, unusedwrite
     # ).
