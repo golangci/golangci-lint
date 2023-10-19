@@ -1044,21 +1044,29 @@ linters-settings:
         strict: true
       unusedresult:
         # Comma-separated list of functions whose results must be used
-        # (in addition to defaults context.WithCancel,context.WithDeadline,context.WithTimeout,context.WithValue,
-        # errors.New,fmt.Errorf,fmt.Sprint,fmt.Sprintf,sort.Reverse)
-        # Default []
+        # (in addition to default:
+        #   context.WithCancel, context.WithDeadline, context.WithTimeout, context.WithValue, errors.New, fmt.Errorf,
+        #   fmt.Sprint, fmt.Sprintf, sort.Reverse
+        # ).
+        # Default: []
         funcs:
           - pkg.MyFunc
         # Comma-separated list of names of methods of type func() string whose results must be used
         # (in addition to default Error,String)
-        # Default []
+        # Default: []
         stringmethods:
           - MyMethod
 
     # Disable all analyzers.
     # Default: false
     disable-all: true
-    # Enable analyzers by name (in addition to default).
+    # Enable analyzers by name.
+    # (in addition to default:
+    #   appends, asmdecl, assign, atomic, bools, buildtag, cgocall, composites, copylocks, defers, directive, errorsas,
+    #   framepointer, httpresponse, ifaceassert, loopclosure, lostcancel, nilfunc, printf, shift, sigchanyzer, slog,
+    #   stdmethods, stringintconv, structtag, testinggoroutine, tests, timeformat, unmarshal, unreachable, unsafeptr,
+    #   unusedresult
+    # ).
     # Run `go tool vet help` to see all analyzers.
     # Default: []
     enable:
@@ -1107,6 +1115,10 @@ linters-settings:
     # Default: false
     enable-all: true
     # Disable analyzers by name.
+    # (in addition to default
+    #   atomicalign, deepequalerrors, fieldalignment, findcall, nilness, reflectvaluecompare, shadow, sortslice,
+    #   timeformat, unusedwrite
+    # ).
     # Run `go tool vet help` to see all analyzers.
     # Default: []
     disable:
@@ -1275,6 +1287,7 @@ linters-settings:
       - k8s.io/klog/v2.InfoS   # package level exported functions
       - (github.com/go-logr/logr.Logger).Error  # "Methods"
       - (*go.uber.org/zap.SugaredLogger).With  # Also "Methods", but with a pointer receiver
+
   maintidx:
     # Show functions with maintainability index lower than N.
     # A high index indicates better maintainability (it's kind of the opposite of complexity).
