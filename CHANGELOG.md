@@ -2,6 +2,45 @@ Follow the news and releases on [Mastodon](https://fosstodon.org/@golangcilint) 
 
 There is the most valuable changes log:
 
+### v1.55.0
+
+1. new linters
+   * `gochecksumtype`: https://github.com/alecthomas/go-check-sumtype
+   * `inamedparam`: https://github.com/macabu/inamedparam
+   * `perfsprint`: https://github.com/catenacyber/perfsprint
+   * `protogetter`: https://github.com/ghostiam/protogetter
+   * `sloglint`: https://github.com/go-simpler/sloglint
+   * `testifylint`: https://github.com/Antonboom/testifylint
+2. updated linters
+   * `bidichk`: from 0.2.4 to 0.2.7
+   * `decorder`: from 0.4.0 to 0.4.1
+   * `dupword`: from 0.0.12 to 0.0.13
+   * `errchkjson`: from 0.3.1 to 0.3.6
+   * `gci`: from 0.11.0 to 0.11.2
+   * `ginkgolinter`: from 0.13.5 to 0.14.0
+   * `go-errorlint`: from 1.4.4 to 1.4.5
+   * `gocognit`: from 1.0.7 to 1.1.0
+   * `goconst`: from 1.5.1 to 1.6.0
+   * `godot`: from 1.4.14 to 1.4.15
+   * `gofmt`: update to HEAD
+   * `goimports`: update to HEAD
+   * `gosec`: from 2.17.0 to 2.18.1
+   * `gosmopolitan`: from 1.2.1 to 1.2.2
+   * `govet`: add `appends` analyzer
+   * `ireturn`: from 0.2.0 to 0.2.1
+   * `protogetter`: from 0.2.2 to 0.2.3
+   * `revgrep`: from 745bb2f7c2e6 to v0.5.0
+   * `revive`: from 1.3.2 to 1.3.4
+   * `sqlclosecheck`: from 0.4.0 to 0.5.1
+   * `staticcheck`: from 0.4.5 to 0.4.6
+   * `tagalign`: from 1.3.2 to 1.3.3
+   * `unused`: support passing in options
+3. misc.
+   * Add a pre-commit hook to check all files
+4. Documentation
+   * add source options to exclude-rules docs
+   * `gosec`: add G602 to includes/excludes inside .golangci.reference.yml
+
 ### v1.54.2
 
 1. updated linters:
