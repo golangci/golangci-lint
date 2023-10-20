@@ -712,6 +712,12 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle, linter.PresetTest).
 			WithURL("https://github.com/kunwardeep/paralleltest"),
 
+		linter.NewConfig(golinters.NewPerfSprint()).
+			WithSince("v1.55.0").
+			WithLoadForGoAnalysis().
+			WithPresets(linter.PresetPerformance).
+			WithURL("https://github.com/catenacyber/perfsprint"),
+
 		linter.NewConfig(golinters.NewPreAlloc(preallocCfg)).
 			WithSince("v1.19.0").
 			WithPresets(linter.PresetPerformance).

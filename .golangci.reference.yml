@@ -2314,6 +2314,7 @@ linters:
     - nosnakecase
     - nosprintfhostport
     - paralleltest
+    - perfsprint
     - prealloc
     - predeclared
     - promlinter
@@ -2433,6 +2434,7 @@ linters:
     - nosnakecase
     - nosprintfhostport
     - paralleltest
+    - perfsprint
     - prealloc
     - predeclared
     - promlinter
