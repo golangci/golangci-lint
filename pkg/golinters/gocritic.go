@@ -15,6 +15,7 @@ import (
 	"github.com/go-critic/go-critic/checkers"
 	gocriticlinter "github.com/go-critic/go-critic/linter"
 	"golang.org/x/exp/maps"
+	"golang.org/x/exp/slices"
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/config"
@@ -31,13 +32,13 @@ var (
 	isGoCriticDebug = logutils.HaveDebugTag(logutils.DebugKeyGoCritic)
 )
 
-func NewGoCritic(settings *config.GoCriticSettings, cfg *config.Config) *goanalysis.Linter {
+func NewGoCritic(settings *config.GoCriticSettings, lintConfigDir string) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
 
 	wrapper := &goCriticWrapper{
-		cfg:   cfg,
-		sizes: types.SizesFor("gc", runtime.GOARCH),
+		lintConfigDir: lintConfigDir,
+		sizes:         types.SizesFor("gc", runtime.GOARCH),
 	}
 
 	analyzer := &analysis.Analyzer{
@@ -74,12 +75,13 @@ Dynamic rules are written declaratively with AST patterns, filters, report messa
 		}).
 		WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
 			return resIssues
-		}).WithLoadMode(goanalysis.LoadModeTypesInfo)
+		}).
+		WithLoadMode(goanalysis.LoadModeTypesInfo)
 }
 
 type goCriticWrapper struct {
 	settingsWrapper *goCriticSettingsWrapper
-	cfg             *config.Config
+	lintConfigDir   string
 	sizes           types.Sizes
 	once            sync.Once
 }
@@ -92,15 +94,15 @@ func (w *goCriticWrapper) init(settings *config.GoCriticSettings, logger logutil
 	w.once.Do(func() {
 		err := checkers.InitEmbeddedRules()
 		if err != nil {
-			logger.Fatalf("%s: %v: setting an explicit GOROOT can fix this problem.", goCriticName, err)
+			logger.Fatalf("%s: %v: setting an explicit GOROOT can fix this problem", goCriticName, err)
 		}
 	})
 
 	settingsWrapper := newGoCriticSettingsWrapper(settings, logger)
-
-	settingsWrapper.inferEnabledChecks()
-
-	if err := settingsWrapper.validate(); err != nil {
+	settingsWrapper.InferEnabledChecks()
+	// NOTE(a.telyshev): Validate must be after InferEnabledChecks, not before.
+	// Because it uses gathered information about tags set and finally enabled checks.
+	if err := settingsWrapper.Validate(); err != nil {
 		logger.Fatalf("%s: invalid settings: %s", goCriticName, err)
 	}
 
@@ -109,7 +111,7 @@ func (w *goCriticWrapper) init(settings *config.GoCriticSettings, logger logutil
 
 func (w *goCriticWrapper) run(pass *analysis.Pass) ([]goanalysis.Issue, error) {
 	if w.settingsWrapper == nil {
-		return nil, fmt.Errorf("the settings wrapper is nil")
+		return nil, errors.New("the settings wrapper is nil")
 	}
 
 	linterCtx := gocriticlinter.NewContext(pass.Fset, w.sizes)
@@ -134,11 +136,11 @@ func (w *goCriticWrapper) run(pass *analysis.Pass) ([]goanalysis.Issue, error) {
 }
 
 func (w *goCriticWrapper) buildEnabledCheckers(linterCtx *gocriticlinter.Context) ([]*gocriticlinter.Checker, error) {
-	allParams := w.settingsWrapper.getLowerCasedParams()
+	allParams := w.settingsWrapper.GetLowerCasedParams()
 
 	var enabledCheckers []*gocriticlinter.Checker
 	for _, info := range gocriticlinter.GetCheckersInfo() {
-		if !w.settingsWrapper.isCheckEnabled(info.Name) {
+		if !w.settingsWrapper.IsCheckEnabled(info.Name) {
 			continue
 		}
 
@@ -156,8 +158,11 @@ func (w *goCriticWrapper) buildEnabledCheckers(linterCtx *gocriticlinter.Context
 	return enabledCheckers, nil
 }
 
-func runGocriticOnPackage(linterCtx *gocriticlinter.Context, checks []*gocriticlinter.Checker,
-	files []*ast.File) []result.Issue {
+func runGocriticOnPackage(
+	linterCtx *gocriticlinter.Context,
+	checks []*gocriticlinter.Checker,
+	files []*ast.File,
+) []result.Issue {
 	var res []result.Issue
 	for _, f := range files {
 		filename := filepath.Base(linterCtx.FileSet.Position(f.Pos()).Filename)
@@ -254,282 +259,58 @@ func (w *goCriticWrapper) normalizeCheckerParamsValue(p any) any {
 		return rv.Bool()
 	case reflect.String:
 		// Perform variable substitution.
-		return strings.ReplaceAll(rv.String(), "${configDir}", w.cfg.GetConfigDir())
+		return strings.ReplaceAll(rv.String(), "${configDir}", w.lintConfigDir)
 	default:
 		return p
 	}
 }
-
-// TODO(ldez): rewrite and simplify goCriticSettingsWrapper.
 
 type goCriticSettingsWrapper struct {
 	*config.GoCriticSettings
 
 	logger logutils.Log
 
-	allCheckers   []*gocriticlinter.CheckerInfo
-	allCheckerMap map[string]*gocriticlinter.CheckerInfo
+	allCheckers       []*gocriticlinter.CheckerInfo
+	allCheckersByName map[string]*gocriticlinter.CheckerInfo
 
-	inferredEnabledChecks map[string]bool
+	allTagsSorted  []string
+	allChecksByTag map[string][]string
+
+	inferredEnabledChecks map[string]struct{}
 }
 
 func newGoCriticSettingsWrapper(settings *config.GoCriticSettings, logger logutils.Log) *goCriticSettingsWrapper {
 	allCheckers := gocriticlinter.GetCheckersInfo()
-
-	allCheckerMap := make(map[string]*gocriticlinter.CheckerInfo)
+	allCheckersByName := make(map[string]*gocriticlinter.CheckerInfo, len(allCheckers))
 	for _, checkInfo := range allCheckers {
-		allCheckerMap[checkInfo.Name] = checkInfo
+		allCheckersByName[checkInfo.Name] = checkInfo
 	}
+
+	allChecksByTag := make(map[string][]string)
+	for _, checker := range allCheckers {
+		for _, tag := range checker.Tags {
+			allChecksByTag[tag] = append(allChecksByTag[tag], checker.Name)
+		}
+	}
+
+	allTagsSorted := make([]string, 0, len(allChecksByTag))
+	for t := range allChecksByTag {
+		allTagsSorted = append(allTagsSorted, t)
+	}
+	sort.Strings(allTagsSorted)
 
 	return &goCriticSettingsWrapper{
 		GoCriticSettings:      settings,
 		logger:                logger,
 		allCheckers:           allCheckers,
-		allCheckerMap:         allCheckerMap,
-		inferredEnabledChecks: map[string]bool{},
+		allCheckersByName:     allCheckersByName,
+		allTagsSorted:         allTagsSorted,
+		allChecksByTag:        allChecksByTag,
+		inferredEnabledChecks: make(map[string]struct{}),
 	}
 }
 
-func (s *goCriticSettingsWrapper) buildTagToCheckersMap() map[string][]string {
-	tagToCheckers := map[string][]string{}
-
-	for _, checker := range s.allCheckers {
-		for _, tag := range checker.Tags {
-			tagToCheckers[tag] = append(tagToCheckers[tag], checker.Name)
-		}
-	}
-
-	return tagToCheckers
-}
-
-func (s *goCriticSettingsWrapper) checkerTagsDebugf() {
-	if !isGoCriticDebug {
-		return
-	}
-
-	tagToCheckers := s.buildTagToCheckersMap()
-
-	allTags := maps.Keys(tagToCheckers)
-	sort.Strings(allTags)
-
-	goCriticDebugf("All gocritic existing tags and checks:")
-	for _, tag := range allTags {
-		debugChecksListf(tagToCheckers[tag], "  tag %q", tag)
-	}
-}
-
-func (s *goCriticSettingsWrapper) disabledCheckersDebugf() {
-	if !isGoCriticDebug {
-		return
-	}
-
-	var disabledCheckers []string
-	for _, checker := range s.allCheckers {
-		if s.inferredEnabledChecks[strings.ToLower(checker.Name)] {
-			continue
-		}
-
-		disabledCheckers = append(disabledCheckers, checker.Name)
-	}
-
-	if len(disabledCheckers) == 0 {
-		goCriticDebugf("All checks are enabled")
-	} else {
-		debugChecksListf(disabledCheckers, "Final not used")
-	}
-}
-
-func (s *goCriticSettingsWrapper) inferEnabledChecks() {
-	s.checkerTagsDebugf()
-
-	enabledByDefaultChecks := s.getDefaultEnabledCheckersNames()
-	debugChecksListf(enabledByDefaultChecks, "Enabled by default")
-
-	disabledByDefaultChecks := s.getDefaultDisabledCheckersNames()
-	debugChecksListf(disabledByDefaultChecks, "Disabled by default")
-
-	enabledChecks := make([]string, 0, len(s.EnabledTags)+len(enabledByDefaultChecks))
-
-	// EnabledTags
-	if len(s.EnabledTags) != 0 {
-		tagToCheckers := s.buildTagToCheckersMap()
-		for _, tag := range s.EnabledTags {
-			enabledChecks = append(enabledChecks, tagToCheckers[tag]...)
-		}
-
-		debugChecksListf(enabledChecks, "Enabled by config tags %s", sprintStrings(s.EnabledTags))
-	}
-
-	if !(len(s.EnabledTags) == 0 && len(s.EnabledChecks) != 0) {
-		// don't use default checks only if we have no enabled tags and enable some checks manually
-		enabledChecks = append(enabledChecks, enabledByDefaultChecks...)
-	}
-
-	// DisabledTags
-	if len(s.DisabledTags) != 0 {
-		enabledChecks = s.filterByDisableTags(enabledChecks, s.DisabledTags)
-	}
-
-	// EnabledChecks
-	if len(s.EnabledChecks) != 0 {
-		debugChecksListf(s.EnabledChecks, "Enabled by config")
-
-		alreadyEnabledChecksSet := stringsSliceToSet(enabledChecks)
-		for _, enabledCheck := range s.EnabledChecks {
-			if alreadyEnabledChecksSet[enabledCheck] {
-				s.logger.Warnf("%s: no need to enable check %q: it's already enabled", goCriticName, enabledCheck)
-				continue
-			}
-			enabledChecks = append(enabledChecks, enabledCheck)
-		}
-	}
-
-	// DisabledChecks
-	if len(s.DisabledChecks) != 0 {
-		debugChecksListf(s.DisabledChecks, "Disabled by config")
-
-		enabledChecksSet := stringsSliceToSet(enabledChecks)
-		for _, disabledCheck := range s.DisabledChecks {
-			if !enabledChecksSet[disabledCheck] {
-				s.logger.Warnf("%s: check %q was explicitly disabled via config. However, as this check "+
-					"is disabled by default, there is no need to explicitly disable it via config.", goCriticName, disabledCheck)
-				continue
-			}
-			delete(enabledChecksSet, disabledCheck)
-		}
-
-		enabledChecks = nil
-		for enabledCheck := range enabledChecksSet {
-			enabledChecks = append(enabledChecks, enabledCheck)
-		}
-	}
-
-	s.inferredEnabledChecks = map[string]bool{}
-	for _, check := range enabledChecks {
-		s.inferredEnabledChecks[strings.ToLower(check)] = true
-	}
-
-	debugChecksListf(enabledChecks, "Final used")
-
-	s.disabledCheckersDebugf()
-}
-
-func (s *goCriticSettingsWrapper) validate() error {
-	if len(s.EnabledTags) == 0 {
-		if len(s.EnabledChecks) != 0 && len(s.DisabledChecks) != 0 {
-			return errors.New("both enabled and disabled check aren't allowed for gocritic")
-		}
-	} else {
-		if err := validateStringsUniq(s.EnabledTags); err != nil {
-			return fmt.Errorf("validate enabled tags: %w", err)
-		}
-
-		tagToCheckers := s.buildTagToCheckersMap()
-
-		for _, tag := range s.EnabledTags {
-			if _, ok := tagToCheckers[tag]; !ok {
-				return fmt.Errorf("gocritic [enabled]tag %q doesn't exist", tag)
-			}
-		}
-	}
-
-	if len(s.DisabledTags) > 0 {
-		tagToCheckers := s.buildTagToCheckersMap()
-		for _, tag := range s.EnabledTags {
-			if _, ok := tagToCheckers[tag]; !ok {
-				return fmt.Errorf("gocritic [disabled]tag %q doesn't exist", tag)
-			}
-		}
-	}
-
-	if err := validateStringsUniq(s.EnabledChecks); err != nil {
-		return fmt.Errorf("validate enabled checks: %w", err)
-	}
-
-	if err := validateStringsUniq(s.DisabledChecks); err != nil {
-		return fmt.Errorf("validate disabled checks: %w", err)
-	}
-
-	if err := s.validateCheckerNames(); err != nil {
-		return fmt.Errorf("validation failed: %w", err)
-	}
-
-	return nil
-}
-
-func (s *goCriticSettingsWrapper) isCheckEnabled(name string) bool {
-	return s.inferredEnabledChecks[strings.ToLower(name)]
-}
-
-// getAllCheckerNames returns a map containing all checker names supported by gocritic.
-func (s *goCriticSettingsWrapper) getAllCheckerNames() map[string]bool {
-	allCheckerNames := make(map[string]bool, len(s.allCheckers))
-
-	for _, checker := range s.allCheckers {
-		allCheckerNames[strings.ToLower(checker.Name)] = true
-	}
-
-	return allCheckerNames
-}
-
-func (s *goCriticSettingsWrapper) getDefaultEnabledCheckersNames() []string {
-	var enabled []string
-
-	for _, info := range s.allCheckers {
-		enable := s.isEnabledByDefaultCheck(info)
-		if enable {
-			enabled = append(enabled, info.Name)
-		}
-	}
-
-	return enabled
-}
-
-func (s *goCriticSettingsWrapper) getDefaultDisabledCheckersNames() []string {
-	var disabled []string
-
-	for _, info := range s.allCheckers {
-		enable := s.isEnabledByDefaultCheck(info)
-		if !enable {
-			disabled = append(disabled, info.Name)
-		}
-	}
-
-	return disabled
-}
-
-func (s *goCriticSettingsWrapper) validateCheckerNames() error {
-	allowedNames := s.getAllCheckerNames()
-
-	for _, name := range s.EnabledChecks {
-		if !allowedNames[strings.ToLower(name)] {
-			return fmt.Errorf("enabled checker %s doesn't exist, all existing checkers: %s",
-				name, sprintAllowedCheckerNames(allowedNames))
-		}
-	}
-
-	for _, name := range s.DisabledChecks {
-		if !allowedNames[strings.ToLower(name)] {
-			return fmt.Errorf("disabled checker %s doesn't exist, all existing checkers: %s",
-				name, sprintAllowedCheckerNames(allowedNames))
-		}
-	}
-
-	for checkName := range s.SettingsPerCheck {
-		if _, ok := allowedNames[checkName]; !ok {
-			return fmt.Errorf("invalid setting, checker %s doesn't exist, all existing checkers: %s",
-				checkName, sprintAllowedCheckerNames(allowedNames))
-		}
-
-		if !s.isCheckEnabled(checkName) {
-			s.logger.Warnf("%s: settings were provided for not enabled check %q", goCriticName, checkName)
-		}
-	}
-
-	return nil
-}
-
-func (s *goCriticSettingsWrapper) getLowerCasedParams() map[string]config.GoCriticCheckSettings {
+func (s *goCriticSettingsWrapper) GetLowerCasedParams() map[string]config.GoCriticCheckSettings {
 	ret := make(map[string]config.GoCriticCheckSettings, len(s.SettingsPerCheck))
 
 	for checker, params := range s.SettingsPerCheck {
@@ -539,77 +320,137 @@ func (s *goCriticSettingsWrapper) getLowerCasedParams() map[string]config.GoCrit
 	return ret
 }
 
-func (s *goCriticSettingsWrapper) filterByDisableTags(enabledChecks, disableTags []string) []string {
-	enabledChecksSet := stringsSliceToSet(enabledChecks)
+// InferEnabledChecks tries to be consistent with (lintersdb.EnabledSet).build.
+func (s *goCriticSettingsWrapper) InferEnabledChecks() {
+	s.debugChecksInitialState()
 
-	for _, enabledCheck := range enabledChecks {
-		checkInfo, checkInfoExists := s.allCheckerMap[enabledCheck]
-		if !checkInfoExists {
-			s.logger.Warnf("%s: check %q was not exists via filtering disabled tags", goCriticName, enabledCheck)
-			continue
+	enabledByDefaultChecks, disabledByDefaultChecks := s.buildEnabledAndDisabledByDefaultChecks()
+	debugChecksListf(enabledByDefaultChecks, "Enabled by default")
+	debugChecksListf(disabledByDefaultChecks, "Disabled by default")
+
+	enabledChecks := make(map[string]struct{})
+
+	if s.EnableAll {
+		enabledChecks = make(map[string]struct{}, len(s.allCheckers))
+		for _, info := range s.allCheckers {
+			enabledChecks[info.Name] = struct{}{}
 		}
-
-		hitTags := intersectStringSlice(checkInfo.Tags, disableTags)
-		if len(hitTags) != 0 {
-			delete(enabledChecksSet, enabledCheck)
-		}
-	}
-
-	debugChecksListf(enabledChecks, "Disabled by config tags %s", sprintStrings(disableTags))
-
-	enabledChecks = nil
-	for enabledCheck := range enabledChecksSet {
-		enabledChecks = append(enabledChecks, enabledCheck)
-	}
-
-	return enabledChecks
-}
-
-func (s *goCriticSettingsWrapper) isEnabledByDefaultCheck(info *gocriticlinter.CheckerInfo) bool {
-	return !info.HasTag("experimental") &&
-		!info.HasTag("opinionated") &&
-		!info.HasTag("performance")
-}
-
-func validateStringsUniq(ss []string) error {
-	set := map[string]bool{}
-
-	for _, s := range ss {
-		_, ok := set[s]
-		if ok {
-			return fmt.Errorf("%q occurs multiple times in list", s)
-		}
-		set[s] = true
-	}
-
-	return nil
-}
-
-func intersectStringSlice(s1, s2 []string) []string {
-	s1Map := make(map[string]struct{}, len(s1))
-
-	for _, s := range s1 {
-		s1Map[s] = struct{}{}
-	}
-
-	results := make([]string, 0)
-	for _, s := range s2 {
-		if _, exists := s1Map[s]; exists {
-			results = append(results, s)
+	} else if !s.DisableAll {
+		// NOTE(a.telyshev): enable-all/disable-all revokes the default settings.
+		enabledChecks = make(map[string]struct{}, len(enabledByDefaultChecks))
+		for _, check := range enabledByDefaultChecks {
+			enabledChecks[check] = struct{}{}
 		}
 	}
 
-	return results
+	if len(s.EnabledTags) != 0 {
+		enabledFromTags := s.expandTagsToChecks(s.EnabledTags)
+		debugChecksListf(enabledFromTags, "Enabled by config tags %s", sprintStrings(s.EnabledTags))
+
+		for _, check := range enabledFromTags {
+			enabledChecks[check] = struct{}{}
+		}
+	}
+
+	if len(s.EnabledChecks) != 0 {
+		debugChecksListf(s.EnabledChecks, "Enabled by config")
+
+		for _, check := range s.EnabledChecks {
+			if _, ok := enabledChecks[check]; ok {
+				s.logger.Warnf("%s: no need to enable check %q: it's already enabled", goCriticName, check)
+				continue
+			}
+			enabledChecks[check] = struct{}{}
+		}
+	}
+
+	if len(s.DisabledTags) != 0 {
+		disabledFromTags := s.expandTagsToChecks(s.DisabledTags)
+		debugChecksListf(disabledFromTags, "Disabled by config tags %s", sprintStrings(s.DisabledTags))
+
+		for _, check := range disabledFromTags {
+			delete(enabledChecks, check)
+		}
+	}
+
+	if len(s.DisabledChecks) != 0 {
+		debugChecksListf(s.DisabledChecks, "Disabled by config")
+
+		for _, check := range s.DisabledChecks {
+			if _, ok := enabledChecks[check]; !ok {
+				s.logger.Warnf("%s: no need to disable check %q: it's already disabled", goCriticName, check)
+				continue
+			}
+			delete(enabledChecks, check)
+		}
+	}
+
+	s.inferredEnabledChecks = enabledChecks
+	s.debugChecksFinalState()
 }
 
-func sprintAllowedCheckerNames(allowedNames map[string]bool) string {
-	namesSlice := maps.Keys(allowedNames)
-	return sprintStrings(namesSlice)
+func (s *goCriticSettingsWrapper) buildEnabledAndDisabledByDefaultChecks() (enabled []string, disabled []string) {
+	for _, info := range s.allCheckers {
+		if enable := isEnabledByDefaultGoCriticChecker(info); enable {
+			enabled = append(enabled, info.Name)
+		} else {
+			disabled = append(disabled, info.Name)
+		}
+	}
+	return enabled, disabled
 }
 
-func sprintStrings(ss []string) string {
-	sort.Strings(ss)
-	return fmt.Sprint(ss)
+func isEnabledByDefaultGoCriticChecker(info *gocriticlinter.CheckerInfo) bool {
+	// https://github.com/go-critic/go-critic/blob/5b67cfd487ae9fe058b4b19321901b3131810f65/cmd/gocritic/check.go#L342-L345
+	return !info.HasTag(gocriticlinter.ExperimentalTag) &&
+		!info.HasTag(gocriticlinter.OpinionatedTag) &&
+		!info.HasTag(gocriticlinter.PerformanceTag) &&
+		!info.HasTag(gocriticlinter.SecurityTag)
+}
+
+func (s *goCriticSettingsWrapper) expandTagsToChecks(tags []string) []string {
+	var checks []string
+	for _, t := range tags {
+		checks = append(checks, s.allChecksByTag[t]...)
+	}
+	return checks
+}
+
+func (s *goCriticSettingsWrapper) debugChecksInitialState() {
+	if !isGoCriticDebug {
+		return
+	}
+
+	goCriticDebugf("All gocritic existing tags and checks:")
+	for _, tag := range s.allTagsSorted {
+		debugChecksListf(s.allChecksByTag[tag], "  tag %q", tag)
+	}
+}
+
+func (s *goCriticSettingsWrapper) debugChecksFinalState() {
+	if !isGoCriticDebug {
+		return
+	}
+
+	var enabledChecks []string
+	var disabledChecks []string
+
+	for _, checker := range s.allCheckers {
+		name := checker.Name
+		if _, ok := s.inferredEnabledChecks[name]; ok {
+			enabledChecks = append(enabledChecks, name)
+		} else {
+			disabledChecks = append(disabledChecks, name)
+		}
+	}
+
+	debugChecksListf(enabledChecks, "Final used")
+
+	if len(disabledChecks) == 0 {
+		goCriticDebugf("All checks are enabled")
+	} else {
+		debugChecksListf(disabledChecks, "Final not used")
+	}
 }
 
 func debugChecksListf(checks []string, format string, args ...any) {
@@ -620,11 +461,134 @@ func debugChecksListf(checks []string, format string, args ...any) {
 	goCriticDebugf("%s checks (%d): %s", fmt.Sprintf(format, args...), len(checks), sprintStrings(checks))
 }
 
-func stringsSliceToSet(ss []string) map[string]bool {
-	ret := make(map[string]bool, len(ss))
-	for _, s := range ss {
-		ret[s] = true
+func sprintStrings(ss []string) string {
+	sort.Strings(ss)
+	return fmt.Sprint(ss)
+}
+
+// Validate tries to be consistent with (lintersdb.Validator).validateEnabledDisabledLintersConfig.
+func (s *goCriticSettingsWrapper) Validate() error {
+	for _, v := range []func() error{
+		s.validateOptionsCombinations,
+		s.validateCheckerTags,
+		s.validateCheckerNames,
+		s.validateDisabledAndEnabledAtOneMoment,
+		s.validateAtLeastOneCheckerEnabled,
+	} {
+		if err := v(); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func (s *goCriticSettingsWrapper) validateOptionsCombinations() error {
+	if s.EnableAll {
+		if s.DisableAll {
+			return errors.New("enable-all and disable-all options must not be combined")
+		}
+
+		if len(s.EnabledTags) != 0 {
+			return errors.New("enable-all and enabled-tags options must not be combined")
+		}
+
+		if len(s.EnabledChecks) != 0 {
+			return errors.New("enable-all and enabled-checks options must not be combined")
+		}
 	}
 
-	return ret
+	if s.DisableAll {
+		if len(s.DisabledTags) != 0 {
+			return errors.New("disable-all and disabled-tags options must not be combined")
+		}
+
+		if len(s.DisabledChecks) != 0 {
+			return errors.New("disable-all and disabled-checks options must not be combined")
+		}
+
+		if len(s.EnabledTags) == 0 && len(s.EnabledChecks) == 0 {
+			return errors.New("all checks were disabled, but no one check was enabled: at least one must be enabled")
+		}
+	}
+
+	return nil
+}
+
+func (s *goCriticSettingsWrapper) validateCheckerTags() error {
+	for _, tag := range s.EnabledTags {
+		if !s.isKnownTag(tag) {
+			return fmt.Errorf("enabled tag %q doesn't exist, see %s's documentation", tag, goCriticName)
+		}
+	}
+
+	for _, tag := range s.DisabledTags {
+		if !s.isKnownTag(tag) {
+			return fmt.Errorf("disabled tag %q doesn't exist, see %s's documentation", tag, goCriticName)
+		}
+	}
+
+	return nil
+}
+
+func (s *goCriticSettingsWrapper) isKnownTag(tag string) bool {
+	_, ok := s.allChecksByTag[tag]
+	return ok
+}
+
+func (s *goCriticSettingsWrapper) validateCheckerNames() error {
+	for _, name := range s.EnabledChecks {
+		if !s.isKnownCheck(name) {
+			return fmt.Errorf("enabled check %q doesn't exist, see %s's documentation", name, goCriticName)
+		}
+	}
+
+	for _, name := range s.DisabledChecks {
+		if !s.isKnownCheck(name) {
+			return fmt.Errorf("disabled check %q doesn't exist, see %s documentation", name, goCriticName)
+		}
+	}
+
+	for name := range s.SettingsPerCheck {
+		if !s.isKnownCheck(name) {
+			return fmt.Errorf("invalid settings, check %q doesn't exist, see %s documentation", name, goCriticName)
+		}
+		if !s.IsCheckEnabled(name) {
+			s.logger.Warnf("%s: settings were provided for disabled check %q", goCriticName, name)
+		}
+	}
+
+	return nil
+}
+
+func (s *goCriticSettingsWrapper) isKnownCheck(name string) bool {
+	_, ok := s.allCheckersByName[name]
+	return ok
+}
+
+func (s *goCriticSettingsWrapper) validateDisabledAndEnabledAtOneMoment() error {
+	for _, tag := range s.DisabledTags {
+		if slices.Contains(s.EnabledTags, tag) {
+			return fmt.Errorf("tag %q disabled and enabled at one moment", tag)
+		}
+	}
+
+	for _, check := range s.DisabledChecks {
+		if slices.Contains(s.EnabledChecks, check) {
+			return fmt.Errorf("check %q disabled and enabled at one moment", check)
+		}
+	}
+
+	return nil
+}
+
+func (s *goCriticSettingsWrapper) validateAtLeastOneCheckerEnabled() error {
+	if len(s.inferredEnabledChecks) == 0 {
+		return errors.New("eventually all checks were disabled: at least one must be enabled")
+	}
+	return nil
+}
+
+func (s *goCriticSettingsWrapper) IsCheckEnabled(name string) bool {
+	_, ok := s.inferredEnabledChecks[name]
+	return ok
 }
