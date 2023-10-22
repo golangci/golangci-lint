@@ -78,6 +78,7 @@ func TestFormatGithubIssueWindows(t *testing.T) {
 	if runtime.GOOS != "windows" {
 		t.Skip("Skipping test on non Windows")
 	}
+
 	sampleIssue := result.Issue{
 		FromLinter: "sample-linter",
 		Text:       "some issue",
