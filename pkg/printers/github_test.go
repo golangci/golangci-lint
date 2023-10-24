@@ -4,6 +4,7 @@ package printers
 import (
 	"bytes"
 	"go/token"
+	"runtime"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -62,6 +63,27 @@ func TestFormatGithubIssue(t *testing.T) {
 		Text:       "some issue",
 		Pos: token.Position{
 			Filename: "path/to/file.go",
+			Offset:   2,
+			Line:     10,
+			Column:   4,
+		},
+	}
+	require.Equal(t, "::error file=path/to/file.go,line=10,col=4::some issue (sample-linter)", formatIssueAsGithub(&sampleIssue))
+
+	sampleIssue.Pos.Column = 0
+	require.Equal(t, "::error file=path/to/file.go,line=10::some issue (sample-linter)", formatIssueAsGithub(&sampleIssue))
+}
+
+func TestFormatGithubIssueWindows(t *testing.T) {
+	if runtime.GOOS != "windows" {
+		t.Skip("Skipping test on non Windows")
+	}
+
+	sampleIssue := result.Issue{
+		FromLinter: "sample-linter",
+		Text:       "some issue",
+		Pos: token.Position{
+			Filename: "path\\to\\file.go",
 			Offset:   2,
 			Line:     10,
 			Column:   4,
