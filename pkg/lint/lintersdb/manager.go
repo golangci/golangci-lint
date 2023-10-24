@@ -121,6 +121,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		noLintLintCfg       *config.NoLintLintSettings
 		noNamedReturnsCfg   *config.NoNamedReturnsSettings
 		parallelTestCfg     *config.ParallelTestSettings
+		perfSprintCfg       *config.PerfSprintSettings
 		preallocCfg         *config.PreallocSettings
 		predeclaredCfg      *config.PredeclaredSettings
 		promlinterCfg       *config.PromlinterSettings
@@ -202,8 +203,9 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		nlreturnCfg = &m.cfg.LintersSettings.Nlreturn
 		noLintLintCfg = &m.cfg.LintersSettings.NoLintLint
 		noNamedReturnsCfg = &m.cfg.LintersSettings.NoNamedReturns
-		preallocCfg = &m.cfg.LintersSettings.Prealloc
 		parallelTestCfg = &m.cfg.LintersSettings.ParallelTest
+		perfSprintCfg = &m.cfg.LintersSettings.PerfSprint
+		preallocCfg = &m.cfg.LintersSettings.Prealloc
 		predeclaredCfg = &m.cfg.LintersSettings.Predeclared
 		promlinterCfg = &m.cfg.LintersSettings.Promlinter
 		reassignCfg = &m.cfg.LintersSettings.Reassign
@@ -712,7 +714,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle, linter.PresetTest).
 			WithURL("https://github.com/kunwardeep/paralleltest"),
 
-		linter.NewConfig(golinters.NewPerfSprint()).
+		linter.NewConfig(golinters.NewPerfSprint(perfSprintCfg)).
 			WithSince("v1.55.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetPerformance).

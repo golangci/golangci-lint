@@ -104,6 +104,9 @@ var defaultLintersSettings = LintersSettings{
 		RequireSpecific:    false,
 		AllowUnused:        false,
 	},
+	PerfSprint: PerfSprintSettings{
+		IntConversion: true,
+	},
 	Prealloc: PreallocSettings{
 		Simple:     true,
 		RangeLoops: true,
@@ -222,6 +225,7 @@ type LintersSettings struct {
 	NoLintLint       NoLintLintSettings
 	NoNamedReturns   NoNamedReturnsSettings
 	ParallelTest     ParallelTestSettings
+	PerfSprint       PerfSprintSettings
 	Prealloc         PreallocSettings
 	Predeclared      PredeclaredSettings
 	Promlinter       PromlinterSettings
@@ -675,9 +679,14 @@ type NoLintLintSettings struct {
 type NoNamedReturnsSettings struct {
 	ReportErrorInDefer bool `mapstructure:"report-error-in-defer"`
 }
+
 type ParallelTestSettings struct {
 	IgnoreMissing         bool `mapstructure:"ignore-missing"`
 	IgnoreMissingSubtests bool `mapstructure:"ignore-missing-subtests"`
+}
+
+type PerfSprintSettings struct {
+	IntConversion bool `mapstructure:"int-conversion"`
 }
 
 type PreallocSettings struct {
