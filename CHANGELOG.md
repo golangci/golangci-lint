@@ -2,6 +2,14 @@ Follow the news and releases on [Mastodon](https://fosstodon.org/@golangcilint) 
 
 There is the most valuable changes log:
 
+### v1.55.1
+
+1. updated linters
+   * `gosec`: from 2.18.1 to 2.18.2
+2. misc.
+   * `revgrep`: from v0.5.0 to v0.5.2 (support git < 2.41.0)
+   * output: convert backslashes to forward slashes for GitHub Action annotations printer
+
 ### v1.55.0
 
 1. new linters
