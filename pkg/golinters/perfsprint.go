@@ -8,7 +8,7 @@ import (
 )
 
 func NewPerfSprint() *goanalysis.Linter {
-	a := analyzer.Analyzer
+	a := analyzer.New()
 
 	return goanalysis.NewLinter(
 		a.Name,
