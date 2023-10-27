@@ -6,18 +6,32 @@ import (
 	"github.com/ghostiam/protogetter"
 	"golang.org/x/tools/go/analysis"
 
+	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-func NewProtoGetter() *goanalysis.Linter {
+func NewProtoGetter(settings *config.ProtoGetterSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
 
-	a := protogetter.NewAnalyzer()
+	var cfg protogetter.Config
+	if settings != nil {
+		cfg = protogetter.Config{
+			SkipGeneratedBy:  settings.SkipGeneratedBy,
+			SkipFiles:        settings.SkipFiles,
+			SkipAnyGenerated: settings.SkipAnyGenerated,
+		}
+	}
+	cfg.Mode = protogetter.GolangciLintMode
+
+	a := protogetter.NewAnalyzer(&cfg)
 	a.Run = func(pass *analysis.Pass) (any, error) {
-		pgIssues := protogetter.Run(pass, protogetter.GolangciLintMode)
+		pgIssues, err := protogetter.Run(pass, &cfg)
+		if err != nil {
+			return nil, err
+		}
 
 		issues := make([]goanalysis.Issue, len(pgIssues))
 		for i, issue := range pgIssues {
