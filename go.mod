@@ -49,7 +49,7 @@ require (
 	github.com/golangci/misspell v0.4.1
 	github.com/golangci/revgrep v0.5.2
 	github.com/golangci/unconvert v0.0.0-20180507085042-28b1c447d1f4
-	github.com/gordonklaus/ineffassign v0.0.0-20230610083614-0e73809eb601
+	github.com/gordonklaus/ineffassign v0.1.0
 	github.com/gostaticanalysis/forcetypeassert v0.1.0
 	github.com/gostaticanalysis/nilerr v0.1.1
 	github.com/hashicorp/go-multierror v1.1.1
