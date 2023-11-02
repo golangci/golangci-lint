@@ -34,7 +34,7 @@ type jsonObject struct {
 
 // NewRevive returns a new Revive linter.
 //
-//nolint:dupl
+
 func NewRevive(settings *config.ReviveSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
