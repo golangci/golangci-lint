@@ -13,7 +13,6 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-
 func NewWhitespace(settings *config.WhitespaceSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
