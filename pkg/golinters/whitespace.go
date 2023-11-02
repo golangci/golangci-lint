@@ -48,6 +48,10 @@ func NewWhitespace(settings *config.WhitespaceSettings) *goanalysis.Linter {
 
 				switch issue.MessageType {
 				case whitespace.MessageTypeRemove:
+					if len(issue.LineNumbers) == 0 {
+						continue
+					}
+
 					report.LineRange = &result.Range{
 						From: issue.LineNumbers[0],
 						To:   issue.LineNumbers[len(issue.LineNumbers)-1],
