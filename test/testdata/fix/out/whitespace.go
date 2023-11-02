@@ -69,3 +69,7 @@ func multiIfFunc() {
 		}
 	}
 }
+
+func notGoFmted() {
+         fmt.Println("Hello world")
+}
