@@ -13,6 +13,8 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
+const whitespaceName = "whitespace"
+
 func NewWhitespace(settings *config.WhitespaceSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
@@ -26,55 +28,18 @@ func NewWhitespace(settings *config.WhitespaceSettings) *goanalysis.Linter {
 		}
 	}
 
-	whitespaceAnalyzer := whitespace.NewAnalyzer(&wsSettings)
+	a := whitespace.NewAnalyzer(&wsSettings)
 
 	return goanalysis.NewLinter(
-		whitespaceAnalyzer.Name,
-		whitespaceAnalyzer.Doc,
-		[]*analysis.Analyzer{whitespaceAnalyzer},
+		a.Name,
+		a.Doc,
+		[]*analysis.Analyzer{a},
 		nil,
 	).WithContextSetter(func(lintCtx *linter.Context) {
-		whitespaceAnalyzer.Run = func(pass *analysis.Pass) (any, error) {
-			whitespaceIssues := whitespace.Run(pass, &wsSettings)
-			issues := make([]goanalysis.Issue, len(whitespaceIssues))
-
-			for i, issue := range whitespaceIssues {
-				report := &result.Issue{
-					FromLinter: whitespaceAnalyzer.Name,
-					Pos:        pass.Fset.PositionFor(issue.Diagnostic, false),
-					Text:       issue.Message,
-				}
-
-				switch issue.MessageType {
-				case whitespace.MessageTypeRemove:
-					if len(issue.LineNumbers) == 0 {
-						continue
-					}
-
-					report.LineRange = &result.Range{
-						From: issue.LineNumbers[0],
-						To:   issue.LineNumbers[len(issue.LineNumbers)-1],
-					}
-
-					report.Replacement = &result.Replacement{
-						NeedOnlyDelete: true,
-					}
-
-				case whitespace.MessageTypeAdd:
-					report.Pos = pass.Fset.PositionFor(issue.FixStart, false)
-					report.Replacement = &result.Replacement{
-						Inline: &result.InlineFix{
-							StartCol:  0,
-							Length:    1,
-							NewString: "\n\t",
-						},
-					}
-
-				default:
-					return nil, fmt.Errorf("unknown message type: %v", issue.MessageType)
-				}
-
-				issues[i] = goanalysis.NewIssue(report, pass)
+		a.Run = func(pass *analysis.Pass) (any, error) {
+			issues, err := runWhitespace(pass, wsSettings)
+			if err != nil {
+				return nil, err
 			}
 
 			if len(issues) == 0 {
@@ -90,4 +55,48 @@ func NewWhitespace(settings *config.WhitespaceSettings) *goanalysis.Linter {
 	}).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
 		return resIssues
 	}).WithLoadMode(goanalysis.LoadModeSyntax)
+}
+
+func runWhitespace(pass *analysis.Pass, wsSettings whitespace.Settings) ([]goanalysis.Issue, error) {
+	lintIssues := whitespace.Run(pass, &wsSettings)
+
+	issues := make([]goanalysis.Issue, len(lintIssues))
+	for i, issue := range lintIssues {
+		report := &result.Issue{
+			FromLinter: whitespaceName,
+			Pos:        pass.Fset.PositionFor(issue.Diagnostic, false),
+			Text:       issue.Message,
+		}
+
+		switch issue.MessageType {
+		case whitespace.MessageTypeRemove:
+			if len(issue.LineNumbers) == 0 {
+				continue
+			}
+
+			report.LineRange = &result.Range{
+				From: issue.LineNumbers[0],
+				To:   issue.LineNumbers[len(issue.LineNumbers)-1],
+			}
+
+			report.Replacement = &result.Replacement{NeedOnlyDelete: true}
+
+		case whitespace.MessageTypeAdd:
+			report.Pos = pass.Fset.PositionFor(issue.FixStart, false)
+			report.Replacement = &result.Replacement{
+				Inline: &result.InlineFix{
+					StartCol:  0,
+					Length:    1,
+					NewString: "\n\t",
+				},
+			}
+
+		default:
+			return nil, fmt.Errorf("unknown message type: %v", issue.MessageType)
+		}
+
+		issues[i] = goanalysis.NewIssue(report, pass)
+	}
+
+	return issues, nil
 }
