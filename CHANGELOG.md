@@ -2,6 +2,12 @@ Follow the news and releases on [Mastodon](https://fosstodon.org/@golangcilint) 
 
 There is the most valuable changes log:
 
+### v1.55.2
+
+1. updated linters
+   * `ireturn`: from 0.2.1 to 0.2.2
+   * `ginkgolinter`: from 0.14.0 to 0.14.1
+
 ### v1.55.1
 
 1. updated linters
