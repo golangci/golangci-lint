@@ -620,6 +620,12 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithAlternativeNames("logrlint").
 			WithURL("https://github.com/timonwong/loggercheck"),
 
+		linter.NewConfig(golinters.NewLoopVar()).
+			WithSince("v1.56.0").
+			WithLoadForGoAnalysis().
+			WithPresets(linter.PresetStyle).
+			WithURL("https://github.com/karamaru-alpha/loopvar"),
+
 		linter.NewConfig(golinters.NewMaintIdx(maintIdxCfg)).
 			WithSince("v1.44.0").
 			WithPresets(linter.PresetComplexity).
