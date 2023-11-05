@@ -119,7 +119,9 @@ var defaultLintersSettings = LintersSettings{
 	SlogLint: SlogLintSettings{
 		KVOnly:         false,
 		AttrOnly:       false,
+		ContextOnly:    false,
 		NoRawKeys:      false,
+		KeyNamingCase:  "",
 		ArgsOnSepLines: false,
 	},
 	TagAlign: TagAlignSettings{
@@ -734,10 +736,12 @@ type RowsErrCheckSettings struct {
 }
 
 type SlogLintSettings struct {
-	KVOnly         bool `mapstructure:"kv-only"`
-	AttrOnly       bool `mapstructure:"attr-only"`
-	NoRawKeys      bool `mapstructure:"no-raw-keys"`
-	ArgsOnSepLines bool `mapstructure:"args-on-sep-lines"`
+	KVOnly         bool   `mapstructure:"kv-only"`
+	AttrOnly       bool   `mapstructure:"attr-only"`
+	ContextOnly    bool   `mapstructure:"context-only"`
+	NoRawKeys      bool   `mapstructure:"no-raw-keys"`
+	KeyNamingCase  string `mapstructure:"key-naming-case"`
+	ArgsOnSepLines bool   `mapstructure:"args-on-sep-lines"`
 }
 
 type StaticCheckSettings struct {

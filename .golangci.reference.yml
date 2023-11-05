@@ -1824,9 +1824,16 @@ linters-settings:
     # Enforce using attributes only (incompatible with kv-only).
     # Default: false
     attr-only: true
+    # Enforce using methods that accept a context.
+    # Default: false
+    context-only: true
     # Enforce using constants instead of raw keys.
     # Default: false
     no-raw-keys: true
+    # Enforce a single key naming convention.
+    # Values: snake, kebab, camel, pascal
+    # Default: ""
+    key-naming-case: snake
     # Enforce putting arguments on separate lines.
     # Default: false
     args-on-sep-lines: true
