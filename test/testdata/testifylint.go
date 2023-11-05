@@ -46,6 +46,15 @@ func TestTestifylint(t *testing.T) {
 		assert.Equalf(t, predicate, true, "message")        // want "bool-compare: use assert\\.Truef"
 		assert.Equalf(t, predicate, true, "message %d", 42) // want "bool-compare: use assert\\.Truef"
 	})
+
+	assert.Equal(t, arr, nil) // want "nil-compare: use assert\\.Nil"
+	assert.Nil(t, arr)
+
+	go func() {
+		if assert.Error(t, err) {
+			require.ErrorIs(t, err, io.EOF) // want "go-require: require must only be used in the goroutine running the test function"
+		}
+	}()
 }
 
 type SuiteExample struct {

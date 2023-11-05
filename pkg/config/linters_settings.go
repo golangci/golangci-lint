@@ -784,12 +784,18 @@ type TagliatelleSettings struct {
 }
 
 type TestifylintSettings struct {
-	EnableAll       bool     `mapstructure:"enable-all"`
-	EnabledCheckers []string `mapstructure:"enable"`
+	EnableAll        bool     `mapstructure:"enable-all"`
+	DisableAll       bool     `mapstructure:"disable-all"`
+	EnabledCheckers  []string `mapstructure:"enable"`
+	DisabledCheckers []string `mapstructure:"disable"`
 
 	ExpectedActual struct {
 		ExpVarPattern string `mapstructure:"pattern"`
 	} `mapstructure:"expected-actual"`
+
+	RequireError struct {
+		FnPattern string `mapstructure:"fn-pattern"`
+	} `mapstructure:"require-error"`
 
 	SuiteExtraAssertCall struct {
 		Mode string `mapstructure:"mode"`

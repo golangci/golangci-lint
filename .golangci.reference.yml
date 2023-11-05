@@ -1944,12 +1944,37 @@ linters-settings:
     all: false
 
   testifylint:
-    # Enable all checkers.
+    # Enable all checkers (https://github.com/Antonboom/testifylint#checkers).
     # Default: false
     enable-all: true
-    # Enable specific checkers.
-    # https://github.com/Antonboom/testifylint#checkers
-    # Default: ["bool-compare", "compares", "empty", "error-is-as", "error-nil", "expected-actual", "float-compare", "len", "require-error", "suite-dont-use-pkg", "suite-extra-assert-call"]
+    # Disable checkers by name
+    # (in addition to default
+    #   suite-thelper
+    # ).
+    disable:
+      - bool-compare
+      - compares
+      - empty
+      - error-is-as
+      - error-nil
+      - expected-actual
+      - go-require
+      - float-compare
+      - len
+      - nil-compare
+      - require-error
+      - suite-dont-use-pkg
+      - suite-extra-assert-call
+      - suite-thelper
+
+    # Disable all checkers (https://github.com/Antonboom/testifylint#checkers).
+    # Default: false
+    disable-all: true
+    # Enable checkers by name
+    # (in addition to default
+    #   bool-compare, compares, empty, error-is-as, error-nil, expected-actual, go-require, float-compare, len,
+    #   nil-compare, require-error, suite-dont-use-pkg, suite-extra-assert-call
+    # ).
     enable:
       - bool-compare
       - compares
@@ -1957,16 +1982,23 @@ linters-settings:
       - error-is-as
       - error-nil
       - expected-actual
+      - go-require
       - float-compare
       - len
+      - nil-compare
       - require-error
       - suite-dont-use-pkg
       - suite-extra-assert-call
       - suite-thelper
+
     expected-actual:
       # Regexp for expected variable name.
       # Default: (^(exp(ected)?|want(ed)?)([A-Z]\w*)?$)|(^(\w*[a-z])?(Exp(ected)?|Want(ed)?)$)
       pattern: ^expected
+    require-error:
+      # Regexp for assertions to analyze. If defined then only matched assertions will be reported.
+      # Default: ""
+      fn-pattern: ^(Errorf?|NoErrorf?)$
     suite-extra-assert-call:
       # To require or remove extra Assert() call?
       # Default: remove
