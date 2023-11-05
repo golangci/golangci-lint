@@ -125,6 +125,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		preallocCfg         *config.PreallocSettings
 		predeclaredCfg      *config.PredeclaredSettings
 		promlinterCfg       *config.PromlinterSettings
+		protogetterCfg      *config.ProtoGetterSettings
 		reassignCfg         *config.ReassignSettings
 		reviveCfg           *config.ReviveSettings
 		rowserrcheckCfg     *config.RowsErrCheckSettings
@@ -208,6 +209,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		preallocCfg = &m.cfg.LintersSettings.Prealloc
 		predeclaredCfg = &m.cfg.LintersSettings.Predeclared
 		promlinterCfg = &m.cfg.LintersSettings.Promlinter
+		protogetterCfg = &m.cfg.LintersSettings.ProtoGetter
 		reassignCfg = &m.cfg.LintersSettings.Reassign
 		reviveCfg = &m.cfg.LintersSettings.Revive
 		rowserrcheckCfg = &m.cfg.LintersSettings.RowsErrCheck
@@ -735,7 +737,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/yeya24/promlinter"),
 
-		linter.NewConfig(golinters.NewProtoGetter()).
+		linter.NewConfig(golinters.NewProtoGetter(protogetterCfg)).
 			WithSince("v1.55.0").
 			WithPresets(linter.PresetBugs).
 			WithLoadForGoAnalysis().

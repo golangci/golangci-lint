@@ -231,6 +231,7 @@ type LintersSettings struct {
 	Prealloc         PreallocSettings
 	Predeclared      PredeclaredSettings
 	Promlinter       PromlinterSettings
+	ProtoGetter      ProtoGetterSettings
 	Reassign         ReassignSettings
 	Revive           ReviveSettings
 	RowsErrCheck     RowsErrCheckSettings
@@ -705,6 +706,12 @@ type PredeclaredSettings struct {
 type PromlinterSettings struct {
 	Strict          bool     `mapstructure:"strict"`
 	DisabledLinters []string `mapstructure:"disabled-linters"`
+}
+
+type ProtoGetterSettings struct {
+	SkipGeneratedBy  []string `mapstructure:"skip-generated-by"`
+	SkipFiles        []string `mapstructure:"skip-files"`
+	SkipAnyGenerated bool     `mapstructure:"skip-any-generated"`
 }
 
 type ReassignSettings struct {
