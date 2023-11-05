@@ -1378,6 +1378,11 @@ linters-settings:
     # Default: false
     ignore-missing-subtests: true
 
+  perfsprint:
+    # Optimizes even if it requires an int or uint type cast.
+    # Default: true
+    int-conversion: false
+
   prealloc:
     # IMPORTANT: we don't recommend using this linter before doing performance profiling.
     # For most programs usage of prealloc will be a premature optimization.
