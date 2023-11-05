@@ -9,7 +9,7 @@ require (
 	github.com/Abirdcfly/dupword v0.0.13
 	github.com/Antonboom/errname v0.1.12
 	github.com/Antonboom/nilnil v0.1.7
-	github.com/Antonboom/testifylint v0.2.3
+	github.com/Antonboom/testifylint v1.0.1
 	github.com/BurntSushi/toml v1.3.2
 	github.com/Djarvur/go-err113 v0.0.0-20210108212216-aea10b59be24
 	github.com/GaijinEntertainment/go-exhaustruct/v3 v3.1.0
@@ -191,9 +191,9 @@ require (
 	go.uber.org/multierr v1.6.0 // indirect
 	go.uber.org/zap v1.24.0 // indirect
 	golang.org/x/exp/typeparams v0.0.0-20230307190834-24139beb5833 // indirect
-	golang.org/x/mod v0.13.0 // indirect
+	golang.org/x/mod v0.14.0 // indirect
 	golang.org/x/sync v0.4.0 // indirect
-	golang.org/x/sys v0.13.0 // indirect
+	golang.org/x/sys v0.14.0 // indirect
 	golang.org/x/text v0.13.0 // indirect
 	google.golang.org/protobuf v1.28.0 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
