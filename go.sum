@@ -152,8 +152,6 @@ github.com/fsnotify/fsnotify v1.5.4 h1:jRbGcIw6P2Meqdwuo0H1p6JVLbL5DHKAKlYndzMwV
 github.com/fsnotify/fsnotify v1.5.4/go.mod h1:OVB6XrOHzAwXMpEM7uPOzcehqUV2UqJxmVXmkdnm1bU=
 github.com/fzipp/gocyclo v0.6.0 h1:lsblElZG7d3ALtGMx9fmxeTKZaLLpU8mET09yN4BBLo=
 github.com/fzipp/gocyclo v0.6.0/go.mod h1:rXPyn8fnlpa0R2csP/31uerbiVBugk5whMdlyaLkLoA=
-github.com/ghostiam/protogetter v0.2.3 h1:qdv2pzo3BpLqezwqfGDLZ+nHEYmc5bUpIdsMbBVwMjw=
-github.com/ghostiam/protogetter v0.2.3/go.mod h1:KmNLOsy1v04hKbvZs8EfGI1fk39AgTdRDxWNYPfXVc4=
 github.com/ghostiam/protogetter v0.3.1 h1:4BQ2YZu9v3C+0QUzVmzjh9iVd/b2SgpLBjv9hvyIAdM=
 github.com/ghostiam/protogetter v0.3.1/go.mod h1:A0JgIhs0fgVnotGinjQiKaFVG3waItLJNwPmcMzDnvk=
 github.com/go-critic/go-critic v0.9.0 h1:Pmys9qvU3pSML/3GEQ2Xd9RZ/ip+aXHKILuxczKGV/U=
@@ -592,10 +590,8 @@ github.com/yusufpapurcu/wmi v1.2.3/go.mod h1:SBZ9tNy3G9/m5Oi98Zks0QjeHVDvuK0qfxQ
 gitlab.com/bosi/decorder v0.4.1 h1:VdsdfxhstabyhZovHafFw+9eJ6eU0d2CkFNJcZz/NU4=
 gitlab.com/bosi/decorder v0.4.1/go.mod h1:jecSqWUew6Yle1pCr2eLWTensJMmsxHsBwt+PVbkAqA=
 go-simpler.org/assert v0.6.0 h1:QxSrXa4oRuo/1eHMXSBFHKvJIpWABayzKldqZyugG7E=
-go-simpler.org/sloglint v0.1.2 h1:IjdhF8NPxyn0Ckn2+fuIof7ntSnVUAqBFcQRrnG9AiM=
-go-simpler.org/sloglint v0.1.2/go.mod h1:2LL+QImPfTslD5muNPydAEYmpXIj6o/WYcqnJjLi4o4=
-go-simpler.org/sloglint v0.2.0 h1:XpOhA+7BCQJnl7KlDLmnFUFTSrl989ZmaVPSWWCWEtc=
-go-simpler.org/sloglint v0.2.0/go.mod h1:/RQr0TeTf89IyRjLJ9ogUbIp1Zs5zJJAj02pwQoDQdg=
+go-simpler.org/sloglint v0.3.0 h1:E6TR0w4io+F1mkdvFaCRKEpf19S2+lnEYiDM2Z6bClk=
+go-simpler.org/sloglint v0.3.0/go.mod h1:/RQr0TeTf89IyRjLJ9ogUbIp1Zs5zJJAj02pwQoDQdg=
 go.opencensus.io v0.21.0/go.mod h1:mSImk1erAIZhrmZN+AvHh14ztQfjbGwt4TtuofqLduU=
 go.opencensus.io v0.22.0/go.mod h1:+kGneAE2xo2IficOXnaByMWTGM9T73dGwxeWcUqIpI8=
 go.opencensus.io v0.22.2/go.mod h1:yxeiOL68Rb0Xd1ddK5vPZ/oVn4vY4Ynel7k9FzqtOIw=
