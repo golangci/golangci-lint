@@ -2,7 +2,6 @@ package golinters
 
 import (
 	"fmt"
-	"go/token"
 	"sync"
 
 	"github.com/ultraware/whitespace"
@@ -16,7 +15,6 @@ import (
 
 const whitespaceName = "whitespace"
 
-//nolint:dupl
 func NewWhitespace(settings *config.WhitespaceSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
@@ -24,25 +22,22 @@ func NewWhitespace(settings *config.WhitespaceSettings) *goanalysis.Linter {
 	var wsSettings whitespace.Settings
 	if settings != nil {
 		wsSettings = whitespace.Settings{
+			Mode:      whitespace.RunningModeGolangCI,
 			MultiIf:   settings.MultiIf,
 			MultiFunc: settings.MultiFunc,
 		}
 	}
 
-	analyzer := &analysis.Analyzer{
-		Name: whitespaceName,
-		Doc:  goanalysis.TheOnlyanalyzerDoc,
-		Run:  goanalysis.DummyRun,
-	}
+	a := whitespace.NewAnalyzer(&wsSettings)
 
 	return goanalysis.NewLinter(
-		whitespaceName,
-		"Tool for detection of leading and trailing whitespace",
-		[]*analysis.Analyzer{analyzer},
+		a.Name,
+		a.Doc,
+		[]*analysis.Analyzer{a},
 		nil,
 	).WithContextSetter(func(lintCtx *linter.Context) {
-		analyzer.Run = func(pass *analysis.Pass) (any, error) {
-			issues, err := runWhitespace(lintCtx, pass, wsSettings)
+		a.Run = func(pass *analysis.Pass) (any, error) {
+			issues, err := runWhitespace(pass, wsSettings)
 			if err != nil {
 				return nil, err
 			}
@@ -62,46 +57,45 @@ func NewWhitespace(settings *config.WhitespaceSettings) *goanalysis.Linter {
 	}).WithLoadMode(goanalysis.LoadModeSyntax)
 }
 
-func runWhitespace(lintCtx *linter.Context, pass *analysis.Pass, wsSettings whitespace.Settings) ([]goanalysis.Issue, error) {
-	var messages []whitespace.Message
-	for _, file := range pass.Files {
-		messages = append(messages, whitespace.Run(file, pass.Fset, wsSettings)...)
-	}
+func runWhitespace(pass *analysis.Pass, wsSettings whitespace.Settings) ([]goanalysis.Issue, error) {
+	lintIssues := whitespace.Run(pass, &wsSettings)
 
-	if len(messages) == 0 {
-		return nil, nil
-	}
-
-	issues := make([]goanalysis.Issue, len(messages))
-	for k, i := range messages {
-		issue := result.Issue{
-			Pos: token.Position{
-				Filename: i.Pos.Filename,
-				Line:     i.Pos.Line,
-			},
-			LineRange:   &result.Range{From: i.Pos.Line, To: i.Pos.Line},
-			Text:        i.Message,
-			FromLinter:  whitespaceName,
-			Replacement: &result.Replacement{},
+	issues := make([]goanalysis.Issue, len(lintIssues))
+	for i, issue := range lintIssues {
+		report := &result.Issue{
+			FromLinter: whitespaceName,
+			Pos:        pass.Fset.PositionFor(issue.Diagnostic, false),
+			Text:       issue.Message,
 		}
 
-		bracketLine, err := lintCtx.LineCache.GetLine(issue.Pos.Filename, issue.Pos.Line)
-		if err != nil {
-			return nil, fmt.Errorf("failed to get line %s:%d: %w", issue.Pos.Filename, issue.Pos.Line, err)
+		switch issue.MessageType {
+		case whitespace.MessageTypeRemove:
+			if len(issue.LineNumbers) == 0 {
+				continue
+			}
+
+			report.LineRange = &result.Range{
+				From: issue.LineNumbers[0],
+				To:   issue.LineNumbers[len(issue.LineNumbers)-1],
+			}
+
+			report.Replacement = &result.Replacement{NeedOnlyDelete: true}
+
+		case whitespace.MessageTypeAdd:
+			report.Pos = pass.Fset.PositionFor(issue.FixStart, false)
+			report.Replacement = &result.Replacement{
+				Inline: &result.InlineFix{
+					StartCol:  0,
+					Length:    1,
+					NewString: "\n\t",
+				},
+			}
+
+		default:
+			return nil, fmt.Errorf("unknown message type: %v", issue.MessageType)
 		}
 
-		switch i.Type {
-		case whitespace.MessageTypeLeading:
-			issue.LineRange.To++ // cover two lines by the issue: opening bracket "{" (issue.Pos.Line) and following empty line
-		case whitespace.MessageTypeTrailing:
-			issue.LineRange.From-- // cover two lines by the issue: closing bracket "}" (issue.Pos.Line) and preceding empty line
-			issue.Pos.Line--       // set in sync with LineRange.From to not break fixer and other code features
-		case whitespace.MessageTypeAddAfter:
-			bracketLine += "\n"
-		}
-		issue.Replacement.NewLines = []string{bracketLine}
-
-		issues[k] = goanalysis.NewIssue(&issue, pass)
+		issues[i] = goanalysis.NewIssue(report, pass)
 	}
 
 	return issues, nil
