@@ -47,6 +47,7 @@ func NewStderrLog(name string) *StderrLog {
 	formatter := &logrus.TextFormatter{
 		DisableTimestamp:          true, // `INFO[0007] msg` -> `INFO msg`
 		EnvironmentOverrideColors: true,
+		PadLevelText:              true,
 	}
 	if os.Getenv(envLogTimestamp) == "1" {
 		formatter.DisableTimestamp = false
