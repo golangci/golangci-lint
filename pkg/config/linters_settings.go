@@ -352,6 +352,7 @@ type ExhaustiveSettings struct {
 	PackageScopeOnly           bool     `mapstructure:"package-scope-only"`
 	ExplicitExhaustiveMap      bool     `mapstructure:"explicit-exhaustive-map"`
 	ExplicitExhaustiveSwitch   bool     `mapstructure:"explicit-exhaustive-switch"`
+	DefaultCaseRequired        bool     `mapstructure:"default-case-required"`
 }
 
 type ExhaustiveStructSettings struct {

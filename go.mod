@@ -80,7 +80,7 @@ require (
 	github.com/mitchellh/mapstructure v1.5.0
 	github.com/moricho/tparallel v0.3.1
 	github.com/nakabonne/nestif v0.3.1
-	github.com/nishanths/exhaustive v0.11.0
+	github.com/nishanths/exhaustive v0.12.0
 	github.com/nishanths/predeclared v0.2.2
 	github.com/nunnatsa/ginkgolinter v0.14.1
 	github.com/polyfloyd/go-errorlint v1.4.5

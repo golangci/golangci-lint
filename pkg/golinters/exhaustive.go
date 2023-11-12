@@ -23,6 +23,7 @@ func NewExhaustive(settings *config.ExhaustiveSettings) *goanalysis.Linter {
 				exhaustive.PackageScopeOnlyFlag:           settings.PackageScopeOnly,
 				exhaustive.ExplicitExhaustiveMapFlag:      settings.ExplicitExhaustiveMap,
 				exhaustive.ExplicitExhaustiveSwitchFlag:   settings.ExplicitExhaustiveSwitch,
+				exhaustive.DefaultCaseRequiredFlag:        settings.DefaultCaseRequired,
 			},
 		}
 	}
