@@ -829,6 +829,12 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/Antonboom/testifylint"),
 
+		linter.NewConfig(golinters.NewGomockControllerFinish()).
+			WithSince("v1.56.0").
+			WithPresets(linter.PresetTest).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/hendrywiranto/gomockcontrollerfinish"),
+
 		linter.NewConfig(golinters.NewTestpackage(testpackageCfg)).
 			WithSince("v1.25.0").
 			WithPresets(linter.PresetStyle, linter.PresetTest).

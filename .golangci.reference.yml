@@ -2345,6 +2345,7 @@ linters:
     - goimports
     - golint
     - gomnd
+    - gomockcontrollerfinish
     - gomoddirectives
     - gomodguard
     - goprintffuncname
@@ -2465,6 +2466,7 @@ linters:
     - goimports
     - golint
     - gomnd
+    - gomockcontrollerfinish
     - gomoddirectives
     - gomodguard
     - goprintffuncname

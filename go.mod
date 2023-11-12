@@ -54,6 +54,7 @@ require (
 	github.com/gostaticanalysis/nilerr v0.1.1
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/hashicorp/go-version v1.6.0
+	github.com/hendrywiranto/gomockcontrollerfinish v0.1.0
 	github.com/hexops/gotextdiff v1.0.3
 	github.com/jgautheron/goconst v1.6.0
 	github.com/jingyugao/rowserrcheck v1.1.1
