@@ -199,6 +199,7 @@ type LintersSettings struct {
 	Gocyclo          GoCycloSettings
 	Godot            GodotSettings
 	Godox            GodoxSettings
+	Gofactory        GoFactoryLintSettings
 	Gofmt            GoFmtSettings
 	Gofumpt          GofumptSettings
 	Goheader         GoHeaderSettings
@@ -476,6 +477,11 @@ type GodotSettings struct {
 
 type GodoxSettings struct {
 	Keywords []string
+}
+
+type GoFactoryLintSettings struct {
+	BlockedPkgs     map[string]map[string]string `mapstructure:"BlockedPkgs"`
+	OnlyBlockedPkgs string                       `mapstructure:"OnlyBlockedPkgs"`
 }
 
 type GoFmtSettings struct {

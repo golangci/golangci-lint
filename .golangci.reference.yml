@@ -661,6 +661,13 @@ linters-settings:
       - OPTIMIZE # marks code that should be optimized before merging
       - HACK # marks hack-around that should be removed before merging
 
+  gofactory:
+    # Default: []
+    blockedPkgs:
+      - github.com/author/repository/path/to/package
+    # Default: false
+    onlyBlockedPkgs: true
+
   gofmt:
     # Simplify code: gofmt with `-s` option.
     # Default: true
@@ -2351,6 +2358,7 @@ linters:
     - godot
     - godox
     - goerr113
+    - gofactory
     - gofmt
     - gofumpt
     - goheader
@@ -2471,6 +2479,7 @@ linters:
     - godot
     - godox
     - goerr113
+    - gofactory
     - gofmt
     - gofumpt
     - goheader
