@@ -80,7 +80,7 @@ require (
 	github.com/mitchellh/mapstructure v1.5.0
 	github.com/moricho/tparallel v0.3.1
 	github.com/nakabonne/nestif v0.3.1
-	github.com/nishanths/exhaustive v0.11.0
+	github.com/nishanths/exhaustive v0.12.0
 	github.com/nishanths/predeclared v0.2.2
 	github.com/nunnatsa/ginkgolinter v0.14.1
 	github.com/polyfloyd/go-errorlint v1.4.5
@@ -123,7 +123,7 @@ require (
 	go-simpler.org/sloglint v0.3.0
 	go.tmz.dev/musttag v0.7.2
 	golang.org/x/exp v0.0.0-20230510235704-dd950f8aeaea
-	golang.org/x/tools v0.14.0
+	golang.org/x/tools v0.15.0
 	gopkg.in/yaml.v3 v3.0.1
 	honnef.co/go/tools v0.4.6
 	mvdan.cc/gofumpt v0.5.0
@@ -192,7 +192,7 @@ require (
 	go.uber.org/zap v1.24.0 // indirect
 	golang.org/x/exp/typeparams v0.0.0-20230307190834-24139beb5833 // indirect
 	golang.org/x/mod v0.14.0 // indirect
-	golang.org/x/sync v0.4.0 // indirect
+	golang.org/x/sync v0.5.0 // indirect
 	golang.org/x/sys v0.14.0 // indirect
 	golang.org/x/text v0.13.0 // indirect
 	google.golang.org/protobuf v1.28.0 // indirect
