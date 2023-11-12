@@ -344,6 +344,9 @@ linters-settings:
     # Only run exhaustive check on map literals with "//exhaustive:enforce" comment.
     # Default: false
     explicit-exhaustive-map: true
+    # Switch statement requires default case even if exhaustive.
+    # Default: false
+    default-case-required: true
 
   exhaustivestruct:
     # Struct Patterns is list of expressions to match struct packages and names.
