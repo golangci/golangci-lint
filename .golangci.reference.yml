@@ -503,6 +503,9 @@ linters-settings:
     # Ignore when constant is not used as function argument.
     # Default: true
     ignore-calls: false
+    # Exclude strings matching the given regular expression.
+    # Default: ""
+    ignore-strings: 'foo.+'
 
   gocritic:
     # Which checks should be enabled; can't be combined with 'disabled-checks'.

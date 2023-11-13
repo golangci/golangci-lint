@@ -438,14 +438,15 @@ type GocognitSettings struct {
 }
 
 type GoConstSettings struct {
-	IgnoreTests         bool `mapstructure:"ignore-tests"`
-	MatchWithConstants  bool `mapstructure:"match-constant"`
-	MinStringLen        int  `mapstructure:"min-len"`
-	MinOccurrencesCount int  `mapstructure:"min-occurrences"`
-	ParseNumbers        bool `mapstructure:"numbers"`
-	NumberMin           int  `mapstructure:"min"`
-	NumberMax           int  `mapstructure:"max"`
-	IgnoreCalls         bool `mapstructure:"ignore-calls"`
+	IgnoreStrings       string `mapstructure:"ignore-strings"`
+	IgnoreTests         bool   `mapstructure:"ignore-tests"`
+	MatchWithConstants  bool   `mapstructure:"match-constant"`
+	MinStringLen        int    `mapstructure:"min-len"`
+	MinOccurrencesCount int    `mapstructure:"min-occurrences"`
+	ParseNumbers        bool   `mapstructure:"numbers"`
+	NumberMin           int    `mapstructure:"min"`
+	NumberMax           int    `mapstructure:"max"`
+	IgnoreCalls         bool   `mapstructure:"ignore-calls"`
 }
 
 type GoCriticSettings struct {

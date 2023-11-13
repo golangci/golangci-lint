@@ -53,6 +53,7 @@ func NewGoconst(settings *config.GoConstSettings) *goanalysis.Linter {
 
 func runGoconst(pass *analysis.Pass, settings *config.GoConstSettings) ([]goanalysis.Issue, error) {
 	cfg := goconstAPI.Config{
+		IgnoreStrings:      settings.IgnoreStrings,
 		IgnoreTests:        settings.IgnoreTests,
 		MatchWithConstants: settings.MatchWithConstants,
 		MinStringLength:    settings.MinStringLen,
