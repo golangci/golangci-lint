@@ -1387,6 +1387,15 @@ linters-settings:
     # Optimizes even if it requires an int or uint type cast.
     # Default: true
     int-conversion: false
+    # Optimizes into `err.Error()` even if it is only equivalent for non-nil errors.
+    # Default: false
+    err-error: true
+    # Optimizes `fmt.Errorf`.
+    # Default: true
+    errorf: false
+    # Optimizes `fmt.Sprintf` with only one argument
+    # Default: true
+    sprintf1: false
 
   prealloc:
     # IMPORTANT: we don't recommend using this linter before doing performance profiling.
