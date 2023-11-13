@@ -106,6 +106,9 @@ var defaultLintersSettings = LintersSettings{
 	},
 	PerfSprint: PerfSprintSettings{
 		IntConversion: true,
+		ErrError:      false,
+		ErrorF:        true,
+		SprintF1:      true,
 	},
 	Prealloc: PreallocSettings{
 		Simple:     true,
@@ -691,6 +694,9 @@ type ParallelTestSettings struct {
 
 type PerfSprintSettings struct {
 	IntConversion bool `mapstructure:"int-conversion"`
+	ErrError      bool `mapstructure:"err-error"`
+	ErrorF        bool `mapstructure:"errorf"`
+	SprintF1      bool `mapstructure:"sprintf1"`
 }
 
 type PreallocSettings struct {

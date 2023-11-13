@@ -1,3 +1,0 @@
-linters-settings:
-  perfsprint:
-    int-conversion: false

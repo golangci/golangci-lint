@@ -15,10 +15,10 @@ func TestPerfsprint() {
 		ui  uint
 	)
 
-	fmt.Sprintf("%s", s)           // want "fmt.Sprintf can be replaced with just using the string"
-	fmt.Sprint(s)                  // want "fmt.Sprint can be replaced with just using the string"
-	fmt.Sprintf("%s", err)         // want "fmt.Sprintf can be replaced with err.Error()"
-	fmt.Sprint(err)                // want "fmt.Sprint can be replaced with err.Error()"
+	fmt.Sprintf("%s", s) // want "fmt.Sprintf can be replaced with just using the string"
+	fmt.Sprint(s)        // want "fmt.Sprint can be replaced with just using the string"
+	fmt.Sprintf("%s", err)
+	fmt.Sprint(err)
 	fmt.Sprintf("%t", b)           // want "fmt.Sprintf can be replaced with faster strconv.FormatBool"
 	fmt.Sprint(b)                  // want "fmt.Sprint can be replaced with faster strconv.FormatBool"
 	fmt.Sprintf("%d", i)           // want "fmt.Sprintf can be replaced with faster strconv.Itoa"
@@ -33,9 +33,9 @@ func TestPerfsprint() {
 
 	fmt.Sprint("test", 42)
 	fmt.Sprint(42, 42)
-	fmt.Sprintf("test")
-	fmt.Sprintf("%v")
-	fmt.Sprintf("%d")
+	fmt.Sprintf("test") // want "fmt.Sprintf can be replaced with just using the string"
+	fmt.Sprintf("%v")   // want "fmt.Sprintf can be replaced with just using the string"
+	fmt.Sprintf("%d")   // want "fmt.Sprintf can be replaced with just using the string"
 	fmt.Sprintf("%d", 42, 42)
 	fmt.Sprintf("%#d", 42)
 	fmt.Sprintf("value %d", 42)

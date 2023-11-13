@@ -1,5 +1,5 @@
 //golangcitest:args -Eperfsprint
-//golangcitest:config_path testdata/configs/perfsprint_int_conversion.yml
+//golangcitest:config_path testdata/configs/perfsprint_custom.yml
 package testdata
 
 import (

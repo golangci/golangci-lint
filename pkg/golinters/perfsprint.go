@@ -16,6 +16,9 @@ func NewPerfSprint(settings *config.PerfSprintSettings) *goanalysis.Linter {
 		cfg = map[string]map[string]any{
 			a.Name: {
 				"int-conversion": settings.IntConversion,
+				"err-error":      settings.ErrError,
+				"errorf":         settings.ErrorF,
+				"sprintf1":       settings.SprintF1,
 			},
 		}
 	}
