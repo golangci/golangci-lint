@@ -1,17 +1,19 @@
 //golangcitest:args -Egofactory
-
 package gofactory
 
-import "github.com/golangci/golangci-lint/test/testdata/gofactory/nested"
+import (
+	alias_blocked "gofactory/blocked"
+	"gofactory/nested"
+)
 
 type Struct struct{}
 
 var (
-	globalStruct    = nested.Struct{}  // want `Use factory for nested.Struct`
-	globalStructPtr = &nested.Struct{} // want `Use factory for nested.Struct`
+	defaultGlobalStruct    = nested.Struct{}  // want `Use factory for nested.Struct`
+	defaultGlobalStructPtr = &nested.Struct{} // want `Use factory for nested.Struct`
 )
 
-func fn() {
+func Default() {
 	_ = nested.Struct{}  // want `Use factory for nested.Struct`
 	_ = &nested.Struct{} // want `Use factory for nested.Struct`
 
@@ -24,3 +26,7 @@ func fn() {
 }
 
 func call(_ nested.Struct) {}
+
+func alias() {
+	_ = alias_blocked.Struct{} // want `Use factory for blocked.Struct`
+}

@@ -480,8 +480,8 @@ type GodoxSettings struct {
 }
 
 type GoFactoryLintSettings struct {
-	BlockedPkgs     map[string]map[string]string `mapstructure:"BlockedPkgs"`
-	OnlyBlockedPkgs string                       `mapstructure:"OnlyBlockedPkgs"`
+	BlockedPkgs     []string `mapstructure:"blockedPkgs"`
+	OnlyBlockedPkgs bool     `mapstructure:"onlyBlockedPkgs"`
 }
 
 type GoFmtSettings struct {
