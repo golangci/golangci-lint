@@ -21,8 +21,6 @@ func NewGoFactoryLint(settings *config.GoFactoryLintSettings) *goanalysis.Linter
 		}
 	}
 
-	// TODO add options to configuration
-
 	return goanalysis.NewLinter(
 		analyzer.Name,
 		analyzer.Doc,

@@ -11,14 +11,14 @@ var (
 	nestedGlobalStruct    = nested.Struct{}
 	nestedGlobalStructPtr = &nested.Struct{}
 
-	blockedGlobalStruct    = blocked.Struct{}
-	blockedGlobalStructPtr = &blocked.Struct{}
+	blockedGlobalStruct    = blocked.Struct{}  // want `Use factory for blocked.Struct`
+	blockedGlobalStructPtr = &blocked.Struct{} // want `Use factory for blocked.Struct`
 )
 
 func Blocked() {
 	_ = nested.Struct{}
 	_ = &nested.Struct{}
 
-	_ = blocked.Struct{}  // want `Use factory for nested.Struct`
-	_ = &blocked.Struct{} // want `Use factory for nested.Struct`
+	_ = blocked.Struct{}  // want `Use factory for blocked.Struct`
+	_ = &blocked.Struct{} // want `Use factory for blocked.Struct`
 }
