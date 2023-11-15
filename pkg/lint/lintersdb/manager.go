@@ -493,6 +493,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		linter.NewConfig(golinters.NewGoFactoryLint(goFactoryCfg)).
 			WithSince("next_version").
 			WithPresets(linter.PresetStyle).
+			WithLoadForGoAnalysis().
 			WithURL("https://github.com/maranqz/go-factory-lint"),
 
 		linter.NewConfig(golinters.NewGofmt(gofmtCfg)).

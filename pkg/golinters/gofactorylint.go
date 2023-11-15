@@ -9,22 +9,22 @@ import (
 )
 
 func NewGoFactoryLint(settings *config.GoFactoryLintSettings) *goanalysis.Linter {
-	a := factory.NewAnalyzer()
+	analyzer := factory.NewAnalyzer()
 
 	cfg := make(map[string]map[string]any)
 	if settings != nil {
-		cfg[a.Name] = map[string]any{}
+		cfg[analyzer.Name] = map[string]any{}
 
 		if len(settings.BlockedPkgs) > 0 {
-			cfg[a.Name]["blockedPkgs"] = settings.BlockedPkgs
-			cfg[a.Name]["onlyBlockedPkgs"] = settings.OnlyBlockedPkgs
+			cfg[analyzer.Name]["blockedPkgs"] = settings.BlockedPkgs
+			cfg[analyzer.Name]["onlyBlockedPkgs"] = settings.OnlyBlockedPkgs
 		}
 	}
 
 	return goanalysis.NewLinter(
-		a.Name,
-		a.Doc,
-		[]*analysis.Analyzer{a},
+		analyzer.Name,
+		analyzer.Doc,
+		[]*analysis.Analyzer{analyzer},
 		cfg,
 	).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }

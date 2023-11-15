@@ -1,3 +1,5 @@
+//golangcitest:args -Egofactory
+
 package gofactory
 
 import "github.com/golangci/golangci-lint/test/testdata/gofactory/nested"
