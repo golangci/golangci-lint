@@ -491,7 +491,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithURL("https://github.com/Djarvur/go-err113"),
 
 		linter.NewConfig(golinters.NewGoFactoryLint(goFactoryCfg)).
-			WithSince("next_version").
+			WithSince("1.56.0").
 			WithPresets(linter.PresetStyle).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/maranqz/go-factory-lint"),
