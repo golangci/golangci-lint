@@ -15,8 +15,9 @@ func NewDepguard(settings *config.DepGuardSettings) *goanalysis.Linter {
 	if settings != nil {
 		for s, rule := range settings.Rules {
 			list := &depguard.List{
-				Files: rule.Files,
-				Allow: rule.Allow,
+				ListMode: rule.ListMode,
+				Files:    rule.Files,
+				Allow:    rule.Allow,
 			}
 
 			// because of bug with Viper parsing (split on dot) we use a list of struct instead of a map.

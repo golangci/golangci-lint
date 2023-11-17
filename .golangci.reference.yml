@@ -205,6 +205,10 @@ linters-settings:
     rules:
       # Name of a rule.
       main:
+        # Used to determine the package matching priority.
+        # There are three different modes: `original`, `strict`, and `lax`.
+        # Default: "original"
+        list-mode: lax
         # List of file globs that will match this list of settings to compare against.
         # Default: $all
         files:
