@@ -289,9 +289,10 @@ type DepGuardSettings struct {
 }
 
 type DepGuardList struct {
-	Files []string       `mapstructure:"files"`
-	Allow []string       `mapstructure:"allow"`
-	Deny  []DepGuardDeny `mapstructure:"deny"`
+	ListMode string         `mapstructure:"list-mode"`
+	Files    []string       `mapstructure:"files"`
+	Allow    []string       `mapstructure:"allow"`
+	Deny     []DepGuardDeny `mapstructure:"deny"`
 }
 
 type DepGuardDeny struct {
