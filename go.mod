@@ -13,7 +13,7 @@ require (
 	github.com/BurntSushi/toml v1.3.2
 	github.com/Djarvur/go-err113 v0.0.0-20210108212216-aea10b59be24
 	github.com/GaijinEntertainment/go-exhaustruct/v3 v3.1.0
-	github.com/OpenPeeDeeP/depguard/v2 v2.1.0
+	github.com/OpenPeeDeeP/depguard/v2 v2.2.0
 	github.com/alecthomas/go-check-sumtype v0.1.3
 	github.com/alexkohler/nakedret/v2 v2.0.2
 	github.com/alexkohler/prealloc v1.0.0
