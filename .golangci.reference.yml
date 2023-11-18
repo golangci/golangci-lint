@@ -2364,6 +2364,7 @@ linters:
     - gomoddirectives
     - gomodguard
     - goprintffuncname
+    - goptrcmp
     - gosec
     - gosimple
     - gosmopolitan
@@ -2484,6 +2485,7 @@ linters:
     - gomoddirectives
     - gomodguard
     - goprintffuncname
+    - goptrcmp
     - gosec
     - gosimple
     - gosmopolitan

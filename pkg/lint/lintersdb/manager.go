@@ -538,6 +538,12 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/jirfag/go-printf-func-name"),
 
+		linter.NewConfig(golinters.NewGoPtrCmp()).
+			WithLoadForGoAnalysis().
+			WithSince("v1.55.3").
+			WithPresets(linter.PresetBugs).
+			WithURL("https://github.com/w1ck3dg0ph3r/goptrcmp"),
+
 		linter.NewConfig(golinters.NewGosec(gosecCfg)).
 			WithSince("v1.0.0").
 			WithLoadForGoAnalysis().
