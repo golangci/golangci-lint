@@ -1,7 +1,7 @@
 package golinters
 
 import (
-	"github.com/maranqz/go-factory-lint"
+	"github.com/maranqz/go-factory-lint/v2"
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/config"
@@ -15,9 +15,9 @@ func NewGoFactoryLint(settings *config.GoFactoryLintSettings) *goanalysis.Linter
 	if settings != nil {
 		cfg[analyzer.Name] = map[string]any{}
 
-		if len(settings.BlockedPkgs) > 0 {
-			cfg[analyzer.Name]["blockedPkgs"] = settings.BlockedPkgs
-			cfg[analyzer.Name]["onlyBlockedPkgs"] = settings.OnlyBlockedPkgs
+		if len(settings.PackageGlobs) > 0 {
+			cfg[analyzer.Name]["packageGlobs"] = settings.PackageGlobs
+			cfg[analyzer.Name]["onlyPackageGlobs"] = settings.OnlyPackageGlobs
 		}
 	}
 

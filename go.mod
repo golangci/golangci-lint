@@ -69,7 +69,7 @@ require (
 	github.com/leonklingele/grouper v1.1.1
 	github.com/lufeee/execinquery v1.2.1
 	github.com/macabu/inamedparam v0.1.2
-	github.com/maranqz/go-factory-lint v1.0.4
+	github.com/maranqz/go-factory-lint/v2 v2.0.0-beta.2
 	github.com/maratori/testableexamples v1.0.0
 	github.com/maratori/testpackage v1.1.1
 	github.com/matoous/godox v0.0.0-20230222163458-006bad1f9d26

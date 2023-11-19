@@ -1,5 +1,5 @@
 linters-settings:
   gofactory:
-    blockedPkgs:
-      - gofactory/blocked
-    onlyBlockedPkgs: true
+    packageGlobs:
+      - gofactory/blocked/**
+    onlyPackageGlobs: true
