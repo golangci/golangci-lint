@@ -1,21 +1,26 @@
 package testdata
 
-func nilErr1() error {
+type P struct {
+	f int
+}
+
+// nilAwayExample1 tests NilAway's detection of uninitialized variable access.
+func nilAwayExample1(someCondition bool) {
 	var p *P
 	if someCondition {
 		p = &P{}
 	}
-	print(p.f) // nilness reports NO error here, but NilAway does.
-}
-
-func nilErr2() error {
-	func nilErr3() *int {
-		return nil
+	// NilAway should report a potential nil pointer dereference here if someCondition is false.
+	if p != nil {
+		print(p.f)
 	}
-
-	print(*foo()) // nilness reports NO error here, but NilAway does.
 }
 
-func nilErr3() *int {
-    return nil
+// nilAwayExample2 tests NilAway's detection of nil returns across function boundaries.
+func nilAwayExample2() {
+	print(*nilAwayFoo()) // NilAway should report an error here.
+}
+
+func nilAwayFoo() *int {
+	return nil
 }
