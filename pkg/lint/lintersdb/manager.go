@@ -671,7 +671,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithURL("https://github.com/nakabonne/nestif"),
 
 		linter.NewConfig(golinters.NewNilAway()).
-			WithSince("v1.55.2").
+			WithSince("v1.55.3").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetBugs).
 			WithURL("https://github.com/uber-go/nilaway/"),
