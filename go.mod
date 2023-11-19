@@ -122,7 +122,7 @@ require (
 	gitlab.com/bosi/decorder v0.4.1
 	go-simpler.org/musttag v0.8.0
 	go-simpler.org/sloglint v0.3.0
-	golang.org/x/exp v0.0.0-20230510235704-dd950f8aeaea
+	golang.org/x/exp v0.0.0-20230713183714-613f0c0eb8a1
 	golang.org/x/tools v0.15.0
 	gopkg.in/yaml.v3 v3.0.1
 	honnef.co/go/tools v0.4.6
@@ -158,6 +158,7 @@ require (
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/kisielk/gotool v1.0.0 // indirect
+	github.com/klauspost/compress v1.17.0 // indirect
 	github.com/lufia/plan9stats v0.0.0-20211012122336-39d0f177ccd0 // indirect
 	github.com/magiconair/properties v1.8.6 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
@@ -189,6 +190,7 @@ require (
 	github.com/yusufpapurcu/wmi v1.2.3 // indirect
 	go.uber.org/atomic v1.7.0 // indirect
 	go.uber.org/multierr v1.6.0 // indirect
+	go.uber.org/nilaway v0.0.0-20231117175943-a267567c6fff // indirect
 	go.uber.org/zap v1.24.0 // indirect
 	golang.org/x/exp/typeparams v0.0.0-20230307190834-24139beb5833 // indirect
 	golang.org/x/mod v0.14.0 // indirect
