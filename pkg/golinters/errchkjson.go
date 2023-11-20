@@ -23,10 +23,8 @@ func NewErrChkJSONFuncName(cfg *config.ErrChkJSONSettings) *goanalysis.Linter {
 	}
 
 	return goanalysis.NewLinter(
-		"errchkjson",
-		"Checks types passed to the json encoding functions. "+
-			"Reports unsupported types and optionally reports occasions, "+
-			"where the check for the returned error can be omitted.",
+		a.Name,
+		a.Doc,
 		[]*analysis.Analyzer{a},
 		cfgMap,
 	).WithLoadMode(goanalysis.LoadModeTypesInfo)

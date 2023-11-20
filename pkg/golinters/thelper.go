@@ -54,8 +54,8 @@ func NewThelper(cfg *config.ThelperSettings) *goanalysis.Linter {
 	}
 
 	return goanalysis.NewLinter(
-		"thelper",
-		"thelper detects Go test helpers without t.Helper() call and checks the consistency of test helpers",
+		a.Name,
+		a.Doc,
 		[]*analysis.Analyzer{a},
 		cfgMap,
 	).WithLoadMode(goanalysis.LoadModeTypesInfo)

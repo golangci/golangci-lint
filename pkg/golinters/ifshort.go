@@ -9,6 +9,7 @@ import (
 )
 
 func NewIfshort(settings *config.IfshortSettings) *goanalysis.Linter {
+	a := analyzer.Analyzer
 	var cfg map[string]map[string]any
 	if settings != nil {
 		cfg = map[string]map[string]any{
@@ -20,9 +21,9 @@ func NewIfshort(settings *config.IfshortSettings) *goanalysis.Linter {
 	}
 
 	return goanalysis.NewLinter(
-		"ifshort",
-		"Checks that your code uses short syntax for if-statements whenever possible",
-		[]*analysis.Analyzer{analyzer.Analyzer},
+		a.Name,
+		a.Doc,
+		[]*analysis.Analyzer{a},
 		cfg,
 	).WithLoadMode(goanalysis.LoadModeSyntax)
 }

@@ -17,7 +17,7 @@ func NewRowsErrCheck(settings *config.RowsErrCheckSettings) *goanalysis.Linter {
 	analyzer := rowserr.NewAnalyzer(pkgs...)
 
 	return goanalysis.NewLinter(
-		"rowserrcheck",
+		analyzer.Name,
 		"checks whether Err of rows is checked successfully",
 		[]*analysis.Analyzer{analyzer},
 		nil,

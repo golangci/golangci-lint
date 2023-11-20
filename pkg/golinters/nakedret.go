@@ -8,8 +8,6 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 )
 
-const nakedretName = "nakedret"
-
 func NewNakedret(settings *config.NakedretSettings) *goanalysis.Linter {
 	var maxLines int
 	if settings != nil {
@@ -19,7 +17,7 @@ func NewNakedret(settings *config.NakedretSettings) *goanalysis.Linter {
 	analyzer := nakedret.NakedReturnAnalyzer(uint(maxLines))
 
 	return goanalysis.NewLinter(
-		nakedretName,
+		analyzer.Name,
 		"Finds naked returns in functions greater than a specified function length",
 		[]*analysis.Analyzer{analyzer},
 		nil,
