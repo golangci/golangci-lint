@@ -9,6 +9,7 @@ import (
 
 func NewSQLCloseCheck() *goanalysis.Linter {
 	a := analyzer.NewAnalyzer()
+
 	return goanalysis.NewLinter(
 		a.Name,
 		a.Doc,

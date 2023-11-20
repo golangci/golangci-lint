@@ -9,7 +9,6 @@ import (
 )
 
 func NewGrouper(settings *config.GrouperSettings) *goanalysis.Linter {
-	a := grouper.New()
 	linterCfg := map[string]map[string]any{}
 	if settings != nil {
 		linterCfg["grouper"] = map[string]any{
@@ -25,9 +24,9 @@ func NewGrouper(settings *config.GrouperSettings) *goanalysis.Linter {
 	}
 
 	return goanalysis.NewLinter(
-		a.Name,
-		"An analyzer to analyze expression groups.",
-		[]*analysis.Analyzer{a},
+		"grouper",
+		"Analyze expression groups.",
+		[]*analysis.Analyzer{grouper.New()},
 		linterCfg,
 	).WithLoadMode(goanalysis.LoadModeSyntax)
 }

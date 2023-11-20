@@ -9,6 +9,7 @@ import (
 
 func NewErrName() *goanalysis.Linter {
 	a := analyzer.New()
+
 	return goanalysis.NewLinter(
 		a.Name,
 		a.Doc,

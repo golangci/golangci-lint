@@ -23,7 +23,7 @@ func NewParallelTest(settings *config.ParallelTestSettings) *goanalysis.Linter {
 
 	return goanalysis.NewLinter(
 		a.Name,
-		"paralleltest detects missing usage of t.Parallel() method in your Go test",
+		"Detects missing usage of t.Parallel() method in your Go test",
 		[]*analysis.Analyzer{a},
 		cfg,
 	).WithLoadMode(goanalysis.LoadModeTypesInfo)

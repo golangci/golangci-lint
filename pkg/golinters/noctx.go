@@ -9,9 +9,10 @@ import (
 
 func NewNoctx() *goanalysis.Linter {
 	a := noctx.Analyzer
+
 	return goanalysis.NewLinter(
 		a.Name,
-		a.Doc,
+		"Detects test helpers which is not start with t.Helper() method",
 		[]*analysis.Analyzer{a},
 		nil,
 	).WithLoadMode(goanalysis.LoadModeTypesInfo)

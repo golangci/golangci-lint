@@ -9,6 +9,7 @@ import (
 
 func NewGoPrintfFuncName() *goanalysis.Linter {
 	a := analyzer.Analyzer
+
 	return goanalysis.NewLinter(
 		a.Name,
 		a.Doc,

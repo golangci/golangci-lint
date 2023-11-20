@@ -9,6 +9,7 @@ import (
 
 func NewIneffassign() *goanalysis.Linter {
 	a := ineffassign.Analyzer
+
 	return goanalysis.NewLinter(
 		a.Name,
 		"Detects when assignments to existing variables are not used",

@@ -9,7 +9,6 @@ import (
 )
 
 func NewIfshort(settings *config.IfshortSettings) *goanalysis.Linter {
-	a := analyzer.Analyzer
 	var cfg map[string]map[string]any
 	if settings != nil {
 		cfg = map[string]map[string]any{
@@ -19,6 +18,8 @@ func NewIfshort(settings *config.IfshortSettings) *goanalysis.Linter {
 			},
 		}
 	}
+
+	a := analyzer.Analyzer
 
 	return goanalysis.NewLinter(
 		a.Name,

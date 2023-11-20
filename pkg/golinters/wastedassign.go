@@ -9,9 +9,10 @@ import (
 
 func NewWastedAssign() *goanalysis.Linter {
 	a := wastedassign.Analyzer
+
 	return goanalysis.NewLinter(
 		a.Name,
-		a.Doc,
+		"Finds wasted assignment statements",
 		[]*analysis.Analyzer{a},
 		nil,
 	).WithLoadMode(goanalysis.LoadModeTypesInfo)
