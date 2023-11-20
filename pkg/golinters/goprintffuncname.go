@@ -8,10 +8,12 @@ import (
 )
 
 func NewGoPrintfFuncName() *goanalysis.Linter {
+	a := analyzer.Analyzer
+
 	return goanalysis.NewLinter(
-		"goprintffuncname",
-		"Checks that printf-like functions are named with `f` at the end",
-		[]*analysis.Analyzer{analyzer.Analyzer},
+		a.Name,
+		a.Doc,
+		[]*analysis.Analyzer{a},
 		nil,
 	).WithLoadMode(goanalysis.LoadModeSyntax)
 }

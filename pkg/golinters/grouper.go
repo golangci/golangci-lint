@@ -25,7 +25,7 @@ func NewGrouper(settings *config.GrouperSettings) *goanalysis.Linter {
 
 	return goanalysis.NewLinter(
 		"grouper",
-		"An analyzer to analyze expression groups.",
+		"Analyze expression groups.",
 		[]*analysis.Analyzer{grouper.New()},
 		linterCfg,
 	).WithLoadMode(goanalysis.LoadModeSyntax)

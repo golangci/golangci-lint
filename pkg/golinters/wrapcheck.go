@@ -8,8 +8,6 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 )
 
-const wrapcheckName = "wrapcheck"
-
 func NewWrapcheck(settings *config.WrapcheckSettings) *goanalysis.Linter {
 	cfg := wrapcheck.NewDefaultConfig()
 	if settings != nil {
@@ -30,7 +28,7 @@ func NewWrapcheck(settings *config.WrapcheckSettings) *goanalysis.Linter {
 	a := wrapcheck.NewAnalyzer(cfg)
 
 	return goanalysis.NewLinter(
-		wrapcheckName,
+		a.Name,
 		a.Doc,
 		[]*analysis.Analyzer{a},
 		nil,

@@ -51,7 +51,7 @@ func NewBiDiChkFuncName(cfg *config.BiDiChkSettings) *goanalysis.Linter {
 	}
 
 	return goanalysis.NewLinter(
-		"bidichk",
+		a.Name,
 		"Checks for dangerous unicode character sequences",
 		[]*analysis.Analyzer{a},
 		cfgMap,
