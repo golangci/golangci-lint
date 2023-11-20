@@ -266,6 +266,16 @@ func TestLineDirective(t *testing.T) {
 			targetPath: "linedirective",
 			expected:   "is a misspelling of `language` (misspell)",
 		},
+		{
+			desc: "wsl",
+			args: []string{
+				"-Ewsl",
+				"--disable-all",
+			},
+			configPath: "",
+			targetPath: "linedirective",
+			expected:   "block should not start with a whitespace (wsl)",
+		},
 	}
 
 	for _, test := range testCases {

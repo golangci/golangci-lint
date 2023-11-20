@@ -29,6 +29,7 @@ func NewWSL(settings *config.WSLSettings) *goanalysis.Linter {
 	}
 
 	a := wsl.NewAnalyzer(conf)
+
 	return goanalysis.NewLinter(
 		a.Name,
 		a.Doc,
