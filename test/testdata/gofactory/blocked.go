@@ -3,22 +3,44 @@
 package gofactory
 
 import (
-	"gofactory/blocked"
-	"gofactory/nested"
+	"net/http"
+	"net/url"
 )
 
 var (
-	nestedGlobalStruct    = nested.Struct{}
-	nestedGlobalStructPtr = &nested.Struct{}
+	nestedGlobalRequest    = http.Request{}
+	nestedGlobalRequestPtr = &http.Request{}
 
-	blockedGlobalStruct    = blocked.Struct{}  // want `Use factory for blocked.Struct`
-	blockedGlobalStructPtr = &blocked.Struct{} // want `Use factory for blocked.Struct`
+	blockedGlobalURL    = url.URL{}  // want `Use factory for url.URL`
+	blockedGlobalURLPtr = &url.URL{} // want `Use factory for url.URL`
 )
 
 func Blocked() {
-	_ = nested.Struct{}
-	_ = &nested.Struct{}
+	_ = http.Request{}
+	_ = &http.Request{}
 
-	_ = blocked.Struct{}  // want `Use factory for blocked.Struct`
-	_ = &blocked.Struct{} // want `Use factory for blocked.Struct`
+	_ = url.URL{}  // want `Use factory for url.URL`
+	_ = &url.URL{} // want `Use factory for url.URL`
+}
+
+type URL struct {
+	Scheme      string
+	Opaque      string
+	User        *url.Userinfo
+	Host        string
+	Path        string
+	RawPath     string
+	OmitHost    bool
+	ForceQuery  bool
+	RawQuery    string
+	Fragment    string
+	RawFragment string
+}
+
+func Casting() {
+	_ = url.URL(URL{}) // want `Use factory for url.URL`
+
+	uPtr, _ := url.Parse("")
+	u := *uPtr
+	_ = URL(u)
 }

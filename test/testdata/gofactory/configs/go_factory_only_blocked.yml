@@ -1,5 +1,5 @@
 linters-settings:
   gofactory:
     packageGlobs:
-      - gofactory/blocked/**
+      - net/url/**
     onlyPackageGlobs: true

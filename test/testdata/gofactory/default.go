@@ -2,31 +2,31 @@
 package gofactory
 
 import (
-	alias_blocked "gofactory/blocked"
-	"gofactory/nested"
+	"net/http"
+	alias_blocked "net/http"
 )
 
 type Struct struct{}
 
 var (
-	defaultGlobalStruct    = nested.Struct{}  // want `Use factory for nested.Struct`
-	defaultGlobalStructPtr = &nested.Struct{} // want `Use factory for nested.Struct`
+	defaultGlobalRequest    = http.Request{}  // want `Use factory for http.Request`
+	defaultGlobalRequestPtr = &http.Request{} // want `Use factory for http.Request`
 )
 
 func Default() {
-	_ = nested.Struct{}  // want `Use factory for nested.Struct`
-	_ = &nested.Struct{} // want `Use factory for nested.Struct`
+	_ = http.Request{}  // want `Use factory for http.Request`
+	_ = &http.Request{} // want `Use factory for http.Request`
 
-	_ = []nested.Struct{{}, nested.Struct{}}   // want `Use factory for nested.Struct`
-	_ = []*nested.Struct{{}, &nested.Struct{}} // want `Use factory for nested.Struct`
+	_ = []http.Request{{}, http.Request{}}   // want `Use factory for http.Request`
+	_ = []*http.Request{{}, &http.Request{}} // want `Use factory for http.Request`
 
-	call(nested.Struct{}) // want `Use factory for nested.Struct`
+	call(http.Request{}) // want `Use factory for http.Request`
 
 	_ = []Struct{{}, {}}
 }
 
-func call(_ nested.Struct) {}
+func call(_ http.Request) {}
 
 func alias() {
-	_ = alias_blocked.Struct{} // want `Use factory for blocked.Struct`
+	_ = alias_blocked.Request{} // want `Use factory for http.Request`
 }
