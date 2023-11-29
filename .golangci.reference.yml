@@ -1864,6 +1864,9 @@ linters-settings:
     # Enforce using methods that accept a context.
     # Default: false
     context-only: true
+    # Enforce using static values for log messages.
+    # Default: false
+    static-msg: true
     # Enforce using constants instead of raw keys.
     # Default: false
     no-raw-keys: true

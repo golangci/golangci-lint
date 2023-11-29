@@ -123,6 +123,7 @@ var defaultLintersSettings = LintersSettings{
 		KVOnly:         false,
 		AttrOnly:       false,
 		ContextOnly:    false,
+		StaticMsg:      false,
 		NoRawKeys:      false,
 		KeyNamingCase:  "",
 		ArgsOnSepLines: false,
@@ -755,6 +756,7 @@ type SlogLintSettings struct {
 	KVOnly         bool   `mapstructure:"kv-only"`
 	AttrOnly       bool   `mapstructure:"attr-only"`
 	ContextOnly    bool   `mapstructure:"context-only"`
+	StaticMsg      bool   `mapstructure:"static-msg"`
 	NoRawKeys      bool   `mapstructure:"no-raw-keys"`
 	KeyNamingCase  string `mapstructure:"key-naming-case"`
 	ArgsOnSepLines bool   `mapstructure:"args-on-sep-lines"`
