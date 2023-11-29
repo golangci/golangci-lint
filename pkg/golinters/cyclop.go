@@ -8,8 +8,6 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 )
 
-const cyclopName = "cyclop"
-
 func NewCyclop(settings *config.Cyclop) *goanalysis.Linter {
 	a := analyzer.NewAnalyzer()
 
@@ -31,7 +29,7 @@ func NewCyclop(settings *config.Cyclop) *goanalysis.Linter {
 	}
 
 	return goanalysis.NewLinter(
-		cyclopName,
+		a.Name,
 		"checks function and package cyclomatic complexity",
 		[]*analysis.Analyzer{a},
 		cfg,

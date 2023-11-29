@@ -8,10 +8,12 @@ import (
 )
 
 func NewNoctx() *goanalysis.Linter {
+	a := noctx.Analyzer
+
 	return goanalysis.NewLinter(
-		"noctx",
-		"noctx finds sending http request without context.Context",
-		[]*analysis.Analyzer{noctx.Analyzer},
+		a.Name,
+		"Detects test helpers which is not start with t.Helper() method",
+		[]*analysis.Analyzer{a},
 		nil,
 	).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }
