@@ -218,6 +218,8 @@ linters-settings:
           - $gostd
           - github.com/OpenPeeDeeP
         # Packages that are not allowed where the value is a suggestion.
+        # /!\ Unlike upstream a deny list (with "pkg" and "desc" keys) must be provided
+        # (due to a viper limitation, yaml map keys can't have a dot)
         deny:
           - pkg: "github.com/sirupsen/logrus"
             desc: not allowed
