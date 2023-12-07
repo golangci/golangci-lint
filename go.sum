@@ -348,6 +348,8 @@ github.com/kunwardeep/paralleltest v1.0.8 h1:Ul2KsqtzFxTlSU7IP0JusWlLiNqQaloB9vg
 github.com/kunwardeep/paralleltest v1.0.8/go.mod h1:2C7s65hONVqY7Q5Efj5aLzRCNLjw2h4eMc9EcypGjcY=
 github.com/kyoh86/exportloopref v0.1.11 h1:1Z0bcmTypkL3Q4k+IDHMWTcnCliEZcaPiIe0/ymEyhQ=
 github.com/kyoh86/exportloopref v0.1.11/go.mod h1:qkV4UF1zGl6EkF1ox8L5t9SwyeBAZ3qLMd6up458uqA=
+github.com/lasiar/canonicalheader v1.0.4 h1:3SfECz18dVumm2+ly2s5XYqQqKyH9IyTGOA5w6C+DvY=
+github.com/lasiar/canonicalheader v1.0.4/go.mod h1:lfMC8RPNimePVAAmIMyPepKpK2iMe8mmkwiTTgeEuec=
 github.com/ldez/gomoddirectives v0.2.3 h1:y7MBaisZVDYmKvt9/l1mjNCiSA1BVn34U0ObUcJwlhA=
 github.com/ldez/gomoddirectives v0.2.3/go.mod h1:cpgBogWITnCfRq2qGoDkKMEVSaarhdBr6g8G04uz6d0=
 github.com/ldez/tagliatelle v0.5.0 h1:epgfuYt9v0CG3fms0pEgIMNPuFf/LpPIfjk4kyqSioo=

@@ -285,6 +285,12 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetPerformance, linter.PresetBugs).
 			WithURL("https://github.com/timakin/bodyclose"),
 
+		linter.NewConfig(golinters.NewCanonicalheder()).
+			WithSince("v1.56.0").
+			WithPresets(linter.PresetStyle).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/lasiar/canonicalHeader"),
+
 		linter.NewConfig(golinters.NewContainedCtx()).
 			WithSince("1.44.0").
 			WithLoadForGoAnalysis().
