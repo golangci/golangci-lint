@@ -19,12 +19,10 @@ type BaseIssue struct {
 	replacement                       *result.Replacement
 }
 
-//nolint:gocritic // TODO must be change in the future.
 func (b BaseIssue) Position() token.Position {
 	return b.position
 }
 
-//nolint:gocritic // TODO must be change in the future.
 func (b BaseIssue) Replacement() *result.Replacement {
 	return b.replacement
 }
@@ -33,53 +31,45 @@ type ExtraLeadingSpace struct {
 	BaseIssue
 }
 
-//nolint:gocritic // TODO must be change in the future.
 func (i ExtraLeadingSpace) Details() string {
 	return fmt.Sprintf("directive `%s` should not have more than one leading space", i.fullDirective)
 }
 
-//nolint:gocritic // TODO must be change in the future.
 func (i ExtraLeadingSpace) String() string { return toString(i) }
 
 type NotMachine struct {
 	BaseIssue
 }
 
-//nolint:gocritic // TODO must be change in the future.
 func (i NotMachine) Details() string {
 	expected := i.fullDirective[:2] + strings.TrimLeftFunc(i.fullDirective[2:], unicode.IsSpace)
 	return fmt.Sprintf("directive `%s` should be written without leading space as `%s`",
 		i.fullDirective, expected)
 }
 
-//nolint:gocritic // TODO must be change in the future.
 func (i NotMachine) String() string { return toString(i) }
 
 type NotSpecific struct {
 	BaseIssue
 }
 
-//nolint:gocritic // TODO must be change in the future.
 func (i NotSpecific) Details() string {
 	return fmt.Sprintf("directive `%s` should mention specific linter such as `%s:my-linter`",
 		i.fullDirective, i.directiveWithOptionalLeadingSpace)
 }
 
-//nolint:gocritic // TODO must be change in the future.
 func (i NotSpecific) String() string { return toString(i) }
 
 type ParseError struct {
 	BaseIssue
 }
 
-//nolint:gocritic // TODO must be change in the future.
 func (i ParseError) Details() string {
 	return fmt.Sprintf("directive `%s` should match `%s[:<comma-separated-linters>] [// <explanation>]`",
 		i.fullDirective,
 		i.directiveWithOptionalLeadingSpace)
 }
 
-//nolint:gocritic // TODO must be change in the future.
 func (i ParseError) String() string { return toString(i) }
 
 type NoExplanation struct {
@@ -87,13 +77,11 @@ type NoExplanation struct {
 	fullDirectiveWithoutExplanation string
 }
 
-//nolint:gocritic // TODO must be change in the future.
 func (i NoExplanation) Details() string {
 	return fmt.Sprintf("directive `%s` should provide explanation such as `%s // this is why`",
 		i.fullDirective, i.fullDirectiveWithoutExplanation)
 }
 
-//nolint:gocritic // TODO must be change in the future.
 func (i NoExplanation) String() string { return toString(i) }
 
 type UnusedCandidate struct {
@@ -101,7 +89,6 @@ type UnusedCandidate struct {
 	ExpectedLinter string
 }
 
-//nolint:gocritic // TODO must be change in the future.
 func (i UnusedCandidate) Details() string {
 	details := fmt.Sprintf("directive `%s` is unused", i.fullDirective)
 	if i.ExpectedLinter != "" {
@@ -110,7 +97,6 @@ func (i UnusedCandidate) Details() string {
 	return details
 }
 
-//nolint:gocritic // TODO must be change in the future.
 func (i UnusedCandidate) String() string { return toString(i) }
 
 func toString(i Issue) string {
