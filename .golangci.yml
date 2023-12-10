@@ -151,6 +151,12 @@ issues:
     - path: test/(fix|linters)_test.go
       text: "string `gocritic.go` has 3 occurrences, make it a constant"
 
+    # Due to a change inside go-critic v0.10.0, some reports have been removed,
+    # but as we run analysis with the previous version of golangci-lint this leads to a paradoxical situation.
+    # This exclusion will be removed when the next version of golangci-lint (v1.56.0) will be released.
+    - path: pkg/golinters/nolintlint/nolintlint.go
+      text: "hugeParam: (i|b) is heavy \\(\\d+ bytes\\); consider passing it by pointer"
+
 run:
   timeout: 5m
   skip-dirs:
