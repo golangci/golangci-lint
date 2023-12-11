@@ -2708,8 +2708,8 @@ github.com/shurcooL/httpfs v0.0.0-20190707220628-8d4bc4ba7749/go.mod h1:ZY1cvUeJ
 github.com/shurcooL/sanitized_anchor_name v1.0.0/go.mod h1:1NzhyTcUVG4SuEtjjoZeVRXNmyL/1OwPU0+IJeTBvfc=
 github.com/shurcooL/vfsgen v0.0.0-20200824052919-0d455de96546/go.mod h1:TrYk7fJVaAttu97ZZKrO9UbRa8izdowaMIZcxYMbVaw=
 github.com/sigstore/cosign v1.11.0/go.mod h1:YaoVdaXyZCnCRJeAmsIq5LVD0Cu7saupPp2Ub9dZ5i4=
-github.com/sigstore/cosign v1.13.1 h1:+5oF8jisEcDw2TuXxCADC1u5//HfdnJhGbpv9Isiwu4=
-github.com/sigstore/cosign v1.13.1/go.mod h1:PlfJODkovUOKsLrGI7Su57Ie/Eb/Ks7hRHw3tn5hQS4=
+github.com/sigstore/cosign v1.13.2 h1:McYQ6CDI3wzi2QH+2aePt+08Zz3/yyGAc1iVpNsjntw=
+github.com/sigstore/cosign v1.13.2/go.mod h1:GBzDCUG+Nq7nur2Kyy/4BwWru10nAh7ZmjYZAQoNnKA=
 github.com/sigstore/fulcio v0.1.2-0.20220114150912-86a2036f9bc7/go.mod h1:ANQivY/lfOp9hN92S813LEthkm/kit96hzeIF3SNoZA=
 github.com/sigstore/rekor v0.10.0/go.mod h1:optBScc+ylAO6nTRyH3kY5me1ClbQufeLiglesAEiwg=
 github.com/sigstore/rekor v1.2.0 h1:ahlnoEY3zo8Vc+eZLPobamw6YfBTAbI0lthzUQd6qe4=
