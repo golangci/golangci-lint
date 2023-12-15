@@ -1,15 +1,15 @@
 package golinters
 
 import (
-	"github.com/maranqz/go-factory-lint/v2"
+	"github.com/maranqz/gofactory"
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 )
 
-func NewGoFactoryLint(settings *config.GoFactoryLintSettings) *goanalysis.Linter {
-	analyzer := factory.NewAnalyzer()
+func NewGoFactory(settings *config.GoFactorySettings) *goanalysis.Linter {
+	analyzer := gofactory.NewAnalyzer()
 
 	cfg := make(map[string]map[string]any)
 	if settings != nil {
@@ -17,7 +17,7 @@ func NewGoFactoryLint(settings *config.GoFactoryLintSettings) *goanalysis.Linter
 
 		if len(settings.PackageGlobs) > 0 {
 			cfg[analyzer.Name]["packageGlobs"] = settings.PackageGlobs
-			cfg[analyzer.Name]["onlyPackageGlobs"] = settings.OnlyPackageGlobs
+			cfg[analyzer.Name]["packageGlobsOnly"] = settings.PackageGlobsOnly
 		}
 	}
 

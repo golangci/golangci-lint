@@ -2,4 +2,4 @@ linters-settings:
   gofactory:
     packageGlobs:
       - net/url/**
-    onlyPackageGlobs: true
+    packageGlobsOnly: true

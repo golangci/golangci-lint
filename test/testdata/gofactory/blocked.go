@@ -1,5 +1,5 @@
 //golangcitest:args -Egofactory
-//golangcitest:config_path configs/go_factory_only_blocked.yml
+//golangcitest:config_path configs/go_factory_package_globs_only.yml
 package gofactory
 
 import (

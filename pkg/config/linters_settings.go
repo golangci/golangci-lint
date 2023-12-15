@@ -199,7 +199,7 @@ type LintersSettings struct {
 	Gocyclo          GoCycloSettings
 	Godot            GodotSettings
 	Godox            GodoxSettings
-	Gofactory        GoFactoryLintSettings
+	Gofactory        GoFactorySettings
 	Gofmt            GoFmtSettings
 	Gofumpt          GofumptSettings
 	Goheader         GoHeaderSettings
@@ -480,9 +480,9 @@ type GodoxSettings struct {
 	Keywords []string
 }
 
-type GoFactoryLintSettings struct {
+type GoFactorySettings struct {
 	PackageGlobs     []string `mapstructure:"packageGlobs"`
-	OnlyPackageGlobs bool     `mapstructure:"onlyPackageGlobs"`
+	PackageGlobsOnly bool     `mapstructure:"packageGlobsOnly"`
 }
 
 type GoFmtSettings struct {

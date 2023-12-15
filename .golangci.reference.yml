@@ -672,7 +672,7 @@ linters-settings:
       - github.com/author/repository/path/to/package/**
     # Use a factory to initiate a structure for glob packages only.
     # Default: false
-    onlyPackageGlobs: true
+    packageGlobsOnly: true
 
   gofmt:
     # Simplify code: gofmt with `-s` option.

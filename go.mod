@@ -69,7 +69,7 @@ require (
 	github.com/leonklingele/grouper v1.1.1
 	github.com/lufeee/execinquery v1.2.1
 	github.com/macabu/inamedparam v0.1.2
-	github.com/maranqz/go-factory-lint/v2 v2.0.0-beta.5
+	github.com/maranqz/gofactory v1.0.0-rc1
 	github.com/maratori/testableexamples v1.0.0
 	github.com/maratori/testpackage v1.1.1
 	github.com/matoous/godox v0.0.0-20230222163458-006bad1f9d26
@@ -124,7 +124,7 @@ require (
 	go-simpler.org/musttag v0.8.0
 	go-simpler.org/sloglint v0.3.0
 	golang.org/x/exp v0.0.0-20230510235704-dd950f8aeaea
-	golang.org/x/tools v0.15.0
+	golang.org/x/tools v0.16.0
 	gopkg.in/yaml.v3 v3.0.1
 	honnef.co/go/tools v0.4.6
 	mvdan.cc/gofumpt v0.5.0
