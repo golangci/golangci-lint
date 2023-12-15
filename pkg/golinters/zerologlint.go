@@ -8,10 +8,12 @@ import (
 )
 
 func NewZerologLint() *goanalysis.Linter {
+	a := zerologlint.Analyzer
+
 	return goanalysis.NewLinter(
-		"zerologlint",
-		"Detects the wrong usage of `zerolog` that a user forgets to dispatch with `Send` or `Msg`.",
-		[]*analysis.Analyzer{zerologlint.Analyzer},
+		a.Name,
+		a.Doc,
+		[]*analysis.Analyzer{a},
 		nil,
 	).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }

@@ -22,12 +22,12 @@ require (
 	github.com/ashanbrown/makezero v1.1.1
 	github.com/bkielbasa/cyclop v1.2.1
 	github.com/blizzy78/varnamelen v0.8.0
-	github.com/bombsimon/wsl/v3 v3.4.0
+	github.com/bombsimon/wsl/v4 v4.2.0
 	github.com/breml/bidichk v0.2.7
 	github.com/breml/errchkjson v0.3.6
 	github.com/butuzov/ireturn v0.2.2
 	github.com/butuzov/mirror v1.1.0
-	github.com/catenacyber/perfsprint v0.3.1
+	github.com/catenacyber/perfsprint v0.4.0
 	github.com/charithe/durationcheck v0.0.10
 	github.com/curioswitch/go-reassign v0.2.0
 	github.com/daixiang0/gci v0.11.2
@@ -37,7 +37,7 @@ require (
 	github.com/firefart/nonamedreturns v1.0.4
 	github.com/fzipp/gocyclo v0.6.0
 	github.com/ghostiam/protogetter v0.3.3
-	github.com/go-critic/go-critic v0.9.0
+	github.com/go-critic/go-critic v0.10.0
 	github.com/go-xmlfmt/xmlfmt v1.1.2
 	github.com/gofrs/flock v0.8.1
 	github.com/golangci/check v0.0.0-20180506172741-cfe4005ccda2
@@ -83,8 +83,8 @@ require (
 	github.com/nakabonne/nestif v0.3.1
 	github.com/nishanths/exhaustive v0.12.0
 	github.com/nishanths/predeclared v0.2.2
-	github.com/nunnatsa/ginkgolinter v0.14.1
-	github.com/polyfloyd/go-errorlint v1.4.5
+	github.com/nunnatsa/ginkgolinter v0.15.1
+	github.com/polyfloyd/go-errorlint v1.4.7
 	github.com/quasilyte/go-ruleguard/dsl v0.3.22
 	github.com/ryancurrah/gomodguard v1.3.0
 	github.com/ryanrolds/sqlclosecheck v0.5.1
@@ -93,7 +93,7 @@ require (
 	github.com/sashamelentyev/usestdlibvars v1.24.0
 	github.com/securego/gosec/v2 v2.18.2
 	github.com/shazow/go-diff v0.0.0-20160112020656-b6b7b6733b8c
-	github.com/shirou/gopsutil/v3 v3.23.10
+	github.com/shirou/gopsutil/v3 v3.23.11
 	github.com/sirupsen/logrus v1.9.3
 	github.com/sivchari/containedctx v1.0.3
 	github.com/sivchari/nosnakecase v1.7.0
@@ -119,7 +119,7 @@ require (
 	github.com/xen0n/gosmopolitan v1.2.2
 	github.com/yagipy/maintidx v1.0.0
 	github.com/yeya24/promlinter v0.2.0
-	github.com/ykadowak/zerologlint v0.1.3
+	github.com/ykadowak/zerologlint v0.1.5
 	gitlab.com/bosi/decorder v0.4.1
 	go-simpler.org/musttag v0.8.0
 	go-simpler.org/sloglint v0.3.0
@@ -191,10 +191,10 @@ require (
 	go.uber.org/atomic v1.7.0 // indirect
 	go.uber.org/multierr v1.6.0 // indirect
 	go.uber.org/zap v1.24.0 // indirect
-	golang.org/x/exp/typeparams v0.0.0-20230307190834-24139beb5833 // indirect
+	golang.org/x/exp/typeparams v0.0.0-20231206192017-f3f8817b8deb // indirect
 	golang.org/x/mod v0.14.0 // indirect
 	golang.org/x/sync v0.5.0 // indirect
-	golang.org/x/sys v0.14.0 // indirect
+	golang.org/x/sys v0.15.0 // indirect
 	golang.org/x/text v0.13.0 // indirect
 	google.golang.org/protobuf v1.28.0 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
