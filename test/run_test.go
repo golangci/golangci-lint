@@ -137,7 +137,7 @@ func TestCgoOk(t *testing.T) {
 			"--timeout=3m",
 			"--enable-all",
 			"-D",
-			"nosnakecase,gci",
+			"nosnakecase,gci,gofactory",
 		).
 		WithTargetPath(testdataDir, "cgo").
 		Runner().
@@ -355,7 +355,11 @@ func TestLineDirectiveProcessedFiles(t *testing.T) {
 func TestUnsafeOk(t *testing.T) {
 	testshared.NewRunnerBuilder(t).
 		WithNoConfig().
-		WithArgs("--enable-all").
+		WithArgs(
+			"--enable-all",
+			"-D",
+			"gofactory",
+		).
 		WithTargetPath(testdataDir, "unsafe").
 		Runner().
 		Install().
