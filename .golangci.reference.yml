@@ -425,7 +425,7 @@ linters-settings:
 
     # Section configuration to compare against.
     # Section names are case-insensitive and may contain parameters in ().
-    # The default order of sections is `standard > default > custom > blank > dot`,
+    # The default order of sections is `standard > default > custom > blank > dot > alias`,
     # If `custom-order` is `true`, it follows the order of `sections` option.
     # Default: ["standard", "default"]
     sections:
@@ -434,6 +434,7 @@ linters-settings:
       - prefix(github.com/org/project) # Custom section: groups all imports with the specified Prefix.
       - blank                          # Blank section: contains all blank imports. This section is not present unless explicitly enabled.
       - dot                            # Dot section: contains all dot imports. This section is not present unless explicitly enabled.
+      - alias                          # Alias section: contains all alias imports. This section is not present unless explicitly enabled.
 
     # Skip generated files.
     # Default: true
