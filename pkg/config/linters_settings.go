@@ -74,6 +74,9 @@ var defaultLintersSettings = LintersSettings{
 		MaxDeclLines: 1,
 		MaxDeclChars: 30,
 	},
+	Inamedparam: InamedparamSettings{
+		SkipSingleParam: false,
+	},
 	InterfaceBloat: InterfaceBloatSettings{
 		Max: 10,
 	},
@@ -216,6 +219,7 @@ type LintersSettings struct {
 	Grouper          GrouperSettings
 	Ifshort          IfshortSettings
 	ImportAs         ImportAsSettings
+	Inamedparam      InamedparamSettings
 	InterfaceBloat   InterfaceBloatSettings
 	Ireturn          IreturnSettings
 	Lll              LllSettings
@@ -612,6 +616,10 @@ type ImportAsSettings struct {
 type ImportAsAlias struct {
 	Pkg   string
 	Alias string
+}
+
+type InamedparamSettings struct {
+	SkipSingleParam bool `mapstructure:"skip-single-param"`
 }
 
 type InterfaceBloatSettings struct {
