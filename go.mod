@@ -27,10 +27,10 @@ require (
 	github.com/breml/errchkjson v0.3.6
 	github.com/butuzov/ireturn v0.2.2
 	github.com/butuzov/mirror v1.1.0
-	github.com/catenacyber/perfsprint v0.4.0
+	github.com/catenacyber/perfsprint v0.5.0
 	github.com/charithe/durationcheck v0.0.10
 	github.com/curioswitch/go-reassign v0.2.0
-	github.com/daixiang0/gci v0.11.2
+	github.com/daixiang0/gci v0.12.0
 	github.com/denis-tingaikin/go-header v0.4.3
 	github.com/esimonov/ifshort v1.0.4
 	github.com/fatih/color v1.16.0
@@ -62,7 +62,7 @@ require (
 	github.com/kisielk/errcheck v1.6.3
 	github.com/kkHAIKE/contextcheck v1.1.4
 	github.com/kulti/thelper v0.6.3
-	github.com/kunwardeep/paralleltest v1.0.8
+	github.com/kunwardeep/paralleltest v1.0.9
 	github.com/kyoh86/exportloopref v0.1.11
 	github.com/ldez/gomoddirectives v0.2.3
 	github.com/ldez/tagliatelle v0.5.0
@@ -122,9 +122,9 @@ require (
 	github.com/ykadowak/zerologlint v0.1.5
 	gitlab.com/bosi/decorder v0.4.1
 	go-simpler.org/musttag v0.8.0
-	go-simpler.org/sloglint v0.3.0
+	go-simpler.org/sloglint v0.4.0
 	golang.org/x/exp v0.0.0-20230510235704-dd950f8aeaea
-	golang.org/x/tools v0.16.0
+	golang.org/x/tools v0.16.1
 	gopkg.in/yaml.v3 v3.0.1
 	honnef.co/go/tools v0.4.6
 	mvdan.cc/gofumpt v0.5.0
@@ -139,7 +139,7 @@ require (
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect
 	github.com/chavacava/garif v0.1.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/ettle/strcase v0.1.1 // indirect
+	github.com/ettle/strcase v0.2.0 // indirect
 	github.com/fatih/structtag v1.2.0 // indirect
 	github.com/fsnotify/fsnotify v1.5.4 // indirect
 	github.com/go-ole/go-ole v1.2.6 // indirect
