@@ -12,6 +12,7 @@ func NewSlogLint(settings *config.SlogLintSettings) *goanalysis.Linter {
 	var opts *sloglint.Options
 	if settings != nil {
 		opts = &sloglint.Options{
+			NoMixedArgs:    settings.NoMixedArgs,
 			KVOnly:         settings.KVOnly,
 			AttrOnly:       settings.AttrOnly,
 			ContextOnly:    settings.ContextOnly,

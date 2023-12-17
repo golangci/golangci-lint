@@ -1855,10 +1855,13 @@ linters-settings:
       - github.com/jmoiron/sqlx
 
   sloglint:
-    # Enforce using key-value pairs only (incompatible with attr-only).
+    # Enforce not mixing key-value pairs and attributes.
+    # Default: true
+    no-mixed-args: false
+    # Enforce using key-value pairs only (overrides no-mixed-args, incompatible with attr-only).
     # Default: false
     kv-only: true
-    # Enforce using attributes only (incompatible with kv-only).
+    # Enforce using attributes only (overrides no-mixed-args, incompatible with kv-only).
     # Default: false
     attr-only: true
     # Enforce using methods that accept a context.
