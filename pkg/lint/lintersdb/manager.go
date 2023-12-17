@@ -105,6 +105,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		grouperCfg          *config.GrouperSettings
 		ifshortCfg          *config.IfshortSettings
 		importAsCfg         *config.ImportAsSettings
+		inamedparamCfg      *config.INamedParamSettings
 		interfaceBloatCfg   *config.InterfaceBloatSettings
 		ireturnCfg          *config.IreturnSettings
 		lllCfg              *config.LllSettings
@@ -189,6 +190,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		grouperCfg = &m.cfg.LintersSettings.Grouper
 		ifshortCfg = &m.cfg.LintersSettings.Ifshort
 		importAsCfg = &m.cfg.LintersSettings.ImportAs
+		inamedparamCfg = &m.cfg.LintersSettings.Inamedparam
 		interfaceBloatCfg = &m.cfg.LintersSettings.InterfaceBloat
 		ireturnCfg = &m.cfg.LintersSettings.Ireturn
 		lllCfg = &m.cfg.LintersSettings.Lll
@@ -584,7 +586,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/julz/importas"),
 
-		linter.NewConfig(golinters.NewINamedParam()).
+		linter.NewConfig(golinters.NewINamedParam(inamedparamCfg)).
 			WithSince("v1.55.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/macabu/inamedparam"),

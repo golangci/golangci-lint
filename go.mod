@@ -68,7 +68,7 @@ require (
 	github.com/ldez/tagliatelle v0.5.0
 	github.com/leonklingele/grouper v1.1.1
 	github.com/lufeee/execinquery v1.2.1
-	github.com/macabu/inamedparam v0.1.2
+	github.com/macabu/inamedparam v0.1.3
 	github.com/maratori/testableexamples v1.0.0
 	github.com/maratori/testpackage v1.1.1
 	github.com/matoous/godox v0.0.0-20230222163458-006bad1f9d26
@@ -194,7 +194,7 @@ require (
 	golang.org/x/mod v0.14.0 // indirect
 	golang.org/x/sync v0.5.0 // indirect
 	golang.org/x/sys v0.15.0 // indirect
-	golang.org/x/text v0.13.0 // indirect
+	golang.org/x/text v0.14.0 // indirect
 	google.golang.org/protobuf v1.28.0 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
