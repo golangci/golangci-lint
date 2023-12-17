@@ -120,6 +120,7 @@ var defaultLintersSettings = LintersSettings{
 		Qualified: false,
 	},
 	SlogLint: SlogLintSettings{
+		NoMixedArgs:    true,
 		KVOnly:         false,
 		AttrOnly:       false,
 		ContextOnly:    false,
@@ -753,6 +754,7 @@ type RowsErrCheckSettings struct {
 }
 
 type SlogLintSettings struct {
+	NoMixedArgs    bool   `mapstructure:"no-mixed-args"`
 	KVOnly         bool   `mapstructure:"kv-only"`
 	AttrOnly       bool   `mapstructure:"attr-only"`
 	ContextOnly    bool   `mapstructure:"context-only"`
