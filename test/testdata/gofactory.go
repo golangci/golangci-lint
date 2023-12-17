@@ -1,5 +1,5 @@
 //golangcitest:args -Egofactory
-package gofactory
+package testdata
 
 import (
 	"net/http"

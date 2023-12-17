@@ -1,32 +1,32 @@
 //golangcitest:args -Egofactory
 //golangcitest:config_path configs/go_factory_package_globs_only.yml
-package gofactory
+package testdata
 
 import (
 	"net/http"
-	"net/url"
+	neturl "net/url"
 )
 
 var (
 	nestedGlobalRequest    = http.Request{}
 	nestedGlobalRequestPtr = &http.Request{}
 
-	blockedGlobalURL    = url.URL{}  // want `Use factory for url.URL`
-	blockedGlobalURLPtr = &url.URL{} // want `Use factory for url.URL`
+	blockedGlobalURL    = neturl.URL{}  // want `Use factory for url.URL`
+	blockedGlobalURLPtr = &neturl.URL{} // want `Use factory for url.URL`
 )
 
 func Blocked() {
 	_ = http.Request{}
 	_ = &http.Request{}
 
-	_ = url.URL{}  // want `Use factory for url.URL`
-	_ = &url.URL{} // want `Use factory for url.URL`
+	_ = neturl.URL{}  // want `Use factory for url.URL`
+	_ = &neturl.URL{} // want `Use factory for url.URL`
 }
 
 type URL struct {
 	Scheme      string
 	Opaque      string
-	User        *url.Userinfo
+	User        *neturl.Userinfo
 	Host        string
 	Path        string
 	RawPath     string
@@ -38,9 +38,9 @@ type URL struct {
 }
 
 func Casting() {
-	_ = url.URL(URL{}) // want `Use factory for url.URL`
+	_ = neturl.URL(URL{}) // want `Use factory for url.URL`
 
-	uPtr, _ := url.Parse("")
+	uPtr, _ := neturl.Parse("")
 	u := *uPtr
 	_ = URL(u)
 }

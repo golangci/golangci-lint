@@ -355,11 +355,6 @@ func TestLineDirectiveProcessedFiles(t *testing.T) {
 func TestUnsafeOk(t *testing.T) {
 	testshared.NewRunnerBuilder(t).
 		WithNoConfig().
-		WithArgs(
-			"--enable-all",
-			"-D",
-			"gofactory",
-		).
 		WithTargetPath(testdataDir, "unsafe").
 		Runner().
 		Install().
