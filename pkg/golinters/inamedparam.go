@@ -8,7 +8,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 )
 
-func NewINamedParam(settings *config.InamedparamSettings) *goanalysis.Linter {
+func NewINamedParam(settings *config.INamedParamSettings) *goanalysis.Linter {
 	a := inamedparam.Analyzer
 
 	var cfg map[string]map[string]any

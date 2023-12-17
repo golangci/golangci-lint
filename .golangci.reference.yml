@@ -1238,7 +1238,8 @@ linters-settings:
 
   inamedparam:
     # Skips check for interface methods with only a single parameter.
-    skip-single-param: false
+    # Default: false
+    skip-single-param: true
 
   interfacebloat:
     # The maximum number of methods allowed for an interface.
