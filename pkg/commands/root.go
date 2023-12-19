@@ -119,7 +119,7 @@ func formatMemory(memBytes uint64) string {
 
 func getDefaultConcurrency() int {
 	if os.Getenv(envHelpRun) == "1" {
-		// Make stable concurrency for README help generating builds.
+		// Make stable concurrency for generating help documentation.
 		const prettyConcurrency = 8
 		return prettyConcurrency
 	}
