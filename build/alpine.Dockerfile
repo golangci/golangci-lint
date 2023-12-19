@@ -1,5 +1,5 @@
 # stage 1 building the code
-FROM golang:1.21-alpine as builder
+FROM golang:1.22-alpine as builder
 
 ARG VERSION
 ARG SHORT_COMMIT
@@ -17,7 +17,7 @@ RUN APP_VERSION=${VERSION#v} \
     go build -trimpath -ldflags "-s -w -X main.version=$APP_VERSION -X main.commit=$SHORT_COMMIT -X main.date=$DATE" -o golangci-lint ./cmd/golangci-lint/main.go
 
 # stage 2
-FROM golang:1.21-alpine
+FROM golang:1.22-alpine
 # related to https://github.com/golangci/golangci-lint/issues/3107
 ENV GOROOT /usr/local/go
 # gcc is required to support cgo;

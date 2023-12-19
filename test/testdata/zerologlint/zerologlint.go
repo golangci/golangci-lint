@@ -3,10 +3,10 @@ package zerologlint
 
 import (
 	"fmt"
+	"slices"
 
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
-	"golang.org/x/exp/slices"
 )
 
 func expectWarnings() {
