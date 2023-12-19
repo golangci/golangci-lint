@@ -165,7 +165,8 @@ func initRootFlagSet(fs *pflag.FlagSet, cfg *config.Config, needVersionOption bo
 	fs.StringVar(&cfg.Run.CPUProfilePath, "cpu-profile-path", "", wh("Path to CPU profile output file"))
 	fs.StringVar(&cfg.Run.MemProfilePath, "mem-profile-path", "", wh("Path to memory profile output file"))
 	fs.StringVar(&cfg.Run.TracePath, "trace-path", "", wh("Path to trace output file"))
-	fs.IntVarP(&cfg.Run.Concurrency, "concurrency", "j", getDefaultConcurrency(), wh("Number of CPUs to use when running golangci-lint. Defaults to the number of logical CPUs in the machine"))
+	fs.IntVarP(&cfg.Run.Concurrency, "concurrency", "j", getDefaultConcurrency(),
+		wh("Number of CPUs to use (Default: number of logical CPUs)"))
 	if needVersionOption {
 		fs.BoolVar(&cfg.Run.PrintVersion, "version", false, wh("Print version"))
 	}
