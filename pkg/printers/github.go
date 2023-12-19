@@ -15,7 +15,7 @@ type github struct {
 const defaultGithubSeverity = "error"
 
 // NewGithub output format outputs issues according to GitHub actions format:
-// https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions
+// https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-error-message
 func NewGithub(w io.Writer) Printer {
 	return &github{w: w}
 }
