@@ -106,7 +106,7 @@ output:
 
   # Sort results by: filepath, line and column.
   # Default: false
-  sort-results: false
+  sort-results: true
 
 
 # All available settings of specific linters.
@@ -2329,7 +2329,7 @@ linters:
   # Default: false
   disable-all: true
   # Enable specific linter
-  # Default: https://golangci-lint.run/usage/linters/#enabled-by-default
+  # https://golangci-lint.run/usage/linters/#enabled-by-default
   enable:
     - asasalint
     - asciicheck
@@ -2449,7 +2449,7 @@ linters:
   # Default: false
   enable-all: true
   # Disable specific linter
-  # Default: https://golangci-lint.run/usage/linters/#disabled-by-default
+  # https://golangci-lint.run/usage/linters/#disabled-by-default
   disable:
     - asasalint
     - asciicheck
@@ -2565,7 +2565,8 @@ linters:
     - wsl
     - zerologlint
 
-  # Enable presets: https://golangci-lint.run/usage/linters
+  # Enable presets.
+  # https://golangci-lint.run/usage/linters
   # Default: []
   presets:
     - bugs

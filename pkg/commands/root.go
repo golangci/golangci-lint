@@ -119,8 +119,9 @@ func formatMemory(memBytes uint64) string {
 
 func getDefaultConcurrency() int {
 	if os.Getenv(envHelpRun) == "1" {
-		// Make default concurrency stable: don't depend on machine CPU number, for docs/src/docs/usage/configuration.mdx help generating builds.
-		return 0
+		// Make stable concurrency for README help generating builds.
+		const prettyConcurrency = 8
+		return prettyConcurrency
 	}
 
 	return runtime.NumCPU()
@@ -170,5 +171,4 @@ func initRootFlagSet(fs *pflag.FlagSet, cfg *config.Config, needVersionOption bo
 	}
 
 	fs.StringVar(&cfg.Output.Color, "color", "auto", wh("Use color when printing; can be 'always', 'auto', or 'never'"))
-	fs.BoolP("help", "h", false, wh("Help for this command"))
 }
