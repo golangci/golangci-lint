@@ -35,7 +35,7 @@ const (
 )
 
 func getDefaultIssueExcludeHelp() string {
-	parts := []string{"Use or not use default excludes:"}
+	parts := []string{color.GreenString("Use or not use default excludes:")}
 	for _, ep := range config.DefaultExcludePatterns {
 		parts = append(parts,
 			fmt.Sprintf("  # %s %s: %s", ep.ID, ep.Linter, ep.Why),
@@ -47,7 +47,7 @@ func getDefaultIssueExcludeHelp() string {
 }
 
 func getDefaultDirectoryExcludeHelp() string {
-	parts := []string{"Use or not use default excluded directories:"}
+	parts := []string{color.GreenString("Use or not use default excluded directories:")}
 	for _, dir := range packages.StdExcludeDirRegexps {
 		parts = append(parts, fmt.Sprintf("  - %s", color.YellowString(dir)))
 	}
@@ -98,7 +98,7 @@ func initFlagSet(fs *pflag.FlagSet, cfg *config.Config, m *lintersdb.Manager, is
 	// Run config
 	rc := &cfg.Run
 	fs.StringVar(&rc.ModulesDownloadMode, "modules-download-mode", "",
-		"Modules download mode. If not empty, passed as -mod=<mode> to go tools")
+		wh("Modules download mode. If not empty, passed as -mod=<mode> to go tools"))
 	fs.IntVar(&rc.ExitCodeIfIssuesFound, "issues-exit-code",
 		exitcodes.IssuesFound, wh("Exit code when issues were found"))
 	fs.StringVar(&rc.Go, "go", "", wh("Targeted Go version"))
@@ -203,7 +203,7 @@ func initFlagSet(fs *pflag.FlagSet, cfg *config.Config, m *lintersdb.Manager, is
 
 	fs.BoolVar(&lc.DisableAll, "disable-all", false, wh("Disable all linters"))
 	fs.StringSliceVarP(&lc.Presets, "presets", "p", nil,
-		wh(fmt.Sprintf("Enable presets (%s) of linters. Run 'golangci-lint linters' to see "+
+		wh(fmt.Sprintf("Enable presets (%s) of linters. Run 'golangci-lint help linters' to see "+
 			"them. This option implies option --disable-all", strings.Join(m.AllPresets(), "|"))))
 	fs.BoolVar(&lc.Fast, "fast", false, wh("Run only fast linters from enabled linters set (first run won't be fast)"))
 
@@ -232,7 +232,7 @@ func initFlagSet(fs *pflag.FlagSet, cfg *config.Config, m *lintersdb.Manager, is
 		wh("Show only new issues created in git patch with file path `PATH`"))
 	fs.BoolVar(&ic.WholeFiles, "whole-files", false,
 		wh("Show issues in any part of update files (requires new-from-rev or new-from-patch)"))
-	fs.BoolVar(&ic.NeedFix, "fix", false, "Fix found issues (if it's supported by the linter)")
+	fs.BoolVar(&ic.NeedFix, "fix", false, wh("Fix found issues (if it's supported by the linter)"))
 }
 
 func (e *Executor) initRunConfiguration(cmd *cobra.Command) {

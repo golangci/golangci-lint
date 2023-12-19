@@ -119,9 +119,8 @@ func formatMemory(memBytes uint64) string {
 
 func getDefaultConcurrency() int {
 	if os.Getenv(envHelpRun) == "1" {
-		// Make stable concurrency for README help generating builds.
-		const prettyConcurrency = 8
-		return prettyConcurrency
+		// Make default concurrency stable: don't depend on machine CPU number, for docs/src/docs/usage/configuration.mdx help generating builds.
+		return 0
 	}
 
 	return runtime.NumCPU()
@@ -165,10 +164,11 @@ func initRootFlagSet(fs *pflag.FlagSet, cfg *config.Config, needVersionOption bo
 	fs.StringVar(&cfg.Run.CPUProfilePath, "cpu-profile-path", "", wh("Path to CPU profile output file"))
 	fs.StringVar(&cfg.Run.MemProfilePath, "mem-profile-path", "", wh("Path to memory profile output file"))
 	fs.StringVar(&cfg.Run.TracePath, "trace-path", "", wh("Path to trace output file"))
-	fs.IntVarP(&cfg.Run.Concurrency, "concurrency", "j", getDefaultConcurrency(), wh("Concurrency (default NumCPU)"))
+	fs.IntVarP(&cfg.Run.Concurrency, "concurrency", "j", getDefaultConcurrency(), wh("Number of CPUs to use when running golangci-lint. Defaults to the number of logical CPUs in the machine"))
 	if needVersionOption {
 		fs.BoolVar(&cfg.Run.PrintVersion, "version", false, wh("Print version"))
 	}
 
 	fs.StringVar(&cfg.Output.Color, "color", "auto", wh("Use color when printing; can be 'always', 'auto', or 'never'"))
+	fs.BoolP("help", "h", false, wh("Help for this command"))
 }
