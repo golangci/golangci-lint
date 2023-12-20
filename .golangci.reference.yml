@@ -1333,6 +1333,11 @@ linters-settings:
     # Default: []
     ignore-words:
       - someword
+    # Mode of the analysis:
+    # - default: checks all the file content.
+    # - restricted: checks only comments.
+    # Default: ""
+    mode: restricted
 
   musttag:
     # A set of custom functions to check in addition to the builtin ones.
