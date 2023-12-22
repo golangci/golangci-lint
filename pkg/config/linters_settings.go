@@ -659,8 +659,9 @@ type MalignedSettings struct {
 }
 
 type MisspellSettings struct {
+	Mode   string `mapstructure:"mode"`
 	Locale string
-	// TODO(ldez): v2 the options must be renamed to `IgnoredRules`.
+	// TODO(ldez): v2 the option must be renamed to `IgnoredRules`.
 	IgnoreWords []string `mapstructure:"ignore-words"`
 }
 
