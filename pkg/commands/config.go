@@ -14,7 +14,7 @@ import (
 func (e *Executor) initConfig() {
 	cmd := &cobra.Command{
 		Use:   "config",
-		Short: "Config",
+		Short: "Config file information",
 		Args:  cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			return cmd.Help()
@@ -29,7 +29,9 @@ func (e *Executor) initConfig() {
 		ValidArgsFunction: cobra.NoFileCompletions,
 		Run:               e.executePathCmd,
 	}
-	e.initRunConfiguration(pathCmd) // allow --config
+	fs := pathCmd.Flags()
+	fs.SortFlags = false // sort them as they are defined here
+	e.initConfigFileFlagSet(fs, &e.cfg.Run)
 	cmd.AddCommand(pathCmd)
 }
 

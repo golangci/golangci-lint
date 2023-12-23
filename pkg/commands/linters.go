@@ -17,8 +17,10 @@ func (e *Executor) initLinters() {
 		ValidArgsFunction: cobra.NoFileCompletions,
 		RunE:              e.executeLinters,
 	}
+	fs := e.lintersCmd.Flags()
+	fs.SortFlags = false // sort them as they are defined here
+	e.initConfigFileFlagSet(fs, &e.cfg.Run)
 	e.rootCmd.AddCommand(e.lintersCmd)
-	e.initRunConfiguration(e.lintersCmd)
 }
 
 // executeLinters runs the 'linters' CLI command, which displays the supported linters.
@@ -28,18 +30,9 @@ func (e *Executor) executeLinters(_ *cobra.Command, _ []string) error {
 		return fmt.Errorf("can't get enabled linters: %w", err)
 	}
 
-	color.Green("Enabled by your configuration linters:\n")
 	var enabledLinters []*linter.Config
-	for _, lc := range enabledLintersMap {
-		if lc.Internal {
-			continue
-		}
-
-		enabledLinters = append(enabledLinters, lc)
-	}
-	printLinterConfigs(enabledLinters)
-
 	var disabledLCs []*linter.Config
+
 	for _, lc := range e.DBManager.GetAllSupportedLinterConfigs() {
 		if lc.Internal {
 			continue
@@ -47,10 +40,19 @@ func (e *Executor) executeLinters(_ *cobra.Command, _ []string) error {
 
 		if enabledLintersMap[lc.Name()] == nil {
 			disabledLCs = append(disabledLCs, lc)
+		} else {
+			enabledLinters = append(enabledLinters, lc)
 		}
 	}
 
-	color.Red("\nDisabled by your configuration linters:\n")
+	enabledBy := "your configuration"
+	if e.cfg.Run.NoConfig {
+		enabledBy = "default"
+	}
+
+	color.Green("Enabled by %v linters:\n", enabledBy)
+	printLinterConfigs(enabledLinters)
+	color.Red("\nDisabled by %v linters:\n", enabledBy)
 	printLinterConfigs(disabledLCs)
 
 	return nil
