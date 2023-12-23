@@ -25,3 +25,6 @@ CVE-2023-3978
 
 # Skip for indirect dependencies golang/google.golang.org/grpc@v1.46.2
 CVE-2023-32731
+
+# Skip for indirect dependencies golang/golang.org/x/crypto@v0.14.0
+CVE-2023-48795
