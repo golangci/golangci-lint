@@ -68,6 +68,17 @@ func (e *Executor) initConfigFileFlagSet(fs *pflag.FlagSet, cfg *config.Run) {
 	fs.BoolVar(&cfg.NoConfig, "no-config", false, wh("Don't read config file"))
 }
 
+func (e *Executor) initLintersFlagSet(fs *pflag.FlagSet, cfg *config.Linters) {
+	fs.StringSliceVarP(&cfg.Disable, "disable", "D", nil, wh("Disable specific linter"))
+	fs.BoolVar(&cfg.DisableAll, "disable-all", false, wh("Disable all linters"))
+	fs.StringSliceVarP(&cfg.Enable, "enable", "E", nil, wh("Enable specific linter"))
+	fs.BoolVar(&cfg.EnableAll, "enable-all", false, wh("Enable all linters"))
+	fs.BoolVar(&cfg.Fast, "fast", false, wh("Enable only fast linters from enabled linters set (first run won't be fast)"))
+	fs.StringSliceVarP(&cfg.Presets, "presets", "p", nil,
+		wh(fmt.Sprintf("Enable presets (%s) of linters. Run 'golangci-lint help linters' to see "+
+			"them. This option implies option --disable-all", strings.Join(e.DBManager.AllPresets(), "|"))))
+}
+
 //nolint:funlen,gomnd
 func (e *Executor) initFlagSet(fs *pflag.FlagSet, cfg *config.Config, isFinalInit bool) {
 	hideFlag := func(name string) {
@@ -206,15 +217,7 @@ func (e *Executor) initFlagSet(fs *pflag.FlagSet, cfg *config.Config, isFinalIni
 
 	// Linters config
 	lc := &cfg.Linters
-	fs.StringSliceVarP(&lc.Enable, "enable", "E", nil, wh("Enable specific linter"))
-	fs.StringSliceVarP(&lc.Disable, "disable", "D", nil, wh("Disable specific linter"))
-	fs.BoolVar(&lc.EnableAll, "enable-all", false, wh("Enable all linters"))
-
-	fs.BoolVar(&lc.DisableAll, "disable-all", false, wh("Disable all linters"))
-	fs.StringSliceVarP(&lc.Presets, "presets", "p", nil,
-		wh(fmt.Sprintf("Enable presets (%s) of linters. Run 'golangci-lint help linters' to see "+
-			"them. This option implies option --disable-all", strings.Join(e.DBManager.AllPresets(), "|"))))
-	fs.BoolVar(&lc.Fast, "fast", false, wh("Run only fast linters from enabled linters set (first run won't be fast)"))
+	e.initLintersFlagSet(fs, lc)
 
 	// Issues config
 	ic := &cfg.Issues

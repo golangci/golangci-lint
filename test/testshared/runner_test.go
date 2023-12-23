@@ -28,11 +28,20 @@ func TestRunnerBuilder_Runner(t *testing.T) {
 			},
 		},
 		{
-			desc:    "with command",
+			desc:    "with non run command",
 			builder: NewRunnerBuilder(t).WithCommand("example"),
 			expected: &Runner{
 				env:     []string(nil),
 				command: "example",
+				args:    []string{},
+			},
+		},
+		{
+			desc:    "with run command",
+			builder: NewRunnerBuilder(t).WithCommand("run"),
+			expected: &Runner{
+				env:     []string(nil),
+				command: "run",
 				args: []string{
 					"--internal-cmd-test",
 					"--allow-parallel-runners",

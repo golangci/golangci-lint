@@ -20,6 +20,7 @@ func (e *Executor) initLinters() {
 	fs := e.lintersCmd.Flags()
 	fs.SortFlags = false // sort them as they are defined here
 	e.initConfigFileFlagSet(fs, &e.cfg.Run)
+	e.initLintersFlagSet(fs, &e.cfg.Linters)
 	e.rootCmd.AddCommand(e.lintersCmd)
 }
 
