@@ -70,6 +70,15 @@ run:
   # Default: false
   allow-parallel-runners: false
 
+  # Allow multiple golangci-lint instances running, but serialize them around a lock.
+  # If false, golangci-lint exits with an error if it fails to acquire file lock on start.
+  # Default: false
+  allow-serial-runners: true
+
+  # Print avg and max memory usage of golangci-lint and total time.
+  # Default: false
+  print-resources-usage: true
+
   # Define the Go version limit.
   # Mainly related to generics support since go1.18.
   # Default: use Go version from the go.mod file, fallback on the env var `GOVERSION`, fallback on 1.17
@@ -2698,6 +2707,9 @@ issues:
   # Default: false
   fix: true
 
+  # Show issues in any part of update files (requires new-from-rev or new-from-patch).
+  # Default: false
+  whole-files: true
 
 severity:
   # Set the default severity for issues.
