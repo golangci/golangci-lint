@@ -213,7 +213,7 @@ type LintersSettings struct {
 	GoModDirectives  GoModDirectivesSettings
 	Gomodguard       GoModGuardSettings
 	Gosec            GoSecSettings
-	Gosimple         StaticCheckSettings
+	Gosimple         CommonStaticCheckSettings
 	Gosmopolitan     GosmopolitanSettings
 	Govet            GovetSettings
 	Grouper          GrouperSettings
@@ -245,7 +245,7 @@ type LintersSettings struct {
 	Revive           ReviveSettings
 	RowsErrCheck     RowsErrCheckSettings
 	SlogLint         SlogLintSettings
-	Staticcheck      StaticCheckSettings
+	Staticcheck      CommonStaticCheckSettings
 	Structcheck      StructCheckSettings
 	Stylecheck       StaticCheckSettings
 	TagAlign         TagAlignSettings
@@ -774,17 +774,34 @@ type SlogLintSettings struct {
 }
 
 type StaticCheckSettings struct {
+	CommonStaticCheckSettings `mapstructure:",squash"`
+	Initialisms               []string `mapstructure:"initialisms"`
+	DotImportWhitelist        []string `mapstructure:"dot-import-whitelist"`
+	HTTPStatusCodeWhitelist   []string `mapstructure:"http-status-code-whitelist"`
+}
+
+type CommonStaticCheckSettings struct {
 	// Deprecated: use the global `run.go` instead.
 	GoVersion string `mapstructure:"go"`
 
-	Checks                  []string `mapstructure:"checks"`
-	Initialisms             []string `mapstructure:"initialisms"`                // only for stylecheck
-	DotImportWhitelist      []string `mapstructure:"dot-import-whitelist"`       // only for stylecheck
-	HTTPStatusCodeWhitelist []string `mapstructure:"http-status-code-whitelist"` // only for stylecheck
+	Checks []string `mapstructure:"checks"`
 }
 
 func (s *StaticCheckSettings) HasConfiguration() bool {
 	return len(s.Initialisms) > 0 || len(s.HTTPStatusCodeWhitelist) > 0 || len(s.DotImportWhitelist) > 0 || len(s.Checks) > 0
+}
+
+func (s *CommonStaticCheckSettings) GetGoVersion() string {
+	var goVersion string
+	if s != nil {
+		goVersion = s.GoVersion
+	}
+
+	if goVersion != "" {
+		return goVersion
+	}
+
+	return "1.17"
 }
 
 type StructCheckSettings struct {
@@ -863,7 +880,9 @@ type UseStdlibVarsSettings struct {
 
 type UnparamSettings struct {
 	CheckExported bool `mapstructure:"check-exported"`
-	Algo          string
+
+	// Deprecated
+	Algo string
 }
 
 type UnusedSettings struct {
@@ -938,7 +957,6 @@ type CustomLinterSettings struct {
 	Description string
 	// OriginalURL The URL containing the source code for the private linter.
 	OriginalURL string `mapstructure:"original-url"`
-
 	// Settings plugin settings only work with linterdb.PluginConstructor symbol.
 	Settings any
 }

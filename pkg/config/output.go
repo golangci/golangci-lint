@@ -28,14 +28,14 @@ var OutFormats = []string{
 }
 
 type Output struct {
-	Format              string
-	PrintIssuedLine     bool   `mapstructure:"print-issued-lines"`
-	PrintLinterName     bool   `mapstructure:"print-linter-name"`
-	UniqByLine          bool   `mapstructure:"uniq-by-line"`
-	SortResults         bool   `mapstructure:"sort-results"`
-	PrintWelcomeMessage bool   `mapstructure:"print-welcome"`
-	PathPrefix          string `mapstructure:"path-prefix"`
+	Format          string
+	PrintIssuedLine bool   `mapstructure:"print-issued-lines"`
+	PrintLinterName bool   `mapstructure:"print-linter-name"`
+	UniqByLine      bool   `mapstructure:"uniq-by-line"`
+	SortResults     bool   `mapstructure:"sort-results"`
+	PathPrefix      string `mapstructure:"path-prefix"`
 
-	// only work with CLI flags because the setup of logs is done before the config file parsing.
-	Color string
+	// Internal usage options, not available to users
+	PrintWelcomeMessage bool   `mapstructure:"-"`
+	Color               string `mapstructure:"-"`
 }

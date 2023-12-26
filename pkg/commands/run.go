@@ -87,8 +87,8 @@ func initFlagSet(fs *pflag.FlagSet, cfg *config.Config, m *lintersdb.Manager, is
 	fs.BoolVar(&oc.UniqByLine, "uniq-by-line", true, wh("Make issues output unique by line"))
 	fs.BoolVar(&oc.SortResults, "sort-results", false, wh("Sort linter results"))
 	fs.BoolVar(&oc.PrintWelcomeMessage, "print-welcome", false, wh("Print welcome message"))
-	fs.StringVar(&oc.PathPrefix, "path-prefix", "", wh("Path prefix to add to output"))
 	hideFlag("print-welcome") // no longer used
+	fs.StringVar(&oc.PathPrefix, "path-prefix", "", wh("Path prefix to add to output"))
 
 	fs.BoolVar(&cfg.InternalCmdTest, "internal-cmd-test", false, wh("Option is used only for testing golangci-lint command, don't use it"))
 	if err := fs.MarkHidden("internal-cmd-test"); err != nil {

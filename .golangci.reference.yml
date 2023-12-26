@@ -70,10 +70,22 @@ run:
   # Default: false
   allow-parallel-runners: false
 
+  # Allow multiple golangci-lint instances running, but serialize them around a lock.
+  # If false, golangci-lint exits with an error if it fails to acquire file lock on start.
+  # Default: false
+  allow-serial-runners: true
+
+  # Print avg and max memory usage of golangci-lint and total time.
+  # Default: false
+  print-resources-usage: true
+
   # Define the Go version limit.
   # Mainly related to generics support since go1.18.
   # Default: use Go version from the go.mod file, fallback on the env var `GOVERSION`, fallback on 1.17
   go: '1.19'
+
+  # Deprecated: use Timeout instead.
+  deadline: 5m
 
 
 # output configuration options
@@ -659,6 +671,8 @@ linters-settings:
     # Check that each sentence starts with a capital letter.
     # Default: false
     capital: true
+    # Deprecated: use `Scope` instead
+    check-all: false
 
   godox:
     # Report any comments starting with keywords, this is useful for TODO or FIXME comments that
@@ -775,6 +789,10 @@ linters-settings:
     ignored-functions:
       - '^math\.'
       - '^http\.StatusText$'
+    # Deprecated
+    settings:
+      deprecated:
+        deprecated: do not use
 
   gomoddirectives:
     # Allow local `replace` directives.
@@ -1505,6 +1523,14 @@ linters-settings:
     # Default: 0.8
     confidence: 0.1
 
+    error-code: 1
+
+    warning-code: 0
+
+    directives:
+      name: example
+      severity: example
+
     rules:
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#add-constant
       - name: add-constant
@@ -2146,6 +2172,9 @@ linters-settings:
     # Default: false
     check-exported: true
 
+    # Deprecated: isn't supported anymore
+    algo: cha
+
   unused:
     # Mark all struct fields that have been written to as used.
     # Default: true
@@ -2313,6 +2342,9 @@ linters-settings:
     # This logic overrides force-err-cuddling among others.
     force-short-decl-cuddling: false
 
+  structcheck:
+    exported-fields: false
+
   # The custom section can be used to define linter plugins to be loaded at runtime.
   # See README documentation for more info.
   custom:
@@ -2327,6 +2359,8 @@ linters-settings:
       # Intended to point to the repo location of the linter.
       # Optional.
       original-url: github.com/golangci/example-linter
+
+      settings: symbol
 
 
 linters:
@@ -2697,6 +2731,10 @@ issues:
   # Fix found issues (if it's supported by the linter).
   # Default: false
   fix: true
+
+  # Show issues in any part of update files (requires new-from-rev or new-from-patch).
+  # Default: false
+  whole-files: true
 
 
 severity:

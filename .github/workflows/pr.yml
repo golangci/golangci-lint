@@ -129,3 +129,20 @@ jobs:
         env:
           # needed for github-action-config.json generation
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  documentation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Unshallow
+        run: git fetch --prune --unshallow
+      - name: Install Go
+        uses: actions/setup-go@v5
+        with:
+          # https://github.com/actions/setup-go#supported-version-syntax
+          # ex:
+          # - 1.18beta1 -> 1.18.0-beta.1
+          # - 1.18rc1 -> 1.18.0-rc.1
+          go-version: ${{ env.GO_VERSION }}
+      - name: Check if documentation reference is up to date
+        run: HELP_RUN=2 go run cmd/golangci-lint/main.go -c .golangci.reference.yml

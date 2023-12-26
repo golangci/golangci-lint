@@ -54,6 +54,24 @@ func setAnalyzerGoVersion(a *analysis.Analyzer, goVersion string) {
 	}
 }
 
+func commonStaticCheckConfig(settings *config.CommonStaticCheckSettings) *scconfig.Config {
+	var cfg *scconfig.Config
+
+	if settings == nil || len(settings.Checks) == 0 {
+		return &scconfig.Config{
+			Checks: []string{"*"}, // override for compatibility reason. Must drop in the next major version.
+		}
+	}
+
+	cfg = &scconfig.Config{
+		Checks: settings.Checks,
+	}
+
+	cfg.Checks = normalizeList(cfg.Checks)
+
+	return cfg
+}
+
 func staticCheckConfig(settings *config.StaticCheckSettings) *scconfig.Config {
 	var cfg *scconfig.Config
 

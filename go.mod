@@ -49,6 +49,7 @@ require (
 	github.com/golangci/misspell v0.4.1
 	github.com/golangci/revgrep v0.5.2
 	github.com/golangci/unconvert v0.0.0-20180507085042-28b1c447d1f4
+	github.com/google/go-cmp v0.6.0
 	github.com/gordonklaus/ineffassign v0.1.0
 	github.com/gostaticanalysis/forcetypeassert v0.1.0
 	github.com/gostaticanalysis/nilerr v0.1.1
@@ -151,7 +152,6 @@ require (
 	github.com/go-toolsmith/typep v1.1.0 // indirect
 	github.com/gobwas/glob v0.2.3 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
-	github.com/google/go-cmp v0.6.0 // indirect
 	github.com/gostaticanalysis/analysisutil v0.7.1 // indirect
 	github.com/gostaticanalysis/comment v1.4.2 // indirect
 	github.com/hashicorp/errwrap v1.0.0 // indirect

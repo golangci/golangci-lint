@@ -99,7 +99,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		goModDirectivesCfg  *config.GoModDirectivesSettings
 		gomodguardCfg       *config.GoModGuardSettings
 		gosecCfg            *config.GoSecSettings
-		gosimpleCfg         *config.StaticCheckSettings
+		gosimpleCfg         *config.CommonStaticCheckSettings
 		gosmopolitanCfg     *config.GosmopolitanSettings
 		govetCfg            *config.GovetSettings
 		grouperCfg          *config.GrouperSettings
@@ -131,7 +131,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		reviveCfg           *config.ReviveSettings
 		rowserrcheckCfg     *config.RowsErrCheckSettings
 		sloglintCfg         *config.SlogLintSettings
-		staticcheckCfg      *config.StaticCheckSettings
+		staticcheckCfg      *config.CommonStaticCheckSettings
 		structcheckCfg      *config.StructCheckSettings
 		stylecheckCfg       *config.StaticCheckSettings
 		tagalignCfg         *config.TagAlignSettings
@@ -868,7 +868,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/mvdan/unparam"),
 
-		linter.NewConfig(golinters.NewUnused(unusedCfg, staticcheckCfg)).
+		linter.NewConfig(golinters.NewUnused(unusedCfg, stylecheckCfg)).
 			WithEnabledByDefault().
 			WithSince("v1.20.0").
 			WithLoadForGoAnalysis().

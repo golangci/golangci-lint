@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/google/go-cmp/cmp"
 	"github.com/mitchellh/go-homedir"
 	"github.com/mitchellh/mapstructure"
 	"github.com/spf13/viper"
@@ -16,6 +17,71 @@ import (
 	"github.com/golangci/golangci-lint/pkg/fsutils"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 )
+
+// "... has unset fields: -" https://github.com/mitchellh/mapstructure/issues/350
+// "... has unset fields: ..." required fields not yet implemented https://github.com/mitchellh/mapstructure/issues/7
+const documentationReferenceErrors = `60 error(s) decoding:
+
+* '' has unset fields: -, InternalTest
+* 'Issues.exclude-rules[0]' has unset fields: Source, Text, path-except
+* 'Issues.exclude-rules[1]' has unset fields: Path, Source, Text
+* 'Issues.exclude-rules[2]' has unset fields: Source, path-except
+* 'Issues.exclude-rules[3]' has unset fields: Path, Source, path-except
+* 'Issues.exclude-rules[4]' has unset fields: Path, Text, path-except
+* 'Output' has unset fields: -
+* 'Severity.rules[0]' has unset fields: Path, Source, Text, path-except
+* 'linters-settings.Forbidigo.forbid[1]' has unset fields: patternString, pkg
+* 'linters-settings.Forbidigo.forbid[4]' has unset fields: msg, patternString
+* 'linters-settings.Gocritic' has unset fields: -
+* 'linters-settings.Govet' has unset fields: -
+* 'linters-settings.Revive.Rules[10]' has unset fields: Arguments
+* 'linters-settings.Revive.Rules[11]' has unset fields: Arguments
+* 'linters-settings.Revive.Rules[12]' has unset fields: Arguments
+* 'linters-settings.Revive.Rules[14]' has unset fields: Arguments
+* 'linters-settings.Revive.Rules[16]' has unset fields: Arguments
+* 'linters-settings.Revive.Rules[17]' has unset fields: Arguments
+* 'linters-settings.Revive.Rules[19]' has unset fields: Arguments
+* 'linters-settings.Revive.Rules[20]' has unset fields: Arguments
+* 'linters-settings.Revive.Rules[22]' has unset fields: Arguments
+* 'linters-settings.Revive.Rules[23]' has unset fields: Arguments
+* 'linters-settings.Revive.Rules[25]' has unset fields: Arguments
+* 'linters-settings.Revive.Rules[26]' has unset fields: Arguments
+* 'linters-settings.Revive.Rules[27]' has unset fields: Arguments
+* 'linters-settings.Revive.Rules[28]' has unset fields: Arguments
+* 'linters-settings.Revive.Rules[2]' has unset fields: Arguments
+* 'linters-settings.Revive.Rules[31]' has unset fields: Arguments
+* 'linters-settings.Revive.Rules[34]' has unset fields: Arguments
+* 'linters-settings.Revive.Rules[35]' has unset fields: Arguments
+* 'linters-settings.Revive.Rules[36]' has unset fields: Arguments
+* 'linters-settings.Revive.Rules[37]' has unset fields: Arguments
+* 'linters-settings.Revive.Rules[41]' has unset fields: Arguments
+* 'linters-settings.Revive.Rules[44]' has unset fields: Arguments
+* 'linters-settings.Revive.Rules[45]' has unset fields: Arguments
+* 'linters-settings.Revive.Rules[46]' has unset fields: Arguments
+* 'linters-settings.Revive.Rules[47]' has unset fields: Arguments
+* 'linters-settings.Revive.Rules[48]' has unset fields: Arguments
+* 'linters-settings.Revive.Rules[49]' has unset fields: Arguments
+* 'linters-settings.Revive.Rules[4]' has unset fields: Arguments
+* 'linters-settings.Revive.Rules[50]' has unset fields: Arguments
+* 'linters-settings.Revive.Rules[51]' has unset fields: Arguments
+* 'linters-settings.Revive.Rules[52]' has unset fields: Arguments
+* 'linters-settings.Revive.Rules[53]' has unset fields: Arguments
+* 'linters-settings.Revive.Rules[54]' has unset fields: Arguments
+* 'linters-settings.Revive.Rules[55]' has unset fields: Arguments
+* 'linters-settings.Revive.Rules[59]' has unset fields: Arguments
+* 'linters-settings.Revive.Rules[5]' has unset fields: Arguments
+* 'linters-settings.Revive.Rules[60]' has unset fields: Arguments
+* 'linters-settings.Revive.Rules[62]' has unset fields: Arguments
+* 'linters-settings.Revive.Rules[63]' has unset fields: Arguments
+* 'linters-settings.Revive.Rules[64]' has unset fields: Arguments
+* 'linters-settings.Revive.Rules[65]' has unset fields: Arguments
+* 'linters-settings.Revive.Rules[67]' has unset fields: Arguments
+* 'linters-settings.Revive.Rules[68]' has unset fields: Arguments
+* 'linters-settings.Revive.Rules[6]' has unset fields: Arguments
+* 'linters-settings.Revive.Rules[71]' has unset fields: Arguments
+* 'linters-settings.Revive.Rules[72]' has unset fields: Arguments
+* 'linters-settings.Revive.Rules[7]' has unset fields: Arguments
+* 'run' has unset fields: -`
 
 type FileReader struct {
 	log            logutils.Log
@@ -99,7 +165,21 @@ func (r *FileReader) parseConfig() error {
 
 		// Needed for forbidigo.
 		mapstructure.TextUnmarshallerHookFunc(),
-	))); err != nil {
+	)), func(config *mapstructure.DecoderConfig) {
+		config.ErrorUnused = true
+		if os.Getenv("HELP_RUN") == "2" {
+			config.ErrorUnset = true
+		}
+	}); err != nil {
+		if os.Getenv("HELP_RUN") == "2" {
+			if err.Error() == documentationReferenceErrors {
+				fmt.Printf("Documentation reference (%v) is up to date\n", usedConfigFile)
+				os.Exit(exitcodes.Success)
+			}
+			fmt.Printf("Documentation reference (%v) is NOT up to date\n", usedConfigFile)
+			fmt.Println(cmp.Diff(err.Error(), documentationReferenceErrors))
+			return fmt.Errorf("%s", err)
+		}
 		return fmt.Errorf("can't unmarshal config by viper: %s", err)
 	}
 
@@ -117,25 +197,6 @@ func (r *FileReader) parseConfig() error {
 
 func (r *FileReader) validateConfig() error {
 	c := r.cfg
-	if len(c.Run.Args) != 0 {
-		return errors.New("option run.args in config isn't supported now")
-	}
-
-	if c.Run.CPUProfilePath != "" {
-		return errors.New("option run.cpuprofilepath in config isn't allowed")
-	}
-
-	if c.Run.MemProfilePath != "" {
-		return errors.New("option run.memprofilepath in config isn't allowed")
-	}
-
-	if c.Run.TracePath != "" {
-		return errors.New("option run.tracepath in config isn't allowed")
-	}
-
-	if c.Run.IsVerbose {
-		return errors.New("can't set run.verbose option with config: only on command-line")
-	}
 	for i, rule := range c.Issues.ExcludeRules {
 		if err := rule.Validate(); err != nil {
 			return fmt.Errorf("error in exclude rule #%d: %v", i, err)

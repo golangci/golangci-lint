@@ -7,10 +7,10 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 )
 
-func NewGosimple(settings *config.StaticCheckSettings) *goanalysis.Linter {
-	cfg := staticCheckConfig(settings)
+func NewGosimple(settings *config.CommonStaticCheckSettings) *goanalysis.Linter {
+	cfg := commonStaticCheckConfig(settings)
 
-	analyzers := setupStaticCheckAnalyzers(simple.Analyzers, getGoVersion(settings), cfg.Checks)
+	analyzers := setupStaticCheckAnalyzers(simple.Analyzers, settings.GetGoVersion(), cfg.Checks)
 
 	return goanalysis.NewLinter(
 		"gosimple",

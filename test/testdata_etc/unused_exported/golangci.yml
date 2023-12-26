@@ -4,4 +4,4 @@ linters:
     - unused
 linters-settings:
   unused:
-    check-exported: true
+    exported-is-used: true

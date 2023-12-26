@@ -475,7 +475,6 @@ func TestConfigFileIsDetected(t *testing.T) {
 			t.Parallel()
 
 			testshared.NewRunnerBuilder(t).
-				// WithNoConfig().
 				WithTargetPath(test.targetPath).
 				Runner().
 				Run().
