@@ -186,10 +186,10 @@ type LintersSettings struct {
 	Decorder         DecorderSettings
 	Depguard         DepGuardSettings
 	Dogsled          DogsledSettings
-	Dupl             DuplSettings
 	DupWord          DupWordSettings
-	Errcheck         ErrcheckSettings
+	Dupl             DuplSettings
 	ErrChkJSON       ErrChkJSONSettings
+	Errcheck         ErrcheckSettings
 	ErrorLint        ErrorLintSettings
 	Exhaustive       ExhaustiveSettings
 	ExhaustiveStruct ExhaustiveStructSettings
@@ -198,6 +198,7 @@ type LintersSettings struct {
 	Funlen           FunlenSettings
 	Gci              GciSettings
 	GinkgoLinter     GinkgoLinterSettings
+	GoModDirectives  GoModDirectivesSettings
 	Gocognit         GocognitSettings
 	Goconst          GoConstSettings
 	Gocritic         GoCriticSettings
@@ -210,7 +211,6 @@ type LintersSettings struct {
 	Goimports        GoImportsSettings
 	Golint           GoLintSettings
 	Gomnd            GoMndSettings
-	GoModDirectives  GoModDirectivesSettings
 	Gomodguard       GoModGuardSettings
 	Gosec            GoSecSettings
 	Gosimple         StaticCheckSettings
@@ -245,13 +245,14 @@ type LintersSettings struct {
 	Revive           ReviveSettings
 	RowsErrCheck     RowsErrCheckSettings
 	SlogLint         SlogLintSettings
+	Spancheck        SpancheckSettings
 	Staticcheck      StaticCheckSettings
 	Structcheck      StructCheckSettings
 	Stylecheck       StaticCheckSettings
 	TagAlign         TagAlignSettings
 	Tagliatelle      TagliatelleSettings
-	Testifylint      TestifylintSettings
 	Tenv             TenvSettings
+	Testifylint      TestifylintSettings
 	Testpackage      TestpackageSettings
 	Thelper          ThelperSettings
 	Unparam          UnparamSettings
@@ -259,9 +260,9 @@ type LintersSettings struct {
 	UseStdlibVars    UseStdlibVarsSettings
 	Varcheck         VarCheckSettings
 	Varnamelen       VarnamelenSettings
+	WSL              WSLSettings
 	Whitespace       WhitespaceSettings
 	Wrapcheck        WrapcheckSettings
-	WSL              WSLSettings
 
 	Custom map[string]CustomLinterSettings
 }
@@ -771,6 +772,15 @@ type SlogLintSettings struct {
 	NoRawKeys      bool   `mapstructure:"no-raw-keys"`
 	KeyNamingCase  string `mapstructure:"key-naming-case"`
 	ArgsOnSepLines bool   `mapstructure:"args-on-sep-lines"`
+}
+
+type SpancheckSettings struct {
+	DisableEndCheck                  bool     `mapstructure:"disable-end-check"`
+	EnableAll                        bool     `mapstructure:"enable-all"`
+	EnableRecordErrorCheck           bool     `mapstructure:"enable-record-error-check"`
+	EnableSetStatusCheck             bool     `mapstructure:"enable-set-status-check"`
+	IgnoreRecordErrorCheckSignatures []string `mapstructure:"ignore-record-error-check-signatures"`
+	IgnoreSetStatusCheckSignatures   []string `mapstructure:"ignore-set-status-check-signatures"`
 }
 
 type StaticCheckSettings struct {
