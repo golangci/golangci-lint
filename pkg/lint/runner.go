@@ -214,7 +214,7 @@ func (r Runner) Run(ctx context.Context, linters []*linter.Config, lintCtx *lint
 		sw.TrackStage(lc.Name(), func() {
 			linterIssues, err := r.runLinterSafe(ctx, lintCtx, lc)
 			if err != nil {
-				lintErrors = errors.Join(lintErrors, fmt.Errorf("can't run linter %s: %w", lc.Linter.Name(), err))
+				lintErrors = errors.Join(lintErrors, fmt.Errorf("can't run linter %s", lc.Linter.Name()), err)
 				r.Log.Warnf("Can't run linter %s: %v", lc.Linter.Name(), err)
 
 				return
