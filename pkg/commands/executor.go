@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"crypto/sha256"
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -78,7 +79,7 @@ func NewExecutor(buildInfo BuildInfo) *Executor {
 	// to setup log level early we need to parse config from command line extra time to
 	// find `-v` option
 	commandLineCfg, err := e.getConfigForCommandLine()
-	if err != nil && err != pflag.ErrHelp {
+	if err != nil && !errors.Is(err, pflag.ErrHelp) {
 		e.log.Fatalf("Can't get config for command line: %s", err)
 	}
 	if commandLineCfg != nil {

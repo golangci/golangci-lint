@@ -60,6 +60,8 @@ linters-settings:
           - (github.com/golangci/golangci-lint/pkg/logutils.Log).Warnf
           - (github.com/golangci/golangci-lint/pkg/logutils.Log).Errorf
           - (github.com/golangci/golangci-lint/pkg/logutils.Log).Fatalf
+  errorlint:
+    asserts: false
   lll:
     line-length: 140
   misspell:
@@ -82,6 +84,7 @@ linters:
     - dogsled
     - dupl
     - errcheck
+    - errorlint
     - exportloopref
     - funlen
     - gocheckcompilerdirectives

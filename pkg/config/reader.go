@@ -38,11 +38,11 @@ func (r *FileReader) Read() error {
 
 	configFile, err := r.parseConfigOption()
 	if err != nil {
-		if err == errConfigDisabled {
+		if errors.Is(err, errConfigDisabled) {
 			return nil
 		}
 
-		return fmt.Errorf("can't parse --config option: %s", err)
+		return fmt.Errorf("can't parse --config option: %w", err)
 	}
 
 	if configFile != "" {
@@ -65,7 +65,7 @@ func (r *FileReader) parseConfig() error {
 			return nil
 		}
 
-		return fmt.Errorf("can't read viper config: %s", err)
+		return fmt.Errorf("can't read viper config: %w", err)
 	}
 
 	usedConfigFile := viper.ConfigFileUsed()
@@ -100,11 +100,11 @@ func (r *FileReader) parseConfig() error {
 		// Needed for forbidigo.
 		mapstructure.TextUnmarshallerHookFunc(),
 	))); err != nil {
-		return fmt.Errorf("can't unmarshal config by viper: %s", err)
+		return fmt.Errorf("can't unmarshal config by viper: %w", err)
 	}
 
 	if err := r.validateConfig(); err != nil {
-		return fmt.Errorf("can't validate config: %s", err)
+		return fmt.Errorf("can't validate config: %w", err)
 	}
 
 	if r.cfg.InternalTest { // just for testing purposes: to detect config file usage
@@ -138,7 +138,7 @@ func (r *FileReader) validateConfig() error {
 	}
 	for i, rule := range c.Issues.ExcludeRules {
 		if err := rule.Validate(); err != nil {
-			return fmt.Errorf("error in exclude rule #%d: %v", i, err)
+			return fmt.Errorf("error in exclude rule #%d: %w", i, err)
 		}
 	}
 	if len(c.Severity.Rules) > 0 && c.Severity.Default == "" {
@@ -146,11 +146,11 @@ func (r *FileReader) validateConfig() error {
 	}
 	for i, rule := range c.Severity.Rules {
 		if err := rule.Validate(); err != nil {
-			return fmt.Errorf("error in severity rule #%d: %v", i, err)
+			return fmt.Errorf("error in severity rule #%d: %w", i, err)
 		}
 	}
 	if err := c.LintersSettings.Govet.Validate(); err != nil {
-		return fmt.Errorf("error in govet config: %v", err)
+		return fmt.Errorf("error in govet config: %w", err)
 	}
 	return nil
 }

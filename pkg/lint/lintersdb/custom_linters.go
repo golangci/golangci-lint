@@ -71,7 +71,7 @@ func (m *Manager) getAnalyzerPlugin(path string, settings any) ([]*analysis.Anal
 		configFilePath := viper.ConfigFileUsed()
 		absConfigFilePath, err := filepath.Abs(configFilePath)
 		if err != nil {
-			return nil, fmt.Errorf("could not get absolute representation of config file path %q: %v", configFilePath, err)
+			return nil, fmt.Errorf("could not get absolute representation of config file path %q: %w", configFilePath, err)
 		}
 		path = filepath.Join(filepath.Dir(absConfigFilePath), path)
 	}
