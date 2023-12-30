@@ -57,7 +57,7 @@ require (
 	github.com/jgautheron/goconst v1.7.0
 	github.com/jingyugao/rowserrcheck v1.1.1
 	github.com/jirfag/go-printf-func-name v0.0.0-20200119135958-7558a9eaa5af
-	github.com/jjti/go-spancheck v0.3.1
+	github.com/jjti/go-spancheck v0.3.2
 	github.com/julz/importas v0.1.0
 	github.com/kisielk/errcheck v1.6.3
 	github.com/kkHAIKE/contextcheck v1.1.4
@@ -141,6 +141,7 @@ require (
 	github.com/ettle/strcase v0.2.0 // indirect
 	github.com/fatih/structtag v1.2.0 // indirect
 	github.com/fsnotify/fsnotify v1.5.4 // indirect
+	github.com/go-logr/logr v1.3.0 // indirect
 	github.com/go-ole/go-ole v1.2.6 // indirect
 	github.com/go-toolsmith/astcast v1.1.0 // indirect
 	github.com/go-toolsmith/astcopy v1.1.0 // indirect
