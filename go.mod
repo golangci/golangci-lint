@@ -1,6 +1,6 @@
 module github.com/golangci/golangci-lint
 
-go 1.21.3
+go 1.20.0
 
 require (
 	4d63.com/gocheckcompilerdirectives v1.2.1
@@ -57,6 +57,7 @@ require (
 	github.com/jgautheron/goconst v1.7.0
 	github.com/jingyugao/rowserrcheck v1.1.1
 	github.com/jirfag/go-printf-func-name v0.0.0-20200119135958-7558a9eaa5af
+	github.com/jjti/go-spancheck v0.3.1
 	github.com/julz/importas v0.1.0
 	github.com/kisielk/errcheck v1.6.3
 	github.com/kkHAIKE/contextcheck v1.1.4
@@ -155,7 +156,6 @@ require (
 	github.com/gostaticanalysis/comment v1.4.2 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
-	github.com/jjti/go-spancheck v0.3.1 // indirect
 	github.com/kisielk/gotool v1.0.0 // indirect
 	github.com/lufia/plan9stats v0.0.0-20211012122336-39d0f177ccd0 // indirect
 	github.com/magiconair/properties v1.8.6 // indirect

@@ -310,10 +310,6 @@ github.com/jingyugao/rowserrcheck v1.1.1 h1:zibz55j/MJtLsjP1OF4bSdgXxwL1b+Vn7Tjz
 github.com/jingyugao/rowserrcheck v1.1.1/go.mod h1:4yvlZSDb3IyDTUZJUmpZfm2Hwok+Dtp+nu2qOq+er9c=
 github.com/jirfag/go-printf-func-name v0.0.0-20200119135958-7558a9eaa5af h1:KA9BjwUk7KlCh6S9EAGWBt1oExIUv9WyNCiRz5amv48=
 github.com/jirfag/go-printf-func-name v0.0.0-20200119135958-7558a9eaa5af/go.mod h1:HEWGJkRDzjJY2sqdDwxccsGicWEf9BQOZsq2tV+xzM0=
-github.com/jjti/go-spancheck v0.2.0 h1:vhwZJnmQt9qBw8xdqiZ7UWKTn2Ag8kh7/zq3seZ+nkI=
-github.com/jjti/go-spancheck v0.2.0/go.mod h1:Y9m3q/eWmAvoVPgWM/H2Ce+Y+TiCcqDAfTKfFXMW274=
-github.com/jjti/go-spancheck v0.3.0 h1:oWmVdpDu56H0Yj9osysJBoFqIpNyxFxIRkN0mFD1HO0=
-github.com/jjti/go-spancheck v0.3.0/go.mod h1:Y9m3q/eWmAvoVPgWM/H2Ce+Y+TiCcqDAfTKfFXMW274=
 github.com/jjti/go-spancheck v0.3.1 h1:3GjJONve4cy/ifYExxGbE6r6LwaISe9EOC5m5BAwpsg=
 github.com/jjti/go-spancheck v0.3.1/go.mod h1:ARPNI1JRG1V2Rjnd6/2f2NEfghjSVDZGVmruNKlnXU0=
 github.com/jpillora/backoff v1.0.0/go.mod h1:J/6gKK9jxlEcS3zixgDgUAsiuZ7yrSoa/FX5e0EB2j4=
