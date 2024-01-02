@@ -261,11 +261,11 @@ func (e *Executor) getConfigForCommandLine() (*config.Config, error) {
 
 	fs.Usage = func() {} // otherwise, help text will be printed twice
 	if err := fs.Parse(os.Args); err != nil {
-		if err == pflag.ErrHelp {
+		if errors.Is(err, pflag.ErrHelp) {
 			return nil, err
 		}
 
-		return nil, fmt.Errorf("can't parse args: %s", err)
+		return nil, fmt.Errorf("can't parse args: %w", err)
 	}
 
 	return &cfg, nil
@@ -433,7 +433,7 @@ func (e *Executor) printReports(issues []result.Issue, path, format string) erro
 		if file, ok := w.(io.Closer); shouldClose && ok {
 			_ = file.Close()
 		}
-		return fmt.Errorf("can't print %d issues: %s", len(issues), err)
+		return fmt.Errorf("can't print %d issues: %w", len(issues), err)
 	}
 
 	if file, ok := w.(io.Closer); shouldClose && ok {

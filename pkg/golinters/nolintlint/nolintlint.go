@@ -171,7 +171,7 @@ func (l Linter) Run(fset *token.FileSet, nodes ...ast.Node) ([]Issue, error) {
 				}
 
 				directiveWithOptionalLeadingSpace := "//"
-				if len(leadingSpace) > 0 {
+				if leadingSpace != "" {
 					directiveWithOptionalLeadingSpace += " "
 				}
 
@@ -188,7 +188,7 @@ func (l Linter) Run(fset *token.FileSet, nodes ...ast.Node) ([]Issue, error) {
 				}
 
 				// check for, report and eliminate leading spaces, so we can check for other issues
-				if len(leadingSpace) > 0 {
+				if leadingSpace != "" {
 					removeWhitespace := &result.Replacement{
 						Inline: &result.InlineFix{
 							StartCol:  pos.Column + 1,
@@ -217,7 +217,7 @@ func (l Linter) Run(fset *token.FileSet, nodes ...ast.Node) ([]Issue, error) {
 				lintersText, explanation := fullMatches[1], fullMatches[2]
 
 				var linters []string
-				if len(lintersText) > 0 && !strings.HasPrefix(lintersText, "all") {
+				if lintersText != "" && !strings.HasPrefix(lintersText, "all") {
 					lls := strings.Split(lintersText, ",")
 					linters = make([]string, 0, len(lls))
 					rangeStart := (pos.Column - 1) + len("//") + len(leadingSpace) + len("nolint:")

@@ -108,7 +108,7 @@ func createMisspellReplacer(settings *config.MisspellSettings) (*misspell.Replac
 func runMisspellOnFile(lintCtx *linter.Context, filename string, replacer *misspell.Replacer, mode string) ([]result.Issue, error) {
 	fileContent, err := lintCtx.FileCache.GetFileBytes(filename)
 	if err != nil {
-		return nil, fmt.Errorf("can't get file %s contents: %s", filename, err)
+		return nil, fmt.Errorf("can't get file %s contents: %w", filename, err)
 	}
 
 	// `r.ReplaceGo` doesn't find issues inside strings: it searches only inside comments.
