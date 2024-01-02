@@ -1,5 +1,5 @@
 //golangcitest:config_path configs/enable_all.yml
-//golangcitest:args --disable-all -Espancheck
+//golangcitest:args -Espancheck
 package spancheck
 
 import (
