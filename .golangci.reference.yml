@@ -1913,40 +1913,19 @@ linters-settings:
     args-on-sep-lines: true
 
   spancheck:
-    # Disable the span.End() check.
-    # Default: false
-    disable-end-check: true
+    # Checks to enable. By default, only the "end" (`span.End()`) check is enabled.
+    # https://github.com/jjti/go-spancheck#configuration
+    # Default: ["end"]
+    checks:
+      - "end"
+      - "record-error"
+      - "set-status"
 
-    # Enable all checks.
-    # This overrides individual check settings.
-    # Default: false
-    enable-all: true
-
-    # Enables a check that `span.RecordError` is called whenever a path to a return statement with an error is found.
-    # Developers should use `span.RecordError(err)` to create an exception event on the span.
-    # https://github.com/jjti/go-spancheck#checks
-    # Default: false
-    enable-record-error-check: true
-
-    # Enables a check that `span.SetStatus` is called whenever a path to a return statement with an error is found.
-    # Developers should use `span.SetStatus(codes.Error, msg)` to set the `status:error` attribute on the span.
-    # https://github.com/jjti/go-spancheck#checks
-    # Default: false
-    enable-set-status-check: true
-
-    # A slice of regexes for function signatures that,
-    # if found in the call path to an error return statement,
-    # should silence the RecordError check.
+    # A slice of regexes for function signatures that, if found in the call path to a returned error,
+    # silence "record-error" or "set-status" warnings.
     # https://github.com/jjti/go-spancheck#configuration
     # Default: []
-    ignore-record-error-check-signatures:
-      - "telemetry.RecordError"
-
-    # A slice of regexes for function signatures that, if found in the call path to an error return statement,
-    # should silence the SetStatus check.
-    # https://github.com/jjti/go-spancheck#configuration
-    # Default: []
-    ignore-set-status-check-signatures:
+    ignore-check-signatures:
       - "telemetry.RecordError"
 
   staticcheck:

@@ -775,12 +775,8 @@ type SlogLintSettings struct {
 }
 
 type SpancheckSettings struct {
-	DisableEndCheck                  bool     `mapstructure:"disable-end-check"`
-	EnableAll                        bool     `mapstructure:"enable-all"`
-	EnableRecordErrorCheck           bool     `mapstructure:"enable-record-error-check"`
-	EnableSetStatusCheck             bool     `mapstructure:"enable-set-status-check"`
-	IgnoreRecordErrorCheckSignatures []string `mapstructure:"ignore-record-error-check-signatures"`
-	IgnoreSetStatusCheckSignatures   []string `mapstructure:"ignore-set-status-check-signatures"`
+	Checks                []string `mapstructure:"checks"`
+	IgnoreCheckSignatures []string `mapstructure:"ignore-check-signatures"`
 }
 
 type StaticCheckSettings struct {

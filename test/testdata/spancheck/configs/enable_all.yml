@@ -1,7 +1,8 @@
 linters-settings:
   spancheck:
-    enable-all: true
-    ignore-record-error-check-signatures:
-      - "recordErr"
-    ignore-set-status-check-signatures:
+    checks:
+      - "end"
+      - "record-error"
+      - "set-status"
+    ignore-check-signatures:
       - "recordErr"
