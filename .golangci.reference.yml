@@ -565,6 +565,10 @@ linters-settings:
         # Whether to restrict checker to params only.
         # Default: true
         paramsOnly: false
+      commentedOutCode:
+        # Min length of the comment that triggers a warning.
+        # Default: 15
+        minLength: 50
       elseif:
         # Whether to skip balanced if-else pairs.
         # Default: true
@@ -573,6 +577,10 @@ linters-settings:
         # Size in bytes that makes the warning trigger.
         # Default: 80
         sizeThreshold: 70
+      ifElseChain:
+        # Min number of if-else blocks that makes the warning trigger.
+        # Default: 2
+        minThreshold: 4
       nestingReduce:
         # Min number of statements inside a branch to trigger a warning.
         # Default: 5
@@ -602,7 +610,7 @@ linters-settings:
         # Then:
         #   ruleguard prints the specific Where() condition that was rejected.
         #
-        # The flag is passed to the ruleguard 'debug-group' argument.
+        # The option is passed to the ruleguard 'debug-group' argument.
         # Default: ""
         debug: 'emptyDecl'
         # Deprecated, use 'failOn' param.
