@@ -198,7 +198,6 @@ type LintersSettings struct {
 	Funlen           FunlenSettings
 	Gci              GciSettings
 	GinkgoLinter     GinkgoLinterSettings
-	GoModDirectives  GoModDirectivesSettings
 	Gocognit         GocognitSettings
 	Goconst          GoConstSettings
 	Gocritic         GoCriticSettings
@@ -211,6 +210,7 @@ type LintersSettings struct {
 	Goimports        GoImportsSettings
 	Golint           GoLintSettings
 	Gomnd            GoMndSettings
+	GoModDirectives  GoModDirectivesSettings
 	Gomodguard       GoModGuardSettings
 	Gosec            GoSecSettings
 	Gosimple         StaticCheckSettings
@@ -260,9 +260,9 @@ type LintersSettings struct {
 	UseStdlibVars    UseStdlibVarsSettings
 	Varcheck         VarCheckSettings
 	Varnamelen       VarnamelenSettings
-	WSL              WSLSettings
 	Whitespace       WhitespaceSettings
 	Wrapcheck        WrapcheckSettings
+	WSL              WSLSettings
 
 	Custom map[string]CustomLinterSettings
 }
