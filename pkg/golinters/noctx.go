@@ -12,7 +12,7 @@ func NewNoctx() *goanalysis.Linter {
 
 	return goanalysis.NewLinter(
 		a.Name,
-		"noctx finds sending http request without context.Context",
+		"Finds sending http request without context.Context",
 		[]*analysis.Analyzer{a},
 		nil,
 	).WithLoadMode(goanalysis.LoadModeTypesInfo)
