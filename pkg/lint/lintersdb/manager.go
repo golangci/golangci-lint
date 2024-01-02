@@ -170,8 +170,6 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		funlenCfg = &m.cfg.LintersSettings.Funlen
 		gciCfg = &m.cfg.LintersSettings.Gci
 		ginkgolinterCfg = &m.cfg.LintersSettings.GinkgoLinter
-		goMndCfg = &m.cfg.LintersSettings.Gomnd
-		goModDirectivesCfg = &m.cfg.LintersSettings.GoModDirectives
 		gocognitCfg = &m.cfg.LintersSettings.Gocognit
 		goconstCfg = &m.cfg.LintersSettings.Goconst
 		gocriticCfg = &m.cfg.LintersSettings.Gocritic
@@ -183,6 +181,8 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		goheaderCfg = &m.cfg.LintersSettings.Goheader
 		goimportsCfg = &m.cfg.LintersSettings.Goimports
 		golintCfg = &m.cfg.LintersSettings.Golint
+		goMndCfg = &m.cfg.LintersSettings.Gomnd
+		goModDirectivesCfg = &m.cfg.LintersSettings.GoModDirectives
 		gomodguardCfg = &m.cfg.LintersSettings.Gomodguard
 		gosecCfg = &m.cfg.LintersSettings.Gosec
 		gosimpleCfg = &m.cfg.LintersSettings.Gosimple

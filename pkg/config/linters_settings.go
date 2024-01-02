@@ -186,10 +186,10 @@ type LintersSettings struct {
 	Decorder         DecorderSettings
 	Depguard         DepGuardSettings
 	Dogsled          DogsledSettings
-	DupWord          DupWordSettings
 	Dupl             DuplSettings
-	ErrChkJSON       ErrChkJSONSettings
+	DupWord          DupWordSettings
 	Errcheck         ErrcheckSettings
+	ErrChkJSON       ErrChkJSONSettings
 	ErrorLint        ErrorLintSettings
 	Exhaustive       ExhaustiveSettings
 	ExhaustiveStruct ExhaustiveStructSettings
