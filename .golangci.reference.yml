@@ -1913,7 +1913,11 @@ linters-settings:
     args-on-sep-lines: true
 
   spancheck:
-    # Checks to enable. By default, only the "end" (`span.End()`) check is enabled.
+    # Checks to enable. By default, only the "end" check is enabled.
+    # Options include:
+    #  - "end": check that `span.End()` is called
+    #  - "record-error": check that `span.RecordError(err)` is called when an error is returned
+    #  - "set-status": check that `span.SetStatus(codes.Error, msg)` is called when an error is returned
     # https://github.com/jjti/go-spancheck#configuration
     # Default: ["end"]
     checks:
