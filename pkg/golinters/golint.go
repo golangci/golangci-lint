@@ -56,7 +56,7 @@ func runGoLint(pass *analysis.Pass, settings *config.GoLintSettings) ([]goanalys
 
 	ps, err := l.LintPkg(pass.Files, pass.Fset, pass.Pkg, pass.TypesInfo)
 	if err != nil {
-		return nil, fmt.Errorf("can't lint %d files: %s", len(pass.Files), err)
+		return nil, fmt.Errorf("can't lint %d files: %w", len(pass.Files), err)
 	}
 
 	if len(ps) == 0 {

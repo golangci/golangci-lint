@@ -139,16 +139,16 @@ type BaseRule struct {
 
 func (b *BaseRule) Validate(minConditionsCount int) error {
 	if err := validateOptionalRegex(b.Path); err != nil {
-		return fmt.Errorf("invalid path regex: %v", err)
+		return fmt.Errorf("invalid path regex: %w", err)
 	}
 	if err := validateOptionalRegex(b.PathExcept); err != nil {
-		return fmt.Errorf("invalid path-except regex: %v", err)
+		return fmt.Errorf("invalid path-except regex: %w", err)
 	}
 	if err := validateOptionalRegex(b.Text); err != nil {
-		return fmt.Errorf("invalid text regex: %v", err)
+		return fmt.Errorf("invalid text regex: %w", err)
 	}
 	if err := validateOptionalRegex(b.Source); err != nil {
-		return fmt.Errorf("invalid source regex: %v", err)
+		return fmt.Errorf("invalid source regex: %w", err)
 	}
 	nonBlank := 0
 	if len(b.Linters) > 0 {

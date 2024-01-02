@@ -21,7 +21,7 @@ func NewSkipFiles(patterns []string, pathPrefix string) (*SkipFiles, error) {
 		p = fsutils.NormalizePathInRegex(p)
 		patternRe, err := regexp.Compile(p)
 		if err != nil {
-			return nil, fmt.Errorf("can't compile regexp %q: %s", p, err)
+			return nil, fmt.Errorf("can't compile regexp %q: %w", p, err)
 		}
 		patternsRe = append(patternsRe, patternRe)
 	}
