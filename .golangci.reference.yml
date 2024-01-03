@@ -1913,21 +1913,19 @@ linters-settings:
     args-on-sep-lines: true
 
   spancheck:
-    # Checks to enable. By default, only the "end" check is enabled.
+    # Checks to enable.
     # Options include:
-    #  - "end": check that `span.End()` is called
-    #  - "record-error": check that `span.RecordError(err)` is called when an error is returned
-    #  - "set-status": check that `span.SetStatus(codes.Error, msg)` is called when an error is returned
-    # https://github.com/jjti/go-spancheck#configuration
+    # - `end`: check that `span.End()` is called
+    # - `record-error`: check that `span.RecordError(err)` is called when an error is returned
+    # - `set-status`: check that `span.SetStatus(codes.Error, msg)` is called when an error is returned
     # Default: ["end"]
     checks:
       - "end"
       - "record-error"
       - "set-status"
-
-    # A slice of regexes for function signatures that, if found in the call path to a returned error,
-    # silence "record-error" or "set-status" warnings.
-    # https://github.com/jjti/go-spancheck#configuration
+    # A slice of regexes for function signatures that,
+    # if found in the call path to a returned error,
+    # silence `record-error` or `set-status` reports.
     # Default: []
     ignore-check-signatures:
       - "telemetry.RecordError"
