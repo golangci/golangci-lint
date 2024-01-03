@@ -1920,12 +1920,13 @@ linters-settings:
     # - `set-status`: check that `span.SetStatus(codes.Error, msg)` is called when an error is returned
     # Default: ["end"]
     checks:
-      - "end"
-      - "record-error"
-      - "set-status"
-    # A slice of regexes for function signatures that,
+      - end
+      - record-error
+      - set-status
+
+    # A list of regexes for function signatures that silence "record-error" or "set-status" warnings
     # if found in the call path to a returned error,
-    # silence `record-error` or `set-status` reports.
+    # https://github.com/jjti/go-spancheck#configuration
     # Default: []
     ignore-check-signatures:
       - "telemetry.RecordError"
