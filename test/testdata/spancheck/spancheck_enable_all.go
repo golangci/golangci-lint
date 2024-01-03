@@ -199,8 +199,8 @@ func _() error {
 	defer span.End()
 
 	err := errors.New("foo")
-	recordErr(span, err)
+	recordError(span, err)
 	return err
 }
 
-func recordErr(span trace.Span, err error) {}
+func recordError(span trace.Span, err error) {}

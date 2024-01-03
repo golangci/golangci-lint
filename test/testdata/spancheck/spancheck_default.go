@@ -1,4 +1,3 @@
-//golangcitest:config_path configs/default.yml
 //golangcitest:args -Espancheck
 package spancheck
 
@@ -9,12 +8,11 @@ import (
 
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/codes"
-	"go.opentelemetry.io/otel/trace"
 )
 
-type testError struct{}
+type testDefaultError struct{}
 
-func (e *testError) Error() string {
+func (e *testDefaultError) Error() string {
 	return "foo"
 }
 
@@ -90,5 +88,3 @@ func _() {
 	_, span = otel.Tracer("foo").Start(context.Background(), "bar")
 	defer span.End()
 }
-
-func recordErr(span trace.Span, err error) {}

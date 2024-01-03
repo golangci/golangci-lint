@@ -10,14 +10,19 @@ import (
 
 func NewSpancheck(settings *config.SpancheckSettings) *goanalysis.Linter {
 	cfg := spancheck.NewDefaultConfig()
-	if settings != nil && settings.Checks != nil {
-		cfg.EnabledChecks = settings.Checks
-	}
-	if settings != nil && settings.IgnoreCheckSignatures != nil {
-		cfg.IgnoreChecksSignaturesSlice = settings.IgnoreCheckSignatures
+
+	if settings != nil {
+		if settings.Checks != nil {
+			cfg.EnabledChecks = settings.Checks
+		}
+
+		if settings.IgnoreCheckSignatures != nil {
+			cfg.IgnoreChecksSignaturesSlice = settings.IgnoreCheckSignatures
+		}
 	}
 
 	a := spancheck.NewAnalyzerWithConfig(cfg)
+
 	return goanalysis.
 		NewLinter(a.Name, a.Doc, []*analysis.Analyzer{a}, nil).
 		WithLoadMode(goanalysis.LoadModeTypesInfo)
