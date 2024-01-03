@@ -245,13 +245,14 @@ type LintersSettings struct {
 	Revive           ReviveSettings
 	RowsErrCheck     RowsErrCheckSettings
 	SlogLint         SlogLintSettings
+	Spancheck        SpancheckSettings
 	Staticcheck      StaticCheckSettings
 	Structcheck      StructCheckSettings
 	Stylecheck       StaticCheckSettings
 	TagAlign         TagAlignSettings
 	Tagliatelle      TagliatelleSettings
-	Testifylint      TestifylintSettings
 	Tenv             TenvSettings
+	Testifylint      TestifylintSettings
 	Testpackage      TestpackageSettings
 	Thelper          ThelperSettings
 	Unparam          UnparamSettings
@@ -771,6 +772,11 @@ type SlogLintSettings struct {
 	NoRawKeys      bool   `mapstructure:"no-raw-keys"`
 	KeyNamingCase  string `mapstructure:"key-naming-case"`
 	ArgsOnSepLines bool   `mapstructure:"args-on-sep-lines"`
+}
+
+type SpancheckSettings struct {
+	Checks                []string `mapstructure:"checks"`
+	IgnoreCheckSignatures []string `mapstructure:"ignore-check-signatures"`
 }
 
 type StaticCheckSettings struct {
