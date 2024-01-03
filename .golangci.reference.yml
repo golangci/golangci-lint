@@ -1923,10 +1923,9 @@ linters-settings:
       - end
       - record-error
       - set-status
-
-    # A list of regexes for function signatures that silence "record-error" or "set-status" warnings
-    # if found in the call path to a returned error,
-    # https://github.com/jjti/go-spancheck#configuration
+    # A list of regexes for function signatures that silence `record-error` and `set-status` reports
+    # if found in the call path to a returned error.
+    # https://github.com/jjti/go-spancheck#ignore-check-signatures
     # Default: []
     ignore-check-signatures:
       - "telemetry.RecordError"
