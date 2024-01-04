@@ -76,7 +76,7 @@ func runNoLintLint(pass *analysis.Pass, settings *config.NoLintLintSettings) ([]
 
 	lintIssues, err := lnt.Run(pass.Fset, nodes...)
 	if err != nil {
-		return nil, fmt.Errorf("linter failed to run: %s", err)
+		return nil, fmt.Errorf("linter failed to run: %w", err)
 	}
 
 	var issues []goanalysis.Issue

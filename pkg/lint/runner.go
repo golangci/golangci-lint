@@ -2,11 +2,11 @@ package lint
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"runtime/debug"
 	"strings"
 
-	"github.com/hashicorp/go-multierror"
 	gopackages "golang.org/x/tools/go/packages"
 
 	"github.com/golangci/golangci-lint/internal/errorutil"
@@ -205,7 +205,7 @@ func (r Runner) Run(ctx context.Context, linters []*linter.Config, lintCtx *lint
 	defer sw.Print()
 
 	var (
-		lintErrors *multierror.Error
+		lintErrors error
 		issues     []result.Issue
 	)
 
@@ -214,7 +214,7 @@ func (r Runner) Run(ctx context.Context, linters []*linter.Config, lintCtx *lint
 		sw.TrackStage(lc.Name(), func() {
 			linterIssues, err := r.runLinterSafe(ctx, lintCtx, lc)
 			if err != nil {
-				lintErrors = multierror.Append(lintErrors, fmt.Errorf("can't run linter %s: %w", lc.Linter.Name(), err))
+				lintErrors = errors.Join(lintErrors, fmt.Errorf("can't run linter %s", lc.Linter.Name()), err)
 				r.Log.Warnf("Can't run linter %s: %v", lc.Linter.Name(), err)
 
 				return
@@ -224,7 +224,7 @@ func (r Runner) Run(ctx context.Context, linters []*linter.Config, lintCtx *lint
 		})
 	}
 
-	return r.processLintResults(issues), lintErrors.ErrorOrNil()
+	return r.processLintResults(issues), lintErrors
 }
 
 func (r *Runner) processIssues(issues []result.Issue, sw *timeutils.Stopwatch, statPerProcessor map[string]processorStat) []result.Issue {

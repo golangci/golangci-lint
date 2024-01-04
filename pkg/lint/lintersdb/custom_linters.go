@@ -1,12 +1,12 @@
 package lintersdb
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
 	"plugin"
 
-	"github.com/hashicorp/go-multierror"
 	"github.com/spf13/viper"
 	"golang.org/x/tools/go/analysis"
 
@@ -71,7 +71,7 @@ func (m *Manager) getAnalyzerPlugin(path string, settings any) ([]*analysis.Anal
 		configFilePath := viper.ConfigFileUsed()
 		absConfigFilePath, err := filepath.Abs(configFilePath)
 		if err != nil {
-			return nil, fmt.Errorf("could not get absolute representation of config file path %q: %v", configFilePath, err)
+			return nil, fmt.Errorf("could not get absolute representation of config file path %q: %w", configFilePath, err)
 		}
 		path = filepath.Join(filepath.Dir(absConfigFilePath), path)
 	}
@@ -94,8 +94,7 @@ func (m *Manager) lookupPlugin(plug *plugin.Plugin, settings any) ([]*analysis.A
 	if err != nil {
 		analyzers, errP := m.lookupAnalyzerPlugin(plug)
 		if errP != nil {
-			// TODO(ldez): use `errors.Join` when we will upgrade to go1.20.
-			return nil, multierror.Append(err, errP)
+			return nil, errors.Join(err, errP)
 		}
 
 		return analyzers, nil

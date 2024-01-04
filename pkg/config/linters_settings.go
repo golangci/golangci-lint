@@ -246,13 +246,14 @@ type LintersSettings struct {
 	Revive           ReviveSettings
 	RowsErrCheck     RowsErrCheckSettings
 	SlogLint         SlogLintSettings
+	Spancheck        SpancheckSettings
 	Staticcheck      StaticCheckSettings
 	Structcheck      StructCheckSettings
 	Stylecheck       StaticCheckSettings
 	TagAlign         TagAlignSettings
 	Tagliatelle      TagliatelleSettings
-	Testifylint      TestifylintSettings
 	Tenv             TenvSettings
+	Testifylint      TestifylintSettings
 	Testpackage      TestpackageSettings
 	Thelper          ThelperSettings
 	Unparam          UnparamSettings
@@ -665,8 +666,9 @@ type MalignedSettings struct {
 }
 
 type MisspellSettings struct {
+	Mode   string `mapstructure:"mode"`
 	Locale string
-	// TODO(ldez): v2 the options must be renamed to `IgnoredRules`.
+	// TODO(ldez): v2 the option must be renamed to `IgnoredRules`.
 	IgnoreWords []string `mapstructure:"ignore-words"`
 }
 
@@ -776,6 +778,11 @@ type SlogLintSettings struct {
 	NoRawKeys      bool   `mapstructure:"no-raw-keys"`
 	KeyNamingCase  string `mapstructure:"key-naming-case"`
 	ArgsOnSepLines bool   `mapstructure:"args-on-sep-lines"`
+}
+
+type SpancheckSettings struct {
+	Checks                []string `mapstructure:"checks"`
+	IgnoreCheckSignatures []string `mapstructure:"ignore-check-signatures"`
 }
 
 type StaticCheckSettings struct {

@@ -9,7 +9,6 @@ import (
 	"runtime/debug"
 	"time"
 
-	"github.com/hashicorp/go-multierror"
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/packages"
 	"golang.org/x/tools/go/types/objectpath"
@@ -126,20 +125,16 @@ func (act *action) analyze() {
 	}(time.Now())
 
 	// Report an error if any dependency failures.
-	var depErrors *multierror.Error
+	var depErrors error
 	for _, dep := range act.deps {
 		if dep.err == nil {
 			continue
 		}
 
-		depErrors = multierror.Append(depErrors, errors.Unwrap(dep.err))
+		depErrors = errors.Join(depErrors, errors.Unwrap(dep.err))
 	}
 	if depErrors != nil {
-		depErrors.ErrorFormat = func(e []error) string {
-			return fmt.Sprintf("failed prerequisites: %v", e)
-		}
-
-		act.err = depErrors
+		act.err = fmt.Errorf("failed prerequisites: %w", depErrors)
 		return
 	}
 

@@ -39,7 +39,7 @@ func NewMirror() *goanalysis.Linter {
 				Pos:        i.Start,
 			}
 
-			if len(i.InlineFix) > 0 {
+			if i.InlineFix != "" {
 				issue.Replacement = &result.Replacement{
 					Inline: &result.InlineFix{
 						StartCol:  i.Start.Column - 1,
