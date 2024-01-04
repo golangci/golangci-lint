@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"golang.org/x/exp/maps"
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
@@ -107,11 +108,10 @@ func TestGetEnabledLintersSet(t *testing.T) {
 			}
 
 			els := es.build(&c.cfg, defaultLinters)
-			var enabledLinters []string
 			for ln, lc := range els {
 				assert.Equal(t, ln, lc.Name())
-				enabledLinters = append(enabledLinters, ln)
 			}
+			enabledLinters := maps.Keys(els)
 
 			assert.ElementsMatch(t, c.exp, enabledLinters)
 		})

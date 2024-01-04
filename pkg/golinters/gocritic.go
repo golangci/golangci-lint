@@ -14,6 +14,7 @@ import (
 
 	"github.com/go-critic/go-critic/checkers"
 	gocriticlinter "github.com/go-critic/go-critic/linter"
+	"golang.org/x/exp/maps"
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/config"
@@ -219,10 +220,7 @@ func (w *goCriticWrapper) configureCheckerInfo(info *gocriticlinter.CheckerInfo,
 				info.Name, k)
 		}
 
-		var supportedKeys []string
-		for sk := range info.Params {
-			supportedKeys = append(supportedKeys, sk)
-		}
+		supportedKeys := maps.Keys(info.Params)
 		sort.Strings(supportedKeys)
 
 		return fmt.Errorf("checker %s config param %s doesn't exist, all existing: %s",
@@ -311,11 +309,7 @@ func (s *goCriticSettingsWrapper) checkerTagsDebugf() {
 
 	tagToCheckers := s.buildTagToCheckersMap()
 
-	allTags := make([]string, 0, len(tagToCheckers))
-	for tag := range tagToCheckers {
-		allTags = append(allTags, tag)
-	}
-
+	allTags := maps.Keys(tagToCheckers)
 	sort.Strings(allTags)
 
 	goCriticDebugf("All gocritic existing tags and checks:")
@@ -609,12 +603,7 @@ func intersectStringSlice(s1, s2 []string) []string {
 }
 
 func sprintAllowedCheckerNames(allowedNames map[string]bool) string {
-	namesSlice := make([]string, 0, len(allowedNames))
-
-	for name := range allowedNames {
-		namesSlice = append(namesSlice, name)
-	}
-
+	namesSlice := maps.Keys(allowedNames)
 	return sprintStrings(namesSlice)
 }
 

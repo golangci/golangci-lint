@@ -7,6 +7,8 @@ import (
 	"sort"
 	"strings"
 
+	"golang.org/x/exp/maps"
+
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
@@ -71,9 +73,7 @@ func (p JunitXML) Print(issues []result.Issue) error {
 	}
 
 	var res testSuitesXML
-	for _, val := range suites {
-		res.TestSuites = append(res.TestSuites, val)
-	}
+	res.TestSuites = maps.Values(suites)
 
 	sort.Slice(res.TestSuites, func(i, j int) bool {
 		return res.TestSuites[i].Suite < res.TestSuites[j].Suite

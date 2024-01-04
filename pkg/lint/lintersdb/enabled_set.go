@@ -4,6 +4,8 @@ import (
 	"os"
 	"sort"
 
+	"golang.org/x/exp/maps"
+
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
@@ -115,10 +117,7 @@ func (es EnabledSet) GetOptimizedLinters() ([]*linter.Config, error) {
 	es.verbosePrintLintersStatus(resultLintersSet)
 	es.combineGoAnalysisLinters(resultLintersSet)
 
-	var resultLinters []*linter.Config
-	for _, lc := range resultLintersSet {
-		resultLinters = append(resultLinters, lc)
-	}
+	resultLinters := maps.Values(resultLintersSet)
 
 	// Make order of execution of linters (go/analysis metalinter and unused) stable.
 	sort.Slice(resultLinters, func(i, j int) bool {
@@ -185,10 +184,7 @@ func (es EnabledSet) combineGoAnalysisLinters(linters map[string]*linter.Config)
 
 	ml := goanalysis.NewMetaLinter(goanalysisLinters)
 
-	var presets []string
-	for p := range goanalysisPresets {
-		presets = append(presets, p)
-	}
+	presets := maps.Keys(goanalysisPresets)
 
 	mlConfig := &linter.Config{
 		Linter:           ml,

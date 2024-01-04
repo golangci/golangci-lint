@@ -9,6 +9,8 @@ import (
 	"sort"
 	"strings"
 
+	"golang.org/x/exp/maps"
+
 	"github.com/golangci/golangci-lint/pkg/golinters"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
@@ -289,10 +291,7 @@ func (p *Nolint) Finish() {
 		return
 	}
 
-	unknownLinters := make([]string, 0, len(p.unknownLintersSet))
-	for name := range p.unknownLintersSet {
-		unknownLinters = append(unknownLinters, name)
-	}
+	unknownLinters := maps.Keys(p.unknownLintersSet)
 	sort.Strings(unknownLinters)
 
 	p.log.Warnf("Found unknown linters in //nolint directives: %s", strings.Join(unknownLinters, ", "))
