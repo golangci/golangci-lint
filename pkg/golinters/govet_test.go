@@ -31,23 +31,28 @@ func TestGovet(t *testing.T) {
 	}
 }
 
+func sortAnalyzers(a, b *analysis.Analyzer) int {
+	if a.Name < b.Name {
+		return -1
+	}
+
+	if a.Name > b.Name {
+		return 1
+	}
+
+	return 0
+}
+
 func TestGovetSorted(t *testing.T) {
 	// Keeping analyzers sorted so their order match the import order.
-	cmp := func(a, b *analysis.Analyzer) int {
-		if a.Name < b.Name {
-			return -1
-		} else if a.Name > b.Name {
-			return 1
-		}
-		return 0
-	}
 	t.Run("All", func(t *testing.T) {
-		if !slices.IsSortedFunc(allAnalyzers, cmp) {
+		if !slices.IsSortedFunc(allAnalyzers, sortAnalyzers) {
 			t.Error("please keep all analyzers list sorted by name")
 		}
 	})
+
 	t.Run("Default", func(t *testing.T) {
-		if !slices.IsSortedFunc(defaultAnalyzers, cmp) {
+		if !slices.IsSortedFunc(defaultAnalyzers, sortAnalyzers) {
 			t.Error("please keep default analyzers list sorted by name")
 		}
 	})
