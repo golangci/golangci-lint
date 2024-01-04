@@ -17,6 +17,7 @@ import (
 	"sort"
 	"sync"
 
+	"golang.org/x/exp/maps"
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/packages"
 
@@ -159,10 +160,7 @@ func (r *runner) buildActionFactDeps(act *action, a *analysis.Analyzer, pkg *pac
 	act.objectFacts = make(map[objectFactKey]analysis.Fact)
 	act.packageFacts = make(map[packageFactKey]analysis.Fact)
 
-	paths := make([]string, 0, len(pkg.Imports))
-	for path := range pkg.Imports {
-		paths = append(paths, path)
-	}
+	paths := maps.Keys(pkg.Imports)
 	sort.Strings(paths) // for determinism
 	for _, path := range paths {
 		dep := r.makeAction(a, pkg.Imports[path], initialPkgs, actions, actAlloc)
@@ -212,10 +210,7 @@ func (r *runner) prepareAnalysis(pkgs []*packages.Package,
 		}
 	}
 
-	allActions := make([]*action, 0, len(actions))
-	for _, act := range actions {
-		allActions = append(allActions, act)
-	}
+	allActions := maps.Values(actions)
 
 	debugf("Built %d actions", len(actions))
 

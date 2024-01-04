@@ -122,7 +122,7 @@ require (
 	gitlab.com/bosi/decorder v0.4.1
 	go-simpler.org/musttag v0.8.0
 	go-simpler.org/sloglint v0.4.0
-	golang.org/x/exp v0.0.0-20230510235704-dd950f8aeaea
+	golang.org/x/exp v0.0.0-20240103183307-be819d1f06fc
 	golang.org/x/tools v0.16.1
 	gopkg.in/yaml.v3 v3.0.1
 	honnef.co/go/tools v0.4.6

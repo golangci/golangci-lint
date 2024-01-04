@@ -16,6 +16,7 @@ import (
 	"unicode"
 	"unicode/utf8"
 
+	"golang.org/x/exp/maps"
 	"gopkg.in/yaml.v3"
 
 	"github.com/golangci/golangci-lint/internal/renameio"
@@ -360,11 +361,7 @@ func getThanksList() string {
 		}
 	}
 
-	var authors []string
-	for author := range addedAuthors {
-		authors = append(authors, author)
-	}
-
+	authors := maps.Keys(addedAuthors)
 	sort.Slice(authors, func(i, j int) bool {
 		return strings.ToLower(authors[i]) < strings.ToLower(authors[j])
 	})

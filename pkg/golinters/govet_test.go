@@ -1,9 +1,9 @@
 package golinters
 
 import (
-	"sort"
 	"testing"
 
+	"golang.org/x/exp/slices"
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/analysis/passes/asmdecl"
 	"golang.org/x/tools/go/analysis/passes/assign"
@@ -18,39 +18,41 @@ import (
 
 func TestGovet(t *testing.T) {
 	// Checking that every default analyzer is in "all analyzers" list.
-	var checkList []*analysis.Analyzer
-	checkList = append(checkList, defaultAnalyzers...)
+	checkList := append([]*analysis.Analyzer{}, defaultAnalyzers...)
 	checkList = append(checkList, shadow.Analyzer) // special case, used in analyzersFromConfig
 
 	for _, defaultAnalyzer := range checkList {
-		found := false
-		for _, a := range allAnalyzers {
-			if a.Name == defaultAnalyzer.Name {
-				found = true
-				break
-			}
-		}
+		found := slices.ContainsFunc(allAnalyzers, func(a *analysis.Analyzer) bool {
+			return a.Name == defaultAnalyzer.Name
+		})
 		if !found {
 			t.Errorf("%s is not in allAnalyzers", defaultAnalyzer.Name)
 		}
 	}
 }
 
-type sortedAnalyzers []*analysis.Analyzer
+func sortAnalyzers(a, b *analysis.Analyzer) int {
+	if a.Name < b.Name {
+		return -1
+	}
 
-func (p sortedAnalyzers) Len() int           { return len(p) }
-func (p sortedAnalyzers) Less(i, j int) bool { return p[i].Name < p[j].Name }
-func (p sortedAnalyzers) Swap(i, j int)      { p[i].Name, p[j].Name = p[j].Name, p[i].Name }
+	if a.Name > b.Name {
+		return 1
+	}
+
+	return 0
+}
 
 func TestGovetSorted(t *testing.T) {
 	// Keeping analyzers sorted so their order match the import order.
 	t.Run("All", func(t *testing.T) {
-		if !sort.IsSorted(sortedAnalyzers(allAnalyzers)) {
+		if !slices.IsSortedFunc(allAnalyzers, sortAnalyzers) {
 			t.Error("please keep all analyzers list sorted by name")
 		}
 	})
+
 	t.Run("Default", func(t *testing.T) {
-		if !sort.IsSorted(sortedAnalyzers(defaultAnalyzers)) {
+		if !slices.IsSortedFunc(defaultAnalyzers, sortAnalyzers) {
 			t.Error("please keep default analyzers list sorted by name")
 		}
 	})
