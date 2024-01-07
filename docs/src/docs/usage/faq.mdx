@@ -57,4 +57,5 @@ How to troubleshoot:
 - [ ] Ensure the version of `golangci-lint` is built with a compatible version of Go.
 - [ ] Ensure dependencies are up-to-date with `go mod tidy`.
 - [ ] Ensure building works with `go run ./...`/`go build ./...` - whole package.
+- [ ] Ensure you are not running an analysis on code that depends on files/packages outside the scope of the analyzed elements.
 - [ ] If using CGO, ensure all require system libraries are installed.
