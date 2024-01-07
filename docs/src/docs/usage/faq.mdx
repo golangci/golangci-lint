@@ -49,5 +49,6 @@ How to troubleshoot:
 
 - [ ] Ensure the version of `golangci-lint` is built with a compatible version of Go.
 - [ ] Ensure dependencies are up-to-date with `go mod tidy`.
+- [ ] Ensure you're linting packages and not single files. I.e. `golangci-lint run ./path/to/pkg` (or `./...`), **not** `./path/to/pkg/file.go`.
 - [ ] Ensure building works with `go run ./...`/`go build ./...` - whole package.
 - [ ] If using CGO, ensure all require system libraries are installed.
