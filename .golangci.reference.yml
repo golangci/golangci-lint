@@ -1643,6 +1643,18 @@ linters-settings:
         disabled: false
         arguments:
           - "make"
+      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#enforce-repeated-arg-type-style
+      - name: enforce-repeated-arg-type-style
+        severity: warning
+        disabled: false
+        arguments:
+          - "short"
+      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#enforce-slice-style
+      - name: enforce-slice-style
+        severity: warning
+        disabled: false
+        arguments:
+          - "make"
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#error-naming
       - name: error-naming
         severity: warning
