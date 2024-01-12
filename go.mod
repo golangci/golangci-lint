@@ -123,7 +123,7 @@ require (
 	go-simpler.org/musttag v0.8.0
 	go-simpler.org/sloglint v0.4.0
 	golang.org/x/exp v0.0.0-20240103183307-be819d1f06fc
-	golang.org/x/tools v0.16.1
+	golang.org/x/tools v0.17.0
 	gopkg.in/yaml.v3 v3.0.1
 	honnef.co/go/tools v0.4.6
 	mvdan.cc/gofumpt v0.5.0
@@ -191,7 +191,7 @@ require (
 	go.uber.org/zap v1.24.0 // indirect
 	golang.org/x/exp/typeparams v0.0.0-20231219180239-dc181d75b848 // indirect
 	golang.org/x/mod v0.14.0 // indirect
-	golang.org/x/sync v0.5.0 // indirect
+	golang.org/x/sync v0.6.0 // indirect
 	golang.org/x/sys v0.15.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
 	google.golang.org/protobuf v1.31.0 // indirect
