@@ -57,7 +57,7 @@ require (
 	github.com/jgautheron/goconst v1.7.0
 	github.com/jingyugao/rowserrcheck v1.1.1
 	github.com/jirfag/go-printf-func-name v0.0.0-20200119135958-7558a9eaa5af
-	github.com/jjti/go-spancheck v0.4.2
+	github.com/jjti/go-spancheck v0.5.2
 	github.com/julz/importas v0.1.0
 	github.com/kisielk/errcheck v1.6.3
 	github.com/kkHAIKE/contextcheck v1.1.4
