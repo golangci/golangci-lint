@@ -29,12 +29,12 @@ func Test_trimGoVersion(t *testing.T) {
 		},
 		{
 			desc:     "alpha version",
-			version:  "1.22beta1",
+			version:  "1.22alpha1",
 			expected: "1.22",
 		},
 		{
 			desc:     "beta version",
-			version:  "1.22alpha1",
+			version:  "1.22beta1",
 			expected: "1.22",
 		},
 		{
