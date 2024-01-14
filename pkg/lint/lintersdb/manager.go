@@ -991,7 +991,7 @@ func trimGoVersion(v string) string {
 		return ""
 	}
 
-	exp := regexp.MustCompile(`(\d\.\d+)\.\d+`)
+	exp := regexp.MustCompile(`(\d\.\d+)(?:\.\d+|[a-z]+\d)`)
 
 	if exp.MatchString(v) {
 		return exp.FindStringSubmatch(v)[1]
