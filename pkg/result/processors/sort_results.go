@@ -1,6 +1,7 @@
 package processors
 
 import (
+	"fmt"
 	"sort"
 	"strings"
 
@@ -35,6 +36,48 @@ func NewSortResults(cfg *config.Config) *SortResults {
 
 // Process is performing sorting of the result issues.
 func (sr SortResults) Process(issues []result.Issue) ([]result.Issue, error) {
+	if sr.cfg.Output.GroupResultsByLinter {
+		issuesByLinterName := sr.groupIssuesByLinterName(issues)
+		return sr.processIssuesByLinterName(issuesByLinterName)
+	}
+	return sr.processFlatIssues(issues)
+}
+
+func (sr SortResults) groupIssuesByLinterName(issues []result.Issue) map[string][]result.Issue {
+	issuesByLinterName := map[string][]result.Issue{}
+	for _, issue := range issues {
+		if _, ok := issuesByLinterName[issue.FromLinter]; !ok {
+			issuesByLinterName[issue.FromLinter] = []result.Issue{}
+		}
+		issuesByLinterName[issue.FromLinter] = append(issuesByLinterName[issue.FromLinter], issue)
+	}
+	return issuesByLinterName
+}
+
+func (sr SortResults) processIssuesByLinterName(issuesByLinterName map[string][]result.Issue) ([]result.Issue, error) {
+	linterNames := sr.getSortedLinterNames(issuesByLinterName)
+	var processedIssues []result.Issue
+	for _, linterName := range linterNames {
+		linterIssues := issuesByLinterName[linterName]
+		processedLinterIssues, err := sr.processFlatIssues(linterIssues)
+		if err != nil {
+			return nil, fmt.Errorf("failed to process issues from %s linter: %w", linterName, err)
+		}
+		processedIssues = append(processedIssues, processedLinterIssues...)
+	}
+	return processedIssues, nil
+}
+
+func (sr SortResults) getSortedLinterNames(issuesByLinterName map[string][]result.Issue) []string {
+	linterNames := make([]string, 0, len(issuesByLinterName))
+	for linterName := range issuesByLinterName {
+		linterNames = append(linterNames, linterName)
+	}
+	sort.Strings(linterNames)
+	return linterNames
+}
+
+func (sr SortResults) processFlatIssues(issues []result.Issue) ([]result.Issue, error) {
 	if !sr.cfg.Output.SortResults {
 		return issues, nil
 	}

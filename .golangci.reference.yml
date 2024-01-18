@@ -117,6 +117,10 @@ output:
   # Default: false
   sort-results: true
 
+  # Group results by linter name.
+  # Default: false
+  group-results-by-linter: false
+
 
 # All available settings of specific linters.
 linters-settings:

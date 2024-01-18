@@ -14,6 +14,7 @@ import (
 
 var issues = []result.Issue{
 	{
+		FromLinter: "linter-a",
 		Pos: token.Position{
 			Filename: "file_windows.go",
 			Column:   80,
@@ -21,6 +22,7 @@ var issues = []result.Issue{
 		},
 	},
 	{
+		FromLinter: "linter-b",
 		Pos: token.Position{
 			Filename: "file_linux.go",
 			Column:   70,
@@ -28,12 +30,14 @@ var issues = []result.Issue{
 		},
 	},
 	{
+		FromLinter: "linter-a",
 		Pos: token.Position{
 			Filename: "file_darwin.go",
 			Line:     12,
 		},
 	},
 	{
+		FromLinter: "linter-b",
 		Pos: token.Position{
 			Filename: "file_darwin.go",
 			Column:   60,
@@ -174,4 +178,31 @@ func TestSorting(t *testing.T) {
 	results, err := sr.Process(tests)
 	require.NoError(t, err)
 	assert.Equal(t, []result.Issue{issues[3], issues[2], issues[1], issues[0]}, results)
+}
+
+func TestGroupingByLinterName(t *testing.T) {
+	var tests = make([]result.Issue, len(issues))
+	copy(tests, issues)
+
+	var cfg = config.Config{}
+	cfg.Output.GroupResultsByLinter = true
+	var sr = NewSortResults(&cfg)
+
+	results, err := sr.Process(tests)
+	require.NoError(t, err)
+	assert.Equal(t, []result.Issue{issues[0], issues[2], issues[1], issues[3]}, results)
+}
+
+func TestSortingAndGroupingByLinterName(t *testing.T) {
+	var tests = make([]result.Issue, len(issues))
+	copy(tests, issues)
+
+	var cfg = config.Config{}
+	cfg.Output.SortResults = true
+	cfg.Output.GroupResultsByLinter = true
+	var sr = NewSortResults(&cfg)
+
+	results, err := sr.Process(tests)
+	require.NoError(t, err)
+	assert.Equal(t, []result.Issue{issues[2], issues[0], issues[3], issues[1]}, results)
 }
