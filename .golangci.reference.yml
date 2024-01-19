@@ -2281,11 +2281,12 @@ linters-settings:
     # An array of strings that specify substrings of signatures to ignore.
     # If this set, it will override the default set of ignored signatures.
     # See https://github.com/tomarrell/wrapcheck#configuration for more information.
-    # Default: [".Errorf(", "errors.New(", "errors.Unwrap(", ".Wrap(", ".Wrapf(", ".WithMessage(", ".WithMessagef(", ".WithStack("]
+    # Default: [".Errorf(", "errors.New(", "errors.Unwrap(", "errors.Join(", ".Wrap(", ".Wrapf(", ".WithMessage(", ".WithMessagef(", ".WithStack("]
     ignoreSigs:
       - .Errorf(
       - errors.New(
       - errors.Unwrap(
+      - errors.Join(
       - .Wrap(
       - .Wrapf(
       - .WithMessage(
