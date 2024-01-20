@@ -19,9 +19,10 @@ func NewProtoGetter(settings *config.ProtoGetterSettings) *goanalysis.Linter {
 	var cfg protogetter.Config
 	if settings != nil {
 		cfg = protogetter.Config{
-			SkipGeneratedBy:  settings.SkipGeneratedBy,
-			SkipFiles:        settings.SkipFiles,
-			SkipAnyGenerated: settings.SkipAnyGenerated,
+			SkipGeneratedBy:         settings.SkipGeneratedBy,
+			SkipFiles:               settings.SkipFiles,
+			SkipAnyGenerated:        settings.SkipAnyGenerated,
+			ReplaceFirstArgInAppend: settings.ReplaceFirstArgInAppend,
 		}
 	}
 	cfg.Mode = protogetter.GolangciLintMode
