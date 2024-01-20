@@ -1489,6 +1489,9 @@ linters-settings:
     # Skip any generated files from the checking.
     # Default: false
     skip-any-generated: true
+    # Skip first argument of append function.
+    # Default: false
+    replace-first-arg-in-append: true
 
   reassign:
     # Patterns for global variable names that are checked for reassignment.

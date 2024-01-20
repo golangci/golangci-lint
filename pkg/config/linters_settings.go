@@ -730,9 +730,10 @@ type PromlinterSettings struct {
 }
 
 type ProtoGetterSettings struct {
-	SkipGeneratedBy  []string `mapstructure:"skip-generated-by"`
-	SkipFiles        []string `mapstructure:"skip-files"`
-	SkipAnyGenerated bool     `mapstructure:"skip-any-generated"`
+	SkipGeneratedBy         []string `mapstructure:"skip-generated-by"`
+	SkipFiles               []string `mapstructure:"skip-files"`
+	SkipAnyGenerated        bool     `mapstructure:"skip-any-generated"`
+	ReplaceFirstArgInAppend bool     `mapstructure:"replace-first-arg-in-append"`
 }
 
 type ReassignSettings struct {
