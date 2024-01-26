@@ -2,9 +2,9 @@ linters-settings:
   gocritic:
     enabled-checks:
       - rangeValCopy
-      - flagDeref
-      - wrapperFunc
       - ruleguard
+    disabled-checks:
+      - dupSubExpr # So as not to overlap `ruleguard`.
     settings:
       rangeValCopy:
         sizeThreshold: 2

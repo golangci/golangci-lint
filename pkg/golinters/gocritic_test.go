@@ -318,7 +318,7 @@ func Test_goCriticSettingsWrapper_Validate(t *testing.T) {
 			name: "combine disable-all and disable-checks",
 			sett: &config.GoCriticSettings{
 				DisableAll:     true,
-				DisabledChecks: []string{"assignOp"},
+				DisabledChecks: []string{"appendAssign"},
 			},
 			expectedErr: true,
 		},
@@ -346,7 +346,7 @@ func Test_goCriticSettingsWrapper_Validate(t *testing.T) {
 		{
 			name: "unknown enabled check",
 			sett: &config.GoCriticSettings{
-				EnabledChecks: []string{"assignOp", "indexAlloc", "noExitAfterDefer"},
+				EnabledChecks: []string{"appendAssign", "noExitAfterDefer", "underef"},
 			},
 			expectedErr: true,
 		},
@@ -361,7 +361,8 @@ func Test_goCriticSettingsWrapper_Validate(t *testing.T) {
 			name: "settings for unknown check",
 			sett: &config.GoCriticSettings{
 				SettingsPerCheck: map[string]config.GoCriticCheckSettings{
-					"captLocall": {"paramsOnly": false},
+					"captLocall":    {"paramsOnly": false},
+					"unnamedResult": {"checkExported": true},
 				},
 			},
 			expectedErr: true,
@@ -377,10 +378,21 @@ func Test_goCriticSettingsWrapper_Validate(t *testing.T) {
 			expectedErr: false, // Just logging.
 		},
 		{
+			name: "settings by lower-cased checker name",
+			sett: &config.GoCriticSettings{
+				EnabledChecks: []string{"tooManyResultsChecker"},
+				SettingsPerCheck: map[string]config.GoCriticCheckSettings{
+					"toomanyresultschecker": {"maxResults": 3},
+					"unnamedResult":         {"checkExported": true},
+				},
+			},
+			expectedErr: false,
+		},
+		{
 			name: "enabled and disabled at one moment check",
 			sett: &config.GoCriticSettings{
-				EnabledChecks:  []string{"badCall", "badLock", "codegenComment", "hugeParam"},
-				DisabledChecks: []string{"elseif", "badLock"},
+				EnabledChecks:  []string{"appendAssign", "codegenComment", "underef"},
+				DisabledChecks: []string{"elseif", "underef"},
 			},
 			expectedErr: true,
 		},
@@ -433,7 +445,9 @@ func Test_goCriticSettingsWrapper_Validate(t *testing.T) {
 
 			err := wr.Validate()
 			if tt.expectedErr {
-				assert.Error(t, err)
+				if assert.Error(t, err) {
+					t.Log(err)
+				}
 			} else {
 				assert.NoError(t, err)
 			}

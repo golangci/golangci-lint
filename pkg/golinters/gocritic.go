@@ -32,13 +32,13 @@ var (
 	isGoCriticDebug = logutils.HaveDebugTag(logutils.DebugKeyGoCritic)
 )
 
-func NewGoCritic(settings *config.GoCriticSettings, lintConfigDir string) *goanalysis.Linter {
+func NewGoCritic(settings *config.GoCriticSettings, lintConfigDirGetter func() string) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
 
 	wrapper := &goCriticWrapper{
-		lintConfigDir: lintConfigDir,
-		sizes:         types.SizesFor("gc", runtime.GOARCH),
+		lintConfigDirGetter: lintConfigDirGetter,
+		sizes:               types.SizesFor("gc", runtime.GOARCH),
 	}
 
 	analyzer := &analysis.Analyzer{
@@ -80,10 +80,10 @@ Dynamic rules are written declaratively with AST patterns, filters, report messa
 }
 
 type goCriticWrapper struct {
-	settingsWrapper *goCriticSettingsWrapper
-	lintConfigDir   string
-	sizes           types.Sizes
-	once            sync.Once
+	settingsWrapper     *goCriticSettingsWrapper
+	lintConfigDirGetter func() string
+	sizes               types.Sizes
+	once                sync.Once
 }
 
 func (w *goCriticWrapper) init(settings *config.GoCriticSettings, logger logutils.Log) {
@@ -100,7 +100,7 @@ func (w *goCriticWrapper) init(settings *config.GoCriticSettings, logger logutil
 
 	settingsWrapper := newGoCriticSettingsWrapper(settings, logger)
 	settingsWrapper.InferEnabledChecks()
-	// NOTE(a.telyshev): Validate must be after InferEnabledChecks, not before.
+	// NOTE(Antonboom): Validate must be after InferEnabledChecks, not before.
 	// Because it uses gathered information about tags set and finally enabled checks.
 	if err := settingsWrapper.Validate(); err != nil {
 		logger.Fatalf("%s: invalid settings: %s", goCriticName, err)
@@ -136,7 +136,7 @@ func (w *goCriticWrapper) run(pass *analysis.Pass) ([]goanalysis.Issue, error) {
 }
 
 func (w *goCriticWrapper) buildEnabledCheckers(linterCtx *gocriticlinter.Context) ([]*gocriticlinter.Checker, error) {
-	allParams := w.settingsWrapper.GetLowerCasedParams()
+	allLowerCasedParams := w.settingsWrapper.GetLowerCasedParams()
 
 	var enabledCheckers []*gocriticlinter.Checker
 	for _, info := range gocriticlinter.GetCheckersInfo() {
@@ -144,7 +144,7 @@ func (w *goCriticWrapper) buildEnabledCheckers(linterCtx *gocriticlinter.Context
 			continue
 		}
 
-		if err := w.configureCheckerInfo(info, allParams); err != nil {
+		if err := w.configureCheckerInfo(info, allLowerCasedParams); err != nil {
 			return nil, err
 		}
 
@@ -205,13 +205,17 @@ func runGocriticOnFile(linterCtx *gocriticlinter.Context, f *ast.File, checks []
 	return res
 }
 
-func (w *goCriticWrapper) configureCheckerInfo(info *gocriticlinter.CheckerInfo, allParams map[string]config.GoCriticCheckSettings) error {
-	params := allParams[strings.ToLower(info.Name)]
+func (w *goCriticWrapper) configureCheckerInfo(
+	info *gocriticlinter.CheckerInfo,
+	allLowerCasedParams map[string]config.GoCriticCheckSettings,
+) error {
+	params := allLowerCasedParams[strings.ToLower(info.Name)]
 	if params == nil { // no config for this checker
 		return nil
 	}
 
-	infoParams := normalizeCheckerInfoParams(info)
+	// NOTE(ldez): lowercase info param keys here because golangci-lint's config parser lowercases all strings.
+	infoParams := normalizeMap(info.Params)
 	for k, p := range params {
 		v, ok := infoParams[k]
 		if ok {
@@ -235,13 +239,11 @@ func (w *goCriticWrapper) configureCheckerInfo(info *gocriticlinter.CheckerInfo,
 	return nil
 }
 
-func normalizeCheckerInfoParams(info *gocriticlinter.CheckerInfo) gocriticlinter.CheckerParams {
-	// lowercase info param keys here because golangci-lint's config parser lowercases all strings
-	ret := gocriticlinter.CheckerParams{}
-	for k, v := range info.Params {
+func normalizeMap[ValueT any](in map[string]ValueT) map[string]ValueT {
+	ret := make(map[string]ValueT, len(in))
+	for k, v := range in {
 		ret[strings.ToLower(k)] = v
 	}
-
 	return ret
 }
 
@@ -259,7 +261,7 @@ func (w *goCriticWrapper) normalizeCheckerParamsValue(p any) any {
 		return rv.Bool()
 	case reflect.String:
 		// Perform variable substitution.
-		return strings.ReplaceAll(rv.String(), "${configDir}", w.lintConfigDir)
+		return strings.ReplaceAll(rv.String(), "${configDir}", w.lintConfigDirGetter())
 	default:
 		return p
 	}
@@ -270,54 +272,50 @@ type goCriticSettingsWrapper struct {
 
 	logger logutils.Log
 
-	allCheckers       []*gocriticlinter.CheckerInfo
-	allCheckersByName map[string]*gocriticlinter.CheckerInfo
+	allCheckers []*gocriticlinter.CheckerInfo
 
-	allTagsSorted  []string
-	allChecksByTag map[string][]string
+	allChecks           map[string]struct{}
+	allChecksLowerCased map[string]struct{}
+	allChecksByTag      map[string][]string
+	allTagsSorted       []string
 
-	inferredEnabledChecks map[string]struct{}
+	inferredEnabledChecks           map[string]struct{}
+	inferredEnabledLowerCasedChecks map[string]struct{}
 }
 
 func newGoCriticSettingsWrapper(settings *config.GoCriticSettings, logger logutils.Log) *goCriticSettingsWrapper {
 	allCheckers := gocriticlinter.GetCheckersInfo()
-	allCheckersByName := make(map[string]*gocriticlinter.CheckerInfo, len(allCheckers))
-	for _, checkInfo := range allCheckers {
-		allCheckersByName[checkInfo.Name] = checkInfo
-	}
 
+	allChecks := make(map[string]struct{}, len(allCheckers))
+	allChecksLowerCased := make(map[string]struct{}, len(allCheckers))
 	allChecksByTag := make(map[string][]string)
 	for _, checker := range allCheckers {
+		allChecks[checker.Name] = struct{}{}
+		allChecksLowerCased[strings.ToLower(checker.Name)] = struct{}{}
+
 		for _, tag := range checker.Tags {
 			allChecksByTag[tag] = append(allChecksByTag[tag], checker.Name)
 		}
 	}
 
-	allTagsSorted := make([]string, 0, len(allChecksByTag))
-	for t := range allChecksByTag {
-		allTagsSorted = append(allTagsSorted, t)
-	}
+	allTagsSorted := maps.Keys(allChecksByTag)
 	sort.Strings(allTagsSorted)
 
 	return &goCriticSettingsWrapper{
-		GoCriticSettings:      settings,
-		logger:                logger,
-		allCheckers:           allCheckers,
-		allCheckersByName:     allCheckersByName,
-		allTagsSorted:         allTagsSorted,
-		allChecksByTag:        allChecksByTag,
-		inferredEnabledChecks: make(map[string]struct{}),
+		GoCriticSettings:                settings,
+		logger:                          logger,
+		allCheckers:                     allCheckers,
+		allChecks:                       allChecks,
+		allChecksLowerCased:             allChecksLowerCased,
+		allChecksByTag:                  allChecksByTag,
+		allTagsSorted:                   allTagsSorted,
+		inferredEnabledChecks:           make(map[string]struct{}),
+		inferredEnabledLowerCasedChecks: make(map[string]struct{}),
 	}
 }
 
 func (s *goCriticSettingsWrapper) GetLowerCasedParams() map[string]config.GoCriticCheckSettings {
-	ret := make(map[string]config.GoCriticCheckSettings, len(s.SettingsPerCheck))
-
-	for checker, params := range s.SettingsPerCheck {
-		ret[strings.ToLower(checker)] = params
-	}
-
-	return ret
+	return normalizeMap(s.SettingsPerCheck)
 }
 
 // InferEnabledChecks tries to be consistent with (lintersdb.EnabledSet).build.
@@ -336,7 +334,7 @@ func (s *goCriticSettingsWrapper) InferEnabledChecks() {
 			enabledChecks[info.Name] = struct{}{}
 		}
 	} else if !s.DisableAll {
-		// NOTE(a.telyshev): enable-all/disable-all revokes the default settings.
+		// NOTE(Antonboom): enable-all/disable-all revokes the default settings.
 		enabledChecks = make(map[string]struct{}, len(enabledByDefaultChecks))
 		for _, check := range enabledByDefaultChecks {
 			enabledChecks[check] = struct{}{}
@@ -386,10 +384,11 @@ func (s *goCriticSettingsWrapper) InferEnabledChecks() {
 	}
 
 	s.inferredEnabledChecks = enabledChecks
+	s.inferredEnabledLowerCasedChecks = normalizeMap(s.inferredEnabledChecks)
 	s.debugChecksFinalState()
 }
 
-func (s *goCriticSettingsWrapper) buildEnabledAndDisabledByDefaultChecks() (enabled []string, disabled []string) {
+func (s *goCriticSettingsWrapper) buildEnabledAndDisabledByDefaultChecks() (enabled, disabled []string) {
 	for _, info := range s.allCheckers {
 		if enable := isEnabledByDefaultGoCriticChecker(info); enable {
 			enabled = append(enabled, info.Name)
@@ -549,10 +548,11 @@ func (s *goCriticSettingsWrapper) validateCheckerNames() error {
 	}
 
 	for name := range s.SettingsPerCheck {
-		if !s.isKnownCheck(name) {
-			return fmt.Errorf("invalid settings, check %q doesn't exist, see %s documentation", name, goCriticName)
+		lcName := strings.ToLower(name)
+		if !s.isKnownLowerCasedCheck(lcName) {
+			return fmt.Errorf("invalid check settings: check %q doesn't exist, see %s documentation", name, goCriticName)
 		}
-		if !s.IsCheckEnabled(name) {
+		if !s.isLowerCasedCheckEnabled(lcName) {
 			s.logger.Warnf("%s: settings were provided for disabled check %q", goCriticName, name)
 		}
 	}
@@ -561,7 +561,12 @@ func (s *goCriticSettingsWrapper) validateCheckerNames() error {
 }
 
 func (s *goCriticSettingsWrapper) isKnownCheck(name string) bool {
-	_, ok := s.allCheckersByName[name]
+	_, ok := s.allChecks[name]
+	return ok
+}
+
+func (s *goCriticSettingsWrapper) isKnownLowerCasedCheck(name string) bool {
+	_, ok := s.allChecksLowerCased[name]
 	return ok
 }
 
@@ -586,6 +591,11 @@ func (s *goCriticSettingsWrapper) validateAtLeastOneCheckerEnabled() error {
 		return errors.New("eventually all checks were disabled: at least one must be enabled")
 	}
 	return nil
+}
+
+func (s *goCriticSettingsWrapper) isLowerCasedCheckEnabled(name string) bool {
+	_, ok := s.inferredEnabledLowerCasedChecks[name]
+	return ok
 }
 
 func (s *goCriticSettingsWrapper) IsCheckEnabled(name string) bool {
