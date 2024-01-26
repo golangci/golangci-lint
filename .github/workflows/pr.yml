@@ -27,6 +27,7 @@ jobs:
         run: |
           go mod tidy
           git diff --exit-code go.mod
+          git diff --exit-code go.sum
 
   # We already run the current golangci-lint in tests, but here we test
   # our GitHub action with the latest stable golangci-lint.

@@ -9,7 +9,7 @@ require (
 	github.com/Abirdcfly/dupword v0.0.13
 	github.com/Antonboom/errname v0.1.12
 	github.com/Antonboom/nilnil v0.1.7
-	github.com/Antonboom/testifylint v1.0.2
+	github.com/Antonboom/testifylint v1.1.0
 	github.com/BurntSushi/toml v1.3.2
 	github.com/Djarvur/go-err113 v0.0.0-20210108212216-aea10b59be24
 	github.com/GaijinEntertainment/go-exhaustruct/v3 v3.1.0
@@ -128,7 +128,7 @@ require (
 	honnef.co/go/tools v0.4.6
 	mvdan.cc/gofumpt v0.5.0
 	mvdan.cc/interfacer v0.0.0-20180901003855-c20040233aed
-	mvdan.cc/unparam v0.0.0-20221223090309-7455f1af531d
+	mvdan.cc/unparam v0.0.0-20240104100049-c549a3470d14
 )
 
 require (
