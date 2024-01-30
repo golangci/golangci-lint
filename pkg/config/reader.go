@@ -7,8 +7,8 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/go-viper/mapstructure/v2"
 	"github.com/mitchellh/go-homedir"
-	"github.com/mitchellh/mapstructure"
 	"github.com/spf13/viper"
 	"golang.org/x/exp/slices"
 
