@@ -4,5 +4,4 @@ linters-settings:
       - ruleguard
     settings:
       ruleguard:
-        rules: 'ruleguard/rangeExprCopy.go,ruleguard/strings_simplify.go'
-
+        rules: 'ruleguard/rangeExprCopy.go,ruleguard/stringsSimplify.go'

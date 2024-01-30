@@ -100,7 +100,7 @@ func (w *goCriticWrapper) init(settings *config.GoCriticSettings, logger logutil
 
 	settingsWrapper := newGoCriticSettingsWrapper(settings, logger)
 	settingsWrapper.InferEnabledChecks()
-	// NOTE(Antonboom): Validate must be after InferEnabledChecks, not before.
+	// Validate must be after InferEnabledChecks, not before.
 	// Because it uses gathered information about tags set and finally enabled checks.
 	if err := settingsWrapper.Validate(); err != nil {
 		logger.Fatalf("%s: invalid settings: %s", goCriticName, err)
@@ -158,11 +158,7 @@ func (w *goCriticWrapper) buildEnabledCheckers(linterCtx *gocriticlinter.Context
 	return enabledCheckers, nil
 }
 
-func runGocriticOnPackage(
-	linterCtx *gocriticlinter.Context,
-	checks []*gocriticlinter.Checker,
-	files []*ast.File,
-) []result.Issue {
+func runGocriticOnPackage(linterCtx *gocriticlinter.Context, checks []*gocriticlinter.Checker, files []*ast.File) []result.Issue {
 	var res []result.Issue
 	for _, f := range files {
 		filename := filepath.Base(linterCtx.FileSet.Position(f.Pos()).Filename)
@@ -214,7 +210,7 @@ func (w *goCriticWrapper) configureCheckerInfo(
 		return nil
 	}
 
-	// NOTE(ldez): lowercase info param keys here because golangci-lint's config parser lowercases all strings.
+	// To lowercase info param keys here because golangci-lint's config parser lowercases all strings.
 	infoParams := normalizeMap(info.Params)
 	for k, p := range params {
 		v, ok := infoParams[k]
@@ -274,12 +270,14 @@ type goCriticSettingsWrapper struct {
 
 	allCheckers []*gocriticlinter.CheckerInfo
 
-	allChecks           map[string]struct{}
-	allChecksLowerCased map[string]struct{}
-	allChecksByTag      map[string][]string
-	allTagsSorted       []string
+	allChecks             map[string]struct{}
+	allChecksByTag        map[string][]string
+	allTagsSorted         []string
+	inferredEnabledChecks map[string]struct{}
 
-	inferredEnabledChecks           map[string]struct{}
+	// *LowerCased* fields are used for GoCriticSettings.SettingsPerCheck validation only.
+
+	allChecksLowerCased             map[string]struct{}
 	inferredEnabledLowerCasedChecks map[string]struct{}
 }
 
@@ -334,7 +332,7 @@ func (s *goCriticSettingsWrapper) InferEnabledChecks() {
 			enabledChecks[info.Name] = struct{}{}
 		}
 	} else if !s.DisableAll {
-		// NOTE(Antonboom): enable-all/disable-all revokes the default settings.
+		// enable-all/disable-all revokes the default settings.
 		enabledChecks = make(map[string]struct{}, len(enabledByDefaultChecks))
 		for _, check := range enabledByDefaultChecks {
 			enabledChecks[check] = struct{}{}
