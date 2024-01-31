@@ -108,12 +108,11 @@ Note: such `go install`/`go get` installation aren't guaranteed to work. We reco
 
 `go install`/`go get` installation isn't recommended because of the following points:
 
-1. some users use `-u` flag for `go get`, which upgrades our dependencies. Resulting configuration wasn't tested and isn't guaranteed to work.
+1. Some users use `-u` flag for `go get`, which upgrades our dependencies. Resulting configuration wasn't tested and isn't guaranteed to work.
 2. [`go.mod`](https://github.com/golangci/golangci-lint/blob/master/go.mod) replacement directive doesn't apply. It means a user will be using patched version of `golangci-lint` if we use such replacements.
-3. it's stability depends on a user's Go version (e.g. on [this compiler Go <= 1.12 bug](https://github.com/golang/go/issues/29612)).
-4. we've encountered a lot of issues with Go modules hashes.
-5. it allows installation from `master` branch which can't be considered stable.
-6. it's slower than binary installation
+3. We've encountered a lot of issues with Go modules hashes.
+4. It allows installation from `master` branch which can't be considered stable.
+5. It's slower than binary installation.
 
 </details>
 
