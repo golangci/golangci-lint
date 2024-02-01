@@ -494,14 +494,16 @@ func (e *Executor) createPrinter(format string, w io.Writer) (printers.Printer, 
 
 func (e *Executor) printStats(issues []result.Issue) {
 	if e.cfg.Run.ShowStatsPerLinter {
-		e.runCmd.Println("Stats per linter:")
 		stats := map[string]int{}
 		for idx := range issues {
 			stats[issues[idx].FromLinter]++
 		}
-
+		e.runCmd.Println("Stats per linter:")
 		for linter, count := range stats {
 			e.runCmd.Printf("  %s: %d\n", linter, count)
+		}
+		if len(stats) == 0 {
+			e.runCmd.Println("  no issues")
 		}
 	}
 }
