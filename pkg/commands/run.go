@@ -125,6 +125,7 @@ func initFlagSet(fs *pflag.FlagSet, cfg *config.Config, m *lintersdb.Manager, is
 	const allowSerialDesc = "Allow multiple golangci-lint instances running, but serialize them around a lock. " +
 		"If false (default) - golangci-lint exits with an error if it fails to acquire file lock on start."
 	fs.BoolVar(&rc.AllowSerialRunners, "allow-serial-runners", false, wh(allowSerialDesc))
+	fs.BoolVar(&rc.ShowStatsPerLinter, "show-stats-per-linter", false, wh("Show stats per linter"))
 
 	// Linters settings config
 	lsc := &cfg.LintersSettings
@@ -408,6 +409,8 @@ func (e *Executor) runAndPrint(ctx context.Context, args []string) error {
 		}
 	}
 
+	e.printStats(issues)
+
 	e.setExitCodeIfIssuesFound(issues)
 
 	e.fileCache.PrintStats(e.log)
@@ -487,6 +490,20 @@ func (e *Executor) createPrinter(format string, w io.Writer) (printers.Printer, 
 	}
 
 	return p, nil
+}
+
+func (e *Executor) printStats(issues []result.Issue) {
+	if e.cfg.Run.ShowStatsPerLinter {
+		e.runCmd.Println("Stats per linter:")
+		stats := map[string]int{}
+		for idx := range issues {
+			stats[issues[idx].FromLinter]++
+		}
+
+		for linter, count := range stats {
+			e.runCmd.Printf("  %s: %d\n", linter, count)
+		}
+	}
 }
 
 // executeRun executes the 'run' CLI command, which runs the linters.
