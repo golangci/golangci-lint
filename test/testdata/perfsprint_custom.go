@@ -3,7 +3,7 @@
 package testdata
 
 import (
-	"fmt" // want "Fix imports"
+	"fmt"
 )
 
 func TestPerfsprint2() {
