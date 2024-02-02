@@ -500,7 +500,7 @@ func (e *Executor) printStats(issues []result.Issue) {
 	}
 
 	if len(issues) == 0 {
-		e.runCmd.Println("0 issue.")
+		e.runCmd.Println("0 issues.")
 		return
 	}
 
