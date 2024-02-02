@@ -500,7 +500,7 @@ func (e *Executor) printStats(issues []result.Issue) {
 	}
 
 	if len(issues) == 0 {
-		e.runCmd.Println("0 report.")
+		e.runCmd.Println("0 issue.")
 		return
 	}
 
@@ -509,7 +509,7 @@ func (e *Executor) printStats(issues []result.Issue) {
 		stats[issues[idx].FromLinter]++
 	}
 
-	e.runCmd.Printf("%d reports:\n", len(issues))
+	e.runCmd.Printf("%d issues:\n", len(issues))
 
 	keys := maps.Keys(stats)
 	sort.Strings(keys)
