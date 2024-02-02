@@ -37,4 +37,6 @@ type Run struct {
 
 	AllowParallelRunners bool `mapstructure:"allow-parallel-runners"`
 	AllowSerialRunners   bool `mapstructure:"allow-serial-runners"`
+
+	ShowStats bool `mapstructure:"show-stats"`
 }

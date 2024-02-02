@@ -8,12 +8,14 @@ import (
 	"log"
 	"os"
 	"runtime"
+	"sort"
 	"strings"
 	"time"
 
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
+	"golang.org/x/exp/maps"
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/exitcodes"
@@ -125,6 +127,7 @@ func initFlagSet(fs *pflag.FlagSet, cfg *config.Config, m *lintersdb.Manager, is
 	const allowSerialDesc = "Allow multiple golangci-lint instances running, but serialize them around a lock. " +
 		"If false (default) - golangci-lint exits with an error if it fails to acquire file lock on start."
 	fs.BoolVar(&rc.AllowSerialRunners, "allow-serial-runners", false, wh(allowSerialDesc))
+	fs.BoolVar(&rc.ShowStats, "show-stats", false, wh("Show statistics per linter"))
 
 	// Linters settings config
 	lsc := &cfg.LintersSettings
@@ -408,6 +411,8 @@ func (e *Executor) runAndPrint(ctx context.Context, args []string) error {
 		}
 	}
 
+	e.printStats(issues)
+
 	e.setExitCodeIfIssuesFound(issues)
 
 	e.fileCache.PrintStats(e.log)
@@ -487,6 +492,31 @@ func (e *Executor) createPrinter(format string, w io.Writer) (printers.Printer, 
 	}
 
 	return p, nil
+}
+
+func (e *Executor) printStats(issues []result.Issue) {
+	if !e.cfg.Run.ShowStats {
+		return
+	}
+
+	if len(issues) == 0 {
+		e.runCmd.Println("0 issues.")
+		return
+	}
+
+	stats := map[string]int{}
+	for idx := range issues {
+		stats[issues[idx].FromLinter]++
+	}
+
+	e.runCmd.Printf("%d issues:\n", len(issues))
+
+	keys := maps.Keys(stats)
+	sort.Strings(keys)
+
+	for _, key := range keys {
+		e.runCmd.Printf("* %s: %d\n", key, stats[key])
+	}
 }
 
 // executeRun executes the 'run' CLI command, which runs the linters.
