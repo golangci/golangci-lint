@@ -33,7 +33,6 @@ func TestRunnerBuilder_Runner(t *testing.T) {
 			expected: &Runner{
 				env:     []string(nil),
 				command: "example",
-				args:    []string{},
 			},
 		},
 		{

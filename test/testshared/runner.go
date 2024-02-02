@@ -163,7 +163,7 @@ func (b *RunnerBuilder) Runner() *Runner {
 		b.tb.Fatal("--no-config and -c cannot be used at the same time")
 	}
 
-	arguments := []string{}
+	var arguments []string
 
 	if b.command == "run" {
 		arguments = append(arguments, "--internal-cmd-test")

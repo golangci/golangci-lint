@@ -5,8 +5,10 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
+	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 
+	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/exitcodes"
 	"github.com/golangci/golangci-lint/pkg/fsutils"
 )
@@ -29,9 +31,12 @@ func (e *Executor) initConfig() {
 		ValidArgsFunction: cobra.NoFileCompletions,
 		Run:               e.executePathCmd,
 	}
+
 	fs := pathCmd.Flags()
 	fs.SortFlags = false // sort them as they are defined here
-	e.initConfigFileFlagSet(fs, &e.cfg.Run)
+
+	initConfigFileFlagSet(fs, &e.cfg.Run)
+
 	cmd.AddCommand(pathCmd)
 }
 
@@ -60,4 +65,9 @@ func (e *Executor) executePathCmd(_ *cobra.Command, _ []string) {
 	}
 
 	fmt.Println(usedConfigFile)
+}
+
+func initConfigFileFlagSet(fs *pflag.FlagSet, cfg *config.Run) {
+	fs.StringVarP(&cfg.Config, "config", "c", "", wh("Read config from file path `PATH`"))
+	fs.BoolVar(&cfg.NoConfig, "no-config", false, wh("Don't read config file"))
 }

@@ -29,55 +29,14 @@ import (
 
 const defaultFileMode = 0644
 
+const defaultTimeout = time.Minute
+
 const (
 	// envFailOnWarnings value: "1"
 	envFailOnWarnings = "FAIL_ON_WARNINGS"
 	// envMemLogEvery value: "1"
 	envMemLogEvery = "GL_MEM_LOG_EVERY"
 )
-
-func getDefaultIssueExcludeHelp() string {
-	parts := []string{color.GreenString("Use or not use default excludes:")}
-	for _, ep := range config.DefaultExcludePatterns {
-		parts = append(parts,
-			fmt.Sprintf("  # %s %s: %s", ep.ID, ep.Linter, ep.Why),
-			fmt.Sprintf("  - %s", color.YellowString(ep.Pattern)),
-			"",
-		)
-	}
-	return strings.Join(parts, "\n")
-}
-
-func getDefaultDirectoryExcludeHelp() string {
-	parts := []string{color.GreenString("Use or not use default excluded directories:")}
-	for _, dir := range packages.StdExcludeDirRegexps {
-		parts = append(parts, fmt.Sprintf("  - %s", color.YellowString(dir)))
-	}
-	parts = append(parts, "")
-	return strings.Join(parts, "\n")
-}
-
-func wh(text string) string {
-	return color.GreenString(text)
-}
-
-const defaultTimeout = time.Minute
-
-func (e *Executor) initConfigFileFlagSet(fs *pflag.FlagSet, cfg *config.Run) {
-	fs.StringVarP(&cfg.Config, "config", "c", "", wh("Read config from file path `PATH`"))
-	fs.BoolVar(&cfg.NoConfig, "no-config", false, wh("Don't read config file"))
-}
-
-func (e *Executor) initLintersFlagSet(fs *pflag.FlagSet, cfg *config.Linters) {
-	fs.StringSliceVarP(&cfg.Disable, "disable", "D", nil, wh("Disable specific linter"))
-	fs.BoolVar(&cfg.DisableAll, "disable-all", false, wh("Disable all linters"))
-	fs.StringSliceVarP(&cfg.Enable, "enable", "E", nil, wh("Enable specific linter"))
-	fs.BoolVar(&cfg.EnableAll, "enable-all", false, wh("Enable all linters"))
-	fs.BoolVar(&cfg.Fast, "fast", false, wh("Enable only fast linters from enabled linters set (first run won't be fast)"))
-	fs.StringSliceVarP(&cfg.Presets, "presets", "p", nil,
-		wh(fmt.Sprintf("Enable presets (%s) of linters. Run 'golangci-lint help linters' to see "+
-			"them. This option implies option --disable-all", strings.Join(e.DBManager.AllPresets(), "|"))))
-}
 
 //nolint:funlen,gomnd
 func (e *Executor) initFlagSet(fs *pflag.FlagSet, cfg *config.Config, isFinalInit bool) {
@@ -97,7 +56,7 @@ func (e *Executor) initFlagSet(fs *pflag.FlagSet, cfg *config.Config, isFinalIni
 
 	// Config file config
 	rc := &cfg.Run
-	e.initConfigFileFlagSet(fs, rc)
+	initConfigFileFlagSet(fs, rc)
 
 	// Output config
 	oc := &cfg.Output
@@ -647,4 +606,29 @@ func watchResources(ctx context.Context, done chan struct{}, logger logutils.Log
 		iterationsCount, avgRSSMB, maxRSSMB)
 	logger.Infof("Execution took %s", time.Since(startedAt))
 	close(done)
+}
+
+func getDefaultIssueExcludeHelp() string {
+	parts := []string{color.GreenString("Use or not use default excludes:")}
+	for _, ep := range config.DefaultExcludePatterns {
+		parts = append(parts,
+			fmt.Sprintf("  # %s %s: %s", ep.ID, ep.Linter, ep.Why),
+			fmt.Sprintf("  - %s", color.YellowString(ep.Pattern)),
+			"",
+		)
+	}
+	return strings.Join(parts, "\n")
+}
+
+func getDefaultDirectoryExcludeHelp() string {
+	parts := []string{color.GreenString("Use or not use default excluded directories:")}
+	for _, dir := range packages.StdExcludeDirRegexps {
+		parts = append(parts, fmt.Sprintf("  - %s", color.YellowString(dir)))
+	}
+	parts = append(parts, "")
+	return strings.Join(parts, "\n")
+}
+
+func wh(text string) string {
+	return color.GreenString(text)
 }
