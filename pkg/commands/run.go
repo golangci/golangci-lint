@@ -29,6 +29,8 @@ import (
 
 const defaultFileMode = 0644
 
+const defaultTimeout = time.Minute
+
 const (
 	// envFailOnWarnings value: "1"
 	envFailOnWarnings = "FAIL_ON_WARNINGS"
@@ -36,35 +38,8 @@ const (
 	envMemLogEvery = "GL_MEM_LOG_EVERY"
 )
 
-func getDefaultIssueExcludeHelp() string {
-	parts := []string{color.GreenString("Use or not use default excludes:")}
-	for _, ep := range config.DefaultExcludePatterns {
-		parts = append(parts,
-			fmt.Sprintf("  # %s %s: %s", ep.ID, ep.Linter, ep.Why),
-			fmt.Sprintf("  - %s", color.YellowString(ep.Pattern)),
-			"",
-		)
-	}
-	return strings.Join(parts, "\n")
-}
-
-func getDefaultDirectoryExcludeHelp() string {
-	parts := []string{color.GreenString("Use or not use default excluded directories:")}
-	for _, dir := range packages.StdExcludeDirRegexps {
-		parts = append(parts, fmt.Sprintf("  - %s", color.YellowString(dir)))
-	}
-	parts = append(parts, "")
-	return strings.Join(parts, "\n")
-}
-
-func wh(text string) string {
-	return color.GreenString(text)
-}
-
-const defaultTimeout = time.Minute
-
 //nolint:funlen,gomnd
-func initFlagSet(fs *pflag.FlagSet, cfg *config.Config, m *lintersdb.Manager, isFinalInit bool) {
+func (e *Executor) initFlagSet(fs *pflag.FlagSet, cfg *config.Config, isFinalInit bool) {
 	hideFlag := func(name string) {
 		if err := fs.MarkHidden(name); err != nil {
 			panic(err)
@@ -78,6 +53,10 @@ func initFlagSet(fs *pflag.FlagSet, cfg *config.Config, m *lintersdb.Manager, is
 			}
 		}
 	}
+
+	// Config file config
+	rc := &cfg.Run
+	initConfigFileFlagSet(fs, rc)
 
 	// Output config
 	oc := &cfg.Output
@@ -98,7 +77,6 @@ func initFlagSet(fs *pflag.FlagSet, cfg *config.Config, m *lintersdb.Manager, is
 	}
 
 	// Run config
-	rc := &cfg.Run
 	fs.StringVar(&rc.ModulesDownloadMode, "modules-download-mode", "",
 		wh("Modules download mode. If not empty, passed as -mod=<mode> to go tools"))
 	fs.IntVar(&rc.ExitCodeIfIssuesFound, "issues-exit-code",
@@ -115,8 +93,6 @@ func initFlagSet(fs *pflag.FlagSet, cfg *config.Config, m *lintersdb.Manager, is
 	fs.BoolVar(&rc.AnalyzeTests, "tests", true, wh("Analyze tests (*_test.go)"))
 	fs.BoolVar(&rc.PrintResourcesUsage, "print-resources-usage", false,
 		wh("Print avg and max memory usage of golangci-lint and total time"))
-	fs.StringVarP(&rc.Config, "config", "c", "", wh("Read config from file path `PATH`"))
-	fs.BoolVar(&rc.NoConfig, "no-config", false, wh("Don't read config"))
 	fs.StringSliceVar(&rc.SkipDirs, "skip-dirs", nil, wh("Regexps of directories to skip"))
 	fs.BoolVar(&rc.UseDefaultSkipDirs, "skip-dirs-use-default", true, getDefaultDirectoryExcludeHelp())
 	fs.StringSliceVar(&rc.SkipFiles, "skip-files", nil, wh("Regexps of files to skip"))
@@ -200,15 +176,7 @@ func initFlagSet(fs *pflag.FlagSet, cfg *config.Config, m *lintersdb.Manager, is
 
 	// Linters config
 	lc := &cfg.Linters
-	fs.StringSliceVarP(&lc.Enable, "enable", "E", nil, wh("Enable specific linter"))
-	fs.StringSliceVarP(&lc.Disable, "disable", "D", nil, wh("Disable specific linter"))
-	fs.BoolVar(&lc.EnableAll, "enable-all", false, wh("Enable all linters"))
-
-	fs.BoolVar(&lc.DisableAll, "disable-all", false, wh("Disable all linters"))
-	fs.StringSliceVarP(&lc.Presets, "presets", "p", nil,
-		wh(fmt.Sprintf("Enable presets (%s) of linters. Run 'golangci-lint help linters' to see "+
-			"them. This option implies option --disable-all", strings.Join(m.AllPresets(), "|"))))
-	fs.BoolVar(&lc.Fast, "fast", false, wh("Run only fast linters from enabled linters set (first run won't be fast)"))
+	e.initLintersFlagSet(fs, lc)
 
 	// Issues config
 	ic := &cfg.Issues
@@ -241,7 +209,7 @@ func initFlagSet(fs *pflag.FlagSet, cfg *config.Config, m *lintersdb.Manager, is
 func (e *Executor) initRunConfiguration(cmd *cobra.Command) {
 	fs := cmd.Flags()
 	fs.SortFlags = false // sort them as they are defined here
-	initFlagSet(fs, e.cfg, e.DBManager, true)
+	e.initFlagSet(fs, e.cfg, true)
 }
 
 func (e *Executor) getConfigForCommandLine() (*config.Config, error) {
@@ -254,7 +222,7 @@ func (e *Executor) getConfigForCommandLine() (*config.Config, error) {
 	// `changed` variable inside string slice vars will be shared.
 	// Use another config variable here, not e.cfg, to not
 	// affect main parsing by this parsing of only config option.
-	initFlagSet(fs, &cfg, e.DBManager, false)
+	e.initFlagSet(fs, &cfg, false)
 	initVersionFlagSet(fs, &cfg)
 
 	// Parse max options, even force version option: don't want
@@ -638,4 +606,29 @@ func watchResources(ctx context.Context, done chan struct{}, logger logutils.Log
 		iterationsCount, avgRSSMB, maxRSSMB)
 	logger.Infof("Execution took %s", time.Since(startedAt))
 	close(done)
+}
+
+func getDefaultIssueExcludeHelp() string {
+	parts := []string{color.GreenString("Use or not use default excludes:")}
+	for _, ep := range config.DefaultExcludePatterns {
+		parts = append(parts,
+			fmt.Sprintf("  # %s %s: %s", ep.ID, ep.Linter, ep.Why),
+			fmt.Sprintf("  - %s", color.YellowString(ep.Pattern)),
+			"",
+		)
+	}
+	return strings.Join(parts, "\n")
+}
+
+func getDefaultDirectoryExcludeHelp() string {
+	parts := []string{color.GreenString("Use or not use default excluded directories:")}
+	for _, dir := range packages.StdExcludeDirRegexps {
+		parts = append(parts, fmt.Sprintf("  - %s", color.YellowString(dir)))
+	}
+	parts = append(parts, "")
+	return strings.Join(parts, "\n")
+}
+
+func wh(text string) string {
+	return color.GreenString(text)
 }

@@ -2649,7 +2649,7 @@ linters:
     - test
     - unused
 
-  # Run only fast linters from enabled linters set (first run won't be fast)
+  # Enable only fast linters from enabled linters set (first run won't be fast)
   # Default: false
   fast: true
 
