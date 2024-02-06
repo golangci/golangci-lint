@@ -6,7 +6,7 @@ on:
   pull_request:
 
 env:
-  GO_VERSION: '1.22.0-rc.2'
+  GO_VERSION: '1.22'
 
 jobs:
   # Check if there is any dirty change for go mod tidy
@@ -92,7 +92,7 @@ jobs:
       matrix:
         golang:
           - '1.21'
-          - '1.22.0-rc.2'
+          - '1.22'
     steps:
       - uses: actions/checkout@v4
       - name: Install Go
