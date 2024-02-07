@@ -25,7 +25,7 @@ require (
 	github.com/bombsimon/wsl/v4 v4.2.0
 	github.com/breml/bidichk v0.2.7
 	github.com/breml/errchkjson v0.3.6
-	github.com/butuzov/ireturn v0.2.2
+	github.com/butuzov/ireturn v0.3.0
 	github.com/butuzov/mirror v1.1.0
 	github.com/catenacyber/perfsprint v0.6.0
 	github.com/charithe/durationcheck v0.0.10
