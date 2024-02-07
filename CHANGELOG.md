@@ -2,6 +2,85 @@ Follow the news and releases on [Mastodon](https://fosstodon.org/@golangcilint) 
 
 There is the most valuable changes log:
 
+### v1.56.0
+
+1. new linters
+   * feat: add `spancheck` linter https://github.com/jjti/go-spancheck
+2. updated linters
+   * `depguard`: from 2.1.0 to 2.2.0
+   * `exhaustive`: from 0.11.0 to 0.12.0
+   * `exhaustruct`: from 3.1.0 to 3.2.0
+   * `gci`: from 0.11.2 to 0.12.1
+   * `ginkgolinter`: from 0.14.1 to 0.15.2
+   * `go-check-sumtype`: from 0.1.3 to 0.1.4
+   * `go-critic`: from 0.9.0 to 0.11.0
+   * `go-errorlint`: from 1.4.5 to 1.4.8
+   * `go-spancheck`: from 0.4.2 to 0.5.2
+   * `goconst`: from 1.6.0 to 1.7.0
+   * `godot`: from 1.4.15 to 1.4.16
+   * `gofumpt`: from 0.5.0 to 0.6.0
+   * `inamedparam`: from 0.1.2 to 0.1.3
+   * `ineffassign`: from 0.0.0-20230610083614-0e73809eb601 to 0.1.0
+   * `ireturn`: from 0.2.2 to 0.3.0
+   * `misspell`: add mode option
+   * `musttag`: from v0.7.2 to v0.8.0
+   * `paralleltest`: from 1.0.8 to 1.0.9
+   * `perfsprint`: from 0.2.0 to 0.6.0
+   * `protogetter`: from 0.2.3 to 0.3.4
+   * `revive`: from 1.3.4 to 1.3.6
+   * `sloglint`: add static-msg option
+   * `sloglint`: from 0.1.2 to 0.4.0
+   * `testifylint`: from 0.2.3 to 1.1.0
+   * `unparam`: from 20221223090309-7455f1af531d to 20240104100049-c549a3470d14
+   * `whitespace`: update after moving to the `analysis` package
+   * `wsl`: from 3.4.0 to 4.2.0
+   * `zerologlint`: from 0.1.3 to 0.1.5
+3. misc.
+   * Implement stats per linter with a flag
+   * fix: make versioning inside Docker image consistent with binaries
+   * fix: parse Go RC version
+4. Documentation
+   * Add missing fields to .golangci.reference.yml
+   * Fix noctx description
+   * Improve .golangci.reference.yml defaults
+   * Improve typecheck FAQ
+   * Note that `exhaustruct` struct regular expressions are expected to match the entire `package/name/structname`
+   * Adjust wrapcheck ignoreSigs to new defaults
+
+**Important**
+
+`testifylint` has [breaking changes](https://github.com/Antonboom/testifylint/releases/tag/v1.0.0) about enabling/disabling checks:
+
+- If you were using the option `enable` with a filtered list of checks, you should either add `disable-all: true` (1) or use `disable` field (2).
+
+    ```yml
+      # Example (1)
+      testifylint:
+        disable-all: true
+        enable:
+          - bool-compare
+          - compares
+          - empty
+          - error-is-as
+          - error-nil
+          - expected-actual
+          - go-require
+          - float-compare
+          - len
+          - nil-compare
+          - require-error
+          # - suite-dont-use-pkg
+          - suite-extra-assert-call
+          - suite-thelper
+    ```
+
+    ```yml
+      # Example (2)
+      testifylint:
+        disable:
+          - suite-dont-use-pkg
+    ```
+
 ### v1.55.2
 
 1. updated linters
