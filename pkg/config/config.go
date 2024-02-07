@@ -41,13 +41,13 @@ type Version struct {
 	Debug  bool   `mapstructure:"debug"`
 }
 
-func IsGreaterThanOrEqualGo121(v string) bool {
+func IsGreaterThanOrEqualGo122(v string) bool {
 	v1, err := hcversion.NewVersion(strings.TrimPrefix(v, "go"))
 	if err != nil {
 		return false
 	}
 
-	limit, err := hcversion.NewVersion("1.21")
+	limit, err := hcversion.NewVersion("1.22")
 	if err != nil {
 		return false
 	}

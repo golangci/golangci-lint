@@ -134,7 +134,7 @@ func (lc *Config) Name() string {
 }
 
 func (lc *Config) WithNoopFallback(cfg *config.Config) *Config {
-	if cfg != nil && config.IsGreaterThanOrEqualGo121(cfg.Run.Go) {
+	if cfg != nil && config.IsGreaterThanOrEqualGo122(cfg.Run.Go) {
 		lc.Linter = &Noop{
 			name: lc.Linter.Name(),
 			desc: lc.Linter.Desc(),
