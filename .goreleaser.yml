@@ -79,7 +79,7 @@ source:
   name_template: '{{ .ProjectName }}-{{ .Version }}-source'
 
 brews:
-  - tap:
+  - repository:
       owner: golangci
       name: homebrew-tap
     folder: Formula
