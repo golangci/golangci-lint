@@ -15,7 +15,7 @@ func NewStylecheck(settings *config.StaticCheckSettings) *goanalysis.Linter {
 	// `scconfig.Analyzer` is a singleton, then it's not possible to have more than one instance for all staticcheck "sub-linters".
 	// When we will merge the 4 "sub-linters", the problem will disappear: https://github.com/golangci/golangci-lint/issues/357
 	// Currently only stylecheck analyzer has a configuration in staticcheck.
-	scconfig.Analyzer.Run = func(pass *analysis.Pass) (any, error) {
+	scconfig.Analyzer.Run = func(_ *analysis.Pass) (any, error) {
 		return cfg, nil
 	}
 

@@ -110,7 +110,7 @@ func parseComments(sourcePath string, fileData []byte) (map[key][]expectation, e
 func parseExpectations(text string) (lineDelta int, expects []expectation, err error) {
 	var scanErr string
 	sc := new(scanner.Scanner).Init(strings.NewReader(text))
-	sc.Error = func(s *scanner.Scanner, msg string) {
+	sc.Error = func(_ *scanner.Scanner, msg string) {
 		scanErr = msg // e.g. bad string escape
 	}
 	sc.Mode = scanner.ScanIdents | scanner.ScanStrings | scanner.ScanRawStrings | scanner.ScanInts

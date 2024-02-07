@@ -138,7 +138,7 @@ func (lc *Config) WithNoopFallback(cfg *config.Config) *Config {
 		lc.Linter = &Noop{
 			name: lc.Linter.Name(),
 			desc: lc.Linter.Desc(),
-			run: func(pass *analysis.Pass) (any, error) {
+			run: func(_ *analysis.Pass) (any, error) {
 				return nil, nil
 			},
 		}

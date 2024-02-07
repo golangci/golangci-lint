@@ -35,7 +35,7 @@ func NewWhitespace(settings *config.WhitespaceSettings) *goanalysis.Linter {
 		a.Doc,
 		[]*analysis.Analyzer{a},
 		nil,
-	).WithContextSetter(func(lintCtx *linter.Context) {
+	).WithContextSetter(func(_ *linter.Context) {
 		a.Run = func(pass *analysis.Pass) (any, error) {
 			issues, err := runWhitespace(pass, wsSettings)
 			if err != nil {
