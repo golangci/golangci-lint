@@ -1734,8 +1734,8 @@ linters-settings:
         disabled: false
         arguments:
           - "^[a-z][a-z0-9]{0,}$"
-      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#imports-blacklist
-      - name: imports-blacklist
+      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#imports-blocklist
+      - name: imports-blocklist
         severity: warning
         disabled: false
         arguments:
@@ -1750,6 +1750,11 @@ linters-settings:
         severity: warning
         disabled: false
         arguments: [ 80 ]
+      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#max-control-nesting
+      - name: max-control-nesting
+        severity: warning
+        disabled: false
+        arguments: [ 3 ]
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#max-public-structs
       - name: max-public-structs
         severity: warning

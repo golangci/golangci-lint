@@ -30,7 +30,7 @@ func NewVarcheck(settings *config.VarCheckSettings) *goanalysis.Linter {
 		"Finds unused global variables and constants",
 		[]*analysis.Analyzer{analyzer},
 		nil,
-	).WithContextSetter(func(lintCtx *linter.Context) {
+	).WithContextSetter(func(_ *linter.Context) {
 		analyzer.Run = func(pass *analysis.Pass) (any, error) {
 			issues := runVarCheck(pass, settings)
 

@@ -45,7 +45,7 @@ func NewGoCheckSumType() *goanalysis.Linter {
 		`Run exhaustiveness checks on Go "sum types"`,
 		[]*analysis.Analyzer{analyzer},
 		nil,
-	).WithIssuesReporter(func(ctx *linter.Context) []goanalysis.Issue {
+	).WithIssuesReporter(func(_ *linter.Context) []goanalysis.Issue {
 		return resIssues
 	}).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }
