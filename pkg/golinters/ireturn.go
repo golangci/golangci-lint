@@ -16,8 +16,9 @@ func NewIreturn(settings *config.IreturnSettings) *goanalysis.Linter {
 	cfg := map[string]map[string]any{}
 	if settings != nil {
 		cfg[a.Name] = map[string]any{
-			"allow":  strings.Join(settings.Allow, ","),
-			"reject": strings.Join(settings.Reject, ","),
+			"allow":    strings.Join(settings.Allow, ","),
+			"reject":   strings.Join(settings.Reject, ","),
+			"nonolint": true,
 		}
 	}
 
