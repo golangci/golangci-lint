@@ -2,6 +2,12 @@ Follow the news and releases on [Mastodon](https://fosstodon.org/@golangcilint) 
 
 There is the most valuable changes log:
 
+
+### v1.56.1
+
+1. misc.
+   * 🎉 go1.22 support
+
 ### v1.56.0
 
 1. new linters

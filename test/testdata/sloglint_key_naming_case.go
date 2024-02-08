@@ -1,4 +1,4 @@
-//go:build go1.21
+//go:build go1.22
 
 //golangcitest:args -Esloglint
 //golangcitest:config_path testdata/configs/sloglint_key_naming_case.yml
