@@ -2,6 +2,14 @@ Follow the news and releases on [Mastodon](https://fosstodon.org/@golangcilint) 
 
 There is the most valuable changes log:
 
+### v1.56.1
+
+1. updated linters
+   * `errcheck`: from 1.6.3 to 1.7.0
+   * `govet`: disable `loopclosure` with go1.22
+   * `revive`: from 1.3.6 to 1.3.7
+   * `testifylint`: from 1.1.0 to 1.1.1
+
 ### v1.56.0
 
 1. new linters
@@ -36,6 +44,7 @@ There is the most valuable changes log:
    * `wsl`: from 3.4.0 to 4.2.0
    * `zerologlint`: from 0.1.3 to 0.1.5
 3. misc.
+   * 🎉 go1.22 support
    * Implement stats per linter with a flag
    * fix: make versioning inside Docker image consistent with binaries
    * fix: parse Go RC version
