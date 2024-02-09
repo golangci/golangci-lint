@@ -22,7 +22,7 @@ require (
 	github.com/ashanbrown/makezero v1.1.1
 	github.com/bkielbasa/cyclop v1.2.1
 	github.com/blizzy78/varnamelen v0.8.0
-	github.com/bombsimon/wsl/v4 v4.2.0
+	github.com/bombsimon/wsl/v4 v4.2.1
 	github.com/breml/bidichk v0.2.7
 	github.com/breml/errchkjson v0.3.6
 	github.com/butuzov/ireturn v0.3.0
@@ -193,7 +193,7 @@ require (
 	golang.org/x/exp/typeparams v0.0.0-20231219180239-dc181d75b848 // indirect
 	golang.org/x/mod v0.15.0 // indirect
 	golang.org/x/sync v0.6.0 // indirect
-	golang.org/x/sys v0.16.0 // indirect
+	golang.org/x/sys v0.17.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
 	google.golang.org/protobuf v1.31.0 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
