@@ -20,58 +20,6 @@ jobs:
       - name: Unshallow
         run: git fetch --prune --unshallow
 
-      - name: Create release
-        uses: goreleaser/goreleaser-action@v5
-        with:
-          version: latest
-          args: release --clean
-        env:
-          GITHUB_TOKEN: ${{ secrets.GOLANGCI_LINT_TOKEN }}
-
-  docker-release:
-    needs: release
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        target:
-          - Dockerfile: build/Dockerfile
-          - Dockerfile: build/alpine.Dockerfile
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install Go
-        uses: actions/setup-go@v5
-        with:
-          # https://github.com/actions/setup-go#supported-version-syntax
-          # ex:
-          # - 1.18beta1 -> 1.18.0-beta.1
-          # - 1.18rc1 -> 1.18.0-rc.1
-          go-version: '1.22'
-
-      - name: Unshallow
-        run: git fetch --prune --unshallow
-
-      - name: Prepare
-        id: prepare
-        run: |
-          TAG=${GITHUB_REF#refs/tags/}
-          MAJOR=${TAG%.*}
-          SHORT_COMMIT=${GITHUB_SHA::8}
-          DATE=$(date '+%Y-%m-%dT%H:%M:%SZ')
-          echo tag_name=${TAG} >> $GITHUB_OUTPUT
-          echo major_tag=${MAJOR} >> $GITHUB_OUTPUT
-          echo short_commit=${SHORT_COMMIT} >> $GITHUB_OUTPUT
-          echo date=${DATE} >> $GITHUB_OUTPUT
-          if [[ ${{ matrix.target.Dockerfile }} == *"alpine"* ]]; then
-            echo full_tag_name=${TAG}-alpine >> $GITHUB_OUTPUT
-            echo full_major_tag=${MAJOR}-alpine >> $GITHUB_OUTPUT
-            echo latest_tag=latest-alpine >> $GITHUB_OUTPUT
-          else
-            echo full_tag_name=${TAG} >> $GITHUB_OUTPUT
-            echo full_major_tag=${MAJOR} >> $GITHUB_OUTPUT
-            echo latest_tag=latest >> $GITHUB_OUTPUT
-          fi
-
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
@@ -81,18 +29,10 @@ jobs:
       - name: Login do docker.io
         run: docker login -u golangci -p ${{ secrets.GOLANGCI_LINT_DOCKER_TOKEN }}
 
-      - name: Build and publish ${{ matrix.target.Dockerfile }}
-        uses: docker/build-push-action@v5
+      - name: Create release
+        uses: goreleaser/goreleaser-action@v5
         with:
-          context: .
-          file: ${{ matrix.target.Dockerfile }}
-          platforms: linux/amd64,linux/arm64
-          push: true
-          build-args: |
-            VERSION=${{ steps.prepare.outputs.tag_name }}
-            SHORT_COMMIT=${{ steps.prepare.outputs.short_commit }}
-            DATE=${{ steps.prepare.outputs.date }}
-          tags: |
-            golangci/golangci-lint:${{ steps.prepare.outputs.full_tag_name }}
-            golangci/golangci-lint:${{ steps.prepare.outputs.full_major_tag }}
-            golangci/golangci-lint:${{ steps.prepare.outputs.latest_tag }}
+          version: latest
+          args: release --clean --timeout=90m
+        env:
+          GITHUB_TOKEN: ${{ secrets.GOLANGCI_LINT_TOKEN }}

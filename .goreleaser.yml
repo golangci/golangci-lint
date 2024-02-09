@@ -132,3 +132,117 @@ nfpms:
           - /usr/bin/go
     rpm:
       group: Development/Tools
+
+docker_manifests:
+  # basic
+  - name_template: 'golangci/golangci-lint:latest'
+    image_templates:
+      - 'golangci/golangci-lint:{{ .Tag }}-amd64'
+      - 'golangci/golangci-lint:{{ .Tag }}-arm64'
+  - name_template: 'golangci/golangci-lint:v{{ .Major }}.{{ .Minor }}'
+    image_templates:
+      - 'golangci/golangci-lint:v{{ .Major }}.{{ .Minor }}-amd64'
+      - 'golangci/golangci-lint:v{{ .Major }}.{{ .Minor }}-arm64'
+  - name_template: 'golangci/golangci-lint:{{ .Tag }}'
+    image_templates:
+      - 'golangci/golangci-lint:{{ .Tag }}-amd64'
+      - 'golangci/golangci-lint:{{ .Tag }}-arm64'
+
+  # alpine
+  - name_template: 'golangci/golangci-lint:latest-alpine'
+    image_templates:
+      - 'golangci/golangci-lint:{{ .Tag }}-alpine-amd64'
+      - 'golangci/golangci-lint:{{ .Tag }}-alpine-arm64'
+  - name_template: 'golangci/golangci-lint:v{{ .Major }}.{{ .Minor }}-alpine'
+    image_templates:
+      - 'golangci/golangci-lint:v{{ .Major }}.{{ .Minor }}-alpine-amd64'
+      - 'golangci/golangci-lint:v{{ .Major }}.{{ .Minor }}-alpine-arm64'
+  - name_template: 'golangci/golangci-lint:{{ .Tag }}'
+    image_templates:
+      - 'golangci/golangci-lint:{{ .Tag }}-alpine-amd64'
+      - 'golangci/golangci-lint:{{ .Tag }}-alpine-arm64'
+
+dockers:
+  - use: buildx
+    goos: linux
+    goarch: amd64
+    dockerfile: build/buildx.Dockerfile
+    image_templates:
+      - 'golangci/golangci-lint:latest-amd64'
+      - 'golangci/golangci-lint:{{ .Tag }}-amd64'
+      - 'golangci/golangci-lint:v{{ .Major }}.{{ .Minor }}-amd64'
+    build_flag_templates:
+      - '--pull'
+      # https://github.com/opencontainers/image-spec/blob/main/annotations.md#pre-defined-annotation-keys
+      - '--label=org.opencontainers.image.title={{.ProjectName}}'
+      - '--label=org.opencontainers.image.description=Fast linters Runner for Go'
+      - '--label=org.opencontainers.image.source={{.GitURL}}'
+      - '--label=org.opencontainers.image.url={{.GitURL}}'
+      - '--label=org.opencontainers.image.documentation=https://golangci-lint.run'
+      - '--label=org.opencontainers.image.created={{.Date}}'
+      - '--label=org.opencontainers.image.revision={{.FullCommit}}'
+      - '--label=org.opencontainers.image.version={{.Version}}'
+      - '--platform=linux/amd64'
+
+  - use: buildx
+    goos: linux
+    goarch: arm64
+    dockerfile: build/buildx.Dockerfile
+    image_templates:
+      - 'golangci/golangci-lint:latest-arm64'
+      - 'golangci/golangci-lint:{{ .Tag }}-arm64'
+      - 'golangci/golangci-lint:v{{ .Major }}.{{ .Minor }}-arm64'
+    build_flag_templates:
+      - '--pull'
+      # https://github.com/opencontainers/image-spec/blob/main/annotations.md#pre-defined-annotation-keys
+      - '--label=org.opencontainers.image.title={{.ProjectName}}'
+      - '--label=org.opencontainers.image.description=Fast linters Runner for Go'
+      - '--label=org.opencontainers.image.source={{.GitURL}}'
+      - '--label=org.opencontainers.image.url={{.GitURL}}'
+      - '--label=org.opencontainers.image.documentation=https://golangci-lint.run'
+      - '--label=org.opencontainers.image.created={{.Date}}'
+      - '--label=org.opencontainers.image.revision={{.FullCommit}}'
+      - '--label=org.opencontainers.image.version={{.Version}}'
+      - '--platform=linux/arm64'
+
+  - use: buildx
+    goos: linux
+    goarch: amd64
+    dockerfile: build/buildx-alpine.Dockerfile
+    image_templates:
+      - 'golangci/golangci-lint:latest-alpine-amd64'
+      - 'golangci/golangci-lint:{{ .Tag }}-alpine-amd64'
+      - 'golangci/golangci-lint:v{{ .Major }}.{{ .Minor }}-alpine-amd64'
+    build_flag_templates:
+      - '--pull'
+      # https://github.com/opencontainers/image-spec/blob/main/annotations.md#pre-defined-annotation-keys
+      - '--label=org.opencontainers.image.title={{.ProjectName}}'
+      - '--label=org.opencontainers.image.description=Fast linters Runner for Go'
+      - '--label=org.opencontainers.image.source={{.GitURL}}'
+      - '--label=org.opencontainers.image.url={{.GitURL}}'
+      - '--label=org.opencontainers.image.documentation=https://golangci-lint.run'
+      - '--label=org.opencontainers.image.created={{.Date}}'
+      - '--label=org.opencontainers.image.revision={{.FullCommit}}'
+      - '--label=org.opencontainers.image.version={{.Version}}'
+      - '--platform=linux/amd64'
+
+  - use: buildx
+    goos: linux
+    goarch: arm64
+    dockerfile: build/buildx-alpine.Dockerfile
+    image_templates:
+      - 'golangci/golangci-lint:latest-alpine-arm64'
+      - 'golangci/golangci-lint:{{ .Tag }}-alpine-arm64'
+      - 'golangci/golangci-lint:v{{ .Major }}.{{ .Minor }}-alpine-arm64'
+    build_flag_templates:
+      - '--pull'
+      # https://github.com/opencontainers/image-spec/blob/main/annotations.md#pre-defined-annotation-keys
+      - '--label=org.opencontainers.image.title={{.ProjectName}}'
+      - '--label=org.opencontainers.image.description=Fast linters Runner for Go'
+      - '--label=org.opencontainers.image.source={{.GitURL}}'
+      - '--label=org.opencontainers.image.url={{.GitURL}}'
+      - '--label=org.opencontainers.image.documentation=https://golangci-lint.run'
+      - '--label=org.opencontainers.image.created={{.Date}}'
+      - '--label=org.opencontainers.image.revision={{.FullCommit}}'
+      - '--label=org.opencontainers.image.version={{.Version}}'
+      - '--platform=linux/arm64'
