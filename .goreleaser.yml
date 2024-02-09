@@ -147,7 +147,6 @@ docker_manifests:
     image_templates:
       - 'golangci/golangci-lint:{{ .Tag }}-amd64'
       - 'golangci/golangci-lint:{{ .Tag }}-arm64'
-      - 'golangci/golangci-lint:{{ .Tag }}-armv7'
 
   # alpine
   - name_template: 'golangci/golangci-lint:latest-alpine'
