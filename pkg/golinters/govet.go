@@ -146,7 +146,7 @@ func NewGovet(settings *config.GovetSettings) *goanalysis.Linter {
 		"govet",
 		"Vet examines Go source code and reports suspicious constructs, "+
 			"such as Printf calls whose arguments do not align with the format string. "+
-			"This is the same analysis as the 'go vet' tool",
+			"It is roughly the same as 'go vet' and uses its passes.",
 		analyzersFromConfig(settings),
 		conf,
 	).WithLoadMode(goanalysis.LoadModeTypesInfo)
