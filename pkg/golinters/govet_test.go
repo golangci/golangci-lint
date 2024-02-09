@@ -72,6 +72,7 @@ func TestGovetAnalyzerIsEnabled(t *testing.T) {
 		Disable    []string
 		EnableAll  bool
 		DisableAll bool
+		Go         string
 
 		Name    string
 		Enabled bool
@@ -83,12 +84,14 @@ func TestGovetAnalyzerIsEnabled(t *testing.T) {
 		{Name: "unsafeptr", Enabled: true, Enable: []string{"unsafeptr"}},
 		{Name: "shift", Enabled: true, EnableAll: true},
 		{Name: "shadow", EnableAll: true, Disable: []string{"shadow"}, Enabled: false},
+		{Name: "loopclosure", EnableAll: true, Enabled: false, Go: "1.22"}, // TODO(ldez) remove loopclosure when go1.23
 	} {
 		cfg := &config.GovetSettings{
 			Enable:     tc.Enable,
 			Disable:    tc.Disable,
 			EnableAll:  tc.EnableAll,
 			DisableAll: tc.DisableAll,
+			Go:         tc.Go,
 		}
 		if enabled := isAnalyzerEnabled(tc.Name, cfg, defaultAnalyzers); enabled != tc.Enabled {
 			t.Errorf("%+v", tc)
