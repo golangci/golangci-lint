@@ -172,17 +172,24 @@ func analyzersFromConfig(settings *config.GovetSettings) []*analysis.Analyzer {
 }
 
 func isAnalyzerEnabled(name string, cfg *config.GovetSettings, defaultAnalyzers []*analysis.Analyzer) bool {
-	switch {
-	case name == loopclosure.Analyzer.Name && config.IsGreaterThanOrEqualGo122(cfg.Go):
+	// TODO(ldez) remove loopclosure when go1.23
+	if name == loopclosure.Analyzer.Name && config.IsGreaterThanOrEqualGo122(cfg.Go) {
 		return false
+	}
+
+	switch {
 	case cfg.EnableAll:
 		return !slices.Contains(cfg.Disable, name)
+
 	case slices.Contains(cfg.Enable, name):
 		return true
+
 	case slices.Contains(cfg.Disable, name):
 		return false
+
 	case cfg.DisableAll:
 		return false
+
 	default:
 		return slices.ContainsFunc(defaultAnalyzers, func(a *analysis.Analyzer) bool { return a.Name == name })
 	}
