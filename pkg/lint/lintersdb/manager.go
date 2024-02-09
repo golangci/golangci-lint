@@ -236,25 +236,18 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		wrapcheckCfg = &m.cfg.LintersSettings.Wrapcheck
 		wslCfg = &m.cfg.LintersSettings.WSL
 
-		if govetCfg != nil {
-			govetCfg.Go = m.cfg.Run.Go
-		}
-
-		if gocriticCfg != nil {
-			gocriticCfg.Go = trimGoVersion(m.cfg.Run.Go)
-		}
-
-		if gofumptCfg != nil && gofumptCfg.LangVersion == "" {
+		govetCfg.Go = m.cfg.Run.Go
+		gocriticCfg.Go = trimGoVersion(m.cfg.Run.Go)
+		if gofumptCfg.LangVersion == "" {
 			gofumptCfg.LangVersion = m.cfg.Run.Go
 		}
-
-		if staticcheckCfg != nil && staticcheckCfg.GoVersion == "" {
+		if staticcheckCfg.GoVersion == "" {
 			staticcheckCfg.GoVersion = trimGoVersion(m.cfg.Run.Go)
 		}
-		if gosimpleCfg != nil && gosimpleCfg.GoVersion == "" {
+		if gosimpleCfg.GoVersion == "" {
 			gosimpleCfg.GoVersion = trimGoVersion(m.cfg.Run.Go)
 		}
-		if stylecheckCfg != nil && stylecheckCfg.GoVersion != "" {
+		if stylecheckCfg.GoVersion != "" {
 			stylecheckCfg.GoVersion = trimGoVersion(m.cfg.Run.Go)
 		}
 	}
