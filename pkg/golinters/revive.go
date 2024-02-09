@@ -186,7 +186,7 @@ func getReviveConfig(cfg *config.ReviveSettings) (*lint.Config, error) {
 	for k, r := range conf.Rules {
 		err := r.Initialize()
 		if err != nil {
-			return nil, fmt.Errorf("error in config of rule [%s] : [%w]", k, err)
+			return nil, fmt.Errorf("error in config of rule %q: %w", k, err)
 		}
 		conf.Rules[k] = r
 	}
