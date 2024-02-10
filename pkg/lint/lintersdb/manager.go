@@ -237,10 +237,14 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		wslCfg = &m.cfg.LintersSettings.WSL
 
 		govetCfg.Go = m.cfg.Run.Go
+
 		gocriticCfg.Go = trimGoVersion(m.cfg.Run.Go)
+
 		if gofumptCfg.LangVersion == "" {
 			gofumptCfg.LangVersion = m.cfg.Run.Go
 		}
+
+		// staticcheck related linters.
 		if staticcheckCfg.GoVersion == "" {
 			staticcheckCfg.GoVersion = trimGoVersion(m.cfg.Run.Go)
 		}
