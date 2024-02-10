@@ -19,10 +19,12 @@ type BaseIssue struct {
 	replacement                       *result.Replacement
 }
 
+//nolint:gocritic // TODO(ldez) must be change in the future.
 func (b BaseIssue) Position() token.Position {
 	return b.position
 }
 
+//nolint:gocritic // TODO(ldez) must be change in the future.
 func (b BaseIssue) Replacement() *result.Replacement {
 	return b.replacement
 }
@@ -31,6 +33,7 @@ type ExtraLeadingSpace struct {
 	BaseIssue
 }
 
+//nolint:gocritic // TODO(ldez) must be change in the future.
 func (i ExtraLeadingSpace) Details() string {
 	return fmt.Sprintf("directive `%s` should not have more than one leading space", i.fullDirective)
 }
@@ -41,6 +44,7 @@ type NotMachine struct {
 	BaseIssue
 }
 
+//nolint:gocritic // TODO(ldez) must be change in the future.
 func (i NotMachine) Details() string {
 	expected := i.fullDirective[:2] + strings.TrimLeftFunc(i.fullDirective[2:], unicode.IsSpace)
 	return fmt.Sprintf("directive `%s` should be written without leading space as `%s`",
@@ -53,6 +57,7 @@ type NotSpecific struct {
 	BaseIssue
 }
 
+//nolint:gocritic // TODO(ldez) must be change in the future.
 func (i NotSpecific) Details() string {
 	return fmt.Sprintf("directive `%s` should mention specific linter such as `%s:my-linter`",
 		i.fullDirective, i.directiveWithOptionalLeadingSpace)
@@ -64,6 +69,7 @@ type ParseError struct {
 	BaseIssue
 }
 
+//nolint:gocritic // TODO(ldez) must be change in the future.
 func (i ParseError) Details() string {
 	return fmt.Sprintf("directive `%s` should match `%s[:<comma-separated-linters>] [// <explanation>]`",
 		i.fullDirective,
@@ -77,6 +83,7 @@ type NoExplanation struct {
 	fullDirectiveWithoutExplanation string
 }
 
+//nolint:gocritic // TODO(ldez) must be change in the future.
 func (i NoExplanation) Details() string {
 	return fmt.Sprintf("directive `%s` should provide explanation such as `%s // this is why`",
 		i.fullDirective, i.fullDirectiveWithoutExplanation)
@@ -89,6 +96,7 @@ type UnusedCandidate struct {
 	ExpectedLinter string
 }
 
+//nolint:gocritic // TODO(ldez) must be change in the future.
 func (i UnusedCandidate) Details() string {
 	details := fmt.Sprintf("directive `%s` is unused", i.fullDirective)
 	if i.ExpectedLinter != "" {

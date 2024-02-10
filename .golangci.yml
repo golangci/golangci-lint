@@ -1,13 +1,16 @@
 linters-settings:
   depguard:
-    # new configuration
     rules:
       logger:
         deny:
           # logging is allowed only by logutils.Log,
           # logrus is allowed to use only in logutils package.
           - pkg: "github.com/sirupsen/logrus"
-            desc: logging is allowed only by logutils.Log
+            desc: logging is allowed only by logutils.Log.
+          - pkg: "github.com/pkg/errors"
+            desc: Should be replaced by standard lib errors package.
+          - pkg: "github.com/instana/testify"
+            desc: It's a fork of github.com/stretchr/testify.
   dupl:
     threshold: 100
   funlen:
@@ -50,7 +53,6 @@ linters-settings:
       - '3'
     ignored-functions:
       - strings.SplitN
-
   govet:
     settings:
       printf:
@@ -118,14 +120,11 @@ linters:
 
   # don't enable:
   # - asciicheck
-  # - scopelint
   # - gochecknoglobals
   # - gocognit
   # - godot
   # - godox
   # - goerr113
-  # - interfacer
-  # - maligned
   # - nestif
   # - prealloc
   # - testpackage
@@ -155,12 +154,6 @@ issues:
       text: "rangeValCopy: each iteration copies 160 bytes \\(consider pointers or indexing\\)"
     - path: test/(fix|linters)_test.go
       text: "string `gocritic.go` has 3 occurrences, make it a constant"
-
-    # Due to a change inside go-critic v0.10.0, some reports have been removed,
-    # but as we run analysis with the previous version of golangci-lint this leads to a paradoxical situation.
-    # This exclusion will be removed when the next version of golangci-lint (v1.56.0) will be released.
-    - path: pkg/golinters/nolintlint/nolintlint.go
-      text: "hugeParam: (i|b) is heavy \\(\\d+ bytes\\); consider passing it by pointer"
 
 run:
   timeout: 5m
