@@ -52,7 +52,6 @@ linters-settings:
       - strings.SplitN
 
   govet:
-    check-shadowing: true
     settings:
       printf:
         funcs:
@@ -60,6 +59,9 @@ linters-settings:
           - (github.com/golangci/golangci-lint/pkg/logutils.Log).Warnf
           - (github.com/golangci/golangci-lint/pkg/logutils.Log).Errorf
           - (github.com/golangci/golangci-lint/pkg/logutils.Log).Fatalf
+    enable:
+      - nilness
+      - shadow
   errorlint:
     asserts: false
   lll:
