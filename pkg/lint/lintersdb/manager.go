@@ -609,7 +609,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			Deprecated("The repository of the linter has been archived by the owner.", "v1.38.0", ""),
 
 		linter.NewConfig(golinters.NewIntrange()).
-			WithSince("v1.56.2").
+			WithSince("v1.57.0").
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/ckaznocha/intrange"),
 
