@@ -12,7 +12,7 @@ Or you can create a [GitHub Issue](https://github.com/golangci/golangci-lint/iss
 We are sure that every project can easily integrate `golangci-lint`, even the large one.
 
 The idea is to not fix all existing issues. Fix only newly added issue: issues in new code.
-To do this setup CI to run `golangci-lint` with option `--new-from-issues=HEAD~1`.
+To do this setup CI to run `golangci-lint` with option `--new-from-rev=HEAD~1`.
 
 Also, take a look at option `--new`, but consider that CI scripts that generate unstaged files will make `--new` only point out issues in those files and not in the last commit.
 In that regard `--new-from-rev=HEAD~1` is safer.
