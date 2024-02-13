@@ -2485,6 +2485,7 @@ linters:
     - bodyclose
     - containedctx
     - contextcheck
+    - copyloopvar
     - cyclop
     - deadcode
     - decorder
@@ -2606,6 +2607,7 @@ linters:
     - bodyclose
     - containedctx
     - contextcheck
+    - copyloopvar
     - cyclop
     - deadcode
     - decorder
