@@ -300,7 +300,6 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 
 		linter.NewConfig(golinters.NewCopyLoopVar()).
 			WithSince("v1.57.0").
-			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/karamaru-alpha/copyloopvar"),
 
