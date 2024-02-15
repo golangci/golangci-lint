@@ -112,6 +112,7 @@ var defaultLintersSettings = LintersSettings{
 		ErrError:      false,
 		ErrorF:        true,
 		SprintF1:      true,
+		StrConcat:     true,
 	},
 	Prealloc: PreallocSettings{
 		Simple:     true,
@@ -711,6 +712,7 @@ type PerfSprintSettings struct {
 	ErrError      bool `mapstructure:"err-error"`
 	ErrorF        bool `mapstructure:"errorf"`
 	SprintF1      bool `mapstructure:"sprintf1"`
+	StrConcat     bool `mapstructure:"strconcat"`
 }
 
 type PreallocSettings struct {
