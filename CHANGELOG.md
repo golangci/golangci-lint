@@ -2,6 +2,19 @@ Follow the news and releases on [Mastodon](https://fosstodon.org/@golangcilint) 
 
 There is the most valuable changes log:
 
+### v1.56.2
+
+1. updated linters
+   * `go-critic`: from 0.11.0 to 0.11.1
+   * `gosec`: from 2.18.2 to 2.19.0
+   * `testifylint`: from 1.1.1 to 1.1.2
+   * `usestdlibvars`: from 1.24.0 to 1.25.0
+   * `wsl`: from 4.2.0 to 4.2.1
+2. misc.
+   * Fix missing version in Docker image
+3. Documentation
+   * Explain the limitation of new-from-rev and new-from-patch
+
 ### v1.56.1
 
 1. updated linters
