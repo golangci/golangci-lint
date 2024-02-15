@@ -2538,6 +2538,7 @@ linters:
     - ineffassign
     - interfacebloat
     - interfacer
+    - intrange
     - ireturn
     - lll
     - loggercheck
@@ -2659,6 +2660,7 @@ linters:
     - ineffassign
     - interfacebloat
     - interfacer
+    - intrange
     - ireturn
     - lll
     - loggercheck
