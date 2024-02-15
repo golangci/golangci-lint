@@ -298,6 +298,11 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/kkHAIKE/contextcheck"),
 
+		linter.NewConfig(golinters.NewCopyLoopVar()).
+			WithSince("v1.57.0").
+			WithPresets(linter.PresetStyle).
+			WithURL("https://github.com/karamaru-alpha/copyloopvar"),
+
 		linter.NewConfig(golinters.NewCyclop(cyclopCfg)).
 			WithSince("v1.37.0").
 			WithLoadForGoAnalysis().
