@@ -30,7 +30,7 @@ func TestPerfsprint2() {
 	fmt.Sprint(ui)
 	fmt.Sprintf("%x", []byte{'a'}) // want "fmt.Sprintf can be replaced with faster hex.EncodeToString"
 	fmt.Errorf("hello")
-	fmt.Sprintf("Hello %s", s) // want "fmt.Sprintf can be replaced with string addition"
+	fmt.Sprintf("Hello %s", s) // want "fmt.Sprintf can be replaced with string concatenation"
 
 	fmt.Sprint("test", 42)
 	fmt.Sprint(42, 42)
