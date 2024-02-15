@@ -160,7 +160,8 @@ func reviveToIssue(pass *analysis.Pass, object *jsonObject) goanalysis.Issue {
 // This function mimics the GetConfig function of revive.
 // This allows to get default values and right types.
 // https://github.com/golangci/golangci-lint/issues/1745
-// https://github.com/mgechev/revive/blob/v1.1.4/config/config.go#L182
+// https://github.com/mgechev/revive/blob/v1.3.7/config/config.go#L217
+// https://github.com/mgechev/revive/blob/v1.3.7/config/config.go#L169-L174
 func getReviveConfig(cfg *config.ReviveSettings) (*lint.Config, error) {
 	conf := defaultConfig()
 
@@ -181,6 +182,14 @@ func getReviveConfig(cfg *config.ReviveSettings) (*lint.Config, error) {
 	}
 
 	normalizeConfig(conf)
+
+	for k, r := range conf.Rules {
+		err := r.Initialize()
+		if err != nil {
+			return nil, fmt.Errorf("error in config of rule %q: %w", k, err)
+		}
+		conf.Rules[k] = r
+	}
 
 	reviveDebugf("revive configuration: %#v", conf)
 
@@ -214,6 +223,7 @@ func createConfigMap(cfg *config.ReviveSettings) map[string]any {
 			"severity":  s.Severity,
 			"arguments": safeTomlSlice(s.Arguments),
 			"disabled":  s.Disabled,
+			"exclude":   s.Exclude,
 		}
 	}
 

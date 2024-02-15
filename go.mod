@@ -27,7 +27,7 @@ require (
 	github.com/breml/errchkjson v0.3.6
 	github.com/butuzov/ireturn v0.3.0
 	github.com/butuzov/mirror v1.1.0
-	github.com/catenacyber/perfsprint v0.6.0
+	github.com/catenacyber/perfsprint v0.7.0
 	github.com/charithe/durationcheck v0.0.10
 	github.com/ckaznocha/intrange v0.1.0
 	github.com/curioswitch/go-reassign v0.2.0
@@ -38,7 +38,7 @@ require (
 	github.com/firefart/nonamedreturns v1.0.4
 	github.com/fzipp/gocyclo v0.6.0
 	github.com/ghostiam/protogetter v0.3.4
-	github.com/go-critic/go-critic v0.11.0
+	github.com/go-critic/go-critic v0.11.1
 	github.com/go-viper/mapstructure/v2 v2.0.0-alpha.1
 	github.com/go-xmlfmt/xmlfmt v1.1.2
 	github.com/gofrs/flock v0.8.1
@@ -90,8 +90,8 @@ require (
 	github.com/ryanrolds/sqlclosecheck v0.5.1
 	github.com/sanposhiho/wastedassign/v2 v2.0.7
 	github.com/sashamelentyev/interfacebloat v1.1.0
-	github.com/sashamelentyev/usestdlibvars v1.24.0
-	github.com/securego/gosec/v2 v2.18.2
+	github.com/sashamelentyev/usestdlibvars v1.25.0
+	github.com/securego/gosec/v2 v2.19.0
 	github.com/shazow/go-diff v0.0.0-20160112020656-b6b7b6733b8c
 	github.com/shirou/gopsutil/v3 v3.24.1
 	github.com/sirupsen/logrus v1.9.3
@@ -124,7 +124,7 @@ require (
 	go-simpler.org/musttag v0.8.0
 	go-simpler.org/sloglint v0.4.0
 	golang.org/x/exp v0.0.0-20240103183307-be819d1f06fc
-	golang.org/x/tools v0.17.0
+	golang.org/x/tools v0.18.0
 	gopkg.in/yaml.v3 v3.0.1
 	honnef.co/go/tools v0.4.6
 	mvdan.cc/gofumpt v0.6.0
@@ -135,7 +135,7 @@ require (
 require (
 	github.com/Masterminds/semver v1.5.0 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
-	github.com/ccojocar/zxcvbn-go v1.0.1 // indirect
+	github.com/ccojocar/zxcvbn-go v1.0.2 // indirect
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect
 	github.com/chavacava/garif v0.1.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
@@ -145,7 +145,7 @@ require (
 	github.com/go-ole/go-ole v1.2.6 // indirect
 	github.com/go-toolsmith/astcast v1.1.0 // indirect
 	github.com/go-toolsmith/astcopy v1.1.0 // indirect
-	github.com/go-toolsmith/astequal v1.1.0 // indirect
+	github.com/go-toolsmith/astequal v1.2.0 // indirect
 	github.com/go-toolsmith/astfmt v1.1.0 // indirect
 	github.com/go-toolsmith/astp v1.1.0 // indirect
 	github.com/go-toolsmith/strparse v1.1.0 // indirect
