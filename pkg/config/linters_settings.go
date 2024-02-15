@@ -751,6 +751,7 @@ type ReviveSettings struct {
 		Arguments []any
 		Severity  string
 		Disabled  bool
+		Exclude   []string
 	}
 	ErrorCode   int `mapstructure:"error-code"`
 	WarningCode int `mapstructure:"warning-code"`
