@@ -139,10 +139,12 @@ docker_manifests:
     image_templates:
       - 'golangci/golangci-lint:{{ .Tag }}-amd64'
       - 'golangci/golangci-lint:{{ .Tag }}-arm64'
+
   - name_template: 'golangci/golangci-lint:v{{ .Major }}.{{ .Minor }}'
     image_templates:
       - 'golangci/golangci-lint:v{{ .Major }}.{{ .Minor }}-amd64'
       - 'golangci/golangci-lint:v{{ .Major }}.{{ .Minor }}-arm64'
+
   - name_template: 'golangci/golangci-lint:{{ .Tag }}'
     image_templates:
       - 'golangci/golangci-lint:{{ .Tag }}-amd64'
@@ -153,11 +155,13 @@ docker_manifests:
     image_templates:
       - 'golangci/golangci-lint:{{ .Tag }}-alpine-amd64'
       - 'golangci/golangci-lint:{{ .Tag }}-alpine-arm64'
+
   - name_template: 'golangci/golangci-lint:v{{ .Major }}.{{ .Minor }}-alpine'
     image_templates:
       - 'golangci/golangci-lint:v{{ .Major }}.{{ .Minor }}-alpine-amd64'
       - 'golangci/golangci-lint:v{{ .Major }}.{{ .Minor }}-alpine-arm64'
-  - name_template: 'golangci/golangci-lint:{{ .Tag }}'
+
+  - name_template: 'golangci/golangci-lint:{{ .Tag }}-alpine'
     image_templates:
       - 'golangci/golangci-lint:{{ .Tag }}-alpine-amd64'
       - 'golangci/golangci-lint:{{ .Tag }}-alpine-arm64'
