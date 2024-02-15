@@ -356,6 +356,11 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/breml/errchkjson"),
 
+		linter.NewConfig(golinters.NewErrIfInline()).
+			WithSince("1.57.0").
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/bastianccm/errifinline"),
+
 		linter.NewConfig(golinters.NewErrName()).
 			WithSince("v1.42.0").
 			WithPresets(linter.PresetStyle).

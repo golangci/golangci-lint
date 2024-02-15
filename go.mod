@@ -1,6 +1,8 @@
 module github.com/golangci/golangci-lint
 
-go 1.21
+go 1.21.0
+
+toolchain go1.21.7
 
 require (
 	4d63.com/gocheckcompilerdirectives v1.2.1
@@ -20,6 +22,7 @@ require (
 	github.com/alingse/asasalint v0.0.11
 	github.com/ashanbrown/forbidigo v1.6.0
 	github.com/ashanbrown/makezero v1.1.1
+	github.com/bastianccm/errifinline v0.0.1
 	github.com/bkielbasa/cyclop v1.2.1
 	github.com/blizzy78/varnamelen v0.8.0
 	github.com/bombsimon/wsl/v4 v4.2.1
@@ -123,7 +126,7 @@ require (
 	go-simpler.org/musttag v0.8.0
 	go-simpler.org/sloglint v0.4.0
 	golang.org/x/exp v0.0.0-20240103183307-be819d1f06fc
-	golang.org/x/tools v0.17.0
+	golang.org/x/tools v0.18.0
 	gopkg.in/yaml.v3 v3.0.1
 	honnef.co/go/tools v0.4.6
 	mvdan.cc/gofumpt v0.6.0

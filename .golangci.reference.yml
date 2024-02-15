@@ -2416,6 +2416,7 @@ linters:
     - durationcheck
     - errcheck
     - errchkjson
+    - errifinline
     - errname
     - errorlint
     - execinquery
@@ -2537,6 +2538,7 @@ linters:
     - durationcheck
     - errcheck
     - errchkjson
+    - errifinline
     - errname
     - errorlint
     - execinquery
