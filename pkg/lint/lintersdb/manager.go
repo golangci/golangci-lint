@@ -238,6 +238,8 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 
 		govetCfg.Go = m.cfg.Run.Go
 
+		parallelTestCfg.Go = m.cfg.Run.Go
+
 		gocriticCfg.Go = trimGoVersion(m.cfg.Run.Go)
 
 		if gofumptCfg.LangVersion == "" {

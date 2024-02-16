@@ -65,7 +65,7 @@ require (
 	github.com/kisielk/errcheck v1.7.0
 	github.com/kkHAIKE/contextcheck v1.1.4
 	github.com/kulti/thelper v0.6.3
-	github.com/kunwardeep/paralleltest v1.0.9
+	github.com/kunwardeep/paralleltest v1.0.10
 	github.com/kyoh86/exportloopref v0.1.11
 	github.com/ldez/gomoddirectives v0.2.3
 	github.com/ldez/tagliatelle v0.5.0

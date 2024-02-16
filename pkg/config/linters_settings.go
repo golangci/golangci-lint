@@ -703,8 +703,9 @@ type NoNamedReturnsSettings struct {
 }
 
 type ParallelTestSettings struct {
-	IgnoreMissing         bool `mapstructure:"ignore-missing"`
-	IgnoreMissingSubtests bool `mapstructure:"ignore-missing-subtests"`
+	Go                    string `mapstructure:"-"`
+	IgnoreMissing         bool   `mapstructure:"ignore-missing"`
+	IgnoreMissingSubtests bool   `mapstructure:"ignore-missing-subtests"`
 }
 
 type PerfSprintSettings struct {
