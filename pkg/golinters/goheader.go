@@ -87,6 +87,7 @@ func runGoHeader(pass *analysis.Pass, conf *goheader.Configuration) ([]goanalysi
 			continue
 		}
 
+		i = a.Analyze(&goheader.Target{File: file, Path: path})
 		issue := result.Issue{
 			Pos: token.Position{
 				Line:     i.Location().Line + 1,
@@ -95,6 +96,17 @@ func runGoHeader(pass *analysis.Pass, conf *goheader.Configuration) ([]goanalysi
 			},
 			Text:       i.Message(),
 			FromLinter: goHeaderName,
+		}
+
+		if fix := i.Fix(); fix != nil {
+			issue.LineRange = &result.Range{
+				From: issue.Line(),
+				To:   issue.Line() + len(fix.Actual) - 1,
+			}
+			issue.Replacement = &result.Replacement{
+				NeedOnlyDelete: len(fix.Expected) == 0,
+				NewLines:       fix.Expected,
+			}
 		}
 
 		issues = append(issues, goanalysis.NewIssue(&issue, pass))
