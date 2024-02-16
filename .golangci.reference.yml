@@ -1684,7 +1684,8 @@ linters-settings:
         disabled: false
         exclude: [""]
         arguments:
-          - "short"
+          funcArgStyle: "short"
+          funcRetValStyle: "short"
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#enforce-slice-style
       - name: enforce-slice-style
         severity: warning
@@ -1778,7 +1779,8 @@ linters-settings:
         disabled: false
         exclude: [""]
         arguments:
-          - "^[a-z][a-z0-9]{0,}$"
+          allowRegex: '^[a-z][a-z0-9]{0,}$'
+          denyRegex: '^v\d+$'
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#imports-blocklist
       - name: imports-blocklist
         severity: warning
