@@ -87,7 +87,6 @@ func runGoHeader(pass *analysis.Pass, conf *goheader.Configuration) ([]goanalysi
 			continue
 		}
 
-		i = a.Analyze(&goheader.Target{File: file, Path: path})
 		issue := result.Issue{
 			Pos: token.Position{
 				Line:     i.Location().Line + 1,
