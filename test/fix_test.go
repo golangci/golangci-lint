@@ -4,7 +4,6 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-	"regexp"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -72,7 +71,7 @@ func TestFix(t *testing.T) {
 			expectedOutput, err := os.ReadFile(filepath.Join(testdataDir, "fix", "out", filepath.Base(input)))
 			require.NoError(t, err)
 
-			require.Equal(t, trimTrailingSpaces(string(expectedOutput)), trimTrailingSpaces(string(output)))
+			require.Equal(t, string(expectedOutput), string(output))
 		})
 	}
 }
@@ -111,13 +110,7 @@ func TestFix_pathPrefix(t *testing.T) {
 			expectedOutput, err := os.ReadFile(filepath.Join(testdataDir, "fix", "out", filepath.Base(input)))
 			require.NoError(t, err)
 
-			require.Equal(t, trimTrailingSpaces(string(expectedOutput)), trimTrailingSpaces(string(output)))
+			require.Equal(t, string(expectedOutput), string(output))
 		})
 	}
-}
-
-var reTrailingSpaces = regexp.MustCompile(`(?m)(\s+)$`)
-
-func trimTrailingSpaces(s string) string {
-	return reTrailingSpaces.ReplaceAllString(s, "")
 }
