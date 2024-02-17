@@ -3,8 +3,6 @@ package linter
 import (
 	"context"
 
-	"golang.org/x/tools/go/analysis"
-
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
@@ -18,7 +16,14 @@ type Noop struct {
 	name   string
 	desc   string
 	reason string
-	run    func(pass *analysis.Pass) (any, error)
+}
+
+func NewNoop(l Linter, reason string) *Noop {
+	return &Noop{
+		name:   l.Name(),
+		desc:   l.Desc(),
+		reason: reason,
+	}
 }
 
 func (n Noop) Run(_ context.Context, lintCtx *Context) ([]result.Issue, error) {
