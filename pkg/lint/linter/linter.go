@@ -15,14 +15,16 @@ type Linter interface {
 }
 
 type Noop struct {
-	name string
-	desc string
-	run  func(pass *analysis.Pass) (any, error)
+	name   string
+	desc   string
+	reason string
+	run    func(pass *analysis.Pass) (any, error)
 }
 
 func (n Noop) Run(_ context.Context, lintCtx *Context) ([]result.Issue, error) {
-	lintCtx.Log.Warnf("%s is disabled because of generics."+
-		" You can track the evolution of the generics support by following the https://github.com/golangci/golangci-lint/issues/2649.", n.name)
+	if n.reason != "" {
+		lintCtx.Log.Warnf("%s: %s", n.name, n.reason)
+	}
 	return nil, nil
 }
 

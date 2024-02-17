@@ -133,11 +133,12 @@ func (lc *Config) Name() string {
 	return lc.Linter.Name()
 }
 
-func (lc *Config) WithNoopFallback(cfg *config.Config) *Config {
-	if cfg != nil && config.IsGreaterThanOrEqualGo122(cfg.Run.Go) {
+func (lc *Config) WithNoopFallback(cfg *config.Config, cond func(cfg *config.Config) bool) *Config {
+	if cfg != nil && cond(cfg) {
 		lc.Linter = &Noop{
-			name: lc.Linter.Name(),
-			desc: lc.Linter.Desc(),
+			name:   lc.Linter.Name(),
+			desc:   lc.Linter.Desc(),
+			reason: "This linter is disabled because the Go version of your project is lower than Go 1.22.",
 			run: func(_ *analysis.Pass) (any, error) {
 				return nil, nil
 			},
@@ -148,6 +149,12 @@ func (lc *Config) WithNoopFallback(cfg *config.Config) *Config {
 	}
 
 	return lc
+}
+
+func IsGoLowerThan(limit string) func(cfg *config.Config) bool {
+	return func(cfg *config.Config) bool {
+		return cfg != nil && !config.IsGoGreaterThanOrEqual(cfg.Run.Go, limit)
+	}
 }
 
 func NewConfig(linter Linter) *Config {

@@ -18,7 +18,7 @@ func NewParallelTest(settings *config.ParallelTestSettings) *goanalysis.Linter {
 			"ignoremissingsubtests": settings.IgnoreMissingSubtests,
 		}
 
-		if config.IsGreaterThanOrEqualGo122(settings.Go) {
+		if config.IsGoGreaterThanOrEqual(settings.Go, "1.22") {
 			d["ignoreloopVar"] = true
 		}
 
