@@ -217,3 +217,50 @@ func TestRunnerResult_ExpectOutputRegexp(t *testing.T) {
 	r.ExpectOutputRegexp(`an.+`)
 	r.ExpectOutputRegexp("an")
 }
+
+// TODO(ldez) remove when we will run go1.23 on the CI.
+func Test_forceDisableUnsupportedLinters(t *testing.T) {
+	t.Skip("only for illustration purpose because works only with go1.21")
+
+	testCases := []struct {
+		desc     string
+		args     []string
+		expected []string
+	}{
+		{
+			desc:     "no args",
+			expected: []string{"-D", "intrange,copyloopvar"},
+		},
+		{
+			desc:     "simple",
+			args:     []string{"-A", "B", "-E"},
+			expected: []string{"-A", "B", "-E", "-D", "intrange,copyloopvar"},
+		},
+		{
+			desc:     "with existing disable linters",
+			args:     []string{"-D", "a,b"},
+			expected: []string{"-D", "a,b,intrange,copyloopvar"},
+		},
+		{
+			desc:     "complex",
+			args:     []string{"-A", "B", "-D", "a,b", "C", "-E", "F"},
+			expected: []string{"-A", "B", "-D", "a,b,intrange,copyloopvar", "C", "-E", "F"},
+		},
+		{
+			desc:     "disable-all",
+			args:     []string{"-disable-all", "-D", "a,b"},
+			expected: []string{"-disable-all", "-D", "a,b"},
+		},
+	}
+
+	for _, test := range testCases {
+		test := test
+		t.Run(test.desc, func(t *testing.T) {
+			t.Parallel()
+
+			result := forceDisableUnsupportedLinters(test.args)
+
+			assert.Equal(t, test.expected, result)
+		})
+	}
+}
