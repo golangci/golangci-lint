@@ -1,3 +1,5 @@
+//go:build go1.22
+
 //golangcitest:args -Eintrange
 package testdata
 
