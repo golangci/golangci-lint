@@ -2,8 +2,11 @@ package test
 
 import (
 	"path/filepath"
+	"runtime"
+	"strings"
 	"testing"
 
+	hcversion "github.com/hashicorp/go-version"
 	"github.com/stretchr/testify/require"
 	_ "github.com/valyala/quicktemplate"
 
@@ -131,14 +134,20 @@ func TestTestsAreLintedByDefault(t *testing.T) {
 }
 
 func TestCgoOk(t *testing.T) {
+	args := []string{"--timeout=3m",
+		"--enable-all",
+		"-D",
+		"nosnakecase", // try to analyze the generated Go.
+	}
+
+	// TODO(ldez) remove when we will run go1.23 on the CI.
+	if isGoVersion("1.21") {
+		args = append(args, "-D", "intrange,copyloopvar")
+	}
+
 	testshared.NewRunnerBuilder(t).
 		WithNoConfig().
-		WithArgs(
-			"--timeout=3m",
-			"--enable-all",
-			"-D",
-			"nosnakecase,gci",
-		).
+		WithArgs(args...).
 		WithTargetPath(testdataDir, "cgo").
 		Runner().
 		Install().
@@ -353,9 +362,16 @@ func TestLineDirectiveProcessedFiles(t *testing.T) {
 }
 
 func TestUnsafeOk(t *testing.T) {
+	args := []string{"--enable-all"}
+
+	// TODO(ldez) remove when we will run go1.23 on the CI.
+	if isGoVersion("1.21") {
+		args = append(args, "-D", "intrange,copyloopvar")
+	}
+
 	testshared.NewRunnerBuilder(t).
 		WithNoConfig().
-		WithArgs("--enable-all").
+		WithArgs(args...).
 		WithTargetPath(testdataDir, "unsafe").
 		Runner().
 		Install().
@@ -510,6 +526,11 @@ func TestEnableAllFastAndEnableCanCoexist(t *testing.T) {
 		test := test
 		t.Run(test.desc, func(t *testing.T) {
 			t.Parallel()
+
+			// TODO(ldez) remove when we will run go1.23 on the CI.
+			if isGoVersion("1.21") {
+				test.args = append(test.args, "-D", "intrange,copyloopvar")
+			}
 
 			testshared.NewRunnerBuilder(t).
 				WithNoConfig().
@@ -680,4 +701,18 @@ func TestPathPrefix(t *testing.T) {
 				ExpectOutputRegexp(test.pattern)
 		})
 	}
+}
+
+func isGoVersion(tag string) bool {
+	vRuntime, err := hcversion.NewVersion(strings.TrimPrefix(runtime.Version(), "go"))
+	if err != nil {
+		return false
+	}
+
+	vTag, err := hcversion.NewVersion(strings.TrimPrefix(tag, "go"))
+	if err != nil {
+		return false
+	}
+
+	return vRuntime.GreaterThanOrEqual(vTag)
 }
