@@ -138,8 +138,8 @@ func TestCgoOk(t *testing.T) {
 			"-D",
 			"nosnakecase",
 		).
+		WithArgs("--go=1.22"). // TODO(ldez) remove this line when we will run go1.23 on the CI. (related to intrange, copyloopvar)
 		WithTargetPath(testdataDir, "cgo").
-		ForceDisableUnsupportedLinters().
 		Runner().
 		Install().
 		Run().
@@ -356,8 +356,8 @@ func TestUnsafeOk(t *testing.T) {
 	testshared.NewRunnerBuilder(t).
 		WithNoConfig().
 		WithArgs("--enable-all").
+		WithArgs("--go=1.22"). // TODO(ldez) remove this line when we will run go1.23 on the CI. (related to intrange, copyloopvar)
 		WithTargetPath(testdataDir, "unsafe").
-		ForceDisableUnsupportedLinters().
 		Runner().
 		Install().
 		Run().
@@ -515,8 +515,8 @@ func TestEnableAllFastAndEnableCanCoexist(t *testing.T) {
 			testshared.NewRunnerBuilder(t).
 				WithNoConfig().
 				WithArgs(test.args...).
+				WithArgs("--go=1.22"). // TODO(ldez) remove this line when we will run go1.23 on the CI. (related to intrange, copyloopvar)
 				WithTargetPath(testdataDir, minimalPkg).
-				ForceDisableUnsupportedLinters().
 				Runner().
 				Run().
 				ExpectExitCode(test.expected...)

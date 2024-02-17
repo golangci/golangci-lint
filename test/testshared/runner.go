@@ -4,15 +4,12 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-	"runtime"
-	"slices"
 	"strings"
 	"sync"
 	"syscall"
 	"testing"
 	"time"
 
-	hcversion "github.com/hashicorp/go-version"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
@@ -149,14 +146,6 @@ func (b *RunnerBuilder) WithNoParallelRunners() *RunnerBuilder {
 
 func (b *RunnerBuilder) WithArgs(args ...string) *RunnerBuilder {
 	b.args = append(b.args, args...)
-
-	return b
-}
-
-// ForceDisableUnsupportedLinters temporary method to disable some linters.
-// TODO(ldez) remove when we will run go1.23 on the CI.
-func (b *RunnerBuilder) ForceDisableUnsupportedLinters() *RunnerBuilder {
-	b.args = forceDisableUnsupportedLinters(b.args)
 
 	return b
 }
@@ -368,64 +357,4 @@ func InstallGolangciLint(tb testing.TB) string {
 	require.NoError(tb, err)
 
 	return abs
-}
-
-// TODO(ldez) remove when we will run go1.23 on the CI.
-func forceDisableUnsupportedLinters(args []string) []string {
-	result := slices.Clone(args)
-
-	if !isGoLessThan("1.22") {
-		return append(result, "--go=1.22")
-	}
-
-	if len(result) == 0 {
-		return append(result, "-D", "intrange,copyloopvar")
-	}
-
-	if slices.ContainsFunc(args, func(arg string) bool { return strings.HasSuffix(arg, "-disable-all") }) {
-		return args
-	}
-
-	var appended bool
-
-	for i, arg := range args {
-		if !strings.HasSuffix(arg, "-D") && !strings.HasSuffix(arg, "-disable") {
-			continue
-		}
-
-		if len(args) <= i+1 || strings.HasPrefix(args[i+1], "-") {
-			continue
-		}
-
-		d := strings.Split(args[i+1], ",")
-		d = append(d, "intrange", "copyloopvar")
-
-		result[i+1] = strings.Join(slices.Compact(d), ",")
-
-		appended = true
-		break
-	}
-
-	if !appended {
-		result = append(result, "-D", "intrange,copyloopvar")
-	}
-
-	return result
-}
-
-// TODO(ldez) remove when we will run go1.23 on the CI.
-func isGoLessThan(tag string) bool {
-	vRuntime, err := hcversion.NewVersion(strings.TrimPrefix(runtime.Version(), "go"))
-	if err != nil {
-		return false
-	}
-
-	vTag, err := hcversion.NewVersion(strings.TrimPrefix(tag, "go"))
-	if err != nil {
-		return false
-	}
-
-	println(vRuntime.LessThanOrEqual(vTag))
-
-	return vRuntime.LessThan(vTag)
 }
