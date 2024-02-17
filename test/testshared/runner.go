@@ -372,7 +372,7 @@ func InstallGolangciLint(tb testing.TB) string {
 
 // TODO(ldez) remove when we will run go1.23 on the CI.
 func forceDisableUnsupportedLinters(args []string) []string {
-	if !isGoVersion("1.21") {
+	if !isGoLessThan("1.22") {
 		return args
 	}
 
@@ -414,7 +414,7 @@ func forceDisableUnsupportedLinters(args []string) []string {
 }
 
 // TODO(ldez) remove when we will run go1.23 on the CI.
-func isGoVersion(tag string) bool {
+func isGoLessThan(tag string) bool {
 	vRuntime, err := hcversion.NewVersion(strings.TrimPrefix(runtime.Version(), "go"))
 	if err != nil {
 		return false
@@ -425,5 +425,7 @@ func isGoVersion(tag string) bool {
 		return false
 	}
 
-	return vRuntime.GreaterThanOrEqual(vTag)
+	println(vRuntime.LessThanOrEqual(vTag))
+
+	return vRuntime.LessThan(vTag)
 }
