@@ -372,11 +372,11 @@ func InstallGolangciLint(tb testing.TB) string {
 
 // TODO(ldez) remove when we will run go1.23 on the CI.
 func forceDisableUnsupportedLinters(args []string) []string {
-	if !isGoLessThan("1.22") {
-		return args
-	}
-
 	result := slices.Clone(args)
+
+	if !isGoLessThan("1.22") {
+		return append(result, "--go=1.22")
+	}
 
 	if len(result) == 0 {
 		return append(result, "-D", "intrange,copyloopvar")
