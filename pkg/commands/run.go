@@ -40,20 +40,6 @@ const (
 
 //nolint:funlen,gomnd
 func (e *Executor) initFlagSet(fs *pflag.FlagSet, cfg *config.Config, isFinalInit bool) {
-	hideFlag := func(name string) {
-		if err := fs.MarkHidden(name); err != nil {
-			panic(err)
-		}
-
-		// we run initFlagSet multiple times, but we wouldn't like to see deprecation message multiple times
-		if isFinalInit {
-			const deprecateMessage = "flag will be removed soon, please, use .golangci.yml config"
-			if err := fs.MarkDeprecated(name, deprecateMessage); err != nil {
-				panic(err)
-			}
-		}
-	}
-
 	// Config file config
 	rc := &cfg.Run
 	initConfigFileFlagSet(fs, rc)
@@ -69,7 +55,6 @@ func (e *Executor) initFlagSet(fs *pflag.FlagSet, cfg *config.Config, isFinalIni
 	fs.BoolVar(&oc.SortResults, "sort-results", false, wh("Sort linter results"))
 	fs.BoolVar(&oc.PrintWelcomeMessage, "print-welcome", false, wh("Print welcome message"))
 	fs.StringVar(&oc.PathPrefix, "path-prefix", "", wh("Path prefix to add to output"))
-	hideFlag("print-welcome") // no longer used
 
 	fs.BoolVar(&cfg.InternalCmdTest, "internal-cmd-test", false, wh("Option is used only for testing golangci-lint command, don't use it"))
 	if err := fs.MarkHidden("internal-cmd-test"); err != nil {
@@ -84,10 +69,6 @@ func (e *Executor) initFlagSet(fs *pflag.FlagSet, cfg *config.Config, isFinalIni
 	fs.StringVar(&rc.Go, "go", "", wh("Targeted Go version"))
 	fs.StringSliceVar(&rc.BuildTags, "build-tags", nil, wh("Build tags"))
 
-	fs.DurationVar(&rc.Timeout, "deadline", defaultTimeout, wh("Deadline for total work"))
-	if err := fs.MarkHidden("deadline"); err != nil {
-		panic(err)
-	}
 	fs.DurationVar(&rc.Timeout, "timeout", defaultTimeout, wh("Timeout for total work"))
 
 	fs.BoolVar(&rc.AnalyzeTests, "tests", true, wh("Analyze tests (*_test.go)"))
@@ -104,75 +85,6 @@ func (e *Executor) initFlagSet(fs *pflag.FlagSet, cfg *config.Config, isFinalIni
 		"If false (default) - golangci-lint exits with an error if it fails to acquire file lock on start."
 	fs.BoolVar(&rc.AllowSerialRunners, "allow-serial-runners", false, wh(allowSerialDesc))
 	fs.BoolVar(&rc.ShowStats, "show-stats", false, wh("Show statistics per linter"))
-
-	// Linters settings config
-	lsc := &cfg.LintersSettings
-
-	// Hide all linters settings flags: they were initially visible,
-	// but when number of linters started to grow it became obvious that
-	// we can't fill 90% of flags by linters settings: common flags became hard to find.
-	// New linters settings should be done only through config file.
-	fs.BoolVar(&lsc.Errcheck.CheckTypeAssertions, "errcheck.check-type-assertions",
-		false, "Errcheck: check for ignored type assertion results")
-	hideFlag("errcheck.check-type-assertions")
-	fs.BoolVar(&lsc.Errcheck.CheckAssignToBlank, "errcheck.check-blank", false,
-		"Errcheck: check for errors assigned to blank identifier: _ = errFunc()")
-	hideFlag("errcheck.check-blank")
-	fs.StringVar(&lsc.Errcheck.Exclude, "errcheck.exclude", "",
-		"Path to a file containing a list of functions to exclude from checking")
-	hideFlag("errcheck.exclude")
-	fs.StringVar(&lsc.Errcheck.Ignore, "errcheck.ignore", "fmt:.*",
-		`Comma-separated list of pairs of the form pkg:regex. The regex is used to ignore names within pkg`)
-	hideFlag("errcheck.ignore")
-
-	fs.BoolVar(&lsc.Govet.CheckShadowing, "govet.check-shadowing", false,
-		"Govet: check for shadowed variables")
-	hideFlag("govet.check-shadowing")
-
-	fs.Float64Var(&lsc.Golint.MinConfidence, "golint.min-confidence", 0.8,
-		"Golint: minimum confidence of a problem to print it")
-	hideFlag("golint.min-confidence")
-
-	fs.BoolVar(&lsc.Gofmt.Simplify, "gofmt.simplify", true, "Gofmt: simplify code")
-	hideFlag("gofmt.simplify")
-
-	fs.IntVar(&lsc.Gocyclo.MinComplexity, "gocyclo.min-complexity",
-		30, "Minimal complexity of function to report it")
-	hideFlag("gocyclo.min-complexity")
-
-	fs.BoolVar(&lsc.Maligned.SuggestNewOrder, "maligned.suggest-new", false,
-		"Maligned: print suggested more optimal struct fields ordering")
-	hideFlag("maligned.suggest-new")
-
-	fs.IntVar(&lsc.Dupl.Threshold, "dupl.threshold",
-		150, "Dupl: Minimal threshold to detect copy-paste")
-	hideFlag("dupl.threshold")
-
-	fs.BoolVar(&lsc.Goconst.MatchWithConstants, "goconst.match-constant",
-		true, "Goconst: look for existing constants matching the values")
-	hideFlag("goconst.match-constant")
-	fs.IntVar(&lsc.Goconst.MinStringLen, "goconst.min-len",
-		3, "Goconst: minimum constant string length")
-	hideFlag("goconst.min-len")
-	fs.IntVar(&lsc.Goconst.MinOccurrencesCount, "goconst.min-occurrences",
-		3, "Goconst: minimum occurrences of constant string count to trigger issue")
-	hideFlag("goconst.min-occurrences")
-	fs.BoolVar(&lsc.Goconst.ParseNumbers, "goconst.numbers",
-		false, "Goconst: search also for duplicated numbers")
-	hideFlag("goconst.numbers")
-	fs.IntVar(&lsc.Goconst.NumberMin, "goconst.min",
-		3, "minimum value, only works with goconst.numbers")
-	hideFlag("goconst.min")
-	fs.IntVar(&lsc.Goconst.NumberMax, "goconst.max",
-		3, "maximum value, only works with goconst.numbers")
-	hideFlag("goconst.max")
-	fs.BoolVar(&lsc.Goconst.IgnoreCalls, "goconst.ignore-calls",
-		true, "Goconst: ignore when constant is not used as function argument")
-	hideFlag("goconst.ignore-calls")
-
-	fs.IntVar(&lsc.Lll.TabWidth, "lll.tab-width", 1,
-		"Lll: tab width in spaces")
-	hideFlag("lll.tab-width")
 
 	// Linters config
 	lc := &cfg.Linters
@@ -497,7 +409,6 @@ func (e *Executor) executeRun(_ *cobra.Command, args []string) {
 		}
 	}()
 
-	e.setTimeoutToDeadlineIfOnlyDeadlineIsSet()
 	ctx, cancel := context.WithTimeout(context.Background(), e.cfg.Run.Timeout)
 	defer cancel()
 
@@ -518,14 +429,6 @@ func (e *Executor) executeRun(_ *cobra.Command, args []string) {
 	}
 
 	e.setupExitCode(ctx)
-}
-
-// to be removed when deadline is finally decommissioned
-func (e *Executor) setTimeoutToDeadlineIfOnlyDeadlineIsSet() {
-	deadlineValue := e.cfg.Run.Deadline
-	if deadlineValue != 0 && e.cfg.Run.Timeout == defaultTimeout {
-		e.cfg.Run.Timeout = deadlineValue
-	}
 }
 
 func (e *Executor) setupExitCode(ctx context.Context) {
