@@ -1,14 +1,7 @@
 package commands
 
 import (
-	"bytes"
-	"context"
-	"crypto/sha256"
 	"errors"
-	"fmt"
-	"io"
-	"os"
-	"path/filepath"
 	"strings"
 	"time"
 
@@ -16,9 +9,7 @@ import (
 	"github.com/gofrs/flock"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
-	"gopkg.in/yaml.v3"
 
-	"github.com/golangci/golangci-lint/internal/cache"
 	"github.com/golangci/golangci-lint/internal/pkgcache"
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/fsutils"
@@ -163,103 +154,36 @@ func (e *Executor) Execute() error {
 	return e.rootCmd.Execute()
 }
 
-func (e *Executor) initHashSalt(version string) error {
-	binSalt, err := computeBinarySalt(version)
-	if err != nil {
-		return fmt.Errorf("failed to calculate binary salt: %w", err)
-	}
+func fixSlicesFlags(fs *pflag.FlagSet) {
+	// It's a dirty hack to set flag.Changed to true for every string slice flag.
+	// It's necessary to merge config and command-line slices: otherwise command-line
+	// flags will always overwrite ones from the config.
+	fs.VisitAll(func(f *pflag.Flag) {
+		if f.Value.Type() != "stringSlice" {
+			return
+		}
 
-	configSalt, err := computeConfigSalt(e.cfg)
-	if err != nil {
-		return fmt.Errorf("failed to calculate config salt: %w", err)
-	}
+		s, err := fs.GetStringSlice(f.Name)
+		if err != nil {
+			return
+		}
 
-	b := bytes.NewBuffer(binSalt)
-	b.Write(configSalt)
-	cache.SetSalt(b.Bytes())
-	return nil
+		if s == nil { // assume that every string slice flag has nil as the default
+			return
+		}
+
+		var safe []string
+		for _, v := range s {
+			// add quotes to escape comma because spf13/pflag use a CSV parser:
+			// https://github.com/spf13/pflag/blob/85dd5c8bc61cfa382fecd072378089d4e856579d/string_slice.go#L43
+			safe = append(safe, `"`+v+`"`)
+		}
+
+		// calling Set sets Changed to true: next Set calls will append, not overwrite
+		_ = f.Value.Set(strings.Join(safe, ","))
+	})
 }
 
-func computeBinarySalt(version string) ([]byte, error) {
-	if version != "" && version != "(devel)" {
-		return []byte(version), nil
-	}
-
-	if logutils.HaveDebugTag(logutils.DebugKeyBinSalt) {
-		return []byte("debug"), nil
-	}
-
-	p, err := os.Executable()
-	if err != nil {
-		return nil, err
-	}
-	f, err := os.Open(p)
-	if err != nil {
-		return nil, err
-	}
-	defer f.Close()
-	h := sha256.New()
-	if _, err := io.Copy(h, f); err != nil {
-		return nil, err
-	}
-	return h.Sum(nil), nil
-}
-
-func computeConfigSalt(cfg *config.Config) ([]byte, error) {
-	// We don't hash all config fields to reduce meaningless cache
-	// invalidations. At least, it has a huge impact on tests speed.
-
-	lintersSettingsBytes, err := yaml.Marshal(cfg.LintersSettings)
-	if err != nil {
-		return nil, fmt.Errorf("failed to json marshal config linter settings: %w", err)
-	}
-
-	configData := bytes.NewBufferString("linters-settings=")
-	configData.Write(lintersSettingsBytes)
-	configData.WriteString("\nbuild-tags=%s" + strings.Join(cfg.Run.BuildTags, ","))
-
-	h := sha256.New()
-	if _, err := h.Write(configData.Bytes()); err != nil {
-		return nil, err
-	}
-	return h.Sum(nil), nil
-}
-
-func (e *Executor) acquireFileLock() bool {
-	if e.cfg.Run.AllowParallelRunners {
-		e.debugf("Parallel runners are allowed, no locking")
-		return true
-	}
-
-	lockFile := filepath.Join(os.TempDir(), "golangci-lint.lock")
-	e.debugf("Locking on file %s...", lockFile)
-	f := flock.New(lockFile)
-	const retryDelay = time.Second
-
-	ctx := context.Background()
-	if !e.cfg.Run.AllowSerialRunners {
-		const totalTimeout = 5 * time.Second
-		var cancel context.CancelFunc
-		ctx, cancel = context.WithTimeout(ctx, totalTimeout)
-		defer cancel()
-	}
-	if ok, _ := f.TryLockContext(ctx, retryDelay); !ok {
-		return false
-	}
-
-	e.flock = f
-	return true
-}
-
-func (e *Executor) releaseFileLock() {
-	if e.cfg.Run.AllowParallelRunners {
-		return
-	}
-
-	if err := e.flock.Unlock(); err != nil {
-		e.debugf("Failed to unlock on file: %s", err)
-	}
-	if err := os.Remove(e.flock.Path()); err != nil {
-		e.debugf("Failed to remove lock file: %s", err)
-	}
+func wh(text string) string {
+	return color.GreenString(text)
 }

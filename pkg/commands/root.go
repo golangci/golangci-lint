@@ -22,6 +22,23 @@ const (
 	envMemProfileRate = "GL_MEM_PROFILE_RATE"
 )
 
+func (e *Executor) initRoot() {
+	rootCmd := &cobra.Command{
+		Use:   "golangci-lint",
+		Short: "golangci-lint is a smart linters runner.",
+		Long:  `Smart, fast linters runner.`,
+		Args:  cobra.NoArgs,
+		RunE: func(cmd *cobra.Command, _ []string) error {
+			return cmd.Help()
+		},
+		PersistentPreRunE:  e.persistentPreRun,
+		PersistentPostRunE: e.persistentPostRun,
+	}
+
+	initRootFlagSet(rootCmd.PersistentFlags(), e.cfg, e.needVersionOption())
+	e.rootCmd = rootCmd
+}
+
 func (e *Executor) persistentPreRun(_ *cobra.Command, _ []string) error {
 	if e.cfg.Run.PrintVersion {
 		_ = printVersion(logutils.StdOut, e.buildInfo)
@@ -89,6 +106,26 @@ func (e *Executor) persistentPostRun(_ *cobra.Command, _ []string) error {
 	return nil
 }
 
+func (e *Executor) needVersionOption() bool {
+	return e.buildInfo.Date != ""
+}
+
+func initRootFlagSet(fs *pflag.FlagSet, cfg *config.Config, needVersionOption bool) {
+	fs.BoolVarP(&cfg.Run.IsVerbose, "verbose", "v", false, wh("Verbose output"))
+	fs.StringVar(&cfg.Output.Color, "color", "auto", wh("Use color when printing; can be 'always', 'auto', or 'never'"))
+
+	fs.StringVar(&cfg.Run.CPUProfilePath, "cpu-profile-path", "", wh("Path to CPU profile output file"))
+	fs.StringVar(&cfg.Run.MemProfilePath, "mem-profile-path", "", wh("Path to memory profile output file"))
+	fs.StringVar(&cfg.Run.TracePath, "trace-path", "", wh("Path to trace output file"))
+
+	fs.IntVarP(&cfg.Run.Concurrency, "concurrency", "j", getDefaultConcurrency(),
+		wh("Number of CPUs to use (Default: number of logical CPUs)"))
+
+	if needVersionOption {
+		fs.BoolVar(&cfg.Run.PrintVersion, "version", false, wh("Print version"))
+	}
+}
+
 func printMemStats(ms *runtime.MemStats, logger logutils.Log) {
 	logger.Infof("Mem stats: alloc=%s total_alloc=%s sys=%s "+
 		"heap_alloc=%s heap_sys=%s heap_idle=%s heap_released=%s heap_in_use=%s "+
@@ -125,41 +162,4 @@ func getDefaultConcurrency() int {
 	}
 
 	return runtime.NumCPU()
-}
-
-func (e *Executor) initRoot() {
-	rootCmd := &cobra.Command{
-		Use:   "golangci-lint",
-		Short: "golangci-lint is a smart linters runner.",
-		Long:  `Smart, fast linters runner.`,
-		Args:  cobra.NoArgs,
-		RunE: func(cmd *cobra.Command, _ []string) error {
-			return cmd.Help()
-		},
-		PersistentPreRunE:  e.persistentPreRun,
-		PersistentPostRunE: e.persistentPostRun,
-	}
-
-	initRootFlagSet(rootCmd.PersistentFlags(), e.cfg, e.needVersionOption())
-	e.rootCmd = rootCmd
-}
-
-func (e *Executor) needVersionOption() bool {
-	return e.buildInfo.Date != ""
-}
-
-func initRootFlagSet(fs *pflag.FlagSet, cfg *config.Config, needVersionOption bool) {
-	fs.BoolVarP(&cfg.Run.IsVerbose, "verbose", "v", false, wh("Verbose output"))
-	fs.StringVar(&cfg.Output.Color, "color", "auto", wh("Use color when printing; can be 'always', 'auto', or 'never'"))
-
-	fs.StringVar(&cfg.Run.CPUProfilePath, "cpu-profile-path", "", wh("Path to CPU profile output file"))
-	fs.StringVar(&cfg.Run.MemProfilePath, "mem-profile-path", "", wh("Path to memory profile output file"))
-	fs.StringVar(&cfg.Run.TracePath, "trace-path", "", wh("Path to trace output file"))
-
-	fs.IntVarP(&cfg.Run.Concurrency, "concurrency", "j", getDefaultConcurrency(),
-		wh("Number of CPUs to use (Default: number of logical CPUs)"))
-
-	if needVersionOption {
-		fs.BoolVar(&cfg.Run.PrintVersion, "version", false, wh("Print version"))
-	}
 }

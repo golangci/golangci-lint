@@ -19,19 +19,6 @@ type versionInfo struct {
 	BuildInfo *debug.BuildInfo
 }
 
-func (e *Executor) initVersionConfiguration(cmd *cobra.Command) {
-	fs := cmd.Flags()
-	fs.SortFlags = false // sort them as they are defined here
-	initVersionFlagSet(fs, e.cfg)
-}
-
-func initVersionFlagSet(fs *pflag.FlagSet, cfg *config.Config) {
-	// Version config
-	vc := &cfg.Version
-	fs.StringVar(&vc.Format, "format", "", wh("The version's format can be: 'short', 'json'"))
-	fs.BoolVar(&vc.Debug, "debug", false, wh("Add build information"))
-}
-
 func (e *Executor) initVersion() {
 	versionCmd := &cobra.Command{
 		Use:               "version",
@@ -74,6 +61,19 @@ func (e *Executor) initVersion() {
 
 	e.rootCmd.AddCommand(versionCmd)
 	e.initVersionConfiguration(versionCmd)
+}
+
+func (e *Executor) initVersionConfiguration(cmd *cobra.Command) {
+	fs := cmd.Flags()
+	fs.SortFlags = false // sort them as they are defined here
+	initVersionFlagSet(fs, e.cfg)
+}
+
+func initVersionFlagSet(fs *pflag.FlagSet, cfg *config.Config) {
+	// Version config
+	vc := &cfg.Version
+	fs.StringVar(&vc.Format, "format", "", wh("The version's format can be: 'short', 'json'"))
+	fs.BoolVar(&vc.Debug, "debug", false, wh("Add build information"))
 }
 
 func printVersion(w io.Writer, buildInfo BuildInfo) error {

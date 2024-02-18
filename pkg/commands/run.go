@@ -7,12 +7,14 @@ import (
 	"io"
 	"log"
 	"os"
+	"path/filepath"
 	"runtime"
 	"sort"
 	"strings"
 	"time"
 
 	"github.com/fatih/color"
+	"github.com/gofrs/flock"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"golang.org/x/exp/maps"
@@ -37,6 +39,35 @@ const (
 	// envMemLogEvery value: "1"
 	envMemLogEvery = "GL_MEM_LOG_EVERY"
 )
+
+func (e *Executor) initRun() {
+	e.runCmd = &cobra.Command{
+		Use:   "run",
+		Short: "Run the linters",
+		Run:   e.executeRun,
+		PreRunE: func(_ *cobra.Command, _ []string) error {
+			if ok := e.acquireFileLock(); !ok {
+				return errors.New("parallel golangci-lint is running")
+			}
+			return nil
+		},
+		PostRun: func(_ *cobra.Command, _ []string) {
+			e.releaseFileLock()
+		},
+	}
+	e.rootCmd.AddCommand(e.runCmd)
+
+	e.runCmd.SetOut(logutils.StdOut) // use custom output to properly color it in Windows terminals
+	e.runCmd.SetErr(logutils.StdErr)
+
+	e.initRunConfiguration(e.runCmd)
+}
+
+func (e *Executor) initRunConfiguration(cmd *cobra.Command) {
+	fs := cmd.Flags()
+	fs.SortFlags = false // sort them as they are defined here
+	e.initFlagSet(fs, e.cfg, true)
+}
 
 //nolint:funlen,gomnd
 func (e *Executor) initFlagSet(fs *pflag.FlagSet, cfg *config.Config, isFinalInit bool) {
@@ -118,12 +149,6 @@ func (e *Executor) initFlagSet(fs *pflag.FlagSet, cfg *config.Config, isFinalIni
 	fs.BoolVar(&ic.NeedFix, "fix", false, wh("Fix found issues (if it's supported by the linter)"))
 }
 
-func (e *Executor) initRunConfiguration(cmd *cobra.Command) {
-	fs := cmd.Flags()
-	fs.SortFlags = false // sort them as they are defined here
-	e.initFlagSet(fs, e.cfg, true)
-}
-
 func (e *Executor) getConfigForCommandLine() (*config.Config, error) {
 	// We use another pflag.FlagSet here to not set `changed` flag
 	// on cmd.Flags() options. Otherwise, string slice options will be duplicated.
@@ -152,59 +177,6 @@ func (e *Executor) getConfigForCommandLine() (*config.Config, error) {
 	}
 
 	return &cfg, nil
-}
-
-func (e *Executor) initRun() {
-	e.runCmd = &cobra.Command{
-		Use:   "run",
-		Short: "Run the linters",
-		Run:   e.executeRun,
-		PreRunE: func(_ *cobra.Command, _ []string) error {
-			if ok := e.acquireFileLock(); !ok {
-				return errors.New("parallel golangci-lint is running")
-			}
-			return nil
-		},
-		PostRun: func(_ *cobra.Command, _ []string) {
-			e.releaseFileLock()
-		},
-	}
-	e.rootCmd.AddCommand(e.runCmd)
-
-	e.runCmd.SetOut(logutils.StdOut) // use custom output to properly color it in Windows terminals
-	e.runCmd.SetErr(logutils.StdErr)
-
-	e.initRunConfiguration(e.runCmd)
-}
-
-func fixSlicesFlags(fs *pflag.FlagSet) {
-	// It's a dirty hack to set flag.Changed to true for every string slice flag.
-	// It's necessary to merge config and command-line slices: otherwise command-line
-	// flags will always overwrite ones from the config.
-	fs.VisitAll(func(f *pflag.Flag) {
-		if f.Value.Type() != "stringSlice" {
-			return
-		}
-
-		s, err := fs.GetStringSlice(f.Name)
-		if err != nil {
-			return
-		}
-
-		if s == nil { // assume that every string slice flag has nil as the default
-			return
-		}
-
-		var safe []string
-		for _, v := range s {
-			// add quotes to escape comma because spf13/pflag use a CSV parser:
-			// https://github.com/spf13/pflag/blob/85dd5c8bc61cfa382fecd072378089d4e856579d/string_slice.go#L43
-			safe = append(safe, `"`+v+`"`)
-		}
-
-		// calling Set sets Changed to true: next Set calls will append, not overwrite
-		_ = f.Value.Set(strings.Join(safe, ","))
-	})
 }
 
 // runAnalysis executes the linters that have been enabled in the configuration.
@@ -455,6 +427,45 @@ func (e *Executor) setupExitCode(ctx context.Context) {
 	}
 }
 
+func (e *Executor) acquireFileLock() bool {
+	if e.cfg.Run.AllowParallelRunners {
+		e.debugf("Parallel runners are allowed, no locking")
+		return true
+	}
+
+	lockFile := filepath.Join(os.TempDir(), "golangci-lint.lock")
+	e.debugf("Locking on file %s...", lockFile)
+	f := flock.New(lockFile)
+	const retryDelay = time.Second
+
+	ctx := context.Background()
+	if !e.cfg.Run.AllowSerialRunners {
+		const totalTimeout = 5 * time.Second
+		var cancel context.CancelFunc
+		ctx, cancel = context.WithTimeout(ctx, totalTimeout)
+		defer cancel()
+	}
+	if ok, _ := f.TryLockContext(ctx, retryDelay); !ok {
+		return false
+	}
+
+	e.flock = f
+	return true
+}
+
+func (e *Executor) releaseFileLock() {
+	if e.cfg.Run.AllowParallelRunners {
+		return
+	}
+
+	if err := e.flock.Unlock(); err != nil {
+		e.debugf("Failed to unlock on file: %s", err)
+	}
+	if err := os.Remove(e.flock.Path()); err != nil {
+		e.debugf("Failed to remove lock file: %s", err)
+	}
+}
+
 func watchResources(ctx context.Context, done chan struct{}, logger logutils.Log, debugf logutils.DebugFunc) {
 	startedAt := time.Now()
 	debugf("Started tracking time")
@@ -530,8 +541,4 @@ func getDefaultDirectoryExcludeHelp() string {
 	}
 	parts = append(parts, "")
 	return strings.Join(parts, "\n")
-}
-
-func wh(text string) string {
-	return color.GreenString(text)
 }
