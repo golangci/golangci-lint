@@ -66,11 +66,11 @@ func (e *Executor) initRun() {
 func (e *Executor) initRunConfiguration(cmd *cobra.Command) {
 	fs := cmd.Flags()
 	fs.SortFlags = false // sort them as they are defined here
-	e.initFlagSet(fs, e.cfg)
+	e.initRunFlagSet(fs, e.cfg)
 }
 
 //nolint:gomnd
-func (e *Executor) initFlagSet(fs *pflag.FlagSet, cfg *config.Config) {
+func (e *Executor) initRunFlagSet(fs *pflag.FlagSet, cfg *config.Config) {
 	// Config file config
 	rc := &cfg.Run
 	initConfigFileFlagSet(fs, rc)
@@ -159,7 +159,7 @@ func (e *Executor) getConfigForCommandLine() (*config.Config, error) {
 	// `changed` variable inside string slice vars will be shared.
 	// Use another config variable here, not e.cfg, to not
 	// affect main parsing by this parsing of only config option.
-	e.initFlagSet(fs, &cfg)
+	e.initRunFlagSet(fs, &cfg)
 	initVersionFlagSet(fs, &cfg)
 
 	// Parse max options, even force version option: don't want
