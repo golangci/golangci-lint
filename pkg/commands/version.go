@@ -14,6 +14,13 @@ import (
 	"github.com/golangci/golangci-lint/pkg/config"
 )
 
+type BuildInfo struct {
+	GoVersion string `json:"goVersion"`
+	Version   string `json:"version"`
+	Commit    string `json:"commit"`
+	Date      string `json:"date"`
+}
+
 type versionInfo struct {
 	Info      BuildInfo
 	BuildInfo *debug.BuildInfo

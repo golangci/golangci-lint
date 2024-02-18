@@ -22,13 +22,6 @@ import (
 	"github.com/golangci/golangci-lint/pkg/timeutils"
 )
 
-type BuildInfo struct {
-	GoVersion string `json:"goVersion"`
-	Version   string `json:"version"`
-	Commit    string `json:"commit"`
-	Date      string `json:"date"`
-}
-
 type Executor struct {
 	rootCmd    *cobra.Command
 	runCmd     *cobra.Command
