@@ -116,7 +116,18 @@ func NewExecutor(buildInfo BuildInfo) *Executor {
 		e.log.Fatalf("Can't read config: %s", err)
 	}
 
-	if (commandLineCfg == nil || commandLineCfg.Run.Go == "") && e.cfg != nil && e.cfg.Run.Go == "" {
+	if commandLineCfg != nil && commandLineCfg.Run.Go != "" {
+		// This hack allow to have the right Run information at least for the Go version (because the default value of the "go" flag is empty).
+		// If you put a log for `m.cfg.Run.Go` inside `GetAllSupportedLinterConfigs`,
+		// you will observe that at end (without this hack) the value will have the right value but too late,
+		// the linters are already running with the previous uncompleted configuration.
+		// TODO(ldez) there is a major problem with the executor:
+		//  the parsing of the configuration and the timing to load the configuration and linters are creating unmanageable situations.
+		//  There is no simple solution because it's spaghetti code.
+		//  I need to completely rewrite the command line system and the executor because it's extremely time consuming to debug,
+		//  so it's unmaintainable.
+		e.cfg.Run.Go = commandLineCfg.Run.Go
+	} else if e.cfg.Run.Go == "" {
 		e.cfg.Run.Go = config.DetectGoVersion()
 	}
 

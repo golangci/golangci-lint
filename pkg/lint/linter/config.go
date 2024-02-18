@@ -1,7 +1,7 @@
 package linter
 
 import (
-	"errors"
+	"fmt"
 
 	"golang.org/x/tools/go/packages"
 
@@ -151,7 +151,7 @@ func IsGoLowerThanGo122() func(cfg *config.Config) error {
 			return nil
 		}
 
-		return errors.New("this linter is disabled because the Go version of your project is lower than Go 1.22")
+		return fmt.Errorf("this linter is disabled because the Go version (%s) of your project is lower than Go 1.22", cfg.Run.Go)
 	}
 }
 
