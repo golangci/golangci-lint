@@ -108,10 +108,11 @@ func computeBinarySalt(version string) ([]byte, error) {
 	return h.Sum(nil), nil
 }
 
+// computeConfigSalt computes configuration hash.
+// We don't hash all config fields to reduce meaningless cache invalidations.
+// At least, it has a huge impact on tests speed.
+// Fields: `LintersSettings` and `Run.BuildTags`.
 func computeConfigSalt(cfg *config.Config) ([]byte, error) {
-	// We don't hash all config fields to reduce meaningless cache
-	// invalidations. At least, it has a huge impact on tests speed.
-
 	lintersSettingsBytes, err := yaml.Marshal(cfg.LintersSettings)
 	if err != nil {
 		return nil, fmt.Errorf("failed to json marshal config linter settings: %w", err)
