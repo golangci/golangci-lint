@@ -1,20 +1,20 @@
 linters-settings:
   gocritic:
+    disabled-checks:
+      - appendAssign
+      - switchTrue
     enabled-checks:
-      - rangeValCopy
-      - flagDeref
-      - wrapperFunc
+      - hugeParam
       - ruleguard
     settings:
-      rangeValCopy:
-        sizeThreshold: 2
+      hugeParam:
+        sizeThreshold: 24
       ruleguard:
-        debug: dupSubExpr
         failOn: dsl,import
-        # comma-separated paths to ruleguard files.
+        # Comma-separated paths to ruleguard files.
         # The ${configDir} is substituted by the directory containing the golangci-lint config file.
         # Note about the directory structure for functional tests:
         #   The ruleguard files used in functional tests cannot be under the 'testdata' directory.
         #   This is because they import the 'github.com/quasilyte/go-ruleguard/dsl' package,
         #   which needs to be added to go.mod. The testdata directory is ignored by go mod.
-        rules: '${configDir}/../../ruleguard/strings_simplify.go,${configDir}/../../ruleguard/dup.go'
+        rules: '${configDir}/../../ruleguard/preferWriteString.go,${configDir}/../../ruleguard/stringsSimplify.go'

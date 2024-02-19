@@ -460,7 +460,9 @@ type GoConstSettings struct {
 
 type GoCriticSettings struct {
 	Go               string                           `mapstructure:"-"`
+	DisableAll       bool                             `mapstructure:"disable-all"`
 	EnabledChecks    []string                         `mapstructure:"enabled-checks"`
+	EnableAll        bool                             `mapstructure:"enable-all"`
 	DisabledChecks   []string                         `mapstructure:"disabled-checks"`
 	EnabledTags      []string                         `mapstructure:"enabled-tags"`
 	DisabledTags     []string                         `mapstructure:"disabled-tags"`

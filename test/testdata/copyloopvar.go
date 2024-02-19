@@ -1,3 +1,5 @@
+//go:build go1.22
+
 //golangcitest:args -Ecopyloopvar
 package testdata
 

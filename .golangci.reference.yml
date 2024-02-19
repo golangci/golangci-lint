@@ -529,22 +529,32 @@ linters-settings:
     ignore-strings: 'foo.+'
 
   gocritic:
-    # Which checks should be enabled; can't be combined with 'disabled-checks'.
-    # See https://go-critic.github.io/overview#checks-overview.
-    # To check which checks are enabled run `GL_DEBUG=gocritic golangci-lint run`.
-    # By default, list of stable checks is used.
+    # Disable all checks.
+    # Default: false
+    disable-all: true
+    # Which checks should be enabled in addition to default checks; can't be combined with 'disabled-checks'.
+    # By default, list of stable checks is used (https://go-critic.github.io/overview#checks-overview):
+    #   appendAssign, argOrder, assignOp, badCall, badCond, captLocal, caseOrder, codegenComment, commentFormatting,
+    #   defaultCaseOrder, deprecatedComment, dupArg, dupBranchBody, dupCase, dupSubExpr, elseif, exitAfterDefer,
+    #   flagDeref, flagName, ifElseChain, mapKey, newDeref, offBy1, regexpMust, singleCaseSwitch, sloppyLen,
+    #   sloppyTypeAssert, switchTrue, typeSwitchVar, underef, unlambda, unslice, valSwap, wrapperFunc
+    # To see which checks are enabled run `GL_DEBUG=gocritic golangci-lint run --enable=gocritic`.
     enabled-checks:
       - nestingReduce
       - unnamedResult
       - ruleguard
       - truncateCmp
 
+    # Enable all checks.
+    # Default: false
+    enable-all: true
     # Which checks should be disabled; can't be combined with 'enabled-checks'.
     # Default: []
     disabled-checks:
       - regexpMust
 
-    # Enable multiple checks by tags, run `GL_DEBUG=gocritic golangci-lint run` to see all tags and checks.
+    # Enable multiple checks by tags in addition to default checks.
+    # Run `GL_DEBUG=gocritic golangci-lint run --enable=gocritic` to see all tags and checks.
     # See https://github.com/go-critic/go-critic#usage -> section "Tags".
     # Default: []
     enabled-tags:
