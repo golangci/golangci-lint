@@ -458,9 +458,9 @@ func debugChecksListf(checks []string, format string, args ...any) {
 	goCriticDebugf("%s checks (%d): %s", fmt.Sprintf(format, args...), len(checks), sprintStrings(checks))
 }
 
-func sprintStrings(ss []string) string {
-	sort.Strings(ss)
-	return fmt.Sprint(ss)
+func sprintStrings(v []string) string {
+	sort.Strings(v)
+	return fmt.Sprint(v)
 }
 
 // Validate tries to be consistent with (lintersdb.Validator).validateEnabledDisabledLintersConfig.
