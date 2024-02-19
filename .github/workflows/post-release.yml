@@ -18,7 +18,7 @@ jobs:
           # ex:
           # - 1.18beta1 -> 1.18.0-beta.1
           # - 1.18rc1 -> 1.18.0-rc.1
-          go-version: '1.21'
+          go-version: '1.22'
 
       - name: Update GitHub action config
         run: make assets/github-action-config.json
@@ -34,7 +34,7 @@ jobs:
         run: make update_contributors_list # may take 15 min
 
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v5
+        uses: peter-evans/create-pull-request@v6
         with:
           base: master
           token: ${{ secrets.GOLANGCI_LINT_TOKEN }}

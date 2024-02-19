@@ -38,7 +38,7 @@ func (e *Executor) initVersion() {
 		Short:             "Version",
 		Args:              cobra.NoArgs,
 		ValidArgsFunction: cobra.NoFileCompletions,
-		RunE: func(cmd *cobra.Command, _ []string) error {
+		RunE: func(_ *cobra.Command, _ []string) error {
 			if e.cfg.Version.Debug {
 				info, ok := debug.ReadBuildInfo()
 				if !ok {

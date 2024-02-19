@@ -2,11 +2,10 @@ package test
 
 import (
 	"fmt"
+	"slices"
 	"sort"
 	"strings"
 	"testing"
-
-	"golang.org/x/exp/slices"
 
 	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
 	"github.com/golangci/golangci-lint/test/testshared"

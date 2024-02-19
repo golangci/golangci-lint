@@ -47,7 +47,7 @@ func NewUnused(settings *config.UnusedSettings, scSettings *config.StaticCheckSe
 		"Checks Go code for unused constants, variables, functions and types",
 		[]*analysis.Analyzer{analyzer},
 		nil,
-	).WithIssuesReporter(func(lintCtx *linter.Context) []goanalysis.Issue {
+	).WithIssuesReporter(func(_ *linter.Context) []goanalysis.Issue {
 		return resIssues
 	}).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }

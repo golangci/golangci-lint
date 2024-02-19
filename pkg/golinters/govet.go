@@ -1,6 +1,8 @@
 package golinters
 
 import (
+	"slices"
+
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/analysis/passes/appends"
 	"golang.org/x/tools/go/analysis/passes/asmdecl"
@@ -142,8 +144,8 @@ func NewGovet(settings *config.GovetSettings) *goanalysis.Linter {
 
 	return goanalysis.NewLinter(
 		"govet",
-		"Vet examines Go source code and reports suspicious constructs, "+
-			"such as Printf calls whose arguments do not align with the format string",
+		"Vet examines Go source code and reports suspicious constructs. "+
+			"It is roughly the same as 'go vet' and uses its passes.",
 		analyzersFromConfig(settings),
 		conf,
 	).WithLoadMode(goanalysis.LoadModeTypesInfo)
@@ -170,36 +172,25 @@ func analyzersFromConfig(settings *config.GovetSettings) []*analysis.Analyzer {
 }
 
 func isAnalyzerEnabled(name string, cfg *config.GovetSettings, defaultAnalyzers []*analysis.Analyzer) bool {
-	if cfg.EnableAll {
-		for _, n := range cfg.Disable {
-			if n == name {
-				return false
-			}
-		}
-		return true
-	}
-
-	// Raw for loops should be OK on small slice lengths.
-	for _, n := range cfg.Enable {
-		if n == name {
-			return true
-		}
-	}
-
-	for _, n := range cfg.Disable {
-		if n == name {
-			return false
-		}
-	}
-
-	if cfg.DisableAll {
+	// TODO(ldez) remove loopclosure when go1.23
+	if name == loopclosure.Analyzer.Name && config.IsGreaterThanOrEqualGo122(cfg.Go) {
 		return false
 	}
 
-	for _, a := range defaultAnalyzers {
-		if a.Name == name {
-			return true
-		}
+	switch {
+	case cfg.EnableAll:
+		return !slices.Contains(cfg.Disable, name)
+
+	case slices.Contains(cfg.Enable, name):
+		return true
+
+	case slices.Contains(cfg.Disable, name):
+		return false
+
+	case cfg.DisableAll:
+		return false
+
+	default:
+		return slices.ContainsFunc(defaultAnalyzers, func(a *analysis.Analyzer) bool { return a.Name == name })
 	}
-	return false
 }

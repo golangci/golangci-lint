@@ -236,25 +236,24 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		wrapcheckCfg = &m.cfg.LintersSettings.Wrapcheck
 		wslCfg = &m.cfg.LintersSettings.WSL
 
-		if govetCfg != nil {
-			govetCfg.Go = m.cfg.Run.Go
-		}
+		govetCfg.Go = m.cfg.Run.Go
 
-		if gocriticCfg != nil {
-			gocriticCfg.Go = trimGoVersion(m.cfg.Run.Go)
-		}
+		parallelTestCfg.Go = m.cfg.Run.Go
 
-		if gofumptCfg != nil && gofumptCfg.LangVersion == "" {
+		gocriticCfg.Go = trimGoVersion(m.cfg.Run.Go)
+
+		if gofumptCfg.LangVersion == "" {
 			gofumptCfg.LangVersion = m.cfg.Run.Go
 		}
 
-		if staticcheckCfg != nil && staticcheckCfg.GoVersion == "" {
+		// staticcheck related linters.
+		if staticcheckCfg.GoVersion == "" {
 			staticcheckCfg.GoVersion = trimGoVersion(m.cfg.Run.Go)
 		}
-		if gosimpleCfg != nil && gosimpleCfg.GoVersion == "" {
+		if gosimpleCfg.GoVersion == "" {
 			gosimpleCfg.GoVersion = trimGoVersion(m.cfg.Run.Go)
 		}
-		if stylecheckCfg != nil && stylecheckCfg.GoVersion != "" {
+		if stylecheckCfg.GoVersion != "" {
 			stylecheckCfg.GoVersion = trimGoVersion(m.cfg.Run.Go)
 		}
 	}
@@ -300,6 +299,11 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetBugs).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/kkHAIKE/contextcheck"),
+
+		linter.NewConfig(golinters.NewCopyLoopVar()).
+			WithSince("v1.57.0").
+			WithPresets(linter.PresetStyle).
+			WithURL("https://github.com/karamaru-alpha/copyloopvar"),
 
 		linter.NewConfig(golinters.NewCyclop(cyclopCfg)).
 			WithSince("v1.37.0").
@@ -610,6 +614,10 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/mvdan/interfacer").
 			Deprecated("The repository of the linter has been archived by the owner.", "v1.38.0", ""),
+
+		linter.NewConfig(golinters.NewIntrange()).
+			WithSince("v1.57.0").
+			WithURL("https://github.com/ckaznocha/intrange"),
 
 		linter.NewConfig(golinters.NewIreturn(ireturnCfg)).
 			WithSince("v1.43.0").

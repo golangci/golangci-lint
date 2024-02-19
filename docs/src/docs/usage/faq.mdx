@@ -9,8 +9,26 @@ Or you can create a [GitHub Issue](https://github.com/golangci/golangci-lint/iss
 
 ## How to integrate `golangci-lint` into large project with thousands of issues
 
-We are sure that every project can easily integrate `golangci-lint`, even the large one. The idea is to not fix all existing issues. Fix only newly added issue: issues in new code. To do this setup CI to run `golangci-lint` with option `--new-from-rev=HEAD~1`. Also, take a look at option `--new`, but consider that CI scripts that generate unstaged files will make `--new` only point out issues in those files and not in the last commit. In that regard `--new-from-rev=HEAD~1` is safer.
+We are sure that every project can easily integrate `golangci-lint`, even the large one.
+
+The idea is to not fix all existing issues. Fix only newly added issue: issues in new code.
+To do this setup CI to run `golangci-lint` with option `--new-from-rev=HEAD~1`.
+
+Also, take a look at option `--new`, but consider that CI scripts that generate unstaged files will make `--new` only point out issues in those files and not in the last commit.
+In that regard `--new-from-rev=HEAD~1` is safer.
+
 By doing this you won't create new issues in your code and can choose fix existing issues (or not).
+
+## Why `--new-from-rev` or `--new-from-patch` don't seem to be working in some cases?
+
+The options `--new-from-rev` and `--new-from-patch` work by comparing `git diff` output and issues.
+
+If an issue is not reported as the same line as the changes then the issue will be skipped.
+This is the line of the issue is not inside the lines changed.
+
+To fix that you have to use the option `--whole-files`.
+
+The side effect is the issues inside file that contains changes but not directly related to the changes themselves will be reported.
 
 ## How to use `golangci-lint` in CI
 
