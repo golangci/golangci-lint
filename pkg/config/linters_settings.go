@@ -663,8 +663,8 @@ type MalignedSettings struct {
 }
 
 type MisspellSettings struct {
-	Mode       string `mapstructure:"mode"`
-	Locale     string `mapstructure:"locale"`
+	Mode       string               `mapstructure:"mode"`
+	Locale     string               `mapstructure:"locale"`
 	ExtraWords []MisspellExtraWords `mapstructure:"extra-words"`
 	// TODO(ldez): v2 the option must be renamed to `IgnoredRules`.
 	IgnoreWords []string `mapstructure:"ignore-words"`
