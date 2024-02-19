@@ -711,6 +711,12 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/firefart/nonamedreturns"),
 
+		linter.NewConfig(golinters.NewNoNilJSON()).
+			WithSince("v1.57.0").
+			WithLoadForGoAnalysis().
+			WithPresets(linter.PresetBugs).
+			WithURL("https://github.com/rezkam/noniljson"),
+
 		linter.NewConfig(golinters.NewNoSnakeCase()).
 			WithSince("v1.47.0").
 			WithPresets(linter.PresetStyle).

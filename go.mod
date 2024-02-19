@@ -87,6 +87,7 @@ require (
 	github.com/nunnatsa/ginkgolinter v0.15.2
 	github.com/polyfloyd/go-errorlint v1.4.8
 	github.com/quasilyte/go-ruleguard/dsl v0.3.22
+	github.com/rezkam/noniljson v1.0.2
 	github.com/ryancurrah/gomodguard v1.3.0
 	github.com/ryanrolds/sqlclosecheck v0.5.1
 	github.com/sanposhiho/wastedassign/v2 v2.0.7

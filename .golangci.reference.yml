@@ -2557,6 +2557,7 @@ linters:
     - noctx
     - nolintlint
     - nonamedreturns
+    - noniljson
     - nosnakecase
     - nosprintfhostport
     - paralleltest
@@ -2680,6 +2681,7 @@ linters:
     - noctx
     - nolintlint
     - nonamedreturns
+    - noniljson
     - nosnakecase
     - nosprintfhostport
     - paralleltest
