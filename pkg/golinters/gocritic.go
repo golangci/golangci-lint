@@ -37,8 +37,8 @@ func NewGoCritic(settings *config.GoCriticSettings, cfg *config.Config) *goanaly
 	var resIssues []goanalysis.Issue
 
 	wrapper := &goCriticWrapper{
-		lintConfigDirGetter: cfg.GetConfigDir, // Config directory is filled after calling this constructor.
-		sizes:               types.SizesFor("gc", runtime.GOARCH),
+		getConfigDir: cfg.GetConfigDir, // Config directory is filled after calling this constructor.
+		sizes:        types.SizesFor("gc", runtime.GOARCH),
 	}
 
 	analyzer := &analysis.Analyzer{
@@ -80,10 +80,10 @@ Dynamic rules are written declaratively with AST patterns, filters, report messa
 }
 
 type goCriticWrapper struct {
-	settingsWrapper     *goCriticSettingsWrapper
-	lintConfigDirGetter func() string
-	sizes               types.Sizes
-	once                sync.Once
+	settingsWrapper *goCriticSettingsWrapper
+	getConfigDir    func() string
+	sizes           types.Sizes
+	once            sync.Once
 }
 
 func (w *goCriticWrapper) init(settings *config.GoCriticSettings, logger logutils.Log) {
@@ -206,7 +206,7 @@ func (w *goCriticWrapper) normalizeCheckerParamsValue(p any) any {
 		return rv.Bool()
 	case reflect.String:
 		// Perform variable substitution.
-		return strings.ReplaceAll(rv.String(), "${configDir}", w.lintConfigDirGetter())
+		return strings.ReplaceAll(rv.String(), "${configDir}", w.getConfigDir())
 	default:
 		return p
 	}
