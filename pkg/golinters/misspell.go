@@ -5,6 +5,7 @@ import (
 	"go/token"
 	"strings"
 	"sync"
+	"unicode"
 
 	"github.com/golangci/misspell"
 	"golang.org/x/tools/go/analysis"
@@ -95,6 +96,11 @@ func createMisspellReplacer(settings *config.MisspellSettings) (*misspell.Replac
 		return nil, fmt.Errorf("unknown locale: %q", settings.Locale)
 	}
 
+	err := appendExtraWords(replacer, settings.ExtraWords)
+	if err != nil {
+		return nil, err
+	}
+
 	if len(settings.IgnoreWords) != 0 {
 		replacer.RemoveRule(settings.IgnoreWords)
 	}
@@ -152,4 +158,25 @@ func runMisspellOnFile(lintCtx *linter.Context, filename string, replacer *missp
 	}
 
 	return res, nil
+}
+
+func appendExtraWords(replacer *misspell.Replacer, extraWords []config.MisspellExtraWords) error {
+	var extra []string
+
+	for _, word := range extraWords {
+		if word.Typo == "" || strings.ContainsFunc(word.Typo, func(r rune) bool { return !unicode.IsLetter(r) }) {
+			return fmt.Errorf("the word in the 'typo' field should only contain letters")
+		}
+		if word.Correction == "" || strings.ContainsFunc(word.Correction, func(r rune) bool { return !unicode.IsLetter(r) }) {
+			return fmt.Errorf("the word in the 'correction' field should only contain letters")
+		}
+
+		extra = append(extra, strings.ToLower(word.Typo), strings.ToLower(word.Correction))
+	}
+
+	if len(extra) > 0 {
+		replacer.AddRuleList(extra)
+	}
+
+	return nil
 }

@@ -1364,6 +1364,14 @@ linters-settings:
     # Default: []
     ignore-words:
       - someword
+    # Extra word corrections.
+    # `typo` and `correction` should only contain letters.
+    # Default: []
+    extra-words:
+      - typo: "iff"
+        correction: "if"
+      - typo: "cancelation"
+        correction: "cancellation"
     # Mode of the analysis:
     # - default: checks all the file content.
     # - restricted: checks only comments.
