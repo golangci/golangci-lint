@@ -169,10 +169,10 @@ func appendExtraWords(replacer *misspell.Replacer, extraWords []config.MisspellE
 		}
 
 		if strings.ContainsFunc(word.Typo, func(r rune) bool { return !unicode.IsLetter(r) }) {
-			return fmt.Errorf("the word in the 'typo' field should only contain letters")
+			return fmt.Errorf("the word %q in the 'typo' field should only contain letters", word.Typo)
 		}
 		if strings.ContainsFunc(word.Correction, func(r rune) bool { return !unicode.IsLetter(r) }) {
-			return fmt.Errorf("the word in the 'correction' field should only contain letters")
+			return fmt.Errorf("the word %q in the 'correction' field should only contain letters", word.Correction)
 		}
 
 		extra = append(extra, strings.ToLower(word.Typo), strings.ToLower(word.Correction))

@@ -68,7 +68,7 @@ func Test_appendExtraWords_error(t *testing.T) {
 				Typo:       "i'ff",
 				Correction: "if",
 			}},
-			expected: `the word in the 'typo' field should only contain letters`,
+			expected: `the word "i'ff" in the 'typo' field should only contain letters`,
 		},
 		{
 			desc: "invalid characters in correction",
@@ -76,7 +76,7 @@ func Test_appendExtraWords_error(t *testing.T) {
 				Typo:       "iff",
 				Correction: "i'f",
 			}},
-			expected: `the word in the 'correction' field should only contain letters`,
+			expected: `the word "i'f" in the 'correction' field should only contain letters`,
 		},
 	}
 
