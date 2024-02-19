@@ -98,7 +98,7 @@ func createMisspellReplacer(settings *config.MisspellSettings) (*misspell.Replac
 
 	err := appendExtraWords(replacer, settings.ExtraWords)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("process extra words: %v": err)
 	}
 
 	if len(settings.IgnoreWords) != 0 {
