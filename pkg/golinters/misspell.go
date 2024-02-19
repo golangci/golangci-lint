@@ -98,7 +98,7 @@ func createMisspellReplacer(settings *config.MisspellSettings) (*misspell.Replac
 
 	err := appendExtraWords(replacer, settings.ExtraWords)
 	if err != nil {
-		return nil, fmt.Errorf("process extra words: %v": err)
+		return nil, fmt.Errorf("process extra words: %w", err)
 	}
 
 	if len(settings.IgnoreWords) != 0 {
@@ -164,10 +164,14 @@ func appendExtraWords(replacer *misspell.Replacer, extraWords []config.MisspellE
 	var extra []string
 
 	for _, word := range extraWords {
-		if word.Typo == "" || strings.ContainsFunc(word.Typo, func(r rune) bool { return !unicode.IsLetter(r) }) {
+		if word.Typo == "" || word.Correction == "" {
+			return fmt.Errorf("typo (%q) and correction (%q) fields should not be empty", word.Typo, word.Correction)
+		}
+
+		if strings.ContainsFunc(word.Typo, func(r rune) bool { return !unicode.IsLetter(r) }) {
 			return fmt.Errorf("the word in the 'typo' field should only contain letters")
 		}
-		if word.Correction == "" || strings.ContainsFunc(word.Correction, func(r rune) bool { return !unicode.IsLetter(r) }) {
+		if strings.ContainsFunc(word.Correction, func(r rune) bool { return !unicode.IsLetter(r) }) {
 			return fmt.Errorf("the word in the 'correction' field should only contain letters")
 		}
 
