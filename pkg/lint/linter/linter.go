@@ -18,8 +18,8 @@ type Noop struct {
 	reason string
 }
 
-func NewNoop(l Linter, reason string) *Noop {
-	return &Noop{
+func NewNoop(l Linter, reason string) Noop {
+	return Noop{
 		name:   l.Name(),
 		desc:   l.Desc(),
 		reason: reason,
