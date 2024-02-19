@@ -32,12 +32,12 @@ var (
 	isGoCriticDebug = logutils.HaveDebugTag(logutils.DebugKeyGoCritic)
 )
 
-func NewGoCritic(settings *config.GoCriticSettings, lintConfigDirGetter func() string) *goanalysis.Linter {
+func NewGoCritic(settings *config.GoCriticSettings, cfg *config.Config) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
 
 	wrapper := &goCriticWrapper{
-		lintConfigDirGetter: lintConfigDirGetter,
+		lintConfigDirGetter: cfg.GetConfigDir, // Config directory is filled after calling this constructor.
 		sizes:               types.SizesFor("gc", runtime.GOARCH),
 	}
 
@@ -270,23 +270,30 @@ type goCriticSettingsWrapper struct {
 
 	allCheckers []*gocriticlinter.CheckerInfo
 
-	allChecks             map[string]struct{}
-	allChecksByTag        map[string][]string
+	allChecks             goCriticChecks[struct{}]
+	allChecksByTag        goCriticChecks[[]string]
 	allTagsSorted         []string
-	inferredEnabledChecks map[string]struct{}
+	inferredEnabledChecks goCriticChecks[struct{}]
 
-	// *LowerCased* fields are used for GoCriticSettings.SettingsPerCheck validation only.
+	// *LowerCased fields are used for GoCriticSettings.SettingsPerCheck validation only.
 
-	allChecksLowerCased             map[string]struct{}
-	inferredEnabledLowerCasedChecks map[string]struct{}
+	allChecksLowerCased             goCriticChecks[struct{}]
+	inferredEnabledChecksLowerCased goCriticChecks[struct{}]
+}
+
+type goCriticChecks[T any] map[string]T
+
+func (m goCriticChecks[T]) has(name string) bool {
+	_, ok := m[name]
+	return ok
 }
 
 func newGoCriticSettingsWrapper(settings *config.GoCriticSettings, logger logutils.Log) *goCriticSettingsWrapper {
 	allCheckers := gocriticlinter.GetCheckersInfo()
 
-	allChecks := make(map[string]struct{}, len(allCheckers))
-	allChecksLowerCased := make(map[string]struct{}, len(allCheckers))
-	allChecksByTag := make(map[string][]string)
+	allChecks := make(goCriticChecks[struct{}], len(allCheckers))
+	allChecksLowerCased := make(goCriticChecks[struct{}], len(allCheckers))
+	allChecksByTag := make(goCriticChecks[[]string])
 	for _, checker := range allCheckers {
 		allChecks[checker.Name] = struct{}{}
 		allChecksLowerCased[strings.ToLower(checker.Name)] = struct{}{}
@@ -307,9 +314,13 @@ func newGoCriticSettingsWrapper(settings *config.GoCriticSettings, logger loguti
 		allChecksLowerCased:             allChecksLowerCased,
 		allChecksByTag:                  allChecksByTag,
 		allTagsSorted:                   allTagsSorted,
-		inferredEnabledChecks:           make(map[string]struct{}),
-		inferredEnabledLowerCasedChecks: make(map[string]struct{}),
+		inferredEnabledChecks:           make(goCriticChecks[struct{}]),
+		inferredEnabledChecksLowerCased: make(goCriticChecks[struct{}]),
 	}
+}
+
+func (s *goCriticSettingsWrapper) IsCheckEnabled(name string) bool {
+	return s.inferredEnabledChecks.has(name)
 }
 
 func (s *goCriticSettingsWrapper) GetLowerCasedParams() map[string]config.GoCriticCheckSettings {
@@ -324,16 +335,16 @@ func (s *goCriticSettingsWrapper) InferEnabledChecks() {
 	debugChecksListf(enabledByDefaultChecks, "Enabled by default")
 	debugChecksListf(disabledByDefaultChecks, "Disabled by default")
 
-	enabledChecks := make(map[string]struct{})
+	enabledChecks := make(goCriticChecks[struct{}])
 
 	if s.EnableAll {
-		enabledChecks = make(map[string]struct{}, len(s.allCheckers))
+		enabledChecks = make(goCriticChecks[struct{}], len(s.allCheckers))
 		for _, info := range s.allCheckers {
 			enabledChecks[info.Name] = struct{}{}
 		}
 	} else if !s.DisableAll {
 		// enable-all/disable-all revokes the default settings.
-		enabledChecks = make(map[string]struct{}, len(enabledByDefaultChecks))
+		enabledChecks = make(goCriticChecks[struct{}], len(enabledByDefaultChecks))
 		for _, check := range enabledByDefaultChecks {
 			enabledChecks[check] = struct{}{}
 		}
@@ -352,7 +363,7 @@ func (s *goCriticSettingsWrapper) InferEnabledChecks() {
 		debugChecksListf(s.EnabledChecks, "Enabled by config")
 
 		for _, check := range s.EnabledChecks {
-			if _, ok := enabledChecks[check]; ok {
+			if enabledChecks.has(check) {
 				s.logger.Warnf("%s: no need to enable check %q: it's already enabled", goCriticName, check)
 				continue
 			}
@@ -373,7 +384,7 @@ func (s *goCriticSettingsWrapper) InferEnabledChecks() {
 		debugChecksListf(s.DisabledChecks, "Disabled by config")
 
 		for _, check := range s.DisabledChecks {
-			if _, ok := enabledChecks[check]; !ok {
+			if !enabledChecks.has(check) {
 				s.logger.Warnf("%s: no need to disable check %q: it's already disabled", goCriticName, check)
 				continue
 			}
@@ -382,13 +393,13 @@ func (s *goCriticSettingsWrapper) InferEnabledChecks() {
 	}
 
 	s.inferredEnabledChecks = enabledChecks
-	s.inferredEnabledLowerCasedChecks = normalizeMap(s.inferredEnabledChecks)
+	s.inferredEnabledChecksLowerCased = normalizeMap(s.inferredEnabledChecks)
 	s.debugChecksFinalState()
 }
 
 func (s *goCriticSettingsWrapper) buildEnabledAndDisabledByDefaultChecks() (enabled, disabled []string) {
 	for _, info := range s.allCheckers {
-		if enable := isEnabledByDefaultGoCriticChecker(info); enable {
+		if enabledByDef := isEnabledByDefaultGoCriticChecker(info); enabledByDef {
 			enabled = append(enabled, info.Name)
 		} else {
 			disabled = append(disabled, info.Name)
@@ -434,7 +445,7 @@ func (s *goCriticSettingsWrapper) debugChecksFinalState() {
 
 	for _, checker := range s.allCheckers {
 		name := checker.Name
-		if _, ok := s.inferredEnabledChecks[name]; ok {
+		if s.inferredEnabledChecks.has(name) {
 			enabledChecks = append(enabledChecks, name)
 		} else {
 			disabledChecks = append(disabledChecks, name)
@@ -513,13 +524,13 @@ func (s *goCriticSettingsWrapper) validateOptionsCombinations() error {
 
 func (s *goCriticSettingsWrapper) validateCheckerTags() error {
 	for _, tag := range s.EnabledTags {
-		if !s.isKnownTag(tag) {
+		if !s.allChecksByTag.has(tag) {
 			return fmt.Errorf("enabled tag %q doesn't exist, see %s's documentation", tag, goCriticName)
 		}
 	}
 
 	for _, tag := range s.DisabledTags {
-		if !s.isKnownTag(tag) {
+		if !s.allChecksByTag.has(tag) {
 			return fmt.Errorf("disabled tag %q doesn't exist, see %s's documentation", tag, goCriticName)
 		}
 	}
@@ -527,45 +538,30 @@ func (s *goCriticSettingsWrapper) validateCheckerTags() error {
 	return nil
 }
 
-func (s *goCriticSettingsWrapper) isKnownTag(tag string) bool {
-	_, ok := s.allChecksByTag[tag]
-	return ok
-}
-
 func (s *goCriticSettingsWrapper) validateCheckerNames() error {
 	for _, name := range s.EnabledChecks {
-		if !s.isKnownCheck(name) {
+		if !s.allChecks.has(name) {
 			return fmt.Errorf("enabled check %q doesn't exist, see %s's documentation", name, goCriticName)
 		}
 	}
 
 	for _, name := range s.DisabledChecks {
-		if !s.isKnownCheck(name) {
+		if !s.allChecks.has(name) {
 			return fmt.Errorf("disabled check %q doesn't exist, see %s documentation", name, goCriticName)
 		}
 	}
 
 	for name := range s.SettingsPerCheck {
 		lcName := strings.ToLower(name)
-		if !s.isKnownLowerCasedCheck(lcName) {
+		if !s.allChecksLowerCased.has(lcName) {
 			return fmt.Errorf("invalid check settings: check %q doesn't exist, see %s documentation", name, goCriticName)
 		}
-		if !s.isLowerCasedCheckEnabled(lcName) {
+		if !s.inferredEnabledChecksLowerCased.has(lcName) {
 			s.logger.Warnf("%s: settings were provided for disabled check %q", goCriticName, name)
 		}
 	}
 
 	return nil
-}
-
-func (s *goCriticSettingsWrapper) isKnownCheck(name string) bool {
-	_, ok := s.allChecks[name]
-	return ok
-}
-
-func (s *goCriticSettingsWrapper) isKnownLowerCasedCheck(name string) bool {
-	_, ok := s.allChecksLowerCased[name]
-	return ok
 }
 
 func (s *goCriticSettingsWrapper) validateDisabledAndEnabledAtOneMoment() error {
@@ -589,14 +585,4 @@ func (s *goCriticSettingsWrapper) validateAtLeastOneCheckerEnabled() error {
 		return errors.New("eventually all checks were disabled: at least one must be enabled")
 	}
 	return nil
-}
-
-func (s *goCriticSettingsWrapper) isLowerCasedCheckEnabled(name string) bool {
-	_, ok := s.inferredEnabledLowerCasedChecks[name]
-	return ok
-}
-
-func (s *goCriticSettingsWrapper) IsCheckEnabled(name string) bool {
-	_, ok := s.inferredEnabledChecks[name]
-	return ok
 }

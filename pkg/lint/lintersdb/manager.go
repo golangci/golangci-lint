@@ -468,7 +468,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/jgautheron/goconst"),
 
-		linter.NewConfig(golinters.NewGoCritic(gocriticCfg, m.cfg.GetConfigDir)).
+		linter.NewConfig(golinters.NewGoCritic(gocriticCfg, m.cfg)).
 			WithSince("v1.12.0").
 			WithPresets(linter.PresetStyle, linter.PresetMetaLinter).
 			WithLoadForGoAnalysis().
