@@ -407,8 +407,8 @@ func isEnabledByDefaultGoCriticChecker(info *gocriticlinter.CheckerInfo) bool {
 
 func (s *goCriticSettingsWrapper) expandTagsToChecks(tags []string) []string {
 	var checks []string
-	for _, t := range tags {
-		checks = append(checks, s.allChecksByTag[t]...)
+	for _, tag := range tags {
+		checks = append(checks, s.allChecksByTag[tag]...)
 	}
 	return checks
 }
