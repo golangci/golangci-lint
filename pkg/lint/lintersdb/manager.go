@@ -90,6 +90,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		gocycloCfg          *config.GoCycloSettings
 		godotCfg            *config.GodotSettings
 		godoxCfg            *config.GodoxSettings
+		goFactoryCfg        *config.GoFactorySettings
 		gofmtCfg            *config.GoFmtSettings
 		gofumptCfg          *config.GofumptSettings
 		goheaderCfg         *config.GoHeaderSettings
@@ -176,6 +177,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		gocycloCfg = &m.cfg.LintersSettings.Gocyclo
 		godotCfg = &m.cfg.LintersSettings.Godot
 		godoxCfg = &m.cfg.LintersSettings.Godox
+		goFactoryCfg = &m.cfg.LintersSettings.Gofactory
 		gofmtCfg = &m.cfg.LintersSettings.Gofmt
 		gofumptCfg = &m.cfg.LintersSettings.Gofumpt
 		goheaderCfg = &m.cfg.LintersSettings.Goheader
@@ -495,6 +497,12 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetStyle, linter.PresetError).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/Djarvur/go-err113"),
+
+		linter.NewConfig(golinters.NewGoFactory(goFactoryCfg)).
+			WithSince("1.56.0").
+			WithPresets(linter.PresetStyle).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/maranqz/gofactory"),
 
 		linter.NewConfig(golinters.NewGofmt(gofmtCfg)).
 			WithSince("v1.0.0").

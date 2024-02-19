@@ -72,6 +72,7 @@ require (
 	github.com/leonklingele/grouper v1.1.1
 	github.com/lufeee/execinquery v1.2.1
 	github.com/macabu/inamedparam v0.1.3
+	github.com/maranqz/gofactory v1.0.0-rc1
 	github.com/maratori/testableexamples v1.0.0
 	github.com/maratori/testpackage v1.1.1
 	github.com/matoous/godox v0.0.0-20230222163458-006bad1f9d26

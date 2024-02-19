@@ -700,6 +700,15 @@ linters-settings:
       - OPTIMIZE # marks code that should be optimized before merging
       - HACK # marks hack-around that should be removed before merging
 
+  gofactory:
+    # List of glob packages, which can create structures without factories inside the glob package.
+    # Default: []
+    packageGlobs:
+      - github.com/author/repository/path/to/package/**
+    # Use a factory to initiate a structure for glob packages only.
+    # Default: false
+    packageGlobsOnly: true
+
   gofmt:
     # Simplify code: gofmt with `-s` option.
     # Default: true
@@ -2529,6 +2538,7 @@ linters:
     - godot
     - godox
     - goerr113
+    - gofactory
     - gofmt
     - gofumpt
     - goheader
@@ -2652,6 +2662,7 @@ linters:
     - godot
     - godox
     - goerr113
+    - gofactory
     - gofmt
     - gofumpt
     - goheader
