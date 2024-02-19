@@ -161,7 +161,11 @@ func runMisspellOnFile(lintCtx *linter.Context, filename string, replacer *missp
 }
 
 func appendExtraWords(replacer *misspell.Replacer, extraWords []config.MisspellExtraWords) error {
-	var extra []string
+	if len(extraWords) == 0 {
+		return nil
+	}
+
+	extra := make([]string, 0, len(extraWords)*2)
 
 	for _, word := range extraWords {
 		if word.Typo == "" || word.Correction == "" {
@@ -178,9 +182,7 @@ func appendExtraWords(replacer *misspell.Replacer, extraWords []config.MisspellE
 		extra = append(extra, strings.ToLower(word.Typo), strings.ToLower(word.Correction))
 	}
 
-	if len(extra) > 0 {
-		replacer.AddRuleList(extra)
-	}
+	replacer.AddRuleList(extra)
 
 	return nil
 }
