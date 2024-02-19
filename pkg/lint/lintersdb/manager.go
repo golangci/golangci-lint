@@ -303,7 +303,8 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		linter.NewConfig(golinters.NewCopyLoopVar()).
 			WithSince("v1.57.0").
 			WithPresets(linter.PresetStyle).
-			WithURL("https://github.com/karamaru-alpha/copyloopvar"),
+			WithURL("https://github.com/karamaru-alpha/copyloopvar").
+			WithNoopFallback(m.cfg, linter.IsGoLowerThanGo122()),
 
 		linter.NewConfig(golinters.NewCyclop(cyclopCfg)).
 			WithSince("v1.37.0").
@@ -617,7 +618,8 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 
 		linter.NewConfig(golinters.NewIntrange()).
 			WithSince("v1.57.0").
-			WithURL("https://github.com/ckaznocha/intrange"),
+			WithURL("https://github.com/ckaznocha/intrange").
+			WithNoopFallback(m.cfg, linter.IsGoLowerThanGo122()),
 
 		linter.NewConfig(golinters.NewIreturn(ireturnCfg)).
 			WithSince("v1.43.0").

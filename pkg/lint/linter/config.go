@@ -1,7 +1,8 @@
 package linter
 
 import (
-	"golang.org/x/tools/go/analysis"
+	"fmt"
+
 	"golang.org/x/tools/go/packages"
 
 	"github.com/golangci/golangci-lint/pkg/config"
@@ -133,21 +134,25 @@ func (lc *Config) Name() string {
 	return lc.Linter.Name()
 }
 
-func (lc *Config) WithNoopFallback(cfg *config.Config) *Config {
-	if cfg != nil && config.IsGreaterThanOrEqualGo122(cfg.Run.Go) {
-		lc.Linter = &Noop{
-			name: lc.Linter.Name(),
-			desc: lc.Linter.Desc(),
-			run: func(_ *analysis.Pass) (any, error) {
-				return nil, nil
-			},
-		}
-
+func (lc *Config) WithNoopFallback(cfg *config.Config, cond func(cfg *config.Config) error) *Config {
+	if err := cond(cfg); err != nil {
+		lc.Linter = NewNoop(lc.Linter, err.Error())
 		lc.LoadMode = 0
+
 		return lc.WithLoadFiles()
 	}
 
 	return lc
+}
+
+func IsGoLowerThanGo122() func(cfg *config.Config) error {
+	return func(cfg *config.Config) error {
+		if cfg == nil || config.IsGoGreaterThanOrEqual(cfg.Run.Go, "1.22") {
+			return nil
+		}
+
+		return fmt.Errorf("this linter is disabled because the Go version (%s) of your project is lower than Go 1.22", cfg.Run.Go)
+	}
 }
 
 func NewConfig(linter Linter) *Config {
