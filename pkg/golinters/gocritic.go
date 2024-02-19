@@ -125,7 +125,7 @@ func (w *goCriticWrapper) run(pass *analysis.Pass) ([]goanalysis.Issue, error) {
 
 	linterCtx.SetPackageInfo(pass.TypesInfo, pass.Pkg)
 
-	pkgIssues := runGocriticOnPackage(linterCtx, enabledCheckers, pass.Files)
+	pkgIssues := runGoCriticOnPackage(linterCtx, enabledCheckers, pass.Files)
 
 	issues := make([]goanalysis.Issue, 0, len(pkgIssues))
 	for i := range pkgIssues {
@@ -156,49 +156,6 @@ func (w *goCriticWrapper) buildEnabledCheckers(linterCtx *gocriticlinter.Context
 	}
 
 	return enabledCheckers, nil
-}
-
-func runGocriticOnPackage(linterCtx *gocriticlinter.Context, checks []*gocriticlinter.Checker, files []*ast.File) []result.Issue {
-	var res []result.Issue
-	for _, f := range files {
-		filename := filepath.Base(linterCtx.FileSet.Position(f.Pos()).Filename)
-		linterCtx.SetFileInfo(filename, f)
-
-		issues := runGocriticOnFile(linterCtx, f, checks)
-		res = append(res, issues...)
-	}
-	return res
-}
-
-func runGocriticOnFile(linterCtx *gocriticlinter.Context, f *ast.File, checks []*gocriticlinter.Checker) []result.Issue {
-	var res []result.Issue
-
-	for _, c := range checks {
-		// All checkers are expected to use *lint.Context
-		// as read-only structure, so no copying is required.
-		for _, warn := range c.Check(f) {
-			pos := linterCtx.FileSet.Position(warn.Pos)
-			issue := result.Issue{
-				Pos:        pos,
-				Text:       fmt.Sprintf("%s: %s", c.Info.Name, warn.Text),
-				FromLinter: goCriticName,
-			}
-
-			if warn.HasQuickFix() {
-				issue.Replacement = &result.Replacement{
-					Inline: &result.InlineFix{
-						StartCol:  pos.Column - 1,
-						Length:    int(warn.Suggestion.To - warn.Suggestion.From),
-						NewString: string(warn.Suggestion.Replacement),
-					},
-				}
-			}
-
-			res = append(res, issue)
-		}
-	}
-
-	return res
 }
 
 func (w *goCriticWrapper) configureCheckerInfo(
@@ -235,14 +192,6 @@ func (w *goCriticWrapper) configureCheckerInfo(
 	return nil
 }
 
-func normalizeMap[ValueT any](in map[string]ValueT) map[string]ValueT {
-	ret := make(map[string]ValueT, len(in))
-	for k, v := range in {
-		ret[strings.ToLower(k)] = v
-	}
-	return ret
-}
-
 // normalizeCheckerParamsValue normalizes value types.
 // go-critic asserts that CheckerParam.Value has some specific types,
 // but the file parsers (TOML, YAML, JSON) don't create the same representation for raw type.
@@ -263,6 +212,56 @@ func (w *goCriticWrapper) normalizeCheckerParamsValue(p any) any {
 	}
 }
 
+func runGoCriticOnPackage(linterCtx *gocriticlinter.Context, checks []*gocriticlinter.Checker, files []*ast.File) []result.Issue {
+	var res []result.Issue
+	for _, f := range files {
+		filename := filepath.Base(linterCtx.FileSet.Position(f.Pos()).Filename)
+		linterCtx.SetFileInfo(filename, f)
+
+		issues := runGoCriticOnFile(linterCtx, f, checks)
+		res = append(res, issues...)
+	}
+	return res
+}
+
+func runGoCriticOnFile(linterCtx *gocriticlinter.Context, f *ast.File, checks []*gocriticlinter.Checker) []result.Issue {
+	var res []result.Issue
+
+	for _, c := range checks {
+		// All checkers are expected to use *lint.Context
+		// as read-only structure, so no copying is required.
+		for _, warn := range c.Check(f) {
+			pos := linterCtx.FileSet.Position(warn.Pos)
+			issue := result.Issue{
+				Pos:        pos,
+				Text:       fmt.Sprintf("%s: %s", c.Info.Name, warn.Text),
+				FromLinter: goCriticName,
+			}
+
+			if warn.HasQuickFix() {
+				issue.Replacement = &result.Replacement{
+					Inline: &result.InlineFix{
+						StartCol:  pos.Column - 1,
+						Length:    int(warn.Suggestion.To - warn.Suggestion.From),
+						NewString: string(warn.Suggestion.Replacement),
+					},
+				}
+			}
+
+			res = append(res, issue)
+		}
+	}
+
+	return res
+}
+
+type goCriticChecks[T any] map[string]T
+
+func (m goCriticChecks[T]) has(name string) bool {
+	_, ok := m[name]
+	return ok
+}
+
 type goCriticSettingsWrapper struct {
 	*config.GoCriticSettings
 
@@ -279,13 +278,6 @@ type goCriticSettingsWrapper struct {
 
 	allChecksLowerCased             goCriticChecks[struct{}]
 	inferredEnabledChecksLowerCased goCriticChecks[struct{}]
-}
-
-type goCriticChecks[T any] map[string]T
-
-func (m goCriticChecks[T]) has(name string) bool {
-	_, ok := m[name]
-	return ok
 }
 
 func newGoCriticSettingsWrapper(settings *config.GoCriticSettings, logger logutils.Log) *goCriticSettingsWrapper {
@@ -352,7 +344,7 @@ func (s *goCriticSettingsWrapper) InferEnabledChecks() {
 
 	if len(s.EnabledTags) != 0 {
 		enabledFromTags := s.expandTagsToChecks(s.EnabledTags)
-		debugChecksListf(enabledFromTags, "Enabled by config tags %s", sprintStrings(s.EnabledTags))
+		debugChecksListf(enabledFromTags, "Enabled by config tags %s", sprintSortedStrings(s.EnabledTags))
 
 		for _, check := range enabledFromTags {
 			enabledChecks[check] = struct{}{}
@@ -373,7 +365,7 @@ func (s *goCriticSettingsWrapper) InferEnabledChecks() {
 
 	if len(s.DisabledTags) != 0 {
 		disabledFromTags := s.expandTagsToChecks(s.DisabledTags)
-		debugChecksListf(disabledFromTags, "Disabled by config tags %s", sprintStrings(s.DisabledTags))
+		debugChecksListf(disabledFromTags, "Disabled by config tags %s", sprintSortedStrings(s.DisabledTags))
 
 		for _, check := range disabledFromTags {
 			delete(enabledChecks, check)
@@ -406,14 +398,6 @@ func (s *goCriticSettingsWrapper) buildEnabledAndDisabledByDefaultChecks() (enab
 		}
 	}
 	return enabled, disabled
-}
-
-func isEnabledByDefaultGoCriticChecker(info *gocriticlinter.CheckerInfo) bool {
-	// https://github.com/go-critic/go-critic/blob/5b67cfd487ae9fe058b4b19321901b3131810f65/cmd/gocritic/check.go#L342-L345
-	return !info.HasTag(gocriticlinter.ExperimentalTag) &&
-		!info.HasTag(gocriticlinter.OpinionatedTag) &&
-		!info.HasTag(gocriticlinter.PerformanceTag) &&
-		!info.HasTag(gocriticlinter.SecurityTag)
 }
 
 func (s *goCriticSettingsWrapper) expandTagsToChecks(tags []string) []string {
@@ -459,19 +443,6 @@ func (s *goCriticSettingsWrapper) debugChecksFinalState() {
 	} else {
 		debugChecksListf(disabledChecks, "Final not used")
 	}
-}
-
-func debugChecksListf(checks []string, format string, args ...any) {
-	if !isGoCriticDebug {
-		return
-	}
-
-	goCriticDebugf("%s checks (%d): %s", fmt.Sprintf(format, args...), len(checks), sprintStrings(checks))
-}
-
-func sprintStrings(v []string) string {
-	sort.Strings(v)
-	return fmt.Sprint(v)
 }
 
 // Validate tries to be consistent with (lintersdb.Validator).validateEnabledDisabledLintersConfig.
@@ -585,4 +556,33 @@ func (s *goCriticSettingsWrapper) validateAtLeastOneCheckerEnabled() error {
 		return errors.New("eventually all checks were disabled: at least one must be enabled")
 	}
 	return nil
+}
+
+func normalizeMap[ValueT any](in map[string]ValueT) map[string]ValueT {
+	ret := make(map[string]ValueT, len(in))
+	for k, v := range in {
+		ret[strings.ToLower(k)] = v
+	}
+	return ret
+}
+
+func isEnabledByDefaultGoCriticChecker(info *gocriticlinter.CheckerInfo) bool {
+	// https://github.com/go-critic/go-critic/blob/5b67cfd487ae9fe058b4b19321901b3131810f65/cmd/gocritic/check.go#L342-L345
+	return !info.HasTag(gocriticlinter.ExperimentalTag) &&
+		!info.HasTag(gocriticlinter.OpinionatedTag) &&
+		!info.HasTag(gocriticlinter.PerformanceTag) &&
+		!info.HasTag(gocriticlinter.SecurityTag)
+}
+
+func debugChecksListf(checks []string, format string, args ...any) {
+	if !isGoCriticDebug {
+		return
+	}
+
+	goCriticDebugf("%s checks (%d): %s", fmt.Sprintf(format, args...), len(checks), sprintSortedStrings(checks))
+}
+
+func sprintSortedStrings(v []string) string {
+	sort.Strings(slices.Clone(v))
+	return fmt.Sprint(v)
 }
