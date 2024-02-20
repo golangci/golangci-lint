@@ -25,9 +25,10 @@ import (
 )
 
 type Executor struct {
-	rootCmd    *cobra.Command
-	runCmd     *cobra.Command
-	lintersCmd *cobra.Command
+	rootCmd *cobra.Command
+
+	runCmd     *cobra.Command // used by fixSlicesFlags, printStats
+	lintersCmd *cobra.Command // used by fixSlicesFlags
 
 	exitCode  int
 	buildInfo BuildInfo
