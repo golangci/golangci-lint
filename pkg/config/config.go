@@ -8,10 +8,11 @@ import (
 	"github.com/ldez/gomoddirectives"
 )
 
-// Config encapsulates the config data specified in the golangci yaml config file.
+// Config encapsulates the config data specified in the golangci-lint yaml config file.
 type Config struct {
-	cfgDir string // The directory containing the golangci config file.
-	Run    Run
+	cfgDir string // The directory containing the golangci-lint config file.
+
+	Run Run
 
 	Output Output
 
