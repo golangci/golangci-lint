@@ -358,11 +358,13 @@ func (e *Executor) releaseFileLock() {
 
 //nolint:gomnd
 func initRunFlagSet(fs *pflag.FlagSet, cfg *config.Config) {
-	// Config file config
-	rc := &cfg.Run
-	initConfigFileFlagSet(fs, rc)
+	fs.BoolVar(&cfg.InternalCmdTest, "internal-cmd-test", false, wh("Option is used only for testing golangci-lint command, don't use it"))
+	if err := fs.MarkHidden("internal-cmd-test"); err != nil {
+		panic(err)
+	}
 
-	// Output config
+	// --- Output config
+
 	oc := &cfg.Output
 	fs.StringVar(&oc.Format, "out-format",
 		config.OutFormatColoredLineNumber,
@@ -374,12 +376,13 @@ func initRunFlagSet(fs *pflag.FlagSet, cfg *config.Config) {
 	fs.BoolVar(&oc.PrintWelcomeMessage, "print-welcome", false, wh("Print welcome message"))
 	fs.StringVar(&oc.PathPrefix, "path-prefix", "", wh("Path prefix to add to output"))
 
-	fs.BoolVar(&cfg.InternalCmdTest, "internal-cmd-test", false, wh("Option is used only for testing golangci-lint command, don't use it"))
-	if err := fs.MarkHidden("internal-cmd-test"); err != nil {
-		panic(err)
-	}
+	// --- Run config
 
-	// Run config
+	rc := &cfg.Run
+
+	// Config file config
+	initConfigFileFlagSet(fs, rc)
+
 	fs.StringVar(&rc.ModulesDownloadMode, "modules-download-mode", "",
 		wh("Modules download mode. If not empty, passed as -mod=<mode> to go tools"))
 	fs.IntVar(&rc.ExitCodeIfIssuesFound, "issues-exit-code",
@@ -404,11 +407,13 @@ func initRunFlagSet(fs *pflag.FlagSet, cfg *config.Config) {
 	fs.BoolVar(&rc.AllowSerialRunners, "allow-serial-runners", false, wh(allowSerialDesc))
 	fs.BoolVar(&rc.ShowStats, "show-stats", false, wh("Show statistics per linter"))
 
-	// Linters config
+	// --- Linters config
+
 	lc := &cfg.Linters
 	initLintersFlagSet(fs, lc)
 
-	// Issues config
+	// --- Issues config
+
 	ic := &cfg.Issues
 	fs.StringSliceVarP(&ic.ExcludePatterns, "exclude", "e", nil, wh("Exclude issue by regexp"))
 	fs.BoolVar(&ic.UseDefaultExcludes, "exclude-use-default", true, getDefaultIssueExcludeHelp())
