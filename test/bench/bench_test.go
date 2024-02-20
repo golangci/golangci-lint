@@ -76,7 +76,7 @@ func printCommand(cmd string, args ...string) {
 }
 
 func getGolangciLintCommonArgs() []string {
-	return []string{"run", "--no-config", "--issues-exit-code=0", "--deadline=30m", "--disable-all", "--enable=govet"}
+	return []string{"run", "--no-config", "--issues-exit-code=0", "--timeout=30m", "--disable-all", "--enable=govet"}
 }
 
 func runGolangciLintForBench(b testing.TB) {
