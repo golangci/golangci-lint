@@ -57,6 +57,9 @@ func NewExecutor(buildInfo BuildInfo) *Executor {
 		debugf:    logutils.Debug(logutils.DebugKeyExec),
 	}
 
+	// init of commands must be done before config file reading because init sets config with the default values of flags.
+	e.initCommands()
+
 	startedAt := time.Now()
 	e.debugf("Starting execution...")
 	e.log = report.NewLogWrapper(logutils.NewStderrLog(logutils.DebugKeyEmpty), &e.reportData)
@@ -80,9 +83,6 @@ func NewExecutor(buildInfo BuildInfo) *Executor {
 			e.log.Fatalf("invalid value %q for --color; must be 'always', 'auto', or 'never'", commandLineCfg.Output.Color)
 		}
 	}
-
-	// init of commands must be done before config file reading because init sets config with the default values of flags.
-	e.initCommands()
 
 	// init e.cfg by values from config: flags parse will see these values like the default ones.
 	// It will overwrite them only if the same option is found in command-line: it's ok, command-line has higher priority.
