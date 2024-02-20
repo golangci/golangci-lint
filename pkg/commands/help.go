@@ -36,7 +36,7 @@ func (e *Executor) initHelp() {
 
 func (e *Executor) executeLintersHelp(_ *cobra.Command, _ []string) {
 	var enabledLCs, disabledLCs []*linter.Config
-	for _, lc := range e.DBManager.GetAllSupportedLinterConfigs() {
+	for _, lc := range e.dbManager.GetAllSupportedLinterConfigs() {
 		if lc.Internal {
 			continue
 		}
@@ -55,7 +55,7 @@ func (e *Executor) executeLintersHelp(_ *cobra.Command, _ []string) {
 
 	color.Green("\nLinters presets:")
 	for _, p := range lintersdb.AllPresets() {
-		linters := e.DBManager.GetAllLinterConfigsForPreset(p)
+		linters := e.dbManager.GetAllLinterConfigsForPreset(p)
 		var linterNames []string
 		for _, lc := range linters {
 			if lc.Internal {

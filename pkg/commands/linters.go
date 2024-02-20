@@ -44,7 +44,7 @@ func (e *Executor) initLintersFlagSet(fs *pflag.FlagSet, cfg *config.Linters) {
 
 // executeLinters runs the 'linters' CLI command, which displays the supported linters.
 func (e *Executor) executeLinters(_ *cobra.Command, _ []string) error {
-	enabledLintersMap, err := e.EnabledLintersSet.GetEnabledLintersMap()
+	enabledLintersMap, err := e.enabledLintersSet.GetEnabledLintersMap()
 	if err != nil {
 		return fmt.Errorf("can't get enabled linters: %w", err)
 	}
@@ -52,7 +52,7 @@ func (e *Executor) executeLinters(_ *cobra.Command, _ []string) error {
 	var enabledLinters []*linter.Config
 	var disabledLCs []*linter.Config
 
-	for _, lc := range e.DBManager.GetAllSupportedLinterConfigs() {
+	for _, lc := range e.dbManager.GetAllSupportedLinterConfigs() {
 		if lc.Internal {
 			continue
 		}

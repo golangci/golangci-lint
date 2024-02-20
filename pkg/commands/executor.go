@@ -33,8 +33,8 @@ type Executor struct {
 	cfg               *config.Config // cfg is the unmarshaled data from the golangci config file.
 	log               logutils.Log
 	reportData        report.Data
-	DBManager         *lintersdb.Manager
-	EnabledLintersSet *lintersdb.EnabledSet
+	dbManager         *lintersdb.Manager
+	enabledLintersSet *lintersdb.EnabledSet
 	contextLoader     *lint.ContextLoader
 	goenv             *goutil.Env
 	fileCache         *fsutils.FileCache
@@ -53,7 +53,7 @@ func NewExecutor(buildInfo BuildInfo) *Executor {
 	e := &Executor{
 		cfg:       config.NewDefault(),
 		buildInfo: buildInfo,
-		DBManager: lintersdb.NewManager(nil, nil),
+		dbManager: lintersdb.NewManager(nil, nil),
 		debugf:    logutils.Debug(logutils.DebugKeyExec),
 	}
 
@@ -113,14 +113,14 @@ func NewExecutor(buildInfo BuildInfo) *Executor {
 	}
 
 	// recreate after getting config
-	e.DBManager = lintersdb.NewManager(e.cfg, e.log)
+	e.dbManager = lintersdb.NewManager(e.cfg, e.log)
 
 	// Slice options must be explicitly set for proper merging of config and command-line options.
 	fixSlicesFlags(e.runCmd.Flags())
 	fixSlicesFlags(e.lintersCmd.Flags())
 
-	e.EnabledLintersSet = lintersdb.NewEnabledSet(e.DBManager,
-		lintersdb.NewValidator(e.DBManager), e.log.Child(logutils.DebugKeyLintersDB), e.cfg)
+	e.enabledLintersSet = lintersdb.NewEnabledSet(e.dbManager,
+		lintersdb.NewValidator(e.dbManager), e.log.Child(logutils.DebugKeyLintersDB), e.cfg)
 	e.goenv = goutil.NewEnv(e.log.Child(logutils.DebugKeyGoEnv))
 	e.fileCache = fsutils.NewFileCache()
 	e.lineCache = fsutils.NewLineCache(e.fileCache)

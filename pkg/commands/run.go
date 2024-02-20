@@ -183,17 +183,17 @@ func (e *Executor) getConfigForCommandLine() (*config.Config, error) {
 func (e *Executor) runAnalysis(ctx context.Context, args []string) ([]result.Issue, error) {
 	e.cfg.Run.Args = args
 
-	lintersToRun, err := e.EnabledLintersSet.GetOptimizedLinters()
+	lintersToRun, err := e.enabledLintersSet.GetOptimizedLinters()
 	if err != nil {
 		return nil, err
 	}
 
-	enabledLintersMap, err := e.EnabledLintersSet.GetEnabledLintersMap()
+	enabledLintersMap, err := e.enabledLintersSet.GetEnabledLintersMap()
 	if err != nil {
 		return nil, err
 	}
 
-	for _, lc := range e.DBManager.GetAllSupportedLinterConfigs() {
+	for _, lc := range e.dbManager.GetAllSupportedLinterConfigs() {
 		isEnabled := enabledLintersMap[lc.Name()] != nil
 		e.reportData.AddLinter(lc.Name(), isEnabled, lc.EnabledByDefault)
 	}
@@ -205,7 +205,7 @@ func (e *Executor) runAnalysis(ctx context.Context, args []string) ([]result.Iss
 	lintCtx.Log = e.log.Child(logutils.DebugKeyLintersContext)
 
 	runner, err := lint.NewRunner(e.cfg, e.log.Child(logutils.DebugKeyRunner),
-		e.goenv, e.EnabledLintersSet, e.lineCache, e.fileCache, e.DBManager, lintCtx.Packages)
+		e.goenv, e.enabledLintersSet, e.lineCache, e.fileCache, e.dbManager, lintCtx.Packages)
 	if err != nil {
 		return nil, err
 	}
