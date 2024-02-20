@@ -606,6 +606,7 @@ type GovetSettings struct {
 }
 
 func (cfg *GovetSettings) Validate() error {
+	// TODO(ldez) need to be move into the linter file.
 	if cfg.EnableAll && cfg.DisableAll {
 		return errors.New("enable-all and disable-all can't be combined")
 	}

@@ -142,6 +142,11 @@ func NewGovet(settings *config.GovetSettings) *goanalysis.Linter {
 		conf = settings.Settings
 	}
 
+	err := settings.Validate()
+	if err != nil {
+		linterLogger.Fatalf("govet configuration: %v", err)
+	}
+
 	return goanalysis.NewLinter(
 		"govet",
 		"Vet examines Go source code and reports suspicious constructs. "+
