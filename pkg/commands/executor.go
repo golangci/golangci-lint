@@ -81,7 +81,7 @@ func (e *Executor) initExecutor() {
 	e.log = report.NewLogWrapper(logutils.NewStderrLog(logutils.DebugKeyEmpty), &e.reportData)
 
 	// to set up log level early we need to parse config from command line extra time to find `-v` option.
-	commandLineCfg, err := e.getConfigForCommandLine()
+	commandLineCfg, err := getConfigForCommandLine()
 	if err != nil && !errors.Is(err, pflag.ErrHelp) {
 		e.log.Fatalf("Can't get config for command line: %s", err)
 	}
@@ -154,7 +154,7 @@ func (e *Executor) Execute() error {
 	return e.rootCmd.Execute()
 }
 
-func (e *Executor) getConfigForCommandLine() (*config.Config, error) {
+func getConfigForCommandLine() (*config.Config, error) {
 	// We use another pflag.FlagSet here to not set `changed` flag
 	// on cmd.Flags() options. Otherwise, string slice options will be duplicated.
 	fs := pflag.NewFlagSet("config flag set", pflag.ContinueOnError)
@@ -170,7 +170,7 @@ func (e *Executor) getConfigForCommandLine() (*config.Config, error) {
 	// Parse max options, even force version option: don't want
 	// to get access to Executor here: it's error-prone to use
 	// cfg vs e.cfg.
-	initRootFlagSet(fs, &cfg, true)
+	initRootFlagSet(fs, &cfg)
 
 	fs.Usage = func() {} // otherwise, help text will be printed twice
 	if err := fs.Parse(os.Args); err != nil {

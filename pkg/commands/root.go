@@ -35,7 +35,7 @@ func (e *Executor) initRoot() {
 		PersistentPostRunE: e.persistentPostRun,
 	}
 
-	initRootFlagSet(rootCmd.PersistentFlags(), e.cfg, e.needVersionOption())
+	initRootFlagSet(rootCmd.PersistentFlags(), e.cfg)
 	e.rootCmd = rootCmd
 }
 
@@ -106,11 +106,7 @@ func (e *Executor) persistentPostRun(_ *cobra.Command, _ []string) error {
 	return nil
 }
 
-func (e *Executor) needVersionOption() bool {
-	return e.buildInfo.Date != ""
-}
-
-func initRootFlagSet(fs *pflag.FlagSet, cfg *config.Config, needVersionOption bool) {
+func initRootFlagSet(fs *pflag.FlagSet, cfg *config.Config) {
 	fs.BoolVarP(&cfg.Run.IsVerbose, "verbose", "v", false, wh("Verbose output"))
 	fs.StringVar(&cfg.Output.Color, "color", "auto", wh("Use color when printing; can be 'always', 'auto', or 'never'"))
 
@@ -121,9 +117,7 @@ func initRootFlagSet(fs *pflag.FlagSet, cfg *config.Config, needVersionOption bo
 	fs.IntVarP(&cfg.Run.Concurrency, "concurrency", "j", getDefaultConcurrency(),
 		wh("Number of CPUs to use (Default: number of logical CPUs)"))
 
-	if needVersionOption {
-		fs.BoolVar(&cfg.Run.PrintVersion, "version", false, wh("Print version"))
-	}
+	fs.BoolVar(&cfg.Run.PrintVersion, "version", false, wh("Print version"))
 }
 
 func printMemStats(ms *runtime.MemStats, logger logutils.Log) {
