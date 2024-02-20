@@ -149,36 +149,6 @@ func (e *Executor) initRunFlagSet(fs *pflag.FlagSet, cfg *config.Config) {
 	fs.BoolVar(&ic.NeedFix, "fix", false, wh("Fix found issues (if it's supported by the linter)"))
 }
 
-func (e *Executor) getConfigForCommandLine() (*config.Config, error) {
-	// We use another pflag.FlagSet here to not set `changed` flag
-	// on cmd.Flags() options. Otherwise, string slice options will be duplicated.
-	fs := pflag.NewFlagSet("config flag set", pflag.ContinueOnError)
-
-	var cfg config.Config
-	// Don't do `fs.AddFlagSet(cmd.Flags())` because it shares flags representations:
-	// `changed` variable inside string slice vars will be shared.
-	// Use another config variable here, not e.cfg, to not
-	// affect main parsing by this parsing of only config option.
-	e.initRunFlagSet(fs, &cfg)
-	initVersionFlagSet(fs, &cfg)
-
-	// Parse max options, even force version option: don't want
-	// to get access to Executor here: it's error-prone to use
-	// cfg vs e.cfg.
-	initRootFlagSet(fs, &cfg, true)
-
-	fs.Usage = func() {} // otherwise, help text will be printed twice
-	if err := fs.Parse(os.Args); err != nil {
-		if errors.Is(err, pflag.ErrHelp) {
-			return nil, err
-		}
-
-		return nil, fmt.Errorf("can't parse args: %w", err)
-	}
-
-	return &cfg, nil
-}
-
 // runAnalysis executes the linters that have been enabled in the configuration.
 func (e *Executor) runAnalysis(ctx context.Context, args []string) ([]result.Issue, error) {
 	e.cfg.Run.Args = args
