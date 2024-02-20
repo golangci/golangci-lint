@@ -60,6 +60,22 @@ func NewExecutor(buildInfo BuildInfo) *Executor {
 	// init of commands must be done before config file reading because init sets config with the default values of flags.
 	e.initCommands()
 
+	e.initExecutor()
+
+	return e
+}
+
+func (e *Executor) initCommands() {
+	e.initRoot()
+	e.initRun()
+	e.initHelp()
+	e.initLinters()
+	e.initConfig()
+	e.initVersion()
+	e.initCache()
+}
+
+func (e *Executor) initExecutor() {
 	startedAt := time.Now()
 	e.debugf("Starting execution...")
 	e.log = report.NewLogWrapper(logutils.NewStderrLog(logutils.DebugKeyEmpty), &e.reportData)
@@ -128,21 +144,10 @@ func NewExecutor(buildInfo BuildInfo) *Executor {
 	e.loadGuard = load.NewGuard()
 	e.contextLoader = lint.NewContextLoader(e.cfg, e.log.Child(logutils.DebugKeyLoader), e.goenv,
 		e.lineCache, e.fileCache, e.pkgCache, e.loadGuard)
-	if err = e.initHashSalt(buildInfo.Version); err != nil {
+	if err = e.initHashSalt(e.buildInfo.Version); err != nil {
 		e.log.Fatalf("Failed to init hash salt: %s", err)
 	}
 	e.debugf("Initialized executor in %s", time.Since(startedAt))
-	return e
-}
-
-func (e *Executor) initCommands() {
-	e.initRoot()
-	e.initRun()
-	e.initHelp()
-	e.initLinters()
-	e.initConfig()
-	e.initVersion()
-	e.initCache()
 }
 
 func (e *Executor) Execute() error {
