@@ -30,21 +30,27 @@ type Executor struct {
 	runCmd     *cobra.Command // used by fixSlicesFlags, printStats
 	lintersCmd *cobra.Command // used by fixSlicesFlags
 
-	exitCode  int
+	exitCode int
+
 	buildInfo BuildInfo
 
-	cfg               *config.Config // cfg is the unmarshaled data from the golangci config file.
-	log               logutils.Log
-	reportData        report.Data
+	cfg *config.Config // cfg is the unmarshaled data from the golangci config file.
+
+	log        logutils.Log
+	debugf     logutils.DebugFunc
+	reportData report.Data
+
 	dbManager         *lintersdb.Manager
 	enabledLintersSet *lintersdb.EnabledSet
-	contextLoader     *lint.ContextLoader
-	goenv             *goutil.Env
-	fileCache         *fsutils.FileCache
-	lineCache         *fsutils.LineCache
-	pkgCache          *pkgcache.Cache
-	debugf            logutils.DebugFunc
-	sw                *timeutils.Stopwatch
+
+	contextLoader *lint.ContextLoader
+	goenv         *goutil.Env
+
+	fileCache *fsutils.FileCache
+	lineCache *fsutils.LineCache
+	pkgCache  *pkgcache.Cache
+
+	sw *timeutils.Stopwatch
 
 	flock *flock.Flock
 }
