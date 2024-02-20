@@ -48,9 +48,6 @@ type Executor struct {
 
 	fileCache *fsutils.FileCache
 	lineCache *fsutils.LineCache
-	pkgCache  *pkgcache.Cache
-
-	sw *timeutils.Stopwatch
 
 	flock *flock.Flock
 }
@@ -144,15 +141,15 @@ func (e *Executor) initExecutor() {
 	e.fileCache = fsutils.NewFileCache()
 	e.lineCache = fsutils.NewLineCache(e.fileCache)
 
-	e.sw = timeutils.NewStopwatch("pkgcache", e.log.Child(logutils.DebugKeyStopwatch))
+	sw := timeutils.NewStopwatch("pkgcache", e.log.Child(logutils.DebugKeyStopwatch))
 
-	e.pkgCache, err = pkgcache.NewCache(e.sw, e.log.Child(logutils.DebugKeyPkgCache))
+	pkgCache, err := pkgcache.NewCache(sw, e.log.Child(logutils.DebugKeyPkgCache))
 	if err != nil {
 		e.log.Fatalf("Failed to build packages cache: %s", err)
 	}
 
 	e.contextLoader = lint.NewContextLoader(e.cfg, e.log.Child(logutils.DebugKeyLoader), e.goenv,
-		e.lineCache, e.fileCache, e.pkgCache, load.NewGuard())
+		e.lineCache, e.fileCache, pkgCache, load.NewGuard())
 	if err = e.initHashSalt(e.buildInfo.Version); err != nil {
 		e.log.Fatalf("Failed to init hash salt: %s", err)
 	}
