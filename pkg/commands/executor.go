@@ -54,7 +54,6 @@ func NewExecutor(buildInfo BuildInfo) *Executor {
 	e := &Executor{
 		cfg:       config.NewDefault(),
 		buildInfo: buildInfo,
-		dbManager: lintersdb.NewManager(nil, nil),
 		debugf:    logutils.Debug(logutils.DebugKeyExec),
 	}
 
