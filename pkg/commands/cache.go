@@ -80,13 +80,13 @@ func dirSizeBytes(path string) (int64, error) {
 
 // --- Related to cache but not used directly by the cache command.
 
-func (e *Executor) initHashSalt(version string) error {
+func initHashSalt(version string, cfg *config.Config) error {
 	binSalt, err := computeBinarySalt(version)
 	if err != nil {
 		return fmt.Errorf("failed to calculate binary salt: %w", err)
 	}
 
-	configSalt, err := computeConfigSalt(e.cfg)
+	configSalt, err := computeConfigSalt(cfg)
 	if err != nil {
 		return fmt.Errorf("failed to calculate config salt: %w", err)
 	}

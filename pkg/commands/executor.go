@@ -155,7 +155,8 @@ func (e *Executor) initExecutor() {
 
 	e.contextLoader = lint.NewContextLoader(e.cfg, e.log.Child(logutils.DebugKeyLoader), e.goenv,
 		e.lineCache, e.fileCache, pkgCache, load.NewGuard())
-	if err = e.initHashSalt(e.buildInfo.Version); err != nil {
+
+	if err = initHashSalt(e.buildInfo.Version, e.cfg); err != nil {
 		e.log.Fatalf("Failed to init hash salt: %s", err)
 	}
 }
