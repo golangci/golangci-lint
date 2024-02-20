@@ -60,8 +60,7 @@ func NewExecutor(buildInfo BuildInfo) *Executor {
 	e.debugf("Starting execution...")
 	e.log = report.NewLogWrapper(logutils.NewStderrLog(logutils.DebugKeyEmpty), &e.reportData)
 
-	// to setup log level early we need to parse config from command line extra time to
-	// find `-v` option
+	// to set up log level early we need to parse config from command line extra time to find `-v` option.
 	commandLineCfg, err := e.getConfigForCommandLine()
 	if err != nil && !errors.Is(err, pflag.ErrHelp) {
 		e.log.Fatalf("Can't get config for command line: %s", err)
@@ -81,8 +80,7 @@ func NewExecutor(buildInfo BuildInfo) *Executor {
 		}
 	}
 
-	// init of commands must be done before config file reading because
-	// init sets config with the default values of flags
+	// init of commands must be done before config file reading because init sets config with the default values of flags.
 	e.initRoot()
 	e.initRun()
 	e.initHelp()
@@ -91,9 +89,8 @@ func NewExecutor(buildInfo BuildInfo) *Executor {
 	e.initVersion()
 	e.initCache()
 
-	// init e.cfg by values from config: flags parse will see these values
-	// like the default ones. It will overwrite them only if the same option
-	// is found in command-line: it's ok, command-line has higher priority.
+	// init e.cfg by values from config: flags parse will see these values like the default ones.
+	// It will overwrite them only if the same option is found in command-line: it's ok, command-line has higher priority.
 
 	r := config.NewFileReader(e.cfg, commandLineCfg, e.log.Child(logutils.DebugKeyConfigReader))
 	if err = r.Read(); err != nil {
