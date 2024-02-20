@@ -61,7 +61,8 @@ func (r *FileReader) Read() error {
 
 func (r *FileReader) parseConfig() error {
 	if err := viper.ReadInConfig(); err != nil {
-		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
+		var configFileNotFoundError viper.ConfigFileNotFoundError
+		if errors.As(err, &configFileNotFoundError) {
 			return nil
 		}
 
