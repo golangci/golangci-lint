@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/fatih/color"
+	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
 	"github.com/spf13/cobra"
 
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
@@ -53,7 +54,7 @@ func (e *Executor) executeLintersHelp(_ *cobra.Command, _ []string) {
 	printLinterConfigs(disabledLCs)
 
 	color.Green("\nLinters presets:")
-	for _, p := range e.DBManager.AllPresets() {
+	for _, p := range lintersdb.AllPresets() {
 		linters := e.DBManager.GetAllLinterConfigsForPreset(p)
 		var linterNames []string
 		for _, lc := range linters {

@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/fatih/color"
+	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 
@@ -38,7 +39,7 @@ func (e *Executor) initLintersFlagSet(fs *pflag.FlagSet, cfg *config.Linters) {
 	fs.BoolVar(&cfg.Fast, "fast", false, wh("Enable only fast linters from enabled linters set (first run won't be fast)"))
 	fs.StringSliceVarP(&cfg.Presets, "presets", "p", nil,
 		wh(fmt.Sprintf("Enable presets (%s) of linters. Run 'golangci-lint help linters' to see "+
-			"them. This option implies option --disable-all", strings.Join(e.DBManager.AllPresets(), "|"))))
+			"them. This option implies option --disable-all", strings.Join(lintersdb.AllPresets(), "|"))))
 }
 
 // executeLinters runs the 'linters' CLI command, which displays the supported linters.

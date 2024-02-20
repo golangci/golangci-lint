@@ -39,11 +39,11 @@ func (v Validator) validateLintersNames(cfg *config.Linters) error {
 }
 
 func (v Validator) validatePresets(cfg *config.Linters) error {
-	allPresets := v.m.allPresetsSet()
+	allPresets := allPresetsSet()
 	for _, p := range cfg.Presets {
 		if !allPresets[p] {
 			return fmt.Errorf("no such preset %q: only next presets exist: (%s)",
-				p, strings.Join(v.m.AllPresets(), "|"))
+				p, strings.Join(AllPresets(), "|"))
 		}
 	}
 

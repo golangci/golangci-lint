@@ -33,32 +33,6 @@ func NewManager(cfg *config.Config, log logutils.Log) *Manager {
 	return m
 }
 
-func (Manager) AllPresets() []string {
-	return []string{
-		linter.PresetBugs,
-		linter.PresetComment,
-		linter.PresetComplexity,
-		linter.PresetError,
-		linter.PresetFormatting,
-		linter.PresetImport,
-		linter.PresetMetaLinter,
-		linter.PresetModule,
-		linter.PresetPerformance,
-		linter.PresetSQL,
-		linter.PresetStyle,
-		linter.PresetTest,
-		linter.PresetUnused,
-	}
-}
-
-func (m Manager) allPresetsSet() map[string]bool {
-	ret := map[string]bool{}
-	for _, p := range m.AllPresets() {
-		ret[p] = true
-	}
-	return ret
-}
-
 func (m Manager) GetLinterConfigs(name string) []*linter.Config {
 	return m.nameToLCs[name]
 }
@@ -964,16 +938,6 @@ func (m Manager) GetAllEnabledByDefaultLinters() []*linter.Config {
 	return ret
 }
 
-func linterConfigsToMap(lcs []*linter.Config) map[string]*linter.Config {
-	ret := map[string]*linter.Config{}
-	for _, lc := range lcs {
-		lc := lc // local copy
-		ret[lc.Name()] = lc
-	}
-
-	return ret
-}
-
 func (m Manager) GetAllLinterConfigsForPreset(p string) []*linter.Config {
 	var ret []*linter.Config
 	for _, lc := range m.GetAllSupportedLinterConfigs() {
@@ -989,6 +953,42 @@ func (m Manager) GetAllLinterConfigsForPreset(p string) []*linter.Config {
 		}
 	}
 
+	return ret
+}
+
+func linterConfigsToMap(lcs []*linter.Config) map[string]*linter.Config {
+	ret := map[string]*linter.Config{}
+	for _, lc := range lcs {
+		lc := lc // local copy
+		ret[lc.Name()] = lc
+	}
+
+	return ret
+}
+
+func AllPresets() []string {
+	return []string{
+		linter.PresetBugs,
+		linter.PresetComment,
+		linter.PresetComplexity,
+		linter.PresetError,
+		linter.PresetFormatting,
+		linter.PresetImport,
+		linter.PresetMetaLinter,
+		linter.PresetModule,
+		linter.PresetPerformance,
+		linter.PresetSQL,
+		linter.PresetStyle,
+		linter.PresetTest,
+		linter.PresetUnused,
+	}
+}
+
+func allPresetsSet() map[string]bool {
+	ret := map[string]bool{}
+	for _, p := range AllPresets() {
+		ret[p] = true
+	}
 	return ret
 }
 
