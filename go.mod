@@ -27,7 +27,7 @@ require (
 	github.com/breml/errchkjson v0.3.6
 	github.com/butuzov/ireturn v0.3.0
 	github.com/butuzov/mirror v1.1.0
-	github.com/catenacyber/perfsprint v0.7.0
+	github.com/catenacyber/perfsprint v0.7.1
 	github.com/charithe/durationcheck v0.0.10
 	github.com/ckaznocha/intrange v0.1.0
 	github.com/curioswitch/go-reassign v0.2.0
