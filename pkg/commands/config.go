@@ -34,8 +34,6 @@ func (e *Executor) initConfig() {
 	fs := pathCmd.Flags()
 	fs.SortFlags = false // sort them as they are defined here
 
-	initConfigFileFlagSet(fs, &e.cfg.Run)
-
 	configCmd.AddCommand(pathCmd)
 	e.rootCmd.AddCommand(configCmd)
 }
@@ -66,6 +64,8 @@ func (e *Executor) getUsedConfig() string {
 
 	return prettyUsedConfigFile
 }
+
+// --- Related to config but not used directly by the config command.
 
 func initConfigFileFlagSet(fs *pflag.FlagSet, cfg *config.Run) {
 	fs.StringVarP(&cfg.Config, "config", "c", "", wh("Read config from file path `PATH`"))
