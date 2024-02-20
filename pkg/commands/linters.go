@@ -5,12 +5,12 @@ import (
 	"strings"
 
 	"github.com/fatih/color"
-	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
+	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
 )
 
 func (e *Executor) initLinters() {
