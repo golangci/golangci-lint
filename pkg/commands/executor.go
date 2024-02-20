@@ -126,12 +126,12 @@ func (e *Executor) initExecutor() {
 		e.cfg.Run.Go = config.DetectGoVersion()
 	}
 
-	// recreate after getting config
-	e.dbManager = lintersdb.NewManager(e.cfg, e.log)
-
 	// Slice options must be explicitly set for proper merging of config and command-line options.
 	fixSlicesFlags(e.runCmd.Flags())
 	fixSlicesFlags(e.lintersCmd.Flags())
+
+	// recreate after getting config
+	e.dbManager = lintersdb.NewManager(e.cfg, e.log)
 
 	e.enabledLintersSet = lintersdb.NewEnabledSet(e.dbManager,
 		lintersdb.NewValidator(e.dbManager), e.log.Child(logutils.DebugKeyLintersDB), e.cfg)
