@@ -111,7 +111,7 @@ require (
 	github.com/tetafro/godot v1.4.16
 	github.com/timakin/bodyclose v0.0.0-20230421092635-574207250966
 	github.com/timonwong/loggercheck v0.9.4
-	github.com/tomarrell/wrapcheck/v2 v2.8.1
+	github.com/tomarrell/wrapcheck/v2 v2.8.3
 	github.com/tommy-muehle/go-mnd/v2 v2.5.1
 	github.com/ultraware/funlen v0.1.0
 	github.com/ultraware/whitespace v0.1.0
