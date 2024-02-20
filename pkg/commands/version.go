@@ -67,11 +67,8 @@ func (e *Executor) initVersion() {
 	}
 
 	e.rootCmd.AddCommand(versionCmd)
-	e.initVersionConfiguration(versionCmd)
-}
 
-func (e *Executor) initVersionConfiguration(cmd *cobra.Command) {
-	fs := cmd.Flags()
+	fs := versionCmd.Flags()
 	fs.SortFlags = false // sort them as they are defined here
 	initVersionFlagSet(fs, e.cfg)
 }
