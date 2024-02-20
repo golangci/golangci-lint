@@ -66,11 +66,12 @@ func (e *Executor) initVersion() {
 		},
 	}
 
-	e.rootCmd.AddCommand(versionCmd)
-
 	fs := versionCmd.Flags()
 	fs.SortFlags = false // sort them as they are defined here
+
 	initVersionFlagSet(fs, e.cfg)
+
+	e.rootCmd.AddCommand(versionCmd)
 }
 
 func initVersionFlagSet(fs *pflag.FlagSet, cfg *config.Config) {

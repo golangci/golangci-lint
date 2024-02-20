@@ -27,7 +27,6 @@ func (e *Executor) initCache() {
 			return cmd.Help()
 		},
 	}
-	e.rootCmd.AddCommand(cacheCmd)
 
 	cacheCmd.AddCommand(&cobra.Command{
 		Use:               "clean",
@@ -45,6 +44,8 @@ func (e *Executor) initCache() {
 	})
 
 	// TODO: add trim command?
+
+	e.rootCmd.AddCommand(cacheCmd)
 }
 
 func (e *Executor) executeCleanCache(_ *cobra.Command, _ []string) error {

@@ -36,6 +36,7 @@ func (e *Executor) initRoot() {
 	}
 
 	initRootFlagSet(rootCmd.PersistentFlags(), e.cfg)
+
 	e.rootCmd = rootCmd
 }
 

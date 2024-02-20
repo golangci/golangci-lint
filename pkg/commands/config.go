@@ -14,7 +14,7 @@ import (
 )
 
 func (e *Executor) initConfig() {
-	cmd := &cobra.Command{
+	configCmd := &cobra.Command{
 		Use:   "config",
 		Short: "Config file information",
 		Args:  cobra.NoArgs,
@@ -22,7 +22,6 @@ func (e *Executor) initConfig() {
 			return cmd.Help()
 		},
 	}
-	e.rootCmd.AddCommand(cmd)
 
 	pathCmd := &cobra.Command{
 		Use:               "path",
@@ -37,7 +36,8 @@ func (e *Executor) initConfig() {
 
 	initConfigFileFlagSet(fs, &e.cfg.Run)
 
-	cmd.AddCommand(pathCmd)
+	configCmd.AddCommand(pathCmd)
+	e.rootCmd.AddCommand(configCmd)
 }
 
 // getUsedConfig returns the resolved path to the golangci config file,

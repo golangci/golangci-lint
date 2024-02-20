@@ -22,7 +22,6 @@ func (e *Executor) initHelp() {
 			return cmd.Help()
 		},
 	}
-	e.rootCmd.SetHelpCommand(helpCmd)
 
 	helpCmd.AddCommand(&cobra.Command{
 		Use:               "linters",
@@ -31,6 +30,8 @@ func (e *Executor) initHelp() {
 		ValidArgsFunction: cobra.NoFileCompletions,
 		Run:               e.executeLintersHelp,
 	})
+
+	e.rootCmd.SetHelpCommand(helpCmd)
 }
 
 func (e *Executor) executeLintersHelp(_ *cobra.Command, _ []string) {

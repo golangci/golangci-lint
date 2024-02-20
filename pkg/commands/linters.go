@@ -14,7 +14,7 @@ import (
 )
 
 func (e *Executor) initLinters() {
-	e.lintersCmd = &cobra.Command{
+	lintersCmd := &cobra.Command{
 		Use:               "linters",
 		Short:             "List current linters configuration",
 		Args:              cobra.NoArgs,
@@ -22,13 +22,15 @@ func (e *Executor) initLinters() {
 		RunE:              e.executeLinters,
 	}
 
-	fs := e.lintersCmd.Flags()
+	fs := lintersCmd.Flags()
 	fs.SortFlags = false // sort them as they are defined here
 
 	initConfigFileFlagSet(fs, &e.cfg.Run)
 	initLintersFlagSet(fs, &e.cfg.Linters)
 
-	e.rootCmd.AddCommand(e.lintersCmd)
+	e.rootCmd.AddCommand(lintersCmd)
+
+	e.lintersCmd = lintersCmd
 }
 
 // executeLinters runs the 'linters' CLI command, which displays the supported linters.

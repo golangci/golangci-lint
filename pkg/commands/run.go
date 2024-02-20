@@ -41,7 +41,7 @@ const (
 )
 
 func (e *Executor) initRun() {
-	e.runCmd = &cobra.Command{
+	runCmd := &cobra.Command{
 		Use:   "run",
 		Short: "Run the linters",
 		Run:   e.executeRun,
@@ -55,18 +55,18 @@ func (e *Executor) initRun() {
 			e.releaseFileLock()
 		},
 	}
-	e.rootCmd.AddCommand(e.runCmd)
 
-	e.runCmd.SetOut(logutils.StdOut) // use custom output to properly color it in Windows terminals
-	e.runCmd.SetErr(logutils.StdErr)
+	runCmd.SetOut(logutils.StdOut) // use custom output to properly color it in Windows terminals
+	runCmd.SetErr(logutils.StdErr)
 
-	e.initRunConfiguration(e.runCmd)
-}
-
-func (e *Executor) initRunConfiguration(cmd *cobra.Command) {
-	fs := cmd.Flags()
+	fs := runCmd.Flags()
 	fs.SortFlags = false // sort them as they are defined here
+
 	initRunFlagSet(fs, e.cfg)
+
+	e.rootCmd.AddCommand(runCmd)
+
+	e.runCmd = runCmd
 }
 
 // runAnalysis executes the linters that have been enabled in the configuration.
