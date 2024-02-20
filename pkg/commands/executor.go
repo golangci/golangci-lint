@@ -51,7 +51,6 @@ type Executor struct {
 
 // NewExecutor creates and initializes a new command executor.
 func NewExecutor(buildInfo BuildInfo) *Executor {
-	startedAt := time.Now()
 	e := &Executor{
 		cfg:       config.NewDefault(),
 		buildInfo: buildInfo,
@@ -59,6 +58,7 @@ func NewExecutor(buildInfo BuildInfo) *Executor {
 		debugf:    logutils.Debug(logutils.DebugKeyExec),
 	}
 
+	startedAt := time.Now()
 	e.debugf("Starting execution...")
 	e.log = report.NewLogWrapper(logutils.NewStderrLog(logutils.DebugKeyEmpty), &e.reportData)
 
@@ -83,13 +83,7 @@ func NewExecutor(buildInfo BuildInfo) *Executor {
 	}
 
 	// init of commands must be done before config file reading because init sets config with the default values of flags.
-	e.initRoot()
-	e.initRun()
-	e.initHelp()
-	e.initLinters()
-	e.initConfig()
-	e.initVersion()
-	e.initCache()
+	e.initCommands()
 
 	// init e.cfg by values from config: flags parse will see these values like the default ones.
 	// It will overwrite them only if the same option is found in command-line: it's ok, command-line has higher priority.
@@ -140,6 +134,16 @@ func NewExecutor(buildInfo BuildInfo) *Executor {
 	}
 	e.debugf("Initialized executor in %s", time.Since(startedAt))
 	return e
+}
+
+func (e *Executor) initCommands() {
+	e.initRoot()
+	e.initRun()
+	e.initHelp()
+	e.initLinters()
+	e.initConfig()
+	e.initVersion()
+	e.initCache()
 }
 
 func (e *Executor) Execute() error {
