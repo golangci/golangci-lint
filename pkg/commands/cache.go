@@ -66,6 +66,19 @@ func (e *Executor) executeCacheStatus(_ *cobra.Command, _ []string) {
 	}
 }
 
+func dirSizeBytes(path string) (int64, error) {
+	var size int64
+	err := filepath.Walk(path, func(_ string, info os.FileInfo, err error) error {
+		if err == nil && !info.IsDir() {
+			size += info.Size()
+		}
+		return err
+	})
+	return size, err
+}
+
+// --- Related to cache but not used directly by the cache command.
+
 func (e *Executor) initHashSalt(version string) error {
 	binSalt, err := computeBinarySalt(version)
 	if err != nil {
@@ -127,15 +140,4 @@ func computeConfigSalt(cfg *config.Config) ([]byte, error) {
 		return nil, err
 	}
 	return h.Sum(nil), nil
-}
-
-func dirSizeBytes(path string) (int64, error) {
-	var size int64
-	err := filepath.Walk(path, func(_ string, info os.FileInfo, err error) error {
-		if err == nil && !info.IsDir() {
-			size += info.Size()
-		}
-		return err
-	})
-	return size, err
 }
