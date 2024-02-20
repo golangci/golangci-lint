@@ -1361,9 +1361,20 @@ linters-settings:
     # Setting locale to US will correct the British spelling of 'colour' to 'color'.
     # Default is to use a neutral variety of English.
     locale: US
+    # Typos to ignore.
+    # Should be in lower case.
     # Default: []
     ignore-words:
       - someword
+    # Extra word corrections.
+    # `typo` and `correction` should only contain letters.
+    # The words are case-insensitive.
+    # Default: []
+    extra-words:
+      - typo: "iff"
+        correction: "if"
+      - typo: "cancelation"
+        correction: "cancellation"
     # Mode of the analysis:
     # - default: checks all the file content.
     # - restricted: checks only comments.

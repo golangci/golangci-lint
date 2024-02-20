@@ -1,0 +1,7 @@
+linters-settings:
+  misspell:
+    extra-words:
+      - typo: "iff"
+        correction: "if"
+      - typo: "cancelation"
+        correction: "cancellation"
