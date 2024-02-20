@@ -28,13 +28,13 @@ func (e *Executor) initHelp() {
 		Short:             "Help about linters",
 		Args:              cobra.NoArgs,
 		ValidArgsFunction: cobra.NoFileCompletions,
-		Run:               e.executeLintersHelp,
+		Run:               e.executeHelp,
 	})
 
 	e.rootCmd.SetHelpCommand(helpCmd)
 }
 
-func (e *Executor) executeLintersHelp(_ *cobra.Command, _ []string) {
+func (e *Executor) executeHelp(_ *cobra.Command, _ []string) {
 	var enabledLCs, disabledLCs []*linter.Config
 	for _, lc := range e.dbManager.GetAllSupportedLinterConfigs() {
 		if lc.Internal {

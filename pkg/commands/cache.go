@@ -33,7 +33,7 @@ func (e *Executor) initCache() {
 		Short:             "Clean cache",
 		Args:              cobra.NoArgs,
 		ValidArgsFunction: cobra.NoFileCompletions,
-		RunE:              e.executeCleanCache,
+		RunE:              e.executeCacheClean,
 	})
 	cacheCmd.AddCommand(&cobra.Command{
 		Use:               "status",
@@ -48,7 +48,7 @@ func (e *Executor) initCache() {
 	e.rootCmd.AddCommand(cacheCmd)
 }
 
-func (e *Executor) executeCleanCache(_ *cobra.Command, _ []string) error {
+func (e *Executor) executeCacheClean(_ *cobra.Command, _ []string) error {
 	cacheDir := cache.DefaultDir()
 	if err := os.RemoveAll(cacheDir); err != nil {
 		return fmt.Errorf("failed to remove dir %s: %w", cacheDir, err)

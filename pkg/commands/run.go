@@ -69,6 +69,79 @@ func (e *Executor) initRun() {
 	e.runCmd = runCmd
 }
 
+// executeRun executes the 'run' CLI command, which runs the linters.
+func (e *Executor) executeRun(_ *cobra.Command, args []string) {
+	needTrackResources := e.cfg.Run.IsVerbose || e.cfg.Run.PrintResourcesUsage
+	trackResourcesEndCh := make(chan struct{})
+	defer func() { // XXX: this defer must be before ctx.cancel defer
+		if needTrackResources { // wait until resource tracking finished to print properly
+			<-trackResourcesEndCh
+		}
+	}()
+
+	ctx, cancel := context.WithTimeout(context.Background(), e.cfg.Run.Timeout)
+	defer cancel()
+
+	if needTrackResources {
+		go watchResources(ctx, trackResourcesEndCh, e.log, e.debugf)
+	}
+
+	if err := e.runAndPrint(ctx, args); err != nil {
+		e.log.Errorf("Running error: %s", err)
+		if e.exitCode == exitcodes.Success {
+			var exitErr *exitcodes.ExitError
+			if errors.As(err, &exitErr) {
+				e.exitCode = exitErr.Code
+			} else {
+				e.exitCode = exitcodes.Failure
+			}
+		}
+	}
+
+	e.setupExitCode(ctx)
+}
+
+func (e *Executor) runAndPrint(ctx context.Context, args []string) error {
+	if err := e.goenv.Discover(ctx); err != nil {
+		e.log.Warnf("Failed to discover go env: %s", err)
+	}
+
+	if !logutils.HaveDebugTag(logutils.DebugKeyLintersOutput) {
+		// Don't allow linters and loader to print anything
+		log.SetOutput(io.Discard)
+		savedStdout, savedStderr := e.setOutputToDevNull()
+		defer func() {
+			os.Stdout, os.Stderr = savedStdout, savedStderr
+		}()
+	}
+
+	issues, err := e.runAnalysis(ctx, args)
+	if err != nil {
+		return err // XXX: don't loose type
+	}
+
+	formats := strings.Split(e.cfg.Output.Format, ",")
+	for _, format := range formats {
+		out := strings.SplitN(format, ":", 2)
+		if len(out) < 2 {
+			out = append(out, "")
+		}
+
+		err := e.printReports(issues, out[1], out[0])
+		if err != nil {
+			return err
+		}
+	}
+
+	e.printStats(issues)
+
+	e.setExitCodeIfIssuesFound(issues)
+
+	e.fileCache.PrintStats(e.log)
+
+	return nil
+}
+
 // runAnalysis executes the linters that have been enabled in the configuration.
 func (e *Executor) runAnalysis(ctx context.Context, args []string) ([]result.Issue, error) {
 	e.cfg.Run.Args = args
@@ -119,47 +192,6 @@ func (e *Executor) setExitCodeIfIssuesFound(issues []result.Issue) {
 	if len(issues) != 0 {
 		e.exitCode = e.cfg.Run.ExitCodeIfIssuesFound
 	}
-}
-
-func (e *Executor) runAndPrint(ctx context.Context, args []string) error {
-	if err := e.goenv.Discover(ctx); err != nil {
-		e.log.Warnf("Failed to discover go env: %s", err)
-	}
-
-	if !logutils.HaveDebugTag(logutils.DebugKeyLintersOutput) {
-		// Don't allow linters and loader to print anything
-		log.SetOutput(io.Discard)
-		savedStdout, savedStderr := e.setOutputToDevNull()
-		defer func() {
-			os.Stdout, os.Stderr = savedStdout, savedStderr
-		}()
-	}
-
-	issues, err := e.runAnalysis(ctx, args)
-	if err != nil {
-		return err // XXX: don't loose type
-	}
-
-	formats := strings.Split(e.cfg.Output.Format, ",")
-	for _, format := range formats {
-		out := strings.SplitN(format, ":", 2)
-		if len(out) < 2 {
-			out = append(out, "")
-		}
-
-		err := e.printReports(issues, out[1], out[0])
-		if err != nil {
-			return err
-		}
-	}
-
-	e.printStats(issues)
-
-	e.setExitCodeIfIssuesFound(issues)
-
-	e.fileCache.PrintStats(e.log)
-
-	return nil
 }
 
 func (e *Executor) printReports(issues []result.Issue, path, format string) error {
@@ -259,38 +291,6 @@ func (e *Executor) printStats(issues []result.Issue) {
 	for _, key := range keys {
 		e.runCmd.Printf("* %s: %d\n", key, stats[key])
 	}
-}
-
-// executeRun executes the 'run' CLI command, which runs the linters.
-func (e *Executor) executeRun(_ *cobra.Command, args []string) {
-	needTrackResources := e.cfg.Run.IsVerbose || e.cfg.Run.PrintResourcesUsage
-	trackResourcesEndCh := make(chan struct{})
-	defer func() { // XXX: this defer must be before ctx.cancel defer
-		if needTrackResources { // wait until resource tracking finished to print properly
-			<-trackResourcesEndCh
-		}
-	}()
-
-	ctx, cancel := context.WithTimeout(context.Background(), e.cfg.Run.Timeout)
-	defer cancel()
-
-	if needTrackResources {
-		go watchResources(ctx, trackResourcesEndCh, e.log, e.debugf)
-	}
-
-	if err := e.runAndPrint(ctx, args); err != nil {
-		e.log.Errorf("Running error: %s", err)
-		if e.exitCode == exitcodes.Success {
-			var exitErr *exitcodes.ExitError
-			if errors.As(err, &exitErr) {
-				e.exitCode = exitErr.Code
-			} else {
-				e.exitCode = exitcodes.Failure
-			}
-		}
-	}
-
-	e.setupExitCode(ctx)
 }
 
 func (e *Executor) setupExitCode(ctx context.Context) {

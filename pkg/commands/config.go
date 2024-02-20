@@ -28,7 +28,7 @@ func (e *Executor) initConfig() {
 		Short:             "Print used config path",
 		Args:              cobra.NoArgs,
 		ValidArgsFunction: cobra.NoFileCompletions,
-		Run:               e.executePathCmd,
+		Run:               e.executePath,
 	}
 
 	fs := pathCmd.Flags()
@@ -38,6 +38,16 @@ func (e *Executor) initConfig() {
 
 	configCmd.AddCommand(pathCmd)
 	e.rootCmd.AddCommand(configCmd)
+}
+
+func (e *Executor) executePath(_ *cobra.Command, _ []string) {
+	usedConfigFile := e.getUsedConfig()
+	if usedConfigFile == "" {
+		e.log.Warnf("No config file detected")
+		os.Exit(exitcodes.NoConfigFileDetected)
+	}
+
+	fmt.Println(usedConfigFile)
 }
 
 // getUsedConfig returns the resolved path to the golangci config file,
@@ -55,16 +65,6 @@ func (e *Executor) getUsedConfig() string {
 	}
 
 	return prettyUsedConfigFile
-}
-
-func (e *Executor) executePathCmd(_ *cobra.Command, _ []string) {
-	usedConfigFile := e.getUsedConfig()
-	if usedConfigFile == "" {
-		e.log.Warnf("No config file detected")
-		os.Exit(exitcodes.NoConfigFileDetected)
-	}
-
-	fmt.Println(usedConfigFile)
 }
 
 func initConfigFileFlagSet(fs *pflag.FlagSet, cfg *config.Run) {

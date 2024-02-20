@@ -32,38 +32,7 @@ func (e *Executor) initVersion() {
 		Short:             "Version",
 		Args:              cobra.NoArgs,
 		ValidArgsFunction: cobra.NoFileCompletions,
-		RunE: func(_ *cobra.Command, _ []string) error {
-			if e.cfg.Version.Debug {
-				info, ok := debug.ReadBuildInfo()
-				if !ok {
-					return nil
-				}
-
-				switch strings.ToLower(e.cfg.Version.Format) {
-				case "json":
-					return json.NewEncoder(os.Stdout).Encode(versionInfo{
-						Info:      e.buildInfo,
-						BuildInfo: info,
-					})
-
-				default:
-					fmt.Println(info.String())
-					return printVersion(os.Stdout, e.buildInfo)
-				}
-			}
-
-			switch strings.ToLower(e.cfg.Version.Format) {
-			case "short":
-				fmt.Println(e.buildInfo.Version)
-				return nil
-
-			case "json":
-				return json.NewEncoder(os.Stdout).Encode(e.buildInfo)
-
-			default:
-				return printVersion(os.Stdout, e.buildInfo)
-			}
-		},
+		RunE:              e.executeVersion,
 	}
 
 	fs := versionCmd.Flags()
@@ -72,6 +41,39 @@ func (e *Executor) initVersion() {
 	initVersionFlagSet(fs, e.cfg)
 
 	e.rootCmd.AddCommand(versionCmd)
+}
+
+func (e *Executor) executeVersion(_ *cobra.Command, _ []string) error {
+	if e.cfg.Version.Debug {
+		info, ok := debug.ReadBuildInfo()
+		if !ok {
+			return nil
+		}
+
+		switch strings.ToLower(e.cfg.Version.Format) {
+		case "json":
+			return json.NewEncoder(os.Stdout).Encode(versionInfo{
+				Info:      e.buildInfo,
+				BuildInfo: info,
+			})
+
+		default:
+			fmt.Println(info.String())
+			return printVersion(os.Stdout, e.buildInfo)
+		}
+	}
+
+	switch strings.ToLower(e.cfg.Version.Format) {
+	case "short":
+		fmt.Println(e.buildInfo.Version)
+		return nil
+
+	case "json":
+		return json.NewEncoder(os.Stdout).Encode(e.buildInfo)
+
+	default:
+		return printVersion(os.Stdout, e.buildInfo)
+	}
 }
 
 func initVersionFlagSet(fs *pflag.FlagSet, cfg *config.Config) {
