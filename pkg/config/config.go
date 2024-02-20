@@ -20,7 +20,8 @@ type Config struct {
 	Linters         Linters
 	Issues          Issues
 	Severity        Severity
-	Version         Version
+
+	Version Version
 
 	InternalCmdTest bool `mapstructure:"internal-cmd-test"` // Option is used only for testing golangci-lint command, don't use it
 	InternalTest    bool // Option is used only for testing golangci-lint code, don't use it
