@@ -60,10 +60,18 @@ func NewExecutor(buildInfo BuildInfo) *Executor {
 		debugf:    logutils.Debug(logutils.DebugKeyExec),
 	}
 
+	e.log = report.NewLogWrapper(logutils.NewStderrLog(logutils.DebugKeyEmpty), &e.reportData)
+
 	// init of commands must be done before config file reading because init sets config with the default values of flags.
 	e.initCommands()
 
+	startedAt := time.Now()
+	e.debugf("Starting execution...")
+
+	e.initConfiguration()
 	e.initExecutor()
+
+	e.debugf("Initialized executor in %s", time.Since(startedAt))
 
 	return e
 }
@@ -78,11 +86,7 @@ func (e *Executor) initCommands() {
 	e.initCache()
 }
 
-func (e *Executor) initExecutor() {
-	startedAt := time.Now()
-	e.debugf("Starting execution...")
-	e.log = report.NewLogWrapper(logutils.NewStderrLog(logutils.DebugKeyEmpty), &e.reportData)
-
+func (e *Executor) initConfiguration() {
 	// to set up log level early we need to parse config from command line extra time to find `-v` option.
 	commandLineCfg, err := getConfigForCommandLine()
 	if err != nil && !errors.Is(err, pflag.ErrHelp) {
@@ -129,8 +133,9 @@ func (e *Executor) initExecutor() {
 	// Slice options must be explicitly set for proper merging of config and command-line options.
 	fixSlicesFlags(e.runCmd.Flags())
 	fixSlicesFlags(e.lintersCmd.Flags())
+}
 
-	// recreate after getting config
+func (e *Executor) initExecutor() {
 	e.dbManager = lintersdb.NewManager(e.cfg, e.log)
 
 	e.enabledLintersSet = lintersdb.NewEnabledSet(e.dbManager,
@@ -153,8 +158,6 @@ func (e *Executor) initExecutor() {
 	if err = e.initHashSalt(e.buildInfo.Version); err != nil {
 		e.log.Fatalf("Failed to init hash salt: %s", err)
 	}
-
-	e.debugf("Initialized executor in %s", time.Since(startedAt))
 }
 
 func (e *Executor) Execute() error {
