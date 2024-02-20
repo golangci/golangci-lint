@@ -33,20 +33,23 @@ func NewEnv(log logutils.Log) *Env {
 	}
 }
 
-func (e *Env) Discover(ctx context.Context) error {
+func (e Env) Discover(ctx context.Context) error {
 	startedAt := time.Now()
-	args := []string{"env", "-json"}
-	args = append(args, string(EnvGoCache), string(EnvGoRoot))
-	out, err := exec.CommandContext(ctx, "go", args...).Output()
+
+	//nolint:gosec // Everything is static here.
+	cmd := exec.CommandContext(ctx, "go", "env", "-json", string(EnvGoCache), string(EnvGoRoot))
+
+	out, err := cmd.Output()
 	if err != nil {
-		return fmt.Errorf("failed to run 'go env': %w", err)
+		return fmt.Errorf("failed to run '%s': %w", strings.Join(cmd.Args, " "), err)
 	}
 
 	if err = json.Unmarshal(out, &e.vars); err != nil {
-		return fmt.Errorf("failed to parse 'go %s' json: %w", strings.Join(args, " "), err)
+		return fmt.Errorf("failed to parse '%s' json: %w", strings.Join(cmd.Args, " "), err)
 	}
 
 	e.debugf("Read go env for %s: %#v", time.Since(startedAt), e.vars)
+
 	return nil
 }
 
