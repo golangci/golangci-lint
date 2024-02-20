@@ -156,7 +156,7 @@ func (e *Executor) getConfigForCommandLine() (*config.Config, error) {
 	// `changed` variable inside string slice vars will be shared.
 	// Use another config variable here, not e.cfg, to not
 	// affect main parsing by this parsing of only config option.
-	e.initRunFlagSet(fs, &cfg)
+	initRunFlagSet(fs, &cfg)
 	initVersionFlagSet(fs, &cfg)
 
 	// Parse max options, even force version option: don't want
