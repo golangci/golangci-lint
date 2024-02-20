@@ -33,12 +33,12 @@ func NewManager(cfg *config.Config, log logutils.Log) *Manager {
 	return m
 }
 
-func (m Manager) GetLinterConfigs(name string) []*linter.Config {
+func (m *Manager) GetLinterConfigs(name string) []*linter.Config {
 	return m.nameToLCs[name]
 }
 
 //nolint:funlen
-func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
+func (m *Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 	var (
 		asasalintCfg        *config.AsasalintSettings
 		bidichkCfg          *config.BiDiChkSettings
@@ -927,7 +927,7 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 	return linters
 }
 
-func (m Manager) GetAllEnabledByDefaultLinters() []*linter.Config {
+func (m *Manager) GetAllEnabledByDefaultLinters() []*linter.Config {
 	var ret []*linter.Config
 	for _, lc := range m.GetAllSupportedLinterConfigs() {
 		if lc.EnabledByDefault {
@@ -938,7 +938,7 @@ func (m Manager) GetAllEnabledByDefaultLinters() []*linter.Config {
 	return ret
 }
 
-func (m Manager) GetAllLinterConfigsForPreset(p string) []*linter.Config {
+func (m *Manager) GetAllLinterConfigsForPreset(p string) []*linter.Config {
 	var ret []*linter.Config
 	for _, lc := range m.GetAllSupportedLinterConfigs() {
 		if lc.IsDeprecated() {
