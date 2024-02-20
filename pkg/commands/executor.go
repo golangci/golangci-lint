@@ -46,8 +46,7 @@ type Executor struct {
 	debugf            logutils.DebugFunc
 	sw                *timeutils.Stopwatch
 
-	loadGuard *load.Guard
-	flock     *flock.Flock
+	flock *flock.Flock
 }
 
 // NewExecutor creates and initializes a new command executor.
@@ -133,21 +132,25 @@ func (e *Executor) initExecutor() {
 
 	e.enabledLintersSet = lintersdb.NewEnabledSet(e.dbManager,
 		lintersdb.NewValidator(e.dbManager), e.log.Child(logutils.DebugKeyLintersDB), e.cfg)
+
 	e.goenv = goutil.NewEnv(e.log.Child(logutils.DebugKeyGoEnv))
+
 	e.fileCache = fsutils.NewFileCache()
 	e.lineCache = fsutils.NewLineCache(e.fileCache)
 
 	e.sw = timeutils.NewStopwatch("pkgcache", e.log.Child(logutils.DebugKeyStopwatch))
+
 	e.pkgCache, err = pkgcache.NewCache(e.sw, e.log.Child(logutils.DebugKeyPkgCache))
 	if err != nil {
 		e.log.Fatalf("Failed to build packages cache: %s", err)
 	}
-	e.loadGuard = load.NewGuard()
+
 	e.contextLoader = lint.NewContextLoader(e.cfg, e.log.Child(logutils.DebugKeyLoader), e.goenv,
-		e.lineCache, e.fileCache, e.pkgCache, e.loadGuard)
+		e.lineCache, e.fileCache, e.pkgCache, load.NewGuard())
 	if err = e.initHashSalt(e.buildInfo.Version); err != nil {
 		e.log.Fatalf("Failed to init hash salt: %s", err)
 	}
+
 	e.debugf("Initialized executor in %s", time.Since(startedAt))
 }
 
