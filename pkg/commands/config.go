@@ -40,8 +40,8 @@ func (e *Executor) initConfig() {
 	cmd.AddCommand(pathCmd)
 }
 
-// getUsedConfig returns the resolved path to the golangci config file, or the empty string
-// if no configuration could be found.
+// getUsedConfig returns the resolved path to the golangci config file,
+// or the empty string if no configuration could be found.
 func (e *Executor) getUsedConfig() string {
 	usedConfigFile := viper.ConfigFileUsed()
 	if usedConfigFile == "" {
