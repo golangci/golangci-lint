@@ -24,14 +24,13 @@ func (e *Executor) initHelp() {
 	}
 	e.rootCmd.SetHelpCommand(helpCmd)
 
-	lintersHelpCmd := &cobra.Command{
+	helpCmd.AddCommand(&cobra.Command{
 		Use:               "linters",
 		Short:             "Help about linters",
 		Args:              cobra.NoArgs,
 		ValidArgsFunction: cobra.NoFileCompletions,
 		Run:               e.executeLintersHelp,
-	}
-	helpCmd.AddCommand(lintersHelpCmd)
+	})
 }
 
 func (e *Executor) executeLintersHelp(_ *cobra.Command, _ []string) {
