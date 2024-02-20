@@ -17,8 +17,8 @@ func Test_appendExtraWords(t *testing.T) {
 			Correction: "if",
 		},
 		{
-			Typo:       "cancelation",
-			Correction: "cancellation",
+			Typo:       "canCELation",
+			Correction: "canceLLaTION",
 		},
 	}
 
