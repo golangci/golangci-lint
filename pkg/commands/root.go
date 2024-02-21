@@ -93,7 +93,7 @@ func (e *Executor) persistentPostRun(_ *cobra.Command, _ []string) error {
 		printMemStats(&ms, e.log)
 
 		if err := pprof.WriteHeapProfile(f); err != nil {
-			return fmt.Errorf("cCan't write heap profile: %w", err)
+			return fmt.Errorf("can't write heap profile: %w", err)
 		}
 		_ = f.Close()
 	}
