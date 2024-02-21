@@ -12,18 +12,18 @@ import (
 type Config struct {
 	cfgDir string // The directory containing the golangci-lint config file.
 
-	Run Run
+	Run Run `mapstructure:"run"`
 
-	Output Output
+	Output Output `mapstructure:"output"`
 
 	LintersSettings LintersSettings `mapstructure:"linters-settings"`
-	Linters         Linters
-	Issues          Issues
-	Severity        Severity
+	Linters         Linters         `mapstructure:"linters"`
+	Issues          Issues          `mapstructure:"issues"`
+	Severity        Severity        `mapstructure:"severity"`
 
-	Version Version
+	Version Version // Flag only. // TODO(ldez) only used by the version command.
 
-	InternalCmdTest bool `mapstructure:"internal-cmd-test"` // Option is used only for testing golangci-lint command, don't use it
+	InternalCmdTest bool // Option is used only for testing golangci-lint command, don't use it
 	InternalTest    bool // Option is used only for testing golangci-lint code, don't use it
 }
 
