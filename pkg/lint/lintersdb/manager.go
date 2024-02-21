@@ -984,14 +984,6 @@ func AllPresets() []string {
 	}
 }
 
-func allPresetsSet() map[string]bool {
-	ret := map[string]bool{}
-	for _, p := range AllPresets() {
-		ret[p] = true
-	}
-	return ret
-}
-
 // Trims the Go version to keep only M.m.
 // Since Go 1.21 the version inside the go.mod can be a patched version (ex: 1.21.0).
 // https://go.dev/doc/toolchain#versions
