@@ -28,7 +28,7 @@ The execution starts here:
 
 ```go title=cmd/golangci-lint/main.go
 func main() {
-	e := commands.NewExecutor(version, commit, date)
+	e := commands.NewExecutor(info)
 
 	if err := e.Execute(); err != nil {
 		fmt.Fprintf(os.Stderr, "failed executing command with error %v\n", err)
@@ -45,7 +45,8 @@ type Executor struct {
 	runCmd     *cobra.Command
 	lintersCmd *cobra.Command
 
-	exitCode              int
+	exitCode  int
+	buildInfo BuildInfo
 
 	cfg               *config.Config
 	log               logutils.Log
@@ -69,9 +70,9 @@ We use dependency injection and all root dependencies are stored in this executo
 
 In the function `NewExecutor` we do the following:
 
-1. init dependencies
-2. init [cobra](https://github.com/spf13/cobra) commands
-3. parse config file using [viper](https://github.com/spf13/viper) and merge it with command line args.
+1. Initialize dependencies.
+2. Initialize [cobra](https://github.com/spf13/cobra) commands.
+3. Parse the config file using [viper](https://github.com/spf13/viper) and merge it with command line arguments.
 
 The following execution is controlled by `cobra`. If a user executes `golangci-lint run`
 then `cobra` executes `e.runCmd`.
@@ -82,19 +83,23 @@ Different `cobra` commands have different runners, e.g. a `run` command is confi
 func (e *Executor) initRun() {
 	e.runCmd = &cobra.Command{
 		Use:   "run",
-		Short: welcomeMessage,
+		Short: "Run the linters",
 		Run:   e.executeRun,
-		PreRun: func(_ *cobra.Command, _ []string) {
+		PreRunE: func(_ *cobra.Command, _ []string) error {
 			if ok := e.acquireFileLock(); !ok {
-				e.log.Fatalf("Parallel golangci-lint is running")
+				return errors.New("parallel golangci-lint is running")
 			}
+			return nil
 		},
 		PostRun: func(_ *cobra.Command, _ []string) {
 			e.releaseFileLock()
 		},
 	}
 	e.rootCmd.AddCommand(e.runCmd)
-	e.runCmd.SetOutput(logutils.StdOut) // use custom output to properly color it in Windows terminals
+
+	e.runCmd.SetOut(logutils.StdOut) // use custom output to properly color it in Windows terminals
+	e.runCmd.SetErr(logutils.StdErr)
+
 	e.initRunConfiguration(e.runCmd)
 }
 ```
@@ -114,13 +119,13 @@ func (cl *ContextLoader) Load(ctx context.Context, linters []*linter.Config) (*l
 	loadMode := cl.findLoadMode(linters)
 	pkgs, err := cl.loadPackages(ctx, loadMode)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to load packages: %w", err)
 	}
 
-    // ...
-    ret := &linter.Context{
-        // ...
-    }
+	// ...
+	ret := &linter.Context{
+		// ...
+	}
 	return ret, nil
 }
 ```
@@ -142,10 +147,11 @@ func (lc *Config) WithLoadFiles() *Config {
 
 If a linter uses `go/analysis` and needs type information, we need to extract more data by `go/packages`:
 
-```go title=/pkg/lint/linter/config.go
+```go title=pkg/lint/linter/config.go
 func (lc *Config) WithLoadForGoAnalysis() *Config {
 	lc = lc.WithLoadFiles()
-	lc.LoadMode |= packages.NeedImports | packages.NeedDeps | packages.NeedExportsFile | packages.NeedTypesSizes
+	lc.LoadMode |= packages.NeedImports | packages.NeedDeps | packages.NeedExportFile | packages.NeedTypesSizes
+	lc.IsSlow = true
 	return lc
 }
 ```
@@ -159,20 +165,24 @@ First, we need to find all enabled linters. All linters are registered here:
 
 ```go title=pkg/lint/lintersdb/manager.go
 func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
-    // ...
-	lcs := []*linter.Config{
-		linter.NewConfig(golinters.NewGovet(govetCfg)).
-			WithLoadForGoAnalysis().
-			WithPresets(linter.PresetBugs).
-			WithAlternativeNames("vet", "vetshadow").
-			WithURL("https://pkg.go.dev/cmd/vet"),
+	// ...
+	linters = append(linters,
+		// ...
 		linter.NewConfig(golinters.NewBodyclose()).
+			WithSince("v1.18.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetPerformance, linter.PresetBugs).
-            WithURL("https://github.com/timakin/bodyclose"),
-        // ...
-    }
-    // ...
+			WithURL("https://github.com/timakin/bodyclose"),
+		// ...
+		linter.NewConfig(golinters.NewGovet(govetCfg)).
+			WithEnabledByDefault().
+			WithSince("v1.0.0").
+			WithLoadForGoAnalysis().
+			WithPresets(linter.PresetBugs, linter.PresetMetaLinter).
+			WithAlternativeNames("vet", "vetshadow").
+			WithURL("https://pkg.go.dev/cmd/vet"),
+	}
+	// ...
 }
 ```
 
@@ -189,9 +199,9 @@ We merge enabled linters into one `MetaLinter` to improve execution time if we c
 // into a fewer number of linters. E.g. some go/analysis linters can be optimized into
 // one metalinter for data reuse and speed up.
 func (es EnabledSet) GetOptimizedLinters() ([]*linter.Config, error) {
-    // ...
-    es.combineGoAnalysisLinters(resultLintersSet)
-    // ...
+	// ...
+	es.combineGoAnalysisLinters(resultLintersSet)
+	// ...
 }
 ```
 
@@ -220,6 +230,8 @@ All found by linters issues are represented with `result.Issue` struct:
 type Issue struct {
 	FromLinter string
 	Text       string
+
+	Severity string
 
 	// Source lines of a code with the issue to show
 	SourceLines []string
@@ -250,8 +262,10 @@ We have an abstraction of `result.Processor` to postprocess found issues:
 ```sh
 $ tree -L 1 ./pkg/result/processors/
 ./pkg/result/processors/
+./pkg/result/processors/
 ├── autogenerated_exclude.go
 ├── autogenerated_exclude_test.go
+├── base_rule.go
 ├── cgo.go
 ├── diff.go
 ├── exclude.go
@@ -262,6 +276,7 @@ $ tree -L 1 ./pkg/result/processors/
 ├── fixer.go
 ├── identifier_marker.go
 ├── identifier_marker_test.go
+├── issues.go
 ├── max_from_linter.go
 ├── max_from_linter_test.go
 ├── max_per_file_from_linter.go
@@ -270,17 +285,23 @@ $ tree -L 1 ./pkg/result/processors/
 ├── max_same_issues_test.go
 ├── nolint.go
 ├── nolint_test.go
+├── path_prefixer.go
+├── path_prefixer_test.go
 ├── path_prettifier.go
 ├── path_shortener.go
 ├── processor.go
+├── processor_test.go
+├── severity_rules.go
+├── severity_rules_test.go
 ├── skip_dirs.go
 ├── skip_files.go
 ├── skip_files_test.go
+├── sort_results.go
+├── sort_results_test.go
 ├── source_code.go
 ├── testdata
 ├── uniq_by_line.go
-├── uniq_by_line_test.go
-└── utils.go
+└── uniq_by_line_test.go
 ```
 
 The abstraction is simple:
@@ -303,14 +324,24 @@ We have an abstraction for printing found issues.
 $ tree -L 1 ./pkg/printers/
 ./pkg/printers/
 ├── checkstyle.go
+├── checkstyle_test.go
 ├── codeclimate.go
+├── codeclimate_test.go
 ├── github.go
 ├── github_test.go
+├── html.go
+├── html_test.go
 ├── json.go
+├── json_test.go
 ├── junitxml.go
+├── junitxml_test.go
 ├── printer.go
 ├── tab.go
-└── text.go
+├── tab_test.go
+├── teamcity.go
+├── teamcity_test.go
+├── text.go
+└── text_test.go
 ```
 
 Needed printer is selected by command line option `--out-format`.
