@@ -35,10 +35,10 @@ type Run struct {
 	MemProfilePath string // Flag only.
 	TracePath      string // Flag only.
 
-	PrintResourcesUsage bool `mapstructure:"print-resources-usage"` // Flag only. // TODO(ldez) need to be enforced.
+	PrintResourcesUsage bool `mapstructure:"print-resources-usage"` // Flag only.
 
 	Config   string // Flag only. The path to the golangci config file, as specified with the --config argument.
 	NoConfig bool   // Flag only.
 
-	Args []string // Flag only. // TODO(ldez) identify the real need and usage.
+	Args []string // Internal needs. // TODO(ldez) it's only use by flags and for the tests, need to removed in another PR.
 }
