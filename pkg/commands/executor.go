@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"runtime"
 	"strings"
 	"time"
 
@@ -83,9 +84,7 @@ func NewExecutor(buildInfo BuildInfo) *Executor {
 	return e
 }
 
-func (e *Executor) initCommands() {
-	e.initRoot()
-}
+func (e *Executor) initCommands() {}
 
 func (e *Executor) initConfiguration() {
 	// to set up log level early we need to parse config from command line extra time to find `-v` option.
@@ -433,4 +432,33 @@ func getDefaultDirectoryExcludeHelp() string {
 	}
 	parts = append(parts, "")
 	return strings.Join(parts, "\n")
+}
+
+// --- Related to root but use here.
+
+// envHelpRun value: "1".
+const envHelpRun = "HELP_RUN"
+
+func getDefaultConcurrency() int {
+	if os.Getenv(envHelpRun) == "1" {
+		// Make stable concurrency for generating help documentation.
+		const prettyConcurrency = 8
+		return prettyConcurrency
+	}
+
+	return runtime.NumCPU()
+}
+
+func initRootFlagSet(fs *pflag.FlagSet, cfg *config.Config) {
+	fs.BoolVarP(&cfg.Run.IsVerbose, "verbose", "v", false, wh("Verbose output"))
+	fs.StringVar(&cfg.Output.Color, "color", "auto", wh("Use color when printing; can be 'always', 'auto', or 'never'"))
+
+	fs.StringVar(&cfg.Run.CPUProfilePath, "cpu-profile-path", "", wh("Path to CPU profile output file"))
+	fs.StringVar(&cfg.Run.MemProfilePath, "mem-profile-path", "", wh("Path to memory profile output file"))
+	fs.StringVar(&cfg.Run.TracePath, "trace-path", "", wh("Path to trace output file"))
+
+	fs.IntVarP(&cfg.Run.Concurrency, "concurrency", "j", getDefaultConcurrency(),
+		wh("Number of CPUs to use (Default: number of logical CPUs)"))
+
+	fs.BoolVar(&cfg.Run.PrintVersion, "version", false, wh("Print version"))
 }
