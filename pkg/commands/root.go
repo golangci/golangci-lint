@@ -2,6 +2,7 @@ package commands
 
 import (
 	"fmt"
+	"io"
 	"os"
 	"runtime"
 	"runtime/pprof"
@@ -157,4 +158,12 @@ func getDefaultConcurrency() int {
 	}
 
 	return runtime.NumCPU()
+}
+
+// --- Related to version but use here.
+
+func printVersion(w io.Writer, buildInfo BuildInfo) error {
+	_, err := fmt.Fprintf(w, "golangci-lint has version %s built with %s from %s on %s\n",
+		buildInfo.Version, buildInfo.GoVersion, buildInfo.Commit, buildInfo.Date)
+	return err
 }

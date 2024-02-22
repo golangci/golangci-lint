@@ -87,7 +87,6 @@ func (e *Executor) initCommands() {
 	e.initHelp()
 	e.initLinters()
 	e.initConfig()
-	e.initVersion()
 }
 
 func (e *Executor) initConfiguration() {
@@ -180,7 +179,6 @@ func getConfigForCommandLine() (*config.Config, error) {
 	// Use another config variable here, not e.cfg, to not
 	// affect main parsing by this parsing of only config option.
 	initRunFlagSet(fs, &cfg)
-	initVersionFlagSet(fs, &cfg)
 
 	// Parse max options, even force version option: don't want
 	// to get access to Executor here: it's error-prone to use
@@ -296,4 +294,13 @@ func computeConfigSalt(cfg *config.Config) ([]byte, error) {
 		return nil, err
 	}
 	return h.Sum(nil), nil
+}
+
+// --- Related to version but use here.
+
+type BuildInfo struct {
+	GoVersion string `json:"goVersion"`
+	Version   string `json:"version"`
+	Commit    string `json:"commit"`
+	Date      string `json:"date"`
 }
