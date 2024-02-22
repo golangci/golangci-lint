@@ -84,7 +84,6 @@ func NewExecutor(buildInfo BuildInfo) *Executor {
 func (e *Executor) initCommands() {
 	e.initRoot()
 	e.initRun()
-	e.initHelp()
 	e.initLinters()
 	e.initConfig()
 }

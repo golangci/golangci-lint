@@ -2,9 +2,11 @@ package commands
 
 import (
 	"fmt"
+	"sort"
 	"strings"
 
 	"github.com/fatih/color"
+	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 
@@ -72,4 +74,33 @@ func initLintersFlagSet(fs *pflag.FlagSet, cfg *config.Linters) {
 	fs.StringSliceVarP(&cfg.Presets, "presets", "p", nil,
 		wh(fmt.Sprintf("Enable presets (%s) of linters. Run 'golangci-lint help linters' to see "+
 			"them. This option implies option --disable-all", strings.Join(lintersdb.AllPresets(), "|"))))
+}
+
+// --- Related to help but use here.
+
+func printLinterConfigs(lcs []*linter.Config) {
+	sort.Slice(lcs, func(i, j int) bool {
+		return lcs[i].Name() < lcs[j].Name()
+	})
+	for _, lc := range lcs {
+		altNamesStr := ""
+		if len(lc.AlternativeNames) != 0 {
+			altNamesStr = fmt.Sprintf(" (%s)", strings.Join(lc.AlternativeNames, ", "))
+		}
+
+		// If the linter description spans multiple lines, truncate everything following the first newline
+		linterDescription := lc.Linter.Desc()
+		firstNewline := strings.IndexRune(linterDescription, '\n')
+		if firstNewline > 0 {
+			linterDescription = linterDescription[:firstNewline]
+		}
+
+		deprecatedMark := ""
+		if lc.IsDeprecated() {
+			deprecatedMark = " [" + color.RedString("deprecated") + "]"
+		}
+
+		fmt.Fprintf(logutils.StdOut, "%s%s%s: %s [fast: %t, auto-fix: %t]\n", color.YellowString(lc.Name()),
+			altNamesStr, deprecatedMark, linterDescription, !lc.IsSlowLinter(), lc.CanAutoFix)
+	}
 }
