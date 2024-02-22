@@ -35,7 +35,4 @@ type Output struct {
 	SortResults         bool   `mapstructure:"sort-results"`
 	PrintWelcomeMessage bool   `mapstructure:"print-welcome"`
 	PathPrefix          string `mapstructure:"path-prefix"`
-
-	// only work with CLI flags because the setup of logs is done before the config file parsing.
-	Color string // Flag only.
 }
