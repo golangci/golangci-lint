@@ -180,6 +180,9 @@ func getFirstPathArg() string {
 	return firstArg
 }
 
+// FIXME just during the dev
+//
+//nolint:dupl
 func (r *FileReader) setupConfigFileSearch() {
 	firstArg := getFirstPathArg()
 	absStartPath, err := filepath.Abs(firstArg)
