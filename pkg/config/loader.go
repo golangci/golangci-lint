@@ -17,6 +17,8 @@ import (
 	"github.com/golangci/golangci-lint/pkg/logutils"
 )
 
+var errConfigDisabled = errors.New("config is disabled by --no-config")
+
 type LoaderOptions struct {
 	Config   string // Flag only. The path to the golangci config file, as specified with the --config argument.
 	NoConfig bool   // Flag only.
@@ -91,7 +93,6 @@ func (r *Loader) evaluateOptions() (string, error) {
 	return configFile, nil
 }
 
-//nolint:dupl // FIXME just during the dev
 func (r *Loader) setupConfigFileSearch() {
 	firstArg := extractFirstPathArg()
 
