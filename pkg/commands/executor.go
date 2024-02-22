@@ -12,6 +12,8 @@ import (
 
 	"github.com/fatih/color"
 	"github.com/gofrs/flock"
+	"github.com/golangci/golangci-lint/pkg/exitcodes"
+	"github.com/golangci/golangci-lint/pkg/packages"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"gopkg.in/yaml.v3"
@@ -83,7 +85,6 @@ func NewExecutor(buildInfo BuildInfo) *Executor {
 
 func (e *Executor) initCommands() {
 	e.initRoot()
-	e.initRun()
 }
 
 func (e *Executor) initConfiguration() {
@@ -300,4 +301,136 @@ type BuildInfo struct {
 	Version   string `json:"version"`
 	Commit    string `json:"commit"`
 	Date      string `json:"date"`
+}
+
+// --- Related to run but use here.
+
+//nolint:gomnd
+func initRunFlagSet(fs *pflag.FlagSet, cfg *config.Config) {
+	fs.BoolVar(&cfg.InternalCmdTest, "internal-cmd-test", false, wh("Option is used only for testing golangci-lint command, don't use it"))
+	if err := fs.MarkHidden("internal-cmd-test"); err != nil {
+		panic(err)
+	}
+
+	// --- Output config
+
+	oc := &cfg.Output
+	fs.StringVar(&oc.Format, "out-format",
+		config.OutFormatColoredLineNumber,
+		wh(fmt.Sprintf("Format of output: %s", strings.Join(config.OutFormats, "|"))))
+	fs.BoolVar(&oc.PrintIssuedLine, "print-issued-lines", true, wh("Print lines of code with issue"))
+	fs.BoolVar(&oc.PrintLinterName, "print-linter-name", true, wh("Print linter name in issue line"))
+	fs.BoolVar(&oc.UniqByLine, "uniq-by-line", true, wh("Make issues output unique by line"))
+	fs.BoolVar(&oc.SortResults, "sort-results", false, wh("Sort linter results"))
+	fs.BoolVar(&oc.PrintWelcomeMessage, "print-welcome", false, wh("Print welcome message"))
+	fs.StringVar(&oc.PathPrefix, "path-prefix", "", wh("Path prefix to add to output"))
+
+	// --- Run config
+
+	rc := &cfg.Run
+
+	// Config file config
+	initConfigFileFlagSet(fs, rc)
+
+	fs.StringVar(&rc.ModulesDownloadMode, "modules-download-mode", "",
+		wh("Modules download mode. If not empty, passed as -mod=<mode> to go tools"))
+	fs.IntVar(&rc.ExitCodeIfIssuesFound, "issues-exit-code",
+		exitcodes.IssuesFound, wh("Exit code when issues were found"))
+	fs.StringVar(&rc.Go, "go", "", wh("Targeted Go version"))
+	fs.StringSliceVar(&rc.BuildTags, "build-tags", nil, wh("Build tags"))
+
+	fs.DurationVar(&rc.Timeout, "timeout", defaultTimeout, wh("Timeout for total work"))
+
+	fs.BoolVar(&rc.AnalyzeTests, "tests", true, wh("Analyze tests (*_test.go)"))
+	fs.BoolVar(&rc.PrintResourcesUsage, "print-resources-usage", false,
+		wh("Print avg and max memory usage of golangci-lint and total time"))
+	fs.StringSliceVar(&rc.SkipDirs, "skip-dirs", nil, wh("Regexps of directories to skip"))
+	fs.BoolVar(&rc.UseDefaultSkipDirs, "skip-dirs-use-default", true, getDefaultDirectoryExcludeHelp())
+	fs.StringSliceVar(&rc.SkipFiles, "skip-files", nil, wh("Regexps of files to skip"))
+
+	const allowParallelDesc = "Allow multiple parallel golangci-lint instances running. " +
+		"If false (default) - golangci-lint acquires file lock on start."
+	fs.BoolVar(&rc.AllowParallelRunners, "allow-parallel-runners", false, wh(allowParallelDesc))
+	const allowSerialDesc = "Allow multiple golangci-lint instances running, but serialize them around a lock. " +
+		"If false (default) - golangci-lint exits with an error if it fails to acquire file lock on start."
+	fs.BoolVar(&rc.AllowSerialRunners, "allow-serial-runners", false, wh(allowSerialDesc))
+	fs.BoolVar(&rc.ShowStats, "show-stats", false, wh("Show statistics per linter"))
+
+	// --- Linters config
+
+	lc := &cfg.Linters
+	initLintersFlagSet(fs, lc)
+
+	// --- Issues config
+
+	ic := &cfg.Issues
+	fs.StringSliceVarP(&ic.ExcludePatterns, "exclude", "e", nil, wh("Exclude issue by regexp"))
+	fs.BoolVar(&ic.UseDefaultExcludes, "exclude-use-default", true, getDefaultIssueExcludeHelp())
+	fs.BoolVar(&ic.ExcludeCaseSensitive, "exclude-case-sensitive", false, wh("If set to true exclude "+
+		"and exclude rules regular expressions are case sensitive"))
+
+	fs.IntVar(&ic.MaxIssuesPerLinter, "max-issues-per-linter", 50,
+		wh("Maximum issues count per one linter. Set to 0 to disable"))
+	fs.IntVar(&ic.MaxSameIssues, "max-same-issues", 3,
+		wh("Maximum count of issues with the same text. Set to 0 to disable"))
+
+	fs.BoolVarP(&ic.Diff, "new", "n", false,
+		wh("Show only new issues: if there are unstaged changes or untracked files, only those changes "+
+			"are analyzed, else only changes in HEAD~ are analyzed.\nIt's a super-useful option for integration "+
+			"of golangci-lint into existing large codebase.\nIt's not practical to fix all existing issues at "+
+			"the moment of integration: much better to not allow issues in new code.\nFor CI setups, prefer "+
+			"--new-from-rev=HEAD~, as --new can skip linting the current patch if any scripts generate "+
+			"unstaged files before golangci-lint runs."))
+	fs.StringVar(&ic.DiffFromRevision, "new-from-rev", "",
+		wh("Show only new issues created after git revision `REV`"))
+	fs.StringVar(&ic.DiffPatchFilePath, "new-from-patch", "",
+		wh("Show only new issues created in git patch with file path `PATH`"))
+	fs.BoolVar(&ic.WholeFiles, "whole-files", false,
+		wh("Show issues in any part of update files (requires new-from-rev or new-from-patch)"))
+	fs.BoolVar(&ic.NeedFix, "fix", false, wh("Fix found issues (if it's supported by the linter)"))
+}
+
+// --- Related to config but use here.
+
+func initConfigFileFlagSet(fs *pflag.FlagSet, cfg *config.Run) {
+	fs.StringVarP(&cfg.Config, "config", "c", "", wh("Read config from file path `PATH`"))
+	fs.BoolVar(&cfg.NoConfig, "no-config", false, wh("Don't read config file"))
+}
+
+// --- Related to linters but use here.
+
+func initLintersFlagSet(fs *pflag.FlagSet, cfg *config.Linters) {
+	fs.StringSliceVarP(&cfg.Disable, "disable", "D", nil, wh("Disable specific linter"))
+	fs.BoolVar(&cfg.DisableAll, "disable-all", false, wh("Disable all linters"))
+	fs.StringSliceVarP(&cfg.Enable, "enable", "E", nil, wh("Enable specific linter"))
+	fs.BoolVar(&cfg.EnableAll, "enable-all", false, wh("Enable all linters"))
+	fs.BoolVar(&cfg.Fast, "fast", false, wh("Enable only fast linters from enabled linters set (first run won't be fast)"))
+	fs.StringSliceVarP(&cfg.Presets, "presets", "p", nil,
+		wh(fmt.Sprintf("Enable presets (%s) of linters. Run 'golangci-lint help linters' to see "+
+			"them. This option implies option --disable-all", strings.Join(lintersdb.AllPresets(), "|"))))
+}
+
+// --- Related to run but use here.
+
+const defaultTimeout = time.Minute
+
+func getDefaultIssueExcludeHelp() string {
+	parts := []string{color.GreenString("Use or not use default excludes:")}
+	for _, ep := range config.DefaultExcludePatterns {
+		parts = append(parts,
+			fmt.Sprintf("  # %s %s: %s", ep.ID, ep.Linter, ep.Why),
+			fmt.Sprintf("  - %s", color.YellowString(ep.Pattern)),
+			"",
+		)
+	}
+	return strings.Join(parts, "\n")
+}
+
+func getDefaultDirectoryExcludeHelp() string {
+	parts := []string{color.GreenString("Use or not use default excluded directories:")}
+	for _, dir := range packages.StdExcludeDirRegexps {
+		parts = append(parts, fmt.Sprintf("  - %s", color.YellowString(dir)))
+	}
+	parts = append(parts, "")
+	return strings.Join(parts, "\n")
 }
