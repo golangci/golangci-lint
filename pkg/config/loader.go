@@ -150,7 +150,7 @@ func (r *Loader) parseConfig() error {
 				return err
 			}
 
-			if err = r.validateConfig(); err != nil {
+			if err = r.cfg.Validate(); err != nil {
 				return fmt.Errorf("can't validate config: %w", err)
 			}
 
@@ -170,7 +170,7 @@ func (r *Loader) parseConfig() error {
 		return fmt.Errorf("can't unmarshal config by viper: %w", err)
 	}
 
-	if err := r.validateConfig(); err != nil {
+	if err := r.cfg.Validate(); err != nil {
 		return fmt.Errorf("can't validate config: %w", err)
 	}
 
@@ -207,26 +207,6 @@ func (r *Loader) setConfigDir() error {
 	}
 
 	r.cfg.cfgDir = usedConfigDir
-
-	return nil
-}
-
-// FIXME move to Config struct.
-func (r *Loader) validateConfig() error {
-	for i, rule := range r.cfg.Issues.ExcludeRules {
-		if err := rule.Validate(); err != nil {
-			return fmt.Errorf("error in exclude rule #%d: %w", i, err)
-		}
-	}
-
-	if len(r.cfg.Severity.Rules) > 0 && r.cfg.Severity.Default == "" {
-		return errors.New("can't set severity rule option: no default severity defined")
-	}
-	for i, rule := range r.cfg.Severity.Rules {
-		if err := rule.Validate(); err != nil {
-			return fmt.Errorf("error in severity rule #%d: %w", i, err)
-		}
-	}
 
 	return nil
 }

@@ -1,6 +1,8 @@
 package config
 
 import (
+	"errors"
+	"fmt"
 	"os"
 	"strings"
 
@@ -30,6 +32,25 @@ type Config struct {
 // GetConfigDir returns the directory that contains golangci config file.
 func (c *Config) GetConfigDir() string {
 	return c.cfgDir
+}
+
+func (c *Config) Validate() error {
+	for i, rule := range c.Issues.ExcludeRules {
+		if err := rule.Validate(); err != nil {
+			return fmt.Errorf("error in exclude rule #%d: %w", i, err)
+		}
+	}
+
+	if len(c.Severity.Rules) > 0 && c.Severity.Default == "" {
+		return errors.New("can't set severity rule option: no default severity defined")
+	}
+	for i, rule := range c.Severity.Rules {
+		if err := rule.Validate(); err != nil {
+			return fmt.Errorf("error in severity rule #%d: %w", i, err)
+		}
+	}
+
+	return nil
 }
 
 func NewDefault() *Config {
