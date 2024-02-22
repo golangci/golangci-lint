@@ -517,3 +517,10 @@ func getDefaultDirectoryExcludeHelp() string {
 	parts = append(parts, "")
 	return strings.Join(parts, "\n")
 }
+
+// --- Related to config but use here.
+
+func initConfigFileFlagSet(fs *pflag.FlagSet, cfg *config.Run) {
+	fs.StringVarP(&cfg.Config, "config", "c", "", wh("Read config from file path `PATH`"))
+	fs.BoolVar(&cfg.NoConfig, "no-config", false, wh("Don't read config file"))
+}

@@ -85,7 +85,6 @@ func (e *Executor) initCommands() {
 	e.initRoot()
 	e.initRun()
 	e.initLinters()
-	e.initConfig()
 }
 
 func (e *Executor) initConfiguration() {
