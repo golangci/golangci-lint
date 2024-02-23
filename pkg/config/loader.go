@@ -49,7 +49,16 @@ func (r *Loader) Load() error {
 		return err
 	}
 
-	return r.parseConfig()
+	err = r.parseConfig()
+	if err != nil {
+		return err
+	}
+
+	if r.cfg.Run.Go == "" {
+		r.cfg.Run.Go = detectGoVersion()
+	}
+
+	return nil
 }
 
 func (r *Loader) setConfigFile() error {

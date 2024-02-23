@@ -154,10 +154,6 @@ func (c *runCommand) persistentPreRunE(_ *cobra.Command, _ []string) error {
 		return fmt.Errorf("can't load config: %w", err)
 	}
 
-	if c.cfg.Run.Go == "" {
-		c.cfg.Run.Go = config.DetectGoVersion()
-	}
-
 	runtime.GOMAXPROCS(c.cfg.Run.Concurrency)
 
 	return c.startTracing()

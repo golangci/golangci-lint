@@ -78,7 +78,7 @@ func IsGoGreaterThanOrEqual(current, limit string) bool {
 	return v1.GreaterThanOrEqual(l)
 }
 
-func DetectGoVersion() string {
+func detectGoVersion() string {
 	file, _ := gomoddirectives.GetModuleFile()
 
 	if file != nil && file.Go != nil && file.Go.Version != "" {
