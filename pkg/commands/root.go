@@ -1,4 +1,4 @@
-package cmder
+package commands
 
 import (
 	"errors"

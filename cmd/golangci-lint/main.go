@@ -5,7 +5,7 @@ import (
 	"os"
 	"runtime/debug"
 
-	"github.com/golangci/golangci-lint/pkg/cmder"
+	"github.com/golangci/golangci-lint/pkg/commands"
 	"github.com/golangci/golangci-lint/pkg/exitcodes"
 )
 
@@ -29,14 +29,14 @@ func main() {
 		}
 	}
 
-	info := cmder.BuildInfo{
+	info := commands.BuildInfo{
 		GoVersion: goVersion,
 		Version:   version,
 		Commit:    commit,
 		Date:      date,
 	}
 
-	if err := cmder.Execute(info); err != nil {
+	if err := commands.Execute(info); err != nil {
 		_, _ = fmt.Fprintf(os.Stderr, "failed executing command with error %v\n", err)
 		os.Exit(exitcodes.Failure)
 	}
