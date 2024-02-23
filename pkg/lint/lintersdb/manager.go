@@ -13,32 +13,28 @@ type Manager struct {
 	cfg *config.Config
 	log logutils.Log
 
-	nameToLCs     map[string][]*linter.Config
+	linters       []*linter.Config
 	customLinters []*linter.Config
+
+	nameToLCs map[string][]*linter.Config
 }
 
 func NewManager(cfg *config.Config, log logutils.Log) *Manager {
-	m := &Manager{cfg: cfg, log: log}
-	m.customLinters = m.getCustomLinterConfigs()
-
-	nameToLCs := make(map[string][]*linter.Config)
-	for _, lc := range m.GetAllSupportedLinterConfigs() {
-		for _, name := range lc.AllNames() {
-			nameToLCs[name] = append(nameToLCs[name], lc)
-		}
+	m := &Manager{
+		cfg:       cfg,
+		log:       log,
+		nameToLCs: map[string][]*linter.Config{},
 	}
 
-	m.nameToLCs = nameToLCs
+	m.loadLinters()
 
 	return m
 }
 
-func (m *Manager) GetLinterConfigs(name string) []*linter.Config {
-	return m.nameToLCs[name]
-}
-
 //nolint:funlen
-func (m *Manager) GetAllSupportedLinterConfigs() []*linter.Config {
+func (m *Manager) loadLinters() {
+	m.customLinters = m.getCustomLinterConfigs()
+
 	var (
 		asasalintCfg        *config.AsasalintSettings
 		bidichkCfg          *config.BiDiChkSettings
@@ -925,12 +921,29 @@ func (m *Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithURL("https://github.com/golangci/golangci-lint/blob/master/pkg/golinters/nolintlint/README.md"),
 	)
 
-	return linters
+	m.linters = linters
+
+	nameToLCs := make(map[string][]*linter.Config)
+	for _, lc := range linters {
+		for _, name := range lc.AllNames() {
+			nameToLCs[name] = append(nameToLCs[name], lc)
+		}
+	}
+
+	m.nameToLCs = nameToLCs
+}
+
+func (m *Manager) GetLinterConfigs(name string) []*linter.Config {
+	return m.nameToLCs[name]
+}
+
+func (m *Manager) GetAllSupportedLinterConfigs() []*linter.Config {
+	return m.linters
 }
 
 func (m *Manager) GetAllEnabledByDefaultLinters() []*linter.Config {
 	var ret []*linter.Config
-	for _, lc := range m.GetAllSupportedLinterConfigs() {
+	for _, lc := range m.linters {
 		if lc.EnabledByDefault {
 			ret = append(ret, lc)
 		}
@@ -941,7 +954,7 @@ func (m *Manager) GetAllEnabledByDefaultLinters() []*linter.Config {
 
 func (m *Manager) GetAllLinterConfigsForPreset(p string) []*linter.Config {
 	var ret []*linter.Config
-	for _, lc := range m.GetAllSupportedLinterConfigs() {
+	for _, lc := range m.linters {
 		if lc.IsDeprecated() {
 			continue
 		}
