@@ -53,7 +53,7 @@ func TestEnabledLinters(t *testing.T) {
 				enable:
 					- revive
 			`,
-			enabledLinters: getEnabledByDefaultFastLintersWith("revive", "gofmt"),
+			enabledLinters: getEnabledByDefaultFastLintersWith("gofmt"),
 		},
 		{
 			name: "fast option in config",
