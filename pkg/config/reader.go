@@ -61,7 +61,8 @@ func (r *FileReader) Read() error {
 
 func (r *FileReader) parseConfig() error {
 	if err := viper.ReadInConfig(); err != nil {
-		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
+		var configFileNotFoundError viper.ConfigFileNotFoundError
+		if errors.As(err, &configFileNotFoundError) {
 			return nil
 		}
 
@@ -116,42 +117,41 @@ func (r *FileReader) parseConfig() error {
 }
 
 func (r *FileReader) validateConfig() error {
-	c := r.cfg
-	if len(c.Run.Args) != 0 {
+	if len(r.cfg.Run.Args) != 0 {
 		return errors.New("option run.args in config isn't supported now")
 	}
 
-	if c.Run.CPUProfilePath != "" {
+	if r.cfg.Run.CPUProfilePath != "" {
 		return errors.New("option run.cpuprofilepath in config isn't allowed")
 	}
 
-	if c.Run.MemProfilePath != "" {
+	if r.cfg.Run.MemProfilePath != "" {
 		return errors.New("option run.memprofilepath in config isn't allowed")
 	}
 
-	if c.Run.TracePath != "" {
+	if r.cfg.Run.TracePath != "" {
 		return errors.New("option run.tracepath in config isn't allowed")
 	}
 
-	if c.Run.IsVerbose {
+	if r.cfg.Run.IsVerbose {
 		return errors.New("can't set run.verbose option with config: only on command-line")
 	}
-	for i, rule := range c.Issues.ExcludeRules {
+
+	for i, rule := range r.cfg.Issues.ExcludeRules {
 		if err := rule.Validate(); err != nil {
 			return fmt.Errorf("error in exclude rule #%d: %w", i, err)
 		}
 	}
-	if len(c.Severity.Rules) > 0 && c.Severity.Default == "" {
+
+	if len(r.cfg.Severity.Rules) > 0 && r.cfg.Severity.Default == "" {
 		return errors.New("can't set severity rule option: no default severity defined")
 	}
-	for i, rule := range c.Severity.Rules {
+	for i, rule := range r.cfg.Severity.Rules {
 		if err := rule.Validate(); err != nil {
 			return fmt.Errorf("error in severity rule #%d: %w", i, err)
 		}
 	}
-	if err := c.LintersSettings.Govet.Validate(); err != nil {
-		return fmt.Errorf("error in govet config: %w", err)
-	}
+
 	return nil
 }
 

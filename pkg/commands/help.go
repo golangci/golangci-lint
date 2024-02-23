@@ -9,6 +9,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
+	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 )
 
@@ -21,16 +22,51 @@ func (e *Executor) initHelp() {
 			return cmd.Help()
 		},
 	}
-	e.rootCmd.SetHelpCommand(helpCmd)
 
-	lintersHelpCmd := &cobra.Command{
+	helpCmd.AddCommand(&cobra.Command{
 		Use:               "linters",
 		Short:             "Help about linters",
 		Args:              cobra.NoArgs,
 		ValidArgsFunction: cobra.NoFileCompletions,
-		Run:               e.executeLintersHelp,
+		Run:               e.executeHelp,
+	})
+
+	e.rootCmd.SetHelpCommand(helpCmd)
+}
+
+func (e *Executor) executeHelp(_ *cobra.Command, _ []string) {
+	var enabledLCs, disabledLCs []*linter.Config
+	for _, lc := range e.dbManager.GetAllSupportedLinterConfigs() {
+		if lc.Internal {
+			continue
+		}
+
+		if lc.EnabledByDefault {
+			enabledLCs = append(enabledLCs, lc)
+		} else {
+			disabledLCs = append(disabledLCs, lc)
+		}
 	}
-	helpCmd.AddCommand(lintersHelpCmd)
+
+	color.Green("Enabled by default linters:\n")
+	printLinterConfigs(enabledLCs)
+	color.Red("\nDisabled by default linters:\n")
+	printLinterConfigs(disabledLCs)
+
+	color.Green("\nLinters presets:")
+	for _, p := range lintersdb.AllPresets() {
+		linters := e.dbManager.GetAllLinterConfigsForPreset(p)
+		var linterNames []string
+		for _, lc := range linters {
+			if lc.Internal {
+				continue
+			}
+
+			linterNames = append(linterNames, lc.Name())
+		}
+		sort.Strings(linterNames)
+		fmt.Fprintf(logutils.StdOut, "%s: %s\n", color.YellowString(p), strings.Join(linterNames, ", "))
+	}
 }
 
 func printLinterConfigs(lcs []*linter.Config) {
@@ -57,40 +93,5 @@ func printLinterConfigs(lcs []*linter.Config) {
 
 		fmt.Fprintf(logutils.StdOut, "%s%s%s: %s [fast: %t, auto-fix: %t]\n", color.YellowString(lc.Name()),
 			altNamesStr, deprecatedMark, linterDescription, !lc.IsSlowLinter(), lc.CanAutoFix)
-	}
-}
-
-func (e *Executor) executeLintersHelp(_ *cobra.Command, _ []string) {
-	var enabledLCs, disabledLCs []*linter.Config
-	for _, lc := range e.DBManager.GetAllSupportedLinterConfigs() {
-		if lc.Internal {
-			continue
-		}
-
-		if lc.EnabledByDefault {
-			enabledLCs = append(enabledLCs, lc)
-		} else {
-			disabledLCs = append(disabledLCs, lc)
-		}
-	}
-
-	color.Green("Enabled by default linters:\n")
-	printLinterConfigs(enabledLCs)
-	color.Red("\nDisabled by default linters:\n")
-	printLinterConfigs(disabledLCs)
-
-	color.Green("\nLinters presets:")
-	for _, p := range e.DBManager.AllPresets() {
-		linters := e.DBManager.GetAllLinterConfigsForPreset(p)
-		var linterNames []string
-		for _, lc := range linters {
-			if lc.Internal {
-				continue
-			}
-
-			linterNames = append(linterNames, lc.Name())
-		}
-		sort.Strings(linterNames)
-		fmt.Fprintf(logutils.StdOut, "%s: %s\n", color.YellowString(p), strings.Join(linterNames, ", "))
 	}
 }

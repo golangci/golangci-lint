@@ -8,20 +8,22 @@ import (
 	"github.com/ldez/gomoddirectives"
 )
 
-// Config encapsulates the config data specified in the golangci yaml config file.
+// Config encapsulates the config data specified in the golangci-lint yaml config file.
 type Config struct {
-	cfgDir string // The directory containing the golangci config file.
-	Run    Run
+	cfgDir string // The directory containing the golangci-lint config file.
 
-	Output Output
+	Run Run `mapstructure:"run"`
+
+	Output Output `mapstructure:"output"`
 
 	LintersSettings LintersSettings `mapstructure:"linters-settings"`
-	Linters         Linters
-	Issues          Issues
-	Severity        Severity
-	Version         Version
+	Linters         Linters         `mapstructure:"linters"`
+	Issues          Issues          `mapstructure:"issues"`
+	Severity        Severity        `mapstructure:"severity"`
 
-	InternalCmdTest bool `mapstructure:"internal-cmd-test"` // Option is used only for testing golangci-lint command, don't use it
+	Version Version // Flag only. // TODO(ldez) only used by the version command.
+
+	InternalCmdTest bool // Option is used only for testing golangci-lint command, don't use it
 	InternalTest    bool // Option is used only for testing golangci-lint code, don't use it
 }
 

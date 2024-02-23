@@ -1,14 +1,9 @@
 package commands
 
 import (
-	"bytes"
-	"context"
-	"crypto/sha256"
 	"errors"
 	"fmt"
-	"io"
 	"os"
-	"path/filepath"
 	"strings"
 	"time"
 
@@ -16,9 +11,7 @@ import (
 	"github.com/gofrs/flock"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
-	"gopkg.in/yaml.v3"
 
-	"github.com/golangci/golangci-lint/internal/cache"
 	"github.com/golangci/golangci-lint/internal/pkgcache"
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/fsutils"
@@ -31,54 +24,71 @@ import (
 	"github.com/golangci/golangci-lint/pkg/timeutils"
 )
 
-type BuildInfo struct {
-	GoVersion string `json:"goVersion"`
-	Version   string `json:"version"`
-	Commit    string `json:"commit"`
-	Date      string `json:"date"`
-}
-
 type Executor struct {
-	rootCmd    *cobra.Command
-	runCmd     *cobra.Command
-	lintersCmd *cobra.Command
+	rootCmd *cobra.Command
 
-	exitCode  int
+	runCmd     *cobra.Command // used by fixSlicesFlags, printStats
+	lintersCmd *cobra.Command // used by fixSlicesFlags
+
+	exitCode int
+
 	buildInfo BuildInfo
 
-	cfg               *config.Config // cfg is the unmarshaled data from the golangci config file.
-	log               logutils.Log
-	reportData        report.Data
-	DBManager         *lintersdb.Manager
-	EnabledLintersSet *lintersdb.EnabledSet
-	contextLoader     *lint.ContextLoader
-	goenv             *goutil.Env
-	fileCache         *fsutils.FileCache
-	lineCache         *fsutils.LineCache
-	pkgCache          *pkgcache.Cache
-	debugf            logutils.DebugFunc
-	sw                *timeutils.Stopwatch
+	cfg *config.Config // cfg is the unmarshaled data from the golangci config file.
 
-	loadGuard *load.Guard
-	flock     *flock.Flock
+	log        logutils.Log
+	debugf     logutils.DebugFunc
+	reportData report.Data
+
+	dbManager         *lintersdb.Manager
+	enabledLintersSet *lintersdb.EnabledSet
+
+	contextLoader *lint.ContextLoader
+	goenv         *goutil.Env
+
+	fileCache *fsutils.FileCache
+	lineCache *fsutils.LineCache
+
+	flock *flock.Flock
 }
 
 // NewExecutor creates and initializes a new command executor.
 func NewExecutor(buildInfo BuildInfo) *Executor {
-	startedAt := time.Now()
 	e := &Executor{
 		cfg:       config.NewDefault(),
 		buildInfo: buildInfo,
-		DBManager: lintersdb.NewManager(nil, nil),
 		debugf:    logutils.Debug(logutils.DebugKeyExec),
 	}
 
-	e.debugf("Starting execution...")
 	e.log = report.NewLogWrapper(logutils.NewStderrLog(logutils.DebugKeyEmpty), &e.reportData)
 
-	// to setup log level early we need to parse config from command line extra time to
-	// find `-v` option
-	commandLineCfg, err := e.getConfigForCommandLine()
+	// init of commands must be done before config file reading because init sets config with the default values of flags.
+	e.initCommands()
+
+	startedAt := time.Now()
+	e.debugf("Starting execution...")
+
+	e.initConfiguration()
+	e.initExecutor()
+
+	e.debugf("Initialized executor in %s", time.Since(startedAt))
+
+	return e
+}
+
+func (e *Executor) initCommands() {
+	e.initRoot()
+	e.initRun()
+	e.initHelp()
+	e.initLinters()
+	e.initConfig()
+	e.initVersion()
+	e.initCache()
+}
+
+func (e *Executor) initConfiguration() {
+	// to set up log level early we need to parse config from command line extra time to find `-v` option.
+	commandLineCfg, err := getConfigForCommandLine()
 	if err != nil && !errors.Is(err, pflag.ErrHelp) {
 		e.log.Fatalf("Can't get config for command line: %s", err)
 	}
@@ -97,19 +107,8 @@ func NewExecutor(buildInfo BuildInfo) *Executor {
 		}
 	}
 
-	// init of commands must be done before config file reading because
-	// init sets config with the default values of flags
-	e.initRoot()
-	e.initRun()
-	e.initHelp()
-	e.initLinters()
-	e.initConfig()
-	e.initVersion()
-	e.initCache()
-
-	// init e.cfg by values from config: flags parse will see these values
-	// like the default ones. It will overwrite them only if the same option
-	// is found in command-line: it's ok, command-line has higher priority.
+	// init e.cfg by values from config: flags parse will see these values like the default ones.
+	// It will overwrite them only if the same option is found in command-line: it's ok, command-line has higher priority.
 
 	r := config.NewFileReader(e.cfg, commandLineCfg, e.log.Child(logutils.DebugKeyConfigReader))
 	if err = r.Read(); err != nil {
@@ -131,135 +130,101 @@ func NewExecutor(buildInfo BuildInfo) *Executor {
 		e.cfg.Run.Go = config.DetectGoVersion()
 	}
 
-	// recreate after getting config
-	e.DBManager = lintersdb.NewManager(e.cfg, e.log)
-
 	// Slice options must be explicitly set for proper merging of config and command-line options.
 	fixSlicesFlags(e.runCmd.Flags())
 	fixSlicesFlags(e.lintersCmd.Flags())
+}
 
-	e.EnabledLintersSet = lintersdb.NewEnabledSet(e.DBManager,
-		lintersdb.NewValidator(e.DBManager), e.log.Child(logutils.DebugKeyLintersDB), e.cfg)
+func (e *Executor) initExecutor() {
+	e.dbManager = lintersdb.NewManager(e.cfg, e.log)
+
+	e.enabledLintersSet = lintersdb.NewEnabledSet(e.dbManager,
+		lintersdb.NewValidator(e.dbManager), e.log.Child(logutils.DebugKeyLintersDB), e.cfg)
+
 	e.goenv = goutil.NewEnv(e.log.Child(logutils.DebugKeyGoEnv))
+
 	e.fileCache = fsutils.NewFileCache()
 	e.lineCache = fsutils.NewLineCache(e.fileCache)
 
-	e.sw = timeutils.NewStopwatch("pkgcache", e.log.Child(logutils.DebugKeyStopwatch))
-	e.pkgCache, err = pkgcache.NewCache(e.sw, e.log.Child(logutils.DebugKeyPkgCache))
+	sw := timeutils.NewStopwatch("pkgcache", e.log.Child(logutils.DebugKeyStopwatch))
+
+	pkgCache, err := pkgcache.NewCache(sw, e.log.Child(logutils.DebugKeyPkgCache))
 	if err != nil {
 		e.log.Fatalf("Failed to build packages cache: %s", err)
 	}
-	e.loadGuard = load.NewGuard()
+
 	e.contextLoader = lint.NewContextLoader(e.cfg, e.log.Child(logutils.DebugKeyLoader), e.goenv,
-		e.lineCache, e.fileCache, e.pkgCache, e.loadGuard)
-	if err = e.initHashSalt(buildInfo.Version); err != nil {
+		e.lineCache, e.fileCache, pkgCache, load.NewGuard())
+
+	if err = initHashSalt(e.buildInfo.Version, e.cfg); err != nil {
 		e.log.Fatalf("Failed to init hash salt: %s", err)
 	}
-	e.debugf("Initialized executor in %s", time.Since(startedAt))
-	return e
 }
 
 func (e *Executor) Execute() error {
 	return e.rootCmd.Execute()
 }
 
-func (e *Executor) initHashSalt(version string) error {
-	binSalt, err := computeBinarySalt(version)
-	if err != nil {
-		return fmt.Errorf("failed to calculate binary salt: %w", err)
+func getConfigForCommandLine() (*config.Config, error) {
+	// We use another pflag.FlagSet here to not set `changed` flag
+	// on cmd.Flags() options. Otherwise, string slice options will be duplicated.
+	fs := pflag.NewFlagSet("config flag set", pflag.ContinueOnError)
+
+	var cfg config.Config
+	// Don't do `fs.AddFlagSet(cmd.Flags())` because it shares flags representations:
+	// `changed` variable inside string slice vars will be shared.
+	// Use another config variable here, not e.cfg, to not
+	// affect main parsing by this parsing of only config option.
+	initRunFlagSet(fs, &cfg)
+	initVersionFlagSet(fs, &cfg)
+
+	// Parse max options, even force version option: don't want
+	// to get access to Executor here: it's error-prone to use
+	// cfg vs e.cfg.
+	initRootFlagSet(fs, &cfg)
+
+	fs.Usage = func() {} // otherwise, help text will be printed twice
+	if err := fs.Parse(os.Args); err != nil {
+		if errors.Is(err, pflag.ErrHelp) {
+			return nil, err
+		}
+
+		return nil, fmt.Errorf("can't parse args: %w", err)
 	}
 
-	configSalt, err := computeConfigSalt(e.cfg)
-	if err != nil {
-		return fmt.Errorf("failed to calculate config salt: %w", err)
-	}
-
-	b := bytes.NewBuffer(binSalt)
-	b.Write(configSalt)
-	cache.SetSalt(b.Bytes())
-	return nil
+	return &cfg, nil
 }
 
-func computeBinarySalt(version string) ([]byte, error) {
-	if version != "" && version != "(devel)" {
-		return []byte(version), nil
-	}
+func fixSlicesFlags(fs *pflag.FlagSet) {
+	// It's a dirty hack to set flag.Changed to true for every string slice flag.
+	// It's necessary to merge config and command-line slices: otherwise command-line
+	// flags will always overwrite ones from the config.
+	fs.VisitAll(func(f *pflag.Flag) {
+		if f.Value.Type() != "stringSlice" {
+			return
+		}
 
-	if logutils.HaveDebugTag(logutils.DebugKeyBinSalt) {
-		return []byte("debug"), nil
-	}
+		s, err := fs.GetStringSlice(f.Name)
+		if err != nil {
+			return
+		}
 
-	p, err := os.Executable()
-	if err != nil {
-		return nil, err
-	}
-	f, err := os.Open(p)
-	if err != nil {
-		return nil, err
-	}
-	defer f.Close()
-	h := sha256.New()
-	if _, err := io.Copy(h, f); err != nil {
-		return nil, err
-	}
-	return h.Sum(nil), nil
+		if s == nil { // assume that every string slice flag has nil as the default
+			return
+		}
+
+		var safe []string
+		for _, v := range s {
+			// add quotes to escape comma because spf13/pflag use a CSV parser:
+			// https://github.com/spf13/pflag/blob/85dd5c8bc61cfa382fecd072378089d4e856579d/string_slice.go#L43
+			safe = append(safe, `"`+v+`"`)
+		}
+
+		// calling Set sets Changed to true: next Set calls will append, not overwrite
+		_ = f.Value.Set(strings.Join(safe, ","))
+	})
 }
 
-func computeConfigSalt(cfg *config.Config) ([]byte, error) {
-	// We don't hash all config fields to reduce meaningless cache
-	// invalidations. At least, it has a huge impact on tests speed.
-
-	lintersSettingsBytes, err := yaml.Marshal(cfg.LintersSettings)
-	if err != nil {
-		return nil, fmt.Errorf("failed to json marshal config linter settings: %w", err)
-	}
-
-	configData := bytes.NewBufferString("linters-settings=")
-	configData.Write(lintersSettingsBytes)
-	configData.WriteString("\nbuild-tags=%s" + strings.Join(cfg.Run.BuildTags, ","))
-
-	h := sha256.New()
-	if _, err := h.Write(configData.Bytes()); err != nil {
-		return nil, err
-	}
-	return h.Sum(nil), nil
-}
-
-func (e *Executor) acquireFileLock() bool {
-	if e.cfg.Run.AllowParallelRunners {
-		e.debugf("Parallel runners are allowed, no locking")
-		return true
-	}
-
-	lockFile := filepath.Join(os.TempDir(), "golangci-lint.lock")
-	e.debugf("Locking on file %s...", lockFile)
-	f := flock.New(lockFile)
-	const retryDelay = time.Second
-
-	ctx := context.Background()
-	if !e.cfg.Run.AllowSerialRunners {
-		const totalTimeout = 5 * time.Second
-		var cancel context.CancelFunc
-		ctx, cancel = context.WithTimeout(ctx, totalTimeout)
-		defer cancel()
-	}
-	if ok, _ := f.TryLockContext(ctx, retryDelay); !ok {
-		return false
-	}
-
-	e.flock = f
-	return true
-}
-
-func (e *Executor) releaseFileLock() {
-	if e.cfg.Run.AllowParallelRunners {
-		return
-	}
-
-	if err := e.flock.Unlock(); err != nil {
-		e.debugf("Failed to unlock on file: %s", err)
-	}
-	if err := os.Remove(e.flock.Path()); err != nil {
-		e.debugf("Failed to remove lock file: %s", err)
-	}
+func wh(text string) string {
+	return color.GreenString(text)
 }

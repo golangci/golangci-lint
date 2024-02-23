@@ -10,10 +10,11 @@ import (
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
+	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
 )
 
 func (e *Executor) initLinters() {
-	e.lintersCmd = &cobra.Command{
+	lintersCmd := &cobra.Command{
 		Use:               "linters",
 		Short:             "List current linters configuration",
 		Args:              cobra.NoArgs,
@@ -21,29 +22,20 @@ func (e *Executor) initLinters() {
 		RunE:              e.executeLinters,
 	}
 
-	fs := e.lintersCmd.Flags()
+	fs := lintersCmd.Flags()
 	fs.SortFlags = false // sort them as they are defined here
 
 	initConfigFileFlagSet(fs, &e.cfg.Run)
-	e.initLintersFlagSet(fs, &e.cfg.Linters)
+	initLintersFlagSet(fs, &e.cfg.Linters)
 
-	e.rootCmd.AddCommand(e.lintersCmd)
-}
+	e.rootCmd.AddCommand(lintersCmd)
 
-func (e *Executor) initLintersFlagSet(fs *pflag.FlagSet, cfg *config.Linters) {
-	fs.StringSliceVarP(&cfg.Disable, "disable", "D", nil, wh("Disable specific linter"))
-	fs.BoolVar(&cfg.DisableAll, "disable-all", false, wh("Disable all linters"))
-	fs.StringSliceVarP(&cfg.Enable, "enable", "E", nil, wh("Enable specific linter"))
-	fs.BoolVar(&cfg.EnableAll, "enable-all", false, wh("Enable all linters"))
-	fs.BoolVar(&cfg.Fast, "fast", false, wh("Enable only fast linters from enabled linters set (first run won't be fast)"))
-	fs.StringSliceVarP(&cfg.Presets, "presets", "p", nil,
-		wh(fmt.Sprintf("Enable presets (%s) of linters. Run 'golangci-lint help linters' to see "+
-			"them. This option implies option --disable-all", strings.Join(e.DBManager.AllPresets(), "|"))))
+	e.lintersCmd = lintersCmd
 }
 
 // executeLinters runs the 'linters' CLI command, which displays the supported linters.
 func (e *Executor) executeLinters(_ *cobra.Command, _ []string) error {
-	enabledLintersMap, err := e.EnabledLintersSet.GetEnabledLintersMap()
+	enabledLintersMap, err := e.enabledLintersSet.GetEnabledLintersMap()
 	if err != nil {
 		return fmt.Errorf("can't get enabled linters: %w", err)
 	}
@@ -51,7 +43,7 @@ func (e *Executor) executeLinters(_ *cobra.Command, _ []string) error {
 	var enabledLinters []*linter.Config
 	var disabledLCs []*linter.Config
 
-	for _, lc := range e.DBManager.GetAllSupportedLinterConfigs() {
+	for _, lc := range e.dbManager.GetAllSupportedLinterConfigs() {
 		if lc.Internal {
 			continue
 		}
@@ -69,4 +61,15 @@ func (e *Executor) executeLinters(_ *cobra.Command, _ []string) error {
 	printLinterConfigs(disabledLCs)
 
 	return nil
+}
+
+func initLintersFlagSet(fs *pflag.FlagSet, cfg *config.Linters) {
+	fs.StringSliceVarP(&cfg.Disable, "disable", "D", nil, wh("Disable specific linter"))
+	fs.BoolVar(&cfg.DisableAll, "disable-all", false, wh("Disable all linters"))
+	fs.StringSliceVarP(&cfg.Enable, "enable", "E", nil, wh("Enable specific linter"))
+	fs.BoolVar(&cfg.EnableAll, "enable-all", false, wh("Enable all linters"))
+	fs.BoolVar(&cfg.Fast, "fast", false, wh("Enable only fast linters from enabled linters set (first run won't be fast)"))
+	fs.StringSliceVarP(&cfg.Presets, "presets", "p", nil,
+		wh(fmt.Sprintf("Enable presets (%s) of linters. Run 'golangci-lint help linters' to see "+
+			"them. This option implies option --disable-all", strings.Join(lintersdb.AllPresets(), "|"))))
 }

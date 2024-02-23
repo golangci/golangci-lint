@@ -3,6 +3,7 @@ package lintersdb
 import (
 	"errors"
 	"fmt"
+	"slices"
 	"strings"
 
 	"github.com/golangci/golangci-lint/pkg/config"
@@ -39,11 +40,12 @@ func (v Validator) validateLintersNames(cfg *config.Linters) error {
 }
 
 func (v Validator) validatePresets(cfg *config.Linters) error {
-	allPresets := v.m.allPresetsSet()
+	presets := AllPresets()
+
 	for _, p := range cfg.Presets {
-		if !allPresets[p] {
+		if !slices.Contains(presets, p) {
 			return fmt.Errorf("no such preset %q: only next presets exist: (%s)",
-				p, strings.Join(v.m.AllPresets(), "|"))
+				p, strings.Join(presets, "|"))
 		}
 	}
 

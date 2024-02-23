@@ -4,18 +4,9 @@ import "time"
 
 // Run encapsulates the config options for running the linter analysis.
 type Run struct {
-	IsVerbose           bool `mapstructure:"verbose"`
-	Silent              bool
-	CPUProfilePath      string
-	MemProfilePath      string
-	TracePath           string
-	Concurrency         int
-	PrintResourcesUsage bool `mapstructure:"print-resources-usage"`
+	Timeout time.Duration `mapstructure:"timeout"`
 
-	Config   string // The path to the golangci config file, as specified with the --config argument.
-	NoConfig bool
-
-	Args []string
+	Concurrency int `mapstructure:"concurrency"`
 
 	Go string `mapstructure:"go"`
 
@@ -25,12 +16,6 @@ type Run struct {
 	ExitCodeIfIssuesFound int  `mapstructure:"issues-exit-code"`
 	AnalyzeTests          bool `mapstructure:"tests"`
 
-	// Deprecated: Deadline exists for historical compatibility
-	// and should not be used. To set run timeout use Timeout instead.
-	Deadline time.Duration
-	Timeout  time.Duration
-
-	PrintVersion       bool
 	SkipFiles          []string `mapstructure:"skip-files"`
 	SkipDirs           []string `mapstructure:"skip-dirs"`
 	UseDefaultSkipDirs bool     `mapstructure:"skip-dirs-use-default"`
@@ -39,4 +24,21 @@ type Run struct {
 	AllowSerialRunners   bool `mapstructure:"allow-serial-runners"`
 
 	ShowStats bool `mapstructure:"show-stats"`
+
+	// --- Flags only section.
+
+	IsVerbose bool `mapstructure:"verbose"` // Flag only
+
+	PrintVersion bool // Flag only. (used by the root command)
+
+	CPUProfilePath string // Flag only.
+	MemProfilePath string // Flag only.
+	TracePath      string // Flag only.
+
+	PrintResourcesUsage bool `mapstructure:"print-resources-usage"` // Flag only. // TODO(ldez) need to be enforced.
+
+	Config   string // Flag only. The path to the golangci config file, as specified with the --config argument.
+	NoConfig bool   // Flag only.
+
+	Args []string // Flag only. // TODO(ldez) identify the real need and usage.
 }

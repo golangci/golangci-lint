@@ -33,38 +33,12 @@ func NewManager(cfg *config.Config, log logutils.Log) *Manager {
 	return m
 }
 
-func (Manager) AllPresets() []string {
-	return []string{
-		linter.PresetBugs,
-		linter.PresetComment,
-		linter.PresetComplexity,
-		linter.PresetError,
-		linter.PresetFormatting,
-		linter.PresetImport,
-		linter.PresetMetaLinter,
-		linter.PresetModule,
-		linter.PresetPerformance,
-		linter.PresetSQL,
-		linter.PresetStyle,
-		linter.PresetTest,
-		linter.PresetUnused,
-	}
-}
-
-func (m Manager) allPresetsSet() map[string]bool {
-	ret := map[string]bool{}
-	for _, p := range m.AllPresets() {
-		ret[p] = true
-	}
-	return ret
-}
-
-func (m Manager) GetLinterConfigs(name string) []*linter.Config {
+func (m *Manager) GetLinterConfigs(name string) []*linter.Config {
 	return m.nameToLCs[name]
 }
 
 //nolint:funlen
-func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
+func (m *Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 	var (
 		asasalintCfg        *config.AsasalintSettings
 		bidichkCfg          *config.BiDiChkSettings
@@ -953,11 +927,29 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 	return linters
 }
 
-func (m Manager) GetAllEnabledByDefaultLinters() []*linter.Config {
+func (m *Manager) GetAllEnabledByDefaultLinters() []*linter.Config {
 	var ret []*linter.Config
 	for _, lc := range m.GetAllSupportedLinterConfigs() {
 		if lc.EnabledByDefault {
 			ret = append(ret, lc)
+		}
+	}
+
+	return ret
+}
+
+func (m *Manager) GetAllLinterConfigsForPreset(p string) []*linter.Config {
+	var ret []*linter.Config
+	for _, lc := range m.GetAllSupportedLinterConfigs() {
+		if lc.IsDeprecated() {
+			continue
+		}
+
+		for _, ip := range lc.InPresets {
+			if p == ip {
+				ret = append(ret, lc)
+				break
+			}
 		}
 	}
 
@@ -974,22 +966,22 @@ func linterConfigsToMap(lcs []*linter.Config) map[string]*linter.Config {
 	return ret
 }
 
-func (m Manager) GetAllLinterConfigsForPreset(p string) []*linter.Config {
-	var ret []*linter.Config
-	for _, lc := range m.GetAllSupportedLinterConfigs() {
-		if lc.IsDeprecated() {
-			continue
-		}
-
-		for _, ip := range lc.InPresets {
-			if p == ip {
-				ret = append(ret, lc)
-				break
-			}
-		}
+func AllPresets() []string {
+	return []string{
+		linter.PresetBugs,
+		linter.PresetComment,
+		linter.PresetComplexity,
+		linter.PresetError,
+		linter.PresetFormatting,
+		linter.PresetImport,
+		linter.PresetMetaLinter,
+		linter.PresetModule,
+		linter.PresetPerformance,
+		linter.PresetSQL,
+		linter.PresetStyle,
+		linter.PresetTest,
+		linter.PresetUnused,
 	}
-
-	return ret
 }
 
 // Trims the Go version to keep only M.m.

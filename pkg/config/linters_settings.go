@@ -21,6 +21,12 @@ var defaultLintersSettings = LintersSettings{
 	Dogsled: DogsledSettings{
 		MaxBlankIdentifiers: 2,
 	},
+	Dupl: DuplSettings{
+		Threshold: 150,
+	},
+	Errcheck: ErrcheckSettings{
+		Ignore: "fmt:.*",
+	},
 	ErrorLint: ErrorLintSettings{
 		Errorf:      true,
 		ErrorfMulti: true,
@@ -46,8 +52,19 @@ var defaultLintersSettings = LintersSettings{
 	Gocognit: GocognitSettings{
 		MinComplexity: 30,
 	},
+	Goconst: GoConstSettings{
+		MatchWithConstants:  true,
+		MinStringLen:        3,
+		MinOccurrencesCount: 3,
+		NumberMin:           3,
+		NumberMax:           3,
+		IgnoreCalls:         true,
+	},
 	Gocritic: GoCriticSettings{
 		SettingsPerCheck: map[string]GoCriticCheckSettings{},
+	},
+	Gocyclo: GoCycloSettings{
+		MinComplexity: 30,
 	},
 	Godox: GodoxSettings{
 		Keywords: []string{},
@@ -56,10 +73,16 @@ var defaultLintersSettings = LintersSettings{
 		Scope:  "declarations",
 		Period: true,
 	},
+	Gofmt: GoFmtSettings{
+		Simplify: true,
+	},
 	Gofumpt: GofumptSettings{
 		LangVersion: "",
 		ModulePath:  "",
 		ExtraRules:  false,
+	},
+	Golint: GoLintSettings{
+		MinConfidence: 0.8,
 	},
 	Gosec: GoSecSettings{
 		Concurrency: runtime.NumCPU(),
@@ -583,6 +606,7 @@ type GovetSettings struct {
 }
 
 func (cfg *GovetSettings) Validate() error {
+	// TODO(ldez) need to be move into the linter file.
 	if cfg.EnableAll && cfg.DisableAll {
 		return errors.New("enable-all and disable-all can't be combined")
 	}

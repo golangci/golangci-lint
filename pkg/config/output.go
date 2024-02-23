@@ -28,7 +28,7 @@ var OutFormats = []string{
 }
 
 type Output struct {
-	Format              string
+	Format              string `mapstructure:"format"`
 	PrintIssuedLine     bool   `mapstructure:"print-issued-lines"`
 	PrintLinterName     bool   `mapstructure:"print-linter-name"`
 	UniqByLine          bool   `mapstructure:"uniq-by-line"`
@@ -37,5 +37,5 @@ type Output struct {
 	PathPrefix          string `mapstructure:"path-prefix"`
 
 	// only work with CLI flags because the setup of logs is done before the config file parsing.
-	Color string
+	Color string // Flag only.
 }

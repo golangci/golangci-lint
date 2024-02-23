@@ -54,20 +54,6 @@ func TestSymlinkLoop(t *testing.T) {
 		ExpectNoIssues()
 }
 
-// TODO(ldez): remove this in v2.
-func TestDeadline(t *testing.T) {
-	projectRoot := filepath.Join("..", "...")
-
-	testshared.NewRunnerBuilder(t).
-		WithArgs("--deadline=1ms").
-		WithTargetPath(projectRoot).
-		Runner().
-		Install().
-		Run().
-		ExpectExitCode(exitcodes.Timeout).
-		ExpectOutputContains(`Timeout exceeded: try increasing it by passing --timeout option`)
-}
-
 func TestTimeout(t *testing.T) {
 	projectRoot := filepath.Join("..", "...")
 
@@ -82,43 +68,21 @@ func TestTimeout(t *testing.T) {
 }
 
 func TestTimeoutInConfig(t *testing.T) {
-	cases := []struct {
-		cfg string
-	}{
-		{
-			cfg: `
-				run:
-					deadline: 1ms
-			`,
-		},
-		{
-			cfg: `
-				run:
-					timeout: 1ms
-			`,
-		},
-		{
-			// timeout should override deadline
-			cfg: `
-				run:
-					deadline: 100s
-					timeout: 1ms
-			`,
-		},
-	}
-
 	testshared.InstallGolangciLint(t)
 
-	for _, c := range cases {
-		// Run with disallowed option set only in config
-		testshared.NewRunnerBuilder(t).
-			WithConfig(c.cfg).
-			WithTargetPath(testdataDir, minimalPkg).
-			Runner().
-			Run().
-			ExpectExitCode(exitcodes.Timeout).
-			ExpectOutputContains(`Timeout exceeded: try increasing it by passing --timeout option`)
-	}
+	cfg := `
+				run:
+					timeout: 1ms
+			`
+
+	// Run with disallowed option set only in config
+	testshared.NewRunnerBuilder(t).
+		WithConfig(cfg).
+		WithTargetPath(testdataDir, minimalPkg).
+		Runner().
+		Run().
+		ExpectExitCode(exitcodes.Timeout).
+		ExpectOutputContains(`Timeout exceeded: try increasing it by passing --timeout option`)
 }
 
 func TestTestsAreLintedByDefault(t *testing.T) {

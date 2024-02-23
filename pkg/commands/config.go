@@ -14,7 +14,7 @@ import (
 )
 
 func (e *Executor) initConfig() {
-	cmd := &cobra.Command{
+	configCmd := &cobra.Command{
 		Use:   "config",
 		Short: "Config file information",
 		Args:  cobra.NoArgs,
@@ -22,26 +22,34 @@ func (e *Executor) initConfig() {
 			return cmd.Help()
 		},
 	}
-	e.rootCmd.AddCommand(cmd)
 
 	pathCmd := &cobra.Command{
 		Use:               "path",
 		Short:             "Print used config path",
 		Args:              cobra.NoArgs,
 		ValidArgsFunction: cobra.NoFileCompletions,
-		Run:               e.executePathCmd,
+		Run:               e.executePath,
 	}
 
 	fs := pathCmd.Flags()
 	fs.SortFlags = false // sort them as they are defined here
 
-	initConfigFileFlagSet(fs, &e.cfg.Run)
-
-	cmd.AddCommand(pathCmd)
+	configCmd.AddCommand(pathCmd)
+	e.rootCmd.AddCommand(configCmd)
 }
 
-// getUsedConfig returns the resolved path to the golangci config file, or the empty string
-// if no configuration could be found.
+func (e *Executor) executePath(_ *cobra.Command, _ []string) {
+	usedConfigFile := e.getUsedConfig()
+	if usedConfigFile == "" {
+		e.log.Warnf("No config file detected")
+		os.Exit(exitcodes.NoConfigFileDetected)
+	}
+
+	fmt.Println(usedConfigFile)
+}
+
+// getUsedConfig returns the resolved path to the golangci config file,
+// or the empty string if no configuration could be found.
 func (e *Executor) getUsedConfig() string {
 	usedConfigFile := viper.ConfigFileUsed()
 	if usedConfigFile == "" {
@@ -57,15 +65,7 @@ func (e *Executor) getUsedConfig() string {
 	return prettyUsedConfigFile
 }
 
-func (e *Executor) executePathCmd(_ *cobra.Command, _ []string) {
-	usedConfigFile := e.getUsedConfig()
-	if usedConfigFile == "" {
-		e.log.Warnf("No config file detected")
-		os.Exit(exitcodes.NoConfigFileDetected)
-	}
-
-	fmt.Println(usedConfigFile)
-}
+// --- Related to config but not used directly by the config command.
 
 func initConfigFileFlagSet(fs *pflag.FlagSet, cfg *config.Run) {
 	fs.StringVarP(&cfg.Config, "config", "c", "", wh("Read config from file path `PATH`"))

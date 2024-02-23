@@ -139,6 +139,11 @@ var (
 func NewGovet(settings *config.GovetSettings) *goanalysis.Linter {
 	var conf map[string]map[string]any
 	if settings != nil {
+		err := settings.Validate()
+		if err != nil {
+			linterLogger.Fatalf("govet configuration: %v", err)
+		}
+
 		conf = settings.Settings
 	}
 
