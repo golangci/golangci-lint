@@ -1,8 +1,6 @@
 package lintersdb
 
 import (
-	"regexp"
-
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/golinters"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
@@ -807,22 +805,4 @@ func AllPresets() []string {
 		linter.PresetTest,
 		linter.PresetUnused,
 	}
-}
-
-// Trims the Go version to keep only M.m.
-// Since Go 1.21 the version inside the go.mod can be a patched version (ex: 1.21.0).
-// https://go.dev/doc/toolchain#versions
-// This a problem with staticcheck and gocritic.
-func trimGoVersion(v string) string {
-	if v == "" {
-		return ""
-	}
-
-	exp := regexp.MustCompile(`(\d\.\d+)(?:\.\d+|[a-z]+\d)`)
-
-	if exp.MatchString(v) {
-		return exp.FindStringSubmatch(v)[1]
-	}
-
-	return v
 }

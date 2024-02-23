@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"regexp"
 	"strings"
 
 	hcversion "github.com/hashicorp/go-version"
@@ -89,4 +90,22 @@ func detectGoVersion() string {
 	}
 
 	return "1.17"
+}
+
+// Trims the Go version to keep only M.m.
+// Since Go 1.21 the version inside the go.mod can be a patched version (ex: 1.21.0).
+// https://go.dev/doc/toolchain#versions
+// This a problem with staticcheck and gocritic.
+func trimGoVersion(v string) string {
+	if v == "" {
+		return ""
+	}
+
+	exp := regexp.MustCompile(`(\d\.\d+)(?:\.\d+|[a-z]+\d)`)
+
+	if exp.MatchString(v) {
+		return exp.FindStringSubmatch(v)[1]
+	}
+
+	return v
 }

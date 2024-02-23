@@ -59,11 +59,35 @@ func (l *Loader) Load() error {
 
 	l.applyStringSliceHack()
 
+	l.handleGoVersion()
+
+	return nil
+}
+
+func (l *Loader) handleGoVersion() {
 	if l.cfg.Run.Go == "" {
 		l.cfg.Run.Go = detectGoVersion()
 	}
 
-	return nil
+	l.cfg.LintersSettings.Govet.Go = l.cfg.Run.Go
+
+	l.cfg.LintersSettings.ParallelTest.Go = l.cfg.Run.Go
+
+	l.cfg.LintersSettings.Gocritic.Go = trimGoVersion(l.cfg.Run.Go)
+	if l.cfg.LintersSettings.Gofumpt.LangVersion == "" {
+		l.cfg.LintersSettings.Gofumpt.LangVersion = l.cfg.Run.Go
+	}
+
+	// staticcheck related linters.
+	if l.cfg.LintersSettings.Staticcheck.GoVersion == "" {
+		l.cfg.LintersSettings.Staticcheck.GoVersion = trimGoVersion(l.cfg.Run.Go)
+	}
+	if l.cfg.LintersSettings.Gosimple.GoVersion == "" {
+		l.cfg.LintersSettings.Gosimple.GoVersion = trimGoVersion(l.cfg.Run.Go)
+	}
+	if l.cfg.LintersSettings.Stylecheck.GoVersion != "" {
+		l.cfg.LintersSettings.Stylecheck.GoVersion = trimGoVersion(l.cfg.Run.Go)
+	}
 }
 
 func (l *Loader) setConfigFile() error {
