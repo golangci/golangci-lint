@@ -66,8 +66,9 @@ func newRootCommand(info BuildInfo) *rootCommand {
 		newCacheCommand().cmd,
 		newConfigCommand(log, config.NewDefault()).cmd,
 		newVersionCommand(info).cmd,
-		newHelpCommand(log, config.NewDefault()).cmd,
 	)
+
+	rootCmd.SetHelpCommand(newHelpCommand(log, config.NewDefault()).cmd)
 
 	c.log = log
 	c.cmd = rootCmd
