@@ -17,16 +17,13 @@ type configCommand struct {
 	viper *viper.Viper
 	cmd   *cobra.Command
 
-	cfg *config.Config
-
 	log logutils.Log
 }
 
-func newConfigCommand(log logutils.Log, cfg *config.Config) *configCommand {
+func newConfigCommand(log logutils.Log) *configCommand {
 	c := &configCommand{
 		viper: viper.New(),
 		log:   log,
-		cfg:   cfg,
 	}
 
 	configCmd := &cobra.Command{
@@ -55,7 +52,9 @@ func newConfigCommand(log logutils.Log, cfg *config.Config) *configCommand {
 }
 
 func (c *configCommand) preRunE(_ *cobra.Command, _ []string) error {
-	loader := config.NewLoader(c.log.Child(logutils.DebugKeyConfigReader), c.viper, config.LoaderOptions{}, c.cfg)
+	// The command doesn't depend on the real configuration.
+	// It only needs to know the path of the configuration file.
+	loader := config.NewLoader(c.log.Child(logutils.DebugKeyConfigReader), c.viper, config.LoaderOptions{}, config.NewDefault())
 
 	if err := loader.Load(); err != nil {
 		return fmt.Errorf("can't load config: %w", err)

@@ -64,11 +64,11 @@ func newRootCommand(info BuildInfo) *rootCommand {
 		newLintersCommand(log, config.NewDefault()).cmd,
 		newRunCommand(log, config.NewDefault(), reportData, info).cmd,
 		newCacheCommand().cmd,
-		newConfigCommand(log, config.NewDefault()).cmd,
+		newConfigCommand(log).cmd,
 		newVersionCommand(info).cmd,
 	)
 
-	rootCmd.SetHelpCommand(newHelpCommand(log, config.NewDefault()).cmd)
+	rootCmd.SetHelpCommand(newHelpCommand(log).cmd)
 
 	c.log = log
 	c.cmd = rootCmd
