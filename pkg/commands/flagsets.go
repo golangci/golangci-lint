@@ -15,16 +15,17 @@ import (
 )
 
 func setupLintersFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
-	internal.VibraP(v, fs, fs.StringSliceP, "disable", "D", "linters.disable", nil, wh("Disable specific linter"))
+	fs.StringSliceP("disable", "D", nil, wh("Disable specific linter")) // Hack see Loader.applyStringSliceHack
 	internal.Vibra(v, fs, fs.Bool, "disable-all", "linters.disable-all", false, wh("Disable all linters"))
 
-	internal.VibraP(v, fs, fs.StringSliceP, "enable", "E", "linters.enable", nil, wh("Enable specific linter"))
+	fs.StringSliceP("enable", "E", nil, wh("Enable specific linter")) // Hack see Loader.applyStringSliceHack
 	internal.Vibra(v, fs, fs.Bool, "enable-all", "linters.enable-all", false, wh("Enable all linters"))
 
 	internal.Vibra(v, fs, fs.Bool, "fast", "linters.fast", false,
 		wh("Enable only fast linters from enabled linters set (first run won't be fast)"))
 
-	internal.VibraP(v, fs, fs.StringSliceP, "presets", "p", "linters.presets", nil,
+	// Hack see Loader.applyStringSliceHack
+	fs.StringSliceP("presets", "p", nil,
 		wh(fmt.Sprintf("Enable presets (%s) of linters. Run 'golangci-lint help linters' to see "+
 			"them. This option implies option --disable-all", strings.Join(lintersdb.AllPresets(), "|"))))
 }
@@ -38,14 +39,14 @@ func setupRunFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
 	internal.Vibra(v, fs, fs.Int, "issues-exit-code", "run.issues-exit-code", exitcodes.IssuesFound,
 		wh("Exit code when issues were found"))
 	internal.Vibra(v, fs, fs.String, "go", "run.go", "", wh("Targeted Go version"))
-	internal.Vibra(v, fs, fs.StringSlice, "build-tags", "run.build-tags", nil, wh("Build tags"))
+	fs.StringSlice("build-tags", nil, wh("Build tags")) // Hack see Loader.applyStringSliceHack
 
 	internal.Vibra(v, fs, fs.Duration, "timeout", "run.timeout", defaultTimeout, wh("Timeout for total work"))
 
 	internal.Vibra(v, fs, fs.Bool, "tests", "run.tests", true, wh("Analyze tests (*_test.go)"))
-	internal.Vibra(v, fs, fs.StringSlice, "skip-dirs", "run.skip-dirs", nil, wh("Regexps of directories to skip"))
+	fs.StringSlice("skip-dirs", nil, wh("Regexps of directories to skip")) // Hack see Loader.applyStringSliceHack
 	internal.Vibra(v, fs, fs.Bool, "skip-dirs-use-default", "run.skip-dirs-use-default", true, getDefaultDirectoryExcludeHelp())
-	internal.Vibra(v, fs, fs.StringSlice, "skip-files", "run.skip-files", nil, wh("Regexps of files to skip"))
+	fs.StringSlice("skip-files", nil, wh("Regexps of files to skip")) // Hack see Loader.applyStringSliceHack
 
 	const allowParallelDesc = "Allow multiple parallel golangci-lint instances running. " +
 		"If false (default) - golangci-lint acquires file lock on start."
@@ -69,7 +70,7 @@ func setupOutputFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
 
 //nolint:gomnd
 func setupIssuesFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
-	internal.VibraP(v, fs, fs.StringSliceP, "exclude", "e", "issues.exclude", nil, wh("Exclude issue by regexp"))
+	fs.StringSliceP("exclude", "e", nil, wh("Exclude issue by regexp")) // Hack see Loader.applyStringSliceHack
 	internal.Vibra(v, fs, fs.Bool, "exclude-use-default", "issues.exclude-use-default", true, getDefaultIssueExcludeHelp())
 	internal.Vibra(v, fs, fs.Bool, "exclude-case-sensitive", "issues.exclude-case-sensitive", false,
 		wh("If set to true exclude and exclude rules regular expressions are case-sensitive"))

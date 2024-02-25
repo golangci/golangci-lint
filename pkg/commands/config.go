@@ -51,10 +51,10 @@ func newConfigCommand(log logutils.Log) *configCommand {
 	return c
 }
 
-func (c *configCommand) preRunE(_ *cobra.Command, _ []string) error {
+func (c *configCommand) preRunE(cmd *cobra.Command, _ []string) error {
 	// The command doesn't depend on the real configuration.
 	// It only needs to know the path of the configuration file.
-	loader := config.NewLoader(c.log.Child(logutils.DebugKeyConfigReader), c.viper, config.LoaderOptions{}, config.NewDefault())
+	loader := config.NewLoader(c.log.Child(logutils.DebugKeyConfigReader), c.viper, cmd.Flags(), config.LoaderOptions{}, config.NewDefault())
 
 	if err := loader.Load(); err != nil {
 		return fmt.Errorf("can't load config: %w", err)

@@ -10,6 +10,7 @@ import (
 
 	"github.com/go-viper/mapstructure/v2"
 	"github.com/mitchellh/go-homedir"
+	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 
 	"github.com/golangci/golangci-lint/pkg/exitcodes"
@@ -28,16 +29,18 @@ type Loader struct {
 	opts LoaderOptions
 
 	viper *viper.Viper
+	fs    *pflag.FlagSet
 
 	log logutils.Log
 
 	cfg *Config
 }
 
-func NewLoader(log logutils.Log, v *viper.Viper, opts LoaderOptions, cfg *Config) *Loader {
+func NewLoader(log logutils.Log, v *viper.Viper, fs *pflag.FlagSet, opts LoaderOptions, cfg *Config) *Loader {
 	return &Loader{
 		opts:  opts,
 		viper: v,
+		fs:    fs,
 		log:   log,
 		cfg:   cfg,
 	}
@@ -53,6 +56,8 @@ func (r *Loader) Load() error {
 	if err != nil {
 		return err
 	}
+
+	r.applyStringSliceHack()
 
 	if r.cfg.Run.Go == "" {
 		r.cfg.Run.Go = detectGoVersion()
@@ -218,6 +223,31 @@ func (r *Loader) setConfigDir() error {
 	r.cfg.cfgDir = usedConfigDir
 
 	return nil
+}
+
+// Hack to append values from StringSlice flags.
+// Viper always overrides StringSlice values.
+// https://github.com/spf13/viper/issues/1448
+// So StringSlice flags are not bind to Viper like that their values are obtain via Cobra Flags.
+func (r *Loader) applyStringSliceHack() {
+	if r.fs == nil {
+		return
+	}
+
+	r.appendStringSlice("enable", &r.cfg.Linters.Enable)
+	r.appendStringSlice("disable", &r.cfg.Linters.Disable)
+	r.appendStringSlice("presets", &r.cfg.Linters.Presets)
+	r.appendStringSlice("build-tags", &r.cfg.Run.BuildTags)
+	r.appendStringSlice("skip-dirs", &r.cfg.Run.SkipDirs)
+	r.appendStringSlice("skip-files", &r.cfg.Run.SkipFiles)
+	r.appendStringSlice("exclude", &r.cfg.Issues.ExcludePatterns)
+}
+
+func (r *Loader) appendStringSlice(name string, current *[]string) {
+	if r.fs.Changed(name) {
+		val, _ := r.fs.GetStringSlice(name)
+		*current = append(*current, val...)
+	}
 }
 
 func fileDecoderHook() viper.DecoderConfigOption {
