@@ -64,7 +64,6 @@ func setupOutputFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
 	internal.Vibra(v, fs, fs.Bool, "print-linter-name", "output.print-linter-name", true, wh("Print linter name in issue line"))
 	internal.Vibra(v, fs, fs.Bool, "uniq-by-line", "output.uniq-by-line", true, wh("Make issues output unique by line"))
 	internal.Vibra(v, fs, fs.Bool, "sort-results", "output.sort-results", false, wh("Sort linter results"))
-	internal.Vibra(v, fs, fs.Bool, "print-welcome", "output.print-welcome", false, wh("Print welcome message"))
 	internal.Vibra(v, fs, fs.String, "path-prefix", "output.path-prefix", "", wh("Path prefix to add to output"))
 }
 
