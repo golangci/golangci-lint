@@ -102,7 +102,9 @@ func (e *Executor) persistentPostRun(_ *cobra.Command, _ []string) error {
 		trace.Stop()
 	}
 
-	os.Exit(e.exitCode)
+	if e.exitCode != exitcodes.Success {
+		os.Exit(e.exitCode)
+	}
 
 	return nil
 }
