@@ -25,6 +25,6 @@ type Run struct {
 
 	ShowStats bool `mapstructure:"show-stats"`
 
-	// TODO(ldez) it's only use by flags and for the tests, need to removed in another PR.
+	// It's obtain by flags and use for the tests and the context loader.
 	Args []string // Internal needs.
 }
