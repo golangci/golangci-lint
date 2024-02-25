@@ -32,7 +32,7 @@ require (
 	github.com/ckaznocha/intrange v0.1.0
 	github.com/curioswitch/go-reassign v0.2.0
 	github.com/daixiang0/gci v0.12.3
-	github.com/denis-tingaikin/go-header v0.4.3
+	github.com/denis-tingaikin/go-header v0.5.0
 	github.com/esimonov/ifshort v1.0.4
 	github.com/fatih/color v1.16.0
 	github.com/firefart/nonamedreturns v1.0.4

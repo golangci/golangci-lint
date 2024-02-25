@@ -59,7 +59,13 @@ func ParseTestDirectives(tb testing.TB, sourcePath string) *RunContext {
 			continue
 		}
 
-		if !strings.HasPrefix(line, "//golangcitest:") {
+		switch {
+		case strings.HasPrefix(line, "//golangcitest:"):
+			// Ok
+		case !strings.Contains(line, "golangcitest"):
+			// Assume this is a regular comment (required for go-header tests)
+			continue
+		default:
 			require.Failf(tb, "invalid prefix of comment line %s", line)
 		}
 
