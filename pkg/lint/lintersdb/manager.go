@@ -486,6 +486,7 @@ func (m *Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 		linter.NewConfig(golinters.NewGoHeader(goheaderCfg)).
 			WithSince("v1.28.0").
 			WithPresets(linter.PresetStyle).
+			WithAutoFix().
 			WithURL("https://github.com/denis-tingaikin/go-header"),
 
 		linter.NewConfig(golinters.NewGoimports(goimportsCfg)).
