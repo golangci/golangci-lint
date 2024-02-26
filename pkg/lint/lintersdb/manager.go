@@ -35,8 +35,6 @@ func NewManager(cfg *config.Config, log logutils.Log) *Manager {
 }
 
 func (m *Manager) loadLinters() {
-	m.customLinters = m.getCustomLinterConfigs()
-
 	const megacheckName = "megacheck"
 
 	var linters []*linter.Config
