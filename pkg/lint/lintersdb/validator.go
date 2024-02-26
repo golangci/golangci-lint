@@ -14,9 +14,33 @@ type Validator struct {
 }
 
 func NewValidator(m *Manager) *Validator {
-	return &Validator{
-		m: m,
+	return &Validator{m: m}
+}
+
+// Validate validates the configuration.
+func (v Validator) Validate(cfg *config.Config) error {
+	err := cfg.Validate()
+	if err != nil {
+		return err
 	}
+
+	return v.validateEnabledDisabledLintersConfig(&cfg.Linters)
+}
+
+func (v Validator) validateEnabledDisabledLintersConfig(cfg *config.Linters) error {
+	validators := []func(cfg *config.Linters) error{
+		v.validateLintersNames,
+		v.validatePresets,
+		v.validateAllDisableEnableOptions,
+		v.validateDisabledAndEnabledAtOneMoment,
+	}
+	for _, v := range validators {
+		if err := v(cfg); err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 func (v Validator) validateLintersNames(cfg *config.Linters) error {
@@ -87,22 +111,6 @@ func (v Validator) validateDisabledAndEnabledAtOneMoment(cfg *config.Linters) er
 	for _, name := range cfg.Disable {
 		if enabledLintersSet[name] {
 			return fmt.Errorf("linter %q can't be disabled and enabled at one moment", name)
-		}
-	}
-
-	return nil
-}
-
-func (v Validator) validateEnabledDisabledLintersConfig(cfg *config.Linters) error {
-	validators := []func(cfg *config.Linters) error{
-		v.validateLintersNames,
-		v.validatePresets,
-		v.validateAllDisableEnableOptions,
-		v.validateDisabledAndEnabledAtOneMoment,
-	}
-	for _, v := range validators {
-		if err := v(cfg); err != nil {
-			return err
 		}
 	}
 

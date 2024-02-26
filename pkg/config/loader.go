@@ -188,10 +188,6 @@ func (l *Loader) parseConfig() error {
 				return err
 			}
 
-			if err = l.cfg.Validate(); err != nil {
-				return fmt.Errorf("can't validate config: %w", err)
-			}
-
 			return nil
 		}
 
@@ -206,10 +202,6 @@ func (l *Loader) parseConfig() error {
 	// Load configuration from all sources (flags, file).
 	if err := l.viper.Unmarshal(l.cfg, fileDecoderHook()); err != nil {
 		return fmt.Errorf("can't unmarshal config by viper: %w", err)
-	}
-
-	if err := l.cfg.Validate(); err != nil {
-		return fmt.Errorf("can't validate config: %w", err)
 	}
 
 	if l.cfg.InternalTest { // just for testing purposes: to detect config file usage
