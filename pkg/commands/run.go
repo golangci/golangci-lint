@@ -172,8 +172,7 @@ func (c *runCommand) persistentPostRunE(_ *cobra.Command, _ []string) error {
 
 func (c *runCommand) preRunE(_ *cobra.Command, _ []string) error {
 	c.dbManager = lintersdb.NewManager(c.cfg, c.log)
-	c.enabledLintersSet = lintersdb.NewEnabledSet(c.dbManager,
-		lintersdb.NewValidator(c.dbManager), c.log.Child(logutils.DebugKeyLintersDB), c.cfg)
+	c.enabledLintersSet = lintersdb.NewEnabledSet(c.dbManager, c.log.Child(logutils.DebugKeyLintersDB), c.cfg)
 
 	c.goenv = goutil.NewEnv(c.log.Child(logutils.DebugKeyGoEnv))
 

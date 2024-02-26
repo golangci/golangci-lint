@@ -285,7 +285,7 @@ func TestNolintUnused(t *testing.T) {
 		cfg := &config.Config{Linters: config.Linters{DisableAll: true, Enable: enabledLinters}}
 		dbManager := lintersdb.NewManager(cfg, nil)
 
-		enabledLintersSet := lintersdb.NewEnabledSet(dbManager, lintersdb.NewValidator(dbManager), enabledSetLog, cfg)
+		enabledLintersSet := lintersdb.NewEnabledSet(dbManager, enabledSetLog, cfg)
 
 		enabledLintersMap, err := enabledLintersSet.GetEnabledLintersMap()
 		require.NoError(t, err)
@@ -348,7 +348,7 @@ func TestNolintUnused(t *testing.T) {
 
 		cfg := &config.Config{Linters: config.Linters{DisableAll: true, Enable: []string{"nolintlint"}}}
 		dbManager := lintersdb.NewManager(cfg, nil)
-		enabledLintersSet := lintersdb.NewEnabledSet(dbManager, lintersdb.NewValidator(dbManager), enabledSetLog, cfg)
+		enabledLintersSet := lintersdb.NewEnabledSet(dbManager, enabledSetLog, cfg)
 
 		enabledLintersMap, err := enabledLintersSet.GetEnabledLintersMap()
 		require.NoError(t, err)

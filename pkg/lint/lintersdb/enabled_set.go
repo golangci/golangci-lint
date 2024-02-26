@@ -17,16 +17,14 @@ const EnvTestRun = "GL_TEST_RUN"
 
 type EnabledSet struct {
 	m      *Manager
-	v      *Validator
 	log    logutils.Log
 	cfg    *config.Config
 	debugf logutils.DebugFunc
 }
 
-func NewEnabledSet(m *Manager, v *Validator, log logutils.Log, cfg *config.Config) *EnabledSet {
+func NewEnabledSet(m *Manager, log logutils.Log, cfg *config.Config) *EnabledSet {
 	return &EnabledSet{
 		m:      m,
-		v:      v,
 		log:    log,
 		cfg:    cfg,
 		debugf: logutils.Debug(logutils.DebugKeyEnabledLinters),
@@ -94,10 +92,6 @@ func (es EnabledSet) build(lcfg *config.Linters, enabledByDefaultLinters []*lint
 }
 
 func (es EnabledSet) GetEnabledLintersMap() (map[string]*linter.Config, error) {
-	if err := es.v.validateEnabledDisabledLintersConfig(&es.cfg.Linters); err != nil {
-		return nil, err
-	}
-
 	enabledLinters := es.build(&es.cfg.Linters, es.m.GetAllEnabledByDefaultLinters())
 	if os.Getenv(EnvTestRun) == "1" {
 		es.verbosePrintLintersStatus(enabledLinters)
@@ -109,10 +103,6 @@ func (es EnabledSet) GetEnabledLintersMap() (map[string]*linter.Config, error) {
 // into a fewer number of linters. E.g. some go/analysis linters can be optimized into
 // one metalinter for data reuse and speed up.
 func (es EnabledSet) GetOptimizedLinters() ([]*linter.Config, error) {
-	if err := es.v.validateEnabledDisabledLintersConfig(&es.cfg.Linters); err != nil {
-		return nil, err
-	}
-
 	resultLintersSet := es.build(&es.cfg.Linters, es.m.GetAllEnabledByDefaultLinters())
 	es.verbosePrintLintersStatus(resultLintersSet)
 	es.combineGoAnalysisLinters(resultLintersSet)

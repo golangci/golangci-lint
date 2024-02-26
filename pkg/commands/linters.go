@@ -66,8 +66,7 @@ func (c *lintersCommand) preRunE(cmd *cobra.Command, _ []string) error {
 	}
 
 	c.dbManager = lintersdb.NewManager(c.cfg, c.log)
-	c.enabledLintersSet = lintersdb.NewEnabledSet(c.dbManager,
-		lintersdb.NewValidator(c.dbManager), c.log.Child(logutils.DebugKeyLintersDB), c.cfg)
+	c.enabledLintersSet = lintersdb.NewEnabledSet(c.dbManager, c.log.Child(logutils.DebugKeyLintersDB), c.cfg)
 
 	return nil
 }
