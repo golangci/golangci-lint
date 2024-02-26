@@ -68,12 +68,16 @@ run:
   # Allow multiple parallel golangci-lint instances running.
   # If false, golangci-lint acquires file lock on start.
   # Default: false
-  allow-parallel-runners: true
+  allow-parallel-runners: false
 
   # Allow multiple golangci-lint instances running, but serialize them around a lock.
   # If false, golangci-lint exits with an error if it fails to acquire file lock on start.
   # Default: false
   allow-serial-runners: true
+
+  # Print avg and max memory usage of golangci-lint and total time.
+  # Default: false
+  print-resources-usage: true
 
   # Define the Go version limit.
   # Mainly related to generics support since go1.18.
@@ -2487,11 +2491,6 @@ linters-settings:
       # Intended to point to the repo location of the linter.
       # Optional.
       original-url: github.com/golangci/example-linter
-      # Plugins settings/configuration.
-      # Only work with plugin based on `linterdb.PluginConstructor`.
-      # Optional.
-      settings:
-        foo: bar
 
 
 linters:
