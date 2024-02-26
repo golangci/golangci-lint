@@ -16,12 +16,12 @@ import (
 
 func setupLintersFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
 	fs.StringSliceP("disable", "D", nil, wh("Disable specific linter")) // Hack see Loader.applyStringSliceHack
-	internal.Vibra(v, fs, fs.Bool, "disable-all", "linters.disable-all", false, wh("Disable all linters"))
+	internal.AddFlagAndBind(v, fs, fs.Bool, "disable-all", "linters.disable-all", false, wh("Disable all linters"))
 
 	fs.StringSliceP("enable", "E", nil, wh("Enable specific linter")) // Hack see Loader.applyStringSliceHack
-	internal.Vibra(v, fs, fs.Bool, "enable-all", "linters.enable-all", false, wh("Enable all linters"))
+	internal.AddFlagAndBind(v, fs, fs.Bool, "enable-all", "linters.enable-all", false, wh("Enable all linters"))
 
-	internal.Vibra(v, fs, fs.Bool, "fast", "linters.fast", false,
+	internal.AddFlagAndBind(v, fs, fs.Bool, "fast", "linters.fast", false,
 		wh("Enable only fast linters from enabled linters set (first run won't be fast)"))
 
 	// Hack see Loader.applyStringSliceHack
@@ -31,52 +31,52 @@ func setupLintersFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
 }
 
 func setupRunFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
-	internal.VibraP(v, fs, fs.IntP, "concurrency", "j", "run.concurrency", getDefaultConcurrency(),
+	internal.AddFlagAndBindP(v, fs, fs.IntP, "concurrency", "j", "run.concurrency", getDefaultConcurrency(),
 		wh("Number of CPUs to use (Default: number of logical CPUs)"))
 
-	internal.Vibra(v, fs, fs.String, "modules-download-mode", "run.modules-download-mode", "",
+	internal.AddFlagAndBind(v, fs, fs.String, "modules-download-mode", "run.modules-download-mode", "",
 		wh("Modules download mode. If not empty, passed as -mod=<mode> to go tools"))
-	internal.Vibra(v, fs, fs.Int, "issues-exit-code", "run.issues-exit-code", exitcodes.IssuesFound,
+	internal.AddFlagAndBind(v, fs, fs.Int, "issues-exit-code", "run.issues-exit-code", exitcodes.IssuesFound,
 		wh("Exit code when issues were found"))
-	internal.Vibra(v, fs, fs.String, "go", "run.go", "", wh("Targeted Go version"))
+	internal.AddFlagAndBind(v, fs, fs.String, "go", "run.go", "", wh("Targeted Go version"))
 	fs.StringSlice("build-tags", nil, wh("Build tags")) // Hack see Loader.applyStringSliceHack
 
-	internal.Vibra(v, fs, fs.Duration, "timeout", "run.timeout", defaultTimeout, wh("Timeout for total work"))
+	internal.AddFlagAndBind(v, fs, fs.Duration, "timeout", "run.timeout", defaultTimeout, wh("Timeout for total work"))
 
-	internal.Vibra(v, fs, fs.Bool, "tests", "run.tests", true, wh("Analyze tests (*_test.go)"))
+	internal.AddFlagAndBind(v, fs, fs.Bool, "tests", "run.tests", true, wh("Analyze tests (*_test.go)"))
 	fs.StringSlice("skip-dirs", nil, wh("Regexps of directories to skip")) // Hack see Loader.applyStringSliceHack
-	internal.Vibra(v, fs, fs.Bool, "skip-dirs-use-default", "run.skip-dirs-use-default", true, getDefaultDirectoryExcludeHelp())
+	internal.AddFlagAndBind(v, fs, fs.Bool, "skip-dirs-use-default", "run.skip-dirs-use-default", true, getDefaultDirectoryExcludeHelp())
 	fs.StringSlice("skip-files", nil, wh("Regexps of files to skip")) // Hack see Loader.applyStringSliceHack
 
 	const allowParallelDesc = "Allow multiple parallel golangci-lint instances running. " +
 		"If false (default) - golangci-lint acquires file lock on start."
-	internal.Vibra(v, fs, fs.Bool, "allow-parallel-runners", "run.allow-parallel-runners", false, wh(allowParallelDesc))
+	internal.AddFlagAndBind(v, fs, fs.Bool, "allow-parallel-runners", "run.allow-parallel-runners", false, wh(allowParallelDesc))
 	const allowSerialDesc = "Allow multiple golangci-lint instances running, but serialize them around a lock. " +
 		"If false (default) - golangci-lint exits with an error if it fails to acquire file lock on start."
-	internal.Vibra(v, fs, fs.Bool, "allow-serial-runners", "run.allow-serial-runners", false, wh(allowSerialDesc))
-	internal.Vibra(v, fs, fs.Bool, "show-stats", "run.show-stats", false, wh("Show statistics per linter"))
+	internal.AddFlagAndBind(v, fs, fs.Bool, "allow-serial-runners", "run.allow-serial-runners", false, wh(allowSerialDesc))
+	internal.AddFlagAndBind(v, fs, fs.Bool, "show-stats", "run.show-stats", false, wh("Show statistics per linter"))
 }
 
 func setupOutputFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
-	internal.Vibra(v, fs, fs.String, "out-format", "output.format", config.OutFormatColoredLineNumber,
+	internal.AddFlagAndBind(v, fs, fs.String, "out-format", "output.format", config.OutFormatColoredLineNumber,
 		wh(fmt.Sprintf("Format of output: %s", strings.Join(config.OutFormats, "|"))))
-	internal.Vibra(v, fs, fs.Bool, "print-issued-lines", "output.print-issued-lines", true, wh("Print lines of code with issue"))
-	internal.Vibra(v, fs, fs.Bool, "print-linter-name", "output.print-linter-name", true, wh("Print linter name in issue line"))
-	internal.Vibra(v, fs, fs.Bool, "uniq-by-line", "output.uniq-by-line", true, wh("Make issues output unique by line"))
-	internal.Vibra(v, fs, fs.Bool, "sort-results", "output.sort-results", false, wh("Sort linter results"))
-	internal.Vibra(v, fs, fs.String, "path-prefix", "output.path-prefix", "", wh("Path prefix to add to output"))
+	internal.AddFlagAndBind(v, fs, fs.Bool, "print-issued-lines", "output.print-issued-lines", true, wh("Print lines of code with issue"))
+	internal.AddFlagAndBind(v, fs, fs.Bool, "print-linter-name", "output.print-linter-name", true, wh("Print linter name in issue line"))
+	internal.AddFlagAndBind(v, fs, fs.Bool, "uniq-by-line", "output.uniq-by-line", true, wh("Make issues output unique by line"))
+	internal.AddFlagAndBind(v, fs, fs.Bool, "sort-results", "output.sort-results", false, wh("Sort linter results"))
+	internal.AddFlagAndBind(v, fs, fs.String, "path-prefix", "output.path-prefix", "", wh("Path prefix to add to output"))
 }
 
 //nolint:gomnd
 func setupIssuesFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
 	fs.StringSliceP("exclude", "e", nil, wh("Exclude issue by regexp")) // Hack see Loader.applyStringSliceHack
-	internal.Vibra(v, fs, fs.Bool, "exclude-use-default", "issues.exclude-use-default", true, getDefaultIssueExcludeHelp())
-	internal.Vibra(v, fs, fs.Bool, "exclude-case-sensitive", "issues.exclude-case-sensitive", false,
+	internal.AddFlagAndBind(v, fs, fs.Bool, "exclude-use-default", "issues.exclude-use-default", true, getDefaultIssueExcludeHelp())
+	internal.AddFlagAndBind(v, fs, fs.Bool, "exclude-case-sensitive", "issues.exclude-case-sensitive", false,
 		wh("If set to true exclude and exclude rules regular expressions are case-sensitive"))
 
-	internal.Vibra(v, fs, fs.Int, "max-issues-per-linter", "issues.max-issues-per-linter", 50,
+	internal.AddFlagAndBind(v, fs, fs.Int, "max-issues-per-linter", "issues.max-issues-per-linter", 50,
 		wh("Maximum issues count per one linter. Set to 0 to disable"))
-	internal.Vibra(v, fs, fs.Int, "max-same-issues", "issues.max-same-issues", 3,
+	internal.AddFlagAndBind(v, fs, fs.Int, "max-same-issues", "issues.max-same-issues", 3,
 		wh("Maximum count of issues with the same text. Set to 0 to disable"))
 
 	const newDesc = "Show only new issues: if there are unstaged changes or untracked files, only those changes " +
@@ -85,14 +85,14 @@ func setupIssuesFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
 		"the moment of integration: much better to not allow issues in new code.\nFor CI setups, prefer " +
 		"--new-from-rev=HEAD~, as --new can skip linting the current patch if any scripts generate " +
 		"unstaged files before golangci-lint runs."
-	internal.VibraP(v, fs, fs.BoolP, "new", "n", "issues.new", false, wh(newDesc))
-	internal.Vibra(v, fs, fs.String, "new-from-rev", "issues.new-from-rev", "",
+	internal.AddFlagAndBindP(v, fs, fs.BoolP, "new", "n", "issues.new", false, wh(newDesc))
+	internal.AddFlagAndBind(v, fs, fs.String, "new-from-rev", "issues.new-from-rev", "",
 		wh("Show only new issues created after git revision `REV`"))
-	internal.Vibra(v, fs, fs.String, "new-from-patch", "issues.new-from-patch", "",
+	internal.AddFlagAndBind(v, fs, fs.String, "new-from-patch", "issues.new-from-patch", "",
 		wh("Show only new issues created in git patch with file path `PATH`"))
-	internal.Vibra(v, fs, fs.Bool, "whole-files", "issues.whole-files", false,
+	internal.AddFlagAndBind(v, fs, fs.Bool, "whole-files", "issues.whole-files", false,
 		wh("Show issues in any part of update files (requires new-from-rev or new-from-patch)"))
-	internal.Vibra(v, fs, fs.Bool, "fix", "issues.fix", false, wh("Fix found issues (if it's supported by the linter)"))
+	internal.AddFlagAndBind(v, fs, fs.Bool, "fix", "issues.fix", false, wh("Fix found issues (if it's supported by the linter)"))
 }
 
 func wh(text string) string {

@@ -11,8 +11,8 @@ type FlagFunc[T any] func(name string, value T, usage string) *T
 
 type FlagPFunc[T any] func(name, shorthand string, value T, usage string) *T
 
-// Vibra adds a Cobra flag and binds it with Viper.
-func Vibra[T any](v *viper.Viper, fs *pflag.FlagSet, pfn FlagFunc[T], name, bind string, value T, usage string) {
+// AddFlagAndBind adds a Cobra/pflag flag and binds it with Viper.
+func AddFlagAndBind[T any](v *viper.Viper, fs *pflag.FlagSet, pfn FlagFunc[T], name, bind string, value T, usage string) {
 	pfn(name, value, usage)
 
 	err := v.BindPFlag(bind, fs.Lookup(name))
@@ -21,8 +21,8 @@ func Vibra[T any](v *viper.Viper, fs *pflag.FlagSet, pfn FlagFunc[T], name, bind
 	}
 }
 
-// VibraP adds a Cobra flag and binds it with Viper.
-func VibraP[T any](v *viper.Viper, fs *pflag.FlagSet, pfn FlagPFunc[T], name, shorthand, bind string, value T, usage string) {
+// AddFlagAndBindP adds a Cobra/pflag flag and binds it with Viper.
+func AddFlagAndBindP[T any](v *viper.Viper, fs *pflag.FlagSet, pfn FlagPFunc[T], name, shorthand, bind string, value T, usage string) {
 	pfn(name, shorthand, value, usage)
 
 	err := v.BindPFlag(bind, fs.Lookup(name))
