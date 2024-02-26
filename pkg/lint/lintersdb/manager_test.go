@@ -30,17 +30,15 @@ func (d dummyLogger) Child(_ string) logutils.Log {
 
 func (d dummyLogger) SetLevel(_ logutils.LogLevel) {}
 
-func TestEnabledSet_GetEnabledLintersMap(t *testing.T) {
-	m := NewManager(nil, nil)
-
+func TestManager_GetEnabledLintersMap(t *testing.T) {
 	cfg := config.NewDefault()
-
 	cfg.Linters.DisableAll = true
 	cfg.Linters.Enable = []string{"gofmt"}
 
-	es := NewEnabledSet(m, dummyLogger{}, cfg)
+	m, err := NewManager(&dummyLogger{}, cfg, NewLinterBuilder())
+	require.NoError(t, err)
 
-	lintersMap, err := es.GetEnabledLintersMap()
+	lintersMap, err := m.GetEnabledLintersMap()
 	require.NoError(t, err)
 
 	gofmtConfigs := m.GetLinterConfigs("gofmt")
@@ -54,27 +52,22 @@ func TestEnabledSet_GetEnabledLintersMap(t *testing.T) {
 	assert.Equal(t, expected, lintersMap)
 }
 
-func TestEnabledSet_GetOptimizedLinters(t *testing.T) {
-	m := NewManager(nil, nil)
-
+func TestManager_GetOptimizedLinters(t *testing.T) {
 	cfg := config.NewDefault()
-
 	cfg.Linters.DisableAll = true
 	cfg.Linters.Enable = []string{"gofmt"}
 
-	es := NewEnabledSet(m, dummyLogger{}, cfg)
-
-	optimizedLinters, err := es.GetOptimizedLinters()
+	m, err := NewManager(&dummyLogger{}, cfg, NewLinterBuilder())
 	require.NoError(t, err)
 
-	gofmtConfigs := m.GetLinterConfigs("gofmt")
-	typecheckConfigs := m.GetLinterConfigs("typecheck")
+	optimizedLinters, err := m.GetOptimizedLinters()
+	require.NoError(t, err)
 
 	var gaLinters []*goanalysis.Linter
-	for _, l := range gofmtConfigs {
+	for _, l := range m.GetLinterConfigs("gofmt") {
 		gaLinters = append(gaLinters, l.Linter.(*goanalysis.Linter))
 	}
-	for _, l := range typecheckConfigs {
+	for _, l := range m.GetLinterConfigs("typecheck") {
 		gaLinters = append(gaLinters, l.Linter.(*goanalysis.Linter))
 	}
 
@@ -88,7 +81,7 @@ func TestEnabledSet_GetOptimizedLinters(t *testing.T) {
 	assert.Equal(t, expected, optimizedLinters)
 }
 
-func TestEnabledSet_build(t *testing.T) {
+func TestManager_build(t *testing.T) {
 	type cs struct {
 		cfg  config.Linters
 		name string   // test case name
@@ -172,12 +165,12 @@ func TestEnabledSet_build(t *testing.T) {
 		},
 	}
 
-	m := NewManager(nil, nil)
-	es := NewEnabledSet(m, dummyLogger{}, nil)
-
 	for _, c := range cases {
 		c := c
 		t.Run(c.name, func(t *testing.T) {
+			m, err := NewManager(&dummyLogger{}, &config.Config{Linters: c.cfg}, NewLinterBuilder())
+			require.NoError(t, err)
+
 			var defaultLinters []*linter.Config
 			for _, ln := range c.def {
 				lcs := m.GetLinterConfigs(ln)
@@ -185,7 +178,7 @@ func TestEnabledSet_build(t *testing.T) {
 				defaultLinters = append(defaultLinters, lcs...)
 			}
 
-			els := es.build(&c.cfg, defaultLinters)
+			els := m.build(defaultLinters)
 			var enabledLinters []string
 			for ln, lc := range els {
 				assert.Equal(t, ln, lc.Name())
@@ -197,10 +190,9 @@ func TestEnabledSet_build(t *testing.T) {
 	}
 }
 
-func TestEnabledSet_combineGoAnalysisLinters(t *testing.T) {
-	m := NewManager(nil, nil)
-
-	es := NewEnabledSet(m, dummyLogger{}, config.NewDefault())
+func TestManager_combineGoAnalysisLinters(t *testing.T) {
+	m, err := NewManager(nil, nil)
+	require.NoError(t, err)
 
 	foo := goanalysis.NewLinter("foo", "example foo", nil, nil).WithLoadMode(goanalysis.LoadModeTypesInfo)
 	bar := goanalysis.NewLinter("bar", "example bar", nil, nil).WithLoadMode(goanalysis.LoadModeTypesInfo)
@@ -255,7 +247,7 @@ func TestEnabledSet_combineGoAnalysisLinters(t *testing.T) {
 		t.Run(test.desc, func(t *testing.T) {
 			t.Parallel()
 
-			es.combineGoAnalysisLinters(test.linters)
+			m.combineGoAnalysisLinters(test.linters)
 
 			assert.Equal(t, test.expected, test.linters)
 		})
