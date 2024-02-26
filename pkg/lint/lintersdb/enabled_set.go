@@ -148,11 +148,14 @@ func (es EnabledSet) combineGoAnalysisLinters(linters map[string]*linter.Config)
 		if !ok {
 			continue
 		}
+
 		if lnt.LoadMode() == goanalysis.LoadModeWholeProgram {
 			// It's ineffective by CPU and memory to run whole-program and incremental analyzers at once.
 			continue
 		}
+
 		goanalysisLinters = append(goanalysisLinters, lnt)
+
 		for _, p := range lc.InPresets {
 			goanalysisPresets[p] = true
 		}
@@ -185,6 +188,7 @@ func (es EnabledSet) combineGoAnalysisLinters(linters map[string]*linter.Config)
 	ml := goanalysis.NewMetaLinter(goanalysisLinters)
 
 	presets := maps.Keys(goanalysisPresets)
+	sort.Strings(presets)
 
 	mlConfig := &linter.Config{
 		Linter:           ml,
@@ -197,6 +201,7 @@ func (es EnabledSet) combineGoAnalysisLinters(linters map[string]*linter.Config)
 	mlConfig = mlConfig.WithLoadForGoAnalysis()
 
 	linters[ml.Name()] = mlConfig
+
 	es.debugf("Combined %d go/analysis linters into one metalinter", len(goanalysisLinters))
 }
 
