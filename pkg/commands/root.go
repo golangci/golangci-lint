@@ -20,10 +20,10 @@ func Execute(info BuildInfo) error {
 }
 
 type rootOptions struct {
-	PrintVersion bool
+	PrintVersion bool // Flag only.
 
-	Verbose bool   // Persistent flag.
-	Color   string // Persistent flag.
+	Verbose bool   // Flag only.
+	Color   string // Flag only.
 }
 
 type rootCommand struct {
