@@ -68,16 +68,12 @@ run:
   # Allow multiple parallel golangci-lint instances running.
   # If false, golangci-lint acquires file lock on start.
   # Default: false
-  allow-parallel-runners: false
+  allow-parallel-runners: true
 
   # Allow multiple golangci-lint instances running, but serialize them around a lock.
   # If false, golangci-lint exits with an error if it fails to acquire file lock on start.
   # Default: false
   allow-serial-runners: true
-
-  # Print avg and max memory usage of golangci-lint and total time.
-  # Default: false
-  print-resources-usage: true
 
   # Define the Go version limit.
   # Mainly related to generics support since go1.18.
@@ -1385,7 +1381,7 @@ linters-settings:
     # A set of custom functions to check in addition to the builtin ones.
     # Default: json, xml, gopkg.in/yaml.v3, BurntSushi/toml, mitchellh/mapstructure, jmoiron/sqlx
     functions:
-        # The full name of the function, including the package.
+      # The full name of the function, including the package.
       - name: github.com/hashicorp/hcl/v2/hclsimple.DecodeFile
         # The struct tag whose presence should be ensured.
         tag: hcl
@@ -2491,6 +2487,11 @@ linters-settings:
       # Intended to point to the repo location of the linter.
       # Optional.
       original-url: github.com/golangci/example-linter
+      # Plugins settings/configuration.
+      # Only work with plugin based on `linterdb.PluginConstructor`.
+      # Optional.
+      settings:
+        foo: bar
 
 
 linters:
