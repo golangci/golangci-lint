@@ -41,7 +41,7 @@ func newHelpCommand(logger logutils.Log) *helpCommand {
 			Args:              cobra.NoArgs,
 			ValidArgsFunction: cobra.NoFileCompletions,
 			Run:               c.execute,
-			PreRun:            c.preRun,
+			PreRunE:           c.preRunE,
 		},
 	)
 
@@ -50,10 +50,18 @@ func newHelpCommand(logger logutils.Log) *helpCommand {
 	return c
 }
 
-func (c *helpCommand) preRun(_ *cobra.Command, _ []string) {
+func (c *helpCommand) preRunE(_ *cobra.Command, _ []string) error {
 	// The command doesn't depend on the real configuration.
 	// It just needs the list of all plugins and all presets.
-	c.dbManager = lintersdb.NewManager(config.NewDefault(), c.log)
+	dbManager, err := lintersdb.NewManager(c.log.Child(logutils.DebugKeyLintersDB), config.NewDefault(),
+		lintersdb.NewPluginBuilder(c.log), lintersdb.NewLinterBuilder())
+	if err != nil {
+		return err
+	}
+
+	c.dbManager = dbManager
+
+	return nil
 }
 
 func (c *helpCommand) execute(_ *cobra.Command, _ []string) {
