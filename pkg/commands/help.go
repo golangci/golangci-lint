@@ -8,12 +8,23 @@ import (
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 
+	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 )
 
-func (e *Executor) initHelp() {
+type helpCommand struct {
+	cmd *cobra.Command
+
+	dbManager *lintersdb.Manager
+
+	log logutils.Log
+}
+
+func newHelpCommand(logger logutils.Log) *helpCommand {
+	c := &helpCommand{log: logger}
+
 	helpCmd := &cobra.Command{
 		Use:   "help",
 		Short: "Help",
@@ -23,20 +34,31 @@ func (e *Executor) initHelp() {
 		},
 	}
 
-	helpCmd.AddCommand(&cobra.Command{
-		Use:               "linters",
-		Short:             "Help about linters",
-		Args:              cobra.NoArgs,
-		ValidArgsFunction: cobra.NoFileCompletions,
-		Run:               e.executeHelp,
-	})
+	helpCmd.AddCommand(
+		&cobra.Command{
+			Use:               "linters",
+			Short:             "Help about linters",
+			Args:              cobra.NoArgs,
+			ValidArgsFunction: cobra.NoFileCompletions,
+			Run:               c.execute,
+			PreRun:            c.preRun,
+		},
+	)
 
-	e.rootCmd.SetHelpCommand(helpCmd)
+	c.cmd = helpCmd
+
+	return c
 }
 
-func (e *Executor) executeHelp(_ *cobra.Command, _ []string) {
+func (c *helpCommand) preRun(_ *cobra.Command, _ []string) {
+	// The command doesn't depend on the real configuration.
+	// It just needs the list of all plugins and all presets.
+	c.dbManager = lintersdb.NewManager(config.NewDefault(), c.log)
+}
+
+func (c *helpCommand) execute(_ *cobra.Command, _ []string) {
 	var enabledLCs, disabledLCs []*linter.Config
-	for _, lc := range e.dbManager.GetAllSupportedLinterConfigs() {
+	for _, lc := range c.dbManager.GetAllSupportedLinterConfigs() {
 		if lc.Internal {
 			continue
 		}
@@ -49,13 +71,19 @@ func (e *Executor) executeHelp(_ *cobra.Command, _ []string) {
 	}
 
 	color.Green("Enabled by default linters:\n")
-	printLinterConfigs(enabledLCs)
+	printLinters(enabledLCs)
+
 	color.Red("\nDisabled by default linters:\n")
-	printLinterConfigs(disabledLCs)
+	printLinters(disabledLCs)
 
 	color.Green("\nLinters presets:")
+	c.printPresets()
+}
+
+func (c *helpCommand) printPresets() {
 	for _, p := range lintersdb.AllPresets() {
-		linters := e.dbManager.GetAllLinterConfigsForPreset(p)
+		linters := c.dbManager.GetAllLinterConfigsForPreset(p)
+
 		var linterNames []string
 		for _, lc := range linters {
 			if lc.Internal {
@@ -65,14 +93,16 @@ func (e *Executor) executeHelp(_ *cobra.Command, _ []string) {
 			linterNames = append(linterNames, lc.Name())
 		}
 		sort.Strings(linterNames)
-		fmt.Fprintf(logutils.StdOut, "%s: %s\n", color.YellowString(p), strings.Join(linterNames, ", "))
+
+		_, _ = fmt.Fprintf(logutils.StdOut, "%s: %s\n", color.YellowString(p), strings.Join(linterNames, ", "))
 	}
 }
 
-func printLinterConfigs(lcs []*linter.Config) {
+func printLinters(lcs []*linter.Config) {
 	sort.Slice(lcs, func(i, j int) bool {
 		return lcs[i].Name() < lcs[j].Name()
 	})
+
 	for _, lc := range lcs {
 		altNamesStr := ""
 		if len(lc.AlternativeNames) != 0 {
@@ -91,7 +121,7 @@ func printLinterConfigs(lcs []*linter.Config) {
 			deprecatedMark = " [" + color.RedString("deprecated") + "]"
 		}
 
-		fmt.Fprintf(logutils.StdOut, "%s%s%s: %s [fast: %t, auto-fix: %t]\n", color.YellowString(lc.Name()),
-			altNamesStr, deprecatedMark, linterDescription, !lc.IsSlowLinter(), lc.CanAutoFix)
+		_, _ = fmt.Fprintf(logutils.StdOut, "%s%s%s: %s [fast: %t, auto-fix: %t]\n",
+			color.YellowString(lc.Name()), altNamesStr, deprecatedMark, linterDescription, !lc.IsSlowLinter(), lc.CanAutoFix)
 	}
 }

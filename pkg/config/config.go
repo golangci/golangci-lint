@@ -1,6 +1,8 @@
 package config
 
 import (
+	"errors"
+	"fmt"
 	"os"
 	"strings"
 
@@ -21,8 +23,6 @@ type Config struct {
 	Issues          Issues          `mapstructure:"issues"`
 	Severity        Severity        `mapstructure:"severity"`
 
-	Version Version // Flag only. // TODO(ldez) only used by the version command.
-
 	InternalCmdTest bool // Option is used only for testing golangci-lint command, don't use it
 	InternalTest    bool // Option is used only for testing golangci-lint code, don't use it
 }
@@ -30,6 +30,25 @@ type Config struct {
 // GetConfigDir returns the directory that contains golangci config file.
 func (c *Config) GetConfigDir() string {
 	return c.cfgDir
+}
+
+func (c *Config) Validate() error {
+	for i, rule := range c.Issues.ExcludeRules {
+		if err := rule.Validate(); err != nil {
+			return fmt.Errorf("error in exclude rule #%d: %w", i, err)
+		}
+	}
+
+	if len(c.Severity.Rules) > 0 && c.Severity.Default == "" {
+		return errors.New("can't set severity rule option: no default severity defined")
+	}
+	for i, rule := range c.Severity.Rules {
+		if err := rule.Validate(); err != nil {
+			return fmt.Errorf("error in severity rule #%d: %w", i, err)
+		}
+	}
+
+	return nil
 }
 
 func NewDefault() *Config {
@@ -57,7 +76,7 @@ func IsGoGreaterThanOrEqual(current, limit string) bool {
 	return v1.GreaterThanOrEqual(l)
 }
 
-func DetectGoVersion() string {
+func detectGoVersion() string {
 	file, _ := gomoddirectives.GetModuleFile()
 
 	if file != nil && file.Go != nil && file.Go.Version != "" {

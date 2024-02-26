@@ -99,8 +99,15 @@ func HaveDebugTag(tag string) bool {
 	return enabledDebugs[tag]
 }
 
+var verbose bool
+
 func SetupVerboseLog(log Log, isVerbose bool) {
 	if isVerbose {
+		verbose = isVerbose
 		log.SetLevel(LogLevelInfo)
 	}
+}
+
+func IsVerbose() bool {
+	return verbose
 }

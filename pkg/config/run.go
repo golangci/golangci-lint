@@ -25,20 +25,6 @@ type Run struct {
 
 	ShowStats bool `mapstructure:"show-stats"`
 
-	// --- Flags only section.
-
-	IsVerbose bool `mapstructure:"verbose"` // Flag only
-
-	PrintVersion bool // Flag only. (used by the root command)
-
-	CPUProfilePath string // Flag only.
-	MemProfilePath string // Flag only.
-	TracePath      string // Flag only.
-
-	PrintResourcesUsage bool `mapstructure:"print-resources-usage"` // Flag only. // TODO(ldez) need to be enforced.
-
-	Config   string // Flag only. The path to the golangci config file, as specified with the --config argument.
-	NoConfig bool   // Flag only.
-
-	Args []string // Flag only. // TODO(ldez) identify the real need and usage.
+	// It's obtain by flags and use for the tests and the context loader.
+	Args []string // Internal needs.
 }

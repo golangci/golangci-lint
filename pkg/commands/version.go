@@ -8,10 +8,8 @@ import (
 	"runtime/debug"
 	"strings"
 
+	"github.com/fatih/color"
 	"github.com/spf13/cobra"
-	"github.com/spf13/pflag"
-
-	"github.com/golangci/golangci-lint/pkg/config"
 )
 
 type BuildInfo struct {
@@ -26,65 +24,75 @@ type versionInfo struct {
 	BuildInfo *debug.BuildInfo
 }
 
-func (e *Executor) initVersion() {
+type versionOptions struct {
+	Format string `mapstructure:"format"`
+	Debug  bool   `mapstructure:"debug"`
+}
+
+type versionCommand struct {
+	cmd  *cobra.Command
+	opts versionOptions
+
+	info BuildInfo
+}
+
+func newVersionCommand(info BuildInfo) *versionCommand {
+	c := &versionCommand{info: info}
+
 	versionCmd := &cobra.Command{
 		Use:               "version",
 		Short:             "Version",
 		Args:              cobra.NoArgs,
 		ValidArgsFunction: cobra.NoFileCompletions,
-		RunE:              e.executeVersion,
+		RunE:              c.execute,
 	}
 
 	fs := versionCmd.Flags()
 	fs.SortFlags = false // sort them as they are defined here
 
-	initVersionFlagSet(fs, e.cfg)
+	fs.StringVar(&c.opts.Format, "format", "", color.GreenString("The version's format can be: 'short', 'json'"))
+	fs.BoolVar(&c.opts.Debug, "debug", false, color.GreenString("Add build information"))
 
-	e.rootCmd.AddCommand(versionCmd)
+	c.cmd = versionCmd
+
+	return c
 }
 
-func (e *Executor) executeVersion(_ *cobra.Command, _ []string) error {
-	if e.cfg.Version.Debug {
+func (c *versionCommand) execute(_ *cobra.Command, _ []string) error {
+	if c.opts.Debug {
 		info, ok := debug.ReadBuildInfo()
 		if !ok {
 			return nil
 		}
 
-		switch strings.ToLower(e.cfg.Version.Format) {
+		switch strings.ToLower(c.opts.Format) {
 		case "json":
 			return json.NewEncoder(os.Stdout).Encode(versionInfo{
-				Info:      e.buildInfo,
+				Info:      c.info,
 				BuildInfo: info,
 			})
 
 		default:
 			fmt.Println(info.String())
-			return printVersion(os.Stdout, e.buildInfo)
+			return printVersion(os.Stdout, c.info)
 		}
 	}
 
-	switch strings.ToLower(e.cfg.Version.Format) {
+	switch strings.ToLower(c.opts.Format) {
 	case "short":
-		fmt.Println(e.buildInfo.Version)
+		fmt.Println(c.info.Version)
 		return nil
 
 	case "json":
-		return json.NewEncoder(os.Stdout).Encode(e.buildInfo)
+		return json.NewEncoder(os.Stdout).Encode(c.info)
 
 	default:
-		return printVersion(os.Stdout, e.buildInfo)
+		return printVersion(os.Stdout, c.info)
 	}
 }
 
-func initVersionFlagSet(fs *pflag.FlagSet, cfg *config.Config) {
-	// Version config
-	vc := &cfg.Version
-	fs.StringVar(&vc.Format, "format", "", wh("The version's format can be: 'short', 'json'"))
-	fs.BoolVar(&vc.Debug, "debug", false, wh("Add build information"))
-}
-
-func printVersion(w io.Writer, buildInfo BuildInfo) error {
+func printVersion(w io.Writer, info BuildInfo) error {
 	_, err := fmt.Fprintf(w, "golangci-lint has version %s built with %s from %s on %s\n",
-		buildInfo.Version, buildInfo.GoVersion, buildInfo.Commit, buildInfo.Date)
+		info.Version, info.GoVersion, info.Commit, info.Date)
 	return err
 }

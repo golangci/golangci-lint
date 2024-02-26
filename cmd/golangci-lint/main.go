@@ -36,10 +36,8 @@ func main() {
 		Date:      date,
 	}
 
-	e := commands.NewExecutor(info)
-
-	if err := e.Execute(); err != nil {
-		fmt.Fprintf(os.Stderr, "failed executing command with error %v\n", err)
+	if err := commands.Execute(info); err != nil {
+		_, _ = fmt.Fprintf(os.Stderr, "failed executing command with error %v\n", err)
 		os.Exit(exitcodes.Failure)
 	}
 }
