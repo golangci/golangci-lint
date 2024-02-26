@@ -46,28 +46,28 @@ func NewLoader(log logutils.Log, v *viper.Viper, fs *pflag.FlagSet, opts LoaderO
 	}
 }
 
-func (r *Loader) Load() error {
-	err := r.setConfigFile()
+func (l *Loader) Load() error {
+	err := l.setConfigFile()
 	if err != nil {
 		return err
 	}
 
-	err = r.parseConfig()
+	err = l.parseConfig()
 	if err != nil {
 		return err
 	}
 
-	r.applyStringSliceHack()
+	l.applyStringSliceHack()
 
-	if r.cfg.Run.Go == "" {
-		r.cfg.Run.Go = detectGoVersion()
+	if l.cfg.Run.Go == "" {
+		l.cfg.Run.Go = detectGoVersion()
 	}
 
 	return nil
 }
 
-func (r *Loader) setConfigFile() error {
-	configFile, err := r.evaluateOptions()
+func (l *Loader) setConfigFile() error {
+	configFile, err := l.evaluateOptions()
 	if err != nil {
 		if errors.Is(err, errConfigDisabled) {
 			return nil
@@ -77,29 +77,29 @@ func (r *Loader) setConfigFile() error {
 	}
 
 	if configFile != "" {
-		r.viper.SetConfigFile(configFile)
+		l.viper.SetConfigFile(configFile)
 
 		// Assume YAML if the file has no extension.
 		if filepath.Ext(configFile) == "" {
-			r.viper.SetConfigType("yaml")
+			l.viper.SetConfigType("yaml")
 		}
 	} else {
-		r.setupConfigFileSearch()
+		l.setupConfigFileSearch()
 	}
 
 	return nil
 }
 
-func (r *Loader) evaluateOptions() (string, error) {
-	if r.opts.NoConfig && r.opts.Config != "" {
+func (l *Loader) evaluateOptions() (string, error) {
+	if l.opts.NoConfig && l.opts.Config != "" {
 		return "", errors.New("can't combine option --config and --no-config")
 	}
 
-	if r.opts.NoConfig {
+	if l.opts.NoConfig {
 		return "", errConfigDisabled
 	}
 
-	configFile, err := homedir.Expand(r.opts.Config)
+	configFile, err := homedir.Expand(l.opts.Config)
 	if err != nil {
 		return "", errors.New("failed to expand configuration path")
 	}
@@ -107,12 +107,12 @@ func (r *Loader) evaluateOptions() (string, error) {
 	return configFile, nil
 }
 
-func (r *Loader) setupConfigFileSearch() {
+func (l *Loader) setupConfigFileSearch() {
 	firstArg := extractFirstPathArg()
 
 	absStartPath, err := filepath.Abs(firstArg)
 	if err != nil {
-		r.log.Warnf("Can't make abs path for %q: %s", firstArg, err)
+		l.log.Warnf("Can't make abs path for %q: %s", firstArg, err)
 		absStartPath = filepath.Clean(firstArg)
 	}
 
@@ -140,31 +140,31 @@ func (r *Loader) setupConfigFileSearch() {
 
 	// find home directory for global config
 	if home, err := homedir.Dir(); err != nil {
-		r.log.Warnf("Can't get user's home directory: %s", err.Error())
+		l.log.Warnf("Can't get user's home directory: %s", err.Error())
 	} else if !slices.Contains(configSearchPaths, home) {
 		configSearchPaths = append(configSearchPaths, home)
 	}
 
-	r.log.Infof("Config search paths: %s", configSearchPaths)
+	l.log.Infof("Config search paths: %s", configSearchPaths)
 
-	r.viper.SetConfigName(".golangci")
+	l.viper.SetConfigName(".golangci")
 
 	for _, p := range configSearchPaths {
-		r.viper.AddConfigPath(p)
+		l.viper.AddConfigPath(p)
 	}
 }
 
-func (r *Loader) parseConfig() error {
-	if err := r.viper.ReadInConfig(); err != nil {
+func (l *Loader) parseConfig() error {
+	if err := l.viper.ReadInConfig(); err != nil {
 		var configFileNotFoundError viper.ConfigFileNotFoundError
 		if errors.As(err, &configFileNotFoundError) {
 			// Load configuration from flags only.
-			err = r.viper.Unmarshal(r.cfg)
+			err = l.viper.Unmarshal(l.cfg)
 			if err != nil {
 				return err
 			}
 
-			if err = r.cfg.Validate(); err != nil {
+			if err = l.cfg.Validate(); err != nil {
 				return fmt.Errorf("can't validate config: %w", err)
 			}
 
@@ -174,21 +174,21 @@ func (r *Loader) parseConfig() error {
 		return fmt.Errorf("can't read viper config: %w", err)
 	}
 
-	err := r.setConfigDir()
+	err := l.setConfigDir()
 	if err != nil {
 		return err
 	}
 
 	// Load configuration from all sources (flags, file).
-	if err := r.viper.Unmarshal(r.cfg, fileDecoderHook()); err != nil {
+	if err := l.viper.Unmarshal(l.cfg, fileDecoderHook()); err != nil {
 		return fmt.Errorf("can't unmarshal config by viper: %w", err)
 	}
 
-	if err := r.cfg.Validate(); err != nil {
+	if err := l.cfg.Validate(); err != nil {
 		return fmt.Errorf("can't validate config: %w", err)
 	}
 
-	if r.cfg.InternalTest { // just for testing purposes: to detect config file usage
+	if l.cfg.InternalTest { // just for testing purposes: to detect config file usage
 		_, _ = fmt.Fprintln(logutils.StdOut, "test")
 		os.Exit(exitcodes.Success)
 	}
@@ -196,23 +196,23 @@ func (r *Loader) parseConfig() error {
 	return nil
 }
 
-func (r *Loader) setConfigDir() error {
-	usedConfigFile := r.viper.ConfigFileUsed()
+func (l *Loader) setConfigDir() error {
+	usedConfigFile := l.viper.ConfigFileUsed()
 	if usedConfigFile == "" {
 		return nil
 	}
 
 	if usedConfigFile == os.Stdin.Name() {
 		usedConfigFile = ""
-		r.log.Infof("Reading config file stdin")
+		l.log.Infof("Reading config file stdin")
 	} else {
 		var err error
 		usedConfigFile, err = fsutils.ShortestRelPath(usedConfigFile, "")
 		if err != nil {
-			r.log.Warnf("Can't pretty print config file path: %v", err)
+			l.log.Warnf("Can't pretty print config file path: %v", err)
 		}
 
-		r.log.Infof("Used config file %s", usedConfigFile)
+		l.log.Infof("Used config file %s", usedConfigFile)
 	}
 
 	usedConfigDir, err := filepath.Abs(filepath.Dir(usedConfigFile))
@@ -220,7 +220,7 @@ func (r *Loader) setConfigDir() error {
 		return errors.New("can't get config directory")
 	}
 
-	r.cfg.cfgDir = usedConfigDir
+	l.cfg.cfgDir = usedConfigDir
 
 	return nil
 }
@@ -229,23 +229,23 @@ func (r *Loader) setConfigDir() error {
 // Viper always overrides StringSlice values.
 // https://github.com/spf13/viper/issues/1448
 // So StringSlice flags are not bind to Viper like that their values are obtain via Cobra Flags.
-func (r *Loader) applyStringSliceHack() {
-	if r.fs == nil {
+func (l *Loader) applyStringSliceHack() {
+	if l.fs == nil {
 		return
 	}
 
-	r.appendStringSlice("enable", &r.cfg.Linters.Enable)
-	r.appendStringSlice("disable", &r.cfg.Linters.Disable)
-	r.appendStringSlice("presets", &r.cfg.Linters.Presets)
-	r.appendStringSlice("build-tags", &r.cfg.Run.BuildTags)
-	r.appendStringSlice("skip-dirs", &r.cfg.Run.SkipDirs)
-	r.appendStringSlice("skip-files", &r.cfg.Run.SkipFiles)
-	r.appendStringSlice("exclude", &r.cfg.Issues.ExcludePatterns)
+	l.appendStringSlice("enable", &l.cfg.Linters.Enable)
+	l.appendStringSlice("disable", &l.cfg.Linters.Disable)
+	l.appendStringSlice("presets", &l.cfg.Linters.Presets)
+	l.appendStringSlice("build-tags", &l.cfg.Run.BuildTags)
+	l.appendStringSlice("skip-dirs", &l.cfg.Run.SkipDirs)
+	l.appendStringSlice("skip-files", &l.cfg.Run.SkipFiles)
+	l.appendStringSlice("exclude", &l.cfg.Issues.ExcludePatterns)
 }
 
-func (r *Loader) appendStringSlice(name string, current *[]string) {
-	if r.fs.Changed(name) {
-		val, _ := r.fs.GetStringSlice(name)
+func (l *Loader) appendStringSlice(name string, current *[]string) {
+	if l.fs.Changed(name) {
+		val, _ := l.fs.GetStringSlice(name)
 		*current = append(*current, val...)
 	}
 }
