@@ -126,7 +126,8 @@ func newRunCommand(logger logutils.Log, cfg *config.Config, reportData *report.D
 
 	// Only for testing purpose.
 	// Don't add other flags here.
-	fs.BoolVar(&cfg.InternalCmdTest, "internal-cmd-test", false, wh("Option is used only for testing golangci-lint command, don't use it"))
+	fs.BoolVar(&cfg.InternalCmdTest, "internal-cmd-test", false,
+		color.GreenString("Option is used only for testing golangci-lint command, don't use it"))
 	_ = fs.MarkHidden("internal-cmd-test")
 
 	setupConfigFileFlagSet(fs, &c.opts.LoaderOptions)
@@ -606,8 +607,8 @@ func watchResources(ctx context.Context, done chan struct{}, logger logutils.Log
 }
 
 func setupConfigFileFlagSet(fs *pflag.FlagSet, cfg *config.LoaderOptions) {
-	fs.StringVarP(&cfg.Config, "config", "c", "", wh("Read config from file path `PATH`"))
-	fs.BoolVar(&cfg.NoConfig, "no-config", false, wh("Don't read config file"))
+	fs.StringVarP(&cfg.Config, "config", "c", "", color.GreenString("Read config from file path `PATH`"))
+	fs.BoolVar(&cfg.NoConfig, "no-config", false, color.GreenString("Don't read config file"))
 }
 
 func getDefaultIssueExcludeHelp() string {
@@ -633,11 +634,11 @@ func getDefaultDirectoryExcludeHelp() string {
 
 func setupRunPersistentFlags(fs *pflag.FlagSet, opts *runOptions) {
 	fs.BoolVar(&opts.PrintResourcesUsage, "print-resources-usage", false,
-		wh("Print avg and max memory usage of golangci-lint and total time"))
+		color.GreenString("Print avg and max memory usage of golangci-lint and total time"))
 
-	fs.StringVar(&opts.CPUProfilePath, "cpu-profile-path", "", wh("Path to CPU profile output file"))
-	fs.StringVar(&opts.MemProfilePath, "mem-profile-path", "", wh("Path to memory profile output file"))
-	fs.StringVar(&opts.TracePath, "trace-path", "", wh("Path to trace output file"))
+	fs.StringVar(&opts.CPUProfilePath, "cpu-profile-path", "", color.GreenString("Path to CPU profile output file"))
+	fs.StringVar(&opts.MemProfilePath, "mem-profile-path", "", color.GreenString("Path to memory profile output file"))
+	fs.StringVar(&opts.TracePath, "trace-path", "", color.GreenString("Path to trace output file"))
 }
 
 func getDefaultConcurrency() int {

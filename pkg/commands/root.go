@@ -52,7 +52,7 @@ func newRootCommand(info BuildInfo) *rootCommand {
 	}
 
 	fs := rootCmd.Flags()
-	fs.BoolVar(&c.opts.PrintVersion, "version", false, wh("Print version"))
+	fs.BoolVar(&c.opts.PrintVersion, "version", false, color.GreenString("Print version"))
 
 	setupRootPersistentFlags(rootCmd.PersistentFlags(), &c.opts)
 
@@ -86,8 +86,8 @@ func (c *rootCommand) Execute() error {
 }
 
 func setupRootPersistentFlags(fs *pflag.FlagSet, opts *rootOptions) {
-	fs.BoolVarP(&opts.Verbose, "verbose", "v", false, wh("Verbose output"))
-	fs.StringVar(&opts.Color, "color", "auto", wh("Use color when printing; can be 'always', 'auto', or 'never'"))
+	fs.BoolVarP(&opts.Verbose, "verbose", "v", false, color.GreenString("Verbose output"))
+	fs.StringVar(&opts.Color, "color", "auto", color.GreenString("Use color when printing; can be 'always', 'auto', or 'never'"))
 }
 
 func setupLogger(logger logutils.Log) error {
