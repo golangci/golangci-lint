@@ -32,16 +32,17 @@ func (c *Config) GetConfigDir() string {
 }
 
 func (c *Config) Validate() error {
-	if err := c.Issues.Validate(); err != nil {
-		return err
+	validators := []func() error{
+		c.Issues.Validate,
+		c.Severity.Validate,
+		c.LintersSettings.Validate,
+		c.Linters.Validate,
 	}
 
-	if err := c.Severity.Validate(); err != nil {
-		return err
-	}
-
-	if err := c.LintersSettings.Validate(); err != nil {
-		return err
+	for _, v := range validators {
+		if err := v(); err != nil {
+			return err
+		}
 	}
 
 	return nil
