@@ -61,6 +61,27 @@ func (l *Loader) Load() error {
 
 	l.handleGoVersion()
 
+	err = l.handleOnlyOption()
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (l *Loader) handleOnlyOption() error {
+	only, err := l.fs.GetStringSlice("only")
+	if err != nil {
+		return err
+	}
+
+	if len(only) > 0 {
+		l.cfg.Linters = Linters{
+			Enable:     only,
+			DisableAll: true,
+		}
+	}
+
 	return nil
 }
 
