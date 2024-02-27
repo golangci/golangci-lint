@@ -26,6 +26,13 @@ func NewNoop(l Linter, reason string) Noop {
 	}
 }
 
+func NewNoopDeprecated(name string) Noop {
+	return Noop{
+		name: name,
+		desc: "Deprecated",
+	}
+}
+
 func (n Noop) Run(_ context.Context, lintCtx *Context) ([]result.Issue, error) {
 	if n.reason != "" {
 		lintCtx.Log.Warnf("%s: %s", n.name, n.reason)
