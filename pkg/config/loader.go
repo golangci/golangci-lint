@@ -185,7 +185,7 @@ func (l *Loader) parseConfig() error {
 			// Load configuration from flags only.
 			err = l.viper.Unmarshal(l.cfg)
 			if err != nil {
-				return err
+				return fmt.Errorf("can't unmarshal config by viper (flags): %w", err)
 			}
 
 			return nil
@@ -201,7 +201,7 @@ func (l *Loader) parseConfig() error {
 
 	// Load configuration from all sources (flags, file).
 	if err := l.viper.Unmarshal(l.cfg, fileDecoderHook()); err != nil {
-		return fmt.Errorf("can't unmarshal config by viper: %w", err)
+		return fmt.Errorf("can't unmarshal config by viper (flags, file): %w", err)
 	}
 
 	if l.cfg.InternalTest { // just for testing purposes: to detect config file usage
