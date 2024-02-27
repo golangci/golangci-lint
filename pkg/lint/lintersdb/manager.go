@@ -299,7 +299,6 @@ func AllPresets() []string {
 func linterConfigsToMap(lcs []*linter.Config) map[string]*linter.Config {
 	ret := map[string]*linter.Config{}
 	for _, lc := range lcs {
-		lc := lc // local copy
 		ret[lc.Name()] = lc
 	}
 
