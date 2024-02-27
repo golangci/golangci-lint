@@ -106,7 +106,7 @@ var validatePresetsTestCases = []validatorTestCase{
 	},
 }
 
-func TestValidator_validateEnabledDisabledLintersConfig(t *testing.T) {
+func TestValidator_Validate(t *testing.T) {
 	m, err := NewManager(nil, nil, NewLinterBuilder())
 	require.NoError(t, err)
 
@@ -121,13 +121,13 @@ func TestValidator_validateEnabledDisabledLintersConfig(t *testing.T) {
 		t.Run(test.desc, func(t *testing.T) {
 			t.Parallel()
 
-			err := v.validateEnabledDisabledLintersConfig(test.cfg)
+			err := v.Validate(&config.Config{Linters: *test.cfg})
 			require.NoError(t, err)
 		})
 	}
 }
 
-func TestValidator_validateEnabledDisabledLintersConfig_error(t *testing.T) {
+func TestValidator_Validate_error(t *testing.T) {
 	m, err := NewManager(nil, nil, NewLinterBuilder())
 	require.NoError(t, err)
 
@@ -142,7 +142,7 @@ func TestValidator_validateEnabledDisabledLintersConfig_error(t *testing.T) {
 		t.Run(test.desc, func(t *testing.T) {
 			t.Parallel()
 
-			err := v.validateEnabledDisabledLintersConfig(test.cfg)
+			err := v.Validate(&config.Config{Linters: *test.cfg})
 			require.Error(t, err)
 
 			require.EqualError(t, err, test.expected)

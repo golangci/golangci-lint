@@ -24,17 +24,13 @@ func (v Validator) Validate(cfg *config.Config) error {
 		return err
 	}
 
-	return v.validateEnabledDisabledLintersConfig(&cfg.Linters)
-}
-
-func (v Validator) validateEnabledDisabledLintersConfig(cfg *config.Linters) error {
 	validators := []func(cfg *config.Linters) error{
 		v.validateLintersNames,
 		v.validatePresets,
 	}
 
 	for _, v := range validators {
-		if err := v(cfg); err != nil {
+		if err := v(&cfg.Linters); err != nil {
 			return err
 		}
 	}
