@@ -1,5 +1,0 @@
-linters-settings:
-  exhaustivestruct:
-    struct-patterns:
-      - '*.ExhaustiveStructCustom'
-      - '*.ExhaustiveStructCustom2'

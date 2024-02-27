@@ -13,7 +13,6 @@ import (
 
 const unconvertName = "unconvert"
 
-//nolint:dupl
 func NewUnconvert() *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
