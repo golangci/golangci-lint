@@ -25,7 +25,7 @@ func (d dummyLogger) Warnf(_ string, _ ...any) {}
 func (d dummyLogger) Infof(_ string, _ ...any) {}
 
 func (d dummyLogger) Child(_ string) logutils.Log {
-	return nil
+	return &d
 }
 
 func (d dummyLogger) SetLevel(_ logutils.LogLevel) {}
