@@ -3,6 +3,7 @@ package goanalysis
 import (
 	"fmt"
 	"runtime"
+	"slices"
 	"sort"
 	"strings"
 	"sync"
@@ -42,13 +43,31 @@ func runAnalyzers(cfg runAnalyzersConfig, lintCtx *linter.Context) ([]result.Iss
 		pkgs = lintCtx.OriginalPackages
 	}
 
+	pkgByPath := make(map[string]*packages.Package, len(pkgs))
+	for _, pkg := range pkgs {
+		pkgByPath[pkg.PkgPath] = pkg
+	}
+
 	issues, pkgsFromCache := loadIssuesFromCache(pkgs, lintCtx, cfg.getAnalyzers())
+
 	var pkgsToAnalyze []*packages.Package
 	for _, pkg := range pkgs {
 		if !pkgsFromCache[pkg] {
 			pkgsToAnalyze = append(pkgsToAnalyze, pkg)
+
+			// Also add the local packages imported by a package to analyze.
+			// Some linters produce reports on a package reported by another one.
+			// This is only needed for local imports.
+			for _, v := range pkg.Imports {
+				if p, found := pkgByPath[v.PkgPath]; found {
+					pkgsToAnalyze = append(pkgsToAnalyze, p)
+				}
+			}
 		}
 	}
+
+	// keep only unique packages
+	pkgsToAnalyze = slices.Compact(pkgsToAnalyze)
 
 	diags, errs, passToPkg := runner.run(cfg.getAnalyzers(), pkgsToAnalyze)
 
