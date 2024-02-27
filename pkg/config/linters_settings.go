@@ -291,6 +291,10 @@ type LintersSettings struct {
 	Custom map[string]CustomLinterSettings
 }
 
+func (s *LintersSettings) Validate() error {
+	return s.Govet.Validate()
+}
+
 type AsasalintSettings struct {
 	Exclude              []string `mapstructure:"exclude"`
 	UseBuiltinExclusions bool     `mapstructure:"use-builtin-exclusions"`
@@ -606,15 +610,14 @@ type GovetSettings struct {
 }
 
 func (cfg *GovetSettings) Validate() error {
-	// TODO(ldez) need to be move into the linter file.
 	if cfg.EnableAll && cfg.DisableAll {
-		return errors.New("enable-all and disable-all can't be combined")
+		return errors.New("govet: enable-all and disable-all can't be combined")
 	}
 	if cfg.EnableAll && len(cfg.Enable) != 0 {
-		return errors.New("enable-all and enable can't be combined")
+		return errors.New("govet: enable-all and enable can't be combined")
 	}
 	if cfg.DisableAll && len(cfg.Disable) != 0 {
-		return errors.New("disable-all and disable can't be combined")
+		return errors.New("govet: disable-all and disable can't be combined")
 	}
 	return nil
 }

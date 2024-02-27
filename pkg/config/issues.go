@@ -122,6 +122,16 @@ type Issues struct {
 	NeedFix bool `mapstructure:"fix"`
 }
 
+func (i *Issues) Validate() error {
+	for i, rule := range i.ExcludeRules {
+		if err := rule.Validate(); err != nil {
+			return fmt.Errorf("error in exclude rule #%d: %w", i, err)
+		}
+	}
+
+	return nil
+}
+
 type ExcludeRule struct {
 	BaseRule `mapstructure:",squash"`
 }

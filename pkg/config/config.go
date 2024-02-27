@@ -1,8 +1,6 @@
 package config
 
 import (
-	"errors"
-	"fmt"
 	"os"
 	"regexp"
 	"strings"
@@ -34,19 +32,16 @@ func (c *Config) GetConfigDir() string {
 }
 
 func (c *Config) Validate() error {
-	for i, rule := range c.Issues.ExcludeRules {
-		if err := rule.Validate(); err != nil {
-			return fmt.Errorf("error in exclude rule #%d: %w", i, err)
-		}
+	if err := c.Issues.Validate(); err != nil {
+		return err
 	}
 
-	if len(c.Severity.Rules) > 0 && c.Severity.Default == "" {
-		return errors.New("can't set severity rule option: no default severity defined")
+	if err := c.Severity.Validate(); err != nil {
+		return err
 	}
-	for i, rule := range c.Severity.Rules {
-		if err := rule.Validate(); err != nil {
-			return fmt.Errorf("error in severity rule #%d: %w", i, err)
-		}
+
+	if err := c.LintersSettings.Validate(); err != nil {
+		return err
 	}
 
 	return nil
