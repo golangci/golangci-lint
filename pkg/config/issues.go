@@ -156,7 +156,7 @@ func (b *BaseRule) Validate(minConditionsCount int) error {
 	}
 
 	if b.Path != "" && b.PathExcept != "" {
-		return errors.New("path and path-except should be set at the same time")
+		return errors.New("path and path-except should not be set at the same time")
 	}
 
 	nonBlank := 0

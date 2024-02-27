@@ -10,7 +10,7 @@ import (
 func TestGetExcludePatterns(t *testing.T) {
 	patterns := GetExcludePatterns(nil)
 
-	assert.Equal(t, patterns, DefaultExcludePatterns)
+	assert.Equal(t, DefaultExcludePatterns, patterns)
 }
 
 func TestGetExcludePatterns_includes(t *testing.T) {
@@ -116,7 +116,7 @@ func TestExcludeRule_Validate(t *testing.T) {
 					PathExcept: "test",
 				},
 			},
-			expected: "path and path-except should be set at the same time",
+			expected: "path and path-except should not be set at the same time",
 		},
 	}
 
@@ -127,6 +127,79 @@ func TestExcludeRule_Validate(t *testing.T) {
 
 			err := test.rule.Validate()
 			require.EqualError(t, err, test.expected)
+		})
+	}
+}
+
+func TestExcludeRule_Validate_error(t *testing.T) {
+	testCases := []struct {
+		desc string
+		rule *ExcludeRule
+	}{
+		{
+			desc: "path and linter",
+			rule: &ExcludeRule{
+				BaseRule{
+					Path:    "test",
+					Linters: []string{"a"},
+				},
+			},
+		},
+		{
+			desc: "path-except and linter",
+			rule: &ExcludeRule{
+				BaseRule{
+					PathExcept: "test",
+					Linters:    []string{"a"},
+				},
+			},
+		},
+		{
+			desc: "text and linter",
+			rule: &ExcludeRule{
+				BaseRule{
+					Text:    "test",
+					Linters: []string{"a"},
+				},
+			},
+		},
+		{
+			desc: "source and linter",
+			rule: &ExcludeRule{
+				BaseRule{
+					Source:  "test",
+					Linters: []string{"a"},
+				},
+			},
+		},
+		{
+			desc: "path and text",
+			rule: &ExcludeRule{
+				BaseRule{
+					Path: "test",
+					Text: "test",
+				},
+			},
+		},
+		{
+			desc: "path and text and linter",
+			rule: &ExcludeRule{
+				BaseRule{
+					Path:    "test",
+					Text:    "test",
+					Linters: []string{"a"},
+				},
+			},
+		},
+	}
+
+	for _, test := range testCases {
+		test := test
+		t.Run(test.desc, func(t *testing.T) {
+			t.Parallel()
+
+			err := test.rule.Validate()
+			require.NoError(t, err)
 		})
 	}
 }

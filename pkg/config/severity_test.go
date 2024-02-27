@@ -7,6 +7,17 @@ import (
 )
 
 func TestSeverity_Validate(t *testing.T) {
+	rule := &SeverityRule{
+		BaseRule: BaseRule{
+			Path: "test",
+		},
+	}
+
+	err := rule.Validate()
+	require.NoError(t, err)
+}
+
+func TestSeverity_Validate_error(t *testing.T) {
 	testCases := []struct {
 		desc     string
 		rule     *SeverityRule
@@ -61,7 +72,7 @@ func TestSeverity_Validate(t *testing.T) {
 					PathExcept: "test",
 				},
 			},
-			expected: "path and path-except should be set at the same time",
+			expected: "path and path-except should not be set at the same time",
 		},
 	}
 
