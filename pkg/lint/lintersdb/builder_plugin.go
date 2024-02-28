@@ -26,7 +26,7 @@ func NewPluginBuilder(log logutils.Log) *PluginBuilder {
 	return &PluginBuilder{log: log}
 }
 
-// Build loads private linters that are specified in the golangci config file.
+// Build loads private linters that are specified in the golangci-lint config file.
 func (b *PluginBuilder) Build(cfg *config.Config) []*linter.Config {
 	if cfg == nil || b.log == nil {
 		return nil
