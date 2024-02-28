@@ -122,7 +122,7 @@ require (
 	github.com/yeya24/promlinter v0.2.0
 	github.com/ykadowak/zerologlint v0.1.5
 	gitlab.com/bosi/decorder v0.4.1
-	go-simpler.org/musttag v0.8.0
+	go-simpler.org/musttag v0.9.0
 	go-simpler.org/sloglint v0.4.0
 	golang.org/x/exp v0.0.0-20240103183307-be819d1f06fc
 	golang.org/x/tools v0.18.0
