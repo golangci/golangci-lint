@@ -11,6 +11,7 @@ import (
 	"github.com/spf13/pflag"
 
 	"github.com/golangci/golangci-lint/pkg/config"
+	"github.com/golangci/golangci-lint/pkg/experimental/commands/custom"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/report"
 )
@@ -66,6 +67,7 @@ func newRootCommand(info BuildInfo) *rootCommand {
 		newCacheCommand().cmd,
 		newConfigCommand(log).cmd,
 		newVersionCommand(info).cmd,
+		custom.NewCommand(log).Cmd,
 	)
 
 	rootCmd.SetHelpCommand(newHelpCommand(log).cmd)

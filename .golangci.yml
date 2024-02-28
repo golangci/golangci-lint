@@ -93,6 +93,7 @@ linters-settings:
         disabled: true
       - name: unused-parameter
 
+
 linters:
   disable-all: true
   enable:
