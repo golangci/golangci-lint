@@ -90,6 +90,7 @@ func detectGoVersion() string {
 
 // Trims the Go version to keep only M.m.
 // Since Go 1.21 the version inside the go.mod can be a patched version (ex: 1.21.0).
+// The version can also include information which we want to remove (ex: 1.21alpha1)
 // https://go.dev/doc/toolchain#versions
 // This a problem with staticcheck and gocritic.
 func trimGoVersion(v string) string {

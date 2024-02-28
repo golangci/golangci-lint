@@ -17,7 +17,8 @@ func NewValidator(m *Manager) *Validator {
 	return &Validator{m: m}
 }
 
-// Validate validates the configuration.
+// Validate validates the configuration by calling all other validators for different
+// sections in the configuration and then some additional linter validation functions.
 func (v Validator) Validate(cfg *config.Config) error {
 	err := cfg.Validate()
 	if err != nil {
