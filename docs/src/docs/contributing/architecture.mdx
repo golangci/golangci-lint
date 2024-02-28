@@ -22,6 +22,14 @@ graph LR
 
 </ResponsiveContainer>
 
+## Init
+
+The configuration is loaded from file and flags by `config.Loader` inside `PersistentPreRun` (or `PreRun`) of the commands that require configuration.
+
+The linter database (`linterdb.Manager`) is fill based on the configuration:
+- The linters ("internals" and plugins) are built by `linterdb.LinterBuilder` and `linterdb.PluginBuilder` builders.
+- The configuration is validated by `linterdb.Validator`.
+
 ## Load Packages
 
 Loading packages is listing all packages and their recursive dependencies for analysis.
