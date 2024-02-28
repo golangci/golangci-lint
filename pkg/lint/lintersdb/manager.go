@@ -19,6 +19,8 @@ type Builder interface {
 	Build(cfg *config.Config) []*linter.Config
 }
 
+// Manager This a kind of database for all the linters (internals or plugins).
+// It provides methods to access to the linter sets.
 type Manager struct {
 	log    logutils.Log
 	debugf logutils.DebugFunc
@@ -30,6 +32,8 @@ type Manager struct {
 	nameToLCs map[string][]*linter.Config
 }
 
+// NewManager creates a new Manager.
+// This constructor will call the builders to build and store the linters.
 func NewManager(log logutils.Log, cfg *config.Config, builders ...Builder) (*Manager, error) {
 	m := &Manager{
 		log:       log,

@@ -6,12 +6,16 @@ import (
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 )
 
+// LinterBuilder builds the "internal" linters based on the configuration.
 type LinterBuilder struct{}
 
+// NewLinterBuilder creates a new LinterBuilder.
 func NewLinterBuilder() *LinterBuilder {
 	return &LinterBuilder{}
 }
 
+// Build loads all the "internal" linters.
+// The configuration is use for the linter settings.
 func (b LinterBuilder) Build(cfg *config.Config) []*linter.Config {
 	if cfg == nil {
 		return nil

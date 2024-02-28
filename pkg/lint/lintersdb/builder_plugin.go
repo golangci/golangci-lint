@@ -18,15 +18,17 @@ type AnalyzerPlugin interface {
 	GetAnalyzers() []*analysis.Analyzer
 }
 
+// PluginBuilder builds the custom linters (plugins) based on the configuration.
 type PluginBuilder struct {
 	log logutils.Log
 }
 
+// NewPluginBuilder creates new PluginBuilder.
 func NewPluginBuilder(log logutils.Log) *PluginBuilder {
 	return &PluginBuilder{log: log}
 }
 
-// Build loads private linters that are specified in the golangci-lint config file.
+// Build loads custom linters that are specified in the golangci-lint config file.
 func (b *PluginBuilder) Build(cfg *config.Config) []*linter.Config {
 	if cfg == nil || b.log == nil {
 		return nil
