@@ -129,7 +129,7 @@ func TestEnabledLinters(t *testing.T) {
 				Runner().
 				Run()
 
-			sort.StringSlice(c.enabledLinters).Sort()
+			sort.Strings(c.enabledLinters)
 
 			r.ExpectOutputContains(fmt.Sprintf("Active %d linters: [%s]",
 				len(c.enabledLinters), strings.Join(c.enabledLinters, " ")))

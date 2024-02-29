@@ -19,7 +19,7 @@ type Builder interface {
 	Build(cfg *config.Config) []*linter.Config
 }
 
-// Manager This a kind of database for all the linters (internals or plugins).
+// Manager is a type of database for all linters (internals or plugins).
 // It provides methods to access to the linter sets.
 type Manager struct {
 	log    logutils.Log
@@ -273,11 +273,11 @@ func (m *Manager) verbosePrintLintersStatus(lcs map[string]*linter.Config) {
 
 		linterNames = append(linterNames, lc.Name())
 	}
-	sort.StringSlice(linterNames).Sort()
+	sort.Strings(linterNames)
 	m.log.Infof("Active %d linters: %s", len(linterNames), linterNames)
 
 	if len(m.cfg.Linters.Presets) != 0 {
-		sort.StringSlice(m.cfg.Linters.Presets).Sort()
+		sort.Strings(m.cfg.Linters.Presets)
 		m.log.Infof("Active presets: %s", m.cfg.Linters.Presets)
 	}
 }
