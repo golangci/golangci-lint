@@ -2,6 +2,7 @@ package lintersdb
 
 import (
 	"os"
+	"slices"
 	"sort"
 
 	"golang.org/x/exp/maps"
@@ -74,16 +75,13 @@ func (m *Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 
 func (m *Manager) GetAllLinterConfigsForPreset(p string) []*linter.Config {
 	var ret []*linter.Config
-	for _, lc := range m.GetAllSupportedLinterConfigs() {
+	for _, lc := range m.linters {
 		if lc.IsDeprecated() {
 			continue
 		}
 
-		for _, ip := range lc.InPresets {
-			if p == ip {
-				ret = append(ret, lc)
-				break
-			}
+		if slices.Contains(lc.InPresets, p) {
+			ret = append(ret, lc)
 		}
 	}
 
@@ -134,7 +132,7 @@ func (m *Manager) GetOptimizedLinters() ([]*linter.Config, error) {
 
 func (m *Manager) GetAllEnabledByDefaultLinters() []*linter.Config {
 	var ret []*linter.Config
-	for _, lc := range m.GetAllSupportedLinterConfigs() {
+	for _, lc := range m.linters {
 		if lc.EnabledByDefault {
 			ret = append(ret, lc)
 		}
@@ -149,12 +147,12 @@ func (m *Manager) build(enabledByDefaultLinters []*linter.Config) map[string]*li
 
 	resultLintersSet := map[string]*linter.Config{}
 	switch {
-	case len(m.cfg.Linters.Presets) != 0:
-		break // imply --disable-all
-	case m.cfg.Linters.EnableAll:
-		resultLintersSet = linterConfigsToMap(m.GetAllSupportedLinterConfigs())
 	case m.cfg.Linters.DisableAll:
-		break
+		// no default linters
+	case len(m.cfg.Linters.Presets) != 0:
+		// imply --disable-all
+	case m.cfg.Linters.EnableAll:
+		resultLintersSet = linterConfigsToMap(m.linters)
 	default:
 		resultLintersSet = linterConfigsToMap(enabledByDefaultLinters)
 	}
