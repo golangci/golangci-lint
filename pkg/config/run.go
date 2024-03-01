@@ -23,7 +23,7 @@ type Run struct {
 	AllowParallelRunners bool `mapstructure:"allow-parallel-runners"`
 	AllowSerialRunners   bool `mapstructure:"allow-serial-runners"`
 
-	ShowStats bool `mapstructure:"show-stats"`
+	ShowStats bool `mapstructure:"show-stats"` // Deprecated use Output.ShowStats instead.
 
 	// It's obtain by flags and use for the tests and the context loader.
 	Args []string // Internal needs.

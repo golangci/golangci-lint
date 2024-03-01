@@ -55,7 +55,6 @@ func setupRunFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
 	const allowSerialDesc = "Allow multiple golangci-lint instances running, but serialize them around a lock. " +
 		"If false (default) - golangci-lint exits with an error if it fails to acquire file lock on start."
 	internal.AddFlagAndBind(v, fs, fs.Bool, "allow-serial-runners", "run.allow-serial-runners", false, color.GreenString(allowSerialDesc))
-	internal.AddFlagAndBind(v, fs, fs.Bool, "show-stats", "run.show-stats", false, color.GreenString("Show statistics per linter"))
 }
 
 func setupOutputFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
@@ -71,6 +70,7 @@ func setupOutputFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
 		color.GreenString("Sort linter results"))
 	internal.AddFlagAndBind(v, fs, fs.String, "path-prefix", "output.path-prefix", "",
 		color.GreenString("Path prefix to add to output"))
+	internal.AddFlagAndBind(v, fs, fs.Bool, "show-stats", "output.show-stats", false, color.GreenString("Show statistics per linter"))
 }
 
 //nolint:gomnd

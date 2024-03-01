@@ -80,10 +80,6 @@ run:
   # Default: use Go version from the go.mod file, fallback on the env var `GOVERSION`, fallback on 1.17
   go: '1.19'
 
-  # Show statistics per linter.
-  # Default: false
-  show-stats: true
-
 
 # output configuration options
 output:
@@ -117,6 +113,9 @@ output:
   # Default: false
   sort-results: true
 
+  # Show statistics per linter.
+  # Default: false
+  show-stats: true
 
 # All available settings of specific linters.
 linters-settings:

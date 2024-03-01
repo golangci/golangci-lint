@@ -34,4 +34,5 @@ type Output struct {
 	UniqByLine      bool   `mapstructure:"uniq-by-line"`
 	SortResults     bool   `mapstructure:"sort-results"`
 	PathPrefix      string `mapstructure:"path-prefix"`
+	ShowStats       bool   `mapstructure:"show-stats"`
 }
