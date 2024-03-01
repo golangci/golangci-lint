@@ -8,7 +8,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-type github struct {
+type Github struct {
 	w io.Writer
 }
 
@@ -16,8 +16,8 @@ const defaultGithubSeverity = "error"
 
 // NewGithub output format outputs issues according to GitHub actions format:
 // https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-error-message
-func NewGithub(w io.Writer) Printer {
-	return &github{w: w}
+func NewGithub(w io.Writer) *Github {
+	return &Github{w: w}
 }
 
 // print each line as: ::error file=app.js,line=10,col=15::Something went wrong
@@ -41,7 +41,7 @@ func formatIssueAsGithub(issue *result.Issue) string {
 	return ret
 }
 
-func (p *github) Print(issues []result.Issue) error {
+func (p *Github) Print(issues []result.Issue) error {
 	for ind := range issues {
 		_, err := fmt.Fprintln(p.w, formatIssueAsGithub(&issues[ind]))
 		if err != nil {

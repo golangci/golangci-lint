@@ -1,0 +1,395 @@
+{
+    "Warnings": [
+      {
+        "Tag": "runner",
+        "Text": "The linter 'maligned' is deprecated (since v1.38.0) due to: The repository of the linter has been archived by the owner. Replaced by govet 'fieldalignment'."
+      }
+    ],
+    "Linters": [
+      {
+        "Name": "asasalint"
+      },
+      {
+        "Name": "asciicheck"
+      },
+      {
+        "Name": "bidichk"
+      },
+      {
+        "Name": "bodyclose",
+        "Enabled": true
+      },
+      {
+        "Name": "containedctx"
+      },
+      {
+        "Name": "contextcheck"
+      },
+      {
+        "Name": "cyclop"
+      },
+      {
+        "Name": "decorder"
+      },
+      {
+        "Name": "deadcode"
+      },
+      {
+        "Name": "depguard",
+        "Enabled": true
+      },
+      {
+        "Name": "dogsled",
+        "Enabled": true
+      },
+      {
+        "Name": "dupl",
+        "Enabled": true
+      },
+      {
+        "Name": "dupword"
+      },
+      {
+        "Name": "durationcheck"
+      },
+      {
+        "Name": "errcheck",
+        "Enabled": true,
+        "EnabledByDefault": true
+      },
+      {
+        "Name": "errchkjson"
+      },
+      {
+        "Name": "errname"
+      },
+      {
+        "Name": "errorlint",
+        "Enabled": true
+      },
+      {
+        "Name": "execinquery"
+      },
+      {
+        "Name": "exhaustive"
+      },
+      {
+        "Name": "exhaustivestruct"
+      },
+      {
+        "Name": "exhaustruct"
+      },
+      {
+        "Name": "exportloopref",
+        "Enabled": true
+      },
+      {
+        "Name": "forbidigo"
+      },
+      {
+        "Name": "forcetypeassert"
+      },
+      {
+        "Name": "funlen",
+        "Enabled": true
+      },
+      {
+        "Name": "gci"
+      },
+      {
+        "Name": "ginkgolinter"
+      },
+      {
+        "Name": "gocheckcompilerdirectives",
+        "Enabled": true
+      },
+      {
+        "Name": "gochecknoglobals"
+      },
+      {
+        "Name": "gochecknoinits",
+        "Enabled": true
+      },
+      {
+        "Name": "gochecksumtype"
+      },
+      {
+        "Name": "gocognit"
+      },
+      {
+        "Name": "goconst",
+        "Enabled": true
+      },
+      {
+        "Name": "gocritic",
+        "Enabled": true
+      },
+      {
+        "Name": "gocyclo",
+        "Enabled": true
+      },
+      {
+        "Name": "godot"
+      },
+      {
+        "Name": "godox"
+      },
+      {
+        "Name": "goerr113"
+      },
+      {
+        "Name": "gofmt",
+        "Enabled": true
+      },
+      {
+        "Name": "gofumpt"
+      },
+      {
+        "Name": "goheader"
+      },
+      {
+        "Name": "goimports",
+        "Enabled": true
+      },
+      {
+        "Name": "golint"
+      },
+      {
+        "Name": "gomnd",
+        "Enabled": true
+      },
+      {
+        "Name": "gomoddirectives"
+      },
+      {
+        "Name": "gomodguard"
+      },
+      {
+        "Name": "goprintffuncname",
+        "Enabled": true
+      },
+      {
+        "Name": "gosec",
+        "Enabled": true
+      },
+      {
+        "Name": "gosimple",
+        "Enabled": true,
+        "EnabledByDefault": true
+      },
+      {
+        "Name": "gosmopolitan"
+      },
+      {
+        "Name": "govet",
+        "Enabled": true,
+        "EnabledByDefault": true
+      },
+      {
+        "Name": "grouper"
+      },
+      {
+        "Name": "ifshort"
+      },
+      {
+        "Name": "importas"
+      },
+      {
+        "Name": "inamedparam"
+      },
+      {
+        "Name": "ineffassign",
+        "Enabled": true,
+        "EnabledByDefault": true
+      },
+      {
+        "Name": "interfacebloat"
+      },
+      {
+        "Name": "interfacer"
+      },
+      {
+        "Name": "ireturn"
+      },
+      {
+        "Name": "lll",
+        "Enabled": true
+      },
+      {
+        "Name": "loggercheck"
+      },
+      {
+        "Name": "maintidx"
+      },
+      {
+        "Name": "makezero"
+      },
+      {
+        "Name": "maligned",
+        "Enabled": true
+      },
+      {
+        "Name": "mirror"
+      },
+      {
+        "Name": "misspell",
+        "Enabled": true
+      },
+      {
+        "Name": "musttag"
+      },
+      {
+        "Name": "nakedret",
+        "Enabled": true
+      },
+      {
+        "Name": "nestif"
+      },
+      {
+        "Name": "nilerr"
+      },
+      {
+        "Name": "nilnil"
+      },
+      {
+        "Name": "nlreturn"
+      },
+      {
+        "Name": "noctx",
+        "Enabled": true
+      },
+      {
+        "Name": "nonamedreturns"
+      },
+      {
+        "Name": "nosnakecase"
+      },
+      {
+        "Name": "nosprintfhostport"
+      },
+      {
+        "Name": "paralleltest"
+      },
+      {
+        "Name": "perfsprint"
+      },
+      {
+        "Name": "prealloc"
+      },
+      {
+        "Name": "predeclared"
+      },
+      {
+        "Name": "promlinter"
+      },
+      {
+        "Name": "protogetter"
+      },
+      {
+        "Name": "reassign"
+      },
+      {
+        "Name": "revive",
+        "Enabled": true
+      },
+      {
+        "Name": "rowserrcheck"
+      },
+      {
+        "Name": "sloglint"
+      },
+      {
+        "Name": "scopelint"
+      },
+      {
+        "Name": "sqlclosecheck"
+      },
+      {
+        "Name": "spancheck"
+      },
+      {
+        "Name": "staticcheck",
+        "Enabled": true,
+        "EnabledByDefault": true
+      },
+      {
+        "Name": "structcheck"
+      },
+      {
+        "Name": "stylecheck",
+        "Enabled": true
+      },
+      {
+        "Name": "tagalign"
+      },
+      {
+        "Name": "tagliatelle"
+      },
+      {
+        "Name": "tenv"
+      },
+      {
+        "Name": "testableexamples"
+      },
+      {
+        "Name": "testifylint"
+      },
+      {
+        "Name": "testpackage"
+      },
+      {
+        "Name": "thelper"
+      },
+      {
+        "Name": "tparallel"
+      },
+      {
+        "Name": "typecheck",
+        "Enabled": true,
+        "EnabledByDefault": true
+      },
+      {
+        "Name": "unconvert",
+        "Enabled": true
+      },
+      {
+        "Name": "unparam",
+        "Enabled": true
+      },
+      {
+        "Name": "unused",
+        "Enabled": true,
+        "EnabledByDefault": true
+      },
+      {
+        "Name": "usestdlibvars"
+      },
+      {
+        "Name": "varcheck"
+      },
+      {
+        "Name": "varnamelen"
+      },
+      {
+        "Name": "wastedassign"
+      },
+      {
+        "Name": "whitespace",
+        "Enabled": true
+      },
+      {
+        "Name": "wrapcheck"
+      },
+      {
+        "Name": "wsl"
+      },
+      {
+        "Name": "zerologlint"
+      },
+      {
+        "Name": "nolintlint",
+        "Enabled": true
+      }
+    ]
+  }
+
