@@ -1,9 +1,8 @@
 package config
 
 import (
-	"errors"
-	"fmt"
 	"os"
+	"regexp"
 	"strings"
 
 	hcversion "github.com/hashicorp/go-version"
@@ -33,18 +32,16 @@ func (c *Config) GetConfigDir() string {
 }
 
 func (c *Config) Validate() error {
-	for i, rule := range c.Issues.ExcludeRules {
-		if err := rule.Validate(); err != nil {
-			return fmt.Errorf("error in exclude rule #%d: %w", i, err)
-		}
+	validators := []func() error{
+		c.Issues.Validate,
+		c.Severity.Validate,
+		c.LintersSettings.Validate,
+		c.Linters.Validate,
 	}
 
-	if len(c.Severity.Rules) > 0 && c.Severity.Default == "" {
-		return errors.New("can't set severity rule option: no default severity defined")
-	}
-	for i, rule := range c.Severity.Rules {
-		if err := rule.Validate(); err != nil {
-			return fmt.Errorf("error in severity rule #%d: %w", i, err)
+	for _, v := range validators {
+		if err := v(); err != nil {
+			return err
 		}
 	}
 
@@ -89,4 +86,23 @@ func detectGoVersion() string {
 	}
 
 	return "1.17"
+}
+
+// Trims the Go version to keep only M.m.
+// Since Go 1.21 the version inside the go.mod can be a patched version (ex: 1.21.0).
+// The version can also include information which we want to remove (ex: 1.21alpha1)
+// https://go.dev/doc/toolchain#versions
+// This a problem with staticcheck and gocritic.
+func trimGoVersion(v string) string {
+	if v == "" {
+		return ""
+	}
+
+	exp := regexp.MustCompile(`(\d\.\d+)(?:\.\d+|[a-z]+\d)`)
+
+	if exp.MatchString(v) {
+		return exp.FindStringSubmatch(v)[1]
+	}
+
+	return v
 }

@@ -25,8 +25,8 @@ type versionInfo struct {
 }
 
 type versionOptions struct {
-	Format string `mapstructure:"format"`
-	Debug  bool   `mapstructure:"debug"`
+	Format string
+	Debug  bool
 }
 
 type versionCommand struct {

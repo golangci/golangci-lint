@@ -27,8 +27,7 @@ type Runner struct {
 	Log        logutils.Log
 }
 
-func NewRunner(cfg *config.Config, log logutils.Log, goenv *goutil.Env,
-	es *lintersdb.EnabledSet,
+func NewRunner(log logutils.Log, cfg *config.Config, goenv *goutil.Env,
 	lineCache *fsutils.LineCache, fileCache *fsutils.FileCache,
 	dbManager *lintersdb.Manager, pkgs []*gopackages.Package) (*Runner, error) {
 	// Beware that some processors need to add the path prefix when working with paths
@@ -50,7 +49,7 @@ func NewRunner(cfg *config.Config, log logutils.Log, goenv *goutil.Env,
 		return nil, err
 	}
 
-	enabledLinters, err := es.GetEnabledLintersMap()
+	enabledLinters, err := dbManager.GetEnabledLintersMap()
 	if err != nil {
 		return nil, fmt.Errorf("failed to get enabled linters: %w", err)
 	}

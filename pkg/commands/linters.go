@@ -27,8 +27,7 @@ type lintersCommand struct {
 
 	log logutils.Log
 
-	dbManager         *lintersdb.Manager
-	enabledLintersSet *lintersdb.EnabledSet
+	dbManager *lintersdb.Manager
 }
 
 func newLintersCommand(logger logutils.Log, cfg *config.Config) *lintersCommand {
@@ -65,15 +64,19 @@ func (c *lintersCommand) preRunE(cmd *cobra.Command, _ []string) error {
 		return fmt.Errorf("can't load config: %w", err)
 	}
 
-	c.dbManager = lintersdb.NewManager(c.cfg, c.log)
-	c.enabledLintersSet = lintersdb.NewEnabledSet(c.dbManager,
-		lintersdb.NewValidator(c.dbManager), c.log.Child(logutils.DebugKeyLintersDB), c.cfg)
+	dbManager, err := lintersdb.NewManager(c.log.Child(logutils.DebugKeyLintersDB), c.cfg,
+		lintersdb.NewPluginBuilder(c.log), lintersdb.NewLinterBuilder())
+	if err != nil {
+		return err
+	}
+
+	c.dbManager = dbManager
 
 	return nil
 }
 
 func (c *lintersCommand) execute(_ *cobra.Command, _ []string) error {
-	enabledLintersMap, err := c.enabledLintersSet.GetEnabledLintersMap()
+	enabledLintersMap, err := c.dbManager.GetEnabledLintersMap()
 	if err != nil {
 		return fmt.Errorf("can't get enabled linters: %w", err)
 	}

@@ -80,8 +80,7 @@ type runCommand struct {
 
 	buildInfo BuildInfo
 
-	dbManager         *lintersdb.Manager
-	enabledLintersSet *lintersdb.EnabledSet
+	dbManager *lintersdb.Manager
 
 	log        logutils.Log
 	debugf     logutils.DebugFunc
@@ -171,9 +170,13 @@ func (c *runCommand) persistentPostRunE(_ *cobra.Command, _ []string) error {
 }
 
 func (c *runCommand) preRunE(_ *cobra.Command, _ []string) error {
-	c.dbManager = lintersdb.NewManager(c.cfg, c.log)
-	c.enabledLintersSet = lintersdb.NewEnabledSet(c.dbManager,
-		lintersdb.NewValidator(c.dbManager), c.log.Child(logutils.DebugKeyLintersDB), c.cfg)
+	dbManager, err := lintersdb.NewManager(c.log.Child(logutils.DebugKeyLintersDB), c.cfg,
+		lintersdb.NewPluginBuilder(c.log), lintersdb.NewLinterBuilder())
+	if err != nil {
+		return err
+	}
+
+	c.dbManager = dbManager
 
 	c.goenv = goutil.NewEnv(c.log.Child(logutils.DebugKeyGoEnv))
 
@@ -340,12 +343,12 @@ func (c *runCommand) runAndPrint(ctx context.Context, args []string) error {
 func (c *runCommand) runAnalysis(ctx context.Context, args []string) ([]result.Issue, error) {
 	c.cfg.Run.Args = args
 
-	lintersToRun, err := c.enabledLintersSet.GetOptimizedLinters()
+	lintersToRun, err := c.dbManager.GetOptimizedLinters()
 	if err != nil {
 		return nil, err
 	}
 
-	enabledLintersMap, err := c.enabledLintersSet.GetEnabledLintersMap()
+	enabledLintersMap, err := c.dbManager.GetEnabledLintersMap()
 	if err != nil {
 		return nil, err
 	}
@@ -361,8 +364,8 @@ func (c *runCommand) runAnalysis(ctx context.Context, args []string) ([]result.I
 	}
 	lintCtx.Log = c.log.Child(logutils.DebugKeyLintersContext)
 
-	runner, err := lint.NewRunner(c.cfg, c.log.Child(logutils.DebugKeyRunner),
-		c.goenv, c.enabledLintersSet, c.lineCache, c.fileCache, c.dbManager, lintCtx.Packages)
+	runner, err := lint.NewRunner(c.log.Child(logutils.DebugKeyRunner),
+		c.cfg, c.goenv, c.lineCache, c.fileCache, c.dbManager, lintCtx.Packages)
 	if err != nil {
 		return nil, err
 	}

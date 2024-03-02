@@ -59,11 +59,37 @@ func (l *Loader) Load() error {
 
 	l.applyStringSliceHack()
 
+	l.handleGoVersion()
+
+	return nil
+}
+
+func (l *Loader) handleGoVersion() {
 	if l.cfg.Run.Go == "" {
 		l.cfg.Run.Go = detectGoVersion()
 	}
 
-	return nil
+	l.cfg.LintersSettings.Govet.Go = l.cfg.Run.Go
+
+	l.cfg.LintersSettings.ParallelTest.Go = l.cfg.Run.Go
+
+	trimmedGoVersion := trimGoVersion(l.cfg.Run.Go)
+
+	l.cfg.LintersSettings.Gocritic.Go = trimmedGoVersion
+	if l.cfg.LintersSettings.Gofumpt.LangVersion == "" {
+		l.cfg.LintersSettings.Gofumpt.LangVersion = l.cfg.Run.Go
+	}
+
+	// staticcheck related linters.
+	if l.cfg.LintersSettings.Staticcheck.GoVersion == "" {
+		l.cfg.LintersSettings.Staticcheck.GoVersion = trimmedGoVersion
+	}
+	if l.cfg.LintersSettings.Gosimple.GoVersion == "" {
+		l.cfg.LintersSettings.Gosimple.GoVersion = trimmedGoVersion
+	}
+	if l.cfg.LintersSettings.Stylecheck.GoVersion != "" {
+		l.cfg.LintersSettings.Stylecheck.GoVersion = trimmedGoVersion
+	}
 }
 
 func (l *Loader) setConfigFile() error {
@@ -161,11 +187,7 @@ func (l *Loader) parseConfig() error {
 			// Load configuration from flags only.
 			err = l.viper.Unmarshal(l.cfg)
 			if err != nil {
-				return err
-			}
-
-			if err = l.cfg.Validate(); err != nil {
-				return fmt.Errorf("can't validate config: %w", err)
+				return fmt.Errorf("can't unmarshal config by viper (flags): %w", err)
 			}
 
 			return nil
@@ -181,11 +203,7 @@ func (l *Loader) parseConfig() error {
 
 	// Load configuration from all sources (flags, file).
 	if err := l.viper.Unmarshal(l.cfg, fileDecoderHook()); err != nil {
-		return fmt.Errorf("can't unmarshal config by viper: %w", err)
-	}
-
-	if err := l.cfg.Validate(); err != nil {
-		return fmt.Errorf("can't validate config: %w", err)
+		return fmt.Errorf("can't unmarshal config by viper (flags, file): %w", err)
 	}
 
 	if l.cfg.InternalTest { // just for testing purposes: to detect config file usage

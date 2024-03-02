@@ -22,11 +22,18 @@ graph LR
 
 </ResponsiveContainer>
 
+## Init
+
+The configuration is loaded from file and flags by `config.Loader` inside `PersistentPreRun` (or `PreRun`) of the commands that require configuration.
+
+The linter database (`linterdb.Manager`) is fill based on the configuration:
+- The linters ("internals" and plugins) are built by `linterdb.LinterBuilder` and `linterdb.PluginBuilder` builders.
+- The configuration is validated by `linterdb.Validator`.
+
 ## Load Packages
 
 Loading packages is listing all packages and their recursive dependencies for analysis.
-Also, depending on the enabled linters set some parsing of the source code can be performed
-at this step.
+Also, depending on the enabled linters set some parsing of the source code can be performed at this step.
 
 Packages loading starts here:
 
@@ -79,10 +86,10 @@ and outputs list of packages and requested information about them: filenames, ty
 
 First, we need to find all enabled linters. All linters are registered here:
 
-```go title=pkg/lint/lintersdb/manager.go
-func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
+```go title=pkg/lint/lintersdb/builder_linter.go
+func (b LinterBuilder) Build(cfg *config.Config) []*linter.Config {
 	// ...
-	linters = append(linters,
+	return []*linter.Config{
 		// ...
 		linter.NewConfig(golinters.NewBodyclose()).
 			WithSince("v1.18.0").
@@ -97,26 +104,25 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithPresets(linter.PresetBugs, linter.PresetMetaLinter).
 			WithAlternativeNames("vet", "vetshadow").
 			WithURL("https://pkg.go.dev/cmd/vet"),
+		// ...
 	}
-	// ...
 }
 ```
 
 We filter requested in config and command-line linters in `EnabledSet`:
 
-```go title=pkg/lint/lintersdb/enabled_set.go
-func (es EnabledSet) GetEnabledLintersMap() (map[string]*linter.Config, error)
+```go title=pkg/lint/lintersdb/manager.go
+func (m *Manager) GetEnabledLintersMap() (map[string]*linter.Config, error)
 ```
 
 We merge enabled linters into one `MetaLinter` to improve execution time if we can:
 
-```go title=pkg/lint/lintersdb/enabled_set.go
-// GetOptimizedLinters returns enabled linters after optimization (merging) of multiple linters
-// into a fewer number of linters. E.g. some go/analysis linters can be optimized into
-// one metalinter for data reuse and speed up.
-func (es EnabledSet) GetOptimizedLinters() ([]*linter.Config, error) {
+```go titlepkg/lint/lintersdb/manager.go
+// GetOptimizedLinters returns enabled linters after optimization (merging) of multiple linters into a fewer number of linters.
+// E.g. some go/analysis linters can be optimized into one metalinter for data reuse and speed up.
+func (m *Manager) GetOptimizedLinters() ([]*linter.Config, error) {
 	// ...
-	es.combineGoAnalysisLinters(resultLintersSet)
+	m.combineGoAnalysisLinters(resultLintersSet)
 	// ...
 }
 ```
@@ -133,9 +139,11 @@ type MetaLinter struct {
 Currently, all linters except `unused` can be merged into this meta linter.
 The `unused` isn't merged because it has high memory usage.
 
-Linters execution starts in `runAnalyzers`. It's the most complex part of the `golangci-lint`.
-We use custom [go/analysis](https://pkg.go.dev/golang.org/x/tools/go/analysis) runner there. It runs as much as it can in parallel. It lazy-loads as much as it can
-to reduce memory usage. Also, it sets all heavyweight data to `nil` as becomes unneeded to save memory.
+Linters execution starts in `runAnalyzers`.
+It's the most complex part of the `golangci-lint`.
+We use custom [go/analysis](https://pkg.go.dev/golang.org/x/tools/go/analysis) runner there.
+It runs as much as it can in parallel. It lazy-loads as much as it can to reduce memory usage.
+Also, it sets all heavyweight data to `nil` as becomes unneeded to save memory.
 
 We don't use existing [multichecker](https://pkg.go.dev/golang.org/x/tools/go/analysis/multichecker) because
 it doesn't use caching and doesn't have some important performance optimizations.

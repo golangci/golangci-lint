@@ -53,72 +53,6 @@ var validatePresetsErrorTestCases = []validateErrorTestCase{
 	},
 }
 
-var validateDisabledAndEnabledAtOneMomentErrorTestCases = []validateErrorTestCase{
-	{
-		desc: "disable one linter of the enabled linters",
-		cfg: &config.Linters{
-			Enable:  []string{"dupl", "gofmt", "misspell"},
-			Disable: []string{"dupl", "gosec", "nolintlint"},
-		},
-		expected: `linter "dupl" can't be disabled and enabled at one moment`,
-	},
-	{
-		desc: "disable multiple enabled linters",
-		cfg: &config.Linters{
-			Enable:  []string{"dupl", "gofmt", "misspell"},
-			Disable: []string{"dupl", "gofmt", "misspell"},
-		},
-		expected: `linter "dupl" can't be disabled and enabled at one moment`,
-	},
-}
-
-var validateAllDisableEnableOptionsErrorTestCases = []validateErrorTestCase{
-	{
-		desc: "enable-all and disable-all",
-		cfg: &config.Linters{
-			Enable:     nil,
-			EnableAll:  true,
-			Disable:    nil,
-			DisableAll: true,
-			Fast:       false,
-		},
-		expected: "--enable-all and --disable-all options must not be combined",
-	},
-	{
-		desc: "disable-all and disable no enable no preset",
-		cfg: &config.Linters{
-			Enable:     nil,
-			EnableAll:  false,
-			Disable:    []string{"dupl", "gofmt", "misspell"},
-			DisableAll: true,
-			Fast:       false,
-		},
-		expected: "all linters were disabled, but no one linter was enabled: must enable at least one",
-	},
-	{
-		desc: "disable-all and disable with enable",
-		cfg: &config.Linters{
-			Enable:     []string{"nolintlint"},
-			EnableAll:  false,
-			Disable:    []string{"dupl", "gofmt", "misspell"},
-			DisableAll: true,
-			Fast:       false,
-		},
-		expected: "can't combine options --disable-all and --disable dupl",
-	},
-	{
-		desc: "enable-all and enable",
-		cfg: &config.Linters{
-			Enable:     []string{"dupl", "gofmt", "misspell"},
-			EnableAll:  true,
-			Disable:    nil,
-			DisableAll: false,
-			Fast:       false,
-		},
-		expected: "can't combine options --enable-all and --enable dupl",
-	},
-}
-
 type validatorTestCase struct {
 	desc string
 	cfg  *config.Linters
@@ -172,116 +106,43 @@ var validatePresetsTestCases = []validatorTestCase{
 	},
 }
 
-var validateDisabledAndEnabledAtOneMomentTestCases = []validatorTestCase{
-	{
-		desc: "2 different sets",
-		cfg: &config.Linters{
-			Enable:  []string{"dupl", "gofmt", "misspell"},
-			Disable: []string{"goimports", "gosec", "nolintlint"},
-		},
-	},
-	{
-		desc: "only enable",
-		cfg: &config.Linters{
-			Enable:  []string{"goimports", "gosec", "nolintlint"},
-			Disable: nil,
-		},
-	},
-	{
-		desc: "only disable",
-		cfg: &config.Linters{
-			Enable:  nil,
-			Disable: []string{"dupl", "gofmt", "misspell"},
-		},
-	},
-	{
-		desc: "no sets",
-		cfg: &config.Linters{
-			Enable:  nil,
-			Disable: nil,
-		},
-	},
-}
+func TestValidator_Validate(t *testing.T) {
+	m, err := NewManager(nil, nil, NewLinterBuilder())
+	require.NoError(t, err)
 
-var validateAllDisableEnableOptionsTestCases = []validatorTestCase{
-	{
-		desc: "nothing",
-		cfg:  &config.Linters{},
-	},
-	{
-		desc: "enable and disable",
-		cfg: &config.Linters{
-			Enable:     []string{"goimports", "gosec", "nolintlint"},
-			EnableAll:  false,
-			Disable:    []string{"dupl", "gofmt", "misspell"},
-			DisableAll: false,
-		},
-	},
-	{
-		desc: "disable-all and enable",
-		cfg: &config.Linters{
-			Enable:     []string{"goimports", "gosec", "nolintlint"},
-			EnableAll:  false,
-			Disable:    nil,
-			DisableAll: true,
-		},
-	},
-	{
-		desc: "enable-all and disable",
-		cfg: &config.Linters{
-			Enable:     nil,
-			EnableAll:  true,
-			Disable:    []string{"goimports", "gosec", "nolintlint"},
-			DisableAll: false,
-		},
-	},
-	{
-		desc: "enable-all and enable and fast",
-		cfg: &config.Linters{
-			Enable:     []string{"dupl", "gofmt", "misspell"},
-			EnableAll:  true,
-			Disable:    nil,
-			DisableAll: false,
-			Fast:       true,
-		},
-	},
-}
-
-func TestValidator_validateEnabledDisabledLintersConfig(t *testing.T) {
-	v := NewValidator(NewManager(nil, nil))
+	v := NewValidator(m)
 
 	var testCases []validatorTestCase
 	testCases = append(testCases, validateLintersNamesTestCases...)
 	testCases = append(testCases, validatePresetsTestCases...)
-	testCases = append(testCases, validateDisabledAndEnabledAtOneMomentTestCases...)
-	testCases = append(testCases, validateAllDisableEnableOptionsTestCases...)
 
 	for _, test := range testCases {
 		test := test
 		t.Run(test.desc, func(t *testing.T) {
 			t.Parallel()
 
-			err := v.validateEnabledDisabledLintersConfig(test.cfg)
+			err := v.Validate(&config.Config{Linters: *test.cfg})
 			require.NoError(t, err)
 		})
 	}
 }
 
-func TestValidator_validateEnabledDisabledLintersConfig_error(t *testing.T) {
-	v := NewValidator(NewManager(nil, nil))
+func TestValidator_Validate_error(t *testing.T) {
+	m, err := NewManager(nil, nil, NewLinterBuilder())
+	require.NoError(t, err)
+
+	v := NewValidator(m)
 
 	var testCases []validateErrorTestCase
 	testCases = append(testCases, validateLintersNamesErrorTestCases...)
 	testCases = append(testCases, validatePresetsErrorTestCases...)
-	testCases = append(testCases, validateDisabledAndEnabledAtOneMomentErrorTestCases...)
-	testCases = append(testCases, validateAllDisableEnableOptionsErrorTestCases...)
 
 	for _, test := range testCases {
 		test := test
 		t.Run(test.desc, func(t *testing.T) {
 			t.Parallel()
 
-			err := v.validateEnabledDisabledLintersConfig(test.cfg)
+			err := v.Validate(&config.Config{Linters: *test.cfg})
 			require.Error(t, err)
 
 			require.EqualError(t, err, test.expected)
@@ -290,7 +151,10 @@ func TestValidator_validateEnabledDisabledLintersConfig_error(t *testing.T) {
 }
 
 func TestValidator_validateLintersNames(t *testing.T) {
-	v := NewValidator(NewManager(nil, nil))
+	m, err := NewManager(nil, nil, NewLinterBuilder())
+	require.NoError(t, err)
+
+	v := NewValidator(m)
 
 	for _, test := range validateLintersNamesTestCases {
 		test := test
@@ -304,7 +168,10 @@ func TestValidator_validateLintersNames(t *testing.T) {
 }
 
 func TestValidator_validateLintersNames_error(t *testing.T) {
-	v := NewValidator(NewManager(nil, nil))
+	m, err := NewManager(nil, nil, NewLinterBuilder())
+	require.NoError(t, err)
+
+	v := NewValidator(m)
 
 	for _, test := range validateLintersNamesErrorTestCases {
 		test := test
@@ -342,66 +209,6 @@ func TestValidator_validatePresets_error(t *testing.T) {
 			t.Parallel()
 
 			err := v.validatePresets(test.cfg)
-			require.Error(t, err)
-
-			require.EqualError(t, err, test.expected)
-		})
-	}
-}
-
-func TestValidator_validateDisabledAndEnabledAtOneMoment(t *testing.T) {
-	v := NewValidator(nil)
-
-	for _, test := range validateDisabledAndEnabledAtOneMomentTestCases {
-		test := test
-		t.Run(test.desc, func(t *testing.T) {
-			t.Parallel()
-
-			err := v.validateDisabledAndEnabledAtOneMoment(test.cfg)
-			require.NoError(t, err)
-		})
-	}
-}
-
-func TestValidator_validateDisabledAndEnabledAtOneMoment_error(t *testing.T) {
-	v := NewValidator(nil)
-
-	for _, test := range validateDisabledAndEnabledAtOneMomentErrorTestCases {
-		test := test
-		t.Run(test.desc, func(t *testing.T) {
-			t.Parallel()
-
-			err := v.validateDisabledAndEnabledAtOneMoment(test.cfg)
-			require.Error(t, err)
-
-			require.EqualError(t, err, test.expected)
-		})
-	}
-}
-
-func TestValidator_validateAllDisableEnableOptions(t *testing.T) {
-	v := NewValidator(nil)
-
-	for _, test := range validateAllDisableEnableOptionsTestCases {
-		test := test
-		t.Run(test.desc, func(t *testing.T) {
-			t.Parallel()
-
-			err := v.validateAllDisableEnableOptions(test.cfg)
-			require.NoError(t, err)
-		})
-	}
-}
-
-func TestValidator_validateAllDisableEnableOptions_error(t *testing.T) {
-	v := NewValidator(nil)
-
-	for _, test := range validateAllDisableEnableOptionsErrorTestCases {
-		test := test
-		t.Run(test.desc, func(t *testing.T) {
-			t.Parallel()
-
-			err := v.validateAllDisableEnableOptions(test.cfg)
 			require.Error(t, err)
 
 			require.EqualError(t, err, test.expected)

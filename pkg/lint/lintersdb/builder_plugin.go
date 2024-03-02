@@ -11,24 +11,35 @@ import (
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
+	"github.com/golangci/golangci-lint/pkg/logutils"
 )
 
 type AnalyzerPlugin interface {
 	GetAnalyzers() []*analysis.Analyzer
 }
 
-// getCustomLinterConfigs loads private linters that are specified in the golangci config file.
-func (m *Manager) getCustomLinterConfigs() []*linter.Config {
-	if m.cfg == nil || m.log == nil {
+// PluginBuilder builds the custom linters (plugins) based on the configuration.
+type PluginBuilder struct {
+	log logutils.Log
+}
+
+// NewPluginBuilder creates new PluginBuilder.
+func NewPluginBuilder(log logutils.Log) *PluginBuilder {
+	return &PluginBuilder{log: log}
+}
+
+// Build loads custom linters that are specified in the golangci-lint config file.
+func (b *PluginBuilder) Build(cfg *config.Config) []*linter.Config {
+	if cfg == nil || b.log == nil {
 		return nil
 	}
 
 	var linters []*linter.Config
 
-	for name, settings := range m.cfg.LintersSettings.Custom {
-		lc, err := m.loadCustomLinterConfig(name, settings)
+	for name, settings := range cfg.LintersSettings.Custom {
+		lc, err := b.loadConfig(cfg, name, settings)
 		if err != nil {
-			m.log.Errorf("Unable to load custom analyzer %s:%s, %v", name, settings.Path, err)
+			b.log.Errorf("Unable to load custom analyzer %s:%s, %v", name, settings.Path, err)
 		} else {
 			linters = append(linters, lc)
 		}
@@ -37,15 +48,15 @@ func (m *Manager) getCustomLinterConfigs() []*linter.Config {
 	return linters
 }
 
-// loadCustomLinterConfig loads the configuration of private linters.
+// loadConfig loads the configuration of private linters.
 // Private linters are dynamically loaded from .so plugin files.
-func (m *Manager) loadCustomLinterConfig(name string, settings config.CustomLinterSettings) (*linter.Config, error) {
-	analyzers, err := m.getAnalyzerPlugin(settings.Path, settings.Settings)
+func (b *PluginBuilder) loadConfig(cfg *config.Config, name string, settings config.CustomLinterSettings) (*linter.Config, error) {
+	analyzers, err := b.getAnalyzerPlugin(cfg, settings.Path, settings.Settings)
 	if err != nil {
 		return nil, err
 	}
 
-	m.log.Infof("Loaded %s: %s", settings.Path, name)
+	b.log.Infof("Loaded %s: %s", settings.Path, name)
 
 	customLinter := goanalysis.NewLinter(name, settings.Description, analyzers, nil).
 		WithLoadMode(goanalysis.LoadModeTypesInfo)
@@ -63,10 +74,10 @@ func (m *Manager) loadCustomLinterConfig(name string, settings config.CustomLint
 // and returns the 'AnalyzerPlugin' interface implemented by the private plugin.
 // An error is returned if the private linter cannot be loaded
 // or the linter does not implement the AnalyzerPlugin interface.
-func (m *Manager) getAnalyzerPlugin(path string, settings any) ([]*analysis.Analyzer, error) {
+func (b *PluginBuilder) getAnalyzerPlugin(cfg *config.Config, path string, settings any) ([]*analysis.Analyzer, error) {
 	if !filepath.IsAbs(path) {
 		// resolve non-absolute paths relative to config file's directory
-		path = filepath.Join(m.cfg.GetConfigDir(), path)
+		path = filepath.Join(cfg.GetConfigDir(), path)
 	}
 
 	plug, err := plugin.Open(path)
@@ -74,7 +85,7 @@ func (m *Manager) getAnalyzerPlugin(path string, settings any) ([]*analysis.Anal
 		return nil, err
 	}
 
-	analyzers, err := m.lookupPlugin(plug, settings)
+	analyzers, err := b.lookupPlugin(plug, settings)
 	if err != nil {
 		return nil, fmt.Errorf("lookup plugin %s: %w", path, err)
 	}
@@ -82,10 +93,10 @@ func (m *Manager) getAnalyzerPlugin(path string, settings any) ([]*analysis.Anal
 	return analyzers, nil
 }
 
-func (m *Manager) lookupPlugin(plug *plugin.Plugin, settings any) ([]*analysis.Analyzer, error) {
+func (b *PluginBuilder) lookupPlugin(plug *plugin.Plugin, settings any) ([]*analysis.Analyzer, error) {
 	symbol, err := plug.Lookup("New")
 	if err != nil {
-		analyzers, errP := m.lookupAnalyzerPlugin(plug)
+		analyzers, errP := b.lookupAnalyzerPlugin(plug)
 		if errP != nil {
 			return nil, errors.Join(err, errP)
 		}
@@ -102,13 +113,13 @@ func (m *Manager) lookupPlugin(plug *plugin.Plugin, settings any) ([]*analysis.A
 	return constructor(settings)
 }
 
-func (m *Manager) lookupAnalyzerPlugin(plug *plugin.Plugin) ([]*analysis.Analyzer, error) {
+func (b *PluginBuilder) lookupAnalyzerPlugin(plug *plugin.Plugin) ([]*analysis.Analyzer, error) {
 	symbol, err := plug.Lookup("AnalyzerPlugin")
 	if err != nil {
 		return nil, err
 	}
 
-	m.log.Warnf("plugin: 'AnalyzerPlugin' plugins are deprecated, please use the new plugin signature: " +
+	b.log.Warnf("plugin: 'AnalyzerPlugin' plugins are deprecated, please use the new plugin signature: " +
 		"https://golangci-lint.run/contributing/new-linters/#create-a-plugin")
 
 	analyzerPlugin, ok := symbol.(AnalyzerPlugin)
