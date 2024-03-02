@@ -31,10 +31,15 @@ type Printer struct {
 
 // NewPrinter creates a new Printer.
 func NewPrinter(log logutils.Log, cfg *config.Config, reportData *report.Data) (*Printer, error) {
-	if log == nil || cfg == nil || reportData == nil {
-		return nil, fmt.Errorf("missing constructor arguments: log=%v cfg=%v report=%v",
-			log == nil, cfg == nil, reportData == nil)
-	}
+    if log == nil {
+        return nil, errors.New("missing log argument in constructor")
+    }
+    if cfg == nil {
+        return nil, errors.New("missing config argument in constructor")
+    }
+    if reportData == nil {
+        return nil, errors.New("missing reportData argument in constructor")
+    }
 
 	return &Printer{
 		cfg:        cfg,
