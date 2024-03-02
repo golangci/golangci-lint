@@ -138,19 +138,30 @@ issues:
         - gomnd
 
     - path: pkg/golinters/errcheck.go
+      linters: [staticcheck]
       text: "SA1019: errCfg.Exclude is deprecated: use ExcludeFunctions instead"
     - path: pkg/commands/run.go
+      linters: [staticcheck]
       text: "SA1019: lsc.Errcheck.Exclude is deprecated: use ExcludeFunctions instead"
+    - path: pkg/commands/run.go
+      linters: [staticcheck]
+      text: "SA1019: c.cfg.Run.ShowStats is deprecated: use Output.ShowStats instead."
 
     - path: pkg/golinters/gofumpt.go
+      linters: [staticcheck]
       text: "SA1019: settings.LangVersion is deprecated: use the global `run.go` instead."
     - path: pkg/golinters/staticcheck_common.go
+      linters: [staticcheck]
       text: "SA1019: settings.GoVersion is deprecated: use the global `run.go` instead."
     - path: pkg/lint/lintersdb/manager.go
+      linters: [staticcheck]
       text: "SA1019: (.+).(GoVersion|LangVersion) is deprecated: use the global `run.go` instead."
+
     - path: pkg/golinters/unused.go
+      linters: [gocritic]
       text: "rangeValCopy: each iteration copies 160 bytes \\(consider pointers or indexing\\)"
     - path: test/(fix|linters)_test.go
+      linters: [gocritic]
       text: "string `gocritic.go` has 3 occurrences, make it a constant"
 
 run:
