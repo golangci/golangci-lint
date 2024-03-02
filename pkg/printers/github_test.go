@@ -13,7 +13,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-func TestGithub_Print(t *testing.T) {
+func TestGitHub_Print(t *testing.T) {
 	issues := []result.Issue{
 		{
 			FromLinter: "linter-a",
@@ -45,7 +45,7 @@ func TestGithub_Print(t *testing.T) {
 	}
 
 	buf := new(bytes.Buffer)
-	printer := NewGithub(buf)
+	printer := NewGitHub(buf)
 
 	err := printer.Print(issues)
 	require.NoError(t, err)
@@ -57,7 +57,7 @@ func TestGithub_Print(t *testing.T) {
 	assert.Equal(t, expected, buf.String())
 }
 
-func TestFormatGithubIssue(t *testing.T) {
+func Test_formatIssueAsGithub(t *testing.T) {
 	sampleIssue := result.Issue{
 		FromLinter: "sample-linter",
 		Text:       "some issue",
@@ -74,7 +74,7 @@ func TestFormatGithubIssue(t *testing.T) {
 	require.Equal(t, "::error file=path/to/file.go,line=10::some issue (sample-linter)", formatIssueAsGithub(&sampleIssue))
 }
 
-func TestFormatGithubIssueWindows(t *testing.T) {
+func Test_formatIssueAsGithub_Windows(t *testing.T) {
 	if runtime.GOOS != "windows" {
 		t.Skip("Skipping test on non Windows")
 	}

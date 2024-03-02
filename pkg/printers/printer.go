@@ -128,7 +128,7 @@ func (c *Printer) createPrinter(format string, w io.Writer) (printer, error) {
 	case config.OutFormatJunitXML:
 		p = NewJunitXML(w)
 	case config.OutFormatGithubActions:
-		p = NewGithub(w)
+		p = NewGitHub(w)
 	case config.OutFormatTeamCity:
 		p = NewTeamCity(w)
 	default:
