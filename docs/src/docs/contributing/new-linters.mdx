@@ -28,8 +28,8 @@ After that:
    Look at other linters in this directory.
    Implement linter integration and check that test passes.
 3. Add the new struct for the linter (which you've implemented in `pkg/golinters/{yourlintername}.go`) to the
-   list of all supported linters in [`pkg/lint/lintersdb/manager.go`](https://github.com/golangci/golangci-lint/blob/master/pkg/lint/lintersdb/manager.go)
-   to the function `GetAllSupportedLinterConfigs`.
+   list of all supported linters in [`pkg/lint/lintersdb/builder_linter.go`](https://github.com/golangci/golangci-lint/blob/master/pkg/lint/lintersdb/builder_linter.go)
+   to the method `LinterBuilder.Build`.
     - Add `WithSince("next_version")`, where `next_version` must be replaced by the next minor version. (ex: v1.2.0 if the current version is v1.1.0)
 4. Find out what options do you need to configure for the linter.
    For example, `nakedret` has only 1 option: [`max-func-lines`](https://github.com/golangci/golangci-lint/blob/master/.golangci.reference.yml).

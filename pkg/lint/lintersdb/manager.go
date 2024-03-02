@@ -98,9 +98,8 @@ func (m *Manager) GetEnabledLintersMap() (map[string]*linter.Config, error) {
 	return enabledLinters, nil
 }
 
-// GetOptimizedLinters returns enabled linters after optimization (merging) of multiple linters
-// into a fewer number of linters. E.g. some go/analysis linters can be optimized into
-// one metalinter for data reuse and speed up.
+// GetOptimizedLinters returns enabled linters after optimization (merging) of multiple linters into a fewer number of linters.
+// E.g. some go/analysis linters can be optimized into one metalinter for data reuse and speed up.
 func (m *Manager) GetOptimizedLinters() ([]*linter.Config, error) {
 	resultLintersSet := m.build(m.GetAllEnabledByDefaultLinters())
 	m.verbosePrintLintersStatus(resultLintersSet)
