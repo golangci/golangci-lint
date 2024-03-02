@@ -94,12 +94,13 @@ func (l *Loader) handleGoVersion() {
 
 	l.cfg.LintersSettings.ParallelTest.Go = l.cfg.Run.Go
 
-	trimmedGoVersion := trimGoVersion(l.cfg.Run.Go)
-
-	l.cfg.LintersSettings.Gocritic.Go = trimmedGoVersion
 	if l.cfg.LintersSettings.Gofumpt.LangVersion == "" {
 		l.cfg.LintersSettings.Gofumpt.LangVersion = l.cfg.Run.Go
 	}
+
+	trimmedGoVersion := trimGoVersion(l.cfg.Run.Go)
+
+	l.cfg.LintersSettings.Gocritic.Go = trimmedGoVersion
 
 	// staticcheck related linters.
 	if l.cfg.LintersSettings.Staticcheck.GoVersion == "" {
