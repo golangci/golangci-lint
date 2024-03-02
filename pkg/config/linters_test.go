@@ -185,7 +185,7 @@ func TestLinters_validateAllDisableEnableOptions_error(t *testing.T) {
 				DisableAll: true,
 				Fast:       false,
 			},
-			expected: "can't combine options --disable-all and --disable dupl",
+			expected: "can't combine options --disable-all and --disable",
 		},
 		{
 			desc: "enable-all and enable",
@@ -196,7 +196,7 @@ func TestLinters_validateAllDisableEnableOptions_error(t *testing.T) {
 				DisableAll: false,
 				Fast:       false,
 			},
-			expected: "can't combine options --enable-all and --enable dupl",
+			expected: "can't combine options --enable-all and --enable",
 		},
 	}
 

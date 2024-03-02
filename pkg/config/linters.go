@@ -38,12 +38,12 @@ func (l *Linters) validateAllDisableEnableOptions() error {
 		}
 
 		if len(l.Disable) != 0 {
-			return fmt.Errorf("can't combine options --disable-all and --disable %s", l.Disable[0])
+			return errors.New("can't combine options --disable-all and --disable")
 		}
 	}
 
 	if l.EnableAll && len(l.Enable) != 0 && !l.Fast {
-		return fmt.Errorf("can't combine options --enable-all and --enable %s", l.Enable[0])
+		return errors.New("can't combine options --enable-all and --enable")
 	}
 
 	return nil
