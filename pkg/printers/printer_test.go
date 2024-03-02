@@ -19,7 +19,7 @@ import (
 func unmarshalFile(t *testing.T, filename string, v any) {
 	t.Helper()
 
-	file, err := os.ReadFile(filepath.Join("fixtures", filename))
+	file, err := os.ReadFile(filepath.Join("testdata", filename))
 	require.NoError(t, err)
 
 	err = json.Unmarshal(file, v)
@@ -77,7 +77,7 @@ func TestPrinter_Print_stdout(t *testing.T) {
 			err = p.Print(issues)
 			require.NoError(t, err)
 
-			golden, err := os.ReadFile(filepath.Join("fixtures", test.expected))
+			golden, err := os.ReadFile(filepath.Join("testdata", test.expected))
 			require.NoError(t, err)
 
 			assert.Equal(t, 0, stdErrBuffer.Len())
@@ -113,7 +113,7 @@ func TestPrinter_Print_stderr(t *testing.T) {
 	err = p.Print(issues)
 	require.NoError(t, err)
 
-	golden, err := os.ReadFile(filepath.Join("fixtures", "golden-line-number.txt"))
+	golden, err := os.ReadFile(filepath.Join("testdata", "golden-line-number.txt"))
 	require.NoError(t, err)
 
 	assert.Equal(t, 0, stdOutBuffer.Len())
@@ -149,7 +149,7 @@ func TestPrinter_Print_file(t *testing.T) {
 	err = p.Print(issues)
 	require.NoError(t, err)
 
-	golden, err := os.ReadFile(filepath.Join("fixtures", "golden-line-number.txt"))
+	golden, err := os.ReadFile(filepath.Join("testdata", "golden-line-number.txt"))
 	require.NoError(t, err)
 
 	assert.Equal(t, 0, stdOutBuffer.Len())
@@ -192,7 +192,7 @@ func TestPrinter_Print_multiple(t *testing.T) {
 	err = p.Print(issues)
 	require.NoError(t, err)
 
-	goldenGitHub, err := os.ReadFile(filepath.Join("fixtures", "golden-github-actions.txt"))
+	goldenGitHub, err := os.ReadFile(filepath.Join("testdata", "golden-github-actions.txt"))
 	require.NoError(t, err)
 
 	actual, err := os.ReadFile(outputPath)
@@ -200,12 +200,12 @@ func TestPrinter_Print_multiple(t *testing.T) {
 
 	assert.Equal(t, string(goldenGitHub), string(actual))
 
-	goldenLineNumber, err := os.ReadFile(filepath.Join("fixtures", "golden-line-number.txt"))
+	goldenLineNumber, err := os.ReadFile(filepath.Join("testdata", "golden-line-number.txt"))
 	require.NoError(t, err)
 
 	assert.Equal(t, string(goldenLineNumber), stdErrBuffer.String())
 
-	goldenJSON, err := os.ReadFile(filepath.Join("fixtures", "golden-json.json"))
+	goldenJSON, err := os.ReadFile(filepath.Join("testdata", "golden-json.json"))
 	require.NoError(t, err)
 
 	assert.Equal(t, string(goldenJSON), stdOutBuffer.String())
