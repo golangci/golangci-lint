@@ -12,30 +12,12 @@ import (
 	"github.com/golangci/golangci-lint/pkg/logutils"
 )
 
-type dummyLogger struct{}
-
-func (d dummyLogger) Fatalf(_ string, _ ...any) {}
-
-func (d dummyLogger) Panicf(_ string, _ ...any) {}
-
-func (d dummyLogger) Errorf(_ string, _ ...any) {}
-
-func (d dummyLogger) Warnf(_ string, _ ...any) {}
-
-func (d dummyLogger) Infof(_ string, _ ...any) {}
-
-func (d dummyLogger) Child(_ string) logutils.Log {
-	return &d
-}
-
-func (d dummyLogger) SetLevel(_ logutils.LogLevel) {}
-
 func TestManager_GetEnabledLintersMap(t *testing.T) {
 	cfg := config.NewDefault()
 	cfg.Linters.DisableAll = true
 	cfg.Linters.Enable = []string{"gofmt"}
 
-	m, err := NewManager(&dummyLogger{}, cfg, NewLinterBuilder())
+	m, err := NewManager(logutils.NewStderrLog("skip"), cfg, NewLinterBuilder())
 	require.NoError(t, err)
 
 	lintersMap, err := m.GetEnabledLintersMap()
@@ -57,7 +39,7 @@ func TestManager_GetOptimizedLinters(t *testing.T) {
 	cfg.Linters.DisableAll = true
 	cfg.Linters.Enable = []string{"gofmt"}
 
-	m, err := NewManager(&dummyLogger{}, cfg, NewLinterBuilder())
+	m, err := NewManager(logutils.NewStderrLog("skip"), cfg, NewLinterBuilder())
 	require.NoError(t, err)
 
 	optimizedLinters, err := m.GetOptimizedLinters()
@@ -168,7 +150,7 @@ func TestManager_build(t *testing.T) {
 	for _, c := range cases {
 		c := c
 		t.Run(c.name, func(t *testing.T) {
-			m, err := NewManager(&dummyLogger{}, &config.Config{Linters: c.cfg}, NewLinterBuilder())
+			m, err := NewManager(logutils.NewStderrLog("skip"), &config.Config{Linters: c.cfg}, NewLinterBuilder())
 			require.NoError(t, err)
 
 			var defaultLinters []*linter.Config
