@@ -72,23 +72,19 @@ func (c *Printer) printReports(issues []result.Issue, path, format string) error
 		return fmt.Errorf("can't create output for %s: %w", path, err)
 	}
 
-	p, err := c.createPrinter(format, w)
-	if err != nil {
+	defer func() {
 		if file, ok := w.(io.Closer); shouldClose && ok {
 			_ = file.Close()
 		}
+	}()
+
+	p, err := c.createPrinter(format, w)
+	if err != nil {
 		return err
 	}
 
 	if err = p.Print(issues); err != nil {
-		if file, ok := w.(io.Closer); shouldClose && ok {
-			_ = file.Close()
-		}
 		return fmt.Errorf("can't print %d issues: %w", len(issues), err)
-	}
-
-	if file, ok := w.(io.Closer); shouldClose && ok {
-		_ = file.Close()
 	}
 
 	return nil
