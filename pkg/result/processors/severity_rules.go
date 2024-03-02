@@ -2,6 +2,7 @@ package processors
 
 import (
 	"regexp"
+	"slices"
 
 	"github.com/golangci/golangci-lint/pkg/fsutils"
 	"github.com/golangci/golangci-lint/pkg/logutils"
@@ -20,17 +21,22 @@ type SeverityRule struct {
 
 type SeverityRules struct {
 	defaultSeverity string
+	excludedLinters []string
 	rules           []severityRule
 	files           *fsutils.Files
 	log             logutils.Log
 }
 
-func NewSeverityRules(defaultSeverity string, rules []SeverityRule, files *fsutils.Files, log logutils.Log) *SeverityRules {
+func NewSeverityRules(defaultSeverity string, excludedLinters []string, rules []SeverityRule,
+	files *fsutils.Files, log logutils.Log,
+) *SeverityRules {
 	r := &SeverityRules{
+		defaultSeverity: defaultSeverity,
+		excludedLinters: excludedLinters,
 		files:           files,
 		log:             log,
-		defaultSeverity: defaultSeverity,
 	}
+
 	r.rules = createSeverityRules(rules, "(?i)")
 
 	return r
@@ -61,11 +67,15 @@ func createSeverityRules(rules []SeverityRule, prefix string) []severityRule {
 	return parsedRules
 }
 
-func (p SeverityRules) Process(issues []result.Issue) ([]result.Issue, error) {
+func (p *SeverityRules) Process(issues []result.Issue) ([]result.Issue, error) {
 	if len(p.rules) == 0 && p.defaultSeverity == "" {
 		return issues, nil
 	}
 	return transformIssues(issues, func(i *result.Issue) *result.Issue {
+		if slices.Contains(p.excludedLinters, i.FromLinter) {
+			return i
+		}
+
 		for _, rule := range p.rules {
 			rule := rule
 
@@ -87,19 +97,22 @@ func (p SeverityRules) Process(issues []result.Issue) ([]result.Issue, error) {
 func (SeverityRules) Name() string { return "severity-rules" }
 func (SeverityRules) Finish()      {}
 
-var _ Processor = SeverityRules{}
+var _ Processor = &SeverityRules{}
 
 type SeverityRulesCaseSensitive struct {
 	*SeverityRules
 }
 
-func NewSeverityRulesCaseSensitive(defaultSeverity string, rules []SeverityRule,
-	files *fsutils.Files, log logutils.Log) *SeverityRulesCaseSensitive {
+func NewSeverityRulesCaseSensitive(defaultSeverity string, excludedLinters []string, rules []SeverityRule,
+	files *fsutils.Files, log logutils.Log,
+) *SeverityRulesCaseSensitive {
 	r := &SeverityRules{
+		defaultSeverity: defaultSeverity,
+		excludedLinters: excludedLinters,
 		files:           files,
 		log:             log,
-		defaultSeverity: defaultSeverity,
 	}
+
 	r.rules = createSeverityRules(rules, "")
 
 	return &SeverityRulesCaseSensitive{r}

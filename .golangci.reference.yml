@@ -2892,6 +2892,14 @@ severity:
   # Default: false
   case-sensitive: true
 
+  # When a list of exclude-linters is provided, the default severity of issues will not be applied to them.
+  # This allows for more complex linters such as 'revive' to conserve their own severity rules.
+  # This takes precedence over `severity-rules`.
+  #
+  # Default: []
+  exclude-linters:
+    - revive
+
   # When a list of severity rules are provided, severity information will be added to lint issues.
   # Severity rules have the same filtering capability as exclude rules
   # except you are allowed to specify one matcher per severity rule.

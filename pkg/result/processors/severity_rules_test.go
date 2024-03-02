@@ -17,7 +17,7 @@ func TestSeverityRulesMultiple(t *testing.T) {
 	lineCache := fsutils.NewLineCache(fsutils.NewFileCache())
 	files := fsutils.NewFiles(lineCache, "")
 	log := report.NewLogWrapper(logutils.NewStderrLog(logutils.DebugKeyEmpty), &report.Data{})
-	p := NewSeverityRules("error", []SeverityRule{
+	p := NewSeverityRules("error", []string{}, []SeverityRule{
 		{
 			Severity: "info",
 			BaseRule: BaseRule{
@@ -122,7 +122,7 @@ func TestSeverityRulesPathPrefix(t *testing.T) {
 	pathPrefix := path.Join("some", "dir")
 	files := fsutils.NewFiles(lineCache, pathPrefix)
 	log := report.NewLogWrapper(logutils.NewStderrLog(logutils.DebugKeyEmpty), &report.Data{})
-	p := NewSeverityRules("error", []SeverityRule{
+	p := NewSeverityRules("error", []string{}, []SeverityRule{
 		{
 			Severity: "info",
 			BaseRule: BaseRule{
@@ -159,7 +159,7 @@ func TestSeverityRulesPathPrefix(t *testing.T) {
 }
 
 func TestSeverityRulesText(t *testing.T) {
-	p := NewSeverityRules("", []SeverityRule{
+	p := NewSeverityRules("", []string{}, []SeverityRule{
 		{
 			BaseRule: BaseRule{
 				Text:    "^severity$",
@@ -190,7 +190,7 @@ func TestSeverityRulesOnlyDefault(t *testing.T) {
 	lineCache := fsutils.NewLineCache(fsutils.NewFileCache())
 	files := fsutils.NewFiles(lineCache, "")
 	log := report.NewLogWrapper(logutils.NewStderrLog(logutils.DebugKeyEmpty), &report.Data{})
-	p := NewSeverityRules("info", []SeverityRule{}, files, log)
+	p := NewSeverityRules("info", []string{}, []SeverityRule{}, files, log)
 
 	cases := []issueTestCase{
 		{Path: "ssl.go", Text: "ssl", Linter: "gosec"},
@@ -219,13 +219,13 @@ func TestSeverityRulesOnlyDefault(t *testing.T) {
 }
 
 func TestSeverityRulesEmpty(t *testing.T) {
-	processAssertSame(t, NewSeverityRules("", nil, nil, nil), newIssueFromTextTestCase("test"))
+	processAssertSame(t, NewSeverityRules("", []string{}, nil, nil, nil), newIssueFromTextTestCase("test"))
 }
 
 func TestSeverityRulesCaseSensitive(t *testing.T) {
 	lineCache := fsutils.NewLineCache(fsutils.NewFileCache())
 	files := fsutils.NewFiles(lineCache, "")
-	p := NewSeverityRulesCaseSensitive("error", []SeverityRule{
+	p := NewSeverityRulesCaseSensitive("error", []string{}, []SeverityRule{
 		{
 			Severity: "info",
 			BaseRule: BaseRule{

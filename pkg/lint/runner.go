@@ -30,7 +30,8 @@ type Runner struct {
 func NewRunner(cfg *config.Config, log logutils.Log, goenv *goutil.Env,
 	es *lintersdb.EnabledSet,
 	lineCache *fsutils.LineCache, fileCache *fsutils.FileCache,
-	dbManager *lintersdb.Manager, pkgs []*gopackages.Package) (*Runner, error) {
+	dbManager *lintersdb.Manager, pkgs []*gopackages.Package,
+) (*Runner, error) {
 	// Beware that some processors need to add the path prefix when working with paths
 	// because they get invoked before the path prefixer (exclude and severity rules)
 	// or process other paths (skip files).
@@ -113,7 +114,8 @@ func NewRunner(cfg *config.Config, log logutils.Log, goenv *goutil.Env,
 }
 
 func (r *Runner) runLinterSafe(ctx context.Context, lintCtx *linter.Context,
-	lc *linter.Config) (ret []result.Issue, err error) {
+	lc *linter.Config,
+) (ret []result.Issue, err error) {
 	defer func() {
 		if panicData := recover(); panicData != nil {
 			if pe, ok := panicData.(*errorutil.PanicError); ok {
@@ -333,6 +335,7 @@ func getSeverityRulesProcessor(cfg *config.Severity, log logutils.Log, files *fs
 	if cfg.CaseSensitive {
 		severityRulesProcessor = processors.NewSeverityRulesCaseSensitive(
 			cfg.Default,
+			cfg.ExcludeLinters,
 			severityRules,
 			files,
 			log.Child(logutils.DebugKeySeverityRules),
@@ -340,6 +343,7 @@ func getSeverityRulesProcessor(cfg *config.Severity, log logutils.Log, files *fs
 	} else {
 		severityRulesProcessor = processors.NewSeverityRules(
 			cfg.Default,
+			cfg.ExcludeLinters,
 			severityRules,
 			files,
 			log.Child(logutils.DebugKeySeverityRules),
