@@ -1,6 +1,7 @@
 package printers
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -31,15 +32,15 @@ type Printer struct {
 
 // NewPrinter creates a new Printer.
 func NewPrinter(log logutils.Log, cfg *config.Config, reportData *report.Data) (*Printer, error) {
-    if log == nil {
-        return nil, errors.New("missing log argument in constructor")
-    }
-    if cfg == nil {
-        return nil, errors.New("missing config argument in constructor")
-    }
-    if reportData == nil {
-        return nil, errors.New("missing reportData argument in constructor")
-    }
+	if log == nil {
+		return nil, errors.New("missing log argument in constructor")
+	}
+	if cfg == nil {
+		return nil, errors.New("missing config argument in constructor")
+	}
+	if reportData == nil {
+		return nil, errors.New("missing reportData argument in constructor")
+	}
 
 	return &Printer{
 		cfg:        cfg,
