@@ -477,7 +477,7 @@ func (b LinterBuilder) Build(cfg *config.Config) []*linter.Config {
 			WithSince("v1.47.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/sivchari/nosnakecase").
-			Deprecated("The repository of the linter has been deprecated by the owner.", "v1.48.1", "revive(var-naming)"),
+			Deprecated("The repository of the linter has been deprecated by the owner.", "v1.48.1", "revive 'var-naming'"),
 
 		linter.NewConfig(golinters.NewNoSprintfHostPort()).
 			WithSince("v1.46.0").
