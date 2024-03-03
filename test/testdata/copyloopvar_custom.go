@@ -1,6 +1,7 @@
 //go:build go1.22
 
 //golangcitest:args -Ecopyloopvar
+//golangcitest:config_path testdata/configs/copyloopvar.yml
 package testdata
 
 import "fmt"
@@ -17,7 +18,7 @@ func copyloopvarCase1() {
 		fns = append(fns, func() {
 			fmt.Println(v)
 		})
-		_v := v // want `The copy of the 'for' variable "v" can be deleted \(Go 1\.22\+\)`
+		_v := v
 		_ = _v
 	}
 	for _, fn := range fns {

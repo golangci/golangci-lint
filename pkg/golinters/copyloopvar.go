@@ -9,20 +9,21 @@ import (
 )
 
 func NewCopyLoopVar(settings *config.CopyLoopVarSettings) *goanalysis.Linter {
-	analyzer := copyloopvar.NewAnalyzer()
+	a := copyloopvar.NewAnalyzer()
+
 	var cfg map[string]map[string]any
 	if settings != nil {
 		cfg = map[string]map[string]any{
-			analyzer.Name: {
+			a.Name: {
 				"ignore-alias": settings.IgnoreAlias,
 			},
 		}
 	}
 
 	return goanalysis.NewLinter(
-		analyzer.Name,
-		analyzer.Doc,
-		[]*analysis.Analyzer{analyzer},
+		a.Name,
+		a.Doc,
+		[]*analysis.Analyzer{a},
 		cfg,
 	).WithLoadMode(goanalysis.LoadModeSyntax)
 }
