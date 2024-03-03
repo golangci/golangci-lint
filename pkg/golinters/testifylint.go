@@ -16,6 +16,8 @@ func NewTestifylint(settings *config.TestifylintSettings) *goanalysis.Linter {
 		cfg[a.Name] = map[string]any{
 			"enable-all":  settings.EnableAll,
 			"disable-all": settings.DisableAll,
+
+			"bool-compare.ignore-custom-types": settings.BoolCompare.IgnoreCustomTypes,
 		}
 		if len(settings.EnabledCheckers) > 0 {
 			cfg[a.Name]["enable"] = settings.EnabledCheckers

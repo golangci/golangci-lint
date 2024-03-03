@@ -1,5 +1,5 @@
 //golangcitest:args -Etestifylint
-//golangcitest:config_path testdata/configs/testifylint.yml
+//golangcitest:config_path testdata/configs/testifylint_require_error_only.yml
 package testdata
 
 import (

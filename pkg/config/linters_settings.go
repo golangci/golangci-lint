@@ -862,6 +862,10 @@ type TestifylintSettings struct {
 	EnabledCheckers  []string `mapstructure:"enable"`
 	DisabledCheckers []string `mapstructure:"disable"`
 
+	BoolCompare struct {
+		IgnoreCustomTypes bool `mapstructure:"ignore-custom-types"`
+	} `mapstructure:"bool-compare"`
+
 	ExpectedActual struct {
 		ExpVarPattern string `mapstructure:"pattern"`
 	} `mapstructure:"expected-actual"`
