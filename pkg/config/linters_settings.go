@@ -81,9 +81,6 @@ var defaultLintersSettings = LintersSettings{
 		ModulePath:  "",
 		ExtraRules:  false,
 	},
-	Golint: GoLintSettings{
-		MinConfidence: 0.8,
-	},
 	Gosec: GoSecSettings{
 		Concurrency: runtime.NumCPU(),
 	},
@@ -92,10 +89,6 @@ var defaultLintersSettings = LintersSettings{
 		EscapeHatches:   []string{},
 		IgnoreTests:     true,
 		WatchForScripts: []string{"Han"},
-	},
-	Ifshort: IfshortSettings{
-		MaxDeclLines: 1,
-		MaxDeclChars: 30,
 	},
 	Inamedparam: INamedParamSettings{
 		SkipSingleParam: false,
@@ -204,90 +197,84 @@ var defaultLintersSettings = LintersSettings{
 }
 
 type LintersSettings struct {
-	Asasalint        AsasalintSettings
-	BiDiChk          BiDiChkSettings
-	CopyLoopVar      CopyLoopVarSettings
-	Cyclop           Cyclop
-	Decorder         DecorderSettings
-	Depguard         DepGuardSettings
-	Dogsled          DogsledSettings
-	Dupl             DuplSettings
-	DupWord          DupWordSettings
-	Errcheck         ErrcheckSettings
-	ErrChkJSON       ErrChkJSONSettings
-	ErrorLint        ErrorLintSettings
-	Exhaustive       ExhaustiveSettings
-	ExhaustiveStruct ExhaustiveStructSettings
-	Exhaustruct      ExhaustructSettings
-	Forbidigo        ForbidigoSettings
-	Funlen           FunlenSettings
-	Gci              GciSettings
-	GinkgoLinter     GinkgoLinterSettings
-	Gocognit         GocognitSettings
-	Goconst          GoConstSettings
-	Gocritic         GoCriticSettings
-	Gocyclo          GoCycloSettings
-	Godot            GodotSettings
-	Godox            GodoxSettings
-	Gofmt            GoFmtSettings
-	Gofumpt          GofumptSettings
-	Goheader         GoHeaderSettings
-	Goimports        GoImportsSettings
-	Golint           GoLintSettings
-	Gomnd            GoMndSettings
-	GoModDirectives  GoModDirectivesSettings
-	Gomodguard       GoModGuardSettings
-	Gosec            GoSecSettings
-	Gosimple         StaticCheckSettings
-	Gosmopolitan     GosmopolitanSettings
-	Govet            GovetSettings
-	Grouper          GrouperSettings
-	Ifshort          IfshortSettings
-	ImportAs         ImportAsSettings
-	Inamedparam      INamedParamSettings
-	InterfaceBloat   InterfaceBloatSettings
-	Ireturn          IreturnSettings
-	Lll              LllSettings
-	LoggerCheck      LoggerCheckSettings
-	MaintIdx         MaintIdxSettings
-	Makezero         MakezeroSettings
-	Maligned         MalignedSettings
-	Misspell         MisspellSettings
-	MustTag          MustTagSettings
-	Nakedret         NakedretSettings
-	Nestif           NestifSettings
-	NilNil           NilNilSettings
-	Nlreturn         NlreturnSettings
-	NoLintLint       NoLintLintSettings
-	NoNamedReturns   NoNamedReturnsSettings
-	ParallelTest     ParallelTestSettings
-	PerfSprint       PerfSprintSettings
-	Prealloc         PreallocSettings
-	Predeclared      PredeclaredSettings
-	Promlinter       PromlinterSettings
-	ProtoGetter      ProtoGetterSettings
-	Reassign         ReassignSettings
-	Revive           ReviveSettings
-	RowsErrCheck     RowsErrCheckSettings
-	SlogLint         SlogLintSettings
-	Spancheck        SpancheckSettings
-	Staticcheck      StaticCheckSettings
-	Structcheck      StructCheckSettings
-	Stylecheck       StaticCheckSettings
-	TagAlign         TagAlignSettings
-	Tagliatelle      TagliatelleSettings
-	Tenv             TenvSettings
-	Testifylint      TestifylintSettings
-	Testpackage      TestpackageSettings
-	Thelper          ThelperSettings
-	Unparam          UnparamSettings
-	Unused           UnusedSettings
-	UseStdlibVars    UseStdlibVarsSettings
-	Varcheck         VarCheckSettings
-	Varnamelen       VarnamelenSettings
-	Whitespace       WhitespaceSettings
-	Wrapcheck        WrapcheckSettings
-	WSL              WSLSettings
+	Asasalint       AsasalintSettings
+	BiDiChk         BiDiChkSettings
+	CopyLoopVar     CopyLoopVarSettings
+	Cyclop          Cyclop
+	Decorder        DecorderSettings
+	Depguard        DepGuardSettings
+	Dogsled         DogsledSettings
+	Dupl            DuplSettings
+	DupWord         DupWordSettings
+	Errcheck        ErrcheckSettings
+	ErrChkJSON      ErrChkJSONSettings
+	ErrorLint       ErrorLintSettings
+	Exhaustive      ExhaustiveSettings
+	Exhaustruct     ExhaustructSettings
+	Forbidigo       ForbidigoSettings
+	Funlen          FunlenSettings
+	Gci             GciSettings
+	GinkgoLinter    GinkgoLinterSettings
+	Gocognit        GocognitSettings
+	Goconst         GoConstSettings
+	Gocritic        GoCriticSettings
+	Gocyclo         GoCycloSettings
+	Godot           GodotSettings
+	Godox           GodoxSettings
+	Gofmt           GoFmtSettings
+	Gofumpt         GofumptSettings
+	Goheader        GoHeaderSettings
+	Goimports       GoImportsSettings
+	Gomnd           GoMndSettings
+	GoModDirectives GoModDirectivesSettings
+	Gomodguard      GoModGuardSettings
+	Gosec           GoSecSettings
+	Gosimple        StaticCheckSettings
+	Gosmopolitan    GosmopolitanSettings
+	Govet           GovetSettings
+	Grouper         GrouperSettings
+	ImportAs        ImportAsSettings
+	Inamedparam     INamedParamSettings
+	InterfaceBloat  InterfaceBloatSettings
+	Ireturn         IreturnSettings
+	Lll             LllSettings
+	LoggerCheck     LoggerCheckSettings
+	MaintIdx        MaintIdxSettings
+	Makezero        MakezeroSettings
+	Misspell        MisspellSettings
+	MustTag         MustTagSettings
+	Nakedret        NakedretSettings
+	Nestif          NestifSettings
+	NilNil          NilNilSettings
+	Nlreturn        NlreturnSettings
+	NoLintLint      NoLintLintSettings
+	NoNamedReturns  NoNamedReturnsSettings
+	ParallelTest    ParallelTestSettings
+	PerfSprint      PerfSprintSettings
+	Prealloc        PreallocSettings
+	Predeclared     PredeclaredSettings
+	Promlinter      PromlinterSettings
+	ProtoGetter     ProtoGetterSettings
+	Reassign        ReassignSettings
+	Revive          ReviveSettings
+	RowsErrCheck    RowsErrCheckSettings
+	SlogLint        SlogLintSettings
+	Spancheck       SpancheckSettings
+	Staticcheck     StaticCheckSettings
+	Stylecheck      StaticCheckSettings
+	TagAlign        TagAlignSettings
+	Tagliatelle     TagliatelleSettings
+	Tenv            TenvSettings
+	Testifylint     TestifylintSettings
+	Testpackage     TestpackageSettings
+	Thelper         ThelperSettings
+	Unparam         UnparamSettings
+	Unused          UnusedSettings
+	UseStdlibVars   UseStdlibVarsSettings
+	Varnamelen      VarnamelenSettings
+	Whitespace      WhitespaceSettings
+	Wrapcheck       WrapcheckSettings
+	WSL             WSLSettings
 
 	Custom map[string]CustomLinterSettings
 }
@@ -397,10 +384,6 @@ type ExhaustiveSettings struct {
 	ExplicitExhaustiveMap      bool     `mapstructure:"explicit-exhaustive-map"`
 	ExplicitExhaustiveSwitch   bool     `mapstructure:"explicit-exhaustive-switch"`
 	DefaultCaseRequired        bool     `mapstructure:"default-case-required"`
-}
-
-type ExhaustiveStructSettings struct {
-	StructPatterns []string `mapstructure:"struct-patterns"`
 }
 
 type ExhaustructSettings struct {
@@ -549,10 +532,6 @@ type GoImportsSettings struct {
 	LocalPrefixes string `mapstructure:"local-prefixes"`
 }
 
-type GoLintSettings struct {
-	MinConfidence float64 `mapstructure:"min-confidence"`
-}
-
 type GoMndSettings struct {
 	Settings         map[string]map[string]any // Deprecated
 	Checks           []string                  `mapstructure:"checks"`
@@ -638,11 +617,6 @@ type GrouperSettings struct {
 	VarRequireGrouping        bool `mapstructure:"var-require-grouping"`
 }
 
-type IfshortSettings struct {
-	MaxDeclLines int `mapstructure:"max-decl-lines"`
-	MaxDeclChars int `mapstructure:"max-decl-chars"`
-}
-
 type ImportAsSettings struct {
 	Alias          []ImportAsAlias
 	NoUnaliased    bool `mapstructure:"no-unaliased"`
@@ -688,10 +662,6 @@ type MaintIdxSettings struct {
 
 type MakezeroSettings struct {
 	Always bool
-}
-
-type MalignedSettings struct {
-	SuggestNewOrder bool `mapstructure:"suggest-new"`
 }
 
 type MisspellSettings struct {
@@ -838,10 +808,6 @@ func (s *StaticCheckSettings) HasConfiguration() bool {
 	return len(s.Initialisms) > 0 || len(s.HTTPStatusCodeWhitelist) > 0 || len(s.DotImportWhitelist) > 0 || len(s.Checks) > 0
 }
 
-type StructCheckSettings struct {
-	CheckExportedFields bool `mapstructure:"exported-fields"`
-}
-
 type TagAlignSettings struct {
 	Align  bool     `mapstructure:"align"`
 	Sort   bool     `mapstructure:"sort"`
@@ -929,10 +895,6 @@ type UnusedSettings struct {
 	ParametersAreUsed      bool `mapstructure:"parameters-are-used"`
 	LocalVariablesAreUsed  bool `mapstructure:"local-variables-are-used"`
 	GeneratedIsUsed        bool `mapstructure:"generated-is-used"`
-}
-
-type VarCheckSettings struct {
-	CheckExportedFields bool `mapstructure:"exported-fields"`
 }
 
 type VarnamelenSettings struct {

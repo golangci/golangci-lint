@@ -369,16 +369,6 @@ linters-settings:
     # Default: false
     default-case-required: true
 
-  exhaustivestruct:
-    # Struct Patterns is list of expressions to match struct packages and names.
-    # The struct packages have the form `example.com/package.ExampleStruct`.
-    # The matching patterns can use matching syntax from https://pkg.go.dev/path#Match.
-    # If this list is empty, all structs are tested.
-    # Default: []
-    struct-patterns:
-      - '*.Test'
-      - 'example.com/package.ExampleStruct'
-
   exhaustruct:
     # List of regular expressions to match struct packages and their names.
     # Regular expressions must match complete canonical struct package/name/structname.
@@ -771,11 +761,6 @@ linters-settings:
     # with the given prefixes are grouped after 3rd-party packages.
     # Default: ""
     local-prefixes: github.com/org/project
-
-  golint:
-    # Minimal confidence for issues.
-    # Default: 0.8
-    min-confidence: 0.7
 
   gomnd:
     # List of enabled checks, see https://github.com/tommy-muehle/go-mnd/#checks for description.
@@ -1241,15 +1226,6 @@ linters-settings:
     # Default: false
     var-require-grouping: true
 
-  ifshort:
-    # Maximum length of variable declaration measured in number of lines, after which linter won't suggest using short syntax.
-    # Has higher priority than max-decl-chars.
-    # Default: 1
-    max-decl-lines: 2
-    # Maximum length of variable declaration measured in number of characters, after which linter won't suggest using short syntax.
-    # Default: 30
-    max-decl-chars: 40
-
   importas:
     # Do not allow unaliased imports of aliased packages.
     # Default: false
@@ -1352,11 +1328,6 @@ linters-settings:
     # Allow only slices initialized with a length of zero.
     # Default: false
     always: true
-
-  maligned:
-    # Print struct with more effective memory layout or not.
-    # Default: false
-    suggest-new: true
 
   misspell:
     # Correct spellings using locale preferences for US or UK.
@@ -2338,11 +2309,6 @@ linters-settings:
     # Default: true
     generated-is-used: false
 
-  varcheck:
-    # Check usage of exported fields and variables.
-    # Default: false
-    exported-fields: true
-
   varnamelen:
     # The longest distance, in source lines, that is being considered a "small scope".
     # Variables used in at most this many lines will be ignored.
@@ -2519,7 +2485,6 @@ linters:
     - contextcheck
     - copyloopvar
     - cyclop
-    - deadcode
     - decorder
     - depguard
     - dogsled
@@ -2532,7 +2497,6 @@ linters:
     - errorlint
     - execinquery
     - exhaustive
-    - exhaustivestruct
     - exhaustruct
     - exportloopref
     - forbidigo
@@ -2555,7 +2519,6 @@ linters:
     - gofumpt
     - goheader
     - goimports
-    - golint
     - gomnd
     - gomoddirectives
     - gomodguard
@@ -2565,19 +2528,16 @@ linters:
     - gosmopolitan
     - govet
     - grouper
-    - ifshort
     - importas
     - inamedparam
     - ineffassign
     - interfacebloat
-    - interfacer
     - intrange
     - ireturn
     - lll
     - loggercheck
     - maintidx
     - makezero
-    - maligned
     - mirror
     - misspell
     - musttag
@@ -2589,7 +2549,6 @@ linters:
     - noctx
     - nolintlint
     - nonamedreturns
-    - nosnakecase
     - nosprintfhostport
     - paralleltest
     - perfsprint
@@ -2600,12 +2559,10 @@ linters:
     - reassign
     - revive
     - rowserrcheck
-    - scopelint
     - sloglint
     - spancheck
     - sqlclosecheck
     - staticcheck
-    - structcheck
     - stylecheck
     - tagalign
     - tagliatelle
@@ -2620,7 +2577,6 @@ linters:
     - unparam
     - unused
     - usestdlibvars
-    - varcheck
     - varnamelen
     - wastedassign
     - whitespace
@@ -2642,7 +2598,6 @@ linters:
     - contextcheck
     - copyloopvar
     - cyclop
-    - deadcode
     - decorder
     - depguard
     - dogsled
@@ -2655,7 +2610,6 @@ linters:
     - errorlint
     - execinquery
     - exhaustive
-    - exhaustivestruct
     - exhaustruct
     - exportloopref
     - forbidigo
@@ -2678,7 +2632,6 @@ linters:
     - gofumpt
     - goheader
     - goimports
-    - golint
     - gomnd
     - gomoddirectives
     - gomodguard
@@ -2688,19 +2641,16 @@ linters:
     - gosmopolitan
     - govet
     - grouper
-    - ifshort
     - importas
     - inamedparam
     - ineffassign
     - interfacebloat
-    - interfacer
     - intrange
     - ireturn
     - lll
     - loggercheck
     - maintidx
     - makezero
-    - maligned
     - mirror
     - misspell
     - musttag
@@ -2712,7 +2662,6 @@ linters:
     - noctx
     - nolintlint
     - nonamedreturns
-    - nosnakecase
     - nosprintfhostport
     - paralleltest
     - perfsprint
@@ -2723,12 +2672,10 @@ linters:
     - reassign
     - revive
     - rowserrcheck
-    - scopelint
     - sloglint
     - spancheck
     - sqlclosecheck
     - staticcheck
-    - structcheck
     - stylecheck
     - tagalign
     - tagliatelle
@@ -2743,13 +2690,22 @@ linters:
     - unparam
     - unused
     - usestdlibvars
-    - varcheck
     - varnamelen
     - wastedassign
     - whitespace
     - wrapcheck
     - wsl
     - zerologlint
+    - deadcode # Deprecated
+    - exhaustivestruct # Deprecated
+    - golint # Deprecated
+    - ifshort # Deprecated
+    - interfacer # Deprecated
+    - maligned # Deprecated
+    - nosnakecase # Deprecated
+    - scopelint # Deprecated
+    - structcheck # Deprecated
+    - varcheck # Deprecated
 
   # Enable presets.
   # https://golangci-lint.run/usage/linters

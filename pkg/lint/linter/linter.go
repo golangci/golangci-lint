@@ -3,6 +3,7 @@ package linter
 import (
 	"context"
 
+	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
@@ -24,6 +25,20 @@ func NewNoop(l Linter, reason string) Noop {
 		desc:   l.Desc(),
 		reason: reason,
 	}
+}
+
+func NewNoopDeprecated(name string, cfg *config.Config) Noop {
+	noop := Noop{
+		name:   name,
+		desc:   "Deprecated",
+		reason: "This linter is fully inactivated: it will not produce any reports.",
+	}
+
+	if cfg.InternalCmdTest {
+		noop.reason = ""
+	}
+
+	return noop
 }
 
 func (n Noop) Run(_ context.Context, lintCtx *Context) ([]result.Issue, error) {
