@@ -44,8 +44,6 @@ import (
 	"github.com/golangci/golangci-lint/pkg/timeutils"
 )
 
-const defaultFileMode = 0644
-
 const defaultTimeout = time.Minute
 
 const (
@@ -82,6 +80,8 @@ type runCommand struct {
 	buildInfo BuildInfo
 
 	dbManager *lintersdb.Manager
+
+	printer *printers.Printer
 
 	log        logutils.Log
 	debugf     logutils.DebugFunc
@@ -183,6 +183,13 @@ func (c *runCommand) preRunE(_ *cobra.Command, _ []string) error {
 	}
 
 	c.dbManager = dbManager
+
+	printer, err := printers.NewPrinter(c.log, c.cfg, c.reportData)
+	if err != nil {
+		return err
+	}
+
+	c.printer = printer
 
 	c.goenv = goutil.NewEnv(c.log.Child(logutils.DebugKeyGoEnv))
 
@@ -320,20 +327,12 @@ func (c *runCommand) runAndPrint(ctx context.Context, args []string) error {
 
 	issues, err := c.runAnalysis(ctx, args)
 	if err != nil {
-		return err // XXX: don't loose type
+		return err // XXX: don't lose type
 	}
 
-	formats := strings.Split(c.cfg.Output.Format, ",")
-	for _, format := range formats {
-		out := strings.SplitN(format, ":", 2)
-		if len(out) < 2 {
-			out = append(out, "")
-		}
-
-		err := c.printReports(issues, out[1], out[0])
-		if err != nil {
-			return err
-		}
+	err = c.printer.Print(issues)
+	if err != nil {
+		return err
 	}
 
 	c.printStats(issues)
@@ -395,80 +394,6 @@ func (c *runCommand) setExitCodeIfIssuesFound(issues []result.Issue) {
 	if len(issues) != 0 {
 		c.exitCode = c.cfg.Run.ExitCodeIfIssuesFound
 	}
-}
-
-func (c *runCommand) printReports(issues []result.Issue, path, format string) error {
-	w, shouldClose, err := c.createWriter(path)
-	if err != nil {
-		return fmt.Errorf("can't create output for %s: %w", path, err)
-	}
-
-	p, err := c.createPrinter(format, w)
-	if err != nil {
-		if file, ok := w.(io.Closer); shouldClose && ok {
-			_ = file.Close()
-		}
-		return err
-	}
-
-	if err = p.Print(issues); err != nil {
-		if file, ok := w.(io.Closer); shouldClose && ok {
-			_ = file.Close()
-		}
-		return fmt.Errorf("can't print %d issues: %w", len(issues), err)
-	}
-
-	if file, ok := w.(io.Closer); shouldClose && ok {
-		_ = file.Close()
-	}
-
-	return nil
-}
-
-func (c *runCommand) createWriter(path string) (io.Writer, bool, error) {
-	if path == "" || path == "stdout" {
-		return logutils.StdOut, false, nil
-	}
-	if path == "stderr" {
-		return logutils.StdErr, false, nil
-	}
-	f, err := os.OpenFile(path, os.O_CREATE|os.O_TRUNC|os.O_WRONLY, defaultFileMode)
-	if err != nil {
-		return nil, false, err
-	}
-	return f, true, nil
-}
-
-func (c *runCommand) createPrinter(format string, w io.Writer) (printers.Printer, error) {
-	var p printers.Printer
-	switch format {
-	case config.OutFormatJSON:
-		p = printers.NewJSON(c.reportData, w)
-	case config.OutFormatColoredLineNumber, config.OutFormatLineNumber:
-		p = printers.NewText(c.cfg.Output.PrintIssuedLine,
-			format == config.OutFormatColoredLineNumber, c.cfg.Output.PrintLinterName,
-			c.log.Child(logutils.DebugKeyTextPrinter), w)
-	case config.OutFormatTab, config.OutFormatColoredTab:
-		p = printers.NewTab(c.cfg.Output.PrintLinterName,
-			format == config.OutFormatColoredTab,
-			c.log.Child(logutils.DebugKeyTabPrinter), w)
-	case config.OutFormatCheckstyle:
-		p = printers.NewCheckstyle(w)
-	case config.OutFormatCodeClimate:
-		p = printers.NewCodeClimate(w)
-	case config.OutFormatHTML:
-		p = printers.NewHTML(w)
-	case config.OutFormatJunitXML:
-		p = printers.NewJunitXML(w)
-	case config.OutFormatGithubActions:
-		p = printers.NewGithub(w)
-	case config.OutFormatTeamCity:
-		p = printers.NewTeamCity(w)
-	default:
-		return nil, fmt.Errorf("unknown output format %s", format)
-	}
-
-	return p, nil
 }
 
 func (c *runCommand) printStats(issues []result.Issue) {
@@ -688,7 +613,7 @@ func formatMemory(memBytes uint64) string {
 	return fmt.Sprintf("%dmb", memBytes/Mb)
 }
 
-// --- Related to cache.
+// Related to cache.
 
 func initHashSalt(version string, cfg *config.Config) error {
 	binSalt, err := computeBinarySalt(version)

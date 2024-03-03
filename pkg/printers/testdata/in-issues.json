@@ -1,0 +1,389 @@
+ [
+    {
+      "FromLinter": "gochecknoinits",
+      "Text": "don't use `init` function",
+      "Severity": "",
+      "SourceLines": [
+        "func init() {"
+      ],
+      "Replacement": null,
+      "Pos": {
+        "Filename": "pkg/experimental/myplugin/myplugin.go",
+        "Offset": 162,
+        "Line": 13,
+        "Column": 1
+      },
+      "ExpectNoLint": false,
+      "ExpectedNoLintLinter": ""
+    },
+    {
+      "FromLinter": "gocritic",
+      "Text": "hugeParam: settings is heavy (80 bytes); consider passing it by pointer",
+      "Severity": "",
+      "SourceLines": [
+        "func (b *PluginBuilder) loadConfig(cfg *config.Config, name string, settings config.CustomLinterSettings) (*linter.Config, error) {"
+      ],
+      "Replacement": null,
+      "Pos": {
+        "Filename": "pkg/lint/lintersdb/builder_plugin.go",
+        "Offset": 1480,
+        "Line": 59,
+        "Column": 69
+      },
+      "ExpectNoLint": false,
+      "ExpectedNoLintLinter": ""
+    },
+    {
+      "FromLinter": "goimports",
+      "Text": "File is not `goimports`-ed with -local github.com/golangci/golangci-lint",
+      "Severity": "",
+      "SourceLines": [
+        ""
+      ],
+      "Replacement": {
+        "NeedOnlyDelete": false,
+        "NewLines": [
+          "",
+          "\t\"github.com/stretchr/testify/require\"",
+          ""
+        ],
+        "Inline": null
+      },
+      "Pos": {
+        "Filename": "pkg/printers/printer_test.go",
+        "Offset": 0,
+        "Line": 6,
+        "Column": 0
+      },
+      "ExpectNoLint": false,
+      "ExpectedNoLintLinter": ""
+    },
+    {
+      "FromLinter": "maligned",
+      "Text": "struct of size 144 bytes could be of size 128 bytes",
+      "Severity": "",
+      "SourceLines": [
+        "type Issues struct {"
+      ],
+      "Replacement": null,
+      "Pos": {
+        "Filename": "pkg/config/issues.go",
+        "Offset": 3338,
+        "Line": 107,
+        "Column": 13
+      },
+      "ExpectNoLint": false,
+      "ExpectedNoLintLinter": ""
+    },
+    {
+      "FromLinter": "maligned",
+      "Text": "struct of size 3144 bytes could be of size 3096 bytes",
+      "Severity": "",
+      "SourceLines": [
+        "type LintersSettings struct {"
+      ],
+      "Replacement": null,
+      "Pos": {
+        "Filename": "pkg/config/linters_settings.go",
+        "Offset": 4576,
+        "Line": 200,
+        "Column": 22
+      },
+      "ExpectNoLint": false,
+      "ExpectedNoLintLinter": ""
+    },
+    {
+      "FromLinter": "maligned",
+      "Text": "struct of size 72 bytes could be of size 64 bytes",
+      "Severity": "",
+      "SourceLines": [
+        "type ExhaustiveSettings struct {"
+      ],
+      "Replacement": null,
+      "Pos": {
+        "Filename": "pkg/config/linters_settings.go",
+        "Offset": 10829,
+        "Line": 383,
+        "Column": 25
+      },
+      "ExpectNoLint": false,
+      "ExpectedNoLintLinter": ""
+    },
+    {
+      "FromLinter": "maligned",
+      "Text": "struct of size 72 bytes could be of size 56 bytes",
+      "Severity": "",
+      "SourceLines": [
+        "type GoConstSettings struct {"
+      ],
+      "Replacement": null,
+      "Pos": {
+        "Filename": "pkg/config/linters_settings.go",
+        "Offset": 14399,
+        "Line": 470,
+        "Column": 22
+      },
+      "ExpectNoLint": false,
+      "ExpectedNoLintLinter": ""
+    },
+    {
+      "FromLinter": "maligned",
+      "Text": "struct of size 136 bytes could be of size 128 bytes",
+      "Severity": "",
+      "SourceLines": [
+        "type GoCriticSettings struct {"
+      ],
+      "Replacement": null,
+      "Pos": {
+        "Filename": "pkg/config/linters_settings.go",
+        "Offset": 14934,
+        "Line": 482,
+        "Column": 23
+      },
+      "ExpectNoLint": false,
+      "ExpectedNoLintLinter": ""
+    },
+    {
+      "FromLinter": "maligned",
+      "Text": "struct of size 64 bytes could be of size 56 bytes",
+      "Severity": "",
+      "SourceLines": [
+        "type GosmopolitanSettings struct {"
+      ],
+      "Replacement": null,
+      "Pos": {
+        "Filename": "pkg/config/linters_settings.go",
+        "Offset": 18601,
+        "Line": 584,
+        "Column": 27
+      },
+      "ExpectNoLint": false,
+      "ExpectedNoLintLinter": ""
+    },
+    {
+      "FromLinter": "maligned",
+      "Text": "struct of size 88 bytes could be of size 80 bytes",
+      "Severity": "",
+      "SourceLines": [
+        "type GovetSettings struct {"
+      ],
+      "Replacement": null,
+      "Pos": {
+        "Filename": "pkg/config/linters_settings.go",
+        "Offset": 18867,
+        "Line": 591,
+        "Column": 20
+      },
+      "ExpectNoLint": false,
+      "ExpectedNoLintLinter": ""
+    },
+    {
+      "FromLinter": "maligned",
+      "Text": "struct of size 40 bytes could be of size 32 bytes",
+      "Severity": "",
+      "SourceLines": [
+        "type NoLintLintSettings struct {"
+      ],
+      "Replacement": null,
+      "Pos": {
+        "Filename": "pkg/config/linters_settings.go",
+        "Offset": 22337,
+        "Line": 710,
+        "Column": 25
+      },
+      "ExpectNoLint": false,
+      "ExpectedNoLintLinter": ""
+    },
+    {
+      "FromLinter": "maligned",
+      "Text": "struct of size 112 bytes could be of size 104 bytes",
+      "Severity": "",
+      "SourceLines": [
+        "type ReviveSettings struct {"
+      ],
+      "Replacement": null,
+      "Pos": {
+        "Filename": "pkg/config/linters_settings.go",
+        "Offset": 24019,
+        "Line": 762,
+        "Column": 21
+      },
+      "ExpectNoLint": false,
+      "ExpectedNoLintLinter": ""
+    },
+    {
+      "FromLinter": "maligned",
+      "Text": "struct of size 32 bytes could be of size 24 bytes",
+      "Severity": "",
+      "SourceLines": [
+        "type SlogLintSettings struct {"
+      ],
+      "Replacement": null,
+      "Pos": {
+        "Filename": "pkg/config/linters_settings.go",
+        "Offset": 24648,
+        "Line": 787,
+        "Column": 23
+      },
+      "ExpectNoLint": false,
+      "ExpectedNoLintLinter": ""
+    },
+    {
+      "FromLinter": "maligned",
+      "Text": "struct of size 40 bytes could be of size 32 bytes",
+      "Severity": "",
+      "SourceLines": [
+        "type TagAlignSettings struct {"
+      ],
+      "Replacement": null,
+      "Pos": {
+        "Filename": "pkg/config/linters_settings.go",
+        "Offset": 25936,
+        "Line": 817,
+        "Column": 23
+      },
+      "ExpectNoLint": false,
+      "ExpectedNoLintLinter": ""
+    },
+    {
+      "FromLinter": "maligned",
+      "Text": "struct of size 80 bytes could be of size 72 bytes",
+      "Severity": "",
+      "SourceLines": [
+        "type VarnamelenSettings struct {"
+      ],
+      "Replacement": null,
+      "Pos": {
+        "Filename": "pkg/config/linters_settings.go",
+        "Offset": 28758,
+        "Line": 902,
+        "Column": 25
+      },
+      "ExpectNoLint": false,
+      "ExpectedNoLintLinter": ""
+    },
+    {
+      "FromLinter": "maligned",
+      "Text": "struct of size 112 bytes could be of size 96 bytes",
+      "Severity": "",
+      "SourceLines": [
+        "type WSLSettings struct {"
+      ],
+      "Replacement": null,
+      "Pos": {
+        "Filename": "pkg/config/linters_settings.go",
+        "Offset": 29898,
+        "Line": 928,
+        "Column": 18
+      },
+      "ExpectNoLint": false,
+      "ExpectedNoLintLinter": ""
+    },
+    {
+      "FromLinter": "maligned",
+      "Text": "struct of size 168 bytes could be of size 160 bytes",
+      "Severity": "",
+      "SourceLines": [
+        "type Run struct {"
+      ],
+      "Replacement": null,
+      "Pos": {
+        "Filename": "pkg/config/run.go",
+        "Offset": 112,
+        "Line": 6,
+        "Column": 10
+      },
+      "ExpectNoLint": false,
+      "ExpectedNoLintLinter": ""
+    },
+    {
+      "FromLinter": "maligned",
+      "Text": "struct of size 128 bytes could be of size 120 bytes",
+      "Severity": "",
+      "SourceLines": [
+        "type Config struct {"
+      ],
+      "Replacement": null,
+      "Pos": {
+        "Filename": "pkg/lint/linter/config.go",
+        "Offset": 1329,
+        "Line": 36,
+        "Column": 13
+      },
+      "ExpectNoLint": false,
+      "ExpectedNoLintLinter": ""
+    },
+    {
+      "FromLinter": "maligned",
+      "Text": "struct of size 96 bytes could be of size 88 bytes",
+      "Severity": "",
+      "SourceLines": [
+        "\tfor _, tc := range []struct {"
+      ],
+      "Replacement": null,
+      "Pos": {
+        "Filename": "pkg/golinters/govet_test.go",
+        "Offset": 1804,
+        "Line": 70,
+        "Column": 23
+      },
+      "ExpectNoLint": false,
+      "ExpectedNoLintLinter": ""
+    },
+    {
+      "FromLinter": "maligned",
+      "Text": "struct of size 64 bytes could be of size 56 bytes",
+      "Severity": "",
+      "SourceLines": [
+        "type Diff struct {"
+      ],
+      "Replacement": null,
+      "Pos": {
+        "Filename": "pkg/result/processors/diff.go",
+        "Offset": 233,
+        "Line": 17,
+        "Column": 11
+      },
+      "ExpectNoLint": false,
+      "ExpectedNoLintLinter": ""
+    },
+    {
+      "FromLinter": "revive",
+      "Text": "unused-parameter: parameter 'pass' seems to be unused, consider removing or renaming it as _",
+      "Severity": "warning",
+      "SourceLines": [
+        "\t\t\tRun: func(pass *analysis.Pass) (any, error) {"
+      ],
+      "Replacement": null,
+      "LineRange": {
+        "From": 49,
+        "To": 49
+      },
+      "Pos": {
+        "Filename": "pkg/experimental/myplugin/myplugin.go",
+        "Offset": 921,
+        "Line": 49,
+        "Column": 14
+      },
+      "ExpectNoLint": false,
+      "ExpectedNoLintLinter": ""
+    },
+    {
+      "FromLinter": "unused",
+      "Text": "const `defaultFileMode` is unused",
+      "Severity": "",
+      "SourceLines": [
+        "const defaultFileMode = 0644"
+      ],
+      "Replacement": null,
+      "Pos": {
+        "Filename": "pkg/commands/run.go",
+        "Offset": 1209,
+        "Line": 47,
+        "Column": 7
+      },
+      "ExpectNoLint": false,
+      "ExpectedNoLintLinter": ""
+    }
+  ]
+

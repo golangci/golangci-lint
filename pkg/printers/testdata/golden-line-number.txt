@@ -1,0 +1,22 @@
+pkg/experimental/myplugin/myplugin.go:13:1: don't use `init` function
+pkg/lint/lintersdb/builder_plugin.go:59:69: hugeParam: settings is heavy (80 bytes); consider passing it by pointer
+pkg/printers/printer_test.go:6: File is not `goimports`-ed with -local github.com/golangci/golangci-lint
+pkg/config/issues.go:107:13: struct of size 144 bytes could be of size 128 bytes
+pkg/config/linters_settings.go:200:22: struct of size 3144 bytes could be of size 3096 bytes
+pkg/config/linters_settings.go:383:25: struct of size 72 bytes could be of size 64 bytes
+pkg/config/linters_settings.go:470:22: struct of size 72 bytes could be of size 56 bytes
+pkg/config/linters_settings.go:482:23: struct of size 136 bytes could be of size 128 bytes
+pkg/config/linters_settings.go:584:27: struct of size 64 bytes could be of size 56 bytes
+pkg/config/linters_settings.go:591:20: struct of size 88 bytes could be of size 80 bytes
+pkg/config/linters_settings.go:710:25: struct of size 40 bytes could be of size 32 bytes
+pkg/config/linters_settings.go:762:21: struct of size 112 bytes could be of size 104 bytes
+pkg/config/linters_settings.go:787:23: struct of size 32 bytes could be of size 24 bytes
+pkg/config/linters_settings.go:817:23: struct of size 40 bytes could be of size 32 bytes
+pkg/config/linters_settings.go:902:25: struct of size 80 bytes could be of size 72 bytes
+pkg/config/linters_settings.go:928:18: struct of size 112 bytes could be of size 96 bytes
+pkg/config/run.go:6:10: struct of size 168 bytes could be of size 160 bytes
+pkg/lint/linter/config.go:36:13: struct of size 128 bytes could be of size 120 bytes
+pkg/golinters/govet_test.go:70:23: struct of size 96 bytes could be of size 88 bytes
+pkg/result/processors/diff.go:17:11: struct of size 64 bytes could be of size 56 bytes
+pkg/experimental/myplugin/myplugin.go:49:14: unused-parameter: parameter 'pass' seems to be unused, consider removing or renaming it as _
+pkg/commands/run.go:47:7: const `defaultFileMode` is unused
