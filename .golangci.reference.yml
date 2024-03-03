@@ -149,6 +149,11 @@ linters-settings:
     first-strong-isolate: false
     pop-directional-isolate: false
 
+  copyloopvar:
+    # If true, ignore aliasing of loop variables.
+    # Default: false
+    ignore-alias: true
+
   cyclop:
     # The maximal code complexity to report.
     # Default: 10
