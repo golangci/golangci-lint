@@ -28,8 +28,9 @@ func NewNoop(l Linter, reason string) Noop {
 
 func NewNoopDeprecated(name string) Noop {
 	return Noop{
-		name: name,
-		desc: "Deprecated",
+		name:   name,
+		desc:   "Deprecated",
+		reason: "This linter is fully inactivated: it will not produce any reports.",
 	}
 }
 
