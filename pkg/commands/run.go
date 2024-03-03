@@ -23,6 +23,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
+	"go.uber.org/automaxprocs/maxprocs"
 	"golang.org/x/exp/maps"
 	"gopkg.in/yaml.v3"
 
@@ -154,7 +155,12 @@ func (c *runCommand) persistentPreRunE(cmd *cobra.Command, _ []string) error {
 		return fmt.Errorf("can't load config: %w", err)
 	}
 
-	runtime.GOMAXPROCS(c.cfg.Run.Concurrency)
+	if c.cfg.Run.Concurrency == 0 {
+		// Automatically set GOMAXPROCS to match Linux container CPU quota.
+		_, _ = maxprocs.Set(nil)
+	} else {
+		runtime.GOMAXPROCS(c.cfg.Run.Concurrency)
+	}
 
 	return c.startTracing()
 }
