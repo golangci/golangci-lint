@@ -106,7 +106,7 @@ require (
 	github.com/spf13/viper v1.12.0
 	github.com/ssgreg/nlreturn/v2 v2.2.1
 	github.com/stbenjam/no-sprintf-host-port v0.1.1
-	github.com/stretchr/testify v1.8.4
+	github.com/stretchr/testify v1.9.0
 	github.com/tdakkota/asciicheck v0.2.0
 	github.com/tetafro/godot v1.4.16
 	github.com/timakin/bodyclose v0.0.0-20230421092635-574207250966
@@ -182,7 +182,7 @@ require (
 	github.com/spf13/afero v1.11.0 // indirect
 	github.com/spf13/cast v1.5.0 // indirect
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
-	github.com/stretchr/objx v0.5.0 // indirect
+	github.com/stretchr/objx v0.5.2 // indirect
 	github.com/subosito/gotenv v1.4.1 // indirect
 	github.com/t-yuki/gocover-cobertura v0.0.0-20180217150009-aaee18c8195c // indirect
 	github.com/tklauser/go-sysconf v0.3.12 // indirect
