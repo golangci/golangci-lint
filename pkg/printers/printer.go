@@ -15,7 +15,7 @@ import (
 
 const defaultFileMode = 0644
 
-type printer interface {
+type issuePrinter interface {
 	Print(issues []result.Issue) error
 }
 
@@ -107,8 +107,8 @@ func (c *Printer) createWriter(path string) (io.Writer, bool, error) {
 	return f, true, nil
 }
 
-func (c *Printer) createPrinter(format string, w io.Writer) (printer, error) {
-	var p printer
+func (c *Printer) createPrinter(format string, w io.Writer) (issuePrinter, error) {
+	var p issuePrinter
 
 	switch format {
 	case config.OutFormatJSON:
