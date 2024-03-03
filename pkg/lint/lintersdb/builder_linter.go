@@ -77,7 +77,7 @@ func (b LinterBuilder) Build(cfg *config.Config) []*linter.Config {
 			WithPresets(linter.PresetFormatting, linter.PresetStyle).
 			WithURL("https://gitlab.com/bosi/decorder"),
 
-		linter.NewConfig(linter.NewNoopDeprecated("deadcode")).
+		linter.NewConfig(linter.NewNoopDeprecated("deadcode", cfg)).
 			WithSince("v1.0.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetUnused).
@@ -148,7 +148,7 @@ func (b LinterBuilder) Build(cfg *config.Config) []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/nishanths/exhaustive"),
 
-		linter.NewConfig(linter.NewNoopDeprecated("exhaustivestruct")).
+		linter.NewConfig(linter.NewNoopDeprecated("exhaustivestruct", cfg)).
 			WithSince("v1.32.0").
 			WithPresets(linter.PresetStyle, linter.PresetTest).
 			WithLoadForGoAnalysis().
@@ -280,7 +280,7 @@ func (b LinterBuilder) Build(cfg *config.Config) []*linter.Config {
 			WithAutoFix().
 			WithURL("https://pkg.go.dev/golang.org/x/tools/cmd/goimports"),
 
-		linter.NewConfig(linter.NewNoopDeprecated("golint")).
+		linter.NewConfig(linter.NewNoopDeprecated("golint", cfg)).
 			WithSince("v1.0.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetStyle).
@@ -341,7 +341,7 @@ func (b LinterBuilder) Build(cfg *config.Config) []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/leonklingele/grouper"),
 
-		linter.NewConfig(linter.NewNoopDeprecated("ifshort")).
+		linter.NewConfig(linter.NewNoopDeprecated("ifshort", cfg)).
 			WithSince("v1.36.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/esimonov/ifshort").
@@ -369,7 +369,7 @@ func (b LinterBuilder) Build(cfg *config.Config) []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/sashamelentyev/interfacebloat"),
 
-		linter.NewConfig(linter.NewNoopDeprecated("interfacer")).
+		linter.NewConfig(linter.NewNoopDeprecated("interfacer", cfg)).
 			WithSince("v1.0.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetStyle).
@@ -409,7 +409,7 @@ func (b LinterBuilder) Build(cfg *config.Config) []*linter.Config {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/ashanbrown/makezero"),
 
-		linter.NewConfig(linter.NewNoopDeprecated("maligned")).
+		linter.NewConfig(linter.NewNoopDeprecated("maligned", cfg)).
 			WithSince("v1.0.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetPerformance).
@@ -473,7 +473,7 @@ func (b LinterBuilder) Build(cfg *config.Config) []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/firefart/nonamedreturns"),
 
-		linter.NewConfig(linter.NewNoopDeprecated("nosnakecase")).
+		linter.NewConfig(linter.NewNoopDeprecated("nosnakecase", cfg)).
 			WithSince("v1.47.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/sivchari/nosnakecase").
@@ -542,7 +542,7 @@ func (b LinterBuilder) Build(cfg *config.Config) []*linter.Config {
 			WithPresets(linter.PresetStyle, linter.PresetFormatting).
 			WithURL("https://github.com/go-simpler/sloglint"),
 
-		linter.NewConfig(linter.NewNoopDeprecated("scopelint")).
+		linter.NewConfig(linter.NewNoopDeprecated("scopelint", cfg)).
 			WithSince("v1.12.0").
 			WithPresets(linter.PresetBugs).
 			WithURL("https://github.com/kyoh86/scopelint").
@@ -568,7 +568,7 @@ func (b LinterBuilder) Build(cfg *config.Config) []*linter.Config {
 			WithAlternativeNames(megacheckName).
 			WithURL("https://staticcheck.io/"),
 
-		linter.NewConfig(linter.NewNoopDeprecated("structcheck")).
+		linter.NewConfig(linter.NewNoopDeprecated("structcheck", cfg)).
 			WithSince("v1.0.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetUnused).
@@ -661,7 +661,7 @@ func (b LinterBuilder) Build(cfg *config.Config) []*linter.Config {
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/sashamelentyev/usestdlibvars"),
 
-		linter.NewConfig(linter.NewNoopDeprecated("varcheck")).
+		linter.NewConfig(linter.NewNoopDeprecated("varcheck", cfg)).
 			WithSince("v1.0.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetUnused).
