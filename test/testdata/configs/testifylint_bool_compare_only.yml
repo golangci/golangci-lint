@@ -1,0 +1,6 @@
+linters-settings:
+  testifylint:
+    disable-all: true
+    enable: bool-compare
+    bool-compare:
+      ignore-custom-types: true

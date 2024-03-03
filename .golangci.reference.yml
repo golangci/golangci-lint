@@ -2197,6 +2197,10 @@ linters-settings:
       - suite-thelper
       - useless-assert
 
+    bool-compare:
+      # To ignore user defined types (over builtin bool).
+      # Default: false
+      ignore-custom-types: true
     expected-actual:
       # Regexp for expected variable name.
       # Default: (^(exp(ected)?|want(ed)?)([A-Z]\w*)?$)|(^(\w*[a-z])?(Exp(ected)?|Want(ed)?)$)

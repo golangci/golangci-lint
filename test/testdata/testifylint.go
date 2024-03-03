@@ -10,6 +10,8 @@ import (
 	"github.com/stretchr/testify/suite"
 )
 
+type Bool bool
+
 func TestTestifylint(t *testing.T) {
 	var (
 		predicate   bool
@@ -20,6 +22,7 @@ func TestTestifylint(t *testing.T) {
 	)
 
 	assert.Equal(t, predicate, true)    // want "bool-compare: use assert\\.True"
+	assert.Equal(t, Bool(predicate), false)    // want "bool-compare: use assert\\.False"
 	assert.True(t, resultInt == 1)      // want "compares: use assert\\.Equal"
 	assert.Equal(t, len(arr), 0)        // want "empty: use assert\\.Empty"
 	assert.Error(t, err, io.EOF)        // want "error-is-as: invalid usage of assert\\.Error, use assert\\.ErrorIs instead"
