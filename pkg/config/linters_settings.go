@@ -206,6 +206,7 @@ var defaultLintersSettings = LintersSettings{
 type LintersSettings struct {
 	Asasalint        AsasalintSettings
 	BiDiChk          BiDiChkSettings
+	CopyLoopVar      CopyLoopVarSettings
 	Cyclop           Cyclop
 	Decorder         DecorderSettings
 	Depguard         DepGuardSettings
@@ -311,6 +312,10 @@ type BiDiChkSettings struct {
 	RightToLeftIsolate       bool `mapstructure:"right-to-left-isolate"`
 	FirstStrongIsolate       bool `mapstructure:"first-strong-isolate"`
 	PopDirectionalIsolate    bool `mapstructure:"pop-directional-isolate"`
+}
+
+type CopyLoopVarSettings struct {
+	IgnoreAlias bool `mapstructure:"ignore-alias"`
 }
 
 type Cyclop struct {
