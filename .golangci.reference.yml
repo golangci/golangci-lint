@@ -2856,6 +2856,10 @@ severity:
   # Default: false
   case-sensitive: true
 
+  # Don't override severity defined by linters.
+  # Default: false
+  keep-linter-severity: true
+
   # When a list of severity rules are provided, severity information will be added to lint issues.
   # Severity rules have the same filtering capability as exclude rules
   # except you are allowed to specify one matcher per severity rule.

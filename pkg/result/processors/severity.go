@@ -24,6 +24,7 @@ type SeverityOptions struct {
 	Default       string
 	Rules         []SeverityRule
 	CaseSensitive bool
+	Override      bool
 }
 
 type Severity struct {
@@ -35,6 +36,7 @@ type Severity struct {
 
 	defaultSeverity string
 	rules           []severityRule
+	override        bool
 }
 
 func NewSeverity(log logutils.Log, files *fsutils.Files, opts SeverityOptions) *Severity {
@@ -43,6 +45,7 @@ func NewSeverity(log logutils.Log, files *fsutils.Files, opts SeverityOptions) *
 		files:           files,
 		log:             log,
 		defaultSeverity: opts.Default,
+		override:        opts.Override,
 	}
 
 	prefix := "(?i)"
@@ -62,6 +65,10 @@ func (p *Severity) Process(issues []result.Issue) ([]result.Issue, error) {
 	}
 
 	return transformIssues(issues, func(i *result.Issue) *result.Issue {
+		if i.Severity != "" && !p.override {
+			return i
+		}
+
 		for _, rule := range p.rules {
 			rule := rule
 
