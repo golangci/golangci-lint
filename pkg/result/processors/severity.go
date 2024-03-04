@@ -18,15 +18,15 @@ type SeverityRule struct {
 	Severity string
 }
 
-type SeverityRules struct {
+type Severity struct {
 	defaultSeverity string
 	rules           []severityRule
 	files           *fsutils.Files
 	log             logutils.Log
 }
 
-func NewSeverityRules(defaultSeverity string, rules []SeverityRule, files *fsutils.Files, log logutils.Log) *SeverityRules {
-	r := &SeverityRules{
+func NewSeverityRules(defaultSeverity string, rules []SeverityRule, files *fsutils.Files, log logutils.Log) *Severity {
+	r := &Severity{
 		files:           files,
 		log:             log,
 		defaultSeverity: defaultSeverity,
@@ -61,7 +61,7 @@ func createSeverityRules(rules []SeverityRule, prefix string) []severityRule {
 	return parsedRules
 }
 
-func (p SeverityRules) Process(issues []result.Issue) ([]result.Issue, error) {
+func (p Severity) Process(issues []result.Issue) ([]result.Issue, error) {
 	if len(p.rules) == 0 && p.defaultSeverity == "" {
 		return issues, nil
 	}
@@ -84,18 +84,18 @@ func (p SeverityRules) Process(issues []result.Issue) ([]result.Issue, error) {
 	}), nil
 }
 
-func (SeverityRules) Name() string { return "severity-rules" }
-func (SeverityRules) Finish()      {}
+func (Severity) Name() string { return "severity-rules" }
+func (Severity) Finish()      {}
 
-var _ Processor = SeverityRules{}
+var _ Processor = Severity{}
 
 type SeverityRulesCaseSensitive struct {
-	*SeverityRules
+	*Severity
 }
 
 func NewSeverityRulesCaseSensitive(defaultSeverity string, rules []SeverityRule,
 	files *fsutils.Files, log logutils.Log) *SeverityRulesCaseSensitive {
-	r := &SeverityRules{
+	r := &Severity{
 		files:           files,
 		log:             log,
 		defaultSeverity: defaultSeverity,
