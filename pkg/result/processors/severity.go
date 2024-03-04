@@ -8,7 +8,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-var _ Processor = Severity{}
+var _ Processor = &Severity{}
 
 type severityRule struct {
 	baseRule
@@ -56,7 +56,7 @@ func NewSeverity(log logutils.Log, files *fsutils.Files, opts SeverityOptions) *
 	return p
 }
 
-func (p Severity) Process(issues []result.Issue) ([]result.Issue, error) {
+func (p *Severity) Process(issues []result.Issue) ([]result.Issue, error) {
 	if len(p.rules) == 0 && p.defaultSeverity == "" {
 		return issues, nil
 	}
@@ -82,9 +82,9 @@ func (p Severity) Process(issues []result.Issue) ([]result.Issue, error) {
 	}), nil
 }
 
-func (p Severity) Name() string { return p.name }
+func (p *Severity) Name() string { return p.name }
 
-func (Severity) Finish() {}
+func (*Severity) Finish() {}
 
 func createSeverityRules(rules []SeverityRule, prefix string) []severityRule {
 	parsedRules := make([]severityRule, 0, len(rules))
