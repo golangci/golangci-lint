@@ -102,7 +102,6 @@ func (b LinterBuilder) Build(cfg *config.Config) []*linter.Config {
 		linter.NewConfig(golinters.NewDupWord(&cfg.LintersSettings.DupWord)).
 			WithSince("1.50.0").
 			WithPresets(linter.PresetComment).
-			WithAutoFix().
 			WithURL("https://github.com/Abirdcfly/dupword"),
 
 		linter.NewConfig(golinters.NewDurationCheck()).
