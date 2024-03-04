@@ -290,22 +290,12 @@ func getExcludeRulesProcessor(cfg *config.Issues, log logutils.Log, files *fsuti
 		}
 	}
 
-	var excludeRulesProcessor processors.Processor
-	if cfg.ExcludeCaseSensitive {
-		excludeRulesProcessor = processors.NewExcludeRulesCaseSensitive(
-			excludeRules,
-			files,
-			log.Child(logutils.DebugKeyExcludeRules),
-		)
-	} else {
-		excludeRulesProcessor = processors.NewExcludeRules(
-			excludeRules,
-			files,
-			log.Child(logutils.DebugKeyExcludeRules),
-		)
+	opts := processors.ExcludeRulesOptions{
+		Rules:         excludeRules,
+		CaseSensitive: cfg.ExcludeCaseSensitive,
 	}
 
-	return excludeRulesProcessor
+	return processors.NewExcludeRules(log.Child(logutils.DebugKeyExcludeRules), files, opts)
 }
 
 func getSeverityRulesProcessor(cfg *config.Severity, log logutils.Log, files *fsutils.Files) processors.Processor {
