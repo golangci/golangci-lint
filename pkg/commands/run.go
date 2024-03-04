@@ -397,7 +397,11 @@ func (c *runCommand) setExitCodeIfIssuesFound(issues []result.Issue) {
 }
 
 func (c *runCommand) printStats(issues []result.Issue) {
-	if !c.cfg.Run.ShowStats {
+	if c.cfg.Run.ShowStats {
+		c.log.Warnf("The configuration option `run.show-stats` is deprecated, please use `output.show-stats`")
+	}
+
+	if !c.cfg.Run.ShowStats && !c.cfg.Output.ShowStats {
 		return
 	}
 
