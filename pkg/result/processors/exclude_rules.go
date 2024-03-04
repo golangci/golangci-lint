@@ -39,7 +39,7 @@ func NewExcludeRules(log logutils.Log, files *fsutils.Files, opts ExcludeRulesOp
 		log:   log,
 	}
 
-	prefix := "(?i)"
+	prefix := caseInsensitivePrefix
 	if opts.CaseSensitive {
 		prefix = ""
 		p.name = "exclude-rules-case-sensitive"

@@ -22,7 +22,7 @@ type ExcludeOptions struct {
 func NewExclude(opts ExcludeOptions) *Exclude {
 	p := &Exclude{name: "exclude"}
 
-	prefix := "(?i)"
+	prefix := caseInsensitivePrefix
 	if opts.CaseSensitive {
 		p.name = "exclude-case-sensitive"
 		prefix = ""

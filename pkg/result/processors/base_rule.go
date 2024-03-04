@@ -8,6 +8,8 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
+const caseInsensitivePrefix = "(?i)"
+
 type BaseRule struct {
 	Text       string
 	Source     string

@@ -48,7 +48,7 @@ func NewSeverity(log logutils.Log, files *fsutils.Files, opts SeverityOptions) *
 		override:        opts.Override,
 	}
 
-	prefix := "(?i)"
+	prefix := caseInsensitivePrefix
 	if opts.CaseSensitive {
 		prefix = ""
 		p.name = "severity-rules-case-sensitive"
