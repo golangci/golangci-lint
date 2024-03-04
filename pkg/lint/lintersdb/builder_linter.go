@@ -494,6 +494,7 @@ func (b LinterBuilder) Build(cfg *config.Config) []*linter.Config {
 			WithSince("v1.55.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetPerformance).
+			WithAutoFix().
 			WithURL("https://github.com/catenacyber/perfsprint"),
 
 		linter.NewConfig(golinters.NewPreAlloc(&cfg.LintersSettings.Prealloc)).
