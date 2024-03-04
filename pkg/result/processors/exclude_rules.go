@@ -92,4 +92,3 @@ func NewExcludeRulesCaseSensitive(rules []ExcludeRule, files *fsutils.Files, log
 
 func (ExcludeRulesCaseSensitive) Name() string { return "exclude-rules-case-sensitive" }
 
-var _ Processor = ExcludeCaseSensitive{}

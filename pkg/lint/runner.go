@@ -254,20 +254,15 @@ func (r *Runner) processIssues(issues []result.Issue, sw *timeutils.Stopwatch, s
 }
 
 func getExcludeProcessor(cfg *config.Issues) processors.Processor {
-	var excludeTotalPattern string
+	opts := processors.ExcludeOptions{
+		CaseSensitive: cfg.ExcludeCaseSensitive,
+	}
 
 	if len(cfg.ExcludePatterns) != 0 {
-		excludeTotalPattern = fmt.Sprintf("(%s)", strings.Join(cfg.ExcludePatterns, "|"))
+		opts.Pattern = fmt.Sprintf("(%s)", strings.Join(cfg.ExcludePatterns, "|"))
 	}
 
-	var excludeProcessor processors.Processor
-	if cfg.ExcludeCaseSensitive {
-		excludeProcessor = processors.NewExcludeCaseSensitive(excludeTotalPattern)
-	} else {
-		excludeProcessor = processors.NewExclude(excludeTotalPattern)
-	}
-
-	return excludeProcessor
+	return processors.NewExclude(opts)
 }
 
 func getExcludeRulesProcessor(cfg *config.Issues, log logutils.Log, files *fsutils.Files) processors.Processor {

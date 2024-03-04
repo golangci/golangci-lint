@@ -9,8 +9,10 @@ import (
 )
 
 func TestExclude(t *testing.T) {
-	p := NewExclude("^exclude$")
+	p := NewExclude(ExcludeOptions{Pattern: "^exclude$"})
+
 	texts := []string{"excLude", "1", "", "exclud", "notexclude"}
+
 	var issues []result.Issue
 	for _, t := range texts {
 		issues = append(issues, newIssueFromTextTestCase(t))
@@ -23,16 +25,19 @@ func TestExclude(t *testing.T) {
 	for _, i := range processedIssues {
 		processedTexts = append(processedTexts, i.Text)
 	}
+
 	assert.Equal(t, texts[1:], processedTexts)
 }
 
-func TestNoExclude(t *testing.T) {
-	processAssertSame(t, NewExclude(""), newIssueFromTextTestCase("test"))
+func TestExclude_empty(t *testing.T) {
+	processAssertSame(t, NewExclude(ExcludeOptions{}), newIssueFromTextTestCase("test"))
 }
 
-func TestExcludeCaseSensitive(t *testing.T) {
-	p := NewExcludeCaseSensitive("^exclude$")
+func TestExclude_caseSensitive(t *testing.T) {
+	p := NewExclude(ExcludeOptions{Pattern: "^exclude$", CaseSensitive: true})
+
 	texts := []string{"excLude", "1", "", "exclud", "exclude"}
+
 	var issues []result.Issue
 	for _, t := range texts {
 		issues = append(issues, newIssueFromTextTestCase(t))
@@ -45,5 +50,6 @@ func TestExcludeCaseSensitive(t *testing.T) {
 	for _, i := range processedIssues {
 		processedTexts = append(processedTexts, i.Text)
 	}
+
 	assert.Equal(t, texts[:len(texts)-1], processedTexts)
 }
