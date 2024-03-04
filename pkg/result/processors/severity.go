@@ -8,6 +8,8 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
+var _ Processor = Severity{}
+
 type severityRule struct {
 	baseRule
 	severity string
@@ -36,31 +38,6 @@ func NewSeverityRules(defaultSeverity string, rules []SeverityRule, files *fsuti
 	return r
 }
 
-func createSeverityRules(rules []SeverityRule, prefix string) []severityRule {
-	parsedRules := make([]severityRule, 0, len(rules))
-	for _, rule := range rules {
-		parsedRule := severityRule{}
-		parsedRule.linters = rule.Linters
-		parsedRule.severity = rule.Severity
-		if rule.Text != "" {
-			parsedRule.text = regexp.MustCompile(prefix + rule.Text)
-		}
-		if rule.Source != "" {
-			parsedRule.source = regexp.MustCompile(prefix + rule.Source)
-		}
-		if rule.Path != "" {
-			path := fsutils.NormalizePathInRegex(rule.Path)
-			parsedRule.path = regexp.MustCompile(path)
-		}
-		if rule.PathExcept != "" {
-			pathExcept := fsutils.NormalizePathInRegex(rule.PathExcept)
-			parsedRule.pathExcept = regexp.MustCompile(pathExcept)
-		}
-		parsedRules = append(parsedRules, parsedRule)
-	}
-	return parsedRules
-}
-
 func (p Severity) Process(issues []result.Issue) ([]result.Issue, error) {
 	if len(p.rules) == 0 && p.defaultSeverity == "" {
 		return issues, nil
@@ -85,9 +62,8 @@ func (p Severity) Process(issues []result.Issue) ([]result.Issue, error) {
 }
 
 func (Severity) Name() string { return "severity-rules" }
-func (Severity) Finish()      {}
 
-var _ Processor = Severity{}
+func (Severity) Finish() {}
 
 type SeverityRulesCaseSensitive struct {
 	*Severity
@@ -106,3 +82,28 @@ func NewSeverityRulesCaseSensitive(defaultSeverity string, rules []SeverityRule,
 }
 
 func (SeverityRulesCaseSensitive) Name() string { return "severity-rules-case-sensitive" }
+
+func createSeverityRules(rules []SeverityRule, prefix string) []severityRule {
+	parsedRules := make([]severityRule, 0, len(rules))
+	for _, rule := range rules {
+		parsedRule := severityRule{}
+		parsedRule.linters = rule.Linters
+		parsedRule.severity = rule.Severity
+		if rule.Text != "" {
+			parsedRule.text = regexp.MustCompile(prefix + rule.Text)
+		}
+		if rule.Source != "" {
+			parsedRule.source = regexp.MustCompile(prefix + rule.Source)
+		}
+		if rule.Path != "" {
+			path := fsutils.NormalizePathInRegex(rule.Path)
+			parsedRule.path = regexp.MustCompile(path)
+		}
+		if rule.PathExcept != "" {
+			pathExcept := fsutils.NormalizePathInRegex(rule.PathExcept)
+			parsedRule.pathExcept = regexp.MustCompile(pathExcept)
+		}
+		parsedRules = append(parsedRules, parsedRule)
+	}
+	return parsedRules
+}
