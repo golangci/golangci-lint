@@ -20,28 +20,47 @@ type SeverityRule struct {
 	Severity string
 }
 
-type Severity struct {
-	defaultSeverity string
-	rules           []severityRule
-	files           *fsutils.Files
-	log             logutils.Log
+type SeverityOptions struct {
+	Default       string
+	Rules         []SeverityRule
+	CaseSensitive bool
 }
 
-func NewSeverityRules(defaultSeverity string, rules []SeverityRule, files *fsutils.Files, log logutils.Log) *Severity {
-	r := &Severity{
+type Severity struct {
+	name string
+
+	log logutils.Log
+
+	files *fsutils.Files
+
+	defaultSeverity string
+	rules           []severityRule
+}
+
+func NewSeverity(log logutils.Log, files *fsutils.Files, opts SeverityOptions) *Severity {
+	p := &Severity{
+		name:            "severity-rules",
 		files:           files,
 		log:             log,
-		defaultSeverity: defaultSeverity,
+		defaultSeverity: opts.Default,
 	}
-	r.rules = createSeverityRules(rules, "(?i)")
 
-	return r
+	prefix := "(?i)"
+	if opts.CaseSensitive {
+		prefix = ""
+		p.name = "severity-rules-case-sensitive"
+	}
+
+	p.rules = createSeverityRules(opts.Rules, prefix)
+
+	return p
 }
 
 func (p Severity) Process(issues []result.Issue) ([]result.Issue, error) {
 	if len(p.rules) == 0 && p.defaultSeverity == "" {
 		return issues, nil
 	}
+
 	return transformIssues(issues, func(i *result.Issue) *result.Issue {
 		for _, rule := range p.rules {
 			rule := rule
@@ -56,54 +75,45 @@ func (p Severity) Process(issues []result.Issue) ([]result.Issue, error) {
 				return i
 			}
 		}
+
 		i.Severity = p.defaultSeverity
+
 		return i
 	}), nil
 }
 
-func (Severity) Name() string { return "severity-rules" }
+func (p Severity) Name() string { return p.name }
 
 func (Severity) Finish() {}
 
-type SeverityRulesCaseSensitive struct {
-	*Severity
-}
-
-func NewSeverityRulesCaseSensitive(defaultSeverity string, rules []SeverityRule,
-	files *fsutils.Files, log logutils.Log) *SeverityRulesCaseSensitive {
-	r := &Severity{
-		files:           files,
-		log:             log,
-		defaultSeverity: defaultSeverity,
-	}
-	r.rules = createSeverityRules(rules, "")
-
-	return &SeverityRulesCaseSensitive{r}
-}
-
-func (SeverityRulesCaseSensitive) Name() string { return "severity-rules-case-sensitive" }
-
 func createSeverityRules(rules []SeverityRule, prefix string) []severityRule {
 	parsedRules := make([]severityRule, 0, len(rules))
+
 	for _, rule := range rules {
 		parsedRule := severityRule{}
 		parsedRule.linters = rule.Linters
 		parsedRule.severity = rule.Severity
+
 		if rule.Text != "" {
 			parsedRule.text = regexp.MustCompile(prefix + rule.Text)
 		}
+
 		if rule.Source != "" {
 			parsedRule.source = regexp.MustCompile(prefix + rule.Source)
 		}
+
 		if rule.Path != "" {
 			path := fsutils.NormalizePathInRegex(rule.Path)
 			parsedRule.path = regexp.MustCompile(path)
 		}
+
 		if rule.PathExcept != "" {
 			pathExcept := fsutils.NormalizePathInRegex(rule.PathExcept)
 			parsedRule.pathExcept = regexp.MustCompile(pathExcept)
 		}
+
 		parsedRules = append(parsedRules, parsedRule)
 	}
+
 	return parsedRules
 }

@@ -328,22 +328,11 @@ func getSeverityRulesProcessor(cfg *config.Severity, log logutils.Log, files *fs
 		})
 	}
 
-	var severityRulesProcessor processors.Processor
-	if cfg.CaseSensitive {
-		severityRulesProcessor = processors.NewSeverityRulesCaseSensitive(
-			cfg.Default,
-			severityRules,
-			files,
-			log.Child(logutils.DebugKeySeverityRules),
-		)
-	} else {
-		severityRulesProcessor = processors.NewSeverityRules(
-			cfg.Default,
-			severityRules,
-			files,
-			log.Child(logutils.DebugKeySeverityRules),
-		)
+	severityOpts := processors.SeverityOptions{
+		Default:       cfg.Default,
+		Rules:         severityRules,
+		CaseSensitive: cfg.CaseSensitive,
 	}
 
-	return severityRulesProcessor
+	return processors.NewSeverity(log.Child(logutils.DebugKeySeverityRules), files, severityOpts)
 }
