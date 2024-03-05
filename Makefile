@@ -88,9 +88,9 @@ go.mod: FORCE
 	go mod verify
 go.sum: go.mod
 
-expand_website_templates:
-	go run ./scripts/expand_website_templates/
-.PHONY: expand_website_templates
+website_expand_templates:
+	go run ./scripts/website/expand_templates/
+.PHONY: website_expand_templates
 
 website_dump_info:
 	go run ./scripts/website/dump_info/
