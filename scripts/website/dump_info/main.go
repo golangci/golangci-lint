@@ -15,6 +15,23 @@ import (
 )
 
 func main() {
+	err := saveLinters()
+	if err != nil {
+		log.Fatalf("Save linters: %v", err)
+	}
+
+	err = saveDefaultExclusions()
+	if err != nil {
+		log.Fatalf("Save default exclusions: %v", err)
+	}
+
+	err = saveCLIHelp(filepath.Join("assets", "cli-help.json"))
+	if err != nil {
+		log.Fatalf("Save CLI help: %v", err)
+	}
+}
+
+func saveLinters() error {
 	linters := lintersdb.NewLinterBuilder().Build(config.NewDefault())
 
 	var wraps []types.LinterWrapper
@@ -45,20 +62,22 @@ func main() {
 		wraps = append(wraps, wrapper)
 	}
 
-	err := saveToJSONFile(filepath.Join("assets", "linters-info.json"), wraps)
-	if err != nil {
-		log.Fatalf("Save linters: %v", err)
+	return saveToJSONFile(filepath.Join("assets", "linters-info.json"), wraps)
+}
+
+func saveDefaultExclusions() error {
+	var excludePatterns []types.ExcludePattern
+
+	for _, pattern := range config.DefaultExcludePatterns {
+		excludePatterns = append(excludePatterns, types.ExcludePattern{
+			ID:      pattern.ID,
+			Pattern: pattern.Pattern,
+			Linter:  pattern.Linter,
+			Why:     pattern.Why,
+		})
 	}
 
-	err = saveToJSONFile(filepath.Join("assets", "default-exclusions.json"), config.DefaultExcludePatterns)
-	if err != nil {
-		log.Fatalf("Save default exclusions: %v", err)
-	}
-
-	err = saveCLIHelp(filepath.Join("assets", "cli-help.json"))
-	if err != nil {
-		log.Fatalf("Save CLI help: %v", err)
-	}
+	return saveToJSONFile(filepath.Join("assets", "default-exclusions.json"), excludePatterns)
 }
 
 func saveCLIHelp(dst string) error {

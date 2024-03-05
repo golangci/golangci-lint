@@ -6,11 +6,11 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/golangci/golangci-lint/pkg/config"
+	"github.com/golangci/golangci-lint/scripts/website/types"
 )
 
 func getDefaultExclusions() string {
-	defaultExcludePatterns, err := readJSONFile[[]config.ExcludePattern](filepath.Join("assets", "default-exclusions.json"))
+	defaultExcludePatterns, err := readJSONFile[[]types.ExcludePattern](filepath.Join("assets", "default-exclusions.json"))
 	if err != nil {
 		panic(err)
 	}
