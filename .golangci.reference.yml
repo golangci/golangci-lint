@@ -2054,7 +2054,7 @@ linters-settings:
     # Align and sort can be used together or separately.
     #
     # Whether enable align. If true, the struct tags will be aligned.
-    # eg:
+    # e.g.:
     # type FooBar struct {
     #     Bar    string `json:"bar" validate:"required"`
     #     FooFoo int8   `json:"foo_foo" validate:"required"`
@@ -2068,7 +2068,7 @@ linters-settings:
     align: false
     # Whether enable tags sort.
     # If true, the tags will be sorted by name in ascending order.
-    # eg: `xml:"bar" json:"bar" validate:"required"` -> `json:"bar" validate:"required" xml:"bar"`
+    # e.g.: `xml:"bar" json:"bar" validate:"required"` -> `json:"bar" validate:"required" xml:"bar"`
     # Default: true
     sort: false
     # Specify the order of tags, the other tags will be sorted by name.
