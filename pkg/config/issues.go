@@ -206,10 +206,10 @@ func validateOptionalRegex(value string) error {
 }
 
 type ExcludePattern struct {
-	ID      string
-	Pattern string
-	Linter  string
-	Why     string
+	ID      string `json:"id,omitempty"`
+	Pattern string `json:"pattern,omitempty"`
+	Linter  string `json:"linter,omitempty"`
+	Why     string `json:"why,omitempty"`
 }
 
 func GetDefaultExcludePatternsStrings() []string {
