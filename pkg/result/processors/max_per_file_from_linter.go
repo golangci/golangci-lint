@@ -36,22 +36,22 @@ func (p *MaxPerFileFromLinter) Name() string {
 }
 
 func (p *MaxPerFileFromLinter) Process(issues []result.Issue) ([]result.Issue, error) {
-	return filterIssues(issues, func(i *result.Issue) bool {
-		limit := p.maxPerFileFromLinterConfig[i.FromLinter]
+	return filterIssues(issues, func(issue *result.Issue) bool {
+		limit := p.maxPerFileFromLinterConfig[issue.FromLinter]
 		if limit == 0 {
 			return true
 		}
 
-		lm := p.flc[i.FilePath()]
+		lm := p.flc[issue.FilePath()]
 		if lm == nil {
-			p.flc[i.FilePath()] = linterToCountMap{}
+			p.flc[issue.FilePath()] = linterToCountMap{}
 		}
-		count := p.flc[i.FilePath()][i.FromLinter]
+		count := p.flc[issue.FilePath()][issue.FromLinter]
 		if count >= limit {
 			return false
 		}
 
-		p.flc[i.FilePath()][i.FromLinter]++
+		p.flc[issue.FilePath()][issue.FromLinter]++
 		return true
 	}), nil
 }

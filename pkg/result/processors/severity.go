@@ -64,9 +64,9 @@ func (p *Severity) Process(issues []result.Issue) ([]result.Issue, error) {
 		return issues, nil
 	}
 
-	return transformIssues(issues, func(i *result.Issue) *result.Issue {
-		if i.Severity != "" && !p.override {
-			return i
+	return transformIssues(issues, func(issue *result.Issue) *result.Issue {
+		if issue.Severity != "" && !p.override {
+			return issue
 		}
 
 		for _, rule := range p.rules {
@@ -77,15 +77,15 @@ func (p *Severity) Process(issues []result.Issue) ([]result.Issue, error) {
 				ruleSeverity = rule.severity
 			}
 
-			if rule.match(i, p.files, p.log) {
-				i.Severity = ruleSeverity
-				return i
+			if rule.match(issue, p.files, p.log) {
+				issue.Severity = ruleSeverity
+				return issue
 			}
 		}
 
-		i.Severity = p.defaultSeverity
+		issue.Severity = p.defaultSeverity
 
-		return i
+		return issue
 	}), nil
 }
 

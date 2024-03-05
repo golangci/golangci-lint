@@ -44,8 +44,8 @@ func (p Exclude) Process(issues []result.Issue) ([]result.Issue, error) {
 		return issues, nil
 	}
 
-	return filterIssues(issues, func(i *result.Issue) bool {
-		return !p.pattern.MatchString(i.Text)
+	return filterIssues(issues, func(issue *result.Issue) bool {
+		return !p.pattern.MatchString(issue.Text)
 	}), nil
 }
 

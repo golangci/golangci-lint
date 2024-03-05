@@ -26,17 +26,17 @@ func (p Cgo) Name() string {
 }
 
 func (p Cgo) Process(issues []result.Issue) ([]result.Issue, error) {
-	return filterIssuesErr(issues, func(i *result.Issue) (bool, error) {
+	return filterIssuesErr(issues, func(issue *result.Issue) (bool, error) {
 		// some linters (e.g. gosec, deadcode) return incorrect filepaths for cgo issues,
 		// also cgo files have strange issues looking like false positives.
 
 		// cache dir contains all preprocessed files including cgo files
 
-		issueFilePath := i.FilePath()
-		if !filepath.IsAbs(i.FilePath()) {
-			absPath, err := filepath.Abs(i.FilePath())
+		issueFilePath := issue.FilePath()
+		if !filepath.IsAbs(issue.FilePath()) {
+			absPath, err := filepath.Abs(issue.FilePath())
 			if err != nil {
-				return false, fmt.Errorf("failed to build abs path for %q: %w", i.FilePath(), err)
+				return false, fmt.Errorf("failed to build abs path for %q: %w", issue.FilePath(), err)
 			}
 			issueFilePath = absPath
 		}
@@ -45,7 +45,7 @@ func (p Cgo) Process(issues []result.Issue) ([]result.Issue, error) {
 			return false, nil
 		}
 
-		if filepath.Base(i.FilePath()) == "_cgo_gotypes.go" {
+		if filepath.Base(issue.FilePath()) == "_cgo_gotypes.go" {
 			// skip cgo warning for go1.10
 			return false, nil
 		}

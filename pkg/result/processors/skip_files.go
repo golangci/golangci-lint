@@ -41,8 +41,8 @@ func (p SkipFiles) Process(issues []result.Issue) ([]result.Issue, error) {
 		return issues, nil
 	}
 
-	return filterIssues(issues, func(i *result.Issue) bool {
-		path := fsutils.WithPathPrefix(p.pathPrefix, i.FilePath())
+	return filterIssues(issues, func(issue *result.Issue) bool {
+		path := fsutils.WithPathPrefix(p.pathPrefix, issue.FilePath())
 		for _, pattern := range p.patterns {
 			if pattern.MatchString(path) {
 				return false

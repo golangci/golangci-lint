@@ -25,22 +25,22 @@ func (p SourceCode) Name() string {
 }
 
 func (p SourceCode) Process(issues []result.Issue) ([]result.Issue, error) {
-	return transformIssues(issues, func(i *result.Issue) *result.Issue {
-		newI := *i
+	return transformIssues(issues, func(issue *result.Issue) *result.Issue {
+		newIssue := *issue
 
-		lineRange := i.GetLineRange()
+		lineRange := issue.GetLineRange()
 		for lineNumber := lineRange.From; lineNumber <= lineRange.To; lineNumber++ {
-			line, err := p.lineCache.GetLine(i.FilePath(), lineNumber)
+			line, err := p.lineCache.GetLine(issue.FilePath(), lineNumber)
 			if err != nil {
 				p.log.Warnf("Failed to get line %d for file %s: %s",
-					lineNumber, i.FilePath(), err)
-				return i
+					lineNumber, issue.FilePath(), err)
+				return issue
 			}
 
-			newI.SourceLines = append(newI.SourceLines, line)
+			newIssue.SourceLines = append(newIssue.SourceLines, line)
 		}
 
-		return &newI
+		return &newIssue
 	}), nil
 }
 

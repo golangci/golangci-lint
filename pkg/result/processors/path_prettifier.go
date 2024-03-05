@@ -29,19 +29,19 @@ func (p PathPrettifier) Name() string {
 }
 
 func (p PathPrettifier) Process(issues []result.Issue) ([]result.Issue, error) {
-	return transformIssues(issues, func(i *result.Issue) *result.Issue {
-		if !filepath.IsAbs(i.FilePath()) {
-			return i
+	return transformIssues(issues, func(issue *result.Issue) *result.Issue {
+		if !filepath.IsAbs(issue.FilePath()) {
+			return issue
 		}
 
-		rel, err := fsutils.ShortestRelPath(i.FilePath(), "")
+		rel, err := fsutils.ShortestRelPath(issue.FilePath(), "")
 		if err != nil {
-			return i
+			return issue
 		}
 
-		newI := i
-		newI.Pos.Filename = rel
-		return newI
+		newIssue := issue
+		newIssue.Pos.Filename = rel
+		return newIssue
 	}), nil
 }
 

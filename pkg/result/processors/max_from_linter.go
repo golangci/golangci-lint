@@ -33,14 +33,14 @@ func (p *MaxFromLinter) Process(issues []result.Issue) ([]result.Issue, error) {
 		return issues, nil
 	}
 
-	return filterIssues(issues, func(i *result.Issue) bool {
-		if i.Replacement != nil && p.cfg.Issues.NeedFix {
+	return filterIssues(issues, func(issue *result.Issue) bool {
+		if issue.Replacement != nil && p.cfg.Issues.NeedFix {
 			// we need to fix all issues at once => we need to return all of them
 			return true
 		}
 
-		p.lc[i.FromLinter]++ // always inc for stat
-		return p.lc[i.FromLinter] <= p.limit
+		p.lc[issue.FromLinter]++ // always inc for stat
+		return p.lc[issue.FromLinter] <= p.limit
 	}), nil
 }
 

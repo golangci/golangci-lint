@@ -107,8 +107,8 @@ func (i UnusedCandidate) Details() string {
 
 func (i UnusedCandidate) String() string { return toString(i) }
 
-func toString(i Issue) string {
-	return fmt.Sprintf("%s at %s", i.Details(), i.Position())
+func toString(issue Issue) string {
+	return fmt.Sprintf("%s at %s", issue.Details(), issue.Position())
 }
 
 type Issue interface {

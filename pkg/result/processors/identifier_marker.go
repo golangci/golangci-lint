@@ -101,10 +101,10 @@ func NewIdentifierMarker() *IdentifierMarker {
 }
 
 func (im IdentifierMarker) Process(issues []result.Issue) ([]result.Issue, error) {
-	return transformIssues(issues, func(i *result.Issue) *result.Issue {
-		iCopy := *i
-		iCopy.Text = im.markIdentifiers(iCopy.Text)
-		return &iCopy
+	return transformIssues(issues, func(issue *result.Issue) *result.Issue {
+		newIssue := *issue
+		newIssue.Text = im.markIdentifiers(newIssue.Text)
+		return &newIssue
 	}), nil
 }
 
