@@ -8,6 +8,8 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
+var _ Processor = ExcludeRules{}
+
 type excludeRule struct {
 	baseRule
 }
@@ -17,43 +19,35 @@ type ExcludeRule struct {
 }
 
 type ExcludeRules struct {
-	rules []excludeRule
-	files *fsutils.Files
+	name string
+
 	log   logutils.Log
+	files *fsutils.Files
+
+	rules []excludeRule
 }
 
-func NewExcludeRules(rules []ExcludeRule, files *fsutils.Files, log logutils.Log) *ExcludeRules {
-	r := &ExcludeRules{
+type ExcludeRulesOptions struct {
+	Rules         []ExcludeRule
+	CaseSensitive bool
+}
+
+func NewExcludeRules(log logutils.Log, files *fsutils.Files, opts ExcludeRulesOptions) *ExcludeRules {
+	p := &ExcludeRules{
+		name:  "exclude-rules",
 		files: files,
 		log:   log,
 	}
-	r.rules = createRules(rules, "(?i)")
 
-	return r
-}
-
-func createRules(rules []ExcludeRule, prefix string) []excludeRule {
-	parsedRules := make([]excludeRule, 0, len(rules))
-	for _, rule := range rules {
-		parsedRule := excludeRule{}
-		parsedRule.linters = rule.Linters
-		if rule.Text != "" {
-			parsedRule.text = regexp.MustCompile(prefix + rule.Text)
-		}
-		if rule.Source != "" {
-			parsedRule.source = regexp.MustCompile(prefix + rule.Source)
-		}
-		if rule.Path != "" {
-			path := fsutils.NormalizePathInRegex(rule.Path)
-			parsedRule.path = regexp.MustCompile(path)
-		}
-		if rule.PathExcept != "" {
-			pathExcept := fsutils.NormalizePathInRegex(rule.PathExcept)
-			parsedRule.pathExcept = regexp.MustCompile(pathExcept)
-		}
-		parsedRules = append(parsedRules, parsedRule)
+	prefix := caseInsensitivePrefix
+	if opts.CaseSensitive {
+		prefix = ""
+		p.name = "exclude-rules-case-sensitive"
 	}
-	return parsedRules
+
+	p.rules = createRules(opts.Rules, prefix)
+
+	return p
 }
 
 func (p ExcludeRules) Process(issues []result.Issue) ([]result.Issue, error) {
@@ -71,25 +65,35 @@ func (p ExcludeRules) Process(issues []result.Issue) ([]result.Issue, error) {
 	}), nil
 }
 
-func (ExcludeRules) Name() string { return "exclude-rules" }
-func (ExcludeRules) Finish()      {}
+func (p ExcludeRules) Name() string { return p.name }
 
-var _ Processor = ExcludeRules{}
+func (ExcludeRules) Finish() {}
 
-type ExcludeRulesCaseSensitive struct {
-	*ExcludeRules
-}
+func createRules(rules []ExcludeRule, prefix string) []excludeRule {
+	parsedRules := make([]excludeRule, 0, len(rules))
 
-func NewExcludeRulesCaseSensitive(rules []ExcludeRule, files *fsutils.Files, log logutils.Log) *ExcludeRulesCaseSensitive {
-	r := &ExcludeRules{
-		files: files,
-		log:   log,
+	for _, rule := range rules {
+		parsedRule := excludeRule{}
+		parsedRule.linters = rule.Linters
+
+		if rule.Text != "" {
+			parsedRule.text = regexp.MustCompile(prefix + rule.Text)
+		}
+
+		if rule.Source != "" {
+			parsedRule.source = regexp.MustCompile(prefix + rule.Source)
+		}
+
+		if rule.Path != "" {
+			parsedRule.path = regexp.MustCompile(fsutils.NormalizePathInRegex(rule.Path))
+		}
+
+		if rule.PathExcept != "" {
+			parsedRule.pathExcept = regexp.MustCompile(fsutils.NormalizePathInRegex(rule.PathExcept))
+		}
+
+		parsedRules = append(parsedRules, parsedRule)
 	}
-	r.rules = createRules(rules, "")
 
-	return &ExcludeRulesCaseSensitive{r}
+	return parsedRules
 }
-
-func (ExcludeRulesCaseSensitive) Name() string { return "exclude-rules-case-sensitive" }
-
-var _ Processor = ExcludeCaseSensitive{}

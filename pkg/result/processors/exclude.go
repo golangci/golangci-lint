@@ -6,24 +6,37 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
+var _ Processor = Exclude{}
+
 type Exclude struct {
+	name string
+
 	pattern *regexp.Regexp
 }
 
-var _ Processor = Exclude{}
+type ExcludeOptions struct {
+	Pattern       string
+	CaseSensitive bool
+}
 
-func NewExclude(pattern string) *Exclude {
-	var patternRe *regexp.Regexp
-	if pattern != "" {
-		patternRe = regexp.MustCompile("(?i)" + pattern)
+func NewExclude(opts ExcludeOptions) *Exclude {
+	p := &Exclude{name: "exclude"}
+
+	prefix := caseInsensitivePrefix
+	if opts.CaseSensitive {
+		p.name = "exclude-case-sensitive"
+		prefix = ""
 	}
-	return &Exclude{
-		pattern: patternRe,
+
+	if opts.Pattern != "" {
+		p.pattern = regexp.MustCompile(prefix + opts.Pattern)
 	}
+
+	return p
 }
 
 func (p Exclude) Name() string {
-	return "exclude"
+	return p.name
 }
 
 func (p Exclude) Process(issues []result.Issue) ([]result.Issue, error) {
@@ -37,23 +50,3 @@ func (p Exclude) Process(issues []result.Issue) ([]result.Issue, error) {
 }
 
 func (p Exclude) Finish() {}
-
-type ExcludeCaseSensitive struct {
-	*Exclude
-}
-
-var _ Processor = ExcludeCaseSensitive{}
-
-func NewExcludeCaseSensitive(pattern string) *ExcludeCaseSensitive {
-	var patternRe *regexp.Regexp
-	if pattern != "" {
-		patternRe = regexp.MustCompile(pattern)
-	}
-	return &ExcludeCaseSensitive{
-		&Exclude{pattern: patternRe},
-	}
-}
-
-func (p ExcludeCaseSensitive) Name() string {
-	return "exclude-case-sensitive"
-}
