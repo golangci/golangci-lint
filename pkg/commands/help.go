@@ -54,7 +54,7 @@ func (c *helpCommand) preRunE(_ *cobra.Command, _ []string) error {
 	// The command doesn't depend on the real configuration.
 	// It just needs the list of all plugins and all presets.
 	dbManager, err := lintersdb.NewManager(c.log.Child(logutils.DebugKeyLintersDB), config.NewDefault(),
-		lintersdb.NewPluginBuilder(c.log), lintersdb.NewLinterBuilder())
+		lintersdb.NewPluginGoBuilder(c.log), lintersdb.NewLinterBuilder())
 	if err != nil {
 		return err
 	}
