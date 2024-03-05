@@ -18,7 +18,3 @@
 /vendor/
 coverage.out
 coverage.xml
-
-/custom-golangci-lint
-/gcl-custom
-.mygcl.yml

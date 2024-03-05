@@ -3,7 +3,6 @@ package config
 import (
 	"encoding"
 	"errors"
-	"fmt"
 	"runtime"
 
 	"gopkg.in/yaml.v3"
@@ -281,17 +280,7 @@ type LintersSettings struct {
 }
 
 func (s *LintersSettings) Validate() error {
-	if err := s.Govet.Validate(); err != nil {
-		return err
-	}
-
-	for name, settings := range s.Custom {
-		if err := settings.Validate(); err != nil {
-			return fmt.Errorf("custom linter %q: %w", name, err)
-		}
-	}
-
-	return nil
+	return s.Govet.Validate()
 }
 
 type AsasalintSettings struct {
@@ -969,19 +958,4 @@ type CustomLinterSettings struct {
 
 	// Settings plugin settings only work with linterdb.PluginConstructor symbol.
 	Settings any
-
-	// FIXME goplugin,module
-	Type string `mapstructure:"type"`
-}
-
-func (s *CustomLinterSettings) Validate() error {
-	if s.Type == "module" {
-		return nil
-	}
-
-	if s.Path == "" {
-		return errors.New("path is required")
-	}
-
-	return nil
 }

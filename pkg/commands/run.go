@@ -31,7 +31,6 @@ import (
 	"github.com/golangci/golangci-lint/internal/pkgcache"
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/exitcodes"
-	"github.com/golangci/golangci-lint/pkg/experimental/db"
 	"github.com/golangci/golangci-lint/pkg/fsutils"
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis/load"
 	"github.com/golangci/golangci-lint/pkg/goutil"
@@ -178,7 +177,7 @@ func (c *runCommand) persistentPostRunE(_ *cobra.Command, _ []string) error {
 
 func (c *runCommand) preRunE(_ *cobra.Command, _ []string) error {
 	dbManager, err := lintersdb.NewManager(c.log.Child(logutils.DebugKeyLintersDB), c.cfg,
-		db.NewPluginBuilderWrapper(c.log), lintersdb.NewLinterBuilder())
+		lintersdb.NewPluginBuilder(c.log), lintersdb.NewLinterBuilder())
 	if err != nil {
 		return err
 	}
