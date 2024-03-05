@@ -24,17 +24,17 @@ func main() {
 
 	err := saveToJSONFile(filepath.Join("assets", "linters-info.json"), wraps)
 	if err != nil {
-		log.Fatalf("save linters: %v", err)
+		log.Fatalf("Save linters: %v", err)
 	}
 
 	err = saveToJSONFile(filepath.Join("assets", "default-exclusions.json"), config.DefaultExcludePatterns)
 	if err != nil {
-		log.Fatalf("save default exclusions: %v", err)
+		log.Fatalf("Save default exclusions: %v", err)
 	}
 
 	err = saveCLIHelp(filepath.Join("assets", "cli-help.json"))
 	if err != nil {
-		log.Fatalf("save CLI help: %v", err)
+		log.Fatalf("Save CLI help: %v", err)
 	}
 }
 
@@ -84,7 +84,7 @@ func saveToJSONFile(dst string, data any) error {
 
 	err = encoder.Encode(data)
 	if err != nil {
-		return fmt.Errorf("JSON encode (%s): %w", dst, err)
+		return fmt.Errorf("encode JSON (%s): %w", dst, err)
 	}
 
 	return nil
