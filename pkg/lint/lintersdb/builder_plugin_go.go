@@ -37,7 +37,8 @@ func (b *PluginBuilder) Build(cfg *config.Config) []*linter.Config {
 	var linters []*linter.Config
 
 	for name, settings := range cfg.LintersSettings.Custom {
-		lc, err := b.loadConfig(cfg, name, settings)
+		settings := settings
+		lc, err := b.loadConfig(cfg, name, &settings)
 		if err != nil {
 			b.log.Errorf("Unable to load custom analyzer %s:%s, %v", name, settings.Path, err)
 		} else {
@@ -50,7 +51,7 @@ func (b *PluginBuilder) Build(cfg *config.Config) []*linter.Config {
 
 // loadConfig loads the configuration of private linters.
 // Private linters are dynamically loaded from .so plugin files.
-func (b *PluginBuilder) loadConfig(cfg *config.Config, name string, settings config.CustomLinterSettings) (*linter.Config, error) {
+func (b *PluginBuilder) loadConfig(cfg *config.Config, name string, settings *config.CustomLinterSettings) (*linter.Config, error) {
 	analyzers, err := b.getAnalyzerPlugin(cfg, settings.Path, settings.Settings)
 	if err != nil {
 		return nil, err
