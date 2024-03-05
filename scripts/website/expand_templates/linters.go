@@ -68,7 +68,7 @@ func getName(lc *types.LinterWrapper) string {
 		name = fmt.Sprintf("%s&nbsp;[%s](#%s)", name, spanWithID(listItemPrefix+lc.Name, "Configuration", "⚙️"), lc.Name)
 	}
 
-	if !lc.IsDeprecated() {
+	if lc.Deprecation == nil {
 		return name
 	}
 
@@ -89,7 +89,7 @@ func check(b bool, title string) string {
 
 func getDesc(lc *types.LinterWrapper) string {
 	desc := lc.Desc
-	if lc.IsDeprecated() {
+	if lc.Deprecation != nil {
 		desc = lc.Deprecation.Message
 		if lc.Deprecation.Replacement != "" {
 			desc += fmt.Sprintf(" Replaced by %s.", lc.Deprecation.Replacement)

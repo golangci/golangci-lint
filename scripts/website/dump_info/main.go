@@ -19,7 +19,30 @@ func main() {
 
 	var wraps []types.LinterWrapper
 	for _, l := range linters {
-		wraps = append(wraps, types.LinterWrapper{Config: l, Name: l.Linter.Name(), Desc: l.Linter.Desc()})
+		wrapper := types.LinterWrapper{
+			Name:             l.Linter.Name(),
+			Desc:             l.Linter.Desc(),
+			EnabledByDefault: l.EnabledByDefault,
+			LoadMode:         l.LoadMode,
+			InPresets:        l.InPresets,
+			AlternativeNames: l.AlternativeNames,
+			OriginalURL:      l.OriginalURL,
+			Internal:         l.Internal,
+			CanAutoFix:       l.CanAutoFix,
+			IsSlow:           l.IsSlow,
+			DoesChangeTypes:  l.DoesChangeTypes,
+			Since:            l.Since,
+		}
+
+		if l.Deprecation != nil {
+			wrapper.Deprecation = &types.Deprecation{
+				Since:       l.Deprecation.Since,
+				Message:     l.Deprecation.Message,
+				Replacement: l.Deprecation.Replacement,
+			}
+		}
+
+		wraps = append(wraps, wrapper)
 	}
 
 	err := saveToJSONFile(filepath.Join("assets", "linters-info.json"), wraps)
