@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"path/filepath"
 	"reflect"
 	"sort"
 	"strings"
@@ -12,15 +13,24 @@ import (
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
-	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
 )
 
 const listItemPrefix = "list-item-"
 
-func getLintersListMarkdown(enabled bool) string {
-	linters := lintersdb.NewLinterBuilder().Build(config.NewDefault())
+type linterWrapper struct {
+	*linter.Config
 
-	var neededLcs []*linter.Config
+	Name string `json:"name"`
+	Desc string `json:"desc"`
+}
+
+func getLintersListMarkdown(enabled bool) string {
+	linters, err := readJSONFile[[]*linterWrapper](filepath.Join("assets", "linters-info.json"))
+	if err != nil {
+		panic(err)
+	}
+
+	var neededLcs []*linterWrapper
 	for _, lc := range linters {
 		if lc.Internal {
 			continue
@@ -32,7 +42,7 @@ func getLintersListMarkdown(enabled bool) string {
 	}
 
 	sort.Slice(neededLcs, func(i, j int) bool {
-		return neededLcs[i].Name() < neededLcs[j].Name()
+		return neededLcs[i].Name < neededLcs[j].Name
 	})
 
 	lines := []string{
@@ -54,15 +64,15 @@ func getLintersListMarkdown(enabled bool) string {
 	return strings.Join(lines, "\n")
 }
 
-func getName(lc *linter.Config) string {
-	name := lc.Name()
+func getName(lc *linterWrapper) string {
+	name := lc.Name
 
 	if lc.OriginalURL != "" {
 		name = fmt.Sprintf("[%s](%s)", name, lc.OriginalURL)
 	}
 
-	if hasSettings(lc.Name()) {
-		name = fmt.Sprintf("%s&nbsp;[%s](#%s)", name, spanWithID(listItemPrefix+lc.Name(), "Configuration", "⚙️"), lc.Name())
+	if hasSettings(lc.Name) {
+		name = fmt.Sprintf("%s&nbsp;[%s](#%s)", name, spanWithID(listItemPrefix+lc.Name, "Configuration", "⚙️"), lc.Name)
 	}
 
 	if !lc.IsDeprecated() {
@@ -84,8 +94,8 @@ func check(b bool, title string) string {
 	return ""
 }
 
-func getDesc(lc *linter.Config) string {
-	desc := lc.Linter.Desc()
+func getDesc(lc *linterWrapper) string {
+	desc := lc.Desc
 	if lc.IsDeprecated() {
 		desc = lc.Deprecation.Message
 		if lc.Deprecation.Replacement != "" {
@@ -233,7 +243,10 @@ func extractExampleSnippets(example []byte) (*SettingSnippets, error) {
 }
 
 func getLintersSettingSections(node, nextNode *yaml.Node) (string, error) {
-	linters := lintersdb.NewLinterBuilder().Build(config.NewDefault())
+	linters, err := readJSONFile[[]*linterWrapper](filepath.Join("assets", "linters-info.json"))
+	if err != nil {
+		panic(err)
+	}
 
 	var lintersDesc = make(map[string]string)
 	for _, lc := range linters {
@@ -242,7 +255,7 @@ func getLintersSettingSections(node, nextNode *yaml.Node) (string, error) {
 		}
 
 		// it's important to use lc.Name() nor name because name can be alias
-		lintersDesc[lc.Name()] = getDesc(lc)
+		lintersDesc[lc.Name] = getDesc(lc)
 	}
 
 	builder := &strings.Builder{}

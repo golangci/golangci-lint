@@ -7,12 +7,17 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"strings"
 
 	"github.com/golangci/golangci-lint/internal/renameio"
 )
+
+type cliHelp struct {
+	Enable  string `json:"enable"`
+	Disable string `json:"disable"`
+	Help    string `json:"help"`
+}
 
 func main() {
 	replacements, err := buildTemplateContext()
@@ -129,18 +134,9 @@ func buildTemplateContext() (map[string]string, error) {
 		return nil, fmt.Errorf("can't read .golangci.reference.yml: %w", err)
 	}
 
-	if err = exec.Command("make", "build").Run(); err != nil {
-		return nil, fmt.Errorf("can't run make build: %w", err)
-	}
-
-	lintersOutParts, err := getHelpLinters()
+	helps, err := readJSONFile[cliHelp](filepath.Join("assets", "cli-help.json"))
 	if err != nil {
-		return nil, fmt.Errorf("can't run linters cmd: %w", err)
-	}
-
-	shortHelp, err := getHelpRun()
-	if err != nil {
-		return nil, fmt.Errorf("can't run help cmd: %w", err)
+		return nil, err
 	}
 
 	changeLog, err := os.ReadFile("CHANGELOG.md")
@@ -156,14 +152,31 @@ func buildTemplateContext() (map[string]string, error) {
 	return map[string]string{
 		"LintersExample":                   snippets.LintersSettings,
 		"ConfigurationExample":             snippets.ConfigurationFile,
-		"LintersCommandOutputEnabledOnly":  string(lintersOutParts[0]),
-		"LintersCommandOutputDisabledOnly": string(lintersOutParts[1]),
+		"LintersCommandOutputEnabledOnly":  helps.Enable,
+		"LintersCommandOutputDisabledOnly": helps.Disable,
 		"EnabledByDefaultLinters":          getLintersListMarkdown(true),
 		"DisabledByDefaultLinters":         getLintersListMarkdown(false),
 		"DefaultExclusions":                getDefaultExclusions(),
 		"ThanksList":                       getThanksList(),
-		"RunHelpText":                      string(shortHelp),
+		"RunHelpText":                      helps.Help,
 		"ChangeLog":                        string(changeLog),
 		"LatestVersion":                    latestVersion,
 	}, nil
+}
+
+func readJSONFile[T any](src string) (T, error) {
+	file, err := os.Open(src)
+	if err != nil {
+		var zero T
+		return zero, err
+	}
+
+	var result T
+	err = json.NewDecoder(file).Decode(&result)
+	if err != nil {
+		var zero T
+		return zero, err
+	}
+
+	return result, nil
 }

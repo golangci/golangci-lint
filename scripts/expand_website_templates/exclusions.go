@@ -3,15 +3,21 @@ package main
 import (
 	"bytes"
 	"fmt"
+	"path/filepath"
 	"strings"
 
 	"github.com/golangci/golangci-lint/pkg/config"
 )
 
 func getDefaultExclusions() string {
+	defaultExcludePatterns, err := readJSONFile[[]config.ExcludePattern](filepath.Join("assets", "default-exclusions.json"))
+	if err != nil {
+		panic(err)
+	}
+
 	bufferString := bytes.NewBufferString("")
 
-	for _, pattern := range config.DefaultExcludePatterns {
+	for _, pattern := range defaultExcludePatterns {
 		_, _ = fmt.Fprintln(bufferString)
 		_, _ = fmt.Fprintf(bufferString, "### %s\n", pattern.ID)
 		_, _ = fmt.Fprintln(bufferString)
