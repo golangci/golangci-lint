@@ -1,4 +1,4 @@
-package shared
+package types
 
 import "github.com/golangci/golangci-lint/pkg/lint/linter"
 

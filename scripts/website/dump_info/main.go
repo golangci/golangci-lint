@@ -11,15 +11,15 @@ import (
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
-	"github.com/golangci/golangci-lint/scripts/website/shared"
+	"github.com/golangci/golangci-lint/scripts/website/types"
 )
 
 func main() {
 	linters := lintersdb.NewLinterBuilder().Build(config.NewDefault())
 
-	var wraps []shared.LinterWrapper
+	var wraps []types.LinterWrapper
 	for _, l := range linters {
-		wraps = append(wraps, shared.LinterWrapper{Config: l, Name: l.Linter.Name(), Desc: l.Linter.Desc()})
+		wraps = append(wraps, types.LinterWrapper{Config: l, Name: l.Linter.Name(), Desc: l.Linter.Desc()})
 	}
 
 	err := saveToJSONFile(filepath.Join("assets", "linters-info.json"), wraps)
@@ -62,7 +62,7 @@ func saveCLIHelp(dst string) error {
 	helpLines := bytes.Split(help, []byte("\n"))
 	shortHelp := bytes.Join(helpLines[2:], []byte("\n"))
 
-	data := shared.CLIHelp{
+	data := types.CLIHelp{
 		Enable:  string(lintersOutParts[0]),
 		Disable: string(lintersOutParts[1]),
 		Help:    string(shortHelp),

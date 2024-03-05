@@ -11,7 +11,7 @@ import (
 	"strings"
 
 	"github.com/golangci/golangci-lint/internal/renameio"
-	"github.com/golangci/golangci-lint/scripts/website/shared"
+	"github.com/golangci/golangci-lint/scripts/website/types"
 )
 
 func main() {
@@ -129,7 +129,7 @@ func buildTemplateContext() (map[string]string, error) {
 		return nil, fmt.Errorf("can't read .golangci.reference.yml: %w", err)
 	}
 
-	helps, err := readJSONFile[shared.CLIHelp](filepath.Join("assets", "cli-help.json"))
+	helps, err := readJSONFile[types.CLIHelp](filepath.Join("assets", "cli-help.json"))
 	if err != nil {
 		return nil, err
 	}

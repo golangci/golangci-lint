@@ -12,18 +12,18 @@ import (
 	"gopkg.in/yaml.v3"
 
 	"github.com/golangci/golangci-lint/pkg/config"
-	"github.com/golangci/golangci-lint/scripts/website/shared"
+	"github.com/golangci/golangci-lint/scripts/website/types"
 )
 
 const listItemPrefix = "list-item-"
 
 func getLintersListMarkdown(enabled bool) string {
-	linters, err := readJSONFile[[]*shared.LinterWrapper](filepath.Join("assets", "linters-info.json"))
+	linters, err := readJSONFile[[]*types.LinterWrapper](filepath.Join("assets", "linters-info.json"))
 	if err != nil {
 		panic(err)
 	}
 
-	var neededLcs []*shared.LinterWrapper
+	var neededLcs []*types.LinterWrapper
 	for _, lc := range linters {
 		if lc.Internal {
 			continue
@@ -57,7 +57,7 @@ func getLintersListMarkdown(enabled bool) string {
 	return strings.Join(lines, "\n")
 }
 
-func getName(lc *shared.LinterWrapper) string {
+func getName(lc *types.LinterWrapper) string {
 	name := lc.Name
 
 	if lc.OriginalURL != "" {
@@ -87,7 +87,7 @@ func check(b bool, title string) string {
 	return ""
 }
 
-func getDesc(lc *shared.LinterWrapper) string {
+func getDesc(lc *types.LinterWrapper) string {
 	desc := lc.Desc
 	if lc.IsDeprecated() {
 		desc = lc.Deprecation.Message
@@ -236,7 +236,7 @@ func extractExampleSnippets(example []byte) (*SettingSnippets, error) {
 }
 
 func getLintersSettingSections(node, nextNode *yaml.Node) (string, error) {
-	linters, err := readJSONFile[[]*shared.LinterWrapper](filepath.Join("assets", "linters-info.json"))
+	linters, err := readJSONFile[[]*types.LinterWrapper](filepath.Join("assets", "linters-info.json"))
 	if err != nil {
 		panic(err)
 	}
