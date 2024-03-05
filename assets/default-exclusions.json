@@ -1,0 +1,92 @@
+[
+  {
+    "id": "EXC0001",
+    "pattern": "Error return value of .((os\\.)?std(out|err)\\..*|.*Close|.*Flush|os\\.Remove(All)?|.*print(f|ln)?|os\\.(Un)?Setenv). is not checked",
+    "linter": "errcheck",
+    "why": "Almost all programs ignore errors on these functions and in most cases it's ok"
+  },
+  {
+    "id": "EXC0002",
+    "pattern": "(comment on exported (method|function|type|const)|should have( a package)? comment|comment should be of the form)",
+    "linter": "golint",
+    "why": "Annoying issue about not having a comment. The rare codebase has such comments"
+  },
+  {
+    "id": "EXC0003",
+    "pattern": "func name will be used as test\\.Test.* by other packages, and that stutters; consider calling this",
+    "linter": "golint",
+    "why": "False positive when tests are defined in package 'test'"
+  },
+  {
+    "id": "EXC0004",
+    "pattern": "(possible misuse of unsafe.Pointer|should have signature)",
+    "linter": "govet",
+    "why": "Common false positives"
+  },
+  {
+    "id": "EXC0005",
+    "pattern": "ineffective break statement. Did you mean to break out of the outer loop",
+    "linter": "staticcheck",
+    "why": "Developers tend to write in C-style with an explicit 'break' in a 'switch', so it's ok to ignore"
+  },
+  {
+    "id": "EXC0006",
+    "pattern": "Use of unsafe calls should be audited",
+    "linter": "gosec",
+    "why": "Too many false-positives on 'unsafe' usage"
+  },
+  {
+    "id": "EXC0007",
+    "pattern": "Subprocess launch(ed with variable|ing should be audited)",
+    "linter": "gosec",
+    "why": "Too many false-positives for parametrized shell calls"
+  },
+  {
+    "id": "EXC0008",
+    "pattern": "(G104)",
+    "linter": "gosec",
+    "why": "Duplicated errcheck checks"
+  },
+  {
+    "id": "EXC0009",
+    "pattern": "(Expect directory permissions to be 0750 or less|Expect file permissions to be 0600 or less)",
+    "linter": "gosec",
+    "why": "Too many issues in popular repos"
+  },
+  {
+    "id": "EXC0010",
+    "pattern": "Potential file inclusion via variable",
+    "linter": "gosec",
+    "why": "False positive is triggered by 'src, err := ioutil.ReadFile(filename)'"
+  },
+  {
+    "id": "EXC0011",
+    "pattern": "(comment on exported (method|function|type|const)|should have( a package)? comment|comment should be of the form)",
+    "linter": "stylecheck",
+    "why": "Annoying issue about not having a comment. The rare codebase has such comments"
+  },
+  {
+    "id": "EXC0012",
+    "pattern": "exported (.+) should have comment( \\(or a comment on this block\\))? or be unexported",
+    "linter": "revive",
+    "why": "Annoying issue about not having a comment. The rare codebase has such comments"
+  },
+  {
+    "id": "EXC0013",
+    "pattern": "package comment should be of the form \"(.+)...",
+    "linter": "revive",
+    "why": "Annoying issue about not having a comment. The rare codebase has such comments"
+  },
+  {
+    "id": "EXC0014",
+    "pattern": "comment on exported (.+) should be of the form \"(.+)...\"",
+    "linter": "revive",
+    "why": "Annoying issue about not having a comment. The rare codebase has such comments"
+  },
+  {
+    "id": "EXC0015",
+    "pattern": "should have a package comment",
+    "linter": "revive",
+    "why": "Annoying issue about not having a comment. The rare codebase has such comments"
+  }
+]
