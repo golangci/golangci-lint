@@ -92,8 +92,8 @@ expand_website_templates:
 	go run ./scripts/expand_website_templates/
 .PHONY: expand_website_templates
 
-dump_info:
-	go run ./scripts/dumpinfo/
+website_dump_info:
+	go run ./scripts/website/dump_info/
 .PHONY: dump_info
 
 update_contributors_list:

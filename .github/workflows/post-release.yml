@@ -68,7 +68,7 @@ jobs:
           cp .golangci.next.reference.yml .golangci.reference.yml
 
       - name: Update information
-        run: make dump_info
+        run: make website_dump_info
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6
