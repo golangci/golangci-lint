@@ -28,3 +28,6 @@ CVE-2023-32731
 
 # Skip for indirect dependencies golang/golang.org/x/crypto@v0.14.0
 CVE-2023-48795
+
+#  Skip for indirect dependencies github.com/jackc/pgproto3 - github.com/jackc/pgx
+CVE-2024-27304
