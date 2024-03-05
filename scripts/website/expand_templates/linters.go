@@ -238,7 +238,7 @@ func extractExampleSnippets(example []byte) (*SettingSnippets, error) {
 func getLintersSettingSections(node, nextNode *yaml.Node) (string, error) {
 	linters, err := readJSONFile[[]*types.LinterWrapper](filepath.Join("assets", "linters-info.json"))
 	if err != nil {
-		panic(err)
+		return "", err
 	}
 
 	var lintersDesc = make(map[string]string)
