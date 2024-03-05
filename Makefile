@@ -89,7 +89,7 @@ go.mod: FORCE
 go.sum: go.mod
 
 expand_website_templates:
-	go run ./scripts/expand_website_templates/main.go
+	go run ./scripts/expand_website_templates/
 .PHONY: expand_website_templates
 
 update_contributors_list:
