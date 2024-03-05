@@ -6,7 +6,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-func filterIssues(issues []result.Issue, filter func(i *result.Issue) bool) []result.Issue {
+func filterIssues(issues []result.Issue, filter func(issue *result.Issue) bool) []result.Issue {
 	retIssues := make([]result.Issue, 0, len(issues))
 	for i := range issues {
 		if filter(&issues[i]) {
@@ -17,7 +17,7 @@ func filterIssues(issues []result.Issue, filter func(i *result.Issue) bool) []re
 	return retIssues
 }
 
-func filterIssuesErr(issues []result.Issue, filter func(i *result.Issue) (bool, error)) ([]result.Issue, error) {
+func filterIssuesErr(issues []result.Issue, filter func(issue *result.Issue) (bool, error)) ([]result.Issue, error) {
 	retIssues := make([]result.Issue, 0, len(issues))
 	for i := range issues {
 		ok, err := filter(&issues[i])
@@ -33,12 +33,12 @@ func filterIssuesErr(issues []result.Issue, filter func(i *result.Issue) (bool, 
 	return retIssues, nil
 }
 
-func transformIssues(issues []result.Issue, transform func(i *result.Issue) *result.Issue) []result.Issue {
+func transformIssues(issues []result.Issue, transform func(issue *result.Issue) *result.Issue) []result.Issue {
 	retIssues := make([]result.Issue, 0, len(issues))
 	for i := range issues {
-		newI := transform(&issues[i])
-		if newI != nil {
-			retIssues = append(retIssues, *newI)
+		newIssue := transform(&issues[i])
+		if newIssue != nil {
+			retIssues = append(retIssues, *newIssue)
 		}
 	}
 

@@ -54,10 +54,10 @@ func (p ExcludeRules) Process(issues []result.Issue) ([]result.Issue, error) {
 	if len(p.rules) == 0 {
 		return issues, nil
 	}
-	return filterIssues(issues, func(i *result.Issue) bool {
+	return filterIssues(issues, func(issue *result.Issue) bool {
 		for _, rule := range p.rules {
 			rule := rule
-			if rule.match(i, p.files, p.log) {
+			if rule.match(issue, p.files, p.log) {
 				return false
 			}
 		}

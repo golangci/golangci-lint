@@ -29,11 +29,11 @@ func (p PathShortener) Name() string {
 }
 
 func (p PathShortener) Process(issues []result.Issue) ([]result.Issue, error) {
-	return transformIssues(issues, func(i *result.Issue) *result.Issue {
-		newI := i
-		newI.Text = strings.ReplaceAll(newI.Text, p.wd+"/", "")
-		newI.Text = strings.ReplaceAll(newI.Text, p.wd, "")
-		return newI
+	return transformIssues(issues, func(issue *result.Issue) *result.Issue {
+		newIssue := issue
+		newIssue.Text = strings.ReplaceAll(newIssue.Text, p.wd+"/", "")
+		newIssue.Text = strings.ReplaceAll(newIssue.Text, p.wd, "")
+		return newIssue
 	}), nil
 }
 

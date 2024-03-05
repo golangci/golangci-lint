@@ -31,26 +31,26 @@ func (p *UniqByLine) Process(issues []result.Issue) ([]result.Issue, error) {
 		return issues, nil
 	}
 
-	return filterIssues(issues, func(i *result.Issue) bool {
-		if i.Replacement != nil && p.cfg.Issues.NeedFix {
+	return filterIssues(issues, func(issue *result.Issue) bool {
+		if issue.Replacement != nil && p.cfg.Issues.NeedFix {
 			// if issue will be auto-fixed we shouldn't collapse issues:
 			// e.g. one line can contain 2 misspellings, they will be in 2 issues and misspell should fix both of them.
 			return true
 		}
 
-		lc := p.flc[i.FilePath()]
+		lc := p.flc[issue.FilePath()]
 		if lc == nil {
 			lc = lineToCount{}
-			p.flc[i.FilePath()] = lc
+			p.flc[issue.FilePath()] = lc
 		}
 
 		const limit = 1
-		count := lc[i.Line()]
+		count := lc[issue.Line()]
 		if count == limit {
 			return false
 		}
 
-		lc[i.Line()]++
+		lc[issue.Line()]++
 		return true
 	}), nil
 }

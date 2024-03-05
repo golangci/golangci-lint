@@ -102,29 +102,29 @@ func (p *FilenameUnadjuster) Name() string {
 }
 
 func (p *FilenameUnadjuster) Process(issues []result.Issue) ([]result.Issue, error) {
-	return transformIssues(issues, func(i *result.Issue) *result.Issue {
-		issueFilePath := i.FilePath()
-		if !filepath.IsAbs(i.FilePath()) {
-			absPath, err := filepath.Abs(i.FilePath())
+	return transformIssues(issues, func(issue *result.Issue) *result.Issue {
+		issueFilePath := issue.FilePath()
+		if !filepath.IsAbs(issue.FilePath()) {
+			absPath, err := filepath.Abs(issue.FilePath())
 			if err != nil {
-				p.log.Warnf("failed to build abs path for %q: %s", i.FilePath(), err)
-				return i
+				p.log.Warnf("failed to build abs path for %q: %s", issue.FilePath(), err)
+				return issue
 			}
 			issueFilePath = absPath
 		}
 
 		mapper := p.m[issueFilePath]
 		if mapper == nil {
-			return i
+			return issue
 		}
 
-		newI := *i
-		newI.Pos = mapper(i.Pos)
-		if !p.loggedUnadjustments[i.Pos.Filename] {
-			p.log.Infof("Unadjusted from %v to %v", i.Pos, newI.Pos)
-			p.loggedUnadjustments[i.Pos.Filename] = true
+		newIssue := *issue
+		newIssue.Pos = mapper(issue.Pos)
+		if !p.loggedUnadjustments[issue.Pos.Filename] {
+			p.log.Infof("Unadjusted from %v to %v", issue.Pos, newIssue.Pos)
+			p.loggedUnadjustments[issue.Pos.Filename] = true
 		}
-		return &newI
+		return &newIssue
 	}), nil
 }
 
