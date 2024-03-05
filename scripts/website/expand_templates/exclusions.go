@@ -9,10 +9,10 @@ import (
 	"github.com/golangci/golangci-lint/scripts/website/types"
 )
 
-func getDefaultExclusions() string {
+func getDefaultExclusions() (string, error) {
 	defaultExcludePatterns, err := readJSONFile[[]types.ExcludePattern](filepath.Join("assets", "default-exclusions.json"))
 	if err != nil {
-		panic(err)
+		return "", err
 	}
 
 	bufferString := bytes.NewBufferString("")
@@ -26,5 +26,5 @@ func getDefaultExclusions() string {
 		_, _ = fmt.Fprintf(bufferString, "- why: %s\n", pattern.Why)
 	}
 
-	return bufferString.String()
+	return bufferString.String(), nil
 }
