@@ -27,7 +27,7 @@ func (p Cgo) Name() string {
 
 func (p Cgo) Process(issues []result.Issue) ([]result.Issue, error) {
 	return filterIssuesErr(issues, func(i *result.Issue) (bool, error) {
-		// some linters (.e.g gosec, deadcode) return incorrect filepaths for cgo issues,
+		// some linters (e.g. gosec, deadcode) return incorrect filepaths for cgo issues,
 		// also cgo files have strange issues looking like false positives.
 
 		// cache dir contains all preprocessed files including cgo files
