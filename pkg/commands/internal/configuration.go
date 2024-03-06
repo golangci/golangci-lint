@@ -3,7 +3,6 @@ package internal
 import (
 	"errors"
 	"fmt"
-	"log"
 	"os"
 	"path/filepath"
 	"strings"
@@ -67,7 +66,7 @@ func (c *Configuration) Validate() error {
 
 		abs, err := filepath.Abs(plugin.Path)
 		if err != nil {
-			log.Fatal(err)
+			return err
 		}
 
 		plugin.Path = abs
