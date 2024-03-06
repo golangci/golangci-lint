@@ -2,12 +2,20 @@ package main
 
 import (
 	"bytes"
-	"fmt"
 	"path/filepath"
 	"strings"
+	"text/template"
 
 	"github.com/golangci/golangci-lint/scripts/website/types"
 )
+
+const exclusionTmpl = `{{ $tick := "` + "`" + `" }}
+### {{ .ID }}
+
+- linter: {{ $tick }}{{ .Linter }}{{ $tick }}
+- pattern: {{ $tick }}{{ .Pattern }}{{ $tick }}
+- why: {{ .Why }}
+`
 
 func getDefaultExclusions() (string, error) {
 	defaultExcludePatterns, err := readJSONFile[[]types.ExcludePattern](filepath.Join("assets", "default-exclusions.json"))
@@ -17,13 +25,23 @@ func getDefaultExclusions() (string, error) {
 
 	bufferString := bytes.NewBufferString("")
 
+	tmpl, err := template.New("exclusions").Parse(exclusionTmpl)
+	if err != nil {
+		return "", err
+	}
+
 	for _, pattern := range defaultExcludePatterns {
-		_, _ = fmt.Fprintln(bufferString)
-		_, _ = fmt.Fprintf(bufferString, "### %s\n", pattern.ID)
-		_, _ = fmt.Fprintln(bufferString)
-		_, _ = fmt.Fprintf(bufferString, "- linter: `%s`\n", pattern.Linter)
-		_, _ = fmt.Fprintf(bufferString, "- pattern: `%s`\n", strings.ReplaceAll(pattern.Pattern, "`", "&grave;"))
-		_, _ = fmt.Fprintf(bufferString, "- why: %s\n", pattern.Why)
+		data := map[string]any{
+			"ID":      pattern.ID,
+			"Linter":  pattern.Linter,
+			"Pattern": strings.ReplaceAll(pattern.Pattern, "`", "&grave;"),
+			"Why":     pattern.Why,
+		}
+
+		err := tmpl.Execute(bufferString, data)
+		if err != nil {
+			return "", err
+		}
 	}
 
 	return bufferString.String(), nil
