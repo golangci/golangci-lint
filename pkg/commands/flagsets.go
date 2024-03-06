@@ -28,6 +28,9 @@ func setupLintersFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
 	fs.StringSliceP("presets", "p", nil,
 		color.GreenString(fmt.Sprintf("Enable presets (%s) of linters. Run 'golangci-lint help linters' to see "+
 			"them. This option implies option --disable-all", strings.Join(lintersdb.AllPresets(), "|"))))
+
+	fs.StringSlice("enable-only", nil,
+		color.GreenString("Override linters configuration section to only run the specific linter(s)")) // Flags only.
 }
 
 func setupRunFlagSet(v *viper.Viper, fs *pflag.FlagSet) {

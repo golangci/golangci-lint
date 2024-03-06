@@ -61,6 +61,27 @@ func (l *Loader) Load() error {
 
 	l.handleGoVersion()
 
+	err = l.handleEnableOnlyOption()
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (l *Loader) handleEnableOnlyOption() error {
+	only, err := l.fs.GetStringSlice("enable-only")
+	if err != nil {
+		return err
+	}
+
+	if len(only) > 0 {
+		l.cfg.Linters = Linters{
+			Enable:     only,
+			DisableAll: true,
+		}
+	}
+
 	return nil
 }
 
@@ -73,12 +94,13 @@ func (l *Loader) handleGoVersion() {
 
 	l.cfg.LintersSettings.ParallelTest.Go = l.cfg.Run.Go
 
-	trimmedGoVersion := trimGoVersion(l.cfg.Run.Go)
-
-	l.cfg.LintersSettings.Gocritic.Go = trimmedGoVersion
 	if l.cfg.LintersSettings.Gofumpt.LangVersion == "" {
 		l.cfg.LintersSettings.Gofumpt.LangVersion = l.cfg.Run.Go
 	}
+
+	trimmedGoVersion := trimGoVersion(l.cfg.Run.Go)
+
+	l.cfg.LintersSettings.Gocritic.Go = trimmedGoVersion
 
 	// staticcheck related linters.
 	if l.cfg.LintersSettings.Staticcheck.GoVersion == "" {
