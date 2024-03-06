@@ -10,6 +10,7 @@ import (
 	"runtime"
 	"strings"
 	"time"
+	"unicode"
 
 	"github.com/golangci/golangci-lint/pkg/logutils"
 )
@@ -84,9 +85,9 @@ func (b Builder) Build(ctx context.Context) error {
 }
 
 func (b Builder) clone(ctx context.Context) error {
-	//nolint:gosec
+	//nolint:gosec // the variable is sanitized.
 	cmd := exec.CommandContext(ctx,
-		"git", "clone", "--branch", b.cfg.Version,
+		"git", "clone", "--branch", sanitizeVersion(b.cfg.Version),
 		"--single-branch", "--depth", "1", "-c advice.detachedHead=false", "-q",
 		"https://github.com/golangci/golangci-lint.git",
 	)
@@ -141,12 +142,12 @@ func (b Builder) goModTidy(ctx context.Context) error {
 }
 
 func (b Builder) goBuild(ctx context.Context, binaryName string) error {
-	//nolint:gosec
+	//nolint:gosec // the variable is sanitized.
 	cmd := exec.CommandContext(ctx, "go", "build",
 		"-ldflags",
 		fmt.Sprintf(
 			"-s -w -X 'main.version=%s-mygcl' -X 'main.date=%s'",
-			b.cfg.Version, time.Now().UTC().String(),
+			sanitizeVersion(b.cfg.Version), time.Now().UTC().String(),
 		),
 		"-o", binaryName,
 		"./cmd/golangci-lint",
@@ -207,4 +208,12 @@ func (b Builder) getBinaryName() string {
 	}
 
 	return name
+}
+
+func sanitizeVersion(v string) string {
+	fn := func(c rune) bool {
+		return !(unicode.IsLetter(c) || unicode.IsNumber(c) || c == '.' || c == '/')
+	}
+
+	return strings.Join(strings.FieldsFunc(v, fn), "")
 }
