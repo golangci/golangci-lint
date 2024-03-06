@@ -63,9 +63,7 @@ jobs:
         run: make assets/github-action-config.json
 
       - name: Update reference files
-        run: |
-          rm .golangci.reference.yml
-          cp .golangci.next.reference.yml .golangci.reference.yml
+        run: cp .golangci.next.reference.yml .golangci.reference.yml
 
       - name: Update information
         run: make website_dump_info
