@@ -61,7 +61,7 @@ func (l *Loader) Load() error {
 
 	l.handleGoVersion()
 
-	err = l.handleOnlyOption()
+	err = l.handleEnableOnlyOption()
 	if err != nil {
 		return err
 	}
@@ -69,8 +69,8 @@ func (l *Loader) Load() error {
 	return nil
 }
 
-func (l *Loader) handleOnlyOption() error {
-	only, err := l.fs.GetStringSlice("only")
+func (l *Loader) handleEnableOnlyOption() error {
+	only, err := l.fs.GetStringSlice("enable-only")
 	if err != nil {
 		return err
 	}
