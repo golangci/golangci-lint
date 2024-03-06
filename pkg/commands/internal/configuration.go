@@ -11,7 +11,7 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-const configFilePath = ".mygcl.yml"
+const base = ".mygcl"
 
 const defaultBinaryName = "gcl-custom"
 
@@ -94,7 +94,7 @@ type Plugin struct {
 }
 
 func LoadConfiguration() (*Configuration, error) {
-	_, err := os.Stat(configFilePath)
+	configFilePath, err := findConfigurationFile()
 	if err != nil {
 		return nil, fmt.Errorf("file %s not found: %w", configFilePath, err)
 	}
@@ -112,4 +112,28 @@ func LoadConfiguration() (*Configuration, error) {
 	}
 
 	return &cfg, nil
+}
+
+func findConfigurationFile() (string, error) {
+	entries, err := os.ReadDir(".")
+	if err != nil {
+		return "", fmt.Errorf("read directory: %w", err)
+	}
+
+	for _, entry := range entries {
+		ext := filepath.Ext(entry.Name())
+
+		switch strings.ToLower(strings.TrimPrefix(ext, ".")) {
+		case "yml", "yaml", "json":
+			if isConf(ext, entry.Name()) {
+				return entry.Name(), nil
+			}
+		}
+	}
+
+	return "", errors.New("configuration file not found")
+}
+
+func isConf(ext, name string) bool {
+	return base+ext == name
 }

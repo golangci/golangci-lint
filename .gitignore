@@ -21,3 +21,4 @@ coverage.xml
 /custom-golangci-lint
 /gcl-custom
 .mygcl.yml
+.mygcl.yaml
