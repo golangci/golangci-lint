@@ -971,6 +971,10 @@ type CustomLinterSettings struct {
 
 func (s *CustomLinterSettings) Validate() error {
 	if s.Type == "module" {
+		if s.Path != "" {
+			return errors.New("path not supported with module type")
+		}
+
 		return nil
 	}
 
