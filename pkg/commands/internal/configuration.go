@@ -10,9 +10,9 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-const base = ".mygcl"
+const base = ".custom-gcl"
 
-const defaultBinaryName = "gcl-custom"
+const defaultBinaryName = "custom-gcl"
 
 // Configuration represents the configuration file.
 type Configuration struct {

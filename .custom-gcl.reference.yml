@@ -4,7 +4,7 @@ version: v1.56.2
 
 # the name of the custom binary.
 # Optional.
-# Default: gcl-custom
+# Default: custom-gcl
 name: custom-golangci-lint
 
 # The directory path used to store the custom binary.

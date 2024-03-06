@@ -6,7 +6,7 @@ An example linter can be found at [here](https://github.com/golangci/example-plu
 
 ## The Automatic Way
 
-- define your building configuration into `.mygcl.yml`
+- define your building configuration into `.custom-gcl.yml`
 - run the command `golangci-lint custom` ( or `golangci-lint custom -v` to have logs)
 - define the plugin inside the  `linters-settings.custom` section with the type `module`.
 - run your custom version of golangci-lint
@@ -17,7 +17,7 @@ Requirements:
 
 ### Configuration Example
 
-```yaml title=.mygcl.yml
+```yaml title=.custom-gcl.yml
 version: v1.57.0
 plugins:
   # a plugin from a Go proxy

@@ -12,7 +12,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/logutils"
 )
 
-const envKeepTempFiles = "MYGCL_KEEP_TEMP_FILES"
+const envKeepTempFiles = "CUSTOM_GCL_KEEP_TEMP_FILES"
 
 type customCommand struct {
 	cmd *cobra.Command
@@ -57,7 +57,7 @@ func (c *customCommand) preRunE(_ *cobra.Command, _ []string) error {
 func (c *customCommand) runE(_ *cobra.Command, _ []string) error {
 	ctx := context.Background()
 
-	tmp, err := os.MkdirTemp(os.TempDir(), "mygcl")
+	tmp, err := os.MkdirTemp(os.TempDir(), "custom-gcl")
 	if err != nil {
 		return fmt.Errorf("create temporary directory: %w", err)
 	}

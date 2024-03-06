@@ -146,7 +146,7 @@ func (b Builder) goBuild(ctx context.Context, binaryName string) error {
 	cmd := exec.CommandContext(ctx, "go", "build",
 		"-ldflags",
 		fmt.Sprintf(
-			"-s -w -X 'main.version=%s-mygcl' -X 'main.date=%s'",
+			"-s -w -X 'main.version=%s-custom-gcl' -X 'main.date=%s'",
 			sanitizeVersion(b.cfg.Version), time.Now().UTC().String(),
 		),
 		"-o", binaryName,
