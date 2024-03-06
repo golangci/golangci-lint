@@ -88,7 +88,7 @@ func (b Builder) clone(ctx context.Context) error {
 	cmd := exec.CommandContext(ctx,
 		"git", "clone", "--branch", b.cfg.Version,
 		"--single-branch", "--depth", "1", "-c advice.detachedHead=false", "-q",
-		"https://github.com/ldez/golangci-lint.git", // FIXME(ldez) use https://github.com/golangci/golangci-lint.git
+		"https://github.com/golangci/golangci-lint.git",
 	)
 	cmd.Dir = b.root
 

@@ -1,6 +1,7 @@
 package lintersdb
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/golangci/plugin-module-register/register"
@@ -24,9 +25,9 @@ func NewPluginModuleBuilder(log logutils.Log) *PluginModuleBuilder {
 }
 
 // Build loads custom linters that are specified in the golangci-lint config file.
-func (b *PluginModuleBuilder) Build(cfg *config.Config) []*linter.Config {
+func (b *PluginModuleBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 	if cfg == nil || b.log == nil {
-		return nil
+		return nil, nil
 	}
 
 	var linters []*linter.Config
@@ -40,23 +41,17 @@ func (b *PluginModuleBuilder) Build(cfg *config.Config) []*linter.Config {
 
 		newPlugin, err := register.GetPlugin(name)
 		if err != nil {
-			// FIXME error
-			b.log.Fatalf("plugin(%s): %v", name, err)
-			return nil
+			return nil, fmt.Errorf("plugin(%s): %w", name, err)
 		}
 
 		p, err := newPlugin(settings.Settings)
 		if err != nil {
-			// FIXME error
-			b.log.Fatalf("plugin(%s): newPlugin %v", name, err)
-			return nil
+			return nil, fmt.Errorf("plugin(%s): newPlugin %w", name, err)
 		}
 
 		analyzers, err := p.BuildAnalyzers()
 		if err != nil {
-			// FIXME error
-			b.log.Fatalf("plugin(%s): BuildAnalyzers %v", name, err)
-			return nil
+			return nil, fmt.Errorf("plugin(%s): BuildAnalyzers %w", name, err)
 		}
 
 		customLinter := goanalysis.NewLinter(name, settings.Description, analyzers, nil)
@@ -86,5 +81,5 @@ func (b *PluginModuleBuilder) Build(cfg *config.Config) []*linter.Config {
 		linters = append(linters, lc)
 	}
 
-	return linters
+	return linters, nil
 }

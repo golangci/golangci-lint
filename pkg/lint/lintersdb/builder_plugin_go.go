@@ -29,9 +29,9 @@ func NewPluginGoBuilder(log logutils.Log) *PluginGoBuilder {
 }
 
 // Build loads custom linters that are specified in the golangci-lint config file.
-func (b *PluginGoBuilder) Build(cfg *config.Config) []*linter.Config {
+func (b *PluginGoBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 	if cfg == nil || b.log == nil {
-		return nil
+		return nil, nil
 	}
 
 	var linters []*linter.Config
@@ -40,13 +40,13 @@ func (b *PluginGoBuilder) Build(cfg *config.Config) []*linter.Config {
 		settings := settings
 		lc, err := b.loadConfig(cfg, name, &settings)
 		if err != nil {
-			b.log.Errorf("Unable to load custom analyzer %s:%s, %v", name, settings.Path, err)
+			return nil, fmt.Errorf("unable to load custom analyzer %s:%s, %w", name, settings.Path, err)
 		} else {
 			linters = append(linters, lc)
 		}
 	}
 
-	return linters
+	return linters, nil
 }
 
 // loadConfig loads the configuration of private linters.
