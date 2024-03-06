@@ -31,3 +31,6 @@ CVE-2023-48795
 
 #  Skip for indirect dependencies github.com/jackc/pgproto3 - github.com/jackc/pgx
 CVE-2024-27304
+
+# Skip for indirect dependencies golang/google.golang.org/protobuf
+CVE-2024-24786
