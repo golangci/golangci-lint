@@ -14,6 +14,8 @@ import (
 	"github.com/golangci/golangci-lint/pkg/logutils"
 )
 
+const goPluginType = "goplugin"
+
 type AnalyzerPlugin interface {
 	GetAnalyzers() []*analysis.Analyzer
 }
@@ -37,10 +39,15 @@ func (b *PluginGoBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 	var linters []*linter.Config
 
 	for name, settings := range cfg.LintersSettings.Custom {
+		if settings.Type != goPluginType && settings.Type != "" {
+			continue
+		}
+
 		settings := settings
+
 		lc, err := b.loadConfig(cfg, name, &settings)
 		if err != nil {
-			return nil, fmt.Errorf("unable to load custom analyzer %s:%s, %w", name, settings.Path, err)
+			return nil, fmt.Errorf("unable to load custom analyzer %q: %s, %w", name, settings.Path, err)
 		} else {
 			linters = append(linters, lc)
 		}
