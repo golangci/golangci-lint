@@ -1100,7 +1100,7 @@ linters-settings:
     #   stdmethods, stringintconv, structtag, testinggoroutine, tests, timeformat, unmarshal, unreachable, unsafeptr,
     #   unusedresult
     # ).
-    # Run `go tool vet help` to see all analyzers.
+    # Run `GL_DEBUG=govet golangci-lint run --enable=govet` to see default, all available analyzers, and enabled analyzers.
     # Default: []
     enable:
       - appends
@@ -1152,7 +1152,7 @@ linters-settings:
     #   atomicalign, deepequalerrors, fieldalignment, findcall, nilness, reflectvaluecompare, shadow, sortslice,
     #   timeformat, unusedwrite
     # ).
-    # Run `go tool vet help` to see all analyzers.
+    # Run `GL_DEBUG=govet golangci-lint run --enable=govet` to see default, all available analyzers, and enabled analyzers.
     # Default: []
     disable:
       - appends
