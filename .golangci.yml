@@ -124,7 +124,7 @@ linters:
   # the linters can change between version,
   # their configuration may be not compatible or their reports can be different,
   # and this can break some of our tests.
-  # Also, some linters are not relevant for the project (ex: linters related to SQL).
+  # Also, some linters are not relevant for the project (e.g., linters related to SQL).
   # We have specific constraints, so we use a specific configuration.
 
 issues:
