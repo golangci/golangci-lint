@@ -2,6 +2,7 @@ package golinters
 
 import (
 	"slices"
+	"sort"
 
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/analysis/passes/appends"
@@ -52,6 +53,7 @@ import (
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
+	"github.com/golangci/golangci-lint/pkg/logutils"
 )
 
 var (
@@ -136,6 +138,11 @@ var (
 	}
 )
 
+var (
+	govetDebugf  = logutils.Debug(logutils.DebugKeyGovet)
+	isGovetDebug = logutils.HaveDebugTag(logutils.DebugKeyGovet)
+)
+
 func NewGovet(settings *config.GovetSettings) *goanalysis.Linter {
 	var conf map[string]map[string]any
 	if settings != nil {
@@ -152,6 +159,9 @@ func NewGovet(settings *config.GovetSettings) *goanalysis.Linter {
 }
 
 func analyzersFromConfig(settings *config.GovetSettings) []*analysis.Analyzer {
+	debugAnalyzersListf(allAnalyzers, "All available analyzers")
+	debugAnalyzersListf(defaultAnalyzers, "Default analyzers")
+
 	if settings == nil {
 		return defaultAnalyzers
 	}
@@ -167,6 +177,8 @@ func analyzersFromConfig(settings *config.GovetSettings) []*analysis.Analyzer {
 			enabledAnalyzers = append(enabledAnalyzers, a)
 		}
 	}
+
+	debugAnalyzersListf(enabledAnalyzers, "Enabled by config analyzers")
 
 	return enabledAnalyzers
 }
@@ -193,4 +205,19 @@ func isAnalyzerEnabled(name string, cfg *config.GovetSettings, defaultAnalyzers 
 	default:
 		return slices.ContainsFunc(defaultAnalyzers, func(a *analysis.Analyzer) bool { return a.Name == name })
 	}
+}
+
+func debugAnalyzersListf(analyzers []*analysis.Analyzer, message string) {
+	if !isGovetDebug {
+		return
+	}
+
+	analyzerNames := make([]string, 0, len(analyzers))
+	for _, a := range analyzers {
+		analyzerNames = append(analyzerNames, a.Name)
+	}
+
+	sort.Strings(analyzerNames)
+
+	govetDebugf("%s (%d): %s", message, len(analyzerNames), analyzerNames)
 }
