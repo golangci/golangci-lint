@@ -1,6 +1,0 @@
-linters-settings:
-  gofumpt:
-    extra-rules: true
-  gocritic:
-    enabled-checks:
-      - commentFormatting
