@@ -1,3 +1,16 @@
+# This configuration file is not a recommendation.
+#
+# We intentionally use a limited set of linters.
+# This configuration file is used with different version of golangci-lint to avoid regressions:
+# the linters can change between version,
+# their configuration may be not compatible or their reports can be different,
+# and this can break some of our tests.
+# Also, some linters are not relevant for the project (e.g. linters related to SQL).
+#
+# We have specific constraints, so we use a specific configuration.
+#
+# See the file `.golangci.reference.yml` to have a list of  all available configuration options.
+
 linters-settings:
   depguard:
     rules:
@@ -118,17 +131,9 @@ linters:
     - unused
     - whitespace
 
-  # don't enable:
-  # - asciicheck
-  # - gochecknoglobals
-  # - gocognit
-  # - godot
-  # - godox
-  # - goerr113
-  # - nestif
-  # - prealloc
-  # - testpackage
-  # - wsl
+  # This list of linters is not a recommendation (same thing for all this configuration file).
+  # We intentionally use a limited set of linters.
+  # See the comment on top of this file.
 
 issues:
   # Excluding configuration per-path, per-linter, per-text and per-source
