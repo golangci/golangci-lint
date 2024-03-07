@@ -216,6 +216,8 @@ func debugAnalyzersListf(analyzers []*analysis.Analyzer, message string) {
 	for _, a := range analyzers {
 		analyzerNames = append(analyzerNames, a.Name)
 	}
+
 	sort.Strings(analyzerNames)
+
 	govetDebugf("%s (%d): %s", message, len(analyzerNames), analyzerNames)
 }
