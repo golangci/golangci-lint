@@ -66,6 +66,10 @@ func (p *Severity) Process(issues []result.Issue) ([]result.Issue, error) {
 			rule := rule
 
 			if rule.match(issue, p.files, p.log) {
+				if rule.severity == "@" || rule.severity == "" && p.defaultSeverity == "@" {
+					return issue
+				}
+
 				issue.Severity = rule.severity
 				if issue.Severity == "" {
 					issue.Severity = p.defaultSeverity
@@ -75,7 +79,9 @@ func (p *Severity) Process(issues []result.Issue) ([]result.Issue, error) {
 			}
 		}
 
-		issue.Severity = p.defaultSeverity
+		if p.defaultSeverity != "@" {
+			issue.Severity = p.defaultSeverity
+		}
 
 		return issue
 	}), nil
