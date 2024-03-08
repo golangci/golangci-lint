@@ -79,6 +79,21 @@ func TestSeverity_Validate_error(t *testing.T) {
 			},
 			expected: "error in severity rule #0: severity should be set",
 		},
+		{
+			desc: "same severity between default and rule",
+			severity: &Severity{
+				Default: "high",
+				Rules: []SeverityRule{
+					{
+						Severity: "high",
+						BaseRule: BaseRule{
+							Path: "test",
+						},
+					},
+				},
+			},
+			expected: `error in severity rule #0: the default severity ("high") is the same as the rule severity, this rule can be removed`,
+		},
 	}
 
 	for _, test := range testCases {
