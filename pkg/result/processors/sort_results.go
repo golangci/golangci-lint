@@ -59,6 +59,8 @@ func (sr SortResults) Process(issues []result.Issue) ([]result.Issue, error) {
 	for _, name := range sr.cfg.SortOrder {
 		if c, ok := sr.cmps[name]; ok {
 			cmps = append(cmps, c...)
+		} else {
+			return nil, fmt.Errorf("unsupported sort-order name %q", name)
 		}
 	}
 
