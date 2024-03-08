@@ -151,6 +151,7 @@ func saveIssuesToCache(allPkgs []*packages.Package, pkgsFromCache map[*packages.
 					encodedIssues = append(encodedIssues, EncodingIssue{
 						FromLinter:           i.FromLinter,
 						Text:                 i.Text,
+						Severity:             i.Severity,
 						Pos:                  i.Pos,
 						LineRange:            i.LineRange,
 						Replacement:          i.Replacement,
@@ -222,6 +223,7 @@ func loadIssuesFromCache(pkgs []*packages.Package, lintCtx *linter.Context,
 					issues = append(issues, result.Issue{
 						FromLinter:           i.FromLinter,
 						Text:                 i.Text,
+						Severity:             i.Severity,
 						Pos:                  i.Pos,
 						LineRange:            i.LineRange,
 						Replacement:          i.Replacement,
