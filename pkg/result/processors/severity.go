@@ -61,30 +61,32 @@ func (p *Severity) Process(issues []result.Issue) ([]result.Issue, error) {
 		return issues, nil
 	}
 
-	return transformIssues(issues, func(issue *result.Issue) *result.Issue {
-		for _, rule := range p.rules {
-			rule := rule
+	return transformIssues(issues, p.transform), nil
+}
 
-			if rule.match(issue, p.files, p.log) {
-				if rule.severity == "@" || rule.severity == "" && p.defaultSeverity == "@" {
-					return issue
-				}
+func (p *Severity) transform(issue *result.Issue) *result.Issue {
+	for _, rule := range p.rules {
+		rule := rule
 
-				issue.Severity = rule.severity
-				if issue.Severity == "" {
-					issue.Severity = p.defaultSeverity
-				}
-
+		if rule.match(issue, p.files, p.log) {
+			if rule.severity == "@" || rule.severity == "" && p.defaultSeverity == "@" {
 				return issue
 			}
-		}
 
-		if p.defaultSeverity != "@" {
-			issue.Severity = p.defaultSeverity
-		}
+			issue.Severity = rule.severity
+			if issue.Severity == "" {
+				issue.Severity = p.defaultSeverity
+			}
 
-		return issue
-	}), nil
+			return issue
+		}
+	}
+
+	if p.defaultSeverity != "@" {
+		issue.Severity = p.defaultSeverity
+	}
+
+	return issue
 }
 
 func (p *Severity) Name() string { return p.name }
