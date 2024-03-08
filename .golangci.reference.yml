@@ -109,8 +109,7 @@ output:
   # Default: ""
   path-prefix: ""
 
-  # Sort results.
-  # See also `sort-order`.
+  # Sort results by the order defined in `sort-order`.
   # Default: false
   sort-results: true
 
