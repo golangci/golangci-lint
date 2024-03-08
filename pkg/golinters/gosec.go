@@ -97,7 +97,7 @@ func runGoSec(lintCtx *linter.Context, pass *analysis.Pass, settings *config.GoS
 
 	issues := make([]goanalysis.Issue, 0, len(secIssues))
 	for _, i := range secIssues {
-		text := fmt.Sprintf("%s: %s", i.RuleID, i.What) // TODO: use severity and confidence
+		text := fmt.Sprintf("%s: %s", i.RuleID, i.What)
 
 		var r *result.Range
 
@@ -118,6 +118,7 @@ func runGoSec(lintCtx *linter.Context, pass *analysis.Pass, settings *config.GoS
 		}
 
 		issues = append(issues, goanalysis.NewIssue(&result.Issue{
+			Severity: convertScoreToString(i.Severity),
 			Pos: token.Position{
 				Filename: i.File,
 				Line:     line,
@@ -147,6 +148,19 @@ func toGosecConfig(settings *config.GoSecSettings) gosec.Config {
 	}
 
 	return conf
+}
+
+func convertScoreToString(score issue.Score) string {
+	switch score {
+	case issue.Low:
+		return "low"
+	case issue.Medium:
+		return "medium"
+	case issue.High:
+		return "high"
+	default:
+		return ""
+	}
 }
 
 // based on https://github.com/securego/gosec/blob/47bfd4eb6fc7395940933388550b547538b4c946/config.go#L52-L62
