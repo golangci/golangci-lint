@@ -65,12 +65,12 @@ func (p *Severity) Process(issues []result.Issue) ([]result.Issue, error) {
 		for _, rule := range p.rules {
 			rule := rule
 
-			ruleSeverity := p.defaultSeverity
-			if rule.severity != "" {
-				ruleSeverity = rule.severity
-			}
-
 			if rule.match(issue, p.files, p.log) {
+				ruleSeverity := p.defaultSeverity
+				if rule.severity != "" {
+					ruleSeverity = rule.severity
+				}
+
 				issue.Severity = ruleSeverity
 				return issue
 			}
