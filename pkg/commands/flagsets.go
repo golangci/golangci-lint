@@ -71,6 +71,8 @@ func setupOutputFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
 		color.GreenString("Make issues output unique by line"))
 	internal.AddFlagAndBind(v, fs, fs.Bool, "sort-results", "output.sort-results", false,
 		color.GreenString("Sort linter results"))
+	internal.AddFlagAndBind(v, fs, fs.StringSlice, "sort-order", "output.sort-order", nil,
+		color.GreenString("Sort order of linter results"))
 	internal.AddFlagAndBind(v, fs, fs.String, "path-prefix", "output.path-prefix", "",
 		color.GreenString("Path prefix to add to output"))
 	internal.AddFlagAndBind(v, fs, fs.Bool, "show-stats", "output.show-stats", false, color.GreenString("Show statistics per linter"))

@@ -109,13 +109,32 @@ output:
   # Default: ""
   path-prefix: ""
 
-  # Sort results by: filepath, line and column.
+  # Sort results by the order defined in `sort-order`.
   # Default: false
   sort-results: true
+
+  # Order to use when sorting results.
+  # Require `sort-results` to `true`.
+  # Possible values: `file`, `linter`, and `severity`.
+  #
+  # If the severity values are inside the following list, they are ordered in this order:
+  #   1. error
+  #   2. warning
+  #   3. high
+  #   4. medium
+  #   5. low
+  # Either they are sorted alphabetically.
+  #
+  # Default: ["file"]
+  sort-order:
+    - linter
+    - severity
+    - file # filepath, line, and column.
 
   # Show statistics per linter.
   # Default: false
   show-stats: true
+
 
 # All available settings of specific linters.
 linters-settings:

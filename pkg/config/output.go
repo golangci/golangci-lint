@@ -1,5 +1,11 @@
 package config
 
+import (
+	"errors"
+	"fmt"
+	"slices"
+)
+
 const (
 	OutFormatJSON              = "json"
 	OutFormatLineNumber        = "line-number"
@@ -28,11 +34,26 @@ var OutFormats = []string{
 }
 
 type Output struct {
-	Format          string `mapstructure:"format"`
-	PrintIssuedLine bool   `mapstructure:"print-issued-lines"`
-	PrintLinterName bool   `mapstructure:"print-linter-name"`
-	UniqByLine      bool   `mapstructure:"uniq-by-line"`
-	SortResults     bool   `mapstructure:"sort-results"`
-	PathPrefix      string `mapstructure:"path-prefix"`
-	ShowStats       bool   `mapstructure:"show-stats"`
+	Format          string   `mapstructure:"format"`
+	PrintIssuedLine bool     `mapstructure:"print-issued-lines"`
+	PrintLinterName bool     `mapstructure:"print-linter-name"`
+	UniqByLine      bool     `mapstructure:"uniq-by-line"`
+	SortResults     bool     `mapstructure:"sort-results"`
+	SortOrder       []string `mapstructure:"sort-order"`
+	PathPrefix      string   `mapstructure:"path-prefix"`
+	ShowStats       bool     `mapstructure:"show-stats"`
+}
+
+func (o *Output) Validate() error {
+	if !o.SortResults && len(o.SortOrder) > 0 {
+		return errors.New("sort-results should be 'true' to use sort-order")
+	}
+
+	for _, order := range o.SortOrder {
+		if !slices.Contains([]string{"linter", "file", "severity"}, order) {
+			return fmt.Errorf("unsupported sort-order name %q", order)
+		}
+	}
+
+	return nil
 }

@@ -1,6 +1,9 @@
 package processors
 
 import (
+	"errors"
+	"fmt"
+	"slices"
 	"sort"
 	"strings"
 
@@ -13,41 +16,69 @@ import (
 // by sorting results.Issues using processor step, and chain based
 // rules that can compare different properties of the Issues struct.
 
+const (
+	fileOrderName      = "file"
+	linterOrderName    = "linter"
+	linterSeverityName = "severity"
+)
+
 var _ Processor = (*SortResults)(nil)
 
 type SortResults struct {
-	cmp comparator
-	cfg *config.Config
+	cmps map[string][]comparator
+
+	cfg *config.Output
 }
 
 func NewSortResults(cfg *config.Config) *SortResults {
-	// For sorting we are comparing (in next order): file names, line numbers,
-	// position, and finally - giving up.
 	return &SortResults{
-		cmp: ByName{
-			next: ByLine{
-				next: ByColumn{},
-			},
+		cmps: map[string][]comparator{
+			// For sorting we are comparing (in next order):
+			// file names, line numbers, position, and finally - giving up.
+			fileOrderName: {&byName{}, &byLine{}, &byColumn{}},
+			// For sorting we are comparing: linter name
+			linterOrderName: {&byLinter{}},
+			// For sorting we are comparing: severity
+			linterSeverityName: {&bySeverity{}},
 		},
-		cfg: cfg,
+		cfg: &cfg.Output,
 	}
 }
 
 // Process is performing sorting of the result issues.
 func (sr SortResults) Process(issues []result.Issue) ([]result.Issue, error) {
-	if !sr.cfg.Output.SortResults {
+	if !sr.cfg.SortResults {
 		return issues, nil
 	}
 
+	if len(sr.cfg.SortOrder) == 0 {
+		sr.cfg.SortOrder = []string{fileOrderName}
+	}
+
+	var cmps []comparator
+	for _, name := range sr.cfg.SortOrder {
+		if c, ok := sr.cmps[name]; ok {
+			cmps = append(cmps, c...)
+		} else {
+			return nil, fmt.Errorf("unsupported sort-order name %q", name)
+		}
+	}
+
+	cmp, err := mergeComparator(cmps)
+	if err != nil {
+		return nil, err
+	}
+
 	sort.Slice(issues, func(i, j int) bool {
-		return sr.cmp.Compare(&issues[i], &issues[j]) == Less
+		return cmp.Compare(&issues[i], &issues[j]) == Less
 	})
 
 	return issues, nil
 }
 
 func (sr SortResults) Name() string { return "sort_results" }
-func (sr SortResults) Finish()      {}
+
+func (sr SortResults) Finish() {}
 
 type compareResult int
 
@@ -71,28 +102,37 @@ func (c compareResult) String() string {
 		return "Equal"
 	case Greater:
 		return "Greater"
+	default:
+		return "None"
 	}
-
-	return "None"
 }
 
 // comparator describe how to implement compare for two "issues" lexicographically
 type comparator interface {
 	Compare(a, b *result.Issue) compareResult
 	Next() comparator
+	AddNext(comparator) comparator
+	fmt.Stringer
 }
 
 var (
-	_ comparator = (*ByName)(nil)
-	_ comparator = (*ByLine)(nil)
-	_ comparator = (*ByColumn)(nil)
+	_ comparator = (*byName)(nil)
+	_ comparator = (*byLine)(nil)
+	_ comparator = (*byColumn)(nil)
+	_ comparator = (*byLinter)(nil)
+	_ comparator = (*bySeverity)(nil)
 )
 
-type ByName struct{ next comparator }
+type byName struct{ next comparator }
 
-func (cmp ByName) Next() comparator { return cmp.next }
+func (cmp *byName) Next() comparator { return cmp.next }
 
-func (cmp ByName) Compare(a, b *result.Issue) compareResult {
+func (cmp *byName) AddNext(c comparator) comparator {
+	cmp.next = c
+	return cmp
+}
+
+func (cmp *byName) Compare(a, b *result.Issue) compareResult {
 	var res compareResult
 
 	if res = compareResult(strings.Compare(a.FilePath(), b.FilePath())); !res.isNeutral() {
@@ -106,11 +146,20 @@ func (cmp ByName) Compare(a, b *result.Issue) compareResult {
 	return res
 }
 
-type ByLine struct{ next comparator }
+func (cmp *byName) String() string {
+	return comparatorToString("byName", cmp)
+}
 
-func (cmp ByLine) Next() comparator { return cmp.next }
+type byLine struct{ next comparator }
 
-func (cmp ByLine) Compare(a, b *result.Issue) compareResult {
+func (cmp *byLine) Next() comparator { return cmp.next }
+
+func (cmp *byLine) AddNext(c comparator) comparator {
+	cmp.next = c
+	return cmp
+}
+
+func (cmp *byLine) Compare(a, b *result.Issue) compareResult {
 	var res compareResult
 
 	if res = numericCompare(a.Line(), b.Line()); !res.isNeutral() {
@@ -124,11 +173,20 @@ func (cmp ByLine) Compare(a, b *result.Issue) compareResult {
 	return res
 }
 
-type ByColumn struct{ next comparator }
+func (cmp *byLine) String() string {
+	return comparatorToString("byLine", cmp)
+}
 
-func (cmp ByColumn) Next() comparator { return cmp.next }
+type byColumn struct{ next comparator }
 
-func (cmp ByColumn) Compare(a, b *result.Issue) compareResult {
+func (cmp *byColumn) Next() comparator { return cmp.next }
+
+func (cmp *byColumn) AddNext(c comparator) comparator {
+	cmp.next = c
+	return cmp
+}
+
+func (cmp *byColumn) Compare(a, b *result.Issue) compareResult {
 	var res compareResult
 
 	if res = numericCompare(a.Column(), b.Column()); !res.isNeutral() {
@@ -140,6 +198,94 @@ func (cmp ByColumn) Compare(a, b *result.Issue) compareResult {
 	}
 
 	return res
+}
+
+func (cmp *byColumn) String() string {
+	return comparatorToString("byColumn", cmp)
+}
+
+type byLinter struct{ next comparator }
+
+func (cmp *byLinter) Next() comparator { return cmp.next }
+
+func (cmp *byLinter) AddNext(c comparator) comparator {
+	cmp.next = c
+	return cmp
+}
+
+func (cmp *byLinter) Compare(a, b *result.Issue) compareResult {
+	var res compareResult
+
+	if res = compareResult(strings.Compare(a.FromLinter, b.FromLinter)); !res.isNeutral() {
+		return res
+	}
+
+	if next := cmp.Next(); next != nil {
+		return next.Compare(a, b)
+	}
+
+	return res
+}
+
+func (cmp *byLinter) String() string {
+	return comparatorToString("byLinter", cmp)
+}
+
+type bySeverity struct{ next comparator }
+
+func (cmp *bySeverity) Next() comparator { return cmp.next }
+
+func (cmp *bySeverity) AddNext(c comparator) comparator {
+	cmp.next = c
+	return cmp
+}
+
+func (cmp *bySeverity) Compare(a, b *result.Issue) compareResult {
+	var res compareResult
+
+	if res = severityCompare(a.Severity, b.Severity); !res.isNeutral() {
+		return res
+	}
+
+	if next := cmp.Next(); next != nil {
+		return next.Compare(a, b)
+	}
+
+	return res
+}
+
+func (cmp *bySeverity) String() string {
+	return comparatorToString("bySeverity", cmp)
+}
+
+func mergeComparator(cmps []comparator) (comparator, error) {
+	if len(cmps) == 0 {
+		return nil, errors.New("no comparator")
+	}
+
+	for i := 0; i < len(cmps)-1; i++ {
+		cmps[i].AddNext(cmps[i+1])
+	}
+
+	return cmps[0], nil
+}
+
+func severityCompare(a, b string) compareResult {
+	// The position inside the slice define the importance (lower to higher).
+	classic := []string{"low", "medium", "high", "warning", "error"}
+
+	if slices.Contains(classic, a) && slices.Contains(classic, b) {
+		switch {
+		case slices.Index(classic, a) > slices.Index(classic, b):
+			return Greater
+		case slices.Index(classic, a) < slices.Index(classic, b):
+			return Less
+		default:
+			return Equal
+		}
+	}
+
+	return compareResult(strings.Compare(a, b))
 }
 
 func numericCompare(a, b int) compareResult {
@@ -163,4 +309,13 @@ func numericCompare(a, b int) compareResult {
 	}
 
 	return Equal
+}
+
+func comparatorToString(name string, c comparator) string {
+	s := name
+	if c.Next() != nil {
+		s += " > " + c.Next().String()
+	}
+
+	return s
 }
