@@ -68,8 +68,6 @@ func (p *Severity) Process(issues []result.Issue) ([]result.Issue, error) {
 
 func (p *Severity) transform(issue *result.Issue) *result.Issue {
 	for _, rule := range p.rules {
-		rule := rule
-
 		if rule.match(issue, p.files, p.log) {
 			if rule.severity == severityFromLinter || rule.severity == "" && p.defaultSeverity == severityFromLinter {
 				return issue
