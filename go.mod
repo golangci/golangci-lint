@@ -45,7 +45,7 @@ require (
 	github.com/golangci/gofmt v0.0.0-20231018234816-f50ced29576e
 	github.com/golangci/misspell v0.4.1
 	github.com/golangci/revgrep v0.5.2
-	github.com/golangci/unconvert v0.0.0-20180507085042-28b1c447d1f4
+	github.com/golangci/unconvert v0.0.0-20240309020433-c5143eacb3ed
 	github.com/gordonklaus/ineffassign v0.1.0
 	github.com/gostaticanalysis/forcetypeassert v0.1.0
 	github.com/gostaticanalysis/nilerr v0.1.1
@@ -151,7 +151,6 @@ require (
 	github.com/gostaticanalysis/comment v1.4.2 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
-	github.com/kisielk/gotool v1.0.0 // indirect
 	github.com/lufia/plan9stats v0.0.0-20211012122336-39d0f177ccd0 // indirect
 	github.com/magiconair/properties v1.8.6 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect

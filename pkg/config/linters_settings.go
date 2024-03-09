@@ -268,6 +268,7 @@ type LintersSettings struct {
 	Testifylint     TestifylintSettings
 	Testpackage     TestpackageSettings
 	Thelper         ThelperSettings
+	Unconvert       UnconvertSettings
 	Unparam         UnparamSettings
 	Unused          UnusedSettings
 	UseStdlibVars   UseStdlibVarsSettings
@@ -880,6 +881,11 @@ type UseStdlibVarsSettings struct {
 	TLSSignatureScheme bool `mapstructure:"tls-signature-scheme"`
 	ConstantKind       bool `mapstructure:"constant-kind"`
 	SyslogPriority     bool `mapstructure:"syslog-priority"`
+}
+
+type UnconvertSettings struct {
+	FastMath bool `mapstructure:"fast-math"`
+	Safe     bool `mapstructure:"safe"`
 }
 
 type UnparamSettings struct {
