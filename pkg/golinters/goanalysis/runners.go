@@ -67,6 +67,9 @@ func runAnalyzers(cfg runAnalyzersConfig, lintCtx *linter.Context) ([]result.Iss
 	}
 
 	// keep only unique packages
+	slices.SortFunc(pkgsToAnalyze, func(a, b *packages.Package) int {
+		return strings.Compare(a.PkgPath, b.PkgPath)
+	})
 	pkgsToAnalyze = slices.Compact(pkgsToAnalyze)
 
 	diags, errs, passToPkg := runner.run(cfg.getAnalyzers(), pkgsToAnalyze)
