@@ -34,5 +34,9 @@ type SeverityRule struct {
 }
 
 func (s *SeverityRule) Validate() error {
+	if s.Severity == "" {
+		return errors.New("severity should be set")
+	}
+
 	return s.BaseRule.Validate(severityRuleMinConditionsCount)
 }
