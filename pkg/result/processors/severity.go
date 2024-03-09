@@ -8,6 +8,8 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
+const severityFromLinter = "@linter"
+
 var _ Processor = &Severity{}
 
 type severityRule struct {
@@ -69,7 +71,7 @@ func (p *Severity) transform(issue *result.Issue) *result.Issue {
 		rule := rule
 
 		if rule.match(issue, p.files, p.log) {
-			if rule.severity == "@" || rule.severity == "" && p.defaultSeverity == "@" {
+			if rule.severity == severityFromLinter || rule.severity == "" && p.defaultSeverity == severityFromLinter {
 				return issue
 			}
 
@@ -82,7 +84,7 @@ func (p *Severity) transform(issue *result.Issue) *result.Issue {
 		}
 	}
 
-	if p.defaultSeverity != "@" {
+	if p.defaultSeverity != severityFromLinter {
 		issue.Severity = p.defaultSeverity
 	}
 

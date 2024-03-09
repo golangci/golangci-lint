@@ -421,7 +421,7 @@ func TestSeverity_transform(t *testing.T) {
 				Default: "error",
 				Rules: []SeverityRule{
 					{
-						Severity: "@",
+						Severity: severityFromLinter,
 						BaseRule: BaseRule{
 							Linters: []string{"linter1"},
 						},
@@ -442,7 +442,7 @@ func TestSeverity_transform(t *testing.T) {
 		{
 			desc: "keep severity from linter as default",
 			opts: SeverityOptions{
-				Default: "@",
+				Default: severityFromLinter,
 				Rules: []SeverityRule{
 					{
 						Severity: "info",
@@ -466,7 +466,7 @@ func TestSeverity_transform(t *testing.T) {
 		{
 			desc: "keep severity from linter as default (without rule)",
 			opts: SeverityOptions{
-				Default: "@",
+				Default: severityFromLinter,
 			},
 			issue: &result.Issue{
 				Text:       "This is a report",
