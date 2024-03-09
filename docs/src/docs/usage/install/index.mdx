@@ -157,15 +157,15 @@ A linter can be deprecated for various reasons, e.g. the linter stops working wi
 
 The deprecation of a linter will follow 3 phases:
 
-1. A warning message will be displayed: you can still use it (except if it doesn't work at all anymore), but it's recommended to remove it from your configuration.
-2. An error message will be displayed: now you should remove the linter. The implementation is replaced by a fake linter that does nothing.
-3. The linter is removed from golangci-lint.
+1. **Display of a warning message**: The linter can still be used (unless it's completely non-functional), but it's recommended to remove it from your configuration.
+2. **Display of an error message**: At this point, you should remove the linter. The original implementation is replaced by a placeholder that does nothing.
+3. **Removal of the linter** from golangci-lint.
 
 Each phase corresponds to a minor version:
 
-- v1.100.0 -> warning message
-- v1.101.0 -> error message
-- v1.102.0 -> linter removed
+- v1.0.0 -> warning message
+- v1.1.0 -> error message
+- v1.2.0 -> linter removed
 
 Otherwise, the deprecated linters are removed from presets immediately when they are deprecated (phase 1).
 
