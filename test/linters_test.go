@@ -88,6 +88,7 @@ func testOneSource(t *testing.T, log *logutils.StderrLog, binPath, sourcePath st
 		"--disable-all",
 		"--out-format=json",
 		"--max-same-issues=100",
+		"--max-issues-per-linter=100",
 	}
 
 	for _, addArg := range []string{"", "-Etypecheck"} {

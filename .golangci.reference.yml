@@ -2293,6 +2293,14 @@ linters-settings:
     # Default: false
     syslog-priority: true
 
+  unconvert:
+    # Remove conversions that force intermediate rounding.
+    # Default: false
+    fast-math: true
+    # Be more conservative (experimental).
+    # Default: false
+    safe: true
+
   unparam:
     # Inspect exported functions.
     #

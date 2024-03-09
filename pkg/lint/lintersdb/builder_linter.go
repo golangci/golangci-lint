@@ -633,7 +633,7 @@ func (b LinterBuilder) Build(cfg *config.Config) []*linter.Config {
 			WithPresets(linter.PresetBugs).
 			WithURL(""),
 
-		linter.NewConfig(golinters.NewUnconvert()).
+		linter.NewConfig(golinters.NewUnconvert(&cfg.LintersSettings.Unconvert)).
 			WithSince("v1.0.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetStyle).
