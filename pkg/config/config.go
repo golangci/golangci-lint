@@ -86,7 +86,7 @@ func detectGoVersion() string {
 		return v
 	}
 
-	return "1.17"
+	return "1.18"
 }
 
 // Trims the Go version to keep only M.m.
