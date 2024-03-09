@@ -20,11 +20,6 @@ func (s *Severity) Validate() error {
 	}
 
 	for i, rule := range s.Rules {
-		if s.Default == rule.Severity {
-			return fmt.Errorf("error in severity rule #%d: the default severity (%q) is the same as the rule severity, this rule can be removed",
-				i, s.Default)
-		}
-
 		if err := rule.Validate(); err != nil {
 			return fmt.Errorf("error in severity rule #%d: %w", i, err)
 		}
