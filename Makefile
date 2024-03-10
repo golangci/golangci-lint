@@ -22,7 +22,6 @@ clean:
 	rm -f $(BINARY)
 	rm -f test/path
 	rm -f tools/Dracula.itermcolors
-	rm -f tools/goreleaser
 	rm -f tools/svg-term
 	rm -rf tools/node_modules
 .PHONY: clean
@@ -62,22 +61,10 @@ fast_check_generated:
 	git checkout -- go.mod go.sum # can differ between go1.16 and go1.17
 	git diff --exit-code # check no changes
 
-release: .goreleaser.yml tools/goreleaser
-	./tools/goreleaser
-.PHONY: release
-
-snapshot: .goreleaser.yml tools/goreleaser
-	./tools/goreleaser --snapshot --rm-dist
-.PHONY: snapshot
-
 # Non-PHONY targets (real files)
 
 $(BINARY): FORCE
 	go build -o $@ ./cmd/golangci-lint
-
-tools/goreleaser: export GOFLAGS = -mod=readonly
-tools/goreleaser: tools/go.mod tools/go.sum
-	cd tools && go build github.com/goreleaser/goreleaser
 
 # TODO: migrate to docs/
 tools/svg-term: tools/package.json tools/package-lock.json
