@@ -112,7 +112,8 @@ func NewRunner(log logutils.Log, cfg *config.Config, goenv *goutil.Env,
 			processors.NewPathPrefixer(cfg.Output.PathPrefix),
 			processors.NewSortResults(cfg),
 		},
-		Log: log,
+		lintCtx: lintCtx,
+		Log:     log,
 	}, nil
 }
 
