@@ -20,6 +20,7 @@ import (
 
 	"github.com/fatih/color"
 	"github.com/gofrs/flock"
+	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
@@ -338,6 +339,8 @@ func (c *runCommand) runAndPrint(ctx context.Context, args []string) error {
 		c.reportData.AddLinter(lc.Name(), isEnabled, lc.EnabledByDefault)
 	}
 
+	c.printDeprecatedLinterMessages(enabledLintersMap)
+
 	issues, err := c.runAnalysis(ctx, args)
 	if err != nil {
 		return err // XXX: don't lose type
@@ -395,6 +398,25 @@ func (c *runCommand) setOutputToDevNull() (savedStdout, savedStderr *os.File) {
 func (c *runCommand) setExitCodeIfIssuesFound(issues []result.Issue) {
 	if len(issues) != 0 {
 		c.exitCode = c.cfg.Run.ExitCodeIfIssuesFound
+	}
+}
+
+func (c *runCommand) printDeprecatedLinterMessages(enabledLinters map[string]*linter.Config) {
+	if c.cfg.InternalCmdTest {
+		return
+	}
+
+	for name, lc := range enabledLinters {
+		if !lc.IsDeprecated() {
+			continue
+		}
+
+		var extra string
+		if lc.Deprecation.Replacement != "" {
+			extra = fmt.Sprintf("Replaced by %s.", lc.Deprecation.Replacement)
+		}
+
+		c.log.Warnf("The linter '%s' is deprecated (since %s) due to: %s %s", name, lc.Deprecation.Since, lc.Deprecation.Message, extra)
 	}
 }
 
