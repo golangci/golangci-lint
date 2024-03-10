@@ -32,7 +32,9 @@ type Runner struct {
 	Processors []processors.Processor
 }
 
-func NewRunner(log logutils.Log, cfg *config.Config, goenv *goutil.Env, lineCache *fsutils.LineCache, fileCache *fsutils.FileCache, dbManager *lintersdb.Manager, lintCtx *linter.Context) (*Runner, error) {
+func NewRunner(log logutils.Log, cfg *config.Config, goenv *goutil.Env,
+	lineCache *fsutils.LineCache, fileCache *fsutils.FileCache,
+	dbManager *lintersdb.Manager, lintCtx *linter.Context) (*Runner, error) {
 	// Beware that some processors need to add the path prefix when working with paths
 	// because they get invoked before the path prefixer (exclude and severity rules)
 	// or process other paths (skip files).
