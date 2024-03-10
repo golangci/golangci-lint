@@ -363,11 +363,10 @@ func (c *runCommand) runAnalysis(ctx context.Context, args []string) ([]result.I
 		c.reportData.AddLinter(lc.Name(), isEnabled, lc.EnabledByDefault)
 	}
 
-	lintCtx, err := c.contextLoader.Load(ctx, lintersToRun)
+	lintCtx, err := c.contextLoader.Load(ctx, c.log.Child(logutils.DebugKeyLintersContext), lintersToRun)
 	if err != nil {
 		return nil, fmt.Errorf("context loading failed: %w", err)
 	}
-	lintCtx.Log = c.log.Child(logutils.DebugKeyLintersContext)
 
 	runner, err := lint.NewRunner(c.log.Child(logutils.DebugKeyRunner),
 		c.cfg, c.goenv, c.lineCache, c.fileCache, c.dbManager, lintCtx.Packages)

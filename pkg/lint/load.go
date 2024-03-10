@@ -294,7 +294,7 @@ func (cl *ContextLoader) filterDuplicatePackages(pkgs []*packages.Package) []*pa
 	return retPkgs
 }
 
-func (cl *ContextLoader) Load(ctx context.Context, linters []*linter.Config) (*linter.Context, error) {
+func (cl *ContextLoader) Load(ctx context.Context, log logutils.Log, linters []*linter.Config) (*linter.Context, error) {
 	loadMode := cl.findLoadMode(linters)
 	pkgs, err := cl.loadPackages(ctx, loadMode)
 	if err != nil {
@@ -315,7 +315,7 @@ func (cl *ContextLoader) Load(ctx context.Context, linters []*linter.Config) (*l
 		OriginalPackages: pkgs,
 
 		Cfg:       cl.cfg,
-		Log:       cl.log,
+		Log:       log,
 		FileCache: cl.fileCache,
 		LineCache: cl.lineCache,
 		PkgCache:  cl.pkgCache,
