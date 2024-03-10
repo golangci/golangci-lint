@@ -98,10 +98,12 @@ type runCommand struct {
 	exitCode int
 }
 
-func newRunCommand(logger logutils.Log, cfg *config.Config, reportData *report.Data, info BuildInfo) *runCommand {
+func newRunCommand(logger logutils.Log, cfg *config.Config, info BuildInfo) *runCommand {
+	reportData := &report.Data{}
+
 	c := &runCommand{
 		viper:      viper.New(),
-		log:        logger,
+		log:        report.NewLogWrapper(logger, reportData),
 		debugf:     logutils.Debug(logutils.DebugKeyExec),
 		cfg:        cfg,
 		reportData: reportData,

@@ -9,14 +9,13 @@ import (
 
 	"github.com/golangci/golangci-lint/pkg/fsutils"
 	"github.com/golangci/golangci-lint/pkg/logutils"
-	"github.com/golangci/golangci-lint/pkg/report"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
 func TestSeverity_multiple(t *testing.T) {
 	lineCache := fsutils.NewLineCache(fsutils.NewFileCache())
 	files := fsutils.NewFiles(lineCache, "")
-	log := report.NewLogWrapper(logutils.NewStderrLog(logutils.DebugKeyEmpty), &report.Data{})
+	log := logutils.NewStderrLog(logutils.DebugKeyEmpty)
 
 	opts := SeverityOptions{
 		Default: "error",
@@ -132,7 +131,7 @@ func TestSeverity_pathPrefix(t *testing.T) {
 	lineCache := fsutils.NewLineCache(fsutils.NewFileCache())
 	pathPrefix := path.Join("some", "dir")
 	files := fsutils.NewFiles(lineCache, pathPrefix)
-	log := report.NewLogWrapper(logutils.NewStderrLog(logutils.DebugKeyEmpty), &report.Data{})
+	log := logutils.NewStderrLog(logutils.DebugKeyEmpty)
 
 	opts := SeverityOptions{
 		Default: "error",
@@ -217,7 +216,7 @@ func TestSeverity_text(t *testing.T) {
 func TestSeverity_onlyDefault(t *testing.T) {
 	lineCache := fsutils.NewLineCache(fsutils.NewFileCache())
 	files := fsutils.NewFiles(lineCache, "")
-	log := report.NewLogWrapper(logutils.NewStderrLog(logutils.DebugKeyEmpty), &report.Data{})
+	log := logutils.NewStderrLog(logutils.DebugKeyEmpty)
 
 	opts := SeverityOptions{
 		Default: "info",

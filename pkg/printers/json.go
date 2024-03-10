@@ -9,7 +9,7 @@ import (
 )
 
 type JSON struct {
-	rd *report.Data
+	rd *report.Data // TODO(ldez) should be drop in v2. Only use by JSON reporter.
 	w  io.Writer
 }
 
