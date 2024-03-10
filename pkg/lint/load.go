@@ -213,13 +213,6 @@ func (cl *ContextLoader) loadPackages(ctx context.Context, loadMode packages.Loa
 		return nil, fmt.Errorf("failed to load with go/packages: %w", err)
 	}
 
-	// Currently, go/packages doesn't guarantee that error will be returned
-	// if context was canceled. See
-	// https://github.com/golang/tools/commit/c5cec6710e927457c3c29d6c156415e8539a5111#r39261855
-	if ctx.Err() != nil {
-		return nil, fmt.Errorf("timed out to load packages: %w", ctx.Err())
-	}
-
 	if loadMode&packages.NeedSyntax == 0 {
 		// Needed e.g. for go/analysis loading.
 		fset := token.NewFileSet()
