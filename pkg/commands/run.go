@@ -327,6 +327,17 @@ func (c *runCommand) runAndPrint(ctx context.Context, args []string) error {
 		}()
 	}
 
+	enabledLintersMap, err := c.dbManager.GetEnabledLintersMap()
+	if err != nil {
+		return err
+	}
+
+	// Fills linters information for the JSON printer.
+	for _, lc := range c.dbManager.GetAllSupportedLinterConfigs() {
+		isEnabled := enabledLintersMap[lc.Name()] != nil
+		c.reportData.AddLinter(lc.Name(), isEnabled, lc.EnabledByDefault)
+	}
+
 	issues, err := c.runAnalysis(ctx, args)
 	if err != nil {
 		return err // XXX: don't lose type
@@ -353,16 +364,6 @@ func (c *runCommand) runAnalysis(ctx context.Context, args []string) ([]result.I
 	lintersToRun, err := c.dbManager.GetOptimizedLinters()
 	if err != nil {
 		return nil, err
-	}
-
-	enabledLintersMap, err := c.dbManager.GetEnabledLintersMap()
-	if err != nil {
-		return nil, err
-	}
-
-	for _, lc := range c.dbManager.GetAllSupportedLinterConfigs() {
-		isEnabled := enabledLintersMap[lc.Name()] != nil
-		c.reportData.AddLinter(lc.Name(), isEnabled, lc.EnabledByDefault)
 	}
 
 	lintCtx, err := c.contextLoader.Load(ctx, c.log.Child(logutils.DebugKeyLintersContext), lintersToRun)
