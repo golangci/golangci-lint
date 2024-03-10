@@ -50,6 +50,37 @@ func NewContextLoader(cfg *config.Config, log logutils.Log, goenv *goutil.Env,
 	}
 }
 
+func (cl *ContextLoader) Load(ctx context.Context, log logutils.Log, linters []*linter.Config) (*linter.Context, error) {
+	loadMode := cl.findLoadMode(linters)
+	pkgs, err := cl.loadPackages(ctx, loadMode)
+	if err != nil {
+		return nil, fmt.Errorf("failed to load packages: %w", err)
+	}
+
+	deduplicatedPkgs := cl.filterDuplicatePackages(pkgs)
+
+	if len(deduplicatedPkgs) == 0 {
+		return nil, exitcodes.ErrNoGoFiles
+	}
+
+	ret := &linter.Context{
+		Packages: deduplicatedPkgs,
+
+		// At least `unused` linters works properly only on original (not deduplicated) packages,
+		// see https://github.com/golangci/golangci-lint/pull/585.
+		OriginalPackages: pkgs,
+
+		Cfg:       cl.cfg,
+		Log:       log,
+		FileCache: cl.fileCache,
+		LineCache: cl.lineCache,
+		PkgCache:  cl.pkgCache,
+		LoadGuard: cl.loadGuard,
+	}
+
+	return ret, nil
+}
+
 func (cl *ContextLoader) prepareBuildContext() {
 	// Set GOROOT to have working cross-compilation: cross-compiled binaries
 	// have invalid GOROOT. XXX: can't use runtime.GOROOT().
@@ -285,35 +316,4 @@ func (cl *ContextLoader) filterDuplicatePackages(pkgs []*packages.Package) []*pa
 	}
 
 	return retPkgs
-}
-
-func (cl *ContextLoader) Load(ctx context.Context, log logutils.Log, linters []*linter.Config) (*linter.Context, error) {
-	loadMode := cl.findLoadMode(linters)
-	pkgs, err := cl.loadPackages(ctx, loadMode)
-	if err != nil {
-		return nil, fmt.Errorf("failed to load packages: %w", err)
-	}
-
-	deduplicatedPkgs := cl.filterDuplicatePackages(pkgs)
-
-	if len(deduplicatedPkgs) == 0 {
-		return nil, exitcodes.ErrNoGoFiles
-	}
-
-	ret := &linter.Context{
-		Packages: deduplicatedPkgs,
-
-		// At least `unused` linters works properly only on original (not deduplicated) packages,
-		// see https://github.com/golangci/golangci-lint/pull/585.
-		OriginalPackages: pkgs,
-
-		Cfg:       cl.cfg,
-		Log:       log,
-		FileCache: cl.fileCache,
-		LineCache: cl.lineCache,
-		PkgCache:  cl.pkgCache,
-		LoadGuard: cl.loadGuard,
-	}
-
-	return ret, nil
 }
