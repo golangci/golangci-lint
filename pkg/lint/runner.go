@@ -20,6 +20,11 @@ import (
 	"github.com/golangci/golangci-lint/pkg/timeutils"
 )
 
+type processorStat struct {
+	inCount  int
+	outCount int
+}
+
 type Runner struct {
 	Log logutils.Log
 
@@ -109,6 +114,33 @@ func NewRunner(log logutils.Log, cfg *config.Config, goenv *goutil.Env, lineCach
 	}, nil
 }
 
+func (r *Runner) Run(ctx context.Context, linters []*linter.Config) ([]result.Issue, error) {
+	sw := timeutils.NewStopwatch("linters", r.Log)
+	defer sw.Print()
+
+	var (
+		lintErrors error
+		issues     []result.Issue
+	)
+
+	for _, lc := range linters {
+		lc := lc
+		sw.TrackStage(lc.Name(), func() {
+			linterIssues, err := r.runLinterSafe(ctx, r.lintCtx, lc)
+			if err != nil {
+				lintErrors = errors.Join(lintErrors, fmt.Errorf("can't run linter %s", lc.Linter.Name()), err)
+				r.Log.Warnf("Can't run linter %s: %v", lc.Linter.Name(), err)
+
+				return
+			}
+
+			issues = append(issues, linterIssues...)
+		})
+	}
+
+	return r.processLintResults(issues), lintErrors
+}
+
 func (r *Runner) runLinterSafe(ctx context.Context, lintCtx *linter.Context,
 	lc *linter.Config) (ret []result.Issue, err error) {
 	defer func() {
@@ -149,12 +181,7 @@ func (r *Runner) runLinterSafe(ctx context.Context, lintCtx *linter.Context,
 	return issues, nil
 }
 
-type processorStat struct {
-	inCount  int
-	outCount int
-}
-
-func (r Runner) processLintResults(inIssues []result.Issue) []result.Issue {
+func (r *Runner) processLintResults(inIssues []result.Issue) []result.Issue {
 	sw := timeutils.NewStopwatch("processing", r.Log)
 
 	var issuesBefore, issuesAfter int
@@ -185,7 +212,7 @@ func (r Runner) processLintResults(inIssues []result.Issue) []result.Issue {
 	return outIssues
 }
 
-func (r Runner) printPerProcessorStat(stat map[string]processorStat) {
+func (r *Runner) printPerProcessorStat(stat map[string]processorStat) {
 	parts := make([]string, 0, len(stat))
 	for name, ps := range stat {
 		if ps.inCount != 0 {
@@ -195,33 +222,6 @@ func (r Runner) printPerProcessorStat(stat map[string]processorStat) {
 	if len(parts) != 0 {
 		r.Log.Infof("Processors filtering stat (out/in): %s", strings.Join(parts, ", "))
 	}
-}
-
-func (r Runner) Run(ctx context.Context, linters []*linter.Config) ([]result.Issue, error) {
-	sw := timeutils.NewStopwatch("linters", r.Log)
-	defer sw.Print()
-
-	var (
-		lintErrors error
-		issues     []result.Issue
-	)
-
-	for _, lc := range linters {
-		lc := lc
-		sw.TrackStage(lc.Name(), func() {
-			linterIssues, err := r.runLinterSafe(ctx, r.lintCtx, lc)
-			if err != nil {
-				lintErrors = errors.Join(lintErrors, fmt.Errorf("can't run linter %s", lc.Linter.Name()), err)
-				r.Log.Warnf("Can't run linter %s: %v", lc.Linter.Name(), err)
-
-				return
-			}
-
-			issues = append(issues, linterIssues...)
-		})
-	}
-
-	return r.processLintResults(issues), lintErrors
 }
 
 func (r *Runner) processIssues(issues []result.Issue, sw *timeutils.Stopwatch, statPerProcessor map[string]processorStat) []result.Issue {
