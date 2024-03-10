@@ -333,17 +333,17 @@ func (c *runCommand) runAndPrint(ctx context.Context, args []string) error {
 		return err
 	}
 
-	// Fills linters information for the JSON printer.
-	for _, lc := range c.dbManager.GetAllSupportedLinterConfigs() {
-		isEnabled := enabledLintersMap[lc.Name()] != nil
-		c.reportData.AddLinter(lc.Name(), isEnabled, lc.EnabledByDefault)
-	}
-
 	c.printDeprecatedLinterMessages(enabledLintersMap)
 
 	issues, err := c.runAnalysis(ctx, args)
 	if err != nil {
 		return err // XXX: don't lose type
+	}
+
+	// Fills linters information for the JSON printer.
+	for _, lc := range c.dbManager.GetAllSupportedLinterConfigs() {
+		isEnabled := enabledLintersMap[lc.Name()] != nil
+		c.reportData.AddLinter(lc.Name(), isEnabled, lc.EnabledByDefault)
 	}
 
 	err = c.printer.Print(issues)
