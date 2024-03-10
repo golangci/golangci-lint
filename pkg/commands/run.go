@@ -369,12 +369,12 @@ func (c *runCommand) runAnalysis(ctx context.Context, args []string) ([]result.I
 	}
 
 	runner, err := lint.NewRunner(c.log.Child(logutils.DebugKeyRunner),
-		c.cfg, c.goenv, c.lineCache, c.fileCache, c.dbManager, lintCtx.Packages)
+		c.cfg, c.goenv, c.lineCache, c.fileCache, c.dbManager, lintCtx)
 	if err != nil {
 		return nil, err
 	}
 
-	return runner.Run(ctx, lintersToRun, lintCtx)
+	return runner.Run(ctx, lintersToRun)
 }
 
 func (c *runCommand) setOutputToDevNull() (savedStdout, savedStderr *os.File) {
