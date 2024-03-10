@@ -37,24 +37,20 @@ func TestPrinter_Print_stdout(t *testing.T) {
 
 	testCases := []struct {
 		desc     string
-		cfg      *config.Config
+		cfg      *config.Output
 		expected string
 	}{
 		{
 			desc: "stdout (implicit)",
-			cfg: &config.Config{
-				Output: config.Output{
-					Format: "line-number",
-				},
+			cfg: &config.Output{
+				Format: "line-number",
 			},
 			expected: "golden-line-number.txt",
 		},
 		{
 			desc: "stdout (explicit)",
-			cfg: &config.Config{
-				Output: config.Output{
-					Format: "line-number:stdout",
-				},
+			cfg: &config.Output{
+				Format: "line-number:stdout",
 			},
 			expected: "golden-line-number.txt",
 		},
@@ -95,10 +91,8 @@ func TestPrinter_Print_stderr(t *testing.T) {
 	data := &report.Data{}
 	unmarshalFile(t, "in-report-data.json", data)
 
-	cfg := &config.Config{
-		Output: config.Output{
-			Format: "line-number:stderr",
-		},
+	cfg := &config.Output{
+		Format: "line-number:stderr",
 	}
 
 	p, err := NewPrinter(logger, cfg, data)
@@ -131,10 +125,8 @@ func TestPrinter_Print_file(t *testing.T) {
 
 	outputPath := filepath.Join(t.TempDir(), "report.txt")
 
-	cfg := &config.Config{
-		Output: config.Output{
-			Format: "line-number:" + outputPath,
-		},
+	cfg := &config.Output{
+		Format: "line-number:" + outputPath,
 	}
 
 	p, err := NewPrinter(logger, cfg, data)
@@ -172,12 +164,10 @@ func TestPrinter_Print_multiple(t *testing.T) {
 
 	outputPath := filepath.Join(t.TempDir(), "github-actions.txt")
 
-	cfg := &config.Config{
-		Output: config.Output{
-			Format: "github-actions:" + outputPath +
-				",json" +
-				",line-number:stderr",
-		},
+	cfg := &config.Output{
+		Format: "github-actions:" + outputPath +
+			",json" +
+			",line-number:stderr",
 	}
 
 	p, err := NewPrinter(logger, cfg, data)

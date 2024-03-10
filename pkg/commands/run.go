@@ -186,7 +186,7 @@ func (c *runCommand) preRunE(_ *cobra.Command, _ []string) error {
 
 	c.dbManager = dbManager
 
-	printer, err := printers.NewPrinter(c.log, c.cfg, c.reportData)
+	printer, err := printers.NewPrinter(c.log, &c.cfg.Output, c.reportData)
 	if err != nil {
 		return err
 	}

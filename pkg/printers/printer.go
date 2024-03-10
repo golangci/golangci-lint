@@ -21,7 +21,7 @@ type issuePrinter interface {
 
 // Printer prints issues
 type Printer struct {
-	cfg        *config.Config
+	cfg        *config.Output
 	reportData *report.Data
 
 	log logutils.Log
@@ -31,7 +31,7 @@ type Printer struct {
 }
 
 // NewPrinter creates a new Printer.
-func NewPrinter(log logutils.Log, cfg *config.Config, reportData *report.Data) (*Printer, error) {
+func NewPrinter(log logutils.Log, cfg *config.Output, reportData *report.Data) (*Printer, error) {
 	if log == nil {
 		return nil, errors.New("missing log argument in constructor")
 	}
@@ -53,7 +53,7 @@ func NewPrinter(log logutils.Log, cfg *config.Config, reportData *report.Data) (
 
 // Print prints issues based on the formats defined
 func (c *Printer) Print(issues []result.Issue) error {
-	formats := strings.Split(c.cfg.Output.Format, ",")
+	formats := strings.Split(c.cfg.Format, ",")
 
 	for _, item := range formats {
 		format, path, _ := strings.Cut(item, ":")
@@ -114,11 +114,11 @@ func (c *Printer) createPrinter(format string, w io.Writer) (issuePrinter, error
 	case config.OutFormatJSON:
 		p = NewJSON(c.reportData, w)
 	case config.OutFormatColoredLineNumber, config.OutFormatLineNumber:
-		p = NewText(c.cfg.Output.PrintIssuedLine,
-			format == config.OutFormatColoredLineNumber, c.cfg.Output.PrintLinterName,
+		p = NewText(c.cfg.PrintIssuedLine,
+			format == config.OutFormatColoredLineNumber, c.cfg.PrintLinterName,
 			c.log.Child(logutils.DebugKeyTextPrinter), w)
 	case config.OutFormatTab, config.OutFormatColoredTab:
-		p = NewTab(c.cfg.Output.PrintLinterName,
+		p = NewTab(c.cfg.PrintLinterName,
 			format == config.OutFormatColoredTab,
 			c.log.Child(logutils.DebugKeyTabPrinter), w)
 	case config.OutFormatCheckstyle:
