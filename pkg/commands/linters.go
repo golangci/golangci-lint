@@ -30,10 +30,10 @@ type lintersCommand struct {
 	dbManager *lintersdb.Manager
 }
 
-func newLintersCommand(logger logutils.Log, cfg *config.Config) *lintersCommand {
+func newLintersCommand(logger logutils.Log) *lintersCommand {
 	c := &lintersCommand{
 		viper: viper.New(),
-		cfg:   cfg,
+		cfg:   config.NewDefault(),
 		log:   logger,
 	}
 

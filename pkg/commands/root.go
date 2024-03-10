@@ -10,7 +10,6 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 
-	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 )
 
@@ -57,10 +56,10 @@ func newRootCommand(info BuildInfo) *rootCommand {
 
 	log := logutils.NewStderrLog(logutils.DebugKeyEmpty)
 
-	// Dedicated configuration for each command to avoid side effects of bindings.
+	// Each command uses a dedicated configuration structure to avoid side effects of bindings.
 	rootCmd.AddCommand(
-		newLintersCommand(log, config.NewDefault()).cmd,
-		newRunCommand(log, config.NewDefault(), info).cmd,
+		newLintersCommand(log).cmd,
+		newRunCommand(log, info).cmd,
 		newCacheCommand().cmd,
 		newConfigCommand(log).cmd,
 		newVersionCommand(info).cmd,
