@@ -157,7 +157,7 @@ func (c *runCommand) persistentPreRunE(cmd *cobra.Command, _ []string) error {
 
 	if c.cfg.Run.Concurrency == 0 {
 		// Automatically set GOMAXPROCS to match Linux container CPU quota.
-		_, _ = maxprocs.Set(nil)
+		_, _ = maxprocs.Set(maxprocs.Logger(c.log.Infof))
 	} else {
 		runtime.GOMAXPROCS(c.cfg.Run.Concurrency)
 	}
