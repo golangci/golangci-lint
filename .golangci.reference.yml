@@ -451,7 +451,7 @@ linters-settings:
 
     # Section configuration to compare against.
     # Section names are case-insensitive and may contain parameters in ().
-    # The default order of sections is `standard > default > custom > blank > dot > alias > localmodule`,
+    # The default order of sections is `standard > default > custom > blank > dot > alias`,
     # If `custom-order` is `true`, it follows the order of `sections` option.
     # Default: ["standard", "default"]
     sections:
@@ -461,7 +461,6 @@ linters-settings:
       - blank                          # Blank section: contains all blank imports. This section is not present unless explicitly enabled.
       - dot                            # Dot section: contains all dot imports. This section is not present unless explicitly enabled.
       - alias                          # Alias section: contains all alias imports. This section is not present unless explicitly enabled.
-      - localmodule                    # Local module section: contains all local packages. This section is not present unless explicitly enabled.
 
     # Skip generated files.
     # Default: true
