@@ -35,6 +35,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis/load"
 	"github.com/golangci/golangci-lint/pkg/goutil"
 	"github.com/golangci/golangci-lint/pkg/lint"
+	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/packages"
@@ -186,7 +187,7 @@ func (c *runCommand) preRunE(_ *cobra.Command, _ []string) error {
 
 	c.dbManager = dbManager
 
-	printer, err := printers.NewPrinter(c.log, c.cfg, c.reportData)
+	printer, err := printers.NewPrinter(c.log, &c.cfg.Output, c.reportData)
 	if err != nil {
 		return err
 	}
@@ -327,9 +328,22 @@ func (c *runCommand) runAndPrint(ctx context.Context, args []string) error {
 		}()
 	}
 
+	enabledLintersMap, err := c.dbManager.GetEnabledLintersMap()
+	if err != nil {
+		return err
+	}
+
+	c.printDeprecatedLinterMessages(enabledLintersMap)
+
 	issues, err := c.runAnalysis(ctx, args)
 	if err != nil {
 		return err // XXX: don't lose type
+	}
+
+	// Fills linters information for the JSON printer.
+	for _, lc := range c.dbManager.GetAllSupportedLinterConfigs() {
+		isEnabled := enabledLintersMap[lc.Name()] != nil
+		c.reportData.AddLinter(lc.Name(), isEnabled, lc.EnabledByDefault)
 	}
 
 	err = c.printer.Print(issues)
@@ -353,16 +367,6 @@ func (c *runCommand) runAnalysis(ctx context.Context, args []string) ([]result.I
 	lintersToRun, err := c.dbManager.GetOptimizedLinters()
 	if err != nil {
 		return nil, err
-	}
-
-	enabledLintersMap, err := c.dbManager.GetEnabledLintersMap()
-	if err != nil {
-		return nil, err
-	}
-
-	for _, lc := range c.dbManager.GetAllSupportedLinterConfigs() {
-		isEnabled := enabledLintersMap[lc.Name()] != nil
-		c.reportData.AddLinter(lc.Name(), isEnabled, lc.EnabledByDefault)
 	}
 
 	lintCtx, err := c.contextLoader.Load(ctx, c.log.Child(logutils.DebugKeyLintersContext), lintersToRun)
@@ -394,6 +398,25 @@ func (c *runCommand) setOutputToDevNull() (savedStdout, savedStderr *os.File) {
 func (c *runCommand) setExitCodeIfIssuesFound(issues []result.Issue) {
 	if len(issues) != 0 {
 		c.exitCode = c.cfg.Run.ExitCodeIfIssuesFound
+	}
+}
+
+func (c *runCommand) printDeprecatedLinterMessages(enabledLinters map[string]*linter.Config) {
+	if c.cfg.InternalCmdTest {
+		return
+	}
+
+	for name, lc := range enabledLinters {
+		if !lc.IsDeprecated() {
+			continue
+		}
+
+		var extra string
+		if lc.Deprecation.Replacement != "" {
+			extra = fmt.Sprintf("Replaced by %s.", lc.Deprecation.Replacement)
+		}
+
+		c.log.Warnf("The linter '%s' is deprecated (since %s) due to: %s %s", name, lc.Deprecation.Since, lc.Deprecation.Message, extra)
 	}
 }
 
