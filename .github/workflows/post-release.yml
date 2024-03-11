@@ -1,4 +1,4 @@
-name: "Publish release documentation"
+name: "Post release"
 on:
   release:
     types:
@@ -44,7 +44,7 @@ jobs:
           delete-branch: true
 
   update-assets:
-    name: "Update GitHub Action assets"
+    name: "Update assets"
     runs-on: ubuntu-latest
     env:
       GITHUB_TOKEN: ${{ secrets.GOLANGCI_LINT_TOKEN }}
@@ -62,12 +62,18 @@ jobs:
       - name: Update GitHub action config
         run: make assets/github-action-config.json
 
+      - name: Update reference files
+        run: cp .golangci.next.reference.yml .golangci.reference.yml
+
+      - name: Update information
+        run: make website_dump_info
+
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6
         with:
           base: master
           token: ${{ secrets.GOLANGCI_LINT_TOKEN }}
           branch-suffix: timestamp
-          title: "docs: update GitHub Action assets"
+          title: "docs: update assets"
           team-reviewers: golangci/team
           delete-branch: true

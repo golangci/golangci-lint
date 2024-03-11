@@ -30,8 +30,8 @@ allowing to use `React` components.
 ## Templating
 
 We use templates like `{.SomeField}` inside our `mdx` files.
-There templates are expanded by running `make expand_website_templates` in the root of the repository.
-It runs script `scripts/expand_website_templates/main.go` that rewrites `mdx` files with replaced templates.
+There templates are expanded by running `make website_expand_templates` in the root of the repository.
+It runs script `scripts/website/expand_templates/` that rewrites `mdx` files with replaced templates.
 
 ## Hosting
 
@@ -59,5 +59,5 @@ Also, there is no need to refresh a webpage: hot reload updates changed content 
 To do it run:
 
 ```sh
-go run ./scripts/expand_website_templates/main.go
+go run ./scripts/website/expand_templates/
 ```
