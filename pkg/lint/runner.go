@@ -302,7 +302,6 @@ func getSeverityRulesProcessor(cfg *config.Severity, log logutils.Log, files *fs
 		Default:       cfg.Default,
 		Rules:         severityRules,
 		CaseSensitive: cfg.CaseSensitive,
-		Override:      !cfg.KeepLinterSeverity,
 	}
 
 	return processors.NewSeverity(log.Child(logutils.DebugKeySeverityRules), files, severityOpts)

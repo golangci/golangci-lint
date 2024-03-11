@@ -2881,6 +2881,8 @@ severity:
   # - GitHub: https://help.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-error-message
   # - TeamCity: https://www.jetbrains.com/help/teamcity/service-messages.html#Inspection+Instance
   #
+  # `@linter` can be used as severity value to keep the severity from linters (e.g. revive, gosec, ...)
+  #
   # Default: ""
   default-severity: error
 
@@ -2888,13 +2890,12 @@ severity:
   # Default: false
   case-sensitive: true
 
-  # Don't override severity defined by linters.
-  # Default: false
-  keep-linter-severity: true
-
   # When a list of severity rules are provided, severity information will be added to lint issues.
   # Severity rules have the same filtering capability as exclude rules
   # except you are allowed to specify one matcher per severity rule.
+  #
+  # `@linter` can be used as severity value to keep the severity from linters (e.g. revive, gosec, ...)
+  #
   # Only affects out formats that support setting severity information.
   #
   # Default: []

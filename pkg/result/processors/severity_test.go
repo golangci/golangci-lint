@@ -310,3 +310,187 @@ func TestSeverity_caseSensitive(t *testing.T) {
 
 	assert.Equal(t, expectedCases, resultingCases)
 }
+
+func TestSeverity_transform(t *testing.T) {
+	lineCache := fsutils.NewLineCache(fsutils.NewFileCache())
+	files := fsutils.NewFiles(lineCache, "")
+
+	testCases := []struct {
+		desc     string
+		opts     SeverityOptions
+		issue    *result.Issue
+		expected *result.Issue
+	}{
+		{
+			desc: "apply severity from rule",
+			opts: SeverityOptions{
+				Default: "error",
+				Rules: []SeverityRule{
+					{
+						Severity: "info",
+						BaseRule: BaseRule{
+							Linters: []string{"linter1"},
+						},
+					},
+				},
+			},
+			issue: &result.Issue{
+				Text:       "This is a report",
+				FromLinter: "linter1",
+			},
+			expected: &result.Issue{
+				Text:       "This is a report",
+				FromLinter: "linter1",
+				Severity:   "info",
+			},
+		},
+		{
+			desc: "apply severity from default",
+			opts: SeverityOptions{
+				Default: "error",
+				Rules: []SeverityRule{
+					{
+						Severity: "info",
+						BaseRule: BaseRule{
+							Linters: []string{"linter1"},
+						},
+					},
+				},
+			},
+			issue: &result.Issue{
+				Text:       "This is a report",
+				FromLinter: "linter2",
+			},
+			expected: &result.Issue{
+				Text:       "This is a report",
+				FromLinter: "linter2",
+				Severity:   "error",
+			},
+		},
+		{
+			desc: "severity from rule override severity from linter",
+			opts: SeverityOptions{
+				Default: "error",
+				Rules: []SeverityRule{
+					{
+						Severity: "info",
+						BaseRule: BaseRule{
+							Linters: []string{"linter1"},
+						},
+					},
+				},
+			},
+			issue: &result.Issue{
+				Text:       "This is a report",
+				FromLinter: "linter1",
+				Severity:   "huge",
+			},
+			expected: &result.Issue{
+				Text:       "This is a report",
+				FromLinter: "linter1",
+				Severity:   "info",
+			},
+		},
+		{
+			desc: "severity from default override severity from linter",
+			opts: SeverityOptions{
+				Default: "error",
+				Rules: []SeverityRule{
+					{
+						Severity: "info",
+						BaseRule: BaseRule{
+							Linters: []string{"linter1"},
+						},
+					},
+				},
+			},
+			issue: &result.Issue{
+				Text:       "This is a report",
+				FromLinter: "linter2",
+				Severity:   "huge",
+			},
+			expected: &result.Issue{
+				Text:       "This is a report",
+				FromLinter: "linter2",
+				Severity:   "error",
+			},
+		},
+		{
+			desc: "keep severity from linter as rule",
+			opts: SeverityOptions{
+				Default: "error",
+				Rules: []SeverityRule{
+					{
+						Severity: severityFromLinter,
+						BaseRule: BaseRule{
+							Linters: []string{"linter1"},
+						},
+					},
+				},
+			},
+			issue: &result.Issue{
+				Text:       "This is a report",
+				FromLinter: "linter1",
+				Severity:   "huge",
+			},
+			expected: &result.Issue{
+				Text:       "This is a report",
+				FromLinter: "linter1",
+				Severity:   "huge",
+			},
+		},
+		{
+			desc: "keep severity from linter as default",
+			opts: SeverityOptions{
+				Default: severityFromLinter,
+				Rules: []SeverityRule{
+					{
+						Severity: "info",
+						BaseRule: BaseRule{
+							Linters: []string{"linter1"},
+						},
+					},
+				},
+			},
+			issue: &result.Issue{
+				Text:       "This is a report",
+				FromLinter: "linter2",
+				Severity:   "huge",
+			},
+			expected: &result.Issue{
+				Text:       "This is a report",
+				FromLinter: "linter2",
+				Severity:   "huge",
+			},
+		},
+		{
+			desc: "keep severity from linter as default (without rule)",
+			opts: SeverityOptions{
+				Default: severityFromLinter,
+			},
+			issue: &result.Issue{
+				Text:       "This is a report",
+				FromLinter: "linter2",
+				Severity:   "huge",
+			},
+			expected: &result.Issue{
+				Text:       "This is a report",
+				FromLinter: "linter2",
+				Severity:   "huge",
+			},
+		},
+	}
+
+	for _, test := range testCases {
+		test := test
+		t.Run(test.desc, func(t *testing.T) {
+			t.Parallel()
+
+			p := NewSeverity(nil, files, test.opts)
+
+			newIssue := p.transform(test.issue)
+
+			assert.Equal(t, test.expected, newIssue)
+		})
+	}
+}
