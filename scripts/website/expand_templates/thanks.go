@@ -20,7 +20,7 @@ type authorDetails struct {
 func getThanksList() string {
 	addedAuthors := map[string]*authorDetails{}
 
-	linters := lintersdb.NewLinterBuilder().Build(config.NewDefault())
+	linters, _ := lintersdb.NewLinterBuilder().Build(config.NewDefault())
 
 	for _, lc := range linters {
 		if lc.Internal {

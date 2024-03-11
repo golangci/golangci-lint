@@ -32,7 +32,7 @@ func main() {
 }
 
 func saveLinters() error {
-	linters := lintersdb.NewLinterBuilder().Build(config.NewDefault())
+	linters, _ := lintersdb.NewLinterBuilder().Build(config.NewDefault())
 
 	var wraps []types.LinterWrapper
 	for _, l := range linters {
