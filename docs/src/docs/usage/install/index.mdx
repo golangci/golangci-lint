@@ -151,6 +151,29 @@ As such, we recommend using the fixed minor version and fixed or the latest patc
 For example, in our [GitHub Action](https://github.com/golangci/golangci-lint-action) we require users to explicitly set the minor version of `golangci-lint`
 and we always use the latest patch version.
 
+## Linter Deprecation Cycle
+
+A linter can be deprecated for various reasons, e.g. the linter stops working with a newer version of Go or the author has abandoned its linter.
+
+The deprecation of a linter will follow 3 phases:
+
+1. **Display of a warning message**: The linter can still be used (unless it's completely non-functional), but it's recommended to remove it from your configuration.
+2. **Display of an error message**: At this point, you should remove the linter. The original implementation is replaced by a placeholder that does nothing.
+3. **Removal of the linter** from golangci-lint.
+
+Each phase corresponds to a minor version:
+
+- v1.0.0 -> warning message
+- v1.1.0 -> error message
+- v1.2.0 -> linter removed
+
+Otherwise, the deprecated linters are removed from presets immediately when they are deprecated (phase 1).
+
+We will provide clear information about those changes on different supports: changelog, logs, social network, etc.
+
+We consider the removal of a linter as non-breaking changes for golangci-lint itself.
+No major version will be created when a linter is removed.
+
 ## Next
 
 [Quick Start: how to use `golangci-lint`](/usage/quick-start).
