@@ -10,9 +10,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 
-	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/logutils"
-	"github.com/golangci/golangci-lint/pkg/report"
 )
 
 func Execute(info BuildInfo) error {
@@ -56,13 +54,12 @@ func newRootCommand(info BuildInfo) *rootCommand {
 
 	setupRootPersistentFlags(rootCmd.PersistentFlags(), &c.opts)
 
-	reportData := &report.Data{}
-	log := report.NewLogWrapper(logutils.NewStderrLog(logutils.DebugKeyEmpty), reportData)
+	log := logutils.NewStderrLog(logutils.DebugKeyEmpty)
 
-	// Dedicated configuration for each command to avoid side effects of bindings.
+	// Each command uses a dedicated configuration structure to avoid side effects of bindings.
 	rootCmd.AddCommand(
-		newLintersCommand(log, config.NewDefault()).cmd,
-		newRunCommand(log, config.NewDefault(), reportData, info).cmd,
+		newLintersCommand(log).cmd,
+		newRunCommand(log, info).cmd,
 		newCacheCommand().cmd,
 		newConfigCommand(log).cmd,
 		newVersionCommand(info).cmd,

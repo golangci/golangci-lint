@@ -98,12 +98,14 @@ type runCommand struct {
 	exitCode int
 }
 
-func newRunCommand(logger logutils.Log, cfg *config.Config, reportData *report.Data, info BuildInfo) *runCommand {
+func newRunCommand(logger logutils.Log, info BuildInfo) *runCommand {
+	reportData := &report.Data{}
+
 	c := &runCommand{
 		viper:      viper.New(),
-		log:        logger,
+		log:        report.NewLogWrapper(logger, reportData),
 		debugf:     logutils.Debug(logutils.DebugKeyExec),
-		cfg:        cfg,
+		cfg:        config.NewDefault(),
 		reportData: reportData,
 		buildInfo:  info,
 	}
@@ -126,7 +128,7 @@ func newRunCommand(logger logutils.Log, cfg *config.Config, reportData *report.D
 
 	// Only for testing purpose.
 	// Don't add other flags here.
-	fs.BoolVar(&cfg.InternalCmdTest, "internal-cmd-test", false,
+	fs.BoolVar(&c.cfg.InternalCmdTest, "internal-cmd-test", false,
 		color.GreenString("Option is used only for testing golangci-lint command, don't use it"))
 	_ = fs.MarkHidden("internal-cmd-test")
 
