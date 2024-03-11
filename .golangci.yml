@@ -46,6 +46,9 @@ linters-settings:
       - whyNoLint
   gocyclo:
     min-complexity: 15
+  godox:
+    keywords:
+      - FIXME
   gofmt:
     rewrite-rules:
       - pattern: 'interface{}'
@@ -109,6 +112,7 @@ linters:
     - goconst
     - gocritic
     - gocyclo
+    - godox
     - gofmt
     - goimports
     - gomnd

@@ -1,6 +1,7 @@
 package lintersdb
 
 import (
+	"fmt"
 	"os"
 	"slices"
 	"sort"
@@ -17,7 +18,7 @@ import (
 const EnvTestRun = "GL_TEST_RUN"
 
 type Builder interface {
-	Build(cfg *config.Config) []*linter.Config
+	Build(cfg *config.Config) ([]*linter.Config, error)
 }
 
 // Manager is a type of database for all linters (internals or plugins).
@@ -48,7 +49,12 @@ func NewManager(log logutils.Log, cfg *config.Config, builders ...Builder) (*Man
 	}
 
 	for _, builder := range builders {
-		m.linters = append(m.linters, builder.Build(m.cfg)...)
+		linters, err := builder.Build(m.cfg)
+		if err != nil {
+			return nil, fmt.Errorf("build linters: %w", err)
+		}
+
+		m.linters = append(m.linters, linters...)
 	}
 
 	for _, lc := range m.linters {

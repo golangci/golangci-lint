@@ -1,0 +1,71 @@
+---
+title: Module Plugin System
+---
+
+An example linter can be found at [here](https://github.com/golangci/example-plugin-module-linter/settings).
+
+## The Automatic Way
+
+- define your building configuration into `.custom-gcl.yml`
+- run the command `golangci-lint custom` ( or `golangci-lint custom -v` to have logs)
+- define the plugin inside the  `linters-settings.custom` section with the type `module`.
+- run your custom version of golangci-lint
+
+Requirements:
+- Go
+- git
+
+### Configuration Example
+
+```yaml title=.custom-gcl.yml
+version: v1.57.0
+plugins:
+  # a plugin from a Go proxy
+  - module: 'github.com/golangci/plugin1'
+    import: 'github.com/golangci/plugin1/foo'
+    version: v1.0.0
+
+  # a plugin from local source
+  - module: 'github.com/golangci/plugin2'
+    path: /my/local/path/plugin2
+```
+
+```yaml title=.golangci.yml
+linters-settings:
+  custom:
+    foo:
+      type: "module"
+      description: This is an example usage of a plugin linter.
+      settings:
+        message: hello
+
+linters:
+  disable-all: true
+  enable:
+    - foo
+```
+
+## The Manual Way
+
+- add a blank-import of your module inside `cmd/golangci-lint/plugins.go`
+- run `go mod tidy`. (the module containing the plugin will be imported)
+- run `make build`
+- define the plugin inside the configuration `linters-settings.custom` section with the type `module`.
+- run your custom version of golangci-lint
+
+### Configuration Example
+
+```yaml title=.golangci.yml
+linters-settings:
+  custom:
+    foo:
+      type: "module"
+      description: This is an example usage of a plugin linter.
+      settings:
+        message: hello
+
+linters:
+  disable-all: true
+  enable:
+    - foo
+```

@@ -1,0 +1,37 @@
+# The golangci-lint version used to build the custom binary.
+# Require.
+version: v1.56.2
+
+# the name of the custom binary.
+# Optional.
+# Default: custom-gcl
+name: custom-golangci-lint
+
+# The directory path used to store the custom binary.
+# Optional.
+# Default: .
+destination: ./my/path/
+
+# The list of the plugins to integrate inside the custom binary.
+plugins:
+  # a plugin from a Go proxy
+  - module: 'github.com/example/plugin3'
+    version: v1.2.3
+
+  # a plugin from a Go proxy (with a specific import path)
+  - module: 'github.com/example/plugin4'
+    import: 'github.com/example/plugin4/foo'
+    version: v1.0.0
+
+  # a plugin from local source (with absolute path)
+  - module: 'github.com/example/plugin2'
+    path: /my/local/path/plugin2
+
+  # a plugin from local source (with relative path)
+  - module: 'github.com/example/plugin1'
+    path: ./my/local/path/plugin1
+
+  # a plugin from local source (with absolute path and a specific import path)
+  - module: 'github.com/example/plugin2'
+    import: 'github.com/example/plugin4/foo'
+    path: /my/local/path/plugin2

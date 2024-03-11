@@ -34,8 +34,7 @@ func newNolint2FileIssue(line int) result.Issue {
 }
 
 func newTestNolintProcessor(log logutils.Log) *Nolint {
-	dbManager, _ := lintersdb.NewManager(log, config.NewDefault(),
-		lintersdb.NewPluginBuilder(log), lintersdb.NewLinterBuilder())
+	dbManager, _ := lintersdb.NewManager(log, config.NewDefault(), lintersdb.NewLinterBuilder())
 
 	return NewNolint(log, dbManager, nil)
 }

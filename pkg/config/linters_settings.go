@@ -3,6 +3,7 @@ package config
 import (
 	"encoding"
 	"errors"
+	"fmt"
 	"runtime"
 
 	"gopkg.in/yaml.v3"
@@ -281,7 +282,17 @@ type LintersSettings struct {
 }
 
 func (s *LintersSettings) Validate() error {
-	return s.Govet.Validate()
+	if err := s.Govet.Validate(); err != nil {
+		return err
+	}
+
+	for name, settings := range s.Custom {
+		if err := settings.Validate(); err != nil {
+			return fmt.Errorf("custom linter %q: %w", name, err)
+		}
+	}
+
+	return nil
 }
 
 type AsasalintSettings struct {
@@ -946,17 +957,15 @@ type WSLSettings struct {
 }
 
 // CustomLinterSettings encapsulates the meta-data of a private linter.
-// For example, a private linter may be added to the golangci config file as shown below.
-//
-//	linters-settings:
-//	 custom:
-//	   example:
-//	     path: /example.so
-//	     description: The description of the linter
-//	     original-url: github.com/golangci/example-linter
 type CustomLinterSettings struct {
+	// Type plugin type.
+	// It can be `goplugin` or `module`.
+	Type string `mapstructure:"type"`
+
 	// Path to a plugin *.so file that implements the private linter.
+	// Only for Go plugin system.
 	Path string
+
 	// Description describes the purpose of the private linter.
 	Description string
 	// OriginalURL The URL containing the source code for the private linter.
@@ -964,4 +973,20 @@ type CustomLinterSettings struct {
 
 	// Settings plugin settings only work with linterdb.PluginConstructor symbol.
 	Settings any
+}
+
+func (s *CustomLinterSettings) Validate() error {
+	if s.Type == "module" {
+		if s.Path != "" {
+			return errors.New("path not supported with module type")
+		}
+
+		return nil
+	}
+
+	if s.Path == "" {
+		return errors.New("path is required")
+	}
+
+	return nil
 }

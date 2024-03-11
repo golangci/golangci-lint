@@ -16,9 +16,9 @@ func NewLinterBuilder() *LinterBuilder {
 
 // Build loads all the "internal" linters.
 // The configuration is use for the linter settings.
-func (b LinterBuilder) Build(cfg *config.Config) []*linter.Config {
+func (b LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 	if cfg == nil {
-		return nil
+		return nil, nil
 	}
 
 	const megacheckName = "megacheck"
@@ -707,5 +707,5 @@ func (b LinterBuilder) Build(cfg *config.Config) []*linter.Config {
 			WithSince("v1.26.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/golangci/golangci-lint/blob/master/pkg/golinters/nolintlint/README.md"),
-	}
+	}, nil
 }

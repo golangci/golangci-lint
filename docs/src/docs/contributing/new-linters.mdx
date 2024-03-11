@@ -46,75 +46,7 @@ After that:
 Some people and organizations may choose to have custom-made linters run as a part of `golangci-lint`.
 Typically, these linters can't be open-sourced or too specific.
 
-Such linters can be added through Go's plugin library.
+Such linters can be added through 2 plugin systems:
 
-For a private linter (which acts as a plugin) to work properly,
-the plugin as well as the golangci-lint binary **needs to be built for the same environment**.
-
-`CGO_ENABLED` is another requirement.
-
-This means that `golangci-lint` needs to be built for whatever machine you intend to run it on
-(cloning the golangci-lint repository and running a `CGO_ENABLED=1 make build` should do the trick for your machine).
-
-### Configure a Plugin
-
-If you already have a linter plugin available, you can follow these steps to define its usage in a projects `.golangci.yml` file.
-
-An example linter can be found at [here](https://github.com/golangci/example-plugin-linter).
-
-If you're looking for instructions on how to configure your own custom linter, they can be found further down.
-
-1. If the project you want to lint does not have one already, copy the [.golangci.yml](https://github.com/golangci/golangci-lint/blob/master/.golangci.yml) to the root directory.
-2. Adjust the yaml to appropriate `linters-settings:custom` entries as so:
-  ```yaml
-  linters-settings:
-    custom:
-      example:
-        path: /example.so
-        description: The description of the linter
-        original-url: github.com/golangci/example-linter
-        settings: # Settings are optional.
-          one: Foo
-          two:
-            - name: Bar
-          three:
-            name: Bar
-  ```
-
-That is all the configuration that is required to run a custom linter in your project.
-
-Custom linters are enabled by default, but abide by the same rules as other linters.
-
-If the disable all option is specified either on command line or in `.golang.yml` files `linters.disable-all: true`, custom linters will be disabled;
-they can be re-enabled by adding them to the `linters:enable` list,
-or providing the enabled option on the command line, `golangci-lint run -Eexample`.
-
-The configuration inside the `settings` field of linter have some limitations (there are NOT related to the plugin system itself):
-we use Viper to handle the configuration but Viper put all the keys in lowercase, and `.` cannot be used inside a key.
-
-### Create a Plugin
-
-Your linter must provide one or more `golang.org/x/tools/go/analysis.Analyzer` structs.
-
-Your project should also use `go.mod`.
-
-All versions of libraries that overlap `golangci-lint` (including replaced libraries) MUST be set to the same version as `golangci-lint`.
-You can see the versions by running `go version -m golangci-lint`.
-
-You'll also need to create a Go file like `plugin/example.go`.
-
-This file MUST be in the package `main`, and MUST define an exposed function called `New` with the following signature:
-```go
-func New(conf any) ([]*analysis.Analyzer, error) {
-	// ...
-}
-```
-
-See [plugin/example.go](https://github.com/golangci/example-plugin-linter/blob/master/plugin/example.go) for more info.
-
-To build the plugin, from the root project directory, run:
-```bash
-go build -buildmode=plugin plugin/example.go
-```
-
-This will create a plugin `*.so` file that can be copied into your project or another well known location for usage in `golangci-lint`.
+- [Go Plugin System](/plugins/module-plugins)
+- [Module Plugin System](/plugins/go-plugins)

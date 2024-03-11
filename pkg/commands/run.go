@@ -180,7 +180,7 @@ func (c *runCommand) persistentPostRunE(_ *cobra.Command, _ []string) error {
 
 func (c *runCommand) preRunE(_ *cobra.Command, _ []string) error {
 	dbManager, err := lintersdb.NewManager(c.log.Child(logutils.DebugKeyLintersDB), c.cfg,
-		lintersdb.NewPluginBuilder(c.log), lintersdb.NewLinterBuilder())
+		lintersdb.NewLinterBuilder(), lintersdb.NewPluginModuleBuilder(c.log), lintersdb.NewPluginGoBuilder(c.log))
 	if err != nil {
 		return err
 	}

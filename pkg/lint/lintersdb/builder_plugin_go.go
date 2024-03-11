@@ -14,43 +14,51 @@ import (
 	"github.com/golangci/golangci-lint/pkg/logutils"
 )
 
+const goPluginType = "goplugin"
+
 type AnalyzerPlugin interface {
 	GetAnalyzers() []*analysis.Analyzer
 }
 
-// PluginBuilder builds the custom linters (plugins) based on the configuration.
-type PluginBuilder struct {
+// PluginGoBuilder builds the custom linters (Go plugin) based on the configuration.
+type PluginGoBuilder struct {
 	log logutils.Log
 }
 
-// NewPluginBuilder creates new PluginBuilder.
-func NewPluginBuilder(log logutils.Log) *PluginBuilder {
-	return &PluginBuilder{log: log}
+// NewPluginGoBuilder creates new PluginGoBuilder.
+func NewPluginGoBuilder(log logutils.Log) *PluginGoBuilder {
+	return &PluginGoBuilder{log: log}
 }
 
 // Build loads custom linters that are specified in the golangci-lint config file.
-func (b *PluginBuilder) Build(cfg *config.Config) []*linter.Config {
+func (b *PluginGoBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 	if cfg == nil || b.log == nil {
-		return nil
+		return nil, nil
 	}
 
 	var linters []*linter.Config
 
 	for name, settings := range cfg.LintersSettings.Custom {
-		lc, err := b.loadConfig(cfg, name, settings)
+		if settings.Type != goPluginType && settings.Type != "" {
+			continue
+		}
+
+		settings := settings
+
+		lc, err := b.loadConfig(cfg, name, &settings)
 		if err != nil {
-			b.log.Errorf("Unable to load custom analyzer %s:%s, %v", name, settings.Path, err)
+			return nil, fmt.Errorf("unable to load custom analyzer %q: %s, %w", name, settings.Path, err)
 		} else {
 			linters = append(linters, lc)
 		}
 	}
 
-	return linters
+	return linters, nil
 }
 
 // loadConfig loads the configuration of private linters.
 // Private linters are dynamically loaded from .so plugin files.
-func (b *PluginBuilder) loadConfig(cfg *config.Config, name string, settings config.CustomLinterSettings) (*linter.Config, error) {
+func (b *PluginGoBuilder) loadConfig(cfg *config.Config, name string, settings *config.CustomLinterSettings) (*linter.Config, error) {
 	analyzers, err := b.getAnalyzerPlugin(cfg, settings.Path, settings.Settings)
 	if err != nil {
 		return nil, err
@@ -74,7 +82,7 @@ func (b *PluginBuilder) loadConfig(cfg *config.Config, name string, settings con
 // and returns the 'AnalyzerPlugin' interface implemented by the private plugin.
 // An error is returned if the private linter cannot be loaded
 // or the linter does not implement the AnalyzerPlugin interface.
-func (b *PluginBuilder) getAnalyzerPlugin(cfg *config.Config, path string, settings any) ([]*analysis.Analyzer, error) {
+func (b *PluginGoBuilder) getAnalyzerPlugin(cfg *config.Config, path string, settings any) ([]*analysis.Analyzer, error) {
 	if !filepath.IsAbs(path) {
 		// resolve non-absolute paths relative to config file's directory
 		path = filepath.Join(cfg.GetConfigDir(), path)
@@ -93,7 +101,7 @@ func (b *PluginBuilder) getAnalyzerPlugin(cfg *config.Config, path string, setti
 	return analyzers, nil
 }
 
-func (b *PluginBuilder) lookupPlugin(plug *plugin.Plugin, settings any) ([]*analysis.Analyzer, error) {
+func (b *PluginGoBuilder) lookupPlugin(plug *plugin.Plugin, settings any) ([]*analysis.Analyzer, error) {
 	symbol, err := plug.Lookup("New")
 	if err != nil {
 		analyzers, errP := b.lookupAnalyzerPlugin(plug)
@@ -113,7 +121,7 @@ func (b *PluginBuilder) lookupPlugin(plug *plugin.Plugin, settings any) ([]*anal
 	return constructor(settings)
 }
 
-func (b *PluginBuilder) lookupAnalyzerPlugin(plug *plugin.Plugin) ([]*analysis.Analyzer, error) {
+func (b *PluginGoBuilder) lookupAnalyzerPlugin(plug *plugin.Plugin) ([]*analysis.Analyzer, error) {
 	symbol, err := plug.Lookup("AnalyzerPlugin")
 	if err != nil {
 		return nil, err

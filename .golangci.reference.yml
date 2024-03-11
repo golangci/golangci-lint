@@ -2481,6 +2481,10 @@ linters-settings:
   custom:
     # Each custom linter should have a unique name.
     example:
+      # The plugin type.
+      # It can be `goplugin` or `module`.
+      # Default: goplugin
+      type: module
       # The path to the plugin *.so. Can be absolute or local.
       # Required for each custom linter.
       path: /path/to/example.so

@@ -46,3 +46,10 @@
       link: /contributing/faq/
     - label: This Website
       link: /contributing/website/
+- label: Plugins
+  items:
+    - label: Module Plugin System
+      link: /contributing/new-linters/
+    - label: Go Plugin System
+      link: /contributing/private-linters/
+
