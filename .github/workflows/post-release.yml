@@ -66,7 +66,7 @@ jobs:
         run: cp .golangci.next.reference.yml .golangci.reference.yml
 
       - name: Update JSON schema files
-        run: cp docs/static/schema/next.jsonschema.json docs/static/schema/jsonschema.json
+        run: cp .schema/next.jsonschema.json .schema/jsonschema.json
 
       - name: Update information
         run: make website_dump_info
