@@ -6,10 +6,10 @@ An example linter can be found at [here](https://github.com/golangci/example-plu
 
 ## The Automatic Way
 
-- define your building configuration into `.custom-gcl.yml`
-- run the command `golangci-lint custom` ( or `golangci-lint custom -v` to have logs)
-- define the plugin inside the  `linters-settings.custom` section with the type `module`.
-- run your custom version of golangci-lint
+- Define your building configuration into `.custom-gcl.yml`.
+- Run the command `golangci-lint custom` (or `golangci-lint custom -v` to have logs).
+- Define the plugin inside the `linters-settings.custom` section with the type `module`.
+- Run your custom version of golangci-lint.
 
 Requirements:
 - Go
@@ -47,11 +47,11 @@ linters:
 
 ## The Manual Way
 
-- add a blank-import of your module inside `cmd/golangci-lint/plugins.go`
-- run `go mod tidy`. (the module containing the plugin will be imported)
-- run `make build`
-- define the plugin inside the configuration `linters-settings.custom` section with the type `module`.
-- run your custom version of golangci-lint
+- Add a blank-import of your module inside `cmd/golangci-lint/plugins.go`.
+- Run `go mod tidy` (the module containing the plugin will be imported).
+- Run `make build`.
+- Define the plugin inside the configuration `linters-settings.custom` section with the type `module`.
+- Run your custom version of golangci-lint.
 
 ### Configuration Example
 

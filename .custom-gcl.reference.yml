@@ -2,7 +2,7 @@
 # Require.
 version: v1.56.2
 
-# the name of the custom binary.
+# The name of the custom binary.
 # Optional.
 # Default: custom-gcl
 name: custom-golangci-lint
