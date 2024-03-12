@@ -64,7 +64,7 @@ func (c *customCommand) runE(_ *cobra.Command, _ []string) error {
 
 	defer func() {
 		if os.Getenv(envKeepTempFiles) != "" {
-			log.Printf("WARN: The env var %s has been dectected: the temporary directory is preserved: %s", envKeepTempFiles, tmp)
+			log.Printf("WARN: The env var %s has been detected: the temporary directory is preserved: %s", envKeepTempFiles, tmp)
 
 			return
 		}
