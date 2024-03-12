@@ -37,35 +37,35 @@ func NewBuilder(logger logutils.Log, cfg *Configuration, root string) *Builder {
 
 // Build builds the custom binary.
 func (b Builder) Build(ctx context.Context) error {
-	b.log.Infof("Cloning golangci-lint repository.")
+	b.log.Infof("Cloning golangci-lint repository")
 
 	err := b.clone(ctx)
 	if err != nil {
 		return fmt.Errorf("clone golangci-lint: %w", err)
 	}
 
-	b.log.Infof("Adding plugin imports.")
+	b.log.Infof("Adding plugin imports")
 
 	err = b.updatePluginsFile()
 	if err != nil {
 		return fmt.Errorf("update plugin file: %w", err)
 	}
 
-	b.log.Infof("Adding replace directives.")
+	b.log.Infof("Adding replace directives")
 
 	err = b.addReplaceDirectives(ctx)
 	if err != nil {
 		return fmt.Errorf("add replace directives: %w", err)
 	}
 
-	b.log.Infof("Running go mod tidy.")
+	b.log.Infof("Running go mod tidy")
 
 	err = b.goModTidy(ctx)
 	if err != nil {
 		return fmt.Errorf("go mod tidy: %w", err)
 	}
 
-	b.log.Infof("Building golangci-lint binary.")
+	b.log.Infof("Building golangci-lint binary")
 
 	binaryName := b.getBinaryName()
 
@@ -74,7 +74,7 @@ func (b Builder) Build(ctx context.Context) error {
 		return fmt.Errorf("build golangci-lint binary: %w", err)
 	}
 
-	b.log.Infof("Moving golangci-lint binary.")
+	b.log.Infof("Moving golangci-lint binary")
 
 	err = b.copyBinary(binaryName)
 	if err != nil {
