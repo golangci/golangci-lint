@@ -6,7 +6,7 @@
 
 # Options for analysis running.
 run:
-  # Number of operating system threads  (`GOMAXPROCS`) that can execute golangci-lint simultaneously.
+  # Number of operating system threads (`GOMAXPROCS`) that can execute golangci-lint simultaneously.
   # If it is explicitly set to 0 (i.e. not the default) then golangci-lint will automatically set the value to match Linux container CPU quota.
   # Default: the number of logical CPUs in the machine
   concurrency: 4
