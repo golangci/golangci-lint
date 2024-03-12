@@ -88,6 +88,10 @@ go.mod: FORCE
 	go mod verify
 go.sum: go.mod
 
+website_copy_jsonschema:
+	 cp -r ./jsonschema ./docs/static
+.PHONY: website_copy_jsonschema
+
 website_expand_templates:
 	go run ./scripts/website/expand_templates/
 .PHONY: website_expand_templates
