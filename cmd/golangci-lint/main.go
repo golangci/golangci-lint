@@ -42,38 +42,40 @@ func createBuildInfo() commands.BuildInfo {
 
 	info.GoVersion = buildInfo.GoVersion
 
-	if date == "" {
-		info.Version = buildInfo.Main.Version
-
-		var revision string
-		var modified string
-		for _, setting := range buildInfo.Settings {
-			// The `vcs.xxx` information is only available with `go build`.
-			// This information is not available with `go install` or `go run`.
-			switch setting.Key {
-			case "vcs.time":
-				info.Date = setting.Value
-			case "vcs.revision":
-				revision = setting.Value
-			case "vcs.modified":
-				modified = setting.Value
-			}
-		}
-
-		if revision == "" {
-			revision = "unknown"
-		}
-
-		if modified == "" {
-			modified = "?"
-		}
-
-		if info.Date == "" {
-			info.Date = "(unknown)"
-		}
-
-		info.Commit = fmt.Sprintf("(%s, modified: %s, mod sum: %q)", revision, modified, buildInfo.Main.Sum)
+	if date != "" {
+		return info
 	}
+
+	info.Version = buildInfo.Main.Version
+
+	var revision string
+	var modified string
+	for _, setting := range buildInfo.Settings {
+		// The `vcs.xxx` information is only available with `go build`.
+		// This information is not available with `go install` or `go run`.
+		switch setting.Key {
+		case "vcs.time":
+			info.Date = setting.Value
+		case "vcs.revision":
+			revision = setting.Value
+		case "vcs.modified":
+			modified = setting.Value
+		}
+	}
+
+	if revision == "" {
+		revision = "unknown"
+	}
+
+	if modified == "" {
+		modified = "?"
+	}
+
+	if info.Date == "" {
+		info.Date = "(unknown)"
+	}
+
+	info.Commit = fmt.Sprintf("(%s, modified: %s, mod sum: %q)", revision, modified, buildInfo.Main.Sum)
 
 	return info
 }
