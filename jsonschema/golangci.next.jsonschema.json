@@ -1308,6 +1308,7 @@
         },
         "goheader": {
           "type": "object",
+          "additionalProperties": false,
           "allOf": [
             {
               "properties": {
@@ -1393,45 +1394,6 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
-            "settings": {
-              "type": "object",
-              "properties": {
-                "mnd": {
-                  "type": "object",
-                  "properties": {
-                    "ignored-files": {
-                      "description": "Comma-separated list of file patterns to exclude from the analysis.",
-                      "examples": ["magic1_.*.go"],
-                      "type": "string"
-                    },
-                    "ignored-functions": {
-                      "description": "Comma-separated list of function patterns to exclude from the analysis.",
-                      "examples": ["math.*,http.StatusText,make"],
-                      "type": "string"
-                    },
-                    "ignored-numbers": {
-                      "description": "Comma-separated list of numbers to exclude from the analysis.",
-                      "examples": ["1000,1234_567_890,3.14159264"],
-                      "type": "string"
-                    },
-                    "checks": {
-                      "description": "The list of enabled checks.",
-                      "type": "array",
-                      "items": {
-                        "enum": [
-                          "argument",
-                          "case",
-                          "condition",
-                          "operation",
-                          "return",
-                          "assign"
-                        ]
-                      }
-                    }
-                  }
-                }
-              }
-            },
             "ignored-files": {
               "description": "List of file patterns to exclude from analysis.",
               "examples": [["magic1_.*.go"]],
