@@ -133,9 +133,8 @@ func (cmp *byFileName) AddNext(c comparator) comparator {
 }
 
 func (cmp *byFileName) Compare(a, b *result.Issue) compareResult {
-	var res compareResult
-
-	if res = compareResult(strings.Compare(a.FilePath(), b.FilePath())); !res.isNeutral() {
+	res := compareResult(strings.Compare(a.FilePath(), b.FilePath()))
+	if !res.isNeutral() {
 		return res
 	}
 
@@ -160,9 +159,8 @@ func (cmp *byLine) AddNext(c comparator) comparator {
 }
 
 func (cmp *byLine) Compare(a, b *result.Issue) compareResult {
-	var res compareResult
-
-	if res = numericCompare(a.Line(), b.Line()); !res.isNeutral() {
+	res := numericCompare(a.Line(), b.Line())
+	if !res.isNeutral() {
 		return res
 	}
 
@@ -187,9 +185,8 @@ func (cmp *byColumn) AddNext(c comparator) comparator {
 }
 
 func (cmp *byColumn) Compare(a, b *result.Issue) compareResult {
-	var res compareResult
-
-	if res = numericCompare(a.Column(), b.Column()); !res.isNeutral() {
+	res := numericCompare(a.Column(), b.Column())
+	if !res.isNeutral() {
 		return res
 	}
 
@@ -214,9 +211,8 @@ func (cmp *byLinter) AddNext(c comparator) comparator {
 }
 
 func (cmp *byLinter) Compare(a, b *result.Issue) compareResult {
-	var res compareResult
-
-	if res = compareResult(strings.Compare(a.FromLinter, b.FromLinter)); !res.isNeutral() {
+	res := compareResult(strings.Compare(a.FromLinter, b.FromLinter))
+	if !res.isNeutral() {
 		return res
 	}
 
@@ -241,9 +237,8 @@ func (cmp *bySeverity) AddNext(c comparator) comparator {
 }
 
 func (cmp *bySeverity) Compare(a, b *result.Issue) compareResult {
-	var res compareResult
-
-	if res = severityCompare(a.Severity, b.Severity); !res.isNeutral() {
+	res := severityCompare(a.Severity, b.Severity)
+	if !res.isNeutral() {
 		return res
 	}
 
