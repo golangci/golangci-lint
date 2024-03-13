@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"slices"
+	"strings"
 )
 
 const (
@@ -49,8 +50,16 @@ func (o *Output) Validate() error {
 		return errors.New("sort-results should be 'true' to use sort-order")
 	}
 
+	validOrders := []string{"linter", "file", "severity"}
+
+	all := strings.Join(o.SortOrder, " ")
+
 	for _, order := range o.SortOrder {
-		if !slices.Contains([]string{"linter", "file", "severity"}, order) {
+		if strings.Count(all, order) > 1 {
+			return fmt.Errorf("the sort-order name %q is repeated several times", order)
+		}
+
+		if !slices.Contains(validOrders, order) {
 			return fmt.Errorf("unsupported sort-order name %q", order)
 		}
 	}

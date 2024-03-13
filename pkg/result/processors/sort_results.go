@@ -17,9 +17,9 @@ import (
 // rules that can compare different properties of the Issues struct.
 
 const (
-	fileOrderName      = "file"
-	linterOrderName    = "linter"
-	linterSeverityName = "severity"
+	orderNameFile     = "file"
+	orderNameLinter   = "linter"
+	orderNameSeverity = "severity"
 )
 
 var _ Processor = (*SortResults)(nil)
@@ -35,11 +35,11 @@ func NewSortResults(cfg *config.Config) *SortResults {
 		cmps: map[string][]comparator{
 			// For sorting we are comparing (in next order):
 			// file names, line numbers, position, and finally - giving up.
-			fileOrderName: {&byName{}, &byLine{}, &byColumn{}},
+			orderNameFile: {&byFileName{}, &byLine{}, &byColumn{}},
 			// For sorting we are comparing: linter name
-			linterOrderName: {&byLinter{}},
+			orderNameLinter: {&byLinter{}},
 			// For sorting we are comparing: severity
-			linterSeverityName: {&bySeverity{}},
+			orderNameSeverity: {&bySeverity{}},
 		},
 		cfg: &cfg.Output,
 	}
@@ -52,7 +52,7 @@ func (sr SortResults) Process(issues []result.Issue) ([]result.Issue, error) {
 	}
 
 	if len(sr.cfg.SortOrder) == 0 {
-		sr.cfg.SortOrder = []string{fileOrderName}
+		sr.cfg.SortOrder = []string{orderNameFile}
 	}
 
 	var cmps []comparator
@@ -64,13 +64,13 @@ func (sr SortResults) Process(issues []result.Issue) ([]result.Issue, error) {
 		}
 	}
 
-	cmp, err := mergeComparator(cmps)
+	cmp, err := mergeComparators(cmps)
 	if err != nil {
 		return nil, err
 	}
 
 	sort.Slice(issues, func(i, j int) bool {
-		return cmp.Compare(&issues[i], &issues[j]) == Less
+		return cmp.Compare(&issues[i], &issues[j]) == less
 	})
 
 	return issues, nil
@@ -83,31 +83,31 @@ func (sr SortResults) Finish() {}
 type compareResult int
 
 const (
-	Less compareResult = iota - 1
-	Equal
-	Greater
-	None
+	less compareResult = iota - 1
+	equal
+	greater
+	none
 )
 
 func (c compareResult) isNeutral() bool {
 	// return true if compare result is incomparable or equal.
-	return c == None || c == Equal
+	return c == none || c == equal
 }
 
 func (c compareResult) String() string {
 	switch c {
-	case Less:
-		return "Less"
-	case Equal:
-		return "Equal"
-	case Greater:
-		return "Greater"
+	case less:
+		return "less"
+	case equal:
+		return "equal"
+	case greater:
+		return "greater"
 	default:
-		return "None"
+		return "none"
 	}
 }
 
-// comparator describe how to implement compare for two "issues" lexicographically
+// comparator describes how to implement compare for two "issues".
 type comparator interface {
 	Compare(a, b *result.Issue) compareResult
 	Next() comparator
@@ -116,23 +116,23 @@ type comparator interface {
 }
 
 var (
-	_ comparator = (*byName)(nil)
+	_ comparator = (*byFileName)(nil)
 	_ comparator = (*byLine)(nil)
 	_ comparator = (*byColumn)(nil)
 	_ comparator = (*byLinter)(nil)
 	_ comparator = (*bySeverity)(nil)
 )
 
-type byName struct{ next comparator }
+type byFileName struct{ next comparator }
 
-func (cmp *byName) Next() comparator { return cmp.next }
+func (cmp *byFileName) Next() comparator { return cmp.next }
 
-func (cmp *byName) AddNext(c comparator) comparator {
+func (cmp *byFileName) AddNext(c comparator) comparator {
 	cmp.next = c
 	return cmp
 }
 
-func (cmp *byName) Compare(a, b *result.Issue) compareResult {
+func (cmp *byFileName) Compare(a, b *result.Issue) compareResult {
 	var res compareResult
 
 	if res = compareResult(strings.Compare(a.FilePath(), b.FilePath())); !res.isNeutral() {
@@ -146,8 +146,8 @@ func (cmp *byName) Compare(a, b *result.Issue) compareResult {
 	return res
 }
 
-func (cmp *byName) String() string {
-	return comparatorToString("byName", cmp)
+func (cmp *byFileName) String() string {
+	return comparatorToString("byFileName", cmp)
 }
 
 type byLine struct{ next comparator }
@@ -258,7 +258,7 @@ func (cmp *bySeverity) String() string {
 	return comparatorToString("bySeverity", cmp)
 }
 
-func mergeComparator(cmps []comparator) (comparator, error) {
+func mergeComparators(cmps []comparator) (comparator, error) {
 	if len(cmps) == 0 {
 		return nil, errors.New("no comparator")
 	}
@@ -277,12 +277,20 @@ func severityCompare(a, b string) compareResult {
 	if slices.Contains(classic, a) && slices.Contains(classic, b) {
 		switch {
 		case slices.Index(classic, a) > slices.Index(classic, b):
-			return Greater
+			return greater
 		case slices.Index(classic, a) < slices.Index(classic, b):
-			return Less
+			return less
 		default:
-			return Equal
+			return equal
 		}
+	}
+
+	if slices.Contains(classic, a) {
+		return greater
+	}
+
+	if slices.Contains(classic, b) {
+		return less
 	}
 
 	return compareResult(strings.Compare(a, b))
@@ -299,16 +307,16 @@ func numericCompare(a, b int) compareResult {
 
 	switch {
 	case isZeroValuesBoth || isEqual:
-		return Equal
+		return equal
 	case isValuesInvalid || isZeroValueInA || isZeroValueInB:
-		return None
+		return none
 	case a > b:
-		return Greater
+		return greater
 	case a < b:
-		return Less
+		return less
 	}
 
-	return Equal
+	return equal
 }
 
 func comparatorToString(name string, c comparator) string {
