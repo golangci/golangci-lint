@@ -84,6 +84,7 @@ func (c *rootCommand) Execute() error {
 }
 
 func setupRootPersistentFlags(fs *pflag.FlagSet, opts *rootOptions) {
+	fs.BoolP("help", "h", false, color.GreenString("Help for a command"))
 	fs.BoolVarP(&opts.Verbose, "verbose", "v", false, color.GreenString("Verbose output"))
 	fs.StringVar(&opts.Color, "color", "auto", color.GreenString("Use color when printing; can be 'always', 'auto', or 'never'"))
 }
