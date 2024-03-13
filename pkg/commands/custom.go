@@ -1,7 +1,6 @@
 package commands
 
 import (
-	"context"
 	"fmt"
 	"log"
 	"os"
@@ -27,7 +26,7 @@ func newCustomCommand(logger logutils.Log) *customCommand {
 
 	customCmd := &cobra.Command{
 		Use:     "custom",
-		Short:   "Build a version of golangci-lint with custom linters.",
+		Short:   "Build a version of golangci-lint with custom linters",
 		Args:    cobra.NoArgs,
 		PreRunE: c.preRunE,
 		RunE:    c.runE,
@@ -54,9 +53,7 @@ func (c *customCommand) preRunE(_ *cobra.Command, _ []string) error {
 	return nil
 }
 
-func (c *customCommand) runE(_ *cobra.Command, _ []string) error {
-	ctx := context.Background()
-
+func (c *customCommand) runE(cmd *cobra.Command, _ []string) error {
 	tmp, err := os.MkdirTemp(os.TempDir(), "custom-gcl")
 	if err != nil {
 		return fmt.Errorf("create temporary directory: %w", err)
@@ -72,7 +69,7 @@ func (c *customCommand) runE(_ *cobra.Command, _ []string) error {
 		_ = os.RemoveAll(tmp)
 	}()
 
-	err = internal.NewBuilder(c.log, c.cfg, tmp).Build(ctx)
+	err = internal.NewBuilder(c.log, c.cfg, tmp).Build(cmd.Context())
 	if err != nil {
 		return fmt.Errorf("build process: %w", err)
 	}
