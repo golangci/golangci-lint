@@ -26,7 +26,7 @@ func getExampleSnippets() (*SettingSnippets, error) {
 
 	snippets, err := extractExampleSnippets(reference)
 	if err != nil {
-		return nil, fmt.Errorf("can't read .golangci.reference.yml: %w", err)
+		return nil, fmt.Errorf("can't extract example snippets from .golangci.reference.yml: %w", err)
 	}
 
 	return snippets, nil
