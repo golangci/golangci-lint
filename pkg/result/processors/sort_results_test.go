@@ -255,6 +255,11 @@ func Test_mergeComparators(t *testing.T) {
 			expected: "bySeverity > byLinter > byFileName > byLine > byColumn",
 		},
 		{
+			desc:     "nested",
+			cmps:     []comparator{bySeverity(), byFileName().AddNext(byLine().AddNext(byColumn())), byLinter()},
+			expected: "bySeverity > byFileName > byLine > byColumn > byLinter",
+		},
+		{
 			desc:     "all reverse",
 			cmps:     []comparator{byColumn(), byLine(), byFileName(), byLinter(), bySeverity()},
 			expected: "byColumn > byLine > byFileName > byLinter > bySeverity",

@@ -25,21 +25,21 @@ const (
 var _ Processor = (*SortResults)(nil)
 
 type SortResults struct {
-	cmps map[string][]comparator
+	cmps map[string]comparator
 
 	cfg *config.Output
 }
 
 func NewSortResults(cfg *config.Config) *SortResults {
 	return &SortResults{
-		cmps: map[string][]comparator{
+		cmps: map[string]comparator{
 			// For sorting we are comparing (in next order):
 			// file names, line numbers, position, and finally - giving up.
-			orderNameFile: {byFileName(), byLine(), byColumn()},
+			orderNameFile: byFileName().AddNext(byLine().AddNext(byColumn())),
 			// For sorting we are comparing: linter name
-			orderNameLinter: {byLinter()},
+			orderNameLinter: byLinter(),
 			// For sorting we are comparing: severity
-			orderNameSeverity: {bySeverity()},
+			orderNameSeverity: bySeverity(),
 		},
 		cfg: &cfg.Output,
 	}
@@ -58,7 +58,7 @@ func (sr SortResults) Process(issues []result.Issue) ([]result.Issue, error) {
 	var cmps []comparator
 	for _, name := range sr.cfg.SortOrder {
 		if c, ok := sr.cmps[name]; ok {
-			cmps = append(cmps, c...)
+			cmps = append(cmps, c)
 		} else {
 			return nil, fmt.Errorf("unsupported sort-order name %q", name)
 		}
@@ -203,10 +203,18 @@ func mergeComparators(cmps []comparator) (comparator, error) {
 	}
 
 	for i := 0; i < len(cmps)-1; i++ {
-		cmps[i].AddNext(cmps[i+1])
+		findComparatorTip(cmps[i]).AddNext(cmps[i+1])
 	}
 
 	return cmps[0], nil
+}
+
+func findComparatorTip(cmp comparator) comparator {
+	if cmp.Next() != nil {
+		return findComparatorTip(cmp.Next())
+	}
+
+	return cmp
 }
 
 func severityCompare(a, b string) compareResult {
