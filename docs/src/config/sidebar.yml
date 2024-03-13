@@ -49,7 +49,7 @@
 - label: Plugins
   items:
     - label: Module Plugin System
-      link: /contributing/new-linters/
+      link: /plugins/module-plugins/
     - label: Go Plugin System
-      link: /contributing/private-linters/
+      link: /plugins/go-plugins/
 
