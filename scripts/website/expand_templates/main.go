@@ -151,6 +151,7 @@ func buildTemplateContext() (map[string]string, error) {
 
 	return map[string]string{
 		"CustomGCLReference":               pluginReference,
+		"LintersExample":                   snippets.LintersSettings,
 		"ConfigurationExample":             snippets.ConfigurationFile,
 		"LintersCommandOutputEnabledOnly":  helps.Enable,
 		"LintersCommandOutputDisabledOnly": helps.Disable,
