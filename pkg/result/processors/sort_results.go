@@ -35,7 +35,7 @@ func NewSortResults(cfg *config.Config) *SortResults {
 		cmps: map[string]*comparator{
 			// For sorting we are comparing (in next order):
 			// file names, line numbers, position, and finally - giving up.
-			orderNameFile: byFileName().AddNext(byLine().AddNext(byColumn())),
+			orderNameFile: byFileName().SetNext(byLine().SetNext(byColumn())),
 			// For sorting we are comparing: linter name
 			orderNameLinter: byLinter(),
 			// For sorting we are comparing: severity
@@ -116,7 +116,7 @@ type comparator struct {
 
 func (cmp *comparator) Next() *comparator { return cmp.next }
 
-func (cmp *comparator) AddNext(c *comparator) *comparator {
+func (cmp *comparator) SetNext(c *comparator) *comparator {
 	cmp.next = c
 	return cmp
 }
@@ -194,7 +194,7 @@ func mergeComparators(cmps []*comparator) (*comparator, error) {
 	}
 
 	for i := 0; i < len(cmps)-1; i++ {
-		findComparatorTip(cmps[i]).AddNext(cmps[i+1])
+		findComparatorTip(cmps[i]).SetNext(cmps[i+1])
 	}
 
 	return cmps[0], nil

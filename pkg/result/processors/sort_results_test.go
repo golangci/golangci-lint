@@ -167,7 +167,7 @@ func TestCompareBySeverity(t *testing.T) {
 }
 
 func TestCompareNested(t *testing.T) {
-	cmp := byFileName().AddNext(byLine().AddNext(byColumn()))
+	cmp := byFileName().SetNext(byLine().SetNext(byColumn()))
 
 	testCompareValues(t, cmp, "Nested Comparing", []compareTestCase{
 		{issues[1], issues[0], less},    // file_linux.go vs file_windows.go
@@ -256,7 +256,7 @@ func Test_mergeComparators(t *testing.T) {
 		},
 		{
 			desc:     "nested",
-			cmps:     []*comparator{bySeverity(), byFileName().AddNext(byLine().AddNext(byColumn())), byLinter()},
+			cmps:     []*comparator{bySeverity(), byFileName().SetNext(byLine().SetNext(byColumn())), byLinter()},
 			expected: "bySeverity > byFileName > byLine > byColumn > byLinter",
 		},
 		{
