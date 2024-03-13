@@ -119,14 +119,14 @@ func getLatestVersion() (string, error) {
 }
 
 func buildTemplateContext() (map[string]string, error) {
-	golangciYamlExample, err := os.ReadFile(".golangci.reference.yml")
+	snippets, err := getExampleSnippets()
 	if err != nil {
-		return nil, fmt.Errorf("can't read .golangci.reference.yml: %w", err)
+		return nil, err
 	}
 
-	snippets, err := extractExampleSnippets(golangciYamlExample)
+	pluginReference, err := getPluginReference()
 	if err != nil {
-		return nil, fmt.Errorf("can't read .golangci.reference.yml: %w", err)
+		return nil, fmt.Errorf("failed to read plugin reference file: %w", err)
 	}
 
 	helps, err := readJSONFile[types.CLIHelp](filepath.Join("assets", "cli-help.json"))
@@ -150,7 +150,7 @@ func buildTemplateContext() (map[string]string, error) {
 	}
 
 	return map[string]string{
-		"LintersExample":                   snippets.LintersSettings,
+		"CustomGCLReference":               pluginReference,
 		"ConfigurationExample":             snippets.ConfigurationFile,
 		"LintersCommandOutputEnabledOnly":  helps.Enable,
 		"LintersCommandOutputDisabledOnly": helps.Disable,

@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"path/filepath"
 	"reflect"
 	"sort"
@@ -16,6 +17,20 @@ import (
 )
 
 const listItemPrefix = "list-item-"
+
+func getExampleSnippets() (*SettingSnippets, error) {
+	reference, err := os.ReadFile(".golangci.reference.yml")
+	if err != nil {
+		return nil, fmt.Errorf("can't read .golangci.reference.yml: %w", err)
+	}
+
+	snippets, err := extractExampleSnippets(reference)
+	if err != nil {
+		return nil, fmt.Errorf("can't extract example snippets from .golangci.reference.yml: %w", err)
+	}
+
+	return snippets, nil
+}
 
 func getLintersListMarkdown(enabled bool) string {
 	linters, err := readJSONFile[[]*types.LinterWrapper](filepath.Join("assets", "linters-info.json"))
