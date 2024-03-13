@@ -107,7 +107,7 @@ func (c compareResult) String() string {
 	}
 }
 
-// baseComparator describes how to implement compare for two "issues".
+// comparator describes how to implement compare for two "issues".
 type comparator struct {
 	name    string
 	compare func(a, b *result.Issue) compareResult
