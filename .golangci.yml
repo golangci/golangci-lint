@@ -49,6 +49,10 @@ linters-settings:
   godox:
     keywords:
       - FIXME
+  gofmt:
+    rewrite-rules:
+      - pattern: 'interface{}'
+        replacement: 'any'
   goimports:
     local-prefixes: github.com/golangci/golangci-lint
   gomnd:
@@ -91,7 +95,6 @@ linters-settings:
       - name: unexported-return
         disabled: true
       - name: unused-parameter
-      - name: use-any
 
 linters:
   disable-all: true
@@ -110,7 +113,7 @@ linters:
     - gocritic
     - gocyclo
     - godox
-    - gofumpt
+    - gofmt
     - goimports
     - gomnd
     - goprintffuncname
