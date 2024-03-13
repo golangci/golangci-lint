@@ -61,7 +61,8 @@ type runner struct {
 }
 
 func newRunner(prefix string, logger logutils.Log, pkgCache *pkgcache.Cache, loadGuard *load.Guard,
-	loadMode LoadMode, sw *timeutils.Stopwatch) *runner {
+	loadMode LoadMode, sw *timeutils.Stopwatch,
+) *runner {
 	return &runner{
 		prefix:    prefix,
 		log:       logger,
@@ -80,7 +81,8 @@ func newRunner(prefix string, logger logutils.Log, pkgCache *pkgcache.Cache, loa
 // singlechecker and the multi-analysis commands.
 // It returns the appropriate exit code.
 func (r *runner) run(analyzers []*analysis.Analyzer, initialPackages []*packages.Package) ([]Diagnostic,
-	[]error, map[*analysis.Pass]*packages.Package) {
+	[]error, map[*analysis.Pass]*packages.Package,
+) {
 	debugf("Analyzing %d packages on load mode %s", len(initialPackages), r.loadMode)
 	defer r.pkgCache.Trim()
 
@@ -116,7 +118,8 @@ func (r *runner) markAllActions(a *analysis.Analyzer, pkg *packages.Package, mar
 }
 
 func (r *runner) makeAction(a *analysis.Analyzer, pkg *packages.Package,
-	initialPkgs map[*packages.Package]bool, actions map[actKey]*action, actAlloc *actionAllocator) *action {
+	initialPkgs map[*packages.Package]bool, actions map[actKey]*action, actAlloc *actionAllocator,
+) *action {
 	k := actKey{a, pkg}
 	act, ok := actions[k]
 	if ok {
@@ -150,7 +153,8 @@ func (r *runner) makeAction(a *analysis.Analyzer, pkg *packages.Package,
 }
 
 func (r *runner) buildActionFactDeps(act *action, a *analysis.Analyzer, pkg *packages.Package,
-	initialPkgs map[*packages.Package]bool, actions map[actKey]*action, actAlloc *actionAllocator) {
+	initialPkgs map[*packages.Package]bool, actions map[actKey]*action, actAlloc *actionAllocator,
+) {
 	// An analysis that consumes/produces facts
 	// must run on the package's dependencies too.
 	if len(a.FactTypes) == 0 {
@@ -175,7 +179,8 @@ func (r *runner) buildActionFactDeps(act *action, a *analysis.Analyzer, pkg *pac
 
 //nolint:gocritic
 func (r *runner) prepareAnalysis(pkgs []*packages.Package,
-	analyzers []*analysis.Analyzer) (map[*packages.Package]bool, []*action, []*action) {
+	analyzers []*analysis.Analyzer,
+) (map[*packages.Package]bool, []*action, []*action) {
 	// Construct the action graph.
 
 	// Each graph node (action) is one unit of analysis.

@@ -13,7 +13,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-const defaultFileMode = 0644
+const defaultFileMode = 0o644
 
 type issuePrinter interface {
 	Print(issues []result.Issue) error

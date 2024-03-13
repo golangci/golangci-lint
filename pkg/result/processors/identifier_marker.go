@@ -31,27 +31,39 @@ var replacePatterns = []replacePattern{
 	{`^composites: (\S+) composite literal uses unkeyed fields$`, "composites: `${1}` composite literal uses unkeyed fields"},
 
 	// gosec
-	{`^(\S+): Blacklisted import (\S+): weak cryptographic primitive$`,
-		"${1}: Blacklisted import `${2}`: weak cryptographic primitive"},
+	{
+		`^(\S+): Blacklisted import (\S+): weak cryptographic primitive$`,
+		"${1}: Blacklisted import `${2}`: weak cryptographic primitive",
+	},
 	{`^TLS InsecureSkipVerify set true.$`, "TLS `InsecureSkipVerify` set true."},
 
 	// gosimple
 	{`should replace loop with (.*)$`, "should replace loop with `${1}`"},
-	{`should use a simple channel send/receive instead of select with a single case`,
-		"should use a simple channel send/receive instead of `select` with a single case"},
-	{`should omit comparison to bool constant, can be simplified to (.+)$`,
-		"should omit comparison to bool constant, can be simplified to `${1}`"},
+	{
+		`should use a simple channel send/receive instead of select with a single case`,
+		"should use a simple channel send/receive instead of `select` with a single case",
+	},
+	{
+		`should omit comparison to bool constant, can be simplified to (.+)$`,
+		"should omit comparison to bool constant, can be simplified to `${1}`",
+	},
 	{`should write (.+) instead of (.+)$`, "should write `${1}` instead of `${2}`"},
 	{`redundant return statement$`, "redundant `return` statement"},
-	{`should replace this if statement with an unconditional strings.TrimPrefix`,
-		"should replace this `if` statement with an unconditional `strings.TrimPrefix`"},
+	{
+		`should replace this if statement with an unconditional strings.TrimPrefix`,
+		"should replace this `if` statement with an unconditional `strings.TrimPrefix`",
+	},
 
 	// staticcheck
 	{`this value of (\S+) is never used$`, "this value of `${1}` is never used"},
-	{`should use time.Since instead of time.Now\(\).Sub$`,
-		"should use `time.Since` instead of `time.Now().Sub`"},
-	{`should check returned error before deferring response.Close\(\)$`,
-		"should check returned error before deferring `response.Close()`"},
+	{
+		`should use time.Since instead of time.Now\(\).Sub$`,
+		"should use `time.Since` instead of `time.Now().Sub`",
+	},
+	{
+		`should check returned error before deferring response.Close\(\)$`,
+		"should check returned error before deferring `response.Close()`",
+	},
 	{`no value of type uint is less than 0$`, "no value of type `uint` is less than `0`"},
 
 	// unused
@@ -59,26 +71,40 @@ var replacePatterns = []replacePattern{
 
 	// typecheck
 	{`^unknown field (\S+) in struct literal$`, "unknown field `${1}` in struct literal"},
-	{`^invalid operation: (\S+) \(variable of type (\S+)\) has no field or method (\S+)$`,
-		"invalid operation: `${1}` (variable of type `${2}`) has no field or method `${3}`"},
+	{
+		`^invalid operation: (\S+) \(variable of type (\S+)\) has no field or method (\S+)$`,
+		"invalid operation: `${1}` (variable of type `${2}`) has no field or method `${3}`",
+	},
 	{`^undeclared name: (\S+)$`, "undeclared name: `${1}`"},
-	{`^cannot use addr \(variable of type (\S+)\) as (\S+) value in argument to (\S+)$`,
-		"cannot use addr (variable of type `${1}`) as `${2}` value in argument to `${3}`"},
+	{
+		`^cannot use addr \(variable of type (\S+)\) as (\S+) value in argument to (\S+)$`,
+		"cannot use addr (variable of type `${1}`) as `${2}` value in argument to `${3}`",
+	},
 	{`^other declaration of (\S+)$`, "other declaration of `${1}`"},
 	{`^(\S+) redeclared in this block$`, "`${1}` redeclared in this block"},
 
 	// golint
-	{`^exported (type|method|function|var|const) (\S+) should have comment or be unexported$`,
-		"exported ${1} `${2}` should have comment or be unexported"},
-	{`^comment on exported (type|method|function|var|const) (\S+) should be of the form "(\S+) ..."$`,
-		"comment on exported ${1} `${2}` should be of the form `${3} ...`"},
+	{
+		`^exported (type|method|function|var|const) (\S+) should have comment or be unexported$`,
+		"exported ${1} `${2}` should have comment or be unexported",
+	},
+	{
+		`^comment on exported (type|method|function|var|const) (\S+) should be of the form "(\S+) ..."$`,
+		"comment on exported ${1} `${2}` should be of the form `${3} ...`",
+	},
 	{`^should replace (.+) with (.+)$`, "should replace `${1}` with `${2}`"},
-	{`^if block ends with a return statement, so drop this else and outdent its block$`,
-		"`if` block ends with a `return` statement, so drop this `else` and outdent its block"},
-	{`^(struct field|var|range var|const|type|(?:func|method|interface method) (?:parameter|result)) (\S+) should be (\S+)$`,
-		"${1} `${2}` should be `${3}`"},
-	{`^don't use underscores in Go names; var (\S+) should be (\S+)$`,
-		"don't use underscores in Go names; var `${1}` should be `${2}`"},
+	{
+		`^if block ends with a return statement, so drop this else and outdent its block$`,
+		"`if` block ends with a `return` statement, so drop this `else` and outdent its block",
+	},
+	{
+		`^(struct field|var|range var|const|type|(?:func|method|interface method) (?:parameter|result)) (\S+) should be (\S+)$`,
+		"${1} `${2}` should be `${3}`",
+	},
+	{
+		`^don't use underscores in Go names; var (\S+) should be (\S+)$`,
+		"don't use underscores in Go names; var `${1}` should be `${2}`",
+	},
 }
 
 type IdentifierMarker struct {

@@ -34,7 +34,8 @@ type Runner struct {
 
 func NewRunner(log logutils.Log, cfg *config.Config, goenv *goutil.Env,
 	lineCache *fsutils.LineCache, fileCache *fsutils.FileCache,
-	dbManager *lintersdb.Manager, lintCtx *linter.Context) (*Runner, error) {
+	dbManager *lintersdb.Manager, lintCtx *linter.Context,
+) (*Runner, error) {
 	// Beware that some processors need to add the path prefix when working with paths
 	// because they get invoked before the path prefixer (exclude and severity rules)
 	// or process other paths (skip files).
@@ -129,7 +130,8 @@ func (r *Runner) Run(ctx context.Context, linters []*linter.Config) ([]result.Is
 }
 
 func (r *Runner) runLinterSafe(ctx context.Context, lintCtx *linter.Context,
-	lc *linter.Config) (ret []result.Issue, err error) {
+	lc *linter.Config,
+) (ret []result.Issue, err error) {
 	defer func() {
 		if panicData := recover(); panicData != nil {
 			if pe, ok := panicData.(*errorutil.PanicError); ok {

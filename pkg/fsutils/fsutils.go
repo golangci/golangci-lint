@@ -12,10 +12,12 @@ func IsDir(filename string) bool {
 	return err == nil && fi.IsDir()
 }
 
-var cachedWd string
-var cachedWdError error
-var getWdOnce sync.Once
-var useCache = true
+var (
+	cachedWd      string
+	cachedWdError error
+	getWdOnce     sync.Once
+	useCache      = true
+)
 
 func UseWdCache(use bool) {
 	useCache = use
