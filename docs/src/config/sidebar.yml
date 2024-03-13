@@ -16,8 +16,6 @@
       link: "/usage/configuration/"
     - label: "False Positives"
       link: "/usage/false-positives/"
-    - label: "Performance"
-      link: "/usage/performance/"
     - label: "FAQ"
       link: "/usage/faq/"
 - label: Product
@@ -28,6 +26,8 @@
       link: "/product/thanks/"
     - label: "Trusted By"
       link: "/product/trusted-by/"
+    - label: "Performance"
+      link: "/product/performance/"
     - label: "GitHub"
       link: "https://github.com/golangci/golangci-lint"
 - label: Contributing
