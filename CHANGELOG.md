@@ -1,4 +1,4 @@
-Follow the news and releases on [Mastodon](https://fosstodon.org/@golangcilint) and on [Twitter](https://twitter.com/golangci).
+Follow the news and releases on [Mastodon](https://fosstodon.org/@golangcilint) and on [X/Twitter](https://twitter.com/golangci).
 
 There is the most valuable changes log:
 
