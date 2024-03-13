@@ -11,7 +11,7 @@ import (
 )
 
 func NewTestpackage(cfg *config.TestpackageSettings) *goanalysis.Linter {
-	var a = testpackage.NewAnalyzer()
+	a := testpackage.NewAnalyzer()
 
 	var settings map[string]map[string]any
 	if cfg != nil {

@@ -36,7 +36,8 @@ type ContextLoader struct {
 }
 
 func NewContextLoader(cfg *config.Config, log logutils.Log, goenv *goutil.Env,
-	lineCache *fsutils.LineCache, fileCache *fsutils.FileCache, pkgCache *pkgcache.Cache, loadGuard *load.Guard) *ContextLoader {
+	lineCache *fsutils.LineCache, fileCache *fsutils.FileCache, pkgCache *pkgcache.Cache, loadGuard *load.Guard,
+) *ContextLoader {
 	return &ContextLoader{
 		cfg:         cfg,
 		log:         log,

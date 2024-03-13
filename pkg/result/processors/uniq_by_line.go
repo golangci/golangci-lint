@@ -5,8 +5,10 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-type lineToCount map[int]int
-type fileToLineToCount map[string]lineToCount
+type (
+	lineToCount       map[int]int
+	fileToLineToCount map[string]lineToCount
+)
 
 type UniqByLine struct {
 	flc fileToLineToCount

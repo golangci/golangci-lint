@@ -192,7 +192,7 @@ func TestNolintAliases(t *testing.T) {
 }
 
 func TestIgnoredRangeMatches(t *testing.T) {
-	var testcases = []struct {
+	testcases := []struct {
 		doc      string
 		issue    result.Issue
 		linters  []string

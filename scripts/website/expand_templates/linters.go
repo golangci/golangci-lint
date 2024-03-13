@@ -256,7 +256,7 @@ func getLintersSettingSections(node, nextNode *yaml.Node) (string, error) {
 		return "", err
 	}
 
-	var lintersDesc = make(map[string]string)
+	lintersDesc := make(map[string]string)
 	for _, lc := range linters {
 		if lc.Internal {
 			continue

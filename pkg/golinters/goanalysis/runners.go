@@ -124,7 +124,8 @@ func getIssuesCacheKey(analyzers []*analysis.Analyzer) string {
 }
 
 func saveIssuesToCache(allPkgs []*packages.Package, pkgsFromCache map[*packages.Package]bool,
-	issues []result.Issue, lintCtx *linter.Context, analyzers []*analysis.Analyzer) {
+	issues []result.Issue, lintCtx *linter.Context, analyzers []*analysis.Analyzer,
+) {
 	startedAt := time.Now()
 	perPkgIssues := map[*packages.Package][]result.Issue{}
 	for ind := range issues {
@@ -185,7 +186,8 @@ func saveIssuesToCache(allPkgs []*packages.Package, pkgsFromCache map[*packages.
 
 //nolint:gocritic
 func loadIssuesFromCache(pkgs []*packages.Package, lintCtx *linter.Context,
-	analyzers []*analysis.Analyzer) ([]result.Issue, map[*packages.Package]bool) {
+	analyzers []*analysis.Analyzer,
+) ([]result.Issue, map[*packages.Package]bool) {
 	startedAt := time.Now()
 
 	lintResKey := getIssuesCacheKey(analyzers)

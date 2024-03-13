@@ -5,8 +5,10 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-type linterToCountMap map[string]int
-type fileToLinterToCountMap map[string]linterToCountMap
+type (
+	linterToCountMap       map[string]int
+	fileToLinterToCountMap map[string]linterToCountMap
+)
 
 type MaxPerFileFromLinter struct {
 	flc                        fileToLinterToCountMap

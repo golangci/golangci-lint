@@ -151,8 +151,10 @@ func NewLinter(needs Needs, excludes []string) (*Linter, error) {
 	}, nil
 }
 
-var leadingSpacePattern = regexp.MustCompile(`^//(\s*)`)
-var trailingBlankExplanation = regexp.MustCompile(`\s*(//\s*)?$`)
+var (
+	leadingSpacePattern      = regexp.MustCompile(`^//(\s*)`)
+	trailingBlankExplanation = regexp.MustCompile(`\s*(//\s*)?$`)
+)
 
 //nolint:funlen,gocyclo
 func (l Linter) Run(fset *token.FileSet, nodes ...ast.Node) ([]Issue, error) {
