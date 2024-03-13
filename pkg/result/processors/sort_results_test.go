@@ -76,7 +76,7 @@ type compareTestCase struct {
 	expected compareResult
 }
 
-func testCompareValues(t *testing.T, cmp comparator, name string, tests []compareTestCase) {
+func testCompareValues(t *testing.T, cmp *comparator, name string, tests []compareTestCase) {
 	t.Parallel()
 
 	for i := 0; i < len(tests); i++ {
@@ -236,32 +236,32 @@ func TestSorting(t *testing.T) {
 func Test_mergeComparators(t *testing.T) {
 	testCases := []struct {
 		desc     string
-		cmps     []comparator
+		cmps     []*comparator
 		expected string
 	}{
 		{
 			desc:     "one",
-			cmps:     []comparator{byLinter()},
+			cmps:     []*comparator{byLinter()},
 			expected: "byLinter",
 		},
 		{
 			desc:     "two",
-			cmps:     []comparator{byLinter(), byFileName()},
+			cmps:     []*comparator{byLinter(), byFileName()},
 			expected: "byLinter > byFileName",
 		},
 		{
 			desc:     "all",
-			cmps:     []comparator{bySeverity(), byLinter(), byFileName(), byLine(), byColumn()},
+			cmps:     []*comparator{bySeverity(), byLinter(), byFileName(), byLine(), byColumn()},
 			expected: "bySeverity > byLinter > byFileName > byLine > byColumn",
 		},
 		{
 			desc:     "nested",
-			cmps:     []comparator{bySeverity(), byFileName().AddNext(byLine().AddNext(byColumn())), byLinter()},
+			cmps:     []*comparator{bySeverity(), byFileName().AddNext(byLine().AddNext(byColumn())), byLinter()},
 			expected: "bySeverity > byFileName > byLine > byColumn > byLinter",
 		},
 		{
 			desc:     "all reverse",
-			cmps:     []comparator{byColumn(), byLine(), byFileName(), byLinter(), bySeverity()},
+			cmps:     []*comparator{byColumn(), byLine(), byFileName(), byLinter(), bySeverity()},
 			expected: "byColumn > byLine > byFileName > byLinter > bySeverity",
 		},
 	}

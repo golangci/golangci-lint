@@ -25,14 +25,14 @@ const (
 var _ Processor = (*SortResults)(nil)
 
 type SortResults struct {
-	cmps map[string]comparator
+	cmps map[string]*comparator
 
 	cfg *config.Output
 }
 
 func NewSortResults(cfg *config.Config) *SortResults {
 	return &SortResults{
-		cmps: map[string]comparator{
+		cmps: map[string]*comparator{
 			// For sorting we are comparing (in next order):
 			// file names, line numbers, position, and finally - giving up.
 			orderNameFile: byFileName().AddNext(byLine().AddNext(byColumn())),
@@ -55,7 +55,7 @@ func (sr SortResults) Process(issues []result.Issue) ([]result.Issue, error) {
 		sr.cfg.SortOrder = []string{orderNameFile}
 	}
 
-	var cmps []comparator
+	var cmps []*comparator
 	for _, name := range sr.cfg.SortOrder {
 		if c, ok := sr.cmps[name]; ok {
 			cmps = append(cmps, c)
@@ -107,30 +107,21 @@ func (c compareResult) String() string {
 	}
 }
 
-// comparator describes how to implement compare for two "issues".
-type comparator interface {
-	Compare(a, b *result.Issue) compareResult
-	Next() comparator
-	AddNext(comparator) comparator
-	fmt.Stringer
-}
-
-var _ comparator = (*baseComparator)(nil)
-
-type baseComparator struct {
+// baseComparator describes how to implement compare for two "issues".
+type comparator struct {
 	name    string
 	compare func(a, b *result.Issue) compareResult
-	next    comparator
+	next    *comparator
 }
 
-func (cmp *baseComparator) Next() comparator { return cmp.next }
+func (cmp *comparator) Next() *comparator { return cmp.next }
 
-func (cmp *baseComparator) AddNext(c comparator) comparator {
+func (cmp *comparator) AddNext(c *comparator) *comparator {
 	cmp.next = c
 	return cmp
 }
 
-func (cmp *baseComparator) String() string {
+func (cmp *comparator) String() string {
 	s := cmp.name
 	if cmp.Next() != nil {
 		s += " > " + cmp.Next().String()
@@ -139,7 +130,7 @@ func (cmp *baseComparator) String() string {
 	return s
 }
 
-func (cmp *baseComparator) Compare(a, b *result.Issue) compareResult {
+func (cmp *comparator) Compare(a, b *result.Issue) compareResult {
 	res := cmp.compare(a, b)
 	if !res.isNeutral() {
 		return res
@@ -152,8 +143,8 @@ func (cmp *baseComparator) Compare(a, b *result.Issue) compareResult {
 	return res
 }
 
-func byFileName() *baseComparator {
-	return &baseComparator{
+func byFileName() *comparator {
+	return &comparator{
 		name: "byFileName",
 		compare: func(a, b *result.Issue) compareResult {
 			return compareResult(strings.Compare(a.FilePath(), b.FilePath()))
@@ -161,8 +152,8 @@ func byFileName() *baseComparator {
 	}
 }
 
-func byLine() *baseComparator {
-	return &baseComparator{
+func byLine() *comparator {
+	return &comparator{
 		name: "byLine",
 		compare: func(a, b *result.Issue) compareResult {
 			return numericCompare(a.Line(), b.Line())
@@ -170,8 +161,8 @@ func byLine() *baseComparator {
 	}
 }
 
-func byColumn() *baseComparator {
-	return &baseComparator{
+func byColumn() *comparator {
+	return &comparator{
 		name: "byColumn",
 		compare: func(a, b *result.Issue) compareResult {
 			return numericCompare(a.Column(), b.Column())
@@ -179,8 +170,8 @@ func byColumn() *baseComparator {
 	}
 }
 
-func byLinter() *baseComparator {
-	return &baseComparator{
+func byLinter() *comparator {
+	return &comparator{
 		name: "byLinter",
 		compare: func(a, b *result.Issue) compareResult {
 			return compareResult(strings.Compare(a.FromLinter, b.FromLinter))
@@ -188,8 +179,8 @@ func byLinter() *baseComparator {
 	}
 }
 
-func bySeverity() *baseComparator {
-	return &baseComparator{
+func bySeverity() *comparator {
+	return &comparator{
 		name: "bySeverity",
 		compare: func(a, b *result.Issue) compareResult {
 			return severityCompare(a.Severity, b.Severity)
@@ -197,7 +188,7 @@ func bySeverity() *baseComparator {
 	}
 }
 
-func mergeComparators(cmps []comparator) (comparator, error) {
+func mergeComparators(cmps []*comparator) (*comparator, error) {
 	if len(cmps) == 0 {
 		return nil, errors.New("no comparator")
 	}
@@ -209,7 +200,7 @@ func mergeComparators(cmps []comparator) (comparator, error) {
 	return cmps[0], nil
 }
 
-func findComparatorTip(cmp comparator) comparator {
+func findComparatorTip(cmp *comparator) *comparator {
 	if cmp.Next() != nil {
 		return findComparatorTip(cmp.Next())
 	}
