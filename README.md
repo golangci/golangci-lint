@@ -6,8 +6,8 @@
 
 ---
 
-`golangci-lint` is a fast Go linters runner. It runs linters in parallel, uses caching, supports `yaml` config, has integrations
-with all major IDE and has dozens of linters included.
+`golangci-lint` is a fast Go linters runner. It runs linters in parallel, uses caching, supports YAML configuration,
+integrates with all major IDEs, and includes over a hundred linters.
 
 ## Install `golangci-lint`
 
