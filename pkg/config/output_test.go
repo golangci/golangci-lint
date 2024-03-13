@@ -32,6 +32,13 @@ func TestOutput_Validate(t *testing.T) {
 				SortOrder:   []string{"severity"},
 			},
 		},
+		{
+			desc: "multiple",
+			settings: &Output{
+				SortResults: true,
+				SortOrder:   []string{"file", "linter", "severity"},
+			},
+		},
 	}
 
 	for _, test := range testCases {
@@ -65,6 +72,14 @@ func TestOutput_Validate_error(t *testing.T) {
 				SortOrder:   []string{"a"},
 			},
 			expected: `unsupported sort-order name "a"`,
+		},
+		{
+			desc: "duplicate",
+			settings: &Output{
+				SortResults: true,
+				SortOrder:   []string{"file", "linter", "severity", "linter"},
+			},
+			expected: `the sort-order name "linter" is repeated several times`,
 		},
 	}
 
