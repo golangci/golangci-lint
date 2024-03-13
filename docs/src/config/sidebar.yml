@@ -5,21 +5,21 @@
 - label: Welcome
   items:
     - label: "Install"
-      link: "/usage/install/"
+      link: "/welcome/install/"
     - label: "Quick Start"
-      link: "/usage/quick-start/"
+      link: "/welcome/quick-start/"
     - label: "Integrations"
-      link: "/usage/integrations/"
+      link: "/welcome/integrations/"
     - label: "FAQ"
-      link: "/usage/faq/"
+      link: "/welcome/faq/"
 - label: Usage
   items:
     - label: "Configuration"
-      link: "/configuration/configuration/"
+      link: "/usage/configuration/"
     - label: "Linters"
-      link: "/configuration/linters/"
+      link: "/usage/linters/"
     - label: "False Positives"
-      link: "/configuration/false-positives/"
+      link: "/usage/false-positives/"
 - label: Product
   items:
     - label: "Thanks"
