@@ -119,14 +119,9 @@ func getLatestVersion() (string, error) {
 }
 
 func buildTemplateContext() (map[string]string, error) {
-	golangciYamlExample, err := os.ReadFile(".golangci.reference.yml")
+	snippets, err := getExampleSnippets()
 	if err != nil {
-		return nil, fmt.Errorf("can't read .golangci.reference.yml: %w", err)
-	}
-
-	snippets, err := extractExampleSnippets(golangciYamlExample)
-	if err != nil {
-		return nil, fmt.Errorf("can't read .golangci.reference.yml: %w", err)
+		return nil, err
 	}
 
 	helps, err := readJSONFile[types.CLIHelp](filepath.Join("assets", "cli-help.json"))
