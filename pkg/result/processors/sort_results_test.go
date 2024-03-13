@@ -76,7 +76,7 @@ type compareTestCase struct {
 	expected compareResult
 }
 
-func testCompareValues(t *testing.T, cmp comparator, name string, tests []compareTestCase) {
+func testCompareValues(t *testing.T, cmp *comparator, name string, tests []compareTestCase) {
 	t.Parallel()
 
 	for i := 0; i < len(tests); i++ {
@@ -89,7 +89,7 @@ func testCompareValues(t *testing.T, cmp comparator, name string, tests []compar
 }
 
 func TestCompareByLine(t *testing.T) {
-	testCompareValues(t, &byLine{}, "Compare By Line", []compareTestCase{
+	testCompareValues(t, byLine(), "Compare By Line", []compareTestCase{
 		{issues[0], issues[1], less},    // 10 vs 11
 		{issues[0], issues[0], equal},   // 10 vs 10
 		{issues[3], issues[3], equal},   // 10 vs 10
@@ -105,7 +105,7 @@ func TestCompareByLine(t *testing.T) {
 }
 
 func TestCompareByFileName(t *testing.T) { //nolint:dupl
-	testCompareValues(t, &byFileName{}, "Compare By File Name", []compareTestCase{
+	testCompareValues(t, byFileName(), "Compare By File Name", []compareTestCase{
 		{issues[0], issues[1], greater}, // file_windows.go vs file_linux.go
 		{issues[1], issues[2], greater}, // file_linux.go vs file_darwin.go
 		{issues[2], issues[3], equal},   // file_darwin.go vs file_darwin.go
@@ -120,7 +120,7 @@ func TestCompareByFileName(t *testing.T) { //nolint:dupl
 }
 
 func TestCompareByColumn(t *testing.T) { //nolint:dupl
-	testCompareValues(t, &byColumn{}, "Compare By Column", []compareTestCase{
+	testCompareValues(t, byColumn(), "Compare By Column", []compareTestCase{
 		{issues[0], issues[1], greater}, // 80 vs 70
 		{issues[1], issues[2], none},    // 70 vs zero value
 		{issues[3], issues[3], equal},   // 60 vs 60
@@ -135,7 +135,7 @@ func TestCompareByColumn(t *testing.T) { //nolint:dupl
 }
 
 func TestCompareByLinter(t *testing.T) { //nolint:dupl
-	testCompareValues(t, &byLinter{}, "Compare By Linter", []compareTestCase{
+	testCompareValues(t, byLinter(), "Compare By Linter", []compareTestCase{
 		{issues[0], issues[1], greater}, // b vs a
 		{issues[1], issues[2], less},    // a vs c
 		{issues[2], issues[3], equal},   // c vs c
@@ -150,7 +150,7 @@ func TestCompareByLinter(t *testing.T) { //nolint:dupl
 }
 
 func TestCompareBySeverity(t *testing.T) {
-	testCompareValues(t, &bySeverity{}, "Compare By Severity", []compareTestCase{
+	testCompareValues(t, bySeverity(), "Compare By Severity", []compareTestCase{
 		{issues[0], issues[1], greater},                           // medium vs low
 		{issues[1], issues[2], less},                              // low vs high
 		{issues[2], issues[3], equal},                             // high vs high
@@ -167,11 +167,7 @@ func TestCompareBySeverity(t *testing.T) {
 }
 
 func TestCompareNested(t *testing.T) {
-	var cmp = &byFileName{
-		next: &byLine{
-			next: &byColumn{},
-		},
-	}
+	cmp := byFileName().SetNext(byLine().SetNext(byColumn()))
 
 	testCompareValues(t, cmp, "Nested Comparing", []compareTestCase{
 		{issues[1], issues[0], less},    // file_linux.go vs file_windows.go
@@ -188,7 +184,7 @@ func TestCompareNested(t *testing.T) {
 }
 
 func TestNumericCompare(t *testing.T) {
-	var tests = []struct {
+	tests := []struct {
 		a, b     int
 		expected compareResult
 	}{
@@ -214,10 +210,10 @@ func TestNumericCompare(t *testing.T) {
 }
 
 func TestNoSorting(t *testing.T) {
-	var tests = make([]result.Issue, len(issues))
+	tests := make([]result.Issue, len(issues))
 	copy(tests, issues)
 
-	var sr = NewSortResults(&config.Config{})
+	sr := NewSortResults(&config.Config{})
 
 	results, err := sr.Process(tests)
 	require.NoError(t, err)
@@ -225,12 +221,12 @@ func TestNoSorting(t *testing.T) {
 }
 
 func TestSorting(t *testing.T) {
-	var tests = make([]result.Issue, len(issues))
+	tests := make([]result.Issue, len(issues))
 	copy(tests, issues)
 
-	var cfg = config.Config{}
+	cfg := config.Config{}
 	cfg.Output.SortResults = true
-	var sr = NewSortResults(&cfg)
+	sr := NewSortResults(&cfg)
 
 	results, err := sr.Process(tests)
 	require.NoError(t, err)
@@ -240,27 +236,32 @@ func TestSorting(t *testing.T) {
 func Test_mergeComparators(t *testing.T) {
 	testCases := []struct {
 		desc     string
-		cmps     []comparator
+		cmps     []*comparator
 		expected string
 	}{
 		{
 			desc:     "one",
-			cmps:     []comparator{&byLinter{}},
+			cmps:     []*comparator{byLinter()},
 			expected: "byLinter",
 		},
 		{
 			desc:     "two",
-			cmps:     []comparator{&byLinter{}, &byFileName{}},
+			cmps:     []*comparator{byLinter(), byFileName()},
 			expected: "byLinter > byFileName",
 		},
 		{
 			desc:     "all",
-			cmps:     []comparator{&bySeverity{}, &byLinter{}, &byFileName{}, &byLine{}, &byColumn{}},
+			cmps:     []*comparator{bySeverity(), byLinter(), byFileName(), byLine(), byColumn()},
 			expected: "bySeverity > byLinter > byFileName > byLine > byColumn",
 		},
 		{
+			desc:     "nested",
+			cmps:     []*comparator{bySeverity(), byFileName().SetNext(byLine().SetNext(byColumn())), byLinter()},
+			expected: "bySeverity > byFileName > byLine > byColumn > byLinter",
+		},
+		{
 			desc:     "all reverse",
-			cmps:     []comparator{&byColumn{}, &byLine{}, &byFileName{}, &byLinter{}, &bySeverity{}},
+			cmps:     []*comparator{byColumn(), byLine(), byFileName(), byLinter(), bySeverity()},
 			expected: "byColumn > byLine > byFileName > byLinter > bySeverity",
 		},
 	}
