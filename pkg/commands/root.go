@@ -20,7 +20,6 @@ func Execute(info BuildInfo) error {
 type rootOptions struct {
 	PrintVersion bool // Flag only.
 
-	Help    bool   // Flag only.
 	Verbose bool   // Flag only.
 	Color   string // Flag only.
 }
@@ -85,7 +84,7 @@ func (c *rootCommand) Execute() error {
 }
 
 func setupRootPersistentFlags(fs *pflag.FlagSet, opts *rootOptions) {
-	fs.BoolVarP(&opts.Help, "help", "h", false, color.GreenString("Help for a command"))
+	fs.BoolP("help", "h", false, color.GreenString("Help for a command"))
 	fs.BoolVarP(&opts.Verbose, "verbose", "v", false, color.GreenString("Verbose output"))
 	fs.StringVar(&opts.Color, "color", "auto", color.GreenString("Use color when printing; can be 'always', 'auto', or 'never'"))
 }
