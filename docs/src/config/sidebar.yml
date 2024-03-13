@@ -6,10 +6,10 @@
   items:
     - label: "Install"
       link: "/usage/install/"
-    - label: "Integrations"
-      link: "/usage/integrations/"
     - label: "Quick Start"
       link: "/usage/quick-start/"
+    - label: "Integrations"
+      link: "/usage/integrations/"
     - label: "FAQ"
       link: "/usage/faq/"
 - label: Usage
