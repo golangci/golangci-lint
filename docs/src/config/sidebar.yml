@@ -2,22 +2,24 @@
 
 - label: "Introduction"
   link: "/"
-- label: Usage
+- label: Welcome
   items:
     - label: "Install"
       link: "/usage/install/"
-    - label: "Quick Start"
-      link: "/usage/quick-start/"
     - label: "Integrations"
       link: "/usage/integrations/"
-    - label: "Linters"
-      link: "/usage/linters/"
-    - label: "Configuration"
-      link: "/usage/configuration/"
-    - label: "False Positives"
-      link: "/usage/false-positives/"
+    - label: "Quick Start"
+      link: "/usage/quick-start/"
     - label: "FAQ"
       link: "/usage/faq/"
+- label: Usage
+  items:
+    - label: "Configuration"
+      link: "/configuration/configuration/"
+    - label: "Linters"
+      link: "/configuration/linters/"
+    - label: "False Positives"
+      link: "/configuration/false-positives/"
 - label: Product
   items:
     - label: "Roadmap"
