@@ -41,15 +41,16 @@ func NewRunner(log logutils.Log, cfg *config.Config, goenv *goutil.Env,
 	// or process other paths (skip files).
 	files := fsutils.NewFiles(lineCache, cfg.Output.PathPrefix)
 
-	skipFilesProcessor, err := processors.NewSkipFiles(cfg.Run.SkipFiles, cfg.Output.PathPrefix)
+	skipFilesProcessor, err := processors.NewSkipFiles(cfg.Issues.ExcludeFiles, cfg.Output.PathPrefix)
 	if err != nil {
 		return nil, err
 	}
 
-	skipDirs := cfg.Run.SkipDirs
-	if cfg.Run.UseDefaultSkipDirs {
+	skipDirs := cfg.Issues.ExcludeDirs
+	if cfg.Issues.UseDefaultExcludeDirs {
 		skipDirs = append(skipDirs, packages.StdExcludeDirRegexps...)
 	}
+
 	skipDirsProcessor, err := processors.NewSkipDirs(skipDirs, log.Child(logutils.DebugKeySkipDirs), cfg.Run.Args, cfg.Output.PathPrefix)
 	if err != nil {
 		return nil, err
