@@ -19,7 +19,7 @@ func NewGochecknoglobals() *goanalysis.Linter {
 
 	return goanalysis.NewLinter(
 		a.Name,
-		a.Doc,
+		"Check that no global variables exist.",
 		[]*analysis.Analyzer{a},
 		linterConfig,
 	).WithLoadMode(goanalysis.LoadModeTypesInfo)
