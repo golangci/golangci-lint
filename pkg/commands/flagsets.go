@@ -12,6 +12,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/exitcodes"
 	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
+	"github.com/golangci/golangci-lint/pkg/packages"
 )
 
 func setupLintersFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
@@ -106,4 +107,25 @@ func setupIssuesFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
 		color.GreenString("Show issues in any part of update files (requires new-from-rev or new-from-patch)"))
 	internal.AddFlagAndBind(v, fs, fs.Bool, "fix", "issues.fix", false,
 		color.GreenString("Fix found issues (if it's supported by the linter)"))
+}
+
+func getDefaultIssueExcludeHelp() string {
+	parts := []string{color.GreenString("Use or not use default excludes:")}
+	for _, ep := range config.DefaultExcludePatterns {
+		parts = append(parts,
+			fmt.Sprintf("  # %s %s: %s", ep.ID, ep.Linter, ep.Why),
+			fmt.Sprintf("  - %s", color.YellowString(ep.Pattern)),
+			"",
+		)
+	}
+	return strings.Join(parts, "\n")
+}
+
+func getDefaultDirectoryExcludeHelp() string {
+	parts := []string{color.GreenString("Use or not use default excluded directories:")}
+	for _, dir := range packages.StdExcludeDirRegexps {
+		parts = append(parts, fmt.Sprintf("  - %s", color.YellowString(dir)))
+	}
+	parts = append(parts, "")
+	return strings.Join(parts, "\n")
 }
