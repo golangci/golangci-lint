@@ -132,6 +132,12 @@ func (l *Loader) handleDeprecation() {
 		l.log.Warnf("The configuration option `run.skip-dirs-use-default` is deprecated, please use `issues.exclude-dirs-use-default`.")
 	}
 	l.cfg.Issues.UseDefaultExcludeDirs = l.cfg.Run.UseDefaultSkipDirs && l.cfg.Issues.UseDefaultExcludeDirs
+
+	// The 2 options are false by default.
+	if l.cfg.Run.ShowStats {
+		l.log.Warnf("The configuration option `run.show-stats` is deprecated, please use `output.show-stats`")
+	}
+	l.cfg.Output.ShowStats = l.cfg.Run.ShowStats || l.cfg.Output.ShowStats
 }
 
 func (l *Loader) setConfigFile() error {

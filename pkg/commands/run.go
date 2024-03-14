@@ -425,11 +425,7 @@ func (c *runCommand) printDeprecatedLinterMessages(enabledLinters map[string]*li
 }
 
 func (c *runCommand) printStats(issues []result.Issue) {
-	if c.cfg.Run.ShowStats {
-		c.log.Warnf("The configuration option `run.show-stats` is deprecated, please use `output.show-stats`")
-	}
-
-	if !c.cfg.Run.ShowStats && !c.cfg.Output.ShowStats {
+	if !c.cfg.Output.ShowStats {
 		return
 	}
 
