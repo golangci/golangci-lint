@@ -278,9 +278,12 @@ func (l *Loader) applyStringSliceHack() {
 	l.appendStringSlice("disable", &l.cfg.Linters.Disable)
 	l.appendStringSlice("presets", &l.cfg.Linters.Presets)
 	l.appendStringSlice("build-tags", &l.cfg.Run.BuildTags)
+	l.appendStringSlice("exclude", &l.cfg.Issues.ExcludePatterns)
+
 	l.appendStringSlice("skip-dirs", &l.cfg.Run.SkipDirs)
 	l.appendStringSlice("skip-files", &l.cfg.Run.SkipFiles)
-	l.appendStringSlice("exclude", &l.cfg.Issues.ExcludePatterns)
+	l.appendStringSlice("skip-dirs", &l.cfg.Issues.ExcludeDirs)
+	l.appendStringSlice("skip-files", &l.cfg.Issues.ExcludeFiles)
 }
 
 func (l *Loader) appendStringSlice(name string, current *[]string) {

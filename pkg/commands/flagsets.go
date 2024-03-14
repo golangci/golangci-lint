@@ -48,9 +48,10 @@ func setupRunFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
 	internal.AddFlagAndBind(v, fs, fs.Duration, "timeout", "run.timeout", defaultTimeout, color.GreenString("Timeout for total work"))
 
 	internal.AddFlagAndBind(v, fs, fs.Bool, "tests", "run.tests", true, color.GreenString("Analyze tests (*_test.go)"))
+
+	fs.StringSlice("skip-files", nil, color.GreenString("Regexps of files to skip"))      // Hack see Loader.applyStringSliceHack
 	fs.StringSlice("skip-dirs", nil, color.GreenString("Regexps of directories to skip")) // Hack see Loader.applyStringSliceHack
 	internal.AddFlagAndBind(v, fs, fs.Bool, "skip-dirs-use-default", "run.skip-dirs-use-default", true, getDefaultDirectoryExcludeHelp())
-	fs.StringSlice("skip-files", nil, color.GreenString("Regexps of files to skip")) // Hack see Loader.applyStringSliceHack
 
 	const allowParallelDesc = "Allow multiple parallel golangci-lint instances running. " +
 		"If false (default) - golangci-lint acquires file lock on start."
@@ -91,6 +92,11 @@ func setupIssuesFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
 		color.GreenString("Maximum issues count per one linter. Set to 0 to disable"))
 	internal.AddFlagAndBind(v, fs, fs.Int, "max-same-issues", "issues.max-same-issues", 3,
 		color.GreenString("Maximum count of issues with the same text. Set to 0 to disable"))
+
+	fs.StringSlice("exclude-files", nil, color.GreenString("Regexps of files to exclude"))      // Hack see Loader.applyStringSliceHack
+	fs.StringSlice("exclude-dirs", nil, color.GreenString("Regexps of directories to exclude")) // Hack see Loader.applyStringSliceHack
+	internal.AddFlagAndBind(v, fs, fs.Bool, "exclude-dirs-use-default", "issues.exclude-dirs-use-default", true,
+		getDefaultDirectoryExcludeHelp())
 
 	const newDesc = "Show only new issues: if there are unstaged changes or untracked files, only those changes " +
 		"are analyzed, else only changes in HEAD~ are analyzed.\nIt's a super-useful option for integration " +
