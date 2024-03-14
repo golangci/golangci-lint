@@ -61,6 +61,8 @@ func (l *Loader) Load() error {
 
 	l.handleGoVersion()
 
+	l.handleDeprecation()
+
 	err = l.handleEnableOnlyOption()
 	if err != nil {
 		return err
@@ -112,6 +114,24 @@ func (l *Loader) handleGoVersion() {
 	if l.cfg.LintersSettings.Stylecheck.GoVersion != "" {
 		l.cfg.LintersSettings.Stylecheck.GoVersion = trimmedGoVersion
 	}
+}
+
+func (l *Loader) handleDeprecation() {
+	if len(l.cfg.Run.SkipFiles) > 0 {
+		l.log.Warnf("The configuration option `run.skip-files` is deprecated, please use `issues.exclude-files`.")
+		l.cfg.Issues.ExcludeFiles = l.cfg.Run.SkipFiles
+	}
+
+	if len(l.cfg.Run.SkipDirs) > 0 {
+		l.log.Warnf("The configuration option `run.skip-dirs` is deprecated, please use `issues.exclude-dirs`.")
+		l.cfg.Issues.ExcludeDirs = l.cfg.Run.SkipDirs
+	}
+
+	// The 2 options are true by default.
+	if !l.cfg.Run.UseDefaultSkipDirs {
+		l.log.Warnf("The configuration option `run.skip-dirs-use-default` is deprecated, please use `issues.exclude-dirs-use-default`.")
+	}
+	l.cfg.Issues.UseDefaultExcludeDirs = l.cfg.Run.UseDefaultSkipDirs && l.cfg.Issues.UseDefaultExcludeDirs
 }
 
 func (l *Loader) setConfigFile() error {
