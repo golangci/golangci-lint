@@ -161,18 +161,17 @@ func buildTemplateContext() (map[string]string, error) {
 	}
 
 	return map[string]string{
-		"CustomGCLReference":               pluginReference,
-		"LintersExample":                   snippets.LintersSettings,
-		"ConfigurationExample":             snippets.ConfigurationFile,
-		"LintersCommandOutputEnabledOnly":  helps.Enable,
-		"LintersCommandOutputDisabledOnly": helps.Disable,
-		"EnabledByDefaultLinters":          getLintersListMarkdown(true),
-		"DisabledByDefaultLinters":         getLintersListMarkdown(false),
-		"DefaultExclusions":                exclusions,
-		"ThanksList":                       getThanksList(),
-		"RunHelpText":                      helps.Help,
-		"ChangeLog":                        string(changeLog),
-		"LatestVersion":                    latestVersion,
+		"CustomGCLReference":              pluginReference,
+		"LintersExample":                  snippets.LintersSettings,
+		"ConfigurationExample":            snippets.ConfigurationFile,
+		"LintersCommandOutputEnabledOnly": helps.Enable,
+		"EnabledByDefaultLinters":         getLintersListMarkdown(true),
+		"DisabledByDefaultLinters":        getLintersListMarkdown(false),
+		"DefaultExclusions":               exclusions,
+		"ThanksList":                      getThanksList(),
+		"RunHelpText":                     helps.Help,
+		"ChangeLog":                       string(changeLog),
+		"LatestVersion":                   latestVersion,
 	}, nil
 }
 

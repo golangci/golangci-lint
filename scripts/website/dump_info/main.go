@@ -105,9 +105,8 @@ func saveCLIHelp(dst string) error {
 	shortHelp := bytes.Join(helpLines[2:], []byte("\n"))
 
 	data := types.CLIHelp{
-		Enable:  string(lintersOutParts[0]),
-		Disable: string(lintersOutParts[1]),
-		Help:    string(shortHelp),
+		Enable: string(lintersOutParts[0]),
+		Help:   string(shortHelp),
 	}
 
 	return saveToJSONFile(dst, data)

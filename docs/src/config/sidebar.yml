@@ -2,32 +2,36 @@
 
 - label: "Introduction"
   link: "/"
-- label: Usage
+- label: Welcome
   items:
     - label: "Install"
-      link: "/usage/install/"
+      link: "/welcome/install/"
     - label: "Quick Start"
-      link: "/usage/quick-start/"
+      link: "/welcome/quick-start/"
     - label: "Integrations"
-      link: "/usage/integrations/"
-    - label: "Linters"
-      link: "/usage/linters/"
+      link: "/welcome/integrations/"
+    - label: "FAQ"
+      link: "/welcome/faq/"
+- label: Usage
+  items:
     - label: "Configuration"
       link: "/usage/configuration/"
+    - label: "Linters"
+      link: "/usage/linters/"
     - label: "False Positives"
       link: "/usage/false-positives/"
-    - label: "Performance"
-      link: "/usage/performance/"
-    - label: "FAQ"
-      link: "/usage/faq/"
 - label: Product
   items:
-    - label: "Roadmap"
-      link: "/product/roadmap/"
     - label: "Thanks"
       link: "/product/thanks/"
     - label: "Trusted By"
       link: "/product/trusted-by/"
+    - label: "Changelog"
+      link: "/product/changelog/"
+    - label: "Roadmap"
+      link: "/product/roadmap/"
+    - label: "Performance"
+      link: "/product/performance/"
     - label: "GitHub"
       link: "https://github.com/golangci/golangci-lint"
 - label: Contributing

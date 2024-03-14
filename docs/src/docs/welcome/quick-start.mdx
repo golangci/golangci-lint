@@ -22,19 +22,11 @@ golangci-lint run dir1 dir2/... dir3/file1.go
 
 Directories are NOT analyzed recursively. To analyze them recursively append `/...` to their path.
 
-GolangCI-Lint can be used with zero configuration. By default the following linters are enabled:
+GolangCI-Lint can be used with zero configuration. By default, the following linters are enabled:
 
 ```sh
 $ golangci-lint help linters
 {.LintersCommandOutputEnabledOnly}
-```
-
-and the following linters are disabled by default:
-
-```sh
-$ golangci-lint help linters
-...
-{.LintersCommandOutputDisabledOnly}
 ```
 
 Pass `-E/--enable` to enable linter and `-D/--disable` to disable:
@@ -42,3 +34,5 @@ Pass `-E/--enable` to enable linter and `-D/--disable` to disable:
 ```sh
 golangci-lint run --disable-all -E errcheck
 ```
+
+More information about available linters can be found in the [linters page](/usage/linters/).
