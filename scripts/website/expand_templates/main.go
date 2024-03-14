@@ -9,6 +9,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/golangci/golangci-lint/internal/renameio"
 	"github.com/golangci/golangci-lint/scripts/website/types"
@@ -101,8 +102,11 @@ func getLatestVersion() (string, error) {
 		return "", fmt.Errorf("prepare a HTTP request: %w", err)
 	}
 
-	req.Header.Add("Accept", "application/vnd.github.v3+json")
-	resp, err := http.DefaultClient.Do(req)
+	req.Header.Set("Accept", "application/vnd.github.v3+json")
+
+	client := &http.Client{Timeout: 2 * time.Second}
+
+	resp, err := client.Do(req)
 
 	if err != nil {
 		return "", fmt.Errorf("get HTTP response for the latest tag: %w", err)
