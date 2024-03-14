@@ -9,6 +9,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/golangci/golangci-lint/internal/renameio"
 	"github.com/golangci/golangci-lint/scripts/website/types"
@@ -29,6 +30,7 @@ func main() {
 
 func rewriteDocs(replacements map[string]string) error {
 	madeReplacements := map[string]bool{}
+
 	err := filepath.Walk(filepath.Join("docs", "src", "docs"),
 		func(path string, info os.FileInfo, err error) error {
 			if err != nil {
@@ -40,7 +42,7 @@ func rewriteDocs(replacements map[string]string) error {
 			return processDoc(path, replacements, madeReplacements)
 		})
 	if err != nil {
-		return fmt.Errorf("failed to walk dir: %w", err)
+		return fmt.Errorf("walk dir: %w", err)
 	}
 
 	if len(madeReplacements) != len(replacements) {
@@ -57,7 +59,7 @@ func rewriteDocs(replacements map[string]string) error {
 func processDoc(path string, replacements map[string]string, madeReplacements map[string]bool) error {
 	contentBytes, err := os.ReadFile(path)
 	if err != nil {
-		return fmt.Errorf("failed to read %s: %w", path, err)
+		return fmt.Errorf("read %s: %w", path, err)
 	}
 
 	content := string(contentBytes)
@@ -81,7 +83,7 @@ func processDoc(path string, replacements map[string]string, madeReplacements ma
 
 	log.Printf("Expanded template in %s, saving it", path)
 	if err = renameio.WriteFile(path, []byte(content), os.ModePerm); err != nil {
-		return fmt.Errorf("failed to write changes to file %s: %w", path, err)
+		return fmt.Errorf("write changes to file %s: %w", path, err)
 	}
 
 	return nil
@@ -92,29 +94,38 @@ type latestRelease struct {
 }
 
 func getLatestVersion() (string, error) {
-	req, err := http.NewRequest( //nolint:noctx
-		http.MethodGet,
-		"https://api.github.com/repos/golangci/golangci-lint/releases/latest",
-		http.NoBody,
-	)
+	endpoint := "https://api.github.com/repos/golangci/golangci-lint/releases/latest"
+
+	//nolint:noctx
+	req, err := http.NewRequest(http.MethodGet, endpoint, http.NoBody)
 	if err != nil {
-		return "", fmt.Errorf("failed to prepare a http request: %w", err)
+		return "", fmt.Errorf("prepare a HTTP request: %w", err)
 	}
-	req.Header.Add("Accept", "application/vnd.github.v3+json")
-	resp, err := http.DefaultClient.Do(req)
+
+	req.Header.Set("Accept", "application/vnd.github.v3+json")
+
+	client := &http.Client{Timeout: 2 * time.Second}
+
+	resp, err := client.Do(req)
+
 	if err != nil {
-		return "", fmt.Errorf("failed to get http response for the latest tag: %w", err)
+		return "", fmt.Errorf("get HTTP response for the latest tag: %w", err)
 	}
+
 	defer resp.Body.Close()
+
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return "", fmt.Errorf("failed to read a body for the latest tag: %w", err)
+		return "", fmt.Errorf("read a body for the latest tag: %w", err)
 	}
+
 	release := latestRelease{}
+
 	err = json.Unmarshal(body, &release)
 	if err != nil {
-		return "", fmt.Errorf("failed to unmarshal the body for the latest tag: %w", err)
+		return "", fmt.Errorf("unmarshal the body for the latest tag: %w", err)
 	}
+
 	return release.TagName, nil
 }
 
@@ -126,7 +137,7 @@ func buildTemplateContext() (map[string]string, error) {
 
 	pluginReference, err := getPluginReference()
 	if err != nil {
-		return nil, fmt.Errorf("failed to read plugin reference file: %w", err)
+		return nil, fmt.Errorf("read plugin reference file: %w", err)
 	}
 
 	helps, err := readJSONFile[types.CLIHelp](filepath.Join("assets", "cli-help.json"))
@@ -136,12 +147,12 @@ func buildTemplateContext() (map[string]string, error) {
 
 	changeLog, err := os.ReadFile("CHANGELOG.md")
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("read CHANGELOG.md: %w", err)
 	}
 
 	latestVersion, err := getLatestVersion()
 	if err != nil {
-		return nil, fmt.Errorf("failed to get the latest version: %w", err)
+		return nil, fmt.Errorf("get the latest version: %w", err)
 	}
 
 	exclusions, err := getDefaultExclusions()
@@ -169,14 +180,16 @@ func readJSONFile[T any](src string) (T, error) {
 	file, err := os.Open(src)
 	if err != nil {
 		var zero T
-		return zero, err
+		return zero, fmt.Errorf("open file %s: %w", src, err)
 	}
+
+	defer func() { _ = file.Close() }()
 
 	var result T
 	err = json.NewDecoder(file).Decode(&result)
 	if err != nil {
 		var zero T
-		return zero, err
+		return zero, fmt.Errorf("decode JSON file %s: %w", src, err)
 	}
 
 	return result, nil

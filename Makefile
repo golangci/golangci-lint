@@ -98,7 +98,7 @@ website_expand_templates:
 
 website_dump_info:
 	go run ./scripts/website/dump_info/
-.PHONY: dump_info
+.PHONY: website_dump_info
 
 update_contributors_list:
 	cd .github/contributors && npm run all
