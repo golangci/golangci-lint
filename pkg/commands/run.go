@@ -211,8 +211,11 @@ func (c *runCommand) preRunE(_ *cobra.Command, _ []string) error {
 		return fmt.Errorf("failed to build packages cache: %w", err)
 	}
 
-	c.contextLoader = lint.NewContextLoader(c.cfg, c.log.Child(logutils.DebugKeyLoader), c.goenv,
-		c.lineCache, c.fileCache, pkgCache, load.NewGuard())
+	guard := load.NewGuard()
+
+	pkgLoader := lint.NewPackageLoader(c.log.Child(logutils.DebugKeyLoader), c.cfg, c.goenv, guard)
+
+	c.contextLoader = lint.NewContextLoader(c.cfg, pkgLoader, c.lineCache, c.fileCache, pkgCache, guard)
 
 	if err = initHashSalt(c.buildInfo.Version, c.cfg); err != nil {
 		return fmt.Errorf("failed to init hash salt: %w", err)
