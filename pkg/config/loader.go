@@ -308,8 +308,8 @@ func (l *Loader) applyStringSliceHack() {
 
 	l.appendStringSlice("skip-dirs", &l.cfg.Run.SkipDirs)
 	l.appendStringSlice("skip-files", &l.cfg.Run.SkipFiles)
-	l.appendStringSlice("skip-dirs", &l.cfg.Issues.ExcludeDirs)
-	l.appendStringSlice("skip-files", &l.cfg.Issues.ExcludeFiles)
+	l.appendStringSlice("exclude-dirs", &l.cfg.Issues.ExcludeDirs)
+	l.appendStringSlice("exclude-files", &l.cfg.Issues.ExcludeFiles)
 }
 
 func (l *Loader) appendStringSlice(name string, current *[]string) {
