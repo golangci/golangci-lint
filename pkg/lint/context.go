@@ -13,7 +13,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/logutils"
 )
 
-type ContextLoader struct {
+type ContextBuilder struct {
 	cfg *config.Config
 
 	pkgLoader *PackageLoader
@@ -25,10 +25,10 @@ type ContextLoader struct {
 	loadGuard *load.Guard
 }
 
-func NewContextLoader(cfg *config.Config, pkgLoader *PackageLoader,
+func NewContextBuilder(cfg *config.Config, pkgLoader *PackageLoader,
 	lineCache *fsutils.LineCache, fileCache *fsutils.FileCache, pkgCache *pkgcache.Cache, loadGuard *load.Guard,
-) *ContextLoader {
-	return &ContextLoader{
+) *ContextBuilder {
+	return &ContextBuilder{
 		cfg:       cfg,
 		pkgLoader: pkgLoader,
 		lineCache: lineCache,
@@ -38,7 +38,7 @@ func NewContextLoader(cfg *config.Config, pkgLoader *PackageLoader,
 	}
 }
 
-func (cl *ContextLoader) Load(ctx context.Context, log logutils.Log, linters []*linter.Config) (*linter.Context, error) {
+func (cl *ContextBuilder) Build(ctx context.Context, log logutils.Log, linters []*linter.Config) (*linter.Context, error) {
 	pkgs, deduplicatedPkgs, err := cl.pkgLoader.Load(ctx, linters)
 	if err != nil {
 		return nil, fmt.Errorf("failed to load packages: %w", err)
