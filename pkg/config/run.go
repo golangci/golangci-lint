@@ -26,6 +26,6 @@ type Run struct {
 	// Deprecated: use Output.ShowStats instead.
 	ShowStats bool `mapstructure:"show-stats"`
 
-	// It's obtain by flags and use for the tests and the context loader.
+	// Only used by skipDirs processor. TODO(ldez) remove it in next PR.
 	Args []string // Internal needs.
 }

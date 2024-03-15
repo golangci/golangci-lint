@@ -28,6 +28,8 @@ type PackageLoader struct {
 
 	cfg *config.Config
 
+	args []string
+
 	pkgTestIDRe *regexp.Regexp
 
 	goenv *goutil.Env
@@ -36,9 +38,10 @@ type PackageLoader struct {
 }
 
 // NewPackageLoader creates a new PackageLoader.
-func NewPackageLoader(log logutils.Log, cfg *config.Config, goenv *goutil.Env, loadGuard *load.Guard) *PackageLoader {
+func NewPackageLoader(log logutils.Log, cfg *config.Config, args []string, goenv *goutil.Env, loadGuard *load.Guard) *PackageLoader {
 	return &PackageLoader{
 		cfg:         cfg,
+		args:        args,
 		log:         log,
 		debugf:      logutils.Debug(logutils.DebugKeyLoader),
 		goenv:       goenv,
@@ -215,13 +218,12 @@ func (l *PackageLoader) prepareBuildContext() {
 }
 
 func (l *PackageLoader) buildArgs() []string {
-	args := l.cfg.Run.Args
-	if len(args) == 0 {
+	if len(l.args) == 0 {
 		return []string{"./..."}
 	}
 
 	var retArgs []string
-	for _, arg := range args {
+	for _, arg := range l.args {
 		if strings.HasPrefix(arg, ".") || filepath.IsAbs(arg) {
 			retArgs = append(retArgs, arg)
 		} else {
