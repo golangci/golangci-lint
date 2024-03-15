@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"go/token"
 	"path/filepath"
+	"runtime"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -227,6 +228,11 @@ func Test_shouldPassIssue(t *testing.T) {
 }
 
 func Test_shouldPassIssue_error(t *testing.T) {
+	notFoundMsg := "no such file or directory"
+	if runtime.GOOS == "windows" {
+		notFoundMsg = "The system cannot find the file specified."
+	}
+
 	testCases := []struct {
 		desc     string
 		strict   bool
@@ -253,8 +259,8 @@ func Test_shouldPassIssue_error(t *testing.T) {
 					Filename: filepath.FromSlash("no-existing.go"),
 				},
 			},
-			expected: fmt.Sprintf("failed to get doc (lax) of file %[1]s: failed to parse file: open %[1]s: no such file or directory",
-				filepath.FromSlash("no-existing.go")),
+			expected: fmt.Sprintf("failed to get doc (lax) of file %[1]s: failed to parse file: open %[1]s: %[2]s",
+				filepath.FromSlash("no-existing.go"), notFoundMsg),
 		},
 		{
 			desc:   "non-existing file (strict)",
@@ -265,8 +271,8 @@ func Test_shouldPassIssue_error(t *testing.T) {
 					Filename: filepath.FromSlash("no-existing.go"),
 				},
 			},
-			expected: fmt.Sprintf("failed to get doc (strict) of file %[1]s: failed to parse file: open %[1]s: no such file or directory",
-				filepath.FromSlash("no-existing.go")),
+			expected: fmt.Sprintf("failed to get doc (strict) of file %[1]s: failed to parse file: open %[1]s: %[2]s",
+				filepath.FromSlash("no-existing.go"), notFoundMsg),
 		},
 	}
 
