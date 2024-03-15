@@ -16,19 +16,18 @@ import (
 )
 
 func setupLintersFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
-	fs.StringSliceP("disable", "D", nil, color.GreenString("Disable specific linter")) // Hack see Loader.applyStringSliceHack
+	internal.AddHackedStringSliceP(fs, "disable", "D", color.GreenString("Disable specific linter"))
 	internal.AddFlagAndBind(v, fs, fs.Bool, "disable-all", "linters.disable-all", false, color.GreenString("Disable all linters"))
 
-	fs.StringSliceP("enable", "E", nil, color.GreenString("Enable specific linter")) // Hack see Loader.applyStringSliceHack
+	internal.AddHackedStringSliceP(fs, "enable", "E", color.GreenString("Enable specific linter"))
 	internal.AddFlagAndBind(v, fs, fs.Bool, "enable-all", "linters.enable-all", false, color.GreenString("Enable all linters"))
 
 	internal.AddFlagAndBind(v, fs, fs.Bool, "fast", "linters.fast", false,
 		color.GreenString("Enable only fast linters from enabled linters set (first run won't be fast)"))
 
-	// Hack see Loader.applyStringSliceHack
-	fs.StringSliceP("presets", "p", nil,
-		color.GreenString(fmt.Sprintf("Enable presets (%s) of linters. Run 'golangci-lint help linters' to see "+
-			"them. This option implies option --disable-all", strings.Join(lintersdb.AllPresets(), "|"))))
+	internal.AddHackedStringSliceP(fs, "presets", "p",
+		color.GreenString(fmt.Sprintf("Enable presets (%s) of linters. Run 'golangci-lint help linters' to see them. "+
+			"This option implies option --disable-all", strings.Join(lintersdb.AllPresets(), "|"))))
 
 	fs.StringSlice("enable-only", nil,
 		color.GreenString("Override linters configuration section to only run the specific linter(s)")) // Flags only.
@@ -43,18 +42,16 @@ func setupRunFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
 	internal.AddFlagAndBind(v, fs, fs.Int, "issues-exit-code", "run.issues-exit-code", exitcodes.IssuesFound,
 		color.GreenString("Exit code when issues were found"))
 	internal.AddFlagAndBind(v, fs, fs.String, "go", "run.go", "", color.GreenString("Targeted Go version"))
-	fs.StringSlice("build-tags", nil, color.GreenString("Build tags")) // Hack see Loader.applyStringSliceHack
+	internal.AddHackedStringSlice(fs, "build-tags", color.GreenString("Build tags"))
 
 	internal.AddFlagAndBind(v, fs, fs.Duration, "timeout", "run.timeout", defaultTimeout, color.GreenString("Timeout for total work"))
 
 	internal.AddFlagAndBind(v, fs, fs.Bool, "tests", "run.tests", true, color.GreenString("Analyze tests (*_test.go)"))
 
-	fs.StringSlice("skip-files", nil, color.GreenString("Regexps of files to skip")) // Hack see Loader.applyStringSliceHack
-	deprecateFlag(fs, "skip-files")
-	fs.StringSlice("skip-dirs", nil, color.GreenString("Regexps of directories to skip")) // Hack see Loader.applyStringSliceHack
-	deprecateFlag(fs, "skip-dirs")
-	internal.AddFlagAndBind(v, fs, fs.Bool, "skip-dirs-use-default", "run.skip-dirs-use-default", true, getDefaultDirectoryExcludeHelp())
-	deprecateFlag(fs, "skip-dirs-use-default")
+	internal.AddDeprecatedHackedStringSlice(fs, "skip-files", color.GreenString("Regexps of files to skip"))
+	internal.AddDeprecatedHackedStringSlice(fs, "skip-dirs", color.GreenString("Regexps of directories to skip"))
+	internal.AddDeprecatedFlagAndBind(v, fs, fs.Bool, "skip-dirs-use-default", "run.skip-dirs-use-default", true,
+		getDefaultDirectoryExcludeHelp())
 
 	const allowParallelDesc = "Allow multiple parallel golangci-lint instances running. " +
 		"If false (default) - golangci-lint acquires file lock on start."
@@ -85,7 +82,7 @@ func setupOutputFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
 
 //nolint:gomnd
 func setupIssuesFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
-	fs.StringSliceP("exclude", "e", nil, color.GreenString("Exclude issue by regexp")) // Hack see Loader.applyStringSliceHack
+	internal.AddHackedStringSliceP(fs, "exclude", "e", color.GreenString("Exclude issue by regexp"))
 	internal.AddFlagAndBind(v, fs, fs.Bool, "exclude-use-default", "issues.exclude-use-default", true,
 		getDefaultIssueExcludeHelp())
 	internal.AddFlagAndBind(v, fs, fs.Bool, "exclude-case-sensitive", "issues.exclude-case-sensitive", false,
@@ -96,8 +93,8 @@ func setupIssuesFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
 	internal.AddFlagAndBind(v, fs, fs.Int, "max-same-issues", "issues.max-same-issues", 3,
 		color.GreenString("Maximum count of issues with the same text. Set to 0 to disable"))
 
-	fs.StringSlice("exclude-files", nil, color.GreenString("Regexps of files to exclude"))      // Hack see Loader.applyStringSliceHack
-	fs.StringSlice("exclude-dirs", nil, color.GreenString("Regexps of directories to exclude")) // Hack see Loader.applyStringSliceHack
+	internal.AddHackedStringSlice(fs, "exclude-files", color.GreenString("Regexps of files to exclude"))
+	internal.AddHackedStringSlice(fs, "exclude-dirs", color.GreenString("Regexps of directories to exclude"))
 	internal.AddFlagAndBind(v, fs, fs.Bool, "exclude-dirs-use-default", "issues.exclude-dirs-use-default", true,
 		getDefaultDirectoryExcludeHelp())
 
@@ -137,9 +134,4 @@ func getDefaultDirectoryExcludeHelp() string {
 	}
 	parts = append(parts, "")
 	return strings.Join(parts, "\n")
-}
-
-func deprecateFlag(fs *pflag.FlagSet, name string) {
-	_ = fs.MarkHidden(name)
-	_ = fs.MarkDeprecated(name, "check the documentation for more information.")
 }
