@@ -1,6 +1,7 @@
 package processors
 
 import (
+	"fmt"
 	"go/token"
 	"path/filepath"
 	"testing"
@@ -249,10 +250,11 @@ func Test_shouldPassIssue_error(t *testing.T) {
 			issue: &result.Issue{
 				FromLinter: "example",
 				Pos: token.Position{
-					Filename: filepath.FromSlash("./no-existing.go"),
+					Filename: filepath.FromSlash("no-existing.go"),
 				},
 			},
-			expected: "failed to get doc (lax) of file ./no-existing.go: failed to parse file: open ./no-existing.go: no such file or directory",
+			expected: fmt.Sprintf("failed to get doc (lax) of file %[1]s: failed to parse file: open %[1]s: no such file or directory",
+				filepath.FromSlash("no-existing.go")),
 		},
 		{
 			desc:   "non-existing file (strict)",
@@ -260,10 +262,11 @@ func Test_shouldPassIssue_error(t *testing.T) {
 			issue: &result.Issue{
 				FromLinter: "example",
 				Pos: token.Position{
-					Filename: filepath.FromSlash("./no-existing.go"),
+					Filename: filepath.FromSlash("no-existing.go"),
 				},
 			},
-			expected: "failed to get doc (strict) of file ./no-existing.go: failed to parse file: open ./no-existing.go: no such file or directory",
+			expected: fmt.Sprintf("failed to get doc (strict) of file %[1]s: failed to parse file: open %[1]s: no such file or directory",
+				filepath.FromSlash("no-existing.go")),
 		},
 	}
 
