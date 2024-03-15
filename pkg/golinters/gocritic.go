@@ -32,13 +32,12 @@ var (
 	isGoCriticDebug = logutils.HaveDebugTag(logutils.DebugKeyGoCritic)
 )
 
-func NewGoCritic(settings *config.GoCriticSettings, cfg *config.Config) *goanalysis.Linter {
+func NewGoCritic(settings *config.GoCriticSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
 
 	wrapper := &goCriticWrapper{
-		configDir: cfg.GetConfigDir(),
-		sizes:     types.SizesFor("gc", runtime.GOARCH),
+		sizes: types.SizesFor("gc", runtime.GOARCH),
 	}
 
 	analyzer := &analysis.Analyzer{
@@ -71,6 +70,8 @@ Dynamic rules are written declaratively with AST patterns, filters, report messa
 		nil,
 	).
 		WithContextSetter(func(context *linter.Context) {
+			wrapper.configDir = context.Cfg.GetConfigDir()
+
 			wrapper.init(context.Log, settings)
 		}).
 		WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {

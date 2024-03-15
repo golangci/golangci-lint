@@ -228,7 +228,7 @@ func (b LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/jgautheron/goconst"),
 
-		linter.NewConfig(golinters.NewGoCritic(&cfg.LintersSettings.Gocritic, cfg)).
+		linter.NewConfig(golinters.NewGoCritic(&cfg.LintersSettings.Gocritic)).
 			WithSince("v1.12.0").
 			WithPresets(linter.PresetStyle, linter.PresetMetaLinter).
 			WithLoadForGoAnalysis().
