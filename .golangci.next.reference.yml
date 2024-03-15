@@ -2785,7 +2785,7 @@ issues:
   # Default: true
   exclude-use-default: false
 
-  # If set to true `exclude` and `exclude-rules` regular expressions become case-sensitive.
+  # If set to true, `exclude` and `exclude-rules` regular expressions become case-sensitive.
   # Default: false
   exclude-case-sensitive: false
 
