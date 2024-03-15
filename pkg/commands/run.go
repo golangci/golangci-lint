@@ -215,7 +215,7 @@ func (c *runCommand) preRunE(_ *cobra.Command, args []string) error {
 
 	pkgLoader := lint.NewPackageLoader(c.log.Child(logutils.DebugKeyLoader), c.cfg, args, c.goenv, guard)
 
-	c.contextBuilder = lint.NewContextBuilder(c.cfg, pkgLoader, c.lineCache, c.fileCache, pkgCache, guard)
+	c.contextBuilder = lint.NewContextBuilder(c.cfg, pkgLoader, c.fileCache, pkgCache, guard)
 
 	if err = initHashSalt(c.buildInfo.Version, c.cfg); err != nil {
 		return fmt.Errorf("failed to init hash salt: %w", err)

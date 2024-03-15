@@ -18,7 +18,6 @@ type ContextBuilder struct {
 
 	pkgLoader *PackageLoader
 
-	lineCache *fsutils.LineCache
 	fileCache *fsutils.FileCache
 	pkgCache  *pkgcache.Cache
 
@@ -26,12 +25,11 @@ type ContextBuilder struct {
 }
 
 func NewContextBuilder(cfg *config.Config, pkgLoader *PackageLoader,
-	lineCache *fsutils.LineCache, fileCache *fsutils.FileCache, pkgCache *pkgcache.Cache, loadGuard *load.Guard,
+	fileCache *fsutils.FileCache, pkgCache *pkgcache.Cache, loadGuard *load.Guard,
 ) *ContextBuilder {
 	return &ContextBuilder{
 		cfg:       cfg,
 		pkgLoader: pkgLoader,
-		lineCache: lineCache,
 		fileCache: fileCache,
 		pkgCache:  pkgCache,
 		loadGuard: loadGuard,
@@ -58,7 +56,6 @@ func (cl *ContextBuilder) Build(ctx context.Context, log logutils.Log, linters [
 		Cfg:       cl.cfg,
 		Log:       log,
 		FileCache: cl.fileCache,
-		LineCache: cl.lineCache,
 		PkgCache:  cl.pkgCache,
 		LoadGuard: cl.loadGuard,
 	}
