@@ -118,24 +118,24 @@ func (l *Loader) handleGoVersion() {
 
 func (l *Loader) handleDeprecation() {
 	if len(l.cfg.Run.SkipFiles) > 0 {
-		l.log.Warnf("The configuration option `run.skip-files` is deprecated, please use `issues.exclude-files`.")
+		l.warn("The configuration option `run.skip-files` is deprecated, please use `issues.exclude-files`.")
 		l.cfg.Issues.ExcludeFiles = l.cfg.Run.SkipFiles
 	}
 
 	if len(l.cfg.Run.SkipDirs) > 0 {
-		l.log.Warnf("The configuration option `run.skip-dirs` is deprecated, please use `issues.exclude-dirs`.")
+		l.warn("The configuration option `run.skip-dirs` is deprecated, please use `issues.exclude-dirs`.")
 		l.cfg.Issues.ExcludeDirs = l.cfg.Run.SkipDirs
 	}
 
 	// The 2 options are true by default.
 	if !l.cfg.Run.UseDefaultSkipDirs {
-		l.log.Warnf("The configuration option `run.skip-dirs-use-default` is deprecated, please use `issues.exclude-dirs-use-default`.")
+		l.warn("The configuration option `run.skip-dirs-use-default` is deprecated, please use `issues.exclude-dirs-use-default`.")
 	}
 	l.cfg.Issues.UseDefaultExcludeDirs = l.cfg.Run.UseDefaultSkipDirs && l.cfg.Issues.UseDefaultExcludeDirs
 
 	// The 2 options are false by default.
 	if l.cfg.Run.ShowStats {
-		l.log.Warnf("The configuration option `run.show-stats` is deprecated, please use `output.show-stats`")
+		l.warn("The configuration option `run.show-stats` is deprecated, please use `output.show-stats`")
 	}
 	l.cfg.Output.ShowStats = l.cfg.Run.ShowStats || l.cfg.Output.ShowStats
 }
@@ -317,6 +317,14 @@ func (l *Loader) appendStringSlice(name string, current *[]string) {
 		val, _ := l.fs.GetStringSlice(name)
 		*current = append(*current, val...)
 	}
+}
+
+func (l *Loader) warn(format string) {
+	if l.cfg.InternalTest || l.cfg.InternalCmdTest || os.Getenv(logutils.EnvTestRun) == "1" {
+		return
+	}
+
+	l.log.Warnf(format)
 }
 
 func fileDecoderHook() viper.DecoderConfigOption {

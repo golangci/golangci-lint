@@ -10,12 +10,13 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
+	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/test/testshared"
 )
 
 func TestEnabledLinters(t *testing.T) {
 	// require to display the message "Active x linters: [x,y]"
-	t.Setenv(lintersdb.EnvTestRun, "1")
+	t.Setenv(logutils.EnvTestRun, "1")
 
 	cases := []struct {
 		name           string

@@ -370,7 +370,7 @@ func TestSkippedDirsNoMatchArg(t *testing.T) {
 		WithNoConfig().
 		WithArgs(
 			"--print-issued-lines=false",
-			"--skip-dirs", dir,
+			"--exclude-dirs", dir,
 			"-Erevive",
 		).
 		WithTargetPath(dir).

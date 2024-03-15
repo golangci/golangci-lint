@@ -460,7 +460,7 @@ func (c *runCommand) setupExitCode(ctx context.Context) {
 		return
 	}
 
-	needFailOnWarnings := os.Getenv(lintersdb.EnvTestRun) == "1" || os.Getenv(envFailOnWarnings) == "1"
+	needFailOnWarnings := os.Getenv(logutils.EnvTestRun) == "1" || os.Getenv(envFailOnWarnings) == "1"
 	if needFailOnWarnings && len(c.reportData.Warnings) != 0 {
 		c.exitCode = exitcodes.WarningInTest
 		return

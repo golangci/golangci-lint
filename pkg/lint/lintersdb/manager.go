@@ -14,9 +14,6 @@ import (
 	"github.com/golangci/golangci-lint/pkg/logutils"
 )
 
-// EnvTestRun value: "1"
-const EnvTestRun = "GL_TEST_RUN"
-
 type Builder interface {
 	Build(cfg *config.Config) ([]*linter.Config, error)
 }
@@ -97,7 +94,7 @@ func (m *Manager) GetAllLinterConfigsForPreset(p string) []*linter.Config {
 func (m *Manager) GetEnabledLintersMap() (map[string]*linter.Config, error) {
 	enabledLinters := m.build(m.GetAllEnabledByDefaultLinters())
 
-	if os.Getenv(EnvTestRun) == "1" {
+	if os.Getenv(logutils.EnvTestRun) == "1" {
 		m.verbosePrintLintersStatus(enabledLinters)
 	}
 

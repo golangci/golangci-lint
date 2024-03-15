@@ -5,6 +5,9 @@ import (
 	"strings"
 )
 
+// EnvTestRun value: "1"
+const EnvTestRun = "GL_TEST_RUN"
+
 // envDebug value: one or several debug keys.
 // examples:
 // - Remove output to `/dev/null`: `GL_DEBUG=linters_output ./golangci-lint run`
