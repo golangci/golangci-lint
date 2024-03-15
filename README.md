@@ -11,8 +11,8 @@ integrates with all major IDEs, and includes over a hundred linters.
 
 ## Install `golangci-lint`
 
-- [On my machine](https://golangci-lint.run/usage/install/#local-installation);
-- [On CI/CD systems](https://golangci-lint.run/usage/install/#ci-installation).
+- [On my machine](https://golangci-lint.run/welcome/install/#local-installation);
+- [On CI/CD systems](https://golangci-lint.run/welcome/install/#ci-installation).
 
 ## Documentation
 
