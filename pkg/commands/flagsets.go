@@ -49,9 +49,12 @@ func setupRunFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
 
 	internal.AddFlagAndBind(v, fs, fs.Bool, "tests", "run.tests", true, color.GreenString("Analyze tests (*_test.go)"))
 
-	fs.StringSlice("skip-files", nil, color.GreenString("Regexps of files to skip"))      // Hack see Loader.applyStringSliceHack
+	fs.StringSlice("skip-files", nil, color.GreenString("Regexps of files to skip")) // Hack see Loader.applyStringSliceHack
+	deprecateFlag(fs, "skip-files")
 	fs.StringSlice("skip-dirs", nil, color.GreenString("Regexps of directories to skip")) // Hack see Loader.applyStringSliceHack
+	deprecateFlag(fs, "skip-dirs")
 	internal.AddFlagAndBind(v, fs, fs.Bool, "skip-dirs-use-default", "run.skip-dirs-use-default", true, getDefaultDirectoryExcludeHelp())
+	deprecateFlag(fs, "skip-dirs-use-default")
 
 	const allowParallelDesc = "Allow multiple parallel golangci-lint instances running. " +
 		"If false (default) - golangci-lint acquires file lock on start."
@@ -134,4 +137,9 @@ func getDefaultDirectoryExcludeHelp() string {
 	}
 	parts = append(parts, "")
 	return strings.Join(parts, "\n")
+}
+
+func deprecateFlag(fs *pflag.FlagSet, name string) {
+	_ = fs.MarkHidden(name)
+	_ = fs.MarkDeprecated(name, "check the documentation for more information.")
 }
