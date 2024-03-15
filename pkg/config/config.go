@@ -38,6 +38,7 @@ func (c *Config) Validate() error {
 		c.LintersSettings.Validate,
 		c.Linters.Validate,
 		c.Output.Validate,
+		c.Run.Validate,
 	}
 
 	for _, v := range validators {

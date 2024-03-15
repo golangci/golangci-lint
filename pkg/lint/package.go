@@ -69,16 +69,11 @@ func (l *PackageLoader) loadPackages(ctx context.Context, loadMode packages.Load
 
 	l.prepareBuildContext()
 
-	buildFlags, err := l.makeBuildFlags()
-	if err != nil {
-		return nil, fmt.Errorf("failed to make build flags for go list: %w", err)
-	}
-
 	conf := &packages.Config{
 		Mode:       loadMode,
 		Tests:      l.cfg.Run.AnalyzeTests,
 		Context:    ctx,
-		BuildFlags: buildFlags,
+		BuildFlags: l.makeBuildFlags(),
 		Logf:       l.debugf,
 		// TODO: use fset, parsefile, overlay
 	}
@@ -235,7 +230,7 @@ func (l *PackageLoader) buildArgs() []string {
 	return retArgs
 }
 
-func (l *PackageLoader) makeBuildFlags() ([]string, error) {
+func (l *PackageLoader) makeBuildFlags() []string {
 	var buildFlags []string
 
 	if len(l.cfg.Run.BuildTags) != 0 {
@@ -244,25 +239,12 @@ func (l *PackageLoader) makeBuildFlags() ([]string, error) {
 		l.log.Infof("Using build tags: %v", l.cfg.Run.BuildTags)
 	}
 
-	mod := l.cfg.Run.ModulesDownloadMode
-	if mod != "" {
+	if l.cfg.Run.ModulesDownloadMode != "" {
 		// go help modules
-		allowedMods := []string{"mod", "readonly", "vendor"}
-		var ok bool
-		for _, am := range allowedMods {
-			if am == mod {
-				ok = true
-				break
-			}
-		}
-		if !ok {
-			return nil, fmt.Errorf("invalid modules download path %s, only (%s) allowed", mod, strings.Join(allowedMods, "|"))
-		}
-
 		buildFlags = append(buildFlags, fmt.Sprintf("-mod=%s", l.cfg.Run.ModulesDownloadMode))
 	}
 
-	return buildFlags, nil
+	return buildFlags
 }
 
 func findLoadMode(linters []*linter.Config) packages.LoadMode {
