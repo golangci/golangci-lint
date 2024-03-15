@@ -32,13 +32,12 @@ var (
 	isGoCriticDebug = logutils.HaveDebugTag(logutils.DebugKeyGoCritic)
 )
 
-func NewGoCritic(settings *config.GoCriticSettings, cfg *config.Config) *goanalysis.Linter {
+func NewGoCritic(settings *config.GoCriticSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
 
 	wrapper := &goCriticWrapper{
-		getConfigDir: cfg.GetConfigDir, // Config directory is filled after calling this constructor.
-		sizes:        types.SizesFor("gc", runtime.GOARCH),
+		sizes: types.SizesFor("gc", runtime.GOARCH),
 	}
 
 	analyzer := &analysis.Analyzer{
@@ -71,7 +70,9 @@ Dynamic rules are written declaratively with AST patterns, filters, report messa
 		nil,
 	).
 		WithContextSetter(func(context *linter.Context) {
-			wrapper.init(settings, context.Log)
+			wrapper.configDir = context.Cfg.GetConfigDir()
+
+			wrapper.init(context.Log, settings)
 		}).
 		WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
 			return resIssues
@@ -81,12 +82,12 @@ Dynamic rules are written declaratively with AST patterns, filters, report messa
 
 type goCriticWrapper struct {
 	settingsWrapper *goCriticSettingsWrapper
-	getConfigDir    func() string
+	configDir       string
 	sizes           types.Sizes
 	once            sync.Once
 }
 
-func (w *goCriticWrapper) init(settings *config.GoCriticSettings, logger logutils.Log) {
+func (w *goCriticWrapper) init(logger logutils.Log, settings *config.GoCriticSettings) {
 	if settings == nil {
 		return
 	}
@@ -206,7 +207,7 @@ func (w *goCriticWrapper) normalizeCheckerParamsValue(p any) any {
 		return rv.Bool()
 	case reflect.String:
 		// Perform variable substitution.
-		return strings.ReplaceAll(rv.String(), "${configDir}", w.getConfigDir())
+		return strings.ReplaceAll(rv.String(), "${configDir}", w.configDir)
 	default:
 		return p
 	}
