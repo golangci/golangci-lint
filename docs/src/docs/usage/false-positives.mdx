@@ -74,7 +74,7 @@ issues:
 
 ### Exclude Issues by Path
 
-Exclude issues in path by `run.skip-dirs`, `run.skip-files` or `issues.exclude-rules` config options.
+Exclude issues in path by `issues.exclude-dirs`, `issues.exclude-files` or `issues.exclude-rules` config options.
 
 Beware that the paths that get matched here are relative to the current working directory.
 When the configuration contains path patterns that check for specific directories,
@@ -103,19 +103,19 @@ issues:
         - goconst
 ```
 
-In the following example, all the reports related to the files (`skip-files`) are excluded:
+In the following example, all the reports related to the files (`exclude-files`) are excluded:
 
 ```yml
-run:
-  skip-files:
+issues:
+  exclude-files:
     - path/to/a/file.go
 ```
 
-In the following example, all the reports related to the directories (`skip-dirs`) are excluded:
+In the following example, all the reports related to the directories (`exclude-dirs`) are excluded:
 
 ```yml
-run:
-  skip-dirs:
+issues:
+  exclude-dirs:
     - path/to/a/dir/
 ```
 

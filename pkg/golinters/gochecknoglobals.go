@@ -12,7 +12,7 @@ func NewGochecknoglobals() *goanalysis.Linter {
 
 	// gochecknoglobals only lints test files if the `-t` flag is passed,
 	// so we pass the `t` flag as true to the analyzer before running it.
-	// This can be turned off by using the regular golangci-lint flags such as `--tests` or `--skip-files`.
+	// This can be turned off by using the regular golangci-lint flags such as `--tests` or `--exclude-files`.
 	linterConfig := map[string]map[string]any{
 		a.Name: {"t": true},
 	}
