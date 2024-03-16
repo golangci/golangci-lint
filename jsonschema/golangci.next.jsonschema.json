@@ -3196,7 +3196,16 @@
                   "type": "object"
                 }
               },
-              "required": ["path"]
+              "oneOf": [
+                {
+                  "properties": {
+                    "type": {"enum": ["module"] }
+                  }
+                },
+                {
+                  "required": ["path"]
+                }
+              ]
             }
           }
         }
