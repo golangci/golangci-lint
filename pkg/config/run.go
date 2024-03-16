@@ -36,6 +36,7 @@ type Run struct {
 }
 
 func (r *Run) Validate() error {
+	// go help modules
 	allowedMods := []string{"mod", "readonly", "vendor"}
 
 	if r.ModulesDownloadMode != "" && !slices.Contains(allowedMods, r.ModulesDownloadMode) {
