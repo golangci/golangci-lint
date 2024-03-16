@@ -61,57 +61,14 @@ func (l *Loader) Load() error {
 
 	l.handleGoVersion()
 
+	l.handleDeprecation()
+
 	err = l.handleEnableOnlyOption()
 	if err != nil {
 		return err
 	}
 
 	return nil
-}
-
-func (l *Loader) handleEnableOnlyOption() error {
-	only, err := l.fs.GetStringSlice("enable-only")
-	if err != nil {
-		return err
-	}
-
-	if len(only) > 0 {
-		l.cfg.Linters = Linters{
-			Enable:     only,
-			DisableAll: true,
-		}
-	}
-
-	return nil
-}
-
-func (l *Loader) handleGoVersion() {
-	if l.cfg.Run.Go == "" {
-		l.cfg.Run.Go = detectGoVersion()
-	}
-
-	l.cfg.LintersSettings.Govet.Go = l.cfg.Run.Go
-
-	l.cfg.LintersSettings.ParallelTest.Go = l.cfg.Run.Go
-
-	if l.cfg.LintersSettings.Gofumpt.LangVersion == "" {
-		l.cfg.LintersSettings.Gofumpt.LangVersion = l.cfg.Run.Go
-	}
-
-	trimmedGoVersion := trimGoVersion(l.cfg.Run.Go)
-
-	l.cfg.LintersSettings.Gocritic.Go = trimmedGoVersion
-
-	// staticcheck related linters.
-	if l.cfg.LintersSettings.Staticcheck.GoVersion == "" {
-		l.cfg.LintersSettings.Staticcheck.GoVersion = trimmedGoVersion
-	}
-	if l.cfg.LintersSettings.Gosimple.GoVersion == "" {
-		l.cfg.LintersSettings.Gosimple.GoVersion = trimmedGoVersion
-	}
-	if l.cfg.LintersSettings.Stylecheck.GoVersion != "" {
-		l.cfg.LintersSettings.Stylecheck.GoVersion = trimmedGoVersion
-	}
 }
 
 func (l *Loader) setConfigFile() error {
@@ -278,9 +235,12 @@ func (l *Loader) applyStringSliceHack() {
 	l.appendStringSlice("disable", &l.cfg.Linters.Disable)
 	l.appendStringSlice("presets", &l.cfg.Linters.Presets)
 	l.appendStringSlice("build-tags", &l.cfg.Run.BuildTags)
+	l.appendStringSlice("exclude", &l.cfg.Issues.ExcludePatterns)
+
 	l.appendStringSlice("skip-dirs", &l.cfg.Run.SkipDirs)
 	l.appendStringSlice("skip-files", &l.cfg.Run.SkipFiles)
-	l.appendStringSlice("exclude", &l.cfg.Issues.ExcludePatterns)
+	l.appendStringSlice("exclude-dirs", &l.cfg.Issues.ExcludeDirs)
+	l.appendStringSlice("exclude-files", &l.cfg.Issues.ExcludeFiles)
 }
 
 func (l *Loader) appendStringSlice(name string, current *[]string) {
@@ -288,6 +248,83 @@ func (l *Loader) appendStringSlice(name string, current *[]string) {
 		val, _ := l.fs.GetStringSlice(name)
 		*current = append(*current, val...)
 	}
+}
+
+func (l *Loader) handleGoVersion() {
+	if l.cfg.Run.Go == "" {
+		l.cfg.Run.Go = detectGoVersion()
+	}
+
+	l.cfg.LintersSettings.Govet.Go = l.cfg.Run.Go
+
+	l.cfg.LintersSettings.ParallelTest.Go = l.cfg.Run.Go
+
+	if l.cfg.LintersSettings.Gofumpt.LangVersion == "" {
+		l.cfg.LintersSettings.Gofumpt.LangVersion = l.cfg.Run.Go
+	}
+
+	trimmedGoVersion := trimGoVersion(l.cfg.Run.Go)
+
+	l.cfg.LintersSettings.Gocritic.Go = trimmedGoVersion
+
+	// staticcheck related linters.
+	if l.cfg.LintersSettings.Staticcheck.GoVersion == "" {
+		l.cfg.LintersSettings.Staticcheck.GoVersion = trimmedGoVersion
+	}
+	if l.cfg.LintersSettings.Gosimple.GoVersion == "" {
+		l.cfg.LintersSettings.Gosimple.GoVersion = trimmedGoVersion
+	}
+	if l.cfg.LintersSettings.Stylecheck.GoVersion != "" {
+		l.cfg.LintersSettings.Stylecheck.GoVersion = trimmedGoVersion
+	}
+}
+
+func (l *Loader) handleDeprecation() {
+	if len(l.cfg.Run.SkipFiles) > 0 {
+		l.warn("The configuration option `run.skip-files` is deprecated, please use `issues.exclude-files`.")
+		l.cfg.Issues.ExcludeFiles = l.cfg.Run.SkipFiles
+	}
+
+	if len(l.cfg.Run.SkipDirs) > 0 {
+		l.warn("The configuration option `run.skip-dirs` is deprecated, please use `issues.exclude-dirs`.")
+		l.cfg.Issues.ExcludeDirs = l.cfg.Run.SkipDirs
+	}
+
+	// The 2 options are true by default.
+	if !l.cfg.Run.UseDefaultSkipDirs {
+		l.warn("The configuration option `run.skip-dirs-use-default` is deprecated, please use `issues.exclude-dirs-use-default`.")
+	}
+	l.cfg.Issues.UseDefaultExcludeDirs = l.cfg.Run.UseDefaultSkipDirs && l.cfg.Issues.UseDefaultExcludeDirs
+
+	// The 2 options are false by default.
+	if l.cfg.Run.ShowStats {
+		l.warn("The configuration option `run.show-stats` is deprecated, please use `output.show-stats`")
+	}
+	l.cfg.Output.ShowStats = l.cfg.Run.ShowStats || l.cfg.Output.ShowStats
+}
+
+func (l *Loader) handleEnableOnlyOption() error {
+	only, err := l.fs.GetStringSlice("enable-only")
+	if err != nil {
+		return err
+	}
+
+	if len(only) > 0 {
+		l.cfg.Linters = Linters{
+			Enable:     only,
+			DisableAll: true,
+		}
+	}
+
+	return nil
+}
+
+func (l *Loader) warn(format string) {
+	if l.cfg.InternalTest || l.cfg.InternalCmdTest || os.Getenv(logutils.EnvTestRun) == "1" {
+		return
+	}
+
+	l.log.Warnf(format)
 }
 
 func fileDecoderHook() viper.DecoderConfigOption {

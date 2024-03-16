@@ -38,7 +38,6 @@ import (
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
 	"github.com/golangci/golangci-lint/pkg/logutils"
-	"github.com/golangci/golangci-lint/pkg/packages"
 	"github.com/golangci/golangci-lint/pkg/printers"
 	"github.com/golangci/golangci-lint/pkg/report"
 	"github.com/golangci/golangci-lint/pkg/result"
@@ -426,11 +425,7 @@ func (c *runCommand) printDeprecatedLinterMessages(enabledLinters map[string]*li
 }
 
 func (c *runCommand) printStats(issues []result.Issue) {
-	if c.cfg.Run.ShowStats {
-		c.log.Warnf("The configuration option `run.show-stats` is deprecated, please use `output.show-stats`")
-	}
-
-	if !c.cfg.Run.ShowStats && !c.cfg.Output.ShowStats {
+	if !c.cfg.Output.ShowStats {
 		return
 	}
 
@@ -465,7 +460,7 @@ func (c *runCommand) setupExitCode(ctx context.Context) {
 		return
 	}
 
-	needFailOnWarnings := os.Getenv(lintersdb.EnvTestRun) == "1" || os.Getenv(envFailOnWarnings) == "1"
+	needFailOnWarnings := os.Getenv(logutils.EnvTestRun) == "1" || os.Getenv(envFailOnWarnings) == "1"
 	if needFailOnWarnings && len(c.reportData.Warnings) != 0 {
 		c.exitCode = exitcodes.WarningInTest
 		return
@@ -576,27 +571,6 @@ func watchResources(ctx context.Context, done chan struct{}, logger logutils.Log
 func setupConfigFileFlagSet(fs *pflag.FlagSet, cfg *config.LoaderOptions) {
 	fs.StringVarP(&cfg.Config, "config", "c", "", color.GreenString("Read config from file path `PATH`"))
 	fs.BoolVar(&cfg.NoConfig, "no-config", false, color.GreenString("Don't read config file"))
-}
-
-func getDefaultIssueExcludeHelp() string {
-	parts := []string{color.GreenString("Use or not use default excludes:")}
-	for _, ep := range config.DefaultExcludePatterns {
-		parts = append(parts,
-			fmt.Sprintf("  # %s %s: %s", ep.ID, ep.Linter, ep.Why),
-			fmt.Sprintf("  - %s", color.YellowString(ep.Pattern)),
-			"",
-		)
-	}
-	return strings.Join(parts, "\n")
-}
-
-func getDefaultDirectoryExcludeHelp() string {
-	parts := []string{color.GreenString("Use or not use default excluded directories:")}
-	for _, dir := range packages.StdExcludeDirRegexps {
-		parts = append(parts, fmt.Sprintf("  - %s", color.YellowString(dir)))
-	}
-	parts = append(parts, "")
-	return strings.Join(parts, "\n")
 }
 
 func setupRunPersistentFlags(fs *pflag.FlagSet, opts *runOptions) {

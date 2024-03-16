@@ -175,7 +175,7 @@ issues:
 
 run:
   timeout: 5m
-  skip-dirs:
+  skip-dirs: # TODO(ldez): should be replaced by `issues.exclude-dirs` after the next release.
     - test/testdata_etc # test files
     - internal/cache # extracted from Go code
     - internal/renameio # extracted from Go code

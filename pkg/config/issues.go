@@ -112,6 +112,10 @@ type Issues struct {
 	ExcludeGeneratedStrict bool          `mapstructure:"exclude-generated-strict"`
 	UseDefaultExcludes     bool          `mapstructure:"exclude-use-default"`
 
+	ExcludeFiles          []string `mapstructure:"exclude-files"`
+	ExcludeDirs           []string `mapstructure:"exclude-dirs"`
+	UseDefaultExcludeDirs bool     `mapstructure:"exclude-dirs-use-default"`
+
 	MaxIssuesPerLinter int `mapstructure:"max-issues-per-linter"`
 	MaxSameIssues      int `mapstructure:"max-same-issues"`
 
