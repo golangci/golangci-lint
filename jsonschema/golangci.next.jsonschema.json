@@ -3445,5 +3445,6 @@
       "additionalProperties": false
     }
   },
+  "additionalProperties": false,
   "type": "object"
 }
