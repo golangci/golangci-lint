@@ -1282,74 +1282,60 @@
         "goheader": {
           "type": "object",
           "additionalProperties": false,
-          "allOf": [
-            {
+          "properties": {
+            "values": {
+              "type": "object",
               "properties": {
-                "values": {
+                "const": {
+                  "description": "Constants to use in the template.",
                   "type": "object",
-                  "properties": {
-                    "const": {
-                      "description": "Constants to use in the template.",
-                      "type": "object",
-                      "patternProperties": {
-                        "^.+$": {
-                          "description": "Value for the constant.",
-                          "type": "string"
-                        }
-                      },
-                      "additionalProperties": false,
-                      "examples": [
-                        {
-                          "YEAR": "2030",
-                          "COMPANY": "MY FUTURISTIC COMPANY"
-                        }
-                      ]
-                    },
-                    "regexp": {
-                      "description": "Regular expressions to use in your template.",
-                      "type": "object",
-                      "patternProperties": {
-                        "^.+$": {
-                          "type": "string"
-                        }
-                      },
-                      "additionalProperties": false,
-                      "examples": [
-                        {
-                          "AUTHOR": ".*@mycompany\\.com"
-                        }
-                      ]
+                  "patternProperties": {
+                    "^.+$": {
+                      "description": "Value for the constant.",
+                      "type": "string"
                     }
-                  }
+                  },
+                  "additionalProperties": false,
+                  "examples": [
+                    {
+                      "YEAR": "2030",
+                      "COMPANY": "MY FUTURISTIC COMPANY"
+                    }
+                  ]
+                },
+                "regexp": {
+                  "description": "Regular expressions to use in your template.",
+                  "type": "object",
+                  "additionalProperties": false,
+                  "patternProperties": {
+                    "^.+$": {
+                      "type": "string"
+                    }
+                  },
+                  "examples": [
+                    {
+                      "AUTHOR": ".*@mycompany\\.com"
+                    }
+                  ]
                 }
               }
             },
-            {
-              "oneOf": [
-                {
-                  "properties": {
-                    "template": {
-                      "description": "Template to put on top of every file.",
-                      "type": "string",
-                      "examples": [
-                        "{{ MY COMPANY }}\nSPDX-License-Identifier: Apache-2.0\n\nLicensed under the Apache License, Version 2.0 (the \"License\");\nyou may not use this file except in compliance with the License.\nYou may obtain a copy of the License at:\n\n    http://www.apache.org/licenses/LICENSE-2.0\n\nUnless required by applicable law or agreed to in writing, software\ndistributed under the License is distributed on an \"AS IS\" BASIS,\nWITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\nSee the License for the specific language governing permissions and\nlimitations under the License."
-                      ]
-                    }
-                  },
-                  "required": ["template"]
-                },
-                {
-                  "properties": {
-                    "template-path": {
-                      "description": "Path to the file containing the template source.",
-                      "type": "string",
-                      "examples": ["my_header_template.txt"]
-                    }
-                  },
-                  "required": ["template-path"]
-                }
+            "template": {
+              "description": "Template to put on top of every file.",
+              "type": "string",
+              "examples": [
+                "{{ MY COMPANY }}\nSPDX-License-Identifier: Apache-2.0\n\nLicensed under the Apache License, Version 2.0 (the \"License\");\nyou may not use this file except in compliance with the License.\nYou may obtain a copy of the License at:\n\n    http://www.apache.org/licenses/LICENSE-2.0\n\nUnless required by applicable law or agreed to in writing, software\ndistributed under the License is distributed on an \"AS IS\" BASIS,\nWITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\nSee the License for the specific language governing permissions and\nlimitations under the License."
               ]
+            },
+            "template-path": {
+              "description": "Path to the file containing the template source.",
+              "type": "string",
+              "examples": ["my_header_template.txt"]
             }
+          },
+          "oneOf": [
+            { "required": ["template"] },
+            { "required": ["template-path"] }
           ]
         },
         "goimports": {
