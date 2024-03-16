@@ -21,7 +21,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/logutils"
 )
 
-// PackageLoader loads packages based on `golang.org/x/tools/go/packages.Load`.
+// PackageLoader loads packages based on [golang.org/x/tools/go/packages.Load].
 type PackageLoader struct {
 	log    logutils.Log
 	debugf logutils.DebugFunc
