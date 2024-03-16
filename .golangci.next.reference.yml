@@ -2097,6 +2097,7 @@ linters-settings:
         json: camel
         yaml: camel
         xml: camel
+        toml: camel
         bson: camel
         avro: snake
         mapstructure: kebab
