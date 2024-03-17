@@ -164,7 +164,7 @@ func (l *Loader) parseConfig() error {
 		var configFileNotFoundError viper.ConfigFileNotFoundError
 		if errors.As(err, &configFileNotFoundError) {
 			// Load configuration from flags only.
-			err = l.viper.Unmarshal(l.cfg)
+			err = l.viper.Unmarshal(l.cfg, customDecoderHook())
 			if err != nil {
 				return fmt.Errorf("can't unmarshal config by viper (flags): %w", err)
 			}
@@ -181,7 +181,7 @@ func (l *Loader) parseConfig() error {
 	}
 
 	// Load configuration from all sources (flags, file).
-	if err := l.viper.Unmarshal(l.cfg, fileDecoderHook()); err != nil {
+	if err := l.viper.Unmarshal(l.cfg, customDecoderHook()); err != nil {
 		return fmt.Errorf("can't unmarshal config by viper (flags, file): %w", err)
 	}
 
@@ -327,13 +327,13 @@ func (l *Loader) warn(format string) {
 	l.log.Warnf(format)
 }
 
-func fileDecoderHook() viper.DecoderConfigOption {
+func customDecoderHook() viper.DecoderConfigOption {
 	return viper.DecodeHook(mapstructure.ComposeDecodeHookFunc(
 		// Default hooks (https://github.com/spf13/viper/blob/518241257478c557633ab36e474dfcaeb9a3c623/viper.go#L135-L138).
 		mapstructure.StringToTimeDurationHookFunc(),
 		mapstructure.StringToSliceHookFunc(","),
 
-		// Needed for forbidigo.
+		// Needed for forbidigo, and output.formats.
 		mapstructure.TextUnmarshallerHookFunc(),
 	))
 }
