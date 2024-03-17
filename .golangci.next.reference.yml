@@ -1982,6 +1982,9 @@ linters-settings:
     # Enforce using key-value pairs only (overrides no-mixed-args, incompatible with attr-only).
     # Default: false
     kv-only: true
+    # Enforce not using global loggers.
+    # Default: default
+    no-global: all
     # Enforce using attributes only (overrides no-mixed-args, incompatible with kv-only).
     # Default: false
     attr-only: true

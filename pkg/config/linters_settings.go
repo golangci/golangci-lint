@@ -793,6 +793,7 @@ type RowsErrCheckSettings struct {
 type SlogLintSettings struct {
 	NoMixedArgs    bool   `mapstructure:"no-mixed-args"`
 	KVOnly         bool   `mapstructure:"kv-only"`
+	NoGlobal       string `mapstructure:"no-global"`
 	AttrOnly       bool   `mapstructure:"attr-only"`
 	ContextOnly    bool   `mapstructure:"context-only"`
 	StaticMsg      bool   `mapstructure:"static-msg"`
