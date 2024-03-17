@@ -33,9 +33,6 @@ type Run struct {
 
 	// Deprecated: use Output.ShowStats instead.
 	ShowStats bool `mapstructure:"show-stats"`
-
-	// Only used by skipDirs processor. TODO(ldez) remove it in next PR.
-	Args []string // Internal needs.
 }
 
 func (r *Run) Validate() error {

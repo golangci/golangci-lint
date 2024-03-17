@@ -32,7 +32,7 @@ type Runner struct {
 	Processors []processors.Processor
 }
 
-func NewRunner(log logutils.Log, cfg *config.Config, goenv *goutil.Env,
+func NewRunner(log logutils.Log, cfg *config.Config, args []string, goenv *goutil.Env,
 	lineCache *fsutils.LineCache, fileCache *fsutils.FileCache,
 	dbManager *lintersdb.Manager, lintCtx *linter.Context,
 ) (*Runner, error) {
@@ -51,7 +51,7 @@ func NewRunner(log logutils.Log, cfg *config.Config, goenv *goutil.Env,
 		skipDirs = append(skipDirs, packages.StdExcludeDirRegexps...)
 	}
 
-	skipDirsProcessor, err := processors.NewSkipDirs(skipDirs, log.Child(logutils.DebugKeySkipDirs), cfg.Run.Args, cfg.Output.PathPrefix)
+	skipDirsProcessor, err := processors.NewSkipDirs(skipDirs, log.Child(logutils.DebugKeySkipDirs), args, cfg.Output.PathPrefix)
 	if err != nil {
 		return nil, err
 	}
