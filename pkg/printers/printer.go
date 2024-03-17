@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/golangci/golangci-lint/pkg/config"
@@ -97,6 +98,11 @@ func (c *Printer) createWriter(path string) (io.Writer, bool, error) {
 
 	if path == "stderr" {
 		return c.stdErr, false, nil
+	}
+
+	err := os.MkdirAll(filepath.Dir(path), os.ModePerm)
+	if err != nil {
+		return nil, false, err
 	}
 
 	f, err := os.OpenFile(path, os.O_CREATE|os.O_TRUNC|os.O_WRONLY, defaultFileMode)
