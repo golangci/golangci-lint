@@ -283,28 +283,33 @@ func (l *Loader) handleGoVersion() {
 }
 
 func (l *Loader) handleDeprecation() error {
+	// Deprecated since v1.57.0
 	if len(l.cfg.Run.SkipFiles) > 0 {
 		l.warn("The configuration option `run.skip-files` is deprecated, please use `issues.exclude-files`.")
 		l.cfg.Issues.ExcludeFiles = l.cfg.Run.SkipFiles
 	}
 
+	// Deprecated since v1.57.0
 	if len(l.cfg.Run.SkipDirs) > 0 {
 		l.warn("The configuration option `run.skip-dirs` is deprecated, please use `issues.exclude-dirs`.")
 		l.cfg.Issues.ExcludeDirs = l.cfg.Run.SkipDirs
 	}
 
 	// The 2 options are true by default.
+	// Deprecated since v1.57.0
 	if !l.cfg.Run.UseDefaultSkipDirs {
 		l.warn("The configuration option `run.skip-dirs-use-default` is deprecated, please use `issues.exclude-dirs-use-default`.")
 	}
 	l.cfg.Issues.UseDefaultExcludeDirs = l.cfg.Run.UseDefaultSkipDirs && l.cfg.Issues.UseDefaultExcludeDirs
 
 	// The 2 options are false by default.
+	// Deprecated since v1.57.0
 	if l.cfg.Run.ShowStats {
 		l.warn("The configuration option `run.show-stats` is deprecated, please use `output.show-stats`")
 	}
 	l.cfg.Output.ShowStats = l.cfg.Run.ShowStats || l.cfg.Output.ShowStats
 
+	// Deprecated since v1.57.0
 	if l.cfg.Output.Format != "" {
 		l.warn("The configuration option `output.format` is deprecated, please use `output.formats`")
 
