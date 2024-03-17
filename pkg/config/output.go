@@ -35,7 +35,6 @@ var AllOutputFormats = []string{
 }
 
 type Output struct {
-	Format          string        `mapstructure:"format"` // Deprecated: use Formats instead.
 	Formats         OutputFormats `mapstructure:"formats"`
 	PrintIssuedLine bool          `mapstructure:"print-issued-lines"`
 	PrintLinterName bool          `mapstructure:"print-linter-name"`
@@ -44,6 +43,9 @@ type Output struct {
 	SortOrder       []string      `mapstructure:"sort-order"`
 	PathPrefix      string        `mapstructure:"path-prefix"`
 	ShowStats       bool          `mapstructure:"show-stats"`
+
+	// Deprecated: use Formats instead.
+	Format string `mapstructure:"format"`
 }
 
 func (o *Output) Validate() error {
