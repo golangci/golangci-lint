@@ -68,7 +68,10 @@ output:
   # Example: "--out-format=checkstyle:report.xml,json:stdout,colored-line-number"
   # The CLI flag (`--out-format`) override the configuration file.
   #
-  # Default: `format: colored-line-number` and `path: stdout`
+  # Default:
+  #   formats:
+  #     - format: colored-line-number
+  #       path: stdout
   formats:
     - format: json
       path: stderr
