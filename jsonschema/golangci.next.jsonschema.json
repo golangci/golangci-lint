@@ -456,6 +456,7 @@
             "additionalProperties": false,
             "properties": {
               "path": {
+                "default": "stdout",
                 "anyOf": [
                   {
                     "enum": [ "stdout", "stderr" ]
