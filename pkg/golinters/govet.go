@@ -184,6 +184,13 @@ func isAnalyzerEnabled(name string, cfg *config.GovetSettings, defaultAnalyzers 
 		return false
 	}
 
+	// TODO(ldez) remove httpresponse because of a panic.
+	// https://github.com/golangci/golangci-lint/issues/4482
+	// https://github.com/golang/go/issues/66259
+	if name == httpresponse.Analyzer.Name {
+		return false
+	}
+
 	// Keeping for backward compatibility.
 	if cfg.CheckShadowing && name == shadow.Analyzer.Name {
 		return true
