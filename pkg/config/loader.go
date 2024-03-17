@@ -61,7 +61,10 @@ func (l *Loader) Load() error {
 
 	l.handleGoVersion()
 
-	l.handleDeprecation()
+	err = l.handleDeprecation()
+	if err != nil {
+		return err
+	}
 
 	err = l.handleEnableOnlyOption()
 	if err != nil {
@@ -279,7 +282,7 @@ func (l *Loader) handleGoVersion() {
 	}
 }
 
-func (l *Loader) handleDeprecation() {
+func (l *Loader) handleDeprecation() error {
 	if len(l.cfg.Run.SkipFiles) > 0 {
 		l.warn("The configuration option `run.skip-files` is deprecated, please use `issues.exclude-files`.")
 		l.cfg.Issues.ExcludeFiles = l.cfg.Run.SkipFiles
@@ -301,6 +304,20 @@ func (l *Loader) handleDeprecation() {
 		l.warn("The configuration option `run.show-stats` is deprecated, please use `output.show-stats`")
 	}
 	l.cfg.Output.ShowStats = l.cfg.Run.ShowStats || l.cfg.Output.ShowStats
+
+	if l.cfg.Output.Format != "" {
+		l.warn("The configuration option `output.format` is deprecated, please use `output.formats`")
+
+		var f OutputFormats
+		err := f.UnmarshalText([]byte(l.cfg.Output.Format))
+		if err != nil {
+			return fmt.Errorf("unmarshal output format: %w", err)
+		}
+
+		l.cfg.Output.Formats = f
+	}
+
+	return nil
 }
 
 func (l *Loader) handleEnableOnlyOption() error {

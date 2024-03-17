@@ -35,7 +35,7 @@ var AllOutputFormats = []string{
 }
 
 type Output struct {
-	Format          string        `mapstructure:"format"`
+	Format          string        `mapstructure:"format"` // Deprecated: use Formats instead.
 	Formats         OutputFormats `mapstructure:"formats"`
 	PrintIssuedLine bool          `mapstructure:"print-issued-lines"`
 	PrintLinterName bool          `mapstructure:"print-linter-name"`
