@@ -22,7 +22,6 @@ type Context struct {
 
 	Cfg       *config.Config
 	FileCache *fsutils.FileCache
-	LineCache *fsutils.LineCache
 	Log       logutils.Log
 
 	PkgCache  *pkgcache.Cache

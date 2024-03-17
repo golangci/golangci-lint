@@ -1,6 +1,11 @@
 package config
 
-import "time"
+import (
+	"fmt"
+	"slices"
+	"strings"
+	"time"
+)
 
 // Run encapsulates the config options for running the linter analysis.
 type Run struct {
@@ -29,6 +34,17 @@ type Run struct {
 	// Deprecated: use Output.ShowStats instead.
 	ShowStats bool `mapstructure:"show-stats"`
 
-	// It's obtain by flags and use for the tests and the context loader.
+	// Only used by skipDirs processor. TODO(ldez) remove it in next PR.
 	Args []string // Internal needs.
+}
+
+func (r *Run) Validate() error {
+	// go help modules
+	allowedMods := []string{"mod", "readonly", "vendor"}
+
+	if r.ModulesDownloadMode != "" && !slices.Contains(allowedMods, r.ModulesDownloadMode) {
+		return fmt.Errorf("invalid modules download path %s, only (%s) allowed", r.ModulesDownloadMode, strings.Join(allowedMods, "|"))
+	}
+
+	return nil
 }

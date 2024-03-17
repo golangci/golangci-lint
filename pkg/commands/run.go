@@ -87,8 +87,8 @@ type runCommand struct {
 	debugf     logutils.DebugFunc
 	reportData *report.Data
 
-	contextLoader *lint.ContextLoader
-	goenv         *goutil.Env
+	contextBuilder *lint.ContextBuilder
+	goenv          *goutil.Env
 
 	fileCache *fsutils.FileCache
 	lineCache *fsutils.LineCache
@@ -182,7 +182,7 @@ func (c *runCommand) persistentPostRunE(_ *cobra.Command, _ []string) error {
 	return nil
 }
 
-func (c *runCommand) preRunE(_ *cobra.Command, _ []string) error {
+func (c *runCommand) preRunE(_ *cobra.Command, args []string) error {
 	dbManager, err := lintersdb.NewManager(c.log.Child(logutils.DebugKeyLintersDB), c.cfg,
 		lintersdb.NewLinterBuilder(), lintersdb.NewPluginModuleBuilder(c.log), lintersdb.NewPluginGoBuilder(c.log))
 	if err != nil {
@@ -210,8 +210,11 @@ func (c *runCommand) preRunE(_ *cobra.Command, _ []string) error {
 		return fmt.Errorf("failed to build packages cache: %w", err)
 	}
 
-	c.contextLoader = lint.NewContextLoader(c.cfg, c.log.Child(logutils.DebugKeyLoader), c.goenv,
-		c.lineCache, c.fileCache, pkgCache, load.NewGuard())
+	guard := load.NewGuard()
+
+	pkgLoader := lint.NewPackageLoader(c.log.Child(logutils.DebugKeyLoader), c.cfg, args, c.goenv, guard)
+
+	c.contextBuilder = lint.NewContextBuilder(c.cfg, pkgLoader, c.fileCache, pkgCache, guard)
 
 	if err = initHashSalt(c.buildInfo.Version, c.cfg); err != nil {
 		return fmt.Errorf("failed to init hash salt: %w", err)
@@ -373,7 +376,7 @@ func (c *runCommand) runAnalysis(ctx context.Context, args []string) ([]result.I
 		return nil, err
 	}
 
-	lintCtx, err := c.contextLoader.Load(ctx, c.log.Child(logutils.DebugKeyLintersContext), lintersToRun)
+	lintCtx, err := c.contextBuilder.Build(ctx, c.log.Child(logutils.DebugKeyLintersContext), lintersToRun)
 	if err != nil {
 		return nil, fmt.Errorf("context loading failed: %w", err)
 	}
