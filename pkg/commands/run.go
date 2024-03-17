@@ -369,8 +369,6 @@ func (c *runCommand) runAndPrint(ctx context.Context, args []string) error {
 
 // runAnalysis executes the linters that have been enabled in the configuration.
 func (c *runCommand) runAnalysis(ctx context.Context, args []string) ([]result.Issue, error) {
-	c.cfg.Run.Args = args
-
 	lintersToRun, err := c.dbManager.GetOptimizedLinters()
 	if err != nil {
 		return nil, err
@@ -381,8 +379,8 @@ func (c *runCommand) runAnalysis(ctx context.Context, args []string) ([]result.I
 		return nil, fmt.Errorf("context loading failed: %w", err)
 	}
 
-	runner, err := lint.NewRunner(c.log.Child(logutils.DebugKeyRunner),
-		c.cfg, c.goenv, c.lineCache, c.fileCache, c.dbManager, lintCtx)
+	runner, err := lint.NewRunner(c.log.Child(logutils.DebugKeyRunner), c.cfg, args,
+		c.goenv, c.lineCache, c.fileCache, c.dbManager, lintCtx)
 	if err != nil {
 		return nil, err
 	}
