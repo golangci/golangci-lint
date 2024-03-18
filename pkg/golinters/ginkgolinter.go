@@ -8,20 +8,23 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 )
 
-func NewGinkgoLinter(cfg *config.GinkgoLinterSettings) *goanalysis.Linter {
+func NewGinkgoLinter(settings *config.GinkgoLinterSettings) *goanalysis.Linter {
 	a := ginkgolinter.NewAnalyzer()
 
 	cfgMap := make(map[string]map[string]any)
-	if cfg != nil {
+	if settings != nil {
 		cfgMap[a.Name] = map[string]any{
-			"suppress-len-assertion":          cfg.SuppressLenAssertion,
-			"suppress-nil-assertion":          cfg.SuppressNilAssertion,
-			"suppress-err-assertion":          cfg.SuppressErrAssertion,
-			"suppress-compare-assertion":      cfg.SuppressCompareAssertion,
-			"suppress-async-assertion":        cfg.SuppressAsyncAssertion,
-			"suppress-type-compare-assertion": cfg.SuppressTypeCompareWarning,
-			"forbid-focus-container":          cfg.ForbidFocusContainer,
-			"allow-havelen-0":                 cfg.AllowHaveLenZero,
+			"suppress-len-assertion":          settings.SuppressLenAssertion,
+			"suppress-nil-assertion":          settings.SuppressNilAssertion,
+			"suppress-err-assertion":          settings.SuppressErrAssertion,
+			"suppress-compare-assertion":      settings.SuppressCompareAssertion,
+			"suppress-async-assertion":        settings.SuppressAsyncAssertion,
+			"suppress-type-compare-assertion": settings.SuppressTypeCompareWarning,
+			"forbid-focus-container":          settings.ForbidFocusContainer,
+			"allow-havelen-0":                 settings.AllowHaveLenZero,
+			"force-expect-to":                 settings.ForceExpectTo,
+			"forbid-spec-pollution":           settings.ForbidSpecPollution,
+			"validate-async-intervals":        settings.ValidateAsyncIntervals,
 		}
 	}
 

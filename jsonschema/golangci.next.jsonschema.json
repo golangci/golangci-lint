@@ -1079,6 +1079,21 @@
               "description": "Don't trigger warnings for HaveLen(0).",
               "type": "boolean",
               "default": false
+            },
+            "force-expect-to": {
+              "description": "Force using `Expect` with `To`, `ToNot` or `NotTo`",
+              "type": "boolean",
+              "default": false
+            },
+            "validate-async-intervals": {
+              "description": "Best effort validation of async intervals (timeout and polling).",
+              "type": "boolean",
+              "default": false
+            },
+            "forbid-spec-pollution": {
+              "description": "Trigger a warning for variable assignments in ginkgo containers like `Describe`, `Context` and `When`, instead of in `BeforeEach()`.",
+              "type": "boolean",
+              "default": false
             }
           }
         },

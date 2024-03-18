@@ -477,17 +477,31 @@ linters-settings:
     # Default: false
     suppress-async-assertion: true
 
-    # Suppress warning for comparing values from different types, like int32 and uint32
+    # Suppress warning for comparing values from different types, like `int32` and `uint32`
     # Default: false
     suppress-type-compare-assertion: true
 
-    # Trigger warning for ginkgo focus containers like FDescribe, FContext, FWhen or FIt
+    # Trigger warning for ginkgo focus containers like `FDescribe`, `FContext`, `FWhen` or `FIt`
     # Default: false
     forbid-focus-container: true
 
     # Don't trigger warnings for HaveLen(0)
     # Default: false
     allow-havelen-zero: true
+
+    # Force using `Expect` with `To`, `ToNot` or `NotTo`.
+    # Reject using `Expect` with `Should` or `ShouldNot`.
+    # Default: false
+    force-expect-to: true
+
+    # Best effort validation of async intervals (timeout and polling).
+    # Ignored the suppress-async-assertion is true.
+    # Default: false
+    validate-async-intervals: true
+
+    # Trigger a warning for variable assignments in ginkgo containers like `Describe`, `Context` and `When`, instead of in `BeforeEach()`.
+    # Default: false
+    forbid-spec-pollution: true
 
   gocognit:
     # Minimal code complexity to report.
