@@ -22,12 +22,12 @@ func Test_validateTestConfigurationFiles(t *testing.T) {
 func validateTestConfigurationFiles(schemaPath, targetDir string) error {
 	schema, err := loadSchema(filepath.FromSlash(schemaPath))
 	if err != nil {
-		return err
+		return fmt.Errorf("load schema: %w", err)
 	}
 
 	yamlFiles, err := findConfigurationFiles(filepath.FromSlash(targetDir))
 	if err != nil {
-		return err
+		return fmt.Errorf("find configuration files: %w", err)
 	}
 
 	var errAll error
@@ -58,19 +58,19 @@ func loadSchema(schemaPath string) (*jsonschema.Schema, error) {
 
 	schemaFile, err := os.Open(schemaPath)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("open schema file: %w", err)
 	}
 
 	defer func() { _ = schemaFile.Close() }()
 
 	err = compiler.AddResource(filepath.Base(schemaPath), schemaFile)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("add schema resource: %w", err)
 	}
 
 	schema, err := compiler.Compile(filepath.Base(schemaPath))
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("compile schema: %w", err)
 	}
 
 	return schema, nil
@@ -91,7 +91,7 @@ func findConfigurationFiles(targetDir string) ([]string, error) {
 		return nil
 	})
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("walk dir: %w", err)
 	}
 
 	return yamlFiles, nil
