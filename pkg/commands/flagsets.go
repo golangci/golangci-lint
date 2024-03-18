@@ -63,8 +63,8 @@ func setupRunFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
 }
 
 func setupOutputFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
-	internal.AddFlagAndBind(v, fs, fs.String, "out-format", "output.format", config.OutFormatColoredLineNumber,
-		color.GreenString(fmt.Sprintf("Format of output: %s", strings.Join(config.OutFormats, "|"))))
+	internal.AddFlagAndBind(v, fs, fs.String, "out-format", "output.formats", config.OutFormatColoredLineNumber,
+		color.GreenString(fmt.Sprintf("Formats of output: %s", strings.Join(config.AllOutputFormats, "|"))))
 	internal.AddFlagAndBind(v, fs, fs.Bool, "print-issued-lines", "output.print-issued-lines", true,
 		color.GreenString("Print lines of code with issue"))
 	internal.AddFlagAndBind(v, fs, fs.Bool, "print-linter-name", "output.print-linter-name", true,

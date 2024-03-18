@@ -61,7 +61,10 @@ func (l *Loader) Load() error {
 
 	l.handleGoVersion()
 
-	l.handleDeprecation()
+	err = l.handleDeprecation()
+	if err != nil {
+		return err
+	}
 
 	err = l.handleEnableOnlyOption()
 	if err != nil {
@@ -164,7 +167,7 @@ func (l *Loader) parseConfig() error {
 		var configFileNotFoundError viper.ConfigFileNotFoundError
 		if errors.As(err, &configFileNotFoundError) {
 			// Load configuration from flags only.
-			err = l.viper.Unmarshal(l.cfg)
+			err = l.viper.Unmarshal(l.cfg, customDecoderHook())
 			if err != nil {
 				return fmt.Errorf("can't unmarshal config by viper (flags): %w", err)
 			}
@@ -181,7 +184,7 @@ func (l *Loader) parseConfig() error {
 	}
 
 	// Load configuration from all sources (flags, file).
-	if err := l.viper.Unmarshal(l.cfg, fileDecoderHook()); err != nil {
+	if err := l.viper.Unmarshal(l.cfg, customDecoderHook()); err != nil {
 		return fmt.Errorf("can't unmarshal config by viper (flags, file): %w", err)
 	}
 
@@ -279,28 +282,47 @@ func (l *Loader) handleGoVersion() {
 	}
 }
 
-func (l *Loader) handleDeprecation() {
+func (l *Loader) handleDeprecation() error {
+	// Deprecated since v1.57.0
 	if len(l.cfg.Run.SkipFiles) > 0 {
 		l.warn("The configuration option `run.skip-files` is deprecated, please use `issues.exclude-files`.")
 		l.cfg.Issues.ExcludeFiles = l.cfg.Run.SkipFiles
 	}
 
+	// Deprecated since v1.57.0
 	if len(l.cfg.Run.SkipDirs) > 0 {
 		l.warn("The configuration option `run.skip-dirs` is deprecated, please use `issues.exclude-dirs`.")
 		l.cfg.Issues.ExcludeDirs = l.cfg.Run.SkipDirs
 	}
 
 	// The 2 options are true by default.
+	// Deprecated since v1.57.0
 	if !l.cfg.Run.UseDefaultSkipDirs {
 		l.warn("The configuration option `run.skip-dirs-use-default` is deprecated, please use `issues.exclude-dirs-use-default`.")
 	}
 	l.cfg.Issues.UseDefaultExcludeDirs = l.cfg.Run.UseDefaultSkipDirs && l.cfg.Issues.UseDefaultExcludeDirs
 
 	// The 2 options are false by default.
+	// Deprecated since v1.57.0
 	if l.cfg.Run.ShowStats {
 		l.warn("The configuration option `run.show-stats` is deprecated, please use `output.show-stats`")
 	}
 	l.cfg.Output.ShowStats = l.cfg.Run.ShowStats || l.cfg.Output.ShowStats
+
+	// Deprecated since v1.57.0
+	if l.cfg.Output.Format != "" {
+		l.warn("The configuration option `output.format` is deprecated, please use `output.formats`")
+
+		var f OutputFormats
+		err := f.UnmarshalText([]byte(l.cfg.Output.Format))
+		if err != nil {
+			return fmt.Errorf("unmarshal output format: %w", err)
+		}
+
+		l.cfg.Output.Formats = f
+	}
+
+	return nil
 }
 
 func (l *Loader) handleEnableOnlyOption() error {
@@ -332,13 +354,13 @@ func (l *Loader) warn(format string) {
 	l.log.Warnf(format)
 }
 
-func fileDecoderHook() viper.DecoderConfigOption {
+func customDecoderHook() viper.DecoderConfigOption {
 	return viper.DecodeHook(mapstructure.ComposeDecodeHookFunc(
 		// Default hooks (https://github.com/spf13/viper/blob/518241257478c557633ab36e474dfcaeb9a3c623/viper.go#L135-L138).
 		mapstructure.StringToTimeDurationHookFunc(),
 		mapstructure.StringToSliceHookFunc(","),
 
-		// Needed for forbidigo.
+		// Needed for forbidigo, and output.formats.
 		mapstructure.TextUnmarshallerHookFunc(),
 	))
 }

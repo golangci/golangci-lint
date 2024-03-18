@@ -451,15 +451,42 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "format": {
-          "description": "Output format to use.",
-          "pattern": "^(,?(colored-line-number|line-number|json|colored-tab|tab|checkstyle|code-climate|junit-xml|github-actions|teamcity)(:[^,]+)?)+$",
-          "default": "colored-line-number",
-          "examples": [
-            "colored-line-number",
-            "checkstyle:report.json,colored-line-number",
-            "line-number:golangci-lint.out,colored-line-number:stdout"
-          ]
+        "formats": {
+          "description": "Output formats to use.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "path": {
+                "default": "stdout",
+                "anyOf": [
+                  {
+                    "enum": [ "stdout", "stderr" ]
+                  },
+                  {
+                    "type": "string"
+                  }
+                ]
+              },
+              "format": {
+                "default": "colored-line-number",
+                "enum": [
+                  "colored-line-number",
+                  "line-number",
+                  "json",
+                  "colored-tab",
+                  "tab",
+                  "checkstyle",
+                  "code-climate",
+                  "junit-xml",
+                  "github-actions",
+                  "teamcity"
+                ]
+              }
+            },
+            "required": ["format"]
+          }
         },
         "print-issued-lines": {
           "description": "Print lines of code with issue.",

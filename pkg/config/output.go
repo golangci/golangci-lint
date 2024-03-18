@@ -21,7 +21,7 @@ const (
 	OutFormatTeamCity          = "teamcity"
 )
 
-var OutFormats = []string{
+var AllOutputFormats = []string{
 	OutFormatColoredLineNumber,
 	OutFormatLineNumber,
 	OutFormatJSON,
@@ -35,14 +35,17 @@ var OutFormats = []string{
 }
 
 type Output struct {
-	Format          string   `mapstructure:"format"`
-	PrintIssuedLine bool     `mapstructure:"print-issued-lines"`
-	PrintLinterName bool     `mapstructure:"print-linter-name"`
-	UniqByLine      bool     `mapstructure:"uniq-by-line"`
-	SortResults     bool     `mapstructure:"sort-results"`
-	SortOrder       []string `mapstructure:"sort-order"`
-	PathPrefix      string   `mapstructure:"path-prefix"`
-	ShowStats       bool     `mapstructure:"show-stats"`
+	Formats         OutputFormats `mapstructure:"formats"`
+	PrintIssuedLine bool          `mapstructure:"print-issued-lines"`
+	PrintLinterName bool          `mapstructure:"print-linter-name"`
+	UniqByLine      bool          `mapstructure:"uniq-by-line"`
+	SortResults     bool          `mapstructure:"sort-results"`
+	SortOrder       []string      `mapstructure:"sort-order"`
+	PathPrefix      string        `mapstructure:"path-prefix"`
+	ShowStats       bool          `mapstructure:"show-stats"`
+
+	// Deprecated: use Formats instead.
+	Format string `mapstructure:"format"`
 }
 
 func (o *Output) Validate() error {
@@ -62,6 +65,47 @@ func (o *Output) Validate() error {
 		if !slices.Contains(validOrders, order) {
 			return fmt.Errorf("unsupported sort-order name %q", order)
 		}
+	}
+
+	for _, format := range o.Formats {
+		err := format.Validate()
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+type OutputFormat struct {
+	Format string `mapstructure:"format"`
+	Path   string `mapstructure:"path"`
+}
+
+func (o *OutputFormat) Validate() error {
+	if o.Format == "" {
+		return errors.New("the format is required")
+	}
+
+	if !slices.Contains(AllOutputFormats, o.Format) {
+		return fmt.Errorf("unsupported output format %q", o.Format)
+	}
+
+	return nil
+}
+
+type OutputFormats []OutputFormat
+
+func (p *OutputFormats) UnmarshalText(text []byte) error {
+	formats := strings.Split(string(text), ",")
+
+	for _, item := range formats {
+		format, path, _ := strings.Cut(item, ":")
+
+		*p = append(*p, OutputFormat{
+			Path:   path,
+			Format: format,
+		})
 	}
 
 	return nil

@@ -81,6 +81,86 @@ func TestOutput_Validate_error(t *testing.T) {
 			},
 			expected: `the sort-order name "linter" is repeated several times`,
 		},
+		{
+			desc: "unsupported format",
+			settings: &Output{
+				Formats: []OutputFormat{
+					{
+						Format: "test",
+					},
+				},
+			},
+			expected: `unsupported output format "test"`,
+		},
+	}
+
+	for _, test := range testCases {
+		test := test
+		t.Run(test.desc, func(t *testing.T) {
+			t.Parallel()
+
+			err := test.settings.Validate()
+			require.EqualError(t, err, test.expected)
+		})
+	}
+}
+
+func TestOutputFormat_Validate(t *testing.T) {
+	testCases := []struct {
+		desc     string
+		settings *OutputFormat
+	}{
+		{
+			desc: "only format",
+			settings: &OutputFormat{
+				Format: "json",
+			},
+		},
+		{
+			desc: "format and path (relative)",
+			settings: &OutputFormat{
+				Format: "json",
+				Path:   "./example.json",
+			},
+		},
+		{
+			desc: "format and path (absolute)",
+			settings: &OutputFormat{
+				Format: "json",
+				Path:   "/tmp/example.json",
+			},
+		},
+	}
+
+	for _, test := range testCases {
+		test := test
+		t.Run(test.desc, func(t *testing.T) {
+			t.Parallel()
+
+			err := test.settings.Validate()
+			require.NoError(t, err)
+		})
+	}
+}
+
+func TestOutputFormat_Validate_error(t *testing.T) {
+	testCases := []struct {
+		desc     string
+		settings *OutputFormat
+		expected string
+	}{
+		{
+			desc:     "empty",
+			settings: &OutputFormat{},
+			expected: "the format is required",
+		},
+		{
+			desc: "unsupported format",
+			settings: &OutputFormat{
+				Format: "test",
+			},
+			expected: `unsupported output format "test"`,
+		},
 	}
 
 	for _, test := range testCases {
