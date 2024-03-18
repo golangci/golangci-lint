@@ -62,6 +62,7 @@ func newConfigCommand(log logutils.Log, info BuildInfo) *configCommand {
 		Args:              cobra.NoArgs,
 		ValidArgsFunction: cobra.NoFileCompletions,
 		RunE:              c.executeVerify,
+		SilenceUsage:      true,
 	}
 
 	configCmd.AddCommand(

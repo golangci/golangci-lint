@@ -25,11 +25,12 @@ func newCustomCommand(logger logutils.Log) *customCommand {
 	c := &customCommand{log: logger}
 
 	customCmd := &cobra.Command{
-		Use:     "custom",
-		Short:   "Build a version of golangci-lint with custom linters",
-		Args:    cobra.NoArgs,
-		PreRunE: c.preRunE,
-		RunE:    c.runE,
+		Use:          "custom",
+		Short:        "Build a version of golangci-lint with custom linters",
+		Args:         cobra.NoArgs,
+		PreRunE:      c.preRunE,
+		RunE:         c.runE,
+		SilenceUsage: true,
 	}
 
 	c.cmd = customCmd
