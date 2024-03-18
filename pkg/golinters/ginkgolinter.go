@@ -2,6 +2,7 @@ package golinters
 
 import (
 	"github.com/nunnatsa/ginkgolinter"
+	"github.com/nunnatsa/ginkgolinter/types"
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/config"
@@ -9,29 +10,30 @@ import (
 )
 
 func NewGinkgoLinter(settings *config.GinkgoLinterSettings) *goanalysis.Linter {
-	a := ginkgolinter.NewAnalyzer()
+	cfg := &types.Config{}
 
-	cfgMap := make(map[string]map[string]any)
 	if settings != nil {
-		cfgMap[a.Name] = map[string]any{
-			"suppress-len-assertion":          settings.SuppressLenAssertion,
-			"suppress-nil-assertion":          settings.SuppressNilAssertion,
-			"suppress-err-assertion":          settings.SuppressErrAssertion,
-			"suppress-compare-assertion":      settings.SuppressCompareAssertion,
-			"suppress-async-assertion":        settings.SuppressAsyncAssertion,
-			"suppress-type-compare-assertion": settings.SuppressTypeCompareWarning,
-			"forbid-focus-container":          settings.ForbidFocusContainer,
-			"allow-havelen-0":                 settings.AllowHaveLenZero,
-			"force-expect-to":                 settings.ForceExpectTo,
-			"forbid-spec-pollution":           settings.ForbidSpecPollution,
-			"validate-async-intervals":        settings.ValidateAsyncIntervals,
+		cfg = &types.Config{
+			SuppressLen:            types.Boolean(settings.SuppressLenAssertion),
+			SuppressNil:            types.Boolean(settings.SuppressNilAssertion),
+			SuppressErr:            types.Boolean(settings.SuppressErrAssertion),
+			SuppressCompare:        types.Boolean(settings.SuppressCompareAssertion),
+			SuppressAsync:          types.Boolean(settings.SuppressAsyncAssertion),
+			ForbidFocus:            types.Boolean(settings.ForbidFocusContainer),
+			SuppressTypeCompare:    types.Boolean(settings.SuppressTypeCompareWarning),
+			AllowHaveLen0:          types.Boolean(settings.AllowHaveLenZero),
+			ForceExpectTo:          types.Boolean(settings.ForceExpectTo),
+			ValidateAsyncIntervals: types.Boolean(settings.ForbidSpecPollution),
+			ForbidSpecPollution:    types.Boolean(settings.ValidateAsyncIntervals),
 		}
 	}
+
+	a := ginkgolinter.NewAnalyzerWithConfig(cfg)
 
 	return goanalysis.NewLinter(
 		a.Name,
 		"enforces standards of using ginkgo and gomega",
 		[]*analysis.Analyzer{a},
-		cfgMap,
+		nil,
 	).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }
