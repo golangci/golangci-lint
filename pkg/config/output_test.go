@@ -117,10 +117,17 @@ func TestOutputFormat_Validate(t *testing.T) {
 			},
 		},
 		{
-			desc: "format and path",
+			desc: "format and path (relative)",
 			settings: &OutputFormat{
 				Format: "json",
 				Path:   "./example.json",
+			},
+		},
+		{
+			desc: "format and path (absolute)",
+			settings: &OutputFormat{
+				Format: "json",
+				Path:   "/tmp/example.json",
 			},
 		},
 	}
