@@ -4,6 +4,11 @@ FROM golang:1.22
 # related to https://github.com/golangci/golangci-lint/issues/3107
 ENV GOROOT /usr/local/go
 
+# Allow to download a more recent version of Go.
+# https://go.dev/doc/toolchain
+# GOTOOLCHAIN=auto is shorthand for GOTOOLCHAIN=local+auto
+ENV GOTOOLCHAIN auto
+
 # Set all directories as safe
 RUN git config --global --add safe.directory '*'
 

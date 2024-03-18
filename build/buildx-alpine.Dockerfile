@@ -4,6 +4,11 @@ FROM golang:1.22-alpine
 # related to https://github.com/golangci/golangci-lint/issues/3107
 ENV GOROOT /usr/local/go
 
+# Allow to download a more recent version of Go.
+# https://go.dev/doc/toolchain
+# GOTOOLCHAIN=auto is shorthand for GOTOOLCHAIN=local+auto
+ENV GOTOOLCHAIN auto
+
 # gcc is required to support cgo;
 # git and mercurial are needed most times for go get`, etc.
 # See https://github.com/docker-library/golang/issues/80
