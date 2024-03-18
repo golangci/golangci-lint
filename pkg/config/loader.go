@@ -295,12 +295,12 @@ func (l *Loader) handleDeprecation() error {
 		l.cfg.Issues.ExcludeDirs = l.cfg.Run.SkipDirs
 	}
 
-	// `UseDefaultExcludeDirs` is true by default but `UseDefaultSkipDirs` is now false by default.
+	// The 2 options are true by default.
 	// Deprecated since v1.57.0
-	if l.cfg.Run.UseDefaultSkipDirs {
+	if !l.cfg.Run.UseDefaultSkipDirs {
 		l.warn("The configuration option `run.skip-dirs-use-default` is deprecated, please use `issues.exclude-dirs-use-default`.")
 	}
-	l.cfg.Issues.UseDefaultExcludeDirs = l.cfg.Run.UseDefaultSkipDirs || l.cfg.Issues.UseDefaultExcludeDirs
+	l.cfg.Issues.UseDefaultExcludeDirs = l.cfg.Run.UseDefaultSkipDirs && l.cfg.Issues.UseDefaultExcludeDirs
 
 	// The 2 options are false by default.
 	// Deprecated since v1.57.0
