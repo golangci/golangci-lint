@@ -304,6 +304,11 @@ func (l *Loader) handleDeprecation() {
 }
 
 func (l *Loader) handleEnableOnlyOption() error {
+	lookup := l.fs.Lookup("enable-only")
+	if lookup == nil {
+		return nil
+	}
+
 	only, err := l.fs.GetStringSlice("enable-only")
 	if err != nil {
 		return err
