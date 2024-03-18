@@ -184,10 +184,9 @@ func isAnalyzerEnabled(name string, cfg *config.GovetSettings, defaultAnalyzers 
 		return false
 	}
 
-	// TODO(ldez) remove httpresponse because of a panic.
-	// https://github.com/golangci/golangci-lint/issues/4482
-	// https://github.com/golang/go/issues/66259
+	// TODO(ldez) enable httpresponse once https://github.com/golang/go/issues/66259 is fixed.
 	if name == httpresponse.Analyzer.Name {
+		govetDebugf("httpresponse is disabled due to panic. See https://github.com/golangci/golangci-lint/issues/4482")
 		return false
 	}
 
