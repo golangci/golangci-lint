@@ -79,7 +79,7 @@ func (o *Output) Validate() error {
 
 type OutputFormat struct {
 	Format string `mapstructure:"format"`
-	Path   string `mapstructure:"filepath"`
+	Path   string `mapstructure:"path"`
 }
 
 func (o *OutputFormat) Validate() error {
