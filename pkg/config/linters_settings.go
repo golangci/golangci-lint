@@ -467,6 +467,9 @@ type GinkgoLinterSettings struct {
 	SuppressTypeCompareWarning bool `mapstructure:"suppress-type-compare-assertion"`
 	ForbidFocusContainer       bool `mapstructure:"forbid-focus-container"`
 	AllowHaveLenZero           bool `mapstructure:"allow-havelen-zero"`
+	ForceExpectTo              bool `mapstructure:"force-expect-to"`
+	ValidateAsyncIntervals     bool `mapstructure:"validate-async-intervals"`
+	ForbidSpecPollution        bool `mapstructure:"forbid-spec-pollution"`
 }
 
 type GocognitSettings struct {
