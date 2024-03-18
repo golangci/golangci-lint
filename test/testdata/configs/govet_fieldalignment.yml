@@ -1,3 +1,4 @@
 linters-settings:
   govet:
-    enable: fieldalignment
+    enable:
+    - fieldalignment

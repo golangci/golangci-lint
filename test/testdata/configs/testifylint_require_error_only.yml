@@ -1,6 +1,7 @@
 linters-settings:
   testifylint:
     disable-all: true
-    enable: require-error
+    enable:
+      - require-error
     require-error:
       fn-pattern: ^NoError$

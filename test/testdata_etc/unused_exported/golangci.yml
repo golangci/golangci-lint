@@ -2,6 +2,3 @@ linters:
   disable-all: true
   enable:
     - unused
-linters-settings:
-  unused:
-    check-exported: true

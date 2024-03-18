@@ -385,15 +385,18 @@
       "additionalProperties": false
     }
   },
+  "type": "object",
+  "additionalProperties": false,
   "properties": {
     "run": {
       "description": "Options for analysis running,",
       "type": "object",
+      "additionalProperties": false,
       "properties": {
         "concurrency": {
           "description": "Number of concurrent runners. Defaults to the number of available CPU cores.",
           "type": "integer",
-          "minimum": 1,
+          "minimum": 0,
           "examples": [4]
         },
         "timeout": {
@@ -441,12 +444,12 @@
           "type": "string",
           "default": "1.17"
         }
-      },
-      "additionalProperties": false
+      }
     },
     "output": {
       "description": "Output configuration options.",
       "type": "object",
+      "additionalProperties": false,
       "properties": {
         "format": {
           "description": "Output format to use.",
@@ -494,12 +497,12 @@
           "type": "boolean",
           "default": true
         }
-      },
-      "additionalProperties": false
+      }
     },
     "linters-settings": {
       "description": "All available settings of specific linters.",
       "type": "object",
+      "additionalProperties": false,
       "properties": {
         "dupword": {
           "type": "object",
@@ -683,8 +686,8 @@
               "patternProperties": {
                 "^[^.]+$": {
                   "description": "Name of a rule.",
-                  "additionalProperties": false,
                   "type": "object",
+                  "additionalProperties": false,
                   "properties": {
                     "list-mode": {
                       "description": "Used to determine the package matching priority.",
@@ -709,11 +712,10 @@
                     },
                     "deny": {
                       "description": "Packages that are not allowed where the value is a suggestion.",
-                      "additionalProperties": false,
                       "type": "array",
                       "items": {
-                        "additionalProperties": false,
                         "type": "object",
+                        "additionalProperties": false,
                         "properties": {
                           "desc": {
                             "description": "Description",
@@ -936,6 +938,7 @@
                   },
                   {
                     "type": "object",
+                    "additionalProperties": false,
                     "properties": {
                       "p": {
                         "description": "Pattern",
@@ -949,8 +952,7 @@
                         "description": "Message",
                         "type": "string"
                       }
-                    },
-                    "additionalProperties": false
+                    }
                   }
                 ]
               }
@@ -1236,6 +1238,7 @@
               "type": "array",
               "items": {
                 "type": "object",
+                "additionalProperties": false,
                 "properties": {
                   "pattern": {
                     "type": "string"
@@ -1243,8 +1246,7 @@
                   "replacement": {
                     "type": "string"
                   }
-                },
-                "additionalProperties": false
+                }
               }
             }
           }
@@ -1282,74 +1284,61 @@
         "goheader": {
           "type": "object",
           "additionalProperties": false,
-          "allOf": [
-            {
+          "properties": {
+            "values": {
+              "type": "object",
+              "additionalProperties": false,
               "properties": {
-                "values": {
+                "const": {
+                  "description": "Constants to use in the template.",
                   "type": "object",
-                  "properties": {
-                    "const": {
-                      "description": "Constants to use in the template.",
-                      "type": "object",
-                      "patternProperties": {
-                        "^.+$": {
-                          "description": "Value for the constant.",
-                          "type": "string"
-                        }
-                      },
-                      "additionalProperties": false,
-                      "examples": [
-                        {
-                          "YEAR": "2030",
-                          "COMPANY": "MY FUTURISTIC COMPANY"
-                        }
-                      ]
-                    },
-                    "regexp": {
-                      "description": "Regular expressions to use in your template.",
-                      "type": "object",
-                      "patternProperties": {
-                        "^.+$": {
-                          "type": "string"
-                        }
-                      },
-                      "additionalProperties": false,
-                      "examples": [
-                        {
-                          "AUTHOR": ".*@mycompany\\.com"
-                        }
-                      ]
+                  "patternProperties": {
+                    "^.+$": {
+                      "description": "Value for the constant.",
+                      "type": "string"
                     }
-                  }
+                  },
+                  "additionalProperties": false,
+                  "examples": [
+                    {
+                      "YEAR": "2030",
+                      "COMPANY": "MY FUTURISTIC COMPANY"
+                    }
+                  ]
+                },
+                "regexp": {
+                  "description": "Regular expressions to use in your template.",
+                  "type": "object",
+                  "additionalProperties": false,
+                  "patternProperties": {
+                    "^.+$": {
+                      "type": "string"
+                    }
+                  },
+                  "examples": [
+                    {
+                      "AUTHOR": ".*@mycompany\\.com"
+                    }
+                  ]
                 }
               }
             },
-            {
-              "oneOf": [
-                {
-                  "properties": {
-                    "template": {
-                      "description": "Template to put on top of every file.",
-                      "type": "string",
-                      "examples": [
-                        "{{ MY COMPANY }}\nSPDX-License-Identifier: Apache-2.0\n\nLicensed under the Apache License, Version 2.0 (the \"License\");\nyou may not use this file except in compliance with the License.\nYou may obtain a copy of the License at:\n\n    http://www.apache.org/licenses/LICENSE-2.0\n\nUnless required by applicable law or agreed to in writing, software\ndistributed under the License is distributed on an \"AS IS\" BASIS,\nWITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\nSee the License for the specific language governing permissions and\nlimitations under the License."
-                      ]
-                    }
-                  },
-                  "required": ["template"]
-                },
-                {
-                  "properties": {
-                    "template-path": {
-                      "description": "Path to the file containing the template source.",
-                      "type": "string",
-                      "examples": ["my_header_template.txt"]
-                    }
-                  },
-                  "required": ["template-path"]
-                }
+            "template": {
+              "description": "Template to put on top of every file.",
+              "type": "string",
+              "examples": [
+                "{{ MY COMPANY }}\nSPDX-License-Identifier: Apache-2.0\n\nLicensed under the Apache License, Version 2.0 (the \"License\");\nyou may not use this file except in compliance with the License.\nYou may obtain a copy of the License at:\n\n    http://www.apache.org/licenses/LICENSE-2.0\n\nUnless required by applicable law or agreed to in writing, software\ndistributed under the License is distributed on an \"AS IS\" BASIS,\nWITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\nSee the License for the specific language governing permissions and\nlimitations under the License."
               ]
+            },
+            "template-path": {
+              "description": "Path to the file containing the template source.",
+              "type": "string",
+              "examples": ["my_header_template.txt"]
             }
+          },
+          "oneOf": [
+            { "required": ["template"] },
+            { "required": ["template-path"] }
           ]
         },
         "goimports": {
@@ -1441,6 +1430,7 @@
           "properties": {
             "allowed": {
               "type": "object",
+              "additionalProperties": false,
               "properties": {
                 "modules": {
                   "description": "List of allowed modules.",
@@ -1462,6 +1452,7 @@
             },
             "blocked": {
               "type": "object",
+              "additionalProperties": false,
               "properties": {
                 "modules": {
                   "description": "List of blocked modules.",
@@ -1471,6 +1462,7 @@
                     "patternProperties": {
                       "^.+$": {
                         "type": "object",
+                        "additionalProperties": false,
                         "properties": {
                           "recommendations": {
                             "description": "Recommended modules that should be used instead.",
@@ -1497,6 +1489,7 @@
                     "patternProperties": {
                       "^.*$": {
                         "type": "object",
+                        "additionalProperties": false,
                         "properties": {
                           "version": {
                             "description": "Version constraint.",
@@ -1727,6 +1720,7 @@
               "type": "array",
               "items": {
                 "type": "object",
+                "additionalProperties": false,
                 "properties": {
                   "pkg": {
                     "description": "Package path e.g. knative.dev/serving/pkg/apis/autoscaling/v1alpha1",
@@ -1931,6 +1925,7 @@
               "type": "array",
               "items": {
                 "type": "object",
+                "additionalProperties": false,
                 "properties": {
                   "name": {
                     "type": "string"
@@ -1941,8 +1936,7 @@
                   "arg-pos": {
                     "type": "integer"
                   }
-                },
-                "additionalProperties": false
+                }
               }
             }
           }
@@ -2578,6 +2572,7 @@
           "properties": {
             "case": {
               "type": "object",
+              "additionalProperties": false,
               "properties": {
                 "use-field-name": {
                   "description": "Use the struct field name to check the name of the struct tag.",
@@ -2772,6 +2767,7 @@
             },
             "benchmark": {
               "type": "object",
+              "additionalProperties": false,
               "properties": {
                 "begin": {
                   "description": "Check if `b.Helper()` begins helper function.",
@@ -2792,6 +2788,7 @@
             },
             "tb": {
               "type": "object",
+              "additionalProperties": false,
               "properties": {
                 "begin": {
                   "description": "Check if `tb.Helper()` begins helper function.",
@@ -2812,6 +2809,7 @@
             },
             "fuzz": {
               "type": "object",
+              "additionalProperties": false,
               "properties": {
                 "begin": {
                   "description": "Check if `f.Helper()` begins helper function.",
@@ -3210,15 +3208,24 @@
                   "type": "object"
                 }
               },
-              "required": ["path"]
+              "oneOf": [
+                {
+                  "properties": {
+                    "type": {"enum": ["module"] }
+                  }
+                },
+                {
+                  "required": ["path"]
+                }
+              ]
             }
           }
         }
-      },
-      "additionalProperties": false
+      }
     },
     "linters": {
       "type": "object",
+      "additionalProperties": false,
       "properties": {
         "enable": {
           "description": "List of enabled linters.",
@@ -3270,11 +3277,11 @@
           "type": "boolean",
           "default": false
         }
-      },
-      "additionalProperties": false
+      }
     },
     "issues": {
       "type": "object",
+      "additionalProperties": false,
       "properties": {
         "exclude": {
           "description": "List of regular expressions of issue texts to exclude.\nBut independently from this option we use default exclude patterns. Their usage can be controlled through `exclude-use-default`.",
@@ -3288,6 +3295,7 @@
           "type": "array",
           "items": {
             "type": "object",
+            "additionalProperties": false,
             "properties": {
               "path": {
                 "type": "string"
@@ -3396,11 +3404,11 @@
           "type": "boolean",
           "default": false
         }
-      },
-      "additionalProperties": false
+      }
     },
     "severity": {
       "type": "object",
+      "additionalProperties": false,
       "properties": {
         "default-severity": {
           "description": "Set the default severity for issues. If severity rules are defined and the issues do not match or no severity is provided to the rule this will be the default severity applied. Severities should match the supported severity names of the selected out format.",
@@ -3446,9 +3454,7 @@
           "default": []
         }
       },
-      "required": ["default-severity"],
-      "additionalProperties": false
+      "required": ["default-severity"]
     }
-  },
-  "type": "object"
+  }
 }
