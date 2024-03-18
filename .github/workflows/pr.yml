@@ -130,3 +130,44 @@ jobs:
         env:
           # needed for github-action-config.json generation
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # Note: the command `run` is tested by the previous steps (`make test`).
+  commands:
+    needs: golangci-lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Go
+        uses: actions/setup-go@v5
+        with:
+          # https://github.com/actions/setup-go#supported-version-syntax
+          # ex:
+          # - 1.18beta1 -> 1.18.0-beta.1
+          # - 1.18rc1 -> 1.18.0-rc.1
+          go-version: ${{ env.GO_VERSION }}
+      - name: Build golangci-lint
+        run: make build
+
+      - run: ./golangci-lint
+
+      - run: ./golangci-lint cache
+      - run: ./golangci-lint cache status
+      - run: ./golangci-lint cache clean
+
+      - run: ./golangci-lint completion
+      - run: ./golangci-lint completion bash
+      - run: ./golangci-lint completion bash --no-descriptions
+      - run: ./golangci-lint completion zsh
+      - run: ./golangci-lint completion zsh --no-descriptions
+      - run: ./golangci-lint completion fish
+      - run: ./golangci-lint completion fish --no-descriptions
+      - run: ./golangci-lint completion powershell
+      - run: ./golangci-lint completion powershell --no-descriptions
+
+      - run: ./golangci-lint config
+      - run: ./golangci-lint config path
+
+      - run: ./golangci-lint help
+      - run: ./golangci-lint help linters
+      - run: ./golangci-lint linters
+      - run: ./golangci-lint version
