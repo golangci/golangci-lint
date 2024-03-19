@@ -152,6 +152,10 @@ issues:
         - gomnd
         - lll
 
+    - path: pkg/golinters
+      linters:
+        - dupl
+
     - path: pkg/golinters/errcheck.go
       linters: [staticcheck]
       text: "SA1019: errCfg.Exclude is deprecated: use ExcludeFunctions instead"
@@ -166,9 +170,9 @@ issues:
     - path: pkg/commands/config.go
       text: "SA1019: cfg.Run.UseDefaultSkipDirs is deprecated: use Issues.UseDefaultExcludeDirs instead."
 
-    - path: pkg/golinters
-      linters:
-        - dupl
+    - path: pkg/golinters/godot.go
+      linters: [staticcheck]
+      text: "SA1019: settings.CheckAll is deprecated: use `Scope` instead"
 
     - path: pkg/golinters/gofumpt.go
       linters: [staticcheck]
