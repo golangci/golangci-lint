@@ -7,7 +7,6 @@ import (
 	"go/token"
 	"regexp"
 	"strings"
-	"unicode"
 
 	"github.com/golangci/golangci-lint/pkg/result"
 )
@@ -35,18 +34,6 @@ func (i ExtraLeadingSpace) Details() string {
 }
 
 func (i ExtraLeadingSpace) String() string { return toString(i) }
-
-type NotMachine struct {
-	baseIssue
-}
-
-func (i NotMachine) Details() string {
-	expected := i.fullDirective[:2] + strings.TrimLeftFunc(i.fullDirective[2:], unicode.IsSpace)
-	return fmt.Sprintf("directive `%s` should be written without leading space as `%s`",
-		i.fullDirective, expected)
-}
-
-func (i NotMachine) String() string { return toString(i) }
 
 type NotSpecific struct {
 	baseIssue
@@ -181,20 +168,6 @@ func (l Linter) Run(fset *token.FileSet, nodes ...ast.Node) ([]Issue, error) {
 				base := baseIssue{
 					fullDirective: comment.Text,
 					position:      pos,
-				}
-
-				// check for, report and eliminate leading spaces, so we can check for other issues
-				if leadingSpace != "" {
-					removeWhitespace := &result.Replacement{
-						Inline: &result.InlineFix{
-							StartCol:  pos.Column + 1,
-							Length:    len(leadingSpace),
-							NewString: "",
-						},
-					}
-					issue := NotMachine{baseIssue: base}
-					issue.baseIssue.replacement = removeWhitespace
-					issues = append(issues, issue)
 				}
 
 				fullMatches := fullDirectivePattern.FindStringSubmatch(comment.Text)
