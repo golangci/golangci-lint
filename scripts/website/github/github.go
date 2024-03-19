@@ -1,4 +1,4 @@
-package gh
+package github
 
 import (
 	"encoding/json"
@@ -27,7 +27,6 @@ func GetLatestVersion() (string, error) {
 	client := &http.Client{Timeout: 2 * time.Second}
 
 	resp, err := client.Do(req)
-
 	if err != nil {
 		return "", fmt.Errorf("get HTTP response for the latest tag: %w", err)
 	}

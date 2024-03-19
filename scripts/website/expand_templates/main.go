@@ -9,7 +9,7 @@ import (
 	"strings"
 
 	"github.com/golangci/golangci-lint/internal/renameio"
-	"github.com/golangci/golangci-lint/scripts/website/gh"
+	"github.com/golangci/golangci-lint/scripts/website/github"
 	"github.com/golangci/golangci-lint/scripts/website/types"
 )
 
@@ -108,7 +108,7 @@ func buildTemplateContext() (map[string]string, error) {
 		return nil, fmt.Errorf("read CHANGELOG.md: %w", err)
 	}
 
-	latestVersion, err := gh.GetLatestVersion()
+	latestVersion, err := github.GetLatestVersion()
 	if err != nil {
 		return nil, fmt.Errorf("get the latest version: %w", err)
 	}

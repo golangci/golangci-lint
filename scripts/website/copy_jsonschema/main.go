@@ -10,20 +10,27 @@ import (
 
 	hcversion "github.com/hashicorp/go-version"
 
-	"github.com/golangci/golangci-lint/scripts/website/gh"
+	"github.com/golangci/golangci-lint/scripts/website/github"
 )
 
 func main() {
+	err := copySchemas()
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func copySchemas() error {
 	dstDir := filepath.FromSlash("docs/static/jsonschema/")
 
 	err := os.RemoveAll(dstDir)
 	if err != nil {
-		log.Fatalf("remove dir: %v", err)
+		return fmt.Errorf("remove dir: %w", err)
 	}
 
 	err = os.MkdirAll(dstDir, os.ModePerm)
 	if err != nil {
-		log.Fatalf("make dir: %v", err)
+		return fmt.Errorf("make dir: %w", err)
 	}
 
 	// The key is the destination file.
@@ -32,7 +39,7 @@ func main() {
 
 	entries, err := os.ReadDir("jsonschema")
 	if err != nil {
-		log.Fatalf("read dir: %v", err)
+		return fmt.Errorf("read dir: %w", err)
 	}
 
 	for _, entry := range entries {
@@ -41,14 +48,14 @@ func main() {
 		}
 	}
 
-	latest, err := gh.GetLatestVersion()
+	latest, err := github.GetLatestVersion()
 	if err != nil {
-		log.Fatalf("get latest release version: %v", err)
+		return fmt.Errorf("get latest release version: %w", err)
 	}
 
 	version, err := hcversion.NewVersion(latest)
 	if err != nil {
-		log.Fatalf("parse version: %v", err)
+		return fmt.Errorf("parse version: %w", err)
 	}
 
 	versioned := fmt.Sprintf("golangci.v%d.%d.jsonschema.json", version.Segments()[0], version.Segments()[1])
@@ -57,9 +64,11 @@ func main() {
 	for dst, src := range files {
 		err := copyFile(filepath.Join("jsonschema", src), filepath.Join(dstDir, dst))
 		if err != nil {
-			log.Fatalf("Copy files: %v", err)
+			return fmt.Errorf("copy files: %w", err)
 		}
 	}
+
+	return nil
 }
 
 func copyFile(src, dst string) error {
@@ -67,6 +76,8 @@ func copyFile(src, dst string) error {
 	if err != nil {
 		return fmt.Errorf("open file %s: %w", src, err)
 	}
+
+	defer func() { _ = source.Close() }()
 
 	info, err := source.Stat()
 	if err != nil {
@@ -77,6 +88,8 @@ func copyFile(src, dst string) error {
 	if err != nil {
 		return fmt.Errorf("create file %s: %w", dst, err)
 	}
+
+	defer func() { _ = destination.Close() }()
 
 	_, err = io.Copy(destination, source)
 	if err != nil {

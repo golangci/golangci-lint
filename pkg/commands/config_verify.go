@@ -126,12 +126,7 @@ func validateConfiguration(schemaPath, targetFile string) error {
 		return errors.New("unsupported configuration format")
 	}
 
-	err = schema.Validate(m)
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return schema.Validate(m)
 }
 
 func printValidationDetail(cmd *cobra.Command, detail *jsonschema.Detailed) {
