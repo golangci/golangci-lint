@@ -102,7 +102,7 @@ func foo() {
 			},
 		},
 		{
-			desc: "spaces are allowed in comma-separated list of linters",
+			desc: "spaces are not allowed in comma-separated list of linters",
 			contents: `
 package bar
 
