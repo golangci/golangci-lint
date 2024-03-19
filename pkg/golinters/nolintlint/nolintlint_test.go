@@ -127,11 +127,17 @@ package bar
 func foo() {
   good() //nolint:linter1,linter-two
   bad() //nolint:linter1 linter2
-  good() //nolint: linter1,linter2
-  good() //nolint: linter1, linter2
+  bad() //nolint: linter1,linter2
+  bad() //nolint: linter1, linter2
+  bad() //nolint / description
+  bad() //nolint, // hi
 }`,
 			expected: []issueWithReplacement{
 				{issue: "directive `//nolint:linter1 linter2` should match `//nolint[:<comma-separated-linters>] [// <explanation>]` at testing.go:6:9"},
+				{issue: "directive `//nolint: linter1,linter2` should match `//nolint[:<comma-separated-linters>] [// <explanation>]` at testing.go:7:9"},
+				{issue: "directive `//nolint: linter1, linter2` should match `//nolint[:<comma-separated-linters>] [// <explanation>]` at testing.go:8:9"},
+				{issue: "directive `//nolint / description` should match `//nolint[:<comma-separated-linters>] [// <explanation>]` at testing.go:9:9"},
+				{issue: "directive `//nolint, // hi` should match `//nolint[:<comma-separated-linters>] [// <explanation>]` at testing.go:10:9"},
 			},
 		},
 		{
