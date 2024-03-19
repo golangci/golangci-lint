@@ -144,7 +144,9 @@ issues:
   exclude-rules:
     - path: _test\.go
       linters:
+        - dupl
         - gomnd
+        - lll
 
     - path: pkg/golinters/errcheck.go
       linters: [staticcheck]

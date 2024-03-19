@@ -131,7 +131,7 @@ func foo() {
   good() //nolint: linter1, linter2
 }`,
 			expected: []issueWithReplacement{
-				{issue: "directive `//nolint:linter1 linter2` should match `//nolint[:<comma-separated-linters>] [// <explanation>]` at testing.go:6:9"}, //nolint:lll // this is a string
+				{issue: "directive `//nolint:linter1 linter2` should match `//nolint[:<comma-separated-linters>] [// <explanation>]` at testing.go:6:9"},
 			},
 		},
 		{
