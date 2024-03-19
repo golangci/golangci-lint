@@ -17,13 +17,15 @@ linters-settings:
       logger:
         deny:
           # logging is allowed only by logutils.Log,
-          # logrus is allowed to use only in logutils package.
           - pkg: "github.com/sirupsen/logrus"
             desc: logging is allowed only by logutils.Log.
           - pkg: "github.com/pkg/errors"
             desc: Should be replaced by standard lib errors package.
           - pkg: "github.com/instana/testify"
             desc: It's a fork of github.com/stretchr/testify.
+        files:
+          # logrus is allowed to use only in logutils package.
+          - "!**/pkg/logutils/**.go"
   dupl:
     threshold: 100
   funlen:
