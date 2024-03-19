@@ -1,8 +1,8 @@
 {
   "MinorVersionToConfig": {
     "latest": {
-      "TargetVersion": "v1.56.2",
-      "AssetURL": "https://github.com/golangci/golangci-lint/releases/download/v1.56.2/golangci-lint-1.56.2-linux-amd64.tar.gz"
+      "TargetVersion": "v1.57.0",
+      "AssetURL": "https://github.com/golangci/golangci-lint/releases/download/v1.57.0/golangci-lint-1.57.0-linux-amd64.tar.gz"
     },
     "v1.10": {
       "Error": "golangci-lint version 'v1.10' isn't supported: we support only v1.14.0 and later versions"
@@ -196,6 +196,10 @@
     "v1.56": {
       "TargetVersion": "v1.56.2",
       "AssetURL": "https://github.com/golangci/golangci-lint/releases/download/v1.56.2/golangci-lint-1.56.2-linux-amd64.tar.gz"
+    },
+    "v1.57": {
+      "TargetVersion": "v1.57.0",
+      "AssetURL": "https://github.com/golangci/golangci-lint/releases/download/v1.57.0/golangci-lint-1.57.0-linux-amd64.tar.gz"
     },
     "v1.6": {
       "Error": "golangci-lint version 'v1.6' isn't supported: we support only v1.14.0 and later versions"
