@@ -12,28 +12,24 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-type BaseIssue struct {
-	fullDirective                     string
-	directiveWithOptionalLeadingSpace string
-	position                          token.Position
-	replacement                       *result.Replacement
+type baseIssue struct {
+	fullDirective string
+	position      token.Position
+	replacement   *result.Replacement
 }
 
-//nolint:gocritic // TODO(ldez) must be change in the future.
-func (b BaseIssue) Position() token.Position {
+func (b baseIssue) Position() token.Position {
 	return b.position
 }
 
-//nolint:gocritic // TODO(ldez) must be change in the future.
-func (b BaseIssue) Replacement() *result.Replacement {
+func (b baseIssue) Replacement() *result.Replacement {
 	return b.replacement
 }
 
 type ExtraLeadingSpace struct {
-	BaseIssue
+	baseIssue
 }
 
-//nolint:gocritic // TODO(ldez) must be change in the future.
 func (i ExtraLeadingSpace) Details() string {
 	return fmt.Sprintf("directive `%s` should not have more than one leading space", i.fullDirective)
 }
@@ -41,10 +37,9 @@ func (i ExtraLeadingSpace) Details() string {
 func (i ExtraLeadingSpace) String() string { return toString(i) }
 
 type NotMachine struct {
-	BaseIssue
+	baseIssue
 }
 
-//nolint:gocritic // TODO(ldez) must be change in the future.
 func (i NotMachine) Details() string {
 	expected := i.fullDirective[:2] + strings.TrimLeftFunc(i.fullDirective[2:], unicode.IsSpace)
 	return fmt.Sprintf("directive `%s` should be written without leading space as `%s`",
@@ -54,32 +49,29 @@ func (i NotMachine) Details() string {
 func (i NotMachine) String() string { return toString(i) }
 
 type NotSpecific struct {
-	BaseIssue
+	baseIssue
 }
 
-//nolint:gocritic // TODO(ldez) must be change in the future.
 func (i NotSpecific) Details() string {
-	return fmt.Sprintf("directive `%s` should mention specific linter such as `%s:my-linter`",
-		i.fullDirective, i.directiveWithOptionalLeadingSpace)
+	return fmt.Sprintf("directive `%s` should mention specific linter such as `//nolint:my-linter`",
+		i.fullDirective)
 }
 
 func (i NotSpecific) String() string { return toString(i) }
 
 type ParseError struct {
-	BaseIssue
+	baseIssue
 }
 
-//nolint:gocritic // TODO(ldez) must be change in the future.
 func (i ParseError) Details() string {
-	return fmt.Sprintf("directive `%s` should match `%s[:<comma-separated-linters>] [// <explanation>]`",
-		i.fullDirective,
-		i.directiveWithOptionalLeadingSpace)
+	return fmt.Sprintf("directive `%s` should match `//nolint[:<comma-separated-linters>] [// <explanation>]`",
+		i.fullDirective)
 }
 
 func (i ParseError) String() string { return toString(i) }
 
 type NoExplanation struct {
-	BaseIssue
+	baseIssue
 	fullDirectiveWithoutExplanation string
 }
 
@@ -92,7 +84,7 @@ func (i NoExplanation) Details() string {
 func (i NoExplanation) String() string { return toString(i) }
 
 type UnusedCandidate struct {
-	BaseIssue
+	baseIssue
 	ExpectedLinter string
 }
 
@@ -131,7 +123,7 @@ const (
 var commentPattern = regexp.MustCompile(`^//\s*(nolint)(:\s*[\w-]+\s*(?:,\s*[\w-]+\s*)*)?\b`)
 
 // matches a complete nolint directive
-var fullDirectivePattern = regexp.MustCompile(`^//\s*nolint(?::(\s*[\w-]+\s*(?:,\s*[\w-]+\s*)*))?\s*(//.*)?\s*\n?$`)
+var fullDirectivePattern = regexp.MustCompile(`^//\s*nolint(?::([\w-]+(?:,[\w-]+)*))?(?: (//.*))?\n?$`)
 
 type Linter struct {
 	needs           Needs // indicates which linter checks to perform
@@ -180,21 +172,12 @@ func (l Linter) Run(fset *token.FileSet, nodes ...ast.Node) ([]Issue, error) {
 					leadingSpace = leadingSpaceMatches[1]
 				}
 
-				directiveWithOptionalLeadingSpace := "//"
-				if leadingSpace != "" {
-					directiveWithOptionalLeadingSpace += " "
-				}
-
-				split := strings.Split(strings.SplitN(comment.Text, ":", 2)[0], "//")
-				directiveWithOptionalLeadingSpace += strings.TrimSpace(split[1])
-
 				pos := fset.Position(comment.Pos())
 				end := fset.Position(comment.End())
 
-				base := BaseIssue{
-					fullDirective:                     comment.Text,
-					directiveWithOptionalLeadingSpace: directiveWithOptionalLeadingSpace,
-					position:                          pos,
+				base := baseIssue{
+					fullDirective: comment.Text,
+					position:      pos,
 				}
 
 				// check for, report and eliminate leading spaces, so we can check for other issues
@@ -207,20 +190,20 @@ func (l Linter) Run(fset *token.FileSet, nodes ...ast.Node) ([]Issue, error) {
 						},
 					}
 					if (l.needs & NeedsMachineOnly) != 0 {
-						issue := NotMachine{BaseIssue: base}
-						issue.BaseIssue.replacement = removeWhitespace
+						issue := NotMachine{baseIssue: base}
+						issue.baseIssue.replacement = removeWhitespace
 						issues = append(issues, issue)
 					} else if len(leadingSpace) > 1 {
-						issue := ExtraLeadingSpace{BaseIssue: base}
-						issue.BaseIssue.replacement = removeWhitespace
-						issue.BaseIssue.replacement.Inline.NewString = " " // assume a single space was intended
+						issue := ExtraLeadingSpace{baseIssue: base}
+						issue.baseIssue.replacement = removeWhitespace
+						issue.baseIssue.replacement.Inline.NewString = " " // assume a single space was intended
 						issues = append(issues, issue)
 					}
 				}
 
 				fullMatches := fullDirectivePattern.FindStringSubmatch(comment.Text)
 				if len(fullMatches) == 0 {
-					issues = append(issues, ParseError{BaseIssue: base})
+					issues = append(issues, ParseError{baseIssue: base})
 					continue
 				}
 
@@ -246,7 +229,7 @@ func (l Linter) Run(fset *token.FileSet, nodes ...ast.Node) ([]Issue, error) {
 
 				if (l.needs & NeedsSpecific) != 0 {
 					if len(linters) == 0 {
-						issues = append(issues, NotSpecific{BaseIssue: base})
+						issues = append(issues, NotSpecific{baseIssue: base})
 					}
 				}
 
@@ -261,12 +244,12 @@ func (l Linter) Run(fset *token.FileSet, nodes ...ast.Node) ([]Issue, error) {
 					}
 
 					if len(linters) == 0 {
-						issue := UnusedCandidate{BaseIssue: base}
+						issue := UnusedCandidate{baseIssue: base}
 						issue.replacement = removeNolintCompletely
 						issues = append(issues, issue)
 					} else {
 						for _, linter := range linters {
-							issue := UnusedCandidate{BaseIssue: base, ExpectedLinter: linter}
+							issue := UnusedCandidate{baseIssue: base, ExpectedLinter: linter}
 							// only offer replacement if there is a single linter
 							// because of issues around commas and the possibility of all
 							// linters being removed
@@ -291,7 +274,7 @@ func (l Linter) Run(fset *token.FileSet, nodes ...ast.Node) ([]Issue, error) {
 					if needsExplanation {
 						fullDirectiveWithoutExplanation := trailingBlankExplanation.ReplaceAllString(comment.Text, "")
 						issues = append(issues, NoExplanation{
-							BaseIssue:                       base,
+							baseIssue:                       base,
 							fullDirectiveWithoutExplanation: fullDirectiveWithoutExplanation,
 						})
 					}
