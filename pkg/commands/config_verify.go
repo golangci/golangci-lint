@@ -18,6 +18,10 @@ import (
 	"github.com/golangci/golangci-lint/pkg/exitcodes"
 )
 
+type verifyOptions struct {
+	schemaURL string // For debugging purpose only (Flag only).
+}
+
 func (c *configCommand) executeVerify(cmd *cobra.Command, _ []string) error {
 	usedConfigFile := c.getUsedConfig()
 	if usedConfigFile == "" {
@@ -25,7 +29,7 @@ func (c *configCommand) executeVerify(cmd *cobra.Command, _ []string) error {
 		os.Exit(exitcodes.NoConfigFileDetected)
 	}
 
-	schemaURL, err := getSchemaURL(cmd.Flags(), c.buildInfo)
+	schemaURL, err := createSchemaURL(cmd.Flags(), c.buildInfo)
 	if err != nil {
 		return fmt.Errorf("get JSON schema: %w", err)
 	}
@@ -40,24 +44,14 @@ func (c *configCommand) executeVerify(cmd *cobra.Command, _ []string) error {
 		detail := v.DetailedOutput()
 
 		printValidationDetail(cmd, &detail)
+
+		return fmt.Errorf("the configuration contains invalid elements")
 	}
 
 	return nil
 }
 
-func printValidationDetail(cmd *cobra.Command, detail *jsonschema.Detailed) {
-	if detail.Error != "" {
-		cmd.PrintErrf("jsonschema: %s does not validate with %s: %s\n",
-			strings.ReplaceAll(strings.TrimPrefix(detail.InstanceLocation, "/"), "/", "."), detail.KeywordLocation, detail.Error)
-	}
-
-	for _, d := range detail.Errors {
-		d := d
-		printValidationDetail(cmd, &d)
-	}
-}
-
-func getSchemaURL(flags *pflag.FlagSet, buildInfo BuildInfo) (string, error) {
+func createSchemaURL(flags *pflag.FlagSet, buildInfo BuildInfo) (string, error) {
 	schemaURL, err := flags.GetString("schema")
 	if err != nil {
 		return "", fmt.Errorf("get schema flag: %w", err)
@@ -78,7 +72,7 @@ func getSchemaURL(flags *pflag.FlagSet, buildInfo BuildInfo) (string, error) {
 			version.Segments()[0], version.Segments()[1])
 
 	case buildInfo.Commit != "" && buildInfo.Commit != "?":
-		if buildInfo.Commit != "unknown" {
+		if buildInfo.Commit == "unknown" {
 			return "", errors.New("unknown commit information")
 		}
 
@@ -138,6 +132,18 @@ func validateConfiguration(schemaPath, targetFile string) error {
 	}
 
 	return nil
+}
+
+func printValidationDetail(cmd *cobra.Command, detail *jsonschema.Detailed) {
+	if detail.Error != "" {
+		cmd.PrintErrf("jsonschema: %q does not validate with %q: %s\n",
+			strings.ReplaceAll(strings.TrimPrefix(detail.InstanceLocation, "/"), "/", "."), detail.KeywordLocation, detail.Error)
+	}
+
+	for _, d := range detail.Errors {
+		d := d
+		printValidationDetail(cmd, &d)
+	}
 }
 
 func decodeYamlFile(filename string) (any, error) {

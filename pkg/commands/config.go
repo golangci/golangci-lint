@@ -14,10 +14,6 @@ import (
 	"github.com/golangci/golangci-lint/pkg/logutils"
 )
 
-type verifyOptions struct {
-	schemaURL string // For debugging purpose only (Flag only).
-}
-
 type configCommand struct {
 	viper *viper.Viper
 	cmd   *cobra.Command
