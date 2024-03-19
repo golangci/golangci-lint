@@ -133,8 +133,8 @@ func (p *hunkChangesParser) handleDeletedLines(deletedLines []diffLine, addedLin
 	}
 
 	if len(addedLines) != 0 {
-		//nolint:gocritic
-		change.Replacement.NewLines = append(p.replacementLinesToPrepend, addedLines...)
+		change.Replacement.NewLines = append([]string{}, p.replacementLinesToPrepend...)
+		change.Replacement.NewLines = append(change.Replacement.NewLines, addedLines...)
 		if len(p.replacementLinesToPrepend) != 0 {
 			p.replacementLinesToPrepend = nil
 		}
