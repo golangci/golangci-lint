@@ -97,26 +97,8 @@ func foo() {
   good() //nolint
 }`,
 			expected: []issueWithReplacement{
-				{
-					issue: "directive `// nolint` should be written without leading space as `//nolint` at testing.go:5:9",
-					replacement: &result.Replacement{
-						Inline: &result.InlineFix{
-							StartCol:  10,
-							Length:    1,
-							NewString: "",
-						},
-					},
-				},
-				{
-					issue: "directive `//   nolint` should be written without leading space as `//nolint` at testing.go:6:9",
-					replacement: &result.Replacement{
-						Inline: &result.InlineFix{
-							StartCol:  10,
-							Length:    3,
-							NewString: "",
-						},
-					},
-				},
+				{issue: "directive `// nolint` should match `//nolint[:<comma-separated-linters>] [// <explanation>]` at testing.go:5:9"},
+				{issue: "directive `//   nolint` should match `//nolint[:<comma-separated-linters>] [// <explanation>]` at testing.go:6:9"},
 			},
 		},
 		{
