@@ -166,11 +166,6 @@ func analyzersFromConfig(settings *config.GovetSettings) []*analysis.Analyzer {
 		return defaultAnalyzers
 	}
 
-	if settings.CheckShadowing {
-		// Keeping for backward compatibility.
-		settings.Enable = append(settings.Enable, shadow.Analyzer.Name)
-	}
-
 	var enabledAnalyzers []*analysis.Analyzer
 	for _, a := range allAnalyzers {
 		if isAnalyzerEnabled(a.Name, settings, defaultAnalyzers) {
@@ -187,6 +182,11 @@ func isAnalyzerEnabled(name string, cfg *config.GovetSettings, defaultAnalyzers 
 	// TODO(ldez) remove loopclosure when go1.23
 	if name == loopclosure.Analyzer.Name && config.IsGoGreaterThanOrEqual(cfg.Go, "1.22") {
 		return false
+	}
+
+	// Keeping for backward compatibility.
+	if cfg.CheckShadowing && name == shadow.Analyzer.Name {
+		return true
 	}
 
 	switch {
