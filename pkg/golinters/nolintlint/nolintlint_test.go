@@ -39,10 +39,10 @@ func foo() {
 	other() //nolintother
 }`,
 			expected: []issueWithReplacement{
-				{issue: "directive `//nolint` should provide explanation such as `//nolint // this is why` at testing.go:5:1"},
-				{issue: "directive `//nolint` should provide explanation such as `//nolint // this is why` at testing.go:7:9"},
-				{issue: "directive `//nolint //` should provide explanation such as `//nolint // this is why` at testing.go:8:9"},
-				{issue: "directive `//nolint // ` should provide explanation such as `//nolint // this is why` at testing.go:9:9"},
+				{issue: "directive `//nolint` is missing an explanation; it should follow the format `//nolint[:<comma-separated-linters>] // <explanation>` at testing.go:5:1"},
+				{issue: "directive `//nolint` is missing an explanation; it should follow the format `//nolint[:<comma-separated-linters>] // <explanation>` at testing.go:7:9"},
+				{issue: "directive `//nolint //` is missing an explanation; it should follow the format `//nolint[:<comma-separated-linters>] // <explanation>` at testing.go:8:9"},
+				{issue: "directive `//nolint // ` is missing an explanation; it should follow the format `//nolint[:<comma-separated-linters>] // <explanation>` at testing.go:9:9"},
 			},
 		},
 		{
@@ -56,7 +56,7 @@ package bar
 //nolint:dupl
 func foo() {}`,
 			expected: []issueWithReplacement{
-				{issue: "directive `//nolint:dupl` should provide explanation such as `//nolint:dupl // this is why` at testing.go:6:1"},
+				{issue: "directive `//nolint:dupl` is missing an explanation; it should follow the format `//nolint[:<comma-separated-linters>] // <explanation>` at testing.go:6:1"},
 			},
 		},
 		{
