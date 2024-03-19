@@ -12,7 +12,7 @@ import (
 	"github.com/golangci/golangci-lint/test/testshared"
 )
 
-//nolint:misspell,lll
+//nolint:misspell // misspelling is intentional
 const expectedJSONOutput = `{"Issues":[{"FromLinter":"misspell","Text":"` + "`" + `occured` + "`" + ` is a misspelling of ` + "`" + `occurred` + "`" + `","Severity":"","SourceLines":["\t// comment with incorrect spelling: occured // want \"` + "`" + `occured` + "`" + ` is a misspelling of ` + "`" + `occurred` + "`" + `\""],"Replacement":{"NeedOnlyDelete":false,"NewLines":null,"Inline":{"StartCol":37,"Length":7,"NewString":"occurred"}},"Pos":{"Filename":"testdata/misspell.go","Offset":0,"Line":6,"Column":38},"ExpectNoLint":false,"ExpectedNoLintLinter":""}]`
 
 func TestOutput_lineNumber(t *testing.T) {
@@ -30,7 +30,7 @@ func TestOutput_lineNumber(t *testing.T) {
 		Runner().
 		Install().
 		Run().
-		//nolint:misspell
+		//nolint:misspell // misspelling is intentional
 		ExpectHasIssue("testdata/misspell.go:6:38: `occured` is a misspelling of `occurred`")
 }
 
@@ -91,7 +91,7 @@ func TestOutput_Multiple(t *testing.T) {
 		Runner().
 		Install().
 		Run().
-		//nolint:misspell
+		//nolint:misspell // misspelling is intentional
 		ExpectHasIssue("testdata/misspell.go:6:38: `occured` is a misspelling of `occurred`").
 		ExpectOutputContains(testshared.NormalizeFilePathInJSON(expectedJSONOutput))
 }

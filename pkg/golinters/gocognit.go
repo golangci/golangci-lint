@@ -16,7 +16,6 @@ import (
 
 const gocognitName = "gocognit"
 
-//nolint:dupl
 func NewGocognit(settings *config.GocognitSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue

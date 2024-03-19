@@ -104,7 +104,7 @@ func TestCompareByLine(t *testing.T) {
 	})
 }
 
-func TestCompareByFileName(t *testing.T) { //nolint:dupl
+func TestCompareByFileName(t *testing.T) {
 	testCompareValues(t, byFileName(), "Compare By File Name", []compareTestCase{
 		{issues[0], issues[1], greater}, // file_windows.go vs file_linux.go
 		{issues[1], issues[2], greater}, // file_linux.go vs file_darwin.go
@@ -119,7 +119,7 @@ func TestCompareByFileName(t *testing.T) { //nolint:dupl
 	})
 }
 
-func TestCompareByColumn(t *testing.T) { //nolint:dupl
+func TestCompareByColumn(t *testing.T) {
 	testCompareValues(t, byColumn(), "Compare By Column", []compareTestCase{
 		{issues[0], issues[1], greater}, // 80 vs 70
 		{issues[1], issues[2], none},    // 70 vs zero value
@@ -134,7 +134,7 @@ func TestCompareByColumn(t *testing.T) { //nolint:dupl
 	})
 }
 
-func TestCompareByLinter(t *testing.T) { //nolint:dupl
+func TestCompareByLinter(t *testing.T) {
 	testCompareValues(t, byLinter(), "Compare By Linter", []compareTestCase{
 		{issues[0], issues[1], greater}, // b vs a
 		{issues[1], issues[2], less},    // a vs c

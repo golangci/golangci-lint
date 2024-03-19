@@ -267,7 +267,7 @@ func (r *Runner) Command() *exec.Cmd {
 
 	runArgs := append([]string{r.command}, r.args...)
 
-	//nolint:gosec
+	//nolint:gosec // we don't use user input here
 	cmd := exec.Command(r.binPath, runArgs...)
 	cmd.Env = append(os.Environ(), r.env...)
 

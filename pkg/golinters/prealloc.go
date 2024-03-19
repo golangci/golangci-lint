@@ -15,7 +15,6 @@ import (
 
 const preallocName = "prealloc"
 
-//nolint:dupl
 func NewPreAlloc(settings *config.PreallocSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue

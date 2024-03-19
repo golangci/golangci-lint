@@ -50,7 +50,6 @@ func TestExcludeRules_multiple(t *testing.T) {
 
 	p := NewExcludeRules(nil, files, opts)
 
-	//nolint:dupl
 	cases := []issueTestCase{
 		{Path: "e.go", Text: "exclude", Linter: "linter"},
 		{Path: "e.go", Text: "some", Linter: "linter"},
@@ -210,7 +209,6 @@ func TestExcludeRules_caseSensitive_multiple(t *testing.T) {
 
 	p := NewExcludeRules(nil, files, opts)
 
-	//nolint:dupl
 	cases := []issueTestCase{
 		{Path: "e.go", Text: "exclude", Linter: "linter"},
 		{Path: "e.go", Text: "excLude", Linter: "linter"},

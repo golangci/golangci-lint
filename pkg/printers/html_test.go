@@ -11,7 +11,6 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-//nolint:lll
 const expectedHTML = `<!doctype html>
 <html lang="en">
 <head>

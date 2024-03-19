@@ -80,7 +80,7 @@ func setupOutputFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
 	internal.AddFlagAndBind(v, fs, fs.Bool, "show-stats", "output.show-stats", false, color.GreenString("Show statistics per linter"))
 }
 
-//nolint:gomnd
+//nolint:gomnd // magic numbers here is ok
 func setupIssuesFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
 	internal.AddHackedStringSliceP(fs, "exclude", "e", color.GreenString("Exclude issue by regexp"))
 	internal.AddFlagAndBind(v, fs, fs.Bool, "exclude-use-default", "issues.exclude-use-default", true,

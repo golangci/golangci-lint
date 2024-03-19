@@ -96,7 +96,7 @@ type latestRelease struct {
 func getLatestVersion() (string, error) {
 	endpoint := "https://api.github.com/repos/golangci/golangci-lint/releases/latest"
 
-	//nolint:noctx
+	//nolint:noctx // request timeout handled by the client
 	req, err := http.NewRequest(http.MethodGet, endpoint, http.NoBody)
 	if err != nil {
 		return "", fmt.Errorf("prepare a HTTP request: %w", err)

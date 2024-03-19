@@ -16,7 +16,6 @@ import (
 
 const forbidigoName = "forbidigo"
 
-//nolint:dupl
 func NewForbidigo(settings *config.ForbidigoSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue

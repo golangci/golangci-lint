@@ -5,7 +5,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/sirupsen/logrus" //nolint:depguard
+	"github.com/sirupsen/logrus"
 
 	"github.com/golangci/golangci-lint/pkg/exitcodes"
 )

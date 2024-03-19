@@ -177,10 +177,9 @@ func (r *runner) buildActionFactDeps(act *action, a *analysis.Analyzer, pkg *pac
 	}
 }
 
-//nolint:gocritic
 func (r *runner) prepareAnalysis(pkgs []*packages.Package,
 	analyzers []*analysis.Analyzer,
-) (map[*packages.Package]bool, []*action, []*action) {
+) (initialPkgs map[*packages.Package]bool, allActions, roots []*action) {
 	// Construct the action graph.
 
 	// Each graph node (action) is one unit of analysis.
@@ -200,13 +199,13 @@ func (r *runner) prepareAnalysis(pkgs []*packages.Package,
 	actions := make(map[actKey]*action, totalActionsCount)
 	actAlloc := newActionAllocator(totalActionsCount)
 
-	initialPkgs := make(map[*packages.Package]bool, len(pkgs))
+	initialPkgs = make(map[*packages.Package]bool, len(pkgs))
 	for _, pkg := range pkgs {
 		initialPkgs[pkg] = true
 	}
 
 	// Build nodes for initial packages.
-	roots := make([]*action, 0, len(pkgs)*len(analyzers))
+	roots = make([]*action, 0, len(pkgs)*len(analyzers))
 	for _, a := range analyzers {
 		for _, pkg := range pkgs {
 			root := r.makeAction(a, pkg, initialPkgs, actions, actAlloc)
@@ -215,7 +214,7 @@ func (r *runner) prepareAnalysis(pkgs []*packages.Package,
 		}
 	}
 
-	allActions := maps.Values(actions)
+	allActions = maps.Values(actions)
 
 	debugf("Built %d actions", len(actions))
 
@@ -281,7 +280,6 @@ func (r *runner) analyze(pkgs []*packages.Package, analyzers []*analysis.Analyze
 	return rootActions
 }
 
-//nolint:nakedret
 func extractDiagnostics(roots []*action) (retDiags []Diagnostic, retErrors []error) {
 	extracted := make(map[*action]bool)
 	var extract func(*action)
@@ -338,5 +336,5 @@ func extractDiagnostics(roots []*action) (retDiags []Diagnostic, retErrors []err
 		}
 	}
 	visitAll(roots)
-	return
+	return retDiags, retErrors
 }

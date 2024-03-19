@@ -6,7 +6,6 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-//nolint:lll
 func Test_stackCrusher(t *testing.T) {
 	testCases := []struct {
 		desc     string

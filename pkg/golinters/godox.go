@@ -16,7 +16,6 @@ import (
 
 const godoxName = "godox"
 
-//nolint:dupl
 func NewGodox(settings *config.GodoxSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue

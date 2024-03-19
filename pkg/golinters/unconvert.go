@@ -14,7 +14,6 @@ import (
 
 const unconvertName = "unconvert"
 
-//nolint:dupl // This is not a duplicate of dogsled.
 func NewUnconvert(settings *config.UnconvertSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue

@@ -15,7 +15,6 @@ import (
 
 const nestifName = "nestif"
 
-//nolint:dupl
 func NewNestif(settings *config.NestifSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue

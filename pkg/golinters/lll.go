@@ -22,7 +22,6 @@ const lllName = "lll"
 
 const goCommentDirectivePrefix = "//go:"
 
-//nolint:dupl
 func NewLLL(settings *config.LllSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue

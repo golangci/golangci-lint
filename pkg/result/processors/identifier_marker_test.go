@@ -10,7 +10,6 @@ import (
 )
 
 func TestIdentifierMarker(t *testing.T) {
-	//nolint:lll
 	cases := []struct{ in, out string }{
 		{"unknown field Address in struct literal", "unknown field `Address` in struct literal"},
 		{

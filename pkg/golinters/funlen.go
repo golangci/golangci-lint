@@ -16,7 +16,6 @@ import (
 
 const funlenName = "funlen"
 
-//nolint:dupl
 func NewFunlen(settings *config.FunlenSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue

@@ -17,7 +17,6 @@ import (
 
 const duplName = "dupl"
 
-//nolint:dupl
 func NewDupl(settings *config.DuplSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue

@@ -17,13 +17,15 @@ linters-settings:
       logger:
         deny:
           # logging is allowed only by logutils.Log,
-          # logrus is allowed to use only in logutils package.
           - pkg: "github.com/sirupsen/logrus"
             desc: logging is allowed only by logutils.Log.
           - pkg: "github.com/pkg/errors"
             desc: Should be replaced by standard lib errors package.
           - pkg: "github.com/instana/testify"
             desc: It's a fork of github.com/stretchr/testify.
+        files:
+          # logrus is allowed to use only in logutils package.
+          - "!**/pkg/logutils/**.go"
   dupl:
     threshold: 100
   funlen:
@@ -86,10 +88,12 @@ linters-settings:
     line-length: 140
   misspell:
     locale: US
+    ignore-words:
+      - "importas" # linter name
   nolintlint:
     allow-unused: false # report any unused nolint directives
-    require-explanation: false # don't require an explanation for nolint directives
-    require-specific: false # don't require nolint directives to be specific about which linter is being skipped
+    require-explanation: true # require an explanation for nolint directives
+    require-specific: true # require nolint directives to be specific about which linter is being skipped
   revive:
     rules:
       - name: unexported-return
@@ -144,7 +148,9 @@ issues:
   exclude-rules:
     - path: _test\.go
       linters:
+        - dupl
         - gomnd
+        - lll
 
     - path: pkg/golinters/errcheck.go
       linters: [staticcheck]
@@ -157,6 +163,10 @@ issues:
       text: "SA1019: c.cfg.Run.ShowStats is deprecated: use Output.ShowStats instead."
     - path: pkg/golinters/govet.go
       text: "SA1019: cfg.CheckShadowing is deprecated: the linter should be enabled inside `Enable`."
+
+    - path: pkg/golinters
+      linters:
+        - dupl
 
     - path: pkg/golinters/gofumpt.go
       linters: [staticcheck]

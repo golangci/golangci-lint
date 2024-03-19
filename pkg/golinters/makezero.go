@@ -15,7 +15,6 @@ import (
 
 const makezeroName = "makezero"
 
-//nolint:dupl
 func NewMakezero(settings *config.MakezeroSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue

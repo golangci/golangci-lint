@@ -15,7 +15,6 @@ import (
 
 const goconstName = "goconst"
 
-//nolint:dupl
 func NewGoconst(settings *config.GoConstSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
