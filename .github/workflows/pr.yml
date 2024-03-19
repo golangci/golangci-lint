@@ -166,6 +166,7 @@ jobs:
 
       - run: ./golangci-lint config
       - run: ./golangci-lint config path
+      - run: ./golangci-lint config verify --schema jsonschema/golangci.jsonschema.json
 
       - run: ./golangci-lint help
       - run: ./golangci-lint help linters

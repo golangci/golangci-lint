@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
@@ -17,13 +18,19 @@ type configCommand struct {
 	viper *viper.Viper
 	cmd   *cobra.Command
 
+	opts       config.LoaderOptions
+	verifyOpts verifyOptions
+
+	buildInfo BuildInfo
+
 	log logutils.Log
 }
 
-func newConfigCommand(log logutils.Log) *configCommand {
+func newConfigCommand(log logutils.Log, info BuildInfo) *configCommand {
 	c := &configCommand{
-		viper: viper.New(),
-		log:   log,
+		viper:     viper.New(),
+		log:       log,
+		buildInfo: info,
 	}
 
 	configCmd := &cobra.Command{
@@ -33,6 +40,15 @@ func newConfigCommand(log logutils.Log) *configCommand {
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			return cmd.Help()
 		},
+		PersistentPreRunE: c.preRunE,
+	}
+
+	verifyCommand := &cobra.Command{
+		Use:               "verify",
+		Short:             "Verify configuration against JSON schema",
+		Args:              cobra.NoArgs,
+		ValidArgsFunction: cobra.NoFileCompletions,
+		RunE:              c.executeVerify,
 	}
 
 	configCmd.AddCommand(
@@ -41,10 +57,20 @@ func newConfigCommand(log logutils.Log) *configCommand {
 			Short:             "Print used config path",
 			Args:              cobra.NoArgs,
 			ValidArgsFunction: cobra.NoFileCompletions,
-			Run:               c.execute,
-			PreRunE:           c.preRunE,
+			Run:               c.executePath,
 		},
+		verifyCommand,
 	)
+
+	flagSet := configCmd.PersistentFlags()
+	flagSet.SortFlags = false // sort them as they are defined here
+
+	setupConfigFileFlagSet(flagSet, &c.opts)
+
+	// ex: --schema jsonschema/golangci.next.jsonschema.json
+	verifyFlagSet := verifyCommand.Flags()
+	verifyFlagSet.StringVar(&c.verifyOpts.schemaURL, "schema", "", color.GreenString("JSON schema URL"))
+	_ = verifyFlagSet.MarkHidden("schema")
 
 	c.cmd = configCmd
 
@@ -54,7 +80,16 @@ func newConfigCommand(log logutils.Log) *configCommand {
 func (c *configCommand) preRunE(cmd *cobra.Command, _ []string) error {
 	// The command doesn't depend on the real configuration.
 	// It only needs to know the path of the configuration file.
-	loader := config.NewLoader(c.log.Child(logutils.DebugKeyConfigReader), c.viper, cmd.Flags(), config.LoaderOptions{}, config.NewDefault())
+	cfg := config.NewDefault()
+
+	// Hack to hide deprecation messages related to `--skip-dirs-use-default`:
+	// Flags are not bound then the default values, defined only through flags, are not applied.
+	// In this command, file path and file information are the only requirements, i.e. it don't need flag values.
+	//
+	// TODO(ldez) add an option (check deprecation) to `Loader.Load()` but this require a dedicated PR.
+	cfg.Run.UseDefaultSkipDirs = true
+
+	loader := config.NewLoader(c.log.Child(logutils.DebugKeyConfigReader), c.viper, cmd.Flags(), c.opts, cfg)
 
 	if err := loader.Load(); err != nil {
 		return fmt.Errorf("can't load config: %w", err)
@@ -63,14 +98,14 @@ func (c *configCommand) preRunE(cmd *cobra.Command, _ []string) error {
 	return nil
 }
 
-func (c *configCommand) execute(_ *cobra.Command, _ []string) {
+func (c *configCommand) executePath(cmd *cobra.Command, _ []string) {
 	usedConfigFile := c.getUsedConfig()
 	if usedConfigFile == "" {
 		c.log.Warnf("No config file detected")
 		os.Exit(exitcodes.NoConfigFileDetected)
 	}
 
-	fmt.Println(usedConfigFile)
+	cmd.Println(usedConfigFile)
 }
 
 // getUsedConfig returns the resolved path to the golangci config file,

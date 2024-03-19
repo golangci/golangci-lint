@@ -89,7 +89,7 @@ go.mod: FORCE
 go.sum: go.mod
 
 website_copy_jsonschema:
-	 cp -r ./jsonschema ./docs/static
+	 go run ./scripts/website/copy_jsonschema/
 .PHONY: website_copy_jsonschema
 
 website_expand_templates:

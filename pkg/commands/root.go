@@ -61,7 +61,7 @@ func newRootCommand(info BuildInfo) *rootCommand {
 		newLintersCommand(log).cmd,
 		newRunCommand(log, info).cmd,
 		newCacheCommand().cmd,
-		newConfigCommand(log).cmd,
+		newConfigCommand(log, info).cmd,
 		newVersionCommand(info).cmd,
 		newCustomCommand(log).cmd,
 	)

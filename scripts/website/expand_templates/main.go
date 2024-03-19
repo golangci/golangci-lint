@@ -3,15 +3,13 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io"
 	"log"
-	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
-	"time"
 
 	"github.com/golangci/golangci-lint/internal/renameio"
+	"github.com/golangci/golangci-lint/scripts/website/github"
 	"github.com/golangci/golangci-lint/scripts/website/types"
 )
 
@@ -89,46 +87,6 @@ func processDoc(path string, replacements map[string]string, madeReplacements ma
 	return nil
 }
 
-type latestRelease struct {
-	TagName string `json:"tag_name"`
-}
-
-func getLatestVersion() (string, error) {
-	endpoint := "https://api.github.com/repos/golangci/golangci-lint/releases/latest"
-
-	//nolint:noctx // request timeout handled by the client
-	req, err := http.NewRequest(http.MethodGet, endpoint, http.NoBody)
-	if err != nil {
-		return "", fmt.Errorf("prepare a HTTP request: %w", err)
-	}
-
-	req.Header.Set("Accept", "application/vnd.github.v3+json")
-
-	client := &http.Client{Timeout: 2 * time.Second}
-
-	resp, err := client.Do(req)
-
-	if err != nil {
-		return "", fmt.Errorf("get HTTP response for the latest tag: %w", err)
-	}
-
-	defer resp.Body.Close()
-
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return "", fmt.Errorf("read a body for the latest tag: %w", err)
-	}
-
-	release := latestRelease{}
-
-	err = json.Unmarshal(body, &release)
-	if err != nil {
-		return "", fmt.Errorf("unmarshal the body for the latest tag: %w", err)
-	}
-
-	return release.TagName, nil
-}
-
 func buildTemplateContext() (map[string]string, error) {
 	snippets, err := getExampleSnippets()
 	if err != nil {
@@ -150,7 +108,7 @@ func buildTemplateContext() (map[string]string, error) {
 		return nil, fmt.Errorf("read CHANGELOG.md: %w", err)
 	}
 
-	latestVersion, err := getLatestVersion()
+	latestVersion, err := github.GetLatestVersion()
 	if err != nil {
 		return nil, fmt.Errorf("get the latest version: %w", err)
 	}
