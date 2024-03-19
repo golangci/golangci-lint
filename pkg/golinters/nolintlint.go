@@ -16,7 +16,6 @@ import (
 
 const NoLintLintName = "nolintlint"
 
-//nolint:dupl
 func NewNoLintLint(settings *config.NoLintLintSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue

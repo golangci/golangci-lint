@@ -16,7 +16,6 @@ import (
 
 const dogsledName = "dogsled"
 
-//nolint:dupl
 func NewDogsled(settings *config.DogsledSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue

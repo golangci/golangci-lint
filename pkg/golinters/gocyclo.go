@@ -15,7 +15,6 @@ import (
 
 const gocycloName = "gocyclo"
 
-//nolint:dupl
 func NewGocyclo(settings *config.GoCycloSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
