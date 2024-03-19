@@ -9,7 +9,7 @@
 #
 # We have specific constraints, so we use a specific configuration.
 #
-# See the file `.golangci.reference.yml` to have a list of  all available configuration options.
+# See the file `.golangci.reference.yml` to have a list of all available configuration options.
 
 linters-settings:
   depguard:
@@ -133,7 +133,6 @@ linters:
     - revive
     - staticcheck
     - stylecheck
-    - typecheck
     - unconvert
     - unparam
     - unused
@@ -146,7 +145,7 @@ linters:
 issues:
   # Excluding configuration per-path, per-linter, per-text and per-source
   exclude-rules:
-    - path: _test\.go
+    - path: (.+)_test\.go
       linters:
         - dupl
         - gomnd
@@ -187,14 +186,13 @@ issues:
     - path: pkg/golinters/unused.go
       linters: [gocritic]
       text: "rangeValCopy: each iteration copies 160 bytes \\(consider pointers or indexing\\)"
-    - path: test/(fix|linters)_test.go
-      linters: [gocritic]
-      text: "string `gocritic.go` has 3 occurrences, make it a constant"
 
-run:
-  timeout: 5m
-  skip-dirs: # TODO(ldez): should be replaced by `issues.exclude-dirs` after the next release.
+  exclude-dirs:
     - test/testdata_etc # test files
     - internal/cache # extracted from Go code
     - internal/renameio # extracted from Go code
     - internal/robustio # extracted from Go code
+
+run:
+  timeout: 5m
+
