@@ -322,6 +322,13 @@ func (l *Loader) handleDeprecation() error {
 		l.cfg.Output.Formats = f
 	}
 
+	// Deprecated since v1.57.0,
+	// but it was unofficially deprecated since v1.19 (2019) (https://github.com/golangci/golangci-lint/pull/697).
+	if l.cfg.LintersSettings.Govet.CheckShadowing {
+		l.warn("The configuration option `govet.check-shadowing` is deprecated. " +
+			"Please enable `shadow` instead, if you are not using `enable-all`.")
+	}
+
 	return nil
 }
 
