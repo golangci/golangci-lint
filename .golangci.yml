@@ -92,8 +92,8 @@ linters-settings:
       - "importas" # linter name
   nolintlint:
     allow-unused: false # report any unused nolint directives
-    require-explanation: false # don't require an explanation for nolint directives
-    require-specific: false # don't require nolint directives to be specific about which linter is being skipped
+    require-explanation: true # require an explanation for nolint directives
+    require-specific: true # require nolint directives to be specific about which linter is being skipped
   revive:
     rules:
       - name: unexported-return

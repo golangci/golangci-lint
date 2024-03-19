@@ -164,7 +164,7 @@ func (f Fixer) applyInlineFixes(lineIssues []result.Issue, origLine []byte, line
 	var newLineBuf bytes.Buffer
 	newLineBuf.Grow(len(origLine))
 
-	//nolint:misspell
+	//nolint:misspell // misspelling is intentional
 	// example: origLine="it's becouse of them", StartCol=5, Length=7, NewString="because"
 
 	curOrigLinePos := 0

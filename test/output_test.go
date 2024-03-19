@@ -30,7 +30,7 @@ func TestOutput_lineNumber(t *testing.T) {
 		Runner().
 		Install().
 		Run().
-		//nolint:misspell
+		//nolint:misspell // misspelling is intentional
 		ExpectHasIssue("testdata/misspell.go:6:38: `occured` is a misspelling of `occurred`")
 }
 
@@ -91,7 +91,7 @@ func TestOutput_Multiple(t *testing.T) {
 		Runner().
 		Install().
 		Run().
-		//nolint:misspell
+		//nolint:misspell // misspelling is intentional
 		ExpectHasIssue("testdata/misspell.go:6:38: `occured` is a misspelling of `occurred`").
 		ExpectOutputContains(testshared.NormalizeFilePathInJSON(expectedJSONOutput))
 }

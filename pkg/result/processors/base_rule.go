@@ -65,7 +65,7 @@ func (r *baseRule) matchLinter(issue *result.Issue) bool {
 	return false
 }
 
-func (r *baseRule) matchSource(issue *result.Issue, lineCache *fsutils.LineCache, log logutils.Log) bool { //nolint:interfacer
+func (r *baseRule) matchSource(issue *result.Issue, lineCache *fsutils.LineCache, log logutils.Log) bool {
 	sourceLine, errSourceLine := lineCache.GetLine(issue.FilePath(), issue.Line())
 	if errSourceLine != nil {
 		log.Warnf("Failed to get line %s:%d from line cache: %s", issue.FilePath(), issue.Line(), errSourceLine)

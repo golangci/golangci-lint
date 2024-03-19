@@ -156,7 +156,7 @@ var (
 	trailingBlankExplanation = regexp.MustCompile(`\s*(//\s*)?$`)
 )
 
-//nolint:funlen,gocyclo
+//nolint:funlen,gocyclo // the function is going to be refactored in the future
 func (l Linter) Run(fset *token.FileSet, nodes ...ast.Node) ([]Issue, error) {
 	var issues []Issue
 
