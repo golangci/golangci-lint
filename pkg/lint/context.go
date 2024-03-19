@@ -43,7 +43,7 @@ func (cl *ContextBuilder) Build(ctx context.Context, log logutils.Log, linters [
 	}
 
 	if len(deduplicatedPkgs) == 0 {
-		return nil, exitcodes.ErrNoGoFiles
+		return nil, fmt.Errorf("%w: running `go mod tidy` may solve the problem", exitcodes.ErrNoGoFiles)
 	}
 
 	ret := &linter.Context{
