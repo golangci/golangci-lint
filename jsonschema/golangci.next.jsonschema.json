@@ -1661,11 +1661,6 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
-            "check-shadowing": {
-              "description": "Report shadowed variables.",
-              "type": "boolean",
-              "default": true
-            },
             "settings": {
               "description": "Settings per analyzer. Map of analyzer name to specific settings.\nRun `go tool vet help` to find out more.",
               "type": "object",

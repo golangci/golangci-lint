@@ -598,14 +598,17 @@ type GosmopolitanSettings struct {
 }
 
 type GovetSettings struct {
-	Go             string `mapstructure:"-"`
-	CheckShadowing bool   `mapstructure:"check-shadowing"`
-	Settings       map[string]map[string]any
+	Go string `mapstructure:"-"`
 
 	Enable     []string
 	Disable    []string
 	EnableAll  bool `mapstructure:"enable-all"`
 	DisableAll bool `mapstructure:"disable-all"`
+
+	Settings map[string]map[string]any
+
+	// Deprecated: the linter should be enabled inside `Enable`.
+	CheckShadowing bool `mapstructure:"check-shadowing"`
 }
 
 func (cfg *GovetSettings) Validate() error {
