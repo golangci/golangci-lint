@@ -113,11 +113,14 @@ type Issue interface {
 type Needs uint
 
 const (
+	// Deprecated: NeedsMachineOnly is deprecated as leading spaces are no longer allowed,
+	// making this condition always true. Consumers should adjust their code to assume
+	// this as the default behavior and no longer rely on NeedsMachineOnly.
 	NeedsMachineOnly Needs = 1 << iota
 	NeedsSpecific
 	NeedsExplanation
 	NeedsUnused
-	NeedsAll = NeedsMachineOnly | NeedsSpecific | NeedsExplanation
+	NeedsAll = NeedsSpecific | NeedsExplanation
 )
 
 var commentPattern = regexp.MustCompile(`^//\s*(nolint)(:\s*[\w-]+\s*(?:,\s*[\w-]+\s*)*)?\b`)
@@ -138,7 +141,7 @@ func NewLinter(needs Needs, excludes []string) (*Linter, error) {
 	}
 
 	return &Linter{
-		needs:           needs | NeedsMachineOnly,
+		needs:           needs,
 		excludeByLinter: excludeByName,
 	}, nil
 }
@@ -189,16 +192,9 @@ func (l Linter) Run(fset *token.FileSet, nodes ...ast.Node) ([]Issue, error) {
 							NewString: "",
 						},
 					}
-					if (l.needs & NeedsMachineOnly) != 0 {
-						issue := NotMachine{baseIssue: base}
-						issue.baseIssue.replacement = removeWhitespace
-						issues = append(issues, issue)
-					} else if len(leadingSpace) > 1 {
-						issue := ExtraLeadingSpace{baseIssue: base}
-						issue.baseIssue.replacement = removeWhitespace
-						issue.baseIssue.replacement.Inline.NewString = " " // assume a single space was intended
-						issues = append(issues, issue)
-					}
+					issue := NotMachine{baseIssue: base}
+					issue.baseIssue.replacement = removeWhitespace
+					issues = append(issues, issue)
 				}
 
 				fullMatches := fullDirectivePattern.FindStringSubmatch(comment.Text)
