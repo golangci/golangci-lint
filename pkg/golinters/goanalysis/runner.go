@@ -281,7 +281,6 @@ func (r *runner) analyze(pkgs []*packages.Package, analyzers []*analysis.Analyze
 	return rootActions
 }
 
-//nolint:nakedret
 func extractDiagnostics(roots []*action) (retDiags []Diagnostic, retErrors []error) {
 	extracted := make(map[*action]bool)
 	var extract func(*action)
@@ -338,5 +337,5 @@ func extractDiagnostics(roots []*action) (retDiags []Diagnostic, retErrors []err
 		}
 	}
 	visitAll(roots)
-	return
+	return retDiags, retErrors
 }
