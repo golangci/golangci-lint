@@ -62,7 +62,7 @@ func newConfigCommand(log logutils.Log, info BuildInfo) *configCommand {
 			Short:             "Print used config path",
 			Args:              cobra.NoArgs,
 			ValidArgsFunction: cobra.NoFileCompletions,
-			Run:               c.execute,
+			Run:               c.executePath,
 		},
 		verifyCommand,
 	)
@@ -103,7 +103,7 @@ func (c *configCommand) preRunE(cmd *cobra.Command, _ []string) error {
 	return nil
 }
 
-func (c *configCommand) execute(cmd *cobra.Command, _ []string) {
+func (c *configCommand) executePath(cmd *cobra.Command, _ []string) {
 	usedConfigFile := c.getUsedConfig()
 	if usedConfigFile == "" {
 		c.log.Warnf("No config file detected")
