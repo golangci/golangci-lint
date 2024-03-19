@@ -44,7 +44,6 @@ func newLintersCommand(logger logutils.Log) *lintersCommand {
 		ValidArgsFunction: cobra.NoFileCompletions,
 		RunE:              c.execute,
 		PreRunE:           c.preRunE,
-		SilenceUsage:      true,
 	}
 
 	fs := lintersCmd.Flags()

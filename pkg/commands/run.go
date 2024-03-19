@@ -118,7 +118,6 @@ func newRunCommand(logger logutils.Log, info BuildInfo) *runCommand {
 		PostRun:            c.postRun,
 		PersistentPreRunE:  c.persistentPreRunE,
 		PersistentPostRunE: c.persistentPostRunE,
-		SilenceUsage:       true,
 	}
 
 	runCmd.SetOut(logutils.StdOut) // use custom output to properly color it in Windows terminals
