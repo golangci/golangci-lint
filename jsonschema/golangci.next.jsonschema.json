@@ -2317,8 +2317,8 @@
             },
             "no-global": {
               "description": "Enforce not using global loggers.",
-              "enum": ["all", "default"],
-              "default": "default"
+              "enum": ["", "all", "default"],
+              "default": ""
             },
             "no-mixed-args": {
               "description": "Enforce not mixing key-value pairs and attributes.",

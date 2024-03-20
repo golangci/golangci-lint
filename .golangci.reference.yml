@@ -2002,12 +2002,16 @@ linters-settings:
     # Enforce using key-value pairs only (overrides no-mixed-args, incompatible with attr-only).
     # Default: false
     kv-only: true
-    # Enforce not using global loggers.
-    # Default: default
-    no-global: all
     # Enforce using attributes only (overrides no-mixed-args, incompatible with kv-only).
     # Default: false
     attr-only: true
+    # Enforce not using global loggers.
+    # Values:
+    # - "": disabled
+    # - "all": report all global loggers
+    # - "default": report only the default slog logger
+    # Default: ""
+    no-global: "all"
     # Enforce using methods that accept a context.
     # Default: false
     context-only: true
