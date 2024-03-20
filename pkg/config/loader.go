@@ -117,50 +117,59 @@ func (l *Loader) evaluateOptions() (string, error) {
 }
 
 func (l *Loader) setupConfigFileSearch() {
-	firstArg := getFirstArg(l.args)
+	l.viper.SetConfigName(".golangci")
 
-	absStartPath, err := filepath.Abs(firstArg)
-	if err != nil {
-		l.log.Warnf("Can't make abs path for %q: %s", firstArg, err)
-		absStartPath = filepath.Clean(firstArg)
-	}
-
-	// start from it
-	var curDir string
-	if fsutils.IsDir(absStartPath) {
-		curDir = absStartPath
-	} else {
-		curDir = filepath.Dir(absStartPath)
-	}
-
-	// find all dirs from it up to the root
-	configSearchPaths := []string{"./"}
-
-	for {
-		configSearchPaths = append(configSearchPaths, curDir)
-
-		newCurDir := filepath.Dir(curDir)
-		if curDir == newCurDir || newCurDir == "" {
-			break
-		}
-
-		curDir = newCurDir
-	}
-
-	// find home directory for global config
-	if home, err := homedir.Dir(); err != nil {
-		l.log.Warnf("Can't get user's home directory: %s", err.Error())
-	} else if !slices.Contains(configSearchPaths, home) {
-		configSearchPaths = append(configSearchPaths, home)
-	}
+	configSearchPaths := l.getConfigSearchPaths()
 
 	l.log.Infof("Config search paths: %s", configSearchPaths)
-
-	l.viper.SetConfigName(".golangci")
 
 	for _, p := range configSearchPaths {
 		l.viper.AddConfigPath(p)
 	}
+}
+
+func (l *Loader) getConfigSearchPaths() []string {
+	firstArg := "./..."
+	if len(l.args) > 0 {
+		firstArg = l.args[0]
+	}
+
+	absPath, err := filepath.Abs(firstArg)
+	if err != nil {
+		l.log.Warnf("Can't make abs path for %q: %s", firstArg, err)
+		absPath = filepath.Clean(firstArg)
+	}
+
+	// start from it
+	var currentDir string
+	if fsutils.IsDir(absPath) {
+		currentDir = absPath
+	} else {
+		currentDir = filepath.Dir(absPath)
+	}
+
+	// find all dirs from it up to the root
+	searchPaths := []string{"./"}
+
+	for {
+		searchPaths = append(searchPaths, currentDir)
+
+		parent := filepath.Dir(currentDir)
+		if currentDir == parent || parent == "" {
+			break
+		}
+
+		currentDir = parent
+	}
+
+	// find home directory for global config
+	if home, err := homedir.Dir(); err != nil {
+		l.log.Warnf("Can't get user's home directory: %v", err)
+	} else if !slices.Contains(searchPaths, home) {
+		searchPaths = append(searchPaths, home)
+	}
+
+	return searchPaths
 }
 
 func (l *Loader) parseConfig() error {
@@ -416,12 +425,4 @@ func customDecoderHook() viper.DecoderConfigOption {
 		// Needed for forbidigo, and output.formats.
 		mapstructure.TextUnmarshallerHookFunc(),
 	))
-}
-
-func getFirstArg(args []string) string {
-	if len(args) == 0 {
-		return "./..."
-	}
-
-	return args[0]
 }
