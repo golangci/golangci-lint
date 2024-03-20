@@ -33,7 +33,11 @@ func (p InvalidIssue) shouldPassIssue(issue *result.Issue) (bool, error) {
 	}
 
 	if issue.FilePath() == "" {
-		p.log.Warnf("no file path for issue: probably a bug inside the linter %q: %#v", issue.FromLinter, issue)
+		// contextcheck has a known bug https://github.com/kkHAIKE/contextcheck/issues/21
+		if issue.FromLinter != "contextcheck" {
+			p.log.Warnf("no file path for issue: probably a bug inside the linter %q: %#v", issue.FromLinter, issue)
+		}
+
 		return false, nil
 	}
 
