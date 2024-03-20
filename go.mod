@@ -44,7 +44,7 @@ require (
 	github.com/golangci/dupl v0.0.0-20180902072040-3e9179ac440a
 	github.com/golangci/gofmt v0.0.0-20231018234816-f50ced29576e
 	github.com/golangci/misspell v0.4.1
-	github.com/golangci/plugin-module-register v0.1.0
+	github.com/golangci/plugin-module-register v0.1.1
 	github.com/golangci/revgrep v0.5.2
 	github.com/golangci/unconvert v0.0.0-20240309020433-c5143eacb3ed
 	github.com/gordonklaus/ineffassign v0.1.0
