@@ -138,6 +138,13 @@ func (l *Loader) setupConfigFileSearch() {
 	for {
 		configSearchPaths = append(configSearchPaths, curDir)
 
+		dotConfig := filepath.Join(curDir, ".config")
+
+		info, err := os.Stat(dotConfig)
+		if err == nil && info.IsDir() {
+			configSearchPaths = append(configSearchPaths, dotConfig)
+		}
+
 		newCurDir := filepath.Dir(curDir)
 		if curDir == newCurDir || newCurDir == "" {
 			break
