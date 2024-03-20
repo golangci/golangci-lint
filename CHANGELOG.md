@@ -2,6 +2,11 @@ Follow the news and releases on [Mastodon](https://fosstodon.org/@golangcilint) 
 
 There is the most valuable changes log:
 
+### v1.57.1
+
+1. Fixes:
+   * Ignore issues with invalid position (e.g. `contextcheck`).
+
 ### v1.57.0
 
 1. New linters
