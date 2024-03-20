@@ -69,8 +69,10 @@ changelog:
       - '(?i)^docs\[[^:]+\]:'
       - '^tests?:'
       - '(?i)^dev:'
+      - '(?i)^chore:'
       - '^build\(deps\): bump .* in /docs \(#\d+\)'
       - '^build\(deps\): bump .* in /\.github/peril \(#\d+\)'
+      - '^build\(deps\): bump .* in /scripts/gen_github_action_config \(#\d+\)'
       - Merge pull request
       - Merge branch
 

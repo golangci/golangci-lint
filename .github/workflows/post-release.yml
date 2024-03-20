@@ -40,11 +40,10 @@ jobs:
           token: ${{ secrets.GOLANGCI_LINT_TOKEN }}
           branch-suffix: timestamp
           title: "docs: update documentation"
-          team-reviewers: golangci/team
           delete-branch: true
 
-  update-assets:
-    name: "Update assets"
+  update-gha-assets:
+    name: "Update GitHub Action assets"
     runs-on: ubuntu-latest
     env:
       GITHUB_TOKEN: ${{ secrets.GOLANGCI_LINT_TOKEN }}
@@ -59,7 +58,7 @@ jobs:
           # - 1.18rc1 -> 1.18.0-rc.1
           go-version: '1.22'
 
-      - name: Update GitHub action config
+      - name: Update GitHub Action config
         run: make assets/github-action-config.json
 
       - name: Update reference files
@@ -77,6 +76,39 @@ jobs:
           base: master
           token: ${{ secrets.GOLANGCI_LINT_TOKEN }}
           branch-suffix: timestamp
-          title: "docs: update assets"
-          team-reviewers: golangci/team
+          title: "docs: update GitHub Action assets"
+          delete-branch: true
+
+  update-assets:
+    name: "Update documentation assets"
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GOLANGCI_LINT_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Go
+        uses: actions/setup-go@v5
+        with:
+          # https://github.com/actions/setup-go#supported-version-syntax
+          # ex:
+          # - 1.18beta1 -> 1.18.0-beta.1
+          # - 1.18rc1 -> 1.18.0-rc.1
+          go-version: '1.22'
+
+      - name: Update reference files
+        run: cp .golangci.next.reference.yml .golangci.reference.yml
+
+      - name: Update JSON schema files
+        run: cp jsonschema/golangci.next.jsonschema.json jsonschema/golangci.jsonschema.json
+
+      - name: Update information
+        run: make website_dump_info
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          base: master
+          token: ${{ secrets.GOLANGCI_LINT_TOKEN }}
+          branch-suffix: timestamp
+          title: "docs: update documentation assets"
           delete-branch: true

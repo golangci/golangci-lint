@@ -2,6 +2,66 @@ Follow the news and releases on [Mastodon](https://fosstodon.org/@golangcilint) 
 
 There is the most valuable changes log:
 
+### v1.57.0
+
+1. New linters
+   * `copyloopvar`: https://github.com/karamaru-alpha/copyloopvar
+   * `intrange`: https://github.com/ckaznocha/intrange
+2. Updated linters
+   * `dupword`: from 0.0.13 to 0.0.14
+   * `gci`: from 0.12.1 to 0.12.3
+   * `ginkgolinter`: from 0.15.2 to 0.16.1 (new option `force-expect-to`, `validate-async-intervals`, and `forbid-spec-pollution`)
+   * `go-critic`: from 0.11.1 to 0.11.2
+   * `go-critic`: support of `enable-all` and `disable-all` options
+   * `go-spancheck`: from 0.5.2 to 0.5.3
+   * `gomodguard`: from 1.3.0 to 1.3.1
+   * `govet`: deprecation of `check-shadowing` ⚠️ 
+   * `govet`: disable temporarily `httpresponse` because of a bug https://github.com/golang/go/issues/66259
+   * `misspell`: add `extra-words`
+   * `musttag`: from 0.8.0 to 0.9.0
+   * `nakedret`: from 2.0.2 to 2.0.4
+   * `paralleltest`: from 1.0.9 to 1.0.10
+   * `perfsprint`: from 0.6.0 to 0.7.1 (new option `strconcat`)
+   * `protogetter`: from 0.3.4 to 0.3.5
+   * `revive`: add `exclude` option
+   * `sloglint`: from 0.4.0 to 0.5.0 (new option `no-global`)
+   * `staticcheck`: from 0.4.6 to 0.4.7
+   * `testifylint`: from 1.1.2 to 1.2.0 (new option `bool-compare`)
+   * `unconvert`: to HEAD (new options `fast-math` and `safe`)
+   * `wrapcheck`: from 2.8.1 to 2.8.3
+   * Disable `copyloopvar` and `intrange` on Go < 1.22
+3. Enhancements
+   * 🧩 New custom linters system https://golangci-lint.run/plugins/module-plugins/
+   * 🎉 Allow running only a specific linter without modifying the file configuration (`--enable-only`)
+   * Allow custom sort order for the reports (`output.sort-order`)
+   * Automatically adjust the maximum concurrency to the container CPU quota if `run.concurrency=0`
+   * Add `verify` command to check the configuration against the JSON Schema
+   * Option to strictly follow Go generated file convention (`issues.exclude-generated-strict`)
+   * Syntax to not override `severity` from linters (`@linter`)
+   * Use severities from `gosec`
+   * Create automatically directory related to `output.formats.path`
+   * Use the first issue without inline on `mergeLineIssues` on multiple issues
+4. Misc.
+   * ⚠️ Inactivate deprecated linters (`deadcode`, `exhaustivestruct`, `golint`, `ifshort`, `interfacer`, `maligned`, `nosnakecase`, `scopelint`, `structcheck`, `varcheck`)
+   * ⚠️ Deprecated CLI flags have been removed (deprecated since 2018)
+   * ⚠️ Move `show-stats` option from `run` to `output` configuration section
+   * ⚠️ Replace `run.skip-xxx` options by `issues.exclude-xxx` options
+   * ⚠️ Replace `output.format` by `output.formats` with a new file configuration syntax
+   * Internal rewrite of the CLI
+   * Improve 'no go files to analyze' message
+   * Use `GOTOOLCHAIN=auto` inside the Docker images
+5. Documentation
+   * ⚠️ Define the linter deprecation cycle https://golangci-lint.run/product/roadmap/#linter-deprecation-cycle
+   * 🎉 Use information from the previous release to create linter pages
+   * 🎉 Publish JSON schema on https://golangci-lint.run/jsonschema/golangci.jsonschema.json
+   * Reorganize documentation pages
+   * Add an explanation about the configuration file inside golangci-lint repository
+
+**⚠️ Important ⚠️**
+
+1. Deprecated linters are inactivated, you still need to disable them if you are using `enable-all`.
+2. Deprecated CLI flags (about linter settings and `deadline`) have been removed.
+
 ### v1.56.2
 
 1. updated linters
@@ -13,7 +73,7 @@ There is the most valuable changes log:
 2. misc.
    * Fix missing version in Docker image
 3. Documentation
-   * Explain the limitation of new-from-rev and new-from-patch
+   * Explain the limitation of `new-from-rev` and `new-from-patch`
 
 ### v1.56.1
 
@@ -26,7 +86,7 @@ There is the most valuable changes log:
 ### v1.56.0
 
 1. new linters
-   * feat: add `spancheck` linter https://github.com/jjti/go-spancheck
+   * `spancheck`: https://github.com/jjti/go-spancheck
 2. updated linters
    * `depguard`: from 2.1.0 to 2.2.0
    * `exhaustive`: from 0.11.0 to 0.12.0
@@ -59,15 +119,15 @@ There is the most valuable changes log:
 3. misc.
    * 🎉 go1.22 support
    * Implement stats per linter with a flag
-   * fix: make versioning inside Docker image consistent with binaries
-   * fix: parse Go RC version
+   * Make versioning inside Docker image consistent with binaries
+   * Parse Go RC version
 4. Documentation
-   * Add missing fields to .golangci.reference.yml
-   * Fix noctx description
-   * Improve .golangci.reference.yml defaults
-   * Improve typecheck FAQ
-   * Note that `exhaustruct` struct regular expressions are expected to match the entire `package/name/structname`
-   * Adjust wrapcheck ignoreSigs to new defaults
+   * Fix `noctx` description
+   * Add missing fields to `.golangci.reference.yml`
+   * Improve `.golangci.reference.yml` defaults
+   * `typecheck`: improve FAQ
+   * `exhaustruct`: note that struct regular expressions are expected to match the entire `package/name/structname`
+   * `wrapcheck`: adjust `ignoreSigs` to new defaults
 
 **Important**
 
@@ -1183,7 +1243,7 @@ IMPORTANT: `varcheck` and `deadcode` has been removed of default linters.
 ### April 2020
 
 1. Add new linters: `testpackage`, `nestif`, `godot`, `gomodguard`, `asciicheck`
-2. Add github actions output format
+2. Add GitHub Actions output format
 3. Update linters: `wsl`, `gomodguard`, `gosec`
 4. Support `disabled-tags` setting for `gocritic`
 5. Mitigate OOM and "failed prerequisites"
@@ -1197,7 +1257,7 @@ IMPORTANT: `varcheck` and `deadcode` has been removed of default linters.
 2. Add new linters: `funlen`, `whitespace` (with auto-fix) and `godox`
 3. Update linters: `gochecknoglobals`, `scopelint`, `gosec`
 4. Provide pre-built binary for ARM and FreeBSD
-5. 2. Fix false-positives in `unused`
+5. Fix false-positives in `unused`
 6. Support `--skip-dirs-use-default`
 7. Add support for bash completions
 
