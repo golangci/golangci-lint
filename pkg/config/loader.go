@@ -116,7 +116,7 @@ func (l *Loader) evaluateOptions() (string, error) {
 }
 
 func (l *Loader) setupConfigFileSearch() {
-	firstArg := extractFirstPathArg()
+	firstArg := extractFirstPathArg(os.Args)
 
 	absStartPath, err := filepath.Abs(firstArg)
 	if err != nil {
@@ -417,9 +417,7 @@ func customDecoderHook() viper.DecoderConfigOption {
 	))
 }
 
-func extractFirstPathArg() string {
-	args := os.Args
-
+func extractFirstPathArg(args []string) string {
 	// skip all args ([golangci-lint, run/linters]) before files/dirs list
 	for len(args) != 0 {
 		if args[0] == "run" {
