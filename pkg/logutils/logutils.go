@@ -25,6 +25,7 @@ const (
 	DebugKeyExcludeRules       = "exclude_rules"
 	DebugKeyExec               = "exec"
 	DebugKeyFilenameUnadjuster = "filename_unadjuster"
+	DebugKeyInvalidIssue       = "invalid_issue"
 	DebugKeyForbidigo          = "forbidigo"
 	DebugKeyGoEnv              = "goenv"
 	DebugKeyLinter             = "linter"

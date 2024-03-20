@@ -167,28 +167,6 @@ func Test_shouldPassIssue(t *testing.T) {
 			assert: assert.True,
 		},
 		{
-			desc:   "go.mod",
-			strict: false,
-			issue: &result.Issue{
-				FromLinter: "example",
-				Pos: token.Position{
-					Filename: filepath.FromSlash("/a/b/c/go.mod"),
-				},
-			},
-			assert: assert.True,
-		},
-		{
-			desc:   "non Go file",
-			strict: false,
-			issue: &result.Issue{
-				FromLinter: "example",
-				Pos: token.Position{
-					Filename: filepath.FromSlash("/a/b/c/test.txt"),
-				},
-			},
-			assert: assert.False,
-		},
-		{
 			desc:   "lax ",
 			strict: false,
 			issue: &result.Issue{
@@ -239,17 +217,6 @@ func Test_shouldPassIssue_error(t *testing.T) {
 		issue    *result.Issue
 		expected string
 	}{
-		{
-			desc:   "missing Filename",
-			strict: false,
-			issue: &result.Issue{
-				FromLinter: "example",
-				Pos: token.Position{
-					Filename: "",
-				},
-			},
-			expected: "no file path for issue",
-		},
 		{
 			desc:   "non-existing file (lax)",
 			strict: false,
