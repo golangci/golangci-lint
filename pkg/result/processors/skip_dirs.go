@@ -27,8 +27,6 @@ type SkipDirs struct {
 
 var _ Processor = (*SkipDirs)(nil)
 
-const goFileSuffix = ".go"
-
 func NewSkipDirs(patterns []string, log logutils.Log, runArgs []string, pathPrefix string) (*SkipDirs, error) {
 	var patternsRe []*regexp.Regexp
 	for _, p := range patterns {
@@ -46,7 +44,7 @@ func NewSkipDirs(patterns []string, log logutils.Log, runArgs []string, pathPref
 	var absArgsDirs []string
 	for _, arg := range runArgs {
 		base := filepath.Base(arg)
-		if base == "..." || strings.HasSuffix(base, goFileSuffix) {
+		if base == "..." || strings.HasSuffix(base, goFileExtension) {
 			arg = filepath.Dir(arg)
 		}
 

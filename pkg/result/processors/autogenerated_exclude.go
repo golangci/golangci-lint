@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"go/parser"
 	"go/token"
-	"path/filepath"
 	"regexp"
 	"strings"
 
@@ -156,8 +155,4 @@ func getComments(filePath string) (string, error) {
 	}
 
 	return strings.Join(docLines, "\n"), nil
-}
-
-func isGoFile(name string) bool {
-	return filepath.Ext(name) == ".go"
 }
