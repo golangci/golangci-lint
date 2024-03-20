@@ -238,9 +238,14 @@ func buildArgs(args []string) []string {
 
 	var retArgs []string
 	for _, arg := range args {
-		if strings.HasPrefix(arg, ".") || filepath.IsAbs(arg) {
+		if strings.HasPrefix(arg, ".") {
+			println("HasPrefix", arg)
+			retArgs = append(retArgs, arg)
+		} else if filepath.IsAbs(arg) {
+			println("IsAbs", arg)
 			retArgs = append(retArgs, arg)
 		} else {
+			println("ELSE", arg)
 			// go/packages doesn't work well if we don't have the prefix ./ for local packages
 			retArgs = append(retArgs, fmt.Sprintf(".%c%s", filepath.Separator, arg))
 		}
