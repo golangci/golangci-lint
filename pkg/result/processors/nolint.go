@@ -1,7 +1,6 @@
 package processors
 
 import (
-	"errors"
 	"go/ast"
 	"go/parser"
 	"go/token"
@@ -99,18 +98,14 @@ func (p *Nolint) Process(issues []result.Issue) ([]result.Issue, error) {
 	return filterIssuesErr(issues, p.shouldPassIssue)
 }
 
-func (p *Nolint) getOrCreateFileData(issue *result.Issue) (*fileData, error) {
+func (p *Nolint) getOrCreateFileData(issue *result.Issue) *fileData {
 	fd := p.cache[issue.FilePath()]
 	if fd != nil {
-		return fd, nil
+		return fd
 	}
 
 	fd = &fileData{}
 	p.cache[issue.FilePath()] = fd
-
-	if issue.FilePath() == "" {
-		return nil, errors.New("no file path for issue")
-	}
 
 	// TODO: migrate this parsing to go/analysis facts
 	// or cache them somehow per file.
@@ -120,12 +115,14 @@ func (p *Nolint) getOrCreateFileData(issue *result.Issue) (*fileData, error) {
 	f, err := parser.ParseFile(fset, issue.FilePath(), nil, parser.ParseComments)
 	if err != nil {
 		// Don't report error because it's already must be reporter by typecheck or go/analysis.
-		return fd, nil
+		return fd
 	}
 
 	fd.ignoredRanges = p.buildIgnoredRangesForFile(f, fset, issue.FilePath())
+
 	nolintDebugf("file %s: built nolint ranges are %+v", issue.FilePath(), fd.ignoredRanges)
-	return fd, nil
+
+	return fd
 }
 
 func (p *Nolint) buildIgnoredRangesForFile(f *ast.File, fset *token.FileSet, filePath string) []ignoredRange {
@@ -161,10 +158,7 @@ func (p *Nolint) shouldPassIssue(issue *result.Issue) (bool, error) {
 		nolintDebugf("checking that lint issue was used for %s: %v", issue.ExpectedNoLintLinter, issue)
 	}
 
-	fd, err := p.getOrCreateFileData(issue)
-	if err != nil {
-		return false, err
-	}
+	fd := p.getOrCreateFileData(issue)
 
 	for _, ir := range fd.ignoredRanges {
 		if ir.doesMatch(issue) {
