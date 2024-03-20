@@ -6,7 +6,6 @@ import (
 	"os"
 	"path/filepath"
 	"slices"
-	"strings"
 
 	"github.com/go-viper/mapstructure/v2"
 	"github.com/mitchellh/go-homedir"
@@ -33,16 +32,18 @@ type Loader struct {
 
 	log logutils.Log
 
-	cfg *Config
+	cfg  *Config
+	args []string
 }
 
-func NewLoader(log logutils.Log, v *viper.Viper, fs *pflag.FlagSet, opts LoaderOptions, cfg *Config) *Loader {
+func NewLoader(log logutils.Log, v *viper.Viper, fs *pflag.FlagSet, opts LoaderOptions, cfg *Config, args []string) *Loader {
 	return &Loader{
 		opts:  opts,
 		viper: v,
 		fs:    fs,
 		log:   log,
 		cfg:   cfg,
+		args:  args,
 	}
 }
 
@@ -116,7 +117,7 @@ func (l *Loader) evaluateOptions() (string, error) {
 }
 
 func (l *Loader) setupConfigFileSearch() {
-	firstArg := extractFirstPathArg(os.Args)
+	firstArg := getFirstArg(l.args)
 
 	absStartPath, err := filepath.Abs(firstArg)
 	if err != nil {
@@ -417,25 +418,10 @@ func customDecoderHook() viper.DecoderConfigOption {
 	))
 }
 
-func extractFirstPathArg(args []string) string {
-	// skip all args ([golangci-lint, run/linters]) before files/dirs list
-	for len(args) != 0 {
-		if args[0] == "run" {
-			args = args[1:]
-			break
-		}
-
-		args = args[1:]
+func getFirstArg(args []string) string {
+	if len(args) == 0 {
+		return "./..."
 	}
 
-	// find first file/dir arg
-	firstArg := "./..."
-	for _, arg := range args {
-		if !strings.HasPrefix(arg, "-") {
-			firstArg = arg
-			break
-		}
-	}
-
-	return firstArg
+	return args[0]
 }
