@@ -26,7 +26,7 @@ type SkipDirs struct {
 
 var _ Processor = (*SkipDirs)(nil)
 
-func NewSkipDirs(patterns []string, log logutils.Log, runArgs []string, pathPrefix string) (*SkipDirs, error) {
+func NewSkipDirs(patterns []string, log logutils.Log, args []string, pathPrefix string) (*SkipDirs, error) {
 	var patternsRe []*regexp.Regexp
 	for _, p := range patterns {
 		p = fsutils.NormalizePathInRegex(p)
@@ -37,7 +37,7 @@ func NewSkipDirs(patterns []string, log logutils.Log, runArgs []string, pathPref
 		patternsRe = append(patternsRe, patternRe)
 	}
 
-	absArgsDirs, err := absDirs(runArgs)
+	absArgsDirs, err := absDirs(args)
 	if err != nil {
 		return nil, err
 	}
