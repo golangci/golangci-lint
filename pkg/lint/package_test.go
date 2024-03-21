@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func Test_buildArgs(t *testing.T) {
@@ -30,8 +31,8 @@ func Test_buildArgs(t *testing.T) {
 		},
 		{
 			desc:     "absolute path",
-			args:     []string{filepath.FromSlash("/tmp/foo")},
-			expected: []string{filepath.FromSlash("/tmp/foo")},
+			args:     []string{mustAbs(t, "/tmp/foo")},
+			expected: []string{mustAbs(t, "/tmp/foo")},
 		},
 	}
 
@@ -45,4 +46,13 @@ func Test_buildArgs(t *testing.T) {
 			assert.Equal(t, test.expected, results)
 		})
 	}
+}
+
+func mustAbs(t *testing.T, p string) string {
+	t.Helper()
+
+	abs, err := filepath.Abs(filepath.FromSlash(p))
+	require.NoError(t, err)
+
+	return abs
 }
