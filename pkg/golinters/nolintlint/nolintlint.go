@@ -64,8 +64,9 @@ type NoExplanation struct {
 
 //nolint:gocritic // TODO(ldez) must be change in the future.
 func (i NoExplanation) Details() string {
-	return fmt.Sprintf("directive `%s` is missing an explanation; it should follow the format `//nolint[:<comma-separated-linters>] // <explanation>`",
-		i.fullDirective)
+	baseMsg := "directive `%s` is missing an explanation; "
+	explanationMsg := "it should follow the format `//nolint[:<comma-separated-linters>] // <explanation>`"
+	return fmt.Sprintf(baseMsg+explanationMsg, i.fullDirective)
 }
 
 func (i NoExplanation) String() string { return toString(i) }
