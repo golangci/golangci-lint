@@ -3,10 +3,12 @@ package lintersdb
 import (
 	"errors"
 	"fmt"
+	"os"
 	"slices"
 	"strings"
 
 	"github.com/golangci/golangci-lint/pkg/config"
+	"github.com/golangci/golangci-lint/pkg/logutils"
 )
 
 type Validator struct {
@@ -28,6 +30,7 @@ func (v Validator) Validate(cfg *config.Config) error {
 	validators := []func(cfg *config.Linters) error{
 		v.validateLintersNames,
 		v.validatePresets,
+		v.alternativeNamesDeprecation,
 	}
 
 	for _, v := range validators {
@@ -71,6 +74,38 @@ func (v Validator) validatePresets(cfg *config.Linters) error {
 
 	if len(cfg.Presets) != 0 && cfg.EnableAll {
 		return errors.New("--presets is incompatible with --enable-all")
+	}
+
+	return nil
+}
+
+func (v Validator) alternativeNamesDeprecation(cfg *config.Linters) error {
+	if v.m.cfg.InternalTest || v.m.cfg.InternalCmdTest || os.Getenv(logutils.EnvTestRun) == "1" {
+		return nil
+	}
+
+	altNames := map[string][]string{}
+	for _, lc := range v.m.GetAllSupportedLinterConfigs() {
+		for _, alt := range lc.AlternativeNames {
+			altNames[alt] = append(altNames[alt], lc.Name())
+		}
+	}
+
+	var names []string
+	names = append(names, cfg.Enable...)
+	names = append(names, cfg.Disable...)
+
+	for _, name := range names {
+		lc, ok := altNames[name]
+		if !ok {
+			continue
+		}
+
+		if len(lc) > 1 {
+			v.m.log.Warnf("The linter name %q is deprecated. It has been splited into: %s.", name, strings.Join(lc, ", "))
+		} else {
+			v.m.log.Warnf("The linter name %q is deprecated. It has been renamed to: %s.", name, lc[0])
+		}
 	}
 
 	return nil
