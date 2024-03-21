@@ -1,4 +1,4 @@
-name: Feature request
+name: Feature Request
 description: "Suggest an idea for this project."
 labels: [enhancement]
 body:
@@ -6,7 +6,7 @@ body:
   - type: textarea
     id: problem
     attributes:
-      label: Your feature request related to a problem? Please describe.
+      label: Your feature request related to a problem? Please describe
       placeholder: "A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]"
     validations:
       required: true
@@ -14,7 +14,7 @@ body:
   - type: textarea
     id: solution
     attributes:
-      label: Describe the solution you'd like.
+      label: Describe the solution you'd like
       placeholder: "A clear and concise description of what you want to happen."
     validations:
       required: true
@@ -22,7 +22,7 @@ body:
   - type: textarea
     id: alternatives
     attributes:
-      label: Describe alternatives you've considered.
+      label: Describe alternatives you've considered
       placeholder: "A clear and concise description of any alternative solutions or features you've considered."
     validations:
       required: true
@@ -30,7 +30,7 @@ body:
   - type: textarea
     id: additional
     attributes:
-      label: Additional context.
+      label: Additional context
       placeholder: "Add any other context or screenshots about the feature request here."
     validations:
       required: false
