@@ -45,3 +45,48 @@ func (m *MockLog) Child(name string) Log {
 func (m *MockLog) SetLevel(level LogLevel) {
 	m.Called(level)
 }
+
+func (m *MockLog) OnFatalf(format string, args ...any) *MockLog {
+	arguments := []any{format}
+	arguments = append(arguments, args...)
+
+	m.On("Fatalf", arguments...)
+
+	return m
+}
+
+func (m *MockLog) OnPanicf(format string, args ...any) *MockLog {
+	arguments := []any{format}
+	arguments = append(arguments, args...)
+
+	m.On("Panicf", arguments...)
+
+	return m
+}
+
+func (m *MockLog) OnErrorf(format string, args ...any) *MockLog {
+	arguments := []any{format}
+	arguments = append(arguments, args...)
+
+	m.On("Errorf", arguments...)
+
+	return m
+}
+
+func (m *MockLog) OnWarnf(format string, args ...any) *MockLog {
+	arguments := []any{format}
+	arguments = append(arguments, args...)
+
+	m.On("Warnf", arguments...)
+
+	return m
+}
+
+func (m *MockLog) OnInfof(format string, args ...any) *MockLog {
+	arguments := []any{format}
+	arguments = append(arguments, args...)
+
+	m.On("Infof", arguments...)
+
+	return m
+}
