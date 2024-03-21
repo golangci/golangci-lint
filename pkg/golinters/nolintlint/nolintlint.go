@@ -11,22 +11,22 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-type baseIssue struct {
+type BaseIssue struct {
 	fullDirective string
 	position      token.Position
 	replacement   *result.Replacement
 }
 
-func (b baseIssue) Position() token.Position {
+func (b BaseIssue) Position() token.Position {
 	return b.position
 }
 
-func (b baseIssue) Replacement() *result.Replacement {
+func (b BaseIssue) Replacement() *result.Replacement {
 	return b.replacement
 }
 
 type ExtraLeadingSpace struct {
-	baseIssue
+	BaseIssue
 }
 
 func (i ExtraLeadingSpace) Details() string {
@@ -36,7 +36,7 @@ func (i ExtraLeadingSpace) Details() string {
 func (i ExtraLeadingSpace) String() string { return toString(i) }
 
 type NotSpecific struct {
-	baseIssue
+	BaseIssue
 }
 
 func (i NotSpecific) Details() string {
@@ -47,7 +47,7 @@ func (i NotSpecific) Details() string {
 func (i NotSpecific) String() string { return toString(i) }
 
 type ParseError struct {
-	baseIssue
+	BaseIssue
 }
 
 func (i ParseError) Details() string {
@@ -58,7 +58,7 @@ func (i ParseError) Details() string {
 func (i ParseError) String() string { return toString(i) }
 
 type NoExplanation struct {
-	baseIssue
+	BaseIssue
 	fullDirectiveWithoutExplanation string
 }
 
@@ -71,7 +71,7 @@ func (i NoExplanation) Details() string {
 func (i NoExplanation) String() string { return toString(i) }
 
 type UnusedCandidate struct {
-	baseIssue
+	BaseIssue
 	ExpectedLinter string
 }
 
@@ -165,14 +165,14 @@ func (l Linter) Run(fset *token.FileSet, nodes ...ast.Node) ([]Issue, error) {
 				pos := fset.Position(comment.Pos())
 				end := fset.Position(comment.End())
 
-				base := baseIssue{
+				base := BaseIssue{
 					fullDirective: comment.Text,
 					position:      pos,
 				}
 
 				fullMatches := fullDirectivePattern.FindStringSubmatch(comment.Text)
 				if len(fullMatches) == 0 {
-					issues = append(issues, ParseError{baseIssue: base})
+					issues = append(issues, ParseError{BaseIssue: base})
 					continue
 				}
 
@@ -198,7 +198,7 @@ func (l Linter) Run(fset *token.FileSet, nodes ...ast.Node) ([]Issue, error) {
 
 				if (l.needs & NeedsSpecific) != 0 {
 					if len(linters) == 0 {
-						issues = append(issues, NotSpecific{baseIssue: base})
+						issues = append(issues, NotSpecific{BaseIssue: base})
 					}
 				}
 
@@ -213,12 +213,12 @@ func (l Linter) Run(fset *token.FileSet, nodes ...ast.Node) ([]Issue, error) {
 					}
 
 					if len(linters) == 0 {
-						issue := UnusedCandidate{baseIssue: base}
+						issue := UnusedCandidate{BaseIssue: base}
 						issue.replacement = removeNolintCompletely
 						issues = append(issues, issue)
 					} else {
 						for _, linter := range linters {
-							issue := UnusedCandidate{baseIssue: base, ExpectedLinter: linter}
+							issue := UnusedCandidate{BaseIssue: base, ExpectedLinter: linter}
 							// only offer replacement if there is a single linter
 							// because of issues around commas and the possibility of all
 							// linters being removed
@@ -243,7 +243,7 @@ func (l Linter) Run(fset *token.FileSet, nodes ...ast.Node) ([]Issue, error) {
 					if needsExplanation {
 						fullDirectiveWithoutExplanation := trailingBlankExplanation.ReplaceAllString(comment.Text, "")
 						issues = append(issues, NoExplanation{
-							baseIssue:                       base,
+							BaseIssue:                       base,
 							fullDirectiveWithoutExplanation: fullDirectiveWithoutExplanation,
 						})
 					}
