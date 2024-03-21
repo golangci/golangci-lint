@@ -113,7 +113,7 @@ const (
 var commentPattern = regexp.MustCompile(`^//\s*(nolint)(:\s*[\w-]+\s*(?:,\s*[\w-]+\s*)*)?\b`)
 
 // matches a complete nolint directive
-var fullDirectivePattern = regexp.MustCompile(`^//nolint(?::([\w-]+(?:,[\w-]+)*))?(?: (//.*))?\n?$`)
+var fullDirectivePattern = regexp.MustCompile(`^//nolint(?::(\s*[\w-]+\s*(?:,\s*[\w-]+\s*)*))?\s*(//.*)?\s*\n?$`)
 
 type Linter struct {
 	needs           Needs // indicates which linter checks to perform
