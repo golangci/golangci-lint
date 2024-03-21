@@ -128,8 +128,8 @@ index 0000000..6399915
 +// line
 `
 
-	log := logutils.NewMockLog()
-	log.On("Infof", "The diff contains only additions: no original or deleted lines: %#v", mock.Anything)
+	log := logutils.NewMockLog().
+		OnInfof("The diff contains only additions: no original or deleted lines: %#v", mock.Anything)
 
 	var noChanges []Change
 	testDiffProducesChanges(t, log, diff, noChanges...)
