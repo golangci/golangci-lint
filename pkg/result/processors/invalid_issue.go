@@ -7,7 +7,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-var _ Processor = InvalidIssue{}
+var _ Processor = (*InvalidIssue)(nil)
 
 type InvalidIssue struct {
 	log logutils.Log
@@ -17,15 +17,15 @@ func NewInvalidIssue(log logutils.Log) *InvalidIssue {
 	return &InvalidIssue{log: log}
 }
 
+func (InvalidIssue) Name() string {
+	return "invalid_issue"
+}
+
 func (p InvalidIssue) Process(issues []result.Issue) ([]result.Issue, error) {
 	return filterIssuesErr(issues, p.shouldPassIssue)
 }
 
-func (p InvalidIssue) Name() string {
-	return "invalid_issue"
-}
-
-func (p InvalidIssue) Finish() {}
+func (InvalidIssue) Finish() {}
 
 func (p InvalidIssue) shouldPassIssue(issue *result.Issue) (bool, error) {
 	if issue.FromLinter == "typecheck" {

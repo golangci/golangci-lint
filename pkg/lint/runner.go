@@ -86,7 +86,7 @@ func NewRunner(log logutils.Log, cfg *config.Config, args []string, goenv *gouti
 			processors.NewNolint(log.Child(logutils.DebugKeyNolint), dbManager, enabledLinters),
 
 			processors.NewUniqByLine(cfg),
-			processors.NewDiff(cfg.Issues.Diff, cfg.Issues.DiffFromRevision, cfg.Issues.DiffPatchFilePath, cfg.Issues.WholeFiles),
+			processors.NewDiff(&cfg.Issues),
 			processors.NewMaxPerFileFromLinter(cfg),
 			processors.NewMaxSameIssues(cfg.Issues.MaxSameIssues, log.Child(logutils.DebugKeyMaxSameIssues), cfg),
 			processors.NewMaxFromLinter(cfg.Issues.MaxIssuesPerLinter, log.Child(logutils.DebugKeyMaxFromLinter), cfg),
