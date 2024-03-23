@@ -59,7 +59,7 @@ require (
 	github.com/julz/importas v0.1.0
 	github.com/karamaru-alpha/copyloopvar v1.0.9
 	github.com/kisielk/errcheck v1.7.0
-	github.com/kkHAIKE/contextcheck v1.1.4
+	github.com/kkHAIKE/contextcheck v1.1.5
 	github.com/kulti/thelper v0.6.3
 	github.com/kunwardeep/paralleltest v1.0.10
 	github.com/kyoh86/exportloopref v0.1.11
