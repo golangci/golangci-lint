@@ -350,6 +350,26 @@ func (l *Loader) handleDeprecation() error {
 			"`linters.gomnd.checks`,`linters.gomnd.ignored-numbers`,`linters.gomnd.ignored-files`,`linters.gomnd.ignored-functions`.")
 	}
 
+	// Deprecated since v1.47.0
+	if l.cfg.LintersSettings.Gofumpt.LangVersion != "" {
+		l.warn("The configuration option `linters.gofumpt.lang-version` is deprecated, please use global `run.go`.")
+	}
+
+	// Deprecated since v1.47.0
+	if l.cfg.LintersSettings.Staticcheck.GoVersion != "" {
+		l.warn("The configuration option `linters.staticcheck.go` is deprecated, please use global `run.go`.")
+	}
+
+	// Deprecated since v1.47.0
+	if l.cfg.LintersSettings.Gosimple.GoVersion != "" {
+		l.warn("The configuration option `linters.gosimple.go` is deprecated, please use global `run.go`.")
+	}
+
+	// Deprecated since v1.47.0
+	if l.cfg.LintersSettings.Stylecheck.GoVersion != "" {
+		l.warn("The configuration option `linters.stylecheck.go` is deprecated, please use global `run.go`.")
+	}
+
 	return nil
 }
 
