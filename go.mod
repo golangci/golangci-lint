@@ -29,7 +29,7 @@ require (
 	github.com/butuzov/mirror v1.1.0
 	github.com/catenacyber/perfsprint v0.7.1
 	github.com/charithe/durationcheck v0.0.10
-	github.com/ckaznocha/intrange v0.1.0
+	github.com/ckaznocha/intrange v0.1.1
 	github.com/curioswitch/go-reassign v0.2.0
 	github.com/daixiang0/gci v0.12.3
 	github.com/denis-tingaikin/go-header v0.5.0
