@@ -102,7 +102,7 @@ func (v Validator) alternativeNamesDeprecation(cfg *config.Linters) error {
 		}
 
 		if len(lc) > 1 {
-			v.m.log.Warnf("The linter name %q is deprecated. It has been splited into: %s.", name, strings.Join(lc, ", "))
+			v.m.log.Warnf("The linter name %q is deprecated. It has been split into: %s.", name, strings.Join(lc, ", "))
 		} else {
 			v.m.log.Warnf("The linter name %q is deprecated. It has been renamed to: %s.", name, lc[0])
 		}
