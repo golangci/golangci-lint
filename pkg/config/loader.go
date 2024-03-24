@@ -322,6 +322,12 @@ func (l *Loader) handleDeprecation() error {
 		l.cfg.Output.Formats = f
 	}
 
+	l.handleLinterOptionDeprecations()
+
+	return nil
+}
+
+func (l *Loader) handleLinterOptionDeprecations() {
 	// Deprecated since v1.57.0,
 	// but it was unofficially deprecated since v1.19 (2019) (https://github.com/golangci/golangci-lint/pull/697).
 	if l.cfg.LintersSettings.Govet.CheckShadowing {
@@ -369,8 +375,6 @@ func (l *Loader) handleDeprecation() error {
 	if l.cfg.LintersSettings.Stylecheck.GoVersion != "" {
 		l.warn("The configuration option `linters.stylecheck.go` is deprecated, please use global `run.go`.")
 	}
-
-	return nil
 }
 
 func (l *Loader) handleEnableOnlyOption() error {
