@@ -59,12 +59,12 @@ func (l *Loader) Load() error {
 
 	l.applyStringSliceHack()
 
-	l.handleGoVersion()
-
 	err = l.handleDeprecation()
 	if err != nil {
 		return err
 	}
+
+	l.handleGoVersion()
 
 	err = l.handleEnableOnlyOption()
 	if err != nil {
