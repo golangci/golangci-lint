@@ -217,7 +217,9 @@ func TestValidator_validatePresets_error(t *testing.T) {
 	}
 }
 
-func TestValidator_alternativeNamesDeprecation(t *testing.T) {
+func TestValidator_alternativeNames(t *testing.T) {
+	t.Setenv(logutils.EnvTestRun, "0")
+
 	log := logutils.NewMockLog().
 		OnWarnf("The linter name %q is deprecated. It has been renamed to: %s.", "vet", "govet").
 		OnWarnf("The linter name %q is deprecated. It has been renamed to: %s.", "vetshadow", "govet").
