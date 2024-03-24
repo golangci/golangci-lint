@@ -217,15 +217,15 @@ func TestValidator_validatePresets_error(t *testing.T) {
 	}
 }
 
-func TestValidator_alternativeNames(t *testing.T) {
+func TestValidator_alternativeNamesDeprecation(t *testing.T) {
 	t.Setenv(logutils.EnvTestRun, "0")
 
 	log := logutils.NewMockLog().
-		OnWarnf("The linter name %q is deprecated. It has been renamed to: %s.", "vet", "govet").
-		OnWarnf("The linter name %q is deprecated. It has been renamed to: %s.", "vetshadow", "govet").
-		OnWarnf("The linter name %q is deprecated. It has been renamed to: %s.", "logrlint", "loggercheck").
-		OnWarnf("The linter name %q is deprecated. It has been split into: %s.", "megacheck", "gosimple, staticcheck, unused").
-		OnWarnf("The linter name %q is deprecated. It has been renamed to: %s.", "gas", "gosec")
+		OnWarnf("The name %q is deprecated. The linter has been renamed to: %s.", "vet", "govet").
+		OnWarnf("The name %q is deprecated. The linter has been renamed to: %s.", "vetshadow", "govet").
+		OnWarnf("The name %q is deprecated. The linter has been renamed to: %s.", "logrlint", "loggercheck").
+		OnWarnf("The linter named %q is deprecated. It has been split into: %s.", "megacheck", "gosimple, staticcheck, unused").
+		OnWarnf("The name %q is deprecated. The linter has been renamed to: %s.", "gas", "gosec")
 
 	m, err := NewManager(log, nil, NewLinterBuilder())
 	require.NoError(t, err)
