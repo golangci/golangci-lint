@@ -325,29 +325,29 @@ func (l *Loader) handleDeprecation() error {
 	// Deprecated since v1.57.0,
 	// but it was unofficially deprecated since v1.19 (2019) (https://github.com/golangci/golangci-lint/pull/697).
 	if l.cfg.LintersSettings.Govet.CheckShadowing {
-		l.warn("The configuration option `govet.check-shadowing` is deprecated. " +
+		l.warn("The configuration option `linters.govet.check-shadowing` is deprecated. " +
 			"Please enable `shadow` instead, if you are not using `enable-all`.")
 	}
 
 	// Deprecated since v1.42.0.
 	if l.cfg.LintersSettings.Errcheck.Exclude != "" {
-		l.warn("The configuration option `errcheck.exclude` is deprecated, please use `errcheck.exclude-functions`.")
+		l.warn("The configuration option `linters.errcheck.exclude` is deprecated, please use `linters.errcheck.exclude-functions`.")
 	}
 
 	// Deprecated since v1.44.0.
 	if l.cfg.LintersSettings.Gci.LocalPrefixes != "" {
-		l.warn("The configuration option `gci.local-prefixes` is deprecated, please use `prefix()` inside `gci.sections`.")
+		l.warn("The configuration option `linters.gci.local-prefixes` is deprecated, please use `prefix()` inside `linters.gci.sections`.")
 	}
 
 	// Deprecated since v1.33.0.
 	if l.cfg.LintersSettings.Godot.CheckAll {
-		l.warn("The configuration option `godot.check-all` is deprecated, please use `godot.scope: all`.")
+		l.warn("The configuration option `linters.godot.check-all` is deprecated, please use `linters.godot.scope: all`.")
 	}
 
 	// Deprecated since v1.44.0.
 	if len(l.cfg.LintersSettings.Gomnd.Settings) > 0 {
-		l.warn("The configuration option `gomnd.settings` is deprecated. " +
-			"Please use the options `gomnd.checks`,`gomnd.ignored-numbers`,`gomnd.ignored-files`,`gomnd.ignored-functions`.")
+		l.warn("The configuration option `linters.gomnd.settings` is deprecated. Please use the options " +
+			"`linters.gomnd.checks`,`linters.gomnd.ignored-numbers`,`linters.gomnd.ignored-files`,`linters.gomnd.ignored-functions`.")
 	}
 
 	return nil
