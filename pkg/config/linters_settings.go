@@ -452,10 +452,12 @@ type FunlenSettings struct {
 }
 
 type GciSettings struct {
-	LocalPrefixes string   `mapstructure:"local-prefixes"` // Deprecated
 	Sections      []string `mapstructure:"sections"`
 	SkipGenerated bool     `mapstructure:"skip-generated"`
 	CustomOrder   bool     `mapstructure:"custom-order"`
+
+	// Deprecated: use Sections instead.
+	LocalPrefixes string `mapstructure:"local-prefixes"`
 }
 
 type GinkgoLinterSettings struct {
@@ -511,7 +513,7 @@ type GodotSettings struct {
 	Capital bool     `mapstructure:"capital"`
 	Period  bool     `mapstructure:"period"`
 
-	// Deprecated: use `Scope` instead
+	// Deprecated: use Scope instead
 	CheckAll bool `mapstructure:"check-all"`
 }
 
@@ -548,11 +550,13 @@ type GoImportsSettings struct {
 }
 
 type GoMndSettings struct {
-	Settings         map[string]map[string]any // Deprecated
-	Checks           []string                  `mapstructure:"checks"`
-	IgnoredNumbers   []string                  `mapstructure:"ignored-numbers"`
-	IgnoredFiles     []string                  `mapstructure:"ignored-files"`
-	IgnoredFunctions []string                  `mapstructure:"ignored-functions"`
+	Checks           []string `mapstructure:"checks"`
+	IgnoredNumbers   []string `mapstructure:"ignored-numbers"`
+	IgnoredFiles     []string `mapstructure:"ignored-files"`
+	IgnoredFunctions []string `mapstructure:"ignored-functions"`
+
+	// Deprecated: use root level settings instead.
+	Settings map[string]map[string]any
 }
 
 type GoModDirectivesSettings struct {
@@ -607,7 +611,7 @@ type GovetSettings struct {
 
 	Settings map[string]map[string]any
 
-	// Deprecated: the linter should be enabled inside `Enable`.
+	// Deprecated: the linter should be enabled inside Enable.
 	CheckShadowing bool `mapstructure:"check-shadowing"`
 }
 
@@ -814,13 +818,13 @@ type SpancheckSettings struct {
 }
 
 type StaticCheckSettings struct {
-	// Deprecated: use the global `run.go` instead.
-	GoVersion string `mapstructure:"go"`
-
 	Checks                  []string `mapstructure:"checks"`
 	Initialisms             []string `mapstructure:"initialisms"`                // only for stylecheck
 	DotImportWhitelist      []string `mapstructure:"dot-import-whitelist"`       // only for stylecheck
 	HTTPStatusCodeWhitelist []string `mapstructure:"http-status-code-whitelist"` // only for stylecheck
+
+	// Deprecated: use the global `run.go` instead.
+	GoVersion string `mapstructure:"go"`
 }
 
 func (s *StaticCheckSettings) HasConfiguration() bool {

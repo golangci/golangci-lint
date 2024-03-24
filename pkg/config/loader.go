@@ -59,12 +59,12 @@ func (l *Loader) Load() error {
 
 	l.applyStringSliceHack()
 
-	l.handleGoVersion()
-
 	err = l.handleDeprecation()
 	if err != nil {
 		return err
 	}
+
+	l.handleGoVersion()
 
 	err = l.handleEnableOnlyOption()
 	if err != nil {
@@ -277,7 +277,7 @@ func (l *Loader) handleGoVersion() {
 	if l.cfg.LintersSettings.Gosimple.GoVersion == "" {
 		l.cfg.LintersSettings.Gosimple.GoVersion = trimmedGoVersion
 	}
-	if l.cfg.LintersSettings.Stylecheck.GoVersion != "" {
+	if l.cfg.LintersSettings.Stylecheck.GoVersion == "" {
 		l.cfg.LintersSettings.Stylecheck.GoVersion = trimmedGoVersion
 	}
 }
@@ -322,14 +322,59 @@ func (l *Loader) handleDeprecation() error {
 		l.cfg.Output.Formats = f
 	}
 
+	l.handleLinterOptionDeprecations()
+
+	return nil
+}
+
+func (l *Loader) handleLinterOptionDeprecations() {
 	// Deprecated since v1.57.0,
 	// but it was unofficially deprecated since v1.19 (2019) (https://github.com/golangci/golangci-lint/pull/697).
 	if l.cfg.LintersSettings.Govet.CheckShadowing {
-		l.warn("The configuration option `govet.check-shadowing` is deprecated. " +
+		l.warn("The configuration option `linters.govet.check-shadowing` is deprecated. " +
 			"Please enable `shadow` instead, if you are not using `enable-all`.")
 	}
 
-	return nil
+	// Deprecated since v1.42.0.
+	if l.cfg.LintersSettings.Errcheck.Exclude != "" {
+		l.warn("The configuration option `linters.errcheck.exclude` is deprecated, please use `linters.errcheck.exclude-functions`.")
+	}
+
+	// Deprecated since v1.44.0.
+	if l.cfg.LintersSettings.Gci.LocalPrefixes != "" {
+		l.warn("The configuration option `linters.gci.local-prefixes` is deprecated, please use `prefix()` inside `linters.gci.sections`.")
+	}
+
+	// Deprecated since v1.33.0.
+	if l.cfg.LintersSettings.Godot.CheckAll {
+		l.warn("The configuration option `linters.godot.check-all` is deprecated, please use `linters.godot.scope: all`.")
+	}
+
+	// Deprecated since v1.44.0.
+	if len(l.cfg.LintersSettings.Gomnd.Settings) > 0 {
+		l.warn("The configuration option `linters.gomnd.settings` is deprecated. Please use the options " +
+			"`linters.gomnd.checks`,`linters.gomnd.ignored-numbers`,`linters.gomnd.ignored-files`,`linters.gomnd.ignored-functions`.")
+	}
+
+	// Deprecated since v1.47.0
+	if l.cfg.LintersSettings.Gofumpt.LangVersion != "" {
+		l.warn("The configuration option `linters.gofumpt.lang-version` is deprecated, please use global `run.go`.")
+	}
+
+	// Deprecated since v1.47.0
+	if l.cfg.LintersSettings.Staticcheck.GoVersion != "" {
+		l.warn("The configuration option `linters.staticcheck.go` is deprecated, please use global `run.go`.")
+	}
+
+	// Deprecated since v1.47.0
+	if l.cfg.LintersSettings.Gosimple.GoVersion != "" {
+		l.warn("The configuration option `linters.gosimple.go` is deprecated, please use global `run.go`.")
+	}
+
+	// Deprecated since v1.47.0
+	if l.cfg.LintersSettings.Stylecheck.GoVersion != "" {
+		l.warn("The configuration option `linters.stylecheck.go` is deprecated, please use global `run.go`.")
+	}
 }
 
 func (l *Loader) handleEnableOnlyOption() error {

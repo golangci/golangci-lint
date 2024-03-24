@@ -21,15 +21,15 @@ type Run struct {
 	ExitCodeIfIssuesFound int  `mapstructure:"issues-exit-code"`
 	AnalyzeTests          bool `mapstructure:"tests"`
 
+	AllowParallelRunners bool `mapstructure:"allow-parallel-runners"`
+	AllowSerialRunners   bool `mapstructure:"allow-serial-runners"`
+
 	// Deprecated: use Issues.ExcludeFiles instead.
 	SkipFiles []string `mapstructure:"skip-files"`
 	// Deprecated: use Issues.ExcludeDirs instead.
 	SkipDirs []string `mapstructure:"skip-dirs"`
 	// Deprecated: use Issues.UseDefaultExcludeDirs instead.
 	UseDefaultSkipDirs bool `mapstructure:"skip-dirs-use-default"`
-
-	AllowParallelRunners bool `mapstructure:"allow-parallel-runners"`
-	AllowSerialRunners   bool `mapstructure:"allow-serial-runners"`
 
 	// Deprecated: use Output.ShowStats instead.
 	ShowStats bool `mapstructure:"show-stats"`
