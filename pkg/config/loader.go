@@ -329,6 +329,27 @@ func (l *Loader) handleDeprecation() error {
 			"Please enable `shadow` instead, if you are not using `enable-all`.")
 	}
 
+	// Deprecated since v1.42.0.
+	if l.cfg.LintersSettings.Errcheck.Exclude != "" {
+		l.warn("The configuration option `errcheck.exclude` is deprecated, please use `errcheck.exclude-functions`.")
+	}
+
+	// Deprecated since v1.44.0.
+	if l.cfg.LintersSettings.Gci.LocalPrefixes != "" {
+		l.warn("The configuration option `gci.local-prefixes` is deprecated, please use `prefix()` inside `gci.sections`.")
+	}
+
+	// Deprecated since v1.33.0.
+	if l.cfg.LintersSettings.Godot.CheckAll {
+		l.warn("The configuration option `godot.check-all` is deprecated, please use `godot.scope: all`.")
+	}
+
+	// Deprecated since v1.44.0.
+	if len(l.cfg.LintersSettings.Gomnd.Settings) > 0 {
+		l.warn("The configuration option `gomnd.settings` is deprecated. " +
+			"Please use the options `gomnd.checks`,`gomnd.ignored-numbers`,`gomnd.ignored-files`,`gomnd.ignored-functions`.")
+	}
+
 	return nil
 }
 
