@@ -9,10 +9,23 @@ import (
 )
 
 func NewGoMND(settings *config.GoMndSettings) *goanalysis.Linter {
+	// The constant is only used to force the analyzer name to use the same name as the linter.
+	// This is required to avoid displaying the analyzer name inside the issue text.
+	//
+	// Alternative names cannot help here because of the linter configuration that uses `gomnd` as a name.
+	// The complexity of handling alternative names at a lower level (i.e. `goanalysis.Linter`) isn't worth the cost.
+	// The only way to handle it properly is to deprecate and "duplicate" the linter and its configuration,
+	// for now, I don't know if it's worth the cost.
+	// TODO(ldez): in v2, rename to mnd as the real analyzer name?
+	const name = "gomnd"
+
+	a := mnd.Analyzer
+	a.Name = name
+
 	var linterCfg map[string]map[string]any
 
 	if settings != nil {
-		// TODO(ldez) For compatibility only, must be drop in v2.
+		// Convert deprecated setting.
 		if len(settings.Settings) > 0 {
 			linterCfg = settings.Settings
 		} else {
@@ -31,15 +44,15 @@ func NewGoMND(settings *config.GoMndSettings) *goanalysis.Linter {
 			}
 
 			linterCfg = map[string]map[string]any{
-				"mnd": cfg,
+				a.Name: cfg,
 			}
 		}
 	}
 
 	return goanalysis.NewLinter(
-		"gomnd",
+		a.Name,
 		"An analyzer to detect magic numbers.",
-		[]*analysis.Analyzer{mnd.Analyzer},
+		[]*analysis.Analyzer{a},
 		linterCfg,
 	).WithLoadMode(goanalysis.LoadModeSyntax)
 }
