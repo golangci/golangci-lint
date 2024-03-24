@@ -243,6 +243,7 @@ type LintersSettings struct {
 	MaintIdx        MaintIdxSettings
 	Makezero        MakezeroSettings
 	Misspell        MisspellSettings
+	Mnd             MndSettings
 	MustTag         MustTagSettings
 	Nakedret        NakedretSettings
 	Nestif          NestifSettings
@@ -549,11 +550,9 @@ type GoImportsSettings struct {
 	LocalPrefixes string `mapstructure:"local-prefixes"`
 }
 
+// Deprecated: use MndSettings.
 type GoMndSettings struct {
-	Checks           []string `mapstructure:"checks"`
-	IgnoredNumbers   []string `mapstructure:"ignored-numbers"`
-	IgnoredFiles     []string `mapstructure:"ignored-files"`
-	IgnoredFunctions []string `mapstructure:"ignored-functions"`
+	MndSettings `mapstructure:",squash"`
 
 	// Deprecated: use root level settings instead.
 	Settings map[string]map[string]any
@@ -721,6 +720,13 @@ type NilNilSettings struct {
 
 type NlreturnSettings struct {
 	BlockSize int `mapstructure:"block-size"`
+}
+
+type MndSettings struct {
+	Checks           []string `mapstructure:"checks"`
+	IgnoredNumbers   []string `mapstructure:"ignored-numbers"`
+	IgnoredFiles     []string `mapstructure:"ignored-files"`
+	IgnoredFunctions []string `mapstructure:"ignored-functions"`
 }
 
 type NoLintLintSettings struct {

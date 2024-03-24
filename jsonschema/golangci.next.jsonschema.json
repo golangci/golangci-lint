@@ -256,7 +256,6 @@
             "goheader",
             "goimports",
             "golint",
-            "gomnd",
             "gomoddirectives",
             "gomodguard",
             "goprintffuncname",
@@ -280,6 +279,7 @@
             "maligned",
             "mirror",
             "misspell",
+            "mnd",
             "musttag",
             "nakedret",
             "nestif",
@@ -1408,50 +1408,6 @@
             }
           }
         },
-        "gomnd": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "ignored-files": {
-              "description": "List of file patterns to exclude from analysis.",
-              "examples": [["magic1_.*.go"]],
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            },
-            "ignored-functions": {
-              "description": "Comma-separated list of function patterns to exclude from the analysis.",
-              "examples": [["math.*", "http.StatusText", "make"]],
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            },
-            "ignored-numbers": {
-              "description": "List of numbers to exclude from analysis.",
-              "examples": [["1000", "1234_567_890", "3.14159264"]],
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            },
-            "checks": {
-              "description": "The list of enabled checks, see https://github.com/tommy-muehle/go-mnd/#checks for description.",
-              "type": "array",
-              "items": {
-                "enum": [
-                  "argument",
-                  "case",
-                  "condition",
-                  "operation",
-                  "return",
-                  "assign"
-                ]
-              }
-            }
-          }
-        },
         "gomoddirectives": {
           "type": "object",
           "additionalProperties": false,
@@ -2038,6 +1994,50 @@
               "type": "number",
               "default": 0,
               "minimum": 0
+            }
+          }
+        },
+        "mnd": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "ignored-files": {
+              "description": "List of file patterns to exclude from analysis.",
+              "examples": [["magic1_.*.go"]],
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "ignored-functions": {
+              "description": "Comma-separated list of function patterns to exclude from the analysis.",
+              "examples": [["math.*", "http.StatusText", "make"]],
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "ignored-numbers": {
+              "description": "List of numbers to exclude from analysis.",
+              "examples": [["1000", "1234_567_890", "3.14159264"]],
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "checks": {
+              "description": "The list of enabled checks, see https://github.com/tommy-muehle/go-mnd/#checks for description.",
+              "type": "array",
+              "items": {
+                "enum": [
+                  "argument",
+                  "case",
+                  "condition",
+                  "operation",
+                  "return",
+                  "assign"
+                ]
+              }
             }
           }
         },

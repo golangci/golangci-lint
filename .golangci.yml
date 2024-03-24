@@ -182,9 +182,12 @@ issues:
     - path: pkg/golinters/gci.go
       linters: [staticcheck]
       text: "SA1019: settings.LocalPrefixes is deprecated: use Sections instead."
-    - path: pkg/golinters/gomnd.go
+    - path: pkg/golinters/mnd.go
       linters: [staticcheck]
       text: "SA1019: settings.Settings is deprecated: use root level settings instead."
+    - path: pkg/golinters/mnd.go
+      linters: [staticcheck]
+      text: "SA1019: config.GoMndSettings is deprecated: use MndSettings."
 
     # Related to `run.go`, it cannot be removed.
     - path: pkg/golinters/gofumpt.go
