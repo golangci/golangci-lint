@@ -277,7 +277,7 @@ func (l *Loader) handleGoVersion() {
 	if l.cfg.LintersSettings.Gosimple.GoVersion == "" {
 		l.cfg.LintersSettings.Gosimple.GoVersion = trimmedGoVersion
 	}
-	if l.cfg.LintersSettings.Stylecheck.GoVersion != "" {
+	if l.cfg.LintersSettings.Stylecheck.GoVersion == "" {
 		l.cfg.LintersSettings.Stylecheck.GoVersion = trimmedGoVersion
 	}
 }
