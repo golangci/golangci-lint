@@ -22,10 +22,11 @@ const (
 )
 
 var AllOutputFormats = []string{
-	OutFormatColoredLineNumber,
-	OutFormatLineNumber,
 	OutFormatJSON,
+	OutFormatLineNumber,
+	OutFormatColoredLineNumber,
 	OutFormatTab,
+	OutFormatColoredTab,
 	OutFormatCheckstyle,
 	OutFormatCodeClimate,
 	OutFormatHTML,
