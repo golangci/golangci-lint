@@ -88,7 +88,7 @@ type InspectionType struct {
 }
 
 func (i InspectionType) Print(w io.Writer, escaper *strings.Replacer) (int, error) {
-	return fmt.Fprintf(w, "##teamcity[InspectionType id='%s' name='%s' description='%s' category='%s']\n",
+	return fmt.Fprintf(w, "##teamcity[inspectionType id='%s' name='%s' description='%s' category='%s']\n",
 		limit(i.id, smallLimit), limit(i.name, smallLimit), limit(escaper.Replace(i.description), largeLimit), limit(i.category, smallLimit))
 }
 
