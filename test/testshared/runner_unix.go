@@ -3,9 +3,10 @@
 package testshared
 
 import (
-	"path/filepath"
 	"testing"
 )
+
+const binaryName = "golangci-lint"
 
 // SkipOnWindows it's a noop function on Unix.
 func SkipOnWindows(_ testing.TB) {}
@@ -18,11 +19,6 @@ func NormalizeFilePathInJSON(in string) string {
 // NormalizeFileInString it's a noop function on Unix.
 func NormalizeFileInString(in string) string {
 	return in
-}
-
-// defaultBinaryName returns the path to the default binary.
-func defaultBinaryName() string {
-	return filepath.Join("..", "golangci-lint")
 }
 
 // normalizeFilePath it's a noop function on Unix.

@@ -38,6 +38,8 @@ type key struct {
 // Analyze analyzes the test expectations ('want').
 // inspired by https://github.com/golang/tools/blob/b3b5c13b291f9653da6f31b95db100a2e26bd186/go/analysis/analysistest/analysistest.go
 func Analyze(t *testing.T, sourcePath string, rawData []byte) {
+	t.Helper()
+
 	fileData, err := os.ReadFile(sourcePath)
 	require.NoError(t, err)
 
@@ -168,6 +170,8 @@ func parseExpectations(text string) (lineDelta int, expects []expectation, err e
 
 // inspired by https://github.com/golang/tools/blob/b3b5c13b291f9653da6f31b95db100a2e26bd186/go/analysis/analysistest/analysistest.go
 func checkMessage(t *testing.T, want map[key][]expectation, posn token.Position, kind, name, message string) {
+	t.Helper()
+
 	k := key{posn.Filename, posn.Line}
 	expects := want[k]
 	var unmatched []string

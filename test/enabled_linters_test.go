@@ -110,7 +110,7 @@ func TestEnabledLinters(t *testing.T) {
 		},
 	}
 
-	testshared.InstallGolangciLint(t)
+	binPath := testshared.InstallGolangciLint(t)
 
 	for _, c := range cases {
 		c := c
@@ -127,6 +127,7 @@ func TestEnabledLinters(t *testing.T) {
 				WithArgs(args...).
 				WithArgs(c.args...).
 				WithConfig(c.cfg).
+				WithBinPath(binPath).
 				Runner().
 				Run()
 

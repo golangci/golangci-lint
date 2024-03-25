@@ -33,13 +33,13 @@ func setupTestFix(t *testing.T) []string {
 	err := exec.Command("cp", "-R", sourcesDir, tmpDir).Run()
 	require.NoError(t, err)
 
-	testshared.InstallGolangciLint(t)
-
 	return findSources(t, tmpDir, "in", "*.go")
 }
 
 func TestFix(t *testing.T) {
 	sources := setupTestFix(t)
+
+	binPath := testshared.InstallGolangciLint(t)
 
 	for _, input := range sources {
 		input := input
@@ -61,6 +61,7 @@ func TestFix(t *testing.T) {
 					"--fix").
 				WithRunContext(rc).
 				WithTargetPath(input).
+				WithBinPath(binPath).
 				Runner().
 				Run().
 				ExpectExitCode(rc.ExitCode)
@@ -78,6 +79,8 @@ func TestFix(t *testing.T) {
 
 func TestFix_pathPrefix(t *testing.T) {
 	sources := setupTestFix(t)
+
+	binPath := testshared.InstallGolangciLint(t)
 
 	for _, input := range sources {
 		input := input
@@ -100,6 +103,7 @@ func TestFix_pathPrefix(t *testing.T) {
 					"--path-prefix=foobar/").
 				WithRunContext(rc).
 				WithTargetPath(input).
+				WithBinPath(binPath).
 				Runner().
 				Run().
 				ExpectExitCode(rc.ExitCode)

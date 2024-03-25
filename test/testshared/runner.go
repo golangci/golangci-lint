@@ -49,7 +49,6 @@ func NewRunnerBuilder(tb testing.TB) *RunnerBuilder {
 	return &RunnerBuilder{
 		tb:                   tb,
 		log:                  log,
-		binPath:              defaultBinaryName(),
 		command:              "run",
 		allowParallelRunners: true,
 	}
@@ -214,7 +213,7 @@ func (r *Runner) Install() *Runner {
 	r.tb.Helper()
 
 	r.installOnce.Do(func() {
-		InstallGolangciLint(r.tb)
+		r.binPath = InstallGolangciLint(r.tb)
 	})
 
 	return r
@@ -342,8 +341,10 @@ func (r *RunnerResult) ExpectHasIssue(issueText string) *RunnerResult {
 func InstallGolangciLint(tb testing.TB) string {
 	tb.Helper()
 
+	parentPath := findMakeFile(tb)
+
 	if os.Getenv(envGolangciLintInstalled) != "true" {
-		cmd := exec.Command("make", "-C", "..", "build")
+		cmd := exec.Command("make", "-C", parentPath, "build")
 
 		output, err := cmd.CombinedOutput()
 		if err != nil {
@@ -353,8 +354,31 @@ func InstallGolangciLint(tb testing.TB) string {
 		require.NoError(tb, err, "Can't go install golangci-lint %s", string(output))
 	}
 
-	abs, err := filepath.Abs(defaultBinaryName())
+	abs, err := filepath.Abs(filepath.Join(parentPath, binaryName))
 	require.NoError(tb, err)
 
 	return abs
+}
+
+func findMakeFile(tb testing.TB) string {
+	tb.Helper()
+
+	wd, _ := os.Getwd()
+
+	for wd != "/" {
+		_, err := os.Stat(filepath.Join(wd, "Makefile"))
+		if err != nil {
+			wd = filepath.Dir(wd)
+			continue
+		}
+
+		break
+	}
+
+	here, _ := os.Getwd()
+
+	rel, err := filepath.Rel(here, wd)
+	require.NoError(tb, err)
+
+	return rel
 }
