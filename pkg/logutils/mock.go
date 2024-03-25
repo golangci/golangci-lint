@@ -47,8 +47,7 @@ func (m *MockLog) SetLevel(level LogLevel) {
 }
 
 func (m *MockLog) OnFatalf(format string, args ...any) *MockLog {
-	arguments := []any{format}
-	arguments = append(arguments, args...)
+	arguments := append([]any{format}, args...)
 
 	m.On("Fatalf", arguments...)
 

@@ -91,8 +91,7 @@ func (v Validator) alternativeNamesDeprecation(cfg *config.Linters) error {
 		}
 	}
 
-	var names []string
-	names = append(names, cfg.Enable...)
+	names := append([]string{}, cfg.Enable...)
 	names = append(names, cfg.Disable...)
 
 	for _, name := range names {
