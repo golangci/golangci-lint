@@ -7,8 +7,6 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-const goFileExtension = ".go"
-
 var _ Processor = InvalidIssue{}
 
 type InvalidIssue struct {
@@ -54,5 +52,5 @@ func (p InvalidIssue) shouldPassIssue(issue *result.Issue) (bool, error) {
 }
 
 func isGoFile(name string) bool {
-	return filepath.Ext(name) == goFileExtension
+	return filepath.Ext(name) == ".go"
 }
