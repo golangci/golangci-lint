@@ -43,7 +43,7 @@ func (v Validator) Validate(cfg *config.Config) error {
 }
 
 func (v Validator) validateLintersNames(cfg *config.Linters) error {
-	allNames := append([]string{}, cfg.Enable...)
+	allNames := cfg.Enable
 	allNames = append(allNames, cfg.Disable...)
 
 	var unknownNames []string
@@ -91,7 +91,7 @@ func (v Validator) alternativeNamesDeprecation(cfg *config.Linters) error {
 		}
 	}
 
-	names := append([]string{}, cfg.Enable...)
+	names := cfg.Enable
 	names = append(names, cfg.Disable...)
 
 	for _, name := range names {
