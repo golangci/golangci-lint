@@ -96,7 +96,7 @@ func runGofumpt(lintCtx *linter.Context, pass *analysis.Pass, diff differ, optio
 			}
 
 			diff := out.String()
-			is, err := extractIssuesFromPatch(diff, lintCtx, gofumptName)
+			is, err := extractIssuesFromPatch(diff, lintCtx, gofumptName, getIssuedTextGoFumpt)
 			if err != nil {
 				return nil, fmt.Errorf("can't extract issues from gofumpt diff output %q: %w", diff, err)
 			}
@@ -116,4 +116,14 @@ func getLangVersion(settings *config.GofumptSettings) string {
 		return "1.15"
 	}
 	return settings.LangVersion
+}
+
+func getIssuedTextGoFumpt(settings *config.LintersSettings) string {
+	text := "File is not `gofumpt`-ed"
+
+	if settings.Gofumpt.ExtraRules {
+		text += " with `-extra`"
+	}
+
+	return text
 }
