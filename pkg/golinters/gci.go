@@ -15,6 +15,7 @@ import (
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
+	"github.com/golangci/golangci-lint/pkg/golinters/internal"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 )
 
@@ -97,7 +98,7 @@ func runGci(pass *analysis.Pass, lintCtx *linter.Context, cfg *gcicfg.Config, lo
 			continue
 		}
 
-		is, err := ExtractIssuesFromPatch(diff, lintCtx, gciName, getIssuedTextGci)
+		is, err := internal.ExtractIssuesFromPatch(diff, lintCtx, gciName, getIssuedTextGci)
 		if err != nil {
 			return nil, fmt.Errorf("can't extract issues from gci diff output %s: %w", diff, err)
 		}

@@ -10,6 +10,7 @@ import (
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
+	"github.com/golangci/golangci-lint/pkg/golinters/internal"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 )
 
@@ -69,7 +70,7 @@ func runGoImports(lintCtx *linter.Context, pass *analysis.Pass) ([]goanalysis.Is
 			continue
 		}
 
-		is, err := ExtractIssuesFromPatch(string(diff), lintCtx, goimportsName, getIssuedTextGoImports)
+		is, err := internal.ExtractIssuesFromPatch(string(diff), lintCtx, goimportsName, getIssuedTextGoImports)
 		if err != nil {
 			return nil, fmt.Errorf("can't extract issues from gofmt diff output %q: %w", string(diff), err)
 		}
