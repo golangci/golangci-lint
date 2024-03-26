@@ -37,7 +37,7 @@ func (b LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithPresets(linter.PresetBugs, linter.PresetStyle).
 			WithURL("https://github.com/tdakkota/asciicheck"),
 
-		linter.NewConfig(golinters.NewBiDiChkFuncName(&cfg.LintersSettings.BiDiChk)).
+		linter.NewConfig(golinters.NewBiDiChk(&cfg.LintersSettings.BiDiChk)).
 			WithSince("1.43.0").
 			WithPresets(linter.PresetBugs).
 			WithURL("https://github.com/breml/bidichk"),
@@ -117,7 +117,7 @@ func (b LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithPresets(linter.PresetBugs, linter.PresetError).
 			WithURL("https://github.com/kisielk/errcheck"),
 
-		linter.NewConfig(golinters.NewErrChkJSONFuncName(&cfg.LintersSettings.ErrChkJSON)).
+		linter.NewConfig(golinters.NewErrChkJSON(&cfg.LintersSettings.ErrChkJSON)).
 			WithSince("1.44.0").
 			WithPresets(linter.PresetBugs).
 			WithLoadForGoAnalysis().

@@ -8,7 +8,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 )
 
-func NewErrChkJSONFuncName(cfg *config.ErrChkJSONSettings) *goanalysis.Linter {
+func NewErrChkJSON(cfg *config.ErrChkJSONSettings) *goanalysis.Linter {
 	a := errchkjson.NewAnalyzer()
 
 	cfgMap := map[string]map[string]any{}
