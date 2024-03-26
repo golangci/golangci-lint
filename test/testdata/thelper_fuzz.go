@@ -1,5 +1,3 @@
-//go:build go1.18
-
 //golangcitest:args -Ethelper
 package testdata
 

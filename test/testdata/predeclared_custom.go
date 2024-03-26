@@ -1,5 +1,5 @@
 //golangcitest:args -Epredeclared
-//golangcitest:config_path testdata/configs/predeclared.yml
+//golangcitest:config_path testdata/configs/predeclared_custom.yml
 package testdata
 
 func hello() {

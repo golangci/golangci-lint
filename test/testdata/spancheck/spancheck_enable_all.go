@@ -1,4 +1,4 @@
-//golangcitest:config_path configs/enable_all.yml
+//golangcitest:config_path configs/spancheck_enable_all.yml
 //golangcitest:args -Espancheck
 package spancheck
 

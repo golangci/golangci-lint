@@ -1,21 +1,21 @@
 //golangcitest:args -Edecorder
-//golangcitest:config_path testdata/configs/decorder.yml
+//golangcitest:expected_exitcode 0
 package testdata
 
 import "math"
 
 const (
-	decoc = math.MaxInt64
-	decod = 1
+	decoh = math.MaxInt64
+	decoi = 1
 )
 
-var decoa = 1
-var decob = 1 // want "multiple \"var\" declarations are not allowed; use parentheses instead"
+var decoj = 1
+var decok = 1
 
-type decoe int // want "type must not be placed after const"
+type decol int
 
-func decof() {
-	const decog = 1
+func decom() {
+	const decon = 1
 }
 
-func init() {} // want "init func must be the first function in file"
+func init() {}

@@ -10,7 +10,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
 )
 
-func NewBiDiChkFuncName(cfg *config.BiDiChkSettings) *goanalysis.Linter {
+func NewBiDiChk(cfg *config.BiDiChkSettings) *goanalysis.Linter {
 	a := bidichk.NewAnalyzer()
 
 	cfgMap := map[string]map[string]any{}

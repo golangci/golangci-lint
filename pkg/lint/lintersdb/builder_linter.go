@@ -37,7 +37,7 @@ func (b LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithPresets(linter.PresetBugs, linter.PresetStyle).
 			WithURL("https://github.com/tdakkota/asciicheck"),
 
-		linter.NewConfig(golinters.NewBiDiChkFuncName(&cfg.LintersSettings.BiDiChk)).
+		linter.NewConfig(golinters.NewBiDiChk(&cfg.LintersSettings.BiDiChk)).
 			WithSince("1.43.0").
 			WithPresets(linter.PresetBugs).
 			WithURL("https://github.com/breml/bidichk"),
@@ -117,7 +117,7 @@ func (b LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithPresets(linter.PresetBugs, linter.PresetError).
 			WithURL("https://github.com/kisielk/errcheck"),
 
-		linter.NewConfig(golinters.NewErrChkJSONFuncName(&cfg.LintersSettings.ErrChkJSON)).
+		linter.NewConfig(golinters.NewErrChkJSON(&cfg.LintersSettings.ErrChkJSON)).
 			WithSince("1.44.0").
 			WithPresets(linter.PresetBugs).
 			WithLoadForGoAnalysis().
@@ -189,6 +189,7 @@ func (b LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 		linter.NewConfig(golinters.NewGci(&cfg.LintersSettings.Gci)).
 			WithSince("v1.30.0").
 			WithPresets(linter.PresetFormatting, linter.PresetImport).
+			WithAutoFix().
 			WithURL("https://github.com/daixiang0/gci"),
 
 		linter.NewConfig(golinters.NewGinkgoLinter(&cfg.LintersSettings.GinkgoLinter)).
@@ -232,6 +233,7 @@ func (b LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithSince("v1.12.0").
 			WithPresets(linter.PresetStyle, linter.PresetMetaLinter).
 			WithLoadForGoAnalysis().
+			WithAutoFix().
 			WithURL("https://github.com/go-critic/go-critic"),
 
 		linter.NewConfig(golinters.NewGocyclo(&cfg.LintersSettings.Gocyclo)).
@@ -271,6 +273,7 @@ func (b LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 		linter.NewConfig(golinters.NewGoHeader(&cfg.LintersSettings.Goheader)).
 			WithSince("v1.28.0").
 			WithPresets(linter.PresetStyle).
+			WithAutoFix().
 			WithURL("https://github.com/denis-tingaikin/go-header"),
 
 		linter.NewConfig(golinters.NewGoimports(&cfg.LintersSettings.Goimports)).
@@ -419,6 +422,7 @@ func (b LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithSince("v1.53.0").
 			WithPresets(linter.PresetStyle).
 			WithLoadForGoAnalysis().
+			WithAutoFix().
 			WithURL("https://github.com/butuzov/mirror"),
 
 		linter.NewConfig(golinters.NewMisspell(&cfg.LintersSettings.Misspell)).
@@ -706,6 +710,7 @@ func (b LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 		linter.NewConfig(golinters.NewNoLintLint(&cfg.LintersSettings.NoLintLint)).
 			WithSince("v1.26.0").
 			WithPresets(linter.PresetStyle).
+			WithAutoFix().
 			WithURL("https://github.com/golangci/golangci-lint/blob/master/pkg/golinters/nolintlint/README.md"),
 	}, nil
 }
