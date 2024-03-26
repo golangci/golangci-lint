@@ -779,38 +779,6 @@ linters-settings:
     # Default: ""
     local-prefixes: github.com/org/project
 
-  gomnd:
-    # List of enabled checks, see https://github.com/tommy-muehle/go-mnd/#checks for description.
-    # Default: ["argument", "case", "condition", "operation", "return", "assign"]
-    checks:
-      - argument
-      - case
-      - condition
-      - operation
-      - return
-      - assign
-    # List of numbers to exclude from analysis.
-    # The numbers should be written as string.
-    # Values always ignored: "1", "1.0", "0" and "0.0"
-    # Default: []
-    ignored-numbers:
-      - '0666'
-      - '0755'
-      - '42'
-    # List of file patterns to exclude from analysis.
-    # Values always ignored: `.+_test.go`
-    # Default: []
-    ignored-files:
-      - 'magic1_.+\.go$'
-    # List of function patterns to exclude from analysis.
-    # Following functions are always ignored: `time.Date`,
-    # `strconv.FormatInt`, `strconv.FormatUint`, `strconv.FormatFloat`,
-    # `strconv.ParseInt`, `strconv.ParseUint`, `strconv.ParseFloat`.
-    # Default: []
-    ignored-functions:
-      - '^math\.'
-      - '^http\.StatusText$'
-
   gomoddirectives:
     # Allow local `replace` directives.
     # Default: false
@@ -1366,6 +1334,38 @@ linters-settings:
     # - restricted: checks only comments.
     # Default: ""
     mode: restricted
+
+  mnd:
+    # List of enabled checks, see https://github.com/tommy-muehle/go-mnd/#checks for description.
+    # Default: ["argument", "case", "condition", "operation", "return", "assign"]
+    checks:
+      - argument
+      - case
+      - condition
+      - operation
+      - return
+      - assign
+    # List of numbers to exclude from analysis.
+    # The numbers should be written as string.
+    # Values always ignored: "1", "1.0", "0" and "0.0"
+    # Default: []
+    ignored-numbers:
+      - '0666'
+      - '0755'
+      - '42'
+    # List of file patterns to exclude from analysis.
+    # Values always ignored: `.+_test.go`
+    # Default: []
+    ignored-files:
+      - 'magic1_.+\.go$'
+    # List of function patterns to exclude from analysis.
+    # Following functions are always ignored: `time.Date`,
+    # `strconv.FormatInt`, `strconv.FormatUint`, `strconv.FormatFloat`,
+    # `strconv.ParseInt`, `strconv.ParseUint`, `strconv.ParseFloat`.
+    # Default: []
+    ignored-functions:
+      - '^math\.'
+      - '^http\.StatusText$'
 
   musttag:
     # A set of custom functions to check in addition to the builtin ones.
@@ -2552,7 +2552,6 @@ linters:
     - gofumpt
     - goheader
     - goimports
-    - gomnd
     - gomoddirectives
     - gomodguard
     - goprintffuncname
@@ -2573,6 +2572,7 @@ linters:
     - makezero
     - mirror
     - misspell
+    - mnd
     - musttag
     - nakedret
     - nestif
@@ -2665,7 +2665,6 @@ linters:
     - gofumpt
     - goheader
     - goimports
-    - gomnd
     - gomoddirectives
     - gomodguard
     - goprintffuncname
@@ -2686,6 +2685,7 @@ linters:
     - makezero
     - mirror
     - misspell
+    - mnd
     - musttag
     - nakedret
     - nestif
@@ -2735,6 +2735,7 @@ linters:
     - ifshort # Deprecated
     - interfacer # Deprecated
     - maligned # Deprecated
+    - gomnd # Deprecated
     - nosnakecase # Deprecated
     - scopelint # Deprecated
     - structcheck # Deprecated

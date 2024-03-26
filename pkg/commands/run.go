@@ -408,7 +408,7 @@ func (c *runCommand) setExitCodeIfIssuesFound(issues []result.Issue) {
 }
 
 func (c *runCommand) printDeprecatedLinterMessages(enabledLinters map[string]*linter.Config) {
-	if c.cfg.InternalCmdTest {
+	if c.cfg.InternalCmdTest || os.Getenv(logutils.EnvTestRun) == "1" {
 		return
 	}
 

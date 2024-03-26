@@ -1,4 +1,4 @@
-//golangcitest:args -Egomnd
+//golangcitest:args -Emnd
 package testdata
 
 import (
