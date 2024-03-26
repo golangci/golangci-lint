@@ -54,7 +54,7 @@ func NewGofmt(settings *config.GoFmtSettings) *goanalysis.Linter {
 }
 
 func runGofmt(lintCtx *linter.Context, pass *analysis.Pass, settings *config.GoFmtSettings) ([]goanalysis.Issue, error) {
-	fileNames := getFileNames(pass)
+	fileNames := internal.GetFileNames(pass)
 
 	var rewriteRules []gofmtAPI.RewriteRule
 	for _, rule := range settings.RewriteRules {

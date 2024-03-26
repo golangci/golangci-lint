@@ -57,7 +57,7 @@ func NewGoimports(settings *config.GoImportsSettings) *goanalysis.Linter {
 }
 
 func runGoImports(lintCtx *linter.Context, pass *analysis.Pass) ([]goanalysis.Issue, error) {
-	fileNames := getFileNames(pass)
+	fileNames := internal.GetFileNames(pass)
 
 	var issues []goanalysis.Issue
 

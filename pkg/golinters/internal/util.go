@@ -1,4 +1,4 @@
-package golinters
+package internal
 
 import (
 	"fmt"
@@ -10,7 +10,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/config"
 )
 
-func formatCode(code string, _ *config.Config) string {
+func FormatCode(code string, _ *config.Config) string {
 	if strings.Contains(code, "`") {
 		return code // TODO: properly escape or remove
 	}
@@ -18,7 +18,7 @@ func formatCode(code string, _ *config.Config) string {
 	return fmt.Sprintf("`%s`", code)
 }
 
-func getFileNames(pass *analysis.Pass) []string {
+func GetFileNames(pass *analysis.Pass) []string {
 	var fileNames []string
 	for _, f := range pass.Files {
 		fileName := pass.Fset.PositionFor(f.Pos(), true).Filename

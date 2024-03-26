@@ -17,6 +17,7 @@ import (
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
+	"github.com/golangci/golangci-lint/pkg/golinters/internal"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
@@ -73,7 +74,7 @@ func NewRevive(settings *config.ReviveSettings) *goanalysis.Linter {
 }
 
 func runRevive(lintCtx *linter.Context, pass *analysis.Pass, settings *config.ReviveSettings) ([]goanalysis.Issue, error) {
-	packages := [][]string{getFileNames(pass)}
+	packages := [][]string{internal.GetFileNames(pass)}
 
 	conf, err := getReviveConfig(settings)
 	if err != nil {
