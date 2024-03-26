@@ -1,5 +1,5 @@
 //golangcitest:args -Eireturn
-//golangcitest:config_path testdata/configs/ireturn.yml
+//golangcitest:config_path testdata/configs/ireturn_allow.yml
 //golangcitest:expected_exitcode 0
 package testdata
 
