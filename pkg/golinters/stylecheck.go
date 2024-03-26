@@ -6,11 +6,12 @@ import (
 	"honnef.co/go/tools/stylecheck"
 
 	"github.com/golangci/golangci-lint/pkg/config"
-	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
+	"github.com/golangci/golangci-lint/pkg/goanalysis"
+	"github.com/golangci/golangci-lint/pkg/golinters/internal"
 )
 
 func NewStylecheck(settings *config.StaticCheckSettings) *goanalysis.Linter {
-	cfg := staticCheckConfig(settings)
+	cfg := internal.StaticCheckConfig(settings)
 
 	// `scconfig.Analyzer` is a singleton, then it's not possible to have more than one instance for all staticcheck "sub-linters".
 	// When we will merge the 4 "sub-linters", the problem will disappear: https://github.com/golangci/golangci-lint/issues/357
@@ -19,7 +20,7 @@ func NewStylecheck(settings *config.StaticCheckSettings) *goanalysis.Linter {
 		return cfg, nil
 	}
 
-	analyzers := setupStaticCheckAnalyzers(stylecheck.Analyzers, getGoVersion(settings), cfg.Checks)
+	analyzers := internal.SetupStaticCheckAnalyzers(stylecheck.Analyzers, internal.GetGoVersion(settings), cfg.Checks)
 
 	return goanalysis.NewLinter(
 		"stylecheck",

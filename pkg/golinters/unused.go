@@ -11,7 +11,8 @@ import (
 	"honnef.co/go/tools/unused"
 
 	"github.com/golangci/golangci-lint/pkg/config"
-	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
+	"github.com/golangci/golangci-lint/pkg/goanalysis"
+	"github.com/golangci/golangci-lint/pkg/golinters/internal"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
@@ -40,7 +41,7 @@ func NewUnused(settings *config.UnusedSettings, scSettings *config.StaticCheckSe
 		},
 	}
 
-	setAnalyzerGoVersion(analyzer, getGoVersion(scSettings))
+	internal.SetAnalyzerGoVersion(analyzer, internal.GetGoVersion(scSettings))
 
 	return goanalysis.NewLinter(
 		unusedName,

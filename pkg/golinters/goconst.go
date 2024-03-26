@@ -8,7 +8,8 @@ import (
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/config"
-	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
+	"github.com/golangci/golangci-lint/pkg/goanalysis"
+	"github.com/golangci/golangci-lint/pkg/golinters/internal"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
@@ -78,12 +79,12 @@ func runGoconst(pass *analysis.Pass, settings *config.GoConstSettings) ([]goanal
 
 	res := make([]goanalysis.Issue, 0, len(lintIssues))
 	for _, i := range lintIssues {
-		text := fmt.Sprintf("string %s has %d occurrences", formatCode(i.Str, nil), i.OccurrencesCount)
+		text := fmt.Sprintf("string %s has %d occurrences", internal.FormatCode(i.Str, nil), i.OccurrencesCount)
 
 		if i.MatchingConst == "" {
 			text += ", make it a constant"
 		} else {
-			text += fmt.Sprintf(", but such constant %s already exists", formatCode(i.MatchingConst, nil))
+			text += fmt.Sprintf(", but such constant %s already exists", internal.FormatCode(i.MatchingConst, nil))
 		}
 
 		res = append(res, goanalysis.NewIssue(&result.Issue{

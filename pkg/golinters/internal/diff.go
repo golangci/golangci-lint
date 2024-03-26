@@ -1,4 +1,4 @@
-package golinters
+package internal
 
 import (
 	"bytes"
@@ -26,6 +26,8 @@ const (
 	diffLineOriginal diffLineType = "original"
 	diffLineDeleted  diffLineType = "deleted"
 )
+
+type fmtTextFormatter func(settings *config.LintersSettings) string
 
 type diffLine struct {
 	originalNumber int // 1-based original line number
@@ -217,34 +219,7 @@ func (p *hunkChangesParser) parse(h *diffpkg.Hunk) []Change {
 	return p.ret
 }
 
-func getErrorTextForLinter(settings *config.LintersSettings, linterName string) string {
-	text := "File is not formatted"
-	switch linterName {
-	case gciName:
-		text = getErrorTextForGci(settings.Gci)
-	case gofumptName:
-		text = "File is not `gofumpt`-ed"
-		if settings.Gofumpt.ExtraRules {
-			text += " with `-extra`"
-		}
-	case gofmtName:
-		text = "File is not `gofmt`-ed"
-		if settings.Gofmt.Simplify {
-			text += " with `-s`"
-		}
-		for _, rule := range settings.Gofmt.RewriteRules {
-			text += fmt.Sprintf(" `-r '%s -> %s'`", rule.Pattern, rule.Replacement)
-		}
-	case goimportsName:
-		text = "File is not `goimports`-ed"
-		if settings.Goimports.LocalPrefixes != "" {
-			text += " with -local " + settings.Goimports.LocalPrefixes
-		}
-	}
-	return text
-}
-
-func extractIssuesFromPatch(patch string, lintCtx *linter.Context, linterName string) ([]result.Issue, error) {
+func ExtractIssuesFromPatch(patch string, lintCtx *linter.Context, linterName string, formatter fmtTextFormatter) ([]result.Issue, error) {
 	diffs, err := diffpkg.ParseMultiFileDiff([]byte(patch))
 	if err != nil {
 		return nil, fmt.Errorf("can't parse patch: %w", err)
@@ -274,7 +249,7 @@ func extractIssuesFromPatch(patch string, lintCtx *linter.Context, linterName st
 						Filename: d.NewName,
 						Line:     change.LineRange.From,
 					},
-					Text:        getErrorTextForLinter(lintCtx.Settings(), linterName),
+					Text:        formatter(lintCtx.Settings()),
 					Replacement: &change.Replacement,
 				}
 				if change.LineRange.From != change.LineRange.To {

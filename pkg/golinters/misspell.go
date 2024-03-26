@@ -11,7 +11,8 @@ import (
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/config"
-	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
+	"github.com/golangci/golangci-lint/pkg/goanalysis"
+	"github.com/golangci/golangci-lint/pkg/golinters/internal"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
@@ -62,7 +63,7 @@ func NewMisspell(settings *config.MisspellSettings) *goanalysis.Linter {
 }
 
 func runMisspell(lintCtx *linter.Context, pass *analysis.Pass, replacer *misspell.Replacer, mode string) ([]goanalysis.Issue, error) {
-	fileNames := getFileNames(pass)
+	fileNames := internal.GetFileNames(pass)
 
 	var issues []goanalysis.Issue
 	for _, filename := range fileNames {

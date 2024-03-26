@@ -4,12 +4,13 @@ import (
 	"honnef.co/go/tools/staticcheck"
 
 	"github.com/golangci/golangci-lint/pkg/config"
-	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
+	"github.com/golangci/golangci-lint/pkg/goanalysis"
+	"github.com/golangci/golangci-lint/pkg/golinters/internal"
 )
 
 func NewStaticcheck(settings *config.StaticCheckSettings) *goanalysis.Linter {
-	cfg := staticCheckConfig(settings)
-	analyzers := setupStaticCheckAnalyzers(staticcheck.Analyzers, getGoVersion(settings), cfg.Checks)
+	cfg := internal.StaticCheckConfig(settings)
+	analyzers := internal.SetupStaticCheckAnalyzers(staticcheck.Analyzers, internal.GetGoVersion(settings), cfg.Checks)
 
 	return goanalysis.NewLinter(
 		"staticcheck",

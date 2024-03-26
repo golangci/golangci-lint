@@ -14,7 +14,8 @@ import (
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/config"
-	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
+	"github.com/golangci/golangci-lint/pkg/goanalysis"
+	"github.com/golangci/golangci-lint/pkg/golinters/internal"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 )
 
@@ -48,7 +49,7 @@ func NewGci(settings *config.GciSettings) *goanalysis.Linter {
 		var err error
 		cfg, err = rawCfg.Parse()
 		if err != nil {
-			linterLogger.Fatalf("gci: configuration parsing: %v", err)
+			internal.LinterLogger.Fatalf("gci: configuration parsing: %v", err)
 		}
 	}
 
@@ -82,7 +83,7 @@ func NewGci(settings *config.GciSettings) *goanalysis.Linter {
 }
 
 func runGci(pass *analysis.Pass, lintCtx *linter.Context, cfg *gcicfg.Config, lock *sync.Mutex) ([]goanalysis.Issue, error) {
-	fileNames := getFileNames(pass)
+	fileNames := internal.GetFileNames(pass)
 
 	var diffs []string
 	err := diffFormattedFilesToArray(fileNames, *cfg, &diffs, lock)
@@ -97,7 +98,7 @@ func runGci(pass *analysis.Pass, lintCtx *linter.Context, cfg *gcicfg.Config, lo
 			continue
 		}
 
-		is, err := extractIssuesFromPatch(diff, lintCtx, gciName)
+		is, err := internal.ExtractIssuesFromPatch(diff, lintCtx, gciName, getIssuedTextGci)
 		if err != nil {
 			return nil, fmt.Errorf("can't extract issues from gci diff output %s: %w", diff, err)
 		}
@@ -129,27 +130,27 @@ func diffFormattedFilesToArray(paths []string, cfg gcicfg.Config, diffs *[]strin
 	})
 }
 
-func getErrorTextForGci(settings config.GciSettings) string {
+func getIssuedTextGci(settings *config.LintersSettings) string {
 	text := "File is not `gci`-ed"
 
-	hasOptions := settings.SkipGenerated || len(settings.Sections) > 0
+	hasOptions := settings.Gci.SkipGenerated || len(settings.Gci.Sections) > 0
 	if !hasOptions {
 		return text
 	}
 
 	text += " with"
 
-	if settings.SkipGenerated {
+	if settings.Gci.SkipGenerated {
 		text += " --skip-generated"
 	}
 
-	if len(settings.Sections) > 0 {
-		for _, section := range settings.Sections {
+	if len(settings.Gci.Sections) > 0 {
+		for _, section := range settings.Gci.Sections {
 			text += " -s " + section
 		}
 	}
 
-	if settings.CustomOrder {
+	if settings.Gci.CustomOrder {
 		text += " --custom-order"
 	}
 

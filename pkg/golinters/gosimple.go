@@ -4,13 +4,14 @@ import (
 	"honnef.co/go/tools/simple"
 
 	"github.com/golangci/golangci-lint/pkg/config"
-	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
+	"github.com/golangci/golangci-lint/pkg/goanalysis"
+	"github.com/golangci/golangci-lint/pkg/golinters/internal"
 )
 
 func NewGosimple(settings *config.StaticCheckSettings) *goanalysis.Linter {
-	cfg := staticCheckConfig(settings)
+	cfg := internal.StaticCheckConfig(settings)
 
-	analyzers := setupStaticCheckAnalyzers(simple.Analyzers, getGoVersion(settings), cfg.Checks)
+	analyzers := internal.SetupStaticCheckAnalyzers(simple.Analyzers, internal.GetGoVersion(settings), cfg.Checks)
 
 	return goanalysis.NewLinter(
 		"gosimple",

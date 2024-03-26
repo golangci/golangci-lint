@@ -9,7 +9,8 @@ import (
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/config"
-	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
+	"github.com/golangci/golangci-lint/pkg/goanalysis"
+	"github.com/golangci/golangci-lint/pkg/golinters/internal"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
@@ -70,7 +71,7 @@ func runGocognit(pass *analysis.Pass, settings *config.GocognitSettings) []goana
 		issues = append(issues, goanalysis.NewIssue(&result.Issue{
 			Pos: s.Pos,
 			Text: fmt.Sprintf("cognitive complexity %d of func %s is high (> %d)",
-				s.Complexity, formatCode(s.FuncName, nil), settings.MinComplexity),
+				s.Complexity, internal.FormatCode(s.FuncName, nil), settings.MinComplexity),
 			FromLinter: gocognitName,
 		}, pass))
 	}

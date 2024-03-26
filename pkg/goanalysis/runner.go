@@ -23,7 +23,7 @@ import (
 
 	"github.com/golangci/golangci-lint/internal/errorutil"
 	"github.com/golangci/golangci-lint/internal/pkgcache"
-	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis/load"
+	"github.com/golangci/golangci-lint/pkg/goanalysis/load"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/timeutils"
 )

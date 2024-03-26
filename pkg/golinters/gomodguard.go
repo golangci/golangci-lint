@@ -7,7 +7,8 @@ import (
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/config"
-	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
+	"github.com/golangci/golangci-lint/pkg/goanalysis"
+	"github.com/golangci/golangci-lint/pkg/golinters/internal"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
@@ -73,7 +74,7 @@ func NewGomodguard(settings *config.GoModGuardSettings) *goanalysis.Linter {
 		}
 
 		analyzer.Run = func(pass *analysis.Pass) (any, error) {
-			gomodguardIssues := processor.ProcessFiles(getFileNames(pass))
+			gomodguardIssues := processor.ProcessFiles(internal.GetFileNames(pass))
 
 			mu.Lock()
 			defer mu.Unlock()

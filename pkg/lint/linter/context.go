@@ -8,7 +8,7 @@ import (
 	"github.com/golangci/golangci-lint/internal/pkgcache"
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/fsutils"
-	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis/load"
+	"github.com/golangci/golangci-lint/pkg/goanalysis/load"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 )
 

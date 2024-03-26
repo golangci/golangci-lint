@@ -16,7 +16,8 @@ import (
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/fsutils"
-	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
+	"github.com/golangci/golangci-lint/pkg/goanalysis"
+	"github.com/golangci/golangci-lint/pkg/golinters/internal"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
@@ -94,7 +95,7 @@ func runErrCheck(lintCtx *linter.Context, pass *analysis.Pass, checker *errcheck
 				code = err.FuncName
 			}
 
-			text = fmt.Sprintf("Error return value of %s is not checked", formatCode(code, lintCtx.Cfg))
+			text = fmt.Sprintf("Error return value of %s is not checked", internal.FormatCode(code, lintCtx.Cfg))
 		}
 
 		issues[i] = goanalysis.NewIssue(

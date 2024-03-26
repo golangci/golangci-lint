@@ -1,4 +1,4 @@
-package golinters
+package internal
 
 import (
 	"strings"
@@ -14,7 +14,7 @@ import (
 
 var debugf = logutils.Debug(logutils.DebugKeyMegacheck)
 
-func getGoVersion(settings *config.StaticCheckSettings) string {
+func GetGoVersion(settings *config.StaticCheckSettings) string {
 	var goVersion string
 	if settings != nil {
 		goVersion = settings.GoVersion
@@ -27,7 +27,7 @@ func getGoVersion(settings *config.StaticCheckSettings) string {
 	return "1.17"
 }
 
-func setupStaticCheckAnalyzers(src []*lint.Analyzer, goVersion string, checks []string) []*analysis.Analyzer {
+func SetupStaticCheckAnalyzers(src []*lint.Analyzer, goVersion string, checks []string) []*analysis.Analyzer {
 	var names []string
 	for _, a := range src {
 		names = append(names, a.Analyzer.Name)
@@ -38,7 +38,7 @@ func setupStaticCheckAnalyzers(src []*lint.Analyzer, goVersion string, checks []
 	var ret []*analysis.Analyzer
 	for _, a := range src {
 		if filter[a.Analyzer.Name] {
-			setAnalyzerGoVersion(a.Analyzer, goVersion)
+			SetAnalyzerGoVersion(a.Analyzer, goVersion)
 			ret = append(ret, a.Analyzer)
 		}
 	}
@@ -46,7 +46,7 @@ func setupStaticCheckAnalyzers(src []*lint.Analyzer, goVersion string, checks []
 	return ret
 }
 
-func setAnalyzerGoVersion(a *analysis.Analyzer, goVersion string) {
+func SetAnalyzerGoVersion(a *analysis.Analyzer, goVersion string) {
 	if v := a.Flags.Lookup("go"); v != nil {
 		if err := v.Value.Set(goVersion); err != nil {
 			debugf("Failed to set go version: %s", err)
@@ -54,7 +54,7 @@ func setAnalyzerGoVersion(a *analysis.Analyzer, goVersion string) {
 	}
 }
 
-func staticCheckConfig(settings *config.StaticCheckSettings) *scconfig.Config {
+func StaticCheckConfig(settings *config.StaticCheckSettings) *scconfig.Config {
 	var cfg *scconfig.Config
 
 	if settings == nil || !settings.HasConfiguration() {

@@ -10,7 +10,8 @@ import (
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/fsutils"
-	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
+	"github.com/golangci/golangci-lint/pkg/goanalysis"
+	"github.com/golangci/golangci-lint/pkg/golinters/internal"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
@@ -53,7 +54,7 @@ func NewDupl(settings *config.DuplSettings) *goanalysis.Linter {
 }
 
 func runDupl(pass *analysis.Pass, settings *config.DuplSettings) ([]goanalysis.Issue, error) {
-	fileNames := getFileNames(pass)
+	fileNames := internal.GetFileNames(pass)
 
 	issues, err := duplAPI.Run(fileNames, settings.Threshold)
 	if err != nil {
@@ -75,7 +76,7 @@ func runDupl(pass *analysis.Pass, settings *config.DuplSettings) ([]goanalysis.I
 		dupl := fmt.Sprintf("%s:%d-%d", toFilename, i.To.LineStart(), i.To.LineEnd())
 		text := fmt.Sprintf("%d-%d lines are duplicate of %s",
 			i.From.LineStart(), i.From.LineEnd(),
-			formatCode(dupl, nil))
+			internal.FormatCode(dupl, nil))
 
 		res = append(res, goanalysis.NewIssue(&result.Issue{
 			Pos: token.Position{

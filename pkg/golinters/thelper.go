@@ -8,7 +8,8 @@ import (
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/config"
-	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
+	"github.com/golangci/golangci-lint/pkg/goanalysis"
+	"github.com/golangci/golangci-lint/pkg/golinters/internal"
 )
 
 func NewThelper(cfg *config.ThelperSettings) *goanalysis.Linter {
@@ -40,7 +41,7 @@ func NewThelper(cfg *config.ThelperSettings) *goanalysis.Linter {
 	}
 
 	if len(opts) == 0 {
-		linterLogger.Fatalf("thelper: at least one option must be enabled")
+		internal.LinterLogger.Fatalf("thelper: at least one option must be enabled")
 	}
 
 	args := maps.Keys(opts)

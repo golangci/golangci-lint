@@ -9,7 +9,8 @@ import (
 	"golang.org/x/tools/imports"
 
 	"github.com/golangci/golangci-lint/pkg/config"
-	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
+	"github.com/golangci/golangci-lint/pkg/goanalysis"
+	"github.com/golangci/golangci-lint/pkg/golinters/internal"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 )
 
@@ -56,7 +57,7 @@ func NewGoimports(settings *config.GoImportsSettings) *goanalysis.Linter {
 }
 
 func runGoImports(lintCtx *linter.Context, pass *analysis.Pass) ([]goanalysis.Issue, error) {
-	fileNames := getFileNames(pass)
+	fileNames := internal.GetFileNames(pass)
 
 	var issues []goanalysis.Issue
 
@@ -69,7 +70,7 @@ func runGoImports(lintCtx *linter.Context, pass *analysis.Pass) ([]goanalysis.Is
 			continue
 		}
 
-		is, err := extractIssuesFromPatch(string(diff), lintCtx, goimportsName)
+		is, err := internal.ExtractIssuesFromPatch(string(diff), lintCtx, goimportsName, getIssuedTextGoImports)
 		if err != nil {
 			return nil, fmt.Errorf("can't extract issues from gofmt diff output %q: %w", string(diff), err)
 		}
@@ -80,4 +81,14 @@ func runGoImports(lintCtx *linter.Context, pass *analysis.Pass) ([]goanalysis.Is
 	}
 
 	return issues, nil
+}
+
+func getIssuedTextGoImports(settings *config.LintersSettings) string {
+	text := "File is not `goimports`-ed"
+
+	if settings.Goimports.LocalPrefixes != "" {
+		text += " with -local " + settings.Goimports.LocalPrefixes
+	}
+
+	return text
 }

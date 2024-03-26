@@ -15,7 +15,7 @@ import (
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/exitcodes"
-	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis/load"
+	"github.com/golangci/golangci-lint/pkg/goanalysis/load"
 	"github.com/golangci/golangci-lint/pkg/goutil"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/logutils"

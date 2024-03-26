@@ -8,7 +8,8 @@ import (
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/config"
-	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
+	"github.com/golangci/golangci-lint/pkg/goanalysis"
+	"github.com/golangci/golangci-lint/pkg/golinters/internal"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 )
 
@@ -53,7 +54,7 @@ func NewGofmt(settings *config.GoFmtSettings) *goanalysis.Linter {
 }
 
 func runGofmt(lintCtx *linter.Context, pass *analysis.Pass, settings *config.GoFmtSettings) ([]goanalysis.Issue, error) {
-	fileNames := getFileNames(pass)
+	fileNames := internal.GetFileNames(pass)
 
 	var rewriteRules []gofmtAPI.RewriteRule
 	for _, rule := range settings.RewriteRules {
@@ -71,7 +72,7 @@ func runGofmt(lintCtx *linter.Context, pass *analysis.Pass, settings *config.GoF
 			continue
 		}
 
-		is, err := extractIssuesFromPatch(string(diff), lintCtx, gofmtName)
+		is, err := internal.ExtractIssuesFromPatch(string(diff), lintCtx, gofmtName, getIssuedTextGoFmt)
 		if err != nil {
 			return nil, fmt.Errorf("can't extract issues from gofmt diff output %q: %w", string(diff), err)
 		}
@@ -82,4 +83,16 @@ func runGofmt(lintCtx *linter.Context, pass *analysis.Pass, settings *config.GoF
 	}
 
 	return issues, nil
+}
+
+func getIssuedTextGoFmt(settings *config.LintersSettings) string {
+	text := "File is not `gofmt`-ed"
+	if settings.Gofmt.Simplify {
+		text += " with `-s`"
+	}
+	for _, rule := range settings.Gofmt.RewriteRules {
+		text += fmt.Sprintf(" `-r '%s -> %s'`", rule.Pattern, rule.Replacement)
+	}
+
+	return text
 }

@@ -52,7 +52,7 @@ import (
 	"golang.org/x/tools/go/analysis/passes/unusedwrite"
 
 	"github.com/golangci/golangci-lint/pkg/config"
-	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
+	"github.com/golangci/golangci-lint/pkg/goanalysis"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 )
 

@@ -12,7 +12,8 @@ import (
 	"mvdan.cc/gofumpt/format"
 
 	"github.com/golangci/golangci-lint/pkg/config"
-	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
+	"github.com/golangci/golangci-lint/pkg/goanalysis"
+	"github.com/golangci/golangci-lint/pkg/golinters/internal"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 )
 
@@ -72,7 +73,7 @@ func NewGofumpt(settings *config.GofumptSettings) *goanalysis.Linter {
 }
 
 func runGofumpt(lintCtx *linter.Context, pass *analysis.Pass, diff differ, options format.Options) ([]goanalysis.Issue, error) {
-	fileNames := getFileNames(pass)
+	fileNames := internal.GetFileNames(pass)
 
 	var issues []goanalysis.Issue
 
@@ -96,7 +97,7 @@ func runGofumpt(lintCtx *linter.Context, pass *analysis.Pass, diff differ, optio
 			}
 
 			diff := out.String()
-			is, err := extractIssuesFromPatch(diff, lintCtx, gofumptName)
+			is, err := internal.ExtractIssuesFromPatch(diff, lintCtx, gofumptName, getIssuedTextGoFumpt)
 			if err != nil {
 				return nil, fmt.Errorf("can't extract issues from gofumpt diff output %q: %w", diff, err)
 			}
@@ -116,4 +117,14 @@ func getLangVersion(settings *config.GofumptSettings) string {
 		return "1.15"
 	}
 	return settings.LangVersion
+}
+
+func getIssuedTextGoFumpt(settings *config.LintersSettings) string {
+	text := "File is not `gofumpt`-ed"
+
+	if settings.Gofumpt.ExtraRules {
+		text += " with `-extra`"
+	}
+
+	return text
 }
