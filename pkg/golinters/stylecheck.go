@@ -6,7 +6,7 @@ import (
 	"honnef.co/go/tools/stylecheck"
 
 	"github.com/golangci/golangci-lint/pkg/config"
-	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
+	"github.com/golangci/golangci-lint/pkg/goanalysis"
 	"github.com/golangci/golangci-lint/pkg/golinters/internal"
 )
 

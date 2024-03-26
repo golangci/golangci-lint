@@ -4,7 +4,7 @@ import (
 	"github.com/maratori/testableexamples/pkg/testableexamples"
 	"golang.org/x/tools/go/analysis"
 
-	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
+	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
 func NewTestableexamples() *goanalysis.Linter {

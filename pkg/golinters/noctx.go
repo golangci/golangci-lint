@@ -4,7 +4,7 @@ import (
 	"github.com/sonatard/noctx"
 	"golang.org/x/tools/go/analysis"
 
-	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
+	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
 func NewNoctx() *goanalysis.Linter {

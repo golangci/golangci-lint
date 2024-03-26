@@ -4,7 +4,7 @@ import (
 	"github.com/ryanrolds/sqlclosecheck/pkg/analyzer"
 	"golang.org/x/tools/go/analysis"
 
-	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
+	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
 func NewSQLCloseCheck() *goanalysis.Linter {
