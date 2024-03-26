@@ -353,6 +353,7 @@
     ],
     "originalURL": "https://github.com/daixiang0/gci",
     "internal": false,
+    "canAutoFix": true,
     "isSlow": false,
     "since": "v1.30.0"
   },
@@ -449,6 +450,7 @@
     ],
     "originalURL": "https://github.com/go-critic/go-critic",
     "internal": false,
+    "canAutoFix": true,
     "isSlow": true,
     "since": "v1.12.0"
   },
@@ -539,6 +541,7 @@
     ],
     "originalURL": "https://github.com/denis-tingaikin/go-header",
     "internal": false,
+    "canAutoFix": true,
     "isSlow": false,
     "since": "v1.28.0"
   },
@@ -877,6 +880,7 @@
     ],
     "originalURL": "https://github.com/butuzov/mirror",
     "internal": false,
+    "canAutoFix": true,
     "isSlow": true,
     "since": "v1.53.0"
   },
@@ -1500,6 +1504,7 @@
     ],
     "originalURL": "https://github.com/golangci/golangci-lint/blob/master/pkg/golinters/nolintlint/README.md",
     "internal": false,
+    "canAutoFix": true,
     "isSlow": false,
     "since": "v1.26.0"
   }
