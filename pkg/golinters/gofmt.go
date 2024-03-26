@@ -71,7 +71,7 @@ func runGofmt(lintCtx *linter.Context, pass *analysis.Pass, settings *config.GoF
 			continue
 		}
 
-		is, err := extractIssuesFromPatch(string(diff), lintCtx, gofmtName, getIssuedTextGoFmt)
+		is, err := ExtractIssuesFromPatch(string(diff), lintCtx, gofmtName, getIssuedTextGoFmt)
 		if err != nil {
 			return nil, fmt.Errorf("can't extract issues from gofmt diff output %q: %w", string(diff), err)
 		}

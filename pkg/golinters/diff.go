@@ -219,7 +219,7 @@ func (p *hunkChangesParser) parse(h *diffpkg.Hunk) []Change {
 	return p.ret
 }
 
-func extractIssuesFromPatch(patch string, lintCtx *linter.Context, linterName string, formatter fmtTextFormatter) ([]result.Issue, error) {
+func ExtractIssuesFromPatch(patch string, lintCtx *linter.Context, linterName string, formatter fmtTextFormatter) ([]result.Issue, error) {
 	diffs, err := diffpkg.ParseMultiFileDiff([]byte(patch))
 	if err != nil {
 		return nil, fmt.Errorf("can't parse patch: %w", err)

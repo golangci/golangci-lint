@@ -97,7 +97,7 @@ func runGci(pass *analysis.Pass, lintCtx *linter.Context, cfg *gcicfg.Config, lo
 			continue
 		}
 
-		is, err := extractIssuesFromPatch(diff, lintCtx, gciName, getIssuedTextGci)
+		is, err := ExtractIssuesFromPatch(diff, lintCtx, gciName, getIssuedTextGci)
 		if err != nil {
 			return nil, fmt.Errorf("can't extract issues from gci diff output %s: %w", diff, err)
 		}

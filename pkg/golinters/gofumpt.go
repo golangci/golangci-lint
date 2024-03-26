@@ -96,7 +96,7 @@ func runGofumpt(lintCtx *linter.Context, pass *analysis.Pass, diff differ, optio
 			}
 
 			diff := out.String()
-			is, err := extractIssuesFromPatch(diff, lintCtx, gofumptName, getIssuedTextGoFumpt)
+			is, err := ExtractIssuesFromPatch(diff, lintCtx, gofumptName, getIssuedTextGoFumpt)
 			if err != nil {
 				return nil, fmt.Errorf("can't extract issues from gofumpt diff output %q: %w", diff, err)
 			}
