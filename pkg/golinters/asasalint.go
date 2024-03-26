@@ -6,6 +6,7 @@ import (
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
+	"github.com/golangci/golangci-lint/pkg/golinters/internal"
 )
 
 func NewAsasalint(setting *config.AsasalintSettings) *goanalysis.Linter {
@@ -18,7 +19,7 @@ func NewAsasalint(setting *config.AsasalintSettings) *goanalysis.Linter {
 
 	a, err := asasalint.NewAnalyzer(cfg)
 	if err != nil {
-		linterLogger.Fatalf("asasalint: create analyzer: %v", err)
+		internal.LinterLogger.Fatalf("asasalint: create analyzer: %v", err)
 	}
 
 	return goanalysis.NewLinter(

@@ -6,6 +6,7 @@ import (
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/golinters/goanalysis"
+	"github.com/golangci/golangci-lint/pkg/golinters/internal"
 )
 
 func NewExhaustruct(settings *config.ExhaustructSettings) *goanalysis.Linter {
@@ -17,7 +18,7 @@ func NewExhaustruct(settings *config.ExhaustructSettings) *goanalysis.Linter {
 
 	a, err := analyzer.NewAnalyzer(include, exclude)
 	if err != nil {
-		linterLogger.Fatalf("exhaustruct configuration: %v", err)
+		internal.LinterLogger.Fatalf("exhaustruct configuration: %v", err)
 	}
 
 	return goanalysis.NewLinter(
