@@ -186,7 +186,7 @@ issues:
     - path: pkg/golinters/gofumpt.go
       linters: [staticcheck]
       text: "SA1019: settings.LangVersion is deprecated: use the global `run.go` instead."
-    - path: pkg/golinters/staticcheck_common.go
+    - path: pkg/golinters/internal/staticcheck_common.go
       linters: [staticcheck]
       text: "SA1019: settings.GoVersion is deprecated: use the global `run.go` instead."
     - path: pkg/lint/lintersdb/manager.go
