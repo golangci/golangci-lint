@@ -1020,7 +1020,21 @@
               "description": "Section configuration to compare against.",
               "type": "array",
               "items": {
-                "type": "string"
+                "anyOf": [
+                  {
+                    "enum": [
+                      "standard",
+                      "default",
+                      "blank",
+                      "dot",
+                      "alias",
+                      "localmodule"
+                    ]
+                  },
+                  {
+                    "type": "string"
+                  }
+                ]
               },
               "default": ["standard", "default"]
             },
