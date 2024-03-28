@@ -252,10 +252,11 @@ func (b LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithPresets(linter.PresetStyle, linter.PresetComment).
 			WithURL("https://github.com/matoous/godox"),
 
-		linter.NewConfig(golinters.NewGoerr113()).
+		linter.NewConfig(golinters.NewErr113()).
 			WithSince("v1.26.0").
 			WithPresets(linter.PresetStyle, linter.PresetError).
 			WithLoadForGoAnalysis().
+			WithAlternativeNames("goerr113").
 			WithURL("https://github.com/Djarvur/go-err113"),
 
 		linter.NewConfig(golinters.NewGofmt(&cfg.LintersSettings.Gofmt)).

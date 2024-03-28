@@ -7,11 +7,13 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func NewGoerr113() *goanalysis.Linter {
+func NewErr113() *goanalysis.Linter {
+	a := err113.NewAnalyzer()
+
 	return goanalysis.NewLinter(
-		"goerr113",
+		a.Name,
 		"Go linter to check the errors handling expressions",
-		[]*analysis.Analyzer{err113.NewAnalyzer()},
+		[]*analysis.Analyzer{a},
 		nil,
 	).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }
