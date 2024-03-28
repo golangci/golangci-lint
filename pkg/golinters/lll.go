@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"go/token"
 	"os"
+	"regexp"
 	"strings"
 	"sync"
 	"unicode/utf8"
@@ -90,6 +91,8 @@ func getLLLIssuesForFile(filename string, maxLineLen int, tabSpaces string) ([]r
 	lineNumber := 0
 	multiImportEnabled := false
 
+	urlComment := regexp.MustCompile(`\s*//\s*http(s)?://[^ ]+$`)
+
 	scanner := bufio.NewScanner(f)
 	for scanner.Scan() {
 		lineNumber++
@@ -98,6 +101,10 @@ func getLLLIssuesForFile(filename string, maxLineLen int, tabSpaces string) ([]r
 		line = strings.ReplaceAll(line, "\t", tabSpaces)
 
 		if strings.HasPrefix(line, goCommentDirectivePrefix) {
+			continue
+		}
+
+		if urlComment.MatchString(line) {
 			continue
 		}
 
