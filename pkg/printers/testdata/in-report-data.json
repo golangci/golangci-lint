@@ -155,7 +155,7 @@
         "Name": "golint"
       },
       {
-        "Name": "gomnd",
+        "Name": "mnd",
         "Enabled": true
       },
       {

@@ -290,9 +290,15 @@ func (b LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithURL("https://github.com/golang/lint").
 			Deprecated("The repository of the linter has been archived by the owner.", "v1.41.0", "revive"),
 
+		linter.NewConfig(golinters.NewMND(&cfg.LintersSettings.Mnd)).
+			WithSince("v1.22.0").
+			WithPresets(linter.PresetStyle).
+			WithURL("https://github.com/tommy-muehle/go-mnd"),
+
 		linter.NewConfig(golinters.NewGoMND(&cfg.LintersSettings.Gomnd)).
 			WithSince("v1.22.0").
 			WithPresets(linter.PresetStyle).
+			Deprecated("The linter has been renamed.", "v1.58.0", "mnd").
 			WithURL("https://github.com/tommy-muehle/go-mnd"),
 
 		linter.NewConfig(golinters.NewGoModDirectives(&cfg.LintersSettings.GoModDirectives)).
