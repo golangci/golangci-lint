@@ -195,3 +195,5 @@ require (
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
+
+replace github.com/leonklingele/grouper v1.1.1 => github.com/alexandear/grouper v1.1.2
