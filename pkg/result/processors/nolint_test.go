@@ -11,7 +11,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/golangci/golangci-lint/pkg/config"
-	"github.com/golangci/golangci-lint/pkg/golinters"
+	"github.com/golangci/golangci-lint/pkg/golinters/nolintlint"
 	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
@@ -301,7 +301,7 @@ func TestNolintUnused(t *testing.T) {
 			Filename: fileName,
 			Line:     3,
 		},
-		FromLinter:           golinters.NoLintLintName,
+		FromLinter:           nolintlint.Name,
 		ExpectNoLint:         true,
 		ExpectedNoLintLinter: "varcheck",
 	}
@@ -312,7 +312,7 @@ func TestNolintUnused(t *testing.T) {
 			Filename: fileName,
 			Line:     5,
 		},
-		FromLinter:           golinters.NoLintLintName,
+		FromLinter:           nolintlint.Name,
 		ExpectNoLint:         true,
 		ExpectedNoLintLinter: "varcheck",
 	}

@@ -1,4 +1,4 @@
-package nolintlint
+package internal
 
 import (
 	"go/parser"

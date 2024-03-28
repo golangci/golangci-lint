@@ -3,6 +3,7 @@ package lintersdb
 import (
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/golinters"
+	"github.com/golangci/golangci-lint/pkg/golinters/nolintlint"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 )
 
@@ -720,7 +721,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithURL("https://github.com/ykadowak/zerologlint"),
 
 		// nolintlint must be last because it looks at the results of all the previous linters for unused nolint directives
-		linter.NewConfig(golinters.NewNoLintLint(&cfg.LintersSettings.NoLintLint)).
+		linter.NewConfig(nolintlint.New(&cfg.LintersSettings.NoLintLint)).
 			WithSince("v1.26.0").
 			WithPresets(linter.PresetStyle).
 			WithAutoFix().
