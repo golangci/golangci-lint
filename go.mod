@@ -31,7 +31,7 @@ require (
 	github.com/charithe/durationcheck v0.0.10
 	github.com/ckaznocha/intrange v0.1.1
 	github.com/curioswitch/go-reassign v0.2.0
-	github.com/daixiang0/gci v0.12.3
+	github.com/daixiang0/gci v0.13.3
 	github.com/denis-tingaikin/go-header v0.5.0
 	github.com/fatih/color v1.16.0
 	github.com/firefart/nonamedreturns v1.0.4
@@ -44,6 +44,7 @@ require (
 	github.com/golangci/dupl v0.0.0-20180902072040-3e9179ac440a
 	github.com/golangci/gofmt v0.0.0-20231018234816-f50ced29576e
 	github.com/golangci/misspell v0.4.1
+	github.com/golangci/modinfo v0.3.4
 	github.com/golangci/plugin-module-register v0.1.1
 	github.com/golangci/revgrep v0.5.2
 	github.com/golangci/unconvert v0.0.0-20240309020433-c5143eacb3ed
