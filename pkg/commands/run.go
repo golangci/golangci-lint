@@ -147,12 +147,12 @@ func newRunCommand(logger logutils.Log, info BuildInfo) *runCommand {
 	return c
 }
 
-func (c *runCommand) persistentPreRunE(cmd *cobra.Command, _ []string) error {
+func (c *runCommand) persistentPreRunE(cmd *cobra.Command, args []string) error {
 	if err := c.startTracing(); err != nil {
 		return err
 	}
 
-	loader := config.NewLoader(c.log.Child(logutils.DebugKeyConfigReader), c.viper, cmd.Flags(), c.opts.LoaderOptions, c.cfg)
+	loader := config.NewLoader(c.log.Child(logutils.DebugKeyConfigReader), c.viper, cmd.Flags(), c.opts.LoaderOptions, c.cfg, args)
 
 	if err := loader.Load(); err != nil {
 		return fmt.Errorf("can't load config: %w", err)
