@@ -58,7 +58,7 @@ func newLintersCommand(logger logutils.Log) *lintersCommand {
 	return c
 }
 
-func (c *lintersCommand) preRunE(cmd *cobra.Command, _ []string) error {
+func (c *lintersCommand) preRunE(cmd *cobra.Command, args []string) error {
 	// Hack to hide deprecation messages related to `--skip-dirs-use-default`:
 	// Flags are not bound then the default values, defined only through flags, are not applied.
 	// In this command, linters information are the only requirements, i.e. it don't need flag values.
@@ -66,7 +66,7 @@ func (c *lintersCommand) preRunE(cmd *cobra.Command, _ []string) error {
 	// TODO(ldez) add an option (check deprecation) to `Loader.Load()` but this require a dedicated PR.
 	c.cfg.Run.UseDefaultSkipDirs = true
 
-	loader := config.NewLoader(c.log.Child(logutils.DebugKeyConfigReader), c.viper, cmd.Flags(), c.opts.LoaderOptions, c.cfg)
+	loader := config.NewLoader(c.log.Child(logutils.DebugKeyConfigReader), c.viper, cmd.Flags(), c.opts.LoaderOptions, c.cfg, args)
 
 	if err := loader.Load(); err != nil {
 		return fmt.Errorf("can't load config: %w", err)

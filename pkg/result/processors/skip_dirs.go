@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"path/filepath"
 	"regexp"
-	"strings"
 
 	"github.com/golangci/golangci-lint/pkg/fsutils"
 	"github.com/golangci/golangci-lint/pkg/logutils"
@@ -27,9 +26,7 @@ type SkipDirs struct {
 
 var _ Processor = (*SkipDirs)(nil)
 
-const goFileSuffix = ".go"
-
-func NewSkipDirs(patterns []string, log logutils.Log, runArgs []string, pathPrefix string) (*SkipDirs, error) {
+func NewSkipDirs(patterns []string, log logutils.Log, args []string, pathPrefix string) (*SkipDirs, error) {
 	var patternsRe []*regexp.Regexp
 	for _, p := range patterns {
 		p = fsutils.NormalizePathInRegex(p)
@@ -40,21 +37,9 @@ func NewSkipDirs(patterns []string, log logutils.Log, runArgs []string, pathPref
 		patternsRe = append(patternsRe, patternRe)
 	}
 
-	if len(runArgs) == 0 {
-		runArgs = append(runArgs, "./...")
-	}
-	var absArgsDirs []string
-	for _, arg := range runArgs {
-		base := filepath.Base(arg)
-		if base == "..." || strings.HasSuffix(base, goFileSuffix) {
-			arg = filepath.Dir(arg)
-		}
-
-		absArg, err := filepath.Abs(arg)
-		if err != nil {
-			return nil, fmt.Errorf("failed to abs-ify arg %q: %w", arg, err)
-		}
-		absArgsDirs = append(absArgsDirs, absArg)
+	absArgsDirs, err := absDirs(args)
+	if err != nil {
+		return nil, err
 	}
 
 	return &SkipDirs{
@@ -143,4 +128,27 @@ func (p *SkipDirs) Finish() {
 	for dir, stat := range p.skippedDirs {
 		p.log.Infof("Skipped %d issues from dir %s by pattern %s", stat.count, dir, stat.pattern)
 	}
+}
+
+func absDirs(args []string) ([]string, error) {
+	if len(args) == 0 {
+		args = append(args, "./...")
+	}
+
+	var absArgsDirs []string
+	for _, arg := range args {
+		base := filepath.Base(arg)
+		if base == "..." || isGoFile(base) {
+			arg = filepath.Dir(arg)
+		}
+
+		absArg, err := filepath.Abs(arg)
+		if err != nil {
+			return nil, fmt.Errorf("failed to abs-ify arg %q: %w", arg, err)
+		}
+
+		absArgsDirs = append(absArgsDirs, absArg)
+	}
+
+	return absArgsDirs, nil
 }

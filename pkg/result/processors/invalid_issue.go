@@ -50,3 +50,7 @@ func (p InvalidIssue) shouldPassIssue(issue *result.Issue) (bool, error) {
 
 	return true, nil
 }
+
+func isGoFile(name string) bool {
+	return filepath.Ext(name) == ".go"
+}

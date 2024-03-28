@@ -6,7 +6,6 @@ import (
 	"os"
 	"path/filepath"
 	"slices"
-	"strings"
 
 	"github.com/go-viper/mapstructure/v2"
 	"github.com/mitchellh/go-homedir"
@@ -33,16 +32,18 @@ type Loader struct {
 
 	log logutils.Log
 
-	cfg *Config
+	cfg  *Config
+	args []string
 }
 
-func NewLoader(log logutils.Log, v *viper.Viper, fs *pflag.FlagSet, opts LoaderOptions, cfg *Config) *Loader {
+func NewLoader(log logutils.Log, v *viper.Viper, fs *pflag.FlagSet, opts LoaderOptions, cfg *Config, args []string) *Loader {
 	return &Loader{
 		opts:  opts,
 		viper: v,
 		fs:    fs,
 		log:   log,
 		cfg:   cfg,
+		args:  args,
 	}
 }
 
@@ -116,50 +117,59 @@ func (l *Loader) evaluateOptions() (string, error) {
 }
 
 func (l *Loader) setupConfigFileSearch() {
-	firstArg := extractFirstPathArg()
+	l.viper.SetConfigName(".golangci")
 
-	absStartPath, err := filepath.Abs(firstArg)
-	if err != nil {
-		l.log.Warnf("Can't make abs path for %q: %s", firstArg, err)
-		absStartPath = filepath.Clean(firstArg)
-	}
-
-	// start from it
-	var curDir string
-	if fsutils.IsDir(absStartPath) {
-		curDir = absStartPath
-	} else {
-		curDir = filepath.Dir(absStartPath)
-	}
-
-	// find all dirs from it up to the root
-	configSearchPaths := []string{"./"}
-
-	for {
-		configSearchPaths = append(configSearchPaths, curDir)
-
-		newCurDir := filepath.Dir(curDir)
-		if curDir == newCurDir || newCurDir == "" {
-			break
-		}
-
-		curDir = newCurDir
-	}
-
-	// find home directory for global config
-	if home, err := homedir.Dir(); err != nil {
-		l.log.Warnf("Can't get user's home directory: %s", err.Error())
-	} else if !slices.Contains(configSearchPaths, home) {
-		configSearchPaths = append(configSearchPaths, home)
-	}
+	configSearchPaths := l.getConfigSearchPaths()
 
 	l.log.Infof("Config search paths: %s", configSearchPaths)
-
-	l.viper.SetConfigName(".golangci")
 
 	for _, p := range configSearchPaths {
 		l.viper.AddConfigPath(p)
 	}
+}
+
+func (l *Loader) getConfigSearchPaths() []string {
+	firstArg := "./..."
+	if len(l.args) > 0 {
+		firstArg = l.args[0]
+	}
+
+	absPath, err := filepath.Abs(firstArg)
+	if err != nil {
+		l.log.Warnf("Can't make abs path for %q: %s", firstArg, err)
+		absPath = filepath.Clean(firstArg)
+	}
+
+	// start from it
+	var currentDir string
+	if fsutils.IsDir(absPath) {
+		currentDir = absPath
+	} else {
+		currentDir = filepath.Dir(absPath)
+	}
+
+	// find all dirs from it up to the root
+	searchPaths := []string{"./"}
+
+	for {
+		searchPaths = append(searchPaths, currentDir)
+
+		parent := filepath.Dir(currentDir)
+		if currentDir == parent || parent == "" {
+			break
+		}
+
+		currentDir = parent
+	}
+
+	// find home directory for global config
+	if home, err := homedir.Dir(); err != nil {
+		l.log.Warnf("Can't get user's home directory: %v", err)
+	} else if !slices.Contains(searchPaths, home) {
+		searchPaths = append(searchPaths, home)
+	}
+
+	return searchPaths
 }
 
 func (l *Loader) parseConfig() error {
@@ -415,29 +425,4 @@ func customDecoderHook() viper.DecoderConfigOption {
 		// Needed for forbidigo, and output.formats.
 		mapstructure.TextUnmarshallerHookFunc(),
 	))
-}
-
-func extractFirstPathArg() string {
-	args := os.Args
-
-	// skip all args ([golangci-lint, run/linters]) before files/dirs list
-	for len(args) != 0 {
-		if args[0] == "run" {
-			args = args[1:]
-			break
-		}
-
-		args = args[1:]
-	}
-
-	// find first file/dir arg
-	firstArg := "./..."
-	for _, arg := range args {
-		if !strings.HasPrefix(arg, "-") {
-			firstArg = arg
-			break
-		}
-	}
-
-	return firstArg
 }

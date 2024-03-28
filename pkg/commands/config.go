@@ -77,7 +77,7 @@ func newConfigCommand(log logutils.Log, info BuildInfo) *configCommand {
 	return c
 }
 
-func (c *configCommand) preRunE(cmd *cobra.Command, _ []string) error {
+func (c *configCommand) preRunE(cmd *cobra.Command, args []string) error {
 	// The command doesn't depend on the real configuration.
 	// It only needs to know the path of the configuration file.
 	cfg := config.NewDefault()
@@ -89,7 +89,7 @@ func (c *configCommand) preRunE(cmd *cobra.Command, _ []string) error {
 	// TODO(ldez) add an option (check deprecation) to `Loader.Load()` but this require a dedicated PR.
 	cfg.Run.UseDefaultSkipDirs = true
 
-	loader := config.NewLoader(c.log.Child(logutils.DebugKeyConfigReader), c.viper, cmd.Flags(), c.opts, cfg)
+	loader := config.NewLoader(c.log.Child(logutils.DebugKeyConfigReader), c.viper, cmd.Flags(), c.opts, cfg, args)
 
 	if err := loader.Load(); err != nil {
 		return fmt.Errorf("can't load config: %w", err)
