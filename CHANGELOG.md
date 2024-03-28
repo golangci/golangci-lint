@@ -2,6 +2,23 @@ Follow the news and releases on [Mastodon](https://fosstodon.org/@golangcilint) 
 
 There is the most valuable changes log:
 
+### v1.57.2
+
+1. Updated linters
+   * `contextcheck`: from 1.1.4 to 1.1.5
+   * `copyloopvar`: from 1.0.8 to 1.0.10
+   * `ginkgolinter`: from 0.16.1 to 0.16.2
+   * `goconst`: from 1.7.0 to 1.7.1
+   * `gomoddirectives`: from 0.2.3 to 0.2.4
+   * `intrange`: from 0.1.0 to 0.1.1
+2. Misc.
+   * fix: display warnings on deprecated linter options
+   * fix: missing `colored-tab` output format
+   * fix: TeamCity `inspectionType` service message
+3. Documentation
+   * Remove invalid example about mixing files and directory
+   * Improve linters page
+
 ### v1.57.1
 
 1. Fixes:
