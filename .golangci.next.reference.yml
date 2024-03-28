@@ -2608,6 +2608,7 @@ linters:
     - typecheck
     - unconvert
     - unparam
+    - untypedconst
     - unused
     - usestdlibvars
     - varnamelen
@@ -2721,6 +2722,7 @@ linters:
     - typecheck
     - unconvert
     - unparam
+    - untypedconst
     - unused
     - usestdlibvars
     - varnamelen

@@ -649,6 +649,11 @@ func (b LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/mvdan/unparam"),
 
+		linter.NewConfig(golinters.NewUntypedConst()).
+			WithSince("v1.58.0").
+			WithPresets(linter.PresetBugs).
+			WithURL("https://github.com/jiftechnify/untypedconst"),
+
 		linter.NewConfig(golinters.NewUnused(&cfg.LintersSettings.Unused, &cfg.LintersSettings.Staticcheck)).
 			WithEnabledByDefault().
 			WithSince("v1.20.0").
