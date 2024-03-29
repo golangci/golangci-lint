@@ -252,6 +252,7 @@ func Test_shouldPassIssue_error(t *testing.T) {
 
 			pass, err := p.shouldPassIssue(test.issue)
 
+			//nolint:testifylint // It's a loop and the main expectation is the error message.
 			assert.EqualError(t, err, test.expected)
 			assert.False(t, pass)
 		})

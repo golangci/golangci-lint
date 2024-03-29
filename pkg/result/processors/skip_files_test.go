@@ -49,6 +49,6 @@ func TestSkipFiles(t *testing.T) {
 
 func TestSkipFilesInvalidPattern(t *testing.T) {
 	p, err := NewSkipFiles([]string{"\\o"}, "")
-	assert.Error(t, err)
+	require.Error(t, err)
 	assert.Nil(t, p)
 }
