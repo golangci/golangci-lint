@@ -6,7 +6,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-var _ Processor = Exclude{}
+var _ Processor = (*Exclude)(nil)
 
 type Exclude struct {
 	name string
@@ -49,4 +49,4 @@ func (p Exclude) Process(issues []result.Issue) ([]result.Issue, error) {
 	}), nil
 }
 
-func (p Exclude) Finish() {}
+func (Exclude) Finish() {}

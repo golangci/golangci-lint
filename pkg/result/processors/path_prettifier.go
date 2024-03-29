@@ -8,23 +8,22 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
+var _ Processor = (*PathPrettifier)(nil)
+
 type PathPrettifier struct {
 	root string
 }
-
-var _ Processor = PathPrettifier{}
 
 func NewPathPrettifier() *PathPrettifier {
 	root, err := fsutils.Getwd()
 	if err != nil {
 		panic(fmt.Sprintf("Can't get working dir: %s", err))
 	}
-	return &PathPrettifier{
-		root: root,
-	}
+
+	return &PathPrettifier{root: root}
 }
 
-func (p PathPrettifier) Name() string {
+func (PathPrettifier) Name() string {
 	return "path_prettifier"
 }
 
@@ -45,4 +44,4 @@ func (p PathPrettifier) Process(issues []result.Issue) ([]result.Issue, error) {
 	}), nil
 }
 
-func (p PathPrettifier) Finish() {}
+func (PathPrettifier) Finish() {}

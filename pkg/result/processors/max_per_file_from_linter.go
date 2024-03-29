@@ -5,17 +5,12 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-type (
-	linterToCountMap       map[string]int
-	fileToLinterToCountMap map[string]linterToCountMap
-)
+var _ Processor = (*MaxPerFileFromLinter)(nil)
 
 type MaxPerFileFromLinter struct {
-	flc                        fileToLinterToCountMap
+	fileLinterCounter          fileLinterCounter
 	maxPerFileFromLinterConfig map[string]int
 }
-
-var _ Processor = &MaxPerFileFromLinter{}
 
 func NewMaxPerFileFromLinter(cfg *config.Config) *MaxPerFileFromLinter {
 	maxPerFileFromLinterConfig := map[string]int{}
@@ -28,12 +23,12 @@ func NewMaxPerFileFromLinter(cfg *config.Config) *MaxPerFileFromLinter {
 	}
 
 	return &MaxPerFileFromLinter{
-		flc:                        fileToLinterToCountMap{},
+		fileLinterCounter:          fileLinterCounter{},
 		maxPerFileFromLinterConfig: maxPerFileFromLinterConfig,
 	}
 }
 
-func (p *MaxPerFileFromLinter) Name() string {
+func (*MaxPerFileFromLinter) Name() string {
 	return "max_per_file_from_linter"
 }
 
@@ -44,18 +39,35 @@ func (p *MaxPerFileFromLinter) Process(issues []result.Issue) ([]result.Issue, e
 			return true
 		}
 
-		lm := p.flc[issue.FilePath()]
-		if lm == nil {
-			p.flc[issue.FilePath()] = linterToCountMap{}
-		}
-		count := p.flc[issue.FilePath()][issue.FromLinter]
-		if count >= limit {
+		if p.fileLinterCounter.GetCount(issue) >= limit {
 			return false
 		}
 
-		p.flc[issue.FilePath()][issue.FromLinter]++
+		p.fileLinterCounter.Increment(issue)
+
 		return true
 	}), nil
 }
 
-func (p *MaxPerFileFromLinter) Finish() {}
+func (*MaxPerFileFromLinter) Finish() {}
+
+type fileLinterCounter map[string]map[string]int
+
+func (f fileLinterCounter) GetCount(issue *result.Issue) int {
+	return f.getCounter(issue)[issue.FromLinter]
+}
+
+func (f fileLinterCounter) Increment(issue *result.Issue) {
+	f.getCounter(issue)[issue.FromLinter]++
+}
+
+func (f fileLinterCounter) getCounter(issue *result.Issue) map[string]int {
+	lc := f[issue.FilePath()]
+
+	if lc == nil {
+		lc = map[string]int{}
+		f[issue.FilePath()] = lc
+	}
+
+	return lc
+}

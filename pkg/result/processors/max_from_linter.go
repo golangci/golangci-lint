@@ -6,25 +6,25 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-type MaxFromLinter struct {
-	lc    linterToCountMap
-	limit int
-	log   logutils.Log
-	cfg   *config.Config
-}
+var _ Processor = (*MaxFromLinter)(nil)
 
-var _ Processor = &MaxFromLinter{}
+type MaxFromLinter struct {
+	linterCounter map[string]int
+	limit         int
+	log           logutils.Log
+	cfg           *config.Config
+}
 
 func NewMaxFromLinter(limit int, log logutils.Log, cfg *config.Config) *MaxFromLinter {
 	return &MaxFromLinter{
-		lc:    linterToCountMap{},
-		limit: limit,
-		log:   log,
-		cfg:   cfg,
+		linterCounter: map[string]int{},
+		limit:         limit,
+		log:           log,
+		cfg:           cfg,
 	}
 }
 
-func (p *MaxFromLinter) Name() string {
+func (*MaxFromLinter) Name() string {
 	return "max_from_linter"
 }
 
@@ -39,13 +39,14 @@ func (p *MaxFromLinter) Process(issues []result.Issue) ([]result.Issue, error) {
 			return true
 		}
 
-		p.lc[issue.FromLinter]++ // always inc for stat
-		return p.lc[issue.FromLinter] <= p.limit
+		p.linterCounter[issue.FromLinter]++ // always inc for stat
+
+		return p.linterCounter[issue.FromLinter] <= p.limit
 	}), nil
 }
 
 func (p *MaxFromLinter) Finish() {
-	walkStringToIntMapSortedByValue(p.lc, func(linter string, count int) {
+	walkStringToIntMapSortedByValue(p.linterCounter, func(linter string, count int) {
 		if count > p.limit {
 			p.log.Infof("%d/%d issues from linter %s were hidden, use --max-issues-per-linter",
 				count-p.limit, count, linter)

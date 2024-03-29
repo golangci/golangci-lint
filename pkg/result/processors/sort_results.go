@@ -45,23 +45,26 @@ func NewSortResults(cfg *config.Config) *SortResults {
 	}
 }
 
+func (SortResults) Name() string { return "sort_results" }
+
 // Process is performing sorting of the result issues.
-func (sr SortResults) Process(issues []result.Issue) ([]result.Issue, error) {
-	if !sr.cfg.SortResults {
+func (p SortResults) Process(issues []result.Issue) ([]result.Issue, error) {
+	if !p.cfg.SortResults {
 		return issues, nil
 	}
 
-	if len(sr.cfg.SortOrder) == 0 {
-		sr.cfg.SortOrder = []string{orderNameFile}
+	if len(p.cfg.SortOrder) == 0 {
+		p.cfg.SortOrder = []string{orderNameFile}
 	}
 
 	var cmps []*comparator
-	for _, name := range sr.cfg.SortOrder {
-		if c, ok := sr.cmps[name]; ok {
-			cmps = append(cmps, c)
-		} else {
+	for _, name := range p.cfg.SortOrder {
+		c, ok := p.cmps[name]
+		if !ok {
 			return nil, fmt.Errorf("unsupported sort-order name %q", name)
 		}
+
+		cmps = append(cmps, c)
 	}
 
 	cmp, err := mergeComparators(cmps)
@@ -76,9 +79,7 @@ func (sr SortResults) Process(issues []result.Issue) ([]result.Issue, error) {
 	return issues, nil
 }
 
-func (sr SortResults) Name() string { return "sort_results" }
-
-func (sr SortResults) Finish() {}
+func (SortResults) Finish() {}
 
 type compareResult int
 

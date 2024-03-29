@@ -8,7 +8,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-var _ Processor = ExcludeRules{}
+var _ Processor = (*ExcludeRules)(nil)
 
 type excludeRule struct {
 	baseRule
@@ -50,10 +50,13 @@ func NewExcludeRules(log logutils.Log, files *fsutils.Files, opts ExcludeRulesOp
 	return p
 }
 
+func (p ExcludeRules) Name() string { return p.name }
+
 func (p ExcludeRules) Process(issues []result.Issue) ([]result.Issue, error) {
 	if len(p.rules) == 0 {
 		return issues, nil
 	}
+
 	return filterIssues(issues, func(issue *result.Issue) bool {
 		for _, rule := range p.rules {
 			rule := rule
@@ -61,11 +64,10 @@ func (p ExcludeRules) Process(issues []result.Issue) ([]result.Issue, error) {
 				return false
 			}
 		}
+
 		return true
 	}), nil
 }
-
-func (p ExcludeRules) Name() string { return p.name }
 
 func (ExcludeRules) Finish() {}
 

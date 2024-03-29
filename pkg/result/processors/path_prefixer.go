@@ -5,12 +5,12 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
+var _ Processor = (*PathPrefixer)(nil)
+
 // PathPrefixer adds a customizable prefix to every output path
 type PathPrefixer struct {
 	prefix string
 }
-
-var _ Processor = new(PathPrefixer)
 
 // NewPathPrefixer returns a new path prefixer for the provided string
 func NewPathPrefixer(prefix string) *PathPrefixer {

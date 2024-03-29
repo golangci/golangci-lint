@@ -10,6 +10,8 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
+var _ Processor = (*SkipDirs)(nil)
+
 type skipStat struct {
 	pattern string
 	count   int
@@ -23,8 +25,6 @@ type SkipDirs struct {
 	skippedDirsCache map[string]bool
 	pathPrefix       string
 }
-
-var _ Processor = (*SkipDirs)(nil)
 
 func NewSkipDirs(patterns []string, log logutils.Log, args []string, pathPrefix string) (*SkipDirs, error) {
 	var patternsRe []*regexp.Regexp
@@ -52,7 +52,7 @@ func NewSkipDirs(patterns []string, log logutils.Log, args []string, pathPrefix 
 	}, nil
 }
 
-func (p *SkipDirs) Name() string {
+func (*SkipDirs) Name() string {
 	return "skip_dirs"
 }
 
@@ -62,6 +62,12 @@ func (p *SkipDirs) Process(issues []result.Issue) ([]result.Issue, error) {
 	}
 
 	return filterIssues(issues, p.shouldPassIssue), nil
+}
+
+func (p *SkipDirs) Finish() {
+	for dir, stat := range p.skippedDirs {
+		p.log.Infof("Skipped %d issues from dir %s by pattern %s", stat.count, dir, stat.pattern)
+	}
 }
 
 func (p *SkipDirs) shouldPassIssue(issue *result.Issue) bool {
@@ -122,12 +128,6 @@ func (p *SkipDirs) shouldPassIssueDirs(issueRelDir, issueAbsDir string) bool {
 	}
 
 	return true
-}
-
-func (p *SkipDirs) Finish() {
-	for dir, stat := range p.skippedDirs {
-		p.log.Infof("Skipped %d issues from dir %s by pattern %s", stat.count, dir, stat.pattern)
-	}
 }
 
 func absDirs(args []string) ([]string, error) {

@@ -10,7 +10,7 @@ import (
 
 const severityFromLinter = "@linter"
 
-var _ Processor = &Severity{}
+var _ Processor = (*Severity)(nil)
 
 type severityRule struct {
 	baseRule
@@ -58,6 +58,8 @@ func NewSeverity(log logutils.Log, files *fsutils.Files, opts SeverityOptions) *
 	return p
 }
 
+func (p *Severity) Name() string { return p.name }
+
 func (p *Severity) Process(issues []result.Issue) ([]result.Issue, error) {
 	if len(p.rules) == 0 && p.defaultSeverity == "" {
 		return issues, nil
@@ -65,6 +67,8 @@ func (p *Severity) Process(issues []result.Issue) ([]result.Issue, error) {
 
 	return transformIssues(issues, p.transform), nil
 }
+
+func (*Severity) Finish() {}
 
 func (p *Severity) transform(issue *result.Issue) *result.Issue {
 	for _, rule := range p.rules {
@@ -88,10 +92,6 @@ func (p *Severity) transform(issue *result.Issue) *result.Issue {
 
 	return issue
 }
-
-func (p *Severity) Name() string { return p.name }
-
-func (*Severity) Finish() {}
 
 func createSeverityRules(rules []SeverityRule, prefix string) []severityRule {
 	parsedRules := make([]severityRule, 0, len(rules))
