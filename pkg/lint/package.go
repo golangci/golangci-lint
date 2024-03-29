@@ -105,7 +105,7 @@ func (l *PackageLoader) loadPackages(ctx context.Context, loadMode packages.Load
 	return l.filterTestMainPackages(pkgs), nil
 }
 
-func (l *PackageLoader) parseLoadedPackagesErrors(pkgs []*packages.Package) error {
+func (*PackageLoader) parseLoadedPackagesErrors(pkgs []*packages.Package) error {
 	for _, pkg := range pkgs {
 		var errs []packages.Error
 		for _, err := range pkg.Errors {
