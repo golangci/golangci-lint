@@ -29,7 +29,7 @@ func Test_appendExtraWords(t *testing.T) {
 
 	expected := []string{"iff", "if", "cancelation", "cancellation"}
 
-	assert.Equal(t, replacer.Replacements, expected)
+	assert.Equal(t, expected, replacer.Replacements)
 }
 
 func Test_appendExtraWords_error(t *testing.T) {

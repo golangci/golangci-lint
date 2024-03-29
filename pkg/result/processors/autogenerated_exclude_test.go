@@ -252,7 +252,7 @@ func Test_shouldPassIssue_error(t *testing.T) {
 
 			pass, err := p.shouldPassIssue(test.issue)
 
-			assert.EqualError(t, err, test.expected)
+			require.EqualError(t, err, test.expected)
 			assert.False(t, pass)
 		})
 	}

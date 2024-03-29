@@ -133,6 +133,7 @@ linters:
     - revive
     - staticcheck
     - stylecheck
+    - testifylint
     - unconvert
     - unparam
     - unused
@@ -213,4 +214,3 @@ issues:
 
 run:
   timeout: 5m
-
