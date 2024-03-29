@@ -99,6 +99,7 @@ linters-settings:
       - name: unexported-return
         disabled: true
       - name: unused-parameter
+      - name: unused-receiver
 
 linters:
   disable-all: true

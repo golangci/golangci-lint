@@ -62,7 +62,7 @@ func (v Validator) validateLintersNames(cfg *config.Linters) error {
 	return nil
 }
 
-func (v Validator) validatePresets(cfg *config.Linters) error {
+func (Validator) validatePresets(cfg *config.Linters) error {
 	presets := AllPresets()
 
 	for _, p := range cfg.Presets {

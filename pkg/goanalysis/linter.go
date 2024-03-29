@@ -102,7 +102,7 @@ func (lnt *Linter) allAnalyzerNames() []string {
 	return ret
 }
 
-func (lnt *Linter) configureAnalyzer(a *analysis.Analyzer, cfg map[string]any) error {
+func (*Linter) configureAnalyzer(a *analysis.Analyzer, cfg map[string]any) error {
 	for k, v := range cfg {
 		f := a.Flags.Lookup(k)
 		if f == nil {

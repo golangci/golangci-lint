@@ -50,7 +50,7 @@ func newCacheCommand() *cacheCommand {
 	return c
 }
 
-func (c *cacheCommand) executeClean(_ *cobra.Command, _ []string) error {
+func (*cacheCommand) executeClean(_ *cobra.Command, _ []string) error {
 	cacheDir := cache.DefaultDir()
 
 	if err := os.RemoveAll(cacheDir); err != nil {
@@ -60,7 +60,7 @@ func (c *cacheCommand) executeClean(_ *cobra.Command, _ []string) error {
 	return nil
 }
 
-func (c *cacheCommand) executeStatus(_ *cobra.Command, _ []string) {
+func (*cacheCommand) executeStatus(_ *cobra.Command, _ []string) {
 	cacheDir := cache.DefaultDir()
 	_, _ = fmt.Fprintf(logutils.StdOut, "Dir: %s\n", cacheDir)
 
