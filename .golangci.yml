@@ -163,27 +163,27 @@ issues:
       text: "SA1019: c.cfg.Run.ShowStats is deprecated: use Output.ShowStats instead."
 
     # Deprecated linter options.
-    - path: pkg/golinters/errcheck.go
+    - path: pkg/golinters/errcheck/errcheck.go
       linters: [staticcheck]
       text: "SA1019: errCfg.Exclude is deprecated: use ExcludeFunctions instead"
-    - path: pkg/golinters/govet.go
+    - path: pkg/golinters/govet/govet.go
       linters: [staticcheck]
       text: "SA1019: cfg.CheckShadowing is deprecated: the linter should be enabled inside Enable."
-    - path: pkg/golinters/godot.go
+    - path: pkg/golinters/godot/godot.go
       linters: [staticcheck]
       text: "SA1019: settings.CheckAll is deprecated: use Scope instead"
-    - path: pkg/golinters/gci.go
+    - path: pkg/golinters/gci/gci.go
       linters: [staticcheck]
       text: "SA1019: settings.LocalPrefixes is deprecated: use Sections instead."
-    - path: pkg/golinters/mnd.go
+    - path: pkg/golinters/mnd/mnd.go
       linters: [staticcheck]
       text: "SA1019: settings.Settings is deprecated: use root level settings instead."
-    - path: pkg/golinters/mnd.go
+    - path: pkg/golinters/mnd/mnd.go
       linters: [staticcheck]
       text: "SA1019: config.GoMndSettings is deprecated: use MndSettings."
 
     # Related to `run.go`, it cannot be removed.
-    - path: pkg/golinters/gofumpt.go
+    - path: pkg/golinters/gofumpt/gofumpt.go
       linters: [staticcheck]
       text: "SA1019: settings.LangVersion is deprecated: use the global `run.go` instead."
     - path: pkg/golinters/internal/staticcheck_common.go
@@ -194,7 +194,7 @@ issues:
       text: "SA1019: (.+).(GoVersion|LangVersion) is deprecated: use the global `run.go` instead."
 
     # Based on existing code, the modifications should be limited to make maintenance easier.
-    - path: pkg/golinters/unused.go
+    - path: pkg/golinters/unused/unused.go
       linters: [gocritic]
       text: "rangeValCopy: each iteration copies 160 bytes \\(consider pointers or indexing\\)"
 
