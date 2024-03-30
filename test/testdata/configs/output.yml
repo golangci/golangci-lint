@@ -1,0 +1,6 @@
+linters-settings:
+  misspell:
+    locale: US
+    ignore-words:
+      - langauge
+      - Dialogue
