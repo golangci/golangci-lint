@@ -18,12 +18,8 @@ import (
 	"github.com/golangci/golangci-lint/pkg/logutils"
 )
 
-const (
-	// value: "1"
-	envKeepTempFiles = "GL_KEEP_TEMP_FILES"
-	// value: "true"
-	envGolangciLintInstalled = "GOLANGCI_LINT_INSTALLED"
-)
+// value: "1"
+const envKeepTempFiles = "GL_KEEP_TEMP_FILES"
 
 type RunnerBuilder struct {
 	tb  testing.TB
@@ -336,49 +332,4 @@ func (r *RunnerResult) ExpectHasIssue(issueText string) *RunnerResult {
 	r.tb.Helper()
 
 	return r.ExpectExitCode(exitcodes.IssuesFound).ExpectOutputContains(issueText)
-}
-
-func InstallGolangciLint(tb testing.TB) string {
-	tb.Helper()
-
-	parentPath := findMakeFile(tb)
-
-	if os.Getenv(envGolangciLintInstalled) != "true" {
-		cmd := exec.Command("make", "-C", parentPath, "build")
-
-		output, err := cmd.CombinedOutput()
-		if err != nil {
-			tb.Log(string(output))
-		}
-
-		require.NoError(tb, err, "Can't go install golangci-lint %s", string(output))
-	}
-
-	abs, err := filepath.Abs(filepath.Join(parentPath, binaryName))
-	require.NoError(tb, err)
-
-	return abs
-}
-
-func findMakeFile(tb testing.TB) string {
-	tb.Helper()
-
-	wd, _ := os.Getwd()
-
-	for wd != "/" {
-		_, err := os.Stat(filepath.Join(wd, "Makefile"))
-		if err != nil {
-			wd = filepath.Dir(wd)
-			continue
-		}
-
-		break
-	}
-
-	here, _ := os.Getwd()
-
-	rel, err := filepath.Rel(here, wd)
-	require.NoError(tb, err)
-
-	return rel
 }

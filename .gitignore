@@ -3,6 +3,7 @@
 /*.pdf
 /*.pprof
 /*.txt
+/test.lock
 /.idea/
 /.vscode/
 /dist/
