@@ -26,6 +26,7 @@ type LoaderOptions struct {
 
 type LoadOptions struct {
 	CheckDeprecation bool
+	Validation       bool
 }
 
 type Loader struct {
@@ -76,6 +77,13 @@ func (l *Loader) Load(opts LoadOptions) error {
 	err = l.handleEnableOnlyOption()
 	if err != nil {
 		return err
+	}
+
+	if opts.Validation {
+		err = l.cfg.Validate()
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil

@@ -22,11 +22,6 @@ func NewValidator(m *Manager) *Validator {
 // Validate validates the configuration by calling all other validators for different
 // sections in the configuration and then some additional linter validation functions.
 func (v Validator) Validate(cfg *config.Config) error {
-	err := cfg.Validate()
-	if err != nil {
-		return err
-	}
-
 	validators := []func(cfg *config.Linters) error{
 		v.validateLintersNames,
 		v.validatePresets,
