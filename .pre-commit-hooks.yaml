@@ -14,3 +14,10 @@
   language: golang
   require_serial: true
   pass_filenames: false
+- id: golangci-lint-config-verify
+  name: golangci-lint-config-verify
+  description: Verifies the configuration file
+  entry: golangci-lint config verify
+  files: '\.golangci\.(?:yml|yaml|toml|json)'
+  language: golang
+  pass_filenames: false
