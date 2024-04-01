@@ -1,5 +1,5 @@
 //golangcitest:args -Enestif
-//golangcitest:config_path testdata/configs/nestif.yml
+//golangcitest:config_path testdata/nestif.yml
 package testdata
 
 func _() {

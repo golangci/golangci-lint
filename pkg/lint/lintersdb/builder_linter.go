@@ -69,6 +69,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/mnd"
 	"github.com/golangci/golangci-lint/pkg/golinters/musttag"
 	"github.com/golangci/golangci-lint/pkg/golinters/nakedret"
+	"github.com/golangci/golangci-lint/pkg/golinters/nestif"
 	"github.com/golangci/golangci-lint/pkg/golinters/nolintlint"
 	"github.com/golangci/golangci-lint/pkg/golinters/protogetter"
 	"github.com/golangci/golangci-lint/pkg/golinters/spancheck"
@@ -527,7 +528,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/alexkohler/nakedret"),
 
-		linter.NewConfig(golinters.NewNestif(&cfg.LintersSettings.Nestif)).
+		linter.NewConfig(nestif.New(&cfg.LintersSettings.Nestif)).
 			WithSince("v1.25.0").
 			WithPresets(linter.PresetComplexity).
 			WithURL("https://github.com/nakabonne/nestif"),
