@@ -1,4 +1,4 @@
-package golinters
+package reassign
 
 import (
 	"fmt"
@@ -11,7 +11,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func NewReassign(settings *config.ReassignSettings) *goanalysis.Linter {
+func New(settings *config.ReassignSettings) *goanalysis.Linter {
 	a := reassign.NewAnalyzer()
 
 	var cfg map[string]map[string]any

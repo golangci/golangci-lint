@@ -83,6 +83,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/predeclared"
 	"github.com/golangci/golangci-lint/pkg/golinters/promlinter"
 	"github.com/golangci/golangci-lint/pkg/golinters/protogetter"
+	"github.com/golangci/golangci-lint/pkg/golinters/reassign"
 	"github.com/golangci/golangci-lint/pkg/golinters/spancheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/tagalign"
 	"github.com/golangci/golangci-lint/pkg/golinters/whitespace"
@@ -618,7 +619,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithAutoFix().
 			WithURL("https://github.com/ghostiam/protogetter"),
 
-		linter.NewConfig(golinters.NewReassign(&cfg.LintersSettings.Reassign)).
+		linter.NewConfig(reassign.New(&cfg.LintersSettings.Reassign)).
 			WithSince("1.49.0").
 			WithPresets(linter.PresetBugs).
 			WithLoadForGoAnalysis().

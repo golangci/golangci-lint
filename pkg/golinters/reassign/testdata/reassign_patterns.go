@@ -1,5 +1,5 @@
 //golangcitest:args -Ereassign
-//golangcitest:config_path testdata/configs/reassign_patterns.yml
+//golangcitest:config_path testdata/reassign_patterns.yml
 package testdata
 
 import (
