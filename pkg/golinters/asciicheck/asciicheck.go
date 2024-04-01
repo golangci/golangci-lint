@@ -1,4 +1,4 @@
-package golinters
+package asciicheck
 
 import (
 	"github.com/tdakkota/asciicheck"
@@ -7,7 +7,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func NewAsciicheck() *goanalysis.Linter {
+func New() *goanalysis.Linter {
 	a := asciicheck.NewAnalyzer()
 
 	return goanalysis.NewLinter(
