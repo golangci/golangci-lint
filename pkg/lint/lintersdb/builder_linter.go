@@ -20,6 +20,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/err113"
 	"github.com/golangci/golangci-lint/pkg/golinters/errcheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/errchkjson"
+	"github.com/golangci/golangci-lint/pkg/golinters/errname"
 	"github.com/golangci/golangci-lint/pkg/golinters/gci"
 	"github.com/golangci/golangci-lint/pkg/golinters/ginkgolinter"
 	"github.com/golangci/golangci-lint/pkg/golinters/gocritic"
@@ -159,7 +160,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/breml/errchkjson"),
 
-		linter.NewConfig(golinters.NewErrName()).
+		linter.NewConfig(errname.New()).
 			WithSince("v1.42.0").
 			WithPresets(linter.PresetStyle).
 			WithLoadForGoAnalysis().

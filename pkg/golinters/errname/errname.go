@@ -1,4 +1,4 @@
-package golinters
+package errname
 
 import (
 	"github.com/Antonboom/errname/pkg/analyzer"
@@ -7,7 +7,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func NewErrName() *goanalysis.Linter {
+func New() *goanalysis.Linter {
 	a := analyzer.New()
 
 	return goanalysis.NewLinter(
