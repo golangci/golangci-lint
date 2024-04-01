@@ -1,4 +1,4 @@
-package golinters
+package misspell
 
 import (
 	"testing"

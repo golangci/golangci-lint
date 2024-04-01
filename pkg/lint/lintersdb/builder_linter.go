@@ -14,6 +14,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/gomoddirectives"
 	"github.com/golangci/golangci-lint/pkg/golinters/loggercheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/mirror"
+	"github.com/golangci/golangci-lint/pkg/golinters/misspell"
 	"github.com/golangci/golangci-lint/pkg/golinters/mnd"
 	"github.com/golangci/golangci-lint/pkg/golinters/nolintlint"
 	"github.com/golangci/golangci-lint/pkg/golinters/protogetter"
@@ -454,7 +455,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithAutoFix().
 			WithURL("https://github.com/butuzov/mirror"),
 
-		linter.NewConfig(golinters.NewMisspell(&cfg.LintersSettings.Misspell)).
+		linter.NewConfig(misspell.New(&cfg.LintersSettings.Misspell)).
 			WithSince("v1.8.0").
 			WithPresets(linter.PresetStyle, linter.PresetComment).
 			WithAutoFix().
