@@ -96,6 +96,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/tenv"
 	"github.com/golangci/golangci-lint/pkg/golinters/testableexamples"
 	"github.com/golangci/golangci-lint/pkg/golinters/testifylint"
+	"github.com/golangci/golangci-lint/pkg/golinters/testpackage"
 	"github.com/golangci/golangci-lint/pkg/golinters/whitespace"
 	"github.com/golangci/golangci-lint/pkg/golinters/zerologlint"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
@@ -720,7 +721,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/Antonboom/testifylint"),
 
-		linter.NewConfig(golinters.NewTestpackage(&cfg.LintersSettings.Testpackage)).
+		linter.NewConfig(testpackage.New(&cfg.LintersSettings.Testpackage)).
 			WithSince("v1.25.0").
 			WithPresets(linter.PresetStyle, linter.PresetTest).
 			WithURL("https://github.com/maratori/testpackage"),

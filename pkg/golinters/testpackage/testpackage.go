@@ -1,4 +1,4 @@
-package golinters
+package testpackage
 
 import (
 	"strings"
@@ -10,7 +10,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func NewTestpackage(cfg *config.TestpackageSettings) *goanalysis.Linter {
+func New(cfg *config.TestpackageSettings) *goanalysis.Linter {
 	a := testpackage.NewAnalyzer()
 
 	var settings map[string]map[string]any
