@@ -1,4 +1,4 @@
-package golinters
+package tenv
 
 import (
 	"github.com/sivchari/tenv"
@@ -8,7 +8,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func NewTenv(settings *config.TenvSettings) *goanalysis.Linter {
+func New(settings *config.TenvSettings) *goanalysis.Linter {
 	a := tenv.Analyzer
 
 	var cfg map[string]map[string]any
