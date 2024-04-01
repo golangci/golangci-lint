@@ -53,6 +53,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/gosimple"
 	"github.com/golangci/golangci-lint/pkg/golinters/gosmopolitan"
 	"github.com/golangci/golangci-lint/pkg/golinters/govet"
+	"github.com/golangci/golangci-lint/pkg/golinters/grouper"
 	"github.com/golangci/golangci-lint/pkg/golinters/loggercheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/mirror"
 	"github.com/golangci/golangci-lint/pkg/golinters/misspell"
@@ -411,7 +412,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithAlternativeNames("vet", "vetshadow").
 			WithURL("https://pkg.go.dev/cmd/vet"),
 
-		linter.NewConfig(golinters.NewGrouper(&cfg.LintersSettings.Grouper)).
+		linter.NewConfig(grouper.New(&cfg.LintersSettings.Grouper)).
 			WithSince("v1.44.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/leonklingele/grouper"),

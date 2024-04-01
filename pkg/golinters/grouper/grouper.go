@@ -1,4 +1,4 @@
-package golinters
+package grouper
 
 import (
 	grouper "github.com/leonklingele/grouper/pkg/analyzer"
@@ -8,7 +8,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func NewGrouper(settings *config.GrouperSettings) *goanalysis.Linter {
+func New(settings *config.GrouperSettings) *goanalysis.Linter {
 	a := grouper.New()
 
 	linterCfg := map[string]map[string]any{}
