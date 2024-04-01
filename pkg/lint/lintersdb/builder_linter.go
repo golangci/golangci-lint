@@ -26,6 +26,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/exhaustive"
 	"github.com/golangci/golangci-lint/pkg/golinters/exhaustruct"
 	"github.com/golangci/golangci-lint/pkg/golinters/exportloopref"
+	"github.com/golangci/golangci-lint/pkg/golinters/fatcontext"
 	"github.com/golangci/golangci-lint/pkg/golinters/gci"
 	"github.com/golangci/golangci-lint/pkg/golinters/ginkgolinter"
 	"github.com/golangci/golangci-lint/pkg/golinters/gocritic"
@@ -223,7 +224,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/gostaticanalysis/forcetypeassert"),
 
-		linter.NewConfig(golinters.NewFatContext()).
+		linter.NewConfig(fatcontext.New()).
 			WithSince("1.58.0").
 			WithPresets(linter.PresetPerformance).
 			WithLoadForGoAnalysis().

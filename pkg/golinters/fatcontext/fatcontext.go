@@ -1,4 +1,4 @@
-package golinters
+package fatcontext
 
 import (
 	"github.com/Crocmagnon/fatcontext/pkg/analyzer"
@@ -7,7 +7,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func NewFatContext() *goanalysis.Linter {
+func New() *goanalysis.Linter {
 	a := analyzer.Analyzer
 
 	return goanalysis.NewLinter(
