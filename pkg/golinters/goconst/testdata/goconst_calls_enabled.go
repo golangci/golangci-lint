@@ -1,5 +1,5 @@
 //golangcitest:args -Egoconst
-//golangcitest:config_path testdata/configs/goconst_calls_enabled.yml
+//golangcitest:config_path testdata/goconst_calls_enabled.yml
 package testdata
 
 import "fmt"

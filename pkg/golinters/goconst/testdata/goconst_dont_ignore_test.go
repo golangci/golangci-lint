@@ -1,6 +1,5 @@
 //golangcitest:args -Egoconst
-//golangcitest:config_path testdata/configs/goconst_ignore.yml
-//golangcitest:expected_exitcode 0
+//golangcitest:config_path testdata/goconst_dont_ignore.yml
 package testdata
 
 import (
@@ -9,7 +8,7 @@ import (
 )
 
 func TestGoConstA(t *testing.T) {
-	a := "needconst"
+	a := "needconst" // want "string `needconst` has 5 occurrences, make it a constant"
 	fmt.Print(a)
 	b := "needconst"
 	fmt.Print(b)
@@ -27,7 +26,7 @@ func TestGoConstB(t *testing.T) {
 const AlreadyHasConst = "alreadyhasconst"
 
 func TestGoConstC(t *testing.T) {
-	a := "alreadyhasconst"
+	a := "alreadyhasconst" // want "string `alreadyhasconst` has 3 occurrences, but such constant `AlreadyHasConst` already exists"
 	fmt.Print(a)
 	b := "alreadyhasconst"
 	fmt.Print(b)

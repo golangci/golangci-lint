@@ -37,6 +37,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/gochecknoinits"
 	"github.com/golangci/golangci-lint/pkg/golinters/gochecksumtype"
 	"github.com/golangci/golangci-lint/pkg/golinters/gocognit"
+	"github.com/golangci/golangci-lint/pkg/golinters/goconst"
 	"github.com/golangci/golangci-lint/pkg/golinters/gocritic"
 	"github.com/golangci/golangci-lint/pkg/golinters/godot"
 	"github.com/golangci/golangci-lint/pkg/golinters/gofmt"
@@ -281,7 +282,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithPresets(linter.PresetComplexity).
 			WithURL("https://github.com/uudashr/gocognit"),
 
-		linter.NewConfig(golinters.NewGoconst(&cfg.LintersSettings.Goconst)).
+		linter.NewConfig(goconst.New(&cfg.LintersSettings.Goconst)).
 			WithSince("v1.0.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/jgautheron/goconst"),

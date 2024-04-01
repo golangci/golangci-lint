@@ -1,4 +1,4 @@
-package golinters
+package goconst
 
 import (
 	"fmt"
@@ -14,14 +14,14 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-const goconstName = "goconst"
+const name = "goconst"
 
-func NewGoconst(settings *config.GoConstSettings) *goanalysis.Linter {
+func New(settings *config.GoConstSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
 
 	analyzer := &analysis.Analyzer{
-		Name: goconstName,
+		Name: name,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 		Run: func(pass *analysis.Pass) (any, error) {
 			issues, err := runGoconst(pass, settings)
@@ -42,7 +42,7 @@ func NewGoconst(settings *config.GoConstSettings) *goanalysis.Linter {
 	}
 
 	return goanalysis.NewLinter(
-		goconstName,
+		name,
 		"Finds repeated strings that could be replaced by a constant",
 		[]*analysis.Analyzer{analyzer},
 		nil,
@@ -90,7 +90,7 @@ func runGoconst(pass *analysis.Pass, settings *config.GoConstSettings) ([]goanal
 		res = append(res, goanalysis.NewIssue(&result.Issue{
 			Pos:        i.Pos,
 			Text:       text,
-			FromLinter: goconstName,
+			FromLinter: name,
 		}, pass))
 	}
 
