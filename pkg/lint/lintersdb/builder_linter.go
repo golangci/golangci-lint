@@ -27,6 +27,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/exhaustruct"
 	"github.com/golangci/golangci-lint/pkg/golinters/exportloopref"
 	"github.com/golangci/golangci-lint/pkg/golinters/fatcontext"
+	"github.com/golangci/golangci-lint/pkg/golinters/forbidigo"
 	"github.com/golangci/golangci-lint/pkg/golinters/gci"
 	"github.com/golangci/golangci-lint/pkg/golinters/ginkgolinter"
 	"github.com/golangci/golangci-lint/pkg/golinters/gocritic"
@@ -209,7 +210,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/kyoh86/exportloopref"),
 
-		linter.NewConfig(golinters.NewForbidigo(&cfg.LintersSettings.Forbidigo)).
+		linter.NewConfig(forbidigo.New(&cfg.LintersSettings.Forbidigo)).
 			WithSince("v1.34.0").
 			WithPresets(linter.PresetStyle).
 			// Strictly speaking,

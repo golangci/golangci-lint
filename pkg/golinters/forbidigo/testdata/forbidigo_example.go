@@ -1,5 +1,5 @@
 //golangcitest:args -Eforbidigo
-//golangcitest:config_path testdata/configs/forbidigo.yml
+//golangcitest:config_path testdata/forbidigo.yml
 package testdata
 
 import (
