@@ -1,4 +1,4 @@
-package golinters
+package wastedassign
 
 import (
 	"github.com/sanposhiho/wastedassign/v2"
@@ -7,7 +7,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func NewWastedAssign() *goanalysis.Linter {
+func New() *goanalysis.Linter {
 	a := wastedassign.Analyzer
 
 	return goanalysis.NewLinter(
