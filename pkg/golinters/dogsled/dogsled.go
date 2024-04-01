@@ -1,4 +1,4 @@
-package golinters
+package dogsled
 
 import (
 	"fmt"
@@ -14,14 +14,14 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-const dogsledName = "dogsled"
+const name = "dogsled"
 
-func NewDogsled(settings *config.DogsledSettings) *goanalysis.Linter {
+func New(settings *config.DogsledSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
 
 	analyzer := &analysis.Analyzer{
-		Name: dogsledName,
+		Name: name,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 		Run: func(pass *analysis.Pass) (any, error) {
 			issues := runDogsled(pass, settings)
@@ -39,7 +39,7 @@ func NewDogsled(settings *config.DogsledSettings) *goanalysis.Linter {
 	}
 
 	return goanalysis.NewLinter(
-		dogsledName,
+		name,
 		"Checks assignments with too many blank identifiers (e.g. x, _, _, _, := f())",
 		[]*analysis.Analyzer{analyzer},
 		nil,
@@ -100,7 +100,7 @@ func (v *returnsVisitor) Visit(node ast.Node) ast.Visitor {
 
 		if numBlank > v.maxBlanks {
 			v.issues = append(v.issues, result.Issue{
-				FromLinter: dogsledName,
+				FromLinter: name,
 				Text:       fmt.Sprintf("declaration has %v blank identifiers", numBlank),
 				Pos:        v.f.Position(assgnStmt.Pos()),
 			})
