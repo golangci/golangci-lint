@@ -1,4 +1,4 @@
-package golinters
+package gochecknoglobals
 
 import (
 	"4d63.com/gochecknoglobals/checknoglobals"
@@ -7,7 +7,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func NewGochecknoglobals() *goanalysis.Linter {
+func New() *goanalysis.Linter {
 	a := checknoglobals.Analyzer()
 
 	// gochecknoglobals only lints test files if the `-t` flag is passed,
