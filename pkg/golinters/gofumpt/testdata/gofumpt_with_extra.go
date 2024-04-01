@@ -1,5 +1,5 @@
 //golangcitest:args -Egofumpt
-//golangcitest:config_path testdata/configs/gofumpt_with_extra.yml
+//golangcitest:config_path testdata/gofumpt_with_extra.yml
 package testdata
 
 import "fmt"

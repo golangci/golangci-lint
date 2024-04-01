@@ -1,5 +1,5 @@
 //golangcitest:args -Egofumpt
-//golangcitest:config_path testdata/configs/gofumpt-fix.yml
+//golangcitest:config_path testdata/gofumpt-fix.yml
 //golangcitest:expected_exitcode 0
 package p
 

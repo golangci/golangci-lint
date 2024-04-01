@@ -8,6 +8,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/gocritic"
 	"github.com/golangci/golangci-lint/pkg/golinters/godot"
 	"github.com/golangci/golangci-lint/pkg/golinters/gofmt"
+	"github.com/golangci/golangci-lint/pkg/golinters/gofumpt"
 	"github.com/golangci/golangci-lint/pkg/golinters/gomoddirectives"
 	"github.com/golangci/golangci-lint/pkg/golinters/loggercheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/mnd"
@@ -283,7 +284,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithAutoFix().
 			WithURL("https://pkg.go.dev/cmd/gofmt"),
 
-		linter.NewConfig(golinters.NewGofumpt(&cfg.LintersSettings.Gofumpt)).
+		linter.NewConfig(gofumpt.New(&cfg.LintersSettings.Gofumpt)).
 			WithSince("v1.28.0").
 			WithPresets(linter.PresetFormatting).
 			WithAutoFix().
