@@ -1,5 +1,5 @@
 //golangcitest:args -Egocyclo
-//golangcitest:config_path testdata/configs/gocyclo.yml
+//golangcitest:config_path testdata/gocyclo.yml
 package testdata
 
 import "net/http"

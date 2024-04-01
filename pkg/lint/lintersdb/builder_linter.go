@@ -39,6 +39,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/gocognit"
 	"github.com/golangci/golangci-lint/pkg/golinters/goconst"
 	"github.com/golangci/golangci-lint/pkg/golinters/gocritic"
+	"github.com/golangci/golangci-lint/pkg/golinters/gocyclo"
 	"github.com/golangci/golangci-lint/pkg/golinters/godot"
 	"github.com/golangci/golangci-lint/pkg/golinters/gofmt"
 	"github.com/golangci/golangci-lint/pkg/golinters/gofumpt"
@@ -294,7 +295,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithAutoFix().
 			WithURL("https://github.com/go-critic/go-critic"),
 
-		linter.NewConfig(golinters.NewGocyclo(&cfg.LintersSettings.Gocyclo)).
+		linter.NewConfig(gocyclo.New(&cfg.LintersSettings.Gocyclo)).
 			WithSince("v1.0.0").
 			WithPresets(linter.PresetComplexity).
 			WithURL("https://github.com/fzipp/gocyclo"),

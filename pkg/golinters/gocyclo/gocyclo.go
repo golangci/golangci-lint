@@ -1,4 +1,4 @@
-package golinters
+package gocyclo
 
 import (
 	"fmt"
@@ -14,14 +14,14 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-const gocycloName = "gocyclo"
+const name = "gocyclo"
 
-func NewGocyclo(settings *config.GoCycloSettings) *goanalysis.Linter {
+func New(settings *config.GoCycloSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
 
 	analyzer := &analysis.Analyzer{
-		Name: gocycloName,
+		Name: name,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 		Run: func(pass *analysis.Pass) (any, error) {
 			issues := runGoCyclo(pass, settings)
@@ -39,7 +39,7 @@ func NewGocyclo(settings *config.GoCycloSettings) *goanalysis.Linter {
 	}
 
 	return goanalysis.NewLinter(
-		gocycloName,
+		name,
 		"Computes and checks the cyclomatic complexity of functions",
 		[]*analysis.Analyzer{analyzer},
 		nil,
@@ -68,7 +68,7 @@ func runGoCyclo(pass *analysis.Pass, settings *config.GoCycloSettings) []goanaly
 		issues = append(issues, goanalysis.NewIssue(&result.Issue{
 			Pos:        s.Pos,
 			Text:       text,
-			FromLinter: gocycloName,
+			FromLinter: name,
 		}, pass))
 	}
 
