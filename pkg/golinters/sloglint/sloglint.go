@@ -1,4 +1,4 @@
-package golinters
+package sloglint
 
 import (
 	"go-simpler.org/sloglint"
@@ -8,7 +8,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func NewSlogLint(settings *config.SlogLintSettings) *goanalysis.Linter {
+func New(settings *config.SlogLintSettings) *goanalysis.Linter {
 	var opts *sloglint.Options
 	if settings != nil {
 		opts = &sloglint.Options{

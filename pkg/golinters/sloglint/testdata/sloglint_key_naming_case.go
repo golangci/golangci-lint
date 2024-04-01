@@ -1,7 +1,7 @@
 //go:build go1.21
 
 //golangcitest:args -Esloglint
-//golangcitest:config_path testdata/configs/sloglint_key_naming_case.yml
+//golangcitest:config_path testdata/sloglint_key_naming_case.yml
 package testdata
 
 import "log/slog"

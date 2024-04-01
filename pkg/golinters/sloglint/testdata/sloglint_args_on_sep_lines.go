@@ -1,7 +1,7 @@
 //go:build go1.21
 
 //golangcitest:args -Esloglint
-//golangcitest:config_path testdata/configs/sloglint_args_on_sep_lines.yml
+//golangcitest:config_path testdata/sloglint_args_on_sep_lines.yml
 package testdata
 
 import "log/slog"

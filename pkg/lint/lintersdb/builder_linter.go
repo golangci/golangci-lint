@@ -86,6 +86,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/reassign"
 	"github.com/golangci/golangci-lint/pkg/golinters/revive"
 	"github.com/golangci/golangci-lint/pkg/golinters/rowserrcheck"
+	"github.com/golangci/golangci-lint/pkg/golinters/sloglint"
 	"github.com/golangci/golangci-lint/pkg/golinters/spancheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/tagalign"
 	"github.com/golangci/golangci-lint/pkg/golinters/whitespace"
@@ -639,7 +640,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithPresets(linter.PresetBugs, linter.PresetSQL).
 			WithURL("https://github.com/jingyugao/rowserrcheck"),
 
-		linter.NewConfig(golinters.NewSlogLint(&cfg.LintersSettings.SlogLint)).
+		linter.NewConfig(sloglint.New(&cfg.LintersSettings.SlogLint)).
 			WithSince("v1.55.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetStyle, linter.PresetFormatting).

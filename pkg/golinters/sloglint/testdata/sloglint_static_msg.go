@@ -1,7 +1,7 @@
 //go:build go1.21
 
 //golangcitest:args -Esloglint
-//golangcitest:config_path testdata/configs/sloglint_static_msg.yml
+//golangcitest:config_path testdata/sloglint_static_msg.yml
 package testdata
 
 import (
