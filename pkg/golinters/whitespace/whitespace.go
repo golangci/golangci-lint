@@ -1,4 +1,4 @@
-package golinters
+package whitespace
 
 import (
 	"fmt"
@@ -13,9 +13,9 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-const whitespaceName = "whitespace"
+const name = "whitespace"
 
-func NewWhitespace(settings *config.WhitespaceSettings) *goanalysis.Linter {
+func New(settings *config.WhitespaceSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
 
@@ -63,7 +63,7 @@ func runWhitespace(pass *analysis.Pass, wsSettings whitespace.Settings) ([]goana
 	issues := make([]goanalysis.Issue, len(lintIssues))
 	for i, issue := range lintIssues {
 		report := &result.Issue{
-			FromLinter: whitespaceName,
+			FromLinter: name,
 			Pos:        pass.Fset.PositionFor(issue.Diagnostic, false),
 			Text:       issue.Message,
 		}
