@@ -34,6 +34,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/ginkgolinter"
 	"github.com/golangci/golangci-lint/pkg/golinters/gocheckcompilerdirectives"
 	"github.com/golangci/golangci-lint/pkg/golinters/gochecknoglobals"
+	"github.com/golangci/golangci-lint/pkg/golinters/gochecknoinits"
 	"github.com/golangci/golangci-lint/pkg/golinters/gocritic"
 	"github.com/golangci/golangci-lint/pkg/golinters/godot"
 	"github.com/golangci/golangci-lint/pkg/golinters/gofmt"
@@ -263,7 +264,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/leighmcculloch/gochecknoglobals"),
 
-		linter.NewConfig(golinters.NewGochecknoinits()).
+		linter.NewConfig(gochecknoinits.New()).
 			WithSince("v1.12.0").
 			WithPresets(linter.PresetStyle),
 

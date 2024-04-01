@@ -1,4 +1,4 @@
-package golinters
+package gochecknoinits
 
 import (
 	"fmt"
@@ -14,14 +14,14 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-const gochecknoinitsName = "gochecknoinits"
+const name = "gochecknoinits"
 
-func NewGochecknoinits() *goanalysis.Linter {
+func New() *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
 
 	analyzer := &analysis.Analyzer{
-		Name: gochecknoinitsName,
+		Name: name,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 		Run: func(pass *analysis.Pass) (any, error) {
 			var res []goanalysis.Issue
@@ -44,7 +44,7 @@ func NewGochecknoinits() *goanalysis.Linter {
 	}
 
 	return goanalysis.NewLinter(
-		gochecknoinitsName,
+		name,
 		"Checks that no init functions are present in Go code",
 		[]*analysis.Analyzer{analyzer},
 		nil,
@@ -66,7 +66,7 @@ func checkFileForInits(f *ast.File, fset *token.FileSet) []result.Issue {
 			res = append(res, result.Issue{
 				Pos:        fset.Position(funcDecl.Pos()),
 				Text:       fmt.Sprintf("don't use %s function", internal.FormatCode(name, nil)),
-				FromLinter: gochecknoinitsName,
+				FromLinter: name,
 			})
 		}
 	}
