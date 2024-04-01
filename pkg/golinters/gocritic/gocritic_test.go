@@ -1,4 +1,4 @@
-package golinters
+package gocritic
 
 import (
 	"strings"
@@ -16,7 +16,7 @@ import (
 )
 
 // https://go-critic.com/overview.html
-func Test_goCriticSettingsWrapper_InferEnabledChecks(t *testing.T) {
+func Test_settingsWrapper_InferEnabledChecks(t *testing.T) {
 	err := checkers.InitEmbeddedRules()
 	require.NoError(t, err)
 
@@ -267,7 +267,7 @@ func Test_goCriticSettingsWrapper_InferEnabledChecks(t *testing.T) {
 			t.Parallel()
 
 			lg := logutils.NewStderrLog("Test_goCriticSettingsWrapper_InferEnabledChecks")
-			wr := newGoCriticSettingsWrapper(tt.sett, lg)
+			wr := newSettingsWrapper(tt.sett, lg)
 
 			wr.InferEnabledChecks()
 			assert.ElementsMatch(t, tt.expectedEnabledChecks, maps.Keys(wr.inferredEnabledChecks))
@@ -276,7 +276,7 @@ func Test_goCriticSettingsWrapper_InferEnabledChecks(t *testing.T) {
 	}
 }
 
-func Test_goCriticSettingsWrapper_Validate(t *testing.T) {
+func Test_settingsWrapper_Validate(t *testing.T) {
 	cases := []struct {
 		name        string
 		sett        *config.GoCriticSettings
@@ -439,7 +439,7 @@ func Test_goCriticSettingsWrapper_Validate(t *testing.T) {
 			t.Parallel()
 
 			lg := logutils.NewStderrLog("Test_goCriticSettingsWrapper_Validate")
-			wr := newGoCriticSettingsWrapper(tt.sett, lg)
+			wr := newSettingsWrapper(tt.sett, lg)
 
 			wr.InferEnabledChecks()
 
