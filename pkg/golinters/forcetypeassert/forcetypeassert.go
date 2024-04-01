@@ -1,4 +1,4 @@
-package golinters
+package forcetypeassert
 
 import (
 	"github.com/gostaticanalysis/forcetypeassert"
@@ -7,7 +7,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func NewForceTypeAssert() *goanalysis.Linter {
+func New() *goanalysis.Linter {
 	a := forcetypeassert.Analyzer
 
 	return goanalysis.NewLinter(
