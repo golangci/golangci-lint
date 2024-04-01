@@ -1,5 +1,5 @@
 //golangcitest:args -Eerrcheck
-//golangcitest:config_path testdata/configs/errcheck_ignore_default.yml
+//golangcitest:config_path testdata/errcheck_ignore_default.yml
 package testdata
 
 import (

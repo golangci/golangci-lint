@@ -18,6 +18,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/dupword"
 	"github.com/golangci/golangci-lint/pkg/golinters/durationcheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/err113"
+	"github.com/golangci/golangci-lint/pkg/golinters/errcheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/gci"
 	"github.com/golangci/golangci-lint/pkg/golinters/ginkgolinter"
 	"github.com/golangci/golangci-lint/pkg/golinters/gocritic"
@@ -144,7 +145,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/charithe/durationcheck"),
 
-		linter.NewConfig(golinters.NewErrcheck(&cfg.LintersSettings.Errcheck)).
+		linter.NewConfig(errcheck.New(&cfg.LintersSettings.Errcheck)).
 			WithEnabledByDefault().
 			WithSince("v1.0.0").
 			WithLoadForGoAnalysis().

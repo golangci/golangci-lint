@@ -1,17 +1,18 @@
 //golangcitest:args -Eerrcheck
-//golangcitest:config_path testdata/configs/errcheck_exclude.yml
+//golangcitest:config_path testdata/errcheck_exclude_functions.yml
 package testdata
 
 import (
 	"io/ioutil"
 )
 
-func TestErrcheckExclude() []byte {
+func TestErrcheckExcludeFunctions() []byte {
 	ret, _ := ioutil.ReadFile("f.txt")
+	ioutil.ReadDir("dir")
 	return ret
 }
 
-func TestErrcheckNoExclude() []byte {
+func TestErrcheckNoExcludeFunctions() []byte {
 	ret, _ := ioutil.ReadAll(nil) // want "Error return value of `ioutil.ReadAll` is not checked"
 	return ret
 }

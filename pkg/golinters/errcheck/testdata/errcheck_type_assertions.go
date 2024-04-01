@@ -1,5 +1,5 @@
 //golangcitest:args -Eerrcheck
-//golangcitest:config_path testdata/configs/errcheck_type_assertions.yml
+//golangcitest:config_path testdata/errcheck_type_assertions.yml
 //golangcitest:expected_exitcode 0
 package testdata
 
