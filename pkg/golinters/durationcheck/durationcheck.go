@@ -1,4 +1,4 @@
-package golinters
+package durationcheck
 
 import (
 	"github.com/charithe/durationcheck"
@@ -7,7 +7,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func NewDurationCheck() *goanalysis.Linter {
+func New() *goanalysis.Linter {
 	a := durationcheck.Analyzer
 
 	return goanalysis.NewLinter(

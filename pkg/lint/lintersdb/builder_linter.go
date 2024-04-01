@@ -16,6 +16,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/dogsled"
 	"github.com/golangci/golangci-lint/pkg/golinters/dupl"
 	"github.com/golangci/golangci-lint/pkg/golinters/dupword"
+	"github.com/golangci/golangci-lint/pkg/golinters/durationcheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/gci"
 	"github.com/golangci/golangci-lint/pkg/golinters/ginkgolinter"
 	"github.com/golangci/golangci-lint/pkg/golinters/gocritic"
@@ -136,7 +137,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithPresets(linter.PresetComment).
 			WithURL("https://github.com/Abirdcfly/dupword"),
 
-		linter.NewConfig(golinters.NewDurationCheck()).
+		linter.NewConfig(durationcheck.New()).
 			WithSince("v1.37.0").
 			WithPresets(linter.PresetBugs).
 			WithLoadForGoAnalysis().
