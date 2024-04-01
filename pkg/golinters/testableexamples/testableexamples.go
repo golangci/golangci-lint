@@ -1,4 +1,4 @@
-package golinters
+package testableexamples
 
 import (
 	"github.com/maratori/testableexamples/pkg/testableexamples"
@@ -7,7 +7,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func NewTestableexamples() *goanalysis.Linter {
+func New() *goanalysis.Linter {
 	a := testableexamples.NewAnalyzer()
 
 	return goanalysis.NewLinter(

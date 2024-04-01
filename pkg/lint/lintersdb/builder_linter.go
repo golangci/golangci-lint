@@ -94,6 +94,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/tagalign"
 	"github.com/golangci/golangci-lint/pkg/golinters/tagliatelle"
 	"github.com/golangci/golangci-lint/pkg/golinters/tenv"
+	"github.com/golangci/golangci-lint/pkg/golinters/testableexamples"
 	"github.com/golangci/golangci-lint/pkg/golinters/whitespace"
 	"github.com/golangci/golangci-lint/pkg/golinters/zerologlint"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
@@ -707,7 +708,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/sivchari/tenv"),
 
-		linter.NewConfig(golinters.NewTestableexamples()).
+		linter.NewConfig(testableexamples.New()).
 			WithSince("v1.50.0").
 			WithPresets(linter.PresetTest).
 			WithURL("https://github.com/maratori/testableexamples"),
