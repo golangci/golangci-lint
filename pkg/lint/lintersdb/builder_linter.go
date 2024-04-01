@@ -106,6 +106,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/varnamelen"
 	"github.com/golangci/golangci-lint/pkg/golinters/wastedassign"
 	"github.com/golangci/golangci-lint/pkg/golinters/whitespace"
+	"github.com/golangci/golangci-lint/pkg/golinters/wrapcheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/zerologlint"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 )
@@ -806,7 +807,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithAutoFix().
 			WithURL("https://github.com/ultraware/whitespace"),
 
-		linter.NewConfig(golinters.NewWrapcheck(&cfg.LintersSettings.Wrapcheck)).
+		linter.NewConfig(wrapcheck.New(&cfg.LintersSettings.Wrapcheck)).
 			WithSince("v1.32.0").
 			WithPresets(linter.PresetStyle, linter.PresetError).
 			WithLoadForGoAnalysis().

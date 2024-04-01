@@ -1,4 +1,4 @@
-package golinters
+package wrapcheck
 
 import (
 	"github.com/tomarrell/wrapcheck/v2/wrapcheck"
@@ -8,7 +8,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func NewWrapcheck(settings *config.WrapcheckSettings) *goanalysis.Linter {
+func New(settings *config.WrapcheckSettings) *goanalysis.Linter {
 	cfg := wrapcheck.NewDefaultConfig()
 	if settings != nil {
 		if len(settings.IgnoreSigs) != 0 {
