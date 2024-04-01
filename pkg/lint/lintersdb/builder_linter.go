@@ -8,6 +8,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/nolintlint"
 	"github.com/golangci/golangci-lint/pkg/golinters/protogetter"
 	"github.com/golangci/golangci-lint/pkg/golinters/spancheck"
+	"github.com/golangci/golangci-lint/pkg/golinters/zerologlint"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 )
 
@@ -718,7 +719,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/bombsimon/wsl"),
 
-		linter.NewConfig(golinters.NewZerologLint()).
+		linter.NewConfig(zerologlint.New()).
 			WithSince("v1.53.0").
 			WithPresets(linter.PresetBugs).
 			WithLoadForGoAnalysis().
