@@ -1,4 +1,4 @@
-package golinters
+package depguard
 
 import (
 	"github.com/OpenPeeDeeP/depguard/v2"
@@ -9,7 +9,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 )
 
-func NewDepguard(settings *config.DepGuardSettings) *goanalysis.Linter {
+func New(settings *config.DepGuardSettings) *goanalysis.Linter {
 	conf := depguard.LinterSettings{}
 
 	if settings != nil {
