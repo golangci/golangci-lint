@@ -1,4 +1,4 @@
-package golinters
+package asasalint
 
 import (
 	"github.com/alingse/asasalint"
@@ -9,7 +9,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/internal"
 )
 
-func NewAsasalint(setting *config.AsasalintSettings) *goanalysis.Linter {
+func New(setting *config.AsasalintSettings) *goanalysis.Linter {
 	cfg := asasalint.LinterSetting{}
 	if setting != nil {
 		cfg.Exclude = setting.Exclude
