@@ -1,4 +1,4 @@
-package golinters
+package containedctx
 
 import (
 	"github.com/sivchari/containedctx"
@@ -7,7 +7,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func NewContainedCtx() *goanalysis.Linter {
+func New() *goanalysis.Linter {
 	a := containedctx.Analyzer
 
 	return goanalysis.NewLinter(

@@ -7,6 +7,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/asciicheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/bidichk"
 	"github.com/golangci/golangci-lint/pkg/golinters/bodyclose"
+	"github.com/golangci/golangci-lint/pkg/golinters/containedctx"
 	"github.com/golangci/golangci-lint/pkg/golinters/gci"
 	"github.com/golangci/golangci-lint/pkg/golinters/ginkgolinter"
 	"github.com/golangci/golangci-lint/pkg/golinters/gocritic"
@@ -71,7 +72,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithPresets(linter.PresetPerformance, linter.PresetBugs).
 			WithURL("https://github.com/timakin/bodyclose"),
 
-		linter.NewConfig(golinters.NewContainedCtx()).
+		linter.NewConfig(containedctx.New()).
 			WithSince("1.44.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetStyle).
