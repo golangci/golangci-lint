@@ -1,4 +1,4 @@
-package golinters
+package maintidx
 
 import (
 	"github.com/yagipy/maintidx"
@@ -8,7 +8,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func NewMaintIdx(cfg *config.MaintIdxSettings) *goanalysis.Linter {
+func New(cfg *config.MaintIdxSettings) *goanalysis.Linter {
 	analyzer := maintidx.Analyzer
 
 	cfgMap := map[string]map[string]any{
