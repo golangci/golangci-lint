@@ -5,6 +5,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters"
 	"github.com/golangci/golangci-lint/pkg/golinters/asasalint"
 	"github.com/golangci/golangci-lint/pkg/golinters/asciicheck"
+	"github.com/golangci/golangci-lint/pkg/golinters/bidichk"
 	"github.com/golangci/golangci-lint/pkg/golinters/gci"
 	"github.com/golangci/golangci-lint/pkg/golinters/ginkgolinter"
 	"github.com/golangci/golangci-lint/pkg/golinters/gocritic"
@@ -58,7 +59,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithPresets(linter.PresetBugs, linter.PresetStyle).
 			WithURL("https://github.com/tdakkota/asciicheck"),
 
-		linter.NewConfig(golinters.NewBiDiChk(&cfg.LintersSettings.BiDiChk)).
+		linter.NewConfig(bidichk.New(&cfg.LintersSettings.BiDiChk)).
 			WithSince("1.43.0").
 			WithPresets(linter.PresetBugs).
 			WithURL("https://github.com/breml/bidichk"),
