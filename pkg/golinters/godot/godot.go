@@ -1,4 +1,4 @@
-package golinters
+package godot
 
 import (
 	"sync"
@@ -12,9 +12,9 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-const godotName = "godot"
+const name = "godot"
 
-func NewGodot(settings *config.GodotSettings) *goanalysis.Linter {
+func New(settings *config.GodotSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
 
@@ -39,7 +39,7 @@ func NewGodot(settings *config.GodotSettings) *goanalysis.Linter {
 	}
 
 	analyzer := &analysis.Analyzer{
-		Name: godotName,
+		Name: name,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 		Run: func(pass *analysis.Pass) (any, error) {
 			issues, err := runGodot(pass, dotSettings)
@@ -60,7 +60,7 @@ func NewGodot(settings *config.GodotSettings) *goanalysis.Linter {
 	}
 
 	return goanalysis.NewLinter(
-		godotName,
+		name,
 		"Check if comments end in a period",
 		[]*analysis.Analyzer{analyzer},
 		nil,
@@ -88,7 +88,7 @@ func runGodot(pass *analysis.Pass, settings godot.Settings) ([]goanalysis.Issue,
 		issue := result.Issue{
 			Pos:        i.Pos,
 			Text:       i.Message,
-			FromLinter: godotName,
+			FromLinter: name,
 			Replacement: &result.Replacement{
 				NewLines: []string{i.Replacement},
 			},

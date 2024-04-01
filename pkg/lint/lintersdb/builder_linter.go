@@ -6,6 +6,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/gci"
 	"github.com/golangci/golangci-lint/pkg/golinters/ginkgolinter"
 	"github.com/golangci/golangci-lint/pkg/golinters/gocritic"
+	"github.com/golangci/golangci-lint/pkg/golinters/godot"
 	"github.com/golangci/golangci-lint/pkg/golinters/gomoddirectives"
 	"github.com/golangci/golangci-lint/pkg/golinters/loggercheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/mnd"
@@ -257,7 +258,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithPresets(linter.PresetComplexity).
 			WithURL("https://github.com/fzipp/gocyclo"),
 
-		linter.NewConfig(golinters.NewGodot(&cfg.LintersSettings.Godot)).
+		linter.NewConfig(godot.New(&cfg.LintersSettings.Godot)).
 			WithSince("v1.25.0").
 			WithPresets(linter.PresetStyle, linter.PresetComment).
 			WithAutoFix().
