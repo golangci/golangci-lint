@@ -1,4 +1,4 @@
-package golinters
+package lll
 
 import (
 	"bufio"
@@ -19,16 +19,16 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-const lllName = "lll"
+const name = "lll"
 
 const goCommentDirectivePrefix = "//go:"
 
-func NewLLL(settings *config.LllSettings) *goanalysis.Linter {
+func New(settings *config.LllSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
 
 	analyzer := &analysis.Analyzer{
-		Name: lllName,
+		Name: name,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 		Run: func(pass *analysis.Pass) (any, error) {
 			issues, err := runLll(pass, settings)
@@ -49,7 +49,7 @@ func NewLLL(settings *config.LllSettings) *goanalysis.Linter {
 	}
 
 	return goanalysis.NewLinter(
-		lllName,
+		name,
 		"Reports long lines",
 		[]*analysis.Analyzer{analyzer},
 		nil,
@@ -122,7 +122,7 @@ func getLLLIssuesForFile(filename string, maxLineLen int, tabSpaces string) ([]r
 					Line:     lineNumber,
 				},
 				Text:       fmt.Sprintf("line is %d characters", lineLen),
-				FromLinter: lllName,
+				FromLinter: name,
 			})
 		}
 	}
@@ -146,7 +146,7 @@ func getLLLIssuesForFile(filename string, maxLineLen int, tabSpaces string) ([]r
 					Column:   1,
 				},
 				Text:       fmt.Sprintf("line is more than %d characters", bufio.MaxScanTokenSize),
-				FromLinter: lllName,
+				FromLinter: name,
 			})
 		} else {
 			return nil, fmt.Errorf("can't scan file %s: %w", filename, err)

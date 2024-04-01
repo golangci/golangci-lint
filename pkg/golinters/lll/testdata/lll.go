@@ -1,5 +1,5 @@
 //golangcitest:args -Elll
-//golangcitest:config_path testdata/configs/lll.yml
+//golangcitest:config_path testdata/lll.yml
 package testdata
 
 import (

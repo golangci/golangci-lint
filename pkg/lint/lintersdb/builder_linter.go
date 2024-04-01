@@ -60,6 +60,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/interfacebloat"
 	"github.com/golangci/golangci-lint/pkg/golinters/intrange"
 	"github.com/golangci/golangci-lint/pkg/golinters/ireturn"
+	"github.com/golangci/golangci-lint/pkg/golinters/lll"
 	"github.com/golangci/golangci-lint/pkg/golinters/loggercheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/mirror"
 	"github.com/golangci/golangci-lint/pkg/golinters/misspell"
@@ -469,7 +470,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/butuzov/ireturn"),
 
-		linter.NewConfig(golinters.NewLLL(&cfg.LintersSettings.Lll)).
+		linter.NewConfig(lll.New(&cfg.LintersSettings.Lll)).
 			WithSince("v1.8.0").
 			WithPresets(linter.PresetStyle),
 
