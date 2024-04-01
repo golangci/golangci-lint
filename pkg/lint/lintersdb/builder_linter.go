@@ -107,6 +107,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/wastedassign"
 	"github.com/golangci/golangci-lint/pkg/golinters/whitespace"
 	"github.com/golangci/golangci-lint/pkg/golinters/wrapcheck"
+	"github.com/golangci/golangci-lint/pkg/golinters/wsl"
 	"github.com/golangci/golangci-lint/pkg/golinters/zerologlint"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 )
@@ -813,7 +814,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/tomarrell/wrapcheck"),
 
-		linter.NewConfig(golinters.NewWSL(&cfg.LintersSettings.WSL)).
+		linter.NewConfig(wsl.New(&cfg.LintersSettings.WSL)).
 			WithSince("v1.20.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/bombsimon/wsl"),

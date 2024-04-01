@@ -1,4 +1,4 @@
-package golinters
+package wsl
 
 import (
 	"github.com/bombsimon/wsl/v4"
@@ -8,7 +8,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func NewWSL(settings *config.WSLSettings) *goanalysis.Linter {
+func New(settings *config.WSLSettings) *goanalysis.Linter {
 	var conf *wsl.Configuration
 	if settings != nil {
 		conf = &wsl.Configuration{
