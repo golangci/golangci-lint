@@ -1,4 +1,4 @@
-package golinters
+package promlinter
 
 import (
 	"fmt"
@@ -13,9 +13,9 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-const promlinterName = "promlinter"
+const name = "promlinter"
 
-func NewPromlinter(settings *config.PromlinterSettings) *goanalysis.Linter {
+func New(settings *config.PromlinterSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
 
@@ -28,7 +28,7 @@ func NewPromlinter(settings *config.PromlinterSettings) *goanalysis.Linter {
 	}
 
 	analyzer := &analysis.Analyzer{
-		Name: promlinterName,
+		Name: name,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 		Run: func(pass *analysis.Pass) (any, error) {
 			issues := runPromLinter(pass, promSettings)
@@ -46,7 +46,7 @@ func NewPromlinter(settings *config.PromlinterSettings) *goanalysis.Linter {
 	}
 
 	return goanalysis.NewLinter(
-		promlinterName,
+		name,
 		"Check Prometheus metrics naming via promlint",
 		[]*analysis.Analyzer{analyzer},
 		nil,
@@ -67,7 +67,7 @@ func runPromLinter(pass *analysis.Pass, promSettings promlinter.Setting) []goana
 		issue := result.Issue{
 			Pos:        i.Pos,
 			Text:       fmt.Sprintf("Metric: %s Error: %s", i.Metric, i.Text),
-			FromLinter: promlinterName,
+			FromLinter: name,
 		}
 
 		issues[k] = goanalysis.NewIssue(&issue, pass)

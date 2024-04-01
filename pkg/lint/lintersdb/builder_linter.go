@@ -81,6 +81,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/perfsprint"
 	"github.com/golangci/golangci-lint/pkg/golinters/prealloc"
 	"github.com/golangci/golangci-lint/pkg/golinters/predeclared"
+	"github.com/golangci/golangci-lint/pkg/golinters/promlinter"
 	"github.com/golangci/golangci-lint/pkg/golinters/protogetter"
 	"github.com/golangci/golangci-lint/pkg/golinters/spancheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/tagalign"
@@ -605,7 +606,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/nishanths/predeclared"),
 
-		linter.NewConfig(golinters.NewPromlinter(&cfg.LintersSettings.Promlinter)).
+		linter.NewConfig(promlinter.New(&cfg.LintersSettings.Promlinter)).
 			WithSince("v1.40.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/yeya24/promlinter"),
