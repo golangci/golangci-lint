@@ -1,4 +1,4 @@
-package golinters
+package nilnil
 
 import (
 	"strings"
@@ -10,7 +10,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func NewNilNil(cfg *config.NilNilSettings) *goanalysis.Linter {
+func New(cfg *config.NilNilSettings) *goanalysis.Linter {
 	a := analyzer.New()
 
 	cfgMap := make(map[string]map[string]any)

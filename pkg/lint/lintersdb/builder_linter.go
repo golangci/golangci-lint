@@ -71,6 +71,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/nakedret"
 	"github.com/golangci/golangci-lint/pkg/golinters/nestif"
 	"github.com/golangci/golangci-lint/pkg/golinters/nilerr"
+	"github.com/golangci/golangci-lint/pkg/golinters/nilnil"
 	"github.com/golangci/golangci-lint/pkg/golinters/nolintlint"
 	"github.com/golangci/golangci-lint/pkg/golinters/protogetter"
 	"github.com/golangci/golangci-lint/pkg/golinters/spancheck"
@@ -540,7 +541,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithPresets(linter.PresetBugs).
 			WithURL("https://github.com/gostaticanalysis/nilerr"),
 
-		linter.NewConfig(golinters.NewNilNil(&cfg.LintersSettings.NilNil)).
+		linter.NewConfig(nilnil.New(&cfg.LintersSettings.NilNil)).
 			WithSince("v1.43.0").
 			WithPresets(linter.PresetStyle).
 			WithLoadForGoAnalysis().
