@@ -1,4 +1,4 @@
-package golinters
+package staticcheck
 
 import (
 	"honnef.co/go/tools/staticcheck"
@@ -8,7 +8,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/internal"
 )
 
-func NewStaticcheck(settings *config.StaticCheckSettings) *goanalysis.Linter {
+func New(settings *config.StaticCheckSettings) *goanalysis.Linter {
 	cfg := internal.StaticCheckConfig(settings)
 	analyzers := internal.SetupStaticCheckAnalyzers(staticcheck.Analyzers, internal.GetGoVersion(settings), cfg.Checks)
 

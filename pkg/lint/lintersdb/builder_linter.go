@@ -89,6 +89,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/sloglint"
 	"github.com/golangci/golangci-lint/pkg/golinters/spancheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/sqlclosecheck"
+	"github.com/golangci/golangci-lint/pkg/golinters/staticcheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/tagalign"
 	"github.com/golangci/golangci-lint/pkg/golinters/whitespace"
 	"github.com/golangci/golangci-lint/pkg/golinters/zerologlint"
@@ -665,7 +666,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithPresets(linter.PresetBugs).
 			WithURL("https://github.com/jjti/go-spancheck"),
 
-		linter.NewConfig(golinters.NewStaticcheck(&cfg.LintersSettings.Staticcheck)).
+		linter.NewConfig(staticcheck.New(&cfg.LintersSettings.Staticcheck)).
 			WithEnabledByDefault().
 			WithSince("v1.0.0").
 			WithLoadForGoAnalysis().
