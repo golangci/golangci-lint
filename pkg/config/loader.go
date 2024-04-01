@@ -24,6 +24,11 @@ type LoaderOptions struct {
 	NoConfig bool   // Flag only.
 }
 
+type LoadOptions struct {
+	CheckDeprecation bool
+	Validation       bool
+}
+
 type Loader struct {
 	opts LoaderOptions
 
@@ -47,7 +52,7 @@ func NewLoader(log logutils.Log, v *viper.Viper, fs *pflag.FlagSet, opts LoaderO
 	}
 }
 
-func (l *Loader) Load() error {
+func (l *Loader) Load(opts LoadOptions) error {
 	err := l.setConfigFile()
 	if err != nil {
 		return err
@@ -60,9 +65,11 @@ func (l *Loader) Load() error {
 
 	l.applyStringSliceHack()
 
-	err = l.handleDeprecation()
-	if err != nil {
-		return err
+	if opts.CheckDeprecation {
+		err = l.handleDeprecation()
+		if err != nil {
+			return err
+		}
 	}
 
 	l.handleGoVersion()
@@ -70,6 +77,13 @@ func (l *Loader) Load() error {
 	err = l.handleEnableOnlyOption()
 	if err != nil {
 		return err
+	}
+
+	if opts.Validation {
+		err = l.cfg.Validate()
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -293,35 +307,39 @@ func (l *Loader) handleGoVersion() {
 }
 
 func (l *Loader) handleDeprecation() error {
+	if l.cfg.InternalTest || l.cfg.InternalCmdTest || os.Getenv(logutils.EnvTestRun) == "1" {
+		return nil
+	}
+
 	// Deprecated since v1.57.0
 	if len(l.cfg.Run.SkipFiles) > 0 {
-		l.warn("The configuration option `run.skip-files` is deprecated, please use `issues.exclude-files`.")
+		l.log.Warnf("The configuration option `run.skip-files` is deprecated, please use `issues.exclude-files`.")
 		l.cfg.Issues.ExcludeFiles = l.cfg.Run.SkipFiles
 	}
 
 	// Deprecated since v1.57.0
 	if len(l.cfg.Run.SkipDirs) > 0 {
-		l.warn("The configuration option `run.skip-dirs` is deprecated, please use `issues.exclude-dirs`.")
+		l.log.Warnf("The configuration option `run.skip-dirs` is deprecated, please use `issues.exclude-dirs`.")
 		l.cfg.Issues.ExcludeDirs = l.cfg.Run.SkipDirs
 	}
 
 	// The 2 options are true by default.
 	// Deprecated since v1.57.0
 	if !l.cfg.Run.UseDefaultSkipDirs {
-		l.warn("The configuration option `run.skip-dirs-use-default` is deprecated, please use `issues.exclude-dirs-use-default`.")
+		l.log.Warnf("The configuration option `run.skip-dirs-use-default` is deprecated, please use `issues.exclude-dirs-use-default`.")
 	}
 	l.cfg.Issues.UseDefaultExcludeDirs = l.cfg.Run.UseDefaultSkipDirs && l.cfg.Issues.UseDefaultExcludeDirs
 
 	// The 2 options are false by default.
 	// Deprecated since v1.57.0
 	if l.cfg.Run.ShowStats {
-		l.warn("The configuration option `run.show-stats` is deprecated, please use `output.show-stats`")
+		l.log.Warnf("The configuration option `run.show-stats` is deprecated, please use `output.show-stats`")
 	}
 	l.cfg.Output.ShowStats = l.cfg.Run.ShowStats || l.cfg.Output.ShowStats
 
 	// Deprecated since v1.57.0
 	if l.cfg.Output.Format != "" {
-		l.warn("The configuration option `output.format` is deprecated, please use `output.formats`")
+		l.log.Warnf("The configuration option `output.format` is deprecated, please use `output.formats`")
 
 		var f OutputFormats
 		err := f.UnmarshalText([]byte(l.cfg.Output.Format))
@@ -341,49 +359,49 @@ func (l *Loader) handleLinterOptionDeprecations() {
 	// Deprecated since v1.57.0,
 	// but it was unofficially deprecated since v1.19 (2019) (https://github.com/golangci/golangci-lint/pull/697).
 	if l.cfg.LintersSettings.Govet.CheckShadowing {
-		l.warn("The configuration option `linters.govet.check-shadowing` is deprecated. " +
+		l.log.Warnf("The configuration option `linters.govet.check-shadowing` is deprecated. " +
 			"Please enable `shadow` instead, if you are not using `enable-all`.")
 	}
 
 	// Deprecated since v1.42.0.
 	if l.cfg.LintersSettings.Errcheck.Exclude != "" {
-		l.warn("The configuration option `linters.errcheck.exclude` is deprecated, please use `linters.errcheck.exclude-functions`.")
+		l.log.Warnf("The configuration option `linters.errcheck.exclude` is deprecated, please use `linters.errcheck.exclude-functions`.")
 	}
 
 	// Deprecated since v1.44.0.
 	if l.cfg.LintersSettings.Gci.LocalPrefixes != "" {
-		l.warn("The configuration option `linters.gci.local-prefixes` is deprecated, please use `prefix()` inside `linters.gci.sections`.")
+		l.log.Warnf("The configuration option `linters.gci.local-prefixes` is deprecated, please use `prefix()` inside `linters.gci.sections`.")
 	}
 
 	// Deprecated since v1.33.0.
 	if l.cfg.LintersSettings.Godot.CheckAll {
-		l.warn("The configuration option `linters.godot.check-all` is deprecated, please use `linters.godot.scope: all`.")
+		l.log.Warnf("The configuration option `linters.godot.check-all` is deprecated, please use `linters.godot.scope: all`.")
 	}
 
 	// Deprecated since v1.44.0.
 	if len(l.cfg.LintersSettings.Gomnd.Settings) > 0 {
-		l.warn("The configuration option `linters.gomnd.settings` is deprecated. Please use the options " +
+		l.log.Warnf("The configuration option `linters.gomnd.settings` is deprecated. Please use the options " +
 			"`linters.gomnd.checks`,`linters.gomnd.ignored-numbers`,`linters.gomnd.ignored-files`,`linters.gomnd.ignored-functions`.")
 	}
 
 	// Deprecated since v1.47.0
 	if l.cfg.LintersSettings.Gofumpt.LangVersion != "" {
-		l.warn("The configuration option `linters.gofumpt.lang-version` is deprecated, please use global `run.go`.")
+		l.log.Warnf("The configuration option `linters.gofumpt.lang-version` is deprecated, please use global `run.go`.")
 	}
 
 	// Deprecated since v1.47.0
 	if l.cfg.LintersSettings.Staticcheck.GoVersion != "" {
-		l.warn("The configuration option `linters.staticcheck.go` is deprecated, please use global `run.go`.")
+		l.log.Warnf("The configuration option `linters.staticcheck.go` is deprecated, please use global `run.go`.")
 	}
 
 	// Deprecated since v1.47.0
 	if l.cfg.LintersSettings.Gosimple.GoVersion != "" {
-		l.warn("The configuration option `linters.gosimple.go` is deprecated, please use global `run.go`.")
+		l.log.Warnf("The configuration option `linters.gosimple.go` is deprecated, please use global `run.go`.")
 	}
 
 	// Deprecated since v1.47.0
 	if l.cfg.LintersSettings.Stylecheck.GoVersion != "" {
-		l.warn("The configuration option `linters.stylecheck.go` is deprecated, please use global `run.go`.")
+		l.log.Warnf("The configuration option `linters.stylecheck.go` is deprecated, please use global `run.go`.")
 	}
 }
 
@@ -406,14 +424,6 @@ func (l *Loader) handleEnableOnlyOption() error {
 	}
 
 	return nil
-}
-
-func (l *Loader) warn(format string) {
-	if l.cfg.InternalTest || l.cfg.InternalCmdTest || os.Getenv(logutils.EnvTestRun) == "1" {
-		return
-	}
-
-	l.log.Warnf(format)
 }
 
 func customDecoderHook() viper.DecoderConfigOption {

@@ -154,7 +154,8 @@ func (c *runCommand) persistentPreRunE(cmd *cobra.Command, args []string) error 
 
 	loader := config.NewLoader(c.log.Child(logutils.DebugKeyConfigReader), c.viper, cmd.Flags(), c.opts.LoaderOptions, c.cfg, args)
 
-	if err := loader.Load(); err != nil {
+	err := loader.Load(config.LoadOptions{CheckDeprecation: true, Validation: true})
+	if err != nil {
 		return fmt.Errorf("can't load config: %w", err)
 	}
 
