@@ -1,4 +1,4 @@
-package golinters
+package usestdlibvars
 
 import (
 	"github.com/sashamelentyev/usestdlibvars/pkg/analyzer"
@@ -8,7 +8,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func NewUseStdlibVars(cfg *config.UseStdlibVarsSettings) *goanalysis.Linter {
+func New(cfg *config.UseStdlibVarsSettings) *goanalysis.Linter {
 	a := analyzer.New()
 
 	cfgMap := make(map[string]map[string]any)

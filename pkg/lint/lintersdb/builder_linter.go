@@ -102,6 +102,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/unconvert"
 	"github.com/golangci/golangci-lint/pkg/golinters/unparam"
 	"github.com/golangci/golangci-lint/pkg/golinters/unused"
+	"github.com/golangci/golangci-lint/pkg/golinters/usestdlibvars"
 	"github.com/golangci/golangci-lint/pkg/golinters/whitespace"
 	"github.com/golangci/golangci-lint/pkg/golinters/zerologlint"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
@@ -773,7 +774,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithChangeTypes().
 			WithURL("https://github.com/dominikh/go-tools/tree/master/unused"),
 
-		linter.NewConfig(golinters.NewUseStdlibVars(&cfg.LintersSettings.UseStdlibVars)).
+		linter.NewConfig(usestdlibvars.New(&cfg.LintersSettings.UseStdlibVars)).
 			WithSince("v1.48.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/sashamelentyev/usestdlibvars"),

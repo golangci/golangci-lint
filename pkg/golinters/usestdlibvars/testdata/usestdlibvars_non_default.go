@@ -1,5 +1,5 @@
 //golangcitest:args -Eusestdlibvars
-//golangcitest:config_path testdata/configs/usestdlibvars_non_default.yml
+//golangcitest:config_path testdata/usestdlibvars_non_default.yml
 package testdata
 
 import "net/http"
