@@ -1,4 +1,4 @@
-package golinters
+package errorlint
 
 import (
 	"github.com/polyfloyd/go-errorlint/errorlint"
@@ -8,7 +8,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func NewErrorLint(cfg *config.ErrorLintSettings) *goanalysis.Linter {
+func New(cfg *config.ErrorLintSettings) *goanalysis.Linter {
 	a := errorlint.NewAnalyzer()
 
 	cfgMap := map[string]map[string]any{}

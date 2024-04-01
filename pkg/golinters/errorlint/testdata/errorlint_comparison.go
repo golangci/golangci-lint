@@ -1,5 +1,5 @@
 //golangcitest:args -Eerrorlint
-//golangcitest:config_path testdata/configs/errorlint_comparison.yml
+//golangcitest:config_path testdata/errorlint_comparison.yml
 package testdata
 
 import (

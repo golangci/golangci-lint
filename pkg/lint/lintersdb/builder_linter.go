@@ -21,6 +21,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/errcheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/errchkjson"
 	"github.com/golangci/golangci-lint/pkg/golinters/errname"
+	"github.com/golangci/golangci-lint/pkg/golinters/errorlint"
 	"github.com/golangci/golangci-lint/pkg/golinters/gci"
 	"github.com/golangci/golangci-lint/pkg/golinters/ginkgolinter"
 	"github.com/golangci/golangci-lint/pkg/golinters/gocritic"
@@ -166,7 +167,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/Antonboom/errname"),
 
-		linter.NewConfig(golinters.NewErrorLint(&cfg.LintersSettings.ErrorLint)).
+		linter.NewConfig(errorlint.New(&cfg.LintersSettings.ErrorLint)).
 			WithSince("v1.32.0").
 			WithPresets(linter.PresetBugs, linter.PresetError).
 			WithLoadForGoAnalysis().
