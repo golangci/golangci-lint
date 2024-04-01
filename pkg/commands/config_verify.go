@@ -3,14 +3,16 @@ package commands
 import (
 	"errors"
 	"fmt"
+	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 
 	hcversion "github.com/hashicorp/go-version"
 	"github.com/pelletier/go-toml/v2"
 	"github.com/santhosh-tekuri/jsonschema/v5"
-	_ "github.com/santhosh-tekuri/jsonschema/v5/httploader"
+	"github.com/santhosh-tekuri/jsonschema/v5/httploader"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"gopkg.in/yaml.v3"
@@ -98,6 +100,8 @@ func createSchemaURL(flags *pflag.FlagSet, buildInfo BuildInfo) (string, error) 
 }
 
 func validateConfiguration(schemaPath, targetFile string) error {
+	httploader.Client = &http.Client{Timeout: 2 * time.Second}
+
 	compiler := jsonschema.NewCompiler()
 	compiler.Draft = jsonschema.Draft7
 
