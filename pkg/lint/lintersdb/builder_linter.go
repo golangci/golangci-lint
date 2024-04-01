@@ -92,6 +92,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/staticcheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/stylecheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/tagalign"
+	"github.com/golangci/golangci-lint/pkg/golinters/tagliatelle"
 	"github.com/golangci/golangci-lint/pkg/golinters/whitespace"
 	"github.com/golangci/golangci-lint/pkg/golinters/zerologlint"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
@@ -694,7 +695,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithAutoFix().
 			WithURL("https://github.com/4meepo/tagalign"),
 
-		linter.NewConfig(golinters.NewTagliatelle(&cfg.LintersSettings.Tagliatelle)).
+		linter.NewConfig(tagliatelle.New(&cfg.LintersSettings.Tagliatelle)).
 			WithSince("v1.40.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/ldez/tagliatelle"),

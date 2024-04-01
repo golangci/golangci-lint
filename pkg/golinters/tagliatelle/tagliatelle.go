@@ -1,4 +1,4 @@
-package golinters
+package tagliatelle
 
 import (
 	"github.com/ldez/tagliatelle"
@@ -8,7 +8,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func NewTagliatelle(settings *config.TagliatelleSettings) *goanalysis.Linter {
+func New(settings *config.TagliatelleSettings) *goanalysis.Linter {
 	cfg := tagliatelle.Config{
 		Rules: map[string]string{
 			"json":   "camel",
