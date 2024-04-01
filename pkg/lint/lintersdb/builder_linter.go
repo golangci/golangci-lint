@@ -19,6 +19,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/nolintlint"
 	"github.com/golangci/golangci-lint/pkg/golinters/protogetter"
 	"github.com/golangci/golangci-lint/pkg/golinters/spancheck"
+	"github.com/golangci/golangci-lint/pkg/golinters/tagalign"
 	"github.com/golangci/golangci-lint/pkg/golinters/zerologlint"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 )
@@ -614,7 +615,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/dominikh/go-tools/tree/master/stylecheck"),
 
-		linter.NewConfig(golinters.NewTagAlign(&cfg.LintersSettings.TagAlign)).
+		linter.NewConfig(tagalign.New(&cfg.LintersSettings.TagAlign)).
 			WithSince("v1.53.0").
 			WithPresets(linter.PresetStyle, linter.PresetFormatting).
 			WithAutoFix().

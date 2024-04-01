@@ -1,5 +1,5 @@
 //golangcitest:args -Etagalign
-//golangcitest:config_path testdata/configs/tagalign_strict.yml
+//golangcitest:config_path testdata/tagalign_strict.yml
 package testdata
 
 import "time"

@@ -1,5 +1,5 @@
 //golangcitest:args -Etagalign
-//golangcitest:config_path testdata/configs/tagalign_order_only.yml
+//golangcitest:config_path testdata/tagalign_order_only.yml
 package testdata
 
 import "time"

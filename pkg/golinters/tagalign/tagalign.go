@@ -1,4 +1,4 @@
-package golinters
+package tagalign
 
 import (
 	"sync"
@@ -12,7 +12,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-func NewTagAlign(settings *config.TagAlignSettings) *goanalysis.Linter {
+func New(settings *config.TagAlignSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
 
