@@ -1,4 +1,4 @@
-package golinters
+package nilerr
 
 import (
 	"github.com/gostaticanalysis/nilerr"
@@ -7,7 +7,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func NewNilErr() *goanalysis.Linter {
+func New() *goanalysis.Linter {
 	a := nilerr.Analyzer
 
 	return goanalysis.NewLinter(
