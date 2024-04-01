@@ -1,4 +1,4 @@
-package golinters
+package paralleltest
 
 import (
 	"github.com/kunwardeep/paralleltest/pkg/paralleltest"
@@ -8,7 +8,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func NewParallelTest(settings *config.ParallelTestSettings) *goanalysis.Linter {
+func New(settings *config.ParallelTestSettings) *goanalysis.Linter {
 	a := paralleltest.NewAnalyzer()
 
 	var cfg map[string]map[string]any
