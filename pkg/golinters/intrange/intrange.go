@@ -1,4 +1,4 @@
-package golinters
+package intrange
 
 import (
 	"github.com/ckaznocha/intrange"
@@ -7,7 +7,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func NewIntrange() *goanalysis.Linter {
+func New() *goanalysis.Linter {
 	a := intrange.Analyzer
 
 	return goanalysis.NewLinter(

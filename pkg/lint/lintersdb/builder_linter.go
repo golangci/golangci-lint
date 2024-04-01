@@ -58,6 +58,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/inamedparam"
 	"github.com/golangci/golangci-lint/pkg/golinters/ineffassign"
 	"github.com/golangci/golangci-lint/pkg/golinters/interfacebloat"
+	"github.com/golangci/golangci-lint/pkg/golinters/intrange"
 	"github.com/golangci/golangci-lint/pkg/golinters/loggercheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/mirror"
 	"github.com/golangci/golangci-lint/pkg/golinters/misspell"
@@ -456,7 +457,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithURL("https://github.com/mvdan/interfacer").
 			Deprecated("The repository of the linter has been archived by the owner.", "v1.38.0", ""),
 
-		linter.NewConfig(golinters.NewIntrange()).
+		linter.NewConfig(intrange.New()).
 			WithSince("v1.57.0").
 			WithURL("https://github.com/ckaznocha/intrange").
 			WithNoopFallback(cfg, linter.IsGoLowerThanGo122()),
