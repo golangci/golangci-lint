@@ -90,6 +90,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/spancheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/sqlclosecheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/staticcheck"
+	"github.com/golangci/golangci-lint/pkg/golinters/stylecheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/tagalign"
 	"github.com/golangci/golangci-lint/pkg/golinters/whitespace"
 	"github.com/golangci/golangci-lint/pkg/golinters/zerologlint"
@@ -681,7 +682,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithURL("https://github.com/opennota/check").
 			Deprecated("The owner seems to have abandoned the linter.", "v1.49.0", "unused"),
 
-		linter.NewConfig(golinters.NewStylecheck(&cfg.LintersSettings.Stylecheck)).
+		linter.NewConfig(stylecheck.New(&cfg.LintersSettings.Stylecheck)).
 			WithSince("v1.20.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetStyle).

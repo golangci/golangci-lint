@@ -1,4 +1,4 @@
-package golinters
+package stylecheck
 
 import (
 	"golang.org/x/tools/go/analysis"
@@ -10,7 +10,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/internal"
 )
 
-func NewStylecheck(settings *config.StaticCheckSettings) *goanalysis.Linter {
+func New(settings *config.StaticCheckSettings) *goanalysis.Linter {
 	cfg := internal.StaticCheckConfig(settings)
 
 	// `scconfig.Analyzer` is a singleton, then it's not possible to have more than one instance for all staticcheck "sub-linters".
