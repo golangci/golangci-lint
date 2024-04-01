@@ -1,4 +1,4 @@
-package golinters
+package cyclop
 
 import (
 	"github.com/bkielbasa/cyclop/pkg/analyzer"
@@ -8,7 +8,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func NewCyclop(settings *config.Cyclop) *goanalysis.Linter {
+func New(settings *config.Cyclop) *goanalysis.Linter {
 	a := analyzer.NewAnalyzer()
 
 	var cfg map[string]map[string]any

@@ -1,5 +1,5 @@
 //golangcitest:args -Ecyclop
-//golangcitest:config_path testdata/configs/cyclop.yml
+//golangcitest:config_path testdata/cyclop.yml
 package testdata
 
 func cyclopComplexFunc(s string) { // want "calculated cyclomatic complexity for function cyclopComplexFunc is 22, max is 15"

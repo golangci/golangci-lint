@@ -10,6 +10,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/containedctx"
 	"github.com/golangci/golangci-lint/pkg/golinters/contextcheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/copyloopvar"
+	"github.com/golangci/golangci-lint/pkg/golinters/cyclop"
 	"github.com/golangci/golangci-lint/pkg/golinters/gci"
 	"github.com/golangci/golangci-lint/pkg/golinters/ginkgolinter"
 	"github.com/golangci/golangci-lint/pkg/golinters/gocritic"
@@ -92,7 +93,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithURL("https://github.com/karamaru-alpha/copyloopvar").
 			WithNoopFallback(cfg, linter.IsGoLowerThanGo122()),
 
-		linter.NewConfig(golinters.NewCyclop(&cfg.LintersSettings.Cyclop)).
+		linter.NewConfig(cyclop.New(&cfg.LintersSettings.Cyclop)).
 			WithSince("v1.37.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetComplexity).
