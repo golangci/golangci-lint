@@ -56,6 +56,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/grouper"
 	"github.com/golangci/golangci-lint/pkg/golinters/importas"
 	"github.com/golangci/golangci-lint/pkg/golinters/inamedparam"
+	"github.com/golangci/golangci-lint/pkg/golinters/ineffassign"
 	"github.com/golangci/golangci-lint/pkg/golinters/loggercheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/mirror"
 	"github.com/golangci/golangci-lint/pkg/golinters/misspell"
@@ -436,7 +437,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/macabu/inamedparam"),
 
-		linter.NewConfig(golinters.NewIneffassign()).
+		linter.NewConfig(ineffassign.New()).
 			WithEnabledByDefault().
 			WithSince("v1.0.0").
 			WithPresets(linter.PresetUnused).

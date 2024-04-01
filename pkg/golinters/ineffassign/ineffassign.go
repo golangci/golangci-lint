@@ -1,4 +1,4 @@
-package golinters
+package ineffassign
 
 import (
 	"github.com/gordonklaus/ineffassign/pkg/ineffassign"
@@ -7,7 +7,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func NewIneffassign() *goanalysis.Linter {
+func New() *goanalysis.Linter {
 	a := ineffassign.Analyzer
 
 	return goanalysis.NewLinter(
