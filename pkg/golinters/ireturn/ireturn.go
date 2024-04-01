@@ -1,4 +1,4 @@
-package golinters
+package ireturn
 
 import (
 	"strings"
@@ -10,7 +10,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func NewIreturn(settings *config.IreturnSettings) *goanalysis.Linter {
+func New(settings *config.IreturnSettings) *goanalysis.Linter {
 	a := analyzer.NewAnalyzer()
 
 	cfg := map[string]map[string]any{}

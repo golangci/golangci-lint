@@ -1,5 +1,5 @@
 //golangcitest:args -Eireturn
-//golangcitest:config_path testdata/configs/ireturn_reject_generics.yml
+//golangcitest:config_path testdata/ireturn_reject_generics.yml
 package testdata
 
 import (
