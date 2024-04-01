@@ -1,5 +1,5 @@
 //golangcitest:args -Eloggercheck
-//golangcitest:config_path configs/loggercheck_noprintflike.yml
+//golangcitest:config_path testdata/loggercheck_noprintflike.yml
 package loggercheck
 
 import (

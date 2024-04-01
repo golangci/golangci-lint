@@ -1,5 +1,5 @@
 //golangcitest:args -Eloggercheck
-//golangcitest:config_path configs/loggercheck_zaponly.yml
+//golangcitest:config_path testdata/loggercheck_zaponly.yml
 package loggercheck
 
 import "go.uber.org/zap"

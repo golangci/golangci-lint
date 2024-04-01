@@ -1,4 +1,4 @@
-package golinters
+package loggercheck
 
 import (
 	"github.com/timonwong/loggercheck"
@@ -8,7 +8,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func NewLoggerCheck(settings *config.LoggerCheckSettings) *goanalysis.Linter {
+func New(settings *config.LoggerCheckSettings) *goanalysis.Linter {
 	var opts []loggercheck.Option
 
 	if settings != nil {

@@ -1,5 +1,5 @@
 //golangcitest:args -Eloggercheck
-//golangcitest:config_path configs/loggercheck_custom.yml
+//golangcitest:config_path testdata/loggercheck_custom.yml
 package loggercheck
 
 import (
