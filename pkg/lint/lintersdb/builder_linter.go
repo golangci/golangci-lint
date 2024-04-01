@@ -63,6 +63,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/lll"
 	"github.com/golangci/golangci-lint/pkg/golinters/loggercheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/maintidx"
+	"github.com/golangci/golangci-lint/pkg/golinters/makezero"
 	"github.com/golangci/golangci-lint/pkg/golinters/mirror"
 	"github.com/golangci/golangci-lint/pkg/golinters/misspell"
 	"github.com/golangci/golangci-lint/pkg/golinters/mnd"
@@ -487,7 +488,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithPresets(linter.PresetComplexity).
 			WithURL("https://github.com/yagipy/maintidx"),
 
-		linter.NewConfig(golinters.NewMakezero(&cfg.LintersSettings.Makezero)).
+		linter.NewConfig(makezero.New(&cfg.LintersSettings.Makezero)).
 			WithSince("v1.34.0").
 			WithPresets(linter.PresetStyle, linter.PresetBugs).
 			WithLoadForGoAnalysis().

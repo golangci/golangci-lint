@@ -1,4 +1,4 @@
-package golinters
+package makezero
 
 import (
 	"fmt"
@@ -13,14 +13,14 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-const makezeroName = "makezero"
+const name = "makezero"
 
-func NewMakezero(settings *config.MakezeroSettings) *goanalysis.Linter {
+func New(settings *config.MakezeroSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
 
 	analyzer := &analysis.Analyzer{
-		Name: makezeroName,
+		Name: name,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 		Run: func(pass *analysis.Pass) (any, error) {
 			issues, err := runMakeZero(pass, settings)
@@ -41,7 +41,7 @@ func NewMakezero(settings *config.MakezeroSettings) *goanalysis.Linter {
 	}
 
 	return goanalysis.NewLinter(
-		makezeroName,
+		name,
 		"Finds slice declarations with non-zero initial length",
 		[]*analysis.Analyzer{analyzer},
 		nil,
@@ -65,7 +65,7 @@ func runMakeZero(pass *analysis.Pass, settings *config.MakezeroSettings) ([]goan
 			issues = append(issues, goanalysis.NewIssue(&result.Issue{
 				Pos:        hint.Position(),
 				Text:       hint.Details(),
-				FromLinter: makezeroName,
+				FromLinter: name,
 			}, pass))
 		}
 	}
