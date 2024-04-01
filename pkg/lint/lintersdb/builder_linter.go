@@ -25,6 +25,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/execinquery"
 	"github.com/golangci/golangci-lint/pkg/golinters/exhaustive"
 	"github.com/golangci/golangci-lint/pkg/golinters/exhaustruct"
+	"github.com/golangci/golangci-lint/pkg/golinters/exportloopref"
 	"github.com/golangci/golangci-lint/pkg/golinters/gci"
 	"github.com/golangci/golangci-lint/pkg/golinters/ginkgolinter"
 	"github.com/golangci/golangci-lint/pkg/golinters/gocritic"
@@ -201,7 +202,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/GaijinEntertainment/go-exhaustruct"),
 
-		linter.NewConfig(golinters.NewExportLoopRef()).
+		linter.NewConfig(exportloopref.New()).
 			WithSince("v1.28.0").
 			WithPresets(linter.PresetBugs).
 			WithLoadForGoAnalysis().

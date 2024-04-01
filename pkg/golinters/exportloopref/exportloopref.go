@@ -1,4 +1,4 @@
-package golinters
+package exportloopref
 
 import (
 	"github.com/kyoh86/exportloopref"
@@ -7,7 +7,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func NewExportLoopRef() *goanalysis.Linter {
+func New() *goanalysis.Linter {
 	a := exportloopref.Analyzer
 
 	return goanalysis.NewLinter(
