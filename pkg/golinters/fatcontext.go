@@ -8,10 +8,12 @@ import (
 )
 
 func NewFatContext() *goanalysis.Linter {
+	a := analyzer.Analyzer
+
 	return goanalysis.NewLinter(
-		"fatcontext",
-		"Detects potential fat contexts in loops",
-		[]*analysis.Analyzer{analyzer.Analyzer},
+		a.Name,
+		a.Doc,
+		[]*analysis.Analyzer{a},
 		nil,
 	).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }
