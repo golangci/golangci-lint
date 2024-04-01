@@ -1,4 +1,4 @@
-package golinters
+package tparallel
 
 import (
 	"github.com/moricho/tparallel"
@@ -7,7 +7,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func NewTparallel() *goanalysis.Linter {
+func New() *goanalysis.Linter {
 	a := tparallel.Analyzer
 	return goanalysis.NewLinter(
 		a.Name,
