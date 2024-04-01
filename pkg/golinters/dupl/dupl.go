@@ -1,4 +1,4 @@
-package golinters
+package dupl
 
 import (
 	"fmt"
@@ -16,14 +16,14 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-const duplName = "dupl"
+const name = "dupl"
 
-func NewDupl(settings *config.DuplSettings) *goanalysis.Linter {
+func New(settings *config.DuplSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
 
 	analyzer := &analysis.Analyzer{
-		Name: duplName,
+		Name: name,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 		Run: func(pass *analysis.Pass) (any, error) {
 			issues, err := runDupl(pass, settings)
@@ -44,7 +44,7 @@ func NewDupl(settings *config.DuplSettings) *goanalysis.Linter {
 	}
 
 	return goanalysis.NewLinter(
-		duplName,
+		name,
 		"Tool for code clone detection",
 		[]*analysis.Analyzer{analyzer},
 		nil,
@@ -88,7 +88,7 @@ func runDupl(pass *analysis.Pass, settings *config.DuplSettings) ([]goanalysis.I
 				To:   i.From.LineEnd(),
 			},
 			Text:       text,
-			FromLinter: duplName,
+			FromLinter: name,
 		}, pass))
 	}
 

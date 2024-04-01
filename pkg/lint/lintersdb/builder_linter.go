@@ -14,6 +14,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/decorder"
 	"github.com/golangci/golangci-lint/pkg/golinters/depguard"
 	"github.com/golangci/golangci-lint/pkg/golinters/dogsled"
+	"github.com/golangci/golangci-lint/pkg/golinters/dupl"
 	"github.com/golangci/golangci-lint/pkg/golinters/gci"
 	"github.com/golangci/golangci-lint/pkg/golinters/ginkgolinter"
 	"github.com/golangci/golangci-lint/pkg/golinters/gocritic"
@@ -124,7 +125,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/alexkohler/dogsled"),
 
-		linter.NewConfig(golinters.NewDupl(&cfg.LintersSettings.Dupl)).
+		linter.NewConfig(dupl.New(&cfg.LintersSettings.Dupl)).
 			WithSince("v1.0.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/mibk/dupl"),

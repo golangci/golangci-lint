@@ -1,5 +1,5 @@
 //golangcitest:args -Edupl
-//golangcitest:config_path testdata/configs/dupl.yml
+//golangcitest:config_path testdata/dupl.yml
 package testdata
 
 type DuplLogger struct{}
