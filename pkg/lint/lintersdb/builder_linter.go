@@ -73,6 +73,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/nilerr"
 	"github.com/golangci/golangci-lint/pkg/golinters/nilnil"
 	"github.com/golangci/golangci-lint/pkg/golinters/nlreturn"
+	"github.com/golangci/golangci-lint/pkg/golinters/noctx"
 	"github.com/golangci/golangci-lint/pkg/golinters/nolintlint"
 	"github.com/golangci/golangci-lint/pkg/golinters/protogetter"
 	"github.com/golangci/golangci-lint/pkg/golinters/spancheck"
@@ -553,7 +554,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/ssgreg/nlreturn"),
 
-		linter.NewConfig(golinters.NewNoctx()).
+		linter.NewConfig(noctx.New()).
 			WithSince("v1.28.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetPerformance, linter.PresetBugs).

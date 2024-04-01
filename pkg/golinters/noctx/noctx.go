@@ -1,4 +1,4 @@
-package golinters
+package noctx
 
 import (
 	"github.com/sonatard/noctx"
@@ -7,7 +7,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func NewNoctx() *goanalysis.Linter {
+func New() *goanalysis.Linter {
 	a := noctx.Analyzer
 
 	return goanalysis.NewLinter(
