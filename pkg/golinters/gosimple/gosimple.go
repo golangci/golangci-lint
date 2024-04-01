@@ -1,4 +1,4 @@
-package golinters
+package gosimple
 
 import (
 	"honnef.co/go/tools/simple"
@@ -8,7 +8,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/internal"
 )
 
-func NewGosimple(settings *config.StaticCheckSettings) *goanalysis.Linter {
+func New(settings *config.StaticCheckSettings) *goanalysis.Linter {
 	cfg := internal.StaticCheckConfig(settings)
 
 	analyzers := internal.SetupStaticCheckAnalyzers(simple.Analyzers, internal.GetGoVersion(settings), cfg.Checks)

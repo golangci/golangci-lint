@@ -50,6 +50,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/gomodguard"
 	"github.com/golangci/golangci-lint/pkg/golinters/goprintffuncname"
 	"github.com/golangci/golangci-lint/pkg/golinters/gosec"
+	"github.com/golangci/golangci-lint/pkg/golinters/gosimple"
 	"github.com/golangci/golangci-lint/pkg/golinters/loggercheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/mirror"
 	"github.com/golangci/golangci-lint/pkg/golinters/misspell"
@@ -386,7 +387,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithURL("https://github.com/securego/gosec").
 			WithAlternativeNames("gas"),
 
-		linter.NewConfig(golinters.NewGosimple(&cfg.LintersSettings.Gosimple)).
+		linter.NewConfig(gosimple.New(&cfg.LintersSettings.Gosimple)).
 			WithEnabledByDefault().
 			WithSince("v1.20.0").
 			WithLoadForGoAnalysis().
