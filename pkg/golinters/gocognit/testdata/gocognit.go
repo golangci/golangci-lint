@@ -1,5 +1,5 @@
 //golangcitest:args -Egocognit
-//golangcitest:config_path testdata/configs/gocognit.yml
+//golangcitest:config_path testdata/gocognit.yml
 package testdata
 
 func GoCognit_CC4_GetWords(number int) string { // want "cognitive complexity 4 of func .* is high .*"

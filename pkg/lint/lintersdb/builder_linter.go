@@ -36,6 +36,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/gochecknoglobals"
 	"github.com/golangci/golangci-lint/pkg/golinters/gochecknoinits"
 	"github.com/golangci/golangci-lint/pkg/golinters/gochecksumtype"
+	"github.com/golangci/golangci-lint/pkg/golinters/gocognit"
 	"github.com/golangci/golangci-lint/pkg/golinters/gocritic"
 	"github.com/golangci/golangci-lint/pkg/golinters/godot"
 	"github.com/golangci/golangci-lint/pkg/golinters/gofmt"
@@ -275,7 +276,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/alecthomas/go-check-sumtype"),
 
-		linter.NewConfig(golinters.NewGocognit(&cfg.LintersSettings.Gocognit)).
+		linter.NewConfig(gocognit.New(&cfg.LintersSettings.Gocognit)).
 			WithSince("v1.20.0").
 			WithPresets(linter.PresetComplexity).
 			WithURL("https://github.com/uudashr/gocognit"),
