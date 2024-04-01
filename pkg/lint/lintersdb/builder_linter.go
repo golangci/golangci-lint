@@ -11,6 +11,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/contextcheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/copyloopvar"
 	"github.com/golangci/golangci-lint/pkg/golinters/cyclop"
+	"github.com/golangci/golangci-lint/pkg/golinters/decorder"
 	"github.com/golangci/golangci-lint/pkg/golinters/gci"
 	"github.com/golangci/golangci-lint/pkg/golinters/ginkgolinter"
 	"github.com/golangci/golangci-lint/pkg/golinters/gocritic"
@@ -99,7 +100,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithPresets(linter.PresetComplexity).
 			WithURL("https://github.com/bkielbasa/cyclop"),
 
-		linter.NewConfig(golinters.NewDecorder(&cfg.LintersSettings.Decorder)).
+		linter.NewConfig(decorder.New(&cfg.LintersSettings.Decorder)).
 			WithSince("v1.44.0").
 			WithPresets(linter.PresetFormatting, linter.PresetStyle).
 			WithURL("https://gitlab.com/bosi/decorder"),

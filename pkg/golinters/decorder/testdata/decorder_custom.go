@@ -1,5 +1,5 @@
 //golangcitest:args -Edecorder
-//golangcitest:config_path testdata/configs/decorder_custom.yml
+//golangcitest:config_path testdata/decorder_custom.yml
 package testdata
 
 import "math"

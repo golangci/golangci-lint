@@ -1,4 +1,4 @@
-package golinters
+package decorder
 
 import (
 	"strings"
@@ -10,7 +10,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func NewDecorder(settings *config.DecorderSettings) *goanalysis.Linter {
+func New(settings *config.DecorderSettings) *goanalysis.Linter {
 	a := decorder.Analyzer
 
 	// disable all rules/checks by default
