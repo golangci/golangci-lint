@@ -32,6 +32,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/funlen"
 	"github.com/golangci/golangci-lint/pkg/golinters/gci"
 	"github.com/golangci/golangci-lint/pkg/golinters/ginkgolinter"
+	"github.com/golangci/golangci-lint/pkg/golinters/gocheckcompilerdirectives"
 	"github.com/golangci/golangci-lint/pkg/golinters/gocritic"
 	"github.com/golangci/golangci-lint/pkg/golinters/godot"
 	"github.com/golangci/golangci-lint/pkg/golinters/gofmt"
@@ -250,7 +251,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/nunnatsa/ginkgolinter"),
 
-		linter.NewConfig(golinters.NewGoCheckCompilerDirectives()).
+		linter.NewConfig(gocheckcompilerdirectives.New()).
 			WithSince("v1.51.0").
 			WithPresets(linter.PresetBugs).
 			WithURL("https://github.com/leighmcculloch/gocheckcompilerdirectives"),

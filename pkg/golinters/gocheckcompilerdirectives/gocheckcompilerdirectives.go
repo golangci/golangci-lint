@@ -1,4 +1,4 @@
-package golinters
+package gocheckcompilerdirectives
 
 import (
 	"4d63.com/gocheckcompilerdirectives/checkcompilerdirectives"
@@ -7,7 +7,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func NewGoCheckCompilerDirectives() *goanalysis.Linter {
+func New() *goanalysis.Linter {
 	a := checkcompilerdirectives.Analyzer()
 
 	return goanalysis.NewLinter(
