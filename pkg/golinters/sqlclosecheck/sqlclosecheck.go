@@ -1,4 +1,4 @@
-package golinters
+package sqlclosecheck
 
 import (
 	"github.com/ryanrolds/sqlclosecheck/pkg/analyzer"
@@ -7,7 +7,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func NewSQLCloseCheck() *goanalysis.Linter {
+func New() *goanalysis.Linter {
 	a := analyzer.NewAnalyzer()
 
 	return goanalysis.NewLinter(

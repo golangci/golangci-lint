@@ -88,6 +88,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/rowserrcheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/sloglint"
 	"github.com/golangci/golangci-lint/pkg/golinters/spancheck"
+	"github.com/golangci/golangci-lint/pkg/golinters/sqlclosecheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/tagalign"
 	"github.com/golangci/golangci-lint/pkg/golinters/whitespace"
 	"github.com/golangci/golangci-lint/pkg/golinters/zerologlint"
@@ -652,7 +653,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithURL("https://github.com/kyoh86/scopelint").
 			Deprecated("The repository of the linter has been deprecated by the owner.", "v1.39.0", "exportloopref"),
 
-		linter.NewConfig(golinters.NewSQLCloseCheck()).
+		linter.NewConfig(sqlclosecheck.New()).
 			WithSince("v1.28.0").
 			WithPresets(linter.PresetBugs, linter.PresetSQL).
 			WithLoadForGoAnalysis().
