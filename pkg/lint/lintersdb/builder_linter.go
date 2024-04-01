@@ -55,6 +55,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/govet"
 	"github.com/golangci/golangci-lint/pkg/golinters/grouper"
 	"github.com/golangci/golangci-lint/pkg/golinters/importas"
+	"github.com/golangci/golangci-lint/pkg/golinters/inamedparam"
 	"github.com/golangci/golangci-lint/pkg/golinters/loggercheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/mirror"
 	"github.com/golangci/golangci-lint/pkg/golinters/misspell"
@@ -430,7 +431,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/julz/importas"),
 
-		linter.NewConfig(golinters.NewINamedParam(&cfg.LintersSettings.Inamedparam)).
+		linter.NewConfig(inamedparam.New(&cfg.LintersSettings.Inamedparam)).
 			WithSince("v1.55.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/macabu/inamedparam"),

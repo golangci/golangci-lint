@@ -1,5 +1,5 @@
 //golangcitest:args -Einamedparam
-//golangcitest:config_path testdata/configs/inamedparam_skip_single_param.yml
+//golangcitest:config_path testdata/inamedparam_skip_single_param.yml
 package testdata
 
 import "context"
