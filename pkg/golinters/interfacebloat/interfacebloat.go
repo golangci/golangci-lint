@@ -1,4 +1,4 @@
-package golinters
+package interfacebloat
 
 import (
 	"github.com/sashamelentyev/interfacebloat/pkg/analyzer"
@@ -8,7 +8,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func NewInterfaceBloat(settings *config.InterfaceBloatSettings) *goanalysis.Linter {
+func New(settings *config.InterfaceBloatSettings) *goanalysis.Linter {
 	a := analyzer.New()
 
 	var cfg map[string]map[string]any

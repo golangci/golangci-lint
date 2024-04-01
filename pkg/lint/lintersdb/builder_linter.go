@@ -57,6 +57,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/importas"
 	"github.com/golangci/golangci-lint/pkg/golinters/inamedparam"
 	"github.com/golangci/golangci-lint/pkg/golinters/ineffassign"
+	"github.com/golangci/golangci-lint/pkg/golinters/interfacebloat"
 	"github.com/golangci/golangci-lint/pkg/golinters/loggercheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/mirror"
 	"github.com/golangci/golangci-lint/pkg/golinters/misspell"
@@ -443,7 +444,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithPresets(linter.PresetUnused).
 			WithURL("https://github.com/gordonklaus/ineffassign"),
 
-		linter.NewConfig(golinters.NewInterfaceBloat(&cfg.LintersSettings.InterfaceBloat)).
+		linter.NewConfig(interfacebloat.New(&cfg.LintersSettings.InterfaceBloat)).
 			WithSince("v1.49.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/sashamelentyev/interfacebloat"),
