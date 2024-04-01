@@ -1,4 +1,4 @@
-package golinters
+package rowserrcheck
 
 import (
 	"github.com/jingyugao/rowserrcheck/passes/rowserr"
@@ -8,7 +8,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func NewRowsErrCheck(settings *config.RowsErrCheckSettings) *goanalysis.Linter {
+func New(settings *config.RowsErrCheckSettings) *goanalysis.Linter {
 	var pkgs []string
 	if settings != nil {
 		pkgs = settings.Packages

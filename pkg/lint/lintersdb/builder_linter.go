@@ -85,6 +85,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/protogetter"
 	"github.com/golangci/golangci-lint/pkg/golinters/reassign"
 	"github.com/golangci/golangci-lint/pkg/golinters/revive"
+	"github.com/golangci/golangci-lint/pkg/golinters/rowserrcheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/spancheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/tagalign"
 	"github.com/golangci/golangci-lint/pkg/golinters/whitespace"
@@ -632,7 +633,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			ConsiderSlow().
 			WithURL("https://github.com/mgechev/revive"),
 
-		linter.NewConfig(golinters.NewRowsErrCheck(&cfg.LintersSettings.RowsErrCheck)).
+		linter.NewConfig(rowserrcheck.New(&cfg.LintersSettings.RowsErrCheck)).
 			WithSince("v1.23.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetBugs, linter.PresetSQL).
