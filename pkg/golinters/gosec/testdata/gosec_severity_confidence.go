@@ -1,5 +1,5 @@
 //golangcitest:args -Egosec
-//golangcitest:config_path testdata/configs/gosec_severity_confidence.yml
+//golangcitest:config_path testdata/gosec_severity_confidence.yml
 package testdata
 
 import (

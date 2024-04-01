@@ -1,5 +1,5 @@
 //golangcitest:args -Egosec
-//golangcitest:config_path testdata/configs/gosec_global_option.yml
+//golangcitest:config_path testdata/gosec_global_option.yml
 package testdata
 
 import (

@@ -1,4 +1,4 @@
-package golinters
+package gosec
 
 import (
 	"fmt"
@@ -21,9 +21,9 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-const gosecName = "gosec"
+const name = "gosec"
 
-func NewGosec(settings *config.GoSecSettings) *goanalysis.Linter {
+func New(settings *config.GoSecSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
 
@@ -39,13 +39,13 @@ func NewGosec(settings *config.GoSecSettings) *goanalysis.Linter {
 	ruleDefinitions := rules.Generate(false, filters...)
 
 	analyzer := &analysis.Analyzer{
-		Name: gosecName,
+		Name: name,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 		Run:  goanalysis.DummyRun,
 	}
 
 	return goanalysis.NewLinter(
-		gosecName,
+		name,
 		"Inspects source code for security problems",
 		[]*analysis.Analyzer{analyzer},
 		nil,
@@ -126,7 +126,7 @@ func runGoSec(lintCtx *linter.Context, pass *analysis.Pass, settings *config.GoS
 			},
 			Text:       text,
 			LineRange:  r,
-			FromLinter: gosecName,
+			FromLinter: name,
 		}, pass))
 	}
 
