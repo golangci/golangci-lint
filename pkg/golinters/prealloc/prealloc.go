@@ -1,4 +1,4 @@
-package golinters
+package prealloc
 
 import (
 	"fmt"
@@ -14,14 +14,14 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-const preallocName = "prealloc"
+const name = "prealloc"
 
-func NewPreAlloc(settings *config.PreallocSettings) *goanalysis.Linter {
+func New(settings *config.PreallocSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
 
 	analyzer := &analysis.Analyzer{
-		Name: preallocName,
+		Name: name,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 		Run: func(pass *analysis.Pass) (any, error) {
 			issues := runPreAlloc(pass, settings)
@@ -39,7 +39,7 @@ func NewPreAlloc(settings *config.PreallocSettings) *goanalysis.Linter {
 	}
 
 	return goanalysis.NewLinter(
-		preallocName,
+		name,
 		"Finds slice declarations that could potentially be pre-allocated",
 		[]*analysis.Analyzer{analyzer},
 		nil,
@@ -57,7 +57,7 @@ func runPreAlloc(pass *analysis.Pass, settings *config.PreallocSettings) []goana
 		issues = append(issues, goanalysis.NewIssue(&result.Issue{
 			Pos:        pass.Fset.Position(hint.Pos),
 			Text:       fmt.Sprintf("Consider pre-allocating %s", internal.FormatCode(hint.DeclaredSliceName, nil)),
-			FromLinter: preallocName,
+			FromLinter: name,
 		}, pass))
 	}
 
