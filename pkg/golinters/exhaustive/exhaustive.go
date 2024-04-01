@@ -1,4 +1,4 @@
-package golinters
+package exhaustive
 
 import (
 	"github.com/nishanths/exhaustive"
@@ -8,7 +8,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func NewExhaustive(settings *config.ExhaustiveSettings) *goanalysis.Linter {
+func New(settings *config.ExhaustiveSettings) *goanalysis.Linter {
 	a := exhaustive.Analyzer
 
 	var cfg map[string]map[string]any

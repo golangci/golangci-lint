@@ -23,6 +23,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/errname"
 	"github.com/golangci/golangci-lint/pkg/golinters/errorlint"
 	"github.com/golangci/golangci-lint/pkg/golinters/execinquery"
+	"github.com/golangci/golangci-lint/pkg/golinters/exhaustive"
 	"github.com/golangci/golangci-lint/pkg/golinters/gci"
 	"github.com/golangci/golangci-lint/pkg/golinters/ginkgolinter"
 	"github.com/golangci/golangci-lint/pkg/golinters/gocritic"
@@ -180,7 +181,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/lufeee/execinquery"),
 
-		linter.NewConfig(golinters.NewExhaustive(&cfg.LintersSettings.Exhaustive)).
+		linter.NewConfig(exhaustive.New(&cfg.LintersSettings.Exhaustive)).
 			WithSince(" v1.28.0").
 			WithPresets(linter.PresetBugs).
 			WithLoadForGoAnalysis().
