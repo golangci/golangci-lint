@@ -101,6 +101,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/tparallel"
 	"github.com/golangci/golangci-lint/pkg/golinters/unconvert"
 	"github.com/golangci/golangci-lint/pkg/golinters/unparam"
+	"github.com/golangci/golangci-lint/pkg/golinters/unused"
 	"github.com/golangci/golangci-lint/pkg/golinters/whitespace"
 	"github.com/golangci/golangci-lint/pkg/golinters/zerologlint"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
@@ -762,7 +763,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/mvdan/unparam"),
 
-		linter.NewConfig(golinters.NewUnused(&cfg.LintersSettings.Unused, &cfg.LintersSettings.Staticcheck)).
+		linter.NewConfig(unused.New(&cfg.LintersSettings.Unused, &cfg.LintersSettings.Staticcheck)).
 			WithEnabledByDefault().
 			WithSince("v1.20.0").
 			WithLoadForGoAnalysis().

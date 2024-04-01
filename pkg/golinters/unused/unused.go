@@ -1,4 +1,4 @@
-package golinters
+package unused
 
 import (
 	"fmt"
@@ -17,14 +17,14 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-const unusedName = "unused"
+const name = "unused"
 
-func NewUnused(settings *config.UnusedSettings, scSettings *config.StaticCheckSettings) *goanalysis.Linter {
+func New(settings *config.UnusedSettings, scSettings *config.StaticCheckSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
 
 	analyzer := &analysis.Analyzer{
-		Name:     unusedName,
+		Name:     name,
 		Doc:      unused.Analyzer.Analyzer.Doc,
 		Requires: unused.Analyzer.Analyzer.Requires,
 		Run: func(pass *analysis.Pass) (any, error) {
@@ -44,7 +44,7 @@ func NewUnused(settings *config.UnusedSettings, scSettings *config.StaticCheckSe
 	internal.SetAnalyzerGoVersion(analyzer, internal.GetGoVersion(scSettings))
 
 	return goanalysis.NewLinter(
-		unusedName,
+		name,
 		"Checks Go code for unused constants, variables, functions and types",
 		[]*analysis.Analyzer{analyzer},
 		nil,
@@ -75,7 +75,7 @@ func runUnused(pass *analysis.Pass, cfg *config.UnusedSettings) []goanalysis.Iss
 		}
 
 		issue := goanalysis.NewIssue(&result.Issue{
-			FromLinter: unusedName,
+			FromLinter: name,
 			Text:       fmt.Sprintf("%s %s is unused", object.Kind, object.Name),
 			Pos:        object.Position,
 		}, pass)
