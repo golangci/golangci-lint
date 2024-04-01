@@ -17,6 +17,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/dupl"
 	"github.com/golangci/golangci-lint/pkg/golinters/dupword"
 	"github.com/golangci/golangci-lint/pkg/golinters/durationcheck"
+	"github.com/golangci/golangci-lint/pkg/golinters/err113"
 	"github.com/golangci/golangci-lint/pkg/golinters/gci"
 	"github.com/golangci/golangci-lint/pkg/golinters/ginkgolinter"
 	"github.com/golangci/golangci-lint/pkg/golinters/gocritic"
@@ -291,7 +292,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithPresets(linter.PresetStyle, linter.PresetComment).
 			WithURL("https://github.com/matoous/godox"),
 
-		linter.NewConfig(golinters.NewErr113()).
+		linter.NewConfig(err113.New()).
 			WithSince("v1.26.0").
 			WithPresets(linter.PresetStyle, linter.PresetError).
 			WithLoadForGoAnalysis().

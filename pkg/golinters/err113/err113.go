@@ -1,4 +1,4 @@
-package golinters
+package err113
 
 import (
 	"github.com/Djarvur/go-err113"
@@ -7,7 +7,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func NewErr113() *goanalysis.Linter {
+func New() *goanalysis.Linter {
 	a := err113.NewAnalyzer()
 
 	return goanalysis.NewLinter(
