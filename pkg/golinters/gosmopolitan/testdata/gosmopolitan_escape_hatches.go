@@ -1,5 +1,5 @@
 //golangcitest:args -Egosmopolitan
-//golangcitest:config_path testdata/configs/gosmopolitan_escape_hatches.yml
+//golangcitest:config_path testdata/gosmopolitan_escape_hatches.yml
 package testdata
 
 import (

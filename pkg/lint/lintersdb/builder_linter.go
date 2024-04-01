@@ -51,6 +51,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/goprintffuncname"
 	"github.com/golangci/golangci-lint/pkg/golinters/gosec"
 	"github.com/golangci/golangci-lint/pkg/golinters/gosimple"
+	"github.com/golangci/golangci-lint/pkg/golinters/gosmopolitan"
 	"github.com/golangci/golangci-lint/pkg/golinters/loggercheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/mirror"
 	"github.com/golangci/golangci-lint/pkg/golinters/misspell"
@@ -395,7 +396,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithAlternativeNames(megacheckName).
 			WithURL("https://github.com/dominikh/go-tools/tree/master/simple"),
 
-		linter.NewConfig(golinters.NewGosmopolitan(&cfg.LintersSettings.Gosmopolitan)).
+		linter.NewConfig(gosmopolitan.New(&cfg.LintersSettings.Gosmopolitan)).
 			WithSince("v1.53.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetBugs).

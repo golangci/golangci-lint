@@ -1,5 +1,5 @@
 //golangcitest:args -Egosmopolitan
-//golangcitest:config_path testdata/configs/gosmopolitan_dont_ignore_tests.yml
+//golangcitest:config_path testdata/gosmopolitan_dont_ignore_tests.yml
 package testdata
 
 import (

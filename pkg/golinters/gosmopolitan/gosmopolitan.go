@@ -1,4 +1,4 @@
-package golinters
+package gosmopolitan
 
 import (
 	"strings"
@@ -10,7 +10,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func NewGosmopolitan(s *config.GosmopolitanSettings) *goanalysis.Linter {
+func New(s *config.GosmopolitanSettings) *goanalysis.Linter {
 	a := gosmopolitan.NewAnalyzer()
 
 	cfgMap := map[string]map[string]any{}
