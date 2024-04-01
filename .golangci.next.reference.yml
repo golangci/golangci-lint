@@ -2534,6 +2534,7 @@ linters:
     - exhaustive
     - exhaustruct
     - exportloopref
+    - fatcontext
     - forbidigo
     - forcetypeassert
     - funlen
@@ -2647,6 +2648,7 @@ linters:
     - exhaustive
     - exhaustruct
     - exportloopref
+    - fatcontext
     - forbidigo
     - forcetypeassert
     - funlen

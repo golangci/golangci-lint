@@ -235,6 +235,7 @@
             "exhaustivestruct",
             "exhaustruct",
             "exportloopref",
+            "fatcontext",
             "forbidigo",
             "forcetypeassert",
             "funlen",

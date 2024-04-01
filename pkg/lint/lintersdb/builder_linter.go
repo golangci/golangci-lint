@@ -181,6 +181,12 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/gostaticanalysis/forcetypeassert"),
 
+		linter.NewConfig(golinters.NewFatContext()).
+			WithSince("1.58.0").
+			WithPresets(linter.PresetPerformance).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/Crocmagnon/fatcontext"),
+
 		linter.NewConfig(golinters.NewFunlen(&cfg.LintersSettings.Funlen)).
 			WithSince("v1.18.0").
 			WithPresets(linter.PresetComplexity).
