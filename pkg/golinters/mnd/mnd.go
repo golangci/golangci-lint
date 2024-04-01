@@ -1,4 +1,4 @@
-package golinters
+package mnd
 
 import (
 	mnd "github.com/tommy-muehle/go-mnd/v2"
@@ -8,7 +8,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func NewMND(settings *config.MndSettings) *goanalysis.Linter {
+func New(settings *config.MndSettings) *goanalysis.Linter {
 	return newMND(mnd.Analyzer, settings, nil)
 }
 
