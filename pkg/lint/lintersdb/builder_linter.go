@@ -24,6 +24,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/errorlint"
 	"github.com/golangci/golangci-lint/pkg/golinters/execinquery"
 	"github.com/golangci/golangci-lint/pkg/golinters/exhaustive"
+	"github.com/golangci/golangci-lint/pkg/golinters/exhaustruct"
 	"github.com/golangci/golangci-lint/pkg/golinters/gci"
 	"github.com/golangci/golangci-lint/pkg/golinters/ginkgolinter"
 	"github.com/golangci/golangci-lint/pkg/golinters/gocritic"
@@ -194,7 +195,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithURL("https://github.com/mbilski/exhaustivestruct").
 			Deprecated("The repository of the linter has been deprecated by the owner.", "v1.46.0", "exhaustruct"),
 
-		linter.NewConfig(golinters.NewExhaustruct(&cfg.LintersSettings.Exhaustruct)).
+		linter.NewConfig(exhaustruct.New(&cfg.LintersSettings.Exhaustruct)).
 			WithSince("v1.46.0").
 			WithPresets(linter.PresetStyle, linter.PresetTest).
 			WithLoadForGoAnalysis().

@@ -1,4 +1,4 @@
-package golinters
+package exhaustruct
 
 import (
 	"github.com/GaijinEntertainment/go-exhaustruct/v3/analyzer"
@@ -9,7 +9,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/internal"
 )
 
-func NewExhaustruct(settings *config.ExhaustructSettings) *goanalysis.Linter {
+func New(settings *config.ExhaustructSettings) *goanalysis.Linter {
 	var include, exclude []string
 	if settings != nil {
 		include = settings.Include
