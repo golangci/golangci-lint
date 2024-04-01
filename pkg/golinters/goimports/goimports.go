@@ -1,4 +1,4 @@
-package golinters
+package goimports
 
 import (
 	"fmt"
@@ -14,20 +14,20 @@ import (
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 )
 
-const goimportsName = "goimports"
+const name = "goimports"
 
-func NewGoimports(settings *config.GoImportsSettings) *goanalysis.Linter {
+func New(settings *config.GoImportsSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
 
 	analyzer := &analysis.Analyzer{
-		Name: goimportsName,
+		Name: name,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 		Run:  goanalysis.DummyRun,
 	}
 
 	return goanalysis.NewLinter(
-		goimportsName,
+		name,
 		"Check import statements are formatted according to the 'goimport' command. "+
 			"Reformat imports in autofix mode.",
 		[]*analysis.Analyzer{analyzer},
@@ -70,7 +70,7 @@ func runGoImports(lintCtx *linter.Context, pass *analysis.Pass) ([]goanalysis.Is
 			continue
 		}
 
-		is, err := internal.ExtractIssuesFromPatch(string(diff), lintCtx, goimportsName, getIssuedTextGoImports)
+		is, err := internal.ExtractIssuesFromPatch(string(diff), lintCtx, name, getIssuedTextGoImports)
 		if err != nil {
 			return nil, fmt.Errorf("can't extract issues from gofmt diff output %q: %w", string(diff), err)
 		}

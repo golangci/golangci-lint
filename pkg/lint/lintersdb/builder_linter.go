@@ -10,6 +10,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/gofmt"
 	"github.com/golangci/golangci-lint/pkg/golinters/gofumpt"
 	"github.com/golangci/golangci-lint/pkg/golinters/goheader"
+	"github.com/golangci/golangci-lint/pkg/golinters/goimports"
 	"github.com/golangci/golangci-lint/pkg/golinters/gomoddirectives"
 	"github.com/golangci/golangci-lint/pkg/golinters/loggercheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/mnd"
@@ -297,7 +298,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithAutoFix().
 			WithURL("https://github.com/denis-tingaikin/go-header"),
 
-		linter.NewConfig(golinters.NewGoimports(&cfg.LintersSettings.Goimports)).
+		linter.NewConfig(goimports.New(&cfg.LintersSettings.Goimports)).
 			WithSince("v1.20.0").
 			WithPresets(linter.PresetFormatting, linter.PresetImport).
 			WithAutoFix().
