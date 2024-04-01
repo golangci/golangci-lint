@@ -1,4 +1,4 @@
-package golinters
+package varnamelen
 
 import (
 	"strconv"
@@ -11,7 +11,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func NewVarnamelen(settings *config.VarnamelenSettings) *goanalysis.Linter {
+func New(settings *config.VarnamelenSettings) *goanalysis.Linter {
 	analyzer := varnamelen.NewAnalyzer()
 	cfg := map[string]map[string]any{}
 

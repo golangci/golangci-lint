@@ -103,6 +103,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/unparam"
 	"github.com/golangci/golangci-lint/pkg/golinters/unused"
 	"github.com/golangci/golangci-lint/pkg/golinters/usestdlibvars"
+	"github.com/golangci/golangci-lint/pkg/golinters/varnamelen"
 	"github.com/golangci/golangci-lint/pkg/golinters/whitespace"
 	"github.com/golangci/golangci-lint/pkg/golinters/zerologlint"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
@@ -786,7 +787,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithURL("https://github.com/opennota/check").
 			Deprecated("The owner seems to have abandoned the linter.", "v1.49.0", "unused"),
 
-		linter.NewConfig(golinters.NewVarnamelen(&cfg.LintersSettings.Varnamelen)).
+		linter.NewConfig(varnamelen.New(&cfg.LintersSettings.Varnamelen)).
 			WithSince("v1.43.0").
 			WithPresets(linter.PresetStyle).
 			WithLoadForGoAnalysis().
