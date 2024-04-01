@@ -1,4 +1,4 @@
-package golinters
+package copyloopvar
 
 import (
 	"github.com/karamaru-alpha/copyloopvar"
@@ -8,7 +8,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func NewCopyLoopVar(settings *config.CopyLoopVarSettings) *goanalysis.Linter {
+func New(settings *config.CopyLoopVarSettings) *goanalysis.Linter {
 	a := copyloopvar.NewAnalyzer()
 
 	var cfg map[string]map[string]any

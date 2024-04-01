@@ -1,7 +1,7 @@
 //go:build go1.22
 
 //golangcitest:args -Ecopyloopvar
-//golangcitest:config_path testdata/configs/copyloopvar.yml
+//golangcitest:config_path testdata/copyloopvar.yml
 package testdata
 
 import "fmt"

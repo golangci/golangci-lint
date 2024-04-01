@@ -9,6 +9,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/bodyclose"
 	"github.com/golangci/golangci-lint/pkg/golinters/containedctx"
 	"github.com/golangci/golangci-lint/pkg/golinters/contextcheck"
+	"github.com/golangci/golangci-lint/pkg/golinters/copyloopvar"
 	"github.com/golangci/golangci-lint/pkg/golinters/gci"
 	"github.com/golangci/golangci-lint/pkg/golinters/ginkgolinter"
 	"github.com/golangci/golangci-lint/pkg/golinters/gocritic"
@@ -85,7 +86,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/kkHAIKE/contextcheck"),
 
-		linter.NewConfig(golinters.NewCopyLoopVar(&cfg.LintersSettings.CopyLoopVar)).
+		linter.NewConfig(copyloopvar.New(&cfg.LintersSettings.CopyLoopVar)).
 			WithSince("v1.57.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/karamaru-alpha/copyloopvar").
