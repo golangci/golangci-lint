@@ -1,4 +1,4 @@
-package golinters
+package contextcheck
 
 import (
 	"github.com/kkHAIKE/contextcheck"
@@ -8,7 +8,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 )
 
-func NewContextCheck() *goanalysis.Linter {
+func New() *goanalysis.Linter {
 	analyzer := contextcheck.NewAnalyzer(contextcheck.Configuration{})
 
 	return goanalysis.NewLinter(

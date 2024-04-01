@@ -8,6 +8,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/bidichk"
 	"github.com/golangci/golangci-lint/pkg/golinters/bodyclose"
 	"github.com/golangci/golangci-lint/pkg/golinters/containedctx"
+	"github.com/golangci/golangci-lint/pkg/golinters/contextcheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/gci"
 	"github.com/golangci/golangci-lint/pkg/golinters/ginkgolinter"
 	"github.com/golangci/golangci-lint/pkg/golinters/gocritic"
@@ -78,7 +79,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/sivchari/containedctx"),
 
-		linter.NewConfig(golinters.NewContextCheck()).
+		linter.NewConfig(contextcheck.New()).
 			WithSince("v1.43.0").
 			WithPresets(linter.PresetBugs).
 			WithLoadForGoAnalysis().
