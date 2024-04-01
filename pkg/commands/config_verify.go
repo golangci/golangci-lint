@@ -100,10 +100,10 @@ func createSchemaURL(flags *pflag.FlagSet, buildInfo BuildInfo) (string, error) 
 }
 
 func validateConfiguration(schemaPath, targetFile string) error {
+	httploader.Client = &http.Client{Timeout: 2 * time.Second}
+
 	compiler := jsonschema.NewCompiler()
 	compiler.Draft = jsonschema.Draft7
-	const loadSchemaTimeout = 2 * time.Second
-	httploader.Client = &http.Client{Timeout: loadSchemaTimeout}
 
 	schema, err := compiler.Compile(schemaPath)
 	if err != nil {
