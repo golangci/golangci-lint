@@ -1,5 +1,5 @@
 //golangcitest:args -Edupword
-//golangcitest:config_path testdata/configs/dupword_ignore_the.yml
+//golangcitest:config_path testdata/dupword_ignore_the.yml
 package testdata
 
 import "fmt"

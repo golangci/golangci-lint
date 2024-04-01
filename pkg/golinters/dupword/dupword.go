@@ -1,4 +1,4 @@
-package golinters
+package dupword
 
 import (
 	"strings"
@@ -10,7 +10,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func NewDupWord(setting *config.DupWordSettings) *goanalysis.Linter {
+func New(setting *config.DupWordSettings) *goanalysis.Linter {
 	a := dupword.NewAnalyzer()
 
 	cfgMap := map[string]map[string]any{}

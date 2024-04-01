@@ -15,6 +15,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/depguard"
 	"github.com/golangci/golangci-lint/pkg/golinters/dogsled"
 	"github.com/golangci/golangci-lint/pkg/golinters/dupl"
+	"github.com/golangci/golangci-lint/pkg/golinters/dupword"
 	"github.com/golangci/golangci-lint/pkg/golinters/gci"
 	"github.com/golangci/golangci-lint/pkg/golinters/ginkgolinter"
 	"github.com/golangci/golangci-lint/pkg/golinters/gocritic"
@@ -130,7 +131,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/mibk/dupl"),
 
-		linter.NewConfig(golinters.NewDupWord(&cfg.LintersSettings.DupWord)).
+		linter.NewConfig(dupword.New(&cfg.LintersSettings.DupWord)).
 			WithSince("1.50.0").
 			WithPresets(linter.PresetComment).
 			WithURL("https://github.com/Abirdcfly/dupword"),
