@@ -7,6 +7,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/loggercheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/nolintlint"
 	"github.com/golangci/golangci-lint/pkg/golinters/protogetter"
+	"github.com/golangci/golangci-lint/pkg/golinters/spancheck"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 )
 
@@ -574,7 +575,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/ryanrolds/sqlclosecheck"),
 
-		linter.NewConfig(golinters.NewSpancheck(&cfg.LintersSettings.Spancheck)).
+		linter.NewConfig(spancheck.New(&cfg.LintersSettings.Spancheck)).
 			WithSince("v1.56.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetBugs).

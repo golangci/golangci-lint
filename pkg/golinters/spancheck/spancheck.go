@@ -1,4 +1,4 @@
-package golinters
+package spancheck
 
 import (
 	"github.com/jjti/go-spancheck"
@@ -8,7 +8,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func NewSpancheck(settings *config.SpancheckSettings) *goanalysis.Linter {
+func New(settings *config.SpancheckSettings) *goanalysis.Linter {
 	cfg := spancheck.NewDefaultConfig()
 
 	if settings != nil {
