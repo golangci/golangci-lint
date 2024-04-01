@@ -1,5 +1,5 @@
 //golangcitest:args -Etestifylint
-//golangcitest:config_path testdata/configs/testifylint_bool_compare_only.yml
+//golangcitest:config_path testdata/testifylint_bool_compare_only.yml
 package testdata
 
 import (

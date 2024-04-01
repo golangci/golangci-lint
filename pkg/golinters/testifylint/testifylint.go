@@ -1,4 +1,4 @@
-package golinters
+package testifylint
 
 import (
 	"github.com/Antonboom/testifylint/analyzer"
@@ -8,7 +8,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func NewTestifylint(settings *config.TestifylintSettings) *goanalysis.Linter {
+func New(settings *config.TestifylintSettings) *goanalysis.Linter {
 	a := analyzer.New()
 
 	cfg := make(map[string]map[string]any)
