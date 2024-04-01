@@ -1,4 +1,4 @@
-package golinters
+package nosprintfhostport
 
 import (
 	"github.com/stbenjam/no-sprintf-host-port/pkg/analyzer"
@@ -7,7 +7,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func NewNoSprintfHostPort() *goanalysis.Linter {
+func New() *goanalysis.Linter {
 	a := analyzer.Analyzer
 
 	return goanalysis.NewLinter(

@@ -76,6 +76,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/noctx"
 	"github.com/golangci/golangci-lint/pkg/golinters/nolintlint"
 	"github.com/golangci/golangci-lint/pkg/golinters/nonamedreturns"
+	"github.com/golangci/golangci-lint/pkg/golinters/nosprintfhostport"
 	"github.com/golangci/golangci-lint/pkg/golinters/protogetter"
 	"github.com/golangci/golangci-lint/pkg/golinters/spancheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/tagalign"
@@ -573,7 +574,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithURL("https://github.com/sivchari/nosnakecase").
 			Deprecated("The repository of the linter has been deprecated by the owner.", "v1.48.1", "revive 'var-naming'"),
 
-		linter.NewConfig(golinters.NewNoSprintfHostPort()).
+		linter.NewConfig(nosprintfhostport.New()).
 			WithSince("v1.46.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/stbenjam/no-sprintf-host-port"),
