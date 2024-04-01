@@ -1,4 +1,4 @@
-package golinters
+package gomodguard
 
 import (
 	"sync"
@@ -14,14 +14,13 @@ import (
 )
 
 const (
-	gomodguardName = "gomodguard"
-	gomodguardDesc = "Allow and block list linter for direct Go module dependencies. " +
+	name = "gomodguard"
+	desc = "Allow and block list linter for direct Go module dependencies. " +
 		"This is different from depguard where there are different block " +
 		"types for example version constraints and module recommendations."
 )
 
-// NewGomodguard returns a new Gomodguard linter.
-func NewGomodguard(settings *config.GoModGuardSettings) *goanalysis.Linter {
+func New(settings *config.GoModGuardSettings) *goanalysis.Linter {
 	var issues []goanalysis.Issue
 	var mu sync.Mutex
 
@@ -61,8 +60,8 @@ func NewGomodguard(settings *config.GoModGuardSettings) *goanalysis.Linter {
 	}
 
 	return goanalysis.NewLinter(
-		gomodguardName,
-		gomodguardDesc,
+		name,
+		desc,
 		[]*analysis.Analyzer{analyzer},
 		nil,
 	).WithContextSetter(func(lintCtx *linter.Context) {
@@ -81,7 +80,7 @@ func NewGomodguard(settings *config.GoModGuardSettings) *goanalysis.Linter {
 
 			for _, gomodguardIssue := range gomodguardIssues {
 				issues = append(issues, goanalysis.NewIssue(&result.Issue{
-					FromLinter: gomodguardName,
+					FromLinter: name,
 					Pos:        gomodguardIssue.Position,
 					Text:       gomodguardIssue.Reason,
 				}, pass))

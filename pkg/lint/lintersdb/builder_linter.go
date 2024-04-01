@@ -47,6 +47,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/goheader"
 	"github.com/golangci/golangci-lint/pkg/golinters/goimports"
 	"github.com/golangci/golangci-lint/pkg/golinters/gomoddirectives"
+	"github.com/golangci/golangci-lint/pkg/golinters/gomodguard"
 	"github.com/golangci/golangci-lint/pkg/golinters/loggercheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/mirror"
 	"github.com/golangci/golangci-lint/pkg/golinters/misspell"
@@ -366,7 +367,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithPresets(linter.PresetStyle, linter.PresetModule).
 			WithURL("https://github.com/ldez/gomoddirectives"),
 
-		linter.NewConfig(golinters.NewGomodguard(&cfg.LintersSettings.Gomodguard)).
+		linter.NewConfig(gomodguard.New(&cfg.LintersSettings.Gomodguard)).
 			WithSince("v1.25.0").
 			WithPresets(linter.PresetStyle, linter.PresetImport, linter.PresetModule).
 			WithURL("https://github.com/ryancurrah/gomodguard"),
