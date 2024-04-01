@@ -80,6 +80,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/paralleltest"
 	"github.com/golangci/golangci-lint/pkg/golinters/perfsprint"
 	"github.com/golangci/golangci-lint/pkg/golinters/prealloc"
+	"github.com/golangci/golangci-lint/pkg/golinters/predeclared"
 	"github.com/golangci/golangci-lint/pkg/golinters/protogetter"
 	"github.com/golangci/golangci-lint/pkg/golinters/spancheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/tagalign"
@@ -599,7 +600,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithPresets(linter.PresetPerformance).
 			WithURL("https://github.com/alexkohler/prealloc"),
 
-		linter.NewConfig(golinters.NewPredeclared(&cfg.LintersSettings.Predeclared)).
+		linter.NewConfig(predeclared.New(&cfg.LintersSettings.Predeclared)).
 			WithSince("v1.35.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/nishanths/predeclared"),

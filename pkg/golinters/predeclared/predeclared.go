@@ -1,4 +1,4 @@
-package golinters
+package predeclared
 
 import (
 	"github.com/nishanths/predeclared/passes/predeclared"
@@ -8,7 +8,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func NewPredeclared(settings *config.PredeclaredSettings) *goanalysis.Linter {
+func New(settings *config.PredeclaredSettings) *goanalysis.Linter {
 	a := predeclared.Analyzer
 
 	var cfg map[string]map[string]any
