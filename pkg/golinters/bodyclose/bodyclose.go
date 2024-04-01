@@ -1,4 +1,4 @@
-package golinters
+package bodyclose
 
 import (
 	"github.com/timakin/bodyclose/passes/bodyclose"
@@ -7,7 +7,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func NewBodyclose() *goanalysis.Linter {
+func New() *goanalysis.Linter {
 	a := bodyclose.Analyzer
 
 	return goanalysis.NewLinter(

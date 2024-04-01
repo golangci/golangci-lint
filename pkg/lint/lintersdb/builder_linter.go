@@ -6,6 +6,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/asasalint"
 	"github.com/golangci/golangci-lint/pkg/golinters/asciicheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/bidichk"
+	"github.com/golangci/golangci-lint/pkg/golinters/bodyclose"
 	"github.com/golangci/golangci-lint/pkg/golinters/gci"
 	"github.com/golangci/golangci-lint/pkg/golinters/ginkgolinter"
 	"github.com/golangci/golangci-lint/pkg/golinters/gocritic"
@@ -64,7 +65,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithPresets(linter.PresetBugs).
 			WithURL("https://github.com/breml/bidichk"),
 
-		linter.NewConfig(golinters.NewBodyclose()).
+		linter.NewConfig(bodyclose.New()).
 			WithSince("v1.18.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetPerformance, linter.PresetBugs).
