@@ -9,6 +9,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/godot"
 	"github.com/golangci/golangci-lint/pkg/golinters/gofmt"
 	"github.com/golangci/golangci-lint/pkg/golinters/gofumpt"
+	"github.com/golangci/golangci-lint/pkg/golinters/goheader"
 	"github.com/golangci/golangci-lint/pkg/golinters/gomoddirectives"
 	"github.com/golangci/golangci-lint/pkg/golinters/loggercheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/mnd"
@@ -290,7 +291,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithAutoFix().
 			WithURL("https://github.com/mvdan/gofumpt"),
 
-		linter.NewConfig(golinters.NewGoHeader(&cfg.LintersSettings.Goheader)).
+		linter.NewConfig(goheader.New(&cfg.LintersSettings.Goheader)).
 			WithSince("v1.28.0").
 			WithPresets(linter.PresetStyle).
 			WithAutoFix().

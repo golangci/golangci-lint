@@ -1,4 +1,4 @@
-package golinters
+package goheader
 
 import (
 	"go/token"
@@ -13,9 +13,9 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-const goHeaderName = "goheader"
+const name = "goheader"
 
-func NewGoHeader(settings *config.GoHeaderSettings) *goanalysis.Linter {
+func New(settings *config.GoHeaderSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
 
@@ -29,7 +29,7 @@ func NewGoHeader(settings *config.GoHeaderSettings) *goanalysis.Linter {
 	}
 
 	analyzer := &analysis.Analyzer{
-		Name: goHeaderName,
+		Name: name,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 		Run: func(pass *analysis.Pass) (any, error) {
 			issues, err := runGoHeader(pass, conf)
@@ -50,7 +50,7 @@ func NewGoHeader(settings *config.GoHeaderSettings) *goanalysis.Linter {
 	}
 
 	return goanalysis.NewLinter(
-		goHeaderName,
+		name,
 		"Checks is file header matches to pattern",
 		[]*analysis.Analyzer{analyzer},
 		nil,
@@ -94,7 +94,7 @@ func runGoHeader(pass *analysis.Pass, conf *goheader.Configuration) ([]goanalysi
 				Filename: path,
 			},
 			Text:       i.Message(),
-			FromLinter: goHeaderName,
+			FromLinter: name,
 		}
 
 		if fix := i.Fix(); fix != nil {
