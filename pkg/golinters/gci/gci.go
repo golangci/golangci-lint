@@ -1,4 +1,4 @@
-package golinters
+package gci
 
 import (
 	"fmt"
@@ -23,14 +23,14 @@ import (
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 )
 
-const gciName = "gci"
+const name = "gci"
 
-func NewGci(settings *config.GciSettings) *goanalysis.Linter {
+func New(settings *config.GciSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
 
 	analyzer := &analysis.Analyzer{
-		Name: gciName,
+		Name: name,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 		Run:  goanalysis.DummyRun,
 		Requires: []*analysis.Analyzer{
@@ -63,7 +63,7 @@ func NewGci(settings *config.GciSettings) *goanalysis.Linter {
 	var lock sync.Mutex
 
 	return goanalysis.NewLinter(
-		gciName,
+		name,
 		"Gci controls Go package import order and makes it always deterministic.",
 		[]*analysis.Analyzer{analyzer},
 		nil,
@@ -111,7 +111,7 @@ func runGci(pass *analysis.Pass, lintCtx *linter.Context, cfg *gcicfg.Config, lo
 			continue
 		}
 
-		is, err := internal.ExtractIssuesFromPatch(diff, lintCtx, gciName, getIssuedTextGci)
+		is, err := internal.ExtractIssuesFromPatch(diff, lintCtx, name, getIssuedTextGci)
 		if err != nil {
 			return nil, fmt.Errorf("can't extract issues from gci diff output %s: %w", diff, err)
 		}

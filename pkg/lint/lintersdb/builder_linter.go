@@ -3,6 +3,7 @@ package lintersdb
 import (
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/golinters"
+	"github.com/golangci/golangci-lint/pkg/golinters/gci"
 	"github.com/golangci/golangci-lint/pkg/golinters/ginkgolinter"
 	"github.com/golangci/golangci-lint/pkg/golinters/gocritic"
 	"github.com/golangci/golangci-lint/pkg/golinters/gomoddirectives"
@@ -201,7 +202,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithPresets(linter.PresetComplexity).
 			WithURL("https://github.com/ultraware/funlen"),
 
-		linter.NewConfig(golinters.NewGci(&cfg.LintersSettings.Gci)).
+		linter.NewConfig(gci.New(&cfg.LintersSettings.Gci)).
 			WithSince("v1.30.0").
 			WithPresets(linter.PresetFormatting, linter.PresetImport).
 			WithAutoFix().

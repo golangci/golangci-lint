@@ -1,15 +1,15 @@
 //golangcitest:args -Egci
-//golangcitest:config_path testdata/configs/gci.yml
+//golangcitest:config_path testdata/gci.yml
 //golangcitest:expected_exitcode 0
 package gci
 
 import (
-	"github.com/golangci/golangci-lint/pkg/config"
-	"golang.org/x/tools/go/analysis"
-
 	"fmt"
 
 	gcicfg "github.com/daixiang0/gci/pkg/config"
+	"github.com/golangci/golangci-lint/pkg/config"
+
+	"golang.org/x/tools/go/analysis"
 )
 
 func GoimportsLocalTest() {
