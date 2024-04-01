@@ -1,5 +1,5 @@
 //golangcitest:args -Erevive
-//golangcitest:config_path testdata/configs/revive.yml
+//golangcitest:config_path testdata/revive.yml
 package testdata
 
 import (

@@ -1,4 +1,4 @@
-package golinters
+package revive
 
 import (
 	"bytes"
@@ -23,9 +23,9 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-const reviveName = "revive"
+const name = "revive"
 
-var reviveDebugf = logutils.Debug(logutils.DebugKeyRevive)
+var debugf = logutils.Debug(logutils.DebugKeyRevive)
 
 // jsonObject defines a JSON object of a failure
 type jsonObject struct {
@@ -33,10 +33,7 @@ type jsonObject struct {
 	lint.Failure `json:",inline"`
 }
 
-// NewRevive returns a new Revive linter.
-//
-
-func NewRevive(settings *config.ReviveSettings) *goanalysis.Linter {
+func New(settings *config.ReviveSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
 
@@ -47,7 +44,7 @@ func NewRevive(settings *config.ReviveSettings) *goanalysis.Linter {
 	}
 
 	return goanalysis.NewLinter(
-		reviveName,
+		name,
 		"Fast, configurable, extensible, flexible, and beautiful linter for Go. Drop-in replacement of golint.",
 		[]*analysis.Analyzer{analyzer},
 		nil,
@@ -154,7 +151,7 @@ func reviveToIssue(pass *analysis.Pass, object *jsonObject) goanalysis.Issue {
 			From: object.Position.Start.Line,
 			To:   lineRangeTo,
 		},
-		FromLinter: reviveName,
+		FromLinter: name,
 	}, pass)
 }
 
@@ -192,7 +189,7 @@ func getReviveConfig(cfg *config.ReviveSettings) (*lint.Config, error) {
 		conf.Rules[k] = r
 	}
 
-	reviveDebugf("revive configuration: %#v", conf)
+	debugf("revive configuration: %#v", conf)
 
 	return conf, nil
 }
