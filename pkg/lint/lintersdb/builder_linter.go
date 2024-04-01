@@ -48,6 +48,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/goimports"
 	"github.com/golangci/golangci-lint/pkg/golinters/gomoddirectives"
 	"github.com/golangci/golangci-lint/pkg/golinters/gomodguard"
+	"github.com/golangci/golangci-lint/pkg/golinters/goprintffuncname"
 	"github.com/golangci/golangci-lint/pkg/golinters/loggercheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/mirror"
 	"github.com/golangci/golangci-lint/pkg/golinters/misspell"
@@ -372,7 +373,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithPresets(linter.PresetStyle, linter.PresetImport, linter.PresetModule).
 			WithURL("https://github.com/ryancurrah/gomodguard"),
 
-		linter.NewConfig(golinters.NewGoPrintfFuncName()).
+		linter.NewConfig(goprintffuncname.New()).
 			WithSince("v1.23.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/jirfag/go-printf-func-name"),

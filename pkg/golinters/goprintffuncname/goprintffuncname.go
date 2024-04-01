@@ -1,4 +1,4 @@
-package golinters
+package goprintffuncname
 
 import (
 	"github.com/jirfag/go-printf-func-name/pkg/analyzer"
@@ -7,7 +7,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func NewGoPrintfFuncName() *goanalysis.Linter {
+func New() *goanalysis.Linter {
 	a := analyzer.Analyzer
 
 	return goanalysis.NewLinter(
