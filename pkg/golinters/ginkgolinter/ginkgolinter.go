@@ -1,4 +1,4 @@
-package golinters
+package ginkgolinter
 
 import (
 	"github.com/nunnatsa/ginkgolinter"
@@ -9,7 +9,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func NewGinkgoLinter(settings *config.GinkgoLinterSettings) *goanalysis.Linter {
+func New(settings *config.GinkgoLinterSettings) *goanalysis.Linter {
 	cfg := &types.Config{}
 
 	if settings != nil {

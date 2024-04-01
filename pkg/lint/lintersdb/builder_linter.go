@@ -3,6 +3,7 @@ package lintersdb
 import (
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/golinters"
+	"github.com/golangci/golangci-lint/pkg/golinters/ginkgolinter"
 	"github.com/golangci/golangci-lint/pkg/golinters/nolintlint"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 )
@@ -199,7 +200,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithAutoFix().
 			WithURL("https://github.com/daixiang0/gci"),
 
-		linter.NewConfig(golinters.NewGinkgoLinter(&cfg.LintersSettings.GinkgoLinter)).
+		linter.NewConfig(ginkgolinter.New(&cfg.LintersSettings.GinkgoLinter)).
 			WithSince("v1.51.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetStyle).
