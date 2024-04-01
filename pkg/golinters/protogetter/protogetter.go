@@ -1,4 +1,4 @@
-package golinters
+package protogetter
 
 import (
 	"sync"
@@ -12,7 +12,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-func NewProtoGetter(settings *config.ProtoGetterSettings) *goanalysis.Linter {
+func New(settings *config.ProtoGetterSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
 

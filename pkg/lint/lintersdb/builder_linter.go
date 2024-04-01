@@ -6,6 +6,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/ginkgolinter"
 	"github.com/golangci/golangci-lint/pkg/golinters/loggercheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/nolintlint"
+	"github.com/golangci/golangci-lint/pkg/golinters/protogetter"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 )
 
@@ -530,7 +531,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/yeya24/promlinter"),
 
-		linter.NewConfig(golinters.NewProtoGetter(&cfg.LintersSettings.ProtoGetter)).
+		linter.NewConfig(protogetter.New(&cfg.LintersSettings.ProtoGetter)).
 			WithSince("v1.55.0").
 			WithPresets(linter.PresetBugs).
 			WithLoadForGoAnalysis().
