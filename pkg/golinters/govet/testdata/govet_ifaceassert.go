@@ -1,5 +1,5 @@
 //golangcitest:args -Egovet
-//golangcitest:config_path testdata/configs/govet_ifaceassert.yml
+//golangcitest:config_path testdata/govet_ifaceassert.yml
 package testdata
 
 import (

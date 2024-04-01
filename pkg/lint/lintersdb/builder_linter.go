@@ -52,6 +52,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/gosec"
 	"github.com/golangci/golangci-lint/pkg/golinters/gosimple"
 	"github.com/golangci/golangci-lint/pkg/golinters/gosmopolitan"
+	"github.com/golangci/golangci-lint/pkg/golinters/govet"
 	"github.com/golangci/golangci-lint/pkg/golinters/loggercheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/mirror"
 	"github.com/golangci/golangci-lint/pkg/golinters/misspell"
@@ -402,7 +403,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithPresets(linter.PresetBugs).
 			WithURL("https://github.com/xen0n/gosmopolitan"),
 
-		linter.NewConfig(golinters.NewGovet(&cfg.LintersSettings.Govet)).
+		linter.NewConfig(govet.New(&cfg.LintersSettings.Govet)).
 			WithEnabledByDefault().
 			WithSince("v1.0.0").
 			WithLoadForGoAnalysis().

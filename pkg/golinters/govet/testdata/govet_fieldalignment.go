@@ -1,5 +1,5 @@
 //golangcitest:args -Egovet
-//golangcitest:config_path testdata/configs/govet_fieldalignment.yml
+//golangcitest:config_path testdata/govet_fieldalignment.yml
 package testdata
 
 type gvfaGood struct {

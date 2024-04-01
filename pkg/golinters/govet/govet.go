@@ -1,4 +1,4 @@
-package golinters
+package govet
 
 import (
 	"slices"
@@ -139,11 +139,11 @@ var (
 )
 
 var (
-	govetDebugf  = logutils.Debug(logutils.DebugKeyGovet)
-	isGovetDebug = logutils.HaveDebugTag(logutils.DebugKeyGovet)
+	debugf  = logutils.Debug(logutils.DebugKeyGovet)
+	isDebug = logutils.HaveDebugTag(logutils.DebugKeyGovet)
 )
 
-func NewGovet(settings *config.GovetSettings) *goanalysis.Linter {
+func New(settings *config.GovetSettings) *goanalysis.Linter {
 	var conf map[string]map[string]any
 	if settings != nil {
 		conf = settings.Settings
@@ -208,7 +208,7 @@ func isAnalyzerEnabled(name string, cfg *config.GovetSettings, defaultAnalyzers 
 }
 
 func debugAnalyzersListf(analyzers []*analysis.Analyzer, message string) {
-	if !isGovetDebug {
+	if !isDebug {
 		return
 	}
 
@@ -219,5 +219,5 @@ func debugAnalyzersListf(analyzers []*analysis.Analyzer, message string) {
 
 	sort.Strings(analyzerNames)
 
-	govetDebugf("%s (%d): %s", message, len(analyzerNames), analyzerNames)
+	debugf("%s (%d): %s", message, len(analyzerNames), analyzerNames)
 }

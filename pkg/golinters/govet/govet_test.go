@@ -1,4 +1,4 @@
-package golinters
+package govet
 
 import (
 	"slices"
