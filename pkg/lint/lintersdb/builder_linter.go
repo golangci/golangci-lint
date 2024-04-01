@@ -19,6 +19,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/durationcheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/err113"
 	"github.com/golangci/golangci-lint/pkg/golinters/errcheck"
+	"github.com/golangci/golangci-lint/pkg/golinters/errchkjson"
 	"github.com/golangci/golangci-lint/pkg/golinters/gci"
 	"github.com/golangci/golangci-lint/pkg/golinters/ginkgolinter"
 	"github.com/golangci/golangci-lint/pkg/golinters/gocritic"
@@ -152,7 +153,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithPresets(linter.PresetBugs, linter.PresetError).
 			WithURL("https://github.com/kisielk/errcheck"),
 
-		linter.NewConfig(golinters.NewErrChkJSON(&cfg.LintersSettings.ErrChkJSON)).
+		linter.NewConfig(errchkjson.New(&cfg.LintersSettings.ErrChkJSON)).
 			WithSince("1.44.0").
 			WithPresets(linter.PresetBugs).
 			WithLoadForGoAnalysis().

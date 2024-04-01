@@ -1,5 +1,5 @@
 //golangcitest:args -Eerrchkjson
-//golangcitest:config_path testdata/configs/errchkjson.yml
+//golangcitest:config_path testdata/errchkjson_check_error_free_encoding.yml
 package testdata
 
 import (
@@ -18,120 +18,120 @@ func (mt marshalText) MarshalText() ([]byte, error) {
 
 var _ encoding.TextMarshaler = marshalText(struct{}{})
 
-// JSONMarshalSafeTypesWithNoSafe contains a multitude of test cases to marshal different combinations of types to JSON,
+// JSONMarshalSafeTypes contains a multitude of test cases to marshal different combinations of types to JSON,
 // that are safe, that is, they will never return an error, if these types are marshaled to JSON.
-func JSONMarshalSafeTypesWithNoSafe() {
+func JSONMarshalSafeTypes() {
 	var err error
 
-	_, _ = json.Marshal(nil)   // want "Error return value of `encoding/json.Marshal` is not checked"
-	json.Marshal(nil)          // want "Error return value of `encoding/json.Marshal` is not checked"
-	_, err = json.Marshal(nil) // nil is safe and check-error-free-encoding is false
+	_, _ = json.Marshal(nil)   // nil is safe
+	json.Marshal(nil)          // nil is safe
+	_, err = json.Marshal(nil) // want "Error return value of `encoding/json.Marshal` is checked but passed argument is safe"
 	_ = err
 
-	_, _ = json.MarshalIndent(nil, "", " ")   // want "Error return value of `encoding/json.MarshalIndent` is not checked"
-	json.MarshalIndent(nil, "", " ")          // want "Error return value of `encoding/json.MarshalIndent` is not checked"
-	_, err = json.MarshalIndent(nil, "", " ") // nil is safe and check-error-free-encoding is false
+	_, _ = json.MarshalIndent(nil, "", " ")   // nil is safe
+	json.MarshalIndent(nil, "", " ")          // nil is safe
+	_, err = json.MarshalIndent(nil, "", " ") // want "Error return value of `encoding/json.MarshalIndent` is checked but passed argument is safe"
 	_ = err
 
 	enc := json.NewEncoder(ioutil.Discard)
-	_ = enc.Encode(nil)   // want "Error return value of `\\([*]encoding/json.Encoder\\).Encode` is not checked"
-	enc.Encode(nil)       // want "Error return value of `\\([*]encoding/json.Encoder\\).Encode` is not checked"
-	err = enc.Encode(nil) // nil is safe and check-error-free-encoding is false
+	_ = enc.Encode(nil) // want "Error return value of `\\([*]encoding/json.Encoder\\).Encode` is not checked"
+	enc.Encode(nil)     // want "Error return value of `\\([*]encoding/json.Encoder\\).Encode` is not checked"
+	err = enc.Encode(nil)
 	_ = err
 
 	var b bool
-	_, _ = json.Marshal(b)   // want "Error return value of `encoding/json.Marshal` is not checked"
-	_, err = json.Marshal(b) // bool is safe and check-error-free-encoding is false
+	_, _ = json.Marshal(b)   // bool is safe
+	_, err = json.Marshal(b) // want "Error return value of `encoding/json.Marshal` is checked but passed argument is safe"
 	_ = err
 
 	var i int
-	_, _ = json.Marshal(i)   // want "Error return value of `encoding/json.Marshal` is not checked"
-	_, err = json.Marshal(i) // int is safe and check-error-free-encoding is false
+	_, _ = json.Marshal(i)   // int is safe
+	_, err = json.Marshal(i) // want "Error return value of `encoding/json.Marshal` is checked but passed argument is safe"
 	_ = err
 
 	var i8 int8
-	_, _ = json.Marshal(i8)   // want "Error return value of `encoding/json.Marshal` is not checked"
-	_, err = json.Marshal(i8) // int8 is safe and check-error-free-encoding is false
+	_, _ = json.Marshal(i8)   // int8 is safe
+	_, err = json.Marshal(i8) // want "Error return value of `encoding/json.Marshal` is checked but passed argument is safe"
 	_ = err
 
 	var i16 int16
-	_, _ = json.Marshal(i16)   // want "Error return value of `encoding/json.Marshal` is not checked"
-	_, err = json.Marshal(i16) // int16 is safe and check-error-free-encoding is false
+	_, _ = json.Marshal(i16)   // int16 is safe
+	_, err = json.Marshal(i16) // want "Error return value of `encoding/json.Marshal` is checked but passed argument is safe"
 	_ = err
 
 	var i32 int32
-	_, _ = json.Marshal(i32)   // want "Error return value of `encoding/json.Marshal` is not checked"
-	_, err = json.Marshal(i32) // int32 / rune is safe and check-error-free-encoding is false
+	_, _ = json.Marshal(i32)   // int32 / rune is safe
+	_, err = json.Marshal(i32) // want "Error return value of `encoding/json.Marshal` is checked but passed argument is safe"
 	_ = err
 
 	var i64 int64
-	_, _ = json.Marshal(i64)   // want "Error return value of `encoding/json.Marshal` is not checked"
-	_, err = json.Marshal(i64) // int64 is safe and check-error-free-encoding is false
+	_, _ = json.Marshal(i64)   // int64 is safe
+	_, err = json.Marshal(i64) // want "Error return value of `encoding/json.Marshal` is checked but passed argument is safe"
 	_ = err
 
 	var ui uint
-	_, _ = json.Marshal(ui)   // want "Error return value of `encoding/json.Marshal` is not checked"
-	_, err = json.Marshal(ui) // uint is safe and check-error-free-encoding is false
+	_, _ = json.Marshal(ui)   // uint is safe
+	_, err = json.Marshal(ui) // want "Error return value of `encoding/json.Marshal` is checked but passed argument is safe"
 	_ = err
 
 	var ui8 uint8
-	_, _ = json.Marshal(ui8)   // want "Error return value of `encoding/json.Marshal` is not checked"
-	_, err = json.Marshal(ui8) // uint8 is safe and check-error-free-encoding is false
+	_, _ = json.Marshal(ui8)   // uint8 / byte is safe
+	_, err = json.Marshal(ui8) // want "Error return value of `encoding/json.Marshal` is checked but passed argument is safe"
 	_ = err
 
 	var ui16 uint16
-	_, _ = json.Marshal(ui16)   // want "Error return value of `encoding/json.Marshal` is not checked"
-	_, err = json.Marshal(ui16) // uint16 is safe and check-error-free-encoding is false
+	_, _ = json.Marshal(ui16)   // uint16 is safe
+	_, err = json.Marshal(ui16) // want "Error return value of `encoding/json.Marshal` is checked but passed argument is safe"
 	_ = err
 
 	var ui32 uint32
-	_, _ = json.Marshal(ui32)   // want "Error return value of `encoding/json.Marshal` is not checked"
-	_, err = json.Marshal(ui32) // uint32 is safe and check-error-free-encoding is false
+	_, _ = json.Marshal(ui32)   // uint32 / rune is safe
+	_, err = json.Marshal(ui32) // want "Error return value of `encoding/json.Marshal` is checked but passed argument is safe"
 	_ = err
 
 	var ui64 uint64
-	_, _ = json.Marshal(ui64)   // want "Error return value of `encoding/json.Marshal` is not checked"
-	_, err = json.Marshal(ui64) // uint64 is safe and check-error-free-encoding is false
+	_, _ = json.Marshal(ui64)   // uint64 is safe
+	_, err = json.Marshal(ui64) // want "Error return value of `encoding/json.Marshal` is checked but passed argument is safe"
 	_ = err
 
 	var uiptr uintptr
-	_, _ = json.Marshal(uiptr)   // want "Error return value of `encoding/json.Marshal` is not checked"
-	_, err = json.Marshal(uiptr) // uintptr is safe and check-error-free-encoding is false
+	_, _ = json.Marshal(uiptr)   // uintptr is safe
+	_, err = json.Marshal(uiptr) // want "Error return value of `encoding/json.Marshal` is checked but passed argument is safe"
 	_ = err
 
 	var str string
-	_, _ = json.Marshal(str)   // want "Error return value of `encoding/json.Marshal` is not checked"
-	_, err = json.Marshal(str) // string is safe and check-error-free-encoding is false
+	_, _ = json.Marshal(str)   // string is safe
+	_, err = json.Marshal(str) // want "Error return value of `encoding/json.Marshal` is checked but passed argument is safe"
 	_ = err
 
 	var strSlice []string
-	_, _ = json.Marshal(strSlice)   // want "Error return value of `encoding/json.Marshal` is not checked"
-	_, err = json.Marshal(strSlice) // []string is safe and check-error-free-encoding is false
+	_, _ = json.Marshal(strSlice)   // []string is safe
+	_, err = json.Marshal(strSlice) // want "Error return value of `encoding/json.Marshal` is checked but passed argument is safe"
 	_ = err
 
 	var intSlice []int
-	_, _ = json.Marshal(intSlice)   // want "Error return value of `encoding/json.Marshal` is not checked"
-	_, err = json.Marshal(intSlice) // []int is safe and check-error-free-encoding is false
+	_, _ = json.Marshal(intSlice)   // []int is safe
+	_, err = json.Marshal(intSlice) // want "Error return value of `encoding/json.Marshal` is checked but passed argument is safe"
 	_ = err
 
 	var boolSlice []bool
-	_, _ = json.Marshal(boolSlice)   // want "Error return value of `encoding/json.Marshal` is not checked"
-	_, err = json.Marshal(boolSlice) // []bool is safe and check-error-free-encoding is false
+	_, _ = json.Marshal(boolSlice)   // []bool is safe
+	_, err = json.Marshal(boolSlice) // want "Error return value of `encoding/json.Marshal` is checked but passed argument is safe"
 	_ = err
 
 	var strArray [10]string
-	_, _ = json.Marshal(strArray)   // want "Error return value of `encoding/json.Marshal` is not checked"
-	_, err = json.Marshal(strArray) // [10]string is safe and check-error-free-encoding is false
+	_, _ = json.Marshal(strArray)   // [10]string is safe
+	_, err = json.Marshal(strArray) // want "Error return value of `encoding/json.Marshal` is checked but passed argument is safe"
 	_ = err
 
 	var intArray [10]int
-	_, _ = json.Marshal(intArray)   // want "Error return value of `encoding/json.Marshal` is not checked"
-	_, err = json.Marshal(intArray) // [10]int is safe and check-error-free-encoding is false
+	_, _ = json.Marshal(intArray)   // [10]int is safe
+	_, err = json.Marshal(intArray) // want "Error return value of `encoding/json.Marshal` is checked but passed argument is safe"
 	_ = err
 
 	var boolArray [10]bool
-	_, _ = json.Marshal(boolArray)   // want "Error return value of `encoding/json.Marshal` is not checked"
-	_, err = json.Marshal(boolArray) // [10]bool is safe and check-error-free-encoding is false
+	_, _ = json.Marshal(boolArray)   // [10]bool is safe
+	_, err = json.Marshal(boolArray) // want "Error return value of `encoding/json.Marshal` is checked but passed argument is safe"
 	_ = err
 
 	var basicStruct struct {
@@ -149,8 +149,8 @@ func JSONMarshalSafeTypesWithNoSafe() {
 		Uintptr uintptr
 		String  string
 	}
-	_, _ = json.Marshal(basicStruct)   // want "Error return value of `encoding/json.Marshal` is not checked"
-	_, err = json.Marshal(basicStruct) // struct containing only safe basic types is safe and check-error-free-encoding is false
+	_, _ = json.Marshal(basicStruct)   // struct containing only safe basic types is safe
+	_, err = json.Marshal(basicStruct) // want "Error return value of `encoding/json.Marshal` is checked but passed argument is safe"
 	_ = err
 
 	var ptrStruct struct {
@@ -168,38 +168,38 @@ func JSONMarshalSafeTypesWithNoSafe() {
 		Uintptr *uintptr
 		String  *string
 	}
-	_, _ = json.Marshal(ptrStruct)   // want "Error return value of `encoding/json.Marshal` is not checked"
-	_, err = json.Marshal(ptrStruct) // struct containing pointer to only safe basic types is safe and check-error-free-encoding is false
+	_, _ = json.Marshal(ptrStruct)   // struct containing pointer to only safe basic types is safe
+	_, err = json.Marshal(ptrStruct) // want "Error return value of `encoding/json.Marshal` is checked but passed argument is safe"
 	_ = err
 
 	var mapStrStr map[string]string
-	_, _ = json.Marshal(mapStrStr)   // want "Error return value of `encoding/json.Marshal` is not checked"
-	_, err = json.Marshal(mapStrStr) // map[string]string is safe and check-error-free-encoding is false
+	_, _ = json.Marshal(mapStrStr)   // map[string]string is safe
+	_, err = json.Marshal(mapStrStr) // want "Error return value of `encoding/json.Marshal` is checked but passed argument is safe"
 	_ = err
 
 	var mapStrInt map[string]int
-	_, _ = json.Marshal(mapStrInt)   // want "Error return value of `encoding/json.Marshal` is not checked"
-	_, err = json.Marshal(mapStrInt) // map[string]int is safe and check-error-free-encoding is false
+	_, _ = json.Marshal(mapStrInt)   // map[string]int is safe
+	_, err = json.Marshal(mapStrInt) // want "Error return value of `encoding/json.Marshal` is checked but passed argument is safe"
 	_ = err
 
 	var mapStrBool map[string]bool
-	_, _ = json.Marshal(mapStrBool)   // want "Error return value of `encoding/json.Marshal` is not checked"
-	_, err = json.Marshal(mapStrBool) // map[string]bool is safe and check-error-free-encoding is false
+	_, _ = json.Marshal(mapStrBool)   // map[string]bool is safe
+	_, err = json.Marshal(mapStrBool) // want "Error return value of `encoding/json.Marshal` is checked but passed argument is safe"
 	_ = err
 
 	var mapIntStr map[int]string
-	_, _ = json.Marshal(mapIntStr)   // want "Error return value of `encoding/json.Marshal` is not checked"
-	_, err = json.Marshal(mapIntStr) // map[int]string is safe and check-error-free-encoding is false
+	_, _ = json.Marshal(mapIntStr)   // map[int]string is safe
+	_, err = json.Marshal(mapIntStr) // want "Error return value of `encoding/json.Marshal` is checked but passed argument is safe"
 	_ = err
 
 	var mapIntInt map[int]int
-	_, _ = json.Marshal(mapIntInt)   // want "Error return value of `encoding/json.Marshal` is not checked"
-	_, err = json.Marshal(mapIntInt) // map[int]int is safe and check-error-free-encoding is false
+	_, _ = json.Marshal(mapIntInt)   // map[int]int is safe
+	_, err = json.Marshal(mapIntInt) // want "Error return value of `encoding/json.Marshal` is checked but passed argument is safe"
 	_ = err
 
 	var mapIntBool map[int]bool
-	_, _ = json.Marshal(mapIntBool)   // want "Error return value of `encoding/json.Marshal` is not checked"
-	_, err = json.Marshal(mapIntBool) // map[int]bool is safe and check-error-free-encoding is false
+	_, _ = json.Marshal(mapIntBool)   // map[int]bool is safe
+	_, err = json.Marshal(mapIntBool) // want "Error return value of `encoding/json.Marshal` is checked but passed argument is safe"
 	_ = err
 
 	type innerStruct struct {
@@ -246,8 +246,8 @@ func JSONMarshalSafeTypesWithNoSafe() {
 
 		InnerStruct innerStruct
 	}
-	_, _ = json.Marshal(outerStruct)   // want "Error return value of `encoding/json.Marshal` is not checked"
-	_, err = json.Marshal(outerStruct) // struct with only safe types is safe and check-error-free-encoding is false
+	_, _ = json.Marshal(outerStruct)   // struct with only safe types
+	_, err = json.Marshal(outerStruct) // want "Error return value of `encoding/json.Marshal` is checked but passed argument is safe"
 	_ = err
 }
 
@@ -282,8 +282,8 @@ type (
 	}
 )
 
-// JSONMarshalSafeStructWithUnexportedFieldsWithNoSafe contains a struct with unexported, unsafe fields.
-func JSONMarshalSaveStructWithUnexportedFieldsWithNoSafe() {
+// JSONMarshalSaveStructWithUnexportedFields contains a struct with unexported, unsafe fields.
+func JSONMarshalSaveStructWithUnexportedFields() {
 	var err error
 
 	var unexportedInStruct struct {
@@ -342,13 +342,13 @@ func JSONMarshalSaveStructWithUnexportedFieldsWithNoSafe() {
 	_ = unexportedInStruct.ch
 	_ = unexportedInStruct.unsafePtr
 	_ = unexportedInStruct.mapStructStr[structKey{1}]
-	_, _ = json.Marshal(unexportedInStruct)   // want "Error return value of `encoding/json.Marshal` is not checked"
-	_, err = json.Marshal(unexportedInStruct) // struct containing unsafe but unexported fields is safe
+	_, _ = json.Marshal(unexportedInStruct)   // struct containing unsafe but unexported fields is safe
+	_, err = json.Marshal(unexportedInStruct) // want "Error return value of `encoding/json.Marshal` is checked but passed argument is safe"
 	_ = err
 }
 
-// JSONMarshalSafeStructWithOmittedFieldsWithNoSafe contains a struct with omitted, unsafe fields.
-func JSONMarshalSaveStructWithOmittedFieldsWithNoSafe() {
+// JSONMarshalSaveStructWithOmittedFields contains a struct with omitted, unsafe fields.
+func JSONMarshalSaveStructWithOmittedFields() {
 	var err error
 
 	var omitInStruct struct {
@@ -382,8 +382,8 @@ func JSONMarshalSaveStructWithOmittedFieldsWithNoSafe() {
 		MapStructStr map[structKey]string `json:"-"` // invalid exported but omitted
 	}
 	_ = omitInStruct.MapStructStr[structKey{1}]
-	_, _ = json.Marshal(omitInStruct)   // want "Error return value of `encoding/json.Marshal` is not checked"
-	_, err = json.Marshal(omitInStruct) // struct containing unsafe but omitted, exported fields is safe and check-error-free-encoding is false
+	_, _ = json.Marshal(omitInStruct)   // struct containing unsafe but omitted, exported fields is safe
+	_, err = json.Marshal(omitInStruct) // want "Error return value of `encoding/json.Marshal` is checked but passed argument is safe"
 	_ = err
 }
 
@@ -613,29 +613,4 @@ func NotJSONMarshal() {
 	_ = s
 	f := func() bool { return false }
 	_ = f()
-}
-
-// JSONMarshalStructWithoutExportedFields contains a struct without exported fields.
-func JSONMarshalStructWithoutExportedFields() {
-	var err error
-
-	var withoutExportedFields struct {
-		privateField            bool
-		ExportedButOmittedField bool `json:"-"`
-	}
-	_, err = json.Marshal(withoutExportedFields)
-	_ = err
-}
-
-// JSONMarshalStructWithoutExportedFields contains a struct without exported fields.
-func JSONMarshalStructWithNestedStructWithoutExportedFields() {
-	var err error
-
-	var withNestedStructWithoutExportedFields struct {
-		ExportedStruct struct {
-			privatField bool
-		}
-	}
-	_, err = json.Marshal(withNestedStructWithoutExportedFields)
-	_ = err
 }
