@@ -43,13 +43,9 @@ test_race: build_race
 	GL_TEST_RUN=1 ./$(BINARY) run -v --timeout=5m
 .PHONY: test_race
 
-test_linters:
+test_integration:
 	GL_TEST_RUN=1 go test -v ./test -count 1 -run TestSourcesFromTestdata/$T
-.PHONY: test_linters
-
-test_linters_sub:
-	GL_TEST_RUN=1 go test -v ./test -count 1 -run TestSourcesFromTestdataSubDir/$T
-.PHONY: test_linters_sub
+.PHONY: test_integration
 
 # Maintenance
 

@@ -15,19 +15,16 @@ We don't accept non `go/analysis` linters.
 After that:
 
 1. Implement functional tests for the linter:
-    - Add one file into directory [`test/testdata`](https://github.com/golangci/golangci-lint/tree/master/test/testdata).
-    - Run the test to ensure that test fails:
-      ```bash
-      T=yourlintername.go make test_linters
-      ```
+    - Add one file into directory `pkg/golinters/{yourlintername}/testdata/`.
+    - Run the test to ensure that test fails.
     - Run:
       ```bash
-      go run ./cmd/golangci-lint/ run --no-config --disable-all --enable=yourlintername ./test/testdata/yourlintername.go
+      go run ./cmd/golangci-lint/ run --no-config --disable-all --enable={yourlintername} ./pkg/golinters/{yourlintername}/testdata/{yourlintername}.go
       ```
-2. Add a new file `pkg/golinters/{yourlintername}.go`.
+2. Add a new file `pkg/golinters/{yourlintername}/{yourlintername}.go`.
    Look at other linters in this directory.
    Implement linter integration and check that test passes.
-3. Add the new struct for the linter (which you've implemented in `pkg/golinters/{yourlintername}.go`) to the
+3. Add the new struct for the linter (which you've implemented in `pkg/golinters/{yourlintername}/{yourlintername}.go`) to the
    list of all supported linters in [`pkg/lint/lintersdb/builder_linter.go`](https://github.com/golangci/golangci-lint/blob/master/pkg/lint/lintersdb/builder_linter.go)
    to the method `LinterBuilder.Build`.
     - Add `WithSince("next_version")`, where `next_version` must be replaced by the next minor version. (ex: v1.2.0 if the current version is v1.1.0)
