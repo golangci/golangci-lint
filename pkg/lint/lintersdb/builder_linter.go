@@ -99,6 +99,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/testpackage"
 	"github.com/golangci/golangci-lint/pkg/golinters/thelper"
 	"github.com/golangci/golangci-lint/pkg/golinters/tparallel"
+	"github.com/golangci/golangci-lint/pkg/golinters/unconvert"
 	"github.com/golangci/golangci-lint/pkg/golinters/whitespace"
 	"github.com/golangci/golangci-lint/pkg/golinters/zerologlint"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
@@ -748,7 +749,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithPresets(linter.PresetBugs).
 			WithURL(""),
 
-		linter.NewConfig(golinters.NewUnconvert(&cfg.LintersSettings.Unconvert)).
+		linter.NewConfig(unconvert.New(&cfg.LintersSettings.Unconvert)).
 			WithSince("v1.0.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetStyle).
