@@ -1,5 +1,5 @@
 //golangcitest:args -Ethelper
-//golangcitest:config_path testdata/configs/thelper.yml
+//golangcitest:config_path testdata/thelper.yml
 package testdata
 
 import "testing"

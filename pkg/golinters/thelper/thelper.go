@@ -1,4 +1,4 @@
-package golinters
+package thelper
 
 import (
 	"strings"
@@ -12,7 +12,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/internal"
 )
 
-func NewThelper(cfg *config.ThelperSettings) *goanalysis.Linter {
+func New(cfg *config.ThelperSettings) *goanalysis.Linter {
 	a := analyzer.NewAnalyzer()
 
 	opts := map[string]struct{}{
