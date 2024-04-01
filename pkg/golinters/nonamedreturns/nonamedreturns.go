@@ -1,4 +1,4 @@
-package golinters
+package nonamedreturns
 
 import (
 	"github.com/firefart/nonamedreturns/analyzer"
@@ -8,7 +8,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func NewNoNamedReturns(settings *config.NoNamedReturnsSettings) *goanalysis.Linter {
+func New(settings *config.NoNamedReturnsSettings) *goanalysis.Linter {
 	a := analyzer.Analyzer
 
 	var cfg map[string]map[string]any

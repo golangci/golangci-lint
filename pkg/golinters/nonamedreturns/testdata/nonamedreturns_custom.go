@@ -1,5 +1,5 @@
 //golangcitest:args -Enonamedreturns
-//golangcitest:config_path testdata/configs/nonamedreturns_custom.yml
+//golangcitest:config_path testdata/nonamedreturns_custom.yml
 package testdata
 
 import "fmt"
