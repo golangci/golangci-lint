@@ -1,4 +1,4 @@
-package golinters
+package nlreturn
 
 import (
 	"github.com/ssgreg/nlreturn/v2/pkg/nlreturn"
@@ -8,7 +8,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func NewNLReturn(settings *config.NlreturnSettings) *goanalysis.Linter {
+func New(settings *config.NlreturnSettings) *goanalysis.Linter {
 	a := nlreturn.NewAnalyzer()
 
 	cfg := map[string]map[string]any{}

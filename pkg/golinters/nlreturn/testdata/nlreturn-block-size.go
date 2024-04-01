@@ -1,5 +1,5 @@
 //golangcitest:args -Enlreturn
-//golangcitest:config_path testdata/configs/nlreturn.yml
+//golangcitest:config_path testdata/nlreturn.yml
 package testdata
 
 func foo0(n int) int {
