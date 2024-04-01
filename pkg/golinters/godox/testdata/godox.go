@@ -1,5 +1,5 @@
 //golangcitest:args -Egodox
-//golangcitest:config_path testdata/configs/godox.yml
+//golangcitest:config_path testdata/godox.yml
 package testdata
 
 func todoLeftInCode() {

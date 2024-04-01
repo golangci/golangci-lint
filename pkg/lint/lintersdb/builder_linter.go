@@ -41,6 +41,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/gocritic"
 	"github.com/golangci/golangci-lint/pkg/golinters/gocyclo"
 	"github.com/golangci/golangci-lint/pkg/golinters/godot"
+	"github.com/golangci/golangci-lint/pkg/golinters/godox"
 	"github.com/golangci/golangci-lint/pkg/golinters/gofmt"
 	"github.com/golangci/golangci-lint/pkg/golinters/gofumpt"
 	"github.com/golangci/golangci-lint/pkg/golinters/goheader"
@@ -306,7 +307,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithAutoFix().
 			WithURL("https://github.com/tetafro/godot"),
 
-		linter.NewConfig(golinters.NewGodox(&cfg.LintersSettings.Godox)).
+		linter.NewConfig(godox.New(&cfg.LintersSettings.Godox)).
 			WithSince("v1.19.0").
 			WithPresets(linter.PresetStyle, linter.PresetComment).
 			WithURL("https://github.com/matoous/godox"),

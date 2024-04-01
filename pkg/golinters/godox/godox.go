@@ -1,4 +1,4 @@
-package golinters
+package godox
 
 import (
 	"go/token"
@@ -14,14 +14,14 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-const godoxName = "godox"
+const name = "godox"
 
-func NewGodox(settings *config.GodoxSettings) *goanalysis.Linter {
+func New(settings *config.GodoxSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
 
 	analyzer := &analysis.Analyzer{
-		Name: godoxName,
+		Name: name,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 		Run: func(pass *analysis.Pass) (any, error) {
 			issues := runGodox(pass, settings)
@@ -39,7 +39,7 @@ func NewGodox(settings *config.GodoxSettings) *goanalysis.Linter {
 	}
 
 	return goanalysis.NewLinter(
-		godoxName,
+		name,
 		"Tool for detection of FIXME, TODO and other comment keywords",
 		[]*analysis.Analyzer{analyzer},
 		nil,
@@ -67,7 +67,7 @@ func runGodox(pass *analysis.Pass, settings *config.GodoxSettings) []goanalysis.
 				Line:     i.Pos.Line,
 			},
 			Text:       strings.TrimRight(i.Message, "\n"),
-			FromLinter: godoxName,
+			FromLinter: name,
 		}, pass)
 	}
 
