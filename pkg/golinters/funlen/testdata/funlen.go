@@ -1,5 +1,5 @@
 //golangcitest:args -Efunlen
-//golangcitest:config_path testdata/configs/funlen.yml
+//golangcitest:config_path testdata/funlen.yml
 package testdata
 
 func TooManyLines() { // want `Function 'TooManyLines' is too long \(22 > 20\)`

@@ -29,6 +29,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/fatcontext"
 	"github.com/golangci/golangci-lint/pkg/golinters/forbidigo"
 	"github.com/golangci/golangci-lint/pkg/golinters/forcetypeassert"
+	"github.com/golangci/golangci-lint/pkg/golinters/funlen"
 	"github.com/golangci/golangci-lint/pkg/golinters/gci"
 	"github.com/golangci/golangci-lint/pkg/golinters/ginkgolinter"
 	"github.com/golangci/golangci-lint/pkg/golinters/gocritic"
@@ -232,7 +233,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/Crocmagnon/fatcontext"),
 
-		linter.NewConfig(golinters.NewFunlen(&cfg.LintersSettings.Funlen)).
+		linter.NewConfig(funlen.New(&cfg.LintersSettings.Funlen)).
 			WithSince("v1.18.0").
 			WithPresets(linter.PresetComplexity).
 			WithURL("https://github.com/ultraware/funlen"),
