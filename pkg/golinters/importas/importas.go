@@ -1,4 +1,4 @@
-package golinters
+package importas
 
 import (
 	"fmt"
@@ -13,7 +13,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 )
 
-func NewImportAs(settings *config.ImportAsSettings) *goanalysis.Linter {
+func New(settings *config.ImportAsSettings) *goanalysis.Linter {
 	analyzer := importas.Analyzer
 
 	return goanalysis.NewLinter(

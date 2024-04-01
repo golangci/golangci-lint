@@ -54,6 +54,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/gosmopolitan"
 	"github.com/golangci/golangci-lint/pkg/golinters/govet"
 	"github.com/golangci/golangci-lint/pkg/golinters/grouper"
+	"github.com/golangci/golangci-lint/pkg/golinters/importas"
 	"github.com/golangci/golangci-lint/pkg/golinters/loggercheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/mirror"
 	"github.com/golangci/golangci-lint/pkg/golinters/misspell"
@@ -423,7 +424,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithURL("https://github.com/esimonov/ifshort").
 			Deprecated("The repository of the linter has been deprecated by the owner.", "v1.48.0", ""),
 
-		linter.NewConfig(golinters.NewImportAs(&cfg.LintersSettings.ImportAs)).
+		linter.NewConfig(importas.New(&cfg.LintersSettings.ImportAs)).
 			WithSince("v1.38.0").
 			WithPresets(linter.PresetStyle).
 			WithLoadForGoAnalysis().
