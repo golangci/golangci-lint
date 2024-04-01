@@ -1,4 +1,4 @@
-package golinters
+package musttag
 
 import (
 	"go-simpler.org/musttag"
@@ -8,7 +8,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func NewMustTag(setting *config.MustTagSettings) *goanalysis.Linter {
+func New(setting *config.MustTagSettings) *goanalysis.Linter {
 	var funcs []musttag.Func
 
 	if setting != nil {

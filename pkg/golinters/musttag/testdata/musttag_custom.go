@@ -1,5 +1,5 @@
 //golangcitest:args -Emusttag
-//golangcitest:config_path testdata/configs/musttag.yml
+//golangcitest:config_path testdata/musttag.yml
 package testdata
 
 import (

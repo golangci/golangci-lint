@@ -67,6 +67,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/mirror"
 	"github.com/golangci/golangci-lint/pkg/golinters/misspell"
 	"github.com/golangci/golangci-lint/pkg/golinters/mnd"
+	"github.com/golangci/golangci-lint/pkg/golinters/musttag"
 	"github.com/golangci/golangci-lint/pkg/golinters/nolintlint"
 	"github.com/golangci/golangci-lint/pkg/golinters/protogetter"
 	"github.com/golangci/golangci-lint/pkg/golinters/spancheck"
@@ -514,7 +515,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithAutoFix().
 			WithURL("https://github.com/client9/misspell"),
 
-		linter.NewConfig(golinters.NewMustTag(&cfg.LintersSettings.MustTag)).
+		linter.NewConfig(musttag.New(&cfg.LintersSettings.MustTag)).
 			WithSince("v1.51.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetStyle, linter.PresetBugs).
