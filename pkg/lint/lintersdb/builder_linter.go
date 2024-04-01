@@ -13,6 +13,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/goimports"
 	"github.com/golangci/golangci-lint/pkg/golinters/gomoddirectives"
 	"github.com/golangci/golangci-lint/pkg/golinters/loggercheck"
+	"github.com/golangci/golangci-lint/pkg/golinters/mirror"
 	"github.com/golangci/golangci-lint/pkg/golinters/mnd"
 	"github.com/golangci/golangci-lint/pkg/golinters/nolintlint"
 	"github.com/golangci/golangci-lint/pkg/golinters/protogetter"
@@ -446,7 +447,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithURL("https://github.com/mdempsky/maligned").
 			Deprecated("The repository of the linter has been archived by the owner.", "v1.38.0", "govet 'fieldalignment'"),
 
-		linter.NewConfig(golinters.NewMirror()).
+		linter.NewConfig(mirror.New()).
 			WithSince("v1.53.0").
 			WithPresets(linter.PresetStyle).
 			WithLoadForGoAnalysis().

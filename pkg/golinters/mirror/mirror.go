@@ -1,4 +1,4 @@
-package golinters
+package mirror
 
 import (
 	"sync"
@@ -11,7 +11,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-func NewMirror() *goanalysis.Linter {
+func New() *goanalysis.Linter {
 	var (
 		mu     sync.Mutex
 		issues []goanalysis.Issue
