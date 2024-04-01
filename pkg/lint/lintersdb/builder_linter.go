@@ -22,6 +22,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/errchkjson"
 	"github.com/golangci/golangci-lint/pkg/golinters/errname"
 	"github.com/golangci/golangci-lint/pkg/golinters/errorlint"
+	"github.com/golangci/golangci-lint/pkg/golinters/execinquery"
 	"github.com/golangci/golangci-lint/pkg/golinters/gci"
 	"github.com/golangci/golangci-lint/pkg/golinters/ginkgolinter"
 	"github.com/golangci/golangci-lint/pkg/golinters/gocritic"
@@ -173,7 +174,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/polyfloyd/go-errorlint"),
 
-		linter.NewConfig(golinters.NewExecInQuery()).
+		linter.NewConfig(execinquery.New()).
 			WithSince("v1.46.0").
 			WithPresets(linter.PresetSQL).
 			WithLoadForGoAnalysis().
