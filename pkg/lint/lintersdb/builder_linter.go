@@ -4,6 +4,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/golinters"
 	"github.com/golangci/golangci-lint/pkg/golinters/ginkgolinter"
+	"github.com/golangci/golangci-lint/pkg/golinters/gomoddirectives"
 	"github.com/golangci/golangci-lint/pkg/golinters/loggercheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/nolintlint"
 	"github.com/golangci/golangci-lint/pkg/golinters/protogetter"
@@ -313,7 +314,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			Deprecated("The linter has been renamed.", "v1.58.0", "mnd").
 			WithURL("https://github.com/tommy-muehle/go-mnd"),
 
-		linter.NewConfig(golinters.NewGoModDirectives(&cfg.LintersSettings.GoModDirectives)).
+		linter.NewConfig(gomoddirectives.New(&cfg.LintersSettings.GoModDirectives)).
 			WithSince("v1.39.0").
 			WithPresets(linter.PresetStyle, linter.PresetModule).
 			WithURL("https://github.com/ldez/gomoddirectives"),
