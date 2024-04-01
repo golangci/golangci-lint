@@ -78,6 +78,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/nonamedreturns"
 	"github.com/golangci/golangci-lint/pkg/golinters/nosprintfhostport"
 	"github.com/golangci/golangci-lint/pkg/golinters/paralleltest"
+	"github.com/golangci/golangci-lint/pkg/golinters/perfsprint"
 	"github.com/golangci/golangci-lint/pkg/golinters/protogetter"
 	"github.com/golangci/golangci-lint/pkg/golinters/spancheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/tagalign"
@@ -586,7 +587,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithPresets(linter.PresetStyle, linter.PresetTest).
 			WithURL("https://github.com/kunwardeep/paralleltest"),
 
-		linter.NewConfig(golinters.NewPerfSprint(&cfg.LintersSettings.PerfSprint)).
+		linter.NewConfig(perfsprint.New(&cfg.LintersSettings.PerfSprint)).
 			WithSince("v1.55.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetPerformance).

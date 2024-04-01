@@ -1,4 +1,4 @@
-package golinters
+package perfsprint
 
 import (
 	"github.com/catenacyber/perfsprint/analyzer"
@@ -8,7 +8,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func NewPerfSprint(settings *config.PerfSprintSettings) *goanalysis.Linter {
+func New(settings *config.PerfSprintSettings) *goanalysis.Linter {
 	a := analyzer.New()
 
 	cfg := map[string]map[string]any{
