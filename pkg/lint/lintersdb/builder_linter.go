@@ -68,6 +68,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/misspell"
 	"github.com/golangci/golangci-lint/pkg/golinters/mnd"
 	"github.com/golangci/golangci-lint/pkg/golinters/musttag"
+	"github.com/golangci/golangci-lint/pkg/golinters/nakedret"
 	"github.com/golangci/golangci-lint/pkg/golinters/nolintlint"
 	"github.com/golangci/golangci-lint/pkg/golinters/protogetter"
 	"github.com/golangci/golangci-lint/pkg/golinters/spancheck"
@@ -521,7 +522,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithPresets(linter.PresetStyle, linter.PresetBugs).
 			WithURL("https://github.com/go-simpler/musttag"),
 
-		linter.NewConfig(golinters.NewNakedret(&cfg.LintersSettings.Nakedret)).
+		linter.NewConfig(nakedret.New(&cfg.LintersSettings.Nakedret)).
 			WithSince("v1.19.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/alexkohler/nakedret"),

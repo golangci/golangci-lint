@@ -1,4 +1,4 @@
-package golinters
+package nakedret
 
 import (
 	"github.com/alexkohler/nakedret/v2"
@@ -8,7 +8,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func NewNakedret(settings *config.NakedretSettings) *goanalysis.Linter {
+func New(settings *config.NakedretSettings) *goanalysis.Linter {
 	var maxLines int
 	if settings != nil {
 		maxLines = settings.MaxFuncLines
