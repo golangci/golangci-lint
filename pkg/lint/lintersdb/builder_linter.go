@@ -245,7 +245,8 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithSince("v1.46.0").
 			WithPresets(linter.PresetSQL).
 			WithLoadForGoAnalysis().
-			WithURL("https://github.com/lufeee/execinquery"),
+			WithURL("https://github.com/1uf3/execinquery").
+			Deprecated("The repository of the linter has been archived by the owner.", "v1.58.0", ""),
 
 		linter.NewConfig(exhaustive.New(&cfg.LintersSettings.Exhaustive)).
 			WithSince(" v1.28.0").
