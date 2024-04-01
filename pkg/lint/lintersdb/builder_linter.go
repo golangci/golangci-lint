@@ -7,6 +7,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/ginkgolinter"
 	"github.com/golangci/golangci-lint/pkg/golinters/gocritic"
 	"github.com/golangci/golangci-lint/pkg/golinters/godot"
+	"github.com/golangci/golangci-lint/pkg/golinters/gofmt"
 	"github.com/golangci/golangci-lint/pkg/golinters/gomoddirectives"
 	"github.com/golangci/golangci-lint/pkg/golinters/loggercheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/mnd"
@@ -276,7 +277,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithAlternativeNames("goerr113").
 			WithURL("https://github.com/Djarvur/go-err113"),
 
-		linter.NewConfig(golinters.NewGofmt(&cfg.LintersSettings.Gofmt)).
+		linter.NewConfig(gofmt.New(&cfg.LintersSettings.Gofmt)).
 			WithSince("v1.0.0").
 			WithPresets(linter.PresetFormatting).
 			WithAutoFix().

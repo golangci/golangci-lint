@@ -1,4 +1,4 @@
-package golinters
+package gofmt
 
 import (
 	"fmt"
@@ -13,20 +13,20 @@ import (
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 )
 
-const gofmtName = "gofmt"
+const name = "gofmt"
 
-func NewGofmt(settings *config.GoFmtSettings) *goanalysis.Linter {
+func New(settings *config.GoFmtSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
 
 	analyzer := &analysis.Analyzer{
-		Name: gofmtName,
+		Name: name,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 		Run:  goanalysis.DummyRun,
 	}
 
 	return goanalysis.NewLinter(
-		gofmtName,
+		name,
 		"Gofmt checks whether code was gofmt-ed. By default "+
 			"this tool runs with -s option to check for code simplification",
 		[]*analysis.Analyzer{analyzer},
@@ -72,7 +72,7 @@ func runGofmt(lintCtx *linter.Context, pass *analysis.Pass, settings *config.GoF
 			continue
 		}
 
-		is, err := internal.ExtractIssuesFromPatch(string(diff), lintCtx, gofmtName, getIssuedTextGoFmt)
+		is, err := internal.ExtractIssuesFromPatch(string(diff), lintCtx, name, getIssuedTextGoFmt)
 		if err != nil {
 			return nil, fmt.Errorf("can't extract issues from gofmt diff output %q: %w", string(diff), err)
 		}
