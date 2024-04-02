@@ -430,11 +430,11 @@ func (s *settingsWrapper) debugChecksFinalState() {
 	var disabledChecks []string
 
 	for _, checker := range s.allCheckers {
-		name := checker.Name
-		if s.inferredEnabledChecks.has(name) {
-			enabledChecks = append(enabledChecks, name)
+		check := checker.Name
+		if s.inferredEnabledChecks.has(check) {
+			enabledChecks = append(enabledChecks, check)
 		} else {
-			disabledChecks = append(disabledChecks, name)
+			disabledChecks = append(disabledChecks, check)
 		}
 	}
 
@@ -512,25 +512,25 @@ func (s *settingsWrapper) validateCheckerTags() error {
 }
 
 func (s *settingsWrapper) validateCheckerNames() error {
-	for _, name := range s.EnabledChecks {
-		if !s.allChecks.has(name) {
-			return fmt.Errorf("enabled check %q doesn't exist, see %s's documentation", name, name)
+	for _, check := range s.EnabledChecks {
+		if !s.allChecks.has(check) {
+			return fmt.Errorf("enabled check %q doesn't exist, see %s's documentation", check, name)
 		}
 	}
 
-	for _, name := range s.DisabledChecks {
-		if !s.allChecks.has(name) {
-			return fmt.Errorf("disabled check %q doesn't exist, see %s documentation", name, name)
+	for _, check := range s.DisabledChecks {
+		if !s.allChecks.has(check) {
+			return fmt.Errorf("disabled check %q doesn't exist, see %s documentation", check, name)
 		}
 	}
 
-	for name := range s.SettingsPerCheck {
-		lcName := strings.ToLower(name)
+	for check := range s.SettingsPerCheck {
+		lcName := strings.ToLower(check)
 		if !s.allChecksLowerCased.has(lcName) {
-			return fmt.Errorf("invalid check settings: check %q doesn't exist, see %s documentation", name, name)
+			return fmt.Errorf("invalid check settings: check %q doesn't exist, see %s documentation", check, name)
 		}
 		if !s.inferredEnabledChecksLowerCased.has(lcName) {
-			s.logger.Warnf("%s: settings were provided for disabled check %q", name, name)
+			s.logger.Warnf("%s: settings were provided for disabled check %q", check, name)
 		}
 	}
 

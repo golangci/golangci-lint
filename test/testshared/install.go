@@ -21,14 +21,14 @@ const envGolangciLintInstalled = "GOLANGCI_LINT_INSTALLED"
 // The majority of tests are NOT executed inside the same process,
 // then this is just to limit some cases (~60 cases).
 var (
-	built     bool
 	builtLock sync.RWMutex
+	built     bool
 )
 
 func InstallGolangciLint(tb testing.TB) string {
 	tb.Helper()
 
-	parentPath := findMakeFile(tb)
+	parentPath := findMakefile(tb)
 
 	// Avoids concurrent builds and copies (before the end of the build).
 	f := flock.New(filepath.Join(parentPath, "test.lock"))
@@ -37,7 +37,12 @@ func InstallGolangciLint(tb testing.TB) string {
 		err := f.Lock()
 		require.NoError(tb, err)
 
-		defer func() { _ = f.Unlock() }()
+		defer func() {
+			errU := f.Unlock()
+			if errU != nil {
+				tb.Logf("Can't unlock test.lock: %v", errU)
+			}
+		}()
 
 		builtLock.Lock()
 		defer builtLock.Unlock()
@@ -46,10 +51,6 @@ func InstallGolangciLint(tb testing.TB) string {
 			cmd := exec.Command("make", "-C", parentPath, "build")
 
 			output, err := cmd.CombinedOutput()
-			if err != nil {
-				tb.Log(string(output))
-			}
-
 			require.NoError(tb, err, "can't install golangci-lint %s", string(output))
 
 			built = true
@@ -68,7 +69,7 @@ func InstallGolangciLint(tb testing.TB) string {
 	return abs
 }
 
-func findMakeFile(tb testing.TB) string {
+func findMakefile(tb testing.TB) string {
 	tb.Helper()
 
 	wd, _ := os.Getwd()
