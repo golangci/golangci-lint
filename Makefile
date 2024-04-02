@@ -43,6 +43,8 @@ test_race: build_race
 	GL_TEST_RUN=1 ./$(BINARY) run -v --timeout=5m
 .PHONY: test_race
 
+# ex: T=output.go make test_integration
+# the value of `T` is the name of a file from `test/testdata`
 test_integration:
 	GL_TEST_RUN=1 go test -v ./test -count 1 -run TestSourcesFromTestdata/$T
 .PHONY: test_integration
