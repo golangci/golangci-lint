@@ -12,7 +12,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/exitcodes"
 	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
-	"github.com/golangci/golangci-lint/pkg/packages"
+	"github.com/golangci/golangci-lint/pkg/result/processors"
 )
 
 func setupLintersFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
@@ -129,7 +129,7 @@ func getDefaultIssueExcludeHelp() string {
 
 func getDefaultDirectoryExcludeHelp() string {
 	parts := []string{color.GreenString("Use or not use default excluded directories:")}
-	for _, dir := range packages.StdExcludeDirRegexps {
+	for _, dir := range processors.StdExcludeDirRegexps {
 		parts = append(parts, fmt.Sprintf("  - %s", color.YellowString(dir)))
 	}
 	parts = append(parts, "")
