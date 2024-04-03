@@ -7,6 +7,7 @@ require (
 	4d63.com/gochecknoglobals v0.2.1
 	github.com/4meepo/tagalign v1.3.3
 	github.com/Abirdcfly/dupword v0.0.14
+	github.com/Ak-Army/linereturn v0.0.0-20240402133102-9b651aa9b3c7
 	github.com/Antonboom/errname v0.1.12
 	github.com/Antonboom/nilnil v0.1.7
 	github.com/Antonboom/testifylint v1.2.0

@@ -402,6 +402,11 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/butuzov/ireturn"),
 
+		linter.NewConfig(golinters.NewLineReturn(&cfg.LintersSettings.Linereturn)).
+			WithSince("v1.58.0").
+			WithPresets(linter.PresetStyle).
+			WithURL("github.com/Ak-Army/linereturn"),
+
 		linter.NewConfig(golinters.NewLLL(&cfg.LintersSettings.Lll)).
 			WithSince("v1.8.0").
 			WithPresets(linter.PresetStyle),
@@ -429,7 +434,9 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetPerformance).
 			WithURL("https://github.com/mdempsky/maligned").
-			Deprecated("The repository of the linter has been archived by the owner.", "v1.38.0", "govet 'fieldalignment'"),
+			Deprecated("The repository of the linter has been archived by the owner.",
+				"v1.38.0",
+				"govet 'fieldalignment'"),
 
 		linter.NewConfig(golinters.NewMirror()).
 			WithSince("v1.53.0").
@@ -493,7 +500,9 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithSince("v1.47.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/sivchari/nosnakecase").
-			Deprecated("The repository of the linter has been deprecated by the owner.", "v1.48.1", "revive 'var-naming'"),
+			Deprecated("The repository of the linter has been deprecated by the owner.",
+				"v1.48.1",
+				"revive 'var-naming'"),
 
 		linter.NewConfig(golinters.NewNoSprintfHostPort()).
 			WithSince("v1.46.0").

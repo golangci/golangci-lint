@@ -238,6 +238,7 @@ type LintersSettings struct {
 	Inamedparam     INamedParamSettings
 	InterfaceBloat  InterfaceBloatSettings
 	Ireturn         IreturnSettings
+	Linereturn      LinereturnSettings
 	Lll             LllSettings
 	LoggerCheck     LoggerCheckSettings
 	MaintIdx        MaintIdxSettings
@@ -660,6 +661,10 @@ type InterfaceBloatSettings struct {
 type IreturnSettings struct {
 	Allow  []string `mapstructure:"allow"`
 	Reject []string `mapstructure:"reject"`
+}
+
+type LinereturnSettings struct {
+	BlockSize int `mapstructure:"block-size"`
 }
 
 type LllSettings struct {

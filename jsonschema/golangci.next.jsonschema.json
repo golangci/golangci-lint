@@ -273,6 +273,7 @@
             "interfacer",
             "intrange",
             "ireturn",
+            "linereturn",
             "lll",
             "loggercheck",
             "maintidx",
@@ -1841,6 +1842,18 @@
               "description": "Allow only slices initialized with a length of zero.",
               "type": "boolean",
               "default": false
+            }
+          }
+        },
+        "linereturn": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "block-size": {
+              "description": "set block size that is still ok",
+              "type": "number",
+              "default": 1,
+              "minimum": 1
             }
           }
         },
