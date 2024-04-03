@@ -85,7 +85,7 @@ require (
 	github.com/pelletier/go-toml/v2 v2.2.0
 	github.com/polyfloyd/go-errorlint v1.4.8
 	github.com/quasilyte/go-ruleguard/dsl v0.3.22
-	github.com/ryancurrah/gomodguard v1.3.1
+	github.com/ryancurrah/gomodguard v1.3.2
 	github.com/ryanrolds/sqlclosecheck v0.5.1
 	github.com/sanposhiho/wastedassign/v2 v2.0.7
 	github.com/santhosh-tekuri/jsonschema/v5 v5.3.1
@@ -132,7 +132,7 @@ require (
 )
 
 require (
-	github.com/Masterminds/semver v1.5.0 // indirect
+	github.com/Masterminds/semver/v3 v3.2.1 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/ccojocar/zxcvbn-go v1.0.2 // indirect
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect
