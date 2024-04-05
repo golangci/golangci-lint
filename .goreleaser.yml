@@ -111,6 +111,7 @@ chocolateys:
     license_url: https://github.com/golangci/golangci-lint/blob/master/LICENSE
     require_license_acceptance: false
     project_source_url: https://github.com/golangci/golangci-lint
+    package_source_url: https://github.com/golangci/golangci-lint
     docs_url: https://golangci-lint.run
     bug_tracker_url: https://github.com/golangci/golangci-lint/issues
     tags: "go golang lint linter"
