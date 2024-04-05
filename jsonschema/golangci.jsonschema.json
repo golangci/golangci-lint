@@ -332,57 +332,6 @@
           "type": "string"
         }
       ]
-    },
-    "issue-match-path": {
-      "type": "object",
-      "properties": {
-        "path": {
-          "type": "string"
-        },
-        "severity": {
-          "$comment": "This is here only to allow `additionalProperties: false`."
-        }
-      },
-      "additionalProperties": false
-    },
-    "issue-match-linters": {
-      "type": "object",
-      "properties": {
-        "linters": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/linters"
-          }
-        },
-        "severity": {
-          "$comment": "This is here only to allow `additionalProperties: false`."
-        }
-      },
-      "additionalProperties": false
-    },
-    "issue-match-source": {
-      "type": "object",
-      "properties": {
-        "source": {
-          "type": "string"
-        },
-        "severity": {
-          "$comment": "This is here only to allow `additionalProperties: false`."
-        }
-      },
-      "additionalProperties": false
-    },
-    "issue-match-text": {
-      "type": "object",
-      "properties": {
-        "text": {
-          "type": "string"
-        },
-        "severity": {
-          "$comment": "This is here only to allow `additionalProperties: false`."
-        }
-      },
-      "additionalProperties": false
     }
   },
   "type": "object",
@@ -3461,32 +3410,39 @@
           "description": "When a list of severity rules are provided, severity information will be added to lint issues. Severity rules have the same filtering capability as exclude rules except you are allowed to specify one matcher per severity rule.\nOnly affects out formats that support setting severity information.",
           "type": "array",
           "items": {
-            "allOf": [
-              {
-                "oneOf": [
-                  {
-                    "$ref": "#/definitions/issue-match-path"
-                  },
-                  {
-                    "$ref": "#/definitions/issue-match-source"
-                  },
-                  {
-                    "$ref": "#/definitions/issue-match-linters"
-                  },
-                  {
-                    "$ref": "#/definitions/issue-match-text"
-                  }
-                ]
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "severity": {
+                "type": "string"
               },
-              {
-                "properties": {
-                  "severity": {
-                    "type": "string"
-                  }
+              "path": {
+                "type": "string"
+              },
+              "path-except": {
+                "type": "string"
+              },
+              "linters": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/linters"
                 }
+              },
+              "text": {
+                "type": "string"
+              },
+              "source": {
+                "type": "string"
               }
-            ],
-            "required": ["severity"]
+            },
+            "required": ["severity"],
+            "anyOf": [
+              { "required": ["path"] },
+              { "required": ["path-except"] },
+              { "required": ["linters"] },
+              { "required": ["text"] },
+              { "required": ["source"] }
+            ]
           },
           "default": []
         }
