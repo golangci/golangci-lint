@@ -99,6 +99,32 @@ brews:
     test: |
       system "#{bin}/golangci-lint --version"
 
+chocolateys:
+  - name: golangci-lint
+    owners: golangci
+    title: Golangci-lint
+    authors: golangci
+    project_url: https://golangci-lint.run
+    url_template: "https://github.com/golangci/golangci-lint/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
+    icon_url: "https://cdn.rawgit.com/golangci/golangci-lint/master/assets/go.png"
+    copyright: 2024 GolangCI
+    license_url: https://github.com/golangci/golangci-lint/blob/master/LICENSE
+    require_license_acceptance: false
+    project_source_url: https://github.com/golangci/golangci-lint
+    package_source_url: https://github.com/golangci/golangci-lint
+    docs_url: https://golangci-lint.run
+    bug_tracker_url: https://github.com/golangci/golangci-lint/issues
+    tags: "go golang lint linter"
+    summary: Fast linters Runner for Go
+    description: |
+      {{ .ProjectName }} installer package.
+      Fast linters Runner for Go .
+    release_notes: "https://github.com/golangci/golangci-lint/releases/tag/v{{ .Version }}"
+    api_key: "{{ .Env.CHOCOLATEY_API_KEY }}"
+    source_repo: "https://push.chocolatey.org/"
+    skip_publish: false
+    goamd64: v1
+
 nfpms:
   -
     id: golangci-lint-nfpms

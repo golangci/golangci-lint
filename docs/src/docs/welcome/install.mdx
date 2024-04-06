@@ -9,7 +9,7 @@ Most installations of `golangci-lint` are performed for CI.
 ### GitHub Actions
 
 We recommend using [our GitHub Action](https://github.com/golangci/golangci-lint-action) for running `golangci-lint` in CI for GitHub projects.
-It's [fast and uses smart caching](https://github.com/golangci/golangci-lint-action#performance) inside
+It's [fast and uses smart caching](https://github.com/golangci/golangci-lint-action#performance) inside,
 and it can be much faster than the simple binary installation.
 
 Also, the action creates GitHub annotations for found issues: you don't need to dig into build log to see found by `golangci-lint` issues:
@@ -97,6 +97,14 @@ The macports installation mode is community driven, and not officially maintaine
 
 ```sh
 sudo port install golangci-lint
+```
+
+### Windows
+
+You can install a binary on Windows using [chocolatey](https://community.chocolatey.org/packages/golangci-lint):
+
+```sh
+choco install golangci-lint
 ```
 
 ### Install from Source
