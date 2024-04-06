@@ -38,7 +38,7 @@ require (
 	github.com/firefart/nonamedreturns v1.0.4
 	github.com/fzipp/gocyclo v0.6.0
 	github.com/ghostiam/protogetter v0.3.5
-	github.com/go-critic/go-critic v0.11.2
+	github.com/go-critic/go-critic v0.11.3
 	github.com/go-viper/mapstructure/v2 v2.0.0-alpha.1
 	github.com/go-xmlfmt/xmlfmt v1.1.2
 	github.com/gofrs/flock v0.8.1
