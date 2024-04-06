@@ -66,7 +66,7 @@ func TestTeamCity_Print(t *testing.T) {
 	assert.Equal(t, expected, buf.String())
 }
 
-func TestTeamCity_limit(t *testing.T) {
+func TestTeamCity_cutVal(t *testing.T) {
 	tests := []struct {
 		input    string
 		max      int
@@ -100,6 +100,6 @@ func TestTeamCity_limit(t *testing.T) {
 	}
 
 	for _, tc := range tests {
-		require.Equal(t, tc.expected, limit(tc.input, tc.max))
+		require.Equal(t, tc.expected, cutVal(tc.input, tc.max))
 	}
 }
