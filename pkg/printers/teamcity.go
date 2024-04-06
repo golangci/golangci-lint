@@ -89,7 +89,7 @@ type InspectionType struct {
 
 func (i InspectionType) Print(w io.Writer, escaper *strings.Replacer) (int, error) {
 	return fmt.Fprintf(w, "##teamcity[inspectionType id='%s' name='%s' description='%s' category='%s']\n",
-		limit(i.id, smallLimit), limit(i.name, smallLimit), limit(escaper.Replace(i.description), largeLimit), limit(i.category, smallLimit))
+		cutVal(i.id, smallLimit), cutVal(i.name, smallLimit), cutVal(escaper.Replace(i.description), largeLimit), cutVal(i.category, smallLimit))
 }
 
 // InspectionInstance reports a specific defect, warning, error message.
@@ -105,15 +105,15 @@ type InspectionInstance struct {
 
 func (i InspectionInstance) Print(w io.Writer, replacer *strings.Replacer) (int, error) {
 	return fmt.Fprintf(w, "##teamcity[inspection typeId='%s' message='%s' file='%s' line='%d' SEVERITY='%s']\n",
-		limit(i.typeID, smallLimit),
-		limit(replacer.Replace(i.message), largeLimit),
-		limit(i.file, largeLimit),
+		cutVal(i.typeID, smallLimit),
+		cutVal(replacer.Replace(i.message), largeLimit),
+		cutVal(i.file, largeLimit),
 		i.line, strings.ToUpper(i.severity))
 }
 
-func limit(s string, max int) string {
+func cutVal(s string, limit int) string {
 	var size, count int
-	for i := 0; i < max && count < len(s); i++ {
+	for i := 0; i < limit && count < len(s); i++ {
 		_, size = utf8.DecodeRuneInString(s[count:])
 		count += size
 	}
