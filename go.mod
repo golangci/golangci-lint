@@ -59,7 +59,7 @@ require (
 	github.com/jirfag/go-printf-func-name v0.0.0-20200119135958-7558a9eaa5af
 	github.com/jjti/go-spancheck v0.5.3
 	github.com/julz/importas v0.1.0
-	github.com/karamaru-alpha/copyloopvar v1.0.10
+	github.com/karamaru-alpha/copyloopvar v1.1.0
 	github.com/kisielk/errcheck v1.7.0
 	github.com/kkHAIKE/contextcheck v1.1.5
 	github.com/kulti/thelper v0.6.3
