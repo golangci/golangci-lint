@@ -39,47 +39,16 @@ func setupTestFix(t *testing.T) []string {
 func RunFix(t *testing.T) {
 	t.Helper()
 
-	binPath := testshared.InstallGolangciLint(t)
-
-	sources := setupTestFix(t)
-
-	for _, input := range sources {
-		input := input
-
-		t.Run(filepath.Base(input), func(t *testing.T) {
-			t.Parallel()
-
-			rc := testshared.ParseTestDirectives(t, input)
-			if rc == nil {
-				t.Logf("Skipped: %s", input)
-				return
-			}
-
-			testshared.NewRunnerBuilder(t).
-				WithArgs("--disable-all",
-					"--print-issued-lines=false",
-					"--print-linter-name=false",
-					"--out-format=line-number",
-					"--fix").
-				WithRunContext(rc).
-				WithTargetPath(input).
-				WithBinPath(binPath).
-				Runner().
-				Run().
-				ExpectExitCode(rc.ExitCode)
-
-			output, err := os.ReadFile(input)
-			require.NoError(t, err)
-
-			expectedOutput, err := os.ReadFile(filepath.Join(testdataDir, "fix", "out", filepath.Base(input)))
-			require.NoError(t, err)
-
-			require.Equal(t, string(expectedOutput), string(output))
-		})
-	}
+	runFix(t)
 }
 
 func RunFixPathPrefix(t *testing.T) {
+	t.Helper()
+
+	runFix(t, "--path-prefix=foobar/")
+}
+
+func runFix(t *testing.T, extraArgs ...string) {
 	t.Helper()
 
 	binPath := testshared.InstallGolangciLint(t)
@@ -103,8 +72,8 @@ func RunFixPathPrefix(t *testing.T) {
 					"--print-issued-lines=false",
 					"--print-linter-name=false",
 					"--out-format=line-number",
-					"--fix",
-					"--path-prefix=foobar/").
+					"--fix").
+				WithArgs(extraArgs...).
 				WithRunContext(rc).
 				WithTargetPath(input).
 				WithBinPath(binPath).
