@@ -19,6 +19,11 @@ func Test_validateTestConfigurationFiles(t *testing.T) {
 	require.NoError(t, err)
 }
 
+func Test_validateTestConfigurationFilesLinters(t *testing.T) {
+	err := validateTestConfigurationFiles("../jsonschema/golangci.next.jsonschema.json", "../pkg/golinters")
+	require.NoError(t, err)
+}
+
 func validateTestConfigurationFiles(schemaPath, targetDir string) error {
 	schema, err := loadSchema(filepath.FromSlash(schemaPath))
 	if err != nil {

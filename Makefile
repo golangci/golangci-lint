@@ -33,23 +33,21 @@ test: build
 	GL_TEST_RUN=1 go test -v -parallel 2 ./...
 .PHONY: test
 
-# ex: T=gofmt.go make test_fix
-# the value of `T` is the name of a file from `test/testdata/fix`
-test_fix: build
-	GL_TEST_RUN=1 go test -v ./test -count 1 -run TestFix/$T
-.PHONY: test_fix
-
 test_race: build_race
 	GL_TEST_RUN=1 ./$(BINARY) run -v --timeout=5m
 .PHONY: test_race
 
-test_linters:
+# ex: T=output.go make test_integration
+# the value of `T` is the name of a file from `test/testdata`
+test_integration:
 	GL_TEST_RUN=1 go test -v ./test -count 1 -run TestSourcesFromTestdata/$T
-.PHONY: test_linters
+.PHONY: test_integration
 
-test_linters_sub:
-	GL_TEST_RUN=1 go test -v ./test -count 1 -run TestSourcesFromTestdataSubDir/$T
-.PHONY: test_linters_sub
+# ex: T=multiple-issues-fix.go make test_integration_fix
+# the value of `T` is the name of a file from `test/testdata/fix`
+test_integration_fix: build
+	GL_TEST_RUN=1 go test -v ./test -count 1 -run TestFix/$T
+.PHONY: test_integration_fix
 
 # Maintenance
 

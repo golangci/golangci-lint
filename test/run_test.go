@@ -68,7 +68,7 @@ func TestTimeout(t *testing.T) {
 }
 
 func TestTimeoutInConfig(t *testing.T) {
-	testshared.InstallGolangciLint(t)
+	binPath := testshared.InstallGolangciLint(t)
 
 	cfg := `
 				run:
@@ -79,6 +79,7 @@ func TestTimeoutInConfig(t *testing.T) {
 	testshared.NewRunnerBuilder(t).
 		WithConfig(cfg).
 		WithTargetPath(testdataDir, minimalPkg).
+		WithBinPath(binPath).
 		Runner().
 		Run().
 		ExpectExitCode(exitcodes.Timeout).
@@ -111,7 +112,7 @@ func TestCgoOk(t *testing.T) {
 }
 
 func TestCgoWithIssues(t *testing.T) {
-	testshared.InstallGolangciLint(t)
+	binPath := testshared.InstallGolangciLint(t)
 
 	testCases := []struct {
 		desc     string
@@ -153,6 +154,7 @@ func TestCgoWithIssues(t *testing.T) {
 			testshared.NewRunnerBuilder(t).
 				WithArgs(test.args...).
 				WithTargetPath(testdataDir, test.dir).
+				WithBinPath(binPath).
 				Runner().
 				Run().
 				ExpectHasIssue(test.expected)
@@ -162,7 +164,7 @@ func TestCgoWithIssues(t *testing.T) {
 
 // https://pkg.go.dev/cmd/compile#hdr-Compiler_Directives
 func TestLineDirective(t *testing.T) {
-	testshared.InstallGolangciLint(t)
+	binPath := testshared.InstallGolangciLint(t)
 
 	testCases := []struct {
 		desc       string
@@ -251,6 +253,7 @@ func TestLineDirective(t *testing.T) {
 				WithArgs(test.args...).
 				WithTargetPath(testdataDir, test.targetPath).
 				WithConfigFile(test.configPath).
+				WithBinPath(binPath).
 				Runner().
 				Run().
 				ExpectHasIssue(test.expected)
@@ -260,6 +263,8 @@ func TestLineDirective(t *testing.T) {
 
 // https://pkg.go.dev/cmd/compile#hdr-Compiler_Directives
 func TestLineDirectiveProcessedFiles(t *testing.T) {
+	binPath := testshared.InstallGolangciLint(t)
+
 	testCases := []struct {
 		desc     string
 		args     []string
@@ -307,8 +312,8 @@ func TestLineDirectiveProcessedFiles(t *testing.T) {
 				WithNoConfig().
 				WithArgs(test.args...).
 				WithTargetPath(testdataDir, test.target).
+				WithBinPath(binPath).
 				Runner().
-				Install().
 				Run().
 				ExpectExitCode(exitcodes.IssuesFound).
 				ExpectOutputContains(test.expected...)
@@ -345,7 +350,7 @@ func TestSortedResults(t *testing.T) {
 		},
 	}
 
-	testshared.InstallGolangciLint(t)
+	binPath := testshared.InstallGolangciLint(t)
 
 	for _, test := range testCases {
 		test := test
@@ -356,6 +361,7 @@ func TestSortedResults(t *testing.T) {
 				WithNoConfig().
 				WithArgs("--print-issued-lines=false", test.opt).
 				WithTargetPath(testdataDir, "sort_results").
+				WithBinPath(binPath).
 				Runner().
 				Run().
 				ExpectExitCode(exitcodes.IssuesFound).ExpectOutputEq(test.want + "\n")
@@ -418,7 +424,7 @@ func TestUnusedCheckExported(t *testing.T) {
 }
 
 func TestConfigFileIsDetected(t *testing.T) {
-	testshared.InstallGolangciLint(t)
+	binPath := testshared.InstallGolangciLint(t)
 
 	testCases := []struct {
 		desc       string
@@ -442,6 +448,7 @@ func TestConfigFileIsDetected(t *testing.T) {
 			testshared.NewRunnerBuilder(t).
 				// WithNoConfig().
 				WithTargetPath(test.targetPath).
+				WithBinPath(binPath).
 				Runner().
 				Run().
 				ExpectExitCode(exitcodes.Success).
@@ -452,7 +459,7 @@ func TestConfigFileIsDetected(t *testing.T) {
 }
 
 func TestEnableAllFastAndEnableCanCoexist(t *testing.T) {
-	testshared.InstallGolangciLint(t)
+	binPath := testshared.InstallGolangciLint(t)
 
 	testCases := []struct {
 		desc     string
@@ -481,6 +488,7 @@ func TestEnableAllFastAndEnableCanCoexist(t *testing.T) {
 				WithArgs(test.args...).
 				WithArgs("--go=1.22"). // TODO(ldez) remove this line when we will run go1.23 on the CI. (related to intrange, copyloopvar)
 				WithTargetPath(testdataDir, minimalPkg).
+				WithBinPath(binPath).
 				Runner().
 				Run().
 				ExpectExitCode(test.expected...)
@@ -553,7 +561,7 @@ func TestPathPrefix(t *testing.T) {
 		},
 	}
 
-	testshared.InstallGolangciLint(t)
+	binPath := testshared.InstallGolangciLint(t)
 
 	for _, test := range testCases {
 		test := test
@@ -561,6 +569,7 @@ func TestPathPrefix(t *testing.T) {
 			testshared.NewRunnerBuilder(t).
 				WithArgs(test.args...).
 				WithTargetPath(testdataDir, "withtests").
+				WithBinPath(binPath).
 				Runner().
 				Run().
 				ExpectOutputRegexp(test.pattern)

@@ -1,0 +1,8 @@
+linters-settings:
+  gocritic:
+    enabled-checks:
+      - ruleguard
+    settings:
+      ruleguard:
+        failOn: dsl,import
+        rules: '${configDir}/ruleguard/rangeExprCopy.go,${configDir}/ruleguard/stringsSimplify.go'
