@@ -263,6 +263,8 @@ func TestLineDirective(t *testing.T) {
 
 // https://pkg.go.dev/cmd/compile#hdr-Compiler_Directives
 func TestLineDirectiveProcessedFiles(t *testing.T) {
+	binPath := testshared.InstallGolangciLint(t)
+
 	testCases := []struct {
 		desc     string
 		args     []string
@@ -310,8 +312,8 @@ func TestLineDirectiveProcessedFiles(t *testing.T) {
 				WithNoConfig().
 				WithArgs(test.args...).
 				WithTargetPath(testdataDir, test.target).
+				WithBinPath(binPath).
 				Runner().
-				Install().
 				Run().
 				ExpectExitCode(exitcodes.IssuesFound).
 				ExpectOutputContains(test.expected...)
