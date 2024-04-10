@@ -154,9 +154,9 @@ linters-settings:
     pop-directional-isolate: false
 
   copyloopvar:
-    # If true, ignore aliasing of loop variables.
+    # Check all assigning the loop variable to another variable.
     # Default: false
-    ignore-alias: true
+    check-alias: true
 
   cyclop:
     # The maximal code complexity to report.

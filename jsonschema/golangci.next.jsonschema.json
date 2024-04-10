@@ -3172,7 +3172,7 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
-            "ignore-alias": {
+            "check-alias": {
               "type": "boolean",
               "default": false
             }

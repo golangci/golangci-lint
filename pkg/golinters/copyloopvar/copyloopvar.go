@@ -15,7 +15,7 @@ func New(settings *config.CopyLoopVarSettings) *goanalysis.Linter {
 	if settings != nil {
 		cfg = map[string]map[string]any{
 			a.Name: {
-				"ignore-alias": settings.IgnoreAlias,
+				"check-alias": settings.CheckAlias,
 			},
 		}
 	}
