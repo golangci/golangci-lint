@@ -364,7 +364,8 @@ func (l *Loader) handleLinterOptionDeprecations() {
 	}
 
 	if l.cfg.LintersSettings.CopyLoopVar.IgnoreAlias {
-		l.log.Warnf("The configuration option `linters.copyloopvar.ignore-alias` is deprecated and ignored, please use `linters.copyloopvar.check-alias`.")
+		l.log.Warnf("The configuration option `linters.copyloopvar.ignore-alias` is deprecated and ignored," +
+			"please use `linters.copyloopvar.check-alias`.")
 	}
 
 	// Deprecated since v1.42.0.
