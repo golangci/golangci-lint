@@ -363,6 +363,11 @@ func (l *Loader) handleLinterOptionDeprecations() {
 			"Please enable `shadow` instead, if you are not using `enable-all`.")
 	}
 
+	if l.cfg.LintersSettings.CopyLoopVar.IgnoreAlias {
+		l.log.Warnf("The configuration option `linters.copyloopvar.ignore-alias` is deprecated and ignored," +
+			"please use `linters.copyloopvar.check-alias`.")
+	}
+
 	// Deprecated since v1.42.0.
 	if l.cfg.LintersSettings.Errcheck.Exclude != "" {
 		l.log.Warnf("The configuration option `linters.errcheck.exclude` is deprecated, please use `linters.errcheck.exclude-functions`.")

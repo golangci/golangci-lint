@@ -17,7 +17,7 @@ func copyloopvarCase1() {
 		fns = append(fns, func() {
 			fmt.Println(v)
 		})
-		_v := v // want `The copy of the 'for' variable "v" can be deleted \(Go 1\.22\+\)`
+		_v := v
 		_ = _v
 	}
 	for _, fn := range fns {
