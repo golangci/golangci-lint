@@ -282,7 +282,7 @@ type (
 	}
 )
 
-// JSONMarshalSafeStructWithUnexportedFieldsWithNoSafe contains a struct with unexported, unsafe fields.
+// JSONMarshalSaveStructWithUnexportedFieldsWithNoSafe contains a struct with unexported, unsafe fields.
 func JSONMarshalSaveStructWithUnexportedFieldsWithNoSafe() {
 	var err error
 
@@ -347,7 +347,7 @@ func JSONMarshalSaveStructWithUnexportedFieldsWithNoSafe() {
 	_ = err
 }
 
-// JSONMarshalSafeStructWithOmittedFieldsWithNoSafe contains a struct with omitted, unsafe fields.
+// JSONMarshalSaveStructWithOmittedFieldsWithNoSafe contains a struct with omitted, unsafe fields.
 func JSONMarshalSaveStructWithOmittedFieldsWithNoSafe() {
 	var err error
 
