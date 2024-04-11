@@ -120,13 +120,14 @@ func setupIssuesFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
 
 func getDefaultIssueExcludeHelp() string {
 	parts := []string{color.GreenString("Use or not use default excludes:")}
+
 	for _, ep := range config.DefaultExcludePatterns {
 		parts = append(parts,
-			fmt.Sprintf("  # %s %s: %s", ep.ID, ep.Linter, ep.Why),
-			fmt.Sprintf("  - %s", color.YellowString(ep.Pattern)),
-			"",
+			fmt.Sprintf("  - %s (%s): %s", color.BlueString(ep.ID), color.CyanString(ep.Linter), ep.Why),
+			fmt.Sprintf(`    Pattern: %s`, color.YellowString(`'`+ep.Pattern+`'`)),
 		)
 	}
+
 	return strings.Join(parts, "\n")
 }
 
