@@ -26,9 +26,11 @@ func setupLintersFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
 		color.GreenString("Enable only fast linters from enabled linters set (first run won't be fast)"))
 
 	internal.AddHackedStringSliceP(fs, "presets", "p",
-		color.GreenString(fmt.Sprintf("Enable presets (%s) of linters.\n", strings.Join(lintersdb.AllPresets(), "|"))+
-			"Run 'golangci-lint help linters' to see them. This option implies option --disable-all",
-		))
+		color.GreenString(fmt.Sprintf("Enable presets (%s) of linters.\n"+
+			"Run 'golangci-lint help linters' to see them.\n"+
+			"This option implies option --disable-all",
+			strings.Join(lintersdb.AllPresets(), "|"),
+		)))
 
 	fs.StringSlice("enable-only", nil,
 		color.GreenString("Override linters configuration section to only run the specific linter(s)")) // Flags only.
