@@ -12,6 +12,15 @@ import (
 
 var _ Processor = (*SkipDirs)(nil)
 
+var StdExcludeDirRegexps = []string{
+	normalizePathRegex("vendor"),
+	normalizePathRegex("third_party"),
+	normalizePathRegex("testdata"),
+	normalizePathRegex("examples"),
+	normalizePathRegex("Godeps"),
+	normalizePathRegex("builtin"),
+}
+
 type skipStat struct {
 	pattern string
 	count   int
@@ -26,7 +35,7 @@ type SkipDirs struct {
 	pathPrefix       string
 }
 
-func NewSkipDirs(patterns []string, log logutils.Log, args []string, pathPrefix string) (*SkipDirs, error) {
+func NewSkipDirs(log logutils.Log, patterns, args []string, pathPrefix string) (*SkipDirs, error) {
 	var patternsRe []*regexp.Regexp
 	for _, p := range patterns {
 		p = fsutils.NormalizePathInRegex(p)
@@ -151,4 +160,13 @@ func absDirs(args []string) ([]string, error) {
 	}
 
 	return absArgsDirs, nil
+}
+
+func normalizePathRegex(e string) string {
+	return createPathRegex(e, filepath.Separator)
+}
+
+func createPathRegex(e string, sep rune) string {
+	escapedSep := regexp.QuoteMeta(string(sep)) // needed for windows sep '\\'
+	return fmt.Sprintf(`(^|%[1]s)%[2]s($|%[1]s)`, escapedSep, e)
 }

@@ -14,7 +14,6 @@ import (
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
 	"github.com/golangci/golangci-lint/pkg/logutils"
-	"github.com/golangci/golangci-lint/pkg/packages"
 	"github.com/golangci/golangci-lint/pkg/result"
 	"github.com/golangci/golangci-lint/pkg/result/processors"
 	"github.com/golangci/golangci-lint/pkg/timeutils"
@@ -48,10 +47,10 @@ func NewRunner(log logutils.Log, cfg *config.Config, args []string, goenv *gouti
 
 	skipDirs := cfg.Issues.ExcludeDirs
 	if cfg.Issues.UseDefaultExcludeDirs {
-		skipDirs = append(skipDirs, packages.StdExcludeDirRegexps...)
+		skipDirs = append(skipDirs, processors.StdExcludeDirRegexps...)
 	}
 
-	skipDirsProcessor, err := processors.NewSkipDirs(skipDirs, log.Child(logutils.DebugKeySkipDirs), args, cfg.Output.PathPrefix)
+	skipDirsProcessor, err := processors.NewSkipDirs(log.Child(logutils.DebugKeySkipDirs), skipDirs, args, cfg.Output.PathPrefix)
 	if err != nil {
 		return nil, err
 	}
