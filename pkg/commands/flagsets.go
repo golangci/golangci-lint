@@ -26,8 +26,11 @@ func setupLintersFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
 		color.GreenString("Enable only fast linters from enabled linters set (first run won't be fast)"))
 
 	internal.AddHackedStringSliceP(fs, "presets", "p",
-		color.GreenString(fmt.Sprintf("Enable presets (%s) of linters. Run 'golangci-lint help linters' to see them. "+
-			"This option implies option --disable-all", strings.Join(lintersdb.AllPresets(), "|"))))
+		color.GreenString(fmt.Sprintf("Enable presets (%s) of linters.\n"+
+			"Run 'golangci-lint help linters' to see them.\n"+
+			"This option implies option --disable-all",
+			strings.Join(lintersdb.AllPresets(), "|"),
+		)))
 
 	fs.StringSlice("enable-only", nil,
 		color.GreenString("Override linters configuration section to only run the specific linter(s)")) // Flags only.
@@ -53,11 +56,11 @@ func setupRunFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
 	internal.AddDeprecatedFlagAndBind(v, fs, fs.Bool, "skip-dirs-use-default", "run.skip-dirs-use-default", true,
 		getDefaultDirectoryExcludeHelp())
 
-	const allowParallelDesc = "Allow multiple parallel golangci-lint instances running. " +
+	const allowParallelDesc = "Allow multiple parallel golangci-lint instances running.\n" +
 		"If false (default) - golangci-lint acquires file lock on start."
 	internal.AddFlagAndBind(v, fs, fs.Bool, "allow-parallel-runners", "run.allow-parallel-runners", false,
 		color.GreenString(allowParallelDesc))
-	const allowSerialDesc = "Allow multiple golangci-lint instances running, but serialize them around a lock. " +
+	const allowSerialDesc = "Allow multiple golangci-lint instances running, but serialize them around a lock.\n" +
 		"If false (default) - golangci-lint exits with an error if it fails to acquire file lock on start."
 	internal.AddFlagAndBind(v, fs, fs.Bool, "allow-serial-runners", "run.allow-serial-runners", false, color.GreenString(allowSerialDesc))
 }
