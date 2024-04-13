@@ -2,6 +2,7 @@ package commands
 
 import (
 	"fmt"
+	"slices"
 	"sort"
 	"strings"
 
@@ -106,8 +107,20 @@ func (c *helpCommand) printPresets() {
 }
 
 func printLinters(lcs []*linter.Config) {
-	sort.Slice(lcs, func(i, j int) bool {
-		return lcs[i].Name() < lcs[j].Name()
+	slices.SortFunc(lcs, func(a, b *linter.Config) int {
+		if a.IsDeprecated() && b.IsDeprecated() {
+			return strings.Compare(a.Name(), b.Name())
+		}
+
+		if a.IsDeprecated() {
+			return 1
+		}
+
+		if b.IsDeprecated() {
+			return -1
+		}
+
+		return strings.Compare(a.Name(), b.Name())
 	})
 
 	for _, lc := range lcs {
