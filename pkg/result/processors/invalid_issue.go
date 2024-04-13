@@ -22,16 +22,20 @@ func (InvalidIssue) Name() string {
 }
 
 func (p InvalidIssue) Process(issues []result.Issue) ([]result.Issue, error) {
+	tcIssues := filterIssues(issues, func(issue *result.Issue) bool {
+		return issue.FromLinter == "typecheck"
+	})
+
+	if len(tcIssues) > 0 {
+		return tcIssues, nil
+	}
+
 	return filterIssuesErr(issues, p.shouldPassIssue)
 }
 
 func (InvalidIssue) Finish() {}
 
 func (p InvalidIssue) shouldPassIssue(issue *result.Issue) (bool, error) {
-	if issue.FromLinter == "typecheck" {
-		return true, nil
-	}
-
 	if issue.FilePath() == "" {
 		p.log.Warnf("no file path for the issue: probably a bug inside the linter %q: %#v", issue.FromLinter, issue)
 
