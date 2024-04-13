@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 	"reflect"
+	"slices"
 	"sort"
 	"strings"
 	"unicode"
@@ -51,6 +52,22 @@ func getLintersListMarkdown(enabled bool) string {
 
 	sort.Slice(neededLcs, func(i, j int) bool {
 		return neededLcs[i].Name < neededLcs[j].Name
+	})
+
+	slices.SortFunc(neededLcs, func(a, b *types.LinterWrapper) int {
+		if a.IsDeprecated() && b.IsDeprecated() {
+			return strings.Compare(a.Name, b.Name)
+		}
+
+		if a.IsDeprecated() {
+			return 1
+		}
+
+		if b.IsDeprecated() {
+			return -1
+		}
+
+		return strings.Compare(a.Name, b.Name)
 	})
 
 	lines := []string{
