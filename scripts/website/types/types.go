@@ -45,3 +45,7 @@ type LinterWrapper struct {
 	Since       string       `json:"since,omitempty"`
 	Deprecation *Deprecation `json:"deprecation,omitempty"`
 }
+
+func (l *LinterWrapper) IsDeprecated() bool {
+	return l.Deprecation != nil
+}
