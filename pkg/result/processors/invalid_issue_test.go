@@ -32,7 +32,7 @@ func TestInvalidIssue_Process(t *testing.T) {
 			},
 		},
 		{
-			desc: "typecheck and Go file",
+			desc: "keep only typecheck issues if any exist",
 			issues: []result.Issue{
 				{FromLinter: "typecheck"},
 				{
