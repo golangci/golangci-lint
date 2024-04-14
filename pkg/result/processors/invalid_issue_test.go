@@ -32,6 +32,21 @@ func TestInvalidIssue_Process(t *testing.T) {
 			},
 		},
 		{
+			desc: "keep only typecheck issues if any exist",
+			issues: []result.Issue{
+				{FromLinter: "typecheck"},
+				{
+					FromLinter: "example",
+					Pos: token.Position{
+						Filename: "test.go",
+					},
+				},
+			},
+			expected: []result.Issue{
+				{FromLinter: "typecheck"},
+			},
+		},
+		{
 			desc: "Go file",
 			issues: []result.Issue{
 				{
