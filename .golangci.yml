@@ -131,6 +131,7 @@ linters:
     - nakedret
     - noctx
     - nolintlint
+    - perfsprint
     - revive
     - staticcheck
     - stylecheck

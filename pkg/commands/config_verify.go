@@ -47,7 +47,7 @@ func (c *configCommand) executeVerify(cmd *cobra.Command, _ []string) error {
 
 		printValidationDetail(cmd, &detail)
 
-		return fmt.Errorf("the configuration contains invalid elements")
+		return errors.New("the configuration contains invalid elements")
 	}
 
 	return nil

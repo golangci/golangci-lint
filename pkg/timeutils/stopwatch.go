@@ -61,7 +61,7 @@ func (s *Stopwatch) sprintStages() string {
 		stagesStrings = append(stagesStrings, fmt.Sprintf("%s: %s", s.name, s.d))
 	}
 
-	return fmt.Sprintf("stages: %s", strings.Join(stagesStrings, ", "))
+	return "stages: " + strings.Join(stagesStrings, ", ")
 }
 
 func (s *Stopwatch) sprintTopStages(n int) string {

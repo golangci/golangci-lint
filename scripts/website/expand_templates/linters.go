@@ -111,7 +111,7 @@ func getName(lc *types.LinterWrapper) string {
 
 	title := "deprecated"
 	if lc.Deprecation.Replacement != "" {
-		title += fmt.Sprintf(" since %s", lc.Deprecation.Since)
+		title += " since " + lc.Deprecation.Since
 	}
 
 	return name + "&nbsp;" + span(title, "⚠")
