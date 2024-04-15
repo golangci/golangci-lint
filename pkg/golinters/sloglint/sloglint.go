@@ -22,9 +22,6 @@ func New(settings *config.SlogLintSettings) *goanalysis.Linter {
 			KeyNamingCase:  settings.KeyNamingCase,
 			ArgsOnSepLines: settings.ArgsOnSepLines,
 		}
-		if settings.ContextOnly && settings.Context == "" {
-			opts.ContextOnly = "all"
-		}
 	}
 
 	a := sloglint.New(opts)

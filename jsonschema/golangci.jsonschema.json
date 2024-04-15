@@ -2275,15 +2275,9 @@
               "default": true
             },
             "context-only": {
-              "deprecated": true,
               "description": "Enforce using methods that accept a context.",
               "type": "boolean",
               "default": false
-            },
-            "context": {
-              "description": "Enforce using methods that accept a context.",
-              "enum": ["", "all", "scope"],
-              "default": ""
             },
             "static-msg": {
               "description": "Enforce using static values for log messages.",

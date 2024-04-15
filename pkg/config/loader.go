@@ -408,6 +408,14 @@ func (l *Loader) handleLinterOptionDeprecations() {
 	if l.cfg.LintersSettings.Stylecheck.GoVersion != "" {
 		l.log.Warnf("The configuration option `linters.stylecheck.go` is deprecated, please use global `run.go`.")
 	}
+
+	// Deprecated since v1.58.0
+	if l.cfg.LintersSettings.SlogLint.ContextOnly {
+		l.log.Warnf("The configuration option `linters.sloglint.context-only` is deprecated, please use `linters.sloglint.context`")
+		if l.cfg.LintersSettings.SlogLint.Context == "" {
+			l.cfg.LintersSettings.SlogLint.Context = "all"
+		}
+	}
 }
 
 func (l *Loader) handleEnableOnlyOption() error {
