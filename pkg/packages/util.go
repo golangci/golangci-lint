@@ -44,14 +44,14 @@ func ExtractErrors(pkg *packages.Package) []packages.Error {
 
 			// change pos to local file to properly process it by processors (properly read line etc.)
 			uniqErrors[i].Msg = fmt.Sprintf("%s: %s", uniqErrors[i].Pos, uniqErrors[i].Msg)
-			uniqErrors[i].Pos = pkg.GoFiles[0] + ":1"
+			uniqErrors[i].Pos = fmt.Sprintf("%s:1", pkg.GoFiles[0])
 		}
 
 		// some errors like "code in directory  expects import" don't have Pos, set it here
 		for i := range uniqErrors {
 			err := &uniqErrors[i]
 			if err.Pos == "" {
-				err.Pos = pkg.GoFiles[0] + ":1"
+				err.Pos = fmt.Sprintf("%s:1", pkg.GoFiles[0])
 			}
 		}
 	}

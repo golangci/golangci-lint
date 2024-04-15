@@ -225,7 +225,7 @@ func (l *PackageLoader) makeBuildFlags() []string {
 
 	if l.cfg.Run.ModulesDownloadMode != "" {
 		// go help modules
-		buildFlags = append(buildFlags, "-mod="+l.cfg.Run.ModulesDownloadMode)
+		buildFlags = append(buildFlags, fmt.Sprintf("-mod=%s", l.cfg.Run.ModulesDownloadMode))
 	}
 
 	return buildFlags

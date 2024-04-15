@@ -326,13 +326,13 @@ func (act *action) persistFactsToCache() error {
 
 	factsCacheDebugf("Caching %d facts for package %q and analyzer %s", len(facts), act.pkg.Name, act.a.Name)
 
-	key := analyzer.Name + "/facts"
+	key := fmt.Sprintf("%s/facts", analyzer.Name)
 	return act.r.pkgCache.Put(act.pkg, pkgcache.HashModeNeedAllDeps, key, facts)
 }
 
 func (act *action) loadPersistedFacts() bool {
 	var facts []Fact
-	key := act.a.Name + "/facts"
+	key := fmt.Sprintf("%s/facts", act.a.Name)
 	if err := act.r.pkgCache.Get(act.pkg, pkgcache.HashModeNeedAllDeps, key, &facts); err != nil {
 		if !errors.Is(err, pkgcache.ErrMissing) && !errors.Is(err, io.EOF) {
 			act.r.log.Warnf("Failed to get persisted facts: %s", err)

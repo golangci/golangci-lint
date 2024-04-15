@@ -1,6 +1,7 @@
 package prealloc
 
 import (
+	"fmt"
 	"sync"
 
 	"github.com/alexkohler/prealloc/pkg"
@@ -55,7 +56,7 @@ func runPreAlloc(pass *analysis.Pass, settings *config.PreallocSettings) []goana
 	for _, hint := range hints {
 		issues = append(issues, goanalysis.NewIssue(&result.Issue{
 			Pos:        pass.Fset.Position(hint.Pos),
-			Text:       "Consider pre-allocating " + internal.FormatCode(hint.DeclaredSliceName, nil),
+			Text:       fmt.Sprintf("Consider pre-allocating %s", internal.FormatCode(hint.DeclaredSliceName, nil)),
 			FromLinter: name,
 		}, pass))
 	}

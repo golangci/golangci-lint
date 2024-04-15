@@ -67,7 +67,7 @@ func setupRunFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
 
 func setupOutputFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
 	internal.AddFlagAndBind(v, fs, fs.String, "out-format", "output.formats", config.OutFormatColoredLineNumber,
-		color.GreenString("Formats of output: "+strings.Join(config.AllOutputFormats, "|")))
+		color.GreenString(fmt.Sprintf("Formats of output: %s", strings.Join(config.AllOutputFormats, "|"))))
 	internal.AddFlagAndBind(v, fs, fs.Bool, "print-issued-lines", "output.print-issued-lines", true,
 		color.GreenString("Print lines of code with issue"))
 	internal.AddFlagAndBind(v, fs, fs.Bool, "print-linter-name", "output.print-linter-name", true,
@@ -124,7 +124,7 @@ func getDefaultIssueExcludeHelp() string {
 	for _, ep := range config.DefaultExcludePatterns {
 		parts = append(parts,
 			fmt.Sprintf("  - %s (%s): %s", color.BlueString(ep.ID), color.CyanString(ep.Linter), ep.Why),
-			"    Pattern: "+color.YellowString(`'`+ep.Pattern+`'`),
+			fmt.Sprintf(`    Pattern: %s`, color.YellowString(`'`+ep.Pattern+`'`)),
 		)
 	}
 
@@ -134,7 +134,7 @@ func getDefaultIssueExcludeHelp() string {
 func getDefaultDirectoryExcludeHelp() string {
 	parts := []string{color.GreenString("Use or not use default excluded directories:")}
 	for _, dir := range processors.StdExcludeDirRegexps {
-		parts = append(parts, "  - "+color.YellowString(dir))
+		parts = append(parts, fmt.Sprintf("  - %s", color.YellowString(dir)))
 	}
 	parts = append(parts, "")
 	return strings.Join(parts, "\n")

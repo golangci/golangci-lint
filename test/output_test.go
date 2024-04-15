@@ -1,6 +1,7 @@
 package test
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 	"testing"
@@ -61,7 +62,7 @@ func TestOutput_File(t *testing.T) {
 			"--disable-all",
 			"--print-issued-lines=false",
 			"--print-linter-name=false",
-			"--out-format=json:"+resultPath,
+			fmt.Sprintf("--out-format=json:%s", resultPath),
 		).
 		WithDirectives(sourcePath).
 		WithTargetPath(sourcePath).
