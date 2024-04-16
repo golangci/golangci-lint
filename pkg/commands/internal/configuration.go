@@ -103,6 +103,8 @@ func LoadConfiguration() (*Configuration, error) {
 		return nil, fmt.Errorf("file %s open: %w", configFilePath, err)
 	}
 
+	defer func() { _ = file.Close() }()
+
 	var cfg Configuration
 
 	err = yaml.NewDecoder(file).Decode(&cfg)
