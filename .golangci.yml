@@ -96,6 +96,7 @@ linters-settings:
     require-specific: true # require nolint directives to be specific about which linter is being skipped
   revive:
     rules:
+      - name: indent-error-flow
       - name: unexported-return
         disabled: true
       - name: unused-parameter
