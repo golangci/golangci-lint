@@ -102,6 +102,7 @@ func LoadConfiguration() (*Configuration, error) {
 	if err != nil {
 		return nil, fmt.Errorf("file %s open: %w", configFilePath, err)
 	}
+	defer file.Close()
 
 	var cfg Configuration
 
