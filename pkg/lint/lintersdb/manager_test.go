@@ -55,10 +55,10 @@ func TestManager_GetOptimizedLinters(t *testing.T) {
 
 	mlConfig := &linter.Config{
 		Linter:    goanalysis.NewMetaLinter(gaLinters),
-		InPresets: []string{"bugs", "format"},
+		InPresets: []string{"format"},
 	}
 
-	expected := []*linter.Config{mlConfig.WithLoadForGoAnalysis()}
+	expected := []*linter.Config{mlConfig.WithLoadFiles()}
 
 	assert.Equal(t, expected, optimizedLinters)
 }
