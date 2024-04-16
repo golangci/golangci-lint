@@ -254,6 +254,7 @@ func readExcludeFile(name string) ([]string, error) {
 	if fh == nil {
 		return nil, fmt.Errorf("failed reading exclude file: %s: %w", name, err)
 	}
+	defer func() { _ = fh.Close() }()
 
 	scanner := bufio.NewScanner(fh)
 
