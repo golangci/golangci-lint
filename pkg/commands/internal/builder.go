@@ -124,7 +124,7 @@ func (b Builder) addToGoMod(ctx context.Context) error {
 }
 
 func (b Builder) goGet(ctx context.Context, plugin *Plugin) error {
-	//nolint:gosec // the variables user related.
+	//nolint:gosec // the variables are user related.
 	cmd := exec.CommandContext(ctx, "go", "get", plugin.Module+"@"+plugin.Version)
 	cmd.Dir = b.repo
 
