@@ -11,7 +11,7 @@ body:
           required: true
         - label: Yes, I've searched similar issues on GitHub and didn't find any.
           required: true
-        - label: Yes, I've read the typecheck section of the FAQ (https://golangci-lint.run/usage/faq/#why-do-you-have-typecheck-errors).
+        - label: Yes, I've read the typecheck section of the FAQ (https://golangci-lint.run/welcome/faq/#why-do-you-have-typecheck-errors).
           required: true
         - label: Yes, I've tried with the standalone linter if available (e.g., gocritic, go vet, etc.). (https://golangci-lint.run/usage/linters/)
           required: true
