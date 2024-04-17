@@ -207,7 +207,6 @@ func (m *Manager) combineGoAnalysisLinters(linters map[string]*linter.Config) {
 	mlConfig := &linter.Config{}
 
 	var goanalysisLinters []*goanalysis.Linter
-	goanalysisPresets := map[string]bool{}
 
 	for _, lc := range linters {
 		lnt, ok := lc.Linter.(*goanalysis.Linter)
@@ -226,11 +225,9 @@ func (m *Manager) combineGoAnalysisLinters(linters map[string]*linter.Config) {
 			mlConfig.ConsiderSlow()
 		}
 
-		goanalysisLinters = append(goanalysisLinters, lnt)
+		mlConfig.InPresets = append(mlConfig.InPresets, lc.InPresets...)
 
-		for _, p := range lc.InPresets {
-			goanalysisPresets[p] = true
-		}
+		goanalysisLinters = append(goanalysisLinters, lnt)
 	}
 
 	if len(goanalysisLinters) <= 1 {
@@ -259,9 +256,8 @@ func (m *Manager) combineGoAnalysisLinters(linters map[string]*linter.Config) {
 
 	mlConfig.Linter = goanalysis.NewMetaLinter(goanalysisLinters)
 
-	presets := maps.Keys(goanalysisPresets)
-	sort.Strings(presets)
-	mlConfig.InPresets = presets
+	sort.Strings(mlConfig.InPresets)
+	mlConfig.InPresets = slices.Compact(mlConfig.InPresets)
 
 	linters[mlConfig.Linter.Name()] = mlConfig
 
