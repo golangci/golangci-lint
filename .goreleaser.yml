@@ -1,13 +1,14 @@
 ---
 project_name: golangci-lint
 
-release:
-  github:
-    owner: golangci
-    name: golangci-lint
-
 builds:
   - binary: golangci-lint
+    main: ./cmd/golangci-lint/
+    flags:
+      - -trimpath
+    ldflags: -s -w -X main.version={{.Version}} -X main.commit={{.ShortCommit}} -X main.date={{.Date}}
+    env:
+      - CGO_ENABLED=0
     goos:
       - darwin
       - windows
@@ -31,17 +32,11 @@ builds:
       - 7
     gomips:
       - hardfloat
-    env:
-      - CGO_ENABLED=0
     ignore:
       - goos: darwin
         goarch: 386
       - goos: freebsd
         goarch: arm64
-    main: ./cmd/golangci-lint/
-    flags:
-      - -trimpath
-    ldflags: -s -w -X main.version={{.Version}} -X main.commit={{.ShortCommit}} -X main.date={{.Date}}
 
 archives:
   - format: tar.gz
@@ -75,6 +70,19 @@ changelog:
       - '^build\(deps\): bump .* in /scripts/gen_github_action_config \(#\d+\)'
       - Merge pull request
       - Merge branch
+
+release:
+  github:
+    owner: golangci
+    name: golangci-lint
+  header: |
+    `golangci-lint` is a free and open-source project built by volunteers.
+
+    If you value it, consider supporting us, the [maintainers](https://github.com/golangci/golangci-lint?tab=readme-ov-file#contributors) and [linter authors](https://golangci-lint.run/product/thanks/).
+
+    We appreciate it! :heart:
+
+    For key updates, see the [changelog](https://golangci-lint.run/product/changelog/#{{ .Major }}{{ .Minor }}{{ .Patch }}).
 
 source:
   enabled: true
