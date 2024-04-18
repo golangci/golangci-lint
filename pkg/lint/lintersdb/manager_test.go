@@ -5,6 +5,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"golang.org/x/tools/go/packages"
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
@@ -55,10 +56,10 @@ func TestManager_GetOptimizedLinters(t *testing.T) {
 
 	mlConfig := &linter.Config{
 		Linter:    goanalysis.NewMetaLinter(gaLinters),
-		InPresets: []string{"bugs", "format"},
+		InPresets: []string{"format"},
 	}
 
-	expected := []*linter.Config{mlConfig.WithLoadForGoAnalysis()}
+	expected := []*linter.Config{mlConfig.WithLoadFiles()}
 
 	assert.Equal(t, expected, optimizedLinters)
 }
@@ -176,8 +177,11 @@ func TestManager_combineGoAnalysisLinters(t *testing.T) {
 	m, err := NewManager(nil, nil)
 	require.NoError(t, err)
 
-	foo := goanalysis.NewLinter("foo", "example foo", nil, nil).WithLoadMode(goanalysis.LoadModeTypesInfo)
-	bar := goanalysis.NewLinter("bar", "example bar", nil, nil).WithLoadMode(goanalysis.LoadModeTypesInfo)
+	fooTyped := goanalysis.NewLinter("foo", "example foo", nil, nil).WithLoadMode(goanalysis.LoadModeTypesInfo)
+	barTyped := goanalysis.NewLinter("bar", "example bar", nil, nil).WithLoadMode(goanalysis.LoadModeTypesInfo)
+
+	fooSyntax := goanalysis.NewLinter("foo", "example foo", nil, nil).WithLoadMode(goanalysis.LoadModeSyntax)
+	barSyntax := goanalysis.NewLinter("bar", "example bar", nil, nil).WithLoadMode(goanalysis.LoadModeSyntax)
 
 	testCases := []struct {
 		desc     string
@@ -188,37 +192,112 @@ func TestManager_combineGoAnalysisLinters(t *testing.T) {
 			desc: "no combined, one linter",
 			linters: map[string]*linter.Config{
 				"foo": {
-					Linter:    foo,
+					Linter:    fooTyped,
 					InPresets: []string{"A"},
 				},
 			},
 			expected: map[string]*linter.Config{
 				"foo": {
-					Linter:    foo,
+					Linter:    fooTyped,
 					InPresets: []string{"A"},
 				},
 			},
 		},
 		{
-			desc: "combined, several linters",
+			desc: "combined, several linters (typed)",
 			linters: map[string]*linter.Config{
 				"foo": {
-					Linter:    foo,
+					Linter:    fooTyped,
 					InPresets: []string{"A"},
 				},
 				"bar": {
-					Linter:    bar,
+					Linter:    barTyped,
 					InPresets: []string{"B"},
 				},
 			},
 			expected: func() map[string]*linter.Config {
 				mlConfig := &linter.Config{
-					Linter:    goanalysis.NewMetaLinter([]*goanalysis.Linter{bar, foo}),
+					Linter:    goanalysis.NewMetaLinter([]*goanalysis.Linter{barTyped, fooTyped}),
 					InPresets: []string{"A", "B"},
 				}
 
 				return map[string]*linter.Config{
-					"goanalysis_metalinter": mlConfig.WithLoadForGoAnalysis(),
+					"goanalysis_metalinter": mlConfig,
+				}
+			}(),
+		},
+		{
+			desc: "combined, several linters (different LoadMode)",
+			linters: map[string]*linter.Config{
+				"foo": {
+					Linter:    fooTyped,
+					InPresets: []string{"A"},
+					LoadMode:  packages.NeedName,
+				},
+				"bar": {
+					Linter:    barTyped,
+					InPresets: []string{"B"},
+					LoadMode:  packages.NeedTypesSizes,
+				},
+			},
+			expected: func() map[string]*linter.Config {
+				mlConfig := &linter.Config{
+					Linter:    goanalysis.NewMetaLinter([]*goanalysis.Linter{barTyped, fooTyped}),
+					InPresets: []string{"A", "B"},
+					LoadMode:  packages.NeedName | packages.NeedTypesSizes,
+				}
+
+				return map[string]*linter.Config{
+					"goanalysis_metalinter": mlConfig,
+				}
+			}(),
+		},
+		{
+			desc: "combined, several linters (same LoadMode)",
+			linters: map[string]*linter.Config{
+				"foo": {
+					Linter:    fooTyped,
+					InPresets: []string{"A"},
+					LoadMode:  packages.NeedName,
+				},
+				"bar": {
+					Linter:    barTyped,
+					InPresets: []string{"B"},
+					LoadMode:  packages.NeedName,
+				},
+			},
+			expected: func() map[string]*linter.Config {
+				mlConfig := &linter.Config{
+					Linter:    goanalysis.NewMetaLinter([]*goanalysis.Linter{barTyped, fooTyped}),
+					InPresets: []string{"A", "B"},
+					LoadMode:  packages.NeedName,
+				}
+
+				return map[string]*linter.Config{
+					"goanalysis_metalinter": mlConfig,
+				}
+			}(),
+		},
+		{
+			desc: "combined, several linters (syntax)",
+			linters: map[string]*linter.Config{
+				"foo": {
+					Linter:    fooSyntax,
+					InPresets: []string{"A"},
+				},
+				"bar": {
+					Linter:    barSyntax,
+					InPresets: []string{"B"},
+				},
+			},
+			expected: func() map[string]*linter.Config {
+				mlConfig := &linter.Config{
+					Linter:    goanalysis.NewMetaLinter([]*goanalysis.Linter{barSyntax, fooSyntax}),
+					InPresets: []string{"A", "B"},
+				}
+
+				return map[string]*linter.Config{
+					"goanalysis_metalinter": mlConfig,
 				}
 			}(),
 		},

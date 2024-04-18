@@ -148,7 +148,7 @@ func getEnabledByDefaultFastLintersExcept(t *testing.T, except ...string) []stri
 	ebdl := m.GetAllEnabledByDefaultLinters()
 	var ret []string
 	for _, lc := range ebdl {
-		if lc.IsSlowLinter() {
+		if lc.IsSlowLinter() || lc.Internal {
 			continue
 		}
 
@@ -169,7 +169,7 @@ func getAllFastLintersWith(t *testing.T, with ...string) []string {
 	linters := dbManager.GetAllSupportedLinterConfigs()
 	ret := append([]string{}, with...)
 	for _, lc := range linters {
-		if lc.IsSlowLinter() {
+		if lc.IsSlowLinter() || lc.Internal {
 			continue
 		}
 		ret = append(ret, lc.Name())
@@ -206,7 +206,7 @@ func getEnabledByDefaultFastLintersWith(t *testing.T, with ...string) []string {
 	ebdl := dbManager.GetAllEnabledByDefaultLinters()
 	ret := append([]string{}, with...)
 	for _, lc := range ebdl {
-		if lc.IsSlowLinter() {
+		if lc.IsSlowLinter() || lc.Internal {
 			continue
 		}
 

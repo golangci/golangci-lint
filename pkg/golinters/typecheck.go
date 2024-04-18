@@ -20,5 +20,5 @@ func NewTypecheck() *goanalysis.Linter {
 		"Like the front-end of a Go compiler, parses and type-checks Go code",
 		[]*analysis.Analyzer{analyzer},
 		nil,
-	).WithLoadMode(goanalysis.LoadModeTypesInfo)
+	).WithLoadMode(goanalysis.LoadModeNone)
 }

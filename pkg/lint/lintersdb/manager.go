@@ -204,21 +204,30 @@ func (m *Manager) build(enabledByDefaultLinters []*linter.Config) map[string]*li
 }
 
 func (m *Manager) combineGoAnalysisLinters(linters map[string]*linter.Config) {
+	mlConfig := &linter.Config{}
+
 	var goanalysisLinters []*goanalysis.Linter
-	goanalysisPresets := map[string]bool{}
+
 	for _, lc := range linters {
 		lnt, ok := lc.Linter.(*goanalysis.Linter)
 		if !ok {
 			continue
 		}
+
 		if lnt.LoadMode() == goanalysis.LoadModeWholeProgram {
 			// It's ineffective by CPU and memory to run whole-program and incremental analyzers at once.
 			continue
 		}
-		goanalysisLinters = append(goanalysisLinters, lnt)
-		for _, p := range lc.InPresets {
-			goanalysisPresets[p] = true
+
+		mlConfig.LoadMode |= lc.LoadMode
+
+		if lc.IsSlowLinter() {
+			mlConfig.ConsiderSlow()
 		}
+
+		mlConfig.InPresets = append(mlConfig.InPresets, lc.InPresets...)
+
+		goanalysisLinters = append(goanalysisLinters, lnt)
 	}
 
 	if len(goanalysisLinters) <= 1 {
@@ -245,22 +254,13 @@ func (m *Manager) combineGoAnalysisLinters(linters map[string]*linter.Config) {
 		return a.Name() <= b.Name()
 	})
 
-	ml := goanalysis.NewMetaLinter(goanalysisLinters)
+	mlConfig.Linter = goanalysis.NewMetaLinter(goanalysisLinters)
 
-	presets := maps.Keys(goanalysisPresets)
-	sort.Strings(presets)
+	sort.Strings(mlConfig.InPresets)
+	mlConfig.InPresets = slices.Compact(mlConfig.InPresets)
 
-	mlConfig := &linter.Config{
-		Linter:           ml,
-		EnabledByDefault: false,
-		InPresets:        presets,
-		AlternativeNames: nil,
-		OriginalURL:      "",
-	}
+	linters[mlConfig.Linter.Name()] = mlConfig
 
-	mlConfig = mlConfig.WithLoadForGoAnalysis()
-
-	linters[ml.Name()] = mlConfig
 	m.debugf("Combined %d go/analysis linters into one metalinter", len(goanalysisLinters))
 }
 

@@ -752,10 +752,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 		linter.NewConfig(golinters.NewTypecheck()).
 			WithInternal().
 			WithEnabledByDefault().
-			WithSince("v1.3.0").
-			WithLoadForGoAnalysis().
-			WithPresets(linter.PresetBugs).
-			WithURL(""),
+			WithSince("v1.3.0"),
 
 		linter.NewConfig(unconvert.New(&cfg.LintersSettings.Unconvert)).
 			WithSince("v1.0.0").
