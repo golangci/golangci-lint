@@ -18,8 +18,8 @@ EOF
 }
 
 parse_args() {
-  #BINDIR is ./bin unless set be ENV
-  # over-ridden by flag below
+  # BINDIR is ./bin unless set be ENV
+  # overridden by flag below
 
   BINDIR=${BINDIR:-./bin}
   while getopts "b:dh?x" arg; do
@@ -150,9 +150,6 @@ is_command() {
 echoerr() {
   echo "$@" 1>&2
 }
-log_prefix() {
-  echo "$0"
-}
 _logp=6
 log_set_priority() {
   _logp="$1"
@@ -200,7 +197,7 @@ uname_os() {
     mingw*) os="windows" ;;
     cygwin*) os="windows" ;;
     win*) os="windows" ;;
-    sunos) [ $(uname -o) == "illumos" ] && os=illumos ;;
+    sunos) [ "$(uname -o)" = "illumos" ] && os=illumos ;;
   esac
   echo "$os"
 }
@@ -218,7 +215,7 @@ uname_arch() {
     armv7*) arch="armv7" ;;
     loongarch64) arch="loong64" ;;
   esac
-  echo ${arch}
+  echo "${arch}"
 }
 uname_os_check() {
   os=$(uname_os)
