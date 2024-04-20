@@ -35,7 +35,7 @@ require (
 	github.com/daixiang0/gci v0.13.4
 	github.com/denis-tingaikin/go-header v0.5.0
 	github.com/fatih/color v1.16.0
-	github.com/firefart/nonamedreturns v1.0.4
+	github.com/firefart/nonamedreturns v1.0.5
 	github.com/fzipp/gocyclo v0.6.0
 	github.com/ghostiam/protogetter v0.3.5
 	github.com/go-critic/go-critic v0.11.3
