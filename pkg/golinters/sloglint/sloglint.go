@@ -14,9 +14,9 @@ func New(settings *config.SlogLintSettings) *goanalysis.Linter {
 		opts = &sloglint.Options{
 			NoMixedArgs:    settings.NoMixedArgs,
 			KVOnly:         settings.KVOnly,
-			NoGlobal:       settings.NoGlobal,
 			AttrOnly:       settings.AttrOnly,
-			ContextOnly:    settings.ContextOnly,
+			NoGlobal:       settings.NoGlobal,
+			ContextOnly:    settings.Context,
 			StaticMsg:      settings.StaticMsg,
 			NoRawKeys:      settings.NoRawKeys,
 			KeyNamingCase:  settings.KeyNamingCase,

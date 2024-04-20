@@ -12,5 +12,5 @@ import (
 func test() {
 	slog.InfoContext(context.Background(), "msg")
 
-	slog.Info("msg") // want `methods without a context should not be used`
+	slog.Info("msg") // want `InfoContext should be used instead`
 }

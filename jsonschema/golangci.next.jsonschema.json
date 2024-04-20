@@ -2289,10 +2289,10 @@
               "type": "boolean",
               "default": true
             },
-            "context-only": {
+            "context": {
               "description": "Enforce using methods that accept a context.",
-              "type": "boolean",
-              "default": false
+              "enum": ["", "all", "scope"],
+              "default": ""
             },
             "static-msg": {
               "description": "Enforce using static values for log messages.",

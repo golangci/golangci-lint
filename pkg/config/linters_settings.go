@@ -144,6 +144,8 @@ var defaultLintersSettings = LintersSettings{
 		NoMixedArgs:    true,
 		KVOnly:         false,
 		AttrOnly:       false,
+		NoGlobal:       "",
+		Context:        "",
 		ContextOnly:    false,
 		StaticMsg:      false,
 		NoRawKeys:      false,
@@ -810,9 +812,10 @@ type RowsErrCheckSettings struct {
 type SlogLintSettings struct {
 	NoMixedArgs    bool   `mapstructure:"no-mixed-args"`
 	KVOnly         bool   `mapstructure:"kv-only"`
-	NoGlobal       string `mapstructure:"no-global"`
 	AttrOnly       bool   `mapstructure:"attr-only"`
-	ContextOnly    bool   `mapstructure:"context-only"`
+	NoGlobal       string `mapstructure:"no-global"`
+	Context        string `mapstructure:"context"`
+	ContextOnly    bool   `mapstructure:"context-only"` // Deprecated: use Context instead.
 	StaticMsg      bool   `mapstructure:"static-msg"`
 	NoRawKeys      bool   `mapstructure:"no-raw-keys"`
 	KeyNamingCase  string `mapstructure:"key-naming-case"`

@@ -2014,8 +2014,12 @@ linters-settings:
     # Default: ""
     no-global: "all"
     # Enforce using methods that accept a context.
-    # Default: false
-    context-only: true
+    # Values:
+    # - "": disabled
+    # - "all": report all contextless calls
+    # - "scope": report only if a context exists in the scope of the outermost function
+    # Default: ""
+    context: "all"
     # Enforce using static values for log messages.
     # Default: false
     static-msg: true
