@@ -119,7 +119,7 @@ require (
 	github.com/yagipy/maintidx v1.0.0
 	github.com/yeya24/promlinter v0.2.0
 	github.com/ykadowak/zerologlint v0.1.5
-	gitlab.com/bosi/decorder v0.4.1
+	gitlab.com/bosi/decorder v0.4.2
 	go-simpler.org/musttag v0.12.1
 	go-simpler.org/sloglint v0.6.0
 	go.uber.org/automaxprocs v1.5.3
