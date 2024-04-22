@@ -19,6 +19,10 @@ func New(settings *config.SpancheckSettings) *goanalysis.Linter {
 		if settings.IgnoreCheckSignatures != nil {
 			cfg.IgnoreChecksSignaturesSlice = settings.IgnoreCheckSignatures
 		}
+
+		if settings.ExtraStartSpanSignatures != nil {
+			cfg.StartSpanMatchersSlice = settings.ExtraStartSpanSignatures
+		}
 	}
 
 	a := spancheck.NewAnalyzerWithConfig(cfg)
