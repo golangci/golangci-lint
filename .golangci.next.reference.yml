@@ -2051,7 +2051,13 @@ linters-settings:
     # Default: []
     ignore-check-signatures:
       - "telemetry.RecordError"
-
+    # A list of regexes for additional function signatures that create spans.
+    # This is useful if you have a utility method to create spans.
+    # Each entry should be of the form `<regex>:<telemetry-type>`, where `telemetry-type` can be `opentelemetry` or `opencensus`.
+    # https://github.com/jjti/go-spancheck#extra-start-span-signatures
+    # Default: []
+    extra-start-span-signatures:
+      - "github.com/user/repo/telemetry/trace.Start:opentelemetry"
   staticcheck:
     # Deprecated: use the global `run.go` instead.
     go: "1.15"

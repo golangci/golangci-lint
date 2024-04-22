@@ -823,8 +823,9 @@ type SlogLintSettings struct {
 }
 
 type SpancheckSettings struct {
-	Checks                []string `mapstructure:"checks"`
-	IgnoreCheckSignatures []string `mapstructure:"ignore-check-signatures"`
+	Checks                   []string `mapstructure:"checks"`
+	IgnoreCheckSignatures    []string `mapstructure:"ignore-check-signatures"`
+	ExtraStartSpanSignatures []string `mapstructure:"extra-start-span-signatures"`
 }
 
 type StaticCheckSettings struct {

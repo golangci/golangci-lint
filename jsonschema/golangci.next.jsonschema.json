@@ -2337,6 +2337,13 @@
               "items": {
                 "type": "string"
               }
+            },
+            "extra-start-span-signatures": {
+              "description": "A list of regexes for additional function signatures that create spans.",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
             }
           }
         },
