@@ -117,7 +117,7 @@ require (
 	github.com/valyala/quicktemplate v1.7.0
 	github.com/xen0n/gosmopolitan v1.2.2
 	github.com/yagipy/maintidx v1.0.0
-	github.com/yeya24/promlinter v0.2.0
+	github.com/yeya24/promlinter v0.3.0
 	github.com/ykadowak/zerologlint v0.1.5
 	gitlab.com/bosi/decorder v0.4.2
 	go-simpler.org/musttag v0.12.1
