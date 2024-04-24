@@ -6,8 +6,8 @@ import (
 
 	"golang.org/x/tools/go/packages"
 
+	libpackages "github.com/golangci/golangci-lint/pkg/goanalysis/packages"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
-	libpackages "github.com/golangci/golangci-lint/pkg/packages"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
