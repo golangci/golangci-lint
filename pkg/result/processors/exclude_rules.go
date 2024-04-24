@@ -24,12 +24,7 @@ type ExcludeRules struct {
 	rules []excludeRule
 }
 
-type ExcludeRulesOptions struct {
-	Rules         []config.ExcludeRule
-	CaseSensitive bool
-}
-
-func NewExcludeRules(log logutils.Log, files *fsutils.Files, opts ExcludeRulesOptions) *ExcludeRules {
+func NewExcludeRules(log logutils.Log, files *fsutils.Files, cfg *config.Issues) *ExcludeRules {
 	p := &ExcludeRules{
 		name:  "exclude-rules",
 		files: files,
@@ -37,12 +32,25 @@ func NewExcludeRules(log logutils.Log, files *fsutils.Files, opts ExcludeRulesOp
 	}
 
 	prefix := caseInsensitivePrefix
-	if opts.CaseSensitive {
+	if cfg.ExcludeCaseSensitive {
 		prefix = ""
 		p.name = "exclude-rules-case-sensitive"
 	}
 
-	p.rules = createRules(opts.Rules, prefix)
+	excludeRules := cfg.ExcludeRules
+
+	if cfg.UseDefaultExcludes {
+		for _, r := range config.GetExcludePatterns(cfg.IncludeDefaultExcludes) {
+			excludeRules = append(excludeRules, config.ExcludeRule{
+				BaseRule: config.BaseRule{
+					Text:    r.Pattern,
+					Linters: []string{r.Linter},
+				},
+			})
+		}
+	}
+
+	p.rules = createRules(excludeRules, prefix)
 
 	return p
 }

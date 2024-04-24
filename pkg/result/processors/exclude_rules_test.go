@@ -16,7 +16,7 @@ func TestExcludeRules_multiple(t *testing.T) {
 	lineCache := fsutils.NewLineCache(fsutils.NewFileCache())
 	files := fsutils.NewFiles(lineCache, "")
 
-	opts := ExcludeRulesOptions{Rules: []config.ExcludeRule{
+	opts := &config.Issues{ExcludeRules: []config.ExcludeRule{
 		{
 			BaseRule: config.BaseRule{
 				Text:    "^exclude$",
@@ -95,8 +95,8 @@ func TestExcludeRules_pathPrefix(t *testing.T) {
 	pathPrefix := path.Join("some", "dir")
 	files := fsutils.NewFiles(lineCache, pathPrefix)
 
-	opts := ExcludeRulesOptions{
-		Rules: []config.ExcludeRule{
+	opts := &config.Issues{
+		ExcludeRules: []config.ExcludeRule{
 			{
 				BaseRule: config.BaseRule{
 					Path: `some/dir/e\.go`,
@@ -137,8 +137,8 @@ func TestExcludeRules_pathPrefix(t *testing.T) {
 }
 
 func TestExcludeRules_text(t *testing.T) {
-	opts := ExcludeRulesOptions{
-		Rules: []config.ExcludeRule{
+	opts := &config.Issues{
+		ExcludeRules: []config.ExcludeRule{
 			{
 				BaseRule: config.BaseRule{
 					Text:    "^exclude$",
@@ -171,16 +171,16 @@ func TestExcludeRules_text(t *testing.T) {
 }
 
 func TestExcludeRules_empty(t *testing.T) {
-	processAssertSame(t, NewExcludeRules(nil, nil, ExcludeRulesOptions{}), newIssueFromTextTestCase("test"))
+	processAssertSame(t, NewExcludeRules(nil, nil, &config.Issues{}), newIssueFromTextTestCase("test"))
 }
 
 func TestExcludeRules_caseSensitive_multiple(t *testing.T) {
 	lineCache := fsutils.NewLineCache(fsutils.NewFileCache())
 	files := fsutils.NewFiles(lineCache, "")
 
-	opts := ExcludeRulesOptions{
-		CaseSensitive: true,
-		Rules: []config.ExcludeRule{
+	opts := &config.Issues{
+		ExcludeCaseSensitive: true,
+		ExcludeRules: []config.ExcludeRule{
 			{
 				BaseRule: config.BaseRule{
 					Text:    "^exclude$",
@@ -252,9 +252,9 @@ func TestExcludeRules_caseSensitive_multiple(t *testing.T) {
 }
 
 func TestExcludeRules_caseSensitive_text(t *testing.T) {
-	opts := ExcludeRulesOptions{
-		CaseSensitive: true,
-		Rules: []config.ExcludeRule{
+	opts := &config.Issues{
+		ExcludeCaseSensitive: true,
+		ExcludeRules: []config.ExcludeRule{
 			{
 				BaseRule: config.BaseRule{
 					Text:    "^exclude$",
@@ -288,5 +288,5 @@ func TestExcludeRules_caseSensitive_text(t *testing.T) {
 }
 
 func TestExcludeRules_caseSensitive_empty(t *testing.T) {
-	processAssertSame(t, NewExcludeRules(nil, nil, ExcludeRulesOptions{CaseSensitive: true}), newIssueFromTextTestCase("test"))
+	processAssertSame(t, NewExcludeRules(nil, nil, &config.Issues{ExcludeCaseSensitive: true}), newIssueFromTextTestCase("test"))
 }

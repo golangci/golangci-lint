@@ -81,7 +81,7 @@ func NewRunner(log logutils.Log, cfg *config.Config, args []string, goenv *gouti
 			processors.NewIdentifierMarker(),
 
 			getExcludeProcessor(&cfg.Issues),
-			getExcludeRulesProcessor(&cfg.Issues, log, files),
+			processors.NewExcludeRules(log.Child(logutils.DebugKeyExcludeRules), files, &cfg.Issues),
 			processors.NewNolint(log.Child(logutils.DebugKeyNolint), dbManager, enabledLinters),
 
 			processors.NewUniqByLine(cfg),
@@ -253,26 +253,4 @@ func getExcludeProcessor(cfg *config.Issues) processors.Processor {
 	}
 
 	return processors.NewExclude(opts)
-}
-
-func getExcludeRulesProcessor(cfg *config.Issues, log logutils.Log, files *fsutils.Files) processors.Processor {
-	excludeRules := cfg.ExcludeRules
-
-	if cfg.UseDefaultExcludes {
-		for _, r := range config.GetExcludePatterns(cfg.IncludeDefaultExcludes) {
-			excludeRules = append(excludeRules, config.ExcludeRule{
-				BaseRule: config.BaseRule{
-					Text:    r.Pattern,
-					Linters: []string{r.Linter},
-				},
-			})
-		}
-	}
-
-	opts := processors.ExcludeRulesOptions{
-		Rules:         excludeRules,
-		CaseSensitive: cfg.ExcludeCaseSensitive,
-	}
-
-	return processors.NewExcludeRules(log.Child(logutils.DebugKeyExcludeRules), files, opts)
 }
