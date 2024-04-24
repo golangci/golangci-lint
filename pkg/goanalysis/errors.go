@@ -6,7 +6,7 @@ import (
 
 	"golang.org/x/tools/go/packages"
 
-	libpackages "github.com/golangci/golangci-lint/pkg/goanalysis/packages"
+	"github.com/golangci/golangci-lint/pkg/goanalysis/pkgerrors"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
@@ -36,7 +36,7 @@ func buildIssuesFromIllTypedError(errs []error, lintCtx *linter.Context) ([]resu
 			continue
 		}
 
-		for _, err := range libpackages.ExtractErrors(ill.Pkg) {
+		for _, err := range pkgerrors.ExtractErrors(ill.Pkg) {
 			i, perr := parseError(err)
 			if perr != nil { // failed to parse
 				if uniqReportedIssues[err.Msg] {
@@ -59,7 +59,7 @@ func buildIssuesFromIllTypedError(errs []error, lintCtx *linter.Context) ([]resu
 }
 
 func parseError(srcErr packages.Error) (*result.Issue, error) {
-	pos, err := libpackages.ParseErrorPosition(srcErr.Pos)
+	pos, err := pkgerrors.ParseErrorPosition(srcErr.Pos)
 	if err != nil {
 		return nil, err
 	}
