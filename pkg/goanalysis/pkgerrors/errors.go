@@ -36,7 +36,7 @@ func BuildIssuesFromIllTypedError(errs []error, lintCtx *linter.Context) ([]resu
 		}
 
 		for _, err := range extractErrors(ill.Pkg) {
-			i, perr := parseError(err)
+			issue, perr := parseError(err)
 			if perr != nil { // failed to parse
 				if uniqReportedIssues[err.Msg] {
 					continue
@@ -44,8 +44,8 @@ func BuildIssuesFromIllTypedError(errs []error, lintCtx *linter.Context) ([]resu
 				uniqReportedIssues[err.Msg] = true
 				lintCtx.Log.Errorf("typechecking error: %s", err.Msg)
 			} else {
-				i.Pkg = ill.Pkg // to save to cache later
-				issues = append(issues, *i)
+				issue.Pkg = ill.Pkg // to save to cache later
+				issues = append(issues, *issue)
 			}
 		}
 	}
