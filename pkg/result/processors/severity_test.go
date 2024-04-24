@@ -7,6 +7,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
+	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/fsutils"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
@@ -19,56 +20,56 @@ func TestSeverity_multiple(t *testing.T) {
 
 	opts := SeverityOptions{
 		Default: "error",
-		Rules: []SeverityRule{
+		Rules: []config.SeverityRule{
 			{
 				Severity: "info",
-				BaseRule: BaseRule{
+				BaseRule: config.BaseRule{
 					Text:    "^ssl$",
 					Linters: []string{"gosec"},
 				},
 			},
 			{
 				Severity: "info",
-				BaseRule: BaseRule{
+				BaseRule: config.BaseRule{
 					Linters: []string{"linter"},
 					Path:    "e.go",
 				},
 			},
 			{
 				Severity: "info",
-				BaseRule: BaseRule{
+				BaseRule: config.BaseRule{
 					Text: "^testonly$",
 					Path: `_test\.go`,
 				},
 			},
 			{
 				Severity: "info",
-				BaseRule: BaseRule{
+				BaseRule: config.BaseRule{
 					Text:       "^nontestonly$",
 					PathExcept: `_test\.go`,
 				},
 			},
 			{
-				BaseRule: BaseRule{
+				BaseRule: config.BaseRule{
 					Source:  "^//go:generate ",
 					Linters: []string{"lll"},
 				},
 			},
 			{
 				Severity: "info",
-				BaseRule: BaseRule{
+				BaseRule: config.BaseRule{
 					Source: "^//go:dosomething",
 				},
 			},
 			{
 				Severity: "info",
-				BaseRule: BaseRule{
+				BaseRule: config.BaseRule{
 					Linters: []string{"someotherlinter"},
 				},
 			},
 			{
 				Severity: "info",
-				BaseRule: BaseRule{
+				BaseRule: config.BaseRule{
 					Linters: []string{"somelinter"},
 				},
 			},
@@ -135,10 +136,10 @@ func TestSeverity_pathPrefix(t *testing.T) {
 
 	opts := SeverityOptions{
 		Default: "error",
-		Rules: []SeverityRule{
+		Rules: []config.SeverityRule{
 			{
 				Severity: "info",
-				BaseRule: BaseRule{
+				BaseRule: config.BaseRule{
 					Text: "some",
 					Path: `some/dir/e\.go`,
 				},
@@ -181,9 +182,9 @@ func TestSeverity_pathPrefix(t *testing.T) {
 
 func TestSeverity_text(t *testing.T) {
 	opts := SeverityOptions{
-		Rules: []SeverityRule{
+		Rules: []config.SeverityRule{
 			{
-				BaseRule: BaseRule{
+				BaseRule: config.BaseRule{
 					Text:    "^severity$",
 					Linters: []string{"linter"},
 				},
@@ -220,7 +221,7 @@ func TestSeverity_onlyDefault(t *testing.T) {
 
 	opts := SeverityOptions{
 		Default: "info",
-		Rules:   []SeverityRule{},
+		Rules:   []config.SeverityRule{},
 	}
 
 	p := NewSeverity(log, files, opts)
@@ -268,10 +269,10 @@ func TestSeverity_caseSensitive(t *testing.T) {
 
 	opts := SeverityOptions{
 		Default: "error",
-		Rules: []SeverityRule{
+		Rules: []config.SeverityRule{
 			{
 				Severity: "info",
-				BaseRule: BaseRule{
+				BaseRule: config.BaseRule{
 					Text:    "^ssl$",
 					Linters: []string{"gosec", "someotherlinter"},
 				},
@@ -325,10 +326,10 @@ func TestSeverity_transform(t *testing.T) {
 			desc: "apply severity from rule",
 			opts: SeverityOptions{
 				Default: "error",
-				Rules: []SeverityRule{
+				Rules: []config.SeverityRule{
 					{
 						Severity: "info",
-						BaseRule: BaseRule{
+						BaseRule: config.BaseRule{
 							Linters: []string{"linter1"},
 						},
 					},
@@ -348,10 +349,10 @@ func TestSeverity_transform(t *testing.T) {
 			desc: "apply severity from default",
 			opts: SeverityOptions{
 				Default: "error",
-				Rules: []SeverityRule{
+				Rules: []config.SeverityRule{
 					{
 						Severity: "info",
-						BaseRule: BaseRule{
+						BaseRule: config.BaseRule{
 							Linters: []string{"linter1"},
 						},
 					},
@@ -371,10 +372,10 @@ func TestSeverity_transform(t *testing.T) {
 			desc: "severity from rule override severity from linter",
 			opts: SeverityOptions{
 				Default: "error",
-				Rules: []SeverityRule{
+				Rules: []config.SeverityRule{
 					{
 						Severity: "info",
-						BaseRule: BaseRule{
+						BaseRule: config.BaseRule{
 							Linters: []string{"linter1"},
 						},
 					},
@@ -395,10 +396,10 @@ func TestSeverity_transform(t *testing.T) {
 			desc: "severity from default override severity from linter",
 			opts: SeverityOptions{
 				Default: "error",
-				Rules: []SeverityRule{
+				Rules: []config.SeverityRule{
 					{
 						Severity: "info",
-						BaseRule: BaseRule{
+						BaseRule: config.BaseRule{
 							Linters: []string{"linter1"},
 						},
 					},
@@ -419,10 +420,10 @@ func TestSeverity_transform(t *testing.T) {
 			desc: "keep severity from linter as rule",
 			opts: SeverityOptions{
 				Default: "error",
-				Rules: []SeverityRule{
+				Rules: []config.SeverityRule{
 					{
 						Severity: severityFromLinter,
-						BaseRule: BaseRule{
+						BaseRule: config.BaseRule{
 							Linters: []string{"linter1"},
 						},
 					},
@@ -443,10 +444,10 @@ func TestSeverity_transform(t *testing.T) {
 			desc: "keep severity from linter as default",
 			opts: SeverityOptions{
 				Default: severityFromLinter,
-				Rules: []SeverityRule{
+				Rules: []config.SeverityRule{
 					{
 						Severity: "info",
-						BaseRule: BaseRule{
+						BaseRule: config.BaseRule{
 							Linters: []string{"linter1"},
 						},
 					},

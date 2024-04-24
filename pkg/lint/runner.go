@@ -256,23 +256,12 @@ func getExcludeProcessor(cfg *config.Issues) processors.Processor {
 }
 
 func getExcludeRulesProcessor(cfg *config.Issues, log logutils.Log, files *fsutils.Files) processors.Processor {
-	var excludeRules []processors.ExcludeRule
-	for _, r := range cfg.ExcludeRules {
-		excludeRules = append(excludeRules, processors.ExcludeRule{
-			BaseRule: processors.BaseRule{
-				Text:       r.Text,
-				Source:     r.Source,
-				Path:       r.Path,
-				PathExcept: r.PathExcept,
-				Linters:    r.Linters,
-			},
-		})
-	}
+	excludeRules := cfg.ExcludeRules
 
 	if cfg.UseDefaultExcludes {
 		for _, r := range config.GetExcludePatterns(cfg.IncludeDefaultExcludes) {
-			excludeRules = append(excludeRules, processors.ExcludeRule{
-				BaseRule: processors.BaseRule{
+			excludeRules = append(excludeRules, config.ExcludeRule{
+				BaseRule: config.BaseRule{
 					Text:    r.Pattern,
 					Linters: []string{r.Linter},
 				},
@@ -289,23 +278,9 @@ func getExcludeRulesProcessor(cfg *config.Issues, log logutils.Log, files *fsuti
 }
 
 func getSeverityRulesProcessor(cfg *config.Severity, log logutils.Log, files *fsutils.Files) processors.Processor {
-	var severityRules []processors.SeverityRule
-	for _, r := range cfg.Rules {
-		severityRules = append(severityRules, processors.SeverityRule{
-			Severity: r.Severity,
-			BaseRule: processors.BaseRule{
-				Text:       r.Text,
-				Source:     r.Source,
-				Path:       r.Path,
-				PathExcept: r.PathExcept,
-				Linters:    r.Linters,
-			},
-		})
-	}
-
 	severityOpts := processors.SeverityOptions{
 		Default:       cfg.Default,
-		Rules:         severityRules,
+		Rules:         cfg.Rules,
 		CaseSensitive: cfg.CaseSensitive,
 	}
 

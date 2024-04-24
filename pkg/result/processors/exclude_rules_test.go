@@ -7,6 +7,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
+	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/fsutils"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
@@ -15,33 +16,33 @@ func TestExcludeRules_multiple(t *testing.T) {
 	lineCache := fsutils.NewLineCache(fsutils.NewFileCache())
 	files := fsutils.NewFiles(lineCache, "")
 
-	opts := ExcludeRulesOptions{Rules: []ExcludeRule{
+	opts := ExcludeRulesOptions{Rules: []config.ExcludeRule{
 		{
-			BaseRule: BaseRule{
+			BaseRule: config.BaseRule{
 				Text:    "^exclude$",
 				Linters: []string{"linter"},
 			},
 		},
 		{
-			BaseRule: BaseRule{
+			BaseRule: config.BaseRule{
 				Linters: []string{"testlinter"},
 				Path:    `_test\.go`,
 			},
 		},
 		{
-			BaseRule: BaseRule{
+			BaseRule: config.BaseRule{
 				Text: "^testonly$",
 				Path: `_test\.go`,
 			},
 		},
 		{
-			BaseRule: BaseRule{
+			BaseRule: config.BaseRule{
 				Text:       "^nontestonly$",
 				PathExcept: `_test\.go`,
 			},
 		},
 		{
-			BaseRule: BaseRule{
+			BaseRule: config.BaseRule{
 				Source:  "^//go:generate ",
 				Linters: []string{"lll"},
 			},
@@ -95,9 +96,9 @@ func TestExcludeRules_pathPrefix(t *testing.T) {
 	files := fsutils.NewFiles(lineCache, pathPrefix)
 
 	opts := ExcludeRulesOptions{
-		Rules: []ExcludeRule{
+		Rules: []config.ExcludeRule{
 			{
-				BaseRule: BaseRule{
+				BaseRule: config.BaseRule{
 					Path: `some/dir/e\.go`,
 				},
 			},
@@ -137,9 +138,9 @@ func TestExcludeRules_pathPrefix(t *testing.T) {
 
 func TestExcludeRules_text(t *testing.T) {
 	opts := ExcludeRulesOptions{
-		Rules: []ExcludeRule{
+		Rules: []config.ExcludeRule{
 			{
-				BaseRule: BaseRule{
+				BaseRule: config.BaseRule{
 					Text:    "^exclude$",
 					Linters: []string{"linter"},
 				},
@@ -179,27 +180,27 @@ func TestExcludeRules_caseSensitive_multiple(t *testing.T) {
 
 	opts := ExcludeRulesOptions{
 		CaseSensitive: true,
-		Rules: []ExcludeRule{
+		Rules: []config.ExcludeRule{
 			{
-				BaseRule: BaseRule{
+				BaseRule: config.BaseRule{
 					Text:    "^exclude$",
 					Linters: []string{"linter"},
 				},
 			},
 			{
-				BaseRule: BaseRule{
+				BaseRule: config.BaseRule{
 					Linters: []string{"testlinter"},
 					Path:    `_test\.go`,
 				},
 			},
 			{
-				BaseRule: BaseRule{
+				BaseRule: config.BaseRule{
 					Text: "^testonly$",
 					Path: `_test\.go`,
 				},
 			},
 			{
-				BaseRule: BaseRule{
+				BaseRule: config.BaseRule{
 					Source:  "^//go:generate ",
 					Linters: []string{"lll"},
 				},
@@ -253,9 +254,9 @@ func TestExcludeRules_caseSensitive_multiple(t *testing.T) {
 func TestExcludeRules_caseSensitive_text(t *testing.T) {
 	opts := ExcludeRulesOptions{
 		CaseSensitive: true,
-		Rules: []ExcludeRule{
+		Rules: []config.ExcludeRule{
 			{
-				BaseRule: BaseRule{
+				BaseRule: config.BaseRule{
 					Text:    "^exclude$",
 					Linters: []string{"linter"},
 				},

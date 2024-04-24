@@ -3,6 +3,7 @@ package processors
 import (
 	"regexp"
 
+	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/fsutils"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
@@ -17,14 +18,9 @@ type severityRule struct {
 	severity string
 }
 
-type SeverityRule struct {
-	BaseRule
-	Severity string
-}
-
 type SeverityOptions struct {
 	Default       string
-	Rules         []SeverityRule
+	Rules         []config.SeverityRule
 	CaseSensitive bool
 }
 
@@ -93,7 +89,7 @@ func (p *Severity) transform(issue *result.Issue) *result.Issue {
 	return issue
 }
 
-func createSeverityRules(rules []SeverityRule, prefix string) []severityRule {
+func createSeverityRules(rules []config.SeverityRule, prefix string) []severityRule {
 	parsedRules := make([]severityRule, 0, len(rules))
 
 	for _, rule := range rules {

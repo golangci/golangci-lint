@@ -3,6 +3,7 @@ package processors
 import (
 	"regexp"
 
+	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/fsutils"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
@@ -12,10 +13,6 @@ var _ Processor = (*ExcludeRules)(nil)
 
 type excludeRule struct {
 	baseRule
-}
-
-type ExcludeRule struct {
-	BaseRule
 }
 
 type ExcludeRules struct {
@@ -28,7 +25,7 @@ type ExcludeRules struct {
 }
 
 type ExcludeRulesOptions struct {
-	Rules         []ExcludeRule
+	Rules         []config.ExcludeRule
 	CaseSensitive bool
 }
 
@@ -71,7 +68,7 @@ func (p ExcludeRules) Process(issues []result.Issue) ([]result.Issue, error) {
 
 func (ExcludeRules) Finish() {}
 
-func createRules(rules []ExcludeRule, prefix string) []excludeRule {
+func createRules(rules []config.ExcludeRule, prefix string) []excludeRule {
 	parsedRules := make([]excludeRule, 0, len(rules))
 
 	for _, rule := range rules {
