@@ -35,7 +35,7 @@ func BuildIssuesFromIllTypedError(errs []error, lintCtx *linter.Context) ([]resu
 			continue
 		}
 
-		for _, err := range ExtractErrors(ill.Pkg) {
+		for _, err := range extractErrors(ill.Pkg) {
 			i, perr := parseError(err)
 			if perr != nil { // failed to parse
 				if uniqReportedIssues[err.Msg] {
@@ -58,7 +58,7 @@ func BuildIssuesFromIllTypedError(errs []error, lintCtx *linter.Context) ([]resu
 }
 
 func parseError(srcErr packages.Error) (*result.Issue, error) {
-	pos, err := ParseErrorPosition(srcErr.Pos)
+	pos, err := parseErrorPosition(srcErr.Pos)
 	if err != nil {
 		return nil, err
 	}

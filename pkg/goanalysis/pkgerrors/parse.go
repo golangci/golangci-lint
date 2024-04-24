@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-func ParseErrorPosition(pos string) (*token.Position, error) {
+func parseErrorPosition(pos string) (*token.Position, error) {
 	// file:line(<optional>:colon)
 	parts := strings.Split(pos, ":")
 	if len(parts) == 1 {
