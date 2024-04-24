@@ -80,7 +80,7 @@ func NewRunner(log logutils.Log, cfg *config.Config, args []string, goenv *gouti
 			// Must be before exclude because users see already marked output and configure excluding by it.
 			processors.NewIdentifierMarker(),
 
-			getExcludeProcessor(&cfg.Issues),
+			processors.NewExclude(&cfg.Issues),
 			processors.NewExcludeRules(log.Child(logutils.DebugKeyExcludeRules), files, &cfg.Issues),
 			processors.NewNolint(log.Child(logutils.DebugKeyNolint), dbManager, enabledLinters),
 
@@ -241,16 +241,4 @@ func (r *Runner) processIssues(issues []result.Issue, sw *timeutils.Stopwatch, s
 	}
 
 	return issues
-}
-
-func getExcludeProcessor(cfg *config.Issues) processors.Processor {
-	opts := processors.ExcludeOptions{
-		CaseSensitive: cfg.ExcludeCaseSensitive,
-	}
-
-	if len(cfg.ExcludePatterns) != 0 {
-		opts.Pattern = fmt.Sprintf("(%s)", strings.Join(cfg.ExcludePatterns, "|"))
-	}
-
-	return processors.NewExclude(opts)
 }

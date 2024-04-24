@@ -1,8 +1,11 @@
 package processors
 
 import (
+	"fmt"
 	"regexp"
+	"strings"
 
+	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
@@ -14,22 +17,22 @@ type Exclude struct {
 	pattern *regexp.Regexp
 }
 
-type ExcludeOptions struct {
-	Pattern       string
-	CaseSensitive bool
-}
-
-func NewExclude(opts ExcludeOptions) *Exclude {
+func NewExclude(cfg *config.Issues) *Exclude {
 	p := &Exclude{name: "exclude"}
 
+	var pattern string
+	if len(cfg.ExcludePatterns) != 0 {
+		pattern = fmt.Sprintf("(%s)", strings.Join(cfg.ExcludePatterns, "|"))
+	}
+
 	prefix := caseInsensitivePrefix
-	if opts.CaseSensitive {
+	if cfg.ExcludeCaseSensitive {
 		p.name = "exclude-case-sensitive"
 		prefix = ""
 	}
 
-	if opts.Pattern != "" {
-		p.pattern = regexp.MustCompile(prefix + opts.Pattern)
+	if pattern != "" {
+		p.pattern = regexp.MustCompile(prefix + pattern)
 	}
 
 	return p
