@@ -18,7 +18,7 @@ func TestSeverity_multiple(t *testing.T) {
 	files := fsutils.NewFiles(lineCache, "")
 	log := logutils.NewStderrLog(logutils.DebugKeyEmpty)
 
-	opts := SeverityOptions{
+	opts := &config.Severity{
 		Default: "error",
 		Rules: []config.SeverityRule{
 			{
@@ -134,7 +134,7 @@ func TestSeverity_pathPrefix(t *testing.T) {
 	files := fsutils.NewFiles(lineCache, pathPrefix)
 	log := logutils.NewStderrLog(logutils.DebugKeyEmpty)
 
-	opts := SeverityOptions{
+	opts := &config.Severity{
 		Default: "error",
 		Rules: []config.SeverityRule{
 			{
@@ -181,7 +181,7 @@ func TestSeverity_pathPrefix(t *testing.T) {
 }
 
 func TestSeverity_text(t *testing.T) {
-	opts := SeverityOptions{
+	opts := &config.Severity{
 		Rules: []config.SeverityRule{
 			{
 				BaseRule: config.BaseRule{
@@ -219,12 +219,12 @@ func TestSeverity_onlyDefault(t *testing.T) {
 	files := fsutils.NewFiles(lineCache, "")
 	log := logutils.NewStderrLog(logutils.DebugKeyEmpty)
 
-	opts := SeverityOptions{
+	opts := config.Severity{
 		Default: "info",
 		Rules:   []config.SeverityRule{},
 	}
 
-	p := NewSeverity(log, files, opts)
+	p := NewSeverity(log, files, &opts)
 
 	cases := []issueTestCase{
 		{Path: "ssl.go", Text: "ssl", Linter: "gosec"},
@@ -258,7 +258,7 @@ func TestSeverity_onlyDefault(t *testing.T) {
 }
 
 func TestSeverity_empty(t *testing.T) {
-	p := NewSeverity(nil, nil, SeverityOptions{})
+	p := NewSeverity(nil, nil, &config.Severity{})
 
 	processAssertSame(t, p, newIssueFromTextTestCase("test"))
 }
@@ -267,7 +267,7 @@ func TestSeverity_caseSensitive(t *testing.T) {
 	lineCache := fsutils.NewLineCache(fsutils.NewFileCache())
 	files := fsutils.NewFiles(lineCache, "")
 
-	opts := SeverityOptions{
+	opts := &config.Severity{
 		Default: "error",
 		Rules: []config.SeverityRule{
 			{
@@ -318,13 +318,13 @@ func TestSeverity_transform(t *testing.T) {
 
 	testCases := []struct {
 		desc     string
-		opts     SeverityOptions
+		opts     *config.Severity
 		issue    *result.Issue
 		expected *result.Issue
 	}{
 		{
 			desc: "apply severity from rule",
-			opts: SeverityOptions{
+			opts: &config.Severity{
 				Default: "error",
 				Rules: []config.SeverityRule{
 					{
@@ -347,7 +347,7 @@ func TestSeverity_transform(t *testing.T) {
 		},
 		{
 			desc: "apply severity from default",
-			opts: SeverityOptions{
+			opts: &config.Severity{
 				Default: "error",
 				Rules: []config.SeverityRule{
 					{
@@ -370,7 +370,7 @@ func TestSeverity_transform(t *testing.T) {
 		},
 		{
 			desc: "severity from rule override severity from linter",
-			opts: SeverityOptions{
+			opts: &config.Severity{
 				Default: "error",
 				Rules: []config.SeverityRule{
 					{
@@ -394,7 +394,7 @@ func TestSeverity_transform(t *testing.T) {
 		},
 		{
 			desc: "severity from default override severity from linter",
-			opts: SeverityOptions{
+			opts: &config.Severity{
 				Default: "error",
 				Rules: []config.SeverityRule{
 					{
@@ -418,7 +418,7 @@ func TestSeverity_transform(t *testing.T) {
 		},
 		{
 			desc: "keep severity from linter as rule",
-			opts: SeverityOptions{
+			opts: &config.Severity{
 				Default: "error",
 				Rules: []config.SeverityRule{
 					{
@@ -442,7 +442,7 @@ func TestSeverity_transform(t *testing.T) {
 		},
 		{
 			desc: "keep severity from linter as default",
-			opts: SeverityOptions{
+			opts: &config.Severity{
 				Default: severityFromLinter,
 				Rules: []config.SeverityRule{
 					{
@@ -466,7 +466,7 @@ func TestSeverity_transform(t *testing.T) {
 		},
 		{
 			desc: "keep severity from linter as default (without rule)",
-			opts: SeverityOptions{
+			opts: &config.Severity{
 				Default: severityFromLinter,
 			},
 			issue: &result.Issue{

@@ -91,7 +91,7 @@ func NewRunner(log logutils.Log, cfg *config.Config, args []string, goenv *gouti
 			processors.NewMaxFromLinter(cfg.Issues.MaxIssuesPerLinter, log.Child(logutils.DebugKeyMaxFromLinter), cfg),
 			processors.NewSourceCode(lineCache, log.Child(logutils.DebugKeySourceCode)),
 			processors.NewPathShortener(),
-			getSeverityRulesProcessor(&cfg.Severity, log, files),
+			processors.NewSeverity(log.Child(logutils.DebugKeySeverityRules), files, &cfg.Severity),
 
 			// The fixer still needs to see paths for the issues that are relative to the current directory.
 			processors.NewFixer(cfg, log, fileCache),
@@ -275,14 +275,4 @@ func getExcludeRulesProcessor(cfg *config.Issues, log logutils.Log, files *fsuti
 	}
 
 	return processors.NewExcludeRules(log.Child(logutils.DebugKeyExcludeRules), files, opts)
-}
-
-func getSeverityRulesProcessor(cfg *config.Severity, log logutils.Log, files *fsutils.Files) processors.Processor {
-	severityOpts := processors.SeverityOptions{
-		Default:       cfg.Default,
-		Rules:         cfg.Rules,
-		CaseSensitive: cfg.CaseSensitive,
-	}
-
-	return processors.NewSeverity(log.Child(logutils.DebugKeySeverityRules), files, severityOpts)
 }

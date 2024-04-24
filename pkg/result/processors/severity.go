@@ -18,12 +18,6 @@ type severityRule struct {
 	severity string
 }
 
-type SeverityOptions struct {
-	Default       string
-	Rules         []config.SeverityRule
-	CaseSensitive bool
-}
-
 type Severity struct {
 	name string
 
@@ -35,21 +29,21 @@ type Severity struct {
 	rules           []severityRule
 }
 
-func NewSeverity(log logutils.Log, files *fsutils.Files, opts SeverityOptions) *Severity {
+func NewSeverity(log logutils.Log, files *fsutils.Files, cfg *config.Severity) *Severity {
 	p := &Severity{
 		name:            "severity-rules",
 		files:           files,
 		log:             log,
-		defaultSeverity: opts.Default,
+		defaultSeverity: cfg.Default,
 	}
 
 	prefix := caseInsensitivePrefix
-	if opts.CaseSensitive {
+	if cfg.CaseSensitive {
 		prefix = ""
 		p.name = "severity-rules-case-sensitive"
 	}
 
-	p.rules = createSeverityRules(opts.Rules, prefix)
+	p.rules = createSeverityRules(cfg.Rules, prefix)
 
 	return p
 }
