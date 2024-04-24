@@ -65,7 +65,7 @@ func (p Diff) Process(issues []result.Issue) ([]result.Issue, error) {
 	}
 
 	return transformIssues(issues, func(issue *result.Issue) *result.Issue {
-		if issue.FromLinter == "typecheck" {
+		if issue.FromLinter == typeCheckName {
 			// Never hide typechecking errors.
 			return issue
 		}
