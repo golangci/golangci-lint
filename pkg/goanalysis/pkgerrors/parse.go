@@ -6,7 +6,23 @@ import (
 	"go/token"
 	"strconv"
 	"strings"
+
+	"github.com/golangci/golangci-lint/pkg/result"
+	"golang.org/x/tools/go/packages"
 )
+
+func parseError(srcErr packages.Error) (*result.Issue, error) {
+	pos, err := parseErrorPosition(srcErr.Pos)
+	if err != nil {
+		return nil, err
+	}
+
+	return &result.Issue{
+		Pos:        *pos,
+		Text:       srcErr.Msg,
+		FromLinter: "typecheck",
+	}, nil
+}
 
 func parseErrorPosition(pos string) (*token.Position, error) {
 	// file:line(<optional>:colon)

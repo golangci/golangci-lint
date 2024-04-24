@@ -56,16 +56,3 @@ func BuildIssuesFromIllTypedError(errs []error, lintCtx *linter.Context) ([]resu
 
 	return issues, nil
 }
-
-func parseError(srcErr packages.Error) (*result.Issue, error) {
-	pos, err := parseErrorPosition(srcErr.Pos)
-	if err != nil {
-		return nil, err
-	}
-
-	return &result.Issue{
-		Pos:        *pos,
-		Text:       srcErr.Msg,
-		FromLinter: "typecheck",
-	}, nil
-}
