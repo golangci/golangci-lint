@@ -13,6 +13,7 @@ import (
 	"golang.org/x/tools/go/packages"
 
 	"github.com/golangci/golangci-lint/internal/pkgcache"
+	"github.com/golangci/golangci-lint/pkg/goanalysis/pkgerrors"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
@@ -74,7 +75,7 @@ func runAnalyzers(cfg runAnalyzersConfig, lintCtx *linter.Context) ([]result.Iss
 		return retIssues
 	}
 
-	errIssues, err := buildIssuesFromIllTypedError(errs, lintCtx)
+	errIssues, err := pkgerrors.BuildIssuesFromIllTypedError(errs, lintCtx)
 	if err != nil {
 		return nil, err
 	}

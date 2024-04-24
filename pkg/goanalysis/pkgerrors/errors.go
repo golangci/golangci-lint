@@ -1,4 +1,4 @@
-package goanalysis
+package pkgerrors
 
 import (
 	"errors"
@@ -6,7 +6,6 @@ import (
 
 	"golang.org/x/tools/go/packages"
 
-	"github.com/golangci/golangci-lint/pkg/goanalysis/pkgerrors"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
@@ -19,7 +18,7 @@ func (e *IllTypedError) Error() string {
 	return fmt.Sprintf("errors in package: %v", e.Pkg.Errors)
 }
 
-func buildIssuesFromIllTypedError(errs []error, lintCtx *linter.Context) ([]result.Issue, error) {
+func BuildIssuesFromIllTypedError(errs []error, lintCtx *linter.Context) ([]result.Issue, error) {
 	var issues []result.Issue
 	uniqReportedIssues := map[string]bool{}
 
@@ -36,7 +35,7 @@ func buildIssuesFromIllTypedError(errs []error, lintCtx *linter.Context) ([]resu
 			continue
 		}
 
-		for _, err := range pkgerrors.ExtractErrors(ill.Pkg) {
+		for _, err := range ExtractErrors(ill.Pkg) {
 			i, perr := parseError(err)
 			if perr != nil { // failed to parse
 				if uniqReportedIssues[err.Msg] {
@@ -59,7 +58,7 @@ func buildIssuesFromIllTypedError(errs []error, lintCtx *linter.Context) ([]resu
 }
 
 func parseError(srcErr packages.Error) (*result.Issue, error) {
-	pos, err := pkgerrors.ParseErrorPosition(srcErr.Pos)
+	pos, err := ParseErrorPosition(srcErr.Pos)
 	if err != nil {
 		return nil, err
 	}
