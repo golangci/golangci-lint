@@ -1,4 +1,4 @@
-package packages
+package pkgerrors
 
 import (
 	"testing"

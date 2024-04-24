@@ -1,4 +1,4 @@
-package goanalysis
+package pkgerrors
 
 import (
 	"errors"
@@ -7,7 +7,6 @@ import (
 	"golang.org/x/tools/go/packages"
 
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
-	libpackages "github.com/golangci/golangci-lint/pkg/packages"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
@@ -19,7 +18,7 @@ func (e *IllTypedError) Error() string {
 	return fmt.Sprintf("errors in package: %v", e.Pkg.Errors)
 }
 
-func buildIssuesFromIllTypedError(errs []error, lintCtx *linter.Context) ([]result.Issue, error) {
+func BuildIssuesFromIllTypedError(errs []error, lintCtx *linter.Context) ([]result.Issue, error) {
 	var issues []result.Issue
 	uniqReportedIssues := map[string]bool{}
 
@@ -36,8 +35,8 @@ func buildIssuesFromIllTypedError(errs []error, lintCtx *linter.Context) ([]resu
 			continue
 		}
 
-		for _, err := range libpackages.ExtractErrors(ill.Pkg) {
-			i, perr := parseError(err)
+		for _, err := range extractErrors(ill.Pkg) {
+			issue, perr := parseError(err)
 			if perr != nil { // failed to parse
 				if uniqReportedIssues[err.Msg] {
 					continue
@@ -45,8 +44,8 @@ func buildIssuesFromIllTypedError(errs []error, lintCtx *linter.Context) ([]resu
 				uniqReportedIssues[err.Msg] = true
 				lintCtx.Log.Errorf("typechecking error: %s", err.Msg)
 			} else {
-				i.Pkg = ill.Pkg // to save to cache later
-				issues = append(issues, *i)
+				issue.Pkg = ill.Pkg // to save to cache later
+				issues = append(issues, *issue)
 			}
 		}
 	}
@@ -56,17 +55,4 @@ func buildIssuesFromIllTypedError(errs []error, lintCtx *linter.Context) ([]resu
 	}
 
 	return issues, nil
-}
-
-func parseError(srcErr packages.Error) (*result.Issue, error) {
-	pos, err := libpackages.ParseErrorPosition(srcErr.Pos)
-	if err != nil {
-		return nil, err
-	}
-
-	return &result.Issue{
-		Pos:        *pos,
-		Text:       srcErr.Msg,
-		FromLinter: "typecheck",
-	}, nil
 }

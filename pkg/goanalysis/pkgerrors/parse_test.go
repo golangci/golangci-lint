@@ -1,4 +1,4 @@
-package goanalysis
+package pkgerrors
 
 import (
 	"fmt"
@@ -8,7 +8,7 @@ import (
 	"golang.org/x/tools/go/packages"
 )
 
-func TestParseError(t *testing.T) {
+func Test_parseError(t *testing.T) {
 	cases := []struct {
 		in, out string
 		good    bool

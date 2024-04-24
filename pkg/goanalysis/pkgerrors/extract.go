@@ -1,4 +1,4 @@
-package packages
+package pkgerrors
 
 import (
 	"fmt"
@@ -12,7 +12,7 @@ import (
 // ex: `/example/main.go:11:17: foobar`
 var reFile = regexp.MustCompile(`^.+\.go:\d+:\d+: .+`)
 
-func ExtractErrors(pkg *packages.Package) []packages.Error {
+func extractErrors(pkg *packages.Package) []packages.Error {
 	errors := extractErrorsImpl(pkg, map[*packages.Package]bool{})
 	if len(errors) == 0 {
 		return errors
@@ -38,7 +38,7 @@ func ExtractErrors(pkg *packages.Package) []packages.Error {
 	if len(pkg.GoFiles) != 0 {
 		// errors were extracted from deps and have at least one file in package
 		for i := range uniqErrors {
-			if _, parseErr := ParseErrorPosition(uniqErrors[i].Pos); parseErr == nil {
+			if _, parseErr := parseErrorPosition(uniqErrors[i].Pos); parseErr == nil {
 				continue
 			}
 

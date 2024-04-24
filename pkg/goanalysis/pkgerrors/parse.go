@@ -1,4 +1,4 @@
-package packages
+package pkgerrors
 
 import (
 	"errors"
@@ -6,9 +6,26 @@ import (
 	"go/token"
 	"strconv"
 	"strings"
+
+	"golang.org/x/tools/go/packages"
+
+	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-func ParseErrorPosition(pos string) (*token.Position, error) {
+func parseError(srcErr packages.Error) (*result.Issue, error) {
+	pos, err := parseErrorPosition(srcErr.Pos)
+	if err != nil {
+		return nil, err
+	}
+
+	return &result.Issue{
+		Pos:        *pos,
+		Text:       srcErr.Msg,
+		FromLinter: "typecheck",
+	}, nil
+}
+
+func parseErrorPosition(pos string) (*token.Position, error) {
 	// file:line(<optional>:colon)
 	parts := strings.Split(pos, ":")
 	if len(parts) == 1 {
