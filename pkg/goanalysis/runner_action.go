@@ -9,13 +9,13 @@ import (
 	"runtime/debug"
 	"time"
 
-	"github.com/golangci/golangci-lint/pkg/goanalysis/pkgerrors"
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/packages"
 	"golang.org/x/tools/go/types/objectpath"
 
 	"github.com/golangci/golangci-lint/internal/errorutil"
 	"github.com/golangci/golangci-lint/internal/pkgcache"
+	"github.com/golangci/golangci-lint/pkg/goanalysis/pkgerrors"
 )
 
 type actionAllocator struct {
