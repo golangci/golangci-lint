@@ -2525,6 +2525,7 @@ linters:
     - asciicheck
     - bidichk
     - bodyclose
+    - canonicalheader
     - containedctx
     - contextcheck
     - copyloopvar
@@ -2639,6 +2640,7 @@ linters:
     - asciicheck
     - bidichk
     - bodyclose
+    - canonicalheader
     - containedctx
     - contextcheck
     - copyloopvar
