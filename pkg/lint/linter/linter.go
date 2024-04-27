@@ -17,6 +17,7 @@ type Noop struct {
 	name   string
 	desc   string
 	reason string
+	level  DeprecationLevel
 }
 
 func NewNoop(l Linter, reason string) Noop {
@@ -27,11 +28,12 @@ func NewNoop(l Linter, reason string) Noop {
 	}
 }
 
-func NewNoopDeprecated(name string, cfg *config.Config) Noop {
+func NewNoopDeprecated(name string, cfg *config.Config, level DeprecationLevel) Noop {
 	noop := Noop{
 		name:   name,
 		desc:   "Deprecated",
 		reason: "This linter is fully inactivated: it will not produce any reports.",
+		level:  level,
 	}
 
 	if cfg.InternalCmdTest {
@@ -42,9 +44,17 @@ func NewNoopDeprecated(name string, cfg *config.Config) Noop {
 }
 
 func (n Noop) Run(_ context.Context, lintCtx *Context) ([]result.Issue, error) {
-	if n.reason != "" {
+	if n.reason == "" {
+		return nil, nil
+	}
+
+	switch n.level {
+	case DeprecationError:
+		lintCtx.Log.Errorf("%s: %s", n.name, n.reason)
+	default:
 		lintCtx.Log.Warnf("%s: %s", n.name, n.reason)
 	}
+
 	return nil, nil
 }
 

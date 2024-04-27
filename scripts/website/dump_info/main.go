@@ -10,6 +10,7 @@ import (
 	"path/filepath"
 
 	"github.com/golangci/golangci-lint/pkg/config"
+	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
 	"github.com/golangci/golangci-lint/scripts/website/types"
 )
@@ -36,6 +37,10 @@ func saveLinters() error {
 
 	var wraps []types.LinterWrapper
 	for _, l := range linters {
+		if l.IsDeprecated() && l.Deprecation.Level > linter.DeprecationWarning {
+			continue
+		}
+
 		wrapper := types.LinterWrapper{
 			Name:             l.Linter.Name(),
 			Desc:             l.Linter.Desc(),

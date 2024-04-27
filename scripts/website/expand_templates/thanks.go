@@ -8,6 +8,7 @@ import (
 	"golang.org/x/exp/maps"
 
 	"github.com/golangci/golangci-lint/pkg/config"
+	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
 )
 
@@ -28,6 +29,10 @@ func getThanksList() string {
 		}
 
 		if lc.OriginalURL == "" {
+			continue
+		}
+
+		if lc.IsDeprecated() && lc.Deprecation.Level > linter.DeprecationWarning {
 			continue
 		}
 
