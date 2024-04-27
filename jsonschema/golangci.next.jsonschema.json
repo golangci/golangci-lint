@@ -1143,8 +1143,157 @@
             "settings": {
               "description": "Settings passed to gocritic. Properties must be valid and enabled check names.",
               "type": "object",
-              "propertyNames": {
-                "$ref": "#/definitions/gocritic-checks"
+              "additionalProperties": false,
+              "properties": {
+                "captLocal": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "paramsOnly" : {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                },
+                "commentedOutCode": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "minLength" : {
+                      "type": "number",
+                      "default": 15
+                    }
+                  }
+                },
+                "elseif": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "skipBalanced" : {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                },
+                "hugeParam": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "sizeThreshold" : {
+                      "type": "number",
+                      "default": 80
+                    }
+                  }
+                },
+                "ifElseChain": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "minThreshold" : {
+                      "type": "number",
+                      "default": 2
+                    }
+                  }
+                },
+                "nestingReduce": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "bodyWidth" : {
+                      "type": "number",
+                      "default": 5
+                    }
+                  }
+                },
+                "rangeExprCopy": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "sizeThreshold" : {
+                      "type": "number",
+                      "default": 512
+                    },
+                    "skipTestFuncs" : {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                },
+                "rangeValCopy": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "sizeThreshold" : {
+                      "type": "number",
+                      "default": 128
+                    },
+                    "skipTestFuncs" : {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                },
+                "ruleguard": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "debug" : {
+                      "type": "string"
+                    },
+                    "enable" : {
+                      "type": "string"
+                    },
+                    "disable" : {
+                      "type": "string"
+                    },
+                    "failOn" : {
+                      "type": "string"
+                    },
+                    "rules" : {
+                      "type": "string"
+                    }
+                  }
+                },
+                "tooManyResultsChecker": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "maxResults" : {
+                      "type": "number",
+                      "default": 5
+                    }
+                  }
+                },
+                "truncateCmp": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "skipArchDependent" : {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                },
+                "underef": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "skipRecvDeref" : {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                },
+                "unnamedResult": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "checkExported" : {
+                      "type": "boolean",
+                      "default": false
+                    }
+                  }
+                }
               }
             },
             "disable-all": {

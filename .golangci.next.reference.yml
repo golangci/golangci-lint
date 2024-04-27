@@ -629,7 +629,7 @@ linters-settings:
         # - 'import': ruleguard rule imports a package that cannot be found.
         # - 'dsl':    gorule file does not comply with the ruleguard DSL.
         # Default: ""
-        failOn: dsl
+        failOn: dsl,import
         # Comma-separated list of file paths containing ruleguard rules.
         # If a path is relative, it is relative to the directory where the golangci-lint command is executed.
         # The special '${configDir}' variable is substituted with the absolute directory containing the golangci config file.
