@@ -909,11 +909,11 @@ type UseStdlibVarsSettings struct {
 	TimeLayout         bool `mapstructure:"time-layout"`
 	CryptoHash         bool `mapstructure:"crypto-hash"`
 	DefaultRPCPath     bool `mapstructure:"default-rpc-path"`
-	OSDevNull          bool `mapstructure:"os-dev-null"`
+	OSDevNull          bool `mapstructure:"os-dev-null"` // Deprecated
 	SQLIsolationLevel  bool `mapstructure:"sql-isolation-level"`
 	TLSSignatureScheme bool `mapstructure:"tls-signature-scheme"`
 	ConstantKind       bool `mapstructure:"constant-kind"`
-	SyslogPriority     bool `mapstructure:"syslog-priority"`
+	SyslogPriority     bool `mapstructure:"syslog-priority"` // Deprecated
 }
 
 type UnconvertSettings struct {

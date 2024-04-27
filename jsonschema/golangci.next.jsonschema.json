@@ -750,16 +750,6 @@
               "type": "boolean",
               "default": false
             },
-            "ignore": {
-              "description": "DEPRECATED: use `exclude-functions` instead. Comma-separated list of pairs of the form \"pkg:regex\".",
-              "type": "string",
-              "default": "fmt:.*"
-            },
-            "exclude": {
-              "description": "DEPRECATED: use `exclude-functions` instead. Path to a file containing a list of functions to exclude from checking.",
-              "type": "string",
-              "examples": ["/path/to/file.txt"]
-            },
             "exclude-functions": {
               "description": "List of functions to exclude from checking, where each entry is a single function to exclude",
               "type": "array",
@@ -962,11 +952,6 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
-            "local-prefixes": {
-              "description": "DEPRECATED: use 'sections' and 'prefix(github.com/org/project)' instead.",
-              "type": "string",
-              "examples": ["github.com/org/project"]
-            },
             "sections": {
               "description": "Section configuration to compare against.",
               "type": "array",
@@ -1159,8 +1144,157 @@
             "settings": {
               "description": "Settings passed to gocritic. Properties must be valid and enabled check names.",
               "type": "object",
-              "propertyNames": {
-                "$ref": "#/definitions/gocritic-checks"
+              "additionalProperties": false,
+              "properties": {
+                "captLocal": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "paramsOnly" : {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                },
+                "commentedOutCode": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "minLength" : {
+                      "type": "number",
+                      "default": 15
+                    }
+                  }
+                },
+                "elseif": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "skipBalanced" : {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                },
+                "hugeParam": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "sizeThreshold" : {
+                      "type": "number",
+                      "default": 80
+                    }
+                  }
+                },
+                "ifElseChain": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "minThreshold" : {
+                      "type": "number",
+                      "default": 2
+                    }
+                  }
+                },
+                "nestingReduce": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "bodyWidth" : {
+                      "type": "number",
+                      "default": 5
+                    }
+                  }
+                },
+                "rangeExprCopy": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "sizeThreshold" : {
+                      "type": "number",
+                      "default": 512
+                    },
+                    "skipTestFuncs" : {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                },
+                "rangeValCopy": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "sizeThreshold" : {
+                      "type": "number",
+                      "default": 128
+                    },
+                    "skipTestFuncs" : {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                },
+                "ruleguard": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "debug" : {
+                      "type": "string"
+                    },
+                    "enable" : {
+                      "type": "string"
+                    },
+                    "disable" : {
+                      "type": "string"
+                    },
+                    "failOn" : {
+                      "type": "string"
+                    },
+                    "rules" : {
+                      "type": "string"
+                    }
+                  }
+                },
+                "tooManyResultsChecker": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "maxResults" : {
+                      "type": "number",
+                      "default": 5
+                    }
+                  }
+                },
+                "truncateCmp": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "skipArchDependent" : {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                },
+                "underef": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "skipRecvDeref" : {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                },
+                "unnamedResult": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "checkExported" : {
+                      "type": "boolean",
+                      "default": false
+                    }
+                  }
+                }
               }
             },
             "disable-all": {
@@ -1276,11 +1410,6 @@
               "description": "Choose whether or not to use the extra rules that are disabled by default.",
               "type": "boolean",
               "default": false
-            },
-            "lang-version": {
-              "description": "Select the Go version to target.",
-              "type": "string",
-              "default": "1.15"
             },
             "module-path": {
               "description": " Module path which contains the source code being formatted.",
@@ -1481,11 +1610,6 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
-            "go": {
-              "description": "Targeted Go version",
-              "type": "string",
-              "default": "1.13"
-            },
             "checks": {
               "type": "array",
               "items": {
@@ -2352,11 +2476,6 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
-            "go": {
-              "description": "Targeted Go version",
-              "type": "string",
-              "default": "1.13"
-            },
             "checks": {
               "type": "array",
               "items": {
@@ -2376,11 +2495,6 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
-            "go": {
-              "description": "Targeted Go version",
-              "type": "string",
-              "default": "1.13"
-            },
             "checks": {
               "type": "array",
               "items": {
@@ -2878,11 +2992,6 @@
               "type": "boolean",
               "default": false
             },
-            "os-dev-null": {
-              "description": "Suggest the use of os.DevNull.",
-              "type": "boolean",
-              "default": false
-            },
             "sql-isolation-level": {
               "description": "Suggest the use of sql.LevelXX.String().",
               "type": "boolean",
@@ -2895,11 +3004,6 @@
             },
             "constant-kind": {
               "description": "Suggest the use of constant.Kind.String().",
-              "type": "boolean",
-              "default": false
-            },
-            "syslog-priority": {
-              "description": "Suggest the use of syslog.Priority.",
               "type": "boolean",
               "default": false
             }

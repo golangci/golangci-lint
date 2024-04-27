@@ -279,22 +279,10 @@ linters-settings:
     # Default: false
     check-blank: true
 
-    # DEPRECATED comma-separated list of pairs of the form pkg:regex
-    #
-    # the regex is used to ignore names within pkg. (default "fmt:.*").
-    # see https://github.com/kisielk/errcheck#the-deprecated-method for details
-    ignore: fmt:.*,io/ioutil:^Read.*
-
     # To disable the errcheck built-in exclude list.
     # See `-excludeonly` option in https://github.com/kisielk/errcheck#excluding-functions for details.
     # Default: false
     disable-default-exclusions: true
-
-    # DEPRECATED use exclude-functions instead.
-    #
-    # Path to a file containing a list of functions to exclude from checking.
-    # See https://github.com/kisielk/errcheck#excluding-functions for details.
-    exclude: /path/to/file.txt
 
     # List of functions to exclude from checking, where each entry is a single function to exclude.
     # See https://github.com/kisielk/errcheck#excluding-functions for details.
@@ -431,9 +419,6 @@ linters-settings:
     ignore-comments: true
 
   gci:
-    # DEPRECATED: use `sections` and `prefix(github.com/org/project)` instead.
-    local-prefixes: github.com/org/project
-
     # Section configuration to compare against.
     # Section names are case-insensitive and may contain parameters in ().
     # The default order of sections is `standard > default > custom > blank > dot > alias > localmodule`,
@@ -637,9 +622,6 @@ linters-settings:
         # The option is passed to the ruleguard 'debug-group' argument.
         # Default: ""
         debug: 'emptyDecl'
-        # Deprecated, use 'failOn' param.
-        # If set to true, identical to failOn='all', otherwise failOn=''
-        failOnError: false
         # Determines the behavior when an error occurs while parsing ruleguard files.
         # If flag is not set, log error and skip rule files that contain an error.
         # If flag is set, the value must be a comma-separated list of error conditions.
@@ -647,7 +629,7 @@ linters-settings:
         # - 'import': ruleguard rule imports a package that cannot be found.
         # - 'dsl':    gorule file does not comply with the ruleguard DSL.
         # Default: ""
-        failOn: dsl
+        failOn: dsl,import
         # Comma-separated list of file paths containing ruleguard rules.
         # If a path is relative, it is relative to the directory where the golangci-lint command is executed.
         # The special '${configDir}' variable is substituted with the absolute directory containing the golangci config file.
@@ -724,9 +706,6 @@ linters-settings:
         replacement: 'a[b:]'
 
   gofumpt:
-    # Deprecated: use the global `run.go` instead.
-    lang-version: "1.17"
-
     # Module path which contains the source code being formatted.
     # Default: ""
     module-path: github.com/org/project
@@ -830,8 +809,6 @@ linters-settings:
       local_replace_directives: false
 
   gosimple:
-    # Deprecated: use the global `run.go` instead.
-    go: "1.15"
     # Sxxxx checks in https://staticcheck.io/docs/configuration/options/#checks
     # Default: ["*"]
     checks: [ "all" ]
@@ -2059,15 +2036,11 @@ linters-settings:
     extra-start-span-signatures:
       - "github.com/user/repo/telemetry/trace.Start:opentelemetry"
   staticcheck:
-    # Deprecated: use the global `run.go` instead.
-    go: "1.15"
     # SAxxxx checks in https://staticcheck.io/docs/configuration/options/#checks
     # Default: ["*"]
     checks: [ "all" ]
 
   stylecheck:
-    # Deprecated: use the global `run.go` instead.
-    go: "1.15"
     # STxxxx checks in https://staticcheck.io/docs/configuration/options/#checks
     # Default: ["*"]
     checks: [ "all", "-ST1000", "-ST1003", "-ST1016", "-ST1020", "-ST1021", "-ST1022" ]
@@ -2291,9 +2264,6 @@ linters-settings:
     # Suggest the use of rpc.DefaultXXPath.
     # Default: false
     default-rpc-path: true
-    # DEPRECATED Suggest the use of os.DevNull.
-    # Default: false
-    os-dev-null: true
     # Suggest the use of sql.LevelXX.String().
     # Default: false
     sql-isolation-level: true
@@ -2303,9 +2273,6 @@ linters-settings:
     # Suggest the use of constant.Kind.String().
     # Default: false
     constant-kind: true
-    # DEPRECATED Suggest the use of syslog.Priority.
-    # Default: false
-    syslog-priority: true
 
   unconvert:
     # Remove conversions that force intermediate rounding.
