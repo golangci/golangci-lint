@@ -5,11 +5,12 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
+	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
 func TestExclude(t *testing.T) {
-	p := NewExclude(ExcludeOptions{Pattern: "^exclude$"})
+	p := NewExclude(&config.Issues{ExcludePatterns: []string{"^exclude$"}})
 
 	texts := []string{"excLude", "1", "", "exclud", "notexclude"}
 
@@ -30,11 +31,11 @@ func TestExclude(t *testing.T) {
 }
 
 func TestExclude_empty(t *testing.T) {
-	processAssertSame(t, NewExclude(ExcludeOptions{}), newIssueFromTextTestCase("test"))
+	processAssertSame(t, NewExclude(&config.Issues{}), newIssueFromTextTestCase("test"))
 }
 
 func TestExclude_caseSensitive(t *testing.T) {
-	p := NewExclude(ExcludeOptions{Pattern: "^exclude$", CaseSensitive: true})
+	p := NewExclude(&config.Issues{ExcludePatterns: []string{"^exclude$"}, ExcludeCaseSensitive: true})
 
 	texts := []string{"excLude", "1", "", "exclud", "exclude"}
 

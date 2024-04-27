@@ -3,6 +3,7 @@ package processors
 import (
 	"regexp"
 
+	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/fsutils"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
@@ -14,10 +15,6 @@ type excludeRule struct {
 	baseRule
 }
 
-type ExcludeRule struct {
-	BaseRule
-}
-
 type ExcludeRules struct {
 	name string
 
@@ -27,12 +24,7 @@ type ExcludeRules struct {
 	rules []excludeRule
 }
 
-type ExcludeRulesOptions struct {
-	Rules         []ExcludeRule
-	CaseSensitive bool
-}
-
-func NewExcludeRules(log logutils.Log, files *fsutils.Files, opts ExcludeRulesOptions) *ExcludeRules {
+func NewExcludeRules(log logutils.Log, files *fsutils.Files, cfg *config.Issues) *ExcludeRules {
 	p := &ExcludeRules{
 		name:  "exclude-rules",
 		files: files,
@@ -40,12 +32,25 @@ func NewExcludeRules(log logutils.Log, files *fsutils.Files, opts ExcludeRulesOp
 	}
 
 	prefix := caseInsensitivePrefix
-	if opts.CaseSensitive {
+	if cfg.ExcludeCaseSensitive {
 		prefix = ""
 		p.name = "exclude-rules-case-sensitive"
 	}
 
-	p.rules = createRules(opts.Rules, prefix)
+	excludeRules := cfg.ExcludeRules
+
+	if cfg.UseDefaultExcludes {
+		for _, r := range config.GetExcludePatterns(cfg.IncludeDefaultExcludes) {
+			excludeRules = append(excludeRules, config.ExcludeRule{
+				BaseRule: config.BaseRule{
+					Text:    r.Pattern,
+					Linters: []string{r.Linter},
+				},
+			})
+		}
+	}
+
+	p.rules = createRules(excludeRules, prefix)
 
 	return p
 }
@@ -71,7 +76,7 @@ func (p ExcludeRules) Process(issues []result.Issue) ([]result.Issue, error) {
 
 func (ExcludeRules) Finish() {}
 
-func createRules(rules []ExcludeRule, prefix string) []excludeRule {
+func createRules(rules []config.ExcludeRule, prefix string) []excludeRule {
 	parsedRules := make([]excludeRule, 0, len(rules))
 
 	for _, rule := range rules {

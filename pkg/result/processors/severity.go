@@ -3,6 +3,7 @@ package processors
 import (
 	"regexp"
 
+	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/fsutils"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
@@ -17,17 +18,6 @@ type severityRule struct {
 	severity string
 }
 
-type SeverityRule struct {
-	BaseRule
-	Severity string
-}
-
-type SeverityOptions struct {
-	Default       string
-	Rules         []SeverityRule
-	CaseSensitive bool
-}
-
 type Severity struct {
 	name string
 
@@ -39,21 +29,21 @@ type Severity struct {
 	rules           []severityRule
 }
 
-func NewSeverity(log logutils.Log, files *fsutils.Files, opts SeverityOptions) *Severity {
+func NewSeverity(log logutils.Log, files *fsutils.Files, cfg *config.Severity) *Severity {
 	p := &Severity{
 		name:            "severity-rules",
 		files:           files,
 		log:             log,
-		defaultSeverity: opts.Default,
+		defaultSeverity: cfg.Default,
 	}
 
 	prefix := caseInsensitivePrefix
-	if opts.CaseSensitive {
+	if cfg.CaseSensitive {
 		prefix = ""
 		p.name = "severity-rules-case-sensitive"
 	}
 
-	p.rules = createSeverityRules(opts.Rules, prefix)
+	p.rules = createSeverityRules(cfg.Rules, prefix)
 
 	return p
 }
@@ -93,7 +83,7 @@ func (p *Severity) transform(issue *result.Issue) *result.Issue {
 	return issue
 }
 
-func createSeverityRules(rules []SeverityRule, prefix string) []severityRule {
+func createSeverityRules(rules []config.SeverityRule, prefix string) []severityRule {
 	parsedRules := make([]severityRule, 0, len(rules))
 
 	for _, rule := range rules {

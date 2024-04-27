@@ -10,14 +10,6 @@ import (
 
 const caseInsensitivePrefix = "(?i)"
 
-type BaseRule struct {
-	Text       string
-	Source     string
-	Path       string
-	PathExcept string
-	Linters    []string
-}
-
 type baseRule struct {
 	text       *regexp.Regexp
 	source     *regexp.Regexp

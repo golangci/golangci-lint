@@ -80,8 +80,8 @@ func NewRunner(log logutils.Log, cfg *config.Config, args []string, goenv *gouti
 			// Must be before exclude because users see already marked output and configure excluding by it.
 			processors.NewIdentifierMarker(),
 
-			getExcludeProcessor(&cfg.Issues),
-			getExcludeRulesProcessor(&cfg.Issues, log, files),
+			processors.NewExclude(&cfg.Issues),
+			processors.NewExcludeRules(log.Child(logutils.DebugKeyExcludeRules), files, &cfg.Issues),
 			processors.NewNolint(log.Child(logutils.DebugKeyNolint), dbManager, enabledLinters),
 
 			processors.NewUniqByLine(cfg),
@@ -91,7 +91,7 @@ func NewRunner(log logutils.Log, cfg *config.Config, args []string, goenv *gouti
 			processors.NewMaxFromLinter(cfg.Issues.MaxIssuesPerLinter, log.Child(logutils.DebugKeyMaxFromLinter), cfg),
 			processors.NewSourceCode(lineCache, log.Child(logutils.DebugKeySourceCode)),
 			processors.NewPathShortener(),
-			getSeverityRulesProcessor(&cfg.Severity, log, files),
+			processors.NewSeverity(log.Child(logutils.DebugKeySeverityRules), files, &cfg.Severity),
 
 			// The fixer still needs to see paths for the issues that are relative to the current directory.
 			processors.NewFixer(cfg, log, fileCache),
@@ -241,73 +241,4 @@ func (r *Runner) processIssues(issues []result.Issue, sw *timeutils.Stopwatch, s
 	}
 
 	return issues
-}
-
-func getExcludeProcessor(cfg *config.Issues) processors.Processor {
-	opts := processors.ExcludeOptions{
-		CaseSensitive: cfg.ExcludeCaseSensitive,
-	}
-
-	if len(cfg.ExcludePatterns) != 0 {
-		opts.Pattern = fmt.Sprintf("(%s)", strings.Join(cfg.ExcludePatterns, "|"))
-	}
-
-	return processors.NewExclude(opts)
-}
-
-func getExcludeRulesProcessor(cfg *config.Issues, log logutils.Log, files *fsutils.Files) processors.Processor {
-	var excludeRules []processors.ExcludeRule
-	for _, r := range cfg.ExcludeRules {
-		excludeRules = append(excludeRules, processors.ExcludeRule{
-			BaseRule: processors.BaseRule{
-				Text:       r.Text,
-				Source:     r.Source,
-				Path:       r.Path,
-				PathExcept: r.PathExcept,
-				Linters:    r.Linters,
-			},
-		})
-	}
-
-	if cfg.UseDefaultExcludes {
-		for _, r := range config.GetExcludePatterns(cfg.IncludeDefaultExcludes) {
-			excludeRules = append(excludeRules, processors.ExcludeRule{
-				BaseRule: processors.BaseRule{
-					Text:    r.Pattern,
-					Linters: []string{r.Linter},
-				},
-			})
-		}
-	}
-
-	opts := processors.ExcludeRulesOptions{
-		Rules:         excludeRules,
-		CaseSensitive: cfg.ExcludeCaseSensitive,
-	}
-
-	return processors.NewExcludeRules(log.Child(logutils.DebugKeyExcludeRules), files, opts)
-}
-
-func getSeverityRulesProcessor(cfg *config.Severity, log logutils.Log, files *fsutils.Files) processors.Processor {
-	var severityRules []processors.SeverityRule
-	for _, r := range cfg.Rules {
-		severityRules = append(severityRules, processors.SeverityRule{
-			Severity: r.Severity,
-			BaseRule: processors.BaseRule{
-				Text:       r.Text,
-				Source:     r.Source,
-				Path:       r.Path,
-				PathExcept: r.PathExcept,
-				Linters:    r.Linters,
-			},
-		})
-	}
-
-	severityOpts := processors.SeverityOptions{
-		Default:       cfg.Default,
-		Rules:         severityRules,
-		CaseSensitive: cfg.CaseSensitive,
-	}
-
-	return processors.NewSeverity(log.Child(logutils.DebugKeySeverityRules), files, severityOpts)
 }
