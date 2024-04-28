@@ -9,6 +9,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
+	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/test/testshared"
@@ -163,15 +164,18 @@ func getEnabledByDefaultFastLintersExcept(t *testing.T, except ...string) []stri
 func getAllFastLintersWith(t *testing.T, with ...string) []string {
 	t.Helper()
 
+	ret := append([]string{}, with...)
+
 	dbManager, err := lintersdb.NewManager(nil, nil, lintersdb.NewLinterBuilder())
 	require.NoError(t, err)
 
 	linters := dbManager.GetAllSupportedLinterConfigs()
-	ret := append([]string{}, with...)
+
 	for _, lc := range linters {
-		if lc.IsSlowLinter() || lc.Internal {
+		if lc.IsSlowLinter() || lc.Internal || (lc.IsDeprecated() && lc.Deprecation.Level > linter.DeprecationWarning) {
 			continue
 		}
+
 		ret = append(ret, lc.Name())
 	}
 

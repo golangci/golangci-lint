@@ -190,12 +190,12 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithPresets(linter.PresetFormatting, linter.PresetStyle).
 			WithURL("https://gitlab.com/bosi/decorder"),
 
-		linter.NewConfig(linter.NewNoopDeprecated("deadcode", cfg)).
+		linter.NewConfig(linter.NewNoopDeprecated("deadcode", cfg, linter.DeprecationError)).
 			WithSince("v1.0.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetUnused).
 			WithURL("https://github.com/remyoudompheng/go-misc/tree/master/deadcode").
-			Deprecated("The owner seems to have abandoned the linter.", "v1.49.0", "unused"),
+			DeprecatedError("The owner seems to have abandoned the linter.", "v1.49.0", "unused"),
 
 		linter.NewConfig(depguard.New(&cfg.LintersSettings.Depguard)).
 			WithSince("v1.4.0").
@@ -253,7 +253,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithPresets(linter.PresetSQL).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/1uf3/execinquery").
-			Deprecated("The repository of the linter has been archived by the owner.", "v1.58.0", ""),
+			DeprecatedWarning("The repository of the linter has been archived by the owner.", "v1.58.0", ""),
 
 		linter.NewConfig(exhaustive.New(&cfg.LintersSettings.Exhaustive)).
 			WithSince(" v1.28.0").
@@ -261,12 +261,12 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/nishanths/exhaustive"),
 
-		linter.NewConfig(linter.NewNoopDeprecated("exhaustivestruct", cfg)).
+		linter.NewConfig(linter.NewNoopDeprecated("exhaustivestruct", cfg, linter.DeprecationError)).
 			WithSince("v1.32.0").
 			WithPresets(linter.PresetStyle, linter.PresetTest).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/mbilski/exhaustivestruct").
-			Deprecated("The repository of the linter has been deprecated by the owner.", "v1.46.0", "exhaustruct"),
+			DeprecatedError("The repository of the linter has been deprecated by the owner.", "v1.46.0", "exhaustruct"),
 
 		linter.NewConfig(exhaustruct.New(&cfg.LintersSettings.Exhaustruct)).
 			WithSince("v1.46.0").
@@ -403,12 +403,12 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithAutoFix().
 			WithURL("https://pkg.go.dev/golang.org/x/tools/cmd/goimports"),
 
-		linter.NewConfig(linter.NewNoopDeprecated("golint", cfg)).
+		linter.NewConfig(linter.NewNoopDeprecated("golint", cfg, linter.DeprecationError)).
 			WithSince("v1.0.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/golang/lint").
-			Deprecated("The repository of the linter has been archived by the owner.", "v1.41.0", "revive"),
+			DeprecatedError("The repository of the linter has been archived by the owner.", "v1.41.0", "revive"),
 
 		linter.NewConfig(mnd.New(&cfg.LintersSettings.Mnd)).
 			WithSince("v1.22.0").
@@ -418,8 +418,8 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 		linter.NewConfig(mnd.NewGoMND(&cfg.LintersSettings.Gomnd)).
 			WithSince("v1.22.0").
 			WithPresets(linter.PresetStyle).
-			Deprecated("The linter has been renamed.", "v1.58.0", "mnd").
-			WithURL("https://github.com/tommy-muehle/go-mnd"),
+			WithURL("https://github.com/tommy-muehle/go-mnd").
+			DeprecatedWarning("The linter has been renamed.", "v1.58.0", "mnd"),
 
 		linter.NewConfig(gomoddirectives.New(&cfg.LintersSettings.GoModDirectives)).
 			WithSince("v1.39.0").
@@ -470,11 +470,11 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/leonklingele/grouper"),
 
-		linter.NewConfig(linter.NewNoopDeprecated("ifshort", cfg)).
+		linter.NewConfig(linter.NewNoopDeprecated("ifshort", cfg, linter.DeprecationError)).
 			WithSince("v1.36.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/esimonov/ifshort").
-			Deprecated("The repository of the linter has been deprecated by the owner.", "v1.48.0", ""),
+			DeprecatedError("The repository of the linter has been deprecated by the owner.", "v1.48.0", ""),
 
 		linter.NewConfig(importas.New(&cfg.LintersSettings.ImportAs)).
 			WithSince("v1.38.0").
@@ -498,12 +498,12 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/sashamelentyev/interfacebloat"),
 
-		linter.NewConfig(linter.NewNoopDeprecated("interfacer", cfg)).
+		linter.NewConfig(linter.NewNoopDeprecated("interfacer", cfg, linter.DeprecationError)).
 			WithSince("v1.0.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/mvdan/interfacer").
-			Deprecated("The repository of the linter has been archived by the owner.", "v1.38.0", ""),
+			DeprecatedError("The repository of the linter has been archived by the owner.", "v1.38.0", ""),
 
 		linter.NewConfig(intrange.New()).
 			WithSince("v1.57.0").
@@ -538,12 +538,12 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/ashanbrown/makezero"),
 
-		linter.NewConfig(linter.NewNoopDeprecated("maligned", cfg)).
+		linter.NewConfig(linter.NewNoopDeprecated("maligned", cfg, linter.DeprecationError)).
 			WithSince("v1.0.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetPerformance).
 			WithURL("https://github.com/mdempsky/maligned").
-			Deprecated("The repository of the linter has been archived by the owner.", "v1.38.0", "govet 'fieldalignment'"),
+			DeprecatedError("The repository of the linter has been archived by the owner.", "v1.38.0", "govet 'fieldalignment'"),
 
 		linter.NewConfig(mirror.New()).
 			WithSince("v1.53.0").
@@ -603,11 +603,11 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/firefart/nonamedreturns"),
 
-		linter.NewConfig(linter.NewNoopDeprecated("nosnakecase", cfg)).
+		linter.NewConfig(linter.NewNoopDeprecated("nosnakecase", cfg, linter.DeprecationError)).
 			WithSince("v1.47.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/sivchari/nosnakecase").
-			Deprecated("The repository of the linter has been deprecated by the owner.", "v1.48.1", "revive 'var-naming'"),
+			DeprecatedError("The repository of the linter has been deprecated by the owner.", "v1.48.1", "revive 'var-naming'"),
 
 		linter.NewConfig(nosprintfhostport.New()).
 			WithSince("v1.46.0").
@@ -672,11 +672,11 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithPresets(linter.PresetStyle, linter.PresetFormatting).
 			WithURL("https://github.com/go-simpler/sloglint"),
 
-		linter.NewConfig(linter.NewNoopDeprecated("scopelint", cfg)).
+		linter.NewConfig(linter.NewNoopDeprecated("scopelint", cfg, linter.DeprecationError)).
 			WithSince("v1.12.0").
 			WithPresets(linter.PresetBugs).
 			WithURL("https://github.com/kyoh86/scopelint").
-			Deprecated("The repository of the linter has been deprecated by the owner.", "v1.39.0", "exportloopref"),
+			DeprecatedError("The repository of the linter has been deprecated by the owner.", "v1.39.0", "exportloopref"),
 
 		linter.NewConfig(sqlclosecheck.New()).
 			WithSince("v1.28.0").
@@ -698,12 +698,12 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithAlternativeNames(megacheckName).
 			WithURL("https://staticcheck.io/"),
 
-		linter.NewConfig(linter.NewNoopDeprecated("structcheck", cfg)).
+		linter.NewConfig(linter.NewNoopDeprecated("structcheck", cfg, linter.DeprecationError)).
 			WithSince("v1.0.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetUnused).
 			WithURL("https://github.com/opennota/check").
-			Deprecated("The owner seems to have abandoned the linter.", "v1.49.0", "unused"),
+			DeprecatedError("The owner seems to have abandoned the linter.", "v1.49.0", "unused"),
 
 		linter.NewConfig(stylecheck.New(&cfg.LintersSettings.Stylecheck)).
 			WithSince("v1.20.0").
@@ -788,12 +788,12 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/sashamelentyev/usestdlibvars"),
 
-		linter.NewConfig(linter.NewNoopDeprecated("varcheck", cfg)).
+		linter.NewConfig(linter.NewNoopDeprecated("varcheck", cfg, linter.DeprecationError)).
 			WithSince("v1.0.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetUnused).
 			WithURL("https://github.com/opennota/check").
-			Deprecated("The owner seems to have abandoned the linter.", "v1.49.0", "unused"),
+			DeprecatedError("The owner seems to have abandoned the linter.", "v1.49.0", "unused"),
 
 		linter.NewConfig(varnamelen.New(&cfg.LintersSettings.Varnamelen)).
 			WithSince("v1.43.0").

@@ -303,6 +303,10 @@ func AllPresets() []string {
 func linterConfigsToMap(lcs []*linter.Config) map[string]*linter.Config {
 	ret := map[string]*linter.Config{}
 	for _, lc := range lcs {
+		if lc.IsDeprecated() && lc.Deprecation.Level > linter.DeprecationWarning {
+			continue
+		}
+
 		ret[lc.Name()] = lc
 	}
 
