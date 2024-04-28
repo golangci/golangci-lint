@@ -65,7 +65,7 @@ require (
 	github.com/kulti/thelper v0.6.3
 	github.com/kunwardeep/paralleltest v1.0.10
 	github.com/kyoh86/exportloopref v0.1.11
-	github.com/lasiar/canonicalheader v1.0.5
+	github.com/lasiar/canonicalheader v1.0.6
 	github.com/ldez/gomoddirectives v0.2.4
 	github.com/ldez/tagliatelle v0.5.0
 	github.com/leonklingele/grouper v1.1.2
