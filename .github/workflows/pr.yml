@@ -47,9 +47,6 @@ jobs:
         uses: golangci/golangci-lint-action@v5.1.0
         with:
           version: latest
-          # skip cache because of flaky behaviors
-          skip-build-cache: true
-          skip-pkg-cache: true
 
   tests-on-windows:
     needs: golangci-lint # run after golangci-lint action to not produce duplicated errors
