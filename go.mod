@@ -129,7 +129,7 @@ require (
 	gopkg.in/yaml.v3 v3.0.1
 	honnef.co/go/tools v0.4.7
 	mvdan.cc/gofumpt v0.6.0
-	mvdan.cc/unparam v0.0.0-20240104100049-c549a3470d14
+	mvdan.cc/unparam v0.0.0-20240427195214-063aff900ca1
 )
 
 require (
