@@ -173,10 +173,6 @@ func TestPrinter_Print_file(t *testing.T) {
 func TestPrinter_Print_multiple(t *testing.T) {
 	logger := logutils.NewStderrLog("skip")
 
-	t.Cleanup(func() {
-		_ = os.RemoveAll(filepath.Join(t.TempDir(), filenameGitHubActionProblemMatchers))
-	})
-
 	var issues []result.Issue
 	unmarshalFile(t, "in-issues.json", &issues)
 

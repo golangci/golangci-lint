@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	"go/token"
-	"os"
 	"path/filepath"
 	"regexp"
 	"runtime"
@@ -18,10 +17,6 @@ import (
 )
 
 func TestGitHub_Print(t *testing.T) {
-	if runtime.GOOS != "linux" {
-		t.Skip("Skipping tests because temp folder depends on OS")
-	}
-
 	issues := []result.Issue{
 		{
 			FromLinter: "linter-a",
@@ -52,12 +47,10 @@ func TestGitHub_Print(t *testing.T) {
 		},
 	}
 
-	t.Cleanup(func() {
-		_ = os.RemoveAll(filepath.Join(t.TempDir(), filenameGitHubActionProblemMatchers))
-	})
-
 	buf := new(bytes.Buffer)
+
 	printer := NewGitHub(buf)
+	printer.tempPath = filepath.Join(t.TempDir(), filenameGitHubActionProblemMatchers)
 
 	err := printer.Print(issues)
 	require.NoError(t, err)
@@ -68,6 +61,8 @@ warning	path/to/filea.go:10:4:	some issue (linter-a)
 error	path/to/fileb.go:300:9:	another issue (linter-b)
 ::remove-matcher owner=golangci-lint-action::
 `
+	// To support all the OS.
+	expected = strings.ReplaceAll(expected, "/tmp/golangci-lint-action-problem-matchers.json", printer.tempPath)
 
 	assert.Equal(t, expected, buf.String())
 }

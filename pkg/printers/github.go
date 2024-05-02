@@ -59,12 +59,16 @@ type GitHubPattern struct {
 }
 
 type GitHub struct {
-	w io.Writer
+	tempPath string
+	w        io.Writer
 }
 
 // NewGitHub output format outputs issues according to GitHub actions the problem matcher regexp.
 func NewGitHub(w io.Writer) *GitHub {
-	return &GitHub{w: w}
+	return &GitHub{
+		tempPath: filepath.Join(os.TempDir(), filenameGitHubActionProblemMatchers),
+		w:        w,
+	}
 }
 
 func (p *GitHub) Print(issues []result.Issue) error {
@@ -74,7 +78,7 @@ func (p *GitHub) Print(issues []result.Issue) error {
 	// Result if the file is removed prematurely:
 	// Error: Unable to process command '::add-matcher::/tmp/golangci-lint-action-problem-matchers.json' successfully.
 	// Error: Could not find file '/tmp/golangci-lint-action-problem-matchers.json'.
-	filename, err := storeProblemMatcher()
+	filename, err := p.storeProblemMatcher()
 	if err != nil {
 		return err
 	}
@@ -95,29 +99,8 @@ func (p *GitHub) Print(issues []result.Issue) error {
 	return nil
 }
 
-func formatIssueAsGitHub(issue *result.Issue) string {
-	severity := defaultGitHubSeverity
-	if issue.Severity != "" {
-		severity = issue.Severity
-	}
-
-	// Convert backslashes to forward slashes.
-	// This is needed when running on windows.
-	// Otherwise, GitHub won't be able to show the annotations pointing to the file path with backslashes.
-	file := filepath.ToSlash(issue.FilePath())
-
-	ret := fmt.Sprintf("%s\t%s:%d:", severity, file, issue.Line())
-	if issue.Pos.Column != 0 {
-		ret += fmt.Sprintf("%d:", issue.Pos.Column)
-	}
-
-	ret += fmt.Sprintf("\t%s (%s)", issue.Text, issue.FromLinter)
-	return ret
-}
-
-func storeProblemMatcher() (string, error) {
-	//nolint:gosec // To be able to clean the file during tests, we need a deterministic filepath.
-	file, err := os.Create(filepath.Join(os.TempDir(), filenameGitHubActionProblemMatchers))
+func (p *GitHub) storeProblemMatcher() (string, error) {
+	file, err := os.Create(p.tempPath)
 	if err != nil {
 		return "", err
 	}
@@ -151,4 +134,24 @@ func generateProblemMatcher() GitHubProblemMatchers {
 			},
 		},
 	}
+}
+
+func formatIssueAsGitHub(issue *result.Issue) string {
+	severity := defaultGitHubSeverity
+	if issue.Severity != "" {
+		severity = issue.Severity
+	}
+
+	// Convert backslashes to forward slashes.
+	// This is needed when running on windows.
+	// Otherwise, GitHub won't be able to show the annotations pointing to the file path with backslashes.
+	file := filepath.ToSlash(issue.FilePath())
+
+	ret := fmt.Sprintf("%s\t%s:%d:", severity, file, issue.Line())
+	if issue.Pos.Column != 0 {
+		ret += fmt.Sprintf("%d:", issue.Pos.Column)
+	}
+
+	ret += fmt.Sprintf("\t%s (%s)", issue.Text, issue.FromLinter)
+	return ret
 }
