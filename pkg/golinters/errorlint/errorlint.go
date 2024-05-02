@@ -9,7 +9,21 @@ import (
 )
 
 func New(cfg *config.ErrorLintSettings) *goanalysis.Linter {
-	a := errorlint.NewAnalyzer()
+	var opts []errorlint.Option
+
+	if cfg != nil {
+		ae := toAllowPairs(cfg.AllowedErrors)
+		if len(ae) > 0 {
+			opts = append(opts, errorlint.WithAllowedErrors(ae))
+		}
+
+		aew := toAllowPairs(cfg.AllowedErrorsWildcard)
+		if len(aew) > 0 {
+			opts = append(opts, errorlint.WithAllowedWildcard(aew))
+		}
+	}
+
+	a := errorlint.NewAnalyzer(opts...)
 
 	cfgMap := map[string]map[string]any{}
 
@@ -29,4 +43,12 @@ func New(cfg *config.ErrorLintSettings) *goanalysis.Linter {
 		[]*analysis.Analyzer{a},
 		cfgMap,
 	).WithLoadMode(goanalysis.LoadModeTypesInfo)
+}
+
+func toAllowPairs(data []config.ErrorLintAllowPair) []errorlint.AllowPair {
+	var pairs []errorlint.AllowPair
+	for _, allowedError := range data {
+		pairs = append(pairs, errorlint.AllowPair(allowedError))
+	}
+	return pairs
 }

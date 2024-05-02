@@ -384,10 +384,17 @@ type ErrChkJSONSettings struct {
 }
 
 type ErrorLintSettings struct {
-	Errorf      bool `mapstructure:"errorf"`
-	ErrorfMulti bool `mapstructure:"errorf-multi"`
-	Asserts     bool `mapstructure:"asserts"`
-	Comparison  bool `mapstructure:"comparison"`
+	Errorf                bool                 `mapstructure:"errorf"`
+	ErrorfMulti           bool                 `mapstructure:"errorf-multi"`
+	Asserts               bool                 `mapstructure:"asserts"`
+	Comparison            bool                 `mapstructure:"comparison"`
+	AllowedErrors         []ErrorLintAllowPair `mapstructure:"allowed-errors"`
+	AllowedErrorsWildcard []ErrorLintAllowPair `mapstructure:"allowed-errors-wildcard"`
+}
+
+type ErrorLintAllowPair struct {
+	Err string `mapstructure:"err"`
+	Fun string `mapstructure:"fun"`
 }
 
 type ExhaustiveSettings struct {

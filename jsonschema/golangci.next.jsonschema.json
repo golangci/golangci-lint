@@ -803,6 +803,36 @@
               "description": "Check for plain error comparisons",
               "type": "boolean",
               "default": true
+            },
+            "allowed-errors": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "err": {
+                    "type": "string"
+                  },
+                  "fun": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "allowed-errors-wildcard": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "err": {
+                    "type": "string"
+                  },
+                  "fun": {
+                    "type": "string"
+                  }
+                }
+              }
             }
           }
         },
