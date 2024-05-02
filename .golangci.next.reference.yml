@@ -326,6 +326,16 @@ linters-settings:
     # Check for plain error comparisons.
     # Default: true
     comparison: false
+    # Allowed errors.
+    # Default: []
+    allowed-errors:
+      - err: "io.EOF"
+        fun: "example.com/pkg.Read"
+    # Allowed error "wildcards".
+    # Default: []
+    allowed-errors-wildcard:
+      - err: "example.com/pkg.ErrMagic"
+        fun: "example.com/pkg.Magic"
 
   exhaustive:
     # Program elements to check for exhaustiveness.
