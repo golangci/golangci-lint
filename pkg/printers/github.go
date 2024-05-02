@@ -71,9 +71,9 @@ func (p *GitHub) Print(issues []result.Issue) error {
 	// Note: the file with the problem matcher definition should not be removed.
 	// A sleep can mitigate this problem but this will be flaky.
 	//
+	// Result if the file is removed prematurely:
 	// Error: Unable to process command '::add-matcher::/tmp/golangci-lint-action-problem-matchers.json' successfully.
 	// Error: Could not find file '/tmp/golangci-lint-action-problem-matchers.json'.
-	//
 	filename, err := storeProblemMatcher()
 	if err != nil {
 		return err
