@@ -179,12 +179,12 @@ func TestPrinter_Print_multiple(t *testing.T) {
 	data := &report.Data{}
 	unmarshalFile(t, "in-report-data.json", data)
 
-	outputPath := filepath.Join(t.TempDir(), "github-actions.txt")
+	outputPath := filepath.Join(t.TempDir(), "teamcity.txt")
 
 	cfg := &config.Output{
 		Formats: []config.OutputFormat{
 			{
-				Format: "github-actions",
+				Format: "teamcity",
 				Path:   outputPath,
 			},
 			{
@@ -210,7 +210,7 @@ func TestPrinter_Print_multiple(t *testing.T) {
 	err = p.Print(issues)
 	require.NoError(t, err)
 
-	goldenGitHub, err := os.ReadFile(filepath.Join("testdata", "golden-github-actions.txt"))
+	goldenGitHub, err := os.ReadFile(filepath.Join("testdata", "golden-teamcity.txt"))
 	require.NoError(t, err)
 
 	actual, err := os.ReadFile(outputPath)
