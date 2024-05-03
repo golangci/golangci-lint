@@ -15,6 +15,8 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result/processors"
 )
 
+const defaultMaxIssuesPerLinter = 50
+
 func setupLintersFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
 	internal.AddHackedStringSliceP(fs, "disable", "D", color.GreenString("Disable specific linter"))
 	internal.AddFlagAndBind(v, fs, fs.Bool, "disable-all", "linters.disable-all", false, color.GreenString("Disable all linters"))
@@ -91,7 +93,7 @@ func setupIssuesFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
 	internal.AddFlagAndBind(v, fs, fs.Bool, "exclude-case-sensitive", "issues.exclude-case-sensitive", false,
 		color.GreenString("If set to true exclude and exclude rules regular expressions are case-sensitive"))
 
-	internal.AddFlagAndBind(v, fs, fs.Int, "max-issues-per-linter", "issues.max-issues-per-linter", 50,
+	internal.AddFlagAndBind(v, fs, fs.Int, "max-issues-per-linter", "issues.max-issues-per-linter", defaultMaxIssuesPerLinter,
 		color.GreenString("Maximum issues count per one linter. Set to 0 to disable"))
 	internal.AddFlagAndBind(v, fs, fs.Int, "max-same-issues", "issues.max-same-issues", 3,
 		color.GreenString("Maximum count of issues with the same text. Set to 0 to disable"))
