@@ -57,7 +57,7 @@ linters-settings:
         replacement: 'any'
   goimports:
     local-prefixes: github.com/golangci/golangci-lint
-  gomnd:
+  mnd:
     # don't include the "operation" and "assign"
     checks:
       - argument
@@ -121,7 +121,7 @@ linters:
     - godox
     - gofmt
     - goimports
-    - gomnd
+    - mnd
     - goprintffuncname
     - gosec
     - gosimple
@@ -150,7 +150,7 @@ issues:
     - path: (.+)_test\.go
       linters:
         - dupl
-        - gomnd
+        - mnd
         - lll
 
     # The logic of creating a linter is similar between linters, it's not duplication.
