@@ -50,6 +50,18 @@
     "since": "v1.18.0"
   },
   {
+    "name": "canonicalheader",
+    "desc": "canonicalheader checks whether net/http.Header uses canonical header",
+    "loadMode": 575,
+    "inPresets": [
+      "style"
+    ],
+    "originalURL": "https://github.com/lasiar/canonicalHeader",
+    "internal": false,
+    "isSlow": true,
+    "since": "v1.58.0"
+  },
+  {
     "name": "containedctx",
     "desc": "containedctx is a linter that detects struct contained context.Context field",
     "loadMode": 575,
@@ -109,23 +121,6 @@
     "internal": false,
     "isSlow": false,
     "since": "v1.44.0"
-  },
-  {
-    "name": "deadcode",
-    "desc": "Deprecated",
-    "loadMode": 575,
-    "inPresets": [
-      "unused"
-    ],
-    "originalURL": "https://github.com/remyoudompheng/go-misc/tree/master/deadcode",
-    "internal": false,
-    "isSlow": true,
-    "since": "v1.0.0",
-    "deprecation": {
-      "since": "v1.49.0",
-      "message": "The owner seems to have abandoned the linter.",
-      "replacement": "unused"
-    }
   },
   {
     "name": "depguard",
@@ -247,10 +242,14 @@
     "inPresets": [
       "sql"
     ],
-    "originalURL": "https://github.com/lufeee/execinquery",
+    "originalURL": "https://github.com/1uf3/execinquery",
     "internal": false,
     "isSlow": true,
-    "since": "v1.46.0"
+    "since": "v1.46.0",
+    "deprecation": {
+      "since": "v1.58.0",
+      "message": "The repository of the linter has been archived by the owner."
+    }
   },
   {
     "name": "exhaustive",
@@ -263,24 +262,6 @@
     "internal": false,
     "isSlow": true,
     "since": " v1.28.0"
-  },
-  {
-    "name": "exhaustivestruct",
-    "desc": "Deprecated",
-    "loadMode": 575,
-    "inPresets": [
-      "style",
-      "test"
-    ],
-    "originalURL": "https://github.com/mbilski/exhaustivestruct",
-    "internal": false,
-    "isSlow": true,
-    "since": "v1.32.0",
-    "deprecation": {
-      "since": "v1.46.0",
-      "message": "The repository of the linter has been deprecated by the owner.",
-      "replacement": "exhaustruct"
-    }
   },
   {
     "name": "exhaustruct",
@@ -330,6 +311,18 @@
     "internal": false,
     "isSlow": false,
     "since": "v1.38.0"
+  },
+  {
+    "name": "fatcontext",
+    "desc": "detects nested contexts in loops",
+    "loadMode": 575,
+    "inPresets": [
+      "performance"
+    ],
+    "originalURL": "https://github.com/Crocmagnon/fatcontext",
+    "internal": false,
+    "isSlow": true,
+    "since": "1.58.0"
   },
   {
     "name": "funlen",
@@ -494,12 +487,15 @@
     "since": "v1.19.0"
   },
   {
-    "name": "goerr113",
+    "name": "err113",
     "desc": "Go linter to check the errors handling expressions",
     "loadMode": 575,
     "inPresets": [
       "style",
       "error"
+    ],
+    "alternativeNames": [
+      "goerr113"
     ],
     "originalURL": "https://github.com/Djarvur/go-err113",
     "internal": false,
@@ -560,21 +556,16 @@
     "since": "v1.20.0"
   },
   {
-    "name": "golint",
-    "desc": "Deprecated",
-    "loadMode": 575,
+    "name": "mnd",
+    "desc": "An analyzer to detect magic numbers.",
+    "loadMode": 7,
     "inPresets": [
       "style"
     ],
-    "originalURL": "https://github.com/golang/lint",
+    "originalURL": "https://github.com/tommy-muehle/go-mnd",
     "internal": false,
-    "isSlow": true,
-    "since": "v1.0.0",
-    "deprecation": {
-      "since": "v1.41.0",
-      "message": "The repository of the linter has been archived by the owner.",
-      "replacement": "revive"
-    }
+    "isSlow": false,
+    "since": "v1.22.0"
   },
   {
     "name": "gomnd",
@@ -586,7 +577,12 @@
     "originalURL": "https://github.com/tommy-muehle/go-mnd",
     "internal": false,
     "isSlow": false,
-    "since": "v1.22.0"
+    "since": "v1.22.0",
+    "deprecation": {
+      "since": "v1.58.0",
+      "message": "The linter has been renamed.",
+      "replacement": "mnd"
+    }
   },
   {
     "name": "gomoddirectives",
@@ -701,22 +697,6 @@
     "since": "v1.44.0"
   },
   {
-    "name": "ifshort",
-    "desc": "Deprecated",
-    "loadMode": 7,
-    "inPresets": [
-      "style"
-    ],
-    "originalURL": "https://github.com/esimonov/ifshort",
-    "internal": false,
-    "isSlow": false,
-    "since": "v1.36.0",
-    "deprecation": {
-      "since": "v1.48.0",
-      "message": "The repository of the linter has been deprecated by the owner."
-    }
-  },
-  {
     "name": "importas",
     "desc": "Enforces consistent import aliases",
     "loadMode": 575,
@@ -764,22 +744,6 @@
     "internal": false,
     "isSlow": false,
     "since": "v1.49.0"
-  },
-  {
-    "name": "interfacer",
-    "desc": "Deprecated",
-    "loadMode": 575,
-    "inPresets": [
-      "style"
-    ],
-    "originalURL": "https://github.com/mvdan/interfacer",
-    "internal": false,
-    "isSlow": true,
-    "since": "v1.0.0",
-    "deprecation": {
-      "since": "v1.38.0",
-      "message": "The repository of the linter has been archived by the owner."
-    }
   },
   {
     "name": "intrange",
@@ -853,23 +817,6 @@
     "internal": false,
     "isSlow": true,
     "since": "v1.34.0"
-  },
-  {
-    "name": "maligned",
-    "desc": "Deprecated",
-    "loadMode": 575,
-    "inPresets": [
-      "performance"
-    ],
-    "originalURL": "https://github.com/mdempsky/maligned",
-    "internal": false,
-    "isSlow": true,
-    "since": "v1.0.0",
-    "deprecation": {
-      "since": "v1.38.0",
-      "message": "The repository of the linter has been archived by the owner.",
-      "replacement": "govet 'fieldalignment'"
-    }
   },
   {
     "name": "mirror",
@@ -995,23 +942,6 @@
     "internal": false,
     "isSlow": true,
     "since": "v1.46.0"
-  },
-  {
-    "name": "nosnakecase",
-    "desc": "Deprecated",
-    "loadMode": 7,
-    "inPresets": [
-      "style"
-    ],
-    "originalURL": "https://github.com/sivchari/nosnakecase",
-    "internal": false,
-    "isSlow": false,
-    "since": "v1.47.0",
-    "deprecation": {
-      "since": "v1.48.1",
-      "message": "The repository of the linter has been deprecated by the owner.",
-      "replacement": "revive 'var-naming'"
-    }
   },
   {
     "name": "nosprintfhostport",
@@ -1151,23 +1081,6 @@
     "since": "v1.55.0"
   },
   {
-    "name": "scopelint",
-    "desc": "Deprecated",
-    "loadMode": 7,
-    "inPresets": [
-      "bugs"
-    ],
-    "originalURL": "https://github.com/kyoh86/scopelint",
-    "internal": false,
-    "isSlow": false,
-    "since": "v1.12.0",
-    "deprecation": {
-      "since": "v1.39.0",
-      "message": "The repository of the linter has been deprecated by the owner.",
-      "replacement": "exportloopref"
-    }
-  },
-  {
     "name": "sqlclosecheck",
     "desc": "Checks that sql.Rows, sql.Stmt, sqlx.NamedStmt, pgx.Query are closed.",
     "loadMode": 575,
@@ -1208,23 +1121,6 @@
     "internal": false,
     "isSlow": true,
     "since": "v1.0.0"
-  },
-  {
-    "name": "structcheck",
-    "desc": "Deprecated",
-    "loadMode": 575,
-    "inPresets": [
-      "unused"
-    ],
-    "originalURL": "https://github.com/opennota/check",
-    "internal": false,
-    "isSlow": true,
-    "since": "v1.0.0",
-    "deprecation": {
-      "since": "v1.49.0",
-      "message": "The owner seems to have abandoned the linter.",
-      "replacement": "unused"
-    }
   },
   {
     "name": "stylecheck",
@@ -1343,12 +1239,9 @@
     "name": "typecheck",
     "desc": "Like the front-end of a Go compiler, parses and type-checks Go code",
     "enabledByDefault": true,
-    "loadMode": 575,
-    "inPresets": [
-      "bugs"
-    ],
+    "loadMode": 7,
     "internal": true,
-    "isSlow": true,
+    "isSlow": false,
     "since": "v1.3.0"
   },
   {
@@ -1403,23 +1296,6 @@
     "internal": false,
     "isSlow": false,
     "since": "v1.48.0"
-  },
-  {
-    "name": "varcheck",
-    "desc": "Deprecated",
-    "loadMode": 575,
-    "inPresets": [
-      "unused"
-    ],
-    "originalURL": "https://github.com/opennota/check",
-    "internal": false,
-    "isSlow": true,
-    "since": "v1.0.0",
-    "deprecation": {
-      "since": "v1.49.0",
-      "message": "The owner seems to have abandoned the linter.",
-      "replacement": "unused"
-    }
   },
   {
     "name": "varnamelen",

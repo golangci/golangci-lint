@@ -73,6 +73,8 @@ docker run -t --rm -v $(pwd):/app -w /app golangci/golangci-lint:{.LatestVersion
 
 ### macOS
 
+#### Brew
+
 Note: brew can use a non-expected version of Go to build the binary,
 so we recommend either using our binaries or be sure of the version of Go used to build.
 
@@ -92,6 +94,8 @@ brew tap golangci/tap
 brew install golangci/tap/golangci-lint
 ```
 
+#### Macports
+
 It can also be installed through [macports](https://www.macports.org/)
 The macports installation mode is community driven, and not officially maintained by golangci team.
 
@@ -101,11 +105,23 @@ sudo port install golangci-lint
 
 ### Windows
 
-You can install a binary on Windows using [chocolatey](https://community.chocolatey.org/packages/golangci-lint):
+#### Chocolatey
+
+You can install a binary on Windows using [chocolatey](https://community.chocolatey.org/packages/golangci-lint).
 
 ```sh
 choco install golangci-lint
 ```
+
+#### Scoop
+
+You can install a binary on Windows using [scoop](https://scoop.sh).
+
+```sh
+scoop install main/golangci-lint
+```
+
+The scoop package is not officially maintained by golangci team.
 
 ### Install from Source
 

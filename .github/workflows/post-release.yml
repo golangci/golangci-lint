@@ -61,15 +61,6 @@ jobs:
       - name: Update GitHub Action config
         run: make assets/github-action-config.json
 
-      - name: Update reference files
-        run: cp .golangci.next.reference.yml .golangci.reference.yml
-
-      - name: Update JSON schema files
-        run: cp jsonschema/golangci.next.jsonschema.json jsonschema/golangci.jsonschema.json
-
-      - name: Update information
-        run: make website_dump_info
-
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6
         with:

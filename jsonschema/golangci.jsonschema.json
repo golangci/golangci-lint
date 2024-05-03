@@ -215,6 +215,7 @@
             "asciicheck",
             "bidichk",
             "bodyclose",
+            "canonicalheader",
             "containedctx",
             "contextcheck",
             "copyloopvar",
@@ -235,6 +236,7 @@
             "exhaustivestruct",
             "exhaustruct",
             "exportloopref",
+            "fatcontext",
             "forbidigo",
             "forcetypeassert",
             "funlen",
@@ -250,13 +252,12 @@
             "gocyclo",
             "godot",
             "godox",
-            "goerr113",
+            "err113",
             "gofmt",
             "gofumpt",
             "goheader",
             "goimports",
             "golint",
-            "gomnd",
             "gomoddirectives",
             "gomodguard",
             "goprintffuncname",
@@ -280,6 +281,7 @@
             "maligned",
             "mirror",
             "misspell",
+            "mnd",
             "musttag",
             "nakedret",
             "nestif",
@@ -748,16 +750,6 @@
               "type": "boolean",
               "default": false
             },
-            "ignore": {
-              "description": "DEPRECATED: use `exclude-functions` instead. Comma-separated list of pairs of the form \"pkg:regex\".",
-              "type": "string",
-              "default": "fmt:.*"
-            },
-            "exclude": {
-              "description": "DEPRECATED: use `exclude-functions` instead. Path to a file containing a list of functions to exclude from checking.",
-              "type": "string",
-              "examples": ["/path/to/file.txt"]
-            },
             "exclude-functions": {
               "description": "List of functions to exclude from checking, where each entry is a single function to exclude",
               "type": "array",
@@ -811,6 +803,36 @@
               "description": "Check for plain error comparisons",
               "type": "boolean",
               "default": true
+            },
+            "allowed-errors": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "err": {
+                    "type": "string"
+                  },
+                  "fun": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "allowed-errors-wildcard": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "err": {
+                    "type": "string"
+                  },
+                  "fun": {
+                    "type": "string"
+                  }
+                }
+              }
             }
           }
         },
@@ -960,16 +982,25 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
-            "local-prefixes": {
-              "description": "DEPRECATED: use 'sections' and 'prefix(github.com/org/project)' instead.",
-              "type": "string",
-              "examples": ["github.com/org/project"]
-            },
             "sections": {
               "description": "Section configuration to compare against.",
               "type": "array",
               "items": {
-                "type": "string"
+                "anyOf": [
+                  {
+                    "enum": [
+                      "standard",
+                      "default",
+                      "blank",
+                      "dot",
+                      "alias",
+                      "localmodule"
+                    ]
+                  },
+                  {
+                    "type": "string"
+                  }
+                ]
               },
               "default": ["standard", "default"]
             },
@@ -1143,8 +1174,157 @@
             "settings": {
               "description": "Settings passed to gocritic. Properties must be valid and enabled check names.",
               "type": "object",
-              "propertyNames": {
-                "$ref": "#/definitions/gocritic-checks"
+              "additionalProperties": false,
+              "properties": {
+                "captLocal": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "paramsOnly" : {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                },
+                "commentedOutCode": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "minLength" : {
+                      "type": "number",
+                      "default": 15
+                    }
+                  }
+                },
+                "elseif": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "skipBalanced" : {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                },
+                "hugeParam": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "sizeThreshold" : {
+                      "type": "number",
+                      "default": 80
+                    }
+                  }
+                },
+                "ifElseChain": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "minThreshold" : {
+                      "type": "number",
+                      "default": 2
+                    }
+                  }
+                },
+                "nestingReduce": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "bodyWidth" : {
+                      "type": "number",
+                      "default": 5
+                    }
+                  }
+                },
+                "rangeExprCopy": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "sizeThreshold" : {
+                      "type": "number",
+                      "default": 512
+                    },
+                    "skipTestFuncs" : {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                },
+                "rangeValCopy": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "sizeThreshold" : {
+                      "type": "number",
+                      "default": 128
+                    },
+                    "skipTestFuncs" : {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                },
+                "ruleguard": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "debug" : {
+                      "type": "string"
+                    },
+                    "enable" : {
+                      "type": "string"
+                    },
+                    "disable" : {
+                      "type": "string"
+                    },
+                    "failOn" : {
+                      "type": "string"
+                    },
+                    "rules" : {
+                      "type": "string"
+                    }
+                  }
+                },
+                "tooManyResultsChecker": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "maxResults" : {
+                      "type": "number",
+                      "default": 5
+                    }
+                  }
+                },
+                "truncateCmp": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "skipArchDependent" : {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                },
+                "underef": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "skipRecvDeref" : {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                },
+                "unnamedResult": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "checkExported" : {
+                      "type": "boolean",
+                      "default": false
+                    }
+                  }
+                }
               }
             },
             "disable-all": {
@@ -1261,11 +1441,6 @@
               "type": "boolean",
               "default": false
             },
-            "lang-version": {
-              "description": "Select the Go version to target.",
-              "type": "string",
-              "default": "1.15"
-            },
             "module-path": {
               "description": " Module path which contains the source code being formatted.",
               "type": "string"
@@ -1340,50 +1515,6 @@
               "description": "Put imports beginning with prefix after 3rd-party packages. It is a comma-separated list of prefixes.",
               "type": "string",
               "examples": ["github.com/org/project"]
-            }
-          }
-        },
-        "gomnd": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "ignored-files": {
-              "description": "List of file patterns to exclude from analysis.",
-              "examples": [["magic1_.*.go"]],
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            },
-            "ignored-functions": {
-              "description": "Comma-separated list of function patterns to exclude from the analysis.",
-              "examples": [["math.*", "http.StatusText", "make"]],
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            },
-            "ignored-numbers": {
-              "description": "List of numbers to exclude from analysis.",
-              "examples": [["1000", "1234_567_890", "3.14159264"]],
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            },
-            "checks": {
-              "description": "The list of enabled checks, see https://github.com/tommy-muehle/go-mnd/#checks for description.",
-              "type": "array",
-              "items": {
-                "enum": [
-                  "argument",
-                  "case",
-                  "condition",
-                  "operation",
-                  "return",
-                  "assign"
-                ]
-              }
             }
           }
         },
@@ -1509,11 +1640,6 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
-            "go": {
-              "description": "Targeted Go version",
-              "type": "string",
-              "default": "1.13"
-            },
             "checks": {
               "type": "array",
               "items": {
@@ -1976,6 +2102,50 @@
             }
           }
         },
+        "mnd": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "ignored-files": {
+              "description": "List of file patterns to exclude from analysis.",
+              "examples": [["magic1_.*.go"]],
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "ignored-functions": {
+              "description": "Comma-separated list of function patterns to exclude from the analysis.",
+              "examples": [["math.*", "http.StatusText", "make"]],
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "ignored-numbers": {
+              "description": "List of numbers to exclude from analysis.",
+              "examples": [["1000", "1234_567_890", "3.14159264"]],
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "checks": {
+              "description": "The list of enabled checks, see https://github.com/tommy-muehle/go-mnd/#checks for description.",
+              "type": "array",
+              "items": {
+                "enum": [
+                  "argument",
+                  "case",
+                  "condition",
+                  "operation",
+                  "return",
+                  "assign"
+                ]
+              }
+            }
+          }
+        },
         "nolintlint": {
           "type": "object",
           "additionalProperties": false,
@@ -2274,10 +2444,10 @@
               "type": "boolean",
               "default": true
             },
-            "context-only": {
+            "context": {
               "description": "Enforce using methods that accept a context.",
-              "type": "boolean",
-              "default": false
+              "enum": ["", "all", "scope"],
+              "default": ""
             },
             "static-msg": {
               "description": "Enforce using static values for log messages.",
@@ -2322,6 +2492,13 @@
               "items": {
                 "type": "string"
               }
+            },
+            "extra-start-span-signatures": {
+              "description": "A list of regexes for additional function signatures that create spans.",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
             }
           }
         },
@@ -2329,11 +2506,6 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
-            "go": {
-              "description": "Targeted Go version",
-              "type": "string",
-              "default": "1.13"
-            },
             "checks": {
               "type": "array",
               "items": {
@@ -2353,11 +2525,6 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
-            "go": {
-              "description": "Targeted Go version",
-              "type": "string",
-              "default": "1.13"
-            },
             "checks": {
               "type": "array",
               "items": {
@@ -2855,11 +3022,6 @@
               "type": "boolean",
               "default": false
             },
-            "os-dev-null": {
-              "description": "Suggest the use of os.DevNull.",
-              "type": "boolean",
-              "default": false
-            },
             "sql-isolation-level": {
               "description": "Suggest the use of sql.LevelXX.String().",
               "type": "boolean",
@@ -2872,11 +3034,6 @@
             },
             "constant-kind": {
               "description": "Suggest the use of constant.Kind.String().",
-              "type": "boolean",
-              "default": false
-            },
-            "syslog-priority": {
-              "description": "Suggest the use of syslog.Priority.",
               "type": "boolean",
               "default": false
             }
@@ -3157,7 +3314,7 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
-            "ignore-alias": {
+            "check-alias": {
               "type": "boolean",
               "default": false
             }
