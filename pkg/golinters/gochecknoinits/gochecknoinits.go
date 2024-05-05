@@ -61,11 +61,11 @@ func checkFileForInits(f *ast.File, fset *token.FileSet) []result.Issue {
 			continue
 		}
 
-		name := funcDecl.Name.Name
-		if name == "init" && funcDecl.Recv.NumFields() == 0 {
+		fnName := funcDecl.Name.Name
+		if fnName == "init" && funcDecl.Recv.NumFields() == 0 {
 			res = append(res, result.Issue{
 				Pos:        fset.Position(funcDecl.Pos()),
-				Text:       fmt.Sprintf("don't use %s function", internal.FormatCode(name, nil)),
+				Text:       fmt.Sprintf("don't use %s function", internal.FormatCode(fnName, nil)),
 				FromLinter: name,
 			})
 		}
