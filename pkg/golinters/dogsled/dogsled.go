@@ -14,14 +14,14 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-const name = "dogsled"
+const linterName = "dogsled"
 
 func New(settings *config.DogsledSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
 
 	analyzer := &analysis.Analyzer{
-		Name: name,
+		Name: linterName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 		Run: func(pass *analysis.Pass) (any, error) {
 			issues := runDogsled(pass, settings)
@@ -39,7 +39,7 @@ func New(settings *config.DogsledSettings) *goanalysis.Linter {
 	}
 
 	return goanalysis.NewLinter(
-		name,
+		linterName,
 		"Checks assignments with too many blank identifiers (e.g. x, _, _, _, := f())",
 		[]*analysis.Analyzer{analyzer},
 		nil,
@@ -100,7 +100,7 @@ func (v *returnsVisitor) Visit(node ast.Node) ast.Visitor {
 
 		if numBlank > v.maxBlanks {
 			v.issues = append(v.issues, result.Issue{
-				FromLinter: name,
+				FromLinter: linterName,
 				Text:       fmt.Sprintf("declaration has %v blank identifiers", numBlank),
 				Pos:        v.f.Position(assgnStmt.Pos()),
 			})

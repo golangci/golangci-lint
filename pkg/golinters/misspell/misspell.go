@@ -17,20 +17,20 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-const name = "misspell"
+const linterName = "misspell"
 
 func New(settings *config.MisspellSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
 
 	analyzer := &analysis.Analyzer{
-		Name: name,
+		Name: linterName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 		Run:  goanalysis.DummyRun,
 	}
 
 	return goanalysis.NewLinter(
-		name,
+		linterName,
 		"Finds commonly misspelled English words",
 		[]*analysis.Analyzer{analyzer},
 		nil,
@@ -153,7 +153,7 @@ func runMisspellOnFile(lintCtx *linter.Context, filename string, replacer *missp
 		res = append(res, result.Issue{
 			Pos:         pos,
 			Text:        text,
-			FromLinter:  name,
+			FromLinter:  linterName,
 			Replacement: replacement,
 		})
 	}

@@ -13,7 +13,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-const name = "nestif"
+const linterName = "nestif"
 
 func New(settings *config.NestifSettings) *goanalysis.Linter {
 	var mu sync.Mutex
@@ -38,7 +38,7 @@ func New(settings *config.NestifSettings) *goanalysis.Linter {
 	}
 
 	return goanalysis.NewLinter(
-		name,
+		linterName,
 		"Reports deeply nested if statements",
 		[]*analysis.Analyzer{analyzer},
 		nil,
@@ -70,7 +70,7 @@ func runNestIf(pass *analysis.Pass, settings *config.NestifSettings) []goanalysi
 		issues = append(issues, goanalysis.NewIssue(&result.Issue{
 			Pos:        i.Pos,
 			Text:       i.Message,
-			FromLinter: name,
+			FromLinter: linterName,
 		}, pass))
 	}
 

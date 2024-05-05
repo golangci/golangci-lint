@@ -14,14 +14,14 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-const name = "unparam"
+const linterName = "unparam"
 
 func New(settings *config.UnparamSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
 
 	analyzer := &analysis.Analyzer{
-		Name:     name,
+		Name:     linterName,
 		Doc:      goanalysis.TheOnlyanalyzerDoc,
 		Requires: []*analysis.Analyzer{buildssa.Analyzer},
 		Run: func(pass *analysis.Pass) (any, error) {
@@ -43,7 +43,7 @@ func New(settings *config.UnparamSettings) *goanalysis.Linter {
 	}
 
 	return goanalysis.NewLinter(
-		name,
+		linterName,
 		"Reports unused function parameters",
 		[]*analysis.Analyzer{analyzer},
 		nil,
@@ -82,7 +82,7 @@ func runUnparam(pass *analysis.Pass, settings *config.UnparamSettings) ([]goanal
 		issues = append(issues, goanalysis.NewIssue(&result.Issue{
 			Pos:        pass.Fset.Position(i.Pos()),
 			Text:       i.Message(),
-			FromLinter: name,
+			FromLinter: linterName,
 		}, pass))
 	}
 

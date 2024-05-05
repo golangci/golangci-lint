@@ -35,7 +35,7 @@ func (i *ignoredRange) doesMatch(issue *result.Issue) bool {
 	}
 
 	// only allow selective nolinting of nolintlint
-	nolintFoundForLinter := len(i.linters) == 0 && issue.FromLinter != nolintlint.Name
+	nolintFoundForLinter := len(i.linters) == 0 && issue.FromLinter != nolintlint.LinterName
 
 	for _, linterName := range i.linters {
 		if linterName == issue.FromLinter {
@@ -50,7 +50,7 @@ func (i *ignoredRange) doesMatch(issue *result.Issue) bool {
 
 	// handle possible unused nolint directives
 	// nolintlint generates potential issues for every nolint directive, and they are filtered out here
-	if issue.FromLinter == nolintlint.Name && issue.ExpectNoLint {
+	if issue.FromLinter == nolintlint.LinterName && issue.ExpectNoLint {
 		if issue.ExpectedNoLintLinter != "" {
 			return i.matchedIssueFromLinter[issue.ExpectedNoLintLinter]
 		}
@@ -111,7 +111,7 @@ func (p *Nolint) shouldPassIssue(issue *result.Issue) (bool, error) {
 	nolintDebugf("got issue: %v", *issue)
 
 	// don't expect disabled linters to cover their nolint statements
-	if issue.FromLinter == nolintlint.Name && issue.ExpectNoLint && issue.ExpectedNoLintLinter != "" {
+	if issue.FromLinter == nolintlint.LinterName && issue.ExpectNoLint && issue.ExpectedNoLintLinter != "" {
 		nolintDebugf("enabled linters: %v", p.enabledLinters)
 
 		if p.enabledLinters[issue.ExpectedNoLintLinter] == nil {
@@ -307,7 +307,7 @@ func (issues sortWithNolintlintLast) Len() int {
 }
 
 func (issues sortWithNolintlintLast) Less(i, j int) bool {
-	return issues[i].FromLinter != nolintlint.Name && issues[j].FromLinter == nolintlint.Name
+	return issues[i].FromLinter != nolintlint.LinterName && issues[j].FromLinter == nolintlint.LinterName
 }
 
 func (issues sortWithNolintlintLast) Swap(i, j int) {

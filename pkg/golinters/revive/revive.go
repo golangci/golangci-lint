@@ -23,7 +23,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-const name = "revive"
+const linterName = "revive"
 
 var debugf = logutils.Debug(logutils.DebugKeyRevive)
 
@@ -44,7 +44,7 @@ func New(settings *config.ReviveSettings) *goanalysis.Linter {
 	}
 
 	return goanalysis.NewLinter(
-		name,
+		linterName,
 		"Fast, configurable, extensible, flexible, and beautiful linter for Go. Drop-in replacement of golint.",
 		[]*analysis.Analyzer{analyzer},
 		nil,
@@ -151,7 +151,7 @@ func reviveToIssue(pass *analysis.Pass, object *jsonObject) goanalysis.Issue {
 			From: object.Position.Start.Line,
 			To:   lineRangeTo,
 		},
-		FromLinter: name,
+		FromLinter: linterName,
 	}, pass)
 }
 

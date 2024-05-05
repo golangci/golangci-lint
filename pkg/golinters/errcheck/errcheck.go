@@ -22,20 +22,20 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-const name = "errcheck"
+const linterName = "errcheck"
 
 func New(settings *config.ErrcheckSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
 
 	analyzer := &analysis.Analyzer{
-		Name: name,
+		Name: linterName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 		Run:  goanalysis.DummyRun,
 	}
 
 	return goanalysis.NewLinter(
-		name,
+		linterName,
 		"errcheck is a program for checking for unchecked errors in Go code. "+
 			"These unchecked errors can be critical bugs in some cases",
 		[]*analysis.Analyzer{analyzer},
@@ -100,7 +100,7 @@ func runErrCheck(lintCtx *linter.Context, pass *analysis.Pass, checker *errcheck
 
 		issues[i] = goanalysis.NewIssue(
 			&result.Issue{
-				FromLinter: name,
+				FromLinter: linterName,
 				Text:       text,
 				Pos:        err.Pos,
 			},

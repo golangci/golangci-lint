@@ -13,7 +13,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-const name = "promlinter"
+const linterName = "promlinter"
 
 func New(settings *config.PromlinterSettings) *goanalysis.Linter {
 	var mu sync.Mutex
@@ -28,7 +28,7 @@ func New(settings *config.PromlinterSettings) *goanalysis.Linter {
 	}
 
 	analyzer := &analysis.Analyzer{
-		Name: name,
+		Name: linterName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 		Run: func(pass *analysis.Pass) (any, error) {
 			issues := runPromLinter(pass, promSettings)
@@ -46,7 +46,7 @@ func New(settings *config.PromlinterSettings) *goanalysis.Linter {
 	}
 
 	return goanalysis.NewLinter(
-		name,
+		linterName,
 		"Check Prometheus metrics naming via promlint",
 		[]*analysis.Analyzer{analyzer},
 		nil,
@@ -67,7 +67,7 @@ func runPromLinter(pass *analysis.Pass, promSettings promlinter.Setting) []goana
 		issue := result.Issue{
 			Pos:        i.Pos,
 			Text:       fmt.Sprintf("Metric: %s Error: %s", i.Metric, i.Text),
-			FromLinter: name,
+			FromLinter: linterName,
 		}
 
 		issues[k] = goanalysis.NewIssue(&issue, pass)
