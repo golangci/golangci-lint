@@ -26,7 +26,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-const name = "gocritic"
+const linterName = "gocritic"
 
 var (
 	debugf  = logutils.Debug(logutils.DebugKeyGoCritic)
@@ -42,7 +42,7 @@ func New(settings *config.GoCriticSettings) *goanalysis.Linter {
 	}
 
 	analyzer := &analysis.Analyzer{
-		Name: name,
+		Name: linterName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 		Run: func(pass *analysis.Pass) (any, error) {
 			issues, err := wrapper.run(pass)
@@ -63,7 +63,7 @@ func New(settings *config.GoCriticSettings) *goanalysis.Linter {
 	}
 
 	return goanalysis.NewLinter(
-		name,
+		linterName,
 		`Provides diagnostics that check for bugs, performance and style issues.
 Extensible without recompilation through dynamic rules.
 Dynamic rules are written declaratively with AST patterns, filters, report message and optional suggestion.`,
@@ -96,7 +96,7 @@ func (w *goCriticWrapper) init(logger logutils.Log, settings *config.GoCriticSet
 	w.once.Do(func() {
 		err := checkers.InitEmbeddedRules()
 		if err != nil {
-			logger.Fatalf("%s: %v: setting an explicit GOROOT can fix this problem", name, err)
+			logger.Fatalf("%s: %v: setting an explicit GOROOT can fix this problem", linterName, err)
 		}
 	})
 
@@ -105,7 +105,7 @@ func (w *goCriticWrapper) init(logger logutils.Log, settings *config.GoCriticSet
 	// Validate must be after InferEnabledChecks, not before.
 	// Because it uses gathered information about tags set and finally enabled checks.
 	if err := settingsWrapper.Validate(); err != nil {
-		logger.Fatalf("%s: invalid settings: %s", name, err)
+		logger.Fatalf("%s: invalid settings: %s", linterName, err)
 	}
 
 	w.settingsWrapper = settingsWrapper
@@ -237,7 +237,7 @@ func runOnFile(linterCtx *gocriticlinter.Context, f *ast.File, checks []*gocriti
 			issue := result.Issue{
 				Pos:        pos,
 				Text:       fmt.Sprintf("%s: %s", c.Info.Name, warn.Text),
-				FromLinter: name,
+				FromLinter: linterName,
 			}
 
 			if warn.HasQuickFix() {
@@ -358,7 +358,7 @@ func (s *settingsWrapper) InferEnabledChecks() {
 
 		for _, check := range s.EnabledChecks {
 			if enabledChecks.has(check) {
-				s.logger.Warnf("%s: no need to enable check %q: it's already enabled", name, check)
+				s.logger.Warnf("%s: no need to enable check %q: it's already enabled", linterName, check)
 				continue
 			}
 			enabledChecks[check] = struct{}{}
@@ -379,7 +379,7 @@ func (s *settingsWrapper) InferEnabledChecks() {
 
 		for _, check := range s.DisabledChecks {
 			if !enabledChecks.has(check) {
-				s.logger.Warnf("%s: no need to disable check %q: it's already disabled", name, check)
+				s.logger.Warnf("%s: no need to disable check %q: it's already disabled", linterName, check)
 				continue
 			}
 			delete(enabledChecks, check)
@@ -498,13 +498,13 @@ func (s *settingsWrapper) validateOptionsCombinations() error {
 func (s *settingsWrapper) validateCheckerTags() error {
 	for _, tag := range s.EnabledTags {
 		if !s.allChecksByTag.has(tag) {
-			return fmt.Errorf("enabled tag %q doesn't exist, see %s's documentation", tag, name)
+			return fmt.Errorf("enabled tag %q doesn't exist, see %s's documentation", tag, linterName)
 		}
 	}
 
 	for _, tag := range s.DisabledTags {
 		if !s.allChecksByTag.has(tag) {
-			return fmt.Errorf("disabled tag %q doesn't exist, see %s's documentation", tag, name)
+			return fmt.Errorf("disabled tag %q doesn't exist, see %s's documentation", tag, linterName)
 		}
 	}
 
@@ -514,23 +514,23 @@ func (s *settingsWrapper) validateCheckerTags() error {
 func (s *settingsWrapper) validateCheckerNames() error {
 	for _, check := range s.EnabledChecks {
 		if !s.allChecks.has(check) {
-			return fmt.Errorf("enabled check %q doesn't exist, see %s's documentation", check, name)
+			return fmt.Errorf("enabled check %q doesn't exist, see %s's documentation", check, linterName)
 		}
 	}
 
 	for _, check := range s.DisabledChecks {
 		if !s.allChecks.has(check) {
-			return fmt.Errorf("disabled check %q doesn't exist, see %s documentation", check, name)
+			return fmt.Errorf("disabled check %q doesn't exist, see %s documentation", check, linterName)
 		}
 	}
 
 	for check := range s.SettingsPerCheck {
 		lcName := strings.ToLower(check)
 		if !s.allChecksLowerCased.has(lcName) {
-			return fmt.Errorf("invalid check settings: check %q doesn't exist, see %s documentation", check, name)
+			return fmt.Errorf("invalid check settings: check %q doesn't exist, see %s documentation", check, linterName)
 		}
 		if !s.inferredEnabledChecksLowerCased.has(lcName) {
-			s.logger.Warnf("%s: settings were provided for disabled check %q", check, name)
+			s.logger.Warnf("%s: settings were provided for disabled check %q", check, linterName)
 		}
 	}
 

@@ -12,14 +12,14 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-const name = "unconvert"
+const linterName = "unconvert"
 
 func New(settings *config.UnconvertSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
 
 	analyzer := &analysis.Analyzer{
-		Name: name,
+		Name: linterName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 		Run: func(pass *analysis.Pass) (any, error) {
 			issues := runUnconvert(pass, settings)
@@ -37,7 +37,7 @@ func New(settings *config.UnconvertSettings) *goanalysis.Linter {
 	}
 
 	return goanalysis.NewLinter(
-		name,
+		linterName,
 		"Remove unnecessary type conversions",
 		[]*analysis.Analyzer{analyzer},
 		nil,
@@ -54,7 +54,7 @@ func runUnconvert(pass *analysis.Pass, settings *config.UnconvertSettings) []goa
 		issues = append(issues, goanalysis.NewIssue(&result.Issue{
 			Pos:        position,
 			Text:       "unnecessary conversion",
-			FromLinter: name,
+			FromLinter: linterName,
 		}, pass))
 	}
 

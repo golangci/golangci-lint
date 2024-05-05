@@ -14,14 +14,14 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-const Name = "nolintlint"
+const LinterName = "nolintlint"
 
 func New(settings *config.NoLintLintSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
 
 	analyzer := &analysis.Analyzer{
-		Name: Name,
+		Name: LinterName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 		Run: func(pass *analysis.Pass) (any, error) {
 			issues, err := runNoLintLint(pass, settings)
@@ -42,7 +42,7 @@ func New(settings *config.NoLintLintSettings) *goanalysis.Linter {
 	}
 
 	return goanalysis.NewLinter(
-		Name,
+		LinterName,
 		"Reports ill-formed or insufficient nolint directives",
 		[]*analysis.Analyzer{analyzer},
 		nil,
@@ -89,7 +89,7 @@ func runNoLintLint(pass *analysis.Pass, settings *config.NoLintLintSettings) ([]
 		}
 
 		issue := &result.Issue{
-			FromLinter:           Name,
+			FromLinter:           LinterName,
 			Text:                 i.Details(),
 			Pos:                  i.Position(),
 			ExpectNoLint:         expectNoLint,

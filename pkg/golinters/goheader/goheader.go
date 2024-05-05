@@ -13,7 +13,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-const name = "goheader"
+const linterName = "goheader"
 
 func New(settings *config.GoHeaderSettings) *goanalysis.Linter {
 	var mu sync.Mutex
@@ -29,7 +29,7 @@ func New(settings *config.GoHeaderSettings) *goanalysis.Linter {
 	}
 
 	analyzer := &analysis.Analyzer{
-		Name: name,
+		Name: linterName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 		Run: func(pass *analysis.Pass) (any, error) {
 			issues, err := runGoHeader(pass, conf)
@@ -50,7 +50,7 @@ func New(settings *config.GoHeaderSettings) *goanalysis.Linter {
 	}
 
 	return goanalysis.NewLinter(
-		name,
+		linterName,
 		"Checks is file header matches to pattern",
 		[]*analysis.Analyzer{analyzer},
 		nil,
@@ -94,7 +94,7 @@ func runGoHeader(pass *analysis.Pass, conf *goheader.Configuration) ([]goanalysi
 				Filename: path,
 			},
 			Text:       i.Message(),
-			FromLinter: name,
+			FromLinter: linterName,
 		}
 
 		if fix := i.Fix(); fix != nil {

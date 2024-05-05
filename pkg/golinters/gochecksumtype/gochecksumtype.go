@@ -13,14 +13,14 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-const name = "gochecksumtype"
+const linterName = "gochecksumtype"
 
 func New() *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
 
 	analyzer := &analysis.Analyzer{
-		Name: name,
+		Name: linterName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 		Run: func(pass *analysis.Pass) (any, error) {
 			issues, err := runGoCheckSumType(pass)
@@ -41,7 +41,7 @@ func New() *goanalysis.Linter {
 	}
 
 	return goanalysis.NewLinter(
-		name,
+		linterName,
 		`Run exhaustiveness checks on Go "sum types"`,
 		[]*analysis.Analyzer{analyzer},
 		nil,
@@ -70,7 +70,7 @@ func runGoCheckSumType(pass *analysis.Pass) ([]goanalysis.Issue, error) {
 		}
 
 		resIssues = append(resIssues, goanalysis.NewIssue(&result.Issue{
-			FromLinter: name,
+			FromLinter: linterName,
 			Text:       strings.TrimPrefix(err.Error(), err.Pos().String()+": "),
 			Pos:        err.Pos(),
 		}, pass))

@@ -12,7 +12,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-const name = "gomoddirectives"
+const linterName = "gomoddirectives"
 
 func New(settings *config.GoModDirectivesSettings) *goanalysis.Linter {
 	var issues []goanalysis.Issue
@@ -33,7 +33,7 @@ func New(settings *config.GoModDirectivesSettings) *goanalysis.Linter {
 	}
 
 	return goanalysis.NewLinter(
-		name,
+		linterName,
 		"Manage the use of 'replace', 'retract', and 'excludes' directives in go.mod.",
 		[]*analysis.Analyzer{analyzer},
 		nil,
@@ -43,13 +43,13 @@ func New(settings *config.GoModDirectivesSettings) *goanalysis.Linter {
 				results, err := gomoddirectives.Analyze(opts)
 				if err != nil {
 					lintCtx.Log.Warnf("running %s failed: %s: "+
-						"if you are not using go modules it is suggested to disable this linter", name, err)
+						"if you are not using go modules it is suggested to disable this linter", linterName, err)
 					return
 				}
 
 				for _, p := range results {
 					issues = append(issues, goanalysis.NewIssue(&result.Issue{
-						FromLinter: name,
+						FromLinter: linterName,
 						Pos:        p.Start,
 						Text:       p.Reason,
 					}, pass))

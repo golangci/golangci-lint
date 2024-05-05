@@ -19,7 +19,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-const name = "lll"
+const linterName = "lll"
 
 const goCommentDirectivePrefix = "//go:"
 
@@ -28,7 +28,7 @@ func New(settings *config.LllSettings) *goanalysis.Linter {
 	var resIssues []goanalysis.Issue
 
 	analyzer := &analysis.Analyzer{
-		Name: name,
+		Name: linterName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 		Run: func(pass *analysis.Pass) (any, error) {
 			issues, err := runLll(pass, settings)
@@ -49,7 +49,7 @@ func New(settings *config.LllSettings) *goanalysis.Linter {
 	}
 
 	return goanalysis.NewLinter(
-		name,
+		linterName,
 		"Reports long lines",
 		[]*analysis.Analyzer{analyzer},
 		nil,
@@ -122,7 +122,7 @@ func getLLLIssuesForFile(filename string, maxLineLen int, tabSpaces string) ([]r
 					Line:     lineNumber,
 				},
 				Text:       fmt.Sprintf("line is %d characters", lineLen),
-				FromLinter: name,
+				FromLinter: linterName,
 			})
 		}
 	}
@@ -146,7 +146,7 @@ func getLLLIssuesForFile(filename string, maxLineLen int, tabSpaces string) ([]r
 					Column:   1,
 				},
 				Text:       fmt.Sprintf("line is more than %d characters", bufio.MaxScanTokenSize),
-				FromLinter: name,
+				FromLinter: linterName,
 			})
 		} else {
 			return nil, fmt.Errorf("can't scan file %s: %w", filename, err)

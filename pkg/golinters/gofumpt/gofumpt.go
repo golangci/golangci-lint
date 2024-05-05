@@ -17,7 +17,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 )
 
-const name = "gofumpt"
+const linterName = "gofumpt"
 
 type differ interface {
 	Diff(out io.Writer, a io.ReadSeeker, b io.ReadSeeker) error
@@ -40,13 +40,13 @@ func New(settings *config.GofumptSettings) *goanalysis.Linter {
 	}
 
 	analyzer := &analysis.Analyzer{
-		Name: name,
+		Name: linterName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 		Run:  goanalysis.DummyRun,
 	}
 
 	return goanalysis.NewLinter(
-		name,
+		linterName,
 		"Gofumpt checks whether code was gofumpt-ed.",
 		[]*analysis.Analyzer{analyzer},
 		nil,
@@ -97,7 +97,7 @@ func runGofumpt(lintCtx *linter.Context, pass *analysis.Pass, diff differ, optio
 			}
 
 			diff := out.String()
-			is, err := internal.ExtractIssuesFromPatch(diff, lintCtx, name, getIssuedTextGoFumpt)
+			is, err := internal.ExtractIssuesFromPatch(diff, lintCtx, linterName, getIssuedTextGoFumpt)
 			if err != nil {
 				return nil, fmt.Errorf("can't extract issues from gofumpt diff output %q: %w", diff, err)
 			}

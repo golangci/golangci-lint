@@ -14,14 +14,14 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-const name = "funlen"
+const linterName = "funlen"
 
 func New(settings *config.FunlenSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
 
 	analyzer := &analysis.Analyzer{
-		Name: name,
+		Name: linterName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 		Run: func(pass *analysis.Pass) (any, error) {
 			issues := runFunlen(pass, settings)
@@ -39,7 +39,7 @@ func New(settings *config.FunlenSettings) *goanalysis.Linter {
 	}
 
 	return goanalysis.NewLinter(
-		name,
+		linterName,
 		"Tool for detection of long functions",
 		[]*analysis.Analyzer{analyzer},
 		nil,
@@ -67,7 +67,7 @@ func runFunlen(pass *analysis.Pass, settings *config.FunlenSettings) []goanalysi
 				Line:     i.Pos.Line,
 			},
 			Text:       strings.TrimRight(i.Message, "\n"),
-			FromLinter: name,
+			FromLinter: linterName,
 		}, pass)
 	}
 

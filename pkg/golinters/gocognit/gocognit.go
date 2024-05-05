@@ -15,7 +15,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-const name = "gocognit"
+const linterName = "gocognit"
 
 func New(settings *config.GocognitSettings) *goanalysis.Linter {
 	var mu sync.Mutex
@@ -40,7 +40,7 @@ func New(settings *config.GocognitSettings) *goanalysis.Linter {
 	}
 
 	return goanalysis.NewLinter(
-		name,
+		linterName,
 		"Computes and checks the cognitive complexity of functions",
 		[]*analysis.Analyzer{analyzer},
 		nil,
@@ -72,7 +72,7 @@ func runGocognit(pass *analysis.Pass, settings *config.GocognitSettings) []goana
 			Pos: s.Pos,
 			Text: fmt.Sprintf("cognitive complexity %d of func %s is high (> %d)",
 				s.Complexity, internal.FormatCode(s.FuncName, nil), settings.MinComplexity),
-			FromLinter: name,
+			FromLinter: linterName,
 		}, pass))
 	}
 

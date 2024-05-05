@@ -301,7 +301,7 @@ func TestNolintUnused(t *testing.T) {
 			Filename: fileName,
 			Line:     3,
 		},
-		FromLinter:           nolintlint.Name,
+		FromLinter:           nolintlint.LinterName,
 		ExpectNoLint:         true,
 		ExpectedNoLintLinter: "varcheck",
 	}
@@ -312,7 +312,7 @@ func TestNolintUnused(t *testing.T) {
 			Filename: fileName,
 			Line:     5,
 		},
-		FromLinter:           nolintlint.Name,
+		FromLinter:           nolintlint.LinterName,
 		ExpectNoLint:         true,
 		ExpectedNoLintLinter: "varcheck",
 	}

@@ -14,14 +14,14 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-const name = "godox"
+const linterName = "godox"
 
 func New(settings *config.GodoxSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
 
 	analyzer := &analysis.Analyzer{
-		Name: name,
+		Name: linterName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 		Run: func(pass *analysis.Pass) (any, error) {
 			issues := runGodox(pass, settings)
@@ -39,7 +39,7 @@ func New(settings *config.GodoxSettings) *goanalysis.Linter {
 	}
 
 	return goanalysis.NewLinter(
-		name,
+		linterName,
 		"Tool for detection of FIXME, TODO and other comment keywords",
 		[]*analysis.Analyzer{analyzer},
 		nil,
@@ -67,7 +67,7 @@ func runGodox(pass *analysis.Pass, settings *config.GodoxSettings) []goanalysis.
 				Line:     i.Pos.Line,
 			},
 			Text:       strings.TrimRight(i.Message, "\n"),
-			FromLinter: name,
+			FromLinter: linterName,
 		}, pass)
 	}
 

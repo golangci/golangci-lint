@@ -14,14 +14,14 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-const name = "forbidigo"
+const linterName = "forbidigo"
 
 func New(settings *config.ForbidigoSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
 
 	analyzer := &analysis.Analyzer{
-		Name: name,
+		Name: linterName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 		Run: func(pass *analysis.Pass) (any, error) {
 			issues, err := runForbidigo(pass, settings)
@@ -44,7 +44,7 @@ func New(settings *config.ForbidigoSettings) *goanalysis.Linter {
 	// But we cannot make this depend on the settings and have to mirror the mode chosen in GetAllSupportedLinterConfigs,
 	// therefore we have to use LoadModeTypesInfo in all cases.
 	return goanalysis.NewLinter(
-		name,
+		linterName,
 		"Forbids identifiers",
 		[]*analysis.Analyzer{analyzer},
 		nil,
@@ -73,7 +73,7 @@ func runForbidigo(pass *analysis.Pass, settings *config.ForbidigoSettings) ([]go
 
 	forbid, err := forbidigo.NewLinter(patterns, options...)
 	if err != nil {
-		return nil, fmt.Errorf("failed to create linter %q: %w", name, err)
+		return nil, fmt.Errorf("failed to create linter %q: %w", linterName, err)
 	}
 
 	var issues []goanalysis.Issue
@@ -94,7 +94,7 @@ func runForbidigo(pass *analysis.Pass, settings *config.ForbidigoSettings) ([]go
 			issues = append(issues, goanalysis.NewIssue(&result.Issue{
 				Pos:        hint.Position(),
 				Text:       hint.Details(),
-				FromLinter: name,
+				FromLinter: linterName,
 			}, pass))
 		}
 	}
