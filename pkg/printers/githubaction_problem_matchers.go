@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"strconv"
 
 	"github.com/golangci/golangci-lint/pkg/result"
 )
@@ -72,20 +73,24 @@ func NewGitHubActionProblemMatchers(w io.Writer) *GitHubActionProblemMatchers {
 }
 
 func (p *GitHubActionProblemMatchers) Print(issues []result.Issue) error {
-	// Note: the file with the problem matcher definition should not be removed.
-	// A sleep can mitigate this problem but this will be flaky.
-	//
-	// Result if the file is removed prematurely:
-	// Error: Unable to process command '::add-matcher::/tmp/golangci-lint-action-problem-matchers.json' successfully.
-	// Error: Could not find file '/tmp/golangci-lint-action-problem-matchers.json'.
-	filename, err := p.storeProblemMatcher()
-	if err != nil {
-		return err
+	// Used by the official GitHub Action (https://github.com/golangci/golangci-lint-action).
+	// The problem matchers is embedded inside the GitHub Action to avoid errors:
+	// https://github.com/golangci/golangci-lint/issues/4695
+	if ok, _ := strconv.ParseBool(os.Getenv("GOLANGCI_LINT_SKIP_GHA_PM_INSTALL")); !ok {
+		// Note: the file with the problem matcher definition should not be removed.
+		// A sleep can mitigate this problem but this will be flaky.
+		//
+		// Result if the file is removed prematurely:
+		// Error: Unable to process command '::add-matcher::/tmp/golangci-lint-action-problem-matchers.json' successfully.
+		// Error: Could not find file '/tmp/golangci-lint-action-problem-matchers.json'.
+		filename, err := p.storeProblemMatcher()
+		if err != nil {
+			return err
+		}
+
+		_, _ = fmt.Fprintln(p.w, "::debug::problem matcher definition file: "+filename)
+		_, _ = fmt.Fprintln(p.w, "::add-matcher::"+filename)
 	}
-
-	_, _ = fmt.Fprintln(p.w, "::debug::problem matcher definition file: "+filename)
-
-	_, _ = fmt.Fprintln(p.w, "::add-matcher::"+filename)
 
 	for ind := range issues {
 		_, err := fmt.Fprintln(p.w, formatIssueAsProblemMatcher(&issues[ind]))
@@ -115,6 +120,9 @@ func (p *GitHubActionProblemMatchers) storeProblemMatcher() (string, error) {
 	return file.Name(), nil
 }
 
+// generateProblemMatcher generated the problem matchers file.
+// Should be synced with the official GitHub Action.
+// https://github.com/golangci/golangci-lint-action/blob/master/problem-matchers.json
 func generateProblemMatcher() GHProblemMatchers {
 	return GHProblemMatchers{
 		Matchers: []GHMatcher{
