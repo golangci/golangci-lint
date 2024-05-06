@@ -60,7 +60,17 @@ run:
 # output configuration options
 output:
   # The formats used to render issues.
-  # Format: `colored-line-number`, `line-number`, `json`, `colored-tab`, `tab`, `checkstyle`, `code-climate`, `junit-xml`, `github-actions`, `teamcity`
+  # Formats:
+  # - `colored-line-number`
+  # - `line-number`
+  # - `json`
+  # - `colored-tab`
+  # - `tab`
+  # - `checkstyle`
+  # - `code-climate`
+  # - `junit-xml`
+  # - `github-actions`
+  # - `teamcity`
   # Output path can be either `stdout`, `stderr` or path to the file to write to.
   #
   # For the CLI flag (`--out-format`), multiple formats can be specified by separating them by comma.
