@@ -14,26 +14,26 @@ const defaultGitHubSeverity = "error"
 
 const filenameGitHubActionProblemMatchers = "golangci-lint-action-problem-matchers.json"
 
-// GitHubProblemMatchers defines the root of problem matchers.
+// GHProblemMatchers defines the root of problem matchers.
 // - https://github.com/actions/toolkit/blob/main/docs/problem-matchers.md
 // - https://github.com/actions/toolkit/blob/main/docs/commands.md#problem-matchers
-type GitHubProblemMatchers struct {
-	Matchers []GitHubMatcher `json:"problemMatcher,omitempty"`
+type GHProblemMatchers struct {
+	Matchers []GHMatcher `json:"problemMatcher,omitempty"`
 }
 
-// GitHubMatcher defines a problem matcher.
-type GitHubMatcher struct {
+// GHMatcher defines a problem matcher.
+type GHMatcher struct {
 	// Owner an ID field that can be used to remove or replace the problem matcher.
 	// **required**
 	Owner string `json:"owner,omitempty"`
 	// Severity indicates the default severity, either 'warning' or 'error' case-insensitive.
 	// Defaults to 'error'.
-	Severity string          `json:"severity,omitempty"`
-	Pattern  []GitHubPattern `json:"pattern,omitempty"`
+	Severity string      `json:"severity,omitempty"`
+	Pattern  []GHPattern `json:"pattern,omitempty"`
 }
 
-// GitHubPattern defines a pattern for a problem matcher.
-type GitHubPattern struct {
+// GHPattern defines a pattern for a problem matcher.
+type GHPattern struct {
 	// Regexp the regexp pattern that provides the groups to match against.
 	// **required**
 	Regexp string `json:"regexp,omitempty"`
@@ -58,20 +58,20 @@ type GitHubPattern struct {
 	Loop bool `json:"loop,omitempty"`
 }
 
-type GitHub struct {
+type GitHubActionProblemMatchers struct {
 	tempPath string
 	w        io.Writer
 }
 
-// NewGitHub output format outputs issues according to GitHub actions the problem matcher regexp.
-func NewGitHub(w io.Writer) *GitHub {
-	return &GitHub{
+// NewGitHubActionProblemMatchers output format outputs issues according to GitHub actions the problem matcher regexp.
+func NewGitHubActionProblemMatchers(w io.Writer) *GitHubActionProblemMatchers {
+	return &GitHubActionProblemMatchers{
 		tempPath: filepath.Join(os.TempDir(), filenameGitHubActionProblemMatchers),
 		w:        w,
 	}
 }
 
-func (p *GitHub) Print(issues []result.Issue) error {
+func (p *GitHubActionProblemMatchers) Print(issues []result.Issue) error {
 	// Note: the file with the problem matcher definition should not be removed.
 	// A sleep can mitigate this problem but this will be flaky.
 	//
@@ -99,7 +99,7 @@ func (p *GitHub) Print(issues []result.Issue) error {
 	return nil
 }
 
-func (p *GitHub) storeProblemMatcher() (string, error) {
+func (p *GitHubActionProblemMatchers) storeProblemMatcher() (string, error) {
 	file, err := os.Create(p.tempPath)
 	if err != nil {
 		return "", err
@@ -115,13 +115,13 @@ func (p *GitHub) storeProblemMatcher() (string, error) {
 	return file.Name(), nil
 }
 
-func generateProblemMatcher() GitHubProblemMatchers {
-	return GitHubProblemMatchers{
-		Matchers: []GitHubMatcher{
+func generateProblemMatcher() GHProblemMatchers {
+	return GHProblemMatchers{
+		Matchers: []GHMatcher{
 			{
 				Owner:    "golangci-lint-action",
 				Severity: "error",
-				Pattern: []GitHubPattern{
+				Pattern: []GHPattern{
 					{
 						Regexp:   `^([^\s]+)\s+([^:]+):(\d+):(?:(\d+):)?\s+(.+)$`,
 						Severity: 1,

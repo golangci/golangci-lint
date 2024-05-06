@@ -432,6 +432,7 @@
                   "code-climate",
                   "junit-xml",
                   "github-actions",
+                  "github-actions-problem-matchers",
                   "teamcity"
                 ]
               }

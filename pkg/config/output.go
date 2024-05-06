@@ -8,17 +8,18 @@ import (
 )
 
 const (
-	OutFormatJSON              = "json"
-	OutFormatLineNumber        = "line-number"
-	OutFormatColoredLineNumber = "colored-line-number"
-	OutFormatTab               = "tab"
-	OutFormatColoredTab        = "colored-tab"
-	OutFormatCheckstyle        = "checkstyle"
-	OutFormatCodeClimate       = "code-climate"
-	OutFormatHTML              = "html"
-	OutFormatJunitXML          = "junit-xml"
-	OutFormatGithubActions     = "github-actions"
-	OutFormatTeamCity          = "teamcity"
+	OutFormatJSON                         = "json"
+	OutFormatLineNumber                   = "line-number"
+	OutFormatColoredLineNumber            = "colored-line-number"
+	OutFormatTab                          = "tab"
+	OutFormatColoredTab                   = "colored-tab"
+	OutFormatCheckstyle                   = "checkstyle"
+	OutFormatCodeClimate                  = "code-climate"
+	OutFormatHTML                         = "html"
+	OutFormatJunitXML                     = "junit-xml"
+	OutFormatGithubActions                = "github-actions"
+	OutFormatGithubActionsProblemMatchers = "github-actions-problem-matchers"
+	OutFormatTeamCity                     = "teamcity"
 )
 
 var AllOutputFormats = []string{
@@ -32,6 +33,7 @@ var AllOutputFormats = []string{
 	OutFormatHTML,
 	OutFormatJunitXML,
 	OutFormatGithubActions,
+	OutFormatGithubActionsProblemMatchers,
 	OutFormatTeamCity,
 }
 

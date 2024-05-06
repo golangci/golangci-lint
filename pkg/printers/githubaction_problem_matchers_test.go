@@ -49,7 +49,7 @@ func TestGitHub_Print(t *testing.T) {
 
 	buf := new(bytes.Buffer)
 
-	printer := NewGitHub(buf)
+	printer := NewGitHubActionProblemMatchers(buf)
 	printer.tempPath = filepath.Join(t.TempDir(), filenameGitHubActionProblemMatchers)
 
 	err := printer.Print(issues)
@@ -158,7 +158,7 @@ Message: Foo bar`,
 	}
 }
 
-func createReplacement(pattern *GitHubPattern) string {
+func createReplacement(pattern *GHPattern) string {
 	var repl []string
 
 	if pattern.File > 0 {
