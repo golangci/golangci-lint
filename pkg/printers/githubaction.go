@@ -21,7 +21,7 @@ func NewGitHubAction(w io.Writer) *GitHubAction {
 
 func (p *GitHubAction) Print(issues []result.Issue) error {
 	for ind := range issues {
-		_, err := fmt.Fprintln(p.w, formatIssueAsGithub(&issues[ind]))
+		_, err := fmt.Fprintln(p.w, formatIssueAsGitHub(&issues[ind]))
 		if err != nil {
 			return err
 		}
@@ -30,7 +30,7 @@ func (p *GitHubAction) Print(issues []result.Issue) error {
 }
 
 // print each line as: ::error file=app.js,line=10,col=15::Something went wrong
-func formatIssueAsGithub(issue *result.Issue) string {
+func formatIssueAsGitHub(issue *result.Issue) string {
 	severity := defaultGithubSeverity
 	if issue.Severity != "" {
 		severity = issue.Severity

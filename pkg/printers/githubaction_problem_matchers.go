@@ -88,7 +88,7 @@ func (p *GitHubActionProblemMatchers) Print(issues []result.Issue) error {
 	_, _ = fmt.Fprintln(p.w, "::add-matcher::"+filename)
 
 	for ind := range issues {
-		_, err := fmt.Fprintln(p.w, formatIssueAsGitHub(&issues[ind]))
+		_, err := fmt.Fprintln(p.w, formatIssueAsProblemMatcher(&issues[ind]))
 		if err != nil {
 			return err
 		}
@@ -136,7 +136,7 @@ func generateProblemMatcher() GHProblemMatchers {
 	}
 }
 
-func formatIssueAsGitHub(issue *result.Issue) string {
+func formatIssueAsProblemMatcher(issue *result.Issue) string {
 	severity := defaultGitHubSeverity
 	if issue.Severity != "" {
 		severity = issue.Severity

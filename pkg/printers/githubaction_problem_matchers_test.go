@@ -67,7 +67,7 @@ error	path/to/fileb.go:300:9:	another issue (linter-b)
 	assert.Equal(t, expected, buf.String())
 }
 
-func Test_formatIssueAsGitHub(t *testing.T) {
+func Test_formatIssueAsProblemMatcher(t *testing.T) {
 	sampleIssue := result.Issue{
 		FromLinter: "sample-linter",
 		Text:       "some issue",
@@ -78,13 +78,13 @@ func Test_formatIssueAsGitHub(t *testing.T) {
 			Column:   4,
 		},
 	}
-	require.Equal(t, "error\tpath/to/file.go:10:4:\tsome issue (sample-linter)", formatIssueAsGitHub(&sampleIssue))
+	require.Equal(t, "error\tpath/to/file.go:10:4:\tsome issue (sample-linter)", formatIssueAsProblemMatcher(&sampleIssue))
 
 	sampleIssue.Pos.Column = 0
-	require.Equal(t, "error\tpath/to/file.go:10:\tsome issue (sample-linter)", formatIssueAsGitHub(&sampleIssue))
+	require.Equal(t, "error\tpath/to/file.go:10:\tsome issue (sample-linter)", formatIssueAsProblemMatcher(&sampleIssue))
 }
 
-func Test_formatIssueAsGitHub_Windows(t *testing.T) {
+func Test_formatIssueAsProblemMatcher_Windows(t *testing.T) {
 	if runtime.GOOS != "windows" {
 		t.Skip("Skipping test on non Windows")
 	}
@@ -99,10 +99,10 @@ func Test_formatIssueAsGitHub_Windows(t *testing.T) {
 			Column:   4,
 		},
 	}
-	require.Equal(t, "error\tpath/to/file.go:10:4:\tsome issue (sample-linter)", formatIssueAsGitHub(&sampleIssue))
+	require.Equal(t, "error\tpath/to/file.go:10:4:\tsome issue (sample-linter)", formatIssueAsProblemMatcher(&sampleIssue))
 
 	sampleIssue.Pos.Column = 0
-	require.Equal(t, "error\tpath/to/file.go:10:\tsome issue (sample-linter)", formatIssueAsGitHub(&sampleIssue))
+	require.Equal(t, "error\tpath/to/file.go:10:\tsome issue (sample-linter)", formatIssueAsProblemMatcher(&sampleIssue))
 }
 
 func Test_generateProblemMatcher(t *testing.T) {
