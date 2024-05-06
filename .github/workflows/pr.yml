@@ -44,7 +44,7 @@ jobs:
           # - 1.18rc1 -> 1.18.0-rc.1
           go-version: ${{ env.GO_VERSION }}
       - name: lint
-        uses: golangci/golangci-lint-action@v5.1.0
+        uses: golangci/golangci-lint-action@v5.3.0
         with:
           version: latest
 
