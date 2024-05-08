@@ -167,6 +167,9 @@ issues:
     - path: pkg/golinters/errcheck/errcheck.go
       linters: [staticcheck]
       text: "SA1019: errCfg.Exclude is deprecated: use ExcludeFunctions instead"
+    - path: pkg/golinters/errcheck/errcheck.go
+      linters: [staticcheck]
+      text: "SA1019: errCfg.Ignore is deprecated: use ExcludeFunctions instead"
     - path: pkg/golinters/govet/govet.go
       linters: [staticcheck]
       text: "SA1019: cfg.CheckShadowing is deprecated: the linter should be enabled inside Enable."
