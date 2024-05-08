@@ -355,6 +355,7 @@ func (l *Loader) handleDeprecation() error {
 	return nil
 }
 
+//nolint:gocyclo // the complexity cannot be reduced.
 func (l *Loader) handleLinterOptionDeprecations() {
 	// Deprecated since v1.57.0,
 	// but it was unofficially deprecated since v1.19 (2019) (https://github.com/golangci/golangci-lint/pull/697).
@@ -371,6 +372,12 @@ func (l *Loader) handleLinterOptionDeprecations() {
 	// Deprecated since v1.42.0.
 	if l.cfg.LintersSettings.Errcheck.Exclude != "" {
 		l.log.Warnf("The configuration option `linters.errcheck.exclude` is deprecated, please use `linters.errcheck.exclude-functions`.")
+	}
+
+	// Deprecated since v1.59.0,
+	// but it was unofficially deprecated since v1.13 (2018) (https://github.com/golangci/golangci-lint/pull/332).
+	if l.cfg.LintersSettings.Errcheck.Ignore != "" {
+		l.log.Warnf("The configuration option `linters.errcheck.ignore` is deprecated, please use `linters.errcheck.exclude-functions`.")
 	}
 
 	// Deprecated since v1.44.0.
