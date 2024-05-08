@@ -2,6 +2,15 @@ Follow the news and releases on [Mastodon](https://fosstodon.org/@golangcilint) 
 
 There is the most valuable changes log:
 
+### v1.58.1
+
+1. Updated linters
+   * `tagalign`: from 1.3.3 to 1.3.4
+   * `protogetter`: from 0.3.5 to 0.3.6
+   * `gochecknoinits`: fix analyzer name
+2. Fixes
+   * Restores previous `gihub-actions` output format (removes GitHub Action problem matchers)
+
 ### v1.58.0
 
 1. New linters
