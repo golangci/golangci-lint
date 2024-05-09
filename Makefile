@@ -28,6 +28,7 @@ clean:
 
 # Test
 test: export GOLANGCI_LINT_INSTALLED = true
+test: CGO_ENABLED=1
 test: build
 	GL_TEST_RUN=1 ./$(BINARY) run -v
 	GL_TEST_RUN=1 go test -v -parallel 2 ./...
