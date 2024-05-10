@@ -2082,11 +2082,11 @@
           "properties": {
             "checked-types": {
               "type": "array",
-              "description": "Order of return types to check.",
+              "description": "List of return types to check.",
               "items": {
-                "enum": ["ptr", "func", "iface", "map", "chan"]
+                "enum": ["ptr", "func", "iface", "map", "chan", "uintptr", "unsafeptr"]
               },
-              "default": ["ptr", "func", "iface", "map", "chan"]
+              "default": ["ptr", "func", "iface", "map", "chan", "uintptr", "unsafeptr"]
             }
           }
         },
