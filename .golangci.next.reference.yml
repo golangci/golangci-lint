@@ -1387,14 +1387,16 @@ linters-settings:
     min-complexity: 4
 
   nilnil:
-    # Checks that there is no simultaneous return of `nil` error and an invalid value.
-    # Default: ["ptr", "func", "iface", "map", "chan"]
+    # List of return types to check.
+    # Default: ["ptr", "func", "iface", "map", "chan", "uintptr", "unsafeptr"]
     checked-types:
       - ptr
       - func
       - iface
       - map
       - chan
+      - uintptr
+      - unsafeptr
 
   nlreturn:
     # Size of the block (including return statement that is still "OK")
