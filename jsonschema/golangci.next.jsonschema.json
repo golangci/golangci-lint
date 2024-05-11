@@ -2468,6 +2468,13 @@
               "type": "boolean",
               "default": false
             },
+            "forbidden-keys": {
+              "description": "Enforce not using specific keys.",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
             "args-on-sep-lines": {
               "description": "Enforce putting arguments on separate lines.",
               "type": "boolean",
