@@ -78,7 +78,7 @@ release:
   header: |
     `golangci-lint` is a free and open-source project built by volunteers.
 
-    If you value it, consider supporting us, the [maintainers](https://github.com/golangci/golangci-lint?tab=readme-ov-file#contributors) and [linter authors](https://golangci-lint.run/product/thanks/).
+    If you value it, consider supporting us, the [maintainers](https://opencollective.com/golangci-lint) and [linter authors](https://golangci-lint.run/product/thanks/).
 
     We appreciate it! :heart:
 
