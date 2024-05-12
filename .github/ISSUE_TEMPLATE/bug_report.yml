@@ -15,6 +15,8 @@ body:
           required: true
         - label: Yes, I've tried with the standalone linter if available (e.g., gocritic, go vet, etc.). (https://golangci-lint.run/usage/linters/)
           required: true
+        - label: I agree to follow this project's [Code of Conduct](https://github.com/golangci/golangci-lint?tab=coc-ov-file)
+          required: true
 
   - type: textarea
     id: problem
@@ -111,3 +113,10 @@ body:
       options:
         - label: Yes, I've included all information above (version, config, etc.).
           required: true
+
+  - type: checkboxes
+    id: supporter
+    attributes:
+      label: Supporter
+      options:
+        - label: I am a sponsor/backer through [GitHub](https://github.com/sponsors/golangci/) or [OpenCollective](https://opencollective.com/golangci-lint)

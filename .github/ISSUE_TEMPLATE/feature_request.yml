@@ -3,6 +3,16 @@ description: "Suggest an idea for this project."
 labels: [enhancement]
 body:
 
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Welcome
+      options:
+        - label: Yes, I've searched similar issues on GitHub and didn't find any.
+          required: true
+        - label: I agree to follow this project's [Code of Conduct](https://github.com/golangci/golangci-lint?tab=coc-ov-file)
+          required: true
+
   - type: textarea
     id: problem
     attributes:
@@ -34,3 +44,10 @@ body:
       placeholder: "Add any other context or screenshots about the feature request here."
     validations:
       required: false
+
+  - type: checkboxes
+    id: supporter
+    attributes:
+      label: Supporter
+      options:
+        - label: I am a sponsor through [GitHub](https://github.com/sponsors/golangci/) or [OpenCollective](https://opencollective.com/golangci-lint)
