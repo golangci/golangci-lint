@@ -6,25 +6,28 @@ title: "Install"
 
 Most installations of `golangci-lint` are performed for CI.
 
-### GitHub Actions
-
-We recommend using [our GitHub Action](https://github.com/golangci/golangci-lint-action) for running `golangci-lint` in CI for GitHub projects.
-It's [fast and uses smart caching](https://github.com/golangci/golangci-lint-action#performance) inside,
-and it can be much faster than the simple binary installation.
-
-Also, the action creates GitHub annotations for found issues: you don't need to dig into build log to see found by `golangci-lint` issues:
-
-![GitHub annotations of the action](./annotations.png)
-
-### Other CI
-
 It's important to have reproducible CI: don't start to fail all builds at the same time.
 With golangci-lint this can happen if you use option `--enable-all` and a new linter is added
 or even without `--enable-all` when one upstream linter is upgraded.
 
 **IMPORTANT**: It's highly recommended installing a specific version of golangci-lint available on the [releases page](https://github.com/golangci/golangci-lint/releases).
 
-Here is the recommended way to install golangci-lint {.LatestVersion}:
+### GitHub Actions
+
+We recommend using [our GitHub Action](https://github.com/golangci/golangci-lint-action) for running `golangci-lint` in CI for GitHub projects.
+
+It's [fast and uses smart caching](https://github.com/golangci/golangci-lint-action#performance) inside,
+and it can be much faster than the simple binary installation.
+
+![Log output of the action](./colored-line-number.png)
+
+Also, the action creates GitHub annotations for found issues (you don't need to dig into build log to see found by `golangci-lint` issues):
+
+![GitHub annotations of the action](./annotations.png)
+
+### Other CI
+
+Here is the other way to install golangci-lint:
 
 ```sh
 # binary will be $(go env GOPATH)/bin/golangci-lint
@@ -55,23 +58,11 @@ golangci-lint --version
 
 On Windows, you can run the above commands with Git Bash, which comes with [Git for Windows](https://git-scm.com/download/win).
 
-### Docker
+### Linux
 
-```sh
-docker run --rm -v $(pwd):/app -w /app golangci/golangci-lint:{.LatestVersion} golangci-lint run -v
-```
+Golangci-lint is available inside the majority of the package managers.
 
-Preserving cache between consecutive runs:
-```sh
-docker run --rm -v $(pwd):/app -v ~/.cache/golangci-lint/{.LatestVersion}:/root/.cache -w /app golangci/golangci-lint:{.LatestVersion} golangci-lint run -v
-```
-
-Colored output:
-```sh
-docker run -t --rm -v $(pwd):/app -w /app golangci/golangci-lint:{.LatestVersion} golangci-lint run -v
-```
-
-### macOS
+### MacOS
 
 #### Brew
 
@@ -122,6 +113,22 @@ scoop install main/golangci-lint
 ```
 
 The scoop package is not officially maintained by golangci team.
+
+### Docker
+
+```sh
+docker run --rm -v $(pwd):/app -w /app golangci/golangci-lint:{.LatestVersion} golangci-lint run -v
+```
+
+Preserving cache between consecutive runs:
+```sh
+docker run --rm -v $(pwd):/app -v ~/.cache/golangci-lint/{.LatestVersion}:/root/.cache -w /app golangci/golangci-lint:{.LatestVersion} golangci-lint run -v
+```
+
+Colored output:
+```sh
+docker run -t --rm -v $(pwd):/app -w /app golangci/golangci-lint:{.LatestVersion} golangci-lint run -v
+```
 
 ### Install from Source
 
