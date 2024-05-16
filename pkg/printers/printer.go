@@ -135,6 +135,8 @@ func (c *Printer) createPrinter(format string, w io.Writer) (issuePrinter, error
 		p = NewGitHubAction(w)
 	case config.OutFormatTeamCity:
 		p = NewTeamCity(w)
+	case config.OutFormatSarif:
+		p = NewSarif(w)
 	default:
 		return nil, fmt.Errorf("unknown output format %q", format)
 	}

@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"io"
 
-	"github.com/golangci/golangci-lint/pkg/report"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
@@ -57,26 +56,20 @@ type sarifRegion struct {
 }
 
 type Sarif struct {
-	rd *report.Data
-	w  io.Writer
+	w io.Writer
 }
 
-func NewSarif(rd *report.Data, w io.Writer) *Sarif {
+func NewSarif(w io.Writer) *Sarif {
 	return &Sarif{
-		rd: rd,
-		w:  w,
+		w: w,
 	}
 }
-
-// type SarifResult struct {
-// 	Issues []result.Issue
-// 	Report *report.Data
-// }
 
 func (p Sarif) Print(issues []result.Issue) error {
 	res := SarifResult{}
 	res.Version = sarifVersion
 	res.Schema = sarifSchemaURI
+	res.Runs = []sarifRun{}
 
 	toolMap := map[string][]result.Issue{}
 
@@ -94,6 +87,12 @@ func (p Sarif) Print(issues []result.Issue) error {
 
 		for i := range issues {
 			issue := issues[i]
+			severity := issue.Severity
+			// set default to warning
+			if severity == "" {
+				severity = "warning"
+			}
+
 			physLoc := sarifPhysicalLocation{
 				ArtifactLocation: sarifArtifactLocation{URI: issue.FilePath()},
 				Region:           sarifRegion{StartLine: issue.Line(), StartColumn: issue.Column()},
@@ -102,7 +101,7 @@ func (p Sarif) Print(issues []result.Issue) error {
 
 			curResult := sarifResult{
 				RuleID: issue.Text,
-				Level:  issue.Severity,
+				Level:  severity,
 				Message: struct {
 					Text string "json:\"text\""
 				}{Text: issue.Text},
@@ -113,14 +112,6 @@ func (p Sarif) Print(issues []result.Issue) error {
 		}
 		res.Runs = append(res.Runs, sr)
 	}
-
-	// res := SarifResult{
-	// 	Issues: issues,
-	// 	Report: p.rd,
-	// }
-	// if res.Issues == nil {
-	// 	res.Issues = []result.Issue{}
-	// }
 
 	return json.NewEncoder(p.w).Encode(res)
 }
