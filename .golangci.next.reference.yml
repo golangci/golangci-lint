@@ -71,6 +71,7 @@ output:
   # - `junit-xml`
   # - `github-actions`
   # - `teamcity`
+  # - `sarif`
   # Output path can be either `stdout`, `stderr` or path to the file to write to.
   #
   # For the CLI flag (`--out-format`), multiple formats can be specified by separating them by comma.

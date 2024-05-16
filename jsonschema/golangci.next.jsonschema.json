@@ -432,7 +432,8 @@
                   "code-climate",
                   "junit-xml",
                   "github-actions",
-                  "teamcity"
+                  "teamcity",
+                  "sarif"
                 ]
               }
             },

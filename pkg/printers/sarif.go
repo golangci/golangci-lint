@@ -92,7 +92,10 @@ func (p Sarif) Print(issues []result.Issue) error {
 				{
 					PhysicalLocation: sarifPhysicalLocation{
 						ArtifactLocation: sarifArtifactLocation{URI: issue.FilePath()},
-						Region:           sarifRegion{StartLine: issue.Line(), StartColumn: issue.Column()},
+						Region: sarifRegion{
+							StartLine:   issue.Line(),
+							StartColumn: issue.Column(),
+						},
 					},
 				},
 			},
