@@ -12,11 +12,12 @@ const (
 	sarifSchemaURI = "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.4.json"
 )
 
-type SarifResult struct {
+type SarifOutput struct {
 	Version string     `json:"version"`
 	Schema  string     `json:"$schema"`
 	Runs    []sarifRun `json:"runs"`
 }
+
 type sarifRun struct {
 	Tool    sarifTool     `json:"tool"`
 	Results []sarifResult `json:"results"`
@@ -29,12 +30,14 @@ type sarifTool struct {
 }
 
 type sarifResult struct {
-	RuleID  string `json:"ruleId"`
-	Level   string `json:"level"`
-	Message struct {
-		Text string `json:"text"`
-	} `json:"message"`
+	RuleID    string          `json:"ruleId"`
+	Level     string          `json:"level"`
+	Message   sarifMessage    `json:"message"`
 	Locations []sarifLocation `json:"locations"`
+}
+
+type sarifMessage struct {
+	Text string `json:"text"`
 }
 
 type sarifLocation struct {
@@ -50,6 +53,7 @@ type sarifArtifactLocation struct {
 	URI   string `json:"uri"`
 	Index int    `json:"index"`
 }
+
 type sarifRegion struct {
 	StartLine   int `json:"startLine"`
 	StartColumn int `json:"startColumn"`
@@ -60,58 +64,44 @@ type Sarif struct {
 }
 
 func NewSarif(w io.Writer) *Sarif {
-	return &Sarif{
-		w: w,
-	}
+	return &Sarif{w: w}
 }
 
 func (p Sarif) Print(issues []result.Issue) error {
-	res := SarifResult{}
-	res.Version = sarifVersion
-	res.Schema = sarifSchemaURI
-	res.Runs = []sarifRun{}
+	output := SarifOutput{
+		Version: sarifVersion,
+		Schema:  sarifSchemaURI,
+	}
 
-	toolMap := map[string][]result.Issue{}
+	run := sarifRun{}
+	run.Tool.Driver.Name = "golangci-lint"
 
 	for i := range issues {
 		issue := issues[i]
-		linter := issue.FromLinter
-		toolMap[linter] = append(toolMap[linter], issue)
-	}
 
-	for curtool, issues := range toolMap {
-		tool := sarifTool{}
-		tool.Driver.Name = curtool
-		sr := sarifRun{}
-		sr.Tool = tool
-
-		for i := range issues {
-			issue := issues[i]
-			severity := issue.Severity
-			// set default to warning
-			if severity == "" {
-				severity = "warning"
-			}
-
-			physLoc := sarifPhysicalLocation{
-				ArtifactLocation: sarifArtifactLocation{URI: issue.FilePath()},
-				Region:           sarifRegion{StartLine: issue.Line(), StartColumn: issue.Column()},
-			}
-			loc := sarifLocation{PhysicalLocation: physLoc}
-
-			curResult := sarifResult{
-				RuleID: issue.Text,
-				Level:  severity,
-				Message: struct {
-					Text string "json:\"text\""
-				}{Text: issue.Text},
-				Locations: []sarifLocation{loc},
-			}
-
-			sr.Results = append(sr.Results, curResult)
+		severity := issue.Severity
+		if severity == "" {
+			severity = "error"
 		}
-		res.Runs = append(res.Runs, sr)
+
+		sr := sarifResult{
+			RuleID:  issue.FromLinter,
+			Level:   severity,
+			Message: sarifMessage{Text: issue.Text},
+			Locations: []sarifLocation{
+				{
+					PhysicalLocation: sarifPhysicalLocation{
+						ArtifactLocation: sarifArtifactLocation{URI: issue.FilePath()},
+						Region:           sarifRegion{StartLine: issue.Line(), StartColumn: issue.Column()},
+					},
+				},
+			},
+		}
+
+		run.Results = append(run.Results, sr)
 	}
 
-	return json.NewEncoder(p.w).Encode(res)
+	output.Runs = []sarifRun{run}
+
+	return json.NewEncoder(p.w).Encode(output)
 }
