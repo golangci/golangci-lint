@@ -68,11 +68,6 @@ func NewSarif(w io.Writer) *Sarif {
 }
 
 func (p Sarif) Print(issues []result.Issue) error {
-	output := SarifOutput{
-		Version: sarifVersion,
-		Schema:  sarifSchemaURI,
-	}
-
 	run := sarifRun{}
 	run.Tool.Driver.Name = "golangci-lint"
 
@@ -104,7 +99,11 @@ func (p Sarif) Print(issues []result.Issue) error {
 		run.Results = append(run.Results, sr)
 	}
 
-	output.Runs = []sarifRun{run}
+	output := SarifOutput{
+		Version: sarifVersion,
+		Schema:  sarifSchemaURI,
+		Runs:    []sarifRun{run},
+	}
 
 	return json.NewEncoder(p.w).Encode(output)
 }
