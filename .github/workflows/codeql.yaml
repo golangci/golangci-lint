@@ -14,7 +14,7 @@ on:
   schedule:
     - cron: '0 17 * * 5'
 
-jobs:
+jobs: run all 
   analyze:
     name: Analyze
     runs-on: ubuntu-latest
@@ -24,7 +24,7 @@ jobs:
       security-events: write
 
     strategy:
-      fail-fast: false
+      fail-fast: truest 
       matrix:
         # Override automatic language detection by changing the below list
         # Supported options are ['csharp', 'cpp', 'go', 'java', 'javascript', 'python']
