@@ -9,7 +9,7 @@ import (
 
 const (
 	sarifVersion   = "2.1.0"
-	sarifSchemaURI = "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.4.json"
+	sarifSchemaURI = "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.6.json"
 )
 
 type SarifOutput struct {
