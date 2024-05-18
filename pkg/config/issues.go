@@ -104,12 +104,13 @@ var DefaultExcludePatterns = []ExcludePattern{
 }
 
 type Issues struct {
-	IncludeDefaultExcludes []string      `mapstructure:"include"`
-	ExcludeCaseSensitive   bool          `mapstructure:"exclude-case-sensitive"`
-	ExcludePatterns        []string      `mapstructure:"exclude"`
-	ExcludeRules           []ExcludeRule `mapstructure:"exclude-rules"`
-	ExcludeGeneratedStrict bool          `mapstructure:"exclude-generated-strict"`
-	UseDefaultExcludes     bool          `mapstructure:"exclude-use-default"`
+	IncludeDefaultExcludes    []string      `mapstructure:"include"`
+	ExcludeCaseSensitive      bool          `mapstructure:"exclude-case-sensitive"`
+	ExcludePatterns           []string      `mapstructure:"exclude"`
+	ExcludeRules              []ExcludeRule `mapstructure:"exclude-rules"`
+	ExcludeGeneratedSkipFiles []string      `mapstructure:"exclude-generated-skip-files"`
+	ExcludeGeneratedStrict    bool          `mapstructure:"exclude-generated-strict"`
+	UseDefaultExcludes        bool          `mapstructure:"exclude-use-default"`
 
 	ExcludeFiles          []string `mapstructure:"exclude-files"`
 	ExcludeDirs           []string `mapstructure:"exclude-dirs"`

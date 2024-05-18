@@ -2845,6 +2845,11 @@ issues:
     - ".*\\.my\\.go$"
     - lib/bad.go
 
+  # Which files do not excluded as a generated they will be analyzed and issues will be reported.
+  # Default: []
+  exclude-generated-skip-files:
+    - ".*pb.go$"
+
   # To follow strictly the Go generated file convention.
   #
   # If set to true, source files that have lines matching only the following regular expression will be excluded:
