@@ -116,7 +116,7 @@ func (*Linter) configureAnalyzer(a *analysis.Analyzer, cfg map[string]any) error
 		}
 
 		if err := f.Value.Set(valueToString(v)); err != nil {
-			return fmt.Errorf("failed to set analyzer setting %q with value %v: %w", k, v, err)
+			return fmt.Errorf("failed to set analyzer setting %q with value %q: %w", k, v, err)
 		}
 	}
 

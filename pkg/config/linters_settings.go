@@ -882,6 +882,10 @@ type TestifylintSettings struct {
 		ExpVarPattern string `mapstructure:"pattern"`
 	} `mapstructure:"expected-actual"`
 
+	GoRequire struct {
+		IgnoreHTTPHandlers bool `mapstructure:"ignore-http-handlers"`
+	} `mapstructure:"go-require"`
+
 	RequireError struct {
 		FnPattern string `mapstructure:"fn-pattern"`
 	} `mapstructure:"require-error"`

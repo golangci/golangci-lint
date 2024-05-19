@@ -18,6 +18,7 @@ func New(settings *config.TestifylintSettings) *goanalysis.Linter {
 			"disable-all": settings.DisableAll,
 
 			"bool-compare.ignore-custom-types": settings.BoolCompare.IgnoreCustomTypes,
+			"go-require.ignore-http-handlers":  settings.GoRequire.IgnoreHTTPHandlers,
 		}
 		if len(settings.EnabledCheckers) > 0 {
 			cfg[a.Name]["enable"] = settings.EnabledCheckers

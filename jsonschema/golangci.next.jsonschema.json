@@ -2779,16 +2779,6 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
-            "bool-compare": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "ignore-custom-types": {
-                  "type": "boolean",
-                  "default": false
-                }
-              }
-            },
             "enable-all": {
               "description": "Enable all checkers.",
               "type": "boolean",
@@ -2811,9 +2801,10 @@
                   "error-is-as",
                   "error-nil",
                   "expected-actual",
-                  "go-require",
                   "float-compare",
+                  "go-require",
                   "len",
+                  "negative-positive",
                   "nil-compare",
                   "require-error",
                   "suite-dont-use-pkg",
@@ -2821,10 +2812,28 @@
                   "suite-thelper",
                   "useless-assert"
                 ]
-              }
+              },
+              "default": [
+                "blank-import",
+                "bool-compare",
+                "compares",
+                "empty",
+                "error-is-as",
+                "error-nil",
+                "expected-actual",
+                "float-compare",
+                "go-require",
+                "len",
+                "negative-positive",
+                "nil-compare",
+                "require-error",
+                "suite-dont-use-pkg",
+                "suite-extra-assert-call",
+                "useless-assert"
+              ]
             },
             "disable": {
-              "description": "Enable specific checkers.",
+              "description": "Disable specific checkers.",
               "type": "array",
               "items": {
                 "enum": [
@@ -2835,16 +2844,31 @@
                   "error-is-as",
                   "error-nil",
                   "expected-actual",
-                  "go-require",
                   "float-compare",
+                  "go-require",
                   "len",
+                  "negative-positive",
                   "nil-compare",
                   "require-error",
                   "suite-dont-use-pkg",
                   "suite-extra-assert-call",
                   "suite-thelper",
                   "useless-assert"
+                ],
+                "default": [
+                  "suite-thelper"
                 ]
+              }
+            },
+            "bool-compare": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "ignore-custom-types": {
+                  "description": "To ignore user defined types (over builtin bool).",
+                  "type": "boolean",
+                  "default": false
+                }
               }
             },
             "expected-actual": {
@@ -2853,7 +2877,19 @@
               "properties": {
                 "pattern": {
                   "description": "Regexp for expected variable name.",
-                  "type": "string"
+                  "type": "string",
+                  "default": "(^(exp(ected)?|want(ed)?)([A-Z]\\w*)?$)|(^(\\w*[a-z])?(Exp(ected)?|Want(ed)?)$)"
+                }
+              }
+            },
+            "go-require": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "ignore-http-handlers": {
+                  "description": "To ignore HTTP handlers (like http.HandlerFunc).",
+                  "type": "boolean",
+                  "default": false
                 }
               }
             },
@@ -2862,8 +2898,9 @@
               "additionalProperties": false,
               "properties": {
                 "fn-pattern": {
-                  "description": "Regexp for expected variable name.",
-                  "type": "string"
+                  "description": "Regexp for assertions to analyze. If defined, then only matched error assertions will be reported.",
+                  "type": "string",
+                  "default": ""
                 }
               }
             },
@@ -2874,7 +2911,8 @@
                 "mode": {
                   "description": "To require or remove extra Assert() call?",
                   "type": "string",
-                  "enum": ["remove", "require"]
+                  "enum": ["remove", "require"],
+                  "default": "remove"
                 }
               }
             }
