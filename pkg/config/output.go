@@ -19,6 +19,7 @@ const (
 	OutFormatJunitXML          = "junit-xml"
 	OutFormatGithubActions     = "github-actions"
 	OutFormatTeamCity          = "teamcity"
+	OutFormatSarif             = "sarif"
 )
 
 var AllOutputFormats = []string{
@@ -33,6 +34,7 @@ var AllOutputFormats = []string{
 	OutFormatJunitXML,
 	OutFormatGithubActions,
 	OutFormatTeamCity,
+	OutFormatSarif,
 }
 
 type Output struct {
