@@ -15,6 +15,7 @@ type GitHubAction struct {
 }
 
 // NewGitHubAction output format outputs issues according to GitHub actions.
+// Deprecated
 func NewGitHubAction(w io.Writer) *GitHubAction {
 	return &GitHubAction{w: w}
 }
