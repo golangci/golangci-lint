@@ -17,7 +17,7 @@ const (
 	OutFormatCodeClimate       = "code-climate"
 	OutFormatHTML              = "html"
 	OutFormatJunitXML          = "junit-xml"
-	OutFormatGithubActions     = "github-actions"
+	OutFormatGithubActions     = "github-actions" // Deprecated
 	OutFormatTeamCity          = "teamcity"
 	OutFormatSarif             = "sarif"
 )
