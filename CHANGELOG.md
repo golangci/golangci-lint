@@ -1,6 +1,14 @@
 Follow the news and releases on [Mastodon](https://fosstodon.org/@golangcilint) and on [Twitter](https://twitter.com/golangci).
 
-There is the most valuable changes log:
+### v1.58.2
+
+1. Updated linters
+   * `canonicalheader`: from 1.0.6 to 1.1.1
+   * `gosec`: from 2.19.0 to 2.20.0
+   * `musttag`: from 0.12.1 to 0.12.2
+   * `nilnil`: from 0.1.8 to 0.1.9
+2. Documentation
+   * Improve integrations and install pages
 
 ### v1.58.1
 
@@ -63,7 +71,7 @@ There is the most valuable changes log:
    * Add `pre-commit` hook to run `config verify`
    * Improve `github-action` output
 6. Documentation
-   * docs: remove deprecated Atom from Editor Integrations
+   * Remove deprecated Atom from Editor Integrations
 
 GitHub Action (v5.1.0) for golangci-lint:
 - supports for `pull`, `pull_request_target`, and `merge_group` events with the option `only-new-issues`.
@@ -121,8 +129,8 @@ GitHub Action (v5.1.0) for golangci-lint:
    * `wrapcheck`: from 2.8.1 to 2.8.3
    * Disable `copyloopvar` and `intrange` on Go < 1.22
 3. Enhancements
-   * 🧩 New custom linters system https://golangci-lint.run/plugins/module-plugins/
-   * 🎉 Allow running only a specific linter without modifying the file configuration (`--enable-only`)
+   * 🧩New custom linters system https://golangci-lint.run/plugins/module-plugins/
+   * Allow running only a specific linter without modifying the file configuration (`--enable-only`)
    * Allow custom sort order for the reports (`output.sort-order`)
    * Automatically adjust the maximum concurrency to the container CPU quota if `run.concurrency=0`
    * Add `config verify` command to check the configuration against the JSON Schema
@@ -142,8 +150,8 @@ GitHub Action (v5.1.0) for golangci-lint:
    * Use `GOTOOLCHAIN=auto` inside the Docker images
 5. Documentation
    * ⚠️ Define the linter deprecation cycle https://golangci-lint.run/product/roadmap/#linter-deprecation-cycle
-   * 🎉 Use information from the previous release to create linter pages
-   * 🎉 Publish JSON schema on https://golangci-lint.run/jsonschema/golangci.jsonschema.json
+   * 🎉Use information from the previous release to create linter pages
+   * Publish JSON schema on https://golangci-lint.run/jsonschema/golangci.jsonschema.json
    * Reorganize documentation pages
    * Add an explanation about the configuration file inside golangci-lint repository
 
