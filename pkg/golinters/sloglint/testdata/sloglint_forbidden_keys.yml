@@ -1,0 +1,4 @@
+linters-settings:
+  sloglint:
+    forbidden-keys:
+      - foo_bar

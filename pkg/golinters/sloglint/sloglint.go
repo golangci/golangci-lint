@@ -20,6 +20,7 @@ func New(settings *config.SlogLintSettings) *goanalysis.Linter {
 			StaticMsg:      settings.StaticMsg,
 			NoRawKeys:      settings.NoRawKeys,
 			KeyNamingCase:  settings.KeyNamingCase,
+			ForbiddenKeys:  settings.ForbiddenKeys,
 			ArgsOnSepLines: settings.ArgsOnSepLines,
 		}
 	}

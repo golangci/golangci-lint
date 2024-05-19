@@ -146,10 +146,10 @@ var defaultLintersSettings = LintersSettings{
 		AttrOnly:       false,
 		NoGlobal:       "",
 		Context:        "",
-		ContextOnly:    false,
 		StaticMsg:      false,
 		NoRawKeys:      false,
 		KeyNamingCase:  "",
+		ForbiddenKeys:  nil,
 		ArgsOnSepLines: false,
 	},
 	TagAlign: TagAlignSettings{
@@ -819,16 +819,19 @@ type RowsErrCheckSettings struct {
 }
 
 type SlogLintSettings struct {
-	NoMixedArgs    bool   `mapstructure:"no-mixed-args"`
-	KVOnly         bool   `mapstructure:"kv-only"`
-	AttrOnly       bool   `mapstructure:"attr-only"`
-	NoGlobal       string `mapstructure:"no-global"`
-	Context        string `mapstructure:"context"`
-	ContextOnly    bool   `mapstructure:"context-only"` // Deprecated: use Context instead.
-	StaticMsg      bool   `mapstructure:"static-msg"`
-	NoRawKeys      bool   `mapstructure:"no-raw-keys"`
-	KeyNamingCase  string `mapstructure:"key-naming-case"`
-	ArgsOnSepLines bool   `mapstructure:"args-on-sep-lines"`
+	NoMixedArgs    bool     `mapstructure:"no-mixed-args"`
+	KVOnly         bool     `mapstructure:"kv-only"`
+	AttrOnly       bool     `mapstructure:"attr-only"`
+	NoGlobal       string   `mapstructure:"no-global"`
+	Context        string   `mapstructure:"context"`
+	StaticMsg      bool     `mapstructure:"static-msg"`
+	NoRawKeys      bool     `mapstructure:"no-raw-keys"`
+	KeyNamingCase  string   `mapstructure:"key-naming-case"`
+	ForbiddenKeys  []string `mapstructure:"forbidden-keys"`
+	ArgsOnSepLines bool     `mapstructure:"args-on-sep-lines"`
+
+	// Deprecated: use Context instead.
+	ContextOnly bool `mapstructure:"context-only"`
 }
 
 type SpancheckSettings struct {
