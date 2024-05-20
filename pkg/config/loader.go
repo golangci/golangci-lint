@@ -350,6 +350,13 @@ func (l *Loader) handleDeprecation() error {
 		l.cfg.Output.Formats = f
 	}
 
+	for _, format := range l.cfg.Output.Formats {
+		if format.Format == OutFormatGithubActions {
+			l.log.Warnf("The output format `%s` is deprecated, please use `%s`", OutFormatGithubActions, OutFormatColoredLineNumber)
+			break // To avoid repeating the message if there are several usages of github-actions format.
+		}
+	}
+
 	l.handleLinterOptionDeprecations()
 
 	return nil

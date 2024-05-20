@@ -9,7 +9,7 @@ require (
 	github.com/Abirdcfly/dupword v0.0.14
 	github.com/Antonboom/errname v0.1.13
 	github.com/Antonboom/nilnil v0.1.9
-	github.com/Antonboom/testifylint v1.2.0
+	github.com/Antonboom/testifylint v1.3.0
 	github.com/BurntSushi/toml v1.3.2
 	github.com/Crocmagnon/fatcontext v0.2.2
 	github.com/Djarvur/go-err113 v0.0.0-20210108212216-aea10b59be24
@@ -122,7 +122,7 @@ require (
 	github.com/ykadowak/zerologlint v0.1.5
 	gitlab.com/bosi/decorder v0.4.2
 	go-simpler.org/musttag v0.12.2
-	go-simpler.org/sloglint v0.6.0
+	go-simpler.org/sloglint v0.7.0
 	go.uber.org/automaxprocs v1.5.3
 	golang.org/x/exp v0.0.0-20240103183307-be819d1f06fc
 	golang.org/x/tools v0.21.0
