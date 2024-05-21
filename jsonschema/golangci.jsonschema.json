@@ -428,12 +428,12 @@
                   "json",
                   "colored-tab",
                   "tab",
+                  "html",
                   "checkstyle",
                   "code-climate",
                   "junit-xml",
                   "github-actions",
-                  "teamcity",
-                  "html"
+                  "teamcity"
                 ]
               }
             },
