@@ -150,19 +150,6 @@ func toGosecConfig(settings *config.GoSecSettings) gosec.Config {
 	return conf
 }
 
-func convertScoreToString(score issue.Score) string {
-	switch score {
-	case issue.Low:
-		return "low"
-	case issue.Medium:
-		return "medium"
-	case issue.High:
-		return "high"
-	default:
-		return ""
-	}
-}
-
 // based on https://github.com/securego/gosec/blob/47bfd4eb6fc7395940933388550b547538b4c946/config.go#L52-L62
 func convertGosecGlobals(globalOptionFromConfig any, conf gosec.Config) {
 	globalOptionMap, ok := globalOptionFromConfig.(map[string]any)
@@ -179,15 +166,33 @@ func convertGosecGlobals(globalOptionFromConfig any, conf gosec.Config) {
 func gosecRuleFilters(includes, excludes []string) []rules.RuleFilter {
 	var filters []rules.RuleFilter
 
-	if len(includes) > 0 {
-		filters = append(filters, rules.NewRuleFilter(false, includes...))
+	cleanIncludes := cleanRules(includes)
+
+	if len(cleanIncludes) > 0 {
+		filters = append(filters, rules.NewRuleFilter(false, cleanIncludes...))
 	}
 
-	if len(excludes) > 0 {
-		filters = append(filters, rules.NewRuleFilter(true, excludes...))
+	cleanExcludes := cleanRules(excludes)
+	cleanExcludes = append(cleanExcludes, "G601", "G113")
+
+	if len(cleanExcludes) > 0 {
+		filters = append(filters, rules.NewRuleFilter(true, cleanExcludes...))
 	}
 
 	return filters
+}
+
+// code borrowed from https://github.com/securego/gosec/blob/69213955dacfd560562e780f723486ef1ca6d486/cmd/gosec/main.go#L264-L276
+func filterIssues(issues []*issue.Issue, severity, confidence issue.Score) []*issue.Issue {
+	res := make([]*issue.Issue, 0)
+
+	for _, i := range issues {
+		if i.Severity >= severity && i.Confidence >= confidence {
+			res = append(res, i)
+		}
+	}
+
+	return res
 }
 
 // code borrowed from https://github.com/securego/gosec/blob/69213955dacfd560562e780f723486ef1ca6d486/cmd/gosec/main.go#L250-L262
@@ -205,15 +210,27 @@ func convertToScore(str string) (issue.Score, error) {
 	}
 }
 
-// code borrowed from https://github.com/securego/gosec/blob/69213955dacfd560562e780f723486ef1ca6d486/cmd/gosec/main.go#L264-L276
-func filterIssues(issues []*issue.Issue, severity, confidence issue.Score) []*issue.Issue {
-	res := make([]*issue.Issue, 0)
+func convertScoreToString(score issue.Score) string {
+	switch score {
+	case issue.Low:
+		return "low"
+	case issue.Medium:
+		return "medium"
+	case issue.High:
+		return "high"
+	default:
+		return ""
+	}
+}
 
-	for _, i := range issues {
-		if i.Severity >= severity && i.Confidence >= confidence {
-			res = append(res, i)
+func cleanRules(ruleNames []string) []string {
+	var cleanRuleNames []string
+	for _, ruleName := range ruleNames {
+		if ruleName == "G601" || ruleName == "G113" {
+			continue
 		}
+		cleanRuleNames = append(cleanRuleNames, ruleName)
 	}
 
-	return res
+	return cleanRuleNames
 }
