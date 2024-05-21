@@ -2,13 +2,13 @@
 
 ## Supported Versions
 
-We support only the current latest version of golangci-lint with the 2 latest minor versions of Go.
+We only support the latest version of golangci-lint with the two most recent minor versions of Go.
 
 ## Reporting a Vulnerability
 
-To report a potential security vulnerability you create a [security advisory](https://github.com/golangci/golangci-lint/security/advisories).
+To report a potential security vulnerability, please create a [security advisory](https://github.com/golangci/golangci-lint/security/advisories/new).
 
-In order for us to best respond to your report, please include any of the following:
+For us to respond to your report most effectively, please include any of the following:
 
-- Steps to reproduce or proof-of-concept
-- Any relevant information, including versions used
+- Steps to reproduce or a proof-of-concept
+- Any relevant information, including the versions used
