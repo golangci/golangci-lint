@@ -25,9 +25,6 @@ var defaultLintersSettings = LintersSettings{
 	Dupl: DuplSettings{
 		Threshold: 150,
 	},
-	Errcheck: ErrcheckSettings{
-		Ignore: "fmt:.*",
-	},
 	ErrorLint: ErrorLintSettings{
 		Errorf:      true,
 		ErrorfMulti: true,
