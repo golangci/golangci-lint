@@ -66,6 +66,7 @@ output:
   # - `json`
   # - `colored-tab`
   # - `tab`
+  # - `html`
   # - `checkstyle`
   # - `code-climate`
   # - `junit-xml`
