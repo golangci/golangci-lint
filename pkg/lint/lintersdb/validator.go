@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/golangci/golangci-lint/pkg/config"
+	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 )
 
@@ -38,14 +39,27 @@ func (v Validator) Validate(cfg *config.Config) error {
 }
 
 func (v Validator) validateLintersNames(cfg *config.Linters) error {
-	allNames := cfg.Enable
-	allNames = append(allNames, cfg.Disable...)
-
 	var unknownNames []string
 
-	for _, name := range allNames {
+	for _, name := range cfg.Enable {
 		if v.m.GetLinterConfigs(name) == nil {
 			unknownNames = append(unknownNames, name)
+		}
+	}
+
+	for _, name := range cfg.Disable {
+		lcs := v.m.GetLinterConfigs(name)
+		if len(lcs) == 0 {
+			unknownNames = append(unknownNames, name)
+			continue
+		}
+
+		for _, lc := range lcs {
+			if lc.IsDeprecated() && lc.Deprecation.Level > linter.DeprecationWarning {
+				v.m.log.Warnf("The linter %q is deprecated (step 2) and deactivated. "+
+					"It should be removed from the list of disabled linters. "+
+					"https://golangci-lint.run/product/roadmap/#linter-deprecation-cycle", lc.Name())
+			}
 		}
 	}
 

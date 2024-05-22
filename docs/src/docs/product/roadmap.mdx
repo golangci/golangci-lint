@@ -47,8 +47,11 @@ A linter can be deprecated for various reasons, e.g. the linter stops working wi
 
 The deprecation of a linter will follow 3 phases:
 
-1. **Display of a warning message**: The linter can still be used (unless it's completely non-functional), but it's recommended to remove it from your configuration.
-2. **Display of an error message**: At this point, you should remove the linter. The original implementation is replaced by a placeholder that does nothing.
+1. **Display of a warning message**: The linter can still be used (unless it's completely non-functional),
+  but it's recommended to remove it from your configuration.
+2. **Display of an error message**: At this point, you should remove the linter.
+  The original implementation is replaced by a placeholder that does nothing.
+  The linter is NOT enabled when using `enable-all` and should be removed from the `disable` option.
 3. **Removal of the linter** from golangci-lint.
 
 Each phase corresponds to a minor version:

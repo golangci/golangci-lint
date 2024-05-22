@@ -100,8 +100,6 @@ func TestCgoOk(t *testing.T) {
 		WithNoConfig().
 		WithArgs("--timeout=3m",
 			"--enable-all",
-			"-D",
-			"nosnakecase",
 		).
 		WithArgs("--go=1.22"). // TODO(ldez) remove this line when we will run go1.23 on the CI. (related to intrange, copyloopvar)
 		WithTargetPath(testdataDir, "cgo").
