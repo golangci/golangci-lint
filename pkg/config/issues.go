@@ -108,12 +108,14 @@ type Issues struct {
 	ExcludeCaseSensitive   bool          `mapstructure:"exclude-case-sensitive"`
 	ExcludePatterns        []string      `mapstructure:"exclude"`
 	ExcludeRules           []ExcludeRule `mapstructure:"exclude-rules"`
-	ExcludeGeneratedStrict bool          `mapstructure:"exclude-generated-strict"`
 	UseDefaultExcludes     bool          `mapstructure:"exclude-use-default"`
 
-	ExcludeFiles          []string `mapstructure:"exclude-files"`
-	ExcludeDirs           []string `mapstructure:"exclude-dirs"`
-	UseDefaultExcludeDirs bool     `mapstructure:"exclude-dirs-use-default"`
+	ExcludeGenerated string `mapstructure:"exclude-generated"`
+
+	ExcludeFiles []string `mapstructure:"exclude-files"`
+	ExcludeDirs  []string `mapstructure:"exclude-dirs"`
+
+	UseDefaultExcludeDirs bool `mapstructure:"exclude-dirs-use-default"`
 
 	MaxIssuesPerLinter int `mapstructure:"max-issues-per-linter"`
 	MaxSameIssues      int `mapstructure:"max-same-issues"`
@@ -124,6 +126,8 @@ type Issues struct {
 	Diff              bool   `mapstructure:"new"`
 
 	NeedFix bool `mapstructure:"fix"`
+
+	ExcludeGeneratedStrict bool `mapstructure:"exclude-generated-strict"` // Deprecated: use ExcludeGenerated instead.
 }
 
 func (i *Issues) Validate() error {

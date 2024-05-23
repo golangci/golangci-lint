@@ -3518,10 +3518,10 @@
           "type": "boolean",
           "default": false
         },
-        "exclude-generated-strict": {
-          "description": "To follow strict Go generated file convention",
-          "type": "boolean",
-          "default": false
+        "exclude-generated": {
+          "description": "Mode of the generated files analysis.",
+          "enum": ["lax", "strict", "disable"],
+          "default": "lax"
         },
         "exclude-dirs": {
           "description": "Which directories to exclude: issues from them won't be reported.",

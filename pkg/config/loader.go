@@ -357,6 +357,12 @@ func (l *Loader) handleDeprecation() error {
 		}
 	}
 
+	// Deprecated since v1.59.0
+	if l.cfg.Issues.ExcludeGeneratedStrict {
+		l.log.Warnf("The configuration option `issues.exclude-generated-strict` is deprecated, please use `issues.exclude-generated`")
+		l.cfg.Issues.ExcludeGenerated = "strict" // Don't use the constants to avoid cyclic dependencies.
+	}
+
 	l.handleLinterOptionDeprecations()
 
 	return nil
