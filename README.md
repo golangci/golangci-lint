@@ -28,9 +28,9 @@ Documentation is hosted at https://golangci-lint.run.
 
 ## Supporting Us
 
-[![Open Collective backers and sponsors](https://img.shields.io/opencollective/all/golangci-lint?logo=opencollective&style=for-the-badge)](https://opencollective.com/golangci-lint)
-[![GitHub Sponsors](https://img.shields.io/github/sponsors/golangci?logo=github&style=for-the-badge)](https://github.com/sponsors/golangci)
-[![Linter Authors](https://img.shields.io/badge/Linter-Authors-blue?style=for-the-badge)](https://golangci-lint.run/product/thanks/)
+<!-- [![GitHub Sponsors](https://img.shields.io/badge/GitHub-Donate-blue?logo=github&style=for-the-badge)](https://github.com/sponsors/golangci) -->
+[![Open Collective backers and sponsors](https://img.shields.io/badge/OpenCollective-Donate-blue?logo=opencollective&style=for-the-badge)](https://opencollective.com/golangci-lint)
+[![Linter Authors](https://img.shields.io/badge/Linter_Authors-Donate-blue?style=for-the-badge)](https://golangci-lint.run/product/thanks/)
 
 `golangci-lint` is a free and open-source project built by volunteers.
 
@@ -56,17 +56,18 @@ This project exists thanks to all the people who contribute. [How to contribute]
 <details>
 <summary>About core team</summary>
 
-The GolangCI Core Team is a group of contributors that have demonstrated a lasting enthusiasm for the project and community.
+The GolangCI Core Team is a group of contributors who have demonstrated a lasting enthusiasm for the project and community.
 The GolangCI Core Team has GitHub admin privileges on the repo.
 
 #### Responsibilities
+
 The Core Team has the following responsibilities:
 
 1. Being available to answer high-level questions about vision and future.
 2. Being available to review longstanding/forgotten pull requests.
 3. Occasionally check issues, offer input, and categorize with GitHub issue labels.
 4. Looking out for up-and-coming members of the GolangCI community who might want to serve as Core Team members.
-5. Note that the Core Team – and all GolangCI contributors – are open source volunteers; membership on the Core Team is expressly not an obligation. The Core Team is distinguished as leaders in the community and while they are a good group to turn to when someone needs an answer to a question, they are still volunteering their time, and may not be available to help immediately.
+5. Note that the Core Team – and all GolangCI contributors – are open-source volunteers; membership on the Core Team is expressly not an obligation. The Core Team is distinguished as leaders in the community and while they are a good group to turn to when someone needs an answer to a question, they are still volunteering their time, and may not be available to help immediately.
 
 </details>
 
