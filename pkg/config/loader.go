@@ -304,6 +304,8 @@ func (l *Loader) handleGoVersion() {
 	if l.cfg.LintersSettings.Stylecheck.GoVersion == "" {
 		l.cfg.LintersSettings.Stylecheck.GoVersion = trimmedGoVersion
 	}
+
+	os.Setenv("GOSECGOVERSION", l.cfg.Run.Go)
 }
 
 func (l *Loader) handleDeprecation() error {
