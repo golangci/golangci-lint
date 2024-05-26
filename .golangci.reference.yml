@@ -72,6 +72,7 @@ output:
   # - `junit-xml`
   # - `github-actions`
   # - `teamcity`
+  # - `sarif`
   # Output path can be either `stdout`, `stderr` or path to the file to write to.
   #
   # For the CLI flag (`--out-format`), multiple formats can be specified by separating them by comma.
@@ -1388,14 +1389,16 @@ linters-settings:
     min-complexity: 4
 
   nilnil:
-    # Checks that there is no simultaneous return of `nil` error and an invalid value.
-    # Default: ["ptr", "func", "iface", "map", "chan"]
+    # List of return types to check.
+    # Default: ["ptr", "func", "iface", "map", "chan", "uintptr", "unsafeptr"]
     checked-types:
       - ptr
       - func
       - iface
       - map
       - chan
+      - uintptr
+      - unsafeptr
 
   nlreturn:
     # Size of the block (including return statement that is still "OK")
@@ -1996,12 +1999,15 @@ linters-settings:
 
   sloglint:
     # Enforce not mixing key-value pairs and attributes.
+    # https://github.com/go-simpler/sloglint?tab=readme-ov-file#no-mixed-arguments
     # Default: true
     no-mixed-args: false
     # Enforce using key-value pairs only (overrides no-mixed-args, incompatible with attr-only).
+    # https://github.com/go-simpler/sloglint?tab=readme-ov-file#key-value-pairs-only
     # Default: false
     kv-only: true
     # Enforce using attributes only (overrides no-mixed-args, incompatible with kv-only).
+    # https://github.com/go-simpler/sloglint?tab=readme-ov-file#attributes-only
     # Default: false
     attr-only: true
     # Enforce not using global loggers.
@@ -2009,6 +2015,7 @@ linters-settings:
     # - "": disabled
     # - "all": report all global loggers
     # - "default": report only the default slog logger
+    # https://github.com/go-simpler/sloglint?tab=readme-ov-file#no-global
     # Default: ""
     no-global: "all"
     # Enforce using methods that accept a context.
@@ -2016,19 +2023,32 @@ linters-settings:
     # - "": disabled
     # - "all": report all contextless calls
     # - "scope": report only if a context exists in the scope of the outermost function
+    # https://github.com/go-simpler/sloglint?tab=readme-ov-file#context-only
     # Default: ""
     context: "all"
     # Enforce using static values for log messages.
+    # https://github.com/go-simpler/sloglint?tab=readme-ov-file#static-messages
     # Default: false
     static-msg: true
     # Enforce using constants instead of raw keys.
+    # https://github.com/go-simpler/sloglint?tab=readme-ov-file#no-raw-keys
     # Default: false
     no-raw-keys: true
     # Enforce a single key naming convention.
     # Values: snake, kebab, camel, pascal
+    # https://github.com/go-simpler/sloglint?tab=readme-ov-file#key-naming-convention
     # Default: ""
     key-naming-case: snake
+    # Enforce not using specific keys.
+    # Default: []
+    forbidden-keys:
+      - time
+      - level
+      - msg
+      - source
+      - foo
     # Enforce putting arguments on separate lines.
+    # https://github.com/go-simpler/sloglint?tab=readme-ov-file#forbidden-keys
     # Default: false
     args-on-sep-lines: true
 
@@ -2158,9 +2178,10 @@ linters-settings:
       - error-is-as
       - error-nil
       - expected-actual
-      - go-require
       - float-compare
+      - go-require
       - len
+      - negative-positive
       - nil-compare
       - require-error
       - suite-dont-use-pkg
@@ -2174,7 +2195,7 @@ linters-settings:
     # Enable checkers by name
     # (in addition to default
     #   blank-import, bool-compare, compares, empty, error-is-as, error-nil, expected-actual, go-require, float-compare,
-    #   len, nil-compare, require-error, suite-dont-use-pkg, suite-extra-assert-call, useless-assert
+    #   len, negative-positive, nil-compare, require-error, suite-dont-use-pkg, suite-extra-assert-call, useless-assert
     # ).
     enable:
       - blank-import
@@ -2184,9 +2205,10 @@ linters-settings:
       - error-is-as
       - error-nil
       - expected-actual
-      - go-require
       - float-compare
+      - go-require
       - len
+      - negative-positive
       - nil-compare
       - require-error
       - suite-dont-use-pkg
@@ -2202,6 +2224,10 @@ linters-settings:
       # Regexp for expected variable name.
       # Default: (^(exp(ected)?|want(ed)?)([A-Z]\w*)?$)|(^(\w*[a-z])?(Exp(ected)?|Want(ed)?)$)
       pattern: ^expected
+    go-require:
+      # To ignore HTTP handlers (like http.HandlerFunc).
+      # Default: false
+      ignore-http-handlers: true
     require-error:
       # Regexp for assertions to analyze. If defined, then only matched error assertions will be reported.
       # Default: ""
@@ -2846,17 +2872,17 @@ issues:
     - ".*\\.my\\.go$"
     - lib/bad.go
 
-  # To follow strictly the Go generated file convention.
+  # Mode of the generated files analysis.
   #
-  # If set to true, source files that have lines matching only the following regular expression will be excluded:
-  #   `^// Code generated .* DO NOT EDIT\.$`
-  # This line must appear before the first non-comment, non-blank text in the file.
-  # https://go.dev/s/generatedcode
+  # - `strict`: sources are excluded by following strictly the Go generated file convention.
+  #    Source files that have lines matching only the following regular expression will be excluded: `^// Code generated .* DO NOT EDIT\.$`
+  #    This line must appear before the first non-comment, non-blank text in the file.
+  #    https://go.dev/s/generatedcode
+  # - `lax`: sources are excluded if they contain lines `autogenerated file`, `code generated`, `do not edit`, etc.
+  # - `disable`: disable the generated files exclusion.
   #
-  # By default, a lax pattern is applied:
-  # sources are excluded if they contain lines `autogenerated file`, `code generated`, `do not edit`, etc.
-  # Default: false
-  exclude-generated-strict: true
+  # Default: lax
+  exclude-generated: strict
 
   # The list of ids of default excludes to include or disable.
   # https://golangci-lint.run/usage/false-positives/#default-exclusions
