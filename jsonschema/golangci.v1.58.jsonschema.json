@@ -433,8 +433,7 @@
                   "code-climate",
                   "junit-xml",
                   "github-actions",
-                  "teamcity",
-                  "sarif"
+                  "teamcity"
                 ]
               }
             },
@@ -2084,11 +2083,11 @@
           "properties": {
             "checked-types": {
               "type": "array",
-              "description": "List of return types to check.",
+              "description": "Order of return types to check.",
               "items": {
-                "enum": ["ptr", "func", "iface", "map", "chan", "uintptr", "unsafeptr"]
+                "enum": ["ptr", "func", "iface", "map", "chan"]
               },
-              "default": ["ptr", "func", "iface", "map", "chan", "uintptr", "unsafeptr"]
+              "default": ["ptr", "func", "iface", "map", "chan"]
             }
           }
         },
@@ -2470,13 +2469,6 @@
               "type": "boolean",
               "default": false
             },
-            "forbidden-keys": {
-              "description": "Enforce not using specific keys.",
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            },
             "args-on-sep-lines": {
               "description": "Enforce putting arguments on separate lines.",
               "type": "boolean",
@@ -2781,6 +2773,16 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "bool-compare": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "ignore-custom-types": {
+                  "type": "boolean",
+                  "default": false
+                }
+              }
+            },
             "enable-all": {
               "description": "Enable all checkers.",
               "type": "boolean",
@@ -2803,10 +2805,9 @@
                   "error-is-as",
                   "error-nil",
                   "expected-actual",
-                  "float-compare",
                   "go-require",
+                  "float-compare",
                   "len",
-                  "negative-positive",
                   "nil-compare",
                   "require-error",
                   "suite-dont-use-pkg",
@@ -2814,28 +2815,10 @@
                   "suite-thelper",
                   "useless-assert"
                 ]
-              },
-              "default": [
-                "blank-import",
-                "bool-compare",
-                "compares",
-                "empty",
-                "error-is-as",
-                "error-nil",
-                "expected-actual",
-                "float-compare",
-                "go-require",
-                "len",
-                "negative-positive",
-                "nil-compare",
-                "require-error",
-                "suite-dont-use-pkg",
-                "suite-extra-assert-call",
-                "useless-assert"
-              ]
+              }
             },
             "disable": {
-              "description": "Disable specific checkers.",
+              "description": "Enable specific checkers.",
               "type": "array",
               "items": {
                 "enum": [
@@ -2846,31 +2829,16 @@
                   "error-is-as",
                   "error-nil",
                   "expected-actual",
-                  "float-compare",
                   "go-require",
+                  "float-compare",
                   "len",
-                  "negative-positive",
                   "nil-compare",
                   "require-error",
                   "suite-dont-use-pkg",
                   "suite-extra-assert-call",
                   "suite-thelper",
                   "useless-assert"
-                ],
-                "default": [
-                  "suite-thelper"
                 ]
-              }
-            },
-            "bool-compare": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "ignore-custom-types": {
-                  "description": "To ignore user defined types (over builtin bool).",
-                  "type": "boolean",
-                  "default": false
-                }
               }
             },
             "expected-actual": {
@@ -2879,19 +2847,7 @@
               "properties": {
                 "pattern": {
                   "description": "Regexp for expected variable name.",
-                  "type": "string",
-                  "default": "(^(exp(ected)?|want(ed)?)([A-Z]\\w*)?$)|(^(\\w*[a-z])?(Exp(ected)?|Want(ed)?)$)"
-                }
-              }
-            },
-            "go-require": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "ignore-http-handlers": {
-                  "description": "To ignore HTTP handlers (like http.HandlerFunc).",
-                  "type": "boolean",
-                  "default": false
+                  "type": "string"
                 }
               }
             },
@@ -2900,9 +2856,8 @@
               "additionalProperties": false,
               "properties": {
                 "fn-pattern": {
-                  "description": "Regexp for assertions to analyze. If defined, then only matched error assertions will be reported.",
-                  "type": "string",
-                  "default": ""
+                  "description": "Regexp for expected variable name.",
+                  "type": "string"
                 }
               }
             },
@@ -2913,8 +2868,7 @@
                 "mode": {
                   "description": "To require or remove extra Assert() call?",
                   "type": "string",
-                  "enum": ["remove", "require"],
-                  "default": "remove"
+                  "enum": ["remove", "require"]
                 }
               }
             }
@@ -3518,10 +3472,10 @@
           "type": "boolean",
           "default": false
         },
-        "exclude-generated": {
-          "description": "Mode of the generated files analysis.",
-          "enum": ["lax", "strict", "disable"],
-          "default": "lax"
+        "exclude-generated-strict": {
+          "description": "To follow strict Go generated file convention",
+          "type": "boolean",
+          "default": false
         },
         "exclude-dirs": {
           "description": "Which directories to exclude: issues from them won't be reported.",

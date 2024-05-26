@@ -1,5 +1,21 @@
 Follow the news and releases on [Mastodon](https://fosstodon.org/@golangcilint) and on [Twitter](https://twitter.com/golangci).
 
+### v1.59.0
+
+1. Enhancements
+   * Add SARIF output format
+   * Allow the analysis of generated files (`issues.exclude-generated: disable`)
+2. Updated linters
+   * `errcheck`: fix deprecation warning
+   * `go-critic`: from 0.11.3 to 0.11.4
+   * `gosec`: from 2.20.0 to 5f0084eb01a9 (fix G601 and G113 performance issues)
+   * `sloglint`: from 0.6.0 to 0.7.0 (new option `forbidden-keys`)
+   * `testifylint`: from 1.2.0 to 1.3.0 (new checker `negative-positive` and new option `go-require.ignore-http-handlers`)
+3. Misc.
+   * ️️⚠️ Deprecate `github-action` output format
+   * ️️⚠️ Deprecate `issues.exclude-generated-strict` option (replaced by `issues.exclude-generated: strict`)
+   * ️️⚠️ Add warning about disabled and deprecated linters (level 2)
+
 ### v1.58.2
 
 1. Updated linters
