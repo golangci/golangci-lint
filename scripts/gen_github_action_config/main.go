@@ -225,7 +225,7 @@ func fetchAllReleases(ctx context.Context) ([]release, error) {
 	for {
 		err := client.Query(ctx, &q, vars)
 		if err != nil {
-			return nil, fmt.Errorf("failed to fetch releases page from github: %w", err)
+			return nil, fmt.Errorf("failed to fetch releases page from GitHub: %w", err)
 		}
 		releases := q.Repository.Releases
 		allReleases = append(allReleases, releases.Nodes...)
