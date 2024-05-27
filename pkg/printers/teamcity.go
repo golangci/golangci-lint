@@ -49,7 +49,7 @@ func (p *TeamCity) Print(issues []result.Issue) error {
 				id:          issue.FromLinter,
 				name:        issue.FromLinter,
 				description: issue.FromLinter,
-				category:    "Golangci-lint reports",
+				category:    "golangci-lint reports",
 			}
 
 			_, err := inspectionType.Print(p.w, p.escaper)
