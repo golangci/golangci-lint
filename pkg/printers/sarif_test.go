@@ -65,3 +65,17 @@ func TestSarif_Print(t *testing.T) {
 
 	assert.Equal(t, expected, buf.String())
 }
+
+func TestSarif_Print_empty(t *testing.T) {
+	buf := new(bytes.Buffer)
+
+	printer := NewSarif(buf)
+
+	err := printer.Print(nil)
+	require.NoError(t, err)
+
+	expected := `{"version":"2.1.0","$schema":"https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.6.json","runs":[{"tool":{"driver":{"name":"golangci-lint"}},"results":[]}]}
+`
+
+	assert.Equal(t, expected, buf.String())
+}
