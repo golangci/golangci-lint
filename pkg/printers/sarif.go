@@ -70,6 +70,7 @@ func NewSarif(w io.Writer) *Sarif {
 func (p Sarif) Print(issues []result.Issue) error {
 	run := sarifRun{}
 	run.Tool.Driver.Name = "golangci-lint"
+	run.Results = make([]sarifResult, 0)
 
 	for i := range issues {
 		issue := issues[i]
