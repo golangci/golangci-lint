@@ -60,6 +60,20 @@ fast_check_generated:
 	git checkout -- go.mod go.sum # can differ between go1.16 and go1.17
 	git diff --exit-code # check no changes
 
+# Benchmark
+
+# Benchmark with a local version
+# LINTER=gosec VERSION=v1.59.0 make bench_local
+bench_local:
+	./scripts/bench/bench_local.sh $(LINTER) $(VERSION)
+.PHONY: bench_local
+
+# Benchmark between 2 existing versions
+# LINTER=gosec VERSION_OLD=v1.58.2 VERSION_NEW=v1.59.0 make bench_version
+bench_version:
+	./scripts/bench/bench_version.sh $(LINTER) $(VERSION_OLD) $(VERSION_NEW)
+.PHONY: bench_version
+
 # Non-PHONY targets (real files)
 
 $(BINARY): FORCE
