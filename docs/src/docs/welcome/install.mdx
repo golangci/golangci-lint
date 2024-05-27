@@ -36,7 +36,7 @@ curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/insta
 # or install it into ./bin/
 curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s {.LatestVersion}
 
-# In alpine linux (as it does not come with curl by default)
+# In Alpine Linux (as it does not come with curl by default)
 wget -O- -nv https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s {.LatestVersion}
 
 golangci-lint --version
@@ -62,7 +62,7 @@ On Windows, you can run the above commands with Git Bash, which comes with [Git 
 
 Golangci-lint is available inside the majority of the package managers.
 
-### MacOS
+### macOS
 
 #### Brew
 
@@ -76,8 +76,8 @@ brew install golangci-lint
 brew upgrade golangci-lint
 ```
 
-Note: Previously we used a [homebrew tap](https://github.com/golangci/homebrew-tap). We recommend using official formula instead of the tap, but sometimes the most recent release
-isn't immediately available via homebrew core due to manual updates that need to occur from homebrew core maintainers. In this case, the tap formula, which is updated automatically,
+Note: Previously we used a [Homebrew tap](https://github.com/golangci/homebrew-tap). We recommend using official formula instead of the tap, but sometimes the most recent release
+isn't immediately available via Homebrew core due to manual updates that need to occur from Homebrew core maintainers. In this case, the tap formula, which is updated automatically,
 can be used to install the latest version of `golangci-lint`:
 
 ```sh
@@ -85,10 +85,10 @@ brew tap golangci/tap
 brew install golangci/tap/golangci-lint
 ```
 
-#### Macports
+#### MacPorts
 
-It can also be installed through [macports](https://www.macports.org/)
-The macports installation mode is community driven, and not officially maintained by golangci team.
+It can also be installed through [MacPorts](https://www.macports.org/)
+The MacPorts installation mode is community driven, and not officially maintained by golangci team.
 
 ```sh
 sudo port install golangci-lint

@@ -66,7 +66,7 @@ func processDoc(path string, replacements map[string]string, madeReplacements ma
 		nextContent := content
 		nextContent = strings.ReplaceAll(nextContent, fmt.Sprintf("{.%s}", key), replacement)
 
-		// Yaml formatter in mdx code section makes extra spaces, need to match them too.
+		// YAML formatter in mdx code section makes extra spaces, need to match them too.
 		nextContent = strings.ReplaceAll(nextContent, fmt.Sprintf("{ .%s }", key), replacement)
 
 		if nextContent != content {
