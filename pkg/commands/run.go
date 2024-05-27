@@ -171,7 +171,7 @@ func (c *runCommand) persistentPreRunE(cmd *cobra.Command, args []string) error 
 		runtime.GOMAXPROCS(c.cfg.Run.Concurrency)
 	}
 
-	return c.startTracing()
+	return nil
 }
 
 func (c *runCommand) persistentPostRunE(_ *cobra.Command, _ []string) error {
