@@ -14,15 +14,15 @@ golangci-lint linters
 
 ## Config File
 
-GolangCI-Lint looks for config files in the following paths from the current working directory:
+golangci-lint looks for config files in the following paths from the current working directory:
 
 - `.golangci.yml`
 - `.golangci.yaml`
 - `.golangci.toml`
 - `.golangci.json`
 
-GolangCI-Lint also searches for config files in all directories from the directory of the first analyzed path up to the root.
-If no configuration file has been found, GolangCI-Lint will try to find one in your home directory.
+golangci-lint also searches for config files in all directories from the directory of the first analyzed path up to the root.
+If no configuration file has been found, golangci-lint will try to find one in your home directory.
 To see which config file is being used and where it was sourced from run golangci-lint with `-v` option.
 
 Config options inside the file are identical to command-line options.
@@ -50,6 +50,6 @@ the `go tool trace` command and visualization tool.
 
 ## Cache
 
-GolangCI-Lint stores its cache in the subdirectory `golangci-lint` inside the [default user cache directory](https://pkg.go.dev/os#UserCacheDir).
+golangci-lint stores its cache in the subdirectory `golangci-lint` inside the [default user cache directory](https://pkg.go.dev/os#UserCacheDir).
 
 You can override the default cache directory with the environment variable `GOLANGCI_LINT_CACHE`; the path must be absolute.
