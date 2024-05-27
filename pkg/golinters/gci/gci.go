@@ -194,7 +194,7 @@ func diffFormattedFilesToArray(paths []string, cfg gcicfg.Config, diffs *[]strin
 	})
 }
 
-// Code bellow this comment is borrowed and modified from gci.
+// Code below this comment is borrowed and modified from gci.
 // https://github.com/daixiang0/gci/blob/4725b0c101801e7449530eee2ddb0c72592e3405/pkg/config/config.go
 
 var defaultOrder = map[string]int{
