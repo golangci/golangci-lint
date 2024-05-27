@@ -43,5 +43,5 @@ install "${VERSION_NEW}"
 ## Run
 
 hyperfine \
---prepare 'golangci-lint cache clean' "./golangci-lint-${VERSION_OLD} run --issues-exit-code 0 --print-issued-lines=false --enable-only ${LINTER}" \
---prepare './golangci-lint cache clean' "./golangci-lint-${VERSION_NEW} run --issues-exit-code 0 --print-issued-lines=false --enable-only ${LINTER}"
+--prepare "./golangci-lint-${VERSION_OLD} cache clean" "./golangci-lint-${VERSION_OLD} run --issues-exit-code 0 --print-issued-lines=false --enable-only ${LINTER}" \
+--prepare "./golangci-lint-${VERSION_NEW} cache clean" "./golangci-lint-${VERSION_NEW} run --issues-exit-code 0 --print-issued-lines=false --enable-only ${LINTER}"

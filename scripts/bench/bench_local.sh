@@ -33,8 +33,8 @@ make build
 ## Run
 
 hyperfine \
---prepare 'golangci-lint cache clean' "./golangci-lint run --print-issued-lines=false --enable-only ${LINTER}" \
---prepare './golangci-lint cache clean' "./golangci-lint-${VERSION} run --print-issued-lines=false --enable-only ${LINTER}"
+--prepare './golangci-lint cache clean' "./golangci-lint run --issues-exit-code 0 --print-issued-lines=false --enable-only ${LINTER}" \
+--prepare "./golangci-lint-${VERSION} cache clean" "./golangci-lint-${VERSION} run --issues-exit-code 0 --print-issued-lines=false --enable-only ${LINTER}"
 
 ## Clean
 

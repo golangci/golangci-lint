@@ -11,5 +11,5 @@ LINTER=gosec VERSION=v1.59.0 make bench_local
 ## Benchmark one linter: between 2 existing versions
 
 ```bash
-LINTER=gosec VERSION_OLD=v1.58.2 VERSION_NEW=v1.59.0 make bench_version
+LINTER=gosec VERSION_OLD=v1.58.1 VERSION_NEW=v1.59.0 make bench_version
 ```
