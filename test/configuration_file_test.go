@@ -113,7 +113,7 @@ func decodeYamlFile(filename string) (any, error) {
 	var m any
 	err = yaml.NewDecoder(yamlFile).Decode(&m)
 	if err != nil {
-		return nil, fmt.Errorf("[%s] yaml decode: %w", filename, err)
+		return nil, fmt.Errorf("[%s] YAML decode: %w", filename, err)
 	}
 
 	return m, nil

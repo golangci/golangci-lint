@@ -674,7 +674,7 @@ func computeBinarySalt(version string) ([]byte, error) {
 func computeConfigSalt(cfg *config.Config) ([]byte, error) {
 	lintersSettingsBytes, err := yaml.Marshal(cfg.LintersSettings)
 	if err != nil {
-		return nil, fmt.Errorf("failed to json marshal config linter settings: %w", err)
+		return nil, fmt.Errorf("failed to JSON marshal config linter settings: %w", err)
 	}
 
 	configData := bytes.NewBufferString("linters-settings=")
