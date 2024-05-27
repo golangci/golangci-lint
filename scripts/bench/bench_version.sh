@@ -15,25 +15,30 @@ VERSION_NEW="$3"
 
 function cleanBinaries() {
   echo "Clean binaries"
-  rm ./golangci-lint-${VERSION_OLD}
-  rm ./golangci-lint-${VERSION_NEW}
+  rm "./golangci-lint-${VERSION_OLD}"
+  rm "./golangci-lint-${VERSION_NEW}"
 }
 
 trap cleanBinaries EXIT
 
+## Install
+
+function install() {
+  local VERSION=$1
+
+  curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b "./temp-${VERSION}" "${VERSION}"
+
+  mv "temp-${VERSION}/golangci-lint" "./golangci-lint-${VERSION}"
+  rm -rf "temp-${VERSION}"
+}
+
 ## VERSION_OLD
 
-curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b ./temp-${VERSION_OLD} ${VERSION_OLD}
-
-mv temp-${VERSION_OLD}/golangci-lint ./golangci-lint-${VERSION_OLD}
-rm -rf temp-${VERSION_OLD}
+install "${VERSION_OLD}"
 
 ## VERSION_NEW
 
-curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b ./temp-${VERSION_NEW} ${VERSION_NEW}
-
-mv temp-${VERSION_NEW}/golangci-lint ./golangci-lint-${VERSION_NEW}
-rm -rf temp-${VERSION_NEW}
+install "${VERSION_NEW}"
 
 ## Run
 
