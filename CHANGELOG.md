@@ -1,5 +1,22 @@
 Follow the news and releases on [Mastodon](https://fosstodon.org/@golangcilint) and on [Twitter](https://twitter.com/golangci).
 
+### v1.59.1
+
+1. Updated linters
+   * `go-errorlint`: from 1.5.1 to 1.5.2
+   * `gomnd`: deprecated configuration compatibility
+   * `intrange`: add `style` preset
+   * `misspell`: from 0.5.1 to 0.6.0
+   * `sloglint`: from 0.7.0 to 0.7.1
+   * `testifylint`: from 1.3.0 to 1.3.1
+   * `unparam`: bump to HEAD
+   * `usestdlibvars`: from 1.25.0 to 1.26.0
+2. Fixes
+   * SARIF: init empty result slice
+   * SARIF: issue column >= 1
+3. Documentation
+   * update `revive` configuration
+
 ### v1.59.0
 
 1. Enhancements
