@@ -75,7 +75,7 @@ bench_version: hyperfine
 .PHONY: bench_version
 
 hyperfine:
-	@which hyperfines > /dev/null || (echo "Please install hyperfine https://github.com/sharkdp/hyperfine#installation" && exit 1)
+	@which hyperfine > /dev/null || (echo "Please install hyperfine https://github.com/sharkdp/hyperfine#installation" && exit 1)
 .PHONY: hyperfine
 
 # Non-PHONY targets (real files)
