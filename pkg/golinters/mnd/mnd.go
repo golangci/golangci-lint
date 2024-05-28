@@ -25,7 +25,9 @@ func NewGoMND(settings *config.GoMndSettings) *goanalysis.Linter {
 
 	if settings != nil && len(settings.Settings) > 0 {
 		// Convert deprecated setting.
-		linterCfg = settings.Settings
+		linterCfg = map[string]map[string]any{
+			a.Name: settings.Settings["mnd"],
+		}
 	}
 
 	return newMND(a, &settings.MndSettings, linterCfg)
