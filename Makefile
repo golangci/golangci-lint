@@ -60,6 +60,26 @@ fast_check_generated:
 	git checkout -- go.mod go.sum # can differ between go1.16 and go1.17
 	git diff --exit-code # check no changes
 
+# Benchmark
+
+# Benchmark with a local version
+# LINTER=gosec VERSION=v1.59.0 make bench_local
+bench_local: hyperfine
+	@:$(call check_defined, LINTER VERSION, 'missing parameter(s)')
+	@./scripts/bench/bench_local.sh $(LINTER) $(VERSION)
+.PHONY: bench_local
+
+# Benchmark between 2 existing versions
+# make bench_version LINTER=gosec VERSION_OLD=v1.58.2 VERSION_NEW=v1.59.0
+bench_version: hyperfine
+	@:$(call check_defined, LINTER VERSION_OLD VERSION_NEW, 'missing parameter(s)')
+	@./scripts/bench/bench_version.sh $(LINTER) $(VERSION_OLD) $(VERSION_NEW)
+.PHONY: bench_version
+
+hyperfine:
+	@which hyperfine > /dev/null || (echo "Please install hyperfine https://github.com/sharkdp/hyperfine#installation" && exit 1)
+.PHONY: hyperfine
+
 # Non-PHONY targets (real files)
 
 $(BINARY): FORCE
@@ -102,3 +122,19 @@ website_dump_info:
 update_contributors_list:
 	cd .github/contributors && npm run all
 
+# Functions
+
+# Check that given variables are set and all have non-empty values,
+# die with an error otherwise.
+#
+# Params:
+#   1. Variable name(s) to test.
+#   2. (optional) Error message to print.
+#
+# https://stackoverflow.com/a/10858332/8228109
+check_defined = \
+    $(strip $(foreach 1,$1, \
+        $(call __check_defined,$1,$(strip $(value 2)))))
+__check_defined = \
+    $(if $(value $1),, \
+      $(error Undefined $1$(if $2, ($2))))
