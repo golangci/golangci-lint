@@ -11,6 +11,19 @@ VERSION_OLD="$2"
 # ex: v1.58.2
 VERSION_NEW="$3"
 
+if [ -z "$LINTER" ] || [ -z "$VERSION_OLD" ] || [ -z "$VERSION_NEW" ]; then
+  cat <<-EOF
+Missing required arguments!
+
+Usage:   $0 <linter> <old version> <new version>
+Example: $0 gosec v1.58.1 v1.58.2
+EOF
+
+  exit 1
+fi
+
+EOF
+
 ## Clean
 
 function cleanBinaries() {
