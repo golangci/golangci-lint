@@ -64,15 +64,19 @@ fast_check_generated:
 
 # Benchmark with a local version
 # LINTER=gosec VERSION=v1.59.0 make bench_local
-bench_local:
+bench_local: hyperfine
 	@./scripts/bench/bench_local.sh $(LINTER) $(VERSION)
 .PHONY: bench_local
 
 # Benchmark between 2 existing versions
 # LINTER=gosec VERSION_OLD=v1.58.2 VERSION_NEW=v1.59.0 make bench_version
-bench_version:
+bench_version: hyperfine
 	@./scripts/bench/bench_version.sh $(LINTER) $(VERSION_OLD) $(VERSION_NEW)
 .PHONY: bench_version
+
+hyperfine:
+	@which hyperfines > /dev/null || (echo "Please install hyperfine https://github.com/sharkdp/hyperfine#installation" && exit 1)
+.PHONY: hyperfine
 
 # Non-PHONY targets (real files)
 
