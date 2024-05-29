@@ -19,6 +19,11 @@ type BuildInfo struct {
 	Date      string `json:"date"`
 }
 
+func (b BuildInfo) String() string {
+	return fmt.Sprintf("golangci-lint has version %s built with %s from %s on %s",
+		b.Version, b.GoVersion, b.Commit, b.Date)
+}
+
 type versionInfo struct {
 	Info      BuildInfo
 	BuildInfo *debug.BuildInfo
@@ -92,7 +97,6 @@ func (c *versionCommand) execute(_ *cobra.Command, _ []string) error {
 }
 
 func printVersion(w io.Writer, info BuildInfo) error {
-	_, err := fmt.Fprintf(w, "golangci-lint has version %s built with %s from %s on %s\n",
-		info.Version, info.GoVersion, info.Commit, info.Date)
+	_, err := fmt.Fprintln(w, info.String())
 	return err
 }
