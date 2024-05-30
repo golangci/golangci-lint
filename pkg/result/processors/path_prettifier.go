@@ -1,7 +1,6 @@
 package processors
 
 import (
-	"fmt"
 	"path/filepath"
 
 	"github.com/golangci/golangci-lint/pkg/fsutils"
@@ -11,16 +10,10 @@ import (
 var _ Processor = (*PathPrettifier)(nil)
 
 type PathPrettifier struct {
-	root string
 }
 
 func NewPathPrettifier() *PathPrettifier {
-	root, err := fsutils.Getwd()
-	if err != nil {
-		panic(fmt.Sprintf("Can't get working dir: %s", err))
-	}
-
-	return &PathPrettifier{root: root}
+	return &PathPrettifier{}
 }
 
 func (PathPrettifier) Name() string {
