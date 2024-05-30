@@ -90,7 +90,7 @@ func (p Sarif) Print(issues []result.Issue) error {
 						ArtifactLocation: sarifArtifactLocation{URI: issue.FilePath()},
 						Region: sarifRegion{
 							StartLine:   issue.Line(),
-							StartColumn: issue.Column(),
+							StartColumn: max(1, issue.Column()), // sarif column is required to be >= 1
 						},
 					},
 				},
