@@ -60,6 +60,11 @@ func NewRunner(log logutils.Log, cfg *config.Config, args []string, goenv *gouti
 		return nil, fmt.Errorf("failed to get enabled linters: %w", err)
 	}
 
+	pathShortenerProcessor, err := processors.NewPathShortener()
+	if err != nil {
+		return nil, err
+	}
+
 	return &Runner{
 		Processors: []processors.Processor{
 			processors.NewCgo(goenv),
@@ -90,7 +95,7 @@ func NewRunner(log logutils.Log, cfg *config.Config, args []string, goenv *gouti
 			processors.NewMaxSameIssues(cfg.Issues.MaxSameIssues, log.Child(logutils.DebugKeyMaxSameIssues), cfg),
 			processors.NewMaxFromLinter(cfg.Issues.MaxIssuesPerLinter, log.Child(logutils.DebugKeyMaxFromLinter), cfg),
 			processors.NewSourceCode(lineCache, log.Child(logutils.DebugKeySourceCode)),
-			processors.NewPathShortener(),
+			pathShortenerProcessor,
 			processors.NewSeverity(log.Child(logutils.DebugKeySeverityRules), files, &cfg.Severity),
 
 			// The fixer still needs to see paths for the issues that are relative to the current directory.

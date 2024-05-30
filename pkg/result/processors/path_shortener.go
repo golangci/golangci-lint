@@ -14,13 +14,13 @@ type PathShortener struct {
 	wd string
 }
 
-func NewPathShortener() *PathShortener {
+func NewPathShortener() (*PathShortener, error) {
 	wd, err := fsutils.Getwd()
 	if err != nil {
-		panic(fmt.Sprintf("Can't get working dir: %s", err))
+		return nil, fmt.Errorf("failed to get working dir: %w", err)
 	}
 
-	return &PathShortener{wd: wd}
+	return &PathShortener{wd: wd}, nil
 }
 
 func (PathShortener) Name() string {
