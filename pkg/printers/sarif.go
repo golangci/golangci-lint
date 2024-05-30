@@ -89,8 +89,10 @@ func (p Sarif) Print(issues []result.Issue) error {
 					PhysicalLocation: sarifPhysicalLocation{
 						ArtifactLocation: sarifArtifactLocation{URI: issue.FilePath()},
 						Region: sarifRegion{
-							StartLine:   issue.Line(),
-							StartColumn: issue.Column(),
+							StartLine: issue.Line(),
+							// If startColumn is absent, it SHALL default to 1.
+							// https://docs.oasis-open.org/sarif/sarif/v2.1.0/errata01/os/sarif-v2.1.0-errata01-os-complete.html#_Toc141790941
+							StartColumn: max(1, issue.Column()),
 						},
 					},
 				},
