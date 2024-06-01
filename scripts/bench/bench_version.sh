@@ -22,8 +22,6 @@ EOF
   exit 1
 fi
 
-EOF
-
 ## Clean
 
 function cleanBinaries() {
