@@ -42,12 +42,12 @@ func errorLintComparison() {
 	if errCompare != err { // want "comparing with != will fail on wrapped errors. Use errors.Is to check for a specific error"
 		log.Println("not errCompare")
 	}
-	switch err { // want "switch on an error will fail on wrapped errors. Use errors.Is to check for specific errors"
-	case errCompare:
+	switch err {
+	case errCompare: // want "switch on an error will fail on wrapped errors. Use errors.Is to check for specific errors"
 		log.Println("errCompare")
 	}
-	switch errorLintDoThing() { // want "switch on an error will fail on wrapped errors. Use errors.Is to check for specific errors"
-	case errCompare:
+	switch errorLintDoThing() {
+	case errCompare: // want "switch on an error will fail on wrapped errors. Use errors.Is to check for specific errors"
 		log.Println("errCompare")
 	}
 }
