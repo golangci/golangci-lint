@@ -7,13 +7,13 @@ body:
     attributes:
       label: Welcome
       options:
-        - label: Yes, I'm using a binary release within 2 latest major releases. Only such installations are supported.
+        - label: Yes, I'm using a binary release within 2 latest major [releases](https://github.com/golangci/golangci-lint/releases). Only such installations are supported.
           required: true
-        - label: Yes, I've searched similar issues on GitHub and didn't find any.
+        - label: Yes, I've searched similar [issues on GitHub](https://github.com/golangci/golangci-lint/issues) and didn't find any.
           required: true
-        - label: Yes, I've read the typecheck section of the FAQ (https://golangci-lint.run/welcome/faq/#why-do-you-have-typecheck-errors).
+        - label: Yes, I've read the `typecheck` section of the [FAQ](https://golangci-lint.run/welcome/faq/#why-do-you-have-typecheck-errors).
           required: true
-        - label: Yes, I've tried with the standalone linter if available (e.g., gocritic, go vet, etc.). (https://golangci-lint.run/usage/linters/)
+        - label: Yes, I've tried with the standalone [linter](https://golangci-lint.run/usage/linters/) if available (e.g., gocritic, go vet, etc.).
           required: true
         - label: I agree to follow this project's [Code of Conduct](https://github.com/golangci/golangci-lint?tab=coc-ov-file)
           required: true
