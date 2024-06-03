@@ -54,6 +54,7 @@ require (
 	github.com/gostaticanalysis/nilerr v0.1.1
 	github.com/hashicorp/go-version v1.7.0
 	github.com/hexops/gotextdiff v1.0.3
+	github.com/itsamirhn/whyvarscope v0.3.0
 	github.com/jgautheron/goconst v1.7.1
 	github.com/jingyugao/rowserrcheck v1.1.1
 	github.com/jirfag/go-printf-func-name v0.0.0-20200119135958-7558a9eaa5af
