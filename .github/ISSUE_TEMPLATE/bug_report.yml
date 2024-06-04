@@ -7,7 +7,7 @@ body:
     attributes:
       label: Welcome
       options:
-        - label: Yes, I'm using a binary release within 2 latest major [releases](https://github.com/golangci/golangci-lint/releases). Only such installations are supported.
+        - label: Yes, I'm using a binary release within 2 latest [releases](https://github.com/golangci/golangci-lint/releases). Only such installations are supported.
           required: true
         - label: Yes, I've searched similar [issues on GitHub](https://github.com/golangci/golangci-lint/issues) and didn't find any.
           required: true
