@@ -2641,6 +2641,7 @@ linters:
     - testpackage
     - thelper
     - tparallel
+    - ttempdir
     - typecheck
     - unconvert
     - unparam
@@ -2756,6 +2757,7 @@ linters:
     - testpackage
     - thelper
     - tparallel
+    - ttempdir
     - typecheck
     - unconvert
     - unparam
