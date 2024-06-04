@@ -100,6 +100,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/testpackage"
 	"github.com/golangci/golangci-lint/pkg/golinters/thelper"
 	"github.com/golangci/golangci-lint/pkg/golinters/tparallel"
+	"github.com/golangci/golangci-lint/pkg/golinters/ttempdir"
 	"github.com/golangci/golangci-lint/pkg/golinters/unconvert"
 	"github.com/golangci/golangci-lint/pkg/golinters/unparam"
 	"github.com/golangci/golangci-lint/pkg/golinters/unused"
@@ -755,6 +756,12 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithPresets(linter.PresetStyle, linter.PresetTest).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/moricho/tparallel"),
+
+		linter.NewConfig(ttempdir.New(&cfg.LintersSettings.Ttempdir)).
+			WithSince("v1.60.0").
+			WithPresets(linter.PresetStyle).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/peczenyj/ttempdir"),
 
 		linter.NewConfig(golinters.NewTypecheck()).
 			WithInternal().

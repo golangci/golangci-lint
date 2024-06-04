@@ -2289,6 +2289,15 @@ linters-settings:
       # Default: true
       begin: false
 
+  ttempdir:
+    # The option `all` will run against whole test files (`_test.go`) regardless of method/function signatures.
+    # Otherwise, only methods that take `*testing.T`, `*testing.B`, and `testing.TB` as arguments are checked.
+    # Default: false
+    all: false
+    # The option `max-recursion-level` is uses to analyze function calls in recursion.
+    # Default: 5
+    max-recursion-level: 5
+
   usestdlibvars:
     # Suggest the use of http.MethodXX.
     # Default: true

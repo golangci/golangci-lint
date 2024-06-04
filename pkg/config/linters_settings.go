@@ -269,6 +269,7 @@ type LintersSettings struct {
 	Testifylint     TestifylintSettings
 	Testpackage     TestpackageSettings
 	Thelper         ThelperSettings
+	Ttempdir        TtempdirSettings
 	Unconvert       UnconvertSettings
 	Unparam         UnparamSettings
 	Unused          UnusedSettings
@@ -912,6 +913,11 @@ type ThelperOptions struct {
 
 type TenvSettings struct {
 	All bool `mapstructure:"all"`
+}
+
+type TtempdirSettings struct {
+	All               bool `mapstructure:"all"`
+	MaxRecursionLevel uint `mapstructure:"max-recursion-level"`
 }
 
 type UseStdlibVarsSettings struct {
