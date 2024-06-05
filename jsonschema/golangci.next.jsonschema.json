@@ -316,6 +316,7 @@
             "testpackage",
             "thelper",
             "tparallel",
+            "ttempdir",
             "typecheck",
             "unconvert",
             "unparam",
@@ -3027,6 +3028,22 @@
                   "type": "boolean"
                 }
               }
+            }
+          }
+        },
+        "ttempdir": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "all": {
+              "description": "The option `all` will run against whole test files (`_test.go`) regardless of method/function signatures.",
+              "type": "boolean",
+              "default": false
+            },
+            "max-recursion-level": {
+              "description": "Max recursion level when checking nested arg calls",
+              "type": "integer",
+              "default": 5
             }
           }
         },
