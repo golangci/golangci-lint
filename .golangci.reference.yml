@@ -1561,8 +1561,8 @@ linters-settings:
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#atomic
       - name: atomic
         severity: warning
-        exclude: [""]
         disabled: false
+        exclude: [""]
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#banned-characters
       - name: banned-characters
         severity: warning
@@ -1572,23 +1572,23 @@ linters-settings:
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#bare-return
       - name: bare-return
         severity: warning
-        exclude: [""]
         disabled: false
+        exclude: [""]
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#blank-imports
       - name: blank-imports
         severity: warning
-        exclude: [""]
         disabled: false
+        exclude: [""]
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#bool-literal-in-expr
       - name: bool-literal-in-expr
         severity: warning
-        exclude: [""]
         disabled: false
+        exclude: [""]
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#call-to-gc
       - name: call-to-gc
         severity: warning
-        exclude: [""]
         disabled: false
+        exclude: [""]
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#cognitive-complexity
       - name: cognitive-complexity
         severity: warning
@@ -1658,6 +1658,7 @@ linters-settings:
         severity: warning
         disabled: false
         exclude: [""]
+        arguments: [ ]
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#duplicated-imports
       - name: duplicated-imports
         severity: warning
@@ -1742,18 +1743,18 @@ linters-settings:
         severity: warning
         disabled: false
         exclude: [""]
-      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#function-result-limit
-      - name: function-result-limit
-        severity: warning
-        disabled: false
-        exclude: [""]
-        arguments: [ 2 ]
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#function-length
       - name: function-length
         severity: warning
         disabled: false
         exclude: [""]
         arguments: [ 10, 0 ]
+      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#function-result-limit
+      - name: function-result-limit
+        severity: warning
+        disabled: false
+        exclude: [""]
+        arguments: [ 3 ]
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#get-return
       - name: get-return
         severity: warning
@@ -1769,6 +1770,26 @@ linters-settings:
         severity: warning
         disabled: false
         exclude: [""]
+      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#import-alias-naming
+      - name: import-alias-naming
+        severity: warning
+        disabled: false
+        exclude: [""]
+        arguments:
+          - "^[a-z][a-z0-9]{0,}$"
+      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#import-shadowing
+      - name: import-shadowing
+        severity: warning
+        disabled: false
+        exclude: [""]
+      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#imports-blocklist
+      - name: imports-blocklist
+        severity: warning
+        disabled: false
+        exclude: [""]
+        arguments:
+          - "crypto/md5"
+          - "crypto/sha1"
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#increment-decrement
       - name: increment-decrement
         severity: warning
@@ -1781,26 +1802,6 @@ linters-settings:
         exclude: [""]
         arguments:
           - "preserveScope"
-      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#import-alias-naming
-      - name: import-alias-naming
-        severity: warning
-        disabled: false
-        exclude: [""]
-        arguments:
-          - "^[a-z][a-z0-9]{0,}$"
-      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#imports-blocklist
-      - name: imports-blocklist
-        severity: warning
-        disabled: false
-        exclude: [""]
-        arguments:
-          - "crypto/md5"
-          - "crypto/sha1"
-      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#import-shadowing
-      - name: import-shadowing
-        severity: warning
-        disabled: false
-        exclude: [""]
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#line-length-limit
       - name: line-length-limit
         severity: warning
@@ -1849,13 +1850,13 @@ linters-settings:
         severity: warning
         disabled: false
         exclude: [""]
-      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#range-val-in-closure
-      - name: range-val-in-closure
+      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#range-val-address
+      - name: range-val-address
         severity: warning
         disabled: false
         exclude: [""]
-      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#range-val-address
-      - name: range-val-address
+      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#range-val-in-closure
+      - name: range-val-in-closure
         severity: warning
         disabled: false
         exclude: [""]
@@ -1864,18 +1865,13 @@ linters-settings:
         severity: warning
         disabled: false
         exclude: [""]
-      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#redundant-import-alias
-      - name: redundant-import-alias
-        severity: warning
-        disabled: false
-        exclude: [""]
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#redefines-builtin-id
       - name: redefines-builtin-id
         severity: warning
         disabled: false
         exclude: [""]
-      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#string-of-int
-      - name: string-of-int
+      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#redundant-import-alias
+      - name: redundant-import-alias
         severity: warning
         disabled: false
         exclude: [""]
@@ -1894,14 +1890,19 @@ linters-settings:
           - - panic
             - '/^[^\n]*$/'
             - must not contain line breaks
-      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#struct-tag
-      - name: struct-tag
-        arguments:
-          - "json,inline"
-          - "bson,outline,gnu"
+      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#string-of-int
+      - name: string-of-int
         severity: warning
         disabled: false
         exclude: [""]
+      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#struct-tag
+      - name: struct-tag
+        severity: warning
+        disabled: false
+        exclude: [""]
+        arguments:
+          - "json,inline"
+          - "bson,outline,gnu"
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#superfluous-else
       - name: superfluous-else
         severity: warning
@@ -1919,20 +1920,13 @@ linters-settings:
         severity: warning
         disabled: false
         exclude: [""]
-      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#var-naming
-      - name: var-naming
+      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#unchecked-type-assertion
+      - name: unchecked-type-assertion
         severity: warning
         disabled: false
         exclude: [""]
         arguments:
-          - [ "ID" ] # AllowList
-          - [ "VM" ] # DenyList
-          - - upperCaseConst: true
-      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#var-declaration
-      - name: var-declaration
-        severity: warning
-        disabled: false
-        exclude: [""]
+          - acceptIgnoredAssertionResult: true
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#unconditional-recursion
       - name: unconditional-recursion
         severity: warning
@@ -1980,11 +1974,30 @@ linters-settings:
         exclude: [""]
         arguments:
           - allowRegex: "^_"
+      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#use-any
+      - name: use-any
+        severity: warning
+        disabled: false
+        exclude: [""]
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#useless-break
       - name: useless-break
         severity: warning
         disabled: false
         exclude: [""]
+      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#var-declaration
+      - name: var-declaration
+        severity: warning
+        disabled: false
+        exclude: [""]
+      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#var-naming
+      - name: var-naming
+        severity: warning
+        disabled: false
+        exclude: [""]
+        arguments:
+          - [ "ID" ] # AllowList
+          - [ "VM" ] # DenyList
+          - - upperCaseConst: true # Extra parameter (upperCaseConst|skipPackageNameChecks)
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#waitgroup-by-value
       - name: waitgroup-by-value
         severity: warning
