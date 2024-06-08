@@ -879,6 +879,11 @@ type TestifylintSettings struct {
 		ExpVarPattern string `mapstructure:"pattern"`
 	} `mapstructure:"expected-actual"`
 
+	Formatter struct {
+		CheckFormatString *bool `mapstructure:"check-format-string"`
+		RequireFFuncs     bool  `mapstructure:"require-f-funcs"`
+	} `mapstructure:"formatter"`
+
 	GoRequire struct {
 		IgnoreHTTPHandlers bool `mapstructure:"ignore-http-handlers"`
 	} `mapstructure:"go-require"`

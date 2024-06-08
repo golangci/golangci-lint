@@ -2886,13 +2886,16 @@
                   "error-nil",
                   "expected-actual",
                   "float-compare",
+                  "formatter",
                   "go-require",
                   "len",
                   "negative-positive",
                   "nil-compare",
                   "require-error",
+                  "suite-broken-parallel",
                   "suite-dont-use-pkg",
                   "suite-extra-assert-call",
+                  "suite-subtest-run",
                   "suite-thelper",
                   "useless-assert"
                 ]
@@ -2906,13 +2909,16 @@
                 "error-nil",
                 "expected-actual",
                 "float-compare",
+                "float-compare",
                 "go-require",
                 "len",
                 "negative-positive",
                 "nil-compare",
                 "require-error",
+                "suite-broken-parallel",
                 "suite-dont-use-pkg",
                 "suite-extra-assert-call",
+                "suite-subtest-run",
                 "useless-assert"
               ]
             },
@@ -2929,13 +2935,16 @@
                   "error-nil",
                   "expected-actual",
                   "float-compare",
+                  "formatter",
                   "go-require",
                   "len",
                   "negative-positive",
                   "nil-compare",
                   "require-error",
+                  "suite-broken-parallel",
                   "suite-dont-use-pkg",
                   "suite-extra-assert-call",
+                  "suite-subtest-run",
                   "suite-thelper",
                   "useless-assert"
                 ],
@@ -2963,6 +2972,22 @@
                   "description": "Regexp for expected variable name.",
                   "type": "string",
                   "default": "(^(exp(ected)?|want(ed)?)([A-Z]\\w*)?$)|(^(\\w*[a-z])?(Exp(ected)?|Want(ed)?)$)"
+                }
+              }
+            },
+            "formatter": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "check-format-string": {
+                  "description": "To enable go vet's printf checks.",
+                  "type": "boolean",
+                  "default": true
+                },
+                "require-f-funcs": {
+                  "description": "To require f-assertions if format string is used.",
+                  "type": "boolean",
+                  "default": false
                 }
               }
             },
