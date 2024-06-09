@@ -9,11 +9,11 @@ require (
 	github.com/Abirdcfly/dupword v0.0.14
 	github.com/Antonboom/errname v0.1.13
 	github.com/Antonboom/nilnil v0.1.9
-	github.com/Antonboom/testifylint v1.3.1
+	github.com/Antonboom/testifylint v1.4.1
 	github.com/BurntSushi/toml v1.4.0
-	github.com/Crocmagnon/fatcontext v0.2.2
+	github.com/Crocmagnon/fatcontext v0.3.0
 	github.com/Djarvur/go-err113 v0.0.0-20210108212216-aea10b59be24
-	github.com/GaijinEntertainment/go-exhaustruct/v3 v3.2.0
+	github.com/GaijinEntertainment/go-exhaustruct/v3 v3.3.0
 	github.com/OpenPeeDeeP/depguard/v2 v2.2.0
 	github.com/alecthomas/go-check-sumtype v0.1.4
 	github.com/alexkohler/nakedret/v2 v2.0.4
@@ -23,7 +23,7 @@ require (
 	github.com/ashanbrown/makezero v1.1.1
 	github.com/bkielbasa/cyclop v1.2.1
 	github.com/blizzy78/varnamelen v0.8.0
-	github.com/bombsimon/wsl/v4 v4.2.1
+	github.com/bombsimon/wsl/v4 v4.4.0
 	github.com/breml/bidichk v0.2.7
 	github.com/breml/errchkjson v0.3.6
 	github.com/butuzov/ireturn v0.3.0
@@ -44,7 +44,7 @@ require (
 	github.com/gofrs/flock v0.8.1
 	github.com/golangci/dupl v0.0.0-20180902072040-3e9179ac440a
 	github.com/golangci/gofmt v0.0.0-20231018234816-f50ced29576e
-	github.com/golangci/misspell v0.5.1
+	github.com/golangci/misspell v0.6.0
 	github.com/golangci/modinfo v0.3.4
 	github.com/golangci/plugin-module-register v0.1.1
 	github.com/golangci/revgrep v0.5.3
@@ -92,7 +92,7 @@ require (
 	github.com/sanposhiho/wastedassign/v2 v2.0.7
 	github.com/santhosh-tekuri/jsonschema/v5 v5.3.1
 	github.com/sashamelentyev/interfacebloat v1.1.0
-	github.com/sashamelentyev/usestdlibvars v1.25.0
+	github.com/sashamelentyev/usestdlibvars v1.26.0
 	github.com/securego/gosec/v2 v2.20.1-0.20240525090044-5f0084eb01a9
 	github.com/shazow/go-diff v0.0.0-20160112020656-b6b7b6733b8c
 	github.com/shirou/gopsutil/v3 v3.24.5
@@ -126,7 +126,7 @@ require (
 	go-simpler.org/sloglint v0.7.1
 	go.uber.org/automaxprocs v1.5.3
 	golang.org/x/exp v0.0.0-20240103183307-be819d1f06fc
-	golang.org/x/tools v0.21.0
+	golang.org/x/tools v0.22.0
 	gopkg.in/yaml.v3 v3.0.1
 	honnef.co/go/tools v0.4.7
 	mvdan.cc/gofumpt v0.6.0
@@ -191,9 +191,9 @@ require (
 	go.uber.org/multierr v1.6.0 // indirect
 	go.uber.org/zap v1.24.0 // indirect
 	golang.org/x/exp/typeparams v0.0.0-20240314144324-c7f7c6466f7f // indirect
-	golang.org/x/mod v0.17.0 // indirect
+	golang.org/x/mod v0.18.0 // indirect
 	golang.org/x/sync v0.7.0 // indirect
-	golang.org/x/sys v0.20.0 // indirect
+	golang.org/x/sys v0.21.0 // indirect
 	golang.org/x/text v0.15.0 // indirect
 	google.golang.org/protobuf v1.33.0 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect

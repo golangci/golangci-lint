@@ -121,7 +121,7 @@ func getLLLIssuesForFile(filename string, maxLineLen int, tabSpaces string) ([]r
 					Filename: filename,
 					Line:     lineNumber,
 				},
-				Text:       fmt.Sprintf("line is %d characters", lineLen),
+				Text:       fmt.Sprintf("the line is %d characters long, which exceeds the maximum of %d characters.", lineLen, maxLineLen),
 				FromLinter: linterName,
 			})
 		}

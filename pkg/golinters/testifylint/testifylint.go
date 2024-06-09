@@ -18,6 +18,7 @@ func New(settings *config.TestifylintSettings) *goanalysis.Linter {
 			"disable-all": settings.DisableAll,
 
 			"bool-compare.ignore-custom-types": settings.BoolCompare.IgnoreCustomTypes,
+			"formatter.require-f-funcs":        settings.Formatter.RequireFFuncs,
 			"go-require.ignore-http-handlers":  settings.GoRequire.IgnoreHTTPHandlers,
 		}
 		if len(settings.EnabledCheckers) > 0 {
@@ -27,6 +28,9 @@ func New(settings *config.TestifylintSettings) *goanalysis.Linter {
 			cfg[a.Name]["disable"] = settings.DisabledCheckers
 		}
 
+		if b := settings.Formatter.CheckFormatString; b != nil {
+			cfg[a.Name]["formatter.check-format-string"] = *b
+		}
 		if p := settings.ExpectedActual.ExpVarPattern; p != "" {
 			cfg[a.Name]["expected-actual.pattern"] = p
 		}
