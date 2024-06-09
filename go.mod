@@ -13,7 +13,7 @@ require (
 	github.com/BurntSushi/toml v1.4.0
 	github.com/Crocmagnon/fatcontext v0.2.2
 	github.com/Djarvur/go-err113 v0.0.0-20210108212216-aea10b59be24
-	github.com/GaijinEntertainment/go-exhaustruct/v3 v3.2.0
+	github.com/GaijinEntertainment/go-exhaustruct/v3 v3.3.0
 	github.com/OpenPeeDeeP/depguard/v2 v2.2.0
 	github.com/alecthomas/go-check-sumtype v0.1.4
 	github.com/alexkohler/nakedret/v2 v2.0.4
