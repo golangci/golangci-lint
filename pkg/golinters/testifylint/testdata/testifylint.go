@@ -2,6 +2,7 @@
 package testdata
 
 import (
+	"fmt"
 	"io"
 	"testing"
 
@@ -21,15 +22,15 @@ func TestTestifylint(t *testing.T) {
 		err         error
 	)
 
-	assert.Equal(t, predicate, true)    // want "bool-compare: use assert\\.True"
-	assert.Equal(t, Bool(predicate), false)    // want "bool-compare: use assert\\.False"
-	assert.True(t, resultInt == 1)      // want "compares: use assert\\.Equal"
-	assert.Equal(t, len(arr), 0)        // want "empty: use assert\\.Empty"
-	assert.Error(t, err, io.EOF)        // want "error-is-as: invalid usage of assert\\.Error, use assert\\.ErrorIs instead"
-	assert.Nil(t, err)                  // want "error-nil: use assert\\.NoError"
-	assert.Equal(t, resultInt, 42)      // want "expected-actual: need to reverse actual and expected values"
-	assert.Equal(t, resultFloat, 42.42) // want "float-compare: use assert\\.InEpsilon \\(or InDelta\\)"
-	assert.Equal(t, len(arr), 10)       // want "len: use assert\\.Len"
+	assert.Equal(t, predicate, true)        // want "bool-compare: use assert\\.True"
+	assert.Equal(t, Bool(predicate), false) // want "bool-compare: use assert\\.False"
+	assert.True(t, resultInt == 1)          // want "compares: use assert\\.Equal"
+	assert.Equal(t, len(arr), 0)            // want "empty: use assert\\.Empty"
+	assert.Error(t, err, io.EOF)            // want "error-is-as: invalid usage of assert\\.Error, use assert\\.ErrorIs instead"
+	assert.Nil(t, err)                      // want "error-nil: use assert\\.NoError"
+	assert.Equal(t, resultInt, 42)          // want "expected-actual: need to reverse actual and expected values"
+	assert.Equal(t, resultFloat, 42.42)     // want "float-compare: use assert\\.InEpsilon \\(or InDelta\\)"
+	assert.Equal(t, len(arr), 10)           // want "len: use assert\\.Len"
 
 	assert.True(t, predicate)
 	assert.Equal(t, resultInt, 1) // want "expected-actual: need to reverse actual and expected values"
@@ -48,6 +49,9 @@ func TestTestifylint(t *testing.T) {
 		assert.Equal(t, predicate, true, "message %d", 42)  // want "bool-compare: use assert\\.True"
 		assert.Equalf(t, predicate, true, "message")        // want "bool-compare: use assert\\.Truef"
 		assert.Equalf(t, predicate, true, "message %d", 42) // want "bool-compare: use assert\\.Truef"
+
+		assert.Equal(t, 1, 2, fmt.Sprintf("msg"))     // want "formatter: remove unnecessary fmt\\.Sprintf"
+		assert.Equalf(t, 1, 2, "msg with arg", "arg") // want "formatter: assert\\.Equalf call has arguments but no formatting directives"
 	})
 
 	assert.Equal(t, arr, nil) // want "nil-compare: use assert\\.Nil"
@@ -69,6 +73,25 @@ func TestSuiteExample(t *testing.T) {
 }
 
 func (s *SuiteExample) TestAll() {
+	var b bool
+	s.Assert().True(b) // want "suite-extra-assert-call: need to simplify the assertion to s\\.True"
+}
+
+func (s *SuiteExample) TestOne() {
+	s.T().Parallel() // want "suite-broken-parallel: testify v1 does not support suite's parallel tests and subtests"
+
+	s.T().Run("subtest", func(t *testing.T) { // want "suite-subtest-run: use s\\.Run to run subtest"
+		t.Parallel() // want "suite-broken-parallel: testify v1 does not support suite's parallel tests and subtests"
+
+		assert.Equal(s.T(), 1, 2) // want "suite-dont-use-pkg: use s\\.Equal"
+		s.Equal(1, 2)
+	})
+
+	s.Run("subtest", func() {
+		s.T().Parallel() // want "suite-broken-parallel: testify v1 does not support suite's parallel tests and subtests"
+		s.Equal(1, 2)
+	})
+
 	var b bool
 	s.Assert().True(b) // want "suite-extra-assert-call: need to simplify the assertion to s\\.True"
 }
