@@ -1,9 +1,43 @@
 Follow the news and releases on [Mastodon](https://fosstodon.org/@golangcilint) and on [Twitter](https://twitter.com/golangci).
 
+### v1.60.1
+
+1. Updated linters
+   * `errorlint`: from 1.5.2 to 1.6.0
+   * `exhaustruct`: from 3.2.0 to 3.3.0 (recognize custom error values in return)
+   * `fatcontext`: from 0.2.2 to 0.4.0 (fix false positives for context stored in structs)
+   * `gocognit`: from 1.1.2 to 1.1.3
+   * `gomodguard`: from 1.3.2 to 1.3.3
+   * `govet` (`printf`): report non-constant format, no args
+   * `lll`: advertise max line length instead of just reporting failure
+   * `revive`: from 1.3.7 to 1.3.9 (new rule: `comments-density`)
+   * `sloglint`: from 0.7.1 to 0.7.2
+   * `spancheck`: from 0.6.1 to 0.6.2
+   * `staticcheck`: from 0.4.7 to 0.5.0
+   * `tenv`: from 1.7.1 to 1.10.0 (remove reports on fuzzing)
+   * `testifylint`: from 1.3.1 to 1.4.3 (new options: `formatter`, `suite-broken-parallel`, `suite-subtest-run`)
+   * `tparallel`: from 0.3.1 to 0.3.2
+   * `usestdlibvars`: from 1.26.0 to 1.27.0 (fix false-positive with number used inside a mathematical operations)
+   * `wsl`: from 4.2.1 to 4.4.1
+   * ️⚠️ `unused`: remove `exported-is-used` option
+2. Fixes
+   * SARIF: sanitize level property
+   * ️⚠️ `typecheck` issues should never be ignored
+3. Documentation
+   * Add link on linter without configuration
+   * Remove 'trusted by' page
+   * `wsl` update documentation of the configuration
+4. misc.
+   * 🎉 go1.23 support
+
+### v1.60.0
+
+Cancelled due to a CI problem.
+
 ### v1.59.1
 
 1. Updated linters
-   * `go-errorlint`: from 1.5.1 to 1.5.2
+   * `errorlint`: from 1.5.1 to 1.5.2
    * `gomnd`: deprecated configuration compatibility
    * `intrange`: add `style` preset
    * `misspell`: from 0.5.1 to 0.6.0
@@ -15,7 +49,7 @@ Follow the news and releases on [Mastodon](https://fosstodon.org/@golangcilint) 
    * SARIF: init empty result slice
    * SARIF: issue column >= 1
 3. Documentation
-   * update `revive` configuration
+   * `revive`: update documentation of the configuration
 
 ### v1.59.0
 
