@@ -2667,6 +2667,7 @@ linters:
     - varnamelen
     - wastedassign
     - whitespace
+    - whyvarscope
     - wrapcheck
     - wsl
     - zerologlint
