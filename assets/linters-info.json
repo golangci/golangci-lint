@@ -749,6 +749,9 @@
     "name": "intrange",
     "desc": "intrange is a linter to find places where for loops could make use of an integer range.",
     "loadMode": 7,
+    "inPresets": [
+      "style"
+    ],
     "originalURL": "https://github.com/ckaznocha/intrange",
     "internal": false,
     "isSlow": false,
