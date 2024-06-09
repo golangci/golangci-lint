@@ -218,7 +218,7 @@ func TestLineDirective(t *testing.T) {
 			},
 			configPath: "testdata/linedirective/lll.yml",
 			targetPath: "linedirective",
-			expected:   "line is 57 characters (lll)",
+			expected:   "the line is 57 characters long, which exceeds the maximum of 50 characters. (lll)",
 		},
 		{
 			desc: "misspell",
