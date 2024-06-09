@@ -818,7 +818,6 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 		linter.NewConfig(whyvarscope.New()).
 			WithSince("v1.60.0").
 			WithPresets(linter.PresetUnused).
-			WithLoadForGoAnalysis().
 			WithURL("https://github.com/itsamirhn/whyvarscope"),
 
 		linter.NewConfig(wrapcheck.New(&cfg.LintersSettings.Wrapcheck)).
