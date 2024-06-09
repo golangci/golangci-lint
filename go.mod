@@ -9,11 +9,11 @@ require (
 	github.com/Abirdcfly/dupword v0.0.14
 	github.com/Antonboom/errname v0.1.13
 	github.com/Antonboom/nilnil v0.1.9
-	github.com/Antonboom/testifylint v1.3.1
+	github.com/Antonboom/testifylint v1.4.1
 	github.com/BurntSushi/toml v1.4.0
-	github.com/Crocmagnon/fatcontext v0.2.2
+	github.com/Crocmagnon/fatcontext v0.3.0
 	github.com/Djarvur/go-err113 v0.0.0-20210108212216-aea10b59be24
-	github.com/GaijinEntertainment/go-exhaustruct/v3 v3.2.0
+	github.com/GaijinEntertainment/go-exhaustruct/v3 v3.3.0
 	github.com/OpenPeeDeeP/depguard/v2 v2.2.0
 	github.com/alecthomas/go-check-sumtype v0.1.4
 	github.com/alexkohler/nakedret/v2 v2.0.4
@@ -23,7 +23,7 @@ require (
 	github.com/ashanbrown/makezero v1.1.1
 	github.com/bkielbasa/cyclop v1.2.1
 	github.com/blizzy78/varnamelen v0.8.0
-	github.com/bombsimon/wsl/v4 v4.2.1
+	github.com/bombsimon/wsl/v4 v4.4.0
 	github.com/breml/bidichk v0.2.7
 	github.com/breml/errchkjson v0.3.6
 	github.com/butuzov/ireturn v0.3.0
@@ -44,7 +44,7 @@ require (
 	github.com/gofrs/flock v0.8.1
 	github.com/golangci/dupl v0.0.0-20180902072040-3e9179ac440a
 	github.com/golangci/gofmt v0.0.0-20231018234816-f50ced29576e
-	github.com/golangci/misspell v0.5.1
+	github.com/golangci/misspell v0.6.0
 	github.com/golangci/modinfo v0.3.4
 	github.com/golangci/plugin-module-register v0.1.1
 	github.com/golangci/revgrep v0.5.3
@@ -92,7 +92,7 @@ require (
 	github.com/sanposhiho/wastedassign/v2 v2.0.7
 	github.com/santhosh-tekuri/jsonschema/v5 v5.3.1
 	github.com/sashamelentyev/interfacebloat v1.1.0
-	github.com/sashamelentyev/usestdlibvars v1.25.0
+	github.com/sashamelentyev/usestdlibvars v1.26.0
 	github.com/securego/gosec/v2 v2.20.1-0.20240525090044-5f0084eb01a9
 	github.com/shazow/go-diff v0.0.0-20160112020656-b6b7b6733b8c
 	github.com/shirou/gopsutil/v3 v3.24.5
