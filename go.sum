@@ -49,8 +49,8 @@ github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03
 github.com/BurntSushi/toml v1.4.0 h1:kuoIxZQy2WRRk1pttg9asf+WVv6tWQuBNVmK8+nqPr0=
 github.com/BurntSushi/toml v1.4.0/go.mod h1:ukJfTF/6rtPPRCnwkur4qwRxa8vTRFBF0uk2lLoLwho=
 github.com/BurntSushi/xgb v0.0.0-20160522181843-27f122750802/go.mod h1:IVnqGOEym/WlBOVXweHU+Q+/VP0lqqI8lqeDx9IjBqo=
-github.com/Crocmagnon/fatcontext v0.2.2 h1:OrFlsDdOj9hW/oBEJBNSuH7QWf+E9WPVHw+x52bXVbk=
-github.com/Crocmagnon/fatcontext v0.2.2/go.mod h1:WSn/c/+MMNiD8Pri0ahRj0o9jVpeowzavOQplBJw6u0=
+github.com/Crocmagnon/fatcontext v0.3.0 h1:S6gNUYNSN9V76Tu017OFgoaOpybmMhwe6Ewh1cYd0jg=
+github.com/Crocmagnon/fatcontext v0.3.0/go.mod h1:x3F9YW5CFE7vo+FGA5GzBD1SBXU4FQI0+y1ReG4Q+pY=
 github.com/Djarvur/go-err113 v0.0.0-20210108212216-aea10b59be24 h1:sHglBQTwgx+rWPdisA5ynNEsoARbiCBOyGcJM4/OzsM=
 github.com/Djarvur/go-err113 v0.0.0-20210108212216-aea10b59be24/go.mod h1:4UJr5HIiMZrwgkSPdsjy2uOQExX/WEILpIrO9UPGuXs=
 github.com/GaijinEntertainment/go-exhaustruct/v3 v3.3.0 h1:/fTUt5vmbkAcMBt4YQiuC23cV0kEsN1MVMNqeOW43cU=
