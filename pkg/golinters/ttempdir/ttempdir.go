@@ -9,12 +9,12 @@ import (
 )
 
 func New(settings *config.TtempdirSettings) *goanalysis.Linter {
-	ttempdirAnalyzer := analyzer.New()
+	a := analyzer.New()
 
 	var cfg map[string]map[string]any
 	if settings != nil {
 		cfg = map[string]map[string]any{
-			ttempdirAnalyzer.Name: {
+			a.Name: {
 				analyzer.FlagAllName:               settings.All,
 				analyzer.FlagMaxRecursionLevelName: settings.MaxRecursionLevel,
 			},
@@ -22,9 +22,9 @@ func New(settings *config.TtempdirSettings) *goanalysis.Linter {
 	}
 
 	return goanalysis.NewLinter(
-		ttempdirAnalyzer.Name,
-		ttempdirAnalyzer.Doc,
-		[]*analysis.Analyzer{ttempdirAnalyzer},
+		a.Name,
+		"Detects the use of os.MkdirTemp, ioutil.TempDir or os.TempDir instead of t.TempDir",
+		[]*analysis.Analyzer{a},
 		cfg,
 	).WithLoadMode(goanalysis.LoadModeSyntax)
 }
