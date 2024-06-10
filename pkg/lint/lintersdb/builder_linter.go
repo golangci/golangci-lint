@@ -725,7 +725,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 
 		linter.NewConfig(tenv.New(&cfg.LintersSettings.Tenv)).
 			WithSince("v1.43.0").
-			WithPresets(linter.PresetStyle).
+			WithPresets(linter.PresetTest).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/sivchari/tenv"),
 
@@ -747,7 +747,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 
 		linter.NewConfig(thelper.New(&cfg.LintersSettings.Thelper)).
 			WithSince("v1.34.0").
-			WithPresets(linter.PresetStyle).
+			WithPresets(linter.PresetTest).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/kulti/thelper"),
 
