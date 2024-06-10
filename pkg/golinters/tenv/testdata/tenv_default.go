@@ -1,5 +1,4 @@
 //golangcitest:args -Etenv
-//golangcitest:config_path testdata/tenv_all.yml
 package testdata
 
 import (
