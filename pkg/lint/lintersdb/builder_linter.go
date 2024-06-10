@@ -760,7 +760,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 
 		linter.NewConfig(ttempdir.New(&cfg.LintersSettings.Ttempdir)).
 			WithSince("v1.60.0").
-			WithPresets(linter.PresetStyle, linter.PresetTest).
+			WithPresets(linter.PresetTest).
 			WithURL("https://github.com/peczenyj/ttempdir"),
 
 		linter.NewConfig(golinters.NewTypecheck()).
