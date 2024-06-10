@@ -159,6 +159,10 @@ var defaultLintersSettings = LintersSettings{
 		SkipRegexp:    `(export|internal)_test\.go`,
 		AllowPackages: []string{"main"},
 	},
+	Ttempdir: TtempdirSettings{
+		All:               false,
+		MaxRecursionLevel: 5,
+	},
 	Unparam: UnparamSettings{
 		Algo: "cha",
 	},

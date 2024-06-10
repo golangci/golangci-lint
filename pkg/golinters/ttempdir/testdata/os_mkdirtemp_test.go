@@ -1,8 +1,8 @@
 //golangcitest:args -Ettempdir
-//golangcitest:config_path testdata/ttempdir_all.yml
 package testdata
 
 import (
+	"fmt"
 	"os"
 	"testing"
 )
@@ -12,12 +12,12 @@ var (
 )
 
 func testsetup() {
-	os.MkdirTemp("a", "b")           // if -all = true, want  "os\\.MkdirTemp\\(\\) should be replaced by `testing\\.TempDir\\(\\)` in testsetup"
-	_, err := os.MkdirTemp("a", "b") // if -all = true, want  "os\\.MkdirTemp\\(\\) should be replaced by `testing\\.TempDir\\(\\)` in testsetup"
+	os.MkdirTemp("a", "b")           // never seen
+	_, err := os.MkdirTemp("a", "b") // never seen
 	if err != nil {
 		_ = err
 	}
-	os.MkdirTemp("a", "b") // if -all = true, "func setup is not using testing.TempDir"
+	os.MkdirTemp("a", "b") // never seen
 }
 
 func TestF(t *testing.T) {
@@ -76,4 +76,32 @@ func TestEmpty(t *testing.T) {
 
 func TestEmptyTB(t *testing.T) {
 	func(testing.TB) {}(t)
+}
+
+func TestTDD(t *testing.T) {
+	for _, tt := range []struct {
+		name string
+	}{
+		{"test"},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			os.MkdirTemp("a", "b")           // want "os\\.MkdirTemp\\(\\) should be replaced by `t\\.TempDir\\(\\)` in anonymous function"
+			_, err := os.MkdirTemp("a", "b") // want "os\\.MkdirTemp\\(\\) should be replaced by `t\\.TempDir\\(\\)` in anonymous function"
+			_ = err
+			if _, err := os.MkdirTemp("a", "b"); err != nil { // want "os\\.MkdirTemp\\(\\) should be replaced by `t\\.TempDir\\(\\)` in anonymous function"
+				_ = err
+			}
+		})
+	}
+}
+
+func TestLoop(t *testing.T) {
+	for i := 0; i < 3; i++ {
+		os.MkdirTemp(fmt.Sprintf("a%d", i), "b")           // want "os\\.MkdirTemp\\(\\) should be replaced by `t\\.TempDir\\(\\)` in TestLoop"
+		_, err := os.MkdirTemp(fmt.Sprintf("a%d", i), "b") // want "os\\.MkdirTemp\\(\\) should be replaced by `t\\.TempDir\\(\\)` in TestLoop"
+		_ = err
+		if _, err := os.MkdirTemp(fmt.Sprintf("a%d", i), "b"); err != nil { // want "os\\.MkdirTemp\\(\\) should be replaced by `t\\.TempDir\\(\\)` in TestLoop"
+			_ = err
+		}
+	}
 }
