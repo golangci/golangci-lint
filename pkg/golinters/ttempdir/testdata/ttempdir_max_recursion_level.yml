@@ -1,4 +1,0 @@
-linters-settings:
-  ttempdir:
-    all: false
-    max-recursion-level: 10
