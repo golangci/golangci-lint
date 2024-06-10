@@ -41,7 +41,7 @@ jobs:
         run: docker login -u golangci -p ${{ secrets.GOLANGCI_LINT_DOCKER_TOKEN }}
 
       - name: Create release
-        uses: goreleaser/goreleaser-action@v5
+        uses: goreleaser/goreleaser-action@v6
         with:
           version: latest
           args: release --clean --timeout=90m
