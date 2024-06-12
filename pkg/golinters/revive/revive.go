@@ -49,8 +49,14 @@ func New(settings *config.ReviveSettings) *goanalysis.Linter {
 		[]*analysis.Analyzer{analyzer},
 		nil,
 	).WithContextSetter(func(lintCtx *linter.Context) {
+		conf, err := getReviveConfig(settings)
+		if err != nil {
+			lintCtx.Log.Errorf("failed to get revive config: %v", err)
+			return
+		}
+
 		analyzer.Run = func(pass *analysis.Pass) (any, error) {
-			issues, err := runRevive(lintCtx, pass, settings)
+			issues, err := runRevive(lintCtx, pass, settings, conf)
 			if err != nil {
 				return nil, err
 			}
@@ -70,13 +76,9 @@ func New(settings *config.ReviveSettings) *goanalysis.Linter {
 	}).WithLoadMode(goanalysis.LoadModeSyntax)
 }
 
-func runRevive(lintCtx *linter.Context, pass *analysis.Pass, settings *config.ReviveSettings) ([]goanalysis.Issue, error) {
+func runRevive(lintCtx *linter.Context, pass *analysis.Pass, settings *config.ReviveSettings, conf *lint.Config,
+) ([]goanalysis.Issue, error) {
 	packages := [][]string{internal.GetFileNames(pass)}
-
-	conf, err := getReviveConfig(settings)
-	if err != nil {
-		return nil, err
-	}
 
 	formatter, err := reviveConfig.GetFormatter("json")
 	if err != nil {
