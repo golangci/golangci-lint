@@ -103,3 +103,13 @@ jobs:
           branch-suffix: timestamp
           title: "docs: update documentation assets"
           delete-branch: true
+
+  check-install-script:
+    name: Installation script (remote)
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - run: curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b "./install-golangci-lint"
