@@ -275,6 +275,26 @@ http_download_curl() {
   local_file=$1
   source_url=$2
   header=$3
+
+  # workaround https://github.com/curl/curl/issues/13845
+  curl_version=$(curl --version | head -n 1 | awk '{ print $2 }')
+  if [ "$curl_version" = "8.8.0" ]; then
+    log_debug "http_download_curl curl $curl_version detected"
+    if [ -z "$header" ]; then
+      curl -sL -o "$local_file" "$source_url"
+    else
+      curl -sL -H "$header" -o "$local_file" "$source_url"
+
+      nf=$(cat "$local_file" | jq -r '.error // ""')
+      if  [ ! -z "$nf" ]; then
+        log_debug "http_download_curl received an error: $nf"
+        return 1
+      fi
+    fi
+
+    return 0
+  fi
+
   if [ -z "$header" ]; then
     code=$(curl -w '%{http_code}' -sL -o "$local_file" "$source_url")
   else
