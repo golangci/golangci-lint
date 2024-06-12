@@ -2958,13 +2958,14 @@ issues:
   # Default: ""
   new-from-patch: path/to/patch/file
 
+  # Show issues in any part of update files (requires new-from-rev or new-from-patch).
+  # Default: false
+  whole-files: true
+
   # Fix found issues (if it's supported by the linter).
   # Default: false
   fix: true
 
-  # Show issues in any part of update files (requires new-from-rev or new-from-patch).
-  # Default: false
-  whole-files: true
 
 severity:
   # Set the default severity for issues.
