@@ -42,7 +42,7 @@ func TestSarif_Print(t *testing.T) {
 		},
 		{
 			FromLinter: "linter-a",
-			Severity:   "error",
+			Severity:   "low",
 			Text:       "some issue 2",
 			Pos: token.Position{
 				Filename: "path/to/filec.go",
