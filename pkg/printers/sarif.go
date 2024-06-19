@@ -77,11 +77,10 @@ func (p Sarif) Print(issues []result.Issue) error {
 
 		severity := issue.Severity
 
-		// can be only none, note, warning, error
-		// https://docs.oasis-open.org/sarif/sarif/v2.1.0/errata01/os/sarif-v2.1.0-errata01-os-complete.html#_Toc141790898
 		switch severity {
+		// https://docs.oasis-open.org/sarif/sarif/v2.1.0/errata01/os/sarif-v2.1.0-errata01-os-complete.html#_Toc141790898
 		case "none", "note", "warning", "error":
-			// valid
+			// Valid levels.
 		default:
 			severity = "error"
 		}
