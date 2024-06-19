@@ -79,12 +79,11 @@ func (p Sarif) Print(issues []result.Issue) error {
 
 		// can be only none, note, warning, error
 		// https://docs.oasis-open.org/sarif/sarif/v2.1.0/errata01/os/sarif-v2.1.0-errata01-os-complete.html#_Toc141790898
-		if severity == "" ||
-			severity != "none" &&
-				severity != "note" &&
-				severity != "warning" &&
-				severity != "error" {
-			severity = "note"
+		switch severity {
+		case "none", "note", "warning", "error":
+			// valid
+		default:
+			severity = "error"
 		}
 
 		sr := sarifResult{
