@@ -63,7 +63,6 @@ func testOneSource(t *testing.T, log *logutils.StderrLog, binPath, sourcePath st
 	}
 
 	args := []string{
-		"--go=1.22", // TODO(ldez) remove this line when we will run go1.23 on the CI. (related to intrange, copyloopvar)
 		"--disable-all",
 		"--out-format=json",
 		"--max-same-issues=100",

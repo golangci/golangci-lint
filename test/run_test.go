@@ -101,7 +101,6 @@ func TestCgoOk(t *testing.T) {
 		WithArgs("--timeout=3m",
 			"--enable-all",
 		).
-		WithArgs("--go=1.22"). // TODO(ldez) remove this line when we will run go1.23 on the CI. (related to intrange, copyloopvar)
 		WithTargetPath(testdataDir, "cgo").
 		Runner().
 		Install().
@@ -323,7 +322,6 @@ func TestUnsafeOk(t *testing.T) {
 	testshared.NewRunnerBuilder(t).
 		WithNoConfig().
 		WithArgs("--enable-all").
-		WithArgs("--go=1.22"). // TODO(ldez) remove this line when we will run go1.23 on the CI. (related to intrange, copyloopvar)
 		WithTargetPath(testdataDir, "unsafe").
 		Runner().
 		Install().
@@ -484,7 +482,6 @@ func TestEnableAllFastAndEnableCanCoexist(t *testing.T) {
 			testshared.NewRunnerBuilder(t).
 				WithNoConfig().
 				WithArgs(test.args...).
-				WithArgs("--go=1.22"). // TODO(ldez) remove this line when we will run go1.23 on the CI. (related to intrange, copyloopvar)
 				WithTargetPath(testdataDir, minimalPkg).
 				WithBinPath(binPath).
 				Runner().
