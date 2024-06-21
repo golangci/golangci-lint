@@ -8,3 +8,4 @@ func Misspell() {
 
 // the word iff should be reported here // want "\\`iff\\` is a misspelling of \\`if\\`"
 // the word cancelation should be reported here // want "\\`cancelation\\` is a misspelling of \\`cancellation\\`"
+// the word successed should be reported here // want "\\`successed\\` is a misspelling of \\`successful,success,succeeded\\`"

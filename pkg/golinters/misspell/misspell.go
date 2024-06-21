@@ -134,7 +134,10 @@ func runMisspellOnFile(lintCtx *linter.Context, filename string, replacer *missp
 	var res []result.Issue
 
 	for _, diff := range diffs {
-		text := fmt.Sprintf("`%s` is a misspelling of `%s`", diff.Original, diff.Corrected)
+		allCorrections := diff.Corrected
+		text := fmt.Sprintf("`%s` is a misspelling of `%s`", diff.Original, allCorrections)
+		// The first suggestion is the most likely to be correct.
+		correction := strings.Split(allCorrections, ",")[0]
 
 		pos := token.Position{
 			Filename: filename,
@@ -146,7 +149,7 @@ func runMisspellOnFile(lintCtx *linter.Context, filename string, replacer *missp
 			Inline: &result.InlineFix{
 				StartCol:  diff.Column,
 				Length:    len(diff.Original),
-				NewString: diff.Corrected,
+				NewString: correction,
 			},
 		}
 
@@ -176,7 +179,7 @@ func appendExtraWords(replacer *misspell.Replacer, extraWords []config.MisspellE
 		if strings.ContainsFunc(word.Typo, func(r rune) bool { return !unicode.IsLetter(r) }) {
 			return fmt.Errorf("the word %q in the 'typo' field should only contain letters", word.Typo)
 		}
-		if strings.ContainsFunc(word.Correction, func(r rune) bool { return !unicode.IsLetter(r) }) {
+		if strings.ContainsFunc(word.Correction, func(r rune) bool { return r != ',' && !unicode.IsLetter(r) }) {
 			return fmt.Errorf("the word %q in the 'correction' field should only contain letters", word.Correction)
 		}
 

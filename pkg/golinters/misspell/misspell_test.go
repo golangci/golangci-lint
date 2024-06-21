@@ -20,6 +20,10 @@ func Test_appendExtraWords(t *testing.T) {
 			Typo:       "canCELation",
 			Correction: "canceLLaTION",
 		},
+		{
+			Typo:       "successed",
+			Correction: "successful,success,succeeded",
+		},
 	}
 
 	replacer := &misspell.Replacer{}
@@ -27,7 +31,7 @@ func Test_appendExtraWords(t *testing.T) {
 	err := appendExtraWords(replacer, extraWords)
 	require.NoError(t, err)
 
-	expected := []string{"iff", "if", "cancelation", "cancellation"}
+	expected := []string{"iff", "if", "cancelation", "cancellation", "successed", "successful,success,succeeded"}
 
 	assert.Equal(t, expected, replacer.Replacements)
 }

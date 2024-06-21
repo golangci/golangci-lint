@@ -1321,7 +1321,8 @@ linters-settings:
     ignore-words:
       - someword
     # Extra word corrections.
-    # `typo` and `correction` should only contain letters.
+    # `typo` should only contain letters.
+    # `correction` can contains one or more words separated by commas without spaces.
     # The words are case-insensitive.
     # Default: []
     extra-words:
@@ -1329,6 +1330,8 @@ linters-settings:
         correction: "if"
       - typo: "cancelation"
         correction: "cancellation"
+      - typo: "successed"
+        correction: "successful,success,succeeded"
     # Mode of the analysis:
     # - default: checks all the file content.
     # - restricted: checks only comments.

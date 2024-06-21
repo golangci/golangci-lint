@@ -1,4 +1,5 @@
 //golangcitest:args -Emisspell
+//golangcitest:config_path testdata/misspell_fix.yml
 //golangcitest:expected_exitcode 0
 package p
 
@@ -8,6 +9,7 @@ import "log"
 // lala language
 // language
 // language language
+// successful
 
 // check Language
 // and check langAuge
