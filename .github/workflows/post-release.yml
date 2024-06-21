@@ -20,7 +20,7 @@ jobs:
           # ex:
           # - 1.18beta1 -> 1.18.0-beta.1
           # - 1.18rc1 -> 1.18.0-rc.1
-          go-version: '1.22'
+          go-version: '1.23.0-rc.1'
       - uses: actions/setup-node@v4
         with:
           node-version: "15"
@@ -56,7 +56,7 @@ jobs:
           # ex:
           # - 1.18beta1 -> 1.18.0-beta.1
           # - 1.18rc1 -> 1.18.0-rc.1
-          go-version: '1.22'
+          go-version: '1.23.0-rc.1'
 
       - name: Update GitHub Action config
         run: make assets/github-action-config.json
@@ -84,7 +84,7 @@ jobs:
           # ex:
           # - 1.18beta1 -> 1.18.0-beta.1
           # - 1.18rc1 -> 1.18.0-rc.1
-          go-version: '1.22'
+          go-version: '1.23.0-rc.1'
 
       - name: Update reference files
         run: cp .golangci.next.reference.yml .golangci.reference.yml

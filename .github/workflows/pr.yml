@@ -6,7 +6,7 @@ on:
   pull_request:
 
 env:
-  GO_VERSION: '1.22'
+  GO_VERSION: '1.23.0-rc.1'
 
 jobs:
   # Check if there is any dirty change for go mod tidy
@@ -42,7 +42,7 @@ jobs:
           # ex:
           # - 1.18beta1 -> 1.18.0-beta.1
           # - 1.18rc1 -> 1.18.0-rc.1
-          go-version: ${{ env.GO_VERSION }}
+          go-version: '1.22'
       - name: lint
         uses: golangci/golangci-lint-action@v6.0.1
         with:
@@ -86,8 +86,8 @@ jobs:
     strategy:
       matrix:
         golang:
-          - '1.21'
           - '1.22'
+          - '1.23.0-rc.1'
     steps:
       - uses: actions/checkout@v4
       - name: Install Go
