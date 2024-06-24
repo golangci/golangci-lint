@@ -90,12 +90,12 @@ func getLintersListMarkdown(enabled bool) string {
 }
 
 func getName(lc *types.LinterWrapper) string {
-	name := lc.Name
+	name := spanWithID(listItemPrefix+lc.Name, "", "")
 
 	if hasSettings(lc.Name) {
-		name = fmt.Sprintf("[%[1]s](#%[2]s \"%[1]s configuration\")", name, lc.Name)
+		name += fmt.Sprintf("[%[1]s](#%[1]s \"%[1]s configuration\")", lc.Name)
 	} else {
-		name = fmt.Sprintf("%s [%s](#%s)", spanWithID(lc.Name, "", ""), name, lc.Name)
+		name += fmt.Sprintf("%[1]s[%[2]s](#%[2]s)", spanWithID(lc.Name, "", ""), lc.Name)
 	}
 
 	if lc.OriginalURL != "" {
@@ -104,9 +104,7 @@ func getName(lc *types.LinterWrapper) string {
 			icon = "<FaGitlab size={'0.8rem'} />"
 		}
 
-		name = fmt.Sprintf("%s%s&nbsp;[%s](%s)",
-			spanWithID(listItemPrefix+lc.Name, "", ""),
-			name,
+		name += fmt.Sprintf("&nbsp;[%s](%s)",
 			span(lc.Name+" repository", icon),
 			lc.OriginalURL,
 		)
