@@ -95,7 +95,7 @@ func getName(lc *types.LinterWrapper) string {
 	if hasSettings(lc.Name) {
 		name += fmt.Sprintf("[%[1]s](#%[1]s \"%[1]s configuration\")", lc.Name)
 	} else {
-		name += fmt.Sprintf("%[1]s[%[2]s](#%[2]s)", spanWithID(lc.Name, "", ""), lc.Name)
+		name += fmt.Sprintf("%[1]s[%[2]s](#%[2]s \"%[2]s has no configuration\")", spanWithID(lc.Name, "", ""), lc.Name)
 	}
 
 	if lc.OriginalURL != "" {
