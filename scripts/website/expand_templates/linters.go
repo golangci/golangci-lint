@@ -95,7 +95,7 @@ func getName(lc *types.LinterWrapper) string {
 	if hasSettings(lc.Name) {
 		name = fmt.Sprintf("[%[1]s](#%[2]s \"%[1]s configuration\")", name, lc.Name)
 	} else {
-		name = fmt.Sprintf("%s&nbsp;%s", lc.Name, "[<FaLink size={'0.8rem'} />](#"+listItemPrefix+lc.Name+")")
+		name = fmt.Sprintf("%s [%s](#%s)", spanWithID(lc.Name, "", ""), name, lc.Name)
 	}
 
 	if lc.OriginalURL != "" {
