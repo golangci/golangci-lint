@@ -90,10 +90,10 @@ func getLintersListMarkdown(enabled bool) string {
 }
 
 func getName(lc *types.LinterWrapper) string {
-	name := lc.Name
+	name := span(lc.Name, lc.Name)
 
 	if hasSettings(lc.Name) {
-		name = fmt.Sprintf("[%[1]s](#%[2]s \"%[1]s configuration\")", name, lc.Name)
+		name = fmt.Sprintf("[%[1]s](#%[2]s \"%[1]s configuration\")", lc.Name, lc.Name)
 	}
 
 	if lc.OriginalURL != "" {
