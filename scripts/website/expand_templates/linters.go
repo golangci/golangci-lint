@@ -104,10 +104,7 @@ func getName(lc *types.LinterWrapper) string {
 			icon = "<FaGitlab size={'0.8rem'} />"
 		}
 
-		name += fmt.Sprintf("&nbsp;[%s](%s)",
-			span(lc.Name+" repository", icon),
-			lc.OriginalURL,
-		)
+		name += fmt.Sprintf("&nbsp;[%s](%s)", span(lc.Name+" repository", icon), lc.OriginalURL)
 	}
 
 	if lc.Deprecation == nil {
