@@ -2462,59 +2462,77 @@ linters-settings:
       - ^(?i)c(?-i)ach(ing|e)
 
   wsl:
-    # See https://github.com/bombsimon/wsl/blob/master/doc/configuration.md for documentation of available settings.
-    # These are the defaults for `golangci-lint`.
-
-    # Do strict checking when assigning from append (x = append(x, y)). If
-    # this is set to true - the append call must append either a variable
+    # Do strict checking when assigning from append (x = append(x, y)).
+    # If this is set to true - the append call must append either a variable
     # assigned, called or used on the line above.
-    strict-append: true
+    # https://github.com/bombsimon/wsl/blob/master/doc/configuration.md#strict-append
+    # Default: true
+    strict-append: false
 
     # Allows assignments to be cuddled with variables used in calls on
     # line above and calls to be cuddled with assignments of variables
     # used in call on line above.
-    allow-assign-and-call: true
+    # https://github.com/bombsimon/wsl/blob/master/doc/configuration.md#allow-assign-and-call
+    # Default: true
+    allow-assign-and-call: false
 
     # Allows assignments to be cuddled with anything.
-    allow-assign-and-anything: false
+    # https://github.com/bombsimon/wsl/blob/master/doc/configuration.md#allow-assign-and-anything
+    # Default: false
+    allow-assign-and-anything: true
 
     # Allows cuddling to assignments even if they span over multiple lines.
-    allow-multiline-assign: true
+    # https://github.com/bombsimon/wsl/blob/master/doc/configuration.md#allow-multiline-assign
+    # Default: true
+    allow-multiline-assign: false
 
-    # If the number of lines in a case block is equal to or lager than this
-    # number, the case *must* end white a newline.
-    force-case-trailing-whitespace: 0
+    # If the number of lines in a case block is equal to or lager than this number,
+    # the case *must* end white a newline.
+    # https://github.com/bombsimon/wsl/blob/master/doc/configuration.md#force-case-trailing-whitespace
+    # Default: 0
+    force-case-trailing-whitespace: 1
 
     # Allow blocks to end with comments.
-    allow-trailing-comment: false
+    # https://github.com/bombsimon/wsl/blob/master/doc/configuration.md#allow-trailing-comment
+    # Default: false
+    allow-trailing-comment: true
 
     # Allow multiple comments in the beginning of a block separated with newline.
-    allow-separated-leading-comment: false
+    # https://github.com/bombsimon/wsl/blob/master/doc/configuration.md#allow-separated-leading-comment
+    # Default: false
+    allow-separated-leading-comment: true
 
     # Allow multiple var/declaration statements to be cuddled.
-    allow-cuddle-declarations: false
+    # https://github.com/bombsimon/wsl/blob/master/doc/configuration.md#allow-cuddle-declarations
+    # Default: false
+    allow-cuddle-declarations: true
 
     # A list of call idents that everything can be cuddled with.
-    # Defaults to calls looking like locks.
-    allow-cuddle-with-calls: [ "Lock", "RLock" ]
+    # Defaults: [ "Lock", "RLock" ]
+    allow-cuddle-with-calls: [ "Foo", "Bar" ]
 
     # AllowCuddleWithRHS is a list of right hand side variables that is allowed
-    # to be cuddled with anything. Defaults to assignments or calls looking
-    # like unlocks.
-    allow-cuddle-with-rhs: [ "Unlock", "RUnlock" ]
+    # to be cuddled with anything.
+    # Defaults: [ "Unlock", "RUnlock" ]
+    allow-cuddle-with-rhs: [ "Foo", "Bar" ]
 
     # Causes an error when an If statement that checks an error variable doesn't
     # cuddle with the assignment of that variable.
-    force-err-cuddling: false
+    # https://github.com/bombsimon/wsl/blob/master/doc/configuration.md#force-err-cuddling
+    # Default: false
+    force-err-cuddling: true
 
     # When force-err-cuddling is enabled this is a list of names
     # used for error variables to check for in the conditional.
-    error-variable-names: [ "err" ]
+    # Default: [ "err" ]
+    error-variable-names: [ "foo" ]
 
     # Causes an error if a short declaration (:=) cuddles with anything other than
     # another short declaration.
     # This logic overrides force-err-cuddling among others.
-    force-short-decl-cuddling: false
+    # https://github.com/bombsimon/wsl/blob/master/doc/configuration.md#force-short-decl-cuddling
+    # Default: false
+    force-short-decl-cuddling: true
 
   # The custom section can be used to define linter plugins to be loaded at runtime.
   # See README documentation for more info.
