@@ -92,8 +92,8 @@ func getLintersListMarkdown(enabled bool) string {
 func getName(lc *types.LinterWrapper) string {
 	name := spanWithID(listItemPrefix+lc.Name, "", "")
 
-	if hasSettings(lc.Name) {
-		name += fmt.Sprintf("[%[1]s](#%[1]s \"%[1]s configuration\")", lc.Name)
+	if hasSettings(lc.Name) && lc.Deprecation == nil {
+		name += fmt.Sprintf("[%[1]s&nbsp;%[2]s](#%[1]s \"%[1]s configuration\")", lc.Name, "<FaCog size={'0.8rem'} />")
 	} else {
 		name += fmt.Sprintf("%[1]s[%[2]s](#%[2]s \"%[2]s has no configuration\")", spanWithID(lc.Name, "", ""), lc.Name)
 	}
