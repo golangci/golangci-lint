@@ -78,7 +78,7 @@ require (
 	github.com/mgechev/revive v1.3.7
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/mitchellh/go-ps v1.0.0
-	github.com/moricho/tparallel v0.3.1
+	github.com/moricho/tparallel v0.3.2
 	github.com/nakabonne/nestif v0.3.1
 	github.com/nishanths/exhaustive v0.12.0
 	github.com/nishanths/predeclared v0.2.2
