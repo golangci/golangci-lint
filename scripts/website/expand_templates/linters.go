@@ -324,7 +324,7 @@ func getLintersSettingSections(node, nextNode *yaml.Node) (string, error) {
 
 		_, _ = fmt.Fprintln(builder, "```")
 		_, _ = fmt.Fprintln(builder)
-		_, _ = fmt.Fprintf(builder, "[%s](#%s)\n\n", span("Back to the top", "🔼"), listItemPrefix+nextNode.Content[i].Value)
+		_, _ = fmt.Fprintf(builder, "[%s](#%s)\n\n", span("Back to the top", "<FaArrowUp />"), listItemPrefix+nextNode.Content[i].Value)
 		_, _ = fmt.Fprintln(builder)
 	}
 
