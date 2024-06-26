@@ -385,9 +385,7 @@ func getLinterNames(tb testing.TB, fastOnly bool) []string {
 	tb.Helper()
 
 	// add linter names here if needed.
-	excluded := []string{
-		"tparallel", // bug with go source code https://github.com/moricho/tparallel/pull/27
-	}
+	var excluded []string
 
 	linters, err := lintersdb.NewLinterBuilder().Build(config.NewDefault())
 	require.NoError(tb, err)
