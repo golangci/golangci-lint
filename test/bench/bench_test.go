@@ -83,7 +83,7 @@ func Benchmark_linters(b *testing.B) {
 	}
 }
 
-func BenchmarkGolangciLint(b *testing.B) {
+func Benchmark_golangciLint(b *testing.B) {
 	savedWD, err := os.Getwd()
 	require.NoError(b, err)
 
