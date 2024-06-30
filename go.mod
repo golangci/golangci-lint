@@ -86,7 +86,7 @@ require (
 	github.com/pelletier/go-toml/v2 v2.2.2
 	github.com/polyfloyd/go-errorlint v1.5.2
 	github.com/quasilyte/go-ruleguard/dsl v0.3.22
-	github.com/ryancurrah/gomodguard v1.3.2
+	github.com/ryancurrah/gomodguard v1.3.3
 	github.com/ryanrolds/sqlclosecheck v0.5.1
 	github.com/sanposhiho/wastedassign/v2 v2.0.7
 	github.com/santhosh-tekuri/jsonschema/v5 v5.3.1
@@ -181,7 +181,6 @@ require (
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/stretchr/objx v0.5.2 // indirect
 	github.com/subosito/gotenv v1.4.1 // indirect
-	github.com/t-yuki/gocover-cobertura v0.0.0-20180217150009-aaee18c8195c // indirect
 	github.com/tklauser/go-sysconf v0.3.12 // indirect
 	github.com/tklauser/numcpus v0.6.1 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
