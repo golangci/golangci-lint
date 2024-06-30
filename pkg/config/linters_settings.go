@@ -159,6 +159,10 @@ var defaultLintersSettings = LintersSettings{
 		SkipRegexp:    `(export|internal)_test\.go`,
 		AllowPackages: []string{"main"},
 	},
+	Ttempdir: TtempdirSettings{
+		All:               false,
+		MaxRecursionLevel: 5,
+	},
 	Unparam: UnparamSettings{
 		Algo: "cha",
 	},
@@ -269,6 +273,7 @@ type LintersSettings struct {
 	Testifylint     TestifylintSettings
 	Testpackage     TestpackageSettings
 	Thelper         ThelperSettings
+	Ttempdir        TtempdirSettings
 	Unconvert       UnconvertSettings
 	Unparam         UnparamSettings
 	Unused          UnusedSettings
@@ -917,6 +922,11 @@ type ThelperOptions struct {
 
 type TenvSettings struct {
 	All bool `mapstructure:"all"`
+}
+
+type TtempdirSettings struct {
+	All               bool `mapstructure:"all"`
+	MaxRecursionLevel uint `mapstructure:"max-recursion-level"`
 }
 
 type UseStdlibVarsSettings struct {
