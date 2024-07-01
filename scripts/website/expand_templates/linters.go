@@ -90,10 +90,12 @@ func getLintersListMarkdown(enabled bool) string {
 }
 
 func getName(lc *types.LinterWrapper) string {
-	name := lc.Name
+	name := spanWithID(listItemPrefix+lc.Name, "", "")
 
-	if hasSettings(lc.Name) {
-		name = fmt.Sprintf("[%[1]s](#%[2]s \"%[1]s configuration\")", name, lc.Name)
+	if hasSettings(lc.Name) && lc.Deprecation == nil {
+		name += fmt.Sprintf("[%[1]s&nbsp;%[2]s](#%[1]s \"%[1]s configuration\")", lc.Name, "<FaCog size={'0.8rem'} />")
+	} else {
+		name += fmt.Sprintf("%[1]s[%[2]s](#%[2]s \"%[2]s has no configuration\")", spanWithID(lc.Name, "", ""), lc.Name)
 	}
 
 	if lc.OriginalURL != "" {
@@ -102,7 +104,7 @@ func getName(lc *types.LinterWrapper) string {
 			icon = "<FaGitlab size={'0.8rem'} />"
 		}
 
-		name = fmt.Sprintf("%s&nbsp;[%s](%s)", name, spanWithID(listItemPrefix+lc.Name, lc.Name+" repository", icon), lc.OriginalURL)
+		name += fmt.Sprintf("&nbsp;[%s](%s)", span(lc.Name+" repository", icon), lc.OriginalURL)
 	}
 
 	if lc.Deprecation == nil {
@@ -322,7 +324,7 @@ func getLintersSettingSections(node, nextNode *yaml.Node) (string, error) {
 
 		_, _ = fmt.Fprintln(builder, "```")
 		_, _ = fmt.Fprintln(builder)
-		_, _ = fmt.Fprintf(builder, "[%s](#%s)\n\n", span("Back to the top", "🔼"), listItemPrefix+nextNode.Content[i].Value)
+		_, _ = fmt.Fprintf(builder, "[%s](#%s)\n\n", span("Back to the top", "<FaArrowUp />"), listItemPrefix+nextNode.Content[i].Value)
 		_, _ = fmt.Fprintln(builder)
 	}
 
