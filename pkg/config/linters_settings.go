@@ -212,6 +212,7 @@ type LintersSettings struct {
 	Exhaustive      ExhaustiveSettings
 	Exhaustruct     ExhaustructSettings
 	Forbidigo       ForbidigoSettings
+	Fparams         Fparams
 	Funlen          FunlenSettings
 	Gci             GciSettings
 	GinkgoLinter    GinkgoLinterSettings
@@ -453,6 +454,11 @@ func (p *ForbidigoPattern) MarshalString() ([]byte, error) {
 	}
 
 	return yaml.Marshal(p)
+}
+
+type Fparams struct {
+	DisableCheckFuncParams  bool `mapstructure:"disable-check-params"`
+	DisableCheckFuncReturns bool `mapstructure:"disable-check-returns"`
 }
 
 type FunlenSettings struct {

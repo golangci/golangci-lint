@@ -427,6 +427,15 @@ linters-settings:
     # Default: false
     analyze-types: true
 
+  fparams:
+    # Disable check function params
+    # Default: false
+    disableCheckFuncParams: false
+
+    # Disable check function return values
+    # Default false
+    disableCheckFuncReturns: false
+
   funlen:
     # Checks the number of lines in a function.
     # If lower than 0, disable the check.
@@ -2593,6 +2602,7 @@ linters:
     - fatcontext
     - forbidigo
     - forcetypeassert
+    - fparams
     - funlen
     - gci
     - ginkgolinter
@@ -2708,6 +2718,7 @@ linters:
     - fatcontext
     - forbidigo
     - forcetypeassert
+    - fparams
     - funlen
     - gci
     - ginkgolinter

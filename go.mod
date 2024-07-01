@@ -1,6 +1,8 @@
 module github.com/golangci/golangci-lint
 
-go 1.21.0
+go 1.22
+
+toolchain go1.22.4
 
 require (
 	4d63.com/gocheckcompilerdirectives v1.2.1
@@ -19,6 +21,7 @@ require (
 	github.com/alexkohler/nakedret/v2 v2.0.4
 	github.com/alexkohler/prealloc v1.0.0
 	github.com/alingse/asasalint v0.0.11
+	github.com/artemk1337/fparams v1.0.0
 	github.com/ashanbrown/forbidigo v1.6.0
 	github.com/ashanbrown/makezero v1.1.1
 	github.com/bkielbasa/cyclop v1.2.1
