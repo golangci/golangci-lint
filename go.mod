@@ -1,6 +1,6 @@
 module github.com/golangci/golangci-lint
 
-go 1.22.0
+go 1.22.1
 
 require (
 	4d63.com/gocheckcompilerdirectives v1.2.1
@@ -127,7 +127,7 @@ require (
 	golang.org/x/exp v0.0.0-20240103183307-be819d1f06fc
 	golang.org/x/tools v0.24.0
 	gopkg.in/yaml.v3 v3.0.1
-	honnef.co/go/tools v0.5.0-0.dev.0.20240621230735-3fe6ed0ecdfe
+	honnef.co/go/tools v0.5.0-rc.1
 	mvdan.cc/gofumpt v0.6.0
 	mvdan.cc/unparam v0.0.0-20240528143540-8a5130ca722f
 )
