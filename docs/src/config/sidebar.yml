@@ -24,8 +24,6 @@
   items:
     - label: "Thanks"
       link: "/product/thanks/"
-    - label: "Trusted By"
-      link: "/product/trusted-by/"
     - label: "Changelog"
       link: "/product/changelog/"
     - label: "Roadmap"
