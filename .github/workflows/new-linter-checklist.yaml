@@ -18,16 +18,13 @@ jobs:
       - uses: actions/checkout@v4
       - name: Add checklist
         run: |
-          # This is just safety to not spam with new comments if the tag is
-          # removed and added back multiple times maliciously. It will reset the
-          # checklist but the previous values will be in the edit history.
+          # Avoid adding multiple comments for the same PR.
           comment_exist=$(gh pr view "$NUMBER" \
             --json comments \
             --jq '.comments[].author | select(.login=="github-actions") | .login' \
             | wc -l)
           [ "$comment_exist" -gt 0 ] && edit_last="--edit-last"
 
-          # Comment on the PR with the checklist.
           gh pr comment "$NUMBER" --body "$(cat .github/new-linter-checklist.md)" $edit_last
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
