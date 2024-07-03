@@ -1,0 +1,32 @@
+name: Add new linter checklist
+
+on:
+  workflow_dispatch:
+    inputs:
+      pr:
+        description: PR number
+        required: true
+        type: number
+
+permissions:
+  pull-requests: write
+
+jobs:
+  add-comment:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Add checklist
+        run: |
+          # Avoid adding multiple comments for the same PR.
+          comment_exist=$(gh pr view "$NUMBER" \
+            --json comments \
+            --jq '.comments[].author | select(.login=="github-actions") | .login' \
+            | wc -l)
+          [ "$comment_exist" -gt 0 ] && edit_last="--edit-last"
+
+          gh pr comment "$NUMBER" --body "$(cat .github/new-linter-checklist.md)" $edit_last
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          NUMBER: ${{ inputs.pr }}
