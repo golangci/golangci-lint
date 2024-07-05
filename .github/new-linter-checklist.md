@@ -9,17 +9,17 @@ In order for a pull request adding a linter to be reviewed, the linter and the P
 
 ### Linter
 
-- [ ] It must not be a duplicate of another linter or a rule of a linter. (the team will help to verify that)
-- [ ] It must have a valid license (AGPL is not allowed) and the file must contain the required information by the license, ex: author, year, etc.
-- [ ] It must use Go <= 1.21
+- [ ] It must not be a duplicate of another linter or a rule of a linter (the team will help to verify that).
+- [ ] It must have a valid license (AGPL is not allowed), and the file must contain the required information by the license, ex: author, year, etc.
+- [ ] It must use Go version >= 1.21
 - [ ] The linter repository must have a CI and tests.
 - [ ] It must use [`go/analysis`](https://golangci-lint.run/contributing/new-linters/).
 - [ ] It must have a valid tag, ex: `v1.0.0`, `v0.1.0`.
 - [ ] It must not contain `init()`.
 - [ ] It must not contain `panic()`.
-- [ ] It must not contain `log.fatal()`, `os.exit()`, or similar.
+- [ ] It must not contain `log.Fatal()`, `os.Exit()`, or similar.
 - [ ] It must not modify the AST.
-- [ ] It must not have false positives/negatives. (the team will help to verify that)
+- [ ] It must not have false positives/negatives (the team will help to verify that).
 - [ ] It must have tests inside golangci-lint.
 
 ### The Linter Tests Inside Golangci-lint
@@ -55,7 +55,7 @@ In order for a pull request adding a linter to be reviewed, the linter and the P
 - [ ] The file `jsonschema/golangci.next.jsonschema.json` should be updated.
 - [ ] The file `jsonschema/golangci.jsonschema.json` must NOT be edited.
 - [ ] The linter repository should have a readme and linting.
-- [ ] The linter should be published as a binary. (useful to diagnose bug origins)
+- [ ] The linter should be published as a binary (useful to diagnose bug origins).
 - [ ] The linter repository should have a `.gitignore` (IDE files, binaries, OS files, etc. should not be committed)
 - [ ] A tag should never be recreated.
 
