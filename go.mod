@@ -1,6 +1,6 @@
 module github.com/golangci/golangci-lint
 
-go 1.21.0
+go 1.22
 
 require (
 	4d63.com/gocheckcompilerdirectives v1.2.1
@@ -176,6 +176,7 @@ require (
 	github.com/quasilyte/regex/syntax v0.0.0-20210819130434-b3f0c404a727 // indirect
 	github.com/quasilyte/stdinfo v0.0.0-20220114132959-f7386bf02567 // indirect
 	github.com/shoenig/go-m1cpu v0.1.6 // indirect
+	github.com/sivchari/ctxcause v0.1.0 // indirect
 	github.com/spf13/afero v1.11.0 // indirect
 	github.com/spf13/cast v1.5.0 // indirect
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
