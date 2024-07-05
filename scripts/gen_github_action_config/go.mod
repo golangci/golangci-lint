@@ -1,6 +1,6 @@
 module github.com/golangci/golangci-lint/scripts/gen_github_action_config
 
-go 1.21
+go 1.21.0
 
 require (
 	github.com/shurcooL/githubv4 v0.0.0-20240429030203-be2daab69064
