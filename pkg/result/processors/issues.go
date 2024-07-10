@@ -9,6 +9,23 @@ import (
 func filterIssues(issues []result.Issue, filter func(issue *result.Issue) bool) []result.Issue {
 	retIssues := make([]result.Issue, 0, len(issues))
 	for i := range issues {
+		if issues[i].FromLinter == typeCheckName {
+			// don't hide typechecking errors in generated files: users expect to see why the project isn't compiling
+			retIssues = append(retIssues, issues[i])
+			continue
+		}
+
+		if filter(&issues[i]) {
+			retIssues = append(retIssues, issues[i])
+		}
+	}
+
+	return retIssues
+}
+
+func filterIssuesUnsafe(issues []result.Issue, filter func(issue *result.Issue) bool) []result.Issue {
+	retIssues := make([]result.Issue, 0, len(issues))
+	for i := range issues {
 		if filter(&issues[i]) {
 			retIssues = append(retIssues, issues[i])
 		}
@@ -20,6 +37,12 @@ func filterIssues(issues []result.Issue, filter func(issue *result.Issue) bool) 
 func filterIssuesErr(issues []result.Issue, filter func(issue *result.Issue) (bool, error)) ([]result.Issue, error) {
 	retIssues := make([]result.Issue, 0, len(issues))
 	for i := range issues {
+		if issues[i].FromLinter == typeCheckName {
+			// don't hide typechecking errors in generated files: users expect to see why the project isn't compiling
+			retIssues = append(retIssues, issues[i])
+			continue
+		}
+
 		ok, err := filter(&issues[i])
 		if err != nil {
 			return nil, fmt.Errorf("can't filter issue %#v: %w", issues[i], err)

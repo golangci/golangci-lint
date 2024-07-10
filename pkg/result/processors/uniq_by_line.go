@@ -30,7 +30,7 @@ func (p *UniqByLine) Process(issues []result.Issue) ([]result.Issue, error) {
 		return issues, nil
 	}
 
-	return filterIssues(issues, p.shouldPassIssue), nil
+	return filterIssuesUnsafe(issues, p.shouldPassIssue), nil
 }
 
 func (*UniqByLine) Finish() {}

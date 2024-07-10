@@ -33,7 +33,7 @@ func (*MaxPerFileFromLinter) Name() string {
 }
 
 func (p *MaxPerFileFromLinter) Process(issues []result.Issue) ([]result.Issue, error) {
-	return filterIssues(issues, func(issue *result.Issue) bool {
+	return filterIssuesUnsafe(issues, func(issue *result.Issue) bool {
 		limit := p.maxPerFileFromLinterConfig[issue.FromLinter]
 		if limit == 0 {
 			return true
