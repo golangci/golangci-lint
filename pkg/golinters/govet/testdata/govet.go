@@ -39,5 +39,5 @@ func GovetPrintf() {
 
 func GovetStringIntConv() {
 	i := 42
-	fmt.Println("i = " + string(i)) // want "stringintconv: conversion from int to string yields a string of one rune, not a string of digits \\(did you mean fmt.Sprint\\(x\\)\\?\\)"
+	fmt.Println("i = " + string(i)) // want "stringintconv: conversion from int to string yields a string of one rune, not a string of digits"
 }
