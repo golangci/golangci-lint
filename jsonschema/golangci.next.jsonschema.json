@@ -293,6 +293,14 @@
         "waitgroup-by-value"
       ]
     },
+    "iface-analyzers": {
+      "enum": [
+        "empty",
+        "unused",
+        "duplicate",
+        "opaque"
+      ]
+    },
     "linters": {
       "$comment": "anyOf with enum is used to allow auto completion of non-custom linters",
       "description": "Linters usable.",
@@ -1907,6 +1915,19 @@
             "var-require-grouping": {
               "type": "boolean",
               "default": false
+            }
+          }
+        },
+        "iface": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "enable": {
+              "description": "Enable analyzers by name.",
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/iface-analyzers"
+              }
             }
           }
         },

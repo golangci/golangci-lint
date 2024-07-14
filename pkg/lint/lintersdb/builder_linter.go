@@ -55,6 +55,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/gosmopolitan"
 	"github.com/golangci/golangci-lint/pkg/golinters/govet"
 	"github.com/golangci/golangci-lint/pkg/golinters/grouper"
+	"github.com/golangci/golangci-lint/pkg/golinters/iface"
 	"github.com/golangci/golangci-lint/pkg/golinters/importas"
 	"github.com/golangci/golangci-lint/pkg/golinters/inamedparam"
 	"github.com/golangci/golangci-lint/pkg/golinters/ineffassign"
@@ -471,6 +472,12 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithSince("v1.44.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/leonklingele/grouper"),
+
+		linter.NewConfig(iface.New(&cfg.LintersSettings.Iface)).
+			WithSince("v1.60.0").
+			WithLoadForGoAnalysis().
+			WithPresets(linter.PresetStyle, linter.PresetMetaLinter).
+			WithURL("http://github.com/uudashr/iface"),
 
 		linter.NewConfig(linter.NewNoopDeprecated("ifshort", cfg, linter.DeprecationError)).
 			WithSince("v1.36.0").

@@ -1222,6 +1222,15 @@ linters-settings:
     # Default: false
     var-require-grouping: true
 
+  iface:
+    # By default set to empty. Leave it empty means all analyzers are enabled.
+    # Default: []
+    enable:
+      - unused
+      - empty
+      - duplicate
+      - opaque
+
   importas:
     # Do not allow unaliased imports of aliased packages.
     # Default: false
