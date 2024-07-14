@@ -476,8 +476,8 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 		linter.NewConfig(iface.New(&cfg.LintersSettings.Iface)).
 			WithSince("v1.60.0").
 			WithLoadForGoAnalysis().
-			WithPresets(linter.PresetStyle).
-			WithURL("https://github.com/uudashr/iface"),
+			WithPresets(linter.PresetStyle, linter.PresetMetaLinter).
+			WithURL("http://github.com/uudashr/iface"),
 
 		linter.NewConfig(linter.NewNoopDeprecated("ifshort", cfg, linter.DeprecationError)).
 			WithSince("v1.36.0").

@@ -293,6 +293,14 @@
         "waitgroup-by-value"
       ]
     },
+    "iface-analyzers": {
+      "enum": [
+        "empty",
+        "unused",
+        "duplicate",
+        "opaque"
+      ]
+    },
     "linters": {
       "$comment": "anyOf with enum is used to allow auto completion of non-custom linters",
       "description": "Linters usable.",
@@ -1915,20 +1923,12 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
-            "unused": {
-              "description": "Identifies interfaces that are not used anywhere in the same package where the interface is defined.",
-              "type": "boolean",
-              "default": false
-            },
-            "identical": {
-              "description": "Identifies interfaces in the same package with identical methods or constraints.",
-              "type": "boolean",
-              "default": false
-            },
-            "opaque": {
-              "description": "Identifies functions that return interfaces, but the actual returned value is always a single concrete implementation.",
-              "type": "boolean",
-              "default": false
+            "enable": {
+              "description": "Enable analyzers by name.",
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/iface-analyzers"
+              }
             }
           }
         },

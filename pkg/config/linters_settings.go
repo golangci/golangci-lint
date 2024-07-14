@@ -655,9 +655,7 @@ type GrouperSettings struct {
 }
 
 type IfaceSettings struct {
-	Unused    bool `mapstructure:"unused"`
-	Identical bool `mapstructure:"identical"`
-	Opaque    bool `mapstructure:"opaque"`
+	Enable []string `mapstructure:"enable"`
 }
 
 type ImportAsSettings struct {
