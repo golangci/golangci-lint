@@ -1,6 +1,6 @@
 module github.com/golangci/golangci-lint
 
-go 1.21.0
+go 1.22.5
 
 require (
 	4d63.com/gocheckcompilerdirectives v1.2.1
@@ -115,6 +115,7 @@ require (
 	github.com/ultraware/funlen v0.1.0
 	github.com/ultraware/whitespace v0.1.1
 	github.com/uudashr/gocognit v1.1.2
+	github.com/uudashr/iface v1.0.0
 	github.com/valyala/quicktemplate v1.8.0
 	github.com/xen0n/gosmopolitan v1.2.2
 	github.com/yagipy/maintidx v1.0.0
