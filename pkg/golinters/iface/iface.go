@@ -3,13 +3,14 @@ package iface
 import (
 	"slices"
 
-	"github.com/golangci/golangci-lint/pkg/config"
-	"github.com/golangci/golangci-lint/pkg/goanalysis"
 	"github.com/uudashr/iface/duplicate"
 	"github.com/uudashr/iface/empty"
 	"github.com/uudashr/iface/opaque"
 	"github.com/uudashr/iface/unused"
 	"golang.org/x/tools/go/analysis"
+
+	"github.com/golangci/golangci-lint/pkg/config"
+	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
 var allAnalyzers = []*analysis.Analyzer{
