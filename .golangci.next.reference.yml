@@ -1223,13 +1223,15 @@ linters-settings:
     var-require-grouping: true
 
   iface:
-    # By default set to empty. Leave it empty means all analyzers are enabled.
-    # Default: []
-    enable:
-      - unused
-      - empty
-      - duplicate
-      - opaque
+    # Identifies interfaces that are not used anywhere in the same package where the interface is defined.
+    # Default: false
+    unused: true
+    # Identifies interfaces in the same package with identical methods or constraints.
+    # Default: false
+    identical: true
+    # Identifies functions that return interfaces, but the actual returned value is always a single concrete implementation.
+    # Default: false
+    opaque: true
 
   importas:
     # Do not allow unaliased imports of aliased packages.
@@ -2668,6 +2670,7 @@ linters:
     - gosmopolitan
     - govet
     - grouper
+    - iface
     - importas
     - inamedparam
     - ineffassign
@@ -2784,6 +2787,7 @@ linters:
     - gosmopolitan
     - govet
     - grouper
+    - iface
     - importas
     - inamedparam
     - ineffassign
