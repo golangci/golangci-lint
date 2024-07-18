@@ -10,7 +10,7 @@ env:
   # ex:
   # - 1.18beta1 -> 1.18.0-beta.1
   # - 1.18rc1 -> 1.18.0-rc.1
-  GO_VERSION: '1.23.0-rc.1'
+  GO_VERSION: '1.23.0-rc.2'
 
 jobs:
   # Check if there is any dirty change for go mod tidy
