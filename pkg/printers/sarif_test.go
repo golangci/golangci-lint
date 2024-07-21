@@ -3,13 +3,37 @@ package printers
 import (
 	"bytes"
 	"go/token"
+	"io"
 	"testing"
 
+	"github.com/santhosh-tekuri/jsonschema/v6"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
 	"github.com/golangci/golangci-lint/pkg/result"
 )
+
+var sarifSchema *jsonschema.Schema
+
+func RequireSarifSchema(t *testing.T) *jsonschema.Schema {
+	t.Helper()
+	if sarifSchema == nil {
+		c := jsonschema.NewCompiler()
+		var err error
+		sarifSchema, err = c.Compile("./testdata/sarif-2.1.0-rtm.6.json")
+		require.NoError(t, err)
+	}
+	return sarifSchema
+}
+
+func ValidateSarifSchema(t *testing.T, reader io.Reader) {
+	t.Helper()
+	inst, err := jsonschema.UnmarshalJSON(reader)
+	require.NoError(t, err)
+
+	err = RequireSarifSchema(t).Validate(inst)
+	require.NoError(t, err)
+}
 
 func TestSarif_Print(t *testing.T) {
 	issues := []result.Issue{
@@ -74,6 +98,7 @@ func TestSarif_Print(t *testing.T) {
 `
 
 	assert.Equal(t, expected, buf.String())
+	ValidateSarifSchema(t, buf)
 }
 
 func TestSarif_Print_empty(t *testing.T) {
@@ -88,4 +113,5 @@ func TestSarif_Print_empty(t *testing.T) {
 `
 
 	assert.Equal(t, expected, buf.String())
+	ValidateSarifSchema(t, buf)
 }

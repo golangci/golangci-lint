@@ -90,6 +90,7 @@ require (
 	github.com/ryanrolds/sqlclosecheck v0.5.1
 	github.com/sanposhiho/wastedassign/v2 v2.0.7
 	github.com/santhosh-tekuri/jsonschema/v5 v5.3.1
+	github.com/santhosh-tekuri/jsonschema/v6 v6.0.1
 	github.com/sashamelentyev/interfacebloat v1.1.0
 	github.com/sashamelentyev/usestdlibvars v1.27.0
 	github.com/securego/gosec/v2 v2.20.1-0.20240525090044-5f0084eb01a9
