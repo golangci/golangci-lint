@@ -235,6 +235,7 @@ func (r *Runner) processIssues(issues []result.Issue, sw *timeutils.Stopwatch, s
 			issues = newIssues
 		}
 
+		// This is required by JSON serialization
 		if issues == nil {
 			issues = []result.Issue{}
 		}
