@@ -234,10 +234,6 @@ func (r *Runner) processIssues(issues []result.Issue, sw *timeutils.Stopwatch, s
 			statPerProcessor[p.Name()] = stat
 			issues = newIssues
 		}
-
-		if issues == nil {
-			issues = []result.Issue{}
-		}
 	}
 
 	return issues
