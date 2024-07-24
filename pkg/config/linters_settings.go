@@ -88,6 +88,11 @@ var defaultLintersSettings = LintersSettings{
 		IgnoreTests:     true,
 		WatchForScripts: []string{"Han"},
 	},
+	Iface: IfaceSettings{
+		Unused:    true,
+		Identical: true,
+		Opaque:    true,
+	},
 	Inamedparam: INamedParamSettings{
 		SkipSingleParam: false,
 	},
@@ -233,6 +238,7 @@ type LintersSettings struct {
 	Gosmopolitan    GosmopolitanSettings
 	Govet           GovetSettings
 	Grouper         GrouperSettings
+	Iface           IfaceSettings
 	ImportAs        ImportAsSettings
 	Inamedparam     INamedParamSettings
 	InterfaceBloat  InterfaceBloatSettings
@@ -645,6 +651,12 @@ type GrouperSettings struct {
 	TypeRequireGrouping       bool `mapstructure:"type-require-grouping"`
 	VarRequireSingleVar       bool `mapstructure:"var-require-single-var"`
 	VarRequireGrouping        bool `mapstructure:"var-require-grouping"`
+}
+
+type IfaceSettings struct {
+	Unused    bool `mapstructure:"unused"`
+	Identical bool `mapstructure:"identical"`
+	Opaque    bool `mapstructure:"opaque"`
 }
 
 type ImportAsSettings struct {

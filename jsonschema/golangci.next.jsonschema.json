@@ -348,6 +348,7 @@
             "gosmopolitan",
             "govet",
             "grouper",
+            "iface",
             "ifshort",
             "importas",
             "inamedparam",
@@ -1892,6 +1893,27 @@
               "default": false
             },
             "var-require-grouping": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        },
+        "iface": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "unused": {
+              "description": "Identifies interfaces that are not used anywhere in the same package where the interface is defined.",
+              "type": "boolean",
+              "default": false
+            },
+            "identical": {
+              "description": "Identifies interfaces in the same package with identical methods or constraints.",
+              "type": "boolean",
+              "default": false
+            },
+            "opaque": {
+              "description": "Identifies functions that return interfaces, but the actual returned value is always a single concrete implementation.",
               "type": "boolean",
               "default": false
             }
