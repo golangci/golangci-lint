@@ -189,7 +189,10 @@ func toIssue(pass *analysis.Pass, object *jsonObject) goanalysis.Issue {
 func getConfig(cfg *config.ReviveSettings) (*lint.Config, error) {
 	conf := defaultConfig()
 
-	if !reflect.DeepEqual(cfg, &config.ReviveSettings{}) {
+	// Since the Go version is dynamic, this value must be neutralized in order to compare with a "zero value" of the configuration structure.
+	zero := &config.ReviveSettings{Go: cfg.Go}
+
+	if !reflect.DeepEqual(cfg, zero) {
 		rawRoot := createConfigMap(cfg)
 		buf := bytes.NewBuffer(nil)
 
