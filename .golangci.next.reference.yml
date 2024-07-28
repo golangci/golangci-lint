@@ -1612,6 +1612,12 @@ linters-settings:
         arguments:
           - mypragma
           - otherpragma
+      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#comments-density
+      - name: comments-density
+        severity: warning
+        disabled: false
+        exclude: [""]
+        arguments: [ 15 ]
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#confusing-naming
       - name: confusing-naming
         severity: warning

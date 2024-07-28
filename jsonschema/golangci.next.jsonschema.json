@@ -217,6 +217,7 @@
         "call-to-gc",
         "cognitive-complexity",
         "comment-spacings",
+        "comments-density",
         "confusing-naming",
         "confusing-results",
         "constant-logical-expr",

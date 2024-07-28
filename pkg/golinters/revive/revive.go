@@ -10,6 +10,7 @@ import (
 	"sync"
 
 	"github.com/BurntSushi/toml"
+	hcversion "github.com/hashicorp/go-version"
 	reviveConfig "github.com/mgechev/revive/config"
 	"github.com/mgechev/revive/lint"
 	"github.com/mgechev/revive/rule"
@@ -85,6 +86,11 @@ type wrapper struct {
 
 func newWrapper(settings *config.ReviveSettings) (*wrapper, error) {
 	conf, err := getConfig(settings)
+	if err != nil {
+		return nil, err
+	}
+
+	conf.GoVersion, err = hcversion.NewVersion(settings.Go)
 	if err != nil {
 		return nil, err
 	}
@@ -183,7 +189,10 @@ func toIssue(pass *analysis.Pass, object *jsonObject) goanalysis.Issue {
 func getConfig(cfg *config.ReviveSettings) (*lint.Config, error) {
 	conf := defaultConfig()
 
-	if !reflect.DeepEqual(cfg, &config.ReviveSettings{}) {
+	// Since the Go version is dynamic, this value must be neutralized in order to compare with a "zero value" of the configuration structure.
+	zero := &config.ReviveSettings{Go: cfg.Go}
+
+	if !reflect.DeepEqual(cfg, zero) {
 		rawRoot := createConfigMap(cfg)
 		buf := bytes.NewBuffer(nil)
 
@@ -275,7 +284,7 @@ func safeTomlSlice(r []any) []any {
 }
 
 // This element is not exported by revive, so we need copy the code.
-// Extracted from https://github.com/mgechev/revive/blob/v1.3.7/config/config.go#L15
+// Extracted from https://github.com/mgechev/revive/blob/v1.3.9/config/config.go#L15
 var defaultRules = []lint.Rule{
 	&rule.VarDeclarationsRule{},
 	&rule.PackageCommentsRule{},
@@ -358,6 +367,7 @@ var allRules = append([]lint.Rule{
 	&rule.EnforceRepeatedArgTypeStyleRule{},
 	&rule.EnforceSliceStyleRule{},
 	&rule.MaxControlNestingRule{},
+	&rule.CommentsDensityRule{},
 }, defaultRules...)
 
 const defaultConfidence = 0.8
