@@ -275,7 +275,7 @@ func safeTomlSlice(r []any) []any {
 }
 
 // This element is not exported by revive, so we need copy the code.
-// Extracted from https://github.com/mgechev/revive/blob/v1.3.7/config/config.go#L15
+// Extracted from https://github.com/mgechev/revive/blob/v1.3.9/config/config.go#L15
 var defaultRules = []lint.Rule{
 	&rule.VarDeclarationsRule{},
 	&rule.PackageCommentsRule{},
@@ -358,6 +358,7 @@ var allRules = append([]lint.Rule{
 	&rule.EnforceRepeatedArgTypeStyleRule{},
 	&rule.EnforceSliceStyleRule{},
 	&rule.MaxControlNestingRule{},
+	&rule.CommentsDensityRule{},
 }, defaultRules...)
 
 const defaultConfidence = 0.8
