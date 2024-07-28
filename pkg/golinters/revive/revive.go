@@ -10,6 +10,7 @@ import (
 	"sync"
 
 	"github.com/BurntSushi/toml"
+	hcversion "github.com/hashicorp/go-version"
 	reviveConfig "github.com/mgechev/revive/config"
 	"github.com/mgechev/revive/lint"
 	"github.com/mgechev/revive/rule"
@@ -85,6 +86,11 @@ type wrapper struct {
 
 func newWrapper(settings *config.ReviveSettings) (*wrapper, error) {
 	conf, err := getConfig(settings)
+	if err != nil {
+		return nil, err
+	}
+
+	conf.GoVersion, err = hcversion.NewVersion(settings.Go)
 	if err != nil {
 		return nil, err
 	}

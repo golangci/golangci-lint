@@ -791,8 +791,9 @@ type ReassignSettings struct {
 }
 
 type ReviveSettings struct {
-	MaxOpenFiles          int  `mapstructure:"max-open-files"`
-	IgnoreGeneratedHeader bool `mapstructure:"ignore-generated-header"`
+	Go                    string `mapstructure:"-"`
+	MaxOpenFiles          int    `mapstructure:"max-open-files"`
+	IgnoreGeneratedHeader bool   `mapstructure:"ignore-generated-header"`
 	Confidence            float64
 	Severity              string
 	EnableAllRules        bool `mapstructure:"enable-all-rules"`

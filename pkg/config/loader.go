@@ -292,6 +292,8 @@ func (l *Loader) handleGoVersion() {
 
 	trimmedGoVersion := trimGoVersion(l.cfg.Run.Go)
 
+	l.cfg.LintersSettings.Revive.Go = trimmedGoVersion
+
 	l.cfg.LintersSettings.Gocritic.Go = trimmedGoVersion
 
 	// staticcheck related linters.
