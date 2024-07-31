@@ -90,7 +90,7 @@ func getUnusedResults(pass *analysis.Pass, settings *config.UnusedSettings) unus
 	opts := unused.Options{
 		FieldWritesAreUses:     settings.FieldWritesAreUses,
 		PostStatementsAreReads: settings.PostStatementsAreReads,
-		ExportedIsUsed:         settings.ExportedIsUsed,
+		ExportedIsUsed:         true,
 		ExportedFieldsAreUsed:  settings.ExportedFieldsAreUsed,
 		ParametersAreUsed:      settings.ParametersAreUsed,
 		LocalVariablesAreUsed:  settings.LocalVariablesAreUsed,

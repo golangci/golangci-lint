@@ -3233,11 +3233,6 @@
               "type": "boolean",
               "default": false
             },
-            "exported-is-used": {
-              "description": "",
-              "type": "boolean",
-              "default": true
-            },
             "exported-fields-are-used": {
               "description": "",
               "type": "boolean",

@@ -433,6 +433,11 @@ func (l *Loader) handleLinterOptionDeprecations() {
 		l.log.Warnf("The configuration option `linters.stylecheck.go` is deprecated, please use global `run.go`.")
 	}
 
+	// Deprecated since v1.60.0
+	if !l.cfg.LintersSettings.Unused.ExportedIsUsed {
+		l.log.Warnf("The configuration option `linters.unused.exported-is-used` is deprecated.")
+	}
+
 	// Deprecated since v1.58.0
 	if l.cfg.LintersSettings.SlogLint.ContextOnly {
 		l.log.Warnf("The configuration option `linters.sloglint.context-only` is deprecated, please use `linters.sloglint.context`.")
