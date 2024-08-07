@@ -21,6 +21,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/err113"
 	"github.com/golangci/golangci-lint/pkg/golinters/errcheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/errchkjson"
+	"github.com/golangci/golangci-lint/pkg/golinters/errgroupcheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/errname"
 	"github.com/golangci/golangci-lint/pkg/golinters/errorlint"
 	"github.com/golangci/golangci-lint/pkg/golinters/execinquery"
@@ -235,6 +236,12 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithPresets(linter.PresetBugs).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/breml/errchkjson"),
+
+		linter.NewConfig(errgroupcheck.New(&cfg.LintersSettings.ErrGroupCheck)).
+			WithSince("1.60.0").
+			WithPresets(linter.PresetBugs).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/alexbagnolini/errgroupcheck"),
 
 		linter.NewConfig(errname.New()).
 			WithSince("v1.42.0").

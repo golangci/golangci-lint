@@ -16,6 +16,7 @@ require (
 	github.com/GaijinEntertainment/go-exhaustruct/v3 v3.3.0
 	github.com/OpenPeeDeeP/depguard/v2 v2.2.0
 	github.com/alecthomas/go-check-sumtype v0.1.4
+	github.com/alexbagnolini/errgroupcheck v0.1.2
 	github.com/alexkohler/nakedret/v2 v2.0.4
 	github.com/alexkohler/prealloc v1.0.0
 	github.com/alingse/asasalint v0.0.11

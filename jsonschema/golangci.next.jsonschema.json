@@ -312,6 +312,7 @@
             "durationcheck",
             "errcheck",
             "errchkjson",
+            "errgroupcheck",
             "errname",
             "errorlint",
             "execinquery",
@@ -862,6 +863,17 @@
               "description": "Issue on struct that doesn't have exported fields.",
               "type": "boolean",
               "default": false
+            }
+          }
+        },
+        "errgroupcheck": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "require-wait": {
+              "description": "Check if any sync.errgroup.Group instance is missing a call to the Wait() func.",
+              "type": "boolean",
+              "default": true
             }
           }
         },
