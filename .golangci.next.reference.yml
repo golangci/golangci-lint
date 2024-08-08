@@ -324,6 +324,11 @@ linters-settings:
     # Default: false
     report-no-exported: false
 
+  errgroupcheck:
+    # Check if any sync.errgroup.Group instance is missing a call to the Wait() func.
+    # Default: true
+    require-wait: true
+
   errorlint:
     # Check whether fmt.Errorf uses the %w verb for formatting errors.
     # See the https://github.com/polyfloyd/go-errorlint for caveats.

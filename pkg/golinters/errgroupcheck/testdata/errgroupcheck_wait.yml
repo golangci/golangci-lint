@@ -1,0 +1,3 @@
+linters-settings:
+  errgroupcheck:
+    require-wait: true
