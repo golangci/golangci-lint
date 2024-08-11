@@ -95,7 +95,7 @@ func (b Builder) clone(ctx context.Context) error {
 
 	output, err := cmd.CombinedOutput()
 	if err != nil {
-		b.log.Infof(string(output))
+		b.log.Infof("%s", string(output))
 
 		return fmt.Errorf("%s: %w", strings.Join(cmd.Args, " "), err)
 	}
@@ -132,7 +132,7 @@ func (b Builder) goGet(ctx context.Context, plugin *Plugin) error {
 
 	output, err := cmd.CombinedOutput()
 	if err != nil {
-		b.log.Warnf(string(output))
+		b.log.Warnf("%s", string(output))
 
 		return fmt.Errorf("%s: %w", strings.Join(cmd.Args, " "), err)
 	}
@@ -150,7 +150,7 @@ func (b Builder) addReplaceDirective(ctx context.Context, plugin *Plugin) error 
 
 	output, err := cmd.CombinedOutput()
 	if err != nil {
-		b.log.Warnf(string(output))
+		b.log.Warnf("%s", string(output))
 
 		return fmt.Errorf("%s: %w", strings.Join(cmd.Args, " "), err)
 	}
@@ -164,7 +164,7 @@ func (b Builder) goModTidy(ctx context.Context) error {
 
 	output, err := cmd.CombinedOutput()
 	if err != nil {
-		b.log.Warnf(string(output))
+		b.log.Warnf("%s", string(output))
 
 		return fmt.Errorf("%s: %w", strings.Join(cmd.Args, " "), err)
 	}
@@ -187,7 +187,7 @@ func (b Builder) goBuild(ctx context.Context, binaryName string) error {
 
 	output, err := cmd.CombinedOutput()
 	if err != nil {
-		b.log.Warnf(string(output))
+		b.log.Warnf("%s", string(output))
 
 		return fmt.Errorf("%s: %w", strings.Join(cmd.Args, " "), err)
 	}

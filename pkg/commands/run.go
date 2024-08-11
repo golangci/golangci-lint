@@ -152,7 +152,7 @@ func (c *runCommand) persistentPreRunE(cmd *cobra.Command, args []string) error 
 		return err
 	}
 
-	c.log.Infof(c.buildInfo.String())
+	c.log.Infof("%s", c.buildInfo.String())
 
 	loader := config.NewLoader(c.log.Child(logutils.DebugKeyConfigReader), c.viper, cmd.Flags(), c.opts.LoaderOptions, c.cfg, args)
 
