@@ -11,36 +11,18 @@ jobs:
     name: Build and deploy documentation
     runs-on: ubuntu-latest
     env:
-      GO_VERSION: '1.22'
+      # https://github.com/actions/setup-go#supported-version-syntax
+      # ex:
+      # - 1.18beta1 -> 1.18.0-beta.1
+      # - 1.18rc1 -> 1.18.0-rc.1
+      GO_VERSION: '1.23'
       NODE_VERSION: '20.x'
       CGO_ENABLED: 0
-
     steps:
-      - name: Check out code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Set up Go ${{ env.GO_VERSION }}
-        uses: actions/setup-go@v5
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
         with:
           go-version: ${{ env.GO_VERSION }}
-
-      - name: Cache Go modules
-        uses: actions/cache@v4
-        with:
-          # In order:
-          # * Module download cache
-          # * Build cache (Linux)
-          path: |
-            ~/go/pkg/mod
-            ~/.cache/go-build
-          key: docs-${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
-          restore-keys: |
-            docs-${{ runner.os }}-go-
-
-      - run: go mod download
-
       - name: Use Node.js ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v4
         with:
@@ -48,12 +30,14 @@ jobs:
           cache: npm
           cache-dependency-path: docs/package-lock.json
 
+      - run: go mod download
+
       - run:  npm install --legacy-peer-deps
         working-directory: ./docs
 
       - name: Build Documentation
-        run: npm run build
         working-directory: ./docs
+        run: npm run build
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4

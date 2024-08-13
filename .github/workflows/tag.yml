@@ -12,16 +12,15 @@ jobs:
       # ex:
       # - 1.18beta1 -> 1.18.0-beta.1
       # - 1.18rc1 -> 1.18.0-rc.1
-      GO_VERSION: '1.22'
+      GO_VERSION: '1.23'
       CHOCOLATEY_VERSION: 2.2.0
     steps:
       - uses: actions/checkout@v4
-      - name: Install Go
-        uses: actions/setup-go@v5
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-go@v5
         with:
           go-version: ${{ env.GO_VERSION }}
-      - name: Unshallow
-        run: git fetch --prune --unshallow
 
       - name: Install chocolatey
         run: |

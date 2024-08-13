@@ -6,23 +6,21 @@ on:
   pull_request:
 
 env:
-  GO_VERSION: '1.22'
+  # https://github.com/actions/setup-go#supported-version-syntax
+  # ex:
+  # - 1.18beta1 -> 1.18.0-beta.1
+  # - 1.18rc1 -> 1.18.0-rc.1
+  GO_VERSION: '1.23'
 
 jobs:
   # Check if there is any dirty change for go mod tidy
   go-mod:
     runs-on: ubuntu-latest
     steps:
-      - name: Install Go
-        uses: actions/setup-go@v5
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
         with:
-          # https://github.com/actions/setup-go#supported-version-syntax
-          # ex:
-          # - 1.18beta1 -> 1.18.0-beta.1
-          # - 1.18rc1 -> 1.18.0-rc.1
           go-version: ${{ env.GO_VERSION }}
-      - name: Checkout code
-        uses: actions/checkout@v4
       - name: Check go mod
         run: |
           go mod tidy
@@ -35,14 +33,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install Go
-        uses: actions/setup-go@v5
+      - uses: actions/setup-go@v5
         with:
           # https://github.com/actions/setup-go#supported-version-syntax
           # ex:
           # - 1.18beta1 -> 1.18.0-beta.1
           # - 1.18rc1 -> 1.18.0-rc.1
-          go-version: ${{ env.GO_VERSION }}
+          # TODO(ldez) must be changed after the first release of golangci-lint with go1.23
+          # go-version: ${{ env.GO_VERSION }}
+          go-version: '1.22'
       - name: lint
         uses: golangci/golangci-lint-action@v6.1.0
         with:
@@ -53,13 +52,8 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install Go
-        uses: actions/setup-go@v5
+      - uses: actions/setup-go@v5
         with:
-          # https://github.com/actions/setup-go#supported-version-syntax
-          # ex:
-          # - 1.18beta1 -> 1.18.0-beta.1
-          # - 1.18rc1 -> 1.18.0-rc.1
           go-version: ${{ env.GO_VERSION }} # test only the latest go version to speed up CI
       - name: Run tests
         run: make.exe test
@@ -69,13 +63,8 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install Go
-        uses: actions/setup-go@v5
+      - uses: actions/setup-go@v5
         with:
-          # https://github.com/actions/setup-go#supported-version-syntax
-          # ex:
-          # - 1.18beta1 -> 1.18.0-beta.1
-          # - 1.18rc1 -> 1.18.0-rc.1
           go-version: ${{ env.GO_VERSION }} # test only the latest go version to speed up CI
       - name: Run tests
         run: make test
@@ -86,43 +75,27 @@ jobs:
     strategy:
       matrix:
         golang:
-          - '1.21'
           - '1.22'
+          - '1.23'
     steps:
       - uses: actions/checkout@v4
-      - name: Install Go
-        uses: actions/setup-go@v5
+      - uses: actions/setup-go@v5
         with:
-          # https://github.com/actions/setup-go#supported-version-syntax
-          # ex:
-          # - 1.18beta1 -> 1.18.0-beta.1
-          # - 1.18rc1 -> 1.18.0-rc.1
           go-version: ${{ matrix.golang }}
-      - uses: actions/cache@v4
-        with:
-          path: ~/go/pkg/mod
-          key: ${{ runner.os }}-go-${{ matrix.golang }}-${{ hashFiles('**/go.sum') }}
-          restore-keys: |
-            ${{ runner.os }}-go-${{ matrix.golang }}-
       - name: Run tests
         run: make test
 
+  # Checks: GitHub action assets
   check_generated:
-    needs: golangci-lint # run after golangci-lint action to not produce duplicated errors
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Unshallow
-        run: git fetch --prune --unshallow
-      - name: Install Go
-        uses: actions/setup-go@v5
         with:
-          # https://github.com/actions/setup-go#supported-version-syntax
-          # ex:
-          # - 1.18beta1 -> 1.18.0-beta.1
-          # - 1.18rc1 -> 1.18.0-rc.1
+          fetch-depth: 0
+      - uses: actions/setup-go@v5
+        with:
           go-version: ${{ env.GO_VERSION }}
-      - name: Check generated files are up to date
+      - name: Check generated files are up-to-date
         run: make fast_check_generated
         env:
           # needed for github-action-config.json generation
@@ -145,13 +118,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install Go
-        uses: actions/setup-go@v5
+      - uses: actions/setup-go@v5
         with:
-          # https://github.com/actions/setup-go#supported-version-syntax
-          # ex:
-          # - 1.18beta1 -> 1.18.0-beta.1
-          # - 1.18rc1 -> 1.18.0-rc.1
           go-version: ${{ env.GO_VERSION }}
       - name: Build golangci-lint
         run: make build

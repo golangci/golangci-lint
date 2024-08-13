@@ -11,16 +11,16 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GITHUB_TOKEN: ${{ secrets.GOLANGCI_LINT_TOKEN }}
+      # https://github.com/actions/setup-go#supported-version-syntax
+      # ex:
+      # - 1.18beta1 -> 1.18.0-beta.1
+      # - 1.18rc1 -> 1.18.0-rc.1
+      GO_VERSION: '1.23'
     steps:
       - uses: actions/checkout@v4
-      - name: Install Go
-        uses: actions/setup-go@v5
+      - uses: actions/setup-go@v5
         with:
-          # https://github.com/actions/setup-go#supported-version-syntax
-          # ex:
-          # - 1.18beta1 -> 1.18.0-beta.1
-          # - 1.18rc1 -> 1.18.0-rc.1
-          go-version: '1.22'
+          go-version: ${{ env.GO_VERSION }}
       - uses: actions/setup-node@v4
         with:
           node-version: "15"
@@ -49,14 +49,9 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GOLANGCI_LINT_TOKEN }}
     steps:
       - uses: actions/checkout@v4
-      - name: Install Go
-        uses: actions/setup-go@v5
+      - uses: actions/setup-go@v5
         with:
-          # https://github.com/actions/setup-go#supported-version-syntax
-          # ex:
-          # - 1.18beta1 -> 1.18.0-beta.1
-          # - 1.18rc1 -> 1.18.0-rc.1
-          go-version: '1.22'
+          go-version: ${{ env.GO_VERSION }}
 
       - name: Update GitHub Action config
         run: make assets/github-action-config.json
@@ -77,14 +72,9 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GOLANGCI_LINT_TOKEN }}
     steps:
       - uses: actions/checkout@v4
-      - name: Install Go
-        uses: actions/setup-go@v5
+      - uses: actions/setup-go@v5
         with:
-          # https://github.com/actions/setup-go#supported-version-syntax
-          # ex:
-          # - 1.18beta1 -> 1.18.0-beta.1
-          # - 1.18rc1 -> 1.18.0-rc.1
-          go-version: '1.22'
+          go-version: ${{ env.GO_VERSION }}
 
       - name: Update reference files
         run: cp .golangci.next.reference.yml .golangci.reference.yml
@@ -110,6 +100,5 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
     runs-on: ${{ matrix.os }}
-
     steps:
       - run: curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b "./install-golangci-lint"
