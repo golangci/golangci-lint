@@ -36,7 +36,12 @@ func runAnalyzers(cfg runAnalyzersConfig, lintCtx *linter.Context) ([]result.Iss
 	const stagesToPrint = 10
 	defer sw.PrintTopStages(stagesToPrint)
 
-	runner := newRunner(cfg.getName(), log, lintCtx.PkgCache, lintCtx.LoadGuard, cfg.getLoadMode(), sw)
+	var goVersion string
+	if lintCtx.Cfg != nil {
+		goVersion = lintCtx.Cfg.Run.Go
+	}
+
+	runner := newRunner(cfg.getName(), log, lintCtx.PkgCache, lintCtx.LoadGuard, cfg.getLoadMode(), sw, goVersion)
 
 	pkgs := lintCtx.Packages
 	if cfg.useOriginalPackages() {

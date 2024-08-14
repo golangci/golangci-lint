@@ -15,6 +15,7 @@ import (
 	"go/token"
 	"runtime"
 	"sort"
+	"strings"
 	"sync"
 
 	"golang.org/x/exp/maps"
@@ -58,11 +59,12 @@ type runner struct {
 	passToPkg      map[*analysis.Pass]*packages.Package
 	passToPkgGuard sync.Mutex
 	sw             *timeutils.Stopwatch
+	goVersion      string // TODO(ldez) temporary workaround
 }
 
-func newRunner(prefix string, logger logutils.Log, pkgCache *pkgcache.Cache, loadGuard *load.Guard,
-	loadMode LoadMode, sw *timeutils.Stopwatch,
-) *runner {
+func newRunner(prefix string, logger logutils.Log,
+	pkgCache *pkgcache.Cache, loadGuard *load.Guard, loadMode LoadMode,
+	sw *timeutils.Stopwatch, goVersion string) *runner {
 	return &runner{
 		prefix:    prefix,
 		log:       logger,
@@ -71,6 +73,7 @@ func newRunner(prefix string, logger logutils.Log, pkgCache *pkgcache.Cache, loa
 		loadMode:  loadMode,
 		passToPkg: map[*analysis.Pass]*packages.Package{},
 		sw:        sw,
+		goVersion: goVersion,
 	}
 }
 
@@ -247,6 +250,7 @@ func (r *runner) analyze(pkgs []*packages.Package, analyzers []*analysis.Analyze
 
 		loadingPackages[pkg] = &loadingPackage{
 			pkg:        pkg,
+			goVersion:  "go" + strings.TrimPrefix(r.goVersion, "go"),
 			imports:    imports,
 			isInitial:  initialPkgs[pkg],
 			log:        r.log,

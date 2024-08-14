@@ -23,6 +23,7 @@ const unsafePkgName = "unsafe"
 
 type loadingPackage struct {
 	pkg         *packages.Package
+	goVersion   string // TODO(ldez) temporary workaround
 	imports     map[string]*loadingPackage
 	isInitial   bool
 	log         logutils.Log
@@ -155,6 +156,7 @@ func (lp *loadingPackage) loadFromSource(loadMode LoadMode) error {
 		Error: func(err error) {
 			pkg.Errors = append(pkg.Errors, lp.convertError(err)...)
 		},
+		GoVersion: lp.goVersion, // TODO(ldez) temporary workaround
 	}
 	_ = types.NewChecker(tc, pkg.Fset, pkg.Types, pkg.TypesInfo).Files(pkg.Syntax)
 	// Don't handle error here: errors are adding by tc.Error function.
