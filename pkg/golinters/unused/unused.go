@@ -12,14 +12,13 @@ import (
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
-	"github.com/golangci/golangci-lint/pkg/golinters/internal"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
 const linterName = "unused"
 
-func New(settings *config.UnusedSettings, scSettings *config.StaticCheckSettings) *goanalysis.Linter {
+func New(settings *config.UnusedSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
 
@@ -40,8 +39,6 @@ func New(settings *config.UnusedSettings, scSettings *config.StaticCheckSettings
 			return nil, nil
 		},
 	}
-
-	internal.SetAnalyzerGoVersion(analyzer, internal.GetGoVersion(scSettings))
 
 	return goanalysis.NewLinter(
 		linterName,
