@@ -1168,7 +1168,7 @@
     "desc": "tenv is analyzer that detects using os.Setenv instead of t.Setenv since Go1.17",
     "loadMode": 575,
     "inPresets": [
-      "style"
+      "test"
     ],
     "originalURL": "https://github.com/sivchari/tenv",
     "internal": false,
@@ -1218,7 +1218,7 @@
     "desc": "thelper detects tests helpers which is not start with t.Helper() method.",
     "loadMode": 575,
     "inPresets": [
-      "style"
+      "test"
     ],
     "originalURL": "https://github.com/kulti/thelper",
     "internal": false,
