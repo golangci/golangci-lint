@@ -9,6 +9,8 @@ import (
 	"go/types"
 	"os"
 	"reflect"
+	"runtime"
+	"strings"
 	"sync"
 	"sync/atomic"
 
@@ -150,12 +152,15 @@ func (lp *loadingPackage) loadFromSource(loadMode LoadMode) error {
 		}
 		return imp.Types, nil
 	}
+
 	tc := &types.Config{
 		Importer: importerFunc(importer),
 		Error: func(err error) {
 			pkg.Errors = append(pkg.Errors, lp.convertError(err)...)
 		},
+		GoVersion: getGoVersion(),
 	}
+
 	_ = types.NewChecker(tc, pkg.Fset, pkg.Types, pkg.TypesInfo).Files(pkg.Syntax)
 	// Don't handle error here: errors are adding by tc.Error function.
 
@@ -496,4 +501,18 @@ func sizeOfReflectValueTreeBytes(rv reflect.Value, visitedPtrs map[uintptr]struc
 	default:
 		panic("unknown rv of type " + rv.String())
 	}
+}
+
+// TODO(ldez) temporary workaround
+func getGoVersion() string {
+	goVersion := runtime.Version()
+
+	parts := strings.Fields(goVersion)
+
+	if len(parts) == 0 {
+		return goVersion
+	}
+
+	// When using GOEXPERIMENT, the version returned might look something like "go1.23.0 X:boringcrypto".
+	return parts[0]
 }

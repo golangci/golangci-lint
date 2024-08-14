@@ -20,7 +20,7 @@ func New(settings *config.StaticCheckSettings) *goanalysis.Linter {
 		return cfg, nil
 	}
 
-	analyzers := internal.SetupStaticCheckAnalyzers(stylecheck.Analyzers, internal.GetGoVersion(settings), cfg.Checks)
+	analyzers := internal.SetupStaticCheckAnalyzers(stylecheck.Analyzers, cfg.Checks)
 
 	return goanalysis.NewLinter(
 		"stylecheck",

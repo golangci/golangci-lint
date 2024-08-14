@@ -11,7 +11,7 @@ import (
 func New(settings *config.StaticCheckSettings) *goanalysis.Linter {
 	cfg := internal.StaticCheckConfig(settings)
 
-	analyzers := internal.SetupStaticCheckAnalyzers(simple.Analyzers, internal.GetGoVersion(settings), cfg.Checks)
+	analyzers := internal.SetupStaticCheckAnalyzers(simple.Analyzers, cfg.Checks)
 
 	return goanalysis.NewLinter(
 		"gosimple",

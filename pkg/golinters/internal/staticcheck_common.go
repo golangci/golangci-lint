@@ -14,20 +14,7 @@ import (
 
 var debugf = logutils.Debug(logutils.DebugKeyMegacheck)
 
-func GetGoVersion(settings *config.StaticCheckSettings) string {
-	var goVersion string
-	if settings != nil {
-		goVersion = settings.GoVersion
-	}
-
-	if goVersion != "" {
-		return goVersion
-	}
-
-	return "1.17"
-}
-
-func SetupStaticCheckAnalyzers(src []*lint.Analyzer, goVersion string, checks []string) []*analysis.Analyzer {
+func SetupStaticCheckAnalyzers(src []*lint.Analyzer, checks []string) []*analysis.Analyzer {
 	var names []string
 	for _, a := range src {
 		names = append(names, a.Analyzer.Name)
@@ -38,7 +25,6 @@ func SetupStaticCheckAnalyzers(src []*lint.Analyzer, goVersion string, checks []
 	var ret []*analysis.Analyzer
 	for _, a := range src {
 		if filter[a.Analyzer.Name] {
-			SetAnalyzerGoVersion(a.Analyzer, goVersion)
 			ret = append(ret, a.Analyzer)
 		}
 	}
