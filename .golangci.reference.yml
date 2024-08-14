@@ -874,7 +874,6 @@ linters-settings:
       - G504 # Import blocklist: net/http/cgi
       - G505 # Import blocklist: crypto/sha1
       - G601 # Implicit memory aliasing of items from a range statement
-      - G602 # Slice access out of bounds
 
     # To specify a set of rules to explicitly exclude.
     # Available rules: https://github.com/securego/gosec#available-rules
@@ -914,7 +913,6 @@ linters-settings:
       - G504 # Import blocklist: net/http/cgi
       - G505 # Import blocklist: crypto/sha1
       - G601 # Implicit memory aliasing of items from a range statement
-      - G602 # Slice access out of bounds
 
     # Exclude generated files
     # Default: false
