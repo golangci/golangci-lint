@@ -39,7 +39,7 @@ require (
 	github.com/fzipp/gocyclo v0.6.0
 	github.com/ghostiam/protogetter v0.3.6
 	github.com/go-critic/go-critic v0.11.4
-	github.com/go-viper/mapstructure/v2 v2.0.0
+	github.com/go-viper/mapstructure/v2 v2.1.0
 	github.com/go-xmlfmt/xmlfmt v1.1.2
 	github.com/gofrs/flock v0.12.1
 	github.com/golangci/dupl v0.0.0-20180902072040-3e9179ac440a
