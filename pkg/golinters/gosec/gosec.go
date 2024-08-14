@@ -77,6 +77,7 @@ func runGoSec(lintCtx *linter.Context, pass *analysis.Pass, settings *config.GoS
 	}
 
 	analyzer.CheckRules(pkg)
+	analyzer.CheckAnalyzers(pkg)
 
 	secIssues, _, _ := analyzer.Report()
 	if len(secIssues) == 0 {
