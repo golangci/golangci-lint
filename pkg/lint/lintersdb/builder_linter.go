@@ -278,7 +278,8 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithSince("v1.28.0").
 			WithPresets(linter.PresetBugs).
 			WithLoadForGoAnalysis().
-			WithURL("https://github.com/kyoh86/exportloopref"),
+			WithURL("https://github.com/kyoh86/exportloopref").
+			WithNoopFallback(cfg, linter.IsGoGreaterThanOrEqualGo122()),
 
 		linter.NewConfig(forbidigo.New(&cfg.LintersSettings.Forbidigo)).
 			WithSince("v1.34.0").
