@@ -149,7 +149,6 @@ func TestManager_build(t *testing.T) {
 	}
 
 	for _, c := range cases {
-		c := c
 		t.Run(c.name, func(t *testing.T) {
 			m, err := NewManager(logutils.NewStderrLog("skip"), &config.Config{Linters: c.cfg}, NewLinterBuilder())
 			require.NoError(t, err)
@@ -304,7 +303,6 @@ func TestManager_combineGoAnalysisLinters(t *testing.T) {
 	}
 
 	for _, test := range testCases {
-		test := test
 		t.Run(test.desc, func(t *testing.T) {
 			t.Parallel()
 

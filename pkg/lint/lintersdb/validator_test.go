@@ -118,7 +118,6 @@ func TestValidator_Validate(t *testing.T) {
 	testCases = append(testCases, validatePresetsTestCases...)
 
 	for _, test := range testCases {
-		test := test
 		t.Run(test.desc, func(t *testing.T) {
 			t.Parallel()
 
@@ -139,7 +138,6 @@ func TestValidator_Validate_error(t *testing.T) {
 	testCases = append(testCases, validatePresetsErrorTestCases...)
 
 	for _, test := range testCases {
-		test := test
 		t.Run(test.desc, func(t *testing.T) {
 			t.Parallel()
 
@@ -158,7 +156,6 @@ func TestValidator_validateLintersNames(t *testing.T) {
 	v := NewValidator(m)
 
 	for _, test := range validateLintersNamesTestCases {
-		test := test
 		t.Run(test.desc, func(t *testing.T) {
 			t.Parallel()
 
@@ -175,7 +172,6 @@ func TestValidator_validateLintersNames_error(t *testing.T) {
 	v := NewValidator(m)
 
 	for _, test := range validateLintersNamesErrorTestCases {
-		test := test
 		t.Run(test.desc, func(t *testing.T) {
 			t.Parallel()
 
@@ -191,7 +187,6 @@ func TestValidator_validatePresets(t *testing.T) {
 	v := NewValidator(nil)
 
 	for _, test := range validatePresetsTestCases {
-		test := test
 		t.Run(test.desc, func(t *testing.T) {
 			t.Parallel()
 
@@ -205,7 +200,6 @@ func TestValidator_validatePresets_error(t *testing.T) {
 	v := NewValidator(nil)
 
 	for _, test := range validatePresetsErrorTestCases {
-		test := test
 		t.Run(test.desc, func(t *testing.T) {
 			t.Parallel()
 

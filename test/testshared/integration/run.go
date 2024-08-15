@@ -42,7 +42,6 @@ func RunTestSourcesFromDir(t *testing.T, dir string) {
 	log.SetLevel(logutils.LogLevelInfo)
 
 	for _, source := range sources {
-		source := source
 		t.Run(filepath.Base(source), func(subTest *testing.T) {
 			subTest.Parallel()
 

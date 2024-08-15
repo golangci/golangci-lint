@@ -43,8 +43,6 @@ func (b *PluginGoBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			continue
 		}
 
-		settings := settings
-
 		lc, err := b.loadConfig(cfg, name, &settings)
 		if err != nil {
 			return nil, fmt.Errorf("unable to load custom analyzer %q: %s, %w", name, settings.Path, err)

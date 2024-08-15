@@ -475,7 +475,7 @@ func sizeOfReflectValueTreeBytes(rv reflect.Value, visitedPtrs map[uintptr]struc
 		return sizeOfReflectValueTreeBytes(rv.Elem(), visitedPtrs)
 	case reflect.Struct:
 		ret := 0
-		for i := 0; i < rv.NumField(); i++ {
+		for i := range rv.NumField() {
 			ret += sizeOfReflectValueTreeBytes(rv.Field(i), visitedPtrs)
 		}
 		return ret

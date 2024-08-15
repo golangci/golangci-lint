@@ -42,7 +42,6 @@ func TestLinters_validateDisabledAndEnabledAtOneMoment(t *testing.T) {
 	}
 
 	for _, test := range testCases {
-		test := test
 		t.Run(test.desc, func(t *testing.T) {
 			t.Parallel()
 
@@ -77,7 +76,6 @@ func TestLinters_validateDisabledAndEnabledAtOneMoment_error(t *testing.T) {
 	}
 
 	for _, test := range testCases {
-		test := test
 		t.Run(test.desc, func(t *testing.T) {
 			t.Parallel()
 
@@ -138,7 +136,6 @@ func TestLinters_validateAllDisableEnableOptions(t *testing.T) {
 	}
 
 	for _, test := range testCases {
-		test := test
 		t.Run(test.desc, func(t *testing.T) {
 			t.Parallel()
 
@@ -201,7 +198,6 @@ func TestLinters_validateAllDisableEnableOptions_error(t *testing.T) {
 	}
 
 	for _, test := range testCases {
-		test := test
 		t.Run(test.desc, func(t *testing.T) {
 			t.Parallel()
 

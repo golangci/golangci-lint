@@ -115,7 +115,6 @@ func (r *Runner) Run(ctx context.Context, linters []*linter.Config) ([]result.Is
 	)
 
 	for _, lc := range linters {
-		lc := lc
 		sw.TrackStage(lc.Name(), func() {
 			linterIssues, err := r.runLinterSafe(ctx, r.lintCtx, lc)
 			if err != nil {
@@ -189,7 +188,6 @@ func (r *Runner) processLintResults(inIssues []result.Issue) []result.Issue {
 	// finalize processors: logging, clearing, no heavy work here
 
 	for _, p := range r.Processors {
-		p := p
 		sw.TrackStage(p.Name(), func() {
 			p.Finish()
 		})
@@ -220,7 +218,6 @@ func (r *Runner) processIssues(issues []result.Issue, sw *timeutils.Stopwatch, s
 	for _, p := range r.Processors {
 		var newIssues []result.Issue
 		var err error
-		p := p
 		sw.TrackStage(p.Name(), func() {
 			newIssues, err = p.Process(issues)
 		})

@@ -56,8 +56,6 @@ func runFix(t *testing.T, extraArgs ...string) {
 	sources := setupTestFix(t)
 
 	for _, input := range sources {
-		input := input
-
 		t.Run(filepath.Base(input), func(t *testing.T) {
 			t.Parallel()
 

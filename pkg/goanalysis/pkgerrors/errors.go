@@ -25,8 +25,6 @@ func BuildIssuesFromIllTypedError(errs []error, lintCtx *linter.Context) ([]resu
 	var other error
 
 	for _, err := range errs {
-		err := err
-
 		var ill *IllTypedError
 		if !errors.As(err, &ill) {
 			if other == nil {

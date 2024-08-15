@@ -64,7 +64,6 @@ func (p ExcludeRules) Process(issues []result.Issue) ([]result.Issue, error) {
 
 	return filterIssues(issues, func(issue *result.Issue) bool {
 		for _, rule := range p.rules {
-			rule := rule
 			if rule.match(issue, p.files, p.log) {
 				return false
 			}

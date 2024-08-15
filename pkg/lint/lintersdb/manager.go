@@ -162,7 +162,6 @@ func (m *Manager) build(enabledByDefaultLinters []*linter.Config) map[string]*li
 	// --presets can only add linters to default set
 	for _, p := range m.cfg.Linters.Presets {
 		for _, lc := range m.GetAllLinterConfigsForPreset(p) {
-			lc := lc
 			resultLintersSet[lc.Name()] = lc
 		}
 	}

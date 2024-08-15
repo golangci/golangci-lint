@@ -140,7 +140,6 @@ func printValidationDetail(cmd *cobra.Command, detail *jsonschema.Detailed) {
 	}
 
 	for _, d := range detail.Errors {
-		d := d
 		printValidationDetail(cmd, &d)
 	}
 }
