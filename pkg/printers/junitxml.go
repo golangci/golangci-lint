@@ -30,6 +30,8 @@ type testCaseXML struct {
 	Name      string     `xml:"name,attr"`
 	ClassName string     `xml:"classname,attr"`
 	Failure   failureXML `xml:"failure"`
+	File      string     `xml:"file,attr,omitempty"`
+	Line      int        `xml:"line,attr,omitempty"`
 }
 
 type failureXML struct {
@@ -39,11 +41,15 @@ type failureXML struct {
 }
 
 type JunitXML struct {
-	w io.Writer
+	extended bool
+	w        io.Writer
 }
 
-func NewJunitXML(w io.Writer) *JunitXML {
-	return &JunitXML{w: w}
+func NewJunitXML(extended bool, w io.Writer) *JunitXML {
+	return &JunitXML{
+		extended: extended,
+		w:        w,
+	}
 }
 
 func (p JunitXML) Print(issues []result.Issue) error {
@@ -66,6 +72,11 @@ func (p JunitXML) Print(issues []result.Issue) error {
 				Content: fmt.Sprintf("%s: %s\nCategory: %s\nFile: %s\nLine: %d\nDetails: %s",
 					i.Severity, i.Text, i.FromLinter, i.Pos.Filename, i.Pos.Line, strings.Join(i.SourceLines, "\n")),
 			},
+		}
+
+		if p.extended {
+			tc.File = i.Pos.Filename
+			tc.Line = i.Pos.Line
 		}
 
 		testSuite.TestCases = append(testSuite.TestCases, tc)
