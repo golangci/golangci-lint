@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"strings"
 	"sync"
 
 	"github.com/shazow/go-diff/difflib"
@@ -113,10 +114,11 @@ func runGofumpt(lintCtx *linter.Context, pass *analysis.Pass, diff differ, optio
 
 func getLangVersion(settings *config.GofumptSettings) string {
 	if settings == nil || settings.LangVersion == "" {
-		// TODO: defaults to "1.15", in the future (v2) must be set by using build.Default.ReleaseTags like staticcheck.
-		return "1.15"
+		// TODO: defaults to "1.15", in the future (v2) must be removed.
+		return "go1.15"
 	}
-	return settings.LangVersion
+
+	return "go" + strings.TrimPrefix(settings.LangVersion, "go")
 }
 
 func getIssuedTextGoFumpt(settings *config.LintersSettings) string {
