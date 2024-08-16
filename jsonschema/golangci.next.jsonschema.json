@@ -324,6 +324,7 @@
             "funlen",
             "gci",
             "ginkgolinter",
+            "gobreakselectinfor",
             "gocheckcompilerdirectives",
             "gochecknoglobals",
             "gochecknoinits",

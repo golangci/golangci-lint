@@ -2620,6 +2620,7 @@ linters:
     - funlen
     - gci
     - ginkgolinter
+    - gobreakselectinfor
     - gocheckcompilerdirectives
     - gochecknoglobals
     - gochecknoinits
@@ -2735,6 +2736,7 @@ linters:
     - funlen
     - gci
     - ginkgolinter
+    - gobreakselectinfor
     - gocheckcompilerdirectives
     - gochecknoglobals
     - gochecknoinits
