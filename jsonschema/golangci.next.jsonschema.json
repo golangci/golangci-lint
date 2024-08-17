@@ -384,6 +384,7 @@
             "reassign",
             "revive",
             "rowserrcheck",
+            "scancheck",
             "scopelint",
             "sloglint",
             "sqlclosecheck",

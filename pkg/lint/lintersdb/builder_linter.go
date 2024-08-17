@@ -87,6 +87,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/reassign"
 	"github.com/golangci/golangci-lint/pkg/golinters/revive"
 	"github.com/golangci/golangci-lint/pkg/golinters/rowserrcheck"
+	"github.com/golangci/golangci-lint/pkg/golinters/scancheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/sloglint"
 	"github.com/golangci/golangci-lint/pkg/golinters/spancheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/sqlclosecheck"
@@ -667,6 +668,11 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetBugs, linter.PresetSQL).
 			WithURL("https://github.com/jingyugao/rowserrcheck"),
+
+		linter.NewConfig(scancheck.New()).
+			WithSince("v1.61.0").
+			WithPresets(linter.PresetBugs, linter.PresetError).
+			WithURL("https://github.com/raidancampbell/scancheck"),
 
 		linter.NewConfig(sloglint.New(&cfg.LintersSettings.SlogLint)).
 			WithSince("v1.55.0").
