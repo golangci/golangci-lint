@@ -106,14 +106,15 @@ linters:
   disable-all: true
   enable:
     - bodyclose
+    - copyloopvar
     - depguard
     - dogsled
     - dupl
     - errcheck
     - errorlint
-    - exportloopref
     - funlen
     - gocheckcompilerdirectives
+    - gochecknoinits
     - gochecknoinits
     - goconst
     - gocritic
@@ -126,6 +127,7 @@ linters:
     - gosec
     - gosimple
     - govet
+    - intrange
     - ineffassign
     - lll
     - misspell

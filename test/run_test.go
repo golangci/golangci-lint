@@ -144,7 +144,6 @@ func TestCgoWithIssues(t *testing.T) {
 	}
 
 	for _, test := range testCases {
-		test := test
 		t.Run(test.desc, func(t *testing.T) {
 			t.Parallel()
 
@@ -242,7 +241,6 @@ func TestLineDirective(t *testing.T) {
 	}
 
 	for _, test := range testCases {
-		test := test
 		t.Run(test.desc, func(t *testing.T) {
 			t.Parallel()
 
@@ -301,7 +299,6 @@ func TestLineDirectiveProcessedFiles(t *testing.T) {
 	}
 
 	for _, test := range testCases {
-		test := test
 		t.Run(test.desc, func(t *testing.T) {
 			t.Parallel()
 
@@ -349,7 +346,6 @@ func TestSortedResults(t *testing.T) {
 	binPath := testshared.InstallGolangciLint(t)
 
 	for _, test := range testCases {
-		test := test
 		t.Run(test.opt, func(t *testing.T) {
 			t.Parallel()
 
@@ -437,7 +433,6 @@ func TestConfigFileIsDetected(t *testing.T) {
 	}
 
 	for _, test := range testCases {
-		test := test
 		t.Run(test.desc, func(t *testing.T) {
 			t.Parallel()
 
@@ -475,7 +470,6 @@ func TestEnableAllFastAndEnableCanCoexist(t *testing.T) {
 	}
 
 	for _, test := range testCases {
-		test := test
 		t.Run(test.desc, func(t *testing.T) {
 			t.Parallel()
 
@@ -559,7 +553,6 @@ func TestPathPrefix(t *testing.T) {
 	binPath := testshared.InstallGolangciLint(t)
 
 	for _, test := range testCases {
-		test := test
 		t.Run(test.desc, func(t *testing.T) {
 			testshared.NewRunnerBuilder(t).
 				WithArgs(test.args...).

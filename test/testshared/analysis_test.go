@@ -124,7 +124,6 @@ func println(...interface{}) { println() } // want println:"found" "call of prin
 	}
 
 	for _, test := range testCases {
-		test := test
 		t.Run(test.filename, func(t *testing.T) {
 			t.Parallel()
 

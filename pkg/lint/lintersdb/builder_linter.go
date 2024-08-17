@@ -278,7 +278,8 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithSince("v1.28.0").
 			WithPresets(linter.PresetBugs).
 			WithLoadForGoAnalysis().
-			WithURL("https://github.com/kyoh86/exportloopref"),
+			WithURL("https://github.com/kyoh86/exportloopref").
+			DeprecatedWarning("Since Go1.22 (loopvar) this linter is no longer relevant.", "v1.60.2", "copyloopvar"),
 
 		linter.NewConfig(forbidigo.New(&cfg.LintersSettings.Forbidigo)).
 			WithSince("v1.34.0").

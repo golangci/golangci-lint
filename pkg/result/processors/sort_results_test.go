@@ -79,8 +79,7 @@ type compareTestCase struct {
 func testCompareValues(t *testing.T, cmp *comparator, name string, tests []compareTestCase) {
 	t.Parallel()
 
-	for i := 0; i < len(tests); i++ {
-		test := tests[i]
+	for i, test := range tests { //nolint:gocritic // To ignore rangeValCopy rule
 		t.Run(fmt.Sprintf("%s(%d)", name, i), func(t *testing.T) {
 			res := cmp.Compare(&test.a, &test.b)
 			assert.Equal(t, test.expected.String(), res.String())
@@ -200,8 +199,7 @@ func TestNumericCompare(t *testing.T) {
 
 	t.Parallel()
 
-	for i := 0; i < len(tests); i++ {
-		test := tests[i]
+	for i, test := range tests {
 		t.Run(fmt.Sprintf("%s(%d)", "Numeric Compare", i), func(t *testing.T) {
 			res := numericCompare(test.a, test.b)
 			assert.Equal(t, test.expected.String(), res.String())
@@ -267,7 +265,6 @@ func Test_mergeComparators(t *testing.T) {
 	}
 
 	for _, test := range testCases {
-		test := test
 		t.Run(test.desc, func(t *testing.T) {
 			t.Parallel()
 

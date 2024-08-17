@@ -242,7 +242,6 @@ func ExtractIssuesFromPatch(patch string, lintCtx *linter.Context, linterName st
 			changes := p.parse(hunk)
 
 			for _, change := range changes {
-				change := change // fix scope
 				i := result.Issue{
 					FromLinter: linterName,
 					Pos: token.Position{

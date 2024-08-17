@@ -194,7 +194,7 @@ func mergeComparators(cmps []*comparator) (*comparator, error) {
 		return nil, errors.New("no comparator")
 	}
 
-	for i := 0; i < len(cmps)-1; i++ {
+	for i := range len(cmps) - 1 {
 		findComparatorTip(cmps[i]).SetNext(cmps[i+1])
 	}
 

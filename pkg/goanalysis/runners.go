@@ -205,7 +205,7 @@ func loadIssuesFromCache(pkgs []*packages.Package, lintCtx *linter.Context,
 	wg.Add(workerCount)
 
 	pkgCh := make(chan *packages.Package, len(pkgs))
-	for i := 0; i < workerCount; i++ {
+	for range workerCount {
 		go func() {
 			defer wg.Done()
 			for pkg := range pkgCh {

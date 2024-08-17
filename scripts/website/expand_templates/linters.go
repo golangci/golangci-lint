@@ -154,7 +154,7 @@ func formatDesc(desc string) string {
 func hasSettings(name string) bool {
 	tp := reflect.TypeOf(config.LintersSettings{})
 
-	for i := 0; i < tp.NumField(); i++ {
+	for i := range tp.NumField() {
 		if strings.EqualFold(name, tp.Field(i).Name) {
 			return true
 		}
