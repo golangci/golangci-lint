@@ -86,7 +86,7 @@ require (
 	github.com/pelletier/go-toml/v2 v2.2.2
 	github.com/polyfloyd/go-errorlint v1.6.0
 	github.com/quasilyte/go-ruleguard/dsl v0.3.22
-	github.com/rnben/go-break-select-in-for v0.0.2
+	github.com/rnben/go-break-select-in-for v0.1.0
 	github.com/ryancurrah/gomodguard v1.3.3
 	github.com/ryanrolds/sqlclosecheck v0.5.1
 	github.com/sanposhiho/wastedassign/v2 v2.0.7
