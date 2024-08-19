@@ -4,6 +4,13 @@ on:
     types:
       - published
 
+env:
+  # https://github.com/actions/setup-go#supported-version-syntax
+  # ex:
+  # - 1.18beta1 -> 1.18.0-beta.1
+  # - 1.18rc1 -> 1.18.0-rc.1
+  GO_VERSION: '1.23'
+
 jobs:
   update-docs:
     name: "Update readme"
@@ -11,11 +18,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GITHUB_TOKEN: ${{ secrets.GOLANGCI_LINT_TOKEN }}
-      # https://github.com/actions/setup-go#supported-version-syntax
-      # ex:
-      # - 1.18beta1 -> 1.18.0-beta.1
-      # - 1.18rc1 -> 1.18.0-rc.1
-      GO_VERSION: '1.23'
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
