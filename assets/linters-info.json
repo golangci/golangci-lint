@@ -286,7 +286,12 @@
     "originalURL": "https://github.com/kyoh86/exportloopref",
     "internal": false,
     "isSlow": true,
-    "since": "v1.28.0"
+    "since": "v1.28.0",
+    "deprecation": {
+      "since": "v1.60.2",
+      "message": "Since Go1.22 (loopvar) this linter is no longer relevant.",
+      "replacement": "copyloopvar"
+    }
   },
   {
     "name": "forbidigo",
