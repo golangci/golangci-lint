@@ -134,7 +134,7 @@ func saveIssuesToCache(allPkgs []*packages.Package, pkgsFromCache map[*packages.
 		perPkgIssues[i.Pkg] = append(perPkgIssues[i.Pkg], *i)
 	}
 
-	savedIssuesCount := int32(0)
+	var savedIssuesCount int64 = 0
 	lintResKey := getIssuesCacheKey(analyzers)
 
 	workerCount := runtime.GOMAXPROCS(-1)
@@ -162,7 +162,7 @@ func saveIssuesToCache(allPkgs []*packages.Package, pkgsFromCache map[*packages.
 					})
 				}
 
-				atomic.AddInt32(&savedIssuesCount, int32(len(encodedIssues)))
+				atomic.AddInt64(&savedIssuesCount, int64(len(encodedIssues)))
 				if err := lintCtx.PkgCache.Put(pkg, pkgcache.HashModeNeedAllDeps, lintResKey, encodedIssues); err != nil {
 					lintCtx.Log.Infof("Failed to save package %s issues (%d) to cache: %s", pkg, len(pkgIssues), err)
 				} else {
