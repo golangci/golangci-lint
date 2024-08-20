@@ -10,6 +10,7 @@ import (
 	"sync"
 
 	"github.com/securego/gosec/v2"
+	"github.com/securego/gosec/v2/analyzers"
 	"github.com/securego/gosec/v2/issue"
 	"github.com/securego/gosec/v2/rules"
 	"golang.org/x/tools/go/analysis"
@@ -27,16 +28,20 @@ func New(settings *config.GoSecSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
 
-	var filters []rules.RuleFilter
 	conf := gosec.NewConfig()
+
+	var ruleFilters []rules.RuleFilter
+	var analyzerFilters []analyzers.AnalyzerFilter
 	if settings != nil {
-		filters = gosecRuleFilters(settings.Includes, settings.Excludes)
+		ruleFilters = createRuleFilters(settings.Includes, settings.Excludes)
+		analyzerFilters = createAnalyzerFilters(settings.Includes, settings.Excludes)
 		conf = toGosecConfig(settings)
 	}
 
 	logger := log.New(io.Discard, "", 0)
 
-	ruleDefinitions := rules.Generate(false, filters...)
+	ruleDefinitions := rules.Generate(false, ruleFilters...)
+	analyzerDefinitions := analyzers.Generate(false, analyzerFilters...)
 
 	analyzer := &analysis.Analyzer{
 		Name: linterName,
@@ -53,7 +58,9 @@ func New(settings *config.GoSecSettings) *goanalysis.Linter {
 		analyzer.Run = func(pass *analysis.Pass) (any, error) {
 			// The `gosecAnalyzer` is here because of concurrency issue.
 			gosecAnalyzer := gosec.NewAnalyzer(conf, true, settings.ExcludeGenerated, false, settings.Concurrency, logger)
+
 			gosecAnalyzer.LoadRules(ruleDefinitions.RulesInfo())
+			gosecAnalyzer.LoadAnalyzers(analyzerDefinitions.AnalyzersInfo())
 
 			issues := runGoSec(lintCtx, pass, settings, gosecAnalyzer)
 
@@ -176,8 +183,23 @@ func convertGosecGlobals(globalOptionFromConfig any, conf gosec.Config) {
 	}
 }
 
+// based on https://github.com/securego/gosec/blob/81cda2f91fbe1bf4735feb55febcae03e697a92b/cmd/gosec/main.go#L258-L275
+func createAnalyzerFilters(includes, excludes []string) []analyzers.AnalyzerFilter {
+	var filters []analyzers.AnalyzerFilter
+
+	if len(includes) > 0 {
+		filters = append(filters, analyzers.NewAnalyzerFilter(false, includes...))
+	}
+
+	if len(excludes) > 0 {
+		filters = append(filters, analyzers.NewAnalyzerFilter(true, excludes...))
+	}
+
+	return filters
+}
+
 // based on https://github.com/securego/gosec/blob/569328eade2ccbad4ce2d0f21ee158ab5356a5cf/cmd/gosec/main.go#L170-L188
-func gosecRuleFilters(includes, excludes []string) []rules.RuleFilter {
+func createRuleFilters(includes, excludes []string) []rules.RuleFilter {
 	var filters []rules.RuleFilter
 
 	if len(includes) > 0 {

@@ -204,6 +204,21 @@ issues:
       linters: [gocritic]
       text: "rangeValCopy: each iteration copies 160 bytes \\(consider pointers or indexing\\)"
 
+    # Related to file sizes.
+    - path: pkg/goanalysis/runner_loadingpackage.go
+      linters: [gosec]
+      text: "G115: integer overflow conversion uintptr -> int"
+
+    # Related to PID.
+    - path: test/bench/bench_test.go
+      linters: [gosec]
+      text: "G115: integer overflow conversion int -> int32"
+
+    # Related to the result of computation but divided multiple times by 1024.
+    - path: test/bench/bench_test.go
+      linters: [gosec]
+      text: "G115: integer overflow conversion uint64 -> int"
+
   exclude-dirs:
     - test/testdata_etc # test files
     - internal/cache # extracted from Go code
