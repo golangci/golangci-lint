@@ -1,5 +1,17 @@
 Follow the news and releases on [Mastodon](https://fosstodon.org/@golangcilint) and on [Twitter](https://twitter.com/golangci).
 
+### v1.60.2
+
+1. Updated linters
+  * `gofmt`: update to HEAD (go1.22)
+  * `gofumpt`: from 0.6.0 to 0.7.0
+  * `gosec`: fix G602 analyzer
+  * `gosec`: from 5f0084eb01a9 to 81cda2f91fbe (adds `G115`, `G405`, `G406`, `G506`, `G507`)
+  * `staticcheck`: from 0.5.0 to 0.5.1
+  * `staticcheck`: propagate Go version
+  * `wrapcheck`: from 2.8.3 to 2.9.0
+  * ⚠️ `exportloopref`: deprecation
+
 ### v1.60.1
 
 1. Updated linters
