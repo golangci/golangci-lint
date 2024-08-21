@@ -304,6 +304,7 @@
             "bidichk",
             "bodyclose",
             "canonicalheader",
+            "constructorcheck",
             "containedctx",
             "contextcheck",
             "copyloopvar",

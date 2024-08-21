@@ -8,6 +8,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/bidichk"
 	"github.com/golangci/golangci-lint/pkg/golinters/bodyclose"
 	"github.com/golangci/golangci-lint/pkg/golinters/canonicalheader"
+	"github.com/golangci/golangci-lint/pkg/golinters/constructorcheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/containedctx"
 	"github.com/golangci/golangci-lint/pkg/golinters/contextcheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/copyloopvar"
@@ -161,7 +162,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/lasiar/canonicalHeader"),
 
-		linter.NewConfig(canonicalheader.New()).
+		linter.NewConfig(constructorcheck.New()).
 			WithSince("v1.61.0").
 			WithPresets(linter.PresetStyle).
 			WithLoadForGoAnalysis().
