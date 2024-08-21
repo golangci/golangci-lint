@@ -14,6 +14,5 @@ func New() *goanalysis.Linter {
 		a.Doc,
 		[]*analysis.Analyzer{a},
 		nil,
-	).WithLoadMode(goanalysis.LoadModeSyntax)
-	// WithLoadMode(goanalysis.LoadModeTypesInfo)
+	).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }
