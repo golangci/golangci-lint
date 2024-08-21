@@ -1,10 +1,9 @@
 package constructorcheck
 
 import (
-	"golang.org/x/tools/go/analysis"
-
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 	constructorcheck "github.com/reflechant/constructor-check/analyzer"
+	"golang.org/x/tools/go/analysis"
 )
 
 func New() *goanalysis.Linter {
