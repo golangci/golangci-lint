@@ -74,6 +74,11 @@ func (l *Loader) Load(opts LoadOptions) error {
 
 	l.handleGoVersion()
 
+	err = checkGoVersion(l.cfg.Run.Go)
+	if err != nil {
+		return err
+	}
+
 	err = l.handleEnableOnlyOption()
 	if err != nil {
 		return err
