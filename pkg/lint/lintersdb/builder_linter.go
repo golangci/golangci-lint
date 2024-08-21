@@ -161,6 +161,12 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/lasiar/canonicalHeader"),
 
+		linter.NewConfig(canonicalheader.New()).
+			WithSince("v1.61.0").
+			WithPresets(linter.PresetStyle).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/reflechant/constructor-check"),
+
 		linter.NewConfig(containedctx.New()).
 			WithSince("1.44.0").
 			WithLoadForGoAnalysis().
