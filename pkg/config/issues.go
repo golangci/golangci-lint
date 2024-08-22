@@ -101,6 +101,12 @@ var DefaultExcludePatterns = []ExcludePattern{
 		Linter:  "revive",
 		Why:     "Annoying issue about not having a comment. The rare codebase has such comments.",
 	},
+	{
+		ID:      "EXC0016",
+		Pattern: `G115: integer overflow conversion`, // rule: package-comments
+		Linter:  "gosec",
+		Why:     "Too many false positives.",
+	},
 }
 
 type Issues struct {
