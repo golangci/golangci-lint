@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestIsGoGreaterThanOrEqual(t *testing.T) {
@@ -128,6 +129,59 @@ func Test_trimGoVersion(t *testing.T) {
 
 			version := trimGoVersion(test.version)
 			assert.Equal(t, test.expected, version)
+		})
+	}
+}
+
+func Test_checkGoVersion(t *testing.T) {
+	testCases := []struct {
+		desc    string
+		version string
+		require require.ErrorAssertionFunc
+	}{
+		{
+			desc:    "version greater than runtime version (patch)",
+			version: "1.30.1",
+			require: require.Error,
+		},
+		{
+			desc:    "version greater than runtime version (family)",
+			version: "1.30",
+			require: require.Error,
+		},
+		{
+			desc:    "version greater than runtime version (RC)",
+			version: "1.30.0-rc1",
+			require: require.Error,
+		},
+		{
+			desc:    "version equals to runtime version",
+			version: getRuntimeGoVersion(),
+			require: require.NoError,
+		},
+		{
+			desc:    "version lower than runtime version (patch)",
+			version: "1.19.1",
+			require: require.NoError,
+		},
+		{
+			desc:    "version lower than runtime version (family)",
+			version: "1.19",
+			require: require.NoError,
+		},
+		{
+			desc:    "version lower than runtime version (RC)",
+			version: "1.19.0-rc1",
+			require: require.NoError,
+		},
+	}
+
+	for _, test := range testCases {
+		t.Run(test.desc, func(t *testing.T) {
+			t.Parallel()
+
+			err := checkGoVersion(test.version)
+			test.require(t, err)
 		})
 	}
 }
