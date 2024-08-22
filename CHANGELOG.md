@@ -1,5 +1,12 @@
 Follow the news and releases on [Mastodon](https://fosstodon.org/@golangcilint) and on [Twitter](https://twitter.com/golangci).
 
+### v1.60.3
+
+1. Updated linters
+   * `gosec`: from 81cda2f91fbe to ab3f6c1c83a0 (fix `G115` false positives)
+2. Misc.
+   * Check that the Go version use to build is greater or equals to the Go version of the project
+
 ### v1.60.2
 
 1. Updated linters
