@@ -94,6 +94,10 @@ var defaultLintersSettings = LintersSettings{
 	InterfaceBloat: InterfaceBloatSettings{
 		Max: 10,
 	},
+	Interfaceguard: InterfaceguardSettings{
+		DisableInterfaceComparison: false,
+		DisableNilComparison:       false,
+	},
 	Lll: LllSettings{
 		LineLength: 120,
 		TabWidth:   1,
@@ -236,6 +240,7 @@ type LintersSettings struct {
 	ImportAs        ImportAsSettings
 	Inamedparam     INamedParamSettings
 	InterfaceBloat  InterfaceBloatSettings
+	Interfaceguard  InterfaceguardSettings
 	Ireturn         IreturnSettings
 	Lll             LllSettings
 	LoggerCheck     LoggerCheckSettings
@@ -664,6 +669,11 @@ type INamedParamSettings struct {
 
 type InterfaceBloatSettings struct {
 	Max int `mapstructure:"max"`
+}
+
+type InterfaceguardSettings struct {
+	DisableInterfaceComparison bool `mapstructure:"disable-interface-to-interface"`
+	DisableNilComparison       bool `mapstructure:"disable-interface-to-nil"`
 }
 
 type IreturnSettings struct {

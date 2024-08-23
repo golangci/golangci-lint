@@ -1249,6 +1249,14 @@ linters-settings:
     # Default: 10
     max: 5
 
+  interfaceguard:
+    # Disable check for direct interface-to-interface comparisons.
+    # Default: false
+    disable-interface-to-interface: true
+    # Disable check for direct interface-to-nil comparisons.
+    # Default: false
+    disable-interface-to-nil: true
+
   ireturn:
     # List of interfaces to allow.
     # Lists of the keywords and regular expressions matched to interface or package names can be used.
@@ -2658,6 +2666,7 @@ linters:
     - inamedparam
     - ineffassign
     - interfacebloat
+    - interfaceguard
     - intrange
     - ireturn
     - lll
@@ -2773,6 +2782,7 @@ linters:
     - inamedparam
     - ineffassign
     - interfacebloat
+    - interfaceguard
     - intrange
     - ireturn
     - lll

@@ -359,6 +359,7 @@
             "inamedparam",
             "ineffassign",
             "interfacebloat",
+            "interfaceguard",
             "interfacer",
             "intrange",
             "ireturn",
@@ -1519,6 +1520,22 @@
             "max": {
               "description": "The maximum number of methods allowed for an interface.",
               "type": "integer"
+            }
+          }
+        },
+        "interfaceguard": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "disable-interface-to-interface": {
+              "description": "Disable check for direct interface-to-interface comparisons.",
+              "type": "boolean",
+              "default": false
+            },
+            "disable-interface-to-nil": {
+              "description": "Disable check for direct interface-to-nil comparisons.",
+              "type": "boolean",
+              "default": false
             }
           }
         },

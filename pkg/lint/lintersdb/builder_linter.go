@@ -59,6 +59,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/inamedparam"
 	"github.com/golangci/golangci-lint/pkg/golinters/ineffassign"
 	"github.com/golangci/golangci-lint/pkg/golinters/interfacebloat"
+	"github.com/golangci/golangci-lint/pkg/golinters/interfaceguard"
 	"github.com/golangci/golangci-lint/pkg/golinters/intrange"
 	"github.com/golangci/golangci-lint/pkg/golinters/ireturn"
 	"github.com/golangci/golangci-lint/pkg/golinters/lll"
@@ -498,6 +499,12 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithSince("v1.49.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/sashamelentyev/interfacebloat"),
+
+		linter.NewConfig(interfaceguard.New(&cfg.LintersSettings.Interfaceguard)).
+			WithSince("v1.61.0").
+			WithPresets(linter.PresetBugs).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/jkeys089/interfaceguard"),
 
 		linter.NewConfig(linter.NewNoopDeprecated("interfacer", cfg, linter.DeprecationError)).
 			WithSince("v1.0.0").
