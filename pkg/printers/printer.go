@@ -131,7 +131,7 @@ func (c *Printer) createPrinter(format string, w io.Writer) (issuePrinter, error
 		p = NewHTML(w)
 	case config.OutFormatJunitXML:
 		p = NewJunitXML(false, w)
-	case config.OutFormatExtendedJunitXML:
+	case config.OutFormatJunitXMLExtended:
 		p = NewJunitXML(true, w)
 	case config.OutFormatGithubActions:
 		p = NewGitHubAction(w)

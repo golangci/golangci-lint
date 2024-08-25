@@ -17,7 +17,7 @@ const (
 	OutFormatCodeClimate       = "code-climate"
 	OutFormatHTML              = "html"
 	OutFormatJunitXML          = "junit-xml"
-	OutFormatExtendedJunitXML  = "extended-junit-xml"
+	OutFormatJunitXMLExtended  = "junit-xml-extended"
 	OutFormatGithubActions     = "github-actions" // Deprecated
 	OutFormatTeamCity          = "teamcity"
 	OutFormatSarif             = "sarif"
@@ -33,7 +33,7 @@ var AllOutputFormats = []string{
 	OutFormatCodeClimate,
 	OutFormatHTML,
 	OutFormatJunitXML,
-	OutFormatExtendedJunitXML,
+	OutFormatJunitXMLExtended,
 	OutFormatGithubActions,
 	OutFormatTeamCity,
 	OutFormatSarif,
