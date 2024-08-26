@@ -319,7 +319,7 @@
   },
   {
     "name": "fatcontext",
-    "desc": "detects nested contexts in loops",
+    "desc": "detects nested contexts in loops or function literals",
     "loadMode": 575,
     "inPresets": [
       "performance"
