@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 )
 
 func TestIsGoGreaterThanOrEqual(t *testing.T) {
@@ -81,107 +80,6 @@ func TestIsGoGreaterThanOrEqual(t *testing.T) {
 			t.Parallel()
 
 			test.assert(t, IsGoGreaterThanOrEqual(test.current, test.limit))
-		})
-	}
-}
-
-func Test_trimGoVersion(t *testing.T) {
-	testCases := []struct {
-		desc     string
-		version  string
-		expected string
-	}{
-		{
-			desc:     "patched version",
-			version:  "1.22.0",
-			expected: "1.22",
-		},
-		{
-			desc:     "minor version",
-			version:  "1.22",
-			expected: "1.22",
-		},
-		{
-			desc:     "RC version",
-			version:  "1.22rc1",
-			expected: "1.22",
-		},
-		{
-			desc:     "alpha version",
-			version:  "1.22alpha1",
-			expected: "1.22",
-		},
-		{
-			desc:     "beta version",
-			version:  "1.22beta1",
-			expected: "1.22",
-		},
-		{
-			desc:     "semver RC version",
-			version:  "1.22.0-rc1",
-			expected: "1.22",
-		},
-	}
-
-	for _, test := range testCases {
-		t.Run(test.desc, func(t *testing.T) {
-			t.Parallel()
-
-			version := trimGoVersion(test.version)
-			assert.Equal(t, test.expected, version)
-		})
-	}
-}
-
-func Test_checkGoVersion(t *testing.T) {
-	testCases := []struct {
-		desc    string
-		version string
-		require require.ErrorAssertionFunc
-	}{
-		{
-			desc:    "version greater than runtime version (patch)",
-			version: "1.30.1",
-			require: require.Error,
-		},
-		{
-			desc:    "version greater than runtime version (family)",
-			version: "1.30",
-			require: require.Error,
-		},
-		{
-			desc:    "version greater than runtime version (RC)",
-			version: "1.30.0-rc1",
-			require: require.Error,
-		},
-		{
-			desc:    "version equals to runtime version",
-			version: getRuntimeGoVersion(),
-			require: require.NoError,
-		},
-		{
-			desc:    "version lower than runtime version (patch)",
-			version: "1.19.1",
-			require: require.NoError,
-		},
-		{
-			desc:    "version lower than runtime version (family)",
-			version: "1.19",
-			require: require.NoError,
-		},
-		{
-			desc:    "version lower than runtime version (RC)",
-			version: "1.19.0-rc1",
-			require: require.NoError,
-		},
-	}
-
-	for _, test := range testCases {
-		t.Run(test.desc, func(t *testing.T) {
-			t.Parallel()
-
-			err := checkGoVersion(test.version)
-			test.require(t, err)
 		})
 	}
 }

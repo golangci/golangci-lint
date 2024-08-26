@@ -14,6 +14,7 @@ import (
 
 	"github.com/golangci/golangci-lint/pkg/exitcodes"
 	"github.com/golangci/golangci-lint/pkg/fsutils"
+	"github.com/golangci/golangci-lint/pkg/goutil"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 )
 
@@ -74,7 +75,7 @@ func (l *Loader) Load(opts LoadOptions) error {
 
 	l.handleGoVersion()
 
-	err = checkGoVersion(l.cfg.Run.Go)
+	err = goutil.CheckGoVersion(l.cfg.Run.Go)
 	if err != nil {
 		return err
 	}
@@ -295,7 +296,7 @@ func (l *Loader) handleGoVersion() {
 		l.cfg.LintersSettings.Gofumpt.LangVersion = l.cfg.Run.Go
 	}
 
-	trimmedGoVersion := trimGoVersion(l.cfg.Run.Go)
+	trimmedGoVersion := goutil.TrimGoVersion(l.cfg.Run.Go)
 
 	l.cfg.LintersSettings.Revive.Go = trimmedGoVersion
 
