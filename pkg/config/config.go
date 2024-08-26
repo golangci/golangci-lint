@@ -112,17 +112,24 @@ func trimGoVersion(v string) string {
 	return v
 }
 
+// Return the Go version that golangci-lint was compiled with, for example "go1.23"
 func getRuntimeGoVersion() string {
 	goVersion := runtime.Version()
 
+	// When using GOEXPERIMENT, the version returned might look something like "go1.23.0 X:boringcrypto"
+	//
+	// For development versions, the version might be "devel go1.24-e705a2d Wed Aug 7 01:16:42 2024 +0000 linux/amd64"
+	//
+	// So we split the full version string by whitespace and extract the part starting with "go"
 	parts := strings.Fields(goVersion)
-
-	if len(parts) == 0 {
-		return goVersion
+	for _, version := range parts {
+		if strings.HasPrefix(version, "go") {
+			return version
+		}
 	}
 
-	// When using GOEXPERIMENT, the version returned might look something like "go1.23.0 X:boringcrypto".
-	return parts[0]
+	// As a fallback, return the full version string (not sure if this is useful)
+	return goVersion
 }
 
 func checkGoVersion(goVersion string) error {
