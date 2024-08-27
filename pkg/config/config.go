@@ -1,11 +1,7 @@
 package config
 
 import (
-	"fmt"
-	"go/version"
 	"os"
-	"regexp"
-	"runtime"
 	"strings"
 
 	hcversion "github.com/hashicorp/go-version"
@@ -91,57 +87,4 @@ func detectGoVersion() string {
 	}
 
 	return "1.17"
-}
-
-// Trims the Go version to keep only M.m.
-// Since Go 1.21 the version inside the go.mod can be a patched version (ex: 1.21.0).
-// The version can also include information which we want to remove (ex: 1.21alpha1)
-// https://go.dev/doc/toolchain#versions
-// This a problem with staticcheck and gocritic.
-func trimGoVersion(v string) string {
-	if v == "" {
-		return ""
-	}
-
-	exp := regexp.MustCompile(`(\d\.\d+)(?:\.\d+|[a-z]+\d)`)
-
-	if exp.MatchString(v) {
-		return exp.FindStringSubmatch(v)[1]
-	}
-
-	return v
-}
-
-func getRuntimeGoVersion() string {
-	goVersion := runtime.Version()
-
-	parts := strings.Fields(goVersion)
-
-	if len(parts) == 0 {
-		return goVersion
-	}
-
-	// When using GOEXPERIMENT, the version returned might look something like "go1.23.0 X:boringcrypto".
-	return parts[0]
-}
-
-func checkGoVersion(goVersion string) error {
-	langVersion := version.Lang(getRuntimeGoVersion())
-
-	runtimeVersion, err := hcversion.NewVersion(strings.TrimPrefix(langVersion, "go"))
-	if err != nil {
-		return err
-	}
-
-	targetedVersion, err := hcversion.NewVersion(trimGoVersion(goVersion))
-	if err != nil {
-		return err
-	}
-
-	if runtimeVersion.LessThan(targetedVersion) {
-		return fmt.Errorf("the Go language version (%s) used to build golangci-lint is lower than the targeted Go version (%s)",
-			langVersion, goVersion)
-	}
-
-	return nil
 }

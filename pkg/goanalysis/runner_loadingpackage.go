@@ -9,8 +9,6 @@ import (
 	"go/types"
 	"os"
 	"reflect"
-	"runtime"
-	"strings"
 	"sync"
 	"sync/atomic"
 
@@ -18,6 +16,7 @@ import (
 	"golang.org/x/tools/go/packages"
 
 	"github.com/golangci/golangci-lint/pkg/goanalysis/load"
+	"github.com/golangci/golangci-lint/pkg/goutil"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 )
 
@@ -153,12 +152,18 @@ func (lp *loadingPackage) loadFromSource(loadMode LoadMode) error {
 		return imp.Types, nil
 	}
 
+	// TODO(ldez) temporary workaround
+	rv, err := goutil.CleanRuntimeVersion()
+	if err != nil {
+		return err
+	}
+
 	tc := &types.Config{
 		Importer: importerFunc(importer),
 		Error: func(err error) {
 			pkg.Errors = append(pkg.Errors, lp.convertError(err)...)
 		},
-		GoVersion: getGoVersion(),
+		GoVersion: rv, // TODO(ldez) temporary workaround
 	}
 
 	_ = types.NewChecker(tc, pkg.Fset, pkg.Types, pkg.TypesInfo).Files(pkg.Syntax)
@@ -501,18 +506,4 @@ func sizeOfReflectValueTreeBytes(rv reflect.Value, visitedPtrs map[uintptr]struc
 	default:
 		panic("unknown rv of type " + rv.String())
 	}
-}
-
-// TODO(ldez) temporary workaround
-func getGoVersion() string {
-	goVersion := runtime.Version()
-
-	parts := strings.Fields(goVersion)
-
-	if len(parts) == 0 {
-		return goVersion
-	}
-
-	// When using GOEXPERIMENT, the version returned might look something like "go1.23.0 X:boringcrypto".
-	return parts[0]
 }
