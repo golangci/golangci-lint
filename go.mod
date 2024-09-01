@@ -1,7 +1,6 @@
 module github.com/golangci/golangci-lint
 
 go 1.22.1
-
 require (
 	4d63.com/gocheckcompilerdirectives v1.2.1
 	4d63.com/gochecknoglobals v0.2.1
@@ -11,7 +10,7 @@ require (
 	github.com/Antonboom/nilnil v0.1.9
 	github.com/Antonboom/testifylint v1.4.3
 	github.com/BurntSushi/toml v1.4.1-0.20240526193622-a339e1f7089c
-	github.com/Crocmagnon/fatcontext v0.4.0
+	github.com/Crocmagnon/fatcontext v0.5.1
 	github.com/Djarvur/go-err113 v0.0.0-20210108212216-aea10b59be24
 	github.com/GaijinEntertainment/go-exhaustruct/v3 v3.3.0
 	github.com/OpenPeeDeeP/depguard/v2 v2.2.0
