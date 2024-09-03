@@ -259,6 +259,11 @@ func (l Linter) Run(fset *token.FileSet, nodes ...ast.Node) ([]Issue, error) {
 							NewString: "",
 						},
 					}
+					// if the directive starts from a new line, remove the line
+					if removeNolintCompletely.Inline.StartCol == 0 {
+						removeNolintCompletely.NeedOnlyDelete = true
+						removeNolintCompletely.Inline = nil
+					}
 
 					if len(linters) == 0 {
 						issue := UnusedCandidate{BaseIssue: base}
