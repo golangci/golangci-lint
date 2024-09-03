@@ -113,7 +113,15 @@ func (l *Loader) setConfigFile() error {
 			l.viper.SetConfigType("yaml")
 		}
 	} else {
-		l.setupConfigFileSearch()
+		l.setupRecursiveConfigFileSearch()
+
+		// If recursive search didn't find any config file, try searching in the global config paths.
+		if err := l.viper.ReadInConfig(); err != nil {
+			var configFileNotFoundError viper.ConfigFileNotFoundError
+			if errors.As(err, &configFileNotFoundError) {
+				l.setupGlobalConfigFileSearch()
+			}
+		}
 	}
 
 	return nil
@@ -136,10 +144,10 @@ func (l *Loader) evaluateOptions() (string, error) {
 	return configFile, nil
 }
 
-func (l *Loader) setupConfigFileSearch() {
+func (l *Loader) setupRecursiveConfigFileSearch() {
 	l.viper.SetConfigName(".golangci")
 
-	configSearchPaths := l.getConfigSearchPaths()
+	configSearchPaths := l.getRecursiveConfigSearchPaths()
 
 	l.log.Infof("Config search paths: %s", configSearchPaths)
 
@@ -148,7 +156,19 @@ func (l *Loader) setupConfigFileSearch() {
 	}
 }
 
-func (l *Loader) getConfigSearchPaths() []string {
+func (l *Loader) setupGlobalConfigFileSearch() {
+	l.viper.SetConfigName("golangci")
+
+	configSearchPaths := l.getGlobalConfigSearchPaths()
+
+	l.log.Infof("Global config search paths: %s", configSearchPaths)
+
+	for _, p := range configSearchPaths {
+		l.viper.AddConfigPath(p)
+	}
+}
+
+func (l *Loader) getRecursiveConfigSearchPaths() []string {
 	firstArg := "./..."
 	if len(l.args) > 0 {
 		firstArg = l.args[0]
@@ -187,6 +207,29 @@ func (l *Loader) getConfigSearchPaths() []string {
 		l.log.Warnf("Can't get user's home directory: %v", err)
 	} else if !slices.Contains(searchPaths, home) {
 		searchPaths = append(searchPaths, home)
+	}
+
+	return searchPaths
+}
+
+func (l *Loader) getGlobalConfigSearchPaths() []string {
+	searchPaths := []string{}
+
+	// Find in XDG_CONFIG_HOME/golangci or $HOME/.config/golangci for global config
+	if xdgConfigHome := os.Getenv("XDG_CONFIG_HOME"); xdgConfigHome == "" {
+		l.log.Warnf("XDG_CONFIG_HOME is not set")
+	} else {
+		searchPaths = append(searchPaths, filepath.Join(xdgConfigHome, "golangci"))
+	}
+
+	// Find the user's home directory
+	if home, err := homedir.Dir(); err != nil {
+		l.log.Warnf("Can't get user's home directory: %v", err)
+	} else {
+		homeGlobalConfigPath := filepath.Join(home, ".config", "golangci")
+		if !slices.Contains(searchPaths, homeGlobalConfigPath) {
+			searchPaths = append(searchPaths, filepath.Join(home, ".config", "golangci"))
+		}
 	}
 
 	return searchPaths
