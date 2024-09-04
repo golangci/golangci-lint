@@ -252,12 +252,19 @@ func (l Linter) Run(fset *token.FileSet, nodes ...ast.Node) ([]Issue, error) {
 
 				// when detecting unused directives, we send all the directives through and filter them out in the nolint processor
 				if (l.needs & NeedsUnused) != 0 {
-					removeNolintCompletely := &result.Replacement{
-						Inline: &result.InlineFix{
-							StartCol:  pos.Column - 1,
+					removeNolintCompletely := &result.Replacement{}
+
+					startCol := pos.Column - 1
+
+					if startCol == 0 {
+						// if the directive starts from a new line, remove the line
+						removeNolintCompletely.NeedOnlyDelete = true
+					} else {
+						removeNolintCompletely.Inline = &result.InlineFix{
+							StartCol:  startCol,
 							Length:    end.Column - pos.Column,
 							NewString: "",
-						},
+						}
 					}
 
 					if len(linters) == 0 {

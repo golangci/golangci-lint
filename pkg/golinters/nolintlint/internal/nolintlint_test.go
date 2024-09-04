@@ -189,6 +189,25 @@ func foo() {
 			},
 		},
 		{
+			desc:  "needs unused with one specific linter in a new line generates replacement",
+			needs: NeedsUnused,
+			contents: `
+package bar
+
+//nolint:somelinter
+func foo() {
+  bad()
+}`,
+			expected: []issueWithReplacement{
+				{
+					issue: "directive `//nolint:somelinter` is unused for linter \"somelinter\" at testing.go:4:1",
+					replacement: &result.Replacement{
+						NeedOnlyDelete: true,
+					},
+				},
+			},
+		},
+		{
 			desc:  "needs unused with multiple specific linters does not generate replacements",
 			needs: NeedsUnused,
 			contents: `
