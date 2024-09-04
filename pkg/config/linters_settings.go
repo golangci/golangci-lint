@@ -717,7 +717,7 @@ type MustTagSettings struct {
 }
 
 type NakedretSettings struct {
-	MaxFuncLines int `mapstructure:"max-func-lines"`
+	MaxFuncLines uint `mapstructure:"max-func-lines"`
 }
 
 type NestifSettings struct {
