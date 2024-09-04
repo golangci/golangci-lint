@@ -464,6 +464,10 @@ linters-settings:
     # Default: false
     custom-order: true
 
+    # Drops lexical ordering for custom sections.
+    # Default: false
+    no-lex-order: true
+
   ginkgolinter:
     # Suppress the wrong length assertion warning.
     # Default: false

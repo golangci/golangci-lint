@@ -44,6 +44,7 @@ func New(settings *config.GciSettings) *goanalysis.Linter {
 			Cfg: gcicfg.BoolConfig{
 				SkipGenerated: settings.SkipGenerated,
 				CustomOrder:   settings.CustomOrder,
+				NoLexOrder:    settings.NoLexOrder,
 			},
 			SectionStrings: settings.Sections,
 		}
@@ -195,7 +196,7 @@ func diffFormattedFilesToArray(paths []string, cfg gcicfg.Config, diffs *[]strin
 }
 
 // Code below this comment is borrowed and modified from gci.
-// https://github.com/daixiang0/gci/blob/4725b0c101801e7449530eee2ddb0c72592e3405/pkg/config/config.go
+// https://github.com/daixiang0/gci/blob/v0.13.5/pkg/config/config.go
 
 var defaultOrder = map[string]int{
 	section.StandardType:    0,
@@ -229,10 +230,11 @@ func (g YamlConfig) Parse() (*gcicfg.Config, error) {
 		sort.Slice(sections, func(i, j int) bool {
 			sectionI, sectionJ := sections[i].Type(), sections[j].Type()
 
-			if strings.Compare(sectionI, sectionJ) == 0 {
-				return strings.Compare(sections[i].String(), sections[j].String()) < 0
+			if g.origin.Cfg.NoLexOrder || strings.Compare(sectionI, sectionJ) != 0 {
+				return defaultOrder[sectionI] < defaultOrder[sectionJ]
 			}
-			return defaultOrder[sectionI] < defaultOrder[sectionJ]
+
+			return strings.Compare(sections[i].String(), sections[j].String()) < 0
 		})
 	}
 

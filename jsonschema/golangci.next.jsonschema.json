@@ -1103,6 +1103,11 @@
               "description": "Enable custom order of sections.",
               "type": "boolean",
               "default": false
+            },
+            "no-lex-order": {
+              "description": "Drops lexical ordering for custom sections.",
+              "type": "boolean",
+              "default": false
             }
           }
         },
