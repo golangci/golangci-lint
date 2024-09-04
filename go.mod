@@ -6,7 +6,7 @@ require (
 	4d63.com/gocheckcompilerdirectives v1.2.1
 	4d63.com/gochecknoglobals v0.2.1
 	github.com/4meepo/tagalign v1.3.4
-	github.com/Abirdcfly/dupword v0.0.14
+	github.com/Abirdcfly/dupword v0.1.1
 	github.com/Antonboom/errname v0.1.13
 	github.com/Antonboom/nilnil v0.1.9
 	github.com/Antonboom/testifylint v1.4.3
