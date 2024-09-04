@@ -521,6 +521,7 @@
                   "checkstyle",
                   "code-climate",
                   "junit-xml",
+                  "junit-xml-extended",
                   "github-actions",
                   "teamcity",
                   "sarif"

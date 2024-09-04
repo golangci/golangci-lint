@@ -42,13 +42,14 @@ func TestJunitXML_Print(t *testing.T) {
 		},
 	}
 
-	buf := new(bytes.Buffer)
-	printer := NewJunitXML(buf)
-
-	err := printer.Print(issues)
-	require.NoError(t, err)
-
-	expected := `<testsuites>
+	testCases := []struct {
+		desc     string
+		extended bool
+		expected string
+	}{
+		{
+			desc: "basic",
+			expected: `<testsuites>
   <testsuite name="path/to/filea.go" tests="1" errors="0" failures="1">
     <testcase name="linter-a" classname="path/to/filea.go:10:4">
       <failure message="path/to/filea.go:10:4: some issue" type="warning"><![CDATA[warning: some issue
@@ -69,7 +70,47 @@ Details: func foo() {
 }]]></failure>
     </testcase>
   </testsuite>
-</testsuites>`
+</testsuites>`,
+		},
+		{
+			desc:     "extended/complete",
+			extended: true,
+			expected: `<testsuites>
+  <testsuite name="path/to/filea.go" tests="1" errors="0" failures="1">
+    <testcase name="linter-a" classname="path/to/filea.go:10:4" file="path/to/filea.go" line="10">
+      <failure message="path/to/filea.go:10:4: some issue" type="warning"><![CDATA[warning: some issue
+Category: linter-a
+File: path/to/filea.go
+Line: 10
+Details: ]]></failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="path/to/fileb.go" tests="1" errors="0" failures="1">
+    <testcase name="linter-b" classname="path/to/fileb.go:300:9" file="path/to/fileb.go" line="300">
+      <failure message="path/to/fileb.go:300:9: another issue" type="error"><![CDATA[error: another issue
+Category: linter-b
+File: path/to/fileb.go
+Line: 300
+Details: func foo() {
+	fmt.Println("bar")
+}]]></failure>
+    </testcase>
+  </testsuite>
+</testsuites>`,
+		},
+	}
 
-	assert.Equal(t, expected, buf.String())
+	for _, test := range testCases {
+		t.Run(test.desc, func(t *testing.T) {
+			t.Parallel()
+
+			buf := new(bytes.Buffer)
+			printer := NewJunitXML(test.extended, buf)
+
+			err := printer.Print(issues)
+			require.NoError(t, err)
+
+			assert.Equal(t, test.expected, buf.String())
+		})
+	}
 }

@@ -115,7 +115,7 @@ func (c *Printer) createPrinter(format string, w io.Writer) (issuePrinter, error
 	switch format {
 	case config.OutFormatJSON:
 		p = NewJSON(c.reportData, w)
-	case config.OutFormatColoredLineNumber, config.OutFormatLineNumber:
+	case config.OutFormatLineNumber, config.OutFormatColoredLineNumber:
 		p = NewText(c.cfg.PrintIssuedLine,
 			format == config.OutFormatColoredLineNumber, c.cfg.PrintLinterName,
 			c.log.Child(logutils.DebugKeyTextPrinter), w)
@@ -129,8 +129,8 @@ func (c *Printer) createPrinter(format string, w io.Writer) (issuePrinter, error
 		p = NewCodeClimate(w)
 	case config.OutFormatHTML:
 		p = NewHTML(w)
-	case config.OutFormatJunitXML:
-		p = NewJunitXML(w)
+	case config.OutFormatJunitXML, config.OutFormatJunitXMLExtended:
+		p = NewJunitXML(format == config.OutFormatJunitXMLExtended, w)
 	case config.OutFormatGithubActions:
 		p = NewGitHubAction(w)
 	case config.OutFormatTeamCity:
