@@ -1,6 +1,6 @@
 module loggercheck
 
-go 1.19
+go 1.21.0
 
 require (
 	github.com/go-kit/log v0.2.1
@@ -10,6 +10,6 @@ require (
 )
 
 require (
-	github.com/go-logfmt/logfmt v0.5.1 // indirect
-	go.uber.org/multierr v1.10.0 // indirect
+	github.com/go-logfmt/logfmt v0.6.0 // indirect
+	go.uber.org/multierr v1.11.0 // indirect
 )

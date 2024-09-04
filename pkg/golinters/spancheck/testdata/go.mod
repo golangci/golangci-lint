@@ -1,6 +1,6 @@
 module spancheck
 
-go 1.21
+go 1.21.0
 
 require (
 	go.opentelemetry.io/otel v1.29.0
