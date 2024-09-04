@@ -875,6 +875,7 @@ linters-settings:
       - G404 # Insecure random number source (rand)
       - G405 # Detect the usage of DES or RC4
       - G406 # Detect the usage of MD4 or RIPEMD160
+      - G407 # Detect the usage of hardcoded Initialization Vector(IV)/Nonce
       - G501 # Import blocklist: crypto/md5
       - G502 # Import blocklist: crypto/des
       - G503 # Import blocklist: crypto/rc4
@@ -920,6 +921,7 @@ linters-settings:
       - G404 # Insecure random number source (rand)
       - G405 # Detect the usage of DES or RC4
       - G406 # Detect the usage of MD4 or RIPEMD160
+      - G407 # Detect the usage of hardcoded Initialization Vector(IV)/Nonce
       - G501 # Import blocklist: crypto/md5
       - G502 # Import blocklist: crypto/des
       - G503 # Import blocklist: crypto/rc4
