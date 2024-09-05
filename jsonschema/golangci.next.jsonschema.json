@@ -2504,6 +2504,28 @@
                   }
                 }
               }
+            },
+            "error-code": {
+              "type": "integer"
+            },
+            "warning-code": {
+              "type": "integer"
+            },
+            "directives": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "severity": {
+                    "type": "string",
+                    "enum": ["warning", "error"]
+                  }
+                },
+                "required": ["name"]
+              }
             }
           }
         },
