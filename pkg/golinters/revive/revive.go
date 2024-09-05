@@ -235,8 +235,12 @@ func createConfigMap(cfg *config.ReviveSettings) map[string]any {
 
 	rawDirectives := map[string]map[string]any{}
 	for _, directive := range cfg.Directives {
+		severity := directive.Severity
+		if severity == "" {
+			severity = cfg.Severity
+		}
 		rawDirectives[directive.Name] = map[string]any{
-			"severity": directive.Severity,
+			"severity": severity,
 		}
 	}
 
