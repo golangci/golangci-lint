@@ -45,7 +45,19 @@ How to troubleshoot:
 - [ ] Ensure you are not running an analysis on code that depends on files/packages outside the scope of the analyzed elements.
 - [ ] If using CGO, ensure all require system libraries are installed.
 
-## Why running with `--fast` is slow on the first run
+## Why is it not possible to skip/ignore `typecheck` errors?
+
+For mainly the same reasons that you cannot compile when you have a compiler error.
+
+`typecheck` errors are reported in the same style as linter reports/issues,
+but are completely different because they are related to problems that block the analysis (`typecheck` is not a linter).
+
+When there are `typecheck` errors,
+most linters are not able to perform the analysis,
+and they simply do not produce any reports,
+so it's not possible to skip/ignore `typecheck` errors.
+
+## Why running with `--fast` is slow on the first run?
 
 Because the first run caches type information. All subsequent runs will be fast.
 Usually this options is used during development on local machine and compilation was already performed.
