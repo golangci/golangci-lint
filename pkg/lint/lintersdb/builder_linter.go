@@ -33,6 +33,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/funlen"
 	"github.com/golangci/golangci-lint/pkg/golinters/gci"
 	"github.com/golangci/golangci-lint/pkg/golinters/ginkgolinter"
+	"github.com/golangci/golangci-lint/pkg/golinters/gobreakselectinfor"
 	"github.com/golangci/golangci-lint/pkg/golinters/gocheckcompilerdirectives"
 	"github.com/golangci/golangci-lint/pkg/golinters/gochecknoglobals"
 	"github.com/golangci/golangci-lint/pkg/golinters/gochecknoinits"
@@ -318,6 +319,12 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/nunnatsa/ginkgolinter"),
+
+		linter.NewConfig(gobreakselectinfor.New()).
+			WithSince("1.61.0").
+			WithPresets(linter.PresetStyle).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/rnben/go-break-select-in-for"),
 
 		linter.NewConfig(gocheckcompilerdirectives.New()).
 			WithSince("v1.51.0").
