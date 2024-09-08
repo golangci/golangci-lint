@@ -2612,6 +2612,7 @@ linters:
     - bidichk
     - bodyclose
     - canonicalheader
+    - constructorcheck
     - containedctx
     - contextcheck
     - copyloopvar
@@ -2727,6 +2728,7 @@ linters:
     - bidichk
     - bodyclose
     - canonicalheader
+    - constructorcheck
     - containedctx
     - contextcheck
     - copyloopvar
