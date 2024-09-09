@@ -509,6 +509,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 		linter.NewConfig(intrange.New()).
 			WithSince("v1.57.0").
 			WithPresets(linter.PresetStyle).
+			WithAutoFix().
 			WithURL("https://github.com/ckaznocha/intrange").
 			WithNoopFallback(cfg, linter.IsGoLowerThanGo122()),
 
