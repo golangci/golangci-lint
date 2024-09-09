@@ -125,7 +125,7 @@ require (
 	go-simpler.org/sloglint v0.7.2
 	go.uber.org/automaxprocs v1.5.3
 	golang.org/x/exp v0.0.0-20240904232852-e7e105dedf7e
-	golang.org/x/tools v0.24.0
+	golang.org/x/tools v0.25.0
 	gopkg.in/yaml.v3 v3.0.1
 	honnef.co/go/tools v0.5.1
 	mvdan.cc/gofumpt v0.7.0
