@@ -319,7 +319,7 @@
   },
   {
     "name": "fatcontext",
-    "desc": "detects nested contexts in loops",
+    "desc": "detects nested contexts in loops and function literals",
     "loadMode": 575,
     "inPresets": [
       "performance"
@@ -759,7 +759,7 @@
     ],
     "originalURL": "https://github.com/ckaznocha/intrange",
     "internal": false,
-    "isSlow": false,
+    "isSlow": true,
     "since": "v1.57.0"
   },
   {

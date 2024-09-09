@@ -1,5 +1,26 @@
 Follow the news and releases on [Mastodon](https://fosstodon.org/@golangcilint) and on [Twitter](https://twitter.com/golangci).
 
+### v1.61.0
+
+1. Enhancements
+   * Add `junit-xml-extended` format
+   * Exclude Swagger Codegen files by default
+2. Updated linters
+   * `dupword`: from 0.0.14 to 0.1.1
+   * `fatcontext`: from 0.4.0 to 0.5.2
+   * `gci`: from 0.13.4 to 0.13.5 (new option `no-lex-order`)
+   * `go-ruleguard`: from 0.4.2 to 0fe6f58b47b1 (fix panic with custom linters)
+   * `godot`: from 1.4.16 to 1.4.17
+   * `gomodguard`: from 1.3.3 to 1.3.5
+   * `gosec`: disable temporarily `G407`
+   * `gosec`: from ab3f6c1c83a0 to 2.21.2 (partially fix `G115`)
+   * `intrange`: from 0.1.2 to 0.2.0
+   * `nolintlint`: remove the empty line in the directive replacement
+3. Misc.
+    * Improve runtime version parsing
+4. Documentation
+    * Add additional info about `typecheck`
+
 ### v1.60.3
 
 1. Updated linters
