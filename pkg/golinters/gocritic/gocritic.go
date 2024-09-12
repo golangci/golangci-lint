@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	"reflect"
 	"runtime"
+	"slices"
 	"sort"
 	"strings"
 	"sync"
@@ -16,7 +17,6 @@ import (
 	gocriticlinter "github.com/go-critic/go-critic/linter"
 	_ "github.com/quasilyte/go-ruleguard/dsl"
 	"golang.org/x/exp/maps"
-	"golang.org/x/exp/slices"
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/config"
