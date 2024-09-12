@@ -535,7 +535,7 @@
   },
   {
     "name": "goheader",
-    "desc": "Checks if file header matches to pattern",
+    "desc": "Checks is file header matches to pattern",
     "loadMode": 7,
     "inPresets": [
       "style"
