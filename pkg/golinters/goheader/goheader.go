@@ -51,7 +51,7 @@ func New(settings *config.GoHeaderSettings) *goanalysis.Linter {
 
 	return goanalysis.NewLinter(
 		linterName,
-		"Checks is file header matches to pattern",
+		"Checks if file header matches to pattern",
 		[]*analysis.Analyzer{analyzer},
 		nil,
 	).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
