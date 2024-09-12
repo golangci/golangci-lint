@@ -120,6 +120,7 @@ require (
 	github.com/yagipy/maintidx v1.0.0
 	github.com/yeya24/promlinter v0.3.0
 	github.com/ykadowak/zerologlint v0.1.5
+	github.com/ytnsym/receivernamelen v0.0.0-20240911094623-cb234a87d58c
 	gitlab.com/bosi/decorder v0.4.2
 	go-simpler.org/musttag v0.12.2
 	go-simpler.org/sloglint v0.7.2

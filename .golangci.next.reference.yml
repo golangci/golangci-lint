@@ -2689,6 +2689,7 @@ linters:
     - promlinter
     - protogetter
     - reassign
+    - receivernamelen
     - revive
     - rowserrcheck
     - sloglint
@@ -2804,6 +2805,7 @@ linters:
     - promlinter
     - protogetter
     - reassign
+    - receivernamelen
     - revive
     - rowserrcheck
     - sloglint

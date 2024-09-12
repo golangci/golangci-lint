@@ -388,6 +388,7 @@
             "promlinter",
             "protogetter",
             "reassign",
+            "receivernamelen",
             "revive",
             "rowserrcheck",
             "scopelint",
