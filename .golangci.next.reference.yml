@@ -1540,6 +1540,14 @@ linters-settings:
     patterns:
       - ".*"
 
+  recv:
+    # Maximum length for a receiver name.
+    # Default: 3
+    max-name-length: 6
+    # Allow to use pointer receiver and non pointer receiver on the same struct.
+    # Default: true
+    type-consistency: false
+
   revive:
     # Maximum number of open files at the same time.
     # See https://github.com/mgechev/revive#command-line-flags
@@ -2689,6 +2697,7 @@ linters:
     - promlinter
     - protogetter
     - reassign
+    - recv
     - revive
     - rowserrcheck
     - sloglint
@@ -2804,6 +2813,7 @@ linters:
     - promlinter
     - protogetter
     - reassign
+    - recv
     - revive
     - rowserrcheck
     - sloglint

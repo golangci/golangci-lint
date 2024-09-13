@@ -85,6 +85,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/promlinter"
 	"github.com/golangci/golangci-lint/pkg/golinters/protogetter"
 	"github.com/golangci/golangci-lint/pkg/golinters/reassign"
+	"github.com/golangci/golangci-lint/pkg/golinters/recv"
 	"github.com/golangci/golangci-lint/pkg/golinters/revive"
 	"github.com/golangci/golangci-lint/pkg/golinters/rowserrcheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/sloglint"
@@ -656,6 +657,12 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithPresets(linter.PresetBugs).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/curioswitch/go-reassign"),
+
+		linter.NewConfig(recv.New(&cfg.LintersSettings.Recv)).
+			WithSince("1.62.0").
+			WithPresets(linter.PresetStyle).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/ldez/recv"),
 
 		linter.NewConfig(revive.New(&cfg.LintersSettings.Revive)).
 			WithSince("v1.37.0").

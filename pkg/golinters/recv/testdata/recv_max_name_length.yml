@@ -1,0 +1,3 @@
+linters-settings:
+  recv:
+    max-name-length: 6

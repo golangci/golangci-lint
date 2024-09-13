@@ -388,6 +388,7 @@
             "promlinter",
             "protogetter",
             "reassign",
+            "recv",
             "revive",
             "rowserrcheck",
             "scopelint",
@@ -2280,6 +2281,22 @@
               "items": {
                 "type": "string"
               }
+            }
+          }
+        },
+        "recv": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "max-name-length": {
+              "description": "Maximum length for a receiver name.",
+              "type": "integer",
+              "default": 3
+            },
+            "type-consistency": {
+              "description": "Allow to use pointer receiver and non pointer receiver on the same struct.",
+              "type": "boolean",
+              "default": true
             }
           }
         },

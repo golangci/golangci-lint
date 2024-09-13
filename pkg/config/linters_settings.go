@@ -137,6 +137,10 @@ var defaultLintersSettings = LintersSettings{
 		Ignore:    "",
 		Qualified: false,
 	},
+	Recv: RecvSettings{
+		MaxNameLength:   3,
+		TypeConsistency: true,
+	},
 	SlogLint: SlogLintSettings{
 		NoMixedArgs:    true,
 		KVOnly:         false,
@@ -257,6 +261,7 @@ type LintersSettings struct {
 	Promlinter      PromlinterSettings
 	ProtoGetter     ProtoGetterSettings
 	Reassign        ReassignSettings
+	Recv            RecvSettings
 	Revive          ReviveSettings
 	RowsErrCheck    RowsErrCheckSettings
 	SlogLint        SlogLintSettings
@@ -789,6 +794,11 @@ type ProtoGetterSettings struct {
 
 type ReassignSettings struct {
 	Patterns []string `mapstructure:"patterns"`
+}
+
+type RecvSettings struct {
+	MaxNameLength   int  `mapstructure:"max-name-length"`
+	TypeConsistency bool `mapstructure:"type-consistency"`
 }
 
 type ReviveSettings struct {
