@@ -1544,7 +1544,7 @@ linters-settings:
     # Maximum length for a receiver name.
     # Default: 3
     max-name-length: 6
-    # Allow to use pointer receiver and non pointer receiver on the same struct.
+    # Allow using pointer receiver and non-pointer receiver on the same struct.
     # Default: true
     type-consistency: false
 

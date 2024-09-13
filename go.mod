@@ -67,7 +67,7 @@ require (
 	github.com/kyoh86/exportloopref v0.1.11
 	github.com/lasiar/canonicalheader v1.1.1
 	github.com/ldez/gomoddirectives v0.2.4
-	github.com/ldez/recv v0.1.1
+	github.com/ldez/recv v0.1.2
 	github.com/ldez/tagliatelle v0.5.0
 	github.com/leonklingele/grouper v1.1.2
 	github.com/lufeee/execinquery v1.2.1

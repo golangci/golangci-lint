@@ -2294,7 +2294,7 @@
               "default": 3
             },
             "type-consistency": {
-              "description": "Allow to use pointer receiver and non pointer receiver on the same struct.",
+              "description": "Allow using pointer receiver and non-pointer receiver on the same struct",
               "type": "boolean",
               "default": true
             }

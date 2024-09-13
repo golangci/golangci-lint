@@ -343,8 +343,8 @@ github.com/lasiar/canonicalheader v1.1.1 h1:wC+dY9ZfiqiPwAexUApFush/csSPXeIi4Qqy
 github.com/lasiar/canonicalheader v1.1.1/go.mod h1:cXkb3Dlk6XXy+8MVQnF23CYKWlyA7kfQhSw2CcZtZb0=
 github.com/ldez/gomoddirectives v0.2.4 h1:j3YjBIjEBbqZ0NKtBNzr8rtMHTOrLPeiwTkfUJZ3alg=
 github.com/ldez/gomoddirectives v0.2.4/go.mod h1:oWu9i62VcQDYp9EQ0ONTfqLNh+mDLWWDO+SO0qSQw5g=
-github.com/ldez/recv v0.1.1 h1:X8qarUytSxWvYKBqw0Yp4OaqvVXt/0HykDfkjF5XulY=
-github.com/ldez/recv v0.1.1/go.mod h1:I/thYIKCTqjjfuVz8P/jkqeQUl1V5i88qYudsGok6FI=
+github.com/ldez/recv v0.1.2 h1:j/1nFLi4wwItCBSYX+fQCIe06IlXP6OhSLdYKJig8Cc=
+github.com/ldez/recv v0.1.2/go.mod h1:I/thYIKCTqjjfuVz8P/jkqeQUl1V5i88qYudsGok6FI=
 github.com/ldez/tagliatelle v0.5.0 h1:epgfuYt9v0CG3fms0pEgIMNPuFf/LpPIfjk4kyqSioo=
 github.com/ldez/tagliatelle v0.5.0/go.mod h1:rj1HmWiL1MiKQuOONhd09iySTEkUuE/8+5jtPYz9xa4=
 github.com/leonklingele/grouper v1.1.2 h1:o1ARBDLOmmasUaNDesWqWCIFH3u7hoFlM84YrjT3mIY=

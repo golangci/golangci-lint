@@ -10,7 +10,7 @@ type Foo struct { // want `the methods of "Foo" use different receiver names: f,
 func (f Foo) A()  {}
 func (fo Foo) B() {}
 
-type Bar struct{} // want `the methods of "Bar" use pointer receiver and non pointer receiver.`
+type Bar struct{} // want `the methods of "Bar" use pointer receiver and non-pointer receiver.`
 
 func (b Bar) A()  {}
 func (b *Bar) B() {}
