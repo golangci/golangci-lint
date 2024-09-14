@@ -845,6 +845,6 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithSince("v1.26.0").
 			WithPresets(linter.PresetStyle).
 			WithAutoFix().
-			WithURL("https://github.com/golangci/golangci-lint/blob/master/pkg/golinters/nolintlint/README.md"),
+			WithURL("https://github.com/golangci/golangci-lint/tree/master/pkg/golinters/nolintlint/internal"),
 	}, nil
 }
