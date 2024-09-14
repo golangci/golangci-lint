@@ -388,6 +388,7 @@
             "promlinter",
             "protogetter",
             "reassign",
+            "recvcheck",
             "revive",
             "rowserrcheck",
             "scopelint",
