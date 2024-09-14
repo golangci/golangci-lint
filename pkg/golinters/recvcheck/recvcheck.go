@@ -8,12 +8,12 @@ import (
 )
 
 func New() *goanalysis.Linter {
-	analyzer := recvcheck.Analyzer
+	a := recvcheck.Analyzer
 
 	return goanalysis.NewLinter(
-		analyzer.Name,
-		analyzer.Doc,
-		[]*analysis.Analyzer{analyzer},
+		a.Name,
+		a.Doc,
+		[]*analysis.Analyzer{a},
 		nil,
 	).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }
