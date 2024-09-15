@@ -24,7 +24,7 @@ require (
 	github.com/bkielbasa/cyclop v1.2.1
 	github.com/blizzy78/varnamelen v0.8.0
 	github.com/bombsimon/wsl/v4 v4.4.1
-	github.com/breml/bidichk v0.2.7
+	github.com/breml/bidichk v0.3.1
 	github.com/breml/errchkjson v0.3.6
 	github.com/butuzov/ireturn v0.3.0
 	github.com/butuzov/mirror v1.2.0
