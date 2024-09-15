@@ -135,7 +135,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 	// When a new linter is added the version in `WithSince(...)` must be the next minor version of golangci-lint.
 	return []*linter.Config{
 		linter.NewConfig(asasalint.New(&cfg.LintersSettings.Asasalint)).
-			WithSince("1.47.0").
+			WithSince("v1.47.0").
 			WithPresets(linter.PresetBugs).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/alingse/asasalint"),
@@ -146,7 +146,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithURL("https://github.com/tdakkota/asciicheck"),
 
 		linter.NewConfig(bidichk.New(&cfg.LintersSettings.BiDiChk)).
-			WithSince("1.43.0").
+			WithSince("v1.43.0").
 			WithPresets(linter.PresetBugs).
 			WithURL("https://github.com/breml/bidichk"),
 
@@ -163,7 +163,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithURL("https://github.com/lasiar/canonicalHeader"),
 
 		linter.NewConfig(containedctx.New()).
-			WithSince("1.44.0").
+			WithSince("v1.44.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/sivchari/containedctx"),
@@ -214,7 +214,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithURL("https://github.com/mibk/dupl"),
 
 		linter.NewConfig(dupword.New(&cfg.LintersSettings.DupWord)).
-			WithSince("1.50.0").
+			WithSince("v1.50.0").
 			WithPresets(linter.PresetComment).
 			WithURL("https://github.com/Abirdcfly/dupword"),
 
@@ -232,7 +232,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithURL("https://github.com/kisielk/errcheck"),
 
 		linter.NewConfig(errchkjson.New(&cfg.LintersSettings.ErrChkJSON)).
-			WithSince("1.44.0").
+			WithSince("v1.44.0").
 			WithPresets(linter.PresetBugs).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/breml/errchkjson"),
@@ -298,7 +298,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithURL("https://github.com/gostaticanalysis/forcetypeassert"),
 
 		linter.NewConfig(fatcontext.New()).
-			WithSince("1.58.0").
+			WithSince("v1.58.0").
 			WithPresets(linter.PresetPerformance).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/Crocmagnon/fatcontext"),
@@ -653,7 +653,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithURL("https://github.com/ghostiam/protogetter"),
 
 		linter.NewConfig(reassign.New(&cfg.LintersSettings.Reassign)).
-			WithSince("1.49.0").
+			WithSince("v1.49.0").
 			WithPresets(linter.PresetBugs).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/curioswitch/go-reassign"),
