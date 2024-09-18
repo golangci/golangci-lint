@@ -88,11 +88,6 @@ var defaultLintersSettings = LintersSettings{
 		IgnoreTests:     true,
 		WatchForScripts: []string{"Han"},
 	},
-	Iface: IfaceSettings{
-		Unused:    true,
-		Identical: true,
-		Opaque:    true,
-	},
 	Inamedparam: INamedParamSettings{
 		SkipSingleParam: false,
 	},
