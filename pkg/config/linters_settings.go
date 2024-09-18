@@ -650,7 +650,8 @@ type GrouperSettings struct {
 }
 
 type IfaceSettings struct {
-	Enable []string `mapstructure:"enable"`
+	Enable   []string                  `mapstructure:"enable"`
+	Settings map[string]map[string]any `mapstructure:"settings"`
 }
 
 type ImportAsSettings struct {

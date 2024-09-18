@@ -1928,6 +1928,17 @@
               "items": {
                 "$ref": "#/definitions/iface-analyzers"
               }
+            },
+            "settings": {
+              "type": "object",
+              "propertyNames": {
+                "$ref": "#/definitions/iface-analyzers"
+              },
+              "patternProperties": {
+                "^.*$": {
+                  "type": "object"
+                }
+              }
             }
           }
         },

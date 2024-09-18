@@ -1223,7 +1223,8 @@ linters-settings:
     var-require-grouping: true
 
   iface:
-    # By default set to empty. Leave it empty means all analyzers are enabled.
+    # By default, set to empty.
+    # Empty means that all analyzers are enabled.
     # Default: []
     enable:
       - unused
@@ -1231,7 +1232,7 @@ linters-settings:
       - opaque
     settings:
       unused:
-        # Comma-separated list of packages to exclude from the check.
+        # List of packages path to exclude from the check.
         # Default: []
         exclude:
           - github.com/example/log

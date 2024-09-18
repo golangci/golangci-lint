@@ -473,17 +473,17 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/leonklingele/grouper"),
 
-		linter.NewConfig(iface.New(&cfg.LintersSettings.Iface)).
-			WithSince("v1.60.0").
-			WithLoadForGoAnalysis().
-			WithPresets(linter.PresetStyle, linter.PresetMetaLinter).
-			WithURL("http://github.com/uudashr/iface"),
-
 		linter.NewConfig(linter.NewNoopDeprecated("ifshort", cfg, linter.DeprecationError)).
 			WithSince("v1.36.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/esimonov/ifshort").
 			DeprecatedError("The repository of the linter has been deprecated by the owner.", "v1.48.0", ""),
+
+		linter.NewConfig(iface.New(&cfg.LintersSettings.Iface)).
+			WithSince("v1.62.0").
+			WithLoadForGoAnalysis().
+			WithPresets(linter.PresetStyle, linter.PresetMetaLinter).
+			WithURL("https://github.com/uudashr/iface"),
 
 		linter.NewConfig(importas.New(&cfg.LintersSettings.ImportAs)).
 			WithSince("v1.38.0").

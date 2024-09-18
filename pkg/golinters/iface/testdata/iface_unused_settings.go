@@ -1,13 +1,44 @@
 //golangcitest:args -Eiface
-//golangcitest:config_path testdata/unused.yml
+//golangcitest:config_path testdata/iface_unused_settings.yml
+//golangcitest:expected_exitcode 0
 package testdata
+
+// identical
+
+type Pinger interface {
+	Ping() error
+}
+
+type Healthcheck interface {
+	Ping() error
+}
+
+// opaque
+
+type Server interface {
+	Serve() error
+}
+
+type server struct {
+	addr string
+}
+
+func (s server) Serve() error {
+	return nil
+}
+
+func NewServer(addr string) Server {
+	return &server{addr: addr}
+}
+
+// unused
 
 type User struct {
 	ID   string
 	Name string
 }
 
-type UserRepository interface { // want "interface UserRepository is declared but not used within the package"
+type UserRepository interface {
 	UserOf(id string) (*User, error)
 }
 

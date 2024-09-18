@@ -1,0 +1,8 @@
+linters-settings:
+  iface:
+    enable:
+      - unused
+    settings:
+      unused:
+        exclude:
+         - "command-line-arguments" # fake package name used for test inside golangci-lint
