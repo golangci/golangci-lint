@@ -5,8 +5,7 @@ import (
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
-	"github.com/uudashr/iface/duplicate"
-	"github.com/uudashr/iface/empty"
+	"github.com/uudashr/iface/identical"
 	"github.com/uudashr/iface/opaque"
 	"github.com/uudashr/iface/unused"
 	"golang.org/x/tools/go/analysis"
@@ -14,8 +13,7 @@ import (
 
 var allAnalyzers = []*analysis.Analyzer{
 	unused.Analyzer,
-	empty.Analyzer,
-	duplicate.Analyzer,
+	identical.Analyzer,
 	opaque.Analyzer,
 }
 

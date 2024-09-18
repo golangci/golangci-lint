@@ -1227,9 +1227,14 @@ linters-settings:
     # Default: []
     enable:
       - unused
-      - empty
-      - duplicate
+      - identical
       - opaque
+    settings:
+      unused:
+        # Comma-separated list of packages to exclude from the check.
+        # Default: []
+        exclude:
+          - github.com/example/log
 
   importas:
     # Do not allow unaliased imports of aliased packages.

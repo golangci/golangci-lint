@@ -295,9 +295,8 @@
     },
     "iface-analyzers": {
       "enum": [
-        "empty",
         "unused",
-        "duplicate",
+        "identical",
         "opaque"
       ]
     },

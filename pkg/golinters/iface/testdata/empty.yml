@@ -1,4 +1,0 @@
-linters-settings:
-  iface:
-    enable:
-      - empty

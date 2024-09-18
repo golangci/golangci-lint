@@ -13,11 +13,11 @@ func TestAnalyzersFromSettings(t *testing.T) {
 	}{
 		"nil analyzers": {
 			enable:          nil,
-			expectedEnabled: []string{"unused", "empty", "duplicate", "opaque"},
+			expectedEnabled: []string{"unused", "identical", "opaque"},
 		},
 		"empty analyzers": {
 			enable:          []string{},
-			expectedEnabled: []string{"unused", "empty", "duplicate", "opaque"},
+			expectedEnabled: []string{"unused", "identical", "opaque"},
 		},
 		"unused only": {
 			enable:          []string{"unused"},
@@ -32,8 +32,8 @@ func TestAnalyzersFromSettings(t *testing.T) {
 			expectedEnabled: []string{"unused", "opaque"},
 		},
 		"all analyzers": {
-			enable:          []string{"unused", "opaque", "empty", "duplicate"},
-			expectedEnabled: []string{"unused", "empty", "duplicate", "opaque"},
+			enable:          []string{"unused", "opaque", "identical"},
+			expectedEnabled: []string{"unused", "identical", "opaque"},
 		},
 	}
 
