@@ -93,7 +93,7 @@ require (
 	github.com/santhosh-tekuri/jsonschema/v5 v5.3.1
 	github.com/sashamelentyev/interfacebloat v1.1.0
 	github.com/sashamelentyev/usestdlibvars v1.27.0
-	github.com/securego/gosec/v2 v2.21.2
+	github.com/securego/gosec/v2 v2.21.3
 	github.com/shazow/go-diff v0.0.0-20160112020656-b6b7b6733b8c
 	github.com/shirou/gopsutil/v3 v3.24.5
 	github.com/sirupsen/logrus v1.9.3
@@ -125,7 +125,7 @@ require (
 	go-simpler.org/musttag v0.12.2
 	go-simpler.org/sloglint v0.7.2
 	go.uber.org/automaxprocs v1.5.3
-	golang.org/x/exp v0.0.0-20240904232852-e7e105dedf7e
+	golang.org/x/exp v0.0.0-20240909161429-701f63a606c0
 	golang.org/x/tools v0.25.0
 	gopkg.in/yaml.v3 v3.0.1
 	honnef.co/go/tools v0.5.1
