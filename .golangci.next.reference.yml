@@ -2417,6 +2417,23 @@ linters-settings:
     # Default: true
     generated-is-used: false
 
+  useq:
+    # The list of functions with message formatting arguments that should be validated.
+    functions:
+      # The function name needs to be the full qualified name (including potential pointers).
+      # Examples:
+      #- github.com/custom/package.MyPrintf              # exported package level function.
+      #- (github.com/custom/package.MyStruct).MyPrintf   # exported method of a struct.
+      #- (*github.com/custom/package.MyStruct).MyPrintf  # exported method of a struct with a pointer receiver.
+
+      # By default, the following functions are validated:
+      #- fmt.Printf
+      #- fmt.Sprintf
+      #- fmt.Errorf
+      #- fmt.Fprintf
+      #- github.com/pkg/errors.Errorf
+      #- github.com/pkg/errors.Wrapf
+
   varnamelen:
     # The longest distance, in source lines, that is being considered a "small scope".
     # Variables used in at most this many lines will be ignored.
@@ -2709,6 +2726,7 @@ linters:
     - unconvert
     - unparam
     - unused
+    - useq
     - usestdlibvars
     - varnamelen
     - wastedassign
@@ -2825,6 +2843,7 @@ linters:
     - unconvert
     - unparam
     - unused
+    - useq
     - usestdlibvars
     - varnamelen
     - wastedassign

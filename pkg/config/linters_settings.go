@@ -273,6 +273,7 @@ type LintersSettings struct {
 	Unparam         UnparamSettings
 	Unused          UnusedSettings
 	UseStdlibVars   UseStdlibVarsSettings
+	Useq            UseqSettings
 	Varnamelen      VarnamelenSettings
 	Whitespace      WhitespaceSettings
 	Wrapcheck       WrapcheckSettings
@@ -954,6 +955,10 @@ type UnusedSettings struct {
 	ParametersAreUsed      bool `mapstructure:"parameters-are-used"`
 	LocalVariablesAreUsed  bool `mapstructure:"local-variables-are-used"`
 	GeneratedIsUsed        bool `mapstructure:"generated-is-used"`
+}
+
+type UseqSettings struct {
+	Functions []string `mapstructure:"functions"`
 }
 
 type VarnamelenSettings struct {

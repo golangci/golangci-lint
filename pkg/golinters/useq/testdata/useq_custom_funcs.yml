@@ -1,0 +1,4 @@
+linters-settings:
+  useq:
+    functions:
+      - command-line-arguments.customPrint

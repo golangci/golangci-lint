@@ -409,6 +409,7 @@
             "unconvert",
             "unparam",
             "unused",
+            "useq",
             "usestdlibvars",
             "varcheck",
             "varnamelen",
@@ -3146,6 +3147,20 @@
                   "default": true,
                   "type": "boolean"
                 }
+              }
+            }
+          }
+        },
+        "useq": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "functions": {
+              "type": "array",
+              "description": "List of functions to check for use of %q formatting",
+              "items": {
+                "type": "string",
+                "description": "The function name with package name, e.g. fmt.Sprintf"
               }
             }
           }
