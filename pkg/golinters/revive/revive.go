@@ -184,8 +184,8 @@ func toIssue(pass *analysis.Pass, object *jsonObject) goanalysis.Issue {
 // This function mimics the GetConfig function of revive.
 // This allows to get default values and right types.
 // https://github.com/golangci/golangci-lint/issues/1745
-// https://github.com/mgechev/revive/blob/v1.3.7/config/config.go#L217
-// https://github.com/mgechev/revive/blob/v1.3.7/config/config.go#L169-L174
+// https://github.com/mgechev/revive/blob/v1.4.0/config/config.go#L218
+// https://github.com/mgechev/revive/blob/v1.4.0/config/config.go#L170-L176
 func getConfig(cfg *config.ReviveSettings) (*lint.Config, error) {
 	conf := defaultConfig()
 
@@ -284,7 +284,7 @@ func safeTomlSlice(r []any) []any {
 }
 
 // This element is not exported by revive, so we need copy the code.
-// Extracted from https://github.com/mgechev/revive/blob/v1.3.9/config/config.go#L15
+// Extracted from https://github.com/mgechev/revive/blob/v1.4.0/config/config.go#L16
 var defaultRules = []lint.Rule{
 	&rule.VarDeclarationsRule{},
 	&rule.PackageCommentsRule{},
@@ -373,7 +373,7 @@ var allRules = append([]lint.Rule{
 const defaultConfidence = 0.8
 
 // This element is not exported by revive, so we need copy the code.
-// Extracted from https://github.com/mgechev/revive/blob/v1.1.4/config/config.go#L145
+// Extracted from https://github.com/mgechev/revive/blob/v1.4.0/config/config.go#L181
 func normalizeConfig(cfg *lint.Config) {
 	// NOTE(ldez): this custom section for golangci-lint should be kept.
 	// ---
@@ -419,7 +419,7 @@ func normalizeConfig(cfg *lint.Config) {
 }
 
 // This element is not exported by revive, so we need copy the code.
-// Extracted from https://github.com/mgechev/revive/blob/v1.1.4/config/config.go#L214
+// Extracted from https://github.com/mgechev/revive/blob/v1.4.0/config/config.go#L181
 func defaultConfig() *lint.Config {
 	defaultConfig := lint.Config{
 		Confidence: defaultConfidence,
