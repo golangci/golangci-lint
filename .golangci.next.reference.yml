@@ -154,7 +154,7 @@ linters-settings:
     ignore-test: true
 
   bidichk:
-    # The following configurations check for all mentioned invisible unicode runes.
+    # The following configurations check for all mentioned invisible Unicode runes.
     # All runes are enabled by default.
     left-to-right-embedding: false
     right-to-left-embedding: false
@@ -3618,7 +3618,6 @@ linters:
     - testpackage
     - thelper
     - tparallel
-    - typecheck
     - unconvert
     - unparam
     - unused
@@ -3734,7 +3733,6 @@ linters:
     - testpackage
     - thelper
     - tparallel
-    - typecheck
     - unconvert
     - unparam
     - unused
