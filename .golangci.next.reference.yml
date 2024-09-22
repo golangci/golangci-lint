@@ -1485,45 +1485,87 @@ linters-settings:
     # Run `GL_DEBUG=govet golangci-lint run --enable=govet` to see default, all available analyzers, and enabled analyzers.
     # Default: []
     enable:
+      # Check for missing values after append.
       - appends
+      # Report mismatches between assembly files and Go declarations.
       - asmdecl
+      # Check for useless assignments.
       - assign
+      # Check for common mistakes using the sync/atomic package.
       - atomic
+      # Check for non-64-bits-aligned arguments to sync/atomic functions.
       - atomicalign
+      # Check for common mistakes involving boolean operators.
       - bools
+      # Check //go:build and // +build directives.
       - buildtag
+      # Detect some violations of the cgo pointer passing rules.
       - cgocall
+      # Check for unkeyed composite literals.
       - composites
+      # Check for locks erroneously passed by value.
       - copylocks
+      # Check for calls of reflect.DeepEqual on error values.
       - deepequalerrors
+      # Report common mistakes in defer statements.
       - defers
+      # Check Go toolchain directives such as //go:debug.
       - directive
+      # Report passing non-pointer or non-error values to errors.As.
       - errorsas
+      # Find structs that would use less memory if their fields were sorted.
       - fieldalignment
+      # Find calls to a particular function.
       - findcall
+      # Report assembly that clobbers the frame pointer before saving it.
       - framepointer
+      # Check for mistakes using HTTP responses.
       - httpresponse
+      # Detect impossible interface-to-interface type assertions.
       - ifaceassert
+      # Check references to loop variables from within nested functions.
       - loopclosure
+      # Check cancel func returned by context.WithCancel is called.
       - lostcancel
+      # Check for useless comparisons between functions and nil.
       - nilfunc
+      # Check for redundant or impossible nil comparisons.
       - nilness
+      # Check consistency of Printf format strings and arguments.
       - printf
+      # Check for comparing reflect.Value values with == or reflect.DeepEqual.
       - reflectvaluecompare
+      # Check for possible unintended shadowing of variables.
       - shadow
+      # Check for shifts that equal or exceed the width of the integer.
       - shift
+      # Check for unbuffered channel of os.Signal.
       - sigchanyzer
+      # Check for invalid structured logging calls.
       - slog
+      # Check the argument type of sort.Slice.
       - sortslice
+      # Check signature of methods of well-known interfaces.
       - stdmethods
+      # Check for string(int) conversions.
       - stringintconv
+      # Check that struct field tags conform to reflect.StructTag.Get.
       - structtag
+      # Report calls to (*testing.T).Fatal from goroutines started by a test.
       - testinggoroutine
+      # Check for common mistaken usages of tests and examples.
       - tests
+      # Check for calls of (time.Time).Format or time.Parse with 2006-02-01.
+      - timeformat
+      # Report passing non-pointer or non-interface values to unmarshal.
       - unmarshal
+      # Check for unreachable code.
       - unreachable
+      # Check for invalid conversions of uintptr to unsafe.Pointer.
       - unsafeptr
+      # Check for unused results of calls to some functions.
       - unusedresult
+      # Checks for unused writes.
       - unusedwrite
 
     # Enable all analyzers.
@@ -1572,6 +1614,7 @@ linters-settings:
       - structtag
       - testinggoroutine
       - tests
+      - timeformat
       - unmarshal
       - unreachable
       - unsafeptr
