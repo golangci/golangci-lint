@@ -482,7 +482,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 		linter.NewConfig(iface.New(&cfg.LintersSettings.Iface)).
 			WithSince("v1.62.0").
 			WithLoadForGoAnalysis().
-			WithPresets(linter.PresetStyle, linter.PresetMetaLinter).
+			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/uudashr/iface"),
 
 		linter.NewConfig(importas.New(&cfg.LintersSettings.ImportAs)).
