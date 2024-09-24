@@ -1,4 +1,5 @@
 //golangcitest:args -Eiface
+//golangcitest:config_path testdata/iface_all.yml
 package testdata
 
 // identical

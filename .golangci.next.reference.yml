@@ -1223,12 +1223,11 @@ linters-settings:
     var-require-grouping: true
 
   iface:
-    # By default, set to empty.
-    # Empty means that all analyzers are enabled.
-    # Default: []
+    # By default is set to 'identical' only.
+    # Default: [identical]
     enable:
-      - unused
       - identical
+      - unused
       - opaque
     settings:
       unused:

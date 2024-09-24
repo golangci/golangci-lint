@@ -2,12 +2,10 @@ package iface
 
 import (
 	"slices"
-	"strings"
 
 	"github.com/uudashr/iface/identical"
 	"github.com/uudashr/iface/opaque"
 	"github.com/uudashr/iface/unused"
-	"golang.org/x/exp/maps"
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/config"
@@ -30,24 +28,23 @@ func New(settings *config.IfaceSettings) *goanalysis.Linter {
 
 func analyzersFromSettings(settings *config.IfaceSettings) []*analysis.Analyzer {
 	allAnalyzers := map[string]*analysis.Analyzer{
-		"unused":    unused.Analyzer,
 		"identical": identical.Analyzer,
+		"unused":    unused.Analyzer,
 		"opaque":    opaque.Analyzer,
 	}
 
 	if settings == nil || len(settings.Enable) == 0 {
-		analyzers := maps.Values(allAnalyzers)
-
-		// To have a deterministic order.
-		slices.SortFunc(analyzers, func(a *analysis.Analyzer, b *analysis.Analyzer) int {
-			return strings.Compare(a.Name, b.Name)
-		})
-
-		return analyzers
+		// Default enable `identical` analyzer only
+		return []*analysis.Analyzer{identical.Analyzer}
 	}
 
 	var analyzers []*analysis.Analyzer
 	for _, name := range uniqueNames(settings.Enable) {
+		if _, ok := allAnalyzers[name]; !ok {
+			// skip unknown analyzer
+			continue
+		}
+
 		analyzers = append(analyzers, allAnalyzers[name])
 	}
 

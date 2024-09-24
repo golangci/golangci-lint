@@ -1,15 +1,13 @@
 //golangcitest:args -Eiface
-//golangcitest:config_path testdata/iface_unused_settings.yml
-//golangcitest:expected_exitcode 0
 package testdata
 
 // identical
 
-type Pinger interface {
+type Pinger interface { // want "identical: interface Pinger contains identical methods or type constraints from another interface, causing redundancy"
 	Ping() error
 }
 
-type Healthcheck interface {
+type Healthcheck interface { // want "identical: interface Healthcheck contains identical methods or type constraints from another interface, causing redundancy"
 	Ping() error
 }
 
