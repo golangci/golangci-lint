@@ -208,6 +208,7 @@ type LintersSettings struct {
 	DupWord         DupWordSettings
 	Errcheck        ErrcheckSettings
 	ErrChkJSON      ErrChkJSONSettings
+	ErrGroupCheck   ErrGroupCheckSettings
 	ErrorLint       ErrorLintSettings
 	Exhaustive      ExhaustiveSettings
 	Exhaustruct     ExhaustructSettings
@@ -380,6 +381,10 @@ type ErrcheckSettings struct {
 type ErrChkJSONSettings struct {
 	CheckErrorFreeEncoding bool `mapstructure:"check-error-free-encoding"`
 	ReportNoExported       bool `mapstructure:"report-no-exported"`
+}
+
+type ErrGroupCheckSettings struct {
+	RequireWait bool `mapstructure:"require-wait"`
 }
 
 type ErrorLintSettings struct {
