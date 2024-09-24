@@ -25,7 +25,7 @@ require (
 	github.com/blizzy78/varnamelen v0.8.0
 	github.com/bombsimon/wsl/v4 v4.4.1
 	github.com/breml/bidichk v0.3.1
-	github.com/breml/errchkjson v0.3.6
+	github.com/breml/errchkjson v0.4.0
 	github.com/butuzov/ireturn v0.3.0
 	github.com/butuzov/mirror v1.2.0
 	github.com/catenacyber/perfsprint v0.7.1
@@ -39,7 +39,7 @@ require (
 	github.com/fzipp/gocyclo v0.6.0
 	github.com/ghostiam/protogetter v0.3.8
 	github.com/go-critic/go-critic v0.11.4
-	github.com/go-viper/mapstructure/v2 v2.1.0
+	github.com/go-viper/mapstructure/v2 v2.2.0
 	github.com/go-xmlfmt/xmlfmt v1.1.2
 	github.com/gofrs/flock v0.12.1
 	github.com/golangci/dupl v0.0.0-20180902072040-3e9179ac440a
@@ -75,7 +75,7 @@ require (
 	github.com/maratori/testpackage v1.1.1
 	github.com/matoous/godox v0.0.0-20230222163458-006bad1f9d26
 	github.com/mattn/go-colorable v0.1.13
-	github.com/mgechev/revive v1.3.9
+	github.com/mgechev/revive v1.4.0
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/mitchellh/go-ps v1.0.0
 	github.com/moricho/tparallel v0.3.2
@@ -93,7 +93,7 @@ require (
 	github.com/santhosh-tekuri/jsonschema/v5 v5.3.1
 	github.com/sashamelentyev/interfacebloat v1.1.0
 	github.com/sashamelentyev/usestdlibvars v1.27.0
-	github.com/securego/gosec/v2 v2.21.2
+	github.com/securego/gosec/v2 v2.21.3
 	github.com/shazow/go-diff v0.0.0-20160112020656-b6b7b6733b8c
 	github.com/shirou/gopsutil/v3 v3.24.5
 	github.com/sirupsen/logrus v1.9.3
@@ -126,7 +126,7 @@ require (
 	go-simpler.org/musttag v0.12.2
 	go-simpler.org/sloglint v0.7.2
 	go.uber.org/automaxprocs v1.5.3
-	golang.org/x/exp v0.0.0-20240904232852-e7e105dedf7e
+	golang.org/x/exp v0.0.0-20240909161429-701f63a606c0
 	golang.org/x/tools v0.25.0
 	gopkg.in/yaml.v3 v3.0.1
 	honnef.co/go/tools v0.5.1

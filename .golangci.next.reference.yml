@@ -154,7 +154,7 @@ linters-settings:
     ignore-test: true
 
   bidichk:
-    # The following configurations check for all mentioned invisible unicode runes.
+    # The following configurations check for all mentioned invisible Unicode runes.
     # All runes are enabled by default.
     left-to-right-embedding: false
     right-to-left-embedding: false
@@ -562,10 +562,321 @@ linters-settings:
     #   sloppyTypeAssert, switchTrue, typeSwitchVar, underef, unlambda, unslice, valSwap, wrapperFunc
     # To see which checks are enabled run `GL_DEBUG=gocritic golangci-lint run --enable=gocritic`.
     enabled-checks:
+      # Detects suspicious append result assignments.
+      # https://go-critic.com/overview.html#appendAssign
+      - appendAssign
+      # Detects `append` chains to the same slice that can be done in a single `append` call.
+      # https://go-critic.com/overview.html#appendCombine
+      - appendCombine
+      # Detects suspicious arguments order.
+      # https://go-critic.com/overview.html#argOrder
+      - argOrder
+      # Detects assignments that can be simplified by using assignment operators.
+      # https://go-critic.com/overview.html#assignOp
+      - assignOp
+      # Detects suspicious function calls.
+      # https://go-critic.com/overview.html#badCall
+      - badCall
+      # Detects suspicious condition expressions.
+      # https://go-critic.com/overview.html#badCond
+      - badCond
+      # Detects suspicious mutex lock/unlock operations.
+      # https://go-critic.com/overview.html#badLock
+      - badLock
+      # Detects suspicious regexp patterns.
+      # https://go-critic.com/overview.html#badRegexp
+      - badRegexp
+      # Detects bad usage of sort package.
+      # https://go-critic.com/overview.html#badSorting
+      - badSorting
+      # Detects bad usage of sync.OnceFunc.
+      # https://go-critic.com/overview.html#badSyncOnceFunc
+      - badSyncOnceFunc
+      # Detects bool expressions that can be simplified.
+      # https://go-critic.com/overview.html#boolExprSimplify
+      - boolExprSimplify
+      # Detects when predeclared identifiers are shadowed in assignments.
+      # https://go-critic.com/overview.html#builtinShadow
+      - builtinShadow
+      # Detects top-level declarations that shadow the predeclared identifiers.
+      # https://go-critic.com/overview.html#builtinShadowDecl
+      - builtinShadowDecl
+      # Detects capitalized names for local variables.
+      # https://go-critic.com/overview.html#captLocal
+      - captLocal
+      # Detects erroneous case order inside switch statements.
+      # https://go-critic.com/overview.html#caseOrder
+      - caseOrder
+      # Detects malformed 'code generated' file comments.
+      # https://go-critic.com/overview.html#codegenComment
+      - codegenComment
+      # Detects comments with non-idiomatic formatting.
+      # https://go-critic.com/overview.html#commentFormatting
+      - commentFormatting
+      # Detects commented-out code inside function bodies.
+      # https://go-critic.com/overview.html#commentedOutCode
+      - commentedOutCode
+      # Detects commented-out imports.
+      # https://go-critic.com/overview.html#commentedOutImport
+      - commentedOutImport
+      # Detects when default case in switch isn't on 1st or last position.
+      # https://go-critic.com/overview.html#defaultCaseOrder
+      - defaultCaseOrder
+      # Detects loops inside functions that use defer.
+      # https://go-critic.com/overview.html#deferInLoop
+      - deferInLoop
+      # Detects deferred function literals that can be simplified.
+      # https://go-critic.com/overview.html#deferUnlambda
+      - deferUnlambda
+      # Detects malformed 'deprecated' doc-comments.
+      # https://go-critic.com/overview.html#deprecatedComment
+      - deprecatedComment
+      # Detects comments that silence go lint complaints about doc-comment.
+      # https://go-critic.com/overview.html#docStub
+      - docStub
+      # Detects suspicious duplicated arguments.
+      # https://go-critic.com/overview.html#dupArg
+      - dupArg
+      # Detects duplicated branch bodies inside conditional statements.
+      # https://go-critic.com/overview.html#dupBranchBody
+      - dupBranchBody
+      # Detects duplicated case clauses inside switch or select statements.
+      # https://go-critic.com/overview.html#dupCase
+      - dupCase
+      # Detects multiple imports of the same package under different aliases.
+      # https://go-critic.com/overview.html#dupImport
+      - dupImport
+      # Detects suspicious duplicated sub-expressions.
+      # https://go-critic.com/overview.html#dupSubExpr
+      - dupSubExpr
+      # Detects suspicious formatting strings usage.
+      # https://go-critic.com/overview.html#dynamicFmtString
+      - dynamicFmtString
+      # Detects else with nested if statement that can be replaced with else-if.
+      # https://go-critic.com/overview.html#elseif
+      - elseif
+      # Detects suspicious empty declarations blocks.
+      # https://go-critic.com/overview.html#emptyDecl
+      - emptyDecl
+      # Detects fallthrough that can be avoided by using multi case values.
+      # https://go-critic.com/overview.html#emptyFallthrough
+      - emptyFallthrough
+      # Detects empty string checks that can be written more idiomatically.
+      # https://go-critic.com/overview.html#emptyStringTest
+      - emptyStringTest
+      # Detects unoptimal strings/bytes case-insensitive comparison.
+      # https://go-critic.com/overview.html#equalFold
+      - equalFold
+      # Detects unwanted dependencies on the evaluation order.
+      # https://go-critic.com/overview.html#evalOrder
+      - evalOrder
+      # Detects calls to exit/fatal inside functions that use defer.
+      # https://go-critic.com/overview.html#exitAfterDefer
+      - exitAfterDefer
+      # Detects exposed methods from sync.Mutex and sync.RWMutex.
+      # https://go-critic.com/overview.html#exposedSyncMutex
+      - exposedSyncMutex
+      # Detects suspicious reassignment of error from another package.
+      # https://go-critic.com/overview.html#externalErrorReassign
+      - externalErrorReassign
+      # Detects problems in filepath.Join() function calls.
+      # https://go-critic.com/overview.html#filepathJoin
+      - filepathJoin
+      # Detects immediate dereferencing of `flag` package pointers.
+      # https://go-critic.com/overview.html#flagDeref
+      - flagDeref
+      # Detects suspicious flag names.
+      # https://go-critic.com/overview.html#flagName
+      - flagName
+      # Detects hex literals that have mixed case letter digits.
+      # https://go-critic.com/overview.html#hexLiteral
+      - hexLiteral
+      # Detects nil usages in http.NewRequest calls, suggesting http.NoBody as an alternative.
+      # https://go-critic.com/overview.html#httpNoBody
+      - httpNoBody
+      # Detects params that incur excessive amount of copying.
+      # https://go-critic.com/overview.html#hugeParam
+      - hugeParam
+      # Detects repeated if-else statements and suggests to replace them with switch statement.
+      # https://go-critic.com/overview.html#ifElseChain
+      - ifElseChain
+      # Detects when imported package names shadowed in the assignments.
+      # https://go-critic.com/overview.html#importShadow
+      - importShadow
+      # Detects strings.Index calls that may cause unwanted allocs.
+      # https://go-critic.com/overview.html#indexAlloc
+      - indexAlloc
+      # Detects non-assignment statements inside if/switch init clause.
+      # https://go-critic.com/overview.html#initClause
+      - initClause
+      # Detects suspicious map literal keys.
+      # https://go-critic.com/overview.html#mapKey
+      - mapKey
+      # Detects method expression call that can be replaced with a method call.
+      # https://go-critic.com/overview.html#methodExprCall
+      - methodExprCall
+      # Finds where nesting level could be reduced.
+      # https://go-critic.com/overview.html#nestingReduce
       - nestingReduce
-      - unnamedResult
+      # Detects immediate dereferencing of `new` expressions.
+      # https://go-critic.com/overview.html#newDeref
+      - newDeref
+      # Detects return statements those results evaluate to nil.
+      # https://go-critic.com/overview.html#nilValReturn
+      - nilValReturn
+      # Detects old-style octal literals.
+      # https://go-critic.com/overview.html#octalLiteral
+      - octalLiteral
+      # Detects various off-by-one kind of errors.
+      # https://go-critic.com/overview.html#offBy1
+      - offBy1
+      # Detects if function parameters could be combined by type and suggest the way to do it.
+      # https://go-critic.com/overview.html#paramTypeCombine
+      - paramTypeCombine
+      # Detects expressions like []rune(s)[0] that may cause unwanted rune slice allocation.
+      # https://go-critic.com/overview.html#preferDecodeRune
+      - preferDecodeRune
+      # Detects concatenation with os.PathSeparator which can be replaced with filepath.Join.
+      # https://go-critic.com/overview.html#preferFilepathJoin
+      - preferFilepathJoin
+      # Detects fmt.Sprint(f/ln) calls which can be replaced with fmt.Fprint(f/ln).
+      # https://go-critic.com/overview.html#preferFprint
+      - preferFprint
+      # Detects w.Write or io.WriteString calls which can be replaced with w.WriteString.
+      # https://go-critic.com/overview.html#preferStringWriter
+      - preferStringWriter
+      # Detects WriteRune calls with rune literal argument that is single byte and reports to use WriteByte instead.
+      # https://go-critic.com/overview.html#preferWriteByte
+      - preferWriteByte
+      # Detects input and output parameters that have a type of pointer to referential type.
+      # https://go-critic.com/overview.html#ptrToRefParam
+      - ptrToRefParam
+      # Detects expensive copies of `for` loop range expressions.
+      # https://go-critic.com/overview.html#rangeExprCopy
+      - rangeExprCopy
+      # Detects loops that copy big objects during each iteration.
+      # https://go-critic.com/overview.html#rangeValCopy
+      - rangeValCopy
+      # Detects redundant fmt.Sprint calls.
+      # https://go-critic.com/overview.html#redundantSprint
+      - redundantSprint
+      # Detects `regexp.Compile*` that can be replaced with `regexp.MustCompile*`.
+      # https://go-critic.com/overview.html#regexpMust
+      - regexpMust
+      # Detects suspicious regexp patterns.
+      # https://go-critic.com/overview.html#regexpPattern
+      - regexpPattern
+      # Detects regexp patterns that can be simplified.
+      # https://go-critic.com/overview.html#regexpSimplify
+      - regexpSimplify
+      # Detects suspicious http.Error call without following return.
+      # https://go-critic.com/overview.html#returnAfterHttpError
+      - returnAfterHttpError
+      # Runs user-defined rules using ruleguard linter.
+      # https://go-critic.com/overview.html#ruleguard
       - ruleguard
+      # Detects switch statements that could be better written as if statement.
+      # https://go-critic.com/overview.html#singleCaseSwitch
+      - singleCaseSwitch
+      # Detects slice clear loops, suggests an idiom that is recognized by the Go compiler.
+      # https://go-critic.com/overview.html#sliceClear
+      - sliceClear
+      # Detects usage of `len` when result is obvious or doesn't make sense.
+      # https://go-critic.com/overview.html#sloppyLen
+      - sloppyLen
+      # Detects suspicious/confusing re-assignments.
+      # https://go-critic.com/overview.html#sloppyReassign
+      - sloppyReassign
+      # Detects redundant type assertions.
+      # https://go-critic.com/overview.html#sloppyTypeAssert
+      - sloppyTypeAssert
+      # Detects suspicious sort.Slice calls.
+      # https://go-critic.com/overview.html#sortSlice
+      - sortSlice
+      # Detects "%s" formatting directives that can be replaced with %q.
+      # https://go-critic.com/overview.html#sprintfQuotedString
+      - sprintfQuotedString
+      # Detects issue in Query() and Exec() calls.
+      # https://go-critic.com/overview.html#sqlQuery
+      - sqlQuery
+      # Detects string concat operations that can be simplified.
+      # https://go-critic.com/overview.html#stringConcatSimplify
+      - stringConcatSimplify
+      # Detects redundant conversions between string and []byte.
+      # https://go-critic.com/overview.html#stringXbytes
+      - stringXbytes
+      # Detects strings.Compare usage.
+      # https://go-critic.com/overview.html#stringsCompare
+      - stringsCompare
+      # Detects switch-over-bool statements that use explicit `true` tag value.
+      # https://go-critic.com/overview.html#switchTrue
+      - switchTrue
+      # Detects sync.Map load+delete operations that can be replaced with LoadAndDelete.
+      # https://go-critic.com/overview.html#syncMapLoadAndDelete
+      - syncMapLoadAndDelete
+      # Detects manual conversion to milli- or microseconds.
+      # https://go-critic.com/overview.html#timeExprSimplify
+      - timeExprSimplify
+      # Detects TODO comments without detail/assignee.
+      # https://go-critic.com/overview.html#todoCommentWithoutDetail
+      - todoCommentWithoutDetail
+      # Detects function with too many results.
+      # https://go-critic.com/overview.html#tooManyResultsChecker
+      - tooManyResultsChecker
+      # Detects potential truncation issues when comparing ints of different sizes.
+      # https://go-critic.com/overview.html#truncateCmp
       - truncateCmp
+      # Detects repeated type assertions and suggests to replace them with type switch statement.
+      # https://go-critic.com/overview.html#typeAssertChain
+      - typeAssertChain
+      # Detects method declarations preceding the type definition itself.
+      # https://go-critic.com/overview.html#typeDefFirst
+      - typeDefFirst
+      # Detects type switches that can benefit from type guard clause with variable.
+      # https://go-critic.com/overview.html#typeSwitchVar
+      - typeSwitchVar
+      # Detects unneeded parenthesis inside type expressions and suggests to remove them.
+      # https://go-critic.com/overview.html#typeUnparen
+      - typeUnparen
+      # Detects unchecked errors in if statements.
+      # https://go-critic.com/overview.html#uncheckedInlineErr
+      - uncheckedInlineErr
+      # Detects dereference expressions that can be omitted.
+      # https://go-critic.com/overview.html#underef
+      - underef
+      # Detects redundant statement labels.
+      # https://go-critic.com/overview.html#unlabelStmt
+      - unlabelStmt
+      # Detects function literals that can be simplified.
+      # https://go-critic.com/overview.html#unlambda
+      - unlambda
+      # Detects unnamed results that may benefit from names.
+      # https://go-critic.com/overview.html#unnamedResult
+      - unnamedResult
+      # Detects unnecessary braced statement blocks.
+      # https://go-critic.com/overview.html#unnecessaryBlock
+      - unnecessaryBlock
+      # Detects redundantly deferred calls.
+      # https://go-critic.com/overview.html#unnecessaryDefer
+      - unnecessaryDefer
+      # Detects slice expressions that can be simplified to sliced expression itself.
+      # https://go-critic.com/overview.html#unslice
+      - unslice
+      # Detects value swapping code that are not using parallel assignment.
+      # https://go-critic.com/overview.html#valSwap
+      - valSwap
+      # Detects conditions that are unsafe due to not being exhaustive.
+      # https://go-critic.com/overview.html#weakCond
+      - weakCond
+      # Ensures that `//nolint` comments include an explanation.
+      # https://go-critic.com/overview.html#whyNoLint
+      - whyNoLint
+      # Detects function calls that can be replaced with convenience wrappers.
+      # https://go-critic.com/overview.html#wrapperFunc
+      - wrapperFunc
+      # Detects Yoda style expressions and suggests to replace them.
+      # https://go-critic.com/overview.html#yodaStyleExpr
+      - yodaStyleExpr
 
     # Enable all checks.
     # Default: false
@@ -573,7 +884,111 @@ linters-settings:
     # Which checks should be disabled; can't be combined with 'enabled-checks'.
     # Default: []
     disabled-checks:
+      - appendAssign
+      - appendCombine
+      - argOrder
+      - assignOp
+      - badCall
+      - badCond
+      - badLock
+      - badRegexp
+      - badSorting
+      - badSyncOnceFunc
+      - boolExprSimplify
+      - builtinShadow
+      - builtinShadowDecl
+      - captLocal
+      - caseOrder
+      - codegenComment
+      - commentFormatting
+      - commentedOutCode
+      - commentedOutImport
+      - defaultCaseOrder
+      - deferInLoop
+      - deferUnlambda
+      - deprecatedComment
+      - docStub
+      - dupArg
+      - dupBranchBody
+      - dupCase
+      - dupImport
+      - dupSubExpr
+      - dynamicFmtString
+      - elseif
+      - emptyDecl
+      - emptyFallthrough
+      - emptyStringTest
+      - equalFold
+      - evalOrder
+      - exitAfterDefer
+      - exposedSyncMutex
+      - externalErrorReassign
+      - filepathJoin
+      - flagDeref
+      - flagName
+      - hexLiteral
+      - httpNoBody
+      - hugeParam
+      - ifElseChain
+      - importShadow
+      - indexAlloc
+      - initClause
+      - mapKey
+      - methodExprCall
+      - nestingReduce
+      - newDeref
+      - nilValReturn
+      - octalLiteral
+      - offBy1
+      - paramTypeCombine
+      - preferDecodeRune
+      - preferFilepathJoin
+      - preferFprint
+      - preferStringWriter
+      - preferWriteByte
+      - ptrToRefParam
+      - rangeExprCopy
+      - rangeValCopy
+      - redundantSprint
       - regexpMust
+      - regexpPattern
+      - regexpSimplify
+      - returnAfterHttpError
+      - ruleguard
+      - singleCaseSwitch
+      - sliceClear
+      - sloppyLen
+      - sloppyReassign
+      - sloppyTypeAssert
+      - sortSlice
+      - sprintfQuotedString
+      - sqlQuery
+      - stringConcatSimplify
+      - stringXbytes
+      - stringsCompare
+      - switchTrue
+      - syncMapLoadAndDelete
+      - timeExprSimplify
+      - todoCommentWithoutDetail
+      - tooManyResultsChecker
+      - truncateCmp
+      - typeAssertChain
+      - typeDefFirst
+      - typeSwitchVar
+      - typeUnparen
+      - uncheckedInlineErr
+      - underef
+      - unlabelStmt
+      - unlambda
+      - unnamedResult
+      - unnecessaryBlock
+      - unnecessaryDefer
+      - unslice
+      - valSwap
+      - weakCond
+      - whyNoLint
+      - wrapperFunc
+      - yodaStyleExpr
 
     # Enable multiple checks by tags in addition to default checks.
     # Run `GL_DEBUG=gocritic golangci-lint run --enable=gocritic` to see all tags and checks.
@@ -838,7 +1253,112 @@ linters-settings:
   gosimple:
     # Sxxxx checks in https://staticcheck.io/docs/configuration/options/#checks
     # Default: ["*"]
-    checks: [ "all" ]
+    checks:
+      # Use plain channel send or receive instead of single-case select.
+      # https://staticcheck.dev/docs/checks/#S1000
+      - S1000
+      # Replace for loop with call to copy.
+      # https://staticcheck.dev/docs/checks/#S1001
+      - S1001
+      # Omit comparison with boolean constant.
+      # https://staticcheck.dev/docs/checks/#S1002
+      - S1002
+      # Replace call to 'strings.Index' with 'strings.Contains'.
+      # https://staticcheck.dev/docs/checks/#S1003
+      - S1003
+      # Replace call to 'bytes.Compare' with 'bytes.Equal'.
+      # https://staticcheck.dev/docs/checks/#S1004
+      - S1004
+      # Drop unnecessary use of the blank identifier.
+      # https://staticcheck.dev/docs/checks/#S1005
+      - S1005
+      # Use "for { ... }" for infinite loops.
+      # https://staticcheck.dev/docs/checks/#S1006
+      - S1006
+      # Simplify regular expression by using raw string literal.
+      # https://staticcheck.dev/docs/checks/#S1007
+      - S1007
+      # Simplify returning boolean expression.
+      # https://staticcheck.dev/docs/checks/#S1008
+      - S1008
+      # Omit redundant nil check on slices, maps, and channels.
+      # https://staticcheck.dev/docs/checks/#S1009
+      - S1009
+      # Omit default slice index.
+      # https://staticcheck.dev/docs/checks/#S1010
+      - S1010
+      # Use a single 'append' to concatenate two slices.
+      # https://staticcheck.dev/docs/checks/#S1011
+      - S1011
+      # Replace 'time.Now().Sub(x)' with 'time.Since(x)'.
+      # https://staticcheck.dev/docs/checks/#S1012
+      - S1012
+      # Use a type conversion instead of manually copying struct fields.
+      # https://staticcheck.dev/docs/checks/#S1016
+      - S1016
+      # Replace manual trimming with 'strings.TrimPrefix'.
+      # https://staticcheck.dev/docs/checks/#S1017
+      - S1017
+      # Use "copy" for sliding elements.
+      # https://staticcheck.dev/docs/checks/#S1018
+      - S1018
+      # Simplify "make" call by omitting redundant arguments.
+      # https://staticcheck.dev/docs/checks/#S1019
+      - S1019
+      # Omit redundant nil check in type assertion.
+      # https://staticcheck.dev/docs/checks/#S1020
+      - S1020
+      # Merge variable declaration and assignment.
+      # https://staticcheck.dev/docs/checks/#S1021
+      - S1021
+      # Omit redundant control flow.
+      # https://staticcheck.dev/docs/checks/#S1023
+      - S1023
+      # Replace 'x.Sub(time.Now())' with 'time.Until(x)'.
+      # https://staticcheck.dev/docs/checks/#S1024
+      - S1024
+      # Don't use 'fmt.Sprintf("%s", x)' unnecessarily.
+      # https://staticcheck.dev/docs/checks/#S1025
+      - S1025
+      # Simplify error construction with 'fmt.Errorf'.
+      # https://staticcheck.dev/docs/checks/#S1028
+      - S1028
+      # Range over the string directly.
+      # https://staticcheck.dev/docs/checks/#S1029
+      - S1029
+      # Use 'bytes.Buffer.String' or 'bytes.Buffer.Bytes'.
+      # https://staticcheck.dev/docs/checks/#S1030
+      - S1030
+      # Omit redundant nil check around loop.
+      # https://staticcheck.dev/docs/checks/#S1031
+      - S1031
+      # Use 'sort.Ints(x)', 'sort.Float64s(x)', and 'sort.Strings(x)'.
+      # https://staticcheck.dev/docs/checks/#S1032
+      - S1032
+      # Unnecessary guard around call to "delete".
+      # https://staticcheck.dev/docs/checks/#S1033
+      - S1033
+      # Use result of type assertion to simplify cases.
+      # https://staticcheck.dev/docs/checks/#S1034
+      - S1034
+      # Redundant call to 'net/http.CanonicalHeaderKey' in method call on 'net/http.Header'.
+      # https://staticcheck.dev/docs/checks/#S1035
+      - S1035
+      # Unnecessary guard around map access.
+      # https://staticcheck.dev/docs/checks/#S1036
+      - S1036
+      # Elaborate way of sleeping.
+      # https://staticcheck.dev/docs/checks/#S1037
+      - S1037
+      # Unnecessarily complex way of printing formatted string.
+      # https://staticcheck.dev/docs/checks/#S1038
+      - S1038
+      # Unnecessary use of 'fmt.Sprint'.
+      # https://staticcheck.dev/docs/checks/#S1039
+      - S1039
+      # Type assertion to current type.
+      # https://staticcheck.dev/docs/checks/#S1040
+      - S1040
 
   gosec:
     # To select a subset of rules to run.
@@ -1070,45 +1590,87 @@ linters-settings:
     # Run `GL_DEBUG=govet golangci-lint run --enable=govet` to see default, all available analyzers, and enabled analyzers.
     # Default: []
     enable:
+      # Check for missing values after append.
       - appends
+      # Report mismatches between assembly files and Go declarations.
       - asmdecl
+      # Check for useless assignments.
       - assign
+      # Check for common mistakes using the sync/atomic package.
       - atomic
+      # Check for non-64-bits-aligned arguments to sync/atomic functions.
       - atomicalign
+      # Check for common mistakes involving boolean operators.
       - bools
+      # Check //go:build and // +build directives.
       - buildtag
+      # Detect some violations of the cgo pointer passing rules.
       - cgocall
+      # Check for unkeyed composite literals.
       - composites
+      # Check for locks erroneously passed by value.
       - copylocks
+      # Check for calls of reflect.DeepEqual on error values.
       - deepequalerrors
+      # Report common mistakes in defer statements.
       - defers
+      # Check Go toolchain directives such as //go:debug.
       - directive
+      # Report passing non-pointer or non-error values to errors.As.
       - errorsas
+      # Find structs that would use less memory if their fields were sorted.
       - fieldalignment
+      # Find calls to a particular function.
       - findcall
+      # Report assembly that clobbers the frame pointer before saving it.
       - framepointer
+      # Check for mistakes using HTTP responses.
       - httpresponse
+      # Detect impossible interface-to-interface type assertions.
       - ifaceassert
+      # Check references to loop variables from within nested functions.
       - loopclosure
+      # Check cancel func returned by context.WithCancel is called.
       - lostcancel
+      # Check for useless comparisons between functions and nil.
       - nilfunc
+      # Check for redundant or impossible nil comparisons.
       - nilness
+      # Check consistency of Printf format strings and arguments.
       - printf
+      # Check for comparing reflect.Value values with == or reflect.DeepEqual.
       - reflectvaluecompare
+      # Check for possible unintended shadowing of variables.
       - shadow
+      # Check for shifts that equal or exceed the width of the integer.
       - shift
+      # Check for unbuffered channel of os.Signal.
       - sigchanyzer
+      # Check for invalid structured logging calls.
       - slog
+      # Check the argument type of sort.Slice.
       - sortslice
+      # Check signature of methods of well-known interfaces.
       - stdmethods
+      # Check for string(int) conversions.
       - stringintconv
+      # Check that struct field tags conform to reflect.StructTag.Get.
       - structtag
+      # Report calls to (*testing.T).Fatal from goroutines started by a test.
       - testinggoroutine
+      # Check for common mistaken usages of tests and examples.
       - tests
+      # Check for calls of (time.Time).Format or time.Parse with 2006-02-01.
+      - timeformat
+      # Report passing non-pointer or non-interface values to unmarshal.
       - unmarshal
+      # Check for unreachable code.
       - unreachable
+      # Check for invalid conversions of uintptr to unsafe.Pointer.
       - unsafeptr
+      # Check for unused results of calls to some functions.
       - unusedresult
+      # Checks for unused writes.
       - unusedwrite
 
     # Enable all analyzers.
@@ -1157,6 +1719,7 @@ linters-settings:
       - structtag
       - testinggoroutine
       - tests
+      - timeformat
       - unmarshal
       - unreachable
       - unsafeptr
@@ -1519,14 +2082,23 @@ linters-settings:
     # Please refer to https://github.com/yeya24/promlinter#usage for detailed usage.
     # Default: []
     disabled-linters:
+      # Help detects issues related to the help text for a metric.
       - Help
+      # MetricUnits detects issues with metric unit names.
       - MetricUnits
+      # Counter detects issues specific to counters, as well as patterns that should only be used with counters.
       - Counter
+      # HistogramSummaryReserved detects when other types of metrics use names or labels reserved for use by histograms and/or summaries.
       - HistogramSummaryReserved
+      # MetricTypeInName detects when metric types are included in the metric name.
       - MetricTypeInName
+      # ReservedChars detects colons in metric names.
       - ReservedChars
+      # CamelCase detects metric names and label names written in camelCase.
       - CamelCase
+      # UnitAbbreviations detects abbreviated units in the metric name.
       - UnitAbbreviations
+
 
   protogetter:
     # Skip files generated by specified generators from the checking.
@@ -2135,13 +2707,296 @@ linters-settings:
       - "github.com/user/repo/telemetry/trace.Start:opentelemetry"
   staticcheck:
     # SAxxxx checks in https://staticcheck.io/docs/configuration/options/#checks
+    # Example (to disable some checks): [ "all", "-SA1000", "-SA1001"]
     # Default: ["*"]
-    checks: [ "all" ]
+    checks:
+      # Invalid regular expression.
+      # https://staticcheck.dev/docs/checks/#SA1000
+      - SA1000
+      # Invalid template.
+      # https://staticcheck.dev/docs/checks/#SA1001
+      - SA1001
+      # Invalid format in 'time.Parse'.
+      # https://staticcheck.dev/docs/checks/#SA1002
+      - SA1002
+      # Unsupported argument to functions in 'encoding/binary'.
+      # https://staticcheck.dev/docs/checks/#SA1003
+      - SA1003
+      # Suspiciously small untyped constant in 'time.Sleep'.
+      # https://staticcheck.dev/docs/checks/#SA1004
+      - SA1004
+      # Invalid first argument to 'exec.Command'.
+      # https://staticcheck.dev/docs/checks/#SA1005
+      - SA1005
+      # 'Printf' with dynamic first argument and no further arguments.
+      # https://staticcheck.dev/docs/checks/#SA1006
+      - SA1006
+      # Invalid URL in 'net/url.Parse'.
+      # https://staticcheck.dev/docs/checks/#SA1007
+      - SA1007
+      # Non-canonical key in 'http.Header' map.
+      # https://staticcheck.dev/docs/checks/#SA1008
+      - SA1008
+      # '(*regexp.Regexp).FindAll' called with 'n == 0', which will always return zero results.
+      # https://staticcheck.dev/docs/checks/#SA1010
+      - SA1010
+      # Various methods in the "strings" package expect valid UTF-8, but invalid input is provided.
+      # https://staticcheck.dev/docs/checks/#SA1011
+      - SA1011
+      # A nil 'context.Context' is being passed to a function, consider using 'context.TODO' instead.
+      # https://staticcheck.dev/docs/checks/#SA1012
+      - SA1012
+      # 'io.Seeker.Seek' is being called with the whence constant as the first argument, but it should be the second.
+      # https://staticcheck.dev/docs/checks/#SA1013
+      - SA1013
+      # Non-pointer value passed to 'Unmarshal' or 'Decode'.
+      # https://staticcheck.dev/docs/checks/#SA1014
+      - SA1014
+      # Using 'time.Tick' in a way that will leak. Consider using 'time.NewTicker', and only use 'time.Tick' in tests, commands and endless functions.
+      # https://staticcheck.dev/docs/checks/#SA1015
+      - SA1015
+      # Trapping a signal that cannot be trapped.
+      # https://staticcheck.dev/docs/checks/#SA1016
+      - SA1016
+      # Channels used with 'os/signal.Notify' should be buffered.
+      # https://staticcheck.dev/docs/checks/#SA1017
+      - SA1017
+      # 'strings.Replace' called with 'n == 0', which does nothing.
+      # https://staticcheck.dev/docs/checks/#SA1018
+      - SA1018
+      # Using a deprecated function, variable, constant or field.
+      # https://staticcheck.dev/docs/checks/#SA1019
+      - SA1019
+      # Using an invalid host:port pair with a 'net.Listen'-related function.
+      # https://staticcheck.dev/docs/checks/#SA1020
+      - SA1020
+      # Using 'bytes.Equal' to compare two 'net.IP'.
+      # https://staticcheck.dev/docs/checks/#SA1021
+      - SA1021
+      # Modifying the buffer in an 'io.Writer' implementation.
+      # https://staticcheck.dev/docs/checks/#SA1023
+      - SA1023
+      # A string cutset contains duplicate characters.
+      # https://staticcheck.dev/docs/checks/#SA1024
+      - SA1024
+      # It is not possible to use '(*time.Timer).Reset''s return value correctly.
+      # https://staticcheck.dev/docs/checks/#SA1025
+      - SA1025
+      # Cannot marshal channels or functions.
+      # https://staticcheck.dev/docs/checks/#SA1026
+      - SA1026
+      # Atomic access to 64-bit variable must be 64-bit aligned.
+      # https://staticcheck.dev/docs/checks/#SA1027
+      - SA1027
+      # 'sort.Slice' can only be used on slices.
+      # https://staticcheck.dev/docs/checks/#SA1028
+      - SA1028
+      # Inappropriate key in call to 'context.WithValue'.
+      # https://staticcheck.dev/docs/checks/#SA1029
+      - SA1029
+      # Invalid argument in call to a 'strconv' function.
+      # https://staticcheck.dev/docs/checks/#SA1030
+      - SA1030
+      # Overlapping byte slices passed to an encoder.
+      # https://staticcheck.dev/docs/checks/#SA1031
+      - SA1031
+      # Wrong order of arguments to 'errors.Is'.
+      # https://staticcheck.dev/docs/checks/#SA1032
+      - SA1032
+      # 'sync.WaitGroup.Add' called inside the goroutine, leading to a race condition.
+      # https://staticcheck.dev/docs/checks/#SA2000
+      - SA2000
+      # Empty critical section, did you mean to defer the unlock?.
+      # https://staticcheck.dev/docs/checks/#SA2001
+      - SA2001
+      # Called 'testing.T.FailNow' or 'SkipNow' in a goroutine, which isn't allowed.
+      # https://staticcheck.dev/docs/checks/#SA2002
+      - SA2002
+      # Deferred 'Lock' right after locking, likely meant to defer 'Unlock' instead.
+      # https://staticcheck.dev/docs/checks/#SA2003
+      - SA2003
+      # 'TestMain' doesn't call 'os.Exit', hiding test failures.
+      # https://staticcheck.dev/docs/checks/#SA3000
+      - SA3000
+      # Assigning to 'b.N' in benchmarks distorts the results.
+      # https://staticcheck.dev/docs/checks/#SA3001
+      - SA3001
+      # Binary operator has identical expressions on both sides.
+      # https://staticcheck.dev/docs/checks/#SA4000
+      - SA4000
+      # '&*x' gets simplified to 'x', it does not copy 'x'.
+      # https://staticcheck.dev/docs/checks/#SA4001
+      - SA4001
+      # Comparing unsigned values against negative values is pointless.
+      # https://staticcheck.dev/docs/checks/#SA4003
+      - SA4003
+      # The loop exits unconditionally after one iteration.
+      # https://staticcheck.dev/docs/checks/#SA4004
+      - SA4004
+      # Field assignment that will never be observed. Did you mean to use a pointer receiver?.
+      # https://staticcheck.dev/docs/checks/#SA4005
+      - SA4005
+      # A value assigned to a variable is never read before being overwritten. Forgotten error check or dead code?.
+      # https://staticcheck.dev/docs/checks/#SA4006
+      - SA4006
+      # The variable in the loop condition never changes, are you incrementing the wrong variable?.
+      # https://staticcheck.dev/docs/checks/#SA4008
+      - SA4008
+      # A function argument is overwritten before its first use.
+      # https://staticcheck.dev/docs/checks/#SA4009
+      - SA4009
+      # The result of 'append' will never be observed anywhere.
+      # https://staticcheck.dev/docs/checks/#SA4010
+      - SA4010
+      # Break statement with no effect. Did you mean to break out of an outer loop?.
+      # https://staticcheck.dev/docs/checks/#SA4011
+      - SA4011
+      # Comparing a value against NaN even though no value is equal to NaN.
+      # https://staticcheck.dev/docs/checks/#SA4012
+      - SA4012
+      # Negating a boolean twice ('!!b') is the same as writing 'b'. This is either redundant, or a typo.
+      # https://staticcheck.dev/docs/checks/#SA4013
+      - SA4013
+      # An if/else if chain has repeated conditions and no side-effects; if the condition didn't match the first time, it won't match the second time, either.
+      # https://staticcheck.dev/docs/checks/#SA4014
+      - SA4014
+      # Calling functions like 'math.Ceil' on floats converted from integers doesn't do anything useful.
+      # https://staticcheck.dev/docs/checks/#SA4015
+      - SA4015
+      # Certain bitwise operations, such as 'x ^ 0', do not do anything useful.
+      # https://staticcheck.dev/docs/checks/#SA4016
+      - SA4016
+      # Discarding the return values of a function without side effects, making the call pointless.
+      # https://staticcheck.dev/docs/checks/#SA4017
+      - SA4017
+      # Self-assignment of variables.
+      # https://staticcheck.dev/docs/checks/#SA4018
+      - SA4018
+      # Multiple, identical build constraints in the same file.
+      # https://staticcheck.dev/docs/checks/#SA4019
+      - SA4019
+      # Unreachable case clause in a type switch.
+      # https://staticcheck.dev/docs/checks/#SA4020
+      - SA4020
+      # "x = append(y)" is equivalent to "x = y".
+      # https://staticcheck.dev/docs/checks/#SA4021
+      - SA4021
+      # Comparing the address of a variable against nil.
+      # https://staticcheck.dev/docs/checks/#SA4022
+      - SA4022
+      # Impossible comparison of interface value with untyped nil.
+      # https://staticcheck.dev/docs/checks/#SA4023
+      - SA4023
+      # Checking for impossible return value from a builtin function.
+      # https://staticcheck.dev/docs/checks/#SA4024
+      - SA4024
+      # Integer division of literals that results in zero.
+      # https://staticcheck.dev/docs/checks/#SA4025
+      - SA4025
+      # Go constants cannot express negative zero.
+      # https://staticcheck.dev/docs/checks/#SA4026
+      - SA4026
+      # '(*net/url.URL).Query' returns a copy, modifying it doesn't change the URL.
+      # https://staticcheck.dev/docs/checks/#SA4027
+      - SA4027
+      # 'x % 1' is always zero.
+      # https://staticcheck.dev/docs/checks/#SA4028
+      - SA4028
+      # Ineffective attempt at sorting slice.
+      # https://staticcheck.dev/docs/checks/#SA4029
+      - SA4029
+      # Ineffective attempt at generating random number.
+      # https://staticcheck.dev/docs/checks/#SA4030
+      - SA4030
+      # Checking never-nil value against nil.
+      # https://staticcheck.dev/docs/checks/#SA4031
+      - SA4031
+      # Comparing 'runtime.GOOS' or 'runtime.GOARCH' against impossible value.
+      # https://staticcheck.dev/docs/checks/#SA4032
+      - SA4032
+      # Assignment to nil map.
+      # https://staticcheck.dev/docs/checks/#SA5000
+      - SA5000
+      # Deferring 'Close' before checking for a possible error.
+      # https://staticcheck.dev/docs/checks/#SA5001
+      - SA5001
+      # The empty for loop ("for {}") spins and can block the scheduler.
+      # https://staticcheck.dev/docs/checks/#SA5002
+      - SA5002
+      # Defers in infinite loops will never execute.
+      # https://staticcheck.dev/docs/checks/#SA5003
+      - SA5003
+      # "for { select { ..." with an empty default branch spins.
+      # https://staticcheck.dev/docs/checks/#SA5004
+      - SA5004
+      # The finalizer references the finalized object, preventing garbage collection.
+      # https://staticcheck.dev/docs/checks/#SA5005
+      - SA5005
+      # Infinite recursive call.
+      # https://staticcheck.dev/docs/checks/#SA5007
+      - SA5007
+      # Invalid struct tag.
+      # https://staticcheck.dev/docs/checks/#SA5008
+      - SA5008
+      # Invalid Printf call.
+      # https://staticcheck.dev/docs/checks/#SA5009
+      - SA5009
+      # Impossible type assertion.
+      # https://staticcheck.dev/docs/checks/#SA5010
+      - SA5010
+      # Possible nil pointer dereference.
+      # https://staticcheck.dev/docs/checks/#SA5011
+      - SA5011
+      # Passing odd-sized slice to function expecting even size.
+      # https://staticcheck.dev/docs/checks/#SA5012
+      - SA5012
+      # Using 'regexp.Match' or related in a loop, should use 'regexp.Compile'.
+      # https://staticcheck.dev/docs/checks/#SA6000
+      - SA6000
+      # Missing an optimization opportunity when indexing maps by byte slices.
+      # https://staticcheck.dev/docs/checks/#SA6001
+      - SA6001
+      # Storing non-pointer values in 'sync.Pool' allocates memory.
+      # https://staticcheck.dev/docs/checks/#SA6002
+      - SA6002
+      # Converting a string to a slice of runes before ranging over it.
+      # https://staticcheck.dev/docs/checks/#SA6003
+      - SA6003
+      # Inefficient string comparison with 'strings.ToLower' or 'strings.ToUpper'.
+      # https://staticcheck.dev/docs/checks/#SA6005
+      - SA6005
+      # Using io.WriteString to write '[]byte'.
+      # https://staticcheck.dev/docs/checks/#SA6006
+      - SA6006
+      # Defers in range loops may not run when you expect them to.
+      # https://staticcheck.dev/docs/checks/#SA9001
+      - SA9001
+      # Using a non-octal 'os.FileMode' that looks like it was meant to be in octal.
+      # https://staticcheck.dev/docs/checks/#SA9002
+      - SA9002
+      # Empty body in an if or else branch.
+      # https://staticcheck.dev/docs/checks/#SA9003
+      - SA9003
+      # Only the first constant has an explicit type.
+      # https://staticcheck.dev/docs/checks/#SA9004
+      - SA9004
+      # Trying to marshal a struct with no public fields nor custom marshaling.
+      # https://staticcheck.dev/docs/checks/#SA9005
+      - SA9005
+      # Dubious bit shifting of a fixed size integer value.
+      # https://staticcheck.dev/docs/checks/#SA9006
+      - SA9006
+      # Deleting a directory that shouldn't be deleted.
+      # https://staticcheck.dev/docs/checks/#SA9007
+      - SA9007
+      # 'else' branch of a type assertion is probably not reading the right value.
+      # https://staticcheck.dev/docs/checks/#SA9008
+      - SA9008
+      # Ineffectual Go compiler directive.
+      # https://staticcheck.dev/docs/checks/#SA9009
+      - SA9009
 
   stylecheck:
-    # STxxxx checks in https://staticcheck.io/docs/configuration/options/#checks
-    # Default: ["*"]
-    checks: [ "all", "-ST1000", "-ST1003", "-ST1016", "-ST1020", "-ST1021", "-ST1022" ]
     # https://staticcheck.io/docs/configuration/options/#dot_import_whitelist
     # Default: ["github.com/mmcloughlin/avo/build", "github.com/mmcloughlin/avo/operand", "github.com/mmcloughlin/avo/reg"]
     dot-import-whitelist:
@@ -2152,6 +3007,64 @@ linters-settings:
     # https://staticcheck.io/docs/configuration/options/#http_status_code_whitelist
     # Default: ["200", "400", "404", "500"]
     http-status-code-whitelist: [ "200", "400", "404", "500" ]
+    # STxxxx checks in https://staticcheck.io/docs/configuration/options/#checks
+    # Example (to disable some checks): [ "all", "-ST1000", "-ST1003", "-ST1016", "-ST1020", "-ST1021", "-ST1022" ]
+    # Default: ["*"]
+    checks:
+      # Incorrect or missing package comment.
+      # https://staticcheck.dev/docs/checks/#ST1000
+      - ST1000
+      # Dot imports are discouraged.
+      # https://staticcheck.dev/docs/checks/#ST1001
+      - ST1001
+      # Poorly chosen identifier.
+      # https://staticcheck.dev/docs/checks/#ST1003
+      - ST1003
+      # Incorrectly formatted error string.
+      # https://staticcheck.dev/docs/checks/#ST1005
+      - ST1005
+      # Poorly chosen receiver name.
+      # https://staticcheck.dev/docs/checks/#ST1006
+      - ST1006
+      # A function's error value should be its last return value.
+      # https://staticcheck.dev/docs/checks/#ST1008
+      - ST1008
+      # Poorly chosen name for variable of type 'time.Duration'.
+      # https://staticcheck.dev/docs/checks/#ST1011
+      - ST1011
+      # Poorly chosen name for error variable.
+      # https://staticcheck.dev/docs/checks/#ST1012
+      - ST1012
+      # Should use constants for HTTP error codes, not magic numbers.
+      # https://staticcheck.dev/docs/checks/#ST1013
+      - ST1013
+      # A switch's default case should be the first or last case.
+      # https://staticcheck.dev/docs/checks/#ST1015
+      - ST1015
+      # Use consistent method receiver names.
+      # https://staticcheck.dev/docs/checks/#ST1016
+      - ST1016
+      # Don't use Yoda conditions.
+      # https://staticcheck.dev/docs/checks/#ST1017
+      - ST1017
+      # Avoid zero-width and control characters in string literals.
+      # https://staticcheck.dev/docs/checks/#ST1018
+      - ST1018
+      # Importing the same package multiple times.
+      # https://staticcheck.dev/docs/checks/#ST1019
+      - ST1019
+      # The documentation of an exported function should start with the function's name.
+      # https://staticcheck.dev/docs/checks/#ST1020
+      - ST1020
+      # The documentation of an exported type should start with type's name.
+      # https://staticcheck.dev/docs/checks/#ST1021
+      - ST1021
+      # The documentation of an exported variable or constant should start with variable's name.
+      # https://staticcheck.dev/docs/checks/#ST1022
+      - ST1022
+      # Redundant type in variable declaration.
+      # https://staticcheck.dev/docs/checks/#ST1023
+      - ST1023
 
   tagalign:
     # Align and sort can be used together or separately.
@@ -2720,7 +3633,6 @@ linters:
     - testpackage
     - thelper
     - tparallel
-    - typecheck
     - unconvert
     - unparam
     - unused
@@ -2837,7 +3749,6 @@ linters:
     - testpackage
     - thelper
     - tparallel
-    - typecheck
     - unconvert
     - unparam
     - unused
