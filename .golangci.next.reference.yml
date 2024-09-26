@@ -516,6 +516,11 @@ linters-settings:
     # Default: false
     forbid-spec-pollution: true
 
+  gochecksumtype:
+    # Presence of `default` case in switch statements satisfies exhaustiveness, if all members are not listed.
+    # Default: true
+    default-signifies-exhaustive: false
+
   gocognit:
     # Minimal code complexity to report.
     # Default: 30 (but we recommend 10-20)

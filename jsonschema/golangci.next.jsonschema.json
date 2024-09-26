@@ -1174,6 +1174,17 @@
             }
           }
         },
+        "gochecksumtype": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "default-signifies-exhaustive": {
+              "description": "Presence of `default` case in switch statements satisfies exhaustiveness, if all members are not listed.",
+              "type": "boolean",
+              "default": true
+            }
+          }
+        },
         "gocognit": {
           "type": "object",
           "additionalProperties": false,
