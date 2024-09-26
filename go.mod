@@ -124,7 +124,7 @@ require (
 	gitlab.com/bosi/decorder v0.4.2
 	go-simpler.org/musttag v0.12.2
 	go-simpler.org/sloglint v0.7.2
-	go.uber.org/automaxprocs v1.5.3
+	go.uber.org/automaxprocs v1.6.0
 	golang.org/x/exp v0.0.0-20240909161429-701f63a606c0
 	golang.org/x/tools v0.25.0
 	gopkg.in/yaml.v3 v3.0.1
