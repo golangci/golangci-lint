@@ -1,4 +1,5 @@
 //golangcitest:args -Egochecksumtype
+//golangcitest:config_path testdata/gochecksumtype_custom.yml
 package testdata
 
 import (
@@ -29,7 +30,7 @@ func sumTypeTest() {
 		panic("??")
 	}
 
-	switch sum.(type) {
+	switch sum.(type) { // want "exhaustiveness check failed for sum type.*SumType.*missing cases for Two"
 	case *One:
 	default:
 		log.Println("legit catch all goes here")

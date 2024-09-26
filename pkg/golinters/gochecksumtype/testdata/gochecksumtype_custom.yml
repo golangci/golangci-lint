@@ -1,0 +1,3 @@
+linters-settings:
+  gochecksumtype:
+    default-signifies-exhaustive: false
