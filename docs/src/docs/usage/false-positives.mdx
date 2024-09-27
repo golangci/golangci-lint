@@ -175,3 +175,18 @@ Some exclusions are considered as common, to help golangci-lint users those comm
 
 If you don't want to use it you can set `issues.exclude-use-default` to `false`.
 {.DefaultExclusions}
+
+### Default Directory Exclusions
+
+By default, the reports from directory names, that match the following regular expressions, are excluded:
+
+- `third_party$`
+- `examples$`
+- `Godeps$`
+- `builtin$`
+
+This option has been defined when Go modules was not existed and when the golangci-lint core was different, this is not something we still recommend.
+
+At some point, we will remove all those obsolete exclusions, but as it's a breaking changes it will only happen inside a major version.
+
+So we recommend setting `issues.exclude-dirs-use-default` to `false`.
