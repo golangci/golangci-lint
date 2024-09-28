@@ -55,6 +55,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/gosmopolitan"
 	"github.com/golangci/golangci-lint/pkg/golinters/govet"
 	"github.com/golangci/golangci-lint/pkg/golinters/grouper"
+	"github.com/golangci/golangci-lint/pkg/golinters/iface"
 	"github.com/golangci/golangci-lint/pkg/golinters/importas"
 	"github.com/golangci/golangci-lint/pkg/golinters/inamedparam"
 	"github.com/golangci/golangci-lint/pkg/golinters/ineffassign"
@@ -477,6 +478,12 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/esimonov/ifshort").
 			DeprecatedError("The repository of the linter has been deprecated by the owner.", "v1.48.0", ""),
+
+		linter.NewConfig(iface.New(&cfg.LintersSettings.Iface)).
+			WithSince("v1.62.0").
+			WithLoadForGoAnalysis().
+			WithPresets(linter.PresetStyle).
+			WithURL("https://github.com/uudashr/iface"),
 
 		linter.NewConfig(importas.New(&cfg.LintersSettings.ImportAs)).
 			WithSince("v1.38.0").

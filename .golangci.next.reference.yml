@@ -1790,6 +1790,20 @@ linters-settings:
     # Default: false
     var-require-grouping: true
 
+  iface:
+    # By default is set to 'identical' only.
+    # Default: [identical]
+    enable:
+      - identical
+      - unused
+      - opaque
+    settings:
+      unused:
+        # List of packages path to exclude from the check.
+        # Default: []
+        exclude:
+          - github.com/example/log
+
   importas:
     # Do not allow unaliased imports of aliased packages.
     # Default: false
@@ -3577,6 +3591,7 @@ linters:
     - gosmopolitan
     - govet
     - grouper
+    - iface
     - importas
     - inamedparam
     - ineffassign
@@ -3692,6 +3707,7 @@ linters:
     - gosmopolitan
     - govet
     - grouper
+    - iface
     - importas
     - inamedparam
     - ineffassign
