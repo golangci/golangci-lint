@@ -132,30 +132,25 @@ Colored output:
 docker run -t --rm -v $(pwd):/app -w /app golangci/golangci-lint:{.LatestVersion} golangci-lint run -v
 ```
 
-### Install from Source
+### Install from Sources
 
-Note: such `go install`/`go get` installation aren't guaranteed to work. We recommend using binary installation.
+Such `go install`/`go get` or "tools pattern" installations aren't guaranteed to work.
 
-<details>
-<summary>Why?</summary>
+We recommend using binary installation.
 
-`go install`/`go get` installation isn't recommended because of the following points:
+Those installations aren't recommended because of the following points:
 
-1. Some users use `-u` flag for `go get`, which upgrades our dependencies. Resulting configuration wasn't tested and isn't guaranteed to work.
-2. [`go.mod`](https://github.com/golangci/golangci-lint/blob/master/go.mod) replacement directive doesn't apply. It means a user will be using patched version of `golangci-lint` if we use such replacements.
-3. We've encountered a lot of issues with Go modules hashes.
-4. It allows installation from `master` branch which can't be considered stable.
-5. It's slower than binary installation.
-
-</details>
-
-<div style="margin-top: 2em;">
+1. Those installations are compiling golangci-lint locally, the Go version used to build will depend on your local Go version.
+2. Some users use `-u` flag for `go get`, which upgrades our dependencies. Resulting binary was not tested and is not guaranteed to work.
+3. When using "tools pattern", the dependencies of a tool can modify the dependencies of another. Resulting binary was not tested and is not guaranteed to work.
+4. We've encountered issues with Go modules hashes due to unexpected recreation of dependency tags.
+5. `go.mod` replacement directives don't apply transitively. It means a user will be using patched version of `golangci-lint` if we use such replacements.
+6. It allows installation from main branch which can't be considered stable.
+7. It's slower than binary installation.
 
 ```sh
 go install github.com/golangci/golangci-lint/cmd/golangci-lint@{.LatestVersion}
 ```
-
-</div>
 
 ## Next
 
