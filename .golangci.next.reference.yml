@@ -3269,7 +3269,9 @@ linters-settings:
       - blank-import
       - bool-compare
       - compares
+      - contains
       - empty
+      - encoded-compare
       - error-is-as
       - error-nil
       - expected-actual
@@ -3279,6 +3281,7 @@ linters-settings:
       - len
       - negative-positive
       - nil-compare
+      - regexp
       - require-error
       - suite-broken-parallel
       - suite-dont-use-pkg
@@ -3292,15 +3295,17 @@ linters-settings:
     disable-all: true
     # Enable checkers by name
     # (in addition to default
-    #   blank-import, bool-compare, compares, empty, error-is-as, error-nil, expected-actual, go-require, float-compare,
-    #   formatter, len, negative-positive, nil-compare, require-error, suite-broken-parallel, suite-dont-use-pkg,
-    #   suite-extra-assert-call, suite-subtest-run, useless-assert
+    #   blank-import, bool-compare, compares, contains, empty, encoded-compare, error-is-as, error-nil, expected-actual,
+    #   go-require, float-compare, formatter, len, negative-positive, nil-compare, regexp, require-error,
+    #   suite-broken-parallel, suite-dont-use-pkg, suite-extra-assert-call, suite-subtest-run, useless-assert
     # ).
     enable:
       - blank-import
       - bool-compare
       - compares
+      - contains
       - empty
+      - encoded-compare
       - error-is-as
       - error-nil
       - expected-actual
@@ -3310,6 +3315,7 @@ linters-settings:
       - len
       - negative-positive
       - nil-compare
+      - regexp
       - require-error
       - suite-broken-parallel
       - suite-dont-use-pkg
