@@ -9,7 +9,7 @@ require (
 	github.com/Abirdcfly/dupword v0.1.1
 	github.com/Antonboom/errname v0.1.13
 	github.com/Antonboom/nilnil v0.1.9
-	github.com/Antonboom/testifylint v1.4.3
+	github.com/Antonboom/testifylint v1.5.0
 	github.com/BurntSushi/toml v1.4.1-0.20240526193622-a339e1f7089c
 	github.com/Crocmagnon/fatcontext v0.5.2
 	github.com/Djarvur/go-err113 v0.0.0-20210108212216-aea10b59be24

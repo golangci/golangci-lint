@@ -225,5 +225,5 @@ func TestPrinter_Print_multiple(t *testing.T) {
 	goldenJSON, err := os.ReadFile(filepath.Join("testdata", "golden-json.json"))
 	require.NoError(t, err)
 
-	assert.Equal(t, string(goldenJSON), stdOutBuffer.String())
+	assert.JSONEq(t, string(goldenJSON), stdOutBuffer.String())
 }
