@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"go/ast"
+	"go/build"
 	"go/parser"
 	"go/scanner"
 	"go/types"
@@ -164,6 +165,7 @@ func (lp *loadingPackage) loadFromSource(loadMode LoadMode) error {
 			pkg.Errors = append(pkg.Errors, lp.convertError(err)...)
 		},
 		GoVersion: rv, // TODO(ldez) temporary workaround
+		Sizes: types.SizesFor("gc", build.Default.GOARCH),
 	}
 
 	_ = types.NewChecker(tc, pkg.Fset, pkg.Types, pkg.TypesInfo).Files(pkg.Syntax)
