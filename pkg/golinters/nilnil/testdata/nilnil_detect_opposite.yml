@@ -1,0 +1,3 @@
+linters-settings:
+  nilnil:
+    detect-opposite: true

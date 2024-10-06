@@ -41,8 +41,8 @@ github.com/Abirdcfly/dupword v0.1.1 h1:Bsxe0fIw6OwBtXMIncaTxCLHYO5BB+3mcsR5E8VXl
 github.com/Abirdcfly/dupword v0.1.1/go.mod h1:B49AcJdTYYkpd4HjgAcutNGG9HZ2JWwKunH9Y2BA6sM=
 github.com/Antonboom/errname v1.0.0 h1:oJOOWR07vS1kRusl6YRSlat7HFnb3mSfMl6sDMRoTBA=
 github.com/Antonboom/errname v1.0.0/go.mod h1:gMOBFzK/vrTiXN9Oh+HFs+e6Ndl0eTFbtsRTSRdXyGI=
-github.com/Antonboom/nilnil v0.1.9 h1:eKFMejSxPSA9eLSensFmjW2XTgTwJMjZ8hUHtV4s/SQ=
-github.com/Antonboom/nilnil v0.1.9/go.mod h1:iGe2rYwCq5/Me1khrysB4nwI7swQvjclR8/YRPl5ihQ=
+github.com/Antonboom/nilnil v1.0.0 h1:n+v+B12dsE5tbAqRODXmEKfZv9j2KcTBrp+LkoM4HZk=
+github.com/Antonboom/nilnil v1.0.0/go.mod h1:fDJ1FSFoLN6yoG65ANb1WihItf6qt9PJVTn/s2IrcII=
 github.com/Antonboom/testifylint v1.5.0 h1:dlUIsDMtCrZWUnvkaCz3quJCoIjaGi41GzjPBGkkJ8A=
 github.com/Antonboom/testifylint v1.5.0/go.mod h1:wqaJbu0Blb5Wag2wv7Z5xt+CIV+eVLxtGZrlK13z3AE=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=

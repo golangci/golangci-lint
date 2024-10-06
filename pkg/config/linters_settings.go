@@ -733,7 +733,8 @@ type NestifSettings struct {
 }
 
 type NilNilSettings struct {
-	CheckedTypes []string `mapstructure:"checked-types"`
+	DetectOpposite bool     `mapstructure:"detect-opposite"`
+	CheckedTypes   []string `mapstructure:"checked-types"`
 }
 
 type NlreturnSettings struct {
