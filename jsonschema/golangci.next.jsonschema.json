@@ -2188,13 +2188,18 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "detect-opposite": {
+              "type": "boolean",
+              "description": "In addition, detect opposite situation (simultaneous return of non-nil error and valid value).",
+              "default": false
+            },
             "checked-types": {
               "type": "array",
               "description": "List of return types to check.",
               "items": {
-                "enum": ["ptr", "func", "iface", "map", "chan", "uintptr", "unsafeptr"]
+                "enum": ["chan", "func", "iface", "map", "ptr", "uintptr", "unsafeptr"]
               },
-              "default": ["ptr", "func", "iface", "map", "chan", "uintptr", "unsafeptr"]
+              "default": ["chan", "func", "iface", "map", "ptr", "uintptr", "unsafeptr"]
             }
           }
         },

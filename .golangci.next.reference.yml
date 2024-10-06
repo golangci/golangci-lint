@@ -2115,14 +2115,17 @@ linters-settings:
     min-complexity: 4
 
   nilnil:
+    # In addition, detect opposite situation (simultaneous return of non-nil error and valid value).
+    # Default: false
+    detect-opposite: true
     # List of return types to check.
-    # Default: ["ptr", "func", "iface", "map", "chan", "uintptr", "unsafeptr"]
+    # Default: ["chan", "func", "iface", "map", "ptr", "uintptr", "unsafeptr"]
     checked-types:
-      - ptr
+      - chan
       - func
       - iface
       - map
-      - chan
+      - ptr
       - uintptr
       - unsafeptr
 
