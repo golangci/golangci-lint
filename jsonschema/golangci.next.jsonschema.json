@@ -68,6 +68,7 @@
         "preferStringWriter",
         "preferWriteByte",
         "ptrToRefParam",
+        "rangeAppendAll",
         "rangeExprCopy",
         "rangeValCopy",
         "redundantSprint",
