@@ -201,7 +201,6 @@ linters:
     - nolintlint
     - nonamedreturns
     - nosprintfhostport
-    - paniccheck
     - paralleltest
     - perfsprint
     - prealloc
