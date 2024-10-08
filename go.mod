@@ -1,6 +1,6 @@
 module github.com/golangci/golangci-lint
 
-go 1.22.1
+go 1.22.8
 
 require (
 	4d63.com/gocheckcompilerdirectives v1.2.1
@@ -66,6 +66,7 @@ require (
 	github.com/kunwardeep/paralleltest v1.0.10
 	github.com/kyoh86/exportloopref v0.1.11
 	github.com/lasiar/canonicalheader v1.1.1
+	github.com/ldemailly/panic-linter v0.2.1
 	github.com/ldez/gomoddirectives v0.2.4
 	github.com/ldez/tagliatelle v0.5.0
 	github.com/leonklingele/grouper v1.1.2
@@ -134,6 +135,7 @@ require (
 )
 
 require (
+	fortio.org/sets v1.2.0 // indirect
 	github.com/Masterminds/semver/v3 v3.3.0 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/ccojocar/zxcvbn-go v1.0.2 // indirect

@@ -78,6 +78,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/nolintlint"
 	"github.com/golangci/golangci-lint/pkg/golinters/nonamedreturns"
 	"github.com/golangci/golangci-lint/pkg/golinters/nosprintfhostport"
+	"github.com/golangci/golangci-lint/pkg/golinters/paniccheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/paralleltest"
 	"github.com/golangci/golangci-lint/pkg/golinters/perfsprint"
 	"github.com/golangci/golangci-lint/pkg/golinters/prealloc"
@@ -617,6 +618,12 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithSince("v1.46.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/stbenjam/no-sprintf-host-port"),
+
+		linter.NewConfig(paniccheck.New()).
+			WithSince("v1.62.0").
+			WithLoadForGoAnalysis().
+			WithPresets(linter.PresetError).
+			WithURL("https://github.com/ldemailly/panic-linter"),
 
 		linter.NewConfig(paralleltest.New(&cfg.LintersSettings.ParallelTest)).
 			WithSince("v1.33.0").

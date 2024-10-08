@@ -35,6 +35,10 @@ cloud.google.com/go/storage v1.6.0/go.mod h1:N7U0C8pVQ/+NIKOBQyamJIeKQKkZ+mxpohl
 cloud.google.com/go/storage v1.8.0/go.mod h1:Wv1Oy7z6Yz3DshWRJFhqM/UCfaWIRTdp0RXyy7KQOVs=
 cloud.google.com/go/storage v1.10.0/go.mod h1:FLPqc6j+Ki4BU591ie1oL6qBQGu2Bl/tZ9ullr3+Kg0=
 dmitri.shuralyov.com/gpu/mtl v0.0.0-20190408044501-666a987793e9/go.mod h1:H6x//7gZCb22OMCxBHrMx7a5I7Hp++hsVxbQ4BYO7hU=
+fortio.org/assert v1.2.1 h1:48I39urpeDj65RP1KguF7akCjILNeu6vICiYMEysR7Q=
+fortio.org/assert v1.2.1/go.mod h1:039mG+/iYDPO8Ibx8TrNuJCm2T2SuhwRI3uL9nHTTls=
+fortio.org/sets v1.2.0 h1:FBfC7R2xrOJtkcioUbY6WqEzdujuBoZRbSdp1fYF4Kk=
+fortio.org/sets v1.2.0/go.mod h1:J2BwIxNOLWsSU7IMZUg541kh3Au4JEKHrghVwXs68tE=
 github.com/4meepo/tagalign v1.3.4 h1:P51VcvBnf04YkHzjfclN6BbsopfJR5rxs1n+5zHt+w8=
 github.com/4meepo/tagalign v1.3.4/go.mod h1:M+pnkHH2vG8+qhE5bVc/zeP7HS/j910Fwa9TUSyZVI0=
 github.com/Abirdcfly/dupword v0.1.3 h1:9Pa1NuAsZvpFPi9Pqkd93I7LIYRURj+A//dFd5tgBeE=
@@ -341,6 +345,8 @@ github.com/kyoh86/exportloopref v0.1.11 h1:1Z0bcmTypkL3Q4k+IDHMWTcnCliEZcaPiIe0/
 github.com/kyoh86/exportloopref v0.1.11/go.mod h1:qkV4UF1zGl6EkF1ox8L5t9SwyeBAZ3qLMd6up458uqA=
 github.com/lasiar/canonicalheader v1.1.1 h1:wC+dY9ZfiqiPwAexUApFush/csSPXeIi4QqyxXmng8I=
 github.com/lasiar/canonicalheader v1.1.1/go.mod h1:cXkb3Dlk6XXy+8MVQnF23CYKWlyA7kfQhSw2CcZtZb0=
+github.com/ldemailly/panic-linter v0.2.1 h1:Llh2KfvOoSuY+1GEZzRQkZLCjpEIsJlfyIv9nHkv4mc=
+github.com/ldemailly/panic-linter v0.2.1/go.mod h1:gz+Uj5blylcIwQROn9+xm5cUa6kLNVW5sWCbx5FqeHA=
 github.com/ldez/gomoddirectives v0.2.4 h1:j3YjBIjEBbqZ0NKtBNzr8rtMHTOrLPeiwTkfUJZ3alg=
 github.com/ldez/gomoddirectives v0.2.4/go.mod h1:oWu9i62VcQDYp9EQ0ONTfqLNh+mDLWWDO+SO0qSQw5g=
 github.com/ldez/tagliatelle v0.5.0 h1:epgfuYt9v0CG3fms0pEgIMNPuFf/LpPIfjk4kyqSioo=
