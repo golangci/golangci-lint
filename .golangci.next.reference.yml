@@ -890,6 +890,9 @@ linters-settings:
       # Detects input and output parameters that have a type of pointer to referential type.
       # https://go-critic.com/overview.html#ptrToRefParam
       - ptrToRefParam
+      # Detects append all its data while range it.
+      # https://go-critic.com/overview.html#rangeAppendAll
+      - rangeAppendAll
       # Detects expensive copies of `for` loop range expressions.
       # https://go-critic.com/overview.html#rangeExprCopy
       - rangeExprCopy
@@ -1086,6 +1089,7 @@ linters-settings:
       - preferStringWriter
       - preferWriteByte
       - ptrToRefParam
+      - rangeAppendAll
       - rangeExprCopy
       - rangeValCopy
       - redundantSprint
