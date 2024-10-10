@@ -1,4 +1,55 @@
-Follow the news and releases on [Mastodon](https://fosstodon.org/@golangcilint) and on [Twitter](https://twitter.com/golangci).
+Follow the news and releases on [Mastodon](https://fosstodon.org/@golangcilint) and on [Bluesky](https://bsky.app/profile/golangcilint.bsky.social).
+
+`golangci-lint` is a free and open-source project built by volunteers.
+
+If you value it, consider supporting us, we appreciate it! ❤️
+
+[![Open Collective backers and sponsors](https://img.shields.io/badge/OpenCollective-Donate-blue?logo=opencollective&style=for-the-badge)](https://opencollective.com/golangci-lint)
+[![GitHub Sponsors](https://img.shields.io/badge/GitHub-Donate-blue?logo=github&style=for-the-badge)](https://github.com/sponsors/golangci)
+
+### v1.62.0
+
+1. New linters
+   * Add `recvcheck` linter https://github.com/raeperd/recvcheck
+   * Add `iface` linter https://github.com/uudashr/iface
+2. Updated linters
+   * ⚠️ `execinquery`: deprecation step 2
+   * ⚠️ `gomnd`: deprecation step 2 (replaced by `mnd`)
+   * `bidichk`: from 0.2.7 to 0.3.2 (important performance improvement)
+   * `canonicalheader`: from 1.1.1 to 1.1.2
+   * `cyclop`: from 1.2.1 to 1.2.3
+   * `dupword`: from 0.1.1 to 0.1.3
+   * `errcheck`: from 1.7.0 to 1.8.0
+   * `errchkjson`: from 0.3.6 to 0.4.0
+   * `errname`: from 0.1.13 to 1.0.0
+   * `ginkgolinter`: from 0.17.0 to 0.18.0 (new option: `force-succeed`)
+   * `go-check-sumtype`: from 0.1.4 to 0.2.0 (new option: `default-signifies-exhaustive`)
+   * `go-critic`: from 0.11.4 to 0.11.5
+   * `go-printf-func-name`: from 7558a9eaa5af to v0.1.0
+   * `godot`: from 1.4.17 to 1.4.18
+   * `gosec`: from 2.21.2 to 2.21.4
+   * `intrange`: from 0.2.0 to 0.2.1
+   * `loggercheck`: from 0.9.4 to 0.10.1 (`log/slog` support)
+   * `musttag`: from 0.12.2 to 0.13.0
+   * `nakedret`: from 2.0.4 to 2.0.5
+   * `nilnil`: from 0.1.9 to 1.0.0 (new option: `detect-opposite`)
+   * `noctx`: from 0.0.2 to 0.1.0
+   * `protogetter`: from 0.3.6 to 0.3.8
+   * `revive`: from 1.3.9 to 1.5.0 (new rules: `filename-format`, and `file-length-limit`)
+   * `tenv`: from 1.10.0 to 1.12.1 (handle dot import)
+   * `testifylint`: from 1.4.3 to 1.5.0 (new checkers: `contains`, `encoded-compare`, `regexp`)
+3. Misc.
+   * Type sizing when cross-compiling (32-bit).
+   * code-climate: add check_name field
+   * Improve Go version detection
+   * Fix Go version propagation
+4. Documentation
+   * Adds a section about `exclude-dirs-use-default`
+   * Improve 'install from sources' section
+   * Improve FAQ about Go versions
+   * Improve linter/rule/check docs
+   * Improve new linter section
+   * Improve `forbidigo` pattern examples for built-in functions
 
 ### v1.61.0
 
