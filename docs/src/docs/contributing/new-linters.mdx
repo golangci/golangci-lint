@@ -16,14 +16,8 @@ After that:
 
 1. Implement functional tests for the linter:
     - Add one file into directory `pkg/golinters/{yourlintername}/testdata/`.
-    - Run the test to ensure that test fails.
-    - Run:
-      ```bash
-      go run ./cmd/golangci-lint/ run --no-config --disable-all --enable={yourlintername} ./pkg/golinters/{yourlintername}/testdata/{yourlintername}.go
-      ```
 2. Add a new file `pkg/golinters/{yourlintername}/{yourlintername}.go`.
-   Look at other linters in this directory.
-   Implement linter integration and check that test passes.
+   Other linters implementation can help you.
 3. Add the new struct for the linter (which you've implemented in `pkg/golinters/{yourlintername}/{yourlintername}.go`) to the
    list of all supported linters in [`pkg/lint/lintersdb/builder_linter.go`](https://github.com/golangci/golangci-lint/blob/master/pkg/lint/lintersdb/builder_linter.go)
    to the method `LinterBuilder.Build`.
@@ -31,12 +25,16 @@ After that:
 4. Find out what options do you need to configure for the linter.
    For example, `nakedret` has only 1 option: [`max-func-lines`](https://github.com/golangci/golangci-lint/blob/master/.golangci.reference.yml).
    Choose default values to not being annoying for users of golangci-lint. Add configuration options to:
-    - [.golangci.reference.yml](https://github.com/golangci/golangci-lint/blob/master/.golangci.reference.yml) - the example of a configuration file.
+    - [.golangci.next.reference.yml](https://github.com/golangci/golangci-lint/blob/master/.golangci.next.reference.yml): the example of a configuration file.
       You can also add them to [.golangci.yml](https://github.com/golangci/golangci-lint/blob/master/.golangci.yml)
       if you think that this project needs not default values.
-    - [config struct](https://github.com/golangci/golangci-lint/blob/master/pkg/config/config.go) -
-      don't forget about `mapstructure` tag for proper configuration files parsing by [pflag](https://github.com/spf13/pflag).
+    - [config struct](https://github.com/golangci/golangci-lint/blob/master/pkg/config/config.go):
+      don't forget about `mapstructure` tags for proper configuration files parsing.
 5. Take a look at the example of [pull requests with new linter support](https://github.com/golangci/golangci-lint/pulls?q=is%3Apr+is%3Amerged+label%3A%22linter%3A+new%22).
+6. Run the tests:
+    ```bash
+    go run ./cmd/golangci-lint/ run --no-config --disable-all --enable={yourlintername} ./pkg/golinters/{yourlintername}/testdata/{yourlintername}.go
+    ```
 
 ## How to add a private linter to `golangci-lint`
 
