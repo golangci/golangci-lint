@@ -58,7 +58,7 @@ In order for a pull request adding a linter to be reviewed, the linter and the P
 - [ ] The linter should be published as a binary (useful to diagnose bug origins).
 - [ ] The linter repository should have a `.gitignore` (IDE files, binaries, OS files, etc. should not be committed)
 - [ ] A tag should never be recreated.
-- [ ] use `main` as the default branch name.
+- [ ] Use `main` as the default branch name.
 
 ---
 
