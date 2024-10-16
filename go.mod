@@ -1,6 +1,7 @@
 module github.com/golangci/golangci-lint
 
 go 1.22.1
+toolchain go1.23.2
 
 require (
 	4d63.com/gocheckcompilerdirectives v1.2.1
@@ -110,7 +111,7 @@ require (
 	github.com/tdakkota/asciicheck v0.2.0
 	github.com/tetafro/godot v1.4.18
 	github.com/timakin/bodyclose v0.0.0-20230421092635-574207250966
-	github.com/timonwong/loggercheck v0.9.4
+	github.com/timonwong/loggercheck v0.10.0
 	github.com/tomarrell/wrapcheck/v2 v2.9.0
 	github.com/tommy-muehle/go-mnd/v2 v2.5.1
 	github.com/ultraware/funlen v0.1.0
