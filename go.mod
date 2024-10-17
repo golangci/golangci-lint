@@ -60,7 +60,7 @@ require (
 	github.com/jjti/go-spancheck v0.6.2
 	github.com/julz/importas v0.1.0
 	github.com/karamaru-alpha/copyloopvar v1.1.0
-	github.com/kisielk/errcheck v1.7.0
+	github.com/kisielk/errcheck v1.8.0
 	github.com/kkHAIKE/contextcheck v1.1.5
 	github.com/kulti/thelper v0.6.3
 	github.com/kunwardeep/paralleltest v1.0.10
