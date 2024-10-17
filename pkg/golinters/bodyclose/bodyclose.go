@@ -12,7 +12,7 @@ func New() *goanalysis.Linter {
 
 	return goanalysis.NewLinter(
 		a.Name,
-		"checks whether HTTP response body is closed successfully",
+		a.Doc,
 		[]*analysis.Analyzer{a},
 		nil,
 	).WithLoadMode(goanalysis.LoadModeTypesInfo)
