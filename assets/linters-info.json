@@ -1220,7 +1220,7 @@
   },
   {
     "name": "thelper",
-    "desc": "thelper detects tests helpers which is not start with t.Helper() method.",
+    "desc": "thelper detects tests helpers which do not start with the t.Helper() method.",
     "loadMode": 575,
     "inPresets": [
       "test"
