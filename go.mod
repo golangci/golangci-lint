@@ -43,6 +43,7 @@ require (
 	github.com/go-xmlfmt/xmlfmt v1.1.2
 	github.com/gofrs/flock v0.12.1
 	github.com/golangci/dupl v0.0.0-20180902072040-3e9179ac440a
+	github.com/golangci/go-printf-func-name v0.1.0
 	github.com/golangci/gofmt v0.0.0-20240816233607-d8596aa466a9
 	github.com/golangci/misspell v0.6.0
 	github.com/golangci/modinfo v0.3.4
@@ -56,7 +57,6 @@ require (
 	github.com/hexops/gotextdiff v1.0.3
 	github.com/jgautheron/goconst v1.7.1
 	github.com/jingyugao/rowserrcheck v1.1.1
-	github.com/jirfag/go-printf-func-name v0.0.0-20200119135958-7558a9eaa5af
 	github.com/jjti/go-spancheck v0.6.2
 	github.com/julz/importas v0.1.0
 	github.com/karamaru-alpha/copyloopvar v1.1.0
