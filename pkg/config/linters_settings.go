@@ -197,6 +197,11 @@ var defaultLintersSettings = LintersSettings{
 		ErrorVariableNames:               []string{"err"},
 		ForceExclusiveShortDeclarations:  false,
 	},
+	Filen: FilenSettings{
+		MinLinesNum:    5,
+		MaxLinesNum:    500,
+		IgnoreComments: false,
+	},
 }
 
 type LintersSettings struct {
@@ -282,6 +287,7 @@ type LintersSettings struct {
 	Whitespace      WhitespaceSettings
 	Wrapcheck       WrapcheckSettings
 	WSL             WSLSettings
+	Filen           FilenSettings
 
 	Custom map[string]CustomLinterSettings
 }
@@ -1011,6 +1017,12 @@ type WSLSettings struct {
 	ForceCuddleErrCheckAndAssign     bool     `mapstructure:"force-err-cuddling"`
 	ErrorVariableNames               []string `mapstructure:"error-variable-names"`
 	ForceExclusiveShortDeclarations  bool     `mapstructure:"force-short-decl-cuddling"`
+}
+
+type FilenSettings struct {
+	MaxLinesNum    int  `mapstructure:"min-lines-num"`
+	MinLinesNum    int  `mapstructure:"max-lines-num"`
+	IgnoreComments bool `mapstructure:"ignore-comments"`
 }
 
 // CustomLinterSettings encapsulates the meta-data of a private linter.

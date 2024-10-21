@@ -39,6 +39,7 @@ linters:
     - forbidigo
     - forcetypeassert
     - funlen
+    - filen
     - gci
     - ginkgolinter
     - gocheckcompilerdirectives
@@ -155,6 +156,7 @@ linters:
     - forbidigo
     - forcetypeassert
     - funlen
+    - filen
     - gci
     - ginkgolinter
     - gocheckcompilerdirectives
@@ -576,6 +578,17 @@ linters-settings:
     # Ignore comments when counting lines.
     # Default false
     ignore-comments: true
+
+  filen:
+    # Min number of lines in a file setting
+    # Default: 5
+    min-lines-num: 5
+    # Max number of lines in a file setting
+    # Default: 5
+    max-lines-num: 500
+    # Ignore comments when counting lines.
+    # Default false
+    ignore-comments: false
 
   gci:
     # Section configuration to compare against.

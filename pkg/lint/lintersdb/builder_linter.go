@@ -28,6 +28,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/exhaustruct"
 	"github.com/golangci/golangci-lint/pkg/golinters/exportloopref"
 	"github.com/golangci/golangci-lint/pkg/golinters/fatcontext"
+	"github.com/golangci/golangci-lint/pkg/golinters/filen"
 	"github.com/golangci/golangci-lint/pkg/golinters/forbidigo"
 	"github.com/golangci/golangci-lint/pkg/golinters/forcetypeassert"
 	"github.com/golangci/golangci-lint/pkg/golinters/funlen"
@@ -853,5 +854,11 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithPresets(linter.PresetStyle).
 			WithAutoFix().
 			WithURL("https://github.com/golangci/golangci-lint/tree/master/pkg/golinters/nolintlint/internal"),
+
+		linter.NewConfig(filen.New(&cfg.LintersSettings.Filen)).
+			WithSince("v1.62.0").
+			WithPresets(linter.PresetComplexity).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/DanilXO/filen"),
 	}, nil
 }
