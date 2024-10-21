@@ -284,6 +284,12 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithURL("https://github.com/kyoh86/exportloopref").
 			DeprecatedWarning("Since Go1.22 (loopvar) this linter is no longer relevant.", "v1.60.2", "copyloopvar"),
 
+		linter.NewConfig(filen.New(&cfg.LintersSettings.Filen)).
+			WithSince("v1.62.0").
+			WithPresets(linter.PresetComplexity).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/DanilXO/filen"),
+
 		linter.NewConfig(forbidigo.New(&cfg.LintersSettings.Forbidigo)).
 			WithSince("v1.34.0").
 			WithPresets(linter.PresetStyle).
@@ -854,11 +860,5 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithPresets(linter.PresetStyle).
 			WithAutoFix().
 			WithURL("https://github.com/golangci/golangci-lint/tree/master/pkg/golinters/nolintlint/internal"),
-
-		linter.NewConfig(filen.New(&cfg.LintersSettings.Filen)).
-			WithSince("v1.62.0").
-			WithPresets(linter.PresetComplexity).
-			WithLoadForGoAnalysis().
-			WithURL("https://github.com/DanilXO/filen"),
 	}, nil
 }

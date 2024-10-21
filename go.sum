@@ -53,6 +53,8 @@ github.com/Crocmagnon/fatcontext v0.5.2 h1:vhSEg8Gqng8awhPju2w7MKHqMlg4/NI+gSDHt
 github.com/Crocmagnon/fatcontext v0.5.2/go.mod h1:87XhRMaInHP44Q7Tlc7jkgKKB7kZAOPiDkFMdKCC+74=
 github.com/DanilXO/filen v0.0.2 h1:cajId7tBxTuzwFBe68T92HHKpkkfLKNPnrYY1VIwQMI=
 github.com/DanilXO/filen v0.0.2/go.mod h1:+5CEggayiUKiLoK7lUi98X1oSuwX7ixyPx2BvObUavw=
+github.com/DanilXO/filen v0.1.0 h1:3fND5TD+dWg6XKnV5IaVto5jcZuRRq1suYUC2IgoCT8=
+github.com/DanilXO/filen v0.1.0/go.mod h1:+5CEggayiUKiLoK7lUi98X1oSuwX7ixyPx2BvObUavw=
 github.com/Djarvur/go-err113 v0.0.0-20210108212216-aea10b59be24 h1:sHglBQTwgx+rWPdisA5ynNEsoARbiCBOyGcJM4/OzsM=
 github.com/Djarvur/go-err113 v0.0.0-20210108212216-aea10b59be24/go.mod h1:4UJr5HIiMZrwgkSPdsjy2uOQExX/WEILpIrO9UPGuXs=
 github.com/GaijinEntertainment/go-exhaustruct/v3 v3.3.0 h1:/fTUt5vmbkAcMBt4YQiuC23cV0kEsN1MVMNqeOW43cU=
