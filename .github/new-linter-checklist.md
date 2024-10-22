@@ -11,7 +11,7 @@ In order for a pull request adding a linter to be reviewed, the linter and the P
 
 - [ ] It must not be a duplicate of another linter or a rule of a linter (the team will help to verify that).
 - [ ] It must have a valid license (AGPL is not allowed), and the file must contain the required information by the license, ex: author, year, etc.
-- [ ] It must use Go version <= 1.21
+- [ ] It must use Go version <= 1.22.0
 - [ ] The linter repository must have a CI and tests.
 - [ ] It must use [`go/analysis`](https://golangci-lint.run/contributing/new-linters/).
 - [ ] It must have a valid tag, ex: `v1.0.0`, `v0.1.0`.
@@ -58,6 +58,7 @@ In order for a pull request adding a linter to be reviewed, the linter and the P
 - [ ] The linter should be published as a binary (useful to diagnose bug origins).
 - [ ] The linter repository should have a `.gitignore` (IDE files, binaries, OS files, etc. should not be committed)
 - [ ] A tag should never be recreated.
+- [ ] Use `main` as the default branch name.
 
 ---
 

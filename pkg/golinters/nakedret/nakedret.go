@@ -14,7 +14,7 @@ func New(settings *config.NakedretSettings) *goanalysis.Linter {
 		maxLines = settings.MaxFuncLines
 	}
 
-	a := nakedret.NakedReturnAnalyzer(maxLines)
+	a := nakedret.NakedReturnAnalyzer(maxLines, false)
 
 	return goanalysis.NewLinter(
 		a.Name,

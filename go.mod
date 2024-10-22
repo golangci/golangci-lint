@@ -6,25 +6,25 @@ require (
 	4d63.com/gocheckcompilerdirectives v1.2.1
 	4d63.com/gochecknoglobals v0.2.1
 	github.com/4meepo/tagalign v1.3.4
-	github.com/Abirdcfly/dupword v0.1.1
-	github.com/Antonboom/errname v0.1.13
-	github.com/Antonboom/nilnil v0.1.9
-	github.com/Antonboom/testifylint v1.4.3
+	github.com/Abirdcfly/dupword v0.1.3
+	github.com/Antonboom/errname v1.0.0
+	github.com/Antonboom/nilnil v1.0.0
+	github.com/Antonboom/testifylint v1.5.0
 	github.com/BurntSushi/toml v1.4.1-0.20240526193622-a339e1f7089c
 	github.com/Crocmagnon/fatcontext v0.5.2
 	github.com/Djarvur/go-err113 v0.0.0-20210108212216-aea10b59be24
 	github.com/GaijinEntertainment/go-exhaustruct/v3 v3.3.0
 	github.com/OpenPeeDeeP/depguard/v2 v2.2.0
-	github.com/alecthomas/go-check-sumtype v0.1.4
-	github.com/alexkohler/nakedret/v2 v2.0.4
+	github.com/alecthomas/go-check-sumtype v0.2.0
+	github.com/alexkohler/nakedret/v2 v2.0.5
 	github.com/alexkohler/prealloc v1.0.0
 	github.com/alingse/asasalint v0.0.11
 	github.com/ashanbrown/forbidigo v1.6.0
 	github.com/ashanbrown/makezero v1.1.1
-	github.com/bkielbasa/cyclop v1.2.1
+	github.com/bkielbasa/cyclop v1.2.3
 	github.com/blizzy78/varnamelen v0.8.0
 	github.com/bombsimon/wsl/v4 v4.4.1
-	github.com/breml/bidichk v0.3.1
+	github.com/breml/bidichk v0.3.2
 	github.com/breml/errchkjson v0.4.0
 	github.com/butuzov/ireturn v0.3.0
 	github.com/butuzov/mirror v1.2.0
@@ -38,11 +38,12 @@ require (
 	github.com/firefart/nonamedreturns v1.0.5
 	github.com/fzipp/gocyclo v0.6.0
 	github.com/ghostiam/protogetter v0.3.8
-	github.com/go-critic/go-critic v0.11.4
-	github.com/go-viper/mapstructure/v2 v2.2.0
+	github.com/go-critic/go-critic v0.11.5
+	github.com/go-viper/mapstructure/v2 v2.2.1
 	github.com/go-xmlfmt/xmlfmt v1.1.2
 	github.com/gofrs/flock v0.12.1
 	github.com/golangci/dupl v0.0.0-20180902072040-3e9179ac440a
+	github.com/golangci/go-printf-func-name v0.1.0
 	github.com/golangci/gofmt v0.0.0-20240816233607-d8596aa466a9
 	github.com/golangci/misspell v0.6.0
 	github.com/golangci/modinfo v0.3.4
@@ -56,11 +57,10 @@ require (
 	github.com/hexops/gotextdiff v1.0.3
 	github.com/jgautheron/goconst v1.7.1
 	github.com/jingyugao/rowserrcheck v1.1.1
-	github.com/jirfag/go-printf-func-name v0.0.0-20200119135958-7558a9eaa5af
 	github.com/jjti/go-spancheck v0.6.2
 	github.com/julz/importas v0.1.0
 	github.com/karamaru-alpha/copyloopvar v1.1.0
-	github.com/kisielk/errcheck v1.7.0
+	github.com/kisielk/errcheck v1.8.0
 	github.com/kkHAIKE/contextcheck v1.1.5
 	github.com/kulti/thelper v0.6.3
 	github.com/kunwardeep/paralleltest v1.0.10
@@ -93,7 +93,7 @@ require (
 	github.com/santhosh-tekuri/jsonschema/v5 v5.3.1
 	github.com/sashamelentyev/interfacebloat v1.1.0
 	github.com/sashamelentyev/usestdlibvars v1.27.0
-	github.com/securego/gosec/v2 v2.21.3
+	github.com/securego/gosec/v2 v2.21.4
 	github.com/shazow/go-diff v0.0.0-20160112020656-b6b7b6733b8c
 	github.com/shirou/gopsutil/v3 v3.24.5
 	github.com/sirupsen/logrus v1.9.3
@@ -125,9 +125,9 @@ require (
 	gitlab.com/bosi/decorder v0.4.2
 	go-simpler.org/musttag v0.12.2
 	go-simpler.org/sloglint v0.7.2
-	go.uber.org/automaxprocs v1.5.3
+	go.uber.org/automaxprocs v1.6.0
 	golang.org/x/exp v0.0.0-20240909161429-701f63a606c0
-	golang.org/x/tools v0.25.0
+	golang.org/x/tools v0.26.0
 	gopkg.in/yaml.v3 v3.0.1
 	honnef.co/go/tools v0.5.1
 	mvdan.cc/gofumpt v0.7.0
@@ -193,7 +193,7 @@ require (
 	golang.org/x/exp/typeparams v0.0.0-20240314144324-c7f7c6466f7f // indirect
 	golang.org/x/mod v0.21.0 // indirect
 	golang.org/x/sync v0.8.0 // indirect
-	golang.org/x/sys v0.25.0 // indirect
+	golang.org/x/sys v0.26.0 // indirect
 	golang.org/x/text v0.18.0 // indirect
 	google.golang.org/protobuf v1.34.2 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect

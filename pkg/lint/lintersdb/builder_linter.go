@@ -336,7 +336,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithSince("v1.12.0").
 			WithPresets(linter.PresetStyle),
 
-		linter.NewConfig(gochecksumtype.New()).
+		linter.NewConfig(gochecksumtype.New(&cfg.LintersSettings.GoChecksumType)).
 			WithSince("v1.55.0").
 			WithPresets(linter.PresetBugs).
 			WithLoadForGoAnalysis().
@@ -437,7 +437,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 		linter.NewConfig(goprintffuncname.New()).
 			WithSince("v1.23.0").
 			WithPresets(linter.PresetStyle).
-			WithURL("https://github.com/jirfag/go-printf-func-name"),
+			WithURL("https://github.com/golangci/go-printf-func-name"),
 
 		linter.NewConfig(gosec.New(&cfg.LintersSettings.Gosec)).
 			WithSince("v1.0.0").

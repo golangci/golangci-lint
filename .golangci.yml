@@ -11,6 +11,51 @@
 #
 # See the file `.golangci.reference.yml` to have a list of all available configuration options.
 
+linters:
+  disable-all: true
+  # This list of linters is not a recommendation (same thing for all this configuration file).
+  # We intentionally use a limited set of linters.
+  # See the comment on top of this file.
+  enable:
+    - bodyclose
+    - copyloopvar
+    - depguard
+    - dogsled
+    - dupl
+    - errcheck
+    - errorlint
+    - funlen
+    - gocheckcompilerdirectives
+    - gochecknoinits
+    - gochecknoinits
+    - goconst
+    - gocritic
+    - gocyclo
+    - godox
+    - gofmt
+    - goimports
+    - mnd
+    - goprintffuncname
+    - gosec
+    - gosimple
+    - govet
+    - intrange
+    - ineffassign
+    - lll
+    - misspell
+    - nakedret
+    - noctx
+    - nolintlint
+    - revive
+    - staticcheck
+    - stylecheck
+    - testifylint
+    - unconvert
+    - unparam
+    - unused
+    - whitespace
+
+
 linters-settings:
   depguard:
     rules:
@@ -101,51 +146,6 @@ linters-settings:
         disabled: true
       - name: unused-parameter
       - name: unused-receiver
-
-linters:
-  disable-all: true
-  enable:
-    - bodyclose
-    - copyloopvar
-    - depguard
-    - dogsled
-    - dupl
-    - errcheck
-    - errorlint
-    - funlen
-    - gocheckcompilerdirectives
-    - gochecknoinits
-    - gochecknoinits
-    - goconst
-    - gocritic
-    - gocyclo
-    - godox
-    - gofmt
-    - goimports
-    - mnd
-    - goprintffuncname
-    - gosec
-    - gosimple
-    - govet
-    - intrange
-    - ineffassign
-    - lll
-    - misspell
-    - nakedret
-    - noctx
-    - nolintlint
-    - revive
-    - staticcheck
-    - stylecheck
-    - testifylint
-    - unconvert
-    - unparam
-    - unused
-    - whitespace
-
-  # This list of linters is not a recommendation (same thing for all this configuration file).
-  # We intentionally use a limited set of linters.
-  # See the comment on top of this file.
 
 issues:
   exclude-rules:

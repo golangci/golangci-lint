@@ -47,6 +47,9 @@ var defaultLintersSettings = LintersSettings{
 		Sections:      []string{"standard", "default"},
 		SkipGenerated: true,
 	},
+	GoChecksumType: GoChecksumTypeSettings{
+		DefaultSignifiesExhaustive: true,
+	},
 	Gocognit: GocognitSettings{
 		MinComplexity: 30,
 	},
@@ -216,6 +219,7 @@ type LintersSettings struct {
 	Gci             GciSettings
 	GinkgoLinter    GinkgoLinterSettings
 	Gocognit        GocognitSettings
+	GoChecksumType  GoChecksumTypeSettings
 	Goconst         GoConstSettings
 	Gocritic        GoCriticSettings
 	Gocyclo         GoCycloSettings
@@ -486,6 +490,10 @@ type GinkgoLinterSettings struct {
 	ForbidSpecPollution        bool `mapstructure:"forbid-spec-pollution"`
 }
 
+type GoChecksumTypeSettings struct {
+	DefaultSignifiesExhaustive bool `mapstructure:"default-signifies-exhaustive"`
+}
+
 type GocognitSettings struct {
 	MinComplexity int `mapstructure:"min-complexity"`
 }
@@ -731,7 +739,8 @@ type NestifSettings struct {
 }
 
 type NilNilSettings struct {
-	CheckedTypes []string `mapstructure:"checked-types"`
+	DetectOpposite bool     `mapstructure:"detect-opposite"`
+	CheckedTypes   []string `mapstructure:"checked-types"`
 }
 
 type NlreturnSettings struct {

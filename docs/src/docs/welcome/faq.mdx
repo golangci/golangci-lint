@@ -6,6 +6,11 @@ title: FAQ
 
 The same as the Go team (the 2 latest minor versions).
 
+Basically, golangci-lint supports Go versions lower or equal to the Go version used to compile it.
+
+New versions of Go are not automatically supported because, in addition of the Go version used to build it,
+some linters and/or internal pieces of golangci-lint could need to be adapted to support this new Go version.
+
 ## How to use `golangci-lint` in CI
 
 Run `golangci-lint` in CI and check the exit code. If it's non-zero - fail the build.

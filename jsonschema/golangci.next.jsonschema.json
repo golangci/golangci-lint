@@ -68,6 +68,7 @@
         "preferStringWriter",
         "preferWriteByte",
         "ptrToRefParam",
+        "rangeAppendAll",
         "rangeExprCopy",
         "rangeValCopy",
         "redundantSprint",
@@ -1182,6 +1183,17 @@
             }
           }
         },
+        "gochecksumtype": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "default-signifies-exhaustive": {
+              "description": "Presence of `default` case in switch statements satisfies exhaustiveness, if all members are not listed.",
+              "type": "boolean",
+              "default": true
+            }
+          }
+        },
         "gocognit": {
           "type": "object",
           "additionalProperties": false,
@@ -2209,13 +2221,18 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "detect-opposite": {
+              "type": "boolean",
+              "description": "In addition, detect opposite situation (simultaneous return of non-nil error and valid value).",
+              "default": false
+            },
             "checked-types": {
               "type": "array",
               "description": "List of return types to check.",
               "items": {
-                "enum": ["ptr", "func", "iface", "map", "chan", "uintptr", "unsafeptr"]
+                "enum": ["chan", "func", "iface", "map", "ptr", "uintptr", "unsafeptr"]
               },
-              "default": ["ptr", "func", "iface", "map", "chan", "uintptr", "unsafeptr"]
+              "default": ["chan", "func", "iface", "map", "ptr", "uintptr", "unsafeptr"]
             }
           }
         },
@@ -2926,7 +2943,9 @@
                   "blank-import",
                   "bool-compare",
                   "compares",
+                  "contains",
                   "empty",
+                  "encoded-compare",
                   "error-is-as",
                   "error-nil",
                   "expected-actual",
@@ -2936,6 +2955,7 @@
                   "len",
                   "negative-positive",
                   "nil-compare",
+                  "regexp",
                   "require-error",
                   "suite-broken-parallel",
                   "suite-dont-use-pkg",
@@ -2949,16 +2969,19 @@
                 "blank-import",
                 "bool-compare",
                 "compares",
+                "contains",
                 "empty",
+                "encoded-compare",
                 "error-is-as",
                 "error-nil",
                 "expected-actual",
                 "float-compare",
-                "float-compare",
+                "formatter",
                 "go-require",
                 "len",
                 "negative-positive",
                 "nil-compare",
+                "regexp",
                 "require-error",
                 "suite-broken-parallel",
                 "suite-dont-use-pkg",
@@ -2975,7 +2998,9 @@
                   "blank-import",
                   "bool-compare",
                   "compares",
+                  "contains",
                   "empty",
+                  "encoded-compare",
                   "error-is-as",
                   "error-nil",
                   "expected-actual",
@@ -2985,6 +3010,7 @@
                   "len",
                   "negative-positive",
                   "nil-compare",
+                  "regexp",
                   "require-error",
                   "suite-broken-parallel",
                   "suite-dont-use-pkg",
