@@ -1931,12 +1931,12 @@ linters-settings:
     var-require-grouping: true
 
   iface:
-    # By default is set to 'identical' only.
-    # Default: [identical]
+    # List of analyzers.
+    # Default: ["identical"]
     enable:
-      - identical
-      - unused
-      - opaque
+      - identical # Identifies interfaces in the same package that have identical method sets.
+      - unused # Identifies interfaces that are not used anywhere in the same package where the interface is defined.
+      - opaque # Identifies functions that return interfaces, but the actual returned value is always a single concrete implementation.
     settings:
       unused:
         # List of packages path to exclude from the check.

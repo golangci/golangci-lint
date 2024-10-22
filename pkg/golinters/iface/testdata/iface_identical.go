@@ -2,6 +2,8 @@
 //golangcitest:config_path testdata/iface_identical.yml
 package testdata
 
+import "fmt"
+
 // identical
 
 type Pinger interface { // want "identical: interface Pinger contains identical methods or type constraints from another interface, causing redundancy"
@@ -60,6 +62,7 @@ type Allower interface {
 	Allow(permission string) error
 }
 
-func Allow(x interface{}) {
+func Allow(x any) {
 	_ = x.(Allower)
+	fmt.Println("allow")
 }

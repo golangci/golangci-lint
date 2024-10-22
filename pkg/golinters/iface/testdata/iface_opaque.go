@@ -2,6 +2,8 @@
 //golangcitest:config_path testdata/iface_opaque.yml
 package testdata
 
+import "fmt"
+
 // identical
 
 type Pinger interface {
@@ -60,6 +62,7 @@ type Allower interface {
 	Allow(permission string) error
 }
 
-func Allow(x interface{}) {
+func Allow(x any) {
 	_ = x.(Allower)
+	fmt.Println("allow")
 }
