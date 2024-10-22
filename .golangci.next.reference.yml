@@ -63,6 +63,7 @@ linters:
     - gosmopolitan
     - govet
     - grouper
+    - iface
     - importas
     - inamedparam
     - ineffassign
@@ -178,6 +179,7 @@ linters:
     - gosmopolitan
     - govet
     - grouper
+    - ifcae
     - importas
     - inamedparam
     - ineffassign
@@ -1927,6 +1929,20 @@ linters-settings:
     # Require the use of grouped global 'var' declarations.
     # Default: false
     var-require-grouping: true
+
+  iface:
+    # List of analyzers.
+    # Default: ["identical"]
+    enable:
+      - identical # Identifies interfaces in the same package that have identical method sets.
+      - unused # Identifies interfaces that are not used anywhere in the same package where the interface is defined.
+      - opaque # Identifies functions that return interfaces, but the actual returned value is always a single concrete implementation.
+    settings:
+      unused:
+        # List of packages path to exclude from the check.
+        # Default: []
+        exclude:
+          - github.com/example/log
 
   importas:
     # Do not allow unaliased imports of aliased packages.

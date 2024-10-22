@@ -237,6 +237,7 @@ type LintersSettings struct {
 	Gosmopolitan    GosmopolitanSettings
 	Govet           GovetSettings
 	Grouper         GrouperSettings
+	Iface           IfaceSettings
 	ImportAs        ImportAsSettings
 	Inamedparam     INamedParamSettings
 	InterfaceBloat  InterfaceBloatSettings
@@ -654,6 +655,11 @@ type GrouperSettings struct {
 	TypeRequireGrouping       bool `mapstructure:"type-require-grouping"`
 	VarRequireSingleVar       bool `mapstructure:"var-require-single-var"`
 	VarRequireGrouping        bool `mapstructure:"var-require-grouping"`
+}
+
+type IfaceSettings struct {
+	Enable   []string                  `mapstructure:"enable"`
+	Settings map[string]map[string]any `mapstructure:"settings"`
 }
 
 type ImportAsSettings struct {
