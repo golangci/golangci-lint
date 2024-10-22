@@ -1943,12 +1943,19 @@
             },
             "settings": {
               "type": "object",
-              "propertyNames": {
-                "$ref": "#/definitions/iface-analyzers"
-              },
-              "patternProperties": {
-                "^.*$": {
-                  "type": "object"
+              "additionalProperties": false,
+              "properties": {
+                "unused": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "exclude": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
                 }
               }
             }
