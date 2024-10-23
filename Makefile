@@ -85,18 +85,8 @@ hyperfine:
 $(BINARY): FORCE
 	go build -o $@ ./cmd/golangci-lint
 
-# TODO: migrate to docs/
-tools/svg-term: tools/package.json tools/package-lock.json
-	cd tools && npm ci
-	ln -sf node_modules/.bin/svg-term $@
-
-# TODO: migrate to docs/
-tools/Dracula.itermcolors:
-	curl -fL -o $@ https://raw.githubusercontent.com/dracula/iterm/master/Dracula.itermcolors
-
-# TODO: migrate to docs/
-assets/demo.svg: tools/svg-term tools/Dracula.itermcolors
-	./tools/svg-term --cast=183662 --out assets/demo.svg --window --width 110 --height 30 --from 2000 --to 20000 --profile ./tools/Dracula.itermcolors --term iterm2
+docs/static/demo.gif: FORCE
+	vhs docs/golangci-lint.tape
 
 assets/github-action-config.json: FORCE $(BINARY)
 	# go run ./scripts/gen_github_action_config/main.go $@
