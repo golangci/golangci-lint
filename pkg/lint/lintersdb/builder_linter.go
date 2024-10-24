@@ -286,8 +286,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 
 		linter.NewConfig(filen.New(&cfg.LintersSettings.Filen)).
 			WithSince("v1.62.0").
-			WithPresets(linter.PresetComplexity).
-			WithLoadForGoAnalysis().
+			WithPresets(linter.PresetComplexity, linter.PresetStyle).
 			WithURL("https://github.com/DanilXO/filen"),
 
 		linter.NewConfig(forbidigo.New(&cfg.LintersSettings.Forbidigo)).

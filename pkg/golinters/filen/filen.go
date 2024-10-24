@@ -20,5 +20,5 @@ func New(settings *config.FilenSettings) *goanalysis.Linter {
 		a.Doc,
 		[]*analysis.Analyzer{a},
 		nil,
-	).WithLoadMode(goanalysis.LoadModeTypesInfo)
+	).WithLoadMode(goanalysis.LoadModeSyntax)
 }
