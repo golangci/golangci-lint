@@ -1,0 +1,3 @@
+linters-settings:
+  filen:
+    min-lines: 100

@@ -40,6 +40,11 @@ var defaultLintersSettings = LintersSettings{
 		ExplicitExhaustiveMap:      false,
 		ExplicitExhaustiveSwitch:   false,
 	},
+	Filen: FilenSettings{
+		MinLines:       5,
+		MaxLines:       1000,
+		IgnoreComments: false,
+	},
 	Forbidigo: ForbidigoSettings{
 		ExcludeGodocExamples: true,
 	},
@@ -214,6 +219,7 @@ type LintersSettings struct {
 	ErrorLint       ErrorLintSettings
 	Exhaustive      ExhaustiveSettings
 	Exhaustruct     ExhaustructSettings
+	Filen           FilenSettings
 	Forbidigo       ForbidigoSettings
 	Funlen          FunlenSettings
 	Gci             GciSettings
@@ -416,6 +422,12 @@ type ExhaustiveSettings struct {
 type ExhaustructSettings struct {
 	Include []string `mapstructure:"include"`
 	Exclude []string `mapstructure:"exclude"`
+}
+
+type FilenSettings struct {
+	IgnoreComments bool `mapstructure:"ignore-comments"`
+	MaxLines       int  `mapstructure:"max-lines"`
+	MinLines       int  `mapstructure:"min-lines"`
 }
 
 type ForbidigoSettings struct {
