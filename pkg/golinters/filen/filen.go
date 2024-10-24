@@ -2,9 +2,10 @@ package filen
 
 import (
 	"github.com/DanilXO/filen/pkg/filen"
+	"golang.org/x/tools/go/analysis"
+
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
-	"golang.org/x/tools/go/analysis"
 )
 
 func New(settings *config.FilenSettings) *goanalysis.Linter {

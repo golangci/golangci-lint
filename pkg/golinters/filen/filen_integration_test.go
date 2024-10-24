@@ -1,8 +1,9 @@
 package filen
 
 import (
-	"github.com/golangci/golangci-lint/test/testshared/integration"
 	"testing"
+
+	"github.com/golangci/golangci-lint/test/testshared/integration"
 )
 
 func TestFromTestdata(t *testing.T) {
