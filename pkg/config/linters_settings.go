@@ -198,8 +198,8 @@ var defaultLintersSettings = LintersSettings{
 		ForceExclusiveShortDeclarations:  false,
 	},
 	Filen: FilenSettings{
-		MinLinesNum:    5,
-		MaxLinesNum:    500,
+		MinLines:       5,
+		MaxLines:       500,
 		IgnoreComments: false,
 	},
 }
@@ -1021,8 +1021,8 @@ type WSLSettings struct {
 
 type FilenSettings struct {
 	IgnoreComments bool `mapstructure:"ignore-comments"`
-	MaxLinesNum    int  `mapstructure:"min-lines-num"`
-	MinLinesNum    int  `mapstructure:"max-lines-num"`
+	MaxLines       int  `mapstructure:"min-lines"`
+	MinLines       int  `mapstructure:"max-lines"`
 }
 
 // CustomLinterSettings encapsulates the meta-data of a private linter.
