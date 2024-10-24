@@ -1024,7 +1024,7 @@
             "max-lines": {
               "description": "Max number of lines in a file.",
               "type": "integer",
-              "default": 500
+              "default": 1000
             },
             "min-lines": {
               "description": "Min number of lines in a file.",

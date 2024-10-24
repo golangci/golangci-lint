@@ -42,7 +42,7 @@ var defaultLintersSettings = LintersSettings{
 	},
 	Filen: FilenSettings{
 		MinLines:       5,
-		MaxLines:       500,
+		MaxLines:       1000,
 		IgnoreComments: false,
 	},
 	Forbidigo: ForbidigoSettings{
