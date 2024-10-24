@@ -10,8 +10,8 @@ import (
 
 func New(settings *config.FilenSettings) *goanalysis.Linter {
 	a := filen.NewAnalyzer(&filen.Runner{
-		MaxLinesNum:    settings.MaxLines,
-		MinLinesNum:    settings.MinLines,
+		MaxLines:       settings.MaxLines,
+		MinLines:       settings.MinLines,
 		IgnoreComments: settings.IgnoreComments,
 	})
 

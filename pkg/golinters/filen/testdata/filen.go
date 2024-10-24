@@ -1,5 +1,5 @@
 //golangcitest:args -Efilen
-package testdata // want "The number of lines in the file filen.go exceeds the allowed value! maxLinesNum = 500, fileLines = 502"
+package testdata // want `The number of lines exceeds the allowed value. \(maxLinesNum = 500, fileLines = 502\)`
 
 import "fmt"
 

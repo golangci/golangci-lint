@@ -1,6 +1,6 @@
 //golangcitest:args -Efilen
 //golangcitest:config_path testdata/filen_min_lines.yml
-package testdata // want "The number of lines in the file filen_min_lines.go less the allowed value! minLinesNum = 100, fileLines = 17"
+package testdata // want `The number of lines in less the allowed value. \(minLinesNum = 100, fileLines = 17\)`
 
 import "fmt"
 
