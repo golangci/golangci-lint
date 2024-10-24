@@ -540,12 +540,12 @@ linters-settings:
     # Ignore comments when counting lines.
     # Default false
     ignore-comments: true
-    # Max number of lines in a file setting
+    # Max number of lines in a file.
     # Default: 500
-    max-lines-num: 1000
-    # Min number of lines in a file setting
+    max-lines: 1000
+    # Min number of lines in a file.
     # Default: 5
-    min-lines-num: 1
+    min-lines: 1
 
   forbidigo:
     # Forbid the following identifiers (list of regexp).

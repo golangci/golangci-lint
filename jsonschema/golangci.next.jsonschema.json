@@ -1012,6 +1012,27 @@
             }
           }
         },
+        "filen": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "ignore-comments": {
+              "description": "Ignore comments when counting lines.",
+              "type": "boolean",
+              "default": false
+            },
+            "max-lines": {
+              "description": "Max number of lines in a file.",
+              "type": "integer",
+              "default": 500
+            },
+            "min-lines": {
+              "description": "Min number of lines in a file.",
+              "type": "integer",
+              "default": 5
+            }
+          }
+        },
         "forbidigo": {
           "type": "object",
           "additionalProperties": false,
