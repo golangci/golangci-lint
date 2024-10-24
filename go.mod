@@ -1,6 +1,6 @@
 module github.com/golangci/golangci-lint
 
-go 1.23.2
+go 1.22.1
 
 require (
 	4d63.com/gocheckcompilerdirectives v1.2.1
@@ -12,7 +12,7 @@ require (
 	github.com/Antonboom/testifylint v1.5.0
 	github.com/BurntSushi/toml v1.4.1-0.20240526193622-a339e1f7089c
 	github.com/Crocmagnon/fatcontext v0.5.2
-	github.com/DanilXO/filen v0.1.0
+	github.com/DanilXO/filen v0.2.0
 	github.com/Djarvur/go-err113 v0.0.0-20210108212216-aea10b59be24
 	github.com/GaijinEntertainment/go-exhaustruct/v3 v3.3.0
 	github.com/OpenPeeDeeP/depguard/v2 v2.2.0

@@ -1020,9 +1020,9 @@ type WSLSettings struct {
 }
 
 type FilenSettings struct {
+	IgnoreComments bool `mapstructure:"ignore-comments"`
 	MaxLinesNum    int  `mapstructure:"min-lines-num"`
 	MinLinesNum    int  `mapstructure:"max-lines-num"`
-	IgnoreComments bool `mapstructure:"ignore-comments"`
 }
 
 // CustomLinterSettings encapsulates the meta-data of a private linter.

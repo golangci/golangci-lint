@@ -1,7 +1,7 @@
 package filen
 
 import (
-	"github.com/DanilXO/filen/pgk/filen"
+	"github.com/DanilXO/filen/pkg/filen"
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 	"golang.org/x/tools/go/analysis"

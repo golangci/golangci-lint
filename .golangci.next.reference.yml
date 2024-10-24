@@ -537,15 +537,15 @@ linters-settings:
       - '.+/cobra\.Command$'
 
   filen:
-    # Min number of lines in a file setting
-    # Default: 5
-    min-lines-num: 5
-    # Max number of lines in a file setting
-    # Default: 5
-    max-lines-num: 500
     # Ignore comments when counting lines.
     # Default false
-    ignore-comments: false
+    ignore-comments: true
+    # Max number of lines in a file setting
+    # Default: 500
+    max-lines-num: 1000
+    # Min number of lines in a file setting
+    # Default: 5
+    min-lines-num: 1
 
   forbidigo:
     # Forbid the following identifiers (list of regexp).
