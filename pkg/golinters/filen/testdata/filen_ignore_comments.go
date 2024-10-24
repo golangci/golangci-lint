@@ -1,5 +1,7 @@
 //golangcitest:args -Efilen
-package testdata // want "The number of lines in the file filen.go exceeds the allowed value! maxLinesNum = 500, fileLines = 502"
+//golangcitest:config_path testdata/filen_ignore_comments.yml
+//golangcitest:expected_exitcode 0
+package testdata
 
 import "fmt"
 
