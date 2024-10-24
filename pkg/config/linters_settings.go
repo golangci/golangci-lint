@@ -40,6 +40,11 @@ var defaultLintersSettings = LintersSettings{
 		ExplicitExhaustiveMap:      false,
 		ExplicitExhaustiveSwitch:   false,
 	},
+	Filen: FilenSettings{
+		MinLines:       5,
+		MaxLines:       500,
+		IgnoreComments: false,
+	},
 	Forbidigo: ForbidigoSettings{
 		ExcludeGodocExamples: true,
 	},
@@ -197,11 +202,6 @@ var defaultLintersSettings = LintersSettings{
 		ErrorVariableNames:               []string{"err"},
 		ForceExclusiveShortDeclarations:  false,
 	},
-	Filen: FilenSettings{
-		MinLines:       5,
-		MaxLines:       500,
-		IgnoreComments: false,
-	},
 }
 
 type LintersSettings struct {
@@ -219,6 +219,7 @@ type LintersSettings struct {
 	ErrorLint       ErrorLintSettings
 	Exhaustive      ExhaustiveSettings
 	Exhaustruct     ExhaustructSettings
+	Filen           FilenSettings
 	Forbidigo       ForbidigoSettings
 	Funlen          FunlenSettings
 	Gci             GciSettings
@@ -287,7 +288,6 @@ type LintersSettings struct {
 	Whitespace      WhitespaceSettings
 	Wrapcheck       WrapcheckSettings
 	WSL             WSLSettings
-	Filen           FilenSettings
 
 	Custom map[string]CustomLinterSettings
 }
@@ -422,6 +422,12 @@ type ExhaustiveSettings struct {
 type ExhaustructSettings struct {
 	Include []string `mapstructure:"include"`
 	Exclude []string `mapstructure:"exclude"`
+}
+
+type FilenSettings struct {
+	IgnoreComments bool `mapstructure:"ignore-comments"`
+	MaxLines       int  `mapstructure:"max-lines"`
+	MinLines       int  `mapstructure:"min-lines"`
 }
 
 type ForbidigoSettings struct {
@@ -1017,12 +1023,6 @@ type WSLSettings struct {
 	ForceCuddleErrCheckAndAssign     bool     `mapstructure:"force-err-cuddling"`
 	ErrorVariableNames               []string `mapstructure:"error-variable-names"`
 	ForceExclusiveShortDeclarations  bool     `mapstructure:"force-short-decl-cuddling"`
-}
-
-type FilenSettings struct {
-	IgnoreComments bool `mapstructure:"ignore-comments"`
-	MaxLines       int  `mapstructure:"max-lines"`
-	MinLines       int  `mapstructure:"min-lines"`
 }
 
 // CustomLinterSettings encapsulates the meta-data of a private linter.
