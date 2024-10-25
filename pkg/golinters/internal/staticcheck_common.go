@@ -9,10 +9,7 @@ import (
 	scconfig "honnef.co/go/tools/config"
 
 	"github.com/golangci/golangci-lint/pkg/config"
-	"github.com/golangci/golangci-lint/pkg/logutils"
 )
-
-var debugf = logutils.Debug(logutils.DebugKeyMegacheck)
 
 func SetupStaticCheckAnalyzers(src []*lint.Analyzer, checks []string) []*analysis.Analyzer {
 	var names []string
@@ -30,14 +27,6 @@ func SetupStaticCheckAnalyzers(src []*lint.Analyzer, checks []string) []*analysi
 	}
 
 	return ret
-}
-
-func SetAnalyzerGoVersion(a *analysis.Analyzer, goVersion string) {
-	if v := a.Flags.Lookup("go"); v != nil {
-		if err := v.Value.Set(goVersion); err != nil {
-			debugf("Failed to set go version: %s", err)
-		}
-	}
 }
 
 func StaticCheckConfig(settings *config.StaticCheckSettings) *scconfig.Config {

@@ -60,11 +60,10 @@ const (
 )
 
 const (
-	DebugKeyGoCritic  = "gocritic"  // Debugs `go-critic` linter.
-	DebugKeyGovet     = "govet"     // Debugs `govet` linter.
-	DebugKeyMegacheck = "megacheck" // Debugs `staticcheck` related linters.
-	DebugKeyNolint    = "nolint"    // Debugs a filter excluding issues by `//nolint` comments.
-	DebugKeyRevive    = "revive"    // Debugs `revive` linter.
+	DebugKeyGoCritic = "gocritic" // Debugs `go-critic` linter.
+	DebugKeyGovet    = "govet"    // Debugs `govet` linter.
+	DebugKeyNolint   = "nolint"   // Debugs a filter excluding issues by `//nolint` comments.
+	DebugKeyRevive   = "revive"   // Debugs `revive` linter.
 )
 
 func getEnabledDebugs() map[string]bool {
