@@ -9,10 +9,7 @@ import (
 	scconfig "honnef.co/go/tools/config"
 
 	"github.com/golangci/golangci-lint/pkg/config"
-	"github.com/golangci/golangci-lint/pkg/logutils"
 )
-
-var debugf = logutils.Debug(logutils.DebugKeyMegacheck)
 
 func SetupStaticCheckAnalyzers(src []*lint.Analyzer, checks []string) []*analysis.Analyzer {
 	var names []string
