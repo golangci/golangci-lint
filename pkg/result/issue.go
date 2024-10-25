@@ -81,10 +81,6 @@ func (i *Issue) GetLineRange() Range {
 	return *i.LineRange
 }
 
-func (i *Issue) Description() string {
-	return fmt.Sprintf("%s: %s", i.FromLinter, i.Text)
-}
-
 func (i *Issue) Fingerprint() string {
 	firstLine := ""
 	if len(i.SourceLines) > 0 {
