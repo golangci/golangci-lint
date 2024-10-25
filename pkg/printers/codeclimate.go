@@ -7,10 +7,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-const (
-	defaultCheckName           = "golangci-lint"
-	defaultCodeClimateSeverity = "critical"
-)
+const defaultCodeClimateSeverity = "critical"
 
 // CodeClimateIssue is a subset of the Code Climate spec.
 // https://github.com/codeclimate/platform/blob/master/spec/analyzers/SPEC.md#data-types
@@ -39,19 +36,17 @@ func NewCodeClimate(w io.Writer) *CodeClimate {
 
 func (p CodeClimate) Print(issues []result.Issue) error {
 	codeClimateIssues := make([]CodeClimateIssue, 0, len(issues))
+
 	for i := range issues {
 		issue := &issues[i]
+
 		codeClimateIssue := CodeClimateIssue{}
-		codeClimateIssue.Description = issue.Text
-		codeClimateIssue.CheckName = defaultCheckName
+		codeClimateIssue.Description = issue.Description()
+		codeClimateIssue.CheckName = issue.FromLinter
 		codeClimateIssue.Location.Path = issue.Pos.Filename
 		codeClimateIssue.Location.Lines.Begin = issue.Pos.Line
 		codeClimateIssue.Fingerprint = issue.Fingerprint()
 		codeClimateIssue.Severity = defaultCodeClimateSeverity
-
-		if issue.FromLinter != "" {
-			codeClimateIssue.CheckName = issue.FromLinter
-		}
 
 		if issue.Severity != "" {
 			codeClimateIssue.Severity = issue.Severity
@@ -60,9 +55,5 @@ func (p CodeClimate) Print(issues []result.Issue) error {
 		codeClimateIssues = append(codeClimateIssues, codeClimateIssue)
 	}
 
-	err := json.NewEncoder(p.w).Encode(codeClimateIssues)
-	if err != nil {
-		return err
-	}
-	return nil
+	return json.NewEncoder(p.w).Encode(codeClimateIssues)
 }
