@@ -36,7 +36,6 @@ linters:
     - exhaustruct
     - exportloopref
     - fatcontext
-    - filen
     - forbidigo
     - forcetypeassert
     - funlen
@@ -153,7 +152,6 @@ linters:
     - exhaustruct
     - exportloopref
     - fatcontext
-    - filen
     - forbidigo
     - forcetypeassert
     - funlen
@@ -535,17 +533,6 @@ linters-settings:
     # Default: []
     exclude:
       - '.+/cobra\.Command$'
-
-  filen:
-    # Ignore comments when counting lines.
-    # Default false
-    ignore-comments: true
-    # Max number of lines in a file.
-    # Default: 1000
-    max-lines: 500
-    # Min number of lines in a file.
-    # Default: 5
-    min-lines: 1
 
   forbidigo:
     # Forbid the following identifiers (list of regexp).
