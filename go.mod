@@ -1,6 +1,7 @@
 module github.com/golangci/golangci-lint
 
 go 1.22.1
+toolchain go1.22.5
 
 require (
 	4d63.com/gocheckcompilerdirectives v1.2.1
@@ -98,7 +99,7 @@ require (
 	github.com/shirou/gopsutil/v3 v3.24.5
 	github.com/sirupsen/logrus v1.9.3
 	github.com/sivchari/containedctx v1.0.3
-	github.com/sivchari/tenv v1.10.0
+	github.com/sivchari/tenv v1.12.0
 	github.com/sonatard/noctx v0.1.0
 	github.com/sourcegraph/go-diff v0.7.0
 	github.com/spf13/cobra v1.8.1
