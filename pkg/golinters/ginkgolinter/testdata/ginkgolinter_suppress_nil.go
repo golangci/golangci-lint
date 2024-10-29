@@ -31,9 +31,9 @@ func LenUsecase_nil() {
 func NilUsecase_nil() {
 	y := 5
 	x := &y
-	Expect(x == nil).To(Equal(true))
-	Expect(nil == x).To(Equal(true))
-	Expect(x != nil).To(Equal(true))
+	Expect(x == nil).To(Equal(true)) // want "ginkgo-linter: wrong boolean assertion. Consider using `Expect\\(x == nil\\).To\\(BeTrue\\(\\)\\)`"
+	Expect(nil == x).To(Equal(true)) // want "ginkgo-linter: wrong boolean assertion. Consider using `Expect\\(nil == x\\).To\\(BeTrue\\(\\)\\)`"
+	Expect(x != nil).To(Equal(true)) // want "ginkgo-linter: wrong boolean assertion. Consider using `Expect\\(x != nil\\).To\\(BeTrue\\(\\)\\)`"
 	Expect(x == nil).To(BeTrue())
 	Expect(x == nil).To(BeFalse())
 }

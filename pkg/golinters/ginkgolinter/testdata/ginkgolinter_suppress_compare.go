@@ -64,10 +64,10 @@ func WrongComparisonUsecase_compare() {
 	x := 8
 	Expect(x == 8).To(BeTrue())
 	Expect(x < 9).To(BeTrue())
-	Expect(x < 7).To(Equal(false))
+	Expect(x < 7).To(Equal(false)) // want "ginkgo-linter: wrong boolean assertion. Consider using `Expect\\(x < 7\\)\\.To\\(BeFalse\\(\\)\\)`"
 
 	p1, p2 := &x, &x
-	Expect(p1 == p2).To(Equal(true))
+	Expect(p1 == p2).To(Equal(true)) // want "ginkgo-linter: wrong boolean assertion. Consider using `Expect\\(p1 == p2\\)\\.To\\(BeTrue\\(\\)\\)`"
 }
 
 func slowInt_compare() int {

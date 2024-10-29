@@ -49,9 +49,9 @@ func ErrorUsecase_err() {
 	funcReturnsErr := func() error { return err }
 
 	Expect(err).To(BeNil())
-	Expect(err == nil).To(Equal(true))
-	Expect(err == nil).To(BeFalse())
-	Expect(err != nil).To(BeTrue())
+	Expect(err == nil).To(Equal(true)) // want "ginkgo-linter: wrong nil assertion. Consider using `Expect\\(err\\).To\\(BeNil\\(\\)\\)`"
+	Expect(err == nil).To(BeFalse())   // want "ginkgo-linter: wrong nil assertion. Consider using `Expect\\(err\\).ToNot\\(BeNil\\(\\)\\)`"
+	Expect(err != nil).To(BeTrue())    // want "ginkgo-linter: wrong nil assertion. Consider using `Expect\\(err\\).ToNot\\(BeNil\\(\\)\\)`"
 	Expect(funcReturnsErr()).To(BeNil())
 }
 
