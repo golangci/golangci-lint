@@ -1,18 +1,25 @@
 # cache
 
-Extracted from go/src/cmd/go/internal/cache/
-I don't know what version of Go this package was pulled from.
+Extracted from `go/src/cmd/go/internal/cache/`.
+
+Based on the initial PR/commit the based in a mix between go1.12 and go1.13:
+- cache.go (go1.13)
+- cache_test.go (go1.12?)
+- default.go (go1.12?)
+- hash.go (go1.13 and go1.12 are identical)
+- hash_test.go -> (go1.12?)
 
 Adapted for golangci-lint:
-- https://github.com/golangci/golangci-lint/pull/699
-- https://github.com/golangci/golangci-lint/pull/779
-- https://github.com/golangci/golangci-lint/pull/788
-- https://github.com/golangci/golangci-lint/pull/808
-- https://github.com/golangci/golangci-lint/pull/1063
-- https://github.com/golangci/golangci-lint/pull/1070
-- https://github.com/golangci/golangci-lint/pull/1162
-- https://github.com/golangci/golangci-lint/pull/2318
-- https://github.com/golangci/golangci-lint/pull/2352
-- https://github.com/golangci/golangci-lint/pull/3012
-- https://github.com/golangci/golangci-lint/pull/3096
-- https://github.com/golangci/golangci-lint/pull/3204
+- https://github.com/golangci/golangci-lint/pull/699: initial code (contains modifications of the files)
+- https://github.com/golangci/golangci-lint/pull/779: just a nolint (`cache.go`)
+- https://github.com/golangci/golangci-lint/pull/788: only directory permissions changes (0777 -> 0744) (`cache.go`, `cache_test.go`, `default.go`)
+- https://github.com/golangci/golangci-lint/pull/808: mainly related to logs and errors (`cache.go`, `default.go`, `hash.go`, `hash_test.go`)
+- https://github.com/golangci/golangci-lint/pull/1063: `ioutil` -> `robustio` (`cache.go`)
+- https://github.com/golangci/golangci-lint/pull/1070: add `t.Parallel()` inside `cache_test.go`
+- https://github.com/golangci/golangci-lint/pull/1162: errors inside `cache.go`
+- https://github.com/golangci/golangci-lint/pull/2318: `ioutil` -> `os` (`cache.go`, `cache_test.go`, `default.go`, `hash_test.go`)
+- https://github.com/golangci/golangci-lint/pull/2352: Go doc typos
+- https://github.com/golangci/golangci-lint/pull/3012: errors inside `cache.go` (`cache.go`, `default.go`)
+- https://github.com/golangci/golangci-lint/pull/3196: constant for `GOLANGCI_LINT_CACHE` (`cache.go`)
+- https://github.com/golangci/golangci-lint/pull/3204: add this file and `%w` in `fmt.Errorf` (`cache.go`)
+- https://github.com/golangci/golangci-lint/pull/3604: remove `github.com/pkg/errors` (`cache.go`)
