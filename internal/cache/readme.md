@@ -2,6 +2,7 @@
 
 Extracted from `go/src/cmd/go/internal/cache/`.
 
+- sync with go1.20.14
 - sync with go1.19.13
 - sync with go1.18.10
 - sync with go1.17.13

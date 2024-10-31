@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"runtime"
 	"testing"
 	"time"
 )
@@ -150,6 +151,10 @@ func dummyID(x int) [HashSize]byte {
 }
 
 func TestCacheTrim(t *testing.T) {
+	if runtime.GOOS == "js" {
+		t.Skip(t, "js")
+	}
+
 	dir, err := os.MkdirTemp("", "cachetest-")
 	if err != nil {
 		t.Fatal(err)
