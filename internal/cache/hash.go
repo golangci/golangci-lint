@@ -36,10 +36,6 @@ type Hash struct {
 // which are still addressed by unsalted SHA256.
 var hashSalt []byte
 
-func SetSalt(b []byte) {
-	hashSalt = b
-}
-
 // Subkey returns an action ID corresponding to mixing a parent
 // action ID with a string description of the subkey.
 func Subkey(parent ActionID, desc string) (ActionID, error) {

@@ -22,7 +22,6 @@ import (
 	"time"
 
 	"github.com/golangci/golangci-lint/internal/renameio"
-	"github.com/golangci/golangci-lint/internal/robustio"
 )
 
 // An ActionID is a cache action key, the hash of a complete description of a
@@ -77,10 +76,6 @@ func (c *Cache) fileName(id [HashSize]byte, key string) string {
 }
 
 var errMissing = errors.New("cache entry not found")
-
-func IsErrMissing(err error) bool {
-	return errors.Is(err, errMissing)
-}
 
 const (
 	// action entry file is "v1 <hex id> <hex out> <decimal size space-padded to 20 bytes> <unixnano space-padded to 20 bytes>\n"
@@ -222,16 +217,10 @@ func (c *Cache) GetBytes(id ActionID) ([]byte, Entry, error) {
 	if err != nil {
 		return nil, entry, err
 	}
-	outputFile, err := c.OutputFile(entry.OutputID)
+	data, err := c.readFileCGIL(c.OutputFile(entry.OutputID))
 	if err != nil {
 		return nil, entry, err
 	}
-
-	data, err := robustio.ReadFile(outputFile)
-	if err != nil {
-		return nil, entry, err
-	}
-
 	if sha256.Sum256(data) != entry.OutputID {
 		return nil, entry, errMissing
 	}

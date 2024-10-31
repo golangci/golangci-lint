@@ -13,8 +13,6 @@ import (
 	"sync"
 )
 
-const envGolangciLintCache = "GOLANGCI_LINT_CACHE"
-
 // Default returns the default cache to use.
 func Default() (*Cache, error) {
 	defaultOnce.Do(initDefaultCache)
