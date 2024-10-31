@@ -50,13 +50,14 @@ type Cache struct {
 // to share a cache directory (for example, if the directory were stored
 // in a network file system). File locking is notoriously unreliable in
 // network file systems and may not suffice to protect the cache.
+//
 func Open(dir string) (*Cache, error) {
 	info, err := os.Stat(dir)
 	if err != nil {
 		return nil, err
 	}
 	if !info.IsDir() {
-		return nil, &os.PathError{Op: "open", Path: dir, Err: errors.New("not a directory")}
+		return nil, &os.PathError{Op: "open", Path: dir, Err: fmt.Errorf("not a directory")}
 	}
 	for i := 0; i < 256; i++ {
 		name := filepath.Join(dir, fmt.Sprintf("%02x", i))
@@ -165,7 +166,7 @@ func (c *Cache) get(id ActionID) (Entry, error) {
 	eid, entry := entry[3:3+hexSize], entry[3+hexSize:]
 	eout, entry := entry[1:1+hexSize], entry[1+hexSize:]
 	esize, entry := entry[1:1+20], entry[1+20:]
-	etime := entry[1 : 1+20]
+	etime, entry := entry[1:1+20], entry[1+20:]
 	var buf [HashSize]byte
 	if _, err = hex.Decode(buf[:], eid); err != nil || buf != id {
 		return failed(fmt.Errorf("failed to hex decode eid data in %s: %w", fileName, err))
@@ -255,7 +256,7 @@ const (
 // and to reduce the amount of disk activity caused by using
 // cache entries, used only updates the mtime if the current
 // mtime is more than an hour old. This heuristic eliminates
-// nearly all the mtime updates that would otherwise happen,
+// nearly all of the mtime updates that would otherwise happen,
 // while still keeping the mtimes useful for cache trimming.
 func (c *Cache) used(file string) error {
 	info, err := os.Stat(file)
@@ -301,7 +302,7 @@ func (c *Cache) Trim() {
 
 	// Ignore errors from here: if we don't write the complete timestamp, the
 	// cache will appear older than it is, and we'll trim it again next time.
-	_ = renameio.WriteFile(filepath.Join(c.dir, "trim.txt"), []byte(fmt.Sprintf("%d", now.Unix())), 0666)
+	renameio.WriteFile(filepath.Join(c.dir, "trim.txt"), []byte(fmt.Sprintf("%d", now.Unix())), 0666)
 }
 
 // trimSubdir trims a single cache subdirectory.
@@ -309,7 +310,7 @@ func (c *Cache) trimSubdir(subdir string, cutoff time.Time) {
 	// Read all directory entries from subdir before removing
 	// any files, in case removing files invalidates the file offset
 	// in the directory scan. Also, ignore error from f.Readdirnames,
-	// because we don't care about reporting the error, and we still
+	// because we don't care about reporting the error and we still
 	// want to process any entries found before the error.
 	f, err := os.Open(subdir)
 	if err != nil {
@@ -346,7 +347,6 @@ func (c *Cache) putIndexEntry(id ActionID, out OutputID, size int64, allowVerify
 	// are entirely reproducible. As just noted, this may be unrealistic
 	// in some cases but the check is also useful for shaking out real bugs.
 	entry := fmt.Sprintf("v1 %x %x %20d %20d\n", id, out, size, time.Now().UnixNano())
-
 	if verify && allowVerify {
 		old, err := c.get(id)
 		if err == nil && (old.OutputID != out || old.Size != size) {
@@ -368,7 +368,7 @@ func (c *Cache) putIndexEntry(id ActionID, out OutputID, size int64, allowVerify
 		// Truncate the file only *after* writing it.
 		// (This should be a no-op, but truncate just in case of previous corruption.)
 		//
-		// This differs from os.WriteFile, which truncates to 0 *before* writing
+		// This differs from ioutil.WriteFile, which truncates to 0 *before* writing
 		// via os.O_TRUNC. Truncating only after writing ensures that a second write
 		// of the same content to the same file is idempotent, and does not — even
 		// temporarily! — undo the effect of the first write.
@@ -502,7 +502,7 @@ func (c *Cache) copyFile(file io.ReadSeeker, out OutputID, size int64) error {
 	sum := h.Sum(nil)
 	if !bytes.Equal(sum, out[:]) {
 		_ = f.Truncate(0)
-		return errors.New("file content changed underfoot")
+		return fmt.Errorf("file content changed underfoot")
 	}
 
 	// Commit cache file entry.
