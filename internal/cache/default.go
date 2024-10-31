@@ -13,14 +13,15 @@ import (
 )
 
 // Default returns the default cache to use.
-func Default() (*DiskCache, error) {
+// It never returns nil.
+func Default() Cache {
 	defaultOnce.Do(initDefaultCache)
-	return defaultCache, defaultDirErr
+	return defaultCache
 }
 
 var (
 	defaultOnce  sync.Once
-	defaultCache *DiskCache
+	defaultCache Cache
 )
 
 // cacheREADME is a message stored in a README in the cache directory.
@@ -32,7 +33,13 @@ const cacheREADME = `This directory holds cached build artifacts from golangci-l
 // initDefaultCache does the work of finding the default cache
 // the first time Default is called.
 func initDefaultCache() {
-	dir := DefaultDir()
+	dir, _ := DefaultDir()
+	if dir == "off" {
+		if defaultDirErr != nil {
+			base.Fatalf("build cache is required, but could not be located: %v", defaultDirErr)
+		}
+		base.Fatalf("build cache is disabled by %s=off, but required", envGolangciLintCache)
+	}
 	if err := os.MkdirAll(dir, 0744); err != nil {
 		base.Fatalf("failed to initialize build cache at %s: %s\n", dir, err)
 	}
@@ -43,21 +50,29 @@ func initDefaultCache() {
 		}
 	}
 
-	c, err := Open(dir)
+	diskCache, err := Open(dir)
 	if err != nil {
 		base.Fatalf("failed to initialize build cache at %s: %s\n", dir, err)
 	}
-	defaultCache = c
+
+	if v := os.Getenv(envGolangciLintCacheProg); v != "" {
+		defaultCache = startCacheProg(v, diskCache)
+	} else {
+		defaultCache = diskCache
+	}
 }
 
 var (
-	defaultDirOnce sync.Once
-	defaultDir     string
-	defaultDirErr  error
+	defaultDirOnce    sync.Once
+	defaultDir        string
+	defaultDirChanged bool // effective value differs from $GOLANGCI_LINT_CACHE
+	defaultDirErr     error
 )
 
 // DefaultDir returns the effective GOLANGCI_LINT_CACHE setting.
-func DefaultDir() string {
+// It returns "off" if the cache is disabled,
+// and reports whether the effective value differs from GOLANGCI_LINT_CACHE.
+func DefaultDir() (string, bool) {
 	// Save the result of the first call to DefaultDir for later use in
 	// initDefaultCache. cmd/go/main.go explicitly sets GOCACHE so that
 	// subprocesses will inherit it, but that means initDefaultCache can't
@@ -65,10 +80,12 @@ func DefaultDir() string {
 
 	defaultDirOnce.Do(func() {
 		defaultDir = os.Getenv(envGolangciLintCache)
-		if filepath.IsAbs(defaultDir) {
-			return
-		}
 		if defaultDir != "" {
+			defaultDirChanged = true
+			if filepath.IsAbs(defaultDir) || defaultDir == "off" {
+				return
+			}
+			defaultDir = "off"
 			defaultDirErr = fmt.Errorf("%s is not an absolute path", envGolangciLintCache)
 			return
 		}
@@ -76,11 +93,13 @@ func DefaultDir() string {
 		// Compute default location.
 		dir, err := os.UserCacheDir()
 		if err != nil {
+			defaultDir = "off"
+			defaultDirChanged = true
 			defaultDirErr = fmt.Errorf("%s is not defined and %w", envGolangciLintCache, err)
 			return
 		}
 		defaultDir = filepath.Join(dir, "golangci-lint")
 	})
 
-	return defaultDir
+	return defaultDir, defaultDirChanged
 }

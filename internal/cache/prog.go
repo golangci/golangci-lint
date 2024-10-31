@@ -76,7 +76,7 @@ const (
 )
 
 // ProgRequest is the JSON-encoded message that's sent from cmd/go to
-// the GOCACHEPROG child process over stdin. Each JSON object is on its
+// the GOLANGCI_LINT_CACHEPROG child process over stdin. Each JSON object is on its
 // own line. A ProgRequest of Type "put" with BodySize > 0 will be followed
 // by a line containing a base64-encoded JSON string literal of the body.
 type ProgRequest struct {
@@ -152,7 +152,7 @@ func startCacheProg(progAndArgs string, fuzzDirCache Cache) Cache {
 	}
 	args, err := quoted.Split(progAndArgs)
 	if err != nil {
-		base.Fatalf("GOCACHEPROG args: %v", err)
+		base.Fatalf("%s args: %v", envGolangciLintCacheProg, err)
 	}
 	var prog string
 	if len(args) > 0 {
@@ -165,17 +165,17 @@ func startCacheProg(progAndArgs string, fuzzDirCache Cache) Cache {
 	cmd := exec.CommandContext(ctx, prog, args...)
 	out, err := cmd.StdoutPipe()
 	if err != nil {
-		base.Fatalf("StdoutPipe to GOCACHEPROG: %v", err)
+		base.Fatalf("StdoutPipe to %s: %v", envGolangciLintCacheProg, err)
 	}
 	in, err := cmd.StdinPipe()
 	if err != nil {
-		base.Fatalf("StdinPipe to GOCACHEPROG: %v", err)
+		base.Fatalf("StdinPipe to %s: %v", envGolangciLintCacheProg, err)
 	}
 	cmd.Stderr = os.Stderr
 	cmd.Cancel = in.Close
 
 	if err := cmd.Start(); err != nil {
-		base.Fatalf("error starting GOCACHEPROG program %q: %v", prog, err)
+		base.Fatalf("error starting %s program %q: %v", envGolangciLintCacheProg, prog, err)
 	}
 
 	pc := &ProgCache{
@@ -206,14 +206,14 @@ func startCacheProg(progAndArgs string, fuzzDirCache Cache) Cache {
 	for {
 		select {
 		case <-timer.C:
-			log.Printf("# still waiting for GOCACHEPROG %v ...", prog)
+			log.Printf("# still waiting for %s %v ...", envGolangciLintCacheProg, prog)
 		case capRes := <-capResc:
 			can := map[ProgCmd]bool{}
 			for _, cmd := range capRes.KnownCommands {
 				can[cmd] = true
 			}
 			if len(can) == 0 {
-				base.Fatalf("GOCACHEPROG %v declared no supported commands", prog)
+				base.Fatalf("%s %v declared no supported commands", envGolangciLintCacheProg, prog)
 			}
 			pc.can = can
 			return pc
@@ -234,9 +234,9 @@ func (c *ProgCache) readLoop(readLoopDone chan<- struct{}) {
 				c.mu.Lock()
 				inFlight := len(c.inFlight)
 				c.mu.Unlock()
-				base.Fatalf("GOCACHEPROG exited pre-Close with %v pending requests", inFlight)
+				base.Fatalf("%s exited pre-Close with %v pending requests", envGolangciLintCacheProg, inFlight)
 			}
-			base.Fatalf("error reading JSON from GOCACHEPROG: %v", err)
+			base.Fatalf("error reading JSON from %s: %v", envGolangciLintCacheProg, err)
 		}
 		c.mu.Lock()
 		ch, ok := c.inFlight[res.ID]
@@ -245,7 +245,7 @@ func (c *ProgCache) readLoop(readLoopDone chan<- struct{}) {
 		if ok {
 			ch <- res
 		} else {
-			base.Fatalf("GOCACHEPROG sent response for unknown request ID %v", res.ID)
+			base.Fatalf("%s sent response for unknown request ID %v", envGolangciLintCacheProg, res.ID)
 		}
 	}
 }
@@ -303,8 +303,8 @@ func (c *ProgCache) writeToChild(req *ProgRequest, resc chan<- *ProgResponse) (e
 			return nil
 		}
 		if wrote != req.BodySize {
-			return fmt.Errorf("short write writing body to GOCACHEPROG for action %x, object %x: wrote %v; expected %v",
-				req.ActionID, req.ObjectID, wrote, req.BodySize)
+			return fmt.Errorf("short write writing body to %s for action %x, object %x: wrote %v; expected %v",
+				envGolangciLintCacheProg, req.ActionID, req.ObjectID, wrote, req.BodySize)
 		}
 		if _, err := c.bw.WriteString("\"\n"); err != nil {
 			return err
@@ -346,7 +346,7 @@ func (c *ProgCache) Get(a ActionID) (Entry, error) {
 		e.Time = time.Now()
 	}
 	if res.DiskPath == "" {
-		return Entry{}, &entryNotFoundError{errors.New("GOCACHEPROG didn't populate DiskPath on get hit")}
+		return Entry{}, &entryNotFoundError{fmt.Errorf("%s didn't populate DiskPath on get hit", envGolangciLintCacheProg)}
 	}
 	if copy(e.OutputID[:], res.OutputID) != len(res.OutputID) {
 		return Entry{}, &entryNotFoundError{errors.New("incomplete ProgResponse OutputID")}
@@ -400,7 +400,7 @@ func (c *ProgCache) Put(a ActionID, file io.ReadSeeker) (_ OutputID, size int64,
 		return OutputID{}, 0, err
 	}
 	if res.DiskPath == "" {
-		return OutputID{}, 0, errors.New("GOCACHEPROG didn't return DiskPath in put response")
+		return OutputID{}, 0, fmt.Errorf("%s didn't return DiskPath in put response", envGolangciLintCacheProg)
 	}
 	c.noteOutputFile(out, res.DiskPath)
 	return out, size, err

@@ -84,7 +84,6 @@ func (r *runner) run(analyzers []*analysis.Analyzer, initialPackages []*packages
 	[]error, map[*analysis.Pass]*packages.Package,
 ) {
 	debugf("Analyzing %d packages on load mode %s", len(initialPackages), r.loadMode)
-	defer r.pkgCache.Trim()
 
 	roots := r.analyze(initialPackages, analyzers)
 

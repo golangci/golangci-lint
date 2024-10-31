@@ -28,7 +28,7 @@ const (
 // Cache is a per-package data cache. A cached data is invalidated when
 // package, or it's dependencies change.
 type Cache struct {
-	lowLevelCache *cache.DiskCache
+	lowLevelCache cache.Cache
 	pkgHashes     sync.Map
 	sw            *timeutils.Stopwatch
 	log           logutils.Log
@@ -36,23 +36,19 @@ type Cache struct {
 }
 
 func NewCache(sw *timeutils.Stopwatch, log logutils.Log) (*Cache, error) {
-	c, err := cache.Default()
-	if err != nil {
-		return nil, err
-	}
 	return &Cache{
-		lowLevelCache: c,
+		lowLevelCache: cache.Default(),
 		sw:            sw,
 		log:           log,
 		ioSem:         make(chan struct{}, runtime.GOMAXPROCS(-1)),
 	}, nil
 }
 
-func (c *Cache) Trim() {
-	c.sw.TrackStage("trim", func() {
-		err := c.lowLevelCache.Trim()
+func (c *Cache) Close() {
+	c.sw.TrackStage("close", func() {
+		err := c.lowLevelCache.Close()
 		if err != nil {
-			c.log.Errorf("cache trim: %v", err)
+			c.log.Errorf("cache close: %v", err)
 		}
 	})
 }
