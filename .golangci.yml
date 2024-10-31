@@ -223,6 +223,7 @@ issues:
     - test/testdata_etc # test files
     - internal/cache # extracted from Go code
     - internal/robustio # extracted from Go code
+    - internal/mmap # extracted from Go code
 
 run:
   timeout: 5m

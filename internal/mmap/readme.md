@@ -1,0 +1,5 @@
+# mmap
+
+Extracted from `go/src/cmd/go/internal/mmap/` (related to `cache`).
+
+- sync with go1.19.13
