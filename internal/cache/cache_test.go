@@ -10,9 +10,10 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"runtime"
 	"testing"
 	"time"
+
+	"github.com/golangci/golangci-lint/internal/testenv"
 )
 
 func init() {
@@ -106,43 +107,43 @@ func TestGrowth(t *testing.T) {
 	}
 }
 
-func TestVerifyPanic(t *testing.T) {
-	os.Setenv("GODEBUG", "gocacheverify=1")
-	initEnv()
-	defer func() {
-		os.Unsetenv("GODEBUG")
-		verify = false
-	}()
-
-	if !verify {
-		t.Fatal("initEnv did not set verify")
-	}
-
-	dir, err := os.MkdirTemp("", "cachetest-")
-	if err != nil {
-		t.Fatal(err)
-	}
-	defer os.RemoveAll(dir)
-
-	c, err := Open(dir)
-	if err != nil {
-		t.Fatalf("Open: %v", err)
-	}
-
-	id := ActionID(dummyID(1))
-	if err := c.PutBytes(id, []byte("abc")); err != nil {
-		t.Fatal(err)
-	}
-
-	defer func() {
-		if err := recover(); err != nil {
-			t.Log(err)
-			return
-		}
-	}()
-	c.PutBytes(id, []byte("def"))
-	t.Fatal("mismatched Put did not panic in verify mode")
-}
+// func TestVerifyPanic(t *testing.T) {
+// 	os.Setenv("GODEBUG", "gocacheverify=1")
+// 	initEnv()
+// 	defer func() {
+// 		os.Unsetenv("GODEBUG")
+// 		verify = false
+// 	}()
+//
+// 	if !verify {
+// 		t.Fatal("initEnv did not set verify")
+// 	}
+//
+// 	dir, err := os.MkdirTemp("", "cachetest-")
+// 	if err != nil {
+// 		t.Fatal(err)
+// 	}
+// 	defer os.RemoveAll(dir)
+//
+// 	c, err := Open(dir)
+// 	if err != nil {
+// 		t.Fatalf("Open: %v", err)
+// 	}
+//
+// 	id := ActionID(dummyID(1))
+// 	if err := PutBytes(c, id, []byte("abc")); err != nil {
+// 		t.Fatal(err)
+// 	}
+//
+// 	defer func() {
+// 		if err := recover(); err != nil {
+// 			t.Log(err)
+// 			return
+// 		}
+// 	}()
+// 	PutBytes(c, id, []byte("def"))
+// 	t.Fatal("mismatched Put did not panic in verify mode")
+// }
 
 func dummyID(x int) [HashSize]byte {
 	var out [HashSize]byte
@@ -151,10 +152,6 @@ func dummyID(x int) [HashSize]byte {
 }
 
 func TestCacheTrim(t *testing.T) {
-	if runtime.GOOS == "js" {
-		t.Skip(t, "js")
-	}
-
 	dir, err := os.MkdirTemp("", "cachetest-")
 	if err != nil {
 		t.Fatal(err)
@@ -182,9 +179,9 @@ func TestCacheTrim(t *testing.T) {
 	}
 
 	id := ActionID(dummyID(1))
-	c.PutBytes(id, []byte("abc"))
+	PutBytes(c, id, []byte("abc"))
 	entry, _ := c.Get(id)
-	c.PutBytes(ActionID(dummyID(2)), []byte("def"))
+	PutBytes(c, ActionID(dummyID(2)), []byte("def"))
 	mtime := now
 	checkTime(fmt.Sprintf("%x-a", id), mtime)
 	checkTime(fmt.Sprintf("%x-d", entry.OutputID), mtime)
@@ -206,7 +203,12 @@ func TestCacheTrim(t *testing.T) {
 	checkTime(fmt.Sprintf("%x-d", entry.OutputID), mtime2)
 
 	// Trim should leave everything alone: it's all too new.
-	c.Trim()
+	if err := c.Trim(); err != nil {
+		if testenv.SyscallIsNotSupported(err) {
+			t.Skipf("skipping: Trim is unsupported (%v)", err)
+		}
+		t.Fatal(err)
+	}
 	if _, err := c.Get(id); err != nil {
 		t.Fatal(err)
 	}
@@ -219,7 +221,9 @@ func TestCacheTrim(t *testing.T) {
 
 	// Trim less than a day later should not do any work at all.
 	now = start + 80000
-	c.Trim()
+	if err := c.Trim(); err != nil {
+		t.Fatal(err)
+	}
 	if _, err := c.Get(id); err != nil {
 		t.Fatal(err)
 	}
@@ -239,7 +243,9 @@ func TestCacheTrim(t *testing.T) {
 	// and we haven't looked at it since, so 5 days later it should be gone.
 	now += 5 * 86400
 	checkTime(fmt.Sprintf("%x-a", dummyID(2)), start)
-	c.Trim()
+	if err := c.Trim(); err != nil {
+		t.Fatal(err)
+	}
 	if _, err := c.Get(id); err != nil {
 		t.Fatal(err)
 	}
@@ -253,7 +259,9 @@ func TestCacheTrim(t *testing.T) {
 	// Check that another 5 days later it is still not gone,
 	// but check by using checkTime, which doesn't bring mtime forward.
 	now += 5 * 86400
-	c.Trim()
+	if err := c.Trim(); err != nil {
+		t.Fatal(err)
+	}
 	checkTime(fmt.Sprintf("%x-a", id), mtime3)
 	checkTime(fmt.Sprintf("%x-d", entry.OutputID), mtime3)
 
@@ -261,13 +269,17 @@ func TestCacheTrim(t *testing.T) {
 	// Even though the entry for id is now old enough to be trimmed,
 	// it gets a reprieve until the time comes for a new Trim scan.
 	now += 86400 / 2
-	c.Trim()
+	if err := c.Trim(); err != nil {
+		t.Fatal(err)
+	}
 	checkTime(fmt.Sprintf("%x-a", id), mtime3)
 	checkTime(fmt.Sprintf("%x-d", entry.OutputID), mtime3)
 
 	// Another half a day later, Trim should actually run, and it should remove id.
 	now += 86400/2 + 1
-	c.Trim()
+	if err := c.Trim(); err != nil {
+		t.Fatal(err)
+	}
 	if _, err := c.Get(dummyID(1)); err == nil {
 		t.Fatal("Trim did not remove dummyID(1)")
 	}

@@ -224,6 +224,8 @@ issues:
     - internal/cache # extracted from Go code
     - internal/robustio # extracted from Go code
     - internal/mmap # extracted from Go code
+    - internal/quoted # extracted from Go code
+    - internal/testenv # extracted from Go code
 
 run:
   timeout: 5m

@@ -13,14 +13,14 @@ import (
 )
 
 // Default returns the default cache to use.
-func Default() (*Cache, error) {
+func Default() (*DiskCache, error) {
 	defaultOnce.Do(initDefaultCache)
 	return defaultCache, defaultDirErr
 }
 
 var (
 	defaultOnce  sync.Once
-	defaultCache *Cache
+	defaultCache *DiskCache
 )
 
 // cacheREADME is a message stored in a README in the cache directory.

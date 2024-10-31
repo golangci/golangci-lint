@@ -28,10 +28,10 @@ const (
 // Cache is a per-package data cache. A cached data is invalidated when
 // package, or it's dependencies change.
 type Cache struct {
-	lowLevelCache *cache.Cache
+	lowLevelCache *cache.DiskCache
 	pkgHashes     sync.Map
 	sw            *timeutils.Stopwatch
-	log           logutils.Log  // not used now, but may be needed for future debugging purposes
+	log           logutils.Log
 	ioSem         chan struct{} // semaphore limiting parallel IO
 }
 
@@ -50,7 +50,10 @@ func NewCache(sw *timeutils.Stopwatch, log logutils.Log) (*Cache, error) {
 
 func (c *Cache) Trim() {
 	c.sw.TrackStage("trim", func() {
-		c.lowLevelCache.Trim()
+		err := c.lowLevelCache.Trim()
+		if err != nil {
+			c.log.Errorf("cache trim: %v", err)
+		}
 	})
 }
 
@@ -81,7 +84,7 @@ func (c *Cache) Put(pkg *packages.Package, mode HashMode, key string, data any) 
 	}
 	c.ioSem <- struct{}{}
 	c.sw.TrackStage("cache io", func() {
-		err = c.lowLevelCache.PutBytes(aID, buf.Bytes())
+		err = cache.PutBytes(c.lowLevelCache, aID, buf.Bytes())
 	})
 	<-c.ioSem
 	if err != nil {
@@ -113,7 +116,7 @@ func (c *Cache) Get(pkg *packages.Package, mode HashMode, key string, data any) 
 	var b []byte
 	c.ioSem <- struct{}{}
 	c.sw.TrackStage("cache io", func() {
-		b, _, err = c.lowLevelCache.GetBytes(aID)
+		b, _, err = cache.GetBytes(c.lowLevelCache, aID)
 	})
 	<-c.ioSem
 	if err != nil {
