@@ -2,6 +2,10 @@
 
 Extracted from `go/src/cmd/go/internal/cache/`.
 
+- sync with go1.14.15
+
+# Previous History
+
 Based on the initial PR/commit the based in a mix between go1.12 and go1.13:
 - cache.go (go1.13)
 - cache_test.go (go1.12?)
