@@ -44,14 +44,13 @@ func SetSalt(b []byte) {
 // action ID with a string description of the subkey.
 func Subkey(parent ActionID, desc string) (ActionID, error) {
 	h := sha256.New()
-	const subkeyPrefix = "subkey:"
-	if n, err := h.Write([]byte(subkeyPrefix)); n != len(subkeyPrefix) {
-		return ActionID{}, fmt.Errorf("wrote %d/%d bytes of subkey prefix with error %s", n, len(subkeyPrefix), err)
-	}
-	if n, err := h.Write(parent[:]); n != len(parent) {
+	h.Write([]byte(("subkey:")))
+	n, err := h.Write(parent[:])
+	if n != len(parent) {
 		return ActionID{}, fmt.Errorf("wrote %d/%d bytes of parent with error %s", n, len(parent), err)
 	}
-	if n, err := h.Write([]byte(desc)); n != len(desc) {
+	n, err = h.Write([]byte(desc))
+	if n != len(desc) {
 		return ActionID{}, fmt.Errorf("wrote %d/%d bytes of desc with error %s", n, len(desc), err)
 	}
 
@@ -75,7 +74,8 @@ func NewHash(name string) (*Hash, error) {
 	if debugHash {
 		fmt.Fprintf(os.Stderr, "HASH[%s]\n", h.name)
 	}
-	if n, err := h.Write(hashSalt); n != len(hashSalt) {
+	n, err := h.Write(hashSalt)
+	if n != len(hashSalt) {
 		return nil, fmt.Errorf("wrote %d/%d bytes of hash salt with error %s", n, len(hashSalt), err)
 	}
 	if verify {

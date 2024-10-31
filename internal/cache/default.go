@@ -6,7 +6,8 @@ package cache
 
 import (
 	"fmt"
-	"log"
+	"io/ioutil"
+	base "log"
 	"os"
 	"path/filepath"
 	"sync"
@@ -36,18 +37,18 @@ const cacheREADME = `This directory holds cached build artifacts from golangci-l
 func initDefaultCache() {
 	dir := DefaultDir()
 	if err := os.MkdirAll(dir, 0744); err != nil {
-		log.Fatalf("failed to initialize build cache at %s: %s\n", dir, err)
+		base.Fatalf("failed to initialize build cache at %s: %s\n", dir, err)
 	}
 	if _, err := os.Stat(filepath.Join(dir, "README")); err != nil {
 		// Best effort.
-		if wErr := os.WriteFile(filepath.Join(dir, "README"), []byte(cacheREADME), 0666); wErr != nil {
-			log.Fatalf("Failed to write README file to cache dir %s: %s", dir, err)
+		if wErr := ioutil.WriteFile(filepath.Join(dir, "README"), []byte(cacheREADME), 0666); wErr != nil {
+			base.Fatalf("Failed to write README file to cache dir %s: %s", dir, err)
 		}
 	}
 
 	c, err := Open(dir)
 	if err != nil {
-		log.Fatalf("failed to initialize build cache at %s: %s\n", dir, err)
+		base.Fatalf("failed to initialize build cache at %s: %s\n", dir, err)
 	}
 	defaultCache = c
 }
