@@ -11,6 +11,7 @@ import (
 	"hash"
 	"io"
 	"os"
+	"strings"
 	"sync"
 )
 
@@ -35,6 +36,15 @@ type Hash struct {
 // in the cache, but not additional copies of the large output files,
 // which are still addressed by unsalted SHA256.
 var hashSalt []byte
+
+// stripExperiment strips any GOEXPERIMENT configuration from the Go
+// version string.
+func stripExperiment(version string) string {
+	if i := strings.Index(version, " X:"); i >= 0 {
+		return version[:i]
+	}
+	return version
+}
 
 // Subkey returns an action ID corresponding to mixing a parent
 // action ID with a string description of the subkey.

@@ -87,6 +87,7 @@ require (
 	github.com/polyfloyd/go-errorlint v1.6.0
 	github.com/quasilyte/go-ruleguard/dsl v0.3.22
 	github.com/raeperd/recvcheck v0.1.2
+	github.com/rogpeppe/go-internal v1.13.1
 	github.com/ryancurrah/gomodguard v1.3.5
 	github.com/ryanrolds/sqlclosecheck v0.5.1
 	github.com/sanposhiho/wastedassign/v2 v2.0.7
