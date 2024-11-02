@@ -27,7 +27,7 @@ import (
 	"golang.org/x/exp/maps"
 	"gopkg.in/yaml.v3"
 
-	"github.com/golangci/golangci-lint/internal/cache"
+	"github.com/golangci/golangci-lint/internal/go/cache"
 	"github.com/golangci/golangci-lint/internal/pkgcache"
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/exitcodes"

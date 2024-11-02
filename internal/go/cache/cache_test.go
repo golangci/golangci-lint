@@ -13,7 +13,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/golangci/golangci-lint/internal/testenv"
+	"github.com/golangci/golangci-lint/internal/go/testenv"
 )
 
 func init() {

@@ -7,7 +7,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/golangci/golangci-lint/internal/cache"
+	"github.com/golangci/golangci-lint/internal/go/cache"
 	"github.com/golangci/golangci-lint/pkg/fsutils"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 )
