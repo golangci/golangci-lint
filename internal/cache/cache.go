@@ -81,12 +81,7 @@ func (c *Cache) Get(pkg *packages.Package, mode HashMode, key string, data any) 
 		return fmt.Errorf("failed to calculate package %s action id: %w", pkg.Name, err)
 	}
 
-	var b []byte
-	c.ioSem <- struct{}{}
-	c.sw.TrackStage("cache io", func() {
-		b, _, err = cache.GetBytes(c.lowLevelCache, actionID)
-	})
-	<-c.ioSem
+	cachedData, err := c.getBytes(actionID)
 	if err != nil {
 		if cache.IsErrMissing(err) {
 			return ErrMissing
@@ -94,7 +89,7 @@ func (c *Cache) Get(pkg *packages.Package, mode HashMode, key string, data any) 
 		return fmt.Errorf("failed to get data from low-level cache by key %s for package %s: %w", key, pkg.Name, err)
 	}
 
-	return c.decode(b, data)
+	return c.decode(cachedData, data)
 }
 
 func (c *Cache) buildKey(pkg *packages.Package, mode HashMode, key string) (cache.ActionID, error) {
@@ -222,6 +217,23 @@ func (c *Cache) putBytes(actionID cache.ActionID, buf *bytes.Buffer) error {
 	}
 
 	return nil
+}
+
+func (c *Cache) getBytes(actionID cache.ActionID) ([]byte, error) {
+	c.ioSem <- struct{}{}
+
+	cachedData, err := timeutils.TrackStage[[]byte](c.sw, "cache io", func() ([]byte, error) {
+		b, _, errGB := cache.GetBytes(c.lowLevelCache, actionID)
+		return b, errGB
+	})
+
+	<-c.ioSem
+
+	if err != nil {
+		return nil, err
+	}
+
+	return cachedData, nil
 }
 
 func (c *Cache) encode(data any) (*bytes.Buffer, error) {
