@@ -57,13 +57,9 @@ func (c *Cache) Close() {
 }
 
 func (c *Cache) Put(pkg *packages.Package, mode HashMode, key string, data any) error {
-	var err error
-	buf := &bytes.Buffer{}
-	c.sw.TrackStage("gob", func() {
-		err = gob.NewEncoder(buf).Encode(data)
-	})
+	buf, err := c.encode(data)
 	if err != nil {
-		return fmt.Errorf("failed to gob encode: %w", err)
+		return err
 	}
 
 	var aID cache.ActionID
@@ -123,14 +119,7 @@ func (c *Cache) Get(pkg *packages.Package, mode HashMode, key string, data any) 
 		return fmt.Errorf("failed to get data from low-level cache by key %s for package %s: %w", key, pkg.Name, err)
 	}
 
-	c.sw.TrackStage("gob", func() {
-		err = gob.NewDecoder(bytes.NewReader(b)).Decode(data)
-	})
-	if err != nil {
-		return fmt.Errorf("failed to gob decode: %w", err)
-	}
-
-	return nil
+	return c.decode(b, data)
 }
 
 func (c *Cache) pkgActionID(pkg *packages.Package, mode HashMode) (cache.ActionID, error) {
@@ -226,6 +215,29 @@ func (c *Cache) packageHash(pkg *packages.Package, mode HashMode) (string, error
 
 	c.pkgHashes.Store(pkg, hashRes)
 	return hashRes[mode], nil
+}
+
+func (c *Cache) encode(data any) (*bytes.Buffer, error) {
+	buf := &bytes.Buffer{}
+	err := c.sw.TrackStageErr("gob", func() error {
+		return gob.NewEncoder(buf).Encode(data)
+	})
+	if err != nil {
+		return nil, fmt.Errorf("failed to gob encode: %w", err)
+	}
+
+	return buf, nil
+}
+
+func (c *Cache) decode(b []byte, data any) error {
+	err := c.sw.TrackStageErr("gob", func() error {
+		return gob.NewDecoder(bytes.NewReader(b)).Decode(data)
+	})
+	if err != nil {
+		return fmt.Errorf("failed to gob decode: %w", err)
+	}
+
+	return nil
 }
 
 func SetSalt(b *bytes.Buffer) {
