@@ -147,9 +147,7 @@ func (c *Cache) packageHash(pkg *packages.Package, mode HashMode) (string, error
 
 	fmt.Fprintf(key, "pkgpath %s\n", pkg.PkgPath)
 	for _, f := range pkg.CompiledGoFiles {
-		c.ioSem <- struct{}{}
-		h, fErr := cache.FileHash(f)
-		<-c.ioSem
+		h, fErr := c.fileHash(f)
 		if fErr != nil {
 			return "", fmt.Errorf("failed to calculate file %s hash: %w", f, fErr)
 		}
@@ -234,6 +232,20 @@ func (c *Cache) getBytes(actionID cache.ActionID) ([]byte, error) {
 	}
 
 	return cachedData, nil
+}
+
+func (c *Cache) fileHash(f string) ([cache.HashSize]byte, error) {
+	c.ioSem <- struct{}{}
+
+	h, err := cache.FileHash(f)
+
+	<-c.ioSem
+
+	if err != nil {
+		return [cache.HashSize]byte{}, err
+	}
+
+	return h, nil
 }
 
 func (c *Cache) encode(data any) (*bytes.Buffer, error) {
