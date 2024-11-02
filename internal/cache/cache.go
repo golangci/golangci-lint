@@ -164,30 +164,14 @@ func (c *Cache) packageHash(pkg *packages.Package, mode HashMode) (string, error
 		return strings.Compare(a.PkgPath, b.PkgPath)
 	})
 
-	calcDepsHash := func(depMode HashMode) error {
-		for _, dep := range imps {
-			if dep.PkgPath == "unsafe" {
-				continue
-			}
-
-			depHash, depErr := c.packageHash(dep, depMode)
-			if depErr != nil {
-				return fmt.Errorf("failed to calculate hash for dependency %s with mode %d: %w", dep.Name, depMode, depErr)
-			}
-
-			fmt.Fprintf(key, "import %s %s\n", dep.PkgPath, depHash)
-		}
-		return nil
-	}
-
-	if err := calcDepsHash(HashModeNeedOnlySelf); err != nil {
+	if err := c.computeDepsHash(HashModeNeedOnlySelf, imps, key); err != nil {
 		return "", err
 	}
 
 	curSum = key.Sum()
 	hashRes[HashModeNeedDirectDeps] = hex.EncodeToString(curSum[:])
 
-	if err := calcDepsHash(HashModeNeedAllDeps); err != nil {
+	if err := c.computeDepsHash(HashModeNeedAllDeps, imps, key); err != nil {
 		return "", err
 	}
 	curSum = key.Sum()
@@ -199,6 +183,23 @@ func (c *Cache) packageHash(pkg *packages.Package, mode HashMode) (string, error
 
 	c.pkgHashes.Store(pkg, hashRes)
 	return hashRes[mode], nil
+}
+
+func (c *Cache) computeDepsHash(depMode HashMode, imps []*packages.Package, key *cache.Hash) error {
+	for _, dep := range imps {
+		if dep.PkgPath == "unsafe" {
+			continue
+		}
+
+		depHash, err := c.packageHash(dep, depMode)
+		if err != nil {
+			return fmt.Errorf("failed to calculate hash for dependency %s with mode %d: %w", dep.Name, depMode, err)
+		}
+
+		fmt.Fprintf(key, "import %s %s\n", dep.PkgPath, depHash)
+	}
+
+	return nil
 }
 
 func (c *Cache) putBytes(actionID cache.ActionID, buf *bytes.Buffer) error {
