@@ -7,9 +7,11 @@ import (
 	"errors"
 	"fmt"
 	"runtime"
-	"sort"
+	"slices"
+	"strings"
 	"sync"
 
+	"golang.org/x/exp/maps"
 	"golang.org/x/tools/go/packages"
 
 	"github.com/golangci/golangci-lint/internal/go/cache"
@@ -156,12 +158,10 @@ func (c *Cache) packageHash(pkg *packages.Package, mode HashMode) (string, error
 	curSum := key.Sum()
 	hashRes[HashModeNeedOnlySelf] = hex.EncodeToString(curSum[:])
 
-	imps := make([]*packages.Package, 0, len(pkg.Imports))
-	for _, imp := range pkg.Imports {
-		imps = append(imps, imp)
-	}
-	sort.Slice(imps, func(i, j int) bool {
-		return imps[i].PkgPath < imps[j].PkgPath
+	imps := maps.Values(pkg.Imports)
+
+	slices.SortFunc(imps, func(a, b *packages.Package) int {
+		return strings.Compare(a.PkgPath, b.PkgPath)
 	})
 
 	calcDepsHash := func(depMode HashMode) error {
