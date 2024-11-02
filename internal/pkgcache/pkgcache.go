@@ -226,3 +226,12 @@ func (c *Cache) packageHash(pkg *packages.Package, mode HashMode) (string, error
 	c.pkgHashes.Store(pkg, hashRes)
 	return hashRes[mode], nil
 }
+
+func SetSalt(b *bytes.Buffer) {
+	cache.SetSalt(b.Bytes())
+}
+
+func DefaultDir() string {
+	cacheDir, _ := cache.DefaultDir()
+	return cacheDir
+}

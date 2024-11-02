@@ -27,7 +27,6 @@ import (
 	"golang.org/x/exp/maps"
 	"gopkg.in/yaml.v3"
 
-	"github.com/golangci/golangci-lint/internal/go/cache"
 	"github.com/golangci/golangci-lint/internal/pkgcache"
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/exitcodes"
@@ -640,7 +639,7 @@ func initHashSalt(version string, cfg *config.Config) error {
 
 	b := bytes.NewBuffer(binSalt)
 	b.Write(configSalt)
-	cache.SetSalt(b.Bytes())
+	pkgcache.SetSalt(b)
 	return nil
 }
 

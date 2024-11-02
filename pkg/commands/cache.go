@@ -7,7 +7,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/golangci/golangci-lint/internal/go/cache"
+	"github.com/golangci/golangci-lint/internal/pkgcache"
 	"github.com/golangci/golangci-lint/pkg/fsutils"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 )
@@ -51,7 +51,7 @@ func newCacheCommand() *cacheCommand {
 }
 
 func (*cacheCommand) executeClean(_ *cobra.Command, _ []string) error {
-	cacheDir, _ := cache.DefaultDir()
+	cacheDir := pkgcache.DefaultDir()
 
 	if err := os.RemoveAll(cacheDir); err != nil {
 		return fmt.Errorf("failed to remove dir %s: %w", cacheDir, err)
@@ -61,7 +61,7 @@ func (*cacheCommand) executeClean(_ *cobra.Command, _ []string) error {
 }
 
 func (*cacheCommand) executeStatus(_ *cobra.Command, _ []string) {
-	cacheDir, _ := cache.DefaultDir()
+	cacheDir := pkgcache.DefaultDir()
 
 	_, _ = fmt.Fprintf(logutils.StdOut, "Dir: %s\n", cacheDir)
 
