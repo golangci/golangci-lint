@@ -1,4 +1,4 @@
-package pkgcache
+package cache
 
 import (
 	"bytes"

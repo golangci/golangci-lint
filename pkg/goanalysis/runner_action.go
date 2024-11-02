@@ -13,8 +13,8 @@ import (
 	"golang.org/x/tools/go/packages"
 	"golang.org/x/tools/go/types/objectpath"
 
+	"github.com/golangci/golangci-lint/internal/cache"
 	"github.com/golangci/golangci-lint/internal/errorutil"
-	"github.com/golangci/golangci-lint/internal/pkgcache"
 	"github.com/golangci/golangci-lint/pkg/goanalysis/pkgerrors"
 )
 
@@ -328,14 +328,14 @@ func (act *action) persistFactsToCache() error {
 	factsCacheDebugf("Caching %d facts for package %q and analyzer %s", len(facts), act.pkg.Name, act.a.Name)
 
 	key := fmt.Sprintf("%s/facts", analyzer.Name)
-	return act.r.pkgCache.Put(act.pkg, pkgcache.HashModeNeedAllDeps, key, facts)
+	return act.r.pkgCache.Put(act.pkg, cache.HashModeNeedAllDeps, key, facts)
 }
 
 func (act *action) loadPersistedFacts() bool {
 	var facts []Fact
 	key := fmt.Sprintf("%s/facts", act.a.Name)
-	if err := act.r.pkgCache.Get(act.pkg, pkgcache.HashModeNeedAllDeps, key, &facts); err != nil {
-		if !errors.Is(err, pkgcache.ErrMissing) && !errors.Is(err, io.EOF) {
+	if err := act.r.pkgCache.Get(act.pkg, cache.HashModeNeedAllDeps, key, &facts); err != nil {
+		if !errors.Is(err, cache.ErrMissing) && !errors.Is(err, io.EOF) {
 			act.r.log.Warnf("Failed to get persisted facts: %s", err)
 		}
 
