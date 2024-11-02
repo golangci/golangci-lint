@@ -122,6 +122,7 @@ func (c *Cache) pkgActionID(pkg *packages.Package, mode HashMode) (cache.ActionI
 	if err != nil {
 		return cache.ActionID{}, fmt.Errorf("failed to make a hash: %w", err)
 	}
+
 	fmt.Fprintf(key, "pkgpath %s\n", pkg.PkgPath)
 	fmt.Fprintf(key, "pkghash %s\n", hash)
 
@@ -138,24 +139,28 @@ func (c *Cache) packageHash(pkg *packages.Package, mode HashMode) (string, error
 		if _, ok := hashRes[mode]; !ok {
 			return "", fmt.Errorf("no mode %d in hash result", mode)
 		}
+
 		return hashRes[mode], nil
 	}
-
-	hashRes := hashResults{}
 
 	key, err := cache.NewHash("package hash")
 	if err != nil {
 		return "", fmt.Errorf("failed to make a hash: %w", err)
 	}
 
+	hashRes := hashResults{}
+
 	fmt.Fprintf(key, "pkgpath %s\n", pkg.PkgPath)
+
 	for _, f := range pkg.CompiledGoFiles {
 		h, fErr := c.fileHash(f)
 		if fErr != nil {
 			return "", fmt.Errorf("failed to calculate file %s hash: %w", f, fErr)
 		}
+
 		fmt.Fprintf(key, "file %s %x\n", f, h)
 	}
+
 	curSum := key.Sum()
 	hashRes[HashModeNeedOnlySelf] = hex.EncodeToString(curSum[:])
 
@@ -175,6 +180,7 @@ func (c *Cache) packageHash(pkg *packages.Package, mode HashMode) (string, error
 	if err := c.computeDepsHash(HashModeNeedAllDeps, imps, key); err != nil {
 		return "", err
 	}
+
 	curSum = key.Sum()
 	hashRes[HashModeNeedAllDeps] = hex.EncodeToString(curSum[:])
 
@@ -183,6 +189,7 @@ func (c *Cache) packageHash(pkg *packages.Package, mode HashMode) (string, error
 	}
 
 	c.pkgHashes.Store(pkg, hashRes)
+
 	return hashRes[mode], nil
 }
 
