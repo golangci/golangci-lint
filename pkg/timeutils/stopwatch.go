@@ -114,3 +114,25 @@ func (s *Stopwatch) TrackStage(name string, f func()) {
 	s.stages[name] += time.Since(startedAt)
 	s.mu.Unlock()
 }
+
+func (s *Stopwatch) TrackStageErr(name string, f func() error) error {
+	startedAt := time.Now()
+	err := f()
+
+	s.mu.Lock()
+	s.stages[name] += time.Since(startedAt)
+	s.mu.Unlock()
+
+	return err
+}
+
+func TrackStage[T any](s *Stopwatch, name string, f func() (T, error)) (T, error) {
+	var result T
+	var err error
+
+	s.TrackStage(name, func() {
+		result, err = f()
+	})
+
+	return result, err
+}
