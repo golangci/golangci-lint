@@ -29,6 +29,8 @@ const (
 
 var ErrMissing = errors.New("missing data")
 
+type hashResults map[HashMode]string
+
 // Cache is a per-package data cache.
 // A cached data is invalidated when package,
 // or it's dependencies change.
@@ -130,7 +132,6 @@ func (c *Cache) pkgActionID(pkg *packages.Package, mode HashMode) (cache.ActionI
 // The hash is based on all Go files that make up the package,
 // as well as the hashes of imported packages.
 func (c *Cache) packageHash(pkg *packages.Package, mode HashMode) (string, error) {
-	type hashResults map[HashMode]string
 	hashResI, ok := c.pkgHashes.Load(pkg)
 	if ok {
 		hashRes := hashResI.(hashResults)
