@@ -62,24 +62,14 @@ func (c *Cache) Put(pkg *packages.Package, mode HashMode, key string, data any) 
 		return err
 	}
 
-	var aID cache.ActionID
-
-	c.sw.TrackStage("key build", func() {
-		aID, err = c.pkgActionID(pkg, mode)
-		if err == nil {
-			subkey, subkeyErr := cache.Subkey(aID, key)
-			if subkeyErr != nil {
-				err = fmt.Errorf("failed to build subkey: %w", subkeyErr)
-			}
-			aID = subkey
-		}
-	})
+	actionID, err := c.buildKey(pkg, mode, key)
 	if err != nil {
 		return fmt.Errorf("failed to calculate package %s action id: %w", pkg.Name, err)
 	}
+
 	c.ioSem <- struct{}{}
 	c.sw.TrackStage("cache io", func() {
-		err = cache.PutBytes(c.lowLevelCache, aID, buf.Bytes())
+		err = cache.PutBytes(c.lowLevelCache, actionID, buf.Bytes())
 	})
 	<-c.ioSem
 	if err != nil {
@@ -90,18 +80,7 @@ func (c *Cache) Put(pkg *packages.Package, mode HashMode, key string, data any) 
 }
 
 func (c *Cache) Get(pkg *packages.Package, mode HashMode, key string, data any) error {
-	var aID cache.ActionID
-	var err error
-	c.sw.TrackStage("key build", func() {
-		aID, err = c.pkgActionID(pkg, mode)
-		if err == nil {
-			subkey, subkeyErr := cache.Subkey(aID, key)
-			if subkeyErr != nil {
-				err = fmt.Errorf("failed to build subkey: %w", subkeyErr)
-			}
-			aID = subkey
-		}
-	})
+	actionID, err := c.buildKey(pkg, mode, key)
 	if err != nil {
 		return fmt.Errorf("failed to calculate package %s action id: %w", pkg.Name, err)
 	}
@@ -109,7 +88,7 @@ func (c *Cache) Get(pkg *packages.Package, mode HashMode, key string, data any) 
 	var b []byte
 	c.ioSem <- struct{}{}
 	c.sw.TrackStage("cache io", func() {
-		b, _, err = cache.GetBytes(c.lowLevelCache, aID)
+		b, _, err = cache.GetBytes(c.lowLevelCache, actionID)
 	})
 	<-c.ioSem
 	if err != nil {
@@ -120,6 +99,22 @@ func (c *Cache) Get(pkg *packages.Package, mode HashMode, key string, data any) 
 	}
 
 	return c.decode(b, data)
+}
+
+func (c *Cache) buildKey(pkg *packages.Package, mode HashMode, key string) (cache.ActionID, error) {
+	return timeutils.TrackStage[cache.ActionID](c.sw, "key build", func() (cache.ActionID, error) {
+		actionID, err := c.pkgActionID(pkg, mode)
+		if err != nil {
+			return actionID, err
+		}
+
+		subkey, subkeyErr := cache.Subkey(actionID, key)
+		if subkeyErr != nil {
+			return actionID, fmt.Errorf("failed to build subkey: %w", subkeyErr)
+		}
+
+		return subkey, nil
+	})
 }
 
 func (c *Cache) pkgActionID(pkg *packages.Package, mode HashMode) (cache.ActionID, error) {
