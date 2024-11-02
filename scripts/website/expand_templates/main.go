@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -8,7 +9,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/golangci/golangci-lint/internal/renameio"
+	"github.com/rogpeppe/go-internal/lockedfile"
+
 	"github.com/golangci/golangci-lint/scripts/website/github"
 	"github.com/golangci/golangci-lint/scripts/website/types"
 )
@@ -80,7 +82,7 @@ func processDoc(path string, replacements map[string]string, madeReplacements ma
 	}
 
 	log.Printf("Expanded template in %s, saving it", path)
-	if err = renameio.WriteFile(path, []byte(content), os.ModePerm); err != nil {
+	if err = lockedfile.Write(path, bytes.NewBufferString(content), os.ModePerm); err != nil {
 		return fmt.Errorf("write changes to file %s: %w", path, err)
 	}
 

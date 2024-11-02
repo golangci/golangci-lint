@@ -182,6 +182,8 @@ func saveIssuesToCache(allPkgs []*packages.Package, pkgsFromCache map[*packages.
 	close(pkgCh)
 	wg.Wait()
 
+	lintCtx.PkgCache.Close()
+
 	issuesCacheDebugf("Saved %d issues from %d packages to cache in %s", savedIssuesCount, len(allPkgs), time.Since(startedAt))
 }
 
