@@ -2,18 +2,31 @@
 
 Extracted from `go/src/cmd/go/internal/cache/`.
 
-- sync with go1.23.2
-- sync with go1.22.8
-- sync with go1.21.13
-- sync with go1.20.14
-- sync with go1.19.13
-- sync with go1.18.10
-- sync with go1.17.13
-- sync with go1.16.15
-- sync with go1.15.15
-- sync with go1.14.15
+The main modifications are:
+- The errors management
+  - Some methods return error.
+  - Some errors are returned instead of being ignored.
+- The name of the env vars:
+  - `GOCACHE` -> `GOLANGCI_LINT_CACHE`
+  - `GOCACHEPROG` -> `GOLANGCI_LINT_CACHEPROG` 
 
-# Previous History
+## History
+
+- https://github.com/golangci/golangci-lint/pull/5100
+  - Move package from `internal/cache` to `internal/go/cache`
+- https://github.com/golangci/golangci-lint/pull/5098
+  - sync with go1.23.2
+  - sync with go1.22.8
+  - sync with go1.21.13
+  - sync with go1.20.14
+  - sync with go1.19.13
+  - sync with go1.18.10
+  - sync with go1.17.13
+  - sync with go1.16.15
+  - sync with go1.15.15
+  - sync with go1.14.15
+
+## Previous History
 
 Based on the initial PR/commit the based in a mix between go1.12 and go1.13:
 - cache.go (go1.13)
