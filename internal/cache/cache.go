@@ -67,11 +67,7 @@ func (c *Cache) Put(pkg *packages.Package, mode HashMode, key string, data any) 
 		return fmt.Errorf("failed to calculate package %s action id: %w", pkg.Name, err)
 	}
 
-	c.ioSem <- struct{}{}
-	c.sw.TrackStage("cache io", func() {
-		err = cache.PutBytes(c.lowLevelCache, actionID, buf.Bytes())
-	})
-	<-c.ioSem
+	err = c.putBytes(actionID, buf)
 	if err != nil {
 		return fmt.Errorf("failed to save data to low-level cache by key %s for package %s: %w", key, pkg.Name, err)
 	}
@@ -210,6 +206,22 @@ func (c *Cache) packageHash(pkg *packages.Package, mode HashMode) (string, error
 
 	c.pkgHashes.Store(pkg, hashRes)
 	return hashRes[mode], nil
+}
+
+func (c *Cache) putBytes(actionID cache.ActionID, buf *bytes.Buffer) error {
+	c.ioSem <- struct{}{}
+
+	err := c.sw.TrackStageErr("cache io", func() error {
+		return cache.PutBytes(c.lowLevelCache, actionID, buf.Bytes())
+	})
+
+	<-c.ioSem
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (c *Cache) encode(data any) (*bytes.Buffer, error) {
