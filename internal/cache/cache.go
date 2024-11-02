@@ -25,8 +25,11 @@ const (
 	HashModeNeedAllDeps
 )
 
-// Cache is a per-package data cache. A cached data is invalidated when
-// package, or it's dependencies change.
+var ErrMissing = errors.New("missing data")
+
+// Cache is a per-package data cache.
+// A cached data is invalidated when package,
+// or it's dependencies change.
 type Cache struct {
 	lowLevelCache cache.Cache
 	pkgHashes     sync.Map
@@ -90,8 +93,6 @@ func (c *Cache) Put(pkg *packages.Package, mode HashMode, key string, data any) 
 	return nil
 }
 
-var ErrMissing = errors.New("missing data")
-
 func (c *Cache) Get(pkg *packages.Package, mode HashMode, key string, data any) error {
 	var aID cache.ActionID
 	var err error
@@ -148,9 +149,9 @@ func (c *Cache) pkgActionID(pkg *packages.Package, mode HashMode) (cache.ActionI
 	return key.Sum(), nil
 }
 
-// packageHash computes a package's hash. The hash is based on all Go
-// files that make up the package, as well as the hashes of imported
-// packages.
+// packageHash computes a package's hash.
+// The hash is based on all Go files that make up the package,
+// as well as the hashes of imported packages.
 func (c *Cache) packageHash(pkg *packages.Package, mode HashMode) (string, error) {
 	type hashResults map[HashMode]string
 	hashResI, ok := c.pkgHashes.Load(pkg)
