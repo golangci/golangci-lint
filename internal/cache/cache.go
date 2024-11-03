@@ -52,12 +52,10 @@ func NewCache(sw *timeutils.Stopwatch, log logutils.Log) (*Cache, error) {
 }
 
 func (c *Cache) Close() {
-	c.sw.TrackStage("close", func() {
-		err := c.lowLevelCache.Close()
-		if err != nil {
-			c.log.Errorf("cache close: %v", err)
-		}
-	})
+	err := c.sw.TrackStageErr("close", c.lowLevelCache.Close)
+	if err != nil {
+		c.log.Errorf("cache close: %v", err)
+	}
 }
 
 func (c *Cache) Put(pkg *packages.Package, mode HashMode, key string, data any) error {
