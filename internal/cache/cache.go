@@ -128,14 +128,14 @@ func (c *Cache) pkgActionID(pkg *packages.Package, mode HashMode) (cache.ActionI
 }
 
 func (c *Cache) packageHash(pkg *packages.Package, mode HashMode) (string, error) {
-	hashResI, ok := c.pkgHashes.Load(pkg)
-	if ok {
-		hashRes := hashResI.(hashResults)
-		if _, ok := hashRes[mode]; !ok {
-			return "", fmt.Errorf("no mode %d in hash result", mode)
+	results, found := c.pkgHashes.Load(pkg)
+	if found {
+		hashRes := results.(hashResults)
+		if result, ok := hashRes[mode]; ok {
+			return result, nil
 		}
 
-		return hashRes[mode], nil
+		return "", fmt.Errorf("no mode %d in hash result", mode)
 	}
 
 	hashRes, err := c.computePkgHash(pkg)
@@ -143,13 +143,14 @@ func (c *Cache) packageHash(pkg *packages.Package, mode HashMode) (string, error
 		return "", err
 	}
 
-	if _, ok := hashRes[mode]; !ok {
+	result, found := hashRes[mode]
+	if !found {
 		return "", fmt.Errorf("invalid mode %d", mode)
 	}
 
 	c.pkgHashes.Store(pkg, hashRes)
 
-	return hashRes[mode], nil
+	return result, nil
 }
 
 // computePkgHash computes a package's hash.
