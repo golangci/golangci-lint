@@ -127,9 +127,6 @@ func (c *Cache) pkgActionID(pkg *packages.Package, mode HashMode) (cache.ActionI
 	return key.Sum(), nil
 }
 
-// packageHash computes a package's hash.
-// The hash is based on all Go files that make up the package,
-// as well as the hashes of imported packages.
 func (c *Cache) packageHash(pkg *packages.Package, mode HashMode) (string, error) {
 	hashResI, ok := c.pkgHashes.Load(pkg)
 	if ok {
@@ -141,9 +138,27 @@ func (c *Cache) packageHash(pkg *packages.Package, mode HashMode) (string, error
 		return hashRes[mode], nil
 	}
 
+	hashRes, err := c.computePkgHash(pkg)
+	if err != nil {
+		return "", err
+	}
+
+	if _, ok := hashRes[mode]; !ok {
+		return "", fmt.Errorf("invalid mode %d", mode)
+	}
+
+	c.pkgHashes.Store(pkg, hashRes)
+
+	return hashRes[mode], nil
+}
+
+// computePkgHash computes a package's hash.
+// The hash is based on all Go files that make up the package,
+// as well as the hashes of imported packages.
+func (c *Cache) computePkgHash(pkg *packages.Package) (hashResults, error) {
 	key, err := cache.NewHash("package hash")
 	if err != nil {
-		return "", fmt.Errorf("failed to make a hash: %w", err)
+		return nil, fmt.Errorf("failed to make a hash: %w", err)
 	}
 
 	hashRes := hashResults{}
@@ -153,7 +168,7 @@ func (c *Cache) packageHash(pkg *packages.Package, mode HashMode) (string, error
 	for _, f := range pkg.CompiledGoFiles {
 		h, fErr := c.fileHash(f)
 		if fErr != nil {
-			return "", fmt.Errorf("failed to calculate file %s hash: %w", f, fErr)
+			return nil, fmt.Errorf("failed to calculate file %s hash: %w", f, fErr)
 		}
 
 		fmt.Fprintf(key, "file %s %x\n", f, h)
@@ -169,26 +184,20 @@ func (c *Cache) packageHash(pkg *packages.Package, mode HashMode) (string, error
 	})
 
 	if err := c.computeDepsHash(HashModeNeedOnlySelf, imps, key); err != nil {
-		return "", err
+		return nil, err
 	}
 
 	curSum = key.Sum()
 	hashRes[HashModeNeedDirectDeps] = hex.EncodeToString(curSum[:])
 
 	if err := c.computeDepsHash(HashModeNeedAllDeps, imps, key); err != nil {
-		return "", err
+		return nil, err
 	}
 
 	curSum = key.Sum()
 	hashRes[HashModeNeedAllDeps] = hex.EncodeToString(curSum[:])
 
-	if _, ok := hashRes[mode]; !ok {
-		return "", fmt.Errorf("invalid mode %d", mode)
-	}
-
-	c.pkgHashes.Store(pkg, hashRes)
-
-	return hashRes[mode], nil
+	return hashRes, nil
 }
 
 func (c *Cache) computeDepsHash(depMode HashMode, imps []*packages.Package, key *cache.Hash) error {
