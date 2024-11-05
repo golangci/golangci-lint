@@ -7,9 +7,11 @@ import (
 	"errors"
 	"fmt"
 	"runtime"
-	"sort"
+	"slices"
+	"strings"
 	"sync"
 
+	"golang.org/x/exp/maps"
 	"golang.org/x/tools/go/packages"
 
 	"github.com/golangci/golangci-lint/internal/go/cache"
@@ -25,8 +27,13 @@ const (
 	HashModeNeedAllDeps
 )
 
-// Cache is a per-package data cache. A cached data is invalidated when
-// package, or it's dependencies change.
+var ErrMissing = errors.New("missing data")
+
+type hashResults map[HashMode]string
+
+// Cache is a per-package data cache.
+// A cached data is invalidated when package,
+// or it's dependencies change.
 type Cache struct {
 	lowLevelCache cache.Cache
 	pkgHashes     sync.Map
@@ -45,44 +52,24 @@ func NewCache(sw *timeutils.Stopwatch, log logutils.Log) (*Cache, error) {
 }
 
 func (c *Cache) Close() {
-	c.sw.TrackStage("close", func() {
-		err := c.lowLevelCache.Close()
-		if err != nil {
-			c.log.Errorf("cache close: %v", err)
-		}
-	})
+	err := c.sw.TrackStageErr("close", c.lowLevelCache.Close)
+	if err != nil {
+		c.log.Errorf("cache close: %v", err)
+	}
 }
 
 func (c *Cache) Put(pkg *packages.Package, mode HashMode, key string, data any) error {
-	var err error
-	buf := &bytes.Buffer{}
-	c.sw.TrackStage("gob", func() {
-		err = gob.NewEncoder(buf).Encode(data)
-	})
+	buf, err := c.encode(data)
 	if err != nil {
-		return fmt.Errorf("failed to gob encode: %w", err)
+		return err
 	}
 
-	var aID cache.ActionID
-
-	c.sw.TrackStage("key build", func() {
-		aID, err = c.pkgActionID(pkg, mode)
-		if err == nil {
-			subkey, subkeyErr := cache.Subkey(aID, key)
-			if subkeyErr != nil {
-				err = fmt.Errorf("failed to build subkey: %w", subkeyErr)
-			}
-			aID = subkey
-		}
-	})
+	actionID, err := c.buildKey(pkg, mode, key)
 	if err != nil {
 		return fmt.Errorf("failed to calculate package %s action id: %w", pkg.Name, err)
 	}
-	c.ioSem <- struct{}{}
-	c.sw.TrackStage("cache io", func() {
-		err = cache.PutBytes(c.lowLevelCache, aID, buf.Bytes())
-	})
-	<-c.ioSem
+
+	err = c.putBytes(actionID, buf)
 	if err != nil {
 		return fmt.Errorf("failed to save data to low-level cache by key %s for package %s: %w", key, pkg.Name, err)
 	}
@@ -90,31 +77,13 @@ func (c *Cache) Put(pkg *packages.Package, mode HashMode, key string, data any) 
 	return nil
 }
 
-var ErrMissing = errors.New("missing data")
-
 func (c *Cache) Get(pkg *packages.Package, mode HashMode, key string, data any) error {
-	var aID cache.ActionID
-	var err error
-	c.sw.TrackStage("key build", func() {
-		aID, err = c.pkgActionID(pkg, mode)
-		if err == nil {
-			subkey, subkeyErr := cache.Subkey(aID, key)
-			if subkeyErr != nil {
-				err = fmt.Errorf("failed to build subkey: %w", subkeyErr)
-			}
-			aID = subkey
-		}
-	})
+	actionID, err := c.buildKey(pkg, mode, key)
 	if err != nil {
 		return fmt.Errorf("failed to calculate package %s action id: %w", pkg.Name, err)
 	}
 
-	var b []byte
-	c.ioSem <- struct{}{}
-	c.sw.TrackStage("cache io", func() {
-		b, _, err = cache.GetBytes(c.lowLevelCache, aID)
-	})
-	<-c.ioSem
+	cachedData, err := c.getBytes(actionID)
 	if err != nil {
 		if cache.IsErrMissing(err) {
 			return ErrMissing
@@ -122,14 +91,23 @@ func (c *Cache) Get(pkg *packages.Package, mode HashMode, key string, data any) 
 		return fmt.Errorf("failed to get data from low-level cache by key %s for package %s: %w", key, pkg.Name, err)
 	}
 
-	c.sw.TrackStage("gob", func() {
-		err = gob.NewDecoder(bytes.NewReader(b)).Decode(data)
-	})
-	if err != nil {
-		return fmt.Errorf("failed to gob decode: %w", err)
-	}
+	return c.decode(cachedData, data)
+}
 
-	return nil
+func (c *Cache) buildKey(pkg *packages.Package, mode HashMode, key string) (cache.ActionID, error) {
+	return timeutils.TrackStage(c.sw, "key build", func() (cache.ActionID, error) {
+		actionID, err := c.pkgActionID(pkg, mode)
+		if err != nil {
+			return actionID, err
+		}
+
+		subkey, subkeyErr := cache.Subkey(actionID, key)
+		if subkeyErr != nil {
+			return actionID, fmt.Errorf("failed to build subkey: %w", subkeyErr)
+		}
+
+		return subkey, nil
+	})
 }
 
 func (c *Cache) pkgActionID(pkg *packages.Package, mode HashMode) (cache.ActionID, error) {
@@ -142,89 +120,172 @@ func (c *Cache) pkgActionID(pkg *packages.Package, mode HashMode) (cache.ActionI
 	if err != nil {
 		return cache.ActionID{}, fmt.Errorf("failed to make a hash: %w", err)
 	}
+
 	fmt.Fprintf(key, "pkgpath %s\n", pkg.PkgPath)
 	fmt.Fprintf(key, "pkghash %s\n", hash)
 
 	return key.Sum(), nil
 }
 
-// packageHash computes a package's hash. The hash is based on all Go
-// files that make up the package, as well as the hashes of imported
-// packages.
 func (c *Cache) packageHash(pkg *packages.Package, mode HashMode) (string, error) {
-	type hashResults map[HashMode]string
-	hashResI, ok := c.pkgHashes.Load(pkg)
-	if ok {
-		hashRes := hashResI.(hashResults)
-		if _, ok := hashRes[mode]; !ok {
-			return "", fmt.Errorf("no mode %d in hash result", mode)
+	results, found := c.pkgHashes.Load(pkg)
+	if found {
+		hashRes := results.(hashResults)
+		if result, ok := hashRes[mode]; ok {
+			return result, nil
 		}
-		return hashRes[mode], nil
+
+		return "", fmt.Errorf("no mode %d in hash result", mode)
+	}
+
+	hashRes, err := c.computePkgHash(pkg)
+	if err != nil {
+		return "", err
+	}
+
+	result, found := hashRes[mode]
+	if !found {
+		return "", fmt.Errorf("invalid mode %d", mode)
+	}
+
+	c.pkgHashes.Store(pkg, hashRes)
+
+	return result, nil
+}
+
+// computePkgHash computes a package's hash.
+// The hash is based on all Go files that make up the package,
+// as well as the hashes of imported packages.
+func (c *Cache) computePkgHash(pkg *packages.Package) (hashResults, error) {
+	key, err := cache.NewHash("package hash")
+	if err != nil {
+		return nil, fmt.Errorf("failed to make a hash: %w", err)
 	}
 
 	hashRes := hashResults{}
 
-	key, err := cache.NewHash("package hash")
-	if err != nil {
-		return "", fmt.Errorf("failed to make a hash: %w", err)
-	}
-
 	fmt.Fprintf(key, "pkgpath %s\n", pkg.PkgPath)
+
 	for _, f := range pkg.CompiledGoFiles {
-		c.ioSem <- struct{}{}
-		h, fErr := cache.FileHash(f)
-		<-c.ioSem
+		h, fErr := c.fileHash(f)
 		if fErr != nil {
-			return "", fmt.Errorf("failed to calculate file %s hash: %w", f, fErr)
+			return nil, fmt.Errorf("failed to calculate file %s hash: %w", f, fErr)
 		}
+
 		fmt.Fprintf(key, "file %s %x\n", f, h)
 	}
+
 	curSum := key.Sum()
 	hashRes[HashModeNeedOnlySelf] = hex.EncodeToString(curSum[:])
 
-	imps := make([]*packages.Package, 0, len(pkg.Imports))
-	for _, imp := range pkg.Imports {
-		imps = append(imps, imp)
-	}
-	sort.Slice(imps, func(i, j int) bool {
-		return imps[i].PkgPath < imps[j].PkgPath
+	imps := maps.Values(pkg.Imports)
+
+	slices.SortFunc(imps, func(a, b *packages.Package) int {
+		return strings.Compare(a.PkgPath, b.PkgPath)
 	})
 
-	calcDepsHash := func(depMode HashMode) error {
-		for _, dep := range imps {
-			if dep.PkgPath == "unsafe" {
-				continue
-			}
-
-			depHash, depErr := c.packageHash(dep, depMode)
-			if depErr != nil {
-				return fmt.Errorf("failed to calculate hash for dependency %s with mode %d: %w", dep.Name, depMode, depErr)
-			}
-
-			fmt.Fprintf(key, "import %s %s\n", dep.PkgPath, depHash)
-		}
-		return nil
-	}
-
-	if err := calcDepsHash(HashModeNeedOnlySelf); err != nil {
-		return "", err
+	if err := c.computeDepsHash(HashModeNeedOnlySelf, imps, key); err != nil {
+		return nil, err
 	}
 
 	curSum = key.Sum()
 	hashRes[HashModeNeedDirectDeps] = hex.EncodeToString(curSum[:])
 
-	if err := calcDepsHash(HashModeNeedAllDeps); err != nil {
-		return "", err
+	if err := c.computeDepsHash(HashModeNeedAllDeps, imps, key); err != nil {
+		return nil, err
 	}
+
 	curSum = key.Sum()
 	hashRes[HashModeNeedAllDeps] = hex.EncodeToString(curSum[:])
 
-	if _, ok := hashRes[mode]; !ok {
-		return "", fmt.Errorf("invalid mode %d", mode)
+	return hashRes, nil
+}
+
+func (c *Cache) computeDepsHash(depMode HashMode, imps []*packages.Package, key *cache.Hash) error {
+	for _, dep := range imps {
+		if dep.PkgPath == "unsafe" {
+			continue
+		}
+
+		depHash, err := c.packageHash(dep, depMode)
+		if err != nil {
+			return fmt.Errorf("failed to calculate hash for dependency %s with mode %d: %w", dep.Name, depMode, err)
+		}
+
+		fmt.Fprintf(key, "import %s %s\n", dep.PkgPath, depHash)
 	}
 
-	c.pkgHashes.Store(pkg, hashRes)
-	return hashRes[mode], nil
+	return nil
+}
+
+func (c *Cache) putBytes(actionID cache.ActionID, buf *bytes.Buffer) error {
+	c.ioSem <- struct{}{}
+
+	err := c.sw.TrackStageErr("cache io", func() error {
+		return cache.PutBytes(c.lowLevelCache, actionID, buf.Bytes())
+	})
+
+	<-c.ioSem
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (c *Cache) getBytes(actionID cache.ActionID) ([]byte, error) {
+	c.ioSem <- struct{}{}
+
+	cachedData, err := timeutils.TrackStage(c.sw, "cache io", func() ([]byte, error) {
+		b, _, errGB := cache.GetBytes(c.lowLevelCache, actionID)
+		return b, errGB
+	})
+
+	<-c.ioSem
+
+	if err != nil {
+		return nil, err
+	}
+
+	return cachedData, nil
+}
+
+func (c *Cache) fileHash(f string) ([cache.HashSize]byte, error) {
+	c.ioSem <- struct{}{}
+
+	h, err := cache.FileHash(f)
+
+	<-c.ioSem
+
+	if err != nil {
+		return [cache.HashSize]byte{}, err
+	}
+
+	return h, nil
+}
+
+func (c *Cache) encode(data any) (*bytes.Buffer, error) {
+	buf := &bytes.Buffer{}
+	err := c.sw.TrackStageErr("gob", func() error {
+		return gob.NewEncoder(buf).Encode(data)
+	})
+	if err != nil {
+		return nil, fmt.Errorf("failed to gob encode: %w", err)
+	}
+
+	return buf, nil
+}
+
+func (c *Cache) decode(b []byte, data any) error {
+	err := c.sw.TrackStageErr("gob", func() error {
+		return gob.NewDecoder(bytes.NewReader(b)).Decode(data)
+	})
+	if err != nil {
+		return fmt.Errorf("failed to gob decode: %w", err)
+	}
+
+	return nil
 }
 
 func SetSalt(b *bytes.Buffer) {
