@@ -115,17 +115,17 @@ func (r *Runner) Run(ctx context.Context, linters []*linter.Config) ([]result.Is
 	)
 
 	for _, lc := range linters {
-		sw.TrackStage(lc.Name(), func() {
-			linterIssues, err := r.runLinterSafe(ctx, r.lintCtx, lc)
-			if err != nil {
-				lintErrors = errors.Join(lintErrors, fmt.Errorf("can't run linter %s", lc.Linter.Name()), err)
-				r.Log.Warnf("Can't run linter %s: %v", lc.Linter.Name(), err)
-
-				return
-			}
-
-			issues = append(issues, linterIssues...)
+		linterIssues, err := timeutils.TrackStage(sw, lc.Name(), func() ([]result.Issue, error) {
+			return r.runLinterSafe(ctx, r.lintCtx, lc)
 		})
+		if err != nil {
+			lintErrors = errors.Join(lintErrors, fmt.Errorf("can't run linter %s", lc.Linter.Name()), err)
+			r.Log.Warnf("Can't run linter %s: %v", lc.Linter.Name(), err)
+
+			continue
+		}
+
+		issues = append(issues, linterIssues...)
 	}
 
 	return r.processLintResults(issues), lintErrors
@@ -188,9 +188,7 @@ func (r *Runner) processLintResults(inIssues []result.Issue) []result.Issue {
 	// finalize processors: logging, clearing, no heavy work here
 
 	for _, p := range r.Processors {
-		sw.TrackStage(p.Name(), func() {
-			p.Finish()
-		})
+		sw.TrackStage(p.Name(), p.Finish)
 	}
 
 	if issuesBefore != issuesAfter {
@@ -216,10 +214,8 @@ func (r *Runner) printPerProcessorStat(stat map[string]processorStat) {
 
 func (r *Runner) processIssues(issues []result.Issue, sw *timeutils.Stopwatch, statPerProcessor map[string]processorStat) []result.Issue {
 	for _, p := range r.Processors {
-		var newIssues []result.Issue
-		var err error
-		sw.TrackStage(p.Name(), func() {
-			newIssues, err = p.Process(issues)
+		newIssues, err := timeutils.TrackStage(sw, p.Name(), func() ([]result.Issue, error) {
+			return p.Process(issues)
 		})
 
 		if err != nil {
