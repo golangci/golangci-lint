@@ -44,7 +44,7 @@ func fakePackage() *packages.Package {
 	}
 }
 
-func Test_buildKey(t *testing.T) {
+func TestCache_buildKey(t *testing.T) {
 	pkgCache := setupCache(t)
 
 	pkg := fakePackage()
@@ -55,7 +55,7 @@ func Test_buildKey(t *testing.T) {
 	assert.Equal(t, "f32bf1bf010aa9b570e081c64ec9e22e17aafa1e822990ba952905ec5fdf8d9d", fmt.Sprintf("%x", actionID))
 }
 
-func Test_pkgActionID(t *testing.T) {
+func TestCache_pkgActionID(t *testing.T) {
 	pkgCache := setupCache(t)
 
 	pkg := fakePackage()
@@ -66,7 +66,7 @@ func Test_pkgActionID(t *testing.T) {
 	assert.Equal(t, "f690f05acd1024386ae912d9ad9c04080523b9a899f6afe56ab3108d88215c1d", fmt.Sprintf("%x", actionID))
 }
 
-func Test_packageHash_load(t *testing.T) {
+func TestCache_packageHash_load(t *testing.T) {
 	pkgCache := setupCache(t)
 
 	pkg := fakePackage()
@@ -79,7 +79,7 @@ func Test_packageHash_load(t *testing.T) {
 	assert.Equal(t, "fake", hash)
 }
 
-func Test_packageHash_store(t *testing.T) {
+func TestCache_packageHash_store(t *testing.T) {
 	pkgCache := setupCache(t)
 
 	pkg := fakePackage()
@@ -101,7 +101,7 @@ func Test_packageHash_store(t *testing.T) {
 	assert.Equal(t, "9c602ef861197b6807e82c99caa7c4042eb03c1a92886303fb02893744355131", hashRes[HashModeNeedAllDeps])
 }
 
-func Test_computeHash(t *testing.T) {
+func TestCache_computeHash(t *testing.T) {
 	pkgCache := setupCache(t)
 
 	pkg := fakePackage()
