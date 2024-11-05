@@ -44,6 +44,47 @@ func fakePackage() *packages.Package {
 	}
 }
 
+type Foo struct {
+	Value string
+}
+
+func TestCache_Put(t *testing.T) {
+	t.Setenv("GOLANGCI_LINT_CACHE", t.TempDir())
+
+	pkgCache := setupCache(t)
+
+	pkg := fakePackage()
+
+	in := &Foo{Value: "hello"}
+
+	err := pkgCache.Put(pkg, HashModeNeedAllDeps, "key", in)
+	require.NoError(t, err)
+
+	out := &Foo{}
+	err = pkgCache.Get(pkg, HashModeNeedAllDeps, "key", out)
+	require.NoError(t, err)
+
+	assert.Equal(t, in, out)
+
+	pkgCache.Close()
+}
+
+func TestCache_Get_missing_data(t *testing.T) {
+	t.Setenv("GOLANGCI_LINT_CACHE", t.TempDir())
+
+	pkgCache := setupCache(t)
+
+	pkg := fakePackage()
+
+	out := &Foo{}
+	err := pkgCache.Get(pkg, HashModeNeedAllDeps, "key", out)
+	require.Error(t, err)
+
+	require.ErrorIs(t, err, ErrMissing)
+
+	pkgCache.Close()
+}
+
 func TestCache_buildKey(t *testing.T) {
 	pkgCache := setupCache(t)
 
