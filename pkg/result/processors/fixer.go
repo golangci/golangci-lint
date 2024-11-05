@@ -8,7 +8,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/golangci/golangci-lint/internal/robustio"
+	"github.com/golangci/golangci-lint/internal/go/robustio"
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/fsutils"
 	"github.com/golangci/golangci-lint/pkg/logutils"

@@ -5,7 +5,7 @@ import (
 
 	"golang.org/x/tools/go/packages"
 
-	"github.com/golangci/golangci-lint/internal/pkgcache"
+	"github.com/golangci/golangci-lint/internal/cache"
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/fsutils"
 	"github.com/golangci/golangci-lint/pkg/goanalysis/load"
@@ -24,7 +24,7 @@ type Context struct {
 	FileCache *fsutils.FileCache
 	Log       logutils.Log
 
-	PkgCache  *pkgcache.Cache
+	PkgCache  *cache.Cache
 	LoadGuard *load.Guard
 }
 

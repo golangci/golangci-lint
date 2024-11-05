@@ -21,8 +21,8 @@ import (
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/packages"
 
+	"github.com/golangci/golangci-lint/internal/cache"
 	"github.com/golangci/golangci-lint/internal/errorutil"
-	"github.com/golangci/golangci-lint/internal/pkgcache"
 	"github.com/golangci/golangci-lint/pkg/goanalysis/load"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/timeutils"
@@ -52,7 +52,7 @@ type Diagnostic struct {
 type runner struct {
 	log            logutils.Log
 	prefix         string // ensure unique analyzer names
-	pkgCache       *pkgcache.Cache
+	pkgCache       *cache.Cache
 	loadGuard      *load.Guard
 	loadMode       LoadMode
 	passToPkg      map[*analysis.Pass]*packages.Package
@@ -60,7 +60,7 @@ type runner struct {
 	sw             *timeutils.Stopwatch
 }
 
-func newRunner(prefix string, logger logutils.Log, pkgCache *pkgcache.Cache, loadGuard *load.Guard,
+func newRunner(prefix string, logger logutils.Log, pkgCache *cache.Cache, loadGuard *load.Guard,
 	loadMode LoadMode, sw *timeutils.Stopwatch,
 ) *runner {
 	return &runner{
