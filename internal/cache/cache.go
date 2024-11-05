@@ -95,7 +95,7 @@ func (c *Cache) Get(pkg *packages.Package, mode HashMode, key string, data any) 
 }
 
 func (c *Cache) buildKey(pkg *packages.Package, mode HashMode, key string) (cache.ActionID, error) {
-	return timeutils.TrackStage[cache.ActionID](c.sw, "key build", func() (cache.ActionID, error) {
+	return timeutils.TrackStage(c.sw, "key build", func() (cache.ActionID, error) {
 		actionID, err := c.pkgActionID(pkg, mode)
 		if err != nil {
 			return actionID, err
@@ -237,7 +237,7 @@ func (c *Cache) putBytes(actionID cache.ActionID, buf *bytes.Buffer) error {
 func (c *Cache) getBytes(actionID cache.ActionID) ([]byte, error) {
 	c.ioSem <- struct{}{}
 
-	cachedData, err := timeutils.TrackStage[[]byte](c.sw, "cache io", func() ([]byte, error) {
+	cachedData, err := timeutils.TrackStage(c.sw, "cache io", func() ([]byte, error) {
 		b, _, errGB := cache.GetBytes(c.lowLevelCache, actionID)
 		return b, errGB
 	})
