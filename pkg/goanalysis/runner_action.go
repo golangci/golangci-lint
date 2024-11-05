@@ -109,9 +109,8 @@ func (act *action) analyzeSafe() {
 				act.a.Name, act.pkg.Name, act.isInitialPkg, act.needAnalyzeSource, p), debug.Stack())
 		}
 	}()
-	act.r.sw.TrackStage(act.a.Name, func() {
-		act.analyze()
-	})
+
+	act.r.sw.TrackStage(act.a.Name, act.analyze)
 }
 
 func (act *action) analyze() {
