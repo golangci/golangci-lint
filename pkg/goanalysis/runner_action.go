@@ -244,17 +244,6 @@ func (act *action) exportPackageFact(fact analysis.Fact) {
 		act.pkg.Fset.Position(act.pass.Files[0].Pos()), act.pass.Pkg.Path(), fact)
 }
 
-func (act *action) allPackageFacts() []analysis.PackageFact {
-	out := make([]analysis.PackageFact, 0, len(act.packageFacts))
-	for key, fact := range act.packageFacts {
-		out = append(out, analysis.PackageFact{
-			Package: key.pkg,
-			Fact:    fact,
-		})
-	}
-	return out
-}
-
 func (act *action) factType(fact analysis.Fact) reflect.Type {
 	t := reflect.TypeOf(fact)
 	if t.Kind() != reflect.Ptr {

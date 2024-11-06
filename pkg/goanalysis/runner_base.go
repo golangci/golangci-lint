@@ -6,3 +6,17 @@
 // FIXME add a commit hash.
 
 package goanalysis
+
+import "golang.org/x/tools/go/analysis"
+
+// NOTE(ldez) no alteration.
+func (act *action) allPackageFacts() []analysis.PackageFact {
+	out := make([]analysis.PackageFact, 0, len(act.packageFacts))
+	for key, fact := range act.packageFacts {
+		out = append(out, analysis.PackageFact{
+			Package: key.pkg,
+			Fact:    fact,
+		})
+	}
+	return out
+}
