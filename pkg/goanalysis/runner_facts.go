@@ -20,11 +20,6 @@ type packageFactKey struct {
 	typ reflect.Type
 }
 
-type Fact struct {
-	Path string // non-empty only for object facts
-	Fact analysis.Fact
-}
-
 // inheritFacts populates act.facts with
 // those it obtains from its dependency, dep.
 func inheritFacts(act, dep *action) {
