@@ -1,9 +1,6 @@
 package goanalysis
 
 import (
-	"bytes"
-	"encoding/gob"
-	"fmt"
 	"go/types"
 	"reflect"
 
@@ -67,32 +64,4 @@ func inheritFacts(act, dep *action) {
 		factsInheritDebugf("%v: inherited %T fact for %s: %s", act, fact, key.pkg.Path(), fact)
 		act.packageFacts[key] = fact
 	}
-}
-
-// codeFact encodes then decodes a fact,
-// just to exercise that logic.
-func codeFact(fact analysis.Fact) (analysis.Fact, error) {
-	// We encode facts one at a time.
-	// A real modular driver would emit all facts
-	// into one encoder to improve gob efficiency.
-	var buf bytes.Buffer
-	if err := gob.NewEncoder(&buf).Encode(fact); err != nil {
-		return nil, err
-	}
-
-	// Encode it twice and assert that we get the same bits.
-	// This helps detect nondeterministic Gob encoding (e.g. of maps).
-	var buf2 bytes.Buffer
-	if err := gob.NewEncoder(&buf2).Encode(fact); err != nil {
-		return nil, err
-	}
-	if !bytes.Equal(buf.Bytes(), buf2.Bytes()) {
-		return nil, fmt.Errorf("encoding of %T fact is nondeterministic", fact)
-	}
-
-	newFact := reflect.New(reflect.TypeOf(fact).Elem()).Interface().(analysis.Fact)
-	if err := gob.NewDecoder(&buf).Decode(newFact); err != nil {
-		return nil, err
-	}
-	return newFact, nil
 }
