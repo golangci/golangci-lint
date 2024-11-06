@@ -244,14 +244,6 @@ func (act *action) exportPackageFact(fact analysis.Fact) {
 		act.pkg.Fset.Position(act.pass.Files[0].Pos()), act.pass.Pkg.Path(), fact)
 }
 
-func (act *action) factType(fact analysis.Fact) reflect.Type {
-	t := reflect.TypeOf(fact)
-	if t.Kind() != reflect.Ptr {
-		act.r.log.Fatalf("invalid Fact type: got %T, want pointer", t)
-	}
-	return t
-}
-
 func (act *action) markDepsForAnalyzingSource() {
 	// Horizontal deps (analyzer.Requires) must be loaded from source and analyzed before analyzing
 	// this action.

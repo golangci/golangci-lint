@@ -7,7 +7,20 @@
 
 package goanalysis
 
-import "golang.org/x/tools/go/analysis"
+import (
+	"reflect"
+
+	"golang.org/x/tools/go/analysis"
+)
+
+// NOTE(ldez) altered: add receiver to handle logs.
+func (act *action) factType(fact analysis.Fact) reflect.Type {
+	t := reflect.TypeOf(fact)
+	if t.Kind() != reflect.Ptr {
+		act.r.log.Fatalf("invalid Fact type: got %T, want pointer", t)
+	}
+	return t
+}
 
 // NOTE(ldez) no alteration.
 func (act *action) allPackageFacts() []analysis.PackageFact {
