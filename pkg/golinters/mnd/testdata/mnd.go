@@ -12,10 +12,11 @@ func UseMagicNumber() {
 		Timeout: 2 * time.Second, // want "Magic number: 2, in <assign> detected"
 	}
 
-	res, err := c.Get("http://www.google.com")
+	res, err := c.Get("https://www.google.com")
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer res.Body.Close()
 	if res.StatusCode != 200 { // want "Magic number: 200, in <condition> detected"
 		log.Println("Something went wrong")
 	}
@@ -26,10 +27,11 @@ func UseNoMagicNumber() {
 		Timeout: time.Second,
 	}
 
-	res, err := c.Get("http://www.google.com")
+	res, err := c.Get("https://www.google.com")
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer res.Body.Close()
 	if res.StatusCode != http.StatusOK {
 		log.Println("Something went wrong")
 	}
