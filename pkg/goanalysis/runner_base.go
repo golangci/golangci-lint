@@ -13,7 +13,19 @@ import (
 	"golang.org/x/tools/go/analysis"
 )
 
-// NOTE(ldez) altered: removes code related to `act.pass.ExportPackageFact`; logger; act.factType.
+// NOTE(ldez) no alteration.
+func (act *action) allObjectFacts() []analysis.ObjectFact {
+	out := make([]analysis.ObjectFact, 0, len(act.objectFacts))
+	for key, fact := range act.objectFacts {
+		out = append(out, analysis.ObjectFact{
+			Object: key.obj,
+			Fact:   fact,
+		})
+	}
+	return out
+}
+
+// NOTE(ldez) altered: removes code related to `act.pass.ExportPackageFact`; logger; `act.factType`.
 // exportPackageFact implements Pass.ExportPackageFact.
 func (act *action) exportPackageFact(fact analysis.Fact) {
 	key := packageFactKey{act.pass.Pkg, act.factType(fact)}

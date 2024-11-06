@@ -210,17 +210,6 @@ func (act *action) exportObjectFact(obj types.Object, fact analysis.Fact) {
 	}
 }
 
-func (act *action) allObjectFacts() []analysis.ObjectFact {
-	out := make([]analysis.ObjectFact, 0, len(act.objectFacts))
-	for key, fact := range act.objectFacts {
-		out = append(out, analysis.ObjectFact{
-			Object: key.obj,
-			Fact:   fact,
-		})
-	}
-	return out
-}
-
 // importPackageFact implements Pass.ImportPackageFact.
 // Given a non-nil pointer ptr of type *T, where *T satisfies Fact,
 // fact copies the fact value to *ptr.
