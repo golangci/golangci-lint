@@ -81,7 +81,7 @@ func (lc *Config) IsSlowLinter() bool {
 }
 
 func (lc *Config) WithLoadFiles() *Config {
-	lc.LoadMode |= packages.NeedName | packages.NeedFiles | packages.NeedCompiledGoFiles
+	lc.LoadMode |= packages.NeedName | packages.NeedFiles | packages.NeedCompiledGoFiles | packages.NeedModule
 	return lc
 }
 
