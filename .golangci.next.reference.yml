@@ -179,7 +179,7 @@ linters:
     - gosmopolitan
     - govet
     - grouper
-    - ifcae
+    - iface
     - importas
     - inamedparam
     - ineffassign
