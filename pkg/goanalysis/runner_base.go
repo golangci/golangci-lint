@@ -301,6 +301,22 @@ func (act *action) allObjectFacts() []analysis.ObjectFact {
 	return out
 }
 
+// NOTE(ldez) altered: `act.factType`
+// importPackageFact implements Pass.ImportPackageFact.
+// Given a non-nil pointer ptr of type *T, where *T satisfies Fact,
+// fact copies the fact value to *ptr.
+func (act *action) importPackageFact(pkg *types.Package, ptr analysis.Fact) bool {
+	if pkg == nil {
+		panic("nil package")
+	}
+	key := packageFactKey{pkg, act.factType(ptr)}
+	if v, ok := act.packageFacts[key]; ok {
+		reflect.ValueOf(ptr).Elem().Set(reflect.ValueOf(v).Elem())
+		return true
+	}
+	return false
+}
+
 // NOTE(ldez) altered: removes code related to `act.pass.ExportPackageFact`; logger; `act.factType`.
 // exportPackageFact implements Pass.ExportPackageFact.
 func (act *action) exportPackageFact(fact analysis.Fact) {

@@ -2,11 +2,7 @@ package goanalysis
 
 import (
 	"fmt"
-	"go/types"
-	"reflect"
 	"runtime/debug"
-
-	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/internal/errorutil"
 )
@@ -56,21 +52,6 @@ func (act *action) analyzeSafe() {
 	}()
 
 	act.r.sw.TrackStage(act.a.Name, act.analyze)
-}
-
-// importPackageFact implements Pass.ImportPackageFact.
-// Given a non-nil pointer ptr of type *T, where *T satisfies Fact,
-// fact copies the fact value to *ptr.
-func (act *action) importPackageFact(pkg *types.Package, ptr analysis.Fact) bool {
-	if pkg == nil {
-		panic("nil package")
-	}
-	key := packageFactKey{pkg, act.factType(ptr)}
-	if v, ok := act.packageFacts[key]; ok {
-		reflect.ValueOf(ptr).Elem().Set(reflect.ValueOf(v).Elem())
-		return true
-	}
-	return false
 }
 
 func (act *action) markDepsForAnalyzingSource() {
