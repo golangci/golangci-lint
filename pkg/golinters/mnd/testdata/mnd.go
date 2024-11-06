@@ -31,7 +31,7 @@ func UseNoMagicNumber() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer res.Body.Close()
+
 	if res.StatusCode != http.StatusOK {
 		log.Println("Something went wrong")
 	}
