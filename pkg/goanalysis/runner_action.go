@@ -236,14 +236,6 @@ func (act *action) importPackageFact(pkg *types.Package, ptr analysis.Fact) bool
 	return false
 }
 
-// exportPackageFact implements Pass.ExportPackageFact.
-func (act *action) exportPackageFact(fact analysis.Fact) {
-	key := packageFactKey{act.pass.Pkg, act.factType(fact)}
-	act.packageFacts[key] = fact // clobber any existing entry
-	factsDebugf("%s: package %s has fact %s\n",
-		act.pkg.Fset.Position(act.pass.Files[0].Pos()), act.pass.Pkg.Path(), fact)
-}
-
 func (act *action) markDepsForAnalyzingSource() {
 	// Horizontal deps (analyzer.Requires) must be loaded from source and analyzed before analyzing
 	// this action.
