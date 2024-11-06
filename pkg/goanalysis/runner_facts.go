@@ -96,25 +96,3 @@ func codeFact(fact analysis.Fact) (analysis.Fact, error) {
 	}
 	return newFact, nil
 }
-
-// exportedFrom reports whether obj may be visible to a package that imports pkg.
-// This includes not just the exported members of pkg, but also unexported
-// constants, types, fields, and methods, perhaps belonging to other packages,
-// that find there way into the API.
-// This is an over-approximation of the more accurate approach used by
-// gc export data, which walks the type graph, but it's much simpler.
-//
-// TODO(adonovan): do more accurate filtering by walking the type graph.
-func exportedFrom(obj types.Object, pkg *types.Package) bool {
-	switch obj := obj.(type) {
-	case *types.Func:
-		return obj.Exported() && obj.Pkg() == pkg ||
-			obj.Type().(*types.Signature).Recv() != nil
-	case *types.Var:
-		return obj.Exported() && obj.Pkg() == pkg ||
-			obj.IsField()
-	case *types.TypeName, *types.Const:
-		return true
-	}
-	return false // Nil, Builtin, Label, or PkgName
-}
