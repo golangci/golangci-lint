@@ -194,22 +194,6 @@ func (act *action) importObjectFact(obj types.Object, ptr analysis.Fact) bool {
 	return false
 }
 
-// exportObjectFact implements Pass.ExportObjectFact.
-func (act *action) exportObjectFact(obj types.Object, fact analysis.Fact) {
-	if obj.Pkg() != act.pkg.Types {
-		act.r.log.Panicf("internal error: in analysis %s of package %s: Fact.Set(%s, %T): can't set facts on objects belonging another package",
-			act.a, act.pkg, obj, fact)
-	}
-
-	key := objectFactKey{obj, act.factType(fact)}
-	act.objectFacts[key] = fact // clobber any existing entry
-	if isFactsExportDebug {
-		objstr := types.ObjectString(obj, (*types.Package).Name)
-		factsExportDebugf("%s: object %s has fact %s\n",
-			act.pkg.Fset.Position(obj.Pos()), objstr, fact)
-	}
-}
-
 // importPackageFact implements Pass.ImportPackageFact.
 // Given a non-nil pointer ptr of type *T, where *T satisfies Fact,
 // fact copies the fact value to *ptr.

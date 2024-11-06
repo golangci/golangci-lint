@@ -8,10 +8,28 @@
 package goanalysis
 
 import (
+	"go/types"
 	"reflect"
 
 	"golang.org/x/tools/go/analysis"
 )
+
+// NOTE(ldez) altered: removes code related to `act.pass.ExportPackageFact`; logger; `act.factType`.
+// exportObjectFact implements Pass.ExportObjectFact.
+func (act *action) exportObjectFact(obj types.Object, fact analysis.Fact) {
+	if obj.Pkg() != act.pkg.Types {
+		act.r.log.Panicf("internal error: in analysis %s of package %s: Fact.Set(%s, %T): can't set facts on objects belonging another package",
+			act.a, act.pkg, obj, fact)
+	}
+
+	key := objectFactKey{obj, act.factType(fact)}
+	act.objectFacts[key] = fact // clobber any existing entry
+	if isFactsExportDebug {
+		objstr := types.ObjectString(obj, (*types.Package).Name)
+		factsExportDebugf("%s: object %s has fact %s\n",
+			act.pkg.Fset.Position(obj.Pos()), objstr, fact)
+	}
+}
 
 // NOTE(ldez) no alteration.
 func (act *action) allObjectFacts() []analysis.ObjectFact {
