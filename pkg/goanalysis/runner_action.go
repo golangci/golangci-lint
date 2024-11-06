@@ -7,7 +7,6 @@ import (
 	"runtime/debug"
 
 	"golang.org/x/tools/go/analysis"
-	"golang.org/x/tools/go/packages"
 
 	"github.com/golangci/golangci-lint/internal/errorutil"
 )
@@ -31,29 +30,6 @@ func (actAlloc *actionAllocator) alloc() *action {
 	act := &actAlloc.allocatedActions[actAlloc.nextFreeIndex]
 	actAlloc.nextFreeIndex++
 	return act
-}
-
-// An action represents one unit of analysis work: the application of
-// one analysis to one package. Actions form a DAG, both within a
-// package (as different analyzers are applied, either in sequence or
-// parallel), and across packages (as dependencies are analyzed).
-type action struct {
-	a                   *analysis.Analyzer
-	pkg                 *packages.Package
-	pass                *analysis.Pass
-	deps                []*action
-	objectFacts         map[objectFactKey]analysis.Fact
-	packageFacts        map[packageFactKey]analysis.Fact
-	result              any
-	diagnostics         []analysis.Diagnostic
-	err                 error
-	r                   *runner
-	analysisDoneCh      chan struct{}
-	loadCachedFactsDone bool
-	loadCachedFactsOk   bool
-	isroot              bool
-	isInitialPkg        bool
-	needAnalyzeSource   bool
 }
 
 func (act *action) waitUntilDependingAnalyzersWorked() {
