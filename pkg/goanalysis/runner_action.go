@@ -1,18 +1,15 @@
 package goanalysis
 
 import (
-	"errors"
 	"fmt"
 	"go/types"
 	"reflect"
 	"runtime/debug"
-	"time"
 
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/packages"
 
 	"github.com/golangci/golangci-lint/internal/errorutil"
-	"github.com/golangci/golangci-lint/pkg/goanalysis/pkgerrors"
 )
 
 type actionAllocator struct {
@@ -87,96 +84,6 @@ func (act *action) analyzeSafe() {
 	}()
 
 	act.r.sw.TrackStage(act.a.Name, act.analyze)
-}
-
-func (act *action) analyze() {
-	defer close(act.analysisDoneCh) // unblock actions depending on this action
-
-	if !act.needAnalyzeSource {
-		return
-	}
-
-	defer func(now time.Time) {
-		analyzeDebugf("go/analysis: %s: %s: analyzed package %q in %s", act.r.prefix, act.a.Name, act.pkg.Name, time.Since(now))
-	}(time.Now())
-
-	// Report an error if any dependency failures.
-	var depErrors error
-	for _, dep := range act.deps {
-		if dep.err == nil {
-			continue
-		}
-
-		depErrors = errors.Join(depErrors, errors.Unwrap(dep.err))
-	}
-	if depErrors != nil {
-		act.err = fmt.Errorf("failed prerequisites: %w", depErrors)
-		return
-	}
-
-	// Plumb the output values of the dependencies
-	// into the inputs of this action.  Also facts.
-	inputs := make(map[*analysis.Analyzer]any)
-	startedAt := time.Now()
-	for _, dep := range act.deps {
-		if dep.pkg == act.pkg {
-			// Same package, different analysis (horizontal edge):
-			// in-memory outputs of prerequisite analyzers
-			// become inputs to this analysis pass.
-			inputs[dep.a] = dep.result
-		} else if dep.a == act.a { // (always true)
-			// Same analysis, different package (vertical edge):
-			// serialized facts produced by prerequisite analysis
-			// become available to this analysis pass.
-			inheritFacts(act, dep)
-		}
-	}
-	factsDebugf("%s: Inherited facts in %s", act, time.Since(startedAt))
-
-	// Run the analysis.
-	pass := &analysis.Pass{
-		Analyzer:          act.a,
-		Fset:              act.pkg.Fset,
-		Files:             act.pkg.Syntax,
-		OtherFiles:        act.pkg.OtherFiles,
-		Pkg:               act.pkg.Types,
-		TypesInfo:         act.pkg.TypesInfo,
-		TypesSizes:        act.pkg.TypesSizes,
-		ResultOf:          inputs,
-		Report:            func(d analysis.Diagnostic) { act.diagnostics = append(act.diagnostics, d) },
-		ImportObjectFact:  act.importObjectFact,
-		ExportObjectFact:  act.exportObjectFact,
-		ImportPackageFact: act.importPackageFact,
-		ExportPackageFact: act.exportPackageFact,
-		AllObjectFacts:    act.allObjectFacts,
-		AllPackageFacts:   act.allPackageFacts,
-	}
-	act.pass = pass
-	act.r.passToPkgGuard.Lock()
-	act.r.passToPkg[pass] = act.pkg
-	act.r.passToPkgGuard.Unlock()
-
-	if act.pkg.IllTyped {
-		// It looks like there should be !pass.Analyzer.RunDespiteErrors
-		// but govet's cgocall crashes on it. Govet itself contains !pass.Analyzer.RunDespiteErrors condition here,
-		// but it exits before it if packages.Load have failed.
-		act.err = fmt.Errorf("analysis skipped: %w", &pkgerrors.IllTypedError{Pkg: act.pkg})
-	} else {
-		startedAt = time.Now()
-		act.result, act.err = pass.Analyzer.Run(pass)
-		analyzedIn := time.Since(startedAt)
-		if analyzedIn > time.Millisecond*10 {
-			debugf("%s: run analyzer in %s", act, analyzedIn)
-		}
-	}
-
-	// disallow calls after Run
-	pass.ExportObjectFact = nil
-	pass.ExportPackageFact = nil
-
-	if err := act.persistFactsToCache(); err != nil {
-		act.r.log.Warnf("Failed to persist facts to cache: %s", err)
-	}
 }
 
 // importPackageFact implements Pass.ImportPackageFact.
