@@ -179,21 +179,6 @@ func (act *action) analyze() {
 	}
 }
 
-// importObjectFact implements Pass.ImportObjectFact.
-// Given a non-nil pointer ptr of type *T, where *T satisfies Fact,
-// importObjectFact copies the fact value to *ptr.
-func (act *action) importObjectFact(obj types.Object, ptr analysis.Fact) bool {
-	if obj == nil {
-		panic("nil object")
-	}
-	key := objectFactKey{obj, act.factType(ptr)}
-	if v, ok := act.objectFacts[key]; ok {
-		reflect.ValueOf(ptr).Elem().Set(reflect.ValueOf(v).Elem())
-		return true
-	}
-	return false
-}
-
 // importPackageFact implements Pass.ImportPackageFact.
 // Given a non-nil pointer ptr of type *T, where *T satisfies Fact,
 // fact copies the fact value to *ptr.
