@@ -1125,7 +1125,7 @@
     "alternativeNames": [
       "megacheck"
     ],
-    "originalURL": "https://staticcheck.io/",
+    "originalURL": "https://staticcheck.dev/",
     "internal": false,
     "isSlow": true,
     "since": "v1.0.0"

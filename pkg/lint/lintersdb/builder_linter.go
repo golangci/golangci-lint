@@ -713,7 +713,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetBugs, linter.PresetMetaLinter).
 			WithAlternativeNames(megacheckName).
-			WithURL("https://staticcheck.io/"),
+			WithURL("https://staticcheck.dev/"),
 
 		linter.NewConfig(linter.NewNoopDeprecated("structcheck", cfg, linter.DeprecationError)).
 			WithSince("v1.0.0").
