@@ -56,10 +56,6 @@ type action struct {
 	needAnalyzeSource   bool
 }
 
-func (act *action) String() string {
-	return fmt.Sprintf("%s@%s", act.a, act.pkg)
-}
-
 func (act *action) waitUntilDependingAnalyzersWorked() {
 	for _, dep := range act.deps {
 		if dep.pkg == act.pkg {

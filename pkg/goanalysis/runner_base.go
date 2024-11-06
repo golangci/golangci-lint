@@ -16,9 +16,27 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/golangci/golangci-lint/pkg/goanalysis/pkgerrors"
 	"golang.org/x/tools/go/analysis"
+
+	"github.com/golangci/golangci-lint/pkg/goanalysis/pkgerrors"
 )
+
+// NOTE(ldez) no alteration.
+type objectFactKey struct {
+	obj types.Object
+	typ reflect.Type
+}
+
+// NOTE(ldez) no alteration.
+type packageFactKey struct {
+	pkg *types.Package
+	typ reflect.Type
+}
+
+// NOTE(ldez) no alteration.
+func (act *action) String() string {
+	return fmt.Sprintf("%s@%s", act.a, act.pkg)
+}
 
 // NOTE(ldez) altered version of `func (act *action) execOnce()`.
 func (act *action) analyze() {
