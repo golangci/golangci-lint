@@ -229,7 +229,6 @@ type LintersSettings struct {
 	Gofumpt         GofumptSettings
 	Goheader        GoHeaderSettings
 	Goimports       GoImportsSettings
-	Gomnd           GoMndSettings
 	GoModDirectives GoModDirectivesSettings
 	Gomodguard      GoModGuardSettings
 	Gosec           GoSecSettings
@@ -568,14 +567,6 @@ type GoHeaderSettings struct {
 
 type GoImportsSettings struct {
 	LocalPrefixes string `mapstructure:"local-prefixes"`
-}
-
-// Deprecated: use MndSettings.
-type GoMndSettings struct {
-	MndSettings `mapstructure:",squash"`
-
-	// Deprecated: use root level settings instead.
-	Settings map[string]map[string]any
 }
 
 type GoModDirectivesSettings struct {

@@ -23,7 +23,6 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/errchkjson"
 	"github.com/golangci/golangci-lint/pkg/golinters/errname"
 	"github.com/golangci/golangci-lint/pkg/golinters/errorlint"
-	"github.com/golangci/golangci-lint/pkg/golinters/execinquery"
 	"github.com/golangci/golangci-lint/pkg/golinters/exhaustive"
 	"github.com/golangci/golangci-lint/pkg/golinters/exhaustruct"
 	"github.com/golangci/golangci-lint/pkg/golinters/exportloopref"
@@ -250,12 +249,12 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/polyfloyd/go-errorlint"),
 
-		linter.NewConfig(execinquery.New()).
+		linter.NewConfig(linter.NewNoopDeprecated("execinquery", cfg, linter.DeprecationError)).
 			WithSince("v1.46.0").
 			WithPresets(linter.PresetSQL).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/1uf3/execinquery").
-			DeprecatedWarning("The repository of the linter has been archived by the owner.", "v1.58.0", ""),
+			DeprecatedError("The repository of the linter has been archived by the owner.", "v1.58.0", ""),
 
 		linter.NewConfig(exhaustive.New(&cfg.LintersSettings.Exhaustive)).
 			WithSince(" v1.28.0").
@@ -418,11 +417,11 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/tommy-muehle/go-mnd"),
 
-		linter.NewConfig(mnd.NewGoMND(&cfg.LintersSettings.Gomnd)).
+		linter.NewConfig(linter.NewNoopDeprecated("gomnd", cfg, linter.DeprecationError)).
 			WithSince("v1.22.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/tommy-muehle/go-mnd").
-			DeprecatedWarning("The linter has been renamed.", "v1.58.0", "mnd"),
+			DeprecatedError("The linter has been renamed.", "v1.58.0", "mnd"),
 
 		linter.NewConfig(gomoddirectives.New(&cfg.LintersSettings.GoModDirectives)).
 			WithSince("v1.39.0").
