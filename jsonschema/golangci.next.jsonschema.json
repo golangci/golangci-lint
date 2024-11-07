@@ -248,6 +248,8 @@
         "errorf",
         "exported",
         "file-header",
+        "file-length-limit",
+        "filename-format",
         "flag-parameter",
         "function-length",
         "function-result-limit",

@@ -2496,9 +2496,10 @@ linters-settings:
         disabled: false
         exclude: [""]
         arguments:
-          - "preserveScope"
           - "checkPrivateReceivers"
-          - "sayRepetitiveInsteadOfStutters"
+          - "disableStutteringCheck"
+          - "checkPublicInterface"
+          - "disableChecksOnFunctions"
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#file-header
       - name: file-header
         severity: warning
@@ -2506,6 +2507,22 @@ linters-settings:
         exclude: [""]
         arguments:
           - This is the text that must appear at the top of source files.
+      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#file-length-limit
+      - name: file-length-limit
+        severity: warning
+        disabled: false
+        exclude: [""]
+        arguments:
+          - max: 100
+            skipComments: true
+            skipBlankLines: true
+      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#filename-format
+      - name: filename-format
+        severity: warning
+        disabled: false
+        exclude: [""]
+        arguments:
+          - "^[_a-z][_a-z0-9]*.go$"
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#flag-parameter
       - name: flag-parameter
         severity: warning
@@ -2633,6 +2650,8 @@ linters-settings:
         severity: warning
         disabled: false
         exclude: [""]
+        arguments:
+          - maxLength: 2
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#redefines-builtin-id
       - name: redefines-builtin-id
         severity: warning
