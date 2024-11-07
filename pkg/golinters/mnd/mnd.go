@@ -12,27 +12,6 @@ func New(settings *config.MndSettings) *goanalysis.Linter {
 	return newMND(mnd.Analyzer, settings, nil)
 }
 
-func NewGoMND(settings *config.GoMndSettings) *goanalysis.Linter {
-	// shallow copy because mnd.Analyzer is a global variable.
-	a := new(analysis.Analyzer)
-	*a = *mnd.Analyzer
-
-	// Used to force the analyzer name to use the same name as the linter.
-	// This is required to avoid displaying the analyzer name inside the issue text.
-	a.Name = "gomnd"
-
-	var linterCfg map[string]map[string]any
-
-	if settings != nil && len(settings.Settings) > 0 {
-		// Convert deprecated setting.
-		linterCfg = map[string]map[string]any{
-			a.Name: settings.Settings["mnd"],
-		}
-	}
-
-	return newMND(a, &settings.MndSettings, linterCfg)
-}
-
 func newMND(a *analysis.Analyzer, settings *config.MndSettings, linterCfg map[string]map[string]any) *goanalysis.Linter {
 	if len(linterCfg) == 0 && settings != nil {
 		cfg := make(map[string]any)

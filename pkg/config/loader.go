@@ -413,12 +413,6 @@ func (l *Loader) handleLinterOptionDeprecations() {
 		l.log.Warnf("The configuration option `linters.godot.check-all` is deprecated, please use `linters.godot.scope: all`.")
 	}
 
-	// Deprecated since v1.44.0.
-	if len(l.cfg.LintersSettings.Gomnd.Settings) > 0 {
-		l.log.Warnf("The configuration option `linters.gomnd.settings` is deprecated. Please use the options " +
-			"`linters.gomnd.checks`,`linters.gomnd.ignored-numbers`,`linters.gomnd.ignored-files`,`linters.gomnd.ignored-functions`.")
-	}
-
 	// Deprecated since v1.47.0
 	if l.cfg.LintersSettings.Gofumpt.LangVersion != "" {
 		l.log.Warnf("The configuration option `linters.gofumpt.lang-version` is deprecated, please use global `run.go`.")
