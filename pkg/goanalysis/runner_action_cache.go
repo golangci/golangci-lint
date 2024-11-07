@@ -76,14 +76,14 @@ func (act *action) persistFactsToCache() error {
 
 	factsCacheDebugf("Caching %d facts for package %q and analyzer %s", len(facts), act.pkg.Name, act.a.Name)
 
-	key := fmt.Sprintf("%s/facts", analyzer.Name)
-	return act.r.pkgCache.Put(act.pkg, cache.HashModeNeedAllDeps, key, facts)
+	return act.r.pkgCache.Put(act.pkg, cache.HashModeNeedAllDeps, factCacheKey(analyzer), facts)
 }
 
 func (act *action) loadPersistedFacts() bool {
 	var facts []Fact
-	key := fmt.Sprintf("%s/facts", act.a.Name)
-	if err := act.r.pkgCache.Get(act.pkg, cache.HashModeNeedAllDeps, key, &facts); err != nil {
+
+	err := act.r.pkgCache.Get(act.pkg, cache.HashModeNeedAllDeps, factCacheKey(act.a), &facts)
+	if err != nil {
 		if !errors.Is(err, cache.ErrMissing) && !errors.Is(err, io.EOF) {
 			act.r.log.Warnf("Failed to get persisted facts: %s", err)
 		}
@@ -120,4 +120,8 @@ func (act *action) loadPersistedFacts() bool {
 	}
 
 	return true
+}
+
+func factCacheKey(a *analysis.Analyzer) string {
+	return fmt.Sprintf("%s/facts", a.Name)
 }
