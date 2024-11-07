@@ -89,8 +89,8 @@ func detectGoVersion() string {
 }
 
 // detectGoVersionFromGoMod tries to get Go version from go.mod.
-// It returns toolchain version if present,
-// else it returns go version if present,
+// It returns `toolchain` version if present,
+// else it returns `go` version if present,
 // else it returns empty.
 func detectGoVersionFromGoMod() string {
 	file, _ := gomoddirectives.GetModuleFile()
@@ -98,7 +98,7 @@ func detectGoVersionFromGoMod() string {
 		return ""
 	}
 
-	// The toolchain exist only if 'toolchain' version > 'go' version.
+	// The toolchain exists only if 'toolchain' version > 'go' version.
 	// If 'toolchain' version <= 'go' version, `go mod tidy` will remove 'toolchain' version from go.mod.
 	if file.Toolchain != nil && file.Toolchain.Name != "" {
 		return strings.TrimPrefix(file.Toolchain.Name, "go")
