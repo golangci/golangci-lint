@@ -652,6 +652,10 @@ linters-settings:
     # Default: false
     forbid-spec-pollution: true
 
+    # Force using the Succeed matcher for error functions, and the HaveOccurred matcher for non-function error values.
+    # Default: false
+    force-succeed: true
+
   gochecksumtype:
     # Presence of `default` case in switch statements satisfies exhaustiveness, if all members are not listed.
     # Default: true

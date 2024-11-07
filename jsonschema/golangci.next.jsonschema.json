@@ -1180,6 +1180,11 @@
               "description": "Trigger a warning for variable assignments in ginkgo containers like `Describe`, `Context` and `When`, instead of in `BeforeEach()`.",
               "type": "boolean",
               "default": false
+            },
+            "force-succeed": {
+              "description": "Force using the Succeed matcher for error functions, and the HaveOccurred matcher for non-function error values.",
+              "type": "boolean",
+              "default": false
             }
           }
         },
