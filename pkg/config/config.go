@@ -75,10 +75,9 @@ func IsGoGreaterThanOrEqual(current, limit string) bool {
 }
 
 func detectGoVersion() string {
-	file, _ := gomoddirectives.GetModuleFile()
-
-	if file != nil && file.Go != nil && file.Go.Version != "" {
-		return file.Go.Version
+	goVersion := detectGoVersionFromGoMod()
+	if goVersion != "" {
+		return goVersion
 	}
 
 	v := os.Getenv("GOVERSION")
@@ -87,4 +86,27 @@ func detectGoVersion() string {
 	}
 
 	return "1.17"
+}
+
+// detectGoVersionFromGoMod tries to get Go version from go.mod.
+// It returns `toolchain` version if present,
+// else it returns `go` version if present,
+// else it returns empty.
+func detectGoVersionFromGoMod() string {
+	file, _ := gomoddirectives.GetModuleFile()
+	if file == nil {
+		return ""
+	}
+
+	// The toolchain exists only if 'toolchain' version > 'go' version.
+	// If 'toolchain' version <= 'go' version, `go mod tidy` will remove 'toolchain' version from go.mod.
+	if file.Toolchain != nil && file.Toolchain.Name != "" {
+		return strings.TrimPrefix(file.Toolchain.Name, "go")
+	}
+
+	if file.Go != nil && file.Go.Version != "" {
+		return file.Go.Version
+	}
+
+	return ""
 }
