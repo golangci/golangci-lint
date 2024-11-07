@@ -184,8 +184,8 @@ func toIssue(pass *analysis.Pass, object *jsonObject) goanalysis.Issue {
 // This function mimics the GetConfig function of revive.
 // This allows to get default values and right types.
 // https://github.com/golangci/golangci-lint/issues/1745
-// https://github.com/mgechev/revive/blob/v1.4.0/config/config.go#L218
-// https://github.com/mgechev/revive/blob/v1.4.0/config/config.go#L170-L176
+// https://github.com/mgechev/revive/blob/v1.5.0/config/config.go#L220
+// https://github.com/mgechev/revive/blob/v1.5.0/config/config.go#L172-L178
 func getConfig(cfg *config.ReviveSettings) (*lint.Config, error) {
 	conf := defaultConfig()
 
@@ -284,7 +284,7 @@ func safeTomlSlice(r []any) []any {
 }
 
 // This element is not exported by revive, so we need copy the code.
-// Extracted from https://github.com/mgechev/revive/blob/v1.4.0/config/config.go#L16
+// Extracted from https://github.com/mgechev/revive/blob/v1.5.0/config/config.go#L16
 var defaultRules = []lint.Rule{
 	&rule.VarDeclarationsRule{},
 	&rule.PackageCommentsRule{},
@@ -368,12 +368,14 @@ var allRules = append([]lint.Rule{
 	&rule.EnforceSliceStyleRule{},
 	&rule.MaxControlNestingRule{},
 	&rule.CommentsDensityRule{},
+	&rule.FileLengthLimitRule{},
+	&rule.FilenameFormatRule{},
 }, defaultRules...)
 
 const defaultConfidence = 0.8
 
 // This element is not exported by revive, so we need copy the code.
-// Extracted from https://github.com/mgechev/revive/blob/v1.4.0/config/config.go#L181
+// Extracted from https://github.com/mgechev/revive/blob/v1.5.0/config/config.go#L183
 func normalizeConfig(cfg *lint.Config) {
 	// NOTE(ldez): this custom section for golangci-lint should be kept.
 	// ---
@@ -419,7 +421,7 @@ func normalizeConfig(cfg *lint.Config) {
 }
 
 // This element is not exported by revive, so we need copy the code.
-// Extracted from https://github.com/mgechev/revive/blob/v1.4.0/config/config.go#L181
+// Extracted from https://github.com/mgechev/revive/blob/v1.5.0/config/config.go#L252
 func defaultConfig() *lint.Config {
 	defaultConfig := lint.Config{
 		Confidence: defaultConfidence,
