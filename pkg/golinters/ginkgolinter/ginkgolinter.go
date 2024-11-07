@@ -25,6 +25,7 @@ func New(settings *config.GinkgoLinterSettings) *goanalysis.Linter {
 			ForceExpectTo:          types.Boolean(settings.ForceExpectTo),
 			ValidateAsyncIntervals: types.Boolean(settings.ValidateAsyncIntervals),
 			ForbidSpecPollution:    types.Boolean(settings.ForbidSpecPollution),
+			ForceSucceedForFuncs:   types.Boolean(settings.ForceSucceedForFuncs),
 		}
 	}
 

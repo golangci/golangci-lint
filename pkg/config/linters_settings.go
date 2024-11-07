@@ -488,6 +488,7 @@ type GinkgoLinterSettings struct {
 	ForceExpectTo              bool `mapstructure:"force-expect-to"`
 	ValidateAsyncIntervals     bool `mapstructure:"validate-async-intervals"`
 	ForbidSpecPollution        bool `mapstructure:"forbid-spec-pollution"`
+	ForceSucceedForFuncs       bool `mapstructure:"force-succeed"`
 }
 
 type GoChecksumTypeSettings struct {
