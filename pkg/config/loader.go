@@ -302,17 +302,6 @@ func (l *Loader) handleGoVersion() {
 
 	l.cfg.LintersSettings.Gocritic.Go = trimmedGoVersion
 
-	// staticcheck related linters.
-	if l.cfg.LintersSettings.Staticcheck.GoVersion == "" {
-		l.cfg.LintersSettings.Staticcheck.GoVersion = trimmedGoVersion
-	}
-	if l.cfg.LintersSettings.Gosimple.GoVersion == "" {
-		l.cfg.LintersSettings.Gosimple.GoVersion = trimmedGoVersion
-	}
-	if l.cfg.LintersSettings.Stylecheck.GoVersion == "" {
-		l.cfg.LintersSettings.Stylecheck.GoVersion = trimmedGoVersion
-	}
-
 	os.Setenv("GOSECGOVERSION", l.cfg.Run.Go)
 }
 
