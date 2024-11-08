@@ -535,8 +535,8 @@ linters-settings:
     # Forbid the following identifiers (list of regexp).
     # Default: ["^(fmt\\.Print(|f|ln)|print|println)$"]
     forbid:
-      # Builtin function:
-      - ^print.*$
+      # Built-in bootstrapping functions.
+      - ^print(ln)?$
       # Optional message that gets included in error reports.
       - p: ^fmt\.Print.*$
         msg: Do not commit print statements.

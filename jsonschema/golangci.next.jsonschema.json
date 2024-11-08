@@ -1020,7 +1020,7 @@
             "forbid": {
               "description": "List of identifiers to forbid (written using `regexp`)",
               "type": "array",
-              "examples": ["^print.*$"],
+              "examples": ["^print(ln)?$"],
               "items": {
                 "anyOf": [
                   {
