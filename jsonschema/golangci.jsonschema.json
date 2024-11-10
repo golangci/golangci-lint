@@ -13,18 +13,19 @@
         "badLock",
         "badRegexp",
         "badSorting",
+        "badSyncOnceFunc",
         "boolExprSimplify",
         "builtinShadow",
         "builtinShadowDecl",
         "captLocal",
         "caseOrder",
         "codegenComment",
+        "commentFormatting",
         "commentedOutCode",
         "commentedOutImport",
-        "commentFormatting",
         "defaultCaseOrder",
-        "deferUnlambda",
         "deferInLoop",
+        "deferUnlambda",
         "deprecatedComment",
         "docStub",
         "dupArg",
@@ -67,6 +68,7 @@
         "preferStringWriter",
         "preferWriteByte",
         "ptrToRefParam",
+        "rangeAppendAll",
         "rangeExprCopy",
         "rangeValCopy",
         "redundantSprint",
@@ -84,13 +86,12 @@
         "sprintfQuotedString",
         "sqlQuery",
         "stringConcatSimplify",
-        "stringsCompare",
         "stringXbytes",
-        "suspiciousSorting",
+        "stringsCompare",
         "switchTrue",
         "syncMapLoadAndDelete",
-        "timeCmpSimplify",
         "timeExprSimplify",
+        "todoCommentWithoutDetail",
         "tooManyResultsChecker",
         "truncateCmp",
         "typeAssertChain",
@@ -203,6 +204,7 @@
         "structtag",
         "testinggoroutine",
         "tests",
+        "timeformat",
         "unmarshal",
         "unreachable",
         "unsafeptr",
@@ -246,6 +248,8 @@
         "errorf",
         "exported",
         "file-header",
+        "file-length-limit",
+        "filename-format",
         "flag-parameter",
         "function-length",
         "function-result-limit",
@@ -293,6 +297,13 @@
         "waitgroup-by-value"
       ]
     },
+    "iface-analyzers": {
+      "enum": [
+        "identical",
+        "unused",
+        "opaque"
+      ]
+    },
     "linters": {
       "$comment": "anyOf with enum is used to allow auto completion of non-custom linters",
       "description": "Linters usable.",
@@ -308,7 +319,6 @@
             "contextcheck",
             "copyloopvar",
             "cyclop",
-            "deadcode",
             "decorder",
             "depguard",
             "dogsled",
@@ -319,9 +329,7 @@
             "errchkjson",
             "errname",
             "errorlint",
-            "execinquery",
             "exhaustive",
-            "exhaustivestruct",
             "exhaustruct",
             "exportloopref",
             "fatcontext",
@@ -345,7 +353,6 @@
             "gofumpt",
             "goheader",
             "goimports",
-            "golint",
             "gomoddirectives",
             "gomodguard",
             "goprintffuncname",
@@ -354,19 +361,17 @@
             "gosmopolitan",
             "govet",
             "grouper",
-            "ifshort",
+            "iface",
             "importas",
             "inamedparam",
             "ineffassign",
             "interfacebloat",
-            "interfacer",
             "intrange",
             "ireturn",
             "lll",
             "loggercheck",
             "maintidx",
             "makezero",
-            "maligned",
             "mirror",
             "misspell",
             "mnd",
@@ -379,7 +384,6 @@
             "noctx",
             "nolintlint",
             "nonamedreturns",
-            "nosnakecase",
             "nosprintfhostport",
             "paralleltest",
             "perfsprint",
@@ -388,13 +392,12 @@
             "promlinter",
             "protogetter",
             "reassign",
+            "recvcheck",
             "revive",
             "rowserrcheck",
-            "scopelint",
             "sloglint",
             "sqlclosecheck",
             "staticcheck",
-            "structcheck",
             "stylecheck",
             "tagalign",
             "tagliatelle",
@@ -408,7 +411,6 @@
             "unparam",
             "unused",
             "usestdlibvars",
-            "varcheck",
             "varnamelen",
             "wastedassign",
             "whitespace",
@@ -1169,6 +1171,22 @@
               "description": "Trigger a warning for variable assignments in ginkgo containers like `Describe`, `Context` and `When`, instead of in `BeforeEach()`.",
               "type": "boolean",
               "default": false
+            },
+            "force-succeed": {
+              "description": "Force using the Succeed matcher for error functions, and the HaveOccurred matcher for non-function error values.",
+              "type": "boolean",
+              "default": false
+            }
+          }
+        },
+        "gochecksumtype": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "default-signifies-exhaustive": {
+              "description": "Presence of `default` case in switch statements satisfies exhaustiveness, if all members are not listed.",
+              "type": "boolean",
+              "default": true
             }
           }
         },
@@ -1908,6 +1926,37 @@
             }
           }
         },
+        "iface": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "enable": {
+              "description": "Enable analyzers by name.",
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/iface-analyzers"
+              }
+            },
+            "settings": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "unused": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "exclude": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
         "importas": {
           "type": "object",
           "additionalProperties": false,
@@ -2175,13 +2224,18 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "detect-opposite": {
+              "type": "boolean",
+              "description": "In addition, detect opposite situation (simultaneous return of non-nil error and valid value).",
+              "default": false
+            },
             "checked-types": {
               "type": "array",
               "description": "List of return types to check.",
               "items": {
-                "enum": ["ptr", "func", "iface", "map", "chan", "uintptr", "unsafeptr"]
+                "enum": ["chan", "func", "iface", "map", "ptr", "uintptr", "unsafeptr"]
               },
-              "default": ["ptr", "func", "iface", "map", "chan", "uintptr", "unsafeptr"]
+              "default": ["chan", "func", "iface", "map", "ptr", "uintptr", "unsafeptr"]
             }
           }
         },
@@ -2892,7 +2946,9 @@
                   "blank-import",
                   "bool-compare",
                   "compares",
+                  "contains",
                   "empty",
+                  "encoded-compare",
                   "error-is-as",
                   "error-nil",
                   "expected-actual",
@@ -2902,6 +2958,7 @@
                   "len",
                   "negative-positive",
                   "nil-compare",
+                  "regexp",
                   "require-error",
                   "suite-broken-parallel",
                   "suite-dont-use-pkg",
@@ -2915,16 +2972,19 @@
                 "blank-import",
                 "bool-compare",
                 "compares",
+                "contains",
                 "empty",
+                "encoded-compare",
                 "error-is-as",
                 "error-nil",
                 "expected-actual",
                 "float-compare",
-                "float-compare",
+                "formatter",
                 "go-require",
                 "len",
                 "negative-positive",
                 "nil-compare",
+                "regexp",
                 "require-error",
                 "suite-broken-parallel",
                 "suite-dont-use-pkg",
@@ -2941,7 +3001,9 @@
                   "blank-import",
                   "bool-compare",
                   "compares",
+                  "contains",
                   "empty",
+                  "encoded-compare",
                   "error-is-as",
                   "error-nil",
                   "expected-actual",
@@ -2951,6 +3013,7 @@
                   "len",
                   "negative-positive",
                   "nil-compare",
+                  "regexp",
                   "require-error",
                   "suite-broken-parallel",
                   "suite-dont-use-pkg",
