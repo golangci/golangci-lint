@@ -2840,6 +2840,7 @@ linters-settings:
     # Default: ""
     key-naming-case: snake
     # Enforce not using specific keys.
+    # https://github.com/go-simpler/sloglint?tab=readme-ov-file#forbidden-keys
     # Default: []
     forbidden-keys:
       - time
@@ -2848,7 +2849,7 @@ linters-settings:
       - source
       - foo
     # Enforce putting arguments on separate lines.
-    # https://github.com/go-simpler/sloglint?tab=readme-ov-file#forbidden-keys
+    # https://github.com/go-simpler/sloglint?tab=readme-ov-file#arguments-on-separate-lines
     # Default: false
     args-on-sep-lines: true
 
