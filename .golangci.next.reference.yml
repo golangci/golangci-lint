@@ -3383,10 +3383,10 @@ linters-settings:
       # To enable go vet's printf checks.
       # Default: true
       check-format-string: false
-      # To require f-assertions (e.g. assert.Equalf) if format string is used, even if there are no variable-length
-      # variables, i.e. it requires require.NoErrorf for both these cases:
-      #   require.NoErrorf(t, err, "unexpected error")
-      #   require.NoErrorf(t, err, "unexpected error for sid: %v", sid)
+      # To require f-assertions (e.g. `assert.Equalf`) if format string is used, even if there are no variable-length
+      # variables, i.e. it requires `require.NoErrorf` for both these cases:
+      # - require.NoErrorf(t, err, "unexpected error")
+      # - require.NoErrorf(t, err, "unexpected error for sid: %v", sid)
       # To understand this behavior, please read the
       # https://github.com/Antonboom/testifylint?tab=readme-ov-file#historical-reference-of-formatter.
       # Default: false
