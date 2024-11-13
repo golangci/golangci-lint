@@ -293,7 +293,7 @@ func GetBytes(c Cache, id ActionID) ([]byte, Entry, error) {
 	}
 	data, err := robustio.ReadFile(c.OutputFile(entry.OutputID))
 	if err != nil {
-		return nil, entry, err
+		return nil, entry, &entryNotFoundError{Err: err}
 	}
 	if sha256.Sum256(data) != entry.OutputID {
 		return nil, entry, &entryNotFoundError{Err: errors.New("bad checksum")}
