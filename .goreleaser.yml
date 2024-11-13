@@ -127,7 +127,7 @@ chocolateys:
     summary: Fast linters Runner for Go
     description: |
       {{ .ProjectName }} installer package.
-      Fast linters Runner for Go .
+      Fast linters Runner for Go.
     release_notes: "https://github.com/golangci/golangci-lint/releases/tag/v{{ .Version }}"
     api_key: "{{ .Env.CHOCOLATEY_API_KEY }}"
     source_repo: "https://push.chocolatey.org/"
@@ -162,6 +162,18 @@ aurs:
       ./golangci-lint completion bash | install -Dm644 /dev/stdin "${pkgdir}/usr/share/bash-completion/completions/golangci-lint"
       ./golangci-lint completion zsh | install -Dm644 /dev/stdin "${pkgdir}/usr/share/zsh/site-functions/_golangci-lint"
       ./golangci-lint completion fish | install -Dm644 /dev/stdin "${pkgdir}/usr/share/fish/vendor_completions.d/golangci-lint.fish"
+
+snapcrafts:
+  - name_template: "{{ .ProjectName }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
+    grade: stable
+    confinement: classic
+    license: GPL-3.0
+    base: core22
+    summary: Fast linters runner for Go.
+    description: |
+      It runs linters in parallel, uses caching, supports YAML configuration, integrates with all major IDEs, and includes over a hundred linters.
+    disable: false
+    publish: true
 
 nfpms:
   -
