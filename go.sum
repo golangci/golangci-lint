@@ -371,8 +371,8 @@ github.com/mattn/go-runewidth v0.0.16 h1:E5ScNMtiwvlvB5paMFdw9p4kSQzbXFikJ5SQO6T
 github.com/mattn/go-runewidth v0.0.16/go.mod h1:Jdepj2loyihRzMpdS35Xk/zdY8IAYHsh153qUoGf23w=
 github.com/matttproud/golang_protobuf_extensions v1.0.1 h1:4hp9jkHxhMHkqkrB3Ix0jegS5sx/RkqARlsWZ6pIwiU=
 github.com/matttproud/golang_protobuf_extensions v1.0.1/go.mod h1:D8He9yQNgCq6Z5Ld7szi9bcBfOoFv/3dc6xSMkL2PC0=
-github.com/mgechev/revive v1.5.0 h1:oaSmjA7rP8+HyoRuCgC531VHwnLH1AlJdjj+1AnQceQ=
-github.com/mgechev/revive v1.5.0/go.mod h1:L6T3H8EoerRO86c7WuGpvohIUmiploGiyoYbtIWFmV8=
+github.com/mgechev/revive v1.5.1 h1:hE+QPeq0/wIzJwOphdVyUJ82njdd8Khp4fUIHGZHW3M=
+github.com/mgechev/revive v1.5.1/go.mod h1:lC9AhkJIBs5zwx8wkudyHrU+IJkrEKmpCmGMnIJPk4o=
 github.com/mitchellh/go-homedir v1.1.0 h1:lukF9ziXFxDFPkA1vsr5zpc1XuPDn/wFntq5mG+4E0Y=
 github.com/mitchellh/go-homedir v1.1.0/go.mod h1:SfyaCUpYCn1Vlf4IUYiD9fPX4A5wJrkLzIz1N1q0pr0=
 github.com/mitchellh/go-ps v1.0.0 h1:i6ampVEEF4wQFF+bkYfwYgY+F/uYJDktmvLPf7qIgjc=
