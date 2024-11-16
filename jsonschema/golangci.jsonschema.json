@@ -3059,7 +3059,7 @@
                   "default": true
                 },
                 "require-f-funcs": {
-                  "description": "To require f-assertions if format string is used.",
+                  "description": "To require f-assertions (e.g. assert.Equalf) if format string is used, even if there are no variable-length variables.",
                   "type": "boolean",
                   "default": false
                 }
