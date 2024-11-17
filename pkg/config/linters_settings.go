@@ -984,6 +984,7 @@ type WhitespaceSettings struct {
 }
 
 type WrapcheckSettings struct {
+	ExtraIgnoreSigs []string `mapstructure:"extra-ignore-sigs"`
 	// TODO(ldez): v2 the options must be renamed to use hyphen.
 	IgnoreSigs             []string `mapstructure:"ignoreSigs"`
 	IgnoreSigRegexps       []string `mapstructure:"ignoreSigRegexps"`
