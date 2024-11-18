@@ -3591,6 +3591,7 @@ linters-settings:
     # Unlike 'ignoreSigs', this option extends the default set (or the set specified in 'ignoreSigs') without replacing it entirely.
     # This allows you to add specific signatures to the ignore list
     # while retaining the defaults or any items in 'ignoreSigs'.
+    # Default: []
     extra-ignore-sigs:
       - .CustomError(
       - .SpecificWrap(
