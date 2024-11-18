@@ -18,7 +18,7 @@ const (
 	OutFormatHTML              = "html"
 	OutFormatJunitXML          = "junit-xml"
 	OutFormatJunitXMLExtended  = "junit-xml-extended"
-	OutFormatGithubActions     = "github-actions" // Deprecated
+	OutFormatGithubActions     = "github-actions" // Deprecated: use OutFormatColoredLineNumber instead.
 	OutFormatTeamCity          = "teamcity"
 	OutFormatSarif             = "sarif"
 )
