@@ -2285,7 +2285,7 @@ linters-settings:
     max-open-files: 2048
 
     # When set to false, ignores files with "GENERATED" header, similar to golint.
-    # See https://github.com/mgechev/revive#available-rules for details.
+    # See https://github.com/mgechev/revive#configuration for details.
     # Default: false
     ignore-generated-header: true
 
