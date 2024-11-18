@@ -22,7 +22,7 @@ Less `GOGC` values trigger garbage collection more frequently and golangci-lint 
 
 1. Work sharing
 
-   During operation, `golangci-lint` shares work between specific linters (like `golint`, `govet`, etc.).
+   During operation, `golangci-lint` shares work between specific linters (like `govet`, `ineffasign`, etc.).
    We don't fork to call a specific linter, but instead use its API.
    For small and medium projects 50-90% of work between linters can be reused.
 
