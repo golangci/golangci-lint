@@ -19,6 +19,9 @@ var defaultLintersSettings = LintersSettings{
 		DisableDecOrderCheck:      true,
 		DisableInitFuncFirstCheck: true,
 	},
+	Docenv: DocenvSettings{
+		TagName: "env",
+	},
 	Dogsled: DogsledSettings{
 		MaxBlankIdentifiers: 2,
 	},
@@ -206,6 +209,7 @@ type LintersSettings struct {
 	Cyclop          Cyclop
 	Decorder        DecorderSettings
 	Depguard        DepGuardSettings
+	Docenv          DocenvSettings
 	Dogsled         DogsledSettings
 	Dupl            DuplSettings
 	DupWord         DupWordSettings
@@ -353,6 +357,10 @@ type DecorderSettings struct {
 	DisableVarDecNumCheck     bool     `mapstructure:"disable-var-dec-num-check"`
 	DisableDecOrderCheck      bool     `mapstructure:"disable-dec-order-check"`
 	DisableInitFuncFirstCheck bool     `mapstructure:"disable-init-func-first-check"`
+}
+
+type DocenvSettings struct {
+	TagName string `mapstructure:"tag-name"`
 }
 
 type DogsledSettings struct {

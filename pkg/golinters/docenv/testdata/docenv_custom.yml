@@ -1,0 +1,3 @@
+linters-settings:
+  docenv:
+    tag-name: foo

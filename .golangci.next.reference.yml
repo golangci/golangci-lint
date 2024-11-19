@@ -22,6 +22,7 @@ linters:
     - cyclop
     - decorder
     - depguard
+    - docenv
     - dogsled
     - dupl
     - dupword
@@ -138,6 +139,7 @@ linters:
     - cyclop
     - decorder
     - depguard
+    - docenv
     - dogsled
     - dupl
     - dupword
@@ -393,6 +395,11 @@ linters-settings:
             desc: not allowed
           - pkg: "github.com/pkg/errors"
             desc: Should be replaced by standard lib errors package
+
+  docenv:
+    # Set custom env tag name.
+    # Default: env
+    tag-name: env
 
   dogsled:
     # Checks assignments with too many blank identifiers.
