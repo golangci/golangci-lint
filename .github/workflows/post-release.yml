@@ -9,41 +9,9 @@ env:
   # ex:
   # - 1.18beta1 -> 1.18.0-beta.1
   # - 1.18rc1 -> 1.18.0-rc.1
-  GO_VERSION: '1.23'
+  GO_VERSION: "1.23"
 
 jobs:
-  update-docs:
-    name: "Update readme"
-    continue-on-error: true
-    runs-on: ubuntu-latest
-    env:
-      GITHUB_TOKEN: ${{ secrets.GOLANGCI_LINT_TOKEN }}
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
-        with:
-          go-version: ${{ env.GO_VERSION }}
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "15"
-          check-latest: true
-
-      - name: npm install
-        working-directory: .github/contributors
-        run: npm install
-
-      - name: Update Contributors list
-        run: make update_contributors_list # may take more than 1 hour
-
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v7
-        with:
-          base: master
-          token: ${{ secrets.GOLANGCI_LINT_TOKEN }}
-          branch-suffix: timestamp
-          title: "docs: update documentation"
-          delete-branch: true
-
   update-gha-assets:
     name: "Update GitHub Action assets"
     runs-on: ubuntu-latest
