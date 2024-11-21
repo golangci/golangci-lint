@@ -49,7 +49,6 @@ const buildContributorInfo = async (contributors: WeightedContributor[]): Promis
     fragment UserFragment on User {
         login
         name
-        websiteUrl
         avatarUrl
     }`
 
@@ -70,21 +69,21 @@ const buildContributorInfo = async (contributors: WeightedContributor[]): Promis
   }
 }
 
-const buildCoreTeamInfo = async (): Promise<ContributorInfo[]> => {
+const getTeamInfo = async (teamName: string): Promise<ContributorInfo[]> => {
   const query = `{
         organization(login:"golangci"){
-          team(slug:"core-team"){
+          team(slug:"${teamName}"){
             members {
               nodes {
                 login
                 name
-                websiteUrl
                 avatarUrl
               }
             }
           }
         }
       }`
+
   const resp = await graphql.graphql(query, {
     headers: {
       authorization: `token ${process.env.GITHUB_TOKEN}`,
@@ -115,8 +114,10 @@ const main = async () => {
     loginToWeight.forEach((weight, login) => weightedContributors.push({ login, weight }))
 
     weightedContributors.sort((a, b) => b.weight - a.weight)
-    const coreTeamInfo = await buildCoreTeamInfo()
+    const coreTeamInfo = await getTeamInfo("core-team")
+    const teamInfo = await getTeamInfo("team")
     const contributorsInfo = await buildContributorInfo(weightedContributors)
+    contributorsInfo.map((c) => (c.isTeamMember = teamInfo.some((ti) => ti.login == c.login)))
     const exclude: any = {
       golangcidev: true,
       CLAassistant: true,

@@ -40,11 +40,10 @@ ${rows
       `<tr>\n${row
         .map(
           (c) =>
-            `  <td align="center"><a href="${
-              c.websiteUrl ? (c.websiteUrl.startsWith("http") ? c.websiteUrl : `https://${c.websiteUrl}`) : `https://github.com/${c.login}`
-            }?utm_source=golangci-lint-contributors"><img src="${c.avatarUrl}" width="100px;" alt=""/><br /><sub><b>${
-              c.name ? c.name : `@${c.login}`
-            }</b></sub></a></td>`
+            `  <td align="center" valign="top"${
+              contributors.length >= colPerRow ? ` width="14.28%"` : ``
+            }><a href="https://github.com/${c.login}"><img src="${c.avatarUrl}" width="100px;" alt=""/>` +
+            `<br /><sub><b>${c.name ? c.name : `@${c.login}`}</b>${c.isTeamMember ? "🔹" : ""}</sub></a></td>`
         )
         .join(`\n`)}\n</tr>`
   )
@@ -82,12 +81,14 @@ The Core Team has the following responsibilities:
 
 ${buildContributorsTable(data.coreTeam)}
 
-### Team
+### Contributors
+
+These contributors have helped shape \`golangci-lint\` into what it is today. Team members are marked with a '🔹' next to their names.
 
 ${buildContributorsTable(data.contributors.slice(0, visibleCount))}
 
 <details>
-<summary>And ${hiddenCount} more our team members</summary>
+<summary>And ${hiddenCount} more contributors</summary>
 
 ${buildContributorsTable(data.contributors.slice(visibleCount))}
 

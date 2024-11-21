@@ -3,6 +3,7 @@ export type ContributorInfo = {
   name: string
   avatarUrl: string
   websiteUrl: string
+  isTeamMember: boolean
 }
 
 export type DataJSON = {
