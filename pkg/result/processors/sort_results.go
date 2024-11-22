@@ -2,7 +2,6 @@ package processors
 
 import (
 	"cmp"
-	"errors"
 	"fmt"
 	"slices"
 	"strings"
@@ -31,21 +30,21 @@ const (
 var _ Processor = (*SortResults)(nil)
 
 type SortResults struct {
-	cmps map[string]*comparator
+	cmps map[string][]issueComparator
 
 	cfg *config.Output
 }
 
 func NewSortResults(cfg *config.Config) *SortResults {
 	return &SortResults{
-		cmps: map[string]*comparator{
+		cmps: map[string][]issueComparator{
 			// For sorting we are comparing (in next order):
 			// file names, line numbers, position, and finally - giving up.
-			orderNameFile: byFileName().SetNext(byLine().SetNext(byColumn())),
+			orderNameFile: {byFileName, byLine, byColumn},
 			// For sorting we are comparing: linter name
-			orderNameLinter: byLinter(),
+			orderNameLinter: {byLinter},
 			// For sorting we are comparing: severity
-			orderNameSeverity: bySeverity(),
+			orderNameSeverity: {bySeverity},
 		},
 		cfg: &cfg.Output,
 	}
@@ -63,23 +62,21 @@ func (p SortResults) Process(issues []result.Issue) ([]result.Issue, error) {
 		p.cfg.SortOrder = []string{orderNameFile}
 	}
 
-	var cmps []*comparator
+	var cmps []issueComparator
+
 	for _, name := range p.cfg.SortOrder {
 		c, ok := p.cmps[name]
 		if !ok {
 			return nil, fmt.Errorf("unsupported sort-order name %q", name)
 		}
 
-		cmps = append(cmps, c)
+		cmps = append(cmps, c...)
 	}
 
-	comp, err := mergeComparators(cmps)
-	if err != nil {
-		return nil, err
-	}
+	comp := mergeComparators(cmps...)
 
 	slices.SortFunc(issues, func(a, b result.Issue) int {
-		return comp.Compare(&a, &b)
+		return comp(&a, &b)
 	})
 
 	return issues, nil
@@ -87,105 +84,26 @@ func (p SortResults) Process(issues []result.Issue) ([]result.Issue, error) {
 
 func (SortResults) Finish() {}
 
-// comparator describes how to implement compare for two "issues".
-type comparator struct {
-	name    string
-	compare func(a, b *result.Issue) int
-	next    *comparator
+type issueComparator func(a, b *result.Issue) int
+
+func byFileName(a, b *result.Issue) int {
+	return strings.Compare(a.FilePath(), b.FilePath())
 }
 
-func (cp *comparator) Next() *comparator { return cp.next }
-
-func (cp *comparator) SetNext(c *comparator) *comparator {
-	cp.next = c
-	return cp
+func byLine(a, b *result.Issue) int {
+	return numericCompare(a.Line(), b.Line())
 }
 
-func (cp *comparator) String() string {
-	s := cp.name
-	if cp.Next() != nil {
-		s += " > " + cp.Next().String()
-	}
-
-	return s
+func byColumn(a, b *result.Issue) int {
+	return numericCompare(a.Column(), b.Column())
 }
 
-func (cp *comparator) Compare(a, b *result.Issue) int {
-	res := cp.compare(a, b)
-	if res != equal {
-		return res
-	}
-
-	if next := cp.Next(); next != nil {
-		return next.Compare(a, b)
-	}
-
-	return res
+func byLinter(a, b *result.Issue) int {
+	return strings.Compare(a.FromLinter, b.FromLinter)
 }
 
-func byFileName() *comparator {
-	return &comparator{
-		name: "byFileName",
-		compare: func(a, b *result.Issue) int {
-			return strings.Compare(a.FilePath(), b.FilePath())
-		},
-	}
-}
-
-func byLine() *comparator {
-	return &comparator{
-		name: "byLine",
-		compare: func(a, b *result.Issue) int {
-			return numericCompare(a.Line(), b.Line())
-		},
-	}
-}
-
-func byColumn() *comparator {
-	return &comparator{
-		name: "byColumn",
-		compare: func(a, b *result.Issue) int {
-			return numericCompare(a.Column(), b.Column())
-		},
-	}
-}
-
-func byLinter() *comparator {
-	return &comparator{
-		name: "byLinter",
-		compare: func(a, b *result.Issue) int {
-			return strings.Compare(a.FromLinter, b.FromLinter)
-		},
-	}
-}
-
-func bySeverity() *comparator {
-	return &comparator{
-		name: "bySeverity",
-		compare: func(a, b *result.Issue) int {
-			return severityCompare(a.Severity, b.Severity)
-		},
-	}
-}
-
-func mergeComparators(cmps []*comparator) (*comparator, error) {
-	if len(cmps) == 0 {
-		return nil, errors.New("no comparator")
-	}
-
-	for i := range len(cmps) - 1 {
-		findComparatorTip(cmps[i]).SetNext(cmps[i+1])
-	}
-
-	return cmps[0], nil
-}
-
-func findComparatorTip(cmp *comparator) *comparator {
-	if cmp.Next() != nil {
-		return findComparatorTip(cmp.Next())
-	}
-
-	return cmp
+func bySeverity(a, b *result.Issue) int {
+	return severityCompare(a.Severity, b.Severity)
 }
 
 func severityCompare(a, b string) int {
@@ -208,10 +126,23 @@ func severityCompare(a, b string) int {
 }
 
 func numericCompare(a, b int) int {
-	// Negative value and 0 are skipped because they either "neutral" (default value) or "invalid.
+	// Negative values and zeros are skipped (equal) because they either invalid or  "neutral" (default int value).
 	if a <= 0 || b <= 0 {
 		return equal
 	}
 
 	return cmp.Compare(a, b)
+}
+
+func mergeComparators(comps ...issueComparator) issueComparator {
+	return func(a, b *result.Issue) int {
+		for _, comp := range comps {
+			i := comp(a, b)
+			if i != equal {
+				return i
+			}
+		}
+
+		return equal
+	}
 }

@@ -76,19 +76,19 @@ type compareTestCase struct {
 	expected int
 }
 
-func testCompareValues(t *testing.T, cmp *comparator, name string, tests []compareTestCase) {
+func testCompareValues(t *testing.T, cmp issueComparator, name string, tests []compareTestCase) {
 	t.Parallel()
 
 	for i, test := range tests { //nolint:gocritic // To ignore rangeValCopy rule
 		t.Run(fmt.Sprintf("%s(%d)", name, i), func(t *testing.T) {
-			res := cmp.Compare(&test.a, &test.b)
+			res := cmp(&test.a, &test.b)
 			assert.Equal(t, compToString(test.expected), compToString(res))
 		})
 	}
 }
 
-func TestCompareByLine(t *testing.T) {
-	testCompareValues(t, byLine(), "Compare By Line", []compareTestCase{
+func Test_byLine(t *testing.T) {
+	testCompareValues(t, byLine, "Compare By Line", []compareTestCase{
 		{issues[0], issues[1], less},    // 10 vs 11
 		{issues[0], issues[0], equal},   // 10 vs 10
 		{issues[3], issues[3], equal},   // 10 vs 10
@@ -103,8 +103,8 @@ func TestCompareByLine(t *testing.T) {
 	})
 }
 
-func TestCompareByFileName(t *testing.T) {
-	testCompareValues(t, byFileName(), "Compare By File Name", []compareTestCase{
+func Test_byFileName(t *testing.T) {
+	testCompareValues(t, byFileName, "Compare By File Name", []compareTestCase{
 		{issues[0], issues[1], greater}, // file_windows.go vs file_linux.go
 		{issues[1], issues[2], greater}, // file_linux.go vs file_darwin.go
 		{issues[2], issues[3], equal},   // file_darwin.go vs file_darwin.go
@@ -118,8 +118,8 @@ func TestCompareByFileName(t *testing.T) {
 	})
 }
 
-func TestCompareByColumn(t *testing.T) {
-	testCompareValues(t, byColumn(), "Compare By Column", []compareTestCase{
+func Test_byColumn(t *testing.T) {
+	testCompareValues(t, byColumn, "Compare By Column", []compareTestCase{
 		{issues[0], issues[1], greater}, // 80 vs 70
 		{issues[1], issues[2], equal},   // 70 vs zero value
 		{issues[3], issues[3], equal},   // 60 vs 60
@@ -133,8 +133,8 @@ func TestCompareByColumn(t *testing.T) {
 	})
 }
 
-func TestCompareByLinter(t *testing.T) {
-	testCompareValues(t, byLinter(), "Compare By Linter", []compareTestCase{
+func Test_byLinter(t *testing.T) {
+	testCompareValues(t, byLinter, "Compare By Linter", []compareTestCase{
 		{issues[0], issues[1], greater}, // b vs a
 		{issues[1], issues[2], less},    // a vs c
 		{issues[2], issues[3], equal},   // c vs c
@@ -148,8 +148,8 @@ func TestCompareByLinter(t *testing.T) {
 	})
 }
 
-func TestCompareBySeverity(t *testing.T) {
-	testCompareValues(t, bySeverity(), "Compare By Severity", []compareTestCase{
+func Test_bySeverity(t *testing.T) {
+	testCompareValues(t, bySeverity, "Compare By Severity", []compareTestCase{
 		{issues[0], issues[1], greater},                           // medium vs low
 		{issues[1], issues[2], less},                              // low vs high
 		{issues[2], issues[3], equal},                             // high vs high
@@ -165,24 +165,24 @@ func TestCompareBySeverity(t *testing.T) {
 	})
 }
 
-func TestCompareNested(t *testing.T) {
-	cmp := byFileName().SetNext(byLine().SetNext(byColumn()))
-
-	testCompareValues(t, cmp, "Nested Comparing", []compareTestCase{
-		{issues[1], issues[0], less},    // file_linux.go vs file_windows.go
-		{issues[2], issues[1], less},    // file_darwin.go vs file_linux.go
-		{issues[0], issues[1], greater}, // file_windows.go vs file_linux.go
-		{issues[1], issues[2], greater}, // file_linux.go vs file_darwin.go
-		{issues[3], issues[2], less},    // file_darwin.go vs file_darwin.go, 10 vs 12
-		{issues[0], issues[0], equal},   // file_windows.go vs file_windows.go
-		{issues[2], issues[3], greater}, // file_darwin.go vs file_darwin.go, 12 vs 10
-		{issues[1], issues[1], equal},   // file_linux.go vs file_linux.go
-		{issues[2], issues[2], equal},   // file_darwin.go vs file_darwin.go
-		{issues[3], issues[3], equal},   // file_darwin.go vs file_darwin.go
-	})
+func Test_mergeComparators(t *testing.T) {
+	testCompareValues(t, mergeComparators(byFileName, byLine, byColumn), "Nested Comparing",
+		[]compareTestCase{
+			{issues[1], issues[0], less},    // file_linux.go vs file_windows.go
+			{issues[2], issues[1], less},    // file_darwin.go vs file_linux.go
+			{issues[0], issues[1], greater}, // file_windows.go vs file_linux.go
+			{issues[1], issues[2], greater}, // file_linux.go vs file_darwin.go
+			{issues[3], issues[2], less},    // file_darwin.go vs file_darwin.go, 10 vs 12
+			{issues[0], issues[0], equal},   // file_windows.go vs file_windows.go
+			{issues[2], issues[3], greater}, // file_darwin.go vs file_darwin.go, 12 vs 10
+			{issues[1], issues[1], equal},   // file_linux.go vs file_linux.go
+			{issues[2], issues[2], equal},   // file_darwin.go vs file_darwin.go
+			{issues[3], issues[3], equal},   // file_darwin.go vs file_darwin.go
+		},
+	)
 }
 
-func TestNumericCompare(t *testing.T) {
+func Test_numericCompare(t *testing.T) {
 	tests := []struct {
 		a, b     int
 		expected int
@@ -229,56 +229,6 @@ func TestSorting(t *testing.T) {
 	results, err := sr.Process(tests)
 	require.NoError(t, err)
 	assert.Equal(t, []result.Issue{issues[3], issues[2], issues[1], issues[0]}, results)
-}
-
-func Test_mergeComparators(t *testing.T) {
-	testCases := []struct {
-		desc     string
-		cmps     []*comparator
-		expected string
-	}{
-		{
-			desc:     "one",
-			cmps:     []*comparator{byLinter()},
-			expected: "byLinter",
-		},
-		{
-			desc:     "two",
-			cmps:     []*comparator{byLinter(), byFileName()},
-			expected: "byLinter > byFileName",
-		},
-		{
-			desc:     "all",
-			cmps:     []*comparator{bySeverity(), byLinter(), byFileName(), byLine(), byColumn()},
-			expected: "bySeverity > byLinter > byFileName > byLine > byColumn",
-		},
-		{
-			desc:     "nested",
-			cmps:     []*comparator{bySeverity(), byFileName().SetNext(byLine().SetNext(byColumn())), byLinter()},
-			expected: "bySeverity > byFileName > byLine > byColumn > byLinter",
-		},
-		{
-			desc:     "all reverse",
-			cmps:     []*comparator{byColumn(), byLine(), byFileName(), byLinter(), bySeverity()},
-			expected: "byColumn > byLine > byFileName > byLinter > bySeverity",
-		},
-	}
-
-	for _, test := range testCases {
-		t.Run(test.desc, func(t *testing.T) {
-			t.Parallel()
-
-			cmp, err := mergeComparators(test.cmps)
-			require.NoError(t, err)
-
-			assert.Equal(t, test.expected, cmp.String())
-		})
-	}
-}
-
-func Test_mergeComparators_error(t *testing.T) {
-	_, err := mergeComparators(nil)
-	require.EqualError(t, err, "no comparator")
 }
 
 func compToString(c int) string {
