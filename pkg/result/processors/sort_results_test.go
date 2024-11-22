@@ -73,7 +73,7 @@ var extraSeverityIssues = []result.Issue{
 
 type compareTestCase struct {
 	a, b     result.Issue
-	expected compareResult
+	expected int
 }
 
 func testCompareValues(t *testing.T, cmp *comparator, name string, tests []compareTestCase) {
@@ -82,7 +82,7 @@ func testCompareValues(t *testing.T, cmp *comparator, name string, tests []compa
 	for i, test := range tests { //nolint:gocritic // To ignore rangeValCopy rule
 		t.Run(fmt.Sprintf("%s(%d)", name, i), func(t *testing.T) {
 			res := cmp.Compare(&test.a, &test.b)
-			assert.Equal(t, test.expected.String(), res.String())
+			assert.Equal(t, compToString(test.expected), compToString(res))
 		})
 	}
 }
@@ -121,13 +121,13 @@ func TestCompareByFileName(t *testing.T) {
 func TestCompareByColumn(t *testing.T) {
 	testCompareValues(t, byColumn(), "Compare By Column", []compareTestCase{
 		{issues[0], issues[1], greater}, // 80 vs 70
-		{issues[1], issues[2], none},    // 70 vs zero value
+		{issues[1], issues[2], equal},   // 70 vs zero value
 		{issues[3], issues[3], equal},   // 60 vs 60
-		{issues[2], issues[3], none},    // zero value vs 60
-		{issues[2], issues[1], none},    // zero value vs 70
+		{issues[2], issues[3], equal},   // zero value vs 60
+		{issues[2], issues[1], equal},   // zero value vs 70
 		{issues[1], issues[0], less},    // 70 vs 80
 		{issues[1], issues[1], equal},   // 70 vs 70
-		{issues[3], issues[2], none},    // vs zero value
+		{issues[3], issues[2], equal},   // vs zero value
 		{issues[2], issues[2], equal},   // zero value vs zero value
 		{issues[1], issues[1], equal},   // 70 vs 70
 	})
@@ -185,13 +185,13 @@ func TestCompareNested(t *testing.T) {
 func TestNumericCompare(t *testing.T) {
 	tests := []struct {
 		a, b     int
-		expected compareResult
+		expected int
 	}{
 		{0, 0, equal},
-		{0, 1, none},
-		{1, 0, none},
-		{1, -1, none},
-		{-1, 1, none},
+		{0, 1, equal},
+		{1, 0, equal},
+		{1, -1, equal},
+		{-1, 1, equal},
 		{1, 1, equal},
 		{1, 2, less},
 		{2, 1, greater},
@@ -202,7 +202,7 @@ func TestNumericCompare(t *testing.T) {
 	for i, test := range tests {
 		t.Run(fmt.Sprintf("%s(%d)", "Numeric Compare", i), func(t *testing.T) {
 			res := numericCompare(test.a, test.b)
-			assert.Equal(t, test.expected.String(), res.String())
+			assert.Equal(t, compToString(test.expected), compToString(res))
 		})
 	}
 }
@@ -279,4 +279,15 @@ func Test_mergeComparators(t *testing.T) {
 func Test_mergeComparators_error(t *testing.T) {
 	_, err := mergeComparators(nil)
 	require.EqualError(t, err, "no comparator")
+}
+
+func compToString(c int) string {
+	switch c {
+	case less:
+		return "less"
+	case greater:
+		return "greater"
+	default:
+		return "equal"
+	}
 }
