@@ -67,5 +67,6 @@ jobs:
           version: latest
           args: release --clean --timeout=90m
         env:
+          AUR_KEY: ${{ secrets.AUR_KEY }}
           CHOCOLATEY_API_KEY: ${{ secrets.CHOCOLATEY_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GOLANGCI_LINT_TOKEN }}
