@@ -77,11 +77,12 @@ type compareTestCase struct {
 }
 
 func testCompareValues(t *testing.T, cmp issueComparator, name string, tests []compareTestCase) {
-	t.Parallel()
-
 	for i, test := range tests { //nolint:gocritic // To ignore rangeValCopy rule
 		t.Run(fmt.Sprintf("%s(%d)", name, i), func(t *testing.T) {
+			t.Parallel()
+
 			res := cmp(&test.a, &test.b)
+
 			assert.Equal(t, compToString(test.expected), compToString(res))
 		})
 	}
@@ -197,17 +198,18 @@ func Test_numericCompare(t *testing.T) {
 		{2, 1, greater},
 	}
 
-	t.Parallel()
-
 	for i, test := range tests {
 		t.Run(fmt.Sprintf("%s(%d)", "Numeric Compare", i), func(t *testing.T) {
+			t.Parallel()
+
 			res := numericCompare(test.a, test.b)
+
 			assert.Equal(t, compToString(test.expected), compToString(res))
 		})
 	}
 }
 
-func TestNoSorting(t *testing.T) {
+func TestSortResults_Process_noSorting(t *testing.T) {
 	tests := make([]result.Issue, len(issues))
 	copy(tests, issues)
 
@@ -218,7 +220,7 @@ func TestNoSorting(t *testing.T) {
 	assert.Equal(t, tests, results)
 }
 
-func TestSorting(t *testing.T) {
+func TestSortResults_Process_Sorting(t *testing.T) {
 	tests := make([]result.Issue, len(issues))
 	copy(tests, issues)
 
@@ -237,7 +239,9 @@ func compToString(c int) string {
 		return "less"
 	case greater:
 		return "greater"
-	default:
+	case equal:
 		return "equal"
+	default:
+		return "error"
 	}
 }
