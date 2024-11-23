@@ -29,6 +29,8 @@ const (
 
 var _ Processor = (*SortResults)(nil)
 
+type issueComparator func(a, b *result.Issue) int
+
 type SortResults struct {
 	cmps map[string][]issueComparator
 
@@ -83,8 +85,6 @@ func (p SortResults) Process(issues []result.Issue) ([]result.Issue, error) {
 }
 
 func (SortResults) Finish() {}
-
-type issueComparator func(a, b *result.Issue) int
 
 func byFileName(a, b *result.Issue) int {
 	return strings.Compare(a.FilePath(), b.FilePath())
