@@ -52,6 +52,9 @@ jobs:
           echo 'mono /opt/chocolatey/choco.exe $@' >> /usr/local/bin/choco
           chmod +x /usr/local/bin/choco
 
+      - name: Install snapcraft
+        run: sudo snap install snapcraft --classic
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
