@@ -2,4 +2,5 @@ linters-settings:
   loggercheck:
     logr: true
     klog: false
+    slog: false
     zap: false

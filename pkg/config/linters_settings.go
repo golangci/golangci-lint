@@ -105,6 +105,7 @@ var defaultLintersSettings = LintersSettings{
 		Kitlog:           true,
 		Klog:             true,
 		Logr:             true,
+		Slog:             true,
 		Zap:              true,
 		RequireStringKey: false,
 		NoPrintfLike:     false,
@@ -687,6 +688,7 @@ type LoggerCheckSettings struct {
 	Kitlog           bool     `mapstructure:"kitlog"`
 	Klog             bool     `mapstructure:"klog"`
 	Logr             bool     `mapstructure:"logr"`
+	Slog             bool     `mapstructure:"slog"`
 	Zap              bool     `mapstructure:"zap"`
 	RequireStringKey bool     `mapstructure:"require-string-key"`
 	NoPrintfLike     bool     `mapstructure:"no-printf-like"`

@@ -3,6 +3,7 @@ package loggercheck
 
 import (
 	"fmt"
+	"log/slog"
 
 	"github.com/go-logr/logr"
 	"go.uber.org/zap"
@@ -25,4 +26,11 @@ func ExampleZapSugarNotChecked() {
 	sugar := zap.NewExample().Sugar()
 	defer sugar.Sync()
 	sugar.Infow("message", "key1", "value1", "key2") // want `odd number of arguments passed as key-value pairs for logging`
+}
+
+func ExampleSlog() {
+	logger := slog.With("key1", "value1")
+
+	logger.Info("msg", "key1") // want `odd number of arguments passed as key-value pairs for logging`
+	slog.Info("msg", "key1")   // want `odd number of arguments passed as key-value pairs for logging`
 }

@@ -1,7 +1,6 @@
 linters-settings:
   loggercheck:
-    kitlog: true
-    klog: false
     logr: false
-    slog: false
+    klog: false
+    slog: true
     zap: false
