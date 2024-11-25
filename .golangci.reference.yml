@@ -2032,6 +2032,9 @@ linters-settings:
     # Allow check for the github.com/go-logr/logr library.
     # Default: true
     logr: false
+    # Allow check for the log/slog library.
+    # Default: true
+    slog: false
     # Allow check for the "sugar logger" from go.uber.org/zap library.
     # Default: true
     zap: false
