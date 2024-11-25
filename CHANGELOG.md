@@ -7,6 +7,22 @@ If you value it, consider supporting us, we appreciate it! ❤️
 [![Open Collective backers and sponsors](https://img.shields.io/badge/OpenCollective-Donate-blue?logo=opencollective&style=for-the-badge)](https://opencollective.com/golangci-lint)
 [![GitHub Sponsors](https://img.shields.io/badge/GitHub-Donate-blue?logo=github&style=for-the-badge)](https://github.com/sponsors/golangci)
 
+### v1.62.2
+
+1. Updated linters
+   * `fatcontext`: from 0.5.2 to 0.5.3
+   * `ginkgolinter`: from 0.18.0 to 0.18.3
+   * `go-errorlint`: from 1.6.0 to 1.7.0
+   * `iface`: from 1.2.0 to 1.2.1
+   * `revive`: from 1.5.0 to 1.5.1
+   * `testifylint`: from 1.5.0 to 1.5.2
+2. Misc.
+   * fix: ignore cache error when file not found
+
+### v1.62.1
+
+Cancelled due to CI failure.
+
 ### v1.62.0
 
 1. New linters
