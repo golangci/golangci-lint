@@ -155,6 +155,9 @@ aurs:
       name: golangci-releaser
       email: 65486276+golangci-releaser@users.noreply.github.com
     package: |-
+      local x86_64=amd64 i686=386 aarch64=arm64 armv6h=armv6 armv7h=armv7
+      cd "golangci-lint-${pkgver}-linux-${!CARCH}"
+      
       # bin
       install -Dm755 "./golangci-lint" "${pkgdir}/usr/bin/golangci-lint"
 
