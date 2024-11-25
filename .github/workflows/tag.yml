@@ -69,4 +69,5 @@ jobs:
         env:
           AUR_KEY: ${{ secrets.AUR_KEY }}
           CHOCOLATEY_API_KEY: ${{ secrets.CHOCOLATEY_API_KEY }}
+          SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAPCRAFT_STORE_CREDENTIALS }}
           GITHUB_TOKEN: ${{ secrets.GOLANGCI_LINT_TOKEN }}
