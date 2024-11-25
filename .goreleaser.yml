@@ -51,9 +51,10 @@ archives:
       - README.md
 
 snapshot:
-  name_template: SNAPSHOT-{{ .Commit }}
+  version_template: SNAPSHOT-{{ .Commit }}
 
 checksum:
+  disable: false
   name_template: '{{ .ProjectName }}-{{ .Version }}-checksums.txt'
 
 changelog:
@@ -73,6 +74,7 @@ changelog:
       - Merge branch
 
 release:
+  skip_upload: false
   github:
     owner: golangci
     name: golangci-lint
@@ -90,12 +92,16 @@ source:
   name_template: '{{ .ProjectName }}-{{ .Version }}-source'
 
 brews:
-  - repository:
+  - description: Fast linters runner for Go.
+    homepage: https://golangci.com
+    skip_upload: false
+    repository:
       owner: golangci
       name: homebrew-tap
+    commit_author:
+      name: golangci-releaser
+      email: 65486276+golangci-releaser@users.noreply.github.com
     directory: Formula
-    homepage: https://golangci.com
-    description: Fast linters runner for Go.
     install: |
       bin.install "golangci-lint"
       output = Utils.popen_read("#{bin}/golangci-lint completion bash")
@@ -109,14 +115,19 @@ brews:
       system "#{bin}/golangci-lint --version"
 
 chocolateys:
-  - name: golangci-lint
-    owners: golangci
-    title: Golangci-lint
-    authors: golangci
+  - summary: Fast linters Runner for Go
+    description: |
+      {{ .ProjectName }} installer package.
+      Fast linters Runner for Go.
     project_url: https://golangci-lint.run
+    skip_publish: false
+    name: golangci-lint
+    title: Golangci-lint
+    owners: golangci
+    authors: golangci
+    copyright: 2024 GolangCI
     url_template: "https://github.com/golangci/golangci-lint/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
     icon_url: "https://cdn.rawgit.com/golangci/golangci-lint/master/assets/go.png"
-    copyright: 2024 GolangCI
     license_url: https://github.com/golangci/golangci-lint/blob/master/LICENSE
     require_license_acceptance: false
     project_source_url: https://github.com/golangci/golangci-lint
@@ -124,14 +135,9 @@ chocolateys:
     docs_url: https://golangci-lint.run
     bug_tracker_url: https://github.com/golangci/golangci-lint/issues
     tags: "go golang lint linter"
-    summary: Fast linters Runner for Go
-    description: |
-      {{ .ProjectName }} installer package.
-      Fast linters Runner for Go.
     release_notes: "https://github.com/golangci/golangci-lint/releases/tag/v{{ .Version }}"
     api_key: "{{ .Env.CHOCOLATEY_API_KEY }}"
     source_repo: "https://push.chocolatey.org/"
-    skip_publish: false
     goamd64: v1
 
 aurs:
@@ -164,26 +170,26 @@ aurs:
       ./golangci-lint completion fish | install -Dm644 /dev/stdin "${pkgdir}/usr/share/fish/vendor_completions.d/golangci-lint.fish"
 
 snapcrafts:
-  - name_template: "{{ .ProjectName }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
-    grade: stable
-    confinement: classic
-    license: GPL-3.0
-    base: core22
-    summary: Fast linters runner for Go.
+  - summary: Fast linters runner for Go.
     description: |
       It runs linters in parallel, uses caching, supports YAML configuration, integrates with all major IDEs, and includes over a hundred linters.
     disable: false
     publish: true
+    name_template: "{{ .ProjectName }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
+    grade: stable
+    confinement: classic
+    license: GPL-3.0
+    base: core22
 
 nfpms:
-  -
+  - description: Fast linters Runner for Go
+    homepage: https://golangci-lint.run/
     id: golangci-lint-nfpms
     package_name: golangci-lint
     file_name_template: "{{ .ProjectName }}-{{ .Version }}-{{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
-    homepage: https://golangci-lint.run/
-    maintainer: "golangci-lint Team <golangci-releaser@users.noreply.github.com>"
-    description: Fast linters Runner for Go
+    maintainer: "Golangci-lint Maintainers <65486276+golangci-releaser@users.noreply.github.com>"
     license: GPLv3
+    vendor: golangci
     section: golang
     formats:
       - deb
@@ -246,6 +252,7 @@ docker_manifests:
 
 dockers:
   - use: buildx
+    skip_push: false
     goos: linux
     goarch: amd64
     dockerfile: build/buildx.Dockerfile
