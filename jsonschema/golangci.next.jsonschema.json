@@ -3417,6 +3417,17 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "extra-ignore-sigs": {
+              "description": "An array of strings specifying additional substrings of signatures to ignore.",
+              "default": [
+                ".CustomError(",
+                ".SpecificWrap("
+              ],
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
             "ignoreSigs": {
               "description": "An array of strings which specify substrings of signatures to ignore.",
               "default": [
