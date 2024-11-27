@@ -6,7 +6,6 @@ import (
 	"io"
 	"sort"
 
-	"github.com/go-xmlfmt/xmlfmt"
 	"golang.org/x/exp/maps"
 
 	"github.com/golangci/golangci-lint/pkg/result"
@@ -81,12 +80,12 @@ func (p Checkstyle) Print(issues []result.Issue) error {
 		return out.Files[i].Name < out.Files[j].Name
 	})
 
-	data, err := xml.Marshal(&out)
+	data, err := xml.MarshalIndent(&out, "", "  ")
 	if err != nil {
 		return err
 	}
 
-	_, err = fmt.Fprintf(p.w, "%s%s\n", xml.Header, xmlfmt.FormatXML(string(data), "", "  "))
+	_, err = fmt.Fprintf(p.w, "%s\n%s\n", xml.Header, data)
 	if err != nil {
 		return err
 	}
