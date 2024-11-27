@@ -12,7 +12,7 @@ const defaultCodeClimateSeverity = "critical"
 // CodeClimateIssue is a subset of the Code Climate spec.
 // https://github.com/codeclimate/platform/blob/master/spec/analyzers/SPEC.md#data-types
 // It is just enough to support GitLab CI Code Quality.
-// https://docs.gitlab.com/ee/ci/testing/code_quality.html#implement-a-custom-tool
+// https://docs.gitlab.com/ee/ci/testing/code_quality.html#code-quality-report-format
 type CodeClimateIssue struct {
 	Description string `json:"description"`
 	CheckName   string `json:"check_name"`
