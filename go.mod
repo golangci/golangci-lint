@@ -67,7 +67,7 @@ require (
 	github.com/kyoh86/exportloopref v0.1.11
 	github.com/lasiar/canonicalheader v1.1.2
 	github.com/ldez/gomoddirectives v0.2.4
-	github.com/ldez/tagliatelle v0.5.0
+	github.com/ldez/tagliatelle v0.6.0
 	github.com/leonklingele/grouper v1.1.2
 	github.com/macabu/inamedparam v0.1.3
 	github.com/maratori/testableexamples v1.0.0
@@ -158,6 +158,8 @@ require (
 	github.com/google/go-cmp v0.6.0 // indirect
 	github.com/gostaticanalysis/analysisutil v0.7.1 // indirect
 	github.com/gostaticanalysis/comment v1.4.2 // indirect
+	github.com/hashicorp/go-immutable-radix/v2 v2.1.0 // indirect
+	github.com/hashicorp/golang-lru/v2 v2.0.7 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/lufia/plan9stats v0.0.0-20211012122336-39d0f177ccd0 // indirect
