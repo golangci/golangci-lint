@@ -305,6 +305,22 @@
         "opaque"
       ]
     },
+    "tagliatelle-cases": {
+      "enum": [
+        "camel",
+        "pascal",
+        "kebab",
+        "snake",
+        "goCamel",
+        "goPascal",
+        "goKebab",
+        "goSnake",
+        "upper",
+        "upperSnake",
+        "lower",
+        "header"
+      ]
+    },
     "linters": {
       "$comment": "anyOf with enum is used to allow auto completion of non-custom linters",
       "description": "Linters usable.",
@@ -2894,24 +2910,60 @@
                   "type": "boolean",
                   "default": false
                 },
+                "ignored-fields": {
+                  "description": "The field names to ignore.",
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "examples": ["example"]
+                  }
+                },
                 "rules": {
                   "type": "object",
                   "patternProperties": {
                     "^.+$": {
-                      "enum": [
-                        "camel",
-                        "pascal",
-                        "kebab",
-                        "snake",
-                        "goCamel",
-                        "goPascal",
-                        "goKebab",
-                        "goSnake",
-                        "upper",
-                        "upperSnake",
-                        "lower",
-                        "header"
-                      ]
+                      "$ref": "#/definitions/tagliatelle-cases"
+                    }
+                  }
+                },
+                "overrides": {
+                  "description": "Overrides the default/root configuration.",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": ["pkg"],
+                    "properties": {
+                      "pkg": {
+                        "description": "A package path.",
+                        "type": "string"
+                      },
+                      "use-field-name": {
+                        "description": "Use the struct field name to check the name of the struct tag.",
+                        "type": "boolean",
+                        "default": false
+                      },
+                      "ignored-fields": {
+                        "description": "The field names to ignore.",
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "examples": ["example"]
+                        }
+                      },
+                      "ignore": {
+                        "description": "Ignore the package (it takes the precedence over all other configuration).",
+                        "type": "boolean",
+                        "default": false
+                      },
+                      "rules": {
+                        "type": "object",
+                        "patternProperties": {
+                          "^.+$": {
+                            "$ref": "#/definitions/tagliatelle-cases"
+                          }
+                        }
+                      }
                     }
                   }
                 }
