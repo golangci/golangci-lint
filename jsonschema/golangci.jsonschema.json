@@ -200,7 +200,6 @@
         "slog",
         "sortslice",
         "stdmethods",
-        "stdversion",
         "stringintconv",
         "structtag",
         "testinggoroutine",

@@ -1801,8 +1801,6 @@ linters-settings:
       - sortslice
       # Check signature of methods of well-known interfaces.
       - stdmethods
-      # Check for uses of too-new standard library symbols.
-      - stdversion
       # Check for string(int) conversions.
       - stringintconv
       # Check that struct field tags conform to reflect.StructTag.Get.
