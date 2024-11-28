@@ -2952,7 +2952,7 @@
                         }
                       },
                       "ignore": {
-                        "description": "Ignore the package (it takes the precedence over all other configuration).",
+                        "description": "Ignore the package (takes precedence over all other configurations).",
                         "type": "boolean",
                         "default": false
                       },
