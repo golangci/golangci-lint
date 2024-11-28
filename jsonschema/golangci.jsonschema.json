@@ -2111,11 +2111,6 @@
               "type": "boolean",
               "default": true
             },
-            "slog": {
-              "description": "Allow check for the log/slog library.",
-              "type": "boolean",
-              "default": true
-            },
             "zap": {
               "description": "Allow check for the \"sugar logger\" from go.uber.org/zap library.",
               "type": "boolean",
