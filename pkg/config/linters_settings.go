@@ -179,6 +179,12 @@ var defaultLintersSettings = LintersSettings{
 		HTTPMethod:     true,
 		HTTPStatusCode: true,
 	},
+	UseTesting: UseTestingSettings{
+		ContextBackground: true,
+		ContextTodo:       true,
+		OSChdir:           true,
+		OSMkdirTemp:       true,
+	},
 	Varnamelen: VarnamelenSettings{
 		MaxDistance:   5,
 		MinNameLength: 3,
@@ -278,6 +284,7 @@ type LintersSettings struct {
 	Unparam         UnparamSettings
 	Unused          UnusedSettings
 	UseStdlibVars   UseStdlibVarsSettings
+	UseTesting      UseTestingSettings
 	Varnamelen      VarnamelenSettings
 	Whitespace      WhitespaceSettings
 	Wrapcheck       WrapcheckSettings
@@ -957,6 +964,14 @@ type UseStdlibVarsSettings struct {
 	TLSSignatureScheme bool `mapstructure:"tls-signature-scheme"`
 	ConstantKind       bool `mapstructure:"constant-kind"`
 	SyslogPriority     bool `mapstructure:"syslog-priority"` // Deprecated
+}
+
+type UseTestingSettings struct {
+	ContextBackground bool `mapstructure:"context-background"`
+	ContextTodo       bool `mapstructure:"context-todo"`
+	OSChdir           bool `mapstructure:"os-chdir"`
+	OSMkdirTemp       bool `mapstructure:"os-mkdir-temp"`
+	OSSetenv          bool `mapstructure:"os-setenv"`
 }
 
 type UnconvertSettings struct {

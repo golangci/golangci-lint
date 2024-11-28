@@ -1,0 +1,7 @@
+linters-settings:
+  usetesting:
+    context-background: false
+    context-todo: false
+    os-chdir: false
+    os-mkdir-temp: false
+    os-setenv: true

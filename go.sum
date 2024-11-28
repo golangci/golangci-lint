@@ -355,6 +355,8 @@ github.com/ldez/gomoddirectives v0.2.4 h1:j3YjBIjEBbqZ0NKtBNzr8rtMHTOrLPeiwTkfUJ
 github.com/ldez/gomoddirectives v0.2.4/go.mod h1:oWu9i62VcQDYp9EQ0ONTfqLNh+mDLWWDO+SO0qSQw5g=
 github.com/ldez/tagliatelle v0.6.0 h1:1Muumft/shmQ0x96vA6a/OUgTjamRt8jUlZPLm1ruwA=
 github.com/ldez/tagliatelle v0.6.0/go.mod h1:WeZ7TgEqq7fw/0Zj8BuQhh4+4KX1/+g0O11eygvClRA=
+github.com/ldez/usetesting v0.1.0 h1:Hk2geZK7Vgf6rSCTZDMJvW/qZHvv+OW9cSCeoFzykMM=
+github.com/ldez/usetesting v0.1.0/go.mod h1:9Tk8OH9NL3Xi7lpvkGRpuY/cOmWmatxwVjRc+TkgLDg=
 github.com/leonklingele/grouper v1.1.2 h1:o1ARBDLOmmasUaNDesWqWCIFH3u7hoFlM84YrjT3mIY=
 github.com/leonklingele/grouper v1.1.2/go.mod h1:6D0M/HVkhs2yRKRFZUoGjeDy7EZTfFBE9gl4kjmIGkA=
 github.com/lufia/plan9stats v0.0.0-20211012122336-39d0f177ccd0 h1:6E+4a0GO5zZEnZ81pIr0yLvtUWk2if982qA3F3QD6H4=
