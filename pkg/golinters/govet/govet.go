@@ -103,7 +103,7 @@ var (
 		unusedwrite.Analyzer,
 	}
 
-	// https://github.com/golang/go/blob/b56645a87b28840a180d64077877cb46570b4176/src/cmd/vet/main.go#L49-L81
+	// https://github.com/golang/go/blob/go1.23.0/src/cmd/vet/main.go#L55-L87
 	defaultAnalyzers = []*analysis.Analyzer{
 		appends.Analyzer,
 		asmdecl.Analyzer,
@@ -128,6 +128,7 @@ var (
 		sigchanyzer.Analyzer,
 		slog.Analyzer,
 		stdmethods.Analyzer,
+		stdversion.Analyzer,
 		stringintconv.Analyzer,
 		structtag.Analyzer,
 		testinggoroutine.Analyzer,
