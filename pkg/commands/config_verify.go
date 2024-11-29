@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -103,7 +104,7 @@ func validateConfiguration(schemaPath, targetFile string) error {
 	compiler := jsonschema.NewCompiler()
 	loader := jsonschema.SchemeURLLoader{
 		"file":  jsonschema.FileLoader{},
-		"https": newHTTPURLLoader(),
+		"https": newJSONSchemaHTTPLoader(),
 	}
 	compiler.UseLoader(loader)
 	compiler.DefaultDraft(jsonschema.Draft7)
@@ -182,22 +183,29 @@ func decodeTomlFile(filename string) (any, error) {
 	return m, nil
 }
 
-type httpURLLoader http.Client
-
-func newHTTPURLLoader() *httpURLLoader {
-	httpLoader := httpURLLoader(http.Client{
-		Timeout: 2 * time.Second,
-	})
-	return &httpLoader
+type jsonschemaHTTPLoader struct {
+	*http.Client
 }
 
-func (l *httpURLLoader) Load(url string) (any, error) {
-	client := (*http.Client)(l)
-	resp, err := client.Get(url)
+func newJSONSchemaHTTPLoader() *jsonschemaHTTPLoader {
+	return &jsonschemaHTTPLoader{Client: &http.Client{
+		Timeout: 2 * time.Second,
+	}}
+}
+
+func (l jsonschemaHTTPLoader) Load(url string) (any, error) {
+	req, err := http.NewRequestWithContext(context.Background(), http.MethodGet, url, http.NoBody)
 	if err != nil {
 		return nil, err
 	}
+
+	resp, err := l.Do(req)
+	if err != nil {
+		return nil, err
+	}
+
 	defer resp.Body.Close()
+
 	if resp.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("%s returned status code %d", url, resp.StatusCode)
 	}

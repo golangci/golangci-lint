@@ -15,7 +15,7 @@ import (
 )
 
 func Test_validateTestConfigurationFiles(t *testing.T) {
-	err := validateTestConfigurationFiles("../jsonschema/golangci.next.jsonschema.json", ".")
+	err := validateTestConfigurationFiles("../../jsonschema/golangci.next.jsonschema.json", ".")
 	require.NoError(t, err)
 }
 
@@ -59,7 +59,7 @@ func validateTestConfigurationFiles(schemaPath, targetDir string) error {
 
 func loadSchema(schemaPath string) (*jsonschema.Schema, error) {
 	compiler := jsonschema.NewCompiler()
-	compiler.Draft = jsonschema.Draft7
+	compiler.DefaultDraft(jsonschema.Draft7)
 
 	schemaFile, err := os.Open(schemaPath)
 	if err != nil {
@@ -73,7 +73,7 @@ func loadSchema(schemaPath string) (*jsonschema.Schema, error) {
 		return nil, fmt.Errorf("add schema resource: %w", err)
 	}
 
-	schema, err := compiler.Compile(filepath.Base(schemaPath))
+	schema, err := compiler.Compile(schemaPath)
 	if err != nil {
 		return nil, fmt.Errorf("compile schema: %w", err)
 	}
