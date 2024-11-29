@@ -114,6 +114,7 @@ linters:
     - unparam
     - unused
     - usestdlibvars
+    - usetesting
     - varnamelen
     - wastedassign
     - whitespace
@@ -230,6 +231,7 @@ linters:
     - unparam
     - unused
     - usestdlibvars
+    - usetesting
     - varnamelen
     - wastedassign
     - whitespace

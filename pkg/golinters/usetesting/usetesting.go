@@ -8,17 +8,17 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func New(cfg *config.UseTestingSettings) *goanalysis.Linter {
+func New(settings *config.UseTestingSettings) *goanalysis.Linter {
 	a := usetesting.NewAnalyzer()
 
-	cfgMap := make(map[string]map[string]any)
-	if cfg != nil {
-		cfgMap[a.Name] = map[string]any{
-			"contextbackground": cfg.ContextBackground,
-			"contexttodo":       cfg.ContextTodo,
-			"oschdir":           cfg.OSChdir,
-			"osmkdirtemp":       cfg.OSMkdirTemp,
-			"ossetenv":          cfg.OSSetenv,
+	cfg := make(map[string]map[string]any)
+	if settings != nil {
+		cfg[a.Name] = map[string]any{
+			"contextbackground": settings.ContextBackground,
+			"contexttodo":       settings.ContextTodo,
+			"oschdir":           settings.OSChdir,
+			"osmkdirtemp":       settings.OSMkdirTemp,
+			"ossetenv":          settings.OSSetenv,
 		}
 	}
 
@@ -26,6 +26,6 @@ func New(cfg *config.UseTestingSettings) *goanalysis.Linter {
 		a.Name,
 		a.Doc,
 		[]*analysis.Analyzer{a},
-		cfgMap,
+		cfg,
 	).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }
