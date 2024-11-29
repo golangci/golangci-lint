@@ -73,7 +73,7 @@ func loadSchema(schemaPath string) (*jsonschema.Schema, error) {
 		return nil, fmt.Errorf("unmarshal schema resource: %w", err)
 	}
 
-	if err := compiler.AddResource(filepath.Base(schemaPath), doc); err != nil {
+	if err = compiler.AddResource(filepath.Base(schemaPath), doc); err != nil {
 		return nil, fmt.Errorf("add schema resource: %w", err)
 	}
 
