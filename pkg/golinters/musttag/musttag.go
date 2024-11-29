@@ -8,11 +8,11 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func New(setting *config.MustTagSettings) *goanalysis.Linter {
+func New(settings *config.MustTagSettings) *goanalysis.Linter {
 	var funcs []musttag.Func
 
-	if setting != nil {
-		for _, fn := range setting.Functions {
+	if settings != nil {
+		for _, fn := range settings.Functions {
 			funcs = append(funcs, musttag.Func{
 				Name:   fn.Name,
 				Tag:    fn.Tag,

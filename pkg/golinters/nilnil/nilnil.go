@@ -11,13 +11,13 @@ import (
 func New(settings *config.NilNilSettings) *goanalysis.Linter {
 	a := analyzer.New()
 
-	cfgMap := make(map[string]map[string]any)
+	cfg := make(map[string]map[string]any)
 	if settings != nil {
-		cfgMap[a.Name] = map[string]any{
+		cfg[a.Name] = map[string]any{
 			"detect-opposite": settings.DetectOpposite,
 		}
 		if len(settings.CheckedTypes) != 0 {
-			cfgMap[a.Name]["checked-types"] = settings.CheckedTypes
+			cfg[a.Name]["checked-types"] = settings.CheckedTypes
 		}
 	}
 
@@ -25,7 +25,7 @@ func New(settings *config.NilNilSettings) *goanalysis.Linter {
 		a.Name,
 		a.Doc,
 		[]*analysis.Analyzer{a},
-		cfgMap,
+		cfg,
 	).
 		WithLoadMode(goanalysis.LoadModeTypesInfo)
 }

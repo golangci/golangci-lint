@@ -10,14 +10,14 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func New(setting *config.DupWordSettings) *goanalysis.Linter {
+func New(settings *config.DupWordSettings) *goanalysis.Linter {
 	a := dupword.NewAnalyzer()
 
-	cfgMap := map[string]map[string]any{}
-	if setting != nil {
-		cfgMap[a.Name] = map[string]any{
-			"keyword": strings.Join(setting.Keywords, ","),
-			"ignore":  strings.Join(setting.Ignore, ","),
+	cfg := map[string]map[string]any{}
+	if settings != nil {
+		cfg[a.Name] = map[string]any{
+			"keyword": strings.Join(settings.Keywords, ","),
+			"ignore":  strings.Join(settings.Ignore, ","),
 		}
 	}
 
@@ -25,6 +25,6 @@ func New(setting *config.DupWordSettings) *goanalysis.Linter {
 		a.Name,
 		"checks for duplicate words in the source code",
 		[]*analysis.Analyzer{a},
-		cfgMap,
+		cfg,
 	).WithLoadMode(goanalysis.LoadModeSyntax)
 }

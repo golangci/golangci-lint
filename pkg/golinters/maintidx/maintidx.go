@@ -8,16 +8,16 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func New(cfg *config.MaintIdxSettings) *goanalysis.Linter {
+func New(settings *config.MaintIdxSettings) *goanalysis.Linter {
 	analyzer := maintidx.Analyzer
 
-	cfgMap := map[string]map[string]any{
+	cfg := map[string]map[string]any{
 		analyzer.Name: {"under": 20},
 	}
 
-	if cfg != nil {
-		cfgMap[analyzer.Name] = map[string]any{
-			"under": cfg.Under,
+	if settings != nil {
+		cfg[analyzer.Name] = map[string]any{
+			"under": settings.Under,
 		}
 	}
 
@@ -25,6 +25,6 @@ func New(cfg *config.MaintIdxSettings) *goanalysis.Linter {
 		analyzer.Name,
 		analyzer.Doc,
 		[]*analysis.Analyzer{analyzer},
-		cfgMap,
+		cfg,
 	).WithLoadMode(goanalysis.LoadModeSyntax)
 }

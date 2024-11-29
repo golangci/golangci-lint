@@ -8,16 +8,16 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func New(cfg *config.ErrorLintSettings) *goanalysis.Linter {
+func New(settings *config.ErrorLintSettings) *goanalysis.Linter {
 	var opts []errorlint.Option
 
-	if cfg != nil {
-		ae := toAllowPairs(cfg.AllowedErrors)
+	if settings != nil {
+		ae := toAllowPairs(settings.AllowedErrors)
 		if len(ae) > 0 {
 			opts = append(opts, errorlint.WithAllowedErrors(ae))
 		}
 
-		aew := toAllowPairs(cfg.AllowedErrorsWildcard)
+		aew := toAllowPairs(settings.AllowedErrorsWildcard)
 		if len(aew) > 0 {
 			opts = append(opts, errorlint.WithAllowedWildcard(aew))
 		}
@@ -25,14 +25,14 @@ func New(cfg *config.ErrorLintSettings) *goanalysis.Linter {
 
 	a := errorlint.NewAnalyzer(opts...)
 
-	cfgMap := map[string]map[string]any{}
+	cfg := map[string]map[string]any{}
 
-	if cfg != nil {
-		cfgMap[a.Name] = map[string]any{
-			"errorf":       cfg.Errorf,
-			"errorf-multi": cfg.ErrorfMulti,
-			"asserts":      cfg.Asserts,
-			"comparison":   cfg.Comparison,
+	if settings != nil {
+		cfg[a.Name] = map[string]any{
+			"errorf":       settings.Errorf,
+			"errorf-multi": settings.ErrorfMulti,
+			"asserts":      settings.Asserts,
+			"comparison":   settings.Comparison,
 		}
 	}
 
@@ -41,7 +41,7 @@ func New(cfg *config.ErrorLintSettings) *goanalysis.Linter {
 		"errorlint is a linter for that can be used to find code "+
 			"that will cause problems with the error wrapping scheme introduced in Go 1.13.",
 		[]*analysis.Analyzer{a},
-		cfgMap,
+		cfg,
 	).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }
 
