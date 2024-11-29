@@ -68,12 +68,16 @@ func loadSchema(schemaPath string) (*jsonschema.Schema, error) {
 
 	defer func() { _ = schemaFile.Close() }()
 
-	err = compiler.AddResource(filepath.Base(schemaPath), schemaFile)
+	doc, err := jsonschema.UnmarshalJSON(schemaFile)
 	if err != nil {
+		return nil, fmt.Errorf("unmarshal schema resource: %w", err)
+	}
+
+	if err := compiler.AddResource(filepath.Base(schemaPath), doc); err != nil {
 		return nil, fmt.Errorf("add schema resource: %w", err)
 	}
 
-	schema, err := compiler.Compile(schemaPath)
+	schema, err := compiler.Compile(filepath.Base(schemaPath))
 	if err != nil {
 		return nil, fmt.Errorf("compile schema: %w", err)
 	}
