@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"time"
 
@@ -44,9 +45,7 @@ func (c *configCommand) executeVerify(cmd *cobra.Command, _ []string) error {
 			return fmt.Errorf("[%s] validate: %w", usedConfigFile, err)
 		}
 
-		detail := v.DetailedOutput()
-
-		printValidationDetail(cmd, detail)
+		printValidationDetail(cmd, v.DetailedOutput())
 
 		return errors.New("the configuration contains invalid elements")
 	}
@@ -102,11 +101,10 @@ func createSchemaURL(flags *pflag.FlagSet, buildInfo BuildInfo) (string, error) 
 
 func validateConfiguration(schemaPath, targetFile string) error {
 	compiler := jsonschema.NewCompiler()
-	loader := jsonschema.SchemeURLLoader{
+	compiler.UseLoader(jsonschema.SchemeURLLoader{
 		"file":  jsonschema.FileLoader{},
 		"https": newJSONSchemaHTTPLoader(),
-	}
-	compiler.UseLoader(loader)
+	})
 	compiler.DefaultDraft(jsonschema.Draft7)
 
 	schema, err := compiler.Compile(schemaPath)
@@ -139,9 +137,11 @@ func validateConfiguration(schemaPath, targetFile string) error {
 
 func printValidationDetail(cmd *cobra.Command, detail *jsonschema.OutputUnit) {
 	if detail.Error != nil {
-		b, _ := json.Marshal(detail.Error)
+		data, _ := json.Marshal(detail.Error)
+		details, _ := strconv.Unquote(string(data))
+
 		cmd.PrintErrf("jsonschema: %q does not validate with %q: %s\n",
-			strings.ReplaceAll(strings.TrimPrefix(detail.InstanceLocation, "/"), "/", "."), detail.KeywordLocation, b)
+			strings.ReplaceAll(strings.TrimPrefix(detail.InstanceLocation, "/"), "/", "."), detail.KeywordLocation, details)
 	}
 
 	for _, d := range detail.Errors {

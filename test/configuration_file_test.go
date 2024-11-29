@@ -15,7 +15,7 @@ import (
 )
 
 func Test_validateTestConfigurationFiles(t *testing.T) {
-	err := validateTestConfigurationFiles("../../jsonschema/golangci.next.jsonschema.json", ".")
+	err := validateTestConfigurationFiles("../jsonschema/golangci.next.jsonschema.json", ".")
 	require.NoError(t, err)
 }
 
