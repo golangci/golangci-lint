@@ -11,9 +11,9 @@ import (
 func New(settings *config.GrouperSettings) *goanalysis.Linter {
 	a := grouper.New()
 
-	linterCfg := map[string]map[string]any{}
+	cfg := map[string]map[string]any{}
 	if settings != nil {
-		linterCfg[a.Name] = map[string]any{
+		cfg[a.Name] = map[string]any{
 			"const-require-single-const":   settings.ConstRequireSingleConst,
 			"const-require-grouping":       settings.ConstRequireGrouping,
 			"import-require-single-import": settings.ImportRequireSingleImport,
@@ -29,6 +29,6 @@ func New(settings *config.GrouperSettings) *goanalysis.Linter {
 		a.Name,
 		"Analyze expression groups.",
 		[]*analysis.Analyzer{a},
-		linterCfg,
+		cfg,
 	).WithLoadMode(goanalysis.LoadModeSyntax)
 }

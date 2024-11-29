@@ -10,19 +10,19 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func New(cfg *config.TestpackageSettings) *goanalysis.Linter {
+func New(settings *config.TestpackageSettings) *goanalysis.Linter {
 	a := testpackage.NewAnalyzer()
 
-	var settings map[string]map[string]any
-	if cfg != nil {
-		settings = map[string]map[string]any{
+	var cfg map[string]map[string]any
+	if settings != nil {
+		cfg = map[string]map[string]any{
 			a.Name: {
-				testpackage.SkipRegexpFlagName:    cfg.SkipRegexp,
-				testpackage.AllowPackagesFlagName: strings.Join(cfg.AllowPackages, ","),
+				testpackage.SkipRegexpFlagName:    settings.SkipRegexp,
+				testpackage.AllowPackagesFlagName: strings.Join(settings.AllowPackages, ","),
 			},
 		}
 	}
 
-	return goanalysis.NewLinter(a.Name, a.Doc, []*analysis.Analyzer{a}, settings).
+	return goanalysis.NewLinter(a.Name, a.Doc, []*analysis.Analyzer{a}, cfg).
 		WithLoadMode(goanalysis.LoadModeSyntax)
 }

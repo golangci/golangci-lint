@@ -12,7 +12,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/internal"
 )
 
-func New(cfg *config.ThelperSettings) *goanalysis.Linter {
+func New(settings *config.ThelperSettings) *goanalysis.Linter {
 	a := analyzer.NewAnalyzer()
 
 	opts := map[string]struct{}{
@@ -33,11 +33,11 @@ func New(cfg *config.ThelperSettings) *goanalysis.Linter {
 		"tb_first": {},
 	}
 
-	if cfg != nil {
-		applyTHelperOptions(cfg.Test, "t_", opts)
-		applyTHelperOptions(cfg.Fuzz, "f_", opts)
-		applyTHelperOptions(cfg.Benchmark, "b_", opts)
-		applyTHelperOptions(cfg.TB, "tb_", opts)
+	if settings != nil {
+		applyTHelperOptions(settings.Test, "t_", opts)
+		applyTHelperOptions(settings.Fuzz, "f_", opts)
+		applyTHelperOptions(settings.Benchmark, "b_", opts)
+		applyTHelperOptions(settings.TB, "tb_", opts)
 	}
 
 	if len(opts) == 0 {
@@ -46,7 +46,7 @@ func New(cfg *config.ThelperSettings) *goanalysis.Linter {
 
 	args := maps.Keys(opts)
 
-	cfgMap := map[string]map[string]any{
+	cfg := map[string]map[string]any{
 		a.Name: {
 			"checks": strings.Join(args, ","),
 		},
@@ -56,7 +56,7 @@ func New(cfg *config.ThelperSettings) *goanalysis.Linter {
 		a.Name,
 		a.Doc,
 		[]*analysis.Analyzer{a},
-		cfgMap,
+		cfg,
 	).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }
 
