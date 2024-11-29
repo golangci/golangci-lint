@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/santhosh-tekuri/jsonschema/v5"
+	"github.com/santhosh-tekuri/jsonschema/v6"
 	"github.com/stretchr/testify/require"
 	"gopkg.in/yaml.v3"
 )
@@ -59,7 +59,7 @@ func validateTestConfigurationFiles(schemaPath, targetDir string) error {
 
 func loadSchema(schemaPath string) (*jsonschema.Schema, error) {
 	compiler := jsonschema.NewCompiler()
-	compiler.Draft = jsonschema.Draft7
+	compiler.DefaultDraft(jsonschema.Draft7)
 
 	schemaFile, err := os.Open(schemaPath)
 	if err != nil {
@@ -68,8 +68,12 @@ func loadSchema(schemaPath string) (*jsonschema.Schema, error) {
 
 	defer func() { _ = schemaFile.Close() }()
 
-	err = compiler.AddResource(filepath.Base(schemaPath), schemaFile)
+	doc, err := jsonschema.UnmarshalJSON(schemaFile)
 	if err != nil {
+		return nil, fmt.Errorf("unmarshal schema resource: %w", err)
+	}
+
+	if err = compiler.AddResource(filepath.Base(schemaPath), doc); err != nil {
 		return nil, fmt.Errorf("add schema resource: %w", err)
 	}
 
