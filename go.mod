@@ -66,7 +66,7 @@ require (
 	github.com/kunwardeep/paralleltest v1.0.10
 	github.com/kyoh86/exportloopref v0.1.11
 	github.com/lasiar/canonicalheader v1.1.2
-	github.com/ldez/gomoddirectives v0.4.1
+	github.com/ldez/gomoddirectives v0.4.2
 	github.com/ldez/tagliatelle v0.6.0
 	github.com/ldez/usetesting v0.2.0
 	github.com/leonklingele/grouper v1.1.2
@@ -164,6 +164,7 @@ require (
 	github.com/hashicorp/golang-lru/v2 v2.0.7 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
+	github.com/ldez/grignotin v0.6.0 // indirect
 	github.com/lufia/plan9stats v0.0.0-20211012122336-39d0f177ccd0 // indirect
 	github.com/magiconair/properties v1.8.6 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
