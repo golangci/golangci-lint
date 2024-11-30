@@ -57,7 +57,7 @@ require (
 	github.com/hexops/gotextdiff v1.0.3
 	github.com/jgautheron/goconst v1.7.1
 	github.com/jingyugao/rowserrcheck v1.1.1
-	github.com/jjti/go-spancheck v0.6.2
+	github.com/jjti/go-spancheck v0.6.4
 	github.com/julz/importas v0.1.0
 	github.com/karamaru-alpha/copyloopvar v1.1.0
 	github.com/kisielk/errcheck v1.8.0
