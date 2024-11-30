@@ -184,6 +184,9 @@ var defaultLintersSettings = LintersSettings{
 		ContextTodo:       true,
 		OSChdir:           true,
 		OSMkdirTemp:       true,
+		OSSetenv:          false,
+		OSTempDir:         false,
+		OSSCreateTemp:     true,
 	},
 	Varnamelen: VarnamelenSettings{
 		MaxDistance:   5,
@@ -972,6 +975,8 @@ type UseTestingSettings struct {
 	OSChdir           bool `mapstructure:"os-chdir"`
 	OSMkdirTemp       bool `mapstructure:"os-mkdir-temp"`
 	OSSetenv          bool `mapstructure:"os-setenv"`
+	OSTempDir         bool `mapstructure:"os-temp-dir"`
+	OSSCreateTemp     bool `mapstructure:"os-create-temp"`
 }
 
 type UnconvertSettings struct {

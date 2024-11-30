@@ -19,6 +19,8 @@ func New(settings *config.UseTestingSettings) *goanalysis.Linter {
 			"oschdir":           settings.OSChdir,
 			"osmkdirtemp":       settings.OSMkdirTemp,
 			"ossetenv":          settings.OSSetenv,
+			"ostempdir":         settings.OSTempDir,
+			"oscreatetemp":      settings.OSSCreateTemp,
 		}
 	}
 

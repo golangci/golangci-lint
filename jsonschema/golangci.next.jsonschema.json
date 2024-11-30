@@ -428,6 +428,7 @@
             "unparam",
             "unused",
             "usestdlibvars",
+            "usetesting",
             "varnamelen",
             "wastedassign",
             "whitespace",
@@ -3346,6 +3347,14 @@
               "default": true
             },
             "os-setenv": {
+              "type": "boolean",
+              "default": false
+            },
+            "os-create-temp": {
+              "type": "boolean",
+              "default": true
+            },
+            "os-temp-dir": {
               "type": "boolean",
               "default": false
             }
