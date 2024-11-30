@@ -114,6 +114,7 @@ linters:
     - unparam
     - unused
     - usestdlibvars
+    - usetesting
     - varnamelen
     - wastedassign
     - whitespace
@@ -230,6 +231,7 @@ linters:
     - unparam
     - unused
     - usestdlibvars
+    - usetesting
     - varnamelen
     - wastedassign
     - whitespace
@@ -3532,6 +3534,38 @@ linters-settings:
     # Suggest the use of constant.Kind.String().
     # Default: false
     constant-kind: true
+
+  usetesting:
+    # Enable/disable `os.CreateTemp("", ...)` detections.
+    # Default: true
+    os-create-temp: false
+
+    # Enable/disable `os.MkdirTemp()` detections.
+    # Default: true
+    os-mkdir-temp: false
+
+    # Enable/disable `os.Setenv()` detections.
+    # Default: false
+    os-setenv: true
+
+    # Enable/disable `os.TempDir()` detections.
+    # Default: false
+    os-temp-dir: true
+
+    # Enable/disable `os.Chdir()` detections.
+    # Disabled if Go < 1.24.
+    # Default: true
+    os-chdir: false
+
+    # Enable/disable `context.Background()` detections.
+    # Disabled if Go < 1.24.
+    # Default: true
+    context-background: false
+
+    # Enable/disable `context.TODO()` detections.
+    # Disabled if Go < 1.24.
+    # Default: true
+    context-todo: false
 
   unconvert:
     # Remove conversions that force intermediate rounding.

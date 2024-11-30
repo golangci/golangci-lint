@@ -164,12 +164,20 @@ func (lc *Config) WithNoopFallback(cfg *config.Config, cond func(cfg *config.Con
 }
 
 func IsGoLowerThanGo122() func(cfg *config.Config) error {
+	return isGoLowerThanGo("1.22")
+}
+
+func IsGoLowerThanGo124() func(cfg *config.Config) error {
+	return isGoLowerThanGo("1.24")
+}
+
+func isGoLowerThanGo(v string) func(cfg *config.Config) error {
 	return func(cfg *config.Config) error {
-		if cfg == nil || config.IsGoGreaterThanOrEqual(cfg.Run.Go, "1.22") {
+		if cfg == nil || config.IsGoGreaterThanOrEqual(cfg.Run.Go, v) {
 			return nil
 		}
 
-		return fmt.Errorf("this linter is disabled because the Go version (%s) of your project is lower than Go 1.22", cfg.Run.Go)
+		return fmt.Errorf("this linter is disabled because the Go version (%s) of your project is lower than Go %s", cfg.Run.Go, v)
 	}
 }
 

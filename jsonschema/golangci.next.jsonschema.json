@@ -428,6 +428,7 @@
             "unparam",
             "unused",
             "usestdlibvars",
+            "usetesting",
             "varnamelen",
             "wastedassign",
             "whitespace",
@@ -3320,6 +3321,40 @@
             },
             "constant-kind": {
               "description": "Suggest the use of constant.Kind.String().",
+              "type": "boolean",
+              "default": false
+            }
+          }
+        },
+        "usetesting": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "context-background": {
+              "type": "boolean",
+              "default": true
+            },
+            "context-todo": {
+              "type": "boolean",
+              "default": true
+            },
+            "os-chdir": {
+              "type": "boolean",
+              "default": true
+            },
+            "os-mkdir-temp": {
+              "type": "boolean",
+              "default": true
+            },
+            "os-setenv": {
+              "type": "boolean",
+              "default": false
+            },
+            "os-create-temp": {
+              "type": "boolean",
+              "default": true
+            },
+            "os-temp-dir": {
               "type": "boolean",
               "default": false
             }
