@@ -3285,14 +3285,24 @@ linters-settings:
   tagliatelle:
     # Check the struct tag name case.
     case:
-      # Use the struct field name to check the name of the struct tag.
-      # Default: false
-      use-field-name: true
       # `camel` is used for `json` and `yaml`, and `header` is used for `header` (can be overridden)
       # Default: {}
       rules:
-        # Any struct tag type can be used.
-        # Support string case: `camel`, `pascal`, `kebab`, `snake`, `upperSnake`, `goCamel`, `goPascal`, `goKebab`, `goSnake`, `upper`, `lower`, `header`
+        # Define the association between tag name and case.
+        # Any struct tag name can be used.
+        # Supported string cases:
+        # - `camel`
+        # - `pascal`
+        # - `kebab`
+        # - `snake`
+        # - `upperSnake`
+        # - `goCamel`
+        # - `goPascal`
+        # - `goKebab`
+        # - `goSnake`
+        # - `upper`
+        # - `lower`
+        # - `header`
         json: camel
         yaml: camel
         xml: camel
@@ -3302,6 +3312,36 @@ linters-settings:
         mapstructure: kebab
         env: upperSnake
         envconfig: upperSnake
+        whatever: snake
+      # Use the struct field name to check the name of the struct tag.
+      # Default: false
+      use-field-name: true
+      # The field names to ignore.
+      # Default: []
+      ignored-fields:
+        - Bar
+        - Foo
+      # Overrides the default/root configuration.
+      # Default: []
+      overrides:
+        -
+          # The package path (uses `/` only as a separator).
+          # Required.
+          pkg: foo/bar
+          # Default: empty or the same as the default/root configuration.
+          rules:
+            json: snake
+            xml: pascal
+          # Default: false (WARNING: it doesn't follow the default/root configuration)
+          use-field-name: true
+          # The field names to ignore.
+          # Default: [] or the same as the default/root configuration.
+          ignored-fields:
+            - Bar
+            - Foo
+          # Ignore the package (takes precedence over all other configurations).
+          # Default: false
+          ignore: true
 
   tenv:
     # The option `all` will run against whole test files (`_test.go`) regardless of method/function signatures.

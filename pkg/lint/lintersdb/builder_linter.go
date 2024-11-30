@@ -736,6 +736,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 		linter.NewConfig(tagliatelle.New(&cfg.LintersSettings.Tagliatelle)).
 			WithSince("v1.40.0").
 			WithPresets(linter.PresetStyle).
+			WithLoadForGoAnalysis().
 			WithURL("https://github.com/ldez/tagliatelle"),
 
 		linter.NewConfig(tenv.New(&cfg.LintersSettings.Tenv)).

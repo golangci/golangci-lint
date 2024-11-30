@@ -870,10 +870,24 @@ type TagAlignSettings struct {
 }
 
 type TagliatelleSettings struct {
-	Case struct {
-		Rules        map[string]string
-		UseFieldName bool `mapstructure:"use-field-name"`
-	}
+	Case TagliatelleCase
+}
+
+type TagliatelleCase struct {
+	TagliatelleBase `mapstructure:",squash"`
+	Overrides       []TagliatelleOverrides
+}
+
+type TagliatelleOverrides struct {
+	TagliatelleBase `mapstructure:",squash"`
+	Package         string `mapstructure:"pkg"`
+	Ignore          bool   `mapstructure:"ignore"`
+}
+
+type TagliatelleBase struct {
+	Rules         map[string]string `mapstructure:"rules"`
+	UseFieldName  bool              `mapstructure:"use-field-name"`
+	IgnoredFields []string          `mapstructure:"ignored-fields"`
 }
 
 type TestifylintSettings struct {
