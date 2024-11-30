@@ -40,7 +40,7 @@ func New(settings *config.GoModDirectivesSettings) *goanalysis.Linter {
 	).WithContextSetter(func(lintCtx *linter.Context) {
 		analyzer.Run = func(pass *analysis.Pass) (any, error) {
 			once.Do(func() {
-				results, err := gomoddirectives.Analyze(opts)
+				results, err := gomoddirectives.AnalyzePass(pass, opts)
 				if err != nil {
 					lintCtx.Log.Warnf("running %s failed: %s: "+
 						"if you are not using go modules it is suggested to disable this linter", linterName, err)
