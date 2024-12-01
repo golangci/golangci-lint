@@ -20,7 +20,7 @@ require (
 	github.com/alexkohler/prealloc v1.0.0
 	github.com/alingse/asasalint v0.0.11
 	github.com/ashanbrown/forbidigo v1.6.0
-	github.com/ashanbrown/makezero v1.1.1
+	github.com/ashanbrown/makezero v1.2.0
 	github.com/bkielbasa/cyclop v1.2.3
 	github.com/blizzy78/varnamelen v0.8.0
 	github.com/bombsimon/wsl/v4 v4.4.1
