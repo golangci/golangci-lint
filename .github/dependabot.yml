@@ -16,7 +16,7 @@ updates:
     schedule:
       interval: weekly
     groups:
-      all:
+      github-actions:
         patterns:
           - "*"  # Group all updates into a single larger pull request.
   - package-ecosystem: docker
@@ -24,7 +24,7 @@ updates:
     schedule:
       interval: weekly
     groups:
-      all:
+      docker:
         patterns:
           - "*"  # Group all updates into a single larger pull request.
   - package-ecosystem: gomod
@@ -32,13 +32,9 @@ updates:
     schedule:
       interval: weekly
     groups:
-      all:
+      scripts:
         patterns:
           - "*"  # Group all updates into a single larger pull request.
-  - package-ecosystem: npm
-    directory: "/docs"
-    schedule:
-      interval: monthly
   - package-ecosystem: gomod
     directories:
       - pkg/golinters/ginkgolinter/testdata/
@@ -47,7 +43,7 @@ updates:
       - pkg/golinters/spancheck/testdata/
       - pkg/golinters/zerologlint/testdata/
     groups:
-      all:
+      linter-testdata:
         patterns:
           - "*"  # Group all updates into a single larger pull request.
     schedule:
