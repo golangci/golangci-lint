@@ -1,8 +1,8 @@
 linters-settings:
   gomodguard:
     allowed:
-      modules:                                                    # List of allowed modules
-        - golang.org/x/mod/modfile
+      modules:                                                      # List of allowed modules
+        - golang.org/x/mod
     blocked:
       modules:                                                      # List of blocked modules
         - gopkg.in/yaml.v3:                                         # Blocked module
