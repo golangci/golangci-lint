@@ -1355,17 +1355,29 @@ linters-settings:
   gomoddirectives:
     # Allow local `replace` directives.
     # Default: false
-    replace-local: false
+    replace-local: true
     # List of allowed `replace` directives.
     # Default: []
     replace-allow-list:
       - launchpad.net/gocheck
     # Allow to not explain why the version has been retracted in the `retract` directives.
     # Default: false
-    retract-allow-no-explanation: false
+    retract-allow-no-explanation: true
     # Forbid the use of the `exclude` directives.
     # Default: false
-    exclude-forbidden: false
+    exclude-forbidden: true
+    # Forbid the use of the `toolchain` directive.
+    # Default: false
+    toolchain-forbidden: true
+    # Forbid the use of the `tool` directives.
+    # Default: false
+    tool-forbidden: true
+    # Forbid the use of the `godebug` directive.
+    # Default: false
+    go-debug-forbidden: true
+    # Defines a pattern to validate `go` minimum version directive.
+    # Default: '' (no match)
+    go-version-pattern: '\d\.\d+(\.0)?'
 
   gomodguard:
     allowed:

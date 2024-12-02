@@ -1668,12 +1668,32 @@
             "retract-allow-no-explanation": {
               "description": "Allow to not explain why the version has been retracted in the `retract` directives.",
               "type": "boolean",
-              "default": true
+              "default": false
             },
             "exclude-forbidden": {
               "description": "Forbid the use of the `exclude` directives.",
               "type": "boolean",
-              "default": true
+              "default": false
+            },
+            "toolchain-forbidden": {
+              "description": "Forbid the use of the `toolchain` directive.",
+              "type": "boolean",
+              "default": false
+            },
+            "tool-forbidden": {
+              "description": "Forbid the use of the `tool` directives.",
+              "type": "boolean",
+              "default": false
+            },
+            "go-debug-forbidden": {
+              "description": "Forbid the use of the `godebug` directive.",
+              "type": "boolean",
+              "default": false
+            },
+            "go-version-pattern": {
+              "description": "Defines a pattern to validate `go` minimum version directive.",
+              "type": "string",
+              "default": ""
             }
           }
         },
