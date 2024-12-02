@@ -69,7 +69,7 @@ require (
 	github.com/ldez/gomoddirectives v0.4.2
 	github.com/ldez/grignotin v0.6.0
 	github.com/ldez/tagliatelle v0.6.0
-	github.com/ldez/usetesting v0.2.0
+	github.com/ldez/usetesting v0.2.1
 	github.com/leonklingele/grouper v1.1.2
 	github.com/macabu/inamedparam v0.1.3
 	github.com/maratori/testableexamples v1.0.0
