@@ -1,6 +1,7 @@
 package gomoddirectives
 
 import (
+	"regexp"
 	"sync"
 
 	"github.com/ldez/gomoddirectives"
@@ -8,6 +9,7 @@ import (
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
+	"github.com/golangci/golangci-lint/pkg/golinters/internal"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
@@ -24,6 +26,18 @@ func New(settings *config.GoModDirectivesSettings) *goanalysis.Linter {
 		opts.ReplaceAllowList = settings.ReplaceAllowList
 		opts.RetractAllowNoExplanation = settings.RetractAllowNoExplanation
 		opts.ExcludeForbidden = settings.ExcludeForbidden
+		opts.ToolchainForbidden = settings.ToolchainForbidden
+		opts.ToolForbidden = settings.ToolForbidden
+		opts.GoDebugForbidden = settings.GoDebugForbidden
+
+		if settings.GoVersionPattern != "" {
+			exp, err := regexp.Compile(settings.GoVersionPattern)
+			if err != nil {
+				internal.LinterLogger.Fatalf("%s: invalid Go version pattern: %v", linterName, err)
+			} else {
+				opts.GoVersionPattern = exp
+			}
+		}
 	}
 
 	analyzer := &analysis.Analyzer{

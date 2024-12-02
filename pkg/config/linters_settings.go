@@ -585,6 +585,10 @@ type GoModDirectivesSettings struct {
 	ReplaceLocal              bool     `mapstructure:"replace-local"`
 	ExcludeForbidden          bool     `mapstructure:"exclude-forbidden"`
 	RetractAllowNoExplanation bool     `mapstructure:"retract-allow-no-explanation"`
+	ToolchainForbidden        bool     `mapstructure:"toolchain-forbidden"`
+	ToolForbidden             bool     `mapstructure:"tool-forbidden"`
+	GoDebugForbidden          bool     `mapstructure:"go-debug-forbidden"`
+	GoVersionPattern          string   `mapstructure:"go-version-pattern"`
 }
 
 type GoModGuardSettings struct {

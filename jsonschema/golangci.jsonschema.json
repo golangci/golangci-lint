@@ -1638,7 +1638,7 @@
             "replace-local": {
               "description": "Allow local `replace` directives.",
               "type": "boolean",
-              "default": true
+              "default": false
             },
             "replace-allow-list": {
               "description": "List of allowed `replace` directives.",
@@ -1650,12 +1650,12 @@
             "retract-allow-no-explanation": {
               "description": "Allow to not explain why the version has been retracted in the `retract` directives.",
               "type": "boolean",
-              "default": true
+              "default": false
             },
             "exclude-forbidden": {
               "description": "Forbid the use of the `exclude` directives.",
               "type": "boolean",
-              "default": true
+              "default": false
             }
           }
         },
