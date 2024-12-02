@@ -2,11 +2,11 @@ package lll
 
 import (
 	"bufio"
+	"bytes"
 	"errors"
 	"fmt"
 	"go/token"
 	"os"
-	"strings"
 	"sync"
 	"unicode/utf8"
 
@@ -21,7 +21,7 @@ import (
 
 const linterName = "lll"
 
-const goCommentDirectivePrefix = "//go:"
+var goCommentDirectivePrefix = []byte("//go:")
 
 func New(settings *config.LllSettings) *goanalysis.Linter {
 	var mu sync.Mutex
@@ -61,7 +61,7 @@ func New(settings *config.LllSettings) *goanalysis.Linter {
 func runLll(pass *analysis.Pass, settings *config.LllSettings) ([]goanalysis.Issue, error) {
 	fileNames := internal.GetFileNames(pass)
 
-	spaces := strings.Repeat(" ", settings.TabWidth)
+	spaces := bytes.Repeat([]byte{' '}, settings.TabWidth)
 
 	var issues []goanalysis.Issue
 	for _, f := range fileNames {
@@ -78,7 +78,7 @@ func runLll(pass *analysis.Pass, settings *config.LllSettings) ([]goanalysis.Iss
 	return issues, nil
 }
 
-func getLLLIssuesForFile(filename string, maxLineLen int, tabSpaces string) ([]result.Issue, error) {
+func getLLLIssuesForFile(filename string, maxLineLen int, tabSpaces []byte) ([]result.Issue, error) {
 	var res []result.Issue
 
 	f, err := os.Open(filename)
@@ -87,34 +87,33 @@ func getLLLIssuesForFile(filename string, maxLineLen int, tabSpaces string) ([]r
 	}
 	defer f.Close()
 
-	lineNumber := 0
+	lineNumber := 1
 	multiImportEnabled := false
 
 	scanner := bufio.NewScanner(f)
-	for scanner.Scan() {
-		lineNumber++
+	for ; scanner.Scan(); lineNumber++ {
+		line := scanner.Bytes()
 
-		line := scanner.Text()
-		line = strings.ReplaceAll(line, "\t", tabSpaces)
-
-		if strings.HasPrefix(line, goCommentDirectivePrefix) {
+		if bytes.HasPrefix(line, goCommentDirectivePrefix) {
 			continue
 		}
 
-		if strings.HasPrefix(line, "import") {
-			multiImportEnabled = strings.HasSuffix(line, "(")
+		if bytes.HasPrefix(line, []byte("import")) {
+			multiImportEnabled = bytes.HasSuffix(line, []byte{'('})
 			continue
 		}
 
 		if multiImportEnabled {
-			if line == ")" {
+			if bytes.Equal(line, []byte{')'}) {
 				multiImportEnabled = false
 			}
 
 			continue
 		}
 
-		lineLen := utf8.RuneCountInString(line)
+		line = bytes.ReplaceAll(line, []byte{'\t'}, tabSpaces)
+
+		lineLen := utf8.RuneCount(line)
 		if lineLen > maxLineLen {
 			res = append(res, result.Issue{
 				Pos: token.Position{
