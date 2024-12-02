@@ -4,12 +4,12 @@ import (
 	"regexp"
 	"sync"
 
-	"github.com/golangci/golangci-lint/pkg/golinters/internal"
 	"github.com/ldez/gomoddirectives"
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
+	"github.com/golangci/golangci-lint/pkg/golinters/internal"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
