@@ -183,7 +183,6 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 
 		linter.NewConfig(cyclop.New(&cfg.LintersSettings.Cyclop)).
 			WithSince("v1.37.0").
-			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetComplexity).
 			WithURL("https://github.com/bkielbasa/cyclop"),
 
