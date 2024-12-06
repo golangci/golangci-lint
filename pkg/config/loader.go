@@ -364,7 +364,6 @@ func (l *Loader) handleDeprecation() error {
 	return nil
 }
 
-//nolint:gocyclo // the complexity cannot be reduced.
 func (l *Loader) handleLinterOptionDeprecations() {
 	// Deprecated since v1.57.0,
 	// but it was unofficially deprecated since v1.19 (2019) (https://github.com/golangci/golangci-lint/pull/697).
