@@ -131,7 +131,7 @@ require (
 	golang.org/x/exp v0.0.0-20240909161429-701f63a606c0
 	golang.org/x/mod v0.22.0
 	golang.org/x/sys v0.28.0
-	golang.org/x/tools v0.27.0
+	golang.org/x/tools v0.28.0
 	gopkg.in/yaml.v3 v3.0.1
 	honnef.co/go/tools v0.5.1
 	mvdan.cc/gofumpt v0.7.0
@@ -198,7 +198,7 @@ require (
 	go.uber.org/multierr v1.6.0 // indirect
 	go.uber.org/zap v1.24.0 // indirect
 	golang.org/x/exp/typeparams v0.0.0-20241108190413-2d47ceb2692f // indirect
-	golang.org/x/sync v0.9.0 // indirect
+	golang.org/x/sync v0.10.0 // indirect
 	golang.org/x/text v0.18.0 // indirect
 	google.golang.org/protobuf v1.34.2 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
