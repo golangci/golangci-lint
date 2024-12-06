@@ -2,6 +2,7 @@ package errcheck
 
 import (
 	"bufio"
+	"cmp"
 	"fmt"
 	"os"
 	"os/user"
@@ -90,10 +91,7 @@ func runErrCheck(lintCtx *linter.Context, pass *analysis.Pass, checker *errcheck
 		text := "Error return value is not checked"
 
 		if err.FuncName != "" {
-			code := err.SelectorName
-			if err.SelectorName == "" {
-				code = err.FuncName
-			}
+			code := cmp.Or(err.SelectorName, err.FuncName)
 
 			text = fmt.Sprintf("Error return value of %s is not checked", internal.FormatCode(code, lintCtx.Cfg))
 		}

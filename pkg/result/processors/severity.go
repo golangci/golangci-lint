@@ -1,6 +1,7 @@
 package processors
 
 import (
+	"cmp"
 	"regexp"
 
 	"github.com/golangci/golangci-lint/pkg/config"
@@ -67,10 +68,7 @@ func (p *Severity) transform(issue *result.Issue) *result.Issue {
 				return issue
 			}
 
-			issue.Severity = rule.severity
-			if issue.Severity == "" {
-				issue.Severity = p.defaultSeverity
-			}
+			issue.Severity = cmp.Or(rule.severity, p.defaultSeverity)
 
 			return issue
 		}

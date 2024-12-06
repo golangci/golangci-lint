@@ -1,6 +1,7 @@
 package config
 
 import (
+	"cmp"
 	"errors"
 	"fmt"
 	"os"
@@ -292,9 +293,7 @@ func (l *Loader) handleGoVersion() {
 
 	l.cfg.LintersSettings.ParallelTest.Go = l.cfg.Run.Go
 
-	if l.cfg.LintersSettings.Gofumpt.LangVersion == "" {
-		l.cfg.LintersSettings.Gofumpt.LangVersion = l.cfg.Run.Go
-	}
+	l.cfg.LintersSettings.Gofumpt.LangVersion = cmp.Or(l.cfg.LintersSettings.Gofumpt.LangVersion, l.cfg.Run.Go)
 
 	trimmedGoVersion := goutil.TrimGoVersion(l.cfg.Run.Go)
 
@@ -367,7 +366,6 @@ func (l *Loader) handleDeprecation() error {
 	return nil
 }
 
-//nolint:gocyclo // the complexity cannot be reduced.
 func (l *Loader) handleLinterOptionDeprecations() {
 	// Deprecated since v1.57.0,
 	// but it was unofficially deprecated since v1.19 (2019) (https://github.com/golangci/golangci-lint/pull/697).
@@ -430,9 +428,7 @@ func (l *Loader) handleLinterOptionDeprecations() {
 	// Deprecated since v1.58.0
 	if l.cfg.LintersSettings.SlogLint.ContextOnly {
 		l.log.Warnf("The configuration option `linters.sloglint.context-only` is deprecated, please use `linters.sloglint.context`.")
-		if l.cfg.LintersSettings.SlogLint.Context == "" {
-			l.cfg.LintersSettings.SlogLint.Context = "all"
-		}
+		l.cfg.LintersSettings.SlogLint.Context = cmp.Or(l.cfg.LintersSettings.SlogLint.Context, "all")
 	}
 
 	// Deprecated since v1.51.0

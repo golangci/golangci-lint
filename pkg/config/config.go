@@ -85,12 +85,7 @@ func detectGoVersion() string {
 		return goVersion
 	}
 
-	v := os.Getenv("GOVERSION")
-	if v != "" {
-		return v
-	}
-
-	return "1.17"
+	return cmp.Or(os.Getenv("GOVERSION"), "1.17")
 }
 
 // detectGoVersionFromGoMod tries to get Go version from go.mod.
