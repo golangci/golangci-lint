@@ -30,6 +30,15 @@ func New(settings *config.GoModDirectivesSettings) *goanalysis.Linter {
 		opts.ToolForbidden = settings.ToolForbidden
 		opts.GoDebugForbidden = settings.GoDebugForbidden
 
+		if settings.ToolchainPattern != "" {
+			exp, err := regexp.Compile(settings.ToolchainPattern)
+			if err != nil {
+				internal.LinterLogger.Fatalf("%s: invalid toolchain pattern: %v", linterName, err)
+			} else {
+				opts.ToolchainPattern = exp
+			}
+		}
+
 		if settings.GoVersionPattern != "" {
 			exp, err := regexp.Compile(settings.GoVersionPattern)
 			if err != nil {

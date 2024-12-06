@@ -1369,6 +1369,9 @@ linters-settings:
     # Forbid the use of the `toolchain` directive.
     # Default: false
     toolchain-forbidden: true
+    # Defines a pattern to validate `toolchain` directive.
+    # Default: '' (no match)
+    toolchain-pattern: 'go1\.23\.\d+$'
     # Forbid the use of the `tool` directives.
     # Default: false
     tool-forbidden: true
