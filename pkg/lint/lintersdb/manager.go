@@ -1,7 +1,6 @@
 package lintersdb
 
 import (
-	"cmp"
 	"fmt"
 	"os"
 	"slices"
@@ -41,7 +40,10 @@ func NewManager(log logutils.Log, cfg *config.Config, builders ...Builder) (*Man
 		nameToLCs: make(map[string][]*linter.Config),
 	}
 
-	m.cfg = cmp.Or(cfg, config.NewDefault())
+	m.cfg = cfg
+	if cfg == nil {
+		m.cfg = config.NewDefault()
+	}
 
 	for _, builder := range builders {
 		linters, err := builder.Build(m.cfg)

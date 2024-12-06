@@ -1,7 +1,6 @@
 package pkgerrors
 
 import (
-	"cmp"
 	"fmt"
 	"regexp"
 	"strings"
@@ -51,7 +50,9 @@ func extractErrors(pkg *packages.Package) []packages.Error {
 		// some errors like "code in directory  expects import" don't have Pos, set it here
 		for i := range uniqErrors {
 			err := &uniqErrors[i]
-			err.Pos = cmp.Or(err.Pos, fmt.Sprintf("%s:1", pkg.GoFiles[0]))
+			if err.Pos == "" {
+				err.Pos = fmt.Sprintf("%s:1", pkg.GoFiles[0])
+			}
 		}
 	}
 

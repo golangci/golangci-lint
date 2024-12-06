@@ -285,7 +285,9 @@ func (l *Loader) appendStringSlice(name string, current *[]string) {
 }
 
 func (l *Loader) handleGoVersion() {
-	l.cfg.Run.Go = cmp.Or(l.cfg.Run.Go, detectGoVersion())
+	if l.cfg.Run.Go == "" {
+		l.cfg.Run.Go = detectGoVersion()
+	}
 
 	l.cfg.LintersSettings.Govet.Go = l.cfg.Run.Go
 

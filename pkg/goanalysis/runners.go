@@ -1,7 +1,6 @@
 package goanalysis
 
 import (
-	"cmp"
 	"fmt"
 
 	"golang.org/x/tools/go/analysis"
@@ -60,7 +59,9 @@ func runAnalyzers(cfg runAnalyzersConfig, lintCtx *linter.Context) ([]result.Iss
 		reportedIssues := cfg.reportIssues(lintCtx)
 		for i := range reportedIssues {
 			issue := &reportedIssues[i].Issue
-			issue.Pkg = cmp.Or(issue.Pkg, passToPkg[reportedIssues[i].Pass])
+			if issue.Pkg == nil {
+				issue.Pkg = passToPkg[reportedIssues[i].Pass]
+			}
 			retIssues = append(retIssues, *issue)
 		}
 		retIssues = append(retIssues, buildIssues(diags, cfg.getLinterNameForDiagnostic)...)
