@@ -51,6 +51,7 @@ import (
 	"golang.org/x/tools/go/analysis/passes/unsafeptr"
 	"golang.org/x/tools/go/analysis/passes/unusedresult"
 	"golang.org/x/tools/go/analysis/passes/unusedwrite"
+	"golang.org/x/tools/go/analysis/passes/waitgroup"
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
@@ -101,6 +102,7 @@ var (
 		unsafeptr.Analyzer,
 		unusedresult.Analyzer,
 		unusedwrite.Analyzer,
+		waitgroup.Analyzer,
 	}
 
 	// https://github.com/golang/go/blob/go1.23.0/src/cmd/vet/main.go#L55-L87
