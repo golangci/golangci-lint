@@ -161,7 +161,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithSince("v1.58.0").
 			WithPresets(linter.PresetStyle).
 			WithLoadForGoAnalysis().
-			WithURL("https://github.com/lasiar/canonicalHeader"),
+			WithURL("https://github.com/lasiar/canonicalheader"),
 
 		linter.NewConfig(containedctx.New()).
 			WithSince("v1.44.0").
