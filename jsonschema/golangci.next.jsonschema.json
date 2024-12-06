@@ -1680,6 +1680,10 @@
               "type": "boolean",
               "default": false
             },
+            "toolchain-pattern": {
+              "description": "Defines a pattern to validate `toolchain` directive.",
+              "type": "string"
+            },
             "tool-forbidden": {
               "description": "Forbid the use of the `tool` directives.",
               "type": "boolean",

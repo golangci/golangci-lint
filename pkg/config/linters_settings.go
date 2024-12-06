@@ -586,6 +586,7 @@ type GoModDirectivesSettings struct {
 	ExcludeForbidden          bool     `mapstructure:"exclude-forbidden"`
 	RetractAllowNoExplanation bool     `mapstructure:"retract-allow-no-explanation"`
 	ToolchainForbidden        bool     `mapstructure:"toolchain-forbidden"`
+	ToolchainPattern          string   `mapstructure:"toolchain-pattern"`
 	ToolForbidden             bool     `mapstructure:"tool-forbidden"`
 	GoDebugForbidden          bool     `mapstructure:"go-debug-forbidden"`
 	GoVersionPattern          string   `mapstructure:"go-version-pattern"`
