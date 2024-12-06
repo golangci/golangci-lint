@@ -1,7 +1,6 @@
 package pkgerrors
 
 import (
-	"cmp"
 	"fmt"
 	"testing"
 
@@ -37,7 +36,10 @@ func Test_parseError(t *testing.T) {
 			pos += fmt.Sprintf(":%d", i.Pos.Column)
 		}
 		out := pos
-		expOut := cmp.Or(c.out, c.in)
+		expOut := c.out
+		if expOut == "" {
+			expOut = c.in
+		}
 		assert.Equal(t, expOut, out)
 
 		assert.Equal(t, "typecheck", i.FromLinter)
