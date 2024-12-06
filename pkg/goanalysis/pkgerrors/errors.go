@@ -1,7 +1,6 @@
 package pkgerrors
 
 import (
-	"cmp"
 	"errors"
 	"fmt"
 
@@ -28,7 +27,9 @@ func BuildIssuesFromIllTypedError(errs []error, lintCtx *linter.Context) ([]resu
 	for _, err := range errs {
 		var ill *IllTypedError
 		if !errors.As(err, &ill) {
-			other = cmp.Or(other, err)
+			if other == nil {
+				other = err
+			}
 			continue
 		}
 

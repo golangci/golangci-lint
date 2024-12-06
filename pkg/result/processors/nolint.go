@@ -1,7 +1,6 @@
 package processors
 
 import (
-	"cmp"
 	"go/ast"
 	"go/parser"
 	"go/token"
@@ -286,7 +285,9 @@ func (e *rangeExpander) Visit(node ast.Node) ast.Visitor {
 
 	expandedRange := *foundRange
 	// store the original unexpanded range for matching nolintlint issues
-	expandedRange.originalRange = cmp.Or(expandedRange.originalRange, foundRange)
+	if expandedRange.originalRange == nil {
+		expandedRange.originalRange = foundRange
+	}
 	if expandedRange.To < nodeEndLine {
 		expandedRange.To = nodeEndLine
 	}
