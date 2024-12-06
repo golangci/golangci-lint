@@ -2,6 +2,7 @@ package bench
 
 import (
 	"bytes"
+	"cmp"
 	"errors"
 	"fmt"
 	"go/build"
@@ -133,10 +134,7 @@ func Benchmark_golangciLint(b *testing.B) {
 func getAllRepositories(tb testing.TB) []repo {
 	tb.Helper()
 
-	benchRoot := os.Getenv("GCL_BENCH_ROOT")
-	if benchRoot == "" {
-		benchRoot = tb.TempDir()
-	}
+	benchRoot := cmp.Or(os.Getenv("GCL_BENCH_ROOT"), tb.TempDir())
 
 	return []repo{
 		{

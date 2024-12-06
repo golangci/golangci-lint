@@ -2,6 +2,7 @@ package fsutils
 
 import (
 	"bytes"
+	"cmp"
 	"fmt"
 	"sync"
 )
@@ -21,9 +22,7 @@ func NewLineCache(fc *FileCache) *LineCache {
 
 // GetLine returns the index1-th (1-based index) line from the file on filePath
 func (lc *LineCache) GetLine(filePath string, index1 int) (string, error) {
-	if index1 == 0 { // some linters, e.g. gosec can do it: it really means first line
-		index1 = 1
-	}
+	index1 = cmp.Or(index1, 1) // some linters, e.g. gosec can return 0: it really means first line
 
 	const index1To0Offset = -1
 	rawLine, err := lc.getRawLine(filePath, index1+index1To0Offset)

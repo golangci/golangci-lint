@@ -1,6 +1,7 @@
 package godot
 
 import (
+	"cmp"
 	"sync"
 
 	"github.com/tetafro/godot"
@@ -34,9 +35,7 @@ func New(settings *config.GodotSettings) *goanalysis.Linter {
 		}
 	}
 
-	if dotSettings.Scope == "" {
-		dotSettings.Scope = godot.DeclScope
-	}
+	dotSettings.Scope = cmp.Or(dotSettings.Scope, godot.DeclScope)
 
 	analyzer := &analysis.Analyzer{
 		Name: linterName,

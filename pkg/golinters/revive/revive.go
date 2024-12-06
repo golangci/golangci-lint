@@ -2,6 +2,7 @@ package revive
 
 import (
 	"bytes"
+	"cmp"
 	"encoding/json"
 	"fmt"
 	"go/token"
@@ -379,12 +380,8 @@ const defaultConfidence = 0.8
 func normalizeConfig(cfg *lint.Config) {
 	// NOTE(ldez): this custom section for golangci-lint should be kept.
 	// ---
-	if cfg.Confidence == 0 {
-		cfg.Confidence = defaultConfidence
-	}
-	if cfg.Severity == "" {
-		cfg.Severity = lint.SeverityWarning
-	}
+	cfg.Confidence = cmp.Or(cfg.Confidence, defaultConfidence)
+	cfg.Severity = cmp.Or(cfg.Severity, lint.SeverityWarning)
 	// ---
 
 	if len(cfg.Rules) == 0 {

@@ -1,6 +1,7 @@
 package lint
 
 import (
+	"cmp"
 	"context"
 	"errors"
 	"fmt"
@@ -164,9 +165,7 @@ func (r *Runner) runLinterSafe(ctx context.Context, lintCtx *linter.Context,
 	}
 
 	for i := range issues {
-		if issues[i].FromLinter == "" {
-			issues[i].FromLinter = lc.Name()
-		}
+		issues[i].FromLinter = cmp.Or(issues[i].FromLinter, lc.Name())
 	}
 
 	return issues, nil

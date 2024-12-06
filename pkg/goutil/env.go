@@ -1,6 +1,7 @@
 package goutil
 
 import (
+	"cmp"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -54,10 +55,5 @@ func (e Env) Discover(ctx context.Context) error {
 }
 
 func (e Env) Get(k EnvKey) string {
-	envValue := os.Getenv(string(k))
-	if envValue != "" {
-		return envValue
-	}
-
-	return e.vars[string(k)]
+	return cmp.Or(os.Getenv(string(k)), e.vars[string(k)])
 }
