@@ -50,7 +50,7 @@ If you value it, consider supporting us, we appreciate it! :heart:
 This project exists thanks to all the people who contribute. [How to contribute](https://golangci-lint.run/contributing/quick-start/).
 
 <a href="https://github.com/golangci/golangci-lint/graphs/contributors">
-  <img src="https://opencollective.com/golangci-lint/contributors.svg?width=890&button=false&skip=golangcidev&skip=CLAassistant&skip=renovate&skipfossabot&skip=golangcibot&skip=kortschak&skip=golangci-releaser&skip=dependabot%5Bbot%5D" />
+  <img src="https://opencollective.com/golangci-lint/contributors.svg?width=890&button=false&skip=golangcidev,CLAassistant,renovate,fossabot,golangcibot,kortschak,golangci-releaser,dependabot%5Bbot%5D" />
 </a>
 
 ## Stargazers over time
