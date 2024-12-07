@@ -26,7 +26,7 @@ func (act *action) loadCachedFacts() bool {
 			return true // load cached facts only for non-initial packages
 		}
 
-		if len(act.a.FactTypes) == 0 {
+		if len(act.Analyzer.FactTypes) == 0 {
 			return true // no need to load facts
 		}
 
@@ -38,7 +38,7 @@ func (act *action) loadCachedFacts() bool {
 }
 
 func (act *action) persistFactsToCache() error {
-	analyzer := act.a
+	analyzer := act.Analyzer
 	if len(analyzer.FactTypes) == 0 {
 		return nil
 	}
@@ -46,7 +46,7 @@ func (act *action) persistFactsToCache() error {
 	// Merge new facts into the package and persist them.
 	var facts []Fact
 	for key, fact := range act.packageFacts {
-		if key.pkg != act.pkg.Types {
+		if key.pkg != act.Package.Types {
 			// The fact is from inherited facts from another package
 			continue
 		}
@@ -57,7 +57,7 @@ func (act *action) persistFactsToCache() error {
 	}
 	for key, fact := range act.objectFacts {
 		obj := key.obj
-		if obj.Pkg() != act.pkg.Types {
+		if obj.Pkg() != act.Package.Types {
 			// The fact is from inherited facts from another package
 			continue
 		}
@@ -74,33 +74,33 @@ func (act *action) persistFactsToCache() error {
 		})
 	}
 
-	factsCacheDebugf("Caching %d facts for package %q and analyzer %s", len(facts), act.pkg.Name, act.a.Name)
+	factsCacheDebugf("Caching %d facts for package %q and analyzer %s", len(facts), act.Package.Name, act.Analyzer.Name)
 
-	return act.r.pkgCache.Put(act.pkg, cache.HashModeNeedAllDeps, factCacheKey(analyzer), facts)
+	return act.runner.pkgCache.Put(act.Package, cache.HashModeNeedAllDeps, factCacheKey(analyzer), facts)
 }
 
 func (act *action) loadPersistedFacts() bool {
 	var facts []Fact
 
-	err := act.r.pkgCache.Get(act.pkg, cache.HashModeNeedAllDeps, factCacheKey(act.a), &facts)
+	err := act.runner.pkgCache.Get(act.Package, cache.HashModeNeedAllDeps, factCacheKey(act.Analyzer), &facts)
 	if err != nil {
 		if !errors.Is(err, cache.ErrMissing) && !errors.Is(err, io.EOF) {
-			act.r.log.Warnf("Failed to get persisted facts: %s", err)
+			act.runner.log.Warnf("Failed to get persisted facts: %s", err)
 		}
 
-		factsCacheDebugf("No cached facts for package %q and analyzer %s", act.pkg.Name, act.a.Name)
+		factsCacheDebugf("No cached facts for package %q and analyzer %s", act.Package.Name, act.Analyzer.Name)
 		return false
 	}
 
-	factsCacheDebugf("Loaded %d cached facts for package %q and analyzer %s", len(facts), act.pkg.Name, act.a.Name)
+	factsCacheDebugf("Loaded %d cached facts for package %q and analyzer %s", len(facts), act.Package.Name, act.Analyzer.Name)
 
 	for _, f := range facts {
 		if f.Path == "" { // this is a package fact
-			key := packageFactKey{act.pkg.Types, act.factType(f.Fact)}
+			key := packageFactKey{act.Package.Types, act.factType(f.Fact)}
 			act.packageFacts[key] = f.Fact
 			continue
 		}
-		obj, err := objectpath.Object(act.pkg.Types, objectpath.Path(f.Path))
+		obj, err := objectpath.Object(act.Package.Types, objectpath.Path(f.Path))
 		if err != nil {
 			// Be lenient about these errors. For example, when
 			// analyzing io/ioutil from source, we may get a fact

@@ -67,7 +67,7 @@ func (lp *loadingPackage) analyze(loadMode LoadMode, loadSem chan struct{}) {
 		// Unblock depending on actions and propagate error.
 		for _, act := range lp.actions {
 			close(act.analysisDoneCh)
-			act.err = werr
+			act.Err = werr
 		}
 		return
 	}
@@ -364,12 +364,12 @@ func (lp *loadingPackage) decUse(canClearTypes bool) {
 		pass.ImportPackageFact = nil
 		pass.ExportPackageFact = nil
 		act.pass = nil
-		act.deps = nil
-		if act.result != nil {
+		act.Deps = nil
+		if act.Result != nil {
 			if isMemoryDebug {
-				debugf("%s: decUse: nilling act result of size %d bytes", act, sizeOfValueTreeBytes(act.result))
+				debugf("%s: decUse: nilling act result of size %d bytes", act, sizeOfValueTreeBytes(act.Result))
 			}
-			act.result = nil
+			act.Result = nil
 		}
 	}
 
@@ -400,7 +400,7 @@ func (lp *loadingPackage) decUse(canClearTypes bool) {
 
 	for _, act := range lp.actions {
 		if !lp.isInitial {
-			act.pkg = nil
+			act.Package = nil
 		}
 		act.packageFacts = nil
 		act.objectFacts = nil

@@ -1840,6 +1840,8 @@ linters-settings:
       - unusedresult
       # Checks for unused writes.
       - unusedwrite
+      # Checks for misuses of sync.WaitGroup.
+      - waitgroup
 
     # Enable all analyzers.
     # Default: false

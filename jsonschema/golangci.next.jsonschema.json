@@ -210,7 +210,8 @@
         "unreachable",
         "unsafeptr",
         "unusedresult",
-        "unusedwrite"
+        "unusedwrite",
+        "waitgroup"
       ]
     },
     "revive-rules": {

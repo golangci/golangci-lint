@@ -222,6 +222,9 @@ issues:
   exclude-dirs:
     - test/testdata_etc # test files
     - internal/go # extracted from Go code
+    - internal/x # extracted from x/tools code
+  exclude-files:
+    - pkg/goanalysis/runner_checker.go # extracted from x/tools code
 
 run:
   timeout: 5m
