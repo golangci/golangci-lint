@@ -4,10 +4,11 @@ import (
 	"encoding/xml"
 	"fmt"
 	"io"
-	"sort"
+	"maps"
+	"slices"
+	"strings"
 
 	"github.com/go-xmlfmt/xmlfmt"
-	"golang.org/x/exp/maps"
 
 	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
@@ -70,10 +71,8 @@ func (p *Checkstyle) Print(issues []result.Issue) error {
 		p.log.Infof("%v", err)
 	}
 
-	out.Files = maps.Values(files)
-
-	sort.Slice(out.Files, func(i, j int) bool {
-		return out.Files[i].Name < out.Files[j].Name
+	out.Files = slices.SortedFunc(maps.Values(files), func(a *checkstyleFile, b *checkstyleFile) int {
+		return strings.Compare(a.Name, b.Name)
 	})
 
 	data, err := xml.Marshal(&out)

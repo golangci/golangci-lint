@@ -8,11 +8,11 @@ import (
 	"encoding/gob"
 	"fmt"
 	"go/token"
+	"maps"
 	"runtime"
-	"sort"
+	"slices"
 	"sync"
 
-	"golang.org/x/exp/maps"
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/packages"
 
@@ -159,8 +159,8 @@ func (r *runner) buildActionFactDeps(act *action, a *analysis.Analyzer, pkg *pac
 	act.objectFacts = make(map[objectFactKey]analysis.Fact)
 	act.packageFacts = make(map[packageFactKey]analysis.Fact)
 
-	paths := maps.Keys(pkg.Imports)
-	sort.Strings(paths) // for determinism
+	paths := slices.Sorted(maps.Keys(pkg.Imports)) // for determinism
+
 	for _, path := range paths {
 		dep := r.makeAction(a, pkg.Imports[path], initialPkgs, actions, actAlloc)
 		act.Deps = append(act.Deps, dep)
@@ -209,7 +209,7 @@ func (r *runner) prepareAnalysis(pkgs []*packages.Package,
 		}
 	}
 
-	allActions = maps.Values(actions)
+	allActions = slices.Collect(maps.Values(actions))
 
 	debugf("Built %d actions", len(actions))
 

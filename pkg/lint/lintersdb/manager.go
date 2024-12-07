@@ -2,11 +2,11 @@ package lintersdb
 
 import (
 	"fmt"
+	"maps"
 	"os"
 	"slices"
 	"sort"
-
-	"golang.org/x/exp/maps"
+	"strings"
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
@@ -109,24 +109,25 @@ func (m *Manager) GetOptimizedLinters() ([]*linter.Config, error) {
 
 	m.combineGoAnalysisLinters(resultLintersSet)
 
-	resultLinters := maps.Values(resultLintersSet)
-
 	// Make order of execution of linters (go/analysis metalinter and unused) stable.
-	sort.Slice(resultLinters, func(i, j int) bool {
-		a, b := resultLinters[i], resultLinters[j]
-
+	resultLinters := slices.SortedFunc(maps.Values(resultLintersSet), func(a *linter.Config, b *linter.Config) int {
 		if b.Name() == linter.LastLinter {
-			return true
+			return -1
 		}
 
 		if a.Name() == linter.LastLinter {
-			return false
+			return 1
 		}
 
 		if a.DoesChangeTypes != b.DoesChangeTypes {
-			return b.DoesChangeTypes // move type-changing linters to the end to optimize speed
+			// move type-changing linters to the end to optimize speed
+			if b.DoesChangeTypes {
+				return -1
+			}
+			return 1
 		}
-		return a.Name() < b.Name()
+
+		return strings.Compare(a.Name(), b.Name())
 	})
 
 	return resultLinters, nil

@@ -1,10 +1,11 @@
 package thelper
 
 import (
+	"maps"
+	"slices"
 	"strings"
 
 	"github.com/kulti/thelper/pkg/analyzer"
-	"golang.org/x/exp/maps"
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/config"
@@ -44,7 +45,7 @@ func New(settings *config.ThelperSettings) *goanalysis.Linter {
 		internal.LinterLogger.Fatalf("thelper: at least one option must be enabled")
 	}
 
-	args := maps.Keys(opts)
+	args := slices.Collect(maps.Keys(opts))
 
 	cfg := map[string]map[string]any{
 		a.Name: {

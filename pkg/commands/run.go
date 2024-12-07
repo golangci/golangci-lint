@@ -8,12 +8,13 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"maps"
 	"os"
 	"path/filepath"
 	"runtime"
 	"runtime/pprof"
 	"runtime/trace"
-	"sort"
+	"slices"
 	"strconv"
 	"strings"
 	"time"
@@ -24,7 +25,6 @@ import (
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 	"go.uber.org/automaxprocs/maxprocs"
-	"golang.org/x/exp/maps"
 	"gopkg.in/yaml.v3"
 
 	"github.com/golangci/golangci-lint/internal/cache"
@@ -452,8 +452,7 @@ func (c *runCommand) printStats(issues []result.Issue) {
 
 	c.cmd.Printf("%d issues:\n", len(issues))
 
-	keys := maps.Keys(stats)
-	sort.Strings(keys)
+	keys := slices.Sorted(maps.Keys(stats))
 
 	for _, key := range keys {
 		c.cmd.Printf("* %s: %d\n", key, stats[key])
