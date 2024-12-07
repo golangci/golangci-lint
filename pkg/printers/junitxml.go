@@ -4,10 +4,9 @@ import (
 	"encoding/xml"
 	"fmt"
 	"io"
-	"sort"
+	"maps"
+	"slices"
 	"strings"
-
-	"golang.org/x/exp/maps"
 
 	"github.com/golangci/golangci-lint/pkg/result"
 )
@@ -84,10 +83,9 @@ func (p JunitXML) Print(issues []result.Issue) error {
 	}
 
 	var res testSuitesXML
-	res.TestSuites = maps.Values(suites)
 
-	sort.Slice(res.TestSuites, func(i, j int) bool {
-		return res.TestSuites[i].Suite < res.TestSuites[j].Suite
+	res.TestSuites = slices.SortedFunc(maps.Values(suites), func(a testSuiteXML, b testSuiteXML) int {
+		return strings.Compare(a.Suite, b.Suite)
 	})
 
 	enc := xml.NewEncoder(p.w)

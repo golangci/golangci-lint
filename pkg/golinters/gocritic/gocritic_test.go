@@ -1,6 +1,7 @@
 package gocritic
 
 import (
+	"maps"
 	"slices"
 	"strings"
 	"testing"
@@ -9,7 +10,6 @@ import (
 	gocriticlinter "github.com/go-critic/go-critic/linter"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"golang.org/x/exp/maps"
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/logutils"
@@ -40,7 +40,7 @@ func Test_settingsWrapper_InferEnabledChecks(t *testing.T) {
 	t.Logf("enabled by default checks:\n%s", strings.Join(enabledByDefaultChecks, "\n"))
 
 	insert := func(in []string, toInsert ...string) []string {
-		return append(slices.Clone(in), toInsert...)
+		return slices.Concat(in, toInsert)
 	}
 
 	remove := func(in []string, toRemove ...string) []string {
@@ -54,9 +54,7 @@ func Test_settingsWrapper_InferEnabledChecks(t *testing.T) {
 	}
 
 	uniq := func(in []string) []string {
-		result := slices.Clone(in)
-		slices.Sort(result)
-		return slices.Compact(result)
+		return slices.Compact(slices.Sorted(slices.Values(in)))
 	}
 
 	cases := []struct {
@@ -269,7 +267,7 @@ func Test_settingsWrapper_InferEnabledChecks(t *testing.T) {
 			wr := newSettingsWrapper(tt.sett, lg)
 
 			wr.InferEnabledChecks()
-			assert.ElementsMatch(t, tt.expectedEnabledChecks, maps.Keys(wr.inferredEnabledChecks))
+			assert.ElementsMatch(t, tt.expectedEnabledChecks, slices.Collect(maps.Keys(wr.inferredEnabledChecks)))
 			assert.NoError(t, wr.Validate())
 		})
 	}
