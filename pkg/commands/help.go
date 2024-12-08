@@ -8,6 +8,8 @@ import (
 
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
@@ -129,6 +131,11 @@ func printLinters(lcs []*linter.Config) {
 		firstNewline := strings.IndexRune(linterDescription, '\n')
 		if firstNewline > 0 {
 			linterDescription = linterDescription[:firstNewline]
+		}
+
+		// Capitalize the first word of the linter description
+		if firstWord, remaining, ok := strings.Cut(linterDescription, " "); ok {
+			linterDescription = cases.Title(language.Und, cases.NoLower).String(firstWord) + " " + remaining
 		}
 
 		deprecatedMark := ""
