@@ -5,11 +5,11 @@ import (
 	"slices"
 	"sort"
 	"strings"
+	"unicode"
+	"unicode/utf8"
 
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
-	"golang.org/x/text/cases"
-	"golang.org/x/text/language"
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
@@ -126,16 +126,21 @@ func printLinters(lcs []*linter.Config) {
 	})
 
 	for _, lc := range lcs {
+		desc := lc.Linter.Desc()
+
 		// If the linter description spans multiple lines, truncate everything following the first newline
-		linterDescription := lc.Linter.Desc()
-		firstNewline := strings.IndexRune(linterDescription, '\n')
-		if firstNewline > 0 {
-			linterDescription = linterDescription[:firstNewline]
+		endFirstLine := strings.IndexRune(desc, '\n')
+		if endFirstLine > 0 {
+			desc = desc[:endFirstLine]
 		}
 
-		// Capitalize the first word of the linter description
-		if firstWord, remaining, ok := strings.Cut(linterDescription, " "); ok {
-			linterDescription = cases.Title(language.Und, cases.NoLower).String(firstWord) + " " + remaining
+		rawDesc := []rune(desc)
+
+		r, _ := utf8.DecodeRuneInString(desc)
+		rawDesc[0] = unicode.ToUpper(r)
+
+		if rawDesc[len(rawDesc)-1] != '.' {
+			rawDesc = append(rawDesc, '.')
 		}
 
 		deprecatedMark := ""
@@ -144,6 +149,6 @@ func printLinters(lcs []*linter.Config) {
 		}
 
 		_, _ = fmt.Fprintf(logutils.StdOut, "%s%s: %s [fast: %t, auto-fix: %t]\n",
-			color.YellowString(lc.Name()), deprecatedMark, linterDescription, !lc.IsSlowLinter(), lc.CanAutoFix)
+			color.YellowString(lc.Name()), deprecatedMark, string(rawDesc), !lc.IsSlowLinter(), lc.CanAutoFix)
 	}
 }
