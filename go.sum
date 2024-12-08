@@ -137,8 +137,8 @@ github.com/envoyproxy/go-control-plane v0.9.0/go.mod h1:YTl/9mNaCwkRvm6d1a2C3ymF
 github.com/envoyproxy/go-control-plane v0.9.1-0.20191026205805-5f8ba28d4473/go.mod h1:YTl/9mNaCwkRvm6d1a2C3ymFceY/DCBVvsKhRF0iEA4=
 github.com/envoyproxy/go-control-plane v0.9.4/go.mod h1:6rpuAdCZL397s3pYoYcLgu1mIlRU8Am5FuJP05cCM98=
 github.com/envoyproxy/protoc-gen-validate v0.1.0/go.mod h1:iSmxcyjqTsJpI2R4NaDN7+kN2VEUnK/pcBlmesArF7c=
-github.com/ettle/strcase v0.2.1-0.20230114185658-e5db6a6becf3 h1:UveVPOxnOkBoelw2vLZTm+L0Z7fe/nz5d6JlY+A3QdE=
-github.com/ettle/strcase v0.2.1-0.20230114185658-e5db6a6becf3/go.mod h1:DajmHElDSaX76ITe3/VHVyMin4LWSJN5Z909Wp+ED1A=
+github.com/ettle/strcase v0.2.0 h1:fGNiVF21fHXpX1niBgk0aROov1LagYsOwV/xqKDKR/Q=
+github.com/ettle/strcase v0.2.0/go.mod h1:DajmHElDSaX76ITe3/VHVyMin4LWSJN5Z909Wp+ED1A=
 github.com/fatih/color v1.18.0 h1:S8gINlzdQ840/4pfAwic/ZE0djQEH3wM94VfqLTZcOM=
 github.com/fatih/color v1.18.0/go.mod h1:4FelSpRwEGDpQ12mAdzqdOukCy4u8WUtOY6lkT/6HfU=
 github.com/fatih/structtag v1.2.0 h1:/OdNE99OxoI/PqaW/SuSK9uxxT3f/tcSZgon/ssNSx4=
@@ -355,8 +355,8 @@ github.com/ldez/gomoddirectives v0.6.0 h1:Jyf1ZdTeiIB4dd+2n4qw+g4aI9IJ6JyfOZ8Bit
 github.com/ldez/gomoddirectives v0.6.0/go.mod h1:TuwOGYoPAoENDWQpe8DMqEm5nIfjrxZXmxX/CExWyZ4=
 github.com/ldez/grignotin v0.6.0 h1:i++3002hxD5TpVto0iLjLrfz1V+yEJ+BBk4glb3aqC8=
 github.com/ldez/grignotin v0.6.0/go.mod h1:uaVTr0SoZ1KBii33c47O1M8Jp3OP3YDwhZCmzT9GHEk=
-github.com/ldez/tagliatelle v0.7.0 h1:EoeVfkzBjlq1WIwYkL0ZH8OIKIcG0VBfMLBIbJfD4Kg=
-github.com/ldez/tagliatelle v0.7.0/go.mod h1:QXpdyXlbGNIBMdQ694Rso0UnF5ZMaNezd0apLcEsOpQ=
+github.com/ldez/tagliatelle v0.7.1 h1:bTgKjjc2sQcsgPiT902+aadvMjCeMHrY7ly2XKFORIk=
+github.com/ldez/tagliatelle v0.7.1/go.mod h1:3zjxUpsNB2aEZScWiZTHrAXOl1x25t3cRmzfK1mlo2I=
 github.com/ldez/usetesting v0.2.2 h1:5h/nKjodUOIZNaBSmyktR6VjUY8lVgNoCRBvs2Fdg+g=
 github.com/ldez/usetesting v0.2.2/go.mod h1:9Tk8OH9NL3Xi7lpvkGRpuY/cOmWmatxwVjRc+TkgLDg=
 github.com/leonklingele/grouper v1.1.2 h1:o1ARBDLOmmasUaNDesWqWCIFH3u7hoFlM84YrjT3mIY=
