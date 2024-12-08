@@ -3302,26 +3302,24 @@ linters-settings:
     strict: true
 
   tagliatelle:
-    # Check the struct tag name case.
+    # Checks the struct tag name case.
     case:
-      # `camel` is used for `json` and `yaml`, and `header` is used for `header` (can be overridden)
-      # Default: {}
+      # Defines the association between tag name and case.
+      # Any struct tag name can be used.
+      # Supported string cases:
+      # - `camel`
+      # - `pascal`
+      # - `kebab`
+      # - `snake`
+      # - `upperSnake`
+      # - `goCamel`
+      # - `goPascal`
+      # - `goKebab`
+      # - `goSnake`
+      # - `upper`
+      # - `lower`
+      # - `header`
       rules:
-        # Define the association between tag name and case.
-        # Any struct tag name can be used.
-        # Supported string cases:
-        # - `camel`
-        # - `pascal`
-        # - `kebab`
-        # - `snake`
-        # - `upperSnake`
-        # - `goCamel`
-        # - `goPascal`
-        # - `goKebab`
-        # - `goSnake`
-        # - `upper`
-        # - `lower`
-        # - `header`
         json: camel
         yaml: camel
         xml: camel
@@ -3332,7 +3330,38 @@ linters-settings:
         env: upperSnake
         envconfig: upperSnake
         whatever: snake
-      # Use the struct field name to check the name of the struct tag.
+      # Defines the association between tag name and case.
+      # Important: the `extended-rules` overrides `rules`.
+      # Default: empty
+      extended-rules:
+        json:
+          # Supported string cases:
+          # - `camel`
+          # - `pascal`
+          # - `kebab`
+          # - `snake`
+          # - `upperSnake`
+          # - `goCamel`
+          # - `goPascal`
+          # - `goKebab`
+          # - `goSnake`
+          # - `header`
+          # - `lower`
+          # - `header`
+          #
+          # Required
+          case: camel
+          # Adds 'AMQP', 'DB', 'GID', 'RTP', 'SIP', 'TS' to initialisms,
+          # and removes 'LHS', 'RHS' from initialisms.
+          # Default: false
+          extra-initialisms: true
+          # Defines initialism additions and overrides.
+          # Default: empty
+          initialism-overrides:
+            DB: true # add a new initialism
+            LHS: false # disable a default initialism.
+            # ...
+      # Uses the struct field name to check the name of the struct tag.
       # Default: false
       use-field-name: true
       # The field names to ignore.
@@ -3345,12 +3374,15 @@ linters-settings:
       overrides:
         -
           # The package path (uses `/` only as a separator).
-          # Required.
+          # Required
           pkg: foo/bar
           # Default: empty or the same as the default/root configuration.
           rules:
             json: snake
             xml: pascal
+          # Default: empty or the same as the default/root configuration.
+          extended-rules:
+            # Same options as the base `extended-rules`.
           # Default: false (WARNING: it doesn't follow the default/root configuration)
           use-field-name: true
           # The field names to ignore.
