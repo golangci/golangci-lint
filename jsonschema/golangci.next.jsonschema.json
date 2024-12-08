@@ -2952,6 +2952,35 @@
                     }
                   }
                 },
+                "extended-rules": {
+                  "description": "Defines the association between tag name and case.",
+                  "type": "object",
+                  "patternProperties": {
+                    "^.+$": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": ["case"],
+                      "properties": {
+                        "case": {
+                          "$ref": "#/definitions/tagliatelle-cases"
+                        },
+                        "extra-initialisms": {
+                          "type": "boolean",
+                          "default": false
+                        },
+                        "initialism-overrides": {
+                          "type": "object",
+                          "patternProperties": {
+                            "^.+$": {
+                              "type": "boolean",
+                              "default": false
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
                 "overrides": {
                   "description": "Overrides the default/root configuration.",
                   "type": "array",
@@ -2987,6 +3016,35 @@
                         "patternProperties": {
                           "^.+$": {
                             "$ref": "#/definitions/tagliatelle-cases"
+                          }
+                        }
+                      },
+                      "extended-rules": {
+                        "description": "Defines the association between tag name and case.",
+                        "type": "object",
+                        "patternProperties": {
+                          "^.+$": {
+                            "type": "object",
+                            "additionalProperties": false,
+                            "required": ["case"],
+                            "properties": {
+                              "case": {
+                                "$ref": "#/definitions/tagliatelle-cases"
+                              },
+                              "extra-initialisms": {
+                                "type": "boolean",
+                                "default": false
+                              },
+                              "initialism-overrides": {
+                                "type": "object",
+                                "patternProperties": {
+                                  "^.+$": {
+                                    "type": "boolean",
+                                    "default": false
+                                  }
+                                }
+                              }
+                            }
                           }
                         }
                       }

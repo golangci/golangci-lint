@@ -900,9 +900,16 @@ type TagliatelleOverrides struct {
 }
 
 type TagliatelleBase struct {
-	Rules         map[string]string `mapstructure:"rules"`
-	UseFieldName  bool              `mapstructure:"use-field-name"`
-	IgnoredFields []string          `mapstructure:"ignored-fields"`
+	Rules         map[string]string                  `mapstructure:"rules"`
+	ExtendedRules map[string]TagliatelleExtendedRule `mapstructure:"extended-rules"`
+	UseFieldName  bool                               `mapstructure:"use-field-name"`
+	IgnoredFields []string                           `mapstructure:"ignored-fields"`
+}
+
+type TagliatelleExtendedRule struct {
+	Case                string
+	ExtraInitialisms    bool
+	InitialismOverrides map[string]bool
 }
 
 type TestifylintSettings struct {
