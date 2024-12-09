@@ -15,7 +15,6 @@ import (
 	"testing"
 	"time"
 
-	gops "github.com/mitchellh/go-ps"
 	"github.com/shirou/gopsutil/v4/process"
 	"github.com/stretchr/testify/require"
 
@@ -251,16 +250,20 @@ func countGoLines(tb testing.TB) int {
 func getLinterMemoryMB(tb testing.TB) (int, error) {
 	tb.Helper()
 
-	processes, err := gops.Processes()
+	processes, err := process.Processes()
 	if err != nil {
 		tb.Fatalf("can't get processes: %s", err)
 	}
 
-	var progPID int
+	var progPID int32
 	for _, p := range processes {
+		exe, err := p.Exe()
+		if err != nil {
+			continue
+		}
 		// The executable name can be shorter than the binary name.
-		if strings.HasPrefix(binName, p.Executable()) {
-			progPID = p.Pid()
+		if strings.HasPrefix(binName, filepath.Base(exe)) {
+			progPID = p.Pid
 			break
 		}
 	}
@@ -268,16 +271,20 @@ func getLinterMemoryMB(tb testing.TB) (int, error) {
 		return 0, errors.New("no process")
 	}
 
-	allProgPIDs := []int{progPID}
+	allProgPIDs := []int32{progPID}
 	for _, p := range processes {
-		if p.PPid() == progPID {
-			allProgPIDs = append(allProgPIDs, p.Pid())
+		ppid, err := p.Ppid()
+		if err != nil {
+			continue
+		}
+		if ppid == progPID {
+			allProgPIDs = append(allProgPIDs, p.Pid)
 		}
 	}
 
 	var totalProgMemBytes uint64
 	for _, pid := range allProgPIDs {
-		p, err := process.NewProcess(int32(pid))
+		p, err := process.NewProcess(pid)
 		if err != nil {
 			continue // subprocess could die
 		}
