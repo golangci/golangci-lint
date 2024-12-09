@@ -148,15 +148,17 @@ func printLinters(lcs []*linter.Config) {
 			deprecatedMark = " [" + color.RedString("deprecated") + "]"
 		}
 
+		var capabilities []string
+		if !lc.IsSlowLinter() {
+			capabilities = append(capabilities, color.GreenString("fast"))
+		}
+		if lc.CanAutoFix {
+			capabilities = append(capabilities, color.GreenString("auto-fix"))
+		}
+
 		var capability string
-		switch isFast := !lc.IsSlowLinter(); {
-		case isFast && lc.CanAutoFix:
-			capability = " [" + color.GreenString("fast, auto-fix") + "]"
-		case isFast:
-			capability = " [" + color.GreenString("fast") + "]"
-		case lc.CanAutoFix:
-			capability = " [" + color.GreenString("auto-fix") + "]"
-		default:
+		if capabilities != nil {
+			capability = " [" + strings.Join(capabilities, ", ") + "]"
 		}
 
 		_, _ = fmt.Fprintf(logutils.StdOut, "%s%s: %s%s\n",
