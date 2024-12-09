@@ -148,7 +148,18 @@ func printLinters(lcs []*linter.Config) {
 			deprecatedMark = " [" + color.RedString("deprecated") + "]"
 		}
 
-		_, _ = fmt.Fprintf(logutils.StdOut, "%s%s: %s [fast: %t, auto-fix: %t]\n",
-			color.YellowString(lc.Name()), deprecatedMark, string(rawDesc), !lc.IsSlowLinter(), lc.CanAutoFix)
+		var capability string
+		switch isFast := !lc.IsSlowLinter(); {
+		case isFast && lc.CanAutoFix:
+			capability = " [" + color.GreenString("fast, auto-fix") + "]"
+		case isFast:
+			capability = " [" + color.GreenString("fast") + "]"
+		case lc.CanAutoFix:
+			capability = " [" + color.GreenString("auto-fix") + "]"
+		default:
+		}
+
+		_, _ = fmt.Fprintf(logutils.StdOut, "%s%s: %s%s\n",
+			color.YellowString(lc.Name()), deprecatedMark, string(rawDesc), capability)
 	}
 }
