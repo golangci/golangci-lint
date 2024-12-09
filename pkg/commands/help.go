@@ -70,7 +70,7 @@ func newHelpCommand(logger logutils.Log) *helpCommand {
 	fs := lintersCmd.Flags()
 	fs.SortFlags = false // sort them as they are defined here
 
-	fs.BoolVar(&c.opts.JSON, "json", true, color.GreenString("Display as JSON"))
+	fs.BoolVar(&c.opts.JSON, "json", false, color.GreenString("Display as JSON"))
 
 	c.cmd = helpCmd
 
