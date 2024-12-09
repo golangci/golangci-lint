@@ -26,6 +26,8 @@ type linterHelp struct {
 	Presets          []string `json:"presets"`
 	EnabledByDefault bool     `json:"enabledByDefault"`
 	Deprecated       bool     `json:"deprecated"`
+	Since            string   `json:"since"`
+	OriginalURL      string   `json:"originalURL,omitempty"`
 }
 
 type helpOptions struct {
@@ -114,6 +116,8 @@ func (c *helpCommand) printJSON() error {
 			Presets:          lc.InPresets,
 			EnabledByDefault: lc.EnabledByDefault,
 			Deprecated:       lc.IsDeprecated(),
+			Since:            lc.Since,
+			OriginalURL:      lc.OriginalURL,
 		})
 	}
 
