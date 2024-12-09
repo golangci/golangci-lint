@@ -150,7 +150,7 @@ func printLinters(lcs []*linter.Config) {
 
 		var capabilities []string
 		if !lc.IsSlowLinter() {
-			capabilities = append(capabilities, color.GreenString("fast"))
+			capabilities = append(capabilities, color.BlueString("fast"))
 		}
 		if lc.CanAutoFix {
 			capabilities = append(capabilities, color.GreenString("auto-fix"))
