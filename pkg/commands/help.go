@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"encoding/json"
 	"fmt"
 	"slices"
 	"sort"
@@ -17,8 +18,26 @@ import (
 	"github.com/golangci/golangci-lint/pkg/logutils"
 )
 
+type linterHelp struct {
+	Name             string   `json:"name"`
+	Desc             string   `json:"description"`
+	Fast             bool     `json:"fast"`
+	AutoFix          bool     `json:"autoFix"`
+	Presets          []string `json:"presets"`
+	EnabledByDefault bool     `json:"enabledByDefault"`
+	Deprecated       bool     `json:"deprecated"`
+	Since            string   `json:"since"`
+	OriginalURL      string   `json:"originalURL,omitempty"`
+}
+
+type helpOptions struct {
+	JSON bool
+}
+
 type helpCommand struct {
 	cmd *cobra.Command
+
+	opts helpOptions
 
 	dbManager *lintersdb.Manager
 
@@ -37,16 +56,21 @@ func newHelpCommand(logger logutils.Log) *helpCommand {
 		},
 	}
 
-	helpCmd.AddCommand(
-		&cobra.Command{
-			Use:               "linters",
-			Short:             "Help about linters",
-			Args:              cobra.NoArgs,
-			ValidArgsFunction: cobra.NoFileCompletions,
-			Run:               c.execute,
-			PreRunE:           c.preRunE,
-		},
-	)
+	lintersCmd := &cobra.Command{
+		Use:               "linters",
+		Short:             "Help about linters",
+		Args:              cobra.NoArgs,
+		ValidArgsFunction: cobra.NoFileCompletions,
+		RunE:              c.execute,
+		PreRunE:           c.preRunE,
+	}
+
+	helpCmd.AddCommand(lintersCmd)
+
+	fs := lintersCmd.Flags()
+	fs.SortFlags = false // sort them as they are defined here
+
+	fs.BoolVar(&c.opts.JSON, "json", false, color.GreenString("Display as JSON"))
 
 	c.cmd = helpCmd
 
@@ -66,7 +90,41 @@ func (c *helpCommand) preRunE(_ *cobra.Command, _ []string) error {
 	return nil
 }
 
-func (c *helpCommand) execute(_ *cobra.Command, _ []string) {
+func (c *helpCommand) execute(_ *cobra.Command, _ []string) error {
+	if c.opts.JSON {
+		return c.printJSON()
+	}
+
+	c.print()
+
+	return nil
+}
+
+func (c *helpCommand) printJSON() error {
+	var linters []linterHelp
+
+	for _, lc := range c.dbManager.GetAllSupportedLinterConfigs() {
+		if lc.Internal {
+			continue
+		}
+
+		linters = append(linters, linterHelp{
+			Name:             lc.Name(),
+			Desc:             formatDescription(lc.Linter.Desc()),
+			Fast:             !lc.IsSlowLinter(),
+			AutoFix:          lc.CanAutoFix,
+			Presets:          lc.InPresets,
+			EnabledByDefault: lc.EnabledByDefault,
+			Deprecated:       lc.IsDeprecated(),
+			Since:            lc.Since,
+			OriginalURL:      lc.OriginalURL,
+		})
+	}
+
+	return json.NewEncoder(c.cmd.OutOrStdout()).Encode(linters)
+}
+
+func (c *helpCommand) print() {
 	var enabledLCs, disabledLCs []*linter.Config
 	for _, lc := range c.dbManager.GetAllSupportedLinterConfigs() {
 		if lc.Internal {
@@ -126,22 +184,7 @@ func printLinters(lcs []*linter.Config) {
 	})
 
 	for _, lc := range lcs {
-		desc := lc.Linter.Desc()
-
-		// If the linter description spans multiple lines, truncate everything following the first newline
-		endFirstLine := strings.IndexRune(desc, '\n')
-		if endFirstLine > 0 {
-			desc = desc[:endFirstLine]
-		}
-
-		rawDesc := []rune(desc)
-
-		r, _ := utf8.DecodeRuneInString(desc)
-		rawDesc[0] = unicode.ToUpper(r)
-
-		if rawDesc[len(rawDesc)-1] != '.' {
-			rawDesc = append(rawDesc, '.')
-		}
+		desc := formatDescription(lc.Linter.Desc())
 
 		deprecatedMark := ""
 		if lc.IsDeprecated() {
@@ -162,6 +205,25 @@ func printLinters(lcs []*linter.Config) {
 		}
 
 		_, _ = fmt.Fprintf(logutils.StdOut, "%s%s: %s%s\n",
-			color.YellowString(lc.Name()), deprecatedMark, string(rawDesc), capability)
+			color.YellowString(lc.Name()), deprecatedMark, desc, capability)
 	}
+}
+
+func formatDescription(desc string) string {
+	// If the linter description spans multiple lines, truncate everything following the first newline
+	endFirstLine := strings.IndexRune(desc, '\n')
+	if endFirstLine > 0 {
+		desc = desc[:endFirstLine]
+	}
+
+	rawDesc := []rune(desc)
+
+	r, _ := utf8.DecodeRuneInString(desc)
+	rawDesc[0] = unicode.ToUpper(r)
+
+	if rawDesc[len(rawDesc)-1] != '.' {
+		rawDesc = append(rawDesc, '.')
+	}
+
+	return string(rawDesc)
 }
