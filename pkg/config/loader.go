@@ -7,9 +7,9 @@ import (
 	"os"
 	"path/filepath"
 	"slices"
+	"strings"
 
 	"github.com/go-viper/mapstructure/v2"
-	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 
@@ -129,9 +129,9 @@ func (l *Loader) evaluateOptions() (string, error) {
 		return "", errConfigDisabled
 	}
 
-	configFile, err := homedir.Expand(l.opts.Config)
+	configFile, err := expandHomeDir(l.opts.Config)
 	if err != nil {
-		return "", errors.New("failed to expand configuration path")
+		return "", fmt.Errorf("failed to expand configuration path: %w", err)
 	}
 
 	return configFile, nil
@@ -184,7 +184,7 @@ func (l *Loader) getConfigSearchPaths() []string {
 	}
 
 	// find home directory for global config
-	if home, err := homedir.Dir(); err != nil {
+	if home, err := os.UserHomeDir(); err != nil {
 		l.log.Warnf("Can't get user's home directory: %v", err)
 	} else if !slices.Contains(searchPaths, home) {
 		searchPaths = append(searchPaths, home)
@@ -472,4 +472,26 @@ func customDecoderHook() viper.DecoderConfigOption {
 		// Needed for forbidigo, and output.formats.
 		mapstructure.TextUnmarshallerHookFunc(),
 	))
+}
+
+// expandHomeDir expands file paths relative to the user's home directory (~) into absolute paths.
+func expandHomeDir(path string) (string, error) {
+	if !strings.HasPrefix(path, "~") {
+		return path, nil
+	}
+
+	homeDir, err := os.UserHomeDir()
+	if err != nil {
+		return "", err
+	}
+
+	if path == "~" {
+		return homeDir, nil
+	}
+
+	if !strings.HasPrefix(path, "~"+string(filepath.Separator)) {
+		return "", errors.New("cannot expand user-specific home dir")
+	}
+
+	return filepath.Join(homeDir, strings.TrimPrefix(path, "~")), nil
 }
