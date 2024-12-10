@@ -72,11 +72,7 @@ func New(settings *config.GciSettings) *goanalysis.Linter {
 		nil,
 	).WithContextSetter(func(lintCtx *linter.Context) {
 		analyzer.Run = func(pass *analysis.Pass) (any, error) {
-			var err error
-			cfg.Sections, err = hackSectionList(pass, cfg)
-			if err != nil {
-				return nil, err
-			}
+			cfg.Sections = hackSectionList(pass, cfg)
 
 			issues, err := runGci(pass, lintCtx, cfg, &lock)
 			if err != nil {
@@ -154,7 +150,7 @@ func getIssuedTextGci(settings *config.LintersSettings) string {
 	return text
 }
 
-func hackSectionList(pass *analysis.Pass, cfg *gcicfg.Config) (section.SectionList, error) {
+func hackSectionList(pass *analysis.Pass, cfg *gcicfg.Config) section.SectionList {
 	var sections section.SectionList
 
 	for _, sect := range cfg.Sections {
@@ -170,7 +166,7 @@ func hackSectionList(pass *analysis.Pass, cfg *gcicfg.Config) (section.SectionLi
 		sections = append(sections, sect)
 	}
 
-	return sections, nil
+	return sections
 }
 
 // diffFormattedFilesToArray is a copy of gci.DiffFormattedFilesToArray without io.StdInGenerator.
