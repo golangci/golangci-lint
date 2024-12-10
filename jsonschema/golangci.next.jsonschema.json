@@ -1120,6 +1120,16 @@
               "type": "boolean",
               "default": true
             },
+            "no-inline-comments": {
+              "description": "Checks that no inline Comments are present.",
+              "type": "boolean",
+              "default": false
+            },
+            "no-prefix-comments": {
+              "description": "Checks that no prefix Comments(comment lines above an import) are present.",
+              "type": "boolean",
+              "default": false
+            },
             "custom-order": {
               "description": "Enable custom order of sections.",
               "type": "boolean",

@@ -11,11 +11,11 @@ import (
 	"github.com/daixiang0/gci/pkg/io"
 	"github.com/daixiang0/gci/pkg/log"
 	"github.com/daixiang0/gci/pkg/section"
-	"github.com/golangci/modinfo"
 	"github.com/hexops/gotextdiff"
 	"github.com/hexops/gotextdiff/myers"
 	"github.com/hexops/gotextdiff/span"
 	"golang.org/x/tools/go/analysis"
+	"golang.org/x/tools/go/analysis/passes/inspect"
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
@@ -34,7 +34,7 @@ func New(settings *config.GciSettings) *goanalysis.Linter {
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 		Run:  goanalysis.DummyRun,
 		Requires: []*analysis.Analyzer{
-			modinfo.Analyzer,
+			inspect.Analyzer,
 		},
 	}
 
@@ -42,9 +42,11 @@ func New(settings *config.GciSettings) *goanalysis.Linter {
 	if settings != nil {
 		rawCfg := gcicfg.YamlConfig{
 			Cfg: gcicfg.BoolConfig{
-				SkipGenerated: settings.SkipGenerated,
-				CustomOrder:   settings.CustomOrder,
-				NoLexOrder:    settings.NoLexOrder,
+				NoInlineComments: settings.NoInlineComments,
+				NoPrefixComments: settings.NoPrefixComments,
+				SkipGenerated:    settings.SkipGenerated,
+				CustomOrder:      settings.CustomOrder,
+				NoLexOrder:       settings.NoLexOrder,
 			},
 			SectionStrings: settings.Sections,
 		}
@@ -158,16 +160,11 @@ func hackSectionList(pass *analysis.Pass, cfg *gcicfg.Config) (section.SectionLi
 	for _, sect := range cfg.Sections {
 		// local module hack
 		if v, ok := sect.(*section.LocalModule); ok {
-			info, err := modinfo.FindModuleFromPass(pass)
-			if err != nil {
-				return nil, err
-			}
-
-			if info.Path == "" {
+			if pass.Module == nil {
 				continue
 			}
 
-			v.Path = info.Path
+			v.Path = pass.Module.Path
 		}
 
 		sections = append(sections, sect)

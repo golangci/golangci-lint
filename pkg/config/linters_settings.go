@@ -477,10 +477,12 @@ type FunlenSettings struct {
 }
 
 type GciSettings struct {
-	Sections      []string `mapstructure:"sections"`
-	SkipGenerated bool     `mapstructure:"skip-generated"`
-	CustomOrder   bool     `mapstructure:"custom-order"`
-	NoLexOrder    bool     `mapstructure:"no-lex-order"`
+	Sections         []string `mapstructure:"sections"`
+	NoInlineComments bool     `mapstructure:"no-inline-comments"`
+	NoPrefixComments bool     `mapstructure:"no-prefix-comments"`
+	SkipGenerated    bool     `mapstructure:"skip-generated"`
+	CustomOrder      bool     `mapstructure:"custom-order"`
+	NoLexOrder       bool     `mapstructure:"no-lex-order"`
 
 	// Deprecated: use Sections instead.
 	LocalPrefixes string `mapstructure:"local-prefixes"`

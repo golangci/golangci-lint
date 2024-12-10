@@ -594,6 +594,14 @@ linters-settings:
       - alias                          # Alias section: contains all alias imports. This section is not present unless explicitly enabled.
       - localmodule                    # Local module section: contains all local packages. This section is not present unless explicitly enabled.
 
+    # Checks that no inline Comments are present.
+    # Default: false
+    no-inline-comments: true
+
+    # Checks that no prefix Comments(comment lines above an import) are present.
+    # Default: false
+    no-prefix-comments: true
+
     # Skip generated files.
     # Default: true
     skip-generated: false
