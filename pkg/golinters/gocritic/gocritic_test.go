@@ -40,7 +40,7 @@ func Test_settingsWrapper_InferEnabledChecks(t *testing.T) {
 	t.Logf("enabled by default checks:\n%s", strings.Join(enabledByDefaultChecks, "\n"))
 
 	insert := func(in []string, toInsert ...string) []string {
-		return append(slices.Clone(in), toInsert...)
+		return slices.Concat(in, toInsert)
 	}
 
 	remove := func(in []string, toRemove ...string) []string {

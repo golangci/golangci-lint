@@ -1,6 +1,7 @@
 package lintersdb
 
 import (
+	"slices"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -113,9 +114,7 @@ func TestValidator_Validate(t *testing.T) {
 
 	v := NewValidator(m)
 
-	var testCases []validatorTestCase
-	testCases = append(testCases, validateLintersNamesTestCases...)
-	testCases = append(testCases, validatePresetsTestCases...)
+	testCases := slices.Concat(validateLintersNamesTestCases, validatePresetsTestCases)
 
 	for _, test := range testCases {
 		t.Run(test.desc, func(t *testing.T) {
@@ -133,9 +132,7 @@ func TestValidator_Validate_error(t *testing.T) {
 
 	v := NewValidator(m)
 
-	var testCases []validateErrorTestCase
-	testCases = append(testCases, validateLintersNamesErrorTestCases...)
-	testCases = append(testCases, validatePresetsErrorTestCases...)
+	testCases := slices.Concat(validateLintersNamesErrorTestCases, validatePresetsErrorTestCases)
 
 	for _, test := range testCases {
 		t.Run(test.desc, func(t *testing.T) {
