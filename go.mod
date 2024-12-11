@@ -1,6 +1,8 @@
 module github.com/golangci/golangci-lint
 
-go 1.22.1
+go 1.22.9
+
+toolchain go1.23.4
 
 require (
 	4d63.com/gocheckcompilerdirectives v1.2.1
@@ -160,6 +162,7 @@ require (
 	github.com/google/go-cmp v0.6.0 // indirect
 	github.com/gostaticanalysis/analysisutil v0.7.1 // indirect
 	github.com/gostaticanalysis/comment v1.4.2 // indirect
+	github.com/gostaticanalysis/testutil v0.5.2 // indirect
 	github.com/hashicorp/go-immutable-radix/v2 v2.1.0 // indirect
 	github.com/hashicorp/golang-lru/v2 v2.0.7 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
