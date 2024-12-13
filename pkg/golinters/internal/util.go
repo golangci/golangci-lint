@@ -2,12 +2,12 @@ package internal
 
 import (
 	"fmt"
-	"path/filepath"
 	"strings"
 
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/config"
+	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
 func FormatCode(code string, _ *config.Config) string {
@@ -19,15 +19,9 @@ func FormatCode(code string, _ *config.Config) string {
 }
 
 func GetFileNames(pass *analysis.Pass) []string {
-	var fileNames []string
+	var filenames []string
 	for _, f := range pass.Files {
-		fileName := pass.Fset.PositionFor(f.Pos(), true).Filename
-		ext := filepath.Ext(fileName)
-		if ext != "" && ext != ".go" {
-			// position has been adjusted to a non-go file, revert to original file
-			fileName = pass.Fset.PositionFor(f.Pos(), false).Filename
-		}
-		fileNames = append(fileNames, fileName)
+		filenames = append(filenames, goanalysis.GetFilePosition(pass, f).Filename)
 	}
-	return fileNames
+	return filenames
 }
