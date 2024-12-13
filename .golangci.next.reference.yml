@@ -1998,11 +1998,10 @@ linters-settings:
       # see https://github.com/julz/importas#use-regular-expression for details
       - pkg: knative.dev/serving/pkg/apis/(\w+)/(v[\w\d]+)
         alias: $1$2
-      # Here the `errors` and `fmt` packages will be enforced to have no aliases.
-      # The linter allows multiple packages for empty alias
+      # An explicit empty alias can be used to ensure no aliases are used for a package.
+      # This can be useful if `no-extra-aliases: true` doesn't fit your need.
+      # Multiple packages can use an empty alias.
       - pkg: errors
-        alias: ""
-      - pkg: fmt
         alias: ""
 
   inamedparam:
