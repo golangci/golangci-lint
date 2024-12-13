@@ -1998,6 +1998,12 @@ linters-settings:
       # see https://github.com/julz/importas#use-regular-expression for details
       - pkg: knative.dev/serving/pkg/apis/(\w+)/(v[\w\d]+)
         alias: $1$2
+      # Here the `errors` and `fmt` packages will be enforced to have no aliases.
+      # The linter allows multiple packages for empty alias
+      - pkg: errors
+        alias: ""
+      - pkg: fmt
+        alias: ""
 
   inamedparam:
     # Skips check for interface methods with only a single parameter.
