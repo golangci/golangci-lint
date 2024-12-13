@@ -1,0 +1,9 @@
+diff --git a/internal/shared/logutil/log.go b/internal/shared/logutil/log.go
+index 258b340..c2a8516 100644
+--- a/internal/shared/logutil/log.go
++++ b/internal/shared/logutil/log.go
+@@ -1,4 +1,4 @@
+-package logutil
++package test2
+
+ type Func func(format string, args ...interface{})

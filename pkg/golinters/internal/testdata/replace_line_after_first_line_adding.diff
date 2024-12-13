@@ -1,0 +1,13 @@
+diff --git a/internal/shared/logutil/log.go b/internal/shared/logutil/log.go
+index 258b340..43fc0de 100644
+--- a/internal/shared/logutil/log.go
++++ b/internal/shared/logutil/log.go
+@@ -1,6 +1,7 @@
++// added line
+ package logutil
+
+-type Func func(format string, args ...interface{})
++// changed line
+
+ type Log interface {
+        Fatalf(format string, args ...interface{})
