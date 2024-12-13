@@ -51,11 +51,13 @@ func New(settings *config.ImportAsSettings) *goanalysis.Linter {
 				uniqPackages[a.Pkg] = a
 			}
 
-			// skip the duplication check when the alias is a regular expression replacement pattern (ie. contains `$`).
+			// Skips the duplication check when:
+			// - the alias is empty.
+			// - the alias is a regular expression replacement pattern (ie. contains `$`).
 			v, ok := uniqAliases[a.Alias]
-			if ok && !strings.Contains(a.Alias, "$") {
+			if ok && a.Alias != "" && !strings.Contains(a.Alias, "$") {
 				lintCtx.Log.Errorf("invalid configuration, multiple packages with the same alias: alias=%s packages=[%s,%s]", a.Alias, a.Pkg, v.Pkg)
-			} else if a.Alias != "" { // Ignore duplication for empty aliases.
+			} else {
 				uniqAliases[a.Alias] = a
 			}
 
