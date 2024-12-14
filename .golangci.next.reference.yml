@@ -1998,6 +1998,11 @@ linters-settings:
       # see https://github.com/julz/importas#use-regular-expression for details
       - pkg: knative.dev/serving/pkg/apis/(\w+)/(v[\w\d]+)
         alias: $1$2
+      # An explicit empty alias can be used to ensure no aliases are used for a package.
+      # This can be useful if `no-extra-aliases: true` doesn't fit your need.
+      # Multiple packages can use an empty alias.
+      - pkg: errors
+        alias: ""
 
   inamedparam:
     # Skips check for interface methods with only a single parameter.
