@@ -1216,6 +1216,11 @@
               "description": "Presence of `default` case in switch statements satisfies exhaustiveness, if all members are not listed.",
               "type": "boolean",
               "default": true
+            },
+            "include-shared-interfaces": {
+              "description": "Include shared interfaces in the exhaustiviness check.",
+              "type": "boolean",
+              "default": false
             }
           }
         },
