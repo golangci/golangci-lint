@@ -61,9 +61,13 @@ func runGoCheckSumType(pass *analysis.Pass, settings *config.GoChecksumTypeSetti
 		TypesInfo: pass.TypesInfo,
 	}
 
+	cfg := gochecksumtype.Config{
+		DefaultSignifiesExhaustive: settings.DefaultSignifiesExhaustive,
+		IncludeSharedInterfaces:    settings.IncludeSharedInterfaces,
+	}
+
 	var unknownError error
-	errors := gochecksumtype.Run([]*packages.Package{pkg},
-		gochecksumtype.Config{DefaultSignifiesExhaustive: settings.DefaultSignifiesExhaustive})
+	errors := gochecksumtype.Run([]*packages.Package{pkg}, cfg)
 	for _, err := range errors {
 		err, ok := err.(gochecksumtype.Error)
 		if !ok {

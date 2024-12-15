@@ -505,6 +505,7 @@ type GinkgoLinterSettings struct {
 
 type GoChecksumTypeSettings struct {
 	DefaultSignifiesExhaustive bool `mapstructure:"default-signifies-exhaustive"`
+	IncludeSharedInterfaces    bool `mapstructure:"include-shared-interfaces"`
 }
 
 type GocognitSettings struct {

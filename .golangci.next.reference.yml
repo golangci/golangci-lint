@@ -670,6 +670,9 @@ linters-settings:
     # Presence of `default` case in switch statements satisfies exhaustiveness, if all members are not listed.
     # Default: true
     default-signifies-exhaustive: false
+    # Include shared interfaces in the exhaustiviness check.
+    # Default: false
+    include-shared-interfaces: true
 
   gocognit:
     # Minimal code complexity to report.
