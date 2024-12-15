@@ -40,6 +40,22 @@ func Test_toGosecConfig(t *testing.T) {
 			},
 		},
 		{
+			desc: "with global settings nosec enabled",
+			settings: &config.GoSecSettings{
+				Config: map[string]any{
+					gosec.Globals: map[string]any{
+						string(gosec.Nosec): false,
+						string(gosec.Audit): "true",
+					},
+				},
+			},
+			expected: gosec.Config{
+				"global": map[gosec.GlobalOption]string{
+					"audit": "true",
+				},
+			},
+		},
+		{
 			desc: "rule specified setting",
 			settings: &config.GoSecSettings{
 				Config: map[string]any{

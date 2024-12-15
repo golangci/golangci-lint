@@ -184,7 +184,15 @@ func convertGosecGlobals(globalOptionFromConfig any, conf gosec.Config) {
 	}
 
 	for k, v := range globalOptionMap {
-		conf.SetGlobal(gosec.GlobalOption(k), fmt.Sprintf("%v", v))
+		option := gosec.GlobalOption(k)
+
+		// Set nosec global option only if the value is true
+		// https://github.com/securego/gosec/blob/v2.21.4/analyzer.go#L572
+		if option == gosec.Nosec && v == false {
+			continue
+		}
+
+		conf.SetGlobal(option, fmt.Sprintf("%v", v))
 	}
 }
 
