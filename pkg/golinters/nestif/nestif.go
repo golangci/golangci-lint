@@ -1,37 +1,21 @@
 package nestif
 
 import (
-	"sort"
-	"sync"
-
 	"github.com/nakabonne/nestif"
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
-	"github.com/golangci/golangci-lint/pkg/lint/linter"
-	"github.com/golangci/golangci-lint/pkg/result"
 )
 
 const linterName = "nestif"
 
 func New(settings *config.NestifSettings) *goanalysis.Linter {
-	var mu sync.Mutex
-	var resIssues []goanalysis.Issue
-
 	analyzer := &analysis.Analyzer{
-		Name: goanalysis.TheOnlyAnalyzerName,
+		Name: linterName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 		Run: func(pass *analysis.Pass) (any, error) {
-			issues := runNestIf(pass, settings)
-
-			if len(issues) == 0 {
-				return nil, nil
-			}
-
-			mu.Lock()
-			resIssues = append(resIssues, issues...)
-			mu.Unlock()
+			runNestIf(pass, settings)
 
 			return nil, nil
 		},
@@ -42,37 +26,31 @@ func New(settings *config.NestifSettings) *goanalysis.Linter {
 		"Reports deeply nested if statements",
 		[]*analysis.Analyzer{analyzer},
 		nil,
-	).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
-		return resIssues
-	}).WithLoadMode(goanalysis.LoadModeSyntax)
+	).WithLoadMode(goanalysis.LoadModeSyntax)
 }
 
-func runNestIf(pass *analysis.Pass, settings *config.NestifSettings) []goanalysis.Issue {
+func runNestIf(pass *analysis.Pass, settings *config.NestifSettings) {
 	checker := &nestif.Checker{
 		MinComplexity: settings.MinComplexity,
 	}
 
-	var lintIssues []nestif.Issue
-	for _, f := range pass.Files {
-		lintIssues = append(lintIssues, checker.Check(f, pass.Fset)...)
+	for _, file := range pass.Files {
+		position := goanalysis.GetFilePosition(pass, file)
+
+		issues := checker.Check(file, pass.Fset)
+		if len(issues) == 0 {
+			continue
+		}
+
+		nonAdjPosition := pass.Fset.PositionFor(file.Pos(), false)
+
+		f := pass.Fset.File(file.Pos())
+
+		for _, issue := range issues {
+			pass.Report(analysis.Diagnostic{
+				Pos:     f.LineStart(goanalysis.AdjustPos(issue.Pos.Line, nonAdjPosition.Line, position.Line)),
+				Message: issue.Message,
+			})
+		}
 	}
-
-	if len(lintIssues) == 0 {
-		return nil
-	}
-
-	sort.SliceStable(lintIssues, func(i, j int) bool {
-		return lintIssues[i].Complexity > lintIssues[j].Complexity
-	})
-
-	issues := make([]goanalysis.Issue, 0, len(lintIssues))
-	for _, i := range lintIssues {
-		issues = append(issues, goanalysis.NewIssue(&result.Issue{
-			Pos:        i.Pos,
-			Text:       i.Message,
-			FromLinter: linterName,
-		}, pass))
-	}
-
-	return issues
 }
