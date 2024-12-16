@@ -2,40 +2,27 @@ package forbidigo
 
 import (
 	"fmt"
-	"sync"
 
 	"github.com/ashanbrown/forbidigo/forbidigo"
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
-	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/logutils"
-	"github.com/golangci/golangci-lint/pkg/result"
 )
 
 const linterName = "forbidigo"
 
 func New(settings *config.ForbidigoSettings) *goanalysis.Linter {
-	var mu sync.Mutex
-	var resIssues []goanalysis.Issue
-
 	analyzer := &analysis.Analyzer{
 		Name: linterName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 		Run: func(pass *analysis.Pass) (any, error) {
-			issues, err := runForbidigo(pass, settings)
+			err := runForbidigo(pass, settings)
 			if err != nil {
 				return nil, err
 			}
 
-			if len(issues) == 0 {
-				return nil, nil
-			}
-
-			mu.Lock()
-			resIssues = append(resIssues, issues...)
-			mu.Unlock()
 			return nil, nil
 		},
 	}
@@ -48,12 +35,10 @@ func New(settings *config.ForbidigoSettings) *goanalysis.Linter {
 		"Forbids identifiers",
 		[]*analysis.Analyzer{analyzer},
 		nil,
-	).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
-		return resIssues
-	}).WithLoadMode(goanalysis.LoadModeTypesInfo)
+	).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }
 
-func runForbidigo(pass *analysis.Pass, settings *config.ForbidigoSettings) ([]goanalysis.Issue, error) {
+func runForbidigo(pass *analysis.Pass, settings *config.ForbidigoSettings) error {
 	options := []forbidigo.Option{
 		forbidigo.OptionExcludeGodocExamples(settings.ExcludeGodocExamples),
 		// disable "//permit" directives so only "//nolint" directives matters within golangci-lint
@@ -66,38 +51,42 @@ func runForbidigo(pass *analysis.Pass, settings *config.ForbidigoSettings) ([]go
 	for _, pattern := range settings.Forbid {
 		buffer, err := pattern.MarshalString()
 		if err != nil {
-			return nil, err
+			return err
 		}
+
 		patterns = append(patterns, string(buffer))
 	}
 
 	forbid, err := forbidigo.NewLinter(patterns, options...)
 	if err != nil {
-		return nil, fmt.Errorf("failed to create linter %q: %w", linterName, err)
+		return fmt.Errorf("failed to create linter %q: %w", linterName, err)
 	}
 
-	var issues []goanalysis.Issue
 	for _, file := range pass.Files {
 		runConfig := forbidigo.RunConfig{
 			Fset:     pass.Fset,
 			DebugLog: logutils.Debug(logutils.DebugKeyForbidigo),
 		}
-		if settings != nil && settings.AnalyzeTypes {
+
+		if settings.AnalyzeTypes {
 			runConfig.TypesInfo = pass.TypesInfo
 		}
+
 		hints, err := forbid.RunWithConfig(runConfig, file)
 		if err != nil {
-			return nil, fmt.Errorf("forbidigo linter failed on file %q: %w", file.Name.String(), err)
+			return fmt.Errorf("forbidigo linter failed on file %q: %w", file.Name.String(), err)
 		}
 
 		for _, hint := range hints {
-			issues = append(issues, goanalysis.NewIssue(&result.Issue{
-				Pos:        hint.Position(),
-				Text:       hint.Details(),
-				FromLinter: linterName,
-			}, pass))
+			pass.Report(analysis.Diagnostic{
+				Pos:            hint.Pos(),
+				Message:        hint.Details(),
+				URL:            "",
+				SuggestedFixes: nil,
+				Related:        nil,
+			})
 		}
 	}
 
-	return issues, nil
+	return nil
 }
