@@ -2,7 +2,6 @@ package godot
 
 import (
 	"cmp"
-	"go/token"
 
 	"github.com/tetafro/godot"
 	"golang.org/x/tools/go/analysis"
@@ -60,26 +59,23 @@ func runGodot(pass *analysis.Pass, settings godot.Settings) error {
 			return err
 		}
 
+		if len(iss) == 0 {
+			continue
+		}
+
+		f := pass.Fset.File(file.Pos())
+
 		for _, i := range iss {
-			f := pass.Fset.File(file.Pos())
-
-			pos := f.Pos(i.Pos.Offset)
-
-			var end token.Pos
-			if i.Pos.Line == f.LineCount() {
-				// missing newline at the end of the file
-				end = f.Pos(f.Size())
-			} else {
-				end = f.LineStart(i.Pos.Line+1) - token.Pos(1)
-			}
+			start := f.Pos(i.Pos.Offset)
+			end := goanalysis.EndOfLinePos(f, i.Pos.Line)
 
 			pass.Report(analysis.Diagnostic{
-				Pos:     pos,
+				Pos:     start,
 				End:     end,
 				Message: i.Message,
 				SuggestedFixes: []analysis.SuggestedFix{{
 					TextEdits: []analysis.TextEdit{{
-						Pos:     pos,
+						Pos:     start,
 						End:     end,
 						NewText: []byte(i.Replacement),
 					}},
