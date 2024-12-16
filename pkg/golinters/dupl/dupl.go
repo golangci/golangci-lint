@@ -3,6 +3,7 @@ package dupl
 import (
 	"fmt"
 	"go/token"
+	"strings"
 	"sync"
 
 	duplAPI "github.com/golangci/dupl"
@@ -56,7 +57,17 @@ func New(settings *config.DuplSettings) *goanalysis.Linter {
 func runDupl(pass *analysis.Pass, settings *config.DuplSettings) ([]goanalysis.Issue, error) {
 	fileNames := internal.GetFileNames(pass)
 
-	issues, err := duplAPI.Run(fileNames, settings.Threshold)
+	var onlyGofiles []string
+	for _, name := range fileNames {
+		// Related to Windows
+		if !strings.HasSuffix(name, ".go") {
+			continue
+		}
+
+		onlyGofiles = append(onlyGofiles, name)
+	}
+
+	issues, err := duplAPI.Run(onlyGofiles, settings.Threshold)
 	if err != nil {
 		return nil, err
 	}
