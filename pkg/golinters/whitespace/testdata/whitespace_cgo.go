@@ -1,3 +1,7 @@
+//go:build ignore
+
+// TODO(ldez) the linter doesn't support cgo.
+
 //golangcitest:args -Ewhitespace
 //golangcitest:config_path testdata/whitespace.yml
 package testdata
@@ -14,7 +18,6 @@ import "C"
 
 import (
 	"fmt"
-	"strings"
 	"unsafe"
 )
 
@@ -24,16 +27,16 @@ func _() {
 	C.free(unsafe.Pointer(cs))
 }
 
-func oneLeadingNewline() {
+func oneLeadingNewline() { // want "unnecessary leading newline"
 
 	fmt.Println("Hello world")
 }
 
-func oneNewlineAtBothEnds() {
+func oneNewlineAtBothEnds() { // want "unnecessary leading newline"
 
 	fmt.Println("Hello world")
 
-}
+} // want "unnecessary trailing newline"
 
 func noNewlineFunc() {
 }
@@ -61,20 +64,20 @@ func oneLeadingNewlineWithCommentFunc() {
 	// some comment
 }
 
-func twoLeadingNewlines() {
+func twoLeadingNewlines() { // want "unnecessary leading newline"
 
 
 	fmt.Println("Hello world")
 }
 
 func multiFuncFunc(a int,
-	b int) {
+	b int) { // want "multi-line statement should be followed by a newline"
 	fmt.Println("Hello world")
 }
 
 func multiIfFunc() {
 	if 1 == 1 &&
-		2 == 2 {
+		2 == 2 { // want "multi-line statement should be followed by a newline"
 		fmt.Println("Hello multi-line world")
 	}
 
@@ -82,7 +85,7 @@ func multiIfFunc() {
 		if true {
 			if true {
 				if 1 == 1 &&
-					2 == 2 {
+					2 == 2 { // want "multi-line statement should be followed by a newline"
 						fmt.Println("Hello nested multi-line world")
 				}
 			}
@@ -90,7 +93,7 @@ func multiIfFunc() {
 	}
 }
 
-func notGoFmted() {
+func notGoFmted() { // want "unnecessary leading newline"
 
 
 
@@ -99,4 +102,4 @@ func notGoFmted() {
 
 
 
-}
+} // want "unnecessary trailing newline"
