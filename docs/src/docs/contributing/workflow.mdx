@@ -56,14 +56,8 @@ First, see [our versioning policy](/product/roadmap/#versioning-policy).
 To make a new release create a tag `vx.y.z`. Don't forget to add zero patch version for a new minor release, e.g. `v1.99.0`.
 A GitHub Action [workflow](https://github.com/golangci/golangci-lint/blob/master/.github/workflows/tag.yml) will start building and publishing release after that.
 
-After making a release you need to update:
-
-1. GitHub [Action config](https://github.com/golangci/golangci-lint/blob/master/assets/github-action-config.json) by running:
+After making a release you need to update
+GitHub [Action config](https://github.com/golangci/golangci-lint/blob/master/assets/github-action-config.json) by running:
 ```sh
 make assets/github-action-config.json
-```
-
-2. Contributors list:
-```sh
-make update_contributors_list # may take 15 min
 ```
