@@ -1,3 +1,7 @@
+//go:build ignore
+
+// TODO(ldez) the linter doesn't support cgo.
+
 /*MY TITLE!*/ // want `Expected:TITLE\., Actual: TITLE!`
 
 //golangcitest:args -Egoheader

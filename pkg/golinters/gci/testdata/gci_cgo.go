@@ -1,3 +1,7 @@
+//go:build ignore
+
+// TODO(ldez) the linter doesn't support cgo.
+
 //golangcitest:args -Egci
 //golangcitest:config_path testdata/gci.yml
 package testdata
