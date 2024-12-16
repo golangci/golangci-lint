@@ -6,7 +6,6 @@ import (
 	"io"
 	"os"
 	"strings"
-	"sync"
 
 	"github.com/shazow/go-diff/difflib"
 	"golang.org/x/tools/go/analysis"
@@ -25,9 +24,6 @@ type differ interface {
 }
 
 func New(settings *config.GofumptSettings) *goanalysis.Linter {
-	var mu sync.Mutex
-	var resIssues []goanalysis.Issue
-
 	diff := difflib.New()
 
 	var options format.Options
@@ -53,63 +49,48 @@ func New(settings *config.GofumptSettings) *goanalysis.Linter {
 		nil,
 	).WithContextSetter(func(lintCtx *linter.Context) {
 		analyzer.Run = func(pass *analysis.Pass) (any, error) {
-			issues, err := runGofumpt(lintCtx, pass, diff, options)
+			err := runGofumpt(lintCtx, pass, diff, options)
 			if err != nil {
 				return nil, err
 			}
 
-			if len(issues) == 0 {
-				return nil, nil
-			}
-
-			mu.Lock()
-			resIssues = append(resIssues, issues...)
-			mu.Unlock()
-
 			return nil, nil
 		}
-	}).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
-		return resIssues
 	}).WithLoadMode(goanalysis.LoadModeSyntax)
 }
 
-func runGofumpt(lintCtx *linter.Context, pass *analysis.Pass, diff differ, options format.Options) ([]goanalysis.Issue, error) {
-	fileNames := internal.GetFileNames(pass)
+func runGofumpt(lintCtx *linter.Context, pass *analysis.Pass, diff differ, options format.Options) error {
+	for _, file := range pass.Files {
+		position := goanalysis.GetFilePosition(pass, file)
 
-	var issues []goanalysis.Issue
-
-	for _, f := range fileNames {
-		input, err := os.ReadFile(f)
+		input, err := os.ReadFile(position.Filename)
 		if err != nil {
-			return nil, fmt.Errorf("unable to open file %s: %w", f, err)
+			return fmt.Errorf("unable to open file %s: %w", position.Filename, err)
 		}
 
 		output, err := format.Source(input, options)
 		if err != nil {
-			return nil, fmt.Errorf("error while running gofumpt: %w", err)
+			return fmt.Errorf("error while running gofumpt: %w", err)
 		}
 
 		if !bytes.Equal(input, output) {
-			out := bytes.NewBufferString(fmt.Sprintf("--- %[1]s\n+++ %[1]s\n", f))
+			out := bytes.NewBufferString(fmt.Sprintf("--- %[1]s\n+++ %[1]s\n", position.Filename))
 
 			err := diff.Diff(out, bytes.NewReader(input), bytes.NewReader(output))
 			if err != nil {
-				return nil, fmt.Errorf("error while running gofumpt: %w", err)
+				return fmt.Errorf("error while running gofumpt: %w", err)
 			}
 
 			diff := out.String()
-			is, err := internal.ExtractIssuesFromPatch(diff, lintCtx, linterName, getIssuedTextGoFumpt)
-			if err != nil {
-				return nil, fmt.Errorf("can't extract issues from gofumpt diff output %q: %w", diff, err)
-			}
 
-			for i := range is {
-				issues = append(issues, goanalysis.NewIssue(&is[i], pass))
+			err = internal.ExtractDiagnosticFromPatch(pass, file, diff, lintCtx, getIssuedTextGoFumpt)
+			if err != nil {
+				return fmt.Errorf("can't extract issues from gofumpt diff output %q: %w", diff, err)
 			}
 		}
 	}
 
-	return issues, nil
+	return nil
 }
 
 func getLangVersion(settings *config.GofumptSettings) string {
