@@ -214,8 +214,13 @@ func parseDiffLines(h *diffpkg.Hunk) []diffLine {
 	return diffLines
 }
 
-func ExtractDiagnosticFromPatch(pass *analysis.Pass, file *ast.File, patch string,
-	lintCtx *linter.Context, formatter fmtTextFormatter) error {
+func ExtractDiagnosticFromPatch(
+	pass *analysis.Pass,
+	file *ast.File,
+	patch string,
+	lintCtx *linter.Context,
+	formatter fmtTextFormatter,
+) error {
 	diffs, err := diffpkg.ParseMultiFileDiff([]byte(patch))
 	if err != nil {
 		return fmt.Errorf("can't parse patch: %w", err)

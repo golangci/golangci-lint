@@ -33,7 +33,7 @@ func New(settings *config.NoLintLintSettings) *goanalysis.Linter {
 
 	lnt, err := nolintlint.NewLinter(needs, settings.AllowNoExplanation)
 	if err != nil {
-		internal.LinterLogger.Fatalf("asasalint: create analyzer: %v", err)
+		internal.LinterLogger.Fatalf("%s: create analyzer: %v", nolintlint.LinterName, err)
 	}
 
 	analyzer := &analysis.Analyzer{

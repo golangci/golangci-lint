@@ -134,7 +134,7 @@ func (l Linter) Run(pass *analysis.Pass) ([]goanalysis.Issue, error) {
 				if lintersText != "" && !strings.HasPrefix(lintersText, "all") {
 					lls := strings.Split(lintersText, ",")
 					linters = make([]string, 0, len(lls))
-					rangeStart := (pos.Column - 1) + len("//") + len(leadingSpace) + len("nolint:")
+					rangeStart := (pos.Column - 1) + len(commentMark) + len(leadingSpace) + len("nolint:")
 					for i, ll := range lls {
 						rangeEnd := rangeStart + len(ll)
 						if i < len(lls)-1 {
@@ -202,7 +202,7 @@ func (l Linter) Run(pass *analysis.Pass) ([]goanalysis.Issue, error) {
 					}
 				}
 
-				if (l.needs&NeedsExplanation) != 0 && (explanation == "" || strings.TrimSpace(explanation) == "//") {
+				if (l.needs&NeedsExplanation) != 0 && (explanation == "" || strings.TrimSpace(explanation) == commentMark) {
 					needsExplanation := len(linters) == 0 // if no linters are mentioned, we must have explanation
 					// otherwise, check if we are excluding all the mentioned linters
 					for _, ll := range linters {
