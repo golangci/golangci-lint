@@ -13,7 +13,7 @@ import (
 )
 
 //nolint:misspell // misspelling is intentional
-const expectedJSONOutput = `{"Issues":[{"FromLinter":"misspell","Text":"` + "`" + `occured` + "`" + ` is a misspelling of ` + "`" + `occurred` + "`" + `","Severity":"","SourceLines":["\t// comment with incorrect spelling: occured // want \"` + "`" + `occured` + "`" + ` is a misspelling of ` + "`" + `occurred` + "`" + `\""],"Replacement":{"NeedOnlyDelete":false,"NewLines":null,"Inline":{"StartCol":37,"Length":7,"NewString":"occurred"}},"Pos":{"Filename":"testdata/output.go","Offset":0,"Line":6,"Column":38},"ExpectNoLint":false,"ExpectedNoLintLinter":""}]`
+const expectedJSONOutput = `{"Issues":[{"FromLinter":"misspell","Text":"` + "`" + `occured` + "`" + ` is a misspelling of ` + "`" + `occurred` + "`" + `","Severity":"","SourceLines":["\t// comment with incorrect spelling: occured // want \"` + "`" + `occured` + "`" + ` is a misspelling of ` + "`" + `occurred` + "`" + `\""],"Pos":{"Filename":"testdata/output.go","Offset":159,"Line":6,"Column":38},"SuggestedFixes":[{"Message":"","TextEdits":[{"Pos":159,"End":166,"NewText":"b2NjdXJyZWQ="}]}],"ExpectNoLint":false,"ExpectedNoLintLinter":""}]`
 
 func TestOutput_lineNumber(t *testing.T) {
 	sourcePath := filepath.Join(testdataDir, "output.go")
