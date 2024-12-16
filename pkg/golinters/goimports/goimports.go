@@ -2,7 +2,6 @@ package goimports
 
 import (
 	"fmt"
-	"sync"
 
 	goimportsAPI "github.com/golangci/gofmt/goimports"
 	"golang.org/x/tools/go/analysis"
@@ -17,9 +16,6 @@ import (
 const linterName = "goimports"
 
 func New(settings *config.GoImportsSettings) *goanalysis.Linter {
-	var mu sync.Mutex
-	var resIssues []goanalysis.Issue
-
 	analyzer := &analysis.Analyzer{
 		Name: linterName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
@@ -36,51 +32,35 @@ func New(settings *config.GoImportsSettings) *goanalysis.Linter {
 		imports.LocalPrefix = settings.LocalPrefixes
 
 		analyzer.Run = func(pass *analysis.Pass) (any, error) {
-			issues, err := runGoImports(lintCtx, pass)
+			err := runGoImports(lintCtx, pass)
 			if err != nil {
 				return nil, err
 			}
 
-			if len(issues) == 0 {
-				return nil, nil
-			}
-
-			mu.Lock()
-			resIssues = append(resIssues, issues...)
-			mu.Unlock()
-
 			return nil, nil
 		}
-	}).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
-		return resIssues
 	}).WithLoadMode(goanalysis.LoadModeSyntax)
 }
 
-func runGoImports(lintCtx *linter.Context, pass *analysis.Pass) ([]goanalysis.Issue, error) {
-	fileNames := internal.GetFileNames(pass)
+func runGoImports(lintCtx *linter.Context, pass *analysis.Pass) error {
+	for _, file := range pass.Files {
+		position := goanalysis.GetFilePosition(pass, file)
 
-	var issues []goanalysis.Issue
-
-	for _, f := range fileNames {
-		diff, err := goimportsAPI.Run(f)
+		diff, err := goimportsAPI.Run(position.Filename)
 		if err != nil { // TODO: skip
-			return nil, err
+			return err
 		}
 		if diff == nil {
 			continue
 		}
 
-		is, err := internal.ExtractIssuesFromPatch(string(diff), lintCtx, linterName, getIssuedTextGoImports)
+		err = internal.ExtractDiagnosticFromPatch(pass, file, string(diff), lintCtx, getIssuedTextGoImports)
 		if err != nil {
-			return nil, fmt.Errorf("can't extract issues from gofmt diff output %q: %w", string(diff), err)
-		}
-
-		for i := range is {
-			issues = append(issues, goanalysis.NewIssue(&is[i], pass))
+			return fmt.Errorf("can't extract issues from gofmt diff output %q: %w", string(diff), err)
 		}
 	}
 
-	return issues, nil
+	return nil
 }
 
 func getIssuedTextGoImports(settings *config.LintersSettings) string {
