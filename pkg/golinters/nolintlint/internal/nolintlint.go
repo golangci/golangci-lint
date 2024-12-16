@@ -2,6 +2,7 @@
 package internal
 
 import (
+	"go/token"
 	"regexp"
 	"strings"
 
@@ -22,6 +23,8 @@ const (
 )
 
 type Needs uint
+
+const commentMark = "//"
 
 var commentPattern = regexp.MustCompile(`^//\s*(nolint)(:\s*[\w-]+\s*(?:,\s*[\w-]+\s*)*)?\b`)
 
@@ -70,12 +73,12 @@ func (l Linter) Run(pass *analysis.Pass) ([]goanalysis.Issue, error) {
 					leadingSpace = leadingSpaceMatches[1]
 				}
 
-				directiveWithOptionalLeadingSpace := "//"
+				directiveWithOptionalLeadingSpace := commentMark
 				if leadingSpace != "" {
 					directiveWithOptionalLeadingSpace += " "
 				}
 
-				split := strings.Split(strings.SplitN(comment.Text, ":", 2)[0], "//")
+				split := strings.Split(strings.SplitN(comment.Text, ":", 2)[0], commentMark)
 				directiveWithOptionalLeadingSpace += strings.TrimSpace(split[1])
 
 				pos := pass.Fset.Position(comment.Pos())
@@ -83,31 +86,30 @@ func (l Linter) Run(pass *analysis.Pass) ([]goanalysis.Issue, error) {
 
 				// check for, report and eliminate leading spaces, so we can check for other issues
 				if leadingSpace != "" {
-					removeWhitespace := &result.Replacement{
-						Inline: &result.InlineFix{
-							StartCol: pos.Column + 1,
-							Length:   len(leadingSpace),
-						},
-					}
+					removeWhitespace := []analysis.SuggestedFix{{
+						TextEdits: []analysis.TextEdit{{
+							Pos:     token.Pos(pos.Offset),
+							End:     token.Pos(pos.Offset + len(commentMark) + len(leadingSpace)),
+							NewText: []byte(commentMark),
+						}},
+					}}
 
 					if (l.needs & NeedsMachineOnly) != 0 {
 						issue := &result.Issue{
-							FromLinter:  LinterName,
-							Text:        formatNotMachine(comment.Text),
-							Pos:         pos,
-							Replacement: removeWhitespace,
+							FromLinter:     LinterName,
+							Text:           formatNotMachine(comment.Text),
+							Pos:            pos,
+							SuggestedFixes: removeWhitespace,
 						}
 
 						issues = append(issues, goanalysis.NewIssue(issue, pass))
 					} else if len(leadingSpace) > 1 {
 						issue := &result.Issue{
-							FromLinter:  LinterName,
-							Text:        formatExtraLeadingSpace(comment.Text),
-							Pos:         pos,
-							Replacement: removeWhitespace,
+							FromLinter:     LinterName,
+							Text:           formatExtraLeadingSpace(comment.Text),
+							Pos:            pos,
+							SuggestedFixes: removeWhitespace,
 						}
-
-						issue.Replacement.Inline.NewString = " " // assume a single space was intended
 
 						issues = append(issues, goanalysis.NewIssue(issue, pass))
 					}
@@ -160,27 +162,21 @@ func (l Linter) Run(pass *analysis.Pass) ([]goanalysis.Issue, error) {
 
 				// when detecting unused directives, we send all the directives through and filter them out in the nolint processor
 				if (l.needs & NeedsUnused) != 0 {
-					removeNolintCompletely := &result.Replacement{}
-
-					startCol := pos.Column - 1
-
-					if startCol == 0 {
-						// if the directive starts from a new line, remove the line
-						removeNolintCompletely.NeedOnlyDelete = true
-					} else {
-						removeNolintCompletely.Inline = &result.InlineFix{
-							StartCol: startCol,
-							Length:   end.Column - pos.Column,
-						}
-					}
+					removeNolintCompletely := []analysis.SuggestedFix{{
+						TextEdits: []analysis.TextEdit{{
+							Pos:     token.Pos(pos.Offset),
+							End:     token.Pos(end.Offset),
+							NewText: nil,
+						}},
+					}}
 
 					if len(linters) == 0 {
 						issue := &result.Issue{
-							FromLinter:   LinterName,
-							Text:         formatUnusedCandidate(comment.Text, ""),
-							Pos:          pos,
-							ExpectNoLint: true,
-							Replacement:  removeNolintCompletely,
+							FromLinter:     LinterName,
+							Text:           formatUnusedCandidate(comment.Text, ""),
+							Pos:            pos,
+							ExpectNoLint:   true,
+							SuggestedFixes: removeNolintCompletely,
 						}
 
 						issues = append(issues, goanalysis.NewIssue(issue, pass))
@@ -194,11 +190,11 @@ func (l Linter) Run(pass *analysis.Pass) ([]goanalysis.Issue, error) {
 								ExpectedNoLintLinter: linter,
 							}
 
-							// only offer replacement if there is a single linter
+							// only offer SuggestedFix if there is a single linter
 							// because of issues around commas and the possibility of all
 							// linters being removed
 							if len(linters) == 1 {
-								issue.Replacement = removeNolintCompletely
+								issue.SuggestedFixes = removeNolintCompletely
 							}
 
 							issues = append(issues, goanalysis.NewIssue(issue, pass))
