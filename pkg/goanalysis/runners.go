@@ -106,6 +106,8 @@ func buildIssues(diags []Diagnostic, linterNameBuilder func(diag *Diagnostic) st
 					end = edit.Pos
 				}
 
+				// To be applied the positions need to be "adjusted" based on the file.
+				// This is the difference between the "displayed" positions and "effective" positions.
 				nsf.TextEdits = append(nsf.TextEdits, analysis.TextEdit{
 					Pos:     token.Pos(diag.File.Offset(edit.Pos)),
 					End:     token.Pos(diag.File.Offset(end)),
