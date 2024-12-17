@@ -2,23 +2,17 @@ package godot
 
 import (
 	"cmp"
-	"sync"
 
 	"github.com/tetafro/godot"
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
-	"github.com/golangci/golangci-lint/pkg/lint/linter"
-	"github.com/golangci/golangci-lint/pkg/result"
 )
 
 const linterName = "godot"
 
 func New(settings *config.GodotSettings) *goanalysis.Linter {
-	var mu sync.Mutex
-	var resIssues []goanalysis.Issue
-
 	var dotSettings godot.Settings
 
 	if settings != nil {
@@ -41,18 +35,10 @@ func New(settings *config.GodotSettings) *goanalysis.Linter {
 		Name: linterName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 		Run: func(pass *analysis.Pass) (any, error) {
-			issues, err := runGodot(pass, dotSettings)
+			err := runGodot(pass, dotSettings)
 			if err != nil {
 				return nil, err
 			}
-
-			if len(issues) == 0 {
-				return nil, nil
-			}
-
-			mu.Lock()
-			resIssues = append(resIssues, issues...)
-			mu.Unlock()
 
 			return nil, nil
 		},
@@ -63,38 +49,40 @@ func New(settings *config.GodotSettings) *goanalysis.Linter {
 		"Check if comments end in a period",
 		[]*analysis.Analyzer{analyzer},
 		nil,
-	).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
-		return resIssues
-	}).WithLoadMode(goanalysis.LoadModeSyntax)
+	).WithLoadMode(goanalysis.LoadModeSyntax)
 }
 
-func runGodot(pass *analysis.Pass, settings godot.Settings) ([]goanalysis.Issue, error) {
-	var lintIssues []godot.Issue
+func runGodot(pass *analysis.Pass, settings godot.Settings) error {
 	for _, file := range pass.Files {
 		iss, err := godot.Run(file, pass.Fset, settings)
 		if err != nil {
-			return nil, err
-		}
-		lintIssues = append(lintIssues, iss...)
-	}
-
-	if len(lintIssues) == 0 {
-		return nil, nil
-	}
-
-	issues := make([]goanalysis.Issue, len(lintIssues))
-	for k, i := range lintIssues {
-		issue := result.Issue{
-			Pos:        i.Pos,
-			Text:       i.Message,
-			FromLinter: linterName,
-			Replacement: &result.Replacement{
-				NewLines: []string{i.Replacement},
-			},
+			return err
 		}
 
-		issues[k] = goanalysis.NewIssue(&issue, pass)
+		if len(iss) == 0 {
+			continue
+		}
+
+		f := pass.Fset.File(file.Pos())
+
+		for _, i := range iss {
+			start := f.Pos(i.Pos.Offset)
+			end := goanalysis.EndOfLinePos(f, i.Pos.Line)
+
+			pass.Report(analysis.Diagnostic{
+				Pos:     start,
+				End:     end,
+				Message: i.Message,
+				SuggestedFixes: []analysis.SuggestedFix{{
+					TextEdits: []analysis.TextEdit{{
+						Pos:     start,
+						End:     end,
+						NewText: []byte(i.Replacement),
+					}},
+				}},
+			})
+		}
 	}
 
-	return issues, nil
+	return nil
 }

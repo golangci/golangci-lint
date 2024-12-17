@@ -5,7 +5,6 @@ package p
 
 import "fmt"
 
-//line yaccpar:1
 func oneLeadingNewline() {
 	fmt.Println("Hello world")
 }
@@ -22,7 +21,6 @@ func oneNewlineFunc() {
 }
 
 func twoNewlinesFunc() {
-
 
 }
 
@@ -63,7 +61,7 @@ func multiIfFunc() {
 				if 1 == 1 &&
 					2 == 2 {
 
-						fmt.Println("Hello nested multi-line world")
+					fmt.Println("Hello nested multi-line world")
 				}
 			}
 		}
@@ -71,5 +69,5 @@ func multiIfFunc() {
 }
 
 func notGoFmted() {
-         fmt.Println("Hello world")
+	fmt.Println("Hello world")
 }

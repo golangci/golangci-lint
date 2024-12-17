@@ -42,6 +42,7 @@ type Diagnostic struct {
 	Analyzer *analysis.Analyzer
 	Position token.Position
 	Pkg      *packages.Package
+	File     *token.File
 }
 
 type runner struct {
@@ -312,17 +313,20 @@ func extractDiagnostics(roots []*action) (retDiags []Diagnostic, retErrors []err
 				// We don't display a.Name/f.Category
 				// as most users don't care.
 
-				posn := act.Package.Fset.Position(diag.Pos)
-				k := key{posn, act.Analyzer, diag.Message}
+				position := GetFilePositionFor(act.Package.Fset, diag.Pos)
+				file := act.Package.Fset.File(diag.Pos)
+
+				k := key{Position: position, Analyzer: act.Analyzer, message: diag.Message}
 				if seen[k] {
 					continue // duplicate
 				}
 				seen[k] = true
 
 				retDiag := Diagnostic{
+					File:       file,
 					Diagnostic: diag,
 					Analyzer:   act.Analyzer,
-					Position:   posn,
+					Position:   position,
 					Pkg:        act.Package,
 				}
 				retDiags = append(retDiags, retDiag)

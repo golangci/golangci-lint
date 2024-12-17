@@ -2,6 +2,8 @@ package goanalysis
 
 import (
 	"fmt"
+	"go/token"
+	"strings"
 
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/packages"
@@ -81,6 +83,7 @@ func runAnalyzers(cfg runAnalyzersConfig, lintCtx *linter.Context) ([]result.Iss
 
 func buildIssues(diags []Diagnostic, linterNameBuilder func(diag *Diagnostic) string) []result.Issue {
 	var issues []result.Issue
+
 	for i := range diags {
 		diag := &diags[i]
 		linterName := linterNameBuilder(diag)
@@ -92,11 +95,43 @@ func buildIssues(diags []Diagnostic, linterNameBuilder func(diag *Diagnostic) st
 			text = fmt.Sprintf("%s: %s", diag.Analyzer.Name, diag.Message)
 		}
 
+		var suggestedFixes []analysis.SuggestedFix
+
+		for _, sf := range diag.SuggestedFixes {
+			// Skip suggested fixes on cgo files.
+			// The related error is: "diff has out-of-bounds edits"
+			// This is a temporary workaround.
+			if !strings.HasSuffix(diag.File.Name(), ".go") {
+				continue
+			}
+
+			nsf := analysis.SuggestedFix{Message: sf.Message}
+
+			for _, edit := range sf.TextEdits {
+				end := edit.End
+
+				if !end.IsValid() {
+					end = edit.Pos
+				}
+
+				// To be applied the positions need to be "adjusted" based on the file.
+				// This is the difference between the "displayed" positions and "effective" positions.
+				nsf.TextEdits = append(nsf.TextEdits, analysis.TextEdit{
+					Pos:     token.Pos(diag.File.Offset(edit.Pos)),
+					End:     token.Pos(diag.File.Offset(end)),
+					NewText: edit.NewText,
+				})
+			}
+
+			suggestedFixes = append(suggestedFixes, nsf)
+		}
+
 		issues = append(issues, result.Issue{
-			FromLinter: linterName,
-			Text:       text,
-			Pos:        diag.Position,
-			Pkg:        diag.Pkg,
+			FromLinter:     linterName,
+			Text:           text,
+			Pos:            diag.Position,
+			Pkg:            diag.Pkg,
+			SuggestedFixes: suggestedFixes,
 		})
 
 		if len(diag.Related) > 0 {

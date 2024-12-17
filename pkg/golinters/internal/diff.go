@@ -3,20 +3,23 @@ package internal
 import (
 	"bytes"
 	"fmt"
+	"go/ast"
 	"go/token"
+	"slices"
 	"strings"
 
 	diffpkg "github.com/sourcegraph/go-diff/diff"
+	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/config"
+	"github.com/golangci/golangci-lint/pkg/goanalysis"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/logutils"
-	"github.com/golangci/golangci-lint/pkg/result"
 )
 
 type Change struct {
-	LineRange   result.Range
-	Replacement result.Replacement
+	From, To int
+	NewLines []string
 }
 
 type diffLineType string
@@ -44,58 +47,48 @@ type hunkChangesParser struct {
 
 	log logutils.Log
 
-	lines []diffLine
-
-	ret []Change
+	changes []Change
 }
 
-func (p *hunkChangesParser) parseDiffLines(h *diffpkg.Hunk) {
-	lines := bytes.Split(h.Body, []byte{'\n'})
-	currentOriginalLineNumber := int(h.OrigStartLine)
-	var ret []diffLine
+func (p *hunkChangesParser) parse(h *diffpkg.Hunk) []Change {
+	lines := parseDiffLines(h)
 
-	for i, line := range lines {
-		dl := diffLine{
-			originalNumber: currentOriginalLineNumber,
+	for i := 0; i < len(lines); {
+		line := lines[i]
+
+		if line.typ == diffLineOriginal {
+			p.handleOriginalLine(lines, line, &i)
+			continue
 		}
 
-		lineStr := string(line)
-
-		if strings.HasPrefix(lineStr, "-") {
-			dl.typ = diffLineDeleted
-			dl.data = strings.TrimPrefix(lineStr, "-")
-			currentOriginalLineNumber++
-		} else if strings.HasPrefix(lineStr, "+") {
-			dl.typ = diffLineAdded
-			dl.data = strings.TrimPrefix(lineStr, "+")
-		} else {
-			if i == len(lines)-1 && lineStr == "" {
-				// handle last \n: don't add an empty original line
-				break
-			}
-
-			dl.typ = diffLineOriginal
-			dl.data = strings.TrimPrefix(lineStr, " ")
-			currentOriginalLineNumber++
+		var deletedLines []diffLine
+		for ; i < len(lines) && lines[i].typ == diffLineDeleted; i++ {
+			deletedLines = append(deletedLines, lines[i])
 		}
 
-		ret = append(ret, dl)
+		var addedLines []string
+		for ; i < len(lines) && lines[i].typ == diffLineAdded; i++ {
+			addedLines = append(addedLines, lines[i].data)
+		}
+
+		if len(deletedLines) != 0 {
+			p.handleDeletedLines(deletedLines, addedLines)
+			continue
+		}
+
+		// no deletions, only additions
+		p.handleAddedOnlyLines(addedLines)
 	}
 
-	// if > 0, then the original file had a 'No newline at end of file' mark
-	if h.OrigNoNewlineAt > 0 {
-		dl := diffLine{
-			originalNumber: currentOriginalLineNumber + 1,
-			typ:            diffLineAdded,
-			data:           "",
-		}
-		ret = append(ret, dl)
+	if len(p.replacementLinesToPrepend) != 0 {
+		p.log.Infof("The diff contains only additions: no original or deleted lines: %#v", lines)
+		return nil
 	}
 
-	p.lines = ret
+	return p.changes
 }
 
-func (p *hunkChangesParser) handleOriginalLine(line diffLine, i *int) {
+func (p *hunkChangesParser) handleOriginalLine(lines []diffLine, line diffLine, i *int) {
 	if len(p.replacementLinesToPrepend) == 0 {
 		p.lastOriginalLine = &line
 		*i++
@@ -109,51 +102,39 @@ func (p *hunkChangesParser) handleOriginalLine(line diffLine, i *int) {
 
 	*i++
 	var followingAddedLines []string
-	for ; *i < len(p.lines) && p.lines[*i].typ == diffLineAdded; *i++ {
-		followingAddedLines = append(followingAddedLines, p.lines[*i].data)
+	for ; *i < len(lines) && lines[*i].typ == diffLineAdded; *i++ {
+		followingAddedLines = append(followingAddedLines, lines[*i].data)
 	}
 
-	p.ret = append(p.ret, Change{
-		LineRange: result.Range{
-			From: line.originalNumber,
-			To:   line.originalNumber,
-		},
-		Replacement: result.Replacement{
-			NewLines: append(p.replacementLinesToPrepend, append([]string{line.data}, followingAddedLines...)...),
-		},
-	})
+	change := Change{
+		From:     line.originalNumber,
+		To:       line.originalNumber,
+		NewLines: slices.Concat(p.replacementLinesToPrepend, []string{line.data}, followingAddedLines),
+	}
+	p.changes = append(p.changes, change)
+
 	p.replacementLinesToPrepend = nil
 	p.lastOriginalLine = &line
 }
 
 func (p *hunkChangesParser) handleDeletedLines(deletedLines []diffLine, addedLines []string) {
 	change := Change{
-		LineRange: result.Range{
-			From: deletedLines[0].originalNumber,
-			To:   deletedLines[len(deletedLines)-1].originalNumber,
-		},
+		From: deletedLines[0].originalNumber,
+		To:   deletedLines[len(deletedLines)-1].originalNumber,
 	}
 
-	if len(addedLines) != 0 {
-		change.Replacement.NewLines = append([]string{}, p.replacementLinesToPrepend...)
-		change.Replacement.NewLines = append(change.Replacement.NewLines, addedLines...)
-		if len(p.replacementLinesToPrepend) != 0 {
-			p.replacementLinesToPrepend = nil
-		}
-
-		p.ret = append(p.ret, change)
-		return
-	}
-
-	// delete-only change with possible prepending
-	if len(p.replacementLinesToPrepend) != 0 {
-		change.Replacement.NewLines = p.replacementLinesToPrepend
+	switch {
+	case len(addedLines) != 0:
+		change.NewLines = slices.Concat(p.replacementLinesToPrepend, addedLines)
 		p.replacementLinesToPrepend = nil
-	} else {
-		change.Replacement.NeedOnlyDelete = true
+
+	case len(p.replacementLinesToPrepend) != 0:
+		// delete-only change with possible prepending
+		change.NewLines = slices.Clone(p.replacementLinesToPrepend)
+		p.replacementLinesToPrepend = nil
 	}
 
-	p.ret = append(p.ret, change)
+	p.changes = append(p.changes, change)
 }
 
 func (p *hunkChangesParser) handleAddedOnlyLines(addedLines []string) {
@@ -166,70 +147,93 @@ func (p *hunkChangesParser) handleAddedOnlyLines(addedLines []string) {
 		// 2. ...
 
 		p.replacementLinesToPrepend = addedLines
+
 		return
 	}
 
 	// add-only change merged into the last original line with possible prepending
-	p.ret = append(p.ret, Change{
-		LineRange: result.Range{
-			From: p.lastOriginalLine.originalNumber,
-			To:   p.lastOriginalLine.originalNumber,
-		},
-		Replacement: result.Replacement{
-			NewLines: append(p.replacementLinesToPrepend, append([]string{p.lastOriginalLine.data}, addedLines...)...),
-		},
-	})
+	change := Change{
+		From:     p.lastOriginalLine.originalNumber,
+		To:       p.lastOriginalLine.originalNumber,
+		NewLines: slices.Concat(p.replacementLinesToPrepend, []string{p.lastOriginalLine.data}, addedLines),
+	}
+
+	p.changes = append(p.changes, change)
+
 	p.replacementLinesToPrepend = nil
 }
 
-func (p *hunkChangesParser) parse(h *diffpkg.Hunk) []Change {
-	p.parseDiffLines(h)
+func parseDiffLines(h *diffpkg.Hunk) []diffLine {
+	lines := bytes.Split(h.Body, []byte{'\n'})
 
-	for i := 0; i < len(p.lines); {
-		line := p.lines[i]
-		if line.typ == diffLineOriginal {
-			p.handleOriginalLine(line, &i)
-			continue
+	currentOriginalLineNumber := int(h.OrigStartLine)
+
+	var diffLines []diffLine
+
+	for i, line := range lines {
+		dl := diffLine{
+			originalNumber: currentOriginalLineNumber,
 		}
 
-		var deletedLines []diffLine
-		for ; i < len(p.lines) && p.lines[i].typ == diffLineDeleted; i++ {
-			deletedLines = append(deletedLines, p.lines[i])
+		if i == len(lines)-1 && len(line) == 0 {
+			// handle last \n: don't add an empty original line
+			break
 		}
 
-		var addedLines []string
-		for ; i < len(p.lines) && p.lines[i].typ == diffLineAdded; i++ {
-			addedLines = append(addedLines, p.lines[i].data)
+		lineStr := string(line)
+
+		switch {
+		case strings.HasPrefix(lineStr, "-"):
+			dl.typ = diffLineDeleted
+			dl.data = strings.TrimPrefix(lineStr, "-")
+			currentOriginalLineNumber++
+
+		case strings.HasPrefix(lineStr, "+"):
+			dl.typ = diffLineAdded
+			dl.data = strings.TrimPrefix(lineStr, "+")
+
+		default:
+			dl.typ = diffLineOriginal
+			dl.data = strings.TrimPrefix(lineStr, " ")
+			currentOriginalLineNumber++
 		}
 
-		if len(deletedLines) != 0 {
-			p.handleDeletedLines(deletedLines, addedLines)
-			continue
-		}
-
-		// no deletions, only additions
-		p.handleAddedOnlyLines(addedLines)
+		diffLines = append(diffLines, dl)
 	}
 
-	if len(p.replacementLinesToPrepend) != 0 {
-		p.log.Infof("The diff contains only additions: no original or deleted lines: %#v", p.lines)
-		return nil
+	// if > 0, then the original file had a 'No newline at end of file' mark
+	if h.OrigNoNewlineAt > 0 {
+		dl := diffLine{
+			originalNumber: currentOriginalLineNumber + 1,
+			typ:            diffLineAdded,
+			data:           "",
+		}
+		diffLines = append(diffLines, dl)
 	}
 
-	return p.ret
+	return diffLines
 }
 
-func ExtractIssuesFromPatch(patch string, lintCtx *linter.Context, linterName string, formatter fmtTextFormatter) ([]result.Issue, error) {
+func ExtractDiagnosticFromPatch(
+	pass *analysis.Pass,
+	file *ast.File,
+	patch string,
+	lintCtx *linter.Context,
+	formatter fmtTextFormatter,
+) error {
 	diffs, err := diffpkg.ParseMultiFileDiff([]byte(patch))
 	if err != nil {
-		return nil, fmt.Errorf("can't parse patch: %w", err)
+		return fmt.Errorf("can't parse patch: %w", err)
 	}
 
 	if len(diffs) == 0 {
-		return nil, fmt.Errorf("got no diffs from patch parser: %v", patch)
+		return fmt.Errorf("got no diffs from patch parser: %v", patch)
 	}
 
-	var issues []result.Issue
+	ft := pass.Fset.File(file.Pos())
+
+	adjLine := pass.Fset.PositionFor(file.Pos(), false).Line - pass.Fset.PositionFor(file.Pos(), true).Line
+
 	for _, d := range diffs {
 		if len(d.Hunks) == 0 {
 			lintCtx.Log.Warnf("Got no hunks in diff %+v", d)
@@ -242,23 +246,29 @@ func ExtractIssuesFromPatch(patch string, lintCtx *linter.Context, linterName st
 			changes := p.parse(hunk)
 
 			for _, change := range changes {
-				i := result.Issue{
-					FromLinter: linterName,
-					Pos: token.Position{
-						Filename: d.NewName,
-						Line:     change.LineRange.From,
-					},
-					Text:        formatter(lintCtx.Settings()),
-					Replacement: &change.Replacement,
-				}
-				if change.LineRange.From != change.LineRange.To {
-					i.LineRange = &change.LineRange
-				}
-
-				issues = append(issues, i)
+				pass.Report(toDiagnostic(ft, change, formatter(lintCtx.Settings()), adjLine))
 			}
 		}
 	}
 
-	return issues, nil
+	return nil
+}
+
+func toDiagnostic(ft *token.File, change Change, message string, adjLine int) analysis.Diagnostic {
+	start := ft.LineStart(change.From + adjLine)
+
+	end := goanalysis.EndOfLinePos(ft, change.To+adjLine)
+
+	return analysis.Diagnostic{
+		Pos:     start,
+		End:     end,
+		Message: message, // TODO(ldez) change message formatter to have a better message.
+		SuggestedFixes: []analysis.SuggestedFix{{
+			TextEdits: []analysis.TextEdit{{
+				Pos:     start,
+				End:     end,
+				NewText: []byte(strings.Join(change.NewLines, "\n")),
+			}},
+		}},
+	}
 }

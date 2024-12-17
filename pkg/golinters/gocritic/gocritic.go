@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"go/ast"
 	"go/types"
-	"path/filepath"
 	"reflect"
 	"runtime"
 	"slices"
@@ -23,7 +22,6 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/logutils"
-	"github.com/golangci/golangci-lint/pkg/result"
 )
 
 const linterName = "gocritic"
@@ -34,9 +32,6 @@ var (
 )
 
 func New(settings *config.GoCriticSettings) *goanalysis.Linter {
-	var mu sync.Mutex
-	var resIssues []goanalysis.Issue
-
 	wrapper := &goCriticWrapper{
 		sizes: types.SizesFor("gc", runtime.GOARCH),
 	}
@@ -45,18 +40,10 @@ func New(settings *config.GoCriticSettings) *goanalysis.Linter {
 		Name: linterName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 		Run: func(pass *analysis.Pass) (any, error) {
-			issues, err := wrapper.run(pass)
+			err := wrapper.run(pass)
 			if err != nil {
 				return nil, err
 			}
-
-			if len(issues) == 0 {
-				return nil, nil
-			}
-
-			mu.Lock()
-			resIssues = append(resIssues, issues...)
-			mu.Unlock()
 
 			return nil, nil
 		},
@@ -74,9 +61,6 @@ Dynamic rules are written declaratively with AST patterns, filters, report messa
 			wrapper.configDir = context.Cfg.GetConfigDir()
 
 			wrapper.init(context.Log, settings)
-		}).
-		WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
-			return resIssues
 		}).
 		WithLoadMode(goanalysis.LoadModeTypesInfo)
 }
@@ -111,9 +95,9 @@ func (w *goCriticWrapper) init(logger logutils.Log, settings *config.GoCriticSet
 	w.settingsWrapper = settingsWrapper
 }
 
-func (w *goCriticWrapper) run(pass *analysis.Pass) ([]goanalysis.Issue, error) {
+func (w *goCriticWrapper) run(pass *analysis.Pass) error {
 	if w.settingsWrapper == nil {
-		return nil, errors.New("the settings wrapper is nil")
+		return errors.New("the settings wrapper is nil")
 	}
 
 	linterCtx := gocriticlinter.NewContext(pass.Fset, w.sizes)
@@ -122,19 +106,14 @@ func (w *goCriticWrapper) run(pass *analysis.Pass) ([]goanalysis.Issue, error) {
 
 	enabledCheckers, err := w.buildEnabledCheckers(linterCtx)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	linterCtx.SetPackageInfo(pass.TypesInfo, pass.Pkg)
 
-	pkgIssues := runOnPackage(linterCtx, enabledCheckers, pass.Files)
+	runOnPackage(pass, enabledCheckers, pass.Files)
 
-	issues := make([]goanalysis.Issue, 0, len(pkgIssues))
-	for i := range pkgIssues {
-		issues = append(issues, goanalysis.NewIssue(&pkgIssues[i], pass))
-	}
-
-	return issues, nil
+	return nil
 }
 
 func (w *goCriticWrapper) buildEnabledCheckers(linterCtx *gocriticlinter.Context) ([]*gocriticlinter.Checker, error) {
@@ -214,47 +193,36 @@ func (w *goCriticWrapper) normalizeCheckerParamsValue(p any) any {
 	}
 }
 
-func runOnPackage(linterCtx *gocriticlinter.Context, checks []*gocriticlinter.Checker, files []*ast.File) []result.Issue {
-	var res []result.Issue
+func runOnPackage(pass *analysis.Pass, checks []*gocriticlinter.Checker, files []*ast.File) {
 	for _, f := range files {
-		filename := filepath.Base(linterCtx.FileSet.Position(f.Pos()).Filename)
-		linterCtx.SetFileInfo(filename, f)
-
-		issues := runOnFile(linterCtx, f, checks)
-		res = append(res, issues...)
+		runOnFile(pass, f, checks)
 	}
-	return res
 }
 
-func runOnFile(linterCtx *gocriticlinter.Context, f *ast.File, checks []*gocriticlinter.Checker) []result.Issue {
-	var res []result.Issue
-
+func runOnFile(pass *analysis.Pass, f *ast.File, checks []*gocriticlinter.Checker) {
 	for _, c := range checks {
 		// All checkers are expected to use *lint.Context
 		// as read-only structure, so no copying is required.
 		for _, warn := range c.Check(f) {
-			pos := linterCtx.FileSet.Position(warn.Pos)
-			issue := result.Issue{
-				Pos:        pos,
-				Text:       fmt.Sprintf("%s: %s", c.Info.Name, warn.Text),
-				FromLinter: linterName,
+			diag := analysis.Diagnostic{
+				Pos:      warn.Pos,
+				Category: c.Info.Name,
+				Message:  fmt.Sprintf("%s: %s", c.Info.Name, warn.Text),
 			}
 
 			if warn.HasQuickFix() {
-				issue.Replacement = &result.Replacement{
-					Inline: &result.InlineFix{
-						StartCol:  pos.Column - 1,
-						Length:    int(warn.Suggestion.To - warn.Suggestion.From),
-						NewString: string(warn.Suggestion.Replacement),
-					},
-				}
+				diag.SuggestedFixes = []analysis.SuggestedFix{{
+					TextEdits: []analysis.TextEdit{{
+						Pos:     warn.Suggestion.From,
+						End:     warn.Suggestion.To,
+						NewText: warn.Suggestion.Replacement,
+					}},
+				}}
 			}
 
-			res = append(res, issue)
+			pass.Report(diag)
 		}
 	}
-
-	return res
 }
 
 type goCriticChecks[T any] map[string]T

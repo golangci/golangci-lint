@@ -5,7 +5,6 @@ package p
 
 import "fmt"
 
-//line yaccpar:1
 func oneLeadingNewline() {
 
 	fmt.Println("Hello world")

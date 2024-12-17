@@ -165,7 +165,7 @@ func toIssue(pass *analysis.Pass, object *jsonObject) goanalysis.Issue {
 		lineRangeTo = object.Position.Start.Line
 	}
 
-	return goanalysis.NewIssue(&result.Issue{
+	issue := &result.Issue{
 		Severity: string(object.Severity),
 		Text:     fmt.Sprintf("%s: %s", object.RuleName, object.Failure.Failure),
 		Pos: token.Position{
@@ -179,7 +179,25 @@ func toIssue(pass *analysis.Pass, object *jsonObject) goanalysis.Issue {
 			To:   lineRangeTo,
 		},
 		FromLinter: linterName,
-	}, pass)
+	}
+
+	if object.ReplacementLine != "" {
+		f := pass.Fset.File(token.Pos(object.Position.Start.Offset))
+
+		start := f.LineStart(object.Position.Start.Line)
+
+		end := goanalysis.EndOfLinePos(f, object.Position.End.Line)
+
+		issue.SuggestedFixes = []analysis.SuggestedFix{{
+			TextEdits: []analysis.TextEdit{{
+				Pos:     start,
+				End:     end,
+				NewText: []byte(object.ReplacementLine),
+			}},
+		}}
+	}
+
+	return goanalysis.NewIssue(issue, pass)
 }
 
 // This function mimics the GetConfig function of revive.

@@ -6,7 +6,6 @@
       "SourceLines": [
         "func init() {"
       ],
-      "Replacement": null,
       "Pos": {
         "Filename": "pkg/experimental/myplugin/myplugin.go",
         "Offset": 162,
@@ -23,7 +22,6 @@
       "SourceLines": [
         "func (b *PluginBuilder) loadConfig(cfg *config.Config, name string, settings config.CustomLinterSettings) (*linter.Config, error) {"
       ],
-      "Replacement": null,
       "Pos": {
         "Filename": "pkg/lint/lintersdb/builder_plugin.go",
         "Offset": 1480,
@@ -40,15 +38,18 @@
       "SourceLines": [
         ""
       ],
-      "Replacement": {
-        "NeedOnlyDelete": false,
-        "NewLines": [
-          "",
-          "\t\"github.com/stretchr/testify/require\"",
-          ""
-        ],
-        "Inline": null
-      },
+      "SuggestedFixes": [
+        {
+          "Message": "",
+          "TextEdits": [
+            {
+              "Pos": 13,
+              "End": 32,
+              "NewText": null
+            }
+          ]
+        }
+      ],
       "Pos": {
         "Filename": "pkg/printers/printer_test.go",
         "Offset": 0,
@@ -65,7 +66,6 @@
       "SourceLines": [
         "type Issues struct {"
       ],
-      "Replacement": null,
       "Pos": {
         "Filename": "pkg/config/issues.go",
         "Offset": 3338,
@@ -82,7 +82,6 @@
       "SourceLines": [
         "type LintersSettings struct {"
       ],
-      "Replacement": null,
       "Pos": {
         "Filename": "pkg/config/linters_settings.go",
         "Offset": 4576,
@@ -99,7 +98,6 @@
       "SourceLines": [
         "type ExhaustiveSettings struct {"
       ],
-      "Replacement": null,
       "Pos": {
         "Filename": "pkg/config/linters_settings.go",
         "Offset": 10829,
@@ -116,7 +114,6 @@
       "SourceLines": [
         "type GoConstSettings struct {"
       ],
-      "Replacement": null,
       "Pos": {
         "Filename": "pkg/config/linters_settings.go",
         "Offset": 14399,
@@ -133,7 +130,6 @@
       "SourceLines": [
         "type GoCriticSettings struct {"
       ],
-      "Replacement": null,
       "Pos": {
         "Filename": "pkg/config/linters_settings.go",
         "Offset": 14934,
@@ -150,7 +146,6 @@
       "SourceLines": [
         "type GosmopolitanSettings struct {"
       ],
-      "Replacement": null,
       "Pos": {
         "Filename": "pkg/config/linters_settings.go",
         "Offset": 18601,
@@ -167,7 +162,6 @@
       "SourceLines": [
         "type GovetSettings struct {"
       ],
-      "Replacement": null,
       "Pos": {
         "Filename": "pkg/config/linters_settings.go",
         "Offset": 18867,
@@ -184,7 +178,6 @@
       "SourceLines": [
         "type NoLintLintSettings struct {"
       ],
-      "Replacement": null,
       "Pos": {
         "Filename": "pkg/config/linters_settings.go",
         "Offset": 22337,
@@ -201,7 +194,6 @@
       "SourceLines": [
         "type ReviveSettings struct {"
       ],
-      "Replacement": null,
       "Pos": {
         "Filename": "pkg/config/linters_settings.go",
         "Offset": 24019,
@@ -218,7 +210,6 @@
       "SourceLines": [
         "type SlogLintSettings struct {"
       ],
-      "Replacement": null,
       "Pos": {
         "Filename": "pkg/config/linters_settings.go",
         "Offset": 24648,
@@ -235,7 +226,6 @@
       "SourceLines": [
         "type TagAlignSettings struct {"
       ],
-      "Replacement": null,
       "Pos": {
         "Filename": "pkg/config/linters_settings.go",
         "Offset": 25936,
@@ -252,7 +242,6 @@
       "SourceLines": [
         "type VarnamelenSettings struct {"
       ],
-      "Replacement": null,
       "Pos": {
         "Filename": "pkg/config/linters_settings.go",
         "Offset": 28758,
@@ -269,7 +258,6 @@
       "SourceLines": [
         "type WSLSettings struct {"
       ],
-      "Replacement": null,
       "Pos": {
         "Filename": "pkg/config/linters_settings.go",
         "Offset": 29898,
@@ -286,7 +274,6 @@
       "SourceLines": [
         "type Run struct {"
       ],
-      "Replacement": null,
       "Pos": {
         "Filename": "pkg/config/run.go",
         "Offset": 112,
@@ -303,7 +290,6 @@
       "SourceLines": [
         "type Config struct {"
       ],
-      "Replacement": null,
       "Pos": {
         "Filename": "pkg/lint/linter/config.go",
         "Offset": 1329,
@@ -320,7 +306,6 @@
       "SourceLines": [
         "\tfor _, tc := range []struct {"
       ],
-      "Replacement": null,
       "Pos": {
         "Filename": "pkg/golinters/govet_test.go",
         "Offset": 1804,
@@ -337,7 +322,6 @@
       "SourceLines": [
         "type Diff struct {"
       ],
-      "Replacement": null,
       "Pos": {
         "Filename": "pkg/result/processors/diff.go",
         "Offset": 233,
@@ -354,7 +338,6 @@
       "SourceLines": [
         "\t\t\tRun: func(pass *analysis.Pass) (any, error) {"
       ],
-      "Replacement": null,
       "LineRange": {
         "From": 49,
         "To": 49
@@ -375,7 +358,6 @@
       "SourceLines": [
         "const defaultFileMode = 0644"
       ],
-      "Replacement": null,
       "Pos": {
         "Filename": "pkg/commands/run.go",
         "Offset": 1209,

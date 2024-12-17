@@ -1,6 +1,6 @@
 //golangcitest:args -Enolintlint -Emisspell
 //golangcitest:expected_linter nolintlint
-//golangcitest:config_path testdata/configs/nolintlint.yml
+//golangcitest:config_path nolintlint.yml
 package testdata
 
 import "fmt"

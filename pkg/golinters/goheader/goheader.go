@@ -2,23 +2,18 @@ package goheader
 
 import (
 	"go/token"
-	"sync"
+	"strings"
 
 	goheader "github.com/denis-tingaikin/go-header"
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
-	"github.com/golangci/golangci-lint/pkg/lint/linter"
-	"github.com/golangci/golangci-lint/pkg/result"
 )
 
 const linterName = "goheader"
 
 func New(settings *config.GoHeaderSettings) *goanalysis.Linter {
-	var mu sync.Mutex
-	var resIssues []goanalysis.Issue
-
 	conf := &goheader.Configuration{}
 	if settings != nil {
 		conf = &goheader.Configuration{
@@ -32,18 +27,10 @@ func New(settings *config.GoHeaderSettings) *goanalysis.Linter {
 		Name: linterName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 		Run: func(pass *analysis.Pass) (any, error) {
-			issues, err := runGoHeader(pass, conf)
+			err := runGoHeader(pass, conf)
 			if err != nil {
 				return nil, err
 			}
-
-			if len(issues) == 0 {
-				return nil, nil
-			}
-
-			mu.Lock()
-			resIssues = append(resIssues, issues...)
-			mu.Unlock()
 
 			return nil, nil
 		},
@@ -54,62 +41,61 @@ func New(settings *config.GoHeaderSettings) *goanalysis.Linter {
 		"Checks if file header matches to pattern",
 		[]*analysis.Analyzer{analyzer},
 		nil,
-	).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
-		return resIssues
-	}).WithLoadMode(goanalysis.LoadModeSyntax)
+	).WithLoadMode(goanalysis.LoadModeSyntax)
 }
 
-func runGoHeader(pass *analysis.Pass, conf *goheader.Configuration) ([]goanalysis.Issue, error) {
+func runGoHeader(pass *analysis.Pass, conf *goheader.Configuration) error {
 	if conf.TemplatePath == "" && conf.Template == "" {
 		// User did not pass template, so then do not run go-header linter
-		return nil, nil
+		return nil
 	}
 
 	template, err := conf.GetTemplate()
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	values, err := conf.GetValues()
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	a := goheader.New(goheader.WithTemplate(template), goheader.WithValues(values))
 
-	var issues []goanalysis.Issue
 	for _, file := range pass.Files {
-		path := pass.Fset.Position(file.Pos()).Filename
+		position := goanalysis.GetFilePosition(pass, file)
 
-		i := a.Analyze(&goheader.Target{File: file, Path: path})
-
-		if i == nil {
+		issue := a.Analyze(&goheader.Target{File: file, Path: position.Filename})
+		if issue == nil {
 			continue
 		}
 
-		issue := result.Issue{
-			Pos: token.Position{
-				Line:     i.Location().Line + 1,
-				Column:   i.Location().Position,
-				Filename: path,
-			},
-			Text:       i.Message(),
-			FromLinter: linterName,
+		f := pass.Fset.File(file.Pos())
+
+		start := f.LineStart(issue.Location().Line + 1)
+
+		diag := analysis.Diagnostic{
+			Pos:     start,
+			Message: issue.Message(),
 		}
 
-		if fix := i.Fix(); fix != nil {
-			issue.LineRange = &result.Range{
-				From: issue.Line(),
-				To:   issue.Line() + len(fix.Actual) - 1,
+		if fix := issue.Fix(); fix != nil {
+			end := len(fix.Actual)
+			for _, s := range fix.Actual {
+				end += len(s)
 			}
-			issue.Replacement = &result.Replacement{
-				NeedOnlyDelete: len(fix.Expected) == 0,
-				NewLines:       fix.Expected,
-			}
+
+			diag.SuggestedFixes = []analysis.SuggestedFix{{
+				TextEdits: []analysis.TextEdit{{
+					Pos:     start,
+					End:     start + token.Pos(end),
+					NewText: []byte(strings.Join(fix.Expected, "\n") + "\n"),
+				}},
+			}}
 		}
 
-		issues = append(issues, goanalysis.NewIssue(&issue, pass))
+		pass.Report(diag)
 	}
 
-	return issues, nil
+	return nil
 }
