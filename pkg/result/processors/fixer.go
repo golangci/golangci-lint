@@ -59,7 +59,7 @@ func (p Fixer) Process(issues []result.Issue) ([]result.Issue, error) {
 		return p.process(issues)
 	})
 	if err != nil {
-		p.log.Errorf("Failed to fix issues: %v", err)
+		p.log.Warnf("Failed to fix issues: %v", err)
 	}
 
 	p.printStat()
@@ -167,13 +167,13 @@ func (p Fixer) process(issues []result.Issue) ([]result.Issue, error) {
 	for path, edits := range editsByPath {
 		contents, err := p.fileCache.GetFileBytes(path)
 		if err != nil {
-			editError = errors.Join(editError, err)
+			editError = errors.Join(editError, fmt.Errorf("%s: %w", path, err))
 			continue
 		}
 
 		out, err := diff.ApplyBytes(contents, edits)
 		if err != nil {
-			editError = errors.Join(editError, err)
+			editError = errors.Join(editError, fmt.Errorf("%s: %w", path, err))
 			continue
 		}
 
@@ -183,7 +183,7 @@ func (p Fixer) process(issues []result.Issue) ([]result.Issue, error) {
 		}
 
 		if err := os.WriteFile(path, out, filePerm); err != nil {
-			editError = errors.Join(editError, err)
+			editError = errors.Join(editError, fmt.Errorf("%s: %w", path, err))
 			continue
 		}
 	}
