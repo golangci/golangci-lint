@@ -3,6 +3,7 @@ package goanalysis
 import (
 	"fmt"
 	"go/token"
+	"strings"
 
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/packages"
@@ -97,6 +98,13 @@ func buildIssues(diags []Diagnostic, linterNameBuilder func(diag *Diagnostic) st
 		var suggestedFixes []analysis.SuggestedFix
 
 		for _, sf := range diag.SuggestedFixes {
+			// Skip suggested fixes on cgo files.
+			// The related error is: "diff has out-of-bounds edits"
+			// This is a temporary workaround.
+			if !strings.HasSuffix(diag.File.Name(), ".go") {
+				continue
+			}
+
 			nsf := analysis.SuggestedFix{Message: sf.Message}
 
 			for _, edit := range sf.TextEdits {
