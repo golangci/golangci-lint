@@ -134,7 +134,7 @@ docker run -t --rm -v $(pwd):/app -w /app golangci/golangci-lint:{.LatestVersion
 
 ### Install from Sources
 
-Such `go install`/`go get` or "tools pattern" installations aren't guaranteed to work.
+Such `go install`/`go get`, "tools pattern", and `tool` command/directives installations aren't guaranteed to work.
 
 We recommend using binary installation.
 
@@ -142,7 +142,7 @@ Those installations aren't recommended because of the following points:
 
 1. Those installations are compiling golangci-lint locally, the Go version used to build will depend on your local Go version.
 2. Some users use `-u` flag for `go get`, which upgrades our dependencies. Resulting binary was not tested and is not guaranteed to work.
-3. When using "tools pattern", the dependencies of a tool can modify the dependencies of another. Resulting binary was not tested and is not guaranteed to work.
+3. When using "tools pattern" or and `tool` command/directives, the dependencies of a tool can modify the dependencies of another or your project. Resulting binary was not tested and is not guaranteed to work.
 4. We've encountered issues with Go modules hashes due to unexpected recreation of dependency tags.
 5. `go.mod` replacement directives don't apply transitively. It means a user will be using patched version of `golangci-lint` if we use such replacements.
 6. It allows installation from main branch which can't be considered stable.
