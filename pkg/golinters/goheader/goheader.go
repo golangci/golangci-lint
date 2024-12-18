@@ -72,7 +72,14 @@ func runGoHeader(pass *analysis.Pass, conf *goheader.Configuration) error {
 
 		f := pass.Fset.File(file.Pos())
 
-		start := f.LineStart(issue.Location().Line + 1)
+		commentLine := 1
+
+		// Inspired by https://github.com/denis-tingaikin/go-header/blob/4c75a6a2332f025705325d6c71fff4616aedf48f/analyzer.go#L85-L92
+		if len(file.Comments) > 0 && file.Comments[0].Pos() < file.Package {
+			commentLine = goanalysis.GetFilePositionFor(pass.Fset, file.Comments[0].Pos()).Line
+		}
+
+		start := f.LineStart(commentLine)
 
 		diag := analysis.Diagnostic{
 			Pos:     start,
