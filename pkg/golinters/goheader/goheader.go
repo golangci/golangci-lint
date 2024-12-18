@@ -65,6 +65,10 @@ func runGoHeader(pass *analysis.Pass, conf *goheader.Configuration) error {
 	for _, file := range pass.Files {
 		position := goanalysis.GetFilePosition(pass, file)
 
+		if !strings.HasSuffix(position.Filename, ".go") {
+			continue
+		}
+
 		issue := a.Analyze(&goheader.Target{File: file, Path: position.Filename})
 		if issue == nil {
 			continue
@@ -72,24 +76,45 @@ func runGoHeader(pass *analysis.Pass, conf *goheader.Configuration) error {
 
 		f := pass.Fset.File(file.Pos())
 
-		start := f.LineStart(issue.Location().Line + 1)
+		commentLine := 1
+		var offset int
+
+		// Inspired by https://github.com/denis-tingaikin/go-header/blob/4c75a6a2332f025705325d6c71fff4616aedf48f/analyzer.go#L85-L92
+		if len(file.Comments) > 0 && file.Comments[0].Pos() < file.Package {
+			if !strings.HasPrefix(file.Comments[0].List[0].Text, "/*") {
+				// When the comment are "//" there is a one character offset.
+				offset = 1
+			}
+			commentLine = goanalysis.GetFilePositionFor(pass.Fset, file.Comments[0].Pos()).Line
+		}
 
 		diag := analysis.Diagnostic{
-			Pos:     start,
+			Pos:     f.LineStart(issue.Location().Line+1) + token.Pos(issue.Location().Position-offset), // The position of the first divergence.
 			Message: issue.Message(),
 		}
 
 		if fix := issue.Fix(); fix != nil {
-			end := len(fix.Actual)
+			current := len(fix.Actual)
 			for _, s := range fix.Actual {
-				end += len(s)
+				current += len(s)
+			}
+
+			start := f.LineStart(commentLine)
+
+			end := start + token.Pos(current)
+
+			header := strings.Join(fix.Expected, "\n") + "\n"
+
+			// Adds an extra line between the package and the header.
+			if end == file.Package {
+				header += "\n"
 			}
 
 			diag.SuggestedFixes = []analysis.SuggestedFix{{
 				TextEdits: []analysis.TextEdit{{
 					Pos:     start,
-					End:     start + token.Pos(end),
-					NewText: []byte(strings.Join(fix.Expected, "\n") + "\n"),
+					End:     end,
+					NewText: []byte(header),
 				}},
 			}}
 		}
