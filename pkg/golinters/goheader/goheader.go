@@ -91,16 +91,25 @@ func runGoHeader(pass *analysis.Pass, conf *goheader.Configuration) error {
 		}
 
 		if fix := issue.Fix(); fix != nil {
-			end := len(fix.Actual)
+			current := len(fix.Actual)
 			for _, s := range fix.Actual {
-				end += len(s)
+				current += len(s)
+			}
+
+			end := start + token.Pos(current)
+
+			header := strings.Join(fix.Expected, "\n") + "\n"
+
+			// Adds an extra line between the package and the header.
+			if end == file.Package {
+				header += "\n"
 			}
 
 			diag.SuggestedFixes = []analysis.SuggestedFix{{
 				TextEdits: []analysis.TextEdit{{
 					Pos:     start,
-					End:     start + token.Pos(end),
-					NewText: []byte(strings.Join(fix.Expected, "\n") + "\n"),
+					End:     end,
+					NewText: []byte(header),
 				}},
 			}}
 		}
