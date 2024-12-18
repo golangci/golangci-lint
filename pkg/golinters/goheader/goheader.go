@@ -76,17 +76,8 @@ func runGoHeader(pass *analysis.Pass, conf *goheader.Configuration) error {
 
 		f := pass.Fset.File(file.Pos())
 
-		commentLine := 1
-
-		// Inspired by https://github.com/denis-tingaikin/go-header/blob/4c75a6a2332f025705325d6c71fff4616aedf48f/analyzer.go#L85-L92
-		if len(file.Comments) > 0 && file.Comments[0].Pos() < file.Package {
-			commentLine = goanalysis.GetFilePositionFor(pass.Fset, file.Comments[0].Pos()).Line
-		}
-
-		start := f.LineStart(commentLine)
-
 		diag := analysis.Diagnostic{
-			Pos:     start,
+			Pos:     f.LineStart(issue.Location().Line+1) + token.Pos(issue.Location().Position), // The position of the first divergence.
 			Message: issue.Message(),
 		}
 
@@ -95,6 +86,15 @@ func runGoHeader(pass *analysis.Pass, conf *goheader.Configuration) error {
 			for _, s := range fix.Actual {
 				current += len(s)
 			}
+
+			commentLine := 1
+
+			// Inspired by https://github.com/denis-tingaikin/go-header/blob/4c75a6a2332f025705325d6c71fff4616aedf48f/analyzer.go#L85-L92
+			if len(file.Comments) > 0 && file.Comments[0].Pos() < file.Package {
+				commentLine = goanalysis.GetFilePositionFor(pass.Fset, file.Comments[0].Pos()).Line
+			}
+
+			start := f.LineStart(commentLine)
 
 			end := start + token.Pos(current)
 
