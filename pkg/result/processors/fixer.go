@@ -10,7 +10,6 @@ import (
 	"errors"
 	"fmt"
 	"go/format"
-	"go/token"
 	"os"
 	"slices"
 
@@ -77,7 +76,8 @@ func (p Fixer) process(issues []result.Issue) ([]result.Issue, error) {
 	for i := range issues {
 		issue := issues[i]
 
-		if issue.SuggestedFixes == nil || skipTextEditWithoutPosition(&issue) {
+		if issue.SuggestedFixes == nil || skipNoTextEdit(&issue) {
+			println("Fixing", len(issues), "issues")
 			notFixableIssues = append(notFixableIssues, issue)
 			continue
 		}
@@ -197,16 +197,14 @@ func (p Fixer) printStat() {
 	p.sw.PrintStages()
 }
 
-func skipTextEditWithoutPosition(issue *result.Issue) bool {
+func skipNoTextEdit(issue *result.Issue) bool {
 	var onlyMessage int
 	var count int
 	for _, sf := range issue.SuggestedFixes {
-		for _, edit := range sf.TextEdits {
-			count++
-			if edit.Pos == token.NoPos && edit.End == token.NoPos {
-				onlyMessage++
-			}
+		if len(sf.TextEdits) == 0 {
+			onlyMessage++
 		}
+		count++
 	}
 
 	return count == onlyMessage
