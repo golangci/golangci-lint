@@ -77,7 +77,6 @@ func (p Fixer) process(issues []result.Issue) ([]result.Issue, error) {
 		issue := issues[i]
 
 		if issue.SuggestedFixes == nil || skipNoTextEdit(&issue) {
-			println("Fixing", len(issues), "issues")
 			notFixableIssues = append(notFixableIssues, issue)
 			continue
 		}
@@ -199,15 +198,13 @@ func (p Fixer) printStat() {
 
 func skipNoTextEdit(issue *result.Issue) bool {
 	var onlyMessage int
-	var count int
 	for _, sf := range issue.SuggestedFixes {
 		if len(sf.TextEdits) == 0 {
 			onlyMessage++
 		}
-		count++
 	}
 
-	return count == onlyMessage
+	return len(issue.SuggestedFixes) == onlyMessage
 }
 
 // validateEdits returns a list of edits that is sorted and
