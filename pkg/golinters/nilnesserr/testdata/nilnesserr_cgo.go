@@ -10,7 +10,17 @@ package testdata
  }
 */
 import "C"
-import "fmt"
+
+import (
+	"fmt"
+	"unsafe"
+)
+
+func _() {
+	cs := C.CString("Hello from stdio\n")
+	C.myprint(cs)
+	C.free(unsafe.Pointer(cs))
+}
 
 func do() error {
 	return fmt.Errorf("do error")
