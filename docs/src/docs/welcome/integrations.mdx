@@ -52,9 +52,17 @@ The following plugins support `golangci-lint`:
 
 `golangci-lint` can generate Bash, fish, PowerShell, and Zsh completion files.
 
-### macOS
+See the instructions on `golangci-lint completion <YOUR_SHELL> --help` (replace `<YOUR_SHELL>` with your favorite one).
 
-There are two versions of `bash-completion`, v1 and v2. V1 is for Bash 3.2 (which is the default on macOS), and v2 is for Bash 4.1+. The `golangci-lint` completion script doesn’t work correctly with bash-completion v1 and Bash 3.2. It requires bash-completion v2 and Bash 4.1+. Thus, to be able to correctly use `golangci-lint` completion on macOS, you have to install and use Bash 4.1+ ([instructions](https://itnext.io/upgrading-bash-on-macos-7138bd1066ba)). The following instructions assume that you use Bash 4.1+ (that is, any Bash version of 4.1 or newer).
+<details><summary>Bash & macOS</summary>
+
+There are two versions of `bash-completion`, v1 and v2. V1 is for Bash 3.2 (which is the default on macOS), and v2 is for Bash 4.1+.
+
+The `golangci-lint` completion script doesn’t work correctly with bash-completion v1 and Bash 3.2. It requires bash-completion v2 and Bash 4.1+.
+
+Thus, to be able to correctly use `golangci-lint` completion on macOS, you have to install and use Bash 4.1+ ([instructions](https://itnext.io/upgrading-bash-on-macos-7138bd1066ba)).
+
+The following instructions assume that you use Bash 4.1+ (that is, any Bash version of 4.1 or newer).
 
 Install `bash-completion v2`:
 
@@ -73,9 +81,7 @@ echo 'source <(golangci-lint completion bash)' >>~/.bashrc
 source ~/.bashrc
 ```
 
-### Linux
-
-See the instructions on `golangci-lint completion <YOUR_SHELL> --help` (replace `<YOUR_SHELL>` with your favorite one).
+</details>
 
 ## CI Integration
 
