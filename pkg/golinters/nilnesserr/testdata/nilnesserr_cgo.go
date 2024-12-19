@@ -10,13 +10,14 @@ package testdata
  }
 */
 import "C"
+import "fmt"
 
 func do() error {
-	return nil
+	return fmt.Errorf("do error")
 }
 
 func do2() error {
-	return nil
+	return fmt.Errorf("do2 error")
 }
 
 func someCall() error {

@@ -598,7 +598,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithURL("https://github.com/gostaticanalysis/nilerr"),
 
 		linter.NewConfig(nilnesserr.New()).
-			WithSince("v1.62.3").
+			WithSince("v1.63.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetBugs).
 			WithURL("https://github.com/alingse/nilnesserr"),
