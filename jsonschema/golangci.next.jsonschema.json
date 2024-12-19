@@ -397,6 +397,7 @@
             "nakedret",
             "nestif",
             "nilerr",
+            "nilnesserr",
             "nilnil",
             "nlreturn",
             "noctx",
@@ -456,14 +457,19 @@
           "description": "Number of concurrent runners. Defaults to the number of available CPU cores.",
           "type": "integer",
           "minimum": 0,
-          "examples": [4]
+          "examples": [
+            4
+          ]
         },
         "timeout": {
           "description": "Timeout for the analysis.",
           "type": "string",
           "pattern": "^\\d*[sm]$",
           "default": "1m",
-          "examples": ["30s", "5m"]
+          "examples": [
+            "30s",
+            "5m"
+          ]
         },
         "issues-exit-code": {
           "description": "Exit code when at least one issue was found.",
@@ -482,11 +488,19 @@
             "type": "string"
           },
           "default": [],
-          "examples": [["mytag"]]
+          "examples": [
+            [
+              "mytag"
+            ]
+          ]
         },
         "modules-download-mode": {
           "description": "Option to pass to \"go list -mod={option}\".\nSee \"go help modules\" for more information.",
-          "enum": ["mod", "readonly", "vendor"]
+          "enum": [
+            "mod",
+            "readonly",
+            "vendor"
+          ]
         },
         "allow-parallel-runners": {
           "description": "Allow multiple parallel golangci-lint instances running. If disabled, golangci-lint acquires file lock on start.",
@@ -521,7 +535,10 @@
                 "default": "stdout",
                 "anyOf": [
                   {
-                    "enum": [ "stdout", "stderr" ]
+                    "enum": [
+                      "stdout",
+                      "stderr"
+                    ]
                   },
                   {
                     "type": "string"
@@ -547,7 +564,9 @@
                 ]
               }
             },
-            "required": ["format"]
+            "required": [
+              "format"
+            ]
           }
         },
         "print-issued-lines": {
@@ -578,7 +597,11 @@
         "sort-order": {
           "type": "array",
           "items": {
-            "enum": ["linter", "severity", "file"]
+            "enum": [
+              "linter",
+              "severity",
+              "file"
+            ]
           }
         },
         "sort-results": {
@@ -603,7 +626,11 @@
               "uniqueItems": true,
               "items": {
                 "type": "string",
-                "examples": ["the", "and", "a"]
+                "examples": [
+                  "the",
+                  "and",
+                  "a"
+                ]
               }
             },
             "ignore": {
@@ -612,7 +639,9 @@
               "uniqueItems": true,
               "items": {
                 "type": "string",
-                "examples": ["0C0C"]
+                "examples": [
+                  "0C0C"
+                ]
               }
             }
           }
@@ -627,7 +656,9 @@
               "uniqueItems": true,
               "items": {
                 "type": "string",
-                "examples": ["\\.Wrapf"]
+                "examples": [
+                  "\\.Wrapf"
+                ]
               }
             },
             "use-builtin-exclusions": {
@@ -722,9 +753,21 @@
           "properties": {
             "dec-order": {
               "type": "array",
-              "default": [["type", "const", "var", "func"]],
+              "default": [
+                [
+                  "type",
+                  "const",
+                  "var",
+                  "func"
+                ]
+              ],
               "items": {
-                "enum": ["type", "const", "var", "func"]
+                "enum": [
+                  "type",
+                  "const",
+                  "var",
+                  "func"
+                ]
               }
             },
             "ignore-underscore-vars": {
@@ -780,7 +823,11 @@
                   "properties": {
                     "list-mode": {
                       "description": "Used to determine the package matching priority.",
-                      "enum": ["original", "strict", "lax"],
+                      "enum": [
+                        "original",
+                        "strict",
+                        "lax"
+                      ],
                       "default": "original"
                     },
                     "files": {
@@ -864,7 +911,10 @@
             "exclude-functions": {
               "description": "List of functions to exclude from checking, where each entry is a single function to exclude",
               "type": "array",
-              "examples": ["io/ioutil.ReadFile", "io.Copy(*bytes.Buffer)"],
+              "examples": [
+                "io/ioutil.ReadFile",
+                "io.Copy(*bytes.Buffer)"
+              ],
               "items": {
                 "type": "string"
               }
@@ -957,7 +1007,10 @@
               "uniqueItems": true,
               "items": {
                 "type": "string",
-                "examples": ["switch", "map"]
+                "examples": [
+                  "switch",
+                  "map"
+                ]
               }
             },
             "check-generated": {
@@ -1007,7 +1060,9 @@
             "include": {
               "description": "List of regular expressions to match struct packages and names.",
               "type": "array",
-              "examples": [".*\\.Test"],
+              "examples": [
+                ".*\\.Test"
+              ],
               "items": {
                 "type": "string"
               }
@@ -1015,7 +1070,9 @@
             "exclude": {
               "description": "List of regular expressions to exclude struct packages and names from check.",
               "type": "array",
-              "examples": ["cobra\\.Command$"],
+              "examples": [
+                "cobra\\.Command$"
+              ],
               "items": {
                 "type": "string"
               }
@@ -1039,7 +1096,9 @@
             "forbid": {
               "description": "List of identifiers to forbid (written using `regexp`)",
               "type": "array",
-              "examples": ["^print(ln)?$"],
+              "examples": [
+                "^print(ln)?$"
+              ],
               "items": {
                 "anyOf": [
                   {
@@ -1113,7 +1172,10 @@
                   }
                 ]
               },
-              "default": ["standard", "default"]
+              "default": [
+                "standard",
+                "default"
+              ]
             },
             "skip-generated": {
               "description": "Skip generated files.",
@@ -1327,7 +1389,7 @@
                   "type": "object",
                   "additionalProperties": false,
                   "properties": {
-                    "paramsOnly" : {
+                    "paramsOnly": {
                       "type": "boolean",
                       "default": true
                     }
@@ -1337,7 +1399,7 @@
                   "type": "object",
                   "additionalProperties": false,
                   "properties": {
-                    "minLength" : {
+                    "minLength": {
                       "type": "number",
                       "default": 15
                     }
@@ -1347,7 +1409,7 @@
                   "type": "object",
                   "additionalProperties": false,
                   "properties": {
-                    "skipBalanced" : {
+                    "skipBalanced": {
                       "type": "boolean",
                       "default": true
                     }
@@ -1357,7 +1419,7 @@
                   "type": "object",
                   "additionalProperties": false,
                   "properties": {
-                    "sizeThreshold" : {
+                    "sizeThreshold": {
                       "type": "number",
                       "default": 80
                     }
@@ -1367,7 +1429,7 @@
                   "type": "object",
                   "additionalProperties": false,
                   "properties": {
-                    "minThreshold" : {
+                    "minThreshold": {
                       "type": "number",
                       "default": 2
                     }
@@ -1377,7 +1439,7 @@
                   "type": "object",
                   "additionalProperties": false,
                   "properties": {
-                    "bodyWidth" : {
+                    "bodyWidth": {
                       "type": "number",
                       "default": 5
                     }
@@ -1387,11 +1449,11 @@
                   "type": "object",
                   "additionalProperties": false,
                   "properties": {
-                    "sizeThreshold" : {
+                    "sizeThreshold": {
                       "type": "number",
                       "default": 512
                     },
-                    "skipTestFuncs" : {
+                    "skipTestFuncs": {
                       "type": "boolean",
                       "default": true
                     }
@@ -1401,11 +1463,11 @@
                   "type": "object",
                   "additionalProperties": false,
                   "properties": {
-                    "sizeThreshold" : {
+                    "sizeThreshold": {
                       "type": "number",
                       "default": 128
                     },
-                    "skipTestFuncs" : {
+                    "skipTestFuncs": {
                       "type": "boolean",
                       "default": true
                     }
@@ -1415,19 +1477,19 @@
                   "type": "object",
                   "additionalProperties": false,
                   "properties": {
-                    "debug" : {
+                    "debug": {
                       "type": "string"
                     },
-                    "enable" : {
+                    "enable": {
                       "type": "string"
                     },
-                    "disable" : {
+                    "disable": {
                       "type": "string"
                     },
-                    "failOn" : {
+                    "failOn": {
                       "type": "string"
                     },
-                    "rules" : {
+                    "rules": {
                       "type": "string"
                     }
                   }
@@ -1436,7 +1498,7 @@
                   "type": "object",
                   "additionalProperties": false,
                   "properties": {
-                    "maxResults" : {
+                    "maxResults": {
                       "type": "number",
                       "default": 5
                     }
@@ -1446,7 +1508,7 @@
                   "type": "object",
                   "additionalProperties": false,
                   "properties": {
-                    "skipArchDependent" : {
+                    "skipArchDependent": {
                       "type": "boolean",
                       "default": true
                     }
@@ -1456,7 +1518,7 @@
                   "type": "object",
                   "additionalProperties": false,
                   "properties": {
-                    "skipRecvDeref" : {
+                    "skipRecvDeref": {
                       "type": "boolean",
                       "default": true
                     }
@@ -1466,7 +1528,7 @@
                   "type": "object",
                   "additionalProperties": false,
                   "properties": {
-                    "checkExported" : {
+                    "checkExported": {
                       "type": "boolean",
                       "default": false
                     }
@@ -1501,7 +1563,11 @@
           "properties": {
             "scope": {
               "description": "Comments to be checked.",
-              "enum": ["declarations", "toplevel", "all"],
+              "enum": [
+                "declarations",
+                "toplevel",
+                "all"
+              ],
               "default": "declarations"
             },
             "exclude": {
@@ -1538,7 +1604,11 @@
               "items": {
                 "type": "string"
               },
-              "default": ["TODO", "BUG", "FIXME"]
+              "default": [
+                "TODO",
+                "BUG",
+                "FIXME"
+              ]
             }
           }
         },
@@ -1646,12 +1716,22 @@
             "template-path": {
               "description": "Path to the file containing the template source.",
               "type": "string",
-              "examples": ["my_header_template.txt"]
+              "examples": [
+                "my_header_template.txt"
+              ]
             }
           },
           "oneOf": [
-            { "required": ["template"] },
-            { "required": ["template-path"] }
+            {
+              "required": [
+                "template"
+              ]
+            },
+            {
+              "required": [
+                "template-path"
+              ]
+            }
           ]
         },
         "goimports": {
@@ -1661,7 +1741,9 @@
             "local-prefixes": {
               "description": "Put imports beginning with prefix after 3rd-party packages. It is a comma-separated list of prefixes.",
               "type": "string",
-              "examples": ["github.com/org/project"]
+              "examples": [
+                "github.com/org/project"
+              ]
             }
           }
         },
@@ -1730,7 +1812,9 @@
                   "type": "array",
                   "items": {
                     "type": "string",
-                    "examples": ["gopkg.in/yaml.v2"]
+                    "examples": [
+                      "gopkg.in/yaml.v2"
+                    ]
                   }
                 },
                 "domains": {
@@ -1738,7 +1822,9 @@
                   "type": "array",
                   "items": {
                     "type": "string",
-                    "examples": ["golang.org"]
+                    "examples": [
+                      "golang.org"
+                    ]
                   }
                 }
               }
@@ -1793,7 +1879,9 @@
                             "type": "string"
                           }
                         },
-                        "required": ["reason"]
+                        "required": [
+                          "reason"
+                        ]
                       }
                     }
                   }
@@ -1816,7 +1904,9 @@
               "items": {
                 "anyOf": [
                   {
-                    "enum": ["all"]
+                    "enum": [
+                      "all"
+                    ]
                   },
                   {
                     "type": "string"
@@ -1833,7 +1923,11 @@
             "includes": {
               "type": "array",
               "description": "To select a subset of rules to run",
-              "examples": [["G401"]],
+              "examples": [
+                [
+                  "G401"
+                ]
+              ],
               "items": {
                 "$ref": "#/definitions/gosec-rules"
               }
@@ -1841,7 +1935,11 @@
             "excludes": {
               "type": "array",
               "description": "To specify a set of rules to explicitly exclude",
-              "examples": [["G401"]],
+              "examples": [
+                [
+                  "G401"
+                ]
+              ],
               "items": {
                 "$ref": "#/definitions/gosec-rules"
               }
@@ -1854,13 +1952,21 @@
             "severity": {
               "description": "Filter out the issues with a lower severity than the given value",
               "type": "string",
-              "enum": ["low", "medium", "high"],
+              "enum": [
+                "low",
+                "medium",
+                "high"
+              ],
               "default": "low"
             },
             "confidence": {
               "description": "Filter out the issues with a lower confidence than the given value",
               "type": "string",
-              "enum": ["low", "medium", "high"],
+              "enum": [
+                "low",
+                "medium",
+                "high"
+              ],
               "default": "low"
             },
             "config": {
@@ -2045,7 +2151,10 @@
                     "type": "string"
                   }
                 },
-                "required": ["pkg", "alias"]
+                "required": [
+                  "pkg",
+                  "alias"
+                ]
               }
             }
           }
@@ -2074,7 +2183,12 @@
                     "type": "string"
                   },
                   {
-                    "enum": ["anon", "error", "empty", "stdlib"]
+                    "enum": [
+                      "anon",
+                      "error",
+                      "empty",
+                      "stdlib"
+                    ]
                   }
                 ]
               }
@@ -2087,7 +2201,12 @@
                     "type": "string"
                   },
                   {
-                    "enum": ["anon", "error", "empty", "stdlib"]
+                    "enum": [
+                      "anon",
+                      "error",
+                      "empty",
+                      "stdlib"
+                    ]
                   }
                 ]
               }
@@ -2102,10 +2221,14 @@
                   }
                 }
               },
-              "required": ["allow"]
+              "required": [
+                "allow"
+              ]
             },
             {
-              "required": ["reject"]
+              "required": [
+                "reject"
+              ]
             }
           ]
         },
@@ -2204,7 +2327,10 @@
           "additionalProperties": false,
           "properties": {
             "locale": {
-              "enum": ["US", "UK"]
+              "enum": [
+                "US",
+                "UK"
+              ]
             },
             "ignore-words": {
               "description": "List of words to ignore.",
@@ -2215,7 +2341,11 @@
             },
             "mode": {
               "description": "Mode of the analysis.",
-              "enum": ["restricted", "", "default"],
+              "enum": [
+                "restricted",
+                "",
+                "default"
+              ],
               "default": ""
             },
             "extra-words": {
@@ -2296,9 +2426,25 @@
               "type": "array",
               "description": "List of return types to check.",
               "items": {
-                "enum": ["chan", "func", "iface", "map", "ptr", "uintptr", "unsafeptr"]
+                "enum": [
+                  "chan",
+                  "func",
+                  "iface",
+                  "map",
+                  "ptr",
+                  "uintptr",
+                  "unsafeptr"
+                ]
               },
-              "default": ["chan", "func", "iface", "map", "ptr", "uintptr", "unsafeptr"]
+              "default": [
+                "chan",
+                "func",
+                "iface",
+                "map",
+                "ptr",
+                "uintptr",
+                "unsafeptr"
+              ]
             }
           }
         },
@@ -2320,7 +2466,11 @@
           "properties": {
             "ignored-files": {
               "description": "List of file patterns to exclude from analysis.",
-              "examples": [["magic1_.*.go"]],
+              "examples": [
+                [
+                  "magic1_.*.go"
+                ]
+              ],
               "type": "array",
               "items": {
                 "type": "string"
@@ -2328,7 +2478,13 @@
             },
             "ignored-functions": {
               "description": "Comma-separated list of function patterns to exclude from the analysis.",
-              "examples": [["math.*", "http.StatusText", "make"]],
+              "examples": [
+                [
+                  "math.*",
+                  "http.StatusText",
+                  "make"
+                ]
+              ],
               "type": "array",
               "items": {
                 "type": "string"
@@ -2336,7 +2492,13 @@
             },
             "ignored-numbers": {
               "description": "List of numbers to exclude from analysis.",
-              "examples": [["1000", "1234_567_890", "3.14159264"]],
+              "examples": [
+                [
+                  "1000",
+                  "1234_567_890",
+                  "3.14159264"
+                ]
+              ],
               "type": "array",
               "items": {
                 "type": "string"
@@ -2524,14 +2686,18 @@
               "type": "array",
               "items": {
                 "type": "string",
-                "examples": ["protoc-gen-go-my-own-generator"]
+                "examples": [
+                  "protoc-gen-go-my-own-generator"
+                ]
               }
             },
             "skip-files": {
               "type": "array",
               "items": {
                 "type": "string",
-                "examples": ["*.pb.go"]
+                "examples": [
+                  "*.pb.go"
+                ]
               }
             },
             "skip-any-generated": {
@@ -2585,7 +2751,10 @@
             },
             "severity": {
               "type": "string",
-              "enum": ["warning", "error"]
+              "enum": [
+                "warning",
+                "error"
+              ]
             },
             "enable-all-rules": {
               "type": "boolean",
@@ -2596,7 +2765,9 @@
               "items": {
                 "type": "object",
                 "additionalProperties": false,
-                "required": ["name"],
+                "required": [
+                  "name"
+                ],
                 "properties": {
                   "name": {
                     "$ref": "#/definitions/revive-rules",
@@ -2607,7 +2778,10 @@
                   },
                   "severity": {
                     "type": "string",
-                    "enum": ["warning", "error"]
+                    "enum": [
+                      "warning",
+                      "error"
+                    ]
                   },
                   "exclude": {
                     "type": "array",
@@ -2632,7 +2806,9 @@
               "items": {
                 "description": "",
                 "type": "string",
-                "examples": ["github.com/jmoiron/sqlx"]
+                "examples": [
+                  "github.com/jmoiron/sqlx"
+                ]
               }
             }
           }
@@ -2648,7 +2824,11 @@
             },
             "no-global": {
               "description": "Enforce not using global loggers.",
-              "enum": ["", "all", "default"],
+              "enum": [
+                "",
+                "all",
+                "default"
+              ],
               "default": ""
             },
             "no-mixed-args": {
@@ -2658,7 +2838,11 @@
             },
             "context": {
               "description": "Enforce using methods that accept a context.",
-              "enum": ["", "all", "scope"],
+              "enum": [
+                "",
+                "all",
+                "scope"
+              ],
               "default": ""
             },
             "static-msg": {
@@ -2668,7 +2852,12 @@
             },
             "key-naming-case": {
               "description": "Enforce a single key naming convention.",
-              "enum": ["snake", "kebab", "camel", "pascal"]
+              "enum": [
+                "snake",
+                "kebab",
+                "camel",
+                "pascal"
+              ]
             },
             "attr-only": {
               "description": "Enforce using attributes only (incompatible with kv-only).",
@@ -2702,7 +2891,11 @@
               "description": "Checks to enable.",
               "type": "array",
               "items": {
-                "enum": ["end", "record-error", "set-status"]
+                "enum": [
+                  "end",
+                  "record-error",
+                  "set-status"
+                ]
               }
             },
             "ignore-check-signatures": {
@@ -2730,7 +2923,9 @@
               "items": {
                 "anyOf": [
                   {
-                    "enum": ["all"]
+                    "enum": [
+                      "all"
+                    ]
                   },
                   {
                     "type": "string"
@@ -2749,7 +2944,9 @@
               "items": {
                 "anyOf": [
                   {
-                    "enum": ["all"]
+                    "enum": [
+                      "all"
+                    ]
                   },
                   {
                     "type": "string"
@@ -2775,7 +2972,12 @@
             },
             "http-status-code-whitelist": {
               "description": "ST1013 recommends using constants from the net/http package instead of hard-coding numeric HTTP status codes. This setting specifies a list of numeric status codes that this check does not complain about.",
-              "default": ["200", "400", "404", "500"],
+              "default": [
+                "200",
+                "400",
+                "404",
+                "500"
+              ],
               "type": "array",
               "items": {
                 "enum": [
@@ -2956,7 +3158,9 @@
                   "type": "array",
                   "items": {
                     "type": "string",
-                    "examples": ["example"]
+                    "examples": [
+                      "example"
+                    ]
                   }
                 },
                 "rules": {
@@ -2974,7 +3178,9 @@
                     "^.+$": {
                       "type": "object",
                       "additionalProperties": false,
-                      "required": ["case"],
+                      "required": [
+                        "case"
+                      ],
                       "properties": {
                         "case": {
                           "$ref": "#/definitions/tagliatelle-cases"
@@ -3002,7 +3208,9 @@
                   "items": {
                     "type": "object",
                     "additionalProperties": false,
-                    "required": ["pkg"],
+                    "required": [
+                      "pkg"
+                    ],
                     "properties": {
                       "pkg": {
                         "description": "A package path.",
@@ -3018,7 +3226,9 @@
                         "type": "array",
                         "items": {
                           "type": "string",
-                          "examples": ["example"]
+                          "examples": [
+                            "example"
+                          ]
                         }
                       },
                       "ignore": {
@@ -3041,7 +3251,9 @@
                           "^.+$": {
                             "type": "object",
                             "additionalProperties": false,
-                            "required": ["case"],
+                            "required": [
+                              "case"
+                            ],
                             "properties": {
                               "case": {
                                 "$ref": "#/definitions/tagliatelle-cases"
@@ -3251,7 +3463,10 @@
                 "mode": {
                   "description": "To require or remove extra Assert() call?",
                   "type": "string",
-                  "enum": ["remove", "require"],
+                  "enum": [
+                    "remove",
+                    "require"
+                  ],
                   "default": "remove"
                 }
               }
@@ -3265,7 +3480,9 @@
             "skip-regexp": {
               "description": "Files with names matching this regular expression are skipped.",
               "type": "string",
-              "examples": ["(export|internal)_test\\.go"]
+              "examples": [
+                "(export|internal)_test\\.go"
+              ]
             },
             "allow-packages": {
               "description": "List of packages that don't end with _test that tests are allowed to be in.",
@@ -3273,7 +3490,9 @@
               "uniqueItems": true,
               "items": {
                 "type": "string",
-                "examples": ["example"]
+                "examples": [
+                  "example"
+                ]
               }
             }
           }
@@ -3565,7 +3784,9 @@
             },
             "ignore-names": {
               "description": "Optional list of variable names that should be ignored completely.",
-              "default": [[]],
+              "default": [
+                []
+              ],
               "type": "array",
               "items": {
                 "type": "string"
@@ -3578,7 +3799,12 @@
                 "type": "string"
               },
               "examples": [
-                ["c echo.Context", "t testing.T", "f *foo.Bar", "const C"]
+                [
+                  "c echo.Context",
+                  "t testing.T",
+                  "f *foo.Bar",
+                  "const C"
+                ]
               ]
             }
           }
@@ -3633,7 +3859,9 @@
             },
             "ignoreSigRegexps": {
               "description": "An array of strings which specify regular expressions of signatures to ignore.",
-              "default": [""],
+              "default": [
+                ""
+              ],
               "type": "array",
               "items": {
                 "type": "string"
@@ -3641,7 +3869,9 @@
             },
             "ignorePackageGlobs": {
               "description": "An array of glob patterns which, if any match the package of the function returning the error, will skip wrapcheck analysis for this error.",
-              "default": [""],
+              "default": [
+                ""
+              ],
               "type": "array",
               "items": {
                 "type": "string"
@@ -3649,7 +3879,9 @@
             },
             "ignoreInterfaceRegexps": {
               "description": "An array of glob patterns which, if matched to an underlying interface name, will ignore unwrapped errors returned from a function whose call is defined on the given interface.",
-              "default": [""],
+              "default": [
+                ""
+              ],
               "type": "array",
               "items": {
                 "type": "string"
@@ -3755,13 +3987,18 @@
               "properties": {
                 "type": {
                   "description": "The plugin type.",
-                  "enum": ["module", "goplugin"],
+                  "enum": [
+                    "module",
+                    "goplugin"
+                  ],
                   "default": "goplugin"
                 },
                 "path": {
                   "description": "The path to the plugin *.so. Can be absolute or local.",
                   "type": "string",
-                  "examples": ["/path/to/example.so"]
+                  "examples": [
+                    "/path/to/example.so"
+                  ]
                 },
                 "description": {
                   "description": "The description of the linter, for documentation purposes only.",
@@ -3779,11 +4016,17 @@
               "oneOf": [
                 {
                   "properties": {
-                    "type": {"enum": ["module"] }
+                    "type": {
+                      "enum": [
+                        "module"
+                      ]
+                    }
                   }
                 },
                 {
-                  "required": ["path"]
+                  "required": [
+                    "path"
+                  ]
                 }
               ]
             }
@@ -3898,7 +4141,11 @@
         },
         "exclude-generated": {
           "description": "Mode of the generated files analysis.",
-          "enum": ["lax", "strict", "disable"],
+          "enum": [
+            "lax",
+            "strict",
+            "disable"
+          ],
           "default": "lax"
         },
         "exclude-dirs": {
@@ -3907,10 +4154,17 @@
           "items": {
             "description": "You can use regexp here. The regexp is applied on the full path.\n\"/\" will be replaced by current OS file path separator to properly work on Windows.",
             "type": "string",
-            "examples": ["generated.*"]
+            "examples": [
+              "generated.*"
+            ]
           },
           "default": [],
-          "examples": [["src/external_libs", "autogenerated_by_my_lib"]]
+          "examples": [
+            [
+              "src/external_libs",
+              "autogenerated_by_my_lib"
+            ]
+          ]
         },
         "exclude-dirs-use-default": {
           "description": "Enable exclusion of directories \"vendor\", \"third_party\", \"testdata\", \"examples\", \"Godeps\", and \"builtin\".",
@@ -3923,10 +4177,17 @@
           "items": {
             "description": "You can use regexp here. There is no need to include all autogenerated files, we confidently recognize them. If that is not the case, please let us know.\n\"/\" will be replaced by current OS file path separator to properly work on Windows.",
             "type": "string",
-            "examples": [".*\\.my\\.go$"]
+            "examples": [
+              ".*\\.my\\.go$"
+            ]
           },
           "default": [],
-          "examples": [[".*\\.my\\.go$", "lib/bad.go"]]
+          "examples": [
+            [
+              ".*\\.my\\.go$",
+              "lib/bad.go"
+            ]
+          ]
         },
         "include": {
           "description": "The list of ids of default excludes to include or disable.",
@@ -3960,7 +4221,9 @@
         "new-from-patch": {
           "description": "Show only new issues created in git patch with this file path.",
           "type": "string",
-          "examples": ["path/to/patch/file"]
+          "examples": [
+            "path/to/patch/file"
+          ]
         },
         "fix": {
           "description": "Fix found issues (if it's supported by the linter).",
@@ -4017,19 +4280,43 @@
                 "type": "string"
               }
             },
-            "required": ["severity"],
+            "required": [
+              "severity"
+            ],
             "anyOf": [
-              { "required": ["path"] },
-              { "required": ["path-except"] },
-              { "required": ["linters"] },
-              { "required": ["text"] },
-              { "required": ["source"] }
+              {
+                "required": [
+                  "path"
+                ]
+              },
+              {
+                "required": [
+                  "path-except"
+                ]
+              },
+              {
+                "required": [
+                  "linters"
+                ]
+              },
+              {
+                "required": [
+                  "text"
+                ]
+              },
+              {
+                "required": [
+                  "source"
+                ]
+              }
             ]
           },
           "default": []
         }
       },
-      "required": ["default-severity"]
+      "required": [
+        "default-severity"
+      ]
     }
   }
 }

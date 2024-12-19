@@ -72,6 +72,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/nakedret"
 	"github.com/golangci/golangci-lint/pkg/golinters/nestif"
 	"github.com/golangci/golangci-lint/pkg/golinters/nilerr"
+	"github.com/golangci/golangci-lint/pkg/golinters/nilnesserr"
 	"github.com/golangci/golangci-lint/pkg/golinters/nilnil"
 	"github.com/golangci/golangci-lint/pkg/golinters/nlreturn"
 	"github.com/golangci/golangci-lint/pkg/golinters/noctx"
@@ -595,6 +596,12 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetBugs).
 			WithURL("https://github.com/gostaticanalysis/nilerr"),
+
+		linter.NewConfig(nilnesserr.New()).
+			WithSince("v1.62.3").
+			WithLoadForGoAnalysis().
+			WithPresets(linter.PresetBugs).
+			WithURL("https://github.com/alingse/nilnesserr"),
 
 		linter.NewConfig(nilnil.New(&cfg.LintersSettings.NilNil)).
 			WithSince("v1.43.0").
