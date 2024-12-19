@@ -1,4 +1,4 @@
-//golangcitest:args -Enilerr
+//golangcitest:args -Enilnesserr
 package testdata
 
 /*
