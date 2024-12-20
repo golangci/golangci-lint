@@ -1,4 +1,4 @@
-Follow the news and releases on [Mastodon](https://fosstodon.org/@golangcilint) and on [Bluesky](https://bsky.app/profile/golangcilint.bsky.social).
+Follow the news and releases on [Mastodon](https://fosstodon.org/@golangcilint) and on [Bluesky](https://bsky.app/profile/golangci-lint.run).
 
 `golangci-lint` is a free and open-source project built by volunteers.
 

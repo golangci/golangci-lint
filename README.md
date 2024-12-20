@@ -24,7 +24,7 @@ Documentation is hosted at https://golangci-lint.run.
 
 [![Join Slack](https://img.shields.io/badge/Slack-4285F4?logo=slack&logoColor=white)](https://gophers.slack.com/archives/CS0TBRKPC)
 [![Follow on Mastodon](https://img.shields.io/badge/Mastodon-6364FF?logo=mastodon&logoColor=white)](https://fosstodon.org/@golangcilint)
-[![Follow on Bluesky](https://img.shields.io/badge/Bluesky-0a7aff?logo=bluesky&logoColor=white)](https://bsky.app/profile/golangcilint.bsky.social)
+[![Follow on Bluesky](https://img.shields.io/badge/Bluesky-0a7aff?logo=bluesky&logoColor=white)](https://bsky.app/profile/golangci-lint.run)
 [![Follow on Twitter](https://img.shields.io/badge/Twitter-1DA1F2?logo=x&logoColor=white)](https://twitter.com/golangci)
 
 ## Supporting Us
