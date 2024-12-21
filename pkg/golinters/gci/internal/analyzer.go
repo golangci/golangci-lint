@@ -108,7 +108,7 @@ func runAnalysis(pass *analysis.Pass) (any, error) {
 
 		pass.Report(analysis.Diagnostic{
 			Pos:            fix.TextEdits[0].Pos,
-			Message:        "Invalid import order",
+			Message:        "File is not properly formatted",
 			SuggestedFixes: []analysis.SuggestedFix{*fix},
 		})
 	}

@@ -11,7 +11,6 @@ import (
 	diffpkg "github.com/sourcegraph/go-diff/diff"
 	"golang.org/x/tools/go/analysis"
 
-	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/logutils"
@@ -29,8 +28,6 @@ const (
 	diffLineOriginal diffLineType = "original"
 	diffLineDeleted  diffLineType = "deleted"
 )
-
-type fmtTextFormatter func(settings *config.LintersSettings) string
 
 type diffLine struct {
 	originalNumber int // 1-based original line number
@@ -219,7 +216,6 @@ func ExtractDiagnosticFromPatch(
 	file *ast.File,
 	patch string,
 	lintCtx *linter.Context,
-	formatter fmtTextFormatter,
 ) error {
 	diffs, err := diffpkg.ParseMultiFileDiff([]byte(patch))
 	if err != nil {
@@ -246,7 +242,7 @@ func ExtractDiagnosticFromPatch(
 			changes := p.parse(hunk)
 
 			for _, change := range changes {
-				pass.Report(toDiagnostic(ft, change, formatter(lintCtx.Settings()), adjLine))
+				pass.Report(toDiagnostic(ft, change, adjLine))
 			}
 		}
 	}
@@ -254,7 +250,7 @@ func ExtractDiagnosticFromPatch(
 	return nil
 }
 
-func toDiagnostic(ft *token.File, change Change, message string, adjLine int) analysis.Diagnostic {
+func toDiagnostic(ft *token.File, change Change, adjLine int) analysis.Diagnostic {
 	start := ft.LineStart(change.From + adjLine)
 
 	end := goanalysis.EndOfLinePos(ft, change.To+adjLine)
@@ -262,7 +258,7 @@ func toDiagnostic(ft *token.File, change Change, message string, adjLine int) an
 	return analysis.Diagnostic{
 		Pos:     start,
 		End:     end,
-		Message: message, // TODO(ldez) change message formatter to have a better message.
+		Message: "File is not properly formatted",
 		SuggestedFixes: []analysis.SuggestedFix{{
 			TextEdits: []analysis.TextEdit{{
 				Pos:     start,
