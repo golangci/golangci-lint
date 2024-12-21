@@ -189,7 +189,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 
 		linter.NewConfig(decorder.New(&cfg.LintersSettings.Decorder)).
 			WithSince("v1.44.0").
-			WithPresets(linter.PresetFormatting, linter.PresetStyle).
+			WithPresets(linter.PresetStyle).
 			WithURL("https://gitlab.com/bosi/decorder"),
 
 		linter.NewConfig(linter.NewNoopDeprecated("deadcode", cfg, linter.DeprecationError)).
@@ -694,7 +694,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 		linter.NewConfig(sloglint.New(&cfg.LintersSettings.SlogLint)).
 			WithSince("v1.55.0").
 			WithLoadForGoAnalysis().
-			WithPresets(linter.PresetStyle, linter.PresetFormatting).
+			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/go-simpler/sloglint"),
 
 		linter.NewConfig(linter.NewNoopDeprecated("scopelint", cfg, linter.DeprecationError)).
@@ -739,7 +739,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 
 		linter.NewConfig(tagalign.New(&cfg.LintersSettings.TagAlign)).
 			WithSince("v1.53.0").
-			WithPresets(linter.PresetStyle, linter.PresetFormatting).
+			WithPresets(linter.PresetStyle).
 			WithAutoFix().
 			WithURL("https://github.com/4meepo/tagalign"),
 
