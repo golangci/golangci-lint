@@ -11,7 +11,7 @@ func GofmtRewriteRule() {
 	vals = append(vals, 2)
 	vals = append(vals, 3)
 
-	slice := vals[1:len(vals)] // want "^File is not `gofmt`-ed"
+	slice := vals[1:len(vals)] // want "File is not properly formatted"
 
 	fmt.Println(slice)
 }
