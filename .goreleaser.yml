@@ -145,7 +145,7 @@ aurs:
     skip_upload: false
     homepage: https://golangci.com
     provides:
-      - "golangci-lint"
+      - "golangci-lint-bin"
     maintainers:
       - "Fernandez Ludovic <lfernandez dot dev at gmail dot com>"
     license: GPL-3.0
@@ -171,6 +171,49 @@ aurs:
       ./golangci-lint completion bash | install -Dm644 /dev/stdin "${pkgdir}/usr/share/bash-completion/completions/golangci-lint"
       ./golangci-lint completion zsh | install -Dm644 /dev/stdin "${pkgdir}/usr/share/zsh/site-functions/_golangci-lint"
       ./golangci-lint completion fish | install -Dm644 /dev/stdin "${pkgdir}/usr/share/fish/vendor_completions.d/golangci-lint.fish"
+
+aur_sources:
+  - description: Fast linters runner for Go.
+    skip_upload: false
+    homepage: https://golangci.com
+    provides:
+      - "golangci-lint"
+    maintainers:
+      - "Fernandez Ludovic <lfernandez dot dev at gmail dot com>"
+    license: GPL-3.0
+    private_key: "{{ .Env.AUR_KEY }}"
+    git_url: "ssh://aur@aur.archlinux.org/golangci-lint.git"
+    commit_author:
+      name: golangci-releaser
+      email: 65486276+golangci-releaser@users.noreply.github.com
+    build: |-
+      local _commit _flags
+      _commit=$(bsdcat "${pkgname}-${pkgver}.tar.gz" | git get-tar-commit-id)
+      _flags=(
+      -X=main.version="$pkgver"
+      -X=main.commit="${_commit::7}"
+      -X=main.date="$(date -u -d "@${SOURCE_DATE_EPOCH}" +'%FT%TZ')"
+      -linkmode=external
+      )
+      export CGO_ENABLED=1
+      export CGO_CFLAGS="${CFLAGS}"
+      export CGO_CPPFLAGS="$CPPFLAGS"
+      export CGO_CXXFLAGS="$CXXFLAGS"
+      export CGO_LDFLAGS="${LDFLAGS}"
+      export GOFLAGS='-buildmode=pie -trimpath -modcacherw'
+      
+      cd "$pkgname-$pkgver"
+      
+      go build -o "$pkgname" -ldflags="${_flags[*]}" ./cmd/"$pkgname"
+      ./"$pkgname" completion bash > completion.bash
+      ./"$pkgname" completion zsh > completion.zsh
+      ./"$pkgname" completion fish > completion.fish
+    package: |-
+      cd "${pkgname}-${pkgver}"
+      install -Dm755 "$pkgname" -t "$pkgdir"/usr/bin
+      install -Dm644 completion.bash "$pkgdir"/usr/share/bash-completion/completions/"$pkgname"
+      install -Dm644 completion.zsh "$pkgdir"/usr/share/zsh/site-functions/_"$pkgname"
+      install -Dm644 completion.fish "$pkgdir"/usr/share/fish/vendor_completions.d/"$pkgname".fish
 
 snapcrafts:
   - summary: Fast linters runner for Go.
