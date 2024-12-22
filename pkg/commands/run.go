@@ -244,8 +244,14 @@ func (c *runCommand) execute(_ *cobra.Command, args []string) {
 		}
 	}()
 
-	ctx, cancel := context.WithTimeout(context.Background(), c.cfg.Run.Timeout)
-	defer cancel()
+	var ctx context.Context
+	if c.cfg.Run.Timeout > 0 {
+		var cancel context.CancelFunc
+		ctx, cancel = context.WithTimeout(context.Background(), c.cfg.Run.Timeout)
+		defer cancel()
+	} else {
+		ctx = context.Background()
+	}
 
 	if needTrackResources {
 		go watchResources(ctx, trackResourcesEndCh, c.log, c.debugf)
