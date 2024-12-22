@@ -113,7 +113,7 @@ require (
 	github.com/tomarrell/wrapcheck/v2 v2.10.0
 	github.com/tommy-muehle/go-mnd/v2 v2.5.1
 	github.com/ultraware/funlen v0.2.0
-	github.com/ultraware/whitespace v0.1.1
+	github.com/ultraware/whitespace v0.2.0
 	github.com/uudashr/gocognit v1.2.0
 	github.com/uudashr/iface v1.3.0
 	github.com/valyala/quicktemplate v1.8.0
