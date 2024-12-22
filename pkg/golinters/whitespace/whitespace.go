@@ -12,7 +12,6 @@ func New(settings *config.WhitespaceSettings) *goanalysis.Linter {
 	var wsSettings whitespace.Settings
 	if settings != nil {
 		wsSettings = whitespace.Settings{
-			Mode:      whitespace.RunningModeNative,
 			MultiIf:   settings.MultiIf,
 			MultiFunc: settings.MultiFunc,
 		}
