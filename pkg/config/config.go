@@ -93,6 +93,42 @@ func detectGoVersion() string {
 // else it returns `go` version if present,
 // else it returns empty.
 func detectGoVersionFromGoMod() string {
+	modPath, err := gomod.GetGoModPath()
+	if err != nil {
+		modPath = detectGoModFallback()
+		if modPath == "" {
+			return ""
+		}
+	}
+
+	file, err := parseGoMod(modPath)
+	if err != nil {
+		return ""
+	}
+
+	// The toolchain exists only if 'toolchain' version > 'go' version.
+	// If 'toolchain' version <= 'go' version, `go mod tidy` will remove 'toolchain' version from go.mod.
+	if file.Toolchain != nil && file.Toolchain.Name != "" {
+		return strings.TrimPrefix(file.Toolchain.Name, "go")
+	}
+
+	if file.Go != nil && file.Go.Version != "" {
+		return file.Go.Version
+	}
+
+	return ""
+}
+
+func parseGoMod(goMod string) (*modfile.File, error) {
+	raw, err := os.ReadFile(filepath.Clean(goMod))
+	if err != nil {
+		return nil, fmt.Errorf("reading go.mod file: %w", err)
+	}
+
+	return modfile.Parse("go.mod", raw, nil)
+}
+
+func detectGoModFallback() string {
 	info, err := gomod.GetModuleInfo()
 	if err != nil {
 		return ""
@@ -118,29 +154,5 @@ func detectGoVersionFromGoMod() string {
 		break
 	}
 
-	file, err := parseGoMod(goMod.GoMod)
-	if err != nil {
-		return ""
-	}
-
-	// The toolchain exists only if 'toolchain' version > 'go' version.
-	// If 'toolchain' version <= 'go' version, `go mod tidy` will remove 'toolchain' version from go.mod.
-	if file.Toolchain != nil && file.Toolchain.Name != "" {
-		return strings.TrimPrefix(file.Toolchain.Name, "go")
-	}
-
-	if file.Go != nil && file.Go.Version != "" {
-		return file.Go.Version
-	}
-
-	return ""
-}
-
-func parseGoMod(goMod string) (*modfile.File, error) {
-	raw, err := os.ReadFile(filepath.Clean(goMod))
-	if err != nil {
-		return nil, fmt.Errorf("reading go.mod file: %w", err)
-	}
-
-	return modfile.Parse("go.mod", raw, nil)
+	return goMod.GoMod
 }
