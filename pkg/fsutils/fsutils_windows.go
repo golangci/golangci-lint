@@ -1,0 +1,35 @@
+//go:build windows
+
+package fsutils
+
+import (
+	"os"
+	"path/filepath"
+	"syscall"
+)
+
+func evalSymlinks(path string) (string, error) {
+	resolved, err := filepath.EvalSymlinks(path)
+	if err != nil {
+		// This is a workaround for the behavior of filepath.EvalSymlinks, which fails with
+		// syscall.ENOTDIR if the specified path contains a junction on Windows. Junctions
+		// can occur, for example, when a volume is mounted as a subdirectory inside another
+		// drive. This can usually happen when using the Dev Drives feature and replacing
+		// existing directories. See: https://github.com/golang/go/issues/40180
+		//
+		// Since syscall.ENOTDIR is only returned when calling filepath.EvalSymlinks on
+		// Windows if part of the presented path is a junction and nothing before was a
+		// symlink, we simply treat this as NOT symlink, because a symlink over the junction
+		// makes no sense at all.
+		if err == syscall.ENOTDIR {
+			if _, sErr := os.Stat(path); sErr == nil {
+				// If exists, we make the path absolute, to be sure...
+				if abs, aErr := filepath.Abs(path); aErr == nil {
+					return abs, nil
+				}
+			}
+		}
+		return "", err
+	}
+	return resolved, nil
+}
