@@ -65,7 +65,7 @@ require (
 	github.com/kyoh86/exportloopref v0.1.11
 	github.com/lasiar/canonicalheader v1.1.2
 	github.com/ldez/gomoddirectives v0.6.0
-	github.com/ldez/grignotin v0.6.0
+	github.com/ldez/grignotin v0.7.0
 	github.com/ldez/tagliatelle v0.7.1
 	github.com/ldez/usetesting v0.2.2
 	github.com/leonklingele/grouper v1.1.2
