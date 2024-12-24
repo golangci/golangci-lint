@@ -16,7 +16,7 @@ package testdata
 */
 import "C"
 
-// want +1 "Invalid import order"
+// want +1 "File is not properly formatted"
 import (
 	"golang.org/x/tools/go/analysis"
 	"github.com/golangci/golangci-lint/pkg/config"

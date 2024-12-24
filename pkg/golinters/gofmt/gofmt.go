@@ -56,23 +56,11 @@ func runGofmt(lintCtx *linter.Context, pass *analysis.Pass, settings *config.GoF
 			continue
 		}
 
-		err = internal.ExtractDiagnosticFromPatch(pass, file, string(diff), lintCtx, getIssuedTextGoFmt)
+		err = internal.ExtractDiagnosticFromPatch(pass, file, string(diff), lintCtx)
 		if err != nil {
 			return fmt.Errorf("can't extract issues from gofmt diff output %q: %w", string(diff), err)
 		}
 	}
 
 	return nil
-}
-
-func getIssuedTextGoFmt(settings *config.LintersSettings) string {
-	text := "File is not `gofmt`-ed"
-	if settings.Gofmt.Simplify {
-		text += " with `-s`"
-	}
-	for _, rule := range settings.Gofmt.RewriteRules {
-		text += fmt.Sprintf(" `-r '%s -> %s'`", rule.Pattern, rule.Replacement)
-	}
-
-	return text
 }
