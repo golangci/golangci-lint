@@ -7,7 +7,6 @@ import (
 	"slices"
 
 	"github.com/golangci/golangci-lint/pkg/config"
-	"github.com/golangci/golangci-lint/pkg/fsutils"
 	"github.com/golangci/golangci-lint/pkg/goformatters"
 	"github.com/golangci/golangci-lint/pkg/goformatters/gci"
 	"github.com/golangci/golangci-lint/pkg/goformatters/gofmt"
@@ -21,17 +20,14 @@ import (
 type Formatter struct {
 	log        logutils.Log
 	cfg        *config.Config
-	fileCache  *fsutils.FileCache
 	formatters []goformatters.Formatter
 }
 
 func NewFormatter(log logutils.Log, cfg *config.Config,
-	fileCache *fsutils.FileCache,
 	enabledLinters map[string]*linter.Config) (*Formatter, error) {
 	p := &Formatter{
-		log:       log,
-		cfg:       cfg,
-		fileCache: fileCache,
+		log: log,
+		cfg: cfg,
 	}
 
 	if _, ok := enabledLinters[gofmt.Name]; ok {
@@ -108,7 +104,7 @@ func (p *Formatter) Process(issues []result.Issue) ([]result.Issue, error) {
 	}
 
 	for target := range files {
-		content, err := p.fileCache.GetFileBytes(target)
+		content, err := os.ReadFile(target)
 		if err != nil {
 			p.log.Warnf("Error reading file %s: %v", target, err)
 			continue
