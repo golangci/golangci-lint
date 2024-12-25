@@ -52,7 +52,7 @@ type Output struct {
 	Format string `mapstructure:"format"`
 
 	// Deprecated: use [Issues.UniqByLine] instead.
-	UniqByLine bool `mapstructure:"uniq-by-line"`
+	UniqByLine *bool `mapstructure:"uniq-by-line"`
 }
 
 func (o *Output) Validate() error {
