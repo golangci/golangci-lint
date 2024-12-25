@@ -29,10 +29,10 @@ type Run struct {
 	// Deprecated: use Issues.ExcludeDirs instead.
 	SkipDirs []string `mapstructure:"skip-dirs"`
 	// Deprecated: use Issues.UseDefaultExcludeDirs instead.
-	UseDefaultSkipDirs bool `mapstructure:"skip-dirs-use-default"`
+	UseDefaultSkipDirs *bool `mapstructure:"skip-dirs-use-default"`
 
 	// Deprecated: use Output.ShowStats instead.
-	ShowStats bool `mapstructure:"show-stats"`
+	ShowStats *bool `mapstructure:"show-stats"`
 }
 
 func (r *Run) Validate() error {
