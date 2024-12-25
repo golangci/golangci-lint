@@ -79,7 +79,7 @@ func NewFormatter(log logutils.Log, cfg *config.Config, enabledLinters map[strin
 }
 
 func (*Formatter) Name() string {
-	return "formater"
+	return "formatter"
 }
 
 func (p *Formatter) Process(issues []result.Issue) ([]result.Issue, error) {
@@ -121,7 +121,7 @@ func (p *Formatter) Process(issues []result.Issue) ([]result.Issue, error) {
 
 		err = os.WriteFile(target, formatted, filePerm)
 		if err != nil {
-			p.log.Warnf("writing file %s: %v", target, err)
+			p.log.Warnf("Writing file %s: %v", target, err)
 		}
 	}
 
