@@ -304,6 +304,7 @@ func (l *Loader) handleGoVersion() {
 	os.Setenv("GOSECGOVERSION", l.cfg.Run.Go)
 }
 
+//nolint:gocyclo // The complexity is expected by the cases to handle.
 func (l *Loader) handleDeprecation() error {
 	if l.cfg.InternalTest || l.cfg.InternalCmdTest || os.Getenv(logutils.EnvTestRun) == "1" {
 		return nil
@@ -334,6 +335,13 @@ func (l *Loader) handleDeprecation() error {
 		l.log.Warnf("The configuration option `run.show-stats` is deprecated, please use `output.show-stats`")
 	}
 	l.cfg.Output.ShowStats = l.cfg.Run.ShowStats || l.cfg.Output.ShowStats
+
+	// The 2 options are true by default.
+	// Deprecated since v1.63.0
+	if !l.cfg.Output.UniqByLine {
+		l.log.Warnf("The configuration option `output.uniq-by-line` is deprecated, please use `issues.uniq-by-line`")
+		l.cfg.Issues.UniqByLine = l.cfg.Output.UniqByLine
+	}
 
 	// Deprecated since v1.57.0
 	if l.cfg.Output.Format != "" {

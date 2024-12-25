@@ -19,7 +19,7 @@ func newFLIssue(file string, line int) result.Issue {
 
 func TestUniqByLine(t *testing.T) {
 	cfg := config.Config{}
-	cfg.Output.UniqByLine = true
+	cfg.Issues.UniqByLine = true
 
 	p := NewUniqByLine(&cfg)
 	i1 := newFLIssue("f1", 1)
@@ -34,7 +34,7 @@ func TestUniqByLine(t *testing.T) {
 
 func TestUniqByLineDisabled(t *testing.T) {
 	cfg := config.Config{}
-	cfg.Output.UniqByLine = false
+	cfg.Issues.UniqByLine = false
 
 	p := NewUniqByLine(&cfg)
 	i1 := newFLIssue("f1", 1)

@@ -26,7 +26,7 @@ func (*UniqByLine) Name() string {
 }
 
 func (p *UniqByLine) Process(issues []result.Issue) ([]result.Issue, error) {
-	if !p.cfg.Output.UniqByLine {
+	if !p.cfg.Issues.UniqByLine {
 		return issues, nil
 	}
 

@@ -75,8 +75,6 @@ func setupOutputFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
 		color.GreenString("Print lines of code with issue"))
 	internal.AddFlagAndBind(v, fs, fs.Bool, "print-linter-name", "output.print-linter-name", true,
 		color.GreenString("Print linter name in issue line"))
-	internal.AddFlagAndBind(v, fs, fs.Bool, "uniq-by-line", "output.uniq-by-line", true,
-		color.GreenString("Make issues output unique by line"))
 	internal.AddFlagAndBind(v, fs, fs.Bool, "sort-results", "output.sort-results", false,
 		color.GreenString("Sort linter results"))
 	internal.AddFlagAndBind(v, fs, fs.StringSlice, "sort-order", "output.sort-order", nil,
@@ -98,6 +96,8 @@ func setupIssuesFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
 		color.GreenString("Maximum issues count per one linter. Set to 0 to disable"))
 	internal.AddFlagAndBind(v, fs, fs.Int, "max-same-issues", "issues.max-same-issues", 3,
 		color.GreenString("Maximum count of issues with the same text. Set to 0 to disable"))
+	internal.AddFlagAndBind(v, fs, fs.Bool, "uniq-by-line", "issues.uniq-by-line", true,
+		color.GreenString("Make issues output unique by line"))
 
 	internal.AddHackedStringSlice(fs, "exclude-files", color.GreenString("Regexps of files to exclude"))
 	internal.AddHackedStringSlice(fs, "exclude-dirs", color.GreenString("Regexps of directories to exclude"))
