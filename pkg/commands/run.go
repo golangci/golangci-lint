@@ -241,7 +241,8 @@ func (c *runCommand) execute(_ *cobra.Command, args []string) {
 
 	// Note: this defer must be before ctx.cancel defer
 	defer func() {
-		if needTrackResources { // wait until resource tracking finished to print properly
+		// wait until resource tracking finished to print properly
+		if needTrackResources {
 			<-trackResourcesEndCh
 		}
 	}()
