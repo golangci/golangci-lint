@@ -17,14 +17,18 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
+// Formatter runs all the "formatters".
+// It should be run after the [Fixer] because:
+// - The code format is applied after the fixes to avoid changing positions.
+// - The [Fixer] writes the files on the disk (so the file cache cannot be used as it contains the files before fixes).
 type Formatter struct {
 	log        logutils.Log
 	cfg        *config.Config
 	formatters []goformatters.Formatter
 }
 
-func NewFormatter(log logutils.Log, cfg *config.Config,
-	enabledLinters map[string]*linter.Config) (*Formatter, error) {
+// NewFormatter creates a new [Formatter].
+func NewFormatter(log logutils.Log, cfg *config.Config, enabledLinters map[string]*linter.Config) (*Formatter, error) {
 	p := &Formatter{
 		log: log,
 		cfg: cfg,
