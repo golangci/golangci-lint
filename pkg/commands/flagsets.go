@@ -49,7 +49,8 @@ func setupRunFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
 	internal.AddFlagAndBind(v, fs, fs.String, "go", "run.go", "", color.GreenString("Targeted Go version"))
 	internal.AddHackedStringSlice(fs, "build-tags", color.GreenString("Build tags"))
 
-	internal.AddFlagAndBind(v, fs, fs.Duration, "timeout", "run.timeout", defaultTimeout, color.GreenString("Timeout for total work. If <= 0, the timeout is disabled"))
+	internal.AddFlagAndBind(v, fs, fs.Duration, "timeout", "run.timeout", defaultTimeout,
+		color.GreenString("Timeout for total work. If <= 0, the timeout is disabled"))
 
 	internal.AddFlagAndBind(v, fs, fs.Bool, "tests", "run.tests", true, color.GreenString("Analyze tests (*_test.go)"))
 
