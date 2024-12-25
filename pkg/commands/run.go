@@ -238,7 +238,9 @@ func (c *runCommand) execute(_ *cobra.Command, args []string) {
 	needTrackResources := logutils.IsVerbose() || c.opts.PrintResourcesUsage
 
 	trackResourcesEndCh := make(chan struct{})
-	defer func() {            // XXX: this defer must be before ctx.cancel defer
+
+	// Note: this defer must be before ctx.cancel defer
+	defer func() {
 		if needTrackResources { // wait until resource tracking finished to print properly
 			<-trackResourcesEndCh
 		}
