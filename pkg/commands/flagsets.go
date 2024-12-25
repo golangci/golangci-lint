@@ -27,12 +27,7 @@ func setupLintersFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
 	internal.AddFlagAndBind(v, fs, fs.Bool, "fast", "linters.fast", false,
 		color.GreenString("Enable only fast linters from enabled linters set (first run won't be fast)"))
 
-	internal.AddHackedStringSliceP(fs, "presets", "p",
-		color.GreenString(fmt.Sprintf("Enable presets (%s) of linters.\n"+
-			"Run 'golangci-lint help linters' to see them.\n"+
-			"This option implies option --disable-all",
-			strings.Join(lintersdb.AllPresets(), "|"),
-		)))
+	internal.AddHackedStringSliceP(fs, "presets", "p", getPresetsHelp())
 
 	fs.StringSlice("enable-only", nil,
 		color.GreenString("Override linters configuration section to only run the specific linter(s)")) // Flags only.
@@ -68,8 +63,7 @@ func setupRunFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
 }
 
 func setupOutputFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
-	internal.AddFlagAndBind(v, fs, fs.String, "out-format", "output.formats", config.OutFormatColoredLineNumber,
-		color.GreenString(fmt.Sprintf("Formats of output: %s", strings.Join(config.AllOutputFormats, "|"))))
+	internal.AddFlagAndBind(v, fs, fs.String, "out-format", "output.formats", config.OutFormatColoredLineNumber, getOutFormatHelp())
 	internal.AddFlagAndBind(v, fs, fs.Bool, "print-issued-lines", "output.print-issued-lines", true,
 		color.GreenString("Print lines of code with issue"))
 	internal.AddFlagAndBind(v, fs, fs.Bool, "print-linter-name", "output.print-linter-name", true,
@@ -121,6 +115,25 @@ func setupIssuesFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
 		color.GreenString("Show issues in any part of update files (requires new-from-rev or new-from-patch)"))
 	internal.AddFlagAndBind(v, fs, fs.Bool, "fix", "issues.fix", false,
 		color.GreenString("Fix found issues (if it's supported by the linter)"))
+}
+
+func getPresetsHelp() string {
+	parts := []string{color.GreenString("Enable presets of linters:")}
+	for _, p := range lintersdb.AllPresets() {
+		parts = append(parts, fmt.Sprintf("  - %s", color.YellowString(p)))
+	}
+	parts = append(parts, color.GreenString("Run 'golangci-lint help linters' to see them."),
+		color.GreenString("This option implies option --disable-all"))
+	return strings.Join(parts, "\n")
+}
+
+func getOutFormatHelp() string {
+	parts := []string{color.GreenString("Formats of output:")}
+	for _, f := range config.AllOutputFormats {
+		parts = append(parts, fmt.Sprintf("  - %s", color.YellowString(f)))
+	}
+	parts = append(parts, "")
+	return strings.Join(parts, "\n")
 }
 
 func getDefaultIssueExcludeHelp() string {
