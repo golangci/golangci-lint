@@ -38,30 +38,11 @@ func NewFormatter(log logutils.Log, cfg *config.Config, enabledLinters map[strin
 		p.formatters = append(p.formatters, gofmt.New(cfg.LintersSettings.Gofmt))
 	}
 
-	_, hasGoFumpt := enabledLinters[gofumpt.Name]
-	_, hasGoImports := enabledLinters[goimports.Name]
-
-	switch {
-	// "dynamic" order based on options.
-	case hasGoFumpt && hasGoImports:
-		// if gofumpt has "ModulePath", it will run after goimports.
-		if cfg.LintersSettings.Gofumpt.ModulePath != "" {
-			p.formatters = append(p.formatters,
-				goimports.New(),
-				gofumpt.New(cfg.LintersSettings.Gofumpt, cfg.Run.Go),
-			)
-		} else {
-			// maybe goimports has "LocalPrefixes`, goimports will run after gofumpt.
-			p.formatters = append(p.formatters,
-				gofumpt.New(cfg.LintersSettings.Gofumpt, cfg.Run.Go),
-				goimports.New(),
-			)
-		}
-
-	case hasGoFumpt:
+	if _, ok := enabledLinters[gofumpt.Name]; ok {
 		p.formatters = append(p.formatters, gofumpt.New(cfg.LintersSettings.Gofumpt, cfg.Run.Go))
+	}
 
-	case hasGoImports:
+	if _, ok := enabledLinters[goimports.Name]; ok {
 		p.formatters = append(p.formatters, goimports.New())
 	}
 
