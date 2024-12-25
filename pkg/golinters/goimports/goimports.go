@@ -54,21 +54,11 @@ func runGoImports(lintCtx *linter.Context, pass *analysis.Pass) error {
 			continue
 		}
 
-		err = internal.ExtractDiagnosticFromPatch(pass, file, string(diff), lintCtx, getIssuedTextGoImports)
+		err = internal.ExtractDiagnosticFromPatch(pass, file, string(diff), lintCtx)
 		if err != nil {
 			return fmt.Errorf("can't extract issues from gofmt diff output %q: %w", string(diff), err)
 		}
 	}
 
 	return nil
-}
-
-func getIssuedTextGoImports(settings *config.LintersSettings) string {
-	text := "File is not `goimports`-ed"
-
-	if settings.Goimports.LocalPrefixes != "" {
-		text += " with -local " + settings.Goimports.LocalPrefixes
-	}
-
-	return text
 }

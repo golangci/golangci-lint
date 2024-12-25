@@ -65,7 +65,7 @@ require (
 	github.com/kyoh86/exportloopref v0.1.11
 	github.com/lasiar/canonicalheader v1.1.2
 	github.com/ldez/gomoddirectives v0.6.0
-	github.com/ldez/grignotin v0.6.0
+	github.com/ldez/grignotin v0.7.0
 	github.com/ldez/tagliatelle v0.7.1
 	github.com/ldez/usetesting v0.2.2
 	github.com/leonklingele/grouper v1.1.2
@@ -107,7 +107,7 @@ require (
 	github.com/stbenjam/no-sprintf-host-port v0.2.0
 	github.com/stretchr/testify v1.10.0
 	github.com/tdakkota/asciicheck v0.3.0
-	github.com/tetafro/godot v1.4.18
+	github.com/tetafro/godot v1.4.20
 	github.com/timakin/bodyclose v0.0.0-20241017074812-ed6a65f985e3
 	github.com/timonwong/loggercheck v0.10.1
 	github.com/tomarrell/wrapcheck/v2 v2.10.0
