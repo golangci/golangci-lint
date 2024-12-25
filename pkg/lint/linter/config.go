@@ -163,6 +163,10 @@ func (lc *Config) WithNoopFallback(cfg *config.Config, cond func(cfg *config.Con
 	return lc
 }
 
+func IsGoLowerThanGo117() func(cfg *config.Config) error {
+	return isGoLowerThanGo("1.17")
+}
+
 func IsGoLowerThanGo122() func(cfg *config.Config) error {
 	return isGoLowerThanGo("1.22")
 }
