@@ -270,6 +270,7 @@ type LintersSettings struct {
 	Promlinter      PromlinterSettings
 	ProtoGetter     ProtoGetterSettings
 	Reassign        ReassignSettings
+	Recvcheck       RecvcheckSettings
 	Revive          ReviveSettings
 	RowsErrCheck    RowsErrCheckSettings
 	SlogLint        SlogLintSettings
@@ -817,6 +818,11 @@ type ProtoGetterSettings struct {
 
 type ReassignSettings struct {
 	Patterns []string `mapstructure:"patterns"`
+}
+
+type RecvcheckSettings struct {
+	DisableBuiltin bool     `mapstructure:"disable-builtin"`
+	Exclusions     []string `mapstructure:"exclusions"`
 }
 
 type ReviveSettings struct {
