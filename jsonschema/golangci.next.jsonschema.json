@@ -397,6 +397,7 @@
             "nakedret",
             "nestif",
             "nilerr",
+            "nilnesserr",
             "nilnil",
             "nlreturn",
             "noctx",
