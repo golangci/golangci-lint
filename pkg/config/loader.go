@@ -304,7 +304,6 @@ func (l *Loader) handleGoVersion() {
 	os.Setenv("GOSECGOVERSION", l.cfg.Run.Go)
 }
 
-//nolint:gocyclo // The complexity is expected by the cases to handle.
 func (l *Loader) handleDeprecation() error {
 	if l.cfg.InternalTest || l.cfg.InternalCmdTest || os.Getenv(logutils.EnvTestRun) == "1" {
 		return nil
@@ -322,19 +321,17 @@ func (l *Loader) handleDeprecation() error {
 		l.cfg.Issues.ExcludeDirs = l.cfg.Run.SkipDirs
 	}
 
-	// The 2 options are true by default.
 	// Deprecated since v1.57.0
-	if !l.cfg.Run.UseDefaultSkipDirs {
+	if l.cfg.Run.UseDefaultSkipDirs != nil {
 		l.log.Warnf("The configuration option `run.skip-dirs-use-default` is deprecated, please use `issues.exclude-dirs-use-default`.")
+		l.cfg.Issues.UseDefaultExcludeDirs = *l.cfg.Run.UseDefaultSkipDirs
 	}
-	l.cfg.Issues.UseDefaultExcludeDirs = l.cfg.Run.UseDefaultSkipDirs && l.cfg.Issues.UseDefaultExcludeDirs
 
-	// The 2 options are false by default.
 	// Deprecated since v1.57.0
-	if l.cfg.Run.ShowStats {
+	if l.cfg.Run.ShowStats != nil {
 		l.log.Warnf("The configuration option `run.show-stats` is deprecated, please use `output.show-stats`")
+		l.cfg.Output.ShowStats = *l.cfg.Run.ShowStats
 	}
-	l.cfg.Output.ShowStats = l.cfg.Run.ShowStats || l.cfg.Output.ShowStats
 
 	// Deprecated since v1.63.0
 	if l.cfg.Output.UniqByLine != nil {
@@ -363,9 +360,11 @@ func (l *Loader) handleDeprecation() error {
 	}
 
 	// Deprecated since v1.59.0
-	if l.cfg.Issues.ExcludeGeneratedStrict {
+	if l.cfg.Issues.ExcludeGeneratedStrict != nil {
 		l.log.Warnf("The configuration option `issues.exclude-generated-strict` is deprecated, please use `issues.exclude-generated`")
-		l.cfg.Issues.ExcludeGenerated = "strict" // Don't use the constants to avoid cyclic dependencies.
+		if !*l.cfg.Issues.ExcludeGeneratedStrict {
+			l.cfg.Issues.ExcludeGenerated = "strict" // Don't use the constants to avoid cyclic dependencies.
+		}
 	}
 
 	l.handleLinterOptionDeprecations()
@@ -376,12 +375,12 @@ func (l *Loader) handleDeprecation() error {
 func (l *Loader) handleLinterOptionDeprecations() {
 	// Deprecated since v1.57.0,
 	// but it was unofficially deprecated since v1.19 (2019) (https://github.com/golangci/golangci-lint/pull/697).
-	if l.cfg.LintersSettings.Govet.CheckShadowing {
+	if l.cfg.LintersSettings.Govet.CheckShadowing != nil {
 		l.log.Warnf("The configuration option `linters.govet.check-shadowing` is deprecated. " +
 			"Please enable `shadow` instead, if you are not using `enable-all`.")
 	}
 
-	if l.cfg.LintersSettings.CopyLoopVar.IgnoreAlias {
+	if l.cfg.LintersSettings.CopyLoopVar.IgnoreAlias != nil {
 		l.log.Warnf("The configuration option `linters.copyloopvar.ignore-alias` is deprecated and ignored," +
 			"please use `linters.copyloopvar.check-alias`.")
 	}
@@ -403,7 +402,7 @@ func (l *Loader) handleLinterOptionDeprecations() {
 	}
 
 	// Deprecated since v1.33.0.
-	if l.cfg.LintersSettings.Godot.CheckAll {
+	if l.cfg.LintersSettings.Godot.CheckAll != nil {
 		l.log.Warnf("The configuration option `linters.godot.check-all` is deprecated, please use `linters.godot.scope: all`.")
 	}
 
@@ -428,23 +427,23 @@ func (l *Loader) handleLinterOptionDeprecations() {
 	}
 
 	// Deprecated since v1.60.0
-	if !l.cfg.LintersSettings.Unused.ExportedIsUsed {
+	if l.cfg.LintersSettings.Unused.ExportedIsUsed != nil {
 		l.log.Warnf("The configuration option `linters.unused.exported-is-used` is deprecated.")
 	}
 
 	// Deprecated since v1.58.0
-	if l.cfg.LintersSettings.SlogLint.ContextOnly {
+	if l.cfg.LintersSettings.SlogLint.ContextOnly != nil {
 		l.log.Warnf("The configuration option `linters.sloglint.context-only` is deprecated, please use `linters.sloglint.context`.")
 		l.cfg.LintersSettings.SlogLint.Context = cmp.Or(l.cfg.LintersSettings.SlogLint.Context, "all")
 	}
 
 	// Deprecated since v1.51.0
-	if l.cfg.LintersSettings.UseStdlibVars.OSDevNull {
+	if l.cfg.LintersSettings.UseStdlibVars.OSDevNull != nil {
 		l.log.Warnf("The configuration option `linters.usestdlibvars.os-dev-null` is deprecated.")
 	}
 
 	// Deprecated since v1.51.0
-	if l.cfg.LintersSettings.UseStdlibVars.SyslogPriority {
+	if l.cfg.LintersSettings.UseStdlibVars.SyslogPriority != nil {
 		l.log.Warnf("The configuration option `linters.usestdlibvars.syslog-priority` is deprecated.")
 	}
 }

@@ -24,7 +24,7 @@ func New(settings *config.GodotSettings) *goanalysis.Linter {
 		}
 
 		// Convert deprecated setting
-		if settings.CheckAll {
+		if settings.CheckAll != nil && *settings.CheckAll {
 			dotSettings.Scope = godot.AllScope
 		}
 	}
