@@ -28,7 +28,7 @@ func evalSymlinks(path string) (string, error) {
 		return "", err
 	}
 
-	_, err := os.Stat(path)
+	_, err = os.Stat(path)
 	if err != nil {
 		return "", err
 	}
