@@ -21,7 +21,7 @@ func evalSymlinks(path string) (string, error) {
 		// Windows if part of the presented path is a junction and nothing before was a
 		// symlink, we simply treat this as NOT symlink, because a symlink over the junction
 		// makes no sense at all.
-		if err == syscall.ENOTDIR {
+		if errors.Is(err, syscall.ENOTDIR) {
 			if _, sErr := os.Stat(path); sErr == nil {
 				// If exists, we make the path absolute, to be sure...
 				if abs, aErr := filepath.Abs(path); aErr == nil {
