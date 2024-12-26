@@ -4,6 +4,7 @@ package fsutils
 
 import (
 	"errors"
+	"os"
 	"path/filepath"
 	"syscall"
 )
