@@ -34,10 +34,5 @@ func evalSymlinks(path string) (string, error) {
 	}
 
 	// If exists, we make the path absolute, to be sure...
-	abs, err := filepath.Abs(path)
-	if err != nil {
-		return "", err
-	}
-
-	return abs, nil
+	return filepath.Abs(path)
 }
