@@ -9,7 +9,7 @@ import (
 )
 
 func New(settings *config.TagAlignSettings) *goanalysis.Linter {
-	options := []tagalign.Option{tagalign.WithMode(tagalign.StandaloneMode)}
+	var options []tagalign.Option
 
 	if settings != nil {
 		options = append(options, tagalign.WithAlign(settings.Align))
