@@ -35,6 +35,7 @@ linters:
     - exhaustive
     - exhaustruct
     - exportloopref
+    - exptostd
     - fatcontext
     - forbidigo
     - forcetypeassert
@@ -153,6 +154,7 @@ linters:
     - exhaustive
     - exhaustruct
     - exportloopref
+    - exptostd
     - fatcontext
     - forbidigo
     - forcetypeassert

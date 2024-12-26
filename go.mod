@@ -65,6 +65,7 @@ require (
 	github.com/kunwardeep/paralleltest v1.0.10
 	github.com/kyoh86/exportloopref v0.1.11
 	github.com/lasiar/canonicalheader v1.1.2
+	github.com/ldez/exptostd v0.1.0
 	github.com/ldez/gomoddirectives v0.6.0
 	github.com/ldez/grignotin v0.7.0
 	github.com/ldez/tagliatelle v0.7.1

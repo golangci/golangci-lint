@@ -350,6 +350,7 @@
             "exhaustive",
             "exhaustruct",
             "exportloopref",
+            "exptostd",
             "fatcontext",
             "forbidigo",
             "forcetypeassert",
