@@ -672,7 +672,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/curioswitch/go-reassign"),
 
-		linter.NewConfig(recvcheck.New()).
+		linter.NewConfig(recvcheck.New(&cfg.LintersSettings.Recvcheck)).
 			WithSince("v1.62.0").
 			WithPresets(linter.PresetBugs).
 			WithLoadForGoAnalysis().

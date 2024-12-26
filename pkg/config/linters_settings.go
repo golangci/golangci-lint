@@ -169,7 +169,6 @@ var defaultLintersSettings = LintersSettings{
 	Unused: UnusedSettings{
 		FieldWritesAreUses:     true,
 		PostStatementsAreReads: false,
-		ExportedIsUsed:         true,
 		ExportedFieldsAreUsed:  true,
 		ParametersAreUsed:      true,
 		LocalVariablesAreUsed:  true,
@@ -271,6 +270,7 @@ type LintersSettings struct {
 	Promlinter      PromlinterSettings
 	ProtoGetter     ProtoGetterSettings
 	Reassign        ReassignSettings
+	Recvcheck       RecvcheckSettings
 	Revive          ReviveSettings
 	RowsErrCheck    RowsErrCheckSettings
 	SlogLint        SlogLintSettings
@@ -329,8 +329,10 @@ type BiDiChkSettings struct {
 }
 
 type CopyLoopVarSettings struct {
-	IgnoreAlias bool `mapstructure:"ignore-alias"` // Deprecated: use CheckAlias
-	CheckAlias  bool `mapstructure:"check-alias"`
+	CheckAlias bool `mapstructure:"check-alias"`
+
+	// Deprecated: use CheckAlias
+	IgnoreAlias *bool `mapstructure:"ignore-alias"`
 }
 
 type Cyclop struct {
@@ -548,7 +550,7 @@ type GodotSettings struct {
 	Period  bool     `mapstructure:"period"`
 
 	// Deprecated: use Scope instead
-	CheckAll bool `mapstructure:"check-all"`
+	CheckAll *bool `mapstructure:"check-all"`
 }
 
 type GodoxSettings struct {
@@ -641,7 +643,7 @@ type GovetSettings struct {
 	Settings map[string]map[string]any
 
 	// Deprecated: the linter should be enabled inside Enable.
-	CheckShadowing bool `mapstructure:"check-shadowing"`
+	CheckShadowing *bool `mapstructure:"check-shadowing"`
 }
 
 func (cfg *GovetSettings) Validate() error {
@@ -818,6 +820,11 @@ type ReassignSettings struct {
 	Patterns []string `mapstructure:"patterns"`
 }
 
+type RecvcheckSettings struct {
+	DisableBuiltin bool     `mapstructure:"disable-builtin"`
+	Exclusions     []string `mapstructure:"exclusions"`
+}
+
 type ReviveSettings struct {
 	Go                    string `mapstructure:"-"`
 	MaxOpenFiles          int    `mapstructure:"max-open-files"`
@@ -857,7 +864,7 @@ type SlogLintSettings struct {
 	ArgsOnSepLines bool     `mapstructure:"args-on-sep-lines"`
 
 	// Deprecated: use Context instead.
-	ContextOnly bool `mapstructure:"context-only"`
+	ContextOnly *bool `mapstructure:"context-only"`
 }
 
 type SpancheckSettings struct {
@@ -977,11 +984,14 @@ type UseStdlibVarsSettings struct {
 	TimeLayout         bool `mapstructure:"time-layout"`
 	CryptoHash         bool `mapstructure:"crypto-hash"`
 	DefaultRPCPath     bool `mapstructure:"default-rpc-path"`
-	OSDevNull          bool `mapstructure:"os-dev-null"` // Deprecated
 	SQLIsolationLevel  bool `mapstructure:"sql-isolation-level"`
 	TLSSignatureScheme bool `mapstructure:"tls-signature-scheme"`
 	ConstantKind       bool `mapstructure:"constant-kind"`
-	SyslogPriority     bool `mapstructure:"syslog-priority"` // Deprecated
+
+	// Deprecated
+	OSDevNull *bool `mapstructure:"os-dev-null"`
+	// Deprecated
+	SyslogPriority *bool `mapstructure:"syslog-priority"`
 }
 
 type UseTestingSettings struct {
@@ -1007,11 +1017,13 @@ type UnparamSettings struct {
 type UnusedSettings struct {
 	FieldWritesAreUses     bool `mapstructure:"field-writes-are-uses"`
 	PostStatementsAreReads bool `mapstructure:"post-statements-are-reads"`
-	ExportedIsUsed         bool `mapstructure:"exported-is-used"` // Deprecated
 	ExportedFieldsAreUsed  bool `mapstructure:"exported-fields-are-used"`
 	ParametersAreUsed      bool `mapstructure:"parameters-are-used"`
 	LocalVariablesAreUsed  bool `mapstructure:"local-variables-are-used"`
 	GeneratedIsUsed        bool `mapstructure:"generated-is-used"`
+
+	// Deprecated
+	ExportedIsUsed *bool `mapstructure:"exported-is-used"`
 }
 
 type VarnamelenSettings struct {

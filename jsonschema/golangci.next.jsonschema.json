@@ -2394,6 +2394,24 @@
             }
           }
         },
+        "recvcheck": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "disable-builtin": {
+              "description": "Disables the built-in method exclusions.",
+              "type": "boolean",
+              "default": true
+            },
+            "exclusions": {
+              "description": "User-defined method exclusions.",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
         "nonamedreturns": {
           "type": "object",
           "additionalProperties": false,

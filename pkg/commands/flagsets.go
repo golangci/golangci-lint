@@ -56,8 +56,6 @@ func setupRunFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
 
 	internal.AddDeprecatedHackedStringSlice(fs, "skip-files", color.GreenString("Regexps of files to skip"))
 	internal.AddDeprecatedHackedStringSlice(fs, "skip-dirs", color.GreenString("Regexps of directories to skip"))
-	internal.AddDeprecatedFlagAndBind(v, fs, fs.Bool, "skip-dirs-use-default", "run.skip-dirs-use-default", true,
-		formatList("Use or not use default excluded directories:", processors.StdExcludeDirRegexps))
 
 	const allowParallelDesc = "Allow multiple parallel golangci-lint instances running.\n" +
 		"If false (default) - golangci-lint acquires file lock on start."
