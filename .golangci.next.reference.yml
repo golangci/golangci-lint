@@ -2318,6 +2318,23 @@ linters-settings:
     patterns:
       - ".*"
 
+  recvcheck:
+    # Disables the built-in method exclusions:
+    # - `MarshalText`
+    # - `MarshalJSON`
+    # - `MarshalYAML`
+    # - `MarshalXML`
+    # - `MarshalBinary`
+    # - `GobEncode`
+    # Default: false
+    disable-builtin: true
+    # User-defined method exclusions.
+    # The format is `struct_name.method_name` (ex: `Foo.MethodName`).
+    # A wildcard `*` can use as a struct name (ex: `*.MethodName`).
+    # Default: []
+    exclusions:
+      - "*.Value"
+
   revive:
     # Maximum number of open files at the same time.
     # See https://github.com/mgechev/revive#command-line-flags
