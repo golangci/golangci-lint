@@ -18,6 +18,10 @@ import (
 	"github.com/golangci/golangci-lint/internal/x/tools/diff"
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/fsutils"
+	"github.com/golangci/golangci-lint/pkg/goformatters/gci"
+	"github.com/golangci/golangci-lint/pkg/goformatters/gofmt"
+	"github.com/golangci/golangci-lint/pkg/goformatters/gofumpt"
+	"github.com/golangci/golangci-lint/pkg/goformatters/goimports"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
 	"github.com/golangci/golangci-lint/pkg/timeutils"
@@ -71,10 +75,17 @@ func (p Fixer) process(issues []result.Issue) ([]result.Issue, error) {
 	// filenames / linters / edits
 	editsByLinter := make(map[string]map[string][]diff.Edit)
 
+	formatters := []string{gofumpt.Name, goimports.Name, gofmt.Name, gci.Name}
+
 	var notFixableIssues []result.Issue
 
 	for i := range issues {
 		issue := issues[i]
+
+		if slices.Contains(formatters, issue.FromLinter) {
+			notFixableIssues = append(notFixableIssues, issue)
+			continue
+		}
 
 		if issue.SuggestedFixes == nil || skipNoTextEdit(&issue) {
 			notFixableIssues = append(notFixableIssues, issue)
