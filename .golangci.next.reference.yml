@@ -3984,6 +3984,10 @@ issues:
   # Default: 3
   max-same-issues: 0
 
+  # Make issues output unique by line.
+  # Default: true
+  uniq-by-line: false
+
   # Show only new issues: if there are unstaged changes or untracked files,
   # only those changes are analyzed, else only changes in HEAD~ are analyzed.
   # It's a super-useful option for integration of golangci-lint into existing large codebase.
@@ -4052,10 +4056,6 @@ output:
   # Print linter name in the end of issue text.
   # Default: true
   print-linter-name: false
-
-  # Make issues output unique by line.
-  # Default: true
-  uniq-by-line: false
 
   # Add a prefix to the output file references.
   # Default: ""

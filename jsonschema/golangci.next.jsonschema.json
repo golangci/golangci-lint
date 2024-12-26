@@ -560,11 +560,6 @@
           "type": "boolean",
           "default": true
         },
-        "uniq-by-line": {
-          "description": "Make issues output unique by line.",
-          "type": "boolean",
-          "default": true
-        },
         "path-prefix": {
           "description": "Add a prefix to the output file references.",
           "type": "string",
@@ -3966,6 +3961,11 @@
           "description": "Fix found issues (if it's supported by the linter).",
           "type": "boolean",
           "default": false
+        },
+        "uniq-by-line": {
+          "description": "Make issues output unique by line.",
+          "type": "boolean",
+          "default": true
         },
         "whole-files": {
           "description": "Show issues in any part of update files (requires new-from-rev or new-from-patch).",
