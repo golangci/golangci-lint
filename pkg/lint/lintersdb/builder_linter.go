@@ -288,6 +288,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithSince("v1.63.0").
 			WithPresets(linter.PresetStyle).
 			WithLoadForGoAnalysis().
+			WithAutoFix().
 			WithURL("https://github.com/ldez/exptostd"),
 
 		linter.NewConfig(forbidigo.New(&cfg.LintersSettings.Forbidigo)).
