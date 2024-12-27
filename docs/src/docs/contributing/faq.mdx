@@ -10,15 +10,15 @@ See [there](/contributing/new-linters#how-to-add-a-public-linter-to-golangci-lin
 
 See [there](/contributing/new-linters#how-to-add-a-private-linter-to-golangci-lint).
 
-## How to update existing linter
+## How to update an existing linter
 
 Just update its version in `go.mod`.
 
-## How to add configuration option to existing linter
+## How to add a configuration option to an existing linter
 
-Add a new field to a [config struct](https://github.com/golangci/golangci-lint/blob/master/pkg/config/config.go).
-Document it in [.golangci.reference.yml](https://github.com/golangci/golangci-lint/blob/master/.golangci.reference.yml).
-Pass it to a linter.
+Add a new field to the [linter settings struct](https://github.com/golangci/golangci-lint/blob/master/pkg/config/linters_settings.go).
+Document it in [.golangci.next.reference.yml](https://github.com/golangci/golangci-lint/blob/master/.golangci.next.reference.yml).
+Pass it to the linter.
 
 ## How to see `INFO` or `DEBUG` logs
 
