@@ -6,8 +6,8 @@ package testdata
 import (
 	"fmt"
 
-	"golang.org/x/exp/maps"
-	"golang.org/x/exp/slices"
+	"golang.org/x/exp/maps"   // want `Import statement 'golang.org/x/exp/maps' can be replaced by 'maps'`
+	"golang.org/x/exp/slices" // want `Import statement 'golang.org/x/exp/slices' can be replaced by 'slices'`
 )
 
 func _(m, a map[string]string) {
@@ -15,7 +15,7 @@ func _(m, a map[string]string) {
 
 	maps.Keys(m) // want `golang.org/x/exp/maps.Keys\(\) can be replaced by slices.Collect\(maps.Keys\(\)\)`
 
-	maps.Values(m) // want `golang.org/x/exp/maps.Values\(\) can be replaced by slices.Collect\(maps.Keys\(\)\)`
+	maps.Values(m) // want `golang.org/x/exp/maps.Values\(\) can be replaced by slices.Collect\(maps.Values\(\)\)`
 
 	maps.Equal(m, a) // want `golang.org/x/exp/maps.Equal\(\) can be replaced by maps.Equal\(\)`
 

@@ -4,8 +4,8 @@ package testdata
 import (
 	"fmt"
 
-	"golang.org/x/exp/maps"
-	"golang.org/x/exp/slices"
+	"golang.org/x/exp/maps"   // want `Import statement 'golang.org/x/exp/maps' can be replaced by 'maps'`
+	"golang.org/x/exp/slices" // want `Import statement 'golang.org/x/exp/slices' can be replaced by 'slices'`
 )
 
 func _(m, a map[string]string) {
