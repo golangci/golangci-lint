@@ -827,6 +827,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithSince("v1.63.0").
 			WithPresets(linter.PresetTest).
 			WithLoadForGoAnalysis().
+			WithAutoFix().
 			WithURL("https://github.com/ldez/usetesting"),
 
 		linter.NewConfig(linter.NewNoopDeprecated("varcheck", cfg, linter.DeprecationError)).
