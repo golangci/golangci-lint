@@ -821,6 +821,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 		linter.NewConfig(usestdlibvars.New(&cfg.LintersSettings.UseStdlibVars)).
 			WithSince("v1.48.0").
 			WithPresets(linter.PresetStyle).
+			WithAutoFix().
 			WithURL("https://github.com/sashamelentyev/usestdlibvars"),
 
 		linter.NewConfig(usetesting.New(&cfg.LintersSettings.UseTesting)).
