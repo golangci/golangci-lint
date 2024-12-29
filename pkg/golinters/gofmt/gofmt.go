@@ -23,8 +23,7 @@ func New(settings *config.GoFmtSettings) *goanalysis.Linter {
 
 	return goanalysis.NewLinter(
 		linterName,
-		"Gofmt checks whether code was gofmt-ed. By default "+
-			"this tool runs with -s option to check for code simplification",
+		"Checks if the code is formatted according to 'gofmt' command.",
 		[]*analysis.Analyzer{analyzer},
 		nil,
 	).WithContextSetter(func(lintCtx *linter.Context) {

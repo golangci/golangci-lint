@@ -44,7 +44,7 @@ func NewAnalyzer() *analysis.Analyzer {
 
 	a := &analysis.Analyzer{
 		Name:     "gci",
-		Doc:      "A tool that control Go package import order and make it always deterministic.",
+		Doc:      "Checks if code and import statements are formatted, it makes import statements always deterministic.",
 		Run:      runAnalysis,
 		Requires: []*analysis.Analyzer{inspect.Analyzer},
 	}

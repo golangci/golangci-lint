@@ -44,7 +44,7 @@ func New(settings *config.GofumptSettings) *goanalysis.Linter {
 
 	return goanalysis.NewLinter(
 		linterName,
-		"Gofumpt checks whether code was gofumpt-ed.",
+		"Checks if code and import statements are formatted, with additional rules.",
 		[]*analysis.Analyzer{analyzer},
 		nil,
 	).WithContextSetter(func(lintCtx *linter.Context) {

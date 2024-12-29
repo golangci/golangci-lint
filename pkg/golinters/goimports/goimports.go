@@ -24,8 +24,7 @@ func New(settings *config.GoImportsSettings) *goanalysis.Linter {
 
 	return goanalysis.NewLinter(
 		linterName,
-		"Check import statements are formatted according to the 'goimport' command. "+
-			"Reformat imports in autofix mode.",
+		"Checks if the code and import statements are formatted according to the 'goimports' command.",
 		[]*analysis.Analyzer{analyzer},
 		nil,
 	).WithContextSetter(func(lintCtx *linter.Context) {
@@ -56,7 +55,7 @@ func runGoImports(lintCtx *linter.Context, pass *analysis.Pass) error {
 
 		err = internal.ExtractDiagnosticFromPatch(pass, file, string(diff), lintCtx)
 		if err != nil {
-			return fmt.Errorf("can't extract issues from gofmt diff output %q: %w", string(diff), err)
+			return fmt.Errorf("can't extract issues from goimports diff output %q: %w", string(diff), err)
 		}
 	}
 
