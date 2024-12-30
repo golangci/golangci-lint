@@ -26,6 +26,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/exhaustive"
 	"github.com/golangci/golangci-lint/pkg/golinters/exhaustruct"
 	"github.com/golangci/golangci-lint/pkg/golinters/exportloopref"
+	"github.com/golangci/golangci-lint/pkg/golinters/exptostd"
 	"github.com/golangci/golangci-lint/pkg/golinters/fatcontext"
 	"github.com/golangci/golangci-lint/pkg/golinters/forbidigo"
 	"github.com/golangci/golangci-lint/pkg/golinters/forcetypeassert"
@@ -282,6 +283,13 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/kyoh86/exportloopref").
 			DeprecatedWarning("Since Go1.22 (loopvar) this linter is no longer relevant.", "v1.60.2", "copyloopvar"),
+
+		linter.NewConfig(exptostd.New()).
+			WithSince("v1.63.0").
+			WithPresets(linter.PresetStyle).
+			WithLoadForGoAnalysis().
+			WithAutoFix().
+			WithURL("https://github.com/ldez/exptostd"),
 
 		linter.NewConfig(forbidigo.New(&cfg.LintersSettings.Forbidigo)).
 			WithSince("v1.34.0").
