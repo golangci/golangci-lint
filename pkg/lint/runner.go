@@ -10,6 +10,7 @@ import (
 	"github.com/golangci/golangci-lint/internal/errorutil"
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/fsutils"
+	"github.com/golangci/golangci-lint/pkg/goformatters"
 	"github.com/golangci/golangci-lint/pkg/goutil"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
@@ -60,7 +61,12 @@ func NewRunner(log logutils.Log, cfg *config.Config, args []string, goenv *gouti
 		return nil, fmt.Errorf("failed to get enabled linters: %w", err)
 	}
 
-	formatter, err := processors.NewFormatter(log, cfg, enabledLinters)
+	metaFormatter, err := goformatters.NewMetaFormatter(log, cfg, enabledLinters)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create meta-formatter: %w", err)
+	}
+
+	formatter, err := processors.NewFormatter(log, cfg, metaFormatter)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create formatter: %w", err)
 	}

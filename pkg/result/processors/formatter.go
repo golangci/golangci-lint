@@ -2,7 +2,6 @@ package processors
 
 import (
 	"bytes"
-	"fmt"
 	"os"
 	"slices"
 
@@ -12,7 +11,6 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goformatters/gofmt"
 	"github.com/golangci/golangci-lint/pkg/goformatters/gofumpt"
 	"github.com/golangci/golangci-lint/pkg/goformatters/goimports"
-	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
@@ -22,38 +20,17 @@ import (
 // - The code format is applied after the fixes to avoid changing positions.
 // - The [Fixer] writes the files on the disk (so the file cache cannot be used as it contains the files before fixes).
 type Formatter struct {
-	log        logutils.Log
-	cfg        *config.Config
-	formatters []goformatters.Formatter
+	log       logutils.Log
+	cfg       *config.Config
+	formatter *goformatters.MetaFormatter
 }
 
 // NewFormatter creates a new [Formatter].
-func NewFormatter(log logutils.Log, cfg *config.Config, enabledLinters map[string]*linter.Config) (*Formatter, error) {
+func NewFormatter(log logutils.Log, cfg *config.Config, formatter *goformatters.MetaFormatter) (*Formatter, error) {
 	p := &Formatter{
-		log: log,
-		cfg: cfg,
-	}
-
-	if _, ok := enabledLinters[gofmt.Name]; ok {
-		p.formatters = append(p.formatters, gofmt.New(cfg.LintersSettings.Gofmt))
-	}
-
-	if _, ok := enabledLinters[gofumpt.Name]; ok {
-		p.formatters = append(p.formatters, gofumpt.New(cfg.LintersSettings.Gofumpt, cfg.Run.Go))
-	}
-
-	if _, ok := enabledLinters[goimports.Name]; ok {
-		p.formatters = append(p.formatters, goimports.New())
-	}
-
-	// gci is a last because the only goal of gci is to handle imports.
-	if _, ok := enabledLinters[gci.Name]; ok {
-		formatter, err := gci.New(cfg.LintersSettings.Gci)
-		if err != nil {
-			return nil, fmt.Errorf("gci: creating formatter: %w", err)
-		}
-
-		p.formatters = append(p.formatters, formatter)
+		log:       log,
+		cfg:       cfg,
+		formatter: formatter,
 	}
 
 	return p, nil
@@ -65,10 +42,6 @@ func (*Formatter) Name() string {
 
 func (p *Formatter) Process(issues []result.Issue) ([]result.Issue, error) {
 	if !p.cfg.Issues.NeedFix {
-		return issues, nil
-	}
-
-	if len(p.formatters) == 0 {
 		return issues, nil
 	}
 
@@ -95,7 +68,7 @@ func (p *Formatter) Process(issues []result.Issue) ([]result.Issue, error) {
 			continue
 		}
 
-		formatted := p.format(target, content)
+		formatted := p.formatter.Format(target, content)
 		if bytes.Equal(content, formatted) {
 			continue
 		}
@@ -107,22 +80,6 @@ func (p *Formatter) Process(issues []result.Issue) ([]result.Issue, error) {
 	}
 
 	return notFixableIssues, nil
-}
-
-func (p *Formatter) format(filename string, src []byte) []byte {
-	data := bytes.Clone(src)
-
-	for _, formatter := range p.formatters {
-		formatted, err := formatter.Format(filename, data)
-		if err != nil {
-			p.log.Warnf("(%s) formatting file %s: %v", formatter.Name(), filename, err)
-			continue
-		}
-
-		data = formatted
-	}
-
-	return data
 }
 
 func (*Formatter) Finish() {}
