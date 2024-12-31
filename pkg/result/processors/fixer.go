@@ -80,13 +80,14 @@ func (p Fixer) process(issues []result.Issue) ([]result.Issue, error) {
 	formatters := []string{gofumpt.Name, goimports.Name, gofmt.Name, gci.Name}
 
 	var notFixableIssues []result.Issue
-	var formatIssues []result.Issue
+
+	toBeFormattedFiles := make(map[string]struct{})
 
 	for i := range issues {
 		issue := issues[i]
 
 		if slices.Contains(formatters, issue.FromLinter) {
-			formatIssues = append(formatIssues, issue)
+			toBeFormattedFiles[issue.FilePath()] = struct{}{}
 			continue
 		}
 
@@ -203,9 +204,7 @@ func (p Fixer) process(issues []result.Issue) ([]result.Issue, error) {
 		formattedFiles = append(formattedFiles, path)
 	}
 
-	for i := range formatIssues {
-		path := issues[i].FilePath()
-
+	for path := range toBeFormattedFiles {
 		// Skips files already formatted by the previous fix step.
 		if !slices.Contains(formattedFiles, path) {
 			content, err := p.fileCache.GetFileBytes(path)
