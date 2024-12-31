@@ -80,12 +80,13 @@ func (p Fixer) process(issues []result.Issue) ([]result.Issue, error) {
 	formatters := []string{gofumpt.Name, goimports.Name, gofmt.Name, gci.Name}
 
 	var notFixableIssues []result.Issue
+	var formatIssues []result.Issue
 
 	for i := range issues {
 		issue := issues[i]
 
 		if slices.Contains(formatters, issue.FromLinter) {
-			notFixableIssues = append(notFixableIssues, issue)
+			formatIssues = append(formatIssues, issue)
 			continue
 		}
 
@@ -175,6 +176,8 @@ func (p Fixer) process(issues []result.Issue) ([]result.Issue, error) {
 
 	var editError error
 
+	var formattedFiles []string
+
 	// Now we've got a set of valid edits for each file. Apply them.
 	for path, edits := range editsByPath {
 		contents, err := p.fileCache.GetFileBytes(path)
@@ -195,6 +198,28 @@ func (p Fixer) process(issues []result.Issue) ([]result.Issue, error) {
 		if err := os.WriteFile(path, out, filePerm); err != nil {
 			editError = errors.Join(editError, fmt.Errorf("%s: %w", path, err))
 			continue
+		}
+
+		formattedFiles = append(formattedFiles, path)
+	}
+
+	for i := range formatIssues {
+		path := issues[i].FilePath()
+
+		// Skips files already formatted by the previous fix step.
+		if !slices.Contains(formattedFiles, path) {
+			content, err := p.fileCache.GetFileBytes(path)
+			if err != nil {
+				p.log.Warnf("Error reading file %s: %v", path, err)
+				continue
+			}
+
+			out := p.formatter.Format(path, content)
+
+			if err := os.WriteFile(path, out, filePerm); err != nil {
+				editError = errors.Join(editError, fmt.Errorf("%s: %w", path, err))
+				continue
+			}
 		}
 	}
 

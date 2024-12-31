@@ -66,11 +66,6 @@ func NewRunner(log logutils.Log, cfg *config.Config, args []string, goenv *gouti
 		return nil, fmt.Errorf("failed to create meta-formatter: %w", err)
 	}
 
-	formatter, err := processors.NewFormatter(log, cfg, metaFormatter)
-	if err != nil {
-		return nil, fmt.Errorf("failed to create formatter: %w", err)
-	}
-
 	return &Runner{
 		Processors: []processors.Processor{
 			processors.NewCgo(goenv),
@@ -106,8 +101,6 @@ func NewRunner(log logutils.Log, cfg *config.Config, args []string, goenv *gouti
 
 			// The fixer still needs to see paths for the issues that are relative to the current directory.
 			processors.NewFixer(cfg, log, fileCache, metaFormatter),
-			// The formatter needs to be after the fixer and the last processor that write files.
-			formatter,
 
 			// Now we can modify the issues for output.
 			processors.NewPathPrefixer(cfg.Output.PathPrefix),
