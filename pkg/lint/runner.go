@@ -105,7 +105,7 @@ func NewRunner(log logutils.Log, cfg *config.Config, args []string, goenv *gouti
 			processors.NewSeverity(log.Child(logutils.DebugKeySeverityRules), files, &cfg.Severity),
 
 			// The fixer still needs to see paths for the issues that are relative to the current directory.
-			processors.NewFixer(cfg, log, fileCache),
+			processors.NewFixer(cfg, log, fileCache, metaFormatter),
 			// The formatter needs to be after the fixer and the last processor that write files.
 			formatter,
 

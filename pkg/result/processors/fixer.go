@@ -9,7 +9,6 @@ package processors
 import (
 	"errors"
 	"fmt"
-	"go/format"
 	"os"
 	"slices"
 
@@ -18,6 +17,7 @@ import (
 	"github.com/golangci/golangci-lint/internal/x/tools/diff"
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/fsutils"
+	"github.com/golangci/golangci-lint/pkg/goformatters"
 	"github.com/golangci/golangci-lint/pkg/goformatters/gci"
 	"github.com/golangci/golangci-lint/pkg/goformatters/gofmt"
 	"github.com/golangci/golangci-lint/pkg/goformatters/gofumpt"
@@ -36,14 +36,16 @@ type Fixer struct {
 	log       logutils.Log
 	fileCache *fsutils.FileCache
 	sw        *timeutils.Stopwatch
+	formatter *goformatters.MetaFormatter
 }
 
-func NewFixer(cfg *config.Config, log logutils.Log, fileCache *fsutils.FileCache) *Fixer {
+func NewFixer(cfg *config.Config, log logutils.Log, fileCache *fsutils.FileCache, formatter *goformatters.MetaFormatter) *Fixer {
 	return &Fixer{
 		cfg:       cfg,
 		log:       log,
 		fileCache: fileCache,
 		sw:        timeutils.NewStopwatch("fixer", log),
+		formatter: formatter,
 	}
 }
 
@@ -188,9 +190,7 @@ func (p Fixer) process(issues []result.Issue) ([]result.Issue, error) {
 		}
 
 		// Try to format the file.
-		if formatted, err := format.Source(out); err == nil {
-			out = formatted
-		}
+		out = p.formatter.Format(path, out)
 
 		if err := os.WriteFile(path, out, filePerm); err != nil {
 			editError = errors.Join(editError, fmt.Errorf("%s: %w", path, err))
