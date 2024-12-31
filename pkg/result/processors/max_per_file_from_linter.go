@@ -22,6 +22,7 @@ func NewMaxPerFileFromLinter(cfg *config.Config) *MaxPerFileFromLinter {
 		maxPerFileFromLinterConfig["gofmt"] = 1
 		maxPerFileFromLinterConfig["goimports"] = 1
 		maxPerFileFromLinterConfig["gci"] = 1
+		maxPerFileFromLinterConfig["golines"] = 1
 	}
 
 	return &MaxPerFileFromLinter{

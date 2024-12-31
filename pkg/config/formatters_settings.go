@@ -8,6 +8,12 @@ var defaultFormatterSettings = FormatterSettings{
 		Sections:      []string{"standard", "default"},
 		SkipGenerated: true,
 	},
+	GoLines: GoLinesSettings{
+		MaxLen:         100,
+		TabLen:         4,
+		ReformatTags:   true,
+		ChainSplitDots: true,
+	},
 }
 
 type FormatterSettings struct {
@@ -15,6 +21,7 @@ type FormatterSettings struct {
 	GoFmt     GoFmtSettings     `mapstructure:"gofmt"`
 	GoFumpt   GoFumptSettings   `mapstructure:"gofumpt"`
 	GoImports GoImportsSettings `mapstructure:"goimports"`
+	GoLines   GoLinesSettings   `mapstructure:"golines"`
 }
 
 type GciSettings struct {
@@ -49,4 +56,12 @@ type GoFumptSettings struct {
 
 type GoImportsSettings struct {
 	LocalPrefixes string `mapstructure:"local-prefixes"`
+}
+
+type GoLinesSettings struct {
+	MaxLen          int  `mapstructure:"max-len"`
+	TabLen          int  `mapstructure:"tab-len"`
+	ShortenComments bool `mapstructure:"shorten-comments"`
+	ReformatTags    bool `mapstructure:"reformat-tags"`
+	ChainSplitDots  bool `mapstructure:"chain-split-dots"`
 }

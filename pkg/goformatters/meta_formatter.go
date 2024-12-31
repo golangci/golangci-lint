@@ -11,6 +11,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goformatters/gofmt"
 	"github.com/golangci/golangci-lint/pkg/goformatters/gofumpt"
 	"github.com/golangci/golangci-lint/pkg/goformatters/goimports"
+	"github.com/golangci/golangci-lint/pkg/goformatters/golines"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 )
 
@@ -50,6 +51,11 @@ func NewMetaFormatter(log logutils.Log, cfg *config.Formatters, runCfg *config.R
 		m.formatters = append(m.formatters, formatter)
 	}
 
+	// golines calls `format.Source()` internally so no need to format after it.
+	if slices.Contains(cfg.Enable, golines.Name) {
+		m.formatters = append(m.formatters, golines.New(&cfg.Settings.GoLines))
+	}
+
 	return m, nil
 }
 
@@ -80,5 +86,5 @@ func (m *MetaFormatter) Format(filename string, src []byte) []byte {
 }
 
 func IsFormatter(name string) bool {
-	return slices.Contains([]string{gofmt.Name, gofumpt.Name, goimports.Name, gci.Name}, name)
+	return slices.Contains([]string{gofmt.Name, gofumpt.Name, goimports.Name, gci.Name, golines.Name}, name)
 }
