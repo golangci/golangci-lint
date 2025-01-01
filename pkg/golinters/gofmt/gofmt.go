@@ -45,7 +45,10 @@ func runGofmt(lintCtx *linter.Context, pass *analysis.Pass, settings *config.GoF
 	}
 
 	for _, file := range pass.Files {
-		position := goanalysis.GetFilePosition(pass, file)
+		position, isGoFile := goanalysis.GetGoFilePosition(pass, file)
+		if !isGoFile {
+			continue
+		}
 
 		diff, err := gofmtAPI.RunRewrite(position.Filename, settings.Simplify, rewriteRules)
 		if err != nil { // TODO: skip

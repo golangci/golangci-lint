@@ -35,7 +35,10 @@ func runNestIf(pass *analysis.Pass, settings *config.NestifSettings) {
 	}
 
 	for _, file := range pass.Files {
-		position := goanalysis.GetFilePosition(pass, file)
+		position, isGoFile := goanalysis.GetGoFilePosition(pass, file)
+		if !isGoFile {
+			continue
+		}
 
 		issues := checker.Check(file, pass.Fset)
 		if len(issues) == 0 {

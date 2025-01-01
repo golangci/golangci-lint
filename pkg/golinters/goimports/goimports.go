@@ -43,7 +43,10 @@ func New(settings *config.GoImportsSettings) *goanalysis.Linter {
 
 func runGoImports(lintCtx *linter.Context, pass *analysis.Pass) error {
 	for _, file := range pass.Files {
-		position := goanalysis.GetFilePosition(pass, file)
+		position, isGoFile := goanalysis.GetGoFilePosition(pass, file)
+		if !isGoFile {
+			continue
+		}
 
 		diff, err := goimportsAPI.Run(position.Filename)
 		if err != nil { // TODO: skip

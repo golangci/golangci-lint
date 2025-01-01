@@ -91,11 +91,14 @@ func createMisspellReplacer(settings *config.MisspellSettings) (*misspell.Replac
 }
 
 func runMisspellOnFile(lintCtx *linter.Context, pass *analysis.Pass, file *ast.File, replacer *misspell.Replacer, mode string) error {
-	filename := goanalysis.GetFilePosition(pass, file).Filename
+	position, isGoFile := goanalysis.GetGoFilePosition(pass, file)
+	if !isGoFile {
+		return nil
+	}
 
-	fileContent, err := lintCtx.FileCache.GetFileBytes(filename)
+	fileContent, err := lintCtx.FileCache.GetFileBytes(position.Filename)
 	if err != nil {
-		return fmt.Errorf("can't get file %s contents: %w", filename, err)
+		return fmt.Errorf("can't get file %s contents: %w", position.Filename, err)
 	}
 
 	// `r.ReplaceGo` doesn't find issues inside strings: it searches only inside comments.

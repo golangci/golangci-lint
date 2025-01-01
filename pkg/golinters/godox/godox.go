@@ -34,7 +34,10 @@ func New(settings *config.GodoxSettings) *goanalysis.Linter {
 
 func runGodox(pass *analysis.Pass, settings *config.GodoxSettings) {
 	for _, file := range pass.Files {
-		position := goanalysis.GetFilePosition(pass, file)
+		position, isGoFile := goanalysis.GetGoFilePosition(pass, file)
+		if !isGoFile {
+			continue
+		}
 
 		messages := godox.Run(file, pass.Fset, settings.Keywords...)
 		if len(messages) == 0 {
