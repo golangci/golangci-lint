@@ -55,9 +55,8 @@ func runLll(pass *analysis.Pass, settings *config.LllSettings) error {
 }
 
 func getLLLIssuesForFile(pass *analysis.Pass, file *ast.File, maxLineLen int, tabSpaces string) error {
-	position := goanalysis.GetFilePosition(pass, file)
-
-	if !strings.HasSuffix(position.Filename, ".go") {
+	position, isGoFile := goanalysis.GetGoFilePosition(pass, file)
+	if !isGoFile {
 		return nil
 	}
 

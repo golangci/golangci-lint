@@ -1,8 +1,6 @@
 package nestif
 
 import (
-	"strings"
-
 	"github.com/nakabonne/nestif"
 	"golang.org/x/tools/go/analysis"
 
@@ -37,9 +35,8 @@ func runNestIf(pass *analysis.Pass, settings *config.NestifSettings) {
 	}
 
 	for _, file := range pass.Files {
-		position := goanalysis.GetFilePosition(pass, file)
-
-		if !strings.HasSuffix(position.Filename, ".go") {
+		position, isGoFile := goanalysis.GetGoFilePosition(pass, file)
+		if !isGoFile {
 			continue
 		}
 

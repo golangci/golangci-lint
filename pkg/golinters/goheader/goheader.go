@@ -63,9 +63,8 @@ func runGoHeader(pass *analysis.Pass, conf *goheader.Configuration) error {
 	a := goheader.New(goheader.WithTemplate(template), goheader.WithValues(values))
 
 	for _, file := range pass.Files {
-		position := goanalysis.GetFilePosition(pass, file)
-
-		if !strings.HasSuffix(position.Filename, ".go") {
+		position, isGoFile := goanalysis.GetGoFilePosition(pass, file)
+		if !isGoFile {
 			continue
 		}
 

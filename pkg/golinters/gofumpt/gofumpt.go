@@ -61,9 +61,8 @@ func New(settings *config.GofumptSettings) *goanalysis.Linter {
 
 func runGofumpt(lintCtx *linter.Context, pass *analysis.Pass, diff differ, options format.Options) error {
 	for _, file := range pass.Files {
-		position := goanalysis.GetFilePosition(pass, file)
-
-		if !strings.HasSuffix(position.Filename, ".go") {
+		position, isGoFile := goanalysis.GetGoFilePosition(pass, file)
+		if !isGoFile {
 			continue
 		}
 

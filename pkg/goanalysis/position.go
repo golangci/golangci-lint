@@ -12,6 +12,16 @@ func GetFilePosition(pass *analysis.Pass, f *ast.File) token.Position {
 	return GetFilePositionFor(pass.Fset, f.Pos())
 }
 
+func GetGoFilePosition(pass *analysis.Pass, f *ast.File) (token.Position, bool) {
+	position := GetFilePositionFor(pass.Fset, f.Pos())
+
+	if filepath.Ext(position.Filename) == ".go" {
+		return position, true
+	}
+
+	return position, false
+}
+
 func GetFilePositionFor(fset *token.FileSet, p token.Pos) token.Position {
 	pos := fset.PositionFor(p, true)
 
