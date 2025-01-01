@@ -12,10 +12,9 @@ package testdata
 */
 import "C"
 
-import ( // want "File is not properly formatted"
-	"golang.org/x/tools/go/analysis"
-	"github.com/golangci/golangci-lint/pkg/config" // want "File is not properly formatted"
-	"unsafe"
+import (
+	"golang.org/x/tools/go/analysis" // want "File is not properly formatted"
+	"github.com/golangci/golangci-lint/pkg/config"
 	"fmt"
 	"errors"
 	gcicfg "github.com/daixiang0/gci/pkg/config"

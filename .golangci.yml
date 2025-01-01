@@ -178,7 +178,7 @@ issues:
     - path: pkg/golinters/godot/godot.go
       linters: [staticcheck]
       text: "SA1019: settings.CheckAll is deprecated: use Scope instead"
-    - path: pkg/golinters/gci/gci.go
+    - path: pkg/goformatters/gci/gci.go
       linters: [staticcheck]
       text: "SA1019: settings.LocalPrefixes is deprecated: use Sections instead."
     - path: pkg/golinters/mnd/mnd.go
