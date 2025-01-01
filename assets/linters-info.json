@@ -343,7 +343,7 @@
   },
   {
     "name": "gci",
-    "desc": "Checks if code and import statements are formatted, it makes import statements always deterministic.",
+    "desc": "the_only_doc",
     "loadMode": 8199,
     "inPresets": [
       "format",
