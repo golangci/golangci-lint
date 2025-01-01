@@ -3,11 +3,11 @@ package gofumpt
 import (
 	"bytes"
 	"fmt"
-	"io"
 	"os"
+	"path/filepath"
 	"strings"
 
-	"github.com/shazow/go-diff/difflib"
+	"github.com/rogpeppe/go-internal/diff"
 	"golang.org/x/tools/go/analysis"
 	"mvdan.cc/gofumpt/format"
 
@@ -19,13 +19,7 @@ import (
 
 const linterName = "gofumpt"
 
-type differ interface {
-	Diff(out io.Writer, a io.ReadSeeker, b io.ReadSeeker) error
-}
-
 func New(settings *config.GofumptSettings) *goanalysis.Linter {
-	diff := difflib.New()
-
 	var options format.Options
 
 	if settings != nil {
@@ -49,7 +43,7 @@ func New(settings *config.GofumptSettings) *goanalysis.Linter {
 		nil,
 	).WithContextSetter(func(lintCtx *linter.Context) {
 		analyzer.Run = func(pass *analysis.Pass) (any, error) {
-			err := runGofumpt(lintCtx, pass, diff, options)
+			err := run(lintCtx, pass, options)
 			if err != nil {
 				return nil, err
 			}
@@ -59,7 +53,7 @@ func New(settings *config.GofumptSettings) *goanalysis.Linter {
 	}).WithLoadMode(goanalysis.LoadModeSyntax)
 }
 
-func runGofumpt(lintCtx *linter.Context, pass *analysis.Pass, diff differ, options format.Options) error {
+func run(lintCtx *linter.Context, pass *analysis.Pass, options format.Options) error {
 	for _, file := range pass.Files {
 		position, isGoFile := goanalysis.GetGoFilePosition(pass, file)
 		if !isGoFile {
@@ -77,18 +71,14 @@ func runGofumpt(lintCtx *linter.Context, pass *analysis.Pass, diff differ, optio
 		}
 
 		if !bytes.Equal(input, output) {
-			out := bytes.NewBufferString(fmt.Sprintf("--- %[1]s\n+++ %[1]s\n", position.Filename))
+			newName := filepath.ToSlash(position.Filename)
+			oldName := newName + ".orig"
 
-			err := diff.Diff(out, bytes.NewReader(input), bytes.NewReader(output))
+			theDiff := diff.Diff(oldName, input, newName, output)
+
+			err = internal.ExtractDiagnosticFromPatch(pass, file, string(theDiff), lintCtx)
 			if err != nil {
-				return fmt.Errorf("error while running gofumpt: %w", err)
-			}
-
-			diff := out.String()
-
-			err = internal.ExtractDiagnosticFromPatch(pass, file, diff, lintCtx)
-			if err != nil {
-				return fmt.Errorf("can't extract issues from gofumpt diff output %q: %w", diff, err)
+				return fmt.Errorf("can't extract issues from gofumpt diff output %q: %w", string(theDiff), err)
 			}
 		}
 	}

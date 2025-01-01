@@ -1,9 +1,12 @@
 package goimports
 
 import (
+	"bytes"
 	"fmt"
+	"os"
+	"path/filepath"
 
-	goimportsAPI "github.com/golangci/gofmt/goimports"
+	"github.com/rogpeppe/go-internal/diff"
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/imports"
 
@@ -31,7 +34,7 @@ func New(settings *config.GoImportsSettings) *goanalysis.Linter {
 		imports.LocalPrefix = settings.LocalPrefixes
 
 		analyzer.Run = func(pass *analysis.Pass) (any, error) {
-			err := runGoImports(lintCtx, pass)
+			err := run(lintCtx, pass)
 			if err != nil {
 				return nil, err
 			}
@@ -41,24 +44,33 @@ func New(settings *config.GoImportsSettings) *goanalysis.Linter {
 	}).WithLoadMode(goanalysis.LoadModeSyntax)
 }
 
-func runGoImports(lintCtx *linter.Context, pass *analysis.Pass) error {
+func run(lintCtx *linter.Context, pass *analysis.Pass) error {
 	for _, file := range pass.Files {
 		position, isGoFile := goanalysis.GetGoFilePosition(pass, file)
 		if !isGoFile {
 			continue
 		}
 
-		diff, err := goimportsAPI.Run(position.Filename)
-		if err != nil { // TODO: skip
-			return err
-		}
-		if diff == nil {
-			continue
+		input, err := os.ReadFile(position.Filename)
+		if err != nil {
+			return fmt.Errorf("unable to open file %s: %w", position.Filename, err)
 		}
 
-		err = internal.ExtractDiagnosticFromPatch(pass, file, string(diff), lintCtx)
+		output, err := imports.Process(position.Filename, input, nil)
 		if err != nil {
-			return fmt.Errorf("can't extract issues from goimports diff output %q: %w", string(diff), err)
+			return fmt.Errorf("error while running goimports: %w", err)
+		}
+
+		if !bytes.Equal(input, output) {
+			newName := filepath.ToSlash(position.Filename)
+			oldName := newName + ".orig"
+
+			theDiff := diff.Diff(oldName, input, newName, output)
+
+			err = internal.ExtractDiagnosticFromPatch(pass, file, string(theDiff), lintCtx)
+			if err != nil {
+				return fmt.Errorf("can't extract issues from goimports diff output %q: %w", string(theDiff), err)
+			}
 		}
 	}
 
