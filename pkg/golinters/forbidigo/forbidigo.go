@@ -79,11 +79,8 @@ func runForbidigo(pass *analysis.Pass, settings *config.ForbidigoSettings) error
 
 		for _, hint := range hints {
 			pass.Report(analysis.Diagnostic{
-				Pos:            hint.Pos(),
-				Message:        hint.Details(),
-				URL:            "",
-				SuggestedFixes: nil,
-				Related:        nil,
+				Pos:     hint.Pos(),
+				Message: hint.Details(),
 			})
 		}
 	}

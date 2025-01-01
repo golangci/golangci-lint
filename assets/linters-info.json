@@ -56,8 +56,9 @@
     "inPresets": [
       "style"
     ],
-    "originalURL": "https://github.com/lasiar/canonicalHeader",
+    "originalURL": "https://github.com/lasiar/canonicalheader",
     "internal": false,
+    "canAutoFix": true,
     "isSlow": true,
     "since": "v1.58.0"
   },
@@ -100,13 +101,13 @@
   {
     "name": "cyclop",
     "desc": "checks function and package cyclomatic complexity",
-    "loadMode": 8767,
+    "loadMode": 8199,
     "inPresets": [
       "complexity"
     ],
     "originalURL": "https://github.com/bkielbasa/cyclop",
     "internal": false,
-    "isSlow": true,
+    "isSlow": false,
     "since": "v1.37.0"
   },
   {
@@ -114,7 +115,6 @@
     "desc": "check declaration order and count of types, constants, variables and functions",
     "loadMode": 8199,
     "inPresets": [
-      "format",
       "style"
     ],
     "originalURL": "https://gitlab.com/bosi/decorder",
@@ -169,6 +169,7 @@
     ],
     "originalURL": "https://github.com/Abirdcfly/dupword",
     "internal": false,
+    "canAutoFix": true,
     "isSlow": false,
     "since": "v1.50.0"
   },
@@ -232,6 +233,7 @@
     ],
     "originalURL": "https://github.com/polyfloyd/go-errorlint",
     "internal": false,
+    "canAutoFix": true,
     "isSlow": true,
     "since": "v1.32.0"
   },
@@ -278,6 +280,19 @@
     }
   },
   {
+    "name": "exptostd",
+    "desc": "Detects functions from golang.org/x/exp/ that can be replaced by std functions.",
+    "loadMode": 8767,
+    "inPresets": [
+      "style"
+    ],
+    "originalURL": "https://github.com/ldez/exptostd",
+    "internal": false,
+    "canAutoFix": true,
+    "isSlow": true,
+    "since": "v1.63.0"
+  },
+  {
     "name": "forbidigo",
     "desc": "Forbids identifiers",
     "loadMode": 8767,
@@ -310,12 +325,13 @@
     ],
     "originalURL": "https://github.com/Crocmagnon/fatcontext",
     "internal": false,
+    "canAutoFix": true,
     "isSlow": true,
     "since": "v1.58.0"
   },
   {
     "name": "funlen",
-    "desc": "Tool for detection of long functions",
+    "desc": "Checks for long functions.",
     "loadMode": 8199,
     "inPresets": [
       "complexity"
@@ -327,7 +343,7 @@
   },
   {
     "name": "gci",
-    "desc": "Gci controls Go package import order and makes it always deterministic.",
+    "desc": "Checks if code and import statements are formatted, it makes import statements always deterministic.",
     "loadMode": 8199,
     "inPresets": [
       "format",
@@ -348,6 +364,7 @@
     ],
     "originalURL": "https://github.com/nunnatsa/ginkgolinter",
     "internal": false,
+    "canAutoFix": true,
     "isSlow": true,
     "since": "v1.51.0"
   },
@@ -488,12 +505,13 @@
     ],
     "originalURL": "https://github.com/Djarvur/go-err113",
     "internal": false,
+    "canAutoFix": true,
     "isSlow": true,
     "since": "v1.26.0"
   },
   {
     "name": "gofmt",
-    "desc": "Gofmt checks whether code was gofmt-ed. By default this tool runs with -s option to check for code simplification",
+    "desc": "Checks if the code is formatted according to 'gofmt' command.",
     "loadMode": 8199,
     "inPresets": [
       "format"
@@ -506,7 +524,7 @@
   },
   {
     "name": "gofumpt",
-    "desc": "Gofumpt checks whether code was gofumpt-ed.",
+    "desc": "Checks if code and import statements are formatted, with additional rules.",
     "loadMode": 8199,
     "inPresets": [
       "format"
@@ -532,7 +550,7 @@
   },
   {
     "name": "goimports",
-    "desc": "Check import statements are formatted according to the 'goimport' command. Reformat imports in autofix mode.",
+    "desc": "Checks if the code and import statements are formatted according to the 'goimports' command.",
     "loadMode": 8199,
     "inPresets": [
       "format",
@@ -623,6 +641,7 @@
     ],
     "originalURL": "https://github.com/dominikh/go-tools/tree/master/simple",
     "internal": false,
+    "canAutoFix": true,
     "isSlow": true,
     "since": "v1.20.0"
   },
@@ -653,6 +672,7 @@
     ],
     "originalURL": "https://pkg.go.dev/cmd/vet",
     "internal": false,
+    "canAutoFix": true,
     "isSlow": true,
     "since": "v1.0.0"
   },
@@ -677,6 +697,7 @@
     ],
     "originalURL": "https://github.com/uudashr/iface",
     "internal": false,
+    "canAutoFix": true,
     "isSlow": true,
     "since": "v1.62.0"
   },
@@ -689,6 +710,7 @@
     ],
     "originalURL": "https://github.com/julz/importas",
     "internal": false,
+    "canAutoFix": true,
     "isSlow": true,
     "since": "v1.38.0"
   },
@@ -738,6 +760,7 @@
     ],
     "originalURL": "https://github.com/ckaznocha/intrange",
     "internal": false,
+    "canAutoFix": true,
     "isSlow": true,
     "since": "v1.57.0"
   },
@@ -854,6 +877,7 @@
     ],
     "originalURL": "https://github.com/alexkohler/nakedret",
     "internal": false,
+    "canAutoFix": true,
     "isSlow": false,
     "since": "v1.19.0"
   },
@@ -882,6 +906,18 @@
     "since": "v1.38.0"
   },
   {
+    "name": "nilnesserr",
+    "desc": "This linter reports that it checks for err != nil, but it returns a different nil value error.\npowered by nilness and nilerr.",
+    "loadMode": 8767,
+    "inPresets": [
+      "bugs"
+    ],
+    "originalURL": "https://github.com/alingse/nilnesserr",
+    "internal": false,
+    "isSlow": true,
+    "since": "v1.63.0"
+  },
+  {
     "name": "nilnil",
     "desc": "Checks that there is no simultaneous return of `nil` error and an invalid value.",
     "loadMode": 8767,
@@ -902,6 +938,7 @@
     ],
     "originalURL": "https://github.com/ssgreg/nlreturn",
     "internal": false,
+    "canAutoFix": true,
     "isSlow": false,
     "since": "v1.30.0"
   },
@@ -964,6 +1001,7 @@
     ],
     "originalURL": "https://github.com/catenacyber/perfsprint",
     "internal": false,
+    "canAutoFix": true,
     "isSlow": true,
     "since": "v1.55.0"
   },
@@ -1050,6 +1088,7 @@
     ],
     "originalURL": "https://github.com/mgechev/revive",
     "internal": false,
+    "canAutoFix": true,
     "isSlow": true,
     "since": "v1.37.0"
   },
@@ -1071,8 +1110,7 @@
     "desc": "ensure consistent code style when using log/slog",
     "loadMode": 8767,
     "inPresets": [
-      "style",
-      "format"
+      "style"
     ],
     "originalURL": "https://github.com/go-simpler/sloglint",
     "internal": false,
@@ -1118,6 +1156,7 @@
     ],
     "originalURL": "https://staticcheck.dev/",
     "internal": false,
+    "canAutoFix": true,
     "isSlow": true,
     "since": "v1.0.0"
   },
@@ -1130,6 +1169,7 @@
     ],
     "originalURL": "https://github.com/dominikh/go-tools/tree/master/stylecheck",
     "internal": false,
+    "canAutoFix": true,
     "isSlow": true,
     "since": "v1.20.0"
   },
@@ -1138,8 +1178,7 @@
     "desc": "check that struct tags are well aligned",
     "loadMode": 8199,
     "inPresets": [
-      "style",
-      "format"
+      "style"
     ],
     "originalURL": "https://github.com/4meepo/tagalign",
     "internal": false,
@@ -1150,13 +1189,13 @@
   {
     "name": "tagliatelle",
     "desc": "Checks the struct tags.",
-    "loadMode": 8199,
+    "loadMode": 8767,
     "inPresets": [
       "style"
     ],
     "originalURL": "https://github.com/ldez/tagliatelle",
     "internal": false,
-    "isSlow": false,
+    "isSlow": true,
     "since": "v1.40.0"
   },
   {
@@ -1193,6 +1232,7 @@
     ],
     "originalURL": "https://github.com/Antonboom/testifylint",
     "internal": false,
+    "canAutoFix": true,
     "isSlow": true,
     "since": "v1.55.0"
   },
@@ -1293,8 +1333,22 @@
     ],
     "originalURL": "https://github.com/sashamelentyev/usestdlibvars",
     "internal": false,
+    "canAutoFix": true,
     "isSlow": false,
     "since": "v1.48.0"
+  },
+  {
+    "name": "usetesting",
+    "desc": "Reports uses of functions with replacement inside the testing package.",
+    "loadMode": 8767,
+    "inPresets": [
+      "test"
+    ],
+    "originalURL": "https://github.com/ldez/usetesting",
+    "internal": false,
+    "canAutoFix": true,
+    "isSlow": true,
+    "since": "v1.63.0"
   },
   {
     "name": "varnamelen",
@@ -1355,6 +1409,7 @@
     ],
     "originalURL": "https://github.com/bombsimon/wsl",
     "internal": false,
+    "canAutoFix": true,
     "isSlow": false,
     "since": "v1.20.0"
   },

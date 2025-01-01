@@ -190,10 +190,10 @@ aur_sources:
       local _commit _flags
       _commit=$(bsdcat "${pkgname}-${pkgver}.tar.gz" | git get-tar-commit-id)
       _flags=(
-      -X=main.version="$pkgver"
-      -X=main.commit="${_commit::7}"
-      -X=main.date="$(date -u -d "@${SOURCE_DATE_EPOCH}" +'%FT%TZ')"
-      -linkmode=external
+        -X=main.version="$pkgver"
+        -X=main.commit="${_commit::7}"
+        -X=main.date="$(date -u -d "@${SOURCE_DATE_EPOCH}" +'%FT%TZ')"
+        -linkmode=external
       )
       export CGO_ENABLED=1
       export CGO_CFLAGS="${CFLAGS}"
