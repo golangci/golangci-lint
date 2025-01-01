@@ -188,7 +188,7 @@ aur_sources:
       email: 65486276+golangci-releaser@users.noreply.github.com
     build: |-
       local _commit _flags
-      _commit=$(bsdcat "${pkgname}-${pkgver}.tar.gz" | git get-tar-commit-id)
+      _commit=$(bsdcat "${pkgname}_${pkgver}.tar.gz" | git get-tar-commit-id)
       _flags=(
         -X=main.version="$pkgver"
         -X=main.commit="${_commit::7}"
@@ -201,15 +201,12 @@ aur_sources:
       export CGO_CXXFLAGS="$CXXFLAGS"
       export CGO_LDFLAGS="${LDFLAGS}"
       export GOFLAGS='-buildmode=pie -trimpath -modcacherw'
-      
-      cd "$pkgname-$pkgver"
-      
+            
       go build -o "$pkgname" -ldflags="${_flags[*]}" ./cmd/"$pkgname"
       ./"$pkgname" completion bash > completion.bash
       ./"$pkgname" completion zsh > completion.zsh
       ./"$pkgname" completion fish > completion.fish
     package: |-
-      cd "${pkgname}-${pkgver}"
       install -Dm755 "$pkgname" -t "$pkgdir"/usr/bin
       install -Dm644 completion.bash "$pkgdir"/usr/share/bash-completion/completions/"$pkgname"
       install -Dm644 completion.zsh "$pkgdir"/usr/share/zsh/site-functions/_"$pkgname"
