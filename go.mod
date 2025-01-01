@@ -158,7 +158,6 @@ require (
 	github.com/go-toolsmith/typep v1.1.0 // indirect
 	github.com/gobwas/glob v0.2.3 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
-	github.com/golangci/modinfo v0.3.3 // indirect
 	github.com/google/go-cmp v0.6.0 // indirect
 	github.com/gostaticanalysis/analysisutil v0.7.1 // indirect
 	github.com/gostaticanalysis/comment v1.4.2 // indirect

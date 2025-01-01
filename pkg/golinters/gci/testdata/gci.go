@@ -2,10 +2,9 @@
 //golangcitest:config_path testdata/gci.yml
 package testdata
 
-// want +1 "File is not properly formatted"
-import (
+import ( // want "File is not properly formatted"
 	"golang.org/x/tools/go/analysis"
-	"github.com/golangci/golangci-lint/pkg/config"
+	"github.com/golangci/golangci-lint/pkg/config" // want "File is not properly formatted"
 	"fmt"
 	"errors"
 	gcicfg "github.com/daixiang0/gci/pkg/config"
