@@ -41,6 +41,10 @@ func getThanksList() string {
 			linterURL = "https://github.com/dominikh/go-tools"
 		}
 
+		if strings.HasPrefix(lc.OriginalURL, "https://github.com/gostaticanalysis/") {
+			linterURL = "https://github.com/tenntenn/gostaticanalysis"
+		}
+
 		if author := extractAuthor(linterURL, "https://github.com/"); author != "" && author != "golangci" {
 			if _, ok := addedAuthors[author]; ok {
 				addedAuthors[author].Linters = append(addedAuthors[author].Linters, lc.Name())
