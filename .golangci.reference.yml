@@ -35,6 +35,7 @@ linters:
     - exhaustive
     - exhaustruct
     - exportloopref
+    - exptostd
     - fatcontext
     - forbidigo
     - forcetypeassert
@@ -81,6 +82,7 @@ linters:
     - nakedret
     - nestif
     - nilerr
+    - nilnesserr
     - nilnil
     - nlreturn
     - noctx
@@ -114,6 +116,7 @@ linters:
     - unparam
     - unused
     - usestdlibvars
+    - usetesting
     - varnamelen
     - wastedassign
     - whitespace
@@ -151,6 +154,7 @@ linters:
     - exhaustive
     - exhaustruct
     - exportloopref
+    - exptostd
     - fatcontext
     - forbidigo
     - forcetypeassert
@@ -197,6 +201,7 @@ linters:
     - nakedret
     - nestif
     - nilerr
+    - nilnesserr
     - nilnil
     - nlreturn
     - noctx
@@ -230,6 +235,7 @@ linters:
     - unparam
     - unused
     - usestdlibvars
+    - usetesting
     - varnamelen
     - wastedassign
     - whitespace
@@ -592,6 +598,14 @@ linters-settings:
       - alias                          # Alias section: contains all alias imports. This section is not present unless explicitly enabled.
       - localmodule                    # Local module section: contains all local packages. This section is not present unless explicitly enabled.
 
+    # Checks that no inline Comments are present.
+    # Default: false
+    no-inline-comments: true
+
+    # Checks that no prefix Comments(comment lines above an import) are present.
+    # Default: false
+    no-prefix-comments: true
+
     # Skip generated files.
     # Default: true
     skip-generated: false
@@ -660,6 +674,9 @@ linters-settings:
     # Presence of `default` case in switch statements satisfies exhaustiveness, if all members are not listed.
     # Default: true
     default-signifies-exhaustive: false
+    # Include shared interfaces in the exhaustiviness check.
+    # Default: false
+    include-shared-interfaces: true
 
   gocognit:
     # Minimal code complexity to report.
@@ -1354,7 +1371,6 @@ linters-settings:
     # Allow local `replace` directives.
     # Default: false
     replace-local: true
-
     # List of allowed `replace` directives.
     # Default: []
     replace-allow-list:
@@ -1362,10 +1378,24 @@ linters-settings:
     # Allow to not explain why the version has been retracted in the `retract` directives.
     # Default: false
     retract-allow-no-explanation: true
-
     # Forbid the use of the `exclude` directives.
     # Default: false
     exclude-forbidden: true
+    # Forbid the use of the `toolchain` directive.
+    # Default: false
+    toolchain-forbidden: true
+    # Defines a pattern to validate `toolchain` directive.
+    # Default: '' (no match)
+    toolchain-pattern: 'go1\.23\.\d+$'
+    # Forbid the use of the `tool` directives.
+    # Default: false
+    tool-forbidden: true
+    # Forbid the use of the `godebug` directive.
+    # Default: false
+    go-debug-forbidden: true
+    # Defines a pattern to validate `go` minimum version directive.
+    # Default: '' (no match)
+    go-version-pattern: '\d\.\d+(\.0)?'
 
   gomodguard:
     allowed:
@@ -1803,6 +1833,8 @@ linters-settings:
       - sortslice
       # Check signature of methods of well-known interfaces.
       - stdmethods
+      # Check for uses of too-new standard library symbols.
+      - stdversion
       # Check for string(int) conversions.
       - stringintconv
       # Check that struct field tags conform to reflect.StructTag.Get.
@@ -1823,6 +1855,8 @@ linters-settings:
       - unusedresult
       # Checks for unused writes.
       - unusedwrite
+      # Checks for misuses of sync.WaitGroup.
+      - waitgroup
 
     # Enable all analyzers.
     # Default: false
@@ -1971,6 +2005,11 @@ linters-settings:
       # see https://github.com/julz/importas#use-regular-expression for details
       - pkg: knative.dev/serving/pkg/apis/(\w+)/(v[\w\d]+)
         alias: $1$2
+      # An explicit empty alias can be used to ensure no aliases are used for a package.
+      # This can be useful if `no-extra-aliases: true` doesn't fit your need.
+      # Multiple packages can use an empty alias.
+      - pkg: errors
+        alias: ""
 
   inamedparam:
     # Skips check for interface methods with only a single parameter.
@@ -2034,6 +2073,9 @@ linters-settings:
     # Allow check for the github.com/go-logr/logr library.
     # Default: true
     logr: false
+    # Allow check for the log/slog library.
+    # Default: true
+    slog: false
     # Allow check for the "sugar logger" from go.uber.org/zap library.
     # Default: true
     zap: false
@@ -2279,6 +2321,23 @@ linters-settings:
     # Default: ["EOF", "Err.*"]
     patterns:
       - ".*"
+
+  recvcheck:
+    # Disables the built-in method exclusions:
+    # - `MarshalText`
+    # - `MarshalJSON`
+    # - `MarshalYAML`
+    # - `MarshalXML`
+    # - `MarshalBinary`
+    # - `GobEncode`
+    # Default: false
+    disable-builtin: true
+    # User-defined method exclusions.
+    # The format is `struct_name.method_name` (ex: `Foo.MethodName`).
+    # A wildcard `*` can use as a struct name (ex: `*.MethodName`).
+    # Default: []
+    exclusions:
+      - "*.Value"
 
   revive:
     # Maximum number of open files at the same time.
@@ -3280,16 +3339,24 @@ linters-settings:
     strict: true
 
   tagliatelle:
-    # Check the struct tag name case.
+    # Checks the struct tag name case.
     case:
-      # Use the struct field name to check the name of the struct tag.
-      # Default: false
-      use-field-name: true
-      # `camel` is used for `json` and `yaml`, and `header` is used for `header` (can be overridden)
-      # Default: {}
+      # Defines the association between tag name and case.
+      # Any struct tag name can be used.
+      # Supported string cases:
+      # - `camel`
+      # - `pascal`
+      # - `kebab`
+      # - `snake`
+      # - `upperSnake`
+      # - `goCamel`
+      # - `goPascal`
+      # - `goKebab`
+      # - `goSnake`
+      # - `upper`
+      # - `lower`
+      # - `header`
       rules:
-        # Any struct tag type can be used.
-        # Support string case: `camel`, `pascal`, `kebab`, `snake`, `upperSnake`, `goCamel`, `goPascal`, `goKebab`, `goSnake`, `upper`, `lower`, `header`
         json: camel
         yaml: camel
         xml: camel
@@ -3299,6 +3366,70 @@ linters-settings:
         mapstructure: kebab
         env: upperSnake
         envconfig: upperSnake
+        whatever: snake
+      # Defines the association between tag name and case.
+      # Important: the `extended-rules` overrides `rules`.
+      # Default: empty
+      extended-rules:
+        json:
+          # Supported string cases:
+          # - `camel`
+          # - `pascal`
+          # - `kebab`
+          # - `snake`
+          # - `upperSnake`
+          # - `goCamel`
+          # - `goPascal`
+          # - `goKebab`
+          # - `goSnake`
+          # - `header`
+          # - `lower`
+          # - `header`
+          #
+          # Required
+          case: camel
+          # Adds 'AMQP', 'DB', 'GID', 'RTP', 'SIP', 'TS' to initialisms,
+          # and removes 'LHS', 'RHS' from initialisms.
+          # Default: false
+          extra-initialisms: true
+          # Defines initialism additions and overrides.
+          # Default: empty
+          initialism-overrides:
+            DB: true # add a new initialism
+            LHS: false # disable a default initialism.
+            # ...
+      # Uses the struct field name to check the name of the struct tag.
+      # Default: false
+      use-field-name: true
+      # The field names to ignore.
+      # Default: []
+      ignored-fields:
+        - Bar
+        - Foo
+      # Overrides the default/root configuration.
+      # Default: []
+      overrides:
+        -
+          # The package path (uses `/` only as a separator).
+          # Required
+          pkg: foo/bar
+          # Default: empty or the same as the default/root configuration.
+          rules:
+            json: snake
+            xml: pascal
+          # Default: empty or the same as the default/root configuration.
+          extended-rules:
+            # Same options as the base `extended-rules`.
+          # Default: false (WARNING: it doesn't follow the default/root configuration)
+          use-field-name: true
+          # The field names to ignore.
+          # Default: [] or the same as the default/root configuration.
+          ignored-fields:
+            - Bar
+            - Foo
+          # Ignore the package (takes precedence over all other configurations).
+          # Default: false
+          ignore: true
 
   tenv:
     # The option `all` will run against whole test files (`_test.go`) regardless of method/function signatures.
@@ -3490,6 +3621,38 @@ linters-settings:
     # Default: false
     constant-kind: true
 
+  usetesting:
+    # Enable/disable `os.CreateTemp("", ...)` detections.
+    # Default: true
+    os-create-temp: false
+
+    # Enable/disable `os.MkdirTemp()` detections.
+    # Default: true
+    os-mkdir-temp: false
+
+    # Enable/disable `os.Setenv()` detections.
+    # Default: false
+    os-setenv: true
+
+    # Enable/disable `os.TempDir()` detections.
+    # Default: false
+    os-temp-dir: true
+
+    # Enable/disable `os.Chdir()` detections.
+    # Disabled if Go < 1.24.
+    # Default: true
+    os-chdir: false
+
+    # Enable/disable `context.Background()` detections.
+    # Disabled if Go < 1.24.
+    # Default: true
+    context-background: false
+
+    # Enable/disable `context.TODO()` detections.
+    # Disabled if Go < 1.24.
+    # Default: true
+    context-todo: false
+
   unconvert:
     # Remove conversions that force intermediate rounding.
     # Default: false
@@ -3586,6 +3749,15 @@ linters-settings:
     multi-func: true
 
   wrapcheck:
+    # An array of strings specifying additional substrings of signatures to ignore.
+    # Unlike 'ignoreSigs', this option extends the default set (or the set specified in 'ignoreSigs') without replacing it entirely.
+    # This allows you to add specific signatures to the ignore list
+    # while retaining the defaults or any items in 'ignoreSigs'.
+    # Default: []
+    extra-ignore-sigs:
+      - .CustomError(
+      - .SpecificWrap(
+
     # An array of strings that specify substrings of signatures to ignore.
     # If this set, it will override the default set of ignored signatures.
     # See https://github.com/tomarrell/wrapcheck#configuration for more information.
@@ -3833,6 +4005,10 @@ issues:
   # Default: 3
   max-same-issues: 0
 
+  # Make issues output unique by line.
+  # Default: true
+  uniq-by-line: false
+
   # Show only new issues: if there are unstaged changes or untracked files,
   # only those changes are analyzed, else only changes in HEAD~ are analyzed.
   # It's a super-useful option for integration of golangci-lint into existing large codebase.
@@ -3902,10 +4078,6 @@ output:
   # Default: true
   print-linter-name: false
 
-  # Make issues output unique by line.
-  # Default: true
-  uniq-by-line: false
-
   # Add a prefix to the output file references.
   # Default: ""
   path-prefix: ""
@@ -3940,6 +4112,7 @@ output:
 # Options for analysis running.
 run:
   # Timeout for analysis, e.g. 30s, 5m.
+  # If the value is lower or equal to 0, the timeout is disabled.
   # Default: 1m
   timeout: 5m
 
