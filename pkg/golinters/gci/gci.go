@@ -38,7 +38,7 @@ func New(settings *config.GciSettings) *goanalysis.Linter {
 
 	return goanalysis.NewLinter(
 		linterName,
-		a.Doc,
+		"Checks if code and import statements are formatted, it makes import statements always deterministic.",
 		[]*analysis.Analyzer{a},
 		nil,
 	).WithContextSetter(func(lintCtx *linter.Context) {
