@@ -14,14 +14,18 @@ type Formatter struct {
 	options gofumpt.Options
 }
 
-func New(cfg config.GofumptSettings, goVersion string) *Formatter {
-	return &Formatter{
-		options: gofumpt.Options{
+func New(settings *config.GofumptSettings, goVersion string) *Formatter {
+	var options gofumpt.Options
+
+	if settings != nil {
+		options = gofumpt.Options{
 			LangVersion: getLangVersion(goVersion),
-			ModulePath:  cfg.ModulePath,
-			ExtraRules:  cfg.ExtraRules,
-		},
+			ModulePath:  settings.ModulePath,
+			ExtraRules:  settings.ExtraRules,
+		}
 	}
+
+	return &Formatter{options: options}
 }
 
 func (*Formatter) Name() string {
@@ -32,7 +36,6 @@ func (f *Formatter) Format(_ string, src []byte) ([]byte, error) {
 	return gofumpt.Source(src, f.options)
 }
 
-// modified copy of pkg/golinters/gofumpt/gofumpt.go
 func getLangVersion(v string) string {
 	if v == "" {
 		// TODO: defaults to "1.15", in the future (v2) must be removed.
