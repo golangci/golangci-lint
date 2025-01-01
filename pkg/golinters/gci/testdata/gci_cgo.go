@@ -1,7 +1,3 @@
-//go:build ignore
-
-// TODO(ldez) the linter doesn't support cgo.
-
 //golangcitest:args -Egci
 //golangcitest:config_path testdata/gci.yml
 package testdata
@@ -16,10 +12,9 @@ package testdata
 */
 import "C"
 
-// want +1 "File is not properly formatted"
-import (
+import ( // want "File is not properly formatted"
 	"golang.org/x/tools/go/analysis"
-	"github.com/golangci/golangci-lint/pkg/config"
+	"github.com/golangci/golangci-lint/pkg/config" // want "File is not properly formatted"
 	"unsafe"
 	"fmt"
 	"errors"

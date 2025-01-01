@@ -1,61 +1,118 @@
 package gci
 
 import (
+	"bytes"
 	"fmt"
+	"io"
+	"os"
 	"strings"
 
+	gcicfg "github.com/daixiang0/gci/pkg/config"
+	"github.com/daixiang0/gci/pkg/gci"
+	"github.com/daixiang0/gci/pkg/log"
+	"github.com/shazow/go-diff/difflib"
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
-	"github.com/golangci/golangci-lint/pkg/golinters/gci/internal"
+	"github.com/golangci/golangci-lint/pkg/golinters/internal"
+	"github.com/golangci/golangci-lint/pkg/lint/linter"
 )
 
 const linterName = "gci"
 
-const prefixSeparator = "¤"
+type differ interface {
+	Diff(out io.Writer, a io.ReadSeeker, b io.ReadSeeker) error
+}
 
 func New(settings *config.GciSettings) *goanalysis.Linter {
-	a := internal.NewAnalyzer()
+	log.InitLogger()
+	_ = log.L().Sync()
 
-	var cfg map[string]map[string]any
-	if settings != nil {
-		var sections []string
-		for _, section := range settings.Sections {
-			if strings.HasPrefix(section, "prefix(") {
-				sections = append(sections, strings.ReplaceAll(section, ",", prefixSeparator))
-				continue
-			}
+	diff := difflib.New()
 
-			sections = append(sections, section)
-		}
-
-		cfg = map[string]map[string]any{
-			a.Name: {
-				internal.NoInlineCommentsFlag: settings.NoInlineComments,
-				internal.NoPrefixCommentsFlag: settings.NoPrefixComments,
-				internal.SkipGeneratedFlag:    settings.SkipGenerated,
-				internal.SectionsFlag:         sections, // bug because prefix contains comas.
-				internal.CustomOrderFlag:      settings.CustomOrder,
-				internal.NoLexOrderFlag:       settings.NoLexOrder,
-				internal.PrefixDelimiterFlag:  prefixSeparator,
-			},
-		}
-
-		if settings.LocalPrefixes != "" {
-			prefix := []string{
-				"standard",
-				"default",
-				fmt.Sprintf("prefix(%s)", strings.Join(strings.Split(settings.LocalPrefixes, ","), prefixSeparator)),
-			}
-			cfg[a.Name][internal.SectionsFlag] = prefix
-		}
+	a := &analysis.Analyzer{
+		Name: linterName,
+		Doc:  goanalysis.TheOnlyanalyzerDoc,
+		Run:  goanalysis.DummyRun,
 	}
 
 	return goanalysis.NewLinter(
 		linterName,
 		a.Doc,
 		[]*analysis.Analyzer{a},
-		cfg,
-	).WithLoadMode(goanalysis.LoadModeSyntax)
+		nil,
+	).WithContextSetter(func(lintCtx *linter.Context) {
+		a.Run = func(pass *analysis.Pass) (any, error) {
+			err := run(lintCtx, pass, settings, diff)
+			if err != nil {
+				return nil, err
+			}
+
+			return nil, nil
+		}
+	}).WithLoadMode(goanalysis.LoadModeSyntax)
+}
+
+func run(lintCtx *linter.Context, pass *analysis.Pass, settings *config.GciSettings, diff differ) error {
+	cfg := gcicfg.YamlConfig{
+		Cfg: gcicfg.BoolConfig{
+			NoInlineComments: settings.NoInlineComments,
+			NoPrefixComments: settings.NoPrefixComments,
+			SkipGenerated:    settings.SkipGenerated,
+			CustomOrder:      settings.CustomOrder,
+			NoLexOrder:       settings.NoLexOrder,
+		},
+		SectionStrings: settings.Sections,
+		ModPath:        pass.Module.Path,
+	}
+
+	if settings.LocalPrefixes != "" {
+		cfg.SectionStrings = []string{
+			"standard",
+			"default",
+			fmt.Sprintf("prefix(%s)", settings.LocalPrefixes),
+		}
+	}
+
+	parsedCfg, err := cfg.Parse()
+	if err != nil {
+		return err
+	}
+
+	for _, file := range pass.Files {
+		position := goanalysis.GetFilePosition(pass, file)
+
+		if !strings.HasSuffix(position.Filename, ".go") {
+			continue
+		}
+
+		input, err := os.ReadFile(position.Filename)
+		if err != nil {
+			return fmt.Errorf("unable to open file %s: %w", position.Filename, err)
+		}
+
+		_, output, err := gci.LoadFormat(input, position.Filename, *parsedCfg)
+		if err != nil {
+			return fmt.Errorf("error while running gci: %w", err)
+		}
+
+		if !bytes.Equal(input, output) {
+			out := bytes.NewBufferString(fmt.Sprintf("--- %[1]s\n+++ %[1]s\n", position.Filename))
+
+			err := diff.Diff(out, bytes.NewReader(input), bytes.NewReader(output))
+			if err != nil {
+				return fmt.Errorf("error while running gci: %w", err)
+			}
+
+			diff := out.String()
+
+			err = internal.ExtractDiagnosticFromPatch(pass, file, diff, lintCtx)
+			if err != nil {
+				return fmt.Errorf("can't extract issues from gci diff output %q: %w", diff, err)
+			}
+		}
+	}
+
+	return nil
 }
