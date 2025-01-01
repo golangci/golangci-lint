@@ -2,6 +2,7 @@ package goimports
 
 import (
 	"fmt"
+	"strings"
 
 	goimportsAPI "github.com/golangci/gofmt/goimports"
 	"golang.org/x/tools/go/analysis"
@@ -44,6 +45,10 @@ func New(settings *config.GoImportsSettings) *goanalysis.Linter {
 func runGoImports(lintCtx *linter.Context, pass *analysis.Pass) error {
 	for _, file := range pass.Files {
 		position := goanalysis.GetFilePosition(pass, file)
+
+		if !strings.HasSuffix(position.Filename, ".go") {
+			continue
+		}
 
 		diff, err := goimportsAPI.Run(position.Filename)
 		if err != nil { // TODO: skip

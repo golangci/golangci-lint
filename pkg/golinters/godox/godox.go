@@ -36,6 +36,10 @@ func runGodox(pass *analysis.Pass, settings *config.GodoxSettings) {
 	for _, file := range pass.Files {
 		position := goanalysis.GetFilePosition(pass, file)
 
+		if !strings.HasSuffix(position.Filename, ".go") {
+			continue
+		}
+
 		messages := godox.Run(file, pass.Fset, settings.Keywords...)
 		if len(messages) == 0 {
 			continue

@@ -63,6 +63,10 @@ func runGofumpt(lintCtx *linter.Context, pass *analysis.Pass, diff differ, optio
 	for _, file := range pass.Files {
 		position := goanalysis.GetFilePosition(pass, file)
 
+		if !strings.HasSuffix(position.Filename, ".go") {
+			continue
+		}
+
 		input, err := os.ReadFile(position.Filename)
 		if err != nil {
 			return fmt.Errorf("unable to open file %s: %w", position.Filename, err)
