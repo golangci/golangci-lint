@@ -1,0 +1,55 @@
+package goformatters
+
+import (
+	"bytes"
+	"fmt"
+	"os"
+	"path/filepath"
+
+	"github.com/rogpeppe/go-internal/diff"
+	"golang.org/x/tools/go/analysis"
+
+	"github.com/golangci/golangci-lint/pkg/goanalysis"
+	"github.com/golangci/golangci-lint/pkg/goformatters/internal"
+	"github.com/golangci/golangci-lint/pkg/logutils"
+)
+
+// NewAnalyzer converts a [Formatter] to an [analysis.Analyzer].
+func NewAnalyzer(logger logutils.Log, doc string, formatter Formatter) *analysis.Analyzer {
+	return &analysis.Analyzer{
+		Name: formatter.Name(),
+		Doc:  doc,
+		Run: func(pass *analysis.Pass) (any, error) {
+			for _, file := range pass.Files {
+				position, isGoFiles := goanalysis.GetGoFilePosition(pass, file)
+				if !isGoFiles {
+					continue
+				}
+
+				input, err := os.ReadFile(position.Filename)
+				if err != nil {
+					return nil, fmt.Errorf("unable to open file %s: %w", position.Filename, err)
+				}
+
+				output, err := formatter.Format(position.Filename, input)
+				if err != nil {
+					return nil, fmt.Errorf("error while running %s: %w", formatter.Name(), err)
+				}
+
+				if !bytes.Equal(input, output) {
+					newName := filepath.ToSlash(position.Filename)
+					oldName := newName + ".orig"
+
+					theDiff := diff.Diff(oldName, input, newName, output)
+
+					err = internal.ExtractDiagnosticFromPatch(pass, file, string(theDiff), logger)
+					if err != nil {
+						return nil, fmt.Errorf("can't extract issues from %s diff output %q: %w", formatter.Name(), string(theDiff), err)
+					}
+				}
+			}
+
+			return nil, nil
+		},
+	}
+}
