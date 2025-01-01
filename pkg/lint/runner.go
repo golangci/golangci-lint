@@ -10,6 +10,7 @@ import (
 	"github.com/golangci/golangci-lint/internal/errorutil"
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/fsutils"
+	"github.com/golangci/golangci-lint/pkg/goformatters"
 	"github.com/golangci/golangci-lint/pkg/goutil"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
@@ -60,9 +61,9 @@ func NewRunner(log logutils.Log, cfg *config.Config, args []string, goenv *gouti
 		return nil, fmt.Errorf("failed to get enabled linters: %w", err)
 	}
 
-	formatter, err := processors.NewFormatter(log, cfg, enabledLinters)
+	metaFormatter, err := goformatters.NewMetaFormatter(log, cfg, enabledLinters)
 	if err != nil {
-		return nil, fmt.Errorf("failed to create formatter: %w", err)
+		return nil, fmt.Errorf("failed to create meta-formatter: %w", err)
 	}
 
 	return &Runner{
@@ -99,9 +100,7 @@ func NewRunner(log logutils.Log, cfg *config.Config, args []string, goenv *gouti
 			processors.NewSeverity(log.Child(logutils.DebugKeySeverityRules), files, &cfg.Severity),
 
 			// The fixer still needs to see paths for the issues that are relative to the current directory.
-			processors.NewFixer(cfg, log, fileCache),
-			// The formatter needs to be after the fixer and the last processor that write files.
-			formatter,
+			processors.NewFixer(cfg, log, fileCache, metaFormatter),
 
 			// Now we can modify the issues for output.
 			processors.NewPathPrefixer(cfg.Output.PathPrefix),

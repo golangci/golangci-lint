@@ -9,7 +9,6 @@ package processors
 import (
 	"errors"
 	"fmt"
-	"go/format"
 	"os"
 	"slices"
 
@@ -18,6 +17,7 @@ import (
 	"github.com/golangci/golangci-lint/internal/x/tools/diff"
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/fsutils"
+	"github.com/golangci/golangci-lint/pkg/goformatters"
 	"github.com/golangci/golangci-lint/pkg/goformatters/gci"
 	"github.com/golangci/golangci-lint/pkg/goformatters/gofmt"
 	"github.com/golangci/golangci-lint/pkg/goformatters/gofumpt"
@@ -36,14 +36,16 @@ type Fixer struct {
 	log       logutils.Log
 	fileCache *fsutils.FileCache
 	sw        *timeutils.Stopwatch
+	formatter *goformatters.MetaFormatter
 }
 
-func NewFixer(cfg *config.Config, log logutils.Log, fileCache *fsutils.FileCache) *Fixer {
+func NewFixer(cfg *config.Config, log logutils.Log, fileCache *fsutils.FileCache, formatter *goformatters.MetaFormatter) *Fixer {
 	return &Fixer{
 		cfg:       cfg,
 		log:       log,
 		fileCache: fileCache,
 		sw:        timeutils.NewStopwatch("fixer", log),
+		formatter: formatter,
 	}
 }
 
@@ -79,11 +81,13 @@ func (p Fixer) process(issues []result.Issue) ([]result.Issue, error) {
 
 	var notFixableIssues []result.Issue
 
+	toBeFormattedFiles := make(map[string]struct{})
+
 	for i := range issues {
 		issue := issues[i]
 
 		if slices.Contains(formatters, issue.FromLinter) {
-			notFixableIssues = append(notFixableIssues, issue)
+			toBeFormattedFiles[issue.FilePath()] = struct{}{}
 			continue
 		}
 
@@ -173,6 +177,8 @@ func (p Fixer) process(issues []result.Issue) ([]result.Issue, error) {
 
 	var editError error
 
+	var formattedFiles []string
+
 	// Now we've got a set of valid edits for each file. Apply them.
 	for path, edits := range editsByPath {
 		contents, err := p.fileCache.GetFileBytes(path)
@@ -188,13 +194,31 @@ func (p Fixer) process(issues []result.Issue) ([]result.Issue, error) {
 		}
 
 		// Try to format the file.
-		if formatted, err := format.Source(out); err == nil {
-			out = formatted
-		}
+		out = p.formatter.Format(path, out)
 
 		if err := os.WriteFile(path, out, filePerm); err != nil {
 			editError = errors.Join(editError, fmt.Errorf("%s: %w", path, err))
 			continue
+		}
+
+		formattedFiles = append(formattedFiles, path)
+	}
+
+	for path := range toBeFormattedFiles {
+		// Skips files already formatted by the previous fix step.
+		if !slices.Contains(formattedFiles, path) {
+			content, err := p.fileCache.GetFileBytes(path)
+			if err != nil {
+				p.log.Warnf("Error reading file %s: %v", path, err)
+				continue
+			}
+
+			out := p.formatter.Format(path, content)
+
+			if err := os.WriteFile(path, out, filePerm); err != nil {
+				editError = errors.Join(editError, fmt.Errorf("%s: %w", path, err))
+				continue
+			}
 		}
 	}
 
