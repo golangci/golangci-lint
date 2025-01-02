@@ -351,8 +351,8 @@ github.com/kyoh86/exportloopref v0.1.11 h1:1Z0bcmTypkL3Q4k+IDHMWTcnCliEZcaPiIe0/
 github.com/kyoh86/exportloopref v0.1.11/go.mod h1:qkV4UF1zGl6EkF1ox8L5t9SwyeBAZ3qLMd6up458uqA=
 github.com/lasiar/canonicalheader v1.1.2 h1:vZ5uqwvDbyJCnMhmFYimgMZnJMjwljN5VGY0VKbMXb4=
 github.com/lasiar/canonicalheader v1.1.2/go.mod h1:qJCeLFS0G/QlLQ506T+Fk/fWMa2VmBUiEI2cuMK4djI=
-github.com/ldez/exptostd v0.3.0 h1:iKdMtUedzov89jDvuwmo0qpo+ARpZJg9hMp3428WwNg=
-github.com/ldez/exptostd v0.3.0/go.mod h1:iZBRYaUmcW5jwCR3KROEZ1KivQQp6PHXbDPk9hqJKCQ=
+github.com/ldez/exptostd v0.3.1 h1:90yWWoAKMFHeovTK8uzBms9Ppp8Du/xQ20DRO26Ymrw=
+github.com/ldez/exptostd v0.3.1/go.mod h1:iZBRYaUmcW5jwCR3KROEZ1KivQQp6PHXbDPk9hqJKCQ=
 github.com/ldez/gomoddirectives v0.6.0 h1:Jyf1ZdTeiIB4dd+2n4qw+g4aI9IJ6JyfOZ8BityWvnA=
 github.com/ldez/gomoddirectives v0.6.0/go.mod h1:TuwOGYoPAoENDWQpe8DMqEm5nIfjrxZXmxX/CExWyZ4=
 github.com/ldez/grignotin v0.7.0 h1:vh0dI32WhHaq6LLPZ38g7WxXuZ1+RzyrJ7iPG9JMa8c=
