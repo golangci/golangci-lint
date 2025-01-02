@@ -10,6 +10,12 @@ If you value it, consider supporting us, we appreciate it! ❤️
 ### v1.63.2
 
 1. Linters bug fixes
+   * `gofmt`, `gofumpt`, `goimports`, `gci`: panic with several trailing EOL
+   * `goheader`: skip issues with invalid positions
+
+### v1.63.2
+
+1. Linters bug fixes
    * `gofmt`, `gofumpt`, `goimports`, `gci`: panic with missing trailing EOL
 
 ### v1.63.1
