@@ -20,6 +20,13 @@ func Test_parse(t *testing.T) {
 		expected []Change
 	}{
 		{
+			diff: "delete_last_line.diff",
+			expected: []Change{{
+				From: 10,
+				To:   10,
+			}},
+		},
+		{
 			diff: "delete_only_first_lines.diff",
 			expected: []Change{{
 				From: 1,
