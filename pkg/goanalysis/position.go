@@ -37,7 +37,7 @@ func GetFilePositionFor(fset *token.FileSet, p token.Pos) token.Position {
 func EndOfLinePos(f *token.File, line int) token.Pos {
 	var end token.Pos
 
-	if line == f.LineCount() {
+	if line >= f.LineCount() {
 		// missing newline at the end of the file
 		end = f.Pos(f.Size())
 	} else {
