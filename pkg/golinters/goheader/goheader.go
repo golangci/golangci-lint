@@ -81,10 +81,16 @@ func runGoHeader(pass *analysis.Pass, conf *goheader.Configuration) error {
 		// Inspired by https://github.com/denis-tingaikin/go-header/blob/4c75a6a2332f025705325d6c71fff4616aedf48f/analyzer.go#L85-L92
 		if len(file.Comments) > 0 && file.Comments[0].Pos() < file.Package {
 			if !strings.HasPrefix(file.Comments[0].List[0].Text, "/*") {
-				// When the comment are "//" there is a one character offset.
+				// When the comment is "//" there is a one character offset.
 				offset = 1
 			}
 			commentLine = goanalysis.GetFilePositionFor(pass.Fset, file.Comments[0].Pos()).Line
+		}
+
+		// Skip issues related to build directives.
+		// https://github.com/denis-tingaikin/go-header/issues/18
+		if issue.Location().Position-offset < 0 {
+			continue
 		}
 
 		diag := analysis.Diagnostic{
