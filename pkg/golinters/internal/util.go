@@ -18,10 +18,17 @@ func FormatCode(code string, _ *config.Config) string {
 	return fmt.Sprintf("`%s`", code)
 }
 
-func GetFileNames(pass *analysis.Pass) []string {
+func GetGoFileNames(pass *analysis.Pass) []string {
 	var filenames []string
+
 	for _, f := range pass.Files {
-		filenames = append(filenames, goanalysis.GetFilePosition(pass, f).Filename)
+		position, b := goanalysis.GetGoFilePosition(pass, f)
+		if !b {
+			continue
+		}
+
+		filenames = append(filenames, position.Filename)
 	}
+
 	return filenames
 }

@@ -115,7 +115,7 @@ func newWrapper(settings *config.ReviveSettings) (*wrapper, error) {
 }
 
 func (w *wrapper) run(lintCtx *linter.Context, pass *analysis.Pass) ([]goanalysis.Issue, error) {
-	packages := [][]string{internal.GetFileNames(pass)}
+	packages := [][]string{internal.GetGoFileNames(pass)}
 
 	failures, err := w.revive.Lint(packages, w.lintingRules, *w.conf)
 	if err != nil {
@@ -184,17 +184,16 @@ func toIssue(pass *analysis.Pass, object *jsonObject) goanalysis.Issue {
 	if object.ReplacementLine != "" {
 		f := pass.Fset.File(token.Pos(object.Position.Start.Offset))
 
-		start := f.LineStart(object.Position.Start.Line)
-
-		end := goanalysis.EndOfLinePos(f, object.Position.End.Line)
-
-		issue.SuggestedFixes = []analysis.SuggestedFix{{
-			TextEdits: []analysis.TextEdit{{
-				Pos:     start,
-				End:     end,
-				NewText: []byte(object.ReplacementLine),
-			}},
-		}}
+		// Skip cgo files because the positions are wrong.
+		if object.GetFilename() == f.Name() {
+			issue.SuggestedFixes = []analysis.SuggestedFix{{
+				TextEdits: []analysis.TextEdit{{
+					Pos:     f.LineStart(object.Position.Start.Line),
+					End:     goanalysis.EndOfLinePos(f, object.Position.End.Line),
+					NewText: []byte(object.ReplacementLine),
+				}},
+			}}
+		}
 	}
 
 	return goanalysis.NewIssue(issue, pass)
