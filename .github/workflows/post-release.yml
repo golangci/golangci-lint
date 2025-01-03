@@ -9,7 +9,7 @@ env:
   # ex:
   # - 1.18beta1 -> 1.18.0-beta.1
   # - 1.18rc1 -> 1.18.0-rc.1
-  GO_VERSION: "1.23"
+  GO_VERSION: '1.24.0-rc.1'
 
 jobs:
   update-gha-assets:

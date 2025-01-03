@@ -167,10 +167,6 @@ func IsGoLowerThanGo122() func(cfg *config.Config) error {
 	return isGoLowerThanGo("1.22")
 }
 
-func IsGoLowerThanGo124() func(cfg *config.Config) error {
-	return isGoLowerThanGo("1.24")
-}
-
 func isGoLowerThanGo(v string) func(cfg *config.Config) error {
 	return func(cfg *config.Config) error {
 		if cfg == nil || config.IsGoGreaterThanOrEqual(cfg.Run.Go, v) {
