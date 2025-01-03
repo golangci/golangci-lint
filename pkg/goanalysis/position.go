@@ -8,10 +8,6 @@ import (
 	"golang.org/x/tools/go/analysis"
 )
 
-func GetFilePosition(pass *analysis.Pass, f *ast.File) token.Position {
-	return GetFilePositionFor(pass.Fset, f.Pos())
-}
-
 func GetGoFilePosition(pass *analysis.Pass, f *ast.File) (token.Position, bool) {
 	position := GetFilePositionFor(pass.Fset, f.Pos())
 

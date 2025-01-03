@@ -73,7 +73,7 @@ func New(settings *config.GoModGuardSettings) *goanalysis.Linter {
 		}
 
 		analyzer.Run = func(pass *analysis.Pass) (any, error) {
-			gomodguardIssues := processor.ProcessFiles(internal.GetFileNames(pass))
+			gomodguardIssues := processor.ProcessFiles(internal.GetGoFileNames(pass))
 
 			mu.Lock()
 			defer mu.Unlock()
