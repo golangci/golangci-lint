@@ -9,6 +9,7 @@ import (
 	"github.com/ldez/grignotin/gomod"
 
 	"github.com/golangci/golangci-lint/pkg/config"
+	"github.com/golangci/golangci-lint/pkg/goformatters/internal"
 )
 
 const Name = "gci"
@@ -23,7 +24,7 @@ func New(settings *config.GciSettings) (*Formatter, error) {
 
 	modPath, err := gomod.GetModulePath()
 	if err != nil {
-		return nil, err
+		internal.LinterLogger.Errorf("gci: %v", err)
 	}
 
 	cfg := gcicfg.YamlConfig{
