@@ -24,7 +24,7 @@ func New(settings *config.GciSettings) (*Formatter, error) {
 
 	modPath, err := gomod.GetModulePath()
 	if err != nil {
-		internal.LinterLogger.Errorf("gci: %v", err)
+		internal.FormatterLogger.Errorf("gci: %v", err)
 	}
 
 	cfg := gcicfg.YamlConfig{
