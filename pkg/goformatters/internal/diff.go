@@ -12,7 +12,6 @@ import (
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
-	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 )
 
@@ -215,7 +214,7 @@ func ExtractDiagnosticFromPatch(
 	pass *analysis.Pass,
 	file *ast.File,
 	patch string,
-	lintCtx *linter.Context,
+	logger logutils.Log,
 ) error {
 	diffs, err := diffpkg.ParseMultiFileDiff([]byte(patch))
 	if err != nil {
@@ -232,12 +231,12 @@ func ExtractDiagnosticFromPatch(
 
 	for _, d := range diffs {
 		if len(d.Hunks) == 0 {
-			lintCtx.Log.Warnf("Got no hunks in diff %+v", d)
+			logger.Warnf("Got no hunks in diff %+v", d)
 			continue
 		}
 
 		for _, hunk := range d.Hunks {
-			p := hunkChangesParser{log: lintCtx.Log}
+			p := hunkChangesParser{log: logger}
 
 			changes := p.parse(hunk)
 

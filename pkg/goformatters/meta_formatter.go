@@ -23,20 +23,20 @@ func NewMetaFormatter(log logutils.Log, cfg *config.Config, enabledLinters map[s
 	m := &MetaFormatter{log: log}
 
 	if _, ok := enabledLinters[gofmt.Name]; ok {
-		m.formatters = append(m.formatters, gofmt.New(cfg.LintersSettings.Gofmt))
+		m.formatters = append(m.formatters, gofmt.New(&cfg.LintersSettings.Gofmt))
 	}
 
 	if _, ok := enabledLinters[gofumpt.Name]; ok {
-		m.formatters = append(m.formatters, gofumpt.New(cfg.LintersSettings.Gofumpt, cfg.Run.Go))
+		m.formatters = append(m.formatters, gofumpt.New(&cfg.LintersSettings.Gofumpt, cfg.Run.Go))
 	}
 
 	if _, ok := enabledLinters[goimports.Name]; ok {
-		m.formatters = append(m.formatters, goimports.New())
+		m.formatters = append(m.formatters, goimports.New(&cfg.LintersSettings.Goimports))
 	}
 
 	// gci is a last because the only goal of gci is to handle imports.
 	if _, ok := enabledLinters[gci.Name]; ok {
-		formatter, err := gci.New(cfg.LintersSettings.Gci)
+		formatter, err := gci.New(&cfg.LintersSettings.Gci)
 		if err != nil {
 			return nil, fmt.Errorf("gci: creating formatter: %w", err)
 		}
