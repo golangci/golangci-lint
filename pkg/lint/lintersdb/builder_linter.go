@@ -49,6 +49,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/goimports"
 	"github.com/golangci/golangci-lint/pkg/golinters/gomoddirectives"
 	"github.com/golangci/golangci-lint/pkg/golinters/gomodguard"
+	"github.com/golangci/golangci-lint/pkg/golinters/gomutcheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/goprintffuncname"
 	"github.com/golangci/golangci-lint/pkg/golinters/gosec"
 	"github.com/golangci/golangci-lint/pkg/golinters/gosimple"
@@ -443,6 +444,11 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithSince("v1.25.0").
 			WithPresets(linter.PresetStyle, linter.PresetImport, linter.PresetModule).
 			WithURL("https://github.com/ryancurrah/gomodguard"),
+
+		linter.NewConfig(gomutcheck.New()).
+			WithSince("v1.0.0").
+			WithPresets(linter.PresetStyle, linter.PresetBugs).
+			WithURL("https://github.com/BeyCoder/gomutcheck"),
 
 		linter.NewConfig(goprintffuncname.New()).
 			WithSince("v1.23.0").

@@ -45,6 +45,8 @@ github.com/Antonboom/nilnil v1.0.1 h1:C3Tkm0KUxgfO4Duk3PM+ztPncTFlOf0b2qadmS0s4x
 github.com/Antonboom/nilnil v1.0.1/go.mod h1:CH7pW2JsRNFgEh8B2UaPZTEPhCMuFowP/e8Udp9Nnb0=
 github.com/Antonboom/testifylint v1.5.2 h1:4s3Xhuv5AvdIgbd8wOOEeo0uZG7PbDKQyKY5lGoQazk=
 github.com/Antonboom/testifylint v1.5.2/go.mod h1:vxy8VJ0bc6NavlYqjZfmp6EfqXMtBgQ4+mhCojwC1P8=
+github.com/BeyCoder/gomutcheck v1.1.0 h1:Aa8dAucjKVqqnzwpUwo/1pWDEQJO09XCf4FW43j2zao=
+github.com/BeyCoder/gomutcheck v1.1.0/go.mod h1:inzGIQUezsz6bsrjEhiTv63dkWfKYU4/WzA4om734D4=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/BurntSushi/toml v1.4.1-0.20240526193622-a339e1f7089c h1:pxW6RcqyfI9/kWtOwnv/G+AzdKuy2ZrqINhenH4HyNs=
 github.com/BurntSushi/toml v1.4.1-0.20240526193622-a339e1f7089c/go.mod h1:ukJfTF/6rtPPRCnwkur4qwRxa8vTRFBF0uk2lLoLwho=

@@ -1,6 +1,6 @@
 module github.com/golangci/golangci-lint
 
-go 1.22.1
+go 1.23.4
 
 require (
 	4d63.com/gocheckcompilerdirectives v1.2.1
@@ -10,6 +10,7 @@ require (
 	github.com/Antonboom/errname v1.0.0
 	github.com/Antonboom/nilnil v1.0.1
 	github.com/Antonboom/testifylint v1.5.2
+	github.com/BeyCoder/gomutcheck v1.1.0
 	github.com/BurntSushi/toml v1.4.1-0.20240526193622-a339e1f7089c
 	github.com/Crocmagnon/fatcontext v0.5.3
 	github.com/Djarvur/go-err113 v0.0.0-20210108212216-aea10b59be24
