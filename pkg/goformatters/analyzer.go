@@ -40,11 +40,11 @@ func NewAnalyzer(logger logutils.Log, doc string, formatter Formatter) *analysis
 					newName := filepath.ToSlash(position.Filename)
 					oldName := newName + ".orig"
 
-					theDiff := diff.Diff(oldName, input, newName, output)
+					patch := diff.Diff(oldName, input, newName, output)
 
-					err = internal.ExtractDiagnosticFromPatch(pass, file, string(theDiff), logger)
+					err = internal.ExtractDiagnosticFromPatch(pass, file, patch, logger)
 					if err != nil {
-						return nil, fmt.Errorf("can't extract issues from %s diff output %q: %w", formatter.Name(), string(theDiff), err)
+						return nil, fmt.Errorf("can't extract issues from %s diff output %q: %w", formatter.Name(), patch, err)
 					}
 				}
 			}

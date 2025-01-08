@@ -213,16 +213,16 @@ func parseDiffLines(h *diffpkg.Hunk) []diffLine {
 func ExtractDiagnosticFromPatch(
 	pass *analysis.Pass,
 	file *ast.File,
-	patch string,
+	patch []byte,
 	logger logutils.Log,
 ) error {
-	diffs, err := diffpkg.ParseMultiFileDiff([]byte(patch))
+	diffs, err := diffpkg.ParseMultiFileDiff(patch)
 	if err != nil {
 		return fmt.Errorf("can't parse patch: %w", err)
 	}
 
 	if len(diffs) == 0 {
-		return fmt.Errorf("got no diffs from patch parser: %v", patch)
+		return fmt.Errorf("got no diffs from patch parser: %s", patch)
 	}
 
 	ft := pass.Fset.File(file.Pos())
