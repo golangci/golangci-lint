@@ -907,7 +907,7 @@
   },
   {
     "name": "nilnesserr",
-    "desc": "This linter reports that it checks for err != nil, but it returns a different nil value error.\npowered by nilness and nilerr.",
+    "desc": "Reports constructs that checks for err != nil, but returns a different nil value error. Powered by nilness and nilerr.",
     "loadMode": 8767,
     "inPresets": [
       "bugs"

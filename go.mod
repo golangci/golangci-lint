@@ -19,7 +19,7 @@ require (
 	github.com/alexkohler/nakedret/v2 v2.0.5
 	github.com/alexkohler/prealloc v1.0.0
 	github.com/alingse/asasalint v0.0.11
-	github.com/alingse/nilnesserr v0.1.1
+	github.com/alingse/nilnesserr v0.1.2
 	github.com/ashanbrown/forbidigo v1.6.0
 	github.com/ashanbrown/makezero v1.2.0
 	github.com/bkielbasa/cyclop v1.2.3
