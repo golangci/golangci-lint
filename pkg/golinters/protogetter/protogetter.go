@@ -19,8 +19,6 @@ func New(settings *config.ProtoGetterSettings) *goanalysis.Linter {
 		}
 	}
 
-	cfg.Mode = protogetter.StandaloneMode
-
 	a := protogetter.NewAnalyzer(&cfg)
 
 	return goanalysis.NewLinter(
