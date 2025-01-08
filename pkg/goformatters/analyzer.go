@@ -21,8 +21,8 @@ func NewAnalyzer(logger logutils.Log, doc string, formatter Formatter) *analysis
 		Doc:  doc,
 		Run: func(pass *analysis.Pass) (any, error) {
 			for _, file := range pass.Files {
-				position, isGoFiles := goanalysis.GetGoFilePosition(pass, file)
-				if !isGoFiles {
+				position, isGoFile := goanalysis.GetGoFilePosition(pass, file)
+				if !isGoFile {
 					continue
 				}
 
