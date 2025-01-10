@@ -11,7 +11,7 @@
 #
 # See the file `.golangci.reference.yml` to have a list of all available configuration options.
 
-linters:
+lintersS:
   disable-all: true
   # This list of linters is not a recommendation (same thing for all this configuration file).
   # We intentionally use a limited set of linters.

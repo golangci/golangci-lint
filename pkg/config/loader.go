@@ -8,8 +8,9 @@ import (
 	"path/filepath"
 	"slices"
 
-	"github.com/go-viper/mapstructure/v2"
+	// "github.com/go-viper/mapstructure/v2"
 	"github.com/mitchellh/go-homedir"
+	"github.com/mitchellh/mapstructure"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 
@@ -214,8 +215,12 @@ func (l *Loader) parseConfig() error {
 		return err
 	}
 
+	customDecoderConfig := func(c *mapstructure.DecoderConfig) {
+		c.ErrorUnused = true
+	}
+
 	// Load configuration from all sources (flags, file).
-	if err := l.viper.Unmarshal(l.cfg, customDecoderHook()); err != nil {
+	if err := l.viper.Unmarshal(l.cfg, customDecoderHook(), customDecoderConfig); err != nil {
 		return fmt.Errorf("can't unmarshal config by viper (flags, file): %w", err)
 	}
 
