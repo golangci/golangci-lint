@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=https://golangci-lint.run/jsonschema/golangci.jsonschema.json
 # This file contains all available configuration options
 # with their default values (in comments).
 #

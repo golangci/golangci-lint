@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=https://golangci-lint.run/jsonschema/golangci.jsonschema.json
 # This configuration file is not a recommendation.
 #
 # We intentionally use a limited set of linters.
