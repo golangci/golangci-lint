@@ -36,32 +36,36 @@ func NewDiff(cfg *config.Issues) *Diff {
 	}
 }
 
-func (Diff) Name() string {
+func (*Diff) Name() string {
 	return "diff"
 }
 
-func (p Diff) Process(issues []result.Issue) ([]result.Issue, error) {
-	if !p.onlyNew && p.fromRev == "" && p.patchFilePath == "" && p.patch == "" { // no need to work
+func (p *Diff) Process(issues []result.Issue) ([]result.Issue, error) {
+	if !p.onlyNew && p.fromRev == "" && p.patchFilePath == "" && p.patch == "" {
 		return issues, nil
 	}
 
 	var patchReader io.Reader
-	if p.patchFilePath != "" {
+	switch {
+	case p.patchFilePath != "":
 		patch, err := os.ReadFile(p.patchFilePath)
 		if err != nil {
 			return nil, fmt.Errorf("can't read from patch file %s: %w", p.patchFilePath, err)
 		}
+
 		patchReader = bytes.NewReader(patch)
-	} else if p.patch != "" {
+
+	case p.patch != "":
 		patchReader = strings.NewReader(p.patch)
 	}
 
-	c := revgrep.Checker{
+	checker := revgrep.Checker{
 		Patch:        patchReader,
 		RevisionFrom: p.fromRev,
 		WholeFiles:   p.wholeFiles,
 	}
-	if err := c.Prepare(context.Background()); err != nil {
+
+	if err := checker.Prepare(context.Background()); err != nil {
 		return nil, fmt.Errorf("can't prepare diff by revgrep: %w", err)
 	}
 
@@ -71,15 +75,16 @@ func (p Diff) Process(issues []result.Issue) ([]result.Issue, error) {
 			return issue
 		}
 
-		hunkPos, isNew := c.IsNewIssue(issue)
+		hunkPos, isNew := checker.IsNewIssue(issue)
 		if !isNew {
 			return nil
 		}
 
 		newIssue := *issue
 		newIssue.HunkPos = hunkPos
+
 		return &newIssue
 	}), nil
 }
 
-func (Diff) Finish() {}
+func (*Diff) Finish() {}
