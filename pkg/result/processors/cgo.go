@@ -1,7 +1,6 @@
 package processors
 
 import (
-	"fmt"
 	"path/filepath"
 	"strings"
 
@@ -11,6 +10,10 @@ import (
 
 var _ Processor = (*Cgo)(nil)
 
+// Cgo some linters (e.g. gosec, deadcode) return incorrect filepaths for cgo issues,
+// also cgo files have strange issues looking like false positives.
+//
+// Require absolute filepath.
 type Cgo struct {
 	goCacheDir string
 }
@@ -21,32 +24,19 @@ func NewCgo(goenv *goutil.Env) *Cgo {
 	}
 }
 
-func (Cgo) Name() string {
+func (*Cgo) Name() string {
 	return "cgo"
 }
 
-func (p Cgo) Process(issues []result.Issue) ([]result.Issue, error) {
+func (p *Cgo) Process(issues []result.Issue) ([]result.Issue, error) {
 	return filterIssuesErr(issues, p.shouldPassIssue)
 }
 
-func (Cgo) Finish() {}
+func (*Cgo) Finish() {}
 
-func (p Cgo) shouldPassIssue(issue *result.Issue) (bool, error) {
-	// some linters (e.g. gosec, deadcode) return incorrect filepaths for cgo issues,
-	// also cgo files have strange issues looking like false positives.
-
-	// cache dir contains all preprocessed files including cgo files
-
-	issueFilePath := issue.FilePath()
-	if !filepath.IsAbs(issue.FilePath()) {
-		absPath, err := filepath.Abs(issue.FilePath())
-		if err != nil {
-			return false, fmt.Errorf("failed to build abs path for %q: %w", issue.FilePath(), err)
-		}
-		issueFilePath = absPath
-	}
-
-	if p.goCacheDir != "" && strings.HasPrefix(issueFilePath, p.goCacheDir) {
+func (p *Cgo) shouldPassIssue(issue *result.Issue) (bool, error) {
+	// [p.goCacheDir] contains all preprocessed files including cgo files.
+	if p.goCacheDir != "" && strings.HasPrefix(issue.FilePath(), p.goCacheDir) {
 		return false, nil
 	}
 

@@ -36,6 +36,7 @@ const (
 	DebugKeyLoader             = "loader" // Debugs packages loading (including `go/packages` internal debugging).
 	DebugKeyMaxFromLinter      = "max_from_linter"
 	DebugKeyMaxSameIssues      = "max_same_issues"
+	DebugKeyPathAbsoluter      = "path_absoluter"
 	DebugKeyPkgCache           = "pkgcache"
 	DebugKeyRunner             = "runner"
 	DebugKeySeverityRules      = "severity_rules"
