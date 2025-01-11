@@ -210,6 +210,12 @@ func printLinters(lcs []*linter.Config) {
 }
 
 func formatDescription(desc string) string {
+	desc = strings.TrimSpace(desc)
+
+	if desc == "" {
+		return desc
+	}
+
 	// If the linter description spans multiple lines, truncate everything following the first newline
 	endFirstLine := strings.IndexRune(desc, '\n')
 	if endFirstLine > 0 {
