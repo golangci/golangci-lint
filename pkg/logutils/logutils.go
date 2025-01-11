@@ -37,6 +37,7 @@ const (
 	DebugKeyMaxFromLinter      = "max_from_linter"
 	DebugKeyMaxSameIssues      = "max_same_issues"
 	DebugKeyPathAbsoluter      = "path_absoluter"
+	DebugKeyPathPrettifier     = "path_prettifier"
 	DebugKeyPkgCache           = "pkgcache"
 	DebugKeyRunner             = "runner"
 	DebugKeySeverityRules      = "severity_rules"
