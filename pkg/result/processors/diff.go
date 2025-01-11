@@ -2,6 +2,7 @@ package processors
 
 import (
 	"bytes"
+	"context"
 	"fmt"
 	"io"
 	"os"
@@ -60,7 +61,7 @@ func (p Diff) Process(issues []result.Issue) ([]result.Issue, error) {
 		RevisionFrom: p.fromRev,
 		WholeFiles:   p.wholeFiles,
 	}
-	if err := c.Prepare(); err != nil {
+	if err := c.Prepare(context.Background()); err != nil {
 		return nil, fmt.Errorf("can't prepare diff by revgrep: %w", err)
 	}
 
