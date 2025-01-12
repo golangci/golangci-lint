@@ -7,7 +7,6 @@ import (
 
 	"github.com/golangci/golangci-lint/internal/cache"
 	"github.com/golangci/golangci-lint/pkg/config"
-	"github.com/golangci/golangci-lint/pkg/fsutils"
 	"github.com/golangci/golangci-lint/pkg/goanalysis/load"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 )
@@ -20,9 +19,8 @@ type Context struct {
 	// version for each of packages
 	OriginalPackages []*packages.Package
 
-	Cfg       *config.Config
-	FileCache *fsutils.FileCache
-	Log       logutils.Log
+	Cfg *config.Config
+	Log logutils.Log
 
 	PkgCache  *cache.Cache
 	LoadGuard *load.Guard
