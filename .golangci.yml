@@ -27,7 +27,6 @@ linters:
     - funlen
     - gocheckcompilerdirectives
     - gochecknoinits
-    - gochecknoinits
     - goconst
     - gocritic
     - gocyclo
