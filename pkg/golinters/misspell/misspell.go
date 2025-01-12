@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"go/ast"
 	"go/token"
-	"os"
 	"strings"
 	"unicode"
 
@@ -85,7 +84,9 @@ func runMisspellOnFile(pass *analysis.Pass, file *ast.File, replacer *misspell.R
 		return nil
 	}
 
-	fileContent, err := os.ReadFile(position.Filename)
+	// Uses the non-adjusted file to work with cgo:
+	// if we read the real file, the positions are wrong in some cases.
+	fileContent, err := pass.ReadFile(pass.Fset.PositionFor(file.Pos(), false).Filename)
 	if err != nil {
 		return fmt.Errorf("can't get file %s contents: %w", position.Filename, err)
 	}
