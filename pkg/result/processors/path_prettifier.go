@@ -4,23 +4,25 @@ import (
 	"path/filepath"
 
 	"github.com/golangci/golangci-lint/pkg/fsutils"
+	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
 var _ Processor = (*PathPrettifier)(nil)
 
 type PathPrettifier struct {
+	log logutils.Log
 }
 
-func NewPathPrettifier() *PathPrettifier {
-	return &PathPrettifier{}
+func NewPathPrettifier(log logutils.Log) *PathPrettifier {
+	return &PathPrettifier{log: log.Child(logutils.DebugKeyPathPrettifier)}
 }
 
-func (PathPrettifier) Name() string {
+func (*PathPrettifier) Name() string {
 	return "path_prettifier"
 }
 
-func (PathPrettifier) Process(issues []result.Issue) ([]result.Issue, error) {
+func (p *PathPrettifier) Process(issues []result.Issue) ([]result.Issue, error) {
 	return transformIssues(issues, func(issue *result.Issue) *result.Issue {
 		if !filepath.IsAbs(issue.FilePath()) {
 			return issue
@@ -28,6 +30,7 @@ func (PathPrettifier) Process(issues []result.Issue) ([]result.Issue, error) {
 
 		rel, err := fsutils.ShortestRelPath(issue.FilePath(), "")
 		if err != nil {
+			p.log.Warnf("shortest relative path: %v", err)
 			return issue
 		}
 
@@ -37,4 +40,4 @@ func (PathPrettifier) Process(issues []result.Issue) ([]result.Issue, error) {
 	}), nil
 }
 
-func (PathPrettifier) Finish() {}
+func (*PathPrettifier) Finish() {}

@@ -1,6 +1,7 @@
 package processors
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -9,70 +10,130 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-func TestIdentifierMarker(t *testing.T) {
-	cases := []struct{ in, out string }{
-		{"unknown field Address in struct literal", "unknown field `Address` in struct literal"},
+func TestIdentifierMarker_Process(t *testing.T) {
+	testCases := []struct {
+		desc   string
+		linter string
+		in     string
+		out    string
+	}{
+		// unparam
 		{
-			"invalid operation: res (variable of type github.com/iotexproject/iotex-core/explorer/idl/explorer.GetBlkOrActResponse) has no field or method Address",
-			"invalid operation: `res` (variable of type `github.com/iotexproject/iotex-core/explorer/idl/explorer.GetBlkOrActResponse`) has no field or method `Address`",
+			linter: "unparam",
+			in:     "foo - bar is unused",
+			out:    "`foo` - `bar` is unused",
 		},
 		{
-			"should use a simple channel send/receive instead of select with a single case",
-			"should use a simple channel send/receive instead of `select` with a single case",
-		},
-		{"var testInputs is unused", "var `testInputs` is unused"},
-		{"undeclared name: stateIDLabel", "undeclared name: `stateIDLabel`"},
-		{
-			"exported type Metrics should have comment or be unexported",
-			"exported type `Metrics` should have comment or be unexported",
+			linter: "unparam",
+			in:     "foo - bar always receives fii (abc)",
+			out:    "`foo` - `bar` always receives `fii` (`abc`)",
 		},
 		{
-			`comment on exported function NewMetrics should be of the form "NewMetrics ..."`,
-			"comment on exported function `NewMetrics` should be of the form `NewMetrics ...`",
+			linter: "unparam",
+			in:     "foo - bar always receives fii",
+			out:    "`foo` - `bar` always receives `fii`",
 		},
 		{
-			"cannot use addr (variable of type string) as github.com/iotexproject/iotex-core/pkg/keypair.PublicKey value in argument to action.FakeSeal",
-			"cannot use addr (variable of type `string`) as `github.com/iotexproject/iotex-core/pkg/keypair.PublicKey` value in argument to `action.FakeSeal`",
+			linter: "unparam",
+			in:     "createEntry - result err is always nil",
+			out:    "`createEntry` - result `err` is always `nil`",
 		},
-		{"other declaration of out", "other declaration of `out`"},
-		{"should check returned error before deferring response.Close()", "should check returned error before deferring `response.Close()`"},
-		{"should use time.Since instead of time.Now().Sub", "should use `time.Since` instead of `time.Now().Sub`"},
-		{"TestFibZeroCount redeclared in this block", "`TestFibZeroCount` redeclared in this block"},
-		{"should replace i += 1 with i++", "should replace `i += 1` with `i++`"},
-		{"createEntry - result err is always nil", "`createEntry` - result `err` is always `nil`"},
+
+		// govet
 		{
-			"should omit comparison to bool constant, can be simplified to !projectIntegration.Model.Storage",
-			"should omit comparison to bool constant, can be simplified to `!projectIntegration.Model.Storage`",
+			linter: "govet",
+			in:     "printf: foo arg list ends with redundant newline",
+			out:    "printf: `foo` arg list ends with redundant newline",
 		},
+
+		// gosec
 		{
-			"if block ends with a return statement, so drop this else and outdent its block",
-			"`if` block ends with a `return` statement, so drop this `else` and outdent its block",
+			linter: "gosec",
+			in:     "TLS InsecureSkipVerify set true.",
+			out:    "TLS `InsecureSkipVerify` set true.",
 		},
+
+		// gosimple
 		{
-			"should write pupData := ms.m[pupID] instead of pupData, _ := ms.m[pupID]",
-			"should write `pupData := ms.m[pupID]` instead of `pupData, _ := ms.m[pupID]`",
-		},
-		{"no value of type uint is less than 0", "no value of type `uint` is less than `0`"},
-		{"redundant return statement", "redundant `return` statement"},
-		{"struct field Id should be ID", "struct field `Id` should be `ID`"},
-		{
-			"don't use underscores in Go names; var Go_lint should be GoLint",
-			"don't use underscores in Go names; var `Go_lint` should be `GoLint`",
+			linter: "gosimple",
+			in:     "should replace loop with foo",
+			out:    "should replace loop with `foo`",
 		},
 		{
-			"G501: Blacklisted import crypto/md5: weak cryptographic primitive",
-			"G501: Blacklisted import `crypto/md5`: weak cryptographic primitive",
+			linter: "gosimple",
+			in:     "should use a simple channel send/receive instead of select with a single case",
+			out:    "should use a simple channel send/receive instead of `select` with a single case",
 		},
 		{
-			"S1017: should replace this if statement with an unconditional strings.TrimPrefix",
-			"S1017: should replace this `if` statement with an unconditional `strings.TrimPrefix`",
+			linter: "gosimple",
+			in:     "should omit comparison to bool constant, can be simplified to !projectIntegration.Model.Storage",
+			out:    "should omit comparison to bool constant, can be simplified to `!projectIntegration.Model.Storage`",
+		},
+		{
+			linter: "gosimple",
+			in:     "redundant return statement",
+			out:    "redundant `return` statement",
+		},
+		{
+			linter: "gosimple",
+			in:     "S1017: should replace this if statement with an unconditional strings.TrimPrefix",
+			out:    "S1017: should replace this `if` statement with an unconditional `strings.TrimPrefix`",
+		},
+
+		// staticcheck
+		{
+			linter: "staticcheck",
+			in:     "this value of foo is never used",
+			out:    "this value of `foo` is never used",
+		},
+		{
+			linter: "staticcheck",
+			in:     "should use time.Since instead of time.Now().Sub",
+			out:    "should use `time.Since` instead of `time.Now().Sub`",
+		},
+		{
+			linter: "staticcheck",
+			in:     "should check returned error before deferring response.Close()",
+			out:    "should check returned error before deferring `response.Close()`",
+		},
+		{
+			linter: "staticcheck",
+			in:     "no value of type uint is less than 0",
+			out:    "no value of type `uint` is less than `0`",
+		},
+
+		// unused
+		{
+			linter: "unused",
+			in:     "var testInputs is unused",
+			out:    "var `testInputs` is unused",
+		},
+
+		// From a linter without patterns.
+		{
+			linter: "foo",
+			in:     "var testInputs is unused",
+			out:    "var testInputs is unused",
+		},
+
+		// Non-matching text.
+		{
+			linter: "unused",
+			in:     "foo is a foo",
+			out:    "foo is a foo",
 		},
 	}
+
 	p := NewIdentifierMarker()
 
-	for _, c := range cases {
-		out, err := p.Process([]result.Issue{{Text: c.in}})
-		require.NoError(t, err)
-		assert.Equal(t, []result.Issue{{Text: c.out}}, out)
+	for _, test := range testCases {
+		t.Run(fmt.Sprintf("%s: %s", test.linter, test.in), func(t *testing.T) {
+			t.Parallel()
+
+			out, err := p.Process([]result.Issue{{FromLinter: test.linter, Text: test.in}})
+			require.NoError(t, err)
+
+			assert.Equal(t, []result.Issue{{FromLinter: test.linter, Text: test.out}}, out)
+		})
 	}
 }
