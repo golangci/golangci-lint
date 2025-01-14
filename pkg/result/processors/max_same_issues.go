@@ -10,6 +10,7 @@ import (
 
 var _ Processor = (*MaxSameIssues)(nil)
 
+// MaxSameIssues limits the number of reports with the same text.
 type MaxSameIssues struct {
 	textCounter map[string]int
 	limit       int

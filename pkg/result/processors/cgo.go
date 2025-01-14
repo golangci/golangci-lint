@@ -10,10 +10,11 @@ import (
 
 var _ Processor = (*Cgo)(nil)
 
-// Cgo some linters (e.g. gosec, deadcode) return incorrect filepaths for cgo issues,
-// also cgo files have strange issues looking like false positives.
+// Cgo filters cgo artifacts.
 //
-// Require absolute filepath.
+// Some linters (e.g. gosec, etc.) return incorrect file paths for cgo files.
+//
+// Require absolute file path.
 type Cgo struct {
 	goCacheDir string
 }

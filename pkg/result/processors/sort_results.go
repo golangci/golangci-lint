@@ -31,6 +31,10 @@ var _ Processor = (*SortResults)(nil)
 
 type issueComparator func(a, b *result.Issue) int
 
+// SortResults sorts reports based on criteria:
+// - file names, line numbers, positions
+// - linter names
+// - severity names
 type SortResults struct {
 	cmps map[string][]issueComparator
 

@@ -9,6 +9,7 @@ const uniqByLineLimit = 1
 
 var _ Processor = (*UniqByLine)(nil)
 
+// UniqByLine filters reports to keep only one report by line of code.
 type UniqByLine struct {
 	fileLineCounter fileLineCounter
 	cfg             *config.Config

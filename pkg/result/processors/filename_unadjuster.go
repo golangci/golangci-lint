@@ -22,11 +22,13 @@ type adjustMap struct {
 	m map[string]posMapper
 }
 
-// FilenameUnadjuster is needed because a lot of linters use `fset.Position(f.Pos())` to get filename.
-// And they return adjusted filename (e.g.` *.qtpl`) for an issue.
+// FilenameUnadjuster fixes filename based on adjusted and unadjusted position (related to line directives and cgo).
+//
+// A lot of linters use `fset.Position(f.Pos())` to get filename,
+// and they return adjusted filename (e.g.` *.qtpl`) for an issue.
 // We need restore real `.go` filename to properly output it, parse it, etc.
 //
-// Require absolute filepath.
+// Require absolute file path.
 type FilenameUnadjuster struct {
 	m                   map[string]posMapper // map from adjusted filename to position mapper: adjusted -> unadjusted position
 	log                 logutils.Log

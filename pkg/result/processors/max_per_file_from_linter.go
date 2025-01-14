@@ -7,6 +7,7 @@ import (
 
 var _ Processor = (*MaxPerFileFromLinter)(nil)
 
+// MaxPerFileFromLinter limits the number of reports by file and by linter.
 type MaxPerFileFromLinter struct {
 	fileLinterCounter          fileLinterCounter
 	maxPerFileFromLinterConfig map[string]int

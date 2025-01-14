@@ -8,6 +8,7 @@ import (
 
 var _ Processor = (*MaxFromLinter)(nil)
 
+// MaxFromLinter limits the number of reports from the same linter.
 type MaxFromLinter struct {
 	linterCounter map[string]int
 	limit         int

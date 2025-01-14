@@ -11,6 +11,7 @@ import (
 
 var _ Processor = (*Exclude)(nil)
 
+// Exclude filters reports only based on regular expressions applied to the report text.
 type Exclude struct {
 	name string
 

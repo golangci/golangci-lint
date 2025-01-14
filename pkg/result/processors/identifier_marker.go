@@ -13,6 +13,9 @@ type replacePattern struct {
 	repl string
 }
 
+// IdentifierMarker modifies report text.
+// It must be before [Exclude] and [ExcludeRules]:
+// users configure exclusions based on the modified text.
 type IdentifierMarker struct {
 	patterns map[string][]replacePattern
 }

@@ -64,6 +64,7 @@ type fileData struct {
 	ignoredRanges []ignoredRange
 }
 
+// Nolint filters and sorts reports related to `nolint` directives.
 type Nolint struct {
 	fileCache      map[string]*fileData
 	dbManager      *lintersdb.Manager

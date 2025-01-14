@@ -31,6 +31,8 @@ var _ Processor = (*Fixer)(nil)
 
 const filePerm = 0644
 
+// Fixer fixes reports if possible.
+// The reports that are not fixed are passed to the next processor.
 type Fixer struct {
 	cfg       *config.Config
 	log       logutils.Log
