@@ -8,6 +8,7 @@ import (
 	"go/token"
 	"os"
 	"reflect"
+	"sort"
 	"sync"
 
 	"github.com/BurntSushi/toml"
@@ -27,7 +28,10 @@ import (
 
 const linterName = "revive"
 
-var debugf = logutils.Debug(logutils.DebugKeyRevive)
+var (
+	debugf  = logutils.Debug(logutils.DebugKeyRevive)
+	isDebug = logutils.HaveDebugTag(logutils.DebugKeyRevive)
+)
 
 // jsonObject defines a JSON object of a failure
 type jsonObject struct {
@@ -228,13 +232,22 @@ func getConfig(cfg *config.ReviveSettings) (*lint.Config, error) {
 
 	normalizeConfig(conf)
 
+	rulesEnabledByConfig := []string{}
 	for k, r := range conf.Rules {
 		err := r.Initialize()
 		if err != nil {
 			return nil, fmt.Errorf("error in config of rule %q: %w", k, err)
 		}
 		conf.Rules[k] = r
+
+		if !r.Disabled {
+			rulesEnabledByConfig = append(rulesEnabledByConfig, k)
+		}
 	}
+
+	debugChecksListf(extractRulesName(allRules), "All available analyzers")
+	debugChecksListf(extractRulesName(defaultRules), "Default analyzers")
+	debugChecksListf(rulesEnabledByConfig, "Enabled by config analyzers")
 
 	debugf("revive configuration: %#v", conf)
 
@@ -446,4 +459,21 @@ func defaultConfig() *lint.Config {
 		defaultConfig.Rules[r.Name()] = lint.RuleConfig{}
 	}
 	return &defaultConfig
+}
+
+func extractRulesName(rules []lint.Rule) []string {
+	names := []string{}
+	for _, r := range rules {
+		names = append(names, r.Name())
+	}
+	return names
+}
+
+func debugChecksListf(checks []string, format string, args ...any) {
+	if !isDebug {
+		return
+	}
+	sort.Strings(checks)
+
+	debugf("%s checks (%d): %s", fmt.Sprintf(format, args...), len(checks), fmt.Sprint(checks))
 }
