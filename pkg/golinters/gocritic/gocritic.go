@@ -316,6 +316,7 @@ func (s *settingsWrapper) InferEnabledChecks() {
 
 	if len(s.EnabledTags) != 0 {
 		enabledFromTags := s.expandTagsToChecks(s.EnabledTags)
+
 		debugChecksListf(enabledFromTags, "Enabled by config tags %s", s.EnabledTags)
 
 		for _, check := range enabledFromTags {
@@ -337,6 +338,7 @@ func (s *settingsWrapper) InferEnabledChecks() {
 
 	if len(s.DisabledTags) != 0 {
 		disabledFromTags := s.expandTagsToChecks(s.DisabledTags)
+
 		debugChecksListf(disabledFromTags, "Disabled by config tags %s", s.DisabledTags)
 
 		for _, check := range disabledFromTags {
@@ -358,6 +360,7 @@ func (s *settingsWrapper) InferEnabledChecks() {
 
 	s.inferredEnabledChecks = enabledChecks
 	s.inferredEnabledChecksLowerCased = normalizeMap(s.inferredEnabledChecks)
+
 	s.debugChecksFinalState()
 }
 
