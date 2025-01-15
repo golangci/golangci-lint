@@ -2371,7 +2371,7 @@ linters-settings:
     # This means that linting errors with less than 0.8 confidence will be ignored.
     # Default: 0.8
     confidence: 0.1
-
+    # Run `GL_DEBUG=revive golangci-lint run --enable-only=revive` to see default, all available rules, and enabled rules.
     rules:
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#add-constant
       - name: add-constant

@@ -8,6 +8,8 @@ import (
 	"go/token"
 	"os"
 	"reflect"
+	"slices"
+	"strings"
 	"sync"
 
 	"github.com/BurntSushi/toml"
@@ -27,7 +29,10 @@ import (
 
 const linterName = "revive"
 
-var debugf = logutils.Debug(logutils.DebugKeyRevive)
+var (
+	debugf  = logutils.Debug(logutils.DebugKeyRevive)
+	isDebug = logutils.HaveDebugTag(logutils.DebugKeyRevive)
+)
 
 // jsonObject defines a JSON object of a failure
 type jsonObject struct {
@@ -90,6 +95,8 @@ func newWrapper(settings *config.ReviveSettings) (*wrapper, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	displayRules(conf)
 
 	conf.GoVersion, err = hcversion.NewVersion(settings.Go)
 	if err != nil {
@@ -235,8 +242,6 @@ func getConfig(cfg *config.ReviveSettings) (*lint.Config, error) {
 		}
 		conf.Rules[k] = r
 	}
-
-	debugf("revive configuration: %#v", conf)
 
 	return conf, nil
 }
@@ -446,4 +451,37 @@ func defaultConfig() *lint.Config {
 		defaultConfig.Rules[r.Name()] = lint.RuleConfig{}
 	}
 	return &defaultConfig
+}
+
+func displayRules(conf *lint.Config) {
+	if !isDebug {
+		return
+	}
+
+	var enabledRules []string
+	for k, r := range conf.Rules {
+		if !r.Disabled {
+			enabledRules = append(enabledRules, k)
+		}
+	}
+
+	slices.Sort(enabledRules)
+
+	debugf("All available rules (%d): %s.", len(allRules), strings.Join(extractRulesName(allRules), ", "))
+	debugf("Default rules (%d): %s.", len(allRules), strings.Join(extractRulesName(allRules), ", "))
+	debugf("Enabled by config rules (%d): %s.", len(enabledRules), strings.Join(enabledRules, ", "))
+
+	debugf("revive configuration: %#v", conf)
+}
+
+func extractRulesName(rules []lint.Rule) []string {
+	var names []string
+
+	for _, r := range rules {
+		names = append(names, r.Name())
+	}
+
+	slices.Sort(names)
+
+	return names
 }
