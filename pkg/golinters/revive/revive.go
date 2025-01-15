@@ -8,6 +8,7 @@ import (
 	"go/token"
 	"os"
 	"reflect"
+	"slices"
 	"sort"
 	"strings"
 	"sync"
@@ -481,7 +482,7 @@ func extractRulesName(rules []lint.Rule) []string {
 		names = append(names, r.Name())
 	}
 
-	sort.Strings(names)
+	slices.Sort(names)
 
 	return names
 }
