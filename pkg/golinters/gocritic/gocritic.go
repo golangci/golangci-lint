@@ -133,6 +133,7 @@ func (w *goCriticWrapper) buildEnabledCheckers(linterCtx *gocriticlinter.Context
 		if err != nil {
 			return nil, err
 		}
+
 		enabledCheckers = append(enabledCheckers, c)
 	}
 
@@ -294,6 +295,7 @@ func (s *settingsWrapper) InferEnabledChecks() {
 	s.debugChecksInitialState()
 
 	enabledByDefaultChecks, disabledByDefaultChecks := s.buildEnabledAndDisabledByDefaultChecks()
+
 	debugChecksListf(enabledByDefaultChecks, "Enabled by default")
 	debugChecksListf(disabledByDefaultChecks, "Disabled by default")
 
@@ -314,7 +316,8 @@ func (s *settingsWrapper) InferEnabledChecks() {
 
 	if len(s.EnabledTags) != 0 {
 		enabledFromTags := s.expandTagsToChecks(s.EnabledTags)
-		debugChecksListf(enabledFromTags, "Enabled by config tags %s", sprintSortedStrings(s.EnabledTags))
+
+		debugChecksListf(enabledFromTags, "Enabled by config tags %s", s.EnabledTags)
 
 		for _, check := range enabledFromTags {
 			enabledChecks[check] = struct{}{}
@@ -335,7 +338,8 @@ func (s *settingsWrapper) InferEnabledChecks() {
 
 	if len(s.DisabledTags) != 0 {
 		disabledFromTags := s.expandTagsToChecks(s.DisabledTags)
-		debugChecksListf(disabledFromTags, "Disabled by config tags %s", sprintSortedStrings(s.DisabledTags))
+
+		debugChecksListf(disabledFromTags, "Disabled by config tags %s", s.DisabledTags)
 
 		for _, check := range disabledFromTags {
 			delete(enabledChecks, check)
@@ -356,6 +360,7 @@ func (s *settingsWrapper) InferEnabledChecks() {
 
 	s.inferredEnabledChecks = enabledChecks
 	s.inferredEnabledChecksLowerCased = normalizeMap(s.inferredEnabledChecks)
+
 	s.debugChecksFinalState()
 }
 
@@ -549,10 +554,8 @@ func debugChecksListf(checks []string, format string, args ...any) {
 		return
 	}
 
-	debugf("%s checks (%d): %s", fmt.Sprintf(format, args...), len(checks), sprintSortedStrings(checks))
-}
+	v := slices.Clone(checks)
+	slices.Sort(v)
 
-func sprintSortedStrings(v []string) string {
-	sort.Strings(slices.Clone(v))
-	return fmt.Sprint(v)
+	debugf("%s checks (%d): %s", fmt.Sprintf(format, args...), len(checks), strings.Join(v, ", "))
 }
