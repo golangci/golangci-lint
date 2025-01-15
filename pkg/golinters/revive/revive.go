@@ -9,7 +9,6 @@ import (
 	"os"
 	"reflect"
 	"slices"
-	"sort"
 	"strings"
 	"sync"
 
@@ -466,7 +465,7 @@ func displayRules(conf *lint.Config) {
 		}
 	}
 
-	sort.Strings(enabledRules)
+	slices.Sort(enabledRules)
 
 	debugf("All available rules (%d): %s.", len(allRules), strings.Join(extractRulesName(allRules), ", "))
 	debugf("Default rules (%d): %s.", len(allRules), strings.Join(extractRulesName(allRules), ", "))
