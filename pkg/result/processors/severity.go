@@ -20,7 +20,7 @@ type severityRule struct {
 }
 
 // Severity modifies report severity.
-// It uses the same [baseRule] structure as [ExcludeRules] processor.
+// It uses the same `baseRule` structure as [ExcludeRules] processor.
 //
 // Warning: it doesn't use `path-prefix` option.
 type Severity struct {

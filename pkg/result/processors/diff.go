@@ -21,7 +21,7 @@ var _ Processor = (*Diff)(nil)
 // Diff filters issues based on options `new`, `new-from-rev`, etc.
 //
 // Uses `git`.
-// The paths inside the patch are relative to the path where git/golangci-lint is run.
+// The paths inside the patch are relative to the path where git is run (the same location where golangci-lint is run).
 //
 // Warning: it doesn't use `path-prefix` option.
 type Diff struct {

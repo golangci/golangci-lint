@@ -10,8 +10,8 @@ import (
 var _ Processor = (*InvalidIssue)(nil)
 
 // InvalidIssue filters invalid reports.
-// - non-go files (except `go.mod`)
-// - reports without file path
+//   - non-go files (except `go.mod`)
+//   - reports without file path
 type InvalidIssue struct {
 	log logutils.Log
 }

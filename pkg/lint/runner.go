@@ -79,10 +79,10 @@ func NewRunner(log logutils.Log, cfg *config.Config, args []string, goenv *gouti
 			// Must be after FilenameUnadjuster.
 			processors.NewInvalidIssue(log.Child(logutils.DebugKeyInvalidIssue)),
 
-			// Must be before Diff, SkipFiles, SkipDirs,  ExcludeRules processors at least.
+			// Must be before Diff, SkipFiles, SkipDirs, ExcludeRules processors at least.
 			processors.NewPathPrettifier(log),
 
-			// must be after path prettifier
+			// must be after PathPrettifier.
 			skipFilesProcessor,
 			skipDirsProcessor,
 

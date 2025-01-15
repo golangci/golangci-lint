@@ -11,8 +11,8 @@ var _ Processor = (*SourceCode)(nil)
 // SourceCode modifies displayed information based on [result.Issue.GetLineRange()].
 //
 // This is used:
-// - to display the "UnderLinePointer".
-// - in some rare cases to display multiple lines instead of one (ex: `dupl`)
+//   - to display the "UnderLinePointer".
+//   - in some rare cases to display multiple lines instead of one (ex: `dupl`)
 //
 // It requires to use [fsutils.LineCache] ([fsutils.FileCache]) to get the file information before the fixes.
 type SourceCode struct {

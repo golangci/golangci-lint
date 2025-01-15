@@ -16,10 +16,10 @@ type excludeRule struct {
 }
 
 // ExcludeRules filters reports based on multiple criteria:
-// - linter names (string)
-// - file path (regular expressions)
-// - text (regular expressions)
-// - code source (regular expressions)
+//   - linter names (string)
+//   - file path (regular expressions)
+//   - text (regular expressions)
+//   - code source (regular expressions)
 //
 // It uses the shortest relative paths and `path-prefix` option.
 type ExcludeRules struct {
