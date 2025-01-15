@@ -9,6 +9,7 @@ import (
 	"os"
 	"reflect"
 	"sort"
+	"strings"
 	"sync"
 
 	"github.com/BurntSushi/toml"
@@ -94,6 +95,8 @@ func newWrapper(settings *config.ReviveSettings) (*wrapper, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	displayRules(conf)
 
 	conf.GoVersion, err = hcversion.NewVersion(settings.Go)
 	if err != nil {
@@ -232,24 +235,13 @@ func getConfig(cfg *config.ReviveSettings) (*lint.Config, error) {
 
 	normalizeConfig(conf)
 
-	rulesEnabledByConfig := []string{}
 	for k, r := range conf.Rules {
 		err := r.Initialize()
 		if err != nil {
 			return nil, fmt.Errorf("error in config of rule %q: %w", k, err)
 		}
 		conf.Rules[k] = r
-
-		if !r.Disabled {
-			rulesEnabledByConfig = append(rulesEnabledByConfig, k)
-		}
 	}
-
-	debugChecksListf(extractRulesName(allRules), "All available analyzers")
-	debugChecksListf(extractRulesName(defaultRules), "Default analyzers")
-	debugChecksListf(rulesEnabledByConfig, "Enabled by config analyzers")
-
-	debugf("revive configuration: %#v", conf)
 
 	return conf, nil
 }
@@ -461,19 +453,35 @@ func defaultConfig() *lint.Config {
 	return &defaultConfig
 }
 
-func extractRulesName(rules []lint.Rule) []string {
-	names := []string{}
-	for _, r := range rules {
-		names = append(names, r.Name())
-	}
-	return names
-}
-
-func debugChecksListf(checks []string, format string, args ...any) {
+func displayRules(conf *lint.Config) {
 	if !isDebug {
 		return
 	}
-	sort.Strings(checks)
 
-	debugf("%s checks (%d): %s", fmt.Sprintf(format, args...), len(checks), fmt.Sprint(checks))
+	var enabledRules []string
+	for k, r := range conf.Rules {
+		if !r.Disabled {
+			enabledRules = append(enabledRules, k)
+		}
+	}
+
+	sort.Strings(enabledRules)
+
+	debugf("All available rules (%d): %s.", len(allRules), strings.Join(extractRulesName(allRules), ", "))
+	debugf("Default rules (%d): %s.", len(allRules), strings.Join(extractRulesName(allRules), ", "))
+	debugf("Enabled by config rules (%d): %s.", len(enabledRules), strings.Join(enabledRules, ", "))
+
+	debugf("revive configuration: %#v", conf)
+}
+
+func extractRulesName(rules []lint.Rule) []string {
+	var names []string
+
+	for _, r := range rules {
+		names = append(names, r.Name())
+	}
+
+	sort.Strings(names)
+
+	return names
 }
