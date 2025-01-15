@@ -10,6 +10,8 @@ import (
 
 var _ Processor = (*PathShortener)(nil)
 
+// PathShortener modifies text of the reports to reduce file path inside the text.
+// It uses the rooted path name corresponding to the current directory (`wd`).
 type PathShortener struct {
 	wd string
 }

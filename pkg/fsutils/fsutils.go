@@ -34,13 +34,13 @@ func Getwd() (string, error) {
 			return
 		}
 
-		evaledWd, err := EvalSymlinks(cachedWd)
+		evaluatedWd, err := EvalSymlinks(cachedWd)
 		if err != nil {
 			cachedWd, cachedWdError = "", fmt.Errorf("can't eval symlinks on wd %s: %w", cachedWd, err)
 			return
 		}
 
-		cachedWd = evaledWd
+		cachedWd = evaluatedWd
 	})
 
 	return cachedWd, cachedWdError
@@ -83,8 +83,8 @@ func ShortestRelPath(path, wd string) (string, error) {
 	path = evaledPath
 
 	// make path absolute and then relative to be able to fix this case:
-	// we are in /test dir, we want to normalize ../test, and have file file.go in this dir;
-	// it must have normalized path file.go, not ../test/file.go,
+	// we are in `/test` dir, we want to normalize `../test`, and have file `file.go` in this dir;
+	// it must have normalized path `file.go`, not `../test/file.go`,
 	var absPath string
 	if filepath.IsAbs(path) {
 		absPath = path

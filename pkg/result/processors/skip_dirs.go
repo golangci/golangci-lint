@@ -21,6 +21,8 @@ var StdExcludeDirRegexps = []string{
 	normalizePathRegex("builtin"),
 }
 
+// SkipDirs filters reports based on directory names.
+// It uses the shortest relative paths and `path-prefix` option.
 type skipStat struct {
 	pattern string
 	count   int

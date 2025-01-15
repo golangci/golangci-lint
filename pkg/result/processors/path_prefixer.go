@@ -7,7 +7,8 @@ import (
 
 var _ Processor = (*PathPrefixer)(nil)
 
-// PathPrefixer adds a customizable prefix to every output path
+// PathPrefixer adds a customizable path prefix to report file paths for user facing.
+// It uses the shortest relative paths and `path-prefix` option.
 type PathPrefixer struct {
 	prefix string
 }
@@ -24,11 +25,14 @@ func (*PathPrefixer) Name() string {
 
 // Process adds the prefix to each path
 func (p *PathPrefixer) Process(issues []result.Issue) ([]result.Issue, error) {
-	if p.prefix != "" {
-		for i := range issues {
-			issues[i].Pos.Filename = fsutils.WithPathPrefix(p.prefix, issues[i].Pos.Filename)
-		}
+	if p.prefix == "" {
+		return issues, nil
 	}
+
+	for i := range issues {
+		issues[i].Pos.Filename = fsutils.WithPathPrefix(p.prefix, issues[i].Pos.Filename)
+	}
+
 	return issues, nil
 }
 

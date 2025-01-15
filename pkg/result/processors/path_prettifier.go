@@ -10,6 +10,7 @@ import (
 
 var _ Processor = (*PathPrettifier)(nil)
 
+// PathPrettifier modifies report file path with the shortest relative path.
 type PathPrettifier struct {
 	log logutils.Log
 }
