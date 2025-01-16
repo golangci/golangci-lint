@@ -1,6 +1,7 @@
 package gci
 
 import (
+	"context"
 	"fmt"
 
 	gcicfg "github.com/daixiang0/gci/pkg/config"
@@ -22,7 +23,7 @@ func New(settings *config.GciSettings) (*Formatter, error) {
 	log.InitLogger()
 	_ = log.L().Sync()
 
-	modPath, err := gomod.GetModulePath()
+	modPath, err := gomod.GetModulePath(context.Background())
 	if err != nil {
 		internal.FormatterLogger.Errorf("gci: %v", err)
 	}

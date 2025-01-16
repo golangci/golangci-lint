@@ -2,6 +2,7 @@ package config
 
 import (
 	"cmp"
+	"context"
 	"errors"
 	"fmt"
 	"os"
@@ -286,7 +287,7 @@ func (l *Loader) appendStringSlice(name string, current *[]string) {
 
 func (l *Loader) handleGoVersion() {
 	if l.cfg.Run.Go == "" {
-		l.cfg.Run.Go = detectGoVersion()
+		l.cfg.Run.Go = detectGoVersion(context.Background())
 	}
 
 	l.cfg.LintersSettings.Govet.Go = l.cfg.Run.Go
