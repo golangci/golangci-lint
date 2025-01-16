@@ -2,6 +2,7 @@ package config
 
 import (
 	"cmp"
+	"context"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -80,8 +81,8 @@ func IsGoGreaterThanOrEqual(current, limit string) bool {
 	return v1.GreaterThanOrEqual(l)
 }
 
-func detectGoVersion() string {
-	return cmp.Or(detectGoVersionFromGoMod(), "1.17")
+func detectGoVersion(ctx context.Context) string {
+	return cmp.Or(detectGoVersionFromGoMod(ctx), "1.17")
 }
 
 // detectGoVersionFromGoMod tries to get Go version from go.mod.
@@ -89,11 +90,11 @@ func detectGoVersion() string {
 // else it returns `go` version if present,
 // else it returns `GOVERSION` version if present,
 // else it returns empty.
-func detectGoVersionFromGoMod() string {
-	values, err := goenv.Get(goenv.GOMOD, goenv.GOVERSION)
+func detectGoVersionFromGoMod(ctx context.Context) string {
+	values, err := goenv.Get(ctx, goenv.GOMOD, goenv.GOVERSION)
 	if err != nil {
 		values = map[string]string{
-			goenv.GOMOD: detectGoModFallback(),
+			goenv.GOMOD: detectGoModFallback(ctx),
 		}
 	}
 
@@ -143,8 +144,8 @@ func parseGoMod(goMod string) (*modfile.File, error) {
 	return modfile.Parse("go.mod", raw, nil)
 }
 
-func detectGoModFallback() string {
-	info, err := gomod.GetModuleInfo()
+func detectGoModFallback(ctx context.Context) string {
+	info, err := gomod.GetModuleInfo(ctx)
 	if err != nil {
 		return ""
 	}

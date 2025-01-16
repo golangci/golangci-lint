@@ -11,6 +11,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/ldez/grignotin/goenv"
 	"golang.org/x/tools/go/packages"
 
 	"github.com/golangci/golangci-lint/pkg/config"
@@ -204,12 +205,13 @@ func (l *PackageLoader) debugPrintLoadedPackages(pkgs []*packages.Package) {
 func (l *PackageLoader) prepareBuildContext() {
 	// Set GOROOT to have working cross-compilation: cross-compiled binaries
 	// have invalid GOROOT. XXX: can't use runtime.GOROOT().
-	goroot := l.goenv.Get(goutil.EnvGoRoot)
+	goroot := l.goenv.Get(goenv.GOROOT)
 	if goroot == "" {
 		return
 	}
 
-	os.Setenv(string(goutil.EnvGoRoot), goroot)
+	_ = os.Setenv(goenv.GOROOT, goroot)
+
 	build.Default.GOROOT = goroot
 	build.Default.BuildTags = l.cfg.Run.BuildTags
 }

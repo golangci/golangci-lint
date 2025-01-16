@@ -4,6 +4,8 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/ldez/grignotin/goenv"
+
 	"github.com/golangci/golangci-lint/pkg/goutil"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
@@ -19,9 +21,9 @@ type Cgo struct {
 	goCacheDir string
 }
 
-func NewCgo(goenv *goutil.Env) *Cgo {
+func NewCgo(env *goutil.Env) *Cgo {
 	return &Cgo{
-		goCacheDir: goenv.Get(goutil.EnvGoCache),
+		goCacheDir: env.Get(goenv.GOCACHE),
 	}
 }
 
