@@ -69,12 +69,15 @@ jobs:
 
   tests-on-unix:
     needs: golangci-lint # run after golangci-lint action to not produce duplicated errors
-    runs-on: ubuntu-latest
     strategy:
       matrix:
+        os:
+          - ubuntu-latest
+          - ubuntu-24.04-arm
         golang:
           - '1.22'
           - '1.23'
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
