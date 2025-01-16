@@ -40,9 +40,6 @@ var defaultLintersSettings = LintersSettings{
 		ExplicitExhaustiveMap:      false,
 		ExplicitExhaustiveSwitch:   false,
 	},
-	Fatcontext: FatcontextSettings{
-		CheckStructPointers: false,
-	},
 	Forbidigo: ForbidigoSettings{
 		ExcludeGodocExamples: true,
 	},
