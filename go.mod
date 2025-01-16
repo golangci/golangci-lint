@@ -67,7 +67,7 @@ require (
 	github.com/lasiar/canonicalheader v1.1.2
 	github.com/ldez/exptostd v0.3.1
 	github.com/ldez/gomoddirectives v0.6.0
-	github.com/ldez/grignotin v0.8.0
+	github.com/ldez/grignotin v0.9.0
 	github.com/ldez/tagliatelle v0.7.1
 	github.com/ldez/usetesting v0.4.2
 	github.com/leonklingele/grouper v1.1.2
