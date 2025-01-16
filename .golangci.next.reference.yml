@@ -548,6 +548,12 @@ linters-settings:
     exclude:
       - '.+/cobra\.Command$'
 
+  fatcontext:
+    # Check for potential fat contexts in struct pointers.
+    # May generate false positives.
+    # Default: false
+    check-struct-pointers: true
+
   forbidigo:
     # Forbid the following identifiers (list of regexp).
     # Default: ["^(fmt\\.Print(|f|ln)|print|println)$"]
