@@ -25,7 +25,6 @@ const (
 	DebugKeyExcludeRules       = "exclude_rules"
 	DebugKeyExec               = "exec"
 	DebugKeyFilenameUnadjuster = "filename_unadjuster"
-	DebugKeyForbidigo          = "forbidigo"
 	DebugKeyFormatter          = "formatter"
 	DebugKeyGoEnv              = "goenv"
 	DebugKeyInvalidIssue       = "invalid_issue"
@@ -63,10 +62,11 @@ const (
 )
 
 const (
-	DebugKeyGoCritic = "gocritic" // Debugs `go-critic` linter.
-	DebugKeyGovet    = "govet"    // Debugs `govet` linter.
-	DebugKeyNolint   = "nolint"   // Debugs a filter excluding issues by `//nolint` comments.
-	DebugKeyRevive   = "revive"   // Debugs `revive` linter.
+	DebugKeyForbidigo = "forbidigo" // Debugs `forbidigo` linter.
+	DebugKeyGoCritic  = "gocritic"  // Debugs `gocritic` linter.
+	DebugKeyGovet     = "govet"     // Debugs `govet` linter.
+	DebugKeyNolint    = "nolint"    // Debugs a filter excluding issues by `//nolint` comments.
+	DebugKeyRevive    = "revive"    // Debugs `revive` linter.
 )
 
 func getEnabledDebugs() map[string]bool {
