@@ -41,7 +41,7 @@ jobs:
           # - 1.18rc1 -> 1.18.0-rc.1
           go-version: ${{ env.GO_VERSION }}
       - name: lint
-        uses: golangci/golangci-lint-action@v6.1.1
+        uses: golangci/golangci-lint-action@v6.2.0
         with:
           version: latest
 
@@ -69,12 +69,15 @@ jobs:
 
   tests-on-unix:
     needs: golangci-lint # run after golangci-lint action to not produce duplicated errors
-    runs-on: ubuntu-latest
     strategy:
       matrix:
+        os:
+          - ubuntu-latest
+          - ubuntu-24.04-arm
         golang:
           - '1.22'
           - '1.23'
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
@@ -103,7 +106,7 @@ jobs:
     name: Installation script (local)
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-latest, ubuntu-24.04-arm, macos-latest, windows-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
