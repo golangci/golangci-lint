@@ -223,6 +223,7 @@ type LintersSettings struct {
 	ErrorLint       ErrorLintSettings
 	Exhaustive      ExhaustiveSettings
 	Exhaustruct     ExhaustructSettings
+	Fatcontext      FatcontextSettings
 	Forbidigo       ForbidigoSettings
 	Funlen          FunlenSettings
 	Gci             GciSettings
@@ -428,6 +429,10 @@ type ExhaustiveSettings struct {
 type ExhaustructSettings struct {
 	Include []string `mapstructure:"include"`
 	Exclude []string `mapstructure:"exclude"`
+}
+
+type FatcontextSettings struct {
+	CheckStructPointers bool `mapstructure:"check-struct-pointers"`
 }
 
 type ForbidigoSettings struct {

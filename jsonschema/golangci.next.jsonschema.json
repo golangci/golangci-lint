@@ -1019,6 +1019,17 @@
             }
           }
         },
+        "fatcontext": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "check-struct-pointers": {
+              "description": "Check for potential fat contexts in struct pointers.",
+              "type": "boolean",
+              "default": false
+            }
+          }
+        },
         "forbidigo": {
           "type": "object",
           "additionalProperties": false,
