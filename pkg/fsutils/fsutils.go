@@ -76,11 +76,11 @@ func ShortestRelPath(path, wd string) (string, error) {
 		}
 	}
 
-	evaledPath, err := EvalSymlinks(path)
+	evaluatedPath, err := EvalSymlinks(path)
 	if err != nil {
 		return "", fmt.Errorf("can't eval symlinks for path %s: %w", path, err)
 	}
-	path = evaledPath
+	path = evaluatedPath
 
 	// make path absolute and then relative to be able to fix this case:
 	// we are in `/test` dir, we want to normalize `../test`, and have file `file.go` in this dir;

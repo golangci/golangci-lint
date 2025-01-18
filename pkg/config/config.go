@@ -17,7 +17,7 @@ import (
 
 // Config encapsulates the config data specified in the golangci-lint YAML config file.
 type Config struct {
-	cfgDir string // The directory containing the golangci-lint config file.
+	cfgDir string // Path to the directory containing golangci-lint config file.
 
 	Run Run `mapstructure:"run"`
 
@@ -32,7 +32,7 @@ type Config struct {
 	InternalTest    bool // Option is used only for testing golangci-lint code, don't use it
 }
 
-// GetConfigDir returns the directory that contains golangci config file.
+// GetConfigDir returns the directory that contains golangci-lint config file.
 func (c *Config) GetConfigDir() string {
 	return c.cfgDir
 }

@@ -37,10 +37,10 @@ type Run struct {
 
 func (r *Run) Validate() error {
 	// go help modules
-	allowedMods := []string{"mod", "readonly", "vendor"}
+	allowedModes := []string{"mod", "readonly", "vendor"}
 
-	if r.ModulesDownloadMode != "" && !slices.Contains(allowedMods, r.ModulesDownloadMode) {
-		return fmt.Errorf("invalid modules download path %s, only (%s) allowed", r.ModulesDownloadMode, strings.Join(allowedMods, "|"))
+	if r.ModulesDownloadMode != "" && !slices.Contains(allowedModes, r.ModulesDownloadMode) {
+		return fmt.Errorf("invalid modules download path %s, only (%s) allowed", r.ModulesDownloadMode, strings.Join(allowedModes, "|"))
 	}
 
 	return nil
