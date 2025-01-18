@@ -4141,6 +4141,16 @@ run:
   # Default: 1m
   timeout: 5m
 
+  # The mode used to evaluate relative paths.
+  # It's used by exclusions, Go plugins, and some linters.
+  # The value can be:
+  # - `gomod`: the paths will be relative to the directory of the `go.mod` file.
+  # - `gitroot`: the paths will be relative to the git root (the parent directory of `.git`).
+  # - `cfg`: the paths will be relative to the configuration file.
+  # - `wd` (NOT recommended): the paths will be relative to the place where golangci-lint is run.
+  # Default: wd
+  relative-path-mode: gomod
+
   # Exit code when at least one issue was found.
   # Default: 1
   issues-exit-code: 2

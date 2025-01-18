@@ -446,6 +446,14 @@
           "type": "string"
         }
       ]
+    },
+    "relative-path-modes": {
+      "enum": [
+        "gomod",
+        "gitroot",
+        "cfg",
+        "wd"
+      ]
     }
   },
   "type": "object",
@@ -506,6 +514,12 @@
           "description": "Targeted Go version.",
           "type": "string",
           "default": "1.17"
+        },
+        "relative-path-mode": {
+          "description": "The mode used to evaluate relative paths.",
+          "type": "string",
+          "$ref": "#/definitions/relative-path-modes",
+          "default": "wd"
         }
       }
     },
