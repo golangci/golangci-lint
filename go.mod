@@ -48,7 +48,7 @@ require (
 	github.com/golangci/gofmt v0.0.0-20250106114630-d62b90e6713d
 	github.com/golangci/misspell v0.6.0
 	github.com/golangci/plugin-module-register v0.1.1
-	github.com/golangci/revgrep v0.6.0
+	github.com/golangci/revgrep v0.6.1
 	github.com/golangci/unconvert v0.0.0-20240309020433-c5143eacb3ed
 	github.com/gordonklaus/ineffassign v0.1.0
 	github.com/gostaticanalysis/forcetypeassert v0.1.0
