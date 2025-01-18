@@ -37,26 +37,28 @@ func NewSkipFiles(patterns []string, pathPrefix string) (*SkipFiles, error) {
 	}, nil
 }
 
-func (SkipFiles) Name() string {
+func (*SkipFiles) Name() string {
 	return "skip_files"
 }
 
-func (p SkipFiles) Process(issues []result.Issue) ([]result.Issue, error) {
+func (p *SkipFiles) Process(issues []result.Issue) ([]result.Issue, error) {
 	if len(p.patterns) == 0 {
 		return issues, nil
 	}
 
-	return filterIssues(issues, func(issue *result.Issue) bool {
-		path := fsutils.WithPathPrefix(p.pathPrefix, issue.RelativePath)
-
-		for _, pattern := range p.patterns {
-			if pattern.MatchString(path) {
-				return false
-			}
-		}
-
-		return true
-	}), nil
+	return filterIssues(issues, p.shouldPassIssue), nil
 }
 
-func (SkipFiles) Finish() {}
+func (*SkipFiles) Finish() {}
+
+func (p *SkipFiles) shouldPassIssue(issue *result.Issue) bool {
+	path := fsutils.WithPathPrefix(p.pathPrefix, issue.RelativePath)
+
+	for _, pattern := range p.patterns {
+		if pattern.MatchString(path) {
+			return false
+		}
+	}
+
+	return true
+}
