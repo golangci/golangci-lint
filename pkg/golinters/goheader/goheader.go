@@ -9,17 +9,18 @@ import (
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
+	"github.com/golangci/golangci-lint/pkg/golinters/internal"
 )
 
 const linterName = "goheader"
 
-func New(settings *config.GoHeaderSettings) *goanalysis.Linter {
+func New(settings *config.GoHeaderSettings, basePath string) *goanalysis.Linter {
 	conf := &goheader.Configuration{}
 	if settings != nil {
 		conf = &goheader.Configuration{
 			Values:       settings.Values,
 			Template:     settings.Template,
-			TemplatePath: settings.TemplatePath,
+			TemplatePath: strings.ReplaceAll(settings.TemplatePath, internal.PlaceholderBasePath, basePath),
 		}
 	}
 

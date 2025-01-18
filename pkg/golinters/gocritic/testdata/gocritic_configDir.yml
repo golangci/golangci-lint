@@ -17,7 +17,4 @@ linters-settings:
         #   The ruleguard files used in functional tests cannot be under the 'testdata' directory.
         #   This is because they import the 'github.com/quasilyte/go-ruleguard/dsl' package,
         #   which needs to be added to go.mod. The testdata directory is ignored by go mod.
-        rules: '${base-path}/ruleguard/preferWriteString.go,${base-path}/ruleguard/stringsSimplify.go'
-
-run:
-  relative-path-mode: cfg
+        rules: '${configDir}/ruleguard/preferWriteString.go,${configDir}/ruleguard/stringsSimplify.go'
