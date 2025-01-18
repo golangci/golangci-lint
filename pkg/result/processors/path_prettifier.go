@@ -1,9 +1,6 @@
 package processors
 
 import (
-	"path/filepath"
-
-	"github.com/golangci/golangci-lint/pkg/fsutils"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
@@ -23,20 +20,11 @@ func (*PathPrettifier) Name() string {
 	return "path_prettifier"
 }
 
-func (p *PathPrettifier) Process(issues []result.Issue) ([]result.Issue, error) {
+func (*PathPrettifier) Process(issues []result.Issue) ([]result.Issue, error) {
 	return transformIssues(issues, func(issue *result.Issue) *result.Issue {
-		if !filepath.IsAbs(issue.FilePath()) {
-			return issue
-		}
-
-		rel, err := fsutils.ShortestRelPath(issue.FilePath(), "")
-		if err != nil {
-			p.log.Warnf("shortest relative path: %v", err)
-			return issue
-		}
-
 		newIssue := issue
-		newIssue.Pos.Filename = rel
+		newIssue.Pos.Filename = issue.RelativePath
+
 		return newIssue
 	}), nil
 }

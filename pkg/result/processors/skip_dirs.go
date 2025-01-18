@@ -82,14 +82,7 @@ func (p *SkipDirs) Finish() {
 }
 
 func (p *SkipDirs) shouldPassIssue(issue *result.Issue) bool {
-	if filepath.IsAbs(issue.FilePath()) {
-		if isGoFile(issue.FilePath()) {
-			p.log.Warnf("Got abs path %s in skip dirs processor, it should be relative", issue.FilePath())
-		}
-		return true
-	}
-
-	issueRelDir := filepath.Dir(issue.FilePath())
+	issueRelDir := filepath.Dir(issue.RelativePath)
 
 	if toPass, ok := p.skippedDirsCache[issueRelDir]; ok {
 		if !toPass {

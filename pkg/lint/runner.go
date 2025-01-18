@@ -41,6 +41,11 @@ func NewRunner(log logutils.Log, cfg *config.Config, args []string, goenv *gouti
 	// or process other paths (skip files).
 	files := fsutils.NewFiles(lineCache, cfg.Output.PathPrefix)
 
+	pathRelativity, err := processors.NewPathRelativity(log, cfg.GetBasePath())
+	if err != nil {
+		return nil, fmt.Errorf("error creating path relativity processor: %w", err)
+	}
+
 	skipFilesProcessor, err := processors.NewSkipFiles(cfg.Issues.ExcludeFiles, cfg.Output.PathPrefix)
 	if err != nil {
 		return nil, err
@@ -79,10 +84,10 @@ func NewRunner(log logutils.Log, cfg *config.Config, args []string, goenv *gouti
 			// Must be after FilenameUnadjuster.
 			processors.NewInvalidIssue(log.Child(logutils.DebugKeyInvalidIssue)),
 
-			// Must be before Diff, SkipFiles, SkipDirs, ExcludeRules processors at least.
-			processors.NewPathPrettifier(log),
+			// Must be after PathAbsoluter, Cgo, FilenameUnadjuster InvalidIssue.
+			pathRelativity,
 
-			// must be after PathPrettifier.
+			// Must be after PathRelativity.
 			skipFilesProcessor,
 			skipDirsProcessor,
 
@@ -111,6 +116,7 @@ func NewRunner(log logutils.Log, cfg *config.Config, args []string, goenv *gouti
 			processors.NewSourceCode(lineCache, log.Child(logutils.DebugKeySourceCode)),
 			processors.NewPathShortener(),
 			processors.NewSeverity(log.Child(logutils.DebugKeySeverityRules), files, &cfg.Severity),
+			processors.NewPathPrettifier(log),
 			processors.NewPathPrefixer(cfg.Output.PathPrefix),
 			processors.NewSortResults(cfg),
 		},

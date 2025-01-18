@@ -27,6 +27,7 @@ func newIssueFromIssueTestCase(c issueTestCase) result.Issue {
 			Filename: c.Path,
 			Line:     c.Line,
 		},
+		RelativePath: c.Path,
 	}
 }
 

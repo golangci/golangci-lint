@@ -50,6 +50,7 @@ const (
 	DebugKeyMaxSameIssues      = "max_same_issues"
 	DebugKeyPathAbsoluter      = "path_absoluter"
 	DebugKeyPathPrettifier     = "path_prettifier"
+	DebugKeyPathRelativity     = "path_relativity"
 	DebugKeySeverityRules      = "severity_rules"
 	DebugKeySkipDirs           = "skip_dirs"
 	DebugKeySourceCode         = "source_code"

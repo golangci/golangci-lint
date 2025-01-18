@@ -38,6 +38,12 @@ type Issue struct {
 	// If we are expecting a nolint (because this is from nolintlint), record the expected linter
 	ExpectNoLint         bool
 	ExpectedNoLintLinter string
+
+	// Only for Diff processor needs.
+	WorkingDirectoryRelativePath string `json:"-"`
+
+	// Only for processor that need relative paths evaluation.
+	RelativePath string `json:"-"`
 }
 
 func (i *Issue) FilePath() string {
