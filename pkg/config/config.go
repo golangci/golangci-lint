@@ -17,7 +17,8 @@ import (
 
 // Config encapsulates the config data specified in the golangci-lint YAML config file.
 type Config struct {
-	cfgDir string // Path to the directory containing golangci-lint config file.
+	cfgDir   string // Path to the directory containing golangci-lint config file.
+	basePath string // Path the root directory related to [Run.RelativePathMode].
 
 	Run Run `mapstructure:"run"`
 
@@ -35,6 +36,10 @@ type Config struct {
 // GetConfigDir returns the directory that contains golangci-lint config file.
 func (c *Config) GetConfigDir() string {
 	return c.cfgDir
+}
+
+func (c *Config) GetBasePath() string {
+	return c.basePath
 }
 
 func (c *Config) Validate() error {

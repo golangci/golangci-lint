@@ -82,6 +82,11 @@ func (l *Loader) Load(opts LoadOptions) error {
 		return err
 	}
 
+	l.cfg.basePath, err = fsutils.GetBasePath(context.Background(), l.cfg.Run.RelativePathMode, l.cfg.cfgDir)
+	if err != nil {
+		return fmt.Errorf("get base path: %w", err)
+	}
+
 	err = l.handleEnableOnlyOption()
 	if err != nil {
 		return err
