@@ -87,8 +87,8 @@ func TestSeverity_multiple(t *testing.T) {
 		{Path: "e_test.go", Text: "testonly", Linter: "testlinter"},
 		{Path: "e.go", Text: "nontestonly", Linter: "testlinter"},
 		{Path: "e_test.go", Text: "nontestonly", Linter: "testlinter"},
-		{Path: filepath.Join("testdata", "exclude_rules.go"), Line: 3, Linter: "lll"},
-		{Path: filepath.Join("testdata", "severity_rules.go"), Line: 3, Linter: "invalidgo"},
+		{Path: filepath.FromSlash("testdata/severity/exclude_rules.go"), Line: 3, Linter: "lll"},
+		{Path: filepath.FromSlash("testdata/severity/severity_rules.go"), Line: 3, Linter: "invalidgo"},
 		{Path: "someotherlinter.go", Text: "someotherlinter", Linter: "someotherlinter"},
 		{Path: "somenotmatchlinter.go", Text: "somenotmatchlinter", Linter: "somenotmatchlinter"},
 		{Path: "empty.go", Text: "empty", Linter: "empty"},
@@ -118,8 +118,8 @@ func TestSeverity_multiple(t *testing.T) {
 		{Path: "e_test.go", Text: "testonly", Linter: "testlinter", Severity: "info"},
 		{Path: "e.go", Text: "nontestonly", Linter: "testlinter", Severity: "info"},       // matched
 		{Path: "e_test.go", Text: "nontestonly", Linter: "testlinter", Severity: "error"}, // not matched
-		{Path: filepath.Join("testdata", "exclude_rules.go"), Line: 3, Linter: "lll", Severity: "error"},
-		{Path: filepath.Join("testdata", "severity_rules.go"), Line: 3, Linter: "invalidgo", Severity: "info"},
+		{Path: filepath.FromSlash("testdata/severity/exclude_rules.go"), Line: 3, Linter: "lll", Severity: "error"},
+		{Path: filepath.FromSlash("testdata/severity/severity_rules.go"), Line: 3, Linter: "invalidgo", Severity: "info"},
 		{Path: "someotherlinter.go", Text: "someotherlinter", Linter: "someotherlinter", Severity: "info"},
 		{Path: "somenotmatchlinter.go", Text: "somenotmatchlinter", Linter: "somenotmatchlinter", Severity: "error"},
 		{Path: "empty.go", Text: "empty", Linter: "empty", Severity: "error"},
