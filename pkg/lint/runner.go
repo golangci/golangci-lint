@@ -107,7 +107,7 @@ func NewRunner(log logutils.Log, cfg *config.Config, args []string, goenv *gouti
 			processors.NewFixer(cfg, log, fileCache, metaFormatter),
 
 			// Must be after the Fixer.
-			processors.NewUniqByLine(cfg),
+			processors.NewUniqByLine(cfg.Issues.UniqByLine),
 			processors.NewMaxPerFileFromLinter(cfg),
 			processors.NewMaxSameIssues(cfg.Issues.MaxSameIssues, log.Child(logutils.DebugKeyMaxSameIssues), cfg),
 			processors.NewMaxFromLinter(cfg.Issues.MaxIssuesPerLinter, log.Child(logutils.DebugKeyMaxFromLinter), cfg),
@@ -117,7 +117,7 @@ func NewRunner(log logutils.Log, cfg *config.Config, args []string, goenv *gouti
 			processors.NewPathShortener(),
 			processors.NewSeverity(log.Child(logutils.DebugKeySeverityRules), files, &cfg.Severity),
 			processors.NewPathPrettifier(log, cfg.Output.PathPrefix),
-			processors.NewSortResults(cfg),
+			processors.NewSortResults(&cfg.Output),
 		},
 		lintCtx: lintCtx,
 		Log:     log,

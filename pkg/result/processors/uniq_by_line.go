@@ -1,7 +1,6 @@
 package processors
 
 import (
-	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
@@ -12,13 +11,13 @@ var _ Processor = (*UniqByLine)(nil)
 // UniqByLine filters reports to keep only one report by line of code.
 type UniqByLine struct {
 	fileLineCounter fileLineCounter
-	cfg             *config.Config
+	enable          bool
 }
 
-func NewUniqByLine(cfg *config.Config) *UniqByLine {
+func NewUniqByLine(enable bool) *UniqByLine {
 	return &UniqByLine{
 		fileLineCounter: fileLineCounter{},
-		cfg:             cfg,
+		enable:          enable,
 	}
 }
 
@@ -27,7 +26,7 @@ func (*UniqByLine) Name() string {
 }
 
 func (p *UniqByLine) Process(issues []result.Issue) ([]result.Issue, error) {
-	if !p.cfg.Issues.UniqByLine {
+	if !p.enable {
 		return issues, nil
 	}
 
