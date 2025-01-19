@@ -60,7 +60,7 @@ func TestExcludeRules_multiple(t *testing.T) {
 		{Path: "e_test.go", Text: "testonly", Linter: "linter"},
 		{Path: "e.go", Text: "nontestonly", Linter: "linter"},
 		{Path: "e_test.go", Text: "nontestonly", Linter: "linter"},
-		{Path: filepath.Join("testdata", "exclude_rules.go"), Line: 3, Linter: "lll"},
+		{Path: filepath.FromSlash("testdata/exclude_rules/exclude_rules.go"), Line: 3, Linter: "lll"},
 	}
 
 	var issues []result.Issue
@@ -219,7 +219,7 @@ func TestExcludeRules_caseSensitive_multiple(t *testing.T) {
 		{Path: "e_test.go", Text: "another", Linter: "linter"},
 		{Path: "e_test.go", Text: "testonly", Linter: "linter"},
 		{Path: "e_test.go", Text: "testOnly", Linter: "linter"},
-		{Path: filepath.Join("testdata", "exclude_rules_case_sensitive.go"), Line: 3, Linter: "lll"},
+		{Path: filepath.FromSlash("testdata/exclude_rules/case_sensitive.go"), Line: 3, Linter: "lll"},
 	}
 
 	var issues []result.Issue
@@ -245,7 +245,7 @@ func TestExcludeRules_caseSensitive_multiple(t *testing.T) {
 		{Path: "e_Test.go", Text: "normal", Linter: "testlinter"},
 		{Path: "e_test.go", Text: "another", Linter: "linter"},
 		{Path: "e_test.go", Text: "testOnly", Linter: "linter"},
-		{Path: filepath.Join("testdata", "exclude_rules_case_sensitive.go"), Line: 3, Linter: "lll"},
+		{Path: filepath.FromSlash("testdata/exclude_rules/case_sensitive.go"), Line: 3, Linter: "lll"},
 	}
 
 	assert.Equal(t, expectedCases, resultingCases)

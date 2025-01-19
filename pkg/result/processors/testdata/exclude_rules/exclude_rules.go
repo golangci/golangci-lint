@@ -1,4 +1,4 @@
-package testdata
+package exclude_rules
 
 //go:generate --long line --with a --lot of --arguments --that we --would like --to exclude --from lll --issues --by exclude-rules
 
