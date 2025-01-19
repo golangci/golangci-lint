@@ -13,4 +13,4 @@ this type of block comment also
 
 /* this one line comment also */
 
-package testdata
+package exclusion_generated_file_filter

@@ -82,13 +82,13 @@ func TestGeneratedFileFilter_isGeneratedFileStrict(t *testing.T) {
 		assert   assert.BoolAssertionFunc
 	}{
 		{
-			desc:     "",
-			filepath: filepath.FromSlash("testdata/autogen_go_strict.go"),
+			desc:     "go strict",
+			filepath: filepath.FromSlash("testdata/exclusion_generated_file_filter/go_strict.go"),
 			assert:   assert.True,
 		},
 		{
-			desc:     "",
-			filepath: filepath.FromSlash("testdata/autogen_go_strict_invalid.go"),
+			desc:     "go strict invalid",
+			filepath: filepath.FromSlash("testdata/exclusion_generated_file_filter/go_strict_invalid.go"),
 			assert:   assert.False,
 		},
 	}
@@ -111,7 +111,7 @@ func Test_getComments(t *testing.T) {
 		doc   string
 	}{
 		{
-			fpath: filepath.FromSlash("testdata/autogen_exclude.go"),
+			fpath: filepath.FromSlash("testdata/exclusion_generated_file_filter/exclude.go"),
 			doc: `first line
 second line
 third line
@@ -119,11 +119,11 @@ this text also
 and this text also`,
 		},
 		{
-			fpath: filepath.FromSlash("testdata/autogen_exclude_doc.go"),
+			fpath: filepath.FromSlash("testdata/exclusion_generated_file_filter/exclude_doc.go"),
 			doc:   `DO NOT EDIT`,
 		},
 		{
-			fpath: filepath.FromSlash("testdata/autogen_exclude_block_comment.go"),
+			fpath: filepath.FromSlash("testdata/exclusion_generated_file_filter/exclude_block_comment.go"),
 			doc: `* first line
  *
  * second line
@@ -144,7 +144,7 @@ this one line comment also`,
 // Issue 954: Some lines can be very long, e.g. auto-generated
 // embedded resources. Reported on file of 86.2KB.
 func Test_getComments_fileWithLongLine(t *testing.T) {
-	fpath := filepath.FromSlash("testdata/autogen_exclude_long_line.go")
+	fpath := filepath.FromSlash("testdata/exclusion_generated_file_filter/exclude_long_line.go")
 	_, err := getComments(fpath)
 	assert.NoError(t, err)
 }
@@ -162,7 +162,7 @@ func TestGeneratedFileFilter_shouldPassIssue(t *testing.T) {
 			issue: &result.Issue{
 				FromLinter: "example",
 				Pos: token.Position{
-					Filename: filepath.FromSlash("testdata/autogen_go_strict_invalid.go"),
+					Filename: filepath.FromSlash("testdata/exclusion_generated_file_filter/go_strict_invalid.go"),
 				},
 			},
 			assert: assert.False,
@@ -173,7 +173,7 @@ func TestGeneratedFileFilter_shouldPassIssue(t *testing.T) {
 			issue: &result.Issue{
 				FromLinter: "example",
 				Pos: token.Position{
-					Filename: filepath.FromSlash("testdata/autogen_go_strict_invalid.go"),
+					Filename: filepath.FromSlash("testdata/exclusion_generated_file_filter/go_strict_invalid.go"),
 				},
 			},
 			assert: assert.True,
