@@ -4,11 +4,11 @@ import (
 	"go/ast"
 	"go/parser"
 	"go/token"
+	"maps"
 	"regexp"
+	"slices"
 	"sort"
 	"strings"
-
-	"golang.org/x/exp/maps"
 
 	"github.com/golangci/golangci-lint/pkg/golinters/nolintlint"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
@@ -102,8 +102,7 @@ func (p *Nolint) Finish() {
 		return
 	}
 
-	unknownLinters := maps.Keys(p.unknownLintersSet)
-	sort.Strings(unknownLinters)
+	unknownLinters := slices.Sorted(maps.Keys(p.unknownLintersSet))
 
 	p.log.Warnf("Found unknown linters in //nolint directives: %s", strings.Join(unknownLinters, ", "))
 }
