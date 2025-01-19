@@ -17,9 +17,9 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-var _ Processor = (*Nolint)(nil)
+var _ Processor = (*NolintFilter)(nil)
 
-var nolintDebugf = logutils.Debug(logutils.DebugKeyNolint)
+var nolintDebugf = logutils.Debug(logutils.DebugKeyNolintFilter)
 
 type ignoredRange struct {
 	linters                []string
@@ -64,8 +64,8 @@ type fileData struct {
 	ignoredRanges []ignoredRange
 }
 
-// Nolint filters and sorts reports related to `nolint` directives.
-type Nolint struct {
+// NolintFilter filters and sorts reports related to `nolint` directives.
+type NolintFilter struct {
 	fileCache      map[string]*fileData
 	dbManager      *lintersdb.Manager
 	enabledLinters map[string]*linter.Config
@@ -76,8 +76,8 @@ type Nolint struct {
 	pattern *regexp.Regexp
 }
 
-func NewNolint(log logutils.Log, dbManager *lintersdb.Manager, enabledLinters map[string]*linter.Config) *Nolint {
-	return &Nolint{
+func NewNolintFilter(log logutils.Log, dbManager *lintersdb.Manager, enabledLinters map[string]*linter.Config) *NolintFilter {
+	return &NolintFilter{
 		fileCache:         map[string]*fileData{},
 		dbManager:         dbManager,
 		enabledLinters:    enabledLinters,
@@ -87,17 +87,17 @@ func NewNolint(log logutils.Log, dbManager *lintersdb.Manager, enabledLinters ma
 	}
 }
 
-func (*Nolint) Name() string {
-	return "nolint"
+func (*NolintFilter) Name() string {
+	return "nolint_filter"
 }
 
-func (p *Nolint) Process(issues []result.Issue) ([]result.Issue, error) {
+func (p *NolintFilter) Process(issues []result.Issue) ([]result.Issue, error) {
 	// put nolintlint issues last because we process other issues first to determine which nolint directives are unused
 	sort.Stable(sortWithNolintlintLast(issues))
 	return filterIssuesErr(issues, p.shouldPassIssue)
 }
 
-func (p *Nolint) Finish() {
+func (p *NolintFilter) Finish() {
 	if len(p.unknownLintersSet) == 0 {
 		return
 	}
@@ -108,7 +108,7 @@ func (p *Nolint) Finish() {
 	p.log.Warnf("Found unknown linters in //nolint directives: %s", strings.Join(unknownLinters, ", "))
 }
 
-func (p *Nolint) shouldPassIssue(issue *result.Issue) (bool, error) {
+func (p *NolintFilter) shouldPassIssue(issue *result.Issue) (bool, error) {
 	nolintDebugf("got issue: %v", *issue)
 
 	// don't expect disabled linters to cover their nolint statements
@@ -143,7 +143,7 @@ func (p *Nolint) shouldPassIssue(issue *result.Issue) (bool, error) {
 	return true, nil
 }
 
-func (p *Nolint) getOrCreateFileData(issue *result.Issue) *fileData {
+func (p *NolintFilter) getOrCreateFileData(issue *result.Issue) *fileData {
 	fd := p.fileCache[issue.FilePath()]
 	if fd != nil {
 		return fd
@@ -170,7 +170,7 @@ func (p *Nolint) getOrCreateFileData(issue *result.Issue) *fileData {
 	return fd
 }
 
-func (p *Nolint) buildIgnoredRangesForFile(f *ast.File, fset *token.FileSet, filePath string) []ignoredRange {
+func (p *NolintFilter) buildIgnoredRangesForFile(f *ast.File, fset *token.FileSet, filePath string) []ignoredRange {
 	inlineRanges := p.extractFileCommentsInlineRanges(fset, f.Comments...)
 	nolintDebugf("file %s: inline nolint ranges are %+v", filePath, inlineRanges)
 
@@ -192,7 +192,7 @@ func (p *Nolint) buildIgnoredRangesForFile(f *ast.File, fset *token.FileSet, fil
 	return allRanges
 }
 
-func (p *Nolint) extractFileCommentsInlineRanges(fset *token.FileSet, comments ...*ast.CommentGroup) []ignoredRange {
+func (p *NolintFilter) extractFileCommentsInlineRanges(fset *token.FileSet, comments ...*ast.CommentGroup) []ignoredRange {
 	var ret []ignoredRange
 	for _, g := range comments {
 		for _, c := range g.List {
@@ -206,7 +206,7 @@ func (p *Nolint) extractFileCommentsInlineRanges(fset *token.FileSet, comments .
 	return ret
 }
 
-func (p *Nolint) extractInlineRangeFromComment(text string, g ast.Node, fset *token.FileSet) *ignoredRange {
+func (p *NolintFilter) extractInlineRangeFromComment(text string, g ast.Node, fset *token.FileSet) *ignoredRange {
 	text = strings.TrimLeft(text, "/ ")
 	if !p.pattern.MatchString(text) {
 		return nil

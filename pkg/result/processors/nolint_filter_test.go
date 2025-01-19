@@ -33,10 +33,10 @@ func newNolint2FileIssue(line int) result.Issue {
 	return i
 }
 
-func newTestNolintProcessor(log logutils.Log) *Nolint {
+func newTestNolintFilter(log logutils.Log) *NolintFilter {
 	dbManager, _ := lintersdb.NewManager(log, config.NewDefault(), lintersdb.NewLinterBuilder())
 
-	return NewNolint(log, dbManager, nil)
+	return NewNolintFilter(log, dbManager, nil)
 }
 
 func getMockLog() *logutils.MockLog {
@@ -45,8 +45,8 @@ func getMockLog() *logutils.MockLog {
 	return log
 }
 
-func TestNolint(t *testing.T) {
-	p := newTestNolintProcessor(getMockLog())
+func TestTestNolintFilter_Process(t *testing.T) {
+	p := newTestNolintFilter(getMockLog())
 	defer p.Finish()
 
 	// test inline comments
@@ -125,7 +125,7 @@ func TestNolint(t *testing.T) {
 	}
 }
 
-func TestNolintInvalidLinterName(t *testing.T) {
+func TestNolintFilter_Process_invalidLinterName(t *testing.T) {
 	fileName := filepath.Join("testdata", "nolint_bad_names.go")
 	issues := []result.Issue{
 		{
@@ -154,12 +154,12 @@ func TestNolintInvalidLinterName(t *testing.T) {
 	log := getMockLog()
 	log.On("Warnf", "Found unknown linters in //nolint directives: %s", "bad1, bad2")
 
-	p := newTestNolintProcessor(log)
+	p := newTestNolintFilter(log)
 	processAssertEmpty(t, p, issues...)
 	p.Finish()
 }
 
-func TestNolintInvalidLinterNameWithViolationOnTheSameLine(t *testing.T) {
+func TestNolintFilter_Process_invalidLinterNameWithViolationOnTheSameLine(t *testing.T) {
 	log := getMockLog()
 	log.On("Warnf", "Found unknown linters in //nolint directives: %s", "foobar")
 	issues := []result.Issue{
@@ -172,7 +172,7 @@ func TestNolintInvalidLinterNameWithViolationOnTheSameLine(t *testing.T) {
 		},
 	}
 
-	p := newTestNolintProcessor(log)
+	p := newTestNolintFilter(log)
 	processedIssues, err := p.Process(issues)
 	p.Finish()
 
@@ -180,8 +180,8 @@ func TestNolintInvalidLinterNameWithViolationOnTheSameLine(t *testing.T) {
 	assert.Equal(t, issues, processedIssues)
 }
 
-func TestNolintAliases(t *testing.T) {
-	p := newTestNolintProcessor(getMockLog())
+func TestNolintFilter_Process_aliases(t *testing.T) {
+	p := newTestNolintFilter(getMockLog())
 	for _, line := range []int{47, 49, 51} {
 		t.Run(fmt.Sprintf("line-%d", line), func(t *testing.T) {
 			processAssertEmpty(t, p, newNolintFileIssue(line, "gosec"))
@@ -190,7 +190,7 @@ func TestNolintAliases(t *testing.T) {
 	p.Finish()
 }
 
-func TestIgnoredRangeMatches(t *testing.T) {
+func Test_ignoredRange_doesMatch(t *testing.T) {
 	testcases := []struct {
 		doc      string
 		issue    result.Issue
@@ -251,10 +251,10 @@ func TestIgnoredRangeMatches(t *testing.T) {
 	}
 }
 
-func TestNolintWholeFile(t *testing.T) {
+func TestNolintFilter_Process_wholeFile(t *testing.T) {
 	fileName := filepath.Join("testdata", "nolint_whole_file.go")
 
-	p := newTestNolintProcessor(getMockLog())
+	p := newTestNolintFilter(getMockLog())
 	defer p.Finish()
 
 	processAssertEmpty(t, p, result.Issue{
@@ -273,13 +273,13 @@ func TestNolintWholeFile(t *testing.T) {
 	})
 }
 
-func TestNolintUnused(t *testing.T) {
+func TestNolintFilter_Process_unused(t *testing.T) {
 	fileName := filepath.Join("testdata", "nolint_unused.go")
 
 	log := getMockLog()
 	log.On("Warnf", "Found unknown linters in //nolint directives: %s", "blah")
 
-	createProcessor := func(t *testing.T, log *logutils.MockLog, enabledLinters []string) *Nolint {
+	createProcessor := func(t *testing.T, log *logutils.MockLog, enabledLinters []string) *NolintFilter {
 		enabledSetLog := logutils.NewMockLog()
 		enabledSetLog.On("Infof", "Active %d linters: %s", len(enabledLinters), enabledLinters)
 
@@ -291,7 +291,7 @@ func TestNolintUnused(t *testing.T) {
 		enabledLintersMap, err := dbManager.GetEnabledLintersMap()
 		require.NoError(t, err)
 
-		return NewNolint(log, dbManager, enabledLintersMap)
+		return NewNolintFilter(log, dbManager, enabledLintersMap)
 	}
 
 	// the issue below is the nolintlint issue that would be generated for the test file
@@ -355,7 +355,7 @@ func TestNolintUnused(t *testing.T) {
 		enabledLintersMap, err := dbManager.GetEnabledLintersMap()
 		require.NoError(t, err)
 
-		p := NewNolint(log, dbManager, enabledLintersMap)
+		p := NewNolintFilter(log, dbManager, enabledLintersMap)
 		defer p.Finish()
 
 		processAssertEmpty(t, p, nolintlintIssueVarcheck)

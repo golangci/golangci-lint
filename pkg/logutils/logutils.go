@@ -48,6 +48,7 @@ const (
 	DebugKeyInvalidIssue        = "invalid_issue"
 	DebugKeyMaxFromLinter       = "max_from_linter"
 	DebugKeyMaxSameIssues       = "max_same_issues"
+	DebugKeyNolintFilter        = "nolint_filter" // Debugs a filter excluding issues by `//nolint` comments.
 	DebugKeyPathAbsoluter       = "path_absoluter"
 	DebugKeyPathPrettifier      = "path_prettifier"
 	DebugKeyPathRelativity      = "path_relativity"
@@ -75,7 +76,6 @@ const (
 	DebugKeyForbidigo = "forbidigo" // Debugs `forbidigo` linter.
 	DebugKeyGoCritic  = "gocritic"  // Debugs `gocritic` linter.
 	DebugKeyGovet     = "govet"     // Debugs `govet` linter.
-	DebugKeyNolint    = "nolint"    // Debugs a filter excluding issues by `//nolint` comments.
 	DebugKeyRevive    = "revive"    // Debugs `revive` linter.
 )
 

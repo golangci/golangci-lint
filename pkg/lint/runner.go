@@ -99,7 +99,7 @@ func NewRunner(log logutils.Log, cfg *config.Config, args []string, goenv *gouti
 			processors.NewExclude(&cfg.Issues),
 			processors.NewExcludeRules(log.Child(logutils.DebugKeyExcludeRules), files, &cfg.Issues),
 
-			processors.NewNolint(log.Child(logutils.DebugKeyNolint), dbManager, enabledLinters),
+			processors.NewNolintFilter(log.Child(logutils.DebugKeyNolintFilter), dbManager, enabledLinters),
 
 			processors.NewDiff(&cfg.Issues),
 
