@@ -1,5 +1,5 @@
 //nolint:errcheck
-package testdata
+package nolint_filter
 
 func RetError() error {
 	return nil

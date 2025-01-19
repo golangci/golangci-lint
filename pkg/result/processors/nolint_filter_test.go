@@ -20,7 +20,7 @@ import (
 func newNolintFileIssue(line int, fromLinter string) result.Issue {
 	return result.Issue{
 		Pos: token.Position{
-			Filename: filepath.Join("testdata", "nolint.go"),
+			Filename: filepath.FromSlash("testdata/nolint_filter/nolint.go"),
 			Line:     line,
 		},
 		FromLinter: fromLinter,
@@ -29,7 +29,7 @@ func newNolintFileIssue(line int, fromLinter string) result.Issue {
 
 func newNolint2FileIssue(line int) result.Issue {
 	i := newNolintFileIssue(line, "errcheck")
-	i.Pos.Filename = filepath.Join("testdata", "nolint2.go")
+	i.Pos.Filename = filepath.FromSlash("testdata/nolint_filter/nolint2.go")
 	return i
 }
 
@@ -126,7 +126,7 @@ func TestTestNolintFilter_Process(t *testing.T) {
 }
 
 func TestNolintFilter_Process_invalidLinterName(t *testing.T) {
-	fileName := filepath.Join("testdata", "nolint_bad_names.go")
+	fileName := filepath.FromSlash("testdata/nolint_filter/bad_names.go")
 	issues := []result.Issue{
 		{
 			Pos: token.Position{
@@ -165,7 +165,7 @@ func TestNolintFilter_Process_invalidLinterNameWithViolationOnTheSameLine(t *tes
 	issues := []result.Issue{
 		{
 			Pos: token.Position{
-				Filename: filepath.Join("testdata", "nolint_apply_to_unknown.go"),
+				Filename: filepath.FromSlash("testdata/nolint_filter/apply_to_unknown.go"),
 				Line:     4,
 			},
 			FromLinter: "gofmt",
@@ -252,7 +252,7 @@ func Test_ignoredRange_doesMatch(t *testing.T) {
 }
 
 func TestNolintFilter_Process_wholeFile(t *testing.T) {
-	fileName := filepath.Join("testdata", "nolint_whole_file.go")
+	fileName := filepath.FromSlash("testdata/nolint_filter/whole_file.go")
 
 	p := newTestNolintFilter(getMockLog())
 	defer p.Finish()
@@ -274,7 +274,7 @@ func TestNolintFilter_Process_wholeFile(t *testing.T) {
 }
 
 func TestNolintFilter_Process_unused(t *testing.T) {
-	fileName := filepath.Join("testdata", "nolint_unused.go")
+	fileName := filepath.FromSlash("testdata/nolint_filter/unused.go")
 
 	log := getMockLog()
 	log.On("Warnf", "Found unknown linters in //nolint directives: %s", "blah")

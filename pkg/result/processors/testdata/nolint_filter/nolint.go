@@ -1,4 +1,4 @@
-package testdata
+package nolint_filter
 
 var nolintSpecific int    //nolint:gofmt
 var nolintSpace int       // nolint: gofmt
