@@ -1,6 +1,7 @@
 package processors
 
 import (
+	"path/filepath"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -39,39 +40,39 @@ func TestExclusionPaths_Process(t *testing.T) {
 			desc:     "begin with word",
 			patterns: []string{"^foo"},
 			issues: []result.Issue{
-				{RelativePath: "foo.go"},
-				{RelativePath: "foo/foo.go"},
-				{RelativePath: "foo/bar.go"},
-				{RelativePath: "bar/foo.go"},
-				{RelativePath: "bar/bar.go"},
+				{RelativePath: filepath.FromSlash("foo.go")},
+				{RelativePath: filepath.FromSlash("foo/foo.go")},
+				{RelativePath: filepath.FromSlash("foo/bar.go")},
+				{RelativePath: filepath.FromSlash("bar/foo.go")},
+				{RelativePath: filepath.FromSlash("bar/bar.go")},
 			},
 			expected: []result.Issue{
-				{RelativePath: "bar/foo.go"},
-				{RelativePath: "bar/bar.go"},
+				{RelativePath: filepath.FromSlash("bar/foo.go")},
+				{RelativePath: filepath.FromSlash("bar/bar.go")},
 			},
 		},
 		{
 			desc:     "directory begin with word",
 			patterns: []string{"^foo/"},
 			issues: []result.Issue{
-				{RelativePath: "foo.go"},
-				{RelativePath: "foo/foo.go"},
-				{RelativePath: "foo/bar.go"},
-				{RelativePath: "bar/foo.go"},
-				{RelativePath: "bar/bar.go"},
+				{RelativePath: filepath.FromSlash("foo.go")},
+				{RelativePath: filepath.FromSlash("foo/foo.go")},
+				{RelativePath: filepath.FromSlash("foo/bar.go")},
+				{RelativePath: filepath.FromSlash("bar/foo.go")},
+				{RelativePath: filepath.FromSlash("bar/bar.go")},
 			},
 			expected: []result.Issue{
-				{RelativePath: "foo.go"},
-				{RelativePath: "bar/foo.go"},
-				{RelativePath: "bar/bar.go"},
+				{RelativePath: filepath.FromSlash("foo.go")},
+				{RelativePath: filepath.FromSlash("bar/foo.go")},
+				{RelativePath: filepath.FromSlash("bar/bar.go")},
 			},
 		},
 		{
 			desc:     "same suffix with unconstrained expression",
 			patterns: []string{"c/d.go"},
 			issues: []result.Issue{
-				{RelativePath: "a/b/c/d.go"},
-				{RelativePath: "c/d.go"},
+				{RelativePath: filepath.FromSlash("a/b/c/d.go")},
+				{RelativePath: filepath.FromSlash("c/d.go")},
 			},
 			expected: []result.Issue{},
 		},
@@ -79,11 +80,11 @@ func TestExclusionPaths_Process(t *testing.T) {
 			desc:     "same suffix with constrained expression",
 			patterns: []string{"^c/d.go"},
 			issues: []result.Issue{
-				{RelativePath: "a/b/c/d.go"},
-				{RelativePath: "c/d.go"},
+				{RelativePath: filepath.FromSlash("a/b/c/d.go")},
+				{RelativePath: filepath.FromSlash("c/d.go")},
 			},
 			expected: []result.Issue{
-				{RelativePath: "a/b/c/d.go"},
+				{RelativePath: filepath.FromSlash("a/b/c/d.go")},
 			},
 		},
 	}
