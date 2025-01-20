@@ -91,7 +91,7 @@ func NewRunner(log logutils.Log, cfg *config.Config, args []string, goenv *gouti
 			skipFilesProcessor,
 			skipDirsProcessor,
 
-			processors.NewGeneratedFileFilter(cfg.Issues.ExcludeGenerated),
+			processors.NewGeneratedFileFilter(cfg.Linters.LinterExclusions.Generated),
 
 			// Must be before exclude because users see already marked output and configure excluding by it.
 			processors.NewIdentifierMarker(),
