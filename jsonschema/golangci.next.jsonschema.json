@@ -3958,7 +3958,9 @@
           "description": "The list of ids of default excludes to include or disable.",
           "type": "array",
           "items": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^EXC[0-9]{4}$",
+            "examples": ["EXC0001", "EXC0002", "EXC0015"]
           },
           "default": []
         },
