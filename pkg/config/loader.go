@@ -68,6 +68,23 @@ func (l *Loader) Load(opts LoadOptions) error {
 
 	l.applyStringSliceHack()
 
+	if l.cfg.Linters.LinterExclusions.Generated == "" {
+		// This is always non-empty because of the flag default value.
+		if l.cfg.Issues.ExcludeGenerated != "" {
+			l.cfg.Linters.LinterExclusions.Generated = l.cfg.Issues.ExcludeGenerated
+		} else {
+			l.cfg.Linters.LinterExclusions.Generated = "strict"
+		}
+	}
+
+	if l.cfg.Issues.UseDefaultExcludes {
+		l.cfg.Linters.LinterExclusions.Default = []string{"comments", "stdErrorHandling", "commonFalsePositives", "legacy"}
+	}
+
+	if len(l.cfg.Issues.ExcludeRules) > 0 {
+		l.cfg.Linters.LinterExclusions.Rules = append(l.cfg.Linters.LinterExclusions.Rules, l.cfg.Issues.ExcludeRules...)
+	}
+
 	if opts.CheckDeprecation {
 		err = l.handleDeprecation()
 		if err != nil {

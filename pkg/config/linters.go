@@ -13,6 +13,8 @@ type Linters struct {
 	Fast       bool
 
 	Presets []string
+
+	LinterExclusions LinterExclusions `mapstructure:"exclusions"`
 }
 
 func (l *Linters) Validate() error {
