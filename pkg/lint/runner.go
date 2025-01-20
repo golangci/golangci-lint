@@ -46,6 +46,11 @@ func NewRunner(log logutils.Log, cfg *config.Config, args []string, goenv *gouti
 		return nil, fmt.Errorf("error creating path relativity processor: %w", err)
 	}
 
+	exclusionPaths, err := processors.NewExclusionPaths(log, &cfg.Linters.LinterExclusions)
+	if err != nil {
+		return nil, err
+	}
+
 	skipFilesProcessor, err := processors.NewSkipFiles(cfg.Issues.ExcludeFiles, cfg.Output.PathPrefix)
 	if err != nil {
 		return nil, err
@@ -88,6 +93,7 @@ func NewRunner(log logutils.Log, cfg *config.Config, args []string, goenv *gouti
 			pathRelativity,
 
 			// Must be after PathRelativity.
+			exclusionPaths,
 			skipFilesProcessor,
 			skipDirsProcessor,
 
