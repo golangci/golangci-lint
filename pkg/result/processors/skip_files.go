@@ -13,6 +13,7 @@ var _ Processor = (*SkipFiles)(nil)
 // SkipFiles filters reports based on filename.
 //
 // It uses the shortest relative paths and `path-prefix` option.
+// TODO(ldez): should be remove in v2.
 type SkipFiles struct {
 	patterns   []*regexp.Regexp
 	pathPrefix string
