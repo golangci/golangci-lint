@@ -102,9 +102,8 @@ func NewRunner(log logutils.Log, cfg *config.Config, args []string, goenv *gouti
 			// Must be before exclude because users see already marked output and configure excluding by it.
 			processors.NewIdentifierMarker(),
 
-			processors.NewExclude(&cfg.Issues),
 			processors.NewExclusionRules(log.Child(logutils.DebugKeyExclusionRules), files,
-				&cfg.Linters.LinterExclusions, cfg.Issues.IncludeDefaultExcludes, cfg.Issues.ExcludeCaseSensitive),
+				&cfg.Linters.LinterExclusions, &cfg.Issues),
 
 			processors.NewNolintFilter(log.Child(logutils.DebugKeyNolintFilter), dbManager, enabledLinters),
 

@@ -54,8 +54,7 @@ type ExclusionRules struct {
 	rules []excludeRule
 }
 
-func NewExclusionRules(log logutils.Log, files *fsutils.Files, cfg *config.LinterExclusions,
-	refs []string, caseSensitive bool) *ExclusionRules {
+func NewExclusionRules(log logutils.Log, files *fsutils.Files, cfg *config.LinterExclusions, oldCfg *config.Issues) *ExclusionRules {
 	p := &ExclusionRules{
 		log:            log,
 		files:          files,
@@ -63,16 +62,32 @@ func NewExclusionRules(log logutils.Log, files *fsutils.Files, cfg *config.Linte
 		skippedCounter: map[string]int{},
 	}
 
-	excludeRules := slices.Clone(cfg.Rules)
-	excludeRules = append(excludeRules, filterInclude(getDefaultLintersExclusions(cfg.Default), refs)...)
-
 	// TODO(ldez) remove prefix in v2: the matching must be case sensitive, users can add `(?i)` inside the patterns if needed.
 	prefix := caseInsensitivePrefix
-	if caseSensitive {
+	if oldCfg.ExcludeCaseSensitive {
 		prefix = ""
 	}
 
+	excludeRules := slices.Clone(cfg.Rules)
+	excludeRules = append(excludeRules, filterInclude(getDefaultLintersExclusions(cfg.Default), oldCfg.IncludeDefaultExcludes)...)
+
 	p.rules = createRules(excludeRules, prefix)
+
+	// TODO(ldez): should be remove in v2.
+	for _, pattern := range oldCfg.ExcludePatterns {
+		if pattern == "" {
+			continue
+		}
+
+		rule := createRule(&config.ExcludeRule{
+			BaseRule: config.BaseRule{
+				Path: `.+\.go`,
+				Text: pattern,
+			},
+		}, prefix)
+
+		p.rules = append(p.rules, rule)
+	}
 
 	for _, rule := range p.rules {
 		if rule.internalReference == "" {
@@ -121,33 +136,41 @@ func (p *ExclusionRules) Finish() {
 }
 
 func createRules(rules []config.ExcludeRule, prefix string) []excludeRule {
+	if len(rules) == 0 {
+		return nil
+	}
+
 	parsedRules := make([]excludeRule, 0, len(rules))
 
 	for _, rule := range rules {
-		parsedRule := excludeRule{}
-		parsedRule.linters = rule.Linters
-		parsedRule.internalReference = rule.InternalReference
-
-		if rule.Text != "" {
-			parsedRule.text = regexp.MustCompile(prefix + rule.Text)
-		}
-
-		if rule.Source != "" {
-			parsedRule.source = regexp.MustCompile(prefix + rule.Source)
-		}
-
-		if rule.Path != "" {
-			parsedRule.path = regexp.MustCompile(fsutils.NormalizePathInRegex(rule.Path))
-		}
-
-		if rule.PathExcept != "" {
-			parsedRule.pathExcept = regexp.MustCompile(fsutils.NormalizePathInRegex(rule.PathExcept))
-		}
-
-		parsedRules = append(parsedRules, parsedRule)
+		parsedRules = append(parsedRules, createRule(&rule, prefix))
 	}
 
 	return parsedRules
+}
+
+func createRule(rule *config.ExcludeRule, prefix string) excludeRule {
+	parsedRule := excludeRule{}
+	parsedRule.linters = rule.Linters
+	parsedRule.internalReference = rule.InternalReference
+
+	if rule.Text != "" {
+		parsedRule.text = regexp.MustCompile(prefix + rule.Text)
+	}
+
+	if rule.Source != "" {
+		parsedRule.source = regexp.MustCompile(prefix + rule.Source)
+	}
+
+	if rule.Path != "" {
+		parsedRule.path = regexp.MustCompile(fsutils.NormalizePathInRegex(rule.Path))
+	}
+
+	if rule.PathExcept != "" {
+		parsedRule.pathExcept = regexp.MustCompile(fsutils.NormalizePathInRegex(rule.PathExcept))
+	}
+
+	return parsedRule
 }
 
 // TODO(ldez): must be removed in v2, only for compatibility with exclude-use-default/include.

@@ -50,7 +50,7 @@ func TestExclusionRules_Process_multiple(t *testing.T) {
 		},
 	}
 
-	p := NewExclusionRules(nil, files, cfg, nil, false)
+	p := NewExclusionRules(nil, files, cfg, &config.Issues{})
 
 	cases := []issueTestCase{
 		{Path: "e.go", Text: "exclude", Linter: "linter"},
@@ -104,7 +104,7 @@ func TestExclusionRules_Process_pathPrefix(t *testing.T) {
 		},
 	}
 
-	p := NewExclusionRules(nil, files, cfg, nil, false)
+	p := NewExclusionRules(nil, files, cfg, &config.Issues{})
 
 	cases := []issueTestCase{
 		{Path: "e.go"},
@@ -147,7 +147,7 @@ func TestExclusionRules_Process_text(t *testing.T) {
 		}},
 	}
 
-	p := NewExclusionRules(nil, files, cfg, nil, false)
+	p := NewExclusionRules(nil, files, cfg, &config.Issues{})
 
 	texts := []string{"excLude", "1", "", "exclud", "notexclude"}
 	var issues []result.Issue
@@ -172,7 +172,7 @@ func TestExclusionRules_Process_text(t *testing.T) {
 func TestExclusionRules_Process_empty(t *testing.T) {
 	files := fsutils.NewFiles(fsutils.NewLineCache(fsutils.NewFileCache()), "")
 
-	p := NewExclusionRules(nil, files, &config.LinterExclusions{}, nil, false)
+	p := NewExclusionRules(nil, files, &config.LinterExclusions{}, &config.Issues{})
 
 	processAssertSame(t, p, newIssueFromTextTestCase("test"))
 }
@@ -209,7 +209,7 @@ func TestExclusionRules_Process_caseSensitive_multiple(t *testing.T) {
 		},
 	}
 
-	p := NewExclusionRules(nil, files, cfg, nil, true)
+	p := NewExclusionRules(nil, files, cfg, &config.Issues{ExcludeCaseSensitive: true})
 
 	cases := []issueTestCase{
 		{Path: "e.go", Text: "exclude", Linter: "linter"},
@@ -266,7 +266,7 @@ func TestExclusionRules_Process_caseSensitive_text(t *testing.T) {
 		},
 	}
 
-	p := NewExclusionRules(nil, files, cfg, nil, true)
+	p := NewExclusionRules(nil, files, cfg, &config.Issues{ExcludeCaseSensitive: true})
 
 	texts := []string{"exclude", "excLude", "1", "", "exclud", "notexclude"}
 
@@ -292,7 +292,7 @@ func TestExclusionRules_Process_caseSensitive_text(t *testing.T) {
 func TestExclusionRules_Process_caseSensitive_empty(t *testing.T) {
 	files := fsutils.NewFiles(fsutils.NewLineCache(fsutils.NewFileCache()), "")
 
-	p := NewExclusionRules(nil, files, &config.LinterExclusions{}, nil, true)
+	p := NewExclusionRules(nil, files, &config.LinterExclusions{}, &config.Issues{ExcludeCaseSensitive: true})
 
 	processAssertSame(t, p, newIssueFromTextTestCase("test"))
 }
