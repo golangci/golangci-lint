@@ -16,6 +16,9 @@ type baseRule struct {
 	path       *regexp.Regexp
 	pathExcept *regexp.Regexp
 	linters    []string
+
+	// For compatibility with exclude-use-default/include.
+	internalReference string `mapstructure:"-"`
 }
 
 func (r *baseRule) isEmpty() bool {

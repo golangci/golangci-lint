@@ -155,6 +155,9 @@ type BaseRule struct {
 	PathExcept string `mapstructure:"path-except"`
 	Text       string
 	Source     string
+
+	// For compatibility with exclude-use-default/include.
+	InternalReference string `mapstructure:"-"`
 }
 
 func (b *BaseRule) Validate(minConditionsCount int) error {
