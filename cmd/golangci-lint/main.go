@@ -64,11 +64,10 @@ func createBuildInfo() commands.BuildInfo {
 		}
 	}
 
-	revision = cmp.Or(revision, "unknown")
-	modified = cmp.Or(modified, "?")
 	info.Date = cmp.Or(info.Date, "(unknown)")
 
-	info.Commit = fmt.Sprintf("(%s, modified: %s, mod sum: %q)", revision, modified, buildInfo.Main.Sum)
+	info.Commit = fmt.Sprintf("(%s, modified: %s, mod sum: %q)",
+		cmp.Or(revision, "unknown"), cmp.Or(modified, "?"), buildInfo.Main.Sum)
 
 	return info
 }
