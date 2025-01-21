@@ -6,6 +6,12 @@ import (
 )
 
 const (
+	GeneratedModeLax     = "lax"
+	GeneratedModeStrict  = "strict"
+	GeneratedModeDisable = "disable"
+)
+
+const (
 	ExclusionPresetComments             = "comments"
 	ExclusionPresetStdErrorHandling     = "stdErrorHandling"
 	ExclusionPresetCommonFalsePositives = "commonFalsePositives"

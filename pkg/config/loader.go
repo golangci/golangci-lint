@@ -70,7 +70,7 @@ func (l *Loader) Load(opts LoadOptions) error {
 
 	if l.cfg.Linters.LinterExclusions.Generated == "" {
 		// `l.cfg.Issues.ExcludeGenerated` is always non-empty because of the flag default value.
-		l.cfg.Linters.LinterExclusions.Generated = cmp.Or(l.cfg.Issues.ExcludeGenerated, "strict")
+		l.cfg.Linters.LinterExclusions.Generated = cmp.Or(l.cfg.Issues.ExcludeGenerated, GeneratedModeStrict)
 	}
 
 	// Compatibility layer with v1.
