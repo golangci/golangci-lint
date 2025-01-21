@@ -78,7 +78,12 @@ func (l *Loader) Load(opts LoadOptions) error {
 	}
 
 	if l.cfg.Issues.UseDefaultExcludes {
-		l.cfg.Linters.LinterExclusions.Default = []string{"comments", "stdErrorHandling", "commonFalsePositives", "legacy"}
+		l.cfg.Linters.LinterExclusions.Default = []string{
+			DefaultExclusionComments,
+			DefaultExclusionStdErrorHandling,
+			DefaultExclusionCommonFalsePositives,
+			DefaultExclusionLegacy,
+		}
 	}
 
 	if len(l.cfg.Issues.ExcludeRules) > 0 {

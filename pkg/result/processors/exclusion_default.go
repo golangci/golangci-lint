@@ -3,7 +3,7 @@ package processors
 import "github.com/golangci/golangci-lint/pkg/config"
 
 var defaultLintersExclusions = map[string][]config.ExcludeRule{
-	"comments": {
+	config.DefaultExclusionComments: {
 		{
 			// Annoying issue about not having a comment. The rare codebase has such comments.
 			// CheckPackageComment, CheckExportedFunctionDocs, CheckExportedTypeDocs, CheckExportedVarDocs
@@ -50,7 +50,7 @@ var defaultLintersExclusions = map[string][]config.ExcludeRule{
 			},
 		},
 	},
-	"stdErrorHandling": {
+	config.DefaultExclusionStdErrorHandling: {
 		{
 			// Almost all programs ignore errors on these functions and in most cases it's ok.
 			BaseRule: config.BaseRule{
@@ -61,7 +61,7 @@ var defaultLintersExclusions = map[string][]config.ExcludeRule{
 			},
 		},
 	},
-	"commonFalsePositives": {
+	config.DefaultExclusionCommonFalsePositives: {
 		{
 			// Too many false-positives on 'unsafe' usage.
 			BaseRule: config.BaseRule{
@@ -87,7 +87,7 @@ var defaultLintersExclusions = map[string][]config.ExcludeRule{
 			},
 		},
 	},
-	"legacy": {
+	config.DefaultExclusionLegacy: {
 		{
 			// Common false positives.
 			BaseRule: config.BaseRule{
