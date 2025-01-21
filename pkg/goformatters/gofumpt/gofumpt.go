@@ -14,7 +14,7 @@ type Formatter struct {
 	options gofumpt.Options
 }
 
-func New(settings *config.GofumptSettings, goVersion string) *Formatter {
+func New(settings *config.GoFumptSettings, goVersion string) *Formatter {
 	var options gofumpt.Options
 
 	if settings != nil {

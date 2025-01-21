@@ -77,7 +77,7 @@ var defaultLintersSettings = LintersSettings{
 	Gofmt: GoFmtSettings{
 		Simplify: true,
 	},
-	Gofumpt: GofumptSettings{
+	Gofumpt: GoFumptSettings{
 		LangVersion: "",
 		ModulePath:  "",
 		ExtraRules:  false,
@@ -241,7 +241,7 @@ type LintersSettings struct {
 	Godot           GodotSettings
 	Godox           GodoxSettings
 	Gofmt           GoFmtSettings
-	Gofumpt         GofumptSettings
+	Gofumpt         GoFumptSettings
 	Goheader        GoHeaderSettings
 	Goimports       GoImportsSettings
 	GoModDirectives GoModDirectivesSettings
@@ -488,18 +488,6 @@ type FunlenSettings struct {
 	IgnoreComments bool `mapstructure:"ignore-comments"`
 }
 
-type GciSettings struct {
-	Sections         []string `mapstructure:"sections"`
-	NoInlineComments bool     `mapstructure:"no-inline-comments"`
-	NoPrefixComments bool     `mapstructure:"no-prefix-comments"`
-	SkipGenerated    bool     `mapstructure:"skip-generated"`
-	CustomOrder      bool     `mapstructure:"custom-order"`
-	NoLexOrder       bool     `mapstructure:"no-lex-order"`
-
-	// Deprecated: use Sections instead.
-	LocalPrefixes string `mapstructure:"local-prefixes"`
-}
-
 type GinkgoLinterSettings struct {
 	SuppressLenAssertion       bool `mapstructure:"suppress-len-assertion"`
 	SuppressNilAssertion       bool `mapstructure:"suppress-nil-assertion"`
@@ -567,32 +555,10 @@ type GodoxSettings struct {
 	Keywords []string
 }
 
-type GoFmtSettings struct {
-	Simplify     bool
-	RewriteRules []GoFmtRewriteRule `mapstructure:"rewrite-rules"`
-}
-
-type GoFmtRewriteRule struct {
-	Pattern     string
-	Replacement string
-}
-
-type GofumptSettings struct {
-	ModulePath string `mapstructure:"module-path"`
-	ExtraRules bool   `mapstructure:"extra-rules"`
-
-	// Deprecated: use the global `run.go` instead.
-	LangVersion string `mapstructure:"lang-version"`
-}
-
 type GoHeaderSettings struct {
 	Values       map[string]map[string]string `mapstructure:"values"`
 	Template     string                       `mapstructure:"template"`
 	TemplatePath string                       `mapstructure:"template-path"`
-}
-
-type GoImportsSettings struct {
-	LocalPrefixes string `mapstructure:"local-prefixes"`
 }
 
 type GoModDirectivesSettings struct {

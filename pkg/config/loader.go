@@ -321,6 +321,8 @@ func (l *Loader) handleGoVersion() {
 
 	l.cfg.LintersSettings.Gofumpt.LangVersion = cmp.Or(l.cfg.LintersSettings.Gofumpt.LangVersion, l.cfg.Run.Go)
 
+	l.cfg.Formatters.Settings.GoFumpt.LangVersion = cmp.Or(l.cfg.Formatters.Settings.GoFumpt.LangVersion, l.cfg.Run.Go)
+
 	trimmedGoVersion := goutil.TrimGoVersion(l.cfg.Run.Go)
 
 	l.cfg.LintersSettings.Revive.Go = trimmedGoVersion
