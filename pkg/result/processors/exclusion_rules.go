@@ -73,7 +73,7 @@ func NewExclusionRules(log logutils.Log, files *fsutils.Files, cfg *config.Linte
 
 	p.rules = createRules(excludeRules, prefix)
 
-	// TODO(ldez): should be remove in v2.
+	// TODO(ldez): should be removed in v2.
 	for _, pattern := range oldCfg.ExcludePatterns {
 		if pattern == "" {
 			continue

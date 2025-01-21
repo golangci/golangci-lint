@@ -85,7 +85,7 @@ func (b *PluginGoBuilder) getAnalyzerPlugin(cfg *config.Config, path string, set
 	if !filepath.IsAbs(path) {
 		// Hack for compatibility:
 		// the previous default (v1) was `cfg` but `fsutils.GetBasePath` defaults on `wd`.
-		// TODO(ldez): should be remove in v2.
+		// TODO(ldez): should be removed in v2.
 		relativePathMode := cfg.Run.RelativePathMode
 		if relativePathMode == "" {
 			relativePathMode = fsutils.RelativePathModeCfg
