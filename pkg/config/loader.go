@@ -88,6 +88,8 @@ func (l *Loader) Load(opts LoadOptions) error {
 		l.cfg.Linters.LinterExclusions.Rules = append(l.cfg.Linters.LinterExclusions.Rules, l.cfg.Issues.ExcludeRules...)
 	}
 
+	l.handleFormatterOverrides()
+
 	if opts.CheckDeprecation {
 		err = l.handleDeprecation()
 		if err != nil {
@@ -500,6 +502,25 @@ func (l *Loader) handleEnableOnlyOption() error {
 	}
 
 	return nil
+}
+
+// Overrides linter settings with formatter settings if the formatter is enabled.
+func (l *Loader) handleFormatterOverrides() {
+	if slices.Contains(l.cfg.Formatters.Enable, "gofmt") {
+		l.cfg.LintersSettings.GoFmt = l.cfg.Formatters.Settings.GoFmt
+	}
+
+	if slices.Contains(l.cfg.Formatters.Enable, "gofumpt") {
+		l.cfg.LintersSettings.GoFumpt = l.cfg.Formatters.Settings.GoFumpt
+	}
+
+	if slices.Contains(l.cfg.Formatters.Enable, "goimports") {
+		l.cfg.LintersSettings.GoImports = l.cfg.Formatters.Settings.GoImports
+	}
+
+	if slices.Contains(l.cfg.Formatters.Enable, "gci") {
+		l.cfg.LintersSettings.Gci = l.cfg.Formatters.Settings.Gci
+	}
 }
 
 func customDecoderHook() viper.DecoderConfigOption {
