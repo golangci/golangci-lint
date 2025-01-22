@@ -95,6 +95,8 @@ func (l *Loader) Load(opts LoadOptions) error {
 		if err != nil {
 			return err
 		}
+
+		l.handleFormatterDeprecations()
 	}
 
 	l.handleGoVersion()
@@ -429,9 +431,6 @@ func (l *Loader) handleLinterOptionDeprecations() {
 	if l.cfg.LintersSettings.Gci.LocalPrefixes != "" {
 		l.log.Warnf("The configuration option `linters.gci.local-prefixes` is deprecated, please use `prefix()` inside `linters.gci.sections`.")
 	}
-	if l.cfg.Formatters.Settings.Gci.LocalPrefixes != "" {
-		l.log.Warnf("The configuration option `formatters.settings.gci.local-prefixes` is deprecated, please use `prefix()` inside `formatters.settings.gci.sections`.")
-	}
 
 	// Deprecated since v1.33.0.
 	if l.cfg.LintersSettings.Godot.CheckAll != nil {
@@ -441,9 +440,6 @@ func (l *Loader) handleLinterOptionDeprecations() {
 	// Deprecated since v1.47.0
 	if l.cfg.LintersSettings.GoFumpt.LangVersion != "" {
 		l.log.Warnf("The configuration option `linters.gofumpt.lang-version` is deprecated, please use global `run.go`.")
-	}
-	if l.cfg.Formatters.Settings.GoFumpt.LangVersion != "" {
-		l.log.Warnf("The configuration option `formatters.settings.gofumpt.lang-version` is deprecated, please use global `run.go`.")
 	}
 
 	// Deprecated since v1.47.0
@@ -541,6 +537,19 @@ func (l *Loader) handleFormatterExclusions() {
 				Path:    path,
 			},
 		})
+	}
+}
+func (l *Loader) handleFormatterDeprecations() {
+	// Deprecated since v1.44.0.
+	if l.cfg.Formatters.Settings.Gci.LocalPrefixes != "" {
+		l.log.Warnf("The configuration option `formatters.settings.gci.local-prefixes` is deprecated, " +
+			"please use `prefix()` inside `formatters.settings.gci.sections`.")
+	}
+
+	// Deprecated since v1.47.0
+	if l.cfg.Formatters.Settings.GoFumpt.LangVersion != "" {
+		l.log.Warnf("The configuration option `formatters.settings.gofumpt.lang-version` is deprecated, " +
+			"please use global `run.go`.")
 	}
 }
 
