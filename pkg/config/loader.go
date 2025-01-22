@@ -88,7 +88,7 @@ func (l *Loader) Load(opts LoadOptions) error {
 		l.cfg.Linters.LinterExclusions.Rules = append(l.cfg.Linters.LinterExclusions.Rules, l.cfg.Issues.ExcludeRules...)
 	}
 
-	l.handleFormatterOverrides()
+	l.handleFormatters()
 
 	if opts.CheckDeprecation {
 		err = l.handleDeprecation()
@@ -504,6 +504,11 @@ func (l *Loader) handleEnableOnlyOption() error {
 	return nil
 }
 
+func (l *Loader) handleFormatters() {
+	l.handleFormatterOverrides()
+	l.handleFormatterExclusions()
+}
+
 // Overrides linter settings with formatter settings if the formatter is enabled.
 func (l *Loader) handleFormatterOverrides() {
 	if slices.Contains(l.cfg.Formatters.Enable, "gofmt") {
@@ -520,6 +525,22 @@ func (l *Loader) handleFormatterOverrides() {
 
 	if slices.Contains(l.cfg.Formatters.Enable, "gci") {
 		l.cfg.LintersSettings.Gci = l.cfg.Formatters.Settings.Gci
+	}
+}
+
+// Add formatter exclusions to linters exclusions.
+func (l *Loader) handleFormatterExclusions() {
+	if len(l.cfg.Formatters.Enable) == 0 {
+		return
+	}
+
+	for _, path := range l.cfg.Formatters.Exclusions.Paths {
+		l.cfg.Linters.LinterExclusions.Rules = append(l.cfg.Linters.LinterExclusions.Rules, ExcludeRule{
+			BaseRule: BaseRule{
+				Linters: l.cfg.Formatters.Enable,
+				Path:    path,
+			},
+		})
 	}
 }
 
