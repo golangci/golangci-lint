@@ -38,6 +38,11 @@ func setupLintersFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
 		color.GreenString("Override linters configuration section to only run the specific linter(s)")) // Flags only.
 }
 
+func setupFormattersFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
+	internal.AddFlagAndBindP(v, fs, fs.StringSliceP, "enable", "E", "formatters.enable", nil,
+		color.GreenString("Enable specific formatter"))
+}
+
 func setupRunFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
 	internal.AddFlagAndBindP(v, fs, fs.IntP, "concurrency", "j", "run.concurrency", getDefaultConcurrency(),
 		color.GreenString("Number of CPUs to use (Default: number of logical CPUs)"))
