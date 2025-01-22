@@ -10,6 +10,8 @@ import (
 )
 
 var defaultLintersSettings = LintersSettings{
+	FormatterSettings: defaultFormatterSettings,
+
 	Asasalint: AsasalintSettings{
 		UseBuiltinExclusions: true,
 	},
@@ -43,10 +45,6 @@ var defaultLintersSettings = LintersSettings{
 	Forbidigo: ForbidigoSettings{
 		ExcludeGodocExamples: true,
 	},
-	Gci: GciSettings{
-		Sections:      []string{"standard", "default"},
-		SkipGenerated: true,
-	},
 	GoChecksumType: GoChecksumTypeSettings{
 		DefaultSignifiesExhaustive: true,
 	},
@@ -73,14 +71,6 @@ var defaultLintersSettings = LintersSettings{
 	Godot: GodotSettings{
 		Scope:  "declarations",
 		Period: true,
-	},
-	Gofmt: GoFmtSettings{
-		Simplify: true,
-	},
-	Gofumpt: GoFumptSettings{
-		LangVersion: "",
-		ModulePath:  "",
-		ExtraRules:  false,
 	},
 	Gosec: GoSecSettings{
 		Concurrency: runtime.NumCPU(),
@@ -214,6 +204,8 @@ var defaultLintersSettings = LintersSettings{
 }
 
 type LintersSettings struct {
+	FormatterSettings `mapstructure:",squash"`
+
 	Asasalint       AsasalintSettings
 	BiDiChk         BiDiChkSettings
 	CopyLoopVar     CopyLoopVarSettings
@@ -231,7 +223,6 @@ type LintersSettings struct {
 	Fatcontext      FatcontextSettings
 	Forbidigo       ForbidigoSettings
 	Funlen          FunlenSettings
-	Gci             GciSettings
 	GinkgoLinter    GinkgoLinterSettings
 	Gocognit        GocognitSettings
 	GoChecksumType  GoChecksumTypeSettings
@@ -240,10 +231,7 @@ type LintersSettings struct {
 	Gocyclo         GoCycloSettings
 	Godot           GodotSettings
 	Godox           GodoxSettings
-	Gofmt           GoFmtSettings
-	Gofumpt         GoFumptSettings
 	Goheader        GoHeaderSettings
-	Goimports       GoImportsSettings
 	GoModDirectives GoModDirectivesSettings
 	Gomodguard      GoModGuardSettings
 	Gosec           GoSecSettings

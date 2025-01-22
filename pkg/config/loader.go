@@ -319,8 +319,7 @@ func (l *Loader) handleGoVersion() {
 
 	l.cfg.LintersSettings.ParallelTest.Go = l.cfg.Run.Go
 
-	l.cfg.LintersSettings.Gofumpt.LangVersion = cmp.Or(l.cfg.LintersSettings.Gofumpt.LangVersion, l.cfg.Run.Go)
-
+	l.cfg.LintersSettings.GoFumpt.LangVersion = cmp.Or(l.cfg.LintersSettings.GoFumpt.LangVersion, l.cfg.Run.Go)
 	l.cfg.Formatters.Settings.GoFumpt.LangVersion = cmp.Or(l.cfg.Formatters.Settings.GoFumpt.LangVersion, l.cfg.Run.Go)
 
 	trimmedGoVersion := goutil.TrimGoVersion(l.cfg.Run.Go)
@@ -428,6 +427,9 @@ func (l *Loader) handleLinterOptionDeprecations() {
 	if l.cfg.LintersSettings.Gci.LocalPrefixes != "" {
 		l.log.Warnf("The configuration option `linters.gci.local-prefixes` is deprecated, please use `prefix()` inside `linters.gci.sections`.")
 	}
+	if l.cfg.Formatters.Settings.Gci.LocalPrefixes != "" {
+		l.log.Warnf("The configuration option `formatters.settings.gci.local-prefixes` is deprecated, please use `prefix()` inside `formatters.settings.gci.sections`.")
+	}
 
 	// Deprecated since v1.33.0.
 	if l.cfg.LintersSettings.Godot.CheckAll != nil {
@@ -435,8 +437,11 @@ func (l *Loader) handleLinterOptionDeprecations() {
 	}
 
 	// Deprecated since v1.47.0
-	if l.cfg.LintersSettings.Gofumpt.LangVersion != "" {
+	if l.cfg.LintersSettings.GoFumpt.LangVersion != "" {
 		l.log.Warnf("The configuration option `linters.gofumpt.lang-version` is deprecated, please use global `run.go`.")
+	}
+	if l.cfg.Formatters.Settings.GoFumpt.LangVersion != "" {
+		l.log.Warnf("The configuration option `formatters.settings.gofumpt.lang-version` is deprecated, please use global `run.go`.")
 	}
 
 	// Deprecated since v1.47.0
