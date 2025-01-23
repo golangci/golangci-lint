@@ -21,14 +21,14 @@ var StdExcludeDirRegexps = []string{
 	normalizePathRegex("builtin"),
 }
 
-// SkipDirs filters reports based on directory names.
-// It uses the shortest relative paths and `path-prefix` option.
-// TODO(ldez): should be removed in v2.
 type skipStat struct {
 	pattern string
 	count   int
 }
 
+// SkipDirs filters reports based on directory names.
+// It uses the shortest relative paths and `path-prefix` option.
+// TODO(ldez): should be removed in v2.
 type SkipDirs struct {
 	patterns   []*regexp.Regexp
 	pathPrefix string
