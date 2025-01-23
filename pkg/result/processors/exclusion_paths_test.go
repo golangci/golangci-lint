@@ -98,6 +98,23 @@ func TestExclusionPaths_Process(t *testing.T) {
 			},
 		},
 		{
+			desc: "paths: unused",
+			cfg: &config.LinterExclusions{
+				WarnUnused: true,
+				Paths: []string{
+					`^z/d.go`, // This pattern is unused.
+					`^c/d.go`,
+				},
+			},
+			issues: []result.Issue{
+				{RelativePath: filepath.FromSlash("a/b/c/d.go")},
+				{RelativePath: filepath.FromSlash("c/d.go")},
+			},
+			expected: []result.Issue{
+				{RelativePath: filepath.FromSlash("a/b/c/d.go")},
+			},
+		},
+		{
 			desc: "pathsExcept",
 			cfg: &config.LinterExclusions{
 				PathsExcept: []string{`^base/c/.*$`},
@@ -117,10 +134,11 @@ func TestExclusionPaths_Process(t *testing.T) {
 			},
 		},
 		{
-			desc: "pathsExcept: multiple patterns",
+			desc: "pathsExcept: unused",
 			cfg: &config.LinterExclusions{
+				WarnUnused: true,
 				PathsExcept: []string{
-					`^base/z/.*$`,
+					`^base/z/.*$`, // This pattern is unused.
 					`^base/c/.*$`,
 				},
 			},
@@ -131,6 +149,29 @@ func TestExclusionPaths_Process(t *testing.T) {
 				{RelativePath: filepath.FromSlash("base/c/a/file.go")},
 				{RelativePath: filepath.FromSlash("base/c/b/file.go")},
 				{RelativePath: filepath.FromSlash("base/d/file.go")},
+			},
+			expected: []result.Issue{
+				{RelativePath: filepath.FromSlash("base/a/file.go")},
+				{RelativePath: filepath.FromSlash("base/b/file.go")},
+				{RelativePath: filepath.FromSlash("base/d/file.go")},
+			},
+		},
+		{
+			desc: "pathsExcept: multiple patterns",
+			cfg: &config.LinterExclusions{
+				PathsExcept: []string{
+					`^base/e/.*$`,
+					`^base/c/.*$`,
+				},
+			},
+			issues: []result.Issue{
+				{RelativePath: filepath.FromSlash("base/a/file.go")},
+				{RelativePath: filepath.FromSlash("base/b/file.go")},
+				{RelativePath: filepath.FromSlash("base/c/file.go")},
+				{RelativePath: filepath.FromSlash("base/c/a/file.go")},
+				{RelativePath: filepath.FromSlash("base/c/b/file.go")},
+				{RelativePath: filepath.FromSlash("base/d/file.go")},
+				{RelativePath: filepath.FromSlash("base/e/file.go")},
 			},
 			expected: []result.Issue{
 				{RelativePath: filepath.FromSlash("base/a/file.go")},
