@@ -2732,6 +2732,11 @@ linters-settings:
         severity: warning
         disabled: false
         exclude: [""]
+      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#redundant-build-tag
+      - name: redundant-build-tag
+        severity: warning
+        disabled: false
+        exclude: [""]
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#redundant-import-alias
       - name: redundant-import-alias
         severity: warning
@@ -2838,6 +2843,11 @@ linters-settings:
           - allowRegex: "^_"
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#use-any
       - name: use-any
+        severity: warning
+        disabled: false
+        exclude: [""]
+      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#use-errors-new
+      - name: use-errors-new
         severity: warning
         disabled: false
         exclude: [""]
