@@ -209,8 +209,8 @@ func toIssue(pass *analysis.Pass, object *jsonObject) goanalysis.Issue {
 // This function mimics the GetConfig function of revive.
 // This allows to get default values and right types.
 // https://github.com/golangci/golangci-lint/issues/1745
-// https://github.com/mgechev/revive/blob/v1.5.0/config/config.go#L220
-// https://github.com/mgechev/revive/blob/v1.5.0/config/config.go#L172-L178
+// https://github.com/mgechev/revive/blob/v1.6.0/config/config.go#L230
+// https://github.com/mgechev/revive/blob/v1.6.0/config/config.go#L182-L188
 func getConfig(cfg *config.ReviveSettings) (*lint.Config, error) {
 	conf := defaultConfig()
 
@@ -307,7 +307,7 @@ func safeTomlSlice(r []any) []any {
 }
 
 // This element is not exported by revive, so we need copy the code.
-// Extracted from https://github.com/mgechev/revive/blob/v1.5.0/config/config.go#L16
+// Extracted from https://github.com/mgechev/revive/blob/v1.6.0/config/config.go#L16
 var defaultRules = []lint.Rule{
 	&rule.VarDeclarationsRule{},
 	&rule.PackageCommentsRule{},
@@ -393,6 +393,8 @@ var allRules = append([]lint.Rule{
 	&rule.CommentsDensityRule{},
 	&rule.FileLengthLimitRule{},
 	&rule.FilenameFormatRule{},
+	&rule.RedundantBuildTagRule{},
+	&rule.UseErrorsNewRule{},
 }, defaultRules...)
 
 const defaultConfidence = 0.8
