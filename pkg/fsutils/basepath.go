@@ -3,6 +3,7 @@ package fsutils
 import (
 	"bytes"
 	"context"
+	"errors"
 	"fmt"
 	"os/exec"
 	"path/filepath"
@@ -23,7 +24,19 @@ func AllRelativePathModes() []string {
 }
 
 func GetBasePath(ctx context.Context, mode, cfgDir string) (string, error) {
+	if mode == "" {
+		// TODO(ldez): v2 the default should be cfg or gomod.
+		mode = RelativePathModeWd
+	}
+
 	switch mode {
+	case RelativePathModeCfg:
+		if cfgDir == "" {
+			return GetBasePath(ctx, RelativePathModeWd, cfgDir)
+		}
+
+		return cfgDir, nil
+
 	case RelativePathModeGoMod:
 		goMod, err := goenv.GetOne(ctx, goenv.GOMOD)
 		if err != nil {
@@ -40,21 +53,16 @@ func GetBasePath(ctx context.Context, mode, cfgDir string) (string, error) {
 
 		return root, nil
 
-	case RelativePathModeCfg:
-		if cfgDir == "" {
-			return "", fmt.Errorf("missing configuration directory")
-		}
-
-		return cfgDir, nil
-
-	default:
-		// mode "wd"
+	case RelativePathModeWd:
 		wd, err := Getwd()
 		if err != nil {
 			return "", fmt.Errorf("get wd: %w", err)
 		}
 
 		return wd, nil
+
+	default:
+		return "", errors.New("unknown relative path mode")
 	}
 }
 
