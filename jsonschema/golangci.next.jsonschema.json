@@ -3948,6 +3948,12 @@
               "items": {
                 "type": "string"
               }
+            },
+            "paths-except":  {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
             }
           }
         }

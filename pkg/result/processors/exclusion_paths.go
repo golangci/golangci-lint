@@ -13,7 +13,8 @@ import (
 var _ Processor = (*ExclusionPaths)(nil)
 
 type ExclusionPaths struct {
-	patterns []*regexp.Regexp
+	pathPatterns       []*regexp.Regexp
+	pathExceptPatterns []*regexp.Regexp
 
 	warnUnused         bool
 	skippedPathCounter map[*regexp.Regexp]int
@@ -24,7 +25,7 @@ type ExclusionPaths struct {
 func NewExclusionPaths(log logutils.Log, cfg *config.LinterExclusions) (*ExclusionPaths, error) {
 	var counter = make(map[*regexp.Regexp]int)
 
-	var patternsRe []*regexp.Regexp
+	var pathPatterns []*regexp.Regexp
 	for _, p := range cfg.Paths {
 		p = fsutils.NormalizePathInRegex(p)
 
@@ -33,12 +34,25 @@ func NewExclusionPaths(log logutils.Log, cfg *config.LinterExclusions) (*Exclusi
 			return nil, fmt.Errorf("can't compile regexp %q: %w", p, err)
 		}
 
-		patternsRe = append(patternsRe, patternRe)
+		pathPatterns = append(pathPatterns, patternRe)
 		counter[patternRe] = 0
 	}
 
+	var pathExceptPatterns []*regexp.Regexp
+	for _, p := range cfg.PathsExcept {
+		p = fsutils.NormalizePathInRegex(p)
+
+		patternRe, err := regexp.Compile(p)
+		if err != nil {
+			return nil, fmt.Errorf("can't compile regexp %q: %w", p, err)
+		}
+
+		pathExceptPatterns = append(pathExceptPatterns, patternRe)
+	}
+
 	return &ExclusionPaths{
-		patterns:           patternsRe,
+		pathPatterns:       pathPatterns,
+		pathExceptPatterns: pathExceptPatterns,
 		warnUnused:         cfg.WarnUnused,
 		skippedPathCounter: counter,
 		log:                log.Child(logutils.DebugKeyExclusionPaths),
@@ -50,7 +64,7 @@ func (*ExclusionPaths) Name() string {
 }
 
 func (p *ExclusionPaths) Process(issues []result.Issue) ([]result.Issue, error) {
-	if len(p.patterns) == 0 {
+	if len(p.pathPatterns) == 0 && len(p.pathExceptPatterns) == 0 {
 		return issues, nil
 	}
 
@@ -68,12 +82,25 @@ func (p *ExclusionPaths) Finish() {
 }
 
 func (p *ExclusionPaths) shouldPassIssue(issue *result.Issue) bool {
-	for _, pattern := range p.patterns {
+	for _, pattern := range p.pathPatterns {
 		if pattern.MatchString(issue.RelativePath) {
 			p.skippedPathCounter[pattern] += 1
 			return false
 		}
 	}
 
-	return true
+	if len(p.pathExceptPatterns) == 0 {
+		return true
+	}
+
+	matched := false
+	for _, pattern := range p.pathExceptPatterns {
+		if !pattern.MatchString(issue.RelativePath) {
+			continue
+		}
+
+		matched = true
+	}
+
+	return !matched
 }

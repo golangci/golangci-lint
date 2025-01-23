@@ -18,13 +18,15 @@ func TestExclusionPaths_Process(t *testing.T) {
 
 	testCases := []struct {
 		desc     string
-		patterns []string
+		cfg      *config.LinterExclusions
 		issues   []result.Issue
 		expected []result.Issue
 	}{
 		{
-			desc:     "word",
-			patterns: []string{"foo"},
+			desc: "paths: word",
+			cfg: &config.LinterExclusions{
+				Paths: []string{"foo"},
+			},
 			issues: []result.Issue{
 				{RelativePath: "foo.go"},
 				{RelativePath: "foo/foo.go"},
@@ -37,8 +39,10 @@ func TestExclusionPaths_Process(t *testing.T) {
 			},
 		},
 		{
-			desc:     "begin with word",
-			patterns: []string{"^foo"},
+			desc: "paths: begin with word",
+			cfg: &config.LinterExclusions{
+				Paths: []string{"^foo"},
+			},
 			issues: []result.Issue{
 				{RelativePath: filepath.FromSlash("foo.go")},
 				{RelativePath: filepath.FromSlash("foo/foo.go")},
@@ -52,8 +56,10 @@ func TestExclusionPaths_Process(t *testing.T) {
 			},
 		},
 		{
-			desc:     "directory begin with word",
-			patterns: []string{"^foo/"},
+			desc: "paths: directory begin with word",
+			cfg: &config.LinterExclusions{
+				Paths: []string{"^foo/"},
+			},
 			issues: []result.Issue{
 				{RelativePath: filepath.FromSlash("foo.go")},
 				{RelativePath: filepath.FromSlash("foo/foo.go")},
@@ -68,8 +74,10 @@ func TestExclusionPaths_Process(t *testing.T) {
 			},
 		},
 		{
-			desc:     "same suffix with unconstrained expression",
-			patterns: []string{"c/d.go"},
+			desc: "paths: same suffix with unconstrained expression",
+			cfg: &config.LinterExclusions{
+				Paths: []string{"c/d.go"},
+			},
 			issues: []result.Issue{
 				{RelativePath: filepath.FromSlash("a/b/c/d.go")},
 				{RelativePath: filepath.FromSlash("c/d.go")},
@@ -77,14 +85,76 @@ func TestExclusionPaths_Process(t *testing.T) {
 			expected: []result.Issue{},
 		},
 		{
-			desc:     "same suffix with constrained expression",
-			patterns: []string{"^c/d.go"},
+			desc: "paths: same suffix with constrained expression",
+			cfg: &config.LinterExclusions{
+				Paths: []string{"^c/d.go"},
+			},
 			issues: []result.Issue{
 				{RelativePath: filepath.FromSlash("a/b/c/d.go")},
 				{RelativePath: filepath.FromSlash("c/d.go")},
 			},
 			expected: []result.Issue{
 				{RelativePath: filepath.FromSlash("a/b/c/d.go")},
+			},
+		},
+		{
+			desc: "pathsExcept",
+			cfg: &config.LinterExclusions{
+				PathsExcept: []string{`^base/c/.*$`},
+			},
+			issues: []result.Issue{
+				{RelativePath: filepath.FromSlash("base/a/file.go")},
+				{RelativePath: filepath.FromSlash("base/b/file.go")},
+				{RelativePath: filepath.FromSlash("base/c/file.go")},
+				{RelativePath: filepath.FromSlash("base/c/a/file.go")},
+				{RelativePath: filepath.FromSlash("base/c/b/file.go")},
+				{RelativePath: filepath.FromSlash("base/d/file.go")},
+			},
+			expected: []result.Issue{
+				{RelativePath: filepath.FromSlash("base/a/file.go")},
+				{RelativePath: filepath.FromSlash("base/b/file.go")},
+				{RelativePath: filepath.FromSlash("base/d/file.go")},
+			},
+		},
+		{
+			desc: "pathsExcept: multiple patterns",
+			cfg: &config.LinterExclusions{
+				PathsExcept: []string{
+					`^base/z/.*$`,
+					`^base/c/.*$`,
+				},
+			},
+			issues: []result.Issue{
+				{RelativePath: filepath.FromSlash("base/a/file.go")},
+				{RelativePath: filepath.FromSlash("base/b/file.go")},
+				{RelativePath: filepath.FromSlash("base/c/file.go")},
+				{RelativePath: filepath.FromSlash("base/c/a/file.go")},
+				{RelativePath: filepath.FromSlash("base/c/b/file.go")},
+				{RelativePath: filepath.FromSlash("base/d/file.go")},
+			},
+			expected: []result.Issue{
+				{RelativePath: filepath.FromSlash("base/a/file.go")},
+				{RelativePath: filepath.FromSlash("base/b/file.go")},
+				{RelativePath: filepath.FromSlash("base/d/file.go")},
+			},
+		},
+		{
+			desc: "pathsExcept and paths",
+			cfg: &config.LinterExclusions{
+				Paths:       []string{"^base/b/"},
+				PathsExcept: []string{`^base/c/.*$`},
+			},
+			issues: []result.Issue{
+				{RelativePath: filepath.FromSlash("base/a/file.go")},
+				{RelativePath: filepath.FromSlash("base/b/file.go")},
+				{RelativePath: filepath.FromSlash("base/c/file.go")},
+				{RelativePath: filepath.FromSlash("base/c/a/file.go")},
+				{RelativePath: filepath.FromSlash("base/c/b/file.go")},
+				{RelativePath: filepath.FromSlash("base/d/file.go")},
+			},
+			expected: []result.Issue{
+				{RelativePath: filepath.FromSlash("base/a/file.go")},
+				{RelativePath: filepath.FromSlash("base/d/file.go")},
 			},
 		},
 	}
@@ -93,7 +163,7 @@ func TestExclusionPaths_Process(t *testing.T) {
 		t.Run(test.desc, func(t *testing.T) {
 			t.Parallel()
 
-			p, err := NewExclusionPaths(logger, &config.LinterExclusions{Paths: test.patterns})
+			p, err := NewExclusionPaths(logger, test.cfg)
 			require.NoError(t, err)
 
 			processedIssues := process(t, p, test.issues...)
