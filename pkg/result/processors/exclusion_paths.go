@@ -95,7 +95,7 @@ func (p *ExclusionPaths) Finish() {
 func (p *ExclusionPaths) shouldPassIssue(issue *result.Issue) bool {
 	for _, pattern := range p.pathPatterns {
 		if pattern.MatchString(issue.RelativePath) {
-			p.excludedPathCounter[pattern] += 1
+			p.excludedPathCounter[pattern]++
 			return false
 		}
 	}
@@ -110,7 +110,7 @@ func (p *ExclusionPaths) shouldPassIssue(issue *result.Issue) bool {
 			continue
 		}
 
-		p.excludedPathExceptCounter[pattern] += 1
+		p.excludedPathExceptCounter[pattern]++
 		matched = true
 	}
 

@@ -136,7 +136,7 @@ func TestSeverityRule_Validate_error(t *testing.T) {
 			rule: &SeverityRule{
 				Severity: "low",
 			},
-			expected: "at least 1 of (text, source, path[-except],  linters) should be set",
+			expected: "at least 1 of (text, source, path[-except], linters) should be set",
 		},
 		{
 			desc: "invalid path rule",

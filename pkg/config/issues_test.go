@@ -34,7 +34,7 @@ func TestExcludeRule_Validate(t *testing.T) {
 		{
 			desc:     "empty rule",
 			rule:     &ExcludeRule{},
-			expected: "at least 2 of (text, source, path[-except],  linters) should be set",
+			expected: "at least 2 of (text, source, path[-except], linters) should be set",
 		},
 		{
 			desc: "only path rule",
@@ -43,7 +43,7 @@ func TestExcludeRule_Validate(t *testing.T) {
 					Path: "test",
 				},
 			},
-			expected: "at least 2 of (text, source, path[-except],  linters) should be set",
+			expected: "at least 2 of (text, source, path[-except], linters) should be set",
 		},
 		{
 			desc: "only path-except rule",
@@ -52,7 +52,7 @@ func TestExcludeRule_Validate(t *testing.T) {
 					PathExcept: "test",
 				},
 			},
-			expected: "at least 2 of (text, source, path[-except],  linters) should be set",
+			expected: "at least 2 of (text, source, path[-except], linters) should be set",
 		},
 		{
 			desc: "only text rule",
@@ -61,7 +61,7 @@ func TestExcludeRule_Validate(t *testing.T) {
 					Text: "test",
 				},
 			},
-			expected: "at least 2 of (text, source, path[-except],  linters) should be set",
+			expected: "at least 2 of (text, source, path[-except], linters) should be set",
 		},
 		{
 			desc: "only source rule",
@@ -70,7 +70,7 @@ func TestExcludeRule_Validate(t *testing.T) {
 					Source: "test",
 				},
 			},
-			expected: "at least 2 of (text, source, path[-except],  linters) should be set",
+			expected: "at least 2 of (text, source, path[-except], linters) should be set",
 		},
 		{
 			desc: "invalid path rule",
