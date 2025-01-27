@@ -3,6 +3,7 @@ package printers
 import (
 	"encoding/json"
 	"io"
+	"slices"
 
 	"github.com/golangci/golangci-lint/pkg/result"
 )
@@ -28,10 +29,15 @@ type CodeClimateIssue struct {
 
 type CodeClimate struct {
 	w io.Writer
+
+	allowedSeverities []string
 }
 
 func NewCodeClimate(w io.Writer) *CodeClimate {
-	return &CodeClimate{w: w}
+	return &CodeClimate{
+		w:                 w,
+		allowedSeverities: []string{"info", "minor", "major", defaultCodeClimateSeverity, "blocker"},
+	}
 }
 
 func (p CodeClimate) Print(issues []result.Issue) error {
@@ -48,7 +54,7 @@ func (p CodeClimate) Print(issues []result.Issue) error {
 		codeClimateIssue.Fingerprint = issue.Fingerprint()
 		codeClimateIssue.Severity = defaultCodeClimateSeverity
 
-		if issue.Severity != "" {
+		if issue.Severity != "" && slices.Contains(p.allowedSeverities, issue.Severity) {
 			codeClimateIssue.Severity = issue.Severity
 		}
 
