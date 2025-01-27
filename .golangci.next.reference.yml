@@ -2514,6 +2514,7 @@ linters-settings:
         exclude: [""]
         arguments:
           - "preserveScope"
+          - "allowJump"
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#empty-block
       - name: empty-block
         severity: warning
@@ -2597,7 +2598,7 @@ linters-settings:
         disabled: false
         exclude: [""]
         arguments:
-          - "^[_a-z][_a-z0-9]*.go$"
+          - "^[_a-z][_a-z0-9]*\\.go$"
       # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#flag-parameter
       - name: flag-parameter
         severity: warning
