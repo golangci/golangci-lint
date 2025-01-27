@@ -54,7 +54,7 @@ func (p CodeClimate) Print(issues []result.Issue) error {
 		codeClimateIssue.Fingerprint = issue.Fingerprint()
 		codeClimateIssue.Severity = defaultCodeClimateSeverity
 
-		if issue.Severity != "" && slices.Contains(p.allowedSeverities, issue.Severity) {
+		if slices.Contains(p.allowedSeverities, issue.Severity) {
 			codeClimateIssue.Severity = issue.Severity
 		}
 
