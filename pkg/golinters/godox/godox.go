@@ -18,9 +18,7 @@ func New(settings *config.GodoxSettings) *goanalysis.Linter {
 		Name: linterName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 		Run: func(pass *analysis.Pass) (any, error) {
-			runGodox(pass, settings)
-
-			return nil, nil
+			return run(pass, settings), nil
 		},
 	}
 
@@ -32,14 +30,18 @@ func New(settings *config.GodoxSettings) *goanalysis.Linter {
 	).WithLoadMode(goanalysis.LoadModeSyntax)
 }
 
-func runGodox(pass *analysis.Pass, settings *config.GodoxSettings) {
+func run(pass *analysis.Pass, settings *config.GodoxSettings) error {
 	for _, file := range pass.Files {
 		position, isGoFile := goanalysis.GetGoFilePosition(pass, file)
 		if !isGoFile {
 			continue
 		}
 
-		messages := godox.Run(file, pass.Fset, settings.Keywords...)
+		messages, err := godox.Run(file, pass.Fset, settings.Keywords...)
+		if err != nil {
+			return err
+		}
+
 		if len(messages) == 0 {
 			continue
 		}
@@ -55,4 +57,6 @@ func runGodox(pass *analysis.Pass, settings *config.GodoxSettings) {
 			})
 		}
 	}
+
+	return nil
 }
