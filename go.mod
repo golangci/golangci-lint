@@ -74,7 +74,7 @@ require (
 	github.com/macabu/inamedparam v0.1.3
 	github.com/maratori/testableexamples v1.0.0
 	github.com/maratori/testpackage v1.1.1
-	github.com/matoous/godox v0.0.0-20230222163458-006bad1f9d26
+	github.com/matoous/godox v1.1.0
 	github.com/mattn/go-colorable v0.1.14
 	github.com/mgechev/revive v1.6.0
 	github.com/mitchellh/go-homedir v1.1.0
