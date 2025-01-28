@@ -24,7 +24,7 @@ func New(settings *config.GodoxSettings) *goanalysis.Linter {
 
 	return goanalysis.NewLinter(
 		linterName,
-		"Tool for detection of FIXME, TODO and other comment keywords",
+		"Detects usage of FIXME, TODO and other keywords inside comments",
 		[]*analysis.Analyzer{analyzer},
 		nil,
 	).WithLoadMode(goanalysis.LoadModeSyntax)
