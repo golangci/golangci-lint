@@ -446,6 +446,14 @@
           "type": "string"
         }
       ]
+    },
+    "relative-path-modes": {
+      "enum": [
+        "gomod",
+        "gitroot",
+        "cfg",
+        "wd"
+      ]
     }
   },
   "type": "object",
@@ -506,6 +514,12 @@
           "description": "Targeted Go version.",
           "type": "string",
           "default": "1.17"
+        },
+        "relative-path-mode": {
+          "description": "The mode used to evaluate relative paths.",
+          "type": "string",
+          "$ref": "#/definitions/relative-path-modes",
+          "default": "wd"
         }
       }
     },
@@ -3872,6 +3886,76 @@
           "description": "Enable run of fast linters.",
           "type": "boolean",
           "default": false
+        },
+        "exclusions":{
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "generated": {
+              "enum": ["strict", "lax", "disable"],
+              "default": "lax"
+            },
+            "warn-unused": {
+              "type": "boolean",
+              "default": false
+            },
+            "default":  {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "comments",
+                  "stdErrorHandling",
+                  "commonFalsePositives",
+                  "legacy"
+                ]
+              }
+            },
+            "rules": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "path": {
+                    "type": "string"
+                  },
+                  "path-except": {
+                    "type": "string"
+                  },
+                  "linters": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/definitions/linters"
+                    }
+                  },
+                  "text": {
+                    "type": "string"
+                  },
+                  "source": {
+                    "type": "string"
+                  }
+                },
+                "anyOf": [
+                  { "required": ["path"] },
+                  { "required": ["path-except"] },
+                  { "required": ["linters"] },
+                  { "required": ["text"] },
+                  { "required": ["source"] }
+                ]
+              }
+            },
+            "paths":  {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "paths-except":  {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
         }
       }
     },

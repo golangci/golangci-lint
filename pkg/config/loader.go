@@ -68,6 +68,26 @@ func (l *Loader) Load(opts LoadOptions) error {
 
 	l.applyStringSliceHack()
 
+	if l.cfg.Linters.LinterExclusions.Generated == "" {
+		// `l.cfg.Issues.ExcludeGenerated` is always non-empty because of the flag default value.
+		l.cfg.Linters.LinterExclusions.Generated = cmp.Or(l.cfg.Issues.ExcludeGenerated, "strict")
+	}
+
+	// Compatibility layer with v1.
+	// TODO(ldez): should be removed in v2.
+	if l.cfg.Issues.UseDefaultExcludes {
+		l.cfg.Linters.LinterExclusions.Presets = []string{
+			ExclusionPresetComments,
+			ExclusionPresetStdErrorHandling,
+			ExclusionPresetCommonFalsePositives,
+			ExclusionPresetLegacy,
+		}
+	}
+
+	if len(l.cfg.Issues.ExcludeRules) > 0 {
+		l.cfg.Linters.LinterExclusions.Rules = append(l.cfg.Linters.LinterExclusions.Rules, l.cfg.Issues.ExcludeRules...)
+	}
+
 	if opts.CheckDeprecation {
 		err = l.handleDeprecation()
 		if err != nil {
@@ -80,6 +100,11 @@ func (l *Loader) Load(opts LoadOptions) error {
 	err = goutil.CheckGoVersion(l.cfg.Run.Go)
 	if err != nil {
 		return err
+	}
+
+	l.cfg.basePath, err = fsutils.GetBasePath(context.Background(), l.cfg.Run.RelativePathMode, l.cfg.cfgDir)
+	if err != nil {
+		return fmt.Errorf("get base path: %w", err)
 	}
 
 	err = l.handleEnableOnlyOption()

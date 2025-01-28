@@ -154,16 +154,6 @@ issues:
         - mnd
         - lll
 
-    # The logic of creating a linter is similar between linters, it's not duplication.
-    - path: pkg/golinters
-      linters:
-        - dupl
-
-    # Deprecated configuration options.
-    - path: pkg/commands/run.go
-      linters: [staticcheck]
-      text: "SA1019: c.cfg.Run.ShowStats is deprecated: use Output.ShowStats instead."
-
     # Deprecated linter options.
     - path: pkg/golinters/errcheck/errcheck.go
       linters: [staticcheck]
@@ -180,38 +170,16 @@ issues:
     - path: pkg/goformatters/gci/gci.go
       linters: [staticcheck]
       text: "SA1019: settings.LocalPrefixes is deprecated: use Sections instead."
-    - path: pkg/golinters/mnd/mnd.go
-      linters: [staticcheck]
-      text: "SA1019: settings.Settings is deprecated: use root level settings instead."
-    - path: pkg/golinters/mnd/mnd.go
-      linters: [staticcheck]
-      text: "SA1019: config.GoMndSettings is deprecated: use MndSettings."
 
     # Related to `run.go`, it cannot be removed.
     - path: pkg/golinters/gofumpt/gofumpt.go
       linters: [staticcheck]
       text: "SA1019: settings.LangVersion is deprecated: use the global `run.go` instead."
-    - path: pkg/golinters/internal/staticcheck_common.go
-      linters: [staticcheck]
-      text: "SA1019: settings.GoVersion is deprecated: use the global `run.go` instead."
-    - path: pkg/lint/lintersdb/manager.go
-      linters: [staticcheck]
-      text: "SA1019: (.+).(GoVersion|LangVersion) is deprecated: use the global `run.go` instead."
 
     # Based on existing code, the modifications should be limited to make maintenance easier.
     - path: pkg/golinters/unused/unused.go
       linters: [gocritic]
       text: "rangeValCopy: each iteration copies 160 bytes \\(consider pointers or indexing\\)"
-
-    # Related to file sizes.
-    - path: pkg/goanalysis/runner_loadingpackage.go
-      linters: [gosec]
-      text: "G115: integer overflow conversion uintptr -> int"
-
-    # Related to PID.
-    - path: test/bench/bench_test.go
-      linters: [gosec]
-      text: "G115: integer overflow conversion int -> int32"
 
     # Related to the result of computation but divided multiple times by 1024.
     - path: test/bench/bench_test.go

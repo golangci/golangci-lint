@@ -1248,7 +1248,7 @@ linters-settings:
         failOn: dsl,import
         # Comma-separated list of file paths containing ruleguard rules.
         # If a path is relative, it is relative to the directory where the golangci-lint command is executed.
-        # The special '${configDir}' variable is substituted with the absolute directory containing the golangci config file.
+        # The special '${configDir}' variable is substituted with the absolute directory containing the golangci-lint config file.
         # Glob patterns such as 'rules-*.go' may be specified.
         # Default: ""
         rules: '${configDir}/ruleguard/rules-*.go,${configDir}/myrule1.go'

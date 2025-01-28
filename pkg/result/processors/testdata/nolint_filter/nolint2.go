@@ -1,4 +1,4 @@
-package testdata
+package nolint_filter
 
 import (
 	"bytes"

@@ -20,6 +20,7 @@ import (
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
+	"github.com/golangci/golangci-lint/pkg/golinters/internal"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 )
@@ -58,7 +59,10 @@ Dynamic rules are written declaratively with AST patterns, filters, report messa
 		nil,
 	).
 		WithContextSetter(func(context *linter.Context) {
-			wrapper.configDir = context.Cfg.GetConfigDir()
+			wrapper.replacer = strings.NewReplacer(
+				internal.PlaceholderBasePath, context.Cfg.GetBasePath(),
+				internal.PlaceholderConfigDir, context.Cfg.GetConfigDir(), //nolint:staticcheck // It must be removed in v2.
+			)
 
 			wrapper.init(context.Log, settings)
 		}).
@@ -67,7 +71,7 @@ Dynamic rules are written declaratively with AST patterns, filters, report messa
 
 type goCriticWrapper struct {
 	settingsWrapper *settingsWrapper
-	configDir       string
+	replacer        *strings.Replacer
 	sizes           types.Sizes
 	once            sync.Once
 }
@@ -188,7 +192,7 @@ func (w *goCriticWrapper) normalizeCheckerParamsValue(p any) any {
 		return rv.Bool()
 	case reflect.String:
 		// Perform variable substitution.
-		return strings.ReplaceAll(rv.String(), "${configDir}", w.configDir)
+		return w.replacer.Replace(rv.String())
 	default:
 		return p
 	}

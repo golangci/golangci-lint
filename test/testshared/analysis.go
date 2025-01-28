@@ -36,7 +36,8 @@ type key struct {
 }
 
 // Analyze analyzes the test expectations ('want').
-// inspired by https://github.com/golang/tools/blob/b3b5c13b291f9653da6f31b95db100a2e26bd186/go/analysis/analysistest/analysistest.go
+// Inspired by:
+// https://github.com/golang/tools/blob/1261a24ceb1867ea7439eda244e53e7ace4ad777/go/analysis/analysistest/analysistest.go#L655-L672
 func Analyze(t *testing.T, sourcePath string, rawData []byte) {
 	t.Helper()
 
@@ -69,7 +70,8 @@ func Analyze(t *testing.T, sourcePath string, rawData []byte) {
 	}
 }
 
-// inspired by https://github.com/golang/tools/blob/b3b5c13b291f9653da6f31b95db100a2e26bd186/go/analysis/analysistest/analysistest.go
+// Inspired by:
+// https://github.com/golang/tools/blob/1261a24ceb1867ea7439eda244e53e7ace4ad777/go/analysis/analysistest/analysistest.go#L524-L553
 func parseComments(sourcePath string, fileData []byte) (map[key][]expectation, error) {
 	fset := token.NewFileSet()
 
@@ -108,7 +110,8 @@ func parseComments(sourcePath string, fileData []byte) (map[key][]expectation, e
 	return want, nil
 }
 
-// inspired by https://github.com/golang/tools/blob/b3b5c13b291f9653da6f31b95db100a2e26bd186/go/analysis/analysistest/analysistest.go
+// Inspired by:
+// https://github.com/golang/tools/blob/1261a24ceb1867ea7439eda244e53e7ace4ad777/go/analysis/analysistest/analysistest.go#L685-L745
 func parseExpectations(text string) (lineDelta int, expects []expectation, err error) {
 	var scanErr string
 	sc := new(scanner.Scanner).Init(strings.NewReader(text))
@@ -168,7 +171,8 @@ func parseExpectations(text string) (lineDelta int, expects []expectation, err e
 	}
 }
 
-// inspired by https://github.com/golang/tools/blob/b3b5c13b291f9653da6f31b95db100a2e26bd186/go/analysis/analysistest/analysistest.go
+// Inspired by:
+// https://github.com/golang/tools/blob/1261a24ceb1867ea7439eda244e53e7ace4ad777/go/analysis/analysistest/analysistest.go#L594-L617
 func checkMessage(t *testing.T, want map[key][]expectation, posn token.Position, kind, name, message string) {
 	t.Helper()
 

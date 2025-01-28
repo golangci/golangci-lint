@@ -213,7 +213,7 @@ func TestSortResults_Process_noSorting(t *testing.T) {
 	tests := make([]result.Issue, len(issues))
 	copy(tests, issues)
 
-	sr := NewSortResults(&config.Config{})
+	sr := NewSortResults(&config.Output{})
 
 	results, err := sr.Process(tests)
 	require.NoError(t, err)
@@ -224,9 +224,9 @@ func TestSortResults_Process_Sorting(t *testing.T) {
 	tests := make([]result.Issue, len(issues))
 	copy(tests, issues)
 
-	cfg := config.Config{}
-	cfg.Output.SortResults = true
-	sr := NewSortResults(&cfg)
+	cfg := &config.Output{SortResults: true}
+
+	sr := NewSortResults(cfg)
 
 	results, err := sr.Process(tests)
 	require.NoError(t, err)

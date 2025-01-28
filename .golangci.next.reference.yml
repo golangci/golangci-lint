@@ -1254,7 +1254,7 @@ linters-settings:
         failOn: dsl,import
         # Comma-separated list of file paths containing ruleguard rules.
         # If a path is relative, it is relative to the directory where the golangci-lint command is executed.
-        # The special '${configDir}' variable is substituted with the absolute directory containing the golangci config file.
+        # The special '${configDir}' variable is substituted with the absolute directory containing the golangci-lint config file.
         # Glob patterns such as 'rules-*.go' may be specified.
         # Default: ""
         rules: '${configDir}/ruleguard/rules-*.go,${configDir}/myrule1.go'
@@ -4140,6 +4140,16 @@ run:
   # If the value is lower or equal to 0, the timeout is disabled.
   # Default: 1m
   timeout: 5m
+
+  # The mode used to evaluate relative paths.
+  # It's used by exclusions, Go plugins, and some linters.
+  # The value can be:
+  # - `gomod`: the paths will be relative to the directory of the `go.mod` file.
+  # - `gitroot`: the paths will be relative to the git root (the parent directory of `.git`).
+  # - `cfg`: the paths will be relative to the configuration file.
+  # - `wd` (NOT recommended): the paths will be relative to the place where golangci-lint is run.
+  # Default: wd
+  relative-path-mode: gomod
 
   # Exit code when at least one issue was found.
   # Default: 1

@@ -1,3 +1,3 @@
-package testdata
+package severity
 
 //go:dosomething

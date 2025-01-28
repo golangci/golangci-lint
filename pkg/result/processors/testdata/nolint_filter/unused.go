@@ -1,4 +1,4 @@
-package testdata
+package nolint_filter
 
 var nolintVarcheck int //nolint:varcheck
 

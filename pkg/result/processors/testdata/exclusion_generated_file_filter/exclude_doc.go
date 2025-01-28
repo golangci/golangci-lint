@@ -1,4 +1,4 @@
-package testdata
+package exclusion_generated_file_filter
 
 // DO NOT EDIT
 

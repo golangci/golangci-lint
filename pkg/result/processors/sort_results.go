@@ -36,7 +36,7 @@ type SortResults struct {
 	cfg *config.Output
 }
 
-func NewSortResults(cfg *config.Config) *SortResults {
+func NewSortResults(cfg *config.Output) *SortResults {
 	return &SortResults{
 		cmps: map[string][]issueComparator{
 			// For sorting we are comparing (in next order):
@@ -47,7 +47,7 @@ func NewSortResults(cfg *config.Config) *SortResults {
 			// For sorting we are comparing: severity
 			orderNameSeverity: {bySeverity},
 		},
-		cfg: &cfg.Output,
+		cfg: cfg,
 	}
 }
 

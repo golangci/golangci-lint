@@ -71,7 +71,8 @@ func (p *Diff) Process(issues []result.Issue) ([]result.Issue, error) {
 		WholeFiles:   p.wholeFiles,
 	}
 
-	if err := checker.Prepare(context.Background()); err != nil {
+	err := checker.Prepare(context.Background())
+	if err != nil {
 		return nil, fmt.Errorf("can't prepare diff by revgrep: %w", err)
 	}
 
@@ -81,7 +82,7 @@ func (p *Diff) Process(issues []result.Issue) ([]result.Issue, error) {
 			return issue
 		}
 
-		hunkPos, isNew := checker.IsNewIssue(issue)
+		hunkPos, isNew := checker.IsNew(issue.WorkingDirectoryRelativePath, issue.Line())
 		if !isNew {
 			return nil
 		}

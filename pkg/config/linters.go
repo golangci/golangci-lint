@@ -13,15 +13,21 @@ type Linters struct {
 	Fast       bool
 
 	Presets []string
+
+	LinterExclusions LinterExclusions `mapstructure:"exclusions"`
 }
 
 func (l *Linters) Validate() error {
-	if err := l.validateAllDisableEnableOptions(); err != nil {
-		return err
+	validators := []func() error{
+		l.validateAllDisableEnableOptions,
+		l.validateDisabledAndEnabledAtOneMoment,
+		l.LinterExclusions.Validate,
 	}
 
-	if err := l.validateDisabledAndEnabledAtOneMoment(); err != nil {
-		return err
+	for _, v := range validators {
+		if err := v(); err != nil {
+			return err
+		}
 	}
 
 	return nil

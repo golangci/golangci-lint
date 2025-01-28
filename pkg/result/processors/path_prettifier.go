@@ -1,8 +1,6 @@
 package processors
 
 import (
-	"path/filepath"
-
 	"github.com/golangci/golangci-lint/pkg/fsutils"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
@@ -10,13 +8,18 @@ import (
 
 var _ Processor = (*PathPrettifier)(nil)
 
-// PathPrettifier modifies report file path with the shortest relative path.
+// PathPrettifier modifies report file path to be relative to the base path.
+// Also handles the `output.path-prefix` option.
 type PathPrettifier struct {
-	log logutils.Log
+	prefix string
+	log    logutils.Log
 }
 
-func NewPathPrettifier(log logutils.Log) *PathPrettifier {
-	return &PathPrettifier{log: log.Child(logutils.DebugKeyPathPrettifier)}
+func NewPathPrettifier(log logutils.Log, prefix string) *PathPrettifier {
+	return &PathPrettifier{
+		prefix: prefix,
+		log:    log.Child(logutils.DebugKeyPathPrettifier),
+	}
 }
 
 func (*PathPrettifier) Name() string {
@@ -25,18 +28,10 @@ func (*PathPrettifier) Name() string {
 
 func (p *PathPrettifier) Process(issues []result.Issue) ([]result.Issue, error) {
 	return transformIssues(issues, func(issue *result.Issue) *result.Issue {
-		if !filepath.IsAbs(issue.FilePath()) {
-			return issue
-		}
-
-		rel, err := fsutils.ShortestRelPath(issue.FilePath(), "")
-		if err != nil {
-			p.log.Warnf("shortest relative path: %v", err)
-			return issue
-		}
-
 		newIssue := issue
-		newIssue.Pos.Filename = rel
+
+		newIssue.Pos.Filename = fsutils.WithPathPrefix(p.prefix, issue.RelativePath)
+
 		return newIssue
 	}), nil
 }
