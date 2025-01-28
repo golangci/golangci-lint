@@ -14,36 +14,6 @@ import (
 
 var _ Processor = (*ExclusionRules)(nil)
 
-type excludeRule struct {
-	baseRule
-}
-
-func (e excludeRule) String() string {
-	var msg []string
-
-	if e.text != nil && e.text.String() != "" {
-		msg = append(msg, fmt.Sprintf("Text: %q", e.text))
-	}
-
-	if e.source != nil && e.source.String() != "" {
-		msg = append(msg, fmt.Sprintf("Source: %q", e.source))
-	}
-
-	if e.path != nil && e.path.String() != "" {
-		msg = append(msg, fmt.Sprintf("Path: %q", e.path))
-	}
-
-	if e.pathExcept != nil && e.pathExcept.String() != "" {
-		msg = append(msg, fmt.Sprintf("Path Except: %q", e.pathExcept))
-	}
-
-	if len(e.linters) > 0 {
-		msg = append(msg, fmt.Sprintf("Linters: %q", strings.Join(e.linters, ", ")))
-	}
-
-	return strings.Join(msg, ", ")
-}
-
 type ExclusionRules struct {
 	log   logutils.Log
 	files *fsutils.Files
@@ -68,10 +38,10 @@ func NewExclusionRules(log logutils.Log, files *fsutils.Files, cfg *config.Linte
 		prefix = ""
 	}
 
-	excludeRules := slices.Clone(cfg.Rules)
-	excludeRules = append(excludeRules, filterInclude(getDefaultLintersExclusions(cfg.Default), oldCfg.IncludeDefaultExcludes)...)
+	excludeRules := slices.Concat(slices.Clone(cfg.Rules),
+		filterInclude(getDefaultLintersExclusions(cfg.Default), oldCfg.IncludeDefaultExcludes))
 
-	p.rules = createRules(excludeRules, prefix)
+	p.rules = createExcludeRules(excludeRules, prefix)
 
 	// TODO(ldez): should be removed in v2.
 	for _, pattern := range oldCfg.ExcludePatterns {
@@ -79,7 +49,7 @@ func NewExclusionRules(log logutils.Log, files *fsutils.Files, cfg *config.Linte
 			continue
 		}
 
-		rule := createRule(&config.ExcludeRule{
+		rule := newRule(&config.ExcludeRule{
 			BaseRule: config.BaseRule{
 				Path: `.+\.go`,
 				Text: pattern,
@@ -135,21 +105,11 @@ func (p *ExclusionRules) Finish() {
 	}
 }
 
-func createRules(rules []config.ExcludeRule, prefix string) []excludeRule {
-	if len(rules) == 0 {
-		return nil
-	}
-
-	parsedRules := make([]excludeRule, 0, len(rules))
-
-	for _, rule := range rules {
-		parsedRules = append(parsedRules, createRule(&rule, prefix))
-	}
-
-	return parsedRules
+type excludeRule struct {
+	baseRule
 }
 
-func createRule(rule *config.ExcludeRule, prefix string) excludeRule {
+func newRule(rule *config.ExcludeRule, prefix string) excludeRule {
 	parsedRule := excludeRule{}
 	parsedRule.linters = rule.Linters
 	parsedRule.internalReference = rule.InternalReference
@@ -171,6 +131,46 @@ func createRule(rule *config.ExcludeRule, prefix string) excludeRule {
 	}
 
 	return parsedRule
+}
+
+func (e excludeRule) String() string {
+	var msg []string
+
+	if e.text != nil && e.text.String() != "" {
+		msg = append(msg, fmt.Sprintf("Text: %q", e.text))
+	}
+
+	if e.source != nil && e.source.String() != "" {
+		msg = append(msg, fmt.Sprintf("Source: %q", e.source))
+	}
+
+	if e.path != nil && e.path.String() != "" {
+		msg = append(msg, fmt.Sprintf("Path: %q", e.path))
+	}
+
+	if e.pathExcept != nil && e.pathExcept.String() != "" {
+		msg = append(msg, fmt.Sprintf("Path Except: %q", e.pathExcept))
+	}
+
+	if len(e.linters) > 0 {
+		msg = append(msg, fmt.Sprintf("Linters: %q", strings.Join(e.linters, ", ")))
+	}
+
+	return strings.Join(msg, ", ")
+}
+
+func createExcludeRules(rules []config.ExcludeRule, prefix string) []excludeRule {
+	if len(rules) == 0 {
+		return nil
+	}
+
+	parsedRules := make([]excludeRule, 0, len(rules))
+
+	for _, rule := range rules {
+		parsedRules = append(parsedRules, newRule(&rule, prefix))
+	}
+
+	return parsedRules
 }
 
 // TODO(ldez): must be removed in v2, only for compatibility with exclude-use-default/include.

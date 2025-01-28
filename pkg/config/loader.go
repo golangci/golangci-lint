@@ -69,12 +69,8 @@ func (l *Loader) Load(opts LoadOptions) error {
 	l.applyStringSliceHack()
 
 	if l.cfg.Linters.LinterExclusions.Generated == "" {
-		// This is always non-empty because of the flag default value.
-		if l.cfg.Issues.ExcludeGenerated != "" {
-			l.cfg.Linters.LinterExclusions.Generated = l.cfg.Issues.ExcludeGenerated
-		} else {
-			l.cfg.Linters.LinterExclusions.Generated = "strict"
-		}
+		// `l.cfg.Issues.ExcludeGenerated` is always non-empty because of the flag default value.
+		l.cfg.Linters.LinterExclusions.Generated = cmp.Or(l.cfg.Issues.ExcludeGenerated, "strict")
 	}
 
 	if l.cfg.Issues.UseDefaultExcludes {

@@ -11,7 +11,7 @@ import (
 
 var _ Processor = (*PathRelativity)(nil)
 
-// PathRelativity computes [result.Issue.RelativePath] and  [result.Issue.WorkingDirectoryRelativePath],
+// PathRelativity computes [result.Issue.RelativePath] and [result.Issue.WorkingDirectoryRelativePath],
 // based on the base path.
 type PathRelativity struct {
 	log      logutils.Log
@@ -34,22 +34,22 @@ func NewPathRelativity(log logutils.Log, basePath string) (*PathRelativity, erro
 
 func (p *PathRelativity) Process(issues []result.Issue) ([]result.Issue, error) {
 	return transformIssues(issues, func(issue *result.Issue) *result.Issue {
-		newIssue := issue
+		newIssue := *issue
 
 		var err error
 		newIssue.RelativePath, err = filepath.Rel(p.basePath, issue.FilePath())
 		if err != nil {
-			p.log.Warnf("relative path (basepath): %v", err)
+			p.log.Warnf("Getting relative path (basepath): %v", err)
 			return nil
 		}
 
 		newIssue.WorkingDirectoryRelativePath, err = filepath.Rel(p.wd, issue.FilePath())
 		if err != nil {
-			p.log.Warnf("relative path (wd): %v", err)
+			p.log.Warnf("Getting relative path (wd): %v", err)
 			return nil
 		}
 
-		return newIssue
+		return &newIssue
 	}), nil
 }
 

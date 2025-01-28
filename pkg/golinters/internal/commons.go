@@ -9,7 +9,7 @@ var LinterLogger = logutils.NewStderrLog(logutils.DebugKeyLinter)
 const (
 	PlaceholderBasePath = "${base-path}"
 	// Deprecated: it must be removed in v2.
-	// [PlaceholderBasePath] will be the only one placeholder as it is a dynamic value base on
+	// [PlaceholderBasePath] will be the only one placeholder as it is a dynamic value based on
 	// [github.com/golangci/golangci-lint/pkg/config.Run.RelativePathMode].
 	PlaceholderConfigDir = "${configDir}"
 )

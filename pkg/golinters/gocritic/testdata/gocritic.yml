@@ -11,12 +11,6 @@ linters-settings:
         sizeThreshold: 24
       ruleguard:
         failOn: dsl,import
-        # Comma-separated paths to ruleguard files.
-        # The ${configDir} is substituted by the directory containing the golangci-lint config file.
-        # Note about the directory structure for functional tests:
-        #   The ruleguard files used in functional tests cannot be under the 'testdata' directory.
-        #   This is because they import the 'github.com/quasilyte/go-ruleguard/dsl' package,
-        #   which needs to be added to go.mod. The testdata directory is ignored by go mod.
         rules: '${base-path}/ruleguard/preferWriteString.go,${base-path}/ruleguard/stringsSimplify.go'
 
 run:

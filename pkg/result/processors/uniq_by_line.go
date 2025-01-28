@@ -11,13 +11,13 @@ var _ Processor = (*UniqByLine)(nil)
 // UniqByLine filters reports to keep only one report by line of code.
 type UniqByLine struct {
 	fileLineCounter fileLineCounter
-	enable          bool
+	enabled         bool
 }
 
 func NewUniqByLine(enable bool) *UniqByLine {
 	return &UniqByLine{
 		fileLineCounter: fileLineCounter{},
-		enable:          enable,
+		enabled:         enable,
 	}
 }
 
@@ -26,7 +26,7 @@ func (*UniqByLine) Name() string {
 }
 
 func (p *UniqByLine) Process(issues []result.Issue) ([]result.Issue, error) {
-	if !p.enable {
+	if !p.enabled {
 		return issues, nil
 	}
 
