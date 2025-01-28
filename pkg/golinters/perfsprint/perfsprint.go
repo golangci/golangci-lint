@@ -21,6 +21,7 @@ func New(settings *config.PerfSprintSettings) *goanalysis.Linter {
 		cfg[a.Name]["errorf"] = settings.ErrorF
 		cfg[a.Name]["sprintf1"] = settings.SprintF1
 		cfg[a.Name]["strconcat"] = settings.StrConcat
+		cfg[a.Name]["test"] = !settings.IgnoreTests
 	}
 
 	return goanalysis.NewLinter(

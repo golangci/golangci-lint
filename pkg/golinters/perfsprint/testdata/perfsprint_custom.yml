@@ -4,4 +4,4 @@ linters-settings:
     err-error: true
     errorf: false
     sprintf1: false
-
+    ignore-tests: false
