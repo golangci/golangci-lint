@@ -39,7 +39,7 @@ func NewExclusionRules(log logutils.Log, files *fsutils.Files, cfg *config.Linte
 	}
 
 	excludeRules := slices.Concat(slices.Clone(cfg.Rules),
-		filterInclude(getDefaultLintersExclusions(cfg.Default), oldCfg.IncludeDefaultExcludes))
+		filterInclude(getLinterExclusionPresets(cfg.Presets), oldCfg.IncludeDefaultExcludes))
 
 	p.rules = createExcludeRules(excludeRules, prefix)
 

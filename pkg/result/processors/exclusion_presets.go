@@ -2,8 +2,8 @@ package processors
 
 import "github.com/golangci/golangci-lint/pkg/config"
 
-var defaultLintersExclusions = map[string][]config.ExcludeRule{
-	config.DefaultExclusionComments: {
+var linterExclusionPresets = map[string][]config.ExcludeRule{
+	config.ExclusionPresetComments: {
 		{
 			// Annoying issue about not having a comment. The rare codebase has such comments.
 			// CheckPackageComment, CheckExportedFunctionDocs, CheckExportedTypeDocs, CheckExportedVarDocs
@@ -50,7 +50,7 @@ var defaultLintersExclusions = map[string][]config.ExcludeRule{
 			},
 		},
 	},
-	config.DefaultExclusionStdErrorHandling: {
+	config.ExclusionPresetStdErrorHandling: {
 		{
 			// Almost all programs ignore errors on these functions and in most cases it's ok.
 			BaseRule: config.BaseRule{
@@ -61,7 +61,7 @@ var defaultLintersExclusions = map[string][]config.ExcludeRule{
 			},
 		},
 	},
-	config.DefaultExclusionCommonFalsePositives: {
+	config.ExclusionPresetCommonFalsePositives: {
 		{
 			// Too many false-positives on 'unsafe' usage.
 			BaseRule: config.BaseRule{
@@ -87,7 +87,7 @@ var defaultLintersExclusions = map[string][]config.ExcludeRule{
 			},
 		},
 	},
-	config.DefaultExclusionLegacy: {
+	config.ExclusionPresetLegacy: {
 		{
 			// Common false positives.
 			BaseRule: config.BaseRule{
@@ -125,11 +125,13 @@ var defaultLintersExclusions = map[string][]config.ExcludeRule{
 	},
 }
 
-func getDefaultLintersExclusions(names []string) []config.ExcludeRule {
+func getLinterExclusionPresets(names []string) []config.ExcludeRule {
 	var rules []config.ExcludeRule
 
 	for _, name := range names {
-		rules = append(rules, defaultLintersExclusions[name]...)
+		if p, ok := linterExclusionPresets[name]; ok {
+			rules = append(rules, p...)
+		}
 	}
 
 	return rules

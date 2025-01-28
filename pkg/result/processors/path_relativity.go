@@ -14,9 +14,9 @@ var _ Processor = (*PathRelativity)(nil)
 // PathRelativity computes [result.Issue.RelativePath] and [result.Issue.WorkingDirectoryRelativePath],
 // based on the base path.
 type PathRelativity struct {
-	log      logutils.Log
-	basePath string
-	wd       string
+	log              logutils.Log
+	basePath         string
+	workingDirectory string
 }
 
 func NewPathRelativity(log logutils.Log, basePath string) (*PathRelativity, error) {
@@ -26,10 +26,14 @@ func NewPathRelativity(log logutils.Log, basePath string) (*PathRelativity, erro
 	}
 
 	return &PathRelativity{
-		log:      log.Child(logutils.DebugKeyPathRelativity),
-		basePath: basePath,
-		wd:       wd,
+		log:              log.Child(logutils.DebugKeyPathRelativity),
+		basePath:         basePath,
+		workingDirectory: wd,
 	}, nil
+}
+
+func (*PathRelativity) Name() string {
+	return "path_relativity"
 }
 
 func (p *PathRelativity) Process(issues []result.Issue) ([]result.Issue, error) {
@@ -43,7 +47,7 @@ func (p *PathRelativity) Process(issues []result.Issue) ([]result.Issue, error) 
 			return nil
 		}
 
-		newIssue.WorkingDirectoryRelativePath, err = filepath.Rel(p.wd, issue.FilePath())
+		newIssue.WorkingDirectoryRelativePath, err = filepath.Rel(p.workingDirectory, issue.FilePath())
 		if err != nil {
 			p.log.Warnf("Getting relative path (wd): %v", err)
 			return nil
@@ -51,10 +55,6 @@ func (p *PathRelativity) Process(issues []result.Issue) ([]result.Issue, error) 
 
 		return &newIssue
 	}), nil
-}
-
-func (*PathRelativity) Name() string {
-	return "path_relativity"
 }
 
 func (*PathRelativity) Finish() {}

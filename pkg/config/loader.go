@@ -73,12 +73,14 @@ func (l *Loader) Load(opts LoadOptions) error {
 		l.cfg.Linters.LinterExclusions.Generated = cmp.Or(l.cfg.Issues.ExcludeGenerated, "strict")
 	}
 
+	// Compatibility layer with v1.
+	// TODO(ldez): should be removed in v2.
 	if l.cfg.Issues.UseDefaultExcludes {
-		l.cfg.Linters.LinterExclusions.Default = []string{
-			DefaultExclusionComments,
-			DefaultExclusionStdErrorHandling,
-			DefaultExclusionCommonFalsePositives,
-			DefaultExclusionLegacy,
+		l.cfg.Linters.LinterExclusions.Presets = []string{
+			ExclusionPresetComments,
+			ExclusionPresetStdErrorHandling,
+			ExclusionPresetCommonFalsePositives,
+			ExclusionPresetLegacy,
 		}
 	}
 
