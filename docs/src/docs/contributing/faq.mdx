@@ -12,7 +12,10 @@ See [there](/contributing/new-linters#how-to-add-a-private-linter-to-golangci-li
 
 ## How to update an existing linter
 
-Just update its version in `go.mod`.
+We use [Dependabot](https://github.com/golangci/golangci-lint/blob/HEAD/.github/dependabot.yml) to update dependencies, including linters.
+The updates happen at least automatically once a week (Sunday 11am UTC).
+
+No pull requests to update a linter will be accepted unless you are the author of the linter and specific changes are required.
 
 ## How to add a configuration option to an existing linter
 
