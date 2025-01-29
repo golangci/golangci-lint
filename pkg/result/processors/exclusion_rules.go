@@ -2,7 +2,6 @@ package processors
 
 import (
 	"fmt"
-	"regexp"
 	"slices"
 	"strings"
 
@@ -24,7 +23,8 @@ type ExclusionRules struct {
 	rules []excludeRule
 }
 
-func NewExclusionRules(log logutils.Log, files *fsutils.Files, cfg *config.LinterExclusions, oldCfg *config.Issues) *ExclusionRules {
+func NewExclusionRules(log logutils.Log, files *fsutils.Files,
+	cfg *config.LinterExclusions, oldCfg *config.Issues) *ExclusionRules {
 	p := &ExclusionRules{
 		log:            log,
 		files:          files,
@@ -41,7 +41,7 @@ func NewExclusionRules(log logutils.Log, files *fsutils.Files, cfg *config.Linte
 	excludeRules := slices.Concat(slices.Clone(cfg.Rules),
 		filterInclude(getLinterExclusionPresets(cfg.Presets), oldCfg.IncludeDefaultExcludes))
 
-	p.rules = createExcludeRules(excludeRules, prefix)
+	p.rules = parseRules(excludeRules, prefix, newExcludeRule)
 
 	// TODO(ldez): should be removed in v2.
 	for _, pattern := range oldCfg.ExcludePatterns {
@@ -49,12 +49,14 @@ func NewExclusionRules(log logutils.Log, files *fsutils.Files, cfg *config.Linte
 			continue
 		}
 
-		rule := newRule(&config.ExcludeRule{
+		r := &config.ExcludeRule{
 			BaseRule: config.BaseRule{
 				Path: `.+\.go`,
 				Text: pattern,
 			},
-		}, prefix)
+		}
+
+		rule := newExcludeRule(r, prefix)
 
 		p.rules = append(p.rules, rule)
 	}
@@ -109,28 +111,8 @@ type excludeRule struct {
 	baseRule
 }
 
-func newRule(rule *config.ExcludeRule, prefix string) excludeRule {
-	parsedRule := excludeRule{}
-	parsedRule.linters = rule.Linters
-	parsedRule.internalReference = rule.InternalReference
-
-	if rule.Text != "" {
-		parsedRule.text = regexp.MustCompile(prefix + rule.Text)
-	}
-
-	if rule.Source != "" {
-		parsedRule.source = regexp.MustCompile(prefix + rule.Source)
-	}
-
-	if rule.Path != "" {
-		parsedRule.path = regexp.MustCompile(fsutils.NormalizePathInRegex(rule.Path))
-	}
-
-	if rule.PathExcept != "" {
-		parsedRule.pathExcept = regexp.MustCompile(fsutils.NormalizePathInRegex(rule.PathExcept))
-	}
-
-	return parsedRule
+func newExcludeRule(rule *config.ExcludeRule, prefix string) excludeRule {
+	return excludeRule{baseRule: newBaseRule(&rule.BaseRule, prefix)}
 }
 
 func (e excludeRule) String() string {
@@ -157,20 +139,6 @@ func (e excludeRule) String() string {
 	}
 
 	return strings.Join(msg, ", ")
-}
-
-func createExcludeRules(rules []config.ExcludeRule, prefix string) []excludeRule {
-	if len(rules) == 0 {
-		return nil
-	}
-
-	parsedRules := make([]excludeRule, 0, len(rules))
-
-	for _, rule := range rules {
-		parsedRules = append(parsedRules, newRule(&rule, prefix))
-	}
-
-	return parsedRules
 }
 
 // TODO(ldez): must be removed in v2, only for compatibility with exclude-use-default/include.
