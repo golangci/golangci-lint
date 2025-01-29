@@ -58,12 +58,11 @@ func (c *Runner) walk(root string) error {
 			return fs.SkipDir
 		}
 
-		// Ignore non-Go files.
 		if !isGoFile(f) {
 			return nil
 		}
 
-		match, err := c.opts.MatchPatterns(path)
+		match, err := c.opts.MatchAnyPattern(path)
 		if err != nil || match {
 			return err
 		}
@@ -125,7 +124,7 @@ func NewRunnerOptions(cfg *config.Config) (RunnerOptions, error) {
 	return opts, nil
 }
 
-func (o RunnerOptions) MatchPatterns(path string) (bool, error) {
+func (o RunnerOptions) MatchAnyPattern(path string) (bool, error) {
 	if len(o.patterns) == 0 {
 		return false, nil
 	}
@@ -153,11 +152,7 @@ func skipDir(name string) bool {
 		return true
 
 	default:
-		if strings.HasPrefix(name, ".") {
-			return true
-		}
-
-		return false
+		return strings.HasPrefix(name, ".")
 	}
 }
 

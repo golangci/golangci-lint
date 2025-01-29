@@ -99,7 +99,7 @@ func (c *fmtCommand) preRunE(_ *cobra.Command, _ []string) error {
 }
 
 func (c *fmtCommand) execute(_ *cobra.Command, args []string) error {
-	if !logutils.HaveDebugTag(logutils.DebugKeyLintersOutput) {
+	if !logutils.HaveDebugTag(logutils.DebugKeyFormattersOutput) {
 		// Don't allow linters and loader to print anything
 		log.SetOutput(io.Discard)
 		savedStdout, savedStderr := c.setOutputToDevNull()
@@ -145,15 +145,15 @@ func cleanArgs(args []string) ([]string, error) {
 		return []string{abs}, nil
 	}
 
-	var expended []string
+	var expanded []string
 	for _, arg := range args {
 		abs, err := filepath.Abs(strings.ReplaceAll(arg, "...", ""))
 		if err != nil {
 			return nil, err
 		}
 
-		expended = append(expended, abs)
+		expanded = append(expanded, abs)
 	}
 
-	return expended, nil
+	return expanded, nil
 }
