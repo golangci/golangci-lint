@@ -14,25 +14,8 @@ import (
 
 const defaultCheckstyleSeverity = "error"
 
-type checkstyleOutput struct {
-	XMLName xml.Name          `xml:"checkstyle"`
-	Version string            `xml:"version,attr"`
-	Files   []*checkstyleFile `xml:"file"`
-}
-
-type checkstyleFile struct {
-	Name   string             `xml:"name,attr"`
-	Errors []*checkstyleError `xml:"error"`
-}
-
-type checkstyleError struct {
-	Column   int    `xml:"column,attr"`
-	Line     int    `xml:"line,attr"`
-	Message  string `xml:"message,attr"`
-	Severity string `xml:"severity,attr"`
-	Source   string `xml:"source,attr"`
-}
-
+// Checkstyle prints issues in the Checkstyle format.
+// https://checkstyle.org/config.html
 type Checkstyle struct {
 	w io.Writer
 }
@@ -92,4 +75,23 @@ func (p Checkstyle) Print(issues []result.Issue) error {
 	}
 
 	return nil
+}
+
+type checkstyleOutput struct {
+	XMLName xml.Name          `xml:"checkstyle"`
+	Version string            `xml:"version,attr"`
+	Files   []*checkstyleFile `xml:"file"`
+}
+
+type checkstyleFile struct {
+	Name   string             `xml:"name,attr"`
+	Errors []*checkstyleError `xml:"error"`
+}
+
+type checkstyleError struct {
+	Column   int    `xml:"column,attr"`
+	Line     int    `xml:"line,attr"`
+	Message  string `xml:"message,attr"`
+	Severity string `xml:"severity,attr"`
+	Source   string `xml:"source,attr"`
 }

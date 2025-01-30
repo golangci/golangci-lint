@@ -14,7 +14,8 @@ const (
 	largeLimit = 4000
 )
 
-// TeamCity printer for TeamCity format.
+// TeamCity prints issues in the TeamCity format.
+// https://www.jetbrains.com/help/teamcity/service-messages.html
 type TeamCity struct {
 	w       io.Writer
 	escaper *strings.Replacer

@@ -11,6 +11,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
+// Text prints issues with a human friendly representation.
 type Text struct {
 	printIssuedLine bool
 	printLinterName bool

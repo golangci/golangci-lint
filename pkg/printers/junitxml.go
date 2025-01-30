@@ -12,34 +12,10 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-type testSuitesXML struct {
-	XMLName    xml.Name `xml:"testsuites"`
-	TestSuites []testSuiteXML
-}
-
-type testSuiteXML struct {
-	XMLName   xml.Name      `xml:"testsuite"`
-	Suite     string        `xml:"name,attr"`
-	Tests     int           `xml:"tests,attr"`
-	Errors    int           `xml:"errors,attr"`
-	Failures  int           `xml:"failures,attr"`
-	TestCases []testCaseXML `xml:"testcase"`
-}
-
-type testCaseXML struct {
-	Name      string     `xml:"name,attr"`
-	ClassName string     `xml:"classname,attr"`
-	Failure   failureXML `xml:"failure"`
-	File      string     `xml:"file,attr,omitempty"`
-	Line      int        `xml:"line,attr,omitempty"`
-}
-
-type failureXML struct {
-	Message string `xml:"message,attr"`
-	Type    string `xml:"type,attr"`
-	Content string `xml:",cdata"`
-}
-
+// JunitXML prints issues in the Junit XML format.
+// There is no official specification for the JUnit XML file format,
+// and various tools generate and support different flavors of this format.
+// https://github.com/testmoapp/junitxml
 type JunitXML struct {
 	extended bool
 	w        io.Writer
@@ -96,4 +72,32 @@ func (p JunitXML) Print(issues []result.Issue) error {
 		return err
 	}
 	return nil
+}
+
+type testSuitesXML struct {
+	XMLName    xml.Name `xml:"testsuites"`
+	TestSuites []testSuiteXML
+}
+
+type testSuiteXML struct {
+	XMLName   xml.Name      `xml:"testsuite"`
+	Suite     string        `xml:"name,attr"`
+	Tests     int           `xml:"tests,attr"`
+	Errors    int           `xml:"errors,attr"`
+	Failures  int           `xml:"failures,attr"`
+	TestCases []testCaseXML `xml:"testcase"`
+}
+
+type testCaseXML struct {
+	Name      string     `xml:"name,attr"`
+	ClassName string     `xml:"classname,attr"`
+	Failure   failureXML `xml:"failure"`
+	File      string     `xml:"file,attr,omitempty"`
+	Line      int        `xml:"line,attr,omitempty"`
+}
+
+type failureXML struct {
+	Message string `xml:"message,attr"`
+	Type    string `xml:"type,attr"`
+	Content string `xml:",cdata"`
 }

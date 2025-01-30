@@ -10,23 +10,8 @@ import (
 
 const defaultCodeClimateSeverity = "critical"
 
-// CodeClimateIssue is a subset of the Code Climate spec.
-// https://github.com/codeclimate/platform/blob/master/spec/analyzers/SPEC.md#data-types
-// It is just enough to support GitLab CI Code Quality.
-// https://docs.gitlab.com/ee/ci/testing/code_quality.html#code-quality-report-format
-type CodeClimateIssue struct {
-	Description string `json:"description"`
-	CheckName   string `json:"check_name"`
-	Severity    string `json:"severity,omitempty"`
-	Fingerprint string `json:"fingerprint"`
-	Location    struct {
-		Path  string `json:"path"`
-		Lines struct {
-			Begin int `json:"begin"`
-		} `json:"lines"`
-	} `json:"location"`
-}
-
+// CodeClimate prints issues in the Code Climate format.
+// https://github.com/codeclimate/platform/blob/master/spec/analyzers/SPEC.md
 type CodeClimate struct {
 	w io.Writer
 
@@ -44,7 +29,7 @@ func (p CodeClimate) Print(issues []result.Issue) error {
 	codeClimateIssues := make([]CodeClimateIssue, 0, len(issues))
 
 	for i := range issues {
-		issue := &issues[i]
+		issue := issues[i]
 
 		codeClimateIssue := CodeClimateIssue{}
 		codeClimateIssue.Description = issue.Description()
@@ -62,4 +47,21 @@ func (p CodeClimate) Print(issues []result.Issue) error {
 	}
 
 	return json.NewEncoder(p.w).Encode(codeClimateIssues)
+}
+
+// CodeClimateIssue is a subset of the Code Climate spec.
+// https://github.com/codeclimate/platform/blob/master/spec/analyzers/SPEC.md#data-types
+// It is just enough to support GitLab CI Code Quality.
+// https://docs.gitlab.com/ee/ci/testing/code_quality.html#code-quality-report-format
+type CodeClimateIssue struct {
+	Description string `json:"description"`
+	CheckName   string `json:"check_name"`
+	Severity    string `json:"severity,omitempty"`
+	Fingerprint string `json:"fingerprint"`
+	Location    struct {
+		Path  string `json:"path"`
+		Lines struct {
+			Begin int `json:"begin"`
+		} `json:"lines"`
+	} `json:"location"`
 }

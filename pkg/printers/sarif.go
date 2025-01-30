@@ -12,53 +12,9 @@ const (
 	sarifSchemaURI = "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.6.json"
 )
 
-type SarifOutput struct {
-	Version string     `json:"version"`
-	Schema  string     `json:"$schema"`
-	Runs    []sarifRun `json:"runs"`
-}
-
-type sarifRun struct {
-	Tool    sarifTool     `json:"tool"`
-	Results []sarifResult `json:"results"`
-}
-
-type sarifTool struct {
-	Driver struct {
-		Name string `json:"name"`
-	} `json:"driver"`
-}
-
-type sarifResult struct {
-	RuleID    string          `json:"ruleId"`
-	Level     string          `json:"level"`
-	Message   sarifMessage    `json:"message"`
-	Locations []sarifLocation `json:"locations"`
-}
-
-type sarifMessage struct {
-	Text string `json:"text"`
-}
-
-type sarifLocation struct {
-	PhysicalLocation sarifPhysicalLocation `json:"physicalLocation"`
-}
-
-type sarifPhysicalLocation struct {
-	ArtifactLocation sarifArtifactLocation `json:"artifactLocation"`
-	Region           sarifRegion           `json:"region"`
-}
-
-type sarifArtifactLocation struct {
-	URI   string `json:"uri"`
-	Index int    `json:"index"`
-}
-
-type sarifRegion struct {
-	StartLine   int `json:"startLine"`
-	StartColumn int `json:"startColumn"`
-}
-
+// Sarif prints issues in the SARIF format.
+// https://sarifweb.azurewebsites.net/
+// https://docs.oasis-open.org/sarif/sarif/v2.1.0/
 type Sarif struct {
 	w io.Writer
 }
@@ -114,4 +70,51 @@ func (p Sarif) Print(issues []result.Issue) error {
 	}
 
 	return json.NewEncoder(p.w).Encode(output)
+}
+
+type SarifOutput struct {
+	Version string     `json:"version"`
+	Schema  string     `json:"$schema"`
+	Runs    []sarifRun `json:"runs"`
+}
+
+type sarifRun struct {
+	Tool    sarifTool     `json:"tool"`
+	Results []sarifResult `json:"results"`
+}
+
+type sarifTool struct {
+	Driver struct {
+		Name string `json:"name"`
+	} `json:"driver"`
+}
+
+type sarifResult struct {
+	RuleID    string          `json:"ruleId"`
+	Level     string          `json:"level"`
+	Message   sarifMessage    `json:"message"`
+	Locations []sarifLocation `json:"locations"`
+}
+
+type sarifMessage struct {
+	Text string `json:"text"`
+}
+
+type sarifLocation struct {
+	PhysicalLocation sarifPhysicalLocation `json:"physicalLocation"`
+}
+
+type sarifPhysicalLocation struct {
+	ArtifactLocation sarifArtifactLocation `json:"artifactLocation"`
+	Region           sarifRegion           `json:"region"`
+}
+
+type sarifArtifactLocation struct {
+	URI   string `json:"uri"`
+	Index int    `json:"index"`
+}
+
+type sarifRegion struct {
+	StartLine   int `json:"startLine"`
+	StartColumn int `json:"startColumn"`
 }

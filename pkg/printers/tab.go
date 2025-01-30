@@ -11,6 +11,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
+// Tab prints issues using tabulation as field separator.
 type Tab struct {
 	printLinterName bool
 	useColors       bool
