@@ -17,11 +17,20 @@ const defaultCheckstyleSeverity = "error"
 // Checkstyle prints issues in the Checkstyle format.
 // https://checkstyle.org/config.html
 type Checkstyle struct {
-	w io.Writer
+	w         io.Writer
+	sanitizer severitySanitizer
 }
 
 func NewCheckstyle(w io.Writer) *Checkstyle {
-	return &Checkstyle{w: w}
+	return &Checkstyle{
+		w: w,
+		sanitizer: severitySanitizer{
+			// https://checkstyle.org/config.html#Severity
+			// https://checkstyle.org/property_types.html#SeverityLevel
+			allowedSeverities: []string{"ignore", "info", "warning", defaultCheckstyleSeverity},
+			defaultSeverity:   defaultCheckstyleSeverity,
+		},
+	}
 }
 
 func (p Checkstyle) Print(issues []result.Issue) error {
@@ -42,17 +51,12 @@ func (p Checkstyle) Print(issues []result.Issue) error {
 			files[issue.FilePath()] = file
 		}
 
-		severity := defaultCheckstyleSeverity
-		if issue.Severity != "" {
-			severity = issue.Severity
-		}
-
 		newError := &checkstyleError{
 			Column:   issue.Column(),
 			Line:     issue.Line(),
 			Message:  issue.Text,
 			Source:   issue.FromLinter,
-			Severity: severity,
+			Severity: p.sanitizer.Clean(issue.Severity),
 		}
 
 		file.Errors = append(file.Errors, newError)

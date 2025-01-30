@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"slices"
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/logutils"
@@ -142,4 +143,17 @@ func (c *Printer) createPrinter(format string, w io.Writer) (issuePrinter, error
 	}
 
 	return p, nil
+}
+
+type severitySanitizer struct {
+	allowedSeverities []string
+	defaultSeverity   string
+}
+
+func (s *severitySanitizer) Clean(severity string) string {
+	if slices.Contains(s.allowedSeverities, severity) {
+		return severity
+	}
+
+	return s.defaultSeverity
 }

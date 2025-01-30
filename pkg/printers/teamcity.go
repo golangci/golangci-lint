@@ -14,11 +14,14 @@ const (
 	largeLimit = 4000
 )
 
+const defaultTeamCitySeverity = "ERROR"
+
 // TeamCity prints issues in the TeamCity format.
 // https://www.jetbrains.com/help/teamcity/service-messages.html
 type TeamCity struct {
-	w       io.Writer
-	escaper *strings.Replacer
+	w         io.Writer
+	escaper   *strings.Replacer
+	sanitizer severitySanitizer
 }
 
 // NewTeamCity output format outputs issues according to TeamCity service message format.
@@ -34,6 +37,11 @@ func NewTeamCity(w io.Writer) *TeamCity {
 			"[", "|[",
 			"]", "|]",
 		),
+		sanitizer: severitySanitizer{
+			// https://www.jetbrains.com/help/teamcity/service-messages.html#Inspection+Instance
+			allowedSeverities: []string{"INFO", defaultTeamCitySeverity, "WARNING", "WEAK WARNING"},
+			defaultSeverity:   defaultTeamCitySeverity,
+		},
 	}
 }
 
@@ -65,7 +73,7 @@ func (p *TeamCity) Print(issues []result.Issue) error {
 			message:  issue.Text,
 			file:     issue.FilePath(),
 			line:     issue.Line(),
-			severity: issue.Severity,
+			severity: p.sanitizer.Clean(strings.ToUpper(issue.Severity)),
 		}
 
 		_, err := instance.Print(p.w, p.escaper)
@@ -108,7 +116,7 @@ func (i InspectionInstance) Print(w io.Writer, replacer *strings.Replacer) (int,
 		cutVal(i.typeID, smallLimit),
 		cutVal(replacer.Replace(i.message), largeLimit),
 		cutVal(i.file, largeLimit),
-		i.line, strings.ToUpper(i.severity))
+		i.line, i.severity)
 }
 
 func cutVal(s string, limit int) string {

@@ -12,15 +12,25 @@ const (
 	sarifSchemaURI = "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.6.json"
 )
 
+const defaultSarifSeverity = "error"
+
 // Sarif prints issues in the SARIF format.
 // https://sarifweb.azurewebsites.net/
 // https://docs.oasis-open.org/sarif/sarif/v2.1.0/
 type Sarif struct {
-	w io.Writer
+	w         io.Writer
+	sanitizer severitySanitizer
 }
 
 func NewSarif(w io.Writer) *Sarif {
-	return &Sarif{w: w}
+	return &Sarif{
+		w: w,
+		sanitizer: severitySanitizer{
+			// https://docs.oasis-open.org/sarif/sarif/v2.1.0/errata01/os/sarif-v2.1.0-errata01-os-complete.html#_Toc141790898
+			allowedSeverities: []string{"none", "note", "warning", defaultSarifSeverity},
+			defaultSeverity:   defaultSarifSeverity,
+		},
+	}
 }
 
 func (p Sarif) Print(issues []result.Issue) error {
@@ -31,19 +41,9 @@ func (p Sarif) Print(issues []result.Issue) error {
 	for i := range issues {
 		issue := issues[i]
 
-		severity := issue.Severity
-
-		switch severity {
-		// https://docs.oasis-open.org/sarif/sarif/v2.1.0/errata01/os/sarif-v2.1.0-errata01-os-complete.html#_Toc141790898
-		case "none", "note", "warning", "error":
-			// Valid levels.
-		default:
-			severity = "error"
-		}
-
 		sr := sarifResult{
 			RuleID:  issue.FromLinter,
-			Level:   severity,
+			Level:   p.sanitizer.Clean(issue.Severity),
 			Message: sarifMessage{Text: issue.Text},
 			Locations: []sarifLocation{
 				{

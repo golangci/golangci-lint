@@ -3,7 +3,6 @@ package printers
 import (
 	"encoding/json"
 	"io"
-	"slices"
 
 	"github.com/golangci/golangci-lint/pkg/result"
 )
@@ -13,15 +12,18 @@ const defaultCodeClimateSeverity = "critical"
 // CodeClimate prints issues in the Code Climate format.
 // https://github.com/codeclimate/platform/blob/master/spec/analyzers/SPEC.md
 type CodeClimate struct {
-	w io.Writer
-
-	allowedSeverities []string
+	w         io.Writer
+	sanitizer severitySanitizer
 }
 
 func NewCodeClimate(w io.Writer) *CodeClimate {
 	return &CodeClimate{
-		w:                 w,
-		allowedSeverities: []string{"info", "minor", "major", defaultCodeClimateSeverity, "blocker"},
+		w: w,
+		sanitizer: severitySanitizer{
+			// https://github.com/codeclimate/platform/blob/master/spec/analyzers/SPEC.md#data-types
+			allowedSeverities: []string{"info", "minor", "major", defaultCodeClimateSeverity, "blocker"},
+			defaultSeverity:   defaultCodeClimateSeverity,
+		},
 	}
 }
 
@@ -37,11 +39,7 @@ func (p CodeClimate) Print(issues []result.Issue) error {
 		codeClimateIssue.Location.Path = issue.Pos.Filename
 		codeClimateIssue.Location.Lines.Begin = issue.Pos.Line
 		codeClimateIssue.Fingerprint = issue.Fingerprint()
-		codeClimateIssue.Severity = defaultCodeClimateSeverity
-
-		if slices.Contains(p.allowedSeverities, issue.Severity) {
-			codeClimateIssue.Severity = issue.Severity
-		}
+		codeClimateIssue.Severity = p.sanitizer.Clean(issue.Severity)
 
 		codeClimateIssues = append(codeClimateIssues, codeClimateIssue)
 	}
