@@ -3,6 +3,7 @@ package processors
 import (
 	"regexp"
 
+	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/fsutils"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
@@ -16,9 +17,32 @@ type baseRule struct {
 	path       *regexp.Regexp
 	pathExcept *regexp.Regexp
 	linters    []string
+}
 
-	// For compatibility with exclude-use-default/include.
-	internalReference string `mapstructure:"-"`
+// The usage of `regexp.MustCompile()` is safe here,
+// because the regular expressions are checked before inside [config.BaseRule.Validate].
+func newBaseRule(rule *config.BaseRule, prefix string) baseRule {
+	base := baseRule{
+		linters: rule.Linters,
+	}
+
+	if rule.Text != "" {
+		base.text = regexp.MustCompile(prefix + rule.Text)
+	}
+
+	if rule.Source != "" {
+		base.source = regexp.MustCompile(prefix + rule.Source)
+	}
+
+	if rule.Path != "" {
+		base.path = regexp.MustCompile(fsutils.NormalizePathInRegex(rule.Path))
+	}
+
+	if rule.PathExcept != "" {
+		base.pathExcept = regexp.MustCompile(fsutils.NormalizePathInRegex(rule.PathExcept))
+	}
+
+	return base
 }
 
 func (r *baseRule) isEmpty() bool {
@@ -68,4 +92,18 @@ func (r *baseRule) matchSource(issue *result.Issue, lineCache *fsutils.LineCache
 	}
 
 	return r.source.MatchString(sourceLine)
+}
+
+func parseRules[T, V any](rules []T, prefix string, newFn func(*T, string) V) []V {
+	if len(rules) == 0 {
+		return nil
+	}
+
+	parsedRules := make([]V, 0, len(rules))
+
+	for _, r := range rules {
+		parsedRules = append(parsedRules, newFn(&r, prefix))
+	}
+
+	return parsedRules
 }
