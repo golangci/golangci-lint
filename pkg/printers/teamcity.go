@@ -5,6 +5,7 @@ import (
 	"io"
 	"strings"
 
+	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
@@ -25,7 +26,7 @@ type TeamCity struct {
 }
 
 // NewTeamCity output format outputs issues according to TeamCity service message format.
-func NewTeamCity(w io.Writer) *TeamCity {
+func NewTeamCity(log logutils.Log, w io.Writer) *TeamCity {
 	return &TeamCity{
 		w: w,
 		// https://www.jetbrains.com/help/teamcity/service-messages.html#Escaped+Values
@@ -38,6 +39,7 @@ func NewTeamCity(w io.Writer) *TeamCity {
 			"]", "|]",
 		),
 		sanitizer: severitySanitizer{
+			log: log.Child(logutils.DebugKeyTeamCityPrinter),
 			// https://www.jetbrains.com/help/teamcity/service-messages.html#Inspection+Instance
 			allowedSeverities: []string{"INFO", defaultTeamCitySeverity, "WARNING", "WEAK WARNING"},
 			defaultSeverity:   defaultTeamCitySeverity,

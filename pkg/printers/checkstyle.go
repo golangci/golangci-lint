@@ -9,6 +9,7 @@ import (
 	"github.com/go-xmlfmt/xmlfmt"
 	"golang.org/x/exp/maps"
 
+	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
@@ -21,10 +22,11 @@ type Checkstyle struct {
 	sanitizer severitySanitizer
 }
 
-func NewCheckstyle(w io.Writer) *Checkstyle {
+func NewCheckstyle(log logutils.Log, w io.Writer) *Checkstyle {
 	return &Checkstyle{
 		w: w,
 		sanitizer: severitySanitizer{
+			log: log.Child(logutils.DebugKeyCheckstylePrinter),
 			// https://checkstyle.org/config.html#Severity
 			// https://checkstyle.org/property_types.html#SeverityLevel
 			allowedSeverities: []string{"ignore", "info", "warning", defaultCheckstyleSeverity},

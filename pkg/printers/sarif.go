@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"io"
 
+	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
@@ -22,10 +23,11 @@ type Sarif struct {
 	sanitizer severitySanitizer
 }
 
-func NewSarif(w io.Writer) *Sarif {
+func NewSarif(log logutils.Log, w io.Writer) *Sarif {
 	return &Sarif{
 		w: w,
 		sanitizer: severitySanitizer{
+			log: log.Child(logutils.DebugKeySarifPrinter),
 			// https://docs.oasis-open.org/sarif/sarif/v2.1.0/errata01/os/sarif-v2.1.0-errata01-os-complete.html#_Toc141790898
 			allowedSeverities: []string{"none", "note", "warning", defaultSarifSeverity},
 			defaultSeverity:   defaultSarifSeverity,

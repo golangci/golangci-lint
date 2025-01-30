@@ -44,7 +44,7 @@ func TestJSON_Print(t *testing.T) {
 
 	buf := new(bytes.Buffer)
 
-	printer := NewJSON(nil, buf)
+	printer := NewJSON(buf, nil)
 
 	err := printer.Print(issues)
 	require.NoError(t, err)

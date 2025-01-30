@@ -20,11 +20,11 @@ type Tab struct {
 	w   io.Writer
 }
 
-func NewTab(printLinterName, useColors bool, log logutils.Log, w io.Writer) *Tab {
+func NewTab(log logutils.Log, w io.Writer, printLinterName, useColors bool) *Tab {
 	return &Tab{
 		printLinterName: printLinterName,
 		useColors:       useColors,
-		log:             log,
+		log:             log.Child(logutils.DebugKeyTabPrinter),
 		w:               w,
 	}
 }

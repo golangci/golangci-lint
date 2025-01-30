@@ -105,7 +105,7 @@ Details: func foo() {
 			t.Parallel()
 
 			buf := new(bytes.Buffer)
-			printer := NewJunitXML(test.extended, buf)
+			printer := NewJunitXML(buf, test.extended)
 
 			err := printer.Print(issues)
 			require.NoError(t, err)

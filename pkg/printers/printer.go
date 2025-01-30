@@ -115,29 +115,25 @@ func (c *Printer) createPrinter(format string, w io.Writer) (issuePrinter, error
 
 	switch format {
 	case config.OutFormatJSON:
-		p = NewJSON(c.reportData, w)
+		p = NewJSON(w, c.reportData)
 	case config.OutFormatLineNumber, config.OutFormatColoredLineNumber:
-		p = NewText(c.cfg.PrintIssuedLine,
-			format == config.OutFormatColoredLineNumber, c.cfg.PrintLinterName,
-			c.log.Child(logutils.DebugKeyTextPrinter), w)
+		p = NewText(c.log, w, c.cfg.PrintLinterName, c.cfg.PrintIssuedLine, format == config.OutFormatColoredLineNumber)
 	case config.OutFormatTab, config.OutFormatColoredTab:
-		p = NewTab(c.cfg.PrintLinterName,
-			format == config.OutFormatColoredTab,
-			c.log.Child(logutils.DebugKeyTabPrinter), w)
+		p = NewTab(c.log, w, c.cfg.PrintLinterName, format == config.OutFormatColoredTab)
 	case config.OutFormatCheckstyle:
-		p = NewCheckstyle(w)
+		p = NewCheckstyle(c.log, w)
 	case config.OutFormatCodeClimate:
-		p = NewCodeClimate(w)
+		p = NewCodeClimate(c.log, w)
 	case config.OutFormatHTML:
 		p = NewHTML(w)
 	case config.OutFormatJunitXML, config.OutFormatJunitXMLExtended:
-		p = NewJunitXML(format == config.OutFormatJunitXMLExtended, w)
+		p = NewJunitXML(w, format == config.OutFormatJunitXMLExtended)
 	case config.OutFormatGithubActions:
 		p = NewGitHubAction(w)
 	case config.OutFormatTeamCity:
-		p = NewTeamCity(w)
+		p = NewTeamCity(c.log, w)
 	case config.OutFormatSarif:
-		p = NewSarif(w)
+		p = NewSarif(c.log, w)
 	default:
 		return nil, fmt.Errorf("unknown output format %q", format)
 	}
@@ -146,6 +142,8 @@ func (c *Printer) createPrinter(format string, w io.Writer) (issuePrinter, error
 }
 
 type severitySanitizer struct {
+	log logutils.Log
+
 	allowedSeverities []string
 	defaultSeverity   string
 }
@@ -154,6 +152,8 @@ func (s *severitySanitizer) Clean(severity string) string {
 	if slices.Contains(s.allowedSeverities, severity) {
 		return severity
 	}
+
+	s.log.Infof("severity '%s' is not inside %v, fallback to '%s'", severity, s.allowedSeverities, s.defaultSeverity)
 
 	return s.defaultSeverity
 }

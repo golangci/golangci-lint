@@ -14,7 +14,7 @@ type JSON struct {
 	w  io.Writer
 }
 
-func NewJSON(rd *report.Data, w io.Writer) *JSON {
+func NewJSON(w io.Writer, rd *report.Data) *JSON {
 	return &JSON{
 		rd: rd,
 		w:  w,

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"io"
 
+	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
@@ -16,10 +17,11 @@ type CodeClimate struct {
 	sanitizer severitySanitizer
 }
 
-func NewCodeClimate(w io.Writer) *CodeClimate {
+func NewCodeClimate(log logutils.Log, w io.Writer) *CodeClimate {
 	return &CodeClimate{
 		w: w,
 		sanitizer: severitySanitizer{
+			log: log.Child(logutils.DebugKeyCodeClimatePrinter),
 			// https://github.com/codeclimate/platform/blob/master/spec/analyzers/SPEC.md#data-types
 			allowedSeverities: []string{"info", "minor", "major", defaultCodeClimateSeverity, "blocker"},
 			defaultSeverity:   defaultCodeClimateSeverity,

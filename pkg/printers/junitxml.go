@@ -21,7 +21,7 @@ type JunitXML struct {
 	w        io.Writer
 }
 
-func NewJunitXML(extended bool, w io.Writer) *JunitXML {
+func NewJunitXML(w io.Writer, extended bool) *JunitXML {
 	return &JunitXML{
 		extended: extended,
 		w:        w,
