@@ -17,17 +17,13 @@ type baseRule struct {
 	path       *regexp.Regexp
 	pathExcept *regexp.Regexp
 	linters    []string
-
-	// For compatibility with exclude-use-default/include.
-	internalReference string `mapstructure:"-"`
 }
 
 // The usage of `regexp.MustCompile()` is safe here,
 // because the regular expressions are checked before inside [config.BaseRule.Validate].
 func newBaseRule(rule *config.BaseRule, prefix string) baseRule {
 	base := baseRule{
-		linters:           rule.Linters,
-		internalReference: rule.InternalReference,
+		linters: rule.Linters,
 	}
 
 	if rule.Text != "" {

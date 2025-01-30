@@ -109,10 +109,16 @@ func (p *ExclusionRules) Finish() {
 
 type excludeRule struct {
 	baseRule
+
+	// For compatibility with exclude-use-default/include.
+	internalReference string `mapstructure:"-"`
 }
 
 func newExcludeRule(rule *config.ExcludeRule, prefix string) excludeRule {
-	return excludeRule{baseRule: newBaseRule(&rule.BaseRule, prefix)}
+	return excludeRule{
+		baseRule:          newBaseRule(&rule.BaseRule, prefix),
+		internalReference: rule.InternalReference,
+	}
 }
 
 func (e excludeRule) String() string {
