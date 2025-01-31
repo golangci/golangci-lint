@@ -27,6 +27,7 @@ var _ Processor = (*Diff)(nil)
 type Diff struct {
 	onlyNew       bool
 	fromRev       string
+	fromMergeBase string
 	patchFilePath string
 	wholeFiles    bool
 	patch         string
@@ -36,6 +37,7 @@ func NewDiff(cfg *config.Issues) *Diff {
 	return &Diff{
 		onlyNew:       cfg.Diff,
 		fromRev:       cfg.DiffFromRevision,
+		fromMergeBase: cfg.DiffFromMergeBase,
 		patchFilePath: cfg.DiffPatchFilePath,
 		wholeFiles:    cfg.WholeFiles,
 		patch:         os.Getenv(envGolangciDiffProcessorPatch),
@@ -47,7 +49,7 @@ func (*Diff) Name() string {
 }
 
 func (p *Diff) Process(issues []result.Issue) ([]result.Issue, error) {
-	if !p.onlyNew && p.fromRev == "" && p.patchFilePath == "" && p.patch == "" {
+	if !p.onlyNew && p.fromRev == "" && p.fromMergeBase == "" && p.patchFilePath == "" && p.patch == "" {
 		return issues, nil
 	}
 
@@ -68,6 +70,7 @@ func (p *Diff) Process(issues []result.Issue) ([]result.Issue, error) {
 	checker := revgrep.Checker{
 		Patch:        patchReader,
 		RevisionFrom: p.fromRev,
+		MergeBase:    p.fromMergeBase,
 		WholeFiles:   p.wholeFiles,
 	}
 

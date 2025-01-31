@@ -4043,6 +4043,10 @@ issues:
   # Default: false
   new: true
 
+  # Show only new issues created after the best common ancestor (merge-base against HEAD).
+  # Default: ""
+  new-from-merge-base: main
+
   # Show only new issues created after git revision `REV`.
   # Default: ""
   new-from-rev: HEAD

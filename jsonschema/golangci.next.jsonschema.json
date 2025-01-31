@@ -4081,6 +4081,10 @@
           "type": "boolean",
           "default": false
         },
+        "new-from-merge-base": {
+          "description": "Show only new issues created after the best common ancestor (merge-base against HEAD).",
+          "type": "string"
+        },
         "new-from-rev": {
           "description": "Show only new issues created after this git revision.",
           "type": "string"
