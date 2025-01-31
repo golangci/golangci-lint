@@ -20,6 +20,7 @@ const defaultTeamCitySeverity = "ERROR"
 // TeamCity prints issues in the TeamCity format.
 // https://www.jetbrains.com/help/teamcity/service-messages.html
 type TeamCity struct {
+	log       logutils.Log
 	w         io.Writer
 	escaper   *strings.Replacer
 	sanitizer severitySanitizer
@@ -28,7 +29,8 @@ type TeamCity struct {
 // NewTeamCity output format outputs issues according to TeamCity service message format.
 func NewTeamCity(log logutils.Log, w io.Writer) *TeamCity {
 	return &TeamCity{
-		w: w,
+		log: log.Child(logutils.DebugKeyTeamCityPrinter),
+		w:   w,
 		// https://www.jetbrains.com/help/teamcity/service-messages.html#Escaped+Values
 		escaper: strings.NewReplacer(
 			"'", "|'",
@@ -39,7 +41,6 @@ func NewTeamCity(log logutils.Log, w io.Writer) *TeamCity {
 			"]", "|]",
 		),
 		sanitizer: severitySanitizer{
-			log: log.Child(logutils.DebugKeyTeamCityPrinter),
 			// https://www.jetbrains.com/help/teamcity/service-messages.html#Inspection+Instance
 			allowedSeverities: []string{"INFO", defaultTeamCitySeverity, "WARNING", "WEAK WARNING"},
 			defaultSeverity:   defaultTeamCitySeverity,
@@ -75,13 +76,18 @@ func (p *TeamCity) Print(issues []result.Issue) error {
 			message:  issue.Text,
 			file:     issue.FilePath(),
 			line:     issue.Line(),
-			severity: p.sanitizer.Clean(strings.ToUpper(issue.Severity)),
+			severity: p.sanitizer.Sanitize(strings.ToUpper(issue.Severity)),
 		}
 
 		_, err := instance.Print(p.w, p.escaper)
 		if err != nil {
 			return err
 		}
+	}
+
+	err := p.sanitizer.Err()
+	if err != nil {
+		p.log.Infof("%v", err)
 	}
 
 	return nil

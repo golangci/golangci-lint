@@ -7,6 +7,7 @@ import (
 	"os"
 	"path/filepath"
 	"slices"
+	"strings"
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/logutils"
@@ -142,18 +143,36 @@ func (c *Printer) createPrinter(format string, w io.Writer) (issuePrinter, error
 }
 
 type severitySanitizer struct {
-	log logutils.Log
-
 	allowedSeverities []string
 	defaultSeverity   string
+
+	unsupportedSeverities map[string]struct{}
 }
 
-func (s *severitySanitizer) Clean(severity string) string {
+func (s *severitySanitizer) Sanitize(severity string) string {
 	if slices.Contains(s.allowedSeverities, severity) {
 		return severity
 	}
 
-	s.log.Infof("severity '%s' is not inside %v, fallback to '%s'", severity, s.allowedSeverities, s.defaultSeverity)
+	if s.unsupportedSeverities == nil {
+		s.unsupportedSeverities = make(map[string]struct{})
+	}
+
+	s.unsupportedSeverities[severity] = struct{}{}
 
 	return s.defaultSeverity
+}
+
+func (s *severitySanitizer) Err() error {
+	if len(s.unsupportedSeverities) == 0 {
+		return nil
+	}
+
+	var foo []string
+	for k := range s.unsupportedSeverities {
+		foo = append(foo, "'"+k+"'")
+	}
+
+	return fmt.Errorf("some severities (%v) are not inside supported values (%v), fallback to '%s'",
+		strings.Join(foo, ", "), strings.Join(s.allowedSeverities, ", "), s.defaultSeverity)
 }

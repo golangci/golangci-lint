@@ -19,15 +19,16 @@ const defaultSarifSeverity = "error"
 // https://sarifweb.azurewebsites.net/
 // https://docs.oasis-open.org/sarif/sarif/v2.1.0/
 type Sarif struct {
+	log       logutils.Log
 	w         io.Writer
 	sanitizer severitySanitizer
 }
 
 func NewSarif(log logutils.Log, w io.Writer) *Sarif {
 	return &Sarif{
-		w: w,
+		log: log.Child(logutils.DebugKeySarifPrinter),
+		w:   w,
 		sanitizer: severitySanitizer{
-			log: log.Child(logutils.DebugKeySarifPrinter),
 			// https://docs.oasis-open.org/sarif/sarif/v2.1.0/errata01/os/sarif-v2.1.0-errata01-os-complete.html#_Toc141790898
 			allowedSeverities: []string{"none", "note", "warning", defaultSarifSeverity},
 			defaultSeverity:   defaultSarifSeverity,
@@ -35,7 +36,7 @@ func NewSarif(log logutils.Log, w io.Writer) *Sarif {
 	}
 }
 
-func (p Sarif) Print(issues []result.Issue) error {
+func (p *Sarif) Print(issues []result.Issue) error {
 	run := sarifRun{}
 	run.Tool.Driver.Name = "golangci-lint"
 	run.Results = make([]sarifResult, 0)
@@ -45,7 +46,7 @@ func (p Sarif) Print(issues []result.Issue) error {
 
 		sr := sarifResult{
 			RuleID:  issue.FromLinter,
-			Level:   p.sanitizer.Clean(issue.Severity),
+			Level:   p.sanitizer.Sanitize(issue.Severity),
 			Message: sarifMessage{Text: issue.Text},
 			Locations: []sarifLocation{
 				{
@@ -63,6 +64,11 @@ func (p Sarif) Print(issues []result.Issue) error {
 		}
 
 		run.Results = append(run.Results, sr)
+	}
+
+	err := p.sanitizer.Err()
+	if err != nil {
+		p.log.Infof("%v", err)
 	}
 
 	output := SarifOutput{

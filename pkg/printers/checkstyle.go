@@ -18,15 +18,16 @@ const defaultCheckstyleSeverity = "error"
 // Checkstyle prints issues in the Checkstyle format.
 // https://checkstyle.org/config.html
 type Checkstyle struct {
+	log       logutils.Log
 	w         io.Writer
 	sanitizer severitySanitizer
 }
 
 func NewCheckstyle(log logutils.Log, w io.Writer) *Checkstyle {
 	return &Checkstyle{
-		w: w,
+		log: log.Child(logutils.DebugKeyCheckstylePrinter),
+		w:   w,
 		sanitizer: severitySanitizer{
-			log: log.Child(logutils.DebugKeyCheckstylePrinter),
 			// https://checkstyle.org/config.html#Severity
 			// https://checkstyle.org/property_types.html#SeverityLevel
 			allowedSeverities: []string{"ignore", "info", "warning", defaultCheckstyleSeverity},
@@ -35,7 +36,7 @@ func NewCheckstyle(log logutils.Log, w io.Writer) *Checkstyle {
 	}
 }
 
-func (p Checkstyle) Print(issues []result.Issue) error {
+func (p *Checkstyle) Print(issues []result.Issue) error {
 	out := checkstyleOutput{
 		Version: "5.0",
 	}
@@ -58,10 +59,15 @@ func (p Checkstyle) Print(issues []result.Issue) error {
 			Line:     issue.Line(),
 			Message:  issue.Text,
 			Source:   issue.FromLinter,
-			Severity: p.sanitizer.Clean(issue.Severity),
+			Severity: p.sanitizer.Sanitize(issue.Severity),
 		}
 
 		file.Errors = append(file.Errors, newError)
+	}
+
+	err := p.sanitizer.Err()
+	if err != nil {
+		p.log.Infof("%v", err)
 	}
 
 	out.Files = maps.Values(files)

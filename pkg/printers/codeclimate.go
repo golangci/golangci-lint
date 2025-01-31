@@ -13,15 +13,16 @@ const defaultCodeClimateSeverity = "critical"
 // CodeClimate prints issues in the Code Climate format.
 // https://github.com/codeclimate/platform/blob/master/spec/analyzers/SPEC.md
 type CodeClimate struct {
+	log       logutils.Log
 	w         io.Writer
 	sanitizer severitySanitizer
 }
 
 func NewCodeClimate(log logutils.Log, w io.Writer) *CodeClimate {
 	return &CodeClimate{
-		w: w,
+		log: log.Child(logutils.DebugKeyCodeClimatePrinter),
+		w:   w,
 		sanitizer: severitySanitizer{
-			log: log.Child(logutils.DebugKeyCodeClimatePrinter),
 			// https://github.com/codeclimate/platform/blob/master/spec/analyzers/SPEC.md#data-types
 			allowedSeverities: []string{"info", "minor", "major", defaultCodeClimateSeverity, "blocker"},
 			defaultSeverity:   defaultCodeClimateSeverity,
@@ -29,7 +30,7 @@ func NewCodeClimate(log logutils.Log, w io.Writer) *CodeClimate {
 	}
 }
 
-func (p CodeClimate) Print(issues []result.Issue) error {
+func (p *CodeClimate) Print(issues []result.Issue) error {
 	codeClimateIssues := make([]CodeClimateIssue, 0, len(issues))
 
 	for i := range issues {
@@ -41,9 +42,14 @@ func (p CodeClimate) Print(issues []result.Issue) error {
 		codeClimateIssue.Location.Path = issue.Pos.Filename
 		codeClimateIssue.Location.Lines.Begin = issue.Pos.Line
 		codeClimateIssue.Fingerprint = issue.Fingerprint()
-		codeClimateIssue.Severity = p.sanitizer.Clean(issue.Severity)
+		codeClimateIssue.Severity = p.sanitizer.Sanitize(issue.Severity)
 
 		codeClimateIssues = append(codeClimateIssues, codeClimateIssue)
+	}
+
+	err := p.sanitizer.Err()
+	if err != nil {
+		p.log.Infof("%v", err)
 	}
 
 	return json.NewEncoder(p.w).Encode(codeClimateIssues)
