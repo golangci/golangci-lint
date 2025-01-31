@@ -36,8 +36,12 @@ const (
 
 // Printers.
 const (
-	DebugKeyTabPrinter  = "tab_printer"
-	DebugKeyTextPrinter = "text_printer"
+	DebugKeyCheckstylePrinter  = "checkstyle_printer"
+	DebugKeyCodeClimatePrinter = "codeclimate_printer"
+	DebugKeySarifPrinter       = "sarif_printer"
+	DebugKeyTabPrinter         = "tab_printer"
+	DebugKeyTeamCityPrinter    = "teamcity_printer"
+	DebugKeyTextPrinter        = "text_printer"
 )
 
 // Processors.

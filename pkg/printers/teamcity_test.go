@@ -8,6 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
+	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
@@ -15,6 +16,7 @@ func TestTeamCity_Print(t *testing.T) {
 	issues := []result.Issue{
 		{
 			FromLinter: "linter-a",
+			Severity:   "WARNING",
 			Text:       "warning issue",
 			Pos: token.Position{
 				Filename: "path/to/filea.go",
@@ -34,33 +36,56 @@ func TestTeamCity_Print(t *testing.T) {
 			},
 		},
 		{
-			FromLinter: "linter-b",
-			Text:       "info issue",
+			FromLinter: "linter-c",
+			Severity:   "",
+			Text:       "without severity",
 			SourceLines: []string{
 				"func foo() {",
 				"\tfmt.Println(\"bar\")",
 				"}",
 			},
 			Pos: token.Position{
-				Filename: "path/to/fileb.go",
+				Filename: "path/to/filec.go",
 				Offset:   5,
 				Line:     300,
-				Column:   9,
+				Column:   10,
+			},
+		},
+		{
+			FromLinter: "linter-d",
+			Severity:   "foo",
+			Text:       "unknown severity",
+			SourceLines: []string{
+				"func foo() {",
+				"\tfmt.Println(\"bar\")",
+				"}",
+			},
+			Pos: token.Position{
+				Filename: "path/to/filed.go",
+				Offset:   5,
+				Line:     300,
+				Column:   11,
 			},
 		},
 	}
 
 	buf := new(bytes.Buffer)
-	printer := NewTeamCity(buf)
+
+	log := logutils.NewStderrLog(logutils.DebugKeyEmpty)
+	log.SetLevel(logutils.LogLevelDebug)
+
+	printer := NewTeamCity(log, buf)
 
 	err := printer.Print(issues)
 	require.NoError(t, err)
 
 	expected := `##teamcity[inspectionType id='linter-a' name='linter-a' description='linter-a' category='Golangci-lint reports']
-##teamcity[inspection typeId='linter-a' message='warning issue' file='path/to/filea.go' line='10' SEVERITY='']
+##teamcity[inspection typeId='linter-a' message='warning issue' file='path/to/filea.go' line='10' SEVERITY='WARNING']
 ##teamcity[inspection typeId='linter-a' message='error issue' file='path/to/filea.go' line='10' SEVERITY='ERROR']
-##teamcity[inspectionType id='linter-b' name='linter-b' description='linter-b' category='Golangci-lint reports']
-##teamcity[inspection typeId='linter-b' message='info issue' file='path/to/fileb.go' line='300' SEVERITY='']
+##teamcity[inspectionType id='linter-c' name='linter-c' description='linter-c' category='Golangci-lint reports']
+##teamcity[inspection typeId='linter-c' message='without severity' file='path/to/filec.go' line='300' SEVERITY='ERROR']
+##teamcity[inspectionType id='linter-d' name='linter-d' description='linter-d' category='Golangci-lint reports']
+##teamcity[inspection typeId='linter-d' message='unknown severity' file='path/to/filed.go' line='300' SEVERITY='ERROR']
 `
 
 	assert.Equal(t, expected, buf.String())

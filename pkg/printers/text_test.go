@@ -115,7 +115,7 @@ path/to/fileb.go:300:9: another issue
 
 			buf := new(bytes.Buffer)
 
-			printer := NewText(test.printIssuedLine, test.useColors, test.printLinterName, logutils.NewStderrLog(logutils.DebugKeyEmpty), buf)
+			printer := NewText(logutils.NewStderrLog(logutils.DebugKeyEmpty), buf, test.printLinterName, test.printIssuedLine, test.useColors)
 
 			err := printer.Print(issues)
 			require.NoError(t, err)

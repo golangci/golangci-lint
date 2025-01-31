@@ -5,6 +5,7 @@ import (
 	"io"
 	"strings"
 
+	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
@@ -14,16 +15,22 @@ const (
 	largeLimit = 4000
 )
 
-// TeamCity printer for TeamCity format.
+const defaultTeamCitySeverity = "ERROR"
+
+// TeamCity prints issues in the TeamCity format.
+// https://www.jetbrains.com/help/teamcity/service-messages.html
 type TeamCity struct {
-	w       io.Writer
-	escaper *strings.Replacer
+	log       logutils.Log
+	w         io.Writer
+	escaper   *strings.Replacer
+	sanitizer severitySanitizer
 }
 
 // NewTeamCity output format outputs issues according to TeamCity service message format.
-func NewTeamCity(w io.Writer) *TeamCity {
+func NewTeamCity(log logutils.Log, w io.Writer) *TeamCity {
 	return &TeamCity{
-		w: w,
+		log: log.Child(logutils.DebugKeyTeamCityPrinter),
+		w:   w,
 		// https://www.jetbrains.com/help/teamcity/service-messages.html#Escaped+Values
 		escaper: strings.NewReplacer(
 			"'", "|'",
@@ -33,6 +40,11 @@ func NewTeamCity(w io.Writer) *TeamCity {
 			"[", "|[",
 			"]", "|]",
 		),
+		sanitizer: severitySanitizer{
+			// https://www.jetbrains.com/help/teamcity/service-messages.html#Inspection+Instance
+			allowedSeverities: []string{"INFO", defaultTeamCitySeverity, "WARNING", "WEAK WARNING"},
+			defaultSeverity:   defaultTeamCitySeverity,
+		},
 	}
 }
 
@@ -64,13 +76,18 @@ func (p *TeamCity) Print(issues []result.Issue) error {
 			message:  issue.Text,
 			file:     issue.FilePath(),
 			line:     issue.Line(),
-			severity: issue.Severity,
+			severity: p.sanitizer.Sanitize(strings.ToUpper(issue.Severity)),
 		}
 
 		_, err := instance.Print(p.w, p.escaper)
 		if err != nil {
 			return err
 		}
+	}
+
+	err := p.sanitizer.Err()
+	if err != nil {
+		p.log.Infof("%v", err)
 	}
 
 	return nil
@@ -107,7 +124,7 @@ func (i InspectionInstance) Print(w io.Writer, replacer *strings.Replacer) (int,
 		cutVal(i.typeID, smallLimit),
 		cutVal(replacer.Replace(i.message), largeLimit),
 		cutVal(i.file, largeLimit),
-		i.line, strings.ToUpper(i.severity))
+		i.line, i.severity)
 }
 
 func cutVal(s string, limit int) string {
