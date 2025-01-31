@@ -128,7 +128,7 @@ func (c *Printer) createPrinter(format string, w io.Writer) (issuePrinter, error
 	case config.OutFormatHTML:
 		p = NewHTML(w)
 	case config.OutFormatJunitXML, config.OutFormatJunitXMLExtended:
-		p = NewJunitXML(w, format == config.OutFormatJunitXMLExtended)
+		p = NewJUnitXML(w, format == config.OutFormatJunitXMLExtended)
 	case config.OutFormatGithubActions:
 		p = NewGitHubAction(w)
 	case config.OutFormatTeamCity:
@@ -168,11 +168,11 @@ func (s *severitySanitizer) Err() error {
 		return nil
 	}
 
-	var foo []string
+	var names []string
 	for k := range s.unsupportedSeverities {
-		foo = append(foo, "'"+k+"'")
+		names = append(names, "'"+k+"'")
 	}
 
-	return fmt.Errorf("some severities (%v) are not inside supported values (%v), fallback to '%s'",
-		strings.Join(foo, ", "), strings.Join(s.allowedSeverities, ", "), s.defaultSeverity)
+	return fmt.Errorf("severities (%v) are not inside supported values (%v), fallback to '%s'",
+		strings.Join(names, ", "), strings.Join(s.allowedSeverities, ", "), s.defaultSeverity)
 }

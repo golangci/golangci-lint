@@ -31,20 +31,20 @@ func NewCodeClimate(log logutils.Log, w io.Writer) *CodeClimate {
 }
 
 func (p *CodeClimate) Print(issues []result.Issue) error {
-	codeClimateIssues := make([]CodeClimateIssue, 0, len(issues))
+	ccIssues := make([]codeClimateIssue, 0, len(issues))
 
 	for i := range issues {
 		issue := issues[i]
 
-		codeClimateIssue := CodeClimateIssue{}
-		codeClimateIssue.Description = issue.Description()
-		codeClimateIssue.CheckName = issue.FromLinter
-		codeClimateIssue.Location.Path = issue.Pos.Filename
-		codeClimateIssue.Location.Lines.Begin = issue.Pos.Line
-		codeClimateIssue.Fingerprint = issue.Fingerprint()
-		codeClimateIssue.Severity = p.sanitizer.Sanitize(issue.Severity)
+		ccIssue := codeClimateIssue{}
+		ccIssue.Description = issue.Description()
+		ccIssue.CheckName = issue.FromLinter
+		ccIssue.Location.Path = issue.Pos.Filename
+		ccIssue.Location.Lines.Begin = issue.Pos.Line
+		ccIssue.Fingerprint = issue.Fingerprint()
+		ccIssue.Severity = p.sanitizer.Sanitize(issue.Severity)
 
-		codeClimateIssues = append(codeClimateIssues, codeClimateIssue)
+		ccIssues = append(ccIssues, ccIssue)
 	}
 
 	err := p.sanitizer.Err()
@@ -52,14 +52,14 @@ func (p *CodeClimate) Print(issues []result.Issue) error {
 		p.log.Infof("%v", err)
 	}
 
-	return json.NewEncoder(p.w).Encode(codeClimateIssues)
+	return json.NewEncoder(p.w).Encode(ccIssues)
 }
 
-// CodeClimateIssue is a subset of the Code Climate spec.
+// codeClimateIssue is a subset of the Code Climate spec.
 // https://github.com/codeclimate/platform/blob/master/spec/analyzers/SPEC.md#data-types
 // It is just enough to support GitLab CI Code Quality.
 // https://docs.gitlab.com/ee/ci/testing/code_quality.html#code-quality-report-format
-type CodeClimateIssue struct {
+type codeClimateIssue struct {
 	Description string `json:"description"`
 	CheckName   string `json:"check_name"`
 	Severity    string `json:"severity,omitempty"`
