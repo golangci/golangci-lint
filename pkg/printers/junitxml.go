@@ -12,23 +12,23 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-// JunitXML prints issues in the Junit XML format.
+// JUnitXML prints issues in the JUnit XML format.
 // There is no official specification for the JUnit XML file format,
 // and various tools generate and support different flavors of this format.
 // https://github.com/testmoapp/junitxml
-type JunitXML struct {
+type JUnitXML struct {
 	extended bool
 	w        io.Writer
 }
 
-func NewJunitXML(w io.Writer, extended bool) *JunitXML {
-	return &JunitXML{
+func NewJUnitXML(w io.Writer, extended bool) *JUnitXML {
+	return &JUnitXML{
 		extended: extended,
 		w:        w,
 	}
 }
 
-func (p JunitXML) Print(issues []result.Issue) error {
+func (p JUnitXML) Print(issues []result.Issue) error {
 	suites := make(map[string]testSuiteXML) // use a map to group by file
 
 	for ind := range issues {
