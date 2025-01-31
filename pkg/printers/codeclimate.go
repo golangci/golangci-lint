@@ -36,13 +36,15 @@ func (p *CodeClimate) Print(issues []result.Issue) error {
 	for i := range issues {
 		issue := issues[i]
 
-		ccIssue := codeClimateIssue{}
-		ccIssue.Description = issue.Description()
-		ccIssue.CheckName = issue.FromLinter
+		ccIssue := codeClimateIssue{
+			Description: issue.Description(),
+			CheckName:   issue.FromLinter,
+			Severity:    p.sanitizer.Sanitize(issue.Severity),
+			Fingerprint: issue.Fingerprint(),
+		}
+
 		ccIssue.Location.Path = issue.Pos.Filename
 		ccIssue.Location.Lines.Begin = issue.Pos.Line
-		ccIssue.Fingerprint = issue.Fingerprint()
-		ccIssue.Severity = p.sanitizer.Sanitize(issue.Severity)
 
 		ccIssues = append(ccIssues, ccIssue)
 	}
