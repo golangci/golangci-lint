@@ -67,7 +67,7 @@ func TestPrinter_Print_stdout(t *testing.T) {
 		t.Run(test.desc, func(t *testing.T) {
 			t.Parallel()
 
-			p, err := NewPrinter(logger, test.cfg, data)
+			p, err := NewPrinter(logger, test.cfg, data, "")
 			require.NoError(t, err)
 
 			var stdOutBuffer bytes.Buffer
@@ -106,7 +106,7 @@ func TestPrinter_Print_stderr(t *testing.T) {
 		},
 	}
 
-	p, err := NewPrinter(logger, cfg, data)
+	p, err := NewPrinter(logger, cfg, data, "")
 	require.NoError(t, err)
 
 	var stdOutBuffer bytes.Buffer
@@ -145,7 +145,7 @@ func TestPrinter_Print_file(t *testing.T) {
 		},
 	}
 
-	p, err := NewPrinter(logger, cfg, data)
+	p, err := NewPrinter(logger, cfg, data, "")
 	require.NoError(t, err)
 
 	var stdOutBuffer bytes.Buffer
@@ -197,7 +197,7 @@ func TestPrinter_Print_multiple(t *testing.T) {
 		},
 	}
 
-	p, err := NewPrinter(logger, cfg, data)
+	p, err := NewPrinter(logger, cfg, data, "")
 	require.NoError(t, err)
 
 	var stdOutBuffer bytes.Buffer
