@@ -11,7 +11,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-func TestJunitXML_Print(t *testing.T) {
+func TestJUnitXML_Print(t *testing.T) {
 	issues := []result.Issue{
 		{
 			FromLinter: "linter-a",

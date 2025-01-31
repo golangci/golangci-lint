@@ -127,8 +127,8 @@ func (c *Printer) createPrinter(format string, w io.Writer) (issuePrinter, error
 		p = NewCodeClimate(c.log, w)
 	case config.OutFormatHTML:
 		p = NewHTML(w)
-	case config.OutFormatJunitXML, config.OutFormatJunitXMLExtended:
-		p = NewJUnitXML(w, format == config.OutFormatJunitXMLExtended)
+	case config.OutFormatJUnitXML, config.OutFormatJUnitXMLExtended:
+		p = NewJUnitXML(w, format == config.OutFormatJUnitXMLExtended)
 	case config.OutFormatGithubActions:
 		p = NewGitHubAction(w)
 	case config.OutFormatTeamCity:

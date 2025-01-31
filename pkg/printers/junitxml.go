@@ -12,7 +12,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-// JUnitXML prints issues in the Junit XML format.
+// JUnitXML prints issues in the JUnit XML format.
 // There is no official specification for the JUnit XML file format,
 // and various tools generate and support different flavors of this format.
 // https://github.com/testmoapp/junitxml
