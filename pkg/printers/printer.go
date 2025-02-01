@@ -25,6 +25,7 @@ type issuePrinter interface {
 type Printer struct {
 	cfg        *config.Output
 	reportData *report.Data
+	basePath   string
 
 	log logutils.Log
 
@@ -33,7 +34,7 @@ type Printer struct {
 }
 
 // NewPrinter creates a new Printer.
-func NewPrinter(log logutils.Log, cfg *config.Output, reportData *report.Data) (*Printer, error) {
+func NewPrinter(log logutils.Log, cfg *config.Output, reportData *report.Data, basePath string) (*Printer, error) {
 	if log == nil {
 		return nil, errors.New("missing log argument in constructor")
 	}
@@ -47,6 +48,7 @@ func NewPrinter(log logutils.Log, cfg *config.Output, reportData *report.Data) (
 	return &Printer{
 		cfg:        cfg,
 		reportData: reportData,
+		basePath:   basePath,
 		log:        log,
 		stdOut:     logutils.StdOut,
 		stdErr:     logutils.StdErr,
@@ -96,6 +98,10 @@ func (c *Printer) createWriter(path string) (io.Writer, bool, error) {
 
 	if path == "stderr" {
 		return c.stdErr, false, nil
+	}
+
+	if !filepath.IsAbs(path) {
+		path = filepath.Join(c.basePath, path)
 	}
 
 	err := os.MkdirAll(filepath.Dir(path), os.ModePerm)
