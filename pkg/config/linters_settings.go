@@ -183,7 +183,7 @@ var defaultLintersSettings = LintersSettings{
 		ContextTodo:       true,
 		OSChdir:           true,
 		OSMkdirTemp:       true,
-		OSSetenv:          false,
+		OSSetenv:          true,
 		OSTempDir:         false,
 		OSCreateTemp:      true,
 	},

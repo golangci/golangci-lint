@@ -3488,7 +3488,7 @@
             },
             "os-setenv": {
               "type": "boolean",
-              "default": false
+              "default": true
             },
             "os-create-temp": {
               "type": "boolean",
