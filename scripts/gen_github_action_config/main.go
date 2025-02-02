@@ -87,7 +87,8 @@ func generate(ctx context.Context) error {
 		return fmt.Errorf("failed to fetch all releases: %w", err)
 	}
 
-	minAllowedVersion := version{major: 1, minor: 14, patch: 0}
+	// https://github.com/golangci/golangci-lint-action/blob/5421a116d2bf2a1d53595d0dca7da6e18bd1cfd7/src/version.ts#L43-L47
+	minAllowedVersion := version{major: 1, minor: 28, patch: 3}
 
 	cfg, err := buildConfig(allReleases, minAllowedVersion)
 	if err != nil {
