@@ -6,7 +6,6 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	"strings"
 
 	hcversion "github.com/hashicorp/go-version"
 
@@ -28,24 +27,9 @@ func copySchemas() error {
 		return fmt.Errorf("remove dir: %w", err)
 	}
 
-	err = os.MkdirAll(dstDir, os.ModePerm)
+	err = os.CopyFS(dstDir, os.DirFS("jsonschema"))
 	if err != nil {
-		return fmt.Errorf("make dir: %w", err)
-	}
-
-	// The key is the destination file.
-	// The value is the source file.
-	files := map[string]string{}
-
-	entries, err := os.ReadDir("jsonschema")
-	if err != nil {
-		return fmt.Errorf("read dir: %w", err)
-	}
-
-	for _, entry := range entries {
-		if strings.HasSuffix(entry.Name(), ".jsonschema.json") {
-			files[entry.Name()] = entry.Name()
-		}
+		return fmt.Errorf("copy FS: %w", err)
 	}
 
 	latest, err := github.GetLatestVersion()
@@ -59,13 +43,10 @@ func copySchemas() error {
 	}
 
 	versioned := fmt.Sprintf("golangci.v%d.%d.jsonschema.json", version.Segments()[0], version.Segments()[1])
-	files[versioned] = "golangci.jsonschema.json"
 
-	for dst, src := range files {
-		err := copyFile(filepath.Join("jsonschema", src), filepath.Join(dstDir, dst))
-		if err != nil {
-			return fmt.Errorf("copy files: %w", err)
-		}
+	err = copyFile(filepath.FromSlash("jsonschema/golangci.jsonschema.json"), filepath.Join(dstDir, versioned))
+	if err != nil {
+		return fmt.Errorf("copy files: %w", err)
 	}
 
 	return nil
