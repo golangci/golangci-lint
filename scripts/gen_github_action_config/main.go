@@ -87,7 +87,9 @@ func generate(ctx context.Context) error {
 		return fmt.Errorf("failed to fetch all releases: %w", err)
 	}
 
-	cfg, err := buildConfig(allReleases)
+	minAllowedVersion := version{major: 1, minor: 14, patch: 0}
+
+	cfg, err := buildConfig(allReleases, minAllowedVersion)
 	if err != nil {
 		return fmt.Errorf("failed to build config: %w", err)
 	}
@@ -155,7 +157,7 @@ func fetchAllReleases(ctx context.Context) ([]release, error) {
 	return allReleases, nil
 }
 
-func buildConfig(releases []release) (*actionConfig, error) {
+func buildConfig(releases []release, minAllowedVersion version) (*actionConfig, error) {
 	versionToRelease := map[version]release{}
 
 	for _, rel := range releases {
@@ -182,7 +184,6 @@ func buildConfig(releases []release) (*actionConfig, error) {
 	}
 
 	minorVersionToConfig := map[string]versionConfig{}
-	minAllowedVersion := version{major: 1, minor: 14, patch: 0}
 
 	latestVersion := version{}
 	latestVersionConfig := versionConfig{}
