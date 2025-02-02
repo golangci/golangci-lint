@@ -16,68 +16,13 @@ import (
 
 const noPatch = -1
 
-type logInfo struct {
-	Warning string `json:",omitempty"`
-	Info    string `json:",omitempty"`
-}
-
-type versionConfig struct {
-	Error string `json:",omitempty"`
-
-	Log *logInfo `json:",omitempty"`
-
-	TargetVersion string `json:",omitempty"`
-	AssetURL      string `json:",omitempty"`
-}
-
-type actionConfig struct {
-	MinorVersionToConfig map[string]versionConfig
-}
-
-type version struct {
-	major, minor, patch int
-}
-
-func (v version) String() string {
-	ret := fmt.Sprintf("v%d.%d", v.major, v.minor)
-
-	if v.patch != noPatch {
-		ret += fmt.Sprintf(".%d", v.patch)
-	}
-
-	return ret
-}
-
-func (v version) isAfterOrEq(vv *version) bool {
-	if v.major != vv.major {
-		return v.major >= vv.major
-	}
-
-	if v.minor != vv.minor {
-		return v.minor >= vv.minor
-	}
-
-	return v.patch >= vv.patch
-}
-
-type release struct {
-	TagName       string
-	ReleaseAssets struct {
-		Nodes []releaseAsset
-	} `graphql:"releaseAssets(first: 50)"`
-}
-
-type releaseAsset struct {
-	DownloadURL string
-}
-
 func main() {
-	if err := generate(context.Background()); err != nil {
+	if err := run(context.Background()); err != nil {
 		log.Fatal(err)
 	}
 }
 
-func generate(ctx context.Context) error {
+func run(ctx context.Context) error {
 	if len(os.Args) != 2 {
 		return fmt.Errorf("usage: go run .../main.go out-path.json")
 	}
@@ -87,15 +32,24 @@ func generate(ctx context.Context) error {
 		return fmt.Errorf("failed to fetch all releases: %w", err)
 	}
 
-	// https://github.com/golangci/golangci-lint-action/blob/5421a116d2bf2a1d53595d0dca7da6e18bd1cfd7/src/version.ts#L43-L47
-	minAllowedVersion := version{major: 1, minor: 28, patch: 3}
+	dest := os.Args[1]
 
+	// https://github.com/golangci/golangci-lint-action/blob/5421a116d2bf2a1d53595d0dca7da6e18bd1cfd7/src/version.ts#L43-L47
+	err = generate(allReleases, version{major: 1, minor: 28, patch: 3}, dest)
+	if err != nil {
+		return fmt.Errorf("failed to generate v1: %w", err)
+	}
+
+	return nil
+}
+
+func generate(allReleases []release, minAllowedVersion version, dest string) error {
 	cfg, err := buildConfig(allReleases, minAllowedVersion)
 	if err != nil {
 		return fmt.Errorf("failed to build config: %w", err)
 	}
 
-	outFile, err := os.Create(os.Args[1])
+	outFile, err := os.Create(dest)
 	if err != nil {
 		return fmt.Errorf("failed to create output config file: %w", err)
 	}
