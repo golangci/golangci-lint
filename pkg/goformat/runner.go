@@ -4,11 +4,15 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"io"
 	"io/fs"
+	"log"
 	"os"
 	"path/filepath"
 	"regexp"
 	"strings"
+
+	"github.com/rogpeppe/go-internal/diff"
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/fsutils"
@@ -24,6 +28,8 @@ type Runner struct {
 	matcher       *processors.GeneratedFileMatcher
 
 	opts RunnerOptions
+
+	exitCode int
 }
 
 func NewRunner(log logutils.Log,
@@ -38,8 +44,19 @@ func NewRunner(log logutils.Log,
 }
 
 func (c *Runner) Run(paths []string) error {
+	savedStdout, savedStderr := os.Stdout, os.Stderr
+
+	if !logutils.HaveDebugTag(logutils.DebugKeyFormattersOutput) {
+		// Don't allow linters and loader to print anything
+		log.SetOutput(io.Discard)
+		c.setOutputToDevNull()
+		defer func() {
+			os.Stdout, os.Stderr = savedStdout, savedStderr
+		}()
+	}
+
 	for _, path := range paths {
-		err := c.walk(path)
+		err := c.walk(path, savedStdout)
 		if err != nil {
 			return err
 		}
@@ -48,7 +65,7 @@ func (c *Runner) Run(paths []string) error {
 	return nil
 }
 
-func (c *Runner) walk(root string) error {
+func (c *Runner) walk(root string, stdout *os.File) error {
 	return filepath.Walk(root, func(path string, f fs.FileInfo, err error) error {
 		if err != nil {
 			return err
@@ -83,6 +100,19 @@ func (c *Runner) walk(root string) error {
 			return nil
 		}
 
+		if c.opts.diff {
+			newName := filepath.ToSlash(path)
+			oldName := newName + ".orig"
+			_, err = stdout.Write(diff.Diff(oldName, input, newName, output))
+			if err != nil {
+				return err
+			}
+
+			c.exitCode = 1
+
+			return nil
+		}
+
 		c.log.Infof("format: %s", path)
 
 		// On Windows, we need to re-set the permissions from the file. See golang/go#38225.
@@ -95,13 +125,28 @@ func (c *Runner) walk(root string) error {
 	})
 }
 
+func (c *Runner) setOutputToDevNull() {
+	devNull, err := os.Open(os.DevNull)
+	if err != nil {
+		c.log.Warnf("Can't open null device %q: %s", os.DevNull, err)
+		return
+	}
+
+	os.Stdout, os.Stderr = devNull, devNull
+}
+
+func (c *Runner) ExitCode() int {
+	return c.exitCode
+}
+
 type RunnerOptions struct {
 	basePath  string
 	patterns  []*regexp.Regexp
 	generated string
+	diff      bool
 }
 
-func NewRunnerOptions(cfg *config.Config) (RunnerOptions, error) {
+func NewRunnerOptions(cfg *config.Config, diff bool) (RunnerOptions, error) {
 	basePath, err := fsutils.GetBasePath(context.Background(), cfg.Run.RelativePathMode, cfg.GetConfigDir())
 	if err != nil {
 		return RunnerOptions{}, fmt.Errorf("get base path: %w", err)
@@ -110,6 +155,7 @@ func NewRunnerOptions(cfg *config.Config) (RunnerOptions, error) {
 	opts := RunnerOptions{
 		basePath:  basePath,
 		generated: cfg.Formatters.Exclusions.Generated,
+		diff:      diff,
 	}
 
 	for _, pattern := range cfg.Formatters.Exclusions.Paths {

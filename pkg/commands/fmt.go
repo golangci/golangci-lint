@@ -2,12 +2,11 @@ package commands
 
 import (
 	"fmt"
-	"io"
-	"log"
 	"os"
 	"path/filepath"
 	"strings"
 
+	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
@@ -18,11 +17,17 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result/processors"
 )
 
+type fmtOptions struct {
+	config.LoaderOptions
+
+	diff bool // Flag only.
+}
+
 type fmtCommand struct {
 	viper *viper.Viper
 	cmd   *cobra.Command
 
-	opts config.LoaderOptions
+	opts fmtOptions
 
 	cfg *config.Config
 
@@ -49,18 +54,21 @@ func newFmtCommand(logger logutils.Log, info BuildInfo) *fmtCommand {
 		RunE:              c.execute,
 		PreRunE:           c.preRunE,
 		PersistentPreRunE: c.persistentPreRunE,
+		PersistentPostRun: c.persistentPostRun,
 		SilenceUsage:      true,
 	}
 
 	fmtCmd.SetOut(logutils.StdOut) // use custom output to properly color it in Windows terminals
 	fmtCmd.SetErr(logutils.StdErr)
 
-	flagSet := fmtCmd.Flags()
-	flagSet.SortFlags = false // sort them as they are defined here
+	fs := fmtCmd.Flags()
+	fs.SortFlags = false // sort them as they are defined here
 
-	setupConfigFileFlagSet(flagSet, &c.opts)
+	setupConfigFileFlagSet(fs, &c.opts.LoaderOptions)
 
-	setupFormattersFlagSet(c.viper, flagSet)
+	setupFormattersFlagSet(c.viper, fs)
+
+	fs.BoolVarP(&c.opts.diff, "diff", "d", false, color.GreenString("Display diffs instead of rewriting files"))
 
 	c.cmd = fmtCmd
 
@@ -70,7 +78,7 @@ func newFmtCommand(logger logutils.Log, info BuildInfo) *fmtCommand {
 func (c *fmtCommand) persistentPreRunE(cmd *cobra.Command, args []string) error {
 	c.log.Infof("%s", c.buildInfo.String())
 
-	loader := config.NewLoader(c.log.Child(logutils.DebugKeyConfigReader), c.viper, cmd.Flags(), c.opts, c.cfg, args)
+	loader := config.NewLoader(c.log.Child(logutils.DebugKeyConfigReader), c.viper, cmd.Flags(), c.opts.LoaderOptions, c.cfg, args)
 
 	err := loader.Load(config.LoadOptions{CheckDeprecation: true, Validation: true})
 	if err != nil {
@@ -88,7 +96,7 @@ func (c *fmtCommand) preRunE(_ *cobra.Command, _ []string) error {
 
 	matcher := processors.NewGeneratedFileMatcher(c.cfg.Formatters.Exclusions.Generated)
 
-	opts, err := goformat.NewRunnerOptions(c.cfg)
+	opts, err := goformat.NewRunnerOptions(c.cfg, c.opts.diff)
 	if err != nil {
 		return fmt.Errorf("build walk options: %w", err)
 	}
@@ -99,15 +107,6 @@ func (c *fmtCommand) preRunE(_ *cobra.Command, _ []string) error {
 }
 
 func (c *fmtCommand) execute(_ *cobra.Command, args []string) error {
-	if !logutils.HaveDebugTag(logutils.DebugKeyFormattersOutput) {
-		// Don't allow linters and loader to print anything
-		log.SetOutput(io.Discard)
-		savedStdout, savedStderr := c.setOutputToDevNull()
-		defer func() {
-			os.Stdout, os.Stderr = savedStdout, savedStderr
-		}()
-	}
-
 	paths, err := cleanArgs(args)
 	if err != nil {
 		return fmt.Errorf("failed to clean arguments: %w", err)
@@ -123,16 +122,10 @@ func (c *fmtCommand) execute(_ *cobra.Command, args []string) error {
 	return nil
 }
 
-func (c *fmtCommand) setOutputToDevNull() (savedStdout, savedStderr *os.File) {
-	savedStdout, savedStderr = os.Stdout, os.Stderr
-	devNull, err := os.Open(os.DevNull)
-	if err != nil {
-		c.log.Warnf("Can't open null device %q: %s", os.DevNull, err)
-		return
+func (c *fmtCommand) persistentPostRun(_ *cobra.Command, _ []string) {
+	if c.runner.ExitCode() != 0 {
+		os.Exit(c.runner.ExitCode())
 	}
-
-	os.Stdout, os.Stderr = devNull, devNull
-	return
 }
 
 func cleanArgs(args []string) ([]string, error) {
