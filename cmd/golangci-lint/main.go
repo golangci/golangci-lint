@@ -22,6 +22,8 @@ var (
 func main() {
 	info := createBuildInfo()
 
+	fmt.Println("test")
+
 	if err := commands.Execute(info); err != nil {
 		_, _ = fmt.Fprintf(os.Stderr, "Failed executing command with error: %v\n", err)
 		os.Exit(exitcodes.Failure)
