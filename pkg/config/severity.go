@@ -29,7 +29,7 @@ func (s *Severity) Validate() error {
 
 type SeverityRule struct {
 	BaseRule `mapstructure:",squash"`
-	Severity string
+	Severity string `mapstructure:"severity"`
 }
 
 func (s *SeverityRule) Validate() error {

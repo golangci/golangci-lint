@@ -6,13 +6,13 @@ import (
 )
 
 type Linters struct {
-	Enable     []string
-	Disable    []string
-	EnableAll  bool `mapstructure:"enable-all"`
-	DisableAll bool `mapstructure:"disable-all"`
-	Fast       bool
+	Enable     []string `mapstructure:"enable"`
+	Disable    []string `mapstructure:"disable"`
+	EnableAll  bool     `mapstructure:"enable-all"`
+	DisableAll bool     `mapstructure:"disable-all"`
+	Fast       bool     `mapstructure:"fast"`
 
-	Presets []string
+	Presets []string `mapstructure:"presets"`
 
 	LinterExclusions LinterExclusions `mapstructure:"exclusions"`
 }
