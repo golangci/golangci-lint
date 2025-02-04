@@ -769,7 +769,8 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithSince("v1.43.0").
 			WithPresets(linter.PresetTest).
 			WithLoadForGoAnalysis().
-			WithURL("https://github.com/sivchari/tenv"),
+			WithURL("https://github.com/sivchari/tenv").
+			DeprecatedWarning("Duplicate feature another linter.", "v1.64.0", "usetesting"),
 
 		linter.NewConfig(testableexamples.New()).
 			WithSince("v1.50.0").
