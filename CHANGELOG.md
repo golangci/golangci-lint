@@ -309,7 +309,7 @@ Cancelled due to a CI problem.
    * Don't hide `typecheck` errors inside diff processor
 5. Misc.
    * ⚠️ log an error when using previously deprecated linters ([Linter Deprecation Cycle](https://golangci-lint.run/product/roadmap/#linter-deprecation-cycle))
-      * [`deadcode`](https://github.com/remyoudompheng/go-misc/tree/master/deadcode): deprecated since v1.49.0 (2022-08-23).
+      * [`deadcode`](https://github.com/remyoudompheng/go-misc/tree/HEAD/deadcode): deprecated since v1.49.0 (2022-08-23).
       * [`exhaustivestruct`](https://github.com/mbilski/exhaustivestruct): deprecated since v1.46.0 (2022-05-08).
       * [`golint`](https://github.com/golang/lint): deprecated since v1.41.0 (2021-06-15).
       * [`ifshort`](https://github.com/esimonov/ifshort): deprecated since v1.48.0 (2022-08-04).

@@ -639,7 +639,7 @@
     "alternativeNames": [
       "megacheck"
     ],
-    "originalURL": "https://github.com/dominikh/go-tools/tree/master/simple",
+    "originalURL": "https://github.com/dominikh/go-tools/tree/HEAD/simple",
     "internal": false,
     "canAutoFix": true,
     "isSlow": true,
@@ -1167,7 +1167,7 @@
     "inPresets": [
       "style"
     ],
-    "originalURL": "https://github.com/dominikh/go-tools/tree/master/stylecheck",
+    "originalURL": "https://github.com/dominikh/go-tools/tree/HEAD/stylecheck",
     "internal": false,
     "canAutoFix": true,
     "isSlow": true,
@@ -1318,7 +1318,7 @@
     "alternativeNames": [
       "megacheck"
     ],
-    "originalURL": "https://github.com/dominikh/go-tools/tree/master/unused",
+    "originalURL": "https://github.com/dominikh/go-tools/tree/HEAD/unused",
     "internal": false,
     "isSlow": true,
     "doesChangeTypes": true,
@@ -1432,7 +1432,7 @@
     "inPresets": [
       "style"
     ],
-    "originalURL": "https://github.com/golangci/golangci-lint/tree/master/pkg/golinters/nolintlint/internal",
+    "originalURL": "https://github.com/golangci/golangci-lint/tree/HEAD/pkg/golinters/nolintlint/internal",
     "internal": false,
     "canAutoFix": true,
     "isSlow": false,
