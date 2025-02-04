@@ -147,11 +147,20 @@ func (p *hunkChangesParser) handleAddedOnlyLines(addedLines []string) {
 		return
 	}
 
-	// add-only change merged into the last original line with possible prepending
+	// Calculate total capacity needed for all line types
+	prependCount := len(p.replacementLinesToPrepend)
+	originalLineCount := 1 // We always have exactly one original line
+	addedCount := len(addedLines)
+	newLines := make([]string, 0, prependCount+originalLineCount+addedCount)
+
+	newLines = append(newLines, p.replacementLinesToPrepend...)
+	newLines = append(newLines, p.lastOriginalLine.data)
+	newLines = append(newLines, addedLines...)
+
 	change := Change{
 		From:     p.lastOriginalLine.originalNumber,
 		To:       p.lastOriginalLine.originalNumber,
-		NewLines: slices.Concat(p.replacementLinesToPrepend, []string{p.lastOriginalLine.data}, addedLines),
+		NewLines: newLines,
 	}
 
 	p.changes = append(p.changes, change)
@@ -161,10 +170,10 @@ func (p *hunkChangesParser) handleAddedOnlyLines(addedLines []string) {
 
 func parseDiffLines(h *diffpkg.Hunk) []diffLine {
 	lines := bytes.Split(h.Body, []byte{'\n'})
-
 	currentOriginalLineNumber := int(h.OrigStartLine)
 
-	var diffLines []diffLine
+	// Preallocate slice with capacity for all lines (we'll truncate later)
+	diffLines := make([]diffLine, 0, len(lines))
 
 	for i, line := range lines {
 		dl := diffLine{
@@ -176,21 +185,21 @@ func parseDiffLines(h *diffpkg.Hunk) []diffLine {
 			break
 		}
 
-		lineStr := string(line)
-
+		// Use byte operations instead of converting to string first
 		switch {
-		case strings.HasPrefix(lineStr, "-"):
+		case bytes.HasPrefix(line, []byte{'-'}):
 			dl.typ = diffLineDeleted
-			dl.data = strings.TrimPrefix(lineStr, "-")
+			dl.data = string(bytes.TrimPrefix(line, []byte{'-'}))
 			currentOriginalLineNumber++
 
-		case strings.HasPrefix(lineStr, "+"):
+		case bytes.HasPrefix(line, []byte{'+'}):
 			dl.typ = diffLineAdded
-			dl.data = strings.TrimPrefix(lineStr, "+")
+			dl.data = string(bytes.TrimPrefix(line, []byte{'+'}))
 
 		default:
 			dl.typ = diffLineOriginal
-			dl.data = strings.TrimPrefix(lineStr, " ")
+			// For original lines, the prefix is a space, so trim it
+			dl.data = string(bytes.TrimPrefix(line, []byte{' '}))
 			currentOriginalLineNumber++
 		}
 
