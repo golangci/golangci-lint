@@ -54,6 +54,13 @@ func run(ctx context.Context) error {
 		return fmt.Errorf("failed to generate v1: %w", err)
 	}
 
+	destV2 := filepath.Join(filepath.Dir(dest), strings.TrimSuffix(filepath.Base(dest), ext)+"-v2"+ext)
+
+	err = generate(allReleases, version{major: 2, minor: 0, patch: 0}, destV2)
+	if err != nil {
+		return fmt.Errorf("failed to generate v2: %w", err)
+	}
+
 	return nil
 }
 

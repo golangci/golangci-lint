@@ -29,6 +29,12 @@ func Test_buildConfig(t *testing.T) {
 			minVersion: version{major: 1, minor: 28, patch: 3},
 			expected:   "github-action-config-v1.json",
 		},
+		{
+			desc:       "v2",
+			inputPath:  "all-releases-v2.json",
+			minVersion: version{major: 2, minor: 0, patch: 0},
+			expected:   "github-action-config-v2.json",
+		},
 	}
 
 	for _, test := range testCases {
