@@ -90,7 +90,7 @@ docs/static/demo.gif: FORCE
 
 assets/github-action-config.json: FORCE $(BINARY)
 	# go run ./scripts/gen_github_action_config/main.go $@
-	cd ./scripts/gen_github_action_config/; go run ./main.go ../../$@
+	cd ./scripts/gen_github_action_config/; go run . ../../$@
 
 go.mod: FORCE
 	go mod tidy

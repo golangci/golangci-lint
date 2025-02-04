@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 
@@ -16,68 +17,13 @@ import (
 
 const noPatch = -1
 
-type logInfo struct {
-	Warning string `json:",omitempty"`
-	Info    string `json:",omitempty"`
-}
-
-type versionConfig struct {
-	Error string `json:",omitempty"`
-
-	Log *logInfo `json:",omitempty"`
-
-	TargetVersion string `json:",omitempty"`
-	AssetURL      string `json:",omitempty"`
-}
-
-type actionConfig struct {
-	MinorVersionToConfig map[string]versionConfig
-}
-
-type version struct {
-	major, minor, patch int
-}
-
-func (v version) String() string {
-	ret := fmt.Sprintf("v%d.%d", v.major, v.minor)
-
-	if v.patch != noPatch {
-		ret += fmt.Sprintf(".%d", v.patch)
-	}
-
-	return ret
-}
-
-func (v version) isAfterOrEq(vv *version) bool {
-	if v.major != vv.major {
-		return v.major >= vv.major
-	}
-
-	if v.minor != vv.minor {
-		return v.minor >= vv.minor
-	}
-
-	return v.patch >= vv.patch
-}
-
-type release struct {
-	TagName       string
-	ReleaseAssets struct {
-		Nodes []releaseAsset
-	} `graphql:"releaseAssets(first: 50)"`
-}
-
-type releaseAsset struct {
-	DownloadURL string
-}
-
 func main() {
-	if err := generate(context.Background()); err != nil {
+	if err := run(context.Background()); err != nil {
 		log.Fatal(err)
 	}
 }
 
-func generate(ctx context.Context) error {
+func run(ctx context.Context) error {
 	if len(os.Args) != 2 {
 		return fmt.Errorf("usage: go run .../main.go out-path.json")
 	}
@@ -87,12 +33,37 @@ func generate(ctx context.Context) error {
 		return fmt.Errorf("failed to fetch all releases: %w", err)
 	}
 
-	cfg, err := buildConfig(allReleases)
+	dest := os.Args[1]
+
+	ext := filepath.Ext(dest)
+
+	// https://github.com/golangci/golangci-lint-action/blob/5421a116d2bf2a1d53595d0dca7da6e18bd1cfd7/src/version.ts#L43-L47
+	minAllowedVersionV1 := version{major: 1, minor: 28, patch: 3}
+
+	// For compatibility with v1: it should always be related to v1 only.
+	// TODO(ldez): it should be removed but I don't know when.
+	err = generate(allReleases, minAllowedVersionV1, dest)
+	if err != nil {
+		return fmt.Errorf("failed to generate v1: %w", err)
+	}
+
+	destV1 := filepath.Join(filepath.Dir(dest), strings.TrimSuffix(filepath.Base(dest), ext)+"-v1"+ext)
+
+	err = generate(allReleases, minAllowedVersionV1, destV1)
+	if err != nil {
+		return fmt.Errorf("failed to generate v1: %w", err)
+	}
+
+	return nil
+}
+
+func generate(allReleases []release, minAllowedVersion version, dest string) error {
+	cfg, err := buildConfig(allReleases, minAllowedVersion)
 	if err != nil {
 		return fmt.Errorf("failed to build config: %w", err)
 	}
 
-	outFile, err := os.Create(os.Args[1])
+	outFile, err := os.Create(dest)
 	if err != nil {
 		return fmt.Errorf("failed to create output config file: %w", err)
 	}
@@ -155,7 +126,7 @@ func fetchAllReleases(ctx context.Context) ([]release, error) {
 	return allReleases, nil
 }
 
-func buildConfig(releases []release) (*actionConfig, error) {
+func buildConfig(releases []release, minAllowedVersion version) (*actionConfig, error) {
 	versionToRelease := map[version]release{}
 
 	for _, rel := range releases {
@@ -182,12 +153,19 @@ func buildConfig(releases []release) (*actionConfig, error) {
 	}
 
 	minorVersionToConfig := map[string]versionConfig{}
-	minAllowedVersion := version{major: 1, minor: 14, patch: 0}
 
 	latestVersion := version{}
 	latestVersionConfig := versionConfig{}
 
 	for minorVersionedStr, maxPatchVersion := range maxPatchReleases {
+		if minAllowedVersion.major < maxPatchVersion.major {
+			minorVersionToConfig[minorVersionedStr] = versionConfig{
+				Error: fmt.Sprintf("golangci-lint version '%s' isn't supported: only v%d versions are supported",
+					minorVersionedStr, minAllowedVersion.major),
+			}
+			continue
+		}
+
 		if !maxPatchVersion.isAfterOrEq(&minAllowedVersion) {
 			minorVersionToConfig[minorVersionedStr] = versionConfig{
 				Error: fmt.Sprintf("golangci-lint version '%s' isn't supported: we support only %s and later versions",
@@ -195,8 +173,6 @@ func buildConfig(releases []release) (*actionConfig, error) {
 			}
 			continue
 		}
-
-		maxPatchVersion := maxPatchVersion
 
 		assetURL, err := findLinuxAssetURL(&maxPatchVersion, versionToRelease[maxPatchVersion].ReleaseAssets.Nodes)
 		if err != nil {
