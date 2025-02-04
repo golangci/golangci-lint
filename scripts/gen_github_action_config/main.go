@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 
@@ -34,8 +35,21 @@ func run(ctx context.Context) error {
 
 	dest := os.Args[1]
 
+	ext := filepath.Ext(dest)
+
 	// https://github.com/golangci/golangci-lint-action/blob/5421a116d2bf2a1d53595d0dca7da6e18bd1cfd7/src/version.ts#L43-L47
-	err = generate(allReleases, version{major: 1, minor: 28, patch: 3}, dest)
+	minAllowedVersionV1 := version{major: 1, minor: 28, patch: 3}
+
+	// For compatibility with v1: it should always be related to v1 only.
+	// TODO(ldez): it should be removed but I don't know when.
+	err = generate(allReleases, minAllowedVersionV1, dest)
+	if err != nil {
+		return fmt.Errorf("failed to generate v1: %w", err)
+	}
+
+	destV1 := filepath.Join(filepath.Dir(dest), strings.TrimSuffix(filepath.Base(dest), ext)+"-v1"+ext)
+
+	err = generate(allReleases, minAllowedVersionV1, destV1)
 	if err != nil {
 		return fmt.Errorf("failed to generate v1: %w", err)
 	}
@@ -144,6 +158,14 @@ func buildConfig(releases []release, minAllowedVersion version) (*actionConfig, 
 	latestVersionConfig := versionConfig{}
 
 	for minorVersionedStr, maxPatchVersion := range maxPatchReleases {
+		if minAllowedVersion.major < maxPatchVersion.major {
+			minorVersionToConfig[minorVersionedStr] = versionConfig{
+				Error: fmt.Sprintf("golangci-lint version '%s' isn't supported: only v%d versions are supported",
+					minorVersionedStr, minAllowedVersion.major),
+			}
+			continue
+		}
+
 		if !maxPatchVersion.isAfterOrEq(&minAllowedVersion) {
 			minorVersionToConfig[minorVersionedStr] = versionConfig{
 				Error: fmt.Sprintf("golangci-lint version '%s' isn't supported: we support only %s and later versions",
@@ -151,8 +173,6 @@ func buildConfig(releases []release, minAllowedVersion version) (*actionConfig, 
 			}
 			continue
 		}
-
-		maxPatchVersion := maxPatchVersion
 
 		assetURL, err := findLinuxAssetURL(&maxPatchVersion, versionToRelease[maxPatchVersion].ReleaseAssets.Nodes)
 		if err != nil {

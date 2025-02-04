@@ -11,20 +11,44 @@ import (
 )
 
 func Test_buildConfig(t *testing.T) {
-	allReleases := unmarshalRelease(t, "all-releases.json")
+	testCases := []struct {
+		desc       string
+		inputPath  string
+		minVersion version
+		expected   string
+	}{
+		{
+			desc:       "v1",
+			inputPath:  "all-releases.json",
+			minVersion: version{major: 1, minor: 28, patch: 3},
+			expected:   "github-action-config.json",
+		},
+		{
+			desc:       "v1 only",
+			inputPath:  "all-releases-v2.json",
+			minVersion: version{major: 1, minor: 28, patch: 3},
+			expected:   "github-action-config-v1.json",
+		},
+	}
 
-	minAllowedVersion := version{major: 1, minor: 28, patch: 3}
+	for _, test := range testCases {
+		t.Run(test.desc, func(t *testing.T) {
+			t.Parallel()
 
-	config, err := buildConfig(allReleases, minAllowedVersion)
-	require.NoError(t, err)
+			allReleases := unmarshalRelease(t, test.inputPath)
 
-	data, err := json.MarshalIndent(config, "", "  ")
-	require.NoError(t, err)
+			config, err := buildConfig(allReleases, test.minVersion)
+			require.NoError(t, err)
 
-	expected, err := os.ReadFile(filepath.Join("testdata", "github-action-config.json"))
-	require.NoError(t, err)
+			data, err := json.MarshalIndent(config, "", "  ")
+			require.NoError(t, err)
 
-	assert.JSONEq(t, string(expected), string(data))
+			expected, err := os.ReadFile(filepath.Join("testdata", test.expected))
+			require.NoError(t, err)
+
+			assert.JSONEq(t, string(expected), string(data))
+		})
+	}
 }
 
 func unmarshalRelease(t *testing.T, filename string) []release {
