@@ -198,7 +198,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 		linter.NewConfig(linter.NewNoopDeprecated("deadcode", cfg, linter.DeprecationError)).
 			WithSince("v1.0.0").
 			WithPresets(linter.PresetUnused).
-			WithURL("https://github.com/remyoudompheng/go-misc/tree/master/deadcode").
+			WithURL("https://github.com/remyoudompheng/go-misc/tree/HEAD/deadcode").
 			DeprecatedError("The owner seems to have abandoned the linter.", "v1.49.0", "unused"),
 
 		linter.NewConfig(depguard.New(&cfg.LintersSettings.Depguard, cfg.GetBasePath())).
@@ -464,7 +464,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithPresets(linter.PresetStyle).
 			WithAlternativeNames(megacheckName).
 			WithAutoFix().
-			WithURL("https://github.com/dominikh/go-tools/tree/master/simple"),
+			WithURL("https://github.com/dominikh/go-tools/tree/HEAD/simple"),
 
 		linter.NewConfig(gosmopolitan.New(&cfg.LintersSettings.Gosmopolitan)).
 			WithSince("v1.53.0").
@@ -751,7 +751,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetStyle).
 			WithAutoFix().
-			WithURL("https://github.com/dominikh/go-tools/tree/master/stylecheck"),
+			WithURL("https://github.com/dominikh/go-tools/tree/HEAD/stylecheck"),
 
 		linter.NewConfig(tagalign.New(&cfg.LintersSettings.TagAlign)).
 			WithSince("v1.53.0").
@@ -826,7 +826,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithAlternativeNames(megacheckName).
 			ConsiderSlow().
 			WithChangeTypes().
-			WithURL("https://github.com/dominikh/go-tools/tree/master/unused"),
+			WithURL("https://github.com/dominikh/go-tools/tree/HEAD/unused"),
 
 		linter.NewConfig(usestdlibvars.New(&cfg.LintersSettings.UseStdlibVars)).
 			WithSince("v1.48.0").
@@ -888,6 +888,6 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithSince("v1.26.0").
 			WithPresets(linter.PresetStyle).
 			WithAutoFix().
-			WithURL("https://github.com/golangci/golangci-lint/tree/master/pkg/golinters/nolintlint/internal"),
+			WithURL("https://github.com/golangci/golangci-lint/tree/HEAD/pkg/golinters/nolintlint/internal"),
 	}, nil
 }

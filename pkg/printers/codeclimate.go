@@ -11,7 +11,7 @@ import (
 const defaultCodeClimateSeverity = "critical"
 
 // CodeClimate prints issues in the Code Climate format.
-// https://github.com/codeclimate/platform/blob/master/spec/analyzers/SPEC.md
+// https://github.com/codeclimate/platform/blob/HEAD/spec/analyzers/SPEC.md
 type CodeClimate struct {
 	log       logutils.Log
 	w         io.Writer
@@ -23,7 +23,7 @@ func NewCodeClimate(log logutils.Log, w io.Writer) *CodeClimate {
 		log: log.Child(logutils.DebugKeyCodeClimatePrinter),
 		w:   w,
 		sanitizer: severitySanitizer{
-			// https://github.com/codeclimate/platform/blob/master/spec/analyzers/SPEC.md#data-types
+			// https://github.com/codeclimate/platform/blob/HEAD/spec/analyzers/SPEC.md#data-types
 			allowedSeverities: []string{"info", "minor", "major", defaultCodeClimateSeverity, "blocker"},
 			defaultSeverity:   defaultCodeClimateSeverity,
 		},
@@ -58,7 +58,7 @@ func (p *CodeClimate) Print(issues []result.Issue) error {
 }
 
 // codeClimateIssue is a subset of the Code Climate spec.
-// https://github.com/codeclimate/platform/blob/master/spec/analyzers/SPEC.md#data-types
+// https://github.com/codeclimate/platform/blob/HEAD/spec/analyzers/SPEC.md#data-types
 // It is just enough to support GitLab CI Code Quality.
 // https://docs.gitlab.com/ee/ci/testing/code_quality.html#code-quality-report-format
 type codeClimateIssue struct {

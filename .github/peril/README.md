@@ -1,4 +1,4 @@
-Based on https://github.com/gatsbyjs/gatsby/tree/master/peril.
+Based on https://github.com/gatsbyjs/gatsby/tree/HEAD/peril.
 
 ## Update a code
 

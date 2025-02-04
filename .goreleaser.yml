@@ -127,8 +127,8 @@ chocolateys:
     authors: golangci
     copyright: 2024 GolangCI
     url_template: "https://github.com/golangci/golangci-lint/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
-    icon_url: "https://cdn.rawgit.com/golangci/golangci-lint/master/assets/go.png"
-    license_url: https://github.com/golangci/golangci-lint/blob/master/LICENSE
+    icon_url: "https://cdn.rawgit.com/golangci/golangci-lint/HEAD/assets/go.png"
+    license_url: https://github.com/golangci/golangci-lint/blob/HEAD/LICENSE
     require_license_acceptance: false
     project_source_url: https://github.com/golangci/golangci-lint
     package_source_url: https://github.com/golangci/golangci-lint
