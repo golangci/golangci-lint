@@ -136,7 +136,19 @@ func (lc *Config) DeprecatedWarning(message, version, replacement string) *Confi
 	return lc.Deprecated(message, version, replacement, DeprecationWarning)
 }
 
-func (lc *Config) DeprecatedError(message, version, replacement string) *Config {
+func (lc *Config) DeprecatedBecauseAbandoned(version, replacement string) *Config {
+	return lc.deprecatedError("The owner seems to have abandoned the linter.", version, replacement)
+}
+
+func (lc *Config) DeprecatedBecauseArchived(version, replacement string) *Config {
+	return lc.deprecatedError("The repository of the linter has been archived by the owner.", version, replacement)
+}
+
+func (lc *Config) DeprecatedBecauseRenamed(version, replacement string) *Config {
+	return lc.deprecatedError("The linter has been renamed.", version, replacement)
+}
+
+func (lc *Config) deprecatedError(message, version, replacement string) *Config {
 	return lc.Deprecated(message, version, replacement, DeprecationError)
 }
 
