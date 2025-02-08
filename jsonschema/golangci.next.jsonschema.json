@@ -2472,8 +2472,18 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "integer-format": {
+              "description": "Enable/disable optimization of integer formatting.",
+              "type": "boolean",
+              "default": true
+            },
             "int-conversion": {
               "description": "Optimizes even if it requires an int or uint type cast.",
+              "type": "boolean",
+              "default": true
+            },
+            "error-format": {
+              "description": "Enable/disable optimization of error formatting.",
               "type": "boolean",
               "default": true
             },
@@ -2487,6 +2497,11 @@
               "type": "boolean",
               "default": true
             },
+            "string-format": {
+              "description": "Enable/disable optimization of string formatting.",
+              "type": "boolean",
+              "default": true
+            },
             "sprintf1": {
               "description": "Optimizes `fmt.Sprintf` with only one argument.",
               "type": "boolean",
@@ -2494,6 +2509,16 @@
             },
             "strconcat": {
               "description": "Optimizes into strings concatenation.",
+              "type": "boolean",
+              "default": true
+            },
+            "bool-format": {
+              "description": "Enable/disable optimization of bool formatting.",
+              "type": "boolean",
+              "default": true
+            },
+            "hex-format": {
+              "description": "Enable/disable optimization of hex formatting.",
               "type": "boolean",
               "default": true
             }
