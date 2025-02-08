@@ -2243,23 +2243,37 @@ linters-settings:
     # still required to have `t.Parallel`, but subtests are allowed to skip it.
     # Default: false
     ignore-missing-subtests: true
-
   perfsprint:
+    # Enable/disable optimization of integer formatting.
+    # Default: true
+    integer-format: false
     # Optimizes even if it requires an int or uint type cast.
     # Default: true
     int-conversion: false
+    # Enable/disable optimization of error formatting.
+    # Default: true
+    error-format: false
     # Optimizes into `err.Error()` even if it is only equivalent for non-nil errors.
     # Default: false
     err-error: true
     # Optimizes `fmt.Errorf`.
     # Default: true
     errorf: false
+    # Enable/disable optimization of string formatting.
+    # Default: true
+    string-format: false
     # Optimizes `fmt.Sprintf` with only one argument.
     # Default: true
     sprintf1: false
     # Optimizes into strings concatenation.
     # Default: true
     strconcat: false
+    # Enable/disable optimization of bool formatting.
+    # Default: true
+    bool-format: false
+    # Enable/disable optimization of hex formatting.
+    # Default: true
+    hex-format: false
 
   prealloc:
     # IMPORTANT: we don't recommend using this linter before doing performance profiling.
