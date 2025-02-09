@@ -174,20 +174,18 @@ func buildConfig(releases []release, minAllowedVersion version) (*actionConfig, 
 			continue
 		}
 
-		assetURL, err := findLinuxAssetURL(&maxPatchVersion, versionToRelease[maxPatchVersion].ReleaseAssets.Nodes)
+		err := findLinuxAssetURL(&maxPatchVersion, versionToRelease[maxPatchVersion].ReleaseAssets.Nodes)
 		if err != nil {
 			return nil, fmt.Errorf("failed to find linux asset url for release %s: %w", maxPatchVersion, err)
 		}
 
 		minorVersionToConfig[minorVersionedStr] = versionConfig{
 			TargetVersion: maxPatchVersion.String(),
-			AssetURL:      assetURL,
 		}
 
 		if maxPatchVersion.isAfterOrEq(&latestVersion) {
 			latestVersion = maxPatchVersion
 			latestVersionConfig.TargetVersion = maxPatchVersion.String()
-			latestVersionConfig.AssetURL = assetURL
 		}
 	}
 
@@ -196,16 +194,16 @@ func buildConfig(releases []release, minAllowedVersion version) (*actionConfig, 
 	return &actionConfig{MinorVersionToConfig: minorVersionToConfig}, nil
 }
 
-func findLinuxAssetURL(ver *version, releaseAssets []releaseAsset) (string, error) {
+func findLinuxAssetURL(ver *version, releaseAssets []releaseAsset) error {
 	pattern := fmt.Sprintf("golangci-lint-%d.%d.%d-linux-amd64.tar.gz", ver.major, ver.minor, ver.patch)
 
 	for _, relAsset := range releaseAssets {
 		if strings.HasSuffix(relAsset.DownloadURL, pattern) {
-			return relAsset.DownloadURL, nil
+			return nil
 		}
 	}
 
-	return "", fmt.Errorf("no matched asset url for pattern %q", pattern)
+	return fmt.Errorf("no matched asset url for pattern %q", pattern)
 }
 
 func parseVersion(s string) (*version, error) {

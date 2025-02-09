@@ -2,18 +2,10 @@ package main
 
 import "fmt"
 
-type logInfo struct {
-	Warning string `json:",omitempty"`
-	Info    string `json:",omitempty"`
-}
-
 type versionConfig struct {
 	Error string `json:",omitempty"`
 
-	Log *logInfo `json:",omitempty"`
-
 	TargetVersion string `json:",omitempty"`
-	AssetURL      string `json:",omitempty"`
 }
 
 type actionConfig struct {
