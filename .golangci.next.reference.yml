@@ -1846,7 +1846,7 @@ linters-settings:
       - sortslice
       # Check signature of methods of well-known interfaces.
       - stdmethods
-      # Check for uses of too-new standard library symbols.
+      # Report uses of too-new standard library symbols.
       - stdversion
       # Check for string(int) conversions.
       - stringintconv
@@ -1868,7 +1868,7 @@ linters-settings:
       - unusedresult
       # Checks for unused writes.
       - unusedwrite
-      # Checks for misuses of sync.WaitGroup.
+      # Check for misuses of sync.WaitGroup.
       - waitgroup
 
     # Enable all analyzers.
@@ -1913,6 +1913,7 @@ linters-settings:
       - slog
       - sortslice
       - stdmethods
+      - stdversion
       - stringintconv
       - structtag
       - testinggoroutine
@@ -1923,6 +1924,7 @@ linters-settings:
       - unsafeptr
       - unusedresult
       - unusedwrite
+      - waitgroup
 
     # Settings per analyzer.
     settings:
