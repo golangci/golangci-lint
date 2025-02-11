@@ -4,10 +4,9 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"maps"
 	"runtime/debug"
 	"strings"
-
-	"golang.org/x/exp/maps"
 
 	"github.com/golangci/golangci-lint/internal/errorutil"
 	"github.com/golangci/golangci-lint/pkg/config"
@@ -74,7 +73,7 @@ func NewRunner(log logutils.Log, cfg *config.Config, args []string, goenv *gouti
 	}
 
 	var enabledFormatters []string
-	for _, name := range maps.Keys(enabledLinters) {
+	for name := range maps.Keys(enabledLinters) {
 		if goformatters.IsFormatter(name) {
 			enabledFormatters = append(enabledFormatters, name)
 		}
