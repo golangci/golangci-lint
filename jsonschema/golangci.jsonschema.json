@@ -271,11 +271,12 @@
         "nested-structs",
         "optimize-operands-order",
         "package-comments",
-        "range",
         "range-val-address",
         "range-val-in-closure",
+        "range",
         "receiver-naming",
         "redefines-builtin-id",
+        "redundant-build-tag",
         "redundant-import-alias",
         "string-format",
         "string-of-int",
@@ -293,6 +294,7 @@
         "unused-parameter",
         "unused-receiver",
         "use-any",
+        "use-errors-new",
         "useless-break",
         "var-declaration",
         "var-naming",
@@ -349,7 +351,6 @@
             "errorlint",
             "exhaustive",
             "exhaustruct",
-            "exportloopref",
             "exptostd",
             "fatcontext",
             "forbidigo",
@@ -444,6 +445,14 @@
           "type": "string"
         }
       ]
+    },
+    "relative-path-modes": {
+      "enum": [
+        "gomod",
+        "gitroot",
+        "cfg",
+        "wd"
+      ]
     }
   },
   "type": "object",
@@ -504,6 +513,12 @@
           "description": "Targeted Go version.",
           "type": "string",
           "default": "1.17"
+        },
+        "relative-path-mode": {
+          "description": "The mode used to evaluate relative paths.",
+          "type": "string",
+          "$ref": "#/definitions/relative-path-modes",
+          "default": "wd"
         }
       }
     },
@@ -1016,6 +1031,17 @@
               "items": {
                 "type": "string"
               }
+            }
+          }
+        },
+        "fatcontext": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "check-struct-pointers": {
+              "description": "Check for potential fat contexts in struct pointers.",
+              "type": "boolean",
+              "default": false
             }
           }
         },
@@ -2445,8 +2471,18 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "integer-format": {
+              "description": "Enable/disable optimization of integer formatting.",
+              "type": "boolean",
+              "default": true
+            },
             "int-conversion": {
               "description": "Optimizes even if it requires an int or uint type cast.",
+              "type": "boolean",
+              "default": true
+            },
+            "error-format": {
+              "description": "Enable/disable optimization of error formatting.",
               "type": "boolean",
               "default": true
             },
@@ -2460,6 +2496,11 @@
               "type": "boolean",
               "default": true
             },
+            "string-format": {
+              "description": "Enable/disable optimization of string formatting.",
+              "type": "boolean",
+              "default": true
+            },
             "sprintf1": {
               "description": "Optimizes `fmt.Sprintf` with only one argument.",
               "type": "boolean",
@@ -2467,6 +2508,16 @@
             },
             "strconcat": {
               "description": "Optimizes into strings concatenation.",
+              "type": "boolean",
+              "default": true
+            },
+            "bool-format": {
+              "description": "Enable/disable optimization of bool formatting.",
+              "type": "boolean",
+              "default": true
+            },
+            "hex-format": {
+              "description": "Enable/disable optimization of hex formatting.",
               "type": "boolean",
               "default": true
             }
@@ -3461,7 +3512,7 @@
             },
             "os-setenv": {
               "type": "boolean",
-              "default": false
+              "default": true
             },
             "os-create-temp": {
               "type": "boolean",
@@ -3859,6 +3910,76 @@
           "description": "Enable run of fast linters.",
           "type": "boolean",
           "default": false
+        },
+        "exclusions":{
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "generated": {
+              "enum": ["strict", "lax", "disable"],
+              "default": "lax"
+            },
+            "warn-unused": {
+              "type": "boolean",
+              "default": false
+            },
+            "default":  {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "comments",
+                  "stdErrorHandling",
+                  "commonFalsePositives",
+                  "legacy"
+                ]
+              }
+            },
+            "rules": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "path": {
+                    "type": "string"
+                  },
+                  "path-except": {
+                    "type": "string"
+                  },
+                  "linters": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/definitions/linters"
+                    }
+                  },
+                  "text": {
+                    "type": "string"
+                  },
+                  "source": {
+                    "type": "string"
+                  }
+                },
+                "anyOf": [
+                  { "required": ["path"] },
+                  { "required": ["path-except"] },
+                  { "required": ["linters"] },
+                  { "required": ["text"] },
+                  { "required": ["source"] }
+                ]
+              }
+            },
+            "paths":  {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "paths-except":  {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
         }
       }
     },
@@ -3947,7 +4068,23 @@
           "description": "The list of ids of default excludes to include or disable.",
           "type": "array",
           "items": {
-            "type": "string"
+            "enum": [
+              "EXC0001",
+              "EXC0002",
+              "EXC0003",
+              "EXC0004",
+              "EXC0005",
+              "EXC0006",
+              "EXC0007",
+              "EXC0008",
+              "EXC0009",
+              "EXC0010",
+              "EXC0011",
+              "EXC0012",
+              "EXC0013",
+              "EXC0014",
+              "EXC0015"
+            ]
           },
           "default": []
         },
@@ -3967,6 +4104,10 @@
           "description": "Show only new issues: if there are unstaged changes or untracked files, only those changes are analyzed, else only changes in HEAD~ are analyzed.",
           "type": "boolean",
           "default": false
+        },
+        "new-from-merge-base": {
+          "description": "Show only new issues created after the best common ancestor (merge-base against HEAD).",
+          "type": "string"
         },
         "new-from-rev": {
           "description": "Show only new issues created after this git revision.",

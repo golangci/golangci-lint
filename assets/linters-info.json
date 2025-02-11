@@ -88,13 +88,14 @@
   },
   {
     "name": "copyloopvar",
-    "desc": "copyloopvar is a linter detects places where loop variables are copied",
+    "desc": "a linter detects places where loop variables are copied",
     "loadMode": 8199,
     "inPresets": [
       "style"
     ],
     "originalURL": "https://github.com/karamaru-alpha/copyloopvar",
     "internal": false,
+    "canAutoFix": true,
     "isSlow": false,
     "since": "v1.57.0"
   },
@@ -263,23 +264,6 @@
     "since": "v1.46.0"
   },
   {
-    "name": "exportloopref",
-    "desc": "checks for pointers to enclosing loop variables",
-    "loadMode": 8767,
-    "inPresets": [
-      "bugs"
-    ],
-    "originalURL": "https://github.com/kyoh86/exportloopref",
-    "internal": false,
-    "isSlow": true,
-    "since": "v1.28.0",
-    "deprecation": {
-      "since": "v1.60.2",
-      "message": "Since Go1.22 (loopvar) this linter is no longer relevant.",
-      "replacement": "copyloopvar"
-    }
-  },
-  {
     "name": "exptostd",
     "desc": "Detects functions from golang.org/x/exp/ that can be replaced by std functions.",
     "loadMode": 8767,
@@ -343,7 +327,7 @@
   },
   {
     "name": "gci",
-    "desc": "Checks if code and import statements are formatted, it makes import statements always deterministic.",
+    "desc": "Checks if code and import statements are formatted, with additional rules.",
     "loadMode": 8199,
     "inPresets": [
       "format",
@@ -481,7 +465,7 @@
   },
   {
     "name": "godox",
-    "desc": "Tool for detection of FIXME, TODO and other comment keywords",
+    "desc": "Detects usage of FIXME, TODO and other keywords inside comments",
     "loadMode": 8199,
     "inPresets": [
       "style",
@@ -907,7 +891,7 @@
   },
   {
     "name": "nilnesserr",
-    "desc": "Reports constructs that checks for err != nil, but returns a different nil value error. Powered by nilness and nilerr.",
+    "desc": "Reports constructs that checks for err != nil, but returns a different nil value error.\nPowered by nilness and nilerr.",
     "loadMode": 8767,
     "inPresets": [
       "bugs"
@@ -1208,7 +1192,12 @@
     "originalURL": "https://github.com/sivchari/tenv",
     "internal": false,
     "isSlow": true,
-    "since": "v1.43.0"
+    "since": "v1.43.0",
+    "deprecation": {
+      "since": "v1.64.0",
+      "message": "Duplicate feature another linter.",
+      "replacement": "usetesting"
+    }
   },
   {
     "name": "testableexamples",
