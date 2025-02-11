@@ -7,6 +7,48 @@ If you value it, consider supporting us, we appreciate it! ❤️
 [![Open Collective backers and sponsors](https://img.shields.io/badge/OpenCollective-Donate-blue?logo=opencollective&style=for-the-badge)](https://opencollective.com/golangci-lint)
 [![GitHub Sponsors](https://img.shields.io/badge/GitHub-Donate-blue?logo=github&style=for-the-badge)](https://github.com/sponsors/golangci)
 
+### v1.64.2
+
+This is the last minor release of golangci-lint v1.
+The next release will be golangci-lint [v2](https://github.com/golangci/golangci-lint/issues/5300). 
+
+1. Enhancements
+   * 🎉 go1.24 support
+   * New `issues.new-from-merge-base` option
+   * New `run.relative-path-mode` option
+2. Linters new features
+   * `copyloopvar`: from 1.1.0 to 1.2.1 (support suggested fixes)
+   * `exptostd`: from 0.3.1 to 0.4.1 (handles `golang.org/x/exp/constraints.Ordered`)
+   * `fatcontext`: from 0.5.3 to 0.7.1 (new option: `check-struct-pointers`)
+   * `perfsprint`: from 0.7.1 to 0.8.1 (new options: `integer-format`, `error-format`, `string-format`, `bool-format`, and `hex-format`)
+   * `revive`: from 1.5.1 to 1.6.0 (new rules: `redundant-build-tag`, `use-errors-new`. New option `early-return.early-return`)
+3. Linters bug fixes
+   * `go-errorlint`: from 1.7.0 to 1.7.1
+   * `gochecknoglobals`: from 0.2.1 to 0.2.2
+   * `godox`: from 006bad1f9d26 to 1.1.0
+   * `gosec`: from 2.21.4 to 2.22.0
+   * `iface`: from 1.3.0 to 1.3.1
+   * `nilnesserr`: from 0.1.1 to 0.1.2
+   * `protogetter`: from 0.3.8 to 0.3.9
+   * `sloglint`: from 0.7.2 to 0.9.0
+   * `spancheck`: fix default `StartSpanMatchersSlice` values
+   * `staticcheck`: from 0.5.1 to 0.6.0
+4. Deprecations
+   * ⚠️ `tenv` is deprecated and replaced by `usetesing.osenv: true`.
+5. Misc.
+   * Sanitize severities by output format
+   * Avoid panic with plugin without description
+6. Documentation
+   * Clarify `depguard` configuration
+
+### v1.64.1
+
+Cancelled due to CI failure.
+
+### v1.64.0
+
+Cancelled due to CI failure.
+
 ### v1.63.4
 
 1. Linters bug fixes
