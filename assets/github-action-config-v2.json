@@ -175,6 +175,9 @@
     "v1.63": {
       "Error": "golangci-lint version 'v1.63' isn't supported: we support only v2.0.0 and later versions"
     },
+    "v1.64": {
+      "Error": "golangci-lint version 'v1.64' isn't supported: we support only v2.0.0 and later versions"
+    },
     "v1.7": {
       "Error": "golangci-lint version 'v1.7' isn't supported: we support only v2.0.0 and later versions"
     },
