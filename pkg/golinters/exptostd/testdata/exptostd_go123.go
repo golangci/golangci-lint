@@ -13,9 +13,9 @@ import (
 func _(m, a map[string]string) {
 	maps.Clone(m) // want `golang.org/x/exp/maps.Clone\(\) can be replaced by maps.Clone\(\)`
 
-	maps.Keys(m) // want `golang.org/x/exp/maps.Keys\(\) can be replaced by slices.Collect\(maps.Keys\(\)\)`
+	maps.Keys(m) // want `golang.org/x/exp/maps\.Keys\(\) can be replaced by slices\.AppendSeq\(make\(\[\]T, 0, len\(data\)\), maps\.Keys\(data\)\)`
 
-	maps.Values(m) // want `golang.org/x/exp/maps.Values\(\) can be replaced by slices.Collect\(maps.Values\(\)\)`
+	maps.Values(m) // want `golang.org/x/exp/maps\.Values\(\) can be replaced by slices\.AppendSeq\(make\(\[\]T, 0, len\(data\)\), maps\.Values\(data\)\)`
 
 	maps.Equal(m, a) // want `golang.org/x/exp/maps.Equal\(\) can be replaced by maps.Equal\(\)`
 
