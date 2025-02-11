@@ -2,10 +2,9 @@ package main
 
 import (
 	"fmt"
-	"sort"
+	"maps"
+	"slices"
 	"strings"
-
-	"golang.org/x/exp/maps"
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
@@ -69,9 +68,8 @@ func getThanksList() string {
 		}
 	}
 
-	authors := maps.Keys(addedAuthors)
-	sort.Slice(authors, func(i, j int) bool {
-		return strings.ToLower(authors[i]) < strings.ToLower(authors[j])
+	authors := slices.SortedFunc(maps.Keys(addedAuthors), func(a string, b string) int {
+		return strings.Compare(strings.ToLower(a), strings.ToLower(b))
 	})
 
 	lines := []string{

@@ -1,6 +1,6 @@
 module github.com/golangci/golangci-lint
 
-go 1.22.1
+go 1.23.0
 
 require (
 	4d63.com/gocheckcompilerdirectives v1.2.1
@@ -63,7 +63,6 @@ require (
 	github.com/kkHAIKE/contextcheck v1.1.5
 	github.com/kulti/thelper v0.6.3
 	github.com/kunwardeep/paralleltest v1.0.10
-	github.com/kyoh86/exportloopref v0.1.11
 	github.com/lasiar/canonicalheader v1.1.2
 	github.com/ldez/exptostd v0.4.1
 	github.com/ldez/gomoddirectives v0.6.1
@@ -126,7 +125,6 @@ require (
 	go-simpler.org/musttag v0.13.0
 	go-simpler.org/sloglint v0.9.0
 	go.uber.org/automaxprocs v1.6.0
-	golang.org/x/exp v0.0.0-20240909161429-701f63a606c0
 	golang.org/x/mod v0.23.0
 	golang.org/x/sys v0.30.0
 	golang.org/x/tools v0.30.0
@@ -196,6 +194,7 @@ require (
 	go.uber.org/atomic v1.7.0 // indirect
 	go.uber.org/multierr v1.6.0 // indirect
 	go.uber.org/zap v1.24.0 // indirect
+	golang.org/x/exp v0.0.0-20240909161429-701f63a606c0 // indirect
 	golang.org/x/exp/typeparams v0.0.0-20241108190413-2d47ceb2692f // indirect
 	golang.org/x/sync v0.11.0 // indirect
 	golang.org/x/text v0.21.0 // indirect

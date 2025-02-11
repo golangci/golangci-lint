@@ -5,17 +5,16 @@ import (
 	"fmt"
 	"go/ast"
 	"go/types"
+	"maps"
 	"reflect"
 	"runtime"
 	"slices"
-	"sort"
 	"strings"
 	"sync"
 
 	"github.com/go-critic/go-critic/checkers"
 	gocriticlinter "github.com/go-critic/go-critic/linter"
 	_ "github.com/quasilyte/go-ruleguard/dsl"
-	"golang.org/x/exp/maps"
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/config"
@@ -168,8 +167,7 @@ func (w *goCriticWrapper) configureCheckerInfo(
 				info.Name, k)
 		}
 
-		supportedKeys := maps.Keys(info.Params)
-		sort.Strings(supportedKeys)
+		supportedKeys := slices.Sorted(maps.Keys(info.Params))
 
 		return fmt.Errorf("checker %s config param %s doesn't exist, all existing: %s",
 			info.Name, k, supportedKeys)
@@ -270,8 +268,7 @@ func newSettingsWrapper(settings *config.GoCriticSettings, logger logutils.Log) 
 		}
 	}
 
-	allTagsSorted := maps.Keys(allChecksByTag)
-	sort.Strings(allTagsSorted)
+	allTagsSorted := slices.Sorted(maps.Keys(allChecksByTag))
 
 	return &settingsWrapper{
 		GoCriticSettings:                settings,
@@ -558,8 +555,7 @@ func debugChecksListf(checks []string, format string, args ...any) {
 		return
 	}
 
-	v := slices.Clone(checks)
-	slices.Sort(v)
+	v := slices.Sorted(slices.Values(checks))
 
 	debugf("%s checks (%d): %s", fmt.Sprintf(format, args...), len(checks), strings.Join(v, ", "))
 }

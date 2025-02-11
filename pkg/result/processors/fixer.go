@@ -9,10 +9,9 @@ package processors
 import (
 	"errors"
 	"fmt"
+	"maps"
 	"os"
 	"slices"
-
-	"golang.org/x/exp/maps"
 
 	"github.com/golangci/golangci-lint/internal/x/tools/diff"
 	"github.com/golangci/golangci-lint/pkg/config"
@@ -126,7 +125,7 @@ func (p Fixer) process(issues []result.Issue) ([]result.Issue, error) {
 	for path, linterToEdits := range editsByLinter {
 		excludedLinters := make(map[string]struct{})
 
-		linters := maps.Keys(linterToEdits)
+		linters := slices.Collect(maps.Keys(linterToEdits))
 
 		// Does any linter create conflicting edits?
 		for _, linter := range linters {

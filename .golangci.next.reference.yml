@@ -31,10 +31,8 @@ linters:
     - errchkjson
     - errname
     - errorlint
-    - execinquery
     - exhaustive
     - exhaustruct
-    - exportloopref
     - exptostd
     - fatcontext
     - forbidigo
@@ -149,10 +147,8 @@ linters:
     - errchkjson
     - errname
     - errorlint
-    - execinquery
     - exhaustive
     - exhaustruct
-    - exportloopref
     - exptostd
     - fatcontext
     - forbidigo
@@ -241,7 +237,9 @@ linters:
     - wsl
     - zerologlint
     - deadcode # Deprecated
+    - execinquery # Deprecated
     - exhaustivestruct # Deprecated
+    - exportloopref # Deprecated
     - golint # Deprecated
     - gomnd # Deprecated
     - ifshort # Deprecated

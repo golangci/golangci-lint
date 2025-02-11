@@ -6,12 +6,12 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
+	"maps"
 	"runtime"
 	"slices"
 	"strings"
 	"sync"
 
-	"golang.org/x/exp/maps"
 	"golang.org/x/tools/go/packages"
 
 	"github.com/golangci/golangci-lint/internal/go/cache"
@@ -178,9 +178,7 @@ func (c *Cache) computePkgHash(pkg *packages.Package) (hashResults, error) {
 	curSum := key.Sum()
 	hashRes[HashModeNeedOnlySelf] = hex.EncodeToString(curSum[:])
 
-	imps := maps.Values(pkg.Imports)
-
-	slices.SortFunc(imps, func(a, b *packages.Package) int {
+	imps := slices.SortedFunc(maps.Values(pkg.Imports), func(a, b *packages.Package) int {
 		return strings.Compare(a.PkgPath, b.PkgPath)
 	})
 
