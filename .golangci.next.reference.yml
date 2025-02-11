@@ -111,6 +111,7 @@ linters:
     - tparallel
     - unconvert
     - unparam
+    - untypedconst
     - unused
     - usestdlibvars
     - usetesting
@@ -227,6 +228,7 @@ linters:
     - tparallel
     - unconvert
     - unparam
+    - untypedconst
     - unused
     - usestdlibvars
     - usetesting

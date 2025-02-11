@@ -55,6 +55,7 @@ require (
 	github.com/gostaticanalysis/nilerr v0.1.1
 	github.com/hashicorp/go-version v1.7.0
 	github.com/jgautheron/goconst v1.7.1
+	github.com/jiftechnify/untypedconst v0.1.0
 	github.com/jingyugao/rowserrcheck v1.1.1
 	github.com/jjti/go-spancheck v0.6.4
 	github.com/julz/importas v0.2.0

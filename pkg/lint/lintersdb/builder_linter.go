@@ -104,6 +104,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/tparallel"
 	"github.com/golangci/golangci-lint/pkg/golinters/unconvert"
 	"github.com/golangci/golangci-lint/pkg/golinters/unparam"
+	"github.com/golangci/golangci-lint/pkg/golinters/untypedconst"
 	"github.com/golangci/golangci-lint/pkg/golinters/unused"
 	"github.com/golangci/golangci-lint/pkg/golinters/usestdlibvars"
 	"github.com/golangci/golangci-lint/pkg/golinters/usetesting"
@@ -816,6 +817,12 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithPresets(linter.PresetUnused).
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/mvdan/unparam"),
+
+		linter.NewConfig(untypedconst.New()).
+			WithSince("v1.65.0").
+			WithPresets(linter.PresetBugs).
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/jiftechnify/untypedconst"),
 
 		linter.NewConfig(unused.New(&cfg.LintersSettings.Unused)).
 			WithEnabledByDefault().
