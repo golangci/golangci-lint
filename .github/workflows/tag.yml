@@ -44,15 +44,15 @@ jobs:
         with:
           go-version: ${{ env.GO_VERSION }}
 
-      - name: Install chocolatey
-        run: |
-          mono --version
-          mkdir -p /opt/chocolatey
-          wget -q -O - "https://github.com/chocolatey/choco/releases/download/${CHOCOLATEY_VERSION}/chocolatey.v${CHOCOLATEY_VERSION}.tar.gz" | tar -xz -C "/opt/chocolatey"
-          echo '#!/bin/bash' >> /usr/local/bin/choco
-          echo 'mono /opt/chocolatey/choco.exe $@' >> /usr/local/bin/choco
-          chmod +x /usr/local/bin/choco
-          choco --version
+#      - name: Install chocolatey
+#        run: |
+#          mono --version
+#          mkdir -p /opt/chocolatey
+#          wget -q -O - "https://github.com/chocolatey/choco/releases/download/${CHOCOLATEY_VERSION}/chocolatey.v${CHOCOLATEY_VERSION}.tar.gz" | tar -xz -C "/opt/chocolatey"
+#          echo '#!/bin/bash' >> /usr/local/bin/choco
+#          echo 'mono /opt/chocolatey/choco.exe $@' >> /usr/local/bin/choco
+#          chmod +x /usr/local/bin/choco
+#          choco --version
 
       - name: Install snapcraft
         run: sudo snap install snapcraft --classic
