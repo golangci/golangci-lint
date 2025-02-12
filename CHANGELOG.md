@@ -7,6 +7,16 @@ If you value it, consider supporting us, we appreciate it! ❤️
 [![Open Collective backers and sponsors](https://img.shields.io/badge/OpenCollective-Donate-blue?logo=opencollective&style=for-the-badge)](https://opencollective.com/golangci-lint)
 [![GitHub Sponsors](https://img.shields.io/badge/GitHub-Donate-blue?logo=github&style=for-the-badge)](https://github.com/sponsors/golangci)
 
+### v1.64.3
+
+1. Linters bug fixes
+   * `ginkgolinter`: from 0.18.4 to 0.19.0
+   * `go-critic`: from 0.11.5 to 0.12.0
+   * `revive`: from 1.6.0 to 1.6.1
+   * `gci`: fix standard packages list for go1.24
+2. Misc.
+   * Build Docker images with go1.24
+
 ### v1.64.2
 
 This is the last minor release of golangci-lint v1.
