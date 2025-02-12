@@ -75,7 +75,7 @@ require (
 	github.com/maratori/testpackage v1.1.1
 	github.com/matoous/godox v1.1.0
 	github.com/mattn/go-colorable v0.1.14
-	github.com/mgechev/revive v1.6.0
+	github.com/mgechev/revive v1.6.1
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/moricho/tparallel v0.3.2
 	github.com/nakabonne/nestif v0.3.1
@@ -197,7 +197,7 @@ require (
 	golang.org/x/exp v0.0.0-20240909161429-701f63a606c0 // indirect
 	golang.org/x/exp/typeparams v0.0.0-20241108190413-2d47ceb2692f // indirect
 	golang.org/x/sync v0.11.0 // indirect
-	golang.org/x/text v0.21.0 // indirect
+	golang.org/x/text v0.22.0 // indirect
 	google.golang.org/protobuf v1.36.1 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
