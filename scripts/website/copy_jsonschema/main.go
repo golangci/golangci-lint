@@ -32,7 +32,7 @@ func copySchemas() error {
 		return fmt.Errorf("copy FS: %w", err)
 	}
 
-	err = copyLatestSchema()
+	err = copyLatestSchema(dstDir)
 	if err != nil {
 		return fmt.Errorf("copy files: %w", err)
 	}
@@ -40,7 +40,7 @@ func copySchemas() error {
 	return nil
 }
 
-func copyLatestSchema() error {
+func copyLatestSchema(dstDir string) error {
 	src := filepath.FromSlash("jsonschema/golangci.jsonschema.json")
 
 	latest, err := github.GetLatestVersion()
@@ -71,7 +71,7 @@ func copyLatestSchema() error {
 	}
 
 	for _, dst := range files {
-		err = copyFile(dst, source, info)
+		err = copyFile(filepath.Join(dstDir, dst), source, info)
 		if err != nil {
 			return fmt.Errorf("copy file %s to %s: %w", src, dst, err)
 		}
