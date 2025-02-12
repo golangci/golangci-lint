@@ -34,7 +34,7 @@ The next release will be golangci-lint [v2](https://github.com/golangci/golangci
    * `spancheck`: fix default `StartSpanMatchersSlice` values
    * `staticcheck`: from 0.5.1 to 0.6.0
 4. Deprecations
-   * ⚠️ `tenv` is deprecated and replaced by `usetesing.osenv: true`.
+   * ⚠️ `tenv` is deprecated and replaced by `usetesing.os-setenv: true`.
 5. Misc.
    * Sanitize severities by output format
    * Avoid panic with plugin without description
