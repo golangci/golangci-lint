@@ -8,6 +8,7 @@ import (
 
 	"github.com/daixiang0/gci/pkg/config"
 	"github.com/daixiang0/gci/pkg/section"
+	sectioni "github.com/golangci/golangci-lint/pkg/goformatters/gci/internal/section"
 )
 
 var defaultOrder = map[string]int{
@@ -39,12 +40,12 @@ type YamlConfig struct {
 func (g YamlConfig) Parse() (*Config, error) {
 	var err error
 
-	sections, err := section.Parse(g.SectionStrings)
+	sections, err := sectioni.Parse(g.SectionStrings)
 	if err != nil {
 		return nil, err
 	}
 	if sections == nil {
-		sections = section.DefaultSections()
+		sections = sectioni.DefaultSections()
 	}
 	if err := configureSections(sections, g.ModPath); err != nil {
 		return nil, err
@@ -63,7 +64,7 @@ func (g YamlConfig) Parse() (*Config, error) {
 		})
 	}
 
-	sectionSeparators, err := section.Parse(g.SectionSeparatorStrings)
+	sectionSeparators, err := sectioni.Parse(g.SectionSeparatorStrings)
 	if err != nil {
 		return nil, err
 	}
