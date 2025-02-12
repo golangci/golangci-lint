@@ -58,6 +58,17 @@ func copyLatestSchema(dstDir string) error {
 		fmt.Sprintf("golangci.v%d.%d.jsonschema.json", version.Segments()[0], version.Segments()[1]),
 	}
 
+	for _, dst := range files {
+		err = copyFile(filepath.Join(dstDir, dst), src)
+		if err != nil {
+			return fmt.Errorf("copy file %s to %s: %w", src, dst, err)
+		}
+	}
+
+	return nil
+}
+
+func copyFile(dst, src string) error {
 	source, err := os.Open(src)
 	if err != nil {
 		return fmt.Errorf("open file %s: %w", src, err)
@@ -70,17 +81,6 @@ func copyLatestSchema(dstDir string) error {
 		return fmt.Errorf("file %s not found: %w", src, err)
 	}
 
-	for _, dst := range files {
-		err = copyFile(filepath.Join(dstDir, dst), source, info)
-		if err != nil {
-			return fmt.Errorf("copy file %s to %s: %w", src, dst, err)
-		}
-	}
-
-	return nil
-}
-
-func copyFile(dst string, source io.Reader, info os.FileInfo) error {
 	destination, err := os.OpenFile(dst, os.O_RDWR|os.O_CREATE|os.O_TRUNC, info.Mode())
 	if err != nil {
 		return fmt.Errorf("create file %s: %w", dst, err)
