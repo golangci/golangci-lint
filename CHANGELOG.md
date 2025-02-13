@@ -7,6 +7,15 @@ If you value it, consider supporting us, we appreciate it! ❤️
 [![Open Collective backers and sponsors](https://img.shields.io/badge/OpenCollective-Donate-blue?logo=opencollective&style=for-the-badge)](https://opencollective.com/golangci-lint)
 [![GitHub Sponsors](https://img.shields.io/badge/GitHub-Donate-blue?logo=github&style=for-the-badge)](https://github.com/sponsors/golangci)
 
+### v1.64.5
+
+1. Bug fixes
+   * Add missing flag `new-from-merge-base-flag`
+2. Linters bug fixes
+   * `asciicheck`: from 0.3.0 to 0.4.0
+   * `forcetypeassert`: from 0.1.0 to 0.2.0
+   * `gosec`: from 2.22.0 to 2.22.1
+
 ### v1.64.4
 
 1. Linters bug fixes

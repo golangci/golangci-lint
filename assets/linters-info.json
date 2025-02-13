@@ -291,13 +291,13 @@
   {
     "name": "forcetypeassert",
     "desc": "finds forced type assertions",
-    "loadMode": 8199,
+    "loadMode": 8767,
     "inPresets": [
       "style"
     ],
     "originalURL": "https://github.com/gostaticanalysis/forcetypeassert",
     "internal": false,
-    "isSlow": false,
+    "isSlow": true,
     "since": "v1.38.0"
   },
   {
