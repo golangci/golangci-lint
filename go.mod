@@ -106,7 +106,7 @@ require (
 	github.com/ssgreg/nlreturn/v2 v2.2.1
 	github.com/stbenjam/no-sprintf-host-port v0.2.0
 	github.com/stretchr/testify v1.10.0
-	github.com/tdakkota/asciicheck v0.3.0
+	github.com/tdakkota/asciicheck v0.4.0
 	github.com/tetafro/godot v1.4.20
 	github.com/timakin/bodyclose v0.0.0-20241017074812-ed6a65f985e3
 	github.com/timonwong/loggercheck v0.10.1
