@@ -116,6 +116,8 @@ func setupIssuesFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
 		color.GreenString("Show only new issues created after git revision `REV`"))
 	internal.AddFlagAndBind(v, fs, fs.String, "new-from-patch", "issues.new-from-patch", "",
 		color.GreenString("Show only new issues created in git patch with file path `PATH`"))
+	internal.AddFlagAndBind(v, fs, fs.String, "new-from-merge-base", "issues.new-from-merge-base", "",
+		color.GreenString("Show only new issues created after the best common ancestor (merge-base against HEAD)"))
 	internal.AddFlagAndBind(v, fs, fs.Bool, "whole-files", "issues.whole-files", false,
 		color.GreenString("Show issues in any part of update files (requires new-from-rev or new-from-patch)"))
 	internal.AddFlagAndBind(v, fs, fs.Bool, "fix", "issues.fix", false,
