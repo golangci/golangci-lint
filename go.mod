@@ -51,7 +51,7 @@ require (
 	github.com/golangci/revgrep v0.8.0
 	github.com/golangci/unconvert v0.0.0-20240309020433-c5143eacb3ed
 	github.com/gordonklaus/ineffassign v0.1.0
-	github.com/gostaticanalysis/forcetypeassert v0.1.0
+	github.com/gostaticanalysis/forcetypeassert v0.2.0
 	github.com/gostaticanalysis/nilerr v0.1.1
 	github.com/hashicorp/go-version v1.7.0
 	github.com/jgautheron/goconst v1.7.1
