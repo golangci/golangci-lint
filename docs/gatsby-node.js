@@ -102,7 +102,7 @@ exports.createPages = ({ graphql, actions: { createPage }, reporter }) => {
 
       const githubEditUrl =
         githubUrl &&
-        `${githubUrl}/tree/master/${baseDir}/${docsPath}/${relativePath}`;
+        `${githubUrl}/tree/main/${baseDir}/${docsPath}/${relativePath}`;
 
       const currentPageIndex = listOfItems.findIndex(
         (page) => page.link === slug

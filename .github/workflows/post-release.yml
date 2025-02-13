@@ -29,7 +29,7 @@ jobs:
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7
         with:
-          base: master
+          base: main
           token: ${{ secrets.GOLANGCI_LINT_TOKEN }}
           branch-suffix: timestamp
           title: "docs: update GitHub Action assets"
@@ -58,7 +58,7 @@ jobs:
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7
         with:
-          base: master
+          base: main
           token: ${{ secrets.GOLANGCI_LINT_TOKEN }}
           branch-suffix: timestamp
           title: "docs: update documentation assets"
