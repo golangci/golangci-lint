@@ -15,5 +15,5 @@ func New() *goanalysis.Linter {
 		"finds forced type assertions",
 		[]*analysis.Analyzer{a},
 		nil,
-	).WithLoadMode(goanalysis.LoadModeSyntax)
+	).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }

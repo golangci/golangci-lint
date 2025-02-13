@@ -304,6 +304,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 		linter.NewConfig(forcetypeassert.New()).
 			WithSince("v1.38.0").
 			WithPresets(linter.PresetStyle).
+			WithLoadForGoAnalysis().
 			WithURL("https://github.com/gostaticanalysis/forcetypeassert"),
 
 		linter.NewConfig(fatcontext.New(&cfg.LintersSettings.Fatcontext)).
