@@ -34,7 +34,7 @@ If you value it, consider supporting us, we appreciate it! ❤️
 ### v1.64.2
 
 This is the last minor release of golangci-lint v1.
-The next release will be golangci-lint [v2](https://github.com/golangci/golangci-lint/issues/5300). 
+The next release will be golangci-lint [v2](https://github.com/golangci/golangci-lint/issues/5300).
 
 1. Enhancements
    * 🎉 go1.24 support
@@ -58,7 +58,7 @@ The next release will be golangci-lint [v2](https://github.com/golangci/golangci
    * `spancheck`: fix default `StartSpanMatchersSlice` values
    * `staticcheck`: from 0.5.1 to 0.6.0
 4. Deprecations
-   * ⚠️ `tenv` is deprecated and replaced by `usetesing.os-setenv: true`.
+   * ⚠️ `tenv` is deprecated and replaced by `usetesting.os-setenv: true`.
 5. Misc.
    * Sanitize severities by output format
    * Avoid panic with plugin without description
@@ -141,7 +141,7 @@ Cancelled due to CI failure.
    * ⚠️ `output.uniq-by-line` is deprecated and replaced by `issues.uniq-by-line`.
 6. Misc.
    * Improvements of the help command (color and JSON support).
-   * Removes `decoder`, `sloglint`, `tagalin` from `format` preset.
+   * Removes `decoder`, `sloglint`, `tagalign` from `format` preset.
    * Enables paths with junction inside Windows.
    * The timeout is disabled if `run.timeout` <= 0.
 
@@ -336,7 +336,7 @@ Cancelled due to a CI problem.
    * `protogetter`: from 0.3.5 to 0.3.6
    * `gochecknoinits`: fix analyzer name
 2. Fixes
-   * Restores previous `gihub-actions` output format (removes GitHub Action problem matchers)
+   * Restores previous `github-actions` output format (removes GitHub Action problem matchers)
 
 ### v1.58.0
 
@@ -432,7 +432,7 @@ GitHub Action (v5.1.0) for golangci-lint:
    * `go-critic`: support of `enable-all` and `disable-all` options
    * `go-spancheck`: from 0.5.2 to 0.5.3
    * `gomodguard`: from 1.3.0 to 1.3.1
-   * `govet`: deprecation of `check-shadowing` ⚠️ 
+   * `govet`: deprecation of `check-shadowing` ⚠️
    * `govet`: disable temporarily `httpresponse` because of a bug https://github.com/golang/go/issues/66259
    * `misspell`: add `extra-words`
    * `musttag`: from 0.8.0 to 0.9.0
@@ -1451,7 +1451,7 @@ IMPORTANT: `varcheck` and `deadcode` has been removed of default linters.
 3. CLI: truncate multiline descriptions
 4. fix: new-from-rev for a large repository
 5. Support RelatedInformation for analysis Diagnostic
-6. use go1.16 to create binaries 
+6. use go1.16 to create binaries
 7. fix: MIPS release
 8. documentation:
    * bump documentation dependencies
