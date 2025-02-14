@@ -25,7 +25,7 @@ func main() {
 
 func run(ctx context.Context) error {
 	if len(os.Args) != 2 {
-		return fmt.Errorf("usage: go run .../main.go out-path.json")
+		return fmt.Errorf("usage: %s out-path.json", filepath.Base(os.Args[0]))
 	}
 
 	allReleases, err := fetchAllReleases(ctx)
