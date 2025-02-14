@@ -1,6 +1,8 @@
 module github.com/golangci/golangci-lint
 
-go 1.23.0
+go 1.24
+
+toolchain go1.24.0
 
 require (
 	4d63.com/gocheckcompilerdirectives v1.2.1
@@ -35,6 +37,7 @@ require (
 	github.com/curioswitch/go-reassign v0.3.0
 	github.com/daixiang0/gci v0.13.5
 	github.com/denis-tingaikin/go-header v0.5.0
+	github.com/dkorunic/betteralign v0.6.5
 	github.com/fatih/color v1.18.0
 	github.com/firefart/nonamedreturns v1.0.5
 	github.com/fzipp/gocyclo v0.6.0
@@ -156,6 +159,7 @@ require (
 	github.com/gobwas/glob v0.2.3 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/google/go-cmp v0.6.0 // indirect
+	github.com/google/renameio/v2 v2.0.0 // indirect
 	github.com/gostaticanalysis/analysisutil v0.7.1 // indirect
 	github.com/gostaticanalysis/comment v1.4.2 // indirect
 	github.com/hashicorp/go-immutable-radix/v2 v2.1.0 // indirect
@@ -182,6 +186,7 @@ require (
 	github.com/quasilyte/regex/syntax v0.0.0-20210819130434-b3f0c404a727 // indirect
 	github.com/quasilyte/stdinfo v0.0.0-20220114132959-f7386bf02567 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
+	github.com/sirkon/dst v0.26.4 // indirect
 	github.com/spf13/afero v1.12.0 // indirect
 	github.com/spf13/cast v1.5.0 // indirect
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect

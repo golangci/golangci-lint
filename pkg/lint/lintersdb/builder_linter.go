@@ -5,6 +5,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters"
 	"github.com/golangci/golangci-lint/pkg/golinters/asasalint"
 	"github.com/golangci/golangci-lint/pkg/golinters/asciicheck"
+	"github.com/golangci/golangci-lint/pkg/golinters/betteralign"
 	"github.com/golangci/golangci-lint/pkg/golinters/bidichk"
 	"github.com/golangci/golangci-lint/pkg/golinters/bodyclose"
 	"github.com/golangci/golangci-lint/pkg/golinters/canonicalheader"
@@ -146,6 +147,12 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithSince("v1.26.0").
 			WithPresets(linter.PresetBugs, linter.PresetStyle).
 			WithURL("https://github.com/tdakkota/asciicheck"),
+
+		linter.NewConfig(betteralign.New(&cfg.LintersSettings.Betteralign)).
+			WithSince("v1.65.0").
+			WithLoadForGoAnalysis().
+			WithPresets(linter.PresetPerformance, linter.PresetBugs).
+			WithURL("https://github.com/dkorunic/betteralign"),
 
 		linter.NewConfig(bidichk.New(&cfg.LintersSettings.BiDiChk)).
 			WithSince("v1.43.0").

@@ -13,6 +13,7 @@ linters:
   enable:
     - asasalint
     - asciicheck
+    - betteralign
     - bidichk
     - bodyclose
     - canonicalheader
@@ -129,6 +130,7 @@ linters:
   disable:
     - asasalint
     - asciicheck
+    - betteralign
     - bidichk
     - bodyclose
     - canonicalheader
@@ -291,6 +293,23 @@ linters-settings:
     # Ignore *_test.go files.
     # Default: false
     ignore-test: true
+
+  betteralign:
+    # Enable checking and fixing test files as well (ending in `_test.go`)
+    # Default: false
+    test-files: false
+
+    # Enable checking and fixing generated files (ending in `_generated.go`, `_gen.go`, `.gen.go`, `.pb.go`, `.pb.gw.go`)
+    # Default: false
+    generated-files: false
+
+    # Exclude files matching the specified glob pattern, for instance: `testdata/src/exclude/b/b/*.go`
+    # Default: []
+    exclude-files:
+
+    # Exclude directories matching the specified glob pattern, for instance: `testdata/src/exclude/all/`
+    # Default: []
+    exclude-dirs:
 
   bidichk:
     # The following configurations check for all mentioned invisible Unicode runes.

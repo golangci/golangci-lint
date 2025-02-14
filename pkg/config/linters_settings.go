@@ -215,6 +215,7 @@ var defaultLintersSettings = LintersSettings{
 
 type LintersSettings struct {
 	Asasalint       AsasalintSettings
+	Betteralign     BetteralignSettings
 	BiDiChk         BiDiChkSettings
 	CopyLoopVar     CopyLoopVarSettings
 	Cyclop          Cyclop
@@ -320,6 +321,13 @@ type AsasalintSettings struct {
 	Exclude              []string `mapstructure:"exclude"`
 	UseBuiltinExclusions bool     `mapstructure:"use-builtin-exclusions"`
 	IgnoreTest           bool     `mapstructure:"ignore-test"`
+}
+
+type BetteralignSettings struct {
+	TestFiles      bool     `mapstructure:"test-files"`
+	GeneratedFiles bool     `mapstructure:"generated-files"`
+	ExcludeFiles   []string `mapstructure:"exclude-files"`
+	ExcludeDirs    []string `mapstructure:"exclude-dirs"`
 }
 
 type BiDiChkSettings struct {
