@@ -1,8 +1,10 @@
 package commands
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
+	"path/filepath"
 
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
@@ -14,12 +16,17 @@ import (
 	"github.com/golangci/golangci-lint/pkg/logutils"
 )
 
+type pathOptions struct {
+	JSON bool
+}
+
 type configCommand struct {
 	viper *viper.Viper
 	cmd   *cobra.Command
 
 	opts       config.LoaderOptions
 	verifyOpts verifyOptions
+	pathOpts   pathOptions
 
 	buildInfo BuildInfo
 
@@ -53,14 +60,16 @@ func newConfigCommand(log logutils.Log, info BuildInfo) *configCommand {
 		SilenceErrors:     true,
 	}
 
+	pathCommand := &cobra.Command{
+		Use:               "path",
+		Short:             "Print used config path",
+		Args:              cobra.NoArgs,
+		ValidArgsFunction: cobra.NoFileCompletions,
+		RunE:              c.executePath,
+	}
+
 	configCmd.AddCommand(
-		&cobra.Command{
-			Use:               "path",
-			Short:             "Print used config path",
-			Args:              cobra.NoArgs,
-			ValidArgsFunction: cobra.NoFileCompletions,
-			Run:               c.executePath,
-		},
+		pathCommand,
 		verifyCommand,
 	)
 
@@ -73,6 +82,9 @@ func newConfigCommand(log logutils.Log, info BuildInfo) *configCommand {
 	verifyFlagSet := verifyCommand.Flags()
 	verifyFlagSet.StringVar(&c.verifyOpts.schemaURL, "schema", "", color.GreenString("JSON schema URL"))
 	_ = verifyFlagSet.MarkHidden("schema")
+
+	pathFlagSet := pathCommand.Flags()
+	pathFlagSet.BoolVar(&c.pathOpts.JSON, "json", false, color.GreenString("Display as JSON"))
 
 	c.cmd = configCmd
 
@@ -94,14 +106,29 @@ func (c *configCommand) preRunE(cmd *cobra.Command, args []string) error {
 	return nil
 }
 
-func (c *configCommand) executePath(cmd *cobra.Command, _ []string) {
+func (c *configCommand) executePath(cmd *cobra.Command, _ []string) error {
 	usedConfigFile := c.getUsedConfig()
+
+	if c.pathOpts.JSON {
+		abs, err := filepath.Abs(usedConfigFile)
+		if err != nil {
+			return err
+		}
+
+		return json.NewEncoder(cmd.OutOrStdout()).Encode(map[string]string{
+			"path":         usedConfigFile,
+			"absolutePath": abs,
+		})
+	}
+
 	if usedConfigFile == "" {
 		c.log.Warnf("No config file detected")
 		os.Exit(exitcodes.NoConfigFileDetected)
 	}
 
 	cmd.Println(usedConfigFile)
+
+	return nil
 }
 
 // getUsedConfig returns the resolved path to the golangci config file,
