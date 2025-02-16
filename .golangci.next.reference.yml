@@ -1286,7 +1286,7 @@ linters-settings:
     min-complexity: 10
 
   godot:
-    # Comments to be checked: `declarations`, `toplevel`, or `all`.
+    # Comments to be checked: `declarations`, `toplevel`, `noinline` or `all`.
     # Default: declarations
     scope: toplevel
     # List of regexps for excluding particular comment lines from check.
