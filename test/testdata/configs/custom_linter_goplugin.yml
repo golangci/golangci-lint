@@ -1,0 +1,8 @@
+linters-settings:
+  custom:
+    foo:
+      type: "goplugin"
+      path: "bin/linter/myplugin.so"
+      description: I am a Go plugin system-based custom linter.
+      settings:
+        message: hello
