@@ -25,7 +25,7 @@ func New(settings *config.GoLinesSettings) *Formatter {
 			IgnoreGenerated:  false, // handle globally
 			DotFile:          "",    // golines debug (not usable inside golangci-lint)
 			ChainSplitDots:   settings.ChainSplitDots,
-			BaseFormatterCmd: "fmt", // fake cmd
+			BaseFormatterCmd: "gofmt", // fake cmd
 		}
 	}
 
