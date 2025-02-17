@@ -1,0 +1,7 @@
+linters-settings:
+  custom:
+    foo:
+      type: "module"
+      description: I am a module-based custom linter.
+      settings:
+        message: hello

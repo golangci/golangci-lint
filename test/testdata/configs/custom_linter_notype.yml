@@ -1,0 +1,9 @@
+linters-settings:
+  custom:
+    foo:
+      path: "bin/linter/myplugin.so"
+      description: >
+        I didn't specify the type, so I am a Go plugin system-based custom linter.
+        As such, I need to be specified the path.
+      settings:
+        message: hello

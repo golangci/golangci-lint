@@ -3846,7 +3846,8 @@
                 {
                   "properties": {
                     "type": {"enum": ["module"] }
-                  }
+                  },
+                  "required": ["type"]
                 },
                 {
                   "required": ["path"]
