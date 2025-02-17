@@ -13,6 +13,31 @@ body:
         - label: I agree to follow this project's [Code of Conduct](https://github.com/golangci/golangci-lint?tab=coc-ov-file)
           required: true
 
+  - type: dropdown
+    id: install
+    attributes:
+      label: How did you install golangci-lint?
+      options:
+        - I don't know
+        - Official GitHub Action
+        - Official binary
+        - Brew
+        - MacPorts
+        - Chocolatey
+        - Scoop
+        - Docker
+        - go install
+        - Tools pattern
+        - go tool
+        - AUR
+        - Nix
+        - Deb
+        - RPM
+        - Other Linux package manager
+        - Other
+    validations:
+      required: true
+
   - type: textarea
     id: problem
     attributes:
