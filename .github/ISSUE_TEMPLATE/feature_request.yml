@@ -21,19 +21,19 @@ body:
         - I don't know
         - Official GitHub Action
         - Official binary
-        - Docker
         - Brew
         - MacPorts
+        - Chocolatey
+        - Scoop
+        - Docker
+        - go install
+        - Tools pattern
+        - go tool
         - AUR
         - Nix
         - Deb
         - RPM
         - Other Linux package manager
-        - Chocolatey
-        - Scoop
-        - go install
-        - Tools pattern
-        - go tool
         - Other
     validations:
       required: true
