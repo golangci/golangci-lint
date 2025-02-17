@@ -368,6 +368,7 @@
             "gocyclo",
             "godot",
             "godox",
+            "golines",
             "err113",
             "gofmt",
             "gofumpt",
@@ -1589,6 +1590,32 @@
                   }
                 }
               }
+            }
+          }
+        },
+        "golines": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "max-len": {
+              "type": "integer",
+              "default": 100
+            },
+            "tab-len": {
+              "type": "integer",
+              "default": 4
+            },
+            "shorten-comments": {
+              "type": "boolean",
+              "default": false
+            },
+            "reformat-tags": {
+              "type": "boolean",
+              "default": true
+            },
+            "chain-split-dots": {
+              "type": "boolean",
+              "default": true
             }
           }
         },

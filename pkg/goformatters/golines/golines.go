@@ -19,11 +19,11 @@ func New(settings *config.GoLinesSettings) *Formatter {
 		options = golines.ShortenerConfig{
 			MaxLen:           settings.MaxLen,
 			TabLen:           settings.TabLen,
-			KeepAnnotations:  false, // debug
+			KeepAnnotations:  false, // golines debug (not usable inside golangci-lint)
 			ShortenComments:  settings.ShortenComments,
 			ReformatTags:     settings.ReformatTags,
 			IgnoreGenerated:  false, // handle globally
-			DotFile:          "",    // debug
+			DotFile:          "",    // golines debug (not usable inside golangci-lint)
 			ChainSplitDots:   settings.ChainSplitDots,
 			BaseFormatterCmd: "fmt", // fake cmd
 		}
