@@ -70,7 +70,7 @@ func (l *Loader) Load(opts LoadOptions) error {
 
 	if l.cfg.Linters.LinterExclusions.Generated == "" {
 		// `l.cfg.Issues.ExcludeGenerated` is always non-empty because of the flag default value.
-		l.cfg.Linters.LinterExclusions.Generated = cmp.Or(l.cfg.Issues.ExcludeGenerated, "strict")
+		l.cfg.Linters.LinterExclusions.Generated = cmp.Or(l.cfg.Issues.ExcludeGenerated, GeneratedModeStrict)
 	}
 
 	// Compatibility layer with v1.
@@ -88,11 +88,15 @@ func (l *Loader) Load(opts LoadOptions) error {
 		l.cfg.Linters.LinterExclusions.Rules = append(l.cfg.Linters.LinterExclusions.Rules, l.cfg.Issues.ExcludeRules...)
 	}
 
+	l.handleFormatters()
+
 	if opts.CheckDeprecation {
 		err = l.handleDeprecation()
 		if err != nil {
 			return err
 		}
+
+		l.handleFormatterDeprecations()
 	}
 
 	l.handleGoVersion()
@@ -319,7 +323,8 @@ func (l *Loader) handleGoVersion() {
 
 	l.cfg.LintersSettings.ParallelTest.Go = l.cfg.Run.Go
 
-	l.cfg.LintersSettings.Gofumpt.LangVersion = cmp.Or(l.cfg.LintersSettings.Gofumpt.LangVersion, l.cfg.Run.Go)
+	l.cfg.LintersSettings.GoFumpt.LangVersion = cmp.Or(l.cfg.LintersSettings.GoFumpt.LangVersion, l.cfg.Run.Go)
+	l.cfg.Formatters.Settings.GoFumpt.LangVersion = cmp.Or(l.cfg.Formatters.Settings.GoFumpt.LangVersion, l.cfg.Run.Go)
 
 	trimmedGoVersion := goutil.TrimGoVersion(l.cfg.Run.Go)
 
@@ -433,7 +438,7 @@ func (l *Loader) handleLinterOptionDeprecations() {
 	}
 
 	// Deprecated since v1.47.0
-	if l.cfg.LintersSettings.Gofumpt.LangVersion != "" {
+	if l.cfg.LintersSettings.GoFumpt.LangVersion != "" {
 		l.log.Warnf("The configuration option `linters.gofumpt.lang-version` is deprecated, please use global `run.go`.")
 	}
 
@@ -493,6 +498,59 @@ func (l *Loader) handleEnableOnlyOption() error {
 	}
 
 	return nil
+}
+
+func (l *Loader) handleFormatters() {
+	l.handleFormatterOverrides()
+	l.handleFormatterExclusions()
+}
+
+// Overrides linter settings with formatter settings if the formatter is enabled.
+func (l *Loader) handleFormatterOverrides() {
+	if slices.Contains(l.cfg.Formatters.Enable, "gofmt") {
+		l.cfg.LintersSettings.GoFmt = l.cfg.Formatters.Settings.GoFmt
+	}
+
+	if slices.Contains(l.cfg.Formatters.Enable, "gofumpt") {
+		l.cfg.LintersSettings.GoFumpt = l.cfg.Formatters.Settings.GoFumpt
+	}
+
+	if slices.Contains(l.cfg.Formatters.Enable, "goimports") {
+		l.cfg.LintersSettings.GoImports = l.cfg.Formatters.Settings.GoImports
+	}
+
+	if slices.Contains(l.cfg.Formatters.Enable, "gci") {
+		l.cfg.LintersSettings.Gci = l.cfg.Formatters.Settings.Gci
+	}
+}
+
+// Add formatter exclusions to linters exclusions.
+func (l *Loader) handleFormatterExclusions() {
+	if len(l.cfg.Formatters.Enable) == 0 {
+		return
+	}
+
+	for _, path := range l.cfg.Formatters.Exclusions.Paths {
+		l.cfg.Linters.LinterExclusions.Rules = append(l.cfg.Linters.LinterExclusions.Rules, ExcludeRule{
+			BaseRule: BaseRule{
+				Linters: l.cfg.Formatters.Enable,
+				Path:    path,
+			},
+		})
+	}
+}
+func (l *Loader) handleFormatterDeprecations() {
+	// Deprecated since v1.44.0.
+	if l.cfg.Formatters.Settings.Gci.LocalPrefixes != "" {
+		l.log.Warnf("The configuration option `formatters.settings.gci.local-prefixes` is deprecated, " +
+			"please use `prefix()` inside `formatters.settings.gci.sections`.")
+	}
+
+	// Deprecated since v1.47.0
+	if l.cfg.Formatters.Settings.GoFumpt.LangVersion != "" {
+		l.log.Warnf("The configuration option `formatters.settings.gofumpt.lang-version` is deprecated, " +
+			"please use global `run.go`.")
+	}
 }
 
 func customDecoderHook() viper.DecoderConfigOption {

@@ -65,96 +65,144 @@ func TestManager_GetOptimizedLinters(t *testing.T) {
 }
 
 func TestManager_build(t *testing.T) {
-	type cs struct {
-		cfg  config.Linters
-		name string   // test case name
-		def  []string // enabled by default linters
-		exp  []string // alphabetically ordered enabled linter names
-	}
-
 	allMegacheckLinterNames := []string{"gosimple", "staticcheck", "unused"}
 
-	cases := []cs{
+	testCases := []struct {
+		desc       string
+		cfg        *config.Config
+		defaultSet []string // enabled by default linters
+		expected   []string // alphabetically ordered enabled linter names
+	}{
 		{
-			cfg: config.Linters{
-				Disable: []string{"megacheck"},
+			desc: "disable all linters from megacheck",
+			cfg: &config.Config{
+				Linters: config.Linters{
+					Disable: []string{"megacheck"},
+				},
 			},
-			name: "disable all linters from megacheck",
-			def:  allMegacheckLinterNames,
-			exp:  []string{"typecheck"}, // all disabled
+			defaultSet: allMegacheckLinterNames,
+			expected:   []string{"typecheck"}, // all disabled
 		},
 		{
-			cfg: config.Linters{
-				Disable: []string{"staticcheck"},
+			desc: "disable only staticcheck",
+			cfg: &config.Config{
+				Linters: config.Linters{
+					Disable: []string{"staticcheck"},
+				},
 			},
-			name: "disable only staticcheck",
-			def:  allMegacheckLinterNames,
-			exp:  []string{"gosimple", "typecheck", "unused"},
+			defaultSet: allMegacheckLinterNames,
+			expected:   []string{"gosimple", "typecheck", "unused"},
 		},
 		{
-			name: "don't merge into megacheck",
-			def:  allMegacheckLinterNames,
-			exp:  []string{"gosimple", "staticcheck", "typecheck", "unused"},
+			desc:       "don't merge into megacheck",
+			defaultSet: allMegacheckLinterNames,
+			expected:   []string{"gosimple", "staticcheck", "typecheck", "unused"},
 		},
 		{
-			name: "expand megacheck",
-			cfg: config.Linters{
-				Enable: []string{"megacheck"},
+			desc: "expand megacheck",
+			cfg: &config.Config{
+				Linters: config.Linters{
+					Enable: []string{"megacheck"},
+				},
 			},
-			def: nil,
-			exp: []string{"gosimple", "staticcheck", "typecheck", "unused"},
+			defaultSet: nil,
+			expected:   []string{"gosimple", "staticcheck", "typecheck", "unused"},
 		},
 		{
-			name: "don't disable anything",
-			def:  []string{"gofmt", "govet", "typecheck"},
-			exp:  []string{"gofmt", "govet", "typecheck"},
+			desc:       "don't disable anything",
+			defaultSet: []string{"gofmt", "govet", "typecheck"},
+			expected:   []string{"gofmt", "govet", "typecheck"},
 		},
 		{
-			name: "enable gosec by gas alias",
-			cfg: config.Linters{
-				Enable: []string{"gas"},
+			desc: "enable gosec by gas alias",
+			cfg: &config.Config{
+				Linters: config.Linters{
+					Enable: []string{"gas"},
+				},
 			},
-			exp: []string{"gosec", "typecheck"},
+			expected: []string{"gosec", "typecheck"},
 		},
 		{
-			name: "enable gosec by primary name",
-			cfg: config.Linters{
-				Enable: []string{"gosec"},
+			desc: "enable gosec by primary name",
+			cfg: &config.Config{
+				Linters: config.Linters{
+					Enable: []string{"gosec"},
+				},
 			},
-			exp: []string{"gosec", "typecheck"},
+			expected: []string{"gosec", "typecheck"},
 		},
 		{
-			name: "enable gosec by both names",
-			cfg: config.Linters{
-				Enable: []string{"gosec", "gas"},
+			desc: "enable gosec by both names",
+			cfg: &config.Config{
+				Linters: config.Linters{
+					Enable: []string{"gosec", "gas"},
+				},
 			},
-			exp: []string{"gosec", "typecheck"},
+			expected: []string{"gosec", "typecheck"},
 		},
 		{
-			name: "disable gosec by gas alias",
-			cfg: config.Linters{
-				Disable: []string{"gas"},
+			desc: "disable gosec by gas alias",
+			cfg: &config.Config{
+				Linters: config.Linters{
+					Disable: []string{"gas"},
+				},
 			},
-			def: []string{"gosec"},
-			exp: []string{"typecheck"},
+			defaultSet: []string{"gosec"},
+			expected:   []string{"typecheck"},
 		},
 		{
-			name: "disable gosec by primary name",
-			cfg: config.Linters{
-				Disable: []string{"gosec"},
+			desc: "disable gosec by primary name",
+			cfg: &config.Config{
+				Linters: config.Linters{
+					Disable: []string{"gosec"},
+				},
 			},
-			def: []string{"gosec"},
-			exp: []string{"typecheck"},
+			defaultSet: []string{"gosec"},
+			expected:   []string{"typecheck"},
+		},
+		{
+			desc: "linters and formatters",
+			cfg: &config.Config{
+				Linters: config.Linters{
+					Enable: []string{"gosec"},
+				},
+				Formatters: config.Formatters{
+					Enable: []string{"gofmt"},
+				},
+			},
+			expected: []string{"gosec", "gofmt", "typecheck"},
+		},
+		{
+			desc: "linters and formatters but linters configuration disables the formatter",
+			cfg: &config.Config{
+				Linters: config.Linters{
+					Enable:  []string{"gosec"},
+					Disable: []string{"gofmt"},
+				},
+				Formatters: config.Formatters{
+					Enable: []string{"gofmt"},
+				},
+			},
+			expected: []string{"gosec", "typecheck"},
+		},
+		{
+			desc: "only formatters",
+			cfg: &config.Config{
+				Formatters: config.Formatters{
+					Enable: []string{"gofmt"},
+				},
+			},
+			expected: []string{"gofmt", "typecheck"},
 		},
 	}
 
-	for _, c := range cases {
-		t.Run(c.name, func(t *testing.T) {
-			m, err := NewManager(logutils.NewStderrLog("skip"), &config.Config{Linters: c.cfg}, NewLinterBuilder())
+	for _, test := range testCases {
+		t.Run(test.desc, func(t *testing.T) {
+			m, err := NewManager(logutils.NewStderrLog("skip"), test.cfg, NewLinterBuilder())
 			require.NoError(t, err)
 
 			var defaultLinters []*linter.Config
-			for _, ln := range c.def {
+			for _, ln := range test.defaultSet {
 				lcs := m.GetLinterConfigs(ln)
 				assert.NotNil(t, lcs, ln)
 				defaultLinters = append(defaultLinters, lcs...)
@@ -167,7 +215,7 @@ func TestManager_build(t *testing.T) {
 				enabledLinters = append(enabledLinters, ln)
 			}
 
-			assert.ElementsMatch(t, c.exp, enabledLinters)
+			assert.ElementsMatch(t, test.expected, enabledLinters)
 		})
 	}
 }

@@ -16,22 +16,22 @@ const EnvTestRun = "GL_TEST_RUN"
 const envDebug = "GL_DEBUG"
 
 const (
-	DebugKeyBinSalt        = "bin_salt"
-	DebugKeyConfigReader   = "config_reader"
-	DebugKeyEmpty          = ""
-	DebugKeyEnabledLinters = "enabled_linters"
-	DebugKeyExec           = "exec"
-	DebugKeyFormatter      = "formatter"
-	DebugKeyGoEnv          = "goenv"
-	DebugKeyLinter         = "linter"
-	DebugKeyLintersContext = "linters_context"
-	DebugKeyLintersDB      = "lintersdb"
-	DebugKeyLintersOutput  = "linters_output"
-	DebugKeyLoader         = "loader" // Debugs packages loading (including `go/packages` internal debugging).
-	DebugKeyPkgCache       = "pkgcache"
-	DebugKeyRunner         = "runner"
-	DebugKeyStopwatch      = "stopwatch"
-	DebugKeyTest           = "test"
+	DebugKeyBinSalt          = "bin_salt"
+	DebugKeyConfigReader     = "config_reader"
+	DebugKeyEmpty            = ""
+	DebugKeyEnabledLinters   = "enabled_linters"
+	DebugKeyExec             = "exec"
+	DebugKeyFormatter        = "formatter"
+	DebugKeyFormattersOutput = "formatters_output"
+	DebugKeyGoEnv            = "goenv"
+	DebugKeyLintersContext   = "linters_context"
+	DebugKeyLintersDB        = "lintersdb"
+	DebugKeyLintersOutput    = "linters_output"
+	DebugKeyLoader           = "loader" // Debugs packages loading (including `go/packages` internal debugging).
+	DebugKeyPkgCache         = "pkgcache"
+	DebugKeyRunner           = "runner"
+	DebugKeyStopwatch        = "stopwatch"
+	DebugKeyTest             = "test"
 )
 
 // Printers.
@@ -81,7 +81,8 @@ const (
 	DebugKeyForbidigo = "forbidigo" // Debugs `forbidigo` linter.
 	DebugKeyGoCritic  = "gocritic"  // Debugs `gocritic` linter.
 	DebugKeyGovet     = "govet"     // Debugs `govet` linter.
-	DebugKeyRevive    = "revive"    // Debugs `revive` linter.
+	DebugKeyLinter    = "linter"
+	DebugKeyRevive    = "revive" // Debugs `revive` linter.
 )
 
 func getEnabledDebugs() map[string]bool {

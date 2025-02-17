@@ -12,7 +12,7 @@ import (
 
 const linterName = "gofumpt"
 
-func New(settings *config.GofumptSettings) *goanalysis.Linter {
+func New(settings *config.GoFumptSettings) *goanalysis.Linter {
 	a := goformatters.NewAnalyzer(
 		internal.LinterLogger.Child(linterName),
 		"Checks if code and import statements are formatted, with additional rules.",

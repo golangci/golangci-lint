@@ -394,13 +394,13 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithAutoFix().
 			WithURL("https://github.com/Djarvur/go-err113"),
 
-		linter.NewConfig(gofmt.New(&cfg.LintersSettings.Gofmt)).
+		linter.NewConfig(gofmt.New(&cfg.LintersSettings.GoFmt)).
 			WithSince("v1.0.0").
 			WithPresets(linter.PresetFormatting).
 			WithAutoFix().
 			WithURL("https://pkg.go.dev/cmd/gofmt"),
 
-		linter.NewConfig(gofumpt.New(&cfg.LintersSettings.Gofumpt)).
+		linter.NewConfig(gofumpt.New(&cfg.LintersSettings.GoFumpt)).
 			WithSince("v1.28.0").
 			WithPresets(linter.PresetFormatting).
 			WithAutoFix().
@@ -412,7 +412,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithAutoFix().
 			WithURL("https://github.com/denis-tingaikin/go-header"),
 
-		linter.NewConfig(goimports.New(&cfg.LintersSettings.Goimports)).
+		linter.NewConfig(goimports.New(&cfg.LintersSettings.GoImports)).
 			WithSince("v1.20.0").
 			WithPresets(linter.PresetFormatting, linter.PresetImport).
 			WithAutoFix().

@@ -178,7 +178,7 @@ func (m *Manager) build(enabledByDefaultLinters []*linter.Config) map[string]*li
 		}
 	}
 
-	for _, name := range m.cfg.Linters.Enable {
+	for _, name := range slices.Concat(m.cfg.Linters.Enable, m.cfg.Formatters.Enable) {
 		for _, lc := range m.GetLinterConfigs(name) {
 			// it's important to use lc.Name() nor name because name can be alias
 			resultLintersSet[lc.Name()] = lc

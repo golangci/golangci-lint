@@ -29,6 +29,8 @@ type Config struct {
 	Issues          Issues          `mapstructure:"issues"`
 	Severity        Severity        `mapstructure:"severity"`
 
+	Formatters Formatters `mapstructure:"formatters"`
+
 	InternalCmdTest bool // Option is used only for testing golangci-lint command, don't use it
 	InternalTest    bool // Option is used only for testing golangci-lint code, don't use it
 }
@@ -64,6 +66,9 @@ func (c *Config) Validate() error {
 func NewDefault() *Config {
 	return &Config{
 		LintersSettings: defaultLintersSettings,
+		Formatters: Formatters{
+			Settings: defaultFormatterSettings,
+		},
 	}
 }
 

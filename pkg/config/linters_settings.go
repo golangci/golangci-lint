@@ -10,6 +10,8 @@ import (
 )
 
 var defaultLintersSettings = LintersSettings{
+	FormatterSettings: defaultFormatterSettings,
+
 	Asasalint: AsasalintSettings{
 		UseBuiltinExclusions: true,
 	},
@@ -43,10 +45,6 @@ var defaultLintersSettings = LintersSettings{
 	Forbidigo: ForbidigoSettings{
 		ExcludeGodocExamples: true,
 	},
-	Gci: GciSettings{
-		Sections:      []string{"standard", "default"},
-		SkipGenerated: true,
-	},
 	GoChecksumType: GoChecksumTypeSettings{
 		DefaultSignifiesExhaustive: true,
 	},
@@ -73,14 +71,6 @@ var defaultLintersSettings = LintersSettings{
 	Godot: GodotSettings{
 		Scope:  "declarations",
 		Period: true,
-	},
-	Gofmt: GoFmtSettings{
-		Simplify: true,
-	},
-	Gofumpt: GofumptSettings{
-		LangVersion: "",
-		ModulePath:  "",
-		ExtraRules:  false,
 	},
 	Gosec: GoSecSettings{
 		Concurrency: runtime.NumCPU(),
@@ -214,6 +204,8 @@ var defaultLintersSettings = LintersSettings{
 }
 
 type LintersSettings struct {
+	FormatterSettings `mapstructure:",squash"`
+
 	Asasalint       AsasalintSettings
 	BiDiChk         BiDiChkSettings
 	CopyLoopVar     CopyLoopVarSettings
@@ -231,7 +223,6 @@ type LintersSettings struct {
 	Fatcontext      FatcontextSettings
 	Forbidigo       ForbidigoSettings
 	Funlen          FunlenSettings
-	Gci             GciSettings
 	GinkgoLinter    GinkgoLinterSettings
 	Gocognit        GocognitSettings
 	GoChecksumType  GoChecksumTypeSettings
@@ -240,10 +231,7 @@ type LintersSettings struct {
 	Gocyclo         GoCycloSettings
 	Godot           GodotSettings
 	Godox           GodoxSettings
-	Gofmt           GoFmtSettings
-	Gofumpt         GofumptSettings
 	Goheader        GoHeaderSettings
-	Goimports       GoImportsSettings
 	GoModDirectives GoModDirectivesSettings
 	Gomodguard      GoModGuardSettings
 	Gosec           GoSecSettings
@@ -488,18 +476,6 @@ type FunlenSettings struct {
 	IgnoreComments bool `mapstructure:"ignore-comments"`
 }
 
-type GciSettings struct {
-	Sections         []string `mapstructure:"sections"`
-	NoInlineComments bool     `mapstructure:"no-inline-comments"`
-	NoPrefixComments bool     `mapstructure:"no-prefix-comments"`
-	SkipGenerated    bool     `mapstructure:"skip-generated"`
-	CustomOrder      bool     `mapstructure:"custom-order"`
-	NoLexOrder       bool     `mapstructure:"no-lex-order"`
-
-	// Deprecated: use Sections instead.
-	LocalPrefixes string `mapstructure:"local-prefixes"`
-}
-
 type GinkgoLinterSettings struct {
 	SuppressLenAssertion       bool `mapstructure:"suppress-len-assertion"`
 	SuppressNilAssertion       bool `mapstructure:"suppress-nil-assertion"`
@@ -567,32 +543,10 @@ type GodoxSettings struct {
 	Keywords []string
 }
 
-type GoFmtSettings struct {
-	Simplify     bool
-	RewriteRules []GoFmtRewriteRule `mapstructure:"rewrite-rules"`
-}
-
-type GoFmtRewriteRule struct {
-	Pattern     string
-	Replacement string
-}
-
-type GofumptSettings struct {
-	ModulePath string `mapstructure:"module-path"`
-	ExtraRules bool   `mapstructure:"extra-rules"`
-
-	// Deprecated: use the global `run.go` instead.
-	LangVersion string `mapstructure:"lang-version"`
-}
-
 type GoHeaderSettings struct {
 	Values       map[string]map[string]string `mapstructure:"values"`
 	Template     string                       `mapstructure:"template"`
 	TemplatePath string                       `mapstructure:"template-path"`
-}
-
-type GoImportsSettings struct {
-	LocalPrefixes string `mapstructure:"local-prefixes"`
 }
 
 type GoModDirectivesSettings struct {

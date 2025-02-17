@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"maps"
 	"runtime/debug"
 	"strings"
 
@@ -71,7 +72,19 @@ func NewRunner(log logutils.Log, cfg *config.Config, args []string, goenv *gouti
 		return nil, fmt.Errorf("failed to get enabled linters: %w", err)
 	}
 
-	metaFormatter, err := goformatters.NewMetaFormatter(log, cfg, enabledLinters)
+	var enabledFormatters []string
+	for name := range maps.Keys(enabledLinters) {
+		if goformatters.IsFormatter(name) {
+			enabledFormatters = append(enabledFormatters, name)
+		}
+	}
+
+	formattersCfg := &config.Formatters{
+		Enable:   enabledFormatters,
+		Settings: cfg.LintersSettings.FormatterSettings,
+	}
+
+	metaFormatter, err := goformatters.NewMetaFormatter(log, formattersCfg, &cfg.Run)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create meta-formatter: %w", err)
 	}
