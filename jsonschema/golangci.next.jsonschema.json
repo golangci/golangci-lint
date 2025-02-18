@@ -356,8 +356,8 @@
       ]
     },
     "linter-names": {
-      "$comment": "anyOf with enum is used to allow auto completion of non-custom linters",
-      "description": "Linters usable.",
+      "$comment": "anyOf with enum is used to allow auto-completion of non-custom linters",
+      "description": "Usable linter names.",
       "anyOf": [
         {
           "enum": [
@@ -387,7 +387,6 @@
             "forbidigo",
             "forcetypeassert",
             "funlen",
-            "gci",
             "ginkgolinter",
             "gocheckcompilerdirectives",
             "gochecknoglobals",
@@ -399,12 +398,8 @@
             "gocyclo",
             "godot",
             "godox",
-            "golines",
             "err113",
-            "gofmt",
-            "gofumpt",
             "goheader",
-            "goimports",
             "gomoddirectives",
             "gomodguard",
             "goprintffuncname",
@@ -476,6 +471,16 @@
         {
           "type": "string"
         }
+      ]
+    },
+    "formatter-names": {
+      "description": "Usable formatter names.",
+      "enum": [
+        "gci",
+        "gofmt",
+        "gofumpt",
+        "goimports",
+        "golines"
       ]
     },
     "settings": {
