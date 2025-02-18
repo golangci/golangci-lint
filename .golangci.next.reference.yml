@@ -4080,45 +4080,62 @@ issues:
 # output configuration options
 output:
   # The formats used to render issues.
-  # Formats:
-  # - `colored-line-number`
-  # - `line-number`
-  # - `json`
-  # - `colored-tab`
-  # - `tab`
-  # - `html`
-  # - `checkstyle`
-  # - `code-climate`
-  # - `junit-xml`
-  # - `junit-xml-extended`
-  # - `github-actions`
-  # - `teamcity`
-  # - `sarif`
-  # Output path can be either `stdout`, `stderr` or path to the file to write to.
-  #
-  # For the CLI flag (`--out-format`), multiple formats can be specified by separating them by comma.
-  # The output can be specified for each of them by separating format name and path by colon symbol.
-  # Example: "--out-format=checkstyle:report.xml,json:stdout,colored-line-number"
-  # The CLI flag (`--out-format`) override the configuration file.
-  #
-  # Default:
-  #   formats:
-  #     - format: colored-line-number
-  #       path: stdout
   formats:
-    - format: json
-      path: stderr
-    - format: checkstyle
-      path: report.xml
-    - format: colored-line-number
-
-  # Print lines of code with issue.
-  # Default: true
-  print-issued-lines: false
-
-  # Print linter name in the end of issue text.
-  # Default: true
-  print-linter-name: false
+    # (line-number)
+    text:
+      # Output path can be either `stdout`, `stderr` or path to the file to write to.
+      # Default: stdout
+      path: ./path/to/report.txt
+      # Print linter name in the end of issue text.
+      # Default: true
+      print-linter-name: false
+      # Print lines of code with issue.
+      # Default: true
+      print-issued-lines: false
+      # Use colors.
+      # Default: true
+      colors: false
+    json:
+      # Output path can be either `stdout`, `stderr` or path to the file to write to.
+      # Default: stdout
+      path: ./path/to/output.json
+    tab:
+      # Output path can be either `stdout`, `stderr` or path to the file to write to.
+      # Default: stdout
+      path: stdout
+      # Print linter name in the end of issue text.
+      # Default: true
+      print-linter-name: true
+      # Use colors.
+      # Default: true
+      colors: false
+    html:
+      # Output path can be either `stdout`, `stderr` or path to the file to write to.
+      # Default: stdout
+      path: ./path/to/output.html
+    checkstyle:
+      # Output path can be either `stdout`, `stderr` or path to the file to write to.
+      # Default: stdout
+      path: ./path/to/output.xml
+    code-climate:
+      # Output path can be either `stdout`, `stderr` or path to the file to write to.
+      # Default: stdout
+      path: ./path/to/output.json
+    junit-xml:
+      # Output path can be either `stdout`, `stderr` or path to the file to write to.
+      # Default: stdout
+      path: ./path/to/output.xml
+      # Support extra JUnit XML fields.
+      # Default: false
+      extended: true
+    teamcity:
+      # Output path can be either `stdout`, `stderr` or path to the file to write to.
+      # Default: stdout
+      path: ./path/to/output.txt
+    sarif:
+      # Output path can be either `stdout`, `stderr` or path to the file to write to.
+      # Default: stdout
+      path: ./path/to/output.json
 
   # Add a prefix to the output file references.
   # Default: ""
