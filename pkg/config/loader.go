@@ -1,7 +1,6 @@
 package config
 
 import (
-	"cmp"
 	"context"
 	"errors"
 	"fmt"
@@ -69,23 +68,7 @@ func (l *Loader) Load(opts LoadOptions) error {
 	l.applyStringSliceHack()
 
 	if l.cfg.Linters.LinterExclusions.Generated == "" {
-		// `l.cfg.Issues.ExcludeGenerated` is always non-empty because of the flag default value.
-		l.cfg.Linters.LinterExclusions.Generated = cmp.Or(l.cfg.Issues.ExcludeGenerated, GeneratedModeStrict)
-	}
-
-	// Compatibility layer with v1.
-	// TODO(ldez): should be removed in v2.
-	if l.cfg.Issues.UseDefaultExcludes {
-		l.cfg.Linters.LinterExclusions.Presets = []string{
-			ExclusionPresetComments,
-			ExclusionPresetStdErrorHandling,
-			ExclusionPresetCommonFalsePositives,
-			ExclusionPresetLegacy,
-		}
-	}
-
-	if len(l.cfg.Issues.ExcludeRules) > 0 {
-		l.cfg.Linters.LinterExclusions.Rules = append(l.cfg.Linters.LinterExclusions.Rules, l.cfg.Issues.ExcludeRules...)
+		l.cfg.Linters.LinterExclusions.Generated = GeneratedModeStrict
 	}
 
 	l.handleFormatters()
@@ -299,10 +282,6 @@ func (l *Loader) applyStringSliceHack() {
 	l.appendStringSlice("disable", &l.cfg.Linters.Disable)
 	l.appendStringSlice("presets", &l.cfg.Linters.Presets)
 	l.appendStringSlice("build-tags", &l.cfg.Run.BuildTags)
-	l.appendStringSlice("exclude", &l.cfg.Issues.ExcludePatterns)
-
-	l.appendStringSlice("exclude-dirs", &l.cfg.Issues.ExcludeDirs)
-	l.appendStringSlice("exclude-files", &l.cfg.Issues.ExcludeFiles)
 }
 
 func (l *Loader) appendStringSlice(name string, current *[]string) {

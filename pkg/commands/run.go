@@ -232,7 +232,7 @@ func (c *runCommand) postRun(_ *cobra.Command, _ []string) {
 	c.releaseFileLock()
 }
 
-func (c *runCommand) execute(_ *cobra.Command, args []string) {
+func (c *runCommand) execute(_ *cobra.Command, _ []string) {
 	needTrackResources := logutils.IsVerbose() || c.opts.PrintResourcesUsage
 
 	trackResourcesEndCh := make(chan struct{})
@@ -256,7 +256,7 @@ func (c *runCommand) execute(_ *cobra.Command, args []string) {
 		go watchResources(ctx, trackResourcesEndCh, c.log, c.debugf)
 	}
 
-	if err := c.runAndPrint(ctx, args); err != nil {
+	if err := c.runAndPrint(ctx); err != nil {
 		c.log.Errorf("Running error: %s", err)
 		if c.exitCode == exitcodes.Success {
 			var exitErr *exitcodes.ExitError
@@ -329,7 +329,7 @@ func (c *runCommand) stopTracing() error {
 	return nil
 }
 
-func (c *runCommand) runAndPrint(ctx context.Context, args []string) error {
+func (c *runCommand) runAndPrint(ctx context.Context) error {
 	if err := c.goenv.Discover(ctx); err != nil {
 		c.log.Warnf("Failed to discover go env: %s", err)
 	}
@@ -350,7 +350,7 @@ func (c *runCommand) runAndPrint(ctx context.Context, args []string) error {
 
 	c.printDeprecatedLinterMessages(enabledLintersMap)
 
-	issues, err := c.runAnalysis(ctx, args)
+	issues, err := c.runAnalysis(ctx)
 	if err != nil {
 		return err // XXX: don't lose type
 	}
@@ -376,7 +376,7 @@ func (c *runCommand) runAndPrint(ctx context.Context, args []string) error {
 }
 
 // runAnalysis executes the linters that have been enabled in the configuration.
-func (c *runCommand) runAnalysis(ctx context.Context, args []string) ([]result.Issue, error) {
+func (c *runCommand) runAnalysis(ctx context.Context) ([]result.Issue, error) {
 	lintersToRun, err := c.dbManager.GetOptimizedLinters()
 	if err != nil {
 		return nil, err
@@ -387,7 +387,7 @@ func (c *runCommand) runAnalysis(ctx context.Context, args []string) ([]result.I
 		return nil, fmt.Errorf("context loading failed: %w", err)
 	}
 
-	runner, err := lint.NewRunner(c.log.Child(logutils.DebugKeyRunner), c.cfg, args,
+	runner, err := lint.NewRunner(c.log.Child(logutils.DebugKeyRunner), c.cfg,
 		c.goenv, c.lineCache, c.fileCache, c.dbManager, lintCtx)
 	if err != nil {
 		return nil, err

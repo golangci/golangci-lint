@@ -71,18 +71,8 @@ func saveLinters() error {
 }
 
 func saveDefaultExclusions() error {
-	var excludePatterns []types.ExcludePattern
-
-	for _, pattern := range config.DefaultExcludePatterns {
-		excludePatterns = append(excludePatterns, types.ExcludePattern{
-			ID:      pattern.ID,
-			Pattern: pattern.Pattern,
-			Linter:  pattern.Linter,
-			Why:     pattern.Why,
-		})
-	}
-
-	return saveToJSONFile(filepath.Join("assets", "default-exclusions.json"), excludePatterns)
+	// FIXME
+	return saveToJSONFile(filepath.Join("assets", "default-exclusions.json"), nil)
 }
 
 func saveCLIHelp(dst string) error {
