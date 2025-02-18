@@ -10,7 +10,7 @@ linters:
   # Disable all linters.
   # Default: false
   disable-all: true
-  # Enable specific linter
+  # Enable specific linter.
   # https://golangci-lint.run/usage/linters/#enabled-by-default
   enable:
     - asasalint
@@ -274,6 +274,99 @@ linters:
   # Enable only fast linters from enabled linters set (first run won't be fast)
   # Default: false
   fast: true
+
+
+formatters:
+  # Enable specific formatter.
+  # Default: [] (uses standard Go formatting)
+  enable:
+    - gci
+    - gofmt
+    - gofumpt
+    - goimports
+    - golines
+
+  # Formatters settings.
+  settings:
+    gci:
+      # Section configuration to compare against.
+      # Section names are case-insensitive and may contain parameters in ().
+      # The default order of sections is `standard > default > custom > blank > dot > alias > localmodule`,
+      # If `custom-order` is `true`, it follows the order of `sections` option.
+      # Default: ["standard", "default"]
+      sections:
+        - standard                       # Standard section: captures all standard packages.
+        - default                        # Default section: contains all imports that could not be matched to another section type.
+        - prefix(github.com/org/project) # Custom section: groups all imports with the specified Prefix.
+        - blank                          # Blank section: contains all blank imports. This section is not present unless explicitly enabled.
+        - dot                            # Dot section: contains all dot imports. This section is not present unless explicitly enabled.
+        - alias                          # Alias section: contains all alias imports. This section is not present unless explicitly enabled.
+        - localmodule                    # Local module section: contains all local packages. This section is not present unless explicitly enabled.
+
+      # Checks that no inline Comments are present.
+      # Default: false
+      no-inline-comments: true
+
+      # Checks that no prefix Comments(comment lines above an import) are present.
+      # Default: false
+      no-prefix-comments: true
+
+      # Skip generated files.
+      # Default: true
+      skip-generated: false
+
+      # Enable custom order of sections.
+      # If `true`, make the section order the same as the order of `sections`.
+      # Default: false
+      custom-order: true
+
+      # Drops lexical ordering for custom sections.
+      # Default: false
+      no-lex-order: true
+
+    gofmt:
+      # Simplify code: gofmt with `-s` option.
+      # Default: true
+      simplify: false
+      # Apply the rewrite rules to the source before reformatting.
+      # https://pkg.go.dev/cmd/gofmt
+      # Default: []
+      rewrite-rules:
+        - pattern: 'interface{}'
+          replacement: 'any'
+        - pattern: 'a[b:len(a)]'
+          replacement: 'a[b:]'
+
+    gofumpt:
+      # Module path which contains the source code being formatted.
+      # Default: ""
+      module-path: github.com/org/project
+
+      # Choose whether to use the extra rules.
+      # Default: false
+      extra-rules: true
+
+    goimports:
+      # A comma-separated list of prefixes, which, if set, checks import paths
+      # with the given prefixes are grouped after 3rd-party packages.
+      # Default: ""
+      local-prefixes: github.com/org/project
+
+    golines:
+      # Target maximum line length.
+      # Default: 100
+      max-len: 200
+      # Length of a tabulation.
+      # Default: 4
+      tab-len: 8
+      # Shorten single-line comments.
+      # Default: false
+      shorten-comments: true
+      # Default: true
+      reformat-tags: false
+      # Split chained methods on the dots as opposed to the arguments.
+      # Default: true
+      chain-split-dots: false
 
 
 # All available settings of specific linters.
@@ -595,42 +688,6 @@ linters-settings:
     # Ignore comments when counting lines.
     # Default false
     ignore-comments: true
-
-  gci:
-    # Section configuration to compare against.
-    # Section names are case-insensitive and may contain parameters in ().
-    # The default order of sections is `standard > default > custom > blank > dot > alias > localmodule`,
-    # If `custom-order` is `true`, it follows the order of `sections` option.
-    # Default: ["standard", "default"]
-    sections:
-      - standard                       # Standard section: captures all standard packages.
-      - default                        # Default section: contains all imports that could not be matched to another section type.
-      - prefix(github.com/org/project) # Custom section: groups all imports with the specified Prefix.
-      - blank                          # Blank section: contains all blank imports. This section is not present unless explicitly enabled.
-      - dot                            # Dot section: contains all dot imports. This section is not present unless explicitly enabled.
-      - alias                          # Alias section: contains all alias imports. This section is not present unless explicitly enabled.
-      - localmodule                    # Local module section: contains all local packages. This section is not present unless explicitly enabled.
-
-    # Checks that no inline Comments are present.
-    # Default: false
-    no-inline-comments: true
-
-    # Checks that no prefix Comments(comment lines above an import) are present.
-    # Default: false
-    no-prefix-comments: true
-
-    # Skip generated files.
-    # Default: true
-    skip-generated: false
-
-    # Enable custom order of sections.
-    # If `true`, make the section order the same as the order of `sections`.
-    # Default: false
-    custom-order: true
-
-    # Drops lexical ordering for custom sections.
-    # Default: false
-    no-lex-order: true
 
   ginkgolinter:
     # Suppress the wrong length assertion warning.
@@ -1313,28 +1370,6 @@ linters-settings:
       - OPTIMIZE # marks code that should be optimized before merging
       - HACK # marks hack-around that should be removed before merging
 
-  gofmt:
-    # Simplify code: gofmt with `-s` option.
-    # Default: true
-    simplify: false
-    # Apply the rewrite rules to the source before reformatting.
-    # https://pkg.go.dev/cmd/gofmt
-    # Default: []
-    rewrite-rules:
-      - pattern: 'interface{}'
-        replacement: 'any'
-      - pattern: 'a[b:len(a)]'
-        replacement: 'a[b:]'
-
-  gofumpt:
-    # Module path which contains the source code being formatted.
-    # Default: ""
-    module-path: github.com/org/project
-
-    # Choose whether to use the extra rules.
-    # Default: false
-    extra-rules: true
-
   goheader:
     # Supports two types 'const` and `regexp`.
     # Values can be used recursively.
@@ -1373,12 +1408,6 @@ linters-settings:
     # Useful if you need to load the template from a specific file.
     # Default: ""
     template-path: /path/to/my/template.tmpl
-
-  goimports:
-    # A comma-separated list of prefixes, which, if set, checks import paths
-    # with the given prefixes are grouped after 3rd-party packages.
-    # Default: ""
-    local-prefixes: github.com/org/project
 
   gomoddirectives:
     # Allow local `replace` directives.
