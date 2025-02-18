@@ -9,6 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
+	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
@@ -87,7 +88,11 @@ path/to/fileb.go:300:9  another issue
 
 			buf := new(bytes.Buffer)
 
-			printer := NewTab(logutils.NewStderrLog(logutils.DebugKeyEmpty), buf, test.printLinterName, test.useColors)
+			printer := NewTab(logutils.NewStderrLog(logutils.DebugKeyEmpty), buf, &config.Tab{
+				SimpleStyle:     config.SimpleStyle{},
+				PrintLinterName: test.printLinterName,
+				UseColors:       test.useColors,
+			})
 
 			err := printer.Print(issues)
 			require.NoError(t, err)

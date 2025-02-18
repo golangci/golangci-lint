@@ -7,49 +7,12 @@ import (
 	"strings"
 )
 
-const (
-	OutFormatJSON              = "json"
-	OutFormatLineNumber        = "line-number"
-	OutFormatColoredLineNumber = "colored-line-number"
-	OutFormatTab               = "tab"
-	OutFormatColoredTab        = "colored-tab"
-	OutFormatCheckstyle        = "checkstyle"
-	OutFormatCodeClimate       = "code-climate"
-	OutFormatHTML              = "html"
-	OutFormatJUnitXML          = "junit-xml"
-	OutFormatJUnitXMLExtended  = "junit-xml-extended"
-	OutFormatGithubActions     = "github-actions" // Deprecated
-	OutFormatTeamCity          = "teamcity"
-	OutFormatSarif             = "sarif"
-)
-
-var AllOutputFormats = []string{
-	OutFormatJSON,
-	OutFormatLineNumber,
-	OutFormatColoredLineNumber,
-	OutFormatTab,
-	OutFormatColoredTab,
-	OutFormatCheckstyle,
-	OutFormatCodeClimate,
-	OutFormatHTML,
-	OutFormatJUnitXML,
-	OutFormatJUnitXMLExtended,
-	OutFormatGithubActions,
-	OutFormatTeamCity,
-	OutFormatSarif,
-}
-
 type Output struct {
-	Formats         OutputFormats `mapstructure:"formats"`
-	PrintIssuedLine bool          `mapstructure:"print-issued-lines"`
-	PrintLinterName bool          `mapstructure:"print-linter-name"`
-	SortResults     bool          `mapstructure:"sort-results"`
-	SortOrder       []string      `mapstructure:"sort-order"`
-	PathPrefix      string        `mapstructure:"path-prefix"`
-	ShowStats       bool          `mapstructure:"show-stats"`
-
-	// Deprecated: use Formats instead.
-	Format string `mapstructure:"format"`
+	Formats     Formats  `mapstructure:"formats"`
+	SortResults bool     `mapstructure:"sort-results"`
+	SortOrder   []string `mapstructure:"sort-order"`
+	PathPrefix  string   `mapstructure:"path-prefix"`
+	ShowStats   bool     `mapstructure:"show-stats"`
 
 	// Deprecated: use [Issues.UniqByLine] instead.
 	UniqByLine *bool `mapstructure:"uniq-by-line"`
@@ -72,47 +35,6 @@ func (o *Output) Validate() error {
 		if !slices.Contains(validOrders, order) {
 			return fmt.Errorf("unsupported sort-order name %q", order)
 		}
-	}
-
-	for _, format := range o.Formats {
-		err := format.Validate()
-		if err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
-type OutputFormat struct {
-	Format string `mapstructure:"format"`
-	Path   string `mapstructure:"path"`
-}
-
-func (o *OutputFormat) Validate() error {
-	if o.Format == "" {
-		return errors.New("the format is required")
-	}
-
-	if !slices.Contains(AllOutputFormats, o.Format) {
-		return fmt.Errorf("unsupported output format %q", o.Format)
-	}
-
-	return nil
-}
-
-type OutputFormats []OutputFormat
-
-func (p *OutputFormats) UnmarshalText(text []byte) error {
-	formats := strings.Split(string(text), ",")
-
-	for _, item := range formats {
-		format, path, _ := strings.Cut(item, ":")
-
-		*p = append(*p, OutputFormat{
-			Path:   path,
-			Format: format,
-		})
 	}
 
 	return nil

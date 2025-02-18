@@ -7,6 +7,7 @@ import (
 
 	"github.com/fatih/color"
 
+	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
@@ -21,11 +22,11 @@ type Text struct {
 	w   io.Writer
 }
 
-func NewText(log logutils.Log, w io.Writer, printLinterName, printIssuedLine, useColors bool) *Text {
+func NewText(log logutils.Log, w io.Writer, cfg *config.Text) *Text {
 	return &Text{
-		printLinterName: printLinterName,
-		printIssuedLine: printIssuedLine,
-		useColors:       useColors,
+		printLinterName: cfg.PrintLinterName,
+		printIssuedLine: cfg.PrintIssuedLine,
+		useColors:       cfg.Colors,
 		log:             log.Child(logutils.DebugKeyTextPrinter),
 		w:               w,
 	}

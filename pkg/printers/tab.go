@@ -7,6 +7,7 @@ import (
 
 	"github.com/fatih/color"
 
+	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
@@ -20,10 +21,10 @@ type Tab struct {
 	w   io.Writer
 }
 
-func NewTab(log logutils.Log, w io.Writer, printLinterName, useColors bool) *Tab {
+func NewTab(log logutils.Log, w io.Writer, cfg *config.Tab) *Tab {
 	return &Tab{
-		printLinterName: printLinterName,
-		useColors:       useColors,
+		printLinterName: cfg.PrintLinterName,
+		useColors:       cfg.UseColors,
 		log:             log.Child(logutils.DebugKeyTabPrinter),
 		w:               w,
 	}

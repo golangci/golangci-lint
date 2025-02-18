@@ -194,12 +194,10 @@ func (c *runCommand) preRunE(_ *cobra.Command, args []string) error {
 
 	c.dbManager = dbManager
 
-	printer, err := printers.NewPrinter(c.log, &c.cfg.Output, c.reportData, c.cfg.GetBasePath())
+	c.printer, err = printers.NewPrinter(c.log, &c.cfg.Output.Formats, c.reportData, c.cfg.GetBasePath())
 	if err != nil {
 		return err
 	}
-
-	c.printer = printer
 
 	c.goenv = goutil.NewEnv(c.log.Child(logutils.DebugKeyGoEnv))
 

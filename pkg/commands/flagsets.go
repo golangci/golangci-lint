@@ -72,12 +72,6 @@ func setupRunFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
 }
 
 func setupOutputFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
-	internal.AddFlagAndBind(v, fs, fs.String, "out-format", "output.formats", config.OutFormatColoredLineNumber,
-		formatList("Formats of output:", config.AllOutputFormats))
-	internal.AddFlagAndBind(v, fs, fs.Bool, "print-issued-lines", "output.print-issued-lines", true,
-		color.GreenString("Print lines of code with issue"))
-	internal.AddFlagAndBind(v, fs, fs.Bool, "print-linter-name", "output.print-linter-name", true,
-		color.GreenString("Print linter name in issue line"))
 	internal.AddFlagAndBind(v, fs, fs.Bool, "sort-results", "output.sort-results", false,
 		color.GreenString("Sort linter results"))
 	internal.AddFlagAndBind(v, fs, fs.StringSlice, "sort-order", "output.sort-order", nil,
@@ -85,6 +79,53 @@ func setupOutputFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
 	internal.AddFlagAndBind(v, fs, fs.String, "path-prefix", "output.path-prefix", "",
 		color.GreenString("Path prefix to add to output"))
 	internal.AddFlagAndBind(v, fs, fs.Bool, "show-stats", "output.show-stats", false, color.GreenString("Show statistics per linter"))
+
+	setupOutputFormatsFlagSet(v, fs)
+}
+
+func setupOutputFormatsFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
+	outputPathDesc := "Output path can be either `stdout`, `stderr` or path to the file to write to."
+	printLinterNameDesc := "Print linter name in the end of issue text."
+	colorsDesc := "Use colors."
+
+	internal.AddFlagAndBind(v, fs, fs.String, "output.text.path", "output.formats.text.path", "",
+		color.GreenString(outputPathDesc))
+	internal.AddFlagAndBind(v, fs, fs.Bool, "output.text.print-linter-name", "output.formats.text.print-linter-name", true,
+		color.GreenString(printLinterNameDesc))
+	internal.AddFlagAndBind(v, fs, fs.Bool, "output.text.print-issued-lines", "output.formats.text.print-issued-lines", true,
+		color.GreenString("Print lines of code with issue."))
+	internal.AddFlagAndBind(v, fs, fs.Bool, "output.text.colors", "output.formats.text.colors", true,
+		color.GreenString(colorsDesc))
+
+	internal.AddFlagAndBind(v, fs, fs.String, "output.json.path", "output.formats.json.path", "",
+		color.GreenString(outputPathDesc))
+
+	internal.AddFlagAndBind(v, fs, fs.String, "output.tab.path", "output.formats.tab.path", "",
+		color.GreenString(outputPathDesc))
+	internal.AddFlagAndBind(v, fs, fs.Bool, "output.tab.print-linter-name", "output.formats.tab.print-linter-name",
+		true, color.GreenString(printLinterNameDesc))
+	internal.AddFlagAndBind(v, fs, fs.Bool, "output.tab.colors", "output.formats.tab.colors", true,
+		color.GreenString(colorsDesc))
+
+	internal.AddFlagAndBind(v, fs, fs.String, "output.html.path", "output.formats.html.path", "",
+		color.GreenString(outputPathDesc))
+
+	internal.AddFlagAndBind(v, fs, fs.String, "output.checkstyle.path", "output.formats.checkstyle.path", "",
+		color.GreenString(outputPathDesc))
+
+	internal.AddFlagAndBind(v, fs, fs.String, "output.code-climate.path", "output.formats.code-climate.path", "",
+		color.GreenString(outputPathDesc))
+
+	internal.AddFlagAndBind(v, fs, fs.String, "output.junit-xml.path", "output.formats.junit-xml.path", "",
+		color.GreenString(outputPathDesc))
+	internal.AddFlagAndBind(v, fs, fs.Bool, "output.junit-xml.extended", "output.formats.junit-xml.extended", true,
+		color.GreenString("Support extra JUnit XML fields."))
+
+	internal.AddFlagAndBind(v, fs, fs.String, "output.teamcity.path", "output.formats.teamcity.path", "",
+		color.GreenString(outputPathDesc))
+
+	internal.AddFlagAndBind(v, fs, fs.String, "output.sarif.path", "output.formats.sarif.path", "",
+		color.GreenString(outputPathDesc))
 }
 
 //nolint:gomnd // magic numbers here is ok
