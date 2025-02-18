@@ -1,3 +1,5 @@
+version: "2"
+
 linters-settings:
   errchkjson:
     report-no-exported: true

@@ -1,3 +1,5 @@
+version: "2"
+
 linters-settings:
   exhaustive:
     default-signifies-exhaustive: true

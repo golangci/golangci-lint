@@ -4,6 +4,8 @@
 # This file is not a configuration example,
 # it contains the exhaustive configuration with explanations of the options.
 
+version: "2"
+
 linters:
   # Disable all linters.
   # Default: false

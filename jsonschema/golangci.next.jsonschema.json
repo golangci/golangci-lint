@@ -481,7 +481,12 @@
   },
   "type": "object",
   "additionalProperties": false,
+  "required": ["version"],
   "properties": {
+    "version": {
+      "type": "string",
+      "default": "2"
+    },
     "run": {
       "description": "Options for analysis running,",
       "type": "object",

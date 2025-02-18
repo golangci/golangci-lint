@@ -1,3 +1,5 @@
+version: "2"
+
 linters-settings:
   nonamedreturns:
     report-error-in-defer: true

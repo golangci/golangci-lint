@@ -20,6 +20,8 @@ type Config struct {
 	cfgDir   string // Path to the directory containing golangci-lint config file.
 	basePath string // Path the root directory related to [Run.RelativePathMode].
 
+	Version string `mapstructure:"version"`
+
 	Run Run `mapstructure:"run"`
 
 	Output Output `mapstructure:"output"`

@@ -1,2 +1,4 @@
+version: "2"
+
 issues:
   max-issues-per-linter: 100
