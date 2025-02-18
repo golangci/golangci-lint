@@ -355,7 +355,7 @@
         }
       ]
     },
-    "linters": {
+    "linter-names": {
       "$comment": "anyOf with enum is used to allow auto completion of non-custom linters",
       "description": "Linters usable.",
       "anyOf": [
@@ -2295,7 +2295,7 @@
               "description": "Exclude these linters from requiring an explanation.",
               "type": "array",
               "items": {
-                "$ref": "#/definitions/linters"
+                "$ref": "#/definitions/linter-names"
               },
               "default": []
             },
@@ -4212,14 +4212,14 @@
           "description": "List of enabled linters.",
           "type": "array",
           "items": {
-            "$ref": "#/definitions/linters"
+            "$ref": "#/definitions/linter-names"
           }
         },
         "disable": {
           "description": "List of disabled linters.",
           "type": "array",
           "items": {
-            "$ref": "#/definitions/linters"
+            "$ref": "#/definitions/linter-names"
           }
         },
         "enable-all": {
@@ -4295,7 +4295,7 @@
                   "linters": {
                     "type": "array",
                     "items": {
-                      "$ref": "#/definitions/linters"
+                      "$ref": "#/definitions/linter-names"
                     }
                   },
                   "text": {
@@ -4357,7 +4357,7 @@
               "linters": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/definitions/linters"
+                  "$ref": "#/definitions/linter-names"
                 }
               },
               "text": {
@@ -4515,7 +4515,7 @@
               "linters": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/definitions/linters"
+                  "$ref": "#/definitions/linter-names"
                 }
               },
               "text": {
