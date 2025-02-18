@@ -477,193 +477,10 @@
           "type": "string"
         }
       ]
-    }
-  },
-  "type": "object",
-  "additionalProperties": false,
-  "required": ["version"],
-  "properties": {
-    "version": {
-      "type": "string",
-      "default": "2"
     },
-    "run": {
-      "description": "Options for analysis running,",
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "concurrency": {
-          "description": "Number of concurrent runners. Defaults to the number of available CPU cores.",
-          "type": "integer",
-          "minimum": 0,
-          "examples": [4]
-        },
-        "timeout": {
-          "description": "Timeout for the analysis.",
-          "type": "string",
-          "pattern": "^\\d*[sm]$",
-          "default": "1m",
-          "examples": ["30s", "5m"]
-        },
-        "issues-exit-code": {
-          "description": "Exit code when at least one issue was found.",
-          "type": "integer",
-          "default": 1
-        },
-        "tests": {
-          "description": "Enable inclusion of test files.",
-          "type": "boolean",
-          "default": true
-        },
-        "build-tags": {
-          "description": "List of build tags to pass to all linters.",
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "default": [],
-          "examples": [["mytag"]]
-        },
-        "modules-download-mode": {
-          "description": "Option to pass to \"go list -mod={option}\".\nSee \"go help modules\" for more information.",
-          "enum": ["mod", "readonly", "vendor"]
-        },
-        "allow-parallel-runners": {
-          "description": "Allow multiple parallel golangci-lint instances running. If disabled, golangci-lint acquires file lock on start.",
-          "type": "boolean",
-          "default": false
-        },
-        "allow-serial-runners": {
-          "description": "Allow multiple golangci-lint instances running, but serialize them around a lock.",
-          "type": "boolean",
-          "default": false
-        },
-        "go": {
-          "description": "Targeted Go version.",
-          "type": "string",
-          "default": "1.17"
-        },
-        "relative-path-mode": {
-          "description": "The mode used to evaluate relative paths.",
-          "type": "string",
-          "$ref": "#/definitions/relative-path-modes",
-          "default": "wd"
-        }
-      }
-    },
-    "output": {
-      "description": "Output configuration options.",
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "formats": {
-          "description": "Output formats to use.",
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "text": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "path": {
-                  "$ref": "#/definitions/formats-path",
-                  "default": "stdout"
-                },
-                "print-linter-name": {
-                  "type": "boolean",
-                  "default": true
-                },
-                "print-issued-lines": {
-                  "type": "boolean",
-                  "default": true
-                },
-                "colors": {
-                  "type": "boolean",
-                  "default": true
-                }
-              }
-            },
-            "json": {
-              "$ref": "#/definitions/simple-format"
-            },
-            "tab": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "path": {
-                  "$ref": "#/definitions/formats-path",
-                  "default": "stdout"
-                },
-                "print-linter-name": {
-                  "type": "boolean",
-                  "default": true
-                },
-                "colors": {
-                  "type": "boolean",
-                  "default": true
-                }
-              }
-            },
-            "html": {
-              "$ref": "#/definitions/simple-format"
-            },
-            "checkstyle": {
-              "$ref": "#/definitions/simple-format"
-            },
-            "code-climate": {
-              "$ref": "#/definitions/simple-format"
-            },
-            "junit-xml": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "path": {
-                  "$ref": "#/definitions/formats-path",
-                  "default": "stdout"
-                },
-                "extended": {
-                  "type": "boolean",
-                  "default": true
-                }
-              }
-            },
-            "teamcity": {
-              "$ref": "#/definitions/simple-format"
-            },
-            "sarif": {
-              "$ref": "#/definitions/simple-format"
-            }
-          }
-        },
-        "path-prefix": {
-          "description": "Add a prefix to the output file references.",
-          "type": "string",
-          "default": ""
-        },
-        "show-stats": {
-          "description": "Show statistics per linter.",
-          "type": "boolean",
-          "default": false
-        },
-        "sort-order": {
-          "type": "array",
-          "items": {
-            "enum": ["linter", "severity", "file"]
-          }
-        },
-        "sort-results": {
-          "description": "Sort results by: filepath, line and column.",
-          "type": "boolean",
-          "default": true
-        }
-      }
-    },
-    "linters-settings": {
-      "description": "All available settings of specific linters.",
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "dupword": {
+    "settings": {
+      "definitions": {
+        "dupwordSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -687,7 +504,7 @@
             }
           }
         },
-        "asasalint": {
+        "asasalintSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -712,7 +529,7 @@
             }
           }
         },
-        "bidichk": {
+        "bidichkSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -763,7 +580,7 @@
             }
           }
         },
-        "cyclop": {
+        "cyclopSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -786,7 +603,7 @@
             }
           }
         },
-        "decorder": {
+        "decorderSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -834,7 +651,7 @@
             }
           }
         },
-        "depguard": {
+        "depguardSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -893,7 +710,7 @@
             }
           }
         },
-        "dogsled": {
+        "dogsledSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -905,7 +722,7 @@
             }
           }
         },
-        "dupl": {
+        "duplSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -917,7 +734,7 @@
             }
           }
         },
-        "errcheck": {
+        "errcheckSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -946,7 +763,7 @@
             }
           }
         },
-        "errchkjson": {
+        "errchkjsonSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -961,7 +778,7 @@
             }
           }
         },
-        "errorlint": {
+        "errorlintSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -1017,7 +834,7 @@
             }
           }
         },
-        "exhaustive": {
+        "exhaustiveSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -1070,7 +887,7 @@
             }
           }
         },
-        "exhaustruct": {
+        "exhaustructSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -1092,7 +909,7 @@
             }
           }
         },
-        "fatcontext": {
+        "fatcontextSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -1103,7 +920,7 @@
             }
           }
         },
-        "forbidigo": {
+        "forbidigoSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -1149,7 +966,7 @@
             }
           }
         },
-        "funlen": {
+        "funlenSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -1170,7 +987,7 @@
             }
           }
         },
-        "gci": {
+        "gciSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -1223,7 +1040,7 @@
             }
           }
         },
-        "ginkgolinter": {
+        "ginkgolinterSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -1289,7 +1106,7 @@
             }
           }
         },
-        "gochecksumtype": {
+        "gochecksumtypeSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -1305,7 +1122,7 @@
             }
           }
         },
-        "gocognit": {
+        "gocognitSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -1316,7 +1133,7 @@
             }
           }
         },
-        "goconst": {
+        "goconstSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -1366,7 +1183,7 @@
             }
           }
         },
-        "gocritic": {
+        "gocriticSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -1565,7 +1382,7 @@
             }
           }
         },
-        "gocyclo": {
+        "gocycloSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -1576,7 +1393,7 @@
             }
           }
         },
-        "godot": {
+        "godotSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -1609,7 +1426,7 @@
             }
           }
         },
-        "godox": {
+        "godoxSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -1623,7 +1440,7 @@
             }
           }
         },
-        "gofmt": {
+        "gofmtSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -1650,7 +1467,7 @@
             }
           }
         },
-        "golines": {
+        "golinesSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -1676,7 +1493,7 @@
             }
           }
         },
-        "interfacebloat": {
+        "interfacebloatSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -1686,7 +1503,7 @@
             }
           }
         },
-        "gofumpt": {
+        "gofumptSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -1701,7 +1518,7 @@
             }
           }
         },
-        "goheader": {
+        "goheaderSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -1761,7 +1578,7 @@
             { "required": ["template-path"] }
           ]
         },
-        "goimports": {
+        "goimportsSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -1772,7 +1589,7 @@
             }
           }
         },
-        "gomoddirectives": {
+        "gomoddirectivesSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -1824,7 +1641,7 @@
             }
           }
         },
-        "gomodguard": {
+        "gomodguardSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -1914,7 +1731,7 @@
             }
           }
         },
-        "gosimple": {
+        "gosimpleSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -1933,7 +1750,7 @@
             }
           }
         },
-        "gosec": {
+        "gosecSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -1980,7 +1797,7 @@
             }
           }
         },
-        "gosmopolitan": {
+        "gosmopolitanSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -2010,7 +1827,7 @@
             }
           }
         },
-        "govet": {
+        "govetSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -2053,7 +1870,7 @@
             }
           }
         },
-        "grouper": {
+        "grouperSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -2091,7 +1908,7 @@
             }
           }
         },
-        "iface": {
+        "ifaceSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -2122,7 +1939,7 @@
             }
           }
         },
-        "importas": {
+        "importasSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -2157,7 +1974,7 @@
             }
           }
         },
-        "inamedparam": {
+        "inamedparamSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -2168,7 +1985,7 @@
             }
           }
         },
-        "ireturn": {
+        "ireturnSettings": {
           "type": "object",
           "additionalProperties": false,
           "description": "Use either `reject` or `allow` properties for interfaces matching.",
@@ -2216,7 +2033,7 @@
             }
           ]
         },
-        "lll": {
+        "lllSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -2234,7 +2051,7 @@
             }
           }
         },
-        "maintidx": {
+        "maintidxSettings": {
           "description": "Maintainability index https://docs.microsoft.com/en-us/visualstudio/code-quality/code-metrics-maintainability-index-range-and-meaning?view=vs-2022",
           "type": "object",
           "additionalProperties": false,
@@ -2246,7 +2063,7 @@
             }
           }
         },
-        "makezero": {
+        "makezeroSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -2257,7 +2074,7 @@
             }
           }
         },
-        "loggercheck": {
+        "loggercheckSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -2305,7 +2122,7 @@
             }
           }
         },
-        "misspell": {
+        "misspellSettings": {
           "description": "Correct spellings using locale preferences for US or UK. Default is to use a neutral variety of English.",
           "type": "object",
           "additionalProperties": false,
@@ -2343,7 +2160,7 @@
             }
           }
         },
-        "musttag": {
+        "musttagSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -2367,7 +2184,7 @@
             }
           }
         },
-        "nakedret": {
+        "nakedretSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -2379,7 +2196,7 @@
             }
           }
         },
-        "nestif": {
+        "nestifSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -2390,7 +2207,7 @@
             }
           }
         },
-        "nilnil": {
+        "nilnilSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -2409,7 +2226,7 @@
             }
           }
         },
-        "nlreturn": {
+        "nlreturnSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -2421,7 +2238,7 @@
             }
           }
         },
-        "mnd": {
+        "mndSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -2465,7 +2282,7 @@
             }
           }
         },
-        "nolintlint": {
+        "nolintlintSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -2494,7 +2311,7 @@
             }
           }
         },
-        "reassign": {
+        "reassignSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -2506,7 +2323,7 @@
             }
           }
         },
-        "recvcheck": {
+        "recvcheckSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -2524,7 +2341,7 @@
             }
           }
         },
-        "nonamedreturns": {
+        "nonamedreturnsSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -2535,7 +2352,7 @@
             }
           }
         },
-        "paralleltest": {
+        "paralleltestSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -2551,7 +2368,7 @@
             }
           }
         },
-        "perfsprint": {
+        "perfsprintSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -2607,7 +2424,7 @@
             }
           }
         },
-        "prealloc": {
+        "preallocSettings": {
           "description": "We do not recommend using this linter before doing performance profiling.\nFor most programs usage of `prealloc` will be premature optimization.",
           "type": "object",
           "additionalProperties": false,
@@ -2629,7 +2446,7 @@
             }
           }
         },
-        "predeclared": {
+        "predeclaredSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -2644,7 +2461,7 @@
             }
           }
         },
-        "promlinter": {
+        "promlinterSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -2666,7 +2483,7 @@
             }
           }
         },
-        "protogetter": {
+        "protogetterSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -2696,7 +2513,7 @@
             }
           }
         },
-        "revive": {
+        "reviveSettings": {
           "type": "object",
           "additionalProperties": false,
           "examples": [
@@ -2773,7 +2590,7 @@
             }
           }
         },
-        "rowserrcheck": {
+        "rowserrcheckSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -2787,7 +2604,7 @@
             }
           }
         },
-        "sloglint": {
+        "sloglintSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -2844,7 +2661,7 @@
             }
           }
         },
-        "spancheck": {
+        "spancheckSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -2871,7 +2688,7 @@
             }
           }
         },
-        "staticcheck": {
+        "staticcheckSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -2890,7 +2707,7 @@
             }
           }
         },
-        "stylecheck": {
+        "stylecheckSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -3048,7 +2865,7 @@
             }
           }
         },
-        "tagalign": {
+        "tagalignSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -3088,7 +2905,7 @@
             }
           }
         },
-        "tagliatelle": {
+        "tagliatelleSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -3220,7 +3037,7 @@
             }
           }
         },
-        "tenv": {
+        "tenvSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -3231,7 +3048,7 @@
             }
           }
         },
-        "testifylint": {
+        "testifylintSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -3408,7 +3225,7 @@
             }
           }
         },
-        "testpackage": {
+        "testpackageSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -3428,7 +3245,7 @@
             }
           }
         },
-        "thelper": {
+        "thelperSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -3518,7 +3335,7 @@
             }
           }
         },
-        "usestdlibvars": {
+        "usestdlibvarsSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -3574,7 +3391,7 @@
             }
           }
         },
-        "usetesting": {
+        "usetestingSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -3608,7 +3425,7 @@
             }
           }
         },
-        "unconvert": {
+        "unconvertSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -3622,7 +3439,7 @@
             }
           }
         },
-        "unparam": {
+        "unparamSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -3633,7 +3450,7 @@
             }
           }
         },
-        "unused": {
+        "unusedSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -3669,7 +3486,7 @@
             }
           }
         },
-        "varnamelen": {
+        "varnamelenSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -3733,7 +3550,7 @@
             }
           }
         },
-        "whitespace": {
+        "whitespaceSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -3749,7 +3566,7 @@
             }
           }
         },
-        "wrapcheck": {
+        "wrapcheckSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -3807,7 +3624,7 @@
             }
           }
         },
-        "wsl": {
+        "wslSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -3885,7 +3702,7 @@
             }
           }
         },
-        "copyloopvar": {
+        "copyloopvarSettings": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -3895,7 +3712,7 @@
             }
           }
         },
-        "custom": {
+        "customSettings": {
           "description": "The custom section can be used to define linter plugins to be loaded at runtime. See README of golangci-lint for more information.\nEach custom linter should have a unique name.",
           "type": "object",
           "patternProperties": {
@@ -3930,7 +3747,8 @@
                 {
                   "properties": {
                     "type": {"enum": ["module"] }
-                  }
+                  },
+                  "required": ["type"]
                 },
                 {
                   "required": ["path"]
@@ -3938,6 +3756,451 @@
               ]
             }
           }
+        }
+      }
+    }
+  },
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version"],
+  "properties": {
+    "version": {
+      "type": "string",
+      "default": "2"
+    },
+    "run": {
+      "description": "Options for analysis running,",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "concurrency": {
+          "description": "Number of concurrent runners. Defaults to the number of available CPU cores.",
+          "type": "integer",
+          "minimum": 0,
+          "examples": [4]
+        },
+        "timeout": {
+          "description": "Timeout for the analysis.",
+          "type": "string",
+          "pattern": "^\\d*[sm]$",
+          "default": "1m",
+          "examples": ["30s", "5m"]
+        },
+        "issues-exit-code": {
+          "description": "Exit code when at least one issue was found.",
+          "type": "integer",
+          "default": 1
+        },
+        "tests": {
+          "description": "Enable inclusion of test files.",
+          "type": "boolean",
+          "default": true
+        },
+        "build-tags": {
+          "description": "List of build tags to pass to all linters.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "examples": [["mytag"]]
+        },
+        "modules-download-mode": {
+          "description": "Option to pass to \"go list -mod={option}\".\nSee \"go help modules\" for more information.",
+          "enum": ["mod", "readonly", "vendor"]
+        },
+        "allow-parallel-runners": {
+          "description": "Allow multiple parallel golangci-lint instances running. If disabled, golangci-lint acquires file lock on start.",
+          "type": "boolean",
+          "default": false
+        },
+        "allow-serial-runners": {
+          "description": "Allow multiple golangci-lint instances running, but serialize them around a lock.",
+          "type": "boolean",
+          "default": false
+        },
+        "go": {
+          "description": "Targeted Go version.",
+          "type": "string",
+          "default": "1.17"
+        },
+        "relative-path-mode": {
+          "description": "The mode used to evaluate relative paths.",
+          "type": "string",
+          "$ref": "#/definitions/relative-path-modes",
+          "default": "wd"
+        }
+      }
+    },
+    "output": {
+      "description": "Output configuration options.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "formats": {
+          "description": "Output formats to use.",
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "text": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "path": {
+                  "$ref": "#/definitions/formats-path",
+                  "default": "stdout"
+                },
+                "print-linter-name": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "print-issued-lines": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "colors": {
+                  "type": "boolean",
+                  "default": true
+                }
+              }
+            },
+            "json": {
+              "$ref": "#/definitions/simple-format"
+            },
+            "tab": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "path": {
+                  "$ref": "#/definitions/formats-path",
+                  "default": "stdout"
+                },
+                "print-linter-name": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "colors": {
+                  "type": "boolean",
+                  "default": true
+                }
+              }
+            },
+            "html": {
+              "$ref": "#/definitions/simple-format"
+            },
+            "checkstyle": {
+              "$ref": "#/definitions/simple-format"
+            },
+            "code-climate": {
+              "$ref": "#/definitions/simple-format"
+            },
+            "junit-xml": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "path": {
+                  "$ref": "#/definitions/formats-path",
+                  "default": "stdout"
+                },
+                "extended": {
+                  "type": "boolean",
+                  "default": true
+                }
+              }
+            },
+            "teamcity": {
+              "$ref": "#/definitions/simple-format"
+            },
+            "sarif": {
+              "$ref": "#/definitions/simple-format"
+            }
+          }
+        },
+        "path-prefix": {
+          "description": "Add a prefix to the output file references.",
+          "type": "string",
+          "default": ""
+        },
+        "show-stats": {
+          "description": "Show statistics per linter.",
+          "type": "boolean",
+          "default": false
+        },
+        "sort-order": {
+          "type": "array",
+          "items": {
+            "enum": ["linter", "severity", "file"]
+          }
+        },
+        "sort-results": {
+          "description": "Sort results by: filepath, line and column.",
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "linters-settings": {
+      "description": "All available settings of specific linters.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "dupword": {
+          "$ref": "#/definitions/settings/definitions/dupwordSettings"
+        },
+        "asasalint": {
+          "$ref": "#/definitions/settings/definitions/asasalintSettings"
+        },
+        "bidichk": {
+          "$ref": "#/definitions/settings/definitions/bidichkSettings"
+        },
+        "cyclop": {
+          "$ref": "#/definitions/settings/definitions/cyclopSettings"
+        },
+        "decorder": {
+          "$ref": "#/definitions/settings/definitions/decorderSettings"
+        },
+        "depguard":{
+          "$ref": "#/definitions/settings/definitions/depguardSettings"
+        },
+        "dogsled": {
+          "$ref": "#/definitions/settings/definitions/dogsledSettings"
+        },
+        "dupl": {
+          "$ref": "#/definitions/settings/definitions/duplSettings"
+        },
+        "errcheck": {
+          "$ref": "#/definitions/settings/definitions/errcheckSettings"
+        },
+        "errchkjson": {
+          "$ref": "#/definitions/settings/definitions/errchkjsonSettings"
+        },
+        "errorlint": {
+          "$ref": "#/definitions/settings/definitions/errorlintSettings"
+        },
+        "exhaustive": {
+          "$ref": "#/definitions/settings/definitions/exhaustiveSettings"
+        },
+        "exhaustruct": {
+          "$ref": "#/definitions/settings/definitions/exhaustructSettings"
+        },
+        "fatcontext": {
+          "$ref": "#/definitions/settings/definitions/fatcontextSettings"
+        },
+        "forbidigo": {
+          "$ref": "#/definitions/settings/definitions/forbidigoSettings"
+        },
+        "funlen": {
+          "$ref": "#/definitions/settings/definitions/funlenSettings"
+        },
+        "gci": {
+          "$ref": "#/definitions/settings/definitions/gciSettings"
+        },
+        "ginkgolinter": {
+          "$ref": "#/definitions/settings/definitions/ginkgolinterSettings"
+        },
+        "gochecksumtype": {
+          "$ref": "#/definitions/settings/definitions/gochecksumtypeSettings"
+        },
+        "gocognit": {
+          "$ref": "#/definitions/settings/definitions/gocognitSettings"
+        },
+        "goconst": {
+          "$ref": "#/definitions/settings/definitions/goconstSettings"
+        },
+        "gocritic": {
+          "$ref": "#/definitions/settings/definitions/gocriticSettings"
+        },
+        "gocyclo": {
+          "$ref": "#/definitions/settings/definitions/gocycloSettings"
+        },
+        "godot": {
+          "$ref": "#/definitions/settings/definitions/godotSettings"
+        },
+        "godox": {
+          "$ref": "#/definitions/settings/definitions/godoxSettings"
+        },
+        "gofmt": {
+          "$ref": "#/definitions/settings/definitions/gofmtSettings"
+        },
+        "golines": {
+          "$ref": "#/definitions/settings/definitions/golinesSettings"
+        },
+        "interfacebloat":{
+          "$ref": "#/definitions/settings/definitions/interfacebloatSettings"
+        },
+        "gofumpt": {
+          "$ref": "#/definitions/settings/definitions/gofumptSettings"
+        },
+        "goheader": {
+          "$ref": "#/definitions/settings/definitions/goheaderSettings"
+        },
+        "goimports": {
+          "$ref": "#/definitions/settings/definitions/goimportsSettings"
+        },
+        "gomoddirectives": {
+          "$ref": "#/definitions/settings/definitions/gomoddirectivesSettings"
+        },
+        "gomodguard": {
+          "$ref": "#/definitions/settings/definitions/gomodguardSettings"
+        },
+        "gosimple": {
+          "$ref": "#/definitions/settings/definitions/gosimpleSettings"
+        },
+        "gosec": {
+          "$ref": "#/definitions/settings/definitions/gosecSettings"
+        },
+        "gosmopolitan": {
+          "$ref": "#/definitions/settings/definitions/gosmopolitanSettings"
+        },
+        "govet": {
+          "$ref": "#/definitions/settings/definitions/govetSettings"
+        },
+        "grouper": {
+          "$ref": "#/definitions/settings/definitions/grouperSettings"
+        },
+        "iface": {
+          "$ref": "#/definitions/settings/definitions/ifaceSettings"
+        },
+        "importas": {
+          "$ref": "#/definitions/settings/definitions/importasSettings"
+        },
+        "inamedparam": {
+          "$ref": "#/definitions/settings/definitions/inamedparamSettings"
+        },
+        "ireturn": {
+          "$ref": "#/definitions/settings/definitions/ireturnSettings"
+        },
+        "lll": {
+          "$ref": "#/definitions/settings/definitions/lllSettings"
+        },
+        "maintidx": {
+          "$ref": "#/definitions/settings/definitions/maintidxSettings"
+        },
+        "makezero":{
+          "$ref": "#/definitions/settings/definitions/makezeroSettings"
+        },
+        "loggercheck": {
+          "$ref": "#/definitions/settings/definitions/loggercheckSettings"
+        },
+        "misspell": {
+          "$ref": "#/definitions/settings/definitions/misspellSettings"
+        },
+        "musttag": {
+          "$ref": "#/definitions/settings/definitions/musttagSettings"
+        },
+        "nakedret": {
+          "$ref": "#/definitions/settings/definitions/nakedretSettings"
+        },
+        "nestif": {
+          "$ref": "#/definitions/settings/definitions/nestifSettings"
+        },
+        "nilnil": {
+          "$ref": "#/definitions/settings/definitions/nilnilSettings"
+        },
+        "nlreturn": {
+          "$ref": "#/definitions/settings/definitions/nlreturnSettings"
+        },
+        "mnd": {
+          "$ref": "#/definitions/settings/definitions/mndSettings"
+        },
+        "nolintlint":{
+          "$ref": "#/definitions/settings/definitions/nolintlintSettings"
+        },
+        "reassign": {
+          "$ref": "#/definitions/settings/definitions/reassignSettings"
+        },
+        "recvcheck": {
+          "$ref": "#/definitions/settings/definitions/recvcheckSettings"
+        },
+        "nonamedreturns": {
+          "$ref": "#/definitions/settings/definitions/nonamedreturnsSettings"
+        },
+        "paralleltest": {
+          "$ref": "#/definitions/settings/definitions/paralleltestSettings"
+        },
+        "perfsprint": {
+          "$ref": "#/definitions/settings/definitions/perfsprintSettings"
+        },
+        "prealloc": {
+          "$ref": "#/definitions/settings/definitions/preallocSettings"
+        },
+        "predeclared": {
+          "$ref": "#/definitions/settings/definitions/predeclaredSettings"
+        },
+        "promlinter": {
+          "$ref": "#/definitions/settings/definitions/promlinterSettings"
+        },
+        "protogetter": {
+          "$ref": "#/definitions/settings/definitions/protogetterSettings"
+        },
+        "revive": {
+          "$ref": "#/definitions/settings/definitions/reviveSettings"
+        },
+        "rowserrcheck": {
+          "$ref": "#/definitions/settings/definitions/rowserrcheckSettings"
+        },
+        "sloglint": {
+          "$ref": "#/definitions/settings/definitions/sloglintSettings"
+        },
+        "spancheck": {
+          "$ref": "#/definitions/settings/definitions/spancheckSettings"
+        },
+        "staticcheck":{
+          "$ref": "#/definitions/settings/definitions/staticcheckSettings"
+        },
+        "stylecheck": {
+          "$ref": "#/definitions/settings/definitions/stylecheckSettings"
+        },
+        "tagalign": {
+          "$ref": "#/definitions/settings/definitions/tagalignSettings"
+        },
+        "tagliatelle": {
+          "$ref": "#/definitions/settings/definitions/tagliatelleSettings"
+        },
+        "tenv": {
+          "$ref": "#/definitions/settings/definitions/tenvSettings"
+        },
+        "testifylint": {
+          "$ref": "#/definitions/settings/definitions/testifylintSettings"
+        },
+        "testpackage": {
+          "$ref": "#/definitions/settings/definitions/testpackageSettings"
+        },
+        "thelper": {
+          "$ref": "#/definitions/settings/definitions/thelperSettings"
+        },
+        "usestdlibvars": {
+          "$ref": "#/definitions/settings/definitions/usestdlibvarsSettings"
+        },
+        "usetesting": {
+          "$ref": "#/definitions/settings/definitions/usetestingSettings"
+        },
+        "unconvert": {
+          "$ref": "#/definitions/settings/definitions/unconvertSettings"
+        },
+        "unparam": {
+          "$ref": "#/definitions/settings/definitions/unparamSettings"
+        },
+        "unused": {
+          "$ref": "#/definitions/settings/definitions/unusedSettings"
+        },
+        "varnamelen": {
+          "$ref": "#/definitions/settings/definitions/varnamelenSettings"
+        },
+        "whitespace": {
+          "$ref": "#/definitions/settings/definitions/whitespaceSettings"
+        },
+        "wrapcheck": {
+          "$ref": "#/definitions/settings/definitions/wrapcheckSettings"
+        },
+        "wsl": {
+          "$ref": "#/definitions/settings/definitions/wslSettings"
+        },
+        "copyloopvar": {
+          "$ref": "#/definitions/settings/definitions/copyloopvarSettings"
+        },
+        "custom":{
+          "$ref": "#/definitions/settings/definitions/customSettings"
         }
       }
     },
