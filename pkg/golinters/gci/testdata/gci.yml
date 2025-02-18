@@ -1,9 +1,12 @@
 version: "2"
 
-linters-settings:
-  gci:
-    sections:
-      - standard
-      - prefix(github.com/golangci/golangci-lint,github.com/daixiang0/gci)
-      - default
-    custom-order: true
+formatters:
+  enable:
+    - gci
+  settings:
+    gci:
+      sections:
+        - standard
+        - prefix(github.com/golangci/golangci-lint,github.com/daixiang0/gci)
+        - default
+      custom-order: true
