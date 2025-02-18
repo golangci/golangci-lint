@@ -37,13 +37,13 @@ type GciSettings struct {
 }
 
 type GoFmtSettings struct {
-	Simplify     bool
+	Simplify     bool               `mapstructure:"simplify"`
 	RewriteRules []GoFmtRewriteRule `mapstructure:"rewrite-rules"`
 }
 
 type GoFmtRewriteRule struct {
-	Pattern     string
-	Replacement string
+	Pattern     string `mapstructure:"pattern"`
+	Replacement string `mapstructure:"replacement"`
 }
 
 type GoFumptSettings struct {

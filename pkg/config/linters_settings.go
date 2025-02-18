@@ -206,88 +206,88 @@ var defaultLintersSettings = LintersSettings{
 type LintersSettings struct {
 	FormatterSettings `mapstructure:",squash"`
 
-	Asasalint       AsasalintSettings
-	BiDiChk         BiDiChkSettings
-	CopyLoopVar     CopyLoopVarSettings
-	Cyclop          Cyclop
-	Decorder        DecorderSettings
-	Depguard        DepGuardSettings
-	Dogsled         DogsledSettings
-	Dupl            DuplSettings
-	DupWord         DupWordSettings
-	Errcheck        ErrcheckSettings
-	ErrChkJSON      ErrChkJSONSettings
-	ErrorLint       ErrorLintSettings
-	Exhaustive      ExhaustiveSettings
-	Exhaustruct     ExhaustructSettings
-	Fatcontext      FatcontextSettings
-	Forbidigo       ForbidigoSettings
-	Funlen          FunlenSettings
-	GinkgoLinter    GinkgoLinterSettings
-	Gocognit        GocognitSettings
-	GoChecksumType  GoChecksumTypeSettings
-	Goconst         GoConstSettings
-	Gocritic        GoCriticSettings
-	Gocyclo         GoCycloSettings
-	Godot           GodotSettings
-	Godox           GodoxSettings
-	Goheader        GoHeaderSettings
-	GoModDirectives GoModDirectivesSettings
-	Gomodguard      GoModGuardSettings
-	Gosec           GoSecSettings
-	Gosimple        StaticCheckSettings
-	Gosmopolitan    GosmopolitanSettings
-	Govet           GovetSettings
-	Grouper         GrouperSettings
-	Iface           IfaceSettings
-	ImportAs        ImportAsSettings
-	Inamedparam     INamedParamSettings
-	InterfaceBloat  InterfaceBloatSettings
-	Ireturn         IreturnSettings
-	Lll             LllSettings
-	LoggerCheck     LoggerCheckSettings
-	MaintIdx        MaintIdxSettings
-	Makezero        MakezeroSettings
-	Misspell        MisspellSettings
-	Mnd             MndSettings
-	MustTag         MustTagSettings
-	Nakedret        NakedretSettings
-	Nestif          NestifSettings
-	NilNil          NilNilSettings
-	Nlreturn        NlreturnSettings
-	NoLintLint      NoLintLintSettings
-	NoNamedReturns  NoNamedReturnsSettings
-	ParallelTest    ParallelTestSettings
-	PerfSprint      PerfSprintSettings
-	Prealloc        PreallocSettings
-	Predeclared     PredeclaredSettings
-	Promlinter      PromlinterSettings
-	ProtoGetter     ProtoGetterSettings
-	Reassign        ReassignSettings
-	Recvcheck       RecvcheckSettings
-	Revive          ReviveSettings
-	RowsErrCheck    RowsErrCheckSettings
-	SlogLint        SlogLintSettings
-	Spancheck       SpancheckSettings
-	Staticcheck     StaticCheckSettings
-	Stylecheck      StaticCheckSettings
-	TagAlign        TagAlignSettings
-	Tagliatelle     TagliatelleSettings
-	Tenv            TenvSettings
-	Testifylint     TestifylintSettings
-	Testpackage     TestpackageSettings
-	Thelper         ThelperSettings
-	Unconvert       UnconvertSettings
-	Unparam         UnparamSettings
-	Unused          UnusedSettings
-	UseStdlibVars   UseStdlibVarsSettings
-	UseTesting      UseTestingSettings
-	Varnamelen      VarnamelenSettings
-	Whitespace      WhitespaceSettings
-	Wrapcheck       WrapcheckSettings
-	WSL             WSLSettings
+	Asasalint       AsasalintSettings       `mapstructure:"asasalint"`
+	BiDiChk         BiDiChkSettings         `mapstructure:"bidichk"`
+	CopyLoopVar     CopyLoopVarSettings     `mapstructure:"copyloopvar"`
+	Cyclop          Cyclop                  `mapstructure:"cyclop"`
+	Decorder        DecorderSettings        `mapstructure:"decorder"`
+	Depguard        DepGuardSettings        `mapstructure:"depguard"`
+	Dogsled         DogsledSettings         `mapstructure:"dogsled"`
+	Dupl            DuplSettings            `mapstructure:"dupl"`
+	DupWord         DupWordSettings         `mapstructure:"dupword"`
+	Errcheck        ErrcheckSettings        `mapstructure:"errcheck"`
+	ErrChkJSON      ErrChkJSONSettings      `mapstructure:"errchkjson"`
+	ErrorLint       ErrorLintSettings       `mapstructure:"errorlint"`
+	Exhaustive      ExhaustiveSettings      `mapstructure:"exhaustive"`
+	Exhaustruct     ExhaustructSettings     `mapstructure:"exhaustruct"`
+	Fatcontext      FatcontextSettings      `mapstructure:"fatcontext"`
+	Forbidigo       ForbidigoSettings       `mapstructure:"forbidigo"`
+	Funlen          FunlenSettings          `mapstructure:"funlen"`
+	GinkgoLinter    GinkgoLinterSettings    `mapstructure:"ginkgolinter"`
+	Gocognit        GocognitSettings        `mapstructure:"gocognit"`
+	GoChecksumType  GoChecksumTypeSettings  `mapstructure:"gochecksumtype"`
+	Goconst         GoConstSettings         `mapstructure:"goconst"`
+	Gocritic        GoCriticSettings        `mapstructure:"gocritic"`
+	Gocyclo         GoCycloSettings         `mapstructure:"gocyclo"`
+	Godot           GodotSettings           `mapstructure:"godot"`
+	Godox           GodoxSettings           `mapstructure:"godox"`
+	Goheader        GoHeaderSettings        `mapstructure:"goheader"`
+	GoModDirectives GoModDirectivesSettings `mapstructure:"gomoddirectives"`
+	Gomodguard      GoModGuardSettings      `mapstructure:"gomodguard"`
+	Gosec           GoSecSettings           `mapstructure:"gosec"`
+	Gosimple        StaticCheckSettings     `mapstructure:"gosimple"`
+	Gosmopolitan    GosmopolitanSettings    `mapstructure:"gosmopolitan"`
+	Govet           GovetSettings           `mapstructure:"govet"`
+	Grouper         GrouperSettings         `mapstructure:"grouper"`
+	Iface           IfaceSettings           `mapstructure:"iface"`
+	ImportAs        ImportAsSettings        `mapstructure:"importas"`
+	Inamedparam     INamedParamSettings     `mapstructure:"inamedparam"`
+	InterfaceBloat  InterfaceBloatSettings  `mapstructure:"interfacebloat"`
+	Ireturn         IreturnSettings         `mapstructure:"ireturn"`
+	Lll             LllSettings             `mapstructure:"lll"`
+	LoggerCheck     LoggerCheckSettings     `mapstructure:"loggercheck"`
+	MaintIdx        MaintIdxSettings        `mapstructure:"maintidx"`
+	Makezero        MakezeroSettings        `mapstructure:"makezero"`
+	Misspell        MisspellSettings        `mapstructure:"misspell"`
+	Mnd             MndSettings             `mapstructure:"mnd"`
+	MustTag         MustTagSettings         `mapstructure:"musttag"`
+	Nakedret        NakedretSettings        `mapstructure:"nakedret"`
+	Nestif          NestifSettings          `mapstructure:"nestif"`
+	NilNil          NilNilSettings          `mapstructure:"nilnil"`
+	Nlreturn        NlreturnSettings        `mapstructure:"nlreturn"`
+	NoLintLint      NoLintLintSettings      `mapstructure:"nolintlint"`
+	NoNamedReturns  NoNamedReturnsSettings  `mapstructure:"nonamedreturns"`
+	ParallelTest    ParallelTestSettings    `mapstructure:"paralleltest"`
+	PerfSprint      PerfSprintSettings      `mapstructure:"perfsprint"`
+	Prealloc        PreallocSettings        `mapstructure:"prealloc"`
+	Predeclared     PredeclaredSettings     `mapstructure:"predeclared"`
+	Promlinter      PromlinterSettings      `mapstructure:"promlinter"`
+	ProtoGetter     ProtoGetterSettings     `mapstructure:"protogetter"`
+	Reassign        ReassignSettings        `mapstructure:"reassign"`
+	Recvcheck       RecvcheckSettings       `mapstructure:"recvcheck"`
+	Revive          ReviveSettings          `mapstructure:"revive"`
+	RowsErrCheck    RowsErrCheckSettings    `mapstructure:"rowserrcheck"`
+	SlogLint        SlogLintSettings        `mapstructure:"sloglint"`
+	Spancheck       SpancheckSettings       `mapstructure:"spancheck"`
+	Staticcheck     StaticCheckSettings     `mapstructure:"staticcheck"`
+	Stylecheck      StaticCheckSettings     `mapstructure:"stylecheck"`
+	TagAlign        TagAlignSettings        `mapstructure:"tagalign"`
+	Tagliatelle     TagliatelleSettings     `mapstructure:"tagliatelle"`
+	Tenv            TenvSettings            `mapstructure:"tenv"`
+	Testifylint     TestifylintSettings     `mapstructure:"testifylint"`
+	Testpackage     TestpackageSettings     `mapstructure:"testpackage"`
+	Thelper         ThelperSettings         `mapstructure:"thelper"`
+	Unconvert       UnconvertSettings       `mapstructure:"unconvert"`
+	Unparam         UnparamSettings         `mapstructure:"unparam"`
+	Unused          UnusedSettings          `mapstructure:"unused"`
+	UseStdlibVars   UseStdlibVarsSettings   `mapstructure:"usestdlibvars"`
+	UseTesting      UseTestingSettings      `mapstructure:"usetesting"`
+	Varnamelen      VarnamelenSettings      `mapstructure:"varnamelen"`
+	Whitespace      WhitespaceSettings      `mapstructure:"whitespace"`
+	Wrapcheck       WrapcheckSettings       `mapstructure:"wrapcheck"`
+	WSL             WSLSettings             `mapstructure:"wsl"`
 
-	Custom map[string]CustomLinterSettings
+	Custom map[string]CustomLinterSettings `mapstructure:"custom"`
 }
 
 func (s *LintersSettings) Validate() error {
@@ -367,7 +367,7 @@ type DogsledSettings struct {
 }
 
 type DuplSettings struct {
-	Threshold int
+	Threshold int `mapstructure:"threshold"`
 }
 
 type DupWordSettings struct {
@@ -471,8 +471,8 @@ func (p *ForbidigoPattern) MarshalString() ([]byte, error) {
 }
 
 type FunlenSettings struct {
-	Lines          int
-	Statements     int
+	Lines          int  `mapstructure:"lines"`
+	Statements     int  `mapstructure:"statements"`
 	IgnoreComments bool `mapstructure:"ignore-comments"`
 }
 
@@ -540,7 +540,7 @@ type GodotSettings struct {
 }
 
 type GodoxSettings struct {
-	Keywords []string
+	Keywords []string `mapstructure:"keywords"`
 }
 
 type GoHeaderSettings struct {
@@ -599,10 +599,10 @@ type GosmopolitanSettings struct {
 type GovetSettings struct {
 	Go string `mapstructure:"-"`
 
-	Enable     []string
-	Disable    []string
-	EnableAll  bool `mapstructure:"enable-all"`
-	DisableAll bool `mapstructure:"disable-all"`
+	Enable     []string `mapstructure:"enable"`
+	Disable    []string `mapstructure:"disable"`
+	EnableAll  bool     `mapstructure:"enable-all"`
+	DisableAll bool     `mapstructure:"disable-all"`
 
 	Settings map[string]map[string]any
 
@@ -640,14 +640,14 @@ type IfaceSettings struct {
 }
 
 type ImportAsSettings struct {
-	Alias          []ImportAsAlias
-	NoUnaliased    bool `mapstructure:"no-unaliased"`
-	NoExtraAliases bool `mapstructure:"no-extra-aliases"`
+	Alias          []ImportAsAlias `mapstructure:"alias"`
+	NoUnaliased    bool            `mapstructure:"no-unaliased"`
+	NoExtraAliases bool            `mapstructure:"no-extra-aliases"`
 }
 
 type ImportAsAlias struct {
-	Pkg   string
-	Alias string
+	Pkg   string `mapstructure:"pkg"`
+	Alias string `mapstructure:"alias"`
 }
 
 type INamedParamSettings struct {
@@ -684,7 +684,7 @@ type MaintIdxSettings struct {
 }
 
 type MakezeroSettings struct {
-	Always bool
+	Always bool `mapstructure:"always"`
 }
 
 type MisspellSettings struct {
@@ -798,29 +798,29 @@ type RecvcheckSettings struct {
 }
 
 type ReviveSettings struct {
-	Go                    string `mapstructure:"-"`
-	MaxOpenFiles          int    `mapstructure:"max-open-files"`
-	IgnoreGeneratedHeader bool   `mapstructure:"ignore-generated-header"`
-	Confidence            float64
-	Severity              string
-	EnableAllRules        bool `mapstructure:"enable-all-rules"`
+	Go                    string  `mapstructure:"-"`
+	MaxOpenFiles          int     `mapstructure:"max-open-files"`
+	IgnoreGeneratedHeader bool    `mapstructure:"ignore-generated-header"`
+	Confidence            float64 `mapstructure:"confidence"`
+	Severity              string  `mapstructure:"severity"`
+	EnableAllRules        bool    `mapstructure:"enable-all-rules"`
 	Rules                 []struct {
-		Name      string
-		Arguments []any
-		Severity  string
-		Disabled  bool
-		Exclude   []string
-	}
+		Name      string   `mapstructure:"name"`
+		Arguments []any    `mapstructure:"arguments"`
+		Severity  string   `mapstructure:"severity"`
+		Disabled  bool     `mapstructure:"disabled"`
+		Exclude   []string `mapstructure:"exclude"`
+	} `mapstructure:"rules"`
 	ErrorCode   int `mapstructure:"error-code"`
 	WarningCode int `mapstructure:"warning-code"`
 	Directives  []struct {
-		Name     string
-		Severity string
-	}
+		Name     string `mapstructure:"name"`
+		Severity string `mapstructure:"severity"`
+	} `mapstructure:"directives"`
 }
 
 type RowsErrCheckSettings struct {
-	Packages []string
+	Packages []string `mapstructure:"packages"`
 }
 
 type SlogLintSettings struct {
@@ -867,12 +867,12 @@ type TagAlignSettings struct {
 }
 
 type TagliatelleSettings struct {
-	Case TagliatelleCase
+	Case TagliatelleCase `mapstructure:"case"`
 }
 
 type TagliatelleCase struct {
 	TagliatelleBase `mapstructure:",squash"`
-	Overrides       []TagliatelleOverrides
+	Overrides       []TagliatelleOverrides `mapstructure:"overrides"`
 }
 
 type TagliatelleOverrides struct {
@@ -889,9 +889,9 @@ type TagliatelleBase struct {
 }
 
 type TagliatelleExtendedRule struct {
-	Case                string
-	ExtraInitialisms    bool
-	InitialismOverrides map[string]bool
+	Case                string          `mapstructure:"case"`
+	ExtraInitialisms    bool            `mapstructure:"extra-initialisms"`
+	InitialismOverrides map[string]bool `mapstructure:"initialism-overrides"`
 }
 
 type TestifylintSettings struct {
@@ -982,8 +982,8 @@ type UnconvertSettings struct {
 }
 
 type UnparamSettings struct {
-	CheckExported bool `mapstructure:"check-exported"`
-	Algo          string
+	CheckExported bool   `mapstructure:"check-exported"`
+	Algo          string `mapstructure:"algo"`
 }
 
 type UnusedSettings struct {
@@ -1049,15 +1049,15 @@ type CustomLinterSettings struct {
 
 	// Path to a plugin *.so file that implements the private linter.
 	// Only for Go plugin system.
-	Path string
+	Path string `mapstructure:"path"`
 
 	// Description describes the purpose of the private linter.
-	Description string
+	Description string `mapstructure:"description"`
 	// OriginalURL The URL containing the source code for the private linter.
 	OriginalURL string `mapstructure:"original-url"`
 
 	// Settings plugin settings only work with linterdb.PluginConstructor symbol.
-	Settings any
+	Settings any `mapstructure:"settings"`
 }
 
 func (s *CustomLinterSettings) Validate() error {

@@ -7,11 +7,11 @@ import (
 )
 
 type BaseRule struct {
-	Linters    []string
-	Path       string
-	PathExcept string `mapstructure:"path-except"`
-	Text       string
-	Source     string
+	Linters    []string `mapstructure:"linters"`
+	Path       string   `mapstructure:"path"`
+	PathExcept string   `mapstructure:"path-except"`
+	Text       string   `mapstructure:"text"`
+	Source     string   `mapstructure:"source"`
 
 	// For compatibility with exclude-use-default/include.
 	InternalReference string `mapstructure:"-"`
