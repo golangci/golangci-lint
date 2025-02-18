@@ -269,7 +269,7 @@ func TestLineDirectiveProcessedFiles(t *testing.T) {
 		{
 			desc: "lite loading",
 			args: []string{
-				"--print-issued-lines=false",
+				"--output.text.print-issued-lines=false",
 				"--exclude-use-default=false",
 				"-Erevive",
 			},
@@ -284,7 +284,7 @@ func TestLineDirectiveProcessedFiles(t *testing.T) {
 		{
 			desc: "full loading",
 			args: []string{
-				"--print-issued-lines=false",
+				"--output.text.print-issued-lines=false",
 				"--exclude-use-default=false",
 				"-Erevive,govet",
 			},
@@ -351,7 +351,7 @@ func TestSortedResults(t *testing.T) {
 
 			testshared.NewRunnerBuilder(t).
 				WithNoConfig().
-				WithArgs("--print-issued-lines=false", test.opt).
+				WithArgs("--output.text.print-issued-lines=false", test.opt).
 				WithTargetPath(testdataDir, "sort_results").
 				WithBinPath(binPath).
 				Runner().
@@ -367,7 +367,7 @@ func TestSkippedDirsNoMatchArg(t *testing.T) {
 	testshared.NewRunnerBuilder(t).
 		WithNoConfig().
 		WithArgs(
-			"--print-issued-lines=false",
+			"--output.text.print-issued-lines=false",
 			"--exclude-dirs", dir,
 			"-Erevive",
 		).
@@ -384,7 +384,7 @@ func TestSkippedDirsTestdata(t *testing.T) {
 	testshared.NewRunnerBuilder(t).
 		WithNoConfig().
 		WithArgs(
-			"--print-issued-lines=false",
+			"--output.text.print-issued-lines=false",
 			"-Erevive",
 		).
 		WithTargetPath(testdataDir, "skipdirs", "...").
@@ -504,7 +504,7 @@ func TestAbsPathDirAnalysis(t *testing.T) {
 	testshared.NewRunnerBuilder(t).
 		WithNoConfig().
 		WithArgs(
-			"--print-issued-lines=false",
+			"--output.text.print-issued-lines=false",
 			"-Erevive",
 		).
 		WithTargetPath(absDir).
@@ -523,7 +523,7 @@ func TestAbsPathFileAnalysis(t *testing.T) {
 	testshared.NewRunnerBuilder(t).
 		WithNoConfig().
 		WithArgs(
-			"--print-issued-lines=false",
+			"--output.text.print-issued-lines=false",
 			"-Erevive",
 		).
 		WithTargetPath(absDir).

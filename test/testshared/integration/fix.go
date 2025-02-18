@@ -67,9 +67,9 @@ func runFix(t *testing.T, extraArgs ...string) {
 
 			testshared.NewRunnerBuilder(t).
 				WithArgs("--disable-all",
-					"--print-issued-lines=false",
-					"--print-linter-name=false",
-					"--out-format=line-number",
+					"--output.text.print-issued-lines=false",
+					"--output.text.print-linter-name=false",
+					"--output.text.path=stdout",
 					"--fix").
 				WithArgs(extraArgs...).
 				WithRunContext(rc).
