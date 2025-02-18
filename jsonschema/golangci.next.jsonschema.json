@@ -3997,9 +3997,6 @@
         "funlen": {
           "$ref": "#/definitions/settings/definitions/funlenSettings"
         },
-        "gci": {
-          "$ref": "#/definitions/settings/definitions/gciSettings"
-        },
         "ginkgolinter": {
           "$ref": "#/definitions/settings/definitions/ginkgolinterSettings"
         },
@@ -4024,23 +4021,11 @@
         "godox": {
           "$ref": "#/definitions/settings/definitions/godoxSettings"
         },
-        "gofmt": {
-          "$ref": "#/definitions/settings/definitions/gofmtSettings"
-        },
-        "golines": {
-          "$ref": "#/definitions/settings/definitions/golinesSettings"
-        },
         "interfacebloat":{
           "$ref": "#/definitions/settings/definitions/interfacebloatSettings"
         },
-        "gofumpt": {
-          "$ref": "#/definitions/settings/definitions/gofumptSettings"
-        },
         "goheader": {
           "$ref": "#/definitions/settings/definitions/goheaderSettings"
-        },
-        "goimports": {
-          "$ref": "#/definitions/settings/definitions/goimportsSettings"
         },
         "gomoddirectives": {
           "$ref": "#/definitions/settings/definitions/gomoddirectivesSettings"
@@ -4326,6 +4311,56 @@
               }
             },
             "paths-except":  {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "formatters": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enable": {
+          "description": "List of enabled formatters.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/formatter-names"
+          }
+        },
+        "settings": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "gci": {
+              "$ref": "#/definitions/settings/definitions/gciSettings"
+            },
+            "gofmt": {
+              "$ref": "#/definitions/settings/definitions/gofmtSettings"
+            },
+            "gofumpt": {
+              "$ref": "#/definitions/settings/definitions/gofumptSettings"
+            },
+            "goimports": {
+              "$ref": "#/definitions/settings/definitions/goimportsSettings"
+            },
+            "golines": {
+              "$ref": "#/definitions/settings/definitions/golinesSettings"
+            }
+          }
+        },
+        "exclusions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "generated": {
+              "type": "boolean",
+              "default": true
+            },
+            "paths": {
               "type": "array",
               "items": {
                 "type": "string"
