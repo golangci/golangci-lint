@@ -13,9 +13,6 @@ type Output struct {
 	SortOrder   []string `mapstructure:"sort-order"`
 	PathPrefix  string   `mapstructure:"path-prefix"`
 	ShowStats   bool     `mapstructure:"show-stats"`
-
-	// Deprecated: use [Issues.UniqByLine] instead.
-	UniqByLine *bool `mapstructure:"uniq-by-line"`
 }
 
 func (o *Output) Validate() error {

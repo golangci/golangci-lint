@@ -124,8 +124,6 @@ type Issues struct {
 	Diff              bool   `mapstructure:"new"`
 
 	NeedFix bool `mapstructure:"fix"`
-
-	ExcludeGeneratedStrict *bool `mapstructure:"exclude-generated-strict"` // Deprecated: use ExcludeGenerated instead.
 }
 
 func (i *Issues) Validate() error {
