@@ -39,6 +39,7 @@ body:
         - Deb
         - RPM
         - Other Linux package manager
+        - Via editor/IDE
         - Other
     validations:
       required: true
