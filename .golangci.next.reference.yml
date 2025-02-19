@@ -4131,7 +4131,7 @@ output:
 run:
   # Timeout for analysis, e.g. 30s, 5m.
   # If the value is lower or equal to 0, the timeout is disabled.
-  # Default: 1m
+  # Default: 15m
   timeout: 5m
 
   # The mode used to evaluate relative paths.
