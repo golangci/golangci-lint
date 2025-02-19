@@ -4083,6 +4083,8 @@ issues:
 output:
   # The formats used to render issues.
   formats:
+    # Reports issues in a text format with colors, line number, and linter name.
+    # This format is the default format.
     text:
       # Output path can be either `stdout`, `stderr` or path to the file to write to.
       # Default: stdout
@@ -4096,10 +4098,12 @@ output:
       # Use colors.
       # Default: true
       colors: false
+    # Reports issues in a JSON format.
     json:
       # Output path can be either `stdout`, `stderr` or path to the file to write to.
       # Default: stdout
       path: ./path/to/output.json
+    # Reports issues in columns separated by tabulations.
     tab:
       # Output path can be either `stdout`, `stderr` or path to the file to write to.
       # Default: stdout
@@ -4110,18 +4114,22 @@ output:
       # Use colors.
       # Default: true
       colors: false
+    # Reports issues in an HTML format.
     html:
       # Output path can be either `stdout`, `stderr` or path to the file to write to.
       # Default: stdout
       path: ./path/to/output.html
+    # Reports issues in a Checkstyle format.
     checkstyle:
       # Output path can be either `stdout`, `stderr` or path to the file to write to.
       # Default: stdout
       path: ./path/to/output.xml
+    # Reports issues in a Code Climate format.
     code-climate:
       # Output path can be either `stdout`, `stderr` or path to the file to write to.
       # Default: stdout
       path: ./path/to/output.json
+    # Reports issues in a JUnit XML format.
     junit-xml:
       # Output path can be either `stdout`, `stderr` or path to the file to write to.
       # Default: stdout
@@ -4129,10 +4137,12 @@ output:
       # Support extra JUnit XML fields.
       # Default: false
       extended: true
+    # Reports issues in a Teamcity format.
     teamcity:
       # Output path can be either `stdout`, `stderr` or path to the file to write to.
       # Default: stdout
       path: ./path/to/output.txt
+    # Reports issues in a SARIF format.
     sarif:
       # Output path can be either `stdout`, `stderr` or path to the file to write to.
       # Default: stdout
