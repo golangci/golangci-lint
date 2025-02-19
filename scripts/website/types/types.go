@@ -9,11 +9,12 @@ type CLIHelp struct {
 	Help   string `json:"help"`
 }
 
-type ExcludePattern struct {
-	ID      string `json:"id,omitempty"`
-	Pattern string `json:"pattern,omitempty"`
-	Linter  string `json:"linter,omitempty"`
-	Why     string `json:"why,omitempty"`
+type ExcludeRule struct {
+	Linters    []string `json:"linters,omitempty"`
+	Path       string   `json:"path,omitempty"`
+	PathExcept string   `json:"path-except,omitempty"`
+	Text       string   `json:"text,omitempty"`
+	Source     string   `json:"source,omitempty"`
 }
 
 type Deprecation struct {

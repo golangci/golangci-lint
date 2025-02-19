@@ -2,7 +2,7 @@ package processors
 
 import "github.com/golangci/golangci-lint/pkg/config"
 
-var linterExclusionPresets = map[string][]config.ExcludeRule{
+var LinterExclusionPresets = map[string][]config.ExcludeRule{
 	config.ExclusionPresetComments: {
 		{
 			// Annoying issue about not having a comment. The rare codebase has such comments.
@@ -129,7 +129,7 @@ func getLinterExclusionPresets(names []string) []config.ExcludeRule {
 	var rules []config.ExcludeRule
 
 	for _, name := range names {
-		if p, ok := linterExclusionPresets[name]; ok {
+		if p, ok := LinterExclusionPresets[name]; ok {
 			rules = append(rules, p...)
 		}
 	}

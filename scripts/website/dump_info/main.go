@@ -12,6 +12,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
+	"github.com/golangci/golangci-lint/pkg/result/processors"
 	"github.com/golangci/golangci-lint/scripts/website/types"
 )
 
@@ -71,8 +72,21 @@ func saveLinters() error {
 }
 
 func saveDefaultExclusions() error {
-	// FIXME
-	return saveToJSONFile(filepath.Join("assets", "default-exclusions.json"), nil)
+	data := make(map[string][]types.ExcludeRule)
+
+	for name, rules := range processors.LinterExclusionPresets {
+		for _, rule := range rules {
+			data[name] = append(data[name], types.ExcludeRule{
+				Linters:    rule.Linters,
+				Path:       rule.Path,
+				PathExcept: rule.PathExcept,
+				Text:       rule.Text,
+				Source:     rule.Source,
+			})
+		}
+	}
+
+	return saveToJSONFile(filepath.Join("assets", "exclusion-presets.json"), data)
 }
 
 func saveCLIHelp(dst string) error {

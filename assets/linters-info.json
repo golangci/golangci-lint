@@ -520,6 +520,19 @@
     "since": "v1.28.0"
   },
   {
+    "name": "golines",
+    "desc": "Checks if code is formatted, and fixes long lines",
+    "loadMode": 8199,
+    "inPresets": [
+      "format"
+    ],
+    "originalURL": "https://github.com/segmentio/golines",
+    "internal": false,
+    "canAutoFix": true,
+    "isSlow": false,
+    "since": "v2.0.0"
+  },
+  {
     "name": "goheader",
     "desc": "Checks if file header matches to pattern",
     "loadMode": 8199,
@@ -1181,23 +1194,6 @@
     "internal": false,
     "isSlow": true,
     "since": "v1.40.0"
-  },
-  {
-    "name": "tenv",
-    "desc": "tenv is analyzer that detects using os.Setenv instead of t.Setenv since Go1.17",
-    "loadMode": 8767,
-    "inPresets": [
-      "test"
-    ],
-    "originalURL": "https://github.com/sivchari/tenv",
-    "internal": false,
-    "isSlow": true,
-    "since": "v1.43.0",
-    "deprecation": {
-      "since": "v1.64.0",
-      "message": "Duplicate feature another linter.",
-      "replacement": "usetesting"
-    }
   },
   {
     "name": "testableexamples",

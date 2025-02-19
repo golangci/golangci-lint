@@ -382,7 +382,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithURL("https://github.com/mvdan/gofumpt"),
 
 		linter.NewConfig(golines.New(&cfg.LintersSettings.GoLines)).
-			WithSince("v1.64.0").
+			WithSince("v2.0.0").
 			WithPresets(linter.PresetFormatting).
 			WithAutoFix().
 			WithURL("https://github.com/segmentio/golines"),
