@@ -60,7 +60,6 @@ Dynamic rules are written declaratively with AST patterns, filters, report messa
 		WithContextSetter(func(context *linter.Context) {
 			wrapper.replacer = strings.NewReplacer(
 				internal.PlaceholderBasePath, context.Cfg.GetBasePath(),
-				internal.PlaceholderConfigDir, context.Cfg.GetConfigDir(), //nolint:staticcheck // It must be removed in v2.
 			)
 
 			wrapper.init(context.Log, settings)

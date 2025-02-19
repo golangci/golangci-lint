@@ -535,6 +535,8 @@ linters-settings:
         # Default: "original"
         list-mode: lax
         # List of file globs that will match this list of settings to compare against.
+        # By default, if a path is relative, it is relative to the directory where the golangci-lint command is executed.
+        # The placeholder '${base-path}' is substituted with a path relative to the mode defined with `run.relative-path-mode`.
         # Default: $all
         files:
           - "!**/*_a _file.go"
@@ -1364,11 +1366,11 @@ linters-settings:
         # Default: ""
         failOn: dsl,import
         # Comma-separated list of file paths containing ruleguard rules.
-        # If a path is relative, it is relative to the directory where the golangci-lint command is executed.
-        # The special '${configDir}' variable is substituted with the absolute directory containing the golangci-lint config file.
+        # By default, if a path is relative, it is relative to the directory where the golangci-lint command is executed.
+        # The placeholder '${base-path}' is substituted with a path relative to the mode defined with `run.relative-path-mode`.
         # Glob patterns such as 'rules-*.go' may be specified.
         # Default: ""
-        rules: '${configDir}/ruleguard/rules-*.go,${configDir}/myrule1.go'
+        rules: '${base-path}/ruleguard/rules-*.go,${base-path}/myrule1.go'
         # Comma-separated list of enabled groups or skip empty to enable everything.
         # Tags can be defined with # character prefix.
         # Default: "<all>"
@@ -1461,6 +1463,8 @@ linters-settings:
       # limitations under the License.
     # As alternative of directive 'template', you may put the path to file with the template source.
     # Useful if you need to load the template from a specific file.
+    # By default, if a path is relative, it is relative to the directory where the golangci-lint command is executed.
+    # The placeholder '${base-path}' is substituted with a path relative to the mode defined with `run.relative-path-mode`.
     # Default: ""
     template-path: /path/to/my/template.tmpl
 
