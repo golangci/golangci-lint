@@ -4114,7 +4114,7 @@ output:
   #   5. low
   # Either they are sorted alphabetically.
   #
-  # Default: ["file"]
+  # Default: ["linter", "file"]
   sort-order:
     - linter
     - severity

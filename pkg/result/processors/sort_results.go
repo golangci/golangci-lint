@@ -56,7 +56,7 @@ func (SortResults) Name() string { return "sort_results" }
 // Process is performing sorting of the result issues.
 func (p SortResults) Process(issues []result.Issue) ([]result.Issue, error) {
 	if len(p.cfg.SortOrder) == 0 {
-		p.cfg.SortOrder = []string{orderNameFile}
+		p.cfg.SortOrder = []string{orderNameLinter, orderNameFile}
 	}
 
 	var cmps []issueComparator

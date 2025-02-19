@@ -367,38 +367,19 @@ func TestUnsafeOk(t *testing.T) {
 }
 
 func TestSortedResults(t *testing.T) {
-	testCases := []struct {
-		opt  string
-		want string
-	}{
-		{
-			opt: "--sort-results=false",
-			want: "testdata/sort_results/main.go:15:13: Error return value is not checked (errcheck)" + "\n" +
-				"testdata/sort_results/main.go:12:5: var `db` is unused (unused)",
-		},
-		{
-			opt: "--sort-results=true",
-			want: "testdata/sort_results/main.go:12:5: var `db` is unused (unused)" + "\n" +
-				"testdata/sort_results/main.go:15:13: Error return value is not checked (errcheck)",
-		},
-	}
-
 	binPath := testshared.InstallGolangciLint(t)
 
-	for _, test := range testCases {
-		t.Run(test.opt, func(t *testing.T) {
-			t.Parallel()
-
-			testshared.NewRunnerBuilder(t).
-				WithNoConfig().
-				WithArgs("--output.text.print-issued-lines=false", test.opt).
-				WithTargetPath(testdataDir, "sort_results").
-				WithBinPath(binPath).
-				Runner().
-				Run().
-				ExpectExitCode(exitcodes.IssuesFound).ExpectOutputEq(test.want + "\n")
-		})
-	}
+	testshared.NewRunnerBuilder(t).
+		WithNoConfig().
+		WithArgs("--output.text.print-issued-lines=false").
+		WithTargetPath(testdataDir, "sort_results").
+		WithBinPath(binPath).
+		Runner().
+		Run().
+		ExpectExitCode(exitcodes.IssuesFound).ExpectOutputEq(
+		"testdata/sort_results/main.go:15:13: Error return value is not checked (errcheck)" + "\n" +
+			"testdata/sort_results/main.go:12:5: var `db` is unused (unused)" + "\n",
+	)
 }
 
 func TestIdentifierUsedOnlyInTests(t *testing.T) {

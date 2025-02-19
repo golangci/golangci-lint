@@ -219,7 +219,7 @@ func TestSortResults_Process(t *testing.T) {
 
 	results, err := sr.Process(tests)
 	require.NoError(t, err)
-	assert.Equal(t, []result.Issue{issues[3], issues[2], issues[1], issues[0]}, results)
+	assert.Equal(t, []result.Issue{issues[1], issues[0], issues[3], issues[2]}, results)
 }
 
 func compToString(c int) string {
