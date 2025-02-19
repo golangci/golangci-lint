@@ -2386,6 +2386,12 @@ linters-settings:
     # Default: false
     enable-all-rules: true
 
+    # Enable validation of comment directives
+    # See https://github.com/mgechev/revive#comment-directives
+    directives:
+      - name: specify-disable-reason
+        severity: error
+
     # Sets the default failure confidence.
     # This means that linting errors with less than 0.8 confidence will be ignored.
     # Default: 0.8

@@ -2380,6 +2380,32 @@
               "type": "boolean",
               "default": false
             },
+            "directives": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "enum": ["specify-disable-reason"]
+                  },
+                  "severity": {
+                    "type": "string",
+                    "enum": ["warning", "error"]
+                  },
+                  "exclude": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "arguments": {
+                    "type": "array"
+                  }
+                }
+              }
+            },
             "rules": {
               "type": "array",
               "items": {
