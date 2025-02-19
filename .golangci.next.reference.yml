@@ -4088,7 +4088,7 @@ output:
     text:
       # Output path can be either `stdout`, `stderr` or path to the file to write to.
       # Default: stdout
-      path: ./path/to/report.txt
+      path: ./path/to/output.txt
       # Print linter name in the end of issue text.
       # Default: true
       print-linter-name: false
@@ -4107,7 +4107,7 @@ output:
     tab:
       # Output path can be either `stdout`, `stderr` or path to the file to write to.
       # Default: stdout
-      path: stdout
+      path: ./path/to/output.txt
       # Print linter name in the end of issue text.
       # Default: true
       print-linter-name: true
@@ -4138,7 +4138,7 @@ output:
       # Support extra JUnit XML fields.
       # Default: false
       extended: true
-    # Prints issues in the Teamcity format.
+    # Prints issues in the TeamCity format.
     teamcity:
       # Output path can be either `stdout`, `stderr` or path to the file to write to.
       # Default: stdout

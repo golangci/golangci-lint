@@ -13,7 +13,7 @@ type Formats struct {
 }
 
 func (f *Formats) IsEmpty() bool {
-	styles := []SimpleFormat{
+	formats := []SimpleFormat{
 		f.Text.SimpleFormat,
 		f.JSON,
 		f.Tab.SimpleFormat,
@@ -25,8 +25,8 @@ func (f *Formats) IsEmpty() bool {
 		f.Sarif,
 	}
 
-	for _, style := range styles {
-		if style.Path != "" {
+	for _, format := range formats {
+		if format.Path != "" {
 			return false
 		}
 	}
