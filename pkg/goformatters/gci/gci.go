@@ -32,9 +32,11 @@ func New(settings *config.GciSettings) (*Formatter, error) {
 		Cfg: gcicfg.BoolConfig{
 			NoInlineComments: settings.NoInlineComments,
 			NoPrefixComments: settings.NoPrefixComments,
-			SkipGenerated:    settings.SkipGenerated,
 			CustomOrder:      settings.CustomOrder,
 			NoLexOrder:       settings.NoLexOrder,
+
+			// Should be managed with `formatters.exclusions.generated`.
+			SkipGenerated: false,
 		},
 		SectionStrings: settings.Sections,
 		ModPath:        modPath,

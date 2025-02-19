@@ -526,11 +526,6 @@
               "description": "To enable/disable the asasalint builtin exclusions of function names.",
               "type": "boolean",
               "default": true
-            },
-            "ignore-test": {
-              "description": "Ignore *_test.go files.",
-              "type": "boolean",
-              "default": false
             }
           }
         },
@@ -589,11 +584,6 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
-            "skip-tests": {
-              "description": "Should the linter execute on test files as well",
-              "type": "boolean",
-              "default": false
-            },
             "max-complexity": {
               "description": "Max complexity the function can have",
               "type": "integer",
@@ -852,11 +842,6 @@
                 "examples": ["switch", "map"]
               }
             },
-            "check-generated": {
-              "description": "Check switch statements in generated files",
-              "type": "boolean",
-              "default": false
-            },
             "explicit-exhaustive-switch": {
               "description": "Only run exhaustive check on switches with \"//exhaustive:enforce\" comment.",
               "type": "boolean",
@@ -1010,11 +995,6 @@
               },
               "default": ["standard", "default"]
             },
-            "skip-generated": {
-              "description": "Skip generated files.",
-              "type": "boolean",
-              "default": true
-            },
             "no-inline-comments": {
               "description": "Checks that no inline Comments are present.",
               "type": "boolean",
@@ -1148,11 +1128,6 @@
               "description": "Minimum occurrences count to trigger.",
               "type": "integer",
               "default": 3
-            },
-            "ignore-tests": {
-              "description": "Ignore test files.",
-              "type": "boolean",
-              "default": false
             },
             "ignore-calls": {
               "description": "Ignore when constant is not used as function argument",
@@ -1767,11 +1742,6 @@
                 "$ref": "#/definitions/gosec-rules"
               }
             },
-            "exclude-generated": {
-              "description": "Exclude generated files",
-              "type": "boolean",
-              "default": false
-            },
             "severity": {
               "description": "Filter out the issues with a lower severity than the given value",
               "type": "string",
@@ -1809,11 +1779,6 @@
               "items": {
                 "type": "string"
               }
-            },
-            "ignore-tests": {
-              "description": "Ignore test files.",
-              "type": "boolean",
-              "default": false
             },
             "watch-for-scripts": {
               "description": "List of Unicode scripts to watch for any usage in string literals.",
@@ -2540,9 +2505,6 @@
           "properties": {
             "max-open-files": {
               "type": "integer"
-            },
-            "ignore-generated-header": {
-              "type": "boolean"
             },
             "confidence": {
               "type": "number"

@@ -14,7 +14,9 @@ func New(settings *config.AsasalintSettings) *goanalysis.Linter {
 	if settings != nil {
 		cfg.Exclude = settings.Exclude
 		cfg.NoBuiltinExclusions = !settings.UseBuiltinExclusions
-		cfg.IgnoreTest = settings.IgnoreTest
+
+		// Should be managed with `linters.exclusions.rules`.
+		cfg.IgnoreTest = false
 	}
 
 	a, err := asasalint.NewAnalyzer(cfg)
