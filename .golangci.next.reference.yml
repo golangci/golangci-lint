@@ -4083,7 +4083,7 @@ issues:
 output:
   # The formats used to render issues.
   formats:
-    # Reports issues in a text format with colors, line number, and linter name.
+    # Prints issues in a text format with colors, line number, and linter name.
     # This format is the default format.
     text:
       # Output path can be either `stdout`, `stderr` or path to the file to write to.
@@ -4098,12 +4098,12 @@ output:
       # Use colors.
       # Default: true
       colors: false
-    # Reports issues in a JSON format.
+    # Prints issues in a JSON representation.
     json:
       # Output path can be either `stdout`, `stderr` or path to the file to write to.
       # Default: stdout
       path: ./path/to/output.json
-    # Reports issues in columns separated by tabulations.
+    # Prints issues in columns representation separated by tabulations.
     tab:
       # Output path can be either `stdout`, `stderr` or path to the file to write to.
       # Default: stdout
@@ -4114,22 +4114,23 @@ output:
       # Use colors.
       # Default: true
       colors: false
-    # Reports issues in an HTML format.
+    # Prints issues in an HTML page.
+    # It uses the Cloudflare CDN (cdnjs) and React.
     html:
       # Output path can be either `stdout`, `stderr` or path to the file to write to.
       # Default: stdout
       path: ./path/to/output.html
-    # Reports issues in a Checkstyle format.
+    # Prints issues in the Checkstyle format.
     checkstyle:
       # Output path can be either `stdout`, `stderr` or path to the file to write to.
       # Default: stdout
       path: ./path/to/output.xml
-    # Reports issues in a Code Climate format.
+    # Prints issues in the Code Climate format.
     code-climate:
       # Output path can be either `stdout`, `stderr` or path to the file to write to.
       # Default: stdout
       path: ./path/to/output.json
-    # Reports issues in a JUnit XML format.
+    # Prints issues in the JUnit XML format.
     junit-xml:
       # Output path can be either `stdout`, `stderr` or path to the file to write to.
       # Default: stdout
@@ -4137,12 +4138,12 @@ output:
       # Support extra JUnit XML fields.
       # Default: false
       extended: true
-    # Reports issues in a Teamcity format.
+    # Prints issues in the Teamcity format.
     teamcity:
       # Output path can be either `stdout`, `stderr` or path to the file to write to.
       # Default: stdout
       path: ./path/to/output.txt
-    # Reports issues in a SARIF format.
+    # Prints issues in the SARIF format.
     sarif:
       # Output path can be either `stdout`, `stderr` or path to the file to write to.
       # Default: stdout
