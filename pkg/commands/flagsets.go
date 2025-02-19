@@ -118,7 +118,7 @@ func setupOutputFormatsFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
 
 	internal.AddFlagAndBind(v, fs, fs.String, "output.junit-xml.path", "output.formats.junit-xml.path", "",
 		color.GreenString(outputPathDesc))
-	internal.AddFlagAndBind(v, fs, fs.Bool, "output.junit-xml.extended", "output.formats.junit-xml.extended", true,
+	internal.AddFlagAndBind(v, fs, fs.Bool, "output.junit-xml.extended", "output.formats.junit-xml.extended", false,
 		color.GreenString("Support extra JUnit XML fields."))
 
 	internal.AddFlagAndBind(v, fs, fs.String, "output.teamcity.path", "output.formats.teamcity.path", "",

@@ -15,7 +15,7 @@ import (
 // Tab prints issues using tabulation as a field separator.
 type Tab struct {
 	printLinterName bool
-	useColors       bool
+	colors          bool
 
 	log logutils.Log
 	w   io.Writer
@@ -24,7 +24,7 @@ type Tab struct {
 func NewTab(log logutils.Log, w io.Writer, cfg *config.Tab) *Tab {
 	return &Tab{
 		printLinterName: cfg.PrintLinterName,
-		useColors:       cfg.UseColors,
+		colors:          cfg.Colors,
 		log:             log.Child(logutils.DebugKeyTabPrinter),
 		w:               w,
 	}
@@ -33,7 +33,7 @@ func NewTab(log logutils.Log, w io.Writer, cfg *config.Tab) *Tab {
 func (p *Tab) SprintfColored(ca color.Attribute, format string, args ...any) string {
 	c := color.New(ca)
 
-	if !p.useColors {
+	if !p.colors {
 		c.DisableColor()
 	}
 

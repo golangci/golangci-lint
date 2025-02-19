@@ -89,9 +89,9 @@ path/to/fileb.go:300:9  another issue
 			buf := new(bytes.Buffer)
 
 			printer := NewTab(logutils.NewStderrLog(logutils.DebugKeyEmpty), buf, &config.Tab{
-				SimpleStyle:     config.SimpleStyle{},
+				SimpleFormat:    config.SimpleFormat{},
 				PrintLinterName: test.printLinterName,
-				UseColors:       test.useColors,
+				Colors:          test.useColors,
 			})
 
 			err := printer.Print(issues)

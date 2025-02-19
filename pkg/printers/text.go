@@ -16,7 +16,7 @@ import (
 type Text struct {
 	printLinterName bool
 	printIssuedLine bool
-	useColors       bool
+	colors          bool
 
 	log logutils.Log
 	w   io.Writer
@@ -26,7 +26,7 @@ func NewText(log logutils.Log, w io.Writer, cfg *config.Text) *Text {
 	return &Text{
 		printLinterName: cfg.PrintLinterName,
 		printIssuedLine: cfg.PrintIssuedLine,
-		useColors:       cfg.Colors,
+		colors:          cfg.Colors,
 		log:             log.Child(logutils.DebugKeyTextPrinter),
 		w:               w,
 	}
@@ -35,7 +35,7 @@ func NewText(log logutils.Log, w io.Writer, cfg *config.Text) *Text {
 func (p *Text) SprintfColored(ca color.Attribute, format string, args ...any) string {
 	c := color.New(ca)
 
-	if !p.useColors {
+	if !p.colors {
 		c.DisableColor()
 	}
 

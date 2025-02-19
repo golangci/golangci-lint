@@ -65,13 +65,13 @@ func NewPrinter(log logutils.Log, cfg *config.Formats, reportData *report.Data, 
 //nolint:gocyclo,funlen // the complexity is related to the number of formats.
 func (c *Printer) Print(issues []result.Issue) error {
 	if c.cfg.IsEmpty() {
-		c.cfg.Text.SimpleStyle.Path = outputStdOut
+		c.cfg.Text.SimpleFormat.Path = outputStdOut
 	}
 
 	var printers []issuePrinter
 
 	if c.cfg.Text.Path != "" {
-		w, closer, err := c.createWriter(&c.cfg.Text.SimpleStyle)
+		w, closer, err := c.createWriter(&c.cfg.Text.SimpleFormat)
 		if err != nil {
 			return fmt.Errorf("can't create output for %s: %w", c.cfg.Text.Path, err)
 		}
@@ -137,7 +137,7 @@ func (c *Printer) Print(issues []result.Issue) error {
 	}
 
 	if c.cfg.JUnitXML.Path != "" {
-		w, closer, err := c.createWriter(&c.cfg.JUnitXML.SimpleStyle)
+		w, closer, err := c.createWriter(&c.cfg.JUnitXML.SimpleFormat)
 		if err != nil {
 			return fmt.Errorf("can't create output for %s: %w", c.cfg.JUnitXML.Path, err)
 		}
@@ -179,7 +179,7 @@ func (c *Printer) Print(issues []result.Issue) error {
 	return nil
 }
 
-func (c *Printer) createWriter(cfg *config.SimpleStyle) (io.Writer, func(), error) {
+func (c *Printer) createWriter(cfg *config.SimpleFormat) (io.Writer, func(), error) {
 	if cfg.Path == "" || cfg.Path == outputStdOut {
 		return c.stdOut, func() {}, nil
 	}

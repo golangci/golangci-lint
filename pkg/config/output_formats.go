@@ -1,26 +1,26 @@
 package config
 
 type Formats struct {
-	Text        Text        `mapstructure:"text"`
-	JSON        SimpleStyle `mapstructure:"json"`
-	Tab         Tab         `mapstructure:"tab"`
-	HTML        SimpleStyle `mapstructure:"html"`
-	Checkstyle  SimpleStyle `mapstructure:"checkstyle"`
-	CodeClimate SimpleStyle `mapstructure:"code-climate"`
-	JUnitXML    JUnitXML    `mapstructure:"junit-xml"`
-	TeamCity    SimpleStyle `mapstructure:"team-city"`
-	Sarif       SimpleStyle `mapstructure:"sarif"`
+	Text        Text         `mapstructure:"text"`
+	JSON        SimpleFormat `mapstructure:"json"`
+	Tab         Tab          `mapstructure:"tab"`
+	HTML        SimpleFormat `mapstructure:"html"`
+	Checkstyle  SimpleFormat `mapstructure:"checkstyle"`
+	CodeClimate SimpleFormat `mapstructure:"code-climate"`
+	JUnitXML    JUnitXML     `mapstructure:"junit-xml"`
+	TeamCity    SimpleFormat `mapstructure:"teamcity"`
+	Sarif       SimpleFormat `mapstructure:"sarif"`
 }
 
 func (f *Formats) IsEmpty() bool {
-	styles := []SimpleStyle{
-		f.Text.SimpleStyle,
+	styles := []SimpleFormat{
+		f.Text.SimpleFormat,
 		f.JSON,
-		f.Tab.SimpleStyle,
+		f.Tab.SimpleFormat,
 		f.HTML,
 		f.Checkstyle,
 		f.CodeClimate,
-		f.JUnitXML.SimpleStyle,
+		f.JUnitXML.SimpleFormat,
 		f.TeamCity,
 		f.Sarif,
 	}
@@ -34,24 +34,24 @@ func (f *Formats) IsEmpty() bool {
 	return true
 }
 
-type SimpleStyle struct {
+type SimpleFormat struct {
 	Path string `mapstructure:"path"`
 }
 
 type Text struct {
-	SimpleStyle     `mapstructure:",squash"`
+	SimpleFormat    `mapstructure:",squash"`
 	PrintLinterName bool `mapstructure:"print-linter-name"`
 	PrintIssuedLine bool `mapstructure:"print-issued-lines"`
 	Colors          bool `mapstructure:"colors"`
 }
 
 type Tab struct {
-	SimpleStyle     `mapstructure:",squash"`
+	SimpleFormat    `mapstructure:",squash"`
 	PrintLinterName bool `mapstructure:"print-linter-name"`
-	UseColors       bool `mapstructure:"use-colors"`
+	Colors          bool `mapstructure:"colors"`
 }
 
 type JUnitXML struct {
-	SimpleStyle `mapstructure:",squash"`
-	Extended    bool `mapstructure:"extended"`
+	SimpleFormat `mapstructure:",squash"`
+	Extended     bool `mapstructure:"extended"`
 }

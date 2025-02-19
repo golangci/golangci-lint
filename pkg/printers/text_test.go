@@ -117,7 +117,7 @@ path/to/fileb.go:300:9: another issue
 			buf := new(bytes.Buffer)
 
 			printer := NewText(logutils.NewStderrLog(logutils.DebugKeyEmpty), buf, &config.Text{
-				SimpleStyle:     config.SimpleStyle{},
+				SimpleFormat:    config.SimpleFormat{},
 				PrintLinterName: test.printLinterName,
 				PrintIssuedLine: test.printIssuedLine,
 				Colors:          test.useColors,

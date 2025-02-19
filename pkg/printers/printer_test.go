@@ -49,7 +49,7 @@ func TestPrinter_Print_stdout(t *testing.T) {
 			desc: "stdout (explicit)",
 			cfg: &config.Formats{
 				Text: config.Text{
-					SimpleStyle: config.SimpleStyle{
+					SimpleFormat: config.SimpleFormat{
 						Path: "stdout",
 					},
 				},
@@ -94,7 +94,7 @@ func TestPrinter_Print_stderr(t *testing.T) {
 
 	cfg := &config.Formats{
 		Text: config.Text{
-			SimpleStyle: config.SimpleStyle{
+			SimpleFormat: config.SimpleFormat{
 				Path: "stderr",
 			},
 		},
@@ -132,7 +132,7 @@ func TestPrinter_Print_file(t *testing.T) {
 
 	cfg := &config.Formats{
 		Text: config.Text{
-			SimpleStyle: config.SimpleStyle{
+			SimpleFormat: config.SimpleFormat{
 				Path: outputPath,
 			},
 		},
@@ -174,14 +174,14 @@ func TestPrinter_Print_multiple(t *testing.T) {
 	outputPath := filepath.Join(t.TempDir(), "teamcity.txt")
 
 	cfg := &config.Formats{
-		TeamCity: config.SimpleStyle{
+		TeamCity: config.SimpleFormat{
 			Path: outputPath,
 		},
-		JSON: config.SimpleStyle{
+		JSON: config.SimpleFormat{
 			Path: "stdout",
 		},
 		Text: config.Text{
-			SimpleStyle: config.SimpleStyle{
+			SimpleFormat: config.SimpleFormat{
 				Path: "stderr",
 			},
 		},

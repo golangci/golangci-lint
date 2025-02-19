@@ -4079,11 +4079,10 @@ issues:
   fix: true
 
 
-# output configuration options
+# Output configuration options.
 output:
   # The formats used to render issues.
   formats:
-    # (line-number)
     text:
       # Output path can be either `stdout`, `stderr` or path to the file to write to.
       # Default: stdout
