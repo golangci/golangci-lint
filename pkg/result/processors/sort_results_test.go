@@ -209,22 +209,11 @@ func Test_numericCompare(t *testing.T) {
 	}
 }
 
-func TestSortResults_Process_noSorting(t *testing.T) {
+func TestSortResults_Process(t *testing.T) {
 	tests := make([]result.Issue, len(issues))
 	copy(tests, issues)
 
-	sr := NewSortResults(&config.Output{})
-
-	results, err := sr.Process(tests)
-	require.NoError(t, err)
-	assert.Equal(t, tests, results)
-}
-
-func TestSortResults_Process_Sorting(t *testing.T) {
-	tests := make([]result.Issue, len(issues))
-	copy(tests, issues)
-
-	cfg := &config.Output{SortResults: true}
+	cfg := &config.Output{}
 
 	sr := NewSortResults(cfg)
 

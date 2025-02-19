@@ -3890,11 +3890,6 @@
           "items": {
             "enum": ["linter", "severity", "file"]
           }
-        },
-        "sort-results": {
-          "description": "Sort results by: filepath, line and column.",
-          "type": "boolean",
-          "default": true
         }
       }
     },

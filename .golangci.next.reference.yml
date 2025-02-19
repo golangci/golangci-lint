@@ -4102,10 +4102,6 @@ output:
   # Default: ""
   path-prefix: ""
 
-  # Sort results by the order defined in `sort-order`.
-  # Default: false
-  sort-results: true
-
   # Order to use when sorting results.
   # Require `sort-results` to `true`.
   # Possible values: `file`, `linter`, and `severity`.

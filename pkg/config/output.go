@@ -1,25 +1,19 @@
 package config
 
 import (
-	"errors"
 	"fmt"
 	"slices"
 	"strings"
 )
 
 type Output struct {
-	Formats     Formats  `mapstructure:"formats"`
-	SortResults bool     `mapstructure:"sort-results"`
-	SortOrder   []string `mapstructure:"sort-order"`
-	PathPrefix  string   `mapstructure:"path-prefix"`
-	ShowStats   bool     `mapstructure:"show-stats"`
+	Formats    Formats  `mapstructure:"formats"`
+	SortOrder  []string `mapstructure:"sort-order"`
+	PathPrefix string   `mapstructure:"path-prefix"`
+	ShowStats  bool     `mapstructure:"show-stats"`
 }
 
 func (o *Output) Validate() error {
-	if !o.SortResults && len(o.SortOrder) > 0 {
-		return errors.New("sort-results should be 'true' to use sort-order")
-	}
-
 	validOrders := []string{"linter", "file", "severity"}
 
 	all := strings.Join(o.SortOrder, " ")

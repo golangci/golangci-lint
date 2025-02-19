@@ -70,8 +70,6 @@ func setupRunFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
 }
 
 func setupOutputFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
-	internal.AddFlagAndBind(v, fs, fs.Bool, "sort-results", "output.sort-results", false,
-		color.GreenString("Sort linter results"))
 	internal.AddFlagAndBind(v, fs, fs.StringSlice, "sort-order", "output.sort-order", nil,
 		color.GreenString("Sort order of linter results"))
 	internal.AddFlagAndBind(v, fs, fs.String, "path-prefix", "output.path-prefix", "",
