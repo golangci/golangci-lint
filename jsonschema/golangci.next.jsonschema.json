@@ -4384,11 +4384,6 @@
           "type": "string",
           "default": ""
         },
-        "case-sensitive": {
-          "description": "If set to true, severity-rules regular expressions become case sensitive.",
-          "type": "boolean",
-          "default": false
-        },
         "rules": {
           "description": "When a list of severity rules are provided, severity information will be added to lint issues. Severity rules have the same filtering capability as exclude rules except you are allowed to specify one matcher per severity rule.\nOnly affects out formats that support setting severity information.",
           "type": "array",

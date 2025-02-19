@@ -278,7 +278,6 @@ func TestSeverity_caseSensitive(t *testing.T) {
 				},
 			},
 		},
-		CaseSensitive: true,
 	}
 
 	p := NewSeverity(nil, files, opts)
