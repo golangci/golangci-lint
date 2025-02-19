@@ -15,15 +15,20 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
+const (
+	outputStdOut = "stdout"
+	outputStdErr = "stderr"
+)
+
 const defaultFileMode = 0o644
 
 type issuePrinter interface {
 	Print(issues []result.Issue) error
 }
 
-// Printer prints issues
+// Printer prints issues.
 type Printer struct {
-	cfg        *config.Output
+	cfg        *config.Formats
 	reportData *report.Data
 	basePath   string
 
@@ -34,7 +39,7 @@ type Printer struct {
 }
 
 // NewPrinter creates a new Printer.
-func NewPrinter(log logutils.Log, cfg *config.Output, reportData *report.Data, basePath string) (*Printer, error) {
+func NewPrinter(log logutils.Log, cfg *config.Formats, reportData *report.Data, basePath string) (*Printer, error) {
 	if log == nil {
 		return nil, errors.New("missing log argument in constructor")
 	}
@@ -55,10 +60,117 @@ func NewPrinter(log logutils.Log, cfg *config.Output, reportData *report.Data, b
 	}, nil
 }
 
-// Print prints issues based on the formats defined
+// Print prints issues based on the formats defined.
+//
+//nolint:gocyclo,funlen // the complexity is related to the number of formats.
 func (c *Printer) Print(issues []result.Issue) error {
-	for _, format := range c.cfg.Formats {
-		err := c.printReports(issues, format)
+	if c.cfg.IsEmpty() {
+		c.cfg.Text.SimpleFormat.Path = outputStdOut
+	}
+
+	var printers []issuePrinter
+
+	if c.cfg.Text.Path != "" {
+		w, closer, err := c.createWriter(&c.cfg.Text.SimpleFormat)
+		if err != nil {
+			return fmt.Errorf("can't create output for %s: %w", c.cfg.Text.Path, err)
+		}
+
+		defer closer()
+
+		printers = append(printers, NewText(c.log, w, &c.cfg.Text))
+	}
+
+	if c.cfg.JSON.Path != "" {
+		w, closer, err := c.createWriter(&c.cfg.JSON)
+		if err != nil {
+			return fmt.Errorf("can't create output for %s: %w", c.cfg.JSON.Path, err)
+		}
+
+		defer closer()
+
+		printers = append(printers, NewJSON(w, c.reportData))
+	}
+
+	if c.cfg.Tab.Path != "" {
+		w, closer, err := c.createWriter(&c.cfg.Tab.SimpleFormat)
+		if err != nil {
+			return fmt.Errorf("can't create output for %s: %w", c.cfg.Tab.Path, err)
+		}
+
+		defer closer()
+
+		printers = append(printers, NewTab(c.log, w, &c.cfg.Tab))
+	}
+
+	if c.cfg.HTML.Path != "" {
+		w, closer, err := c.createWriter(&c.cfg.HTML)
+		if err != nil {
+			return fmt.Errorf("can't create output for %s: %w", c.cfg.HTML.Path, err)
+		}
+
+		defer closer()
+
+		printers = append(printers, NewHTML(w))
+	}
+
+	if c.cfg.Checkstyle.Path != "" {
+		w, closer, err := c.createWriter(&c.cfg.Checkstyle)
+		if err != nil {
+			return fmt.Errorf("can't create output for %s: %w", c.cfg.Checkstyle.Path, err)
+		}
+
+		defer closer()
+
+		printers = append(printers, NewCheckstyle(c.log, w))
+	}
+
+	if c.cfg.CodeClimate.Path != "" {
+		w, closer, err := c.createWriter(&c.cfg.CodeClimate)
+		if err != nil {
+			return fmt.Errorf("can't create output for %s: %w", c.cfg.CodeClimate.Path, err)
+		}
+
+		defer closer()
+
+		printers = append(printers, NewCodeClimate(c.log, w))
+	}
+
+	if c.cfg.JUnitXML.Path != "" {
+		w, closer, err := c.createWriter(&c.cfg.JUnitXML.SimpleFormat)
+		if err != nil {
+			return fmt.Errorf("can't create output for %s: %w", c.cfg.JUnitXML.Path, err)
+		}
+
+		defer closer()
+
+		printers = append(printers, NewJUnitXML(w, c.cfg.JUnitXML.Extended))
+	}
+
+	if c.cfg.TeamCity.Path != "" {
+		w, closer, err := c.createWriter(&c.cfg.TeamCity)
+		if err != nil {
+			return fmt.Errorf("can't create output for %s: %w", c.cfg.TeamCity.Path, err)
+		}
+
+		defer closer()
+
+		printers = append(printers, NewTeamCity(c.log, w))
+	}
+
+	if c.cfg.Sarif.Path != "" {
+		w, closer, err := c.createWriter(&c.cfg.Sarif)
+		if err != nil {
+			return fmt.Errorf("can't create output for %s: %w", c.cfg.Sarif.Path, err)
+		}
+
+		defer closer()
+
+		printers = append(printers, NewSarif(c.log, w))
+	}
+
+	for _, printer := range printers {
+		err := printer.Print(issues)
 		if err != nil {
 			return err
 		}
@@ -67,85 +179,30 @@ func (c *Printer) Print(issues []result.Issue) error {
 	return nil
 }
 
-func (c *Printer) printReports(issues []result.Issue, format config.OutputFormat) error {
-	w, shouldClose, err := c.createWriter(format.Path)
+func (c *Printer) createWriter(cfg *config.SimpleFormat) (io.Writer, func(), error) {
+	if cfg.Path == "" || cfg.Path == outputStdOut {
+		return c.stdOut, func() {}, nil
+	}
+
+	if cfg.Path == outputStdErr {
+		return c.stdErr, func() {}, nil
+	}
+
+	if !filepath.IsAbs(cfg.Path) {
+		cfg.Path = filepath.Join(c.basePath, cfg.Path)
+	}
+
+	err := os.MkdirAll(filepath.Dir(cfg.Path), os.ModePerm)
 	if err != nil {
-		return fmt.Errorf("can't create output for %s: %w", format.Path, err)
+		return nil, func() {}, err
 	}
 
-	defer func() {
-		if file, ok := w.(io.Closer); shouldClose && ok {
-			_ = file.Close()
-		}
-	}()
-
-	p, err := c.createPrinter(format.Format, w)
+	f, err := os.OpenFile(cfg.Path, os.O_CREATE|os.O_TRUNC|os.O_WRONLY, defaultFileMode)
 	if err != nil {
-		return err
+		return nil, func() {}, err
 	}
 
-	if err = p.Print(issues); err != nil {
-		return fmt.Errorf("can't print %d issues: %w", len(issues), err)
-	}
-
-	return nil
-}
-
-func (c *Printer) createWriter(path string) (io.Writer, bool, error) {
-	if path == "" || path == "stdout" {
-		return c.stdOut, false, nil
-	}
-
-	if path == "stderr" {
-		return c.stdErr, false, nil
-	}
-
-	if !filepath.IsAbs(path) {
-		path = filepath.Join(c.basePath, path)
-	}
-
-	err := os.MkdirAll(filepath.Dir(path), os.ModePerm)
-	if err != nil {
-		return nil, false, err
-	}
-
-	f, err := os.OpenFile(path, os.O_CREATE|os.O_TRUNC|os.O_WRONLY, defaultFileMode)
-	if err != nil {
-		return nil, false, err
-	}
-
-	return f, true, nil
-}
-
-func (c *Printer) createPrinter(format string, w io.Writer) (issuePrinter, error) {
-	var p issuePrinter
-
-	switch format {
-	case config.OutFormatJSON:
-		p = NewJSON(w, c.reportData)
-	case config.OutFormatLineNumber, config.OutFormatColoredLineNumber:
-		p = NewText(c.log, w, c.cfg.PrintLinterName, c.cfg.PrintIssuedLine, format == config.OutFormatColoredLineNumber)
-	case config.OutFormatTab, config.OutFormatColoredTab:
-		p = NewTab(c.log, w, c.cfg.PrintLinterName, format == config.OutFormatColoredTab)
-	case config.OutFormatCheckstyle:
-		p = NewCheckstyle(c.log, w)
-	case config.OutFormatCodeClimate:
-		p = NewCodeClimate(c.log, w)
-	case config.OutFormatHTML:
-		p = NewHTML(w)
-	case config.OutFormatJUnitXML, config.OutFormatJUnitXMLExtended:
-		p = NewJUnitXML(w, format == config.OutFormatJUnitXMLExtended)
-	case config.OutFormatGithubActions:
-		p = NewGitHubAction(w)
-	case config.OutFormatTeamCity:
-		p = NewTeamCity(c.log, w)
-	case config.OutFormatSarif:
-		p = NewSarif(c.log, w)
-	default:
-		return nil, fmt.Errorf("unknown output format %q", format)
-	}
-
-	return p, nil
+	return f, func() { _ = f.Close() }, nil
 }
 
 type severitySanitizer struct {

@@ -370,26 +370,6 @@ func (l *Loader) handleDeprecation() error {
 		l.cfg.Issues.UniqByLine = *l.cfg.Output.UniqByLine
 	}
 
-	// Deprecated since v1.57.0
-	if l.cfg.Output.Format != "" {
-		l.log.Warnf("The configuration option `output.format` is deprecated, please use `output.formats`")
-
-		var f OutputFormats
-		err := f.UnmarshalText([]byte(l.cfg.Output.Format))
-		if err != nil {
-			return fmt.Errorf("unmarshal output format: %w", err)
-		}
-
-		l.cfg.Output.Formats = f
-	}
-
-	for _, format := range l.cfg.Output.Formats {
-		if format.Format == OutFormatGithubActions {
-			l.log.Warnf("The output format `%s` is deprecated, please use `%s`", OutFormatGithubActions, OutFormatColoredLineNumber)
-			break // To avoid repeating the message if there are several usages of github-actions format.
-		}
-	}
-
 	// Deprecated since v1.59.0
 	if l.cfg.Issues.ExcludeGeneratedStrict != nil {
 		l.log.Warnf("The configuration option `issues.exclude-generated-strict` is deprecated, please use `issues.exclude-generated`")

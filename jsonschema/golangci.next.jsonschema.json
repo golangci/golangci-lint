@@ -454,11 +454,39 @@
         "cfg",
         "wd"
       ]
+    },
+    "simple-format": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "$ref": "#/definitions/formats-path",
+          "default": "stdout"
+        }
+      }
+    },
+    "formats-path" : {
+      "anyOf": [
+        {
+          "enum": [
+            "stdout",
+            "stderr"
+          ]
+        },
+        {
+          "type": "string"
+        }
+      ]
     }
   },
   "type": "object",
   "additionalProperties": false,
+  "required": ["version"],
   "properties": {
+    "version": {
+      "type": "string",
+      "default": "2"
+    },
     "run": {
       "description": "Options for analysis running,",
       "type": "object",
@@ -530,53 +558,82 @@
       "properties": {
         "formats": {
           "description": "Output formats to use.",
-          "type": "array",
-          "items": {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "path": {
-                "default": "stdout",
-                "anyOf": [
-                  {
-                    "enum": [ "stdout", "stderr" ]
-                  },
-                  {
-                    "type": "string"
-                  }
-                ]
-              },
-              "format": {
-                "default": "colored-line-number",
-                "enum": [
-                  "colored-line-number",
-                  "line-number",
-                  "json",
-                  "colored-tab",
-                  "tab",
-                  "html",
-                  "checkstyle",
-                  "code-climate",
-                  "junit-xml",
-                  "junit-xml-extended",
-                  "github-actions",
-                  "teamcity",
-                  "sarif"
-                ]
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "text": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "path": {
+                  "$ref": "#/definitions/formats-path",
+                  "default": "stdout"
+                },
+                "print-linter-name": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "print-issued-lines": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "colors": {
+                  "type": "boolean",
+                  "default": true
+                }
               }
             },
-            "required": ["format"]
+            "json": {
+              "$ref": "#/definitions/simple-format"
+            },
+            "tab": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "path": {
+                  "$ref": "#/definitions/formats-path",
+                  "default": "stdout"
+                },
+                "print-linter-name": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "colors": {
+                  "type": "boolean",
+                  "default": true
+                }
+              }
+            },
+            "html": {
+              "$ref": "#/definitions/simple-format"
+            },
+            "checkstyle": {
+              "$ref": "#/definitions/simple-format"
+            },
+            "code-climate": {
+              "$ref": "#/definitions/simple-format"
+            },
+            "junit-xml": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "path": {
+                  "$ref": "#/definitions/formats-path",
+                  "default": "stdout"
+                },
+                "extended": {
+                  "type": "boolean",
+                  "default": true
+                }
+              }
+            },
+            "teamcity": {
+              "$ref": "#/definitions/simple-format"
+            },
+            "sarif": {
+              "$ref": "#/definitions/simple-format"
+            }
           }
-        },
-        "print-issued-lines": {
-          "description": "Print lines of code with issue.",
-          "type": "boolean",
-          "default": true
-        },
-        "print-linter-name": {
-          "description": "Print linter name in the end of issue text.",
-          "type": "boolean",
-          "default": true
         },
         "path-prefix": {
           "description": "Add a prefix to the output file references.",

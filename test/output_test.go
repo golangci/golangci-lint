@@ -21,9 +21,9 @@ func TestOutput_lineNumber(t *testing.T) {
 	testshared.NewRunnerBuilder(t).
 		WithArgs(
 			"--disable-all",
-			"--print-issued-lines=false",
-			"--print-linter-name=false",
-			"--out-format=line-number",
+			"--output.text.print-issued-lines=false",
+			"--output.text.print-linter-name=false",
+			"--output.text.path=stdout",
 		).
 		WithDirectives(sourcePath).
 		WithTargetPath(sourcePath).
@@ -40,9 +40,7 @@ func TestOutput_Stderr(t *testing.T) {
 	testshared.NewRunnerBuilder(t).
 		WithArgs(
 			"--disable-all",
-			"--print-issued-lines=false",
-			"--print-linter-name=false",
-			"--out-format=json:stderr",
+			"--output.json.path=stderr",
 		).
 		WithDirectives(sourcePath).
 		WithTargetPath(sourcePath).
@@ -60,9 +58,7 @@ func TestOutput_File(t *testing.T) {
 	testshared.NewRunnerBuilder(t).
 		WithArgs(
 			"--disable-all",
-			"--print-issued-lines=false",
-			"--print-linter-name=false",
-			fmt.Sprintf("--out-format=json:%s", resultPath),
+			fmt.Sprintf("--output.json.path=%s", resultPath),
 		).
 		WithDirectives(sourcePath).
 		WithTargetPath(sourcePath).
@@ -82,9 +78,10 @@ func TestOutput_Multiple(t *testing.T) {
 	testshared.NewRunnerBuilder(t).
 		WithArgs(
 			"--disable-all",
-			"--print-issued-lines=false",
-			"--print-linter-name=false",
-			"--out-format=line-number,json:stdout",
+			"--output.text.print-issued-lines=false",
+			"--output.text.print-linter-name=false",
+			"--output.text.path=stdout",
+			"--output.json.path=stdout",
 		).
 		WithDirectives(sourcePath).
 		WithTargetPath(sourcePath).

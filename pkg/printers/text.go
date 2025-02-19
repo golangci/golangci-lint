@@ -7,6 +7,7 @@ import (
 
 	"github.com/fatih/color"
 
+	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
@@ -15,17 +16,17 @@ import (
 type Text struct {
 	printLinterName bool
 	printIssuedLine bool
-	useColors       bool
+	colors          bool
 
 	log logutils.Log
 	w   io.Writer
 }
 
-func NewText(log logutils.Log, w io.Writer, printLinterName, printIssuedLine, useColors bool) *Text {
+func NewText(log logutils.Log, w io.Writer, cfg *config.Text) *Text {
 	return &Text{
-		printLinterName: printLinterName,
-		printIssuedLine: printIssuedLine,
-		useColors:       useColors,
+		printLinterName: cfg.PrintLinterName,
+		printIssuedLine: cfg.PrintIssuedLine,
+		colors:          cfg.Colors,
 		log:             log.Child(logutils.DebugKeyTextPrinter),
 		w:               w,
 	}
@@ -34,7 +35,7 @@ func NewText(log logutils.Log, w io.Writer, printLinterName, printIssuedLine, us
 func (p *Text) SprintfColored(ca color.Attribute, format string, args ...any) string {
 	c := color.New(ca)
 
-	if !p.useColors {
+	if !p.colors {
 		c.DisableColor()
 	}
 

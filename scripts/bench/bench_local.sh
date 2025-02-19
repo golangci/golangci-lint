@@ -46,5 +46,5 @@ go build -trimpath -ldflags '-s -w' -o golangci-lint ./cmd/golangci-lint
 ## Run
 
 hyperfine --warmup 1 \
--n 'local' --prepare './golangci-lint cache clean' "./golangci-lint run --issues-exit-code 0 --print-issued-lines=false --enable-only ${LINTER}" \
--n "${VERSION}" --prepare "./golangci-lint-${VERSION} cache clean" "./golangci-lint-${VERSION} run --issues-exit-code 0 --print-issued-lines=false --enable-only ${LINTER}"
+-n 'local' --prepare './golangci-lint cache clean' "./golangci-lint run --issues-exit-code 0 ---output.text.print-issued-lines=false --enable-only ${LINTER}" \
+-n "${VERSION}" --prepare "./golangci-lint-${VERSION} cache clean" "./golangci-lint-${VERSION} run --issues-exit-code 0 ---output.text.print-issued-lines=false --enable-only ${LINTER}"
