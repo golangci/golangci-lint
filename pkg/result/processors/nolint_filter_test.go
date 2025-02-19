@@ -317,21 +317,21 @@ func TestNolintFilter_Process_unused(t *testing.T) {
 	}
 
 	t.Run("when an issue does not occur, it is not removed from the nolintlint issues", func(t *testing.T) {
-		p := createProcessor(t, log, []string{"nolintlint", "misspell"})
+		p := createProcessor(t, log, []string{"misspell", "nolintlint"})
 		defer p.Finish()
 
 		processAssertSame(t, p, nolintlintIssueMisspell)
 	})
 
 	t.Run("when an issue does not occur but nolintlint is nolinted, it is removed from the nolintlint issues", func(t *testing.T) {
-		p := createProcessor(t, log, []string{"nolintlint", "misspell"})
+		p := createProcessor(t, log, []string{"misspell", "nolintlint"})
 		defer p.Finish()
 
 		processAssertEmpty(t, p, nolintlintIssueMisspellUnusedOK)
 	})
 
 	t.Run("when an issue occurs, it is removed from the nolintlint issues", func(t *testing.T) {
-		p := createProcessor(t, log, []string{"nolintlint", "misspell"})
+		p := createProcessor(t, log, []string{"misspell", "nolintlint"})
 		defer p.Finish()
 
 		processAssertEmpty(t, p, []result.Issue{{
