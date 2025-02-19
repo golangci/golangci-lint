@@ -59,7 +59,7 @@ require (
 	github.com/jjti/go-spancheck v0.6.4
 	github.com/julz/importas v0.2.0
 	github.com/karamaru-alpha/copyloopvar v1.2.1
-	github.com/kisielk/errcheck v1.8.0
+	github.com/kisielk/errcheck v1.9.0
 	github.com/kkHAIKE/contextcheck v1.1.5
 	github.com/kulti/thelper v0.6.3
 	github.com/kunwardeep/paralleltest v1.0.10
