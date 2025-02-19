@@ -1,6 +1,8 @@
 version: "2"
 
-linters-settings:
-  gofumpt:
-    extra-rules: true
-
+formatters:
+  enable:
+    - gofumpt
+  settings:
+    gofumpt:
+      extra-rules: true

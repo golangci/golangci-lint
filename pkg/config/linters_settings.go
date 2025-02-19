@@ -204,7 +204,7 @@ var defaultLintersSettings = LintersSettings{
 }
 
 type LintersSettings struct {
-	FormatterSettings `mapstructure:",squash"`
+	FormatterSettings `mapstructure:"-"`
 
 	Asasalint       AsasalintSettings       `mapstructure:"asasalint"`
 	BiDiChk         BiDiChkSettings         `mapstructure:"bidichk"`
