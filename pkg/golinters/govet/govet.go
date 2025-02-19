@@ -189,11 +189,6 @@ func isAnalyzerEnabled(name string, cfg *config.GovetSettings, defaultAnalyzers 
 		return false
 	}
 
-	// Keeping for backward compatibility.
-	if cfg.CheckShadowing != nil && *cfg.CheckShadowing && name == shadow.Analyzer.Name {
-		return true
-	}
-
 	switch {
 	case cfg.EnableAll:
 		return !slices.Contains(cfg.Disable, name)

@@ -295,43 +295,43 @@ func TestNolintFilter_Process_unused(t *testing.T) {
 	}
 
 	// the issue below is the nolintlint issue that would be generated for the test file
-	nolintlintIssueVarcheck := result.Issue{
+	nolintlintIssueMisspell := result.Issue{
 		Pos: token.Position{
 			Filename: fileName,
 			Line:     3,
 		},
 		FromLinter:           nolintlint.LinterName,
 		ExpectNoLint:         true,
-		ExpectedNoLintLinter: "varcheck",
+		ExpectedNoLintLinter: "misspell",
 	}
 
 	// the issue below is another nolintlint issue that would be generated for the test file
-	nolintlintIssueVarcheckUnusedOK := result.Issue{
+	nolintlintIssueMisspellUnusedOK := result.Issue{
 		Pos: token.Position{
 			Filename: fileName,
 			Line:     5,
 		},
 		FromLinter:           nolintlint.LinterName,
 		ExpectNoLint:         true,
-		ExpectedNoLintLinter: "varcheck",
+		ExpectedNoLintLinter: "misspell",
 	}
 
 	t.Run("when an issue does not occur, it is not removed from the nolintlint issues", func(t *testing.T) {
-		p := createProcessor(t, log, []string{"nolintlint", "varcheck"})
+		p := createProcessor(t, log, []string{"misspell", "nolintlint"})
 		defer p.Finish()
 
-		processAssertSame(t, p, nolintlintIssueVarcheck)
+		processAssertSame(t, p, nolintlintIssueMisspell)
 	})
 
 	t.Run("when an issue does not occur but nolintlint is nolinted, it is removed from the nolintlint issues", func(t *testing.T) {
-		p := createProcessor(t, log, []string{"nolintlint", "varcheck"})
+		p := createProcessor(t, log, []string{"misspell", "nolintlint"})
 		defer p.Finish()
 
-		processAssertEmpty(t, p, nolintlintIssueVarcheckUnusedOK)
+		processAssertEmpty(t, p, nolintlintIssueMisspellUnusedOK)
 	})
 
 	t.Run("when an issue occurs, it is removed from the nolintlint issues", func(t *testing.T) {
-		p := createProcessor(t, log, []string{"nolintlint", "varcheck"})
+		p := createProcessor(t, log, []string{"misspell", "nolintlint"})
 		defer p.Finish()
 
 		processAssertEmpty(t, p, []result.Issue{{
@@ -339,8 +339,8 @@ func TestNolintFilter_Process_unused(t *testing.T) {
 				Filename: fileName,
 				Line:     3,
 			},
-			FromLinter: "varcheck",
-		}, nolintlintIssueVarcheck}...)
+			FromLinter: "misspell",
+		}, nolintlintIssueMisspell}...)
 	})
 
 	t.Run("when a linter is not enabled, it is removed from the nolintlint unused issues", func(t *testing.T) {
@@ -358,6 +358,6 @@ func TestNolintFilter_Process_unused(t *testing.T) {
 		p := NewNolintFilter(log, dbManager, enabledLintersMap)
 		defer p.Finish()
 
-		processAssertEmpty(t, p, nolintlintIssueVarcheck)
+		processAssertEmpty(t, p, nolintlintIssueMisspell)
 	})
 }

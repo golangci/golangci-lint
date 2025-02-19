@@ -4260,7 +4260,7 @@
               "type": "boolean",
               "default": false
             },
-            "default":  {
+            "presets":  {
               "type": "array",
               "items": {
                 "enum": [

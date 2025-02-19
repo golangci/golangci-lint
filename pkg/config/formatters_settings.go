@@ -31,9 +31,6 @@ type GciSettings struct {
 	SkipGenerated    bool     `mapstructure:"skip-generated"`
 	CustomOrder      bool     `mapstructure:"custom-order"`
 	NoLexOrder       bool     `mapstructure:"no-lex-order"`
-
-	// Deprecated: use Sections instead.
-	LocalPrefixes string `mapstructure:"local-prefixes"`
 }
 
 type GoFmtSettings struct {
@@ -50,8 +47,7 @@ type GoFumptSettings struct {
 	ModulePath string `mapstructure:"module-path"`
 	ExtraRules bool   `mapstructure:"extra-rules"`
 
-	// Deprecated: use the global `run.go` instead.
-	LangVersion string `mapstructure:"lang-version"`
+	LangVersion string `mapstructure:"-"`
 }
 
 type GoImportsSettings struct {

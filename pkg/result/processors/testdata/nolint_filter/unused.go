@@ -1,5 +1,5 @@
 package nolint_filter
 
-var nolintVarcheck int //nolint:varcheck
+var nolintMisspell int //nolint:misspell
 
-var nolintVarcheckUnusedOK int //nolint:varcheck,nolintlint
+var nolintMisspellUnusedOK int //nolint:misspell,nolintlint

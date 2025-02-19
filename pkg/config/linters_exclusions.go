@@ -23,7 +23,7 @@ const excludeRuleMinConditionsCount = 2
 type LinterExclusions struct {
 	Generated   string        `mapstructure:"generated"`
 	WarnUnused  bool          `mapstructure:"warn-unused"`
-	Presets     []string      `mapstructure:"preset"`
+	Presets     []string      `mapstructure:"presets"`
 	Rules       []ExcludeRule `mapstructure:"rules"`
 	Paths       []string      `mapstructure:"paths"`
 	PathsExcept []string      `mapstructure:"paths-except"`

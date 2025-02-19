@@ -324,9 +324,6 @@ type BiDiChkSettings struct {
 
 type CopyLoopVarSettings struct {
 	CheckAlias bool `mapstructure:"check-alias"`
-
-	// Deprecated: use CheckAlias
-	IgnoreAlias *bool `mapstructure:"ignore-alias"`
 }
 
 type Cyclop struct {
@@ -380,12 +377,6 @@ type ErrcheckSettings struct {
 	CheckTypeAssertions      bool     `mapstructure:"check-type-assertions"`
 	CheckAssignToBlank       bool     `mapstructure:"check-blank"`
 	ExcludeFunctions         []string `mapstructure:"exclude-functions"`
-
-	// Deprecated: use ExcludeFunctions instead
-	Exclude string `mapstructure:"exclude"`
-
-	// Deprecated: use ExcludeFunctions instead
-	Ignore string `mapstructure:"ignore"`
 }
 
 type ErrChkJSONSettings struct {
@@ -534,9 +525,6 @@ type GodotSettings struct {
 	Exclude []string `mapstructure:"exclude"`
 	Capital bool     `mapstructure:"capital"`
 	Period  bool     `mapstructure:"period"`
-
-	// Deprecated: use Scope instead
-	CheckAll *bool `mapstructure:"check-all"`
 }
 
 type GodoxSettings struct {
@@ -605,9 +593,6 @@ type GovetSettings struct {
 	DisableAll bool     `mapstructure:"disable-all"`
 
 	Settings map[string]map[string]any
-
-	// Deprecated: the linter should be enabled inside Enable.
-	CheckShadowing *bool `mapstructure:"check-shadowing"`
 }
 
 func (cfg *GovetSettings) Validate() error {
@@ -834,9 +819,6 @@ type SlogLintSettings struct {
 	KeyNamingCase  string   `mapstructure:"key-naming-case"`
 	ForbiddenKeys  []string `mapstructure:"forbidden-keys"`
 	ArgsOnSepLines bool     `mapstructure:"args-on-sep-lines"`
-
-	// Deprecated: use Context instead.
-	ContextOnly *bool `mapstructure:"context-only"`
 }
 
 type SpancheckSettings struct {
@@ -850,9 +832,6 @@ type StaticCheckSettings struct {
 	Initialisms             []string `mapstructure:"initialisms"`                // only for stylecheck
 	DotImportWhitelist      []string `mapstructure:"dot-import-whitelist"`       // only for stylecheck
 	HTTPStatusCodeWhitelist []string `mapstructure:"http-status-code-whitelist"` // only for stylecheck
-
-	// Deprecated: use the global `run.go` instead.
-	GoVersion string `mapstructure:"go"`
 }
 
 func (s *StaticCheckSettings) HasConfiguration() bool {
@@ -959,11 +938,6 @@ type UseStdlibVarsSettings struct {
 	SQLIsolationLevel  bool `mapstructure:"sql-isolation-level"`
 	TLSSignatureScheme bool `mapstructure:"tls-signature-scheme"`
 	ConstantKind       bool `mapstructure:"constant-kind"`
-
-	// Deprecated
-	OSDevNull *bool `mapstructure:"os-dev-null"`
-	// Deprecated
-	SyslogPriority *bool `mapstructure:"syslog-priority"`
 }
 
 type UseTestingSettings struct {
@@ -993,9 +967,6 @@ type UnusedSettings struct {
 	ParametersAreUsed      bool `mapstructure:"parameters-are-used"`
 	LocalVariablesAreUsed  bool `mapstructure:"local-variables-are-used"`
 	GeneratedIsUsed        bool `mapstructure:"generated-is-used"`
-
-	// Deprecated
-	ExportedIsUsed *bool `mapstructure:"exported-is-used"`
 }
 
 type VarnamelenSettings struct {

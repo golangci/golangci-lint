@@ -22,11 +22,6 @@ func New(settings *config.GodotSettings) *goanalysis.Linter {
 			Period:  settings.Period,
 			Capital: settings.Capital,
 		}
-
-		// Convert deprecated setting
-		if settings.CheckAll != nil && *settings.CheckAll {
-			dotSettings.Scope = godot.AllScope
-		}
 	}
 
 	dotSettings.Scope = cmp.Or(dotSettings.Scope, godot.DeclScope)
