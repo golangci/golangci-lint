@@ -1,4 +1,5 @@
 //golangcitest:args -Erevive
+// Package testdata ...
 package testdata
 
 import (

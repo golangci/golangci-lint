@@ -1,4 +1,5 @@
 //golangcitest:args -Estylecheck
+// Package testdata ...
 package testdata
 
 /*

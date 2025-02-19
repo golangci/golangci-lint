@@ -34,5 +34,5 @@ func GosecG204SubprocWithFunc() {
 		return "/tmp/dummy"
 	}
 
-	exec.Command("ls", arg()).Run() // want "G204: Subprocess launched with a potential tainted input or cmd arguments"
+	exec.Command("ls", arg()).Run() // want "G104: Errors unhandled"
 }

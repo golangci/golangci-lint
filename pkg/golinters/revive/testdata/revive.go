@@ -7,6 +7,8 @@ import (
 	"time"
 )
 
+// want +2 "exported: exported function SampleRevive should have comment or be unexported"
+
 func SampleRevive(t *time.Duration) error {
 	if t == nil {
 		return nil
