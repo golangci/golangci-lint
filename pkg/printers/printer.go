@@ -93,9 +93,9 @@ func (c *Printer) Print(issues []result.Issue) error {
 	}
 
 	if c.cfg.Tab.Path != "" {
-		w, closer, err := c.createWriter(&c.cfg.Sarif)
+		w, closer, err := c.createWriter(&c.cfg.Tab.SimpleFormat)
 		if err != nil {
-			return fmt.Errorf("can't create output for %s: %w", c.cfg.Sarif.Path, err)
+			return fmt.Errorf("can't create output for %s: %w", c.cfg.Tab.Path, err)
 		}
 
 		defer closer()
