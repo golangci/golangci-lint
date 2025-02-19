@@ -126,7 +126,6 @@ func setupOutputFormatsFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
 		color.GreenString(outputPathDesc))
 }
 
-//nolint:gomnd // magic numbers here is ok
 func setupIssuesFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
 	internal.AddFlagAndBind(v, fs, fs.Int, "max-issues-per-linter", "issues.max-issues-per-linter", defaultMaxIssuesPerLinter,
 		color.GreenString("Maximum issues count per one linter. Set to 0 to disable"))
