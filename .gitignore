@@ -23,3 +23,4 @@ coverage.xml
 /custom-gcl
 .custom-gcl.yml
 .custom-gcl.yaml
+**/testdata/fix.tmp/
