@@ -4182,8 +4182,8 @@ run:
 
   # Define the Go version limit.
   # Mainly related to generics support since go1.18.
-  # Default: use Go version from the go.mod file, fallback on the env var `GOVERSION`, fallback on 1.17
-  go: '1.19'
+  # Default: use Go version from the go.mod file, fallback on the env var `GOVERSION`, fallback on 1.22.
+  go: '1.22'
 
   # Number of operating system threads (`GOMAXPROCS`) that can execute golangci-lint simultaneously.
   # Default: automatically set to match Linux container CPU quota and

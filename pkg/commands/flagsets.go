@@ -50,7 +50,6 @@ func setupRunFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
 		color.GreenString("Modules download mode. If not empty, passed as -mod=<mode> to go tools"))
 	internal.AddFlagAndBind(v, fs, fs.Int, "issues-exit-code", "run.issues-exit-code", exitcodes.IssuesFound,
 		color.GreenString("Exit code when issues were found"))
-	internal.AddFlagAndBind(v, fs, fs.String, "go", "run.go", "", color.GreenString("Targeted Go version"))
 	internal.AddHackedStringSlice(fs, "build-tags", color.GreenString("Build tags"))
 
 	internal.AddFlagAndBind(v, fs, fs.Duration, "timeout", "run.timeout", defaultTimeout,
