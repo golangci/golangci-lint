@@ -13,8 +13,8 @@ const (
 
 const (
 	ExclusionPresetComments             = "comments"
-	ExclusionPresetStdErrorHandling     = "stdErrorHandling"
-	ExclusionPresetCommonFalsePositives = "commonFalsePositives"
+	ExclusionPresetStdErrorHandling     = "std-error-handling"
+	ExclusionPresetCommonFalsePositives = "common-false-positives"
 	ExclusionPresetLegacy               = "legacy"
 )
 

@@ -56,8 +56,8 @@ linters:
   exclusions:
     presets:
       - comments
-      - stdErrorHandling
-      - commonFalsePositives
+      - std-error-handling
+      - common-false-positives
       - legacy
     paths:
       - test/testdata_etc # test files

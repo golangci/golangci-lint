@@ -4265,8 +4265,8 @@
               "items": {
                 "enum": [
                   "comments",
-                  "stdErrorHandling",
-                  "commonFalsePositives",
+                  "std-error-handling",
+                  "common-false-positives",
                   "legacy"
                 ]
               }

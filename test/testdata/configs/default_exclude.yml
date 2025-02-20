@@ -3,6 +3,6 @@ version: "2"
 linters:
   exclusions:
     presets:
-      - stdErrorHandling
-      - commonFalsePositives
+      - std-error-handling
+      - common-false-positives
       - legacy

@@ -353,7 +353,7 @@ func TestUnsafeOk(t *testing.T) {
 				linters:
 					exclusions:
 						presets:
-						- commonFalsePositives
+						- common-false-positives
 			`
 
 	testshared.NewRunnerBuilder(t).
