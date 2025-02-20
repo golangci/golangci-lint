@@ -51,7 +51,7 @@ type GoFumptSettings struct {
 }
 
 type GoImportsSettings struct {
-	LocalPrefixes string `mapstructure:"local-prefixes"`
+	LocalPrefixes []string `mapstructure:"local-prefixes"`
 }
 
 type GoLinesSettings struct {

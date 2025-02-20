@@ -1556,8 +1556,10 @@
           "properties": {
             "local-prefixes": {
               "description": "Put imports beginning with prefix after 3rd-party packages. It is a comma-separated list of prefixes.",
-              "type": "string",
-              "examples": ["github.com/org/project"]
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
             }
           }
         },
