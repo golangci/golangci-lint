@@ -548,12 +548,12 @@ func TestPathPrefix(t *testing.T) {
 	}{
 		{
 			desc:    "empty",
-			pattern: "^testdata/withtests/",
+			pattern: "^test/testdata/withtests/",
 		},
 		{
 			desc:    "prefixed",
 			args:    []string{"--path-prefix=cool"},
-			pattern: "^cool/testdata/withtests",
+			pattern: "^cool/test/testdata/withtests",
 		},
 	}
 

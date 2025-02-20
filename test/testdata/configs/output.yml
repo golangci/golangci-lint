@@ -6,3 +6,6 @@ linters-settings:
     ignore-words:
       - langauge
       - Dialogue
+
+run:
+  relative-path-mode: wd

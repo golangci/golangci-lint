@@ -25,8 +25,7 @@ func AllRelativePathModes() []string {
 
 func GetBasePath(ctx context.Context, mode, cfgDir string) (string, error) {
 	if mode == "" {
-		// TODO(ldez): v2 the default should be cfg or gomod.
-		mode = RelativePathModeWd
+		mode = RelativePathModeCfg
 	}
 
 	switch mode {

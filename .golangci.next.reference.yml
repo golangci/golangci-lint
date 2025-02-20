@@ -4172,7 +4172,7 @@ run:
   # - `gitroot`: the paths will be relative to the git root (the parent directory of `.git`).
   # - `cfg`: the paths will be relative to the configuration file.
   # - `wd` (NOT recommended): the paths will be relative to the place where golangci-lint is run.
-  # Default: wd
+  # Default: cfg
   relative-path-mode: gomod
 
   # Exit code when at least one issue was found.
