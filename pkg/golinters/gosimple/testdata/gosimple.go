@@ -20,11 +20,3 @@ func GosimpleNolintGosimple(ss []string) {
 		}
 	}
 }
-
-func GosimpleNolintMegacheck(ss []string) {
-	if ss != nil { //nolint:megacheck
-		for _, s := range ss {
-			log.Printf(s)
-		}
-	}
-}

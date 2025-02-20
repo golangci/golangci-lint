@@ -33,7 +33,7 @@ Less `GOGC` values trigger garbage collection more frequently and golangci-lint 
 
    - build `ssa.Program` once
 
-     Some linters (megacheck, interfacer, unparam) work on SSA representation.
+     Some linters (staticcheck, gosec, unparam) work on SSA representation.
      Building of this representation takes 1.5 seconds on 8 kLoC repo and 6 seconds on `$GOROOT/src`.
 
    - parse source code and build AST once
@@ -49,9 +49,9 @@ Less `GOGC` values trigger garbage collection more frequently and golangci-lint 
 2. Smart linters scheduling
 
    We schedule linters by a special algorithm which takes estimated execution time into account. It allows
-   to save 10-30% of time when one of heavy linters (megacheck etc) is enabled.
+   to save 10-30% of time when one of heavy linters (staticcheck, etc) is enabled.
 
 3. Don't fork to run shell commands
 
-All linters has their version fixed with go modules, they are builtin
+All linters have their version fixed with go modules, they are builtin
 and you don't need to install them separately.

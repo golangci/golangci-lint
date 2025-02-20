@@ -131,8 +131,6 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 		return nil, nil
 	}
 
-	const megacheckName = "megacheck"
-
 	// The linters are sorted in the alphabetical order (case-insensitive).
 	// When a new linter is added the version in `WithSince(...)` must be the next minor version of golangci-lint.
 	return []*linter.Config{
@@ -365,7 +363,6 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithSince("v1.26.0").
 			WithPresets(linter.PresetStyle, linter.PresetError).
 			WithLoadForGoAnalysis().
-			WithAlternativeNames("goerr113").
 			WithAutoFix().
 			WithURL("https://github.com/Djarvur/go-err113"),
 
@@ -423,15 +420,13 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithSince("v1.0.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetBugs).
-			WithURL("https://github.com/securego/gosec").
-			WithAlternativeNames("gas"),
+			WithURL("https://github.com/securego/gosec"),
 
 		linter.NewConfig(gosimple.New(&cfg.LintersSettings.Gosimple)).
 			WithEnabledByDefault().
 			WithSince("v1.20.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetStyle).
-			WithAlternativeNames(megacheckName).
 			WithAutoFix().
 			WithURL("https://github.com/dominikh/go-tools/tree/HEAD/simple"),
 
@@ -447,7 +442,6 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetBugs, linter.PresetMetaLinter).
 			WithAutoFix().
-			WithAlternativeNames("vet", "vetshadow").
 			WithURL("https://pkg.go.dev/cmd/vet"),
 
 		linter.NewConfig(grouper.New(&cfg.LintersSettings.Grouper)).
@@ -507,7 +501,6 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithSince("v1.49.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetStyle, linter.PresetBugs).
-			WithAlternativeNames("logrlint").
 			WithURL("https://github.com/timonwong/loggercheck"),
 
 		linter.NewConfig(maintidx.New(&cfg.LintersSettings.MaintIdx)).
@@ -675,7 +668,6 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithSince("v1.0.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetBugs, linter.PresetMetaLinter).
-			WithAlternativeNames(megacheckName).
 			WithAutoFix().
 			WithURL("https://staticcheck.dev/"),
 
@@ -749,7 +741,6 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithSince("v1.20.0").
 			WithLoadForGoAnalysis().
 			WithPresets(linter.PresetUnused).
-			WithAlternativeNames(megacheckName).
 			ConsiderSlow().
 			WithChangeTypes().
 			WithURL("https://github.com/dominikh/go-tools/tree/HEAD/unused"),

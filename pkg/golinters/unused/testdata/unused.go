@@ -17,5 +17,3 @@ func fn6() { fn4() } // want "func `fn6` is unused"
 type unusedStruct struct{} // want "type `unusedStruct` is unused"
 
 type unusedStructNolintUnused struct{} //nolint:unused
-
-type unusedStructNolintMegacheck struct{} //nolint:megacheck

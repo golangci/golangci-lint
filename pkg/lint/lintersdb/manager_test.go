@@ -65,8 +65,6 @@ func TestManager_GetOptimizedLinters(t *testing.T) {
 }
 
 func TestManager_build(t *testing.T) {
-	allMegacheckLinterNames := []string{"gosimple", "staticcheck", "unused"}
-
 	testCases := []struct {
 		desc       string
 		cfg        *config.Config
@@ -74,53 +72,9 @@ func TestManager_build(t *testing.T) {
 		expected   []string // alphabetically ordered enabled linter names
 	}{
 		{
-			desc: "disable all linters from megacheck",
-			cfg: &config.Config{
-				Linters: config.Linters{
-					Disable: []string{"megacheck"},
-				},
-			},
-			defaultSet: allMegacheckLinterNames,
-			expected:   []string{"typecheck"}, // all disabled
-		},
-		{
-			desc: "disable only staticcheck",
-			cfg: &config.Config{
-				Linters: config.Linters{
-					Disable: []string{"staticcheck"},
-				},
-			},
-			defaultSet: allMegacheckLinterNames,
-			expected:   []string{"gosimple", "typecheck", "unused"},
-		},
-		{
-			desc:       "don't merge into megacheck",
-			defaultSet: allMegacheckLinterNames,
-			expected:   []string{"gosimple", "staticcheck", "typecheck", "unused"},
-		},
-		{
-			desc: "expand megacheck",
-			cfg: &config.Config{
-				Linters: config.Linters{
-					Enable: []string{"megacheck"},
-				},
-			},
-			defaultSet: nil,
-			expected:   []string{"gosimple", "staticcheck", "typecheck", "unused"},
-		},
-		{
 			desc:       "don't disable anything",
 			defaultSet: []string{"gofmt", "govet", "typecheck"},
 			expected:   []string{"gofmt", "govet", "typecheck"},
-		},
-		{
-			desc: "enable gosec by gas alias",
-			cfg: &config.Config{
-				Linters: config.Linters{
-					Enable: []string{"gas"},
-				},
-			},
-			expected: []string{"gosec", "typecheck"},
 		},
 		{
 			desc: "enable gosec by primary name",
@@ -130,25 +84,6 @@ func TestManager_build(t *testing.T) {
 				},
 			},
 			expected: []string{"gosec", "typecheck"},
-		},
-		{
-			desc: "enable gosec by both names",
-			cfg: &config.Config{
-				Linters: config.Linters{
-					Enable: []string{"gosec", "gas"},
-				},
-			},
-			expected: []string{"gosec", "typecheck"},
-		},
-		{
-			desc: "disable gosec by gas alias",
-			cfg: &config.Config{
-				Linters: config.Linters{
-					Disable: []string{"gas"},
-				},
-			},
-			defaultSet: []string{"gosec"},
-			expected:   []string{"typecheck"},
 		},
 		{
 			desc: "disable gosec by primary name",
