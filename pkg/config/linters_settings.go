@@ -128,7 +128,6 @@ var defaultLintersSettings = LintersSettings{
 		ForLoops:   false,
 	},
 	Predeclared: PredeclaredSettings{
-		Ignore:    "",
 		Qualified: false,
 	},
 	SlogLint: SlogLintSettings{
@@ -715,8 +714,8 @@ type PreallocSettings struct {
 }
 
 type PredeclaredSettings struct {
-	Ignore    string `mapstructure:"ignore"`
-	Qualified bool   `mapstructure:"qualified-name"`
+	Ignore    []string `mapstructure:"ignore"`
+	Qualified bool     `mapstructure:"qualified-name"`
 }
 
 type PromlinterSettings struct {

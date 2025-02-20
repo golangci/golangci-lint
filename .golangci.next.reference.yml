@@ -2356,9 +2356,11 @@ linters-settings:
     for-loops: true
 
   predeclared:
-    # Comma-separated list of predeclared identifiers to not report on.
-    # Default: ""
-    ignore: "new,int"
+    # List of predeclared identifiers to not report on.
+    # Default: []
+    ignore:
+      - new
+      - int
     # Include method names and field names in checks.
     # Default: false
     qualified-name: true
