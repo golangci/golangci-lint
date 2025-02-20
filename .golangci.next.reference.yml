@@ -4186,8 +4186,8 @@ run:
   go: '1.19'
 
   # Number of operating system threads (`GOMAXPROCS`) that can execute golangci-lint simultaneously.
-  # If it is explicitly set to 0 (i.e. not the default) then golangci-lint will automatically set the value to match Linux container CPU quota.
-  # Default: the number of logical CPUs in the machine
+  # Default: automatically set to match Linux container CPU quota and
+  # fall back to the number of logical CPUs in the machine.
   concurrency: 4
 
 
