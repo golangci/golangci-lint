@@ -1530,7 +1530,7 @@ linters-settings:
             reason: "testing if blocked version constraint works."
       # Set to true to raise lint issues for packages that are loaded from a local path via replace directive.
       # Default: false
-      local_replace_directives: false
+      local-replace-directives: false
 
   gosimple:
     # Sxxxx checks in https://staticcheck.dev/docs/configuration/options/#checks

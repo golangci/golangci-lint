@@ -1727,7 +1727,7 @@
                     }
                   }
                 },
-                "local_replace_directives": {
+                "local-replace-directives": {
                   "description": "Raise lint issues if loading local path with replace directive",
                   "type": "boolean",
                   "default": true

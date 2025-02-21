@@ -563,7 +563,7 @@ type GoModGuardSettings struct {
 			Version string `mapstructure:"version"`
 			Reason  string `mapstructure:"reason"`
 		} `mapstructure:"versions"`
-		LocalReplaceDirectives bool `mapstructure:"local_replace_directives"`
+		LocalReplaceDirectives bool `mapstructure:"local-replace-directives"`
 	} `mapstructure:"blocked"`
 }
 
