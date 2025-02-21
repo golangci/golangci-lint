@@ -3586,7 +3586,7 @@
                 "type": "string"
               }
             },
-            "ignoreSigs": {
+            "ignore-sigs": {
               "description": "An array of strings which specify substrings of signatures to ignore.",
               "default": [
                 ".Errorf(",
@@ -3603,7 +3603,7 @@
                 "type": "string"
               }
             },
-            "ignoreSigRegexps": {
+            "ignore-sig-regexps": {
               "description": "An array of strings which specify regular expressions of signatures to ignore.",
               "default": [""],
               "type": "array",
@@ -3611,7 +3611,7 @@
                 "type": "string"
               }
             },
-            "ignorePackageGlobs": {
+            "ignore-package-globs": {
               "description": "An array of glob patterns which, if any match the package of the function returning the error, will skip wrapcheck analysis for this error.",
               "default": [""],
               "type": "array",
@@ -3619,7 +3619,7 @@
                 "type": "string"
               }
             },
-            "ignoreInterfaceRegexps": {
+            "ignore-interface-regexps": {
               "description": "An array of glob patterns which, if matched to an underlying interface name, will ignore unwrapped errors returned from a function whose call is defined on the given interface.",
               "default": [""],
               "type": "array",

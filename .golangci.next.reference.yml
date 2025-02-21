@@ -3878,9 +3878,9 @@ linters-settings:
 
   wrapcheck:
     # An array of strings specifying additional substrings of signatures to ignore.
-    # Unlike 'ignoreSigs', this option extends the default set (or the set specified in 'ignoreSigs') without replacing it entirely.
+    # Unlike 'ignore-sigs', this option extends the default set (or the set specified in 'ignore-sigs') without replacing it entirely.
     # This allows you to add specific signatures to the ignore list
-    # while retaining the defaults or any items in 'ignoreSigs'.
+    # while retaining the defaults or any items in 'ignore-sigs'.
     # Default: []
     extra-ignore-sigs:
       - .CustomError(
@@ -3890,7 +3890,7 @@ linters-settings:
     # If this set, it will override the default set of ignored signatures.
     # See https://github.com/tomarrell/wrapcheck#configuration for more information.
     # Default: [".Errorf(", "errors.New(", "errors.Unwrap(", "errors.Join(", ".Wrap(", ".Wrapf(", ".WithMessage(", ".WithMessagef(", ".WithStack("]
-    ignoreSigs:
+    ignore-sigs:
       - .Errorf(
       - errors.New(
       - errors.Unwrap(
@@ -3902,16 +3902,16 @@ linters-settings:
       - .WithStack(
     # An array of strings that specify regular expressions of signatures to ignore.
     # Default: []
-    ignoreSigRegexps:
+    ignore-sig-regexps:
       - \.New.*Error\(
     # An array of strings that specify globs of packages to ignore.
     # Default: []
-    ignorePackageGlobs:
+    ignore-package-globs:
       - encoding/*
       - github.com/pkg/*
     # An array of strings that specify regular expressions of interfaces to ignore.
     # Default: []
-    ignoreInterfaceRegexps:
+    ignore-interface-regexps:
       - ^(?i)c(?-i)ach(ing|e)
 
   wsl:
