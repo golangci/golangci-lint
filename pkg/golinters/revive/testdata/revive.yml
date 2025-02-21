@@ -17,3 +17,6 @@ linters-settings:
         arguments: [ 10 ]
       - name: max-public-structs
         arguments: [ 3 ]
+      - name: error-strings
+        arguments:
+          - "xerrors.New"
