@@ -3,5 +3,5 @@ version: "2"
 linters-settings:
   forbidigo:
     forbid:
-      - fmt\.Print.*
-      - time.Sleep(# no sleeping!)?
+      - pattern: fmt\.Print.*
+      - pattern: time.Sleep(# no sleeping!)?

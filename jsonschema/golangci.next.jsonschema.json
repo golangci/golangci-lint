@@ -942,31 +942,23 @@
             "forbid": {
               "description": "List of identifiers to forbid (written using `regexp`)",
               "type": "array",
-              "examples": ["^print(ln)?$"],
               "items": {
-                "anyOf": [
-                  {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "pattern": {
+                    "description": "Pattern",
                     "type": "string"
                   },
-                  {
-                    "type": "object",
-                    "additionalProperties": false,
-                    "properties": {
-                      "p": {
-                        "description": "Pattern",
-                        "type": "string"
-                      },
-                      "pkg": {
-                        "description": "Package",
-                        "type": "string"
-                      },
-                      "msg": {
-                        "description": "Message",
-                        "type": "string"
-                      }
-                    }
+                  "pkg": {
+                    "description": "Package",
+                    "type": "string"
+                  },
+                  "msg": {
+                    "description": "Message",
+                    "type": "string"
                   }
-                ]
+                }
               }
             }
           }

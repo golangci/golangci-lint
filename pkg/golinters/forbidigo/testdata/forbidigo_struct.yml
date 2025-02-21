@@ -4,7 +4,7 @@ linters-settings:
   forbidigo:
     analyze-types: true
     forbid:
-      - p: fmt\.Print.*
+      - pattern: fmt\.Print.*
         pkg: ^fmt$
-      - p: time.Sleep
+      - pattern: time.Sleep
         msg: no sleeping!
