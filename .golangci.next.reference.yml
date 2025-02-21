@@ -2580,6 +2580,8 @@ linters-settings:
         severity: warning
         disabled: false
         exclude: [""]
+        arguments:
+          - "xerrors.New"
       # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#errorf
       - name: errorf
         severity: warning
