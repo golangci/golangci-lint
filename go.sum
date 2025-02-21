@@ -350,8 +350,8 @@ github.com/kunwardeep/paralleltest v1.0.10 h1:wrodoaKYzS2mdNVnc4/w31YaXFtsc21PCT
 github.com/kunwardeep/paralleltest v1.0.10/go.mod h1:2C7s65hONVqY7Q5Efj5aLzRCNLjw2h4eMc9EcypGjcY=
 github.com/lasiar/canonicalheader v1.1.2 h1:vZ5uqwvDbyJCnMhmFYimgMZnJMjwljN5VGY0VKbMXb4=
 github.com/lasiar/canonicalheader v1.1.2/go.mod h1:qJCeLFS0G/QlLQ506T+Fk/fWMa2VmBUiEI2cuMK4djI=
-github.com/ldez/exptostd v0.4.1 h1:DIollgQ3LWZMp3HJbSXsdE2giJxMfjyHj3eX4oiD6JU=
-github.com/ldez/exptostd v0.4.1/go.mod h1:iZBRYaUmcW5jwCR3KROEZ1KivQQp6PHXbDPk9hqJKCQ=
+github.com/ldez/exptostd v0.4.2 h1:l5pOzHBz8mFOlbcifTxzfyYbgEmoUqjxLFHZkjlbHXs=
+github.com/ldez/exptostd v0.4.2/go.mod h1:iZBRYaUmcW5jwCR3KROEZ1KivQQp6PHXbDPk9hqJKCQ=
 github.com/ldez/gomoddirectives v0.6.1 h1:Z+PxGAY+217f/bSGjNZr/b2KTXcyYLgiWI6geMBN2Qc=
 github.com/ldez/gomoddirectives v0.6.1/go.mod h1:cVBiu3AHR9V31em9u2kwfMKD43ayN5/XDgr+cdaFaKs=
 github.com/ldez/grignotin v0.9.0 h1:MgOEmjZIVNn6p5wPaGp/0OKWyvq42KnzAt/DAb8O4Ow=
