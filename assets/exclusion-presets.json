@@ -1,0 +1,88 @@
+{
+  "comments": [
+    {
+      "linters": [
+        "stylecheck"
+      ],
+      "text": "(ST1000|ST1020|ST1021|ST1022)"
+    },
+    {
+      "linters": [
+        "revive"
+      ],
+      "text": "exported (.+) should have comment( \\(or a comment on this block\\))? or be unexported"
+    },
+    {
+      "linters": [
+        "revive"
+      ],
+      "text": "package comment should be of the form \"(.+)...\""
+    },
+    {
+      "linters": [
+        "revive"
+      ],
+      "text": "comment on exported (.+) should be of the form \"(.+)...\""
+    },
+    {
+      "linters": [
+        "revive"
+      ],
+      "text": "should have a package comment"
+    }
+  ],
+  "common-false-positives": [
+    {
+      "linters": [
+        "gosec"
+      ],
+      "text": "G103: Use of unsafe calls should be audited"
+    },
+    {
+      "linters": [
+        "gosec"
+      ],
+      "text": "G204: Subprocess launched with variable"
+    },
+    {
+      "linters": [
+        "gosec"
+      ],
+      "text": "G304: Potential file inclusion via variable"
+    }
+  ],
+  "legacy": [
+    {
+      "linters": [
+        "govet"
+      ],
+      "text": "(possible misuse of unsafe.Pointer|should have signature)"
+    },
+    {
+      "linters": [
+        "staticcheck"
+      ],
+      "text": "SA4011"
+    },
+    {
+      "linters": [
+        "gosec"
+      ],
+      "text": "G104"
+    },
+    {
+      "linters": [
+        "gosec"
+      ],
+      "text": "(G301|G302|G307): Expect (directory permissions to be 0750|file permissions to be 0600) or less"
+    }
+  ],
+  "std-error-handling": [
+    {
+      "linters": [
+        "errcheck"
+      ],
+      "text": "Error return value of .((os\\.)?std(out|err)\\..*|.*Close|.*Flush|os\\.Remove(All)?|.*print(f|ln)?|os\\.(Un)?Setenv). is not checked"
+    }
+  ]
+}

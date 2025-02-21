@@ -9,10 +9,8 @@ import (
 	"github.com/spf13/viper"
 
 	"github.com/golangci/golangci-lint/pkg/commands/internal"
-	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/exitcodes"
 	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
-	"github.com/golangci/golangci-lint/pkg/result/processors"
 )
 
 const defaultMaxIssuesPerLinter = 50
@@ -128,28 +126,13 @@ func setupOutputFormatsFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
 		color.GreenString(outputPathDesc))
 }
 
-//nolint:gomnd // magic numbers here is ok
 func setupIssuesFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
-	internal.AddHackedStringSliceP(fs, "exclude", "e", color.GreenString("Exclude issue by regexp"))
-	internal.AddFlagAndBind(v, fs, fs.Bool, "exclude-use-default", "issues.exclude-use-default", true,
-		getDefaultIssueExcludeHelp())
-	internal.AddFlagAndBind(v, fs, fs.Bool, "exclude-case-sensitive", "issues.exclude-case-sensitive", false,
-		color.GreenString("If set to true exclude and exclude rules regular expressions are case-sensitive"))
-
 	internal.AddFlagAndBind(v, fs, fs.Int, "max-issues-per-linter", "issues.max-issues-per-linter", defaultMaxIssuesPerLinter,
 		color.GreenString("Maximum issues count per one linter. Set to 0 to disable"))
 	internal.AddFlagAndBind(v, fs, fs.Int, "max-same-issues", "issues.max-same-issues", 3,
 		color.GreenString("Maximum count of issues with the same text. Set to 0 to disable"))
 	internal.AddFlagAndBind(v, fs, fs.Bool, "uniq-by-line", "issues.uniq-by-line", true,
 		color.GreenString("Make issues output unique by line"))
-
-	internal.AddHackedStringSlice(fs, "exclude-files", color.GreenString("Regexps of files to exclude"))
-	internal.AddHackedStringSlice(fs, "exclude-dirs", color.GreenString("Regexps of directories to exclude"))
-	internal.AddFlagAndBind(v, fs, fs.Bool, "exclude-dirs-use-default", "issues.exclude-dirs-use-default", true,
-		formatList("Use or not use default excluded directories:", processors.StdExcludeDirRegexps))
-
-	internal.AddFlagAndBind(v, fs, fs.String, "exclude-generated", "issues.exclude-generated", config.GeneratedModeLax,
-		color.GreenString("Mode of the generated files analysis"))
 
 	const newDesc = "Show only new issues: if there are unstaged changes or untracked files, only those changes " +
 		"are analyzed, else only changes in HEAD~ are analyzed.\nIt's a super-useful option for integration " +
@@ -182,19 +165,6 @@ func formatList(head string, items []string, foot ...string) string {
 
 	if len(foot) == 0 {
 		parts = append(parts, "")
-	}
-
-	return strings.Join(parts, "\n")
-}
-
-func getDefaultIssueExcludeHelp() string {
-	parts := []string{color.GreenString("Use or not use default excludes:")}
-
-	for _, ep := range config.DefaultExcludePatterns {
-		parts = append(parts,
-			fmt.Sprintf("  - %s (%s): %s", color.BlueString(ep.ID), color.CyanString(ep.Linter), ep.Why),
-			fmt.Sprintf(`    Pattern: %s`, color.YellowString(`'`+ep.Pattern+`'`)),
-		)
 	}
 
 	return strings.Join(parts, "\n")

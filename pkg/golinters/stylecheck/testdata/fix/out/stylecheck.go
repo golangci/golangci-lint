@@ -1,3 +1,5 @@
+// Package testdata ...
+//
 //golangcitest:args -Estylecheck
 //golangcitest:expected_exitcode 0
 package testdata

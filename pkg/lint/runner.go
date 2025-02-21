@@ -33,7 +33,7 @@ type Runner struct {
 	Processors []processors.Processor
 }
 
-func NewRunner(log logutils.Log, cfg *config.Config, args []string, goenv *goutil.Env,
+func NewRunner(log logutils.Log, cfg *config.Config, goenv *goutil.Env,
 	lineCache *fsutils.LineCache, fileCache *fsutils.FileCache,
 	dbManager *lintersdb.Manager, lintCtx *linter.Context,
 ) (*Runner, error) {
@@ -48,21 +48,6 @@ func NewRunner(log logutils.Log, cfg *config.Config, args []string, goenv *gouti
 	}
 
 	exclusionPaths, err := processors.NewExclusionPaths(log, &cfg.Linters.LinterExclusions)
-	if err != nil {
-		return nil, err
-	}
-
-	skipFilesProcessor, err := processors.NewSkipFiles(cfg.Issues.ExcludeFiles, cfg.Output.PathPrefix)
-	if err != nil {
-		return nil, err
-	}
-
-	skipDirs := cfg.Issues.ExcludeDirs
-	if cfg.Issues.UseDefaultExcludeDirs {
-		skipDirs = append(skipDirs, processors.StdExcludeDirRegexps...)
-	}
-
-	skipDirsProcessor, err := processors.NewSkipDirs(log.Child(logutils.DebugKeySkipDirs), skipDirs, args, cfg.Output.PathPrefix)
 	if err != nil {
 		return nil, err
 	}
@@ -107,8 +92,6 @@ func NewRunner(log logutils.Log, cfg *config.Config, args []string, goenv *gouti
 
 			// Must be after PathRelativity.
 			exclusionPaths,
-			skipFilesProcessor,
-			skipDirsProcessor,
 
 			processors.NewGeneratedFileFilter(cfg.Linters.LinterExclusions.Generated),
 
@@ -116,7 +99,7 @@ func NewRunner(log logutils.Log, cfg *config.Config, args []string, goenv *gouti
 			processors.NewIdentifierMarker(),
 
 			processors.NewExclusionRules(log.Child(logutils.DebugKeyExclusionRules), files,
-				&cfg.Linters.LinterExclusions, &cfg.Issues),
+				&cfg.Linters.LinterExclusions),
 
 			processors.NewNolintFilter(log.Child(logutils.DebugKeyNolintFilter), dbManager, enabledLinters),
 

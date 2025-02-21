@@ -21,7 +21,7 @@ func IgnoreCloseMissingErrHandling() error {
 		return err
 	}
 
-	f.Close()
+	f.Close() // want "Error return value of `f.Close` is not checked"
 	return nil
 }
 
@@ -30,14 +30,14 @@ func IgnoreCloseInDeferMissingErrHandling() {
 	if err != nil {
 		panic(err)
 	}
-	defer resp.Body.Close()
+	defer resp.Body.Close() // want "Error return value of `resp.Body.Close` is not checked"
 
 	panic(resp)
 }
 
 func IgnoreStdxWrite() {
-	os.Stdout.Write([]byte{})
-	os.Stderr.Write([]byte{})
+	os.Stdout.Write([]byte{}) // want "Error return value of `os.Stdout.Write` is not checked"
+	os.Stderr.Write([]byte{}) // want "Error return value of `os.Stderr.Write` is not checked"
 }
 
 func IgnoreBufferWrites(buf *bytes.Buffer) {

@@ -115,7 +115,7 @@ func buildTemplateContext() (map[string]string, error) {
 		return nil, fmt.Errorf("get the latest version: %w", err)
 	}
 
-	exclusions, err := getDefaultExclusions()
+	exclusions, err := getExclusionPresets()
 	if err != nil {
 		return nil, fmt.Errorf("default exclusions: %w", err)
 	}
@@ -127,7 +127,7 @@ func buildTemplateContext() (map[string]string, error) {
 		"LintersCommandOutputEnabledOnly": helps.Enable,
 		"EnabledByDefaultLinters":         getLintersListMarkdown(true),
 		"DisabledByDefaultLinters":        getLintersListMarkdown(false),
-		"DefaultExclusions":               exclusions,
+		"ExclusionPresets":                exclusions,
 		"ThanksList":                      getThanksList(),
 		"RunHelpText":                     helps.Help,
 		"ChangeLog":                       string(changeLog),

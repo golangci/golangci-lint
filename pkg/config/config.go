@@ -52,7 +52,6 @@ func (c *Config) Validate() error {
 		c.Output.Validate,
 		c.LintersSettings.Validate,
 		c.Linters.Validate,
-		c.Issues.Validate,
 		c.Severity.Validate,
 	}
 
