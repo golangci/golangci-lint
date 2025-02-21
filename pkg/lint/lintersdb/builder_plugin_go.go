@@ -83,15 +83,7 @@ func (b *PluginGoBuilder) loadConfig(cfg *config.Config, name string, settings *
 // or the linter does not implement the AnalyzerPlugin interface.
 func (b *PluginGoBuilder) getAnalyzerPlugin(cfg *config.Config, path string, settings any) ([]*analysis.Analyzer, error) {
 	if !filepath.IsAbs(path) {
-		// Hack for compatibility:
-		// the previous default (v1) was `cfg` but `fsutils.GetBasePath` defaults on `wd`.
-		// TODO(ldez): should be removed in v2.
-		relativePathMode := cfg.Run.RelativePathMode
-		if relativePathMode == "" {
-			relativePathMode = fsutils.RelativePathModeCfg
-		}
-
-		basePath, err := fsutils.GetBasePath(context.Background(), relativePathMode, cfg.GetConfigDir())
+		basePath, err := fsutils.GetBasePath(context.Background(), cfg.Run.RelativePathMode, cfg.GetConfigDir())
 		if err != nil {
 			return nil, fmt.Errorf("get base path: %w", err)
 		}
