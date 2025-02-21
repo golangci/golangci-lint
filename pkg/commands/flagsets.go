@@ -72,7 +72,7 @@ func setupRunFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
 func setupOutputFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
 	internal.AddFlagAndBind(v, fs, fs.String, "path-prefix", "output.path-prefix", "",
 		color.GreenString("Path prefix to add to output"))
-	internal.AddFlagAndBind(v, fs, fs.Bool, "show-stats", "output.show-stats", false, color.GreenString("Show statistics per linter"))
+	internal.AddFlagAndBind(v, fs, fs.Bool, "show-stats", "output.show-stats", true, color.GreenString("Show statistics per linter"))
 
 	setupOutputFormatsFlagSet(v, fs)
 }

@@ -4123,8 +4123,8 @@ output:
     - file # filepath, line, and column.
 
   # Show statistics per linter.
-  # Default: false
-  show-stats: true
+  # Default: true
+  show-stats: false
 
 
 # Options for analysis running.

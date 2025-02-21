@@ -3888,7 +3888,7 @@
         "show-stats": {
           "description": "Show statistics per linter.",
           "type": "boolean",
-          "default": false
+          "default": true
         },
         "sort-order": {
           "type": "array",
