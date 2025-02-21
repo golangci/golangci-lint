@@ -4417,7 +4417,7 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "default-severity": {
+        "default": {
           "description": "Set the default severity for issues. If severity rules are defined and the issues do not match or no severity is provided to the rule this will be the default severity applied. Severities should match the supported severity names of the selected out format.",
           "type": "string",
           "default": ""
@@ -4468,7 +4468,7 @@
           "default": []
         }
       },
-      "required": ["default-severity"]
+      "required": ["default"]
     }
   }
 }

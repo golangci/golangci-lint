@@ -4236,7 +4236,7 @@ severity:
   # `@linter` can be used as severity value to keep the severity from linters (e.g. revive, gosec, ...)
   #
   # Default: ""
-  default-severity: error
+  default: error
 
   # If set to true `severity-rules` regular expressions become case-sensitive.
   # Default: false
