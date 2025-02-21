@@ -2385,7 +2385,7 @@ linters-settings:
     ignore: "new,int"
     # Include method names and field names (i.e., qualified names) in checks.
     # Default: false
-    q: true
+    qualified-name: true
 
   promlinter:
     # Promlinter cannot infer all metrics name in static analysis.

@@ -3,4 +3,4 @@ version: "2"
 linters-settings:
   predeclared:
     ignore: "real,recover"
-    q: true
+    qualified-name: true

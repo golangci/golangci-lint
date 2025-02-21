@@ -757,7 +757,7 @@ type PreallocSettings struct {
 
 type PredeclaredSettings struct {
 	Ignore    string `mapstructure:"ignore"`
-	Qualified bool   `mapstructure:"q"`
+	Qualified bool   `mapstructure:"qualified-name"`
 }
 
 type PromlinterSettings struct {
