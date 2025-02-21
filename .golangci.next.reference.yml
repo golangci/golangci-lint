@@ -2215,7 +2215,7 @@ linters-settings:
     # Typos to ignore.
     # Should be in lower case.
     # Default: []
-    ignore-words:
+    ignore-rules:
       - someword
     # Extra word corrections.
     # `typo` and `correction` should only contain letters.

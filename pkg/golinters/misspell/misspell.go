@@ -68,8 +68,8 @@ func createMisspellReplacer(settings *config.MisspellSettings) (*misspell.Replac
 		return nil, fmt.Errorf("process extra words: %w", err)
 	}
 
-	if len(settings.IgnoreWords) != 0 {
-		replacer.RemoveRule(settings.IgnoreWords)
+	if len(settings.IgnoreRules) != 0 {
+		replacer.RemoveRule(settings.IgnoreRules)
 	}
 
 	// It can panic.

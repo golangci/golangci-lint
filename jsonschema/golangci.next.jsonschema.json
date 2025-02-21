@@ -2135,8 +2135,8 @@
             "locale": {
               "enum": ["US", "UK"]
             },
-            "ignore-words": {
-              "description": "List of words to ignore.",
+            "ignore-rules": {
+              "description": "List of rules to ignore.",
               "type": "array",
               "items": {
                 "type": "string"

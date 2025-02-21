@@ -3,6 +3,6 @@ version: "2"
 linters-settings:
   misspell:
     locale: US
-    ignore-words:
+    ignore-rules:
       - langauge
       - Dialogue
