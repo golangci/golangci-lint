@@ -2452,7 +2452,7 @@
               "type": "string"
             },
             "qualified-name": {
-              "description": "Include method names and field names (i.e., qualified names) in checks.",
+              "description": "Include method names and field names in checks.",
               "type": "boolean",
               "default": false
             }

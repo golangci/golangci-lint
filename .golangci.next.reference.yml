@@ -2383,7 +2383,7 @@ linters-settings:
     # Comma-separated list of predeclared identifiers to not report on.
     # Default: ""
     ignore: "new,int"
-    # Include method names and field names (i.e., qualified names) in checks.
+    # Include method names and field names in checks.
     # Default: false
     qualified-name: true
 
