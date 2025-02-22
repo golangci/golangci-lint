@@ -2,6 +2,7 @@ package fsutils
 
 import (
 	"bytes"
+	"cmp"
 	"context"
 	"errors"
 	"fmt"
@@ -24,9 +25,7 @@ func AllRelativePathModes() []string {
 }
 
 func GetBasePath(ctx context.Context, mode, cfgDir string) (string, error) {
-	if mode == "" {
-		mode = RelativePathModeCfg
-	}
+	mode = cmp.Or(mode, RelativePathModeCfg)
 
 	switch mode {
 	case RelativePathModeCfg:
