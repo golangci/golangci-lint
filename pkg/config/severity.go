@@ -8,7 +8,7 @@ import (
 const severityRuleMinConditionsCount = 1
 
 type Severity struct {
-	Default       string         `mapstructure:"default-severity"`
+	Default       string         `mapstructure:"default"`
 	CaseSensitive bool           `mapstructure:"case-sensitive"`
 	Rules         []SeverityRule `mapstructure:"rules"`
 }

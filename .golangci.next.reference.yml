@@ -708,20 +708,20 @@ linters-settings:
     # Default: ["^(fmt\\.Print(|f|ln)|print|println)$"]
     forbid:
       # Built-in bootstrapping functions.
-      - ^print(ln)?$
+      - pattern: ^print(ln)?$
       # Optional message that gets included in error reports.
-      - p: ^fmt\.Print.*$
+      - pattern: ^fmt\.Print.*$
         msg: Do not commit print statements.
       # Alternatively, put messages at the end of the regex, surrounded by `(# )?`
       # Escape any special characters. Those messages get included in error reports.
-      - 'fmt\.Print.*(# Do not commit print statements\.)?'
+      - pattern: 'fmt\.Print.*(# Do not commit print statements\.)?'
       # Forbid spew Dump, whether it is called as function or method.
       # Depends on analyze-types below.
-      - ^spew\.(ConfigState\.)?Dump$
+      - pattern: ^spew\.(ConfigState\.)?Dump$
       # The package name might be ambiguous.
       # The full import path can be used as additional criteria.
       # Depends on analyze-types below.
-      - p: ^v1.Dump$
+      - pattern: ^v1.Dump$
         pkg: ^example.com/pkg/api/v1$
     # Exclude godoc examples from forbidigo checks.
     # Default: true
@@ -1530,7 +1530,7 @@ linters-settings:
             reason: "testing if blocked version constraint works."
       # Set to true to raise lint issues for packages that are loaded from a local path via replace directive.
       # Default: false
-      local_replace_directives: false
+      local-replace-directives: false
 
   gosimple:
     # Sxxxx checks in https://staticcheck.dev/docs/configuration/options/#checks
@@ -2215,7 +2215,7 @@ linters-settings:
     # Typos to ignore.
     # Should be in lower case.
     # Default: []
-    ignore-words:
+    ignore-rules:
       - someword
     # Extra word corrections.
     # `typo` and `correction` should only contain letters.
@@ -2383,9 +2383,9 @@ linters-settings:
     # Comma-separated list of predeclared identifiers to not report on.
     # Default: ""
     ignore: "new,int"
-    # Include method names and field names (i.e., qualified names) in checks.
+    # Include method names and field names in checks.
     # Default: false
-    q: true
+    qualified-name: true
 
   promlinter:
     # Promlinter cannot infer all metrics name in static analysis.
@@ -3878,9 +3878,9 @@ linters-settings:
 
   wrapcheck:
     # An array of strings specifying additional substrings of signatures to ignore.
-    # Unlike 'ignoreSigs', this option extends the default set (or the set specified in 'ignoreSigs') without replacing it entirely.
+    # Unlike 'ignore-sigs', this option extends the default set (or the set specified in 'ignore-sigs') without replacing it entirely.
     # This allows you to add specific signatures to the ignore list
-    # while retaining the defaults or any items in 'ignoreSigs'.
+    # while retaining the defaults or any items in 'ignore-sigs'.
     # Default: []
     extra-ignore-sigs:
       - .CustomError(
@@ -3890,7 +3890,7 @@ linters-settings:
     # If this set, it will override the default set of ignored signatures.
     # See https://github.com/tomarrell/wrapcheck#configuration for more information.
     # Default: [".Errorf(", "errors.New(", "errors.Unwrap(", "errors.Join(", ".Wrap(", ".Wrapf(", ".WithMessage(", ".WithMessagef(", ".WithStack("]
-    ignoreSigs:
+    ignore-sigs:
       - .Errorf(
       - errors.New(
       - errors.Unwrap(
@@ -3902,16 +3902,16 @@ linters-settings:
       - .WithStack(
     # An array of strings that specify regular expressions of signatures to ignore.
     # Default: []
-    ignoreSigRegexps:
+    ignore-sig-regexps:
       - \.New.*Error\(
     # An array of strings that specify globs of packages to ignore.
     # Default: []
-    ignorePackageGlobs:
+    ignore-package-globs:
       - encoding/*
       - github.com/pkg/*
     # An array of strings that specify regular expressions of interfaces to ignore.
     # Default: []
-    ignoreInterfaceRegexps:
+    ignore-interface-regexps:
       - ^(?i)c(?-i)ach(ing|e)
 
   wsl:
@@ -4236,7 +4236,7 @@ severity:
   # `@linter` can be used as severity value to keep the severity from linters (e.g. revive, gosec, ...)
   #
   # Default: ""
-  default-severity: error
+  default: error
 
   # If set to true `severity-rules` regular expressions become case-sensitive.
   # Default: false

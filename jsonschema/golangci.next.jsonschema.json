@@ -942,31 +942,23 @@
             "forbid": {
               "description": "List of identifiers to forbid (written using `regexp`)",
               "type": "array",
-              "examples": ["^print(ln)?$"],
               "items": {
-                "anyOf": [
-                  {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "pattern": {
+                    "description": "Pattern",
                     "type": "string"
                   },
-                  {
-                    "type": "object",
-                    "additionalProperties": false,
-                    "properties": {
-                      "p": {
-                        "description": "Pattern",
-                        "type": "string"
-                      },
-                      "pkg": {
-                        "description": "Package",
-                        "type": "string"
-                      },
-                      "msg": {
-                        "description": "Message",
-                        "type": "string"
-                      }
-                    }
+                  "pkg": {
+                    "description": "Package",
+                    "type": "string"
+                  },
+                  "msg": {
+                    "description": "Message",
+                    "type": "string"
                   }
-                ]
+                }
               }
             }
           }
@@ -1727,7 +1719,7 @@
                     }
                   }
                 },
-                "local_replace_directives": {
+                "local-replace-directives": {
                   "description": "Raise lint issues if loading local path with replace directive",
                   "type": "boolean",
                   "default": true
@@ -2135,8 +2127,8 @@
             "locale": {
               "enum": ["US", "UK"]
             },
-            "ignore-words": {
-              "description": "List of words to ignore.",
+            "ignore-rules": {
+              "description": "List of rules to ignore.",
               "type": "array",
               "items": {
                 "type": "string"
@@ -2459,8 +2451,8 @@
               "description": "Comma-separated list of predeclared identifiers to not report on.",
               "type": "string"
             },
-            "q": {
-              "description": "Include method names and field names (i.e., qualified names) in checks.",
+            "qualified-name": {
+              "description": "Include method names and field names in checks.",
               "type": "boolean",
               "default": false
             }
@@ -3586,7 +3578,7 @@
                 "type": "string"
               }
             },
-            "ignoreSigs": {
+            "ignore-sigs": {
               "description": "An array of strings which specify substrings of signatures to ignore.",
               "default": [
                 ".Errorf(",
@@ -3603,7 +3595,7 @@
                 "type": "string"
               }
             },
-            "ignoreSigRegexps": {
+            "ignore-sig-regexps": {
               "description": "An array of strings which specify regular expressions of signatures to ignore.",
               "default": [""],
               "type": "array",
@@ -3611,7 +3603,7 @@
                 "type": "string"
               }
             },
-            "ignorePackageGlobs": {
+            "ignore-package-globs": {
               "description": "An array of glob patterns which, if any match the package of the function returning the error, will skip wrapcheck analysis for this error.",
               "default": [""],
               "type": "array",
@@ -3619,7 +3611,7 @@
                 "type": "string"
               }
             },
-            "ignoreInterfaceRegexps": {
+            "ignore-interface-regexps": {
               "description": "An array of glob patterns which, if matched to an underlying interface name, will ignore unwrapped errors returned from a function whose call is defined on the given interface.",
               "default": [""],
               "type": "array",
@@ -4425,7 +4417,7 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "default-severity": {
+        "default": {
           "description": "Set the default severity for issues. If severity rules are defined and the issues do not match or no severity is provided to the rule this will be the default severity applied. Severities should match the supported severity names of the selected out format.",
           "type": "string",
           "default": ""
@@ -4476,7 +4468,7 @@
           "default": []
         }
       },
-      "required": ["default-severity"]
+      "required": ["default"]
     }
   }
 }

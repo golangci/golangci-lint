@@ -1,12 +1,9 @@
 package config
 
 import (
-	"encoding"
 	"errors"
 	"fmt"
 	"runtime"
-
-	"gopkg.in/yaml.v3"
 )
 
 var defaultLintersSettings = LintersSettings{
@@ -425,40 +422,10 @@ type ForbidigoSettings struct {
 	AnalyzeTypes         bool               `mapstructure:"analyze-types"`
 }
 
-var _ encoding.TextUnmarshaler = &ForbidigoPattern{}
-
-// ForbidigoPattern corresponds to forbidigo.pattern and adds mapstructure support.
-// The YAML field names must match what forbidigo expects.
 type ForbidigoPattern struct {
-	// patternString gets populated when the config contains a string as entry in ForbidigoSettings.Forbid[]
-	// because ForbidigoPattern implements encoding.TextUnmarshaler
-	// and the reader uses the mapstructure.TextUnmarshallerHookFunc as decoder hook.
-	//
-	// If the entry is a map, then the other fields are set as usual by mapstructure.
-	patternString string
-
-	Pattern string `yaml:"p" mapstructure:"p"`
+	Pattern string `yaml:"p" mapstructure:"pattern"`
 	Package string `yaml:"pkg,omitempty" mapstructure:"pkg,omitempty"`
 	Msg     string `yaml:"msg,omitempty" mapstructure:"msg,omitempty"`
-}
-
-func (p *ForbidigoPattern) UnmarshalText(text []byte) error {
-	// Validation happens when instantiating forbidigo.
-	p.patternString = string(text)
-	return nil
-}
-
-// MarshalString converts the pattern into a string as needed by forbidigo.NewLinter.
-//
-// MarshalString is intentionally not called MarshalText,
-// although it has the same signature
-// because implementing encoding.TextMarshaler led to infinite recursion when yaml.Marshal called MarshalText.
-func (p *ForbidigoPattern) MarshalString() ([]byte, error) {
-	if p.patternString != "" {
-		return []byte(p.patternString), nil
-	}
-
-	return yaml.Marshal(p)
 }
 
 type FunlenSettings struct {
@@ -563,7 +530,7 @@ type GoModGuardSettings struct {
 			Version string `mapstructure:"version"`
 			Reason  string `mapstructure:"reason"`
 		} `mapstructure:"versions"`
-		LocalReplaceDirectives bool `mapstructure:"local_replace_directives"`
+		LocalReplaceDirectives bool `mapstructure:"local-replace-directives"`
 	} `mapstructure:"blocked"`
 }
 
@@ -673,11 +640,10 @@ type MakezeroSettings struct {
 }
 
 type MisspellSettings struct {
-	Mode       string               `mapstructure:"mode"`
-	Locale     string               `mapstructure:"locale"`
-	ExtraWords []MisspellExtraWords `mapstructure:"extra-words"`
-	// TODO(ldez): v2 the option must be renamed to `IgnoredRules`.
-	IgnoreWords []string `mapstructure:"ignore-words"`
+	Mode        string               `mapstructure:"mode"`
+	Locale      string               `mapstructure:"locale"`
+	ExtraWords  []MisspellExtraWords `mapstructure:"extra-words"`
+	IgnoreRules []string             `mapstructure:"ignore-rules"`
 }
 
 type MisspellExtraWords struct {
@@ -758,7 +724,7 @@ type PreallocSettings struct {
 
 type PredeclaredSettings struct {
 	Ignore    string `mapstructure:"ignore"`
-	Qualified bool   `mapstructure:"q"`
+	Qualified bool   `mapstructure:"qualified-name"`
 }
 
 type PromlinterSettings struct {
@@ -988,12 +954,11 @@ type WhitespaceSettings struct {
 }
 
 type WrapcheckSettings struct {
-	ExtraIgnoreSigs []string `mapstructure:"extra-ignore-sigs"`
-	// TODO(ldez): v2 the options must be renamed to use hyphen.
-	IgnoreSigs             []string `mapstructure:"ignoreSigs"`
-	IgnoreSigRegexps       []string `mapstructure:"ignoreSigRegexps"`
-	IgnorePackageGlobs     []string `mapstructure:"ignorePackageGlobs"`
-	IgnoreInterfaceRegexps []string `mapstructure:"ignoreInterfaceRegexps"`
+	ExtraIgnoreSigs        []string `mapstructure:"extra-ignore-sigs"`
+	IgnoreSigs             []string `mapstructure:"ignore-sigs"`
+	IgnoreSigRegexps       []string `mapstructure:"ignore-sig-regexps"`
+	IgnorePackageGlobs     []string `mapstructure:"ignore-package-globs"`
+	IgnoreInterfaceRegexps []string `mapstructure:"ignore-interface-regexps"`
 }
 
 type WSLSettings struct {
