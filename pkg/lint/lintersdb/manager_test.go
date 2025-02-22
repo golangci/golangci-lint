@@ -55,8 +55,7 @@ func TestManager_GetOptimizedLinters(t *testing.T) {
 	}
 
 	mlConfig := &linter.Config{
-		Linter:    goanalysis.NewMetaLinter(gaLinters),
-		InPresets: []string{"format"},
+		Linter: goanalysis.NewMetaLinter(gaLinters),
 	}
 
 	expected := []*linter.Config{mlConfig.WithLoadFiles()}
@@ -174,14 +173,12 @@ func TestManager_combineGoAnalysisLinters(t *testing.T) {
 			desc: "no combined, one linter",
 			linters: map[string]*linter.Config{
 				"foo": {
-					Linter:    fooTyped,
-					InPresets: []string{"A"},
+					Linter: fooTyped,
 				},
 			},
 			expected: map[string]*linter.Config{
 				"foo": {
-					Linter:    fooTyped,
-					InPresets: []string{"A"},
+					Linter: fooTyped,
 				},
 			},
 		},
@@ -189,18 +186,15 @@ func TestManager_combineGoAnalysisLinters(t *testing.T) {
 			desc: "combined, several linters (typed)",
 			linters: map[string]*linter.Config{
 				"foo": {
-					Linter:    fooTyped,
-					InPresets: []string{"A"},
+					Linter: fooTyped,
 				},
 				"bar": {
-					Linter:    barTyped,
-					InPresets: []string{"B"},
+					Linter: barTyped,
 				},
 			},
 			expected: func() map[string]*linter.Config {
 				mlConfig := &linter.Config{
-					Linter:    goanalysis.NewMetaLinter([]*goanalysis.Linter{barTyped, fooTyped}),
-					InPresets: []string{"A", "B"},
+					Linter: goanalysis.NewMetaLinter([]*goanalysis.Linter{barTyped, fooTyped}),
 				}
 
 				return map[string]*linter.Config{
@@ -212,21 +206,18 @@ func TestManager_combineGoAnalysisLinters(t *testing.T) {
 			desc: "combined, several linters (different LoadMode)",
 			linters: map[string]*linter.Config{
 				"foo": {
-					Linter:    fooTyped,
-					InPresets: []string{"A"},
-					LoadMode:  packages.NeedName,
+					Linter:   fooTyped,
+					LoadMode: packages.NeedName,
 				},
 				"bar": {
-					Linter:    barTyped,
-					InPresets: []string{"B"},
-					LoadMode:  packages.NeedTypesSizes,
+					Linter:   barTyped,
+					LoadMode: packages.NeedTypesSizes,
 				},
 			},
 			expected: func() map[string]*linter.Config {
 				mlConfig := &linter.Config{
-					Linter:    goanalysis.NewMetaLinter([]*goanalysis.Linter{barTyped, fooTyped}),
-					InPresets: []string{"A", "B"},
-					LoadMode:  packages.NeedName | packages.NeedTypesSizes,
+					Linter:   goanalysis.NewMetaLinter([]*goanalysis.Linter{barTyped, fooTyped}),
+					LoadMode: packages.NeedName | packages.NeedTypesSizes,
 				}
 
 				return map[string]*linter.Config{
@@ -238,21 +229,18 @@ func TestManager_combineGoAnalysisLinters(t *testing.T) {
 			desc: "combined, several linters (same LoadMode)",
 			linters: map[string]*linter.Config{
 				"foo": {
-					Linter:    fooTyped,
-					InPresets: []string{"A"},
-					LoadMode:  packages.NeedName,
+					Linter:   fooTyped,
+					LoadMode: packages.NeedName,
 				},
 				"bar": {
-					Linter:    barTyped,
-					InPresets: []string{"B"},
-					LoadMode:  packages.NeedName,
+					Linter:   barTyped,
+					LoadMode: packages.NeedName,
 				},
 			},
 			expected: func() map[string]*linter.Config {
 				mlConfig := &linter.Config{
-					Linter:    goanalysis.NewMetaLinter([]*goanalysis.Linter{barTyped, fooTyped}),
-					InPresets: []string{"A", "B"},
-					LoadMode:  packages.NeedName,
+					Linter:   goanalysis.NewMetaLinter([]*goanalysis.Linter{barTyped, fooTyped}),
+					LoadMode: packages.NeedName,
 				}
 
 				return map[string]*linter.Config{
@@ -264,18 +252,15 @@ func TestManager_combineGoAnalysisLinters(t *testing.T) {
 			desc: "combined, several linters (syntax)",
 			linters: map[string]*linter.Config{
 				"foo": {
-					Linter:    fooSyntax,
-					InPresets: []string{"A"},
+					Linter: fooSyntax,
 				},
 				"bar": {
-					Linter:    barSyntax,
-					InPresets: []string{"B"},
+					Linter: barSyntax,
 				},
 			},
 			expected: func() map[string]*linter.Config {
 				mlConfig := &linter.Config{
-					Linter:    goanalysis.NewMetaLinter([]*goanalysis.Linter{barSyntax, fooSyntax}),
-					InPresets: []string{"A", "B"},
+					Linter: goanalysis.NewMetaLinter([]*goanalysis.Linter{barSyntax, fooSyntax}),
 				}
 
 				return map[string]*linter.Config{

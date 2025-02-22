@@ -4176,27 +4176,6 @@
           "type": "boolean",
           "default": false
         },
-        "presets": {
-          "description": "Allow to use different presets of linters",
-          "type": "array",
-          "items": {
-            "enum": [
-              "bugs",
-              "comment",
-              "complexity",
-              "error",
-              "format",
-              "import",
-              "metalinter",
-              "module",
-              "performance",
-              "sql",
-              "style",
-              "test",
-              "unused"
-            ]
-          }
-        },
         "fast": {
           "description": "Enable run of fast linters.",
           "type": "boolean",

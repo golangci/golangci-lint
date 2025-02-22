@@ -39,7 +39,7 @@ func (l *Linters) validateAllDisableEnableOptions() error {
 	}
 
 	if l.DisableAll {
-		if len(l.Enable) == 0 && len(l.Presets) == 0 {
+		if len(l.Enable) == 0 {
 			return errors.New("all linters were disabled, but no one linter was enabled: must enable at least one")
 		}
 

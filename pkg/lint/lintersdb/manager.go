@@ -76,21 +76,6 @@ func (m *Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 	return m.linters
 }
 
-func (m *Manager) GetAllLinterConfigsForPreset(p string) []*linter.Config {
-	var ret []*linter.Config
-	for _, lc := range m.linters {
-		if lc.IsDeprecated() {
-			continue
-		}
-
-		if slices.Contains(lc.InPresets, p) {
-			ret = append(ret, lc)
-		}
-	}
-
-	return ret
-}
-
 func (m *Manager) GetEnabledLintersMap() (map[string]*linter.Config, error) {
 	enabledLinters := m.build(m.GetAllEnabledByDefaultLinters())
 
@@ -144,7 +129,6 @@ func (m *Manager) GetAllEnabledByDefaultLinters() []*linter.Config {
 	return ret
 }
 
-//nolint:gocyclo // the complexity cannot be reduced.
 func (m *Manager) build(enabledByDefaultLinters []*linter.Config) map[string]*linter.Config {
 	m.debugf("Linters config: %#v", m.cfg.Linters)
 
@@ -152,19 +136,10 @@ func (m *Manager) build(enabledByDefaultLinters []*linter.Config) map[string]*li
 	switch {
 	case m.cfg.Linters.DisableAll:
 		// no default linters
-	case len(m.cfg.Linters.Presets) != 0:
-		// imply --disable-all
 	case m.cfg.Linters.EnableAll:
 		resultLintersSet = linterConfigsToMap(m.linters)
 	default:
 		resultLintersSet = linterConfigsToMap(enabledByDefaultLinters)
-	}
-
-	// --presets can only add linters to default set
-	for _, p := range m.cfg.Linters.Presets {
-		for _, lc := range m.GetAllLinterConfigsForPreset(p) {
-			resultLintersSet[lc.Name()] = lc
-		}
 	}
 
 	// --fast removes slow linters from current set.
@@ -225,8 +200,6 @@ func (m *Manager) combineGoAnalysisLinters(linters map[string]*linter.Config) {
 			mlConfig.ConsiderSlow()
 		}
 
-		mlConfig.InPresets = append(mlConfig.InPresets, lc.InPresets...)
-
 		goanalysisLinters = append(goanalysisLinters, lnt)
 	}
 
@@ -256,9 +229,6 @@ func (m *Manager) combineGoAnalysisLinters(linters map[string]*linter.Config) {
 
 	mlConfig.Linter = goanalysis.NewMetaLinter(goanalysisLinters)
 
-	sort.Strings(mlConfig.InPresets)
-	mlConfig.InPresets = slices.Compact(mlConfig.InPresets)
-
 	linters[mlConfig.Linter.Name()] = mlConfig
 
 	m.debugf("Combined %d go/analysis linters into one metalinter", len(goanalysisLinters))
@@ -275,29 +245,6 @@ func (m *Manager) verbosePrintLintersStatus(lcs map[string]*linter.Config) {
 	}
 	sort.Strings(linterNames)
 	m.log.Infof("Active %d linters: %s", len(linterNames), linterNames)
-
-	if len(m.cfg.Linters.Presets) != 0 {
-		sort.Strings(m.cfg.Linters.Presets)
-		m.log.Infof("Active presets: %s", m.cfg.Linters.Presets)
-	}
-}
-
-func AllPresets() []string {
-	return []string{
-		linter.PresetBugs,
-		linter.PresetComment,
-		linter.PresetComplexity,
-		linter.PresetError,
-		linter.PresetFormatting,
-		linter.PresetImport,
-		linter.PresetMetaLinter,
-		linter.PresetModule,
-		linter.PresetPerformance,
-		linter.PresetSQL,
-		linter.PresetStyle,
-		linter.PresetTest,
-		linter.PresetUnused,
-	}
 }
 
 func linterConfigsToMap(lcs []*linter.Config) map[string]*linter.Config {

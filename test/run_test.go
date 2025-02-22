@@ -489,17 +489,6 @@ func TestEnableAllFastAndEnableCanCoexist(t *testing.T) {
 	}
 }
 
-func TestEnabledPresetsAreNotDuplicated(t *testing.T) {
-	testshared.NewRunnerBuilder(t).
-		WithNoConfig().
-		WithArgs("-v", "-p", "style,bugs").
-		WithTargetPath(testdataDir, minimalPkg).
-		Runner().
-		Install().
-		Run().
-		ExpectOutputContains("Active presets: [bugs style]")
-}
-
 func TestAbsPathDirAnalysis(t *testing.T) {
 	dir := filepath.Join("testdata_etc", "abspath") // abs paths don't work with testdata dir
 	absDir, err := filepath.Abs(dir)

@@ -280,7 +280,6 @@ func (l *Loader) applyStringSliceHack() {
 
 	l.appendStringSlice("enable", &l.cfg.Linters.Enable)
 	l.appendStringSlice("disable", &l.cfg.Linters.Disable)
-	l.appendStringSlice("presets", &l.cfg.Linters.Presets)
 	l.appendStringSlice("build-tags", &l.cfg.Run.BuildTags)
 }
 

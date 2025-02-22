@@ -1,16 +1,12 @@
 package commands
 
 import (
-	"fmt"
-	"strings"
-
 	"github.com/fatih/color"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 
 	"github.com/golangci/golangci-lint/pkg/commands/internal"
 	"github.com/golangci/golangci-lint/pkg/exitcodes"
-	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
 )
 
 const defaultMaxIssuesPerLinter = 50
@@ -24,13 +20,6 @@ func setupLintersFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
 
 	internal.AddFlagAndBind(v, fs, fs.Bool, "fast", "linters.fast", false,
 		color.GreenString("Enable only fast linters from enabled linters set (first run won't be fast)"))
-
-	internal.AddHackedStringSliceP(fs, "presets", "p",
-		formatList("Enable presets of linters:", lintersdb.AllPresets(),
-			"Run 'golangci-lint help linters' to see them.",
-			"This option implies option --disable-all",
-		),
-	)
 
 	fs.StringSlice("enable-only", nil,
 		color.GreenString("Override linters configuration section to only run the specific linter(s)")) // Flags only.
@@ -147,21 +136,4 @@ func setupIssuesFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
 		color.GreenString("Show issues in any part of update files (requires new-from-rev or new-from-patch)"))
 	internal.AddFlagAndBind(v, fs, fs.Bool, "fix", "issues.fix", false,
 		color.GreenString("Fix found issues (if it's supported by the linter)"))
-}
-
-func formatList(head string, items []string, foot ...string) string {
-	parts := []string{color.GreenString(head)}
-	for _, p := range items {
-		parts = append(parts, fmt.Sprintf("  - %s", color.YellowString(p)))
-	}
-
-	for _, s := range foot {
-		parts = append(parts, color.GreenString(s))
-	}
-
-	if len(foot) == 0 {
-		parts = append(parts, "")
-	}
-
-	return strings.Join(parts, "\n")
 }

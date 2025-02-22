@@ -71,15 +71,14 @@ func getLintersListMarkdown(enabled bool) string {
 	})
 
 	lines := []string{
-		"|Name|Description|Presets|AutoFix|Since|",
-		"|---|---|---|---|---|---|",
+		"|Name|Description|AutoFix|Since|",
+		"|---|---|---|---|---|",
 	}
 
 	for _, lc := range neededLcs {
-		line := fmt.Sprintf("|%s|%s|%s|%v|%s|",
+		line := fmt.Sprintf("|%s|%s|%v|%s|",
 			getName(lc),
 			getDesc(lc),
-			strings.Join(lc.InPresets, ", "),
 			check(lc.CanAutoFix, "Auto fix supported"),
 			lc.Since,
 		)

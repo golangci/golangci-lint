@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"slices"
-	"sort"
 	"strings"
 	"unicode"
 	"unicode/utf8"
@@ -19,15 +18,14 @@ import (
 )
 
 type linterHelp struct {
-	Name             string   `json:"name"`
-	Desc             string   `json:"description"`
-	Fast             bool     `json:"fast"`
-	AutoFix          bool     `json:"autoFix"`
-	Presets          []string `json:"presets"`
-	EnabledByDefault bool     `json:"enabledByDefault"`
-	Deprecated       bool     `json:"deprecated"`
-	Since            string   `json:"since"`
-	OriginalURL      string   `json:"originalURL,omitempty"`
+	Name             string `json:"name"`
+	Desc             string `json:"description"`
+	Fast             bool   `json:"fast"`
+	AutoFix          bool   `json:"autoFix"`
+	EnabledByDefault bool   `json:"enabledByDefault"`
+	Deprecated       bool   `json:"deprecated"`
+	Since            string `json:"since"`
+	OriginalURL      string `json:"originalURL,omitempty"`
 }
 
 type helpOptions struct {
@@ -113,7 +111,6 @@ func (c *helpCommand) printJSON() error {
 			Desc:             formatDescription(lc.Linter.Desc()),
 			Fast:             !lc.IsSlowLinter(),
 			AutoFix:          lc.CanAutoFix,
-			Presets:          lc.InPresets,
 			EnabledByDefault: lc.EnabledByDefault,
 			Deprecated:       lc.IsDeprecated(),
 			Since:            lc.Since,
@@ -143,27 +140,6 @@ func (c *helpCommand) print() {
 
 	color.Red("\nDisabled by default linters:\n")
 	printLinters(disabledLCs)
-
-	color.Green("\nLinters presets:")
-	c.printPresets()
-}
-
-func (c *helpCommand) printPresets() {
-	for _, p := range lintersdb.AllPresets() {
-		linters := c.dbManager.GetAllLinterConfigsForPreset(p)
-
-		var linterNames []string
-		for _, lc := range linters {
-			if lc.Internal {
-				continue
-			}
-
-			linterNames = append(linterNames, lc.Name())
-		}
-		sort.Strings(linterNames)
-
-		_, _ = fmt.Fprintf(logutils.StdOut, "%s: %s\n", color.YellowString(p), strings.Join(linterNames, ", "))
-	}
 }
 
 func printLinters(lcs []*linter.Config) {

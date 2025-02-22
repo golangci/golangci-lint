@@ -47,7 +47,6 @@ func saveLinters() error {
 			Desc:             l.Linter.Desc(),
 			EnabledByDefault: l.EnabledByDefault,
 			LoadMode:         l.LoadMode,
-			InPresets:        l.InPresets,
 			AlternativeNames: l.AlternativeNames,
 			OriginalURL:      l.OriginalURL,
 			Internal:         l.Internal,
