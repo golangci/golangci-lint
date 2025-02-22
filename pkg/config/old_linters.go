@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-type Linters struct {
+type OldLinters struct {
 	Enable     []string `mapstructure:"enable"`
 	Disable    []string `mapstructure:"disable"`
 	EnableAll  bool     `mapstructure:"enable-all"`
@@ -17,7 +17,7 @@ type Linters struct {
 	LinterExclusions LinterExclusions `mapstructure:"exclusions"`
 }
 
-func (l *Linters) Validate() error {
+func (l *OldLinters) Validate() error {
 	validators := []func() error{
 		l.validateAllDisableEnableOptions,
 		l.validateDisabledAndEnabledAtOneMoment,
@@ -33,7 +33,7 @@ func (l *Linters) Validate() error {
 	return nil
 }
 
-func (l *Linters) validateAllDisableEnableOptions() error {
+func (l *OldLinters) validateAllDisableEnableOptions() error {
 	if l.EnableAll && l.DisableAll {
 		return errors.New("--enable-all and --disable-all options must not be combined")
 	}
@@ -55,7 +55,7 @@ func (l *Linters) validateAllDisableEnableOptions() error {
 	return nil
 }
 
-func (l *Linters) validateDisabledAndEnabledAtOneMoment() error {
+func (l *OldLinters) validateDisabledAndEnabledAtOneMoment() error {
 	enabledLintersSet := map[string]bool{}
 	for _, name := range l.Enable {
 		enabledLintersSet[name] = true

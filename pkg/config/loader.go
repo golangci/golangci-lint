@@ -67,8 +67,8 @@ func (l *Loader) Load(opts LoadOptions) error {
 
 	l.applyStringSliceHack()
 
-	if l.cfg.Linters.LinterExclusions.Generated == "" {
-		l.cfg.Linters.LinterExclusions.Generated = GeneratedModeStrict
+	if l.cfg.OldLinters.LinterExclusions.Generated == "" {
+		l.cfg.OldLinters.LinterExclusions.Generated = GeneratedModeStrict
 	}
 
 	l.handleFormatters()
@@ -278,8 +278,8 @@ func (l *Loader) applyStringSliceHack() {
 		return
 	}
 
-	l.appendStringSlice("enable", &l.cfg.Linters.Enable)
-	l.appendStringSlice("disable", &l.cfg.Linters.Disable)
+	l.appendStringSlice("enable", &l.cfg.OldLinters.Enable)
+	l.appendStringSlice("disable", &l.cfg.OldLinters.Disable)
 	l.appendStringSlice("build-tags", &l.cfg.Run.BuildTags)
 }
 
@@ -337,7 +337,7 @@ func (l *Loader) handleEnableOnlyOption() error {
 	}
 
 	if len(only) > 0 {
-		l.cfg.Linters = Linters{
+		l.cfg.OldLinters = OldLinters{
 			Enable:     only,
 			DisableAll: true,
 		}
@@ -377,7 +377,7 @@ func (l *Loader) handleFormatterExclusions() {
 	}
 
 	for _, path := range l.cfg.Formatters.Exclusions.Paths {
-		l.cfg.Linters.LinterExclusions.Rules = append(l.cfg.Linters.LinterExclusions.Rules, ExcludeRule{
+		l.cfg.OldLinters.LinterExclusions.Rules = append(l.cfg.OldLinters.LinterExclusions.Rules, ExcludeRule{
 			BaseRule: BaseRule{
 				Linters: l.cfg.Formatters.Enable,
 				Path:    path,

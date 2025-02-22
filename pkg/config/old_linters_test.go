@@ -9,32 +9,32 @@ import (
 func TestLinters_validateDisabledAndEnabledAtOneMoment(t *testing.T) {
 	testCases := []struct {
 		desc string
-		cfg  *Linters
+		cfg  *OldLinters
 	}{
 		{
 			desc: "2 different sets",
-			cfg: &Linters{
+			cfg: &OldLinters{
 				Enable:  []string{"dupl", "gofmt", "misspell"},
 				Disable: []string{"goimports", "gosec", "nolintlint"},
 			},
 		},
 		{
 			desc: "only enable",
-			cfg: &Linters{
+			cfg: &OldLinters{
 				Enable:  []string{"goimports", "gosec", "nolintlint"},
 				Disable: nil,
 			},
 		},
 		{
 			desc: "only disable",
-			cfg: &Linters{
+			cfg: &OldLinters{
 				Enable:  nil,
 				Disable: []string{"dupl", "gofmt", "misspell"},
 			},
 		},
 		{
 			desc: "no sets",
-			cfg: &Linters{
+			cfg: &OldLinters{
 				Enable:  nil,
 				Disable: nil,
 			},
@@ -54,12 +54,12 @@ func TestLinters_validateDisabledAndEnabledAtOneMoment(t *testing.T) {
 func TestLinters_validateDisabledAndEnabledAtOneMoment_error(t *testing.T) {
 	testCases := []struct {
 		desc     string
-		cfg      *Linters
+		cfg      *OldLinters
 		expected string
 	}{
 		{
 			desc: "disable one linter of the enabled linters",
-			cfg: &Linters{
+			cfg: &OldLinters{
 				Enable:  []string{"dupl", "gofmt", "misspell"},
 				Disable: []string{"dupl", "gosec", "nolintlint"},
 			},
@@ -67,7 +67,7 @@ func TestLinters_validateDisabledAndEnabledAtOneMoment_error(t *testing.T) {
 		},
 		{
 			desc: "disable multiple enabled linters",
-			cfg: &Linters{
+			cfg: &OldLinters{
 				Enable:  []string{"dupl", "gofmt", "misspell"},
 				Disable: []string{"dupl", "gofmt", "misspell"},
 			},
@@ -90,15 +90,15 @@ func TestLinters_validateDisabledAndEnabledAtOneMoment_error(t *testing.T) {
 func TestLinters_validateAllDisableEnableOptions(t *testing.T) {
 	testCases := []struct {
 		desc string
-		cfg  *Linters
+		cfg  *OldLinters
 	}{
 		{
 			desc: "nothing",
-			cfg:  &Linters{},
+			cfg:  &OldLinters{},
 		},
 		{
 			desc: "enable and disable",
-			cfg: &Linters{
+			cfg: &OldLinters{
 				Enable:     []string{"goimports", "gosec", "nolintlint"},
 				EnableAll:  false,
 				Disable:    []string{"dupl", "gofmt", "misspell"},
@@ -107,7 +107,7 @@ func TestLinters_validateAllDisableEnableOptions(t *testing.T) {
 		},
 		{
 			desc: "disable-all and enable",
-			cfg: &Linters{
+			cfg: &OldLinters{
 				Enable:     []string{"goimports", "gosec", "nolintlint"},
 				EnableAll:  false,
 				Disable:    nil,
@@ -116,7 +116,7 @@ func TestLinters_validateAllDisableEnableOptions(t *testing.T) {
 		},
 		{
 			desc: "enable-all and disable",
-			cfg: &Linters{
+			cfg: &OldLinters{
 				Enable:     nil,
 				EnableAll:  true,
 				Disable:    []string{"goimports", "gosec", "nolintlint"},
@@ -125,7 +125,7 @@ func TestLinters_validateAllDisableEnableOptions(t *testing.T) {
 		},
 		{
 			desc: "enable-all and enable and fast",
-			cfg: &Linters{
+			cfg: &OldLinters{
 				Enable:     []string{"dupl", "gofmt", "misspell"},
 				EnableAll:  true,
 				Disable:    nil,
@@ -148,12 +148,12 @@ func TestLinters_validateAllDisableEnableOptions(t *testing.T) {
 func TestLinters_validateAllDisableEnableOptions_error(t *testing.T) {
 	testCases := []struct {
 		desc     string
-		cfg      *Linters
+		cfg      *OldLinters
 		expected string
 	}{
 		{
 			desc: "enable-all and disable-all",
-			cfg: &Linters{
+			cfg: &OldLinters{
 				Enable:     nil,
 				EnableAll:  true,
 				Disable:    nil,
@@ -164,7 +164,7 @@ func TestLinters_validateAllDisableEnableOptions_error(t *testing.T) {
 		},
 		{
 			desc: "disable-all and disable no enable no preset",
-			cfg: &Linters{
+			cfg: &OldLinters{
 				Enable:     nil,
 				EnableAll:  false,
 				Disable:    []string{"dupl", "gofmt", "misspell"},
@@ -175,7 +175,7 @@ func TestLinters_validateAllDisableEnableOptions_error(t *testing.T) {
 		},
 		{
 			desc: "disable-all and disable with enable",
-			cfg: &Linters{
+			cfg: &OldLinters{
 				Enable:     []string{"nolintlint"},
 				EnableAll:  false,
 				Disable:    []string{"dupl", "gofmt", "misspell"},
@@ -186,7 +186,7 @@ func TestLinters_validateAllDisableEnableOptions_error(t *testing.T) {
 		},
 		{
 			desc: "enable-all and enable",
-			cfg: &Linters{
+			cfg: &OldLinters{
 				Enable:     []string{"dupl", "gofmt", "misspell"},
 				EnableAll:  true,
 				Disable:    nil,

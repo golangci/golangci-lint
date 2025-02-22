@@ -130,13 +130,13 @@ func (m *Manager) GetAllEnabledByDefaultLinters() []*linter.Config {
 }
 
 func (m *Manager) build(enabledByDefaultLinters []*linter.Config) map[string]*linter.Config {
-	m.debugf("Linters config: %#v", m.cfg.Linters)
+	m.debugf("Linters config: %#v", m.cfg.OldLinters)
 
 	resultLintersSet := map[string]*linter.Config{}
 	switch {
-	case m.cfg.Linters.DisableAll:
+	case m.cfg.OldLinters.DisableAll:
 		// no default linters
-	case m.cfg.Linters.EnableAll:
+	case m.cfg.OldLinters.EnableAll:
 		resultLintersSet = linterConfigsToMap(m.linters)
 	default:
 		resultLintersSet = linterConfigsToMap(enabledByDefaultLinters)
@@ -145,7 +145,7 @@ func (m *Manager) build(enabledByDefaultLinters []*linter.Config) map[string]*li
 	// --fast removes slow linters from current set.
 	// It should be after --presets to be able to run only fast linters in preset.
 	// It should be before --enable and --disable to be able to enable or disable specific linter.
-	if m.cfg.Linters.Fast {
+	if m.cfg.OldLinters.Fast {
 		for name, lc := range resultLintersSet {
 			if lc.IsSlowLinter() {
 				delete(resultLintersSet, name)
@@ -153,14 +153,14 @@ func (m *Manager) build(enabledByDefaultLinters []*linter.Config) map[string]*li
 		}
 	}
 
-	for _, name := range slices.Concat(m.cfg.Linters.Enable, m.cfg.Formatters.Enable) {
+	for _, name := range slices.Concat(m.cfg.OldLinters.Enable, m.cfg.Formatters.Enable) {
 		for _, lc := range m.GetLinterConfigs(name) {
 			// it's important to use lc.Name() nor name because name can be alias
 			resultLintersSet[lc.Name()] = lc
 		}
 	}
 
-	for _, name := range m.cfg.Linters.Disable {
+	for _, name := range m.cfg.OldLinters.Disable {
 		for _, lc := range m.GetLinterConfigs(name) {
 			// it's important to use lc.Name() nor name because name can be alias
 			delete(resultLintersSet, lc.Name())

@@ -47,7 +47,7 @@ func NewRunner(log logutils.Log, cfg *config.Config, goenv *goutil.Env,
 		return nil, fmt.Errorf("error creating path relativity processor: %w", err)
 	}
 
-	exclusionPaths, err := processors.NewExclusionPaths(log, &cfg.Linters.LinterExclusions)
+	exclusionPaths, err := processors.NewExclusionPaths(log, &cfg.OldLinters.LinterExclusions)
 	if err != nil {
 		return nil, err
 	}
@@ -93,13 +93,13 @@ func NewRunner(log logutils.Log, cfg *config.Config, goenv *goutil.Env,
 			// Must be after PathRelativity.
 			exclusionPaths,
 
-			processors.NewGeneratedFileFilter(cfg.Linters.LinterExclusions.Generated),
+			processors.NewGeneratedFileFilter(cfg.OldLinters.LinterExclusions.Generated),
 
 			// Must be before exclude because users see already marked output and configure excluding by it.
 			processors.NewIdentifierMarker(),
 
 			processors.NewExclusionRules(log.Child(logutils.DebugKeyExclusionRules), files,
-				&cfg.Linters.LinterExclusions),
+				&cfg.OldLinters.LinterExclusions),
 
 			processors.NewNolintFilter(log.Child(logutils.DebugKeyNolintFilter), dbManager, enabledLinters),
 
