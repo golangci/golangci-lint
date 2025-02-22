@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"cmp"
 	"context"
-	"errors"
 	"fmt"
 	"os/exec"
 	"path/filepath"
@@ -60,7 +59,7 @@ func GetBasePath(ctx context.Context, mode, cfgDir string) (string, error) {
 		return wd, nil
 
 	default:
-		return "", errors.New("unknown relative path mode")
+		return "", fmt.Errorf("unknown relative path mode: %s", mode)
 	}
 }
 
