@@ -32,7 +32,6 @@ var defaultLintersSettings = LintersSettings{
 	},
 	Exhaustive: ExhaustiveSettings{
 		Check:                      []string{"switch"},
-		CheckGenerated:             false,
 		DefaultSignifiesExhaustive: false,
 		IgnoreEnumMembers:          "",
 		PackageScopeOnly:           false,
@@ -75,7 +74,6 @@ var defaultLintersSettings = LintersSettings{
 	Gosmopolitan: GosmopolitanSettings{
 		AllowTimeLocal:  false,
 		EscapeHatches:   []string{},
-		IgnoreTests:     true,
 		WatchForScripts: []string{"Han"},
 	},
 	Inamedparam: INamedParamSettings{
@@ -304,7 +302,6 @@ func (s *LintersSettings) Validate() error {
 type AsasalintSettings struct {
 	Exclude              []string `mapstructure:"exclude"`
 	UseBuiltinExclusions bool     `mapstructure:"use-builtin-exclusions"`
-	IgnoreTest           bool     `mapstructure:"ignore-test"`
 }
 
 type BiDiChkSettings struct {
@@ -326,7 +323,6 @@ type CopyLoopVarSettings struct {
 type Cyclop struct {
 	MaxComplexity  int     `mapstructure:"max-complexity"`
 	PackageAverage float64 `mapstructure:"package-average"`
-	SkipTests      bool    `mapstructure:"skip-tests"`
 }
 
 type DepGuardSettings struct {
@@ -397,7 +393,6 @@ type ErrorLintAllowPair struct {
 
 type ExhaustiveSettings struct {
 	Check                      []string `mapstructure:"check"`
-	CheckGenerated             bool     `mapstructure:"check-generated"`
 	DefaultSignifiesExhaustive bool     `mapstructure:"default-signifies-exhaustive"`
 	IgnoreEnumMembers          string   `mapstructure:"ignore-enum-members"`
 	IgnoreEnumTypes            string   `mapstructure:"ignore-enum-types"`
@@ -460,7 +455,6 @@ type GocognitSettings struct {
 
 type GoConstSettings struct {
 	IgnoreStrings       string `mapstructure:"ignore-strings"`
-	IgnoreTests         bool   `mapstructure:"ignore-tests"`
 	MatchWithConstants  bool   `mapstructure:"match-constant"`
 	MinStringLen        int    `mapstructure:"min-len"`
 	MinOccurrencesCount int    `mapstructure:"min-occurrences"`
@@ -535,19 +529,17 @@ type GoModGuardSettings struct {
 }
 
 type GoSecSettings struct {
-	Includes         []string       `mapstructure:"includes"`
-	Excludes         []string       `mapstructure:"excludes"`
-	Severity         string         `mapstructure:"severity"`
-	Confidence       string         `mapstructure:"confidence"`
-	ExcludeGenerated bool           `mapstructure:"exclude-generated"`
-	Config           map[string]any `mapstructure:"config"`
-	Concurrency      int            `mapstructure:"concurrency"`
+	Includes    []string       `mapstructure:"includes"`
+	Excludes    []string       `mapstructure:"excludes"`
+	Severity    string         `mapstructure:"severity"`
+	Confidence  string         `mapstructure:"confidence"`
+	Config      map[string]any `mapstructure:"config"`
+	Concurrency int            `mapstructure:"concurrency"`
 }
 
 type GosmopolitanSettings struct {
 	AllowTimeLocal  bool     `mapstructure:"allow-time-local"`
 	EscapeHatches   []string `mapstructure:"escape-hatches"`
-	IgnoreTests     bool     `mapstructure:"ignore-tests"`
 	WatchForScripts []string `mapstructure:"watch-for-scripts"`
 }
 
@@ -749,13 +741,12 @@ type RecvcheckSettings struct {
 }
 
 type ReviveSettings struct {
-	Go                    string  `mapstructure:"-"`
-	MaxOpenFiles          int     `mapstructure:"max-open-files"`
-	IgnoreGeneratedHeader bool    `mapstructure:"ignore-generated-header"`
-	Confidence            float64 `mapstructure:"confidence"`
-	Severity              string  `mapstructure:"severity"`
-	EnableAllRules        bool    `mapstructure:"enable-all-rules"`
-	Rules                 []struct {
+	Go             string  `mapstructure:"-"`
+	MaxOpenFiles   int     `mapstructure:"max-open-files"`
+	Confidence     float64 `mapstructure:"confidence"`
+	Severity       string  `mapstructure:"severity"`
+	EnableAllRules bool    `mapstructure:"enable-all-rules"`
+	Rules          []struct {
 		Name      string   `mapstructure:"name"`
 		Arguments []any    `mapstructure:"arguments"`
 		Severity  string   `mapstructure:"severity"`

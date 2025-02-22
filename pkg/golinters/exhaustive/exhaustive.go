@@ -16,7 +16,6 @@ func New(settings *config.ExhaustiveSettings) *goanalysis.Linter {
 		cfg = map[string]map[string]any{
 			a.Name: {
 				exhaustive.CheckFlag:                      settings.Check,
-				exhaustive.CheckGeneratedFlag:             settings.CheckGenerated,
 				exhaustive.DefaultSignifiesExhaustiveFlag: settings.DefaultSignifiesExhaustive,
 				exhaustive.IgnoreEnumMembersFlag:          settings.IgnoreEnumMembers,
 				exhaustive.IgnoreEnumTypesFlag:            settings.IgnoreEnumTypes,
@@ -24,6 +23,8 @@ func New(settings *config.ExhaustiveSettings) *goanalysis.Linter {
 				exhaustive.ExplicitExhaustiveMapFlag:      settings.ExplicitExhaustiveMap,
 				exhaustive.ExplicitExhaustiveSwitchFlag:   settings.ExplicitExhaustiveSwitch,
 				exhaustive.DefaultCaseRequiredFlag:        settings.DefaultCaseRequired,
+				// Should be managed with `linters.exclusions.generated`.
+				exhaustive.CheckGeneratedFlag: true,
 			},
 		}
 	}

@@ -54,7 +54,6 @@ func New(settings *config.GoConstSettings) *goanalysis.Linter {
 func runGoconst(pass *analysis.Pass, settings *config.GoConstSettings) ([]goanalysis.Issue, error) {
 	cfg := goconstAPI.Config{
 		IgnoreStrings:      settings.IgnoreStrings,
-		IgnoreTests:        settings.IgnoreTests,
 		MatchWithConstants: settings.MatchWithConstants,
 		MinStringLength:    settings.MinStringLen,
 		MinOccurrences:     settings.MinOccurrencesCount,
@@ -62,6 +61,9 @@ func runGoconst(pass *analysis.Pass, settings *config.GoConstSettings) ([]goanal
 		NumberMin:          settings.NumberMin,
 		NumberMax:          settings.NumberMax,
 		ExcludeTypes:       map[goconstAPI.Type]bool{},
+
+		// Should be managed with `linters.exclusions.rules`.
+		IgnoreTests: false,
 	}
 
 	if settings.IgnoreCalls {

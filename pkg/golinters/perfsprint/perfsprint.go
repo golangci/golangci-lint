@@ -16,6 +16,8 @@ func New(settings *config.PerfSprintSettings) *goanalysis.Linter {
 	}
 
 	if settings != nil {
+		// NOTE: The option `ignore-tests` is not handled because it should be managed with `linters.exclusions.rules`
+
 		cfg[a.Name]["integer-format"] = settings.IntegerFormat
 		cfg[a.Name]["int-conversion"] = settings.IntConversion
 

@@ -18,8 +18,10 @@ func New(settings *config.GosmopolitanSettings) *goanalysis.Linter {
 		cfg[a.Name] = map[string]any{
 			"allowtimelocal":  settings.AllowTimeLocal,
 			"escapehatches":   strings.Join(settings.EscapeHatches, ","),
-			"lookattests":     !settings.IgnoreTests,
 			"watchforscripts": strings.Join(settings.WatchForScripts, ","),
+
+			// Should be managed with `linters.exclusions.rules`.
+			"lookattests": true,
 		}
 	}
 

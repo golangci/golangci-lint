@@ -14,7 +14,8 @@ func New(settings *config.Cyclop) *goanalysis.Linter {
 	var cfg map[string]map[string]any
 	if settings != nil {
 		d := map[string]any{
-			"skipTests": settings.SkipTests,
+			// Should be managed with `linters.exclusions.rules`.
+			"skipTests": false,
 		}
 
 		if settings.MaxComplexity != 0 {

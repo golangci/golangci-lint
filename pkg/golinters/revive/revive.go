@@ -248,12 +248,14 @@ func getConfig(cfg *config.ReviveSettings) (*lint.Config, error) {
 
 func createConfigMap(cfg *config.ReviveSettings) map[string]any {
 	rawRoot := map[string]any{
-		"ignoreGeneratedHeader": cfg.IgnoreGeneratedHeader,
-		"confidence":            cfg.Confidence,
-		"severity":              cfg.Severity,
-		"errorCode":             cfg.ErrorCode,
-		"warningCode":           cfg.WarningCode,
-		"enableAllRules":        cfg.EnableAllRules,
+		"confidence":     cfg.Confidence,
+		"severity":       cfg.Severity,
+		"errorCode":      cfg.ErrorCode,
+		"warningCode":    cfg.WarningCode,
+		"enableAllRules": cfg.EnableAllRules,
+
+		// Should be managed with `linters.exclusions.generated`.
+		"ignoreGeneratedHeader": false,
 	}
 
 	rawDirectives := map[string]map[string]any{}
