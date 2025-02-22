@@ -1,3 +1,4 @@
+//go:build !(386 || arm || mips || mipsle)
 //golangcitest:args -Egovet
 //golangcitest:config_path testdata/govet_fieldalignment.yml
 package testdata
