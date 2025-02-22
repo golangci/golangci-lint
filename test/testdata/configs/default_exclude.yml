@@ -6,3 +6,6 @@ linters:
       - std-error-handling
       - common-false-positives
       - legacy
+
+run:
+  relative-path-mode: wd

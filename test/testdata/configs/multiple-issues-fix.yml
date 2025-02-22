@@ -6,3 +6,6 @@ formatters:
   settings:
     gofumpt:
       extra-rules: true
+
+run:
+  relative-path-mode: wd
