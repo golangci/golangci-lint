@@ -32,6 +32,7 @@ type Config struct {
 
 	LintersSettings LintersSettings `mapstructure:"linters-settings"`
 	OldLinters      OldLinters      `mapstructure:"linters"`
+	Linters         Linters         `mapstructure:"linters-TEMP"`
 
 	Issues   Issues   `mapstructure:"issues"`
 	Severity Severity `mapstructure:"severity"`
