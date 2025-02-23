@@ -29,6 +29,7 @@ type Deprecation struct {
 type Config struct {
 	Linter           Linter
 	EnabledByDefault bool
+	Groups           map[string]struct{}
 
 	LoadMode packages.LoadMode
 
@@ -42,6 +43,13 @@ type Config struct {
 
 	Since       string
 	Deprecation *Deprecation
+}
+
+func NewConfig(linter Linter) *Config {
+	lc := &Config{
+		Linter: linter,
+	}
+	return lc.WithLoadFiles()
 }
 
 func (lc *Config) WithEnabledByDefault() *Config {
@@ -73,6 +81,27 @@ func (lc *Config) WithLoadForGoAnalysis() *Config {
 	lc.LoadMode |= packages.NeedImports | packages.NeedDeps | packages.NeedExportFile | packages.NeedTypesSizes
 	lc.IsSlow = true
 	return lc
+}
+
+func (lc *Config) WithGroups(names ...string) *Config {
+	if lc.Groups == nil {
+		lc.Groups = make(map[string]struct{})
+	}
+
+	for _, name := range names {
+		lc.Groups[name] = struct{}{}
+	}
+
+	return lc
+}
+
+func (lc *Config) FromGroup(name string) bool {
+	if lc.Groups == nil {
+		return false
+	}
+
+	_, ok := lc.Groups[name]
+	return ok
 }
 
 func (lc *Config) WithURL(url string) *Config {
@@ -153,11 +182,4 @@ func isGoLowerThanGo(v string) func(cfg *config.Config) error {
 
 		return fmt.Errorf("this linter is disabled because the Go version (%s) of your project is lower than Go %s", cfg.Run.Go, v)
 	}
-}
-
-func NewConfig(linter Linter) *Config {
-	lc := &Config{
-		Linter: linter,
-	}
-	return lc.WithLoadFiles()
 }

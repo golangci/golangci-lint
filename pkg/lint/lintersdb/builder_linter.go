@@ -205,6 +205,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithURL("https://github.com/charithe/durationcheck"),
 
 		linter.NewConfig(errcheck.New(&cfg.LintersSettings.Errcheck)).
+			WithGroups(config.DefaultSetNameStandard).
 			WithEnabledByDefault().
 			WithSince("v1.0.0").
 			WithLoadForGoAnalysis().
@@ -374,6 +375,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithURL("https://github.com/securego/gosec"),
 
 		linter.NewConfig(gosimple.New(&cfg.LintersSettings.Gosimple)).
+			WithGroups(config.DefaultSetNameStandard).
 			WithEnabledByDefault().
 			WithSince("v1.20.0").
 			WithLoadForGoAnalysis().
@@ -386,6 +388,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithURL("https://github.com/xen0n/gosmopolitan"),
 
 		linter.NewConfig(govet.New(&cfg.LintersSettings.Govet)).
+			WithGroups(config.DefaultSetNameStandard).
 			WithEnabledByDefault().
 			WithSince("v1.0.0").
 			WithLoadForGoAnalysis().
@@ -413,6 +416,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithURL("https://github.com/macabu/inamedparam"),
 
 		linter.NewConfig(ineffassign.New()).
+			WithGroups(config.DefaultSetNameStandard).
 			WithEnabledByDefault().
 			WithSince("v1.0.0").
 			WithURL("https://github.com/gordonklaus/ineffassign"),
@@ -575,6 +579,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithURL("https://github.com/jjti/go-spancheck"),
 
 		linter.NewConfig(staticcheck.New(&cfg.LintersSettings.Staticcheck)).
+			WithGroups(config.DefaultSetNameStandard).
 			WithEnabledByDefault().
 			WithSince("v1.0.0").
 			WithLoadForGoAnalysis().
@@ -637,6 +642,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithURL("https://github.com/mvdan/unparam"),
 
 		linter.NewConfig(unused.New(&cfg.LintersSettings.Unused)).
+			WithGroups(config.DefaultSetNameStandard).
 			WithEnabledByDefault().
 			WithSince("v1.20.0").
 			WithLoadForGoAnalysis().
