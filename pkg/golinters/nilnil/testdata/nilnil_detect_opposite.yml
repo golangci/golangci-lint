@@ -1,5 +1,6 @@
 version: "2"
 
-linters-settings:
-  nilnil:
-    detect-opposite: true
+linters:
+  settings:
+    nilnil:
+      detect-opposite: true

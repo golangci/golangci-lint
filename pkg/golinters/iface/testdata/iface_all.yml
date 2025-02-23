@@ -1,8 +1,9 @@
 version: "2"
 
-linters-settings:
-  iface:
-    enable:
-      - unused
-      - identical
-      - opaque
+linters:
+  settings:
+    iface:
+      enable:
+        - unused
+        - identical
+        - opaque

@@ -1,5 +1,6 @@
 version: "2"
 
-linters-settings:
-  sloglint:
-    context: "all"
+linters:
+  settings:
+    sloglint:
+      context: "all"

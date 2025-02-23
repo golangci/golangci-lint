@@ -1,8 +1,9 @@
 version: "2"
 
-linters-settings:
-  exhaustruct:
-    include:
-    - .*\.ExhaustructCustom
-    exclude:
-    - .*\.ExhaustructCustom[\d]{1,2}
+linters:
+  settings:
+    exhaustruct:
+      include:
+      - .*\.ExhaustructCustom
+      exclude:
+      - .*\.ExhaustructCustom[\d]{1,2}

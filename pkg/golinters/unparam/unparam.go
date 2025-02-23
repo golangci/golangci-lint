@@ -34,8 +34,8 @@ func New(settings *config.UnparamSettings) *goanalysis.Linter {
 		[]*analysis.Analyzer{analyzer},
 		nil,
 	).WithContextSetter(func(lintCtx *linter.Context) {
-		if settings.Algo != "cha" {
-			lintCtx.Log.Warnf("`linters-settings.unparam.algo` isn't supported by the newest `unparam`")
+		if settings.Algo != "cha" { // TODO(ldez): is it deprecated? Remove?
+			lintCtx.Log.Warnf("`linters.settings.unparam.algo` isn't supported by the newest `unparam`")
 		}
 	}).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }

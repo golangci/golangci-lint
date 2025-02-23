@@ -1,5 +1,6 @@
 version: "2"
 
-linters-settings:
-  exhaustive:
-    default-signifies-exhaustive: true
+linters:
+  settings:
+    exhaustive:
+      default-signifies-exhaustive: true

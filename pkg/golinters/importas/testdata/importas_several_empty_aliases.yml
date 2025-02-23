@@ -1,11 +1,12 @@
 version: "2"
 
-linters-settings:
-  importas:
-    alias:
-      - pkg: fmt
-        alias: ''
-      - pkg: os
-        alias: ''
-      - pkg: math
-        alias: ''
+linters:
+  settings:
+    importas:
+      alias:
+        - pkg: fmt
+          alias: ''
+        - pkg: os
+          alias: ''
+        - pkg: math
+          alias: ''

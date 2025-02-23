@@ -1,5 +1,6 @@
 version: "2"
 
-linters-settings:
-  tagalign:
-    sort: false
+linters:
+  settings:
+    tagalign:
+      sort: false
