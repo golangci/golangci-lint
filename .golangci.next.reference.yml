@@ -366,10 +366,6 @@ formatters:
       # Default: false
       no-prefix-comments: true
 
-      # Skip generated files.
-      # Default: true
-      skip-generated: false
-
       # Enable custom order of sections.
       # If `true`, make the section order the same as the order of `sections`.
       # Default: false
@@ -438,9 +434,6 @@ linters-settings:
     # See the default value of `exclude` to get the builtin exclusions.
     # Default: true
     use-builtin-exclusions: false
-    # Ignore *_test.go files.
-    # Default: false
-    ignore-test: true
 
   bidichk:
     # The following configurations check for all mentioned invisible Unicode runes.
@@ -468,9 +461,6 @@ linters-settings:
     # If it's higher than 0.0 (float) the check is enabled
     # Default: 0.0
     package-average: 0.5
-    # Should ignore tests.
-    # Default: false
-    skip-tests: true
 
   decorder:
     # Required order of `type`, `const`, `var` and `func` declarations inside a file.
@@ -655,9 +645,6 @@ linters-settings:
     check:
       - switch
       - map
-    # Check switch statements in generated files also.
-    # Default: false
-    check-generated: true
     # Presence of "default" case in switch statements satisfies exhaustiveness,
     # even if all enum members are not listed.
     # Default: false
@@ -817,9 +804,6 @@ linters-settings:
     # Minimum occurrences of constant string count to trigger issue.
     # Default: 3
     min-occurrences: 2
-    # Ignore test files.
-    # Default: false
-    ignore-tests: true
     # Look for existing constants matching the values.
     # Default: true
     match-constant: false
@@ -1733,10 +1717,6 @@ linters-settings:
       - G601 # Implicit memory aliasing of items from a range statement
       - G602 # Slice access out of bounds
 
-    # Exclude generated files
-    # Default: false
-    exclude-generated: true
-
     # Filter out the issues with a lower severity than the given value.
     # Valid options are: low, medium, high.
     # Default: low
@@ -1843,10 +1823,6 @@ linters-settings:
       - 'example.com/your/project/i18n/markers.OK'
       - 'example.com/your/project/i18n/markers.TODO'
       - 'command-line-arguments.Simple'
-    # Ignore test files.
-    #
-    # Default: true
-    ignore-tests: false
     # List of Unicode scripts to watch for any usage in string literals.
     # https://pkg.go.dev/unicode#pkg-variables
     #
@@ -2461,11 +2437,6 @@ linters-settings:
     # See https://github.com/mgechev/revive#command-line-flags
     # Defaults to unlimited.
     max-open-files: 2048
-
-    # When set to false, ignores files with "GENERATED" header, similar to golint.
-    # See https://github.com/mgechev/revive#configuration for details.
-    # Default: false
-    ignore-generated-header: true
 
     # Sets the default severity.
     # See https://github.com/mgechev/revive#configuration
@@ -4237,10 +4208,6 @@ severity:
   #
   # Default: ""
   default: error
-
-  # If set to true `severity-rules` regular expressions become case-sensitive.
-  # Default: false
-  case-sensitive: true
 
   # When a list of severity rules are provided, severity information will be added to lint issues.
   # Severity rules have the same filtering capability as exclude rules

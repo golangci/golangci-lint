@@ -9,8 +9,6 @@ import (
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
-const caseInsensitivePrefix = "(?i)"
-
 type baseRule struct {
 	text       *regexp.Regexp
 	source     *regexp.Regexp

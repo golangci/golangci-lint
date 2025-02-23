@@ -36,13 +36,7 @@ func NewSeverity(log logutils.Log, files *fsutils.Files, cfg *config.Severity) *
 		defaultSeverity: cfg.Default,
 	}
 
-	prefix := caseInsensitivePrefix
-	if cfg.CaseSensitive {
-		prefix = ""
-		p.name = "severity-rules-case-sensitive"
-	}
-
-	p.rules = parseRules(cfg.Rules, prefix, newSeverityRule)
+	p.rules = parseRules(cfg.Rules, "", newSeverityRule)
 
 	return p
 }
