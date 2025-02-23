@@ -8,9 +8,10 @@ const (
 )
 
 type Linters struct {
-	Default string   `mapstructure:"default"`
-	Enable  []string `mapstructure:"enable"`
-	Disable []string `mapstructure:"disable"`
+	Default  string   `mapstructure:"default"`
+	Enable   []string `mapstructure:"enable"`
+	Disable  []string `mapstructure:"disable"`
+	FastOnly bool     `mapstructure:"fast-only"` // Flag only option.
 
 	Settings LintersSettings `mapstructure:"settings"`
 

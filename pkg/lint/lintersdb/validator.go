@@ -21,13 +21,13 @@ func NewValidator(m *Manager) *Validator {
 // Validate validates the configuration by calling all other validators for different
 // sections in the configuration and then some additional linter validation functions.
 func (v Validator) Validate(cfg *config.Config) error {
-	validators := []func(cfg *config.OldLinters) error{
+	validators := []func(cfg *config.Linters) error{
 		v.validateLintersNames,
 		v.alternativeNamesDeprecation,
 	}
 
 	for _, v := range validators {
-		if err := v(&cfg.OldLinters); err != nil {
+		if err := v(&cfg.Linters); err != nil {
 			return err
 		}
 	}
@@ -35,7 +35,7 @@ func (v Validator) Validate(cfg *config.Config) error {
 	return nil
 }
 
-func (v Validator) validateLintersNames(cfg *config.OldLinters) error {
+func (v Validator) validateLintersNames(cfg *config.Linters) error {
 	var unknownNames []string
 
 	for _, name := range cfg.Enable {
@@ -68,7 +68,7 @@ func (v Validator) validateLintersNames(cfg *config.OldLinters) error {
 	return nil
 }
 
-func (v Validator) alternativeNamesDeprecation(cfg *config.OldLinters) error {
+func (v Validator) alternativeNamesDeprecation(cfg *config.Linters) error {
 	if v.m.cfg.InternalTest || v.m.cfg.InternalCmdTest || os.Getenv(logutils.EnvTestRun) == "1" {
 		return nil
 	}

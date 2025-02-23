@@ -67,8 +67,8 @@ func (l *Loader) Load(opts LoadOptions) error {
 
 	l.applyStringSliceHack()
 
-	if l.cfg.OldLinters.LinterExclusions.Generated == "" {
-		l.cfg.OldLinters.LinterExclusions.Generated = GeneratedModeStrict
+	if l.cfg.Linters.Exclusions.Generated == "" {
+		l.cfg.Linters.Exclusions.Generated = GeneratedModeStrict
 	}
 
 	l.handleFormatters()
@@ -278,8 +278,8 @@ func (l *Loader) applyStringSliceHack() {
 		return
 	}
 
-	l.appendStringSlice("enable", &l.cfg.OldLinters.Enable)
-	l.appendStringSlice("disable", &l.cfg.OldLinters.Disable)
+	l.appendStringSlice("enable", &l.cfg.Linters.Enable)
+	l.appendStringSlice("disable", &l.cfg.Linters.Disable)
 	l.appendStringSlice("build-tags", &l.cfg.Run.BuildTags)
 }
 
@@ -295,18 +295,18 @@ func (l *Loader) handleGoVersion() {
 		l.cfg.Run.Go = detectGoVersion(context.Background())
 	}
 
-	l.cfg.LintersSettings.Govet.Go = l.cfg.Run.Go
+	l.cfg.Linters.Settings.Govet.Go = l.cfg.Run.Go
 
-	l.cfg.LintersSettings.ParallelTest.Go = l.cfg.Run.Go
+	l.cfg.Linters.Settings.ParallelTest.Go = l.cfg.Run.Go
 
-	l.cfg.LintersSettings.GoFumpt.LangVersion = l.cfg.Run.Go
+	l.cfg.Linters.Settings.GoFumpt.LangVersion = l.cfg.Run.Go
 	l.cfg.Formatters.Settings.GoFumpt.LangVersion = l.cfg.Run.Go
 
 	trimmedGoVersion := goutil.TrimGoVersion(l.cfg.Run.Go)
 
-	l.cfg.LintersSettings.Revive.Go = trimmedGoVersion
+	l.cfg.Linters.Settings.Revive.Go = trimmedGoVersion
 
-	l.cfg.LintersSettings.Gocritic.Go = trimmedGoVersion
+	l.cfg.Linters.Settings.Gocritic.Go = trimmedGoVersion
 
 	os.Setenv("GOSECGOVERSION", l.cfg.Run.Go)
 }
@@ -337,9 +337,9 @@ func (l *Loader) handleEnableOnlyOption() error {
 	}
 
 	if len(only) > 0 {
-		l.cfg.OldLinters = OldLinters{
-			Enable:     only,
-			DisableAll: true,
+		l.cfg.Linters = Linters{
+			Enable:  only,
+			Default: GroupNone,
 		}
 	}
 
@@ -354,19 +354,19 @@ func (l *Loader) handleFormatters() {
 // Overrides linter settings with formatter settings if the formatter is enabled.
 func (l *Loader) handleFormatterOverrides() {
 	if slices.Contains(l.cfg.Formatters.Enable, "gofmt") {
-		l.cfg.LintersSettings.GoFmt = l.cfg.Formatters.Settings.GoFmt
+		l.cfg.Linters.Settings.GoFmt = l.cfg.Formatters.Settings.GoFmt
 	}
 
 	if slices.Contains(l.cfg.Formatters.Enable, "gofumpt") {
-		l.cfg.LintersSettings.GoFumpt = l.cfg.Formatters.Settings.GoFumpt
+		l.cfg.Linters.Settings.GoFumpt = l.cfg.Formatters.Settings.GoFumpt
 	}
 
 	if slices.Contains(l.cfg.Formatters.Enable, "goimports") {
-		l.cfg.LintersSettings.GoImports = l.cfg.Formatters.Settings.GoImports
+		l.cfg.Linters.Settings.GoImports = l.cfg.Formatters.Settings.GoImports
 	}
 
 	if slices.Contains(l.cfg.Formatters.Enable, "gci") {
-		l.cfg.LintersSettings.Gci = l.cfg.Formatters.Settings.Gci
+		l.cfg.Linters.Settings.Gci = l.cfg.Formatters.Settings.Gci
 	}
 }
 
@@ -377,7 +377,7 @@ func (l *Loader) handleFormatterExclusions() {
 	}
 
 	for _, path := range l.cfg.Formatters.Exclusions.Paths {
-		l.cfg.OldLinters.LinterExclusions.Rules = append(l.cfg.OldLinters.LinterExclusions.Rules, ExcludeRule{
+		l.cfg.Linters.Exclusions.Rules = append(l.cfg.Linters.Exclusions.Rules, ExcludeRule{
 			BaseRule: BaseRule{
 				Linters: l.cfg.Formatters.Enable,
 				Path:    path,

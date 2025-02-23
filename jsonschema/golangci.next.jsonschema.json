@@ -3898,260 +3898,18 @@
         }
       }
     },
-    "linters-settings": {
-      "description": "All available settings of specific linters.",
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "dupword": {
-          "$ref": "#/definitions/settings/definitions/dupwordSettings"
-        },
-        "asasalint": {
-          "$ref": "#/definitions/settings/definitions/asasalintSettings"
-        },
-        "bidichk": {
-          "$ref": "#/definitions/settings/definitions/bidichkSettings"
-        },
-        "cyclop": {
-          "$ref": "#/definitions/settings/definitions/cyclopSettings"
-        },
-        "decorder": {
-          "$ref": "#/definitions/settings/definitions/decorderSettings"
-        },
-        "depguard":{
-          "$ref": "#/definitions/settings/definitions/depguardSettings"
-        },
-        "dogsled": {
-          "$ref": "#/definitions/settings/definitions/dogsledSettings"
-        },
-        "dupl": {
-          "$ref": "#/definitions/settings/definitions/duplSettings"
-        },
-        "errcheck": {
-          "$ref": "#/definitions/settings/definitions/errcheckSettings"
-        },
-        "errchkjson": {
-          "$ref": "#/definitions/settings/definitions/errchkjsonSettings"
-        },
-        "errorlint": {
-          "$ref": "#/definitions/settings/definitions/errorlintSettings"
-        },
-        "exhaustive": {
-          "$ref": "#/definitions/settings/definitions/exhaustiveSettings"
-        },
-        "exhaustruct": {
-          "$ref": "#/definitions/settings/definitions/exhaustructSettings"
-        },
-        "fatcontext": {
-          "$ref": "#/definitions/settings/definitions/fatcontextSettings"
-        },
-        "forbidigo": {
-          "$ref": "#/definitions/settings/definitions/forbidigoSettings"
-        },
-        "funlen": {
-          "$ref": "#/definitions/settings/definitions/funlenSettings"
-        },
-        "ginkgolinter": {
-          "$ref": "#/definitions/settings/definitions/ginkgolinterSettings"
-        },
-        "gochecksumtype": {
-          "$ref": "#/definitions/settings/definitions/gochecksumtypeSettings"
-        },
-        "gocognit": {
-          "$ref": "#/definitions/settings/definitions/gocognitSettings"
-        },
-        "goconst": {
-          "$ref": "#/definitions/settings/definitions/goconstSettings"
-        },
-        "gocritic": {
-          "$ref": "#/definitions/settings/definitions/gocriticSettings"
-        },
-        "gocyclo": {
-          "$ref": "#/definitions/settings/definitions/gocycloSettings"
-        },
-        "godot": {
-          "$ref": "#/definitions/settings/definitions/godotSettings"
-        },
-        "godox": {
-          "$ref": "#/definitions/settings/definitions/godoxSettings"
-        },
-        "interfacebloat":{
-          "$ref": "#/definitions/settings/definitions/interfacebloatSettings"
-        },
-        "goheader": {
-          "$ref": "#/definitions/settings/definitions/goheaderSettings"
-        },
-        "gomoddirectives": {
-          "$ref": "#/definitions/settings/definitions/gomoddirectivesSettings"
-        },
-        "gomodguard": {
-          "$ref": "#/definitions/settings/definitions/gomodguardSettings"
-        },
-        "gosimple": {
-          "$ref": "#/definitions/settings/definitions/gosimpleSettings"
-        },
-        "gosec": {
-          "$ref": "#/definitions/settings/definitions/gosecSettings"
-        },
-        "gosmopolitan": {
-          "$ref": "#/definitions/settings/definitions/gosmopolitanSettings"
-        },
-        "govet": {
-          "$ref": "#/definitions/settings/definitions/govetSettings"
-        },
-        "grouper": {
-          "$ref": "#/definitions/settings/definitions/grouperSettings"
-        },
-        "iface": {
-          "$ref": "#/definitions/settings/definitions/ifaceSettings"
-        },
-        "importas": {
-          "$ref": "#/definitions/settings/definitions/importasSettings"
-        },
-        "inamedparam": {
-          "$ref": "#/definitions/settings/definitions/inamedparamSettings"
-        },
-        "ireturn": {
-          "$ref": "#/definitions/settings/definitions/ireturnSettings"
-        },
-        "lll": {
-          "$ref": "#/definitions/settings/definitions/lllSettings"
-        },
-        "maintidx": {
-          "$ref": "#/definitions/settings/definitions/maintidxSettings"
-        },
-        "makezero":{
-          "$ref": "#/definitions/settings/definitions/makezeroSettings"
-        },
-        "loggercheck": {
-          "$ref": "#/definitions/settings/definitions/loggercheckSettings"
-        },
-        "misspell": {
-          "$ref": "#/definitions/settings/definitions/misspellSettings"
-        },
-        "musttag": {
-          "$ref": "#/definitions/settings/definitions/musttagSettings"
-        },
-        "nakedret": {
-          "$ref": "#/definitions/settings/definitions/nakedretSettings"
-        },
-        "nestif": {
-          "$ref": "#/definitions/settings/definitions/nestifSettings"
-        },
-        "nilnil": {
-          "$ref": "#/definitions/settings/definitions/nilnilSettings"
-        },
-        "nlreturn": {
-          "$ref": "#/definitions/settings/definitions/nlreturnSettings"
-        },
-        "mnd": {
-          "$ref": "#/definitions/settings/definitions/mndSettings"
-        },
-        "nolintlint":{
-          "$ref": "#/definitions/settings/definitions/nolintlintSettings"
-        },
-        "reassign": {
-          "$ref": "#/definitions/settings/definitions/reassignSettings"
-        },
-        "recvcheck": {
-          "$ref": "#/definitions/settings/definitions/recvcheckSettings"
-        },
-        "nonamedreturns": {
-          "$ref": "#/definitions/settings/definitions/nonamedreturnsSettings"
-        },
-        "paralleltest": {
-          "$ref": "#/definitions/settings/definitions/paralleltestSettings"
-        },
-        "perfsprint": {
-          "$ref": "#/definitions/settings/definitions/perfsprintSettings"
-        },
-        "prealloc": {
-          "$ref": "#/definitions/settings/definitions/preallocSettings"
-        },
-        "predeclared": {
-          "$ref": "#/definitions/settings/definitions/predeclaredSettings"
-        },
-        "promlinter": {
-          "$ref": "#/definitions/settings/definitions/promlinterSettings"
-        },
-        "protogetter": {
-          "$ref": "#/definitions/settings/definitions/protogetterSettings"
-        },
-        "revive": {
-          "$ref": "#/definitions/settings/definitions/reviveSettings"
-        },
-        "rowserrcheck": {
-          "$ref": "#/definitions/settings/definitions/rowserrcheckSettings"
-        },
-        "sloglint": {
-          "$ref": "#/definitions/settings/definitions/sloglintSettings"
-        },
-        "spancheck": {
-          "$ref": "#/definitions/settings/definitions/spancheckSettings"
-        },
-        "staticcheck":{
-          "$ref": "#/definitions/settings/definitions/staticcheckSettings"
-        },
-        "stylecheck": {
-          "$ref": "#/definitions/settings/definitions/stylecheckSettings"
-        },
-        "tagalign": {
-          "$ref": "#/definitions/settings/definitions/tagalignSettings"
-        },
-        "tagliatelle": {
-          "$ref": "#/definitions/settings/definitions/tagliatelleSettings"
-        },
-        "tenv": {
-          "$ref": "#/definitions/settings/definitions/tenvSettings"
-        },
-        "testifylint": {
-          "$ref": "#/definitions/settings/definitions/testifylintSettings"
-        },
-        "testpackage": {
-          "$ref": "#/definitions/settings/definitions/testpackageSettings"
-        },
-        "thelper": {
-          "$ref": "#/definitions/settings/definitions/thelperSettings"
-        },
-        "usestdlibvars": {
-          "$ref": "#/definitions/settings/definitions/usestdlibvarsSettings"
-        },
-        "usetesting": {
-          "$ref": "#/definitions/settings/definitions/usetestingSettings"
-        },
-        "unconvert": {
-          "$ref": "#/definitions/settings/definitions/unconvertSettings"
-        },
-        "unparam": {
-          "$ref": "#/definitions/settings/definitions/unparamSettings"
-        },
-        "unused": {
-          "$ref": "#/definitions/settings/definitions/unusedSettings"
-        },
-        "varnamelen": {
-          "$ref": "#/definitions/settings/definitions/varnamelenSettings"
-        },
-        "whitespace": {
-          "$ref": "#/definitions/settings/definitions/whitespaceSettings"
-        },
-        "wrapcheck": {
-          "$ref": "#/definitions/settings/definitions/wrapcheckSettings"
-        },
-        "wsl": {
-          "$ref": "#/definitions/settings/definitions/wslSettings"
-        },
-        "copyloopvar": {
-          "$ref": "#/definitions/settings/definitions/copyloopvarSettings"
-        },
-        "custom":{
-          "$ref": "#/definitions/settings/definitions/customSettings"
-        }
-      }
-    },
     "linters": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
+        "default": {
+          "enum": [
+            "standard",
+            "all",
+            "none",
+            "fast"
+          ]
+        },
         "enable": {
           "description": "List of enabled linters.",
           "type": "array",
@@ -4166,20 +3924,255 @@
             "$ref": "#/definitions/linter-names"
           }
         },
-        "enable-all": {
-          "description": "Whether to enable all linters. You can re-disable them with `disable` explicitly.",
-          "type": "boolean",
-          "default": false
-        },
-        "disable-all": {
-          "description": "Whether to disable all linters. You can re-enable them with `enable` explicitly.",
-          "type": "boolean",
-          "default": false
-        },
-        "fast": {
-          "description": "Enable run of fast linters.",
-          "type": "boolean",
-          "default": false
+        "settings": {
+          "description": "All available settings of specific linters.",
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dupword": {
+              "$ref": "#/definitions/settings/definitions/dupwordSettings"
+            },
+            "asasalint": {
+              "$ref": "#/definitions/settings/definitions/asasalintSettings"
+            },
+            "bidichk": {
+              "$ref": "#/definitions/settings/definitions/bidichkSettings"
+            },
+            "cyclop": {
+              "$ref": "#/definitions/settings/definitions/cyclopSettings"
+            },
+            "decorder": {
+              "$ref": "#/definitions/settings/definitions/decorderSettings"
+            },
+            "depguard":{
+              "$ref": "#/definitions/settings/definitions/depguardSettings"
+            },
+            "dogsled": {
+              "$ref": "#/definitions/settings/definitions/dogsledSettings"
+            },
+            "dupl": {
+              "$ref": "#/definitions/settings/definitions/duplSettings"
+            },
+            "errcheck": {
+              "$ref": "#/definitions/settings/definitions/errcheckSettings"
+            },
+            "errchkjson": {
+              "$ref": "#/definitions/settings/definitions/errchkjsonSettings"
+            },
+            "errorlint": {
+              "$ref": "#/definitions/settings/definitions/errorlintSettings"
+            },
+            "exhaustive": {
+              "$ref": "#/definitions/settings/definitions/exhaustiveSettings"
+            },
+            "exhaustruct": {
+              "$ref": "#/definitions/settings/definitions/exhaustructSettings"
+            },
+            "fatcontext": {
+              "$ref": "#/definitions/settings/definitions/fatcontextSettings"
+            },
+            "forbidigo": {
+              "$ref": "#/definitions/settings/definitions/forbidigoSettings"
+            },
+            "funlen": {
+              "$ref": "#/definitions/settings/definitions/funlenSettings"
+            },
+            "ginkgolinter": {
+              "$ref": "#/definitions/settings/definitions/ginkgolinterSettings"
+            },
+            "gochecksumtype": {
+              "$ref": "#/definitions/settings/definitions/gochecksumtypeSettings"
+            },
+            "gocognit": {
+              "$ref": "#/definitions/settings/definitions/gocognitSettings"
+            },
+            "goconst": {
+              "$ref": "#/definitions/settings/definitions/goconstSettings"
+            },
+            "gocritic": {
+              "$ref": "#/definitions/settings/definitions/gocriticSettings"
+            },
+            "gocyclo": {
+              "$ref": "#/definitions/settings/definitions/gocycloSettings"
+            },
+            "godot": {
+              "$ref": "#/definitions/settings/definitions/godotSettings"
+            },
+            "godox": {
+              "$ref": "#/definitions/settings/definitions/godoxSettings"
+            },
+            "interfacebloat":{
+              "$ref": "#/definitions/settings/definitions/interfacebloatSettings"
+            },
+            "goheader": {
+              "$ref": "#/definitions/settings/definitions/goheaderSettings"
+            },
+            "gomoddirectives": {
+              "$ref": "#/definitions/settings/definitions/gomoddirectivesSettings"
+            },
+            "gomodguard": {
+              "$ref": "#/definitions/settings/definitions/gomodguardSettings"
+            },
+            "gosimple": {
+              "$ref": "#/definitions/settings/definitions/gosimpleSettings"
+            },
+            "gosec": {
+              "$ref": "#/definitions/settings/definitions/gosecSettings"
+            },
+            "gosmopolitan": {
+              "$ref": "#/definitions/settings/definitions/gosmopolitanSettings"
+            },
+            "govet": {
+              "$ref": "#/definitions/settings/definitions/govetSettings"
+            },
+            "grouper": {
+              "$ref": "#/definitions/settings/definitions/grouperSettings"
+            },
+            "iface": {
+              "$ref": "#/definitions/settings/definitions/ifaceSettings"
+            },
+            "importas": {
+              "$ref": "#/definitions/settings/definitions/importasSettings"
+            },
+            "inamedparam": {
+              "$ref": "#/definitions/settings/definitions/inamedparamSettings"
+            },
+            "ireturn": {
+              "$ref": "#/definitions/settings/definitions/ireturnSettings"
+            },
+            "lll": {
+              "$ref": "#/definitions/settings/definitions/lllSettings"
+            },
+            "maintidx": {
+              "$ref": "#/definitions/settings/definitions/maintidxSettings"
+            },
+            "makezero":{
+              "$ref": "#/definitions/settings/definitions/makezeroSettings"
+            },
+            "loggercheck": {
+              "$ref": "#/definitions/settings/definitions/loggercheckSettings"
+            },
+            "misspell": {
+              "$ref": "#/definitions/settings/definitions/misspellSettings"
+            },
+            "musttag": {
+              "$ref": "#/definitions/settings/definitions/musttagSettings"
+            },
+            "nakedret": {
+              "$ref": "#/definitions/settings/definitions/nakedretSettings"
+            },
+            "nestif": {
+              "$ref": "#/definitions/settings/definitions/nestifSettings"
+            },
+            "nilnil": {
+              "$ref": "#/definitions/settings/definitions/nilnilSettings"
+            },
+            "nlreturn": {
+              "$ref": "#/definitions/settings/definitions/nlreturnSettings"
+            },
+            "mnd": {
+              "$ref": "#/definitions/settings/definitions/mndSettings"
+            },
+            "nolintlint":{
+              "$ref": "#/definitions/settings/definitions/nolintlintSettings"
+            },
+            "reassign": {
+              "$ref": "#/definitions/settings/definitions/reassignSettings"
+            },
+            "recvcheck": {
+              "$ref": "#/definitions/settings/definitions/recvcheckSettings"
+            },
+            "nonamedreturns": {
+              "$ref": "#/definitions/settings/definitions/nonamedreturnsSettings"
+            },
+            "paralleltest": {
+              "$ref": "#/definitions/settings/definitions/paralleltestSettings"
+            },
+            "perfsprint": {
+              "$ref": "#/definitions/settings/definitions/perfsprintSettings"
+            },
+            "prealloc": {
+              "$ref": "#/definitions/settings/definitions/preallocSettings"
+            },
+            "predeclared": {
+              "$ref": "#/definitions/settings/definitions/predeclaredSettings"
+            },
+            "promlinter": {
+              "$ref": "#/definitions/settings/definitions/promlinterSettings"
+            },
+            "protogetter": {
+              "$ref": "#/definitions/settings/definitions/protogetterSettings"
+            },
+            "revive": {
+              "$ref": "#/definitions/settings/definitions/reviveSettings"
+            },
+            "rowserrcheck": {
+              "$ref": "#/definitions/settings/definitions/rowserrcheckSettings"
+            },
+            "sloglint": {
+              "$ref": "#/definitions/settings/definitions/sloglintSettings"
+            },
+            "spancheck": {
+              "$ref": "#/definitions/settings/definitions/spancheckSettings"
+            },
+            "staticcheck":{
+              "$ref": "#/definitions/settings/definitions/staticcheckSettings"
+            },
+            "stylecheck": {
+              "$ref": "#/definitions/settings/definitions/stylecheckSettings"
+            },
+            "tagalign": {
+              "$ref": "#/definitions/settings/definitions/tagalignSettings"
+            },
+            "tagliatelle": {
+              "$ref": "#/definitions/settings/definitions/tagliatelleSettings"
+            },
+            "tenv": {
+              "$ref": "#/definitions/settings/definitions/tenvSettings"
+            },
+            "testifylint": {
+              "$ref": "#/definitions/settings/definitions/testifylintSettings"
+            },
+            "testpackage": {
+              "$ref": "#/definitions/settings/definitions/testpackageSettings"
+            },
+            "thelper": {
+              "$ref": "#/definitions/settings/definitions/thelperSettings"
+            },
+            "usestdlibvars": {
+              "$ref": "#/definitions/settings/definitions/usestdlibvarsSettings"
+            },
+            "usetesting": {
+              "$ref": "#/definitions/settings/definitions/usetestingSettings"
+            },
+            "unconvert": {
+              "$ref": "#/definitions/settings/definitions/unconvertSettings"
+            },
+            "unparam": {
+              "$ref": "#/definitions/settings/definitions/unparamSettings"
+            },
+            "unused": {
+              "$ref": "#/definitions/settings/definitions/unusedSettings"
+            },
+            "varnamelen": {
+              "$ref": "#/definitions/settings/definitions/varnamelenSettings"
+            },
+            "whitespace": {
+              "$ref": "#/definitions/settings/definitions/whitespaceSettings"
+            },
+            "wrapcheck": {
+              "$ref": "#/definitions/settings/definitions/wrapcheckSettings"
+            },
+            "wsl": {
+              "$ref": "#/definitions/settings/definitions/wslSettings"
+            },
+            "copyloopvar": {
+              "$ref": "#/definitions/settings/definitions/copyloopvarSettings"
+            },
+            "custom":{
+              "$ref": "#/definitions/settings/definitions/customSettings"
+            }
+          }
         },
         "exclusions":{
           "type": "object",

@@ -3,6 +3,7 @@ package commands
 import (
 	"encoding/json"
 	"fmt"
+	"maps"
 	"slices"
 	"strings"
 	"unicode"
@@ -18,14 +19,14 @@ import (
 )
 
 type linterHelp struct {
-	Name             string `json:"name"`
-	Desc             string `json:"description"`
-	Fast             bool   `json:"fast"`
-	AutoFix          bool   `json:"autoFix"`
-	EnabledByDefault bool   `json:"enabledByDefault"`
-	Deprecated       bool   `json:"deprecated"`
-	Since            string `json:"since"`
-	OriginalURL      string `json:"originalURL,omitempty"`
+	Name        string   `json:"name"`
+	Desc        string   `json:"description"`
+	Groups      []string `json:"groups"`
+	Fast        bool     `json:"fast"`
+	AutoFix     bool     `json:"autoFix"`
+	Deprecated  bool     `json:"deprecated"`
+	Since       string   `json:"since"`
+	OriginalURL string   `json:"originalURL,omitempty"`
 }
 
 type helpOptions struct {
@@ -106,15 +107,21 @@ func (c *helpCommand) printJSON() error {
 			continue
 		}
 
+		groups := []string{config.GroupAll}
+
+		if !lc.IsSlowLinter() {
+			groups = append(groups, config.GroupFast)
+		}
+
 		linters = append(linters, linterHelp{
-			Name:             lc.Name(),
-			Desc:             formatDescription(lc.Linter.Desc()),
-			Fast:             !lc.IsSlowLinter(),
-			AutoFix:          lc.CanAutoFix,
-			EnabledByDefault: lc.EnabledByDefault,
-			Deprecated:       lc.IsDeprecated(),
-			Since:            lc.Since,
-			OriginalURL:      lc.OriginalURL,
+			Name:        lc.Name(),
+			Desc:        formatDescription(lc.Linter.Desc()),
+			Groups:      slices.Concat(groups, slices.Collect(maps.Keys(lc.Groups))),
+			Fast:        !lc.IsSlowLinter(),
+			AutoFix:     lc.CanAutoFix,
+			Deprecated:  lc.IsDeprecated(),
+			Since:       lc.Since,
+			OriginalURL: lc.OriginalURL,
 		})
 	}
 
@@ -128,7 +135,7 @@ func (c *helpCommand) print() {
 			continue
 		}
 
-		if lc.EnabledByDefault {
+		if lc.FromGroup(config.GroupStandard) {
 			enabledLCs = append(enabledLCs, lc)
 		} else {
 			disabledLCs = append(disabledLCs, lc)

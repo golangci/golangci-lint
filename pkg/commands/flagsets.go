@@ -6,23 +6,24 @@ import (
 	"github.com/spf13/viper"
 
 	"github.com/golangci/golangci-lint/pkg/commands/internal"
+	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/exitcodes"
 )
 
 const defaultMaxIssuesPerLinter = 50
 
 func setupLintersFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
+	internal.AddFlagAndBind(v, fs, fs.String, "default", "linters.default", config.GroupStandard,
+		color.GreenString("Default set of linters to enable"))
+
 	internal.AddHackedStringSliceP(fs, "disable", "D", color.GreenString("Disable specific linter"))
-	internal.AddFlagAndBind(v, fs, fs.Bool, "disable-all", "linters.disable-all", false, color.GreenString("Disable all linters"))
-
 	internal.AddHackedStringSliceP(fs, "enable", "E", color.GreenString("Enable specific linter"))
-	internal.AddFlagAndBind(v, fs, fs.Bool, "enable-all", "linters.enable-all", false, color.GreenString("Enable all linters"))
-
-	internal.AddFlagAndBind(v, fs, fs.Bool, "fast", "linters.fast", false,
-		color.GreenString("Enable only fast linters from enabled linters set (first run won't be fast)"))
 
 	fs.StringSlice("enable-only", nil,
 		color.GreenString("Override linters configuration section to only run the specific linter(s)")) // Flags only.
+
+	internal.AddFlagAndBind(v, fs, fs.Bool, "fast-only", "linters.fast-only", false,
+		color.GreenString("Filter enabled linters to run only fast linters"))
 }
 
 func setupFormattersFlagSet(v *viper.Viper, fs *pflag.FlagSet) {

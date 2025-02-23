@@ -1,6 +1,7 @@
 package lintersdb
 
 import (
+	"cmp"
 	"fmt"
 	"maps"
 	"os"
@@ -77,7 +78,10 @@ func (m *Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 }
 
 func (m *Manager) GetEnabledLintersMap() (map[string]*linter.Config, error) {
-	enabledLinters := m.build(m.GetAllEnabledByDefaultLinters())
+	enabledLinters, err := m.build()
+	if err != nil {
+		return nil, err
+	}
 
 	if os.Getenv(logutils.EnvTestRun) == "1" {
 		m.verbosePrintLintersStatus(enabledLinters)
@@ -89,7 +93,11 @@ func (m *Manager) GetEnabledLintersMap() (map[string]*linter.Config, error) {
 // GetOptimizedLinters returns enabled linters after optimization (merging) of multiple linters into a fewer number of linters.
 // E.g. some go/analysis linters can be optimized into one metalinter for data reuse and speed up.
 func (m *Manager) GetOptimizedLinters() ([]*linter.Config, error) {
-	resultLintersSet := m.build(m.GetAllEnabledByDefaultLinters())
+	resultLintersSet, err := m.build()
+	if err != nil {
+		return nil, err
+	}
+
 	m.verbosePrintLintersStatus(resultLintersSet)
 
 	m.combineGoAnalysisLinters(resultLintersSet)
@@ -118,52 +126,69 @@ func (m *Manager) GetOptimizedLinters() ([]*linter.Config, error) {
 	return resultLinters, nil
 }
 
-func (m *Manager) GetAllEnabledByDefaultLinters() []*linter.Config {
-	var ret []*linter.Config
-	for _, lc := range m.linters {
-		if lc.EnabledByDefault {
-			ret = append(ret, lc)
-		}
-	}
-
-	return ret
-}
-
-func (m *Manager) build(enabledByDefaultLinters []*linter.Config) map[string]*linter.Config {
-	m.debugf("Linters config: %#v", m.cfg.OldLinters)
+//nolint:gocyclo // the complexity cannot be reduced.
+func (m *Manager) build() (map[string]*linter.Config, error) {
+	m.debugf("Linters config: %#v", m.cfg.Linters)
 
 	resultLintersSet := map[string]*linter.Config{}
-	switch {
-	case m.cfg.OldLinters.DisableAll:
+
+	groupName := cmp.Or(m.cfg.Linters.Default, config.GroupStandard)
+
+	switch groupName {
+	case config.GroupNone:
 		// no default linters
-	case m.cfg.OldLinters.EnableAll:
+
+	case config.GroupAll:
 		resultLintersSet = linterConfigsToMap(m.linters)
-	default:
-		resultLintersSet = linterConfigsToMap(enabledByDefaultLinters)
-	}
 
-	// --fast removes slow linters from current set.
-	// It should be after --presets to be able to run only fast linters in preset.
-	// It should be before --enable and --disable to be able to enable or disable specific linter.
-	if m.cfg.OldLinters.Fast {
-		for name, lc := range resultLintersSet {
+	case config.GroupFast:
+		var selected []*linter.Config
+		for _, lc := range m.linters {
 			if lc.IsSlowLinter() {
-				delete(resultLintersSet, name)
+				continue
 			}
+
+			selected = append(selected, lc)
 		}
+
+		resultLintersSet = linterConfigsToMap(selected)
+
+	case config.GroupStandard:
+		var selected []*linter.Config
+		for _, lc := range m.linters {
+			if !lc.FromGroup(config.GroupStandard) {
+				continue
+			}
+
+			selected = append(selected, lc)
+		}
+
+		resultLintersSet = linterConfigsToMap(selected)
+
+	default:
+		return nil, fmt.Errorf("unknown group: %s", groupName)
 	}
 
-	for _, name := range slices.Concat(m.cfg.OldLinters.Enable, m.cfg.Formatters.Enable) {
+	for _, name := range slices.Concat(m.cfg.Linters.Enable, m.cfg.Formatters.Enable) {
 		for _, lc := range m.GetLinterConfigs(name) {
 			// it's important to use lc.Name() nor name because name can be alias
 			resultLintersSet[lc.Name()] = lc
 		}
 	}
 
-	for _, name := range m.cfg.OldLinters.Disable {
+	for _, name := range m.cfg.Linters.Disable {
 		for _, lc := range m.GetLinterConfigs(name) {
 			// it's important to use lc.Name() nor name because name can be alias
 			delete(resultLintersSet, lc.Name())
+		}
+	}
+
+	if m.cfg.Linters.FastOnly {
+		for lc := range maps.Values(resultLintersSet) {
+			if lc.IsSlowLinter() {
+				// it's important to use lc.Name() nor name because name can be alias
+				delete(resultLintersSet, lc.Name())
+			}
 		}
 	}
 
@@ -175,7 +200,7 @@ func (m *Manager) build(enabledByDefaultLinters []*linter.Config) map[string]*li
 		}
 	}
 
-	return resultLintersSet
+	return resultLintersSet, nil
 }
 
 func (m *Manager) combineGoAnalysisLinters(linters map[string]*linter.Config) {

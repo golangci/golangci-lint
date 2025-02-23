@@ -1,5 +1,6 @@
 version: "2"
 
-linters-settings:
-  lll:
-    line-length: 50
+linters:
+  settings:
+    lll:
+      line-length: 50

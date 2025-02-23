@@ -32,7 +32,7 @@ func (b *PluginModuleBuilder) Build(cfg *config.Config) ([]*linter.Config, error
 
 	var linters []*linter.Config
 
-	for name, settings := range cfg.LintersSettings.Custom {
+	for name, settings := range cfg.Linters.Settings.Custom {
 		if settings.Type != modulePluginType {
 			continue
 		}
@@ -66,7 +66,7 @@ func (b *PluginModuleBuilder) Build(cfg *config.Config) ([]*linter.Config, error
 		}
 
 		lc := linter.NewConfig(customLinter).
-			WithEnabledByDefault().
+			WithGroups(config.GroupStandard).
 			WithURL(settings.OriginalURL)
 
 		switch strings.ToLower(p.GetLoadMode()) {

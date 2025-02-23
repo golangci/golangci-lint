@@ -1,7 +1,8 @@
 version: "2"
 
-linters-settings:
-  gomodguard:
-    allowed:
-      domains:
-        - github.com
+linters:
+  settings:
+    gomodguard:
+      allowed:
+        domains:
+          - github.com

@@ -15,8 +15,8 @@ import (
 
 func TestManager_GetEnabledLintersMap(t *testing.T) {
 	cfg := config.NewDefault()
-	cfg.OldLinters.DisableAll = true
-	cfg.OldLinters.Enable = []string{"gofmt"}
+	cfg.Linters.Default = config.GroupNone
+	cfg.Linters.Enable = []string{"gofmt"}
 
 	m, err := NewManager(logutils.NewStderrLog("skip"), cfg, NewLinterBuilder())
 	require.NoError(t, err)
@@ -37,8 +37,8 @@ func TestManager_GetEnabledLintersMap(t *testing.T) {
 
 func TestManager_GetOptimizedLinters(t *testing.T) {
 	cfg := config.NewDefault()
-	cfg.OldLinters.DisableAll = true
-	cfg.OldLinters.Enable = []string{"gofmt"}
+	cfg.Linters.Default = config.GroupNone
+	cfg.Linters.Enable = []string{"gofmt"}
 
 	m, err := NewManager(logutils.NewStderrLog("skip"), cfg, NewLinterBuilder())
 	require.NoError(t, err)
@@ -65,21 +65,16 @@ func TestManager_GetOptimizedLinters(t *testing.T) {
 
 func TestManager_build(t *testing.T) {
 	testCases := []struct {
-		desc       string
-		cfg        *config.Config
-		defaultSet []string // enabled by default linters
-		expected   []string // alphabetically ordered enabled linter names
+		desc     string
+		cfg      *config.Config
+		expected []string // alphabetically ordered enabled linter names
 	}{
-		{
-			desc:       "don't disable anything",
-			defaultSet: []string{"gofmt", "govet", "typecheck"},
-			expected:   []string{"gofmt", "govet", "typecheck"},
-		},
 		{
 			desc: "enable gosec by primary name",
 			cfg: &config.Config{
-				OldLinters: config.OldLinters{
-					Enable: []string{"gosec"},
+				Linters: config.Linters{
+					Default: config.GroupNone,
+					Enable:  []string{"gosec"},
 				},
 			},
 			expected: []string{"gosec", "typecheck"},
@@ -87,18 +82,19 @@ func TestManager_build(t *testing.T) {
 		{
 			desc: "disable gosec by primary name",
 			cfg: &config.Config{
-				OldLinters: config.OldLinters{
+				Linters: config.Linters{
+					Default: config.GroupNone,
 					Disable: []string{"gosec"},
 				},
 			},
-			defaultSet: []string{"gosec"},
-			expected:   []string{"typecheck"},
+			expected: []string{"typecheck"},
 		},
 		{
 			desc: "linters and formatters",
 			cfg: &config.Config{
-				OldLinters: config.OldLinters{
-					Enable: []string{"gosec"},
+				Linters: config.Linters{
+					Default: config.GroupNone,
+					Enable:  []string{"gosec"},
 				},
 				Formatters: config.Formatters{
 					Enable: []string{"gofmt"},
@@ -109,7 +105,8 @@ func TestManager_build(t *testing.T) {
 		{
 			desc: "linters and formatters but linters configuration disables the formatter",
 			cfg: &config.Config{
-				OldLinters: config.OldLinters{
+				Linters: config.Linters{
+					Default: config.GroupNone,
 					Enable:  []string{"gosec"},
 					Disable: []string{"gofmt"},
 				},
@@ -122,6 +119,9 @@ func TestManager_build(t *testing.T) {
 		{
 			desc: "only formatters",
 			cfg: &config.Config{
+				Linters: config.Linters{
+					Default: config.GroupNone,
+				},
 				Formatters: config.Formatters{
 					Enable: []string{"gofmt"},
 				},
@@ -135,14 +135,9 @@ func TestManager_build(t *testing.T) {
 			m, err := NewManager(logutils.NewStderrLog("skip"), test.cfg, NewLinterBuilder())
 			require.NoError(t, err)
 
-			var defaultLinters []*linter.Config
-			for _, ln := range test.defaultSet {
-				lcs := m.GetLinterConfigs(ln)
-				assert.NotNil(t, lcs, ln)
-				defaultLinters = append(defaultLinters, lcs...)
-			}
+			els, err := m.build()
+			require.NoError(t, err)
 
-			els := m.build(defaultLinters)
 			var enabledLinters []string
 			for ln, lc := range els {
 				assert.Equal(t, ln, lc.Name())

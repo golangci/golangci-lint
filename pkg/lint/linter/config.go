@@ -27,9 +27,8 @@ type Deprecation struct {
 }
 
 type Config struct {
-	Linter           Linter
-	EnabledByDefault bool
-	Groups           map[string]struct{}
+	Linter Linter
+	Groups map[string]struct{}
 
 	LoadMode packages.LoadMode
 
@@ -50,11 +49,6 @@ func NewConfig(linter Linter) *Config {
 		Linter: linter,
 	}
 	return lc.WithLoadFiles()
-}
-
-func (lc *Config) WithEnabledByDefault() *Config {
-	lc.EnabledByDefault = true
-	return lc
 }
 
 func (lc *Config) WithInternal() *Config {

@@ -10,14 +10,14 @@ import (
 
 type validateErrorTestCase struct {
 	desc     string
-	cfg      *config.OldLinters
+	cfg      *config.Linters
 	expected string
 }
 
 var validateLintersNamesErrorTestCases = []validateErrorTestCase{
 	{
 		desc: "unknown enabled linter",
-		cfg: &config.OldLinters{
+		cfg: &config.Linters{
 			Enable:  []string{"golangci"},
 			Disable: nil,
 		},
@@ -25,7 +25,7 @@ var validateLintersNamesErrorTestCases = []validateErrorTestCase{
 	},
 	{
 		desc: "unknown disabled linter",
-		cfg: &config.OldLinters{
+		cfg: &config.Linters{
 			Enable:  nil,
 			Disable: []string{"golangci"},
 		},
@@ -35,27 +35,27 @@ var validateLintersNamesErrorTestCases = []validateErrorTestCase{
 
 type validatorTestCase struct {
 	desc string
-	cfg  *config.OldLinters
+	cfg  *config.Linters
 }
 
 var validateLintersNamesTestCases = []validatorTestCase{
 	{
 		desc: "no enable no disable",
-		cfg: &config.OldLinters{
+		cfg: &config.Linters{
 			Enable:  nil,
 			Disable: nil,
 		},
 	},
 	{
 		desc: "existing enabled linter",
-		cfg: &config.OldLinters{
+		cfg: &config.Linters{
 			Enable:  []string{"gofmt"},
 			Disable: nil,
 		},
 	},
 	{
 		desc: "existing disabled linter",
-		cfg: &config.OldLinters{
+		cfg: &config.Linters{
 			Enable:  nil,
 			Disable: []string{"gofmt"},
 		},
@@ -75,7 +75,7 @@ func TestValidator_Validate(t *testing.T) {
 		t.Run(test.desc, func(t *testing.T) {
 			t.Parallel()
 
-			err := v.Validate(&config.Config{OldLinters: *test.cfg})
+			err := v.Validate(&config.Config{Linters: *test.cfg})
 			require.NoError(t, err)
 		})
 	}
@@ -94,7 +94,7 @@ func TestValidator_Validate_error(t *testing.T) {
 		t.Run(test.desc, func(t *testing.T) {
 			t.Parallel()
 
-			err := v.Validate(&config.Config{OldLinters: *test.cfg})
+			err := v.Validate(&config.Config{Linters: *test.cfg})
 			require.Error(t, err)
 
 			require.EqualError(t, err, test.expected)
