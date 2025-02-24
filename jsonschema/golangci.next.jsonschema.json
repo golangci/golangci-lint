@@ -1555,7 +1555,7 @@
           "additionalProperties": false,
           "properties": {
             "local-prefixes": {
-              "description": "Put imports beginning with prefix after 3rd-party packages. It is a comma-separated list of prefixes.",
+              "description": "Put imports beginning with prefix after 3rd-party packages. It is a list of prefixes.",
               "type": "array",
               "items": {
                 "type": "string"
