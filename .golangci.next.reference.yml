@@ -4103,7 +4103,6 @@ output:
   path-prefix: ""
 
   # Order to use when sorting results.
-  # Require `sort-results` to `true`.
   # Possible values: `file`, `linter`, and `severity`.
   #
   # If the severity values are inside the following list, they are ordered in this order:
