@@ -114,7 +114,8 @@ formatters:
         - pattern: 'interface{}'
           replacement: 'any'
     goimports:
-      local-prefixes: github.com/golangci/golangci-lint
+      local-prefixes:
+        - github.com/golangci/golangci-lint
 
 linters-settings:
   depguard:

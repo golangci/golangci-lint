@@ -398,10 +398,11 @@ formatters:
       extra-rules: true
 
     goimports:
-      # A comma-separated list of prefixes, which, if set, checks import paths
+      # A list of prefixes, which, if set, checks import paths
       # with the given prefixes are grouped after 3rd-party packages.
-      # Default: ""
-      local-prefixes: github.com/org/project
+      # Default: []
+      local-prefixes:
+        - github.com/org/project
 
     golines:
       # Target maximum line length.
@@ -2356,9 +2357,11 @@ linters-settings:
     for-loops: true
 
   predeclared:
-    # Comma-separated list of predeclared identifiers to not report on.
-    # Default: ""
-    ignore: "new,int"
+    # List of predeclared identifiers to not report on.
+    # Default: []
+    ignore:
+      - new
+      - int
     # Include method names and field names in checks.
     # Default: false
     qualified-name: true

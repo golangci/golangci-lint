@@ -1555,9 +1555,11 @@
           "additionalProperties": false,
           "properties": {
             "local-prefixes": {
-              "description": "Put imports beginning with prefix after 3rd-party packages. It is a comma-separated list of prefixes.",
-              "type": "string",
-              "examples": ["github.com/org/project"]
+              "description": "Put imports beginning with prefix after 3rd-party packages. It is a list of prefixes.",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
             }
           }
         },
@@ -2413,8 +2415,11 @@
           "additionalProperties": false,
           "properties": {
             "ignore": {
-              "description": "Comma-separated list of predeclared identifiers to not report on.",
-              "type": "string"
+              "description": "List of predeclared identifiers to not report on.",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
             },
             "qualified-name": {
               "description": "Include method names and field names in checks.",

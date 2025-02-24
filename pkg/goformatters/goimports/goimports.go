@@ -1,6 +1,8 @@
 package goimports
 
 import (
+	"strings"
+
 	"golang.org/x/tools/imports"
 
 	"github.com/golangci/golangci-lint/pkg/config"
@@ -12,7 +14,7 @@ type Formatter struct{}
 
 func New(settings *config.GoImportsSettings) *Formatter {
 	if settings != nil {
-		imports.LocalPrefix = settings.LocalPrefixes
+		imports.LocalPrefix = strings.Join(settings.LocalPrefixes, ",")
 	}
 
 	return &Formatter{}
