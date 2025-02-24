@@ -1,6 +1,8 @@
 package predeclared
 
 import (
+	"strings"
+
 	"github.com/nishanths/predeclared/passes/predeclared"
 	"golang.org/x/tools/go/analysis"
 
@@ -15,7 +17,7 @@ func New(settings *config.PredeclaredSettings) *goanalysis.Linter {
 	if settings != nil {
 		cfg = map[string]map[string]any{
 			a.Name: {
-				predeclared.IgnoreFlag:    settings.Ignore,
+				predeclared.IgnoreFlag:    strings.Join(settings.Ignore, ","),
 				predeclared.QualifiedFlag: settings.Qualified,
 			},
 		}

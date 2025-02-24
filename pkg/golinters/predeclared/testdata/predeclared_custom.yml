@@ -2,5 +2,7 @@ version: "2"
 
 linters-settings:
   predeclared:
-    ignore: "real,recover"
+    ignore:
+      - real
+      - recover
     qualified-name: true
