@@ -14,29 +14,25 @@ func TestOutput_Validate(t *testing.T) {
 		{
 			desc: "file",
 			settings: &Output{
-				SortResults: true,
-				SortOrder:   []string{"file"},
+				SortOrder: []string{"file"},
 			},
 		},
 		{
 			desc: "linter",
 			settings: &Output{
-				SortResults: true,
-				SortOrder:   []string{"linter"},
+				SortOrder: []string{"linter"},
 			},
 		},
 		{
 			desc: "severity",
 			settings: &Output{
-				SortResults: true,
-				SortOrder:   []string{"severity"},
+				SortOrder: []string{"severity"},
 			},
 		},
 		{
 			desc: "multiple",
 			settings: &Output{
-				SortResults: true,
-				SortOrder:   []string{"file", "linter", "severity"},
+				SortOrder: []string{"file", "linter", "severity"},
 			},
 		},
 	}
@@ -58,25 +54,16 @@ func TestOutput_Validate_error(t *testing.T) {
 		expected string
 	}{
 		{
-			desc: "sort-results false and sort-order",
-			settings: &Output{
-				SortOrder: []string{"file"},
-			},
-			expected: "sort-results should be 'true' to use sort-order",
-		},
-		{
 			desc: "invalid sort-order",
 			settings: &Output{
-				SortResults: true,
-				SortOrder:   []string{"a"},
+				SortOrder: []string{"a"},
 			},
 			expected: `unsupported sort-order name "a"`,
 		},
 		{
 			desc: "duplicate",
 			settings: &Output{
-				SortResults: true,
-				SortOrder:   []string{"file", "linter", "severity", "linter"},
+				SortOrder: []string{"file", "linter", "severity", "linter"},
 			},
 			expected: `the sort-order name "linter" is repeated several times`,
 		},

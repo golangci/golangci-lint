@@ -4102,12 +4102,7 @@ output:
   # Default: ""
   path-prefix: ""
 
-  # Sort results by the order defined in `sort-order`.
-  # Default: false
-  sort-results: true
-
   # Order to use when sorting results.
-  # Require `sort-results` to `true`.
   # Possible values: `file`, `linter`, and `severity`.
   #
   # If the severity values are inside the following list, they are ordered in this order:
@@ -4118,7 +4113,7 @@ output:
   #   5. low
   # Either they are sorted alphabetically.
   #
-  # Default: ["file"]
+  # Default: ["linter", "file"]
   sort-order:
     - linter
     - severity
