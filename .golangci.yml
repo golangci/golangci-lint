@@ -36,7 +36,6 @@ linters:
     - mnd
     - goprintffuncname
     - gosec
-    - gosimple
     - govet
     - intrange
     - ineffassign
@@ -47,7 +46,6 @@ linters:
     - nolintlint
     - revive
     - staticcheck
-    - stylecheck
     - testifylint
     - unconvert
     - unparam

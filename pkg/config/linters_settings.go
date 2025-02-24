@@ -226,7 +226,6 @@ type LintersSettings struct {
 	GoModDirectives GoModDirectivesSettings `mapstructure:"gomoddirectives"`
 	Gomodguard      GoModGuardSettings      `mapstructure:"gomodguard"`
 	Gosec           GoSecSettings           `mapstructure:"gosec"`
-	Gosimple        StaticCheckSettings     `mapstructure:"gosimple"`
 	Gosmopolitan    GosmopolitanSettings    `mapstructure:"gosmopolitan"`
 	Govet           GovetSettings           `mapstructure:"govet"`
 	Grouper         GrouperSettings         `mapstructure:"grouper"`
@@ -261,7 +260,6 @@ type LintersSettings struct {
 	SlogLint        SlogLintSettings        `mapstructure:"sloglint"`
 	Spancheck       SpancheckSettings       `mapstructure:"spancheck"`
 	Staticcheck     StaticCheckSettings     `mapstructure:"staticcheck"`
-	Stylecheck      StaticCheckSettings     `mapstructure:"stylecheck"`
 	TagAlign        TagAlignSettings        `mapstructure:"tagalign"`
 	Tagliatelle     TagliatelleSettings     `mapstructure:"tagliatelle"`
 	Tenv            TenvSettings            `mapstructure:"tenv"`
