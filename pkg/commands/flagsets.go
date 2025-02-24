@@ -53,7 +53,7 @@ func setupRunFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
 	internal.AddHackedStringSlice(fs, "build-tags", color.GreenString("Build tags"))
 
 	internal.AddFlagAndBind(v, fs, fs.Duration, "timeout", "run.timeout", defaultTimeout,
-		color.GreenString("Timeout for total work. If <= 0, the timeout is disabled"))
+		color.GreenString("Timeout for total work. Disabled by default"))
 
 	internal.AddFlagAndBind(v, fs, fs.Bool, "tests", "run.tests", true, color.GreenString("Analyze tests (*_test.go)"))
 

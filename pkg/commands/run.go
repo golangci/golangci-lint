@@ -43,7 +43,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/timeutils"
 )
 
-const defaultTimeout = 15 * time.Minute
+const defaultTimeout = 0 * time.Minute
 
 const (
 	// envFailOnWarnings value: "1"
