@@ -49,9 +49,9 @@ Less `GOGC` values trigger garbage collection more frequently and golangci-lint 
 2. Smart linters scheduling
 
    We schedule linters by a special algorithm which takes estimated execution time into account. It allows
-   to save 10-30% of time when one of heavy linters (staticcheck, etc) is enabled.
+   to save 10-30% of time when one of heavy linters (e.g., staticcheck) is enabled.
 
 3. Don't fork to run shell commands
 
-All linters have their version fixed with go modules, they are builtin
+All linters have their versions fixed with Go modules, they are built-in,
 and you don't need to install them separately.
