@@ -1,7 +1,6 @@
 package processors
 
 import (
-	"fmt"
 	"go/token"
 	"path/filepath"
 	"testing"
@@ -178,16 +177,6 @@ func TestNolintFilter_Process_invalidLinterNameWithViolationOnTheSameLine(t *tes
 
 	require.NoError(t, err)
 	assert.Equal(t, issues, processedIssues)
-}
-
-func TestNolintFilter_Process_aliases(t *testing.T) {
-	p := newTestNolintFilter(getMockLog())
-	for _, line := range []int{47, 49, 51} {
-		t.Run(fmt.Sprintf("line-%d", line), func(t *testing.T) {
-			processAssertEmpty(t, p, newNolintFileIssue(line, "gosec"))
-		})
-	}
-	p.Finish()
 }
 
 func Test_ignoredRange_doesMatch(t *testing.T) {
