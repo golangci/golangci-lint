@@ -4123,15 +4123,15 @@ output:
     - file # filepath, line, and column.
 
   # Show statistics per linter.
-  # Default: false
-  show-stats: true
+  # Default: true
+  show-stats: false
 
 
 # Options for analysis running.
 run:
-  # Timeout for analysis, e.g. 30s, 5m.
+  # Timeout for total work, e.g. 30s, 5m.
   # If the value is lower or equal to 0, the timeout is disabled.
-  # Default: 1m
+  # Default: 0 (disabled)
   timeout: 5m
 
   # The mode used to evaluate relative paths.
@@ -4181,13 +4181,12 @@ run:
   allow-serial-runners: true
 
   # Define the Go version limit.
-  # Mainly related to generics support since go1.18.
-  # Default: use Go version from the go.mod file, fallback on the env var `GOVERSION`, fallback on 1.17
-  go: '1.19'
+  # Default: use Go version from the go.mod file, fallback on the env var `GOVERSION`, fallback on 1.22.
+  go: '1.23'
 
   # Number of operating system threads (`GOMAXPROCS`) that can execute golangci-lint simultaneously.
-  # If it is explicitly set to 0 (i.e. not the default) then golangci-lint will automatically set the value to match Linux container CPU quota.
-  # Default: the number of logical CPUs in the machine
+  # Default: 0 (automatically set to match Linux container CPU quota and
+  # fall back to the number of logical CPUs in the machine)
   concurrency: 4
 
 

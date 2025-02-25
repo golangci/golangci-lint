@@ -43,7 +43,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/timeutils"
 )
 
-const defaultTimeout = time.Minute
+const defaultTimeout = 0 * time.Minute
 
 const (
 	// envFailOnWarnings value: "1"
@@ -161,6 +161,7 @@ func (c *runCommand) persistentPreRunE(cmd *cobra.Command, args []string) error 
 	}
 
 	if c.cfg.Run.Concurrency == 0 {
+		// `runtime.GOMAXPROCS` defaults to the value of `runtime.NumCPU`.
 		backup := runtime.GOMAXPROCS(0)
 
 		// Automatically set GOMAXPROCS to match Linux container CPU quota.
@@ -245,12 +246,11 @@ func (c *runCommand) execute(_ *cobra.Command, _ []string) {
 		}
 	}()
 
-	ctx := context.Background()
+	ctx, cancel := context.WithCancel(context.Background())
 	if c.cfg.Run.Timeout > 0 {
-		var cancel context.CancelFunc
 		ctx, cancel = context.WithTimeout(ctx, c.cfg.Run.Timeout)
-		defer cancel()
 	}
+	defer cancel()
 
 	if needTrackResources {
 		go watchResources(ctx, trackResourcesEndCh, c.log, c.debugf)
@@ -588,16 +588,6 @@ func setupRunPersistentFlags(fs *pflag.FlagSet, opts *runOptions) {
 	fs.StringVar(&opts.CPUProfilePath, "cpu-profile-path", "", color.GreenString("Path to CPU profile output file"))
 	fs.StringVar(&opts.MemProfilePath, "mem-profile-path", "", color.GreenString("Path to memory profile output file"))
 	fs.StringVar(&opts.TracePath, "trace-path", "", color.GreenString("Path to trace output file"))
-}
-
-func getDefaultConcurrency() int {
-	if os.Getenv(envHelpRun) == "1" {
-		// Make stable concurrency for generating help documentation.
-		const prettyConcurrency = 8
-		return prettyConcurrency
-	}
-
-	return runtime.NumCPU()
 }
 
 func printMemStats(ms *runtime.MemStats, logger logutils.Log) {

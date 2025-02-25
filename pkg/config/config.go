@@ -15,6 +15,10 @@ import (
 	"golang.org/x/mod/modfile"
 )
 
+// defaultGoVersion the value should be "oldstable" - 1.
+// If the current stable version is 1.24 then 1.23 - 1 = 1.22.
+const defaultGoVersion = "1.22"
+
 // Config encapsulates the config data specified in the golangci-lint YAML config file.
 type Config struct {
 	cfgDir   string // Path to the directory containing golangci-lint config file.
@@ -93,7 +97,7 @@ func IsGoGreaterThanOrEqual(current, limit string) bool {
 }
 
 func detectGoVersion(ctx context.Context) string {
-	return cmp.Or(detectGoVersionFromGoMod(ctx), "1.17")
+	return cmp.Or(detectGoVersionFromGoMod(ctx), defaultGoVersion)
 }
 
 // detectGoVersionFromGoMod tries to get Go version from go.mod.

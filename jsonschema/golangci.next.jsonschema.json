@@ -3744,10 +3744,10 @@
           "examples": [4]
         },
         "timeout": {
-          "description": "Timeout for the analysis.",
+          "description": "Timeout for total work. Disabled by default",
           "type": "string",
           "pattern": "^\\d*[sm]$",
-          "default": "1m",
+          "default": "0",
           "examples": ["30s", "5m"]
         },
         "issues-exit-code": {
@@ -3888,7 +3888,7 @@
         "show-stats": {
           "description": "Show statistics per linter.",
           "type": "boolean",
-          "default": false
+          "default": true
         },
         "sort-order": {
           "type": "array",

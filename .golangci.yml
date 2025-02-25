@@ -202,5 +202,3 @@ linters-settings:
       - name: unused-parameter
       - name: unused-receiver
 
-run:
-  timeout: 5m

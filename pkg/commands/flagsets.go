@@ -42,18 +42,18 @@ func setupFormattersFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
 }
 
 func setupRunFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
-	internal.AddFlagAndBindP(v, fs, fs.IntP, "concurrency", "j", "run.concurrency", getDefaultConcurrency(),
-		color.GreenString("Number of CPUs to use (Default: number of logical CPUs)"))
+	internal.AddFlagAndBindP(v, fs, fs.IntP, "concurrency", "j", "run.concurrency", 0,
+		color.GreenString("Number of CPUs to use (Default: Automatically set to match Linux container CPU quota"+
+			" and fall back to the number of logical CPUs in the machine)"))
 
 	internal.AddFlagAndBind(v, fs, fs.String, "modules-download-mode", "run.modules-download-mode", "",
 		color.GreenString("Modules download mode. If not empty, passed as -mod=<mode> to go tools"))
 	internal.AddFlagAndBind(v, fs, fs.Int, "issues-exit-code", "run.issues-exit-code", exitcodes.IssuesFound,
 		color.GreenString("Exit code when issues were found"))
-	internal.AddFlagAndBind(v, fs, fs.String, "go", "run.go", "", color.GreenString("Targeted Go version"))
 	internal.AddHackedStringSlice(fs, "build-tags", color.GreenString("Build tags"))
 
 	internal.AddFlagAndBind(v, fs, fs.Duration, "timeout", "run.timeout", defaultTimeout,
-		color.GreenString("Timeout for total work. If <= 0, the timeout is disabled"))
+		color.GreenString("Timeout for total work. Disabled by default"))
 
 	internal.AddFlagAndBind(v, fs, fs.Bool, "tests", "run.tests", true, color.GreenString("Analyze tests (*_test.go)"))
 
@@ -72,7 +72,7 @@ func setupRunFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
 func setupOutputFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
 	internal.AddFlagAndBind(v, fs, fs.String, "path-prefix", "output.path-prefix", "",
 		color.GreenString("Path prefix to add to output"))
-	internal.AddFlagAndBind(v, fs, fs.Bool, "show-stats", "output.show-stats", false, color.GreenString("Show statistics per linter"))
+	internal.AddFlagAndBind(v, fs, fs.Bool, "show-stats", "output.show-stats", true, color.GreenString("Show statistics per linter"))
 
 	setupOutputFormatsFlagSet(v, fs)
 }
