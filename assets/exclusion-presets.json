@@ -2,7 +2,7 @@
   "comments": [
     {
       "linters": [
-        "stylecheck"
+        "staticcheck"
       ],
       "text": "(ST1000|ST1020|ST1021|ST1022)"
     },
@@ -82,7 +82,7 @@
       "linters": [
         "errcheck"
       ],
-      "text": "Error return value of .((os\\.)?std(out|err)\\..*|.*Close|.*Flush|os\\.Remove(All)?|.*print(f|ln)?|os\\.(Un)?Setenv). is not checked"
+      "text": "(?i)Error return value of .((os\\.)?std(out|err)\\..*|.*Close|.*Flush|os\\.Remove(All)?|.*print(f|ln)?|os\\.(Un)?Setenv). is not checked"
     }
   ]
 }
