@@ -4129,7 +4129,7 @@ output:
 
 # Options for analysis running.
 run:
-  # Timeout for analysis, e.g. 30s, 5m.
+  # Timeout for total work, e.g. 30s, 5m.
   # If the value is lower or equal to 0, the timeout is disabled.
   # Default: 0 (disabled)
   timeout: 5m
@@ -4181,13 +4181,12 @@ run:
   allow-serial-runners: true
 
   # Define the Go version limit.
-  # Mainly related to generics support since go1.18.
   # Default: use Go version from the go.mod file, fallback on the env var `GOVERSION`, fallback on 1.22.
-  go: '1.22'
+  go: '1.23'
 
   # Number of operating system threads (`GOMAXPROCS`) that can execute golangci-lint simultaneously.
-  # Default: automatically set to match Linux container CPU quota and
-  # fall back to the number of logical CPUs in the machine.
+  # Default: 0 (automatically set to match Linux container CPU quota and
+  # fall back to the number of logical CPUs in the machine)
   concurrency: 4
 
 

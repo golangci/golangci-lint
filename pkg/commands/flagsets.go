@@ -43,8 +43,8 @@ func setupFormattersFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
 
 func setupRunFlagSet(v *viper.Viper, fs *pflag.FlagSet) {
 	internal.AddFlagAndBindP(v, fs, fs.IntP, "concurrency", "j", "run.concurrency", 0,
-		color.GreenString("Number of CPUs to use (Default: Automatically set to match Linux container CPU quota,"+
-			" fall backs on number of logical CPUs)"))
+		color.GreenString("Number of CPUs to use (Default: Automatically set to match Linux container CPU quota"+
+			" and fall back to the number of logical CPUs in the machine)"))
 
 	internal.AddFlagAndBind(v, fs, fs.String, "modules-download-mode", "run.modules-download-mode", "",
 		color.GreenString("Modules download mode. If not empty, passed as -mod=<mode> to go tools"))
