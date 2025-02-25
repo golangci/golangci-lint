@@ -2,6 +2,11 @@ package processors
 
 import (
 	"github.com/golangci/golangci-lint/pkg/config"
+	"github.com/golangci/golangci-lint/pkg/goformatters/gci"
+	"github.com/golangci/golangci-lint/pkg/goformatters/gofmt"
+	"github.com/golangci/golangci-lint/pkg/goformatters/gofumpt"
+	"github.com/golangci/golangci-lint/pkg/goformatters/goimports"
+	"github.com/golangci/golangci-lint/pkg/goformatters/golines"
 	"github.com/golangci/golangci-lint/pkg/result"
 )
 
@@ -19,10 +24,9 @@ func NewMaxPerFileFromLinter(cfg *config.Config) *MaxPerFileFromLinter {
 	if !cfg.Issues.NeedFix {
 		// if we don't fix we do this limiting to not annoy user;
 		// otherwise we need to fix all issues in the file at once
-		maxPerFileFromLinterConfig["gofmt"] = 1
-		maxPerFileFromLinterConfig["goimports"] = 1
-		maxPerFileFromLinterConfig["gci"] = 1
-		maxPerFileFromLinterConfig["golines"] = 1
+		for _, f := range []string{gofmt.Name, gofumpt.Name, goimports.Name, gci.Name, golines.Name} {
+			maxPerFileFromLinterConfig[f] = 1
+		}
 	}
 
 	return &MaxPerFileFromLinter{

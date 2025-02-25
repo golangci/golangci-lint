@@ -4214,7 +4214,7 @@
               "type": "boolean",
               "default": false
             },
-            "presets":  {
+            "presets": {
               "type": "array",
               "items": {
                 "enum": [
