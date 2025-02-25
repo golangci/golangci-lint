@@ -166,6 +166,11 @@ linters:
         linters: [gosec]
         text: "G115: integer overflow conversion uint64 -> int"
 
+      # The files created during the tests don't need to be secured.
+      - path: scripts/website/expand_templates/linters_test.go
+        linters: [gosec]
+        text: "G306: Expect WriteFile permissions to be 0600 or less"
+
 formatters:
   enable:
     - gofmt
