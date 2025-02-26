@@ -243,7 +243,7 @@ func (b Builder) getBinaryName() string {
 
 func sanitizeVersion(v string) string {
 	fn := func(c rune) bool {
-		return !(unicode.IsLetter(c) || unicode.IsNumber(c) || c == '.' || c == '/')
+		return !unicode.IsLetter(c) && !unicode.IsNumber(c) && c != '.' && c != '/'
 	}
 
 	return strings.Join(strings.FieldsFunc(v, fn), "")
