@@ -1,0 +1,81 @@
+---
+title: Migration guide
+---
+
+## Migrating configuration from v1 to v2
+
+Golangci-lint v2 has slightly different configuration options than v1.
+Some options were renamed, some were moved, some were split, and some were removed.
+Here is a guide how to migrate your v1 configuration.
+
+You can use `golangci-lint` itself to migrate your configuration automatically through the `migrate` command:
+
+```sh
+golangci-lint migrate
+```
+
+In case you want to do it manually, here is a list of changes.
+
+### `linters` configuration
+
+### `linters-settings` configuration
+
+This section was removed in v2.
+Most linters settings are now in the `linters.settings` section.
+Settings for `gci`, `gofmt`, `gofumpt`, `goimports` are moved to the `formatters.settings` section.
+
+### `issues` configuration
+
+#### Removed
+
+1. `issues.exclude-case-sensitive` option.
+
+<details>
+<summary>v1</summary>
+```yaml
+issues:
+  exclude-case-sensitive: true
+```
+</details>
+
+<details>
+<summary>v2</summary>
+`issues.exclude` and `issues.exclude-rules` are case sensitive by default.
+</details>
+
+#### Replaced
+
+1. `exclude-dirs` and `exclude-files` with `exclusions.paths`.
+
+<details>
+<summary>v1</summary>
+```yaml
+issues:
+  exclude-dirs:
+    - dir1
+    - dir2
+
+  exclude-files:
+    - file1
+    - file2
+```
+</details>
+
+
+<details>
+<summary>v2</summary>
+```yaml
+linters:
+  exclusions:
+    paths:
+      - dir1
+      - dir2
+      - file1
+      - file2
+```
+
+### `output` configuration
+
+### `run` configuration
+
+### `severity` configuration
