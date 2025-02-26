@@ -1,6 +1,7 @@
 version: "2"
 
-linters-settings:
-  spancheck:
-    extra-start-span-signatures:
-      - dummy:opentelemetry
+linters:
+  settings:
+    spancheck:
+      extra-start-span-signatures:
+        - dummy:opentelemetry

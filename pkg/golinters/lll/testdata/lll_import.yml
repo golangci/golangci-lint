@@ -1,6 +1,7 @@
 version: "2"
 
-linters-settings:
-  lll:
-    tab-width: 4
-    line-length: 60
+linters:
+  settings:
+    lll:
+      tab-width: 4
+      line-length: 60

@@ -152,9 +152,6 @@ var defaultLintersSettings = LintersSettings{
 		SkipRegexp:    `(export|internal)_test\.go`,
 		AllowPackages: []string{"main"},
 	},
-	Unparam: UnparamSettings{
-		Algo: "cha",
-	},
 	Unused: UnusedSettings{
 		FieldWritesAreUses:     true,
 		PostStatementsAreReads: false,
@@ -912,8 +909,7 @@ type UnconvertSettings struct {
 }
 
 type UnparamSettings struct {
-	CheckExported bool   `mapstructure:"check-exported"`
-	Algo          string `mapstructure:"algo"`
+	CheckExported bool `mapstructure:"check-exported"`
 }
 
 type UnusedSettings struct {

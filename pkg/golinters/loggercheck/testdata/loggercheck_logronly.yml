@@ -1,8 +1,9 @@
 version: "2"
 
-linters-settings:
-  loggercheck:
-    logr: true
-    klog: false
-    slog: false
-    zap: false
+linters:
+  settings:
+    loggercheck:
+      logr: true
+      klog: false
+      slog: false
+      zap: false

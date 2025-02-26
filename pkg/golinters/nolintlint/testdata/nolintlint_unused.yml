@@ -1,5 +1,6 @@
 version: "2"
 
-linters-settings:
-  nolintlint:
-    allow-unused: false
+linters:
+  settings:
+    nolintlint:
+      allow-unused: false

@@ -1,5 +1,6 @@
 version: "2"
 
-linters-settings:
-  wsl:
-    allow-cuddle-declarations: false
+linters:
+  settings:
+    wsl:
+      allow-cuddle-declarations: false

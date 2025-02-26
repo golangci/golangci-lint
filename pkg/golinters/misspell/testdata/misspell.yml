@@ -1,8 +1,9 @@
 version: "2"
 
-linters-settings:
-  misspell:
-    locale: US
-    ignore-rules:
-      - langauge
-      - Dialogue
+linters:
+  settings:
+    misspell:
+      locale: US
+      ignore-rules:
+        - langauge
+        - Dialogue

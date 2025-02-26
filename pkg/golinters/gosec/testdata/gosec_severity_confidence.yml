@@ -1,6 +1,7 @@
 version: "2"
 
-linters-settings:
-  gosec:
-    severity: "medium"
-    confidence: "medium"
+linters:
+  settings:
+    gosec:
+      severity: "medium"
+      confidence: "medium"

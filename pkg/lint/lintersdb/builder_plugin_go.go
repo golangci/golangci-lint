@@ -40,7 +40,7 @@ func (b *PluginGoBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 
 	var linters []*linter.Config
 
-	for name, settings := range cfg.LintersSettings.Custom {
+	for name, settings := range cfg.Linters.Settings.Custom {
 		if settings.Type != goPluginType && settings.Type != "" {
 			continue
 		}
@@ -69,7 +69,7 @@ func (b *PluginGoBuilder) loadConfig(cfg *config.Config, name string, settings *
 		WithLoadMode(goanalysis.LoadModeTypesInfo)
 
 	linterConfig := linter.NewConfig(customLinter).
-		WithEnabledByDefault().
+		WithGroups(config.GroupStandard).
 		WithLoadForGoAnalysis().
 		WithURL(settings.OriginalURL)
 

@@ -1,7 +1,8 @@
 version: "2"
 
-linters-settings:
-  tagalign:
-    align: true
-    sort: true
-    strict: true
+linters:
+  settings:
+    tagalign:
+      align: true
+      sort: true
+      strict: true

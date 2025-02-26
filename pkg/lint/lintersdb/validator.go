@@ -1,10 +1,8 @@
 package lintersdb
 
 import (
-	"errors"
 	"fmt"
 	"os"
-	"slices"
 	"strings"
 
 	"github.com/golangci/golangci-lint/pkg/config"
@@ -25,7 +23,6 @@ func NewValidator(m *Manager) *Validator {
 func (v Validator) Validate(cfg *config.Config) error {
 	validators := []func(cfg *config.Linters) error{
 		v.validateLintersNames,
-		v.validatePresets,
 		v.alternativeNamesDeprecation,
 	}
 
@@ -66,23 +63,6 @@ func (v Validator) validateLintersNames(cfg *config.Linters) error {
 	if len(unknownNames) > 0 {
 		return fmt.Errorf("unknown linters: '%v', run 'golangci-lint help linters' to see the list of supported linters",
 			strings.Join(unknownNames, ","))
-	}
-
-	return nil
-}
-
-func (Validator) validatePresets(cfg *config.Linters) error {
-	presets := AllPresets()
-
-	for _, p := range cfg.Presets {
-		if !slices.Contains(presets, p) {
-			return fmt.Errorf("no such preset %q: only next presets exist: (%s)",
-				p, strings.Join(presets, "|"))
-		}
-	}
-
-	if len(cfg.Presets) != 0 && cfg.EnableAll {
-		return errors.New("--presets is incompatible with --enable-all")
 	}
 
 	return nil

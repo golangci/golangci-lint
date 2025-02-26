@@ -1,7 +1,8 @@
 version: "2"
 
-linters-settings:
-  errorlint:
-    errorf: false
-    asserts: true
-    comparison: false
+linters:
+  settings:
+    errorlint:
+      errorf: false
+      asserts: true
+      comparison: false

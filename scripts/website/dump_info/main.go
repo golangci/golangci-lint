@@ -45,9 +45,8 @@ func saveLinters() error {
 		wrapper := types.LinterWrapper{
 			Name:             l.Linter.Name(),
 			Desc:             l.Linter.Desc(),
-			EnabledByDefault: l.EnabledByDefault,
+			Groups:           l.Groups,
 			LoadMode:         l.LoadMode,
-			InPresets:        l.InPresets,
 			AlternativeNames: l.AlternativeNames,
 			OriginalURL:      l.OriginalURL,
 			Internal:         l.Internal,

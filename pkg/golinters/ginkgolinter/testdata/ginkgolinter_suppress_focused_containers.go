@@ -1,4 +1,4 @@
-//golangcitest:args --disable-all -Eginkgolinter
+//golangcitest:args -Eginkgolinter
 //golangcitest:config_path testdata/ginkgolinter_suppress_focused_containers.yml
 package ginkgolinter
 

@@ -1,19 +1,20 @@
 version: "2"
 
-linters-settings:
-  gocritic:
-    disabled-checks:
-      - appendAssign
-      - switchTrue
-    enabled-checks:
-      - hugeParam
-      - ruleguard
-    settings:
-      hugeParam:
-        sizeThreshold: 24
-      ruleguard:
-        failOn: dsl,import
-        rules: '${base-path}/ruleguard/preferWriteString.go,${base-path}/ruleguard/stringsSimplify.go'
+linters:
+  settings:
+    gocritic:
+      disabled-checks:
+        - appendAssign
+        - switchTrue
+      enabled-checks:
+        - hugeParam
+        - ruleguard
+      settings:
+        hugeParam:
+          sizeThreshold: 24
+        ruleguard:
+          failOn: dsl,import
+          rules: '${base-path}/ruleguard/preferWriteString.go,${base-path}/ruleguard/stringsSimplify.go'
 
 run:
   relative-path-mode: cfg

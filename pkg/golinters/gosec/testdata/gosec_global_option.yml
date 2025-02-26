@@ -1,7 +1,8 @@
 version: "2"
 
-linters-settings:
-  gosec:
-    config:
-      global:
-        nosec: true
+linters:
+  settings:
+    gosec:
+      config:
+        global:
+          nosec: true

@@ -1,4 +1,4 @@
-//golangcitest:args --disable-all -Eginkgolinter
+//golangcitest:args -Eginkgolinter
 //golangcitest:config_path testdata/ginkgolinter_suppress_nil.yml
 package ginkgolinter
 

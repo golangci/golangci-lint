@@ -1,6 +1,7 @@
 version: "2"
 
-linters-settings:
-  iface:
-    enable:
-      - unused
+linters:
+  settings:
+    iface:
+      enable:
+        - unused

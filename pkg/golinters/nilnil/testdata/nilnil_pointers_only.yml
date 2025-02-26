@@ -1,7 +1,8 @@
 version: "2"
 
-linters-settings:
-  nilnil:
-    checked-types:
-      - ptr
-      - uintptr
+linters:
+  settings:
+    nilnil:
+      checked-types:
+        - ptr
+        - uintptr

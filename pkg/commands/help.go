@@ -3,8 +3,8 @@ package commands
 import (
 	"encoding/json"
 	"fmt"
+	"maps"
 	"slices"
-	"sort"
 	"strings"
 	"unicode"
 	"unicode/utf8"
@@ -19,15 +19,14 @@ import (
 )
 
 type linterHelp struct {
-	Name             string   `json:"name"`
-	Desc             string   `json:"description"`
-	Fast             bool     `json:"fast"`
-	AutoFix          bool     `json:"autoFix"`
-	Presets          []string `json:"presets"`
-	EnabledByDefault bool     `json:"enabledByDefault"`
-	Deprecated       bool     `json:"deprecated"`
-	Since            string   `json:"since"`
-	OriginalURL      string   `json:"originalURL,omitempty"`
+	Name        string   `json:"name"`
+	Desc        string   `json:"description"`
+	Groups      []string `json:"groups"`
+	Fast        bool     `json:"fast"`
+	AutoFix     bool     `json:"autoFix"`
+	Deprecated  bool     `json:"deprecated"`
+	Since       string   `json:"since"`
+	OriginalURL string   `json:"originalURL,omitempty"`
 }
 
 type helpOptions struct {
@@ -108,16 +107,21 @@ func (c *helpCommand) printJSON() error {
 			continue
 		}
 
+		groups := []string{config.GroupAll}
+
+		if !lc.IsSlowLinter() {
+			groups = append(groups, config.GroupFast)
+		}
+
 		linters = append(linters, linterHelp{
-			Name:             lc.Name(),
-			Desc:             formatDescription(lc.Linter.Desc()),
-			Fast:             !lc.IsSlowLinter(),
-			AutoFix:          lc.CanAutoFix,
-			Presets:          lc.InPresets,
-			EnabledByDefault: lc.EnabledByDefault,
-			Deprecated:       lc.IsDeprecated(),
-			Since:            lc.Since,
-			OriginalURL:      lc.OriginalURL,
+			Name:        lc.Name(),
+			Desc:        formatDescription(lc.Linter.Desc()),
+			Groups:      slices.Concat(groups, slices.Collect(maps.Keys(lc.Groups))),
+			Fast:        !lc.IsSlowLinter(),
+			AutoFix:     lc.CanAutoFix,
+			Deprecated:  lc.IsDeprecated(),
+			Since:       lc.Since,
+			OriginalURL: lc.OriginalURL,
 		})
 	}
 
@@ -131,7 +135,7 @@ func (c *helpCommand) print() {
 			continue
 		}
 
-		if lc.EnabledByDefault {
+		if lc.FromGroup(config.GroupStandard) {
 			enabledLCs = append(enabledLCs, lc)
 		} else {
 			disabledLCs = append(disabledLCs, lc)
@@ -143,27 +147,6 @@ func (c *helpCommand) print() {
 
 	color.Red("\nDisabled by default linters:\n")
 	printLinters(disabledLCs)
-
-	color.Green("\nLinters presets:")
-	c.printPresets()
-}
-
-func (c *helpCommand) printPresets() {
-	for _, p := range lintersdb.AllPresets() {
-		linters := c.dbManager.GetAllLinterConfigsForPreset(p)
-
-		var linterNames []string
-		for _, lc := range linters {
-			if lc.Internal {
-				continue
-			}
-
-			linterNames = append(linterNames, lc.Name())
-		}
-		sort.Strings(linterNames)
-
-		_, _ = fmt.Fprintf(logutils.StdOut, "%s: %s\n", color.YellowString(p), strings.Join(linterNames, ", "))
-	}
 }
 
 func printLinters(lcs []*linter.Config) {

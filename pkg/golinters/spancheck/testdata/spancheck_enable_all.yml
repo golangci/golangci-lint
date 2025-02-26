@@ -1,10 +1,11 @@
 version: "2"
 
-linters-settings:
-  spancheck:
-    checks:
-      - "end"
-      - "record-error"
-      - "set-status"
-    ignore-check-signatures:
-      - "recordErr"
+linters:
+  settings:
+    spancheck:
+      checks:
+        - "end"
+        - "record-error"
+        - "set-status"
+      ignore-check-signatures:
+        - "recordErr"

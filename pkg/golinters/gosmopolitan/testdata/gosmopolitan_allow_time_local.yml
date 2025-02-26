@@ -1,5 +1,6 @@
 version: "2"
 
-linters-settings:
-  gosmopolitan:
-    allow-time-local: true
+linters:
+  settings:
+    gosmopolitan:
+      allow-time-local: true

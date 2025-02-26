@@ -1,4 +1,4 @@
-//golangcitest:args --disable-all -Eginkgolinter
+//golangcitest:args -Eginkgolinter
 package ginkgolinter
 
 import (

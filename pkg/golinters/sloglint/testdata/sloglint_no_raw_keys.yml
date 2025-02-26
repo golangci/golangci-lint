@@ -1,5 +1,6 @@
 version: "2"
 
-linters-settings:
-  sloglint:
-    no-raw-keys: true
+linters:
+  settings:
+    sloglint:
+      no-raw-keys: true

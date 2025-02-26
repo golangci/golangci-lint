@@ -1,5 +1,6 @@
 version: "2"
 
-linters-settings:
-  sloglint:
-    key-naming-case: snake
+linters:
+  settings:
+    sloglint:
+      key-naming-case: snake

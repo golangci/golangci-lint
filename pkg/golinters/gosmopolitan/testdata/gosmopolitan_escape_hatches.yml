@@ -1,10 +1,11 @@
 version: "2"
 
-linters-settings:
-  gosmopolitan:
-    escape-hatches:
-      - 'command-line-arguments.A'
-      - 'command-line-arguments.B'
-      - 'command-line-arguments.C'
-      - 'command-line-arguments.D'
-      - 'fmt.Println'
+linters:
+  settings:
+    gosmopolitan:
+      escape-hatches:
+        - 'command-line-arguments.A'
+        - 'command-line-arguments.B'
+        - 'command-line-arguments.C'
+        - 'command-line-arguments.D'
+        - 'fmt.Println'

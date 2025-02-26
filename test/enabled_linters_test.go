@@ -9,7 +9,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/golangci/golangci-lint/pkg/lint/linter"
+	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 	"github.com/golangci/golangci-lint/test/testshared"
@@ -24,7 +24,6 @@ func TestEnabledLinters(t *testing.T) {
 		cfg            string
 		enabledLinters []string
 		args           []string
-		noImplicitFast bool
 	}{
 		{
 			name: "disable govet in config",
@@ -33,7 +32,7 @@ func TestEnabledLinters(t *testing.T) {
 				disable:
 					- govet
 			`,
-			enabledLinters: getEnabledByDefaultFastLintersExcept(t, "govet"),
+			enabledLinters: getEnabledByDefaultLintersExcept(t, "govet"),
 		},
 		{
 			name: "enable revive in config",
@@ -42,12 +41,12 @@ func TestEnabledLinters(t *testing.T) {
 				enable:
 					- revive
 			`,
-			enabledLinters: getEnabledByDefaultFastLintersWith(t, "revive"),
+			enabledLinters: getEnabledByDefaultLintersWith(t, "revive"),
 		},
 		{
 			name:           "disable govet in cmd",
 			args:           []string{"-Dgovet"},
-			enabledLinters: getEnabledByDefaultFastLintersExcept(t, "govet"),
+			enabledLinters: getEnabledByDefaultLintersExcept(t, "govet"),
 		},
 		{
 			name: "enable gofmt in cmd and enable revive in config",
@@ -57,57 +56,44 @@ func TestEnabledLinters(t *testing.T) {
 				enable:
 					- revive
 			`,
-			enabledLinters: getEnabledByDefaultFastLintersWith(t, "revive", "gofmt"),
+			enabledLinters: getEnabledByDefaultLintersWith(t, "revive", "gofmt"),
 		},
 		{
 			name: "fast option in config",
 			cfg: `
 			linters:
-				fast: true
+				default: fast
 			`,
-			enabledLinters: getEnabledByDefaultFastLintersWith(t),
-			noImplicitFast: true,
+			enabledLinters: getAllLintersFromGroupFast(t),
 		},
 		{
-			name: "explicitly unset fast option in config",
-			cfg: `
-			linters:
-				fast: false
-			`,
-			enabledLinters: getEnabledByDefaultLinters(t),
-			noImplicitFast: true,
-		},
-		{
-			name:           "set fast option in command-line",
-			args:           []string{"--fast"},
-			enabledLinters: getEnabledByDefaultFastLintersWith(t),
-			noImplicitFast: true,
+			name:           "fast option in flag",
+			args:           []string{"--default=fast"},
+			enabledLinters: getAllLintersFromGroupFast(t),
 		},
 		{
 			name: "fast option in command-line has higher priority to enable",
 			cfg: `
 			linters:
-				fast: false
+				default: none
 			`,
-			args:           []string{"--fast"},
-			enabledLinters: getEnabledByDefaultFastLintersWith(t),
-			noImplicitFast: true,
+			args:           []string{"--default=fast"},
+			enabledLinters: getAllLintersFromGroupFast(t),
 		},
 		{
-			name: "fast option in command-line has higher priority to disable",
-			cfg: `
-			linters:
-				fast: true
-			`,
-			args:           []string{"--fast=false"},
-			enabledLinters: getEnabledByDefaultLinters(t),
-			noImplicitFast: true,
+			name:           "only fast linters with standard group",
+			args:           []string{"--fast-only"},
+			enabledLinters: []string{"ineffassign"},
+		},
+		{
+			name:           "only fast false",
+			args:           []string{"--fast-only=false"},
+			enabledLinters: getEnabledByDefaultLintersWith(t),
 		},
 		{
 			name:           "fast option combined with enable and enable-all",
-			args:           []string{"--enable-all", "--fast", "--enable=unused"},
-			enabledLinters: getAllFastLintersWith(t, "unused"),
-			noImplicitFast: true,
+			args:           []string{"--default=all", "--fast-only", "--enable=unused"},
+			enabledLinters: getAllLintersFromGroupFast(t),
 		},
 	}
 
@@ -118,9 +104,6 @@ func TestEnabledLinters(t *testing.T) {
 			t.Parallel()
 
 			args := []string{"--verbose"}
-			if !c.noImplicitFast {
-				args = append(args, "--fast")
-			}
 
 			r := testshared.NewRunnerBuilder(t).
 				WithCommand("linters").
@@ -139,55 +122,37 @@ func TestEnabledLinters(t *testing.T) {
 	}
 }
 
-func getEnabledByDefaultFastLintersExcept(t *testing.T, except ...string) []string {
+func getEnabledByDefaultLintersExcept(t *testing.T, excludes ...string) []string {
 	t.Helper()
 
-	m, err := lintersdb.NewManager(nil, nil, lintersdb.NewLinterBuilder())
-	require.NoError(t, err)
+	linterNames := getEnabledByDefaultLintersWith(t)
 
-	ebdl := m.GetAllEnabledByDefaultLinters()
 	var ret []string
-	for _, lc := range ebdl {
-		if lc.IsSlowLinter() || lc.Internal {
+	for _, lc := range linterNames {
+		if slices.Contains(excludes, lc) {
 			continue
 		}
 
-		if !slices.Contains(except, lc.Name()) {
-			ret = append(ret, lc.Name())
-		}
+		ret = append(ret, lc)
 	}
 
 	return ret
 }
 
-func getAllFastLintersWith(t *testing.T, with ...string) []string {
+func getEnabledByDefaultLintersWith(t *testing.T, includes ...string) []string {
 	t.Helper()
 
-	ret := append([]string{}, with...)
-
-	dbManager, err := lintersdb.NewManager(nil, nil, lintersdb.NewLinterBuilder())
-	require.NoError(t, err)
-
-	linters := dbManager.GetAllSupportedLinterConfigs()
-
-	for _, lc := range linters {
-		if lc.IsSlowLinter() || lc.Internal || (lc.IsDeprecated() && lc.Deprecation.Level > linter.DeprecationWarning) {
-			continue
-		}
-
-		ret = append(ret, lc.Name())
+	cfg := &config.Config{
+		Linters: config.Linters{
+			Default: config.GroupStandard,
+		},
 	}
-
-	return ret
-}
-
-func getEnabledByDefaultLinters(t *testing.T) []string {
-	t.Helper()
-
-	dbManager, err := lintersdb.NewManager(nil, nil, lintersdb.NewLinterBuilder())
+	dbManager, err := lintersdb.NewManager(logutils.NewStderrLog("skip"), cfg, lintersdb.NewLinterBuilder())
 	require.NoError(t, err)
 
-	ebdl := dbManager.GetAllEnabledByDefaultLinters()
+	ebdl, err := dbManager.GetEnabledLintersMap()
+	require.NoError(t, err)
+
 	var ret []string
 	for _, lc := range ebdl {
 		if lc.Internal {
@@ -197,19 +162,31 @@ func getEnabledByDefaultLinters(t *testing.T) []string {
 		ret = append(ret, lc.Name())
 	}
 
-	return ret
+	return slices.Concat(ret, includes)
 }
 
-func getEnabledByDefaultFastLintersWith(t *testing.T, with ...string) []string {
+func getAllLintersFromGroupFast(t *testing.T) []string {
 	t.Helper()
 
-	dbManager, err := lintersdb.NewManager(nil, nil, lintersdb.NewLinterBuilder())
+	cfg := &config.Config{
+		Linters: config.Linters{
+			Default: config.GroupAll,
+		},
+	}
+
+	dbManager, err := lintersdb.NewManager(logutils.NewStderrLog("skip"), cfg, lintersdb.NewLinterBuilder())
 	require.NoError(t, err)
 
-	ebdl := dbManager.GetAllEnabledByDefaultLinters()
-	ret := append([]string{}, with...)
+	ebdl, err := dbManager.GetEnabledLintersMap()
+	require.NoError(t, err)
+
+	var ret []string
 	for _, lc := range ebdl {
-		if lc.IsSlowLinter() || lc.Internal {
+		if lc.Internal {
+			continue
+		}
+
+		if lc.IsSlowLinter() {
 			continue
 		}
 

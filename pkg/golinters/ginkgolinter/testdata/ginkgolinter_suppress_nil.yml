@@ -1,5 +1,6 @@
 version: "2"
 
-linters-settings:
-  ginkgolinter:
-    suppress-nil-assertion: true
+linters:
+  settings:
+    ginkgolinter:
+      suppress-nil-assertion: true

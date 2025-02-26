@@ -57,7 +57,7 @@ func Benchmark_linters(b *testing.B) {
 				"--issues-exit-code=0",
 				"--timeout=30m",
 				"--no-config",
-				"--disable-all",
+				"--default=none",
 				"--enable", linter,
 			}
 
@@ -103,7 +103,7 @@ func Benchmark_golangciLint(b *testing.B) {
 		"--issues-exit-code=0",
 		"--timeout=30m",
 		"--no-config",
-		"--disable-all",
+		"--default=none",
 	}
 
 	linters := getLinterNames(b, false)

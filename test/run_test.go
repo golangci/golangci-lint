@@ -126,7 +126,7 @@ func TestCgoOk(t *testing.T) {
 		WithArgs(
 			"--timeout=3m",
 			"--show-stats=false",
-			"--enable-all",
+			"--default=all",
 		).
 		WithTargetPath(testdataDir, "cgo").
 		Runner().
@@ -146,25 +146,25 @@ func TestCgoWithIssues(t *testing.T) {
 	}{
 		{
 			desc:     "govet",
-			args:     []string{"--no-config", "--disable-all", "-Egovet"},
+			args:     []string{"--no-config", "--default=none", "-Egovet"},
 			dir:      "cgo_with_issues",
 			expected: "Printf format %t has arg cs of wrong type",
 		},
 		{
 			desc:     "staticcheck",
-			args:     []string{"--no-config", "--disable-all", "-Estaticcheck"},
+			args:     []string{"--no-config", "--default=none", "-Estaticcheck"},
 			dir:      "cgo_with_issues",
 			expected: "SA5009: Printf format %t has arg #1 of wrong type",
 		},
 		{
 			desc:     "gofmt",
-			args:     []string{"--no-config", "--disable-all", "-Egofmt"},
+			args:     []string{"--no-config", "--default=none", "-Egofmt"},
 			dir:      "cgo_with_issues",
 			expected: "File is not properly formatted (gofmt)",
 		},
 		{
 			desc:     "revive",
-			args:     []string{"--no-config", "--disable-all", "-Erevive"},
+			args:     []string{"--no-config", "--default=none", "-Erevive"},
 			dir:      "cgo_with_issues",
 			expected: "indent-error-flow: if block ends with a return statement",
 		},
@@ -200,7 +200,7 @@ func TestLineDirective(t *testing.T) {
 			desc: "dupl",
 			args: []string{
 				"-Edupl",
-				"--disable-all",
+				"--default=none",
 			},
 			configPath: "testdata/linedirective/dupl.yml",
 			targetPath: "linedirective",
@@ -210,7 +210,7 @@ func TestLineDirective(t *testing.T) {
 			desc: "gofmt",
 			args: []string{
 				"-Egofmt",
-				"--disable-all",
+				"--default=none",
 			},
 			targetPath: "linedirective",
 			expected:   "File is not properly formatted (gofmt)",
@@ -219,7 +219,7 @@ func TestLineDirective(t *testing.T) {
 			desc: "goimports",
 			args: []string{
 				"-Egoimports",
-				"--disable-all",
+				"--default=none",
 			},
 			targetPath: "linedirective",
 			expected:   "File is not properly formatted (goimports)",
@@ -228,7 +228,7 @@ func TestLineDirective(t *testing.T) {
 			desc: "gomodguard",
 			args: []string{
 				"-Egomodguard",
-				"--disable-all",
+				"--default=none",
 			},
 			configPath: "testdata/linedirective/gomodguard.yml",
 			targetPath: "linedirective",
@@ -239,7 +239,7 @@ func TestLineDirective(t *testing.T) {
 			desc: "lll",
 			args: []string{
 				"-Elll",
-				"--disable-all",
+				"--default=none",
 			},
 			configPath: "testdata/linedirective/lll.yml",
 			targetPath: "linedirective",
@@ -249,7 +249,7 @@ func TestLineDirective(t *testing.T) {
 			desc: "misspell",
 			args: []string{
 				"-Emisspell",
-				"--disable-all",
+				"--default=none",
 			},
 			configPath: "",
 			targetPath: "linedirective",
@@ -259,7 +259,7 @@ func TestLineDirective(t *testing.T) {
 			desc: "wsl",
 			args: []string{
 				"-Ewsl",
-				"--disable-all",
+				"--default=none",
 			},
 			configPath: "",
 			targetPath: "linedirective",
@@ -365,7 +365,7 @@ func TestUnsafeOk(t *testing.T) {
 		WithConfig(cfg).
 		WithArgs(
 			"--show-stats=false",
-			"--enable-all",
+			"--default=all",
 		).
 		WithTargetPath(testdataDir, "unsafe").
 		WithBinPath(binPath).
@@ -398,7 +398,7 @@ func TestIdentifierUsedOnlyInTests(t *testing.T) {
 		WithNoConfig().
 		WithArgs(
 			"--show-stats=false",
-			"--disable-all",
+			"--default=none",
 			"-Eunused",
 		).
 		WithTargetPath(testdataDir, "used_only_in_tests").
@@ -463,13 +463,13 @@ func TestEnableAllFastAndEnableCanCoexist(t *testing.T) {
 	}{
 		{
 			desc:     "fast",
-			args:     []string{"--fast", "--enable-all", "--enable=typecheck"},
+			args:     []string{"--fast-only", "--default=all", "--enable=typecheck"},
 			expected: []int{exitcodes.Success, exitcodes.IssuesFound},
 		},
 		{
 			desc:     "all",
-			args:     []string{"--enable-all", "--enable=typecheck"},
-			expected: []int{exitcodes.Failure},
+			args:     []string{"--default=all", "--enable=typecheck"},
+			expected: []int{exitcodes.Success},
 		},
 	}
 
@@ -487,17 +487,6 @@ func TestEnableAllFastAndEnableCanCoexist(t *testing.T) {
 				ExpectExitCode(test.expected...)
 		})
 	}
-}
-
-func TestEnabledPresetsAreNotDuplicated(t *testing.T) {
-	testshared.NewRunnerBuilder(t).
-		WithNoConfig().
-		WithArgs("-v", "-p", "style,bugs").
-		WithTargetPath(testdataDir, minimalPkg).
-		Runner().
-		Install().
-		Run().
-		ExpectOutputContains("Active presets: [bugs style]")
 }
 
 func TestAbsPathDirAnalysis(t *testing.T) {
@@ -559,6 +548,7 @@ func TestPathPrefix(t *testing.T) {
 	for _, test := range testCases {
 		t.Run(test.desc, func(t *testing.T) {
 			testshared.NewRunnerBuilder(t).
+				WithArgs("--show-stats=false").
 				WithArgs(test.args...).
 				WithTargetPath(testdataDir, "withtests").
 				WithBinPath(binPath).

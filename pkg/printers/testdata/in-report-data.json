@@ -54,8 +54,7 @@
       },
       {
         "Name": "errcheck",
-        "Enabled": true,
-        "EnabledByDefault": true
+        "Enabled": true
       },
       {
         "Name": "errchkjson"
@@ -174,16 +173,14 @@
       },
       {
         "Name": "gosimple",
-        "Enabled": true,
-        "EnabledByDefault": true
+        "Enabled": true
       },
       {
         "Name": "gosmopolitan"
       },
       {
         "Name": "govet",
-        "Enabled": true,
-        "EnabledByDefault": true
+        "Enabled": true
       },
       {
         "Name": "grouper"
@@ -199,8 +196,7 @@
       },
       {
         "Name": "ineffassign",
-        "Enabled": true,
-        "EnabledByDefault": true
+        "Enabled": true
       },
       {
         "Name": "interfacebloat"
@@ -309,8 +305,7 @@
       },
       {
         "Name": "staticcheck",
-        "Enabled": true,
-        "EnabledByDefault": true
+        "Enabled": true
       },
       {
         "Name": "structcheck"
@@ -345,8 +340,7 @@
       },
       {
         "Name": "typecheck",
-        "Enabled": true,
-        "EnabledByDefault": true
+        "Enabled": true
       },
       {
         "Name": "unconvert",
@@ -358,8 +352,7 @@
       },
       {
         "Name": "unused",
-        "Enabled": true,
-        "EnabledByDefault": true
+        "Enabled": true
       },
       {
         "Name": "usestdlibvars"

@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"maps"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -45,7 +46,7 @@ func getLintersListMarkdown(enabled bool) string {
 			continue
 		}
 
-		if lc.EnabledByDefault == enabled {
+		if slices.Contains(slices.Collect(maps.Keys(lc.Groups)), config.GroupStandard) == enabled {
 			neededLcs = append(neededLcs, lc)
 		}
 	}
@@ -71,15 +72,14 @@ func getLintersListMarkdown(enabled bool) string {
 	})
 
 	lines := []string{
-		"|Name|Description|Presets|AutoFix|Since|",
-		"|---|---|---|---|---|---|",
+		"|Name|Description|AutoFix|Since|",
+		"|---|---|---|---|---|",
 	}
 
 	for _, lc := range neededLcs {
-		line := fmt.Sprintf("|%s|%s|%s|%v|%s|",
+		line := fmt.Sprintf("|%s|%s|%v|%s|",
 			getName(lc),
 			getDesc(lc),
-			strings.Join(lc.InPresets, ", "),
 			check(lc.CanAutoFix, "Auto fix supported"),
 			lc.Since,
 		)
@@ -205,7 +205,7 @@ func extractExampleSnippets(example []byte) (*SettingSnippets, error) {
 
 	for j, node := range root.Content {
 		switch node.Value {
-		case "run", "output", "linters", "linters-settings", "issues", "severity":
+		case "run", "output", "linters", "linters-settings", "issues", "severity": // TODO(ldez) documentation
 		default:
 			continue
 		}
@@ -233,13 +233,14 @@ func extractExampleSnippets(example []byte) (*SettingSnippets, error) {
 
 		globalNode.Content = append(globalNode.Content, node, newNode)
 
-		if node.Value == "linters-settings" {
+		if node.Value == "linters-settings" { // TODO(ldez) documentation
 			snippets.LintersSettings, err = getLintersSettingSections(node, nextNode)
 			if err != nil {
 				return nil, err
 			}
 
 			_, _ = builder.WriteString(
+				// TODO(ldez) documentation
 				fmt.Sprintf(
 					"### `%s` configuration\n\nSee the dedicated [linters-settings](/usage/linters) documentation section.\n\n",
 					node.Value,
