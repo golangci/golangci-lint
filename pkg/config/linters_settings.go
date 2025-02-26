@@ -909,8 +909,7 @@ type UnconvertSettings struct {
 }
 
 type UnparamSettings struct {
-	CheckExported bool   `mapstructure:"check-exported"`
-	Algo          string `mapstructure:"algo"`
+	CheckExported bool `mapstructure:"check-exported"`
 }
 
 type UnusedSettings struct {

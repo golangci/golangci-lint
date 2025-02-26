@@ -90,10 +90,6 @@ func (lc *Config) WithGroups(names ...string) *Config {
 }
 
 func (lc *Config) FromGroup(name string) bool {
-	if lc.Groups == nil {
-		return false
-	}
-
 	_, ok := lc.Groups[name]
 	return ok
 }
