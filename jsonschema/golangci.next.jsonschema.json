@@ -3954,6 +3954,11 @@
                 "type": "string"
               }
             },
+            "allow-cuddle-used-in-block": {
+              "description": "Allow cuddling with any block as long as the variable is used somewhere in the block",
+              "type": "boolean",
+              "default": false
+            },
             "allow-multiline-assign": {
               "description": "Allow multiline assignments to be cuddled.",
               "type": "boolean",

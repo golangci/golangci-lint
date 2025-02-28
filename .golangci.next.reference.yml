@@ -3788,6 +3788,12 @@ linters:
       # Defaults: [ "Unlock", "RUnlock" ]
       allow-cuddle-with-rhs: [ "Foo", "Bar" ]
 
+      # Allow cuddling with any block as long as the variable is used somewhere in
+      # the block.
+      # https://github.com/bombsimon/wsl/blob/HEAD/doc/configuration.md#allow-cuddle-used-in-block
+      # Default: false
+      allow-cuddle-used-in-block: true
+
       # Causes an error when an If statement that checks an error variable doesn't
       # cuddle with the assignment of that variable.
       # https://github.com/bombsimon/wsl/blob/HEAD/doc/configuration.md#force-err-cuddling

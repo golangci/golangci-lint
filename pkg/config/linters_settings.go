@@ -188,6 +188,7 @@ var defaultLintersSettings = LintersSettings{
 		AllowCuddleDeclaration:           false,
 		AllowCuddleWithCalls:             []string{"Lock", "RLock"},
 		AllowCuddleWithRHS:               []string{"Unlock", "RUnlock"},
+		AllowCuddleUsedInBlock:           false,
 		ForceCuddleErrCheckAndAssign:     false,
 		ErrorVariableNames:               []string{"err"},
 		ForceExclusiveShortDeclarations:  false,
@@ -972,6 +973,7 @@ type WSLSettings struct {
 	AllowCuddleDeclaration           bool     `mapstructure:"allow-cuddle-declarations"`
 	AllowCuddleWithCalls             []string `mapstructure:"allow-cuddle-with-calls"`
 	AllowCuddleWithRHS               []string `mapstructure:"allow-cuddle-with-rhs"`
+	AllowCuddleUsedInBlock           bool     `mapstructure:"allow-cuddle-used-in-block"`
 	ForceCuddleErrCheckAndAssign     bool     `mapstructure:"force-err-cuddling"`
 	ErrorVariableNames               []string `mapstructure:"error-variable-names"`
 	ForceExclusiveShortDeclarations  bool     `mapstructure:"force-short-decl-cuddling"`
