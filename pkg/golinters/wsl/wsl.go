@@ -23,6 +23,7 @@ func New(settings *config.WSLSettings) *goanalysis.Linter {
 			AllowCuddleWithCalls:             settings.AllowCuddleWithCalls,
 			AllowCuddleWithRHS:               settings.AllowCuddleWithRHS,
 			ForceCuddleErrCheckAndAssign:     settings.ForceCuddleErrCheckAndAssign,
+			AllowCuddleUsedInBlock:           settings.AllowCuddleUsedInBlock,
 			ErrorVariableNames:               settings.ErrorVariableNames,
 			ForceExclusiveShortDeclarations:  settings.ForceExclusiveShortDeclarations,
 			IncludeGenerated:                 true, // force to true because golangci-lint already have a way to filter generated files.
