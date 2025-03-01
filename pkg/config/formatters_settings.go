@@ -5,8 +5,7 @@ var defaultFormatterSettings = FormatterSettings{
 		Simplify: true,
 	},
 	Gci: GciSettings{
-		Sections:      []string{"standard", "default"},
-		SkipGenerated: true,
+		Sections: []string{"standard", "default"},
 	},
 	GoLines: GoLinesSettings{
 		MaxLen:         100,
@@ -28,7 +27,6 @@ type GciSettings struct {
 	Sections         []string `mapstructure:"sections"`
 	NoInlineComments bool     `mapstructure:"no-inline-comments"`
 	NoPrefixComments bool     `mapstructure:"no-prefix-comments"`
-	SkipGenerated    bool     `mapstructure:"skip-generated"`
 	CustomOrder      bool     `mapstructure:"custom-order"`
 	NoLexOrder       bool     `mapstructure:"no-lex-order"`
 }

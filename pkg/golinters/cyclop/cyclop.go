@@ -8,7 +8,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
 )
 
-func New(settings *config.Cyclop) *goanalysis.Linter {
+func New(settings *config.CyclopSettings) *goanalysis.Linter {
 	a := analyzer.NewAnalyzer()
 
 	var cfg map[string]map[string]any

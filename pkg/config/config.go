@@ -87,11 +87,6 @@ func NewDefault() *Config {
 	}
 }
 
-type Version struct {
-	Format string `mapstructure:"format"`
-	Debug  bool   `mapstructure:"debug"`
-}
-
 func IsGoGreaterThanOrEqual(current, limit string) bool {
 	v1, err := hcversion.NewVersion(strings.TrimPrefix(current, "go"))
 	if err != nil {

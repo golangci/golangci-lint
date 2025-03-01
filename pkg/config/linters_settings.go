@@ -200,7 +200,7 @@ type LintersSettings struct {
 	Asasalint       AsasalintSettings       `mapstructure:"asasalint"`
 	BiDiChk         BiDiChkSettings         `mapstructure:"bidichk"`
 	CopyLoopVar     CopyLoopVarSettings     `mapstructure:"copyloopvar"`
-	Cyclop          Cyclop                  `mapstructure:"cyclop"`
+	Cyclop          CyclopSettings          `mapstructure:"cyclop"`
 	Decorder        DecorderSettings        `mapstructure:"decorder"`
 	Depguard        DepGuardSettings        `mapstructure:"depguard"`
 	Dogsled         DogsledSettings         `mapstructure:"dogsled"`
@@ -314,7 +314,7 @@ type CopyLoopVarSettings struct {
 	CheckAlias bool `mapstructure:"check-alias"`
 }
 
-type Cyclop struct {
+type CyclopSettings struct {
 	MaxComplexity  int     `mapstructure:"max-complexity"`
 	PackageAverage float64 `mapstructure:"package-average"`
 }
@@ -505,21 +505,29 @@ type GoModDirectivesSettings struct {
 }
 
 type GoModGuardSettings struct {
-	Allowed struct {
-		Modules []string `mapstructure:"modules"`
-		Domains []string `mapstructure:"domains"`
-	} `mapstructure:"allowed"`
-	Blocked struct {
-		Modules []map[string]struct {
-			Recommendations []string `mapstructure:"recommendations"`
-			Reason          string   `mapstructure:"reason"`
-		} `mapstructure:"modules"`
-		Versions []map[string]struct {
-			Version string `mapstructure:"version"`
-			Reason  string `mapstructure:"reason"`
-		} `mapstructure:"versions"`
-		LocalReplaceDirectives bool `mapstructure:"local-replace-directives"`
-	} `mapstructure:"blocked"`
+	Allowed GoModGuardAllowed `mapstructure:"allowed"`
+	Blocked GoModGuardBlocked `mapstructure:"blocked"`
+}
+
+type GoModGuardAllowed struct {
+	Modules []string `mapstructure:"modules"`
+	Domains []string `mapstructure:"domains"`
+}
+
+type GoModGuardBlocked struct {
+	Modules                []map[string]GoModGuardModule  `mapstructure:"modules"`
+	Versions               []map[string]GoModGuardVersion `mapstructure:"versions"`
+	LocalReplaceDirectives bool                           `mapstructure:"local-replace-directives"`
+}
+
+type GoModGuardModule struct {
+	Recommendations []string `mapstructure:"recommendations"`
+	Reason          string   `mapstructure:"reason"`
+}
+
+type GoModGuardVersion struct {
+	Version string `mapstructure:"version"`
+	Reason  string `mapstructure:"reason"`
 }
 
 type GoSecSettings struct {
@@ -545,7 +553,7 @@ type GovetSettings struct {
 	EnableAll  bool     `mapstructure:"enable-all"`
 	DisableAll bool     `mapstructure:"disable-all"`
 
-	Settings map[string]map[string]any
+	Settings map[string]map[string]any `mapstructure:"settings"`
 }
 
 func (cfg *GovetSettings) Validate() error {
@@ -638,11 +646,13 @@ type MisspellExtraWords struct {
 }
 
 type MustTagSettings struct {
-	Functions []struct {
-		Name   string `mapstructure:"name"`
-		Tag    string `mapstructure:"tag"`
-		ArgPos int    `mapstructure:"arg-pos"`
-	} `mapstructure:"functions"`
+	Functions []MustTagFunction `mapstructure:"functions"`
+}
+
+type MustTagFunction struct {
+	Name   string `mapstructure:"name"`
+	Tag    string `mapstructure:"tag"`
+	ArgPos int    `mapstructure:"arg-pos"`
 }
 
 type NakedretSettings struct {
@@ -703,7 +713,7 @@ type PerfSprintSettings struct {
 }
 
 type PreallocSettings struct {
-	Simple     bool
+	Simple     bool `mapstructure:"simple"`
 	RangeLoops bool `mapstructure:"range-loops"`
 	ForLoops   bool `mapstructure:"for-loops"`
 }
@@ -735,24 +745,28 @@ type RecvcheckSettings struct {
 }
 
 type ReviveSettings struct {
-	Go             string  `mapstructure:"-"`
-	MaxOpenFiles   int     `mapstructure:"max-open-files"`
-	Confidence     float64 `mapstructure:"confidence"`
-	Severity       string  `mapstructure:"severity"`
-	EnableAllRules bool    `mapstructure:"enable-all-rules"`
-	Rules          []struct {
-		Name      string   `mapstructure:"name"`
-		Arguments []any    `mapstructure:"arguments"`
-		Severity  string   `mapstructure:"severity"`
-		Disabled  bool     `mapstructure:"disabled"`
-		Exclude   []string `mapstructure:"exclude"`
-	} `mapstructure:"rules"`
-	ErrorCode   int `mapstructure:"error-code"`
-	WarningCode int `mapstructure:"warning-code"`
-	Directives  []struct {
-		Name     string `mapstructure:"name"`
-		Severity string `mapstructure:"severity"`
-	} `mapstructure:"directives"`
+	Go             string            `mapstructure:"-"`
+	MaxOpenFiles   int               `mapstructure:"max-open-files"`
+	Confidence     float64           `mapstructure:"confidence"`
+	Severity       string            `mapstructure:"severity"`
+	EnableAllRules bool              `mapstructure:"enable-all-rules"`
+	Rules          []ReviveRule      `mapstructure:"rules"`
+	ErrorCode      int               `mapstructure:"error-code"`
+	WarningCode    int               `mapstructure:"warning-code"`
+	Directives     []ReviveDirective `mapstructure:"directives"`
+}
+
+type ReviveRule struct {
+	Name      string   `mapstructure:"name"`
+	Arguments []any    `mapstructure:"arguments"`
+	Severity  string   `mapstructure:"severity"`
+	Disabled  bool     `mapstructure:"disabled"`
+	Exclude   []string `mapstructure:"exclude"`
+}
+
+type ReviveDirective struct {
+	Name     string `mapstructure:"name"`
+	Severity string `mapstructure:"severity"`
 }
 
 type RowsErrCheckSettings struct {
@@ -830,30 +844,37 @@ type TestifylintSettings struct {
 	EnabledCheckers  []string `mapstructure:"enable"`
 	DisabledCheckers []string `mapstructure:"disable"`
 
-	BoolCompare struct {
-		IgnoreCustomTypes bool `mapstructure:"ignore-custom-types"`
-	} `mapstructure:"bool-compare"`
+	BoolCompare          TestifylintBoolCompare          `mapstructure:"bool-compare"`
+	ExpectedActual       TestifylintExpectedActual       `mapstructure:"expected-actual"`
+	Formatter            TestifylintFormatter            `mapstructure:"formatter"`
+	GoRequire            TestifylintGoRequire            `mapstructure:"go-require"`
+	RequireError         TestifylintRequireError         `mapstructure:"require-error"`
+	SuiteExtraAssertCall TestifylintSuiteExtraAssertCall `mapstructure:"suite-extra-assert-call"`
+}
 
-	ExpectedActual struct {
-		ExpVarPattern string `mapstructure:"pattern"`
-	} `mapstructure:"expected-actual"`
+type TestifylintBoolCompare struct {
+	IgnoreCustomTypes bool `mapstructure:"ignore-custom-types"`
+}
 
-	Formatter struct {
-		CheckFormatString *bool `mapstructure:"check-format-string"`
-		RequireFFuncs     bool  `mapstructure:"require-f-funcs"`
-	} `mapstructure:"formatter"`
+type TestifylintExpectedActual struct {
+	ExpVarPattern string `mapstructure:"pattern"`
+}
 
-	GoRequire struct {
-		IgnoreHTTPHandlers bool `mapstructure:"ignore-http-handlers"`
-	} `mapstructure:"go-require"`
+type TestifylintFormatter struct {
+	CheckFormatString *bool `mapstructure:"check-format-string"`
+	RequireFFuncs     bool  `mapstructure:"require-f-funcs"`
+}
 
-	RequireError struct {
-		FnPattern string `mapstructure:"fn-pattern"`
-	} `mapstructure:"require-error"`
+type TestifylintGoRequire struct {
+	IgnoreHTTPHandlers bool `mapstructure:"ignore-http-handlers"`
+}
 
-	SuiteExtraAssertCall struct {
-		Mode string `mapstructure:"mode"`
-	} `mapstructure:"suite-extra-assert-call"`
+type TestifylintRequireError struct {
+	FnPattern string `mapstructure:"fn-pattern"`
+}
+
+type TestifylintSuiteExtraAssertCall struct {
+	Mode string `mapstructure:"mode"`
 }
 
 type TestpackageSettings struct {
