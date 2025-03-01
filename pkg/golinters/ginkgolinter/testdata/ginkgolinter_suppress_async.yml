@@ -1,5 +1,6 @@
 version: "2"
 
-linters-settings:
-  ginkgolinter:
-    suppress-async-assertion: true
+linters:
+  settings:
+    ginkgolinter:
+      suppress-async-assertion: true

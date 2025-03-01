@@ -1,18 +1,18 @@
 version: "2"
 
-linters-settings:
-  depguard:
-    rules:
-      main:
-        deny:
-          - pkg: fmt
-            desc: "nope"
-          - pkg: strings
-            desc: "nope"
-          - pkg: compress
-            desc: "nope"
-          - pkg: log
-            desc: "don't use log"
-          - pkg: "golang.org/x/tools/go/analysis"
-            desc: "example import with dot"
-
+linters:
+  settings:
+    depguard:
+      rules:
+        main:
+          deny:
+            - pkg: fmt
+              desc: "nope"
+            - pkg: strings
+              desc: "nope"
+            - pkg: compress
+              desc: "nope"
+            - pkg: log
+              desc: "don't use log"
+            - pkg: "golang.org/x/tools/go/analysis"
+              desc: "example import with dot"

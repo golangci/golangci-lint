@@ -272,7 +272,7 @@ func TestNolintFilter_Process_unused(t *testing.T) {
 		enabledSetLog := logutils.NewMockLog()
 		enabledSetLog.On("Infof", "Active %d linters: %s", len(enabledLinters), enabledLinters)
 
-		cfg := &config.Config{Linters: config.Linters{DisableAll: true, Enable: enabledLinters}}
+		cfg := &config.Config{Linters: config.Linters{Default: config.GroupNone, Enable: enabledLinters}}
 
 		dbManager, err := lintersdb.NewManager(enabledSetLog, cfg, lintersdb.NewLinterBuilder())
 		require.NoError(t, err)
@@ -336,7 +336,7 @@ func TestNolintFilter_Process_unused(t *testing.T) {
 		enabledSetLog := logutils.NewMockLog()
 		enabledSetLog.On("Infof", "Active %d linters: %s", 1, []string{"nolintlint"})
 
-		cfg := &config.Config{Linters: config.Linters{DisableAll: true, Enable: []string{"nolintlint"}}}
+		cfg := &config.Config{Linters: config.Linters{Default: config.GroupNone, Enable: []string{"nolintlint"}}}
 
 		dbManager, err := lintersdb.NewManager(enabledSetLog, cfg, lintersdb.NewLinterBuilder())
 		require.NoError(t, err)

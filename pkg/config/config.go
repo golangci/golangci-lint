@@ -30,10 +30,10 @@ type Config struct {
 
 	Output Output `mapstructure:"output"`
 
-	LintersSettings LintersSettings `mapstructure:"linters-settings"`
-	Linters         Linters         `mapstructure:"linters"`
-	Issues          Issues          `mapstructure:"issues"`
-	Severity        Severity        `mapstructure:"severity"`
+	Linters Linters `mapstructure:"linters"`
+
+	Issues   Issues   `mapstructure:"issues"`
+	Severity Severity `mapstructure:"severity"`
 
 	Formatters Formatters `mapstructure:"formatters"`
 
@@ -54,7 +54,6 @@ func (c *Config) Validate() error {
 	validators := []func() error{
 		c.Run.Validate,
 		c.Output.Validate,
-		c.LintersSettings.Validate,
 		c.Linters.Validate,
 		c.Severity.Validate,
 	}
@@ -70,7 +69,9 @@ func (c *Config) Validate() error {
 
 func NewDefault() *Config {
 	return &Config{
-		LintersSettings: defaultLintersSettings,
+		Linters: Linters{
+			Settings: defaultLintersSettings,
+		},
 		Formatters: Formatters{
 			Settings: defaultFormatterSettings,
 		},

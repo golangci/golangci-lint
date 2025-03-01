@@ -27,7 +27,7 @@ type Context struct {
 }
 
 func (c *Context) Settings() *config.LintersSettings {
-	return &c.Cfg.LintersSettings
+	return &c.Cfg.Linters.Settings
 }
 
 func (c *Context) ClearTypesInPackages() {

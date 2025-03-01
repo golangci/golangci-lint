@@ -30,7 +30,7 @@ type LinterWrapper struct {
 	Name string `json:"name"` // From linter.
 	Desc string `json:"desc"` // From linter.
 
-	EnabledByDefault bool `json:"enabledByDefault,omitempty"`
+	Groups map[string]struct{}
 
 	LoadMode packages.LoadMode `json:"loadMode,omitempty"`
 

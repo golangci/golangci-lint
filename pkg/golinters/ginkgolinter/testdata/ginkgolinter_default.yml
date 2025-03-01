@@ -1,4 +1,5 @@
 version: "2"
 
-linters-settings:
-  ginkgolinter: {}
+linters:
+  settings:
+    ginkgolinter: {}

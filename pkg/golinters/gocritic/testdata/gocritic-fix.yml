@@ -1,13 +1,14 @@
 version: "2"
 
-linters-settings:
-  gocritic:
-    enabled-checks:
-      - ruleguard
-    settings:
-      ruleguard:
-        failOn: dsl,import
-        rules: '${base-path}/ruleguard/rangeExprCopy.go,${base-path}/ruleguard/stringsSimplify.go'
+linters:
+  settings:
+    gocritic:
+      enabled-checks:
+        - ruleguard
+      settings:
+        ruleguard:
+          failOn: dsl,import
+          rules: '${base-path}/ruleguard/rangeExprCopy.go,${base-path}/ruleguard/stringsSimplify.go'
 
 run:
   relative-path-mode: cfg

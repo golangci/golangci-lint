@@ -62,7 +62,7 @@ func testOneSource(t *testing.T, log *logutils.StderrLog, binPath, sourcePath st
 	}
 
 	args := []string{
-		"--disable-all",
+		"--default=none",
 		"--show-stats=false",
 		"--output.json.path=stdout",
 		"--max-same-issues=100",

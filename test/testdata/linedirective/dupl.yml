@@ -1,5 +1,6 @@
 version: "2"
 
-linters-settings:
-  dupl:
-    threshold: 10
+linters:
+  settings:
+    dupl:
+      threshold: 10
