@@ -26,6 +26,8 @@
       link: "/product/thanks/"
     - label: "Changelog"
       link: "/product/changelog/"
+    - label: "Migration Guide"
+      link: "/product/migration-guide/"
     - label: "Roadmap"
       link: "/product/roadmap/"
     - label: "Performance"
@@ -54,4 +56,3 @@
       link: /plugins/module-plugins/
     - label: Go Plugin System
       link: /plugins/go-plugins/
-
