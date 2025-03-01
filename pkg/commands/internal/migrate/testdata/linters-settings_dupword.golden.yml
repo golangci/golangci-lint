@@ -1,0 +1,10 @@
+version: "2"
+linters:
+  settings:
+    dupword:
+      keywords:
+        - the
+        - and
+        - a
+      ignore:
+        - 0C0C

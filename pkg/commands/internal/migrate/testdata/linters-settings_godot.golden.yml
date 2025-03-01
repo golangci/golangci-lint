@@ -1,0 +1,10 @@
+version: "2"
+linters:
+  settings:
+    godot:
+      scope: toplevel
+      exclude:
+        - '^fixme:'
+        - '^todo:'
+      capital: true
+      period: false

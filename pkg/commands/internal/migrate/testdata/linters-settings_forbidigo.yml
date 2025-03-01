@@ -1,0 +1,18 @@
+issues:
+  # Only to not generate unrelated elements inside golden.
+  exclude-generated: strict
+  # Only to not generate unrelated elements inside golden.
+  exclude-dirs-use-default: false
+
+linters-settings:
+  forbidigo:
+    forbid:
+      - ^print(ln)?$
+      - p: ^fmt\.Print.*$
+        msg: Do not commit print statements.
+      - 'fmt\.Print.*(# Do not commit print statements\.)?'
+      - ^spew\.(ConfigState\.)?Dump$
+      - p: ^v1.Dump$
+        pkg: ^example.com/pkg/api/v1$
+    exclude-godoc-examples: false
+    analyze-types: true

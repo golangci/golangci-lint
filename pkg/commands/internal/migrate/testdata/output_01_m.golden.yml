@@ -1,0 +1,6 @@
+version: "2"
+output:
+  formats:
+    junit-xml:
+      path: stdout
+      extended: true

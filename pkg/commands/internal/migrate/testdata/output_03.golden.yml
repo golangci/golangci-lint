@@ -1,0 +1,6 @@
+version: "2"
+output:
+  sort-order:
+    - linter
+    - severity
+    - file

@@ -1,0 +1,7 @@
+version: "2"
+severity:
+  default: error
+  rules:
+    - linters:
+        - dupl
+      severity: info

@@ -1,0 +1,6 @@
+version: "2"
+linters:
+  settings:
+    whitespace:
+      multi-if: true
+      multi-func: true

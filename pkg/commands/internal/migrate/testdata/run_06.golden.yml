@@ -1,0 +1,3 @@
+version: "2"
+run:
+  modules-download-mode: readonly

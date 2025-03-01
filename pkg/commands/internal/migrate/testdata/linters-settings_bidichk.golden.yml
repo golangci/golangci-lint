@@ -1,0 +1,13 @@
+version: "2"
+linters:
+  settings:
+    bidichk:
+      left-to-right-embedding: true
+      right-to-left-embedding: false
+      pop-directional-formatting: false
+      left-to-right-override: false
+      right-to-left-override: false
+      left-to-right-isolate: false
+      right-to-left-isolate: false
+      first-strong-isolate: false
+      pop-directional-isolate: false
