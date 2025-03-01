@@ -176,6 +176,12 @@ linters:
         linters:
           - lll
 
+      # Related to migration command.
+      - path: pkg/commands/internal/migrate/
+        linters:
+          - gocritic
+        text: "hugeParam:"
+
 formatters:
   enable:
     - gofmt
