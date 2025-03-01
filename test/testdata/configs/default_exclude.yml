@@ -1,6 +1,11 @@
 version: "2"
 
 linters:
+  settings:
+    staticcheck:
+      checks:
+        - all
+
   exclusions:
     presets:
       - std-error-handling

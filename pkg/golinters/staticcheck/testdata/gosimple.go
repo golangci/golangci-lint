@@ -1,4 +1,5 @@
-//golangcitest:args -Egosimple
+//golangcitest:args -Estaticcheck
+//golangcitest:config_path testdata/gosimple.yml
 package testdata
 
 import (
@@ -14,7 +15,7 @@ func Gosimple(ss []string) {
 }
 
 func GosimpleNolintGosimple(ss []string) {
-	if ss != nil { //nolint:gosimple
+	if ss != nil { //nolint:staticcheck
 		for _, s := range ss {
 			log.Printf(s)
 		}

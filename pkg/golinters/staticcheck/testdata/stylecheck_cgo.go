@@ -1,4 +1,5 @@
-//golangcitest:args -Estylecheck
+//golangcitest:args -Estaticcheck
+//golangcitest:config_path testdata/stylecheck.yml
 // Package testdata ...
 package testdata
 

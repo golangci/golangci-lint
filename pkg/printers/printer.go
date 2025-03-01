@@ -65,7 +65,7 @@ func NewPrinter(log logutils.Log, cfg *config.Formats, reportData *report.Data, 
 //nolint:gocyclo,funlen // the complexity is related to the number of formats.
 func (c *Printer) Print(issues []result.Issue) error {
 	if c.cfg.IsEmpty() {
-		c.cfg.Text.SimpleFormat.Path = outputStdOut
+		c.cfg.Text.Path = outputStdOut
 	}
 
 	var printers []issuePrinter

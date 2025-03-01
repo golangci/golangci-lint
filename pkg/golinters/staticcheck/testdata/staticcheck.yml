@@ -1,0 +1,10 @@
+version: "2"
+
+linters:
+  settings:
+    staticcheck:
+      checks:
+        - all
+        - '-ST*'
+        - '-S*'
+        - '-QF*'
