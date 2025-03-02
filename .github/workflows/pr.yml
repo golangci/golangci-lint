@@ -153,5 +153,7 @@ jobs:
 
       - run: ./golangci-lint help
       - run: ./golangci-lint help linters
+      - run: ./golangci-lint help formatters
       - run: ./golangci-lint linters
+      - run: ./golangci-lint formatters
       - run: ./golangci-lint version

@@ -14,15 +14,15 @@ import (
 	"github.com/golangci/golangci-lint/pkg/logutils"
 )
 
-type lintersOptions struct {
+type formattersOptions struct {
 	config.LoaderOptions
 }
 
-type lintersCommand struct {
+type formattersCommand struct {
 	viper *viper.Viper
 	cmd   *cobra.Command
 
-	opts lintersOptions
+	opts formattersOptions
 
 	cfg *config.Config
 
@@ -31,16 +31,16 @@ type lintersCommand struct {
 	dbManager *lintersdb.Manager
 }
 
-func newLintersCommand(logger logutils.Log) *lintersCommand {
-	c := &lintersCommand{
+func newFormattersCommand(logger logutils.Log) *formattersCommand {
+	c := &formattersCommand{
 		viper: viper.New(),
 		cfg:   config.NewDefault(),
 		log:   logger,
 	}
 
-	lintersCmd := &cobra.Command{
-		Use:               "linters",
-		Short:             "List current linters configuration",
+	formattersCmd := &cobra.Command{
+		Use:               "formatters",
+		Short:             "List current formatters configuration",
 		Args:              cobra.NoArgs,
 		ValidArgsFunction: cobra.NoFileCompletions,
 		RunE:              c.execute,
@@ -48,18 +48,18 @@ func newLintersCommand(logger logutils.Log) *lintersCommand {
 		SilenceUsage:      true,
 	}
 
-	fs := lintersCmd.Flags()
+	fs := formattersCmd.Flags()
 	fs.SortFlags = false // sort them as they are defined here
 
 	setupConfigFileFlagSet(fs, &c.opts.LoaderOptions)
 	setupLintersFlagSet(c.viper, fs)
 
-	c.cmd = lintersCmd
+	c.cmd = formattersCmd
 
 	return c
 }
 
-func (c *lintersCommand) preRunE(cmd *cobra.Command, args []string) error {
+func (c *formattersCommand) preRunE(cmd *cobra.Command, args []string) error {
 	loader := config.NewLoader(c.log.Child(logutils.DebugKeyConfigReader), c.viper, cmd.Flags(), c.opts.LoaderOptions, c.cfg, args)
 
 	err := loader.Load(config.LoadOptions{Validation: true})
@@ -78,10 +78,10 @@ func (c *lintersCommand) preRunE(cmd *cobra.Command, args []string) error {
 	return nil
 }
 
-func (c *lintersCommand) execute(_ *cobra.Command, _ []string) error {
+func (c *formattersCommand) execute(_ *cobra.Command, _ []string) error {
 	enabledLintersMap, err := c.dbManager.GetEnabledLintersMap()
 	if err != nil {
-		return fmt.Errorf("can't get enabled linters: %w", err)
+		return fmt.Errorf("can't get enabled formatters: %w", err)
 	}
 
 	var enabledLinters []*linter.Config
@@ -92,7 +92,7 @@ func (c *lintersCommand) execute(_ *cobra.Command, _ []string) error {
 			continue
 		}
 
-		if goformatters.IsFormatter(lc.Name()) {
+		if !goformatters.IsFormatter(lc.Name()) {
 			continue
 		}
 
@@ -103,10 +103,10 @@ func (c *lintersCommand) execute(_ *cobra.Command, _ []string) error {
 		}
 	}
 
-	color.Green("Enabled by your configuration linters:\n")
-	printLinters(enabledLinters)
-	color.Red("\nDisabled by your configuration linters:\n")
-	printLinters(disabledLCs)
+	color.Green("Enabled by your configuration formatters:\n")
+	printFormatters(enabledLinters)
+	color.Red("\nDisabled by your configuration formatters:\n")
+	printFormatters(disabledLCs)
 
 	return nil
 }

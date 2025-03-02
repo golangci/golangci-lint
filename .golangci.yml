@@ -182,6 +182,11 @@ linters:
           - gocritic
         text: "hugeParam:"
 
+      # The codes are close but this is not duplication.
+      - path: pkg/commands/(formatters|linters).go
+        linters:
+          - dupl
+
 formatters:
   enable:
     - gofmt
