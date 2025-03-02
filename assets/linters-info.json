@@ -1195,7 +1195,7 @@
     "since": "v1.43.0",
     "deprecation": {
       "since": "v1.64.0",
-      "message": "Duplicate feature another linter.",
+      "message": "Duplicate feature in another linter.",
       "replacement": "usetesting"
     }
   },
