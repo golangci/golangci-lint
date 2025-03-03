@@ -351,7 +351,7 @@
         "timeout": {
           "description": "Timeout for the analysis.",
           "type": "string",
-          "pattern": "^(\\d+m\\d+s|\\d+m|\\d+s|\\d)$",
+          "pattern": "^((\\d+h)?(\\d+m)?(\\d+(?:\\.\\d)?s)?|0)$",
           "default": "1m",
           "examples": ["30s", "5m", "5m30s"]
         },
