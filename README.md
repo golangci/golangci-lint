@@ -53,6 +53,13 @@ This project exists thanks to all the people who contribute. [How to contribute]
   <img src="https://opencollective.com/golangci-lint/contributors.svg?width=890&button=false&skip=golangcidev,CLAassistant,renovate,fossabot,golangcibot,kortschak,golangci-releaser,dependabot%5Bbot%5D" />
 </a>
 
+## Sponsors
+
+<p>&nbsp;</p>
+<p float="left">
+  <a href="https://www.jetbrains.com/go/?utm_source=OSS&utm_medium=referral&utm_campaign=golangci" target="_blank"><img src="https://raw.githubusercontent.com/gohugoio/gohugoioTheme/master/assets/images/sponsors/goland.svg" width="150" alt="The complete IDE crafted for professional Go developers."></a>
+</p>
+
 ## Stargazers over time
 
 [![Stargazers over time](https://starchart.cc/golangci/golangci-lint.svg)](https://starchart.cc/golangci/golangci-lint)
