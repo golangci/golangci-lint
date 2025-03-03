@@ -22,16 +22,16 @@ type Severity struct {
 
 	log logutils.Log
 
-	files *fsutils.Files
+	lines *fsutils.LineCache
 
 	defaultSeverity string
 	rules           []severityRule
 }
 
-func NewSeverity(log logutils.Log, files *fsutils.Files, cfg *config.Severity) *Severity {
+func NewSeverity(log logutils.Log, lines *fsutils.LineCache, cfg *config.Severity) *Severity {
 	p := &Severity{
 		name:            "severity-rules",
-		files:           files,
+		lines:           lines,
 		log:             log,
 		defaultSeverity: cfg.Default,
 	}
@@ -55,7 +55,7 @@ func (*Severity) Finish() {}
 
 func (p *Severity) transform(issue *result.Issue) *result.Issue {
 	for _, rule := range p.rules {
-		if rule.match(issue, p.files, p.log) {
+		if rule.match(issue, p.lines, p.log) {
 			if rule.severity == severityFromLinter || (rule.severity == "" && p.defaultSeverity == severityFromLinter) {
 				return issue
 			}
