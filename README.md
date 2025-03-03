@@ -57,7 +57,7 @@ This project exists thanks to all the people who contribute. [How to contribute]
 
 <p>&nbsp;</p>
 <p float="left">
-  <a href="https://www.jetbrains.com/go/?utm_source=OSS&utm_medium=referral&utm_campaign=golangci" target="_blank"><img src="https://raw.githubusercontent.com/gohugoio/gohugoioTheme/master/assets/images/sponsors/goland.svg" width="150" alt="The complete IDE crafted for professional Go developers."></a>
+  <a href="https://www.jetbrains.com/go/?utm_source=OSS&utm_medium=referral&utm_campaign=golangci" target="_blank"><img src="assets/goland.svg" width="150" alt="The complete IDE crafted for professional Go developers."></a>
 </p>
 
 ## Stargazers over time
