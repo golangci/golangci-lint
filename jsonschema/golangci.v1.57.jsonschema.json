@@ -351,7 +351,7 @@
         "timeout": {
           "description": "Timeout for the analysis.",
           "type": "string",
-          "pattern": "^(\\d*m)?\\d*[sm]$",
+          "pattern": "^(\\d+m\\d+s|\\d+m|\\d+s|\\d)$",
           "default": "1m",
           "examples": ["30s", "5m", "5m30s"]
         },
