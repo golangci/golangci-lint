@@ -4159,7 +4159,7 @@ output:
 
 # Options for analysis running.
 run:
-  # Timeout for analysis, e.g. 30s, 5m.
+  # Timeout for analysis, e.g. 30s, 5m, 5m30s.
   # If the value is lower or equal to 0, the timeout is disabled.
   # Default: 1m
   timeout: 5m

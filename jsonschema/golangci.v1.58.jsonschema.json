@@ -353,9 +353,9 @@
         "timeout": {
           "description": "Timeout for the analysis.",
           "type": "string",
-          "pattern": "^\\d*[sm]$",
+          "pattern": "^((\\d+h)?(\\d+m)?(\\d+(?:\\.\\d)?s)?|0)$",
           "default": "1m",
-          "examples": ["30s", "5m"]
+          "examples": ["30s", "5m", "5m30s"]
         },
         "issues-exit-code": {
           "description": "Exit code when at least one issue was found.",
