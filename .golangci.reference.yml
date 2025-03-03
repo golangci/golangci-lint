@@ -1286,7 +1286,7 @@ linters-settings:
     min-complexity: 10
 
   godot:
-    # Comments to be checked: `declarations`, `toplevel`, or `all`.
+    # Comments to be checked: `declarations`, `toplevel`, `noinline` or `all`.
     # Default: declarations
     scope: toplevel
     # List of regexps for excluding particular comment lines from check.
@@ -1346,27 +1346,25 @@ linters-settings:
         # Define here regexp type values.
         # for example:
         AUTHOR: .*@mycompany\.com
-    # The template use for checking.
+    # The template used for checking.
+    # Put here copyright header template for source code files
+    # Note: {{ YEAR }} is a builtin value that returns the year relative to the current machine time.
     # Default: ""
     template: |-
-      # Put here copyright header template for source code files
-      # For example:
-      # Note: {{ YEAR }} is a builtin value that returns the year relative to the current machine time.
-      #
-      # {{ AUTHOR }} {{ COMPANY }} {{ YEAR }}
-      # SPDX-License-Identifier: Apache-2.0
+      {{ AUTHOR }} {{ COMPANY }} {{ YEAR }}
+      SPDX-License-Identifier: Apache-2.0
 
-      # Licensed under the Apache License, Version 2.0 (the "License");
-      # you may not use this file except in compliance with the License.
-      # You may obtain a copy of the License at:
+      Licensed under the Apache License, Version 2.0 (the "License");
+      you may not use this file except in compliance with the License.
+      You may obtain a copy of the License at:
 
-      #   http://www.apache.org/licenses/LICENSE-2.0
+        http://www.apache.org/licenses/LICENSE-2.0
 
-      # Unless required by applicable law or agreed to in writing, software
-      # distributed under the License is distributed on an "AS IS" BASIS,
-      # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-      # See the License for the specific language governing permissions and
-      # limitations under the License.
+      Unless required by applicable law or agreed to in writing, software
+      distributed under the License is distributed on an "AS IS" BASIS,
+      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+      See the License for the specific language governing permissions and
+      limitations under the License.
     # As alternative of directive 'template', you may put the path to file with the template source.
     # Useful if you need to load the template from a specific file.
     # Default: ""
@@ -2580,6 +2578,8 @@ linters-settings:
         severity: warning
         disabled: false
         exclude: [""]
+        arguments:
+          - "xerrors.New"
       # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#errorf
       - name: errorf
         severity: warning
