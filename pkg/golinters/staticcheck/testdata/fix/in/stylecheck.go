@@ -1,6 +1,7 @@
 // Package testdata ...
 //
-//golangcitest:args -Estylecheck
+//golangcitest:args -Estaticcheck
+//golangcitest:config_path testdata/stylecheck.yml
 //golangcitest:expected_exitcode 0
 package testdata
 

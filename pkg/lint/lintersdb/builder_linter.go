@@ -51,7 +51,6 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/gomodguard"
 	"github.com/golangci/golangci-lint/pkg/golinters/goprintffuncname"
 	"github.com/golangci/golangci-lint/pkg/golinters/gosec"
-	"github.com/golangci/golangci-lint/pkg/golinters/gosimple"
 	"github.com/golangci/golangci-lint/pkg/golinters/gosmopolitan"
 	"github.com/golangci/golangci-lint/pkg/golinters/govet"
 	"github.com/golangci/golangci-lint/pkg/golinters/grouper"
@@ -94,7 +93,6 @@ import (
 	"github.com/golangci/golangci-lint/pkg/golinters/spancheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/sqlclosecheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/staticcheck"
-	"github.com/golangci/golangci-lint/pkg/golinters/stylecheck"
 	"github.com/golangci/golangci-lint/pkg/golinters/tagalign"
 	"github.com/golangci/golangci-lint/pkg/golinters/tagliatelle"
 	"github.com/golangci/golangci-lint/pkg/golinters/testableexamples"
@@ -373,13 +371,6 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/securego/gosec"),
 
-		linter.NewConfig(gosimple.New(&cfg.Linters.Settings.Gosimple)).
-			WithGroups(config.GroupStandard).
-			WithSince("v1.20.0").
-			WithLoadForGoAnalysis().
-			WithAutoFix().
-			WithURL("https://github.com/dominikh/go-tools/tree/HEAD/simple"),
-
 		linter.NewConfig(gosmopolitan.New(&cfg.Linters.Settings.Gosmopolitan)).
 			WithSince("v1.53.0").
 			WithLoadForGoAnalysis().
@@ -580,12 +571,6 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithLoadForGoAnalysis().
 			WithAutoFix().
 			WithURL("https://staticcheck.dev/"),
-
-		linter.NewConfig(stylecheck.New(&cfg.Linters.Settings.Stylecheck)).
-			WithSince("v1.20.0").
-			WithLoadForGoAnalysis().
-			WithAutoFix().
-			WithURL("https://github.com/dominikh/go-tools/tree/HEAD/stylecheck"),
 
 		linter.NewConfig(tagalign.New(&cfg.Linters.Settings.TagAlign)).
 			WithSince("v1.53.0").

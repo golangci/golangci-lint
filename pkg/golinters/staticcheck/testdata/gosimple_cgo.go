@@ -1,4 +1,5 @@
-//golangcitest:args -Egosimple
+//golangcitest:args -Estaticcheck
+//golangcitest:config_path testdata/gosimple.yml
 package testdata
 
 /*

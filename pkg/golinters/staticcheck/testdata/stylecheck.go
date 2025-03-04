@@ -1,4 +1,5 @@
-//golangcitest:args -Estylecheck
+//golangcitest:args -Estaticcheck
+//golangcitest:config_path testdata/stylecheck.yml
 // Package testdata ...
 package testdata
 
@@ -17,7 +18,7 @@ func StylecheckNolintStylecheck(x int) {
 	switch x {
 	case 1:
 		return
-	default: //nolint:stylecheck
+	default: //nolint:staticcheck
 		return
 	case 2:
 		return

@@ -1,4 +1,5 @@
 //golangcitest:args -Estaticcheck
+//golangcitest:config_path testdata/staticcheck.yml
 package testdata
 
 import (
