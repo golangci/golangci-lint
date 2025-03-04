@@ -184,7 +184,7 @@ type Issue struct {
 We have an abstraction of `result.Processor` to postprocess found issues:
 
 <!--
-$ tree -L 1 ./pkg/result/processors/
+$ tree -L 1 ./pkg/result/processors/ | grep -v test
 -->
 
 ```sh
@@ -235,7 +235,7 @@ A processor can hide issues (`nolint`, `exclude`) or change issues (`path_pretti
 We have an abstraction for printing found issues.
 
 <!--
-$ tree -L 1 ./pkg/printers/
+$ tree -L 1 ./pkg/printers/ | grep -v test
 -->
 
 ```sh
