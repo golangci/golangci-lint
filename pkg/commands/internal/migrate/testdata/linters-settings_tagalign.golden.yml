@@ -1,0 +1,15 @@
+version: "2"
+linters:
+  settings:
+    tagalign:
+      align: false
+      sort: false
+      order:
+        - json
+        - yaml
+        - yml
+        - toml
+        - mapstructure
+        - binding
+        - validate
+      strict: true

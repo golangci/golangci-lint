@@ -1,0 +1,12 @@
+version: "2"
+linters:
+  settings:
+    protogetter:
+      skip-generated-by:
+        - protoc-gen-go-my-own-generator
+      skip-files:
+        - '*.pb.go'
+        - '*/vendor/*'
+        - /full/path/to/file.go
+      skip-any-generated: true
+      replace-first-arg-in-append: true

@@ -1,0 +1,525 @@
+version: "2"
+linters:
+  settings:
+    revive:
+      max-open-files: 2048
+      confidence: 0.1
+      severity: error
+      enable-all-rules: true
+      rules:
+        - name: add-constant
+          arguments:
+            - allowFloats: 0.0,0.,1.0,1.,2.0,2.
+              allowInts: 0,1,2
+              allowStrs: '""'
+              maxLitCount: "3"
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: argument-limit
+          arguments:
+            - 4
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: atomic
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: banned-characters
+          arguments:
+            - Ω
+            - Σ
+            - σ
+            - "7"
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: bare-return
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: blank-imports
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: bool-literal-in-expr
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: call-to-gc
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: cognitive-complexity
+          arguments:
+            - 7
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: comment-spacings
+          arguments:
+            - mypragma
+            - otherpragma
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: comments-density
+          arguments:
+            - 15
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: confusing-naming
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: confusing-results
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: constant-logical-expr
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: context-as-argument
+          arguments:
+            - allowTypesBefore: '*testing.T,*github.com/user/repo/testing.Harness'
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: context-keys-type
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: cyclomatic
+          arguments:
+            - 3
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: datarace
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: deep-exit
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: defer
+          arguments:
+            - - call-chain
+              - loop
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: dot-imports
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: duplicated-imports
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: early-return
+          arguments:
+            - preserveScope
+            - allowJump
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: empty-block
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: empty-lines
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: enforce-map-style
+          arguments:
+            - make
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: enforce-repeated-arg-type-style
+          arguments:
+            - short
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: enforce-slice-style
+          arguments:
+            - make
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: error-naming
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: error-return
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: error-strings
+          arguments:
+            - xerrors.New
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: errorf
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: exported
+          arguments:
+            - checkPrivateReceivers
+            - disableStutteringCheck
+            - checkPublicInterface
+            - disableChecksOnFunctions
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: file-header
+          arguments:
+            - This is the text that must appear at the top of source files.
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: file-length-limit
+          arguments:
+            - max: 100
+              skipBlankLines: true
+              skipComments: true
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: filename-format
+          arguments:
+            - ^[_a-z][_a-z0-9]*\.go$
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: flag-parameter
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: function-length
+          arguments:
+            - 10
+            - 0
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: function-result-limit
+          arguments:
+            - 3
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: get-return
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: identical-branches
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: if-return
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: import-alias-naming
+          arguments:
+            - ^[a-z][a-z0-9]{0,}$
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: import-shadowing
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: imports-blocklist
+          arguments:
+            - crypto/md5
+            - crypto/sha1
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: increment-decrement
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: indent-error-flow
+          arguments:
+            - preserveScope
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: line-length-limit
+          arguments:
+            - 80
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: max-control-nesting
+          arguments:
+            - 3
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: max-public-structs
+          arguments:
+            - 3
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: modifies-parameter
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: modifies-value-receiver
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: nested-structs
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: optimize-operands-order
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: package-comments
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: range
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: range-val-address
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: range-val-in-closure
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: receiver-naming
+          arguments:
+            - maxLength: 2
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: redefines-builtin-id
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: redundant-build-tag
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: redundant-import-alias
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: string-format
+          arguments:
+            - - core.WriteError[1].Message
+              - /^([^A-Z]|$)/
+              - must not start with a capital letter
+            - - fmt.Errorf[0]
+              - /(^|[^\.!?])$/
+              - must not end in punctuation
+            - - panic
+              - /^[^\n]*$/
+              - must not contain line breaks
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: string-of-int
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: struct-tag
+          arguments:
+            - json,inline
+            - bson,outline,gnu
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: superfluous-else
+          arguments:
+            - preserveScope
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: time-equal
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: time-naming
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: unchecked-type-assertion
+          arguments:
+            - acceptIgnoredAssertionResult: true
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: unconditional-recursion
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: unexported-naming
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: unexported-return
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: unhandled-error
+          arguments:
+            - fmt.Printf
+            - myFunction
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: unnecessary-stmt
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: unreachable-code
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: unused-parameter
+          arguments:
+            - allowRegex: ^_
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: unused-receiver
+          arguments:
+            - allowRegex: ^_
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: use-any
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: use-errors-new
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: useless-break
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: var-declaration
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: var-naming
+          arguments:
+            - - ID
+            - - VM
+            - - upperCaseConst: true
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+        - name: waitgroup-by-value
+          severity: warning
+          disabled: false
+          exclude:
+            - ""
+      directives:
+        - name: specify-disable-reason
+          severity: error

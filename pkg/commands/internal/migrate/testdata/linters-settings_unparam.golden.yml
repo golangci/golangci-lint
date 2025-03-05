@@ -1,0 +1,5 @@
+version: "2"
+linters:
+  settings:
+    unparam:
+      check-exported: true

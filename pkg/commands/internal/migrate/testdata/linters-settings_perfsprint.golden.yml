@@ -1,0 +1,14 @@
+version: "2"
+linters:
+  settings:
+    perfsprint:
+      integer-format: false
+      int-conversion: false
+      error-format: false
+      err-error: true
+      errorf: false
+      string-format: false
+      sprintf1: false
+      strconcat: false
+      bool-format: false
+      hex-format: false

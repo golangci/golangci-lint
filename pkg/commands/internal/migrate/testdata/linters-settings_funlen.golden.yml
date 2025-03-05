@@ -1,0 +1,7 @@
+version: "2"
+linters:
+  settings:
+    funlen:
+      lines: -1
+      statements: -1
+      ignore-comments: true

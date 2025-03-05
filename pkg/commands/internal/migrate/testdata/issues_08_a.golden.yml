@@ -1,0 +1,5 @@
+version: "2"
+issues:
+  max-issues-per-linter: 0
+  max-same-issues: 0
+  uniq-by-line: true

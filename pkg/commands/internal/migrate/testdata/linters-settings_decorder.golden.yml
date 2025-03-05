@@ -1,0 +1,16 @@
+version: "2"
+linters:
+  settings:
+    decorder:
+      dec-order:
+        - type
+        - const
+        - var
+        - func
+      ignore-underscore-vars: false
+      disable-dec-num-check: false
+      disable-type-dec-num-check: false
+      disable-const-dec-num-check: false
+      disable-var-dec-num-check: false
+      disable-dec-order-check: false
+      disable-init-func-first-check: false

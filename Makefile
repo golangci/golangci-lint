@@ -60,6 +60,11 @@ fast_check_generated:
 	git checkout -- go.mod go.sum # can differ between go1.16 and go1.17
 	git diff --exit-code # check no changes
 
+# Migration
+
+clone_config:
+	go run ./pkg/commands/internal/migrate/cloner/
+
 # Benchmark
 
 # Benchmark with a local version

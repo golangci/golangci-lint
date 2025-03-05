@@ -1,0 +1,8 @@
+version: "2"
+linters:
+  settings:
+    testpackage:
+      skip-regexp: (export|internal)_test\.go
+      allow-packages:
+        - example
+        - main

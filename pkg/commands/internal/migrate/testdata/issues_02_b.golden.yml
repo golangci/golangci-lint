@@ -1,0 +1,6 @@
+version: "2"
+linters:
+  exclusions:
+    rules:
+      - path: (.+)\.go$
+        text: (?i)abcdef

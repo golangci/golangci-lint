@@ -1,0 +1,13 @@
+version: "2"
+linters:
+  settings:
+    asasalint:
+      exclude:
+        - Append
+        - \.Wrapf
+      use-builtin-exclusions: false
+  exclusions:
+    rules:
+      - linters:
+          - asasalint
+        path: (.+)_test\.go

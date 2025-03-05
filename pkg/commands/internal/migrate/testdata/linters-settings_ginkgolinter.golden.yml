@@ -1,0 +1,16 @@
+version: "2"
+linters:
+  settings:
+    ginkgolinter:
+      suppress-len-assertion: true
+      suppress-nil-assertion: true
+      suppress-err-assertion: true
+      suppress-compare-assertion: true
+      suppress-async-assertion: true
+      suppress-type-compare-assertion: true
+      forbid-focus-container: true
+      allow-havelen-zero: true
+      force-expect-to: true
+      validate-async-intervals: true
+      forbid-spec-pollution: true
+      force-succeed: true

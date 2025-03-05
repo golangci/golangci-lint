@@ -1,0 +1,25 @@
+version: "2"
+output:
+  formats:
+    text:
+      path: stdout
+      print-linter-name: true
+      print-issued-lines: false
+    json:
+      path: stderr
+    tab:
+      path: stdout
+      print-linter-name: true
+    html:
+      path: stdout
+    checkstyle:
+      path: report.xml
+    code-climate:
+      path: stdout
+    junit-xml:
+      path: stdout
+      extended: true
+    teamcity:
+      path: stdout
+    sarif:
+      path: stdout

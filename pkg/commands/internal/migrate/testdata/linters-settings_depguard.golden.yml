@@ -1,0 +1,19 @@
+version: "2"
+linters:
+  settings:
+    depguard:
+      rules:
+        main:
+          list-mode: lax
+          files:
+            - '!**/*_a _file.go'
+          allow:
+            - $gostd
+            - github.com/OpenPeeDeeP
+          deny:
+            - pkg: math/rand$
+              desc: use math/rand/v2
+            - pkg: github.com/sirupsen/logrus
+              desc: not allowed
+            - pkg: github.com/pkg/errors
+              desc: Should be replaced by standard lib errors package

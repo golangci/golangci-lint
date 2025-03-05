@@ -1,0 +1,6 @@
+issues:
+  # Only to not generate unrelated elements inside golden.
+  exclude-dirs-use-default: false
+
+  exclude-generated: lax
+
