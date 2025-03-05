@@ -7,8 +7,8 @@ title: "Install"
 Most installations of `golangci-lint` are performed for CI.
 
 It's important to have reproducible CI: don't start to fail all builds at the same time.
-With golangci-lint this can happen if you use option `--enable-all` and a new linter is added
-or even without `--enable-all` when one upstream linter is upgraded.
+With golangci-lint this can happen if you use option `linters.default: all` and a new linter is added
+or even without `linters.default: all` when one upstream linter is upgraded.
 
 **IMPORTANT**: It's highly recommended installing a specific version of golangci-lint available on the [releases page](https://github.com/golangci/golangci-lint/releases).
 

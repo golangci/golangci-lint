@@ -20,6 +20,8 @@
       link: "/usage/linters/"
     - label: "False Positives"
       link: "/usage/false-positives/"
+    - label: "Formatters"
+      link: "/usage/formatters/"
 - label: Product
   items:
     - label: "Thanks"

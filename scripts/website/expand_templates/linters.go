@@ -20,22 +20,14 @@ import (
 
 const listItemPrefix = "list-item-"
 
-func getExampleSnippets() (*SettingSnippets, error) {
-	reference, err := os.ReadFile(".golangci.reference.yml")
-	if err != nil {
-		return nil, fmt.Errorf("can't read .golangci.reference.yml: %w", err)
-	}
+const (
+	keyLinters    = "linters"
+	keyFormatters = "formatters"
+	keySettings   = "settings"
+)
 
-	snippets, err := extractExampleSnippets(reference)
-	if err != nil {
-		return nil, fmt.Errorf("can't extract example snippets from .golangci.reference.yml: %w", err)
-	}
-
-	return snippets, nil
-}
-
-func getLintersListMarkdown(enabled bool) string {
-	linters, err := readJSONFile[[]*types.LinterWrapper](filepath.Join("assets", "linters-info.json"))
+func getLintersListMarkdown(enabled bool, src string) string {
+	linters, err := readJSONFile[[]*types.LinterWrapper](src)
 	if err != nil {
 		panic(err)
 	}
@@ -73,7 +65,7 @@ func getLintersListMarkdown(enabled bool) string {
 
 	lines := []string{
 		"|Name|Description|AutoFix|Since|",
-		"|---|---|---|---|---|",
+		"|----|-----------|-------|-----|",
 	}
 
 	for _, lc := range neededLcs {
@@ -160,6 +152,14 @@ func hasSettings(name string) bool {
 		}
 	}
 
+	tp = reflect.TypeOf(config.FormatterSettings{})
+
+	for i := range tp.NumField() {
+		if strings.EqualFold(name, tp.Field(i).Name) {
+			return true
+		}
+	}
+
 	return false
 }
 
@@ -172,14 +172,63 @@ func spanWithID(id, title, icon string) string {
 }
 
 type SettingSnippets struct {
-	ConfigurationFile string
-	LintersSettings   string
+	ConfigurationFile  string
+	LintersSettings    string
+	FormattersSettings string
 }
 
-func extractExampleSnippets(example []byte) (*SettingSnippets, error) {
-	var data yaml.Node
-	err := yaml.Unmarshal(example, &data)
+func marshallSnippet(node *yaml.Node) (string, error) {
+	builder := &strings.Builder{}
+
+	if node.Value != "" {
+		_, _ = fmt.Fprintf(builder, "### %s\n\n", node.Value)
+	}
+	_, _ = fmt.Fprintln(builder, "```yaml")
+
+	encoder := yaml.NewEncoder(builder)
+	encoder.SetIndent(2)
+
+	err := encoder.Encode(node)
 	if err != nil {
+		return "", err
+	}
+
+	_, _ = fmt.Fprintln(builder, "```")
+	_, _ = fmt.Fprintln(builder)
+
+	return builder.String(), nil
+}
+
+type ExampleSnippetsExtractor struct {
+	referencePath string
+	assetsPath    string
+}
+
+func NewExampleSnippetsExtractor() *ExampleSnippetsExtractor {
+	return &ExampleSnippetsExtractor{
+		// TODO(ldez) replace .golangci.next.reference.yml by .golangci.reference.yml
+		referencePath: ".golangci.next.reference.yml",
+		assetsPath:    "assets",
+	}
+}
+
+func (e *ExampleSnippetsExtractor) GetExampleSnippets() (*SettingSnippets, error) {
+	reference, err := os.ReadFile(e.referencePath)
+	if err != nil {
+		return nil, fmt.Errorf("can't read .golangci.reference.yml: %w", err)
+	}
+
+	snippets, err := e.extractExampleSnippets(reference)
+	if err != nil {
+		return nil, fmt.Errorf("can't extract example snippets from .golangci.reference.yml: %w", err)
+	}
+
+	return snippets, nil
+}
+
+func (e *ExampleSnippetsExtractor) extractExampleSnippets(example []byte) (*SettingSnippets, error) {
+	var data yaml.Node
+	if err := yaml.Unmarshal(example, &data); err != nil {
 		return nil, err
 	}
 
@@ -205,7 +254,7 @@ func extractExampleSnippets(example []byte) (*SettingSnippets, error) {
 
 	for j, node := range root.Content {
 		switch node.Value {
-		case "run", "output", "linters", "linters-settings", "issues", "severity": // TODO(ldez) documentation
+		case "run", "output", keyLinters, keyFormatters, "issues", "severity":
 		default:
 			continue
 		}
@@ -233,20 +282,43 @@ func extractExampleSnippets(example []byte) (*SettingSnippets, error) {
 
 		globalNode.Content = append(globalNode.Content, node, newNode)
 
-		if node.Value == "linters-settings" { // TODO(ldez) documentation
-			snippets.LintersSettings, err = getLintersSettingSections(node, nextNode)
-			if err != nil {
-				return nil, err
-			}
+		if node.Value == keyLinters || node.Value == keyFormatters {
+			for i := 0; i < len(nextNode.Content); i++ {
+				if nextNode.Content[i].Value != keySettings {
+					continue
+				}
 
-			_, _ = builder.WriteString(
-				// TODO(ldez) documentation
-				fmt.Sprintf(
-					"### `%s` configuration\n\nSee the dedicated [linters-settings](/usage/linters) documentation section.\n\n",
-					node.Value,
-				),
-			)
-			continue
+				settingSections, err := e.getSettingSections(node, nextNode.Content[i+1])
+				if err != nil {
+					return nil, err
+				}
+
+				switch node.Value {
+				case keyLinters:
+					snippets.LintersSettings = settingSections
+
+				case keyFormatters:
+					snippets.FormattersSettings = settingSections
+				}
+
+				nextNode.Content[i+1].Content = []*yaml.Node{
+					{
+						HeadComment: fmt.Sprintf(`See the dedicated "%s.%s" documentation section.`, node.Value, nextNode.Content[i].Value),
+						Kind:        node.Kind,
+						Style:       node.Style,
+						Tag:         node.Tag,
+						Value:       "option",
+					},
+					{
+						Kind:  node.Kind,
+						Style: node.Style,
+						Tag:   node.Tag,
+						Value: "value",
+					},
+				}
+
+				i++
+			}
 		}
 
 		nodeSection := &yaml.Node{
@@ -275,8 +347,8 @@ func extractExampleSnippets(example []byte) (*SettingSnippets, error) {
 	return &snippets, nil
 }
 
-func getLintersSettingSections(node, nextNode *yaml.Node) (string, error) {
-	linters, err := readJSONFile[[]*types.LinterWrapper](filepath.Join("assets", "linters-info.json"))
+func (e *ExampleSnippetsExtractor) getSettingSections(node, nextNode *yaml.Node) (string, error) {
+	linters, err := readJSONFile[[]*types.LinterWrapper](filepath.Join(e.assetsPath, fmt.Sprintf("%s-info.json", node.Value)))
 	if err != nil {
 		return "", err
 	}
@@ -328,28 +400,6 @@ func getLintersSettingSections(node, nextNode *yaml.Node) (string, error) {
 		_, _ = fmt.Fprintf(builder, "[%s](#%s)\n\n", span("Back to the top", "<FaArrowUp />"), listItemPrefix+nextNode.Content[i].Value)
 		_, _ = fmt.Fprintln(builder)
 	}
-
-	return builder.String(), nil
-}
-
-func marshallSnippet(node *yaml.Node) (string, error) {
-	builder := &strings.Builder{}
-
-	if node.Value != "" {
-		_, _ = fmt.Fprintf(builder, "### %s\n\n", node.Value)
-	}
-	_, _ = fmt.Fprintln(builder, "```yaml")
-
-	encoder := yaml.NewEncoder(builder)
-	encoder.SetIndent(2)
-
-	err := encoder.Encode(node)
-	if err != nil {
-		return "", err
-	}
-
-	_, _ = fmt.Fprintln(builder, "```")
-	_, _ = fmt.Fprintln(builder)
 
 	return builder.String(), nil
 }

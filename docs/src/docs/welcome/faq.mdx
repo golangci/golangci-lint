@@ -62,9 +62,10 @@ most linters are not able to perform the analysis,
 and they simply do not produce any reports,
 so it's not possible to skip/ignore `typecheck` errors.
 
-## Why running with `--fast` is slow on the first run?
+## Why running with `--fast-only` can be slow on the first run?
 
-Because the first run caches type information. All subsequent runs will be fast.
+Because the first run caches type information.
+All subsequent runs will be faster.
 Usually this options is used during development on local machine and compilation was already performed.
 
 ## How do you add a custom linter?

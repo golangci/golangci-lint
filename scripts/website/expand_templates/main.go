@@ -90,7 +90,7 @@ func processDoc(path string, replacements map[string]string, madeReplacements ma
 }
 
 func buildTemplateContext() (map[string]string, error) {
-	snippets, err := getExampleSnippets()
+	snippets, err := NewExampleSnippetsExtractor().GetExampleSnippets()
 	if err != nil {
 		return nil, err
 	}
@@ -123,10 +123,12 @@ func buildTemplateContext() (map[string]string, error) {
 	return map[string]string{
 		"CustomGCLReference":              pluginReference,
 		"LintersExample":                  snippets.LintersSettings,
+		"FormattersExample":               snippets.FormattersSettings,
 		"ConfigurationExample":            snippets.ConfigurationFile,
 		"LintersCommandOutputEnabledOnly": helps.Enable,
-		"EnabledByDefaultLinters":         getLintersListMarkdown(true),
-		"DisabledByDefaultLinters":        getLintersListMarkdown(false),
+		"EnabledByDefaultLinters":         getLintersListMarkdown(true, filepath.Join("assets", "linters-info.json")),
+		"DisabledByDefaultLinters":        getLintersListMarkdown(false, filepath.Join("assets", "linters-info.json")),
+		"Formatters":                      getLintersListMarkdown(false, filepath.Join("assets", "formatters-info.json")),
 		"ExclusionPresets":                exclusions,
 		"ThanksList":                      getThanksList(),
 		"RunHelpText":                     helps.Help,

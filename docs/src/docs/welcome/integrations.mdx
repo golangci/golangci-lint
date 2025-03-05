@@ -11,11 +11,11 @@ Recommended settings for VS Code are:
 ```json
 "go.lintTool": "golangci-lint",
 "go.lintFlags": [
-  "--fast"
+  "--fast-only"
 ]
 ```
 
-Using it in an editor without `--fast` can freeze your editor.
+Using it in an editor without `--fast-only` can freeze your editor.
 Golangci-lint automatically discovers `.golangci.yml` config for edited file: you don't need to configure it in VS Code settings.
 
 ### Sublime Text

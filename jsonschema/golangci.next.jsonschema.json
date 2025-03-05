@@ -4584,8 +4584,8 @@
           "additionalProperties": false,
           "properties": {
             "generated": {
-              "type": "boolean",
-              "default": true
+              "enum": ["strict", "lax", "disable"],
+              "default": "strict"
             },
             "paths": {
               "type": "array",

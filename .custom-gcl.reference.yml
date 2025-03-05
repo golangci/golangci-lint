@@ -1,6 +1,6 @@
 # The golangci-lint version used to build the custom binary.
-# Require.
-version: v1.56.2
+# Required.
+version: v2.0.0
 
 # The name of the custom binary.
 # Optional.
