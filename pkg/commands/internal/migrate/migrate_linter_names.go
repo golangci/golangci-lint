@@ -46,6 +46,12 @@ func ProcessEffectiveLinters(old one.Linters) (enable, disable []string) {
 
 // disableAllFilter generates the value of `enable` when `disable-all` is `true`.
 func disableAllFilter(old one.Linters) []string {
+	// Note:
+	// - disable-all + enable-all
+	// 		=> impossible (https://github.com/golangci/golangci-lint/blob/e1eb4cb2c7fba29b5831b63e454844d83c692874/pkg/config/linters.go#L38)
+	// - disable-all + disable
+	// 		=> impossible (https://github.com/golangci/golangci-lint/blob/e1eb4cb2c7fba29b5831b63e454844d83c692874/pkg/config/linters.go#L47)
+
 	// if disable-all -> presets fast enable
 	// - presets fast enable: (presets - [slow]) + enable => effective enable + none
 	// - presets fast: presets - slow => effective enable + none
@@ -69,7 +75,16 @@ func disableAllFilter(old one.Linters) []string {
 
 // enableAllFilter generates the value of `disable` when `enable-all` is `true`.
 func enableAllFilter(old one.Linters) []string {
-	// if enable-all -> presets fast disable
+	// Note:
+	// - enable-all + disable-all
+	// 		=> impossible (https://github.com/golangci/golangci-lint/blob/e1eb4cb2c7fba29b5831b63e454844d83c692874/pkg/config/linters.go#L38)
+	// - enable-all + enable + fast=false
+	// 		=> impossible (https://github.com/golangci/golangci-lint/blob/e1eb4cb2c7fba29b5831b63e454844d83c692874/pkg/config/linters.go#L52)
+	// - enable-all + enable + fast=true
+	// 		=> possible (https://github.com/golangci/golangci-lint/blob/e1eb4cb2c7fba29b5831b63e454844d83c692874/pkg/config/linters.go#L51)
+
+	// if enable-all -> presets fast enable disable
+	// - presets fast enable disable: all - fast - enable + disable => effective disable + all
 	// - presets fast disable: all - fast + disable => effective disable + all
 	// - presets fast: all - fast => effective disable + all
 	// - presets disable: disable => effective disable + all
@@ -77,11 +92,14 @@ func enableAllFilter(old one.Linters) []string {
 	// - fast: all - fast => effective disable + all
 	// - fast disable: all - fast + disable => effective disable + all
 
-	// all - [fast] + disable => effective disable + all
+	// all - [fast] - enable + disable => effective disable + all
 	names := toNames(
 		slices.Concat(
-			filter(
-				allLinters(), keepSlow(old), // all - fast
+			removeLinters(
+				filter(
+					allLinters(), keepSlow(old), // all - fast
+				),
+				allEnabled(old, allLinters()), // - enable
 			),
 			allDisabled(old, allLinters()), // + disable
 		),
@@ -92,6 +110,10 @@ func enableAllFilter(old one.Linters) []string {
 
 // defaultLintersFilter generates the values of `enable` and `disable` when using default linters.
 func defaultLintersFilter(old one.Linters) (enable, disable []string) {
+	// Note:
+	// - a linter cannot be inside `enable` and `disable` in the same configuration
+	// 		=> https://github.com/golangci/golangci-lint/blob/e1eb4cb2c7fba29b5831b63e454844d83c692874/pkg/config/linters.go#L66
+
 	// if default -> presets fast disable
 	// - presets > fast > disable > enable => effective enable + disable + standard
 	//    - (default - fast) - enable + disable => effective disable

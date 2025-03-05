@@ -170,6 +170,17 @@ func Test_enableAllFilter(t *testing.T) {
 			},
 			expected: []string{"asasalint", "bodyclose", "canonicalheader", "containedctx", "contextcheck", "durationcheck", "err113", "errcheck", "errchkjson", "errname", "errorlint", "exhaustive", "exhaustruct", "exptostd", "fatcontext", "forbidigo", "forcetypeassert", "ginkgolinter", "gochecknoglobals", "gochecksumtype", "gocritic", "gosec", "gosimple", "gosmopolitan", "govet", "iface", "importas", "intrange", "ireturn", "lll", "loggercheck", "makezero", "mirror", "misspell", "musttag", "nilerr", "nilnesserr", "nilnil", "noctx", "nonamedreturns", "paralleltest", "perfsprint", "protogetter", "reassign", "recvcheck", "revive", "rowserrcheck", "sloglint", "spancheck", "sqlclosecheck", "staticcheck", "stylecheck", "tagliatelle", "tenv", "testifylint", "thelper", "tparallel", "unconvert", "unparam", "unused", "usetesting", "varnamelen", "wastedassign", "wrapcheck", "zerologlint"},
 		},
+		{
+			desc: "disable, enable, fast",
+			old: one.Linters{
+				EnableAll: ptr.Pointer(true),
+				Enable:    []string{"canonicalheader", "errname"},
+				Disable:   []string{"lll", "misspell", "govet"},
+				Fast:      ptr.Pointer(true),
+				Presets:   nil,
+			},
+			expected: []string{"asasalint", "bodyclose", "containedctx", "contextcheck", "durationcheck", "err113", "errcheck", "errchkjson", "errorlint", "exhaustive", "exhaustruct", "exptostd", "fatcontext", "forbidigo", "forcetypeassert", "ginkgolinter", "gochecknoglobals", "gochecksumtype", "gocritic", "gosec", "gosimple", "gosmopolitan", "govet", "iface", "importas", "intrange", "ireturn", "lll", "loggercheck", "makezero", "mirror", "misspell", "musttag", "nilerr", "nilnesserr", "nilnil", "noctx", "nonamedreturns", "paralleltest", "perfsprint", "protogetter", "reassign", "recvcheck", "revive", "rowserrcheck", "sloglint", "spancheck", "sqlclosecheck", "staticcheck", "stylecheck", "tagliatelle", "tenv", "testifylint", "thelper", "tparallel", "unconvert", "unparam", "unused", "usetesting", "varnamelen", "wastedassign", "wrapcheck", "zerologlint"},
+		},
 	}
 
 	for _, test := range testCases {
