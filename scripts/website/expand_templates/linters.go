@@ -65,7 +65,7 @@ func getLintersListMarkdown(enabled bool, src string) string {
 
 	lines := []string{
 		"|Name|Description|AutoFix|Since|",
-		"|---|---|---|---|---|",
+		"|----|-----------|-------|-----|",
 	}
 
 	for _, lc := range neededLcs {
