@@ -98,7 +98,7 @@ func (c *migrateCommand) execute(_ *cobra.Command, _ []string) error {
 		return err
 	}
 
-	c.cmd.Println("Migrating v1 configuration file:", srcPath)
+	c.log.Infof("Migrating v1 configuration file: %s", srcPath)
 
 	ext := filepath.Ext(srcPath)
 	if strings.TrimSpace(c.opts.format) != "" {
@@ -120,7 +120,7 @@ func (c *migrateCommand) execute(_ *cobra.Command, _ []string) error {
 		return fmt.Errorf("saving configuration file: %w", err)
 	}
 
-	c.cmd.Println("Migration done:", dstPath)
+	c.log.Infof("Migration done: %s", dstPath)
 
 	return nil
 }
@@ -136,7 +136,7 @@ func (c *migrateCommand) preRunE(cmd *cobra.Command, _ []string) error {
 		os.Exit(exitcodes.NoConfigFileDetected)
 	}
 
-	c.cmd.Println("Validating v1 configuration file:", usedConfigFile)
+	c.log.Infof("Validating v1 configuration file: %s", usedConfigFile)
 
 	err := validateConfiguration("https://golangci-lint.run/jsonschema/golangci.v1.jsonschema.json", usedConfigFile)
 	if err != nil {
@@ -154,6 +154,8 @@ func (c *migrateCommand) preRunE(cmd *cobra.Command, _ []string) error {
 }
 
 func (c *migrateCommand) persistentPreRunE(_ *cobra.Command, args []string) error {
+	c.log.SetLevel(logutils.LogLevelInfo)
+
 	c.log.Infof("%s", c.buildInfo.String())
 
 	loader := config.NewBaseLoader(c.log.Child(logutils.DebugKeyConfigReader), c.viper, c.opts.LoaderOptions, c.cfg, args)
@@ -170,7 +172,7 @@ func (c *migrateCommand) backupConfigurationFile(srcPath string) error {
 	filename := strings.TrimSuffix(filepath.Base(srcPath), filepath.Ext(srcPath)) + ".bck" + filepath.Ext(srcPath)
 	dstPath := filepath.Join(filepath.Dir(srcPath), filename)
 
-	c.cmd.Println("Saving the v1 configuration to:", dstPath)
+	c.log.Infof("Saving the v1 configuration to: %s", dstPath)
 
 	stat, err := os.Stat(srcPath)
 	if err != nil {
