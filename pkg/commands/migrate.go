@@ -75,7 +75,7 @@ func newMigrateCommand(log logutils.Log, info BuildInfo) *migrateCommand {
 			"Overrides file format detection.\nIt can be 'yml', 'yaml', 'toml', 'json'."))
 
 	fs.BoolVar(&c.opts.skipValidation, "skip-validation", false,
-		color.GreenString("Skip validating the configuration file on the JSONSchema of the v1."))
+		color.GreenString("Skip validation of the configuration file against the JSONSchema for v1."))
 
 	c.cmd = migrateCmd
 
