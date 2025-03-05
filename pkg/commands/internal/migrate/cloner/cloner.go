@@ -85,34 +85,33 @@ func processFile(file *ast.File) {
 
 	var newDecls []ast.Decl
 	for _, decl := range file.Decls {
-		switch d := decl.(type) {
-		case *ast.FuncDecl:
+		d, ok := decl.(*ast.GenDecl)
+		if !ok {
 			continue
-
-		case *ast.GenDecl:
-			switch d.Tok {
-			case token.CONST, token.VAR:
-				continue
-			case token.TYPE:
-				for _, spec := range d.Specs {
-					typeSpec, ok := spec.(*ast.TypeSpec)
-					if !ok {
-						continue
-					}
-
-					structType, ok := typeSpec.Type.(*ast.StructType)
-					if !ok {
-						continue
-					}
-
-					processStructFields(structType)
-				}
-			default:
-				// noop
-			}
-
-			newDecls = append(newDecls, decl)
 		}
+
+		switch d.Tok {
+		case token.CONST, token.VAR:
+			continue
+		case token.TYPE:
+			for _, spec := range d.Specs {
+				typeSpec, ok := spec.(*ast.TypeSpec)
+				if !ok {
+					continue
+				}
+
+				structType, ok := typeSpec.Type.(*ast.StructType)
+				if !ok {
+					continue
+				}
+
+				processStructFields(structType)
+			}
+		default:
+			// noop
+		}
+
+		newDecls = append(newDecls, decl)
 	}
 
 	file.Decls = newDecls
