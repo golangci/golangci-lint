@@ -152,6 +152,14 @@ func hasSettings(name string) bool {
 		}
 	}
 
+	tp = reflect.TypeOf(config.FormatterSettings{})
+
+	for i := range tp.NumField() {
+		if strings.EqualFold(name, tp.Field(i).Name) {
+			return true
+		}
+	}
+
 	return false
 }
 
