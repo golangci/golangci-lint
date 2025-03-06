@@ -71,11 +71,11 @@ func newMigrateCommand(log logutils.Log, info BuildInfo) *migrateCommand {
 	setupConfigFileFlagSet(fs, &c.opts.LoaderOptions)
 
 	fs.StringVar(&c.opts.format, "format", "",
-		color.GreenString("By default, the file format is based on the configuration file extension.\n"+
-			"Overrides file format detection.\nIt can be 'yml', 'yaml', 'toml', 'json'."))
+		color.GreenString("Output file format.\nBy default, the format of the input configuration file is used.\n"+
+			"It can be 'yml', 'yaml', 'toml', or 'json'."))
 
 	fs.BoolVar(&c.opts.skipValidation, "skip-validation", false,
-		color.GreenString("Skip validation of the configuration file against the JSONSchema for v1."))
+		color.GreenString("Skip validation of the configuration file against the JSON Schema for v1."))
 
 	c.cmd = migrateCmd
 
@@ -101,7 +101,8 @@ func (c *migrateCommand) execute(_ *cobra.Command, _ []string) error {
 	c.log.Infof("Migrating v1 configuration file: %s", srcPath)
 
 	ext := filepath.Ext(srcPath)
-	if strings.TrimSpace(c.opts.format) != "" {
+
+	if c.opts.format != "" {
 		ext = "." + strings.TrimPrefix(c.opts.format, ".")
 	}
 
@@ -126,6 +127,13 @@ func (c *migrateCommand) execute(_ *cobra.Command, _ []string) error {
 }
 
 func (c *migrateCommand) preRunE(cmd *cobra.Command, _ []string) error {
+	switch strings.ToLower(c.opts.format) {
+	case "", "yml", "yaml", "toml", "json": //nolint:goconst // Constants are useless in this context.
+		// Valid format.
+	default:
+		return fmt.Errorf("unsupported format: %s", c.opts.format)
+	}
+
 	if c.opts.skipValidation {
 		return nil
 	}

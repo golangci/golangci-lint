@@ -69,8 +69,9 @@ func toGoFumptSettings(old versionone.GoFumptSettings) versiontwo.GoFumptSetting
 func toGoImportsSettings(old versionone.GoImportsSettings) versiontwo.GoImportsSettings {
 	var localPrefixes []string
 
-	if ptr.Deref(old.LocalPrefixes) != "" {
-		localPrefixes = strings.Split(ptr.Deref(old.LocalPrefixes), ",")
+	prefixes := ptr.Deref(old.LocalPrefixes)
+	if prefixes != "" {
+		localPrefixes = strings.Split(prefixes, ",")
 	}
 
 	return versiontwo.GoImportsSettings{

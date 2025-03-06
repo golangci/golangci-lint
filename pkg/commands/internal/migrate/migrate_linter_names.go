@@ -1,6 +1,7 @@
 package migrate
 
 import (
+	"cmp"
 	"slices"
 
 	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/ptr"
@@ -718,9 +719,7 @@ func toNames(linters []LinterInfo) []string {
 		results = append(results, linter.Name)
 	}
 
-	slices.Sort(results)
-
-	return slices.Compact(results)
+	return Unique(results)
 }
 
 func removeLinters(linters, toRemove []LinterInfo) []LinterInfo {
@@ -852,9 +851,7 @@ func unknownLinterNames(names []string, linters []LinterInfo) []string {
 		}
 	}
 
-	slices.Sort(results)
-
-	return slices.Compact(results)
+	return Unique(results)
 }
 
 func convertStaticcheckLinterNames(names []string) []string {
@@ -869,9 +866,7 @@ func convertStaticcheckLinterNames(names []string) []string {
 		results = append(results, name)
 	}
 
-	slices.Sort(results)
-
-	return slices.Compact(results)
+	return Unique(results)
 }
 
 func onlyLinterNames(names []string) []string {
@@ -924,7 +919,9 @@ func convertAlternativeNames(names []string) []string {
 		results = append(results, name)
 	}
 
-	slices.Sort(results)
+	return Unique(results)
+}
 
-	return slices.Compact(results)
+func Unique[S ~[]E, E cmp.Ordered](s S) S {
+	return slices.Compact(slices.Sorted(slices.Values(s)))
 }
