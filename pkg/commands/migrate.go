@@ -112,6 +112,10 @@ func (c *migrateCommand) execute(_ *cobra.Command, _ []string) error {
 		}()
 	}
 
+	if c.cfg.Run.Timeout != 0 {
+		c.log.Warnf("The configuration `run.timeout` is ignored. By default, in v2, the timeout is disabled.")
+	}
+
 	newCfg := migrate.ToConfig(c.cfg)
 
 	dstPath := strings.TrimSuffix(srcPath, filepath.Ext(srcPath)) + ext
