@@ -1,12 +1,12 @@
 package migrate
 
 import (
-	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/one"
-	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/two"
+	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/versionone"
+	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/versiontwo"
 )
 
-func toIssues(old *one.Config) two.Issues {
-	return two.Issues{
+func toIssues(old *versionone.Config) versiontwo.Issues {
+	return versiontwo.Issues{
 		MaxIssuesPerLinter: old.Issues.MaxIssuesPerLinter,
 		MaxSameIssues:      old.Issues.MaxSameIssues,
 		UniqByLine:         old.Issues.UniqByLine,

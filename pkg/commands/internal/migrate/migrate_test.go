@@ -13,7 +13,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"gopkg.in/yaml.v3"
 
-	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/one"
+	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/versionone"
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 )
@@ -56,7 +56,7 @@ func TestToConfig(t *testing.T) {
 func testFile(t *testing.T, in, golden string, update bool) {
 	t.Helper()
 
-	old := one.NewConfig()
+	old := versionone.NewConfig()
 
 	options := config.LoaderOptions{Config: in}
 
@@ -84,7 +84,7 @@ func testFile(t *testing.T, in, golden string, update bool) {
 	assert.YAMLEq(t, string(expected), buf.String())
 }
 
-func updateGolden(t *testing.T, golden string, old *one.Config) {
+func updateGolden(t *testing.T, golden string, old *versionone.Config) {
 	t.Helper()
 
 	fileOut, err := os.Create(golden)

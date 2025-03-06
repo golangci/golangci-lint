@@ -1,4 +1,4 @@
-package one
+package versionone
 
 type BaseRule struct {
 	Linters    []string `mapstructure:"linters"`

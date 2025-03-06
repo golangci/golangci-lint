@@ -1,15 +1,15 @@
 package migrate
 
 import (
-	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/one"
 	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/ptr"
-	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/two"
+	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/versionone"
+	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/versiontwo"
 )
 
-func toLinters(old *one.Config) two.Linters {
+func toLinters(old *versionone.Config) versiontwo.Linters {
 	enable, disable := ProcessEffectiveLinters(old.Linters)
 
-	return two.Linters{
+	return versiontwo.Linters{
 		Default:    getDefaultName(old.Linters),
 		Enable:     onlyLinterNames(convertStaticcheckLinterNames(enable)),
 		Disable:    onlyLinterNames(convertStaticcheckLinterNames(disable)),
@@ -19,7 +19,7 @@ func toLinters(old *one.Config) two.Linters {
 	}
 }
 
-func getDefaultName(old one.Linters) *string {
+func getDefaultName(old versionone.Linters) *string {
 	switch {
 	case ptr.Deref(old.DisableAll):
 		return ptr.Pointer("none")

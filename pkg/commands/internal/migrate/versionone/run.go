@@ -1,4 +1,4 @@
-package one
+package versionone
 
 import (
 	"time"

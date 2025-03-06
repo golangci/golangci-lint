@@ -1,16 +1,16 @@
 package migrate
 
 import (
-	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/one"
-	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/two"
+	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/versionone"
+	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/versiontwo"
 )
 
-func toSeverity(old *one.Config) two.Severity {
-	var rules []two.SeverityRule
+func toSeverity(old *versionone.Config) versiontwo.Severity {
+	var rules []versiontwo.SeverityRule
 
 	for _, rule := range old.Severity.Rules {
-		rules = append(rules, two.SeverityRule{
-			BaseRule: two.BaseRule{
+		rules = append(rules, versiontwo.SeverityRule{
+			BaseRule: versiontwo.BaseRule{
 				Linters:    convertStaticcheckLinterNames(convertAlternativeNames(rule.Linters)),
 				Path:       rule.Path,
 				PathExcept: rule.PathExcept,
@@ -21,7 +21,7 @@ func toSeverity(old *one.Config) two.Severity {
 		})
 	}
 
-	return two.Severity{
+	return versiontwo.Severity{
 		Default: old.Severity.Default,
 		Rules:   rules,
 	}

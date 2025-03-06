@@ -1,4 +1,4 @@
-package one
+package versionone
 
 type Issues struct {
 	IncludeDefaultExcludes []string      `mapstructure:"include"`

@@ -1,12 +1,12 @@
 package migrate
 
 import (
-	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/one"
 	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/ptr"
-	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/two"
+	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/versionone"
+	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/versiontwo"
 )
 
-func toRun(old *one.Config) two.Run {
+func toRun(old *versionone.Config) versiontwo.Run {
 	var relativePathMode *string
 	if ptr.Deref(old.Run.RelativePathMode) != "cfg" {
 		// cfg is the new default.
@@ -19,7 +19,7 @@ func toRun(old *one.Config) two.Run {
 		concurrency = old.Run.Concurrency
 	}
 
-	return two.Run{
+	return versiontwo.Run{
 		Timeout:               0, // Enforce new default.
 		Concurrency:           concurrency,
 		Go:                    old.Run.Go,

@@ -17,8 +17,8 @@ import (
 	"gopkg.in/yaml.v3"
 
 	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate"
-	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/one"
-	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/two"
+	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/versionone"
+	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/versiontwo"
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/exitcodes"
 	"github.com/golangci/golangci-lint/pkg/logutils"
@@ -36,7 +36,7 @@ type migrateCommand struct {
 
 	opts migrateOptions
 
-	cfg *one.Config
+	cfg *versionone.Config
 
 	buildInfo BuildInfo
 
@@ -46,7 +46,7 @@ type migrateCommand struct {
 func newMigrateCommand(log logutils.Log, info BuildInfo) *migrateCommand {
 	c := &migrateCommand{
 		viper:     viper.New(),
-		cfg:       one.NewConfig(),
+		cfg:       versionone.NewConfig(),
 		buildInfo: info,
 		log:       log,
 	}
@@ -192,7 +192,7 @@ func (c *migrateCommand) backupConfigurationFile(srcPath string) error {
 	return nil
 }
 
-func saveNewConfiguration(newCfg *two.Config, dstPath string) error {
+func saveNewConfiguration(newCfg *versiontwo.Config, dstPath string) error {
 	dstFile, err := os.Create(dstPath)
 	if err != nil {
 		return err

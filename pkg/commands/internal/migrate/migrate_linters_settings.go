@@ -4,13 +4,13 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/one"
 	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/ptr"
-	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/two"
+	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/versionone"
+	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/versiontwo"
 )
 
-func toLinterSettings(old one.LintersSettings) two.LintersSettings {
-	return two.LintersSettings{
+func toLinterSettings(old versionone.LintersSettings) versiontwo.LintersSettings {
+	return versiontwo.LintersSettings{
 		Asasalint:       toAsasalintSettings(old.Asasalint),
 		BiDiChk:         toBiDiChkSettings(old.BiDiChk),
 		CopyLoopVar:     toCopyLoopVarSettings(old.CopyLoopVar),
@@ -93,17 +93,17 @@ func toLinterSettings(old one.LintersSettings) two.LintersSettings {
 	}
 }
 
-func toAsasalintSettings(old one.AsasalintSettings) two.AsasalintSettings {
-	return two.AsasalintSettings{
+func toAsasalintSettings(old versionone.AsasalintSettings) versiontwo.AsasalintSettings {
+	return versiontwo.AsasalintSettings{
 		Exclude:              old.Exclude,
 		UseBuiltinExclusions: old.UseBuiltinExclusions,
 	}
 }
 
-func toBiDiChkSettings(old one.BiDiChkSettings) two.BiDiChkSettings {
+func toBiDiChkSettings(old versionone.BiDiChkSettings) versiontwo.BiDiChkSettings {
 	// The values are true be default, but the default are defined after the configuration loading.
 	// So the serialization doesn't have good results, but it's complex to do better.
-	return two.BiDiChkSettings{
+	return versiontwo.BiDiChkSettings{
 		LeftToRightEmbedding:     old.LeftToRightEmbedding,
 		RightToLeftEmbedding:     old.RightToLeftEmbedding,
 		PopDirectionalFormatting: old.PopDirectionalFormatting,
@@ -116,21 +116,21 @@ func toBiDiChkSettings(old one.BiDiChkSettings) two.BiDiChkSettings {
 	}
 }
 
-func toCopyLoopVarSettings(old one.CopyLoopVarSettings) two.CopyLoopVarSettings {
-	return two.CopyLoopVarSettings{
+func toCopyLoopVarSettings(old versionone.CopyLoopVarSettings) versiontwo.CopyLoopVarSettings {
+	return versiontwo.CopyLoopVarSettings{
 		CheckAlias: old.CheckAlias,
 	}
 }
 
-func toCyclopSettings(old one.Cyclop) two.CyclopSettings {
-	return two.CyclopSettings{
+func toCyclopSettings(old versionone.Cyclop) versiontwo.CyclopSettings {
+	return versiontwo.CyclopSettings{
 		MaxComplexity:  old.MaxComplexity,
 		PackageAverage: old.PackageAverage,
 	}
 }
 
-func toDecorderSettings(old one.DecorderSettings) two.DecorderSettings {
-	return two.DecorderSettings{
+func toDecorderSettings(old versionone.DecorderSettings) versiontwo.DecorderSettings {
+	return versiontwo.DecorderSettings{
 		DecOrder:                  old.DecOrder,
 		IgnoreUnderscoreVars:      old.IgnoreUnderscoreVars,
 		DisableDecNumCheck:        old.DisableDecNumCheck,
@@ -142,22 +142,22 @@ func toDecorderSettings(old one.DecorderSettings) two.DecorderSettings {
 	}
 }
 
-func toDepGuardSettings(old one.DepGuardSettings) two.DepGuardSettings {
-	settings := two.DepGuardSettings{}
+func toDepGuardSettings(old versionone.DepGuardSettings) versiontwo.DepGuardSettings {
+	settings := versiontwo.DepGuardSettings{}
 
 	for k, r := range old.Rules {
 		if settings.Rules == nil {
-			settings.Rules = make(map[string]*two.DepGuardList)
+			settings.Rules = make(map[string]*versiontwo.DepGuardList)
 		}
 
-		list := &two.DepGuardList{
+		list := &versiontwo.DepGuardList{
 			ListMode: r.ListMode,
 			Files:    r.Files,
 			Allow:    r.Allow,
 		}
 
 		for _, deny := range r.Deny {
-			list.Deny = append(list.Deny, two.DepGuardDeny{
+			list.Deny = append(list.Deny, versiontwo.DepGuardDeny{
 				Pkg:  deny.Pkg,
 				Desc: deny.Desc,
 			})
@@ -169,27 +169,27 @@ func toDepGuardSettings(old one.DepGuardSettings) two.DepGuardSettings {
 	return settings
 }
 
-func toDogsledSettings(old one.DogsledSettings) two.DogsledSettings {
-	return two.DogsledSettings{
+func toDogsledSettings(old versionone.DogsledSettings) versiontwo.DogsledSettings {
+	return versiontwo.DogsledSettings{
 		MaxBlankIdentifiers: old.MaxBlankIdentifiers,
 	}
 }
 
-func toDuplSettings(old one.DuplSettings) two.DuplSettings {
-	return two.DuplSettings{
+func toDuplSettings(old versionone.DuplSettings) versiontwo.DuplSettings {
+	return versiontwo.DuplSettings{
 		Threshold: old.Threshold,
 	}
 }
 
-func toDupWordSettings(old one.DupWordSettings) two.DupWordSettings {
-	return two.DupWordSettings{
+func toDupWordSettings(old versionone.DupWordSettings) versiontwo.DupWordSettings {
+	return versiontwo.DupWordSettings{
 		Keywords: old.Keywords,
 		Ignore:   old.Ignore,
 	}
 }
 
-func toErrcheckSettings(old one.ErrcheckSettings) two.ErrcheckSettings {
-	return two.ErrcheckSettings{
+func toErrcheckSettings(old versionone.ErrcheckSettings) versiontwo.ErrcheckSettings {
+	return versiontwo.ErrcheckSettings{
 		DisableDefaultExclusions: old.DisableDefaultExclusions,
 		CheckTypeAssertions:      old.CheckTypeAssertions,
 		CheckAssignToBlank:       old.CheckAssignToBlank,
@@ -197,15 +197,15 @@ func toErrcheckSettings(old one.ErrcheckSettings) two.ErrcheckSettings {
 	}
 }
 
-func toErrChkJSONSettings(old one.ErrChkJSONSettings) two.ErrChkJSONSettings {
-	return two.ErrChkJSONSettings{
+func toErrChkJSONSettings(old versionone.ErrChkJSONSettings) versiontwo.ErrChkJSONSettings {
+	return versiontwo.ErrChkJSONSettings{
 		CheckErrorFreeEncoding: old.CheckErrorFreeEncoding,
 		ReportNoExported:       old.ReportNoExported,
 	}
 }
 
-func toErrorLintSettings(old one.ErrorLintSettings) two.ErrorLintSettings {
-	settings := two.ErrorLintSettings{
+func toErrorLintSettings(old versionone.ErrorLintSettings) versiontwo.ErrorLintSettings {
+	settings := versiontwo.ErrorLintSettings{
 		Errorf:      old.Errorf,
 		ErrorfMulti: old.ErrorfMulti,
 		Asserts:     old.Asserts,
@@ -213,13 +213,13 @@ func toErrorLintSettings(old one.ErrorLintSettings) two.ErrorLintSettings {
 	}
 
 	for _, allowedError := range old.AllowedErrors {
-		settings.AllowedErrors = append(settings.AllowedErrors, two.ErrorLintAllowPair{
+		settings.AllowedErrors = append(settings.AllowedErrors, versiontwo.ErrorLintAllowPair{
 			Err: allowedError.Err,
 			Fun: allowedError.Fun,
 		})
 	}
 	for _, allowedError := range old.AllowedErrorsWildcard {
-		settings.AllowedErrorsWildcard = append(settings.AllowedErrorsWildcard, two.ErrorLintAllowPair{
+		settings.AllowedErrorsWildcard = append(settings.AllowedErrorsWildcard, versiontwo.ErrorLintAllowPair{
 			Err: allowedError.Err,
 			Fun: allowedError.Fun,
 		})
@@ -228,8 +228,8 @@ func toErrorLintSettings(old one.ErrorLintSettings) two.ErrorLintSettings {
 	return settings
 }
 
-func toExhaustiveSettings(old one.ExhaustiveSettings) two.ExhaustiveSettings {
-	return two.ExhaustiveSettings{
+func toExhaustiveSettings(old versionone.ExhaustiveSettings) versiontwo.ExhaustiveSettings {
+	return versiontwo.ExhaustiveSettings{
 		Check:                      old.Check,
 		DefaultSignifiesExhaustive: old.DefaultSignifiesExhaustive,
 		IgnoreEnumMembers:          old.IgnoreEnumMembers,
@@ -241,21 +241,21 @@ func toExhaustiveSettings(old one.ExhaustiveSettings) two.ExhaustiveSettings {
 	}
 }
 
-func toExhaustructSettings(old one.ExhaustructSettings) two.ExhaustructSettings {
-	return two.ExhaustructSettings{
+func toExhaustructSettings(old versionone.ExhaustructSettings) versiontwo.ExhaustructSettings {
+	return versiontwo.ExhaustructSettings{
 		Include: old.Include,
 		Exclude: old.Exclude,
 	}
 }
 
-func toFatcontextSettings(old one.FatcontextSettings) two.FatcontextSettings {
-	return two.FatcontextSettings{
+func toFatcontextSettings(old versionone.FatcontextSettings) versiontwo.FatcontextSettings {
+	return versiontwo.FatcontextSettings{
 		CheckStructPointers: old.CheckStructPointers,
 	}
 }
 
-func toForbidigoSettings(old one.ForbidigoSettings) two.ForbidigoSettings {
-	settings := two.ForbidigoSettings{
+func toForbidigoSettings(old versionone.ForbidigoSettings) versiontwo.ForbidigoSettings {
+	settings := versiontwo.ForbidigoSettings{
 		ExcludeGodocExamples: old.ExcludeGodocExamples,
 		AnalyzeTypes:         old.AnalyzeTypes,
 	}
@@ -268,14 +268,14 @@ func toForbidigoSettings(old one.ForbidigoSettings) two.ForbidigoSettings {
 				panic(err)
 			}
 
-			settings.Forbid = append(settings.Forbid, two.ForbidigoPattern{
+			settings.Forbid = append(settings.Forbid, versiontwo.ForbidigoPattern{
 				Pattern: ptr.Pointer(string(buffer)),
 			})
 
 			continue
 		}
 
-		settings.Forbid = append(settings.Forbid, two.ForbidigoPattern{
+		settings.Forbid = append(settings.Forbid, versiontwo.ForbidigoPattern{
 			Pattern: pattern.Pattern,
 			Package: pattern.Package,
 			Msg:     pattern.Msg,
@@ -285,16 +285,16 @@ func toForbidigoSettings(old one.ForbidigoSettings) two.ForbidigoSettings {
 	return settings
 }
 
-func toFunlenSettings(old one.FunlenSettings) two.FunlenSettings {
-	return two.FunlenSettings{
+func toFunlenSettings(old versionone.FunlenSettings) versiontwo.FunlenSettings {
+	return versiontwo.FunlenSettings{
 		Lines:          old.Lines,
 		Statements:     old.Statements,
 		IgnoreComments: old.IgnoreComments,
 	}
 }
 
-func toGinkgoLinterSettings(old one.GinkgoLinterSettings) two.GinkgoLinterSettings {
-	return two.GinkgoLinterSettings{
+func toGinkgoLinterSettings(old versionone.GinkgoLinterSettings) versiontwo.GinkgoLinterSettings {
+	return versiontwo.GinkgoLinterSettings{
 		SuppressLenAssertion:       old.SuppressLenAssertion,
 		SuppressNilAssertion:       old.SuppressNilAssertion,
 		SuppressErrAssertion:       old.SuppressErrAssertion,
@@ -310,21 +310,21 @@ func toGinkgoLinterSettings(old one.GinkgoLinterSettings) two.GinkgoLinterSettin
 	}
 }
 
-func toGocognitSettings(old one.GocognitSettings) two.GocognitSettings {
-	return two.GocognitSettings{
+func toGocognitSettings(old versionone.GocognitSettings) versiontwo.GocognitSettings {
+	return versiontwo.GocognitSettings{
 		MinComplexity: old.MinComplexity,
 	}
 }
 
-func toGoChecksumTypeSettings(old one.GoChecksumTypeSettings) two.GoChecksumTypeSettings {
-	return two.GoChecksumTypeSettings{
+func toGoChecksumTypeSettings(old versionone.GoChecksumTypeSettings) versiontwo.GoChecksumTypeSettings {
+	return versiontwo.GoChecksumTypeSettings{
 		DefaultSignifiesExhaustive: old.DefaultSignifiesExhaustive,
 		IncludeSharedInterfaces:    old.IncludeSharedInterfaces,
 	}
 }
 
-func toGoConstSettings(old one.GoConstSettings) two.GoConstSettings {
-	return two.GoConstSettings{
+func toGoConstSettings(old versionone.GoConstSettings) versiontwo.GoConstSettings {
+	return versiontwo.GoConstSettings{
 		IgnoreStrings:       old.IgnoreStrings,
 		MatchWithConstants:  old.MatchWithConstants,
 		MinStringLen:        old.MinStringLen,
@@ -336,8 +336,8 @@ func toGoConstSettings(old one.GoConstSettings) two.GoConstSettings {
 	}
 }
 
-func toGoCriticSettings(old one.GoCriticSettings) two.GoCriticSettings {
-	settings := two.GoCriticSettings{
+func toGoCriticSettings(old versionone.GoCriticSettings) versiontwo.GoCriticSettings {
+	settings := versiontwo.GoCriticSettings{
 		Go:             old.Go,
 		DisableAll:     old.DisableAll,
 		EnabledChecks:  old.EnabledChecks,
@@ -349,7 +349,7 @@ func toGoCriticSettings(old one.GoCriticSettings) two.GoCriticSettings {
 
 	for k, checkSettings := range settings.SettingsPerCheck {
 		if settings.SettingsPerCheck == nil {
-			settings.SettingsPerCheck = make(map[string]two.GoCriticCheckSettings)
+			settings.SettingsPerCheck = make(map[string]versiontwo.GoCriticCheckSettings)
 		}
 
 		settings.SettingsPerCheck[k] = checkSettings
@@ -358,14 +358,14 @@ func toGoCriticSettings(old one.GoCriticSettings) two.GoCriticSettings {
 	return settings
 }
 
-func toGoCycloSettings(old one.GoCycloSettings) two.GoCycloSettings {
-	return two.GoCycloSettings{
+func toGoCycloSettings(old versionone.GoCycloSettings) versiontwo.GoCycloSettings {
+	return versiontwo.GoCycloSettings{
 		MinComplexity: old.MinComplexity,
 	}
 }
 
-func toGodotSettings(old one.GodotSettings) two.GodotSettings {
-	return two.GodotSettings{
+func toGodotSettings(old versionone.GodotSettings) versiontwo.GodotSettings {
+	return versiontwo.GodotSettings{
 		Scope:   old.Scope,
 		Exclude: old.Exclude,
 		Capital: old.Capital,
@@ -373,22 +373,22 @@ func toGodotSettings(old one.GodotSettings) two.GodotSettings {
 	}
 }
 
-func toGodoxSettings(old one.GodoxSettings) two.GodoxSettings {
-	return two.GodoxSettings{
+func toGodoxSettings(old versionone.GodoxSettings) versiontwo.GodoxSettings {
+	return versiontwo.GodoxSettings{
 		Keywords: old.Keywords,
 	}
 }
 
-func toGoHeaderSettings(old one.GoHeaderSettings) two.GoHeaderSettings {
-	return two.GoHeaderSettings{
+func toGoHeaderSettings(old versionone.GoHeaderSettings) versiontwo.GoHeaderSettings {
+	return versiontwo.GoHeaderSettings{
 		Values:       old.Values,
 		Template:     old.Template,
 		TemplatePath: old.TemplatePath,
 	}
 }
 
-func toGoModDirectivesSettings(old one.GoModDirectivesSettings) two.GoModDirectivesSettings {
-	return two.GoModDirectivesSettings{
+func toGoModDirectivesSettings(old versionone.GoModDirectivesSettings) versiontwo.GoModDirectivesSettings {
+	return versiontwo.GoModDirectivesSettings{
 		ReplaceAllowList:          old.ReplaceAllowList,
 		ReplaceLocal:              old.ReplaceLocal,
 		ExcludeForbidden:          old.ExcludeForbidden,
@@ -401,16 +401,16 @@ func toGoModDirectivesSettings(old one.GoModDirectivesSettings) two.GoModDirecti
 	}
 }
 
-func toGoModGuardSettings(old one.GoModGuardSettings) two.GoModGuardSettings {
-	blocked := two.GoModGuardBlocked{
+func toGoModGuardSettings(old versionone.GoModGuardSettings) versiontwo.GoModGuardSettings {
+	blocked := versiontwo.GoModGuardBlocked{
 		LocalReplaceDirectives: old.Blocked.LocalReplaceDirectives,
 	}
 
 	for _, version := range old.Blocked.Modules {
-		data := map[string]two.GoModGuardModule{}
+		data := map[string]versiontwo.GoModGuardModule{}
 
 		for k, v := range version {
-			data[k] = two.GoModGuardModule{
+			data[k] = versiontwo.GoModGuardModule{
 				Recommendations: v.Recommendations,
 				Reason:          v.Reason,
 			}
@@ -420,10 +420,10 @@ func toGoModGuardSettings(old one.GoModGuardSettings) two.GoModGuardSettings {
 	}
 
 	for _, version := range old.Blocked.Versions {
-		data := map[string]two.GoModGuardVersion{}
+		data := map[string]versiontwo.GoModGuardVersion{}
 
 		for k, v := range version {
-			data[k] = two.GoModGuardVersion{
+			data[k] = versiontwo.GoModGuardVersion{
 				Version: v.Version,
 				Reason:  v.Reason,
 			}
@@ -432,8 +432,8 @@ func toGoModGuardSettings(old one.GoModGuardSettings) two.GoModGuardSettings {
 		blocked.Versions = append(blocked.Versions, data)
 	}
 
-	return two.GoModGuardSettings{
-		Allowed: two.GoModGuardAllowed{
+	return versiontwo.GoModGuardSettings{
+		Allowed: versiontwo.GoModGuardAllowed{
 			Modules: old.Allowed.Modules,
 			Domains: old.Allowed.Domains,
 		},
@@ -441,8 +441,8 @@ func toGoModGuardSettings(old one.GoModGuardSettings) two.GoModGuardSettings {
 	}
 }
 
-func toGoSecSettings(old one.GoSecSettings) two.GoSecSettings {
-	return two.GoSecSettings{
+func toGoSecSettings(old versionone.GoSecSettings) versiontwo.GoSecSettings {
+	return versiontwo.GoSecSettings{
 		Includes:    old.Includes,
 		Excludes:    old.Excludes,
 		Severity:    old.Severity,
@@ -452,16 +452,16 @@ func toGoSecSettings(old one.GoSecSettings) two.GoSecSettings {
 	}
 }
 
-func toGosmopolitanSettings(old one.GosmopolitanSettings) two.GosmopolitanSettings {
-	return two.GosmopolitanSettings{
+func toGosmopolitanSettings(old versionone.GosmopolitanSettings) versiontwo.GosmopolitanSettings {
+	return versiontwo.GosmopolitanSettings{
 		AllowTimeLocal:  old.AllowTimeLocal,
 		EscapeHatches:   old.EscapeHatches,
 		WatchForScripts: old.WatchForScripts,
 	}
 }
 
-func toGovetSettings(old one.GovetSettings) two.GovetSettings {
-	return two.GovetSettings{
+func toGovetSettings(old versionone.GovetSettings) versiontwo.GovetSettings {
+	return versiontwo.GovetSettings{
 		Go:         old.Go,
 		Enable:     old.Enable,
 		Disable:    old.Disable,
@@ -471,8 +471,8 @@ func toGovetSettings(old one.GovetSettings) two.GovetSettings {
 	}
 }
 
-func toGrouperSettings(old one.GrouperSettings) two.GrouperSettings {
-	return two.GrouperSettings{
+func toGrouperSettings(old versionone.GrouperSettings) versiontwo.GrouperSettings {
+	return versiontwo.GrouperSettings{
 		ConstRequireSingleConst:   old.ConstRequireSingleConst,
 		ConstRequireGrouping:      old.ConstRequireGrouping,
 		ImportRequireSingleImport: old.ImportRequireSingleImport,
@@ -484,21 +484,21 @@ func toGrouperSettings(old one.GrouperSettings) two.GrouperSettings {
 	}
 }
 
-func toIfaceSettings(old one.IfaceSettings) two.IfaceSettings {
-	return two.IfaceSettings{
+func toIfaceSettings(old versionone.IfaceSettings) versiontwo.IfaceSettings {
+	return versiontwo.IfaceSettings{
 		Enable:   old.Enable,
 		Settings: old.Settings,
 	}
 }
 
-func toImportAsSettings(old one.ImportAsSettings) two.ImportAsSettings {
-	settings := two.ImportAsSettings{
+func toImportAsSettings(old versionone.ImportAsSettings) versiontwo.ImportAsSettings {
+	settings := versiontwo.ImportAsSettings{
 		NoUnaliased:    old.NoUnaliased,
 		NoExtraAliases: old.NoExtraAliases,
 	}
 
 	for _, alias := range old.Alias {
-		settings.Alias = append(settings.Alias, two.ImportAsAlias{
+		settings.Alias = append(settings.Alias, versiontwo.ImportAsAlias{
 			Pkg:   alias.Pkg,
 			Alias: alias.Alias,
 		})
@@ -507,34 +507,34 @@ func toImportAsSettings(old one.ImportAsSettings) two.ImportAsSettings {
 	return settings
 }
 
-func toINamedParamSettings(old one.INamedParamSettings) two.INamedParamSettings {
-	return two.INamedParamSettings{
+func toINamedParamSettings(old versionone.INamedParamSettings) versiontwo.INamedParamSettings {
+	return versiontwo.INamedParamSettings{
 		SkipSingleParam: old.SkipSingleParam,
 	}
 }
 
-func toInterfaceBloatSettings(old one.InterfaceBloatSettings) two.InterfaceBloatSettings {
-	return two.InterfaceBloatSettings{
+func toInterfaceBloatSettings(old versionone.InterfaceBloatSettings) versiontwo.InterfaceBloatSettings {
+	return versiontwo.InterfaceBloatSettings{
 		Max: old.Max,
 	}
 }
 
-func toIreturnSettings(old one.IreturnSettings) two.IreturnSettings {
-	return two.IreturnSettings{
+func toIreturnSettings(old versionone.IreturnSettings) versiontwo.IreturnSettings {
+	return versiontwo.IreturnSettings{
 		Allow:  old.Allow,
 		Reject: old.Reject,
 	}
 }
 
-func toLllSettings(old one.LllSettings) two.LllSettings {
-	return two.LllSettings{
+func toLllSettings(old versionone.LllSettings) versiontwo.LllSettings {
+	return versiontwo.LllSettings{
 		LineLength: old.LineLength,
 		TabWidth:   old.TabWidth,
 	}
 }
 
-func toLoggerCheckSettings(old one.LoggerCheckSettings) two.LoggerCheckSettings {
-	return two.LoggerCheckSettings{
+func toLoggerCheckSettings(old versionone.LoggerCheckSettings) versiontwo.LoggerCheckSettings {
+	return versiontwo.LoggerCheckSettings{
 		Kitlog:           old.Kitlog,
 		Klog:             old.Klog,
 		Logr:             old.Logr,
@@ -546,27 +546,27 @@ func toLoggerCheckSettings(old one.LoggerCheckSettings) two.LoggerCheckSettings 
 	}
 }
 
-func toMaintIdxSettings(old one.MaintIdxSettings) two.MaintIdxSettings {
-	return two.MaintIdxSettings{
+func toMaintIdxSettings(old versionone.MaintIdxSettings) versiontwo.MaintIdxSettings {
+	return versiontwo.MaintIdxSettings{
 		Under: old.Under,
 	}
 }
 
-func toMakezeroSettings(old one.MakezeroSettings) two.MakezeroSettings {
-	return two.MakezeroSettings{
+func toMakezeroSettings(old versionone.MakezeroSettings) versiontwo.MakezeroSettings {
+	return versiontwo.MakezeroSettings{
 		Always: old.Always,
 	}
 }
 
-func toMisspellSettings(old one.MisspellSettings) two.MisspellSettings {
-	settings := two.MisspellSettings{
+func toMisspellSettings(old versionone.MisspellSettings) versiontwo.MisspellSettings {
+	settings := versiontwo.MisspellSettings{
 		Mode:        old.Mode,
 		Locale:      old.Locale,
 		IgnoreRules: old.IgnoreWords,
 	}
 
 	for _, word := range old.ExtraWords {
-		settings.ExtraWords = append(settings.ExtraWords, two.MisspellExtraWords{
+		settings.ExtraWords = append(settings.ExtraWords, versiontwo.MisspellExtraWords{
 			Typo:       word.Typo,
 			Correction: word.Correction,
 		})
@@ -575,8 +575,8 @@ func toMisspellSettings(old one.MisspellSettings) two.MisspellSettings {
 	return settings
 }
 
-func toMndSettings(old one.MndSettings) two.MndSettings {
-	return two.MndSettings{
+func toMndSettings(old versionone.MndSettings) versiontwo.MndSettings {
+	return versiontwo.MndSettings{
 		Checks:           old.Checks,
 		IgnoredNumbers:   old.IgnoredNumbers,
 		IgnoredFiles:     old.IgnoredFiles,
@@ -584,11 +584,11 @@ func toMndSettings(old one.MndSettings) two.MndSettings {
 	}
 }
 
-func toMustTagSettings(old one.MustTagSettings) two.MustTagSettings {
-	settings := two.MustTagSettings{}
+func toMustTagSettings(old versionone.MustTagSettings) versiontwo.MustTagSettings {
+	settings := versiontwo.MustTagSettings{}
 
 	for _, function := range old.Functions {
-		settings.Functions = append(settings.Functions, two.MustTagFunction{
+		settings.Functions = append(settings.Functions, versiontwo.MustTagFunction{
 			Name:   function.Name,
 			Tag:    function.Tag,
 			ArgPos: function.ArgPos,
@@ -598,33 +598,33 @@ func toMustTagSettings(old one.MustTagSettings) two.MustTagSettings {
 	return settings
 }
 
-func toNakedretSettings(old one.NakedretSettings) two.NakedretSettings {
-	return two.NakedretSettings{
+func toNakedretSettings(old versionone.NakedretSettings) versiontwo.NakedretSettings {
+	return versiontwo.NakedretSettings{
 		MaxFuncLines: old.MaxFuncLines,
 	}
 }
 
-func toNestifSettings(old one.NestifSettings) two.NestifSettings {
-	return two.NestifSettings{
+func toNestifSettings(old versionone.NestifSettings) versiontwo.NestifSettings {
+	return versiontwo.NestifSettings{
 		MinComplexity: old.MinComplexity,
 	}
 }
 
-func toNilNilSettings(old one.NilNilSettings) two.NilNilSettings {
-	return two.NilNilSettings{
+func toNilNilSettings(old versionone.NilNilSettings) versiontwo.NilNilSettings {
+	return versiontwo.NilNilSettings{
 		DetectOpposite: old.DetectOpposite,
 		CheckedTypes:   old.CheckedTypes,
 	}
 }
 
-func toNlreturnSettings(old one.NlreturnSettings) two.NlreturnSettings {
-	return two.NlreturnSettings{
+func toNlreturnSettings(old versionone.NlreturnSettings) versiontwo.NlreturnSettings {
+	return versiontwo.NlreturnSettings{
 		BlockSize: old.BlockSize,
 	}
 }
 
-func toNoLintLintSettings(old one.NoLintLintSettings) two.NoLintLintSettings {
-	return two.NoLintLintSettings{
+func toNoLintLintSettings(old versionone.NoLintLintSettings) versiontwo.NoLintLintSettings {
+	return versiontwo.NoLintLintSettings{
 		RequireExplanation: old.RequireExplanation,
 		RequireSpecific:    old.RequireSpecific,
 		AllowNoExplanation: old.AllowNoExplanation,
@@ -632,22 +632,22 @@ func toNoLintLintSettings(old one.NoLintLintSettings) two.NoLintLintSettings {
 	}
 }
 
-func toNoNamedReturnsSettings(old one.NoNamedReturnsSettings) two.NoNamedReturnsSettings {
-	return two.NoNamedReturnsSettings{
+func toNoNamedReturnsSettings(old versionone.NoNamedReturnsSettings) versiontwo.NoNamedReturnsSettings {
+	return versiontwo.NoNamedReturnsSettings{
 		ReportErrorInDefer: old.ReportErrorInDefer,
 	}
 }
 
-func toParallelTestSettings(old one.ParallelTestSettings) two.ParallelTestSettings {
-	return two.ParallelTestSettings{
+func toParallelTestSettings(old versionone.ParallelTestSettings) versiontwo.ParallelTestSettings {
+	return versiontwo.ParallelTestSettings{
 		Go:                    nil,
 		IgnoreMissing:         old.IgnoreMissing,
 		IgnoreMissingSubtests: old.IgnoreMissingSubtests,
 	}
 }
 
-func toPerfSprintSettings(old one.PerfSprintSettings) two.PerfSprintSettings {
-	return two.PerfSprintSettings{
+func toPerfSprintSettings(old versionone.PerfSprintSettings) versiontwo.PerfSprintSettings {
+	return versiontwo.PerfSprintSettings{
 		IntegerFormat: old.IntegerFormat,
 		IntConversion: old.IntConversion,
 		ErrorFormat:   old.ErrorFormat,
@@ -661,35 +661,35 @@ func toPerfSprintSettings(old one.PerfSprintSettings) two.PerfSprintSettings {
 	}
 }
 
-func toPreallocSettings(old one.PreallocSettings) two.PreallocSettings {
-	return two.PreallocSettings{
+func toPreallocSettings(old versionone.PreallocSettings) versiontwo.PreallocSettings {
+	return versiontwo.PreallocSettings{
 		Simple:     old.Simple,
 		RangeLoops: old.RangeLoops,
 		ForLoops:   old.ForLoops,
 	}
 }
 
-func toPredeclaredSettings(old one.PredeclaredSettings) two.PredeclaredSettings {
+func toPredeclaredSettings(old versionone.PredeclaredSettings) versiontwo.PredeclaredSettings {
 	var ignore []string
 	if ptr.Deref(old.Ignore) != "" {
 		ignore = strings.Split(ptr.Deref(old.Ignore), ",")
 	}
 
-	return two.PredeclaredSettings{
+	return versiontwo.PredeclaredSettings{
 		Ignore:    ignore,
 		Qualified: old.Qualified,
 	}
 }
 
-func toPromlinterSettings(old one.PromlinterSettings) two.PromlinterSettings {
-	return two.PromlinterSettings{
+func toPromlinterSettings(old versionone.PromlinterSettings) versiontwo.PromlinterSettings {
+	return versiontwo.PromlinterSettings{
 		Strict:          old.Strict,
 		DisabledLinters: old.DisabledLinters,
 	}
 }
 
-func toProtoGetterSettings(old one.ProtoGetterSettings) two.ProtoGetterSettings {
-	return two.ProtoGetterSettings{
+func toProtoGetterSettings(old versionone.ProtoGetterSettings) versiontwo.ProtoGetterSettings {
+	return versiontwo.ProtoGetterSettings{
 		SkipGeneratedBy:         old.SkipGeneratedBy,
 		SkipFiles:               old.SkipFiles,
 		SkipAnyGenerated:        old.SkipAnyGenerated,
@@ -697,21 +697,21 @@ func toProtoGetterSettings(old one.ProtoGetterSettings) two.ProtoGetterSettings 
 	}
 }
 
-func toReassignSettings(old one.ReassignSettings) two.ReassignSettings {
-	return two.ReassignSettings{
+func toReassignSettings(old versionone.ReassignSettings) versiontwo.ReassignSettings {
+	return versiontwo.ReassignSettings{
 		Patterns: old.Patterns,
 	}
 }
 
-func toRecvcheckSettings(old one.RecvcheckSettings) two.RecvcheckSettings {
-	return two.RecvcheckSettings{
+func toRecvcheckSettings(old versionone.RecvcheckSettings) versiontwo.RecvcheckSettings {
+	return versiontwo.RecvcheckSettings{
 		DisableBuiltin: old.DisableBuiltin,
 		Exclusions:     old.Exclusions,
 	}
 }
 
-func toReviveSettings(old one.ReviveSettings) two.ReviveSettings {
-	settings := two.ReviveSettings{
+func toReviveSettings(old versionone.ReviveSettings) versiontwo.ReviveSettings {
+	settings := versiontwo.ReviveSettings{
 		MaxOpenFiles:   old.MaxOpenFiles,
 		Confidence:     old.Confidence,
 		Severity:       old.Severity,
@@ -721,7 +721,7 @@ func toReviveSettings(old one.ReviveSettings) two.ReviveSettings {
 	}
 
 	for _, rule := range old.Rules {
-		settings.Rules = append(settings.Rules, two.ReviveRule{
+		settings.Rules = append(settings.Rules, versiontwo.ReviveRule{
 			Name:      rule.Name,
 			Arguments: rule.Arguments,
 			Severity:  rule.Severity,
@@ -731,7 +731,7 @@ func toReviveSettings(old one.ReviveSettings) two.ReviveSettings {
 	}
 
 	for _, directive := range old.Directives {
-		settings.Directives = append(settings.Directives, two.ReviveDirective{
+		settings.Directives = append(settings.Directives, versiontwo.ReviveDirective{
 			Name:     directive.Name,
 			Severity: directive.Severity,
 		})
@@ -740,14 +740,14 @@ func toReviveSettings(old one.ReviveSettings) two.ReviveSettings {
 	return settings
 }
 
-func toRowsErrCheckSettings(old one.RowsErrCheckSettings) two.RowsErrCheckSettings {
-	return two.RowsErrCheckSettings{
+func toRowsErrCheckSettings(old versionone.RowsErrCheckSettings) versiontwo.RowsErrCheckSettings {
+	return versiontwo.RowsErrCheckSettings{
 		Packages: old.Packages,
 	}
 }
 
-func toSlogLintSettings(old one.SlogLintSettings) two.SlogLintSettings {
-	return two.SlogLintSettings{
+func toSlogLintSettings(old versionone.SlogLintSettings) versiontwo.SlogLintSettings {
+	return versiontwo.SlogLintSettings{
 		NoMixedArgs:    old.NoMixedArgs,
 		KVOnly:         old.KVOnly,
 		AttrOnly:       old.AttrOnly,
@@ -761,20 +761,20 @@ func toSlogLintSettings(old one.SlogLintSettings) two.SlogLintSettings {
 	}
 }
 
-func toSpancheckSettings(old one.SpancheckSettings) two.SpancheckSettings {
-	return two.SpancheckSettings{
+func toSpancheckSettings(old versionone.SpancheckSettings) versiontwo.SpancheckSettings {
+	return versiontwo.SpancheckSettings{
 		Checks:                   old.Checks,
 		IgnoreCheckSignatures:    old.IgnoreCheckSignatures,
 		ExtraStartSpanSignatures: old.ExtraStartSpanSignatures,
 	}
 }
 
-func toStaticCheckSettings(old one.LintersSettings) two.StaticCheckSettings {
+func toStaticCheckSettings(old versionone.LintersSettings) versiontwo.StaticCheckSettings {
 	checks := slices.Concat(old.Staticcheck.Checks, old.Stylecheck.Checks, old.Gosimple.Checks)
 
 	slices.Sort(checks)
 
-	return two.StaticCheckSettings{
+	return versiontwo.StaticCheckSettings{
 		Checks:                  slices.Compact(checks),
 		Initialisms:             old.Stylecheck.Initialisms,
 		DotImportWhitelist:      old.Stylecheck.DotImportWhitelist,
@@ -782,8 +782,8 @@ func toStaticCheckSettings(old one.LintersSettings) two.StaticCheckSettings {
 	}
 }
 
-func toTagAlignSettings(old one.TagAlignSettings) two.TagAlignSettings {
-	return two.TagAlignSettings{
+func toTagAlignSettings(old versionone.TagAlignSettings) versiontwo.TagAlignSettings {
+	return versiontwo.TagAlignSettings{
 		Align:  old.Align,
 		Sort:   old.Sort,
 		Order:  old.Order,
@@ -791,90 +791,90 @@ func toTagAlignSettings(old one.TagAlignSettings) two.TagAlignSettings {
 	}
 }
 
-func toTagliatelleSettings(old one.TagliatelleSettings) two.TagliatelleSettings {
-	tcase := two.TagliatelleCase{
-		TagliatelleBase: two.TagliatelleBase{
+func toTagliatelleSettings(old versionone.TagliatelleSettings) versiontwo.TagliatelleSettings {
+	tcase := versiontwo.TagliatelleCase{
+		TagliatelleBase: versiontwo.TagliatelleBase{
 			Rules:         old.Case.Rules,
 			UseFieldName:  old.Case.UseFieldName,
 			IgnoredFields: old.Case.IgnoredFields,
 		},
-		Overrides: []two.TagliatelleOverrides{},
+		Overrides: []versiontwo.TagliatelleOverrides{},
 	}
 
 	for k, rule := range old.Case.ExtendedRules {
 		if tcase.ExtendedRules == nil {
-			tcase.ExtendedRules = make(map[string]two.TagliatelleExtendedRule)
+			tcase.ExtendedRules = make(map[string]versiontwo.TagliatelleExtendedRule)
 		}
 
-		tcase.ExtendedRules[k] = two.TagliatelleExtendedRule{
+		tcase.ExtendedRules[k] = versiontwo.TagliatelleExtendedRule{
 			Case:                rule.Case,
 			ExtraInitialisms:    rule.ExtraInitialisms,
 			InitialismOverrides: rule.InitialismOverrides,
 		}
 	}
 
-	return two.TagliatelleSettings{Case: tcase}
+	return versiontwo.TagliatelleSettings{Case: tcase}
 }
 
-func toTenvSettings(old one.TenvSettings) two.TenvSettings {
-	return two.TenvSettings{
+func toTenvSettings(old versionone.TenvSettings) versiontwo.TenvSettings {
+	return versiontwo.TenvSettings{
 		All: old.All,
 	}
 }
 
-func toTestifylintSettings(old one.TestifylintSettings) two.TestifylintSettings {
-	return two.TestifylintSettings{
+func toTestifylintSettings(old versionone.TestifylintSettings) versiontwo.TestifylintSettings {
+	return versiontwo.TestifylintSettings{
 		EnableAll:        old.EnableAll,
 		DisableAll:       old.DisableAll,
 		EnabledCheckers:  old.EnabledCheckers,
 		DisabledCheckers: old.DisabledCheckers,
-		BoolCompare: two.TestifylintBoolCompare{
+		BoolCompare: versiontwo.TestifylintBoolCompare{
 			IgnoreCustomTypes: old.BoolCompare.IgnoreCustomTypes,
 		},
-		ExpectedActual: two.TestifylintExpectedActual{
+		ExpectedActual: versiontwo.TestifylintExpectedActual{
 			ExpVarPattern: old.ExpectedActual.ExpVarPattern,
 		},
-		Formatter: two.TestifylintFormatter{
+		Formatter: versiontwo.TestifylintFormatter{
 			CheckFormatString: old.Formatter.CheckFormatString,
 			RequireFFuncs:     old.Formatter.RequireFFuncs,
 		},
-		GoRequire: two.TestifylintGoRequire{
+		GoRequire: versiontwo.TestifylintGoRequire{
 			IgnoreHTTPHandlers: old.GoRequire.IgnoreHTTPHandlers,
 		},
-		RequireError: two.TestifylintRequireError{
+		RequireError: versiontwo.TestifylintRequireError{
 			FnPattern: old.RequireError.FnPattern,
 		},
-		SuiteExtraAssertCall: two.TestifylintSuiteExtraAssertCall{
+		SuiteExtraAssertCall: versiontwo.TestifylintSuiteExtraAssertCall{
 			Mode: old.SuiteExtraAssertCall.Mode,
 		},
 	}
 }
 
-func toTestpackageSettings(old one.TestpackageSettings) two.TestpackageSettings {
-	return two.TestpackageSettings{
+func toTestpackageSettings(old versionone.TestpackageSettings) versiontwo.TestpackageSettings {
+	return versiontwo.TestpackageSettings{
 		SkipRegexp:    old.SkipRegexp,
 		AllowPackages: old.AllowPackages,
 	}
 }
 
-func toThelperSettings(old one.ThelperSettings) two.ThelperSettings {
-	return two.ThelperSettings{
-		Test: two.ThelperOptions{
+func toThelperSettings(old versionone.ThelperSettings) versiontwo.ThelperSettings {
+	return versiontwo.ThelperSettings{
+		Test: versiontwo.ThelperOptions{
 			First: old.Test.First,
 			Name:  old.Test.Name,
 			Begin: old.Test.Begin,
 		},
-		Fuzz: two.ThelperOptions{
+		Fuzz: versiontwo.ThelperOptions{
 			First: old.Fuzz.First,
 			Name:  old.Fuzz.Name,
 			Begin: old.Fuzz.Begin,
 		},
-		Benchmark: two.ThelperOptions{
+		Benchmark: versiontwo.ThelperOptions{
 			First: old.Benchmark.First,
 			Name:  old.Benchmark.Name,
 			Begin: old.Benchmark.Begin,
 		},
-		TB: two.ThelperOptions{
+		TB: versiontwo.ThelperOptions{
 			First: old.TB.First,
 			Name:  old.TB.Name,
 			Begin: old.TB.Begin,
@@ -882,21 +882,21 @@ func toThelperSettings(old one.ThelperSettings) two.ThelperSettings {
 	}
 }
 
-func toUnconvertSettings(old one.UnconvertSettings) two.UnconvertSettings {
-	return two.UnconvertSettings{
+func toUnconvertSettings(old versionone.UnconvertSettings) versiontwo.UnconvertSettings {
+	return versiontwo.UnconvertSettings{
 		FastMath: old.FastMath,
 		Safe:     old.Safe,
 	}
 }
 
-func toUnparamSettings(old one.UnparamSettings) two.UnparamSettings {
-	return two.UnparamSettings{
+func toUnparamSettings(old versionone.UnparamSettings) versiontwo.UnparamSettings {
+	return versiontwo.UnparamSettings{
 		CheckExported: old.CheckExported,
 	}
 }
 
-func toUnusedSettings(old one.UnusedSettings) two.UnusedSettings {
-	return two.UnusedSettings{
+func toUnusedSettings(old versionone.UnusedSettings) versiontwo.UnusedSettings {
+	return versiontwo.UnusedSettings{
 		FieldWritesAreUses:     old.FieldWritesAreUses,
 		PostStatementsAreReads: old.PostStatementsAreReads,
 		ExportedFieldsAreUsed:  old.ExportedFieldsAreUsed,
@@ -906,8 +906,8 @@ func toUnusedSettings(old one.UnusedSettings) two.UnusedSettings {
 	}
 }
 
-func toUseStdlibVarsSettings(old one.UseStdlibVarsSettings) two.UseStdlibVarsSettings {
-	return two.UseStdlibVarsSettings{
+func toUseStdlibVarsSettings(old versionone.UseStdlibVarsSettings) versiontwo.UseStdlibVarsSettings {
+	return versiontwo.UseStdlibVarsSettings{
 		HTTPMethod:         old.HTTPMethod,
 		HTTPStatusCode:     old.HTTPStatusCode,
 		TimeWeekday:        old.TimeWeekday,
@@ -921,8 +921,8 @@ func toUseStdlibVarsSettings(old one.UseStdlibVarsSettings) two.UseStdlibVarsSet
 	}
 }
 
-func toUseTestingSettings(old one.UseTestingSettings) two.UseTestingSettings {
-	return two.UseTestingSettings{
+func toUseTestingSettings(old versionone.UseTestingSettings) versiontwo.UseTestingSettings {
+	return versiontwo.UseTestingSettings{
 		ContextBackground: old.ContextBackground,
 		ContextTodo:       old.ContextTodo,
 		OSChdir:           old.OSChdir,
@@ -933,8 +933,8 @@ func toUseTestingSettings(old one.UseTestingSettings) two.UseTestingSettings {
 	}
 }
 
-func toVarnamelenSettings(old one.VarnamelenSettings) two.VarnamelenSettings {
-	return two.VarnamelenSettings{
+func toVarnamelenSettings(old versionone.VarnamelenSettings) versiontwo.VarnamelenSettings {
+	return versiontwo.VarnamelenSettings{
 		MaxDistance:        old.MaxDistance,
 		MinNameLength:      old.MinNameLength,
 		CheckReceiver:      old.CheckReceiver,
@@ -948,15 +948,15 @@ func toVarnamelenSettings(old one.VarnamelenSettings) two.VarnamelenSettings {
 	}
 }
 
-func toWhitespaceSettings(old one.WhitespaceSettings) two.WhitespaceSettings {
-	return two.WhitespaceSettings{
+func toWhitespaceSettings(old versionone.WhitespaceSettings) versiontwo.WhitespaceSettings {
+	return versiontwo.WhitespaceSettings{
 		MultiIf:   old.MultiIf,
 		MultiFunc: old.MultiFunc,
 	}
 }
 
-func toWrapcheckSettings(old one.WrapcheckSettings) two.WrapcheckSettings {
-	return two.WrapcheckSettings{
+func toWrapcheckSettings(old versionone.WrapcheckSettings) versiontwo.WrapcheckSettings {
+	return versiontwo.WrapcheckSettings{
 		ExtraIgnoreSigs:        old.ExtraIgnoreSigs,
 		IgnoreSigs:             old.IgnoreSigs,
 		IgnoreSigRegexps:       old.IgnoreSigRegexps,
@@ -965,8 +965,8 @@ func toWrapcheckSettings(old one.WrapcheckSettings) two.WrapcheckSettings {
 	}
 }
 
-func toWSLSettings(old one.WSLSettings) two.WSLSettings {
-	return two.WSLSettings{
+func toWSLSettings(old versionone.WSLSettings) versiontwo.WSLSettings {
+	return versiontwo.WSLSettings{
 		StrictAppend:                     old.StrictAppend,
 		AllowAssignAndCallCuddle:         old.AllowAssignAndCallCuddle,
 		AllowAssignAndAnythingCuddle:     old.AllowAssignAndAnythingCuddle,
@@ -983,15 +983,15 @@ func toWSLSettings(old one.WSLSettings) two.WSLSettings {
 	}
 }
 
-func toCustom(old map[string]one.CustomLinterSettings) map[string]two.CustomLinterSettings {
+func toCustom(old map[string]versionone.CustomLinterSettings) map[string]versiontwo.CustomLinterSettings {
 	if old == nil {
 		return nil
 	}
 
-	settings := map[string]two.CustomLinterSettings{}
+	settings := map[string]versiontwo.CustomLinterSettings{}
 
 	for k, s := range old {
-		settings[k] = two.CustomLinterSettings{
+		settings[k] = versiontwo.CustomLinterSettings{
 			Type:        s.Type,
 			Path:        s.Path,
 			Description: s.Description,

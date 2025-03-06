@@ -4,12 +4,12 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/one"
 	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/ptr"
-	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/two"
+	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/versionone"
+	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/versiontwo"
 )
 
-func toFormatters(old *one.Config) two.Formatters {
+func toFormatters(old *versionone.Config) versiontwo.Formatters {
 	enable, _ := ProcessEffectiveLinters(old.Linters)
 
 	formatterNames := onlyFormatterNames(enable)
@@ -19,23 +19,23 @@ func toFormatters(old *one.Config) two.Formatters {
 		paths = slices.Concat(old.Issues.ExcludeFiles, old.Issues.ExcludeDirs)
 	}
 
-	return two.Formatters{
+	return versiontwo.Formatters{
 		Enable: formatterNames,
-		Settings: two.FormatterSettings{
+		Settings: versiontwo.FormatterSettings{
 			Gci:       toGciSettings(old.LintersSettings.Gci),
 			GoFmt:     toGoFmtSettings(old.LintersSettings.GoFmt),
 			GoFumpt:   toGoFumptSettings(old.LintersSettings.GoFumpt),
 			GoImports: toGoImportsSettings(old.LintersSettings.GoImports),
 		},
-		Exclusions: two.FormatterExclusions{
+		Exclusions: versiontwo.FormatterExclusions{
 			Generated: toExclusionGenerated(old.Issues.ExcludeGenerated),
 			Paths:     paths,
 		},
 	}
 }
 
-func toGciSettings(old one.GciSettings) two.GciSettings {
-	return two.GciSettings{
+func toGciSettings(old versionone.GciSettings) versiontwo.GciSettings {
+	return versiontwo.GciSettings{
 		Sections:         old.Sections,
 		NoInlineComments: old.NoInlineComments,
 		NoPrefixComments: old.NoPrefixComments,
@@ -44,13 +44,13 @@ func toGciSettings(old one.GciSettings) two.GciSettings {
 	}
 }
 
-func toGoFmtSettings(old one.GoFmtSettings) two.GoFmtSettings {
-	settings := two.GoFmtSettings{
+func toGoFmtSettings(old versionone.GoFmtSettings) versiontwo.GoFmtSettings {
+	settings := versiontwo.GoFmtSettings{
 		Simplify: old.Simplify,
 	}
 
 	for _, rule := range old.RewriteRules {
-		settings.RewriteRules = append(settings.RewriteRules, two.GoFmtRewriteRule{
+		settings.RewriteRules = append(settings.RewriteRules, versiontwo.GoFmtRewriteRule{
 			Pattern:     rule.Pattern,
 			Replacement: rule.Replacement,
 		})
@@ -59,21 +59,21 @@ func toGoFmtSettings(old one.GoFmtSettings) two.GoFmtSettings {
 	return settings
 }
 
-func toGoFumptSettings(old one.GoFumptSettings) two.GoFumptSettings {
-	return two.GoFumptSettings{
+func toGoFumptSettings(old versionone.GoFumptSettings) versiontwo.GoFumptSettings {
+	return versiontwo.GoFumptSettings{
 		ModulePath: old.ModulePath,
 		ExtraRules: old.ExtraRules,
 	}
 }
 
-func toGoImportsSettings(old one.GoImportsSettings) two.GoImportsSettings {
+func toGoImportsSettings(old versionone.GoImportsSettings) versiontwo.GoImportsSettings {
 	var localPrefixes []string
 
 	if ptr.Deref(old.LocalPrefixes) != "" {
 		localPrefixes = strings.Split(ptr.Deref(old.LocalPrefixes), ",")
 	}
 
-	return two.GoImportsSettings{
+	return versiontwo.GoImportsSettings{
 		LocalPrefixes: localPrefixes,
 	}
 }

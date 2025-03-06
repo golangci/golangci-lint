@@ -1,13 +1,13 @@
 package migrate
 
 import (
-	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/one"
 	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/ptr"
-	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/two"
+	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/versionone"
+	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/versiontwo"
 )
 
-func ToConfig(old *one.Config) *two.Config {
-	return &two.Config{
+func ToConfig(old *versionone.Config) *versiontwo.Config {
+	return &versiontwo.Config{
 		Version:    ptr.Pointer("2"),
 		Linters:    toLinters(old),
 		Formatters: toFormatters(old),

@@ -1,4 +1,4 @@
-package one
+package versionone
 
 type Severity struct {
 	Default       *string        `mapstructure:"default-severity"`

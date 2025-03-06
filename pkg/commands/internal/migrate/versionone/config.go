@@ -1,4 +1,4 @@
-package one
+package versionone
 
 type Config struct {
 	cfgDir string // Path to the directory containing golangci-lint config file.

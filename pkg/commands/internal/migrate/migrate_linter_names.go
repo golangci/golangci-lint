@@ -3,8 +3,8 @@ package migrate
 import (
 	"slices"
 
-	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/one"
 	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/ptr"
+	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/versionone"
 )
 
 type LinterInfo struct {
@@ -33,7 +33,7 @@ func (l *LinterInfo) hasPresets(names []string) bool {
 	return false
 }
 
-func ProcessEffectiveLinters(old one.Linters) (enable, disable []string) {
+func ProcessEffectiveLinters(old versionone.Linters) (enable, disable []string) {
 	switch {
 	case ptr.Deref(old.DisableAll):
 		return disableAllFilter(old), nil
@@ -45,7 +45,7 @@ func ProcessEffectiveLinters(old one.Linters) (enable, disable []string) {
 }
 
 // disableAllFilter generates the value of `enable` when `disable-all` is `true`.
-func disableAllFilter(old one.Linters) []string {
+func disableAllFilter(old versionone.Linters) []string {
 	// Note:
 	// - disable-all + enable-all
 	// 		=> impossible (https://github.com/golangci/golangci-lint/blob/e1eb4cb2c7fba29b5831b63e454844d83c692874/pkg/config/linters.go#L38)
@@ -74,7 +74,7 @@ func disableAllFilter(old one.Linters) []string {
 }
 
 // enableAllFilter generates the value of `disable` when `enable-all` is `true`.
-func enableAllFilter(old one.Linters) []string {
+func enableAllFilter(old versionone.Linters) []string {
 	// Note:
 	// - enable-all + disable-all
 	// 		=> impossible (https://github.com/golangci/golangci-lint/blob/e1eb4cb2c7fba29b5831b63e454844d83c692874/pkg/config/linters.go#L38)
@@ -109,7 +109,7 @@ func enableAllFilter(old one.Linters) []string {
 }
 
 // defaultLintersFilter generates the values of `enable` and `disable` when using default linters.
-func defaultLintersFilter(old one.Linters) (enable, disable []string) {
+func defaultLintersFilter(old versionone.Linters) (enable, disable []string) {
 	// Note:
 	// - a linter cannot be inside `enable` and `disable` in the same configuration
 	// 		=> https://github.com/golangci/golangci-lint/blob/e1eb4cb2c7fba29b5831b63e454844d83c692874/pkg/config/linters.go#L66
@@ -161,7 +161,7 @@ func defaultLintersFilter(old one.Linters) (enable, disable []string) {
 }
 
 // defaultLintersEnableFilter generates the value of `enable` when using default linters.
-func defaultLintersEnableFilter(old one.Linters, effectiveDisabled []LinterInfo) []LinterInfo {
+func defaultLintersEnableFilter(old versionone.Linters, effectiveDisabled []LinterInfo) []LinterInfo {
 	// presets - slow + enable - default - [effective disable] => effective enable
 	return removeLinters(
 		filter(
@@ -178,7 +178,7 @@ func defaultLintersEnableFilter(old one.Linters, effectiveDisabled []LinterInfo)
 }
 
 // defaultLintersDisableFilter generates the value of `disable` when using default linters.
-func defaultLintersDisableFilter(old one.Linters) []LinterInfo {
+func defaultLintersDisableFilter(old versionone.Linters) []LinterInfo {
 	// (default - fast) - enable + disable => effective disable
 	return slices.Concat(
 		removeLinters(
@@ -731,7 +731,7 @@ func removeLinters(linters, toRemove []LinterInfo) []LinterInfo {
 	})
 }
 
-func allEnabled(old one.Linters, linters []LinterInfo) []LinterInfo {
+func allEnabled(old versionone.Linters, linters []LinterInfo) []LinterInfo {
 	var results []LinterInfo
 
 	for _, linter := range linters {
@@ -746,7 +746,7 @@ func allEnabled(old one.Linters, linters []LinterInfo) []LinterInfo {
 	return results
 }
 
-func allDisabled(old one.Linters, linters []LinterInfo) []LinterInfo {
+func allDisabled(old versionone.Linters, linters []LinterInfo) []LinterInfo {
 	var results []LinterInfo
 
 	for _, linter := range linters {
@@ -785,7 +785,7 @@ func mergeFilters(linter LinterInfo, fns []fnFilter) bool {
 
 type fnFilter func(linter LinterInfo) bool
 
-func onlyPresets(old one.Linters) fnFilter {
+func onlyPresets(old versionone.Linters) fnFilter {
 	return func(linter LinterInfo) bool {
 		return linter.hasPresets(old.Presets)
 	}
@@ -799,7 +799,7 @@ func notDefault(linter LinterInfo) bool {
 	return !linter.Default
 }
 
-func keepFast(old one.Linters) fnFilter {
+func keepFast(old versionone.Linters) fnFilter {
 	return func(linter LinterInfo) bool {
 		if !ptr.Deref(old.Fast) {
 			return true
@@ -809,7 +809,7 @@ func keepFast(old one.Linters) fnFilter {
 	}
 }
 
-func keepSlow(old one.Linters) fnFilter {
+func keepSlow(old versionone.Linters) fnFilter {
 	return func(linter LinterInfo) bool {
 		if !ptr.Deref(old.Fast) {
 			return false

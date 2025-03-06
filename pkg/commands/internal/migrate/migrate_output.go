@@ -3,13 +3,13 @@ package migrate
 import (
 	"slices"
 
-	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/one"
 	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/ptr"
-	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/two"
+	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/versionone"
+	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/versiontwo"
 )
 
-func toOutput(old *one.Config) two.Output {
-	formats := two.Formats{}
+func toOutput(old *versionone.Config) versiontwo.Output {
+	formats := versiontwo.Formats{}
 
 	oldFormats := cleanIncompatibleFormats(old.Output.Formats, "colored-line-number", "line-number")
 	oldFormats = cleanIncompatibleFormats(oldFormats, "colored-tab", "tab")
@@ -70,7 +70,7 @@ func toOutput(old *one.Config) two.Output {
 		}
 	}
 
-	return two.Output{
+	return versiontwo.Output{
 		Formats:    formats,
 		SortOrder:  old.Output.SortOrder,
 		PathPrefix: old.Output.PathPrefix,
@@ -86,12 +86,12 @@ func defaultFormatPath(p string) string {
 	return p
 }
 
-func cleanIncompatibleFormats(old one.OutputFormats, f1, f2 string) one.OutputFormats {
-	index1 := slices.IndexFunc(old, func(format one.OutputFormat) bool {
+func cleanIncompatibleFormats(old versionone.OutputFormats, f1, f2 string) versionone.OutputFormats {
+	index1 := slices.IndexFunc(old, func(format versionone.OutputFormat) bool {
 		return ptr.Deref(format.Format) == f1
 	})
 
-	index2 := slices.IndexFunc(old, func(format one.OutputFormat) bool {
+	index2 := slices.IndexFunc(old, func(format versionone.OutputFormat) bool {
 		return ptr.Deref(format.Format) == f2
 	})
 

@@ -3,15 +3,15 @@ package migrate
 import (
 	"slices"
 
-	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/one"
 	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/ptr"
-	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/two"
+	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/versionone"
+	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/versiontwo"
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/result/processors"
 )
 
-func toExclusions(old *one.Config) two.LinterExclusions {
-	return two.LinterExclusions{
+func toExclusions(old *versionone.Config) versiontwo.LinterExclusions {
+	return versiontwo.LinterExclusions{
 		Generated: toExclusionGenerated(old.Issues.ExcludeGenerated),
 		Presets:   toPresets(old.Issues),
 		Rules:     toExclusionRules(old),
@@ -31,7 +31,7 @@ func toExclusionGenerated(excludeGenerated *string) *string {
 	return excludeGenerated
 }
 
-func toPresets(old one.Issues) []string {
+func toPresets(old versionone.Issues) []string {
 	if !ptr.Deref(old.UseDefaultExcludes) {
 		return nil
 	}
@@ -60,12 +60,12 @@ func toPresets(old one.Issues) []string {
 	}
 }
 
-func toExclusionRules(old *one.Config) []two.ExcludeRule {
-	var results []two.ExcludeRule
+func toExclusionRules(old *versionone.Config) []versiontwo.ExcludeRule {
+	var results []versiontwo.ExcludeRule
 
 	for _, rule := range old.Issues.ExcludeRules {
-		results = append(results, two.ExcludeRule{
-			BaseRule: two.BaseRule{
+		results = append(results, versiontwo.ExcludeRule{
+			BaseRule: versiontwo.BaseRule{
 				Linters:    onlyLinterNames(convertStaticcheckLinterNames(convertAlternativeNames(rule.Linters))),
 				Path:       rule.Path,
 				PathExcept: rule.PathExcept,
@@ -76,8 +76,8 @@ func toExclusionRules(old *one.Config) []two.ExcludeRule {
 	}
 
 	for _, pattern := range old.Issues.ExcludePatterns {
-		results = append(results, two.ExcludeRule{
-			BaseRule: two.BaseRule{
+		results = append(results, versiontwo.ExcludeRule{
+			BaseRule: versiontwo.BaseRule{
 				Path: ptr.Pointer(`(.+)\.go$`),
 				Text: addPrefix(old.Issues, ptr.Pointer(pattern)),
 			},
@@ -87,7 +87,7 @@ func toExclusionRules(old *one.Config) []two.ExcludeRule {
 	return slices.Concat(results, linterTestExclusions(old.LintersSettings))
 }
 
-func addPrefix(old one.Issues, s *string) *string {
+func addPrefix(old versionone.Issues, s *string) *string {
 	if s == nil || ptr.Deref(s) == "" {
 		return s
 	}
@@ -100,8 +100,8 @@ func addPrefix(old one.Issues, s *string) *string {
 	return ptr.Pointer(prefix + ptr.Deref(s))
 }
 
-func linterTestExclusions(old one.LintersSettings) []two.ExcludeRule {
-	var results []two.ExcludeRule
+func linterTestExclusions(old versionone.LintersSettings) []versiontwo.ExcludeRule {
+	var results []versiontwo.ExcludeRule
 
 	var excludedTestLinters []string
 
@@ -119,8 +119,8 @@ func linterTestExclusions(old one.LintersSettings) []two.ExcludeRule {
 	}
 
 	if len(excludedTestLinters) > 0 {
-		results = append(results, two.ExcludeRule{
-			BaseRule: two.BaseRule{
+		results = append(results, versiontwo.ExcludeRule{
+			BaseRule: versiontwo.BaseRule{
 				Linters: excludedTestLinters,
 				Path:    ptr.Pointer(`(.+)_test\.go`),
 			},
@@ -130,7 +130,7 @@ func linterTestExclusions(old one.LintersSettings) []two.ExcludeRule {
 	return results
 }
 
-func toExclusionPaths(old one.Issues) []string {
+func toExclusionPaths(old versionone.Issues) []string {
 	results := slices.Concat(old.ExcludeFiles, old.ExcludeDirs)
 
 	if old.UseDefaultExcludeDirs == nil || ptr.Deref(old.UseDefaultExcludeDirs) {

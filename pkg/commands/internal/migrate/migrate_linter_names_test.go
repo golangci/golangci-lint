@@ -5,19 +5,19 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/one"
 	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/ptr"
+	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/versionone"
 )
 
 func Test_disableAllFilter(t *testing.T) {
 	testCases := []struct {
 		desc     string
-		old      one.Linters
+		old      versionone.Linters
 		expected []string
 	}{
 		{
 			desc: "no presets, fast",
-			old: one.Linters{
+			old: versionone.Linters{
 				DisableAll: ptr.Pointer(true),
 				Enable:     nil,
 				Fast:       ptr.Pointer(false),
@@ -27,7 +27,7 @@ func Test_disableAllFilter(t *testing.T) {
 		},
 		{
 			desc: "no presets, fast",
-			old: one.Linters{
+			old: versionone.Linters{
 				DisableAll: ptr.Pointer(true),
 				Enable:     nil,
 				Fast:       ptr.Pointer(true),
@@ -37,7 +37,7 @@ func Test_disableAllFilter(t *testing.T) {
 		},
 		{
 			desc: "no presets, enable",
-			old: one.Linters{
+			old: versionone.Linters{
 				DisableAll: ptr.Pointer(true),
 				Enable:     []string{"lll", "misspell", "govet"},
 				Fast:       ptr.Pointer(false),
@@ -47,7 +47,7 @@ func Test_disableAllFilter(t *testing.T) {
 		},
 		{
 			desc: "fast, no presets, enable",
-			old: one.Linters{
+			old: versionone.Linters{
 				DisableAll: ptr.Pointer(true),
 				Enable:     []string{"lll", "misspell", "govet"},
 				Fast:       ptr.Pointer(true),
@@ -57,7 +57,7 @@ func Test_disableAllFilter(t *testing.T) {
 		},
 		{
 			desc: "presets, enable",
-			old: one.Linters{
+			old: versionone.Linters{
 				DisableAll: ptr.Pointer(true),
 				Enable:     []string{"lll", "misspell", "govet"},
 				Fast:       ptr.Pointer(false),
@@ -82,7 +82,7 @@ func Test_disableAllFilter(t *testing.T) {
 		},
 		{
 			desc: "presets, enable, fast",
-			old: one.Linters{
+			old: versionone.Linters{
 				DisableAll: ptr.Pointer(true),
 				Enable:     []string{"lll", "misspell", "govet"},
 				Fast:       ptr.Pointer(true),
@@ -117,12 +117,12 @@ func Test_disableAllFilter(t *testing.T) {
 func Test_enableAllFilter(t *testing.T) {
 	testCases := []struct {
 		desc     string
-		old      one.Linters
+		old      versionone.Linters
 		expected []string
 	}{
 		{
 			desc: "no options",
-			old: one.Linters{
+			old: versionone.Linters{
 				EnableAll: ptr.Pointer(true),
 				Disable:   nil,
 				Fast:      ptr.Pointer(false),
@@ -132,7 +132,7 @@ func Test_enableAllFilter(t *testing.T) {
 		},
 		{
 			desc: "presets (ignored)",
-			old: one.Linters{
+			old: versionone.Linters{
 				EnableAll: ptr.Pointer(true),
 				Disable:   nil,
 				Fast:      ptr.Pointer(false),
@@ -142,7 +142,7 @@ func Test_enableAllFilter(t *testing.T) {
 		},
 		{
 			desc: "fast",
-			old: one.Linters{
+			old: versionone.Linters{
 				EnableAll: ptr.Pointer(true),
 				Disable:   nil,
 				Fast:      ptr.Pointer(true),
@@ -152,7 +152,7 @@ func Test_enableAllFilter(t *testing.T) {
 		},
 		{
 			desc: "disable",
-			old: one.Linters{
+			old: versionone.Linters{
 				EnableAll: ptr.Pointer(true),
 				Disable:   []string{"lll", "misspell", "govet"},
 				Fast:      ptr.Pointer(false),
@@ -162,7 +162,7 @@ func Test_enableAllFilter(t *testing.T) {
 		},
 		{
 			desc: "disable, fast",
-			old: one.Linters{
+			old: versionone.Linters{
 				EnableAll: ptr.Pointer(true),
 				Disable:   []string{"lll", "misspell", "govet"},
 				Fast:      ptr.Pointer(true),
@@ -172,7 +172,7 @@ func Test_enableAllFilter(t *testing.T) {
 		},
 		{
 			desc: "disable, enable, fast",
-			old: one.Linters{
+			old: versionone.Linters{
 				EnableAll: ptr.Pointer(true),
 				Enable:    []string{"canonicalheader", "errname"},
 				Disable:   []string{"lll", "misspell", "govet"},
@@ -197,12 +197,12 @@ func Test_enableAllFilter(t *testing.T) {
 func Test_defaultLintersDisableFilter(t *testing.T) {
 	testCases := []struct {
 		desc     string
-		old      one.Linters
+		old      versionone.Linters
 		expected []string
 	}{
 		{
 			desc: "no options",
-			old: one.Linters{
+			old: versionone.Linters{
 				Enable:  nil,
 				Disable: nil,
 				Fast:    ptr.Pointer(false),
@@ -212,7 +212,7 @@ func Test_defaultLintersDisableFilter(t *testing.T) {
 		},
 		{
 			desc: "presets (ignored)",
-			old: one.Linters{
+			old: versionone.Linters{
 				Enable:  nil,
 				Disable: nil,
 				Fast:    ptr.Pointer(false),
@@ -222,7 +222,7 @@ func Test_defaultLintersDisableFilter(t *testing.T) {
 		},
 		{
 			desc: "fast",
-			old: one.Linters{
+			old: versionone.Linters{
 				Enable:  nil,
 				Disable: nil,
 				Fast:    ptr.Pointer(true),
@@ -232,7 +232,7 @@ func Test_defaultLintersDisableFilter(t *testing.T) {
 		},
 		{
 			desc: "enable",
-			old: one.Linters{
+			old: versionone.Linters{
 				Enable:  []string{"lll", "misspell", "govet"},
 				Disable: nil,
 				Fast:    ptr.Pointer(false),
@@ -242,7 +242,7 @@ func Test_defaultLintersDisableFilter(t *testing.T) {
 		},
 		{
 			desc: "disable",
-			old: one.Linters{
+			old: versionone.Linters{
 				Enable:  nil,
 				Disable: []string{"lll", "misspell", "govet"},
 				Fast:    ptr.Pointer(false),
@@ -252,7 +252,7 @@ func Test_defaultLintersDisableFilter(t *testing.T) {
 		},
 		{
 			desc: "disable, fast",
-			old: one.Linters{
+			old: versionone.Linters{
 				Enable:  nil,
 				Disable: []string{"lll", "misspell", "govet"},
 				Fast:    ptr.Pointer(true),
@@ -262,7 +262,7 @@ func Test_defaultLintersDisableFilter(t *testing.T) {
 		},
 		{
 			desc: "enable, disable",
-			old: one.Linters{
+			old: versionone.Linters{
 				Enable:  []string{"grouper", "importas", "errcheck"},
 				Disable: []string{"lll", "misspell", "govet"},
 				Fast:    ptr.Pointer(false),
@@ -272,7 +272,7 @@ func Test_defaultLintersDisableFilter(t *testing.T) {
 		},
 		{
 			desc: "enable",
-			old: one.Linters{
+			old: versionone.Linters{
 				Enable:  []string{"grouper", "importas", "errcheck"},
 				Disable: nil,
 				Fast:    ptr.Pointer(false),
@@ -297,12 +297,12 @@ func Test_defaultLintersEnableFilter(t *testing.T) {
 	testCases := []struct {
 		desc string
 
-		old      one.Linters
+		old      versionone.Linters
 		expected []string
 	}{
 		{
 			desc: "no options",
-			old: one.Linters{
+			old: versionone.Linters{
 				Enable:  nil,
 				Disable: nil,
 				Fast:    ptr.Pointer(false),
@@ -312,7 +312,7 @@ func Test_defaultLintersEnableFilter(t *testing.T) {
 		},
 		{
 			desc: "enable",
-			old: one.Linters{
+			old: versionone.Linters{
 				Enable:  []string{"grouper", "importas", "errcheck"},
 				Disable: nil,
 				Fast:    ptr.Pointer(false),
@@ -322,7 +322,7 @@ func Test_defaultLintersEnableFilter(t *testing.T) {
 		},
 		{
 			desc: "enable, disable",
-			old: one.Linters{
+			old: versionone.Linters{
 				Enable:  []string{"grouper", "importas", "errcheck"},
 				Disable: []string{"lll", "misspell", "govet"},
 				Fast:    ptr.Pointer(false),
@@ -332,7 +332,7 @@ func Test_defaultLintersEnableFilter(t *testing.T) {
 		},
 		{
 			desc: "disable",
-			old: one.Linters{
+			old: versionone.Linters{
 				Enable:  nil,
 				Disable: []string{"lll", "misspell", "govet"},
 				Fast:    ptr.Pointer(false),
@@ -342,7 +342,7 @@ func Test_defaultLintersEnableFilter(t *testing.T) {
 		},
 		{
 			desc: "presets",
-			old: one.Linters{
+			old: versionone.Linters{
 				Enable:  nil,
 				Disable: nil,
 				Fast:    ptr.Pointer(false),
@@ -352,7 +352,7 @@ func Test_defaultLintersEnableFilter(t *testing.T) {
 		},
 		{
 			desc: "presets, fast",
-			old: one.Linters{
+			old: versionone.Linters{
 				Enable:  nil,
 				Disable: nil,
 				Fast:    ptr.Pointer(true),

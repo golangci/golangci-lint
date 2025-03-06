@@ -1,4 +1,4 @@
-package one
+package versionone
 
 type Linters struct {
 	Enable     []string `mapstructure:"enable"`
