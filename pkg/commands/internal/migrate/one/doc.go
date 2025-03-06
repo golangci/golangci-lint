@@ -1,3 +1,4 @@
 // Package one contains a modified copy of v1 configuration.
-// The field types has been modified to use pointer of builtin types.
+// The structures are altered to use pointer on builtin types.
+// The field version is added to enforce the detection of already migrated file.
 package one
