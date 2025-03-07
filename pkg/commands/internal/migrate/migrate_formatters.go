@@ -15,8 +15,12 @@ func toFormatters(old *versionone.Config) versiontwo.Formatters {
 	formatterNames := onlyFormatterNames(enable)
 
 	var paths []string
-	if len(formatterNames) != 0 {
+	if len(formatterNames) > 0 {
 		paths = slices.Concat(old.Issues.ExcludeFiles, old.Issues.ExcludeDirs)
+
+		if old.Issues.UseDefaultExcludeDirs == nil || ptr.Deref(old.Issues.UseDefaultExcludeDirs) {
+			paths = append(paths, "examples$")
+		}
 	}
 
 	paths = append(paths, toFormattersPathsFromRules(old.Issues)...)
