@@ -351,7 +351,27 @@ func toGoCriticSettings(old versionone.GoCriticSettings) versiontwo.GoCriticSett
 			settings.SettingsPerCheck = make(map[string]versiontwo.GoCriticCheckSettings)
 		}
 
-		settings.SettingsPerCheck[k] = versiontwo.GoCriticCheckSettings(checkSettings)
+		if k != "ruleguard" {
+			settings.SettingsPerCheck[k] = versiontwo.GoCriticCheckSettings(checkSettings)
+
+			continue
+		}
+
+		gccs := versiontwo.GoCriticCheckSettings{}
+
+		for sk, value := range checkSettings {
+			if sk != "rules" {
+				gccs[sk] = value
+
+				continue
+			}
+
+			if rules, ok := value.(string); ok {
+				gccs[sk] = strings.ReplaceAll(rules, "${configDir}", "${base-path}")
+			}
+		}
+
+		settings.SettingsPerCheck[k] = gccs
 	}
 
 	return settings

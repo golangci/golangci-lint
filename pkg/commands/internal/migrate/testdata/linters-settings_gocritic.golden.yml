@@ -254,7 +254,7 @@ linters:
           disable: myGroupName,#myTagName
           enable: myGroupName,#myTagName
           failon: dsl,import
-          rules: ${configDir}/ruleguard/rules-*.go,${configDir}/myrule1.go
+          rules: ${base-path}/ruleguard/rules-*.go,${base-path}/myrule1.go
         toomanyresultschecker:
           maxresults: 10
         truncatecmp:
