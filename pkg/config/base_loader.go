@@ -16,7 +16,7 @@ import (
 	"github.com/golangci/golangci-lint/pkg/logutils"
 )
 
-type CFG interface {
+type BaseConfig interface {
 	IsInternalTest() bool
 	SetConfigDir(dir string)
 }
@@ -28,11 +28,11 @@ type BaseLoader struct {
 
 	log logutils.Log
 
-	cfg  CFG
+	cfg  BaseConfig
 	args []string
 }
 
-func NewBaseLoader(log logutils.Log, v *viper.Viper, opts LoaderOptions, cfg CFG, args []string) *BaseLoader {
+func NewBaseLoader(log logutils.Log, v *viper.Viper, opts LoaderOptions, cfg BaseConfig, args []string) *BaseLoader {
 	return &BaseLoader{
 		opts:  opts,
 		viper: v,

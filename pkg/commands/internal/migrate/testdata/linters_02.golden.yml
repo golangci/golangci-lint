@@ -91,7 +91,6 @@ linters:
     - staticcheck
     - tagalign
     - tagliatelle
-    - tenv
     - testableexamples
     - testifylint
     - testpackage

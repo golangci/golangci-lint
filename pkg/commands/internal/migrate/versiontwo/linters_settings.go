@@ -70,7 +70,6 @@ type LintersSettings struct {
 	Staticcheck     StaticCheckSettings     `yaml:"staticcheck,omitempty" toml:"staticcheck,omitempty"`
 	TagAlign        TagAlignSettings        `yaml:"tagalign,omitempty" toml:"tagalign,omitempty"`
 	Tagliatelle     TagliatelleSettings     `yaml:"tagliatelle,omitempty" toml:"tagliatelle,omitempty"`
-	Tenv            TenvSettings            `yaml:"tenv,omitempty" toml:"tenv,omitempty"`
 	Testifylint     TestifylintSettings     `yaml:"testifylint,omitempty" toml:"testifylint,omitempty"`
 	Testpackage     TestpackageSettings     `yaml:"testpackage,omitempty" toml:"testpackage,omitempty"`
 	Thelper         ThelperSettings         `yaml:"thelper,omitempty" toml:"thelper,omitempty"`
@@ -670,10 +669,6 @@ type ThelperOptions struct {
 	First *bool `yaml:"first,omitempty" toml:"first,omitempty"`
 	Name  *bool `yaml:"name,omitempty" toml:"name,omitempty"`
 	Begin *bool `yaml:"begin,omitempty" toml:"begin,omitempty"`
-}
-
-type TenvSettings struct {
-	All *bool `yaml:"all,omitempty" toml:"all,omitempty"`
 }
 
 type UseStdlibVarsSettings struct {

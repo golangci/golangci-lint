@@ -262,7 +262,6 @@ type LintersSettings struct {
 	Staticcheck     StaticCheckSettings     `mapstructure:"staticcheck"`
 	TagAlign        TagAlignSettings        `mapstructure:"tagalign"`
 	Tagliatelle     TagliatelleSettings     `mapstructure:"tagliatelle"`
-	Tenv            TenvSettings            `mapstructure:"tenv"`
 	Testifylint     TestifylintSettings     `mapstructure:"testifylint"`
 	Testpackage     TestpackageSettings     `mapstructure:"testpackage"`
 	Thelper         ThelperSettings         `mapstructure:"thelper"`
@@ -893,10 +892,6 @@ type ThelperOptions struct {
 	First *bool `mapstructure:"first"`
 	Name  *bool `mapstructure:"name"`
 	Begin *bool `mapstructure:"begin"`
-}
-
-type TenvSettings struct {
-	All bool `mapstructure:"all"`
 }
 
 type UseStdlibVarsSettings struct {

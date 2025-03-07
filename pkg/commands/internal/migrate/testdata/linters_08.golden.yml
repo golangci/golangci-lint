@@ -64,7 +64,6 @@ linters:
     - sqlclosecheck
     - staticcheck
     - tagliatelle
-    - tenv
     - testifylint
     - thelper
     - tparallel

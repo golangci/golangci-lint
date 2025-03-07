@@ -44,7 +44,6 @@ linters:
     - mycustomlinter3
     - mycustomlinter4
     - staticcheck
-    - tenv
 formatters:
   enable:
     - gofmt

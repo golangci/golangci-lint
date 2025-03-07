@@ -76,7 +76,6 @@ func toLinterSettings(old versionone.LintersSettings) versiontwo.LintersSettings
 		Staticcheck:     toStaticCheckSettings(old),
 		TagAlign:        toTagAlignSettings(old.TagAlign),
 		Tagliatelle:     toTagliatelleSettings(old.Tagliatelle),
-		Tenv:            toTenvSettings(old.Tenv),
 		Testifylint:     toTestifylintSettings(old.Testifylint),
 		Testpackage:     toTestpackageSettings(old.Testpackage),
 		Thelper:         toThelperSettings(old.Thelper),
@@ -814,12 +813,6 @@ func toTagliatelleSettings(old versionone.TagliatelleSettings) versiontwo.Taglia
 	}
 
 	return versiontwo.TagliatelleSettings{Case: tcase}
-}
-
-func toTenvSettings(old versionone.TenvSettings) versiontwo.TenvSettings {
-	return versiontwo.TenvSettings{
-		All: old.All,
-	}
 }
 
 func toTestifylintSettings(old versionone.TestifylintSettings) versiontwo.TestifylintSettings {

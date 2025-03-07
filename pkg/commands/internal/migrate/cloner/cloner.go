@@ -16,11 +16,11 @@ import (
 	"golang.org/x/tools/imports"
 )
 
-const newPkgName = "two"
+const newPkgName = "versiontwo"
 
 const (
 	srcDir = "./pkg/config"
-	dstDir = "./pkg/commands/internal/migrate/two"
+	dstDir = "./pkg/commands/internal/migrate/versiontwo"
 )
 
 func main() {

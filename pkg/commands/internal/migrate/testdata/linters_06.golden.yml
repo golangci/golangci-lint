@@ -43,7 +43,6 @@ linters:
     - mnd
     - mycustomlinter3
     - mycustomlinter4
-    - tenv
 formatters:
   enable:
     - gci

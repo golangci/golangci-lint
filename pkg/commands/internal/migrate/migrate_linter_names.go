@@ -624,11 +624,6 @@ func allLinters() []LinterInfo {
 			Slow:    true,
 		},
 		{
-			Name:    "tenv",
-			Presets: []string{"test"},
-			Slow:    true,
-		},
-		{
 			Name:    "testableexamples",
 			Presets: []string{"test"},
 		},

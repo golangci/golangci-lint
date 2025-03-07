@@ -98,12 +98,14 @@ func (c *migrateCommand) execute(_ *cobra.Command, _ []string) error {
 		return err
 	}
 
+	c.log.Warnf("The configuration comments are not migrated.")
+
 	c.log.Infof("Migrating v1 configuration file: %s", srcPath)
 
 	ext := filepath.Ext(srcPath)
 
 	if c.opts.format != "" {
-		ext = "." + strings.TrimPrefix(c.opts.format, ".")
+		ext = "." + c.opts.format
 	}
 
 	if !strings.EqualFold(filepath.Ext(srcPath), ext) {
