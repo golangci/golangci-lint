@@ -230,3 +230,36 @@ linters:
         - performance
         - experimental
         - opinionated
+      settings:
+        captlocal:
+          paramsonly: false
+        commentedoutcode:
+          minlength: 50
+        elseif:
+          skipbalanced: false
+        hugeparam:
+          sizethreshold: 70
+        ifelsechain:
+          minthreshold: 4
+        nestingreduce:
+          bodywidth: 4
+        rangeexprcopy:
+          sizethreshold: 516
+          skiptestfuncs: false
+        rangevalcopy:
+          sizethreshold: 32
+          skiptestfuncs: false
+        ruleguard:
+          debug: emptyDecl
+          disable: myGroupName,#myTagName
+          enable: myGroupName,#myTagName
+          failon: dsl,import
+          rules: ${configDir}/ruleguard/rules-*.go,${configDir}/myrule1.go
+        toomanyresultschecker:
+          maxresults: 10
+        truncatecmp:
+          skiparchdependent: false
+        underef:
+          skiprecvderef: false
+        unnamedresult:
+          checkexported: true

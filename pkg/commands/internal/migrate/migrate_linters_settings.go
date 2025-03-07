@@ -346,12 +346,12 @@ func toGoCriticSettings(old versionone.GoCriticSettings) versiontwo.GoCriticSett
 		DisabledTags:   old.DisabledTags,
 	}
 
-	for k, checkSettings := range settings.SettingsPerCheck {
+	for k, checkSettings := range old.SettingsPerCheck {
 		if settings.SettingsPerCheck == nil {
 			settings.SettingsPerCheck = make(map[string]versiontwo.GoCriticCheckSettings)
 		}
 
-		settings.SettingsPerCheck[k] = checkSettings
+		settings.SettingsPerCheck[k] = versiontwo.GoCriticCheckSettings(checkSettings)
 	}
 
 	return settings
