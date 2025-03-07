@@ -19,6 +19,8 @@ func toFormatters(old *versionone.Config) versiontwo.Formatters {
 		paths = slices.Concat(old.Issues.ExcludeFiles, old.Issues.ExcludeDirs)
 	}
 
+	paths = append(paths, toFormattersPathsFromRules(old.Issues)...)
+
 	return versiontwo.Formatters{
 		Enable: formatterNames,
 		Settings: versiontwo.FormatterSettings{
@@ -32,6 +34,27 @@ func toFormatters(old *versionone.Config) versiontwo.Formatters {
 			Paths:     paths,
 		},
 	}
+}
+
+func toFormattersPathsFromRules(old versionone.Issues) []string {
+	var results []string
+
+	for _, rule := range old.ExcludeRules {
+		allNames := convertStaticcheckLinterNames(convertAlternativeNames(rule.Linters))
+
+		names := onlyFormatterNames(allNames)
+		if len(names) == 0 {
+			continue
+		}
+
+		if ptr.Deref(rule.Path) == "" {
+			continue
+		}
+
+		results = append(results, ptr.Deref(rule.Path))
+	}
+
+	return results
 }
 
 func toGciSettings(old versionone.GciSettings) versiontwo.GciSettings {

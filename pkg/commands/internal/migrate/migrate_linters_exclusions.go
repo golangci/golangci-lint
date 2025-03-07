@@ -64,9 +64,14 @@ func toExclusionRules(old *versionone.Config) []versiontwo.ExcludeRule {
 	var results []versiontwo.ExcludeRule
 
 	for _, rule := range old.Issues.ExcludeRules {
+		names := onlyLinterNames(convertStaticcheckLinterNames(convertAlternativeNames(rule.Linters)))
+		if len(rule.Linters) > 0 && len(names) == 0 {
+			continue
+		}
+
 		results = append(results, versiontwo.ExcludeRule{
 			BaseRule: versiontwo.BaseRule{
-				Linters:    onlyLinterNames(convertStaticcheckLinterNames(convertAlternativeNames(rule.Linters))),
+				Linters:    names,
 				Path:       rule.Path,
 				PathExcept: rule.PathExcept,
 				Text:       addPrefix(old.Issues, rule.Text),
