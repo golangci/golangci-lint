@@ -125,7 +125,7 @@ require (
 	go-simpler.org/musttag v0.13.0
 	go-simpler.org/sloglint v0.9.0
 	go.uber.org/automaxprocs v1.6.0
-	golang.org/x/mod v0.23.0
+	golang.org/x/mod v0.24.0
 	golang.org/x/sys v0.30.0
 	golang.org/x/tools v0.30.0
 	gopkg.in/yaml.v3 v3.0.1
