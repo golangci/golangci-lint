@@ -1502,132 +1502,159 @@ The presets have been removed.
 
 <details><summary>v1 Presets</summary>
 
-  - 🐛: bugs
-  - 💬: comment
-  - 🧮: complexity
-  - 💢: error
-  - 💾: format
-  - 🔝: import
-  - 🎛️: metalinter
-  - 📦: module
-  - 📊: performance
-  - 🗂️: sql
-  - 🎩: style
-  - 🚦: test
-  - 🧹: unused
-
-  |                             | 🐛 | 💬 | 🧮 | 💢 | 💾 | 🔝 | 🎛️️ | 📦 | 📊 | 🗂️️ | 🎩 | 🚦 | 🧹 |
-  |-----------------------------|----|----|----|----|----|----|------|----|----|------|----|----|----|
-  | `asasalint`                 | 🐛 |    |    |    |    |    |      |    |    |      |    |    |    |
-  | `asciicheck`                | 🐛 |    |    |    |    |    |      |    |    |      | 🎩 |    |    |
-  | `bidichk`                   | 🐛 |    |    |    |    |    |      |    |    |      |    |    |    |
-  | `bodyclose`                 | 🐛 |    |    |    |    |    |      |    | 📊 |      |    |    |    |
-  | `canonicalheader`           |    |    |    |    |    |    |      |    |    |      | 🎩 |    |    |
-  | `containedctx`              |    |    |    |    |    |    |      |    |    |      | 🎩 |    |    |
-  | `contextcheck`              | 🐛 |    |    |    |    |    |      |    |    |      |    |    |    |
-  | `copyloopvar`               |    |    |    |    |    |    |      |    |    |      | 🎩 |    |    |
-  | `cyclop`                    |    |    | 🧮 |    |    |    |      |    |    |      |    |    |    |
-  | `decorder`                  |    |    |    |    |    |    |      |    |    |      | 🎩 |    |    |
-  | `depguard`                  |    |    |    |    |    | 🔝 |      | 📦 |    |      | 🎩 |    |    |
-  | `dogsled`                   |    |    |    |    |    |    |      |    |    |      | 🎩 |    |    |
-  | `dupl`                      |    |    |    |    |    |    |      |    |    |      | 🎩 |    |    |
-  | `dupword`                   |    | 💬 |    |    |    |    |      |    |    |      |    |    |    |
-  | `durationcheck`             | 🐛 |    |    |    |    |    |      |    |    |      |    |    |    |
-  | `err113`                    |    |    |    | 💢 |    |    |      |    |    |      | 🎩 |    |    |
-  | `errcheck`                  | 🐛 |    |    | 💢 |    |    |      |    |    |      |    |    |    |
-  | `errchkjson`                | 🐛 |    |    |    |    |    |      |    |    |      |    |    |    |
-  | `errname`                   |    |    |    |    |    |    |      |    |    |      | 🎩 |    |    |
-  | `errorlint`                 | 🐛 |    |    | 💢 |    |    |      |    |    |      |    |    |    |
-  | `exhaustive`                | 🐛 |    |    |    |    |    |      |    |    |      |    |    |    |
-  | `exhaustruct`               |    |    |    |    |    |    |      |    |    |      | 🎩 | 🚦 |    |
-  | `exptostd`                  |    |    |    |    |    |    |      |    |    |      | 🎩 |    |    |
-  | `fatcontext`                |    |    |    |    |    |    |      |    | 📊 |      |    |    |    |
-  | `forbidigo`                 |    |    |    |    |    |    |      |    |    |      | 🎩 |    |    |
-  | `forcetypeassert`           |    |    |    |    |    |    |      |    |    |      | 🎩 |    |    |
-  | `funlen`                    |    |    | 🧮 |    |    |    |      |    |    |      |    |    |    |
-  | `gci`                       |    |    |    |    | 💾 | 🔝 |      |    |    |      |    |    |    |
-  | `ginkgolinter`              |    |    |    |    |    |    |      |    |    |      | 🎩 |    |    |
-  | `gocheckcompilerdirectives` | 🐛 |    |    |    |    |    |      |    |    |      |    |    |    |
-  | `gochecknoglobals`          |    |    |    |    |    |    |      |    |    |      | 🎩 |    |    |
-  | `gochecknoinits`            |    |    |    |    |    |    |      |    |    |      | 🎩 |    |    |
-  | `gochecksumtype`            | 🐛 |    |    |    |    |    |      |    |    |      |    |    |    |
-  | `gocognit`                  |    |    | 🧮 |    |    |    |      |    |    |      |    |    |    |
-  | `goconst`                   |    |    |    |    |    |    |      |    |    |      | 🎩 |    |    |
-  | `gocritic`                  |    |    |    |    |    |    | 🎛️  |    |    |      | 🎩 |    |    |
-  | `gocyclo`                   |    |    | 🧮 |    |    |    |      |    |    |      |    |    |    |
-  | `godot`                     |    | 💬 |    |    |    |    |      |    |    |      | 🎩 |    |    |
-  | `godox`                     |    | 💬 |    |    |    |    |      |    |    |      | 🎩 |    |    |
-  | `gofmt`                     |    |    |    |    | 💾 |    |      |    |    |      |    |    |    |
-  | `gofumpt`                   |    |    |    |    | 💾 |    |      |    |    |      |    |    |    |
-  | `goheader`                  |    |    |    |    |    |    |      |    |    |      | 🎩 |    |    |
-  | `goimports`                 |    |    |    |    | 💾 | 🔝 |      |    |    |      |    |    |    |
-  | `gomoddirectives`           |    |    |    |    |    |    |      | 📦 |    |      | 🎩 |    |    |
-  | `gomodguard`                |    |    |    |    |    | 🔝 |      | 📦 |    |      | 🎩 |    |    |
-  | `goprintffuncname`          |    |    |    |    |    |    |      |    |    |      | 🎩 |    |    |
-  | `gosec`                     | 🐛 |    |    |    |    |    |      |    |    |      |    |    |    |
-  | `gosimple`                  |    |    |    |    |    |    |      |    |    |      | 🎩 |    |    |
-  | `gosmopolitan`              | 🐛 |    |    |    |    |    |      |    |    |      |    |    |    |
-  | `govet`                     | 🐛 |    |    |    |    |    | 🎛️  |    |    |      |    |    |    |
-  | `grouper`                   |    |    |    |    |    |    |      |    |    |      | 🎩 |    |    |
-  | `iface`                     |    |    |    |    |    |    |      |    |    |      | 🎩 |    |    |
-  | `importas`                  |    |    |    |    |    |    |      |    |    |      | 🎩 |    |    |
-  | `inamedparam`               |    |    |    |    |    |    |      |    |    |      | 🎩 |    |    |
-  | `ineffassign`               |    |    |    |    |    |    |      |    |    |      |    |    | 🧹 |
-  | `interfacebloat`            |    |    |    |    |    |    |      |    |    |      | 🎩 |    |    |
-  | `intrange`                  |    |    |    |    |    |    |      |    |    |      | 🎩 |    |    |
-  | `ireturn`                   |    |    |    |    |    |    |      |    |    |      | 🎩 |    |    |
-  | `lll`                       |    |    |    |    |    |    |      |    |    |      | 🎩 |    |    |
-  | `loggercheck`               | 🐛 |    |    |    |    |    |      |    |    |      | 🎩 |    |    |
-  | `maintidx`                  |    |    | 🧮 |    |    |    |      |    |    |      |    |    |    |
-  | `makezero`                  | 🐛 |    |    |    |    |    |      |    |    |      | 🎩 |    |    |
-  | `mirror`                    |    |    |    |    |    |    |      |    |    |      | 🎩 |    |    |
-  | `misspell`                  |    | 💬 |    |    |    |    |      |    |    |      | 🎩 |    |    |
-  | `mnd`                       |    |    |    |    |    |    |      |    |    |      | 🎩 |    |    |
-  | `musttag`                   | 🐛 |    |    |    |    |    |      |    |    |      | 🎩 |    |    |
-  | `nakedret`                  |    |    |    |    |    |    |      |    |    |      | 🎩 |    |    |
-  | `nestif`                    |    |    | 🧮 |    |    |    |      |    |    |      |    |    |    |
-  | `nilerr`                    | 🐛 |    |    |    |    |    |      |    |    |      |    |    |    |
-  | `nilnesserr`                | 🐛 |    |    |    |    |    |      |    |    |      |    |    |    |
-  | `nilnil`                    |    |    |    |    |    |    |      |    |    |      | 🎩 |    |    |
-  | `nlreturn`                  |    |    |    |    |    |    |      |    |    |      | 🎩 |    |    |
-  | `noctx`                     | 🐛 |    |    |    |    |    |      |    | 📊 |      |    |    |    |
-  | `nolintlint`                |    |    |    |    |    |    |      |    |    |      | 🎩 |    |    |
-  | `nonamedreturns`            |    |    |    |    |    |    |      |    |    |      | 🎩 |    |    |
-  | `nosprintfhostport`         |    |    |    |    |    |    |      |    |    |      | 🎩 |    |    |
-  | `paralleltest`              |    |    |    |    |    |    |      |    |    |      | 🎩 | 🚦 |    |
-  | `perfsprint`                |    |    |    |    |    |    |      |    | 📊 |      |    |    |    |
-  | `prealloc`                  |    |    |    |    |    |    |      |    | 📊 |      |    |    |    |
-  | `predeclared`               |    |    |    |    |    |    |      |    |    |      | 🎩 |    |    |
-  | `promlinter`                |    |    |    |    |    |    |      |    |    |      | 🎩 |    |    |
-  | `protogetter`               | 🐛 |    |    |    |    |    |      |    |    |      |    |    |    |
-  | `reassign`                  | 🐛 |    |    |    |    |    |      |    |    |      |    |    |    |
-  | `recvcheck`                 | 🐛 |    |    |    |    |    |      |    |    |      |    |    |    |
-  | `revive`                    |    |    |    |    |    |    | 🎛️  |    |    |      | 🎩 |    |    |
-  | `rowserrcheck`              | 🐛 |    |    |    |    |    |      |    |    | 🗂️  |    |    |    |
-  | `sloglint`                  |    |    |    |    |    |    |      |    |    |      | 🎩 |    |    |
-  | `spancheck`                 | 🐛 |    |    |    |    |    |      |    |    |      |    |    |    |
-  | `sqlclosecheck`             | 🐛 |    |    |    |    |    |      |    |    | 🗂️  |    |    |    |
-  | `staticcheck`               | 🐛 |    |    |    |    |    | 🎛️  |    |    |      |    |    |    |
-  | `stylecheck`                |    |    |    |    |    |    |      |    |    |      | 🎩 |    |    |
-  | `tagalign`                  |    |    |    |    |    |    |      |    |    |      | 🎩 |    |    |
-  | `tagliatelle`               |    |    |    |    |    |    |      |    |    |      | 🎩 |    |    |
-  | `tenv`                      |    |    |    |    |    |    |      |    |    |      |    | 🚦 |    |
-  | `testableexamples`          |    |    |    |    |    |    |      |    |    |      |    | 🚦 |    |
-  | `testifylint`               | 🐛 |    |    |    |    |    |      |    |    |      |    | 🚦 |    |
-  | `testpackage`               |    |    |    |    |    |    |      |    |    |      | 🎩 | 🚦 |    |
-  | `thelper`                   |    |    |    |    |    |    |      |    |    |      |    | 🚦 |    |
-  | `tparallel`                 |    |    |    |    |    |    |      |    |    |      | 🎩 | 🚦 |    |
-  | `unconvert`                 |    |    |    |    |    |    |      |    |    |      | 🎩 |    |    |
-  | `unparam`                   |    |    |    |    |    |    |      |    |    |      |    |    | 🧹 |
-  | `unused`                    |    |    |    |    |    |    |      |    |    |      |    |    | 🧹 |
-  | `usestdlibvars`             |    |    |    |    |    |    |      |    |    |      | 🎩 |    |    |
-  | `usetesting`                |    |    |    |    |    |    |      |    |    |      |    | 🚦 |    |
-  | `varnamelen`                |    |    |    |    |    |    |      |    |    |      | 🎩 |    |    |
-  | `wastedassign`              |    |    |    |    |    |    |      |    |    |      | 🎩 |    |    |
-  | `whitespace`                |    |    |    |    |    |    |      |    |    |      | 🎩 |    |    |
-  | `wrapcheck`                 |    |    |    | 💢 |    |    |      |    |    |      | 🎩 |    |    |
-  | `wsl`                       |    |    |    |    |    |    |      |    |    |      | 🎩 |    |    |
-  | `zerologlint`               | 🐛 |    |    |    |    |    |      |    |    |      |    |    |    |
+- bugs:
+  - `asasalint`
+  - `asciicheck`
+  - `bidichk`
+  - `bodyclose`
+  - `contextcheck`
+  - `durationcheck`
+  - `errcheck`
+  - `errchkjson`
+  - `errorlint`
+  - `exhaustive`
+  - `gocheckcompilerdirectives`
+  - `gochecksumtype`
+  - `gosec`
+  - `gosmopolitan`
+  - `govet`
+  - `loggercheck`
+  - `makezero`
+  - `musttag`
+  - `nilerr`
+  - `nilnesserr`
+  - `noctx`
+  - `protogetter`
+  - `reassign`
+  - `recvcheck`
+  - `rowserrcheck`
+  - `spancheck`
+  - `sqlclosecheck`
+  - `staticcheck`
+  - `testifylint`
+  - `zerologlint`
+- comment:
+  - `dupword`
+  - `godot`
+  - `godox`
+  - `misspell`
+- complexity:
+  - `cyclop`
+  - `funlen`
+  - `gocognit`
+  - `gocyclo`
+  - `maintidx`
+  - `nestif`
+- error:
+  - `err113`
+  - `errcheck`
+  - `errorlint`
+  - `wrapcheck`
+- format:
+  - `gci`
+  - `gofmt`
+  - `gofumpt`
+  - `goimports`
+- import:
+  - `depguard`
+  - `gci`
+  - `goimports`
+  - `gomodguard`
+- metalinter:
+  - `gocritic`
+  - `govet`
+  - `revive`
+  - `staticcheck`
+- module:
+  - `depguard`
+  - `gomoddirectives`
+  - `gomodguard`
+- performance:
+  - `bodyclose`
+  - `fatcontext`
+  - `noctx`
+  - `perfsprint`
+  - `prealloc`
+- sql:
+  - `rowserrcheck`
+  - `sqlclosecheck`
+- style:
+  - `asciicheck`
+  - `canonicalheader`
+  - `containedctx`
+  - `copyloopvar`
+  - `decorder`
+  - `depguard`
+  - `dogsled`
+  - `dupl`
+  - `err113`
+  - `errname`
+  - `exhaustruct`
+  - `exptostd`
+  - `forbidigo`
+  - `forcetypeassert`
+  - `ginkgolinter`
+  - `gochecknoglobals`
+  - `gochecknoinits`
+  - `goconst`
+  - `gocritic`
+  - `godot`
+  - `godox`
+  - `goheader`
+  - `gomoddirectives`
+  - `gomodguard`
+  - `goprintffuncname`
+  - `gosimple`
+  - `grouper`
+  - `iface`
+  - `importas`
+  - `inamedparam`
+  - `interfacebloat`
+  - `intrange`
+  - `ireturn`
+  - `lll`
+  - `loggercheck`
+  - `makezero`
+  - `mirror`
+  - `misspell`
+  - `mnd`
+  - `musttag`
+  - `nakedret`
+  - `nilnil`
+  - `nlreturn`
+  - `nolintlint`
+  - `nonamedreturns`
+  - `nosprintfhostport`
+  - `paralleltest`
+  - `predeclared`
+  - `promlinter`
+  - `revive`
+  - `sloglint`
+  - `stylecheck`
+  - `tagalign`
+  - `tagliatelle`
+  - `testpackage`
+  - `tparallel`
+  - `unconvert`
+  - `usestdlibvars`
+  - `varnamelen`
+  - `wastedassign`
+  - `whitespace`
+  - `wrapcheck`
+  - `wsl`
+- test:
+  - `exhaustruct`
+  - `paralleltest`
+  - `testableexamples`
+  - `testifylint`
+  - `testpackage`
+  - `thelper`
+  - `tparallel`
+  - `usetesting`
+- unused:
+  - `ineffassign`
+  - `unparam`
+  - `unused`
 
 </details>
 
