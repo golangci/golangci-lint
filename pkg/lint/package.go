@@ -85,7 +85,11 @@ func (l *PackageLoader) loadPackages(ctx context.Context, loadMode packages.Load
 
 	pkgs, err := packages.Load(conf, args...)
 	if err != nil {
-		return nil, fmt.Errorf("failed to load with go/packages: %w", err)
+		return nil, &exitcodes.ExitError{
+			Inner:   err,
+			Message: "failed to load with go/packages:",
+			Code:    exitcodes.PackagesLoadingFailure,
+		}
 	}
 
 	if loadMode&packages.NeedSyntax == 0 {
