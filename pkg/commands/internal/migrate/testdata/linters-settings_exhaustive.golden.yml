@@ -1,0 +1,14 @@
+version: "2"
+linters:
+  settings:
+    exhaustive:
+      check:
+        - switch
+        - map
+      default-signifies-exhaustive: true
+      ignore-enum-members: Example.+
+      ignore-enum-types: Example.+
+      package-scope-only: true
+      explicit-exhaustive-map: true
+      explicit-exhaustive-switch: true
+      default-case-required: true

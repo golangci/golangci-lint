@@ -1,0 +1,15 @@
+version: "2"
+linters:
+  settings:
+    importas:
+      alias:
+        - pkg: knative.dev/serving/pkg/apis/serving/v1
+          alias: servingv1
+        - pkg: knative.dev/serving/pkg/apis/autoscaling/v1alpha1
+          alias: autoscalingv1alpha1
+        - pkg: knative.dev/serving/pkg/apis/(\w+)/(v[\w\d]+)
+          alias: $1$2
+        - pkg: errors
+          alias: ""
+      no-unaliased: true
+      no-extra-aliases: true

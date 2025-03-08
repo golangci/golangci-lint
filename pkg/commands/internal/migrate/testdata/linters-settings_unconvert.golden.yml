@@ -1,0 +1,6 @@
+version: "2"
+linters:
+  settings:
+    unconvert:
+      fast-math: true
+      safe: true

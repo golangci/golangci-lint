@@ -1,0 +1,9 @@
+version: "2"
+linters:
+  default: none
+formatters:
+  enable:
+    - goimports
+  exclusions:
+    paths:
+      - \.(generated\.deepcopy|pb)\.go$

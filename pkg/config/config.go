@@ -46,8 +46,17 @@ func (c *Config) GetConfigDir() string {
 	return c.cfgDir
 }
 
+// SetConfigDir sets the path to directory that contains golangci-lint config file.
+func (c *Config) SetConfigDir(dir string) {
+	c.cfgDir = dir
+}
+
 func (c *Config) GetBasePath() string {
 	return c.basePath
+}
+
+func (c *Config) IsInternalTest() bool {
+	return c.InternalTest
 }
 
 func (c *Config) Validate() error {
@@ -76,11 +85,6 @@ func NewDefault() *Config {
 			Settings: defaultFormatterSettings,
 		},
 	}
-}
-
-type Version struct {
-	Format string `mapstructure:"format"`
-	Debug  bool   `mapstructure:"debug"`
 }
 
 func IsGoGreaterThanOrEqual(current, limit string) bool {

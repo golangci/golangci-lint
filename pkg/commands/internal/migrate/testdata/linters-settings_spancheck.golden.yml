@@ -1,0 +1,12 @@
+version: "2"
+linters:
+  settings:
+    spancheck:
+      checks:
+        - end
+        - record-error
+        - set-status
+      ignore-check-signatures:
+        - telemetry.RecordError
+      extra-start-span-signatures:
+        - github.com/user/repo/telemetry/trace.Start:opentelemetry

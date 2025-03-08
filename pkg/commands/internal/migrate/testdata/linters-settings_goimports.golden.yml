@@ -1,0 +1,6 @@
+version: "2"
+formatters:
+  settings:
+    goimports:
+      local-prefixes:
+        - github.com/org/project

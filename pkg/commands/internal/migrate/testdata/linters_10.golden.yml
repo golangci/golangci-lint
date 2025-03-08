@@ -1,0 +1,17 @@
+version: "2"
+linters:
+  enable:
+    - depguard
+    - gomoddirectives
+    - gomodguard
+  disable:
+    - errcheck
+    - govet
+    - staticcheck
+    - unused
+formatters:
+  enable:
+    - gci
+    - gofmt
+    - gofumpt
+    - goimports

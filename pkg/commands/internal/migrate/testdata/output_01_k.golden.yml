@@ -1,0 +1,6 @@
+version: "2"
+output:
+  formats:
+    tab:
+      path: stdout
+      colors: false

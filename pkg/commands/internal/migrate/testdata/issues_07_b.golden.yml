@@ -1,0 +1,14 @@
+version: "2"
+linters:
+  default: none
+  exclusions:
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
+formatters:
+  enable:
+    - goimports
+  exclusions:
+    paths:
+      - examples$

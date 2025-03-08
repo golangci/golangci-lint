@@ -1,0 +1,8 @@
+version: "2"
+linters:
+  settings:
+    predeclared:
+      ignore:
+        - new
+        - int
+      qualified-name: true

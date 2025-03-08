@@ -1,0 +1,50 @@
+version: "2"
+linters:
+  enable:
+    - gomoddirectives
+    - gomodguard
+    - mycustomlinter1
+    - mycustomlinter2
+    - sqlclosecheck
+    - staticcheck
+    - tagalign
+    - tagliatelle
+    - testableexamples
+    - testifylint
+    - testpackage
+    - thelper
+    - tparallel
+    - unconvert
+    - unparam
+    - usestdlibvars
+    - usetesting
+    - varnamelen
+    - wastedassign
+    - whitespace
+    - wrapcheck
+    - wsl
+    - zerologlint
+  disable:
+    - asasalint
+    - asciicheck
+    - bidichk
+    - bodyclose
+    - canonicalheader
+    - containedctx
+    - contextcheck
+    - copyloopvar
+    - cyclop
+    - decorder
+    - depguard
+    - dogsled
+    - dupl
+    - dupword
+    - durationcheck
+    - mnd
+    - mycustomlinter3
+    - mycustomlinter4
+formatters:
+  enable:
+    - gci
+    - gofmt
+    - gofumpt

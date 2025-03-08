@@ -1,0 +1,9 @@
+version: "2"
+linters:
+  settings:
+    exhaustruct:
+      include:
+        - .+\.Test
+        - example\.com/package\.ExampleStruct[\d]{1,2}
+      exclude:
+        - .+/cobra\.Command$

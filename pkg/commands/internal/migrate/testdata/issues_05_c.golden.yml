@@ -1,0 +1,7 @@
+version: "2"
+linters:
+  exclusions:
+    generated: lax
+formatters:
+  exclusions:
+    generated: lax
