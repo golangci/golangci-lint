@@ -38,11 +38,31 @@ func ProcessEffectiveLinters(old versionone.Linters) (enable, disable []string) 
 	switch {
 	case ptr.Deref(old.DisableAll):
 		return disableAllFilter(old), nil
+
 	case ptr.Deref(old.EnableAll):
 		return nil, enableAllFilter(old)
+
 	default:
 		return defaultLintersFilter(old)
 	}
+}
+
+func ProcessEffectiveFormatters(old versionone.Linters) []string {
+	enabled, disabled := ProcessEffectiveLinters(old)
+
+	if ptr.Deref(old.EnableAll) {
+		var formatterNames []string
+
+		for _, f := range getAllFormatterNames() {
+			if !slices.Contains(disabled, f) {
+				formatterNames = append(formatterNames, f)
+			}
+		}
+
+		return formatterNames
+	}
+
+	return onlyFormatterNames(enabled)
 }
 
 // disableAllFilter generates the value of `enable` when `disable-all` is `true`.
@@ -827,6 +847,7 @@ func unknownLinterNames(names []string, linters []LinterInfo) []string {
 		"scopelint",
 		"structcheck",
 		"tenv",
+		"typecheck",
 		"varcheck",
 	}
 
@@ -879,7 +900,7 @@ func onlyLinterNames(names []string) []string {
 }
 
 func onlyFormatterNames(names []string) []string {
-	formatters := []string{"gci", "gofmt", "gofumpt", "goimports"}
+	formatters := getAllFormatterNames()
 
 	var results []string
 
@@ -919,4 +940,8 @@ func convertAlternativeNames(names []string) []string {
 
 func Unique[S ~[]E, E cmp.Ordered](s S) S {
 	return slices.Compact(slices.Sorted(slices.Values(s)))
+}
+
+func getAllFormatterNames() []string {
+	return []string{"gci", "gofmt", "gofumpt", "goimports"}
 }

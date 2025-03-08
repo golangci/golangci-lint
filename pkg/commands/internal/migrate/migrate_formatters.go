@@ -10,12 +10,10 @@ import (
 )
 
 func toFormatters(old *versionone.Config) versiontwo.Formatters {
-	enable, _ := ProcessEffectiveLinters(old.Linters)
-
-	formatterNames := onlyFormatterNames(enable)
+	enable := ProcessEffectiveFormatters(old.Linters)
 
 	var paths []string
-	if len(formatterNames) > 0 {
+	if len(enable) > 0 {
 		paths = slices.Concat(old.Issues.ExcludeFiles, old.Issues.ExcludeDirs)
 
 		if old.Issues.UseDefaultExcludeDirs == nil || ptr.Deref(old.Issues.UseDefaultExcludeDirs) {
@@ -26,7 +24,7 @@ func toFormatters(old *versionone.Config) versiontwo.Formatters {
 	paths = append(paths, toFormattersPathsFromRules(old.Issues)...)
 
 	return versiontwo.Formatters{
-		Enable: formatterNames,
+		Enable: enable,
 		Settings: versiontwo.FormatterSettings{
 			Gci:       toGciSettings(old.LintersSettings.Gci),
 			GoFmt:     toGoFmtSettings(old.LintersSettings.GoFmt),

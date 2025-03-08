@@ -19,3 +19,9 @@ linters:
     - durationcheck
     - err113
     - errcheck
+formatters:
+  enable:
+    - gci
+    - gofmt
+    - gofumpt
+    - goimports

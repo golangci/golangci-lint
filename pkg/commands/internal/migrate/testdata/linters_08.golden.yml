@@ -75,3 +75,8 @@ linters:
     - wastedassign
     - wrapcheck
     - zerologlint
+formatters:
+  enable:
+    - gofmt
+    - gofumpt
+    - goimports
