@@ -791,10 +791,8 @@ func toSpancheckSettings(old versionone.SpancheckSettings) versiontwo.SpancheckS
 func toStaticCheckSettings(old versionone.LintersSettings) versiontwo.StaticCheckSettings {
 	checks := slices.Concat(old.Staticcheck.Checks, old.Stylecheck.Checks, old.Gosimple.Checks)
 
-	slices.Sort(checks)
-
 	return versiontwo.StaticCheckSettings{
-		Checks:                  slices.Compact(checks),
+		Checks:                  Unique(checks),
 		Initialisms:             old.Stylecheck.Initialisms,
 		DotImportWhitelist:      old.Stylecheck.DotImportWhitelist,
 		HTTPStatusCodeWhitelist: old.Stylecheck.HTTPStatusCodeWhitelist,

@@ -69,15 +69,12 @@ func skipFile(path string) bool {
 		return true
 	}
 
-	if filepath.Base(path) == "base_loader.go" {
+	switch filepath.Base(path) {
+	case "base_loader.go", "loader.go":
 		return true
+	default:
+		return false
 	}
-
-	if filepath.Base(path) == "loader.go" {
-		return true
-	}
-
-	return false
 }
 
 func processFile(file *ast.File) {

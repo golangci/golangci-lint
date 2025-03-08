@@ -67,7 +67,7 @@ func toGciSettings(old versionone.GciSettings) versiontwo.GciSettings {
 		NoInlineComments: old.NoInlineComments,
 		NoPrefixComments: old.NoPrefixComments,
 		CustomOrder:      old.CustomOrder,
-		NoLexOrder:       old.CustomOrder,
+		NoLexOrder:       old.NoLexOrder,
 	}
 }
 
