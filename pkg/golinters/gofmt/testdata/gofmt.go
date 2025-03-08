@@ -1,4 +1,4 @@
-//golangcitest:args -Egofmt
+//golangcitest:config_path testdata/gofmt.yml
 package testdata
 
 import "fmt"

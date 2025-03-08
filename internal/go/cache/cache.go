@@ -22,9 +22,10 @@ import (
 	"strings"
 	"time"
 
+	"github.com/rogpeppe/go-internal/lockedfile"
+
 	"github.com/golangci/golangci-lint/internal/go/mmap"
 	"github.com/golangci/golangci-lint/internal/go/robustio"
-	"github.com/rogpeppe/go-internal/lockedfile"
 )
 
 // An ActionID is a cache action key, the hash of a complete description of a

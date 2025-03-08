@@ -11,6 +11,7 @@ import (
 
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/goanalysis"
+	"github.com/golangci/golangci-lint/pkg/goformatters"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 )
@@ -276,6 +277,10 @@ func linterConfigsToMap(lcs []*linter.Config) map[string]*linter.Config {
 	ret := map[string]*linter.Config{}
 	for _, lc := range lcs {
 		if lc.IsDeprecated() && lc.Deprecation.Level > linter.DeprecationWarning {
+			continue
+		}
+
+		if goformatters.IsFormatter(lc.Name()) {
 			continue
 		}
 
