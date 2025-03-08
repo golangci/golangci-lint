@@ -82,7 +82,7 @@ issues:
 linters:
   exclusions:
     rules:
-    - path: (.+)\.go$
+    - path: '(.+)\.go$'
       text: (?i)abcdef
 ```
 
@@ -145,7 +145,7 @@ linters:
 ```yaml
 issues:
   exclude-files:
-    - ".*\\.my\\.go$"
+    - '.*\.my\.go$'
     - lib/bad.go
 ```
 
@@ -157,7 +157,7 @@ issues:
 linters:
   exclusions:
     paths:
-      - .*\.my\.go$
+      - '.*\.my\.go$'
       - lib/bad.go
 ```
 
@@ -214,13 +214,13 @@ linters:
 ```yaml
 issues:
   exclude-rules:
-    - path: _test\.go
+    - path: '_test\.go'
       linters:
         - gocyclo
         - errcheck
         - dupl
         - gosec
-    - path-except: _test\.go
+    - path-except: '_test\.go'
       linters:
         - staticcheck
     - path: internal/hmac/
@@ -243,13 +243,13 @@ issues:
 linters:
   exclusions:
     rules:
-    - path: _test\.go
+    - path: '_test\.go'
       linters:
         - dupl
         - errcheck
         - gocyclo
         - gosec
-    - path-except: _test\.go
+    - path-except: '_test\.go'
       linters:
         - staticcheck
     - path: internal/hmac/
@@ -309,7 +309,7 @@ issues:
 linters:
   exclusions:
   rules:
-    - path: (.+)\.go$
+    - path: '(.+)\.go$'
       text: abcdef
 ```
 
@@ -399,7 +399,7 @@ linters-settings:
 linters:
   exclusions:
     rules:
-      - path: (.+)_test\.go
+      - path: '(.+)_test\.go'
         linters:
           - asasalint
 ```
@@ -449,7 +449,7 @@ linters-settings:
 linters:
   exclusions:
     rules:
-    - path: (.+)_test\.go
+    - path: '(.+)_test\.go'
       linters:
         - cyclop
 ```
@@ -477,9 +477,9 @@ linters:
   settings:
     errcheck:
       exclude-functions:
-        - example.ReadFile
-        - example.Copy(*bytes.Buffer)
-        - example.Copy(os.Stdout)
+        - 'example.ReadFile'
+        - 'example.Copy(*bytes.Buffer)'
+        - 'example.Copy(os.Stdout)'
 ```
 
 </details>
@@ -506,9 +506,9 @@ linters:
   settings:
     errcheck:
       exclude-functions:
-        - example.ReadFile
-        - example.Copy(*bytes.Buffer)
-        - example.Copy(os.Stdout)
+        - 'example.ReadFile'
+        - 'example.Copy(*bytes.Buffer)'
+        - 'example.Copy(os.Stdout)'
 ```
 
 </details>
@@ -543,7 +543,7 @@ linters:
 linters-settings:
   forbidigo:
     forbid:
-      - p: ^fmt\.Print.*$
+      - p: '^fmt\.Print.*$'
         msg: Do not commit print statements.
 ```
 
@@ -556,7 +556,7 @@ linters:
   settings:
     forbidigo:
       forbid:
-        - pattern: ^fmt\.Print.*$
+        - pattern: '^fmt\.Print.*$'
           msg: Do not commit print statements.
 ```
 
@@ -570,8 +570,8 @@ linters:
 linters-settings:
   forbidigo:
     forbid:
-      - ^print(ln)?$
-      - ^spew\.(ConfigState\.)?Dump$
+      - '^print(ln)?$'
+      - '^spew\.(ConfigState\.)?Dump$'
 ```
 
 </details>
@@ -583,8 +583,8 @@ linters:
   settings:
     forbidigo:
       forbid:
-        - pattern: ^print(ln)?$
-        - pattern: ^spew\.(ConfigState\.)?Dump$
+        - pattern: '^print(ln)?$'
+        - pattern: '^spew\.(ConfigState\.)?Dump$'
 ```
 
 </details>
@@ -659,7 +659,7 @@ linters-settings:
 linters:
   exclusions:
   rules:
-    - path: (.+)_test\.go
+    - path: '(.+)_test\.go'
       linters:
         - goconst
 ```
@@ -825,7 +825,7 @@ linters-settings:
 linters:
   exclusions:
     rules:
-      - path: (.+)_test\.go
+      - path: '(.+)_test\.go'
         linters:
           - gosmopolitan
 ```
@@ -1091,7 +1091,7 @@ Removed.
 linters-settings:
   wrapcheck:
     ignoreInterfaceRegexps:
-      - ^(?i)c(?-i)ach(ing|e)
+      - '^(?i)c(?-i)ach(ing|e)'
 ```
 
 </details>
@@ -1103,7 +1103,7 @@ linters:
   settings:
     wrapcheck:
       ignore-interface-regexps:
-        - ^(?i)c(?-i)ach(ing|e)
+        - '^(?i)c(?-i)ach(ing|e)'
 ```
 
 </details>
@@ -1116,7 +1116,7 @@ linters:
 linters-settings:
   wrapcheck:
     ignorePackageGlobs:
-      - encoding/*
+      - 'encoding/*'
 ```
 
 </details>
@@ -1128,7 +1128,7 @@ linters:
   settings:
     wrapcheck:
       ignore-package-globs:
-        - encoding/*
+        - 'encoding/*'
 ```
 
 </details>
@@ -1141,7 +1141,7 @@ linters:
   linters-settings:
     wrapcheck:
       ignoreSigRegexps:
-        - \.New.*Error\(
+        - '\.New.*Error\('
 ```
 
 </details>
@@ -1153,7 +1153,7 @@ linters:
   settings:
     wrapcheck:
       ignore-sig-regexps:
-        - \.New.*Error\(
+        - '\.New.*Error\('
 ```
 
 </details>
@@ -1166,7 +1166,7 @@ linters:
 linters-settings:
   wrapcheck:
     ignoreSigs:
-      - .Errorf(
+      - '.Errorf('
 ```
 
 </details>
@@ -1178,7 +1178,7 @@ linters:
   settings:
     wrapcheck:
       ignore-sigs:
-        - .Errorf(
+        - '.Errorf('
 ```
 
 </details>
@@ -1207,7 +1207,7 @@ output:
     json:
       path: stdout
     checkstyle:
-      path: report.xml
+      path: 'report.xml'
 ```
 
 </details>
@@ -1222,7 +1222,7 @@ output:
     - format: json
       path: stderr
     - format: checkstyle
-      path: report.xml
+      path: 'report.xml'
     - format: colored-line-number
 ```
 
@@ -1239,7 +1239,7 @@ output:
     json:
       path: stdout
     checkstyle:
-      path: report.xml
+      path: 'report.xml'
 ```
 
 </details>
@@ -1364,7 +1364,7 @@ Deprecated since v1.57.0.
 ```yaml
 run:
   skip-files:
-    - ".*\\.my\\.go$"
+    - '.*\.my\.go$'
     - lib/bad.go
 ```
 
@@ -1376,7 +1376,7 @@ run:
 linters:
   exclusions:
     paths:
-      - ".*\\.my\\.go$"
+      - '.*\.my\.go$'
       - lib/bad.go
 ```
 
