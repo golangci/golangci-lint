@@ -106,8 +106,6 @@ func addPrefix(old versionone.Issues, s *string) *string {
 }
 
 func linterTestExclusions(old versionone.LintersSettings) []versiontwo.ExcludeRule {
-	var results []versiontwo.ExcludeRule
-
 	var excludedTestLinters []string
 
 	if ptr.Deref(old.Asasalint.IgnoreTest) {
@@ -123,16 +121,16 @@ func linterTestExclusions(old versionone.LintersSettings) []versiontwo.ExcludeRu
 		excludedTestLinters = append(excludedTestLinters, "gosmopolitan")
 	}
 
-	if len(excludedTestLinters) > 0 {
-		results = append(results, versiontwo.ExcludeRule{
-			BaseRule: versiontwo.BaseRule{
-				Linters: excludedTestLinters,
-				Path:    ptr.Pointer(`(.+)_test\.go`),
-			},
-		})
+	if len(excludedTestLinters) == 0 {
+		return nil
 	}
 
-	return results
+	return []versiontwo.ExcludeRule{{
+		BaseRule: versiontwo.BaseRule{
+			Linters: excludedTestLinters,
+			Path:    ptr.Pointer(`(.+)_test\.go`),
+		},
+	}}
 }
 
 func toExclusionPaths(old versionone.Issues) []string {
