@@ -19,8 +19,8 @@ linters:
             case: camel
             extra-initialisms: true
             initialism-overrides:
-              db: true
-              lhs: false
+              DB: true
+              LHS: false
         use-field-name: true
         ignored-fields:
           - Bar

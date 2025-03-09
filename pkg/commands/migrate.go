@@ -1,8 +1,6 @@
 package commands
 
 import (
-	"bytes"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"os"
@@ -10,15 +8,14 @@ import (
 	"strings"
 
 	"github.com/fatih/color"
-	"github.com/pelletier/go-toml/v2"
 	"github.com/santhosh-tekuri/jsonschema/v6"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"gopkg.in/yaml.v3"
 
 	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate"
+	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/fakeloader"
+	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/parser"
 	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/versionone"
-	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/versiontwo"
 	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/exitcodes"
 	"github.com/golangci/golangci-lint/pkg/logutils"
@@ -170,14 +167,21 @@ func (c *migrateCommand) preRunE(cmd *cobra.Command, _ []string) error {
 func (c *migrateCommand) persistentPreRunE(_ *cobra.Command, args []string) error {
 	c.log.Infof("%s", c.buildInfo.String())
 
-	loader := config.NewBaseLoader(c.log.Child(logutils.DebugKeyConfigReader), c.viper, c.opts.LoaderOptions, c.cfg, args)
+	loader := config.NewBaseLoader(c.log.Child(logutils.DebugKeyConfigReader), c.viper, c.opts.LoaderOptions, fakeloader.NewConfig(), args)
 
+	// Loads the configuration just to get the effective path of the configuration.
 	err := loader.Load()
 	if err != nil {
 		return fmt.Errorf("can't load config: %w", err)
 	}
 
-	return nil
+	srcPath := c.viper.ConfigFileUsed()
+	if srcPath == "" {
+		c.log.Warnf("No config file detected")
+		os.Exit(exitcodes.NoConfigFileDetected)
+	}
+
+	return fakeloader.Load(srcPath, c.cfg)
 }
 
 func (c *migrateCommand) backupConfigurationFile(srcPath string) error {
@@ -204,7 +208,7 @@ func (c *migrateCommand) backupConfigurationFile(srcPath string) error {
 	return nil
 }
 
-func saveNewConfiguration(newCfg *versiontwo.Config, dstPath string) error {
+func saveNewConfiguration(cfg any, dstPath string) error {
 	dstFile, err := os.Create(dstPath)
 	if err != nil {
 		return err
@@ -212,42 +216,5 @@ func saveNewConfiguration(newCfg *versiontwo.Config, dstPath string) error {
 
 	defer func() { _ = dstFile.Close() }()
 
-	ext := filepath.Ext(dstPath)
-
-	switch strings.ToLower(ext) {
-	case ".yml", ".yaml":
-		encoder := yaml.NewEncoder(dstFile)
-		encoder.SetIndent(2)
-
-		return encoder.Encode(newCfg)
-
-	case ".toml":
-		encoder := toml.NewEncoder(dstFile)
-
-		return encoder.Encode(newCfg)
-
-	case ".json":
-		// The JSON encoder converts empty struct to `{}` instead of nothing (even with omitempty JSON struct tags).
-		// So we need to use the YAML encoder as bridge to create JSON file.
-
-		var buf bytes.Buffer
-		err := yaml.NewEncoder(&buf).Encode(newCfg)
-		if err != nil {
-			return err
-		}
-
-		raw := map[string]any{}
-		err = yaml.NewDecoder(&buf).Decode(raw)
-		if err != nil {
-			return err
-		}
-
-		encoder := json.NewEncoder(dstFile)
-		encoder.SetIndent("", "  ")
-
-		return encoder.Encode(raw)
-
-	default:
-		return fmt.Errorf("unsupported file type: %s", ext)
-	}
+	return parser.Encode(cfg, dstFile)
 }

@@ -231,35 +231,35 @@ linters:
         - experimental
         - opinionated
       settings:
-        captlocal:
-          paramsonly: false
-        commentedoutcode:
-          minlength: 50
+        captLocal:
+          paramsOnly: false
+        commentedOutCode:
+          minLength: 50
         elseif:
-          skipbalanced: false
-        hugeparam:
-          sizethreshold: 70
-        ifelsechain:
-          minthreshold: 4
-        nestingreduce:
-          bodywidth: 4
-        rangeexprcopy:
-          sizethreshold: 516
-          skiptestfuncs: false
-        rangevalcopy:
-          sizethreshold: 32
-          skiptestfuncs: false
+          skipBalanced: false
+        hugeParam:
+          sizeThreshold: 70
+        ifElseChain:
+          minThreshold: 4
+        nestingReduce:
+          bodyWidth: 4
+        rangeExprCopy:
+          sizeThreshold: 516
+          skipTestFuncs: false
+        rangeValCopy:
+          sizeThreshold: 32
+          skipTestFuncs: false
         ruleguard:
           debug: emptyDecl
           disable: myGroupName,#myTagName
           enable: myGroupName,#myTagName
-          failon: dsl,import
+          failOn: dsl,import
           rules: ${base-path}/ruleguard/rules-*.go,${base-path}/myrule1.go
-        toomanyresultschecker:
-          maxresults: 10
-        truncatecmp:
-          skiparchdependent: false
+        tooManyResultsChecker:
+          maxResults: 10
+        truncateCmp:
+          skipArchDependent: false
         underef:
-          skiprecvderef: false
-        unnamedresult:
-          checkexported: true
+          skipRecvDeref: false
+        unnamedResult:
+          checkExported: true

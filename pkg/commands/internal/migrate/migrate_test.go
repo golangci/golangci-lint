@@ -8,15 +8,26 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"gopkg.in/yaml.v3"
 
+	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/fakeloader"
+	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/parser"
 	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/versionone"
-	"github.com/golangci/golangci-lint/pkg/config"
-	"github.com/golangci/golangci-lint/pkg/logutils"
 )
+
+type fakeFile struct {
+	bytes.Buffer
+	name string
+}
+
+func newFakeFile(name string) *fakeFile {
+	return &fakeFile{name: name}
+}
+
+func (f *fakeFile) Name() string {
+	return f.name
+}
 
 func TestToConfig(t *testing.T) {
 	var testFiles []string
@@ -30,7 +41,7 @@ func TestToConfig(t *testing.T) {
 			return nil
 		}
 
-		if strings.HasSuffix(path, ".golden.yml") {
+		if strings.Contains(path, ".golden.") {
 			return nil
 		}
 
@@ -46,7 +57,7 @@ func TestToConfig(t *testing.T) {
 			t.Parallel()
 
 			ext := filepath.Ext(fileIn)
-			fileGolden := strings.TrimSuffix(fileIn, ext) + ".golden.yml"
+			fileGolden := strings.TrimSuffix(fileIn, ext) + ".golden" + ext
 
 			testFile(t, fileIn, fileGolden, false)
 		})
@@ -58,30 +69,33 @@ func testFile(t *testing.T, in, golden string, update bool) {
 
 	old := versionone.NewConfig()
 
-	options := config.LoaderOptions{Config: in}
-
 	// Fake load of the configuration.
 	// IMPORTANT: The default values from flags are not set.
-	loader := config.NewBaseLoader(logutils.NewStderrLog("skip"), viper.New(), options, old, nil)
-
-	err := loader.Load()
+	err := fakeloader.Load(in, old)
 	require.NoError(t, err)
 
 	if update {
 		updateGolden(t, golden, old)
 	}
 
+	buf := newFakeFile("test" + filepath.Ext(golden))
+
+	err = parser.Encode(ToConfig(old), buf)
+	require.NoError(t, err)
+
 	expected, err := os.ReadFile(golden)
 	require.NoError(t, err)
 
-	var buf bytes.Buffer
-	encoder := yaml.NewEncoder(&buf)
-	encoder.SetIndent(2)
-
-	err = encoder.Encode(ToConfig(old))
-	require.NoError(t, err)
-
-	assert.YAMLEq(t, string(expected), buf.String())
+	switch filepath.Ext(golden) {
+	case ".yml":
+		assert.YAMLEq(t, string(expected), buf.String())
+	case ".json":
+		assert.JSONEq(t, string(expected), buf.String())
+	case ".toml":
+		assert.Equal(t, string(expected), buf.String())
+	default:
+		require.Failf(t, "unsupported extension: %s", golden)
+	}
 }
 
 func updateGolden(t *testing.T, golden string, old *versionone.Config) {
@@ -94,9 +108,6 @@ func updateGolden(t *testing.T, golden string, old *versionone.Config) {
 		_ = fileOut.Close()
 	}()
 
-	encoder := yaml.NewEncoder(fileOut)
-	encoder.SetIndent(2)
-
-	err = encoder.Encode(ToConfig(old))
+	err = parser.Encode(ToConfig(old), fileOut)
 	require.NoError(t, err)
 }

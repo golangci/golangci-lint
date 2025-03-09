@@ -87,20 +87,20 @@ linters:
       severity: medium
       confidence: medium
       config:
-        g101:
+        G101:
           entropy_threshold: "80.0"
           ignore_entropy: false
           pattern: (?i)example
           per_char_threshold: "3.0"
           truncate: "32"
-        g104:
+        G104:
           fmt:
             - Fscanf
-        g111:
+        G111:
           pattern: custom\.Dir\(\)
-        g301: "0750"
-        g302: "0600"
-        g306: "0600"
+        G301: "0750"
+        G302: "0600"
+        G306: "0600"
         global:
           '#nosec': '#my-custom-nosec'
           audit: true

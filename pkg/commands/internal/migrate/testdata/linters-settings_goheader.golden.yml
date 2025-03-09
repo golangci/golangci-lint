@@ -4,9 +4,9 @@ linters:
     goheader:
       values:
         const:
-          company: MY COMPANY
+          COMPANY: MY COMPANY
         regexp:
-          author: .*@mycompany\.com
+          AUTHOR: .*@mycompany\.com
       template: |-
         Put here copyright header template for source code files
         For example:
