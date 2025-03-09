@@ -3,16 +3,16 @@
 package versiontwo
 
 type Config struct {
-	Version *string `yaml:"version,omitempty" toml:"version,omitempty"`
+	Version *string `yaml:"version,omitempty" toml:"version,multiline,omitempty"`
 
-	Run Run `yaml:"run,omitempty" toml:"run,omitempty"`
+	Run Run `yaml:"run,omitempty" toml:"run,multiline,omitempty"`
 
-	Output Output `yaml:"output,omitempty" toml:"output,omitempty"`
+	Output Output `yaml:"output,omitempty" toml:"output,multiline,omitempty"`
 
-	Linters Linters `yaml:"linters,omitempty" toml:"linters,omitempty"`
+	Linters Linters `yaml:"linters,omitempty" toml:"linters,multiline,omitempty"`
 
-	Issues   Issues   `yaml:"issues,omitempty" toml:"issues,omitempty"`
-	Severity Severity `yaml:"severity,omitempty" toml:"severity,omitempty"`
+	Issues   Issues   `yaml:"issues,omitempty" toml:"issues,multiline,omitempty"`
+	Severity Severity `yaml:"severity,omitempty" toml:"severity,multiline,omitempty"`
 
-	Formatters Formatters `yaml:"formatters,omitempty" toml:"formatters,omitempty"`
+	Formatters Formatters `yaml:"formatters,omitempty" toml:"formatters,multiline,omitempty"`
 }

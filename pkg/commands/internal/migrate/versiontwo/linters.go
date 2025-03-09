@@ -3,12 +3,12 @@
 package versiontwo
 
 type Linters struct {
-	Default  *string  `yaml:"default,omitempty" toml:"default,omitempty"`
-	Enable   []string `yaml:"enable,omitempty" toml:"enable,omitempty"`
-	Disable  []string `yaml:"disable,omitempty" toml:"disable,omitempty"`
-	FastOnly *bool    `yaml:"fast-only,omitempty" toml:"fast-only,omitempty"`
+	Default  *string  `yaml:"default,omitempty" toml:"default,multiline,omitempty"`
+	Enable   []string `yaml:"enable,omitempty" toml:"enable,multiline,omitempty"`
+	Disable  []string `yaml:"disable,omitempty" toml:"disable,multiline,omitempty"`
+	FastOnly *bool    `yaml:"fast-only,omitempty" toml:"fast-only,multiline,omitempty"`
 
-	Settings LintersSettings `yaml:"settings,omitempty" toml:"settings,omitempty"`
+	Settings LintersSettings `yaml:"settings,omitempty" toml:"settings,multiline,omitempty"`
 
-	Exclusions LinterExclusions `yaml:"exclusions,omitempty" toml:"exclusions,omitempty"`
+	Exclusions LinterExclusions `yaml:"exclusions,omitempty" toml:"exclusions,multiline,omitempty"`
 }

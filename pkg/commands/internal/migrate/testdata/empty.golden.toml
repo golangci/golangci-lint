@@ -3,7 +3,11 @@ version = '2'
 [linters]
 [linters.exclusions]
 generated = 'lax'
-paths = ['third_party$', 'builtin$', 'examples$']
+paths = [
+  'third_party$',
+  'builtin$',
+  'examples$'
+]
 
 [formatters]
 [formatters.exclusions]

@@ -3,11 +3,11 @@
 package versiontwo
 
 type Severity struct {
-	Default *string        `yaml:"default,omitempty" toml:"default,omitempty"`
-	Rules   []SeverityRule `yaml:"rules,omitempty" toml:"rules,omitempty"`
+	Default *string        `yaml:"default,omitempty" toml:"default,multiline,omitempty"`
+	Rules   []SeverityRule `yaml:"rules,omitempty" toml:"rules,multiline,omitempty"`
 }
 
 type SeverityRule struct {
 	BaseRule `yaml:",inline"`
-	Severity *string `yaml:"severity,omitempty" toml:"severity,omitempty"`
+	Severity *string `yaml:"severity,omitempty" toml:"severity,multiline,omitempty"`
 }

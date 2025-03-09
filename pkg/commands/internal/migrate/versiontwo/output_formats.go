@@ -3,35 +3,35 @@
 package versiontwo
 
 type Formats struct {
-	Text        Text         `yaml:"text,omitempty" toml:"text,omitempty"`
-	JSON        SimpleFormat `yaml:"json,omitempty" toml:"json,omitempty"`
-	Tab         Tab          `yaml:"tab,omitempty" toml:"tab,omitempty"`
-	HTML        SimpleFormat `yaml:"html,omitempty" toml:"html,omitempty"`
-	Checkstyle  SimpleFormat `yaml:"checkstyle,omitempty" toml:"checkstyle,omitempty"`
-	CodeClimate SimpleFormat `yaml:"code-climate,omitempty" toml:"code-climate,omitempty"`
-	JUnitXML    JUnitXML     `yaml:"junit-xml,omitempty" toml:"junit-xml,omitempty"`
-	TeamCity    SimpleFormat `yaml:"teamcity,omitempty" toml:"teamcity,omitempty"`
-	Sarif       SimpleFormat `yaml:"sarif,omitempty" toml:"sarif,omitempty"`
+	Text        Text         `yaml:"text,omitempty" toml:"text,multiline,omitempty"`
+	JSON        SimpleFormat `yaml:"json,omitempty" toml:"json,multiline,omitempty"`
+	Tab         Tab          `yaml:"tab,omitempty" toml:"tab,multiline,omitempty"`
+	HTML        SimpleFormat `yaml:"html,omitempty" toml:"html,multiline,omitempty"`
+	Checkstyle  SimpleFormat `yaml:"checkstyle,omitempty" toml:"checkstyle,multiline,omitempty"`
+	CodeClimate SimpleFormat `yaml:"code-climate,omitempty" toml:"code-climate,multiline,omitempty"`
+	JUnitXML    JUnitXML     `yaml:"junit-xml,omitempty" toml:"junit-xml,multiline,omitempty"`
+	TeamCity    SimpleFormat `yaml:"teamcity,omitempty" toml:"teamcity,multiline,omitempty"`
+	Sarif       SimpleFormat `yaml:"sarif,omitempty" toml:"sarif,multiline,omitempty"`
 }
 
 type SimpleFormat struct {
-	Path *string `yaml:"path,omitempty" toml:"path,omitempty"`
+	Path *string `yaml:"path,omitempty" toml:"path,multiline,omitempty"`
 }
 
 type Text struct {
 	SimpleFormat    `yaml:",inline"`
-	PrintLinterName *bool `yaml:"print-linter-name,omitempty" toml:"print-linter-name,omitempty"`
-	PrintIssuedLine *bool `yaml:"print-issued-lines,omitempty" toml:"print-issued-lines,omitempty"`
-	Colors          *bool `yaml:"colors,omitempty" toml:"colors,omitempty"`
+	PrintLinterName *bool `yaml:"print-linter-name,omitempty" toml:"print-linter-name,multiline,omitempty"`
+	PrintIssuedLine *bool `yaml:"print-issued-lines,omitempty" toml:"print-issued-lines,multiline,omitempty"`
+	Colors          *bool `yaml:"colors,omitempty" toml:"colors,multiline,omitempty"`
 }
 
 type Tab struct {
 	SimpleFormat    `yaml:",inline"`
-	PrintLinterName *bool `yaml:"print-linter-name,omitempty" toml:"print-linter-name,omitempty"`
-	Colors          *bool `yaml:"colors,omitempty" toml:"colors,omitempty"`
+	PrintLinterName *bool `yaml:"print-linter-name,omitempty" toml:"print-linter-name,multiline,omitempty"`
+	Colors          *bool `yaml:"colors,omitempty" toml:"colors,multiline,omitempty"`
 }
 
 type JUnitXML struct {
 	SimpleFormat `yaml:",inline"`
-	Extended     *bool `yaml:"extended,omitempty" toml:"extended,omitempty"`
+	Extended     *bool `yaml:"extended,omitempty" toml:"extended,multiline,omitempty"`
 }

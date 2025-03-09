@@ -7,20 +7,20 @@ import (
 )
 
 type Run struct {
-	Timeout time.Duration `yaml:"timeout,omitempty" toml:"timeout,omitempty"`
+	Timeout time.Duration `yaml:"timeout,omitempty" toml:"timeout,multiline,omitempty"`
 
-	Concurrency *int `yaml:"concurrency,omitempty" toml:"concurrency,omitempty"`
+	Concurrency *int `yaml:"concurrency,omitempty" toml:"concurrency,multiline,omitempty"`
 
-	Go *string `yaml:"go,omitempty" toml:"go,omitempty"`
+	Go *string `yaml:"go,omitempty" toml:"go,multiline,omitempty"`
 
-	RelativePathMode *string `yaml:"relative-path-mode,omitempty" toml:"relative-path-mode,omitempty"`
+	RelativePathMode *string `yaml:"relative-path-mode,omitempty" toml:"relative-path-mode,multiline,omitempty"`
 
-	BuildTags           []string `yaml:"build-tags,omitempty" toml:"build-tags,omitempty"`
-	ModulesDownloadMode *string  `yaml:"modules-download-mode,omitempty" toml:"modules-download-mode,omitempty"`
+	BuildTags           []string `yaml:"build-tags,omitempty" toml:"build-tags,multiline,omitempty"`
+	ModulesDownloadMode *string  `yaml:"modules-download-mode,omitempty" toml:"modules-download-mode,multiline,omitempty"`
 
-	ExitCodeIfIssuesFound *int  `yaml:"issues-exit-code,omitempty" toml:"issues-exit-code,omitempty"`
-	AnalyzeTests          *bool `yaml:"tests,omitempty" toml:"tests,omitempty"`
+	ExitCodeIfIssuesFound *int  `yaml:"issues-exit-code,omitempty" toml:"issues-exit-code,multiline,omitempty"`
+	AnalyzeTests          *bool `yaml:"tests,omitempty" toml:"tests,multiline,omitempty"`
 
-	AllowParallelRunners *bool `yaml:"allow-parallel-runners,omitempty" toml:"allow-parallel-runners,omitempty"`
-	AllowSerialRunners   *bool `yaml:"allow-serial-runners,omitempty" toml:"allow-serial-runners,omitempty"`
+	AllowParallelRunners *bool `yaml:"allow-parallel-runners,omitempty" toml:"allow-parallel-runners,multiline,omitempty"`
+	AllowSerialRunners   *bool `yaml:"allow-serial-runners,omitempty" toml:"allow-serial-runners,multiline,omitempty"`
 }

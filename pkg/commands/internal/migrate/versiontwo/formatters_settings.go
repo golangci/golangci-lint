@@ -3,46 +3,46 @@
 package versiontwo
 
 type FormatterSettings struct {
-	Gci       GciSettings       `yaml:"gci,omitempty" toml:"gci,omitempty"`
-	GoFmt     GoFmtSettings     `yaml:"gofmt,omitempty" toml:"gofmt,omitempty"`
-	GoFumpt   GoFumptSettings   `yaml:"gofumpt,omitempty" toml:"gofumpt,omitempty"`
-	GoImports GoImportsSettings `yaml:"goimports,omitempty" toml:"goimports,omitempty"`
-	GoLines   GoLinesSettings   `yaml:"golines,omitempty" toml:"golines,omitempty"`
+	Gci       GciSettings       `yaml:"gci,omitempty" toml:"gci,multiline,omitempty"`
+	GoFmt     GoFmtSettings     `yaml:"gofmt,omitempty" toml:"gofmt,multiline,omitempty"`
+	GoFumpt   GoFumptSettings   `yaml:"gofumpt,omitempty" toml:"gofumpt,multiline,omitempty"`
+	GoImports GoImportsSettings `yaml:"goimports,omitempty" toml:"goimports,multiline,omitempty"`
+	GoLines   GoLinesSettings   `yaml:"golines,omitempty" toml:"golines,multiline,omitempty"`
 }
 
 type GciSettings struct {
-	Sections         []string `yaml:"sections,omitempty" toml:"sections,omitempty"`
-	NoInlineComments *bool    `yaml:"no-inline-comments,omitempty" toml:"no-inline-comments,omitempty"`
-	NoPrefixComments *bool    `yaml:"no-prefix-comments,omitempty" toml:"no-prefix-comments,omitempty"`
-	CustomOrder      *bool    `yaml:"custom-order,omitempty" toml:"custom-order,omitempty"`
-	NoLexOrder       *bool    `yaml:"no-lex-order,omitempty" toml:"no-lex-order,omitempty"`
+	Sections         []string `yaml:"sections,omitempty" toml:"sections,multiline,omitempty"`
+	NoInlineComments *bool    `yaml:"no-inline-comments,omitempty" toml:"no-inline-comments,multiline,omitempty"`
+	NoPrefixComments *bool    `yaml:"no-prefix-comments,omitempty" toml:"no-prefix-comments,multiline,omitempty"`
+	CustomOrder      *bool    `yaml:"custom-order,omitempty" toml:"custom-order,multiline,omitempty"`
+	NoLexOrder       *bool    `yaml:"no-lex-order,omitempty" toml:"no-lex-order,multiline,omitempty"`
 }
 
 type GoFmtSettings struct {
-	Simplify     *bool              `yaml:"simplify,omitempty" toml:"simplify,omitempty"`
-	RewriteRules []GoFmtRewriteRule `yaml:"rewrite-rules,omitempty" toml:"rewrite-rules,omitempty"`
+	Simplify     *bool              `yaml:"simplify,omitempty" toml:"simplify,multiline,omitempty"`
+	RewriteRules []GoFmtRewriteRule `yaml:"rewrite-rules,omitempty" toml:"rewrite-rules,multiline,omitempty"`
 }
 
 type GoFmtRewriteRule struct {
-	Pattern     *string `yaml:"pattern,omitempty" toml:"pattern,omitempty"`
-	Replacement *string `yaml:"replacement,omitempty" toml:"replacement,omitempty"`
+	Pattern     *string `yaml:"pattern,omitempty" toml:"pattern,multiline,omitempty"`
+	Replacement *string `yaml:"replacement,omitempty" toml:"replacement,multiline,omitempty"`
 }
 
 type GoFumptSettings struct {
-	ModulePath *string `yaml:"module-path,omitempty" toml:"module-path,omitempty"`
-	ExtraRules *bool   `yaml:"extra-rules,omitempty" toml:"extra-rules,omitempty"`
+	ModulePath *string `yaml:"module-path,omitempty" toml:"module-path,multiline,omitempty"`
+	ExtraRules *bool   `yaml:"extra-rules,omitempty" toml:"extra-rules,multiline,omitempty"`
 
-	LangVersion *string `yaml:"-,omitempty" toml:"-,omitempty"`
+	LangVersion *string `yaml:"-,omitempty" toml:"-,multiline,omitempty"`
 }
 
 type GoImportsSettings struct {
-	LocalPrefixes []string `yaml:"local-prefixes,omitempty" toml:"local-prefixes,omitempty"`
+	LocalPrefixes []string `yaml:"local-prefixes,omitempty" toml:"local-prefixes,multiline,omitempty"`
 }
 
 type GoLinesSettings struct {
-	MaxLen          *int  `yaml:"max-len,omitempty" toml:"max-len,omitempty"`
-	TabLen          *int  `yaml:"tab-len,omitempty" toml:"tab-len,omitempty"`
-	ShortenComments *bool `yaml:"shorten-comments,omitempty" toml:"shorten-comments,omitempty"`
-	ReformatTags    *bool `yaml:"reformat-tags,omitempty" toml:"reformat-tags,omitempty"`
-	ChainSplitDots  *bool `yaml:"chain-split-dots,omitempty" toml:"chain-split-dots,omitempty"`
+	MaxLen          *int  `yaml:"max-len,omitempty" toml:"max-len,multiline,omitempty"`
+	TabLen          *int  `yaml:"tab-len,omitempty" toml:"tab-len,multiline,omitempty"`
+	ShortenComments *bool `yaml:"shorten-comments,omitempty" toml:"shorten-comments,multiline,omitempty"`
+	ReformatTags    *bool `yaml:"reformat-tags,omitempty" toml:"reformat-tags,multiline,omitempty"`
+	ChainSplitDots  *bool `yaml:"chain-split-dots,omitempty" toml:"chain-split-dots,multiline,omitempty"`
 }

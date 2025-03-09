@@ -159,7 +159,7 @@ func convertStructTag(value string) string {
 		return wrapStructTag(`yaml:",inline"`)
 	}
 
-	return wrapStructTag(fmt.Sprintf(`yaml:"%[1]s,omitempty" toml:"%[1]s,omitempty"`, key))
+	return wrapStructTag(fmt.Sprintf(`yaml:"%[1]s,omitempty" toml:"%[1]s,multiline,omitempty"`, key))
 }
 
 func wrapStructTag(s string) string {
