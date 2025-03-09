@@ -168,8 +168,6 @@ func (c *migrateCommand) preRunE(cmd *cobra.Command, _ []string) error {
 }
 
 func (c *migrateCommand) persistentPreRunE(_ *cobra.Command, args []string) error {
-	c.log.SetLevel(logutils.LogLevelInfo)
-
 	c.log.Infof("%s", c.buildInfo.String())
 
 	loader := config.NewBaseLoader(c.log.Child(logutils.DebugKeyConfigReader), c.viper, c.opts.LoaderOptions, c.cfg, args)
