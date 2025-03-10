@@ -1,7 +1,10 @@
 {
   "formatters": {
     "exclusions": {
-      "generated": "lax"
+      "generated": "lax",
+      "paths": [
+        "examples$"
+      ]
     }
   },
   "linters": {
@@ -11,6 +14,12 @@
         "third_party$",
         "builtin$",
         "examples$"
+      ],
+      "presets": [
+        "comments",
+        "common-false-positives",
+        "legacy",
+        "std-error-handling"
       ]
     }
   },

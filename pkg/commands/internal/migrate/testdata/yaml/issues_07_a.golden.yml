@@ -5,3 +5,7 @@ linters:
       - third_party$
       - builtin$
       - examples$
+formatters:
+  exclusions:
+    paths:
+      - examples$

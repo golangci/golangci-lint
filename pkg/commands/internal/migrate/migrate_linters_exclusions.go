@@ -32,7 +32,7 @@ func toExclusionGenerated(excludeGenerated *string) *string {
 }
 
 func toPresets(old versionone.Issues) []string {
-	if !ptr.Deref(old.UseDefaultExcludes) {
+	if old.UseDefaultExcludes != nil && !ptr.Deref(old.UseDefaultExcludes) {
 		return nil
 	}
 
