@@ -131,7 +131,8 @@ func buildTemplateContext() (map[string]string, error) {
 		"Formatters":                      getLintersListMarkdown(false, filepath.Join("assets", "formatters-info.json")),
 		"ExclusionPresets":                exclusions,
 		"ThanksList":                      getThanksList(),
-		"RunHelpText":                     helps.Help,
+		"RunHelpText":                     helps.RunCmdHelp,
+		"FmtHelpText":                     helps.FmtCmdHelp,
 		"ChangeLog":                       string(changeLog),
 		"LatestVersion":                   latestVersion,
 	}, nil

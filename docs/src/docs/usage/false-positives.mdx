@@ -16,7 +16,7 @@ Otherwise, some linters have dedicated configuration to exclude or disable rules
 
 An example with `staticcheck`:
 
-```yml
+```yaml
 linters-settings:
   staticcheck:
     checks:
@@ -35,7 +35,7 @@ Also, you can use `issues.exclude-rules` config option for per-path or per-linte
 
 In the following example, all the reports that contains the sentences defined in `exclude` are excluded:
 
-```yml
+```yaml
 issues:
   exclude:
     - "Error return value of .((os\\.)?std(out|err)\\..*|.*Close|.*Flush|os\\.Remove(All)?|.*printf?|os\\.(Un)?Setenv). is not checked"
@@ -45,7 +45,7 @@ issues:
 
 In the following example, all the reports from the linters (`linters`) that contains the text (`text`) are excluded:
 
-```yml
+```yaml
 issues:
   exclude-rules:
     - linters:
@@ -55,7 +55,7 @@ issues:
 
 In the following example, all the reports from the linters (`linters`) that originated from the source (`source`) are excluded:
 
-```yml
+```yaml
 issues:
   exclude-rules:
     - linters:
@@ -65,7 +65,7 @@ issues:
 
 In the following example, all the reports that contains the text (`text`) in the path (`path`) are excluded:
 
-```yml
+```yaml
 issues:
   exclude-rules:
     - path: path/to/a/file.go
@@ -82,7 +82,7 @@ the `--path-prefix` parameter can be used to extend the paths before matching.
 
 In the following example, all the reports from the linters (`linters`) that concerns the path (`path`) are excluded:
 
-```yml
+```yaml
 issues:
   exclude-rules:
     - path: '(.+)_test\.go'
@@ -94,7 +94,7 @@ issues:
 The opposite, excluding reports **except** for specific paths, is also possible.
 In the following example, only test files get checked:
 
-```yml
+```yaml
 issues:
   exclude-rules:
     - path-except: '(.+)_test\.go'
@@ -105,7 +105,7 @@ issues:
 
 In the following example, all the reports related to the files (`exclude-files`) are excluded:
 
-```yml
+```yaml
 issues:
   exclude-files:
     - path/to/a/file.go
@@ -113,7 +113,7 @@ issues:
 
 In the following example, all the reports related to the directories (`exclude-dirs`) are excluded:
 
-```yml
+```yaml
 issues:
   exclude-dirs:
     - path/to/a/dir/
@@ -174,18 +174,3 @@ Use `//nolint` instead of `// nolint` because machine-readable comments should h
 Some exclusions are considered common. To help golangci-lint users those common exclusions are provided through presets.
 
 {.ExclusionPresets}
-
-### Default Directory Exclusions
-
-By default, the reports from directory names, that match the following regular expressions, are excluded:
-
-- `third_party$`
-- `examples$`
-- `Godeps$`
-- `builtin$`
-
-This option has been defined when Go modules was not existed and when the golangci-lint core was different, this is not something we still recommend.
-
-At some point, we will remove all those obsolete exclusions, but as it's a breaking changes it will only happen inside a major version.
-
-So we recommend setting `issues.exclude-dirs-use-default` to `false`.

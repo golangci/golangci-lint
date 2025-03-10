@@ -152,23 +152,38 @@ func saveCLIHelp(dst string) error {
 
 	lintersOutParts := bytes.Split(lintersOut, []byte("\n\n"))
 
-	helpCmd := exec.Command("./golangci-lint", "run", "-h")
+	rumCmdHelp, err := getCmdHelp("run")
+	if err != nil {
+		return err
+	}
+
+	fmtCmdHelp, err := getCmdHelp("fmt")
+	if err != nil {
+		return err
+	}
+
+	data := types.CLIHelp{
+		Enable:     string(lintersOutParts[0]),
+		RunCmdHelp: rumCmdHelp,
+		FmtCmdHelp: fmtCmdHelp,
+	}
+
+	return saveToJSONFile(dst, data)
+}
+
+func getCmdHelp(name string) (string, error) {
+	helpCmd := exec.Command("./golangci-lint", name, "-h")
 	helpCmd.Env = append(helpCmd.Env, os.Environ()...)
-	helpCmd.Env = append(helpCmd.Env, "HELP_RUN=1") // make default concurrency stable: don't depend on machine CPU number
+
 	help, err := helpCmd.Output()
 	if err != nil {
-		return fmt.Errorf("can't run help cmd: %w", err)
+		return "", fmt.Errorf("can't run help cmd: %w", err)
 	}
 
 	helpLines := bytes.Split(help, []byte("\n"))
 	shortHelp := bytes.Join(helpLines[2:], []byte("\n"))
 
-	data := types.CLIHelp{
-		Enable: string(lintersOutParts[0]),
-		Help:   string(shortHelp),
-	}
-
-	return saveToJSONFile(dst, data)
+	return string(shortHelp), nil
 }
 
 func saveToJSONFile(dst string, data any) error {

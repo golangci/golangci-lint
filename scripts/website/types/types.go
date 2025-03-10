@@ -5,8 +5,9 @@ import (
 )
 
 type CLIHelp struct {
-	Enable string `json:"enable"`
-	Help   string `json:"help"`
+	Enable     string `json:"enable"`
+	RunCmdHelp string `json:"help"`
+	FmtCmdHelp string `json:"fmtHelp"`
 }
 
 type ExcludeRule struct {
