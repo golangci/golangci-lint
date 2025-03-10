@@ -927,6 +927,10 @@ func convertAlternativeNames(names []string) []string {
 	var results []string
 
 	for _, name := range names {
+		if name == "typecheck" {
+			continue
+		}
+
 		if n, ok := altNames[name]; ok {
 			results = append(results, n)
 			continue

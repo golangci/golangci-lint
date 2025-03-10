@@ -1,0 +1,31 @@
+issues:
+  # Only to not generate unrelated elements inside golden.
+  exclude-use-default: false
+  # Only to not generate unrelated elements inside golden.
+  exclude-generated: strict
+  # Only to not generate unrelated elements inside golden.
+  exclude-dirs-use-default: false
+
+  exclude-case-sensitive: true
+
+  exclude-rules:
+    - path: _test\.go
+      linters:
+        - typecheck
+
+    - path-except: _test\.go
+      linters:
+        - typecheck
+
+    - path: internal/hmac/
+      text: "weak cryptographic primitive"
+      linters:
+        - typecheck
+
+    - linters:
+        - typecheck
+      text: "SA9003:"
+
+    - linters:
+        - typecheck
+      source: "foo"
