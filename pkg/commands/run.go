@@ -53,8 +53,6 @@ const (
 )
 
 const (
-	// envHelpRun value: "1".
-	envHelpRun        = "HELP_RUN"
 	envMemProfileRate = "GL_MEM_PROFILE_RATE"
 )
 

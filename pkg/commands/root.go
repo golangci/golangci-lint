@@ -59,6 +59,7 @@ func newRootCommand(info BuildInfo) *rootCommand {
 	// Each command uses a dedicated configuration structure to avoid side effects of bindings.
 	rootCmd.AddCommand(
 		newLintersCommand(log).cmd,
+		newFormattersCommand(log).cmd,
 		newRunCommand(log, info).cmd,
 		newFmtCommand(log, info).cmd,
 		newMigrateCommand(log, info).cmd,

@@ -29,7 +29,7 @@ Also, the action creates GitHub annotations for found issues (you don't need to 
 
 Here is the other way to install golangci-lint:
 
-```sh
+```bash
 # binary will be $(go env GOPATH)/bin/golangci-lint
 curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/HEAD/install.sh | sh -s -- -b $(go env GOPATH)/bin {.LatestVersion}
 
@@ -51,7 +51,7 @@ and is constantly being improved. For any problems with `golangci-lint`, check o
 
 ### Binaries
 
-```sh
+```bash
 # binary will be $(go env GOPATH)/bin/golangci-lint
 curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/HEAD/install.sh | sh -s -- -b $(go env GOPATH)/bin {.LatestVersion}
 
@@ -73,7 +73,7 @@ so we recommend either using our binaries or be sure of the version of Go used t
 
 You can install a binary release on macOS using [brew](https://brew.sh/):
 
-```sh
+```bash
 brew install golangci-lint
 brew upgrade golangci-lint
 ```
@@ -82,7 +82,7 @@ Note: Previously we used a [Homebrew tap](https://github.com/golangci/homebrew-t
 isn't immediately available via Homebrew core due to manual updates that need to occur from Homebrew core maintainers. In this case, the tap formula, which is updated automatically,
 can be used to install the latest version of `golangci-lint`:
 
-```sh
+```bash
 brew tap golangci/tap
 brew install golangci/tap/golangci-lint
 ```
@@ -92,7 +92,7 @@ brew install golangci/tap/golangci-lint
 It can also be installed through [MacPorts](https://www.macports.org/)
 The MacPorts installation mode is community driven, and not officially maintained by golangci team.
 
-```sh
+```bash
 sudo port install golangci-lint
 ```
 
@@ -102,7 +102,7 @@ sudo port install golangci-lint
 
 You can install a binary on Windows using [chocolatey](https://community.chocolatey.org/packages/golangci-lint).
 
-```sh
+```bash
 choco install golangci-lint
 ```
 
@@ -110,7 +110,7 @@ choco install golangci-lint
 
 You can install a binary on Windows using [scoop](https://scoop.sh).
 
-```sh
+```bash
 scoop install main/golangci-lint
 ```
 
@@ -118,17 +118,17 @@ The scoop package is not officially maintained by golangci team.
 
 ### Docker
 
-```sh
+```bash
 docker run --rm -v $(pwd):/app -w /app golangci/golangci-lint:{.LatestVersion} golangci-lint run -v
 ```
 
 Preserving cache between consecutive runs:
-```sh
+```bash
 docker run --rm -v $(pwd):/app -v ~/.cache/golangci-lint/{.LatestVersion}:/root/.cache -w /app golangci/golangci-lint:{.LatestVersion} golangci-lint run -v
 ```
 
 Colored output:
-```sh
+```bash
 docker run -t --rm -v $(pwd):/app -w /app golangci/golangci-lint:{.LatestVersion} golangci-lint run -v
 ```
 
@@ -148,7 +148,7 @@ These installations aren't recommended because of the following points:
 6. It allows installation from the main branch, which can't be considered stable.
 7. It's slower than binary installation.
 
-```sh
+```bash
 go install github.com/golangci/golangci-lint/cmd/golangci-lint@{.LatestVersion}
 ```
 

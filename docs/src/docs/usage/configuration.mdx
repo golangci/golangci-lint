@@ -2,14 +2,21 @@
 title: Configuration
 ---
 
-The config file has lower priority than command-line options. If the same bool/string/int option is provided on the command-line
+The config file has lower priority than command-line options.
+If the same bool/string/int option is provided on the command-line
 and in the config file, the option from command-line will be used.
 Slice options (e.g. list of enabled/disabled linters) are combined from the command-line and config file.
 
 To see a list of linters enabled by your configuration use:
 
-```sh
+```bash
 golangci-lint linters
+```
+
+To see a list of formatters enabled by your configuration use:
+
+```bash
+golangci-lint formatters
 ```
 
 ## Config File
@@ -37,8 +44,10 @@ The configuration file can be validated with the JSON Schema: https://golangci-l
 
 ## Command-Line Options
 
+### run
+
 ```sh
-golangci-lint run -h
+$ golangci-lint run -h
 {.RunHelpText}
 ```
 
@@ -47,6 +56,13 @@ in the format expected by the [pprof](https://github.com/google/pprof) visualiza
 
 When the `--trace-path` argument is specified, `golangci-lint` writes runtime tracing data in the format expected by
 the `go tool trace` command and visualization tool.
+
+### fmt
+
+```sh
+$ golangci-lint fmt -h
+{.FmtHelpText}
+```
 
 ## Cache
 
