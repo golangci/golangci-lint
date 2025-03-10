@@ -233,8 +233,10 @@ func callForAction(cmd *cobra.Command) {
 
 	s := fmt.Sprintln(hStyle.Render("We need you!"))
 	s += `
-Donations fund the maintenance and development of golangci-lint.
-Click on this link to donate: https://donate.golangci.org`
+Donations help fund the ongoing development and maintenance of this tool.
+If golangci-lint has been useful to you, please consider contributing.
+
+Donate now: https://donate.golangci.org`
 
 	cmd.Println(pStyle.Render(s))
 }
