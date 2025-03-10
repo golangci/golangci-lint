@@ -47,6 +47,11 @@ func newHelpCommand(logger logutils.Log) *helpCommand {
 		PreRunE:           c.lintersPreRunE,
 	}
 
+	fsLinter := lintersCmd.Flags()
+	fsLinter.SortFlags = false // sort them as they are defined here
+
+	fsLinter.BoolVar(&c.opts.JSON, "json", false, color.GreenString("Display as JSON"))
+
 	helpCmd.AddCommand(lintersCmd)
 
 	formattersCmd := &cobra.Command{
@@ -58,12 +63,12 @@ func newHelpCommand(logger logutils.Log) *helpCommand {
 		PreRunE:           c.formattersPreRunE,
 	}
 
+	fsFormatter := formattersCmd.Flags()
+	fsFormatter.SortFlags = false // sort them as they are defined here
+
+	fsFormatter.BoolVar(&c.opts.JSON, "json", false, color.GreenString("Display as JSON"))
+
 	helpCmd.AddCommand(formattersCmd)
-
-	fs := lintersCmd.Flags()
-	fs.SortFlags = false // sort them as they are defined here
-
-	fs.BoolVar(&c.opts.JSON, "json", false, color.GreenString("Display as JSON"))
 
 	c.cmd = helpCmd
 

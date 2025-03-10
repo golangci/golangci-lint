@@ -84,8 +84,8 @@ func (c *formattersCommand) execute(_ *cobra.Command, _ []string) error {
 		return fmt.Errorf("can't get enabled formatters: %w", err)
 	}
 
-	var enabledLinters []*linter.Config
-	var disabledLCs []*linter.Config
+	var enabledFormatters []*linter.Config
+	var disabledFormatters []*linter.Config
 
 	for _, lc := range c.dbManager.GetAllSupportedLinterConfigs() {
 		if lc.Internal {
@@ -97,16 +97,16 @@ func (c *formattersCommand) execute(_ *cobra.Command, _ []string) error {
 		}
 
 		if enabledLintersMap[lc.Name()] == nil {
-			disabledLCs = append(disabledLCs, lc)
+			disabledFormatters = append(disabledFormatters, lc)
 		} else {
-			enabledLinters = append(enabledLinters, lc)
+			enabledFormatters = append(enabledFormatters, lc)
 		}
 	}
 
 	color.Green("Enabled by your configuration formatters:\n")
-	printFormatters(enabledLinters)
+	printFormatters(enabledFormatters)
 	color.Red("\nDisabled by your configuration formatters:\n")
-	printFormatters(disabledLCs)
+	printFormatters(disabledFormatters)
 
 	return nil
 }
