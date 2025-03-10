@@ -1,0 +1,16 @@
+issues:
+  # Only to not generate unrelated elements inside golden.
+  exclude-use-default: false
+  # Only to not generate unrelated elements inside golden.
+  exclude-generated: strict
+  # Only to not generate unrelated elements inside golden.
+  exclude-dirs-use-default: false
+
+linters-settings:
+  unused:
+    field-writes-are-uses: false
+    post-statements-are-reads: true
+    exported-fields-are-used: false
+    parameters-are-used: false
+    local-variables-are-used: false
+    generated-is-used: false

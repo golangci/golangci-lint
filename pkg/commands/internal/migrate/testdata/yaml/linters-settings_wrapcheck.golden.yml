@@ -1,0 +1,24 @@
+version: "2"
+linters:
+  settings:
+    wrapcheck:
+      extra-ignore-sigs:
+        - .CustomError(
+        - .SpecificWrap(
+      ignore-sigs:
+        - .Errorf(
+        - errors.New(
+        - errors.Unwrap(
+        - errors.Join(
+        - .Wrap(
+        - .Wrapf(
+        - .WithMessage(
+        - .WithMessagef(
+        - .WithStack(
+      ignore-sig-regexps:
+        - \.New.*Error\(
+      ignore-package-globs:
+        - encoding/*
+        - github.com/pkg/*
+      ignore-interface-regexps:
+        - ^(?i)c(?-i)ach(ing|e)

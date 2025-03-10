@@ -1,0 +1,46 @@
+issues:
+  # Only to not generate unrelated elements inside golden.
+  exclude-use-default: false
+  # Only to not generate unrelated elements inside golden.
+  exclude-generated: strict
+  # Only to not generate unrelated elements inside golden.
+  exclude-dirs-use-default: false
+
+linters-settings:
+  gosimple:
+    checks:
+      - S1000
+      - S1001
+      - S1002
+      - S1003
+      - S1004
+      - S1005
+      - S1006
+      - S1007
+      - S1008
+      - S1009
+      - S1010
+      - S1011
+      - S1012
+      - S1016
+      - S1017
+      - S1018
+      - S1019
+      - S1020
+      - S1021
+      - S1023
+      - S1024
+      - S1025
+      - S1028
+      - S1029
+      - S1030
+      - S1031
+      - S1032
+      - S1033
+      - S1034
+      - S1035
+      - S1036
+      - S1037
+      - S1038
+      - S1039
+      - S1040

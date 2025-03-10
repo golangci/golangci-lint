@@ -1,0 +1,7 @@
+version: "2"
+linters:
+  exclusions:
+    presets:
+      - comments
+      - legacy
+      - std-error-handling

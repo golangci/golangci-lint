@@ -1,0 +1,8 @@
+version: "2"
+issues:
+  new-from-rev: HEAD
+  new-from-merge-base: main
+  new-from-patch: path/to/patch/file
+  whole-files: true
+  new: true
+  fix: true

@@ -1,0 +1,6 @@
+version: "2"
+linters:
+  settings:
+    errchkjson:
+      check-error-free-encoding: true
+      report-no-exported: false

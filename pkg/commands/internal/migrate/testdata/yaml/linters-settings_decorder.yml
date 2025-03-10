@@ -1,0 +1,22 @@
+issues:
+  # Only to not generate unrelated elements inside golden.
+  exclude-use-default: false
+  # Only to not generate unrelated elements inside golden.
+  exclude-generated: strict
+  # Only to not generate unrelated elements inside golden.
+  exclude-dirs-use-default: false
+
+linters-settings:
+  decorder:
+    dec-order:
+      - type
+      - const
+      - var
+      - func
+    ignore-underscore-vars: false
+    disable-dec-order-check: false
+    disable-init-func-first-check: false
+    disable-dec-num-check: false
+    disable-type-dec-num-check: false
+    disable-const-dec-num-check: false
+    disable-var-dec-num-check: false

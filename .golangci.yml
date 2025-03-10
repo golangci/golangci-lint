@@ -171,6 +171,17 @@ linters:
         linters: [gosec]
         text: "G306: Expect WriteFile permissions to be 0600 or less"
 
+      # Related to migration command.
+      - path: pkg/commands/internal/migrate/two/
+        linters:
+          - lll
+
+      # Related to migration command.
+      - path: pkg/commands/internal/migrate/
+        linters:
+          - gocritic
+        text: "hugeParam:"
+
 formatters:
   enable:
     - gofmt

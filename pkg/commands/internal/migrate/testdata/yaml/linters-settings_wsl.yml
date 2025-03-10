@@ -1,0 +1,23 @@
+issues:
+  # Only to not generate unrelated elements inside golden.
+  exclude-use-default: false
+  # Only to not generate unrelated elements inside golden.
+  exclude-generated: strict
+  # Only to not generate unrelated elements inside golden.
+  exclude-dirs-use-default: false
+
+linters-settings:
+  wsl:
+    strict-append: false
+    allow-assign-and-call: false
+    allow-assign-and-anything: true
+    allow-multiline-assign: false
+    force-case-trailing-whitespace: 1
+    allow-trailing-comment: true
+    allow-separated-leading-comment: true
+    allow-cuddle-declarations: true
+    allow-cuddle-with-calls: [ "Foo", "Bar" ]
+    allow-cuddle-with-rhs: [ "Foo", "Bar" ]
+    force-err-cuddling: true
+    error-variable-names: [ "foo" ]
+    force-short-decl-cuddling: true

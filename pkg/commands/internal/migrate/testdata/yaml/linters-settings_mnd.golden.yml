@@ -1,0 +1,20 @@
+version: "2"
+linters:
+  settings:
+    mnd:
+      checks:
+        - argument
+        - case
+        - condition
+        - operation
+        - return
+        - assign
+      ignored-numbers:
+        - "0666"
+        - "0755"
+        - "42"
+      ignored-files:
+        - magic1_.+\.go$
+      ignored-functions:
+        - ^math\.
+        - ^http\.StatusText$

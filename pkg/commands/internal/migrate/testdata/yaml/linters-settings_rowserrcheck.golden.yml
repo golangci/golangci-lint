@@ -1,0 +1,6 @@
+version: "2"
+linters:
+  settings:
+    rowserrcheck:
+      packages:
+        - github.com/jmoiron/sqlx

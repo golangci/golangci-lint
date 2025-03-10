@@ -1,0 +1,20 @@
+issues:
+  # Only to not generate unrelated elements inside golden.
+  exclude-use-default: false
+  # Only to not generate unrelated elements inside golden.
+  exclude-generated: strict
+  # Only to not generate unrelated elements inside golden.
+  exclude-dirs-use-default: false
+
+linters-settings:
+  usestdlibvars:
+    http-method: false
+    http-status-code: false
+    time-weekday: true
+    time-month: true
+    time-layout: true
+    crypto-hash: true
+    default-rpc-path: true
+    sql-isolation-level: true
+    tls-signature-scheme: true
+    constant-kind: true

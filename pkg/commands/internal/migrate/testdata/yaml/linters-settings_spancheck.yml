@@ -1,0 +1,18 @@
+issues:
+  # Only to not generate unrelated elements inside golden.
+  exclude-use-default: false
+  # Only to not generate unrelated elements inside golden.
+  exclude-generated: strict
+  # Only to not generate unrelated elements inside golden.
+  exclude-dirs-use-default: false
+
+linters-settings:
+  spancheck:
+    checks:
+      - end
+      - record-error
+      - set-status
+    ignore-check-signatures:
+      - "telemetry.RecordError"
+    extra-start-span-signatures:
+      - "github.com/user/repo/telemetry/trace.Start:opentelemetry"

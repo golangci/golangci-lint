@@ -1,0 +1,11 @@
+version: "2"
+linters:
+  exclusions:
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
+formatters:
+  exclusions:
+    paths:
+      - examples$

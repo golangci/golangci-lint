@@ -1,0 +1,109 @@
+version: "2"
+linters:
+  settings:
+    gosec:
+      includes:
+        - G101
+        - G102
+        - G103
+        - G104
+        - G106
+        - G107
+        - G108
+        - G109
+        - G110
+        - G111
+        - G112
+        - G113
+        - G114
+        - G115
+        - G201
+        - G202
+        - G203
+        - G204
+        - G301
+        - G302
+        - G303
+        - G304
+        - G305
+        - G306
+        - G307
+        - G401
+        - G402
+        - G403
+        - G404
+        - G405
+        - G406
+        - G501
+        - G502
+        - G503
+        - G504
+        - G505
+        - G506
+        - G507
+        - G601
+        - G602
+      excludes:
+        - G101
+        - G102
+        - G103
+        - G104
+        - G106
+        - G107
+        - G108
+        - G109
+        - G110
+        - G111
+        - G112
+        - G113
+        - G114
+        - G115
+        - G201
+        - G202
+        - G203
+        - G204
+        - G301
+        - G302
+        - G303
+        - G304
+        - G305
+        - G306
+        - G307
+        - G401
+        - G402
+        - G403
+        - G404
+        - G405
+        - G406
+        - G501
+        - G502
+        - G503
+        - G504
+        - G505
+        - G506
+        - G507
+        - G601
+        - G602
+      severity: medium
+      confidence: medium
+      config:
+        G101:
+          entropy_threshold: "80.0"
+          ignore_entropy: false
+          pattern: (?i)example
+          per_char_threshold: "3.0"
+          truncate: "32"
+        G104:
+          fmt:
+            - Fscanf
+        G111:
+          pattern: custom\.Dir\(\)
+        G301: "0750"
+        G302: "0600"
+        G306: "0600"
+        global:
+          '#nosec': '#my-custom-nosec'
+          audit: true
+          nosec: true
+          show-ignored: true
+      concurrency: 12

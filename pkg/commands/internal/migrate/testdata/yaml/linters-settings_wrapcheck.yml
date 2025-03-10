@@ -1,0 +1,30 @@
+issues:
+  # Only to not generate unrelated elements inside golden.
+  exclude-use-default: false
+  # Only to not generate unrelated elements inside golden.
+  exclude-generated: strict
+  # Only to not generate unrelated elements inside golden.
+  exclude-dirs-use-default: false
+
+linters-settings:
+  wrapcheck:
+    extra-ignore-sigs:
+      - .CustomError(
+      - .SpecificWrap(
+    ignoreSigs:
+      - .Errorf(
+      - errors.New(
+      - errors.Unwrap(
+      - errors.Join(
+      - .Wrap(
+      - .Wrapf(
+      - .WithMessage(
+      - .WithMessagef(
+      - .WithStack(
+    ignoreSigRegexps:
+      - \.New.*Error\(
+    ignorePackageGlobs:
+      - encoding/*
+      - github.com/pkg/*
+    ignoreInterfaceRegexps:
+      - ^(?i)c(?-i)ach(ing|e)

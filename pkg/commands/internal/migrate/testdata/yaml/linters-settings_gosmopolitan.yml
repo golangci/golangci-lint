@@ -1,0 +1,24 @@
+issues:
+  # Only to not generate unrelated elements inside golden.
+  exclude-use-default: false
+  # Only to not generate unrelated elements inside golden.
+  exclude-generated: strict
+  # Only to not generate unrelated elements inside golden.
+  exclude-dirs-use-default: false
+
+linters-settings:
+  gosmopolitan:
+    allow-time-local: true
+    escape-hatches:
+      - 'github.com/nicksnyder/go-i18n/v2/i18n.Message'
+      - 'example.com/your/project/i18n/markers.Raw'
+      - 'example.com/your/project/i18n/markers.OK'
+      - 'example.com/your/project/i18n/markers.TODO'
+      - 'command-line-arguments.Simple'
+    ignore-tests: false
+    watch-for-scripts:
+      - Devanagari
+      - Han
+      - Hangul
+      - Hiragana
+      - Katakana

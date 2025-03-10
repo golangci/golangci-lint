@@ -1,0 +1,73 @@
+issues:
+  # Only to not generate unrelated elements inside golden.
+  exclude-use-default: false
+  # Only to not generate unrelated elements inside golden.
+  exclude-generated: strict
+  # Only to not generate unrelated elements inside golden.
+  exclude-dirs-use-default: false
+
+# case: enable + disable + presets
+linters:
+  enable:
+    - gofmt
+    - sqlclosecheck
+    - staticcheck
+    - stylecheck
+    - tagalign
+    - tagliatelle
+    - testableexamples
+    - testifylint
+    - testpackage
+    - thelper
+    - tparallel
+    - unconvert
+    - unparam
+    - unused
+    - usestdlibvars
+    - usetesting
+    - varnamelen
+    - wastedassign
+    - whitespace
+    - wrapcheck
+    - wsl
+    - zerologlint
+    - mycustomlinter1
+    - mycustomlinter2
+
+  disable:
+    - goimports
+    - asasalint
+    - asciicheck
+    - bidichk
+    - bodyclose
+    - canonicalheader
+    - containedctx
+    - contextcheck
+    - copyloopvar
+    - cyclop
+    - decorder
+    - depguard
+    - dogsled
+    - dupl
+    - dupword
+    - durationcheck
+    - deadcode # Deprecated
+    - execinquery # Deprecated
+    - exhaustivestruct # Deprecated
+    - exportloopref # Deprecated
+    - golint # Deprecated
+    - gomnd # Deprecated
+    - ifshort # Deprecated
+    - interfacer # Deprecated
+    - maligned # Deprecated
+    - nosnakecase # Deprecated
+    - scopelint # Deprecated
+    - structcheck # Deprecated
+    - tenv # Deprecated
+    - varcheck # Deprecated
+    - mycustomlinter3
+    - mycustomlinter4
+
+  presets:
+    - format
+    - module

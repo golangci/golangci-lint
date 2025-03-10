@@ -1,0 +1,14 @@
+version: "2"
+linters:
+  settings:
+    errorlint:
+      errorf: false
+      errorf-multi: false
+      asserts: false
+      comparison: false
+      allowed-errors:
+        - err: io.EOF
+          fun: example.com/pkg.Read
+      allowed-errors-wildcard:
+        - err: example.com/pkg.ErrMagic
+          fun: example.com/pkg.Magic

@@ -1,0 +1,7 @@
+version: "2"
+linters:
+  exclusions:
+    generated: disable
+formatters:
+  exclusions:
+    generated: disable
