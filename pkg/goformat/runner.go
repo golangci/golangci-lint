@@ -194,9 +194,6 @@ func skipDir(name string) bool {
 	case "vendor", "testdata", "node_modules":
 		return true
 
-	case "third_party", "builtin": // For compatibility with `exclude-dirs-use-default`.
-		return true
-
 	default:
 		return strings.HasPrefix(name, ".")
 	}
