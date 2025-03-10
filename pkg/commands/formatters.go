@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"encoding/json"
 	"fmt"
 
 	"github.com/fatih/color"
@@ -14,8 +15,14 @@ import (
 	"github.com/golangci/golangci-lint/pkg/logutils"
 )
 
+type formattersHelp struct {
+	Enabled  []formatterHelp
+	Disabled []formatterHelp
+}
+
 type formattersOptions struct {
 	config.LoaderOptions
+	JSON bool
 }
 
 type formattersCommand struct {
@@ -53,6 +60,8 @@ func newFormattersCommand(logger logutils.Log) *formattersCommand {
 
 	setupConfigFileFlagSet(fs, &c.opts.LoaderOptions)
 	setupLintersFlagSet(c.viper, fs)
+
+	fs.BoolVar(&c.opts.JSON, "json", false, color.GreenString("Display as JSON"))
 
 	c.cmd = formattersCmd
 
@@ -103,8 +112,23 @@ func (c *formattersCommand) execute(_ *cobra.Command, _ []string) error {
 		}
 	}
 
+	if c.opts.JSON {
+		formatters := formattersHelp{}
+
+		for _, lc := range enabledFormatters {
+			formatters.Enabled = append(formatters.Enabled, newFormatterHelp(lc))
+		}
+
+		for _, lc := range disabledFormatters {
+			formatters.Disabled = append(formatters.Disabled, newFormatterHelp(lc))
+		}
+
+		return json.NewEncoder(c.cmd.OutOrStdout()).Encode(formatters)
+	}
+
 	color.Green("Enabled by your configuration formatters:\n")
 	printFormatters(enabledFormatters)
+
 	color.Red("\nDisabled by your configuration formatters:\n")
 	printFormatters(disabledFormatters)
 

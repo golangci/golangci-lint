@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"encoding/json"
 	"fmt"
 
 	"github.com/fatih/color"
@@ -14,8 +15,14 @@ import (
 	"github.com/golangci/golangci-lint/pkg/logutils"
 )
 
+type lintersHelp struct {
+	Enabled  []linterHelp
+	Disabled []linterHelp
+}
+
 type lintersOptions struct {
 	config.LoaderOptions
+	JSON bool
 }
 
 type lintersCommand struct {
@@ -54,6 +61,8 @@ func newLintersCommand(logger logutils.Log) *lintersCommand {
 	setupConfigFileFlagSet(fs, &c.opts.LoaderOptions)
 	setupLintersFlagSet(c.viper, fs)
 
+	fs.BoolVar(&c.opts.JSON, "json", false, color.GreenString("Display as JSON"))
+
 	c.cmd = lintersCmd
 
 	return c
@@ -85,7 +94,7 @@ func (c *lintersCommand) execute(_ *cobra.Command, _ []string) error {
 	}
 
 	var enabledLinters []*linter.Config
-	var disabledLCs []*linter.Config
+	var disabledLinters []*linter.Config
 
 	for _, lc := range c.dbManager.GetAllSupportedLinterConfigs() {
 		if lc.Internal {
@@ -97,16 +106,31 @@ func (c *lintersCommand) execute(_ *cobra.Command, _ []string) error {
 		}
 
 		if enabledLintersMap[lc.Name()] == nil {
-			disabledLCs = append(disabledLCs, lc)
+			disabledLinters = append(disabledLinters, lc)
 		} else {
 			enabledLinters = append(enabledLinters, lc)
 		}
 	}
 
+	if c.opts.JSON {
+		formatters := lintersHelp{}
+
+		for _, lc := range enabledLinters {
+			formatters.Enabled = append(formatters.Enabled, newLinterHelp(lc))
+		}
+
+		for _, lc := range disabledLinters {
+			formatters.Disabled = append(formatters.Disabled, newLinterHelp(lc))
+		}
+
+		return json.NewEncoder(c.cmd.OutOrStdout()).Encode(formatters)
+	}
+
 	color.Green("Enabled by your configuration linters:\n")
 	printLinters(enabledLinters)
+
 	color.Red("\nDisabled by your configuration linters:\n")
-	printLinters(disabledLCs)
+	printLinters(disabledLinters)
 
 	return nil
 }

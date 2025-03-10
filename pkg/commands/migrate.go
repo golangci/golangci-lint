@@ -134,7 +134,7 @@ func (c *migrateCommand) execute(_ *cobra.Command, _ []string) error {
 
 func (c *migrateCommand) preRunE(cmd *cobra.Command, _ []string) error {
 	switch strings.ToLower(c.opts.format) {
-	case "", "yml", "yaml", "toml", "json": //nolint:goconst // Constants are useless in this context.
+	case "", "yml", "yaml", "toml", "json":
 		// Valid format.
 	default:
 		return fmt.Errorf("unsupported format: %s", c.opts.format)
