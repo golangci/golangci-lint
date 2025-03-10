@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/charmbracelet/lipgloss"
 	"github.com/fatih/color"
 	"github.com/santhosh-tekuri/jsonschema/v6"
 	"github.com/spf13/cobra"
@@ -126,6 +127,8 @@ func (c *migrateCommand) execute(_ *cobra.Command, _ []string) error {
 
 	c.log.Infof("Migration done: %s", dstPath)
 
+	callForAction(c.cmd)
+
 	return nil
 }
 
@@ -217,4 +220,23 @@ func saveNewConfiguration(cfg any, dstPath string) error {
 	defer func() { _ = dstFile.Close() }()
 
 	return parser.Encode(cfg, dstFile)
+}
+
+func callForAction(cmd *cobra.Command) {
+	pStyle := lipgloss.NewStyle().
+		Padding(1).
+		BorderStyle(lipgloss.RoundedBorder()).
+		BorderForeground(lipgloss.Color("161")).
+		Align(lipgloss.Center)
+
+	hStyle := lipgloss.NewStyle().Bold(true)
+
+	s := fmt.Sprintln(hStyle.Render("We need you!"))
+	s += `
+Donations help fund the ongoing development and maintenance of this tool.
+If golangci-lint has been useful to you, please consider contributing.
+
+Donate now: https://donate.golangci.org`
+
+	cmd.Println(pStyle.Render(s))
 }
