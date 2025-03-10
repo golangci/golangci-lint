@@ -18,7 +18,7 @@ func toFormatters(old *versionone.Config) versiontwo.Formatters {
 	}
 
 	if old.Issues.UseDefaultExcludeDirs == nil || ptr.Deref(old.Issues.UseDefaultExcludeDirs) {
-		paths = append(paths, "examples$")
+		paths = append(paths, "third_party$", "builtin$", "examples$")
 	}
 
 	paths = append(paths, toFormattersPathsFromRules(old.Issues)...)

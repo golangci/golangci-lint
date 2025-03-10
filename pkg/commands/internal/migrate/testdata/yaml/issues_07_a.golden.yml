@@ -8,4 +8,6 @@ linters:
 formatters:
   exclusions:
     paths:
+      - third_party$
+      - builtin$
       - examples$

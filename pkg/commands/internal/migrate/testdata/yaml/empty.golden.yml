@@ -15,4 +15,6 @@ formatters:
   exclusions:
     generated: lax
     paths:
+      - third_party$
+      - builtin$
       - examples$
