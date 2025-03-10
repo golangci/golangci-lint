@@ -37,11 +37,6 @@ func NewRunner(log logutils.Log, cfg *config.Config, goenv *goutil.Env,
 	lineCache *fsutils.LineCache, fileCache *fsutils.FileCache,
 	dbManager *lintersdb.Manager, lintCtx *linter.Context,
 ) (*Runner, error) {
-	// Beware that some processors need to add the path prefix when working with paths
-	// because they get invoked before the path prefixer (exclude and severity rules)
-	// or process other paths (skip files).
-	files := fsutils.NewFiles(lineCache, cfg.Output.PathPrefix)
-
 	pathRelativity, err := processors.NewPathRelativity(log, cfg.GetBasePath())
 	if err != nil {
 		return nil, fmt.Errorf("error creating path relativity processor: %w", err)
@@ -98,7 +93,7 @@ func NewRunner(log logutils.Log, cfg *config.Config, goenv *goutil.Env,
 			// Must be before exclude because users see already marked output and configure excluding by it.
 			processors.NewIdentifierMarker(),
 
-			processors.NewExclusionRules(log.Child(logutils.DebugKeyExclusionRules), files,
+			processors.NewExclusionRules(log.Child(logutils.DebugKeyExclusionRules), lineCache,
 				&cfg.Linters.Exclusions),
 
 			processors.NewNolintFilter(log.Child(logutils.DebugKeyNolintFilter), dbManager, enabledLinters),
@@ -117,7 +112,7 @@ func NewRunner(log logutils.Log, cfg *config.Config, goenv *goutil.Env,
 			// Now we can modify the issues for output.
 			processors.NewSourceCode(lineCache, log.Child(logutils.DebugKeySourceCode)),
 			processors.NewPathShortener(),
-			processors.NewSeverity(log.Child(logutils.DebugKeySeverityRules), files, &cfg.Severity),
+			processors.NewSeverity(log.Child(logutils.DebugKeySeverityRules), lineCache, &cfg.Severity),
 			processors.NewPathPrettifier(log, cfg.Output.PathPrefix),
 			processors.NewSortResults(&cfg.Output),
 		},
