@@ -158,4 +158,7 @@ jobs:
       - run: ./golangci-lint linters
       - run: ./golangci-lint formatters
       - run: ./golangci-lint version
-      - run: ./golangci-lint version --format json
+      - run: ./golangci-lint version --short
+      - run: ./golangci-lint version --debug
+      - run: ./golangci-lint version --json
+      - run: ./golangci-lint version --json --debug
