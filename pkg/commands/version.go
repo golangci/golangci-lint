@@ -6,17 +6,17 @@ import (
 	"io"
 	"os"
 	"runtime/debug"
-	"strings"
 
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 )
 
 type BuildInfo struct {
-	GoVersion string `json:"goVersion"`
-	Version   string `json:"version"`
-	Commit    string `json:"commit"`
-	Date      string `json:"date"`
+	GoVersion string           `json:"goVersion"`
+	Version   string           `json:"version"`
+	Commit    string           `json:"commit"`
+	Date      string           `json:"date"`
+	BuildInfo *debug.BuildInfo `json:"buildInfo,omitempty"`
 }
 
 func (b BuildInfo) String() string {
@@ -24,14 +24,10 @@ func (b BuildInfo) String() string {
 		b.Version, b.GoVersion, b.Commit, b.Date)
 }
 
-type versionInfo struct {
-	Info      BuildInfo
-	BuildInfo *debug.BuildInfo
-}
-
 type versionOptions struct {
-	Format string
-	Debug  bool
+	Debug bool
+	JSON  bool
+	Short bool
 }
 
 type versionCommand struct {
@@ -55,8 +51,9 @@ func newVersionCommand(info BuildInfo) *versionCommand {
 	fs := versionCmd.Flags()
 	fs.SortFlags = false // sort them as they are defined here
 
-	fs.StringVar(&c.opts.Format, "format", "", color.GreenString("The version's format can be: 'short', 'json'"))
 	fs.BoolVar(&c.opts.Debug, "debug", false, color.GreenString("Add build information"))
+	fs.BoolVar(&c.opts.JSON, "json", false, color.GreenString("Display as JSON"))
+	fs.BoolVar(&c.opts.Short, "short", false, color.GreenString("Display only the version number"))
 
 	c.cmd = versionCmd
 
@@ -64,34 +61,26 @@ func newVersionCommand(info BuildInfo) *versionCommand {
 }
 
 func (c *versionCommand) execute(_ *cobra.Command, _ []string) error {
+	var info *debug.BuildInfo
 	if c.opts.Debug {
-		info, ok := debug.ReadBuildInfo()
-		if !ok {
-			return nil
-		}
-
-		switch strings.ToLower(c.opts.Format) {
-		case "json":
-			return json.NewEncoder(os.Stdout).Encode(versionInfo{
-				Info:      c.info,
-				BuildInfo: info,
-			})
-
-		default:
-			fmt.Println(info.String())
-			return printVersion(os.Stdout, c.info)
-		}
+		info, _ = debug.ReadBuildInfo()
 	}
 
-	switch strings.ToLower(c.opts.Format) {
-	case "short":
+	switch {
+	case c.opts.JSON:
+		c.info.BuildInfo = info
+
+		return json.NewEncoder(os.Stdout).Encode(c.info)
+	case c.opts.Short:
 		fmt.Println(c.info.Version)
+
 		return nil
 
-	case "json":
-		return json.NewEncoder(os.Stdout).Encode(c.info)
-
 	default:
+		if info != nil {
+			fmt.Println(info.String())
+		}
+
 		return printVersion(os.Stdout, c.info)
 	}
 }

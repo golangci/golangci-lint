@@ -24,6 +24,16 @@ type formatterHelp struct {
 	OriginalURL string `json:"originalURL,omitempty"`
 }
 
+func newFormatterHelp(lc *linter.Config) formatterHelp {
+	return formatterHelp{
+		Name:        lc.Name(),
+		Desc:        formatDescription(lc.Linter.Desc()),
+		Deprecated:  lc.IsDeprecated(),
+		Since:       lc.Since,
+		OriginalURL: lc.OriginalURL,
+	}
+}
+
 func (c *helpCommand) formattersPreRunE(_ *cobra.Command, _ []string) error {
 	// The command doesn't depend on the real configuration.
 	dbManager, err := lintersdb.NewManager(c.log.Child(logutils.DebugKeyLintersDB), config.NewDefault(), lintersdb.NewLinterBuilder())
@@ -58,13 +68,7 @@ func (c *helpCommand) formattersPrintJSON() error {
 			continue
 		}
 
-		formatters = append(formatters, formatterHelp{
-			Name:        lc.Name(),
-			Desc:        formatDescription(lc.Linter.Desc()),
-			Deprecated:  lc.IsDeprecated(),
-			Since:       lc.Since,
-			OriginalURL: lc.OriginalURL,
-		})
+		formatters = append(formatters, newFormatterHelp(lc))
 	}
 
 	return json.NewEncoder(c.cmd.OutOrStdout()).Encode(formatters)

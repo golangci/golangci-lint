@@ -28,6 +28,25 @@ type linterHelp struct {
 	OriginalURL string   `json:"originalURL,omitempty"`
 }
 
+func newLinterHelp(lc *linter.Config) linterHelp {
+	groups := []string{config.GroupAll}
+
+	if !lc.IsSlowLinter() {
+		groups = append(groups, config.GroupFast)
+	}
+
+	return linterHelp{
+		Name:        lc.Name(),
+		Desc:        formatDescription(lc.Linter.Desc()),
+		Groups:      slices.Concat(groups, slices.Collect(maps.Keys(lc.Groups))),
+		Fast:        !lc.IsSlowLinter(),
+		AutoFix:     lc.CanAutoFix,
+		Deprecated:  lc.IsDeprecated(),
+		Since:       lc.Since,
+		OriginalURL: lc.OriginalURL,
+	}
+}
+
 func (c *helpCommand) lintersPreRunE(_ *cobra.Command, _ []string) error {
 	// The command doesn't depend on the real configuration.
 	dbManager, err := lintersdb.NewManager(c.log.Child(logutils.DebugKeyLintersDB), config.NewDefault(), lintersdb.NewLinterBuilder())
@@ -62,22 +81,7 @@ func (c *helpCommand) lintersPrintJSON() error {
 			continue
 		}
 
-		groups := []string{config.GroupAll}
-
-		if !lc.IsSlowLinter() {
-			groups = append(groups, config.GroupFast)
-		}
-
-		linters = append(linters, linterHelp{
-			Name:        lc.Name(),
-			Desc:        formatDescription(lc.Linter.Desc()),
-			Groups:      slices.Concat(groups, slices.Collect(maps.Keys(lc.Groups))),
-			Fast:        !lc.IsSlowLinter(),
-			AutoFix:     lc.CanAutoFix,
-			Deprecated:  lc.IsDeprecated(),
-			Since:       lc.Since,
-			OriginalURL: lc.OriginalURL,
-		})
+		linters = append(linters, newLinterHelp(lc))
 	}
 
 	return json.NewEncoder(c.cmd.OutOrStdout()).Encode(linters)
