@@ -1238,27 +1238,25 @@ linters:
           # Define here regexp type values.
           # for example:
           AUTHOR: .*@mycompany\.com
-      # The template use for checking.
+      # The template used for checking.
+      # Put here copyright header template for source code files
+      # Note: {{ YEAR }} is a builtin value that returns the year relative to the current machine time.
       # Default: ""
       template: |-
-        # Put here copyright header template for source code files
-        # For example:
-        # Note: {{ YEAR }} is a builtin value that returns the year relative to the current machine time.
-        #
-        # {{ AUTHOR }} {{ COMPANY }} {{ YEAR }}
-        # SPDX-License-Identifier: Apache-2.0
-  
-        # Licensed under the Apache License, Version 2.0 (the "License");
-        # you may not use this file except in compliance with the License.
-        # You may obtain a copy of the License at:
-  
-        #   http://www.apache.org/licenses/LICENSE-2.0
-  
-        # Unless required by applicable law or agreed to in writing, software
-        # distributed under the License is distributed on an "AS IS" BASIS,
-        # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-        # See the License for the specific language governing permissions and
-        # limitations under the License.
+        {{ AUTHOR }} {{ COMPANY }} {{ YEAR }}
+        SPDX-License-Identifier: Apache-2.0
+        
+        Licensed under the Apache License, Version 2.0 (the "License");
+        you may not use this file except in compliance with the License.
+        You may obtain a copy of the License at:
+        
+          http://www.apache.org/licenses/LICENSE-2.0
+        
+        Unless required by applicable law or agreed to in writing, software
+        distributed under the License is distributed on an "AS IS" BASIS,
+        WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+        See the License for the specific language governing permissions and
+        limitations under the License.
       # As alternative of directive 'template', you may put the path to file with the template source.
       # Useful if you need to load the template from a specific file.
       # By default, if a path is relative, it is relative to the directory where the golangci-lint command is executed.
@@ -2153,6 +2151,12 @@ linters:
       # Default: false
       enable-all-rules: true
 
+      # Enable validation of comment directives.
+      # See https://github.com/mgechev/revive#comment-directives
+      directives:
+        - name: specify-disable-reason
+          severity: error
+
       # Sets the default failure confidence.
       # This means that linting errors with less than 0.8 confidence will be ignored.
       # Default: 0.8
@@ -2341,6 +2345,8 @@ linters:
           severity: warning
           disabled: false
           exclude: [""]
+          arguments:
+            - "xerrors.New"
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#errorf
         - name: errorf
           severity: warning
@@ -4144,7 +4150,7 @@ output:
 
 # Options for analysis running.
 run:
-  # Timeout for total work, e.g. 30s, 5m.
+  # Timeout for total work, e.g. 30s, 5m, 5m30s.
   # If the value is lower or equal to 0, the timeout is disabled.
   # Default: 0 (disabled)
   timeout: 5m

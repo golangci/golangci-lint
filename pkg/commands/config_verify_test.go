@@ -60,6 +60,22 @@ func Test_createSchemaURL(t *testing.T) {
 			},
 			expected: "https://raw.githubusercontent.com/golangci/golangci-lint/cd8b11773c6c1f595e8eb98c0d4310af20ae20df/jsonschema/golangci.next.jsonschema.json",
 		},
+		{
+			desc: "v0 version",
+			info: BuildInfo{
+				Version: "v0.0.0-20250213211019-0a603e49e5e9",
+				Commit:  `(0a603e49e5e9870f5f9f2035bcbe42cd9620a9d5, modified: "false", mod sum: "123")`,
+			},
+			expected: "https://raw.githubusercontent.com/golangci/golangci-lint/0a603e49e5e9870f5f9f2035bcbe42cd9620a9d5/jsonschema/golangci.next.jsonschema.json",
+		},
+		{
+			desc: "dirty",
+			info: BuildInfo{
+				Version: "v1.64.6-0.20250225205237-3eecab1ebde9+dirty",
+				Commit:  `(3eecab1ebde9, modified: "false", mod sum: "123")`,
+			},
+			expected: "https://golangci-lint.run/jsonschema/golangci.v1.64.jsonschema.json",
+		},
 	}
 
 	for _, test := range testCases {
@@ -87,9 +103,17 @@ func Test_createSchemaURL_error(t *testing.T) {
 		expected string
 	}{
 		{
-			desc: "commit unknown",
+			desc: "unknown commit",
 			info: BuildInfo{
 				Commit: "unknown",
+			},
+			expected: "unknown commit information",
+		},
+		{
+			desc: "detailed unknown commit",
+			info: BuildInfo{
+				Version: "",
+				Commit:  `(unknown, modified: ?, mod sum: "")`,
 			},
 			expected: "unknown commit information",
 		},

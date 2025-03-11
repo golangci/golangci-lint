@@ -25,6 +25,18 @@ Also, the action creates GitHub annotations for found issues (you don't need to 
 
 ![GitHub annotations of the action](./annotations.png)
 
+### GitLab CI
+
+GitLab provides a [guide for integrating golangci-lint into the Code Quality widget](https://docs.gitlab.com/ci/testing/code_quality/#golangci-lint).
+A simple quickstart is their [CI component](https://gitlab.com/explore/catalog/components/code-quality-oss/codequality-os-scanners-integration), which can be used like this:
+
+```yaml .gitlab-ci.yml
+include:
+  - component: $CI_SERVER_FQDN/components/code-quality-oss/codequality-os-scanners-integration/golangci@1.0.1
+```
+
+Note that you [can only reference components in the same GitLab instance as your project](https://docs.gitlab.com/ci/components/#use-a-component)
+
 ### Other CI
 
 Here is the other way to install golangci-lint:

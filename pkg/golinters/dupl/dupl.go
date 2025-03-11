@@ -5,7 +5,7 @@ import (
 	"go/token"
 	"sync"
 
-	duplAPI "github.com/golangci/dupl"
+	duplAPI "github.com/golangci/dupl/lib"
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/pkg/config"
@@ -45,7 +45,7 @@ func New(settings *config.DuplSettings) *goanalysis.Linter {
 
 	return goanalysis.NewLinter(
 		linterName,
-		"Tool for code clone detection",
+		"Detects duplicate fragments of code.",
 		[]*analysis.Analyzer{analyzer},
 		nil,
 	).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {

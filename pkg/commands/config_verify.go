@@ -70,33 +70,58 @@ func createSchemaURL(flags *pflag.FlagSet, buildInfo BuildInfo) (string, error) 
 			return "", fmt.Errorf("parse version: %w", err)
 		}
 
-		schemaURL = fmt.Sprintf("https://golangci-lint.run/jsonschema/golangci.v%d.%d.jsonschema.json",
-			version.Segments()[0], version.Segments()[1])
-
-	case buildInfo.Commit != "" && buildInfo.Commit != "?":
-		if buildInfo.Commit == "unknown" {
-			return "", errors.New("unknown commit information")
-		}
-
-		commit := buildInfo.Commit
-
-		if strings.HasPrefix(commit, "(") {
-			c, _, ok := strings.Cut(strings.TrimPrefix(commit, "("), ",")
-			if !ok {
-				return "", errors.New("commit information not found")
+		if version.Core().Equal(hcversion.Must(hcversion.NewVersion("v0.0.0"))) {
+			commit, err := extractCommitHash(buildInfo)
+			if err != nil {
+				return "", err
 			}
 
-			commit = c
+			return fmt.Sprintf("https://raw.githubusercontent.com/golangci/golangci-lint/%s/jsonschema/golangci.next.jsonschema.json",
+				commit), nil
 		}
 
-		schemaURL = fmt.Sprintf("https://raw.githubusercontent.com/golangci/golangci-lint/%s/jsonschema/golangci.next.jsonschema.json",
-			commit)
+		return fmt.Sprintf("https://golangci-lint.run/jsonschema/golangci.v%d.%d.jsonschema.json",
+			version.Segments()[0], version.Segments()[1]), nil
+
+	case buildInfo.Commit != "" && buildInfo.Commit != "?":
+		commit, err := extractCommitHash(buildInfo)
+		if err != nil {
+			return "", err
+		}
+
+		return fmt.Sprintf("https://raw.githubusercontent.com/golangci/golangci-lint/%s/jsonschema/golangci.next.jsonschema.json",
+			commit), nil
 
 	default:
 		return "", errors.New("version not found")
 	}
+}
 
-	return schemaURL, nil
+func extractCommitHash(buildInfo BuildInfo) (string, error) {
+	if buildInfo.Commit == "" || buildInfo.Commit == "?" {
+		return "", errors.New("empty commit information")
+	}
+
+	if buildInfo.Commit == "unknown" {
+		return "", errors.New("unknown commit information")
+	}
+
+	commit := buildInfo.Commit
+
+	if strings.HasPrefix(commit, "(") {
+		c, _, ok := strings.Cut(strings.TrimPrefix(commit, "("), ",")
+		if !ok {
+			return "", errors.New("commit information not found")
+		}
+
+		commit = c
+	}
+
+	if commit == "unknown" {
+		return "", errors.New("unknown commit information")
+	}
+
+	return commit, nil
 }
 
 func validateConfiguration(schemaPath, targetFile string) error {

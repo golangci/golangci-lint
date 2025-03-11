@@ -136,6 +136,10 @@ func evaluateBuildTags(tb testing.TB, line string) bool {
 			return true
 		}
 
+		if tag == runtime.GOARCH {
+			return true
+		}
+
 		if buildTagGoVersion(tag) {
 			return true
 		}
