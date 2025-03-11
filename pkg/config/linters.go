@@ -50,7 +50,7 @@ func (l *Linters) validateNoFormattersEnabled() error {
 }
 
 func (l *Linters) validateNoFormattersDisabled() error {
-	for _, n := range l.Enable {
+	for _, n := range l.Disable {
 		if slices.Contains(getAllFormatterNames(), n) {
 			return fmt.Errorf("%s is a formatter", n)
 		}
