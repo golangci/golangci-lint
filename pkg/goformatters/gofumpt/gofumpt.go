@@ -37,10 +37,5 @@ func (f *Formatter) Format(_ string, src []byte) ([]byte, error) {
 }
 
 func getLangVersion(v string) string {
-	if v == "" {
-		// TODO: defaults to "1.15", in the future (v2) must be removed.
-		return "go1.15"
-	}
-
 	return "go" + strings.TrimPrefix(v, "go")
 }

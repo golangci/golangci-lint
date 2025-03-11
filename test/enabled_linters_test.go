@@ -49,12 +49,12 @@ func TestEnabledLinters(t *testing.T) {
 			enabledLinters: getEnabledByDefaultLintersExcept(t, "govet"),
 		},
 		{
-			name: "enable gofmt in cmd and enable revive in config",
-			args: []string{"-Egofmt"},
+			name: "enable revive in cmd and enable gofmt in config",
+			args: []string{"-Erevive"},
 			cfg: `
-			linters:
+			formatters:
 				enable:
-					- revive
+					- gofmt
 			`,
 			enabledLinters: getEnabledByDefaultLintersWith(t, "revive", "gofmt"),
 		},

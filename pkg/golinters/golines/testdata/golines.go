@@ -1,4 +1,4 @@
-//golangcitest:args -Egolines
+//golangcitest:config_path testdata/golines.yml
 package testdata
 
 import "fmt"

@@ -199,4 +199,10 @@ formatters:
     goimports:
       local-prefixes:
         - github.com/golangci/golangci-lint
-
+  exclusions:
+    paths:
+      - test/testdata_etc # test files
+      - internal/go # extracted from Go code
+      - internal/x # extracted from x/tools code
+      - pkg/goformatters/gci/internal # extracted from gci code
+      - pkg/goanalysis/runner_checker.go # extracted from x/tools code

@@ -1,5 +1,10 @@
 package config
 
+import (
+	"fmt"
+	"slices"
+)
+
 const (
 	GroupStandard = "standard"
 	GroupAll      = "all"
@@ -21,6 +26,8 @@ type Linters struct {
 func (l *Linters) Validate() error {
 	validators := []func() error{
 		l.Exclusions.Validate,
+		l.validateNoFormattersEnabled,
+		l.validateNoFormattersDisabled,
 	}
 
 	for _, v := range validators {
@@ -30,4 +37,28 @@ func (l *Linters) Validate() error {
 	}
 
 	return nil
+}
+
+func (l *Linters) validateNoFormattersEnabled() error {
+	for _, n := range l.Enable {
+		if slices.Contains(getAllFormatterNames(), n) {
+			return fmt.Errorf("%s is a formatter", n)
+		}
+	}
+
+	return nil
+}
+
+func (l *Linters) validateNoFormattersDisabled() error {
+	for _, n := range l.Disable {
+		if slices.Contains(getAllFormatterNames(), n) {
+			return fmt.Errorf("%s is a formatter", n)
+		}
+	}
+
+	return nil
+}
+
+func getAllFormatterNames() []string {
+	return []string{"gci", "gofmt", "gofumpt", "goimports"}
 }

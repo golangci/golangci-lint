@@ -1,4 +1,4 @@
-//golangcitest:args -Egolines
+//golangcitest:config_path testdata/golines.yml
 //golangcitest:expected_exitcode 0
 package testdata
 

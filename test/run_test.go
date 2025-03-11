@@ -157,12 +157,6 @@ func TestCgoWithIssues(t *testing.T) {
 			expected: "SA5009: Printf format %t has arg #1 of wrong type",
 		},
 		{
-			desc:     "gofmt",
-			args:     []string{"--no-config", "--default=none", "-Egofmt"},
-			dir:      "cgo_with_issues",
-			expected: "File is not properly formatted (gofmt)",
-		},
-		{
 			desc:     "revive",
 			args:     []string{"--no-config", "--default=none", "-Erevive"},
 			dir:      "cgo_with_issues",
@@ -205,24 +199,6 @@ func TestLineDirective(t *testing.T) {
 			configPath: "testdata/linedirective/dupl.yml",
 			targetPath: "linedirective",
 			expected:   "21-23 lines are duplicate of `testdata/linedirective/hello.go:25-27` (dupl)",
-		},
-		{
-			desc: "gofmt",
-			args: []string{
-				"-Egofmt",
-				"--default=none",
-			},
-			targetPath: "linedirective",
-			expected:   "File is not properly formatted (gofmt)",
-		},
-		{
-			desc: "goimports",
-			args: []string{
-				"-Egoimports",
-				"--default=none",
-			},
-			targetPath: "linedirective",
-			expected:   "File is not properly formatted (goimports)",
 		},
 		{
 			desc: "gomodguard",

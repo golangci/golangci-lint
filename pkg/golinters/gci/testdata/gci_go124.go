@@ -1,6 +1,6 @@
 //go:build go1.24
 
-//golangcitest:args -Egci
+//golangcitest:config_path testdata/gci_go124.yml
 //golangcitest:expected_exitcode 0
 package testdata
 

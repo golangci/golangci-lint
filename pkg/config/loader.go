@@ -167,9 +167,13 @@ func (l *Loader) handleEnableOnlyOption() error {
 
 	if len(only) > 0 {
 		l.cfg.Linters = Linters{
-			Enable:  only,
-			Default: GroupNone,
+			Default:    GroupNone,
+			Enable:     only,
+			Settings:   l.cfg.Linters.Settings,
+			Exclusions: l.cfg.Linters.Exclusions,
 		}
+
+		l.cfg.Formatters = Formatters{}
 	}
 
 	return nil

@@ -1,4 +1,3 @@
-//golangcitest:args -Egoimports
 //golangcitest:config_path testdata/goimports_local.yml
 package testdata
 
