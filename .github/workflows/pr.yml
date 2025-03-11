@@ -148,6 +148,7 @@ jobs:
 
       - run: ./golangci-lint config
       - run: ./golangci-lint config path
+      - run: ./golangci-lint config path --json
       # TODO(ldez) after v2: golangci.next.jsonschema.json -> golangci.jsonschema.json
       - run: ./golangci-lint config verify --schema jsonschema/golangci.next.jsonschema.json
 
