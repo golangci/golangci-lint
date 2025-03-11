@@ -6,7 +6,7 @@ import (
 	"io"
 	"strings"
 
-	"github.com/golangci/golangci-lint/pkg/result"
+	"github.com/golangci/golangci-lint/v2/pkg/result"
 )
 
 const templateContent = `<!doctype html>

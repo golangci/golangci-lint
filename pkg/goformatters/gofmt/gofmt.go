@@ -3,7 +3,7 @@ package gofmt
 import (
 	"github.com/golangci/gofmt/gofmt"
 
-	"github.com/golangci/golangci-lint/pkg/config"
+	"github.com/golangci/golangci-lint/v2/pkg/config"
 )
 
 const Name = "gofmt"

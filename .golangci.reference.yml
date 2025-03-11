@@ -1929,10 +1929,10 @@ linters-settings:
         # Comma-separated list of print function names to check (in addition to default, see `go tool vet help printf`).
         # Default: []
         funcs:
-          - (github.com/golangci/golangci-lint/pkg/logutils.Log).Infof
-          - (github.com/golangci/golangci-lint/pkg/logutils.Log).Warnf
-          - (github.com/golangci/golangci-lint/pkg/logutils.Log).Errorf
-          - (github.com/golangci/golangci-lint/pkg/logutils.Log).Fatalf
+          - (github.com/golangci/golangci-lint/v2/pkg/logutils.Log).Infof
+          - (github.com/golangci/golangci-lint/v2/pkg/logutils.Log).Warnf
+          - (github.com/golangci/golangci-lint/v2/pkg/logutils.Log).Errorf
+          - (github.com/golangci/golangci-lint/v2/pkg/logutils.Log).Fatalf
       shadow:
         # Whether to be strict about shadowing; can be noisy.
         # Default: false

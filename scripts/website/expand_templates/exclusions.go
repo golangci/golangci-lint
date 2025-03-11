@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"text/template"
 
-	"github.com/golangci/golangci-lint/scripts/website/types"
+	"github.com/golangci/golangci-lint/v2/scripts/website/types"
 )
 
 const exclusionTmpl = `{{- $tick := "` + "`" + `" -}}

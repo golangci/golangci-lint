@@ -1,7 +1,7 @@
 package processors
 
 import (
-	"github.com/golangci/golangci-lint/pkg/result"
+	"github.com/golangci/golangci-lint/v2/pkg/result"
 )
 
 const typeCheckName = "typecheck"

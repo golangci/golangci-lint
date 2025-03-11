@@ -110,10 +110,10 @@ linters:
       settings:
         printf:
           funcs:
-            - (github.com/golangci/golangci-lint/pkg/logutils.Log).Infof
-            - (github.com/golangci/golangci-lint/pkg/logutils.Log).Warnf
-            - (github.com/golangci/golangci-lint/pkg/logutils.Log).Errorf
-            - (github.com/golangci/golangci-lint/pkg/logutils.Log).Fatalf
+            - (github.com/golangci/golangci-lint/v2/pkg/logutils.Log).Infof
+            - (github.com/golangci/golangci-lint/v2/pkg/logutils.Log).Warnf
+            - (github.com/golangci/golangci-lint/v2/pkg/logutils.Log).Errorf
+            - (github.com/golangci/golangci-lint/v2/pkg/logutils.Log).Fatalf
       enable:
         - nilness
         - shadow
@@ -198,7 +198,7 @@ formatters:
           replacement: 'any'
     goimports:
       local-prefixes:
-        - github.com/golangci/golangci-lint
+        - github.com/golangci/golangci-lint/v2
   exclusions:
     paths:
       - test/testdata_etc # test files
