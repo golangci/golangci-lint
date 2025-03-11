@@ -90,9 +90,6 @@ func NewRunner(log logutils.Log, cfg *config.Config, goenv *goutil.Env,
 
 			processors.NewGeneratedFileFilter(cfg.Linters.Exclusions.Generated),
 
-			// Must be before exclude because users see already marked output and configure excluding by it.
-			processors.NewIdentifierMarker(),
-
 			processors.NewExclusionRules(log.Child(logutils.DebugKeyExclusionRules), lineCache,
 				&cfg.Linters.Exclusions),
 

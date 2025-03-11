@@ -365,7 +365,7 @@ func TestSortedResults(t *testing.T) {
 		Run().
 		ExpectExitCode(exitcodes.IssuesFound).ExpectOutputEq(
 		"testdata/sort_results/main.go:15:13: Error return value is not checked (errcheck)" + "\n" +
-			"testdata/sort_results/main.go:12:5: var `db` is unused (unused)" + "\n",
+			"testdata/sort_results/main.go:12:5: var db is unused (unused)" + "\n",
 	)
 }
 
