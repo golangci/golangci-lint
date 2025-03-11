@@ -64,7 +64,7 @@ func (p *GeneratedFileMatcher) IsGeneratedFile(filepath string, src any) (bool, 
 
 // isGeneratedFileLax reports whether the source file is generated code.
 // The function uses a bit laxer rules than isGeneratedFileStrict to match more generated code.
-// See https://github.com/golangci/golangci-lint/v2/issues/48 and https://github.com/golangci/golangci-lint/v2/issues/72.
+// See https://github.com/golangci/golangci-lint/issues/48 and https://github.com/golangci/golangci-lint/issues/72.
 func (p *GeneratedFileMatcher) isGeneratedFileLax(doc string) bool {
 	markers := []string{genCodeGenerated, genDoNotEdit, genAutoFile, genSwaggerCodegen}
 
