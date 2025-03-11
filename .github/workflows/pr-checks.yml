@@ -1,4 +1,4 @@
-name: CI
+name: Checks
 on:
   push:
     branches:
@@ -28,68 +28,8 @@ jobs:
           git diff --exit-code go.mod
           git diff --exit-code go.sum
 
-  # We already run the current golangci-lint in tests, but here we test
-  # our GitHub action with the latest stable golangci-lint.
-  golangci-lint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
-        with:
-          # https://github.com/actions/setup-go#supported-version-syntax
-          # ex:
-          # - 1.18beta1 -> 1.18.0-beta.1
-          # - 1.18rc1 -> 1.18.0-rc.1
-          go-version: ${{ env.GO_VERSION }}
-      # TODO(ldez): must add uncommented when golangci-lint-action@v7.0.0 (with golangci-lint v2 support) will be created.
-#      - name: lint
-#        uses: golangci/golangci-lint-action@v6.5.0
-#        with:
-#          version: latest
-
-  tests-on-windows:
-    needs: golangci-lint # run after golangci-lint action to not produce duplicated errors
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
-        with:
-          go-version: ${{ env.GO_VERSION }} # test only the latest go version to speed up CI
-      - name: Run tests
-        run: make.exe test
-
-  tests-on-macos:
-    needs: golangci-lint # run after golangci-lint action to not produce duplicated errors
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
-        with:
-          go-version: ${{ env.GO_VERSION }} # test only the latest go version to speed up CI
-      - name: Run tests
-        run: make test
-
-  tests-on-unix:
-    needs: golangci-lint # run after golangci-lint action to not produce duplicated errors
-    strategy:
-      matrix:
-        os:
-          - ubuntu-latest
-          - ubuntu-24.04-arm
-        golang:
-          - '1.23'
-          - '1.24'
-    runs-on: ${{ matrix.os }}
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
-        with:
-          go-version: ${{ matrix.golang }}
-      - name: Run tests
-        run: make test
-
   # Checks: GitHub action assets
-  check_generated:
+  check-generated:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -115,9 +55,8 @@ jobs:
       - name: Check installation script
         run: cat ./install.sh | sh -s -- -d -b "./install-golangci-lint"
 
-  # Note: the command `run` is tested by the previous steps (`make test`).
-  commands:
-    needs: golangci-lint
+  # Note: the command `run` is tested by the other workflows (`make test`).
+  check-commands:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
