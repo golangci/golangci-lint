@@ -89,6 +89,10 @@ func (c *fmtCommand) persistentPreRunE(cmd *cobra.Command, args []string) error 
 }
 
 func (c *fmtCommand) preRunE(_ *cobra.Command, _ []string) error {
+	if c.cfg.GetConfigDir() != "" && c.cfg.Version != "2" {
+		return fmt.Errorf("invalid version of the configuration: %q", c.cfg.Version)
+	}
+
 	metaFormatter, err := goformatters.NewMetaFormatter(c.log, &c.cfg.Formatters, &c.cfg.Run)
 	if err != nil {
 		return fmt.Errorf("failed to create meta-formatter: %w", err)
