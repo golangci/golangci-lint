@@ -3,9 +3,7 @@ name: Deploy Documentation
 on:
   push:
     branches:
-      - master
-      # TODO(ldez): remove master and uncomment the next line when v2 will be released.
-      # - main
+      - main
 
 jobs:
 
