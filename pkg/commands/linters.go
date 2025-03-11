@@ -113,17 +113,17 @@ func (c *lintersCommand) execute(_ *cobra.Command, _ []string) error {
 	}
 
 	if c.opts.JSON {
-		formatters := lintersHelp{}
+		linters := lintersHelp{}
 
 		for _, lc := range enabledLinters {
-			formatters.Enabled = append(formatters.Enabled, newLinterHelp(lc))
+			linters.Enabled = append(linters.Enabled, newLinterHelp(lc))
 		}
 
 		for _, lc := range disabledLinters {
-			formatters.Disabled = append(formatters.Disabled, newLinterHelp(lc))
+			linters.Disabled = append(linters.Disabled, newLinterHelp(lc))
 		}
 
-		return json.NewEncoder(c.cmd.OutOrStdout()).Encode(formatters)
+		return json.NewEncoder(c.cmd.OutOrStdout()).Encode(linters)
 	}
 
 	color.Green("Enabled by your configuration linters:\n")
