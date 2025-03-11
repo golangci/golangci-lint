@@ -3,11 +3,11 @@ package migrate
 import (
 	"slices"
 
-	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/ptr"
-	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/versionone"
-	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/versiontwo"
-	"github.com/golangci/golangci-lint/pkg/config"
-	"github.com/golangci/golangci-lint/pkg/result/processors"
+	"github.com/golangci/golangci-lint/v2/pkg/commands/internal/migrate/ptr"
+	"github.com/golangci/golangci-lint/v2/pkg/commands/internal/migrate/versionone"
+	"github.com/golangci/golangci-lint/v2/pkg/commands/internal/migrate/versiontwo"
+	"github.com/golangci/golangci-lint/v2/pkg/config"
+	"github.com/golangci/golangci-lint/v2/pkg/result/processors"
 )
 
 func toExclusions(old *versionone.Config) versiontwo.LinterExclusions {

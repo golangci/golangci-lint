@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/golangci/golangci-lint/pkg/fsutils"
+	"github.com/golangci/golangci-lint/v2/pkg/fsutils"
 )
 
 // Run encapsulates the config options for running the linter analysis.

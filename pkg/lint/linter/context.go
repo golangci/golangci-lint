@@ -5,10 +5,10 @@ import (
 
 	"golang.org/x/tools/go/packages"
 
-	"github.com/golangci/golangci-lint/internal/cache"
-	"github.com/golangci/golangci-lint/pkg/config"
-	"github.com/golangci/golangci-lint/pkg/goanalysis/load"
-	"github.com/golangci/golangci-lint/pkg/logutils"
+	"github.com/golangci/golangci-lint/v2/internal/cache"
+	"github.com/golangci/golangci-lint/v2/pkg/config"
+	"github.com/golangci/golangci-lint/v2/pkg/goanalysis/load"
+	"github.com/golangci/golangci-lint/v2/pkg/logutils"
 )
 
 type Context struct {

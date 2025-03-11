@@ -11,9 +11,9 @@ import (
 	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/viper"
 
-	"github.com/golangci/golangci-lint/pkg/exitcodes"
-	"github.com/golangci/golangci-lint/pkg/fsutils"
-	"github.com/golangci/golangci-lint/pkg/logutils"
+	"github.com/golangci/golangci-lint/v2/pkg/exitcodes"
+	"github.com/golangci/golangci-lint/v2/pkg/fsutils"
+	"github.com/golangci/golangci-lint/v2/pkg/logutils"
 )
 
 type BaseConfig interface {

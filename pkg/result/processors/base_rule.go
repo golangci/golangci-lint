@@ -3,10 +3,10 @@ package processors
 import (
 	"regexp"
 
-	"github.com/golangci/golangci-lint/pkg/config"
-	"github.com/golangci/golangci-lint/pkg/fsutils"
-	"github.com/golangci/golangci-lint/pkg/logutils"
-	"github.com/golangci/golangci-lint/pkg/result"
+	"github.com/golangci/golangci-lint/v2/pkg/config"
+	"github.com/golangci/golangci-lint/v2/pkg/fsutils"
+	"github.com/golangci/golangci-lint/v2/pkg/logutils"
+	"github.com/golangci/golangci-lint/v2/pkg/result"
 )
 
 type baseRule struct {

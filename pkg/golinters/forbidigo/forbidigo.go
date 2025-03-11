@@ -7,9 +7,9 @@ import (
 	"golang.org/x/tools/go/analysis"
 	"gopkg.in/yaml.v3"
 
-	"github.com/golangci/golangci-lint/pkg/config"
-	"github.com/golangci/golangci-lint/pkg/goanalysis"
-	"github.com/golangci/golangci-lint/pkg/logutils"
+	"github.com/golangci/golangci-lint/v2/pkg/config"
+	"github.com/golangci/golangci-lint/v2/pkg/goanalysis"
+	"github.com/golangci/golangci-lint/v2/pkg/logutils"
 )
 
 const linterName = "forbidigo"

@@ -8,8 +8,8 @@ import (
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 
-	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
-	"github.com/golangci/golangci-lint/pkg/logutils"
+	"github.com/golangci/golangci-lint/v2/pkg/lint/lintersdb"
+	"github.com/golangci/golangci-lint/v2/pkg/logutils"
 )
 
 type helpOptions struct {

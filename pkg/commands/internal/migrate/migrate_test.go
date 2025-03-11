@@ -11,9 +11,9 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/fakeloader"
-	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/parser"
-	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/versionone"
+	"github.com/golangci/golangci-lint/v2/pkg/commands/internal/migrate/fakeloader"
+	"github.com/golangci/golangci-lint/v2/pkg/commands/internal/migrate/parser"
+	"github.com/golangci/golangci-lint/v2/pkg/commands/internal/migrate/versionone"
 )
 
 type fakeFile struct {

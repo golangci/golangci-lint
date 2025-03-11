@@ -10,8 +10,8 @@ import (
 
 	"github.com/golangci/revgrep"
 
-	"github.com/golangci/golangci-lint/pkg/config"
-	"github.com/golangci/golangci-lint/pkg/result"
+	"github.com/golangci/golangci-lint/v2/pkg/config"
+	"github.com/golangci/golangci-lint/v2/pkg/result"
 )
 
 const envGolangciDiffProcessorPatch = "GOLANGCI_DIFF_PROCESSOR_PATCH"

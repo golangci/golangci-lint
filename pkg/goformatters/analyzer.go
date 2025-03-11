@@ -9,9 +9,9 @@ import (
 	"github.com/rogpeppe/go-internal/diff"
 	"golang.org/x/tools/go/analysis"
 
-	"github.com/golangci/golangci-lint/pkg/goanalysis"
-	"github.com/golangci/golangci-lint/pkg/goformatters/internal"
-	"github.com/golangci/golangci-lint/pkg/logutils"
+	"github.com/golangci/golangci-lint/v2/pkg/goanalysis"
+	"github.com/golangci/golangci-lint/v2/pkg/goformatters/internal"
+	"github.com/golangci/golangci-lint/v2/pkg/logutils"
 )
 
 // NewAnalyzer converts a [Formatter] to an [analysis.Analyzer].

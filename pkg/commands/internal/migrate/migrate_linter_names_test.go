@@ -5,8 +5,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/ptr"
-	"github.com/golangci/golangci-lint/pkg/commands/internal/migrate/versionone"
+	"github.com/golangci/golangci-lint/v2/pkg/commands/internal/migrate/ptr"
+	"github.com/golangci/golangci-lint/v2/pkg/commands/internal/migrate/versionone"
 )
 
 func Test_disableAllFilter(t *testing.T) {

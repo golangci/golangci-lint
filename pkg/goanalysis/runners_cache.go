@@ -11,9 +11,9 @@ import (
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/packages"
 
-	"github.com/golangci/golangci-lint/internal/cache"
-	"github.com/golangci/golangci-lint/pkg/lint/linter"
-	"github.com/golangci/golangci-lint/pkg/result"
+	"github.com/golangci/golangci-lint/v2/internal/cache"
+	"github.com/golangci/golangci-lint/v2/pkg/lint/linter"
+	"github.com/golangci/golangci-lint/v2/pkg/result"
 )
 
 func saveIssuesToCache(allPkgs []*packages.Package, pkgsFromCache map[*packages.Package]bool,

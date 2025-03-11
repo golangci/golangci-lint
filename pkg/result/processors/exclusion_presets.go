@@ -1,6 +1,6 @@
 package processors
 
-import "github.com/golangci/golangci-lint/pkg/config"
+import "github.com/golangci/golangci-lint/v2/pkg/config"
 
 var LinterExclusionPresets = map[string][]config.ExcludeRule{
 	config.ExclusionPresetComments: {
