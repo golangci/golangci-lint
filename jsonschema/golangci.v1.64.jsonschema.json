@@ -123,360 +123,6 @@
         "security"
       ]
     },
-    "staticcheck-checks": {
-      "enum": [
-        "*",
-        "all",
-        "SA*",
-        "-SA*",
-        "SA1*",
-        "-SA1*",
-        "SA1000",
-        "-SA1000",
-        "SA1001",
-        "-SA1001",
-        "SA1002",
-        "-SA1002",
-        "SA1003",
-        "-SA1003",
-        "SA1004",
-        "-SA1004",
-        "SA1005",
-        "-SA1005",
-        "SA1006",
-        "-SA1006",
-        "SA1007",
-        "-SA1007",
-        "SA1008",
-        "-SA1008",
-        "SA1010",
-        "-SA1010",
-        "SA1011",
-        "-SA1011",
-        "SA1012",
-        "-SA1012",
-        "SA1013",
-        "-SA1013",
-        "SA1014",
-        "-SA1014",
-        "SA1015",
-        "-SA1015",
-        "SA1016",
-        "-SA1016",
-        "SA1017",
-        "-SA1017",
-        "SA1018",
-        "-SA1018",
-        "SA1019",
-        "-SA1019",
-        "SA1020",
-        "-SA1020",
-        "SA1021",
-        "-SA1021",
-        "SA1023",
-        "-SA1023",
-        "SA1024",
-        "-SA1024",
-        "SA1025",
-        "-SA1025",
-        "SA1026",
-        "-SA1026",
-        "SA1027",
-        "-SA1027",
-        "SA1028",
-        "-SA1028",
-        "SA1029",
-        "-SA1029",
-        "SA1030",
-        "-SA1030",
-        "SA1031",
-        "-SA1031",
-        "SA1032",
-        "-SA1032",
-        "SA2*",
-        "-SA2*",
-        "SA2000",
-        "-SA2000",
-        "SA2001",
-        "-SA2001",
-        "SA2002",
-        "-SA2002",
-        "SA2003",
-        "-SA2003",
-        "SA3*",
-        "-SA3*",
-        "SA3000",
-        "-SA3000",
-        "SA3001",
-        "-SA3001",
-        "SA4*",
-        "-SA4*",
-        "SA4000",
-        "-SA4000",
-        "SA4001",
-        "-SA4001",
-        "SA4003",
-        "-SA4003",
-        "SA4004",
-        "-SA4004",
-        "SA4005",
-        "-SA4005",
-        "SA4006",
-        "-SA4006",
-        "SA4008",
-        "-SA4008",
-        "SA4009",
-        "-SA4009",
-        "SA4010",
-        "-SA4010",
-        "SA4011",
-        "-SA4011",
-        "SA4012",
-        "-SA4012",
-        "SA4013",
-        "-SA4013",
-        "SA4014",
-        "-SA4014",
-        "SA4015",
-        "-SA4015",
-        "SA4016",
-        "-SA4016",
-        "SA4017",
-        "-SA4017",
-        "SA4018",
-        "-SA4018",
-        "SA4019",
-        "-SA4019",
-        "SA4020",
-        "-SA4020",
-        "SA4021",
-        "-SA4021",
-        "SA4022",
-        "-SA4022",
-        "SA4023",
-        "-SA4023",
-        "SA4024",
-        "-SA4024",
-        "SA4025",
-        "-SA4025",
-        "SA4026",
-        "-SA4026",
-        "SA4027",
-        "-SA4027",
-        "SA4028",
-        "-SA4028",
-        "SA4029",
-        "-SA4029",
-        "SA4030",
-        "-SA4030",
-        "SA4031",
-        "-SA4031",
-        "SA4032",
-        "-SA4032",
-        "SA5*",
-        "-SA5*",
-        "SA5000",
-        "-SA5000",
-        "SA5001",
-        "-SA5001",
-        "SA5002",
-        "-SA5002",
-        "SA5003",
-        "-SA5003",
-        "SA5004",
-        "-SA5004",
-        "SA5005",
-        "-SA5005",
-        "SA5007",
-        "-SA5007",
-        "SA5008",
-        "-SA5008",
-        "SA5009",
-        "-SA5009",
-        "SA5010",
-        "-SA5010",
-        "SA5011",
-        "-SA5011",
-        "SA5012",
-        "-SA5012",
-        "SA6*",
-        "-SA6*",
-        "SA6000",
-        "-SA6000",
-        "SA6001",
-        "-SA6001",
-        "SA6002",
-        "-SA6002",
-        "SA6003",
-        "-SA6003",
-        "SA6005",
-        "-SA6005",
-        "SA6006",
-        "-SA6006",
-        "SA9*",
-        "-SA9*",
-        "SA9001",
-        "-SA9001",
-        "SA9002",
-        "-SA9002",
-        "SA9003",
-        "-SA9003",
-        "SA9004",
-        "-SA9004",
-        "SA9005",
-        "-SA9005",
-        "SA9006",
-        "-SA9006",
-        "SA9007",
-        "-SA9007",
-        "SA9008",
-        "-SA9008",
-        "SA9009",
-        "-SA9009",
-        "ST*",
-        "-ST*",
-        "ST1*",
-        "-ST1*",
-        "ST1000",
-        "-ST1000",
-        "ST1001",
-        "-ST1001",
-        "ST1003",
-        "-ST1003",
-        "ST1005",
-        "-ST1005",
-        "ST1006",
-        "-ST1006",
-        "ST1008",
-        "-ST1008",
-        "ST1011",
-        "-ST1011",
-        "ST1012",
-        "-ST1012",
-        "ST1013",
-        "-ST1013",
-        "ST1015",
-        "-ST1015",
-        "ST1016",
-        "-ST1016",
-        "ST1017",
-        "-ST1017",
-        "ST1018",
-        "-ST1018",
-        "ST1019",
-        "-ST1019",
-        "ST1020",
-        "-ST1020",
-        "ST1021",
-        "-ST1021",
-        "ST1022",
-        "-ST1022",
-        "ST1023",
-        "-ST1023",
-        "S*",
-        "-S*",
-        "S1*",
-        "-S1*",
-        "S1000",
-        "-S1000",
-        "S1001",
-        "-S1001",
-        "S1002",
-        "-S1002",
-        "S1003",
-        "-S1003",
-        "S1004",
-        "-S1004",
-        "S1005",
-        "-S1005",
-        "S1006",
-        "-S1006",
-        "S1007",
-        "-S1007",
-        "S1008",
-        "-S1008",
-        "S1009",
-        "-S1009",
-        "S1010",
-        "-S1010",
-        "S1011",
-        "-S1011",
-        "S1012",
-        "-S1012",
-        "S1016",
-        "-S1016",
-        "S1017",
-        "-S1017",
-        "S1018",
-        "-S1018",
-        "S1019",
-        "-S1019",
-        "S1020",
-        "-S1020",
-        "S1021",
-        "-S1021",
-        "S1023",
-        "-S1023",
-        "S1024",
-        "-S1024",
-        "S1025",
-        "-S1025",
-        "S1028",
-        "-S1028",
-        "S1029",
-        "-S1029",
-        "S1030",
-        "-S1030",
-        "S1031",
-        "-S1031",
-        "S1032",
-        "-S1032",
-        "S1033",
-        "-S1033",
-        "S1034",
-        "-S1034",
-        "S1035",
-        "-S1035",
-        "S1036",
-        "-S1036",
-        "S1037",
-        "-S1037",
-        "S1038",
-        "-S1038",
-        "S1039",
-        "-S1039",
-        "S1040",
-        "-S1040",
-        "QF*",
-        "-QF*",
-        "QF1*",
-        "-QF1*",
-        "QF1001",
-        "-QF1001",
-        "QF1002",
-        "-QF1002",
-        "QF1003",
-        "-QF1003",
-        "QF1004",
-        "-QF1004",
-        "QF1005",
-        "-QF1005",
-        "QF1006",
-        "-QF1006",
-        "QF1007",
-        "-QF1007",
-        "QF1008",
-        "-QF1008",
-        "QF1009",
-        "-QF1009",
-        "QF1010",
-        "-QF1010",
-        "QF1011",
-        "-QF1011",
-        "QF1012",
-        "-QF1012"
-      ]
-    },
     "gosec-rules": {
       "enum": [
         "G101",
@@ -678,40 +324,9 @@
         "header"
       ]
     },
-    "relative-path-modes": {
-      "enum": [
-        "gomod",
-        "gitroot",
-        "cfg",
-        "wd"
-      ]
-    },
-    "simple-format": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "path": {
-          "$ref": "#/definitions/formats-path",
-          "default": "stdout"
-        }
-      }
-    },
-    "formats-path" : {
-      "anyOf": [
-        {
-          "enum": [
-            "stdout",
-            "stderr"
-          ]
-        },
-        {
-          "type": "string"
-        }
-      ]
-    },
-    "linter-names": {
-      "$comment": "anyOf with enum is used to allow auto-completion of non-custom linters",
-      "description": "Usable linter names.",
+    "linters": {
+      "$comment": "anyOf with enum is used to allow auto completion of non-custom linters",
+      "description": "Linters usable.",
       "anyOf": [
         {
           "enum": [
@@ -741,6 +356,7 @@
             "forbidigo",
             "forcetypeassert",
             "funlen",
+            "gci",
             "ginkgolinter",
             "gocheckcompilerdirectives",
             "gochecknoglobals",
@@ -753,7 +369,10 @@
             "godot",
             "godox",
             "err113",
+            "gofmt",
+            "gofumpt",
             "goheader",
+            "goimports",
             "gomoddirectives",
             "gomodguard",
             "goprintffuncname",
@@ -827,19 +446,166 @@
         }
       ]
     },
-    "formatter-names": {
-      "description": "Usable formatter names.",
+    "relative-path-modes": {
       "enum": [
-        "gci",
-        "gofmt",
-        "gofumpt",
-        "goimports",
-        "golines"
+        "gomod",
+        "gitroot",
+        "cfg",
+        "wd"
       ]
+    }
+  },
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "run": {
+      "description": "Options for analysis running,",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "concurrency": {
+          "description": "Number of concurrent runners. Defaults to the number of available CPU cores.",
+          "type": "integer",
+          "minimum": 0,
+          "examples": [4]
+        },
+        "timeout": {
+          "description": "Timeout for the analysis.",
+          "type": "string",
+          "pattern": "^((\\d+h)?(\\d+m)?(\\d+(?:\\.\\d)?s)?|0)$",
+          "default": "1m",
+          "examples": ["30s", "5m", "5m30s"]
+        },
+        "issues-exit-code": {
+          "description": "Exit code when at least one issue was found.",
+          "type": "integer",
+          "default": 1
+        },
+        "tests": {
+          "description": "Enable inclusion of test files.",
+          "type": "boolean",
+          "default": true
+        },
+        "build-tags": {
+          "description": "List of build tags to pass to all linters.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "examples": [["mytag"]]
+        },
+        "modules-download-mode": {
+          "description": "Option to pass to \"go list -mod={option}\".\nSee \"go help modules\" for more information.",
+          "enum": ["mod", "readonly", "vendor"]
+        },
+        "allow-parallel-runners": {
+          "description": "Allow multiple parallel golangci-lint instances running. If disabled, golangci-lint acquires file lock on start.",
+          "type": "boolean",
+          "default": false
+        },
+        "allow-serial-runners": {
+          "description": "Allow multiple golangci-lint instances running, but serialize them around a lock.",
+          "type": "boolean",
+          "default": false
+        },
+        "go": {
+          "description": "Targeted Go version.",
+          "type": "string",
+          "default": "1.17"
+        },
+        "relative-path-mode": {
+          "description": "The mode used to evaluate relative paths.",
+          "type": "string",
+          "$ref": "#/definitions/relative-path-modes",
+          "default": "wd"
+        }
+      }
     },
-    "settings": {
-      "definitions": {
-        "dupwordSettings": {
+    "output": {
+      "description": "Output configuration options.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "formats": {
+          "description": "Output formats to use.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "path": {
+                "default": "stdout",
+                "anyOf": [
+                  {
+                    "enum": [ "stdout", "stderr" ]
+                  },
+                  {
+                    "type": "string"
+                  }
+                ]
+              },
+              "format": {
+                "default": "colored-line-number",
+                "enum": [
+                  "colored-line-number",
+                  "line-number",
+                  "json",
+                  "colored-tab",
+                  "tab",
+                  "html",
+                  "checkstyle",
+                  "code-climate",
+                  "junit-xml",
+                  "junit-xml-extended",
+                  "github-actions",
+                  "teamcity",
+                  "sarif"
+                ]
+              }
+            },
+            "required": ["format"]
+          }
+        },
+        "print-issued-lines": {
+          "description": "Print lines of code with issue.",
+          "type": "boolean",
+          "default": true
+        },
+        "print-linter-name": {
+          "description": "Print linter name in the end of issue text.",
+          "type": "boolean",
+          "default": true
+        },
+        "path-prefix": {
+          "description": "Add a prefix to the output file references.",
+          "type": "string",
+          "default": ""
+        },
+        "show-stats": {
+          "description": "Show statistics per linter.",
+          "type": "boolean",
+          "default": false
+        },
+        "sort-order": {
+          "type": "array",
+          "items": {
+            "enum": ["linter", "severity", "file"]
+          }
+        },
+        "sort-results": {
+          "description": "Sort results by: filepath, line and column.",
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "linters-settings": {
+      "description": "All available settings of specific linters.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "dupword": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -863,7 +629,7 @@
             }
           }
         },
-        "asasalintSettings": {
+        "asasalint": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -880,10 +646,15 @@
               "description": "To enable/disable the asasalint builtin exclusions of function names.",
               "type": "boolean",
               "default": true
+            },
+            "ignore-test": {
+              "description": "Ignore *_test.go files.",
+              "type": "boolean",
+              "default": false
             }
           }
         },
-        "bidichkSettings": {
+        "bidichk": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -934,10 +705,15 @@
             }
           }
         },
-        "cyclopSettings": {
+        "cyclop": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "skip-tests": {
+              "description": "Should the linter execute on test files as well",
+              "type": "boolean",
+              "default": false
+            },
             "max-complexity": {
               "description": "Max complexity the function can have",
               "type": "integer",
@@ -952,7 +728,7 @@
             }
           }
         },
-        "decorderSettings": {
+        "decorder": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -1000,7 +776,7 @@
             }
           }
         },
-        "depguardSettings": {
+        "depguard": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -1059,7 +835,7 @@
             }
           }
         },
-        "dogsledSettings": {
+        "dogsled": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -1071,7 +847,7 @@
             }
           }
         },
-        "duplSettings": {
+        "dupl": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -1083,7 +859,7 @@
             }
           }
         },
-        "errcheckSettings": {
+        "errcheck": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -1112,7 +888,7 @@
             }
           }
         },
-        "errchkjsonSettings": {
+        "errchkjson": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -1127,7 +903,7 @@
             }
           }
         },
-        "errorlintSettings": {
+        "errorlint": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -1183,7 +959,7 @@
             }
           }
         },
-        "exhaustiveSettings": {
+        "exhaustive": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -1195,6 +971,11 @@
                 "type": "string",
                 "examples": ["switch", "map"]
               }
+            },
+            "check-generated": {
+              "description": "Check switch statements in generated files",
+              "type": "boolean",
+              "default": false
             },
             "explicit-exhaustive-switch": {
               "description": "Only run exhaustive check on switches with \"//exhaustive:enforce\" comment.",
@@ -1231,7 +1012,7 @@
             }
           }
         },
-        "exhaustructSettings": {
+        "exhaustruct": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -1253,7 +1034,7 @@
             }
           }
         },
-        "fatcontextSettings": {
+        "fatcontext": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -1264,7 +1045,7 @@
             }
           }
         },
-        "forbidigoSettings": {
+        "forbidigo": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -1281,28 +1062,36 @@
             "forbid": {
               "description": "List of identifiers to forbid (written using `regexp`)",
               "type": "array",
+              "examples": ["^print(ln)?$"],
               "items": {
-                "type": "object",
-                "additionalProperties": false,
-                "properties": {
-                  "pattern": {
-                    "description": "Pattern",
+                "anyOf": [
+                  {
                     "type": "string"
                   },
-                  "pkg": {
-                    "description": "Package",
-                    "type": "string"
-                  },
-                  "msg": {
-                    "description": "Message",
-                    "type": "string"
+                  {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "p": {
+                        "description": "Pattern",
+                        "type": "string"
+                      },
+                      "pkg": {
+                        "description": "Package",
+                        "type": "string"
+                      },
+                      "msg": {
+                        "description": "Message",
+                        "type": "string"
+                      }
+                    }
                   }
-                }
+                ]
               }
             }
           }
         },
-        "funlenSettings": {
+        "funlen": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -1323,7 +1112,7 @@
             }
           }
         },
-        "gciSettings": {
+        "gci": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -1349,6 +1138,11 @@
               },
               "default": ["standard", "default"]
             },
+            "skip-generated": {
+              "description": "Skip generated files.",
+              "type": "boolean",
+              "default": true
+            },
             "no-inline-comments": {
               "description": "Checks that no inline Comments are present.",
               "type": "boolean",
@@ -1371,7 +1165,7 @@
             }
           }
         },
-        "ginkgolinterSettings": {
+        "ginkgolinter": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -1437,7 +1231,7 @@
             }
           }
         },
-        "gochecksumtypeSettings": {
+        "gochecksumtype": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -1453,7 +1247,7 @@
             }
           }
         },
-        "gocognitSettings": {
+        "gocognit": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -1464,7 +1258,7 @@
             }
           }
         },
-        "goconstSettings": {
+        "goconst": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -1482,6 +1276,11 @@
               "description": "Minimum occurrences count to trigger.",
               "type": "integer",
               "default": 3
+            },
+            "ignore-tests": {
+              "description": "Ignore test files.",
+              "type": "boolean",
+              "default": false
             },
             "ignore-calls": {
               "description": "Ignore when constant is not used as function argument",
@@ -1509,7 +1308,7 @@
             }
           }
         },
-        "gocriticSettings": {
+        "gocritic": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -1708,7 +1507,7 @@
             }
           }
         },
-        "gocycloSettings": {
+        "gocyclo": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -1719,7 +1518,7 @@
             }
           }
         },
-        "godotSettings": {
+        "godot": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -1752,7 +1551,7 @@
             }
           }
         },
-        "godoxSettings": {
+        "godox": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -1766,7 +1565,7 @@
             }
           }
         },
-        "gofmtSettings": {
+        "gofmt": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -1793,33 +1592,7 @@
             }
           }
         },
-        "golinesSettings": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "max-len": {
-              "type": "integer",
-              "default": 100
-            },
-            "tab-len": {
-              "type": "integer",
-              "default": 4
-            },
-            "shorten-comments": {
-              "type": "boolean",
-              "default": false
-            },
-            "reformat-tags": {
-              "type": "boolean",
-              "default": true
-            },
-            "chain-split-dots": {
-              "type": "boolean",
-              "default": true
-            }
-          }
-        },
-        "interfacebloatSettings": {
+        "interfacebloat": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -1829,7 +1602,7 @@
             }
           }
         },
-        "gofumptSettings": {
+        "gofumpt": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -1844,7 +1617,7 @@
             }
           }
         },
-        "goheaderSettings": {
+        "goheader": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -1904,20 +1677,18 @@
             { "required": ["template-path"] }
           ]
         },
-        "goimportsSettings": {
+        "goimports": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
             "local-prefixes": {
-              "description": "Put imports beginning with prefix after 3rd-party packages. It is a list of prefixes.",
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
+              "description": "Put imports beginning with prefix after 3rd-party packages. It is a comma-separated list of prefixes.",
+              "type": "string",
+              "examples": ["github.com/org/project"]
             }
           }
         },
-        "gomoddirectivesSettings": {
+        "gomoddirectives": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -1969,7 +1740,7 @@
             }
           }
         },
-        "gomodguardSettings": {
+        "gomodguard": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -2050,7 +1821,7 @@
                     }
                   }
                 },
-                "local-replace-directives": {
+                "local_replace_directives": {
                   "description": "Raise lint issues if loading local path with replace directive",
                   "type": "boolean",
                   "default": true
@@ -2059,7 +1830,26 @@
             }
           }
         },
-        "gosecSettings": {
+        "gosimple": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "checks": {
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  {
+                    "enum": ["all"]
+                  },
+                  {
+                    "type": "string"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "gosec": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -2078,6 +1868,11 @@
               "items": {
                 "$ref": "#/definitions/gosec-rules"
               }
+            },
+            "exclude-generated": {
+              "description": "Exclude generated files",
+              "type": "boolean",
+              "default": false
             },
             "severity": {
               "description": "Filter out the issues with a lower severity than the given value",
@@ -2101,7 +1896,7 @@
             }
           }
         },
-        "gosmopolitanSettings": {
+        "gosmopolitan": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -2117,6 +1912,11 @@
                 "type": "string"
               }
             },
+            "ignore-tests": {
+              "description": "Ignore test files.",
+              "type": "boolean",
+              "default": false
+            },
             "watch-for-scripts": {
               "description": "List of Unicode scripts to watch for any usage in string literals.",
               "type": "array",
@@ -2126,7 +1926,7 @@
             }
           }
         },
-        "govetSettings": {
+        "govet": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -2169,7 +1969,7 @@
             }
           }
         },
-        "grouperSettings": {
+        "grouper": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -2207,7 +2007,7 @@
             }
           }
         },
-        "ifaceSettings": {
+        "iface": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -2238,7 +2038,7 @@
             }
           }
         },
-        "importasSettings": {
+        "importas": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -2273,7 +2073,7 @@
             }
           }
         },
-        "inamedparamSettings": {
+        "inamedparam": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -2284,7 +2084,7 @@
             }
           }
         },
-        "ireturnSettings": {
+        "ireturn": {
           "type": "object",
           "additionalProperties": false,
           "description": "Use either `reject` or `allow` properties for interfaces matching.",
@@ -2332,7 +2132,7 @@
             }
           ]
         },
-        "lllSettings": {
+        "lll": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -2350,7 +2150,7 @@
             }
           }
         },
-        "maintidxSettings": {
+        "maintidx": {
           "description": "Maintainability index https://docs.microsoft.com/en-us/visualstudio/code-quality/code-metrics-maintainability-index-range-and-meaning?view=vs-2022",
           "type": "object",
           "additionalProperties": false,
@@ -2362,7 +2162,7 @@
             }
           }
         },
-        "makezeroSettings": {
+        "makezero": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -2373,7 +2173,7 @@
             }
           }
         },
-        "loggercheckSettings": {
+        "loggercheck": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -2421,7 +2221,7 @@
             }
           }
         },
-        "misspellSettings": {
+        "misspell": {
           "description": "Correct spellings using locale preferences for US or UK. Default is to use a neutral variety of English.",
           "type": "object",
           "additionalProperties": false,
@@ -2429,8 +2229,8 @@
             "locale": {
               "enum": ["US", "UK"]
             },
-            "ignore-rules": {
-              "description": "List of rules to ignore.",
+            "ignore-words": {
+              "description": "List of words to ignore.",
               "type": "array",
               "items": {
                 "type": "string"
@@ -2459,7 +2259,7 @@
             }
           }
         },
-        "musttagSettings": {
+        "musttag": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -2483,7 +2283,7 @@
             }
           }
         },
-        "nakedretSettings": {
+        "nakedret": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -2495,7 +2295,7 @@
             }
           }
         },
-        "nestifSettings": {
+        "nestif": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -2506,7 +2306,7 @@
             }
           }
         },
-        "nilnilSettings": {
+        "nilnil": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -2525,7 +2325,7 @@
             }
           }
         },
-        "nlreturnSettings": {
+        "nlreturn": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -2537,7 +2337,7 @@
             }
           }
         },
-        "mndSettings": {
+        "mnd": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -2581,7 +2381,7 @@
             }
           }
         },
-        "nolintlintSettings": {
+        "nolintlint": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -2594,7 +2394,7 @@
               "description": "Exclude these linters from requiring an explanation.",
               "type": "array",
               "items": {
-                "$ref": "#/definitions/linter-names"
+                "$ref": "#/definitions/linters"
               },
               "default": []
             },
@@ -2610,7 +2410,7 @@
             }
           }
         },
-        "reassignSettings": {
+        "reassign": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -2622,7 +2422,7 @@
             }
           }
         },
-        "recvcheckSettings": {
+        "recvcheck": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -2640,7 +2440,7 @@
             }
           }
         },
-        "nonamedreturnsSettings": {
+        "nonamedreturns": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -2651,7 +2451,7 @@
             }
           }
         },
-        "paralleltestSettings": {
+        "paralleltest": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -2667,7 +2467,7 @@
             }
           }
         },
-        "perfsprintSettings": {
+        "perfsprint": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -2723,7 +2523,7 @@
             }
           }
         },
-        "preallocSettings": {
+        "prealloc": {
           "description": "We do not recommend using this linter before doing performance profiling.\nFor most programs usage of `prealloc` will be premature optimization.",
           "type": "object",
           "additionalProperties": false,
@@ -2745,25 +2545,22 @@
             }
           }
         },
-        "predeclaredSettings": {
+        "predeclared": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
             "ignore": {
-              "description": "List of predeclared identifiers to not report on.",
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
+              "description": "Comma-separated list of predeclared identifiers to not report on.",
+              "type": "string"
             },
-            "qualified-name": {
-              "description": "Include method names and field names in checks.",
+            "q": {
+              "description": "Include method names and field names (i.e., qualified names) in checks.",
               "type": "boolean",
               "default": false
             }
           }
         },
-        "promlinterSettings": {
+        "promlinter": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -2785,7 +2582,7 @@
             }
           }
         },
-        "protogetterSettings": {
+        "protogetter": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -2815,7 +2612,7 @@
             }
           }
         },
-        "reviveSettings": {
+        "revive": {
           "type": "object",
           "additionalProperties": false,
           "examples": [
@@ -2845,6 +2642,9 @@
           "properties": {
             "max-open-files": {
               "type": "integer"
+            },
+            "ignore-generated-header": {
+              "type": "boolean"
             },
             "confidence": {
               "type": "number"
@@ -2915,7 +2715,7 @@
             }
           }
         },
-        "rowserrcheckSettings": {
+        "rowserrcheck": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -2929,7 +2729,7 @@
             }
           }
         },
-        "sloglintSettings": {
+        "sloglint": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -2986,7 +2786,7 @@
             }
           }
         },
-        "spancheckSettings": {
+        "spancheck": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -3013,7 +2813,7 @@
             }
           }
         },
-        "staticcheckSettings": {
+        "staticcheck": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -3022,13 +2822,41 @@
               "items": {
                 "anyOf": [
                   {
-                    "$ref": "#/definitions/staticcheck-checks"
+                    "enum": ["all"]
                   },
                   {
                     "type": "string"
                   }
                 ]
               }
+            }
+          }
+        },
+        "stylecheck": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "checks": {
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  {
+                    "enum": ["all"]
+                  },
+                  {
+                    "type": "string"
+                  }
+                ]
+              },
+              "default": [
+                "all",
+                "-ST1000",
+                "-ST1003",
+                "-ST1016",
+                "-ST1020",
+                "-ST1021",
+                "-ST1022"
+              ]
             },
             "dot-import-whitelist": {
               "description": "By default, ST1001 forbids all uses of dot imports in non-test packages. This setting allows setting a whitelist of import paths that can be dot-imported anywhere.",
@@ -3162,7 +2990,7 @@
             }
           }
         },
-        "tagalignSettings": {
+        "tagalign": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -3202,7 +3030,7 @@
             }
           }
         },
-        "tagliatelleSettings": {
+        "tagliatelle": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -3334,7 +3162,7 @@
             }
           }
         },
-        "tenvSettings": {
+        "tenv": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -3345,7 +3173,7 @@
             }
           }
         },
-        "testifylintSettings": {
+        "testifylint": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -3522,7 +3350,7 @@
             }
           }
         },
-        "testpackageSettings": {
+        "testpackage": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -3542,7 +3370,7 @@
             }
           }
         },
-        "thelperSettings": {
+        "thelper": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -3632,7 +3460,7 @@
             }
           }
         },
-        "usestdlibvarsSettings": {
+        "usestdlibvars": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -3688,7 +3516,7 @@
             }
           }
         },
-        "usetestingSettings": {
+        "usetesting": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -3722,7 +3550,7 @@
             }
           }
         },
-        "unconvertSettings": {
+        "unconvert": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -3736,7 +3564,7 @@
             }
           }
         },
-        "unparamSettings": {
+        "unparam": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -3747,7 +3575,7 @@
             }
           }
         },
-        "unusedSettings": {
+        "unused": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -3783,7 +3611,7 @@
             }
           }
         },
-        "varnamelenSettings": {
+        "varnamelen": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -3847,7 +3675,7 @@
             }
           }
         },
-        "whitespaceSettings": {
+        "whitespace": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -3863,7 +3691,7 @@
             }
           }
         },
-        "wrapcheckSettings": {
+        "wrapcheck": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -3878,7 +3706,7 @@
                 "type": "string"
               }
             },
-            "ignore-sigs": {
+            "ignoreSigs": {
               "description": "An array of strings which specify substrings of signatures to ignore.",
               "default": [
                 ".Errorf(",
@@ -3895,7 +3723,7 @@
                 "type": "string"
               }
             },
-            "ignore-sig-regexps": {
+            "ignoreSigRegexps": {
               "description": "An array of strings which specify regular expressions of signatures to ignore.",
               "default": [""],
               "type": "array",
@@ -3903,7 +3731,7 @@
                 "type": "string"
               }
             },
-            "ignore-package-globs": {
+            "ignorePackageGlobs": {
               "description": "An array of glob patterns which, if any match the package of the function returning the error, will skip wrapcheck analysis for this error.",
               "default": [""],
               "type": "array",
@@ -3911,7 +3739,7 @@
                 "type": "string"
               }
             },
-            "ignore-interface-regexps": {
+            "ignoreInterfaceRegexps": {
               "description": "An array of glob patterns which, if matched to an underlying interface name, will ignore unwrapped errors returned from a function whose call is defined on the given interface.",
               "default": [""],
               "type": "array",
@@ -3921,7 +3749,7 @@
             }
           }
         },
-        "wslSettings": {
+        "wsl": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -3999,7 +3827,7 @@
             }
           }
         },
-        "copyloopvarSettings": {
+        "copyloopvar": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
@@ -4009,7 +3837,7 @@
             }
           }
         },
-        "customSettings": {
+        "custom": {
           "description": "The custom section can be used to define linter plugins to be loaded at runtime. See README of golangci-lint for more information.\nEach custom linter should have a unique name.",
           "type": "object",
           "patternProperties": {
@@ -4055,451 +3883,60 @@
           }
         }
       }
-    }
-  },
-  "type": "object",
-  "additionalProperties": false,
-  "required": ["version"],
-  "properties": {
-    "version": {
-      "type": "string",
-      "default": "2"
-    },
-    "run": {
-      "description": "Options for analysis running,",
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "concurrency": {
-          "description": "Number of concurrent runners. Defaults to the number of available CPU cores.",
-          "type": "integer",
-          "minimum": 0,
-          "examples": [4]
-        },
-        "timeout": {
-          "description": "Timeout for the analysis.",
-          "type": "string",
-          "pattern": "^((\\d+h)?(\\d+m)?(\\d+(?:\\.\\d)?s)?|0)$",
-          "default": "1m",
-          "examples": ["30s", "5m", "5m30s"]
-        },
-        "issues-exit-code": {
-          "description": "Exit code when at least one issue was found.",
-          "type": "integer",
-          "default": 1
-        },
-        "tests": {
-          "description": "Enable inclusion of test files.",
-          "type": "boolean",
-          "default": true
-        },
-        "build-tags": {
-          "description": "List of build tags to pass to all linters.",
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "default": [],
-          "examples": [["mytag"]]
-        },
-        "modules-download-mode": {
-          "description": "Option to pass to \"go list -mod={option}\".\nSee \"go help modules\" for more information.",
-          "enum": ["mod", "readonly", "vendor"]
-        },
-        "allow-parallel-runners": {
-          "description": "Allow multiple parallel golangci-lint instances running. If disabled, golangci-lint acquires file lock on start.",
-          "type": "boolean",
-          "default": false
-        },
-        "allow-serial-runners": {
-          "description": "Allow multiple golangci-lint instances running, but serialize them around a lock.",
-          "type": "boolean",
-          "default": false
-        },
-        "go": {
-          "description": "Targeted Go version.",
-          "type": "string",
-          "default": "1.17"
-        },
-        "relative-path-mode": {
-          "description": "The mode used to evaluate relative paths.",
-          "type": "string",
-          "$ref": "#/definitions/relative-path-modes",
-          "default": "wd"
-        }
-      }
-    },
-    "output": {
-      "description": "Output configuration options.",
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "formats": {
-          "description": "Output formats to use.",
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "text": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "path": {
-                  "$ref": "#/definitions/formats-path",
-                  "default": "stdout"
-                },
-                "print-linter-name": {
-                  "type": "boolean",
-                  "default": true
-                },
-                "print-issued-lines": {
-                  "type": "boolean",
-                  "default": true
-                },
-                "colors": {
-                  "type": "boolean",
-                  "default": true
-                }
-              }
-            },
-            "json": {
-              "$ref": "#/definitions/simple-format"
-            },
-            "tab": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "path": {
-                  "$ref": "#/definitions/formats-path",
-                  "default": "stdout"
-                },
-                "print-linter-name": {
-                  "type": "boolean",
-                  "default": true
-                },
-                "colors": {
-                  "type": "boolean",
-                  "default": true
-                }
-              }
-            },
-            "html": {
-              "$ref": "#/definitions/simple-format"
-            },
-            "checkstyle": {
-              "$ref": "#/definitions/simple-format"
-            },
-            "code-climate": {
-              "$ref": "#/definitions/simple-format"
-            },
-            "junit-xml": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "path": {
-                  "$ref": "#/definitions/formats-path",
-                  "default": "stdout"
-                },
-                "extended": {
-                  "type": "boolean",
-                  "default": true
-                }
-              }
-            },
-            "teamcity": {
-              "$ref": "#/definitions/simple-format"
-            },
-            "sarif": {
-              "$ref": "#/definitions/simple-format"
-            }
-          }
-        },
-        "path-prefix": {
-          "description": "Add a prefix to the output file references.",
-          "type": "string",
-          "default": ""
-        },
-        "show-stats": {
-          "description": "Show statistics per linter.",
-          "type": "boolean",
-          "default": true
-        },
-        "sort-order": {
-          "type": "array",
-          "items": {
-            "enum": ["linter", "severity", "file"]
-          }
-        }
-      }
     },
     "linters": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "default": {
-          "enum": [
-            "standard",
-            "all",
-            "none",
-            "fast"
-          ]
-        },
         "enable": {
           "description": "List of enabled linters.",
           "type": "array",
           "items": {
-            "$ref": "#/definitions/linter-names"
+            "$ref": "#/definitions/linters"
           }
         },
         "disable": {
           "description": "List of disabled linters.",
           "type": "array",
           "items": {
-            "$ref": "#/definitions/linter-names"
+            "$ref": "#/definitions/linters"
           }
         },
-        "settings": {
-          "description": "All available settings of specific linters.",
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dupword": {
-              "$ref": "#/definitions/settings/definitions/dupwordSettings"
-            },
-            "asasalint": {
-              "$ref": "#/definitions/settings/definitions/asasalintSettings"
-            },
-            "bidichk": {
-              "$ref": "#/definitions/settings/definitions/bidichkSettings"
-            },
-            "cyclop": {
-              "$ref": "#/definitions/settings/definitions/cyclopSettings"
-            },
-            "decorder": {
-              "$ref": "#/definitions/settings/definitions/decorderSettings"
-            },
-            "depguard":{
-              "$ref": "#/definitions/settings/definitions/depguardSettings"
-            },
-            "dogsled": {
-              "$ref": "#/definitions/settings/definitions/dogsledSettings"
-            },
-            "dupl": {
-              "$ref": "#/definitions/settings/definitions/duplSettings"
-            },
-            "errcheck": {
-              "$ref": "#/definitions/settings/definitions/errcheckSettings"
-            },
-            "errchkjson": {
-              "$ref": "#/definitions/settings/definitions/errchkjsonSettings"
-            },
-            "errorlint": {
-              "$ref": "#/definitions/settings/definitions/errorlintSettings"
-            },
-            "exhaustive": {
-              "$ref": "#/definitions/settings/definitions/exhaustiveSettings"
-            },
-            "exhaustruct": {
-              "$ref": "#/definitions/settings/definitions/exhaustructSettings"
-            },
-            "fatcontext": {
-              "$ref": "#/definitions/settings/definitions/fatcontextSettings"
-            },
-            "forbidigo": {
-              "$ref": "#/definitions/settings/definitions/forbidigoSettings"
-            },
-            "funlen": {
-              "$ref": "#/definitions/settings/definitions/funlenSettings"
-            },
-            "ginkgolinter": {
-              "$ref": "#/definitions/settings/definitions/ginkgolinterSettings"
-            },
-            "gochecksumtype": {
-              "$ref": "#/definitions/settings/definitions/gochecksumtypeSettings"
-            },
-            "gocognit": {
-              "$ref": "#/definitions/settings/definitions/gocognitSettings"
-            },
-            "goconst": {
-              "$ref": "#/definitions/settings/definitions/goconstSettings"
-            },
-            "gocritic": {
-              "$ref": "#/definitions/settings/definitions/gocriticSettings"
-            },
-            "gocyclo": {
-              "$ref": "#/definitions/settings/definitions/gocycloSettings"
-            },
-            "godot": {
-              "$ref": "#/definitions/settings/definitions/godotSettings"
-            },
-            "godox": {
-              "$ref": "#/definitions/settings/definitions/godoxSettings"
-            },
-            "interfacebloat":{
-              "$ref": "#/definitions/settings/definitions/interfacebloatSettings"
-            },
-            "goheader": {
-              "$ref": "#/definitions/settings/definitions/goheaderSettings"
-            },
-            "gomoddirectives": {
-              "$ref": "#/definitions/settings/definitions/gomoddirectivesSettings"
-            },
-            "gomodguard": {
-              "$ref": "#/definitions/settings/definitions/gomodguardSettings"
-            },
-            "gosec": {
-              "$ref": "#/definitions/settings/definitions/gosecSettings"
-            },
-            "gosmopolitan": {
-              "$ref": "#/definitions/settings/definitions/gosmopolitanSettings"
-            },
-            "govet": {
-              "$ref": "#/definitions/settings/definitions/govetSettings"
-            },
-            "grouper": {
-              "$ref": "#/definitions/settings/definitions/grouperSettings"
-            },
-            "iface": {
-              "$ref": "#/definitions/settings/definitions/ifaceSettings"
-            },
-            "importas": {
-              "$ref": "#/definitions/settings/definitions/importasSettings"
-            },
-            "inamedparam": {
-              "$ref": "#/definitions/settings/definitions/inamedparamSettings"
-            },
-            "ireturn": {
-              "$ref": "#/definitions/settings/definitions/ireturnSettings"
-            },
-            "lll": {
-              "$ref": "#/definitions/settings/definitions/lllSettings"
-            },
-            "maintidx": {
-              "$ref": "#/definitions/settings/definitions/maintidxSettings"
-            },
-            "makezero":{
-              "$ref": "#/definitions/settings/definitions/makezeroSettings"
-            },
-            "loggercheck": {
-              "$ref": "#/definitions/settings/definitions/loggercheckSettings"
-            },
-            "misspell": {
-              "$ref": "#/definitions/settings/definitions/misspellSettings"
-            },
-            "musttag": {
-              "$ref": "#/definitions/settings/definitions/musttagSettings"
-            },
-            "nakedret": {
-              "$ref": "#/definitions/settings/definitions/nakedretSettings"
-            },
-            "nestif": {
-              "$ref": "#/definitions/settings/definitions/nestifSettings"
-            },
-            "nilnil": {
-              "$ref": "#/definitions/settings/definitions/nilnilSettings"
-            },
-            "nlreturn": {
-              "$ref": "#/definitions/settings/definitions/nlreturnSettings"
-            },
-            "mnd": {
-              "$ref": "#/definitions/settings/definitions/mndSettings"
-            },
-            "nolintlint":{
-              "$ref": "#/definitions/settings/definitions/nolintlintSettings"
-            },
-            "reassign": {
-              "$ref": "#/definitions/settings/definitions/reassignSettings"
-            },
-            "recvcheck": {
-              "$ref": "#/definitions/settings/definitions/recvcheckSettings"
-            },
-            "nonamedreturns": {
-              "$ref": "#/definitions/settings/definitions/nonamedreturnsSettings"
-            },
-            "paralleltest": {
-              "$ref": "#/definitions/settings/definitions/paralleltestSettings"
-            },
-            "perfsprint": {
-              "$ref": "#/definitions/settings/definitions/perfsprintSettings"
-            },
-            "prealloc": {
-              "$ref": "#/definitions/settings/definitions/preallocSettings"
-            },
-            "predeclared": {
-              "$ref": "#/definitions/settings/definitions/predeclaredSettings"
-            },
-            "promlinter": {
-              "$ref": "#/definitions/settings/definitions/promlinterSettings"
-            },
-            "protogetter": {
-              "$ref": "#/definitions/settings/definitions/protogetterSettings"
-            },
-            "revive": {
-              "$ref": "#/definitions/settings/definitions/reviveSettings"
-            },
-            "rowserrcheck": {
-              "$ref": "#/definitions/settings/definitions/rowserrcheckSettings"
-            },
-            "sloglint": {
-              "$ref": "#/definitions/settings/definitions/sloglintSettings"
-            },
-            "spancheck": {
-              "$ref": "#/definitions/settings/definitions/spancheckSettings"
-            },
-            "staticcheck":{
-              "$ref": "#/definitions/settings/definitions/staticcheckSettings"
-            },
-            "tagalign": {
-              "$ref": "#/definitions/settings/definitions/tagalignSettings"
-            },
-            "tagliatelle": {
-              "$ref": "#/definitions/settings/definitions/tagliatelleSettings"
-            },
-            "tenv": {
-              "$ref": "#/definitions/settings/definitions/tenvSettings"
-            },
-            "testifylint": {
-              "$ref": "#/definitions/settings/definitions/testifylintSettings"
-            },
-            "testpackage": {
-              "$ref": "#/definitions/settings/definitions/testpackageSettings"
-            },
-            "thelper": {
-              "$ref": "#/definitions/settings/definitions/thelperSettings"
-            },
-            "usestdlibvars": {
-              "$ref": "#/definitions/settings/definitions/usestdlibvarsSettings"
-            },
-            "usetesting": {
-              "$ref": "#/definitions/settings/definitions/usetestingSettings"
-            },
-            "unconvert": {
-              "$ref": "#/definitions/settings/definitions/unconvertSettings"
-            },
-            "unparam": {
-              "$ref": "#/definitions/settings/definitions/unparamSettings"
-            },
-            "unused": {
-              "$ref": "#/definitions/settings/definitions/unusedSettings"
-            },
-            "varnamelen": {
-              "$ref": "#/definitions/settings/definitions/varnamelenSettings"
-            },
-            "whitespace": {
-              "$ref": "#/definitions/settings/definitions/whitespaceSettings"
-            },
-            "wrapcheck": {
-              "$ref": "#/definitions/settings/definitions/wrapcheckSettings"
-            },
-            "wsl": {
-              "$ref": "#/definitions/settings/definitions/wslSettings"
-            },
-            "copyloopvar": {
-              "$ref": "#/definitions/settings/definitions/copyloopvarSettings"
-            },
-            "custom":{
-              "$ref": "#/definitions/settings/definitions/customSettings"
-            }
+        "enable-all": {
+          "description": "Whether to enable all linters. You can re-disable them with `disable` explicitly.",
+          "type": "boolean",
+          "default": false
+        },
+        "disable-all": {
+          "description": "Whether to disable all linters. You can re-enable them with `enable` explicitly.",
+          "type": "boolean",
+          "default": false
+        },
+        "presets": {
+          "description": "Allow to use different presets of linters",
+          "type": "array",
+          "items": {
+            "enum": [
+              "bugs",
+              "comment",
+              "complexity",
+              "error",
+              "format",
+              "import",
+              "metalinter",
+              "module",
+              "performance",
+              "sql",
+              "style",
+              "test",
+              "unused"
+            ]
           }
+        },
+        "fast": {
+          "description": "Enable run of fast linters.",
+          "type": "boolean",
+          "default": false
         },
         "exclusions":{
           "type": "object",
@@ -4507,19 +3944,19 @@
           "properties": {
             "generated": {
               "enum": ["strict", "lax", "disable"],
-              "default": "strict"
+              "default": "lax"
             },
             "warn-unused": {
               "type": "boolean",
               "default": false
             },
-            "presets": {
+            "default":  {
               "type": "array",
               "items": {
                 "enum": [
                   "comments",
-                  "std-error-handling",
-                  "common-false-positives",
+                  "stdErrorHandling",
+                  "commonFalsePositives",
                   "legacy"
                 ]
               }
@@ -4538,7 +3975,7 @@
                   "linters": {
                     "type": "array",
                     "items": {
-                      "$ref": "#/definitions/linter-names"
+                      "$ref": "#/definitions/linters"
                     }
                   },
                   "text": {
@@ -4573,60 +4010,111 @@
         }
       }
     },
-    "formatters": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "enable": {
-          "description": "List of enabled formatters.",
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/formatter-names"
-          }
-        },
-        "settings": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "gci": {
-              "$ref": "#/definitions/settings/definitions/gciSettings"
-            },
-            "gofmt": {
-              "$ref": "#/definitions/settings/definitions/gofmtSettings"
-            },
-            "gofumpt": {
-              "$ref": "#/definitions/settings/definitions/gofumptSettings"
-            },
-            "goimports": {
-              "$ref": "#/definitions/settings/definitions/goimportsSettings"
-            },
-            "golines": {
-              "$ref": "#/definitions/settings/definitions/golinesSettings"
-            }
-          }
-        },
-        "exclusions": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "generated": {
-              "enum": ["strict", "lax", "disable"],
-              "default": "strict"
-            },
-            "paths": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
-          }
-        }
-      }
-    },
     "issues": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
+        "exclude": {
+          "description": "List of regular expressions of issue texts to exclude.\nBut independently from this option we use default exclude patterns. Their usage can be controlled through `exclude-use-default`.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "exclude-rules": {
+          "description": "Exclude configuration per-path, per-linter, per-text and per-source",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "path": {
+                "type": "string"
+              },
+              "path-except": {
+                "type": "string"
+              },
+              "linters": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/linters"
+                }
+              },
+              "text": {
+                "type": "string"
+              },
+              "source": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "exclude-use-default": {
+          "description": "Independently from option `exclude` we use default exclude patterns. This behavior can be disabled by this option.",
+          "type": "boolean",
+          "default": true
+        },
+        "exclude-case-sensitive": {
+          "description": "If set to true, exclude and exclude-rules regular expressions become case sensitive.",
+          "type": "boolean",
+          "default": false
+        },
+        "exclude-generated": {
+          "description": "Mode of the generated files analysis.",
+          "enum": ["lax", "strict", "disable"],
+          "default": "lax"
+        },
+        "exclude-dirs": {
+          "description": "Which directories to exclude: issues from them won't be reported.",
+          "type": "array",
+          "items": {
+            "description": "You can use regexp here. The regexp is applied on the full path.\n\"/\" will be replaced by current OS file path separator to properly work on Windows.",
+            "type": "string",
+            "examples": ["generated.*"]
+          },
+          "default": [],
+          "examples": [["src/external_libs", "autogenerated_by_my_lib"]]
+        },
+        "exclude-dirs-use-default": {
+          "description": "Enable exclusion of directories \"vendor\", \"third_party\", \"testdata\", \"examples\", \"Godeps\", and \"builtin\".",
+          "type": "boolean",
+          "default": true
+        },
+        "exclude-files": {
+          "description": "Which files to exclude: they will be analyzed, but issues from them will not be reported.",
+          "type": "array",
+          "items": {
+            "description": "You can use regexp here. There is no need to include all autogenerated files, we confidently recognize them. If that is not the case, please let us know.\n\"/\" will be replaced by current OS file path separator to properly work on Windows.",
+            "type": "string",
+            "examples": [".*\\.my\\.go$"]
+          },
+          "default": [],
+          "examples": [[".*\\.my\\.go$", "lib/bad.go"]]
+        },
+        "include": {
+          "description": "The list of ids of default excludes to include or disable.",
+          "type": "array",
+          "items": {
+            "enum": [
+              "EXC0001",
+              "EXC0002",
+              "EXC0003",
+              "EXC0004",
+              "EXC0005",
+              "EXC0006",
+              "EXC0007",
+              "EXC0008",
+              "EXC0009",
+              "EXC0010",
+              "EXC0011",
+              "EXC0012",
+              "EXC0013",
+              "EXC0014",
+              "EXC0015"
+            ]
+          },
+          "default": []
+        },
         "max-issues-per-linter": {
           "description": "Maximum issues count per one linter. Set to 0 to disable.",
           "type": "integer",
@@ -4678,10 +4166,15 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "default": {
+        "default-severity": {
           "description": "Set the default severity for issues. If severity rules are defined and the issues do not match or no severity is provided to the rule this will be the default severity applied. Severities should match the supported severity names of the selected out format.",
           "type": "string",
           "default": ""
+        },
+        "case-sensitive": {
+          "description": "If set to true, severity-rules regular expressions become case sensitive.",
+          "type": "boolean",
+          "default": false
         },
         "rules": {
           "description": "When a list of severity rules are provided, severity information will be added to lint issues. Severity rules have the same filtering capability as exclude rules except you are allowed to specify one matcher per severity rule.\nOnly affects out formats that support setting severity information.",
@@ -4702,7 +4195,7 @@
               "linters": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/definitions/linter-names"
+                  "$ref": "#/definitions/linters"
                 }
               },
               "text": {
@@ -4724,7 +4217,7 @@
           "default": []
         }
       },
-      "required": ["default"]
+      "required": ["default-severity"]
     }
   }
 }
