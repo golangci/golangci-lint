@@ -151,7 +151,7 @@
   },
   {
     "name": "dupl",
-    "desc": "Tool for code clone detection",
+    "desc": "Detects duplicate fragments of code.",
     "loadMode": 8199,
     "inPresets": [
       "style"

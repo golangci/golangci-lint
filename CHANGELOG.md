@@ -7,6 +7,16 @@ If you value it, consider supporting us, we appreciate it! ❤️
 [![Open Collective backers and sponsors](https://img.shields.io/badge/OpenCollective-Donate-blue?logo=opencollective&style=for-the-badge)](https://opencollective.com/golangci-lint)
 [![GitHub Sponsors](https://img.shields.io/badge/GitHub-Donate-blue?logo=github&style=for-the-badge)](https://github.com/sponsors/golangci)
 
+### v1.64.7
+
+1. Linters bug fixes
+   * `depguard`: from 2.2.0 to 2.2.1
+   * `dupl`: from 3e9179ac440a to f665c8d69b32
+   * `gosec`: from 2.22.1 to 2.22.2
+   * `staticcheck`: from 0.6.0 to 0.6.1
+2. Documentation
+   * Add GitLab documentation
+
 ### v1.64.6
 
 1. Linters bug fixes
