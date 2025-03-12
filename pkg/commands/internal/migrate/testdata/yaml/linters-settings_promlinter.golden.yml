@@ -1,0 +1,14 @@
+version: "2"
+linters:
+  settings:
+    promlinter:
+      strict: true
+      disabled-linters:
+        - Help
+        - MetricUnits
+        - Counter
+        - HistogramSummaryReserved
+        - MetricTypeInName
+        - ReservedChars
+        - CamelCase
+        - UnitAbbreviations

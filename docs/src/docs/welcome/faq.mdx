@@ -40,7 +40,7 @@ It means that if you try to run an analysis on a single file or a group of files
 with dependencies on other files or packages of your project, as it doesn't compile (because of the missing pieces of code),
 it also cannot be analyzed.
 
-If there are `typecheck` errors, golangci-lint will not able to produce other reports because that kind of error doesn't allow it to perform any analysis.
+If there are `typecheck` errors, golangci-lint will not be able to produce other reports because that kind of error doesn't allow it to perform any analysis.
 
 How to troubleshoot:
 
@@ -62,9 +62,10 @@ most linters are not able to perform the analysis,
 and they simply do not produce any reports,
 so it's not possible to skip/ignore `typecheck` errors.
 
-## Why running with `--fast` is slow on the first run?
+## Why running with `--fast-only` can be slow on the first run?
 
-Because the first run caches type information. All subsequent runs will be fast.
+Because the first run caches type information.
+All subsequent runs will be faster.
 Usually this options is used during development on local machine and compilation was already performed.
 
 ## How do you add a custom linter?

@@ -5,18 +5,14 @@ import (
 	"errors"
 	"fmt"
 	"os"
-	"path/filepath"
 	"slices"
 
-	"github.com/go-viper/mapstructure/v2"
-	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 
-	"github.com/golangci/golangci-lint/pkg/exitcodes"
-	"github.com/golangci/golangci-lint/pkg/fsutils"
-	"github.com/golangci/golangci-lint/pkg/goutil"
-	"github.com/golangci/golangci-lint/pkg/logutils"
+	"github.com/golangci/golangci-lint/v2/pkg/fsutils"
+	"github.com/golangci/golangci-lint/v2/pkg/goutil"
+	"github.com/golangci/golangci-lint/v2/pkg/logutils"
 )
 
 var errConfigDisabled = errors.New("config is disabled by --no-config")
@@ -32,25 +28,18 @@ type LoadOptions struct {
 }
 
 type Loader struct {
-	opts LoaderOptions
+	*BaseLoader
 
-	viper *viper.Viper
-	fs    *pflag.FlagSet
+	fs *pflag.FlagSet
 
-	log logutils.Log
-
-	cfg  *Config
-	args []string
+	cfg *Config
 }
 
 func NewLoader(log logutils.Log, v *viper.Viper, fs *pflag.FlagSet, opts LoaderOptions, cfg *Config, args []string) *Loader {
 	return &Loader{
-		opts:  opts,
-		viper: v,
-		fs:    fs,
-		log:   log,
-		cfg:   cfg,
-		args:  args,
+		BaseLoader: NewBaseLoader(log, v, opts, cfg, args),
+		fs:         fs,
+		cfg:        cfg,
 	}
 }
 
@@ -67,8 +56,8 @@ func (l *Loader) Load(opts LoadOptions) error {
 
 	l.applyStringSliceHack()
 
-	if l.cfg.Linters.LinterExclusions.Generated == "" {
-		l.cfg.Linters.LinterExclusions.Generated = GeneratedModeStrict
+	if l.cfg.Linters.Exclusions.Generated == "" {
+		l.cfg.Linters.Exclusions.Generated = GeneratedModeStrict
 	}
 
 	l.handleFormatters()
@@ -109,166 +98,6 @@ func (l *Loader) Load(opts LoadOptions) error {
 	return nil
 }
 
-func (l *Loader) setConfigFile() error {
-	configFile, err := l.evaluateOptions()
-	if err != nil {
-		if errors.Is(err, errConfigDisabled) {
-			return nil
-		}
-
-		return fmt.Errorf("can't parse --config option: %w", err)
-	}
-
-	if configFile != "" {
-		l.viper.SetConfigFile(configFile)
-
-		// Assume YAML if the file has no extension.
-		if filepath.Ext(configFile) == "" {
-			l.viper.SetConfigType("yaml")
-		}
-	} else {
-		l.setupConfigFileSearch()
-	}
-
-	return nil
-}
-
-func (l *Loader) evaluateOptions() (string, error) {
-	if l.opts.NoConfig && l.opts.Config != "" {
-		return "", errors.New("can't combine option --config and --no-config")
-	}
-
-	if l.opts.NoConfig {
-		return "", errConfigDisabled
-	}
-
-	configFile, err := homedir.Expand(l.opts.Config)
-	if err != nil {
-		return "", errors.New("failed to expand configuration path")
-	}
-
-	return configFile, nil
-}
-
-func (l *Loader) setupConfigFileSearch() {
-	l.viper.SetConfigName(".golangci")
-
-	configSearchPaths := l.getConfigSearchPaths()
-
-	l.log.Infof("Config search paths: %s", configSearchPaths)
-
-	for _, p := range configSearchPaths {
-		l.viper.AddConfigPath(p)
-	}
-}
-
-func (l *Loader) getConfigSearchPaths() []string {
-	firstArg := "./..."
-	if len(l.args) > 0 {
-		firstArg = l.args[0]
-	}
-
-	absPath, err := filepath.Abs(firstArg)
-	if err != nil {
-		l.log.Warnf("Can't make abs path for %q: %s", firstArg, err)
-		absPath = filepath.Clean(firstArg)
-	}
-
-	// start from it
-	var currentDir string
-	if fsutils.IsDir(absPath) {
-		currentDir = absPath
-	} else {
-		currentDir = filepath.Dir(absPath)
-	}
-
-	// find all dirs from it up to the root
-	searchPaths := []string{"./"}
-
-	for {
-		searchPaths = append(searchPaths, currentDir)
-
-		parent := filepath.Dir(currentDir)
-		if currentDir == parent || parent == "" {
-			break
-		}
-
-		currentDir = parent
-	}
-
-	// find home directory for global config
-	if home, err := homedir.Dir(); err != nil {
-		l.log.Warnf("Can't get user's home directory: %v", err)
-	} else if !slices.Contains(searchPaths, home) {
-		searchPaths = append(searchPaths, home)
-	}
-
-	return searchPaths
-}
-
-func (l *Loader) parseConfig() error {
-	if err := l.viper.ReadInConfig(); err != nil {
-		var configFileNotFoundError viper.ConfigFileNotFoundError
-		if errors.As(err, &configFileNotFoundError) {
-			// Load configuration from flags only.
-			err = l.viper.Unmarshal(l.cfg, customDecoderHook())
-			if err != nil {
-				return fmt.Errorf("can't unmarshal config by viper (flags): %w", err)
-			}
-
-			return nil
-		}
-
-		return fmt.Errorf("can't read viper config: %w", err)
-	}
-
-	err := l.setConfigDir()
-	if err != nil {
-		return err
-	}
-
-	// Load configuration from all sources (flags, file).
-	if err := l.viper.Unmarshal(l.cfg, customDecoderHook()); err != nil {
-		return fmt.Errorf("can't unmarshal config by viper (flags, file): %w", err)
-	}
-
-	if l.cfg.InternalTest { // just for testing purposes: to detect config file usage
-		_, _ = fmt.Fprintln(logutils.StdOut, "test")
-		os.Exit(exitcodes.Success)
-	}
-
-	return nil
-}
-
-func (l *Loader) setConfigDir() error {
-	usedConfigFile := l.viper.ConfigFileUsed()
-	if usedConfigFile == "" {
-		return nil
-	}
-
-	if usedConfigFile == os.Stdin.Name() {
-		usedConfigFile = ""
-		l.log.Infof("Reading config file stdin")
-	} else {
-		var err error
-		usedConfigFile, err = fsutils.ShortestRelPath(usedConfigFile, "")
-		if err != nil {
-			l.log.Warnf("Can't pretty print config file path: %v", err)
-		}
-
-		l.log.Infof("Used config file %s", usedConfigFile)
-	}
-
-	usedConfigDir, err := filepath.Abs(filepath.Dir(usedConfigFile))
-	if err != nil {
-		return errors.New("can't get config directory")
-	}
-
-	l.cfg.cfgDir = usedConfigDir
-
-	return nil
-}
-
 // Hack to append values from StringSlice flags.
 // Viper always overrides StringSlice values.
 // https://github.com/spf13/viper/issues/1448
@@ -280,7 +109,6 @@ func (l *Loader) applyStringSliceHack() {
 
 	l.appendStringSlice("enable", &l.cfg.Linters.Enable)
 	l.appendStringSlice("disable", &l.cfg.Linters.Disable)
-	l.appendStringSlice("presets", &l.cfg.Linters.Presets)
 	l.appendStringSlice("build-tags", &l.cfg.Run.BuildTags)
 }
 
@@ -296,18 +124,18 @@ func (l *Loader) handleGoVersion() {
 		l.cfg.Run.Go = detectGoVersion(context.Background())
 	}
 
-	l.cfg.LintersSettings.Govet.Go = l.cfg.Run.Go
+	l.cfg.Linters.Settings.Govet.Go = l.cfg.Run.Go
 
-	l.cfg.LintersSettings.ParallelTest.Go = l.cfg.Run.Go
+	l.cfg.Linters.Settings.ParallelTest.Go = l.cfg.Run.Go
 
-	l.cfg.LintersSettings.GoFumpt.LangVersion = l.cfg.Run.Go
+	l.cfg.Linters.Settings.GoFumpt.LangVersion = l.cfg.Run.Go
 	l.cfg.Formatters.Settings.GoFumpt.LangVersion = l.cfg.Run.Go
 
 	trimmedGoVersion := goutil.TrimGoVersion(l.cfg.Run.Go)
 
-	l.cfg.LintersSettings.Revive.Go = trimmedGoVersion
+	l.cfg.Linters.Settings.Revive.Go = trimmedGoVersion
 
-	l.cfg.LintersSettings.Gocritic.Go = trimmedGoVersion
+	l.cfg.Linters.Settings.Gocritic.Go = trimmedGoVersion
 
 	os.Setenv("GOSECGOVERSION", l.cfg.Run.Go)
 }
@@ -339,9 +167,13 @@ func (l *Loader) handleEnableOnlyOption() error {
 
 	if len(only) > 0 {
 		l.cfg.Linters = Linters{
+			Default:    GroupNone,
 			Enable:     only,
-			DisableAll: true,
+			Settings:   l.cfg.Linters.Settings,
+			Exclusions: l.cfg.Linters.Exclusions,
 		}
+
+		l.cfg.Formatters = Formatters{}
 	}
 
 	return nil
@@ -355,19 +187,19 @@ func (l *Loader) handleFormatters() {
 // Overrides linter settings with formatter settings if the formatter is enabled.
 func (l *Loader) handleFormatterOverrides() {
 	if slices.Contains(l.cfg.Formatters.Enable, "gofmt") {
-		l.cfg.LintersSettings.GoFmt = l.cfg.Formatters.Settings.GoFmt
+		l.cfg.Linters.Settings.GoFmt = l.cfg.Formatters.Settings.GoFmt
 	}
 
 	if slices.Contains(l.cfg.Formatters.Enable, "gofumpt") {
-		l.cfg.LintersSettings.GoFumpt = l.cfg.Formatters.Settings.GoFumpt
+		l.cfg.Linters.Settings.GoFumpt = l.cfg.Formatters.Settings.GoFumpt
 	}
 
 	if slices.Contains(l.cfg.Formatters.Enable, "goimports") {
-		l.cfg.LintersSettings.GoImports = l.cfg.Formatters.Settings.GoImports
+		l.cfg.Linters.Settings.GoImports = l.cfg.Formatters.Settings.GoImports
 	}
 
 	if slices.Contains(l.cfg.Formatters.Enable, "gci") {
-		l.cfg.LintersSettings.Gci = l.cfg.Formatters.Settings.Gci
+		l.cfg.Linters.Settings.Gci = l.cfg.Formatters.Settings.Gci
 	}
 }
 
@@ -378,7 +210,7 @@ func (l *Loader) handleFormatterExclusions() {
 	}
 
 	for _, path := range l.cfg.Formatters.Exclusions.Paths {
-		l.cfg.Linters.LinterExclusions.Rules = append(l.cfg.Linters.LinterExclusions.Rules, ExcludeRule{
+		l.cfg.Linters.Exclusions.Rules = append(l.cfg.Linters.Exclusions.Rules, ExcludeRule{
 			BaseRule: BaseRule{
 				Linters: l.cfg.Formatters.Enable,
 				Path:    path,
@@ -389,15 +221,4 @@ func (l *Loader) handleFormatterExclusions() {
 
 func (*Loader) handleFormatterDeprecations() {
 	// The function is empty but deprecations will happen in the future.
-}
-
-func customDecoderHook() viper.DecoderConfigOption {
-	return viper.DecodeHook(mapstructure.ComposeDecodeHookFunc(
-		// Default hooks (https://github.com/spf13/viper/blob/518241257478c557633ab36e474dfcaeb9a3c623/viper.go#L135-L138).
-		mapstructure.StringToTimeDurationHookFunc(),
-		mapstructure.StringToSliceHookFunc(","),
-
-		// Needed for forbidigo, and output.formats.
-		mapstructure.TextUnmarshallerHookFunc(),
-	))
 }

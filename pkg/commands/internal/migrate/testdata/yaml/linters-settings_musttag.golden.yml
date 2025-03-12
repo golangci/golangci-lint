@@ -1,0 +1,8 @@
+version: "2"
+linters:
+  settings:
+    musttag:
+      functions:
+        - name: github.com/hashicorp/hcl/v2/hclsimple.DecodeFile
+          tag: hcl
+          arg-pos: 2

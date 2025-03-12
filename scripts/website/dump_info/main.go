@@ -9,17 +9,23 @@ import (
 	"os/exec"
 	"path/filepath"
 
-	"github.com/golangci/golangci-lint/pkg/config"
-	"github.com/golangci/golangci-lint/pkg/lint/linter"
-	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
-	"github.com/golangci/golangci-lint/pkg/result/processors"
-	"github.com/golangci/golangci-lint/scripts/website/types"
+	"github.com/golangci/golangci-lint/v2/pkg/config"
+	"github.com/golangci/golangci-lint/v2/pkg/goformatters"
+	"github.com/golangci/golangci-lint/v2/pkg/lint/linter"
+	"github.com/golangci/golangci-lint/v2/pkg/lint/lintersdb"
+	"github.com/golangci/golangci-lint/v2/pkg/result/processors"
+	"github.com/golangci/golangci-lint/v2/scripts/website/types"
 )
 
 func main() {
 	err := saveLinters()
 	if err != nil {
 		log.Fatalf("Save linters: %v", err)
+	}
+
+	err = saveFormatters()
+	if err != nil {
+		log.Fatalf("Save formatters: %v", err)
 	}
 
 	err = saveDefaultExclusions()
@@ -33,6 +39,47 @@ func main() {
 	}
 }
 
+func saveFormatters() error {
+	linters, _ := lintersdb.NewLinterBuilder().Build(config.NewDefault())
+
+	var wraps []types.LinterWrapper
+	for _, l := range linters {
+		if l.IsDeprecated() && l.Deprecation.Level > linter.DeprecationWarning {
+			continue
+		}
+
+		if !goformatters.IsFormatter(l.Name()) {
+			continue
+		}
+
+		wrapper := types.LinterWrapper{
+			Name:             l.Linter.Name(),
+			Desc:             l.Linter.Desc(),
+			Groups:           l.Groups,
+			LoadMode:         l.LoadMode,
+			AlternativeNames: l.AlternativeNames,
+			OriginalURL:      l.OriginalURL,
+			Internal:         l.Internal,
+			CanAutoFix:       l.CanAutoFix,
+			IsSlow:           l.IsSlow,
+			DoesChangeTypes:  l.DoesChangeTypes,
+			Since:            l.Since,
+		}
+
+		if l.Deprecation != nil {
+			wrapper.Deprecation = &types.Deprecation{
+				Since:       l.Deprecation.Since,
+				Message:     l.Deprecation.Message,
+				Replacement: l.Deprecation.Replacement,
+			}
+		}
+
+		wraps = append(wraps, wrapper)
+	}
+
+	return saveToJSONFile(filepath.Join("assets", "formatters-info.json"), wraps)
+}
+
 func saveLinters() error {
 	linters, _ := lintersdb.NewLinterBuilder().Build(config.NewDefault())
 
@@ -42,12 +89,15 @@ func saveLinters() error {
 			continue
 		}
 
+		if goformatters.IsFormatter(l.Name()) {
+			continue
+		}
+
 		wrapper := types.LinterWrapper{
 			Name:             l.Linter.Name(),
 			Desc:             l.Linter.Desc(),
-			EnabledByDefault: l.EnabledByDefault,
+			Groups:           l.Groups,
 			LoadMode:         l.LoadMode,
-			InPresets:        l.InPresets,
 			AlternativeNames: l.AlternativeNames,
 			OriginalURL:      l.OriginalURL,
 			Internal:         l.Internal,
@@ -102,23 +152,38 @@ func saveCLIHelp(dst string) error {
 
 	lintersOutParts := bytes.Split(lintersOut, []byte("\n\n"))
 
-	helpCmd := exec.Command("./golangci-lint", "run", "-h")
+	rumCmdHelp, err := getCmdHelp("run")
+	if err != nil {
+		return err
+	}
+
+	fmtCmdHelp, err := getCmdHelp("fmt")
+	if err != nil {
+		return err
+	}
+
+	data := types.CLIHelp{
+		Enable:     string(lintersOutParts[0]),
+		RunCmdHelp: rumCmdHelp,
+		FmtCmdHelp: fmtCmdHelp,
+	}
+
+	return saveToJSONFile(dst, data)
+}
+
+func getCmdHelp(name string) (string, error) {
+	helpCmd := exec.Command("./golangci-lint", name, "-h")
 	helpCmd.Env = append(helpCmd.Env, os.Environ()...)
-	helpCmd.Env = append(helpCmd.Env, "HELP_RUN=1") // make default concurrency stable: don't depend on machine CPU number
+
 	help, err := helpCmd.Output()
 	if err != nil {
-		return fmt.Errorf("can't run help cmd: %w", err)
+		return "", fmt.Errorf("can't run help cmd: %w", err)
 	}
 
 	helpLines := bytes.Split(help, []byte("\n"))
 	shortHelp := bytes.Join(helpLines[2:], []byte("\n"))
 
-	data := types.CLIHelp{
-		Enable: string(lintersOutParts[0]),
-		Help:   string(shortHelp),
-	}
-
-	return saveToJSONFile(dst, data)
+	return string(shortHelp), nil
 }
 
 func saveToJSONFile(dst string, data any) error {

@@ -1,0 +1,7 @@
+version: "2"
+linters:
+  settings:
+    recvcheck:
+      disable-builtin: true
+      exclusions:
+        - '*.Value'

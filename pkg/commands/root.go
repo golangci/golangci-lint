@@ -10,7 +10,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 
-	"github.com/golangci/golangci-lint/pkg/logutils"
+	"github.com/golangci/golangci-lint/v2/pkg/logutils"
 )
 
 func Execute(info BuildInfo) error {
@@ -59,8 +59,10 @@ func newRootCommand(info BuildInfo) *rootCommand {
 	// Each command uses a dedicated configuration structure to avoid side effects of bindings.
 	rootCmd.AddCommand(
 		newLintersCommand(log).cmd,
+		newFormattersCommand(log).cmd,
 		newRunCommand(log, info).cmd,
 		newFmtCommand(log, info).cmd,
+		newMigrateCommand(log, info).cmd,
 		newCacheCommand().cmd,
 		newConfigCommand(log, info).cmd,
 		newVersionCommand(info).cmd,

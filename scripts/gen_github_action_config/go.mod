@@ -1,11 +1,11 @@
-module github.com/golangci/golangci-lint/scripts/gen_github_action_config
+module github.com/golangci/golangci-lint/v2/scripts/gen_github_action_config
 
-go 1.22.0
+go 1.23.0
 
 require (
 	github.com/shurcooL/githubv4 v0.0.0-20240429030203-be2daab69064
 	github.com/stretchr/testify v1.10.0
-	golang.org/x/oauth2 v0.26.0
+	golang.org/x/oauth2 v0.28.0
 )
 
 require (

@@ -1,0 +1,73 @@
+issues:
+  # Only to not generate unrelated elements inside golden.
+  exclude-use-default: false
+  # Only to not generate unrelated elements inside golden.
+  exclude-generated: strict
+  # Only to not generate unrelated elements inside golden.
+  exclude-dirs-use-default: false
+
+linters-settings:
+  testifylint:
+    enable-all: true
+    disable:
+      - blank-import
+      - bool-compare
+      - compares
+      - contains
+      - empty
+      - encoded-compare
+      - error-is-as
+      - error-nil
+      - expected-actual
+      - float-compare
+      - formatter
+      - go-require
+      - len
+      - negative-positive
+      - nil-compare
+      - regexp
+      - require-error
+      - suite-broken-parallel
+      - suite-dont-use-pkg
+      - suite-extra-assert-call
+      - suite-subtest-run
+      - suite-thelper
+      - useless-assert
+    disable-all: true
+    enable:
+      - blank-import
+      - bool-compare
+      - compares
+      - contains
+      - empty
+      - encoded-compare
+      - error-is-as
+      - error-nil
+      - expected-actual
+      - float-compare
+      - formatter
+      - go-require
+      - len
+      - negative-positive
+      - nil-compare
+      - regexp
+      - require-error
+      - suite-broken-parallel
+      - suite-dont-use-pkg
+      - suite-extra-assert-call
+      - suite-subtest-run
+      - suite-thelper
+      - useless-assert
+    bool-compare:
+      ignore-custom-types: true
+    expected-actual:
+      pattern: ^expected
+    formatter:
+      check-format-string: false
+      require-f-funcs: true
+    go-require:
+      ignore-http-handlers: true
+    require-error:
+      fn-pattern: ^(Errorf?|NoErrorf?)$
+    suite-extra-assert-call:
+      mode: require

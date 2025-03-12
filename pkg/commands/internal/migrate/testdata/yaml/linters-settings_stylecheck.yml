@@ -1,0 +1,33 @@
+issues:
+  # Only to not generate unrelated elements inside golden.
+  exclude-use-default: false
+  # Only to not generate unrelated elements inside golden.
+  exclude-generated: strict
+  # Only to not generate unrelated elements inside golden.
+  exclude-dirs-use-default: false
+
+linters-settings:
+  stylecheck:
+    dot-import-whitelist:
+      - fmt
+    initialisms: [ "ACL", "API", "ASCII", "CPU", "CSS", "DNS", "EOF", "GUID", "HTML", "HTTP", "HTTPS", "ID", "IP", "JSON", "QPS", "RAM", "RPC", "SLA", "SMTP", "SQL", "SSH", "TCP", "TLS", "TTL", "UDP", "UI", "GID", "UID", "UUID", "URI", "URL", "UTF8", "VM", "XML", "XMPP", "XSRF", "XSS", "SIP", "RTP", "AMQP", "DB", "TS" ]
+    http-status-code-whitelist: [ "200", "400", "404", "500" ]
+    checks:
+      - ST1000
+      - ST1001
+      - ST1003
+      - ST1005
+      - ST1006
+      - ST1008
+      - ST1011
+      - ST1012
+      - ST1013
+      - ST1015
+      - ST1016
+      - ST1017
+      - ST1018
+      - ST1019
+      - ST1020
+      - ST1021
+      - ST1022
+      - ST1023

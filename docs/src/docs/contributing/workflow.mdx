@@ -19,7 +19,7 @@ Fork and clone [golangci-lint](https://github.com/golangci/golangci-lint) reposi
 
 A good way of making sure everything is all right is running the following:
 
-```sh
+```bash
 make build
 ./golangci-lint run -v
 ```
@@ -28,8 +28,8 @@ make build
 
 When you are satisfied with the changes, we suggest you run:
 
-```sh
-$ make test
+```bash
+make test
 ```
 
 Which runs all the linters and tests.
@@ -58,6 +58,7 @@ A GitHub Action [workflow](https://github.com/golangci/golangci-lint/blob/HEAD/.
 
 After making a release you need to update
 GitHub [Action config](https://github.com/golangci/golangci-lint/blob/HEAD/assets/github-action-config.json) by running:
-```sh
+
+```bash
 make assets/github-action-config.json
 ```

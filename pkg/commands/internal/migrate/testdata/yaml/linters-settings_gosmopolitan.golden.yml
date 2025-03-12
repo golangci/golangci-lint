@@ -1,0 +1,17 @@
+version: "2"
+linters:
+  settings:
+    gosmopolitan:
+      allow-time-local: true
+      escape-hatches:
+        - github.com/nicksnyder/go-i18n/v2/i18n.Message
+        - example.com/your/project/i18n/markers.Raw
+        - example.com/your/project/i18n/markers.OK
+        - example.com/your/project/i18n/markers.TODO
+        - command-line-arguments.Simple
+      watch-for-scripts:
+        - Devanagari
+        - Han
+        - Hangul
+        - Hiragana
+        - Katakana

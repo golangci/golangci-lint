@@ -2,21 +2,23 @@
 title: Quick Start
 ---
 
-To run golangci-lint execute:
+## Linting
 
-```sh
+To run golangci-lint:
+
+```bash
 golangci-lint run
 ```
 
-It's an equivalent of executing:
+It's an equivalent of:
 
-```sh
+```bash
 golangci-lint run ./...
 ```
 
 You can choose which directories or files to analyze:
 
-```sh
+```bash
 golangci-lint run dir1 dir2/...
 golangci-lint run file1.go
 ```
@@ -34,8 +36,23 @@ $ golangci-lint help linters
 
 Pass `-E/--enable` to enable linter and `-D/--disable` to disable:
 
-```sh
+```bash
 golangci-lint run --disable-all -E errcheck
 ```
 
 More information about available linters can be found in the [linters page](/usage/linters/).
+
+## Formatting
+
+To format your code:
+
+```bash
+golangci-lint fmt
+```
+
+You can choose which directories or files to analyze:
+
+```bash
+golangci-lint fmt dir1 dir2/...
+golangci-lint fmt file1.go
+```

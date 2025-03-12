@@ -6,9 +6,8 @@ import (
 	"golang.org/x/tools/go/packages"
 	"mvdan.cc/unparam/check"
 
-	"github.com/golangci/golangci-lint/pkg/config"
-	"github.com/golangci/golangci-lint/pkg/goanalysis"
-	"github.com/golangci/golangci-lint/pkg/lint/linter"
+	"github.com/golangci/golangci-lint/v2/pkg/config"
+	"github.com/golangci/golangci-lint/v2/pkg/goanalysis"
 )
 
 const linterName = "unparam"
@@ -33,11 +32,7 @@ func New(settings *config.UnparamSettings) *goanalysis.Linter {
 		"Reports unused function parameters",
 		[]*analysis.Analyzer{analyzer},
 		nil,
-	).WithContextSetter(func(lintCtx *linter.Context) {
-		if settings.Algo != "cha" {
-			lintCtx.Log.Warnf("`linters-settings.unparam.algo` isn't supported by the newest `unparam`")
-		}
-	}).WithLoadMode(goanalysis.LoadModeTypesInfo)
+	).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }
 
 func runUnparam(pass *analysis.Pass, settings *config.UnparamSettings) error {

@@ -1,0 +1,25 @@
+issues:
+  # Only to not generate unrelated elements inside golden.
+  exclude-use-default: false
+  # Only to not generate unrelated elements inside golden.
+  exclude-generated: strict
+  # Only to not generate unrelated elements inside golden.
+  exclude-dirs-use-default: false
+
+output:
+  formats:
+    - format: colored-line-number
+    - format: line-number
+    - format: json
+      path: stderr
+    - format: colored-tab
+    - format: tab
+    - format: html
+    - format: checkstyle
+      path: report.xml
+    - format: code-climate
+    - format: junit-xml
+    - format: junit-xml-extended
+    - format: github-actions
+    - format: teamcity
+    - format: sarif

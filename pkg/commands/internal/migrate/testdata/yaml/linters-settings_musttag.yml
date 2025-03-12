@@ -1,0 +1,14 @@
+issues:
+  # Only to not generate unrelated elements inside golden.
+  exclude-use-default: false
+  # Only to not generate unrelated elements inside golden.
+  exclude-generated: strict
+  # Only to not generate unrelated elements inside golden.
+  exclude-dirs-use-default: false
+
+linters-settings:
+  musttag:
+    functions:
+      - name: github.com/hashicorp/hcl/v2/hclsimple.DecodeFile
+        tag: hcl
+        arg-pos: 2

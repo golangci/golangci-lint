@@ -7,6 +7,31 @@ If you value it, consider supporting us, we appreciate it! ❤️
 [![Open Collective backers and sponsors](https://img.shields.io/badge/OpenCollective-Donate-blue?logo=opencollective&style=for-the-badge)](https://opencollective.com/golangci-lint)
 [![GitHub Sponsors](https://img.shields.io/badge/GitHub-Donate-blue?logo=github&style=for-the-badge)](https://github.com/sponsors/golangci)
 
+### v1.64.7
+
+1. Linters bug fixes
+   * `depguard`: from 2.2.0 to 2.2.1
+   * `dupl`: from 3e9179ac440a to f665c8d69b32
+   * `gosec`: from 2.22.1 to 2.22.2
+   * `staticcheck`: from 0.6.0 to 0.6.1
+2. Documentation
+   * Add GitLab documentation
+
+### v1.64.6
+
+1. Linters bug fixes
+   * `asciicheck`: from 0.4.0 to 0.4.1
+   * `contextcheck`: from 1.1.5 to 1.1.6
+   * `errcheck`: from 1.8.0 to 1.9.0
+   * `exptostd`: from 0.4.1 to 0.4.2
+   * `ginkgolinter`: from 0.19.0 to 0.19.1
+   * `go-exhaustruct`: from 3.3.0 to 3.3.1
+   * `gocheckcompilerdirectives`: from 1.2.1 to 1.3.0
+   * `godot`: from 1.4.20 to 1.5.0
+   * `perfsprint`: from 0.8.1 to 0.8.2
+   * `revive`: from 1.6.1 to 1.7.0
+   * `tagalign`: from 1.4.1 to 1.4.2
+
 ### v1.64.5
 
 1. Bug fixes
@@ -59,6 +84,7 @@ The next release will be golangci-lint [v2](https://github.com/golangci/golangci
    * `staticcheck`: from 0.5.1 to 0.6.0
 4. Deprecations
    * ⚠️ `tenv` is deprecated and replaced by `usetesting.os-setenv: true`.
+   * ⚠️ `exportloopref` deprecation step 2
 5. Misc.
    * Sanitize severities by output format
    * Avoid panic with plugin without description

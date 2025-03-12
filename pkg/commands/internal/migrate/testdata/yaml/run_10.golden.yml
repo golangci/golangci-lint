@@ -1,0 +1,12 @@
+version: "2"
+run:
+  concurrency: 4
+  go: "1.19"
+  relative-path-mode: gomod
+  build-tags:
+    - mytag
+  modules-download-mode: readonly
+  issues-exit-code: 2
+  tests: false
+  allow-parallel-runners: true
+  allow-serial-runners: true

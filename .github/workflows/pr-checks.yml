@@ -1,0 +1,107 @@
+name: Checks
+on:
+  push:
+    branches:
+      - master
+      - main
+  pull_request:
+
+env:
+  # https://github.com/actions/setup-go#supported-version-syntax
+  # ex:
+  # - 1.18beta1 -> 1.18.0-beta.1
+  # - 1.18rc1 -> 1.18.0-rc.1
+  GO_VERSION: '1.24'
+
+jobs:
+  # Check if there is any dirty change for go mod tidy
+  go-mod:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+      - name: Check go mod
+        run: |
+          go mod tidy
+          git diff --exit-code go.mod
+          git diff --exit-code go.sum
+
+  # Checks: GitHub action assets
+  check-generated:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+      - name: Check generated files are up-to-date
+        run: make fast_check_generated
+        env:
+          # needed for github-action-config.json generation
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  check-local-install-script:
+    name: Installation script (local)
+    strategy:
+      matrix:
+        os: [ubuntu-latest, ubuntu-24.04-arm, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check installation script
+        run: cat ./install.sh | sh -s -- -d -b "./install-golangci-lint"
+
+  # Note: the command `run` is tested by the other workflows (`make test`).
+  check-commands:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+      - name: Build golangci-lint
+        run: make build
+
+      - run: ./golangci-lint
+
+      - run: ./golangci-lint fmt
+      - run: ./golangci-lint fmt --diff
+
+      - run: ./golangci-lint cache
+      - run: ./golangci-lint cache status
+      - run: ./golangci-lint cache clean
+
+      - run: ./golangci-lint completion
+      - run: ./golangci-lint completion bash
+      - run: ./golangci-lint completion bash --no-descriptions
+      - run: ./golangci-lint completion zsh
+      - run: ./golangci-lint completion zsh --no-descriptions
+      - run: ./golangci-lint completion fish
+      - run: ./golangci-lint completion fish --no-descriptions
+      - run: ./golangci-lint completion powershell
+      - run: ./golangci-lint completion powershell --no-descriptions
+
+      - run: ./golangci-lint config
+      - run: ./golangci-lint config path
+      - run: ./golangci-lint config path --json
+      # TODO(ldez) after v2: golangci.next.jsonschema.json -> golangci.jsonschema.json
+      - run: ./golangci-lint config verify --schema jsonschema/golangci.next.jsonschema.json
+
+      - run: ./golangci-lint help
+      - run: ./golangci-lint help linters
+      - run: ./golangci-lint help linters --json
+      - run: ./golangci-lint help formatters
+      - run: ./golangci-lint help formatters --json
+      - run: ./golangci-lint linters
+      - run: ./golangci-lint linters --json
+      - run: ./golangci-lint formatters
+      - run: ./golangci-lint formatters --json
+      - run: ./golangci-lint version
+      - run: ./golangci-lint version --short
+      - run: ./golangci-lint version --debug
+      - run: ./golangci-lint version --json
+      - run: ./golangci-lint version --json --debug

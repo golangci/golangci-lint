@@ -27,20 +27,20 @@ import (
 	"go.uber.org/automaxprocs/maxprocs"
 	"gopkg.in/yaml.v3"
 
-	"github.com/golangci/golangci-lint/internal/cache"
-	"github.com/golangci/golangci-lint/pkg/config"
-	"github.com/golangci/golangci-lint/pkg/exitcodes"
-	"github.com/golangci/golangci-lint/pkg/fsutils"
-	"github.com/golangci/golangci-lint/pkg/goanalysis/load"
-	"github.com/golangci/golangci-lint/pkg/goutil"
-	"github.com/golangci/golangci-lint/pkg/lint"
-	"github.com/golangci/golangci-lint/pkg/lint/linter"
-	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
-	"github.com/golangci/golangci-lint/pkg/logutils"
-	"github.com/golangci/golangci-lint/pkg/printers"
-	"github.com/golangci/golangci-lint/pkg/report"
-	"github.com/golangci/golangci-lint/pkg/result"
-	"github.com/golangci/golangci-lint/pkg/timeutils"
+	"github.com/golangci/golangci-lint/v2/internal/cache"
+	"github.com/golangci/golangci-lint/v2/pkg/config"
+	"github.com/golangci/golangci-lint/v2/pkg/exitcodes"
+	"github.com/golangci/golangci-lint/v2/pkg/fsutils"
+	"github.com/golangci/golangci-lint/v2/pkg/goanalysis/load"
+	"github.com/golangci/golangci-lint/v2/pkg/goutil"
+	"github.com/golangci/golangci-lint/v2/pkg/lint"
+	"github.com/golangci/golangci-lint/v2/pkg/lint/linter"
+	"github.com/golangci/golangci-lint/v2/pkg/lint/lintersdb"
+	"github.com/golangci/golangci-lint/v2/pkg/logutils"
+	"github.com/golangci/golangci-lint/v2/pkg/printers"
+	"github.com/golangci/golangci-lint/v2/pkg/report"
+	"github.com/golangci/golangci-lint/v2/pkg/result"
+	"github.com/golangci/golangci-lint/v2/pkg/timeutils"
 )
 
 const defaultTimeout = 0 * time.Minute
@@ -53,8 +53,6 @@ const (
 )
 
 const (
-	// envHelpRun value: "1".
-	envHelpRun        = "HELP_RUN"
 	envMemProfileRate = "GL_MEM_PROFILE_RATE"
 )
 
@@ -187,6 +185,10 @@ func (c *runCommand) persistentPostRunE(_ *cobra.Command, _ []string) error {
 }
 
 func (c *runCommand) preRunE(_ *cobra.Command, args []string) error {
+	if c.cfg.GetConfigDir() != "" && c.cfg.Version != "2" {
+		return fmt.Errorf("invalid version of the configuration: %q", c.cfg.Version)
+	}
+
 	dbManager, err := lintersdb.NewManager(c.log.Child(logutils.DebugKeyLintersDB), c.cfg,
 		lintersdb.NewLinterBuilder(), lintersdb.NewPluginModuleBuilder(c.log), lintersdb.NewPluginGoBuilder(c.log))
 	if err != nil {
@@ -358,7 +360,7 @@ func (c *runCommand) runAndPrint(ctx context.Context) error {
 	// Fills linters information for the JSON printer.
 	for _, lc := range c.dbManager.GetAllSupportedLinterConfigs() {
 		isEnabled := enabledLintersMap[lc.Name()] != nil
-		c.reportData.AddLinter(lc.Name(), isEnabled, lc.EnabledByDefault)
+		c.reportData.AddLinter(lc.Name(), isEnabled)
 	}
 
 	err = c.printer.Print(issues)
@@ -667,12 +669,12 @@ func computeBinarySalt(version string) ([]byte, error) {
 // At least, it has a huge impact on tests speed.
 // Fields: `LintersSettings` and `Run.BuildTags`.
 func computeConfigSalt(cfg *config.Config) ([]byte, error) {
-	lintersSettingsBytes, err := yaml.Marshal(cfg.LintersSettings)
+	lintersSettingsBytes, err := yaml.Marshal(cfg.Linters.Settings)
 	if err != nil {
 		return nil, fmt.Errorf("failed to JSON marshal config linter settings: %w", err)
 	}
 
-	configData := bytes.NewBufferString("linters-settings=")
+	configData := bytes.NewBufferString("linters.settings=")
 	configData.Write(lintersSettingsBytes)
 	configData.WriteString("\nbuild-tags=%s" + strings.Join(cfg.Run.BuildTags, ","))
 

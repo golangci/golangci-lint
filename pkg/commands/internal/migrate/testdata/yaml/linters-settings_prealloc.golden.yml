@@ -1,0 +1,7 @@
+version: "2"
+linters:
+  settings:
+    prealloc:
+      simple: false
+      range-loops: false
+      for-loops: true

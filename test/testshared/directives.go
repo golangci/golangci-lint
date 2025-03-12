@@ -12,7 +12,7 @@ import (
 	hcversion "github.com/hashicorp/go-version"
 	"github.com/stretchr/testify/require"
 
-	"github.com/golangci/golangci-lint/pkg/exitcodes"
+	"github.com/golangci/golangci-lint/v2/pkg/exitcodes"
 )
 
 // RunContext the information extracted from directives.
@@ -133,6 +133,10 @@ func evaluateBuildTags(tb testing.TB, line string) bool {
 
 	return parse.Eval(func(tag string) bool {
 		if tag == runtime.GOOS {
+			return true
+		}
+
+		if tag == runtime.GOARCH {
 			return true
 		}
 

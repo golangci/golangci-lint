@@ -1,0 +1,9 @@
+version: "2"
+linters:
+  settings:
+    ireturn:
+      allow:
+        - anon
+        - (or|er)$
+      reject:
+        - github.com\/user\/package\/v4\.Type

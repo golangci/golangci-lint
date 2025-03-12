@@ -1,0 +1,32 @@
+version: "2"
+linters:
+  exclusions:
+    rules:
+      - linters:
+          - dupl
+          - errcheck
+          - gocyclo
+          - gosec
+        path: _test\.go
+      - linters:
+          - staticcheck
+        path-except: _test\.go
+      - linters:
+          - gosec
+        path: internal/hmac/
+        text: weak cryptographic primitive
+      - linters:
+          - staticcheck
+        text: 'SA9003:'
+      - linters:
+          - staticcheck
+        text: 'ST1006:'
+      - linters:
+          - staticcheck
+        text: 'S1033:'
+      - linters:
+          - lll
+        source: '^//go:generate '
+      - linters:
+          - err113
+        source: foo

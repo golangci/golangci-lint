@@ -1,0 +1,25 @@
+issues:
+  # Only to not generate unrelated elements inside golden.
+  exclude-use-default: false
+  # Only to not generate unrelated elements inside golden.
+  exclude-generated: strict
+  # Only to not generate unrelated elements inside golden.
+  exclude-dirs-use-default: false
+
+linters-settings:
+  sloglint:
+    no-mixed-args: false
+    kv-only: true
+    attr-only: true
+    no-global: "all"
+    context: "all"
+    static-msg: true
+    no-raw-keys: true
+    key-naming-case: snake
+    forbidden-keys:
+      - time
+      - level
+      - msg
+      - source
+      - foo
+    args-on-sep-lines: true

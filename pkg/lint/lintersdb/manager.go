@@ -1,6 +1,7 @@
 package lintersdb
 
 import (
+	"cmp"
 	"fmt"
 	"maps"
 	"os"
@@ -8,10 +9,11 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/golangci/golangci-lint/pkg/config"
-	"github.com/golangci/golangci-lint/pkg/goanalysis"
-	"github.com/golangci/golangci-lint/pkg/lint/linter"
-	"github.com/golangci/golangci-lint/pkg/logutils"
+	"github.com/golangci/golangci-lint/v2/pkg/config"
+	"github.com/golangci/golangci-lint/v2/pkg/goanalysis"
+	"github.com/golangci/golangci-lint/v2/pkg/goformatters"
+	"github.com/golangci/golangci-lint/v2/pkg/lint/linter"
+	"github.com/golangci/golangci-lint/v2/pkg/logutils"
 )
 
 type Builder interface {
@@ -76,23 +78,11 @@ func (m *Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 	return m.linters
 }
 
-func (m *Manager) GetAllLinterConfigsForPreset(p string) []*linter.Config {
-	var ret []*linter.Config
-	for _, lc := range m.linters {
-		if lc.IsDeprecated() {
-			continue
-		}
-
-		if slices.Contains(lc.InPresets, p) {
-			ret = append(ret, lc)
-		}
-	}
-
-	return ret
-}
-
 func (m *Manager) GetEnabledLintersMap() (map[string]*linter.Config, error) {
-	enabledLinters := m.build(m.GetAllEnabledByDefaultLinters())
+	enabledLinters, err := m.build()
+	if err != nil {
+		return nil, err
+	}
 
 	if os.Getenv(logutils.EnvTestRun) == "1" {
 		m.verbosePrintLintersStatus(enabledLinters)
@@ -104,7 +94,11 @@ func (m *Manager) GetEnabledLintersMap() (map[string]*linter.Config, error) {
 // GetOptimizedLinters returns enabled linters after optimization (merging) of multiple linters into a fewer number of linters.
 // E.g. some go/analysis linters can be optimized into one metalinter for data reuse and speed up.
 func (m *Manager) GetOptimizedLinters() ([]*linter.Config, error) {
-	resultLintersSet := m.build(m.GetAllEnabledByDefaultLinters())
+	resultLintersSet, err := m.build()
+	if err != nil {
+		return nil, err
+	}
+
 	m.verbosePrintLintersStatus(resultLintersSet)
 
 	m.combineGoAnalysisLinters(resultLintersSet)
@@ -133,49 +127,47 @@ func (m *Manager) GetOptimizedLinters() ([]*linter.Config, error) {
 	return resultLinters, nil
 }
 
-func (m *Manager) GetAllEnabledByDefaultLinters() []*linter.Config {
-	var ret []*linter.Config
-	for _, lc := range m.linters {
-		if lc.EnabledByDefault {
-			ret = append(ret, lc)
-		}
-	}
-
-	return ret
-}
-
 //nolint:gocyclo // the complexity cannot be reduced.
-func (m *Manager) build(enabledByDefaultLinters []*linter.Config) map[string]*linter.Config {
+func (m *Manager) build() (map[string]*linter.Config, error) {
 	m.debugf("Linters config: %#v", m.cfg.Linters)
 
 	resultLintersSet := map[string]*linter.Config{}
-	switch {
-	case m.cfg.Linters.DisableAll:
+
+	groupName := cmp.Or(m.cfg.Linters.Default, config.GroupStandard)
+
+	switch groupName {
+	case config.GroupNone:
 		// no default linters
-	case len(m.cfg.Linters.Presets) != 0:
-		// imply --disable-all
-	case m.cfg.Linters.EnableAll:
+
+	case config.GroupAll:
 		resultLintersSet = linterConfigsToMap(m.linters)
-	default:
-		resultLintersSet = linterConfigsToMap(enabledByDefaultLinters)
-	}
 
-	// --presets can only add linters to default set
-	for _, p := range m.cfg.Linters.Presets {
-		for _, lc := range m.GetAllLinterConfigsForPreset(p) {
-			resultLintersSet[lc.Name()] = lc
-		}
-	}
-
-	// --fast removes slow linters from current set.
-	// It should be after --presets to be able to run only fast linters in preset.
-	// It should be before --enable and --disable to be able to enable or disable specific linter.
-	if m.cfg.Linters.Fast {
-		for name, lc := range resultLintersSet {
+	case config.GroupFast:
+		var selected []*linter.Config
+		for _, lc := range m.linters {
 			if lc.IsSlowLinter() {
-				delete(resultLintersSet, name)
+				continue
 			}
+
+			selected = append(selected, lc)
 		}
+
+		resultLintersSet = linterConfigsToMap(selected)
+
+	case config.GroupStandard:
+		var selected []*linter.Config
+		for _, lc := range m.linters {
+			if !lc.FromGroup(config.GroupStandard) {
+				continue
+			}
+
+			selected = append(selected, lc)
+		}
+
+		resultLintersSet = linterConfigsToMap(selected)
+
+	default:
+		return nil, fmt.Errorf("unknown group: %s", groupName)
 	}
 
 	for _, name := range slices.Concat(m.cfg.Linters.Enable, m.cfg.Formatters.Enable) {
@@ -192,6 +184,15 @@ func (m *Manager) build(enabledByDefaultLinters []*linter.Config) map[string]*li
 		}
 	}
 
+	if m.cfg.Linters.FastOnly {
+		for lc := range maps.Values(resultLintersSet) {
+			if lc.IsSlowLinter() {
+				// it's important to use lc.Name() nor name because name can be alias
+				delete(resultLintersSet, lc.Name())
+			}
+		}
+	}
+
 	// typecheck is not a real linter and cannot be disabled.
 	if _, ok := resultLintersSet["typecheck"]; !ok && (m.cfg == nil || !m.cfg.InternalCmdTest) {
 		for _, lc := range m.GetLinterConfigs("typecheck") {
@@ -200,7 +201,7 @@ func (m *Manager) build(enabledByDefaultLinters []*linter.Config) map[string]*li
 		}
 	}
 
-	return resultLintersSet
+	return resultLintersSet, nil
 }
 
 func (m *Manager) combineGoAnalysisLinters(linters map[string]*linter.Config) {
@@ -224,8 +225,6 @@ func (m *Manager) combineGoAnalysisLinters(linters map[string]*linter.Config) {
 		if lc.IsSlowLinter() {
 			mlConfig.ConsiderSlow()
 		}
-
-		mlConfig.InPresets = append(mlConfig.InPresets, lc.InPresets...)
 
 		goanalysisLinters = append(goanalysisLinters, lnt)
 	}
@@ -256,9 +255,6 @@ func (m *Manager) combineGoAnalysisLinters(linters map[string]*linter.Config) {
 
 	mlConfig.Linter = goanalysis.NewMetaLinter(goanalysisLinters)
 
-	sort.Strings(mlConfig.InPresets)
-	mlConfig.InPresets = slices.Compact(mlConfig.InPresets)
-
 	linters[mlConfig.Linter.Name()] = mlConfig
 
 	m.debugf("Combined %d go/analysis linters into one metalinter", len(goanalysisLinters))
@@ -275,35 +271,16 @@ func (m *Manager) verbosePrintLintersStatus(lcs map[string]*linter.Config) {
 	}
 	sort.Strings(linterNames)
 	m.log.Infof("Active %d linters: %s", len(linterNames), linterNames)
-
-	if len(m.cfg.Linters.Presets) != 0 {
-		sort.Strings(m.cfg.Linters.Presets)
-		m.log.Infof("Active presets: %s", m.cfg.Linters.Presets)
-	}
-}
-
-func AllPresets() []string {
-	return []string{
-		linter.PresetBugs,
-		linter.PresetComment,
-		linter.PresetComplexity,
-		linter.PresetError,
-		linter.PresetFormatting,
-		linter.PresetImport,
-		linter.PresetMetaLinter,
-		linter.PresetModule,
-		linter.PresetPerformance,
-		linter.PresetSQL,
-		linter.PresetStyle,
-		linter.PresetTest,
-		linter.PresetUnused,
-	}
 }
 
 func linterConfigsToMap(lcs []*linter.Config) map[string]*linter.Config {
 	ret := map[string]*linter.Config{}
 	for _, lc := range lcs {
 		if lc.IsDeprecated() && lc.Deprecation.Level > linter.DeprecationWarning {
+			continue
+		}
+
+		if goformatters.IsFormatter(lc.Name()) {
 			continue
 		}
 

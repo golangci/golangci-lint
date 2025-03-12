@@ -1,0 +1,15 @@
+version: "2"
+linters:
+  settings:
+    loggercheck:
+      kitlog: false
+      klog: false
+      logr: false
+      slog: false
+      zap: false
+      require-string-key: true
+      no-printf-like: true
+      rules:
+        - k8s.io/klog/v2.InfoS
+        - (github.com/go-logr/logr.Logger).Error
+        - (*go.uber.org/zap.SugaredLogger).With

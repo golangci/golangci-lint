@@ -1,0 +1,11 @@
+version: "2"
+linters:
+  settings:
+    cyclop:
+      max-complexity: 10
+      package-average: 0.5
+  exclusions:
+    rules:
+      - linters:
+          - cyclop
+        path: (.+)_test\.go

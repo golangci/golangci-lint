@@ -1,0 +1,14 @@
+issues:
+  # Only to not generate unrelated elements inside golden.
+  exclude-use-default: false
+  # Only to not generate unrelated elements inside golden.
+  exclude-generated: strict
+  # Only to not generate unrelated elements inside golden.
+  exclude-dirs-use-default: false
+
+  new: false
+  new-from-merge-base: ''
+  new-from-rev: ''
+  new-from-patch: ''
+  whole-files: false
+  fix: false

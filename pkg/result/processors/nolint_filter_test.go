@@ -9,11 +9,11 @@ import (
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 
-	"github.com/golangci/golangci-lint/pkg/config"
-	"github.com/golangci/golangci-lint/pkg/golinters/nolintlint"
-	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
-	"github.com/golangci/golangci-lint/pkg/logutils"
-	"github.com/golangci/golangci-lint/pkg/result"
+	"github.com/golangci/golangci-lint/v2/pkg/config"
+	"github.com/golangci/golangci-lint/v2/pkg/golinters/nolintlint"
+	"github.com/golangci/golangci-lint/v2/pkg/lint/lintersdb"
+	"github.com/golangci/golangci-lint/v2/pkg/logutils"
+	"github.com/golangci/golangci-lint/v2/pkg/result"
 )
 
 func newNolintFileIssue(line int, fromLinter string) result.Issue {
@@ -272,7 +272,7 @@ func TestNolintFilter_Process_unused(t *testing.T) {
 		enabledSetLog := logutils.NewMockLog()
 		enabledSetLog.On("Infof", "Active %d linters: %s", len(enabledLinters), enabledLinters)
 
-		cfg := &config.Config{Linters: config.Linters{DisableAll: true, Enable: enabledLinters}}
+		cfg := &config.Config{Linters: config.Linters{Default: config.GroupNone, Enable: enabledLinters}}
 
 		dbManager, err := lintersdb.NewManager(enabledSetLog, cfg, lintersdb.NewLinterBuilder())
 		require.NoError(t, err)
@@ -336,7 +336,7 @@ func TestNolintFilter_Process_unused(t *testing.T) {
 		enabledSetLog := logutils.NewMockLog()
 		enabledSetLog.On("Infof", "Active %d linters: %s", 1, []string{"nolintlint"})
 
-		cfg := &config.Config{Linters: config.Linters{DisableAll: true, Enable: []string{"nolintlint"}}}
+		cfg := &config.Config{Linters: config.Linters{Default: config.GroupNone, Enable: []string{"nolintlint"}}}
 
 		dbManager, err := lintersdb.NewManager(enabledSetLog, cfg, lintersdb.NewLinterBuilder())
 		require.NoError(t, err)

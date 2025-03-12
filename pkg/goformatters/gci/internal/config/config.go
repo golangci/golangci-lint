@@ -8,7 +8,8 @@ import (
 
 	"github.com/daixiang0/gci/pkg/config"
 	"github.com/daixiang0/gci/pkg/section"
-	sectioni "github.com/golangci/golangci-lint/pkg/goformatters/gci/internal/section"
+
+	sectioni "github.com/golangci/golangci-lint/v2/pkg/goformatters/gci/internal/section"
 )
 
 var defaultOrder = map[string]int{

@@ -1,0 +1,6 @@
+version: "2"
+linters:
+  settings:
+    gochecksumtype:
+      default-signifies-exhaustive: false
+      include-shared-interfaces: true

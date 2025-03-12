@@ -1,5 +1,6 @@
 version: "2"
 
-linters-settings:
-  gocognit:
-    min-complexity: 2
+linters:
+  settings:
+    gocognit:
+      min-complexity: 2

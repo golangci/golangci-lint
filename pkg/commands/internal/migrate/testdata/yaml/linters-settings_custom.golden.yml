@@ -1,0 +1,11 @@
+version: "2"
+linters:
+  settings:
+    custom:
+      example:
+        type: module
+        path: /path/to/example.so
+        description: This is an example usage of a plugin linter.
+        original-url: github.com/golangci/example-linter
+        settings:
+          foo: bar

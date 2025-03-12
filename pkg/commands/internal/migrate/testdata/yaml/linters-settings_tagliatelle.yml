@@ -1,0 +1,45 @@
+issues:
+  # Only to not generate unrelated elements inside golden.
+  exclude-use-default: false
+  # Only to not generate unrelated elements inside golden.
+  exclude-generated: strict
+  # Only to not generate unrelated elements inside golden.
+  exclude-dirs-use-default: false
+
+linters-settings:
+  tagliatelle:
+    case:
+      rules:
+        json: camel
+        yaml: camel
+        xml: camel
+        toml: camel
+        bson: camel
+        avro: snake
+        mapstructure: kebab
+        env: upperSnake
+        envconfig: upperSnake
+        whatever: snake
+      extended-rules:
+        json:
+          case: camel
+          extra-initialisms: true
+          initialism-overrides:
+            DB: true
+            LHS: false
+      use-field-name: true
+      ignored-fields:
+        - Bar
+        - Foo
+      overrides:
+        -
+          pkg: foo/bar
+          rules:
+            json: snake
+            xml: pascal
+          extended-rules:
+          use-field-name: true
+          ignored-fields:
+            - Bar
+            - Foo
+          ignore: true

@@ -1,4 +1,3 @@
-//golangcitest:args -Egofmt
 //golangcitest:config_path testdata/gofmt_rewrite_rules.yml
 package testdata
 

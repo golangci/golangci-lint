@@ -1,0 +1,6 @@
+version: "2"
+linters:
+  settings:
+    paralleltest:
+      ignore-missing: true
+      ignore-missing-subtests: true

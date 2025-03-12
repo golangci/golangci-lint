@@ -1,21 +1,19 @@
 package processors
 
 import (
-	"path"
 	"path/filepath"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/golangci/golangci-lint/pkg/config"
-	"github.com/golangci/golangci-lint/pkg/fsutils"
-	"github.com/golangci/golangci-lint/pkg/logutils"
-	"github.com/golangci/golangci-lint/pkg/result"
+	"github.com/golangci/golangci-lint/v2/pkg/config"
+	"github.com/golangci/golangci-lint/v2/pkg/fsutils"
+	"github.com/golangci/golangci-lint/v2/pkg/logutils"
+	"github.com/golangci/golangci-lint/v2/pkg/result"
 )
 
 func TestSeverity_multiple(t *testing.T) {
 	lineCache := fsutils.NewLineCache(fsutils.NewFileCache())
-	files := fsutils.NewFiles(lineCache, "")
 	log := logutils.NewStderrLog(logutils.DebugKeyEmpty)
 
 	opts := &config.Severity{
@@ -79,7 +77,7 @@ func TestSeverity_multiple(t *testing.T) {
 		},
 	}
 
-	p := NewSeverity(log, files, opts)
+	p := NewSeverity(log, lineCache, opts)
 
 	cases := []issueTestCase{
 		{Path: "ssl.go", Text: "ssl", Linter: "gosec"},
@@ -128,58 +126,6 @@ func TestSeverity_multiple(t *testing.T) {
 	assert.Equal(t, expectedCases, resultingCases)
 }
 
-func TestSeverity_pathPrefix(t *testing.T) {
-	lineCache := fsutils.NewLineCache(fsutils.NewFileCache())
-	pathPrefix := path.Join("some", "dir")
-	files := fsutils.NewFiles(lineCache, pathPrefix)
-	log := logutils.NewStderrLog(logutils.DebugKeyEmpty)
-
-	opts := &config.Severity{
-		Default: "error",
-		Rules: []config.SeverityRule{
-			{
-				Severity: "info",
-				BaseRule: config.BaseRule{
-					Text: "some",
-					Path: `some/dir/e\.go`,
-				},
-			},
-		},
-	}
-
-	p := NewSeverity(log, files, opts)
-
-	cases := []issueTestCase{
-		{Path: "e.go", Text: "some", Linter: "linter"},
-		{Path: "other.go", Text: "some", Linter: "linter"},
-	}
-
-	var issues []result.Issue
-	for _, c := range cases {
-		issues = append(issues, newIssueFromIssueTestCase(c))
-	}
-
-	processedIssues := process(t, p, issues...)
-
-	var resultingCases []issueTestCase
-	for _, i := range processedIssues {
-		resultingCases = append(resultingCases, issueTestCase{
-			Path:     i.FilePath(),
-			Linter:   i.FromLinter,
-			Text:     i.Text,
-			Line:     i.Line(),
-			Severity: i.Severity,
-		})
-	}
-
-	expectedCases := []issueTestCase{
-		{Path: "e.go", Text: "some", Linter: "linter", Severity: "info"},
-		{Path: "other.go", Text: "some", Linter: "linter", Severity: "error"},
-	}
-
-	assert.Equal(t, expectedCases, resultingCases)
-}
-
 func TestSeverity_text(t *testing.T) {
 	opts := &config.Severity{
 		Rules: []config.SeverityRule{
@@ -216,7 +162,6 @@ func TestSeverity_text(t *testing.T) {
 
 func TestSeverity_onlyDefault(t *testing.T) {
 	lineCache := fsutils.NewLineCache(fsutils.NewFileCache())
-	files := fsutils.NewFiles(lineCache, "")
 	log := logutils.NewStderrLog(logutils.DebugKeyEmpty)
 
 	opts := config.Severity{
@@ -224,7 +169,7 @@ func TestSeverity_onlyDefault(t *testing.T) {
 		Rules:   []config.SeverityRule{},
 	}
 
-	p := NewSeverity(log, files, &opts)
+	p := NewSeverity(log, lineCache, &opts)
 
 	cases := []issueTestCase{
 		{Path: "ssl.go", Text: "ssl", Linter: "gosec"},
@@ -265,7 +210,6 @@ func TestSeverity_empty(t *testing.T) {
 
 func TestSeverity_caseSensitive(t *testing.T) {
 	lineCache := fsutils.NewLineCache(fsutils.NewFileCache())
-	files := fsutils.NewFiles(lineCache, "")
 
 	opts := &config.Severity{
 		Default: "error",
@@ -280,7 +224,7 @@ func TestSeverity_caseSensitive(t *testing.T) {
 		},
 	}
 
-	p := NewSeverity(nil, files, opts)
+	p := NewSeverity(nil, lineCache, opts)
 
 	cases := []issueTestCase{
 		{Path: "e.go", Text: "ssL", Linter: "gosec"},
@@ -313,7 +257,6 @@ func TestSeverity_caseSensitive(t *testing.T) {
 
 func TestSeverity_transform(t *testing.T) {
 	lineCache := fsutils.NewLineCache(fsutils.NewFileCache())
-	files := fsutils.NewFiles(lineCache, "")
 
 	testCases := []struct {
 		desc     string
@@ -485,7 +428,7 @@ func TestSeverity_transform(t *testing.T) {
 		t.Run(test.desc, func(t *testing.T) {
 			t.Parallel()
 
-			p := NewSeverity(nil, files, test.opts)
+			p := NewSeverity(nil, lineCache, test.opts)
 
 			newIssue := p.transform(test.issue)
 

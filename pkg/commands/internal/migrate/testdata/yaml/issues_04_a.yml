@@ -1,0 +1,47 @@
+issues:
+  # Only to not generate unrelated elements inside golden.
+  exclude-use-default: false
+  # Only to not generate unrelated elements inside golden.
+  exclude-generated: strict
+  # Only to not generate unrelated elements inside golden.
+  exclude-dirs-use-default: false
+
+  exclude-case-sensitive: false
+  exclude-rules:
+    - path: _test\.go
+      linters:
+        - gocyclo
+        - errcheck
+        - dupl
+        - gosec
+
+    - path-except: _test\.go
+      linters:
+        - staticcheck
+        - stylecheck
+        - gosimple
+
+    - path: internal/hmac/
+      text: "weak cryptographic primitive"
+      linters:
+        - gosec
+
+    - linters:
+        - staticcheck
+      text: "SA9003:"
+
+    - linters:
+        - stylecheck
+      text: "ST1006:"
+
+    - linters:
+        - gosimple
+      text: "S1033:"
+
+    - linters:
+        - lll
+      source: "^//go:generate "
+
+    - linters:
+        - goerr113
+      source: "foo"

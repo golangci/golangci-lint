@@ -1,11 +1,10 @@
-//golangcitest:args -Egoimports
 //golangcitest:config_path testdata/goimports_local.yml
 package testdata
 
 import (
 	"fmt"
 
-	"github.com/golangci/golangci-lint/pkg/config" // want "File is not properly formatted"
+	"github.com/golangci/golangci-lint/v2/pkg/config" // want "File is not properly formatted"
 	"golang.org/x/tools/go/analysis"
 )
 

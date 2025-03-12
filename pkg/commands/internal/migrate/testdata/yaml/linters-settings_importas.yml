@@ -1,0 +1,21 @@
+issues:
+  # Only to not generate unrelated elements inside golden.
+  exclude-use-default: false
+  # Only to not generate unrelated elements inside golden.
+  exclude-generated: strict
+  # Only to not generate unrelated elements inside golden.
+  exclude-dirs-use-default: false
+
+linters-settings:
+  importas:
+    no-unaliased: true
+    no-extra-aliases: true
+    alias:
+      - pkg: knative.dev/serving/pkg/apis/serving/v1
+        alias: servingv1
+      - pkg: knative.dev/serving/pkg/apis/autoscaling/v1alpha1
+        alias: autoscalingv1alpha1
+      - pkg: knative.dev/serving/pkg/apis/(\w+)/(v[\w\d]+)
+        alias: $1$2
+      - pkg: errors
+        alias: ""

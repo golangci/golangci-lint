@@ -1,0 +1,13 @@
+version: "2"
+linters:
+  settings:
+    nilnil:
+      detect-opposite: true
+      checked-types:
+        - chan
+        - func
+        - iface
+        - map
+        - ptr
+        - uintptr
+        - unsafeptr

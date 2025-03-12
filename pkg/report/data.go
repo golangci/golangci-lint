@@ -6,9 +6,8 @@ type Warning struct {
 }
 
 type LinterData struct {
-	Name             string
-	Enabled          bool `json:",omitempty"`
-	EnabledByDefault bool `json:",omitempty"`
+	Name    string
+	Enabled bool `json:",omitempty"`
 }
 
 type Data struct {
@@ -17,10 +16,9 @@ type Data struct {
 	Error    string       `json:",omitempty"`
 }
 
-func (d *Data) AddLinter(name string, enabled, enabledByDefault bool) {
+func (d *Data) AddLinter(name string, enabled bool) {
 	d.Linters = append(d.Linters, LinterData{
-		Name:             name,
-		Enabled:          enabled,
-		EnabledByDefault: enabledByDefault,
+		Name:    name,
+		Enabled: enabled,
 	})
 }

@@ -7,8 +7,8 @@ title: "Install"
 Most installations of `golangci-lint` are performed for CI.
 
 It's important to have reproducible CI: don't start to fail all builds at the same time.
-With golangci-lint this can happen if you use option `--enable-all` and a new linter is added
-or even without `--enable-all` when one upstream linter is upgraded.
+With golangci-lint this can happen if you use option `linters.default: all` and a new linter is added
+or even without `linters.default: all` when one upstream linter is upgraded.
 
 **IMPORTANT**: It's highly recommended installing a specific version of golangci-lint available on the [releases page](https://github.com/golangci/golangci-lint/releases).
 
@@ -25,11 +25,23 @@ Also, the action creates GitHub annotations for found issues (you don't need to 
 
 ![GitHub annotations of the action](./annotations.png)
 
+### GitLab CI
+
+GitLab provides a [guide for integrating golangci-lint into the Code Quality widget](https://docs.gitlab.com/ci/testing/code_quality/#golangci-lint).
+A simple quickstart is their [CI component](https://gitlab.com/explore/catalog/components/code-quality-oss/codequality-os-scanners-integration), which can be used like this:
+
+```yaml .gitlab-ci.yml
+include:
+  - component: $CI_SERVER_FQDN/components/code-quality-oss/codequality-os-scanners-integration/golangci@1.0.1
+```
+
+Note that you [can only reference components in the same GitLab instance as your project](https://docs.gitlab.com/ci/components/#use-a-component)
+
 ### Other CI
 
 Here is the other way to install golangci-lint:
 
-```sh
+```bash
 # binary will be $(go env GOPATH)/bin/golangci-lint
 curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/HEAD/install.sh | sh -s -- -b $(go env GOPATH)/bin {.LatestVersion}
 
@@ -51,7 +63,7 @@ and is constantly being improved. For any problems with `golangci-lint`, check o
 
 ### Binaries
 
-```sh
+```bash
 # binary will be $(go env GOPATH)/bin/golangci-lint
 curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/HEAD/install.sh | sh -s -- -b $(go env GOPATH)/bin {.LatestVersion}
 
@@ -73,7 +85,7 @@ so we recommend either using our binaries or be sure of the version of Go used t
 
 You can install a binary release on macOS using [brew](https://brew.sh/):
 
-```sh
+```bash
 brew install golangci-lint
 brew upgrade golangci-lint
 ```
@@ -82,7 +94,7 @@ Note: Previously we used a [Homebrew tap](https://github.com/golangci/homebrew-t
 isn't immediately available via Homebrew core due to manual updates that need to occur from Homebrew core maintainers. In this case, the tap formula, which is updated automatically,
 can be used to install the latest version of `golangci-lint`:
 
-```sh
+```bash
 brew tap golangci/tap
 brew install golangci/tap/golangci-lint
 ```
@@ -92,7 +104,7 @@ brew install golangci/tap/golangci-lint
 It can also be installed through [MacPorts](https://www.macports.org/)
 The MacPorts installation mode is community driven, and not officially maintained by golangci team.
 
-```sh
+```bash
 sudo port install golangci-lint
 ```
 
@@ -102,7 +114,7 @@ sudo port install golangci-lint
 
 You can install a binary on Windows using [chocolatey](https://community.chocolatey.org/packages/golangci-lint).
 
-```sh
+```bash
 choco install golangci-lint
 ```
 
@@ -110,7 +122,7 @@ choco install golangci-lint
 
 You can install a binary on Windows using [scoop](https://scoop.sh).
 
-```sh
+```bash
 scoop install main/golangci-lint
 ```
 
@@ -118,17 +130,17 @@ The scoop package is not officially maintained by golangci team.
 
 ### Docker
 
-```sh
+```bash
 docker run --rm -v $(pwd):/app -w /app golangci/golangci-lint:{.LatestVersion} golangci-lint run -v
 ```
 
 Preserving cache between consecutive runs:
-```sh
+```bash
 docker run --rm -v $(pwd):/app -v ~/.cache/golangci-lint/{.LatestVersion}:/root/.cache -w /app golangci/golangci-lint:{.LatestVersion} golangci-lint run -v
 ```
 
 Colored output:
-```sh
+```bash
 docker run -t --rm -v $(pwd):/app -w /app golangci/golangci-lint:{.LatestVersion} golangci-lint run -v
 ```
 
@@ -148,8 +160,8 @@ These installations aren't recommended because of the following points:
 6. It allows installation from the main branch, which can't be considered stable.
 7. It's slower than binary installation.
 
-```sh
-go install github.com/golangci/golangci-lint/cmd/golangci-lint@{.LatestVersion}
+```bash
+go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@{.LatestVersion}
 ```
 
 ## Next

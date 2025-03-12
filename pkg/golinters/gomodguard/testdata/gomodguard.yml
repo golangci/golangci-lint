@@ -1,13 +1,14 @@
 version: "2"
 
-linters-settings:
-  gomodguard:
-    allowed:
-      modules:                                                      # List of allowed modules
-        - golang.org/x/mod
-    blocked:
-      modules:                                                      # List of blocked modules
-        - gopkg.in/yaml.v3:                                         # Blocked module
-            recommendations:                                        # Recommended modules that should be used instead (Optional)
-              - github.com/kylelemons/go-gypsy                           
-            reason: "This is an example of recommendations."        # Reason why the recommended module should be used (Optional)
+linters:
+  settings:
+    gomodguard:
+      allowed:
+        modules:                                                      # List of allowed modules
+          - golang.org/x/mod
+      blocked:
+        modules:                                                      # List of blocked modules
+          - gopkg.in/yaml.v3:                                         # Blocked module
+              recommendations:                                        # Recommended modules that should be used instead (Optional)
+                - github.com/kylelemons/go-gypsy
+              reason: "This is an example of recommendations."        # Reason why the recommended module should be used (Optional)

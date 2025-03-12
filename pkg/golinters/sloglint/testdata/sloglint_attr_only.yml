@@ -1,5 +1,6 @@
 version: "2"
 
-linters-settings:
-  sloglint:
-    attr-only: true
+linters:
+  settings:
+    sloglint:
+      attr-only: true

@@ -1,6 +1,6 @@
 package processors
 
-import "github.com/golangci/golangci-lint/pkg/config"
+import "github.com/golangci/golangci-lint/v2/pkg/config"
 
 var LinterExclusionPresets = map[string][]config.ExcludeRule{
 	config.ExclusionPresetComments: {
@@ -9,7 +9,7 @@ var LinterExclusionPresets = map[string][]config.ExcludeRule{
 			// CheckPackageComment, CheckExportedFunctionDocs, CheckExportedTypeDocs, CheckExportedVarDocs
 			BaseRule: config.BaseRule{
 				Text:              "(ST1000|ST1020|ST1021|ST1022)",
-				Linters:           []string{"stylecheck"},
+				Linters:           []string{"staticcheck"},
 				InternalReference: "EXC0011",
 			},
 		},

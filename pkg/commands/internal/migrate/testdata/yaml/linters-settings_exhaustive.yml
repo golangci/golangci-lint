@@ -1,0 +1,21 @@
+issues:
+  # Only to not generate unrelated elements inside golden.
+  exclude-use-default: false
+  # Only to not generate unrelated elements inside golden.
+  exclude-generated: strict
+  # Only to not generate unrelated elements inside golden.
+  exclude-dirs-use-default: false
+
+linters-settings:
+  exhaustive:
+    check:
+      - switch
+      - map
+    check-generated: true
+    default-signifies-exhaustive: true
+    ignore-enum-members: "Example.+"
+    ignore-enum-types: "Example.+"
+    package-scope-only: true
+    explicit-exhaustive-switch: true
+    explicit-exhaustive-map: true
+    default-case-required: true

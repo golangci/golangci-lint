@@ -8,8 +8,8 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/golangci/golangci-lint/pkg/exitcodes"
-	"github.com/golangci/golangci-lint/test/testshared"
+	"github.com/golangci/golangci-lint/v2/pkg/exitcodes"
+	"github.com/golangci/golangci-lint/v2/test/testshared"
 )
 
 //nolint:misspell // misspelling is intentional
@@ -20,7 +20,7 @@ func TestOutput_lineNumber(t *testing.T) {
 
 	testshared.NewRunnerBuilder(t).
 		WithArgs(
-			"--disable-all",
+			"--default=none",
 			"--output.text.print-issued-lines=false",
 			"--output.text.print-linter-name=false",
 			"--output.text.path=stdout",
@@ -39,7 +39,7 @@ func TestOutput_Stderr(t *testing.T) {
 
 	testshared.NewRunnerBuilder(t).
 		WithArgs(
-			"--disable-all",
+			"--default=none",
 			"--output.json.path=stderr",
 		).
 		WithDirectives(sourcePath).
@@ -57,7 +57,7 @@ func TestOutput_File(t *testing.T) {
 
 	testshared.NewRunnerBuilder(t).
 		WithArgs(
-			"--disable-all",
+			"--default=none",
 			fmt.Sprintf("--output.json.path=%s", resultPath),
 		).
 		WithDirectives(sourcePath).
@@ -77,7 +77,7 @@ func TestOutput_Multiple(t *testing.T) {
 
 	testshared.NewRunnerBuilder(t).
 		WithArgs(
-			"--disable-all",
+			"--default=none",
 			"--output.text.print-issued-lines=false",
 			"--output.text.print-linter-name=false",
 			"--output.text.path=stdout",

@@ -1,5 +1,6 @@
 version: "2"
 
-linters-settings:
-  grouper:
-    import-require-grouping: true
+linters:
+  settings:
+    grouper:
+      import-require-grouping: true

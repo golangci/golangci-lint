@@ -1,0 +1,17 @@
+version: "2"
+linters:
+  settings:
+    goconst:
+      ignore-strings: foo.+
+      match-constant: false
+      min-len: 2
+      min-occurrences: 2
+      numbers: true
+      min: 2
+      max: 2
+      ignore-calls: false
+  exclusions:
+    rules:
+      - linters:
+          - goconst
+        path: (.+)_test\.go

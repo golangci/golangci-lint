@@ -5,8 +5,9 @@ import (
 )
 
 type CLIHelp struct {
-	Enable string `json:"enable"`
-	Help   string `json:"help"`
+	Enable     string `json:"enable"`
+	RunCmdHelp string `json:"help"`
+	FmtCmdHelp string `json:"fmtHelp"`
 }
 
 type ExcludeRule struct {
@@ -30,7 +31,7 @@ type LinterWrapper struct {
 	Name string `json:"name"` // From linter.
 	Desc string `json:"desc"` // From linter.
 
-	EnabledByDefault bool `json:"enabledByDefault,omitempty"`
+	Groups map[string]struct{}
 
 	LoadMode packages.LoadMode `json:"loadMode,omitempty"`
 

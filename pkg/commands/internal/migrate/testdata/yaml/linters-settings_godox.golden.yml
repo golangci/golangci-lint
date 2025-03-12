@@ -1,0 +1,8 @@
+version: "2"
+linters:
+  settings:
+    godox:
+      keywords:
+        - NOTE
+        - OPTIMIZE
+        - HACK

@@ -25,7 +25,7 @@ func _() {
 	C.free(unsafe.Pointer(cs))
 }
 
-func unparamUnusedCGO(a, b uint) uint { // want "`unparamUnusedCGO` - `b` is unused"
+func unparamUnusedCGO(a, b uint) uint { // want "unparamUnusedCGO - b is unused"
 	a++
 	return a
 }

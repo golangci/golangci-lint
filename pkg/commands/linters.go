@@ -1,20 +1,28 @@
 package commands
 
 import (
+	"encoding/json"
 	"fmt"
 
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-	"github.com/golangci/golangci-lint/pkg/config"
-	"github.com/golangci/golangci-lint/pkg/lint/linter"
-	"github.com/golangci/golangci-lint/pkg/lint/lintersdb"
-	"github.com/golangci/golangci-lint/pkg/logutils"
+	"github.com/golangci/golangci-lint/v2/pkg/config"
+	"github.com/golangci/golangci-lint/v2/pkg/goformatters"
+	"github.com/golangci/golangci-lint/v2/pkg/lint/linter"
+	"github.com/golangci/golangci-lint/v2/pkg/lint/lintersdb"
+	"github.com/golangci/golangci-lint/v2/pkg/logutils"
 )
+
+type lintersHelp struct {
+	Enabled  []linterHelp
+	Disabled []linterHelp
+}
 
 type lintersOptions struct {
 	config.LoaderOptions
+	JSON bool
 }
 
 type lintersCommand struct {
@@ -53,6 +61,8 @@ func newLintersCommand(logger logutils.Log) *lintersCommand {
 	setupConfigFileFlagSet(fs, &c.opts.LoaderOptions)
 	setupLintersFlagSet(c.viper, fs)
 
+	fs.BoolVar(&c.opts.JSON, "json", false, color.GreenString("Display as JSON"))
+
 	c.cmd = lintersCmd
 
 	return c
@@ -84,24 +94,43 @@ func (c *lintersCommand) execute(_ *cobra.Command, _ []string) error {
 	}
 
 	var enabledLinters []*linter.Config
-	var disabledLCs []*linter.Config
+	var disabledLinters []*linter.Config
 
 	for _, lc := range c.dbManager.GetAllSupportedLinterConfigs() {
 		if lc.Internal {
 			continue
 		}
 
+		if goformatters.IsFormatter(lc.Name()) {
+			continue
+		}
+
 		if enabledLintersMap[lc.Name()] == nil {
-			disabledLCs = append(disabledLCs, lc)
+			disabledLinters = append(disabledLinters, lc)
 		} else {
 			enabledLinters = append(enabledLinters, lc)
 		}
 	}
 
+	if c.opts.JSON {
+		linters := lintersHelp{}
+
+		for _, lc := range enabledLinters {
+			linters.Enabled = append(linters.Enabled, newLinterHelp(lc))
+		}
+
+		for _, lc := range disabledLinters {
+			linters.Disabled = append(linters.Disabled, newLinterHelp(lc))
+		}
+
+		return json.NewEncoder(c.cmd.OutOrStdout()).Encode(linters)
+	}
+
 	color.Green("Enabled by your configuration linters:\n")
 	printLinters(enabledLinters)
+
 	color.Red("\nDisabled by your configuration linters:\n")
-	printLinters(disabledLCs)
+	printLinters(disabledLinters)
 
 	return nil
 }

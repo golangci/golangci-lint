@@ -1,5 +1,5 @@
 //golangcitest:config_path testdata/ginkgolinter_suppress_compare.yml
-//golangcitest:args --disable-all -Eginkgolinter
+//golangcitest:args -Eginkgolinter
 package ginkgolinter
 
 import (

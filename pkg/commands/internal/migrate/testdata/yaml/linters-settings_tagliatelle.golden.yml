@@ -1,0 +1,27 @@
+version: "2"
+linters:
+  settings:
+    tagliatelle:
+      case:
+        rules:
+          avro: snake
+          bson: camel
+          env: upperSnake
+          envconfig: upperSnake
+          json: camel
+          mapstructure: kebab
+          toml: camel
+          whatever: snake
+          xml: camel
+          yaml: camel
+        extended-rules:
+          json:
+            case: camel
+            extra-initialisms: true
+            initialism-overrides:
+              DB: true
+              LHS: false
+        use-field-name: true
+        ignored-fields:
+          - Bar
+          - Foo

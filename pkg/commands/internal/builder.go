@@ -12,7 +12,7 @@ import (
 	"time"
 	"unicode"
 
-	"github.com/golangci/golangci-lint/pkg/logutils"
+	"github.com/golangci/golangci-lint/v2/pkg/logutils"
 )
 
 // Builder runs all the required commands to build a binary.
@@ -243,7 +243,7 @@ func (b Builder) getBinaryName() string {
 
 func sanitizeVersion(v string) string {
 	fn := func(c rune) bool {
-		return !(unicode.IsLetter(c) || unicode.IsNumber(c) || c == '.' || c == '/')
+		return !unicode.IsLetter(c) && !unicode.IsNumber(c) && c != '.' && c != '/'
 	}
 
 	return strings.Join(strings.FieldsFunc(v, fn), "")

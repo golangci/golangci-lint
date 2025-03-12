@@ -1,0 +1,14 @@
+version: "2"
+linters:
+  settings:
+    gomoddirectives:
+      replace-allow-list:
+        - launchpad.net/gocheck
+      replace-local: true
+      exclude-forbidden: true
+      retract-allow-no-explanation: true
+      toolchain-forbidden: true
+      toolchain-pattern: go1\.23\.\d+$
+      tool-forbidden: true
+      go-debug-forbidden: true
+      go-version-pattern: \d\.\d+(\.0)?

@@ -6,10 +6,10 @@ import (
 
 	"github.com/golangci/plugin-module-register/register"
 
-	"github.com/golangci/golangci-lint/pkg/config"
-	"github.com/golangci/golangci-lint/pkg/goanalysis"
-	"github.com/golangci/golangci-lint/pkg/lint/linter"
-	"github.com/golangci/golangci-lint/pkg/logutils"
+	"github.com/golangci/golangci-lint/v2/pkg/config"
+	"github.com/golangci/golangci-lint/v2/pkg/goanalysis"
+	"github.com/golangci/golangci-lint/v2/pkg/lint/linter"
+	"github.com/golangci/golangci-lint/v2/pkg/logutils"
 )
 
 const modulePluginType = "module"
@@ -32,7 +32,7 @@ func (b *PluginModuleBuilder) Build(cfg *config.Config) ([]*linter.Config, error
 
 	var linters []*linter.Config
 
-	for name, settings := range cfg.LintersSettings.Custom {
+	for name, settings := range cfg.Linters.Settings.Custom {
 		if settings.Type != modulePluginType {
 			continue
 		}
@@ -66,7 +66,7 @@ func (b *PluginModuleBuilder) Build(cfg *config.Config) ([]*linter.Config, error
 		}
 
 		lc := linter.NewConfig(customLinter).
-			WithEnabledByDefault().
+			WithGroups(config.GroupStandard).
 			WithURL(settings.OriginalURL)
 
 		switch strings.ToLower(p.GetLoadMode()) {

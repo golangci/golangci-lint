@@ -1,12 +1,13 @@
 version: "2"
 
-linters-settings:
-  importas:
-    no-unaliased: true
-    alias:
-      - pkg: fmt
-        alias: fff
-      - pkg: os
-        alias: std_os
-      - pkg: golang.org/x/tools/go/analysis
-        alias: ananas
+linters:
+  settings:
+    importas:
+      no-unaliased: true
+      alias:
+        - pkg: fmt
+          alias: fff
+        - pkg: os
+          alias: std_os
+        - pkg: golang.org/x/tools/go/analysis
+          alias: ananas

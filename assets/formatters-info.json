@@ -1,0 +1,57 @@
+[
+  {
+    "name": "gci",
+    "desc": "Checks if code and import statements are formatted, with additional rules.",
+    "Groups": null,
+    "loadMode": 8199,
+    "originalURL": "https://github.com/daixiang0/gci",
+    "internal": false,
+    "canAutoFix": true,
+    "isSlow": false,
+    "since": "v1.30.0"
+  },
+  {
+    "name": "gofmt",
+    "desc": "Checks if the code is formatted according to 'gofmt' command.",
+    "Groups": null,
+    "loadMode": 8199,
+    "originalURL": "https://pkg.go.dev/cmd/gofmt",
+    "internal": false,
+    "canAutoFix": true,
+    "isSlow": false,
+    "since": "v1.0.0"
+  },
+  {
+    "name": "gofumpt",
+    "desc": "Checks if code and import statements are formatted, with additional rules.",
+    "Groups": null,
+    "loadMode": 8199,
+    "originalURL": "https://github.com/mvdan/gofumpt",
+    "internal": false,
+    "canAutoFix": true,
+    "isSlow": false,
+    "since": "v1.28.0"
+  },
+  {
+    "name": "golines",
+    "desc": "Checks if code is formatted, and fixes long lines",
+    "Groups": null,
+    "loadMode": 8199,
+    "originalURL": "https://github.com/segmentio/golines",
+    "internal": false,
+    "canAutoFix": true,
+    "isSlow": false,
+    "since": "v2.0.0"
+  },
+  {
+    "name": "goimports",
+    "desc": "Checks if the code and import statements are formatted according to the 'goimports' command.",
+    "Groups": null,
+    "loadMode": 8199,
+    "originalURL": "https://pkg.go.dev/golang.org/x/tools/cmd/goimports",
+    "internal": false,
+    "canAutoFix": true,
+    "isSlow": false,
+    "since": "v1.20.0"
+  }
+]

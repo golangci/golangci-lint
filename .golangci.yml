@@ -14,7 +14,7 @@
 version: "2"
 
 linters:
-  disable-all: true
+  default: none
   # This list of linters is not a recommendation (same thing for all this configuration file).
   # We intentionally use a limited set of linters.
   # See the comment on top of this file.
@@ -36,7 +36,6 @@ linters:
     - mnd
     - goprintffuncname
     - gosec
-    - gosimple
     - govet
     - intrange
     - ineffassign
@@ -47,12 +46,97 @@ linters:
     - nolintlint
     - revive
     - staticcheck
-    - stylecheck
     - testifylint
     - unconvert
     - unparam
     - unused
     - whitespace
+
+  settings:
+    depguard:
+      rules:
+        logger:
+          deny:
+            # logging is allowed only by logutils.Log,
+            - pkg: "github.com/sirupsen/logrus"
+              desc: logging is allowed only by logutils.Log.
+            - pkg: "github.com/pkg/errors"
+              desc: Should be replaced by standard lib errors package.
+            - pkg: "github.com/instana/testify"
+              desc: It's a fork of github.com/stretchr/testify.
+          files:
+            # logrus is allowed to use only in logutils package.
+            - "!**/pkg/logutils/**.go"
+    dupl:
+      threshold: 100
+    funlen:
+      lines: -1 # the number of lines (code + empty lines) is not a right metric and leads to code without empty line or one-liner.
+      statements: 50
+    goconst:
+      min-len: 2
+      min-occurrences: 3
+    gocritic:
+      enabled-tags:
+        - diagnostic
+        - experimental
+        - opinionated
+        - performance
+        - style
+      disabled-checks:
+        - dupImport # https://github.com/go-critic/go-critic/issues/845
+        - ifElseChain
+        - octalLiteral
+        - whyNoLint
+    gocyclo:
+      min-complexity: 15
+    godox:
+      keywords:
+        - FIXME
+    mnd:
+      # don't include the "operation" and "assign"
+      checks:
+        - argument
+        - case
+        - condition
+        - return
+      ignored-numbers:
+        - '0'
+        - '1'
+        - '2'
+        - '3'
+      ignored-functions:
+        - strings.SplitN
+    govet:
+      settings:
+        printf:
+          funcs:
+            - (github.com/golangci/golangci-lint/v2/pkg/logutils.Log).Infof
+            - (github.com/golangci/golangci-lint/v2/pkg/logutils.Log).Warnf
+            - (github.com/golangci/golangci-lint/v2/pkg/logutils.Log).Errorf
+            - (github.com/golangci/golangci-lint/v2/pkg/logutils.Log).Fatalf
+      enable:
+        - nilness
+        - shadow
+    errorlint:
+      asserts: false
+    lll:
+      line-length: 140
+    misspell:
+      locale: US
+      ignore-rules:
+        - "importas" # linter name
+    nolintlint:
+      allow-unused: false # report any unused nolint directives
+      require-explanation: true # require an explanation for nolint directives
+      require-specific: true # require nolint directives to be specific about which linter is being skipped
+    revive:
+      rules:
+        - name: indent-error-flow
+        - name: unexported-return
+          disabled: true
+        - name: unused-parameter
+        - name: unused-receiver
+
   exclusions:
     presets:
       - comments
@@ -82,6 +166,27 @@ linters:
         linters: [gosec]
         text: "G115: integer overflow conversion uint64 -> int"
 
+      # The files created during the tests don't need to be secured.
+      - path: scripts/website/expand_templates/linters_test.go
+        linters: [gosec]
+        text: "G306: Expect WriteFile permissions to be 0600 or less"
+
+      # Related to migration command.
+      - path: pkg/commands/internal/migrate/two/
+        linters:
+          - lll
+
+      # Related to migration command.
+      - path: pkg/commands/internal/migrate/
+        linters:
+          - gocritic
+        text: "hugeParam:"
+
+      # The codes are close but this is not duplication.
+      - path: pkg/commands/(formatters|linters).go
+        linters:
+          - dupl
+
 formatters:
   enable:
     - gofmt
@@ -93,90 +198,11 @@ formatters:
           replacement: 'any'
     goimports:
       local-prefixes:
-        - github.com/golangci/golangci-lint
-
-linters-settings:
-  depguard:
-    rules:
-      logger:
-        deny:
-          # logging is allowed only by logutils.Log,
-          - pkg: "github.com/sirupsen/logrus"
-            desc: logging is allowed only by logutils.Log.
-          - pkg: "github.com/pkg/errors"
-            desc: Should be replaced by standard lib errors package.
-          - pkg: "github.com/instana/testify"
-            desc: It's a fork of github.com/stretchr/testify.
-        files:
-          # logrus is allowed to use only in logutils package.
-          - "!**/pkg/logutils/**.go"
-  dupl:
-    threshold: 100
-  funlen:
-    lines: -1 # the number of lines (code + empty lines) is not a right metric and leads to code without empty line or one-liner.
-    statements: 50
-  goconst:
-    min-len: 2
-    min-occurrences: 3
-  gocritic:
-    enabled-tags:
-      - diagnostic
-      - experimental
-      - opinionated
-      - performance
-      - style
-    disabled-checks:
-      - dupImport # https://github.com/go-critic/go-critic/issues/845
-      - ifElseChain
-      - octalLiteral
-      - whyNoLint
-  gocyclo:
-    min-complexity: 15
-  godox:
-    keywords:
-      - FIXME
-  mnd:
-    # don't include the "operation" and "assign"
-    checks:
-      - argument
-      - case
-      - condition
-      - return
-    ignored-numbers:
-      - '0'
-      - '1'
-      - '2'
-      - '3'
-    ignored-functions:
-      - strings.SplitN
-  govet:
-    settings:
-      printf:
-        funcs:
-          - (github.com/golangci/golangci-lint/pkg/logutils.Log).Infof
-          - (github.com/golangci/golangci-lint/pkg/logutils.Log).Warnf
-          - (github.com/golangci/golangci-lint/pkg/logutils.Log).Errorf
-          - (github.com/golangci/golangci-lint/pkg/logutils.Log).Fatalf
-    enable:
-      - nilness
-      - shadow
-  errorlint:
-    asserts: false
-  lll:
-    line-length: 140
-  misspell:
-    locale: US
-    ignore-rules:
-      - "importas" # linter name
-  nolintlint:
-    allow-unused: false # report any unused nolint directives
-    require-explanation: true # require an explanation for nolint directives
-    require-specific: true # require nolint directives to be specific about which linter is being skipped
-  revive:
-    rules:
-      - name: indent-error-flow
-      - name: unexported-return
-        disabled: true
-      - name: unused-parameter
-      - name: unused-receiver
-
+        - github.com/golangci/golangci-lint/v2
+  exclusions:
+    paths:
+      - test/testdata_etc # test files
+      - internal/go # extracted from Go code
+      - internal/x # extracted from x/tools code
+      - pkg/goformatters/gci/internal # extracted from gci code
+      - pkg/goanalysis/runner_checker.go # extracted from x/tools code

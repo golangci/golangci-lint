@@ -1,9 +1,10 @@
 package processors
 
 import (
-	"github.com/golangci/golangci-lint/pkg/fsutils"
-	"github.com/golangci/golangci-lint/pkg/logutils"
-	"github.com/golangci/golangci-lint/pkg/result"
+	"path/filepath"
+
+	"github.com/golangci/golangci-lint/v2/pkg/logutils"
+	"github.com/golangci/golangci-lint/v2/pkg/result"
 )
 
 var _ Processor = (*PathPrettifier)(nil)
@@ -30,7 +31,11 @@ func (p *PathPrettifier) Process(issues []result.Issue) ([]result.Issue, error) 
 	return transformIssues(issues, func(issue *result.Issue) *result.Issue {
 		newIssue := issue
 
-		newIssue.Pos.Filename = fsutils.WithPathPrefix(p.prefix, issue.RelativePath)
+		if p.prefix == "" {
+			newIssue.Pos.Filename = issue.RelativePath
+		} else {
+			newIssue.Pos.Filename = filepath.Join(p.prefix, issue.RelativePath)
+		}
 
 		return newIssue
 	}), nil

@@ -25,4 +25,4 @@ func _() {
 	C.free(unsafe.Pointer(cs))
 }
 
-func fn1() {} // want "func `fn1` is unused"
+func fn1() {} // want "func fn1 is unused"

@@ -5,17 +5,18 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/golangci/golangci-lint/pkg/config"
-	"github.com/golangci/golangci-lint/pkg/fsutils"
-	"github.com/golangci/golangci-lint/pkg/logutils"
-	"github.com/golangci/golangci-lint/pkg/result"
+	"github.com/golangci/golangci-lint/v2/pkg/config"
+	"github.com/golangci/golangci-lint/v2/pkg/fsutils"
+	"github.com/golangci/golangci-lint/v2/pkg/logutils"
+	"github.com/golangci/golangci-lint/v2/pkg/result"
 )
 
 var _ Processor = (*ExclusionRules)(nil)
 
 type ExclusionRules struct {
-	log   logutils.Log
-	files *fsutils.Files
+	log logutils.Log
+
+	lines *fsutils.LineCache
 
 	warnUnused     bool
 	skippedCounter map[string]int
@@ -23,11 +24,10 @@ type ExclusionRules struct {
 	rules []excludeRule
 }
 
-func NewExclusionRules(log logutils.Log, files *fsutils.Files,
-	cfg *config.LinterExclusions) *ExclusionRules {
+func NewExclusionRules(log logutils.Log, lines *fsutils.LineCache, cfg *config.LinterExclusions) *ExclusionRules {
 	p := &ExclusionRules{
 		log:            log,
-		files:          files,
+		lines:          lines,
 		warnUnused:     cfg.WarnUnused,
 		skippedCounter: map[string]int{},
 	}
@@ -56,7 +56,7 @@ func (p *ExclusionRules) Process(issues []result.Issue) ([]result.Issue, error) 
 
 	return filterIssues(issues, func(issue *result.Issue) bool {
 		for _, rule := range p.rules {
-			if !rule.match(issue, p.files, p.log) {
+			if !rule.match(issue, p.lines, p.log) {
 				continue
 			}
 

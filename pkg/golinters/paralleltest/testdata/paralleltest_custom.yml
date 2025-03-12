@@ -1,5 +1,6 @@
 version: "2"
 
-linters-settings:
-  paralleltest:
-    ignore-missing: true
+linters:
+  settings:
+    paralleltest:
+      ignore-missing: true

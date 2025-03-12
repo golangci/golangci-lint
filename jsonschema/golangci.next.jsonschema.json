@@ -123,6 +123,360 @@
         "security"
       ]
     },
+    "staticcheck-checks": {
+      "enum": [
+        "*",
+        "all",
+        "SA*",
+        "-SA*",
+        "SA1*",
+        "-SA1*",
+        "SA1000",
+        "-SA1000",
+        "SA1001",
+        "-SA1001",
+        "SA1002",
+        "-SA1002",
+        "SA1003",
+        "-SA1003",
+        "SA1004",
+        "-SA1004",
+        "SA1005",
+        "-SA1005",
+        "SA1006",
+        "-SA1006",
+        "SA1007",
+        "-SA1007",
+        "SA1008",
+        "-SA1008",
+        "SA1010",
+        "-SA1010",
+        "SA1011",
+        "-SA1011",
+        "SA1012",
+        "-SA1012",
+        "SA1013",
+        "-SA1013",
+        "SA1014",
+        "-SA1014",
+        "SA1015",
+        "-SA1015",
+        "SA1016",
+        "-SA1016",
+        "SA1017",
+        "-SA1017",
+        "SA1018",
+        "-SA1018",
+        "SA1019",
+        "-SA1019",
+        "SA1020",
+        "-SA1020",
+        "SA1021",
+        "-SA1021",
+        "SA1023",
+        "-SA1023",
+        "SA1024",
+        "-SA1024",
+        "SA1025",
+        "-SA1025",
+        "SA1026",
+        "-SA1026",
+        "SA1027",
+        "-SA1027",
+        "SA1028",
+        "-SA1028",
+        "SA1029",
+        "-SA1029",
+        "SA1030",
+        "-SA1030",
+        "SA1031",
+        "-SA1031",
+        "SA1032",
+        "-SA1032",
+        "SA2*",
+        "-SA2*",
+        "SA2000",
+        "-SA2000",
+        "SA2001",
+        "-SA2001",
+        "SA2002",
+        "-SA2002",
+        "SA2003",
+        "-SA2003",
+        "SA3*",
+        "-SA3*",
+        "SA3000",
+        "-SA3000",
+        "SA3001",
+        "-SA3001",
+        "SA4*",
+        "-SA4*",
+        "SA4000",
+        "-SA4000",
+        "SA4001",
+        "-SA4001",
+        "SA4003",
+        "-SA4003",
+        "SA4004",
+        "-SA4004",
+        "SA4005",
+        "-SA4005",
+        "SA4006",
+        "-SA4006",
+        "SA4008",
+        "-SA4008",
+        "SA4009",
+        "-SA4009",
+        "SA4010",
+        "-SA4010",
+        "SA4011",
+        "-SA4011",
+        "SA4012",
+        "-SA4012",
+        "SA4013",
+        "-SA4013",
+        "SA4014",
+        "-SA4014",
+        "SA4015",
+        "-SA4015",
+        "SA4016",
+        "-SA4016",
+        "SA4017",
+        "-SA4017",
+        "SA4018",
+        "-SA4018",
+        "SA4019",
+        "-SA4019",
+        "SA4020",
+        "-SA4020",
+        "SA4021",
+        "-SA4021",
+        "SA4022",
+        "-SA4022",
+        "SA4023",
+        "-SA4023",
+        "SA4024",
+        "-SA4024",
+        "SA4025",
+        "-SA4025",
+        "SA4026",
+        "-SA4026",
+        "SA4027",
+        "-SA4027",
+        "SA4028",
+        "-SA4028",
+        "SA4029",
+        "-SA4029",
+        "SA4030",
+        "-SA4030",
+        "SA4031",
+        "-SA4031",
+        "SA4032",
+        "-SA4032",
+        "SA5*",
+        "-SA5*",
+        "SA5000",
+        "-SA5000",
+        "SA5001",
+        "-SA5001",
+        "SA5002",
+        "-SA5002",
+        "SA5003",
+        "-SA5003",
+        "SA5004",
+        "-SA5004",
+        "SA5005",
+        "-SA5005",
+        "SA5007",
+        "-SA5007",
+        "SA5008",
+        "-SA5008",
+        "SA5009",
+        "-SA5009",
+        "SA5010",
+        "-SA5010",
+        "SA5011",
+        "-SA5011",
+        "SA5012",
+        "-SA5012",
+        "SA6*",
+        "-SA6*",
+        "SA6000",
+        "-SA6000",
+        "SA6001",
+        "-SA6001",
+        "SA6002",
+        "-SA6002",
+        "SA6003",
+        "-SA6003",
+        "SA6005",
+        "-SA6005",
+        "SA6006",
+        "-SA6006",
+        "SA9*",
+        "-SA9*",
+        "SA9001",
+        "-SA9001",
+        "SA9002",
+        "-SA9002",
+        "SA9003",
+        "-SA9003",
+        "SA9004",
+        "-SA9004",
+        "SA9005",
+        "-SA9005",
+        "SA9006",
+        "-SA9006",
+        "SA9007",
+        "-SA9007",
+        "SA9008",
+        "-SA9008",
+        "SA9009",
+        "-SA9009",
+        "ST*",
+        "-ST*",
+        "ST1*",
+        "-ST1*",
+        "ST1000",
+        "-ST1000",
+        "ST1001",
+        "-ST1001",
+        "ST1003",
+        "-ST1003",
+        "ST1005",
+        "-ST1005",
+        "ST1006",
+        "-ST1006",
+        "ST1008",
+        "-ST1008",
+        "ST1011",
+        "-ST1011",
+        "ST1012",
+        "-ST1012",
+        "ST1013",
+        "-ST1013",
+        "ST1015",
+        "-ST1015",
+        "ST1016",
+        "-ST1016",
+        "ST1017",
+        "-ST1017",
+        "ST1018",
+        "-ST1018",
+        "ST1019",
+        "-ST1019",
+        "ST1020",
+        "-ST1020",
+        "ST1021",
+        "-ST1021",
+        "ST1022",
+        "-ST1022",
+        "ST1023",
+        "-ST1023",
+        "S*",
+        "-S*",
+        "S1*",
+        "-S1*",
+        "S1000",
+        "-S1000",
+        "S1001",
+        "-S1001",
+        "S1002",
+        "-S1002",
+        "S1003",
+        "-S1003",
+        "S1004",
+        "-S1004",
+        "S1005",
+        "-S1005",
+        "S1006",
+        "-S1006",
+        "S1007",
+        "-S1007",
+        "S1008",
+        "-S1008",
+        "S1009",
+        "-S1009",
+        "S1010",
+        "-S1010",
+        "S1011",
+        "-S1011",
+        "S1012",
+        "-S1012",
+        "S1016",
+        "-S1016",
+        "S1017",
+        "-S1017",
+        "S1018",
+        "-S1018",
+        "S1019",
+        "-S1019",
+        "S1020",
+        "-S1020",
+        "S1021",
+        "-S1021",
+        "S1023",
+        "-S1023",
+        "S1024",
+        "-S1024",
+        "S1025",
+        "-S1025",
+        "S1028",
+        "-S1028",
+        "S1029",
+        "-S1029",
+        "S1030",
+        "-S1030",
+        "S1031",
+        "-S1031",
+        "S1032",
+        "-S1032",
+        "S1033",
+        "-S1033",
+        "S1034",
+        "-S1034",
+        "S1035",
+        "-S1035",
+        "S1036",
+        "-S1036",
+        "S1037",
+        "-S1037",
+        "S1038",
+        "-S1038",
+        "S1039",
+        "-S1039",
+        "S1040",
+        "-S1040",
+        "QF*",
+        "-QF*",
+        "QF1*",
+        "-QF1*",
+        "QF1001",
+        "-QF1001",
+        "QF1002",
+        "-QF1002",
+        "QF1003",
+        "-QF1003",
+        "QF1004",
+        "-QF1004",
+        "QF1005",
+        "-QF1005",
+        "QF1006",
+        "-QF1006",
+        "QF1007",
+        "-QF1007",
+        "QF1008",
+        "-QF1008",
+        "QF1009",
+        "-QF1009",
+        "QF1010",
+        "-QF1010",
+        "QF1011",
+        "-QF1011",
+        "QF1012",
+        "-QF1012"
+      ]
+    },
     "gosec-rules": {
       "enum": [
         "G101",
@@ -1705,25 +2059,6 @@
             }
           }
         },
-        "gosimpleSettings": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "checks": {
-              "type": "array",
-              "items": {
-                "anyOf": [
-                  {
-                    "enum": ["all"]
-                  },
-                  {
-                    "type": "string"
-                  }
-                ]
-              }
-            }
-          }
-        },
         "gosecSettings": {
           "type": "object",
           "additionalProperties": false,
@@ -2522,6 +2857,32 @@
               "type": "boolean",
               "default": false
             },
+            "directives": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "enum": ["specify-disable-reason"]
+                  },
+                  "severity": {
+                    "type": "string",
+                    "enum": ["warning", "error"]
+                  },
+                  "exclude": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "arguments": {
+                    "type": "array"
+                  }
+                }
+              }
+            },
             "rules": {
               "type": "array",
               "items": {
@@ -2661,41 +3022,13 @@
               "items": {
                 "anyOf": [
                   {
-                    "enum": ["all"]
+                    "$ref": "#/definitions/staticcheck-checks"
                   },
                   {
                     "type": "string"
                   }
                 ]
               }
-            }
-          }
-        },
-        "stylecheckSettings": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "checks": {
-              "type": "array",
-              "items": {
-                "anyOf": [
-                  {
-                    "enum": ["all"]
-                  },
-                  {
-                    "type": "string"
-                  }
-                ]
-              },
-              "default": [
-                "all",
-                "-ST1000",
-                "-ST1003",
-                "-ST1016",
-                "-ST1020",
-                "-ST1021",
-                "-ST1022"
-              ]
             },
             "dot-import-whitelist": {
               "description": "By default, ST1001 forbids all uses of dot imports in non-test packages. This setting allows setting a whitelist of import paths that can be dot-imported anywhere.",
@@ -3744,11 +4077,11 @@
           "examples": [4]
         },
         "timeout": {
-          "description": "Timeout for total work. Disabled by default",
+          "description": "Timeout for the analysis.",
           "type": "string",
-          "pattern": "^\\d*[sm]$",
-          "default": "0",
-          "examples": ["30s", "5m"]
+          "pattern": "^((\\d+h)?(\\d+m)?(\\d+(?:\\.\\d)?s)?|0)$",
+          "default": "1m",
+          "examples": ["30s", "5m", "5m30s"]
         },
         "issues-exit-code": {
           "description": "Exit code when at least one issue was found.",
@@ -3898,260 +4231,18 @@
         }
       }
     },
-    "linters-settings": {
-      "description": "All available settings of specific linters.",
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "dupword": {
-          "$ref": "#/definitions/settings/definitions/dupwordSettings"
-        },
-        "asasalint": {
-          "$ref": "#/definitions/settings/definitions/asasalintSettings"
-        },
-        "bidichk": {
-          "$ref": "#/definitions/settings/definitions/bidichkSettings"
-        },
-        "cyclop": {
-          "$ref": "#/definitions/settings/definitions/cyclopSettings"
-        },
-        "decorder": {
-          "$ref": "#/definitions/settings/definitions/decorderSettings"
-        },
-        "depguard":{
-          "$ref": "#/definitions/settings/definitions/depguardSettings"
-        },
-        "dogsled": {
-          "$ref": "#/definitions/settings/definitions/dogsledSettings"
-        },
-        "dupl": {
-          "$ref": "#/definitions/settings/definitions/duplSettings"
-        },
-        "errcheck": {
-          "$ref": "#/definitions/settings/definitions/errcheckSettings"
-        },
-        "errchkjson": {
-          "$ref": "#/definitions/settings/definitions/errchkjsonSettings"
-        },
-        "errorlint": {
-          "$ref": "#/definitions/settings/definitions/errorlintSettings"
-        },
-        "exhaustive": {
-          "$ref": "#/definitions/settings/definitions/exhaustiveSettings"
-        },
-        "exhaustruct": {
-          "$ref": "#/definitions/settings/definitions/exhaustructSettings"
-        },
-        "fatcontext": {
-          "$ref": "#/definitions/settings/definitions/fatcontextSettings"
-        },
-        "forbidigo": {
-          "$ref": "#/definitions/settings/definitions/forbidigoSettings"
-        },
-        "funlen": {
-          "$ref": "#/definitions/settings/definitions/funlenSettings"
-        },
-        "ginkgolinter": {
-          "$ref": "#/definitions/settings/definitions/ginkgolinterSettings"
-        },
-        "gochecksumtype": {
-          "$ref": "#/definitions/settings/definitions/gochecksumtypeSettings"
-        },
-        "gocognit": {
-          "$ref": "#/definitions/settings/definitions/gocognitSettings"
-        },
-        "goconst": {
-          "$ref": "#/definitions/settings/definitions/goconstSettings"
-        },
-        "gocritic": {
-          "$ref": "#/definitions/settings/definitions/gocriticSettings"
-        },
-        "gocyclo": {
-          "$ref": "#/definitions/settings/definitions/gocycloSettings"
-        },
-        "godot": {
-          "$ref": "#/definitions/settings/definitions/godotSettings"
-        },
-        "godox": {
-          "$ref": "#/definitions/settings/definitions/godoxSettings"
-        },
-        "interfacebloat":{
-          "$ref": "#/definitions/settings/definitions/interfacebloatSettings"
-        },
-        "goheader": {
-          "$ref": "#/definitions/settings/definitions/goheaderSettings"
-        },
-        "gomoddirectives": {
-          "$ref": "#/definitions/settings/definitions/gomoddirectivesSettings"
-        },
-        "gomodguard": {
-          "$ref": "#/definitions/settings/definitions/gomodguardSettings"
-        },
-        "gosimple": {
-          "$ref": "#/definitions/settings/definitions/gosimpleSettings"
-        },
-        "gosec": {
-          "$ref": "#/definitions/settings/definitions/gosecSettings"
-        },
-        "gosmopolitan": {
-          "$ref": "#/definitions/settings/definitions/gosmopolitanSettings"
-        },
-        "govet": {
-          "$ref": "#/definitions/settings/definitions/govetSettings"
-        },
-        "grouper": {
-          "$ref": "#/definitions/settings/definitions/grouperSettings"
-        },
-        "iface": {
-          "$ref": "#/definitions/settings/definitions/ifaceSettings"
-        },
-        "importas": {
-          "$ref": "#/definitions/settings/definitions/importasSettings"
-        },
-        "inamedparam": {
-          "$ref": "#/definitions/settings/definitions/inamedparamSettings"
-        },
-        "ireturn": {
-          "$ref": "#/definitions/settings/definitions/ireturnSettings"
-        },
-        "lll": {
-          "$ref": "#/definitions/settings/definitions/lllSettings"
-        },
-        "maintidx": {
-          "$ref": "#/definitions/settings/definitions/maintidxSettings"
-        },
-        "makezero":{
-          "$ref": "#/definitions/settings/definitions/makezeroSettings"
-        },
-        "loggercheck": {
-          "$ref": "#/definitions/settings/definitions/loggercheckSettings"
-        },
-        "misspell": {
-          "$ref": "#/definitions/settings/definitions/misspellSettings"
-        },
-        "musttag": {
-          "$ref": "#/definitions/settings/definitions/musttagSettings"
-        },
-        "nakedret": {
-          "$ref": "#/definitions/settings/definitions/nakedretSettings"
-        },
-        "nestif": {
-          "$ref": "#/definitions/settings/definitions/nestifSettings"
-        },
-        "nilnil": {
-          "$ref": "#/definitions/settings/definitions/nilnilSettings"
-        },
-        "nlreturn": {
-          "$ref": "#/definitions/settings/definitions/nlreturnSettings"
-        },
-        "mnd": {
-          "$ref": "#/definitions/settings/definitions/mndSettings"
-        },
-        "nolintlint":{
-          "$ref": "#/definitions/settings/definitions/nolintlintSettings"
-        },
-        "reassign": {
-          "$ref": "#/definitions/settings/definitions/reassignSettings"
-        },
-        "recvcheck": {
-          "$ref": "#/definitions/settings/definitions/recvcheckSettings"
-        },
-        "nonamedreturns": {
-          "$ref": "#/definitions/settings/definitions/nonamedreturnsSettings"
-        },
-        "paralleltest": {
-          "$ref": "#/definitions/settings/definitions/paralleltestSettings"
-        },
-        "perfsprint": {
-          "$ref": "#/definitions/settings/definitions/perfsprintSettings"
-        },
-        "prealloc": {
-          "$ref": "#/definitions/settings/definitions/preallocSettings"
-        },
-        "predeclared": {
-          "$ref": "#/definitions/settings/definitions/predeclaredSettings"
-        },
-        "promlinter": {
-          "$ref": "#/definitions/settings/definitions/promlinterSettings"
-        },
-        "protogetter": {
-          "$ref": "#/definitions/settings/definitions/protogetterSettings"
-        },
-        "revive": {
-          "$ref": "#/definitions/settings/definitions/reviveSettings"
-        },
-        "rowserrcheck": {
-          "$ref": "#/definitions/settings/definitions/rowserrcheckSettings"
-        },
-        "sloglint": {
-          "$ref": "#/definitions/settings/definitions/sloglintSettings"
-        },
-        "spancheck": {
-          "$ref": "#/definitions/settings/definitions/spancheckSettings"
-        },
-        "staticcheck":{
-          "$ref": "#/definitions/settings/definitions/staticcheckSettings"
-        },
-        "stylecheck": {
-          "$ref": "#/definitions/settings/definitions/stylecheckSettings"
-        },
-        "tagalign": {
-          "$ref": "#/definitions/settings/definitions/tagalignSettings"
-        },
-        "tagliatelle": {
-          "$ref": "#/definitions/settings/definitions/tagliatelleSettings"
-        },
-        "tenv": {
-          "$ref": "#/definitions/settings/definitions/tenvSettings"
-        },
-        "testifylint": {
-          "$ref": "#/definitions/settings/definitions/testifylintSettings"
-        },
-        "testpackage": {
-          "$ref": "#/definitions/settings/definitions/testpackageSettings"
-        },
-        "thelper": {
-          "$ref": "#/definitions/settings/definitions/thelperSettings"
-        },
-        "usestdlibvars": {
-          "$ref": "#/definitions/settings/definitions/usestdlibvarsSettings"
-        },
-        "usetesting": {
-          "$ref": "#/definitions/settings/definitions/usetestingSettings"
-        },
-        "unconvert": {
-          "$ref": "#/definitions/settings/definitions/unconvertSettings"
-        },
-        "unparam": {
-          "$ref": "#/definitions/settings/definitions/unparamSettings"
-        },
-        "unused": {
-          "$ref": "#/definitions/settings/definitions/unusedSettings"
-        },
-        "varnamelen": {
-          "$ref": "#/definitions/settings/definitions/varnamelenSettings"
-        },
-        "whitespace": {
-          "$ref": "#/definitions/settings/definitions/whitespaceSettings"
-        },
-        "wrapcheck": {
-          "$ref": "#/definitions/settings/definitions/wrapcheckSettings"
-        },
-        "wsl": {
-          "$ref": "#/definitions/settings/definitions/wslSettings"
-        },
-        "copyloopvar": {
-          "$ref": "#/definitions/settings/definitions/copyloopvarSettings"
-        },
-        "custom":{
-          "$ref": "#/definitions/settings/definitions/customSettings"
-        }
-      }
-    },
     "linters": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
+        "default": {
+          "enum": [
+            "standard",
+            "all",
+            "none",
+            "fast"
+          ]
+        },
         "enable": {
           "description": "List of enabled linters.",
           "type": "array",
@@ -4166,41 +4257,249 @@
             "$ref": "#/definitions/linter-names"
           }
         },
-        "enable-all": {
-          "description": "Whether to enable all linters. You can re-disable them with `disable` explicitly.",
-          "type": "boolean",
-          "default": false
-        },
-        "disable-all": {
-          "description": "Whether to disable all linters. You can re-enable them with `enable` explicitly.",
-          "type": "boolean",
-          "default": false
-        },
-        "presets": {
-          "description": "Allow to use different presets of linters",
-          "type": "array",
-          "items": {
-            "enum": [
-              "bugs",
-              "comment",
-              "complexity",
-              "error",
-              "format",
-              "import",
-              "metalinter",
-              "module",
-              "performance",
-              "sql",
-              "style",
-              "test",
-              "unused"
-            ]
+        "settings": {
+          "description": "All available settings of specific linters.",
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dupword": {
+              "$ref": "#/definitions/settings/definitions/dupwordSettings"
+            },
+            "asasalint": {
+              "$ref": "#/definitions/settings/definitions/asasalintSettings"
+            },
+            "bidichk": {
+              "$ref": "#/definitions/settings/definitions/bidichkSettings"
+            },
+            "cyclop": {
+              "$ref": "#/definitions/settings/definitions/cyclopSettings"
+            },
+            "decorder": {
+              "$ref": "#/definitions/settings/definitions/decorderSettings"
+            },
+            "depguard":{
+              "$ref": "#/definitions/settings/definitions/depguardSettings"
+            },
+            "dogsled": {
+              "$ref": "#/definitions/settings/definitions/dogsledSettings"
+            },
+            "dupl": {
+              "$ref": "#/definitions/settings/definitions/duplSettings"
+            },
+            "errcheck": {
+              "$ref": "#/definitions/settings/definitions/errcheckSettings"
+            },
+            "errchkjson": {
+              "$ref": "#/definitions/settings/definitions/errchkjsonSettings"
+            },
+            "errorlint": {
+              "$ref": "#/definitions/settings/definitions/errorlintSettings"
+            },
+            "exhaustive": {
+              "$ref": "#/definitions/settings/definitions/exhaustiveSettings"
+            },
+            "exhaustruct": {
+              "$ref": "#/definitions/settings/definitions/exhaustructSettings"
+            },
+            "fatcontext": {
+              "$ref": "#/definitions/settings/definitions/fatcontextSettings"
+            },
+            "forbidigo": {
+              "$ref": "#/definitions/settings/definitions/forbidigoSettings"
+            },
+            "funlen": {
+              "$ref": "#/definitions/settings/definitions/funlenSettings"
+            },
+            "ginkgolinter": {
+              "$ref": "#/definitions/settings/definitions/ginkgolinterSettings"
+            },
+            "gochecksumtype": {
+              "$ref": "#/definitions/settings/definitions/gochecksumtypeSettings"
+            },
+            "gocognit": {
+              "$ref": "#/definitions/settings/definitions/gocognitSettings"
+            },
+            "goconst": {
+              "$ref": "#/definitions/settings/definitions/goconstSettings"
+            },
+            "gocritic": {
+              "$ref": "#/definitions/settings/definitions/gocriticSettings"
+            },
+            "gocyclo": {
+              "$ref": "#/definitions/settings/definitions/gocycloSettings"
+            },
+            "godot": {
+              "$ref": "#/definitions/settings/definitions/godotSettings"
+            },
+            "godox": {
+              "$ref": "#/definitions/settings/definitions/godoxSettings"
+            },
+            "interfacebloat":{
+              "$ref": "#/definitions/settings/definitions/interfacebloatSettings"
+            },
+            "goheader": {
+              "$ref": "#/definitions/settings/definitions/goheaderSettings"
+            },
+            "gomoddirectives": {
+              "$ref": "#/definitions/settings/definitions/gomoddirectivesSettings"
+            },
+            "gomodguard": {
+              "$ref": "#/definitions/settings/definitions/gomodguardSettings"
+            },
+            "gosec": {
+              "$ref": "#/definitions/settings/definitions/gosecSettings"
+            },
+            "gosmopolitan": {
+              "$ref": "#/definitions/settings/definitions/gosmopolitanSettings"
+            },
+            "govet": {
+              "$ref": "#/definitions/settings/definitions/govetSettings"
+            },
+            "grouper": {
+              "$ref": "#/definitions/settings/definitions/grouperSettings"
+            },
+            "iface": {
+              "$ref": "#/definitions/settings/definitions/ifaceSettings"
+            },
+            "importas": {
+              "$ref": "#/definitions/settings/definitions/importasSettings"
+            },
+            "inamedparam": {
+              "$ref": "#/definitions/settings/definitions/inamedparamSettings"
+            },
+            "ireturn": {
+              "$ref": "#/definitions/settings/definitions/ireturnSettings"
+            },
+            "lll": {
+              "$ref": "#/definitions/settings/definitions/lllSettings"
+            },
+            "maintidx": {
+              "$ref": "#/definitions/settings/definitions/maintidxSettings"
+            },
+            "makezero":{
+              "$ref": "#/definitions/settings/definitions/makezeroSettings"
+            },
+            "loggercheck": {
+              "$ref": "#/definitions/settings/definitions/loggercheckSettings"
+            },
+            "misspell": {
+              "$ref": "#/definitions/settings/definitions/misspellSettings"
+            },
+            "musttag": {
+              "$ref": "#/definitions/settings/definitions/musttagSettings"
+            },
+            "nakedret": {
+              "$ref": "#/definitions/settings/definitions/nakedretSettings"
+            },
+            "nestif": {
+              "$ref": "#/definitions/settings/definitions/nestifSettings"
+            },
+            "nilnil": {
+              "$ref": "#/definitions/settings/definitions/nilnilSettings"
+            },
+            "nlreturn": {
+              "$ref": "#/definitions/settings/definitions/nlreturnSettings"
+            },
+            "mnd": {
+              "$ref": "#/definitions/settings/definitions/mndSettings"
+            },
+            "nolintlint":{
+              "$ref": "#/definitions/settings/definitions/nolintlintSettings"
+            },
+            "reassign": {
+              "$ref": "#/definitions/settings/definitions/reassignSettings"
+            },
+            "recvcheck": {
+              "$ref": "#/definitions/settings/definitions/recvcheckSettings"
+            },
+            "nonamedreturns": {
+              "$ref": "#/definitions/settings/definitions/nonamedreturnsSettings"
+            },
+            "paralleltest": {
+              "$ref": "#/definitions/settings/definitions/paralleltestSettings"
+            },
+            "perfsprint": {
+              "$ref": "#/definitions/settings/definitions/perfsprintSettings"
+            },
+            "prealloc": {
+              "$ref": "#/definitions/settings/definitions/preallocSettings"
+            },
+            "predeclared": {
+              "$ref": "#/definitions/settings/definitions/predeclaredSettings"
+            },
+            "promlinter": {
+              "$ref": "#/definitions/settings/definitions/promlinterSettings"
+            },
+            "protogetter": {
+              "$ref": "#/definitions/settings/definitions/protogetterSettings"
+            },
+            "revive": {
+              "$ref": "#/definitions/settings/definitions/reviveSettings"
+            },
+            "rowserrcheck": {
+              "$ref": "#/definitions/settings/definitions/rowserrcheckSettings"
+            },
+            "sloglint": {
+              "$ref": "#/definitions/settings/definitions/sloglintSettings"
+            },
+            "spancheck": {
+              "$ref": "#/definitions/settings/definitions/spancheckSettings"
+            },
+            "staticcheck":{
+              "$ref": "#/definitions/settings/definitions/staticcheckSettings"
+            },
+            "tagalign": {
+              "$ref": "#/definitions/settings/definitions/tagalignSettings"
+            },
+            "tagliatelle": {
+              "$ref": "#/definitions/settings/definitions/tagliatelleSettings"
+            },
+            "tenv": {
+              "$ref": "#/definitions/settings/definitions/tenvSettings"
+            },
+            "testifylint": {
+              "$ref": "#/definitions/settings/definitions/testifylintSettings"
+            },
+            "testpackage": {
+              "$ref": "#/definitions/settings/definitions/testpackageSettings"
+            },
+            "thelper": {
+              "$ref": "#/definitions/settings/definitions/thelperSettings"
+            },
+            "usestdlibvars": {
+              "$ref": "#/definitions/settings/definitions/usestdlibvarsSettings"
+            },
+            "usetesting": {
+              "$ref": "#/definitions/settings/definitions/usetestingSettings"
+            },
+            "unconvert": {
+              "$ref": "#/definitions/settings/definitions/unconvertSettings"
+            },
+            "unparam": {
+              "$ref": "#/definitions/settings/definitions/unparamSettings"
+            },
+            "unused": {
+              "$ref": "#/definitions/settings/definitions/unusedSettings"
+            },
+            "varnamelen": {
+              "$ref": "#/definitions/settings/definitions/varnamelenSettings"
+            },
+            "whitespace": {
+              "$ref": "#/definitions/settings/definitions/whitespaceSettings"
+            },
+            "wrapcheck": {
+              "$ref": "#/definitions/settings/definitions/wrapcheckSettings"
+            },
+            "wsl": {
+              "$ref": "#/definitions/settings/definitions/wslSettings"
+            },
+            "copyloopvar": {
+              "$ref": "#/definitions/settings/definitions/copyloopvarSettings"
+            },
+            "custom":{
+              "$ref": "#/definitions/settings/definitions/customSettings"
+            }
           }
-        },
-        "fast": {
-          "description": "Enable run of fast linters.",
-          "type": "boolean",
-          "default": false
         },
         "exclusions":{
           "type": "object",
@@ -4311,8 +4610,8 @@
           "additionalProperties": false,
           "properties": {
             "generated": {
-              "type": "boolean",
-              "default": true
+              "enum": ["strict", "lax", "disable"],
+              "default": "strict"
             },
             "paths": {
               "type": "array",

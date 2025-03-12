@@ -1,0 +1,8 @@
+version: "2"
+linters:
+  default: all
+formatters:
+  enable:
+    - gofmt
+    - gofumpt
+    - goimports
