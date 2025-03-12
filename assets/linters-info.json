@@ -123,7 +123,7 @@
   },
   {
     "name": "dupl",
-    "desc": "Tool for code clone detection",
+    "desc": "Detects duplicate fragments of code.",
     "Groups": null,
     "loadMode": 8199,
     "originalURL": "https://github.com/mibk/dupl",
