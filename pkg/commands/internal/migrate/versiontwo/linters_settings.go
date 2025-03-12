@@ -749,6 +749,7 @@ type WSLSettings struct {
 	AllowCuddleDeclaration           *bool    `yaml:"allow-cuddle-declarations,omitempty" toml:"allow-cuddle-declarations,multiline,omitempty"`
 	AllowCuddleWithCalls             []string `yaml:"allow-cuddle-with-calls,omitempty" toml:"allow-cuddle-with-calls,multiline,omitempty"`
 	AllowCuddleWithRHS               []string `yaml:"allow-cuddle-with-rhs,omitempty" toml:"allow-cuddle-with-rhs,multiline,omitempty"`
+	AllowCuddleUsedInBlock           *bool    `yaml:"allow-cuddle-used-in-block,omitempty" toml:"allow-cuddle-used-in-block,multiline,omitempty"`
 	ForceCuddleErrCheckAndAssign     *bool    `yaml:"force-err-cuddling,omitempty" toml:"force-err-cuddling,multiline,omitempty"`
 	ErrorVariableNames               []string `yaml:"error-variable-names,omitempty" toml:"error-variable-names,multiline,omitempty"`
 	ForceExclusiveShortDeclarations  *bool    `yaml:"force-short-decl-cuddling,omitempty" toml:"force-short-decl-cuddling,multiline,omitempty"`
