@@ -2,369 +2,123 @@
 title: Migration guide
 ---
 
-## Migrating configuration from v1 to v2
+## Command `migrate`
 
-Golangci-lint v2 has slightly different configuration options than v1.
-Some options were renamed, some were moved, some were split, and some were removed.
-Here is a guide how to migrate your v1 configuration.
+You can use `golangci-lint` to migrate your configuration with the `migrate` command:
 
-You can use `golangci-lint` itself to migrate your configuration automatically through the `migrate` command:
-
-```sh
+```bash
 golangci-lint migrate
 ```
 
-In case you want to do it manually, here is a list of changes.
+Be aware that **comments inside a configuration file are not migrated.** You need to add them manually after the migration.
 
----
+**Deprecated options from v1 or unknown fields are not migrated.**
 
-### `linters` configuration
+The migration file format is based on the extension of the [configuration file](/usage/configuration/#config-file).
+The format can be overridden by using the `--format` flag:
 
-#### Replaced
-
-1. `linters.disable-all` replaced with `linters.default: none`.
-
-<details>
-<summary>v1</summary>
-
-```yaml
-linters:
-  disable-all: true
+```bash
+golangci-lint migrate --format json
 ```
 
-</details>
+Before the migration, the previous configuration file is copied and saved to a file named `<config_file_name>.bck.<config_file_extension>`.
 
-<details>
-<summary>v2</summary>
+By default, before the migration process, the configuration file is validated against the JSON Schema of configuration v1.
+If you want to skip this validation, you can use the `--skip-validation` flag:
 
-```yaml
-linters:
-  default: none
+```bash
+golangci-lint migrate --skip-validation
 ```
 
-</details>
+The `migrate` command enforces the following default values:
 
-See [golangci-lint#5474](https://github.com/golangci/golangci-lint/pull/5475) for more details.
+- `run.timeout`: the existing value is ignored because, in v2, there is no timeout by default.
+- `issues.show-stats`: the existing value is ignored because, in v2, stats are enabled by default.
+- `run.concurrency`: if the existing value was `0`, it is removed as `0` is the new default.
+- `run.relative-path-mode`: if the existing value was `cfg`, it is removed as `cfg` is the new default.
 
-2. `linters.enable-all` replaced with `linters.default: all`.
+`issues.exclude-generated` has a new default value (v1 `lax`, v2 `strict`), so this field will be added during the migration to maintain the previous behavior.
 
-<details>
-<summary>v1</summary>
+`issues.exclude-dirs-use-default` has been removed, so it is converted to `linters.exclusions.paths` and, if needed, `formatters.exclusions.paths`.
 
-```yaml
-linters:
-  enable-all: true
+Other fields explicitly defined in the configuration file are migrated even if the value is the same as the default value.
+
+```txt
+Migrate configuration file from v1 to v2
+
+Usage:
+  golangci-lint migrate [flags]
+
+Flags:
+  -c, --config PATH       Read config from file path PATH
+      --no-config         Don't read config file
+      --format string     Output file format.
+                          By default, the format of the input configuration file is used.
+                          It can be 'yml', 'yaml', 'toml', or 'json'.
+      --skip-validation   Skip validation of the configuration file against the JSON Schema for v1.
+
+Global Flags:
+  -h, --help           Help for a command
+
 ```
 
-</details>
+## Changes
 
-<details>
-<summary>v2</summary>
+### `issues`
 
-```yaml
-linters:
-  default: all
-```
+#### `issues.exclude-case-sensitive`
 
-</details>
+`issues.exclude`, `issues.exclude-rules.text`, and `issues.exclude-rules.source` are case-sensitive by default.
 
-See [golangci-lint#5474](https://github.com/golangci/golangci-lint/pull/5475) for more details.
-
----
-
-### `linters-settings` configuration
-
-#### Split
-
-1. `linters-settings` section split to `linters.settings` and `formatters.settings`.
-
-Most linters settings are now in the `linters.settings` section.
-Settings for `gci`, `gofmt`, `gofumpt`, `goimports` are moved to the `formatters.settings` section.
-
-<details>
-<summary>v1</summary>
-
-```yaml
-linters-settings:
-  gofmt:
-    simplify: true
-  govet:
-    disable-all: true
-```
-
-</details>
-
-<details>
-<summary>v2</summary>
-
-```yaml
-linters:
-  settings:
-    govet:
-      disable-all: true
-
-formatters:
-  settings:
-    gofmt:
-      simplify: true
-```
-
-</details>
-
-See [golangci-lint#5474](https://github.com/golangci/golangci-lint/pull/5475) for more details.
-
----
-
-### `issues` configuration
-
-#### Removed
-
-1. `issues.exclude-case-sensitive` option.
-
-`issues.exclude` and `issues.exclude-rules` are case sensitive by default.
 To ignore case, use `(?i)` at the beginning of a regex syntax.
 
 <details>
-<summary>v1</summary>
+  <summary>v1</summary>
 
 ```yaml
 issues:
   exclude-case-sensitive: false
-  exclude:
-    - 'abcdef'
+    exclude:
+      - 'abcdef'
 ```
 
 </details>
 
 <details>
-<summary>v2</summary>
-
-```yaml
-issues:
-  exclude:
-    - '(?i)abcdef'
-```
-
-</details>
-
-See [golangci-lint#5451](https://github.com/golangci/golangci-lint/pull/5451) for more details.
-
-2. `issues.exclude-dirs-use-default` option.
-
-<details>
-<summary>v1</summary>
-
-```yaml
-issues:
-  exclude-dirs-use-default: false
-```
-
-</details>
-
-<details>
-<summary>v2</summary>
-
-TODO
-
-</details>
-
-
-See [golangci-lint#5451](https://github.com/golangci/golangci-lint/pull/5451) for more details.
-
-#### Replaced
-
-1. `exclude-dirs` and `exclude-files` replaced with `exclusions.paths`.
-
-<details>
-<summary>v1</summary>
-
-```yaml
-issues:
-  exclude-dirs:
-    - src/external_libs
-    - autogenerated_by_my_lib
-
-  exclude-files:
-    - ".*\\.my\\.go$"
-    - lib/bad.go
-```
-
-</details>
-
-<details>
-<summary>v2</summary>
-
-```yaml
-issues:
-  exclusions:
-    paths:
-      - src/external_libs
-      - autogenerated_by_my_lib
-      - ".*\\.my\\.go$"
-      - lib/bad.go
-```
-
-</details>
-
-2. `issues.exclude-generated-strict` and `issues.exclude-generated` replaced with `linters.exclusions.generated`.
-
-<details>
-<summary>v1</summary>
-
-```yaml
-issues:
-  exclude-generated-strict: true
-  exclude-generated: strict
-```
-
-</details>
-
-<details>
-<summary>v2</summary>
+  <summary>v2</summary>
 
 ```yaml
 linters:
   exclusions:
-    generated: strict
+    rules:
+    - path: '(.+)\.go$'
+      text: (?i)abcdef
 ```
 
 </details>
 
----
-
-### `output` configuration
-
-#### Replaced
-
-1. `output.format` replaced with `output.formats`.
-
-Deprecated since [v1.57.0](https://golangci-lint.run/product/changelog/#v1570).
+#### `issues.exclude-dirs-use-default`
 
 <details>
-<summary>v1</summary>
+  <summary>v1</summary>
 
 ```yaml
-output:
-  format: "checkstyle:report.xml,json:stdout,colored-line-number"
+issues:
+  exclude-dirs-use-default: true
 ```
 
 </details>
 
 <details>
-<summary>v2</summary>
+  <summary>v2</summary>
 
 ```yaml
-output:
-  formats:
-    - format: checkstyle
-      path: report.xml
-    - format: json
-      path: stdout
-    - format: colored-line-number
+linters:
+  exclusions:
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
 ```
 
 </details>
-
-See [golangci-lint#4521](https://github.com/golangci/golangci-lint/pull/4521) for more details.
-
-#### Changed
-
-1. `output.show-stats` is `true` by default.
-
-<details>
-<summary>v1</summary>
-
-```yaml
-output:
-  # show-stats is not present
-```
-
-</details>
-
-<details>
-<summary>v2</summary>
-
-```yaml
-output:
-  show-stats: true
-```
-
-</details>
-
-See [golangci-lint#5470](https://github.com/golangci/golangci-lint/pull/5470) for more details.
-
----
-
-### `run` configuration
-
-#### Changed
-
-1. `run.go` fallback to `1.23`.
-
-In v1, `run.go` fallback to `1.17`.
-
-See [golangci-lint#5470](https://github.com/golangci/golangci-lint/pull/5470) for more details.
-
-2. `run.timeout` is `0` (disabled) by default.
-
-TODO: see https://github.com/golangci/golangci-lint/pull/5506#discussion_r1984001235
-
-In v1, `run.timeout` was `1m` by default.
-
-<details>
-<summary>v1</summary>
-
-```yaml
-run:
-  # timeout is not present
-```
-
-</details>
-
-<details>
-<summary>v2</summary>
-
-```yaml
-run:
-  timeout: 1m
-```
-
-</details>
-
-See [golangci-lint#5470](https://github.com/golangci/golangci-lint/pull/5470) for more details.
-
-3. `run.concurrency` set to match Linux container CPU quota by default.
-
-In v1, `run.concurrency` was set to the number of logical CPUs in the machine.
-
-See [golangci-lint#5470](https://github.com/golangci/golangci-lint/pull/5470) for more details.
-
----
-
-### `severity` configuration
-
-#### Renamed
-
-1. `severity.default-severity` renamed to `severity.default`.
-
-<details>
-<summary>v1</summary>
-
-```yaml
-severity:
-  default-severity: error
-```
-
-</details>
-
-<details>
-<summary>v2</summary>
-
-```yaml
-severity:
-  default: error
-```
-
-</details>
-
-See [golangci-lint#5462](https://github.com/golangci/golangci-lint/pull/5462) for more details.
