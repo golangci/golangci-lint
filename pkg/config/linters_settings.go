@@ -957,6 +957,7 @@ type TestifylintSettings struct {
 	Formatter struct {
 		CheckFormatString *bool `mapstructure:"check-format-string"`
 		RequireFFuncs     bool  `mapstructure:"require-f-funcs"`
+		RequireStringMsg  bool  `mapstructure:"require-string-msg"`
 	} `mapstructure:"formatter"`
 
 	GoRequire struct {

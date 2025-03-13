@@ -5,5 +5,5 @@ linters-settings:
       - formatter
     formatter:
       check-format-string: false
-      require-f-funcs: true
-      require-string-msg: true
+      require-f-funcs: false
+      require-string-msg: false

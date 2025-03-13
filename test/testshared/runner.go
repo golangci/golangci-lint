@@ -279,7 +279,7 @@ type RunnerResult struct {
 func (r *RunnerResult) ExpectNoIssues() {
 	r.tb.Helper()
 
-	assert.Equal(r.tb, "", r.output, "exit code is %d", r.exitCode)
+	assert.Empty(r.tb, r.output, "exit code is %d", r.exitCode)
 	assert.Equal(r.tb, exitcodes.Success, r.exitCode, "output is %s", r.output)
 }
 

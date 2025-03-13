@@ -30,6 +30,7 @@ func TestTestifylint(t *testing.T) {
 	assert.NoError(t, err)                 // want "error-nil: use assert\\.NoError"
 	assert.Equal(t, 42, resultInt)         // want "expected-actual: need to reverse actual and expected values"
 	assert.Equal(t, resultFloat, 42.42)    // want "float-compare: use assert\\.InEpsilon \\(or InDelta\\)"
+	assert.Equal(t, 10, len(arr))          // want "expected-actual: need to reverse actual and expected values"
 	assert.Len(t, arr, 10)                 // want "len: use assert\\.Len"
 
 	assert.True(t, predicate)
