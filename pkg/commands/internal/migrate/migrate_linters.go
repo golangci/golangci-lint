@@ -12,7 +12,7 @@ func toLinters(old *versionone.Config) versiontwo.Linters {
 	return versiontwo.Linters{
 		Default:    getDefaultName(old.Linters),
 		Enable:     onlyLinterNames(convertStaticcheckLinterNames(enable)),
-		Disable:    onlyLinterNames(convertStaticcheckLinterNames(disable)),
+		Disable:    onlyLinterNames(convertDisabledStaticcheckLinterNames(disable)),
 		FastOnly:   nil,
 		Settings:   toLinterSettings(old.LintersSettings),
 		Exclusions: toExclusions(old),

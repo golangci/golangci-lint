@@ -885,6 +885,27 @@ func convertStaticcheckLinterNames(names []string) []string {
 	return Unique(results)
 }
 
+func convertDisabledStaticcheckLinterNames(names []string) []string {
+	removeStaticcheck := slices.Contains(names, "staticcheck") && slices.Contains(names, "stylecheck") && slices.Contains(names, "gosimple")
+
+	var results []string
+
+	for _, name := range names {
+		if removeStaticcheck && slices.Contains([]string{"stylecheck", "gosimple", "staticcheck"}, name) {
+			results = append(results, "staticcheck")
+			continue
+		}
+
+		if slices.Contains([]string{"stylecheck", "gosimple"}, name) {
+			continue
+		}
+
+		results = append(results, name)
+	}
+
+	return Unique(results)
+}
+
 func onlyLinterNames(names []string) []string {
 	formatters := []string{"gci", "gofmt", "gofumpt", "goimports"}
 
