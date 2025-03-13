@@ -760,6 +760,37 @@ linters:
 
 </details>
 
+#### `linters-settings.gocritic.settings.ruleguard.rules`
+
+The special variable `${configDir}` has been replaced with `${base-path}`.
+
+<details>
+<summary>v1</summary>
+
+```yaml
+linters-settings:
+  gocritic:
+    settings:
+      ruleguard:
+        rules: '${configDir}/ruleguard/rules-*.go'
+```
+
+</details>
+
+<details>
+<summary>v2</summary>
+
+```yaml
+linters:
+  settings:
+    gocritic:
+      settings:
+        ruleguard:
+          rules: '${base-path}/ruleguard/rules-*.go'
+```
+
+</details>
+
 #### `linters-settings.govet.check-shadowing`
 
 This option has been deprecated since v1.57.0 and has been removed.
@@ -1225,7 +1256,7 @@ This property is `true` by default.
 
 #### `output.sort-order`
 
-This property has new default: `['linter', 'file']` instead of `['file']`.
+This property has a new default value `['linter', 'file']` instead of `['file']`.
 
 #### `output.sort-results`
 
@@ -1262,6 +1293,10 @@ issues:
 #### `run.concurrency`
 
 This property value set to match Linux container CPU quota by default and fallback on the number of logical CPUs in the machine.
+
+#### `run.relative-path-mode`
+
+This property has a new default value of `cfg` instead of `wd`.
 
 #### `run.show-stats`
 
@@ -1487,6 +1522,109 @@ linters:
 ```
 
 </details>
+
+### `linters.enable[].<formatter_name>`
+
+`gci`, `gofmt`, `gofumpt`, `goimports` have been moved to the `formatters` section.
+
+<details>
+<summary>v1</summary>
+
+```yaml
+linters:
+  enable:
+    - gci
+    - gofmt
+    - gofumpt
+    - goimports
+```
+
+</details>
+
+<details>
+<summary>v2</summary>
+
+```yaml
+formatters:
+  enable:
+    - gci
+    - gofmt
+    - gofumpt
+    - goimports
+```
+
+</details>
+
+### `linters.enable[].{stylecheck,gosimple,staticcheck}`
+
+The linters `stylecheck`, `gosimple`, and `staticcheck` has been merged inside the `staticcheck`.
+
+<details>
+<summary>v1</summary>
+
+```yaml
+linters:
+  enable:
+    - gosimple
+    - staticcheck
+    - stylecheck
+```
+
+</details>
+
+<details>
+<summary>v2</summary>
+
+```yaml
+linters:
+  enable:
+    - staticcheck
+```
+
+</details>
+
+### `linters.enable[].typecheck`
+
+This linter is an internal and enabled by default.
+
+<details>
+<summary>v1</summary>
+
+```yaml
+linters:
+  enable:
+    - typecheck
+```
+
+</details>
+
+<details>
+<summary>v2</summary>
+
+```yaml
+# typecheck is always enabled
+```
+
+</details>
+
+### `linters.enable[].<deprecated_linter>`
+
+The following deprecated linters have been removed:
+
+- `deadcode`
+- `execinquery`
+- `exhaustivestruct`
+- `exportloopref`
+- `golint`
+- `gomnd`
+- `ifshort`
+- `interfacer`
+- `maligned`
+- `nosnakecase`
+- `scopelint`
+- `structcheck`
+- `tenv`
+- `varcheck`
 
 #### `linters.fast`
 
@@ -1722,30 +1860,6 @@ linters:
 
 </details>
 
-### `stylecheck`, `gosimple`, `staticcheck`
+### `version`
 
-The three linters `stylecheck`, `gosimple`, and `staticcheck` has been merged inside `staticcheck`.
-
-<details>
-<summary>v1</summary>
-
-```yaml
-linters:
-  enable:
-    - gosimple
-    - staticcheck
-    - stylecheck
-```
-
-</details>
-
-<details>
-<summary>v2</summary>
-
-```yaml
-linters:
-  enable:
-    - staticcheck
-```
-
-</details>
+The `version` property has been added to the configuration file.
