@@ -849,6 +849,7 @@ type TestifylintSettings struct {
 	Formatter            TestifylintFormatter            `mapstructure:"formatter"`
 	GoRequire            TestifylintGoRequire            `mapstructure:"go-require"`
 	RequireError         TestifylintRequireError         `mapstructure:"require-error"`
+	RequireStringMsg     bool                            `mapstructure:"require-string-msg"`
 	SuiteExtraAssertCall TestifylintSuiteExtraAssertCall `mapstructure:"suite-extra-assert-call"`
 }
 
@@ -863,6 +864,7 @@ type TestifylintExpectedActual struct {
 type TestifylintFormatter struct {
 	CheckFormatString *bool `mapstructure:"check-format-string"`
 	RequireFFuncs     bool  `mapstructure:"require-f-funcs"`
+	RequireStringMsg  bool  `mapstructure:"require-string-msg"`
 }
 
 type TestifylintGoRequire struct {

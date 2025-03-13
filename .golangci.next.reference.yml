@@ -3399,6 +3399,7 @@ linters:
         - contains
         - empty
         - encoded-compare
+        - equal-values
         - error-is-as
         - error-nil
         - expected-actual
@@ -3413,6 +3414,7 @@ linters:
         - suite-broken-parallel
         - suite-dont-use-pkg
         - suite-extra-assert-call
+        - suite-method-signature
         - suite-subtest-run
         - suite-thelper
         - useless-assert
@@ -3422,9 +3424,10 @@ linters:
       disable-all: true
       # Enable checkers by name
       # (in addition to default
-      #   blank-import, bool-compare, compares, contains, empty, encoded-compare, error-is-as, error-nil, expected-actual,
-      #   go-require, float-compare, formatter, len, negative-positive, nil-compare, regexp, require-error,
-      #   suite-broken-parallel, suite-dont-use-pkg, suite-extra-assert-call, suite-subtest-run, useless-assert
+      #   blank-import, bool-compare, compares, contains, empty, encoded-compare, equal-values, error-is-as, error-nil,
+      #   expected-actual, go-require, float-compare, formatter, len, negative-positive, nil-compare, regexp, require-error,
+      #   suite-broken-parallel, suite-dont-use-pkg, suite-extra-assert-call, suite-subtest-run, suite-method-signature,
+      #   useless-assert
       # ).
       enable:
         - blank-import
@@ -3433,6 +3436,7 @@ linters:
         - contains
         - empty
         - encoded-compare
+        - equal-values
         - error-is-as
         - error-nil
         - expected-actual
@@ -3447,6 +3451,7 @@ linters:
         - suite-broken-parallel
         - suite-dont-use-pkg
         - suite-extra-assert-call
+        - suite-method-signature
         - suite-subtest-run
         - suite-thelper
         - useless-assert
@@ -3471,6 +3476,10 @@ linters:
         # https://github.com/Antonboom/testifylint?tab=readme-ov-file#historical-reference-of-formatter.
         # Default: false
         require-f-funcs: true
+        # To require that the first element of msgAndArgs (msg) has a string type.
+        # For example, in such case assertion like `assert.True(t, b, tt.case)` will be considered as invalid.
+        # Default: true
+        require-string-msg: false
       go-require:
         # To ignore HTTP handlers (like http.HandlerFunc).
         # Default: false

@@ -3370,6 +3370,7 @@
                   "contains",
                   "empty",
                   "encoded-compare",
+                  "equal-values",
                   "error-is-as",
                   "error-nil",
                   "expected-actual",
@@ -3384,6 +3385,7 @@
                   "suite-broken-parallel",
                   "suite-dont-use-pkg",
                   "suite-extra-assert-call",
+                  "suite-method-signature",
                   "suite-subtest-run",
                   "suite-thelper",
                   "useless-assert"
@@ -3396,6 +3398,7 @@
                 "contains",
                 "empty",
                 "encoded-compare",
+                "equal-values",
                 "error-is-as",
                 "error-nil",
                 "expected-actual",
@@ -3410,6 +3413,7 @@
                 "suite-broken-parallel",
                 "suite-dont-use-pkg",
                 "suite-extra-assert-call",
+                "suite-method-signature",
                 "suite-subtest-run",
                 "useless-assert"
               ]
@@ -3425,6 +3429,7 @@
                   "contains",
                   "empty",
                   "encoded-compare",
+                  "equal-values",
                   "error-is-as",
                   "error-nil",
                   "expected-actual",
@@ -3439,6 +3444,7 @@
                   "suite-broken-parallel",
                   "suite-dont-use-pkg",
                   "suite-extra-assert-call",
+                  "suite-method-signature",
                   "suite-subtest-run",
                   "suite-thelper",
                   "useless-assert"
@@ -3483,6 +3489,11 @@
                   "description": "To require f-assertions (e.g. assert.Equalf) if format string is used, even if there are no variable-length variables.",
                   "type": "boolean",
                   "default": false
+                },
+                "require-string-msg": {
+                  "description": "To require that the first element of msgAndArgs (msg) has a string type.",
+                  "type": "boolean",
+                  "default": true
                 }
               }
             },
