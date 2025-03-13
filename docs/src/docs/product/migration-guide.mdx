@@ -1269,7 +1269,7 @@ output:
 
 #### `output.formats[].format: colored-line-number`
 
-This format has been replaced by the format `text` with the option `colors: true`.
+This format has been replaced by the format `text` with the option `colors` (`true` by default).
 
 <details>
 <summary>v1</summary>
@@ -1297,7 +1297,7 @@ output:
 
 #### `output.formats[].format: colored-tab`
 
-This format has been replaced by the format `tab` with the option `colors: true`.
+This format has been replaced by the format `tab` with the option `colors` (`true` by default).
 
 <details>
 <summary>v1</summary>
@@ -1327,7 +1327,7 @@ output:
 
 This property has been removed.
 
-To print the lines with issues, use the `text` format with the option `print-issued-lines: true`.
+To not print the lines with issues, use the `text` format with the option `print-issued-lines: false`.
 
 <details>
 <summary>v1</summary>
@@ -1337,7 +1337,7 @@ output:
   formats:
     - format: line-number
       path: stdout
-  print-issued-lines: true
+  print-issued-lines: false
 ```
 
 </details>
@@ -1350,7 +1350,7 @@ output:
   formats:
     text:
       path: stdout
-      print-issued-lines: true
+      print-issued-lines: false
 ```
 
 </details>
@@ -1359,7 +1359,7 @@ output:
 
 This property has been removed.
 
-To print the linter name, use the `text` format with the option `print-linter-name: true`.
+To not print the linter name, use the `text` format with the option `print-linter-name: false`.
 
 <details>
 <summary>v1</summary>
@@ -1369,7 +1369,7 @@ output:
   formats:
     - format: line-number
       path: stdout
-  print-linter-name: true
+  print-linter-name: false
 ```
 
 </details>
@@ -1382,7 +1382,7 @@ output:
   formats:
     text:
       path: stdout
-      print-linter-name: true
+      print-linter-name: false
 ```
 
 </details>
@@ -1684,7 +1684,7 @@ linters:
 
 </details>
 
-### `linters.enable[].<formatter_name>`
+#### `linters.enable[].<formatter_name>`
 
 The linters `gci`, `gofmt`, `gofumpt`, and `goimports` have been moved to the `formatters` section.
 
@@ -1716,7 +1716,7 @@ formatters:
 
 </details>
 
-### `linters.enable[].{stylecheck,gosimple,staticcheck}`
+#### `linters.enable[].{stylecheck,gosimple,staticcheck}`
 
 The linters `stylecheck`, `gosimple`, and `staticcheck` has been merged inside the `staticcheck`.
 
@@ -1931,14 +1931,14 @@ Presets:
 
 </details>
 
-### `typecheck`
+#### `typecheck`
 
 This `typecheck` is not a linter, so it cannot be enabled or disabled:
 
 - https://golangci-lint.run/welcome/faq/#why-do-you-have-typecheck-errors
 - https://golangci-lint.run/welcome/faq/#why-is-it-not-possible-to-skipignore-typecheck-errors
 
-### Deprecated Linters
+#### Deprecated Linters
 
 The following deprecated linters have been removed:
 
@@ -1956,7 +1956,7 @@ The following deprecated linters have been removed:
 - `tenv`
 - `varcheck`
 
-### Alternative Linter Names
+#### Alternative Linter Names
 
 The alternative linters has been removed.
 
