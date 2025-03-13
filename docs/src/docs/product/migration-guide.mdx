@@ -400,7 +400,7 @@ Settings for `gci`, `gofmt`, `gofumpt`, `goimports` are moved to the `formatters
 ```yaml
 linters-settings:
   govet:
-    disable-all: true
+    enable-all: true
   gofmt:
     simplify: false
 ```
@@ -414,7 +414,7 @@ linters-settings:
 linters:
   settings:
     govet:
-      disable-all: true
+      enable-all: true
 
 formatters:
   settings:
@@ -637,7 +637,7 @@ linters:
 
 </details>
 
-#### `linters-settings.forbidigo.forbid[].rawPattern`
+#### `linters-settings.forbidigo.forbid[]<pattern>`
 
 The `pattern` has become mandatory for the `forbid` field.
 
@@ -821,7 +821,7 @@ linters:
 
 #### `linters-settings.predeclared.ignore`
 
-This string option has been replaced with the slice option `linters.settings.predeclared.ignore`.
+This string option has been replaced with the slice option with the same name.
 
 <details>
 <summary>v1</summary>
@@ -1031,7 +1031,7 @@ linters-settings:
 
 #### `linters-settings.wrapcheck.ignoreInterfaceRegexps`
 
-This option has been replaced with `linters.settings.wrapcheck.ignore-interface-regexps`.
+This option has been renamed to `linters.settings.wrapcheck.ignore-interface-regexps`.
 
 <details>
 <summary>v1</summary>
@@ -1060,7 +1060,7 @@ linters:
 
 #### `linters-settings.wrapcheck.ignorePackageGlobs`
 
-This option has been replaced with `linters.settings.wrapcheck.ignore-package-globs`.
+This option has been renamed to `linters.settings.wrapcheck.ignore-package-globs`.
 
 <details>
 <summary>v1</summary>
@@ -1089,7 +1089,7 @@ linters:
 
 #### `linters-settings.wrapcheck.ignoreSigRegexps`
 
-This option has been replaced with `linters.settings.wrapcheck.ignore-sig-regexps`.
+This option has been renamed to `linters.settings.wrapcheck.ignore-sig-regexps`.
 
 <details>
 <summary>v1</summary>
@@ -1118,7 +1118,7 @@ linters:
 
 #### `linters-settings.wrapcheck.ignoreSigs`
 
-This option has been replaced with `linters.settings.wrapcheck.ignore-sigs`.
+This option has been renamed to `linters.settings.wrapcheck.ignore-sigs`.
 
 <details>
 <summary>v1</summary>
@@ -1167,22 +1167,25 @@ output:
 ```yaml
 output:
   formats:
+    checkstyle:
+      path: 'report.xml'
+    json:
+      path: stdout
     text:
       path: stdout
       color: true
-    json:
-      path: stdout
-    checkstyle:
-      path: 'report.xml'
 ```
 
 </details>
 
-#### `output.formats[].format: name`
+#### `output.formats[].format: <name>`
 
-The property `output.formats[].format` has been replaced with `output.formats[].formatName`.
+The property `output.formats[].format` has been replaced with `output.formats[].<format_name>`.
 
-The formats `colored-line-number`, `colored-tab` has been removed. Use `output.formats[].text.colors: true` and `output.formats[].tab.colors: true` instead.
+The formats `colored-line-number`, `colored-tab` have been replaced by an option `colors`:
+
+- `output.formats[].text.colors: true`
+- `output.formats[].tab.colors: true`.
 
 <details>
 <summary>v1</summary>
@@ -1222,11 +1225,13 @@ This property is `true` by default.
 
 #### `output.sort-order`
 
-This property has new default: [`linter`, `file`] instead of [`file`].
+This property has new default: `['linter', 'file']` instead of `['file']`.
 
 #### `output.sort-results`
 
-The property has been removed. The output results are always sorted.
+The property has been removed.
+
+The output results are always sorted.
 
 #### `output.uniq-by-line`
 
@@ -1485,29 +1490,16 @@ linters:
 
 #### `linters.fast`
 
-This property has been replaced with `linters.default: fast`. It is not a strictly equivalent.
+This property has been removed.
 
-<details>
-<summary>v1</summary>
+There are 2 new options (they are not strictly equivalent to the previous option):
 
-```yaml
-linters:
-  fast: true
-```
-
-</details>
-
-<details>
-<summary>v2</summary>
-
-```yaml
-linters:
-  default: fast
-```
-
-</details>
-
-Also, the new flag option `--fast-only` filters enabled linters to keep only "fast" linters.
+1. `linters.default: fast`: set all "fast" linters as the default set of linters.
+    ```yaml
+    linters:
+      default: fast
+    ```
+2. `--fast-only`: filters all enabled linters to keep only "fast" linters.
 
 #### `linters.presets`
 
@@ -1687,7 +1679,7 @@ Presets:
 
 The alternative linters has been removed.
 
-| Alt Name V1 | V2 Name       |
+| Alt Name v1 | Name v2       |
 |-------------|---------------|
 | `gas`       | `gosec`       |
 | `goerr113`  | `err113`      |
