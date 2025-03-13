@@ -1583,49 +1583,6 @@ linters:
 
 </details>
 
-### `linters.enable[].typecheck`
-
-This linter is an internal and enabled by default.
-
-<details>
-<summary>v1</summary>
-
-```yaml
-linters:
-  enable:
-    - typecheck
-```
-
-</details>
-
-<details>
-<summary>v2</summary>
-
-```yaml
-# typecheck is always enabled
-```
-
-</details>
-
-### `linters.enable[].<deprecated_linter>`
-
-The following deprecated linters have been removed:
-
-- `deadcode`
-- `execinquery`
-- `exhaustivestruct`
-- `exportloopref`
-- `golint`
-- `gomnd`
-- `ifshort`
-- `interfacer`
-- `maligned`
-- `nosnakecase`
-- `scopelint`
-- `structcheck`
-- `tenv`
-- `varcheck`
-
 #### `linters.fast`
 
 This property has been removed.
@@ -1812,6 +1769,31 @@ Presets:
 ```
 
 </details>
+
+### `typecheck`
+
+This `typecheck` is not a linter, so it cannot be enabled or disabled:
+
+- https://golangci-lint.run/welcome/faq/#why-do-you-have-typecheck-errors
+- https://golangci-lint.run/welcome/faq/#why-is-it-not-possible-to-skipignore-typecheck-errors
+
+### Deprecated Linters
+
+The following deprecated linters have been removed:
+
+- `deadcode`
+- `execinquery`
+- `exhaustivestruct`
+- `exportloopref`
+- `golint`
+- `ifshort`
+- `interfacer`
+- `maligned`
+- `nosnakecase`
+- `scopelint`
+- `structcheck`
+- `tenv`
+- `varcheck`
 
 ### Alternative Linter Names
 
