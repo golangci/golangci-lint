@@ -390,9 +390,9 @@ linters:
 
 ### `linters-settings`
 
-`linters-settings` section has been split to `linters.settings` and `formatters.settings`.
+The `linters-settings` section has been split into `linters.settings` and `formatters.settings`.
 
-Settings for `gci`, `gofmt`, `gofumpt`, `goimports` are moved to the `formatters.settings` section.
+Settings for `gci`, `gofmt`, `gofumpt`, and `goimports` are moved to the `formatters.settings` section.
 
 <details>
 <summary>v1</summary>
@@ -515,7 +515,7 @@ linters:
 
 #### `linters-settings.errcheck.exclude`
 
-This option has been deprecated since v1.42.0.
+This option has been deprecated since v1.42.0 and has been removed.
 
 To exclude functions, use `linters.settings.errcheck.exclude-functions` instead.
 
@@ -547,7 +547,7 @@ linters:
 
 #### `linters-settings.errcheck.ignore`
 
-This option has been deprecated since v1.13.0.
+This option has been deprecated since v1.13.0 and has been removed.
 
 To exclude functions, use `linters.settings.errcheck.exclude-functions` instead.
 
@@ -558,7 +558,6 @@ To exclude functions, use `linters.settings.errcheck.exclude-functions` instead.
 linters-settings:
   errcheck:
     ignore: 'io:.*'
-
 ```
 
 </details>
@@ -582,7 +581,7 @@ linters:
 
 This option has been removed.
 
-To analyze generated files use `linters.exclusions.generated`.
+To analyze generated files, use `linters.exclusions.generated`.
 
 <details>
 <summary>v1</summary>
@@ -704,7 +703,7 @@ linters:
 
 This option has been removed.
 
-To analyze generated files use `linters.exclusions.generated`.
+To analyze generated files, use `linters.exclusions.generated`.
 
 <details>
 <summary>v1</summary>
@@ -1213,11 +1212,6 @@ output:
 
 The property `output.formats[].format` has been replaced with `output.formats[].<format_name>`.
 
-The formats `colored-line-number`, `colored-tab` have been replaced by an option `colors`:
-
-- `output.formats[].text.colors: true`
-- `output.formats[].tab.colors: true`.
-
 <details>
 <summary>v1</summary>
 
@@ -1227,8 +1221,7 @@ output:
     - format: json
       path: stderr
     - format: checkstyle
-      path: 'report.xml'
-    - format: colored-line-number
+      path: report.xml
 ```
 
 </details>
@@ -1242,10 +1235,154 @@ output:
     json:
       path: stderr
     checkstyle:
-      path: 'report.xml'
+      path: report.xml
+```
+
+</details>
+
+#### `output.formats[].format: line-number`
+
+This format has been replaced by the format `text`.
+
+<details>
+<summary>v1</summary>
+
+```yaml
+output:
+  formats:
+    - format: line-number
+```
+
+</details>
+
+<details>
+<summary>v2</summary>
+
+```yaml
+output:
+  formats:
+    text:
+      path: stdout
+```
+
+</details>
+
+#### `output.formats[].format: colored-line-number`
+
+This format has been replaced by the format `text` with the option `colors: true`.
+
+<details>
+<summary>v1</summary>
+
+```yaml
+output:
+  formats:
+    - format: colored-line-number
+```
+
+</details>
+
+<details>
+<summary>v2</summary>
+
+```yaml
+output:
+  formats:
     text:
       path: stdout
       colors: true
+```
+
+</details>
+
+#### `output.formats[].format: colored-tab`
+
+This format has been replaced by the format `tab` with the option `colors: true`.
+
+<details>
+<summary>v1</summary>
+
+```yaml
+output:
+  formats:
+    - format: colored-tab
+```
+
+</details>
+
+<details>
+<summary>v2</summary>
+
+```yaml
+output:
+  formats:
+    tab:
+      path: stdout
+      colors: true
+```
+
+</details>
+
+#### `output.print-issued-lines`
+
+This property has been removed.
+
+To print the lines with issues, use the `text` format with the option `print-issued-lines: true`.
+
+<details>
+<summary>v1</summary>
+
+```yaml
+output:
+  formats:
+    - format: line-number
+      path: stdout
+  print-issued-lines: true
+```
+
+</details>
+
+<details>
+<summary>v2</summary>
+
+```yaml
+output:
+  formats:
+    text:
+      path: stdout
+      print-issued-lines: true
+```
+
+</details>
+
+#### `output.print-linter-name`
+
+This property has been removed.
+
+To print the linter name, use the `text` format with the option `print-linter-name: true`.
+
+<details>
+<summary>v1</summary>
+
+```yaml
+output:
+  formats:
+    - format: line-number
+      path: stdout
+  print-linter-name: true
+```
+
+</details>
+
+<details>
+<summary>v2</summary>
+
+```yaml
+output:
+  formats:
+    text:
+      path: stdout
+      print-linter-name: true
 ```
 
 </details>
@@ -1290,6 +1427,10 @@ issues:
 
 ### `run`
 
+#### `run.go`
+
+The new fallback value for this property is `1.22` instead of `1.17`.
+
 #### `run.concurrency`
 
 This property value set to match Linux container CPU quota by default and fallback on the number of logical CPUs in the machine.
@@ -1298,9 +1439,29 @@ This property value set to match Linux container CPU quota by default and fallba
 
 This property has a new default value of `cfg` instead of `wd`.
 
+<details>
+<summary>v1</summary>
+
+```yaml
+run:
+  # When not specified, relative-path-mode is set to 'wd' by default
+```
+
+</details>
+
+<details>
+<summary>v2</summary>
+
+```yaml
+run:
+  relative-path-mode: 'cfg'
+```
+
+</details>
+
 #### `run.show-stats`
 
-This property has been deprecated since v1.57.0 and replaced by `output.show-stats`.
+This property has been deprecated since v1.57.0 and has been replaced by `output.show-stats`.
 
 <details>
 <summary>v1</summary>
@@ -1324,7 +1485,7 @@ output:
 
 #### `run.skip-dirs-use-default`
 
-This property has been deprecated since v1.57.0 and replaced by `issues.exclude-dirs-use-default`.
+This property has been deprecated since v1.57.0 and has been replaced by `issues.exclude-dirs-use-default`.
 
 <details>
 <summary>v1</summary>
@@ -1525,7 +1686,7 @@ linters:
 
 ### `linters.enable[].<formatter_name>`
 
-`gci`, `gofmt`, `gofumpt`, `goimports` have been moved to the `formatters` section.
+The linters `gci`, `gofmt`, `gofumpt`, and `goimports` have been moved to the `formatters` section.
 
 <details>
 <summary>v1</summary>
