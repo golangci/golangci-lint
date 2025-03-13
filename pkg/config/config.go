@@ -64,6 +64,7 @@ func (c *Config) Validate() error {
 		c.Run.Validate,
 		c.Output.Validate,
 		c.Linters.Validate,
+		c.Formatters.Validate,
 		c.Severity.Validate,
 	}
 
