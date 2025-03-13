@@ -49,5 +49,5 @@ func (l *Linters) validateNoFormatters() error {
 }
 
 func getAllFormatterNames() []string {
-	return []string{"gci", "gofmt", "gofumpt", "goimports"}
+	return []string{"gci", "gofmt", "gofumpt", "goimports", "golines"}
 }
