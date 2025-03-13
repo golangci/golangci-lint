@@ -60,6 +60,14 @@ func (l *Loader) Load(opts LoadOptions) error {
 		l.cfg.Linters.Exclusions.Generated = GeneratedModeStrict
 	}
 
+	if !l.cfg.InternalCmdTest {
+		for _, n := range slices.Concat(l.cfg.Linters.Enable, l.cfg.Linters.Disable) {
+			if n == "typecheck" {
+				return fmt.Errorf("%s is not a linter, it cannot be enabled or disabled", n)
+			}
+		}
+	}
+
 	l.handleFormatters()
 
 	if opts.CheckDeprecation {
