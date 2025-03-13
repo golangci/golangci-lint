@@ -64,24 +64,355 @@ Global Flags:
 
 ## Changes
 
-### `issues`
+### `linters`
 
-#### `issues.exclude-case-sensitive`
+#### `linters.disable-all`
+
+This property has been replaced with `linters.default: none`.
+
+<details>
+<summary>v1</summary>
+
+```yaml
+linters:
+  disable-all: true
+```
+
+</details>
+
+<details>
+<summary>v2</summary>
+
+```yaml
+linters:
+  default: none
+```
+
+</details>
+
+#### `linters.enable-all`
+
+This property has been replaced with `linters.default: all`.
+
+<details>
+<summary>v1</summary>
+
+```yaml
+linters:
+  enable-all: true
+```
+
+</details>
+
+<details>
+<summary>v2</summary>
+
+```yaml
+linters:
+  default: all
+```
+
+</details>
+
+#### `linters.enable[].<formatter_name>`
+
+The linters `gci`, `gofmt`, `gofumpt`, and `goimports` have been moved to the `formatters` section.
+
+<details>
+<summary>v1</summary>
+
+```yaml
+linters:
+  enable:
+    - gci
+    - gofmt
+    - gofumpt
+    - goimports
+```
+
+</details>
+
+<details>
+<summary>v2</summary>
+
+```yaml
+formatters:
+  enable:
+    - gci
+    - gofmt
+    - gofumpt
+    - goimports
+```
+
+</details>
+
+#### `linters.enable[].{stylecheck,gosimple,staticcheck}`
+
+The linters `stylecheck`, `gosimple`, and `staticcheck` has been merged inside the `staticcheck`.
+
+<details>
+<summary>v1</summary>
+
+```yaml
+linters:
+  enable:
+    - gosimple
+    - staticcheck
+    - stylecheck
+```
+
+</details>
+
+<details>
+<summary>v2</summary>
+
+```yaml
+linters:
+  enable:
+    - staticcheck
+```
+
+</details>
+
+#### `linters.fast`
 
 This property has been removed.
 
-`issues.exclude`, `issues.exclude-rules.text`, and `issues.exclude-rules.source` are case-sensitive by default.
+There are 2 new options (they are not strictly equivalent to the previous option):
 
-To ignore case, use `(?i)` at the beginning of a regex syntax.
+1. `linters.default: fast`: set all "fast" linters as the default set of linters.
+    ```yaml
+    linters:
+      default: fast
+    ```
+2. `--fast-only`: filters all enabled linters to keep only "fast" linters.
+
+#### `linters.presets`
+
+This property have been removed.
+
+<details>
+<summary>v1</summary>
+
+Presets:
+
+- bugs:
+  - `asasalint`
+  - `asciicheck`
+  - `bidichk`
+  - `bodyclose`
+  - `contextcheck`
+  - `durationcheck`
+  - `errcheck`
+  - `errchkjson`
+  - `errorlint`
+  - `exhaustive`
+  - `gocheckcompilerdirectives`
+  - `gochecksumtype`
+  - `gosec`
+  - `gosmopolitan`
+  - `govet`
+  - `loggercheck`
+  - `makezero`
+  - `musttag`
+  - `nilerr`
+  - `nilnesserr`
+  - `noctx`
+  - `protogetter`
+  - `reassign`
+  - `recvcheck`
+  - `rowserrcheck`
+  - `spancheck`
+  - `sqlclosecheck`
+  - `staticcheck`
+  - `testifylint`
+  - `zerologlint`
+- comment:
+  - `dupword`
+  - `godot`
+  - `godox`
+  - `misspell`
+- complexity:
+  - `cyclop`
+  - `funlen`
+  - `gocognit`
+  - `gocyclo`
+  - `maintidx`
+  - `nestif`
+- error:
+  - `err113`
+  - `errcheck`
+  - `errorlint`
+  - `wrapcheck`
+- format:
+  - `gci`
+  - `gofmt`
+  - `gofumpt`
+  - `goimports`
+- import:
+  - `depguard`
+  - `gci`
+  - `goimports`
+  - `gomodguard`
+- metalinter:
+  - `gocritic`
+  - `govet`
+  - `revive`
+  - `staticcheck`
+- module:
+  - `depguard`
+  - `gomoddirectives`
+  - `gomodguard`
+- performance:
+  - `bodyclose`
+  - `fatcontext`
+  - `noctx`
+  - `perfsprint`
+  - `prealloc`
+- sql:
+  - `rowserrcheck`
+  - `sqlclosecheck`
+- style:
+  - `asciicheck`
+  - `canonicalheader`
+  - `containedctx`
+  - `copyloopvar`
+  - `decorder`
+  - `depguard`
+  - `dogsled`
+  - `dupl`
+  - `err113`
+  - `errname`
+  - `exhaustruct`
+  - `exptostd`
+  - `forbidigo`
+  - `forcetypeassert`
+  - `ginkgolinter`
+  - `gochecknoglobals`
+  - `gochecknoinits`
+  - `goconst`
+  - `gocritic`
+  - `godot`
+  - `godox`
+  - `goheader`
+  - `gomoddirectives`
+  - `gomodguard`
+  - `goprintffuncname`
+  - `gosimple`
+  - `grouper`
+  - `iface`
+  - `importas`
+  - `inamedparam`
+  - `interfacebloat`
+  - `intrange`
+  - `ireturn`
+  - `lll`
+  - `loggercheck`
+  - `makezero`
+  - `mirror`
+  - `misspell`
+  - `mnd`
+  - `musttag`
+  - `nakedret`
+  - `nilnil`
+  - `nlreturn`
+  - `nolintlint`
+  - `nonamedreturns`
+  - `nosprintfhostport`
+  - `paralleltest`
+  - `predeclared`
+  - `promlinter`
+  - `revive`
+  - `sloglint`
+  - `stylecheck`
+  - `tagalign`
+  - `tagliatelle`
+  - `testpackage`
+  - `tparallel`
+  - `unconvert`
+  - `usestdlibvars`
+  - `varnamelen`
+  - `wastedassign`
+  - `whitespace`
+  - `wrapcheck`
+  - `wsl`
+- test:
+  - `exhaustruct`
+  - `paralleltest`
+  - `testableexamples`
+  - `testifylint`
+  - `testpackage`
+  - `thelper`
+  - `tparallel`
+  - `usetesting`
+- unused:
+  - `ineffassign`
+  - `unparam`
+  - `unused`
+
+</details>
+
+<details>
+<summary>v2</summary>
+
+```yaml
+# Removed
+```
+
+</details>
+
+#### `typecheck`
+
+This `typecheck` is not a linter, so it cannot be enabled or disabled:
+
+- https://golangci-lint.run/welcome/faq/#why-do-you-have-typecheck-errors
+- https://golangci-lint.run/welcome/faq/#why-is-it-not-possible-to-skipignore-typecheck-errors
+
+#### Deprecated Linters
+
+The following deprecated linters have been removed:
+
+- `deadcode`
+- `execinquery`
+- `exhaustivestruct`
+- `exportloopref`
+- `golint`
+- `ifshort`
+- `interfacer`
+- `maligned`
+- `nosnakecase`
+- `scopelint`
+- `structcheck`
+- `tenv`
+- `varcheck`
+
+#### Alternative Linter Names
+
+The alternative linters has been removed.
+
+| Alt Name v1 | Name v2       |
+|-------------|---------------|
+| `gas`       | `gosec`       |
+| `goerr113`  | `err113`      |
+| `gomnd`     | `mnd`         |
+| `logrlint`  | `loggercheck` |
+| `megacheck` | `staticcheck` |
+| `vet`       | `govet`       |
+| `vetshadow` | `govet`       |
 
 <details>
 <summary>v1</summary>
 
 ```yaml
-issues:
-  exclude-case-sensitive: false
-  exclude:
-    - 'abcdef'
+linters:
+  enable:
+    - gas
+    - goerr113
+    - gomnd
+    - logrlint
+    - megacheck
+    - vet
+    - vetshadow
 ```
 
 </details>
@@ -91,299 +422,13 @@ issues:
 
 ```yaml
 linters:
-  exclusions:
-    rules:
-      - path: '(.+)\.go$'
-        text: (?i)abcdef
-```
-
-</details>
-
-#### `issues.exclude-dirs-use-default`
-
-This property has been removed.
-
-Use `linters.exclusions.paths` and `formatters.exclusions.paths` to exclude directories.
-
-<details>
-<summary>v1</summary>
-
-```yaml
-issues:
-  exclude-dirs-use-default: true
-```
-
-</details>
-
-<details>
-  <summary>v2</summary>
-
-```yaml
-linters:
-  exclusions:
-    paths:
-      - third_party$
-      - builtin$
-      - examples$
-```
-
-</details>
-
-#### `issues.exclude-dirs`
-
-This property has been replaced with `linters.exclusions.paths` and `formatters.exclusions.paths`.
-
-<details>
-<summary>v1</summary>
-
-```yaml
-issues:
-  exclude-dirs:
-    - src/external_libs
-    - autogenerated_by_my_lib
-```
-
-</details>
-
-<details>
-<summary>v2</summary>
-
-```yaml
-linters:
-  exclusions:
-    paths:
-      - src/external_libs
-      - autogenerated_by_my_lib
-```
-
-</details>
-
-#### `issues.exclude-files`
-
-This property has been replaced with `linters.exclusions.paths` and `formatters.exclusions.paths`.
-
-<details>
-<summary>v1</summary>
-
-```yaml
-issues:
-  exclude-files:
-    - '.*\.my\.go$'
-    - lib/bad.go
-```
-
-</details>
-
-<details>
-<summary>v2</summary>
-
-```yaml
-linters:
-  exclusions:
-    paths:
-      - '.*\.my\.go$'
-      - lib/bad.go
-```
-
-</details>
-
-#### `issues.exclude-generated-strict`
-
-This property has been deprecated since v1.59.0 and has been replaced with `linters.exclusions.generated: strict`.
-
-<details>
-<summary>v1</summary>
-
-```yaml
-linters:
-  exclude-generated-strict: true
-```
-
-</details>
-
-<details>
-<summary>v2</summary>
-
-```yaml
-linters:
-  exclusions:
-    generated: strict
-```
-
-</details>
-
-#### `issues.exclude-generated`
-
-This property has been replaced with `linters.exclusions.generated`.
-
-<details>
-<summary>v1</summary>
-
-```yaml
-linters:
-  exclude-generated: lax
-```
-
-</details>
-
-<details>
-<summary>v2</summary>
-
-```yaml
-linters:
-  exclusions:
-    generated: lax
-```
-
-</details>
-
-#### `issues.exclude-rules`
-
-This property has been replaced with `linters.exclusions.rules`.
-
-<details>
-<summary>v1</summary>
-
-```yaml
-issues:
-  exclude-rules:
-    - path: '_test\.go'
-      linters:
-        - gocyclo
-        - errcheck
-        - dupl
-        - gosec
-    - path-except: '_test\.go'
-      linters:
-        - staticcheck
-    - path: internal/hmac/
-      text: "weak cryptographic primitive"
-      linters:
-        - gosec
-    - linters:
-        - staticcheck
-      text: "SA9003:"
-    - linters:
-        - err113
-      source: "foo"
-```
-
-</details>
-
-<details>
-<summary>v2</summary>
-
-```yaml
-linters:
-  exclusions:
-    rules:
-      - path: '_test\.go'
-        linters:
-          - dupl
-          - errcheck
-          - gocyclo
-          - gosec
-      - path-except: '_test\.go'
-        linters:
-          - staticcheck
-      - path: internal/hmac/
-        text: weak cryptographic primitive
-        linters:
-          - gosec
-      - text: 'SA9003:'
-        linters:
-          - staticcheck
-      - source: foo
-        linters:
-          - err113
-  ```
-
-</details>
-
-
-#### `issues.exclude-use-default`
-
-This property has been replaced with `linters.exclusions.presets`.
-
-<details>
-<summary>v1</summary>
-
-```yaml
-issues:
-  exclude-use-default: true
-```
-
-</details>
-
-<details>
-<summary>v2</summary>
-
-```yaml
-linters:
-  exclusions:
-    presets:
-      - comments
-      - common-false-positives
-      - legacy
-      - std-error-handling
-```
-
-</details>
-
-#### `issues.exclude`
-
-This property has been replaced with `linters.exclusions.rules`.
-
-<details>
-<summary>v1</summary>
-
-```yaml
-issues:
-  exclude:
-    - abcdef
-```
-
-</details>
-
-<details>
-<summary>v2</summary>
-
-```yaml
-linters:
-  exclusions:
-  rules:
-    - path: '(.+)\.go$'
-      text: abcdef
-```
-
-</details>
-
-#### `issues.include`
-
-This property has been replaced with `linters.exclusions.presets`.
-
-<details>
-<summary>v1</summary>
-
-```yaml
-issues:
-  include:
-    - EXC0014
-    - EXC0015
-```
-
-</details>
-
-<details>
-<summary>v2</summary>
-
-```yaml
-linters:
-  exclusions:
-    presets:
-      - common-false-positives
-      - legacy
-      - std-error-handling
+  enable:
+    - gosec
+    - err113
+    - mnd
+    - loggercheck
+    - staticcheck
+    - govet
 ```
 
 </details>
@@ -1175,6 +1220,330 @@ linters:
 
 </details>
 
+### `issues`
+
+#### `issues.exclude-case-sensitive`
+
+This property has been removed.
+
+`issues.exclude`, `issues.exclude-rules.text`, and `issues.exclude-rules.source` are case-sensitive by default.
+
+To ignore case, use `(?i)` at the beginning of a regex syntax.
+
+<details>
+<summary>v1</summary>
+
+```yaml
+issues:
+  exclude-case-sensitive: false
+  exclude:
+    - 'abcdef'
+```
+
+</details>
+
+<details>
+<summary>v2</summary>
+
+```yaml
+linters:
+  exclusions:
+    rules:
+      - path: '(.+)\.go$'
+        text: (?i)abcdef
+```
+
+</details>
+
+#### `issues.exclude-dirs-use-default`
+
+This property has been removed.
+
+Use `linters.exclusions.paths` and `formatters.exclusions.paths` to exclude directories.
+
+<details>
+<summary>v1</summary>
+
+```yaml
+issues:
+  exclude-dirs-use-default: true
+```
+
+</details>
+
+<details>
+  <summary>v2</summary>
+
+```yaml
+linters:
+  exclusions:
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
+```
+
+</details>
+
+#### `issues.exclude-dirs`
+
+This property has been replaced with `linters.exclusions.paths` and `formatters.exclusions.paths`.
+
+<details>
+<summary>v1</summary>
+
+```yaml
+issues:
+  exclude-dirs:
+    - src/external_libs
+    - autogenerated_by_my_lib
+```
+
+</details>
+
+<details>
+<summary>v2</summary>
+
+```yaml
+linters:
+  exclusions:
+    paths:
+      - src/external_libs
+      - autogenerated_by_my_lib
+```
+
+</details>
+
+#### `issues.exclude-files`
+
+This property has been replaced with `linters.exclusions.paths` and `formatters.exclusions.paths`.
+
+<details>
+<summary>v1</summary>
+
+```yaml
+issues:
+  exclude-files:
+    - '.*\.my\.go$'
+    - lib/bad.go
+```
+
+</details>
+
+<details>
+<summary>v2</summary>
+
+```yaml
+linters:
+  exclusions:
+    paths:
+      - '.*\.my\.go$'
+      - lib/bad.go
+```
+
+</details>
+
+#### `issues.exclude-generated-strict`
+
+This property has been deprecated since v1.59.0 and has been replaced with `linters.exclusions.generated: strict`.
+
+<details>
+<summary>v1</summary>
+
+```yaml
+linters:
+  exclude-generated-strict: true
+```
+
+</details>
+
+<details>
+<summary>v2</summary>
+
+```yaml
+linters:
+  exclusions:
+    generated: strict
+```
+
+</details>
+
+#### `issues.exclude-generated`
+
+This property has been replaced with `linters.exclusions.generated`.
+
+<details>
+<summary>v1</summary>
+
+```yaml
+linters:
+  exclude-generated: lax
+```
+
+</details>
+
+<details>
+<summary>v2</summary>
+
+```yaml
+linters:
+  exclusions:
+    generated: lax
+```
+
+</details>
+
+#### `issues.exclude-rules`
+
+This property has been replaced with `linters.exclusions.rules`.
+
+<details>
+<summary>v1</summary>
+
+```yaml
+issues:
+  exclude-rules:
+    - path: '_test\.go'
+      linters:
+        - gocyclo
+        - errcheck
+        - dupl
+        - gosec
+    - path-except: '_test\.go'
+      linters:
+        - staticcheck
+    - path: internal/hmac/
+      text: "weak cryptographic primitive"
+      linters:
+        - gosec
+    - linters:
+        - staticcheck
+      text: "SA9003:"
+    - linters:
+        - err113
+      source: "foo"
+```
+
+</details>
+
+<details>
+<summary>v2</summary>
+
+```yaml
+linters:
+  exclusions:
+    rules:
+      - path: '_test\.go'
+        linters:
+          - dupl
+          - errcheck
+          - gocyclo
+          - gosec
+      - path-except: '_test\.go'
+        linters:
+          - staticcheck
+      - path: internal/hmac/
+        text: weak cryptographic primitive
+        linters:
+          - gosec
+      - text: 'SA9003:'
+        linters:
+          - staticcheck
+      - source: foo
+        linters:
+          - err113
+  ```
+
+</details>
+
+
+#### `issues.exclude-use-default`
+
+This property has been replaced with `linters.exclusions.presets`.
+
+<details>
+<summary>v1</summary>
+
+```yaml
+issues:
+  exclude-use-default: true
+```
+
+</details>
+
+<details>
+<summary>v2</summary>
+
+```yaml
+linters:
+  exclusions:
+    presets:
+      - comments
+      - common-false-positives
+      - legacy
+      - std-error-handling
+```
+
+</details>
+
+#### `issues.exclude`
+
+This property has been replaced with `linters.exclusions.rules`.
+
+<details>
+<summary>v1</summary>
+
+```yaml
+issues:
+  exclude:
+    - abcdef
+```
+
+</details>
+
+<details>
+<summary>v2</summary>
+
+```yaml
+linters:
+  exclusions:
+  rules:
+    - path: '(.+)\.go$'
+      text: abcdef
+```
+
+</details>
+
+#### `issues.include`
+
+This property has been replaced with `linters.exclusions.presets`.
+
+<details>
+<summary>v1</summary>
+
+```yaml
+issues:
+  include:
+    - EXC0014
+    - EXC0015
+```
+
+</details>
+
+<details>
+<summary>v2</summary>
+
+```yaml
+linters:
+  exclusions:
+    presets:
+      - common-false-positives
+      - legacy
+      - std-error-handling
+```
+
+</details>
+
 ### `output`
 
 #### `output.format`
@@ -1630,375 +1999,6 @@ severity:
       linters:
         - foo
       text: '(?i)Example.*'
-```
-
-</details>
-
-### `linters`
-
-#### `linters.disable-all`
-
-This property has been replaced with `linters.default: none`.
-
-<details>
-<summary>v1</summary>
-
-```yaml
-linters:
-  disable-all: true
-```
-
-</details>
-
-<details>
-<summary>v2</summary>
-
-```yaml
-linters:
-  default: none
-```
-
-</details>
-
-#### `linters.enable-all`
-
-This property has been replaced with `linters.default: all`.
-
-<details>
-<summary>v1</summary>
-
-```yaml
-linters:
-  enable-all: true
-```
-
-</details>
-
-<details>
-<summary>v2</summary>
-
-```yaml
-linters:
-  default: all
-```
-
-</details>
-
-#### `linters.enable[].<formatter_name>`
-
-The linters `gci`, `gofmt`, `gofumpt`, and `goimports` have been moved to the `formatters` section.
-
-<details>
-<summary>v1</summary>
-
-```yaml
-linters:
-  enable:
-    - gci
-    - gofmt
-    - gofumpt
-    - goimports
-```
-
-</details>
-
-<details>
-<summary>v2</summary>
-
-```yaml
-formatters:
-  enable:
-    - gci
-    - gofmt
-    - gofumpt
-    - goimports
-```
-
-</details>
-
-#### `linters.enable[].{stylecheck,gosimple,staticcheck}`
-
-The linters `stylecheck`, `gosimple`, and `staticcheck` has been merged inside the `staticcheck`.
-
-<details>
-<summary>v1</summary>
-
-```yaml
-linters:
-  enable:
-    - gosimple
-    - staticcheck
-    - stylecheck
-```
-
-</details>
-
-<details>
-<summary>v2</summary>
-
-```yaml
-linters:
-  enable:
-    - staticcheck
-```
-
-</details>
-
-#### `linters.fast`
-
-This property has been removed.
-
-There are 2 new options (they are not strictly equivalent to the previous option):
-
-1. `linters.default: fast`: set all "fast" linters as the default set of linters.
-    ```yaml
-    linters:
-      default: fast
-    ```
-2. `--fast-only`: filters all enabled linters to keep only "fast" linters.
-
-#### `linters.presets`
-
-This property have been removed.
-
-<details>
-<summary>v1</summary>
-
-Presets:
-
-- bugs:
-  - `asasalint`
-  - `asciicheck`
-  - `bidichk`
-  - `bodyclose`
-  - `contextcheck`
-  - `durationcheck`
-  - `errcheck`
-  - `errchkjson`
-  - `errorlint`
-  - `exhaustive`
-  - `gocheckcompilerdirectives`
-  - `gochecksumtype`
-  - `gosec`
-  - `gosmopolitan`
-  - `govet`
-  - `loggercheck`
-  - `makezero`
-  - `musttag`
-  - `nilerr`
-  - `nilnesserr`
-  - `noctx`
-  - `protogetter`
-  - `reassign`
-  - `recvcheck`
-  - `rowserrcheck`
-  - `spancheck`
-  - `sqlclosecheck`
-  - `staticcheck`
-  - `testifylint`
-  - `zerologlint`
-- comment:
-  - `dupword`
-  - `godot`
-  - `godox`
-  - `misspell`
-- complexity:
-  - `cyclop`
-  - `funlen`
-  - `gocognit`
-  - `gocyclo`
-  - `maintidx`
-  - `nestif`
-- error:
-  - `err113`
-  - `errcheck`
-  - `errorlint`
-  - `wrapcheck`
-- format:
-  - `gci`
-  - `gofmt`
-  - `gofumpt`
-  - `goimports`
-- import:
-  - `depguard`
-  - `gci`
-  - `goimports`
-  - `gomodguard`
-- metalinter:
-  - `gocritic`
-  - `govet`
-  - `revive`
-  - `staticcheck`
-- module:
-  - `depguard`
-  - `gomoddirectives`
-  - `gomodguard`
-- performance:
-  - `bodyclose`
-  - `fatcontext`
-  - `noctx`
-  - `perfsprint`
-  - `prealloc`
-- sql:
-  - `rowserrcheck`
-  - `sqlclosecheck`
-- style:
-  - `asciicheck`
-  - `canonicalheader`
-  - `containedctx`
-  - `copyloopvar`
-  - `decorder`
-  - `depguard`
-  - `dogsled`
-  - `dupl`
-  - `err113`
-  - `errname`
-  - `exhaustruct`
-  - `exptostd`
-  - `forbidigo`
-  - `forcetypeassert`
-  - `ginkgolinter`
-  - `gochecknoglobals`
-  - `gochecknoinits`
-  - `goconst`
-  - `gocritic`
-  - `godot`
-  - `godox`
-  - `goheader`
-  - `gomoddirectives`
-  - `gomodguard`
-  - `goprintffuncname`
-  - `gosimple`
-  - `grouper`
-  - `iface`
-  - `importas`
-  - `inamedparam`
-  - `interfacebloat`
-  - `intrange`
-  - `ireturn`
-  - `lll`
-  - `loggercheck`
-  - `makezero`
-  - `mirror`
-  - `misspell`
-  - `mnd`
-  - `musttag`
-  - `nakedret`
-  - `nilnil`
-  - `nlreturn`
-  - `nolintlint`
-  - `nonamedreturns`
-  - `nosprintfhostport`
-  - `paralleltest`
-  - `predeclared`
-  - `promlinter`
-  - `revive`
-  - `sloglint`
-  - `stylecheck`
-  - `tagalign`
-  - `tagliatelle`
-  - `testpackage`
-  - `tparallel`
-  - `unconvert`
-  - `usestdlibvars`
-  - `varnamelen`
-  - `wastedassign`
-  - `whitespace`
-  - `wrapcheck`
-  - `wsl`
-- test:
-  - `exhaustruct`
-  - `paralleltest`
-  - `testableexamples`
-  - `testifylint`
-  - `testpackage`
-  - `thelper`
-  - `tparallel`
-  - `usetesting`
-- unused:
-  - `ineffassign`
-  - `unparam`
-  - `unused`
-
-</details>
-
-<details>
-<summary>v2</summary>
-
-```yaml
-# Removed
-```
-
-</details>
-
-#### `typecheck`
-
-This `typecheck` is not a linter, so it cannot be enabled or disabled:
-
-- https://golangci-lint.run/welcome/faq/#why-do-you-have-typecheck-errors
-- https://golangci-lint.run/welcome/faq/#why-is-it-not-possible-to-skipignore-typecheck-errors
-
-#### Deprecated Linters
-
-The following deprecated linters have been removed:
-
-- `deadcode`
-- `execinquery`
-- `exhaustivestruct`
-- `exportloopref`
-- `golint`
-- `ifshort`
-- `interfacer`
-- `maligned`
-- `nosnakecase`
-- `scopelint`
-- `structcheck`
-- `tenv`
-- `varcheck`
-
-#### Alternative Linter Names
-
-The alternative linters has been removed.
-
-| Alt Name v1 | Name v2       |
-|-------------|---------------|
-| `gas`       | `gosec`       |
-| `goerr113`  | `err113`      |
-| `gomnd`     | `mnd`         |
-| `logrlint`  | `loggercheck` |
-| `megacheck` | `staticcheck` |
-| `vet`       | `govet`       |
-| `vetshadow` | `govet`       |
-
-<details>
-<summary>v1</summary>
-
-```yaml
-linters:
-  enable:
-    - gas
-    - goerr113
-    - gomnd
-    - logrlint
-    - megacheck
-    - vet
-    - vetshadow
-```
-
-</details>
-
-<details>
-<summary>v2</summary>
-
-```yaml
-linters:
-  enable:
-    - gosec
-    - err113
-    - mnd
-    - loggercheck
-    - staticcheck
-    - govet
 ```
 
 </details>
