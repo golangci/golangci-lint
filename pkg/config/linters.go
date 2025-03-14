@@ -26,8 +26,7 @@ type Linters struct {
 func (l *Linters) Validate() error {
 	validators := []func() error{
 		l.Exclusions.Validate,
-		l.validateNoFormattersEnabled,
-		l.validateNoFormattersDisabled,
+		l.validateNoFormatters,
 	}
 
 	for _, v := range validators {
@@ -39,18 +38,8 @@ func (l *Linters) Validate() error {
 	return nil
 }
 
-func (l *Linters) validateNoFormattersEnabled() error {
-	for _, n := range l.Enable {
-		if slices.Contains(getAllFormatterNames(), n) {
-			return fmt.Errorf("%s is a formatter", n)
-		}
-	}
-
-	return nil
-}
-
-func (l *Linters) validateNoFormattersDisabled() error {
-	for _, n := range l.Disable {
+func (l *Linters) validateNoFormatters() error {
+	for _, n := range slices.Concat(l.Enable, l.Disable) {
 		if slices.Contains(getAllFormatterNames(), n) {
 			return fmt.Errorf("%s is a formatter", n)
 		}
@@ -60,5 +49,5 @@ func (l *Linters) validateNoFormattersDisabled() error {
 }
 
 func getAllFormatterNames() []string {
-	return []string{"gci", "gofmt", "gofumpt", "goimports"}
+	return []string{"gci", "gofmt", "gofumpt", "goimports", "golines"}
 }
