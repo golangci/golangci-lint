@@ -135,6 +135,14 @@ require (
 	mvdan.cc/unparam v0.0.0-20240528143540-8a5130ca722f
 )
 
+// When another module imports golangci-lint, they may require a version of
+// Viper above 1.12.0. The Go compiler will then use the higher version, which
+// will break golangci-lint. This replacement ensures that golangci-lint uses
+// the version it requires without impacting modules that import golangci-lint.
+// See https://github.com/golangci/golangci-lint/issues/3280 for details on why
+// golangci-lint is pinned to Viper 1.12.0.
+replace github.com/spf13/viper => github.com/spf13/viper v1.12.0
+
 require (
 	github.com/Masterminds/semver/v3 v3.3.1 // indirect
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect

@@ -129,6 +129,8 @@ func TestCgoOk(t *testing.T) {
 			"--timeout=3m",
 			"--show-stats=false",
 			"--default=all",
+			// We need to disable gomoddirectives because it fails on our own go.mod.
+			"--disable=gomoddirectives",
 		).
 		WithTargetPath(testdataDir, "cgo").
 		Runner().
@@ -345,6 +347,8 @@ linters:
 		WithArgs(
 			"--show-stats=false",
 			"--default=all",
+			// We need to disable gomoddirectives because it fails on our own go.mod.
+			"--disable=gomoddirectives",
 		).
 		WithTargetPath(testdataDir, "unsafe").
 		WithBinPath(binPath).
