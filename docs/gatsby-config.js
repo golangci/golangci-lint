@@ -97,7 +97,6 @@ module.exports = {
         siteUrl: siteUrl,
       },
     },
-    `gatsby-plugin-offline`,
     {
       resolve: "gatsby-plugin-react-svg",
       options: {
