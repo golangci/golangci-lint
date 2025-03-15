@@ -172,11 +172,11 @@ We don't recommend using `go tool`.
 But if you want to use `go tool` to install and run golangci-lint (once again we don't recommend that),
 the best approach is to use a dedicated module or module file to isolate golangci-lint from other tools or dependencies.
 
-This approach avoid to modifying your project dependencies and the golangci-lint dependencies.
+This approach avoids modifying your project dependencies and the golangci-lint dependencies.
 
 **⚠️ IMPORTANT ⚠️: You should never update golangci-lint dependencies manually.**
 
-**Method 1 (dedicated module file)**
+**Method 1: dedicated module file**
 
 ```sh
 # Create a dedicated module file
@@ -199,7 +199,7 @@ go tool -modfile=golangci-lint.mod golangci-lint run
 go get -tool -modfile=golangci-lint.mod github.com/golangci/v2/golangci-lint/cmd/golangci-lint@latest
 ```
 
-**Method 2 (dedicated module)**
+**Method 2: dedicated module**
 
 ```sh
 # Create a dedicated directory
