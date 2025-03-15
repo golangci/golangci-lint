@@ -164,6 +164,76 @@ These installations aren't recommended because of the following points:
 go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@{.LatestVersion}
 ```
 
+<details>
+<summary>`go tool` usage recommendations</summary>
+
+We don't recommend using `go tool`.
+
+But if you want to use `go tool` to install and run golangci-lint (once again we don't recommend that),
+the best approach is to use a dedicated module or module file to isolate golangci-lint from other tools or dependencies.
+
+This approach avoids modifying your project dependencies and the golangci-lint dependencies.
+
+**⚠️ IMPORTANT ⚠️: You should never update golangci-lint dependencies manually.**
+
+**Method 1: dedicated module file**
+
+```sh
+# Create a dedicated module file
+go mod init -modfile=golangci-lint.mod <your_module_path>/golangci-lint
+# Example: go mod init -modfile=golangci-lint.mod github.com/org/repo/golangci-lint
+```
+
+```sh
+# Add golangci-lint as a tool
+go get -tool -modfile=golangci-lint.mod github.com/golangci/golangci-lint/v2/cmd/golangci-lint@{.LatestVersion}
+```
+
+```sh
+# Run golangci-lint as a tool
+go tool -modfile=golangci-lint.mod golangci-lint run
+```
+
+```sh
+# Update golangci-lint
+go get -tool -modfile=golangci-lint.mod github.com/golangci/v2/golangci-lint/cmd/golangci-lint@latest
+```
+
+**Method 2: dedicated module**
+
+```sh
+# Create a dedicated directory
+mkdir golangci-lint
+```
+
+```sh
+# Create a dedicated module file
+go mod init -modfile=tools/go.mod <your_module_path>/golangci-lint
+# Example: go mod init -modfile=golangci-lint/go.mod github.com/org/repo/golangci-lint
+```
+
+```sh
+# Setup a Go workspace
+go work init . golangci-lint
+```
+
+```sh
+# Add golangci-lint as a tool
+go get -tool -modfile=golangci-lint/go.mod github.com/golangci/golangci-lint/v2/cmd/golangci-lint
+```
+
+```sh
+# Run golangci-lint as a tool
+go tool golangci-lint run
+```
+
+```sh
+# Update golangci-lint
+go get -tool -modfile=golangci-lint/go.mod github.com/golangci/golangci-lint/v2/cmd/golangci-lint@latest
+```
+
+</details>
+
 ## Next
 
 [Quick Start: how to use `golangci-lint`](/welcome/quick-start/).
