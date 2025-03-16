@@ -3,7 +3,6 @@ package revive
 import (
 	"bytes"
 	"cmp"
-	"encoding/json"
 	"fmt"
 	"go/token"
 	"os"
@@ -34,12 +33,6 @@ var (
 	isDebug = logutils.HaveDebugTag(logutils.DebugKeyRevive)
 )
 
-// jsonObject defines a JSON object of a failure
-type jsonObject struct {
-	Severity     lint.Severity
-	lint.Failure `json:",inline"`
-}
-
 func New(settings *config.ReviveSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
@@ -63,7 +56,7 @@ func New(settings *config.ReviveSettings) *goanalysis.Linter {
 		}
 
 		analyzer.Run = func(pass *analysis.Pass) (any, error) {
-			issues, err := w.run(lintCtx, pass)
+			issues, err := w.run(pass)
 			if err != nil {
 				return nil, err
 			}
@@ -85,7 +78,6 @@ func New(settings *config.ReviveSettings) *goanalysis.Linter {
 
 type wrapper struct {
 	revive       lint.Linter
-	formatter    lint.Formatter
 	lintingRules []lint.Rule
 	conf         *lint.Config
 }
@@ -103,11 +95,6 @@ func newWrapper(settings *config.ReviveSettings) (*wrapper, error) {
 		return nil, err
 	}
 
-	formatter, err := reviveConfig.GetFormatter("json")
-	if err != nil {
-		return nil, err
-	}
-
 	lintingRules, err := reviveConfig.GetLintingRules(conf, []lint.Rule{})
 	if err != nil {
 		return nil, err
@@ -115,13 +102,12 @@ func newWrapper(settings *config.ReviveSettings) (*wrapper, error) {
 
 	return &wrapper{
 		revive:       lint.New(os.ReadFile, settings.MaxOpenFiles),
-		formatter:    formatter,
 		lintingRules: lintingRules,
 		conf:         conf,
 	}, nil
 }
 
-func (w *wrapper) run(lintCtx *linter.Context, pass *analysis.Pass) ([]goanalysis.Issue, error) {
+func (w *wrapper) run(pass *analysis.Pass) ([]goanalysis.Issue, error) {
 	packages := [][]string{internal.GetGoFileNames(pass)}
 
 	failures, err := w.revive.Lint(packages, w.lintingRules, *w.conf)
@@ -129,75 +115,50 @@ func (w *wrapper) run(lintCtx *linter.Context, pass *analysis.Pass) ([]goanalysi
 		return nil, err
 	}
 
-	formatChan := make(chan lint.Failure)
-	exitChan := make(chan bool)
-
-	var output string
-	go func() {
-		output, err = w.formatter.Format(formatChan, *w.conf)
-		if err != nil {
-			lintCtx.Log.Errorf("Format error: %v", err)
-		}
-		exitChan <- true
-	}()
-
-	for f := range failures {
-		if f.Confidence < w.conf.Confidence {
+	var issues []goanalysis.Issue
+	for failure := range failures {
+		if failure.Confidence < w.conf.Confidence {
 			continue
 		}
 
-		formatChan <- f
-	}
-
-	close(formatChan)
-	<-exitChan
-
-	var results []jsonObject
-	err = json.Unmarshal([]byte(output), &results)
-	if err != nil {
-		return nil, err
-	}
-
-	var issues []goanalysis.Issue
-	for i := range results {
-		issues = append(issues, toIssue(pass, &results[i]))
+		issues = append(issues, w.toIssue(pass, &failure))
 	}
 
 	return issues, nil
 }
 
-func toIssue(pass *analysis.Pass, object *jsonObject) goanalysis.Issue {
-	lineRangeTo := object.Position.End.Line
-	if object.RuleName == (&rule.ExportedRule{}).Name() {
-		lineRangeTo = object.Position.Start.Line
+func (w *wrapper) toIssue(pass *analysis.Pass, failure *lint.Failure) goanalysis.Issue {
+	lineRangeTo := failure.Position.End.Line
+	if failure.RuleName == (&rule.ExportedRule{}).Name() {
+		lineRangeTo = failure.Position.Start.Line
 	}
 
 	issue := &result.Issue{
-		Severity: string(object.Severity),
-		Text:     fmt.Sprintf("%s: %s", object.RuleName, object.Failure.Failure),
+		Severity: string(severity(w.conf, failure)),
+		Text:     fmt.Sprintf("%s: %s", failure.RuleName, failure.Failure),
 		Pos: token.Position{
-			Filename: object.Position.Start.Filename,
-			Line:     object.Position.Start.Line,
-			Offset:   object.Position.Start.Offset,
-			Column:   object.Position.Start.Column,
+			Filename: failure.Position.Start.Filename,
+			Line:     failure.Position.Start.Line,
+			Offset:   failure.Position.Start.Offset,
+			Column:   failure.Position.Start.Column,
 		},
 		LineRange: &result.Range{
-			From: object.Position.Start.Line,
+			From: failure.Position.Start.Line,
 			To:   lineRangeTo,
 		},
 		FromLinter: linterName,
 	}
 
-	if object.ReplacementLine != "" {
-		f := pass.Fset.File(token.Pos(object.Position.Start.Offset))
+	if failure.ReplacementLine != "" {
+		f := pass.Fset.File(token.Pos(failure.Position.Start.Offset))
 
 		// Skip cgo files because the positions are wrong.
-		if object.GetFilename() == f.Name() {
+		if failure.GetFilename() == f.Name() {
 			issue.SuggestedFixes = []analysis.SuggestedFix{{
 				TextEdits: []analysis.TextEdit{{
-					Pos:     f.LineStart(object.Position.Start.Line),
-					End:     goanalysis.EndOfLinePos(f, object.Position.End.Line),
-					NewText: []byte(object.ReplacementLine),
+					Pos:     f.LineStart(failure.Position.Start.Line),
+					End:     goanalysis.EndOfLinePos(f, failure.Position.End.Line),
+					NewText: []byte(failure.ReplacementLine),
 				}},
 			}}
 		}
@@ -488,4 +449,16 @@ func extractRulesName(rules []lint.Rule) []string {
 	slices.Sort(names)
 
 	return names
+}
+
+// Extracted from https://github.com/mgechev/revive/blob/v1.7.0/formatter/severity.go
+// Modified to use pointers (related to hugeParam rule).
+func severity(config *lint.Config, failure *lint.Failure) lint.Severity {
+	if cfg, ok := config.Rules[failure.RuleName]; ok && cfg.Severity == lint.SeverityError {
+		return lint.SeverityError
+	}
+	if cfg, ok := config.Directives[failure.RuleName]; ok && cfg.Severity == lint.SeverityError {
+		return lint.SeverityError
+	}
+	return lint.SeverityWarning
 }
