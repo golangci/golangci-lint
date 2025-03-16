@@ -12,6 +12,8 @@
       link: "/welcome/integrations/"
     - label: "FAQ"
       link: "/welcome/faq/"
+    - label: "Documentation v1"
+      link: "https://golangci.github.io/legacy-v1-doc/"
 - label: "Usage"
   items:
     - label: "Configuration"
