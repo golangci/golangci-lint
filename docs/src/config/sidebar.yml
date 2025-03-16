@@ -2,7 +2,7 @@
 
 - label: "Introduction"
   link: "/"
-- label: Welcome
+- label: "Welcome"
   items:
     - label: "Install"
       link: "/welcome/install/"
@@ -12,7 +12,7 @@
       link: "/welcome/integrations/"
     - label: "FAQ"
       link: "/welcome/faq/"
-- label: Usage
+- label: "Usage"
   items:
     - label: "Configuration"
       link: "/usage/configuration/"
@@ -22,7 +22,7 @@
       link: "/usage/false-positives/"
     - label: "Formatters"
       link: "/usage/formatters/"
-- label: Product
+- label: "Product"
   items:
     - label: "Thanks"
       link: "/product/thanks/"
@@ -36,25 +36,25 @@
       link: "/product/performance/"
     - label: "GitHub"
       link: "https://github.com/golangci/golangci-lint"
-- label: Contributing
+- label: "Contributing"
   items:
-    - label: Quick Start
-      link: /contributing/quick-start/
-    - label: Workflow
-      link: /contributing/workflow/
-    - label: Architecture
-      link: /contributing/architecture/
-    - label: New Linters
-      link: /contributing/new-linters/
+    - label: "Quick Start"
+      link: "/contributing/quick-start/"
+    - label: "Workflow"
+      link: "/contributing/workflow/"
+    - label: "Architecture"
+      link: "/contributing/architecture/"
+    - label: "New Linters"
+      link: "/contributing/new-linters/"
     - label: "Debug"
       link: "/contributing/debug/"
-    - label: FAQ
-      link: /contributing/faq/
-    - label: This Website
-      link: /contributing/website/
-- label: Plugins
+    - label: "FAQ"
+      link: "/contributing/faq/"
+    - label: "This Website"
+      link: "/contributing/website/"
+- label: "Plugins"
   items:
-    - label: Module Plugin System
-      link: /plugins/module-plugins/
-    - label: Go Plugin System
-      link: /plugins/go-plugins/
+    - label: "Module Plugin System"
+      link: "/plugins/module-plugins/"
+    - label: "Go Plugin System"
+      link: "/plugins/go-plugins/"
