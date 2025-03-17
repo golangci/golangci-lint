@@ -118,7 +118,7 @@ require (
 	github.com/uudashr/gocognit v1.2.0
 	github.com/uudashr/iface v1.3.1
 	github.com/valyala/quicktemplate v1.8.0
-	github.com/xen0n/gosmopolitan v1.2.2
+	github.com/xen0n/gosmopolitan v1.3.0
 	github.com/yagipy/maintidx v1.0.0
 	github.com/yeya24/promlinter v0.3.0
 	github.com/ykadowak/zerologlint v0.1.5
@@ -207,7 +207,7 @@ require (
 	golang.org/x/exp v0.0.0-20240909161429-701f63a606c0 // indirect
 	golang.org/x/exp/typeparams v0.0.0-20250210185358-939b2ce775ac // indirect
 	golang.org/x/sync v0.12.0 // indirect
-	golang.org/x/text v0.22.0 // indirect
+	golang.org/x/text v0.23.0 // indirect
 	google.golang.org/protobuf v1.36.5 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
