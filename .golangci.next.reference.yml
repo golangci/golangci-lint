@@ -1964,7 +1964,12 @@ linters:
       min-complexity: 4
 
     nilnil:
+      # To check functions with only two return values (`return nil, nil`).
+      # If disabled then returns like `return nil, nil, ..., nil` are supported.
+      # Default: true
+      only-two: false
       # In addition, detect opposite situation (simultaneous return of non-nil error and valid value).
+      # E.g, `return clone, fh.indexer.Update(clone)` will be considered as invalid.
       # Default: false
       detect-opposite: true
       # List of return types to check.
