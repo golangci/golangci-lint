@@ -2284,13 +2284,19 @@ linters:
           disabled: false
           exclude: [""]
           arguments:
-            - [ "call-chain", "loop" ]
+            - "call-chain"
+            - "loop"
+            - "method-call"
+            - "recover"
+            - "immediate-recover"
+            - "return"
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#dot-imports
         - name: dot-imports
           severity: warning
           disabled: false
           exclude: [""]
-          arguments: [ ]
+          arguments:
+            - allowedPackages: ["github.com/onsi/ginkgo/v2", "github.com/onsi/gomega"]
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#duplicated-imports
         - name: duplicated-imports
           severity: warning
@@ -2328,6 +2334,9 @@ linters:
           exclude: [""]
           arguments:
             - "short"
+            # Or this parameter:
+            - funcArgStyle: "full"
+              funcRetValStyle: "short"
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#enforce-slice-style
         - name: enforce-slice-style
           severity: warning
@@ -2365,8 +2374,13 @@ linters:
           arguments:
             - "checkPrivateReceivers"
             - "disableStutteringCheck"
+            - "sayRepetitiveInsteadOfStutters"
             - "checkPublicInterface"
+            - "disableChecksOnConstants"
             - "disableChecksOnFunctions"
+            - "disableChecksOnMethods"
+            - "disableChecksOnTypes"
+            - "disableChecksOnVariables"
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#file-header
         - name: file-header
           severity: warning
@@ -2429,6 +2443,9 @@ linters:
           exclude: [""]
           arguments:
             - "^[a-z][a-z0-9]{0,}$"
+            # Or this parameter:
+            - allowRegex: "^[a-z][a-z0-9]{0,}$"
+              denyRegex: '^v\d+$'
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#import-shadowing
         - name: import-shadowing
           severity: warning
