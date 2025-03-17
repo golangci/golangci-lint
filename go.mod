@@ -26,7 +26,7 @@ require (
 	github.com/blizzy78/varnamelen v0.8.0
 	github.com/bombsimon/wsl/v4 v4.5.0
 	github.com/breml/bidichk v0.3.2
-	github.com/breml/errchkjson v0.4.0
+	github.com/breml/errchkjson v0.4.1
 	github.com/butuzov/ireturn v0.3.1
 	github.com/butuzov/mirror v1.3.0
 	github.com/catenacyber/perfsprint v0.8.2
