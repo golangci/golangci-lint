@@ -186,6 +186,10 @@ func (c *runCommand) persistentPostRunE(_ *cobra.Command, _ []string) error {
 }
 
 func (c *runCommand) preRunE(_ *cobra.Command, args []string) error {
+	if c.cfg.GetConfigDir() != "" && c.cfg.Version != "" {
+		return errors.New("you are using a configuration file for golangci-lint v2 with golangci-lint v1: please use golangci-lint v2")
+	}
+
 	dbManager, err := lintersdb.NewManager(c.log.Child(logutils.DebugKeyLintersDB), c.cfg,
 		lintersdb.NewLinterBuilder(), lintersdb.NewPluginModuleBuilder(c.log), lintersdb.NewPluginGoBuilder(c.log))
 	if err != nil {
