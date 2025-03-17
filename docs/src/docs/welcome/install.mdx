@@ -78,10 +78,10 @@ Golangci-lint is available inside the majority of the package managers.
 
 ### macOS
 
-#### Brew
+#### Homebrew
 
-Note: brew can use a non-expected version of Go to build the binary,
-so we recommend either using our binaries or be sure of the version of Go used to build.
+Note: Homebrew can use an unexpected version of Go to build the binary,
+so we recommend either using our binaries or ensuring the version of Go used to build.
 
 You can install a binary release on macOS using [brew](https://brew.sh/):
 
@@ -90,8 +90,10 @@ brew install golangci-lint
 brew upgrade golangci-lint
 ```
 
-Note: Previously we used a [Homebrew tap](https://github.com/golangci/homebrew-tap). We recommend using official formula instead of the tap, but sometimes the most recent release
-isn't immediately available via Homebrew core due to manual updates that need to occur from Homebrew core maintainers. In this case, the tap formula, which is updated automatically,
+Note: Previously, we used a [Homebrew tap](https://github.com/golangci/homebrew-tap).
+We recommend using the [official formula](https://formulae.brew.sh/formula/golangci-lint) instead of the tap,
+but sometimes the most recent release isn't immediately available via Homebrew core due to manual updates that need to occur from Homebrew core maintainers.
+In this case, the tap formula, which is updated automatically,
 can be used to install the latest version of `golangci-lint`:
 
 ```bash
