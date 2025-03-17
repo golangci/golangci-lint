@@ -664,6 +664,7 @@ type NestifSettings struct {
 }
 
 type NilNilSettings struct {
+	OnlyTwo        *bool    `mapstructure:"only-two"`
 	DetectOpposite bool     `mapstructure:"detect-opposite"`
 	CheckedTypes   []string `mapstructure:"checked-types"`
 }
@@ -849,7 +850,6 @@ type TestifylintSettings struct {
 	Formatter            TestifylintFormatter            `mapstructure:"formatter"`
 	GoRequire            TestifylintGoRequire            `mapstructure:"go-require"`
 	RequireError         TestifylintRequireError         `mapstructure:"require-error"`
-	RequireStringMsg     bool                            `mapstructure:"require-string-msg"`
 	SuiteExtraAssertCall TestifylintSuiteExtraAssertCall `mapstructure:"suite-extra-assert-call"`
 }
 

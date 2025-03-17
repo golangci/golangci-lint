@@ -16,6 +16,9 @@ func New(settings *config.NilNilSettings) *goanalysis.Linter {
 		cfg[a.Name] = map[string]any{
 			"detect-opposite": settings.DetectOpposite,
 		}
+		if b := settings.OnlyTwo; b != nil {
+			cfg[a.Name]["only-two"] = *b
+		}
 		if len(settings.CheckedTypes) != 0 {
 			cfg[a.Name]["checked-types"] = settings.CheckedTypes
 		}

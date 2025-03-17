@@ -2510,6 +2510,11 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "only-two":  {
+              "type": "boolean",
+              "description": "To check functions with only two return values.",
+              "default": true
+            },
             "detect-opposite": {
               "type": "boolean",
               "description": "In addition, detect opposite situation (simultaneous return of non-nil error and valid value).",
