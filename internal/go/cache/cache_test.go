@@ -21,18 +21,14 @@ func init() {
 }
 
 func TestBasic(t *testing.T) {
-	dir, err := os.MkdirTemp("", "cachetest-")
-	if err != nil {
-		t.Fatal(err)
-	}
-	defer os.RemoveAll(dir)
-	_, err = Open(filepath.Join(dir, "notexist"))
+	dir := t.TempDir()
+	_, err := Open(filepath.Join(dir, "notexist"))
 	if err == nil {
 		t.Fatal(`Open("tmp/notexist") succeeded, want failure`)
 	}
 
 	cdir := filepath.Join(dir, "c1")
-	if err := os.Mkdir(cdir, 0744); err != nil {
+	if err := os.Mkdir(cdir, 0777); err != nil {
 		t.Fatal(err)
 	}
 
@@ -66,13 +62,7 @@ func TestBasic(t *testing.T) {
 }
 
 func TestGrowth(t *testing.T) {
-	dir, err := os.MkdirTemp("", "cachetest-")
-	if err != nil {
-		t.Fatal(err)
-	}
-	defer os.RemoveAll(dir)
-
-	c, err := Open(dir)
+	c, err := Open(t.TempDir())
 	if err != nil {
 		t.Fatalf("Open: %v", err)
 	}
@@ -119,13 +109,7 @@ func TestGrowth(t *testing.T) {
 // 		t.Fatal("initEnv did not set verify")
 // 	}
 //
-// 	dir, err := os.MkdirTemp("", "cachetest-")
-// 	if err != nil {
-// 		t.Fatal(err)
-// 	}
-// 	defer os.RemoveAll(dir)
-//
-// 	c, err := Open(dir)
+// 	c, err := Open(t.TempDir())
 // 	if err != nil {
 // 		t.Fatalf("Open: %v", err)
 // 	}
@@ -152,12 +136,7 @@ func dummyID(x int) [HashSize]byte {
 }
 
 func TestCacheTrim(t *testing.T) {
-	dir, err := os.MkdirTemp("", "cachetest-")
-	if err != nil {
-		t.Fatal(err)
-	}
-	defer os.RemoveAll(dir)
-
+	dir := t.TempDir()
 	c, err := Open(dir)
 	if err != nil {
 		t.Fatalf("Open: %v", err)

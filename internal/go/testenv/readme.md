@@ -6,6 +6,8 @@ Only the function `SyscallIsNotSupported` is extracted (related to `cache`).
 
 ## History
 
+- https://github.com/golangci/golangci-lint/pull/5576
+  - sync go1.24.1
 - https://github.com/golangci/golangci-lint/pull/5100
   - Move package from `internal/testenv` to `internal/go/testenv`
 - https://github.com/golangci/golangci-lint/pull/5098

@@ -50,7 +50,7 @@ func stripExperiment(version string) string {
 // action ID with a string description of the subkey.
 func Subkey(parent ActionID, desc string) (ActionID, error) {
 	h := sha256.New()
-	h.Write([]byte(("subkey:")))
+	h.Write([]byte("subkey:"))
 	n, err := h.Write(parent[:])
 	if n != len(parent) {
 		return ActionID{}, fmt.Errorf("wrote %d/%d bytes of parent with error %s", n, len(parent), err)
