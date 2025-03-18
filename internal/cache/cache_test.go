@@ -93,7 +93,7 @@ func TestCache_buildKey(t *testing.T) {
 	actionID, err := pkgCache.buildKey(pkg, HashModeNeedAllDeps, "")
 	require.NoError(t, err)
 
-	assert.Equal(t, "4db1e9671b1800244a938e1aabe6db77495a5dff82acb434ab435eaabff59372", fmt.Sprintf("%x", actionID))
+	assert.Equal(t, "f32bf1bf010aa9b570e081c64ec9e22e17aafa1e822990ba952905ec5fdf8d9d", fmt.Sprintf("%x", actionID))
 }
 
 func TestCache_pkgActionID(t *testing.T) {
@@ -104,7 +104,7 @@ func TestCache_pkgActionID(t *testing.T) {
 	actionID, err := pkgCache.pkgActionID(pkg, HashModeNeedAllDeps)
 	require.NoError(t, err)
 
-	assert.Equal(t, "6ab6e6fea09b9390f266880ab504e267ea12b76b14a783013843effb1d7d31a5", fmt.Sprintf("%x", actionID))
+	assert.Equal(t, "f690f05acd1024386ae912d9ad9c04080523b9a899f6afe56ab3108d88215c1d", fmt.Sprintf("%x", actionID))
 }
 
 func TestCache_packageHash_load(t *testing.T) {
@@ -128,7 +128,7 @@ func TestCache_packageHash_store(t *testing.T) {
 	hash, err := pkgCache.packageHash(pkg, HashModeNeedAllDeps)
 	require.NoError(t, err)
 
-	assert.Equal(t, "11d5b95830a3d86ad6dcac15b0adb46f686a30f1633cc1b74f7133d093da7979", hash)
+	assert.Equal(t, "9c602ef861197b6807e82c99caa7c4042eb03c1a92886303fb02893744355131", hash)
 
 	results, ok := pkgCache.pkgHashes.Load(pkg)
 	require.True(t, ok)
@@ -137,9 +137,9 @@ func TestCache_packageHash_store(t *testing.T) {
 
 	require.Len(t, hashRes, 3)
 
-	assert.Equal(t, "855344dcd4884d73c77e2eede91270d871e18b57aeb170007b5c682b39e52c96", hashRes[HashModeNeedOnlySelf])
-	assert.Equal(t, "f1288ac9e75477e1ed42c06ba7d78213ed3cc52799c01a4f695bc54cd4e8a698", hashRes[HashModeNeedDirectDeps])
-	assert.Equal(t, "11d5b95830a3d86ad6dcac15b0adb46f686a30f1633cc1b74f7133d093da7979", hashRes[HashModeNeedAllDeps])
+	assert.Equal(t, "8978e3d76c6f99e9663558d7147a7790f229a676804d1fde706a611898547b74", hashRes[HashModeNeedOnlySelf])
+	assert.Equal(t, "b1aef902a0619b5cbfc2d6e2e91a73dd58dd448e58274b2d7a5ff8efd97aefa4", hashRes[HashModeNeedDirectDeps])
+	assert.Equal(t, "9c602ef861197b6807e82c99caa7c4042eb03c1a92886303fb02893744355131", hashRes[HashModeNeedAllDeps])
 }
 
 func TestCache_computeHash(t *testing.T) {
@@ -152,7 +152,7 @@ func TestCache_computeHash(t *testing.T) {
 
 	require.Len(t, results, 3)
 
-	assert.Equal(t, "855344dcd4884d73c77e2eede91270d871e18b57aeb170007b5c682b39e52c96", results[HashModeNeedOnlySelf])
-	assert.Equal(t, "f1288ac9e75477e1ed42c06ba7d78213ed3cc52799c01a4f695bc54cd4e8a698", results[HashModeNeedDirectDeps])
-	assert.Equal(t, "11d5b95830a3d86ad6dcac15b0adb46f686a30f1633cc1b74f7133d093da7979", results[HashModeNeedAllDeps])
+	assert.Equal(t, "8978e3d76c6f99e9663558d7147a7790f229a676804d1fde706a611898547b74", results[HashModeNeedOnlySelf])
+	assert.Equal(t, "b1aef902a0619b5cbfc2d6e2e91a73dd58dd448e58274b2d7a5ff8efd97aefa4", results[HashModeNeedDirectDeps])
+	assert.Equal(t, "9c602ef861197b6807e82c99caa7c4042eb03c1a92886303fb02893744355131", results[HashModeNeedAllDeps])
 }
