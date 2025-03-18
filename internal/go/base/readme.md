@@ -6,5 +6,5 @@ Only the function `IsETXTBSY` is extracted.
 
 ## History
 
-- https://github.com/golangci/golangci-lint/pull/xx
+- https://github.com/golangci/golangci-lint/pull/5576
   - sync go1.24.1
