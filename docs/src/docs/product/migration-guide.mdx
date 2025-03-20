@@ -2006,3 +2006,31 @@ severity:
 ### `version`
 
 The `version` property has been added to the configuration file.
+
+### Integration
+
+#### VSCode
+
+<details>
+<summary>v1</summary>
+
+```json
+"go.lintTool": "golangci-lint",
+"go.lintFlags": [
+  "--fast"
+]
+```
+
+</details>
+
+<details>
+<summary>v2</summary>
+
+```json
+"go.lintTool": "golangci-lint",
+"go.lintFlags": [
+  "--fast-only"
+]
+```
+
+</details>
