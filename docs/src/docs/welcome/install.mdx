@@ -133,17 +133,21 @@ The scoop package is not officially maintained by golangci team.
 ### Docker
 
 ```bash
-docker run --rm -v $(pwd):/app -w /app golangci/golangci-lint:{.LatestVersion} golangci-lint run -v
+docker run --rm -v $(pwd):/app -w /app golangci/golangci-lint:{.LatestVersion} golangci-lint run
 ```
 
-Preserving cache between consecutive runs:
+Preserving caches between consecutive runs:
 ```bash
-docker run --rm -v $(pwd):/app -v ~/.cache/golangci-lint/{.LatestVersion}:/root/.cache -w /app golangci/golangci-lint:{.LatestVersion} golangci-lint run -v
+docker run --rm -v $(pwd):/app -w /app \
+  --user $(id -u):$(id -g) \
+  -v $(go env GOCACHE):/root/.cache/go-build \
+  -v $(go env GOMODCACHE):/go/pkg/mod \
+  golangci/golangci-lint:{.LatestVersion} golangci-lint run
 ```
 
 Colored output:
 ```bash
-docker run -t --rm -v $(pwd):/app -w /app golangci/golangci-lint:{.LatestVersion} golangci-lint run -v
+docker run -t --rm -v $(pwd):/app -w /app golangci/golangci-lint:{.LatestVersion} golangci-lint run
 ```
 
 ### Install from Sources
