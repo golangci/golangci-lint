@@ -138,7 +138,7 @@ docker run --rm -v $(pwd):/app -w /app golangci/golangci-lint:{.LatestVersion} g
 
 Preserving caches between consecutive runs:
 ```bash
-docker run --rm -v $(pwd):/app -w /app \
+docker run --rm -t -v $(pwd):/app -w /app \
   --user $(id -u):$(id -g) \
   -v $(go env GOCACHE):/root/.cache/go-build \
   -v $(go env GOMODCACHE):/go/pkg/mod \
