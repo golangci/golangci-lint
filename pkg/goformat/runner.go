@@ -55,6 +55,10 @@ func (c *Runner) Run(paths []string) error {
 		}()
 	}
 
+	if c.opts.stdin {
+		return c.process("<standard input>", savedStdout, os.Stdin)
+	}
+
 	for _, path := range paths {
 		err := c.walk(path, savedStdout)
 		if err != nil {
@@ -84,45 +88,65 @@ func (c *Runner) walk(root string, stdout *os.File) error {
 			return err
 		}
 
-		input, err := os.ReadFile(path)
+		in, err := os.Open(path)
 		if err != nil {
 			return err
 		}
 
-		match, err = c.matcher.IsGeneratedFile(path, input)
-		if err != nil || match {
+		defer func() { _ = in.Close() }()
+
+		return c.process(path, stdout, in)
+	})
+}
+
+func (c *Runner) process(path string, stdout io.Writer, in io.Reader) error {
+	input, err := io.ReadAll(in)
+	if err != nil {
+		return err
+	}
+
+	match, err := c.matcher.IsGeneratedFile(path, input)
+	if err != nil || match {
+		return err
+	}
+
+	output := c.metaFormatter.Format(path, input)
+
+	if c.opts.stdin {
+		_, err = stdout.Write(output)
+		if err != nil {
 			return err
 		}
 
-		output := c.metaFormatter.Format(path, input)
+		return nil
+	}
 
-		if bytes.Equal(input, output) {
-			return nil
+	if bytes.Equal(input, output) {
+		return nil
+	}
+
+	if c.opts.diff {
+		newName := filepath.ToSlash(path)
+		oldName := newName + ".orig"
+		_, err = stdout.Write(diff.Diff(oldName, input, newName, output))
+		if err != nil {
+			return err
 		}
 
-		if c.opts.diff {
-			newName := filepath.ToSlash(path)
-			oldName := newName + ".orig"
-			_, err = stdout.Write(diff.Diff(oldName, input, newName, output))
-			if err != nil {
-				return err
-			}
+		c.exitCode = 1
 
-			c.exitCode = 1
+		return nil
+	}
 
-			return nil
-		}
+	c.log.Infof("format: %s", path)
 
-		c.log.Infof("format: %s", path)
+	// On Windows, we need to re-set the permissions from the file. See golang/go#38225.
+	var perms os.FileMode
+	if fi, err := os.Stat(path); err == nil {
+		perms = fi.Mode() & os.ModePerm
+	}
 
-		// On Windows, we need to re-set the permissions from the file. See golang/go#38225.
-		var perms os.FileMode
-		if fi, err := os.Stat(path); err == nil {
-			perms = fi.Mode() & os.ModePerm
-		}
-
-		return os.WriteFile(path, output, perms)
-	})
+	return os.WriteFile(path, output, perms)
 }
 
 func (c *Runner) setOutputToDevNull() {
@@ -144,9 +168,10 @@ type RunnerOptions struct {
 	patterns  []*regexp.Regexp
 	generated string
 	diff      bool
+	stdin     bool
 }
 
-func NewRunnerOptions(cfg *config.Config, diff bool) (RunnerOptions, error) {
+func NewRunnerOptions(cfg *config.Config, diff, stdin bool) (RunnerOptions, error) {
 	basePath, err := fsutils.GetBasePath(context.Background(), cfg.Run.RelativePathMode, cfg.GetConfigDir())
 	if err != nil {
 		return RunnerOptions{}, fmt.Errorf("get base path: %w", err)
@@ -156,6 +181,7 @@ func NewRunnerOptions(cfg *config.Config, diff bool) (RunnerOptions, error) {
 		basePath:  basePath,
 		generated: cfg.Formatters.Exclusions.Generated,
 		diff:      diff,
+		stdin:     stdin,
 	}
 
 	for _, pattern := range cfg.Formatters.Exclusions.Paths {
