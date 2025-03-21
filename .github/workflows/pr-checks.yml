@@ -69,6 +69,7 @@ jobs:
 
       - run: ./golangci-lint fmt
       - run: ./golangci-lint fmt --diff
+      - run: cat cmd/golangci-lint/main.go | ./golangci-lint fmt --stdin
 
       - run: ./golangci-lint cache
       - run: ./golangci-lint cache status
