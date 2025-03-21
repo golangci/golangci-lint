@@ -70,7 +70,7 @@ func newFmtCommand(logger logutils.Log, info BuildInfo) *fmtCommand {
 	setupFormattersFlagSet(c.viper, fs)
 
 	fs.BoolVarP(&c.opts.diff, "diff", "d", false, color.GreenString("Display diffs instead of rewriting files"))
-	fs.BoolVar(&c.opts.stdin, "stdin", false, color.GreenString("Use standard input"))
+	fs.BoolVar(&c.opts.stdin, "stdin", false, color.GreenString("Use standard input for piping source files"))
 
 	c.cmd = fmtCmd
 
