@@ -34,8 +34,6 @@
       link: "/product/migration-guide/"
     - label: "Roadmap"
       link: "/product/roadmap/"
-    - label: "Performance"
-      link: "/product/performance/"
     - label: "GitHub"
       link: "https://github.com/golangci/golangci-lint"
 - label: "Contributing"

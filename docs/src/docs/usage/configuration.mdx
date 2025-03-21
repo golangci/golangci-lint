@@ -21,15 +21,15 @@ golangci-lint formatters
 
 ## Config File
 
-GolangCI-Lint looks for config files in the following paths from the current working directory:
+Golangci-lint looks for config files in the following paths from the current working directory:
 
 - `.golangci.yml`
 - `.golangci.yaml`
 - `.golangci.toml`
 - `.golangci.json`
 
-GolangCI-Lint also searches for config files in all directories from the directory of the first analyzed path up to the root.
-If no configuration file has been found, GolangCI-Lint will try to find one in your home directory.
+Golangci-lint also searches for config files in all directories from the directory of the first analyzed path up to the root.
+If no configuration file has been found, golangci-lint will try to find one in your home directory.
 To see which config file is being used and where it was sourced from run golangci-lint with `-v` option.
 
 Config options inside the file are identical to command-line options.
@@ -51,8 +51,8 @@ $ golangci-lint run -h
 {.RunHelpText}
 ```
 
-When the `--cpu-profile-path` or `--mem-profile-path` arguments are specified, `golangci-lint` writes runtime profiling data
-in the format expected by the [pprof](https://github.com/google/pprof) visualization tool.
+When the `--cpu-profile-path` or `--mem-profile-path` arguments are specified,
+golangci-lint writes runtime profiling data in the format expected by the [pprof](https://github.com/google/pprof) visualization tool.
 
 When the `--trace-path` argument is specified, `golangci-lint` writes runtime tracing data in the format expected by
 the `go tool trace` command and visualization tool.
@@ -66,6 +66,6 @@ $ golangci-lint fmt -h
 
 ## Cache
 
-GolangCI-Lint stores its cache in the subdirectory `golangci-lint` inside the [default user cache directory](https://pkg.go.dev/os#UserCacheDir).
+Golangci-lint stores its cache in the subdirectory `golangci-lint` inside the [default user cache directory](https://pkg.go.dev/os#UserCacheDir).
 
 You can override the default cache directory with the environment variable `GOLANGCI_LINT_CACHE`; the path must be absolute.

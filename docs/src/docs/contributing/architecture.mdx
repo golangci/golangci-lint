@@ -5,7 +5,7 @@ title: Architecture
 
 import ResponsiveContainer from "components/ResponsiveContainer";
 
-There are the following `golangci-lint` execution steps:
+There are the following golangci-lint execution steps:
 
 <ResponsiveContainer>
 
@@ -138,7 +138,7 @@ Currently, all linters except `unused` can be merged into this meta linter.
 The `unused` isn't merged because it has high memory usage.
 
 Linters execution starts in `runAnalyzers`.
-It's the most complex part of the `golangci-lint`.
+It's the most complex part of the golangci-lint.
 We use custom [go/analysis](https://pkg.go.dev/golang.org/x/tools/go/analysis) runner there.
 It runs as much as it can in parallel. It lazy-loads as much as it can to reduce memory usage.
 Also, it sets all heavyweight data to `nil` as becomes unneeded to save memory.
