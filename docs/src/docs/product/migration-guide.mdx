@@ -2033,4 +2033,17 @@ The `version` property has been added to the configuration file.
 ]
 ```
 
+You can also add:
+
+```json
+"go.formatTool": "custom",
+"go.alternateTools": {
+  "customFormatter": "golangci-lint"
+},
+"go.formatFlags": [
+  "fmt",
+  "--stdin"
+]
+```
+
 </details>
