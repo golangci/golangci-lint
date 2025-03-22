@@ -44,6 +44,7 @@ import (
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/godox"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/gofmt"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/gofumpt"
+	"github.com/golangci/golangci-lint/v2/pkg/golinters/gofuncor"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/goheader"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/goimports"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/golines"
@@ -334,6 +335,11 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithSince("v1.28.0").
 			WithAutoFix().
 			WithURL("https://github.com/mvdan/gofumpt"),
+
+		linter.NewConfig(gofuncor.New(&cfg.Linters.Settings.GoFuncOr)).
+			WithSince("v1.65.0").
+			WithAutoFix().
+			WithURL("https://github.com/manuelarte/gofuncor"),
 
 		linter.NewConfig(golines.New(&cfg.Linters.Settings.GoLines)).
 			WithSince("v2.0.0").
