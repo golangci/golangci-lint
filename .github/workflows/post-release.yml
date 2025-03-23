@@ -63,6 +63,9 @@ jobs:
           branch-suffix: timestamp
           title: "docs: update documentation assets"
           delete-branch: true
+          body: |
+            - [ ] update changelog
+            - [ ] add previous version JSON Schema
 
   check-install-script:
     name: Installation script (remote)
