@@ -260,7 +260,7 @@ func toForbidigoSettings(old versionone.ForbidigoSettings) versiontwo.ForbidigoS
 	}
 
 	for _, pattern := range old.Forbid {
-		if pattern.Pattern == nil {
+		if pattern.Pattern == nil && pattern.Msg == nil && pattern.Package == nil {
 			buffer, err := pattern.MarshalString()
 			if err != nil {
 				// impossible case
