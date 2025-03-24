@@ -16,5 +16,7 @@ linters-settings:
       - ^spew\.(ConfigState\.)?Dump$
       - p: ^v1.Dump$
         pkg: ^example.com/pkg/api/v1$
+      - pkg: ^github.com/howeyc/gopass$
+        msg: "github.com/howeyc/gopass is archived, use golang.org/x/term instead"
     exclude-godoc-examples: false
     analyze-types: true
