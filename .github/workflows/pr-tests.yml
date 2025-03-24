@@ -40,11 +40,10 @@ jobs:
           # - 1.18beta1 -> 1.18.0-beta.1
           # - 1.18rc1 -> 1.18.0-rc.1
           go-version: ${{ env.GO_VERSION }}
-      # TODO(ldez): must add uncommented when golangci-lint-action@v7.0.0 (with golangci-lint v2 support) will be created.
-#      - name: lint
-#        uses: golangci/golangci-lint-action@v6.5.0
-#        with:
-#          version: latest
+      - name: lint
+        uses: golangci/golangci-lint-action@v7.0.0
+        with:
+          version: latest
 
   tests-on-windows:
     needs: golangci-lint # run after golangci-lint action to not produce duplicated errors
