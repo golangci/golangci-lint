@@ -60,8 +60,9 @@ func (l *Loader) Load(opts LoadOptions) error {
 		l.cfg.Linters.Exclusions.Generated = GeneratedModeStrict
 	}
 
-	if l.cfg.GetConfigDir() != "" && l.cfg.Version != "2" {
-		return fmt.Errorf("unsupported version of the configuration: %q (require configuration v2)", l.cfg.Version)
+	err = l.checkConfigurationVersion()
+	if err != nil {
+		return err
 	}
 
 	if !l.cfg.InternalCmdTest {
@@ -129,6 +130,14 @@ func (l *Loader) appendStringSlice(name string, current *[]string) {
 		val, _ := l.fs.GetStringSlice(name)
 		*current = append(*current, val...)
 	}
+}
+
+func (l *Loader) checkConfigurationVersion() error {
+	if l.cfg.GetConfigDir() != "" && l.cfg.Version != "2" {
+		return fmt.Errorf("unsupported version of the configuration: %q (require configuration v2)", l.cfg.Version)
+	}
+
+	return nil
 }
 
 func (l *Loader) handleGoVersion() {
