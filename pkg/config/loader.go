@@ -60,6 +60,11 @@ func (l *Loader) Load(opts LoadOptions) error {
 		l.cfg.Linters.Exclusions.Generated = GeneratedModeStrict
 	}
 
+	err = l.checkConfigurationVersion()
+	if err != nil {
+		return err
+	}
+
 	if !l.cfg.InternalCmdTest {
 		for _, n := range slices.Concat(l.cfg.Linters.Enable, l.cfg.Linters.Disable) {
 			if n == "typecheck" {
@@ -125,6 +130,15 @@ func (l *Loader) appendStringSlice(name string, current *[]string) {
 		val, _ := l.fs.GetStringSlice(name)
 		*current = append(*current, val...)
 	}
+}
+
+func (l *Loader) checkConfigurationVersion() error {
+	if l.cfg.GetConfigDir() != "" && l.cfg.Version != "2" {
+		return fmt.Errorf("unsupported version of the configuration: %q "+
+			"See https://golangci-lint.run/product/migration-guide for migration instructions", l.cfg.Version)
+	}
+
+	return nil
 }
 
 func (l *Loader) handleGoVersion() {

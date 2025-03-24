@@ -28,18 +28,20 @@ func TestEnabledLinters(t *testing.T) {
 		{
 			name: "disable govet in config",
 			cfg: `
-			linters:
-				disable:
-					- govet
+version: "2"
+linters:
+	disable:
+		- govet
 			`,
 			enabledLinters: getEnabledByDefaultLintersExcept(t, "govet"),
 		},
 		{
 			name: "enable revive in config",
 			cfg: `
-			linters:
-				enable:
-					- revive
+version: "2"
+linters:
+	enable:
+		- revive
 			`,
 			enabledLinters: getEnabledByDefaultLintersWith(t, "revive"),
 		},
@@ -52,17 +54,19 @@ func TestEnabledLinters(t *testing.T) {
 			name: "enable revive in cmd and enable gofmt in config",
 			args: []string{"-Erevive"},
 			cfg: `
-			formatters:
-				enable:
-					- gofmt
+version: "2"
+formatters:
+	enable:
+		- gofmt
 			`,
 			enabledLinters: getEnabledByDefaultLintersWith(t, "revive", "gofmt"),
 		},
 		{
 			name: "fast option in config",
 			cfg: `
-			linters:
-				default: fast
+version: "2"
+linters:
+	default: fast
 			`,
 			enabledLinters: getAllLintersFromGroupFast(t),
 		},
@@ -74,8 +78,9 @@ func TestEnabledLinters(t *testing.T) {
 		{
 			name: "fast option in command-line has higher priority to enable",
 			cfg: `
-			linters:
-				default: none
+version: "2"
+linters:
+	default: none
 			`,
 			args:           []string{"--default=fast"},
 			enabledLinters: getAllLintersFromGroupFast(t),
