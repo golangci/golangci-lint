@@ -7,10 +7,18 @@ If you value it, consider supporting us, we appreciate it! ❤️
 [![Open Collective backers and sponsors](https://img.shields.io/badge/OpenCollective-Donate-blue?logo=opencollective&style=for-the-badge)](https://opencollective.com/golangci-lint)
 [![GitHub Sponsors](https://img.shields.io/badge/GitHub-Donate-blue?logo=github&style=for-the-badge)](https://github.com/sponsors/golangci)
 
+### v2.0.1
+
+1. Linters/formatters bug fixes
+   * `golines`: fix settings during linter load
+2. Misc.
+   * Validates the `version` field before the configuration
+   * `forbidigo`: fix migration
+
 ### v2.0.0
 
 1. Enhancements
-   * 🌟 New `golangci-lint fmt` command with dedicated formatter configuration (https://golangci-lint.run/welcome/quick-start/#formatting)
+   * 🌟 New `golangci-lint fmt` command with dedicated [formatter configuration](https://golangci-lint.run/welcome/quick-start/#formatting)
    * ♻️ New `golangci-lint migrate` command to help migration from v1 to v2 (cf. [Migration guide](https://golangci-lint.run/product/migration-guide/#command-migrate))
    * ⚠️ New default values (cf. [Migration guide](https://golangci-lint.run/product/migration-guide/))
    * ⚠️ No exclusions by default (cf. [Migration guide](https://golangci-lint.run/product/migration-guide/#issuesexclude-use-default))
