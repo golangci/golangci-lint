@@ -544,8 +544,8 @@ linters:
       # Default: 40
       statements: -1
       # Ignore comments when counting lines.
-      # Default false
-      ignore-comments: true
+      # Default: true
+      ignore-comments: false
 
     ginkgolinter:
       # Suppress the wrong length assertion warning.

@@ -19,7 +19,7 @@ func New(settings *config.FunlenSettings) *goanalysis.Linter {
 	if settings != nil {
 		cfg.lineLimit = settings.Lines
 		cfg.stmtLimit = settings.Statements
-		cfg.ignoreComments = !settings.IgnoreComments
+		cfg.ignoreComments = settings.IgnoreComments
 	}
 
 	a := funlen.NewAnalyzer(cfg.lineLimit, cfg.stmtLimit, cfg.ignoreComments)
