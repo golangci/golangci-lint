@@ -21,8 +21,129 @@ func _() {
 	C.free(unsafe.Pointer(cs))
 }
 
-// want +1 "Function 'main' is too long"
-func main() {
+func TooManyLines() { // want `Function 'TooManyLines' is too long \(70 > 60\)`
+	t := struct {
+		A0  string
+		A1  string
+		A2  string
+		A3  string
+		A4  string
+		A5  string
+		A6  string
+		A7  string
+		A8  string
+		A9  string
+		A10 string
+		A11 string
+		A12 string
+		A13 string
+		A14 string
+		A15 string
+		A16 string
+		A17 string
+		A18 string
+		A19 string
+		A20 string
+		A21 string
+		A22 string
+		A23 string
+		A24 string
+		A25 string
+		A26 string
+		A27 string
+		A28 string
+		A29 string
+		A30 string
+		A31 string
+		A32 string
+	}{
+		A0:  "a",
+		A1:  "a",
+		A2:  "a",
+		A3:  "a",
+		A4:  "a",
+		A5:  "a",
+		A6:  "a",
+		A7:  "a",
+		A8:  "a",
+		A9:  "a",
+		A10: "a",
+		A11: "a",
+		A12: "a",
+		A13: "a",
+		A14: "a",
+		A15: "a",
+		A16: "a",
+		A17: "a",
+		A18: "a",
+		A19: "a",
+		A20: "a",
+		A21: "a",
+		A22: "a",
+		A23: "a",
+		A24: "a",
+		A25: "a",
+		A26: "a",
+		A27: "a",
+		A28: "a",
+		A29: "a",
+		A30: "a",
+		A31: "a",
+		A32: "a",
+	}
+	_ = t
+}
+
+func TooManyStatements() { // want `Function 'TooManyStatements' has too many statements \(46 > 40\)`
+	a0 := 1
+	a1 := 1
+	a2 := 1
+	a3 := 1
+	a4 := 1
+	a5 := 1
+	a6 := 1
+	a7 := 1
+	a8 := 1
+	a9 := 1
+	a10 := 1
+	a11 := 1
+	a12 := 1
+	a13 := 1
+	a14 := 1
+	a15 := 1
+	a16 := 1
+	a17 := 1
+	a18 := 1
+	a19 := 1
+	a20 := 1
+	a21 := 1
+	a22 := 1
+	_ = a0
+	_ = a1
+	_ = a2
+	_ = a3
+	_ = a4
+	_ = a5
+	_ = a6
+	_ = a7
+	_ = a8
+	_ = a9
+	_ = a10
+	_ = a11
+	_ = a12
+	_ = a13
+	_ = a14
+	_ = a15
+	_ = a16
+	_ = a17
+	_ = a18
+	_ = a19
+	_ = a20
+	_ = a21
+	_ = a22
+}
+
+func withComments() {
 	// Comment 1
 	// Comment 2
 	// Comment 3

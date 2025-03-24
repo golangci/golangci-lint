@@ -1,9 +1,9 @@
 //golangcitest:args -Efunlen
 //golangcitest:config_path testdata/funlen_ignore_comments.yml
-//golangcitest:expected_exitcode 0
 package testdata
 
-func main() {
+// want +1 "Function 'withComments' is too long"
+func withComments() {
 	// Comment 1
 	// Comment 2
 	// Comment 3

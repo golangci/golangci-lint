@@ -3,4 +3,4 @@ version: "2"
 linters:
   settings:
     funlen:
-      ignore-comments: true
+      ignore-comments: false

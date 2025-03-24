@@ -41,6 +41,9 @@ var defaultLintersSettings = LintersSettings{
 	Forbidigo: ForbidigoSettings{
 		ExcludeGodocExamples: true,
 	},
+	Funlen: FunlenSettings{
+		IgnoreComments: true,
+	},
 	GoChecksumType: GoChecksumTypeSettings{
 		DefaultSignifiesExhaustive: true,
 	},

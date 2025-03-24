@@ -1319,7 +1319,7 @@
             "ignore-comments": {
               "description": "Ignore comments when counting lines.",
               "type": "boolean",
-              "default": false
+              "default": true
             }
           }
         },
