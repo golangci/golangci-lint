@@ -60,6 +60,10 @@ func (l *Loader) Load(opts LoadOptions) error {
 		l.cfg.Linters.Exclusions.Generated = GeneratedModeStrict
 	}
 
+	if l.cfg.GetConfigDir() != "" && l.cfg.Version != "2" {
+		return fmt.Errorf("unsupported version of the configuration: %q (require configuration v2)", l.cfg.Version)
+	}
+
 	if !l.cfg.InternalCmdTest {
 		for _, n := range slices.Concat(l.cfg.Linters.Enable, l.cfg.Linters.Disable) {
 			if n == "typecheck" {
