@@ -3,7 +3,6 @@ title: False Positives
 ---
 
 False positives are inevitable, but we did our best to reduce their count.
-For example, we have a default enabled set of [exclude patterns](/usage/configuration#command-line-options).
 
 If a false positive occurred, you have the several choices.
 
@@ -26,13 +25,11 @@ linters:
         - '-SA1004' # disable the rule SA1004
 ```
 
-## Exclude or Skip
+## Exclude
 
 ### Exclude Issue by Text
 
-Exclude issue by text using command-line option `-e` or config option `issues.exclude`.
-It's helpful when you decided to ignore all issues of this type.
-Also, you can use `issues.exclude-rules` config option for per-path or per-linter configuration.
+You can use `linters.exclusions.rules` config option for per-path or per-linter configuration.
 
 In the following example, all the reports from the linters (`linters`) that contains the text (`text`) are excluded:
 
@@ -68,7 +65,7 @@ linters:
 
 ### Exclude Issues by Path
 
-Exclude issues in path by `linters.exclusions.paths`, or `issues.exclude-rules` config options.
+Exclude issues in path by `linters.exclusions.paths` or `linters.exclusions.rules` config options.
 
 In the following example, all the reports from the linters (`linters`) that concerns the path (`path`) are excluded:
 
@@ -107,7 +104,7 @@ linters:
 In the following example, all the reports related to the directories (`paths`) are excluded:
 
 ```yaml
-issues:
+linters:
   exclusions:
     paths:
       - path/to/a/dir/
