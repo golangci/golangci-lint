@@ -2134,7 +2134,7 @@ The following flags have been removed:
   <summary style={{color: '#737380', paddingLeft: '1rem'}}>v1</summary>
 
 ```bash
-golangci-lint run --disable-all --enable-only=govet --out-format=json --sort-order=linter --sort-results
+golangci-lint run --disable-all --enable=govet --out-format=json --sort-order=linter --sort-results
 ```
 
 </details>
@@ -2143,7 +2143,7 @@ golangci-lint run --disable-all --enable-only=govet --out-format=json --sort-ord
   <summary style={{color: '#737380', paddingLeft: '1rem'}}>v2</summary>
 
 ```bash
-golangci-lint run --default=none --enable-only=govet --output.json.path=stdout
+golangci-lint run --default=none --enable=govet --output.json.path=stdout
 ```
 
 </details>
