@@ -17,6 +17,11 @@ import (
 
 var errConfigDisabled = errors.New("config is disabled by --no-config")
 
+const (
+	modeLinters    = "linters"
+	modeFormatters = "formatters"
+)
+
 type LoaderOptions struct {
 	Config   string // Flag only. The path to the golangci config file, as specified with the --config argument.
 	NoConfig bool   // Flag only.
@@ -33,9 +38,25 @@ type Loader struct {
 	fs *pflag.FlagSet
 
 	cfg *Config
+
+	mode string
 }
 
-func NewLoader(log logutils.Log, v *viper.Viper, fs *pflag.FlagSet, opts LoaderOptions, cfg *Config, args []string) *Loader {
+func NewLintersLoader(log logutils.Log, v *viper.Viper, fs *pflag.FlagSet, opts LoaderOptions, cfg *Config, args []string) *Loader {
+	loader := newLoader(log, v, fs, opts, cfg, args)
+	loader.mode = modeLinters
+
+	return loader
+}
+
+func NewFormattersLoader(log logutils.Log, v *viper.Viper, fs *pflag.FlagSet, opts LoaderOptions, cfg *Config, args []string) *Loader {
+	loader := newLoader(log, v, fs, opts, cfg, args)
+	loader.mode = modeFormatters
+
+	return loader
+}
+
+func newLoader(log logutils.Log, v *viper.Viper, fs *pflag.FlagSet, opts LoaderOptions, cfg *Config, args []string) *Loader {
 	return &Loader{
 		BaseLoader: NewBaseLoader(log, v, opts, cfg, args),
 		fs:         fs,
@@ -44,20 +65,22 @@ func NewLoader(log logutils.Log, v *viper.Viper, fs *pflag.FlagSet, opts LoaderO
 }
 
 func (l *Loader) Load(opts LoadOptions) error {
-	err := l.setConfigFile()
+	err := l.BaseLoader.Load()
 	if err != nil {
 		return err
 	}
 
-	err = l.parseConfig()
-	if err != nil {
-		return err
+	if l.mode == modeLinters {
+		l.applyStringSliceHack()
 	}
-
-	l.applyStringSliceHack()
 
 	if l.cfg.Linters.Exclusions.Generated == "" {
 		l.cfg.Linters.Exclusions.Generated = GeneratedModeStrict
+	}
+
+	err = l.checkConfigurationVersion()
+	if err != nil {
+		return err
 	}
 
 	if !l.cfg.InternalCmdTest {
@@ -125,6 +148,15 @@ func (l *Loader) appendStringSlice(name string, current *[]string) {
 		val, _ := l.fs.GetStringSlice(name)
 		*current = append(*current, val...)
 	}
+}
+
+func (l *Loader) checkConfigurationVersion() error {
+	if l.cfg.GetConfigDir() != "" && l.cfg.Version != "2" {
+		return fmt.Errorf("unsupported version of the configuration: %q "+
+			"See https://golangci-lint.run/product/migration-guide for migration instructions", l.cfg.Version)
+	}
+
+	return nil
 }
 
 func (l *Loader) handleGoVersion() {
@@ -208,6 +240,10 @@ func (l *Loader) handleFormatterOverrides() {
 
 	if slices.Contains(l.cfg.Formatters.Enable, "gci") {
 		l.cfg.Linters.Settings.Gci = l.cfg.Formatters.Settings.Gci
+	}
+
+	if slices.Contains(l.cfg.Formatters.Enable, "golines") {
+		l.cfg.Linters.Settings.GoLines = l.cfg.Formatters.Settings.GoLines
 	}
 }
 

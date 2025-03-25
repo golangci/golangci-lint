@@ -151,7 +151,7 @@ func (c *runCommand) persistentPreRunE(cmd *cobra.Command, args []string) error 
 
 	c.log.Infof("%s", c.buildInfo.String())
 
-	loader := config.NewLoader(c.log.Child(logutils.DebugKeyConfigReader), c.viper, cmd.Flags(), c.opts.LoaderOptions, c.cfg, args)
+	loader := config.NewLintersLoader(c.log.Child(logutils.DebugKeyConfigReader), c.viper, cmd.Flags(), c.opts.LoaderOptions, c.cfg, args)
 
 	err := loader.Load(config.LoadOptions{CheckDeprecation: true, Validation: true})
 	if err != nil {
@@ -185,10 +185,6 @@ func (c *runCommand) persistentPostRunE(_ *cobra.Command, _ []string) error {
 }
 
 func (c *runCommand) preRunE(_ *cobra.Command, args []string) error {
-	if c.cfg.GetConfigDir() != "" && c.cfg.Version != "2" {
-		return fmt.Errorf("invalid version of the configuration: %q", c.cfg.Version)
-	}
-
 	dbManager, err := lintersdb.NewManager(c.log.Child(logutils.DebugKeyLintersDB), c.cfg,
 		lintersdb.NewLinterBuilder(), lintersdb.NewPluginModuleBuilder(c.log), lintersdb.NewPluginGoBuilder(c.log))
 	if err != nil {

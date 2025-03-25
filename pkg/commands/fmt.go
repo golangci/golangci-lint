@@ -80,7 +80,7 @@ func newFmtCommand(logger logutils.Log, info BuildInfo) *fmtCommand {
 func (c *fmtCommand) persistentPreRunE(cmd *cobra.Command, args []string) error {
 	c.log.Infof("%s", c.buildInfo.String())
 
-	loader := config.NewLoader(c.log.Child(logutils.DebugKeyConfigReader), c.viper, cmd.Flags(), c.opts.LoaderOptions, c.cfg, args)
+	loader := config.NewFormattersLoader(c.log.Child(logutils.DebugKeyConfigReader), c.viper, cmd.Flags(), c.opts.LoaderOptions, c.cfg, args)
 
 	err := loader.Load(config.LoadOptions{CheckDeprecation: true, Validation: true})
 	if err != nil {

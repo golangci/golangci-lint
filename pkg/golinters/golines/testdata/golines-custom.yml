@@ -1,0 +1,11 @@
+version: "2"
+
+formatters:
+  enable:
+    - golines
+  settings:
+    golines:
+      # override many settings
+      max-len: 80
+      tab-len: 8
+      reformat-tags: false

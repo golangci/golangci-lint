@@ -14,7 +14,7 @@ type Formatters struct {
 func (f *Formatters) Validate() error {
 	for _, n := range f.Enable {
 		if !slices.Contains(getAllFormatterNames(), n) {
-			return fmt.Errorf("%s is a formatter", n)
+			return fmt.Errorf("%s is not a formatter", n)
 		}
 	}
 

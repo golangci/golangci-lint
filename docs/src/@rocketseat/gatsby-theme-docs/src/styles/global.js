@@ -1,6 +1,6 @@
 import React from 'react';
-import { Global, css, useTheme } from '@emotion/react';
-import { lighten } from 'polished';
+import {css, Global, useTheme} from '@emotion/react';
+import {lighten} from 'polished';
 
 export default function GlobalStyle() {
   const theme = useTheme();
@@ -53,7 +53,7 @@ export default function GlobalStyle() {
         h4,
         h5,
         h6 {
-          color: #737380;
+          color: #4f4f58;
           margin: 24px 0 16px 0;
           font-weight: normal;
         }
@@ -71,7 +71,7 @@ export default function GlobalStyle() {
           vertical-align: middle;
           line-height: 1;
           padding: 0.2em 0.2em 0.3em 0.2em;
-          background-color: #44475a;
+          background-color: #575b73;
           color: rgba(248, 248, 242);
           font-size: 14px;
           border-radius: 3px;

@@ -27,7 +27,7 @@ Directories are NOT analyzed recursively.
 To analyze them recursively append `/...` to their path.
 It's not possible to mix files and packages/directories, and files must come from the same package.
 
-GolangCI-Lint can be used with zero configuration. By default, the following linters are enabled:
+Golangci-lint can be used with zero configuration. By default, the following linters are enabled:
 
 ```sh
 $ golangci-lint help linters
@@ -37,7 +37,7 @@ $ golangci-lint help linters
 Pass `-E/--enable` to enable linter and `-D/--disable` to disable:
 
 ```bash
-golangci-lint run --disable-all -E errcheck
+golangci-lint run --default=none -E errcheck
 ```
 
 More information about available linters can be found in the [linters page](/usage/linters/).

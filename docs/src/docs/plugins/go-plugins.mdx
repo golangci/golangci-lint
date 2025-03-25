@@ -48,29 +48,32 @@ An example linter can be found at [here](https://github.com/golangci/example-plu
 If you're looking for instructions on how to configure your own custom linter, they can be found further down.
 
 1. If the project you want to lint does not have one already, copy the [.golangci.yml](https://github.com/golangci/golangci-lint/blob/HEAD/.golangci.yml) to the root directory.
-2. Adjust the YAML to appropriate `linters-settings.custom` entries as so:
+2. Adjust the YAML to appropriate `linters.settings.custom` entries as so:
   ```yaml title=.golangci.yml
-  linters-settings:
-    custom:
-      example:
-        path: /example.so
-        description: The description of the linter
-        original-url: github.com/golangci/example-linter
-        settings: # Settings are optional.
-          one: Foo
-          two:
-            - name: Bar
-          three:
-            name: Bar
+  version: "2"
+
+  linters:
+    settings:
+      custom:
+        example:
+          path: /example.so
+          description: The description of the linter
+          original-url: github.com/golangci/example-linter
+          settings: # Settings are optional.
+            one: Foo
+            two:
+              - name: Bar
+            three:
+              name: Bar
   ```
 
 That is all the configuration that is required to run a custom linter in your project.
 
 Custom linters are enabled by default, but abide by the same rules as other linters.
 
-If the disable all option is specified either on command line or in `.golang.yml` files `linters.disable-all: true`, custom linters will be disabled;
+If the disable all option is specified either on command line or in `.golangci.yml` files `linters.default: none`, custom linters will be disabled;
 they can be re-enabled by adding them to the `linters.enable` list,
 or providing the enabled option on the command line, `golangci-lint run -Eexample`.
 
-The configuration inside the `settings` field of linter have some limitations (there are NOT related to the plugin system itself):
+The configuration inside the `linters.settings` field of linter have some limitations (there are NOT related to the plugin system itself):
 we use Viper to handle the configuration but Viper put all the keys in lowercase, and `.` cannot be used inside a key.

@@ -11,13 +11,13 @@ Basically, golangci-lint supports Go versions lower or equal to the Go version u
 New versions of Go are not automatically supported because, in addition of the Go version used to build it,
 some linters and/or internal pieces of golangci-lint could need to be adapted to support this new Go version.
 
-## How to use `golangci-lint` in CI
+## How to use golangci-lint in CI
 
-Run `golangci-lint` in CI and check the exit code. If it's non-zero - fail the build.
+Run golangci-lint in CI and check the exit code. If it's non-zero - fail the build.
 
-See [how to properly install `golangci-lint` in CI](/welcome/install/#ci-installation)
+See [how to properly install golangci-lint in CI](/welcome/install/#ci-installation)
 
-## `golangci-lint` doesn't work
+## golangci-lint doesn't work
 
 1. Please, ensure you are using the latest binary release.
 2. Run it with `-v` option and check the output.
@@ -44,7 +44,7 @@ If there are `typecheck` errors, golangci-lint will not be able to produce other
 
 How to troubleshoot:
 
-- [ ] Ensure the version of `golangci-lint` is built with a compatible version of Go.
+- [ ] Ensure the version of golangci-lint is built with a compatible version of Go.
 - [ ] Ensure dependencies are up-to-date with `go mod tidy`.
 - [ ] Ensure building works with `go run ./...`/`go build ./...` - whole package.
 - [ ] Ensure you are not running an analysis on code that depends on files/packages outside the scope of the analyzed elements.
@@ -73,14 +73,14 @@ Usually this options is used during development on local machine and compilation
 You can integrate it yourself, see this [manual](/contributing/new-linters/).
 Or you can create a [GitHub Issue](https://github.com/golangci/golangci-lint/issues/new?assignees=&labels=enhancement&projects=&template=feature_request.yml) and we will integrate when time permits.
 
-## How to integrate `golangci-lint` into large project with thousands of issues
+## How to integrate golangci-lint into large project with thousands of issues
 
-We are sure that every project can easily integrate `golangci-lint`, even the large one.
+We are sure that every project can easily integrate golangci-lint, even the large one.
 
 The idea is to not fix all existing issues.
 Fix only newly added issue: issues in new code.
 
-To do this setup CI to run `golangci-lint` with options `--new-from-merge-base=main` or `--new-from-rev=HEAD~1`.
+To do this setup CI to run golangci-lint with options `--new-from-merge-base=main` or `--new-from-rev=HEAD~1`.
 
 Also, take a look at option `--new`,
 but consider that CI scripts that generate unstaged files will make `--new` only point out issues in those files and not in the last commit.

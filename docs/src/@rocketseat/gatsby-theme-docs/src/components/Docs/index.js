@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { MDXRenderer } from 'gatsby-plugin-mdx';
+import {MDXRenderer} from 'gatsby-plugin-mdx';
 
 import Layout from '../Layout';
 import SEO from '../SEO';

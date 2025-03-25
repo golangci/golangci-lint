@@ -4,7 +4,7 @@ title: "Install"
 
 ## CI installation
 
-Most installations of `golangci-lint` are performed for CI.
+Most installations of golangci-lint are performed for CI.
 
 It's important to have reproducible CI: don't start to fail all builds at the same time.
 With golangci-lint this can happen if you use option `linters.default: all` and a new linter is added
@@ -14,14 +14,14 @@ or even without `linters.default: all` when one upstream linter is upgraded.
 
 ### GitHub Actions
 
-We recommend using [our GitHub Action](https://github.com/golangci/golangci-lint-action) for running `golangci-lint` in CI for GitHub projects.
+We recommend using [our GitHub Action](https://github.com/golangci/golangci-lint-action) for running golangci-lint in CI for GitHub projects.
 
 It's [fast and uses smart caching](https://github.com/golangci/golangci-lint-action#performance) inside,
 and it can be much faster than the simple binary installation.
 
 ![Log output of the action](./colored-line-number.png)
 
-Also, the action creates GitHub annotations for found issues (you don't need to dig into build log to see found by `golangci-lint` issues):
+Also, the action creates GitHub annotations for found issues (you don't need to dig into build log to see found by golangci-lint issues):
 
 ![GitHub annotations of the action](./annotations.png)
 
@@ -54,8 +54,8 @@ wget -O- -nv https://raw.githubusercontent.com/golangci/golangci-lint/HEAD/insta
 golangci-lint --version
 ```
 
-It is advised that you periodically update the version of `golangci-lint` as the project is under active development
-and is constantly being improved. For any problems with `golangci-lint`, check out recent [GitHub issues](https://github.com/golangci/golangci-lint/issues) and update if needed.
+It is advised that you periodically update the version of golangci-lint as the project is under active development and is constantly being improved.
+For any problems with golangci-lint, check out recent [GitHub issues](https://github.com/golangci/golangci-lint/issues) and update if needed.
 
 ## Local Installation
 
@@ -94,7 +94,7 @@ Note: Previously, we used a [Homebrew tap](https://github.com/golangci/homebrew-
 We recommend using the [official formula](https://formulae.brew.sh/formula/golangci-lint) instead of the tap,
 but sometimes the most recent release isn't immediately available via Homebrew core due to manual updates that need to occur from Homebrew core maintainers.
 In this case, the tap formula, which is updated automatically,
-can be used to install the latest version of `golangci-lint`:
+can be used to install the latest version of golangci-lint:
 
 ```bash
 brew tap golangci/tap
@@ -163,7 +163,7 @@ These installations aren't recommended because of the following points:
 2. Some users use the `-u` flag for `go get`, which upgrades our dependencies. The resulting binary was not tested and is not guaranteed to work.
 3. When using the "tools pattern" or `tool` command/directives, the dependencies of a tool can modify the dependencies of another tool or your project. The resulting binary was not tested and is not guaranteed to work.
 4. We've encountered issues with Go module hashes due to the unexpected recreation of dependency tags.
-5. `go.mod` replacement directives don't apply transitively. It means a user will be using a patched version of `golangci-lint` if we use such replacements.
+5. `go.mod` replacement directives don't apply transitively. It means a user will be using a patched version of golangci-lint if we use such replacements.
 6. It allows installation from the main branch, which can't be considered stable.
 7. It's slower than binary installation.
 
@@ -243,4 +243,4 @@ go get -tool -modfile=golangci-lint/go.mod github.com/golangci/golangci-lint/v2/
 
 ## Next
 
-[Quick Start: how to use `golangci-lint`](/welcome/quick-start/).
+[Quick Start: how to use golangci-lint](/welcome/quick-start/).

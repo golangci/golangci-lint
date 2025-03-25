@@ -33,7 +33,7 @@ After that:
 5. Take a look at the example of [pull requests with new linter support](https://github.com/golangci/golangci-lint/pulls?q=is%3Apr+is%3Amerged+label%3A%22linter%3A+new%22).
 6. Run the tests:
     ```bash
-    go run ./cmd/golangci-lint/ run --no-config --disable-all --enable={yourlintername} ./pkg/golinters/{yourlintername}/testdata/{yourlintername}.go
+    go run ./cmd/golangci-lint/ run --no-config --default=none --enable={yourlintername} ./pkg/golinters/{yourlintername}/testdata/{yourlintername}.go
     ```
 
 ## How to add a private linter to `golangci-lint`

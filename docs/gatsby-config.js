@@ -16,7 +16,7 @@ module.exports = {
     siteAuthor: `@golangci`,
     siteImage: `/logo.png`,
     siteLanguage: `en`,
-    themeColor: `#7159c1`,
+    themeColor: `#59c1ce`,
     basePath,
     footer: `© ${new Date().getFullYear()}`,
   },

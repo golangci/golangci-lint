@@ -415,11 +415,12 @@ linters:
       # if check-error-free-encoding is set to true and errcheck linter is enabled,
       # it is recommended to add the following exceptions to prevent from false positives:
       #
-      #     linters-settings:
-      #       errcheck:
-      #         exclude-functions:
-      #           - encoding/json.Marshal
-      #           - encoding/json.MarshalIndent
+      #     linters:
+      #       settings:
+      #         errcheck:
+      #           exclude-functions:
+      #             - encoding/json.Marshal
+      #             - encoding/json.MarshalIndent
       #
       # Default: false
       check-error-free-encoding: true
@@ -544,8 +545,8 @@ linters:
       # Default: 40
       statements: -1
       # Ignore comments when counting lines.
-      # Default false
-      ignore-comments: true
+      # Default: true
+      ignore-comments: false
 
     ginkgolinter:
       # Suppress the wrong length assertion warning.

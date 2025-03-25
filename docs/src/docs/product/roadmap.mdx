@@ -16,29 +16,28 @@ Please file an issue for bugs, missing documentation, or unexpected behavior.
 
 ## Versioning Policy
 
-`golangci-lint` follows [semantic versioning](https://semver.org). However, due to the nature of `golangci-lint` as a code quality tool,
+golangci-lint follows [semantic versioning](https://semver.org). However, due to the nature of golangci-lint as a code quality tool,
 it's not always clear when a minor or major version bump occurs. To help clarify this for everyone, we've defined the following semantic versioning policy:
 
 - Patch release (intended to not break your lint build)
-- A patch version update in a specific linter that results in `golangci-lint` reporting fewer errors.
-- A bug fix to the CLI or core (packages loading, runner, postprocessors, etc).
-- Improvements to documentation.
-- Non-user-facing changes such as refactoring code, adding, deleting, or modifying tests, and increasing test coverage.
-- Re-releasing after a failed release (i.e., publishing a release that doesn't work for anyone).
+  - A patch version update in a specific linter that results in golangci-lint reporting fewer errors.
+  - A bug fix to the CLI or core (packages loading, runner, postprocessors, etc).
+  - Improvements to documentation.
+  - Non-user-facing changes such as refactoring code, adding, deleting, or modifying tests, and increasing test coverage.
+  - Re-releasing after a failed release (i.e., publishing a release that doesn't work for anyone).
 - Minor release (might break your lint build because of newly found issues)
-- A major or minor version update of a specific linter that results in `golangci-lint` reporting more errors.
-- A new linter is added.
-- An existing configuration option or linter is deprecated.
-- A new CLI command is created.
-- Backward incompatible change of configuration with extremely low impact, e.g. adding validation of a list of enabled `go-critic` checkers.
+  - A major or minor version update of a specific linter that results in golangci-lint reporting more errors.
+  - A new linter is added.
+  - An existing configuration option or linter is deprecated.
+  - A new CLI command is created.
+  - Backward incompatible change of configuration.
 - Major release (likely to break your lint build)
-- Backward incompatible change of configuration with huge impact, e.g. removing excluding issues about missed comments from `golint` by default.
-- A linter is removed.
+  - Backward incompatible change of configuration with huge impact.
 
 According to our policy, any minor update may report more errors than the previous release (ex: from a bug fix).
 As such, we recommend using the fixed minor version and fixed or the latest patch version to guarantee the results of your builds.
 
-For example, in our [GitHub Action](https://github.com/golangci/golangci-lint-action) we require users to explicitly set the minor version of `golangci-lint`
+For example, in our [GitHub Action](https://github.com/golangci/golangci-lint-action) we require users to explicitly set the minor version of golangci-lint
 and we always use the latest patch version.
 
 ## Linter Deprecation Cycle
@@ -51,7 +50,7 @@ The deprecation of a linter will follow 3 phases:
   but it's recommended to remove it from your configuration.
 2. **Display of an error message**: At this point, you should remove the linter.
   The original implementation is replaced by a placeholder that does nothing.
-  The linter is NOT enabled when using `enable-all` and should be removed from the `disable` option.
+  The linter is NOT enabled when using `default: all` and should be removed from the `disable` option.
 3. **Removal of the linter** from golangci-lint.
 
 Each phase corresponds to a minor version:
@@ -59,8 +58,6 @@ Each phase corresponds to a minor version:
 - v1.0.0 -> warning message
 - v1.1.0 -> error message
 - v1.2.0 -> linter removed
-
-The deprecated linters are removed from presets immediately when they are deprecated (phase 1).
 
 We will provide clear information about those changes on different supports: changelog, logs, social network, etc.
 
@@ -75,5 +72,4 @@ No major version will be created when a linter is removed.
 4. Analyze (don't only filter) only new code: analyze only changed files and dependencies, make incremental analysis, caches.
 5. Smart new issues detector: don't print existing issues on changed lines.
 6. Minimize false-positives by fixing linters and improving testing tooling.
-7. Automatic issues fixing (code rewrite, refactoring) where it's possible.
-8. Documentation for every issue type.
+7. Documentation for every issue type.

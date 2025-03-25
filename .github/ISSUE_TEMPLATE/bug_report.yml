@@ -40,6 +40,7 @@ body:
         - RPM
         - Other Linux package manager
         - Via editor/IDE
+        - asdf/mise-en-place
         - Other
     validations:
       required: true

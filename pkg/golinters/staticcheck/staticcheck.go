@@ -31,8 +31,7 @@ func New(settings *config.StaticCheckSettings) *goanalysis.Linter {
 
 	return goanalysis.NewLinter(
 		"staticcheck",
-		"It's the set of rules from staticcheck. It's not the same thing as the staticcheck binary."+
-			" The author of staticcheck doesn't support or approve the use of staticcheck as a library inside golangci-lint.",
+		"It's the set of rules from staticcheck.",
 		analyzers,
 		nil,
 	).WithLoadMode(goanalysis.LoadModeTypesInfo)
