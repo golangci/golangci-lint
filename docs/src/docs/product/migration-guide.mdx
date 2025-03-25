@@ -2089,7 +2089,7 @@ The following flags have been removed:
 --output.tab.path
 --output.tab.print-linter-name
 --output.tab.colors
-```bash
+```
 
 ```bash
 # Previously 'html'
@@ -2124,6 +2124,26 @@ The following flags have been removed:
 
 #### `--disable-all` and `--enable-all`
 
-`--disable-all` has been replaced by `--default=none`.
+`--disable-all` has been replaced with `--default=none`.
 
-`--enable-all` has been replaced by `--default=all`.
+`--enable-all` has been replaced with `--default=all`.
+
+#### Example
+
+<details>
+  <summary style={{color: '#737380', paddingLeft: '1rem'}}>v1</summary>
+
+  ```bash
+  golangci-lint run --disable-all --enable-only=govet --out-format=colored-tab --sort-order=linter --sort-results
+  ```
+
+</details>
+
+<details>
+  <summary style={{color: '#737380', paddingLeft: '1rem'}}>v2</summary>
+
+  ```bash
+  golangci-lint run --default=none --enable-only=govet --out-format=colored-tab
+  ```
+
+</details>
