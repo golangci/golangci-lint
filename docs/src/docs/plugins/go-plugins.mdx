@@ -48,8 +48,10 @@ An example linter can be found at [here](https://github.com/golangci/example-plu
 If you're looking for instructions on how to configure your own custom linter, they can be found further down.
 
 1. If the project you want to lint does not have one already, copy the [.golangci.yml](https://github.com/golangci/golangci-lint/blob/HEAD/.golangci.yml) to the root directory.
-2. Adjust the YAML to appropriate `linters-settings.custom` entries as so:
+2. Adjust the YAML to appropriate `linters.settings.custom` entries as so:
   ```yaml title=.golangci.yml
+  version: "2"
+
   linters:
     settings:
       custom:
