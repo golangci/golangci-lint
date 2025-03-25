@@ -50,7 +50,7 @@ The deprecation of a linter will follow 3 phases:
   but it's recommended to remove it from your configuration.
 2. **Display of an error message**: At this point, you should remove the linter.
   The original implementation is replaced by a placeholder that does nothing.
-  The linter is NOT enabled when using `enable-all` and should be removed from the `disable` option.
+  The linter is NOT enabled when using `default: all` and should be removed from the `disable` option.
 3. **Removal of the linter** from golangci-lint.
 
 Each phase corresponds to a minor version:
