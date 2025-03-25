@@ -31,18 +31,17 @@ plugins:
 ```
 
 ```yaml title=.golangci.yml
-linters-settings:
-  custom:
-    foo:
-      type: "module"
-      description: This is an example usage of a plugin linter.
-      settings:
-        message: hello
-
 linters:
-  disable-all: true
+  default: none
   enable:
     - foo
+  settings:
+    custom:
+      foo:
+        type: "module"
+        description: This is an example usage of a plugin linter.
+        settings:
+          message: hello
 ```
 
 ## The Manual Way
@@ -56,18 +55,17 @@ linters:
 ### Configuration Example
 
 ```yaml title=.golangci.yml
-linters-settings:
-  custom:
-    foo:
-      type: "module"
-      description: This is an example usage of a plugin linter.
-      settings:
-        message: hello
-
 linters:
-  disable-all: true
+  default: none
   enable:
     - foo
+  settings:
+    custom:
+      foo:
+        type: "module"
+        description: This is an example usage of a plugin linter.
+        settings:
+          message: hello
 ```
 
 ## Reference

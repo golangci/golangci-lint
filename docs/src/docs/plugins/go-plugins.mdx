@@ -50,18 +50,19 @@ If you're looking for instructions on how to configure your own custom linter, t
 1. If the project you want to lint does not have one already, copy the [.golangci.yml](https://github.com/golangci/golangci-lint/blob/HEAD/.golangci.yml) to the root directory.
 2. Adjust the YAML to appropriate `linters-settings.custom` entries as so:
   ```yaml title=.golangci.yml
-  linters-settings:
-    custom:
-      example:
-        path: /example.so
-        description: The description of the linter
-        original-url: github.com/golangci/example-linter
-        settings: # Settings are optional.
-          one: Foo
-          two:
-            - name: Bar
-          three:
-            name: Bar
+  linters:
+    settings:
+      custom:
+        example:
+          path: /example.so
+          description: The description of the linter
+          original-url: github.com/golangci/example-linter
+          settings: # Settings are optional.
+            one: Foo
+            two:
+              - name: Bar
+            three:
+              name: Bar
   ```
 
 That is all the configuration that is required to run a custom linter in your project.
