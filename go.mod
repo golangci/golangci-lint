@@ -1,6 +1,7 @@
 module github.com/golangci/golangci-lint/v2
 
 go 1.23.0
+toolchain go1.24.1
 
 require (
 	4d63.com/gocheckcompilerdirectives v1.3.0
@@ -64,7 +65,7 @@ require (
 	github.com/kisielk/errcheck v1.9.0
 	github.com/kkHAIKE/contextcheck v1.1.6
 	github.com/kulti/thelper v0.6.3
-	github.com/kunwardeep/paralleltest v1.0.10
+	github.com/kunwardeep/paralleltest v1.0.12
 	github.com/lasiar/canonicalheader v1.1.2
 	github.com/ldez/exptostd v0.4.2
 	github.com/ldez/gomoddirectives v0.6.1
