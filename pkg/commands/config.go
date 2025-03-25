@@ -96,7 +96,7 @@ func (c *configCommand) preRunE(cmd *cobra.Command, args []string) error {
 	// It only needs to know the path of the configuration file.
 	cfg := config.NewDefault()
 
-	loader := config.NewLoader(c.log.Child(logutils.DebugKeyConfigReader), c.viper, cmd.Flags(), c.opts, cfg, args)
+	loader := config.NewLintersLoader(c.log.Child(logutils.DebugKeyConfigReader), c.viper, cmd.Flags(), c.opts, cfg, args)
 
 	err := loader.Load(config.LoadOptions{})
 	if err != nil {

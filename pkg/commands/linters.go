@@ -69,7 +69,7 @@ func newLintersCommand(logger logutils.Log) *lintersCommand {
 }
 
 func (c *lintersCommand) preRunE(cmd *cobra.Command, args []string) error {
-	loader := config.NewLoader(c.log.Child(logutils.DebugKeyConfigReader), c.viper, cmd.Flags(), c.opts.LoaderOptions, c.cfg, args)
+	loader := config.NewLintersLoader(c.log.Child(logutils.DebugKeyConfigReader), c.viper, cmd.Flags(), c.opts.LoaderOptions, c.cfg, args)
 
 	err := loader.Load(config.LoadOptions{Validation: true})
 	if err != nil {
