@@ -337,7 +337,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithURL("https://github.com/mvdan/gofumpt"),
 
 		linter.NewConfig(gofuncor.New(&cfg.Linters.Settings.GoFuncOr)).
-			WithSince("v1.65.0").
+			WithSince("v2.0.2").
 			WithAutoFix().
 			WithURL("https://github.com/manuelarte/gofuncor"),
 

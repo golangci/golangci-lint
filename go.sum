@@ -389,8 +389,8 @@ github.com/macabu/inamedparam v0.2.0 h1:VyPYpOc10nkhI2qeNUdh3Zket4fcZjEWe35poddB
 github.com/macabu/inamedparam v0.2.0/go.mod h1:+Pee9/YfGe5LJ62pYXqB89lJ+0k5bsR8Wgz/C0Zlq3U=
 github.com/magiconair/properties v1.8.6 h1:5ibWZ6iY0NctNGWo87LalDlEZ6R41TqbbDamhfG/Qzo=
 github.com/magiconair/properties v1.8.6/go.mod h1:y3VJvCyxH9uVvJTWEGAELF3aiYNyPKd5NZ3oSwXrF60=
-github.com/manuelarte/gofuncor v0.0.3 h1:C9uZtY1JZM8zzMK/s0ZPYXP78Zdrw3EC+CXl1o3upIs=
-github.com/manuelarte/gofuncor v0.0.3/go.mod h1:qAJxRc8ekJFW8yz3/T9eb6Png1TJGoLBLUuRC+Zley8=
+github.com/manuelarte/gofuncor v0.0.4 h1:a3NnfYT279d2NzDvp/UnpMRBxTCki7HbzIOIvjo75aI=
+github.com/manuelarte/gofuncor v0.0.4/go.mod h1:82VUujTxNIDRv1GyEYe1f5xn6OMn9Xza8Lb5CljsvRY=
 github.com/maratori/testableexamples v1.0.0 h1:dU5alXRrD8WKSjOUnmJZuzdxWOEQ57+7s93SLMxb2vI=
 github.com/maratori/testableexamples v1.0.0/go.mod h1:4rhjL1n20TUTT4vdh3RDqSizKLyXp7K2u6HgraZCGzE=
 github.com/maratori/testpackage v1.1.1 h1:S58XVV5AD7HADMmD0fNnziNHqKvSdDuEKdPD1rNTU04=
