@@ -63,7 +63,7 @@ func TestTestNolintFilter_Process(t *testing.T) {
 	processAssertEmpty(t, p, newNolintFileIssue(6, "any"))
 	processAssertEmpty(t, p, newNolintFileIssue(7, "any"))
 
-	processAssertSame(t, p, newNolintFileIssue(1, "staticcheck")) // no directive
+	processAssertSame(t, p, newNolintFileIssue(1, "wsl")) // no directive
 
 	// test preceding comments
 	processAssertEmpty(t, p, newNolintFileIssue(10, "any")) // preceding comment for var
