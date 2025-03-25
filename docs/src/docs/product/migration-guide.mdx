@@ -2133,17 +2133,17 @@ The following flags have been removed:
 <details>
   <summary style={{color: '#737380', paddingLeft: '1rem'}}>v1</summary>
 
-  ```bash
-  golangci-lint run --disable-all --enable-only=govet --out-format=colored-tab --sort-order=linter --sort-results
-  ```
+```bash
+golangci-lint run --disable-all --enable-only=govet --out-format=json --sort-order=linter --sort-results
+```
 
 </details>
 
 <details>
   <summary style={{color: '#737380', paddingLeft: '1rem'}}>v2</summary>
 
-  ```bash
-  golangci-lint run --default=none --enable-only=govet --out-format=colored-tab
-  ```
+```bash
+golangci-lint run --default=none --enable-only=govet --output.json.path=stdout
+```
 
 </details>
