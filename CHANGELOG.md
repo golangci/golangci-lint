@@ -7,6 +7,15 @@ If you value it, consider supporting us, we appreciate it! ❤️
 [![Open Collective backers and sponsors](https://img.shields.io/badge/OpenCollective-Donate-blue?logo=opencollective&style=for-the-badge)](https://opencollective.com/golangci-lint)
 [![GitHub Sponsors](https://img.shields.io/badge/GitHub-Donate-blue?logo=github&style=for-the-badge)](https://github.com/sponsors/golangci)
 
+### v2.0.2
+
+1. Misc.
+   * Fixes flags parsing for formatters
+   * Fixes the filepath used by the exclusion `source` option
+2. Documentation
+   * Adds a section about flags migration
+   * Cleaning pages with v1 options
+
 ### v2.0.1
 
 1. Linters/formatters bug fixes
