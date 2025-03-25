@@ -8,7 +8,7 @@ An example linter can be found at [here](https://github.com/golangci/example-plu
 
 - Define your building configuration into `.custom-gcl.yml`.
 - Run the command `golangci-lint custom` (or `golangci-lint custom -v` to have logs).
-- Define the plugin inside the `linters-settings.custom` section with the type `module`.
+- Define the plugin inside the `linters.settings.custom` section with the type `module`.
 - Run your custom version of golangci-lint.
 
 Requirements:
@@ -31,18 +31,19 @@ plugins:
 ```
 
 ```yaml title=.golangci.yml
-linters-settings:
-  custom:
-    foo:
-      type: "module"
-      description: This is an example usage of a plugin linter.
-      settings:
-        message: hello
+version: "2"
 
 linters:
-  disable-all: true
+  default: none
   enable:
     - foo
+  settings:
+    custom:
+      foo:
+        type: "module"
+        description: This is an example usage of a plugin linter.
+        settings:
+          message: hello
 ```
 
 ## The Manual Way
@@ -50,24 +51,25 @@ linters:
 - Add a blank-import of your module inside `cmd/golangci-lint/plugins.go`.
 - Run `go mod tidy` (the module containing the plugin will be imported).
 - Run `make build`.
-- Define the plugin inside the configuration `linters-settings.custom` section with the type `module`.
+- Define the plugin inside the `linters.settings.custom` section with the type `module`.
 - Run your custom version of golangci-lint.
 
 ### Configuration Example
 
 ```yaml title=.golangci.yml
-linters-settings:
-  custom:
-    foo:
-      type: "module"
-      description: This is an example usage of a plugin linter.
-      settings:
-        message: hello
+version: "2"
 
 linters:
-  disable-all: true
+  default: none
   enable:
     - foo
+  settings:
+    custom:
+      foo:
+        type: "module"
+        description: This is an example usage of a plugin linter.
+        settings:
+          message: hello
 ```
 
 ## Reference
