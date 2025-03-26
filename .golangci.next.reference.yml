@@ -43,6 +43,7 @@ linters:
     - fatcontext
     - forbidigo
     - forcetypeassert
+    - funcorder
     - funlen
     - ginkgolinter
     - gocheckcompilerdirectives
@@ -55,7 +56,6 @@ linters:
     - gocyclo
     - godot
     - godox
-    - gofuncor
     - goheader
     - gomoddirectives
     - gomodguard
@@ -151,6 +151,7 @@ linters:
     - fatcontext
     - forbidigo
     - forcetypeassert
+    - funcorder
     - funlen
     - ginkgolinter
     - gocheckcompilerdirectives
@@ -163,7 +164,6 @@ linters:
     - gocyclo
     - godot
     - godox
-    - gofuncor
     - goheader
     - gomoddirectives
     - gomodguard

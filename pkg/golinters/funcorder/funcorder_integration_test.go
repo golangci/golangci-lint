@@ -1,4 +1,4 @@
-package gofuncor
+package funcorder
 
 import (
 	"testing"

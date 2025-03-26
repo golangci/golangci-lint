@@ -1,4 +1,4 @@
-//golangcitest:args -Egofuncor
+//golangcitest:args -Efuncorder
 package testdata
 
 import "time"
