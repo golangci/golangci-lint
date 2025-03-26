@@ -206,8 +206,7 @@ type ExampleSnippetsExtractor struct {
 
 func NewExampleSnippetsExtractor() *ExampleSnippetsExtractor {
 	return &ExampleSnippetsExtractor{
-		// TODO(ldez) replace .golangci.next.reference.yml by .golangci.reference.yml
-		referencePath: ".golangci.next.reference.yml",
+		referencePath: ".golangci.reference.yml",
 		assetsPath:    "assets",
 	}
 }
@@ -281,11 +280,19 @@ func (e *ExampleSnippetsExtractor) extractExampleSnippets(example []byte) (*Sett
 		}
 
 		if node.Value == "version" {
-			node.HeadComment = `See the dedicated "version" documentation section.`
-			newNode = nextNode
-		}
+			n := &yaml.Node{
+				HeadComment: fmt.Sprintf("See the dedicated %q documentation section.", node.Value),
+				Kind:        node.Kind,
+				Style:       node.Style,
+				Tag:         node.Tag,
+				Value:       node.Value,
+				Content:     node.Content,
+			}
 
-		globalNode.Content = append(globalNode.Content, node, newNode)
+			globalNode.Content = append(globalNode.Content, n, nextNode)
+		} else {
+			globalNode.Content = append(globalNode.Content, node, newNode)
+		}
 
 		if node.Value == keyLinters || node.Value == keyFormatters {
 			for i := 0; i < len(nextNode.Content); i++ {

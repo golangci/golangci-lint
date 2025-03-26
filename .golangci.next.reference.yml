@@ -4,6 +4,8 @@
 # This file is not a configuration example,
 # it contains the exhaustive configuration with explanations of the options.
 
+# Defines the configuration version.
+# The only possible value is "2".
 version: "2"
 
 linters:
