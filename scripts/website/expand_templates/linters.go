@@ -281,7 +281,8 @@ func (e *ExampleSnippetsExtractor) extractExampleSnippets(example []byte) (*Sett
 		}
 
 		if node.Value == "version" {
-			node.HeadComment = `See the dedicated "version" documentation section.`
+			node.HeadComment = `Defines the configuration version.
+The only possible value is "2"`
 			newNode = nextNode
 		}
 
