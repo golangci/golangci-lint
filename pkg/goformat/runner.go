@@ -12,6 +12,7 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/alecthomas/chroma/v2/quick"
 	rpdiff "github.com/rogpeppe/go-internal/diff"
 
 	"github.com/golangci/golangci-lint/v2/pkg/config"
@@ -128,9 +129,19 @@ func (c *Runner) process(path string, stdout io.Writer, in io.Reader) error {
 	if c.opts.diff {
 		newName := filepath.ToSlash(path)
 		oldName := newName + ".orig"
-		_, err = stdout.Write(rpdiff.Diff(oldName, input, newName, output))
-		if err != nil {
-			return err
+
+		patch := rpdiff.Diff(oldName, input, newName, output)
+
+		if c.opts.colors {
+			err = quick.Highlight(stdout, string(patch), "diff", "terminal", "native")
+			if err != nil {
+				return err
+			}
+		} else {
+			_, err = stdout.Write(patch)
+			if err != nil {
+				return err
+			}
 		}
 
 		c.exitCode = 1
@@ -168,10 +179,11 @@ type RunnerOptions struct {
 	patterns  []*regexp.Regexp
 	generated string
 	diff      bool
+	colors    bool
 	stdin     bool
 }
 
-func NewRunnerOptions(cfg *config.Config, diff, stdin bool) (RunnerOptions, error) {
+func NewRunnerOptions(cfg *config.Config, diff, diffColored, stdin bool) (RunnerOptions, error) {
 	basePath, err := fsutils.GetBasePath(context.Background(), cfg.Run.RelativePathMode, cfg.GetConfigDir())
 	if err != nil {
 		return RunnerOptions{}, fmt.Errorf("get base path: %w", err)
@@ -180,7 +192,8 @@ func NewRunnerOptions(cfg *config.Config, diff, stdin bool) (RunnerOptions, erro
 	opts := RunnerOptions{
 		basePath:  basePath,
 		generated: cfg.Formatters.Exclusions.Generated,
-		diff:      diff,
+		diff:      diff || diffColored,
+		colors:    diffColored,
 		stdin:     stdin,
 	}
 
