@@ -31,7 +31,7 @@ func (m *MyStruct2) SetName(name string) {
 	m.Name = name
 }
 
-func NewMyStruct2() *MyStruct2 { // want `constructor \"NewMyStruct2\" for struct \"MyStruct2\" should be placed before struct method \"GetName\"`
+func NewMyStruct2() *MyStruct2 { // want `constructor "NewMyStruct2" for struct "MyStruct2" should be placed before struct method "GetName"`
 	return &MyStruct2{Name: "John"}
 }
 
