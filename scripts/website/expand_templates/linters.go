@@ -254,7 +254,7 @@ func (e *ExampleSnippetsExtractor) extractExampleSnippets(example []byte) (*Sett
 
 	for j, node := range root.Content {
 		switch node.Value {
-		case "run", "output", keyLinters, keyFormatters, "issues", "severity":
+		case "run", "output", keyLinters, keyFormatters, "issues", "severity", "version":
 		default:
 			continue
 		}
@@ -278,6 +278,11 @@ func (e *ExampleSnippetsExtractor) extractExampleSnippets(example []byte) (*Sett
 					Value: "value",
 				},
 			},
+		}
+
+		if node.Value == "version" {
+			node.HeadComment = `See the dedicated "version" documentation section.`
+			newNode = nextNode
 		}
 
 		globalNode.Content = append(globalNode.Content, node, newNode)
