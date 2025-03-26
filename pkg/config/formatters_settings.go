@@ -19,7 +19,6 @@ type FormatterSettings struct {
 	Gci       GciSettings       `mapstructure:"gci"`
 	GoFmt     GoFmtSettings     `mapstructure:"gofmt"`
 	GoFumpt   GoFumptSettings   `mapstructure:"gofumpt"`
-	GoFuncOr  GoFuncOrSettings  `mapstructure:"gofuncor"`
 	GoImports GoImportsSettings `mapstructure:"goimports"`
 	GoLines   GoLinesSettings   `mapstructure:"golines"`
 }
@@ -48,8 +47,6 @@ type GoFumptSettings struct {
 
 	LangVersion string `mapstructure:"-"`
 }
-
-type GoFuncOrSettings struct{}
 
 type GoImportsSettings struct {
 	LocalPrefixes []string `mapstructure:"local-prefixes"`
