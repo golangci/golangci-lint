@@ -1,9 +1,10 @@
 package gofuncor
 
 import (
-	"github.com/golangci/golangci-lint/v2/pkg/goanalysis"
 	"github.com/manuelarte/gofuncor/pkg/analyzer"
 	"golang.org/x/tools/go/analysis"
+
+	"github.com/golangci/golangci-lint/v2/pkg/goanalysis"
 )
 
 func New() *goanalysis.Linter {
