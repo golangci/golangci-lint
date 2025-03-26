@@ -64,7 +64,7 @@ require (
 	github.com/kisielk/errcheck v1.9.0
 	github.com/kkHAIKE/contextcheck v1.1.6
 	github.com/kulti/thelper v0.6.3
-	github.com/kunwardeep/paralleltest v1.0.10
+	github.com/kunwardeep/paralleltest v1.0.13
 	github.com/lasiar/canonicalheader v1.1.2
 	github.com/ldez/exptostd v0.4.2
 	github.com/ldez/gomoddirectives v0.6.1
