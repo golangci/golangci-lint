@@ -1,5 +1,7 @@
 package testdata
 
+import "time"
+
 type MyStruct struct {
 	Name string
 }
@@ -30,4 +32,8 @@ func (m *MyStruct2) SetName(name string) {
 
 func NewMyStruct2() *MyStruct2 { // want `constructor \"NewMyStruct2\" for struct \"MyStruct2\" should be placed before struct method \"GetName\"`
 	return &MyStruct2{Name: "John"}
+}
+
+func NewTime() time.Time {
+	return time.Now()
 }
