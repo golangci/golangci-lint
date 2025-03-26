@@ -42,7 +42,6 @@ linters:
     - forbidigo
     - forcetypeassert
     - funlen
-    - gci
     - ginkgolinter
     - gocheckcompilerdirectives
     - gochecknoglobals
@@ -54,11 +53,8 @@ linters:
     - gocyclo
     - godot
     - godox
-    - gofmt
-    - gofumpt
     - gofuncor
     - goheader
-    - goimports
     - gomoddirectives
     - gomodguard
     - goprintffuncname
@@ -154,7 +150,6 @@ linters:
     - forbidigo
     - forcetypeassert
     - funlen
-    - gci
     - ginkgolinter
     - gocheckcompilerdirectives
     - gochecknoglobals
@@ -166,11 +161,8 @@ linters:
     - gocyclo
     - godot
     - godox
-    - gofmt
-    - gofumpt
     - gofuncor
     - goheader
-    - goimports
     - gomoddirectives
     - gomodguard
     - goprintffuncname
