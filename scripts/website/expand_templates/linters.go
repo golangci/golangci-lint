@@ -379,18 +379,29 @@ func (e *ExampleSnippetsExtractor) getSettingSections(node, nextNode *yaml.Node)
 
 	for i := 0; i < len(nextNode.Content); i += 2 {
 		r := &yaml.Node{
-			Kind:  nextNode.Kind,
-			Style: nextNode.Style,
+			Kind:  yaml.MappingNode,
 			Tag:   nextNode.Tag,
 			Value: node.Value,
 			Content: []*yaml.Node{
 				{
-					Kind:  node.Kind,
+					Kind:  yaml.ScalarNode,
 					Value: node.Value,
+					Tag:   node.Tag,
 				},
 				{
-					Kind:    nextNode.Kind,
-					Content: []*yaml.Node{nextNode.Content[i], nextNode.Content[i+1]},
+					Kind: yaml.MappingNode,
+					Content: []*yaml.Node{
+						{
+							Kind:  yaml.ScalarNode,
+							Value: "settings",
+							Tag:   node.Tag,
+						},
+						{
+							Kind:    yaml.MappingNode,
+							Tag:     nextNode.Tag,
+							Content: []*yaml.Node{nextNode.Content[i], nextNode.Content[i+1]},
+						},
+					},
 				},
 			},
 		}
