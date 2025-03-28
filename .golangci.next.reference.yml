@@ -4149,8 +4149,15 @@ output:
       path: ./path/to/output.json
 
   # Add a prefix to the output file references.
+  # This option is ignored when using `output.path-prefix: abs` mode.
   # Default: ""
   path-prefix: ""
+
+  # By default, the report are related to the path obtained by `run.relative-path-mode`.
+  # The mode `abs` allows to show absolute file paths instead of relative file paths.
+  # The option `output.path-prefix` is ignored when using `abs` mode.
+  # Default: ""
+  path-mode: "abs"
 
   # Order to use when sorting results.
   # Possible values: `file`, `linter`, and `severity`.
