@@ -4,6 +4,8 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
+
+	"github.com/golangci/golangci-lint/v2/pkg/fsutils"
 )
 
 func TestOutput_Validate(t *testing.T) {
@@ -12,27 +14,39 @@ func TestOutput_Validate(t *testing.T) {
 		settings *Output
 	}{
 		{
-			desc: "file",
+			desc: "SortOrder: file",
 			settings: &Output{
 				SortOrder: []string{"file"},
 			},
 		},
 		{
-			desc: "linter",
+			desc: "SortOrder: linter",
 			settings: &Output{
 				SortOrder: []string{"linter"},
 			},
 		},
 		{
-			desc: "severity",
+			desc: "SortOrder: severity",
 			settings: &Output{
 				SortOrder: []string{"severity"},
 			},
 		},
 		{
-			desc: "multiple",
+			desc: "SortOrder: multiple",
 			settings: &Output{
 				SortOrder: []string{"file", "linter", "severity"},
+			},
+		},
+		{
+			desc: "PathMode: empty",
+			settings: &Output{
+				PathMode: "",
+			},
+		},
+		{
+			desc: "PathMode: absolute",
+			settings: &Output{
+				PathMode: fsutils.OutputPathModeAbsolute,
 			},
 		},
 	}
@@ -54,18 +68,25 @@ func TestOutput_Validate_error(t *testing.T) {
 		expected string
 	}{
 		{
-			desc: "invalid sort-order",
+			desc: "SortOrder: invalid",
 			settings: &Output{
 				SortOrder: []string{"a"},
 			},
 			expected: `unsupported sort-order name "a"`,
 		},
 		{
-			desc: "duplicate",
+			desc: "SortOrder: duplicate",
 			settings: &Output{
 				SortOrder: []string{"file", "linter", "severity", "linter"},
 			},
 			expected: `the sort-order name "linter" is repeated several times`,
+		},
+		{
+			desc: "PathMode: invalid",
+			settings: &Output{
+				PathMode: "example",
+			},
+			expected: `unsupported output path mode "example"`,
 		},
 	}
 

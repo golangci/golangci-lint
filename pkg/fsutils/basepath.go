@@ -19,6 +19,9 @@ const (
 	RelativePathModeWd      = "wd"
 )
 
+// OutputPathModeAbsolute path mode used to show absolute paths in output reports (user-facing).
+const OutputPathModeAbsolute = "abs"
+
 func AllRelativePathModes() []string {
 	return []string{RelativePathModeGoMod, RelativePathModeGitRoot, RelativePathModeCfg, RelativePathModeWd}
 }

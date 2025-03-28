@@ -8,6 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
+	"github.com/golangci/golangci-lint/v2/pkg/config"
 	"github.com/golangci/golangci-lint/v2/pkg/logutils"
 	"github.com/golangci/golangci-lint/v2/pkg/result"
 )
@@ -59,7 +60,7 @@ func TestPathPrettifier_Process(t *testing.T) {
 		},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
-			p := NewPathPrettifier(logutils.NewStderrLog(logutils.DebugKeyEmpty), tt.prefix)
+			p := NewPathPrettifier(logutils.NewStderrLog(logutils.DebugKeyEmpty), &config.Output{PathPrefix: tt.prefix})
 
 			got, err := p.Process(tt.issues)
 			require.NoError(t, err)
