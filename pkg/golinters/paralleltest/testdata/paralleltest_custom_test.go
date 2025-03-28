@@ -1,5 +1,5 @@
 //golangcitest:args -Eparalleltest
-//golangcitest:config_path testdata/paralleltest_custom.yml
+//golangcitest:config_path testdata/paralleltest_custom_test.yml
 //golangcitest:expected_exitcode 0
 package testdata
 
