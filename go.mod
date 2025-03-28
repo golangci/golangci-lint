@@ -2,6 +2,8 @@ module github.com/golangci/golangci-lint/v2
 
 go 1.23.0
 
+toolchain go1.24.1
+
 require (
 	4d63.com/gocheckcompilerdirectives v1.3.0
 	4d63.com/gochecknoglobals v0.2.2
@@ -39,7 +41,7 @@ require (
 	github.com/fatih/color v1.18.0
 	github.com/firefart/nonamedreturns v1.0.5
 	github.com/fzipp/gocyclo v0.6.0
-	github.com/ghostiam/protogetter v0.3.12
+	github.com/ghostiam/protogetter v0.3.13
 	github.com/go-critic/go-critic v0.13.0
 	github.com/go-viper/mapstructure/v2 v2.2.1
 	github.com/go-xmlfmt/xmlfmt v1.1.3
