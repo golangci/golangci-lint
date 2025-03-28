@@ -255,7 +255,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/gostaticanalysis/forcetypeassert"),
 
-		linter.NewConfig(funcorder.New()).
+		linter.NewConfig(funcorder.New(&cfg.Linters.Settings.FuncOrder)).
 			WithSince("v2.1.0").
 			WithURL("https://github.com/manuelarte/funcorder"),
 

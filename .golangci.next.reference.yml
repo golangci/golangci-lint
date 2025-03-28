@@ -531,6 +531,12 @@ linters:
       # Default: false
       analyze-types: true
 
+    funcorder:
+      # Enable/disable feature to check constructors are placed after struct declaration
+      constructor: true
+      # Enable/disable feature to check whether the exported struct's methods are placed before the non-exported
+      struct-method: true
+
     funlen:
       # Checks the number of lines in a function.
       # If lower than 0, disable the check.

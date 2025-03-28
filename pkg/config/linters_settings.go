@@ -217,6 +217,7 @@ type LintersSettings struct {
 	Exhaustruct     ExhaustructSettings     `mapstructure:"exhaustruct"`
 	Fatcontext      FatcontextSettings      `mapstructure:"fatcontext"`
 	Forbidigo       ForbidigoSettings       `mapstructure:"forbidigo"`
+	FuncOrder       FuncOrderSettings       `mapstructure:"funcorder"`
 	Funlen          FunlenSettings          `mapstructure:"funlen"`
 	GinkgoLinter    GinkgoLinterSettings    `mapstructure:"ginkgolinter"`
 	Gocognit        GocognitSettings        `mapstructure:"gocognit"`
@@ -418,6 +419,11 @@ type ForbidigoPattern struct {
 	Pattern string `yaml:"p" mapstructure:"pattern"`
 	Package string `yaml:"pkg,omitempty" mapstructure:"pkg,omitempty"`
 	Msg     string `yaml:"msg,omitempty" mapstructure:"msg,omitempty"`
+}
+
+type FuncOrderSettings struct {
+	Constructor  *bool `mapstructure:"constructor,omitempty"`
+	StructMethod *bool `mapstructure:"struct-method,omitempty"`
 }
 
 type FunlenSettings struct {
