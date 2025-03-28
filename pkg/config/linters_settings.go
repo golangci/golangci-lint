@@ -965,6 +965,7 @@ type WrapcheckSettings struct {
 	IgnoreSigRegexps       []string `mapstructure:"ignore-sig-regexps"`
 	IgnorePackageGlobs     []string `mapstructure:"ignore-package-globs"`
 	IgnoreInterfaceRegexps []string `mapstructure:"ignore-interface-regexps"`
+	ReportInternalErrors   bool     `mapstructure:"report-internal-errors"`
 }
 
 type WSLSettings struct {
