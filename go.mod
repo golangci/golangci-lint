@@ -73,7 +73,7 @@ require (
 	github.com/ldez/usetesting v0.4.2
 	github.com/leonklingele/grouper v1.1.2
 	github.com/macabu/inamedparam v0.2.0
-	github.com/manuelarte/funcorder v0.2.0
+	github.com/manuelarte/funcorder v0.2.1
 	github.com/maratori/testableexamples v1.0.0
 	github.com/maratori/testpackage v1.1.1
 	github.com/matoous/godox v1.1.0
