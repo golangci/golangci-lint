@@ -19,7 +19,6 @@ import (
 
 	"github.com/golangci/golangci-lint/v2/pkg/config"
 	"github.com/golangci/golangci-lint/v2/pkg/goanalysis"
-	"github.com/golangci/golangci-lint/v2/pkg/golinters/internal"
 	"github.com/golangci/golangci-lint/v2/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/v2/pkg/logutils"
 )
@@ -31,7 +30,7 @@ var (
 	isDebug = logutils.HaveDebugTag(logutils.DebugKeyGoCritic)
 )
 
-func New(settings *config.GoCriticSettings) *goanalysis.Linter {
+func New(settings *config.GoCriticSettings, replacer *strings.Replacer) *goanalysis.Linter {
 	wrapper := &goCriticWrapper{
 		sizes: types.SizesFor("gc", runtime.GOARCH),
 	}
@@ -58,9 +57,7 @@ Dynamic rules are written declaratively with AST patterns, filters, report messa
 		nil,
 	).
 		WithContextSetter(func(context *linter.Context) {
-			wrapper.replacer = strings.NewReplacer(
-				internal.PlaceholderBasePath, context.Cfg.GetBasePath(),
-			)
+			wrapper.replacer = replacer
 
 			wrapper.init(context.Log, settings)
 		}).
