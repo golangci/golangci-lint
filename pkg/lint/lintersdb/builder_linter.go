@@ -129,6 +129,8 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 		return nil, nil
 	}
 
+	placeholderReplacer := config.NewPlaceholderReplacer(cfg)
+
 	// The linters are sorted in the alphabetical order (case-insensitive).
 	// When a new linter is added the version in `WithSince(...)` must be the next minor version of golangci-lint.
 	return []*linter.Config{
@@ -180,7 +182,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithSince("v1.44.0").
 			WithURL("https://gitlab.com/bosi/decorder"),
 
-		linter.NewConfig(depguard.New(&cfg.Linters.Settings.Depguard, cfg.GetBasePath())).
+		linter.NewConfig(depguard.New(&cfg.Linters.Settings.Depguard, placeholderReplacer)).
 			WithSince("v1.4.0").
 			WithURL("https://github.com/OpenPeeDeeP/depguard"),
 
@@ -300,7 +302,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithSince("v1.0.0").
 			WithURL("https://github.com/jgautheron/goconst"),
 
-		linter.NewConfig(gocritic.New(&cfg.Linters.Settings.Gocritic)).
+		linter.NewConfig(gocritic.New(&cfg.Linters.Settings.Gocritic, placeholderReplacer)).
 			WithSince("v1.12.0").
 			WithLoadForGoAnalysis().
 			WithAutoFix().
@@ -340,7 +342,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithAutoFix().
 			WithURL("https://github.com/segmentio/golines"),
 
-		linter.NewConfig(goheader.New(&cfg.Linters.Settings.Goheader, cfg.GetBasePath())).
+		linter.NewConfig(goheader.New(&cfg.Linters.Settings.Goheader, placeholderReplacer)).
 			WithSince("v1.28.0").
 			WithAutoFix().
 			WithURL("https://github.com/denis-tingaikin/go-header"),

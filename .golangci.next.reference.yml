@@ -335,6 +335,7 @@ linters:
           # List of file globs that will match this list of settings to compare against.
           # By default, if a path is relative, it is relative to the directory where the golangci-lint command is executed.
           # The placeholder '${base-path}' is substituted with a path relative to the mode defined with `run.relative-path-mode`.
+          # The placeholder '${config-path}' is substituted with a path relative to the configuration file.
           # Default: $all
           files:
             - "!**/*_a _file.go"
@@ -1161,6 +1162,7 @@ linters:
           # Comma-separated list of file paths containing ruleguard rules.
           # By default, if a path is relative, it is relative to the directory where the golangci-lint command is executed.
           # The placeholder '${base-path}' is substituted with a path relative to the mode defined with `run.relative-path-mode`.
+          # The placeholder '${config-path}' is substituted with a path relative to the configuration file.
           # Glob patterns such as 'rules-*.go' may be specified.
           # Default: ""
           rules: '${base-path}/ruleguard/rules-*.go,${base-path}/myrule1.go'
@@ -1256,6 +1258,7 @@ linters:
       # Useful if you need to load the template from a specific file.
       # By default, if a path is relative, it is relative to the directory where the golangci-lint command is executed.
       # The placeholder '${base-path}' is substituted with a path relative to the mode defined with `run.relative-path-mode`.
+      # The placeholder '${config-path}' is substituted with a path relative to the configuration file.
       # Default: ""
       template-path: /path/to/my/template.tmpl
 
