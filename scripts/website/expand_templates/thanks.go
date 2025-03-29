@@ -86,6 +86,9 @@ func extractLinterURL(lc *linter.Config) string {
 	case "depguard":
 		return "https://github.com/dixonwille/depguard"
 
+	case "misspell":
+		return "https://github.com/client9/misspell"
+
 	default:
 		if strings.HasPrefix(lc.OriginalURL, "https://github.com/gostaticanalysis/") {
 			return "https://github.com/tenntenn/gostaticanalysis"
