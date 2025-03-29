@@ -66,6 +66,7 @@ export default function GlobalStyle() {
           font-weight: 400;
         }
 
+        span.inline-code,
         code.inline-code {
           display: inline-block;
           vertical-align: middle;
