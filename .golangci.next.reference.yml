@@ -3758,6 +3758,9 @@ linters:
       # Default: []
       ignore-interface-regexps:
         - ^(?i)c(?-i)ach(ing|e)
+      # Determines whether wrapcheck should report errors returned from inside the package.
+      # Default: false
+      report-internal-errors: true
 
     wsl:
       # Do strict checking when assigning from append (x = append(x, y)).

@@ -10,8 +10,10 @@ import (
 
 func New(settings *config.WrapcheckSettings) *goanalysis.Linter {
 	cfg := wrapcheck.NewDefaultConfig()
+
 	if settings != nil {
 		cfg.ExtraIgnoreSigs = settings.ExtraIgnoreSigs
+		cfg.ReportInternalErrors = settings.ReportInternalErrors
 
 		if len(settings.IgnoreSigs) != 0 {
 			cfg.IgnoreSigs = settings.IgnoreSigs
