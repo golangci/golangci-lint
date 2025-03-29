@@ -9,7 +9,7 @@ require (
 	github.com/Abirdcfly/dupword v0.1.3
 	github.com/Antonboom/errname v1.1.0
 	github.com/Antonboom/nilnil v1.1.0
-	github.com/Antonboom/testifylint v1.6.0
+	github.com/Antonboom/testifylint v1.6.1
 	github.com/BurntSushi/toml v1.5.0
 	github.com/Crocmagnon/fatcontext v0.7.1
 	github.com/Djarvur/go-err113 v0.0.0-20210108212216-aea10b59be24
@@ -39,7 +39,7 @@ require (
 	github.com/fatih/color v1.18.0
 	github.com/firefart/nonamedreturns v1.0.5
 	github.com/fzipp/gocyclo v0.6.0
-	github.com/ghostiam/protogetter v0.3.12
+	github.com/ghostiam/protogetter v0.3.13
 	github.com/go-critic/go-critic v0.13.0
 	github.com/go-viper/mapstructure/v2 v2.2.1
 	github.com/go-xmlfmt/xmlfmt v1.1.3

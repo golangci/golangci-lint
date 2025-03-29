@@ -43,8 +43,8 @@ github.com/Antonboom/errname v1.1.0 h1:A+ucvdpMwlo/myWrkHEUEBWc/xuXdud23S8tmTb/o
 github.com/Antonboom/errname v1.1.0/go.mod h1:O1NMrzgUcVBGIfi3xlVuvX8Q/VP/73sseCaAppfjqZw=
 github.com/Antonboom/nilnil v1.1.0 h1:jGxJxjgYS3VUUtOTNk8Z1icwT5ESpLH/426fjmQG+ng=
 github.com/Antonboom/nilnil v1.1.0/go.mod h1:b7sAlogQjFa1wV8jUW3o4PMzDVFLbTux+xnQdvzdcIE=
-github.com/Antonboom/testifylint v1.6.0 h1:6rdILVPt4+rqcvhid8w9wJNynKLUgqHNpFyM67UeXyc=
-github.com/Antonboom/testifylint v1.6.0/go.mod h1:k+nEkathI2NFjKO6HvwmSrbzUcQ6FAnbZV+ZRrnXPLI=
+github.com/Antonboom/testifylint v1.6.1 h1:6ZSytkFWatT8mwZlmRCHkWz1gPi+q6UBSbieji2Gj/o=
+github.com/Antonboom/testifylint v1.6.1/go.mod h1:k+nEkathI2NFjKO6HvwmSrbzUcQ6FAnbZV+ZRrnXPLI=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/BurntSushi/toml v1.5.0 h1:W5quZX/G/csjUnuI8SUYlsHs9M38FC7znL0lIO+DvMg=
 github.com/BurntSushi/toml v1.5.0/go.mod h1:ukJfTF/6rtPPRCnwkur4qwRxa8vTRFBF0uk2lLoLwho=
@@ -170,8 +170,8 @@ github.com/fsnotify/fsnotify v1.5.4 h1:jRbGcIw6P2Meqdwuo0H1p6JVLbL5DHKAKlYndzMwV
 github.com/fsnotify/fsnotify v1.5.4/go.mod h1:OVB6XrOHzAwXMpEM7uPOzcehqUV2UqJxmVXmkdnm1bU=
 github.com/fzipp/gocyclo v0.6.0 h1:lsblElZG7d3ALtGMx9fmxeTKZaLLpU8mET09yN4BBLo=
 github.com/fzipp/gocyclo v0.6.0/go.mod h1:rXPyn8fnlpa0R2csP/31uerbiVBugk5whMdlyaLkLoA=
-github.com/ghostiam/protogetter v0.3.12 h1:xTPjH97iKph27vXRRKV0OCke5sAMoHPbVeVstdzmCLE=
-github.com/ghostiam/protogetter v0.3.12/go.mod h1:WZ0nw9pfzsgxuRsPOFQomgDVSWtDLJRfQJEhsGbmQMA=
+github.com/ghostiam/protogetter v0.3.13 h1:T4qt1JU0xvx8+jO30+JaA49fngUd6YNajqwk0Rn3t1s=
+github.com/ghostiam/protogetter v0.3.13/go.mod h1:WZ0nw9pfzsgxuRsPOFQomgDVSWtDLJRfQJEhsGbmQMA=
 github.com/go-critic/go-critic v0.13.0 h1:kJzM7wzltQasSUXtYyTl6UaPVySO6GkaR1thFnJ6afY=
 github.com/go-critic/go-critic v0.13.0/go.mod h1:M/YeuJ3vOCQDnP2SU+ZhjgRzwzcBW87JqLpMJLrZDLI=
 github.com/go-gl/glfw v0.0.0-20190409004039-e6da0acd62b1/go.mod h1:vR7hzQXu2zJy9AVAgeJqvqgH9Q5CA+iKCZ2gyEVpxRU=
