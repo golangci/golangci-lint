@@ -10,12 +10,12 @@ import (
 
 const exclusionTmpl = `{{- $tick := "` + "`" + `" -}}
 {{- range $name, $rules := . }}
-### {{ $tick }}{{ $name }}{{ $tick }}
+### Preset {{ $tick }}{{ $name }}{{ $tick }}
 
 <table>
     <thead>
     <tr>
-        <th>linter</th>
+        <th>Linter</th>
         <th>Issue Text</th>
     </tr>
     </thead>
