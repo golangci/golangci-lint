@@ -532,10 +532,10 @@ linters:
       analyze-types: true
 
     funcorder:
-      # Enable/disable feature to check constructors are placed after struct declaration
+      # Enable/disable feature to check constructors are placed after struct declaration.
       # Default: true
       constructor: false
-      # Enable/disable feature to check whether the exported struct's methods are placed before the non-exported
+      # Enable/disable feature to check whether the exported struct's methods are placed before the non-exported.
       # Default: true
       struct-method: false
 
