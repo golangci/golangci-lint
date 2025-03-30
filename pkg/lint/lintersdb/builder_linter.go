@@ -455,7 +455,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 		linter.NewConfig(misspell.New(&cfg.Linters.Settings.Misspell)).
 			WithSince("v1.8.0").
 			WithAutoFix().
-			WithURL("https://github.com/client9/misspell"),
+			WithURL("https://github.com/golangci/misspell"),
 
 		linter.NewConfig(musttag.New(&cfg.Linters.Settings.MustTag)).
 			WithSince("v1.51.0").

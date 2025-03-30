@@ -3,12 +3,18 @@ package main
 import (
 	"fmt"
 	"maps"
+	"regexp"
 	"slices"
 	"strings"
 
 	"github.com/golangci/golangci-lint/v2/pkg/config"
 	"github.com/golangci/golangci-lint/v2/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/v2/pkg/lint/lintersdb"
+)
+
+const (
+	hostGitHub = "github"
+	hostGitLab = "gitlab"
 )
 
 type authorDetails struct {
@@ -35,29 +41,29 @@ func getThanksList() string {
 			continue
 		}
 
-		linterURL := extractLinterURL(lc)
+		info := extractInfo(lc)
 
-		if author := extractAuthor(linterURL, "https://github.com/"); author != "" && author != "golangci" {
-			if _, ok := addedAuthors[author]; ok {
-				addedAuthors[author].Linters = append(addedAuthors[author].Linters, lc.Name())
+		switch {
+		case info.FromGitHub():
+			if _, ok := addedAuthors[info.Author]; ok {
+				addedAuthors[info.Author].Linters = append(addedAuthors[info.Author].Linters, lc.Name())
 			} else {
-				addedAuthors[author] = &authorDetails{
+				addedAuthors[info.Author] = &authorDetails{
 					Linters: []string{lc.Name()},
-					Profile: fmt.Sprintf("[%[1]s](https://github.com/sponsors/%[1]s)", author),
-					Avatar:  fmt.Sprintf(`<img src="https://github.com/%[1]s.png" alt="%[1]s" style="max-width: 100%%;" width="20px;" />`, author),
+					Profile: fmt.Sprintf("[%[1]s](https://github.com/sponsors/%[1]s)", info.Author),
+					Avatar:  fmt.Sprintf(`<img src="https://github.com/%[1]s.png" alt="%[1]s" style="max-width: 100%%;" width="20px;" />`, info.Author),
 				}
 			}
-		} else if author := extractAuthor(linterURL, "https://gitlab.com/"); author != "" {
-			if _, ok := addedAuthors[author]; ok {
-				addedAuthors[author].Linters = append(addedAuthors[author].Linters, lc.Name())
+
+		case info.FromGitLab():
+			if _, ok := addedAuthors[info.Author]; ok {
+				addedAuthors[info.Author].Linters = append(addedAuthors[info.Author].Linters, lc.Name())
 			} else {
-				addedAuthors[author] = &authorDetails{
+				addedAuthors[info.Author] = &authorDetails{
 					Linters: []string{lc.Name()},
-					Profile: fmt.Sprintf("[%[1]s](https://gitlab.com/%[1]s)", author),
+					Profile: fmt.Sprintf("[%[1]s](https://gitlab.com/%[1]s)", info.Author),
 				}
 			}
-		} else {
-			continue
 		}
 	}
 
@@ -78,31 +84,65 @@ func getThanksList() string {
 	return strings.Join(lines, "\n")
 }
 
-func extractLinterURL(lc *linter.Config) string {
+type authorInfo struct {
+	Author string
+	Host   string
+}
+
+func extractInfo(lc *linter.Config) authorInfo {
+	exp := regexp.MustCompile(`https://(github|gitlab)\.com/([^/]+)/.*`)
+
 	switch lc.Name() {
 	case "staticcheck":
-		return "https://github.com/dominikh/go-tools"
+		return authorInfo{Author: "dominikh", Host: hostGitHub}
 
-	case "depguard":
-		return "https://github.com/dixonwille/depguard"
+	case "misspell":
+		return authorInfo{Author: "client9", Host: hostGitHub}
 
 	default:
-		if strings.HasPrefix(lc.OriginalURL, "https://github.com/gostaticanalysis/") {
-			return "https://github.com/tenntenn/gostaticanalysis"
+		if strings.HasPrefix(lc.OriginalURL, "https://pkg.go.dev/") {
+			return authorInfo{Author: "golang", Host: hostGitHub}
 		}
 
-		if strings.HasPrefix(lc.OriginalURL, "https://github.com/go-simpler/") {
-			return "https://github.com/tmzane/go-simpler"
+		if !exp.MatchString(lc.OriginalURL) {
+			return authorInfo{}
 		}
 
-		return lc.OriginalURL
+		submatch := exp.FindAllStringSubmatch(lc.OriginalURL, -1)
+
+		info := authorInfo{
+			Author: submatch[0][2],
+			Host:   submatch[0][1],
+		}
+
+		switch info.Author {
+		case "gostaticanalysis":
+			info.Author = "tenntenn"
+
+		case "go-simpler":
+			info.Author = "tmzane"
+
+		case "curioswitch":
+			info.Author = "chokoswitch"
+
+		case "GaijinEntertainment":
+			info.Author = "xobotyi"
+
+		case "OpenPeeDeeP":
+			info.Author = "dixonwille"
+
+		case "golangci":
+			return authorInfo{}
+		}
+
+		return info
 	}
 }
 
-func extractAuthor(originalURL, prefix string) string {
-	if !strings.HasPrefix(originalURL, prefix) {
-		return ""
-	}
+func (i authorInfo) FromGitHub() bool {
+	return i.Host == hostGitHub
+}
 
-	return strings.SplitN(strings.TrimPrefix(originalURL, prefix), "/", 2)[0]
+func (i authorInfo) FromGitLab() bool {
+	return i.Host == hostGitLab
 }
