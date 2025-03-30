@@ -2169,10 +2169,10 @@ linters:
           disabled: false
           exclude: [""]
           arguments:
-            - maxLitCount: "3"
-              allowStrs: '""'
-              allowInts: "0,1,2"
-              allowFloats: "0.0,0.,1.0,1.,2.0,2."
+            - max-lit-count: "3"
+              allow-strs: '""'
+              allow-ints: "0,1,2"
+              allow-floats: "0.0,0.,1.0,1.,2.0,2."
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#argument-limit
         - name: argument-limit
           severity: warning
@@ -2251,7 +2251,7 @@ linters:
           disabled: false
           exclude: [""]
           arguments:
-            - allowTypesBefore: "*testing.T,*github.com/user/repo/testing.Harness"
+            - allow-types-before: "*testing.T,*github.com/user/repo/testing.Harness"
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#context-keys-type
         - name: context-keys-type
           severity: warning
@@ -2291,7 +2291,7 @@ linters:
           disabled: false
           exclude: [""]
           arguments:
-            - allowedPackages: ["github.com/onsi/ginkgo/v2", "github.com/onsi/gomega"]
+            - allowed-packages: ["github.com/onsi/ginkgo/v2", "github.com/onsi/gomega"]
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#duplicated-imports
         - name: duplicated-imports
           severity: warning
@@ -2303,8 +2303,8 @@ linters:
           disabled: false
           exclude: [""]
           arguments:
-            - "preserveScope"
-            - "allowJump"
+            - "preserve-scope"
+            - "allow-jump"
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#empty-block
         - name: empty-block
           severity: warning
@@ -2330,8 +2330,8 @@ linters:
           arguments:
             - "short"
             # Or this parameter:
-            - funcArgStyle: "full"
-              funcRetValStyle: "short"
+            - func-arg-style: "full"
+              func-ret-val-style: "short"
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#enforce-slice-style
         - name: enforce-slice-style
           severity: warning
@@ -2367,15 +2367,15 @@ linters:
           disabled: false
           exclude: [""]
           arguments:
-            - "checkPrivateReceivers"
-            - "disableStutteringCheck"
-            - "sayRepetitiveInsteadOfStutters"
-            - "checkPublicInterface"
-            - "disableChecksOnConstants"
-            - "disableChecksOnFunctions"
-            - "disableChecksOnMethods"
-            - "disableChecksOnTypes"
-            - "disableChecksOnVariables"
+            - "check-private-receivers"
+            - "disable-stuttering-check"
+            - "say-repetitive-instead-of-stutters"
+            - "check-public-interface"
+            - "disable-checks-on-constants"
+            - "disable-checks-on-functions"
+            - "disable-checks-on-methods"
+            - "disable-checks-on-types"
+            - "disable-checks-on-variables"
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#file-header
         - name: file-header
           severity: warning
@@ -2390,8 +2390,8 @@ linters:
           exclude: [""]
           arguments:
             - max: 100
-              skipComments: true
-              skipBlankLines: true
+              skip-comments: true
+              skip-blank-lines: true
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#filename-format
         - name: filename-format
           severity: warning
@@ -2439,8 +2439,8 @@ linters:
           arguments:
             - "^[a-z][a-z0-9]{0,}$"
             # Or this parameter:
-            - allowRegex: "^[a-z][a-z0-9]{0,}$"
-              denyRegex: '^v\d+$'
+            - allow-regex: "^[a-z][a-z0-9]{0,}$"
+              deny-regex: '^v\d+$'
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#import-shadowing
         - name: import-shadowing
           severity: warning
@@ -2465,7 +2465,7 @@ linters:
           disabled: false
           exclude: [""]
           arguments:
-            - "preserveScope"
+            - "preserve-scope"
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#line-length-limit
         - name: line-length-limit
           severity: warning
@@ -2530,7 +2530,7 @@ linters:
           disabled: false
           exclude: [""]
           arguments:
-            - maxLength: 2
+            - max-length: 2
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#redefines-builtin-id
         - name: redefines-builtin-id
           severity: warning
@@ -2580,7 +2580,7 @@ linters:
           disabled: false
           exclude: [""]
           arguments:
-            - "preserveScope"
+            - "preserve-scope"
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#time-equal
         - name: time-equal
           severity: warning
@@ -2597,7 +2597,7 @@ linters:
           disabled: false
           exclude: [""]
           arguments:
-            - acceptIgnoredAssertionResult: true
+            - accept-ignored-assertion-result: true
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#unconditional-recursion
         - name: unconditional-recursion
           severity: warning
@@ -2637,14 +2637,14 @@ linters:
           disabled: false
           exclude: [""]
           arguments:
-            - allowRegex: "^_"
+            - allow-regex: "^_"
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#unused-receiver
         - name: unused-receiver
           severity: warning
           disabled: false
           exclude: [""]
           arguments:
-            - allowRegex: "^_"
+            - allow-regex: "^_"
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#use-any
         - name: use-any
           severity: warning
@@ -2673,7 +2673,7 @@ linters:
           arguments:
             - [ "ID" ] # AllowList
             - [ "VM" ] # DenyList
-            - - upperCaseConst: true # Extra parameter (upperCaseConst|skipPackageNameChecks)
+            - - upper-case-const: true # Extra parameter (upper-case-const|skip-package-name-checks)
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#waitgroup-by-value
         - name: waitgroup-by-value
           severity: warning
