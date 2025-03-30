@@ -4149,7 +4149,7 @@ output:
       path: ./path/to/output.json
 
   # Add a prefix to the output file references.
-  # This option is ignored when using `output.path-prefix: abs` mode.
+  # This option is ignored when using `output.path-mode: abs` mode.
   # Default: ""
   path-prefix: ""
 
