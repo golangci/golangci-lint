@@ -2,6 +2,8 @@ module github.com/golangci/golangci-lint/v2
 
 go 1.23.0
 
+toolchain go1.24.1
+
 require (
 	4d63.com/gocheckcompilerdirectives v1.3.0
 	4d63.com/gochecknoglobals v0.2.2
@@ -77,7 +79,7 @@ require (
 	github.com/maratori/testpackage v1.1.1
 	github.com/matoous/godox v1.1.0
 	github.com/mattn/go-colorable v0.1.14
-	github.com/mgechev/revive v1.7.0
+	github.com/mgechev/revive v1.8.0
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/moricho/tparallel v0.3.2
 	github.com/nakabonne/nestif v0.3.1
@@ -191,7 +193,7 @@ require (
 	github.com/quasilyte/regex/syntax v0.0.0-20210819130434-b3f0c404a727 // indirect
 	github.com/quasilyte/stdinfo v0.0.0-20220114132959-f7386bf02567 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
-	github.com/spf13/afero v1.12.0 // indirect
+	github.com/spf13/afero v1.14.0 // indirect
 	github.com/spf13/cast v1.5.0 // indirect
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/stretchr/objx v0.5.2 // indirect
