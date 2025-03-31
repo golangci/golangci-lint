@@ -3395,12 +3395,6 @@ linters:
             # Default: false
             ignore: true
 
-    tenv:
-      # The option `all` will run against whole test files (`_test.go`) regardless of method/function signatures.
-      # Otherwise, only methods that take `*testing.T`, `*testing.B`, and `testing.TB` as arguments are checked.
-      # Default: false
-      all: false
-
     testifylint:
       # Enable all checkers (https://github.com/Antonboom/testifylint#checkers).
       # Default: false
