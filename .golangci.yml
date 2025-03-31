@@ -138,6 +138,7 @@ linters:
         - name: unused-receiver
 
   exclusions:
+    warn-unused: true
     presets:
       - comments
       - std-error-handling
@@ -172,11 +173,6 @@ linters:
         text: "G306: Expect WriteFile permissions to be 0600 or less"
 
       # Related to migration command.
-      - path: pkg/commands/internal/migrate/two/
-        linters:
-          - lll
-
-      # Related to migration command.
       - path: pkg/commands/internal/migrate/
         linters:
           - gocritic
@@ -199,10 +195,3 @@ formatters:
     goimports:
       local-prefixes:
         - github.com/golangci/golangci-lint/v2
-  exclusions:
-    paths:
-      - test/testdata_etc # test files
-      - internal/go # extracted from Go code
-      - internal/x # extracted from x/tools code
-      - pkg/goformatters/gci/internal # extracted from gci code
-      - pkg/goanalysis/runner_checker.go # extracted from x/tools code
