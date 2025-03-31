@@ -26,7 +26,7 @@ const exclusionTmpl = `{{- $tick := "` + "`" + `" -}}
         <td><span class="inline-code">{{ if $rule.Text }}{{ $rule.Text }}{{ end }}</span></td>
     </tr>
 {{- end }}
-		</tbody>
+    </tbody>
 </table>
 
 {{ end }}`
