@@ -69,7 +69,7 @@ func (c *Runner) Run(paths []string) error {
 
 	for pattern, count := range c.opts.excludedPathCounter {
 		if c.opts.warnUnused && count == 0 {
-			c.log.Warnf("The pattern %q match %d issues", pattern, count)
+			c.log.Warnf("The pattern %q match no issues", pattern)
 		} else {
 			c.log.Infof("Skipped %d issues by pattern %q", count, pattern)
 		}
