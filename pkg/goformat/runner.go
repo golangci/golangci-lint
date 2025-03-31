@@ -67,6 +67,14 @@ func (c *Runner) Run(paths []string) error {
 		}
 	}
 
+	for pattern, count := range c.opts.excludedPathCounter {
+		if c.opts.warnUnused && count == 0 {
+			c.log.Warnf("The pattern %q match %d issues", pattern, count)
+		} else {
+			c.log.Infof("Skipped %d issues by pattern %q", count, pattern)
+		}
+	}
+
 	return nil
 }
 
@@ -181,6 +189,9 @@ type RunnerOptions struct {
 	diff      bool
 	colors    bool
 	stdin     bool
+
+	warnUnused          bool
+	excludedPathCounter map[*regexp.Regexp]int
 }
 
 func NewRunnerOptions(cfg *config.Config, diff, diffColored, stdin bool) (RunnerOptions, error) {
@@ -190,11 +201,13 @@ func NewRunnerOptions(cfg *config.Config, diff, diffColored, stdin bool) (Runner
 	}
 
 	opts := RunnerOptions{
-		basePath:  basePath,
-		generated: cfg.Formatters.Exclusions.Generated,
-		diff:      diff || diffColored,
-		colors:    diffColored,
-		stdin:     stdin,
+		basePath:            basePath,
+		generated:           cfg.Formatters.Exclusions.Generated,
+		diff:                diff || diffColored,
+		colors:              diffColored,
+		stdin:               stdin,
+		excludedPathCounter: make(map[*regexp.Regexp]int),
+		warnUnused:          cfg.Formatters.Exclusions.WarnUnused,
 	}
 
 	for _, pattern := range cfg.Formatters.Exclusions.Paths {
@@ -204,6 +217,7 @@ func NewRunnerOptions(cfg *config.Config, diff, diffColored, stdin bool) (Runner
 		}
 
 		opts.patterns = append(opts.patterns, exp)
+		opts.excludedPathCounter[exp] = 0
 	}
 
 	return opts, nil
@@ -221,6 +235,7 @@ func (o RunnerOptions) MatchAnyPattern(path string) (bool, error) {
 
 	for _, pattern := range o.patterns {
 		if pattern.MatchString(rel) {
+			o.excludedPathCounter[pattern]++
 			return true, nil
 		}
 	}

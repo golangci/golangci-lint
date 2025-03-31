@@ -4634,6 +4634,10 @@
               "items": {
                 "type": "string"
               }
+            },
+            "warn-unused": {
+              "type": "boolean",
+              "default": false
             }
           }
         }
