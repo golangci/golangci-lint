@@ -2,9 +2,11 @@ module protogetter
 
 go 1.22.0
 
+toolchain go1.24.1
+
 require (
-	google.golang.org/grpc v1.71.0
-	google.golang.org/protobuf v1.36.5
+	google.golang.org/grpc v1.71.1
+	google.golang.org/protobuf v1.36.6
 )
 
 require (
