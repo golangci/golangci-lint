@@ -453,11 +453,11 @@ func extractRulesName(rules []lint.Rule) []string {
 
 // Extracted from https://github.com/mgechev/revive/blob/v1.7.0/formatter/severity.go
 // Modified to use pointers (related to hugeParam rule).
-func severity(config *lint.Config, failure *lint.Failure) lint.Severity {
-	if cfg, ok := config.Rules[failure.RuleName]; ok && cfg.Severity == lint.SeverityError {
+func severity(cfg *lint.Config, failure *lint.Failure) lint.Severity {
+	if cfg, ok := cfg.Rules[failure.RuleName]; ok && cfg.Severity == lint.SeverityError {
 		return lint.SeverityError
 	}
-	if cfg, ok := config.Directives[failure.RuleName]; ok && cfg.Severity == lint.SeverityError {
+	if cfg, ok := cfg.Directives[failure.RuleName]; ok && cfg.Severity == lint.SeverityError {
 		return lint.SeverityError
 	}
 	return lint.SeverityWarning
