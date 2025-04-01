@@ -12,7 +12,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/rogpeppe/go-internal/diff"
+	rpdiff "github.com/rogpeppe/go-internal/diff"
 
 	"github.com/golangci/golangci-lint/v2/pkg/config"
 	"github.com/golangci/golangci-lint/v2/pkg/fsutils"
@@ -32,11 +32,11 @@ type Runner struct {
 	exitCode int
 }
 
-func NewRunner(log logutils.Log,
+func NewRunner(logger logutils.Log,
 	metaFormatter *goformatters.MetaFormatter, matcher *processors.GeneratedFileMatcher,
 	opts RunnerOptions) *Runner {
 	return &Runner{
-		log:           log,
+		log:           logger,
 		matcher:       matcher,
 		metaFormatter: metaFormatter,
 		opts:          opts,
@@ -128,7 +128,7 @@ func (c *Runner) process(path string, stdout io.Writer, in io.Reader) error {
 	if c.opts.diff {
 		newName := filepath.ToSlash(path)
 		oldName := newName + ".orig"
-		_, err = stdout.Write(diff.Diff(oldName, input, newName, output))
+		_, err = stdout.Write(rpdiff.Diff(oldName, input, newName, output))
 		if err != nil {
 			return err
 		}
