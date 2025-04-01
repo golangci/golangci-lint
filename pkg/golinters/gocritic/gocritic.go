@@ -113,7 +113,9 @@ func (w *goCriticWrapper) run(pass *analysis.Pass) error {
 
 	linterCtx.SetPackageInfo(pass.TypesInfo, pass.Pkg)
 
-	runOnPackage(pass, enabledCheckers, pass.Files)
+	for _, f := range pass.Files {
+		runOnFile(pass, f, enabledCheckers)
+	}
 
 	return nil
 }
@@ -192,12 +194,6 @@ func (w *goCriticWrapper) normalizeCheckerParamsValue(p any) any {
 		return w.replacer.Replace(rv.String())
 	default:
 		return p
-	}
-}
-
-func runOnPackage(pass *analysis.Pass, checks []*gocriticlinter.Checker, files []*ast.File) {
-	for _, f := range files {
-		runOnFile(pass, f, checks)
 	}
 }
 
