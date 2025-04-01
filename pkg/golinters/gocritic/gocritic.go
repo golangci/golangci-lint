@@ -88,6 +88,7 @@ func (w *goCriticWrapper) init(logger logutils.Log, settings *config.GoCriticSet
 
 	settingsWrapper := newSettingsWrapper(settings, logger)
 	settingsWrapper.InferEnabledChecks()
+
 	// Validate must be after InferEnabledChecks, not before.
 	// Because it uses gathered information about tags set and finally enabled checks.
 	if err := settingsWrapper.Validate(); err != nil {
@@ -113,7 +114,17 @@ func (w *goCriticWrapper) run(pass *analysis.Pass) error {
 
 	linterCtx.SetPackageInfo(pass.TypesInfo, pass.Pkg)
 
+	needFileInfo := slices.ContainsFunc(enabledCheckers, func(c *gocriticlinter.Checker) bool {
+		// Related to https://github.com/go-critic/go-critic/blob/440ff466685b41e67d231a1c4a8f5e093374ee93/checkers/importShadow_checker.go#L23
+		return strings.EqualFold(c.Info.Name, "importShadow")
+	})
+
 	for _, f := range pass.Files {
+		if needFileInfo {
+			// Related to https://github.com/go-critic/go-critic/blob/440ff466685b41e67d231a1c4a8f5e093374ee93/checkers/importShadow_checker.go#L23
+			linterCtx.SetFileInfo(f.Name.Name, f)
+		}
+
 		runOnFile(pass, f, enabledCheckers)
 	}
 
