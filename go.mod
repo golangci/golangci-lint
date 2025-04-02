@@ -2,6 +2,8 @@ module github.com/golangci/golangci-lint/v2
 
 go 1.23.0
 
+toolchain go1.24.1
+
 require (
 	4d63.com/gocheckcompilerdirectives v1.3.0
 	4d63.com/gochecknoglobals v0.2.2
@@ -16,7 +18,7 @@ require (
 	github.com/GaijinEntertainment/go-exhaustruct/v3 v3.3.1
 	github.com/OpenPeeDeeP/depguard/v2 v2.2.1
 	github.com/alecthomas/go-check-sumtype v0.3.1
-	github.com/alexkohler/nakedret/v2 v2.0.5
+	github.com/alexkohler/nakedret/v2 v2.0.6
 	github.com/alexkohler/prealloc v1.0.0
 	github.com/alingse/asasalint v0.0.11
 	github.com/alingse/nilnesserr v0.1.2
