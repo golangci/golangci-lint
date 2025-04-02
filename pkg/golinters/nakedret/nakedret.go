@@ -9,12 +9,14 @@ import (
 )
 
 func New(settings *config.NakedretSettings) *goanalysis.Linter {
-	var maxLines uint
+	cfg := &nakedret.NakedReturnRunner{}
+
 	if settings != nil {
-		maxLines = settings.MaxFuncLines
+		// SkipTestFiles is intentionally ignored => should be managed with `linters.exclusions.rules`.
+		cfg.MaxLength = settings.MaxFuncLines
 	}
 
-	a := nakedret.NakedReturnAnalyzer(maxLines, false)
+	a := nakedret.NakedReturnAnalyzer(cfg)
 
 	return goanalysis.NewLinter(
 		a.Name,
