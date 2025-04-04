@@ -4022,6 +4022,9 @@ formatters:
       chain-split-dots: false
 
   exclusions:
+    # Log a warning if an exclusion path is unused.
+    # Default: false
+    warn-unused: true
     # Mode of the generated files analysis.
     #
     # - `strict`: sources are excluded by strictly following the Go generated file convention.

@@ -79,7 +79,7 @@ func (p *ExclusionPaths) Process(issues []result.Issue) ([]result.Issue, error) 
 func (p *ExclusionPaths) Finish() {
 	for pattern, count := range p.excludedPathCounter {
 		if p.warnUnused && count == 0 {
-			p.log.Warnf("The pattern %q match %d issues", pattern, count)
+			p.log.Warnf("The pattern %q match no issues", pattern)
 		} else {
 			p.log.Infof("Skipped %d issues by pattern %q", count, pattern)
 		}
@@ -87,7 +87,7 @@ func (p *ExclusionPaths) Finish() {
 
 	for pattern, count := range p.excludedPathExceptCounter {
 		if p.warnUnused && count == 0 {
-			p.log.Warnf("The pattern %q match %d issues", pattern, count)
+			p.log.Warnf("The pattern %q match no issues", pattern)
 		}
 	}
 }
