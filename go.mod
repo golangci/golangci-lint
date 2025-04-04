@@ -2,6 +2,8 @@ module github.com/golangci/golangci-lint/v2
 
 go 1.23.0
 
+toolchain go1.24.1
+
 require (
 	4d63.com/gocheckcompilerdirectives v1.3.0
 	4d63.com/gochecknoglobals v0.2.2
@@ -125,7 +127,7 @@ require (
 	github.com/ykadowak/zerologlint v0.1.5
 	gitlab.com/bosi/decorder v0.4.2
 	go-simpler.org/musttag v0.13.0
-	go-simpler.org/sloglint v0.9.0
+	go-simpler.org/sloglint v0.10.0
 	go.uber.org/automaxprocs v1.6.0
 	golang.org/x/mod v0.24.0
 	golang.org/x/sys v0.31.0
