@@ -4222,6 +4222,11 @@
             }
           }
         },
+        "path-mode": {
+          "type": "string",
+          "default": "",
+          "examples": ["abs"]
+        },
         "path-prefix": {
           "description": "Add a prefix to the output file references.",
           "type": "string",
