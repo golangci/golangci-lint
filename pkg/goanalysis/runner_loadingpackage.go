@@ -24,6 +24,9 @@ import (
 
 const unsafePkgName = "unsafe"
 
+// https://github.com/golang/go/blob/go1.23.8/src/internal/types/errors/codes.go#L1484
+const tooNew = 151
+
 type loadingPackage struct {
 	pkg         *packages.Package
 	imports     map[string]*loadingPackage
@@ -436,6 +439,14 @@ func (lp *loadingPackage) convertError(err error) []packages.Error {
 
 	case types.Error:
 		// from type checker
+
+		// https://github.com/golang/go/blob/go1.23.8/src/go/types/api.go#L52-L57
+		if int(reflect.ValueOf(err).FieldByName("go116code").Int()) == tooNew {
+			// https://github.com/golang/go/blob/go1.23.8/src/go/types/check.go#L380
+			// https://github.com/golang/go/blob/go1.23.8/src/go/types/check.go#L349
+			panic(err.Msg)
+		}
+
 		errs = append(errs, packages.Error{
 			Pos:  err.Fset.Position(err.Pos).String(),
 			Msg:  err.Msg,
