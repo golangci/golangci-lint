@@ -2962,6 +2962,11 @@
               "type": "boolean",
               "default": false
             },
+            "msg-style": {
+              "description": "Enforce message style.",
+              "enum": ["", "lowercased", "capitalized"],
+              "default": false
+            },
             "key-naming-case": {
               "description": "Enforce a single key naming convention.",
               "enum": ["snake", "kebab", "camel", "pascal"]
