@@ -15,7 +15,7 @@ type IllTypedError struct {
 }
 
 func (e *IllTypedError) Error() string {
-	return fmt.Sprintf("errors in package: %v", e.Pkg.Errors)
+	return fmt.Sprintf("IllTypedError: errors in package: %v", e.Pkg.Errors)
 }
 
 func BuildIssuesFromIllTypedError(errs []error, lintCtx *linter.Context) ([]result.Issue, error) {
