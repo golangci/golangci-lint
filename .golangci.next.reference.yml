@@ -43,6 +43,7 @@ linters:
     - fatcontext
     - forbidigo
     - forcetypeassert
+    - funcorder
     - funlen
     - ginkgolinter
     - gocheckcompilerdirectives
@@ -150,6 +151,7 @@ linters:
     - fatcontext
     - forbidigo
     - forcetypeassert
+    - funcorder
     - funlen
     - ginkgolinter
     - gocheckcompilerdirectives
@@ -529,6 +531,14 @@ linters:
       # This makes it possible to handle import renaming and forbid struct fields and methods.
       # Default: false
       analyze-types: true
+
+    funcorder:
+      # Enable/disable feature to check constructors are placed after struct declaration.
+      # Default: true
+      constructor: false
+      # Enable/disable feature to check whether the exported struct's methods are placed before the non-exported.
+      # Default: true
+      struct-method: false
 
     funlen:
       # Checks the number of lines in a function.
