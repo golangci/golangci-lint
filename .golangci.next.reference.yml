@@ -2722,11 +2722,16 @@ linters:
       # https://github.com/go-simpler/sloglint?tab=readme-ov-file#static-messages
       # Default: false
       static-msg: true
+      # Enforce message style.
+      # Values: lowercased, capitalized
+      # https://github.com/go-simpler/sloglint?tab=readme-ov-file#message-style
+      # Default: ""
+      msg-style: capitalized
       # Enforce using constants instead of raw keys.
       # https://github.com/go-simpler/sloglint?tab=readme-ov-file#no-raw-keys
       # Default: false
       no-raw-keys: true
-      # Enforce a single key naming convention.
+      # Enforce key naming convention.
       # Values: snake, kebab, camel, pascal
       # https://github.com/go-simpler/sloglint?tab=readme-ov-file#key-naming-convention
       # Default: ""

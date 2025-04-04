@@ -784,6 +784,7 @@ type SlogLintSettings struct {
 	NoGlobal       string   `mapstructure:"no-global"`
 	Context        string   `mapstructure:"context"`
 	StaticMsg      bool     `mapstructure:"static-msg"`
+	MsgStyle       string   `mapstructure:"msg-style"`
 	NoRawKeys      bool     `mapstructure:"no-raw-keys"`
 	KeyNamingCase  string   `mapstructure:"key-naming-case"`
 	ForbiddenKeys  []string `mapstructure:"forbidden-keys"`
