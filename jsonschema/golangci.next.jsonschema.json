@@ -3922,6 +3922,11 @@
               "items": {
                 "type": "string"
               }
+            },
+            "report-internal-errors": {
+              "description": "Determines whether wrapcheck should report errors returned from inside the package.",
+              "type": "boolean",
+              "default": false
             }
           }
         },
