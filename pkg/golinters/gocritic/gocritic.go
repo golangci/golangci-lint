@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"go/ast"
 	"go/types"
-	"maps"
-	"reflect"
 	"runtime"
 	"slices"
 	"strings"
@@ -19,7 +17,6 @@ import (
 
 	"github.com/golangci/golangci-lint/v2/pkg/config"
 	"github.com/golangci/golangci-lint/v2/pkg/goanalysis"
-	"github.com/golangci/golangci-lint/v2/pkg/golinters/internal"
 	"github.com/golangci/golangci-lint/v2/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/v2/pkg/logutils"
 )
@@ -31,7 +28,7 @@ var (
 	isDebug = logutils.HaveDebugTag(logutils.DebugKeyGoCritic)
 )
 
-func New(settings *config.GoCriticSettings) *goanalysis.Linter {
+func New(settings *config.GoCriticSettings, replacer *strings.Replacer) *goanalysis.Linter {
 	wrapper := &goCriticWrapper{
 		sizes: types.SizesFor("gc", runtime.GOARCH),
 	}
@@ -58,23 +55,18 @@ Dynamic rules are written declaratively with AST patterns, filters, report messa
 		nil,
 	).
 		WithContextSetter(func(context *linter.Context) {
-			wrapper.replacer = strings.NewReplacer(
-				internal.PlaceholderBasePath, context.Cfg.GetBasePath(),
-			)
-
-			wrapper.init(context.Log, settings)
+			wrapper.init(context.Log, settings, replacer)
 		}).
 		WithLoadMode(goanalysis.LoadModeTypesInfo)
 }
 
 type goCriticWrapper struct {
 	settingsWrapper *settingsWrapper
-	replacer        *strings.Replacer
 	sizes           types.Sizes
 	once            sync.Once
 }
 
-func (w *goCriticWrapper) init(logger logutils.Log, settings *config.GoCriticSettings) {
+func (w *goCriticWrapper) init(logger logutils.Log, settings *config.GoCriticSettings, replacer *strings.Replacer) {
 	if settings == nil {
 		return
 	}
@@ -86,12 +78,9 @@ func (w *goCriticWrapper) init(logger logutils.Log, settings *config.GoCriticSet
 		}
 	})
 
-	settingsWrapper := newSettingsWrapper(settings, logger)
-	settingsWrapper.InferEnabledChecks()
+	settingsWrapper := newSettingsWrapper(logger, settings, replacer)
 
-	// Validate must be after InferEnabledChecks, not before.
-	// Because it uses gathered information about tags set and finally enabled checks.
-	if err := settingsWrapper.Validate(); err != nil {
+	if err := settingsWrapper.Load(); err != nil {
 		logger.Fatalf("%s: invalid settings: %s", linterName, err)
 	}
 
@@ -140,7 +129,8 @@ func (w *goCriticWrapper) buildEnabledCheckers(linterCtx *gocriticlinter.Context
 			continue
 		}
 
-		if err := w.configureCheckerInfo(info, allLowerCasedParams); err != nil {
+		err := w.settingsWrapper.setCheckerParams(info, allLowerCasedParams)
+		if err != nil {
 			return nil, err
 		}
 
@@ -153,59 +143,6 @@ func (w *goCriticWrapper) buildEnabledCheckers(linterCtx *gocriticlinter.Context
 	}
 
 	return enabledCheckers, nil
-}
-
-func (w *goCriticWrapper) configureCheckerInfo(
-	info *gocriticlinter.CheckerInfo,
-	allLowerCasedParams map[string]config.GoCriticCheckSettings,
-) error {
-	params := allLowerCasedParams[strings.ToLower(info.Name)]
-	if params == nil { // no config for this checker
-		return nil
-	}
-
-	// To lowercase info param keys here because golangci-lint's config parser lowercases all strings.
-	infoParams := normalizeMap(info.Params)
-	for k, p := range params {
-		v, ok := infoParams[k]
-		if ok {
-			v.Value = w.normalizeCheckerParamsValue(p)
-			continue
-		}
-
-		// param `k` isn't supported
-		if len(info.Params) == 0 {
-			return fmt.Errorf("checker %s config param %s doesn't exist: checker doesn't have params",
-				info.Name, k)
-		}
-
-		supportedKeys := slices.Sorted(maps.Keys(info.Params))
-
-		return fmt.Errorf("checker %s config param %s doesn't exist, all existing: %s",
-			info.Name, k, supportedKeys)
-	}
-
-	return nil
-}
-
-// normalizeCheckerParamsValue normalizes value types.
-// go-critic asserts that CheckerParam.Value has some specific types,
-// but the file parsers (TOML, YAML, JSON) don't create the same representation for raw type.
-// then we have to convert value types into the expected value types.
-// Maybe in the future, this kind of conversion will be done in go-critic itself.
-func (w *goCriticWrapper) normalizeCheckerParamsValue(p any) any {
-	rv := reflect.ValueOf(p)
-	switch rv.Type().Kind() {
-	case reflect.Int64, reflect.Int32, reflect.Int16, reflect.Int8, reflect.Int:
-		return int(rv.Int())
-	case reflect.Bool:
-		return rv.Bool()
-	case reflect.String:
-		// Perform variable substitution.
-		return w.replacer.Replace(rv.String())
-	default:
-		return p
-	}
 }
 
 func runOnFile(pass *analysis.Pass, f *ast.File, checks []*gocriticlinter.Checker) {
@@ -232,20 +169,4 @@ func runOnFile(pass *analysis.Pass, f *ast.File, checks []*gocriticlinter.Checke
 			pass.Report(diag)
 		}
 	}
-}
-
-func normalizeMap[ValueT any](in map[string]ValueT) map[string]ValueT {
-	ret := make(map[string]ValueT, len(in))
-	for k, v := range in {
-		ret[strings.ToLower(k)] = v
-	}
-	return ret
-}
-
-func isEnabledByDefaultGoCriticChecker(info *gocriticlinter.CheckerInfo) bool {
-	// https://github.com/go-critic/go-critic/blob/5b67cfd487ae9fe058b4b19321901b3131810f65/cmd/gocritic/check.go#L342-L345
-	return !info.HasTag(gocriticlinter.ExperimentalTag) &&
-		!info.HasTag(gocriticlinter.OpinionatedTag) &&
-		!info.HasTag(gocriticlinter.PerformanceTag) &&
-		!info.HasTag(gocriticlinter.SecurityTag)
 }

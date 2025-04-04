@@ -14,7 +14,7 @@ linters:
           sizeThreshold: 24
         ruleguard:
           failOn: dsl,import
-          rules: '${base-path}/ruleguard/preferWriteString.go,${base-path}/ruleguard/stringsSimplify.go'
+          rules: '${base-path}/ruleguard/preferWriteString.go,${config-path}/ruleguard/stringsSimplify.go'
 
 run:
   relative-path-mode: cfg
