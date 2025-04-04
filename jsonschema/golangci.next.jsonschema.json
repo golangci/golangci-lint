@@ -490,7 +490,6 @@
         "G110",
         "G111",
         "G112",
-        "G113",
         "G114",
         "G115",
         "G201",
@@ -2966,7 +2965,7 @@
             "msg-style": {
               "description": "Enforce message style.",
               "enum": ["", "lowercased", "capitalized"],
-              "default": false
+              "default": ""
             },
             "key-naming-case": {
               "description": "Enforce a single key naming convention.",
