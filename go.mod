@@ -25,7 +25,7 @@ require (
 	github.com/ashanbrown/makezero v1.2.0
 	github.com/bkielbasa/cyclop v1.2.3
 	github.com/blizzy78/varnamelen v0.8.0
-	github.com/bombsimon/wsl/v4 v4.6.0
+	github.com/bombsimon/wsl/v4 v4.7.0
 	github.com/breml/bidichk v0.3.3
 	github.com/breml/errchkjson v0.4.1
 	github.com/butuzov/ireturn v0.3.1
