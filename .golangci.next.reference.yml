@@ -2549,6 +2549,11 @@ linters:
           severity: warning
           disabled: false
           exclude: [""]
+        # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#redundant-test-main-exit
+        - name: redundant-test-main-exit
+          severity: warning
+          disabled: false
+          exclude: [""]
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#string-format
         - name: string-format
           severity: warning

@@ -632,6 +632,7 @@
         "redefines-builtin-id",
         "redundant-build-tag",
         "redundant-import-alias",
+        "redundant-test-main-exit",
         "string-format",
         "string-of-int",
         "struct-tag",
