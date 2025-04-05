@@ -555,6 +555,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 		linter.NewConfig(sloglint.New(&cfg.Linters.Settings.SlogLint)).
 			WithSince("v1.55.0").
 			WithLoadForGoAnalysis().
+			WithAutoFix().
 			WithURL("https://github.com/go-simpler/sloglint"),
 
 		linter.NewConfig(sqlclosecheck.New()).
