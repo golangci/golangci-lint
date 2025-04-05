@@ -43,6 +43,8 @@ The `migrate` command enforces the following default values:
 
 Other fields explicitly defined in the configuration file are migrated even if the value is the same as the default value.
 
+The `migrate` command automatically migrates `linters.presets` in individual linters to `linters.enable`.
+
 ```txt
 Migrate configuration file from v1 to v2
 
@@ -189,7 +191,9 @@ There are 2 new options (they are not strictly equivalent to the previous option
 
 #### `linters.presets`
 
-This property have been removed.
+This property has been removed.
+
+The `migrate` command automatically migrates `linters.presets` in individual linters to `linters.enable`.
 
 <details>
 <summary style={{color: '#737380', paddingLeft: '1rem'}}>v1</summary>
