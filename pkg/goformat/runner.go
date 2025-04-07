@@ -12,7 +12,8 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/rogpeppe/go-internal/diff"
+	"github.com/alecthomas/chroma/v2/quick"
+	rpdiff "github.com/rogpeppe/go-internal/diff"
 
 	"github.com/golangci/golangci-lint/v2/pkg/config"
 	"github.com/golangci/golangci-lint/v2/pkg/fsutils"
@@ -32,11 +33,11 @@ type Runner struct {
 	exitCode int
 }
 
-func NewRunner(log logutils.Log,
+func NewRunner(logger logutils.Log,
 	metaFormatter *goformatters.MetaFormatter, matcher *processors.GeneratedFileMatcher,
 	opts RunnerOptions) *Runner {
 	return &Runner{
-		log:           log,
+		log:           logger,
 		matcher:       matcher,
 		metaFormatter: metaFormatter,
 		opts:          opts,
@@ -63,6 +64,14 @@ func (c *Runner) Run(paths []string) error {
 		err := c.walk(path, savedStdout)
 		if err != nil {
 			return err
+		}
+	}
+
+	for pattern, count := range c.opts.excludedPathCounter {
+		if c.opts.warnUnused && count == 0 {
+			c.log.Warnf("The pattern %q match no issues", pattern)
+		} else {
+			c.log.Infof("Skipped %d issues by pattern %q", count, pattern)
 		}
 	}
 
@@ -128,9 +137,19 @@ func (c *Runner) process(path string, stdout io.Writer, in io.Reader) error {
 	if c.opts.diff {
 		newName := filepath.ToSlash(path)
 		oldName := newName + ".orig"
-		_, err = stdout.Write(diff.Diff(oldName, input, newName, output))
-		if err != nil {
-			return err
+
+		patch := rpdiff.Diff(oldName, input, newName, output)
+
+		if c.opts.colors {
+			err = quick.Highlight(stdout, string(patch), "diff", "terminal", "native")
+			if err != nil {
+				return err
+			}
+		} else {
+			_, err = stdout.Write(patch)
+			if err != nil {
+				return err
+			}
 		}
 
 		c.exitCode = 1
@@ -168,20 +187,27 @@ type RunnerOptions struct {
 	patterns  []*regexp.Regexp
 	generated string
 	diff      bool
+	colors    bool
 	stdin     bool
+
+	warnUnused          bool
+	excludedPathCounter map[*regexp.Regexp]int
 }
 
-func NewRunnerOptions(cfg *config.Config, diff, stdin bool) (RunnerOptions, error) {
+func NewRunnerOptions(cfg *config.Config, diff, diffColored, stdin bool) (RunnerOptions, error) {
 	basePath, err := fsutils.GetBasePath(context.Background(), cfg.Run.RelativePathMode, cfg.GetConfigDir())
 	if err != nil {
 		return RunnerOptions{}, fmt.Errorf("get base path: %w", err)
 	}
 
 	opts := RunnerOptions{
-		basePath:  basePath,
-		generated: cfg.Formatters.Exclusions.Generated,
-		diff:      diff,
-		stdin:     stdin,
+		basePath:            basePath,
+		generated:           cfg.Formatters.Exclusions.Generated,
+		diff:                diff || diffColored,
+		colors:              diffColored,
+		stdin:               stdin,
+		excludedPathCounter: make(map[*regexp.Regexp]int),
+		warnUnused:          cfg.Formatters.Exclusions.WarnUnused,
 	}
 
 	for _, pattern := range cfg.Formatters.Exclusions.Paths {
@@ -191,6 +217,7 @@ func NewRunnerOptions(cfg *config.Config, diff, stdin bool) (RunnerOptions, erro
 		}
 
 		opts.patterns = append(opts.patterns, exp)
+		opts.excludedPathCounter[exp] = 0
 	}
 
 	return opts, nil
@@ -208,6 +235,7 @@ func (o RunnerOptions) MatchAnyPattern(path string) (bool, error) {
 
 	for _, pattern := range o.patterns {
 		if pattern.MatchString(rel) {
+			o.excludedPathCounter[pattern]++
 			return true, nil
 		}
 	}

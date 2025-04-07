@@ -16,14 +16,15 @@ import (
 )
 
 // https://go-critic.com/overview.html
-func Test_settingsWrapper_InferEnabledChecks(t *testing.T) {
+func Test_settingsWrapper_inferEnabledChecks(t *testing.T) {
 	err := checkers.InitEmbeddedRules()
 	require.NoError(t, err)
 
 	allCheckersInfo := gocriticlinter.GetCheckersInfo()
 
-	allChecksByTag := make(map[string][]string)
-	allChecks := make([]string, 0, len(allCheckersInfo))
+	allChecksByTag := make(map[string]Slicer)
+	allChecks := make(Slicer, 0, len(allCheckersInfo))
+
 	for _, checker := range allCheckersInfo {
 		allChecks = append(allChecks, checker.Name)
 		for _, tag := range checker.Tags {
@@ -31,169 +32,160 @@ func Test_settingsWrapper_InferEnabledChecks(t *testing.T) {
 		}
 	}
 
-	enabledByDefaultChecks := make([]string, 0, len(allCheckersInfo))
+	enabledByDefaultChecks := make(Slicer, 0, len(allCheckersInfo))
+
 	for _, info := range allCheckersInfo {
 		if isEnabledByDefaultGoCriticChecker(info) {
 			enabledByDefaultChecks = append(enabledByDefaultChecks, info.Name)
 		}
 	}
+
 	t.Logf("enabled by default checks:\n%s", strings.Join(enabledByDefaultChecks, "\n"))
 
-	insert := func(in []string, toInsert ...string) []string {
-		return slices.Concat(in, toInsert)
-	}
-
-	remove := func(in []string, toRemove ...string) []string {
-		result := slices.Clone(in)
-		for _, v := range toRemove {
-			if i := slices.Index(result, v); i != -1 {
-				result = slices.Delete(result, i, i+1)
-			}
-		}
-		return result
-	}
-
-	uniq := func(in []string) []string {
-		return slices.Compact(slices.Sorted(slices.Values(in)))
-	}
-
-	cases := []struct {
+	testCases := []struct {
 		name                  string
-		sett                  *config.GoCriticSettings
+		settings              *config.GoCriticSettings
 		expectedEnabledChecks []string
 	}{
 		{
 			name:                  "no configuration",
-			sett:                  &config.GoCriticSettings{},
+			settings:              &config.GoCriticSettings{},
 			expectedEnabledChecks: enabledByDefaultChecks,
 		},
 		{
 			name: "enable checks",
-			sett: &config.GoCriticSettings{
+			settings: &config.GoCriticSettings{
 				EnabledChecks: []string{"assignOp", "badCall", "emptyDecl"},
 			},
-			expectedEnabledChecks: insert(enabledByDefaultChecks, "emptyDecl"),
+			expectedEnabledChecks: enabledByDefaultChecks.add("emptyDecl"),
 		},
 		{
 			name: "disable checks",
-			sett: &config.GoCriticSettings{
+			settings: &config.GoCriticSettings{
 				DisabledChecks: []string{"assignOp", "emptyDecl"},
 			},
-			expectedEnabledChecks: remove(enabledByDefaultChecks, "assignOp"),
+			expectedEnabledChecks: enabledByDefaultChecks.remove("assignOp"),
 		},
 		{
 			name: "enable tags",
-			sett: &config.GoCriticSettings{
+			settings: &config.GoCriticSettings{
 				EnabledTags: []string{"style", "experimental"},
 			},
-			expectedEnabledChecks: uniq(insert(insert(
-				enabledByDefaultChecks,
-				allChecksByTag["style"]...),
-				allChecksByTag["experimental"]...)),
+			expectedEnabledChecks: enabledByDefaultChecks.
+				add(allChecksByTag["style"]...).
+				add(allChecksByTag["experimental"]...).
+				uniq(),
 		},
 		{
 			name: "disable tags",
-			sett: &config.GoCriticSettings{
+			settings: &config.GoCriticSettings{
 				DisabledTags: []string{"diagnostic"},
 			},
-			expectedEnabledChecks: remove(enabledByDefaultChecks, allChecksByTag["diagnostic"]...),
+			expectedEnabledChecks: enabledByDefaultChecks.remove(allChecksByTag["diagnostic"]...),
 		},
 		{
 			name: "enable checks disable checks",
-			sett: &config.GoCriticSettings{
+			settings: &config.GoCriticSettings{
 				EnabledChecks:  []string{"badCall", "badLock"},
 				DisabledChecks: []string{"assignOp", "badSorting"},
 			},
-			expectedEnabledChecks: insert(remove(enabledByDefaultChecks, "assignOp"), "badLock"),
+			expectedEnabledChecks: enabledByDefaultChecks.
+				remove("assignOp").
+				add("badLock"),
 		},
 		{
 			name: "enable checks enable tags",
-			sett: &config.GoCriticSettings{
+			settings: &config.GoCriticSettings{
 				EnabledChecks: []string{"badCall", "badLock", "hugeParam"},
 				EnabledTags:   []string{"diagnostic"},
 			},
-			expectedEnabledChecks: uniq(insert(insert(enabledByDefaultChecks,
-				allChecksByTag["diagnostic"]...),
-				"hugeParam")),
+			expectedEnabledChecks: enabledByDefaultChecks.
+				add(allChecksByTag["diagnostic"]...).
+				add("hugeParam").
+				uniq(),
 		},
 		{
 			name: "enable checks disable tags",
-			sett: &config.GoCriticSettings{
+			settings: &config.GoCriticSettings{
 				EnabledChecks: []string{"badCall", "badLock", "boolExprSimplify", "hugeParam"},
 				DisabledTags:  []string{"style", "diagnostic"},
 			},
-			expectedEnabledChecks: insert(remove(remove(enabledByDefaultChecks,
-				allChecksByTag["style"]...),
-				allChecksByTag["diagnostic"]...),
-				"hugeParam"),
+			expectedEnabledChecks: enabledByDefaultChecks.
+				remove(allChecksByTag["style"]...).
+				remove(allChecksByTag["diagnostic"]...).
+				add("hugeParam"),
 		},
 		{
 			name: "enable all checks via tags",
-			sett: &config.GoCriticSettings{
+			settings: &config.GoCriticSettings{
 				EnabledTags: []string{"diagnostic", "experimental", "opinionated", "performance", "style"},
 			},
 			expectedEnabledChecks: allChecks,
 		},
 		{
 			name: "disable checks enable tags",
-			sett: &config.GoCriticSettings{
+			settings: &config.GoCriticSettings{
 				DisabledChecks: []string{"assignOp", "badCall", "badLock", "hugeParam"},
 				EnabledTags:    []string{"style", "diagnostic"},
 			},
-			expectedEnabledChecks: remove(uniq(insert(insert(enabledByDefaultChecks,
-				allChecksByTag["style"]...),
-				allChecksByTag["diagnostic"]...)),
-				"assignOp", "badCall", "badLock"),
+			expectedEnabledChecks: enabledByDefaultChecks.
+				add(allChecksByTag["style"]...).
+				add(allChecksByTag["diagnostic"]...).
+				uniq().
+				remove("assignOp", "badCall", "badLock"),
 		},
 		{
 			name: "disable checks disable tags",
-			sett: &config.GoCriticSettings{
+			settings: &config.GoCriticSettings{
 				DisabledChecks: []string{"badCall", "badLock", "codegenComment", "hugeParam"},
 				DisabledTags:   []string{"style"},
 			},
-			expectedEnabledChecks: remove(remove(enabledByDefaultChecks,
-				allChecksByTag["style"]...),
-				"badCall", "codegenComment"),
+			expectedEnabledChecks: enabledByDefaultChecks.
+				remove(allChecksByTag["style"]...).
+				remove("badCall", "codegenComment"),
 		},
 		{
 			name: "enable tags disable tags",
-			sett: &config.GoCriticSettings{
+			settings: &config.GoCriticSettings{
 				EnabledTags:  []string{"experimental"},
 				DisabledTags: []string{"style"},
 			},
-			expectedEnabledChecks: remove(uniq(insert(enabledByDefaultChecks,
-				allChecksByTag["experimental"]...)),
-				allChecksByTag["style"]...),
+			expectedEnabledChecks: enabledByDefaultChecks.
+				add(allChecksByTag["experimental"]...).
+				uniq().
+				remove(allChecksByTag["style"]...),
 		},
 		{
 			name: "enable checks disable checks enable tags",
-			sett: &config.GoCriticSettings{
+			settings: &config.GoCriticSettings{
 				EnabledChecks:  []string{"badCall", "badLock", "boolExprSimplify", "indexAlloc", "hugeParam"},
 				DisabledChecks: []string{"deprecatedComment", "typeSwitchVar"},
 				EnabledTags:    []string{"experimental"},
 			},
-			expectedEnabledChecks: remove(uniq(insert(insert(enabledByDefaultChecks,
-				allChecksByTag["experimental"]...),
-				"indexAlloc", "hugeParam")),
-				"deprecatedComment", "typeSwitchVar"),
+			expectedEnabledChecks: enabledByDefaultChecks.
+				add(allChecksByTag["experimental"]...).
+				add("indexAlloc", "hugeParam").
+				uniq().
+				remove("deprecatedComment", "typeSwitchVar"),
 		},
 		{
 			name: "enable checks disable checks enable tags disable tags",
-			sett: &config.GoCriticSettings{
+			settings: &config.GoCriticSettings{
 				EnabledChecks:  []string{"badCall", "badCond", "badLock", "indexAlloc", "hugeParam"},
 				DisabledChecks: []string{"deprecatedComment", "typeSwitchVar"},
 				EnabledTags:    []string{"experimental"},
 				DisabledTags:   []string{"performance"},
 			},
-			expectedEnabledChecks: remove(remove(uniq(insert(insert(enabledByDefaultChecks,
-				allChecksByTag["experimental"]...),
-				"badCond")),
-				allChecksByTag["performance"]...),
-				"deprecatedComment", "typeSwitchVar"),
+			expectedEnabledChecks: enabledByDefaultChecks.
+				add(allChecksByTag["experimental"]...).
+				add("badCond").
+				uniq().
+				remove(allChecksByTag["performance"]...).
+				remove("deprecatedComment", "typeSwitchVar"),
 		},
 		{
 			name: "enable single tag only",
-			sett: &config.GoCriticSettings{
+			settings: &config.GoCriticSettings{
 				DisableAll:  true,
 				EnabledTags: []string{"experimental"},
 			},
@@ -201,31 +193,35 @@ func Test_settingsWrapper_InferEnabledChecks(t *testing.T) {
 		},
 		{
 			name: "enable two tags only",
-			sett: &config.GoCriticSettings{
+			settings: &config.GoCriticSettings{
 				DisableAll:  true,
 				EnabledTags: []string{"experimental", "performance"},
 			},
-			expectedEnabledChecks: uniq(insert(allChecksByTag["experimental"], allChecksByTag["performance"]...)),
+			expectedEnabledChecks: allChecksByTag["experimental"].
+				add(allChecksByTag["performance"]...).
+				uniq(),
 		},
 		{
 			name: "disable single tag only",
-			sett: &config.GoCriticSettings{
+			settings: &config.GoCriticSettings{
 				EnableAll:    true,
 				DisabledTags: []string{"style"},
 			},
-			expectedEnabledChecks: remove(allChecks, allChecksByTag["style"]...),
+			expectedEnabledChecks: allChecks.remove(allChecksByTag["style"]...),
 		},
 		{
 			name: "disable two tags only",
-			sett: &config.GoCriticSettings{
+			settings: &config.GoCriticSettings{
 				EnableAll:    true,
 				DisabledTags: []string{"style", "diagnostic"},
 			},
-			expectedEnabledChecks: remove(remove(allChecks, allChecksByTag["style"]...), allChecksByTag["diagnostic"]...),
+			expectedEnabledChecks: allChecks.
+				remove(allChecksByTag["style"]...).
+				remove(allChecksByTag["diagnostic"]...),
 		},
 		{
 			name: "enable some checks only",
-			sett: &config.GoCriticSettings{
+			settings: &config.GoCriticSettings{
 				DisableAll:    true,
 				EnabledChecks: []string{"deferInLoop", "dupImport", "ifElseChain", "mapKey"},
 			},
@@ -233,55 +229,60 @@ func Test_settingsWrapper_InferEnabledChecks(t *testing.T) {
 		},
 		{
 			name: "disable some checks only",
-			sett: &config.GoCriticSettings{
+			settings: &config.GoCriticSettings{
 				EnableAll:      true,
 				DisabledChecks: []string{"deferInLoop", "dupImport", "ifElseChain", "mapKey"},
 			},
-			expectedEnabledChecks: remove(allChecks, "deferInLoop", "dupImport", "ifElseChain", "mapKey"),
+			expectedEnabledChecks: allChecks.
+				remove("deferInLoop", "dupImport", "ifElseChain", "mapKey"),
 		},
 		{
 			name: "enable single tag and some checks from another tag only",
-			sett: &config.GoCriticSettings{
+			settings: &config.GoCriticSettings{
 				DisableAll:    true,
 				EnabledTags:   []string{"experimental"},
 				EnabledChecks: []string{"importShadow"},
 			},
-			expectedEnabledChecks: insert(allChecksByTag["experimental"], "importShadow"),
+			expectedEnabledChecks: allChecksByTag["experimental"].add("importShadow"),
 		},
 		{
 			name: "disable single tag and some checks from another tag only",
-			sett: &config.GoCriticSettings{
+			settings: &config.GoCriticSettings{
 				EnableAll:      true,
 				DisabledTags:   []string{"experimental"},
 				DisabledChecks: []string{"importShadow"},
 			},
-			expectedEnabledChecks: remove(remove(allChecks, allChecksByTag["experimental"]...), "importShadow"),
+			expectedEnabledChecks: allChecks.
+				remove(allChecksByTag["experimental"]...).
+				remove("importShadow"),
 		},
 	}
 
-	for _, tt := range cases {
-		t.Run(tt.name, func(t *testing.T) {
+	for _, test := range testCases {
+		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			lg := logutils.NewStderrLog("Test_goCriticSettingsWrapper_InferEnabledChecks")
-			wr := newSettingsWrapper(tt.sett, lg)
+			lg := logutils.NewStderrLog(t.Name())
+			wr := newSettingsWrapper(lg, test.settings, nil)
 
-			wr.InferEnabledChecks()
-			assert.ElementsMatch(t, tt.expectedEnabledChecks, slices.Collect(maps.Keys(wr.inferredEnabledChecks)))
-			assert.NoError(t, wr.Validate())
+			wr.inferEnabledChecks()
+
+			assert.ElementsMatch(t, test.expectedEnabledChecks, slices.Collect(maps.Keys(wr.inferredEnabledChecks)))
+
+			assert.NoError(t, wr.validate())
 		})
 	}
 }
 
-func Test_settingsWrapper_Validate(t *testing.T) {
-	cases := []struct {
+func Test_settingsWrapper_Load(t *testing.T) {
+	testCases := []struct {
 		name        string
-		sett        *config.GoCriticSettings
+		settings    *config.GoCriticSettings
 		expectedErr bool
 	}{
 		{
 			name: "combine enable-all and disable-all",
-			sett: &config.GoCriticSettings{
+			settings: &config.GoCriticSettings{
 				EnableAll:  true,
 				DisableAll: true,
 			},
@@ -289,7 +290,7 @@ func Test_settingsWrapper_Validate(t *testing.T) {
 		},
 		{
 			name: "combine enable-all and enabled-tags",
-			sett: &config.GoCriticSettings{
+			settings: &config.GoCriticSettings{
 				EnableAll:   true,
 				EnabledTags: []string{"experimental"},
 			},
@@ -297,7 +298,7 @@ func Test_settingsWrapper_Validate(t *testing.T) {
 		},
 		{
 			name: "combine enable-all and enabled-checks",
-			sett: &config.GoCriticSettings{
+			settings: &config.GoCriticSettings{
 				EnableAll:     true,
 				EnabledChecks: []string{"dupImport"},
 			},
@@ -305,7 +306,7 @@ func Test_settingsWrapper_Validate(t *testing.T) {
 		},
 		{
 			name: "combine disable-all and disabled-tags",
-			sett: &config.GoCriticSettings{
+			settings: &config.GoCriticSettings{
 				DisableAll:   true,
 				DisabledTags: []string{"style"},
 			},
@@ -313,7 +314,7 @@ func Test_settingsWrapper_Validate(t *testing.T) {
 		},
 		{
 			name: "combine disable-all and disable-checks",
-			sett: &config.GoCriticSettings{
+			settings: &config.GoCriticSettings{
 				DisableAll:     true,
 				DisabledChecks: []string{"appendAssign"},
 			},
@@ -321,42 +322,42 @@ func Test_settingsWrapper_Validate(t *testing.T) {
 		},
 		{
 			name: "disable-all and no one check enabled",
-			sett: &config.GoCriticSettings{
+			settings: &config.GoCriticSettings{
 				DisableAll: true,
 			},
 			expectedErr: true,
 		},
 		{
 			name: "unknown enabled tag",
-			sett: &config.GoCriticSettings{
+			settings: &config.GoCriticSettings{
 				EnabledTags: []string{"diagnostic", "go-proverbs"},
 			},
 			expectedErr: true,
 		},
 		{
 			name: "unknown disabled tag",
-			sett: &config.GoCriticSettings{
+			settings: &config.GoCriticSettings{
 				DisabledTags: []string{"style", "go-proverbs"},
 			},
 			expectedErr: true,
 		},
 		{
 			name: "unknown enabled check",
-			sett: &config.GoCriticSettings{
+			settings: &config.GoCriticSettings{
 				EnabledChecks: []string{"appendAssign", "noExitAfterDefer", "underef"},
 			},
 			expectedErr: true,
 		},
 		{
 			name: "unknown disabled check",
-			sett: &config.GoCriticSettings{
+			settings: &config.GoCriticSettings{
 				DisabledChecks: []string{"dupSubExpr", "noExitAfterDefer", "returnAfterHttpError"},
 			},
 			expectedErr: true,
 		},
 		{
 			name: "settings for unknown check",
-			sett: &config.GoCriticSettings{
+			settings: &config.GoCriticSettings{
 				SettingsPerCheck: map[string]config.GoCriticCheckSettings{
 					"captLocall":    {"paramsOnly": false},
 					"unnamedResult": {"checkExported": true},
@@ -366,7 +367,7 @@ func Test_settingsWrapper_Validate(t *testing.T) {
 		},
 		{
 			name: "settings for disabled check",
-			sett: &config.GoCriticSettings{
+			settings: &config.GoCriticSettings{
 				DisabledChecks: []string{"elseif"},
 				SettingsPerCheck: map[string]config.GoCriticCheckSettings{
 					"elseif": {"skipBalanced": true},
@@ -376,7 +377,7 @@ func Test_settingsWrapper_Validate(t *testing.T) {
 		},
 		{
 			name: "settings by lower-cased checker name",
-			sett: &config.GoCriticSettings{
+			settings: &config.GoCriticSettings{
 				EnabledChecks: []string{"tooManyResultsChecker"},
 				SettingsPerCheck: map[string]config.GoCriticCheckSettings{
 					"toomanyresultschecker": {"maxResults": 3},
@@ -387,7 +388,7 @@ func Test_settingsWrapper_Validate(t *testing.T) {
 		},
 		{
 			name: "enabled and disabled at one moment check",
-			sett: &config.GoCriticSettings{
+			settings: &config.GoCriticSettings{
 				EnabledChecks:  []string{"appendAssign", "codegenComment", "underef"},
 				DisabledChecks: []string{"elseif", "underef"},
 			},
@@ -395,7 +396,7 @@ func Test_settingsWrapper_Validate(t *testing.T) {
 		},
 		{
 			name: "enabled and disabled at one moment tag",
-			sett: &config.GoCriticSettings{
+			settings: &config.GoCriticSettings{
 				EnabledTags:  []string{"performance", "style"},
 				DisabledTags: []string{"style", "diagnostic"},
 			},
@@ -403,14 +404,14 @@ func Test_settingsWrapper_Validate(t *testing.T) {
 		},
 		{
 			name: "disable all checks via tags",
-			sett: &config.GoCriticSettings{
+			settings: &config.GoCriticSettings{
 				DisabledTags: []string{"diagnostic", "experimental", "opinionated", "performance", "style"},
 			},
 			expectedErr: true,
 		},
 		{
 			name: "enable-all and disable all checks via tags",
-			sett: &config.GoCriticSettings{
+			settings: &config.GoCriticSettings{
 				EnableAll:    true,
 				DisabledTags: []string{"diagnostic", "experimental", "opinionated", "performance", "style"},
 			},
@@ -418,7 +419,7 @@ func Test_settingsWrapper_Validate(t *testing.T) {
 		},
 		{
 			name: "valid configuration",
-			sett: &config.GoCriticSettings{
+			settings: &config.GoCriticSettings{
 				EnabledTags:    []string{"performance"},
 				DisabledChecks: []string{"dupImport", "ifElseChain", "octalLiteral", "whyNoLint"},
 				SettingsPerCheck: map[string]config.GoCriticCheckSettings{
@@ -430,17 +431,15 @@ func Test_settingsWrapper_Validate(t *testing.T) {
 		},
 	}
 
-	for _, tt := range cases {
-		t.Run(tt.name, func(t *testing.T) {
+	for _, test := range testCases {
+		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			lg := logutils.NewStderrLog("Test_goCriticSettingsWrapper_Validate")
-			wr := newSettingsWrapper(tt.sett, lg)
+			lg := logutils.NewStderrLog(t.Name())
+			wr := newSettingsWrapper(lg, test.settings, nil)
 
-			wr.InferEnabledChecks()
-
-			err := wr.Validate()
-			if tt.expectedErr {
+			err := wr.Load()
+			if test.expectedErr {
 				if assert.Error(t, err) {
 					t.Log(err)
 				}
@@ -449,4 +448,26 @@ func Test_settingsWrapper_Validate(t *testing.T) {
 			}
 		})
 	}
+}
+
+type Slicer []string
+
+func (s Slicer) add(toAdd ...string) Slicer {
+	return slices.Concat(s, toAdd)
+}
+
+func (s Slicer) remove(toRemove ...string) Slicer {
+	result := slices.Clone(s)
+
+	for _, v := range toRemove {
+		if i := slices.Index(result, v); i != -1 {
+			result = slices.Delete(result, i, i+1)
+		}
+	}
+
+	return result
+}
+
+func (s Slicer) uniq() Slicer {
+	return slices.Compact(slices.Sorted(slices.Values(s)))
 }

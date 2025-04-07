@@ -2546,6 +2546,11 @@ linters:
           severity: warning
           disabled: false
           exclude: [""]
+        # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#redundant-test-main-exit
+        - name: redundant-test-main-exit
+          severity: warning
+          disabled: false
+          exclude: [""]
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#string-format
         - name: string-format
           severity: warning
@@ -3394,12 +3399,6 @@ linters:
             # Ignore the package (takes precedence over all other configurations).
             # Default: false
             ignore: true
-
-    tenv:
-      # The option `all` will run against whole test files (`_test.go`) regardless of method/function signatures.
-      # Otherwise, only methods that take `*testing.T`, `*testing.B`, and `testing.TB` as arguments are checked.
-      # Default: false
-      all: false
 
     testifylint:
       # Enable all checkers (https://github.com/Antonboom/testifylint#checkers).

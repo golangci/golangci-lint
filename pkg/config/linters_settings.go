@@ -790,6 +790,7 @@ type SlogLintSettings struct {
 	NoGlobal       string   `mapstructure:"no-global"`
 	Context        string   `mapstructure:"context"`
 	StaticMsg      bool     `mapstructure:"static-msg"`
+	MsgStyle       string   `mapstructure:"msg-style"`
 	NoRawKeys      bool     `mapstructure:"no-raw-keys"`
 	KeyNamingCase  string   `mapstructure:"key-naming-case"`
 	ForbiddenKeys  []string `mapstructure:"forbidden-keys"`
@@ -971,6 +972,7 @@ type WrapcheckSettings struct {
 	IgnoreSigRegexps       []string `mapstructure:"ignore-sig-regexps"`
 	IgnorePackageGlobs     []string `mapstructure:"ignore-package-globs"`
 	IgnoreInterfaceRegexps []string `mapstructure:"ignore-interface-regexps"`
+	ReportInternalErrors   bool     `mapstructure:"report-internal-errors"`
 }
 
 type WSLSettings struct {

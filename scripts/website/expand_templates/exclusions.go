@@ -10,22 +10,26 @@ import (
 
 const exclusionTmpl = `{{- $tick := "` + "`" + `" -}}
 {{- range $name, $rules := . }}
-### {{ $tick }}{{ $name }}{{ $tick }}
-{{ range $rule := $rules }}
-{{ $tick }}{{ range $linter := $rule.Linters }}{{ $linter }}{{ end }}{{ $tick }}:
-{{ if $rule.Path -}}
-- Path: {{ $tick }}{{ $rule.Path }}{{ $tick }}
-{{ end -}}
-{{ if $rule.PathExcept -}}
-- Path Except: {{ $tick }}{{ $rule.PathExcept }}{{ $tick }}
-{{ end -}}
-{{ if $rule.Text -}}
-- Text: {{ $tick }}{{ $rule.Text }}{{ $tick }}
-{{ end -}}
-{{ if $rule.Source -}}
-- Source: {{ $tick }}{{ $rule.Source }}{{ $tick }}
-{{ end -}}
-{{ end }}{{ end }}`
+### Preset {{ $tick }}{{ $name }}{{ $tick }}
+
+<table>
+    <thead>
+    <tr>
+        <th>Linter</th>
+        <th>Issue Text</th>
+    </tr>
+    </thead>
+    <tbody>
+{{- range $rule := $rules }}
+    <tr>
+        <td>{{ range $linter := $rule.Linters }}{{ $linter }}{{ end }}</td>
+        <td><span class="inline-code">{{ if $rule.Text }}{{ $rule.Text }}{{ end }}</span></td>
+    </tr>
+{{- end }}
+    </tbody>
+</table>
+
+{{ end }}`
 
 func getExclusionPresets() (string, error) {
 	linterExclusionPresets, err := readJSONFile[map[string][]types.ExcludeRule](filepath.Join("assets", "exclusion-presets.json"))

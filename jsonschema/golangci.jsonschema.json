@@ -632,6 +632,7 @@
         "redefines-builtin-id",
         "redundant-build-tag",
         "redundant-import-alias",
+        "redundant-test-main-exit",
         "string-format",
         "string-of-int",
         "struct-tag",
@@ -803,7 +804,6 @@
             "stylecheck",
             "tagalign",
             "tagliatelle",
-            "tenv",
             "testableexamples",
             "testifylint",
             "testpackage",
@@ -3339,17 +3339,6 @@
             }
           }
         },
-        "tenvSettings": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "all": {
-              "description": "The option `all` will run against whole test files (`_test.go`) regardless of method/function signatures.",
-              "type": "boolean",
-              "default": false
-            }
-          }
-        },
         "testifylintSettings": {
           "type": "object",
           "additionalProperties": false,
@@ -4474,9 +4463,6 @@
             },
             "tagliatelle": {
               "$ref": "#/definitions/settings/definitions/tagliatelleSettings"
-            },
-            "tenv": {
-              "$ref": "#/definitions/settings/definitions/tenvSettings"
             },
             "testifylint": {
               "$ref": "#/definitions/settings/definitions/testifylintSettings"

@@ -4,6 +4,3 @@ import "github.com/golangci/golangci-lint/v2/pkg/logutils"
 
 // LinterLogger must be use only when the context logger is not available.
 var LinterLogger = logutils.NewStderrLog(logutils.DebugKeyLinter)
-
-// PlaceholderBasePath used inside linters to evaluate relative paths.
-const PlaceholderBasePath = "${base-path}"

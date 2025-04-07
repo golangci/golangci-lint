@@ -490,7 +490,6 @@
         "G110",
         "G111",
         "G112",
-        "G113",
         "G114",
         "G115",
         "G201",
@@ -632,6 +631,7 @@
         "redefines-builtin-id",
         "redundant-build-tag",
         "redundant-import-alias",
+        "redundant-test-main-exit",
         "string-format",
         "string-of-int",
         "struct-tag",
@@ -803,7 +803,6 @@
             "stylecheck",
             "tagalign",
             "tagliatelle",
-            "tenv",
             "testableexamples",
             "testifylint",
             "testpackage",
@@ -2963,6 +2962,11 @@
               "type": "boolean",
               "default": false
             },
+            "msg-style": {
+              "description": "Enforce message style.",
+              "enum": ["", "lowercased", "capitalized"],
+              "default": ""
+            },
             "key-naming-case": {
               "description": "Enforce a single key naming convention.",
               "enum": ["snake", "kebab", "camel", "pascal"]
@@ -3336,17 +3340,6 @@
                   }
                 }
               }
-            }
-          }
-        },
-        "tenvSettings": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "all": {
-              "description": "The option `all` will run against whole test files (`_test.go`) regardless of method/function signatures.",
-              "type": "boolean",
-              "default": false
             }
           }
         },
@@ -3934,6 +3927,11 @@
               "items": {
                 "type": "string"
               }
+            },
+            "report-internal-errors": {
+              "description": "Determines whether wrapcheck should report errors returned from inside the package.",
+              "type": "boolean",
+              "default": false
             }
           }
         },
@@ -4234,6 +4232,11 @@
             }
           }
         },
+        "path-mode": {
+          "type": "string",
+          "default": "",
+          "examples": ["abs"]
+        },
         "path-prefix": {
           "description": "Add a prefix to the output file references.",
           "type": "string",
@@ -4475,9 +4478,6 @@
             "tagliatelle": {
               "$ref": "#/definitions/settings/definitions/tagliatelleSettings"
             },
-            "tenv": {
-              "$ref": "#/definitions/settings/definitions/tenvSettings"
-            },
             "testifylint": {
               "$ref": "#/definitions/settings/definitions/testifylintSettings"
             },
@@ -4639,6 +4639,10 @@
               "items": {
                 "type": "string"
               }
+            },
+            "warn-unused": {
+              "type": "boolean",
+              "default": false
             }
           }
         }

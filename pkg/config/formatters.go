@@ -22,6 +22,7 @@ func (f *Formatters) Validate() error {
 }
 
 type FormatterExclusions struct {
-	Generated string   `mapstructure:"generated"`
-	Paths     []string `mapstructure:"paths"`
+	Generated  string   `mapstructure:"generated"`
+	Paths      []string `mapstructure:"paths"`
+	WarnUnused bool     `mapstructure:"warn-unused"`
 }

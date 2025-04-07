@@ -39,13 +39,13 @@ type PackageLoader struct {
 }
 
 // NewPackageLoader creates a new PackageLoader.
-func NewPackageLoader(log logutils.Log, cfg *config.Config, args []string, goenv *goutil.Env, loadGuard *load.Guard) *PackageLoader {
+func NewPackageLoader(log logutils.Log, cfg *config.Config, args []string, env *goutil.Env, loadGuard *load.Guard) *PackageLoader {
 	return &PackageLoader{
 		cfg:         cfg,
 		args:        args,
 		log:         log,
 		debugf:      logutils.Debug(logutils.DebugKeyLoader),
-		goenv:       goenv,
+		goenv:       env,
 		pkgTestIDRe: regexp.MustCompile(`^(.*) \[(.*)\.test\]`),
 		loadGuard:   loadGuard,
 	}

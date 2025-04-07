@@ -337,6 +337,7 @@ linters:
           # List of file globs that will match this list of settings to compare against.
           # By default, if a path is relative, it is relative to the directory where the golangci-lint command is executed.
           # The placeholder '${base-path}' is substituted with a path relative to the mode defined with `run.relative-path-mode`.
+          # The placeholder '${config-path}' is substituted with a path relative to the configuration file.
           # Default: $all
           files:
             - "!**/*_a _file.go"
@@ -1171,6 +1172,7 @@ linters:
           # Comma-separated list of file paths containing ruleguard rules.
           # By default, if a path is relative, it is relative to the directory where the golangci-lint command is executed.
           # The placeholder '${base-path}' is substituted with a path relative to the mode defined with `run.relative-path-mode`.
+          # The placeholder '${config-path}' is substituted with a path relative to the configuration file.
           # Glob patterns such as 'rules-*.go' may be specified.
           # Default: ""
           rules: '${base-path}/ruleguard/rules-*.go,${base-path}/myrule1.go'
@@ -1266,6 +1268,7 @@ linters:
       # Useful if you need to load the template from a specific file.
       # By default, if a path is relative, it is relative to the directory where the golangci-lint command is executed.
       # The placeholder '${base-path}' is substituted with a path relative to the mode defined with `run.relative-path-mode`.
+      # The placeholder '${config-path}' is substituted with a path relative to the configuration file.
       # Default: ""
       template-path: /path/to/my/template.tmpl
 
@@ -1349,7 +1352,6 @@ linters:
         - G110 # Potential DoS vulnerability via decompression bomb
         - G111 # Potential directory traversal
         - G112 # Potential slowloris attack
-        - G113 # Usage of Rat.SetString in math/big with an overflow (CVE-2022-23772)
         - G114 # Use of net/http serve function that has no support for setting timeouts
         - G115 # Potential integer overflow when converting between integer types
         - G201 # SQL query construction using format string
@@ -1394,7 +1396,6 @@ linters:
         - G110 # Potential DoS vulnerability via decompression bomb
         - G111 # Potential directory traversal
         - G112 # Potential slowloris attack
-        - G113 # Usage of Rat.SetString in math/big with an overflow (CVE-2022-23772)
         - G114 # Use of net/http serve function that has no support for setting timeouts
         - G115 # Potential integer overflow when converting between integer types
         - G201 # SQL query construction using format string
@@ -2179,10 +2180,10 @@ linters:
           disabled: false
           exclude: [""]
           arguments:
-            - maxLitCount: "3"
-              allowStrs: '""'
-              allowInts: "0,1,2"
-              allowFloats: "0.0,0.,1.0,1.,2.0,2."
+            - max-lit-count: "3"
+              allow-strs: '""'
+              allow-ints: "0,1,2"
+              allow-floats: "0.0,0.,1.0,1.,2.0,2."
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#argument-limit
         - name: argument-limit
           severity: warning
@@ -2261,7 +2262,7 @@ linters:
           disabled: false
           exclude: [""]
           arguments:
-            - allowTypesBefore: "*testing.T,*github.com/user/repo/testing.Harness"
+            - allow-types-before: "*testing.T,*github.com/user/repo/testing.Harness"
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#context-keys-type
         - name: context-keys-type
           severity: warning
@@ -2301,7 +2302,7 @@ linters:
           disabled: false
           exclude: [""]
           arguments:
-            - allowedPackages: ["github.com/onsi/ginkgo/v2", "github.com/onsi/gomega"]
+            - allowed-packages: ["github.com/onsi/ginkgo/v2", "github.com/onsi/gomega"]
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#duplicated-imports
         - name: duplicated-imports
           severity: warning
@@ -2313,8 +2314,8 @@ linters:
           disabled: false
           exclude: [""]
           arguments:
-            - "preserveScope"
-            - "allowJump"
+            - "preserve-scope"
+            - "allow-jump"
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#empty-block
         - name: empty-block
           severity: warning
@@ -2340,8 +2341,8 @@ linters:
           arguments:
             - "short"
             # Or this parameter:
-            - funcArgStyle: "full"
-              funcRetValStyle: "short"
+            - func-arg-style: "full"
+              func-ret-val-style: "short"
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#enforce-slice-style
         - name: enforce-slice-style
           severity: warning
@@ -2377,15 +2378,15 @@ linters:
           disabled: false
           exclude: [""]
           arguments:
-            - "checkPrivateReceivers"
-            - "disableStutteringCheck"
-            - "sayRepetitiveInsteadOfStutters"
-            - "checkPublicInterface"
-            - "disableChecksOnConstants"
-            - "disableChecksOnFunctions"
-            - "disableChecksOnMethods"
-            - "disableChecksOnTypes"
-            - "disableChecksOnVariables"
+            - "check-private-receivers"
+            - "disable-stuttering-check"
+            - "say-repetitive-instead-of-stutters"
+            - "check-public-interface"
+            - "disable-checks-on-constants"
+            - "disable-checks-on-functions"
+            - "disable-checks-on-methods"
+            - "disable-checks-on-types"
+            - "disable-checks-on-variables"
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#file-header
         - name: file-header
           severity: warning
@@ -2400,8 +2401,8 @@ linters:
           exclude: [""]
           arguments:
             - max: 100
-              skipComments: true
-              skipBlankLines: true
+              skip-comments: true
+              skip-blank-lines: true
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#filename-format
         - name: filename-format
           severity: warning
@@ -2449,8 +2450,8 @@ linters:
           arguments:
             - "^[a-z][a-z0-9]{0,}$"
             # Or this parameter:
-            - allowRegex: "^[a-z][a-z0-9]{0,}$"
-              denyRegex: '^v\d+$'
+            - allow-regex: "^[a-z][a-z0-9]{0,}$"
+              deny-regex: '^v\d+$'
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#import-shadowing
         - name: import-shadowing
           severity: warning
@@ -2475,7 +2476,7 @@ linters:
           disabled: false
           exclude: [""]
           arguments:
-            - "preserveScope"
+            - "preserve-scope"
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#line-length-limit
         - name: line-length-limit
           severity: warning
@@ -2540,7 +2541,7 @@ linters:
           disabled: false
           exclude: [""]
           arguments:
-            - maxLength: 2
+            - max-length: 2
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#redefines-builtin-id
         - name: redefines-builtin-id
           severity: warning
@@ -2553,6 +2554,11 @@ linters:
           exclude: [""]
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#redundant-import-alias
         - name: redundant-import-alias
+          severity: warning
+          disabled: false
+          exclude: [""]
+        # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#redundant-test-main-exit
+        - name: redundant-test-main-exit
           severity: warning
           disabled: false
           exclude: [""]
@@ -2590,7 +2596,7 @@ linters:
           disabled: false
           exclude: [""]
           arguments:
-            - "preserveScope"
+            - "preserve-scope"
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#time-equal
         - name: time-equal
           severity: warning
@@ -2607,7 +2613,7 @@ linters:
           disabled: false
           exclude: [""]
           arguments:
-            - acceptIgnoredAssertionResult: true
+            - accept-ignored-assertion-result: true
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#unconditional-recursion
         - name: unconditional-recursion
           severity: warning
@@ -2647,14 +2653,14 @@ linters:
           disabled: false
           exclude: [""]
           arguments:
-            - allowRegex: "^_"
+            - allow-regex: "^_"
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#unused-receiver
         - name: unused-receiver
           severity: warning
           disabled: false
           exclude: [""]
           arguments:
-            - allowRegex: "^_"
+            - allow-regex: "^_"
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#use-any
         - name: use-any
           severity: warning
@@ -2683,7 +2689,7 @@ linters:
           arguments:
             - [ "ID" ] # AllowList
             - [ "VM" ] # DenyList
-            - - upperCaseConst: true # Extra parameter (upperCaseConst|skipPackageNameChecks)
+            - - upper-case-const: true # Extra parameter (upper-case-const|skip-package-name-checks)
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#waitgroup-by-value
         - name: waitgroup-by-value
           severity: warning
@@ -2729,11 +2735,16 @@ linters:
       # https://github.com/go-simpler/sloglint?tab=readme-ov-file#static-messages
       # Default: false
       static-msg: true
+      # Enforce message style.
+      # Values: lowercased, capitalized
+      # https://github.com/go-simpler/sloglint?tab=readme-ov-file#message-style
+      # Default: ""
+      msg-style: capitalized
       # Enforce using constants instead of raw keys.
       # https://github.com/go-simpler/sloglint?tab=readme-ov-file#no-raw-keys
       # Default: false
       no-raw-keys: true
-      # Enforce a single key naming convention.
+      # Enforce key naming convention.
       # Values: snake, kebab, camel, pascal
       # https://github.com/go-simpler/sloglint?tab=readme-ov-file#key-naming-convention
       # Default: ""
@@ -3405,12 +3416,6 @@ linters:
             # Default: false
             ignore: true
 
-    tenv:
-      # The option `all` will run against whole test files (`_test.go`) regardless of method/function signatures.
-      # Otherwise, only methods that take `*testing.T`, `*testing.B`, and `testing.TB` as arguments are checked.
-      # Default: false
-      all: false
-
     testifylint:
       # Enable all checkers (https://github.com/Antonboom/testifylint#checkers).
       # Default: false
@@ -3768,6 +3773,9 @@ linters:
       # Default: []
       ignore-interface-regexps:
         - ^(?i)c(?-i)ach(ing|e)
+      # Determines whether wrapcheck should report errors returned from inside the package.
+      # Default: false
+      report-internal-errors: true
 
     wsl:
       # Do strict checking when assigning from append (x = append(x, y)).
@@ -4032,6 +4040,9 @@ formatters:
       chain-split-dots: false
 
   exclusions:
+    # Log a warning if an exclusion path is unused.
+    # Default: false
+    warn-unused: true
     # Mode of the generated files analysis.
     #
     # - `strict`: sources are excluded by strictly following the Go generated file convention.
@@ -4165,8 +4176,15 @@ output:
       path: ./path/to/output.json
 
   # Add a prefix to the output file references.
+  # This option is ignored when using `output.path-mode: abs` mode.
   # Default: ""
   path-prefix: ""
+
+  # By default, the report are related to the path obtained by `run.relative-path-mode`.
+  # The mode `abs` allows to show absolute file paths instead of relative file paths.
+  # The option `output.path-prefix` is ignored when using `abs` mode.
+  # Default: ""
+  path-mode: "abs"
 
   # Order to use when sorting results.
   # Possible values: `file`, `linter`, and `severity`.

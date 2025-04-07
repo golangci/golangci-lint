@@ -20,8 +20,9 @@ import (
 type fmtOptions struct {
 	config.LoaderOptions
 
-	diff  bool // Flag only.
-	stdin bool // Flag only.
+	diff        bool // Flag only.
+	diffColored bool // Flag only.
+	stdin       bool // Flag only.
 }
 
 type fmtCommand struct {
@@ -70,6 +71,7 @@ func newFmtCommand(logger logutils.Log, info BuildInfo) *fmtCommand {
 	setupFormattersFlagSet(c.viper, fs)
 
 	fs.BoolVarP(&c.opts.diff, "diff", "d", false, color.GreenString("Display diffs instead of rewriting files"))
+	fs.BoolVar(&c.opts.diffColored, "diff-colored", false, color.GreenString("Display diffs instead of rewriting files (with colors)"))
 	fs.BoolVar(&c.opts.stdin, "stdin", false, color.GreenString("Use standard input for piping source files"))
 
 	c.cmd = fmtCmd
@@ -102,7 +104,7 @@ func (c *fmtCommand) preRunE(_ *cobra.Command, _ []string) error {
 
 	matcher := processors.NewGeneratedFileMatcher(c.cfg.Formatters.Exclusions.Generated)
 
-	opts, err := goformat.NewRunnerOptions(c.cfg, c.opts.diff, c.opts.stdin)
+	opts, err := goformat.NewRunnerOptions(c.cfg, c.opts.diff, c.opts.diffColored, c.opts.stdin)
 	if err != nil {
 		return fmt.Errorf("build walk options: %w", err)
 	}
