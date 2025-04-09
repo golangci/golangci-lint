@@ -451,14 +451,16 @@ type GocognitSettings struct {
 }
 
 type GoConstSettings struct {
-	IgnoreStrings       string `mapstructure:"ignore-strings"`
-	MatchWithConstants  bool   `mapstructure:"match-constant"`
-	MinStringLen        int    `mapstructure:"min-len"`
-	MinOccurrencesCount int    `mapstructure:"min-occurrences"`
-	ParseNumbers        bool   `mapstructure:"numbers"`
-	NumberMin           int    `mapstructure:"min"`
-	NumberMax           int    `mapstructure:"max"`
-	IgnoreCalls         bool   `mapstructure:"ignore-calls"`
+	IgnoreStrings        string `mapstructure:"ignore-strings"`
+	MatchWithConstants   bool   `mapstructure:"match-constant"`
+	MinStringLen         int    `mapstructure:"min-len"`
+	MinOccurrencesCount  int    `mapstructure:"min-occurrences"`
+	FindDuplicates       bool   `mapstructure:"find-duplicates"`
+	EvalConstExpressions bool   `mapstructure:"eval-const-expressions"`
+	ParseNumbers         bool   `mapstructure:"numbers"`
+	NumberMin            int    `mapstructure:"min"`
+	NumberMax            int    `mapstructure:"max"`
+	IgnoreCalls          bool   `mapstructure:"ignore-calls"`
 }
 
 type GoCriticSettings struct {

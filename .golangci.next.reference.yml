@@ -632,6 +632,12 @@ linters:
       # Exclude strings matching the given regular expression.
       # Default: ""
       ignore-strings: 'foo.+'
+      # Look for duplicate consts with matching values.
+      # Default: false
+      find-duplicates: true
+      # Evaluate constant expressions when searching for constants.
+      # Default: false
+      eval-const-expressions: true
 
     gocritic:
       # Disable all checks.

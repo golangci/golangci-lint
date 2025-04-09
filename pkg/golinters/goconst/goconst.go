@@ -45,22 +45,25 @@ func New(settings *config.GoConstSettings) *goanalysis.Linter {
 		linterName,
 		"Finds repeated strings that could be replaced by a constant",
 		[]*analysis.Analyzer{analyzer},
-		nil,
-	).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
-		return resIssues
-	}).WithLoadMode(goanalysis.LoadModeSyntax)
+		nil).
+		WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
+			return resIssues
+		}).
+		WithLoadMode(goanalysis.LoadModeTypesInfo)
 }
 
 func runGoconst(pass *analysis.Pass, settings *config.GoConstSettings) ([]goanalysis.Issue, error) {
 	cfg := goconstAPI.Config{
-		IgnoreStrings:      settings.IgnoreStrings,
-		MatchWithConstants: settings.MatchWithConstants,
-		MinStringLength:    settings.MinStringLen,
-		MinOccurrences:     settings.MinOccurrencesCount,
-		ParseNumbers:       settings.ParseNumbers,
-		NumberMin:          settings.NumberMin,
-		NumberMax:          settings.NumberMax,
-		ExcludeTypes:       map[goconstAPI.Type]bool{},
+		IgnoreStrings:        []string{settings.IgnoreStrings},
+		MatchWithConstants:   settings.MatchWithConstants,
+		MinStringLength:      settings.MinStringLen,
+		MinOccurrences:       settings.MinOccurrencesCount,
+		FindDuplicates:       settings.FindDuplicates,
+		ParseNumbers:         settings.ParseNumbers,
+		EvalConstExpressions: settings.EvalConstExpressions,
+		NumberMin:            settings.NumberMin,
+		NumberMax:            settings.NumberMax,
+		ExcludeTypes:         map[goconstAPI.Type]bool{},
 
 		// Should be managed with `linters.exclusions.rules`.
 		IgnoreTests: false,
@@ -70,7 +73,7 @@ func runGoconst(pass *analysis.Pass, settings *config.GoConstSettings) ([]goanal
 		cfg.ExcludeTypes[goconstAPI.Call] = true
 	}
 
-	lintIssues, err := goconstAPI.Run(pass.Files, pass.Fset, &cfg)
+	lintIssues, err := goconstAPI.Run(pass.Files, pass.Fset, pass.TypesInfo, &cfg)
 	if err != nil {
 		return nil, err
 	}
@@ -81,12 +84,19 @@ func runGoconst(pass *analysis.Pass, settings *config.GoConstSettings) ([]goanal
 
 	res := make([]goanalysis.Issue, 0, len(lintIssues))
 	for _, i := range lintIssues {
-		text := fmt.Sprintf("string %s has %d occurrences", internal.FormatCode(i.Str, nil), i.OccurrencesCount)
+		var text string
+		if i.OccurrencesCount > 0 {
+			text = fmt.Sprintf("string %s has %d occurrences", internal.FormatCode(i.Str, nil), i.OccurrencesCount)
 
-		if i.MatchingConst == "" {
-			text += ", make it a constant"
-		} else {
-			text += fmt.Sprintf(", but such constant %s already exists", internal.FormatCode(i.MatchingConst, nil))
+			if i.MatchingConst == "" {
+				text += ", make it a constant"
+			} else {
+				text += fmt.Sprintf(", but such constant %s already exists", internal.FormatCode(i.MatchingConst, nil))
+			}
+		}
+
+		if i.DuplicateConst != "" {
+			text = fmt.Sprintf("const definition is duplicate of %s at %s", internal.FormatCode(i.DuplicateConst, nil), i.DuplicatePos.String())
 		}
 
 		res = append(res, goanalysis.NewIssue(&result.Issue{
