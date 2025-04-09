@@ -1,0 +1,6 @@
+version: "2"
+
+linters:
+  settings:
+    goconst:
+      eval-const-expressions: true

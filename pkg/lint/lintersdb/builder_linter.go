@@ -300,6 +300,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 
 		linter.NewConfig(goconst.New(&cfg.Linters.Settings.Goconst)).
 			WithSince("v1.0.0").
+			WithLoadForGoAnalysis().
 			WithURL("https://github.com/jgautheron/goconst"),
 
 		linter.NewConfig(gocritic.New(&cfg.Linters.Settings.Gocritic, placeholderReplacer)).
