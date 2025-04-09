@@ -631,7 +631,14 @@ linters:
       ignore-calls: false
       # Exclude strings matching the given regular expression.
       # Default: ""
-      ignore-strings: 'foo.+'
+      ignore-string-values:
+        - 'foo.+'
+      # Detects constants with identical values.
+      # Default: false
+      find-duplicates: true
+      # Evaluates of constant expressions like Prefix + "suffix".
+      # Default: false
+      eval-const-expressions: true
 
     gocritic:
       # Disable all checks.
