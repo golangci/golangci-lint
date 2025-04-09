@@ -2,7 +2,6 @@ package goconst
 
 import (
 	"fmt"
-	"path/filepath"
 	"sync"
 
 	goconstAPI "github.com/jgautheron/goconst"
@@ -101,7 +100,7 @@ func runGoconst(pass *analysis.Pass, settings *config.GoConstSettings) ([]goanal
 		case issue.DuplicateConst != "":
 			text = fmt.Sprintf("This constant is a duplicate of %s at %s",
 				internal.FormatCode(issue.DuplicateConst, nil),
-				filepath.ToSlash(issue.DuplicatePos.String()))
+				issue.DuplicatePos.String())
 
 		default:
 			continue
