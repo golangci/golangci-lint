@@ -15,9 +15,7 @@ Install [plugin](https://plugins.jetbrains.com/plugin/12496-go-linter).
 Install the [extension](https://marketplace.visualstudio.com/items?itemName=golang.Go).
 
 <details>
-<summary style={{color: '#737380'}}>Recommended settings</summary>
-
-For those who installed golangci-lint manually:
+<summary style={{color: '#737380'}}>Recommended settings for those who installed golangci-lint manually</summary>
 
 ```json
 "go.lintTool": "golangci-lint",
@@ -37,10 +35,14 @@ For those who installed golangci-lint manually:
 Using it in an editor without `--fast-only` can freeze your editor.
 Golangci-lint automatically discovers `.golangci.yml` config for edited file: you don't need to configure it in VS Code settings.
 
-For those who want to install golangci-lint via extension:
-- install `golangci-lint-v2` via the `Go: Install/Update Tools` command after setting these configs.
+</details>
+
+<details>
+<summary style={{color: '#737380'}}>Recommended settings for installed golangci-lint via extension</summary>
+
+1. Install `golangci-lint-v2` via the `Go: Install/Update Tools` command after setting these configs.
   This will enable golangci-lint v1 to co-exist with v2.
-- and use the following settings:
+2. use the following settings:
 
 ```json
 "go.lintTool": "golangci-lint-v2",
