@@ -17,6 +17,27 @@ Install the [extension](https://marketplace.visualstudio.com/items?itemName=gola
 <details>
 <summary style={{color: '#737380'}}>Recommended settings</summary>
 
+- For those who installed golangci-lint manually
+
+```json
+"go.lintTool": "golangci-lint",
+"go.lintFlags": [
+  "--fast-only"
+],
+"go.formatTool": "custom",
+"go.alternateTools": {
+  "customFormatter": "golangci-lint"
+},
+"go.formatFlags": [
+  "fmt",
+  "--stdin"
+]
+```
+
+- For those who want to install golangci-lint via extension
+  - Install `golangci-lint-v2` via the `Go: Install/Update Tools` command after setting these configs
+- This will enable golangci-lint v1 to co-exist with v2
+
 ```json
 "go.lintTool": "golangci-lint-v2",
 "go.lintFlags": [
@@ -24,7 +45,7 @@ Install the [extension](https://marketplace.visualstudio.com/items?itemName=gola
 ],
 "go.formatTool": "custom",
 "go.alternateTools": {
-  "customFormatter": "golangci-lint"
+  "customFormatter": "golangci-lint-v2"
 },
 "go.formatFlags": [
   "fmt",
