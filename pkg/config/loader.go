@@ -190,8 +190,15 @@ func (l *Loader) handleDeprecation() error {
 	return nil
 }
 
-func (*Loader) handleLinterOptionDeprecations() {
-	// The function is empty but deprecations will happen in the future.
+func (l *Loader) handleLinterOptionDeprecations() {
+	// Deprecated since v2.1.0.
+	if l.cfg.Linters.Settings.Goconst.IgnoreStrings != "" {
+		l.log.Warnf("The configuration option `linters.settings.goconst.ignore-strings` is deprecated, " +
+			"please use `linters.settings.goconst.ignore-string-values`.")
+
+		l.cfg.Linters.Settings.Goconst.IgnoreStringValues = append(l.cfg.Linters.Settings.Goconst.IgnoreStringValues,
+			l.cfg.Linters.Settings.Goconst.IgnoreStrings)
+	}
 }
 
 func (l *Loader) handleEnableOnlyOption() error {
