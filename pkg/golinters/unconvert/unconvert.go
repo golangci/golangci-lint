@@ -18,11 +18,14 @@ func New(settings *config.UnconvertSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
 
+	unconvert.SetFastMath(settings.FastMath)
+	unconvert.SetSafe(settings.Safe)
+
 	analyzer := &analysis.Analyzer{
 		Name: linterName,
 		Doc:  goanalysis.TheOnlyanalyzerDoc,
 		Run: func(pass *analysis.Pass) (any, error) {
-			issues := runUnconvert(pass, settings)
+			issues := runUnconvert(pass)
 
 			if len(issues) == 0 {
 				return nil, nil
@@ -46,8 +49,8 @@ func New(settings *config.UnconvertSettings) *goanalysis.Linter {
 	}).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }
 
-func runUnconvert(pass *analysis.Pass, settings *config.UnconvertSettings) []goanalysis.Issue {
-	positions := unconvert.Run(pass, settings.FastMath, settings.Safe)
+func runUnconvert(pass *analysis.Pass) []goanalysis.Issue {
+	positions := unconvert.Run(pass)
 
 	var issues []goanalysis.Issue
 	for _, position := range positions {
