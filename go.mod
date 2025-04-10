@@ -52,7 +52,7 @@ require (
 	github.com/golangci/misspell v0.6.0
 	github.com/golangci/plugin-module-register v0.1.1
 	github.com/golangci/revgrep v0.8.0
-	github.com/golangci/unconvert v0.0.0-20240309020433-c5143eacb3ed
+	github.com/golangci/unconvert v0.0.0-20250410112200-a129a6e6413e
 	github.com/gordonklaus/ineffassign v0.1.0
 	github.com/gostaticanalysis/forcetypeassert v0.2.0
 	github.com/gostaticanalysis/nilerr v0.1.1
