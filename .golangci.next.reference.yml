@@ -1587,6 +1587,8 @@ linters:
         - findcall
         # Report assembly that clobbers the frame pointer before saving it.
         - framepointer
+        # Report using Go 1.22 enhanced ServeMux patterns in older Go versions.
+        - httpmux
         # Check for mistakes using HTTP responses.
         - httpresponse
         # Detect impossible interface-to-interface type assertions.
@@ -1668,6 +1670,7 @@ linters:
         - fieldalignment
         - findcall
         - framepointer
+        - httpmux
         - httpresponse
         - ifaceassert
         - loopclosure
