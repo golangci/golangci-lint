@@ -539,6 +539,7 @@
         "fieldalignment",
         "findcall",
         "framepointer",
+        "httpmux",
         "httpresponse",
         "ifaceassert",
         "loopclosure",
