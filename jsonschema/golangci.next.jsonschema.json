@@ -741,6 +741,7 @@
             "fatcontext",
             "forbidigo",
             "forcetypeassert",
+            "funcorder",
             "funlen",
             "ginkgolinter",
             "gocheckcompilerdirectives",
@@ -1299,6 +1300,22 @@
                   }
                 }
               }
+            }
+          }
+        },
+        "funcorderSettings": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "constructor": {
+              "description": "Checks that constructors are placed after the structure declaration.",
+              "type": "boolean",
+              "default": true
+            },
+            "struct-method": {
+              "description": "Checks if the exported methods of a structure are placed before the non-exported ones.",
+              "type": "boolean",
+              "default": true
             }
           }
         },
@@ -4344,6 +4361,9 @@
             },
             "forbidigo": {
               "$ref": "#/definitions/settings/definitions/forbidigoSettings"
+            },
+            "funcorder": {
+              "$ref": "#/definitions/settings/definitions/funcorderSettings"
             },
             "funlen": {
               "$ref": "#/definitions/settings/definitions/funlenSettings"
