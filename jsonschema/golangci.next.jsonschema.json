@@ -1308,12 +1308,12 @@
           "additionalProperties": false,
           "properties": {
             "constructor": {
-              "description": "Enable/disable feature to check constructors are placed after struct declaration.",
+              "description": "Checks that constructors are placed after the structure declaration.",
               "type": "boolean",
               "default": true
             },
             "struct-method": {
-              "description": "Enable/disable feature to check whether the exported struct's methods are placed before the non-exported.",
+              "description": "Checks if the methods of an exported structure are placed before the non-exported ones.",
               "type": "boolean",
               "default": true
             }
