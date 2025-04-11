@@ -10,12 +10,10 @@ import (
 func New() *goanalysis.Linter {
 	a := analyzer.NewAnalyzer()
 
-	cfg := map[string]map[string]any{}
-
 	return goanalysis.NewLinter(
 		a.Name,
 		a.Doc,
 		[]*analysis.Analyzer{a},
-		cfg,
+		nil,
 	).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }
