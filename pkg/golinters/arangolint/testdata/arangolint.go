@@ -1,7 +1,9 @@
+//golangcitest:args -Earangolint
 package testdata
 
 import (
 	"context"
+
 	"github.com/arangodb/go-driver/v2/arangodb"
 )
 
@@ -32,14 +34,14 @@ func example() {
 	trx, _ = db.BeginTransaction(ctx, arangodb.TransactionCollections{}, &arangodb.BeginTransactionOptions{AllowImplicit: true, LockTimeout: 0})
 
 	// indirect no pointer
-	//options := arangodb.BeginTransactionOptions{LockTimeout: 0}
-	//db.BeginTransaction(ctx, arangodb.TransactionCollections{}, &options) // w@nt "missing AllowImplicit option"
-	//options.AllowImplicit = true
-	//db.BeginTransaction(ctx, arangodb.TransactionCollections{}, &options)
+	// options := arangodb.BeginTransactionOptions{LockTimeout: 0}
+	// db.BeginTransaction(ctx, arangodb.TransactionCollections{}, &options) // w@nt "missing AllowImplicit option"
+	// options.AllowImplicit = true
+	// db.BeginTransaction(ctx, arangodb.TransactionCollections{}, &options)
 	//
 	// indirect pointer
-	//optns := &arangodb.BeginTransactionOptions{LockTimeout: 0}
-	//db.BeginTransaction(ctx, arangodb.TransactionCollections{}, optns) // w@nt "missing AllowImplicit option"
-	//options.AllowImplicit = true
-	//db.BeginTransaction(ctx, arangodb.TransactionCollections{}, optns)
+	// optns := &arangodb.BeginTransactionOptions{LockTimeout: 0}
+	// db.BeginTransaction(ctx, arangodb.TransactionCollections{}, optns) // w@nt "missing AllowImplicit option"
+	// options.AllowImplicit = true
+	// db.BeginTransaction(ctx, arangodb.TransactionCollections{}, optns)
 }
