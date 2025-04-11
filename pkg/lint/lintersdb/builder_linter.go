@@ -29,6 +29,7 @@ import (
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/fatcontext"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/forbidigo"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/forcetypeassert"
+	"github.com/golangci/golangci-lint/v2/pkg/golinters/funcorder"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/funlen"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/gci"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/ginkgolinter"
@@ -255,6 +256,10 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithSince("v1.38.0").
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/gostaticanalysis/forcetypeassert"),
+
+		linter.NewConfig(funcorder.New(&cfg.Linters.Settings.FuncOrder)).
+			WithSince("v2.1.0").
+			WithURL("https://github.com/manuelarte/funcorder"),
 
 		linter.NewConfig(fatcontext.New(&cfg.Linters.Settings.Fatcontext)).
 			WithSince("v1.58.0").
