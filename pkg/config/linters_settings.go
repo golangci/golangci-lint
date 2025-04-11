@@ -41,6 +41,10 @@ var defaultLintersSettings = LintersSettings{
 	Forbidigo: ForbidigoSettings{
 		ExcludeGodocExamples: true,
 	},
+	FuncOrder: FuncOrderSettings{
+		Constructor:  true,
+		StructMethod: true,
+	},
 	Funlen: FunlenSettings{
 		IgnoreComments: true,
 	},
@@ -422,8 +426,8 @@ type ForbidigoPattern struct {
 }
 
 type FuncOrderSettings struct {
-	Constructor  *bool `mapstructure:"constructor,omitempty"`
-	StructMethod *bool `mapstructure:"struct-method,omitempty"`
+	Constructor  bool `mapstructure:"constructor,omitempty"`
+	StructMethod bool `mapstructure:"struct-method,omitempty"`
 }
 
 type FunlenSettings struct {

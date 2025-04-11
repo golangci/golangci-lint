@@ -14,18 +14,9 @@ func New(settings *config.FuncOrderSettings) *goanalysis.Linter {
 	cfg := map[string]map[string]any{}
 
 	if settings != nil {
-		constructor := true
-		if settings.Constructor != nil {
-			constructor = *settings.Constructor
-		}
-		structMethod := true
-		if settings.StructMethod != nil {
-			structMethod = *settings.StructMethod
-		}
-
 		cfg[a.Name] = map[string]any{
-			analyzer.ConstructorCheckName:  constructor,
-			analyzer.StructMethodCheckName: structMethod,
+			analyzer.ConstructorCheckName:  settings.Constructor,
+			analyzer.StructMethodCheckName: settings.StructMethod,
 		}
 	}
 
