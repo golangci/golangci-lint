@@ -49,7 +49,6 @@ require (
 	github.com/golangci/dupl v0.0.0-20250308024227-f665c8d69b32
 	github.com/golangci/go-printf-func-name v0.1.0
 	github.com/golangci/gofmt v0.0.0-20250106114630-d62b90e6713d
-	github.com/golangci/golangci-lint v1.64.8
 	github.com/golangci/golines v0.0.0-20250217134842-442fd0091d95
 	github.com/golangci/misspell v0.6.0
 	github.com/golangci/plugin-module-register v0.1.1
@@ -208,6 +207,7 @@ require (
 	go.uber.org/atomic v1.7.0 // indirect
 	go.uber.org/multierr v1.6.0 // indirect
 	go.uber.org/zap v1.24.0 // indirect
+	golang.org/x/exp v0.0.0-20240909161429-701f63a606c0 // indirect
 	golang.org/x/exp/typeparams v0.0.0-20250210185358-939b2ce775ac // indirect
 	golang.org/x/sync v0.13.0 // indirect
 	golang.org/x/text v0.23.0 // indirect
