@@ -8,8 +8,16 @@
   pass_filenames: false
 - id: golangci-lint-full
   name: golangci-lint-full
-  description: Fast linters runner for Go. Runs on all files in the repo. Use this hook if you use pre-commit in CI.
+  description: Fast linters runner for Go. Runs on all files in the module. Use this hook if you use pre-commit in CI.
   entry: golangci-lint run --fix
+  types: [go]
+  language: golang
+  require_serial: true
+  pass_filenames: false
+- id: golangci-lint-fmt
+  name: golangci-lint-fmt
+  description: Fast linters runner for Go. Formats all files in the repo.
+  entry: golangci-lint fmt
   types: [go]
   language: golang
   require_serial: true

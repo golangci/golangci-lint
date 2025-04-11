@@ -457,14 +457,19 @@ type GocognitSettings struct {
 }
 
 type GoConstSettings struct {
-	IgnoreStrings       string `mapstructure:"ignore-strings"`
-	MatchWithConstants  bool   `mapstructure:"match-constant"`
-	MinStringLen        int    `mapstructure:"min-len"`
-	MinOccurrencesCount int    `mapstructure:"min-occurrences"`
-	ParseNumbers        bool   `mapstructure:"numbers"`
-	NumberMin           int    `mapstructure:"min"`
-	NumberMax           int    `mapstructure:"max"`
-	IgnoreCalls         bool   `mapstructure:"ignore-calls"`
+	IgnoreStringValues   []string `mapstructure:"ignore-string-values"`
+	MatchWithConstants   bool     `mapstructure:"match-constant"`
+	MinStringLen         int      `mapstructure:"min-len"`
+	MinOccurrencesCount  int      `mapstructure:"min-occurrences"`
+	ParseNumbers         bool     `mapstructure:"numbers"`
+	NumberMin            int      `mapstructure:"min"`
+	NumberMax            int      `mapstructure:"max"`
+	IgnoreCalls          bool     `mapstructure:"ignore-calls"`
+	FindDuplicates       bool     `mapstructure:"find-duplicates"`
+	EvalConstExpressions bool     `mapstructure:"eval-const-expressions"`
+
+	// Deprecated: use IgnoreStringValues instead.
+	IgnoreStrings string `mapstructure:"ignore-strings"`
 }
 
 type GoCriticSettings struct {

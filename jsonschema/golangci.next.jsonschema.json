@@ -539,6 +539,7 @@
         "fieldalignment",
         "findcall",
         "framepointer",
+        "httpmux",
         "httpresponse",
         "ifaceassert",
         "loopclosure",
@@ -1487,9 +1488,12 @@
               "type": "boolean",
               "default": true
             },
-            "ignore-strings": {
+            "ignore-string-values": {
               "description": "Exclude strings matching the given regular expression",
-              "type": "string"
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
             },
             "numbers": {
               "description": "Search also for duplicated numbers.",
@@ -1505,6 +1509,16 @@
               "description": "Maximum value, only works with `numbers`",
               "type": "integer",
               "default": 3
+            },
+            "find-duplicates": {
+              "description": "Detects constants with identical values",
+              "type": "boolean",
+              "default": false
+            },
+            "eval-const-expressions": {
+              "description": "Evaluates of constant expressions like Prefix + \"suffix\"",
+              "type": "boolean",
+              "default": false
             }
           }
         },
