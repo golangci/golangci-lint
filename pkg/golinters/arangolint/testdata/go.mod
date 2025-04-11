@@ -1,6 +1,6 @@
 module testdata
 
-go 1.24.2
+go 1.23.0
 
 require github.com/arangodb/go-driver/v2 v2.1.3
 
