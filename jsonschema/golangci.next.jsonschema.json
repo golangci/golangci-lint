@@ -1313,7 +1313,7 @@
               "default": true
             },
             "struct-method": {
-              "description": "Checks if the methods of an exported structure are placed before the non-exported ones.",
+              "description": "Checks if the exported methods of a structure are placed before the non-exported ones.",
               "type": "boolean",
               "default": true
             }

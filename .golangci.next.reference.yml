@@ -536,7 +536,7 @@ linters:
       # Checks that constructors are placed after the structure declaration.
       # Default: true
       constructor: false
-      # Checks if the methods of an exported structure are placed before the non-exported ones.
+      # Checks if the exported methods of a structure are placed before the non-exported ones.
       # Default: true
       struct-method: false
 
