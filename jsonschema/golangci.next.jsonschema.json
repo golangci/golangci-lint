@@ -665,6 +665,7 @@
     },
     "tagliatelle-cases": {
       "enum": [
+        "",
         "camel",
         "pascal",
         "kebab",

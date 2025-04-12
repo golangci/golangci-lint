@@ -490,7 +490,6 @@
         "G110",
         "G111",
         "G112",
-        "G113",
         "G114",
         "G115",
         "G201",
@@ -540,6 +539,7 @@
         "fieldalignment",
         "findcall",
         "framepointer",
+        "httpmux",
         "httpresponse",
         "ifaceassert",
         "loopclosure",
@@ -742,6 +742,7 @@
             "fatcontext",
             "forbidigo",
             "forcetypeassert",
+            "funcorder",
             "funlen",
             "ginkgolinter",
             "gocheckcompilerdirectives",
@@ -1303,6 +1304,22 @@
             }
           }
         },
+        "funcorderSettings": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "constructor": {
+              "description": "Checks that constructors are placed after the structure declaration.",
+              "type": "boolean",
+              "default": true
+            },
+            "struct-method": {
+              "description": "Checks if the exported methods of a structure are placed before the non-exported ones.",
+              "type": "boolean",
+              "default": true
+            }
+          }
+        },
         "funlenSettings": {
           "type": "object",
           "additionalProperties": false,
@@ -1489,9 +1506,12 @@
               "type": "boolean",
               "default": true
             },
-            "ignore-strings": {
+            "ignore-string-values": {
               "description": "Exclude strings matching the given regular expression",
-              "type": "string"
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
             },
             "numbers": {
               "description": "Search also for duplicated numbers.",
@@ -1507,6 +1527,16 @@
               "description": "Maximum value, only works with `numbers`",
               "type": "integer",
               "default": 3
+            },
+            "find-duplicates": {
+              "description": "Detects constants with identical values",
+              "type": "boolean",
+              "default": false
+            },
+            "eval-const-expressions": {
+              "description": "Evaluates of constant expressions like Prefix + \"suffix\"",
+              "type": "boolean",
+              "default": false
             }
           }
         },
@@ -2964,6 +2994,11 @@
               "type": "boolean",
               "default": false
             },
+            "msg-style": {
+              "description": "Enforce message style.",
+              "enum": ["", "lowercased", "capitalized"],
+              "default": ""
+            },
             "key-naming-case": {
               "description": "Enforce a single key naming convention.",
               "enum": ["snake", "kebab", "camel", "pascal"]
@@ -3924,6 +3959,11 @@
               "items": {
                 "type": "string"
               }
+            },
+            "report-internal-errors": {
+              "description": "Determines whether wrapcheck should report errors returned from inside the package.",
+              "type": "boolean",
+              "default": false
             }
           }
         },
@@ -4224,6 +4264,11 @@
             }
           }
         },
+        "path-mode": {
+          "type": "string",
+          "default": "",
+          "examples": ["abs"]
+        },
         "path-prefix": {
           "description": "Add a prefix to the output file references.",
           "type": "string",
@@ -4317,6 +4362,9 @@
             },
             "forbidigo": {
               "$ref": "#/definitions/settings/definitions/forbidigoSettings"
+            },
+            "funcorder": {
+              "$ref": "#/definitions/settings/definitions/funcorderSettings"
             },
             "funlen": {
               "$ref": "#/definitions/settings/definitions/funlenSettings"
@@ -4626,6 +4674,10 @@
               "items": {
                 "type": "string"
               }
+            },
+            "warn-unused": {
+              "type": "boolean",
+              "default": false
             }
           }
         }
