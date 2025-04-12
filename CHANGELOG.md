@@ -9,8 +9,9 @@ If you value it, consider supporting us, we appreciate it! ❤️
 
 ### v2.1.1
 
-The release process of the v2.1.0 as failed due to a regression inside goreleaser.
-The binaries of v2.1.0 has been published but not the other articfacts (AUR, Docker, etc.)
+The release process of v2.1.0 failed due to a regression inside goreleaser.
+
+The binaries of v2.1.0 have been published, but not the other artifacts (AUR, Docker, etc.).
 
 ### v2.1.0
 
