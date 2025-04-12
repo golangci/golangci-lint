@@ -20,6 +20,7 @@ Install the [extension](https://marketplace.visualstudio.com/items?itemName=gola
 ```json
 "go.lintTool": "golangci-lint",
 "go.lintFlags": [
+  "--path-mode=abs",
   "--fast-only"
 ],
 "go.formatTool": "custom",
@@ -47,6 +48,7 @@ And use the following settings:
 ```json
 "go.lintTool": "golangci-lint-v2",
 "go.lintFlags": [
+  "--path-mode=abs",
   "--fast-only"
 ],
 "go.formatTool": "custom",

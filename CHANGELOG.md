@@ -7,6 +7,44 @@ If you value it, consider supporting us, we appreciate it! ❤️
 [![Open Collective backers and sponsors](https://img.shields.io/badge/OpenCollective-Donate-blue?logo=opencollective&style=for-the-badge)](https://opencollective.com/golangci-lint)
 [![GitHub Sponsors](https://img.shields.io/badge/GitHub-Donate-blue?logo=github&style=for-the-badge)](https://github.com/sponsors/golangci)
 
+### v2.1.0
+
+1. Enhancements
+   * Add an option to display absolute paths (`--path-mode=abs`)
+   * Add configuration path placeholder (`${config-path}`)
+   * Add `warn-unused` option for `fmt` command
+   * Colored diff for `fmt` command (`golangci-lint fmt --diff-colored`)
+2. New linters
+   * Add `funcorder` linter https://github.com/manuelarte/funcorder
+3. Linters new features or changes
+   * `go-errorlint`: from 1.7.1 to 1.8.0 (automatic error comparison and type assertion fixes)
+   * ⚠️ `goconst`: `ignore-strings` is deprecated and replaced by `ignore-string-values`
+   * `goconst`: from 1.7.1 to 1.8.1 (new options: `find-duplicates`, `eval-const-expressions`)
+   * `govet`: add `httpmux` analyzer
+   * `nilnesserr`: from 0.1.2 to 0.2.0 (detect more cases)
+   * `paralleltest`: from 1.0.10 to 1.0.14 (checks only `_test.go` files)
+   * `revive`: from 1.7.0 to 1.9.0 (support kebab case for setting names)
+   * `sloglint`: from 0.9.0 to 0.11.0 (autofix, new option `msg-style`, suggest `slog.DiscardHandler`)
+   * `wrapcheck`: from 2.10.0 to 2.11.0 (new option `report-internal-errors`)
+   * `wsl`: from 4.6.0 to 4.7.0 (cgo files are always excluded)
+4. Linters bug fixes
+   * `fatcontext`: from 0.7.1 to 0.7.2
+   * `gocritic`: fix `importshadow` checker
+   * `gosec`: from 2.22.2 to 2.22.3
+   * `ireturn`: from 0.3.1 to 0.4.0
+   * `loggercheck`: from 0.10.1 to 0.11.0
+   * `nakedret`: from 2.0.5 to 2.0.6
+   * `nonamedreturns`: from 1.0.5 to 1.0.6
+   * `protogetter`: from 0.3.12 to 0.3.13
+   * `testifylint`: from 1.6.0 to 1.6.1
+   * `unconvert`: update to HEAD
+5. Misc.
+   * Fixes memory leaks when using go1.(N) with golangci-lint built with go1.(N-X)
+   * Adds `golangci-lint-fmt` pre-commit hook
+6. Documentation
+   * Improvements
+   * Updates section about vscode integration
+
 ### v2.0.2
 
 1. Misc.
