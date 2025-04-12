@@ -69,7 +69,7 @@ jobs:
       - name: Create release
         uses: goreleaser/goreleaser-action@v6
         with:
-          version: latest
+          version: v2.8.1
           args: release --clean --timeout=90m
         env:
           AUR_KEY: ${{ secrets.AUR_KEY }}
