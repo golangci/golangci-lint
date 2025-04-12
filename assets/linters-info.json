@@ -247,6 +247,16 @@
     "since": "v1.38.0"
   },
   {
+    "name": "funcorder",
+    "desc": "checks the order of functions, methods, and constructors",
+    "Groups": null,
+    "loadMode": 8199,
+    "originalURL": "https://github.com/manuelarte/funcorder",
+    "internal": false,
+    "isSlow": false,
+    "since": "v2.1.0"
+  },
+  {
     "name": "fatcontext",
     "desc": "detects nested contexts in loops and function literals",
     "Groups": null,
@@ -331,10 +341,10 @@
     "name": "goconst",
     "desc": "Finds repeated strings that could be replaced by a constant",
     "Groups": null,
-    "loadMode": 8199,
+    "loadMode": 8767,
     "originalURL": "https://github.com/jgautheron/goconst",
     "internal": false,
-    "isSlow": false,
+    "isSlow": true,
     "since": "v1.0.0"
   },
   {
@@ -570,7 +580,7 @@
   },
   {
     "name": "loggercheck",
-    "desc": "Checks key value pairs for common logger libraries (kitlog,klog,logr,zap).",
+    "desc": "Checks key value pairs for common logger libraries (kitlog,klog,logr,slog,zap).",
     "Groups": null,
     "loadMode": 8767,
     "originalURL": "https://github.com/timonwong/loggercheck",
@@ -614,7 +624,7 @@
     "desc": "Finds commonly misspelled English words",
     "Groups": null,
     "loadMode": 8199,
-    "originalURL": "https://github.com/client9/misspell",
+    "originalURL": "https://github.com/golangci/misspell",
     "internal": false,
     "canAutoFix": true,
     "isSlow": false,
@@ -832,6 +842,7 @@
     "loadMode": 8767,
     "originalURL": "https://github.com/go-simpler/sloglint",
     "internal": false,
+    "canAutoFix": true,
     "isSlow": true,
     "since": "v1.55.0"
   },

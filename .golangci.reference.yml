@@ -43,6 +43,7 @@ linters:
     - fatcontext
     - forbidigo
     - forcetypeassert
+    - funcorder
     - funlen
     - ginkgolinter
     - gocheckcompilerdirectives
@@ -121,7 +122,7 @@ linters:
     - wsl
     - zerologlint
 
-  # Disable specific linter
+  # Disable specific linter.
   # https://golangci-lint.run/usage/linters/#disabled-by-default
   disable:
     - asasalint
@@ -150,6 +151,7 @@ linters:
     - fatcontext
     - forbidigo
     - forcetypeassert
+    - funcorder
     - funlen
     - ginkgolinter
     - gocheckcompilerdirectives
@@ -266,7 +268,7 @@ linters:
       # Default: 10
       max-complexity: 10
       # The maximal average package complexity.
-      # If it's higher than 0.0 (float) the check is enabled
+      # If it's higher than 0.0 (float) the check is enabled.
       # Default: 0.0
       package-average: 0.5
 
@@ -279,7 +281,7 @@ linters:
         - var
         - func
 
-      # If true, underscore vars (vars with "_" as the name) will be ignored at all checks
+      # If true, underscore vars (vars with "_" as the name) will be ignored at all checks.
       # Default: false (underscore vars are not ignored)
       ignore-underscore-vars: false
 
@@ -295,15 +297,15 @@ linters:
       # Default: true (disabled)
       disable-dec-num-check: false
 
-      # If true, type declarations will be ignored for dec num check
+      # If true, type declarations will be ignored for dec num check.
       # Default: false (type statements are not ignored)
       disable-type-dec-num-check: false
 
-      # If true, const declarations will be ignored for dec num check
+      # If true, const declarations will be ignored for dec num check.
       # Default: false (const statements are not ignored)
       disable-const-dec-num-check: false
 
-      # If true, var declarations will be ignored for dec num check
+      # If true, var declarations will be ignored for dec num check.
       # Default: false (var statements are not ignored)
       disable-var-dec-num-check: false
 
@@ -335,6 +337,7 @@ linters:
           # List of file globs that will match this list of settings to compare against.
           # By default, if a path is relative, it is relative to the directory where the golangci-lint command is executed.
           # The placeholder '${base-path}' is substituted with a path relative to the mode defined with `run.relative-path-mode`.
+          # The placeholder '${config-path}' is substituted with a path relative to the configuration file.
           # Default: $all
           files:
             - "!**/*_a _file.go"
@@ -428,7 +431,7 @@ linters:
       # See the https://github.com/polyfloyd/go-errorlint for caveats.
       # Default: true
       errorf: false
-      # Permit more than 1 %w verb, valid per Go 1.20 (Requires errorf:true)
+      # Permit more than 1 %w verb, valid per Go 1.20 (requires `errorf: true`).
       # Default: true
       errorf-multi: false
       # Check for plain type assertions and type switches.
@@ -508,7 +511,7 @@ linters:
         # Optional message that gets included in error reports.
         - pattern: ^fmt\.Print.*$
           msg: Do not commit print statements.
-        # Alternatively, put messages at the end of the regex, surrounded by `(# )?`
+        # Alternatively, put messages at the end of the regex, surrounded by `(# )?`.
         # Escape any special characters. Those messages get included in error reports.
         - pattern: 'fmt\.Print.*(# Do not commit print statements\.)?'
         # Forbid spew Dump, whether it is called as function or method.
@@ -528,6 +531,14 @@ linters:
       # This makes it possible to handle import renaming and forbid struct fields and methods.
       # Default: false
       analyze-types: true
+
+    funcorder:
+      # Checks that constructors are placed after the structure declaration.
+      # Default: true
+      constructor: false
+      # Checks if the exported methods of a structure are placed before the non-exported ones.
+      # Default: true
+      struct-method: false
 
     funlen:
       # Checks the number of lines in a function.
@@ -563,11 +574,11 @@ linters:
       # Default: false
       suppress-async-assertion: true
 
-      # Suppress warning for comparing values from different types, like `int32` and `uint32`
+      # Suppress warning for comparing values from different types, like `int32` and `uint32`.
       # Default: false
       suppress-type-compare-assertion: true
 
-      # Trigger warning for ginkgo focus containers like `FDescribe`, `FContext`, `FWhen` or `FIt`
+      # Trigger warning for ginkgo focus containers like `FDescribe`, `FContext`, `FWhen` or `FIt`.
       # Default: false
       forbid-focus-container: true
 
@@ -581,7 +592,7 @@ linters:
       force-expect-to: true
 
       # Best effort validation of async intervals (timeout and polling).
-      # Ignored the suppress-async-assertion is true.
+      # Ignored the `suppress-async-assertion` is true.
       # Default: false
       validate-async-intervals: true
 
@@ -597,7 +608,7 @@ linters:
       # Presence of `default` case in switch statements satisfies exhaustiveness, if all members are not listed.
       # Default: true
       default-signifies-exhaustive: false
-      # Include shared interfaces in the exhaustiviness check.
+      # Include shared interfaces in the exhaustiveness check.
       # Default: false
       include-shared-interfaces: true
 
@@ -619,10 +630,10 @@ linters:
       # Search also for duplicated numbers.
       # Default: false
       numbers: true
-      # Minimum value, only works with goconst.numbers
+      # Minimum value, only works with `goconst.numbers`.
       # Default: 3
       min: 2
-      # Maximum value, only works with goconst.numbers
+      # Maximum value, only works with `goconst.numbers`.
       # Default: 3
       max: 2
       # Ignore when constant is not used as function argument.
@@ -630,7 +641,14 @@ linters:
       ignore-calls: false
       # Exclude strings matching the given regular expression.
       # Default: ""
-      ignore-strings: 'foo.+'
+      ignore-string-values:
+        - 'foo.+'
+      # Detects constants with identical values.
+      # Default: false
+      find-duplicates: true
+      # Evaluates of constant expressions like Prefix + "suffix".
+      # Default: false
+      eval-const-expressions: true
 
     gocritic:
       # Disable all checks.
@@ -1095,7 +1113,7 @@ linters:
 
       # Settings passed to gocritic.
       # The settings key is the name of a supported gocritic checker.
-      # The list of supported checkers can be find in https://go-critic.com/overview.
+      # The list of supported checkers can be found at https://go-critic.com/overview.
       settings:
         # Must be valid enabled check name.
         captLocal:
@@ -1161,6 +1179,7 @@ linters:
           # Comma-separated list of file paths containing ruleguard rules.
           # By default, if a path is relative, it is relative to the directory where the golangci-lint command is executed.
           # The placeholder '${base-path}' is substituted with a path relative to the mode defined with `run.relative-path-mode`.
+          # The placeholder '${config-path}' is substituted with a path relative to the configuration file.
           # Glob patterns such as 'rules-*.go' may be specified.
           # Default: ""
           rules: '${base-path}/ruleguard/rules-*.go,${base-path}/myrule1.go'
@@ -1234,19 +1253,19 @@ linters:
           # for example:
           AUTHOR: .*@mycompany\.com
       # The template used for checking.
-      # Put here copyright header template for source code files
+      # Put here copyright header template for source code files.
       # Note: {{ YEAR }} is a builtin value that returns the year relative to the current machine time.
       # Default: ""
       template: |-
         {{ AUTHOR }} {{ COMPANY }} {{ YEAR }}
         SPDX-License-Identifier: Apache-2.0
-        
+
         Licensed under the Apache License, Version 2.0 (the "License");
         you may not use this file except in compliance with the License.
         You may obtain a copy of the License at:
-        
+
           http://www.apache.org/licenses/LICENSE-2.0
-        
+
         Unless required by applicable law or agreed to in writing, software
         distributed under the License is distributed on an "AS IS" BASIS,
         WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -1256,6 +1275,7 @@ linters:
       # Useful if you need to load the template from a specific file.
       # By default, if a path is relative, it is relative to the directory where the golangci-lint command is executed.
       # The placeholder '${base-path}' is substituted with a path relative to the mode defined with `run.relative-path-mode`.
+      # The placeholder '${config-path}' is substituted with a path relative to the configuration file.
       # Default: ""
       template-path: /path/to/my/template.tmpl
 
@@ -1339,7 +1359,6 @@ linters:
         - G110 # Potential DoS vulnerability via decompression bomb
         - G111 # Potential directory traversal
         - G112 # Potential slowloris attack
-        - G113 # Usage of Rat.SetString in math/big with an overflow (CVE-2022-23772)
         - G114 # Use of net/http serve function that has no support for setting timeouts
         - G115 # Potential integer overflow when converting between integer types
         - G201 # SQL query construction using format string
@@ -1384,7 +1403,6 @@ linters:
         - G110 # Potential DoS vulnerability via decompression bomb
         - G111 # Potential directory traversal
         - G112 # Potential slowloris attack
-        - G113 # Usage of Rat.SetString in math/big with an overflow (CVE-2022-23772)
         - G114 # Use of net/http serve function that has no support for setting timeouts
         - G115 # Potential integer overflow when converting between integer types
         - G201 # SQL query construction using format string
@@ -1494,13 +1512,13 @@ linters:
           # Regexp pattern to find potential directory traversal.
           # Default: "http\\.Dir\\(\"\\/\"\\)|http\\.Dir\\('\\/'\\)"
           pattern: "custom\\.Dir\\(\\)"
-        # Maximum allowed permissions mode for os.Mkdir and os.MkdirAll
+        # Maximum allowed permissions mode for os.Mkdir and os.MkdirAll.
         # Default: "0750"
         G301: "0750"
-        # Maximum allowed permissions mode for os.OpenFile and os.Chmod
+        # Maximum allowed permissions mode for os.OpenFile and os.Chmod.
         # Default: "0600"
         G302: "0600"
-        # Maximum allowed permissions mode for os.WriteFile and ioutil.WriteFile
+        # Maximum allowed permissions mode for os.WriteFile and ioutil.WriteFile.
         # Default: "0600"
         G306: "0600"
 
@@ -1536,7 +1554,7 @@ linters:
       # Default: false
       disable-all: true
       # Enable analyzers by name.
-      # (in addition to default:
+      # (In addition to default:
       #   appends, asmdecl, assign, atomic, bools, buildtag, cgocall, composites, copylocks, defers, directive, errorsas,
       #   framepointer, httpresponse, ifaceassert, loopclosure, lostcancel, nilfunc, printf, shift, sigchanyzer, slog,
       #   stdmethods, stringintconv, structtag, testinggoroutine, tests, timeformat, unmarshal, unreachable, unsafeptr,
@@ -1579,6 +1597,8 @@ linters:
         - findcall
         # Report assembly that clobbers the frame pointer before saving it.
         - framepointer
+        # Report using Go 1.22 enhanced ServeMux patterns in older Go versions.
+        - httpmux
         # Check for mistakes using HTTP responses.
         - httpresponse
         # Detect impossible interface-to-interface type assertions.
@@ -1636,7 +1656,7 @@ linters:
       # Default: false
       enable-all: true
       # Disable analyzers by name.
-      # (in addition to default
+      # (In addition to default
       #   atomicalign, deepequalerrors, fieldalignment, findcall, nilness, reflectvaluecompare, shadow, sortslice,
       #   timeformat, unusedwrite
       # ).
@@ -1660,6 +1680,7 @@ linters:
         - fieldalignment
         - findcall
         - framepointer
+        - httpmux
         - httpresponse
         - ifaceassert
         - loopclosure
@@ -1703,16 +1724,16 @@ linters:
           # Default: false
           strict: true
         unusedresult:
-          # Comma-separated list of functions whose results must be used
-          # (in addition to default:
+          # Comma-separated list of functions whose results must be used.
+          # (In addition to default:
           #   context.WithCancel, context.WithDeadline, context.WithTimeout, context.WithValue, errors.New, fmt.Errorf,
           #   fmt.Sprint, fmt.Sprintf, sort.Reverse
           # ).
           # Default: []
           funcs:
             - pkg.MyFunc
-          # Comma-separated list of names of methods of type func() string whose results must be used
-          # (in addition to default Error,String)
+          # Comma-separated list of names of methods of type func() string whose results must be used.
+          # (In addition to default Error,String).
           # Default: []
           stringmethods:
             - MyMethod
@@ -1778,7 +1799,7 @@ linters:
           alias: autoscalingv1alpha1
         # You can specify the package path by regular expression,
         # and alias by regular expression expansion syntax like below.
-        # see https://github.com/julz/importas#use-regular-expression for details
+        # See https://github.com/julz/importas#use-regular-expression for details.
         - pkg: knative.dev/serving/pkg/apis/(\w+)/(v[\w\d]+)
           alias: $1$2
         # An explicit empty alias can be used to ensure no aliases are used for a package.
@@ -1917,14 +1938,14 @@ linters:
         - assign
       # List of numbers to exclude from analysis.
       # The numbers should be written as string.
-      # Values always ignored: "1", "1.0", "0" and "0.0"
+      # Values always ignored: "1", "1.0", "0" and "0.0".
       # Default: []
       ignored-numbers:
         - '0666'
         - '0755'
         - '42'
       # List of file patterns to exclude from analysis.
-      # Values always ignored: `.+_test.go`
+      # Values always ignored: `.+_test.go`.
       # Default: []
       ignored-files:
         - 'magic1_.+\.go$'
@@ -1979,7 +2000,7 @@ linters:
         - unsafeptr
 
     nlreturn:
-      # Size of the block (including return statement that is still "OK")
+      # Size of the block (including return statement that is still "OK"),
       # so no return split required.
       # Default: 1
       block-size: 2
@@ -2169,10 +2190,10 @@ linters:
           disabled: false
           exclude: [""]
           arguments:
-            - maxLitCount: "3"
-              allowStrs: '""'
-              allowInts: "0,1,2"
-              allowFloats: "0.0,0.,1.0,1.,2.0,2."
+            - max-lit-count: "3"
+              allow-strs: '""'
+              allow-ints: "0,1,2"
+              allow-floats: "0.0,0.,1.0,1.,2.0,2."
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#argument-limit
         - name: argument-limit
           severity: warning
@@ -2251,7 +2272,7 @@ linters:
           disabled: false
           exclude: [""]
           arguments:
-            - allowTypesBefore: "*testing.T,*github.com/user/repo/testing.Harness"
+            - allow-types-before: "*testing.T,*github.com/user/repo/testing.Harness"
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#context-keys-type
         - name: context-keys-type
           severity: warning
@@ -2291,7 +2312,7 @@ linters:
           disabled: false
           exclude: [""]
           arguments:
-            - allowedPackages: ["github.com/onsi/ginkgo/v2", "github.com/onsi/gomega"]
+            - allowed-packages: ["github.com/onsi/ginkgo/v2", "github.com/onsi/gomega"]
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#duplicated-imports
         - name: duplicated-imports
           severity: warning
@@ -2303,8 +2324,8 @@ linters:
           disabled: false
           exclude: [""]
           arguments:
-            - "preserveScope"
-            - "allowJump"
+            - "preserve-scope"
+            - "allow-jump"
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#empty-block
         - name: empty-block
           severity: warning
@@ -2330,8 +2351,8 @@ linters:
           arguments:
             - "short"
             # Or this parameter:
-            - funcArgStyle: "full"
-              funcRetValStyle: "short"
+            - func-arg-style: "full"
+              func-ret-val-style: "short"
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#enforce-slice-style
         - name: enforce-slice-style
           severity: warning
@@ -2367,15 +2388,15 @@ linters:
           disabled: false
           exclude: [""]
           arguments:
-            - "checkPrivateReceivers"
-            - "disableStutteringCheck"
-            - "sayRepetitiveInsteadOfStutters"
-            - "checkPublicInterface"
-            - "disableChecksOnConstants"
-            - "disableChecksOnFunctions"
-            - "disableChecksOnMethods"
-            - "disableChecksOnTypes"
-            - "disableChecksOnVariables"
+            - "check-private-receivers"
+            - "disable-stuttering-check"
+            - "say-repetitive-instead-of-stutters"
+            - "check-public-interface"
+            - "disable-checks-on-constants"
+            - "disable-checks-on-functions"
+            - "disable-checks-on-methods"
+            - "disable-checks-on-types"
+            - "disable-checks-on-variables"
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#file-header
         - name: file-header
           severity: warning
@@ -2390,8 +2411,8 @@ linters:
           exclude: [""]
           arguments:
             - max: 100
-              skipComments: true
-              skipBlankLines: true
+              skip-comments: true
+              skip-blank-lines: true
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#filename-format
         - name: filename-format
           severity: warning
@@ -2439,8 +2460,8 @@ linters:
           arguments:
             - "^[a-z][a-z0-9]{0,}$"
             # Or this parameter:
-            - allowRegex: "^[a-z][a-z0-9]{0,}$"
-              denyRegex: '^v\d+$'
+            - allow-regex: "^[a-z][a-z0-9]{0,}$"
+              deny-regex: '^v\d+$'
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#import-shadowing
         - name: import-shadowing
           severity: warning
@@ -2465,7 +2486,7 @@ linters:
           disabled: false
           exclude: [""]
           arguments:
-            - "preserveScope"
+            - "preserve-scope"
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#line-length-limit
         - name: line-length-limit
           severity: warning
@@ -2530,7 +2551,7 @@ linters:
           disabled: false
           exclude: [""]
           arguments:
-            - maxLength: 2
+            - max-length: 2
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#redefines-builtin-id
         - name: redefines-builtin-id
           severity: warning
@@ -2585,7 +2606,7 @@ linters:
           disabled: false
           exclude: [""]
           arguments:
-            - "preserveScope"
+            - "preserve-scope"
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#time-equal
         - name: time-equal
           severity: warning
@@ -2602,7 +2623,7 @@ linters:
           disabled: false
           exclude: [""]
           arguments:
-            - acceptIgnoredAssertionResult: true
+            - accept-ignored-assertion-result: true
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#unconditional-recursion
         - name: unconditional-recursion
           severity: warning
@@ -2642,14 +2663,14 @@ linters:
           disabled: false
           exclude: [""]
           arguments:
-            - allowRegex: "^_"
+            - allow-regex: "^_"
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#unused-receiver
         - name: unused-receiver
           severity: warning
           disabled: false
           exclude: [""]
           arguments:
-            - allowRegex: "^_"
+            - allow-regex: "^_"
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#use-any
         - name: use-any
           severity: warning
@@ -2678,7 +2699,7 @@ linters:
           arguments:
             - [ "ID" ] # AllowList
             - [ "VM" ] # DenyList
-            - - upperCaseConst: true # Extra parameter (upperCaseConst|skipPackageNameChecks)
+            - - upper-case-const: true # Extra parameter (upper-case-const|skip-package-name-checks)
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#waitgroup-by-value
         - name: waitgroup-by-value
           severity: warning
@@ -2686,7 +2707,7 @@ linters:
           exclude: [""]
 
     rowserrcheck:
-      # database/sql is always checked
+      # database/sql is always checked.
       # Default: []
       packages:
         - github.com/jmoiron/sqlx
@@ -2724,11 +2745,16 @@ linters:
       # https://github.com/go-simpler/sloglint?tab=readme-ov-file#static-messages
       # Default: false
       static-msg: true
+      # Enforce message style.
+      # Values: lowercased, capitalized
+      # https://github.com/go-simpler/sloglint?tab=readme-ov-file#message-style
+      # Default: ""
+      msg-style: capitalized
       # Enforce using constants instead of raw keys.
       # https://github.com/go-simpler/sloglint?tab=readme-ov-file#no-raw-keys
       # Default: false
       no-raw-keys: true
-      # Enforce a single key naming convention.
+      # Enforce key naming convention.
       # Values: snake, kebab, camel, pascal
       # https://github.com/go-simpler/sloglint?tab=readme-ov-file#key-naming-convention
       # Default: ""
@@ -3272,7 +3298,7 @@ linters:
       # Align and sort can be used together or separately.
       #
       # Whether enable align. If true, the struct tags will be aligned.
-      # e.g.:
+      # E.g.:
       # type FooBar struct {
       #     Bar    string `json:"bar" validate:"required"`
       #     FooFoo int8   `json:"foo_foo" validate:"required"`
@@ -3286,7 +3312,7 @@ linters:
       align: false
       # Whether enable tags sort.
       # If true, the tags will be sorted by name in ascending order.
-      # e.g.: `xml:"bar" json:"bar" validate:"required"` -> `json:"bar" validate:"required" xml:"bar"`
+      # E.g.: `xml:"bar" json:"bar" validate:"required"` -> `json:"bar" validate:"required" xml:"bar"`.
       # Default: true
       sort: false
       # Specify the order of tags, the other tags will be sorted by name.
@@ -3757,6 +3783,9 @@ linters:
       # Default: []
       ignore-interface-regexps:
         - ^(?i)c(?-i)ach(ing|e)
+      # Determines whether wrapcheck should report errors returned from inside the package.
+      # Default: false
+      report-internal-errors: true
 
     wsl:
       # Do strict checking when assigning from append (x = append(x, y)).
@@ -3946,7 +3975,7 @@ formatters:
     gci:
       # Section configuration to compare against.
       # Section names are case-insensitive and may contain parameters in ().
-      # The default order of sections is `standard > default > custom > blank > dot > alias > localmodule`,
+      # The default order of sections is `standard > default > custom > blank > dot > alias > localmodule`.
       # If `custom-order` is `true`, it follows the order of `sections` option.
       # Default: ["standard", "default"]
       sections:
@@ -4021,6 +4050,9 @@ formatters:
       chain-split-dots: false
 
   exclusions:
+    # Log a warning if an exclusion path is unused.
+    # Default: false
+    warn-unused: true
     # Mode of the generated files analysis.
     #
     # - `strict`: sources are excluded by strictly following the Go generated file convention.
@@ -4154,8 +4186,15 @@ output:
       path: ./path/to/output.json
 
   # Add a prefix to the output file references.
+  # This option is ignored when using `output.path-mode: abs` mode.
   # Default: ""
   path-prefix: ""
+
+  # By default, the report are related to the path obtained by `run.relative-path-mode`.
+  # The mode `abs` allows to show absolute file paths instead of relative file paths.
+  # The option `output.path-prefix` is ignored when using `abs` mode.
+  # Default: ""
+  path-mode: "abs"
 
   # Order to use when sorting results.
   # Possible values: `file`, `linter`, and `severity`.
