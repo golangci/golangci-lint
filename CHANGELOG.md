@@ -7,6 +7,14 @@ If you value it, consider supporting us, we appreciate it! ❤️
 [![Open Collective backers and sponsors](https://img.shields.io/badge/OpenCollective-Donate-blue?logo=opencollective&style=for-the-badge)](https://opencollective.com/golangci-lint)
 [![GitHub Sponsors](https://img.shields.io/badge/GitHub-Donate-blue?logo=github&style=for-the-badge)](https://github.com/sponsors/golangci)
 
+### v2.1.2
+
+1. Linters bug fixes
+   * `exptostd`: from 0.4.2 to 0.4.3
+   * `gofumpt`: from 0.7.0 to 0.8.0
+   * `protogetter`: from 0.3.13 to 0.3.15
+   * `usetesting`: from 0.4.2 to 0.4.3
+
 ### v2.1.1
 
 The release process of v2.1.0 failed due to a regression inside goreleaser.
