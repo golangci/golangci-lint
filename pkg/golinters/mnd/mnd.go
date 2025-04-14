@@ -9,11 +9,10 @@ import (
 )
 
 func New(settings *config.MndSettings) *goanalysis.Linter {
-	return newMND(mnd.Analyzer, settings, nil)
-}
+	a := mnd.Analyzer
 
-func newMND(a *analysis.Analyzer, settings *config.MndSettings, linterCfg map[string]map[string]any) *goanalysis.Linter {
-	if len(linterCfg) == 0 && settings != nil {
+	var linterCfg map[string]map[string]any
+	if settings != nil {
 		cfg := make(map[string]any)
 		if len(settings.Checks) > 0 {
 			cfg["checks"] = settings.Checks

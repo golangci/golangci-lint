@@ -1,0 +1,7 @@
+version: "2"
+
+linters:
+  settings:
+    mnd:
+      ignored-numbers:
+        - '5'
