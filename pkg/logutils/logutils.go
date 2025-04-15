@@ -17,6 +17,7 @@ const envDebug = "GL_DEBUG"
 
 const (
 	DebugKeyBinSalt          = "bin_salt"
+	DebugKeyGoModSalt        = "gomod_salt"
 	DebugKeyConfigReader     = "config_reader"
 	DebugKeyEmpty            = ""
 	DebugKeyEnabledLinters   = "enabled_linters"
