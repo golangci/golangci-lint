@@ -790,17 +790,13 @@ func toSpancheckSettings(old versionone.SpancheckSettings) versiontwo.SpancheckS
 
 func toStaticCheckSettings(old versionone.LintersSettings) versiontwo.StaticCheckSettings {
 	checks := Unique(slices.Concat(old.Staticcheck.Checks, old.Stylecheck.Checks, old.Gosimple.Checks))
-	// If an element is prefixed with `-` it means that we want to disable that check.
-	// So we have to resort and put everything after the non-minus elements.
-	slices.SortFunc(checks, func(e1, e2 string) int {
-		if strings.HasPrefix(e1, "-") && !strings.HasPrefix(e2, "-") {
+
+	slices.SortFunc(checks, func(a, b string) int {
+		if a == "*" || a == "all" {
 			return 1
 		}
 
-		if !strings.HasPrefix(e1, "-") && strings.HasPrefix(e2, "-") {
-			return -1
-		}
-		return strings.Compare(e1, e2)
+		return strings.Compare(a, b)
 	})
 
 	return versiontwo.StaticCheckSettings{
