@@ -3,7 +3,7 @@ linters:
   settings:
     staticcheck:
       checks:
-        - '*'
+        - all
         - -S1000
         - -S1001
         - -S1002
@@ -152,7 +152,6 @@ linters:
         - ST1021
         - ST1022
         - ST1023
-        - all
       initialisms:
         - ACL
         - API
