@@ -27,21 +27,22 @@ jobs:
           git diff --exit-code go.mod
           git diff --exit-code go.sum
 
+  # This check is disabled because of GitHub API instability: 504 Gateway Timeout.
   # Checks: GitHub action assets
-  check-generated:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - uses: actions/setup-go@v5
-        with:
-          go-version: ${{ env.GO_VERSION }}
-      - name: Check generated files are up-to-date
-        run: make fast_check_generated
-        env:
-          # needed for github-action-config.json generation
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#  check-generated:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v4
+#        with:
+#          fetch-depth: 0
+#      - uses: actions/setup-go@v5
+#        with:
+#          go-version: ${{ env.GO_VERSION }}
+#      - name: Check generated files are up-to-date
+#        run: make fast_check_generated
+#        env:
+#          # needed for github-action-config.json generation
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   check-local-install-script:
     name: Installation script (local)
