@@ -634,7 +634,7 @@ func initHashSalt(logger logutils.Log, version string, cfg *config.Config) error
 	goModSalt, err := computeGoModSalt()
 	if err != nil {
 		// NOTE: missing go.mod must be ignored.
-		logger.Warnf("failed to calculate go.mod salt: %v", err)
+		logger.Warnf("Failed to calculate go.mod salt: %v", err)
 	}
 
 	b := bytes.NewBuffer(binSalt)
