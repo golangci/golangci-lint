@@ -161,7 +161,7 @@ func (l *Loader) checkConfigurationVersion() error {
 
 func (l *Loader) handleGoVersion() {
 	if l.cfg.Run.Go == "" {
-		l.cfg.Run.Go = detectGoVersion(context.Background())
+		l.cfg.Run.Go = detectGoVersion(context.Background(), l.log)
 	}
 
 	l.cfg.Linters.Settings.Govet.Go = l.cfg.Run.Go

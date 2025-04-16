@@ -21,10 +21,12 @@ import (
 
 	"github.com/fatih/color"
 	"github.com/gofrs/flock"
+	"github.com/ldez/grignotin/goenv"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 	"go.uber.org/automaxprocs/maxprocs"
+	"golang.org/x/mod/sumdb/dirhash"
 	"gopkg.in/yaml.v3"
 
 	"github.com/golangci/golangci-lint/v2/internal/cache"
@@ -216,7 +218,7 @@ func (c *runCommand) preRunE(_ *cobra.Command, args []string) error {
 
 	c.contextBuilder = lint.NewContextBuilder(c.cfg, pkgLoader, pkgCache, guard)
 
-	if err = initHashSalt(c.buildInfo.Version, c.cfg); err != nil {
+	if err = initHashSalt(c.log.Child(logutils.DebugKeyGoModSalt), c.buildInfo.Version, c.cfg); err != nil {
 		return fmt.Errorf("failed to init hash salt: %w", err)
 	}
 
@@ -618,7 +620,7 @@ func formatMemory(memBytes uint64) string {
 
 // Related to cache.
 
-func initHashSalt(version string, cfg *config.Config) error {
+func initHashSalt(logger logutils.Log, version string, cfg *config.Config) error {
 	binSalt, err := computeBinarySalt(version)
 	if err != nil {
 		return fmt.Errorf("failed to calculate binary salt: %w", err)
@@ -629,9 +631,18 @@ func initHashSalt(version string, cfg *config.Config) error {
 		return fmt.Errorf("failed to calculate config salt: %w", err)
 	}
 
+	goModSalt, err := computeGoModSalt()
+	if err != nil {
+		// NOTE: missing go.mod must be ignored.
+		logger.Warnf("Failed to calculate go.mod salt: %v", err)
+	}
+
 	b := bytes.NewBuffer(binSalt)
 	b.Write(configSalt)
+	b.WriteString(goModSalt)
+
 	cache.SetSalt(b)
+
 	return nil
 }
 
@@ -648,15 +659,19 @@ func computeBinarySalt(version string) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	f, err := os.Open(p)
 	if err != nil {
 		return nil, err
 	}
+
 	defer f.Close()
+
 	h := sha256.New()
 	if _, err := io.Copy(h, f); err != nil {
 		return nil, err
 	}
+
 	return h.Sum(nil), nil
 }
 
@@ -678,5 +693,29 @@ func computeConfigSalt(cfg *config.Config) ([]byte, error) {
 	if _, err := h.Write(configData.Bytes()); err != nil {
 		return nil, err
 	}
+
 	return h.Sum(nil), nil
+}
+
+func computeGoModSalt() (string, error) {
+	values, err := goenv.Get(context.Background(), goenv.GOMOD)
+	if err != nil {
+		return "", fmt.Errorf("failed to get goenv: %w", err)
+	}
+
+	goModPath := filepath.Clean(values[goenv.GOMOD])
+
+	data, err := os.ReadFile(goModPath)
+	if err != nil {
+		return "", fmt.Errorf("failed to read go.mod: %w", err)
+	}
+
+	sum, err := dirhash.Hash1([]string{goModPath}, func(string) (io.ReadCloser, error) {
+		return io.NopCloser(bytes.NewReader(data)), nil
+	})
+	if err != nil {
+		return "", fmt.Errorf("failed to compute go.sum: %w", err)
+	}
+
+	return sum, nil
 }

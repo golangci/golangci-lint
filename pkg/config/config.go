@@ -13,6 +13,8 @@ import (
 	"github.com/ldez/grignotin/goenv"
 	"github.com/ldez/grignotin/gomod"
 	"golang.org/x/mod/modfile"
+
+	"github.com/golangci/golangci-lint/v2/pkg/logutils"
 )
 
 // defaultGoVersion the value should be "oldstable" - 1.
@@ -102,8 +104,8 @@ func IsGoGreaterThanOrEqual(current, limit string) bool {
 	return v1.GreaterThanOrEqual(l)
 }
 
-func detectGoVersion(ctx context.Context) string {
-	return cmp.Or(detectGoVersionFromGoMod(ctx), defaultGoVersion)
+func detectGoVersion(ctx context.Context, log logutils.Log) string {
+	return cmp.Or(detectGoVersionFromGoMod(ctx, log), defaultGoVersion)
 }
 
 // detectGoVersionFromGoMod tries to get Go version from go.mod.
@@ -111,7 +113,7 @@ func detectGoVersion(ctx context.Context) string {
 // else it returns `go` version if present,
 // else it returns `GOVERSION` version if present,
 // else it returns empty.
-func detectGoVersionFromGoMod(ctx context.Context) string {
+func detectGoVersionFromGoMod(ctx context.Context, log logutils.Log) string {
 	values, err := goenv.Get(ctx, goenv.GOMOD, goenv.GOVERSION)
 	if err != nil {
 		values = map[string]string{
@@ -126,6 +128,10 @@ func detectGoVersionFromGoMod(ctx context.Context) string {
 	file, err := parseGoMod(values[goenv.GOMOD])
 	if err != nil {
 		return parseGoVersion(values[goenv.GOVERSION])
+	}
+
+	if file.Module != nil {
+		log.Infof("Module name %q", file.Module.Mod.Path)
 	}
 
 	// The toolchain exists only if 'toolchain' version > 'go' version.
