@@ -789,15 +789,20 @@ func toSpancheckSettings(old versionone.SpancheckSettings) versiontwo.SpancheckS
 }
 
 func toStaticCheckSettings(old versionone.LintersSettings) versiontwo.StaticCheckSettings {
-	checks := Unique(slices.Concat(old.Staticcheck.Checks, old.Stylecheck.Checks, old.Gosimple.Checks))
+	checks := slices.Compact(
+		slices.SortedFunc(
+			slices.Values(
+				slices.Concat(old.Staticcheck.Checks, old.Stylecheck.Checks, old.Gosimple.Checks),
+			),
+			func(a, b string) int {
+				if a == "*" || a == "all" {
+					return 1
+				}
 
-	slices.SortFunc(checks, func(a, b string) int {
-		if a == "*" || a == "all" {
-			return 1
-		}
-
-		return strings.Compare(a, b)
-	})
+				return strings.Compare(a, b)
+			},
+		),
+	)
 
 	return versiontwo.StaticCheckSettings{
 		Checks:                  checks,
