@@ -1,0 +1,7 @@
+version: "2"
+
+linters:
+  settings:
+    funcorder:
+      struct-method: false
+      alphabetical: true

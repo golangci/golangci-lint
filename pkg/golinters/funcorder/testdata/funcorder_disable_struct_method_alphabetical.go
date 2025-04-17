@@ -1,5 +1,5 @@
 //golangcitest:args -Efuncorder
-//golangcitest:config_path testdata/funcorder_struct_method.yml
+//golangcitest:config_path testdata/funcorder_disable_struct_method_alphabetical.yml
 package testdata
 
 import "time"
@@ -33,6 +33,10 @@ func (m *MyStruct2) SetName(name string) {
 }
 
 func NewMyStruct2() *MyStruct2 { // want `constructor "NewMyStruct2" for struct "MyStruct2" should be placed before struct method "GetName"`
+	return &MyStruct2{Name: "John"}
+}
+
+func MustMyStruct2() *MyStruct2 { // want `constructor "MustMyStruct2" for struct "MyStruct2" should be placed before constructor "NewMyStruct2"`
 	return &MyStruct2{Name: "John"}
 }
 

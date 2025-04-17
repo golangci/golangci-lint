@@ -44,6 +44,7 @@ var defaultLintersSettings = LintersSettings{
 	FuncOrder: FuncOrderSettings{
 		Constructor:  true,
 		StructMethod: true,
+		Alphabetical: false,
 	},
 	Funlen: FunlenSettings{
 		IgnoreComments: true,
@@ -428,6 +429,7 @@ type ForbidigoPattern struct {
 type FuncOrderSettings struct {
 	Constructor  bool `mapstructure:"constructor,omitempty"`
 	StructMethod bool `mapstructure:"struct-method,omitempty"`
+	Alphabetical bool `mapstructure:"alphabetical,omitempty"`
 }
 
 type FunlenSettings struct {
