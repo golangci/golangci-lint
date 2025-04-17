@@ -136,10 +136,16 @@ func buildIssues(diags []Diagnostic, linterNameBuilder func(diag *Diagnostic) st
 
 		if len(diag.Related) > 0 {
 			for _, info := range diag.Related {
+				relatedPos := diag.Pkg.Fset.Position(info.Pos)
+
+				if relatedPos.Filename != diag.Position.Filename {
+					relatedPos = diag.Position
+				}
+
 				issues = append(issues, result.Issue{
 					FromLinter: linterName,
 					Text:       fmt.Sprintf("%s(related information): %s", diag.Analyzer.Name, info.Message),
-					Pos:        diag.Pkg.Fset.Position(info.Pos),
+					Pos:        relatedPos,
 					Pkg:        diag.Pkg,
 				})
 			}
