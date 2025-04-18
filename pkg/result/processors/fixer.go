@@ -22,6 +22,7 @@ import (
 	"github.com/golangci/golangci-lint/v2/pkg/goformatters/gofumpt"
 	"github.com/golangci/golangci-lint/v2/pkg/goformatters/goimports"
 	"github.com/golangci/golangci-lint/v2/pkg/goformatters/golines"
+	"github.com/golangci/golangci-lint/v2/pkg/goformatters/swaggo"
 	"github.com/golangci/golangci-lint/v2/pkg/logutils"
 	"github.com/golangci/golangci-lint/v2/pkg/result"
 	"github.com/golangci/golangci-lint/v2/pkg/timeutils"
@@ -79,7 +80,7 @@ func (p Fixer) process(issues []result.Issue) ([]result.Issue, error) {
 	// filenames / linters / edits
 	editsByLinter := make(map[string]map[string][]diff.Edit)
 
-	formatters := []string{gofumpt.Name, goimports.Name, gofmt.Name, gci.Name, golines.Name}
+	formatters := []string{gofumpt.Name, goimports.Name, gofmt.Name, gci.Name, golines.Name, swaggo.Name}
 
 	var notFixableIssues []result.Issue
 
