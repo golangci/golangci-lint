@@ -3969,6 +3969,7 @@ formatters:
     - gofumpt
     - goimports
     - golines
+    - swaggo
 
   # Formatters settings.
   settings:
