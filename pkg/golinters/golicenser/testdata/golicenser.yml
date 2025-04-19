@@ -1,0 +1,20 @@
+version: "2"
+
+linters:
+  settings:
+    golicenser:
+      header:
+        author: "golangci-lint"
+        template: |-
+          Copyright (c) {{.year}} {{.author}} <{{.email}}>.
+          This file is a part of {{.projectname}}.
+        # Allow matcher to match "// want" comments, otherwise they break matching.
+        matcher: |-
+          Copyright \(c\) {{.year}} {{.author}} <{{.email}}>\.(\s// want.+)?
+          This file is a part of {{.projectname}}\.
+        variables:
+          email:
+            value: "test@example.com"
+            regexp: "(.+)@example\\.com"
+          projectname:
+            value: "golangci-lint"

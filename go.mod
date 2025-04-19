@@ -60,6 +60,7 @@ require (
 	github.com/jgautheron/goconst v1.8.1
 	github.com/jingyugao/rowserrcheck v1.1.1
 	github.com/jjti/go-spancheck v0.6.4
+	github.com/joshuasing/golicenser v0.3.1
 	github.com/julz/importas v0.2.0
 	github.com/karamaru-alpha/copyloopvar v1.2.1
 	github.com/kisielk/errcheck v1.9.0
@@ -141,6 +142,7 @@ require (
 	github.com/Masterminds/semver/v3 v3.3.1 // indirect
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
+	github.com/bmatcuk/doublestar/v4 v4.8.1 // indirect
 	github.com/ccojocar/zxcvbn-go v1.0.2 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/charmbracelet/colorprofile v0.2.3-0.20250311203215-f60798e515dc // indirect
