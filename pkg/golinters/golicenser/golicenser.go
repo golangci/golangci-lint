@@ -1,6 +1,9 @@
 package golicenser
 
 import (
+	"os"
+	"strings"
+
 	"github.com/go-viper/mapstructure/v2"
 	"github.com/joshuasing/golicenser"
 	"golang.org/x/tools/go/analysis"
@@ -15,9 +18,20 @@ const (
 	linterDesc = "Powerful license header linter"
 )
 
-func New(settings *config.GoLicenserSettings) *goanalysis.Linter {
+func New(settings *config.GoLicenserSettings, replacer *strings.Replacer) *goanalysis.Linter {
 	var conf golicenser.Config
 	if settings != nil {
+		// Template from config takes priority over template from template-path.
+		template := settings.Header.Template
+		if template == "" && settings.Header.TemplatePath != "" {
+			b, err := os.ReadFile(replacer.Replace(settings.Header.TemplatePath))
+			if err != nil {
+				internal.LinterLogger.Fatalf("%s: read template file: %v", linterName, err)
+			}
+			// Use template from file (trim newline from end of file)
+			template = strings.TrimSuffix(string(b), "\n")
+		}
+
 		var err error
 		var yearMode golicenser.YearMode
 		if ym := settings.Header.YearMode; ym != "" {
@@ -54,7 +68,7 @@ func New(settings *config.GoLicenserSettings) *goanalysis.Linter {
 
 		conf = golicenser.Config{
 			Header: golicenser.HeaderOpts{
-				Template:      settings.Header.Template,
+				Template:      template,
 				Matcher:       settings.Header.Matcher,
 				MatcherEscape: settings.Header.MatcherEscape,
 				Author:        settings.Header.Author,

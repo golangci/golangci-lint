@@ -520,6 +520,7 @@ type GoLicenserSettings struct {
 
 type GoLicenserHeaderSettings struct {
 	Template      string         `mapstructure:"template"`
+	TemplatePath  string         `mapstructure:"template-path"`
 	Matcher       string         `mapstructure:"matcher"`
 	MatcherEscape bool           `mapstructure:"matcher-escape"`
 	Author        string         `mapstructure:"author"`

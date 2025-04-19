@@ -354,7 +354,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithAutoFix().
 			WithURL("https://github.com/denis-tingaikin/go-header"),
 
-		linter.NewConfig(golicenser.New(&cfg.Linters.Settings.Golicenser)).
+		linter.NewConfig(golicenser.New(&cfg.Linters.Settings.Golicenser, placeholderReplacer)).
 			WithSince("v2.2.0").
 			WithAutoFix().
 			WithURL("https://github.com/joshuasing/golicenser"),

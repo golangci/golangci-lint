@@ -1,0 +1,2 @@
+Copyright (c) {{.year}} {{.author}} <{{.email}}>.
+This file is a part of {{.projectname}}.

@@ -1951,6 +1951,14 @@
                     "Copyright (c) {{.year}} {{.author}}. All rights reserved.\nUse of this source code is governed by a BSD-style\nlicense that can be found in the LICENSE file."
                   ]
                 },
+                "template-path": {
+                  "description": "Path to file containing license header template",
+                  "type": "string",
+                  "examples": [
+                    "license.txt",
+                    "license-header.txt"
+                  ]
+                },
                 "matcher": {
                   "description": "License header matcher regexp\nhttps://github.com/joshuasing/golicenser#matcher",
                   "type": "string",
@@ -2012,7 +2020,10 @@
                   "default": "line"
                 }
               },
-              "required": ["template", "author"]
+              "oneOf": [
+                { "required": ["template", "author"] },
+                { "required": ["template-path", "author"] }
+              ]
             },
             "exclude": {
               "description": "List of file globs (doublestar) or regexps to match excluded paths. To use regexp, prefix the string with `r!`.",

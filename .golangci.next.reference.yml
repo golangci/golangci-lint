@@ -1296,6 +1296,14 @@ linters:
           Use of this source code is governed by a BSD-style
           license that can be found in the LICENSE file.
 
+        # Path to file containing license header template.
+        # This is an alternative to `template`, and `template` will take priority if set.
+        # By default, if a path is relative, it is relative to the directory where the golangci-lint command is executed.
+        # The placeholder '${base-path}' is substituted with a path relative to the mode defined with `run.relative-path-mode`.
+        # The placeholder '${config-path}' is substituted with a path relative to the configuration file.
+        # Default: ""
+        template-path: "${config-path}/license.txt"
+
         # License header match regexp.
         # More information: https://github.com/joshuasing/golicenser#matcher
         # Matched headers will be updated or replaced by the header template.
