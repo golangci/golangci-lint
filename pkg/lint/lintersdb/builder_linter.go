@@ -3,6 +3,7 @@ package lintersdb
 import (
 	"github.com/golangci/golangci-lint/v2/pkg/config"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters"
+	"github.com/golangci/golangci-lint/v2/pkg/golinters/arangolint"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/asasalint"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/asciicheck"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/bidichk"
@@ -135,6 +136,11 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 	// The linters are sorted in the alphabetical order (case-insensitive).
 	// When a new linter is added the version in `WithSince(...)` must be the next minor version of golangci-lint.
 	return []*linter.Config{
+		linter.NewConfig(arangolint.New()).
+			WithSince("v2.1.0").
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/Crocmagnon/arangolint"),
+
 		linter.NewConfig(asasalint.New(&cfg.Linters.Settings.Asasalint)).
 			WithSince("v1.47.0").
 			WithLoadForGoAnalysis().
