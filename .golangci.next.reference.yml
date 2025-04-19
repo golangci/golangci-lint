@@ -1282,7 +1282,25 @@ linters:
       template-path: /path/to/my/template.tmpl
 
     golicenser:
+      # Regexp used to detect license/copyright headers.
+      # This will be used to detect the existence of a copyright header in a file.
+      # If the first comment in a Go source file does not match this, then a license header will be generated.
+      # For the license header to be updated, it must also match the header matcher.
+      # Default: "(?i)copyright"
+      copyright-header-matcher: "(?i)copyright"
+
       header:
+        # The project author name used in the `author` template variable.
+        # Required value.
+        author: "My Name"
+        # Regexp used to match the project author (`author` variable).
+        # Default: regexp-escaped value of `author`.
+        author-regexp: "(My Name|Your Name)"
+        # Style of comment to use in license headers.
+        # More information: https://github.com/joshuasing/golicenser#comment-styles
+        # Valid options are: `line`, `block`.
+        # Default: "line"
+        comment-style: "line"
         # License header template (using Go text/template: https://pkg.go.dev/text/template).
         # More information: https://github.com/joshuasing/golicenser#templates
         # Built-in variables:
@@ -1295,15 +1313,13 @@ linters:
           Copyright (c) {{.year}} {{.author}}. All rights reserved.
           Use of this source code is governed by a BSD-style
           license that can be found in the LICENSE file.
-
         # Path to file containing license header template.
         # This is an alternative to `template`, and `template` will take priority if set.
         # By default, if a path is relative, it is relative to the directory where the golangci-lint command is executed.
         # The placeholder '${base-path}' is substituted with a path relative to the mode defined with `run.relative-path-mode`.
         # The placeholder '${config-path}' is substituted with a path relative to the configuration file.
         # Default: ""
-        template-path: "${config-path}/license.txt"
-
+        template-path: /path/to/my/template.tmpl
         # License header match regexp.
         # More information: https://github.com/joshuasing/golicenser#matcher
         # Matched headers will be updated or replaced by the header template.
@@ -1312,30 +1328,19 @@ linters:
           Copyright \(c\) {{.year}} {{.author}}.(\s*All rights reserved.)?
           Use of this source code is governed by a BSD-style
           license that can be found in the LICENSE file.
-
         # Enable to regexp-escape the header matcher.
         # Useful if you want to provide a license header instead of regexp expression.
         # Default: false
         matcher-escape: false
-
-        # The project author name used in the `author` template variable.
-        # Required value.
-        author: "My Name"
-
-        # Regexp used to match the project author (`author` variable).
-        # Default: regexp-escaped value of `author`.
-        author-regexp: "(My Name|Your Name)"
-
         # Variables to provide to the header template.
         # Due to a limitation of Viper, the configuration loader used by golangci-lint, variable names will always be
         # provided as lowercase to the template.
         # Default: {}
         variables:
           email:
-            value: "me@mycompany.com"
             regexp: "(.+)@mycompany\\.com"
-          projectname: "My project"
-
+          project-name:
+            value: "My project"
         # Copyright year formatting mode.
         # More information: https://github.com/joshuasing/golicenser#year-modes
         # Available year modes are:
@@ -1348,30 +1353,6 @@ linters:
         # - `git-modified-list`: List of all modified years from Git history (e.g. `2022, 2024, 2025`)
         # Default: "preserve"
         year-mode: "git-range"
-
-        # Style of comment to use in license headers.
-        # More information: https://github.com/joshuasing/golicenser#comment-styles
-        # Valid options are: `line`, `block`.
-        # Default: "line"
-        comment-style: "line"
-
-      # List of file globs (doublestar) or regexps to match excluded paths.
-      # To use regexp, prefix the string with `r!`.
-      # Default: ["**/testdata/**"]
-      exclude:
-        - "**/testdata/**"
-        - "r!(.+)_test\\.go"
-
-      # Maximum number of Go routines to use when analysing files.
-      # Default: 2 * the number of logical CPUs usable by the current process.
-      max-concurrent: 100
-
-      # Regexp used to detect license/copyright headers.
-      # This will be used to detect the existence of a copyright header in a file.
-      # If the first comment in a Go source file does not match this, then a license header will be generated.
-      # For the license header to be updated, it must also match the header matcher.
-      # Default: "(?i)copyright"
-      copyright-header-matcher: "(?i)copyright"
 
     gomoddirectives:
       # Allow local `replace` directives.

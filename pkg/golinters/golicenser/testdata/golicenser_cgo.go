@@ -1,12 +1,5 @@
 //go:build ignore
 
-// TODO(joshuasing): golicenser doesn't currently support cgo, for a few reasons:
-//   - source file will be copied to go-build cache
-//   - copied source file will contain generated comment, causing it to be excluded
-//   - modifying the copied go-build cache file does not result in the actual source file being fixed
-//  I would like to eventually support cgo, however for now, if using cgo, it is recommended to add to exclude:
-//   - */go-build/*
-
 // Copyright (c) 2025 golangci-lint <someone@example.com>. // want "invalid license header"
 // This file is a part of golangci-lint.
 

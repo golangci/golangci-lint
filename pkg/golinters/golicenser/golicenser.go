@@ -1,10 +1,10 @@
 package golicenser
 
 import (
+	"fmt"
 	"os"
 	"strings"
 
-	"github.com/go-viper/mapstructure/v2"
 	"github.com/joshuasing/golicenser"
 	"golang.org/x/tools/go/analysis"
 
@@ -13,79 +13,12 @@ import (
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/internal"
 )
 
-const (
-	linterName = "golicenser"
-	linterDesc = "Powerful license header linter"
-)
+const linterName = "golicenser"
 
 func New(settings *config.GoLicenserSettings, replacer *strings.Replacer) *goanalysis.Linter {
-	var conf golicenser.Config
-	if settings != nil {
-		// Template from config takes priority over template from template-path.
-		template := settings.Header.Template
-		if template == "" && settings.Header.TemplatePath != "" {
-			b, err := os.ReadFile(replacer.Replace(settings.Header.TemplatePath))
-			if err != nil {
-				internal.LinterLogger.Fatalf("%s: read template file: %v", linterName, err)
-			}
-			// Use template from file (trim newline from end of file)
-			template = strings.TrimSuffix(string(b), "\n")
-		}
-
-		var err error
-		var yearMode golicenser.YearMode
-		if ym := settings.Header.YearMode; ym != "" {
-			yearMode, err = golicenser.ParseYearMode(ym)
-			if err != nil {
-				internal.LinterLogger.Fatalf("%s: parse year mode: %v", linterName, err)
-			}
-		}
-
-		var commentStyle golicenser.CommentStyle
-		if cs := settings.Header.CommentStyle; cs != "" {
-			commentStyle, err = golicenser.ParseCommentStyle(cs)
-			if err != nil {
-				internal.LinterLogger.Fatalf("%s: parse comment style: %v", linterName, err)
-			}
-		}
-
-		vars := make(map[string]*golicenser.Var, len(settings.Header.Variables))
-		for k, v := range settings.Header.Variables {
-			if s, ok := v.(string); ok {
-				vars[k] = &golicenser.Var{Value: s}
-				continue
-			}
-
-			var glVar config.GoLicenserVar
-			if err := mapstructure.Decode(v, &glVar); err != nil {
-				internal.LinterLogger.Fatalf("%s: decode variable %s: %v", linterName, k, err)
-			}
-			vars[k] = &golicenser.Var{
-				Value:  glVar.Value,
-				Regexp: glVar.Regexp,
-			}
-		}
-
-		conf = golicenser.Config{
-			Header: golicenser.HeaderOpts{
-				Template:      template,
-				Matcher:       settings.Header.Matcher,
-				MatcherEscape: settings.Header.MatcherEscape,
-				Author:        settings.Header.Author,
-				AuthorRegexp:  settings.Header.AuthorRegexp,
-				Variables:     vars,
-				YearMode:      yearMode,
-				CommentStyle:  commentStyle,
-			},
-			Exclude:                settings.Exclude,
-			MaxConcurrent:          settings.MaxConcurrent,
-			CopyrightHeaderMatcher: settings.CopyrightHeaderMatcher,
-		}
-	}
-
-	if conf.Header.Template == "" || conf.Header.Author == "" {
-		// User did not set template or author, disable golicenser.
-		return goanalysis.NewLinter(linterName, linterDesc, nil, nil)
+	conf, err := createConfig(settings, replacer)
+	if err != nil {
+		internal.LinterLogger.Fatalf("%s: parse year mode: %v", linterName, err)
 	}
 
 	analyzer, err := golicenser.NewAnalyzer(conf)
@@ -95,8 +28,67 @@ func New(settings *config.GoLicenserSettings, replacer *strings.Replacer) *goana
 
 	return goanalysis.NewLinter(
 		linterName,
-		linterDesc,
+		"Powerful license header linter",
 		[]*analysis.Analyzer{analyzer},
 		nil,
 	).WithLoadMode(goanalysis.LoadModeSyntax)
+}
+
+func createConfig(settings *config.GoLicenserSettings, replacer *strings.Replacer) (golicenser.Config, error) {
+	if settings == nil {
+		return golicenser.Config{}, nil
+	}
+
+	header := golicenser.HeaderOpts{
+		Matcher:       settings.Header.Matcher,
+		MatcherEscape: settings.Header.MatcherEscape,
+		Author:        settings.Header.Author,
+		AuthorRegexp:  settings.Header.AuthorRegexp,
+		Template:      settings.Header.Template,
+		Variables:     make(map[string]*golicenser.Var, len(settings.Header.Variables)),
+	}
+
+	// Template from config takes priority over template from 'template-path'.
+	if header.Template == "" && settings.Header.TemplatePath != "" {
+		b, err := os.ReadFile(replacer.Replace(settings.Header.TemplatePath))
+		if err != nil {
+			return golicenser.Config{}, fmt.Errorf("read the template file: %w", err)
+		}
+
+		// Use template from a file (trim newline from the end of file)
+		header.Template = strings.TrimSuffix(strings.TrimSuffix(string(b), "\n"), "\r")
+	}
+
+	var err error
+	if settings.Header.YearMode != "" {
+		header.YearMode, err = golicenser.ParseYearMode(settings.Header.YearMode)
+		if err != nil {
+			return golicenser.Config{}, fmt.Errorf("parse year mode: %w", err)
+		}
+	}
+
+	if settings.Header.CommentStyle != "" {
+		header.CommentStyle, err = golicenser.ParseCommentStyle(settings.Header.CommentStyle)
+		if err != nil {
+			return golicenser.Config{}, fmt.Errorf("parse comment style: %w", err)
+		}
+	}
+
+	for k, v := range settings.Header.Variables {
+		header.Variables[k] = &golicenser.Var{
+			Value:  v.Value,
+			Regexp: v.Regexp,
+		}
+	}
+
+	return golicenser.Config{
+		Header:                 header,
+		CopyrightHeaderMatcher: settings.CopyrightHeaderMatcher,
+
+		// NOTE(ldez): not wanted for now.
+		// And an empty slice is used because of a wrong default inside the linter.
+		Exclude: []string{},
+		// NOTE(ldez): golangci-lint already handles concurrency.
+		MaxConcurrent: 1,
+	}, nil
 }

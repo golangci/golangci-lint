@@ -1940,6 +1940,11 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "copyright-header-matcher": {
+              "description": "Regexp used to detect license/copyright headers. This is used to detect the existence of any copyright header in a file.",
+              "type": "string",
+              "default": "(?i)copyright"
+            },
             "header": {
               "description": "License header settings.",
               "type": "object",
@@ -1982,28 +1987,21 @@
                 "variables": {
                   "description": "Custom variables to provide to the header template\nNote: Due to a limitation of Viper, the configuration loader used by golangci-lint, variable names will always be provided as lowercase to the template.",
                   "type": "object",
+                  "additionalProperties": false,
                   "patternProperties": {
-                    "^.+$": {
-                      "oneOf": [
-                        {
+                    "^[a-z\\-]+$": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
                           "description": "Variable value",
                           "type": "string"
                         },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "value": {
-                              "description": "Variable value",
-                              "type": "string"
-                            },
-                            "regexp": {
-                              "description": "Variable matcher regexp",
-                              "type": "string"
-                            }
-                          },
-                          "required": ["value"]
+                        "regexp": {
+                          "description": "Variable matcher regexp",
+                          "type": "string"
                         }
-                      ]
+                      }
                     }
                   }
                 },
@@ -2024,26 +2022,6 @@
                 { "required": ["template", "author"] },
                 { "required": ["template-path", "author"] }
               ]
-            },
-            "exclude": {
-              "description": "List of file globs (doublestar) or regexps to match excluded paths. To use regexp, prefix the string with `r!`.",
-              "type": "array",
-              "items": {
-                "type": "string"
-              },
-              "default": [
-                "**/testdata/**"
-              ]
-            },
-            "max-concurrent": {
-              "description": "Maximum number of Go routines to use when analysing files.",
-              "type": "integer",
-              "minimum": 0
-            },
-            "copyright-header-regexp": {
-              "description": "Regexp used to detect license/copyright headers. This is used to detect the existence of any copyright header in a file.",
-              "type": "string",
-              "default": "(?i)copyright"
             }
           },
           "required": ["header"]

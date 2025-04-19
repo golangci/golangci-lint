@@ -513,21 +513,19 @@ type GoHeaderSettings struct {
 
 type GoLicenserSettings struct {
 	Header                 GoLicenserHeaderSettings `mapstructure:"header"`
-	Exclude                []string                 `mapstructure:"exclude"`
-	MaxConcurrent          int                      `mapstructure:"max-concurrent"`
 	CopyrightHeaderMatcher string                   `mapstructure:"copyright-header-matcher"`
 }
 
 type GoLicenserHeaderSettings struct {
-	Template      string         `mapstructure:"template"`
-	TemplatePath  string         `mapstructure:"template-path"`
-	Matcher       string         `mapstructure:"matcher"`
-	MatcherEscape bool           `mapstructure:"matcher-escape"`
-	Author        string         `mapstructure:"author"`
-	AuthorRegexp  string         `mapstructure:"author-regexp"`
-	Variables     map[string]any `mapstructure:"variables"`
-	YearMode      string         `mapstructure:"year-mode"`
-	CommentStyle  string         `mapstructure:"comment-style"`
+	Template      string                   `mapstructure:"template"`
+	TemplatePath  string                   `mapstructure:"template-path"`
+	Matcher       string                   `mapstructure:"matcher"`
+	MatcherEscape bool                     `mapstructure:"matcher-escape"`
+	Author        string                   `mapstructure:"author"`
+	AuthorRegexp  string                   `mapstructure:"author-regexp"`
+	Variables     map[string]GoLicenserVar `mapstructure:"variables"`
+	YearMode      string                   `mapstructure:"year-mode"`
+	CommentStyle  string                   `mapstructure:"comment-style"`
 }
 
 type GoLicenserVar struct {

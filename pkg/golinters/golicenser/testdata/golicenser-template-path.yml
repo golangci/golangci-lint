@@ -10,5 +10,5 @@ linters:
           email:
             value: "test@example.com"
             regexp: "(.+)@example\\.com"
-          projectname: "golangci-lint"
-      exclude: [] # By default, testdata is excluded.
+          projectname:
+            value: "golangci-lint"
