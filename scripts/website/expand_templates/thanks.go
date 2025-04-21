@@ -99,6 +99,9 @@ func extractInfo(lc *linter.Config) authorInfo {
 	case "misspell":
 		return authorInfo{Author: "client9", Host: hostGitHub}
 
+	case "fatcontext":
+		return authorInfo{Author: "Crocmagnon", Host: hostGitHub}
+
 	default:
 		if strings.HasPrefix(lc.OriginalURL, "https://pkg.go.dev/") {
 			return authorInfo{Author: "golang", Host: hostGitHub}
