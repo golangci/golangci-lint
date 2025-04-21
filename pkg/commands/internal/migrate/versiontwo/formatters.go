@@ -9,6 +9,7 @@ type Formatters struct {
 }
 
 type FormatterExclusions struct {
-	Generated *string  `yaml:"generated,omitempty" toml:"generated,multiline,omitempty"`
-	Paths     []string `yaml:"paths,omitempty" toml:"paths,multiline,omitempty"`
+	Generated  *string  `yaml:"generated,omitempty" toml:"generated,multiline,omitempty"`
+	Paths      []string `yaml:"paths,omitempty" toml:"paths,multiline,omitempty"`
+	WarnUnused *bool    `yaml:"warn-unused,omitempty" toml:"warn-unused,multiline,omitempty"`
 }

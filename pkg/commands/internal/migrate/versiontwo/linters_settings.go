@@ -21,6 +21,7 @@ type LintersSettings struct {
 	Exhaustruct     ExhaustructSettings     `yaml:"exhaustruct,omitempty" toml:"exhaustruct,multiline,omitempty"`
 	Fatcontext      FatcontextSettings      `yaml:"fatcontext,omitempty" toml:"fatcontext,multiline,omitempty"`
 	Forbidigo       ForbidigoSettings       `yaml:"forbidigo,omitempty" toml:"forbidigo,multiline,omitempty"`
+	FuncOrder       FuncOrderSettings       `yaml:"funcorder,omitempty" toml:"funcorder,multiline,omitempty"`
 	Funlen          FunlenSettings          `yaml:"funlen,omitempty" toml:"funlen,multiline,omitempty"`
 	GinkgoLinter    GinkgoLinterSettings    `yaml:"ginkgolinter,omitempty" toml:"ginkgolinter,multiline,omitempty"`
 	Gocognit        GocognitSettings        `yaml:"gocognit,omitempty" toml:"gocognit,multiline,omitempty"`
@@ -210,6 +211,11 @@ type ForbidigoPattern struct {
 	Msg     *string `yaml:"msg,omitempty,omitempty" toml:"msg,omitempty,multiline,omitempty"`
 }
 
+type FuncOrderSettings struct {
+	Constructor  *bool `yaml:"constructor,omitempty,omitempty" toml:"constructor,omitempty,multiline,omitempty"`
+	StructMethod *bool `yaml:"struct-method,omitempty,omitempty" toml:"struct-method,omitempty,multiline,omitempty"`
+}
+
 type FunlenSettings struct {
 	Lines          *int  `yaml:"lines,omitempty" toml:"lines,multiline,omitempty"`
 	Statements     *int  `yaml:"statements,omitempty" toml:"statements,multiline,omitempty"`
@@ -241,14 +247,18 @@ type GocognitSettings struct {
 }
 
 type GoConstSettings struct {
-	IgnoreStrings       *string `yaml:"ignore-strings,omitempty" toml:"ignore-strings,multiline,omitempty"`
-	MatchWithConstants  *bool   `yaml:"match-constant,omitempty" toml:"match-constant,multiline,omitempty"`
-	MinStringLen        *int    `yaml:"min-len,omitempty" toml:"min-len,multiline,omitempty"`
-	MinOccurrencesCount *int    `yaml:"min-occurrences,omitempty" toml:"min-occurrences,multiline,omitempty"`
-	ParseNumbers        *bool   `yaml:"numbers,omitempty" toml:"numbers,multiline,omitempty"`
-	NumberMin           *int    `yaml:"min,omitempty" toml:"min,multiline,omitempty"`
-	NumberMax           *int    `yaml:"max,omitempty" toml:"max,multiline,omitempty"`
-	IgnoreCalls         *bool   `yaml:"ignore-calls,omitempty" toml:"ignore-calls,multiline,omitempty"`
+	IgnoreStringValues   []string `yaml:"ignore-string-values,omitempty" toml:"ignore-string-values,multiline,omitempty"`
+	MatchWithConstants   *bool    `yaml:"match-constant,omitempty" toml:"match-constant,multiline,omitempty"`
+	MinStringLen         *int     `yaml:"min-len,omitempty" toml:"min-len,multiline,omitempty"`
+	MinOccurrencesCount  *int     `yaml:"min-occurrences,omitempty" toml:"min-occurrences,multiline,omitempty"`
+	ParseNumbers         *bool    `yaml:"numbers,omitempty" toml:"numbers,multiline,omitempty"`
+	NumberMin            *int     `yaml:"min,omitempty" toml:"min,multiline,omitempty"`
+	NumberMax            *int     `yaml:"max,omitempty" toml:"max,multiline,omitempty"`
+	IgnoreCalls          *bool    `yaml:"ignore-calls,omitempty" toml:"ignore-calls,multiline,omitempty"`
+	FindDuplicates       *bool    `yaml:"find-duplicates,omitempty" toml:"find-duplicates,multiline,omitempty"`
+	EvalConstExpressions *bool    `yaml:"eval-const-expressions,omitempty" toml:"eval-const-expressions,multiline,omitempty"`
+
+	IgnoreStrings *string `yaml:"ignore-strings,omitempty" toml:"ignore-strings,multiline,omitempty"`
 }
 
 type GoCriticSettings struct {
@@ -436,7 +446,7 @@ type MustTagFunction struct {
 }
 
 type NakedretSettings struct {
-	MaxFuncLines uint `yaml:"max-func-lines,omitempty" toml:"max-func-lines,multiline,omitempty"`
+	MaxFuncLines *uint `yaml:"max-func-lines,omitempty" toml:"max-func-lines,multiline,omitempty"`
 }
 
 type NestifSettings struct {
@@ -444,6 +454,7 @@ type NestifSettings struct {
 }
 
 type NilNilSettings struct {
+	OnlyTwo        *bool    `yaml:"only-two,omitempty" toml:"only-two,multiline,omitempty"`
 	DetectOpposite *bool    `yaml:"detect-opposite,omitempty" toml:"detect-opposite,multiline,omitempty"`
 	CheckedTypes   []string `yaml:"checked-types,omitempty" toml:"checked-types,multiline,omitempty"`
 }
@@ -560,6 +571,7 @@ type SlogLintSettings struct {
 	NoGlobal       *string  `yaml:"no-global,omitempty" toml:"no-global,multiline,omitempty"`
 	Context        *string  `yaml:"context,omitempty" toml:"context,multiline,omitempty"`
 	StaticMsg      *bool    `yaml:"static-msg,omitempty" toml:"static-msg,multiline,omitempty"`
+	MsgStyle       *string  `yaml:"msg-style,omitempty" toml:"msg-style,multiline,omitempty"`
 	NoRawKeys      *bool    `yaml:"no-raw-keys,omitempty" toml:"no-raw-keys,multiline,omitempty"`
 	KeyNamingCase  *string  `yaml:"key-naming-case,omitempty" toml:"key-naming-case,multiline,omitempty"`
 	ForbiddenKeys  []string `yaml:"forbidden-keys,omitempty" toml:"forbidden-keys,multiline,omitempty"`
@@ -639,6 +651,7 @@ type TestifylintExpectedActual struct {
 type TestifylintFormatter struct {
 	CheckFormatString *bool `yaml:"check-format-string,omitempty" toml:"check-format-string,multiline,omitempty"`
 	RequireFFuncs     *bool `yaml:"require-f-funcs,omitempty" toml:"require-f-funcs,multiline,omitempty"`
+	RequireStringMsg  *bool `yaml:"require-string-msg,omitempty" toml:"require-string-msg,multiline,omitempty"`
 }
 
 type TestifylintGoRequire struct {
@@ -736,6 +749,7 @@ type WrapcheckSettings struct {
 	IgnoreSigRegexps       []string `yaml:"ignore-sig-regexps,omitempty" toml:"ignore-sig-regexps,multiline,omitempty"`
 	IgnorePackageGlobs     []string `yaml:"ignore-package-globs,omitempty" toml:"ignore-package-globs,multiline,omitempty"`
 	IgnoreInterfaceRegexps []string `yaml:"ignore-interface-regexps,omitempty" toml:"ignore-interface-regexps,multiline,omitempty"`
+	ReportInternalErrors   *bool    `yaml:"report-internal-errors,omitempty" toml:"report-internal-errors,multiline,omitempty"`
 }
 
 type WSLSettings struct {

@@ -1,0 +1,6 @@
+version: "2"
+
+linters:
+  settings:
+    nakedret:
+      max-func-lines: 0

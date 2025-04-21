@@ -142,7 +142,7 @@ func convertType(expr ast.Expr) ast.Expr {
 	}
 
 	switch ident.Name {
-	case "bool", "string", "int", "int8", "int16", "int32", "int64", "float32", "float64":
+	case "bool", "string", "uint", "uint8", "uint16", "uint32", "uint64", "int", "int8", "int16", "int32", "int64", "float32", "float64":
 		return &ast.StarExpr{X: ident}
 
 	default:
