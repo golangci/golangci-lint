@@ -10,6 +10,16 @@ If you value it, consider supporting us, we appreciate it! ❤️
 ### v2.1.2
 
 1. Linters bug fixes
+   * `fatcontext`: from 0.7.2 to 0.8.0
+2. Misc.
+   * migration: fix `nakedret.max-func-lines: 0`
+   * migration: fix order of `staticcheck` settings
+   * fix: add `go.mod` hash to the cache salt
+   * fix: use diagnostic position for related information position
+
+### v2.1.2
+
+1. Linters bug fixes
    * `exptostd`: from 0.4.2 to 0.4.3
    * `gofumpt`: from 0.7.0 to 0.8.0
    * `protogetter`: from 0.3.13 to 0.3.15
