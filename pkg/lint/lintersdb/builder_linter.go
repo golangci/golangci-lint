@@ -208,7 +208,6 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 
 		linter.NewConfig(embeddedcheck.New()).
 			WithSince("v2.2.0").
-			WithLoadForGoAnalysis().
 			WithURL("https://github.com/manuelarte/embeddedcheck"),
 
 		linter.NewConfig(errcheck.New(&cfg.Linters.Settings.Errcheck)).
