@@ -179,6 +179,7 @@ require (
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mattn/go-runewidth v0.0.16 // indirect
 	github.com/matttproud/golang_protobuf_extensions v1.0.1 // indirect
+	github.com/michaelpeterswa/sqlmustcontext v1.0.1 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/muesli/termenv v0.16.0 // indirect
 	github.com/olekukonko/tablewriter v0.0.5 // indirect

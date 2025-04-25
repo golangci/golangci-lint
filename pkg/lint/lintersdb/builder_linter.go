@@ -93,6 +93,7 @@ import (
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/sloglint"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/spancheck"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/sqlclosecheck"
+	"github.com/golangci/golangci-lint/v2/pkg/golinters/sqlmustcontext"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/staticcheck"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/tagalign"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/tagliatelle"
@@ -568,6 +569,11 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithSince("v1.28.0").
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/ryanrolds/sqlclosecheck"),
+
+		linter.NewConfig(sqlmustcontext.New()).
+			WithSince("v2.2.0").
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/michaelpeterswa/sqlmustcontext"),
 
 		linter.NewConfig(spancheck.New(&cfg.Linters.Settings.Spancheck)).
 			WithSince("v1.56.0").
