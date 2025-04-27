@@ -124,7 +124,7 @@ require (
 	github.com/yeya24/promlinter v0.3.0
 	github.com/ykadowak/zerologlint v0.1.5
 	gitlab.com/bosi/decorder v0.4.2
-	go-simpler.org/musttag v0.13.0
+	go-simpler.org/musttag v0.13.1
 	go-simpler.org/sloglint v0.11.0
 	go.augendre.info/fatcontext v0.8.0
 	go.uber.org/automaxprocs v1.6.0
