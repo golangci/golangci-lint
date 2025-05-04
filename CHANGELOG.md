@@ -7,6 +7,14 @@ If you value it, consider supporting us, we appreciate it! ❤️
 [![Open Collective backers and sponsors](https://img.shields.io/badge/OpenCollective-Donate-blue?logo=opencollective&style=for-the-badge)](https://opencollective.com/golangci-lint)
 [![GitHub Sponsors](https://img.shields.io/badge/GitHub-Donate-blue?logo=github&style=for-the-badge)](https://github.com/sponsors/golangci)
 
+### v2.1.6
+
+1. Linters bug fixes
+   * `godot`: from 1.5.0 to 1.5.1
+   * `musttag`: from 0.13.0 to 0.13.1
+2. Documentation
+   * Add note about golangci-lint v2 integration in VS Code
+
 ### v2.1.5
 
 Due to an error related to Snapcraft, some artifacts of the v2.1.4 release have not been published.
