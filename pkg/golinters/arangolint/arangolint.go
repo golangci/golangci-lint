@@ -1,7 +1,7 @@
 package arangolint
 
 import (
-	"github.com/Crocmagnon/arangolint/pkg/analyzer"
+	"go.augendre.info/arangolint/pkg/analyzer"
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/v2/pkg/goanalysis"
