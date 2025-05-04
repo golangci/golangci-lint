@@ -1,16 +1,16 @@
 package swaggo
 
-import "github.com/swaggo/swag"
+import "github.com/golangci/swaggoswag"
 
 const Name = "swaggo"
 
 type Formatter struct {
-	formatter *swag.Formatter
+	formatter *swaggoswag.Formatter
 }
 
 func New() *Formatter {
 	return &Formatter{
-		formatter: swag.NewFormatter(),
+		formatter: swaggoswag.NewFormatter(),
 	}
 }
 
