@@ -7,6 +7,49 @@ If you value it, consider supporting us, we appreciate it! ❤️
 [![Open Collective backers and sponsors](https://img.shields.io/badge/OpenCollective-Donate-blue?logo=opencollective&style=for-the-badge)](https://opencollective.com/golangci-lint)
 [![GitHub Sponsors](https://img.shields.io/badge/GitHub-Donate-blue?logo=github&style=for-the-badge)](https://github.com/sponsors/golangci)
 
+### v2.2.0
+
+1. New linters
+   * Add `arangolint` linter https://github.com/Crocmagnon/arangolint
+   * Add `embeddedstructfieldcheck` linter https://github.com/manuelarte/embeddedstructfieldcheck
+   * Add `noinlineerr` linter https://github.com/AlwxSin/noinlineerr
+   * Add `swaggo` formatter https://github.com/golangci/swaggoswag
+2. Linters new features or changes
+   * `errcheck`: add `verbose` option
+   * `funcorder`: from 0.2.1 to 0.5.0 (new option `alphabetical`)
+   * `gomoddirectives`: from 0.6.1 to 0.7.0 (new option `ignore-forbidden`)
+   * `iface`: from 1.3.1 to 1.4.0 (new option `unexported`)
+   * `noctx`: from 0.1.0 to 0.3.3 (new report messages, and new rules related to `database/sql`)
+   * `noctx`: from 0.3.3 to 0.3.4 (new SQL functions detection)
+   * `revive`: from 1.9.0 to 1.10.0 (new rules: `time-date`, `unnecessary-format`, `use-fmt-print`)
+   * `usestdlibvars`: from 1.28.0 to 1.29.0 (new option `time-date-month`)
+   * `wsl`: deprecation
+   * `wsl_v5`: from 4.7.0 to 5.0.0 (major version with new configuration)
+3. Linters bug fixes
+   * `dupword`: from 0.1.3 to 0.1.6
+   * `exptostd`: from 0.4.3 to 0.4.4
+   * `forbidigo`: from 1.6.0 to 2.1.0
+   * `gci`: consistently format the code
+   * `go-spancheck`: from 0.6.4 to 0.6.5
+   * `goconst`: from 1.8.1 to 1.8.2
+   * `gosec`: from 2.22.3 to 2.22.4
+   * `gosec`: from 2.22.4 to 2.22.5
+   * `makezero`: from 1.2.0 to 2.0.1
+   * `misspell`: from 0.6.0 to 0.7.0
+   * `usetesting`: from 0.4.3 to 0.5.0
+4. Misc.
+   * exclusions:  fix `path-expect`
+   * formatters: write the input to `stdout` when using `stdin` and there are no changes
+   * migration: improve the error message when trying to migrate a migrated config
+   * `typecheck`: deduplicate errors
+   * `typecheck`: stops the analysis after the first error
+   * Deprecate `print-resources-usage` flag
+   * Unique version per custom build
+5. Documentation
+   * Improves typecheck FAQ
+   * Adds plugin systems recommendations
+   * Add description for `linters.default` sets
+
 ### v2.1.6
 
 1. Linters bug fixes
