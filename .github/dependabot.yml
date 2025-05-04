@@ -10,6 +10,7 @@ updates:
       # Ignore forked linters because of their versioning issues.
       - dependency-name: "github.com/golangci/dupl"
       - dependency-name: "github.com/golangci/gofmt"
+      - dependency-name: "github.com/golangci/swaggoswag"
       - dependency-name: "github.com/golangci/unconvert"
   - package-ecosystem: github-actions
     directory: "/"
