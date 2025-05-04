@@ -718,6 +718,7 @@
       "anyOf": [
         {
           "enum": [
+            "arangolint",
             "asasalint",
             "asciicheck",
             "bidichk",
