@@ -12,7 +12,7 @@ func New() *goanalysis.Linter {
 
 	return goanalysis.NewLinter(
 		a.Name,
-		"Finds sending http request without context.Context",
+		"Detects function and method with missing usage of context.Context",
 		[]*analysis.Analyzer{a},
 		nil,
 	).WithLoadMode(goanalysis.LoadModeTypesInfo)
