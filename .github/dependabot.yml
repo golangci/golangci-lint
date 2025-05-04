@@ -37,6 +37,7 @@ updates:
           - "*"  # Group all updates into a single larger pull request.
   - package-ecosystem: gomod
     directories:
+      - pkg/golinters/arangolint/testdata/
       - pkg/golinters/ginkgolinter/testdata/
       - pkg/golinters/loggercheck/testdata/
       - pkg/golinters/protogetter/testdata/
