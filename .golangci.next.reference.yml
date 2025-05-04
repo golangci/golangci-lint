@@ -17,6 +17,7 @@ linters:
   # Enable specific linter.
   # https://golangci-lint.run/usage/linters/#enabled-by-default
   enable:
+    - arangolint
     - asasalint
     - asciicheck
     - bidichk
@@ -125,6 +126,7 @@ linters:
   # Disable specific linter.
   # https://golangci-lint.run/usage/linters/#disabled-by-default
   disable:
+    - arangolint
     - asasalint
     - asciicheck
     - bidichk
