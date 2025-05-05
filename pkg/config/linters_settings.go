@@ -232,6 +232,7 @@ type LintersSettings struct {
 	Godot           GodotSettings           `mapstructure:"godot"`
 	Godox           GodoxSettings           `mapstructure:"godox"`
 	Goheader        GoHeaderSettings        `mapstructure:"goheader"`
+	Golicenser      GoLicenserSettings      `mapstructure:"golicenser"`
 	GoModDirectives GoModDirectivesSettings `mapstructure:"gomoddirectives"`
 	Gomodguard      GoModGuardSettings      `mapstructure:"gomodguard"`
 	Gosec           GoSecSettings           `mapstructure:"gosec"`
@@ -509,6 +510,28 @@ type GoHeaderSettings struct {
 	Values       map[string]map[string]string `mapstructure:"values"`
 	Template     string                       `mapstructure:"template"`
 	TemplatePath string                       `mapstructure:"template-path"`
+}
+
+type GoLicenserSettings struct {
+	Header                 GoLicenserHeaderSettings `mapstructure:"header"`
+	CopyrightHeaderMatcher string                   `mapstructure:"copyright-header-matcher"`
+}
+
+type GoLicenserHeaderSettings struct {
+	Template      string                   `mapstructure:"template"`
+	TemplatePath  string                   `mapstructure:"template-path"`
+	Matcher       string                   `mapstructure:"matcher"`
+	MatcherEscape bool                     `mapstructure:"matcher-escape"`
+	Author        string                   `mapstructure:"author"`
+	AuthorRegexp  string                   `mapstructure:"author-regexp"`
+	Variables     map[string]GoLicenserVar `mapstructure:"variables"`
+	YearMode      string                   `mapstructure:"year-mode"`
+	CommentStyle  string                   `mapstructure:"comment-style"`
+}
+
+type GoLicenserVar struct {
+	Value  string `mapstructure:"value"`
+	Regexp string `mapstructure:"regexp"`
 }
 
 type GoModDirectivesSettings struct {

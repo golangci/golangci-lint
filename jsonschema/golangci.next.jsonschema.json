@@ -757,6 +757,7 @@
             "godox",
             "err113",
             "goheader",
+            "golicenser",
             "gomoddirectives",
             "gomodguard",
             "goprintffuncname",
@@ -1939,6 +1940,96 @@
             { "required": ["template"] },
             { "required": ["template-path"] }
           ]
+        },
+        "golicenserSettings": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "copyright-header-matcher": {
+              "description": "Regexp used to detect license/copyright headers. This is used to detect the existence of any copyright header in a file.",
+              "type": "string",
+              "default": "(?i)copyright"
+            },
+            "header": {
+              "description": "License header settings.",
+              "type": "object",
+              "properties": {
+                "template": {
+                  "description": "License header template (using Go text/template)\nhttps://github.com/joshuasing/golicenser#templates",
+                  "type": "string",
+                  "examples": [
+                    "Copyright (c) {{.year}} {{.author}}. All rights reserved.\nUse of this source code is governed by a BSD-style\nlicense that can be found in the LICENSE file."
+                  ]
+                },
+                "template-path": {
+                  "description": "Path to file containing license header template",
+                  "type": "string",
+                  "examples": [
+                    "license.txt",
+                    "license-header.txt"
+                  ]
+                },
+                "matcher": {
+                  "description": "License header matcher regexp\nhttps://github.com/joshuasing/golicenser#matcher",
+                  "type": "string",
+                  "examples": [
+                    "Copyright \\(c\\) {{.year}} {{.author}}(.|\\s<.+@example.com>)"
+                  ]
+                },
+                "matcher-escape": {
+                  "description": "Enable to regexp-escape the header matcher. Useful for providing a license template instead of regexp.",
+                  "type": "boolean",
+                  "default": false
+                },
+                "author": {
+                  "description": "Project author name (used in the `author` template variable).",
+                  "type": "string"
+                },
+                "author-regexp": {
+                  "description": "Regexp used to match the project author (`author` variable)",
+                  "type": "string"
+                },
+                "variables": {
+                  "description": "Custom variables to provide to the header template\nNote: Due to a limitation of Viper, the configuration loader used by golangci-lint, variable names will always be provided as lowercase to the template.",
+                  "type": "object",
+                  "additionalProperties": false,
+                  "patternProperties": {
+                    "^[a-z\\-]+$": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "value": {
+                          "description": "Variable value",
+                          "type": "string"
+                        },
+                        "regexp": {
+                          "description": "Variable matcher regexp",
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                "year-mode": {
+                  "description": "Copyright year formatting mode.\nhttps://github.com/joshuasing/golicenser#year-modes",
+                  "type": "string",
+                  "enum": ["preserve", "preserve-this-year-range", "preserve-modified-range", "this-year", "last-modified", "git-range", "git-modified-list"],
+                  "default": "preserve"
+                },
+                "comment-style": {
+                  "description": "Style of comment to use in license headers.\nhttps://github.com/joshuasing/golicenser#comment-styles",
+                  "type": "string",
+                  "enum": ["line", "block"],
+                  "default": "line"
+                }
+              },
+              "oneOf": [
+                { "required": ["template", "author"] },
+                { "required": ["template-path", "author"] }
+              ]
+            }
+          },
+          "required": ["header"]
         },
         "goimportsSettings": {
           "type": "object",
@@ -4403,6 +4494,9 @@
             },
             "goheader": {
               "$ref": "#/definitions/settings/definitions/goheaderSettings"
+            },
+            "golicenser": {
+              "$ref": "#/definitions/settings/definitions/golicenserSettings"
             },
             "gomoddirectives": {
               "$ref": "#/definitions/settings/definitions/gomoddirectivesSettings"
