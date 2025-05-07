@@ -3,7 +3,7 @@ package makezero
 import (
 	"fmt"
 
-	"github.com/ashanbrown/makezero/makezero"
+	"github.com/ashanbrown/makezero/v2/makezero"
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/v2/pkg/config"
