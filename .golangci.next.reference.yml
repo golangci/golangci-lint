@@ -1600,6 +1600,8 @@ linters:
         - findcall
         # Report assembly that clobbers the frame pointer before saving it.
         - framepointer
+        # Check format of addresses passed to net.Dial.
+        - hostport
         # Report using Go 1.22 enhanced ServeMux patterns in older Go versions.
         - httpmux
         # Check for mistakes using HTTP responses.
@@ -1683,6 +1685,7 @@ linters:
         - fieldalignment
         - findcall
         - framepointer
+        - hostport
         - httpmux
         - httpresponse
         - ifaceassert
