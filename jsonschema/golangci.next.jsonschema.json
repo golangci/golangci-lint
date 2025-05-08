@@ -837,7 +837,8 @@
         "gofmt",
         "gofumpt",
         "goimports",
-        "golines"
+        "golines",
+        "swaggo"
       ]
     },
     "settings": {

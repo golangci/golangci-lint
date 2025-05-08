@@ -94,6 +94,7 @@ import (
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/spancheck"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/sqlclosecheck"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/staticcheck"
+	"github.com/golangci/golangci-lint/v2/pkg/golinters/swaggo"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/tagalign"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/tagliatelle"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/testableexamples"
@@ -580,6 +581,11 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithLoadForGoAnalysis().
 			WithAutoFix().
 			WithURL("https://staticcheck.dev/"),
+
+		linter.NewConfig(swaggo.New()).
+			WithSince("v2.2.0").
+			WithAutoFix().
+			WithURL("https://github.com/swaggo/swaggo"),
 
 		linter.NewConfig(tagalign.New(&cfg.Linters.Settings.TagAlign)).
 			WithSince("v1.53.0").
