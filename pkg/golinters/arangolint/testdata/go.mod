@@ -1,4 +1,4 @@
-module testdata
+module arangolint
 
 go 1.23.0
 

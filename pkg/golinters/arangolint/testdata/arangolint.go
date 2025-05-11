@@ -1,5 +1,5 @@
 //golangcitest:args -Earangolint
-package testdata
+package arangolint
 
 import (
 	"context"
@@ -7,7 +7,7 @@ import (
 	"github.com/arangodb/go-driver/v2/arangodb"
 )
 
-func example() {
+func _() {
 	ctx := context.Background()
 	arangoClient := arangodb.NewClient(nil)
 	db, _ := arangoClient.GetDatabase(ctx, "name", nil)
@@ -32,16 +32,4 @@ func example() {
 	// direct with other fields
 	db.BeginTransaction(ctx, arangodb.TransactionCollections{}, &arangodb.BeginTransactionOptions{AllowImplicit: true, LockTimeout: 0})
 	trx, _ = db.BeginTransaction(ctx, arangodb.TransactionCollections{}, &arangodb.BeginTransactionOptions{AllowImplicit: true, LockTimeout: 0})
-
-	// indirect no pointer
-	// options := arangodb.BeginTransactionOptions{LockTimeout: 0}
-	// db.BeginTransaction(ctx, arangodb.TransactionCollections{}, &options) // w@nt "missing AllowImplicit option"
-	// options.AllowImplicit = true
-	// db.BeginTransaction(ctx, arangodb.TransactionCollections{}, &options)
-	//
-	// indirect pointer
-	// optns := &arangodb.BeginTransactionOptions{LockTimeout: 0}
-	// db.BeginTransaction(ctx, arangodb.TransactionCollections{}, optns) // w@nt "missing AllowImplicit option"
-	// options.AllowImplicit = true
-	// db.BeginTransaction(ctx, arangodb.TransactionCollections{}, optns)
 }
