@@ -137,7 +137,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 	// When a new linter is added the version in `WithSince(...)` must be the next minor version of golangci-lint.
 	return []*linter.Config{
 		linter.NewConfig(arangolint.New()).
-			WithSince("v2.1.0").
+			WithSince("v2.2.0").
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/Crocmagnon/arangolint"),
 
