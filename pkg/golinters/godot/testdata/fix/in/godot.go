@@ -11,3 +11,10 @@ func godot(a, b int) int {
 	// Nothing to do here
 	return a + b
 }
+
+// Foo Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+// Aenean rhoncus odio enim, et pulvinar libero ultrices quis.
+// Nulla at erat tellus. Maecenas id dapibus velit, ut porttitor ipsum
+func Foo() {
+	// nothing to do here
+}

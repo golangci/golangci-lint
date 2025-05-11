@@ -14,7 +14,7 @@ require (
 	github.com/Djarvur/go-err113 v0.0.0-20210108212216-aea10b59be24
 	github.com/GaijinEntertainment/go-exhaustruct/v3 v3.3.1
 	github.com/OpenPeeDeeP/depguard/v2 v2.2.1
-	github.com/alecthomas/chroma/v2 v2.16.0
+	github.com/alecthomas/chroma/v2 v2.17.2
 	github.com/alecthomas/go-check-sumtype v0.3.1
 	github.com/alexkohler/nakedret/v2 v2.0.6
 	github.com/alexkohler/prealloc v1.0.0
@@ -74,7 +74,7 @@ require (
 	github.com/leonklingele/grouper v1.1.2
 	github.com/macabu/inamedparam v0.2.0
 	github.com/manuelarte/embeddedcheck v0.1.0
-	github.com/manuelarte/funcorder v0.2.1
+	github.com/manuelarte/funcorder v0.3.0
 	github.com/maratori/testableexamples v1.0.0
 	github.com/maratori/testpackage v1.1.1
 	github.com/matoous/godox v1.1.0
@@ -98,7 +98,7 @@ require (
 	github.com/sashamelentyev/interfacebloat v1.1.0
 	github.com/sashamelentyev/usestdlibvars v1.28.0
 	github.com/securego/gosec/v2 v2.22.3
-	github.com/shirou/gopsutil/v4 v4.25.3
+	github.com/shirou/gopsutil/v4 v4.25.4
 	github.com/sirupsen/logrus v1.9.3
 	github.com/sivchari/containedctx v1.0.3
 	github.com/sonatard/noctx v0.1.0
@@ -110,7 +110,7 @@ require (
 	github.com/stbenjam/no-sprintf-host-port v0.2.0
 	github.com/stretchr/testify v1.10.0
 	github.com/tdakkota/asciicheck v0.4.1
-	github.com/tetafro/godot v1.5.0
+	github.com/tetafro/godot v1.5.1
 	github.com/timakin/bodyclose v0.0.0-20241222091800-1db5c5ca4d67
 	github.com/timonwong/loggercheck v0.11.0
 	github.com/tomarrell/wrapcheck/v2 v2.11.0
@@ -125,7 +125,7 @@ require (
 	github.com/yeya24/promlinter v0.3.0
 	github.com/ykadowak/zerologlint v0.1.5
 	gitlab.com/bosi/decorder v0.4.2
-	go-simpler.org/musttag v0.13.0
+	go-simpler.org/musttag v0.13.1
 	go-simpler.org/sloglint v0.11.0
 	go.augendre.info/fatcontext v0.8.0
 	go.uber.org/automaxprocs v1.6.0
