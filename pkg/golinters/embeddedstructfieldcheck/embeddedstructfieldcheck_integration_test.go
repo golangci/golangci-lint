@@ -1,4 +1,4 @@
-package embeddedcheck
+package embeddedstructfieldcheck
 
 import (
 	"testing"

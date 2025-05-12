@@ -1,7 +1,7 @@
-package embeddedcheck
+package embeddedstructfieldcheck
 
 import (
-	"github.com/manuelarte/embeddedcheck/analyzer"
+	"github.com/manuelarte/embeddedstructfieldcheck/analyzer"
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/v2/pkg/goanalysis"

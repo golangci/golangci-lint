@@ -1,4 +1,4 @@
-//golangcitest:args -Eembeddedcheck
+//golangcitest:args -Eembeddedstructfieldcheck
 package simple
 
 import "time"

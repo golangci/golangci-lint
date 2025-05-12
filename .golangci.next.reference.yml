@@ -32,7 +32,7 @@ linters:
     - dupl
     - dupword
     - durationcheck
-    - embeddedcheck
+    - embeddedstructfieldcheck
     - err113
     - errcheck
     - errchkjson
@@ -141,7 +141,7 @@ linters:
     - dupl
     - dupword
     - durationcheck
-    - embeddedcheck
+    - embeddedstructfieldcheck
     - err113
     - errcheck
     - errchkjson

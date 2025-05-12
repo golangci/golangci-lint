@@ -1,4 +1,4 @@
-//golangcitest:args -Eembeddedcheck
+//golangcitest:args -Eembeddedstructfieldcheck
 package simple
 
 import (
@@ -20,7 +20,7 @@ type NoSpaceStruct struct {
 type NotSortedStruct struct {
 	version int
 
-	time.Time // want `embedded types should be listed before non embedded types`
+	time.Time // want `embedded fields should be listed before regular fields`
 }
 
 type MixedEmbeddedAndNotEmbedded struct {
@@ -28,7 +28,7 @@ type MixedEmbeddedAndNotEmbedded struct {
 
 	name string
 
-	time.Time // want `embedded types should be listed before non embedded types`
+	time.Time // want `embedded fields should be listed before regular fields`
 
 	age int
 }
