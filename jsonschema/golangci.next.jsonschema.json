@@ -539,6 +539,7 @@
         "fieldalignment",
         "findcall",
         "framepointer",
+        "hostport",
         "httpmux",
         "httpresponse",
         "ifaceassert",
@@ -717,6 +718,7 @@
       "anyOf": [
         {
           "enum": [
+            "arangolint",
             "asasalint",
             "asciicheck",
             "bidichk",
@@ -836,7 +838,8 @@
         "gofmt",
         "gofumpt",
         "goimports",
-        "golines"
+        "golines",
+        "swaggo"
       ]
     },
     "settings": {

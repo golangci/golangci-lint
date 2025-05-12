@@ -20,8 +20,8 @@ require (
 	github.com/alexkohler/prealloc v1.0.0
 	github.com/alingse/asasalint v0.0.11
 	github.com/alingse/nilnesserr v0.2.0
-	github.com/ashanbrown/forbidigo v1.6.0
-	github.com/ashanbrown/makezero v1.2.0
+	github.com/ashanbrown/forbidigo/v2 v2.1.0
+	github.com/ashanbrown/makezero/v2 v2.0.1
 	github.com/bkielbasa/cyclop v1.2.3
 	github.com/blizzy78/varnamelen v0.8.0
 	github.com/bombsimon/wsl/v4 v4.7.0
@@ -51,6 +51,7 @@ require (
 	github.com/golangci/misspell v0.6.0
 	github.com/golangci/plugin-module-register v0.1.1
 	github.com/golangci/revgrep v0.8.0
+	github.com/golangci/swaggoswag v0.0.0-20250504205917-77f2aca3143e
 	github.com/golangci/unconvert v0.0.0-20250410112200-a129a6e6413e
 	github.com/gordonklaus/ineffassign v0.1.0
 	github.com/gostaticanalysis/forcetypeassert v0.2.0
@@ -58,7 +59,7 @@ require (
 	github.com/hashicorp/go-version v1.7.0
 	github.com/jgautheron/goconst v1.8.1
 	github.com/jingyugao/rowserrcheck v1.1.1
-	github.com/jjti/go-spancheck v0.6.4
+	github.com/jjti/go-spancheck v0.6.5
 	github.com/julz/importas v0.2.0
 	github.com/karamaru-alpha/copyloopvar v1.2.1
 	github.com/kisielk/errcheck v1.9.0
@@ -74,7 +75,7 @@ require (
 	github.com/leonklingele/grouper v1.1.2
 	github.com/macabu/inamedparam v0.2.0
 	github.com/manuelarte/embeddedstructfieldcheck v0.2.0
-	github.com/manuelarte/funcorder v0.3.0
+	github.com/manuelarte/funcorder v0.5.0
 	github.com/maratori/testableexamples v1.0.0
 	github.com/maratori/testpackage v1.1.1
 	github.com/matoous/godox v1.1.0
@@ -97,11 +98,11 @@ require (
 	github.com/santhosh-tekuri/jsonschema/v6 v6.0.1
 	github.com/sashamelentyev/interfacebloat v1.1.0
 	github.com/sashamelentyev/usestdlibvars v1.28.0
-	github.com/securego/gosec/v2 v2.22.3
+	github.com/securego/gosec/v2 v2.22.4
 	github.com/shirou/gopsutil/v4 v4.25.4
 	github.com/sirupsen/logrus v1.9.3
 	github.com/sivchari/containedctx v1.0.3
-	github.com/sonatard/noctx v0.1.0
+	github.com/sonatard/noctx v0.3.3
 	github.com/sourcegraph/go-diff v0.7.0
 	github.com/spf13/cobra v1.9.1
 	github.com/spf13/pflag v1.0.6
@@ -127,6 +128,7 @@ require (
 	gitlab.com/bosi/decorder v0.4.2
 	go-simpler.org/musttag v0.13.1
 	go-simpler.org/sloglint v0.11.0
+	go.augendre.info/arangolint v0.2.0
 	go.augendre.info/fatcontext v0.8.0
 	go.uber.org/automaxprocs v1.6.0
 	golang.org/x/mod v0.24.0
@@ -142,7 +144,7 @@ require (
 	github.com/Masterminds/semver/v3 v3.3.1 // indirect
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
-	github.com/ccojocar/zxcvbn-go v1.0.2 // indirect
+	github.com/ccojocar/zxcvbn-go v1.0.4 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/charmbracelet/colorprofile v0.2.3-0.20250311203215-f60798e515dc // indirect
 	github.com/charmbracelet/x/ansi v0.8.0 // indirect
@@ -211,7 +213,7 @@ require (
 	golang.org/x/exp v0.0.0-20240909161429-701f63a606c0 // indirect
 	golang.org/x/exp/typeparams v0.0.0-20250210185358-939b2ce775ac // indirect
 	golang.org/x/sync v0.14.0 // indirect
-	golang.org/x/text v0.24.0 // indirect
+	golang.org/x/text v0.25.0 // indirect
 	google.golang.org/protobuf v1.36.6 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect

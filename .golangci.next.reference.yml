@@ -17,6 +17,7 @@ linters:
   # Enable specific linter.
   # https://golangci-lint.run/usage/linters/#enabled-by-default
   enable:
+    - arangolint
     - asasalint
     - asciicheck
     - bidichk
@@ -126,6 +127,7 @@ linters:
   # Disable specific linter.
   # https://golangci-lint.run/usage/linters/#disabled-by-default
   disable:
+    - arangolint
     - asasalint
     - asciicheck
     - bidichk
@@ -1602,6 +1604,8 @@ linters:
         - findcall
         # Report assembly that clobbers the frame pointer before saving it.
         - framepointer
+        # Check format of addresses passed to net.Dial.
+        - hostport
         # Report using Go 1.22 enhanced ServeMux patterns in older Go versions.
         - httpmux
         # Check for mistakes using HTTP responses.
@@ -1685,6 +1689,7 @@ linters:
         - fieldalignment
         - findcall
         - framepointer
+        - hostport
         - httpmux
         - httpresponse
         - ifaceassert
@@ -3974,6 +3979,7 @@ formatters:
     - gofumpt
     - goimports
     - golines
+    - swaggo
 
   # Formatters settings.
   settings:

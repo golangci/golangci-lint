@@ -3,6 +3,7 @@ package lintersdb
 import (
 	"github.com/golangci/golangci-lint/v2/pkg/config"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters"
+	"github.com/golangci/golangci-lint/v2/pkg/golinters/arangolint"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/asasalint"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/asciicheck"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/bidichk"
@@ -95,6 +96,7 @@ import (
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/spancheck"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/sqlclosecheck"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/staticcheck"
+	"github.com/golangci/golangci-lint/v2/pkg/golinters/swaggo"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/tagalign"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/tagliatelle"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/testableexamples"
@@ -136,6 +138,11 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 	// The linters are sorted in the alphabetical order (case-insensitive).
 	// When a new linter is added the version in `WithSince(...)` must be the next minor version of golangci-lint.
 	return []*linter.Config{
+		linter.NewConfig(arangolint.New()).
+			WithSince("v2.2.0").
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/Crocmagnon/arangolint"),
+
 		linter.NewConfig(asasalint.New(&cfg.Linters.Settings.Asasalint)).
 			WithSince("v1.47.0").
 			WithLoadForGoAnalysis().
@@ -585,6 +592,11 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithLoadForGoAnalysis().
 			WithAutoFix().
 			WithURL("https://staticcheck.dev/"),
+
+		linter.NewConfig(swaggo.New()).
+			WithSince("v2.2.0").
+			WithAutoFix().
+			WithURL("https://github.com/swaggo/swaggo"),
 
 		linter.NewConfig(tagalign.New(&cfg.Linters.Settings.TagAlign)).
 			WithSince("v1.53.0").

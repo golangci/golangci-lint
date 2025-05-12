@@ -3,7 +3,7 @@ package forbidigo
 import (
 	"fmt"
 
-	"github.com/ashanbrown/forbidigo/forbidigo"
+	"github.com/ashanbrown/forbidigo/v2/forbidigo"
 	"golang.org/x/tools/go/analysis"
 	"gopkg.in/yaml.v3"
 

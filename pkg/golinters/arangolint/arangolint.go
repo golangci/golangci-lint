@@ -1,18 +1,18 @@
-package noctx
+package arangolint
 
 import (
-	"github.com/sonatard/noctx"
+	"go.augendre.info/arangolint/pkg/analyzer"
 	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/v2/pkg/goanalysis"
 )
 
 func New() *goanalysis.Linter {
-	a := noctx.Analyzer
+	a := analyzer.NewAnalyzer()
 
 	return goanalysis.NewLinter(
 		a.Name,
-		"Detects function and method with missing usage of context.Context",
+		a.Doc,
 		[]*analysis.Analyzer{a},
 		nil,
 	).WithLoadMode(goanalysis.LoadModeTypesInfo)
