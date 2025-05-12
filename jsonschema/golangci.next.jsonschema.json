@@ -734,6 +734,7 @@
             "dupl",
             "dupword",
             "durationcheck",
+            "embeddedstructfieldcheck",
             "errcheck",
             "errchkjson",
             "errname",
