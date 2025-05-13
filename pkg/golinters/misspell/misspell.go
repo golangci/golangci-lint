@@ -23,27 +23,22 @@ func New(settings *config.MisspellSettings) *goanalysis.Linter {
 		internal.LinterLogger.Fatalf("%s: %v", linterName, err)
 	}
 
-	a := &analysis.Analyzer{
-		Name: linterName,
-		Doc:  "Finds commonly misspelled English words",
-		Run: func(pass *analysis.Pass) (any, error) {
-			for _, file := range pass.Files {
-				err := runMisspellOnFile(pass, file, replacer, settings.Mode)
-				if err != nil {
-					return nil, err
+	return goanalysis.
+		NewLinterFromAnalyzer(&analysis.Analyzer{
+			Name: linterName,
+			Doc:  "Finds commonly misspelled English words",
+			Run: func(pass *analysis.Pass) (any, error) {
+				for _, file := range pass.Files {
+					err := runMisspellOnFile(pass, file, replacer, settings.Mode)
+					if err != nil {
+						return nil, err
+					}
 				}
-			}
 
-			return nil, nil
-		},
-	}
-
-	return goanalysis.NewLinter(
-		a.Name,
-		a.Doc,
-		[]*analysis.Analyzer{a},
-		nil,
-	).WithLoadMode(goanalysis.LoadModeSyntax)
+				return nil, nil
+			},
+		}).
+		WithLoadMode(goanalysis.LoadModeSyntax)
 }
 
 func createMisspellReplacer(settings *config.MisspellSettings) (*misspell.Replacer, error) {

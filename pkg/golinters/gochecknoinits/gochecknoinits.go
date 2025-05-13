@@ -11,22 +11,15 @@ import (
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/internal"
 )
 
-const linterName = "gochecknoinits"
-
 func New() *goanalysis.Linter {
-	analyzer := &analysis.Analyzer{
-		Name:     linterName,
-		Doc:      goanalysis.TheOnlyanalyzerDoc,
-		Run:      run,
-		Requires: []*analysis.Analyzer{inspect.Analyzer},
-	}
-
-	return goanalysis.NewLinter(
-		linterName,
-		"Checks that no init functions are present in Go code",
-		[]*analysis.Analyzer{analyzer},
-		nil,
-	).WithLoadMode(goanalysis.LoadModeSyntax)
+	return goanalysis.
+		NewLinterFromAnalyzer(&analysis.Analyzer{
+			Name:     "gochecknoinits",
+			Doc:      "Checks that no init functions are present in Go code",
+			Run:      run,
+			Requires: []*analysis.Analyzer{inspect.Analyzer},
+		}).
+		WithLoadMode(goanalysis.LoadModeSyntax)
 }
 
 func run(pass *analysis.Pass) (any, error) {

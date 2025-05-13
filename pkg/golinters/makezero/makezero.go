@@ -10,28 +10,21 @@ import (
 	"github.com/golangci/golangci-lint/v2/pkg/goanalysis"
 )
 
-const linterName = "makezero"
-
 func New(settings *config.MakezeroSettings) *goanalysis.Linter {
-	analyzer := &analysis.Analyzer{
-		Name: linterName,
-		Doc:  goanalysis.TheOnlyanalyzerDoc,
-		Run: func(pass *analysis.Pass) (any, error) {
-			err := runMakeZero(pass, settings)
-			if err != nil {
-				return nil, err
-			}
+	return goanalysis.
+		NewLinterFromAnalyzer(&analysis.Analyzer{
+			Name: "makezero",
+			Doc:  "Find slice declarations with non-zero initial length",
+			Run: func(pass *analysis.Pass) (any, error) {
+				err := runMakeZero(pass, settings)
+				if err != nil {
+					return nil, err
+				}
 
-			return nil, nil
-		},
-	}
-
-	return goanalysis.NewLinter(
-		linterName,
-		"Finds slice declarations with non-zero initial length",
-		[]*analysis.Analyzer{analyzer},
-		nil,
-	).WithLoadMode(goanalysis.LoadModeTypesInfo)
+				return nil, nil
+			},
+		}).
+		WithLoadMode(goanalysis.LoadModeTypesInfo)
 }
 
 func runMakeZero(pass *analysis.Pass, settings *config.MakezeroSettings) error {

@@ -25,36 +25,35 @@ func New(settings *config.ErrcheckSettings) *goanalysis.Linter {
 
 	analyzer := &analysis.Analyzer{
 		Name: linterName,
-		Doc:  goanalysis.TheOnlyanalyzerDoc,
-		Run:  goanalysis.DummyRun,
+		Doc: "errcheck is a program for checking for unchecked errors in Go code. " +
+			"These unchecked errors can be critical bugs in some cases",
+		Run: goanalysis.DummyRun,
 	}
 
-	return goanalysis.NewLinter(
-		linterName,
-		"errcheck is a program for checking for unchecked errors in Go code. "+
-			"These unchecked errors can be critical bugs in some cases",
-		[]*analysis.Analyzer{analyzer},
-		nil,
-	).WithContextSetter(func(lintCtx *linter.Context) {
-		checker := getChecker(settings)
-		checker.Tags = lintCtx.Cfg.Run.BuildTags
+	return goanalysis.
+		NewLinterFromAnalyzer(analyzer).
+		WithContextSetter(func(lintCtx *linter.Context) {
+			checker := getChecker(settings)
+			checker.Tags = lintCtx.Cfg.Run.BuildTags
 
-		analyzer.Run = func(pass *analysis.Pass) (any, error) {
-			issues := runErrCheck(lintCtx, pass, checker)
+			analyzer.Run = func(pass *analysis.Pass) (any, error) {
+				issues := runErrCheck(lintCtx, pass, checker)
 
-			if len(issues) == 0 {
+				if len(issues) == 0 {
+					return nil, nil
+				}
+
+				mu.Lock()
+				resIssues = append(resIssues, issues...)
+				mu.Unlock()
+
 				return nil, nil
 			}
-
-			mu.Lock()
-			resIssues = append(resIssues, issues...)
-			mu.Unlock()
-
-			return nil, nil
-		}
-	}).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
-		return resIssues
-	}).WithLoadMode(goanalysis.LoadModeTypesInfo)
+		}).
+		WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
+			return resIssues
+		}).
+		WithLoadMode(goanalysis.LoadModeTypesInfo)
 }
 
 func runErrCheck(lintCtx *linter.Context, pass *analysis.Pass, checker *errcheck.Checker) []goanalysis.Issue {

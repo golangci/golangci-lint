@@ -11,23 +11,16 @@ import (
 	"github.com/golangci/golangci-lint/v2/pkg/goanalysis"
 )
 
-const linterName = "godox"
-
 func New(settings *config.GodoxSettings) *goanalysis.Linter {
-	analyzer := &analysis.Analyzer{
-		Name: linterName,
-		Doc:  goanalysis.TheOnlyanalyzerDoc,
-		Run: func(pass *analysis.Pass) (any, error) {
-			return run(pass, settings), nil
-		},
-	}
-
-	return goanalysis.NewLinter(
-		linterName,
-		"Detects usage of FIXME, TODO and other keywords inside comments",
-		[]*analysis.Analyzer{analyzer},
-		nil,
-	).WithLoadMode(goanalysis.LoadModeSyntax)
+	return goanalysis.
+		NewLinterFromAnalyzer(&analysis.Analyzer{
+			Name: "godox",
+			Doc:  "Detects usage of FIXME, TODO and other keywords inside comments",
+			Run: func(pass *analysis.Pass) (any, error) {
+				return run(pass, settings), nil
+			},
+		}).
+		WithLoadMode(goanalysis.LoadModeSyntax)
 }
 
 func run(pass *analysis.Pass, settings *config.GodoxSettings) error {

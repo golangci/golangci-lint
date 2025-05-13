@@ -6,7 +6,6 @@ import (
 	"strings"
 
 	"github.com/kulti/thelper/pkg/analyzer"
-	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/v2/pkg/config"
 	"github.com/golangci/golangci-lint/v2/pkg/goanalysis"
@@ -14,8 +13,6 @@ import (
 )
 
 func New(settings *config.ThelperSettings) *goanalysis.Linter {
-	a := analyzer.NewAnalyzer()
-
 	opts := map[string]struct{}{
 		"t_name":  {},
 		"t_begin": {},
@@ -47,18 +44,14 @@ func New(settings *config.ThelperSettings) *goanalysis.Linter {
 
 	args := slices.Collect(maps.Keys(opts))
 
-	cfg := map[string]map[string]any{
-		a.Name: {
-			"checks": strings.Join(args, ","),
-		},
+	cfg := map[string]any{
+		"checks": strings.Join(args, ","),
 	}
 
-	return goanalysis.NewLinter(
-		a.Name,
-		a.Doc,
-		[]*analysis.Analyzer{a},
-		cfg,
-	).WithLoadMode(goanalysis.LoadModeTypesInfo)
+	return goanalysis.
+		NewLinterFromAnalyzer(analyzer.NewAnalyzer()).
+		WithConfig(cfg).
+		WithLoadMode(goanalysis.LoadModeTypesInfo)
 }
 
 func applyTHelperOptions(o config.ThelperOptions, prefix string, opts map[string]struct{}) {

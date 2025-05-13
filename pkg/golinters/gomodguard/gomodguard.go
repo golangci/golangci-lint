@@ -13,12 +13,7 @@ import (
 	"github.com/golangci/golangci-lint/v2/pkg/result"
 )
 
-const (
-	name = "gomodguard"
-	desc = "Allow and block list linter for direct Go module dependencies. " +
-		"This is different from depguard where there are different block " +
-		"types for example version constraints and module recommendations."
-)
+const linterName = "gomodguard"
 
 func New(settings *config.GoModGuardSettings) *goanalysis.Linter {
 	var issues []goanalysis.Issue
@@ -54,41 +49,41 @@ func New(settings *config.GoModGuardSettings) *goanalysis.Linter {
 	}
 
 	analyzer := &analysis.Analyzer{
-		Name: goanalysis.TheOnlyAnalyzerName,
-		Doc:  goanalysis.TheOnlyanalyzerDoc,
-		Run:  goanalysis.DummyRun,
+		Name: linterName,
+		Doc: "Allow and blocklist linter for direct Go module dependencies. " +
+			"This is different from depguard where there are different block " +
+			"types for example version constraints and module recommendations.",
+		Run: goanalysis.DummyRun,
 	}
 
-	return goanalysis.NewLinter(
-		name,
-		desc,
-		[]*analysis.Analyzer{analyzer},
-		nil,
-	).WithContextSetter(func(lintCtx *linter.Context) {
-		processor, err := gomodguard.NewProcessor(processorCfg)
-		if err != nil {
-			lintCtx.Log.Warnf("running gomodguard failed: %s: if you are not using go modules "+
-				"it is suggested to disable this linter", err)
-			return
-		}
-
-		analyzer.Run = func(pass *analysis.Pass) (any, error) {
-			gomodguardIssues := processor.ProcessFiles(internal.GetGoFileNames(pass))
-
-			mu.Lock()
-			defer mu.Unlock()
-
-			for _, gomodguardIssue := range gomodguardIssues {
-				issues = append(issues, goanalysis.NewIssue(&result.Issue{
-					FromLinter: name,
-					Pos:        gomodguardIssue.Position,
-					Text:       gomodguardIssue.Reason,
-				}, pass))
+	return goanalysis.NewLinterFromAnalyzer(analyzer).
+		WithContextSetter(func(lintCtx *linter.Context) {
+			processor, err := gomodguard.NewProcessor(processorCfg)
+			if err != nil {
+				lintCtx.Log.Warnf("running gomodguard failed: %s: if you are not using go modules "+
+					"it is suggested to disable this linter", err)
+				return
 			}
 
-			return nil, nil
-		}
-	}).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
-		return issues
-	}).WithLoadMode(goanalysis.LoadModeSyntax)
+			analyzer.Run = func(pass *analysis.Pass) (any, error) {
+				gomodguardIssues := processor.ProcessFiles(internal.GetGoFileNames(pass))
+
+				mu.Lock()
+				defer mu.Unlock()
+
+				for _, gomodguardIssue := range gomodguardIssues {
+					issues = append(issues, goanalysis.NewIssue(&result.Issue{
+						FromLinter: linterName,
+						Pos:        gomodguardIssue.Position,
+						Text:       gomodguardIssue.Reason,
+					}, pass))
+				}
+
+				return nil, nil
+			}
+		}).
+		WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
+			return issues
+		}).
+		WithLoadMode(goanalysis.LoadModeSyntax)
 }

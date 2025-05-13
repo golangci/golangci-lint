@@ -11,24 +11,17 @@ import (
 	"github.com/golangci/golangci-lint/v2/pkg/goanalysis"
 )
 
-const linterName = "dogsled"
-
 func New(settings *config.DogsledSettings) *goanalysis.Linter {
-	analyzer := &analysis.Analyzer{
-		Name: linterName,
-		Doc:  goanalysis.TheOnlyanalyzerDoc,
-		Run: func(pass *analysis.Pass) (any, error) {
-			return run(pass, settings.MaxBlankIdentifiers)
-		},
-		Requires: []*analysis.Analyzer{inspect.Analyzer},
-	}
-
-	return goanalysis.NewLinter(
-		linterName,
-		"Checks assignments with too many blank identifiers (e.g. x, _, _, _, := f())",
-		[]*analysis.Analyzer{analyzer},
-		nil,
-	).WithLoadMode(goanalysis.LoadModeSyntax)
+	return goanalysis.
+		NewLinterFromAnalyzer(&analysis.Analyzer{
+			Name: "dogsled",
+			Doc:  "Checks assignments with too many blank identifiers (e.g. x, _, _, _, := f())",
+			Run: func(pass *analysis.Pass) (any, error) {
+				return run(pass, settings.MaxBlankIdentifiers)
+			},
+			Requires: []*analysis.Analyzer{inspect.Analyzer},
+		}).
+		WithLoadMode(goanalysis.LoadModeSyntax)
 }
 
 func run(pass *analysis.Pass, maxBlanks int) (any, error) {

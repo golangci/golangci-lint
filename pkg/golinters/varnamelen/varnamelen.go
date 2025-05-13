@@ -5,15 +5,13 @@ import (
 	"strings"
 
 	"github.com/blizzy78/varnamelen"
-	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/v2/pkg/config"
 	"github.com/golangci/golangci-lint/v2/pkg/goanalysis"
 )
 
 func New(settings *config.VarnamelenSettings) *goanalysis.Linter {
-	analyzer := varnamelen.NewAnalyzer()
-	cfg := map[string]map[string]any{}
+	var cfg map[string]any
 
 	if settings != nil {
 		vnlCfg := map[string]any{
@@ -30,17 +28,15 @@ func New(settings *config.VarnamelenSettings) *goanalysis.Linter {
 		if settings.MaxDistance > 0 {
 			vnlCfg["maxDistance"] = strconv.Itoa(settings.MaxDistance)
 		}
+
 		if settings.MinNameLength > 0 {
 			vnlCfg["minNameLength"] = strconv.Itoa(settings.MinNameLength)
 		}
-
-		cfg[analyzer.Name] = vnlCfg
 	}
 
-	return goanalysis.NewLinter(
-		analyzer.Name,
-		"checks that the length of a variable's name matches its scope",
-		[]*analysis.Analyzer{analyzer},
-		cfg,
-	).WithLoadMode(goanalysis.LoadModeTypesInfo)
+	return goanalysis.
+		NewLinterFromAnalyzer(varnamelen.NewAnalyzer()).
+		WithDesc("checks that the length of a variable's name matches its scope").
+		WithConfig(cfg).
+		WithLoadMode(goanalysis.LoadModeTypesInfo)
 }

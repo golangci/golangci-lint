@@ -10,29 +10,22 @@ import (
 	"github.com/golangci/golangci-lint/v2/pkg/goanalysis"
 )
 
-const linterName = "unparam"
-
 func New(settings *config.UnparamSettings) *goanalysis.Linter {
-	analyzer := &analysis.Analyzer{
-		Name:     linterName,
-		Doc:      goanalysis.TheOnlyanalyzerDoc,
-		Requires: []*analysis.Analyzer{buildssa.Analyzer},
-		Run: func(pass *analysis.Pass) (any, error) {
-			err := runUnparam(pass, settings)
-			if err != nil {
-				return nil, err
-			}
+	return goanalysis.
+		NewLinterFromAnalyzer(&analysis.Analyzer{
+			Name:     "unparam",
+			Doc:      "Reports unused function parameters",
+			Requires: []*analysis.Analyzer{buildssa.Analyzer},
+			Run: func(pass *analysis.Pass) (any, error) {
+				err := runUnparam(pass, settings)
+				if err != nil {
+					return nil, err
+				}
 
-			return nil, nil
-		},
-	}
-
-	return goanalysis.NewLinter(
-		linterName,
-		"Reports unused function parameters",
-		[]*analysis.Analyzer{analyzer},
-		nil,
-	).WithLoadMode(goanalysis.LoadModeTypesInfo)
+				return nil, nil
+			},
+		}).
+		WithLoadMode(goanalysis.LoadModeTypesInfo)
 }
 
 func runUnparam(pass *analysis.Pass, settings *config.UnparamSettings) error {

@@ -15,28 +15,23 @@ import (
 const linterName = "forbidigo"
 
 func New(settings *config.ForbidigoSettings) *goanalysis.Linter {
-	analyzer := &analysis.Analyzer{
-		Name: linterName,
-		Doc:  goanalysis.TheOnlyanalyzerDoc,
-		Run: func(pass *analysis.Pass) (any, error) {
-			err := runForbidigo(pass, settings)
-			if err != nil {
-				return nil, err
-			}
-
-			return nil, nil
-		},
-	}
-
 	// Without AnalyzeTypes, LoadModeSyntax is enough.
 	// But we cannot make this depend on the settings and have to mirror the mode chosen in GetAllSupportedLinterConfigs,
-	// therefore we have to use LoadModeTypesInfo in all cases.
-	return goanalysis.NewLinter(
-		linterName,
-		"Forbids identifiers",
-		[]*analysis.Analyzer{analyzer},
-		nil,
-	).WithLoadMode(goanalysis.LoadModeTypesInfo)
+	// therefore, we have to use LoadModeTypesInfo in all cases.
+	return goanalysis.
+		NewLinterFromAnalyzer(&analysis.Analyzer{
+			Name: linterName,
+			Doc:  "Forbids identifiers",
+			Run: func(pass *analysis.Pass) (any, error) {
+				err := runForbidigo(pass, settings)
+				if err != nil {
+					return nil, err
+				}
+
+				return nil, nil
+			},
+		}).
+		WithLoadMode(goanalysis.LoadModeTypesInfo)
 }
 
 func runForbidigo(pass *analysis.Pass, settings *config.ForbidigoSettings) error {

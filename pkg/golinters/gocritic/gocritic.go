@@ -33,27 +33,21 @@ func New(settings *config.GoCriticSettings, replacer *strings.Replacer) *goanaly
 		sizes: types.SizesFor("gc", runtime.GOARCH),
 	}
 
-	analyzer := &analysis.Analyzer{
-		Name: linterName,
-		Doc:  goanalysis.TheOnlyanalyzerDoc,
-		Run: func(pass *analysis.Pass) (any, error) {
-			err := wrapper.run(pass)
-			if err != nil {
-				return nil, err
-			}
-
-			return nil, nil
-		},
-	}
-
-	return goanalysis.NewLinter(
-		linterName,
-		`Provides diagnostics that check for bugs, performance and style issues.
+	return goanalysis.
+		NewLinterFromAnalyzer(&analysis.Analyzer{
+			Name: linterName,
+			Doc: `Provides diagnostics that check for bugs, performance and style issues.
 Extensible without recompilation through dynamic rules.
 Dynamic rules are written declaratively with AST patterns, filters, report message and optional suggestion.`,
-		[]*analysis.Analyzer{analyzer},
-		nil,
-	).
+			Run: func(pass *analysis.Pass) (any, error) {
+				err := wrapper.run(pass)
+				if err != nil {
+					return nil, err
+				}
+
+				return nil, nil
+			},
+		}).
 		WithContextSetter(func(context *linter.Context) {
 			wrapper.init(context.Log, settings, replacer)
 		}).
