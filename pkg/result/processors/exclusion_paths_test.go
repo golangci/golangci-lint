@@ -128,9 +128,9 @@ func TestExclusionPaths_Process(t *testing.T) {
 				{RelativePath: filepath.FromSlash("base/d/file.go")},
 			},
 			expected: []result.Issue{
-				{RelativePath: filepath.FromSlash("base/a/file.go")},
-				{RelativePath: filepath.FromSlash("base/b/file.go")},
-				{RelativePath: filepath.FromSlash("base/d/file.go")},
+				{RelativePath: filepath.FromSlash("base/c/file.go")},
+				{RelativePath: filepath.FromSlash("base/c/a/file.go")},
+				{RelativePath: filepath.FromSlash("base/c/b/file.go")},
 			},
 		},
 		{
@@ -151,9 +151,9 @@ func TestExclusionPaths_Process(t *testing.T) {
 				{RelativePath: filepath.FromSlash("base/d/file.go")},
 			},
 			expected: []result.Issue{
-				{RelativePath: filepath.FromSlash("base/a/file.go")},
-				{RelativePath: filepath.FromSlash("base/b/file.go")},
-				{RelativePath: filepath.FromSlash("base/d/file.go")},
+				{RelativePath: filepath.FromSlash("base/c/file.go")},
+				{RelativePath: filepath.FromSlash("base/c/a/file.go")},
+				{RelativePath: filepath.FromSlash("base/c/b/file.go")},
 			},
 		},
 		{
@@ -174,13 +174,14 @@ func TestExclusionPaths_Process(t *testing.T) {
 				{RelativePath: filepath.FromSlash("base/e/file.go")},
 			},
 			expected: []result.Issue{
-				{RelativePath: filepath.FromSlash("base/a/file.go")},
-				{RelativePath: filepath.FromSlash("base/b/file.go")},
-				{RelativePath: filepath.FromSlash("base/d/file.go")},
+				{RelativePath: filepath.FromSlash("base/c/file.go")},
+				{RelativePath: filepath.FromSlash("base/c/a/file.go")},
+				{RelativePath: filepath.FromSlash("base/c/b/file.go")},
+				{RelativePath: filepath.FromSlash("base/e/file.go")},
 			},
 		},
 		{
-			desc: "pathsExcept and paths",
+			desc: "pathsExcept and paths (disjoint)",
 			cfg: &config.LinterExclusions{
 				Paths:       []string{"^base/b/"},
 				PathsExcept: []string{`^base/c/.*$`},
@@ -194,8 +195,28 @@ func TestExclusionPaths_Process(t *testing.T) {
 				{RelativePath: filepath.FromSlash("base/d/file.go")},
 			},
 			expected: []result.Issue{
+				{RelativePath: filepath.FromSlash("base/c/file.go")},
+				{RelativePath: filepath.FromSlash("base/c/a/file.go")},
+				{RelativePath: filepath.FromSlash("base/c/b/file.go")},
+			},
+		},
+		{
+			desc: "pathsExcept and paths (intersection)",
+			cfg: &config.LinterExclusions{
+				Paths:       []string{"^base/c/a/"},
+				PathsExcept: []string{`^base/c/.*$`},
+			},
+			issues: []result.Issue{
 				{RelativePath: filepath.FromSlash("base/a/file.go")},
+				{RelativePath: filepath.FromSlash("base/b/file.go")},
+				{RelativePath: filepath.FromSlash("base/c/file.go")},
+				{RelativePath: filepath.FromSlash("base/c/a/file.go")},
+				{RelativePath: filepath.FromSlash("base/c/b/file.go")},
 				{RelativePath: filepath.FromSlash("base/d/file.go")},
+			},
+			expected: []result.Issue{
+				{RelativePath: filepath.FromSlash("base/c/file.go")},
+				{RelativePath: filepath.FromSlash("base/c/b/file.go")},
 			},
 		},
 	}

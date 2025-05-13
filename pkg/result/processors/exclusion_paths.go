@@ -114,5 +114,5 @@ func (p *ExclusionPaths) shouldPassIssue(issue *result.Issue) bool {
 		matched = true
 	}
 
-	return !matched
+	return matched
 }
