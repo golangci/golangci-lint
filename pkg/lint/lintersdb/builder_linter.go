@@ -19,6 +19,7 @@ import (
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/dupl"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/dupword"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/durationcheck"
+	"github.com/golangci/golangci-lint/v2/pkg/golinters/embeddedstructfieldcheck"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/err113"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/errcheck"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/errchkjson"
@@ -211,6 +212,10 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithSince("v1.37.0").
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/charithe/durationcheck"),
+
+		linter.NewConfig(embeddedstructfieldcheck.New()).
+			WithSince("v2.2.0").
+			WithURL("https://github.com/manuelarte/embeddedstructfieldcheck"),
 
 		linter.NewConfig(errcheck.New(&cfg.Linters.Settings.Errcheck)).
 			WithGroups(config.GroupStandard).
