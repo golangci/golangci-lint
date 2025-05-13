@@ -1,8 +1,6 @@
 package gci
 
 import (
-	"golang.org/x/tools/go/analysis"
-
 	"github.com/golangci/golangci-lint/v2/pkg/config"
 	"github.com/golangci/golangci-lint/v2/pkg/goanalysis"
 	"github.com/golangci/golangci-lint/v2/pkg/goformatters"
@@ -18,16 +16,13 @@ func New(settings *config.GciSettings) *goanalysis.Linter {
 		internal.LinterLogger.Fatalf("%s: create analyzer: %v", linterName, err)
 	}
 
-	a := goformatters.NewAnalyzer(
-		internal.LinterLogger.Child(linterName),
-		"Checks if code and import statements are formatted, with additional rules.",
-		formatter,
-	)
-
-	return goanalysis.NewLinter(
-		a.Name,
-		a.Doc,
-		[]*analysis.Analyzer{a},
-		nil,
-	).WithLoadMode(goanalysis.LoadModeSyntax)
+	return goanalysis.
+		NewLinterFromAnalyzer(
+			goformatters.NewAnalyzer(
+				internal.LinterLogger.Child(linterName),
+				"Check if code and import statements are formatted, with additional rules.",
+				formatter,
+			),
+		).
+		WithLoadMode(goanalysis.LoadModeSyntax)
 }

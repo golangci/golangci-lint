@@ -13,11 +13,6 @@ import (
 	"github.com/golangci/golangci-lint/v2/pkg/result"
 )
 
-const (
-	TheOnlyAnalyzerName = "the_only_name"
-	TheOnlyanalyzerDoc  = "the_only_doc"
-)
-
 type LoadMode int
 
 func (loadMode LoadMode) String() string {
@@ -55,6 +50,10 @@ func NewLinter(name, desc string, analyzers []*analysis.Analyzer, cfg map[string
 	return &Linter{name: name, desc: desc, analyzers: analyzers, cfg: cfg}
 }
 
+func NewLinterFromAnalyzer(analyzer *analysis.Analyzer) *Linter {
+	return NewLinter(analyzer.Name, analyzer.Doc, []*analysis.Analyzer{analyzer}, nil)
+}
+
 func (lnt *Linter) Run(_ context.Context, lintCtx *linter.Context) ([]result.Issue, error) {
 	if err := lnt.preRun(lintCtx); err != nil {
 		return nil, err
@@ -69,6 +68,24 @@ func (lnt *Linter) UseOriginalPackages() {
 
 func (lnt *Linter) LoadMode() LoadMode {
 	return lnt.loadMode
+}
+
+func (lnt *Linter) WithDesc(desc string) *Linter {
+	lnt.desc = desc
+
+	return lnt
+}
+
+func (lnt *Linter) WithConfig(cfg map[string]any) *Linter {
+	if len(cfg) == 0 {
+		return lnt
+	}
+
+	lnt.cfg = map[string]map[string]any{
+		lnt.name: cfg,
+	}
+
+	return lnt
 }
 
 func (lnt *Linter) WithLoadMode(loadMode LoadMode) *Linter {

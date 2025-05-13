@@ -2,7 +2,6 @@ package tagliatelle
 
 import (
 	"github.com/ldez/tagliatelle"
-	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/v2/pkg/config"
 	"github.com/golangci/golangci-lint/v2/pkg/goanalysis"
@@ -42,14 +41,9 @@ func New(settings *config.TagliatelleSettings) *goanalysis.Linter {
 		}
 	}
 
-	a := tagliatelle.New(cfg)
-
-	return goanalysis.NewLinter(
-		a.Name,
-		a.Doc,
-		[]*analysis.Analyzer{a},
-		nil,
-	).WithLoadMode(goanalysis.LoadModeTypesInfo)
+	return goanalysis.
+		NewLinterFromAnalyzer(tagliatelle.New(cfg)).
+		WithLoadMode(goanalysis.LoadModeTypesInfo)
 }
 
 func toExtendedRules(src map[string]config.TagliatelleExtendedRule) map[string]tagliatelle.ExtendedRule {

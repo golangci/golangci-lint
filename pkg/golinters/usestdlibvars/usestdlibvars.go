@@ -2,18 +2,16 @@ package usestdlibvars
 
 import (
 	"github.com/sashamelentyev/usestdlibvars/pkg/analyzer"
-	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/v2/pkg/config"
 	"github.com/golangci/golangci-lint/v2/pkg/goanalysis"
 )
 
 func New(settings *config.UseStdlibVarsSettings) *goanalysis.Linter {
-	a := analyzer.New()
+	var cfg map[string]any
 
-	cfg := make(map[string]map[string]any)
 	if settings != nil {
-		cfg[a.Name] = map[string]any{
+		cfg = map[string]any{
 			analyzer.ConstantKindFlag:       settings.ConstantKind,
 			analyzer.CryptoHashFlag:         settings.CryptoHash,
 			analyzer.HTTPMethodFlag:         settings.HTTPMethod,
@@ -29,10 +27,8 @@ func New(settings *config.UseStdlibVarsSettings) *goanalysis.Linter {
 		}
 	}
 
-	return goanalysis.NewLinter(
-		a.Name,
-		a.Doc,
-		[]*analysis.Analyzer{a},
-		cfg,
-	).WithLoadMode(goanalysis.LoadModeSyntax)
+	return goanalysis.
+		NewLinterFromAnalyzer(analyzer.New()).
+		WithConfig(cfg).
+		WithLoadMode(goanalysis.LoadModeSyntax)
 }

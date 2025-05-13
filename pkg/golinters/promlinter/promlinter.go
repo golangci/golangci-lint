@@ -27,32 +27,28 @@ func New(settings *config.PromlinterSettings) *goanalysis.Linter {
 		}
 	}
 
-	analyzer := &analysis.Analyzer{
-		Name: linterName,
-		Doc:  goanalysis.TheOnlyanalyzerDoc,
-		Run: func(pass *analysis.Pass) (any, error) {
-			issues := runPromLinter(pass, promSettings)
+	return goanalysis.
+		NewLinterFromAnalyzer(&analysis.Analyzer{
+			Name: linterName,
+			Doc:  "Check Prometheus metrics naming via promlint",
+			Run: func(pass *analysis.Pass) (any, error) {
+				issues := runPromLinter(pass, promSettings)
 
-			if len(issues) == 0 {
+				if len(issues) == 0 {
+					return nil, nil
+				}
+
+				mu.Lock()
+				resIssues = append(resIssues, issues...)
+				mu.Unlock()
+
 				return nil, nil
-			}
-
-			mu.Lock()
-			resIssues = append(resIssues, issues...)
-			mu.Unlock()
-
-			return nil, nil
-		},
-	}
-
-	return goanalysis.NewLinter(
-		linterName,
-		"Check Prometheus metrics naming via promlint",
-		[]*analysis.Analyzer{analyzer},
-		nil,
-	).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
-		return resIssues
-	}).WithLoadMode(goanalysis.LoadModeSyntax)
+			},
+		}).
+		WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
+			return resIssues
+		}).
+		WithLoadMode(goanalysis.LoadModeSyntax)
 }
 
 func runPromLinter(pass *analysis.Pass, promSettings promlinter.Setting) []goanalysis.Issue {

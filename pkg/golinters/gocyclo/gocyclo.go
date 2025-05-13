@@ -20,32 +20,28 @@ func New(settings *config.GoCycloSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
 
-	analyzer := &analysis.Analyzer{
-		Name: linterName,
-		Doc:  goanalysis.TheOnlyanalyzerDoc,
-		Run: func(pass *analysis.Pass) (any, error) {
-			issues := runGoCyclo(pass, settings)
+	return goanalysis.
+		NewLinterFromAnalyzer(&analysis.Analyzer{
+			Name: linterName,
+			Doc:  "Computes and checks the cyclomatic complexity of functions",
+			Run: func(pass *analysis.Pass) (any, error) {
+				issues := runGoCyclo(pass, settings)
 
-			if len(issues) == 0 {
+				if len(issues) == 0 {
+					return nil, nil
+				}
+
+				mu.Lock()
+				resIssues = append(resIssues, issues...)
+				mu.Unlock()
+
 				return nil, nil
-			}
-
-			mu.Lock()
-			resIssues = append(resIssues, issues...)
-			mu.Unlock()
-
-			return nil, nil
-		},
-	}
-
-	return goanalysis.NewLinter(
-		linterName,
-		"Computes and checks the cyclomatic complexity of functions",
-		[]*analysis.Analyzer{analyzer},
-		nil,
-	).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
-		return resIssues
-	}).WithLoadMode(goanalysis.LoadModeSyntax)
+			},
+		}).
+		WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
+			return resIssues
+		}).
+		WithLoadMode(goanalysis.LoadModeSyntax)
 }
 
 func runGoCyclo(pass *analysis.Pass, settings *config.GoCycloSettings) []goanalysis.Issue {

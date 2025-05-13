@@ -50,34 +50,33 @@ func New(settings *config.GoSecSettings) *goanalysis.Linter {
 
 	analyzer := &analysis.Analyzer{
 		Name: linterName,
-		Doc:  goanalysis.TheOnlyanalyzerDoc,
+		Doc:  "Inspects source code for security problems",
 		Run:  goanalysis.DummyRun,
 	}
 
-	return goanalysis.NewLinter(
-		linterName,
-		"Inspects source code for security problems",
-		[]*analysis.Analyzer{analyzer},
-		nil,
-	).WithContextSetter(func(lintCtx *linter.Context) {
-		analyzer.Run = func(pass *analysis.Pass) (any, error) {
-			// The `gosecAnalyzer` is here because of concurrency issue.
-			gosecAnalyzer := gosec.NewAnalyzer(conf, true, false, false, settings.Concurrency, logger)
+	return goanalysis.
+		NewLinterFromAnalyzer(analyzer).
+		WithContextSetter(func(lintCtx *linter.Context) {
+			analyzer.Run = func(pass *analysis.Pass) (any, error) {
+				// The `gosecAnalyzer` is here because of concurrency issue.
+				gosecAnalyzer := gosec.NewAnalyzer(conf, true, false, false, settings.Concurrency, logger)
 
-			gosecAnalyzer.LoadRules(ruleDefinitions.RulesInfo())
-			gosecAnalyzer.LoadAnalyzers(analyzerDefinitions.AnalyzersInfo())
+				gosecAnalyzer.LoadRules(ruleDefinitions.RulesInfo())
+				gosecAnalyzer.LoadAnalyzers(analyzerDefinitions.AnalyzersInfo())
 
-			issues := runGoSec(lintCtx, pass, settings, gosecAnalyzer)
+				issues := runGoSec(lintCtx, pass, settings, gosecAnalyzer)
 
-			mu.Lock()
-			resIssues = append(resIssues, issues...)
-			mu.Unlock()
+				mu.Lock()
+				resIssues = append(resIssues, issues...)
+				mu.Unlock()
 
-			return nil, nil
-		}
-	}).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
-		return resIssues
-	}).WithLoadMode(goanalysis.LoadModeTypesInfo)
+				return nil, nil
+			}
+		}).
+		WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
+			return resIssues
+		}).
+		WithLoadMode(goanalysis.LoadModeTypesInfo)
 }
 
 func runGoSec(lintCtx *linter.Context, pass *analysis.Pass, settings *config.GoSecSettings, analyzer *gosec.Analyzer) []goanalysis.Issue {

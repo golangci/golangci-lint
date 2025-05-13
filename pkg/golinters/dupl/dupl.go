@@ -22,35 +22,31 @@ func New(settings *config.DuplSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
 
-	analyzer := &analysis.Analyzer{
-		Name: linterName,
-		Doc:  goanalysis.TheOnlyanalyzerDoc,
-		Run: func(pass *analysis.Pass) (any, error) {
-			issues, err := runDupl(pass, settings)
-			if err != nil {
-				return nil, err
-			}
+	return goanalysis.
+		NewLinterFromAnalyzer(&analysis.Analyzer{
+			Name: linterName,
+			Doc:  "Detects duplicate fragments of code.",
+			Run: func(pass *analysis.Pass) (any, error) {
+				issues, err := runDupl(pass, settings)
+				if err != nil {
+					return nil, err
+				}
 
-			if len(issues) == 0 {
+				if len(issues) == 0 {
+					return nil, nil
+				}
+
+				mu.Lock()
+				resIssues = append(resIssues, issues...)
+				mu.Unlock()
+
 				return nil, nil
-			}
-
-			mu.Lock()
-			resIssues = append(resIssues, issues...)
-			mu.Unlock()
-
-			return nil, nil
-		},
-	}
-
-	return goanalysis.NewLinter(
-		linterName,
-		"Detects duplicate fragments of code.",
-		[]*analysis.Analyzer{analyzer},
-		nil,
-	).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
-		return resIssues
-	}).WithLoadMode(goanalysis.LoadModeSyntax)
+			},
+		}).
+		WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
+			return resIssues
+		}).
+		WithLoadMode(goanalysis.LoadModeSyntax)
 }
 
 func runDupl(pass *analysis.Pass, settings *config.DuplSettings) ([]goanalysis.Issue, error) {

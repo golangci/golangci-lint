@@ -4,7 +4,6 @@ import (
 	"strings"
 
 	"github.com/OpenPeeDeeP/depguard/v2"
-	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/v2/pkg/config"
 	"github.com/golangci/golangci-lint/v2/pkg/goanalysis"
@@ -41,17 +40,15 @@ func New(settings *config.DepGuardSettings, replacer *strings.Replacer) *goanaly
 		}
 	}
 
-	a := depguard.NewUncompiledAnalyzer(&conf)
+	analyzer := depguard.NewUncompiledAnalyzer(&conf)
 
-	return goanalysis.NewLinter(
-		a.Analyzer.Name,
-		a.Analyzer.Doc,
-		[]*analysis.Analyzer{a.Analyzer},
-		nil,
-	).WithContextSetter(func(lintCtx *linter.Context) {
-		err := a.Compile()
-		if err != nil {
-			lintCtx.Log.Errorf("create analyzer: %v", err)
-		}
-	}).WithLoadMode(goanalysis.LoadModeSyntax)
+	return goanalysis.
+		NewLinterFromAnalyzer(analyzer.Analyzer).
+		WithContextSetter(func(lintCtx *linter.Context) {
+			err := analyzer.Compile()
+			if err != nil {
+				lintCtx.Log.Errorf("create analyzer: %v", err)
+			}
+		}).
+		WithLoadMode(goanalysis.LoadModeSyntax)
 }

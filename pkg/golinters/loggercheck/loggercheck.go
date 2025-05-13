@@ -2,7 +2,6 @@ package loggercheck
 
 import (
 	"github.com/timonwong/loggercheck"
-	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/v2/pkg/config"
 	"github.com/golangci/golangci-lint/v2/pkg/goanalysis"
@@ -37,11 +36,7 @@ func New(settings *config.LoggerCheckSettings) *goanalysis.Linter {
 		}
 	}
 
-	analyzer := loggercheck.NewAnalyzer(opts...)
-	return goanalysis.NewLinter(
-		analyzer.Name,
-		analyzer.Doc,
-		[]*analysis.Analyzer{analyzer},
-		nil,
-	).WithLoadMode(goanalysis.LoadModeTypesInfo)
+	return goanalysis.
+		NewLinterFromAnalyzer(loggercheck.NewAnalyzer(opts...)).
+		WithLoadMode(goanalysis.LoadModeTypesInfo)
 }

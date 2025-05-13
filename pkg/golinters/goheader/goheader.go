@@ -23,25 +23,20 @@ func New(settings *config.GoHeaderSettings, replacer *strings.Replacer) *goanaly
 		}
 	}
 
-	analyzer := &analysis.Analyzer{
-		Name: linterName,
-		Doc:  goanalysis.TheOnlyanalyzerDoc,
-		Run: func(pass *analysis.Pass) (any, error) {
-			err := runGoHeader(pass, conf)
-			if err != nil {
-				return nil, err
-			}
+	return goanalysis.
+		NewLinterFromAnalyzer(&analysis.Analyzer{
+			Name: linterName,
+			Doc:  "Check if file header matches to pattern",
+			Run: func(pass *analysis.Pass) (any, error) {
+				err := runGoHeader(pass, conf)
+				if err != nil {
+					return nil, err
+				}
 
-			return nil, nil
-		},
-	}
-
-	return goanalysis.NewLinter(
-		linterName,
-		"Checks if file header matches to pattern",
-		[]*analysis.Analyzer{analyzer},
-		nil,
-	).WithLoadMode(goanalysis.LoadModeSyntax)
+				return nil, nil
+			},
+		}).
+		WithLoadMode(goanalysis.LoadModeSyntax)
 }
 
 func runGoHeader(pass *analysis.Pass, conf *goheader.Configuration) error {

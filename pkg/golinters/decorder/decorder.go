@@ -4,15 +4,12 @@ import (
 	"strings"
 
 	"gitlab.com/bosi/decorder"
-	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/v2/pkg/config"
 	"github.com/golangci/golangci-lint/v2/pkg/goanalysis"
 )
 
 func New(settings *config.DecorderSettings) *goanalysis.Linter {
-	a := decorder.Analyzer
-
 	// disable all rules/checks by default
 	cfg := map[string]any{
 		"ignore-underscore-vars":        false,
@@ -35,10 +32,8 @@ func New(settings *config.DecorderSettings) *goanalysis.Linter {
 		cfg["disable-init-func-first-check"] = settings.DisableInitFuncFirstCheck
 	}
 
-	return goanalysis.NewLinter(
-		a.Name,
-		a.Doc,
-		[]*analysis.Analyzer{a},
-		map[string]map[string]any{a.Name: cfg},
-	).WithLoadMode(goanalysis.LoadModeSyntax)
+	return goanalysis.
+		NewLinterFromAnalyzer(decorder.Analyzer).
+		WithConfig(cfg).
+		WithLoadMode(goanalysis.LoadModeSyntax)
 }

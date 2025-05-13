@@ -3,7 +3,6 @@ package ginkgolinter
 import (
 	"github.com/nunnatsa/ginkgolinter"
 	"github.com/nunnatsa/ginkgolinter/types"
-	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/v2/pkg/config"
 	"github.com/golangci/golangci-lint/v2/pkg/goanalysis"
@@ -29,12 +28,8 @@ func New(settings *config.GinkgoLinterSettings) *goanalysis.Linter {
 		}
 	}
 
-	a := ginkgolinter.NewAnalyzerWithConfig(cfg)
-
-	return goanalysis.NewLinter(
-		a.Name,
-		"enforces standards of using ginkgo and gomega",
-		[]*analysis.Analyzer{a},
-		nil,
-	).WithLoadMode(goanalysis.LoadModeTypesInfo)
+	return goanalysis.
+		NewLinterFromAnalyzer(ginkgolinter.NewAnalyzerWithConfig(cfg)).
+		WithDesc("enforces standards of using ginkgo and gomega").
+		WithLoadMode(goanalysis.LoadModeTypesInfo)
 }

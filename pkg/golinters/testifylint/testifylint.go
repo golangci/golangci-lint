@@ -2,18 +2,16 @@ package testifylint
 
 import (
 	"github.com/Antonboom/testifylint/analyzer"
-	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/v2/pkg/config"
 	"github.com/golangci/golangci-lint/v2/pkg/goanalysis"
 )
 
 func New(settings *config.TestifylintSettings) *goanalysis.Linter {
-	a := analyzer.New()
+	var cfg map[string]any
 
-	cfg := make(map[string]map[string]any)
 	if settings != nil {
-		cfg[a.Name] = map[string]any{
+		cfg = map[string]any{
 			"enable-all":  settings.EnableAll,
 			"disable-all": settings.DisableAll,
 
@@ -23,30 +21,28 @@ func New(settings *config.TestifylintSettings) *goanalysis.Linter {
 			"go-require.ignore-http-handlers":  settings.GoRequire.IgnoreHTTPHandlers,
 		}
 		if len(settings.EnabledCheckers) > 0 {
-			cfg[a.Name]["enable"] = settings.EnabledCheckers
+			cfg["enable"] = settings.EnabledCheckers
 		}
 		if len(settings.DisabledCheckers) > 0 {
-			cfg[a.Name]["disable"] = settings.DisabledCheckers
+			cfg["disable"] = settings.DisabledCheckers
 		}
 
 		if b := settings.Formatter.CheckFormatString; b != nil {
-			cfg[a.Name]["formatter.check-format-string"] = *b
+			cfg["formatter.check-format-string"] = *b
 		}
 		if p := settings.ExpectedActual.ExpVarPattern; p != "" {
-			cfg[a.Name]["expected-actual.pattern"] = p
+			cfg["expected-actual.pattern"] = p
 		}
 		if p := settings.RequireError.FnPattern; p != "" {
-			cfg[a.Name]["require-error.fn-pattern"] = p
+			cfg["require-error.fn-pattern"] = p
 		}
 		if m := settings.SuiteExtraAssertCall.Mode; m != "" {
-			cfg[a.Name]["suite-extra-assert-call.mode"] = m
+			cfg["suite-extra-assert-call.mode"] = m
 		}
 	}
 
-	return goanalysis.NewLinter(
-		a.Name,
-		a.Doc,
-		[]*analysis.Analyzer{a},
-		cfg,
-	).WithLoadMode(goanalysis.LoadModeTypesInfo)
+	return goanalysis.
+		NewLinterFromAnalyzer(analyzer.New()).
+		WithConfig(cfg).
+		WithLoadMode(goanalysis.LoadModeTypesInfo)
 }

@@ -2,7 +2,6 @@ package tagalign
 
 import (
 	"github.com/4meepo/tagalign"
-	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/v2/pkg/config"
 	"github.com/golangci/golangci-lint/v2/pkg/goanalysis"
@@ -24,12 +23,7 @@ func New(settings *config.TagAlignSettings) *goanalysis.Linter {
 		}
 	}
 
-	analyzer := tagalign.NewAnalyzer(options...)
-
-	return goanalysis.NewLinter(
-		analyzer.Name,
-		analyzer.Doc,
-		[]*analysis.Analyzer{analyzer},
-		nil,
-	).WithLoadMode(goanalysis.LoadModeSyntax)
+	return goanalysis.
+		NewLinterFromAnalyzer(tagalign.NewAnalyzer(options...)).
+		WithLoadMode(goanalysis.LoadModeSyntax)
 }

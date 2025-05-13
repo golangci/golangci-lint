@@ -2,7 +2,6 @@ package wsl
 
 import (
 	"github.com/bombsimon/wsl/v4"
-	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/v2/pkg/config"
 	"github.com/golangci/golangci-lint/v2/pkg/goanalysis"
@@ -10,6 +9,7 @@ import (
 
 func New(settings *config.WSLSettings) *goanalysis.Linter {
 	var conf *wsl.Configuration
+
 	if settings != nil {
 		conf = &wsl.Configuration{
 			StrictAppend:                     settings.StrictAppend,
@@ -30,12 +30,7 @@ func New(settings *config.WSLSettings) *goanalysis.Linter {
 		}
 	}
 
-	a := wsl.NewAnalyzer(conf)
-
-	return goanalysis.NewLinter(
-		a.Name,
-		a.Doc,
-		[]*analysis.Analyzer{a},
-		nil,
-	).WithLoadMode(goanalysis.LoadModeSyntax)
+	return goanalysis.
+		NewLinterFromAnalyzer(wsl.NewAnalyzer(conf)).
+		WithLoadMode(goanalysis.LoadModeSyntax)
 }

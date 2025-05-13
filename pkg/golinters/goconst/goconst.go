@@ -20,35 +20,31 @@ func New(settings *config.GoConstSettings) *goanalysis.Linter {
 	var mu sync.Mutex
 	var resIssues []goanalysis.Issue
 
-	analyzer := &analysis.Analyzer{
-		Name: linterName,
-		Doc:  goanalysis.TheOnlyanalyzerDoc,
-		Run: func(pass *analysis.Pass) (any, error) {
-			issues, err := runGoconst(pass, settings)
-			if err != nil {
-				return nil, err
-			}
+	return goanalysis.
+		NewLinterFromAnalyzer(&analysis.Analyzer{
+			Name: linterName,
+			Doc:  "Finds repeated strings that could be replaced by a constant",
+			Run: func(pass *analysis.Pass) (any, error) {
+				issues, err := runGoconst(pass, settings)
+				if err != nil {
+					return nil, err
+				}
 
-			if len(issues) == 0 {
+				if len(issues) == 0 {
+					return nil, nil
+				}
+
+				mu.Lock()
+				resIssues = append(resIssues, issues...)
+				mu.Unlock()
+
 				return nil, nil
-			}
-
-			mu.Lock()
-			resIssues = append(resIssues, issues...)
-			mu.Unlock()
-
-			return nil, nil
-		},
-	}
-
-	return goanalysis.NewLinter(
-		linterName,
-		"Finds repeated strings that could be replaced by a constant",
-		[]*analysis.Analyzer{analyzer},
-		nil,
-	).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
-		return resIssues
-	}).WithLoadMode(goanalysis.LoadModeTypesInfo)
+			},
+		}).
+		WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
+			return resIssues
+		}).
+		WithLoadMode(goanalysis.LoadModeTypesInfo)
 }
 
 func runGoconst(pass *analysis.Pass, settings *config.GoConstSettings) ([]goanalysis.Issue, error) {

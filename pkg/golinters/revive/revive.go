@@ -38,42 +38,41 @@ func New(settings *config.ReviveSettings) *goanalysis.Linter {
 	var resIssues []goanalysis.Issue
 
 	analyzer := &analysis.Analyzer{
-		Name: goanalysis.TheOnlyAnalyzerName,
-		Doc:  goanalysis.TheOnlyanalyzerDoc,
+		Name: linterName,
+		Doc:  "Fast, configurable, extensible, flexible, and beautiful linter for Go. Drop-in replacement of golint.",
 		Run:  goanalysis.DummyRun,
 	}
 
-	return goanalysis.NewLinter(
-		linterName,
-		"Fast, configurable, extensible, flexible, and beautiful linter for Go. Drop-in replacement of golint.",
-		[]*analysis.Analyzer{analyzer},
-		nil,
-	).WithContextSetter(func(lintCtx *linter.Context) {
-		w, err := newWrapper(settings)
-		if err != nil {
-			lintCtx.Log.Errorf("setup revive: %v", err)
-			return
-		}
-
-		analyzer.Run = func(pass *analysis.Pass) (any, error) {
-			issues, err := w.run(pass)
+	return goanalysis.
+		NewLinterFromAnalyzer(analyzer).
+		WithContextSetter(func(lintCtx *linter.Context) {
+			w, err := newWrapper(settings)
 			if err != nil {
-				return nil, err
+				lintCtx.Log.Errorf("setup revive: %v", err)
+				return
 			}
 
-			if len(issues) == 0 {
+			analyzer.Run = func(pass *analysis.Pass) (any, error) {
+				issues, err := w.run(pass)
+				if err != nil {
+					return nil, err
+				}
+
+				if len(issues) == 0 {
+					return nil, nil
+				}
+
+				mu.Lock()
+				resIssues = append(resIssues, issues...)
+				mu.Unlock()
+
 				return nil, nil
 			}
-
-			mu.Lock()
-			resIssues = append(resIssues, issues...)
-			mu.Unlock()
-
-			return nil, nil
-		}
-	}).WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
-		return resIssues
-	}).WithLoadMode(goanalysis.LoadModeSyntax)
+		}).
+		WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
+			return resIssues
+		}).
+		WithLoadMode(goanalysis.LoadModeSyntax)
 }
 
 type wrapper struct {

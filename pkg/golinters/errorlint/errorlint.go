@@ -2,7 +2,6 @@ package errorlint
 
 import (
 	"github.com/polyfloyd/go-errorlint/errorlint"
-	"golang.org/x/tools/go/analysis"
 
 	"github.com/golangci/golangci-lint/v2/pkg/config"
 	"github.com/golangci/golangci-lint/v2/pkg/goanalysis"
@@ -23,12 +22,10 @@ func New(settings *config.ErrorLintSettings) *goanalysis.Linter {
 		}
 	}
 
-	a := errorlint.NewAnalyzer(opts...)
-
-	cfg := map[string]map[string]any{}
+	var cfg map[string]any
 
 	if settings != nil {
-		cfg[a.Name] = map[string]any{
+		cfg = map[string]any{
 			"errorf":       settings.Errorf,
 			"errorf-multi": settings.ErrorfMulti,
 			"asserts":      settings.Asserts,
@@ -36,13 +33,11 @@ func New(settings *config.ErrorLintSettings) *goanalysis.Linter {
 		}
 	}
 
-	return goanalysis.NewLinter(
-		a.Name,
-		"errorlint is a linter for that can be used to find code "+
-			"that will cause problems with the error wrapping scheme introduced in Go 1.13.",
-		[]*analysis.Analyzer{a},
-		cfg,
-	).WithLoadMode(goanalysis.LoadModeTypesInfo)
+	return goanalysis.
+		NewLinterFromAnalyzer(errorlint.NewAnalyzer(opts...)).
+		WithDesc("Find code that can cause problems with the error wrapping scheme introduced in Go 1.13.").
+		WithConfig(cfg).
+		WithLoadMode(goanalysis.LoadModeTypesInfo)
 }
 
 func toAllowPairs(data []config.ErrorLintAllowPair) []errorlint.AllowPair {
