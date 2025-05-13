@@ -27,6 +27,7 @@ In order for a pull request adding a linter to be reviewed, the linter and the P
 - [ ] They must have at least one std lib import.
 - [ ] They must have integration tests without configuration (default).
 - [ ] They must have integration tests with configuration (if the linter has a configuration).
+- [ ] If the linter also proposes fixes, they must also be covered.
 
 ### `.golangci.next.reference.yml`
 
