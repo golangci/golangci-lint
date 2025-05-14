@@ -31,7 +31,7 @@ func runPreAlloc(pass *analysis.Pass, settings *config.PreallocSettings) {
 	for _, hint := range hints {
 		pass.Report(analysis.Diagnostic{
 			Pos:     hint.Pos,
-			Message: fmt.Sprintf("Consider pre-allocating %s", internal.FormatCode(hint.DeclaredSliceName, nil)),
+			Message: fmt.Sprintf("Consider pre-allocating %s", internal.FormatCode(hint.DeclaredSliceName)),
 		})
 	}
 }

@@ -67,7 +67,7 @@ func runGocognit(pass *analysis.Pass, settings *config.GocognitSettings) []goana
 		issues = append(issues, goanalysis.NewIssue(&result.Issue{
 			Pos: s.Pos,
 			Text: fmt.Sprintf("cognitive complexity %d of func %s is high (> %d)",
-				s.Complexity, internal.FormatCode(s.FuncName, nil), settings.MinComplexity),
+				s.Complexity, internal.FormatCode(s.FuncName), settings.MinComplexity),
 			FromLinter: linterName,
 		}, pass))
 	}

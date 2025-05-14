@@ -85,17 +85,17 @@ func runGoconst(pass *analysis.Pass, settings *config.GoConstSettings) ([]goanal
 
 		switch {
 		case issue.OccurrencesCount > 0:
-			text = fmt.Sprintf("string %s has %d occurrences", internal.FormatCode(issue.Str, nil), issue.OccurrencesCount)
+			text = fmt.Sprintf("string %s has %d occurrences", internal.FormatCode(issue.Str), issue.OccurrencesCount)
 
 			if issue.MatchingConst == "" {
 				text += ", make it a constant"
 			} else {
-				text += fmt.Sprintf(", but such constant %s already exists", internal.FormatCode(issue.MatchingConst, nil))
+				text += fmt.Sprintf(", but such constant %s already exists", internal.FormatCode(issue.MatchingConst))
 			}
 
 		case issue.DuplicateConst != "":
 			text = fmt.Sprintf("This constant is a duplicate of %s at %s",
-				internal.FormatCode(issue.DuplicateConst, nil),
+				internal.FormatCode(issue.DuplicateConst),
 				issue.DuplicatePos.String())
 
 		default:
