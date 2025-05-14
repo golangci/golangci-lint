@@ -140,6 +140,38 @@ brews:
 #    source_repo: "https://push.chocolatey.org/"
 #    goamd64: v1
 
+aurs:
+  - description: Fast linters runner for Go.
+    skip_upload: false
+    homepage: https://golangci.com
+    provides:
+      - "golangci-lint-bin"
+    maintainers:
+      - "Fernandez Ludovic <lfernandez dot dev at gmail dot com>"
+    license: GPL-3.0
+    private_key: "{{ .Env.AUR_KEY }}"
+    git_url: "ssh://aur@aur.archlinux.org/golangci-lint-bin.git"
+    commit_author:
+      name: golangci-releaser
+      email: 65486276+golangci-releaser@users.noreply.github.com
+    package: |-
+      local x86_64=amd64 i686=386 aarch64=arm64 armv6h=armv6 armv7h=armv7
+      cd "golangci-lint-${pkgver}-linux-${!CARCH}"
+      
+      # bin
+      install -Dm755 "./golangci-lint" "${pkgdir}/usr/bin/golangci-lint"
+
+      # license
+      install -Dm644 "./LICENSE" "${pkgdir}/usr/share/licenses/golangci-lint/LICENSE"
+
+      # completions
+      mkdir -p "${pkgdir}/usr/share/bash-completion/completions/"
+      mkdir -p "${pkgdir}/usr/share/zsh/site-functions/"
+      mkdir -p "${pkgdir}/usr/share/fish/vendor_completions.d/"
+      ./golangci-lint completion bash | install -Dm644 /dev/stdin "${pkgdir}/usr/share/bash-completion/completions/golangci-lint"
+      ./golangci-lint completion zsh | install -Dm644 /dev/stdin "${pkgdir}/usr/share/zsh/site-functions/_golangci-lint"
+      ./golangci-lint completion fish | install -Dm644 /dev/stdin "${pkgdir}/usr/share/fish/vendor_completions.d/golangci-lint.fish"
+
 snapcrafts:
   - summary: Fast linters runner for Go.
     description: |
