@@ -372,6 +372,7 @@ type ErrcheckSettings struct {
 	CheckTypeAssertions      bool     `mapstructure:"check-type-assertions"`
 	CheckAssignToBlank       bool     `mapstructure:"check-blank"`
 	ExcludeFunctions         []string `mapstructure:"exclude-functions"`
+	Verbose                  bool     `mapstructure:"verbose"`
 }
 
 type ErrChkJSONSettings struct {
