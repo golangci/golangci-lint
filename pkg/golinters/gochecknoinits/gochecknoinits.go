@@ -40,7 +40,7 @@ func run(pass *analysis.Pass) (any, error) {
 
 		fnName := funcDecl.Name.Name
 		if fnName == "init" && funcDecl.Recv.NumFields() == 0 {
-			pass.Reportf(funcDecl.Pos(), "don't use %s function", internal.FormatCode(fnName, nil))
+			pass.Reportf(funcDecl.Pos(), "don't use %s function", internal.FormatCode(fnName))
 		}
 	})
 

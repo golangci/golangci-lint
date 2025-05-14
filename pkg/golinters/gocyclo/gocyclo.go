@@ -59,7 +59,7 @@ func runGoCyclo(pass *analysis.Pass, settings *config.GoCycloSettings) []goanaly
 
 	for _, s := range stats {
 		text := fmt.Sprintf("cyclomatic complexity %d of func %s is high (> %d)",
-			s.Complexity, internal.FormatCode(s.FuncName, nil), settings.MinComplexity)
+			s.Complexity, internal.FormatCode(s.FuncName), settings.MinComplexity)
 
 		issues = append(issues, goanalysis.NewIssue(&result.Issue{
 			Pos:        s.Pos,

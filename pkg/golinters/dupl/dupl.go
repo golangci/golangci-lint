@@ -70,7 +70,7 @@ func runDupl(pass *analysis.Pass, settings *config.DuplSettings) ([]goanalysis.I
 		dupl := fmt.Sprintf("%s:%d-%d", toFilename, i.To.LineStart(), i.To.LineEnd())
 		text := fmt.Sprintf("%d-%d lines are duplicate of %s",
 			i.From.LineStart(), i.From.LineEnd(),
-			internal.FormatCode(dupl, nil))
+			internal.FormatCode(dupl))
 
 		res = append(res, goanalysis.NewIssue(&result.Issue{
 			Pos: token.Position{
