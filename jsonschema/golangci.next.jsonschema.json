@@ -1115,6 +1115,11 @@
               "description": "To disable the errcheck built-in exclude list",
               "type": "boolean",
               "default": false
+            },
+            "verbose": {
+              "description": "Display function signature instead of selector",
+              "type": "boolean",
+              "default": false
             }
           }
         },

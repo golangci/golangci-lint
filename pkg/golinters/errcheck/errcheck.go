@@ -37,7 +37,7 @@ func New(settings *config.ErrcheckSettings) *goanalysis.Linter {
 			checker.Tags = lintCtx.Cfg.Run.BuildTags
 
 			analyzer.Run = func(pass *analysis.Pass) (any, error) {
-				issues := runErrCheck(pass, checker)
+				issues := runErrCheck(pass, checker, settings.Verbose)
 
 				if len(issues) == 0 {
 					return nil, nil
@@ -56,7 +56,7 @@ func New(settings *config.ErrcheckSettings) *goanalysis.Linter {
 		WithLoadMode(goanalysis.LoadModeTypesInfo)
 }
 
-func runErrCheck(pass *analysis.Pass, checker *errcheck.Checker) []goanalysis.Issue {
+func runErrCheck(pass *analysis.Pass, checker *errcheck.Checker, verbose bool) []goanalysis.Issue {
 	pkg := &packages.Package{
 		Fset:      pass.Fset,
 		Syntax:    pass.Files,
@@ -76,6 +76,9 @@ func runErrCheck(pass *analysis.Pass, checker *errcheck.Checker) []goanalysis.Is
 
 		if err.FuncName != "" {
 			code := cmp.Or(err.SelectorName, err.FuncName)
+			if verbose {
+				code = err.FuncName
+			}
 
 			text = fmt.Sprintf("Error return value of %s is not checked", internal.FormatCode(code))
 		}

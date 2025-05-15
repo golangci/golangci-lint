@@ -408,6 +408,10 @@ linters:
         - io.Copy(*bytes.Buffer)
         - io.Copy(os.Stdout)
 
+      # Display function signature instead of selector.
+      # Default: false
+      verbose: true
+
     errchkjson:
       # With check-error-free-encoding set to true, errchkjson does warn about errors
       # from json encoding functions that are safe to be ignored,
