@@ -2299,13 +2299,7 @@ linters:
           severity: warning
           disabled: false
           exclude: [""]
-          arguments:
-            - "call-chain"
-            - "loop"
-            - "method-call"
-            - "recover"
-            - "immediate-recover"
-            - "return"
+          arguments: [["call-chain", "loop", "method-call", "recover", "return"]]
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#dot-imports
         - name: dot-imports
           severity: warning
