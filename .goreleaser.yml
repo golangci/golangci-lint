@@ -87,6 +87,16 @@ release:
 
     For key updates, see the [changelog](https://golangci-lint.run/product/changelog/#{{ .Major }}{{ .Minor }}{{ .Patch }}).
 
+signs:
+  - signature: ${artifact}.cosign.bundle
+    cmd: cosign
+    args:
+      - sign-blob
+      - --bundle=${signature}
+      - --yes
+      - ${artifact}
+    artifacts: checksum
+
 source:
   enabled: true
   name_template: '{{ .ProjectName }}-{{ .Version }}-source'
