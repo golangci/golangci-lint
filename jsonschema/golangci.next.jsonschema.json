@@ -1089,6 +1089,17 @@
             }
           }
         },
+        "embeddedstructfieldcheckSettings": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "forbid-mutex": {
+              "description": "Checks that sync.Mutex and sync.RWMutex are not used as embedded fields.",
+              "type": "boolean",
+              "default": false
+            }
+          }
+        },
         "errcheckSettings": {
           "type": "object",
           "additionalProperties": false,
@@ -4355,6 +4366,9 @@
             },
             "dupl": {
               "$ref": "#/definitions/settings/definitions/duplSettings"
+            },
+            "embeddedstructfieldcheck": {
+              "$ref": "#/definitions/settings/definitions/embeddedstructfieldcheckSettings"
             },
             "errcheck": {
               "$ref": "#/definitions/settings/definitions/errcheckSettings"

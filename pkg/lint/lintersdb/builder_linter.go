@@ -213,7 +213,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/charithe/durationcheck"),
 
-		linter.NewConfig(embeddedstructfieldcheck.New()).
+		linter.NewConfig(embeddedstructfieldcheck.New(&cfg.Linters.Settings.EmbeddedStructFieldCheck)).
 			WithSince("v2.2.0").
 			WithURL("https://github.com/manuelarte/embeddedstructfieldcheck"),
 

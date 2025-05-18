@@ -1,5 +1,5 @@
 //golangcitest:args -Eembeddedstructfieldcheck
-package simple
+package testdata
 
 import (
 	"context"

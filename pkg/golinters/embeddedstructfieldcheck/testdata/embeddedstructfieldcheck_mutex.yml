@@ -1,0 +1,6 @@
+version: "2"
+
+linters:
+  settings:
+    embeddedstructfieldcheck:
+      forbid-mutex: true
