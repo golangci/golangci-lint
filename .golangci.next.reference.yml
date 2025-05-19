@@ -10,12 +10,15 @@ version: "2"
 
 linters:
   # Default set of linters.
-  # The value can be: `standard`, `all`, `none`, or `fast`.
+  # The value can be:
+  # - `standard`: https://golangci-lint.run/usage/linters/#enabled-by-default
+  # - `all`: enables all linters by default.
+  # - `none`: disables all linters by default.
+  # - `fast`: enables only linters considered as "fast" (`golangci-lint help linters --json | jq '[ .[] | select(.fast==true) ] | map(.name)'`).
   # Default: standard
   default: all
 
   # Enable specific linter.
-  # https://golangci-lint.run/usage/linters/#enabled-by-default
   enable:
     - arangolint
     - asasalint
@@ -124,8 +127,7 @@ linters:
     - wsl
     - zerologlint
 
-  # Disable specific linter.
-  # https://golangci-lint.run/usage/linters/#disabled-by-default
+  # Disable specific linters.
   disable:
     - arangolint
     - asasalint
