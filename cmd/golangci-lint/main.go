@@ -4,7 +4,9 @@ import (
 	"cmp"
 	"fmt"
 	"os"
+	"regexp"
 	"runtime/debug"
+	"strings"
 
 	"github.com/golangci/golangci-lint/v2/pkg/commands"
 	"github.com/golangci/golangci-lint/v2/pkg/exitcodes"
@@ -23,7 +25,7 @@ func main() {
 	info := createBuildInfo()
 
 	if err := commands.Execute(info); err != nil {
-		_, _ = fmt.Fprintf(os.Stderr, "Failed executing command with error: %v\n", err)
+		_, _ = fmt.Fprintf(os.Stderr, "The command is terminated due to an error: %v\n", err)
 		os.Exit(exitcodes.Failure)
 	}
 }
@@ -48,6 +50,11 @@ func createBuildInfo() commands.BuildInfo {
 	}
 
 	info.Version = buildInfo.Main.Version
+
+	matched, _ := regexp.MatchString(`v\d+\.\d+\.\d+`, buildInfo.Main.Version)
+	if matched {
+		info.Version = strings.TrimPrefix(buildInfo.Main.Version, "v")
+	}
 
 	var revision string
 	var modified string
