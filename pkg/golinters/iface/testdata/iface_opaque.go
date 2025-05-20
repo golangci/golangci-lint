@@ -28,7 +28,7 @@ func (s server) Serve() error {
 	return nil
 }
 
-func NewServer(addr string) Server { // want "opaque: NewServer function return Server interface at the 1st result, abstract a single concrete implementation of \\*server"
+func NewServer(addr string) Server { // want "opaque: 'NewServer' function return 'Server' interface at the 1st result, abstract a single concrete implementation of '\\*server'"
 	return &server{addr: addr}
 }
 
