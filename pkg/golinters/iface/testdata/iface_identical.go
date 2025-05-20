@@ -6,11 +6,11 @@ import "fmt"
 
 // identical
 
-type Pinger interface { // want "identical: interface Pinger contains identical methods or type constraints from another interface, causing redundancy"
+type Pinger interface { // want "identical: interface 'Pinger' contains identical methods or type constraints with another interface, causing redundancy"
 	Ping() error
 }
 
-type Healthcheck interface { // want "identical: interface Healthcheck contains identical methods or type constraints from another interface, causing redundancy"
+type Healthcheck interface { // want "identical: interface 'Healthcheck' contains identical methods or type constraints with another interface, causing redundancy"
 	Ping() error
 }
 
