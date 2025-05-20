@@ -28,7 +28,7 @@ func (s server) Serve() error {
 	return nil
 }
 
-func NewServer(addr string) Server { // want "opaque: NewServer function return Server interface at the 1st result, abstract a single concrete implementation of \\*server"
+func NewServer(addr string) Server { // want "opaque: 'NewServer' function return 'Server' interface at the 1st result, abstract a single concrete implementation of '\\*server'"
 	return &server{addr: addr}
 }
 
@@ -65,4 +65,20 @@ type Allower interface {
 func Allow(x any) {
 	_ = x.(Allower)
 	fmt.Println("allow")
+}
+
+// unexported
+
+type unexportedReader interface {
+	Read([]byte) (int, error)
+}
+
+func ReadAll(r unexportedReader) ([]byte, error) {
+	buf := make([]byte, 1024)
+	_, err := r.Read(buf)
+	return buf, err
+}
+
+func NewUnexportedReader() unexportedReader {
+	return nil // stub
 }

@@ -1,16 +1,16 @@
 //golangcitest:args -Eiface
-//golangcitest:config_path testdata/iface_identical.yml
+//golangcitest:config_path testdata/iface_unexported.yml
 package testdata
 
 import "fmt"
 
 // identical
 
-type Pinger interface { // want "identical: interface 'Pinger' contains identical methods or type constraints with another interface, causing redundancy"
+type Pinger interface {
 	Ping() error
 }
 
-type Healthcheck interface { // want "identical: interface 'Healthcheck' contains identical methods or type constraints with another interface, causing redundancy"
+type Healthcheck interface {
 	Ping() error
 }
 
@@ -73,12 +73,12 @@ type unexportedReader interface {
 	Read([]byte) (int, error)
 }
 
-func ReadAll(r unexportedReader) ([]byte, error) {
+func ReadAll(r unexportedReader) ([]byte, error) { // want "unexported interface 'unexportedReader' used as parameter in exported function 'ReadAll'"
 	buf := make([]byte, 1024)
 	_, err := r.Read(buf)
 	return buf, err
 }
 
-func NewUnexportedReader() unexportedReader {
+func NewUnexportedReader() unexportedReader { // want "unexported interface 'unexportedReader' used as return value in exported function 'NewUnexportedReader'"
 	return nil // stub
 }

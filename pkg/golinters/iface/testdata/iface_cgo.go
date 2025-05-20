@@ -24,11 +24,11 @@ func _() {
 
 // identical
 
-type Pinger interface { // want "identical: interface Pinger contains identical methods or type constraints from another interface, causing redundancy"
+type Pinger interface { // want "identical: interface 'Pinger' contains identical methods or type constraints with another interface, causing redundancy"
 	Ping() error
 }
 
-type Healthcheck interface { // want "identical: interface Healthcheck contains identical methods or type constraints from another interface, causing redundancy"
+type Healthcheck interface { // want "identical: interface 'Healthcheck' contains identical methods or type constraints with another interface, causing redundancy"
 	Ping() error
 }
 
@@ -83,4 +83,20 @@ type Allower interface {
 func Allow(x any) {
 	_ = x.(Allower)
 	fmt.Println("allow")
+}
+
+// unexported
+
+type unexportedReader interface {
+	Read([]byte) (int, error)
+}
+
+func ReadAll(r unexportedReader) ([]byte, error) {
+	buf := make([]byte, 1024)
+	_, err := r.Read(buf)
+	return buf, err
+}
+
+func NewUnexportedReader() unexportedReader {
+	return nil // stub
 }

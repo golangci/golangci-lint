@@ -6,11 +6,11 @@ import "fmt"
 
 // identical
 
-type Pinger interface { // want "unused: interface Pinger is declared but not used within the package"
+type Pinger interface { // want "unused: interface 'Pinger' is declared but not used within the package"
 	Ping() error
 }
 
-type Healthcheck interface { // want "unused: interface Healthcheck is declared but not used within the package"
+type Healthcheck interface { // want "unused: interface 'Healthcheck' is declared but not used within the package"
 	Ping() error
 }
 
@@ -39,7 +39,7 @@ type User struct {
 	Name string
 }
 
-type UserRepository interface { // want "unused: interface UserRepository is declared but not used within the package"
+type UserRepository interface { // want "unused: interface 'UserRepository' is declared but not used within the package"
 	UserOf(id string) (*User, error)
 }
 
@@ -65,4 +65,20 @@ type Allower interface {
 func Allow(x any) {
 	_ = x.(Allower)
 	fmt.Println("allow")
+}
+
+// unexported
+
+type unexportedReader interface {
+	Read([]byte) (int, error)
+}
+
+func ReadAll(r unexportedReader) ([]byte, error) {
+	buf := make([]byte, 1024)
+	_, err := r.Read(buf)
+	return buf, err
+}
+
+func NewUnexportedReader() unexportedReader {
+	return nil // stub
 }

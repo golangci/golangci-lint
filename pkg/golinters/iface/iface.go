@@ -5,6 +5,7 @@ import (
 
 	"github.com/uudashr/iface/identical"
 	"github.com/uudashr/iface/opaque"
+	"github.com/uudashr/iface/unexported"
 	"github.com/uudashr/iface/unused"
 	"golang.org/x/tools/go/analysis"
 
@@ -28,9 +29,10 @@ func New(settings *config.IfaceSettings) *goanalysis.Linter {
 
 func analyzersFromSettings(settings *config.IfaceSettings) []*analysis.Analyzer {
 	allAnalyzers := map[string]*analysis.Analyzer{
-		"identical": identical.Analyzer,
-		"unused":    unused.Analyzer,
-		"opaque":    opaque.Analyzer,
+		"identical":  identical.Analyzer,
+		"unused":     unused.Analyzer,
+		"opaque":     opaque.Analyzer,
+		"unexported": unexported.Analyzer,
 	}
 
 	if settings == nil || len(settings.Enable) == 0 {
