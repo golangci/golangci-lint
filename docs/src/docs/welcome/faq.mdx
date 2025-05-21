@@ -49,7 +49,7 @@ How to troubleshoot:
 - [ ] Ensure building works with `go run ./...`/`go build ./...` - whole package.
 - [ ] Ensure you are not running an analysis on code that depends on files/packages outside the scope of the analyzed elements.
 - [ ] If using CGO, ensure all require system libraries are installed.
-- [ ] If you are using private repositories/dependencies, ensure the Go proxy and sumDB are right and/or your git configuration.
+- [ ] If you are using private repositories/dependencies, ensure the [Go proxy](https://go.dev/ref/mod#module-proxy) (`GOPROXY`) and [checksum database](https://go.dev/ref/mod#checksum-database) (`GOSUMDB`) are right and/or your git configuration.
 
 ## Why is it not possible to skip/ignore `typecheck` errors?
 
