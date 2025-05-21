@@ -33,7 +33,7 @@ it's just a way to identify, parse, and display compiling errors (produced by th
 
 It cannot be disabled because of that.
 
-Of course, this is just as good as the compiler itself and a lot of compilation issues will not properly show where in the code your error lies.
+Of course, this is just as good as the compiler itself, and a lot of compilation issues will not properly show where in the code your error lies.
 
 As a consequence, the code to analyze should compile.
 It means that if you try to run an analysis on a single file or a group of files or a package or a group of packages,
@@ -45,10 +45,11 @@ If there are `typecheck` errors, golangci-lint will not be able to produce other
 How to troubleshoot:
 
 - [ ] Ensure the version of golangci-lint is built with a compatible version of Go.
-- [ ] Ensure dependencies are up-to-date with `go mod tidy`.
+- [ ] Ensure dependencies are up to date with `go mod tidy`.
 - [ ] Ensure building works with `go run ./...`/`go build ./...` - whole package.
 - [ ] Ensure you are not running an analysis on code that depends on files/packages outside the scope of the analyzed elements.
 - [ ] If using CGO, ensure all require system libraries are installed.
+- [ ] If you are using private repositories/dependencies, ensure the [Go proxy](https://go.dev/ref/mod#module-proxy) (`GOPROXY`) and [checksum database](https://go.dev/ref/mod#checksum-database) (`GOSUMDB`) are right and/or your git configuration.
 
 ## Why is it not possible to skip/ignore `typecheck` errors?
 
