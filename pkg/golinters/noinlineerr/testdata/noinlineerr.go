@@ -1,6 +1,8 @@
 //golangcitest:args -Enoinlineerr
 package testdata
 
+import "fmt"
+
 func doSomething() error {
 	return nil
 }
@@ -24,9 +26,9 @@ func valid() error {
 		return err
 	}
 
-	_, err = doSmthMultipleReturn() // ok
+	ok, err := doSmthMultipleReturn() // ok
 	if err != nil {
-		return err
+		return fmt.Errorf("%b; %w", ok, err)
 	}
 	return nil
 }
@@ -44,9 +46,8 @@ func invalid() error {
 		return err
 	}
 
-	if _, err := doSmthMultipleReturn(); err != nil { // want "avoid inline error handling using `if err := ...; err != nil; use plain assignment `err := ..."
-		_ = false
-		return err
+	if ok, err := doSmthMultipleReturn(); err != nil { // want "avoid inline error handling using `if err := ...; err != nil; use plain assignment `err := ..."
+		return fmt.Errorf("%b; %w", ok, err)
 	}
 	return nil
 }
