@@ -4088,6 +4088,7 @@ formatters:
     # Default: lax
     generated: strict
     # Which file paths to exclude.
+    # This option is ignored when using `--stdin` as the path is unknown.
     # Default: []
     paths:
       - ".*\\.my\\.go$"
