@@ -171,6 +171,8 @@ func (c *Runner) formatStdIn(path string, stdout io.Writer, in io.Reader) error 
 	}
 
 	if match {
+		// If the file is generated,
+		// the input should be written to the stdout to avoid emptied the file.
 		_, err = stdout.Write(input)
 		if err != nil {
 			return err
