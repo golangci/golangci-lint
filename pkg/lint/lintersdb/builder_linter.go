@@ -513,7 +513,7 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithURL("https://github.com/sonatard/noctx"),
 
 		linter.NewConfig(noinlineerr.New()).
-			WithSince("v2.2.80").
+			WithSince("v2.2.0").
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/AlwxSin/noinlineerr"),
 
