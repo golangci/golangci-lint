@@ -91,6 +91,7 @@ linters:
     - nilnil
     - nlreturn
     - noctx
+    - noinlineerr
     - nolintlint
     - nonamedreturns
     - nosprintfhostport
@@ -200,6 +201,7 @@ linters:
     - nilnil
     - nlreturn
     - noctx
+    - noinlineerr
     - nolintlint
     - nonamedreturns
     - nosprintfhostport
