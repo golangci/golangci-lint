@@ -57,7 +57,7 @@ func (c *Runner) Run(paths []string) error {
 	}
 
 	if c.opts.stdin {
-		return c.process("<standard input>", savedStdout, os.Stdin)
+		return c.formatStdIn("<standard input>", savedStdout, os.Stdin)
 	}
 
 	for _, path := range paths {
@@ -121,15 +121,6 @@ func (c *Runner) process(path string, stdout io.Writer, in io.Reader) error {
 
 	output := c.metaFormatter.Format(path, input)
 
-	if c.opts.stdin {
-		_, err = stdout.Write(output)
-		if err != nil {
-			return err
-		}
-
-		return nil
-	}
-
 	if bytes.Equal(input, output) {
 		return nil
 	}
@@ -166,6 +157,38 @@ func (c *Runner) process(path string, stdout io.Writer, in io.Reader) error {
 	}
 
 	return os.WriteFile(path, output, perms)
+}
+
+func (c *Runner) formatStdIn(path string, stdout io.Writer, in io.Reader) error {
+	input, err := io.ReadAll(in)
+	if err != nil {
+		return err
+	}
+
+	match, err := c.matcher.IsGeneratedFile(path, input)
+	if err != nil {
+		return err
+	}
+
+	if match {
+		// If the file is generated,
+		// the input should be written to the stdout to avoid emptied the file.
+		_, err = stdout.Write(input)
+		if err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	output := c.metaFormatter.Format(path, input)
+
+	_, err = stdout.Write(output)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (c *Runner) setOutputToDevNull() {
