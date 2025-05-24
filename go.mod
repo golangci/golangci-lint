@@ -97,7 +97,7 @@ require (
 	github.com/sanposhiho/wastedassign/v2 v2.1.0
 	github.com/santhosh-tekuri/jsonschema/v6 v6.0.2
 	github.com/sashamelentyev/interfacebloat v1.1.0
-	github.com/sashamelentyev/usestdlibvars v1.28.0
+	github.com/sashamelentyev/usestdlibvars v1.29.0
 	github.com/securego/gosec/v2 v2.22.4
 	github.com/shirou/gopsutil/v4 v4.25.4
 	github.com/sirupsen/logrus v1.9.3

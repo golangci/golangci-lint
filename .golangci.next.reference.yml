@@ -3616,6 +3616,9 @@ linters:
       # Suggest the use of http.StatusXX.
       # Default: true
       http-status-code: false
+      # Suggest the use of time.Month in time.Date.
+      # Default: false
+      time-date-month: true
       # Suggest the use of time.Weekday.String().
       # Default: true
       time-weekday: true

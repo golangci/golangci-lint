@@ -13,3 +13,4 @@ linters:
       sql-isolation-level: true
       tls-signature-scheme: true
       constant-kind: true
+      time-date-month: true

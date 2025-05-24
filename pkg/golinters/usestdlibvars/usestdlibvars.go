@@ -24,6 +24,7 @@ func New(settings *config.UseStdlibVarsSettings) *goanalysis.Linter {
 			analyzer.TimeMonthFlag:          settings.TimeMonth,
 			analyzer.TimeWeekdayFlag:        settings.TimeWeekday,
 			analyzer.TLSSignatureSchemeFlag: settings.TLSSignatureScheme,
+			analyzer.TimeDateMonthFlag:      settings.TimeDateMonth,
 		}
 	}
 
