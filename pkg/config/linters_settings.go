@@ -934,6 +934,7 @@ type UseStdlibVarsSettings struct {
 	SQLIsolationLevel  bool `mapstructure:"sql-isolation-level"`
 	TLSSignatureScheme bool `mapstructure:"tls-signature-scheme"`
 	ConstantKind       bool `mapstructure:"constant-kind"`
+	TimeDateMonth      bool `mapstructure:"time-date-month"`
 }
 
 type UseTestingSettings struct {

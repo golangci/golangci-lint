@@ -2,7 +2,10 @@
 //golangcitest:config_path testdata/usestdlibvars_non_default.yml
 package testdata
 
-import "net/http"
+import (
+	"net/http"
+	"time"
+)
 
 func _200() {
 	_ = 200
@@ -52,3 +55,8 @@ const (
 	_ = "ECDSAWithP256AndSHA256" // want `"ECDSAWithP256AndSHA256" can be replaced by tls\.ECDSAWithP256AndSHA256\.String\(\)`
 	_ = "ECDSAWithP384AndSHA384" // want `"ECDSAWithP384AndSHA384" can be replaced by tls\.ECDSAWithP384AndSHA384\.String\(\)`
 )
+
+func _() {
+	var _ = time.Date(2023, 1, 2, 3, 4, 5, 0, time.UTC)  // want `"1" can be replaced by time\.January`
+	var _ = time.Date(2023, 10, 2, 3, 4, 5, 0, time.UTC) // want `"10" can be replaced by time\.October`
+}

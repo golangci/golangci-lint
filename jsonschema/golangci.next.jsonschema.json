@@ -3728,6 +3728,11 @@
               "type": "boolean",
               "default": false
             },
+            "time-date-month": {
+              "description": "Suggest the use of time.Month in time.Date.",
+              "type": "boolean",
+              "default": false
+            },
             "crypto-hash": {
               "description": "Suggest the use of crypto.Hash.String().",
               "type": "boolean",
