@@ -59,7 +59,8 @@ func newFormattersCommand(logger logutils.Log) *formattersCommand {
 	fs.SortFlags = false // sort them as they are defined here
 
 	setupConfigFileFlagSet(fs, &c.opts.LoaderOptions)
-	setupLintersFlagSet(c.viper, fs)
+
+	setupFormattersFlagSet(c.viper, fs)
 
 	fs.BoolVar(&c.opts.JSON, "json", false, color.GreenString("Display as JSON"))
 
