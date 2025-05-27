@@ -137,6 +137,10 @@ func (c *migrateCommand) preRunE(cmd *cobra.Command, _ []string) error {
 		return fmt.Errorf("unsupported format: %s", c.opts.format)
 	}
 
+	if c.cfg.Version != "" {
+		return fmt.Errorf("configuration version is already set: %s", c.cfg.Version)
+	}
+
 	if c.opts.skipValidation {
 		return nil
 	}
@@ -145,10 +149,6 @@ func (c *migrateCommand) preRunE(cmd *cobra.Command, _ []string) error {
 	if usedConfigFile == "" {
 		c.log.Warnf("No config file detected")
 		os.Exit(exitcodes.NoConfigFileDetected)
-	}
-
-	if c.cfg.Version != "" {
-		return fmt.Errorf("configuration version is already set: %s", c.cfg.Version)
 	}
 
 	c.log.Infof("Validating v1 configuration file: %s", usedConfigFile)
