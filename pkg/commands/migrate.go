@@ -81,10 +81,6 @@ func newMigrateCommand(log logutils.Log, info BuildInfo) *migrateCommand {
 }
 
 func (c *migrateCommand) execute(_ *cobra.Command, _ []string) error {
-	if c.cfg.Version != "" {
-		return fmt.Errorf("configuration version is already set: %s", c.cfg.Version)
-	}
-
 	srcPath := c.viper.ConfigFileUsed()
 	if srcPath == "" {
 		c.log.Warnf("No config file detected")
@@ -149,6 +145,10 @@ func (c *migrateCommand) preRunE(cmd *cobra.Command, _ []string) error {
 	if usedConfigFile == "" {
 		c.log.Warnf("No config file detected")
 		os.Exit(exitcodes.NoConfigFileDetected)
+	}
+
+	if c.cfg.Version != "" {
+		return fmt.Errorf("configuration version is already set: %s", c.cfg.Version)
 	}
 
 	c.log.Infof("Validating v1 configuration file: %s", usedConfigFile)
