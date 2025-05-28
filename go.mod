@@ -80,7 +80,7 @@ require (
 	github.com/maratori/testpackage v1.1.1
 	github.com/matoous/godox v1.1.0
 	github.com/mattn/go-colorable v0.1.14
-	github.com/mgechev/revive v1.9.0
+	github.com/mgechev/revive v1.10.0
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/moricho/tparallel v0.3.2
 	github.com/nakabonne/nestif v0.3.1
@@ -141,6 +141,7 @@ require (
 )
 
 require (
+	codeberg.org/chavacava/garif v0.2.0 // indirect
 	github.com/Masterminds/semver/v3 v3.3.1 // indirect
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
@@ -150,7 +151,6 @@ require (
 	github.com/charmbracelet/x/ansi v0.8.0 // indirect
 	github.com/charmbracelet/x/cellbuf v0.0.13-0.20250311204145-2c3ea96c31dd // indirect
 	github.com/charmbracelet/x/term v0.2.1 // indirect
-	github.com/chavacava/garif v0.1.0 // indirect
 	github.com/dave/dst v0.27.3 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/dlclark/regexp2 v1.11.5 // indirect
@@ -184,7 +184,6 @@ require (
 	github.com/matttproud/golang_protobuf_extensions v1.0.1 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/muesli/termenv v0.16.0 // indirect
-	github.com/olekukonko/tablewriter v0.0.5 // indirect
 	github.com/pelletier/go-toml v1.9.5 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/power-devops/perfstat v0.0.0-20210106213030-5aafc221ea8c // indirect
