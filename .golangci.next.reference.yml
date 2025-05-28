@@ -2589,7 +2589,7 @@ linters:
           severity: warning
           disabled: false
           exclude: [""]
-        # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#redundant-test-main-exit
+        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#redundant-test-main-exit
         - name: redundant-test-main-exit
           severity: warning
           disabled: false
@@ -2629,6 +2629,11 @@ linters:
           exclude: [""]
           arguments:
             - "preserve-scope"
+        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#time-date
+        - name: time-date
+          severity: warning
+          disabled: false
+          exclude: [""]
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#time-equal
         - name: time-equal
           severity: warning
@@ -2669,6 +2674,11 @@ linters:
           arguments:
             - "fmt.Printf"
             - "myFunction"
+        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#unnecessary-format
+        - name: unnecessary-format
+          severity: warning
+          disabled: false
+          exclude: [""]
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#unnecessary-stmt
         - name: unnecessary-stmt
           severity: warning
@@ -2700,6 +2710,11 @@ linters:
           exclude: [""]
         # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#use-errors-new
         - name: use-errors-new
+          severity: warning
+          disabled: false
+          exclude: [""]
+        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#use-fmt-print
+        - name: use-fmt-print
           severity: warning
           disabled: false
           exclude: [""]
