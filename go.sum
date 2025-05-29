@@ -39,8 +39,8 @@ codeberg.org/chavacava/garif v0.2.0/go.mod h1:P2BPbVbT4QcvLZrORc2T29szK3xEOlnl0G
 dmitri.shuralyov.com/gpu/mtl v0.0.0-20190408044501-666a987793e9/go.mod h1:H6x//7gZCb22OMCxBHrMx7a5I7Hp++hsVxbQ4BYO7hU=
 github.com/4meepo/tagalign v1.4.2 h1:0hcLHPGMjDyM1gHG58cS73aQF8J4TdVR96TZViorO9E=
 github.com/4meepo/tagalign v1.4.2/go.mod h1:+p4aMyFM+ra7nb41CnFG6aSDXqRxU/w1VQqScKqDARI=
-github.com/Abirdcfly/dupword v0.1.5 h1:beKz0j4wOOwehuExCSdJiN8yqBbzBfVDCrEPkiW6LK4=
-github.com/Abirdcfly/dupword v0.1.5/go.mod h1:s+BFMuL/I4YSiFv29snqyjwzDp4b65W2Kvy+PKzZ6cw=
+github.com/Abirdcfly/dupword v0.1.6 h1:qeL6u0442RPRe3mcaLcbaCi2/Y/hOcdtw6DE9odjz9c=
+github.com/Abirdcfly/dupword v0.1.6/go.mod h1:s+BFMuL/I4YSiFv29snqyjwzDp4b65W2Kvy+PKzZ6cw=
 github.com/Antonboom/errname v1.1.0 h1:A+ucvdpMwlo/myWrkHEUEBWc/xuXdud23S8tmTb/oAE=
 github.com/Antonboom/errname v1.1.0/go.mod h1:O1NMrzgUcVBGIfi3xlVuvX8Q/VP/73sseCaAppfjqZw=
 github.com/Antonboom/nilnil v1.1.0 h1:jGxJxjgYS3VUUtOTNk8Z1icwT5ESpLH/426fjmQG+ng=
