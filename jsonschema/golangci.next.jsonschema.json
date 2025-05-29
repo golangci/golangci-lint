@@ -794,6 +794,7 @@
             "nilnil",
             "nlreturn",
             "noctx",
+            "noinlineerr",
             "nolintlint",
             "nonamedreturns",
             "nosprintfhostport",
