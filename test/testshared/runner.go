@@ -4,6 +4,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"slices"
 	"strings"
 	"sync"
 	"syscall"
@@ -286,10 +287,8 @@ func (r *RunnerResult) ExpectNoIssues() {
 func (r *RunnerResult) ExpectExitCode(possibleCodes ...int) *RunnerResult {
 	r.tb.Helper()
 
-	for _, pc := range possibleCodes {
-		if pc == r.exitCode {
-			return r
-		}
+	if slices.Contains(possibleCodes, r.exitCode) {
+		return r
 	}
 
 	assert.Fail(r.tb, "invalid exit code", "exit code (%d) must be one of %v: %s", r.exitCode, possibleCodes, r.output)

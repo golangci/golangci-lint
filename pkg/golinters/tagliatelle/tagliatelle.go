@@ -1,6 +1,8 @@
 package tagliatelle
 
 import (
+	"maps"
+
 	"github.com/ldez/tagliatelle"
 
 	"github.com/golangci/golangci-lint/v2/pkg/config"
@@ -19,9 +21,7 @@ func New(settings *config.TagliatelleSettings) *goanalysis.Linter {
 	}
 
 	if settings != nil {
-		for k, v := range settings.Case.Rules {
-			cfg.Rules[k] = v
-		}
+		maps.Copy(cfg.Rules, settings.Case.Rules)
 
 		cfg.ExtendedRules = toExtendedRules(settings.Case.ExtendedRules)
 		cfg.UseFieldName = settings.Case.UseFieldName
