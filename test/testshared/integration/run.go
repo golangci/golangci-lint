@@ -4,6 +4,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"slices"
 	"strings"
 	"testing"
 	"time"
@@ -70,7 +71,7 @@ func testOneSource(t *testing.T, log *logutils.StderrLog, binPath, sourcePath st
 	}
 
 	for _, addArg := range []string{"", "-Etypecheck"} {
-		caseArgs := append([]string{}, args...)
+		caseArgs := slices.Clone(args)
 
 		if addArg != "" {
 			caseArgs = append(caseArgs, addArg)

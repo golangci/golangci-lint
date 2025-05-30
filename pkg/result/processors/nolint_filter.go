@@ -185,8 +185,7 @@ func (p *NolintFilter) buildIgnoredRangesForFile(f *ast.File, fset *token.FileSe
 	ast.Walk(&e, f)
 
 	// TODO: merge all ranges: there are repeated ranges
-	allRanges := append([]ignoredRange{}, inlineRanges...)
-	allRanges = append(allRanges, e.expandedRanges...)
+	allRanges := slices.Concat(inlineRanges, e.expandedRanges)
 
 	return allRanges
 }

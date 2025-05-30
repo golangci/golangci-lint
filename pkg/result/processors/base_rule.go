@@ -2,6 +2,7 @@ package processors
 
 import (
 	"regexp"
+	"slices"
 
 	"github.com/golangci/golangci-lint/v2/pkg/config"
 	"github.com/golangci/golangci-lint/v2/pkg/fsutils"
@@ -73,13 +74,7 @@ func (r *baseRule) match(issue *result.Issue, lines *fsutils.LineCache, log logu
 }
 
 func (r *baseRule) matchLinter(issue *result.Issue) bool {
-	for _, linter := range r.linters {
-		if linter == issue.FromLinter {
-			return true
-		}
-	}
-
-	return false
+	return slices.Contains(r.linters, issue.FromLinter)
 }
 
 func (r *baseRule) matchSource(issue *result.Issue, lineCache *fsutils.LineCache, log logutils.Log) bool {
