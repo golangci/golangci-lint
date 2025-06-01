@@ -26,7 +26,7 @@ func parseError(srcErr packages.Error) (*result.Issue, error) {
 }
 
 func parseErrorPosition(pos string) (*token.Position, error) {
-	// file:line(<optional>:colon)
+	// file:line(<optional>:column)
 	parts := strings.Split(pos, ":")
 	if len(parts) == 1 {
 		return nil, errors.New("no colons")
@@ -39,7 +39,7 @@ func parseErrorPosition(pos string) (*token.Position, error) {
 	}
 
 	var column int
-	if len(parts) == 3 { // no column
+	if len(parts) == 3 { // got column
 		column, err = strconv.Atoi(parts[2])
 		if err != nil {
 			return nil, fmt.Errorf("failed to parse column from %q: %w", parts[2], err)
