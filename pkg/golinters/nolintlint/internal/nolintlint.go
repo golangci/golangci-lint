@@ -26,7 +26,7 @@ type Needs uint
 
 const commentMark = "//"
 
-var commentPattern = regexp.MustCompile(`^//\s*(nolint)(:\s*[\w-]+\s*(?:,\s*[\w-]+\s*)*)?\b`)
+var commentPattern = regexp.MustCompile(`^(//(\s*)nolint)(?::\s*[\w-]+\s*(?:,\s*[\w-]+\s*)*)?\b`)
 
 // matches a complete nolint directive
 var fullDirectivePattern = regexp.MustCompile(`^//\s*nolint(?::(\s*[\w-]+\s*(?:,\s*[\w-]+\s*)*))?\s*(//.*)?\s*\n?$`)
@@ -49,10 +49,7 @@ func NewLinter(needs Needs, excludes []string) (*Linter, error) {
 	}, nil
 }
 
-var (
-	leadingSpacePattern      = regexp.MustCompile(`^//(\s*)`)
-	trailingBlankExplanation = regexp.MustCompile(`\s*(//\s*)?$`)
-)
+var trailingBlankExplanation = regexp.MustCompile(`\s*(//\s*)?$`)
 
 //nolint:funlen,gocyclo // the function is going to be refactored in the future
 func (l Linter) Run(pass *analysis.Pass) ([]goanalysis.Issue, error) {
@@ -61,25 +58,13 @@ func (l Linter) Run(pass *analysis.Pass) ([]goanalysis.Issue, error) {
 	for _, file := range pass.Files {
 		for _, c := range file.Comments {
 			for _, comment := range c.List {
-				if !commentPattern.MatchString(comment.Text) {
+				m := commentPattern.FindStringSubmatch(comment.Text)
+				if m == nil {
 					continue
 				}
 
-				// check for a space between the "//" and the directive
-				leadingSpaceMatches := leadingSpacePattern.FindStringSubmatch(comment.Text)
-
-				var leadingSpace string
-				if len(leadingSpaceMatches) > 0 {
-					leadingSpace = leadingSpaceMatches[1]
-				}
-
-				directiveWithOptionalLeadingSpace := commentMark
-				if leadingSpace != "" {
-					directiveWithOptionalLeadingSpace += " "
-				}
-
-				split := strings.Split(strings.SplitN(comment.Text, ":", 2)[0], commentMark)
-				directiveWithOptionalLeadingSpace += strings.TrimSpace(split[1])
+				directiveWithOptionalLeadingSpace := m[1]
+				leadingSpace := m[2]
 
 				pos := pass.Fset.Position(comment.Pos())
 				end := pass.Fset.Position(comment.End())
