@@ -76,6 +76,25 @@ func (lnt *Linter) WithDesc(desc string) *Linter {
 	return lnt
 }
 
+func (lnt *Linter) WithVersion(v int) *Linter {
+	if v == 0 {
+		return lnt
+	}
+
+	for _, analyzer := range lnt.analyzers {
+		if lnt.name != analyzer.Name {
+			continue
+		}
+
+		// The analyzer name should be the same as the linter name to avoid displaying the name inside the reports.
+		analyzer.Name = fmt.Sprintf("%s_v%d", analyzer.Name, v)
+	}
+
+	lnt.name = fmt.Sprintf("%s_v%d", lnt.name, v)
+
+	return lnt
+}
+
 func (lnt *Linter) WithConfig(cfg map[string]any) *Linter {
 	if len(cfg) == 0 {
 		return lnt
