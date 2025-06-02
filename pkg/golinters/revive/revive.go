@@ -436,7 +436,7 @@ func displayRules(conf *lint.Config) {
 	slices.Sort(enabledRules)
 
 	debugf("All available rules (%d): %s.", len(allRules), strings.Join(extractRulesName(allRules), ", "))
-	debugf("Default rules (%d): %s.", len(allRules), strings.Join(extractRulesName(allRules), ", "))
+	debugf("Default rules (%d): %s.", len(defaultRules), strings.Join(extractRulesName(defaultRules), ", "))
 	debugf("Enabled by config rules (%d): %s.", len(enabledRules), strings.Join(enabledRules, ", "))
 
 	debugf("revive configuration: %#v", conf)
