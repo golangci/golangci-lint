@@ -221,6 +221,7 @@ type LintersSettings struct {
 	Exhaustive               ExhaustiveSettings               `mapstructure:"exhaustive"`
 	Exhaustruct              ExhaustructSettings              `mapstructure:"exhaustruct"`
 	Fatcontext               FatcontextSettings               `mapstructure:"fatcontext"`
+	RetractedDeps            RetractedDepsSettings            `mapstructure:"retracteddeps"`
 	Forbidigo                ForbidigoSettings                `mapstructure:"forbidigo"`
 	FuncOrder                FuncOrderSettings                `mapstructure:"funcorder"`
 	Funlen                   FunlenSettings                   `mapstructure:"funlen"`
@@ -769,6 +770,8 @@ type RecvcheckSettings struct {
 	DisableBuiltin bool     `mapstructure:"disable-builtin"`
 	Exclusions     []string `mapstructure:"exclusions"`
 }
+
+type RetractedDepsSettings struct{}
 
 type ReviveSettings struct {
 	Go             string            `mapstructure:"-"`

@@ -91,6 +91,7 @@ import (
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/protogetter"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/reassign"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/recvcheck"
+	"github.com/golangci/golangci-lint/v2/pkg/golinters/retracteddeps"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/revive"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/rowserrcheck"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/sloglint"
@@ -279,6 +280,10 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithLoadForGoAnalysis().
 			WithAutoFix().
 			WithURL("https://github.com/Crocmagnon/fatcontext"),
+
+		linter.NewConfig(retracteddeps.New(&cfg.Linters.Settings.RetractedDeps)).
+			WithSince("v2.1.6").
+			WithURL("https://github.com/golangci/golangci-lint"),
 
 		linter.NewConfig(funlen.New(&cfg.Linters.Settings.Funlen)).
 			WithSince("v1.18.0").
