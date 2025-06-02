@@ -40,11 +40,11 @@ func (p *Tab) SprintfColored(ca color.Attribute, format string, args ...any) str
 	return c.Sprintf(format, args...)
 }
 
-func (p *Tab) Print(issues []result.Issue) error {
+func (p *Tab) Print(issues []*result.Issue) error {
 	w := tabwriter.NewWriter(p.w, 0, 0, 2, ' ', 0)
 
-	for i := range issues {
-		p.printIssue(&issues[i], w)
+	for _, issue := range issues {
+		p.printIssue(issue, w)
 	}
 
 	if err := w.Flush(); err != nil {

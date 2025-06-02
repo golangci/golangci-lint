@@ -32,7 +32,7 @@ type Issue struct {
 	// HunkPos is used only when golangci-lint is run over a diff
 	HunkPos int `json:",omitempty"`
 
-	// If we know how to fix the issue we can provide replacement lines
+	// If we know how to fix the issue, we can provide replacement lines
 	SuggestedFixes []analysis.SuggestedFix `json:",omitempty"`
 
 	// If we are expecting a nolint (because this is from nolintlint), record the expected linter
@@ -42,7 +42,7 @@ type Issue struct {
 	// Only for Diff processor needs.
 	WorkingDirectoryRelativePath string `json:"-"`
 
-	// Only for processor that need relative paths evaluation.
+	// Only for processors that need relative paths evaluation.
 	RelativePath string `json:"-"`
 }
 

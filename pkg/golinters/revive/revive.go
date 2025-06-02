@@ -35,7 +35,7 @@ var (
 
 func New(settings *config.ReviveSettings) *goanalysis.Linter {
 	var mu sync.Mutex
-	var resIssues []goanalysis.Issue
+	var resIssues []*goanalysis.Issue
 
 	analyzer := &analysis.Analyzer{
 		Name: linterName,
@@ -69,7 +69,7 @@ func New(settings *config.ReviveSettings) *goanalysis.Linter {
 				return nil, nil
 			}
 		}).
-		WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
+		WithIssuesReporter(func(*linter.Context) []*goanalysis.Issue {
 			return resIssues
 		}).
 		WithLoadMode(goanalysis.LoadModeSyntax)
@@ -106,7 +106,7 @@ func newWrapper(settings *config.ReviveSettings) (*wrapper, error) {
 	}, nil
 }
 
-func (w *wrapper) run(pass *analysis.Pass) ([]goanalysis.Issue, error) {
+func (w *wrapper) run(pass *analysis.Pass) ([]*goanalysis.Issue, error) {
 	packages := [][]string{internal.GetGoFileNames(pass)}
 
 	failures, err := w.revive.Lint(packages, w.lintingRules, *w.conf)
@@ -114,7 +114,7 @@ func (w *wrapper) run(pass *analysis.Pass) ([]goanalysis.Issue, error) {
 		return nil, err
 	}
 
-	var issues []goanalysis.Issue
+	var issues []*goanalysis.Issue
 	for failure := range failures {
 		if failure.Confidence < w.conf.Confidence {
 			continue
@@ -126,7 +126,7 @@ func (w *wrapper) run(pass *analysis.Pass) ([]goanalysis.Issue, error) {
 	return issues, nil
 }
 
-func (w *wrapper) toIssue(pass *analysis.Pass, failure *lint.Failure) goanalysis.Issue {
+func (w *wrapper) toIssue(pass *analysis.Pass, failure *lint.Failure) *goanalysis.Issue {
 	lineRangeTo := failure.Position.End.Line
 	if failure.RuleName == (&rule.ExportedRule{}).Name() {
 		lineRangeTo = failure.Position.Start.Line

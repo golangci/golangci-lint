@@ -12,7 +12,7 @@ import (
 	"github.com/golangci/golangci-lint/v2/pkg/result"
 )
 
-var issues = []result.Issue{
+var issues = []*result.Issue{
 	{
 		FromLinter: "b",
 		Severity:   "medium",
@@ -50,7 +50,7 @@ var issues = []result.Issue{
 	},
 }
 
-var extraSeverityIssues = []result.Issue{
+var extraSeverityIssues = []*result.Issue{
 	{
 		FromLinter: "c",
 		Severity:   "error",
@@ -72,16 +72,16 @@ var extraSeverityIssues = []result.Issue{
 }
 
 type compareTestCase struct {
-	a, b     result.Issue
+	a, b     *result.Issue
 	expected int
 }
 
 func testCompareValues(t *testing.T, cmp issueComparator, name string, tests []compareTestCase) {
-	for i, test := range tests { //nolint:gocritic // To ignore rangeValCopy rule
+	for i, test := range tests {
 		t.Run(fmt.Sprintf("%s(%d)", name, i), func(t *testing.T) {
 			t.Parallel()
 
-			res := cmp(&test.a, &test.b)
+			res := cmp(test.a, test.b)
 
 			assert.Equal(t, compToString(test.expected), compToString(res))
 		})
@@ -210,7 +210,7 @@ func Test_numericCompare(t *testing.T) {
 }
 
 func TestSortResults_Process(t *testing.T) {
-	tests := make([]result.Issue, len(issues))
+	tests := make([]*result.Issue, len(issues))
 	copy(tests, issues)
 
 	cfg := &config.Output{}
@@ -219,7 +219,7 @@ func TestSortResults_Process(t *testing.T) {
 
 	results, err := sr.Process(tests)
 	require.NoError(t, err)
-	assert.Equal(t, []result.Issue{issues[1], issues[0], issues[3], issues[2]}, results)
+	assert.Equal(t, []*result.Issue{issues[1], issues[0], issues[3], issues[2]}, results)
 }
 
 func compToString(c int) string {

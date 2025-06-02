@@ -23,7 +23,7 @@ const (
 const defaultFileMode = 0o644
 
 type issuePrinter interface {
-	Print(issues []result.Issue) error
+	Print(issues []*result.Issue) error
 }
 
 // Printer prints issues.
@@ -63,7 +63,7 @@ func NewPrinter(log logutils.Log, cfg *config.Formats, reportData *report.Data, 
 // Print prints issues based on the formats defined.
 //
 //nolint:gocyclo,funlen // the complexity is related to the number of formats.
-func (c *Printer) Print(issues []result.Issue) error {
+func (c *Printer) Print(issues []*result.Issue) error {
 	if c.cfg.IsEmpty() {
 		c.cfg.Text.Path = outputStdOut
 	}

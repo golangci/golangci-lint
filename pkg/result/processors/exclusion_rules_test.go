@@ -63,7 +63,7 @@ func TestExclusionRules_Process_multiple(t *testing.T) {
 		{Path: filepath.FromSlash("testdata/exclusion_rules/exclusion_rules.go"), Line: 3, Linter: "lll"},
 	}
 
-	var issues []result.Issue
+	var issues []*result.Issue
 	for _, c := range cases {
 		issues = append(issues, newIssueFromIssueTestCase(c))
 	}
@@ -105,9 +105,9 @@ func TestExclusionRules_Process_text(t *testing.T) {
 	p := NewExclusionRules(nil, lines, cfg)
 
 	texts := []string{"exclude", "1", "", "exclud", "notexclude"}
-	var issues []result.Issue
+	var issues []*result.Issue
 	for _, t := range texts {
-		issues = append(issues, result.Issue{
+		issues = append(issues, &result.Issue{
 			Text:       t,
 			FromLinter: "linter",
 		})
@@ -178,7 +178,7 @@ func TestExclusionRules_Process_caseSensitive_multiple(t *testing.T) {
 		{Path: filepath.FromSlash("testdata/exclusion_rules/case_sensitive.go"), Line: 3, Linter: "lll"},
 	}
 
-	var issues []result.Issue
+	var issues []*result.Issue
 	for _, c := range cases {
 		issues = append(issues, newIssueFromIssueTestCase(c))
 	}
@@ -225,9 +225,9 @@ func TestExclusionRules_Process_caseSensitive_text(t *testing.T) {
 
 	texts := []string{"exclude", "excLude", "1", "", "exclud", "notexclude"}
 
-	var issues []result.Issue
+	var issues []*result.Issue
 	for _, t := range texts {
-		issues = append(issues, result.Issue{
+		issues = append(issues, &result.Issue{
 			Text:       t,
 			FromLinter: "linter",
 		})

@@ -9,13 +9,13 @@ import (
 )
 
 type Issue struct {
-	result.Issue
+	*result.Issue
 	Pass *analysis.Pass
 }
 
-func NewIssue(issue *result.Issue, pass *analysis.Pass) Issue {
-	return Issue{
-		Issue: *issue,
+func NewIssue(issue *result.Issue, pass *analysis.Pass) *Issue {
+	return &Issue{
+		Issue: issue,
 		Pass:  pass,
 	}
 }

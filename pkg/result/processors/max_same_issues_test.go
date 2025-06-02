@@ -10,10 +10,10 @@ import (
 
 func TestMaxSameIssues(t *testing.T) {
 	p := NewMaxSameIssues(1, logutils.NewStderrLog(logutils.DebugKeyEmpty), &config.Config{})
-	i1 := result.Issue{
+	i1 := &result.Issue{
 		Text: "1",
 	}
-	i2 := result.Issue{
+	i2 := &result.Issue{
 		Text: "2",
 	}
 

@@ -13,15 +13,15 @@ import (
 	"github.com/golangci/golangci-lint/v2/pkg/result"
 )
 
-func newPPIssue(fn, rp string) result.Issue {
-	return result.Issue{
+func newPPIssue(fn, rp string) *result.Issue {
+	return &result.Issue{
 		Pos:          token.Position{Filename: filepath.FromSlash(fn)},
 		RelativePath: filepath.FromSlash(rp),
 	}
 }
 
 func TestPathPrettifier_Process(t *testing.T) {
-	paths := func(ps ...string) (issues []result.Issue) {
+	paths := func(ps ...string) (issues []*result.Issue) {
 		for _, p := range ps {
 			issues = append(issues, newPPIssue("test", p))
 		}
@@ -30,12 +30,12 @@ func TestPathPrettifier_Process(t *testing.T) {
 
 	for _, tt := range []struct {
 		name, prefix string
-		issues, want []result.Issue
+		issues, want []*result.Issue
 	}{
 		{
 			name:   "empty prefix",
 			issues: paths("some/path", "cool"),
-			want: []result.Issue{
+			want: []*result.Issue{
 				newPPIssue("some/path", "some/path"),
 				newPPIssue("cool", "cool"),
 			},
@@ -44,7 +44,7 @@ func TestPathPrettifier_Process(t *testing.T) {
 			name:   "prefix",
 			prefix: "ok",
 			issues: paths("some/path", "cool"),
-			want: []result.Issue{
+			want: []*result.Issue{
 				newPPIssue("ok/some/path", "some/path"),
 				newPPIssue("ok/cool", "cool"),
 			},
@@ -53,7 +53,7 @@ func TestPathPrettifier_Process(t *testing.T) {
 			name:   "prefix slashed",
 			prefix: "ok/",
 			issues: paths("some/path", "cool"),
-			want: []result.Issue{
+			want: []*result.Issue{
 				newPPIssue("ok/some/path", "some/path"),
 				newPPIssue("ok/cool", "cool"),
 			},

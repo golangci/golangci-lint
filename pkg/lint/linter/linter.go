@@ -8,7 +8,7 @@ import (
 )
 
 type Linter interface {
-	Run(ctx context.Context, lintCtx *Context) ([]result.Issue, error)
+	Run(ctx context.Context, lintCtx *Context) ([]*result.Issue, error)
 	Name() string
 	Desc() string
 }
@@ -43,7 +43,7 @@ func NewNoopDeprecated(name string, cfg *config.Config, level DeprecationLevel) 
 	return noop
 }
 
-func (n Noop) Run(_ context.Context, lintCtx *Context) ([]result.Issue, error) {
+func (n Noop) Run(_ context.Context, lintCtx *Context) ([]*result.Issue, error) {
 	if n.reason == "" {
 		return nil, nil
 	}

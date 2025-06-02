@@ -20,7 +20,7 @@ const linterName = "unused"
 
 func New(settings *config.UnusedSettings) *goanalysis.Linter {
 	var mu sync.Mutex
-	var resIssues []goanalysis.Issue
+	var resIssues []*goanalysis.Issue
 
 	analyzer := &analysis.Analyzer{
 		Name:     linterName,
@@ -45,12 +45,12 @@ func New(settings *config.UnusedSettings) *goanalysis.Linter {
 		"Checks Go code for unused constants, variables, functions and types",
 		[]*analysis.Analyzer{analyzer},
 		nil,
-	).WithIssuesReporter(func(_ *linter.Context) []goanalysis.Issue {
+	).WithIssuesReporter(func(_ *linter.Context) []*goanalysis.Issue {
 		return resIssues
 	}).WithLoadMode(goanalysis.LoadModeTypesInfo)
 }
 
-func runUnused(pass *analysis.Pass, cfg *config.UnusedSettings) []goanalysis.Issue {
+func runUnused(pass *analysis.Pass, cfg *config.UnusedSettings) []*goanalysis.Issue {
 	res := getUnusedResults(pass, cfg)
 
 	used := make(map[string]bool)
@@ -58,7 +58,7 @@ func runUnused(pass *analysis.Pass, cfg *config.UnusedSettings) []goanalysis.Iss
 		used[fmt.Sprintf("%s %d %s", obj.Position.Filename, obj.Position.Line, obj.Name)] = true
 	}
 
-	var issues []goanalysis.Issue
+	var issues []*goanalysis.Issue
 
 	// Inspired by https://github.com/dominikh/go-tools/blob/d694aadcb1f50c2d8ac0a1dd06217ebb9f654764/lintcmd/lint.go#L177-L197
 	for _, object := range res.Unused {

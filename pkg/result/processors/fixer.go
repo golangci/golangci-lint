@@ -56,14 +56,14 @@ func (Fixer) Name() string {
 	return "fixer"
 }
 
-func (p Fixer) Process(issues []result.Issue) ([]result.Issue, error) {
+func (p Fixer) Process(issues []*result.Issue) ([]*result.Issue, error) {
 	if !p.cfg.Issues.NeedFix {
 		return issues, nil
 	}
 
 	p.log.Infof("Applying suggested fixes")
 
-	notFixableIssues, err := timeutils.TrackStage(p.sw, "all", func() ([]result.Issue, error) {
+	notFixableIssues, err := timeutils.TrackStage(p.sw, "all", func() ([]*result.Issue, error) {
 		return p.process(issues)
 	})
 	if err != nil {
@@ -76,13 +76,13 @@ func (p Fixer) Process(issues []result.Issue) ([]result.Issue, error) {
 }
 
 //nolint:funlen,gocyclo // This function should not be split.
-func (p Fixer) process(issues []result.Issue) ([]result.Issue, error) {
+func (p Fixer) process(issues []*result.Issue) ([]*result.Issue, error) {
 	// filenames / linters / edits
 	editsByLinter := make(map[string]map[string][]diff.Edit)
 
 	formatters := []string{gofumpt.Name, goimports.Name, gofmt.Name, gci.Name, golines.Name, swaggo.Name}
 
-	var notFixableIssues []result.Issue
+	var notFixableIssues []*result.Issue
 
 	toBeFormattedFiles := make(map[string]struct{})
 
@@ -94,7 +94,7 @@ func (p Fixer) process(issues []result.Issue) ([]result.Issue, error) {
 			continue
 		}
 
-		if issue.SuggestedFixes == nil || skipNoTextEdit(&issue) {
+		if issue.SuggestedFixes == nil || skipNoTextEdit(issue) {
 			notFixableIssues = append(notFixableIssues, issue)
 			continue
 		}

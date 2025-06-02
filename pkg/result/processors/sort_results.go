@@ -54,7 +54,7 @@ func NewSortResults(cfg *config.Output) *SortResults {
 func (SortResults) Name() string { return "sort_results" }
 
 // Process is performing sorting of the result issues.
-func (p SortResults) Process(issues []result.Issue) ([]result.Issue, error) {
+func (p SortResults) Process(issues []*result.Issue) ([]*result.Issue, error) {
 	if len(p.cfg.SortOrder) == 0 {
 		p.cfg.SortOrder = []string{orderNameLinter, orderNameFile}
 	}
@@ -72,8 +72,8 @@ func (p SortResults) Process(issues []result.Issue) ([]result.Issue, error) {
 
 	comp := mergeComparators(cmps...)
 
-	slices.SortFunc(issues, func(a, b result.Issue) int {
-		return comp(&a, &b)
+	slices.SortFunc(issues, func(a, b *result.Issue) int {
+		return comp(a, b)
 	})
 
 	return issues, nil

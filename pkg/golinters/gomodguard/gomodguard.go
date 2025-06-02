@@ -16,7 +16,7 @@ import (
 const linterName = "gomodguard"
 
 func New(settings *config.GoModGuardSettings) *goanalysis.Linter {
-	var issues []goanalysis.Issue
+	var issues []*goanalysis.Issue
 	var mu sync.Mutex
 
 	processorCfg := &gomodguard.Configuration{}
@@ -82,7 +82,7 @@ func New(settings *config.GoModGuardSettings) *goanalysis.Linter {
 				return nil, nil
 			}
 		}).
-		WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
+		WithIssuesReporter(func(*linter.Context) []*goanalysis.Issue {
 			return issues
 		}).
 		WithLoadMode(goanalysis.LoadModeSyntax)

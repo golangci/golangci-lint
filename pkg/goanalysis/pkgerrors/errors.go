@@ -18,8 +18,8 @@ func (e *IllTypedError) Error() string {
 	return fmt.Sprintf("IllTypedError: errors in package: %v", e.Pkg.Errors)
 }
 
-func BuildIssuesFromIllTypedError(errs []error, lintCtx *linter.Context) ([]result.Issue, error) {
-	var issues []result.Issue
+func BuildIssuesFromIllTypedError(errs []error, lintCtx *linter.Context) ([]*result.Issue, error) {
+	var issues []*result.Issue
 	uniqReportedIssues := map[string]bool{}
 
 	var other error
@@ -43,7 +43,7 @@ func BuildIssuesFromIllTypedError(errs []error, lintCtx *linter.Context) ([]resu
 				lintCtx.Log.Errorf("typechecking error: %s", err.Msg)
 			} else {
 				issue.Pkg = ill.Pkg // to save to cache later
-				issues = append(issues, *issue)
+				issues = append(issues, issue)
 			}
 		}
 	}

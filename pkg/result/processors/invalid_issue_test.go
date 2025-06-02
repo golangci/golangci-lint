@@ -19,21 +19,21 @@ func TestInvalidIssue_Process(t *testing.T) {
 
 	testCases := []struct {
 		desc     string
-		issues   []result.Issue
-		expected []result.Issue
+		issues   []*result.Issue
+		expected []*result.Issue
 	}{
 		{
 			desc: "typecheck",
-			issues: []result.Issue{
+			issues: []*result.Issue{
 				{FromLinter: "typecheck"},
 			},
-			expected: []result.Issue{
+			expected: []*result.Issue{
 				{FromLinter: "typecheck"},
 			},
 		},
 		{
 			desc: "keep only typecheck issues if any exist",
-			issues: []result.Issue{
+			issues: []*result.Issue{
 				{FromLinter: "typecheck"},
 				{
 					FromLinter: "example",
@@ -42,13 +42,13 @@ func TestInvalidIssue_Process(t *testing.T) {
 					},
 				},
 			},
-			expected: []result.Issue{
+			expected: []*result.Issue{
 				{FromLinter: "typecheck"},
 			},
 		},
 		{
 			desc: "Go file",
-			issues: []result.Issue{
+			issues: []*result.Issue{
 				{
 					FromLinter: "example",
 					Pos: token.Position{
@@ -56,7 +56,7 @@ func TestInvalidIssue_Process(t *testing.T) {
 					},
 				},
 			},
-			expected: []result.Issue{
+			expected: []*result.Issue{
 				{
 					FromLinter: "example",
 					Pos: token.Position{
@@ -67,7 +67,7 @@ func TestInvalidIssue_Process(t *testing.T) {
 		},
 		{
 			desc: "go.mod",
-			issues: []result.Issue{
+			issues: []*result.Issue{
 				{
 					FromLinter: "example",
 					Pos: token.Position{
@@ -75,7 +75,7 @@ func TestInvalidIssue_Process(t *testing.T) {
 					},
 				},
 			},
-			expected: []result.Issue{
+			expected: []*result.Issue{
 				{
 					FromLinter: "example",
 					Pos: token.Position{
@@ -86,7 +86,7 @@ func TestInvalidIssue_Process(t *testing.T) {
 		},
 		{
 			desc: "non Go file",
-			issues: []result.Issue{
+			issues: []*result.Issue{
 				{
 					FromLinter: "example",
 					Pos: token.Position{
@@ -94,11 +94,11 @@ func TestInvalidIssue_Process(t *testing.T) {
 					},
 				},
 			},
-			expected: []result.Issue{},
+			expected: []*result.Issue{},
 		},
 		{
 			desc: "no filename",
-			issues: []result.Issue{
+			issues: []*result.Issue{
 				{
 					FromLinter: "example",
 					Pos: token.Position{
@@ -106,7 +106,7 @@ func TestInvalidIssue_Process(t *testing.T) {
 					},
 				},
 			},
-			expected: []result.Issue{},
+			expected: []*result.Issue{},
 		},
 	}
 

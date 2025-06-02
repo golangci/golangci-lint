@@ -18,7 +18,7 @@ const linterName = "gocyclo"
 
 func New(settings *config.GoCycloSettings) *goanalysis.Linter {
 	var mu sync.Mutex
-	var resIssues []goanalysis.Issue
+	var resIssues []*goanalysis.Issue
 
 	return goanalysis.
 		NewLinterFromAnalyzer(&analysis.Analyzer{
@@ -38,13 +38,13 @@ func New(settings *config.GoCycloSettings) *goanalysis.Linter {
 				return nil, nil
 			},
 		}).
-		WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
+		WithIssuesReporter(func(*linter.Context) []*goanalysis.Issue {
 			return resIssues
 		}).
 		WithLoadMode(goanalysis.LoadModeSyntax)
 }
 
-func runGoCyclo(pass *analysis.Pass, settings *config.GoCycloSettings) []goanalysis.Issue {
+func runGoCyclo(pass *analysis.Pass, settings *config.GoCycloSettings) []*goanalysis.Issue {
 	var stats gocyclo.Stats
 	for _, f := range pass.Files {
 		stats = gocyclo.AnalyzeASTFile(f, pass.Fset, stats)
@@ -55,7 +55,7 @@ func runGoCyclo(pass *analysis.Pass, settings *config.GoCycloSettings) []goanaly
 
 	stats = stats.SortAndFilter(-1, settings.MinComplexity)
 
-	issues := make([]goanalysis.Issue, 0, len(stats))
+	issues := make([]*goanalysis.Issue, 0, len(stats))
 
 	for _, s := range stats {
 		text := fmt.Sprintf("cyclomatic complexity %d of func %s is high (> %d)",

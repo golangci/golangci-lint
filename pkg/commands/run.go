@@ -376,7 +376,7 @@ func (c *runCommand) runAndPrint(ctx context.Context) error {
 }
 
 // runAnalysis executes the linters that have been enabled in the configuration.
-func (c *runCommand) runAnalysis(ctx context.Context) ([]result.Issue, error) {
+func (c *runCommand) runAnalysis(ctx context.Context) ([]*result.Issue, error) {
 	lintersToRun, err := c.dbManager.GetOptimizedLinters()
 	if err != nil {
 		return nil, err
@@ -408,7 +408,7 @@ func (c *runCommand) setOutputToDevNull() (savedStdout, savedStderr *os.File) {
 	return
 }
 
-func (c *runCommand) setExitCodeIfIssuesFound(issues []result.Issue) {
+func (c *runCommand) setExitCodeIfIssuesFound(issues []*result.Issue) {
 	if len(issues) != 0 {
 		c.exitCode = c.cfg.Run.ExitCodeIfIssuesFound
 	}
@@ -433,7 +433,7 @@ func (c *runCommand) printDeprecatedLinterMessages(enabledLinters map[string]*li
 	}
 }
 
-func (c *runCommand) printStats(issues []result.Issue) {
+func (c *runCommand) printStats(issues []*result.Issue) {
 	if !c.cfg.Output.ShowStats {
 		return
 	}

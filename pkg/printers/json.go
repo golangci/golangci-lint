@@ -22,17 +22,17 @@ func NewJSON(w io.Writer, rd *report.Data) *JSON {
 }
 
 type JSONResult struct {
-	Issues []result.Issue
+	Issues []*result.Issue
 	Report *report.Data
 }
 
-func (p JSON) Print(issues []result.Issue) error {
+func (p JSON) Print(issues []*result.Issue) error {
 	res := JSONResult{
 		Issues: issues,
 		Report: p.rd,
 	}
 	if res.Issues == nil {
-		res.Issues = []result.Issue{}
+		res.Issues = []*result.Issue{}
 	}
 
 	return json.NewEncoder(p.w).Encode(res)

@@ -17,7 +17,7 @@ const LinterName = nolintlint.LinterName
 
 func New(settings *config.NoLintLintSettings) *goanalysis.Linter {
 	var mu sync.Mutex
-	var resIssues []goanalysis.Issue
+	var resIssues []*goanalysis.Issue
 
 	var needs nolintlint.Needs
 	if settings.RequireExplanation {
@@ -56,7 +56,7 @@ func New(settings *config.NoLintLintSettings) *goanalysis.Linter {
 				return nil, nil
 			},
 		}).
-		WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
+		WithIssuesReporter(func(*linter.Context) []*goanalysis.Issue {
 			return resIssues
 		}).
 		WithLoadMode(goanalysis.LoadModeSyntax)

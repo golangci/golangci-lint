@@ -7,7 +7,7 @@ import (
 const typeCheckName = "typecheck"
 
 type Processor interface {
-	Process(issues []result.Issue) ([]result.Issue, error)
+	Process(issues []*result.Issue) ([]*result.Issue, error)
 	Name() string
 	Finish()
 }

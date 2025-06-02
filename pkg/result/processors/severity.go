@@ -43,7 +43,7 @@ func NewSeverity(log logutils.Log, lines *fsutils.LineCache, cfg *config.Severit
 
 func (p *Severity) Name() string { return p.name }
 
-func (p *Severity) Process(issues []result.Issue) ([]result.Issue, error) {
+func (p *Severity) Process(issues []*result.Issue) ([]*result.Issue, error) {
 	if len(p.rules) == 0 && p.defaultSeverity == "" {
 		return issues, nil
 	}

@@ -49,7 +49,7 @@ func (*ExclusionRules) Name() string {
 	return "exclusion_rules"
 }
 
-func (p *ExclusionRules) Process(issues []result.Issue) ([]result.Issue, error) {
+func (p *ExclusionRules) Process(issues []*result.Issue) ([]*result.Issue, error) {
 	if len(p.rules) == 0 {
 		return issues, nil
 	}

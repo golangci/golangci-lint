@@ -24,7 +24,7 @@ func (InvalidIssue) Name() string {
 	return "invalid_issue"
 }
 
-func (p InvalidIssue) Process(issues []result.Issue) ([]result.Issue, error) {
+func (p InvalidIssue) Process(issues []*result.Issue) ([]*result.Issue, error) {
 	tcIssues := filterIssuesUnsafe(issues, func(issue *result.Issue) bool {
 		return issue.FromLinter == typeCheckName
 	})

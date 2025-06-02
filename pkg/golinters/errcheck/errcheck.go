@@ -21,7 +21,7 @@ const linterName = "errcheck"
 
 func New(settings *config.ErrcheckSettings) *goanalysis.Linter {
 	var mu sync.Mutex
-	var resIssues []goanalysis.Issue
+	var resIssues []*goanalysis.Issue
 
 	analyzer := &analysis.Analyzer{
 		Name: linterName,
@@ -50,13 +50,13 @@ func New(settings *config.ErrcheckSettings) *goanalysis.Linter {
 				return nil, nil
 			}
 		}).
-		WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
+		WithIssuesReporter(func(*linter.Context) []*goanalysis.Issue {
 			return resIssues
 		}).
 		WithLoadMode(goanalysis.LoadModeTypesInfo)
 }
 
-func runErrCheck(pass *analysis.Pass, checker *errcheck.Checker, verbose bool) []goanalysis.Issue {
+func runErrCheck(pass *analysis.Pass, checker *errcheck.Checker, verbose bool) []*goanalysis.Issue {
 	pkg := &packages.Package{
 		Fset:      pass.Fset,
 		Syntax:    pass.Files,
@@ -69,7 +69,7 @@ func runErrCheck(pass *analysis.Pass, checker *errcheck.Checker, verbose bool) [
 		return nil
 	}
 
-	issues := make([]goanalysis.Issue, len(lintIssues.UncheckedErrors))
+	issues := make([]*goanalysis.Issue, len(lintIssues.UncheckedErrors))
 
 	for i, err := range lintIssues.UncheckedErrors {
 		text := "Error return value is not checked"

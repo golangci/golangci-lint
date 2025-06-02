@@ -31,7 +31,7 @@ func (*MaxSameIssues) Name() string {
 	return "max_same_issues"
 }
 
-func (p *MaxSameIssues) Process(issues []result.Issue) ([]result.Issue, error) {
+func (p *MaxSameIssues) Process(issues []*result.Issue) ([]*result.Issue, error) {
 	if p.limit <= 0 { // no limit
 		return issues, nil
 	}

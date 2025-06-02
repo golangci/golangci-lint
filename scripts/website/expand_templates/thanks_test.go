@@ -14,7 +14,7 @@ type FakeLinter struct {
 	name string
 }
 
-func (*FakeLinter) Run(_ context.Context, _ *linter.Context) ([]result.Issue, error) {
+func (*FakeLinter) Run(_ context.Context, _ *linter.Context) ([]*result.Issue, error) {
 	return nil, nil
 }
 

@@ -29,7 +29,7 @@ func unmarshalFile(t *testing.T, filename string, v any) {
 func TestPrinter_Print_stdout(t *testing.T) {
 	logger := logutils.NewStderrLog("skip")
 
-	var issues []result.Issue
+	var issues []*result.Issue
 	unmarshalFile(t, "in-issues.json", &issues)
 
 	data := &report.Data{}
@@ -86,7 +86,7 @@ func TestPrinter_Print_stdout(t *testing.T) {
 func TestPrinter_Print_stderr(t *testing.T) {
 	logger := logutils.NewStderrLog("skip")
 
-	var issues []result.Issue
+	var issues []*result.Issue
 	unmarshalFile(t, "in-issues.json", &issues)
 
 	data := &report.Data{}
@@ -122,7 +122,7 @@ func TestPrinter_Print_stderr(t *testing.T) {
 func TestPrinter_Print_file(t *testing.T) {
 	logger := logutils.NewStderrLog("skip")
 
-	var issues []result.Issue
+	var issues []*result.Issue
 	unmarshalFile(t, "in-issues.json", &issues)
 
 	data := &report.Data{}
@@ -165,7 +165,7 @@ func TestPrinter_Print_file(t *testing.T) {
 func TestPrinter_Print_multiple(t *testing.T) {
 	logger := logutils.NewStderrLog("skip")
 
-	var issues []result.Issue
+	var issues []*result.Issue
 	unmarshalFile(t, "in-issues.json", &issues)
 
 	data := &report.Data{}

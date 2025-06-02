@@ -31,7 +31,7 @@ func (*Cgo) Name() string {
 	return "cgo"
 }
 
-func (p *Cgo) Process(issues []result.Issue) ([]result.Issue, error) {
+func (p *Cgo) Process(issues []*result.Issue) ([]*result.Issue, error) {
 	return filterIssuesErr(issues, p.shouldPassIssue)
 }
 

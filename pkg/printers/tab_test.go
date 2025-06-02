@@ -22,7 +22,7 @@ func TestTab_Print(t *testing.T) {
 	})
 	color.NoColor = false
 
-	issues := []result.Issue{
+	issues := []*result.Issue{
 		{
 			FromLinter: "linter-a",
 			Severity:   "warning",

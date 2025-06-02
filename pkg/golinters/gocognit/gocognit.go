@@ -19,7 +19,7 @@ const linterName = "gocognit"
 
 func New(settings *config.GocognitSettings) *goanalysis.Linter {
 	var mu sync.Mutex
-	var resIssues []goanalysis.Issue
+	var resIssues []*goanalysis.Issue
 
 	return goanalysis.
 		NewLinterFromAnalyzer(&analysis.Analyzer{
@@ -39,13 +39,13 @@ func New(settings *config.GocognitSettings) *goanalysis.Linter {
 				return nil, nil
 			},
 		}).
-		WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
+		WithIssuesReporter(func(*linter.Context) []*goanalysis.Issue {
 			return resIssues
 		}).
 		WithLoadMode(goanalysis.LoadModeSyntax)
 }
 
-func runGocognit(pass *analysis.Pass, settings *config.GocognitSettings) []goanalysis.Issue {
+func runGocognit(pass *analysis.Pass, settings *config.GocognitSettings) []*goanalysis.Issue {
 	var stats []gocognit.Stat
 	for _, f := range pass.Files {
 		stats = gocognit.ComplexityStats(f, pass.Fset, stats)
@@ -58,7 +58,7 @@ func runGocognit(pass *analysis.Pass, settings *config.GocognitSettings) []goana
 		return stats[i].Complexity > stats[j].Complexity
 	})
 
-	issues := make([]goanalysis.Issue, 0, len(stats))
+	issues := make([]*goanalysis.Issue, 0, len(stats))
 	for _, s := range stats {
 		if s.Complexity <= settings.MinComplexity {
 			break // Break as the stats is already sorted from greatest to least

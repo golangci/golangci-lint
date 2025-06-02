@@ -29,7 +29,7 @@ func (PathShortener) Name() string {
 	return "path_shortener"
 }
 
-func (p PathShortener) Process(issues []result.Issue) ([]result.Issue, error) {
+func (p PathShortener) Process(issues []*result.Issue) ([]*result.Issue, error) {
 	return transformIssues(issues, func(issue *result.Issue) *result.Issue {
 		newIssue := issue
 		newIssue.Text = strings.ReplaceAll(newIssue.Text, p.wd+"/", "")

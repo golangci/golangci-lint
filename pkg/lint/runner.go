@@ -118,17 +118,17 @@ func NewRunner(log logutils.Log, cfg *config.Config, goenv *goutil.Env,
 	}, nil
 }
 
-func (r *Runner) Run(ctx context.Context, linters []*linter.Config) ([]result.Issue, error) {
+func (r *Runner) Run(ctx context.Context, linters []*linter.Config) ([]*result.Issue, error) {
 	sw := timeutils.NewStopwatch("linters", r.Log)
 	defer sw.Print()
 
 	var (
 		lintErrors error
-		issues     []result.Issue
+		issues     []*result.Issue
 	)
 
 	for _, lc := range linters {
-		linterIssues, err := timeutils.TrackStage(sw, lc.Name(), func() ([]result.Issue, error) {
+		linterIssues, err := timeutils.TrackStage(sw, lc.Name(), func() ([]*result.Issue, error) {
 			return r.runLinterSafe(ctx, r.lintCtx, lc)
 		})
 		if err != nil {
@@ -146,7 +146,7 @@ func (r *Runner) Run(ctx context.Context, linters []*linter.Config) ([]result.Is
 
 func (r *Runner) runLinterSafe(ctx context.Context, lintCtx *linter.Context,
 	lc *linter.Config,
-) (ret []result.Issue, err error) {
+) (ret []*result.Issue, err error) {
 	defer func() {
 		if panicData := recover(); panicData != nil {
 			if pe, ok := panicData.(*errorutil.PanicError); ok {
@@ -185,13 +185,13 @@ func (r *Runner) runLinterSafe(ctx context.Context, lintCtx *linter.Context,
 	return issues, nil
 }
 
-func (r *Runner) processLintResults(inIssues []result.Issue) []result.Issue {
+func (r *Runner) processLintResults(inIssues []*result.Issue) []*result.Issue {
 	sw := timeutils.NewStopwatch("processing", r.Log)
 
 	var issuesBefore, issuesAfter int
 	statPerProcessor := map[string]processorStat{}
 
-	var outIssues []result.Issue
+	var outIssues []*result.Issue
 	if len(inIssues) != 0 {
 		issuesBefore += len(inIssues)
 		outIssues = r.processIssues(inIssues, sw, statPerProcessor)
@@ -225,9 +225,9 @@ func (r *Runner) printPerProcessorStat(stat map[string]processorStat) {
 	}
 }
 
-func (r *Runner) processIssues(issues []result.Issue, sw *timeutils.Stopwatch, statPerProcessor map[string]processorStat) []result.Issue {
+func (r *Runner) processIssues(issues []*result.Issue, sw *timeutils.Stopwatch, statPerProcessor map[string]processorStat) []*result.Issue {
 	for _, p := range r.Processors {
-		newIssues, err := timeutils.TrackStage(sw, p.Name(), func() ([]result.Issue, error) {
+		newIssues, err := timeutils.TrackStage(sw, p.Name(), func() ([]*result.Issue, error) {
 			return p.Process(issues)
 		})
 
@@ -243,7 +243,7 @@ func (r *Runner) processIssues(issues []result.Issue, sw *timeutils.Stopwatch, s
 
 		// This is required by JSON serialization
 		if issues == nil {
-			issues = []result.Issue{}
+			issues = []*result.Issue{}
 		}
 	}
 

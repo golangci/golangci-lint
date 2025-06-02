@@ -92,7 +92,7 @@ func TestSeverity_multiple(t *testing.T) {
 		{Path: "empty.go", Text: "empty", Linter: "empty"},
 	}
 
-	var issues []result.Issue
+	var issues []*result.Issue
 	for _, c := range cases {
 		issues = append(issues, newIssueFromIssueTestCase(c))
 	}
@@ -141,9 +141,9 @@ func TestSeverity_text(t *testing.T) {
 	p := NewSeverity(nil, nil, opts)
 
 	texts := []string{"seveRity", "1", "", "serverit", "notseverity"}
-	var issues []result.Issue
+	var issues []*result.Issue
 	for _, t := range texts {
-		issues = append(issues, result.Issue{
+		issues = append(issues, &result.Issue{
 			Text:       t,
 			FromLinter: "linter",
 		})
@@ -176,7 +176,7 @@ func TestSeverity_onlyDefault(t *testing.T) {
 		{Path: "empty.go", Text: "empty", Linter: "empty"},
 	}
 
-	var issues []result.Issue
+	var issues []*result.Issue
 	for _, c := range cases {
 		issues = append(issues, newIssueFromIssueTestCase(c))
 	}
@@ -230,7 +230,7 @@ func TestSeverity_caseSensitive(t *testing.T) {
 		{Path: "e.go", Text: "ssL", Linter: "gosec"},
 	}
 
-	var issues []result.Issue
+	var issues []*result.Issue
 	for _, c := range cases {
 		issues = append(issues, newIssueFromIssueTestCase(c))
 	}

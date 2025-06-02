@@ -18,7 +18,7 @@ const linterName = "goconst"
 
 func New(settings *config.GoConstSettings) *goanalysis.Linter {
 	var mu sync.Mutex
-	var resIssues []goanalysis.Issue
+	var resIssues []*goanalysis.Issue
 
 	return goanalysis.
 		NewLinterFromAnalyzer(&analysis.Analyzer{
@@ -41,13 +41,13 @@ func New(settings *config.GoConstSettings) *goanalysis.Linter {
 				return nil, nil
 			},
 		}).
-		WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
+		WithIssuesReporter(func(*linter.Context) []*goanalysis.Issue {
 			return resIssues
 		}).
 		WithLoadMode(goanalysis.LoadModeTypesInfo)
 }
 
-func runGoconst(pass *analysis.Pass, settings *config.GoConstSettings) ([]goanalysis.Issue, error) {
+func runGoconst(pass *analysis.Pass, settings *config.GoConstSettings) ([]*goanalysis.Issue, error) {
 	cfg := goconstAPI.Config{
 		IgnoreStrings:        settings.IgnoreStringValues,
 		MatchWithConstants:   settings.MatchWithConstants,
@@ -77,7 +77,7 @@ func runGoconst(pass *analysis.Pass, settings *config.GoConstSettings) ([]goanal
 		return nil, nil
 	}
 
-	res := make([]goanalysis.Issue, 0, len(lintIssues))
+	res := make([]*goanalysis.Issue, 0, len(lintIssues))
 	for i := range lintIssues {
 		issue := &lintIssues[i]
 
