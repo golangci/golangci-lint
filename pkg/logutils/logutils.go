@@ -79,11 +79,12 @@ const (
 
 // Linters.
 const (
-	DebugKeyForbidigo = "forbidigo" // Debugs `forbidigo` linter.
-	DebugKeyGoCritic  = "gocritic"  // Debugs `gocritic` linter.
-	DebugKeyGovet     = "govet"     // Debugs `govet` linter.
-	DebugKeyLinter    = "linter"
-	DebugKeyRevive    = "revive" // Debugs `revive` linter.
+	DebugKeyForbidigo   = "forbidigo" // Debugs `forbidigo` linter.
+	DebugKeyGoCritic    = "gocritic"  // Debugs `gocritic` linter.
+	DebugKeyGovet       = "govet"     // Debugs `govet` linter.
+	DebugKeyLinter      = "linter"
+	DebugKeyRevive      = "revive"      // Debugs `revive` linter.
+	DebugKeyStaticcheck = "staticcheck" // Debugs `staticcheck` linter.
 )
 
 func getEnabledDebugs() map[string]bool {

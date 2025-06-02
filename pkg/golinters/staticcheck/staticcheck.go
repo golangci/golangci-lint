@@ -15,6 +15,12 @@ import (
 
 	"github.com/golangci/golangci-lint/v2/pkg/config"
 	"github.com/golangci/golangci-lint/v2/pkg/goanalysis"
+	"github.com/golangci/golangci-lint/v2/pkg/logutils"
+)
+
+var (
+	debugf  = logutils.Debug(logutils.DebugKeyStaticcheck)
+	isDebug = logutils.HaveDebugTag(logutils.DebugKeyStaticcheck)
 )
 
 func New(settings *config.StaticCheckSettings) *goanalysis.Linter {
@@ -28,6 +34,21 @@ func New(settings *config.StaticCheckSettings) *goanalysis.Linter {
 	allAnalyzers := slices.Concat(staticcheck.Analyzers, stylecheck.Analyzers, simple.Analyzers, quickfix.Analyzers)
 
 	analyzers := setupAnalyzers(allAnalyzers, cfg.Checks)
+
+	if isDebug {
+		allAnalyzerNames := extractAnalyzerNames(allAnalyzers)
+		slices.Sort(allAnalyzerNames)
+		debugf("All available checks (%d): %s", len(allAnalyzers), strings.Join(allAnalyzerNames, ","))
+
+		var cfgAnalyzerNames []string
+		for _, a := range analyzers {
+			cfgAnalyzerNames = append(cfgAnalyzerNames, a.Name)
+		}
+		slices.Sort(cfgAnalyzerNames)
+		debugf("Enabled by config checks (%d): %s", len(analyzers), strings.Join(cfgAnalyzerNames, ","))
+
+		debugf("staticcheck configuration: %#v", cfg)
+	}
 
 	return goanalysis.NewLinter(
 		"staticcheck",
@@ -107,12 +128,7 @@ func normalizeList(list []string) []string {
 }
 
 func setupAnalyzers(src []*lint.Analyzer, checks []string) []*analysis.Analyzer {
-	var names []string
-	for _, a := range src {
-		names = append(names, a.Analyzer.Name)
-	}
-
-	filter := filterAnalyzerNames(names, checks)
+	filter := filterAnalyzerNames(extractAnalyzerNames(src), checks)
 
 	var ret []*analysis.Analyzer
 	for _, a := range src {
@@ -122,6 +138,14 @@ func setupAnalyzers(src []*lint.Analyzer, checks []string) []*analysis.Analyzer 
 	}
 
 	return ret
+}
+
+func extractAnalyzerNames(analyzers []*lint.Analyzer) []string {
+	var names []string
+	for _, a := range analyzers {
+		names = append(names, a.Analyzer.Name)
+	}
+	return names
 }
 
 // https://github.com/dominikh/go-tools/blob/9bf17c0388a65710524ba04c2d821469e639fdc2/lintcmd/lint.go#L437-L477
