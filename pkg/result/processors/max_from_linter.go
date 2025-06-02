@@ -29,7 +29,7 @@ func (*MaxFromLinter) Name() string {
 	return "max_from_linter"
 }
 
-func (p *MaxFromLinter) Process(issues []result.Issue) ([]result.Issue, error) {
+func (p *MaxFromLinter) Process(issues []*result.Issue) ([]*result.Issue, error) {
 	if p.limit <= 0 { // no limit
 		return issues, nil
 	}

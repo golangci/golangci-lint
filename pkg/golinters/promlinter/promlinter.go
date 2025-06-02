@@ -17,7 +17,7 @@ const linterName = "promlinter"
 
 func New(settings *config.PromlinterSettings) *goanalysis.Linter {
 	var mu sync.Mutex
-	var resIssues []goanalysis.Issue
+	var resIssues []*goanalysis.Issue
 
 	var promSettings promlinter.Setting
 	if settings != nil {
@@ -45,20 +45,20 @@ func New(settings *config.PromlinterSettings) *goanalysis.Linter {
 				return nil, nil
 			},
 		}).
-		WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
+		WithIssuesReporter(func(*linter.Context) []*goanalysis.Issue {
 			return resIssues
 		}).
 		WithLoadMode(goanalysis.LoadModeSyntax)
 }
 
-func runPromLinter(pass *analysis.Pass, promSettings promlinter.Setting) []goanalysis.Issue {
+func runPromLinter(pass *analysis.Pass, promSettings promlinter.Setting) []*goanalysis.Issue {
 	lintIssues := promlinter.RunLint(pass.Fset, pass.Files, promSettings)
 
 	if len(lintIssues) == 0 {
 		return nil
 	}
 
-	issues := make([]goanalysis.Issue, len(lintIssues))
+	issues := make([]*goanalysis.Issue, len(lintIssues))
 	for k, i := range lintIssues {
 		issue := result.Issue{
 			Pos:        i.Pos,

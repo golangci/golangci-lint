@@ -18,8 +18,8 @@ type issueTestCase struct {
 	Severity string
 }
 
-func newIssueFromIssueTestCase(c issueTestCase) result.Issue {
-	return result.Issue{
+func newIssueFromIssueTestCase(c issueTestCase) *result.Issue {
+	return &result.Issue{
 		Text:       c.Text,
 		FromLinter: c.Linter,
 		Severity:   c.Severity,
@@ -31,13 +31,13 @@ func newIssueFromIssueTestCase(c issueTestCase) result.Issue {
 	}
 }
 
-func newIssueFromTextTestCase(text string) result.Issue {
-	return result.Issue{
+func newIssueFromTextTestCase(text string) *result.Issue {
+	return &result.Issue{
 		Text: text,
 	}
 }
 
-func process(t *testing.T, p Processor, issues ...result.Issue) []result.Issue {
+func process(t *testing.T, p Processor, issues ...*result.Issue) []*result.Issue {
 	t.Helper()
 
 	processedIssues, err := p.Process(issues)
@@ -45,14 +45,14 @@ func process(t *testing.T, p Processor, issues ...result.Issue) []result.Issue {
 	return processedIssues
 }
 
-func processAssertSame(t *testing.T, p Processor, issues ...result.Issue) {
+func processAssertSame(t *testing.T, p Processor, issues ...*result.Issue) {
 	t.Helper()
 
 	processedIssues := process(t, p, issues...)
 	assert.Equal(t, issues, processedIssues)
 }
 
-func processAssertEmpty(t *testing.T, p Processor, issues ...result.Issue) {
+func processAssertEmpty(t *testing.T, p Processor, issues ...*result.Issue) {
 	t.Helper()
 
 	processedIssues := process(t, p, issues...)

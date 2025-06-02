@@ -25,7 +25,7 @@ func (*UniqByLine) Name() string {
 	return "uniq_by_line"
 }
 
-func (p *UniqByLine) Process(issues []result.Issue) ([]result.Issue, error) {
+func (p *UniqByLine) Process(issues []*result.Issue) ([]*result.Issue, error) {
 	if !p.enabled {
 		return issues, nil
 	}

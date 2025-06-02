@@ -7,8 +7,8 @@ import (
 	"github.com/golangci/golangci-lint/v2/pkg/result"
 )
 
-func newFromLinterIssue(linterName string) result.Issue {
-	return result.Issue{
+func newFromLinterIssue(linterName string) *result.Issue {
+	return &result.Issue{
 		FromLinter: linterName,
 	}
 }

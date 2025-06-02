@@ -14,7 +14,7 @@ import (
 )
 
 func TestCheckstyle_Print(t *testing.T) {
-	issues := []result.Issue{
+	issues := []*result.Issue{
 		{
 			FromLinter: "linter-a",
 			Severity:   "warning",

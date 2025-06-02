@@ -13,7 +13,7 @@ import (
 )
 
 func TestCodeClimate_Print(t *testing.T) {
-	issues := []result.Issue{
+	issues := []*result.Issue{
 		{
 			FromLinter: "linter-a",
 			Severity:   "minor",

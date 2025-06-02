@@ -36,7 +36,7 @@ func (*PathRelativity) Name() string {
 	return "path_relativity"
 }
 
-func (p *PathRelativity) Process(issues []result.Issue) ([]result.Issue, error) {
+func (p *PathRelativity) Process(issues []*result.Issue) ([]*result.Issue, error) {
 	return transformIssues(issues, func(issue *result.Issue) *result.Issue {
 		newIssue := *issue
 

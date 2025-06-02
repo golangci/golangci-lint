@@ -19,7 +19,7 @@ func TestLinter_Run(t *testing.T) {
 		needs    Needs
 		excludes []string
 		contents string
-		expected []result.Issue
+		expected []*result.Issue
 	}{
 		{
 			desc:  "when no explanation is provided",
@@ -36,7 +36,7 @@ func foo() {
 	other() //nolintother
 }
 `,
-			expected: []result.Issue{
+			expected: []*result.Issue{
 				{
 					FromLinter: "nolintlint",
 					Text:       "directive `//nolint` should provide explanation such as `//nolint // this is why`",
@@ -69,7 +69,7 @@ func foo() {
 //nolint:dupl
 func foo() {}
 `,
-			expected: []result.Issue{{
+			expected: []*result.Issue{{
 				FromLinter: "nolintlint",
 				Text:       "directive `//nolint:dupl` should provide explanation such as `//nolint:dupl // this is why`",
 				Pos:        token.Position{Filename: "testing.go", Offset: 47, Line: 5, Column: 1},
@@ -97,7 +97,7 @@ func foo() {
   bad() //nolint // because
 }
 `,
-			expected: []result.Issue{
+			expected: []*result.Issue{
 				{
 					FromLinter: "nolintlint",
 					Text:       "directive `//nolint` should mention specific linter such as `//nolint:my-linter`",
@@ -120,7 +120,7 @@ func foo() {
   good() //nolint
 }
 `,
-			expected: []result.Issue{
+			expected: []*result.Issue{
 				{
 					FromLinter: "nolintlint",
 					Text:       "directive `// nolint` should be written without leading space as `//nolint`",
@@ -158,7 +158,7 @@ func foo() {
   good() //nolint: linter1, linter2
 }
 `,
-			expected: []result.Issue{{
+			expected: []*result.Issue{{
 				FromLinter: "nolintlint",
 				Text:       "directive `//nolint:linter1 linter2` should match `//nolint[:<comma-separated-linters>] [// <explanation>]`",
 				Pos:        token.Position{Filename: "testing.go", Offset: 71, Line: 5, Column: 9},
@@ -183,7 +183,7 @@ func foo() {
   bad() //nolint
 }
 `,
-			expected: []result.Issue{{
+			expected: []*result.Issue{{
 				FromLinter: "nolintlint",
 				Text:       "directive `//nolint` is unused",
 				Pos:        token.Position{Filename: "testing.go", Offset: 34, Line: 4, Column: 9},
@@ -205,7 +205,7 @@ func foo() {
   bad() //nolint:somelinter
 }
 `,
-			expected: []result.Issue{{
+			expected: []*result.Issue{{
 				FromLinter: "nolintlint",
 				Text:       "directive `//nolint:somelinter` is unused for linter \"somelinter\"",
 				Pos:        token.Position{Filename: "testing.go", Offset: 34, Line: 4, Column: 9},
@@ -229,7 +229,7 @@ func foo() {
   bad()
 }
 `,
-			expected: []result.Issue{{
+			expected: []*result.Issue{{
 				FromLinter: "nolintlint",
 				Text:       "directive `//nolint:somelinter` is unused for linter \"somelinter\"",
 				Pos:        token.Position{Filename: "testing.go", Offset: 13, Line: 3, Column: 1},
@@ -252,7 +252,7 @@ func foo() {
   bad() //nolint:linter1,linter2
 }
 `,
-			expected: []result.Issue{
+			expected: []*result.Issue{
 				{
 					FromLinter:           "nolintlint",
 					Text:                 "directive `//nolint:linter1,linter2` is unused for linter \"linter1\"",
@@ -289,7 +289,7 @@ func foo() {
 			analysisIssues, err := linter.Run(pass)
 			require.NoError(t, err)
 
-			var issues []result.Issue
+			var issues []*result.Issue
 			for _, i := range analysisIssues {
 				issues = append(issues, i.Issue)
 			}

@@ -30,7 +30,7 @@ func (*PathPrettifier) Name() string {
 	return "path_prettifier"
 }
 
-func (p *PathPrettifier) Process(issues []result.Issue) ([]result.Issue, error) {
+func (p *PathPrettifier) Process(issues []*result.Issue) ([]*result.Issue, error) {
 	if p.cfg.PathMode == fsutils.OutputPathModeAbsolute {
 		return issues, nil
 	}

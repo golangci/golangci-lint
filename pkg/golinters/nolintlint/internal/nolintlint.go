@@ -55,8 +55,8 @@ var (
 )
 
 //nolint:funlen,gocyclo // the function is going to be refactored in the future
-func (l Linter) Run(pass *analysis.Pass) ([]goanalysis.Issue, error) {
-	var issues []goanalysis.Issue
+func (l Linter) Run(pass *analysis.Pass) ([]*goanalysis.Issue, error) {
+	var issues []*goanalysis.Issue
 
 	for _, file := range pass.Files {
 		for _, c := range file.Comments {

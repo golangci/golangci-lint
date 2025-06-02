@@ -132,20 +132,20 @@ func NewHTML(w io.Writer) *HTML {
 	return &HTML{w: w}
 }
 
-func (p HTML) Print(issues []result.Issue) error {
+func (p HTML) Print(issues []*result.Issue) error {
 	var htmlIssues []htmlIssue
 
-	for i := range issues {
-		pos := fmt.Sprintf("%s:%d", issues[i].FilePath(), issues[i].Line())
-		if issues[i].Pos.Column != 0 {
-			pos += fmt.Sprintf(":%d", issues[i].Pos.Column)
+	for _, issue := range issues {
+		pos := fmt.Sprintf("%s:%d", issue.FilePath(), issue.Line())
+		if issue.Pos.Column != 0 {
+			pos += fmt.Sprintf(":%d", issue.Pos.Column)
 		}
 
 		htmlIssues = append(htmlIssues, htmlIssue{
-			Title:  strings.TrimSpace(issues[i].Text),
+			Title:  strings.TrimSpace(issue.Text),
 			Pos:    pos,
-			Linter: issues[i].FromLinter,
-			Code:   strings.Join(issues[i].SourceLines, "\n"),
+			Linter: issue.FromLinter,
+			Code:   strings.Join(issue.SourceLines, "\n"),
 		})
 	}
 

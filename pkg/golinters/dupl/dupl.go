@@ -20,7 +20,7 @@ const linterName = "dupl"
 
 func New(settings *config.DuplSettings) *goanalysis.Linter {
 	var mu sync.Mutex
-	var resIssues []goanalysis.Issue
+	var resIssues []*goanalysis.Issue
 
 	return goanalysis.
 		NewLinterFromAnalyzer(&analysis.Analyzer{
@@ -43,13 +43,13 @@ func New(settings *config.DuplSettings) *goanalysis.Linter {
 				return nil, nil
 			},
 		}).
-		WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
+		WithIssuesReporter(func(*linter.Context) []*goanalysis.Issue {
 			return resIssues
 		}).
 		WithLoadMode(goanalysis.LoadModeSyntax)
 }
 
-func runDupl(pass *analysis.Pass, settings *config.DuplSettings) ([]goanalysis.Issue, error) {
+func runDupl(pass *analysis.Pass, settings *config.DuplSettings) ([]*goanalysis.Issue, error) {
 	issues, err := duplAPI.Run(internal.GetGoFileNames(pass), settings.Threshold)
 	if err != nil {
 		return nil, err
@@ -59,7 +59,7 @@ func runDupl(pass *analysis.Pass, settings *config.DuplSettings) ([]goanalysis.I
 		return nil, nil
 	}
 
-	res := make([]goanalysis.Issue, 0, len(issues))
+	res := make([]*goanalysis.Issue, 0, len(issues))
 
 	for _, i := range issues {
 		toFilename, err := fsutils.ShortestRelPath(i.To.Filename(), "")

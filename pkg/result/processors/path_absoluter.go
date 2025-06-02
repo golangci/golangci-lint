@@ -22,7 +22,7 @@ func (*PathAbsoluter) Name() string {
 	return "path_absoluter"
 }
 
-func (p *PathAbsoluter) Process(issues []result.Issue) ([]result.Issue, error) {
+func (p *PathAbsoluter) Process(issues []*result.Issue) ([]*result.Issue, error) {
 	return transformIssues(issues, func(issue *result.Issue) *result.Issue {
 		if filepath.IsAbs(issue.FilePath()) {
 			return issue

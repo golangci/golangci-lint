@@ -17,13 +17,12 @@ import (
 )
 
 func saveIssuesToCache(allPkgs []*packages.Package, pkgsFromCache map[*packages.Package]bool,
-	issues []result.Issue, lintCtx *linter.Context, analyzers []*analysis.Analyzer,
+	issues []*result.Issue, lintCtx *linter.Context, analyzers []*analysis.Analyzer,
 ) {
 	startedAt := time.Now()
-	perPkgIssues := map[*packages.Package][]result.Issue{}
-	for ind := range issues {
-		i := &issues[ind]
-		perPkgIssues[i.Pkg] = append(perPkgIssues[i.Pkg], *i)
+	perPkgIssues := map[*packages.Package][]*result.Issue{}
+	for _, issue := range issues {
+		perPkgIssues[issue.Pkg] = append(perPkgIssues[issue.Pkg], issue)
 	}
 
 	var savedIssuesCount int64 = 0
@@ -34,23 +33,22 @@ func saveIssuesToCache(allPkgs []*packages.Package, pkgsFromCache map[*packages.
 	wg.Add(workerCount)
 
 	pkgCh := make(chan *packages.Package, len(allPkgs))
-	for i := 0; i < workerCount; i++ {
+	for range workerCount {
 		go func() {
 			defer wg.Done()
 			for pkg := range pkgCh {
 				pkgIssues := perPkgIssues[pkg]
 				encodedIssues := make([]EncodingIssue, 0, len(pkgIssues))
-				for ind := range pkgIssues {
-					i := &pkgIssues[ind]
+				for _, issue := range pkgIssues {
 					encodedIssues = append(encodedIssues, EncodingIssue{
-						FromLinter:           i.FromLinter,
-						Text:                 i.Text,
-						Severity:             i.Severity,
-						Pos:                  i.Pos,
-						LineRange:            i.LineRange,
-						SuggestedFixes:       i.SuggestedFixes,
-						ExpectNoLint:         i.ExpectNoLint,
-						ExpectedNoLintLinter: i.ExpectedNoLintLinter,
+						FromLinter:           issue.FromLinter,
+						Text:                 issue.Text,
+						Severity:             issue.Severity,
+						Pos:                  issue.Pos,
+						LineRange:            issue.LineRange,
+						SuggestedFixes:       issue.SuggestedFixes,
+						ExpectNoLint:         issue.ExpectNoLint,
+						ExpectedNoLintLinter: issue.ExpectedNoLintLinter,
 					})
 				}
 
@@ -81,12 +79,12 @@ func saveIssuesToCache(allPkgs []*packages.Package, pkgsFromCache map[*packages.
 
 func loadIssuesFromCache(pkgs []*packages.Package, lintCtx *linter.Context,
 	analyzers []*analysis.Analyzer,
-) (issuesFromCache []result.Issue, pkgsFromCache map[*packages.Package]bool) {
+) (issuesFromCache []*result.Issue, pkgsFromCache map[*packages.Package]bool) {
 	startedAt := time.Now()
 
 	lintResKey := getIssuesCacheKey(analyzers)
 	type cacheRes struct {
-		issues  []result.Issue
+		issues  []*result.Issue
 		loadErr error
 	}
 	pkgToCacheRes := make(map[*packages.Package]*cacheRes, len(pkgs))
@@ -103,7 +101,7 @@ func loadIssuesFromCache(pkgs []*packages.Package, lintCtx *linter.Context,
 		go func() {
 			defer wg.Done()
 			for pkg := range pkgCh {
-				var pkgIssues []EncodingIssue
+				var pkgIssues []*EncodingIssue
 				err := lintCtx.PkgCache.Get(pkg, cache.HashModeNeedAllDeps, lintResKey, &pkgIssues)
 				cacheRes := pkgToCacheRes[pkg]
 				cacheRes.loadErr = err
@@ -114,10 +112,9 @@ func loadIssuesFromCache(pkgs []*packages.Package, lintCtx *linter.Context,
 					continue
 				}
 
-				issues := make([]result.Issue, 0, len(pkgIssues))
-				for i := range pkgIssues {
-					issue := &pkgIssues[i]
-					issues = append(issues, result.Issue{
+				issues := make([]*result.Issue, 0, len(pkgIssues))
+				for _, issue := range pkgIssues {
+					issues = append(issues, &result.Issue{
 						FromLinter:           issue.FromLinter,
 						Text:                 issue.Text,
 						Severity:             issue.Severity,

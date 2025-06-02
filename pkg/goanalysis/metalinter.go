@@ -21,7 +21,7 @@ func NewMetaLinter(linters []*Linter) *MetaLinter {
 	return ml
 }
 
-func (ml MetaLinter) Run(_ context.Context, lintCtx *linter.Context) ([]result.Issue, error) {
+func (ml MetaLinter) Run(_ context.Context, lintCtx *linter.Context) ([]*result.Issue, error) {
 	for _, l := range ml.linters {
 		if err := l.preRun(lintCtx); err != nil {
 			return nil, fmt.Errorf("failed to pre-run %s: %w", l.Name(), err)
@@ -65,8 +65,8 @@ func (MetaLinter) useOriginalPackages() bool {
 	return false // `unused` can't be run by this metalinter
 }
 
-func (ml MetaLinter) reportIssues(lintCtx *linter.Context) []Issue {
-	var ret []Issue
+func (ml MetaLinter) reportIssues(lintCtx *linter.Context) []*Issue {
+	var ret []*Issue
 	for _, lnt := range ml.linters {
 		if lnt.issuesReporter != nil {
 			ret = append(ret, lnt.issuesReporter(lintCtx)...)

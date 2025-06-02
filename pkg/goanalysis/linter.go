@@ -40,7 +40,7 @@ type Linter struct {
 	name, desc              string
 	analyzers               []*analysis.Analyzer
 	cfg                     map[string]map[string]any
-	issuesReporter          func(*linter.Context) []Issue
+	issuesReporter          func(*linter.Context) []*Issue
 	contextSetter           func(*linter.Context)
 	loadMode                LoadMode
 	needUseOriginalPackages bool
@@ -54,7 +54,7 @@ func NewLinterFromAnalyzer(analyzer *analysis.Analyzer) *Linter {
 	return NewLinter(analyzer.Name, analyzer.Doc, []*analysis.Analyzer{analyzer}, nil)
 }
 
-func (lnt *Linter) Run(_ context.Context, lintCtx *linter.Context) ([]result.Issue, error) {
+func (lnt *Linter) Run(_ context.Context, lintCtx *linter.Context) ([]*result.Issue, error) {
 	if err := lnt.preRun(lintCtx); err != nil {
 		return nil, err
 	}
@@ -93,7 +93,7 @@ func (lnt *Linter) WithLoadMode(loadMode LoadMode) *Linter {
 	return lnt
 }
 
-func (lnt *Linter) WithIssuesReporter(r func(*linter.Context) []Issue) *Linter {
+func (lnt *Linter) WithIssuesReporter(r func(*linter.Context) []*Issue) *Linter {
 	lnt.issuesReporter = r
 	return lnt
 }
@@ -193,7 +193,7 @@ func (lnt *Linter) useOriginalPackages() bool {
 	return lnt.needUseOriginalPackages
 }
 
-func (lnt *Linter) reportIssues(lintCtx *linter.Context) []Issue {
+func (lnt *Linter) reportIssues(lintCtx *linter.Context) []*Issue {
 	if lnt.issuesReporter != nil {
 		return lnt.issuesReporter(lintCtx)
 	}

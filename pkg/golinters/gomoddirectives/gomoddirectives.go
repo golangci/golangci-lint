@@ -17,7 +17,7 @@ import (
 const linterName = "gomoddirectives"
 
 func New(settings *config.GoModDirectivesSettings) *goanalysis.Linter {
-	var issues []goanalysis.Issue
+	var issues []*goanalysis.Issue
 	var once sync.Once
 
 	var opts gomoddirectives.Options
@@ -79,7 +79,7 @@ func New(settings *config.GoModDirectivesSettings) *goanalysis.Linter {
 				return nil, nil
 			}
 		}).
-		WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
+		WithIssuesReporter(func(*linter.Context) []*goanalysis.Issue {
 			return issues
 		}).
 		WithLoadMode(goanalysis.LoadModeSyntax)

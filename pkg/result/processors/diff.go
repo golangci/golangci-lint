@@ -48,7 +48,7 @@ func (*Diff) Name() string {
 	return "diff"
 }
 
-func (p *Diff) Process(issues []result.Issue) ([]result.Issue, error) {
+func (p *Diff) Process(issues []*result.Issue) ([]*result.Issue, error) {
 	if !p.onlyNew && p.fromRev == "" && p.fromMergeBase == "" && p.patchFilePath == "" && p.patch == "" {
 		return issues, nil
 	}

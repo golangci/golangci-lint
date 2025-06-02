@@ -36,14 +36,12 @@ func NewSarif(log logutils.Log, w io.Writer) *Sarif {
 	}
 }
 
-func (p *Sarif) Print(issues []result.Issue) error {
+func (p *Sarif) Print(issues []*result.Issue) error {
 	run := sarifRun{}
 	run.Tool.Driver.Name = "golangci-lint"
 	run.Results = make([]sarifResult, 0)
 
-	for i := range issues {
-		issue := issues[i]
-
+	for _, issue := range issues {
 		sr := sarifResult{
 			RuleID:  issue.FromLinter,
 			Level:   p.sanitizer.Sanitize(issue.Severity),

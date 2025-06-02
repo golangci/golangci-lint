@@ -31,7 +31,7 @@ func (SourceCode) Name() string {
 	return "source_code"
 }
 
-func (p SourceCode) Process(issues []result.Issue) ([]result.Issue, error) {
+func (p SourceCode) Process(issues []*result.Issue) ([]*result.Issue, error) {
 	return transformIssues(issues, p.transform), nil
 }
 

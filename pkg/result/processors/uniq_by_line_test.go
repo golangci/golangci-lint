@@ -7,8 +7,8 @@ import (
 	"github.com/golangci/golangci-lint/v2/pkg/result"
 )
 
-func newULIssue(file string, line int) result.Issue {
-	return result.Issue{
+func newULIssue(file string, line int) *result.Issue {
+	return &result.Issue{
 		Pos: token.Position{
 			Filename: file,
 			Line:     line,

@@ -16,8 +16,8 @@ import (
 	"github.com/golangci/golangci-lint/v2/pkg/result"
 )
 
-func newNolintFileIssue(line int, fromLinter string) result.Issue {
-	return result.Issue{
+func newNolintFileIssue(line int, fromLinter string) *result.Issue {
+	return &result.Issue{
 		Pos: token.Position{
 			Filename: filepath.FromSlash("testdata/nolint_filter/nolint.go"),
 			Line:     line,
@@ -26,7 +26,7 @@ func newNolintFileIssue(line int, fromLinter string) result.Issue {
 	}
 }
 
-func newNolint2FileIssue(line int) result.Issue {
+func newNolint2FileIssue(line int) *result.Issue {
 	i := newNolintFileIssue(line, "errcheck")
 	i.Pos.Filename = filepath.FromSlash("testdata/nolint_filter/nolint2.go")
 	return i
@@ -126,7 +126,7 @@ func TestTestNolintFilter_Process(t *testing.T) {
 
 func TestNolintFilter_Process_invalidLinterName(t *testing.T) {
 	fileName := filepath.FromSlash("testdata/nolint_filter/bad_names.go")
-	issues := []result.Issue{
+	issues := []*result.Issue{
 		{
 			Pos: token.Position{
 				Filename: fileName,
@@ -161,7 +161,7 @@ func TestNolintFilter_Process_invalidLinterName(t *testing.T) {
 func TestNolintFilter_Process_invalidLinterNameWithViolationOnTheSameLine(t *testing.T) {
 	log := getMockLog()
 	log.On("Warnf", "Found unknown linters in //nolint directives: %s", "foobar")
-	issues := []result.Issue{
+	issues := []*result.Issue{
 		{
 			Pos: token.Position{
 				Filename: filepath.FromSlash("testdata/nolint_filter/apply_to_unknown.go"),
@@ -246,14 +246,14 @@ func TestNolintFilter_Process_wholeFile(t *testing.T) {
 	p := newTestNolintFilter(getMockLog())
 	defer p.Finish()
 
-	processAssertEmpty(t, p, result.Issue{
+	processAssertEmpty(t, p, &result.Issue{
 		Pos: token.Position{
 			Filename: fileName,
 			Line:     9,
 		},
 		FromLinter: "errcheck",
 	})
-	processAssertSame(t, p, result.Issue{
+	processAssertSame(t, p, &result.Issue{
 		Pos: token.Position{
 			Filename: fileName,
 			Line:     14,
@@ -284,7 +284,7 @@ func TestNolintFilter_Process_unused(t *testing.T) {
 	}
 
 	// the issue below is the nolintlint issue that would be generated for the test file
-	nolintlintIssueMisspell := result.Issue{
+	nolintlintIssueMisspell := &result.Issue{
 		Pos: token.Position{
 			Filename: fileName,
 			Line:     3,
@@ -295,7 +295,7 @@ func TestNolintFilter_Process_unused(t *testing.T) {
 	}
 
 	// the issue below is another nolintlint issue that would be generated for the test file
-	nolintlintIssueMisspellUnusedOK := result.Issue{
+	nolintlintIssueMisspellUnusedOK := &result.Issue{
 		Pos: token.Position{
 			Filename: fileName,
 			Line:     5,
@@ -323,7 +323,7 @@ func TestNolintFilter_Process_unused(t *testing.T) {
 		p := createProcessor(t, log, []string{"misspell", "nolintlint"})
 		defer p.Finish()
 
-		processAssertEmpty(t, p, []result.Issue{{
+		processAssertEmpty(t, p, []*result.Issue{{
 			Pos: token.Position{
 				Filename: fileName,
 				Line:     3,

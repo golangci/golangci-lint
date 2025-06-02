@@ -40,7 +40,7 @@ func (*GeneratedFileFilter) Name() string {
 	return "generated_file_filter"
 }
 
-func (p *GeneratedFileFilter) Process(issues []result.Issue) ([]result.Issue, error) {
+func (p *GeneratedFileFilter) Process(issues []*result.Issue) ([]*result.Issue, error) {
 	if p.mode == config.GeneratedModeDisable {
 		return issues, nil
 	}

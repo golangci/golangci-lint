@@ -68,7 +68,7 @@ func (*ExclusionPaths) Name() string {
 	return "exclusion_paths"
 }
 
-func (p *ExclusionPaths) Process(issues []result.Issue) ([]result.Issue, error) {
+func (p *ExclusionPaths) Process(issues []*result.Issue) ([]*result.Issue, error) {
 	if len(p.pathPatterns) == 0 && len(p.pathExceptPatterns) == 0 {
 		return issues, nil
 	}

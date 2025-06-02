@@ -37,15 +37,14 @@ func NewCheckstyle(log logutils.Log, w io.Writer) *Checkstyle {
 	}
 }
 
-func (p *Checkstyle) Print(issues []result.Issue) error {
+func (p *Checkstyle) Print(issues []*result.Issue) error {
 	out := checkstyleOutput{
 		Version: "5.0",
 	}
 
 	files := map[string]*checkstyleFile{}
 
-	for i := range issues {
-		issue := &issues[i]
+	for _, issue := range issues {
 		file, ok := files[issue.FilePath()]
 		if !ok {
 			file = &checkstyleFile{

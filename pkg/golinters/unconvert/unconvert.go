@@ -16,7 +16,7 @@ const linterName = "unconvert"
 
 func New(settings *config.UnconvertSettings) *goanalysis.Linter {
 	var mu sync.Mutex
-	var resIssues []goanalysis.Issue
+	var resIssues []*goanalysis.Issue
 
 	unconvert.SetFastMath(settings.FastMath)
 	unconvert.SetSafe(settings.Safe)
@@ -39,16 +39,16 @@ func New(settings *config.UnconvertSettings) *goanalysis.Linter {
 				return nil, nil
 			},
 		}).
-		WithIssuesReporter(func(*linter.Context) []goanalysis.Issue {
+		WithIssuesReporter(func(*linter.Context) []*goanalysis.Issue {
 			return resIssues
 		}).
 		WithLoadMode(goanalysis.LoadModeTypesInfo)
 }
 
-func runUnconvert(pass *analysis.Pass) []goanalysis.Issue {
+func runUnconvert(pass *analysis.Pass) []*goanalysis.Issue {
 	positions := unconvert.Run(pass)
 
-	var issues []goanalysis.Issue
+	var issues []*goanalysis.Issue
 	for _, position := range positions {
 		issues = append(issues, goanalysis.NewIssue(&result.Issue{
 			Pos:        position,

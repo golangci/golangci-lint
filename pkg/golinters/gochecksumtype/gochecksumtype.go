@@ -18,7 +18,7 @@ const linterName = "gochecksumtype"
 
 func New(settings *config.GoChecksumTypeSettings) *goanalysis.Linter {
 	var mu sync.Mutex
-	var resIssues []goanalysis.Issue
+	var resIssues []*goanalysis.Issue
 
 	return goanalysis.
 		NewLinterFromAnalyzer(&analysis.Analyzer{
@@ -41,14 +41,14 @@ func New(settings *config.GoChecksumTypeSettings) *goanalysis.Linter {
 				return nil, nil
 			},
 		}).
-		WithIssuesReporter(func(_ *linter.Context) []goanalysis.Issue {
+		WithIssuesReporter(func(_ *linter.Context) []*goanalysis.Issue {
 			return resIssues
 		}).
 		WithLoadMode(goanalysis.LoadModeTypesInfo)
 }
 
-func runGoCheckSumType(pass *analysis.Pass, settings *config.GoChecksumTypeSettings) ([]goanalysis.Issue, error) {
-	var resIssues []goanalysis.Issue
+func runGoCheckSumType(pass *analysis.Pass, settings *config.GoChecksumTypeSettings) ([]*goanalysis.Issue, error) {
+	var resIssues []*goanalysis.Issue
 
 	pkg := &packages.Package{
 		Fset:      pass.Fset,

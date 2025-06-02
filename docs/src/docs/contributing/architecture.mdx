@@ -222,7 +222,7 @@ The abstraction is simple:
 
 ```go title=pkg/result/processors/processor.go
 type Processor interface {
-	Process(issues []result.Issue) ([]result.Issue, error)
+	Process(issues []*result.Issue) ([]*result.Issue, error)
 	Name() string
 	Finish()
 }

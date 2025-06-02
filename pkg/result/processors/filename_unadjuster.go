@@ -66,7 +66,7 @@ func (*FilenameUnadjuster) Name() string {
 	return "filename_unadjuster"
 }
 
-func (p *FilenameUnadjuster) Process(issues []result.Issue) ([]result.Issue, error) {
+func (p *FilenameUnadjuster) Process(issues []*result.Issue) ([]*result.Issue, error) {
 	return transformIssues(issues, func(issue *result.Issue) *result.Issue {
 		mapper := p.m[issue.FilePath()]
 		if mapper == nil {

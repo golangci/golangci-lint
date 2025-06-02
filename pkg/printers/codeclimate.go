@@ -30,12 +30,10 @@ func NewCodeClimate(log logutils.Log, w io.Writer) *CodeClimate {
 	}
 }
 
-func (p *CodeClimate) Print(issues []result.Issue) error {
+func (p *CodeClimate) Print(issues []*result.Issue) error {
 	ccIssues := make([]codeClimateIssue, 0, len(issues))
 
-	for i := range issues {
-		issue := issues[i]
-
+	for _, issue := range issues {
 		ccIssue := codeClimateIssue{
 			Description: issue.Description(),
 			CheckName:   issue.FromLinter,
