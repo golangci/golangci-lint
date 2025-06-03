@@ -829,6 +829,7 @@
             "whitespace",
             "wrapcheck",
             "wsl",
+            "zerolint",
             "zerologlint"
           ]
         },
@@ -4085,6 +4086,30 @@
             }
           }
         },
+        "zerolintSettings": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "level": {
+              "description": "Analysis depth.",
+              "type": "string",
+              "enum": ["default", "extended", "full"],
+              "default": "default"
+            },
+            "excluded": {
+              "description": "Fully qualified type names excluded from analysis.",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "match": {
+              "description": "Limit zero-sized type detection to types matching the regex.",
+              "type": "string",
+              "default": false
+            }
+          }
+        },
         "copyloopvarSettings": {
           "type": "object",
           "additionalProperties": false,
@@ -4586,6 +4611,9 @@
             },
             "wsl": {
               "$ref": "#/definitions/settings/definitions/wslSettings"
+            },
+            "zerolint": {
+              "$ref": "#/definitions/settings/definitions/zerolintSettings"
             },
             "copyloopvar": {
               "$ref": "#/definitions/settings/definitions/copyloopvarSettings"

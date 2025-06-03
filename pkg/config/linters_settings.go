@@ -3,7 +3,10 @@ package config
 import (
 	"errors"
 	"fmt"
+	"regexp"
 	"runtime"
+
+	"fillmore-labs.com/zerolint/pkg/zerolint/level"
 )
 
 var defaultLintersSettings = LintersSettings{
@@ -200,6 +203,11 @@ var defaultLintersSettings = LintersSettings{
 		ErrorVariableNames:               []string{"err"},
 		ForceExclusiveShortDeclarations:  false,
 	},
+	Zerolint: ZerolintSettings{
+		Level:    level.Default,
+		Excluded: nil,
+		Match:    nil,
+	},
 }
 
 type LintersSettings struct {
@@ -284,6 +292,7 @@ type LintersSettings struct {
 	Whitespace               WhitespaceSettings               `mapstructure:"whitespace"`
 	Wrapcheck                WrapcheckSettings                `mapstructure:"wrapcheck"`
 	WSL                      WSLSettings                      `mapstructure:"wsl"`
+	Zerolint                 ZerolintSettings                 `mapstructure:"zerolint"`
 
 	Custom map[string]CustomLinterSettings `mapstructure:"custom"`
 }
@@ -1007,6 +1016,12 @@ type WSLSettings struct {
 	ForceCuddleErrCheckAndAssign     bool     `mapstructure:"force-err-cuddling"`
 	ErrorVariableNames               []string `mapstructure:"error-variable-names"`
 	ForceExclusiveShortDeclarations  bool     `mapstructure:"force-short-decl-cuddling"`
+}
+
+type ZerolintSettings struct {
+	Excluded []string        `mapstructure:"excluded"`
+	Level    level.LintLevel `mapstructure:"level"`
+	Match    *regexp.Regexp  `mapstructure:"match"`
 }
 
 // CustomLinterSettings encapsulates the meta-data of a private linter.

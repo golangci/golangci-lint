@@ -1,0 +1,9 @@
+version: "2"
+
+linters:
+  settings:
+    zerolint:
+      level: default
+      excluded:
+        - "command-line-arguments.Excluded"
+      match: "^.*$"

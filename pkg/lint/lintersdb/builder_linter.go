@@ -115,6 +115,7 @@ import (
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/whitespace"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/wrapcheck"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/wsl"
+	"github.com/golangci/golangci-lint/v2/pkg/golinters/zerolint"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/zerologlint"
 	"github.com/golangci/golangci-lint/v2/pkg/lint/linter"
 )
@@ -695,6 +696,12 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithSince("v1.20.0").
 			WithAutoFix().
 			WithURL("https://github.com/bombsimon/wsl"),
+
+		linter.NewConfig(zerolint.New(&cfg.Linters.Settings.Zerolint)).
+			WithSince("v2.2.0").
+			WithLoadForGoAnalysis().
+			WithAutoFix().
+			WithURL("https://github.com/fillmore-labs/zerolint"),
 
 		linter.NewConfig(zerologlint.New()).
 			WithSince("v1.53.0").

@@ -126,6 +126,7 @@ linters:
     - whitespace
     - wrapcheck
     - wsl
+    - zerolint
     - zerologlint
 
   # Disable specific linters.
@@ -236,6 +237,7 @@ linters:
     - whitespace
     - wrapcheck
     - wsl
+    - zerolint
     - zerologlint
 
   # All available settings of specific linters.
@@ -3907,6 +3909,19 @@ linters:
       # https://github.com/bombsimon/wsl/blob/HEAD/doc/configuration.md#force-short-decl-cuddling
       # Default: false
       force-short-decl-cuddling: true
+
+    zerolint:
+      # Analysis depth. Anything other that "default" might need an exclusion list.
+      # Default: "default"
+      level: full
+
+      # Fully qualified type names excluded from analysis.
+      # Default: empty
+      excluded:
+        - "struct{}"
+
+      # Limit zero-sized type detection to types matching the regex.
+      match: "^.*$"
 
     # The custom section can be used to define linter plugins to be loaded at runtime.
     # See README documentation for more info.
