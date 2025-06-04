@@ -584,6 +584,7 @@ func setupConfigFileFlagSet(fs *pflag.FlagSet, cfg *config.LoaderOptions) {
 func setupRunPersistentFlags(fs *pflag.FlagSet, opts *runOptions) {
 	fs.BoolVar(&opts.PrintResourcesUsage, "print-resources-usage", false,
 		color.GreenString("Print avg and max memory usage of golangci-lint and total time"))
+	_ = fs.MarkDeprecated("print-resources-usage", "use --verbose instead")
 
 	fs.StringVar(&opts.CPUProfilePath, "cpu-profile-path", "", color.GreenString("Path to CPU profile output file"))
 	fs.StringVar(&opts.MemProfilePath, "mem-profile-path", "", color.GreenString("Path to memory profile output file"))
