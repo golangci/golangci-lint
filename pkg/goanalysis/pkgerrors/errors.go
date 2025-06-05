@@ -20,6 +20,7 @@ func (e *IllTypedError) Error() string {
 
 func BuildIssuesFromIllTypedError(errs []error, lintCtx *linter.Context) ([]*result.Issue, error) {
 	var issues []*result.Issue
+
 	uniqReportedIssues := map[string]bool{}
 
 	var other error
@@ -39,9 +40,17 @@ func BuildIssuesFromIllTypedError(errs []error, lintCtx *linter.Context) ([]*res
 				if uniqReportedIssues[err.Msg] {
 					continue
 				}
+
 				uniqReportedIssues[err.Msg] = true
 				lintCtx.Log.Errorf("typechecking error: %s", err.Msg)
 			} else {
+				key := fmt.Sprintf("%s.%d.%d.%s", issue.FilePath(), issue.Line(), issue.Column(), issue.Text)
+				if uniqReportedIssues[key] {
+					continue
+				}
+
+				uniqReportedIssues[key] = true
+
 				issue.Pkg = ill.Pkg // to save to cache later
 				issues = append(issues, issue)
 			}
