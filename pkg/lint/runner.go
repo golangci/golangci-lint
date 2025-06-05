@@ -232,7 +232,7 @@ func (r *Runner) processIssues(issues []*result.Issue, sw *timeutils.Stopwatch, 
 		})
 
 		if err != nil {
-			r.Log.Warnf("Can't process result by %s processor: %s", p.Name(), err)
+			r.Log.Warnf("Can't process results by %s processor: %s", p.Name(), err)
 		} else {
 			stat := statPerProcessor[p.Name()]
 			stat.inCount += len(issues)
