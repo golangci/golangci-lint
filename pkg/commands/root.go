@@ -115,6 +115,9 @@ func setupLogger(logger logutils.Log) error {
 		logger.Fatalf("invalid value %q for --color; must be 'always', 'auto', or 'never'", opts.Color)
 	}
 
+	// For log level colors (mainly for verbose output)
+	logutils.DisableColors(color.NoColor)
+
 	return nil
 }
 
