@@ -38,6 +38,7 @@ require (
 	github.com/daixiang0/gci v0.13.6
 	github.com/denis-tingaikin/go-header v0.5.0
 	github.com/fatih/color v1.18.0
+	github.com/fillmore-labs/ptrequality v0.0.1
 	github.com/firefart/nonamedreturns v1.0.6
 	github.com/fzipp/gocyclo v0.6.0
 	github.com/ghostiam/protogetter v0.3.15
@@ -143,6 +144,7 @@ require (
 
 require (
 	codeberg.org/chavacava/garif v0.2.0 // indirect
+	fillmore-labs.com/cmplint v0.0.3 // indirect
 	github.com/Masterminds/semver/v3 v3.3.1 // indirect
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect

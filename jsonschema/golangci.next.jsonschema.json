@@ -804,6 +804,7 @@
             "predeclared",
             "promlinter",
             "protogetter",
+            "ptrequality",
             "reassign",
             "recvcheck",
             "revive",
@@ -2881,6 +2882,17 @@
             }
           }
         },
+        "ptrequalitySettings": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "check-is": {
+              "description": "Suppress check for errors with \"Is\" method",
+              "type": "boolean",
+              "default": true
+            }
+          }
+        },
         "reviveSettings": {
           "type": "object",
           "additionalProperties": false,
@@ -4529,6 +4541,9 @@
             },
             "protogetter": {
               "$ref": "#/definitions/settings/definitions/protogetterSettings"
+            },
+            "ptrequality": {
+              "$ref": "#/definitions/settings/definitions/ptrequalitySettings"
             },
             "revive": {
               "$ref": "#/definitions/settings/definitions/reviveSettings"

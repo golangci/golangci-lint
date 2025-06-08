@@ -1,0 +1,6 @@
+version: "2"
+
+linters:
+  settings:
+    ptrequality:
+      check-is: false

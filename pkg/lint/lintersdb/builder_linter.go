@@ -89,6 +89,7 @@ import (
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/predeclared"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/promlinter"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/protogetter"
+	"github.com/golangci/golangci-lint/v2/pkg/golinters/ptrequality"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/reassign"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/recvcheck"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/revive"
@@ -554,6 +555,11 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithLoadForGoAnalysis().
 			WithAutoFix().
 			WithURL("https://github.com/ghostiam/protogetter"),
+
+		linter.NewConfig(ptrequality.New(&cfg.Linters.Settings.PtrEquality)).
+			WithSince("v2.2.0").
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/fillmore-labs/ptrequality"),
 
 		linter.NewConfig(reassign.New(&cfg.Linters.Settings.Reassign)).
 			WithSince("v1.49.0").
