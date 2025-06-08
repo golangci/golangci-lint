@@ -17,13 +17,13 @@ const (
 	envLogTimestamp = "LOG_TIMESTAMP"
 )
 
+var _ Log = NewStderrLog(DebugKeyEmpty)
+
 type StderrLog struct {
 	name   string
 	logger *logrus.Logger
 	level  LogLevel
 }
-
-var _ Log = NewStderrLog(DebugKeyEmpty)
 
 func NewStderrLog(name string) *StderrLog {
 	sl := &StderrLog{
@@ -44,16 +44,7 @@ func NewStderrLog(name string) *StderrLog {
 	}
 
 	sl.logger.Out = StdErr
-	formatter := &logrus.TextFormatter{
-		DisableTimestamp:          true, // `INFO[0007] msg` -> `INFO msg`
-		EnvironmentOverrideColors: true,
-	}
-	if os.Getenv(envLogTimestamp) == "1" {
-		formatter.DisableTimestamp = false
-		formatter.FullTimestamp = true
-		formatter.TimestampFormat = time.StampMilli
-	}
-	sl.logger.Formatter = formatter
+	sl.logger.Formatter = logFormatter
 
 	return sl
 }
@@ -126,4 +117,25 @@ func (sl StderrLog) Child(name string) Log {
 
 func (sl *StderrLog) SetLevel(level LogLevel) {
 	sl.level = level
+}
+
+var logFormatter = newLogFormatter()
+
+func DisableColors(disable bool) {
+	logFormatter.DisableColors = disable
+}
+
+func newLogFormatter() *logrus.TextFormatter {
+	formatter := &logrus.TextFormatter{
+		DisableTimestamp:          true, // `INFO[0007] msg` -> `INFO msg`
+		EnvironmentOverrideColors: true,
+	}
+
+	if os.Getenv(envLogTimestamp) == "1" {
+		formatter.DisableTimestamp = false
+		formatter.FullTimestamp = true
+		formatter.TimestampFormat = time.StampMilli
+	}
+
+	return formatter
 }
