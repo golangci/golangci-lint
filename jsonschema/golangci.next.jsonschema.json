@@ -2004,6 +2004,11 @@
               "type": "boolean",
               "default": false
             },
+            "ignore-forbidden": {
+              "description": "Forbid the use of the `ignore` directives. (>= go1.25)",
+              "type": "boolean",
+              "default": false
+            },
             "toolchain-forbidden": {
               "description": "Forbid the use of the `toolchain` directive.",
               "type": "boolean",

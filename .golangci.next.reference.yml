@@ -1313,6 +1313,9 @@ linters:
       # Forbid the use of the `exclude` directives.
       # Default: false
       exclude-forbidden: true
+      # Forbid the use of the `ignore` directives (>= go1.25).
+      # Default: false
+      ignore-forbidden: true
       # Forbid the use of the `toolchain` directive.
       # Default: false
       toolchain-forbidden: true
