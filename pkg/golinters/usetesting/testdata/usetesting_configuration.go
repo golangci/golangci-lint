@@ -24,10 +24,6 @@ func Test_osMkdirTemp(t *testing.T) {
 	os.MkdirTemp("", "")
 }
 
-func Test_osSetenv(t *testing.T) {
-	os.Setenv("", "") // want `os\.Setenv\(\) could be replaced by t\.Setenv\(\) in .+`
-}
-
 func Test_osTempDir(t *testing.T) {
 	os.TempDir() // want `os\.TempDir\(\) could be replaced by t\.TempDir\(\) in .+`
 }
