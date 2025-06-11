@@ -3,9 +3,22 @@
 package testdata
 
 import (
+	"context"
 	"os"
 	"testing"
 )
+
+func Test_contextBackground(t *testing.T) {
+	context.Background()
+}
+
+func Test_contextTODO(t *testing.T) {
+	context.TODO()
+}
+
+func Test_osChdir(t *testing.T) {
+	os.Chdir("")
+}
 
 func Test_osMkdirTemp(t *testing.T) {
 	os.MkdirTemp("", "")
