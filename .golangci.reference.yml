@@ -28,6 +28,7 @@ linters:
     - containedctx
     - contextcheck
     - copyloopvar
+    - correcterr
     - cyclop
     - decorder
     - depguard
@@ -135,6 +136,7 @@ linters:
     - containedctx
     - contextcheck
     - copyloopvar
+    - correcterr
     - cyclop
     - decorder
     - depguard

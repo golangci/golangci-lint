@@ -12,6 +12,7 @@ import (
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/containedctx"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/contextcheck"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/copyloopvar"
+	"github.com/golangci/golangci-lint/v2/pkg/golinters/correcterr"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/cyclop"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/decorder"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/depguard"
@@ -700,6 +701,11 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithSince("v1.53.0").
 			WithLoadForGoAnalysis().
 			WithURL("https://github.com/ykadowak/zerologlint"),
+
+		linter.NewConfig(correcterr.New()).
+			WithSince("v2.2.0").
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/m-ocean-it/correcterr"),
 
 		// nolintlint must be last because it looks at the results of all the previous linters for unused nolint directives
 		linter.NewConfig(nolintlint.New(&cfg.Linters.Settings.NoLintLint)).
