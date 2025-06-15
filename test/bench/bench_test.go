@@ -35,15 +35,6 @@ type metrics struct {
 }
 
 func Benchmark_linters(b *testing.B) {
-	savedWD, err := os.Getwd()
-	require.NoError(b, err)
-
-	b.Cleanup(func() {
-		// Restore WD to avoid side effects when during all the benchmarks.
-		err = os.Chdir(savedWD)
-		require.NoError(b, err)
-	})
-
 	installGolangCILint(b)
 
 	repos := getAllRepositories(b)
@@ -65,8 +56,7 @@ func Benchmark_linters(b *testing.B) {
 				b.Run(repo.name, func(b *testing.B) {
 					_ = exec.Command(binName, "cache", "clean").Run()
 
-					err = os.Chdir(repo.dir)
-					require.NoErrorf(b, err, "can't chdir to %s", repo.dir)
+					b.Chdir(repo.dir)
 
 					lc := countGoLines(b)
 
@@ -83,15 +73,6 @@ func Benchmark_linters(b *testing.B) {
 }
 
 func Benchmark_golangciLint(b *testing.B) {
-	savedWD, err := os.Getwd()
-	require.NoError(b, err)
-
-	b.Cleanup(func() {
-		// Restore WD to avoid side effects when during all the benchmarks.
-		err = os.Chdir(savedWD)
-		require.NoError(b, err)
-	})
-
 	installGolangCILint(b)
 
 	_ = exec.Command(binName, "cache", "clean").Run()
@@ -114,8 +95,7 @@ func Benchmark_golangciLint(b *testing.B) {
 
 	for _, c := range cases {
 		b.Run(c.name, func(b *testing.B) {
-			err = os.Chdir(c.dir)
-			require.NoErrorf(b, err, "can't chdir to %s", c.dir)
+			b.Chdir(c.dir)
 
 			lc := countGoLines(b)
 
@@ -142,26 +122,26 @@ func getAllRepositories(tb testing.TB) []repo {
 			name: "golangci/golangci-lint",
 			dir:  cloneGithubProject(tb, benchRoot, "golangci", "golangci-lint"),
 		},
-		{
-			name: "goreleaser/goreleaser",
-			dir:  cloneGithubProject(tb, benchRoot, "goreleaser", "goreleaser"),
-		},
-		{
-			name: "gohugoio/hugo",
-			dir:  cloneGithubProject(tb, benchRoot, "gohugoio", "hugo"),
-		},
-		{
-			name: "pact-foundation/pact-go", // CGO inside
-			dir:  cloneGithubProject(tb, benchRoot, "pact-foundation", "pact-go"),
-		},
-		{
-			name: "kubernetes/kubernetes",
-			dir:  cloneGithubProject(tb, benchRoot, "kubernetes", "kubernetes"),
-		},
-		{
-			name: "moby/buildkit",
-			dir:  cloneGithubProject(tb, benchRoot, "moby", "buildkit"),
-		},
+		// {
+		// 	name: "goreleaser/goreleaser",
+		// 	dir:  cloneGithubProject(tb, benchRoot, "goreleaser", "goreleaser"),
+		// },
+		// {
+		// 	name: "gohugoio/hugo",
+		// 	dir:  cloneGithubProject(tb, benchRoot, "gohugoio", "hugo"),
+		// },
+		// {
+		// 	name: "pact-foundation/pact-go", // CGO inside
+		// 	dir:  cloneGithubProject(tb, benchRoot, "pact-foundation", "pact-go"),
+		// },
+		// {
+		// 	name: "kubernetes/kubernetes",
+		// 	dir:  cloneGithubProject(tb, benchRoot, "kubernetes", "kubernetes"),
+		// },
+		// {
+		// 	name: "moby/buildkit",
+		// 	dir:  cloneGithubProject(tb, benchRoot, "moby", "buildkit"),
+		// },
 		{
 			name: "go source code",
 			dir:  filepath.Join(build.Default.GOROOT, "src"),
@@ -392,7 +372,14 @@ func getLinterNames(tb testing.TB, fastOnly bool) []string {
 	tb.Helper()
 
 	// add linter names here if needed.
-	var excluded []string
+	excluded := []string{
+		"gci",       // Formatter
+		"gofmt",     // Formatter
+		"gofumpt",   // Formatter
+		"goimports", // Formatter
+		"golines",   // Formatter
+		"swaggo",    // Formatter
+	}
 
 	linters, err := lintersdb.NewLinterBuilder().Build(config.NewDefault())
 	require.NoError(tb, err)
@@ -400,6 +387,10 @@ func getLinterNames(tb testing.TB, fastOnly bool) []string {
 	var names []string
 	for _, lc := range linters {
 		if lc.IsDeprecated() {
+			continue
+		}
+
+		if lc.Internal {
 			continue
 		}
 
