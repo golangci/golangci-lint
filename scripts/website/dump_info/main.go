@@ -151,7 +151,7 @@ func saveCLIHelp(ctx context.Context, dst string) error {
 		return fmt.Errorf("can't run linters cmd: %w", err)
 	}
 
-	lintersOutParts := bytes.Split(lintersOut, []byte("\n\n"))
+	lintersOutEnable, _, _ := bytes.Cut(lintersOut, []byte("\n\n"))
 
 	rumCmdHelp, err := getCmdHelp(ctx, "run")
 	if err != nil {
@@ -164,7 +164,7 @@ func saveCLIHelp(ctx context.Context, dst string) error {
 	}
 
 	data := types.CLIHelp{
-		Enable:     string(lintersOutParts[0]),
+		Enable:     string(lintersOutEnable),
 		RunCmdHelp: rumCmdHelp,
 		FmtCmdHelp: fmtCmdHelp,
 	}

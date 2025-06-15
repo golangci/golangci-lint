@@ -94,7 +94,7 @@ func getEnabledDebugs() map[string]bool {
 		return ret
 	}
 
-	for _, tag := range strings.Split(debugVar, ",") {
+	for tag := range strings.SplitSeq(debugVar, ",") {
 		ret[tag] = true
 	}
 
