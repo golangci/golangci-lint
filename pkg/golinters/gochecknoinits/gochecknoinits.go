@@ -28,21 +28,17 @@ func run(pass *analysis.Pass) (any, error) {
 		return nil, nil
 	}
 
-	nodeFilter := []ast.Node{
-		(*ast.FuncDecl)(nil),
-	}
-
-	insp.Preorder(nodeFilter, func(decl ast.Node) {
-		funcDecl, ok := decl.(*ast.FuncDecl)
+	for node := range insp.PreorderSeq((*ast.FuncDecl)(nil)) {
+		funcDecl, ok := node.(*ast.FuncDecl)
 		if !ok {
-			return
+			continue
 		}
 
 		fnName := funcDecl.Name.Name
 		if fnName == "init" && funcDecl.Recv.NumFields() == 0 {
 			pass.Reportf(funcDecl.Pos(), "don't use %s function", internal.FormatCode(fnName))
 		}
-	})
+	}
 
 	return nil, nil
 }

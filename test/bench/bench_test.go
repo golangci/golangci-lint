@@ -2,7 +2,6 @@ package bench
 
 import (
 	"bytes"
-	"context"
 	"errors"
 	"fmt"
 	"go/build"
@@ -36,15 +35,6 @@ type metrics struct {
 }
 
 func Benchmark_linters(b *testing.B) {
-	savedWD, err := os.Getwd()
-	require.NoError(b, err)
-
-	b.Cleanup(func() {
-		// Restore WD to avoid side effects when during all the benchmarks.
-		err = os.Chdir(savedWD)
-		require.NoError(b, err)
-	})
-
 	installGolangCILint(b)
 
 	repos := getAllRepositories(b)
@@ -64,11 +54,9 @@ func Benchmark_linters(b *testing.B) {
 
 			for _, repo := range repos {
 				b.Run(repo.name, func(b *testing.B) {
-					// TODO(ldez): clean inside go1.25 PR
-					_ = exec.CommandContext(context.Background(), binName, "cache", "clean").Run()
+					_ = exec.CommandContext(b.Context(), binName, "cache", "clean").Run()
 
-					err = os.Chdir(repo.dir)
-					require.NoErrorf(b, err, "can't chdir to %s", repo.dir)
+					b.Chdir(repo.dir)
 
 					lc := countGoLines(b)
 
@@ -85,19 +73,9 @@ func Benchmark_linters(b *testing.B) {
 }
 
 func Benchmark_golangciLint(b *testing.B) {
-	savedWD, err := os.Getwd()
-	require.NoError(b, err)
-
-	b.Cleanup(func() {
-		// Restore WD to avoid side effects when during all the benchmarks.
-		err = os.Chdir(savedWD)
-		require.NoError(b, err)
-	})
-
 	installGolangCILint(b)
 
-	// TODO(ldez): clean inside go1.25 PR
-	_ = exec.CommandContext(context.Background(), binName, "cache", "clean").Run()
+	_ = exec.CommandContext(b.Context(), binName, "cache", "clean").Run()
 
 	cases := getAllRepositories(b)
 
@@ -117,8 +95,7 @@ func Benchmark_golangciLint(b *testing.B) {
 
 	for _, c := range cases {
 		b.Run(c.name, func(b *testing.B) {
-			err = os.Chdir(c.dir)
-			require.NoErrorf(b, err, "can't chdir to %s", c.dir)
+			b.Chdir(c.dir)
 
 			lc := countGoLines(b)
 
@@ -180,8 +157,7 @@ func cloneGithubProject(tb testing.TB, benchRoot, owner, name string) string {
 	if _, err := os.Stat(dir); os.IsNotExist(err) {
 		repo := fmt.Sprintf("https://github.com/%s/%s.git", owner, name)
 
-		// TODO(ldez): clean inside go1.25 PR
-		err = exec.CommandContext(context.Background(), "git", "clone", "--depth", "1", "--single-branch", repo, dir).Run()
+		err = exec.CommandContext(tb.Context(), "git", "clone", "--depth", "1", "--single-branch", repo, dir).Run()
 		if err != nil {
 			tb.Fatalf("can't git clone %s/%s: %s", owner, name, err)
 		}
@@ -214,8 +190,7 @@ func launch(tb testing.TB, run func(testing.TB, string, []string), args []string
 func run(tb testing.TB, name string, args []string) {
 	tb.Helper()
 
-	// TODO(ldez): clean inside go1.25 PR
-	cmd := exec.CommandContext(context.Background(), name, args...)
+	cmd := exec.CommandContext(tb.Context(), name, args...)
 	if os.Getenv("PRINT_CMD") == "1" {
 		log.Print(strings.Join(cmd.Args, " "))
 	}
@@ -233,8 +208,7 @@ func run(tb testing.TB, name string, args []string) {
 func countGoLines(tb testing.TB) int {
 	tb.Helper()
 
-	// TODO(ldez): clean inside go1.25 PR
-	cmd := exec.CommandContext(context.Background(), "bash", "-c", `find . -type f -name "*.go" |  grep -F -v vendor | xargs wc -l | tail -1`)
+	cmd := exec.CommandContext(tb.Context(), "bash", "-c", `find . -type f -name "*.go" |  grep -F -v vendor | xargs wc -l | tail -1`)
 
 	out, err := cmd.CombinedOutput()
 	if err != nil {
@@ -242,9 +216,9 @@ func countGoLines(tb testing.TB) int {
 		tb.Fatalf("can't run go lines counter: %s", err)
 	}
 
-	parts := bytes.Split(bytes.TrimSpace(out), []byte(" "))
+	lineCount, _, _ := bytes.Cut(bytes.TrimSpace(out), []byte(" "))
 
-	n, err := strconv.Atoi(string(parts[0]))
+	n, err := strconv.Atoi(string(lineCount))
 	if err != nil {
 		tb.Log(string(out))
 		tb.Fatalf("can't parse go lines count: %s", err)
@@ -347,8 +321,7 @@ func installGolangCILint(tb testing.TB) {
 
 	parentPath := findMakefile(tb)
 
-	// TODO(ldez): clean inside go1.25 PR
-	cmd := exec.CommandContext(context.Background(), "make", "-C", parentPath, "build")
+	cmd := exec.CommandContext(tb.Context(), "make", "-C", parentPath, "build")
 
 	output, err := cmd.CombinedOutput()
 	if err != nil {
@@ -399,7 +372,14 @@ func getLinterNames(tb testing.TB, fastOnly bool) []string {
 	tb.Helper()
 
 	// add linter names here if needed.
-	var excluded []string
+	excluded := []string{
+		"gci",       // Formatter
+		"gofmt",     // Formatter
+		"gofumpt",   // Formatter
+		"goimports", // Formatter
+		"golines",   // Formatter
+		"swaggo",    // Formatter
+	}
 
 	linters, err := lintersdb.NewLinterBuilder().Build(config.NewDefault())
 	require.NoError(tb, err)
@@ -407,6 +387,10 @@ func getLinterNames(tb testing.TB, fastOnly bool) []string {
 	var names []string
 	for _, lc := range linters {
 		if lc.IsDeprecated() {
+			continue
+		}
+
+		if lc.Internal {
 			continue
 		}
 

@@ -1,7 +1,6 @@
 package testshared
 
 import (
-	"context"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -264,9 +263,8 @@ func (r *Runner) Command() *exec.Cmd {
 
 	runArgs := append([]string{r.command}, r.args...)
 
-	// TODO(ldez): clean inside go1.25 PR
 	//nolint:gosec // we don't use user input here
-	cmd := exec.CommandContext(context.Background(), r.binPath, runArgs...)
+	cmd := exec.CommandContext(r.tb.Context(), r.binPath, runArgs...)
 	cmd.Env = append(os.Environ(), r.env...)
 
 	return cmd
