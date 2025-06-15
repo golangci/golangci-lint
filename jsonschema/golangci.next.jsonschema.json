@@ -3775,11 +3775,11 @@
           "properties": {
             "context-background": {
               "type": "boolean",
-              "default": true
+              "default": false
             },
             "context-todo": {
               "type": "boolean",
-              "default": true
+              "default": false
             },
             "os-chdir": {
               "type": "boolean",
