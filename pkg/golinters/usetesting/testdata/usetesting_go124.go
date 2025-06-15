@@ -10,11 +10,11 @@ import (
 )
 
 func Test_contextBackground(t *testing.T) {
-	context.Background() // want `context\.Background\(\) could be replaced by t\.Context\(\) in .+`
+	context.Background()
 }
 
 func Test_contextTODO(t *testing.T) {
-	context.TODO() // want `context\.TODO\(\) could be replaced by t\.Context\(\) in .+`
+	context.TODO()
 }
 
 func Test_osChdir(t *testing.T) {

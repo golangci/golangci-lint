@@ -172,8 +172,8 @@ var defaultLintersSettings = LintersSettings{
 		HTTPStatusCode: true,
 	},
 	UseTesting: UseTestingSettings{
-		ContextBackground: true,
-		ContextTodo:       true,
+		ContextBackground: false,
+		ContextTodo:       false,
 		OSChdir:           true,
 		OSMkdirTemp:       true,
 		OSSetenv:          true,
