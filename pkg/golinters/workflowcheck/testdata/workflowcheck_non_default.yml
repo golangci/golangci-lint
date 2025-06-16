@@ -1,0 +1,11 @@
+version: "2"
+
+linters:
+  settings:
+    workflowcheck:
+      ident-refs:
+        enable:
+          - "testdata.CustomNonDeterministicFunc"
+      accepts-non-deterministic-parameters:
+        testdata/WrapperThatAcceptsNonDeterministic:
+          - WrapperThatAcceptsNonDeterministic

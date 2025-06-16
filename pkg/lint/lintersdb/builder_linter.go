@@ -113,6 +113,7 @@ import (
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/varnamelen"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/wastedassign"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/whitespace"
+	"github.com/golangci/golangci-lint/v2/pkg/golinters/workflowcheck"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/wrapcheck"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/wsl"
 	"github.com/golangci/golangci-lint/v2/pkg/golinters/zerologlint"
@@ -685,6 +686,11 @@ func (LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 			WithSince("v1.19.0").
 			WithAutoFix().
 			WithURL("https://github.com/ultraware/whitespace"),
+
+		linter.NewConfig(workflowcheck.New(&cfg.Linters.Settings.Workflowcheck)).
+			WithSince("v2.2.0").
+			WithLoadForGoAnalysis().
+			WithURL("https://github.com/temporalio/sdk-go/blob/master/contrib/tools/workflowcheck"),
 
 		linter.NewConfig(wrapcheck.New(&cfg.Linters.Settings.Wrapcheck)).
 			WithSince("v1.32.0").

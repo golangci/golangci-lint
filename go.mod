@@ -131,6 +131,7 @@ require (
 	go-simpler.org/sloglint v0.11.0
 	go.augendre.info/arangolint v0.2.0
 	go.augendre.info/fatcontext v0.8.0
+	go.temporal.io/sdk/contrib/tools/workflowcheck v0.3.0
 	go.uber.org/automaxprocs v1.6.0
 	golang.org/x/mod v0.25.0
 	golang.org/x/sys v0.33.0

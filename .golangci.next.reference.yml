@@ -124,6 +124,7 @@ linters:
     - varnamelen
     - wastedassign
     - whitespace
+    - workflowcheck
     - wrapcheck
     - wsl
     - zerologlint
@@ -234,6 +235,7 @@ linters:
     - varnamelen
     - wastedassign
     - whitespace
+    - workflowcheck
     - wrapcheck
     - wsl
     - zerologlint
@@ -3791,6 +3793,38 @@ linters:
       # Enforces newlines (or comments) after every multi-line function signature.
       # Default: false
       multi-func: true
+
+    workflowcheck:
+      # A map defining which functions (by package) accept non-deterministic parameters.
+      # Example:
+      #   some/package:
+      #     - SafeFunction
+      # Default: {}
+      accepts-non-deterministic-parameters:
+        example/package:
+          - SafeFunction
+      # Enables debug logging for workflowcheck.
+      # Must be set to true to see advanced debug logs.
+      # Default: false
+      debug: true
+      # Enables emitting object-level facts about non-determinism into the fact export system.
+      # Default: false
+      enable-object-facts: true
+      # A map of identifier references.
+      # Each key is an identifier (e.g., variable, function). 
+      # Adding a key to the `enable` array will flag the identifier as deterministic, while adding it to the disable does the opposite. 
+      # If empty, defaults will be used.
+      # Default: {}
+      ident-refs:
+        enable:
+          - "someIdentifier"
+        disable:
+          - "otherIdentifier"
+      # An array of regular expression strings specifying which files should be skipped entirely by the checker.
+      # Useful for excluding test files, generated code, or legacy files from analysis.
+      # Default: []
+      skip-files-regexp:
+        - ^.*_test\.go$
 
     wrapcheck:
       # An array of strings specifying additional substrings of signatures to ignore.

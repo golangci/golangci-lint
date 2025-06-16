@@ -827,6 +827,7 @@
             "varnamelen",
             "wastedassign",
             "whitespace",
+            "workflowcheck",
             "wrapcheck",
             "wsl",
             "zerologlint"
@@ -3944,6 +3945,63 @@
             }
           }
         },
+        "workflowcheckSettings": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "accepts-non-deterministic-parameters": {
+              "description": "A map defining which functions (by package) accept non-deterministic parameters.",
+              "type": "object",
+              "additionalProperties": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "default": {}
+            },
+            "debug": {
+              "description": "Enables debug logging for workflowcheck.",
+              "type": "boolean",
+              "default": false
+            },
+            "enable-object-facts": {
+              "description": "Enables emitting object-level facts about non-determinism into the fact export system.",
+              "type": "boolean",
+              "default": false
+            },
+            "ident-refs": {
+              "description": "A map of identifier references to enable or disable tracking. Each key is either 'enable' or 'disable', with an array of identifiers as values.",
+              "type": "object",
+              "properties": {
+                "enable": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "default": []
+                },
+                "disable": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "default": []
+                }
+              },
+              "additionalProperties": false,
+              "default": {}
+            },
+            "skip-files-regexp": {
+              "description": "An array of regular expression strings specifying which files should be skipped entirely by the checker.",
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "default": []
+            }
+          }
+        },
         "wrapcheckSettings": {
           "type": "object",
           "additionalProperties": false,
@@ -4585,6 +4643,9 @@
             },
             "whitespace": {
               "$ref": "#/definitions/settings/definitions/whitespaceSettings"
+            },
+            "workflowcheck": {
+              "$ref": "#/definitions/settings/definitions/workflowcheckSettings"
             },
             "wrapcheck": {
               "$ref": "#/definitions/settings/definitions/wrapcheckSettings"

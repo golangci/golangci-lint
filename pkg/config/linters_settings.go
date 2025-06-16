@@ -282,6 +282,7 @@ type LintersSettings struct {
 	UseTesting               UseTestingSettings               `mapstructure:"usetesting"`
 	Varnamelen               VarnamelenSettings               `mapstructure:"varnamelen"`
 	Whitespace               WhitespaceSettings               `mapstructure:"whitespace"`
+	Workflowcheck            WorkflowcheckSettings            `mapstructure:"workflowcheck"`
 	Wrapcheck                WrapcheckSettings                `mapstructure:"wrapcheck"`
 	WSL                      WSLSettings                      `mapstructure:"wsl"`
 
@@ -981,6 +982,19 @@ type VarnamelenSettings struct {
 type WhitespaceSettings struct {
 	MultiIf   bool `mapstructure:"multi-if"`
 	MultiFunc bool `mapstructure:"multi-func"`
+}
+
+type WorkflowcheckSettings struct {
+	AcceptsNonDeterministicParameters map[string][]string    `mapstructure:"accepts-non-deterministic-parameters"`
+	Debug                             bool                   `mapstructure:"debug"`
+	EnableObjectFacts                 bool                   `mapstructure:"enable-object-facts"`
+	IdentRefs                         WorkflowcheckIdentRefs `mapstructure:"ident-refs"`
+	SkipFilesRegexp                   []string               `mapstructure:"skip-files-regexp"`
+}
+
+type WorkflowcheckIdentRefs struct {
+	Enable  []string `mapstructure:"enable"`
+	Disable []string `mapstructure:"disable"`
 }
 
 type WrapcheckSettings struct {
