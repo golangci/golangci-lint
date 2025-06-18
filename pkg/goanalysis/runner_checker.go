@@ -90,12 +90,12 @@ func (act *action) analyze() {
 	// Report an error if any dependency failures.
 	var depErrors error
 	for _, dep := range act.Deps {
-		if dep.Err != nil {
+		if dep.Err != nil && errors.Unwrap(dep.Err) != nil {
 			depErrors = errors.Join(depErrors, errors.Unwrap(dep.Err))
 		}
 	}
 	if depErrors != nil {
-		act.Err = fmt.Errorf("failed prerequisites: %w", depErrors)
+		act.Err = errors.Join(depErrors, errors.New("failed prerequisites"))
 		return
 	}
 
