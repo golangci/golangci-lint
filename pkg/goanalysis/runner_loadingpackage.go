@@ -39,23 +39,28 @@ type loadingPackage struct {
 	decUseMutex sync.Mutex
 }
 
-func (lp *loadingPackage) analyzeRecursive(loadMode LoadMode, loadSem chan struct{}) {
+func (lp *loadingPackage) analyzeRecursive(stopChan chan struct{}, loadMode LoadMode, loadSem chan struct{}) {
 	lp.analyzeOnce.Do(func() {
 		// Load the direct dependencies, in parallel.
 		var wg sync.WaitGroup
+
 		wg.Add(len(lp.imports))
+
 		for _, imp := range lp.imports {
 			go func(imp *loadingPackage) {
-				imp.analyzeRecursive(loadMode, loadSem)
+				imp.analyzeRecursive(stopChan, loadMode, loadSem)
+
 				wg.Done()
 			}(imp)
 		}
+
 		wg.Wait()
-		lp.analyze(loadMode, loadSem)
+
+		lp.analyze(stopChan, loadMode, loadSem)
 	})
 }
 
-func (lp *loadingPackage) analyze(loadMode LoadMode, loadSem chan struct{}) {
+func (lp *loadingPackage) analyze(stopChan chan struct{}, loadMode LoadMode, loadSem chan struct{}) {
 	loadSem <- struct{}{}
 	defer func() {
 		<-loadSem
@@ -66,26 +71,47 @@ func (lp *loadingPackage) analyze(loadMode LoadMode, loadSem chan struct{}) {
 
 	if err := lp.loadWithFacts(loadMode); err != nil {
 		werr := fmt.Errorf("failed to load package %s: %w", lp.pkg.Name, err)
+
 		// Don't need to write error to errCh, it will be extracted and reported on another layer.
 		// Unblock depending on actions and propagate error.
 		for _, act := range lp.actions {
 			close(act.analysisDoneCh)
+
 			act.Err = werr
 		}
+
 		return
 	}
 
 	var actsWg sync.WaitGroup
+
 	actsWg.Add(len(lp.actions))
+
 	for _, act := range lp.actions {
 		go func(act *action) {
 			defer actsWg.Done()
 
-			act.waitUntilDependingAnalyzersWorked()
+			act.waitUntilDependingAnalyzersWorked(stopChan)
+
+			select {
+			case <-stopChan:
+				return
+			default:
+			}
 
 			act.analyzeSafe()
+
+			select {
+			case <-stopChan:
+				return
+			default:
+				if act.Err != nil {
+					close(stopChan)
+				}
+			}
 		}(act)
 	}
+
 	actsWg.Wait()
 }
 
