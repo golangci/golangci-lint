@@ -90,7 +90,7 @@ func (act *action) analyze() {
 	// Report an error if any dependency failures.
 	var depErrors error
 	for _, dep := range act.Deps {
-		if dep.Err != nil && errors.Unwrap(dep.Err) != nil {
+		if dep.Err != nil {
 			depErrors = errors.Join(depErrors, errors.Unwrap(dep.Err))
 		}
 	}
