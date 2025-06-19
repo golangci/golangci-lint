@@ -95,7 +95,7 @@ func (act *action) analyze() {
 		}
 	}
 	if depErrors != nil {
-		act.Err = errors.Join(depErrors, errors.New("failed prerequisites"))
+		act.Err = fmt.Errorf("failed prerequisites: %w", depErrors)
 		return
 	}
 
