@@ -2070,6 +2070,8 @@ The following flags have been removed:
 - `--sort-order`
 - `--sort-results`
 - `--out-format`
+- `--print-issued-lines`
+- `--print-linter-name`
 
 #### `--out-format`
 
@@ -2126,13 +2128,23 @@ The following flags have been removed:
 --output.sarif.path
 ```
 
+#### `--print-issued-lines`
+
+`--print-issued-lines` has been replaced with `--output.text.print-issued-lines`.
+
+#### `--print-linter-name`
+
+`--print-linter-name` has been replaced with `--output.text.print-linter-name` or `--output.tab.print-linter-name`.
+
 #### `--disable-all` and `--enable-all`
 
 `--disable-all` has been replaced with `--default=none`.
 
 `--enable-all` has been replaced with `--default=all`.
 
-#### Example
+#### Examples
+
+Run only the `govet` linter, output results to stdout in JSON format, and sort results:
 
 <details>
   <summary style={{color: '#737380', paddingLeft: '1rem'}}>v1</summary>
@@ -2148,6 +2160,26 @@ golangci-lint run --disable-all --enable=govet --out-format=json --sort-order=li
 
 ```bash
 golangci-lint run --default=none --enable=govet --output.json.path=stdout
+```
+
+</details>
+
+Run all linters, do not print issued lines, output results to stdout without colors, and save to `gl-code-quality-report.json` in Code Climate's format:
+
+<details>
+  <summary style={{color: '#737380', paddingLeft: '1rem'}}>v1</summary>
+
+```bash
+golangci-lint run --print-issued-lines=false --out-format code-climate:gl-code-quality-report.json,line-number
+```
+
+</details>
+
+<details>
+  <summary style={{color: '#737380', paddingLeft: '1rem'}}>v2</summary>
+
+```bash
+golangci-lint run --output.text.path=stdout --output.text.colors=false --output.text.print-issued-lines=false --output.code-climate.path=gl-code-quality-report.json
 ```
 
 </details>
