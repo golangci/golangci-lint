@@ -257,19 +257,26 @@ func (r *runner) analyze(pkgs []*packages.Package, analyzers []*analysis.Analyze
 	// Limit memory and IO usage.
 	gomaxprocs := runtime.GOMAXPROCS(-1)
 	debugf("Analyzing at most %d packages in parallel", gomaxprocs)
+
 	loadSem := make(chan struct{}, gomaxprocs)
+	stopChan := make(chan struct{}, 1)
+
+	debugf("There are %d initial and %d total packages", len(initialPkgs), len(loadingPackages))
 
 	var wg sync.WaitGroup
-	debugf("There are %d initial and %d total packages", len(initialPkgs), len(loadingPackages))
+
 	for _, lp := range loadingPackages {
 		if lp.isInitial {
 			wg.Add(1)
+
 			go func(lp *loadingPackage) {
-				lp.analyzeRecursive(r.loadMode, loadSem)
+				lp.analyzeRecursive(stopChan, r.loadMode, loadSem)
+
 				wg.Done()
 			}(lp)
 		}
 	}
+
 	wg.Wait()
 
 	return rootActions
